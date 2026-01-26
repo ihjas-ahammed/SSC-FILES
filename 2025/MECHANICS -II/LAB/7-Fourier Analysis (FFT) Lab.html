@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourier Analysis (FFT) Lab</title>
+    
+    <!-- MathJax for Formulas -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async="" src="7-Fourier%20Analysis%20(FFT)%20Lab_files/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        :root {
+            --primary: #4f46e5; /* Indigo */
+            --secondary: #312e81;
+            --accent: #ec4899;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        h1 { text-align: center; color: var(--secondary); border-bottom: 4px solid var(--primary); padding-bottom: 15px; }
+        h2 { color: var(--primary); margin-top: 30px; border-left: 5px solid var(--accent); padding-left: 10px; }
+        
+        .card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        /* Formulas */
+        .formula-box {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.15rem;
+            margin: 15px 0;
+            border: 1px solid #c7d2fe;
+        }
+
+        /* SIMULATOR STYLES */
+        .sim-wrapper {
+            background: #111827;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .canvases {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        canvas {
+            background: #000;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .controls {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .slider-group { margin-bottom: 15px; }
+        .slider-group label { display: block; font-size: 0.85rem; color: #9ca3af; margin-bottom: 5px; }
+        input[type=range] { width: 100%; cursor: pointer; }
+        
+        /* CODE BLOCK STYLES */
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        .code-keyword { color: #c678dd; } /* purple */
+        .code-func { color: #61afef; } /* blue */
+        .code-string { color: #98c379; } /* green */
+        .code-comment { color: #5c6370; font-style: italic; }
+
+        /* TABLE */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: var(--primary); color: white; padding: 10px; }
+        td { border: 1px solid #e5e7eb; padding: 8px; text-align: center; }
+        input.data-inp { width: 100%; padding: 5px; border: none; text-align: center; }
+
+        @media (max-width: 768px) {
+            .sim-wrapper { grid-template-columns: 1fr; }
+        }
+    </style>
+<style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-msub {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-mfrac {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-frac {
+  display: inline-block;
+  vertical-align: 0.17em;
+  padding: 0 .22em;
+}
+
+mjx-frac[type="d"] {
+  vertical-align: .04em;
+}
+
+mjx-frac[delims] {
+  padding: 0 .1em;
+}
+
+mjx-frac[atop] {
+  padding: 0 .12em;
+}
+
+mjx-frac[atop][delims] {
+  padding: 0;
+}
+
+mjx-dtable {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-dtable > * {
+  font-size: 2000%;
+}
+
+mjx-dbox {
+  display: block;
+  font-size: 5%;
+}
+
+mjx-num {
+  display: block;
+  text-align: center;
+}
+
+mjx-den {
+  display: block;
+  text-align: center;
+}
+
+mjx-mfrac[bevelled] > mjx-num {
+  display: inline-block;
+}
+
+mjx-mfrac[bevelled] > mjx-den {
+  display: inline-block;
+}
+
+mjx-den[align="right"], mjx-num[align="right"] {
+  text-align: right;
+}
+
+mjx-den[align="left"], mjx-num[align="left"] {
+  text-align: left;
+}
+
+mjx-nstrut {
+  display: inline-block;
+  height: .054em;
+  width: 0;
+  vertical-align: -.054em;
+}
+
+mjx-nstrut[type="d"] {
+  height: .217em;
+  vertical-align: -.217em;
+}
+
+mjx-dstrut {
+  display: inline-block;
+  height: .505em;
+  width: 0;
+}
+
+mjx-dstrut[type="d"] {
+  height: .726em;
+}
+
+mjx-line {
+  display: block;
+  box-sizing: border-box;
+  min-height: 1px;
+  height: .06em;
+  border-top: .06em solid;
+  margin: .06em -.1em;
+  overflow: hidden;
+}
+
+mjx-line[type="d"] {
+  margin: .18em -.1em;
+}
+
+mjx-mrow {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msqrt {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-root {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+mjx-surd {
+  display: inline-block;
+  vertical-align: top;
+}
+
+mjx-sqrt {
+  display: inline-block;
+  padding-top: .07em;
+}
+
+mjx-sqrt > mjx-box {
+  border-top: .07em solid;
+}
+
+mjx-sqrt.mjx-tall > mjx-box {
+  padding-left: .3em;
+  margin-left: -.3em;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D453.TEX-I::before {
+  padding: 0.705em 0.55em 0.205em 0;
+  content: "f";
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c1D45B.TEX-I::before {
+  padding: 0.442em 0.6em 0.011em 0;
+  content: "n";
+}
+
+mjx-c.mjx-c1D461.TEX-I::before {
+  padding: 0.626em 0.361em 0.011em 0;
+  content: "t";
+}
+
+mjx-c.mjx-c210E.TEX-I::before {
+  padding: 0.694em 0.576em 0.011em 0;
+  content: "h";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c32::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "2";
+}
+
+mjx-c.mjx-c1D43F.TEX-I::before {
+  padding: 0.683em 0.681em 0 0;
+  content: "L";
+}
+
+mjx-c.mjx-c221A.TEX-S3::before {
+  padding: 1.45em 1.02em 0.95em 0;
+  content: "\221A";
+}
+
+mjx-c.mjx-c1D447.TEX-I::before {
+  padding: 0.677em 0.704em 0 0;
+  content: "T";
+}
+
+mjx-c.mjx-c1D45A.TEX-I::before {
+  padding: 0.442em 0.878em 0.011em 0;
+  content: "m";
+}
+
+mjx-c.mjx-c33::before {
+  padding: 0.665em 0.5em 0.022em 0;
+  content: "3";
+}
+
+mjx-c.mjx-c34::before {
+  padding: 0.677em 0.5em 0 0;
+  content: "4";
+}
+
+mjx-c.mjx-c2F::before {
+  padding: 0.75em 0.5em 0.25em 0;
+  content: "/";
+}
+</style></head>
+<body>
+
+<div class="container">
+    <h1>Fourier Analysis of Vibrating String</h1>
+
+    <!-- 1. AIM & PRINCIPLE -->
+    <div class="card">
+        <h2>1. Aim &amp; Principle</h2>
+        <p><strong>Aim:</strong> To analyze the frequency spectrum of a stretched string (like a guitar) using Fast Fourier Transform (FFT).</p>
+        
+        <p><strong>Principle:</strong> A vibrating string produces a sound composed of a <strong>Fundamental Frequency (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="0"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>f</mi><mn>1</mn></msub></math></mjx-assistive-mml></mjx-container>)</strong> and several <strong>Harmonics</strong> (multiples of <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="1"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>f</mi><mn>1</mn></msub></math></mjx-assistive-mml></mjx-container>).</p>
+        <p>The <strong>FFT (Fast Fourier Transform)</strong> is an algorithm that breaks a complex time-domain signal into its constituent frequencies.</p>
+
+        <div class="formula-box">
+            Frequency of <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="2"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-texatom size="s" texclass="ORD"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D461 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c210E TEX-I"></mjx-c></mjx-mi></mjx-texatom></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mi>n</mi><mrow data-mjx-texclass="ORD"><mi>t</mi><mi>h</mi></mrow></msup></math></mjx-assistive-mml></mjx-container> mode: 
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="3"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-msqrt><mjx-sqrt><mjx-surd><mjx-mo class="mjx-s3"><mjx-c class="mjx-c221A TEX-S3"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.23em;"><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-box></mjx-sqrt></mjx-msqrt></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>f</mi><mi>n</mi></msub><mo>=</mo><mfrac><mi>n</mi><mrow><mn>2</mn><mi>L</mi></mrow></mfrac><msqrt><mfrac><mi>T</mi><mi>m</mi></mfrac></msqrt></math></mjx-assistive-mml></mjx-container>
+        </div>
+        <p style="text-align:center; font-size:0.9em;">
+            Where: <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="4"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></mjx-assistive-mml></mjx-container> = Harmonic number (1, 2, 3...), <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="5"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi></math></mjx-assistive-mml></mjx-container> = Length, <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="6"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi></math></mjx-assistive-mml></mjx-container> = Tension, <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="7"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></mjx-assistive-mml></mjx-container> = Linear Density.
+        </p>
+    </div>
+
+    <!-- 2. INTERACTIVE SIMULATOR -->
+    <div class="card">
+        <h2>2. FFT Simulator</h2>
+        <p><strong>Understand the Concept:</strong> Use the sliders to add "Harmonics" to the string. 
+        <br>1. Observe how adding harmonics changes the shape of the wave (Time Domain).
+        <br>2. Observe how the FFT (Frequency Domain) detects these specific spikes.</p>
+        
+        <div class="sim-wrapper">
+            <div class="canvases">
+                <div style="font-size:0.9em; color:#aaa;">Time Domain (Oscilloscope View)</div>
+                <canvas id="timeCanvas" height="150" width="593"></canvas>
+                <div style="font-size:0.9em; color:#aaa; margin-top:5px;">Frequency Domain (FFT Spectrum)</div>
+                <canvas id="freqCanvas" height="150" width="593"></canvas>
+            </div>
+            
+            <div class="controls">
+                <div class="slider-group">
+                    <label>Fundamental Freq (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="8"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>f</mi><mn>1</mn></msub></math></mjx-assistive-mml></mjx-container>): <span id="valF1" style="color:var(--accent)">218</span> Hz</label>
+                    <input type="range" id="rngF1" min="100" max="500" value="218">
+                </div>
+                <hr style="border-color:#374151; margin:10px 0;">
+                <div style="color:#fff; margin-bottom:10px; font-weight:bold;">Harmonic Amplitudes</div>
+                
+                <div class="slider-group">
+                    <label>1st Harmonic (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="9"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mn>1</mn></math></mjx-assistive-mml></mjx-container>): <span id="valA1">1.0</span></label>
+                    <input type="range" class="amp-slider" data-n="1" min="0" max="1" step="0.1" value="1.0">
+                </div>
+                <div class="slider-group">
+                    <label>2nd Harmonic (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="10"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mn>2</mn></math></mjx-assistive-mml></mjx-container>): <span id="valA2">1.0</span></label>
+                    <input type="range" class="amp-slider" data-n="2" min="0" max="1" step="0.1" value="1">
+                </div>
+                <div class="slider-group">
+                    <label>3rd Harmonic (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="11"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c33"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mn>3</mn></math></mjx-assistive-mml></mjx-container>): <span id="valA3">1.0</span></label>
+                    <input type="range" class="amp-slider" data-n="3" min="0" max="1" step="0.1" value="1">
+                </div>
+                <div class="slider-group">
+                    <label>4th Harmonic (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="12"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c34"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mn>4</mn></math></mjx-assistive-mml></mjx-container>): <span id="valA4">1.0</span></label>
+                    <input type="range" class="amp-slider" data-n="4" min="0" max="1" step="0.1" value="1">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. REAL PROCEDURE (PYTHON) -->
+    <div class="card">
+        <h2>3. Real Lab Procedure (Python)</h2>
+        <p>In the physical lab, you record a guitar sound as a <code>.wav</code> file. Use the following Python code to perform the FFT and plot the spectrum.</p>
+        
+        <pre><code><span class="code-keyword">import</span> numpy <span class="code-keyword">as</span> np
+<span class="code-keyword">import</span> matplotlib.pyplot <span class="code-keyword">as</span> plt
+<span class="code-keyword">from</span> scipy.io <span class="code-keyword">import</span> wavfile
+<span class="code-keyword">from</span> scipy.fft <span class="code-keyword">import</span> fft, fftfreq
+
+<span class="code-comment"># 1. Load the sound file</span>
+sampling_rate, data = wavfile.read(<span class="code-string">'guitar_string_sound.wav'</span>)
+
+<span class="code-comment"># 2. Pre-process (Convert stereo to mono if needed)</span>
+<span class="code-keyword">if</span> len(data.shape) &gt; <span class="code-keyword">1</span>:
+    data = data.mean(axis=<span class="code-keyword">1</span>)
+
+<span class="code-comment"># 3. Perform the FFT</span>
+n = len(data)
+yf = fft(data)
+xf = fftfreq(n, <span class="code-keyword">1</span> / sampling_rate)
+
+<span class="code-comment"># 4. Filter for positive frequencies only</span>
+xf_positive = xf[:n // <span class="code-keyword">2</span>]
+yf_magnitude = np.abs(yf[:n // <span class="code-keyword">2</span>])
+
+<span class="code-comment"># 5. Plot</span>
+plt.figure(figsize=(<span class="code-keyword">10</span>, <span class="code-keyword">4</span>))
+plt.plot(xf_positive, yf_magnitude)
+plt.title(<span class="code-string">"Frequency Spectrum"</span>)
+plt.xlabel(<span class="code-string">"Frequency (Hz)"</span>)
+plt.ylabel(<span class="code-string">"Magnitude"</span>)
+plt.grid()
+plt.show()</code></pre>
+    </div>
+
+    <!-- 4. OBSERVATIONS -->
+    <div class="card">
+        <h2>4. Observations</h2>
+        <p>Look at the peaks in your generated graph (or the simulator 
+above). The first tall peak is the Fundamental. The subsequent peaks are
+ Harmonics.</p>
+        <p><em>Example Data (based on provided PDF): Fundamental was ~262 Hz (Note C4).</em></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Harmonic Number (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="13"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></mjx-assistive-mml></mjx-container>)</th>
+                    <th>Observed Frequency (Hz)</th>
+                    <th>Ratio (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="14"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-script></mjx-msub><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-msub><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: -0.15em; margin-left: -0.06em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-script></mjx-msub></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>f</mi><mi>n</mi></msub><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><msub><mi>f</mi><mn>1</mn></msub></math></mjx-assistive-mml></mjx-container>)</th>
+                </tr>
+            </thead>
+            <tbody id="obsTable">
+                <tr>
+                    <td>1 (Fundamental)</td>
+                    <td><input type="number" class="data-inp" value="262" oninput="updateRatio()"></td>
+                    <td class="ratio-cell">1.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><input type="number" class="data-inp" value="524" oninput="updateRatio()"></td>
+                    <td class="ratio-cell" style="color: green;">2.00</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><input type="number" class="data-inp" value="786" oninput="updateRatio()"></td>
+                    <td class="ratio-cell" style="color: green;">3.00</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><input type="number" class="data-inp" oninput="updateRatio()"></td>
+                    <td class="ratio-cell">-</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p style="margin-top:15px; font-style:italic;">Note: In an ideal string, the ratios should be integers (2, 3, 4...).</p>
+    </div>
+
+</div>
+
+<script>
+    /* =========================================
+       FFT SIMULATOR LOGIC
+       ========================================= */
+    const timeCanvas = document.getElementById('timeCanvas');
+    const freqCanvas = document.getElementById('freqCanvas');
+    const tCtx = timeCanvas.getContext('2d');
+    const fCtx = freqCanvas.getContext('2d');
+
+    // State
+    let fundamental = 200;
+    let amplitudes = [1.0, 0.5, 0.0, 0.0]; // n=1, 2, 3, 4
+
+    // Resize handling
+    function resize() {
+        timeCanvas.width = timeCanvas.parentElement.clientWidth;
+        freqCanvas.width = freqCanvas.parentElement.clientWidth;
+        draw();
+    }
+    window.addEventListener('resize', resize);
+
+    // Controls
+    document.getElementById('rngF1').addEventListener('input', (e) => {
+        fundamental = parseInt(e.target.value);
+        document.getElementById('valF1').innerText = fundamental;
+        draw();
+    });
+
+    document.querySelectorAll('.amp-slider').forEach((slider, idx) => {
+        slider.addEventListener('input', (e) => {
+            amplitudes[idx] = parseFloat(e.target.value);
+            document.getElementById(`valA${idx+1}`).innerText = amplitudes[idx].toFixed(1);
+            draw();
+        });
+    });
+
+    function draw() {
+        drawTimeDomain();
+        drawFreqDomain();
+    }
+
+    function drawTimeDomain() {
+        const w = timeCanvas.width;
+        const h = timeCanvas.height;
+        tCtx.clearRect(0, 0, w, h);
+        
+        tCtx.strokeStyle = "#4f46e5"; // Indigo
+        tCtx.lineWidth = 2;
+        tCtx.beginPath();
+
+        const cy = h / 2;
+        
+        // Simulation parameters
+        // We map 'x' pixels to 't' time
+        // scale factor to make waves look nice
+        const timeScale = 0.002; 
+
+        for (let x = 0; x < w; x++) {
+            let t = x * timeScale;
+            let y = 0;
+            
+            // Sum of Sines (Fourier Series)
+            for (let i = 0; i < 4; i++) {
+                let n = i + 1;
+                let f = fundamental * n;
+                let A = amplitudes[i];
+                // y = sum( A * sin(2*pi*f*t) )
+                // Scaling amplitude to fit canvas (30px max height per harmonic)
+                y += A * 30 * Math.sin(2 * Math.PI * f * t * 0.05); 
+            }
+
+            if (x === 0) tCtx.moveTo(x, cy - y);
+            else tCtx.lineTo(x, cy - y);
+        }
+        tCtx.stroke();
+        
+        // Center Line
+        tCtx.strokeStyle = "#333";
+        tCtx.lineWidth = 1;
+        tCtx.beginPath();
+        tCtx.moveTo(0, cy); tCtx.lineTo(w, cy);
+        tCtx.stroke();
+    }
+
+    function drawFreqDomain() {
+        const w = freqCanvas.width;
+        const h = freqCanvas.height;
+        fCtx.clearRect(0, 0, w, h);
+
+        // Axis
+        fCtx.strokeStyle = "#666";
+        fCtx.beginPath();
+        fCtx.moveTo(30, h - 20); fCtx.lineTo(w, h - 20); // X
+        fCtx.moveTo(30, h - 20); fCtx.lineTo(30, 0); // Y
+        fCtx.stroke();
+
+        // Draw Bars
+        // X axis is frequency (0 to 2000Hz)
+        const maxFreq = 2000;
+        
+        amplitudes.forEach((amp, idx) => {
+            if (amp > 0) {
+                let n = idx + 1;
+                let freq = fundamental * n;
+                
+                // Map freq to x pixels
+                let x = 30 + (freq / maxFreq) * (w - 30);
+                let barHeight = amp * (h - 40); // Max height
+
+                // Bar
+                fCtx.fillStyle = "#ec4899"; // Pink
+                fCtx.fillRect(x - 5, h - 20 - barHeight, 10, barHeight);
+                
+                // Label
+                fCtx.fillStyle = "#fff";
+                fCtx.font = "10px Arial";
+                fCtx.fillText(`${freq}Hz`, x - 15, h - 5);
+            }
+        });
+    }
+
+    // Initial setup
+    resize();
+
+    /* =========================================
+       TABLE CALCULATOR
+       ========================================= */
+    function updateRatio() {
+        const rows = document.querySelectorAll('#obsTable tr');
+        let f1 = parseFloat(rows[0].querySelector('input').value);
+
+        if (!f1) return;
+
+        rows.forEach((row, i) => {
+            if (i === 0) return; // Skip fundamental row
+            let inp = row.querySelector('input');
+            let cell = row.querySelector('.ratio-cell');
+            let fn = parseFloat(inp.value);
+
+            if (fn) {
+                let ratio = fn / f1;
+                cell.innerText = ratio.toFixed(2);
+                cell.style.color = Math.abs(ratio - (i+1)) < 0.1 ? "green" : "red";
+            } else {
+                cell.innerText = "-";
+            }
+        });
+    }
+    updateRatio(); // Run once for default values
+
+</script>
+
+</body></html>

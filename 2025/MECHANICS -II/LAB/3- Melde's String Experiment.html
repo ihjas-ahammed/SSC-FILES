@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melde's String Experiment</title>
+    
+    <!-- MathJax Config -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async="" src="3-%20Melde's%20String%20Experiment_files/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        :root {
+            --primary: #0f766e; /* Teal */
+            --secondary: #134e4a;
+            --accent: #f59e0b;
+            --bg: #f0fdfa;
+            --card: #ffffff;
+            --border: #ccfbf1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        h1 { text-align: center; color: var(--secondary); border-bottom: 4px solid var(--primary); padding-bottom: 15px; }
+        h2 { color: var(--primary); border-left: 5px solid var(--accent); padding-left: 10px; margin-top: 30px; }
+        h3 { color: var(--secondary); margin-bottom: 5px; }
+
+        .card {
+            background: var(--card);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        /* Formulas */
+        .formula-box {
+            background: #e0f2f1;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            border: 1px solid #b2dfdb;
+        }
+
+        /* Diagrams */
+        .diagram-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .diagram-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        svg { max-width: 100%; height: auto; }
+        .diagram-label { font-weight: bold; color: var(--secondary); margin-top: 10px; display: block;}
+
+        /* Simulator */
+        .sim-wrapper {
+            background: #111;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        canvas {
+            background: #000;
+            border: 1px solid #333;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 4px;
+        }
+        .controls {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;
+            background: #222; padding: 15px; margin-top: 15px; border-radius: 6px;
+        }
+        label { font-size: 0.85rem; color: #aaa; display: block; margin-bottom: 5px; }
+        input[type=range], select { width: 100%; cursor: pointer; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        th { background: var(--primary); color: white; padding: 10px; text-align: center; }
+        td { border: 1px solid #cbd5e1; padding: 6px; text-align: center; }
+        input.data-inp { width: 70px; padding: 4px; text-align: center; border: 1px solid #94a3b8; border-radius: 4px; }
+        
+        .btn-load {
+            background: var(--accent); color: white; border: none; padding: 8px 15px;
+            border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 10px;
+        }
+        .btn-load:hover { background: #d97706; }
+        
+        .result-highlight { color: var(--primary); font-weight: bold; }
+    </style>
+<style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-mfrac {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-frac {
+  display: inline-block;
+  vertical-align: 0.17em;
+  padding: 0 .22em;
+}
+
+mjx-frac[type="d"] {
+  vertical-align: .04em;
+}
+
+mjx-frac[delims] {
+  padding: 0 .1em;
+}
+
+mjx-frac[atop] {
+  padding: 0 .12em;
+}
+
+mjx-frac[atop][delims] {
+  padding: 0;
+}
+
+mjx-dtable {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-dtable > * {
+  font-size: 2000%;
+}
+
+mjx-dbox {
+  display: block;
+  font-size: 5%;
+}
+
+mjx-num {
+  display: block;
+  text-align: center;
+}
+
+mjx-den {
+  display: block;
+  text-align: center;
+}
+
+mjx-mfrac[bevelled] > mjx-num {
+  display: inline-block;
+}
+
+mjx-mfrac[bevelled] > mjx-den {
+  display: inline-block;
+}
+
+mjx-den[align="right"], mjx-num[align="right"] {
+  text-align: right;
+}
+
+mjx-den[align="left"], mjx-num[align="left"] {
+  text-align: left;
+}
+
+mjx-nstrut {
+  display: inline-block;
+  height: .054em;
+  width: 0;
+  vertical-align: -.054em;
+}
+
+mjx-nstrut[type="d"] {
+  height: .217em;
+  vertical-align: -.217em;
+}
+
+mjx-dstrut {
+  display: inline-block;
+  height: .505em;
+  width: 0;
+}
+
+mjx-dstrut[type="d"] {
+  height: .726em;
+}
+
+mjx-line {
+  display: block;
+  box-sizing: border-box;
+  min-height: 1px;
+  height: .06em;
+  border-top: .06em solid;
+  margin: .06em -.1em;
+  overflow: hidden;
+}
+
+mjx-line[type="d"] {
+  margin: .18em -.1em;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mrow {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msqrt {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-root {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+mjx-surd {
+  display: inline-block;
+  vertical-align: top;
+}
+
+mjx-sqrt {
+  display: inline-block;
+  padding-top: .07em;
+}
+
+mjx-sqrt > mjx-box {
+  border-top: .07em solid;
+}
+
+mjx-sqrt.mjx-tall > mjx-box {
+  padding-left: .3em;
+  margin-left: -.3em;
+}
+
+mjx-msup {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D45B.TEX-I::before {
+  padding: 0.442em 0.6em 0.011em 0;
+  content: "n";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c32::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "2";
+}
+
+mjx-c.mjx-c1D459.TEX-I::before {
+  padding: 0.694em 0.298em 0.011em 0;
+  content: "l";
+}
+
+mjx-c.mjx-c221A.TEX-S3::before {
+  padding: 1.45em 1.02em 0.95em 0;
+  content: "\221A";
+}
+
+mjx-c.mjx-c1D447.TEX-I::before {
+  padding: 0.677em 0.704em 0 0;
+  content: "T";
+}
+
+mjx-c.mjx-c1D45A.TEX-I::before {
+  padding: 0.442em 0.878em 0.011em 0;
+  content: "m";
+}
+
+mjx-c.mjx-c221A.TEX-S4::before {
+  padding: 1.75em 1.02em 1.25em 0;
+  content: "\221A";
+}
+
+mjx-c.mjx-c1D454.TEX-I::before {
+  padding: 0.442em 0.477em 0.205em 0;
+  content: "g";
+}
+
+mjx-c.mjx-c34::before {
+  padding: 0.677em 0.5em 0 0;
+  content: "4";
+}
+
+mjx-c.mjx-c28.TEX-S3::before {
+  padding: 1.45em 0.736em 0.949em 0;
+  content: "(";
+}
+
+mjx-c.mjx-c1D440.TEX-I::before {
+  padding: 0.683em 1.051em 0 0;
+  content: "M";
+}
+
+mjx-c.mjx-c29.TEX-S3::before {
+  padding: 1.45em 0.736em 0.949em 0;
+  content: ")";
+}
+
+mjx-c.mjx-cD7::before {
+  padding: 0.491em 0.778em 0 0;
+  content: "\D7";
+}
+
+mjx-c.mjx-c1D43F.TEX-I::before {
+  padding: 0.683em 0.681em 0 0;
+  content: "L";
+}
+
+mjx-c.mjx-c1D45D.TEX-I::before {
+  padding: 0.442em 0.503em 0.194em 0;
+  content: "p";
+}
+
+mjx-c.mjx-c2F::before {
+  padding: 0.75em 0.5em 0.25em 0;
+  content: "/";
+}
+
+mjx-c.mjx-c39::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "9";
+}
+
+mjx-c.mjx-c2E::before {
+  padding: 0.12em 0.278em 0 0;
+  content: ".";
+}
+
+mjx-c.mjx-c38::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "8";
+}
+</style></head>
+<body>
+
+<div class="container">
+    <h1>Melde's String Experiment</h1>
+
+    <!-- 1. AIM & APPARATUS -->
+    <div class="card">
+        <h2>1. Aim &amp; Apparatus</h2>
+        <p><strong>Aim:</strong> To determine the frequency of an electrically maintained tuning fork.</p>
+        <p><strong>Apparatus:</strong> Electrically maintained tuning fork, pulley, fine thread (string), meter scale, scale pan, weight box, battery/power supply.</p>
+    </div>
+
+    <!-- 2. DIAGRAMS -->
+    <div class="card">
+        <h2>2. Experimental Setup</h2>
+        <p>The experiment can be performed in two arrangements (modes):</p>
+        
+        <div class="diagram-row">
+            <!-- Transverse Diagram -->
+            <div class="diagram-container">
+                <svg viewBox="0 0 300 200">
+                    <!-- Base -->
+                    <rect x="20" y="160" width="100" height="10" fill="#555"></rect>
+                    <rect x="20" y="80" width="10" height="80" fill="#555"></rect> <!-- Stand -->
+                    
+                    <!-- Fork (U Shape) - Perpendicular to string -->
+                    <path d="M30,80 Q30,120 50,120 Q70,120 70,80" fill="none" stroke="#ccc" stroke-width="6"></path>
+                    <rect x="40" y="120" width="20" height="40" fill="#ccc"></rect> <!-- Stem -->
+                    
+                    <!-- Electromagnet -->
+                    <rect x="40" y="90" width="20" height="20" fill="#374151"></rect>
+                    <path d="M40,100 L10,100 L10,170" fill="none" stroke="#d97706"></path> <!-- Wire -->
+
+                    <!-- Pulley -->
+                    <circle cx="250" cy="80" r="10" fill="#9ca3af" stroke="#000"></circle>
+                    <rect x="245" y="90" width="10" height="70" fill="#555"></rect> <!-- Pulley Stand -->
+                    <rect x="230" y="160" width="40" height="10" fill="#555"></rect>
+
+                    <!-- String (Vibrating) -->
+                    <path d="M70,80 Q115,60 160,80 T250,80" fill="none" stroke="#000" stroke-width="1.5"></path>
+                    
+                    <!-- Pan -->
+                    <line x1="260" y1="80" x2="260" y2="130" stroke="#000"></line>
+                    <polygon points="240,140 280,140 260,130" fill="#ddd" stroke="#000"></polygon> <!-- Pan -->
+                    <text x="260" y="155" text-anchor="middle" font-size="10">Mass M</text>
+
+                    <!-- Arrows indicating motion -->
+                    <path d="M60,70 L80,70" stroke="red" stroke-width="2" marker-end="url(#arrow)"></path>
+                    <text x="70" y="60" text-anchor="middle" font-size="10" fill="red">Vibration ⊥</text>
+                </svg>
+                <span class="diagram-label">Transverse Mode</span>
+                <p style="font-size:0.85em;">Fork vibrates perpendicular to string.</p>
+            </div>
+
+            <!-- Longitudinal Diagram -->
+            <div class="diagram-container">
+                <svg viewBox="0 0 300 200">
+                    <!-- Base -->
+                    <rect x="20" y="160" width="100" height="10" fill="#555"></rect>
+                    <rect x="20" y="120" width="10" height="40" fill="#555"></rect> <!-- Short Stand -->
+
+                    <!-- Fork - Rotated 90deg, pointing to pulley -->
+                    <path d="M30,120 L70,120" stroke="#ccc" stroke-width="6" stroke-linecap="round"></path> <!-- Top prong -->
+                    <path d="M30,140 L70,140" stroke="#ccc" stroke-width="6" stroke-linecap="round"></path> <!-- Bottom prong -->
+                    <path d="M30,120 Q20,130 30,140" fill="none" stroke="#ccc" stroke-width="6"></path> <!-- U bend -->
+                    
+                    <!-- Pulley -->
+                    <circle cx="250" cy="120" r="10" fill="#9ca3af" stroke="#000"></circle>
+                    <rect x="245" y="130" width="10" height="30" fill="#555"></rect>
+                    <rect x="230" y="160" width="40" height="10" fill="#555"></rect>
+
+                    <!-- String -->
+                    <line x1="70" y1="120" x2="250" y2="120" stroke="#000" stroke-width="1.5"></line>
+                    
+                    <!-- Pan -->
+                    <line x1="260" y1="120" x2="260" y2="150" stroke="#000"></line>
+                    <polygon points="240,160 280,160 260,150" fill="#ddd" stroke="#000"></polygon>
+                    <text x="260" y="175" text-anchor="middle" font-size="10">Mass M</text>
+
+                    <!-- Arrows -->
+                    <path d="M80,110 L100,110" stroke="red" stroke-width="2"></path>
+                    <text x="90" y="100" text-anchor="middle" font-size="10" fill="red">Vibration ∥</text>
+                </svg>
+                <span class="diagram-label">Longitudinal Mode</span>
+                <p style="font-size:0.85em;">Fork vibrates parallel to string.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. PRINCIPLE & FORMULAS -->
+    <div class="card">
+        <h2>3. Principle</h2>
+        <p>The frequency of vibration depends on the mode of arrangement.</p>
+
+        <h3>1. Transverse Mode</h3>
+        <p>The frequency of the string is equal to the frequency of the fork.</p>
+        <div class="formula-box">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="0"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-msqrt><mjx-sqrt><mjx-surd><mjx-mo class="mjx-s3"><mjx-c class="mjx-c221A TEX-S3"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.23em;"><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-box></mjx-sqrt></mjx-msqrt><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msqrt space="4"><mjx-sqrt><mjx-surd><mjx-mo class="mjx-s4"><mjx-c class="mjx-c221A TEX-S4"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.356em;"><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mn class="mjx-n"><mjx-c class="mjx-c34"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mrow><mjx-mo class="mjx-s3"><mjx-c class="mjx-c28 TEX-S3"></mjx-c></mjx-mo><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.289em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mo class="mjx-s3"><mjx-c class="mjx-c29 TEX-S3"></mjx-c></mjx-mo></mjx-mrow></mjx-box></mjx-sqrt></mjx-msqrt></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>n</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>l</mi></mrow></mfrac><msqrt><mfrac><mi>T</mi><mi>m</mi></mfrac></msqrt><mo>=</mo><msqrt><mfrac><mi>g</mi><mrow><mn>4</mn><mi>m</mi></mrow></mfrac><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mi>M</mi><msup><mi>l</mi><mn>2</mn></msup></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></msqrt></math></mjx-assistive-mml></mjx-container>
+        </div>
+
+        <h3>2. Longitudinal Mode</h3>
+        <p>The frequency of the fork is twice the frequency of the string.</p>
+        <div class="formula-box">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="1"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-cD7"></mjx-c></mjx-mo><mjx-mfrac space="3"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-msqrt><mjx-sqrt><mjx-surd><mjx-mo class="mjx-s3"><mjx-c class="mjx-c221A TEX-S3"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.23em;"><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-box></mjx-sqrt></mjx-msqrt><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-msqrt space="4"><mjx-sqrt><mjx-surd><mjx-mo class="mjx-s4"><mjx-c class="mjx-c221A TEX-S4"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.356em;"><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mrow><mjx-mo class="mjx-s3"><mjx-c class="mjx-c28 TEX-S3"></mjx-c></mjx-mo><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.289em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mo class="mjx-s3"><mjx-c class="mjx-c29 TEX-S3"></mjx-c></mjx-mo></mjx-mrow></mjx-box></mjx-sqrt></mjx-msqrt></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>n</mi><mo>=</mo><mn>2</mn><mo>×</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>l</mi></mrow></mfrac><msqrt><mfrac><mi>T</mi><mi>m</mi></mfrac></msqrt><mo>=</mo><msqrt><mfrac><mi>g</mi><mi>m</mi></mfrac><mrow data-mjx-texclass="INNER"><mo data-mjx-texclass="OPEN">(</mo><mfrac><mi>M</mi><msup><mi>l</mi><mn>2</mn></msup></mfrac><mo data-mjx-texclass="CLOSE">)</mo></mrow></msqrt></math></mjx-assistive-mml></mjx-container>
+        </div>
+        
+        <p style="text-align: center; font-size: 0.9em;">
+            Where: <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="2"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi></math></mjx-assistive-mml></mjx-container> = Mass in pan (kg), <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="3"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container> = Length of <strong>one loop</strong> (m), <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="4"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></mjx-assistive-mml></mjx-container> = Mass per unit length of string (kg/m), <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="5"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>g</mi></math></mjx-assistive-mml></mjx-container> = 9.8 m/s².
+        </p>
+    </div>
+
+    <!-- 4. SIMULATOR -->
+    <div class="card">
+        <h2>4. Virtual Experiment</h2>
+        <div class="sim-wrapper">
+            <canvas id="waveCanvas" width="600" height="200"></canvas>
+            
+            <div class="controls">
+                <div>
+                    <label>Mode:</label>
+                    <select id="simMode">
+                        <option value="transverse">Transverse</option>
+                        <option value="longitudinal" selected="selected">Longitudinal</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Total String Length (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="6"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi></math></mjx-assistive-mml></mjx-container>):</label>
+                    <input type="range" id="simLen" min="0.5" max="2.0" step="0.1" value="1.4">
+                    <span id="dispLen">1.4 m</span>
+                </div>
+                <div>
+                    <label>Mass in Pan (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="7"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi></math></mjx-assistive-mml></mjx-container>):</label>
+                    <input type="range" id="simMass" min="5" max="50" step="1" value="18">
+                    <span id="dispMass">18 g</span>
+                </div>
+            </div>
+            <p style="font-size: 0.9em; color: #aaa;">Adjust Mass (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="8"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi></math></mjx-assistive-mml></mjx-container>) and Total Length (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="9"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D43F TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>L</mi></math></mjx-assistive-mml></mjx-container>) until you see stable, maximum amplitude loops.</p>
+        </div>
+    </div>
+
+    <!-- 5. OBSERVATIONS -->
+    <div class="card">
+        <h2>5. Observations</h2>
+        <p><strong>Linear Density of String (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="10"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></mjx-assistive-mml></mjx-container>):</strong> <input type="number" id="linearDensity" value="0.003" step="0.0001"> kg/m.</p>
+        <button class="btn-load" onclick="loadExampleData()">Load Example Data (50 Hz Fork)</button>
+
+        <h3>Table 1: Transverse Mode</h3>
+        <table id="tableTrans">
+            <thead>
+                <tr>
+                    <th>Total Mass <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="11"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi></math></mjx-assistive-mml></mjx-container> <br> (kg)</th>
+                    <th>No. of Loops <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="12"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi></math></mjx-assistive-mml></mjx-container></th>
+                    <th>Length of <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="13"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi></math></mjx-assistive-mml></mjx-container> loops <br> (m)</th>
+                    <th>Length of 1 loop <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="14"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container> (m)</th>
+                    <th><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="15"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><msup><mi>l</mi><mn>2</mn></msup></math></mjx-assistive-mml></mjx-container> <br> (kg/m²)</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td><input type="number" class="data-inp mass-t" step="0.001" value="0.01"></td>
+                <td><input type="number" class="data-inp loops-t" value="4"></td>
+                <td><input type="number" class="data-inp lenp-t" step="0.01" value="0.228"></td>
+                <td class="res-l-t">0.057</td>
+                <td class="res-ml2-t">3.078</td>
+            </tr><tr>
+                <td><input type="number" class="data-inp mass-t" step="0.001" value="0.015"></td>
+                <td><input type="number" class="data-inp loops-t" value="3"></td>
+                <td><input type="number" class="data-inp lenp-t" step="0.01" value="0.21"></td>
+                <td class="res-l-t">0.070</td>
+                <td class="res-ml2-t">3.061</td>
+            </tr><tr>
+                <td><input type="number" class="data-inp mass-t" step="0.001" value="0.02"></td>
+                <td><input type="number" class="data-inp loops-t" value="2"></td>
+                <td><input type="number" class="data-inp lenp-t" step="0.01" value="0.162"></td>
+                <td class="res-l-t">0.081</td>
+                <td class="res-ml2-t">3.048</td>
+            </tr></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" style="text-align: right; font-weight: bold;">Mean <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="16"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><msup><mi>l</mi><mn>2</mn></msup></math></mjx-assistive-mml></mjx-container>:</td>
+                    <td id="meanTrans" class="result-highlight">3.062</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <h3>Table 2: Longitudinal Mode</h3>
+        <table id="tableLong">
+            <thead>
+                <tr>
+                    <th>Total Mass <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="17"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi></math></mjx-assistive-mml></mjx-container> <br> (kg)</th>
+                    <th>No. of Loops <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="18"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi></math></mjx-assistive-mml></mjx-container></th>
+                    <th>Length of <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="19"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45D TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi></math></mjx-assistive-mml></mjx-container> loops <br> (m)</th>
+                    <th>Length of 1 loop <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="20"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container> (m)</th>
+                    <th><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="21"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><msup><mi>l</mi><mn>2</mn></msup></math></mjx-assistive-mml></mjx-container> <br> (kg/m²)</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td><input type="number" class="data-inp mass-l" step="0.001" value="0.01"></td>
+                <td><input type="number" class="data-inp loops-l" value="2"></td>
+                <td><input type="number" class="data-inp lenp-l" step="0.01" value="0.228"></td>
+                <td class="res-l-l">0.114</td>
+                <td class="res-ml2-l">0.769</td>
+            </tr><tr>
+                <td><input type="number" class="data-inp mass-l" step="0.001" value="0.015"></td>
+                <td><input type="number" class="data-inp loops-l" value="2"></td>
+                <td><input type="number" class="data-inp lenp-l" step="0.01" value="0.28"></td>
+                <td class="res-l-l">0.140</td>
+                <td class="res-ml2-l">0.765</td>
+            </tr><tr>
+                <td><input type="number" class="data-inp mass-l" step="0.001" value="0.02"></td>
+                <td><input type="number" class="data-inp loops-l" value="1"></td>
+                <td><input type="number" class="data-inp lenp-l" step="0.01" value="0.161"></td>
+                <td class="res-l-l">0.161</td>
+                <td class="res-ml2-l">0.772</td>
+            </tr></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" style="text-align: right; font-weight: bold;">Mean <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="22"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-msup><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi><mjx-script style="vertical-align: 0.363em;"><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-script></mjx-msup></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><msup><mi>l</mi><mn>2</mn></msup></math></mjx-assistive-mml></mjx-container>:</td>
+                    <td id="meanLong" class="result-highlight">0.769</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- 6. RESULTS -->
+    <div class="card">
+        <h2>6. Results</h2>
+        <p>Using <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="23"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c39"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c38"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>g</mi><mo>=</mo><mn>9.8</mn></math></mjx-assistive-mml></mjx-container> m/s² and <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="24"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></mjx-assistive-mml></mjx-container> from above:</p>
+        <ul>
+            <li>Frequency from Transverse Mode: <span id="resTrans" class="result-highlight">50.01</span> Hz</li>
+            <li>Frequency from Longitudinal Mode: <span id="resLong" class="result-highlight">50.12</span> Hz</li>
+        </ul>
+        <p><strong>Mean Frequency of Fork (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="25"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></mjx-assistive-mml></mjx-container>): <span id="finalFreq" style="font-size: 1.2em; color: var(--primary);">50.06</span> Hz</strong></p>
+    </div>
+
+</div>
+
+<script>
+    /* =========================================
+       1. SIMULATOR LOGIC
+       ========================================= */
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Sim State
+    let simMode = 'transverse';
+    let simL = 1.0; // Total Length
+    let simM = 0.010; // Mass in kg
+    const simFreqFork = 50; // Fixed fork freq
+    const simDensity = 0.003; // kg/m
+    const g = 9.8;
+
+    let time = 0;
+
+    // Controls
+    document.getElementById('simMode').addEventListener('change', (e) => { simMode = e.target.value; });
+    document.getElementById('simLen').addEventListener('input', (e) => { 
+        simL = parseFloat(e.target.value); 
+        document.getElementById('dispLen').innerText = simL.toFixed(1) + " m";
+    });
+    document.getElementById('simMass').addEventListener('input', (e) => { 
+        simM = parseFloat(e.target.value) / 1000; // convert g to kg
+        document.getElementById('dispMass').innerText = e.target.value + " g";
+    });
+
+    function drawSim() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const cy = h / 2;
+
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0,0,w,h);
+
+        // Physics Calculation
+        // Wave velocity v = sqrt(T/m)
+        let T = simM * g;
+        let v = Math.sqrt(T / simDensity);
+        
+        // String Frequency
+        // Transverse: String vibrates at Fork Freq
+        // Longitudinal: String vibrates at Fork Freq / 2
+        let f_string = (simMode === 'transverse') ? simFreqFork : (simFreqFork / 2);
+
+        // Wavelength lambda = v / f
+        let lambda = v / f_string;
+        let loopLength = lambda / 2;
+
+        // Check Resonance condition
+        // Does the total length simL contain an integer number of loops?
+        let numLoopsIdeal = simL / loopLength;
+        let nearestInteger = Math.round(numLoopsIdeal);
+        let deviation = Math.abs(numLoopsIdeal - nearestInteger);
+
+        // Amplitude factor: High if deviation is low
+        let resonanceSharpness = 0.2;
+        let amplitude = 50 * Math.exp(-Math.pow(deviation, 2) / (2 * Math.pow(resonanceSharpness, 2)));
+
+        // Draw String
+        ctx.beginPath();
+        ctx.strokeStyle = (simMode === 'transverse') ? "#0ea5e9" : "#f59e0b"; // Blue or Orange
+        ctx.lineWidth = 3;
+
+        // Wave function: A * sin(k*x) * cos(w*t)
+        // k = n*pi / L  (wavenumber for standing wave)
+        let numLoopsVisual = nearestInteger;
+        if (numLoopsVisual < 1) numLoopsVisual = 1;
+
+        for(let x=0; x<w; x++) {
+            // Map canvas x to physical length
+            let x_phys = (x / w) * simL;
+            
+            // Standing wave equation component sin(n * pi * x / L)
+            let spatial = Math.sin((numLoopsVisual * Math.PI * x) / w);
+            
+            let y = cy + amplitude * spatial * Math.cos(time * 0.2);
+            
+            if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+
+        // Info Text
+        ctx.fillStyle = "#fff";
+        ctx.font = "12px monospace";
+        ctx.fillText(`Mode: ${simMode}`, 10, 20);
+        ctx.fillText(`Loops: ~${numLoopsVisual}`, 10, 35);
+        if(amplitude > 30) {
+            ctx.fillStyle = "#22c55e";
+            ctx.fillText("RESONANCE", w-80, 20);
+        }
+
+        time++;
+        requestAnimationFrame(drawSim);
+    }
+    drawSim();
+
+
+    /* =========================================
+       2. TABLE & CALCULATION LOGIC
+       ========================================= */
+    const rowsCount = 3;
+    
+    function createTableRows(tableId, prefix) {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        tbody.innerHTML = '';
+        for(let i=0; i<rowsCount; i++) {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="number" class="data-inp mass-${prefix}" step="0.001"></td>
+                <td><input type="number" class="data-inp loops-${prefix}"></td>
+                <td><input type="number" class="data-inp lenp-${prefix}" step="0.01"></td>
+                <td class="res-l-${prefix}">-</td>
+                <td class="res-ml2-${prefix}">-</td>
+            `;
+            tbody.appendChild(tr);
+        }
+    }
+
+    createTableRows('tableTrans', 't');
+    createTableRows('tableLong', 'l');
+
+    // Add Listeners
+    document.querySelectorAll('input.data-inp').forEach(inp => {
+        inp.addEventListener('input', calculateAll);
+    });
+    document.getElementById('linearDensity').addEventListener('input', calculateAll);
+
+    function calculateAll() {
+        calcTable('t', 'meanTrans');
+        calcTable('l', 'meanLong');
+        calcFinal();
+    }
+
+    function calcTable(prefix, meanId) {
+        const rows = document.querySelectorAll(`.mass-${prefix}`);
+        let totalML2 = 0;
+        let count = 0;
+
+        rows.forEach((inp, index) => {
+            let m = parseFloat(inp.value); // Mass
+            let p = parseFloat(document.querySelectorAll(`.loops-${prefix}`)[index].value); // Loops
+            let Lp = parseFloat(document.querySelectorAll(`.lenp-${prefix}`)[index].value); // Len of p loops
+
+            let cellL = document.querySelectorAll(`.res-l-${prefix}`)[index];
+            let cellML2 = document.querySelectorAll(`.res-ml2-${prefix}`)[index];
+
+            if(m && p && Lp) {
+                let l = Lp / p; // Length of 1 loop
+                let val = m / (l*l);
+                
+                cellL.innerText = l.toFixed(3);
+                cellML2.innerText = val.toFixed(3);
+                totalML2 += val;
+                count++;
+            } else {
+                cellL.innerText = "-";
+                cellML2.innerText = "-";
+            }
+        });
+
+        let mean = count > 0 ? (totalML2/count).toFixed(3) : 0;
+        document.getElementById(meanId).innerText = mean;
+        return mean;
+    }
+
+    function calcFinal() {
+        let m = parseFloat(document.getElementById('linearDensity').value);
+        let g = 9.8;
+        
+        let meanT = parseFloat(document.getElementById('meanTrans').innerText);
+        let meanL = parseFloat(document.getElementById('meanLong').innerText);
+
+        // Transverse: n = sqrt( (g/4m) * (M/l^2) )
+        let n1 = (meanT > 0) ? Math.sqrt( (g / (4*m)) * meanT ) : 0;
+        
+        // Longitudinal: n = sqrt( (g/m) * (M/l^2) )
+        let n2 = (meanL > 0) ? Math.sqrt( (g / m) * meanL ) : 0;
+
+        document.getElementById('resTrans').innerText = n1 > 0 ? n1.toFixed(2) : "---";
+        document.getElementById('resLong').innerText = n2 > 0 ? n2.toFixed(2) : "---";
+        
+        // Average
+        let valid = 0;
+        let sum = 0;
+        if(n1 > 0) { sum+=n1; valid++; }
+        if(n2 > 0) { sum+=n2; valid++; }
+        
+        document.getElementById('finalFreq').innerText = valid > 0 ? (sum/valid).toFixed(2) : "---";
+    }
+
+    /* =========================================
+       3. EXAMPLE DATA LOADER
+       ========================================= */
+    function loadExampleData() {
+        // Example for 50Hz fork, m=0.003
+        // Transverse (n=50): M/l^2 = n^2 * 4m / g = 2500 * 0.012 / 9.8 = ~3.06
+        // Longitudinal (n=50): M/l^2 = n^2 * m / g = 2500 * 0.003 / 9.8 = ~0.765
+
+        // Transverse Data
+        const tData = [
+            { m: 0.010, p: 4, Lp: 0.228 }, // l ~ 0.057, M/l^2 ~ 3.07
+            { m: 0.015, p: 3, Lp: 0.210 }, // l ~ 0.07, M/l^2 ~ 3.06
+            { m: 0.020, p: 2, Lp: 0.162 }  // l ~ 0.081, M/l^2 ~ 3.05
+        ];
+
+        // Longitudinal Data
+        const lData = [
+            { m: 0.010, p: 2, Lp: 0.228 }, // l ~ 0.114, M/l^2 ~ 0.77
+            { m: 0.015, p: 2, Lp: 0.280 }, // l ~ 0.14, M/l^2 ~ 0.76
+            { m: 0.020, p: 1, Lp: 0.161 }  // l ~ 0.161, M/l^2 ~ 0.77
+        ];
+
+        // Fill Tables
+        fillRows('t', tData);
+        fillRows('l', lData);
+        
+        // Trigger Calc
+        calculateAll();
+    }
+
+    function fillRows(prefix, data) {
+        data.forEach((row, i) => {
+            document.querySelectorAll(`.mass-${prefix}`)[i].value = row.m;
+            document.querySelectorAll(`.loops-${prefix}`)[i].value = row.p;
+            document.querySelectorAll(`.lenp-${prefix}`)[i].value = row.Lp;
+        });
+    }
+
+</script>
+
+</body></html>

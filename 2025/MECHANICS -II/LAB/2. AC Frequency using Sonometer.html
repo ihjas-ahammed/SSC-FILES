@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Frequency using Sonometer</title>
+    
+    <!-- MathJax for Formulas -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async="" src="2.%20AC%20Frequency%20using%20Sonometer_files/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        :root {
+            --primary: #7c3aed; /* Violet/Purple theme for AC/Magnetism */
+            --dark: #1e1b4b;
+            --light: #f5f3ff;
+            --accent: #d97706;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 950px; margin: 0 auto; }
+
+        /* Headers */
+        h1 { text-align: center; color: var(--primary); border-bottom: 4px solid var(--primary); padding-bottom: 15px; margin-bottom: 30px; }
+        h2 { color: var(--dark); border-left: 5px solid var(--primary); padding-left: 10px; margin-top: 0; }
+        
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        /* Formulas & Lists */
+        .formula-box {
+            background: #ede9fe;
+            border: 1px solid #c4b5fd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.15rem;
+            margin: 20px 0;
+            color: var(--dark);
+        }
+        ul, ol { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        /* Diagram */
+        .diagram-container { text-align: center; overflow-x: auto; margin: 20px 0; }
+        svg { background: #fff; border: 1px solid #ccc; border-radius: 8px; max-width: 100%; height: auto; }
+        .wire { fill: none; stroke: #4b5563; stroke-width: 2; }
+        .component-text { font-family: monospace; font-size: 12px; fill: #374151; font-weight: bold; }
+
+        /* Simulator */
+        .sim-box {
+            background: #111;
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            background: #000;
+            border: 1px solid #333;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 4px;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #222;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 6px;
+            text-align: left;
+        }
+        label { font-size: 0.9rem; color: #aaa; }
+        input[type=range], select { width: 100%; margin-top: 5px; cursor: pointer; }
+        select { padding: 5px; border-radius: 4px; }
+        
+        .resonance-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 20px;
+            font-weight: bold; margin-bottom: 10px; font-size: 0.9rem;
+            background: #333; color: #777; transition: 0.3s;
+        }
+        .resonance-active { background: #10b981; color: white; box-shadow: 0 0 15px #10b981; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95rem; }
+        th { background: var(--primary); color: white; padding: 10px; }
+        td { border: 1px solid #d1d5db; padding: 8px; text-align: center; }
+        input.table-inp { 
+            width: 80px; padding: 5px; text-align: center; 
+            border: 1px solid #9ca3af; border-radius: 4px; 
+        }
+        .calc-res { font-weight: bold; color: var(--primary); }
+        .note { font-size: 0.85em; color: #6b7280; font-style: italic; }
+
+    </style>
+<style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-mfrac {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-frac {
+  display: inline-block;
+  vertical-align: 0.17em;
+  padding: 0 .22em;
+}
+
+mjx-frac[type="d"] {
+  vertical-align: .04em;
+}
+
+mjx-frac[delims] {
+  padding: 0 .1em;
+}
+
+mjx-frac[atop] {
+  padding: 0 .12em;
+}
+
+mjx-frac[atop][delims] {
+  padding: 0;
+}
+
+mjx-dtable {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-dtable > * {
+  font-size: 2000%;
+}
+
+mjx-dbox {
+  display: block;
+  font-size: 5%;
+}
+
+mjx-num {
+  display: block;
+  text-align: center;
+}
+
+mjx-den {
+  display: block;
+  text-align: center;
+}
+
+mjx-mfrac[bevelled] > mjx-num {
+  display: inline-block;
+}
+
+mjx-mfrac[bevelled] > mjx-den {
+  display: inline-block;
+}
+
+mjx-den[align="right"], mjx-num[align="right"] {
+  text-align: right;
+}
+
+mjx-den[align="left"], mjx-num[align="left"] {
+  text-align: left;
+}
+
+mjx-nstrut {
+  display: inline-block;
+  height: .054em;
+  width: 0;
+  vertical-align: -.054em;
+}
+
+mjx-nstrut[type="d"] {
+  height: .217em;
+  vertical-align: -.217em;
+}
+
+mjx-dstrut {
+  display: inline-block;
+  height: .505em;
+  width: 0;
+}
+
+mjx-dstrut[type="d"] {
+  height: .726em;
+}
+
+mjx-line {
+  display: block;
+  box-sizing: border-box;
+  min-height: 1px;
+  height: .06em;
+  border-top: .06em solid;
+  margin: .06em -.1em;
+  overflow: hidden;
+}
+
+mjx-line[type="d"] {
+  margin: .18em -.1em;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mrow {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-msqrt {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-root {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+mjx-surd {
+  display: inline-block;
+  vertical-align: top;
+}
+
+mjx-sqrt {
+  display: inline-block;
+  padding-top: .07em;
+}
+
+mjx-sqrt > mjx-box {
+  border-top: .07em solid;
+}
+
+mjx-sqrt.mjx-tall > mjx-box {
+  padding-left: .3em;
+  margin-left: -.3em;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D459.TEX-I::before {
+  padding: 0.694em 0.298em 0.011em 0;
+  content: "l";
+}
+
+mjx-c.mjx-c1D45A.TEX-I::before {
+  padding: 0.442em 0.878em 0.011em 0;
+  content: "m";
+}
+
+mjx-c.mjx-c1D447.TEX-I::before {
+  padding: 0.677em 0.704em 0 0;
+  content: "T";
+}
+
+mjx-c.mjx-c1D45B.TEX-I::before {
+  padding: 0.442em 0.6em 0.011em 0;
+  content: "n";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c31::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "1";
+}
+
+mjx-c.mjx-c32::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "2";
+}
+
+mjx-c.mjx-c221A.TEX-S3::before {
+  padding: 1.45em 1.02em 0.95em 0;
+  content: "\221A";
+}
+
+mjx-c.mjx-c1D440.TEX-I::before {
+  padding: 0.683em 1.051em 0 0;
+  content: "M";
+}
+
+mjx-c.mjx-c1D454.TEX-I::before {
+  padding: 0.442em 0.477em 0.205em 0;
+  content: "g";
+}
+
+mjx-c.mjx-cD7::before {
+  padding: 0.491em 0.778em 0 0;
+  content: "\D7";
+}
+
+mjx-c.mjx-c1D453.TEX-I::before {
+  padding: 0.705em 0.55em 0.205em 0;
+  content: "f";
+}
+
+mjx-c.mjx-c46::before {
+  padding: 0.68em 0.653em 0 0;
+  content: "F";
+}
+
+mjx-c.mjx-c72::before {
+  padding: 0.442em 0.392em 0 0;
+  content: "r";
+}
+
+mjx-c.mjx-c65::before {
+  padding: 0.448em 0.444em 0.011em 0;
+  content: "e";
+}
+
+mjx-c.mjx-c71::before {
+  padding: 0.442em 0.528em 0.194em 0;
+  content: "q";
+}
+
+mjx-c.mjx-c75::before {
+  padding: 0.442em 0.556em 0.011em 0;
+  content: "u";
+}
+
+mjx-c.mjx-c6E::before {
+  padding: 0.442em 0.556em 0 0;
+  content: "n";
+}
+
+mjx-c.mjx-c63::before {
+  padding: 0.448em 0.444em 0.011em 0;
+  content: "c";
+}
+
+mjx-c.mjx-c79::before {
+  padding: 0.431em 0.528em 0.204em 0;
+  content: "y";
+}
+
+mjx-c.mjx-c20::before {
+  padding: 0 0.25em 0 0;
+  content: " ";
+}
+
+mjx-c.mjx-c6F::before {
+  padding: 0.448em 0.5em 0.01em 0;
+  content: "o";
+}
+
+mjx-c.mjx-c66::before {
+  padding: 0.705em 0.372em 0 0;
+  content: "f";
+}
+
+mjx-c.mjx-c57::before {
+  padding: 0.683em 1.028em 0.022em 0;
+  content: "W";
+}
+
+mjx-c.mjx-c69::before {
+  padding: 0.669em 0.278em 0 0;
+  content: "i";
+}
+
+mjx-c.mjx-cA0::before {
+  padding: 0 0.25em 0 0;
+  content: "\A0";
+}
+
+mjx-c.mjx-c28::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: "(";
+}
+
+mjx-c.mjx-c29::before {
+  padding: 0.75em 0.389em 0.25em 0;
+  content: ")";
+}
+
+mjx-c.mjx-c2248::before {
+  padding: 0.483em 0.778em 0 0;
+  content: "\2248";
+}
+
+mjx-c.mjx-c30::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "0";
+}
+
+mjx-c.mjx-c2E::before {
+  padding: 0.12em 0.278em 0 0;
+  content: ".";
+}
+
+mjx-c.mjx-c35::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "5";
+}
+
+mjx-c.mjx-c221A.TEX-S2::before {
+  padding: 1.15em 1.02em 0.65em 0;
+  content: "\221A";
+}
+
+mjx-c.mjx-c2F::before {
+  padding: 0.75em 0.5em 0.25em 0;
+  content: "/";
+}
+</style></head>
+<body>
+
+<div class="container">
+    <h1>Frequency of AC using Sonometer</h1>
+
+    <!-- 1. AIM & APPARATUS -->
+    <div class="card">
+        <h2>1. Aim &amp; Apparatus</h2>
+        <p><strong>Aim:</strong> To find the frequency of alternating current (AC) by using a sonometer and an electromagnet.</p>
+        
+        <h3>Apparatus:</h3>
+        <ul>
+            <li>Sonometer with soft iron wire stretched over it.</li>
+            <li>Electromagnet with a step-down transformer (220-6V).</li>
+            <li>Slotted weights with hanger.</li>
+        </ul>
+    </div>
+
+    <!-- 2. PRINCIPLE -->
+    <div class="card">
+        <h2>2. Principle</h2>
+        <p>A wire of length <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="0"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container> and mass per unit length <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="1"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></mjx-assistive-mml></mjx-container> is stretched by a tension force <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="2"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi></math></mjx-assistive-mml></mjx-container>. When set into transverse vibrations in the fundamental mode, the frequency <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="3"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></mjx-assistive-mml></mjx-container> is given by:</p>
+        
+        <div class="formula-box">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="4"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mrow><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-msqrt><mjx-sqrt><mjx-surd><mjx-mo class="mjx-s3"><mjx-c class="mjx-c221A TEX-S3"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.23em;"><mjx-mfrac><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-box></mjx-sqrt></mjx-msqrt></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>n</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>l</mi></mrow></mfrac><msqrt><mfrac><mi>T</mi><mi>m</mi></mfrac></msqrt></math></mjx-assistive-mml></mjx-container>
+        </div>
+        
+        <p>Where <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="5"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D447 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi><mo>=</mo><mi>M</mi><mi>g</mi></math></mjx-assistive-mml></mjx-container> (Mass <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="6"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-cD7"></mjx-c></mjx-mo></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>×</mo></math></mjx-assistive-mml></mjx-container> Gravity).</p>
+
+        <h3>Relationship between Wire Frequency (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="7"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></mjx-assistive-mml></mjx-container>) and AC Frequency (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="8"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math></mjx-assistive-mml></mjx-container>):</h3>
+        <p>An AC current changes direction twice per cycle. The 
+electromagnet becomes magnetized during both the positive and negative 
+half-cycles. The soft iron wire is attracted to the magnet regardless of
+ polarity (North or South).</p>
+        <p>Therefore, the wire is attracted <strong>twice</strong> in every AC cycle.</p>
+        
+        <div class="formula-box" style="border-color: var(--accent); background: #fffbeb;">
+            Frequency of AC (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="9"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math></mjx-assistive-mml></mjx-container>) = <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="10"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mfrac><mjx-frac><mjx-num><mjx-nstrut></mjx-nstrut><mjx-mrow size="s"><mjx-mtext class="mjx-n"><mjx-c class="mjx-c46"></mjx-c><mjx-c class="mjx-c72"></mjx-c><mjx-c class="mjx-c65"></mjx-c><mjx-c class="mjx-c71"></mjx-c><mjx-c class="mjx-c75"></mjx-c><mjx-c class="mjx-c65"></mjx-c><mjx-c class="mjx-c6E"></mjx-c><mjx-c class="mjx-c63"></mjx-c><mjx-c class="mjx-c79"></mjx-c><mjx-c class="mjx-c20"></mjx-c><mjx-c class="mjx-c6F"></mjx-c><mjx-c class="mjx-c66"></mjx-c><mjx-c class="mjx-c20"></mjx-c><mjx-c class="mjx-c57"></mjx-c><mjx-c class="mjx-c69"></mjx-c><mjx-c class="mjx-c72"></mjx-c><mjx-c class="mjx-c65"></mjx-c><mjx-c class="mjx-cA0"></mjx-c></mjx-mtext><mjx-mo class="mjx-n"><mjx-c class="mjx-c28"></mjx-c></mjx-mo><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n"><mjx-c class="mjx-c29"></mjx-c></mjx-mo></mjx-mrow></mjx-num><mjx-dbox><mjx-dtable><mjx-line></mjx-line><mjx-row><mjx-den><mjx-dstrut></mjx-dstrut><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mrow><mtext>Frequency of Wire&nbsp;</mtext><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><mn>2</mn></mfrac></math></mjx-assistive-mml></mjx-container>
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="11"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>f</mi><mo>=</mo><mfrac><mi>n</mi><mn>2</mn></mfrac></math></mjx-assistive-mml></mjx-container>
+        </div>
+    </div>
+
+    <!-- 3. DIAGRAM -->
+    <div class="card">
+        <h2>3. Experimental Setup</h2>
+        <p>The electromagnet is connected to the step-down transformer. 
+It is placed near the center of the wire between the two bridges (knife 
+edges).</p>
+        
+        <div class="diagram-container">
+            <svg viewBox="0 0 600 280">
+                <!-- Wooden Box -->
+                <rect x="50" y="150" width="450" height="60" fill="#d4a373" stroke="#8d6e63" stroke-width="2"></rect>
+                <line x1="50" y1="150" x2="500" y2="150" stroke="#8d6e63" stroke-width="2"></line>
+                <text x="275" y="190" text-anchor="middle" fill="#5d4037" font-weight="bold">WOODEN SOUND BOX</text>
+
+                <!-- Pulley -->
+                <circle cx="510" cy="150" r="15" fill="#94a3b8" stroke="#333"></circle>
+                
+                <!-- Wire -->
+                <line x1="50" y1="135" x2="510" y2="135" stroke="#333" stroke-width="2"></line> <!-- Horizontal -->
+                <line x1="510" y1="135" x2="525" y2="150" stroke="#333" stroke-width="2"></line> <!-- Over pulley -->
+                <line x1="525" y1="150" x2="525" y2="230" stroke="#333" stroke-width="2"></line> <!-- Down -->
+
+                <!-- Weights -->
+                <rect x="510" y="230" width="30" height="10" fill="#333"></rect>
+                <rect x="515" y="240" width="20" height="10" fill="#555"></rect>
+                <rect x="515" y="250" width="20" height="10" fill="#555"></rect>
+                <text x="545" y="250" font-size="12">Load (Mg)</text>
+
+                <!-- Bridges (Knife Edges) -->
+                <!-- Left Fixed Bridge -->
+                <path d="M80,150 L100,150 L90,135 Z" fill="#a3a3a3" stroke="#333"></path> 
+                <!-- Right Moveable Bridge -->
+                <path d="M380,150 L400,150 L390,135 Z" fill="#eab308" stroke="#333"></path> 
+                <text x="390" y="170" text-anchor="middle" font-size="10">Moveable Bridge</text>
+
+                <!-- Electromagnet -->
+                <rect x="220" y="80" width="40" height="50" fill="#475569"></rect>
+                <line x1="240" y1="130" x2="240" y2="135" stroke="#ef4444" stroke-width="2" stroke-dasharray="2,2"></line> <!-- Magnetic field -->
+                <text x="240" y="70" text-anchor="middle" font-size="10" font-weight="bold">Electromagnet</text>
+
+                <!-- Transformer connection -->
+                <path d="M220,100 L180,100 L180,220" fill="none" stroke="#333"></path>
+                <path d="M260,100 L300,100 L300,220" fill="none" stroke="#333"></path>
+                <rect x="160" y="220" width="160" height="40" fill="#e2e8f0" stroke="#333"></rect>
+                <text x="240" y="245" text-anchor="middle" font-size="10">6V Transformer</text>
+
+                <!-- Dimensions -->
+                <line x1="90" y1="120" x2="390" y2="120" stroke="#2563eb" stroke-width="1" marker-end="url(#arrow)" marker-start="url(#arrow)"></line>
+                <text x="240" y="115" text-anchor="middle" fill="#2563eb" font-size="12">Length l</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- 4. SIMULATOR -->
+    <div class="card">
+        <h2>4. Virtual Experiment</h2>
+        <p><strong>Instructions:</strong>
+        </p><ol>
+            <li>Select a <strong>Load (Mass)</strong>.</li>
+            <li>Slowly slide the <strong>Bridge Length (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="12"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container>)</strong>.</li>
+            <li>Look for <strong>Maximum Amplitude</strong> (Resonance). The paper strip on the wire would fly off here.</li>
+            <li>Note the Mass and Resonant Length in the table below.</li>
+        </ol>
+        <p></p>
+
+        <div class="sim-box">
+            <div id="resBadge" class="resonance-badge">Adjust Length...</div>
+            <canvas id="simCanvas" width="600" height="200"></canvas>
+            
+            <div class="controls">
+                <div>
+                    <label>Hanging Load (Mass):</label>
+                    <select id="massSelect">
+                        <option value="0.5" selected="selected">0.5 kg</option>
+                        <option value="1.0">1.0 kg</option>
+                        <option value="1.5">1.5 kg</option>
+                        <option value="2.0">2.0 kg</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Vibrating Length (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="13"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container>): <span id="lenVal" style="color:var(--accent); font-weight:bold;">13.8</span> cm</label>
+                    <input type="range" id="lenSlider" min="10" max="60" step="0.1" value="13.8">
+                </div>
+            </div>
+            <p class="note">Simulation assumes standard steel wire (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="14"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2248"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c35"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi><mo>≈</mo><mn>0.005</mn></math></mjx-assistive-mml></mjx-container> kg/m) and AC Freq <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.2%; position: relative;" tabindex="0" ctxtmenu_counter="15"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2248"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c35"></mjx-c><mjx-c class="mjx-c30"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>≈</mo><mn>50</mn></math></mjx-assistive-mml></mjx-container> Hz.</p>
+        </div>
+    </div>
+
+    <!-- 5. OBSERVATIONS -->
+    <div class="card">
+        <h2>5. Observations &amp; Calculations</h2>
+        <p><strong>Given:</strong> Mass per unit length of wire (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.4%; position: relative;" tabindex="0" ctxtmenu_counter="16"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>m</mi></math></mjx-assistive-mml></mjx-container>) = <input type="number" id="linearMass" value="0.005" step="0.001" style="width:70px"> kg/m.</p>
+        <p>Use the data from the simulator or the provided examples to fill the table.</p>
+
+        <table id="obsTable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Load in Kg <br> (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="17"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>M</mi></math></mjx-assistive-mml></mjx-container>)</th>
+                    <th>Resonant Length <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="18"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>l</mi></math></mjx-assistive-mml></mjx-container> (m)</th>
+                    <th>Wire Frequency <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="19"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac><mjx-num><mjx-nstrut></mjx-nstrut><mjx-mn class="mjx-n" size="s"><mjx-c class="mjx-c31"></mjx-c></mjx-mn></mjx-num><mjx-dbox><mjx-dtable><mjx-line></mjx-line><mjx-row><mjx-den><mjx-dstrut></mjx-dstrut><mjx-mrow size="s"><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D459 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-msqrt><mjx-sqrt><mjx-surd><mjx-mo class="mjx-lop"><mjx-c class="mjx-c221A TEX-S2"></mjx-c></mjx-mo></mjx-surd><mjx-box style="padding-top: 0.247em;"><mjx-mfrac><mjx-frac><mjx-num><mjx-nstrut></mjx-nstrut><mjx-mrow size="s"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D440 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D454 TEX-I"></mjx-c></mjx-mi></mjx-mrow></mjx-num><mjx-dbox><mjx-dtable><mjx-line></mjx-line><mjx-row><mjx-den><mjx-dstrut></mjx-dstrut><mjx-mi class="mjx-i" size="s"><mjx-c class="mjx-c1D45A TEX-I"></mjx-c></mjx-mi></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac></mjx-box></mjx-sqrt></mjx-msqrt></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>l</mi></mrow></mfrac><msqrt><mfrac><mrow><mi>M</mi><mi>g</mi></mrow><mi>m</mi></mfrac></msqrt></math></mjx-assistive-mml></mjx-container> (Hz)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"><tr>
+                <td>1</td>
+                <td><input type="number" class="table-inp mass-inp" value="0.5" step="0.1"></td>
+                <td><input type="number" class="table-inp len-inp" value="0.156" step="0.001"></td>
+                <td class="calc-res">100.34</td>
+            </tr><tr>
+                <td>2</td>
+                <td><input type="number" class="table-inp mass-inp" value="1" step="0.1"></td>
+                <td><input type="number" class="table-inp len-inp" value="0.221" step="0.001"></td>
+                <td class="calc-res">100.16</td>
+            </tr><tr>
+                <td>3</td>
+                <td><input type="number" class="table-inp mass-inp" value="1.5" step="0.1"></td>
+                <td><input type="number" class="table-inp len-inp" value="0.271" step="0.001"></td>
+                <td class="calc-res">100.04</td>
+            </tr><tr>
+                <td>4</td>
+                <td><input type="number" class="table-inp mass-inp" value="2" step="0.1"></td>
+                <td><input type="number" class="table-inp len-inp" value="0.313" step="0.001"></td>
+                <td class="calc-res">100.02</td>
+            </tr></tbody>
+            <tfoot>
+                <tr style="background-color: #f3f4f6;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Mean Wire Frequency (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="20"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></mjx-assistive-mml></mjx-container>):</td>
+                    <td id="meanN" style="font-weight: bold; color: var(--dark);">100.14</td>
+                </tr>
+                <tr style="background-color: #ede9fe;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">AC Frequency (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 121.3%; position: relative;" tabindex="0" ctxtmenu_counter="21"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D453 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D45B TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi><mo>=</mo><mi>n</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><mn>2</mn></math></mjx-assistive-mml></mjx-container>):</td>
+                    <td id="finalF" style="font-weight: bold; font-size: 1.2em; color: var(--primary);">50.07</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <p><strong>Result:</strong> The frequency of the alternating current is <strong><span id="resText">50.07</span> Hz</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* =========================================
+       1. SIMULATOR LOGIC
+       ========================================= */
+    const canvas = document.getElementById('simCanvas');
+    const ctx = canvas.getContext('2d');
+    const massSelect = document.getElementById('massSelect');
+    const lenSlider = document.getElementById('lenSlider');
+    const lenVal = document.getElementById('lenVal');
+    const badge = document.getElementById('resBadge');
+
+    // Physics Constants
+    const g = 9.8;
+    const linearDensity = 0.005; // kg/m
+    const targetACFreq = 50; // Hz
+    const targetWireFreq = targetACFreq * 2; // 100 Hz
+
+    let time = 0;
+
+    function getOptimalLength(mass) {
+        // Formula: n = (1/2l) * sqrt(T/m)
+        // Rearranged: l = (1/2n) * sqrt(Mg/m)
+        let T = mass * g;
+        let l_meters = (1 / (2 * targetWireFreq)) * Math.sqrt(T / linearDensity);
+        return l_meters * 100; // convert to cm
+    }
+
+    function draw() {
+        // Clear
+        ctx.fillStyle = "#111";
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+        
+        // Inputs
+        let M = parseFloat(massSelect.value);
+        let currentL = parseFloat(lenSlider.value);
+        lenVal.innerText = currentL.toFixed(1);
+
+        // Calculate Resonance
+        let optimalL = getOptimalLength(M);
+        let diff = Math.abs(currentL - optimalL);
+        
+        // Amplitude Logic (Gaussian curve around optimal length)
+        // If difference is 0, amplitude is max (40). If diff is high, amp is near 0.
+        let bandwidth = 2.0; // How picky the resonance is
+        let amplitude = 60 * Math.exp( -Math.pow(diff, 2) / (2 * Math.pow(bandwidth, 2)) );
+
+        // Visual Feedback
+        if(amplitude > 40) {
+            badge.innerText = "RESONANCE DETECTED (Max Amplitude)";
+            badge.className = "resonance-badge resonance-active";
+        } else {
+            badge.innerText = "Adjust Length...";
+            badge.className = "resonance-badge";
+        }
+
+        // Draw Wire
+        ctx.beginPath();
+        ctx.strokeStyle = "#eab308"; // Gold color
+        ctx.lineWidth = 3;
+        
+        let centerY = canvas.height / 2;
+        let width = canvas.width;
+
+        // Draw Sine Wave
+        for(let x = 0; x < width; x++) {
+            // Visualize the "Length" by constraining the wave width visually? 
+            // For simplicity, we animate the whole canvas but amplitude depends on slider
+            let y = centerY + amplitude * Math.sin((x * 0.05) + (time * 0.5));
+            
+            // Damping at edges to look like attached wire
+            let envelope = Math.sin((x / width) * Math.PI); 
+            y = centerY + (y - centerY) * envelope;
+
+            if(x===0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Draw Bridges (Visual markers)
+        ctx.fillStyle = "#aaa";
+        ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(20, centerY+20); ctx.lineTo(0, centerY+40); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(width, centerY); ctx.lineTo(width-20, centerY+20); ctx.lineTo(width, centerY+40); ctx.fill();
+
+        time += 1;
+        requestAnimationFrame(draw);
+    }
+
+    massSelect.addEventListener('change', draw);
+    lenSlider.addEventListener('input', draw);
+    draw();
+
+    /* =========================================
+       2. TABLE & CALCULATION LOGIC
+       ========================================= */
+    // Initial Example Data (Close to optimal for 50Hz AC / 100Hz Wire)
+    const initialData = [
+        { m: 0.5, l: 0.156 }, // ~15.6 cm
+        { m: 1.0, l: 0.221 }, // ~22.1 cm
+        { m: 1.5, l: 0.271 }, // ~27.1 cm
+        { m: 2.0, l: 0.313 }  // ~31.3 cm
+    ];
+
+    const tbody = document.getElementById('tableBody');
+    const linearMassInput = document.getElementById('linearMass');
+
+    function renderTable() {
+        tbody.innerHTML = "";
+        initialData.forEach((row, i) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${i+1}</td>
+                <td><input type="number" class="table-inp mass-inp" value="${row.m}" step="0.1"></td>
+                <td><input type="number" class="table-inp len-inp" value="${row.l}" step="0.001"></td>
+                <td class="calc-res">---</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Add listeners
+        document.querySelectorAll('.table-inp').forEach(inp => {
+            inp.addEventListener('input', calculate);
+        });
+        linearMassInput.addEventListener('input', calculate);
+        
+        calculate();
+    }
+
+    function calculate() {
+        const m_density = parseFloat(linearMassInput.value);
+        const rows = tbody.querySelectorAll('tr');
+        let totalN = 0;
+        let count = 0;
+        const g_val = 9.8;
+
+        rows.forEach(row => {
+            let M = parseFloat(row.querySelector('.mass-inp').value);
+            let l = parseFloat(row.querySelector('.len-inp').value); // in meters
+            let resCell = row.querySelector('.calc-res');
+
+            if(M && l && m_density > 0) {
+                // n = (1/2l) * sqrt(Mg/m)
+                let T = M * g_val;
+                let insideSqrt = T / m_density;
+                let n = (1 / (2 * l)) * Math.sqrt(insideSqrt);
+
+                resCell.innerText = n.toFixed(2);
+                totalN += n;
+                count++;
+            } else {
+                resCell.innerText = "---";
+            }
+        });
+
+        if(count > 0) {
+            let mean = totalN / count;
+            document.getElementById('meanN').innerText = mean.toFixed(2);
+            
+            // Final AC Frequency = n / 2
+            let acFreq = mean / 2;
+            document.getElementById('finalF').innerText = acFreq.toFixed(2);
+            document.getElementById('resText').innerText = acFreq.toFixed(2);
+        }
+    }
+
+    renderTable();
+
+</script>
+
+</body></html>

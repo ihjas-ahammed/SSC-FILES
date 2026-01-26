@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velocity of Sound Lab Manual</title>
+    
+    <!-- 1. MATHJAX CONFIGURATION -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async="" src="1-Velocity%20of%20Sound_files/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e293b;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--secondary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 950px; margin: 0 auto; }
+
+        /* TYPOGRAPHY */
+        h1 { text-align: center; color: var(--primary); border-bottom: 4px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px; }
+        h2 { border-left: 5px solid var(--primary); padding-left: 10px; color: var(--secondary); margin-top: 0; }
+        h3 { color: var(--primary); margin-bottom: 5px; }
+
+        /* CARDS */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* LISTS */
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        /* FORMULAS */
+        .formula-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 15px 0;
+        }
+
+        /* CIRCUIT DIAGRAM */
+        .svg-container { text-align: center; overflow-x: auto; }
+        svg { background: white; border: 1px solid #e2e8f0; border-radius: 8px; max-width: 100%; height: auto; }
+        .wire { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+        .comp-label { font-family: monospace; font-weight: bold; fill: #475569; font-size: 12px; }
+
+        /* SIMULATOR */
+        .sim-wrapper { background: #111827; color: white; padding: 20px; border-radius: 8px; text-align: center; }
+        canvas { background: #000; border: 1px solid #374151; border-radius: 4px; width: 100%; max-width: 650px; }
+        .controls { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; 
+            background: #1f2937; padding: 15px; margin-top: 15px; border-radius: 6px; 
+        }
+        input[type=range] { width: 100%; cursor: pointer; }
+        .status-badge {
+            display: inline-block; padding: 5px 15px; border-radius: 20px; 
+            font-weight: bold; font-size: 0.9rem; margin-bottom: 10px;
+            background: #374151; color: #9ca3af; transition: 0.3s;
+        }
+        .status-success { background: #10b981; color: white; box-shadow: 0 0 10px #10b981; }
+
+        /* TABLE */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: var(--primary); color: white; padding: 12px; text-align: center; }
+        td { border: 1px solid #cbd5e1; padding: 8px; text-align: center; }
+        input.data-input { 
+            width: 80px; padding: 5px; text-align: center; 
+            border: 1px solid #94a3b8; border-radius: 4px; font-weight: bold;
+        }
+        .result-text { font-weight: bold; color: var(--primary); }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) { .controls { grid-template-columns: 1fr; } }
+    </style>
+<style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style><style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  border-collapse: collapse;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mi {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-TeXAtom {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-mfrac {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-frac {
+  display: inline-block;
+  vertical-align: 0.17em;
+  padding: 0 .22em;
+}
+
+mjx-frac[type="d"] {
+  vertical-align: .04em;
+}
+
+mjx-frac[delims] {
+  padding: 0 .1em;
+}
+
+mjx-frac[atop] {
+  padding: 0 .12em;
+}
+
+mjx-frac[atop][delims] {
+  padding: 0;
+}
+
+mjx-dtable {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-dtable > * {
+  font-size: 2000%;
+}
+
+mjx-dbox {
+  display: block;
+  font-size: 5%;
+}
+
+mjx-num {
+  display: block;
+  text-align: center;
+}
+
+mjx-den {
+  display: block;
+  text-align: center;
+}
+
+mjx-mfrac[bevelled] > mjx-num {
+  display: inline-block;
+}
+
+mjx-mfrac[bevelled] > mjx-den {
+  display: inline-block;
+}
+
+mjx-den[align="right"], mjx-num[align="right"] {
+  text-align: right;
+}
+
+mjx-den[align="left"], mjx-num[align="left"] {
+  text-align: left;
+}
+
+mjx-nstrut {
+  display: inline-block;
+  height: .054em;
+  width: 0;
+  vertical-align: -.054em;
+}
+
+mjx-nstrut[type="d"] {
+  height: .217em;
+  vertical-align: -.217em;
+}
+
+mjx-dstrut {
+  display: inline-block;
+  height: .505em;
+  width: 0;
+}
+
+mjx-dstrut[type="d"] {
+  height: .726em;
+}
+
+mjx-line {
+  display: block;
+  box-sizing: border-box;
+  min-height: 1px;
+  height: .06em;
+  border-top: .06em solid;
+  margin: .06em -.1em;
+  overflow: hidden;
+}
+
+mjx-line[type="d"] {
+  margin: .18em -.1em;
+}
+
+mjx-mspace {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c1D451.TEX-I::before {
+  padding: 0.694em 0.52em 0.01em 0;
+  content: "d";
+}
+
+mjx-c.mjx-c1D706.TEX-I::before {
+  padding: 0.694em 0.583em 0.012em 0;
+  content: "\3BB";
+}
+
+mjx-c.mjx-c2F::before {
+  padding: 0.75em 0.5em 0.25em 0;
+  content: "/";
+}
+
+mjx-c.mjx-c32::before {
+  padding: 0.666em 0.5em 0 0;
+  content: "2";
+}
+
+mjx-c.mjx-c3D::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "=";
+}
+
+mjx-c.mjx-c27F9::before {
+  padding: 0.525em 1.638em 0.024em 0;
+  content: "\27F9";
+}
+
+mjx-c.mjx-c1D449.TEX-I::before {
+  padding: 0.683em 0.769em 0.022em 0;
+  content: "V";
+}
+
+mjx-c.mjx-c1D708.TEX-I::before {
+  padding: 0.442em 0.53em 0 0;
+  content: "\3BD";
+}
+</style></head>
+<body>
+
+<div class="container">
+    <h1>Determination of Velocity of Sound in Air</h1>
+
+    <!-- 1. AIM & APPARATUS -->
+    <div class="card">
+        <h2>1. Aim &amp; Apparatus</h2>
+        <p><strong>Aim:</strong> To determine the velocity of sound in air using a Cathode Ray Oscilloscope (CRO) by the phase difference method.</p>
+        
+        <h3>Apparatus Required:</h3>
+        <ul>
+            <li><strong>CRO</strong> (Cathode Ray Oscilloscope).</li>
+            <li><strong>Piezoelectric Buzzer</strong> (Source of sound).</li>
+            <li><strong>Function Generator</strong> (To drive the buzzer, range 2000Hz - 6000Hz).</li>
+            <li><strong>MAX4466 Electret Microphone</strong> with Amplifier (Receiver).</li>
+            <li><strong>DC Power Supply</strong> (3.3V or 5V for the microphone).</li>
+        </ul>
+        <p style="font-size: 0.9em; color: #64748b;"><em>Note: The MAX4466 is a dedicated amplifier chip designed for microphones with adjustable gain to fill the CRO screen.</em></p>
+    </div>
+
+    <!-- 2. PRINCIPLE -->
+    <div class="card">
+        <h2>2. Principle</h2>
+        <p>Sound waves travel from the source (Buzzer) to the receiver (Microphone) over a distance <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="0"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container>. The signals from both are displayed on the CRO.</p>
+        
+        <p>As the distance <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="1"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container> changes, the phase difference between the two signals changes. When the two signals show a <strong>phase difference of 180°</strong> (Mirror images/Antiphase), the distance between source and receiver is exactly half a wavelength (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="2"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D706 TEX-I"></mjx-c></mjx-mi><mjx-texatom texclass="ORD"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2F"></mjx-c></mjx-mo></mjx-texatom><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>λ</mi><mrow data-mjx-texclass="ORD"><mo>/</mo></mrow><mn>2</mn></math></mjx-assistive-mml></mjx-container>).</p>
+
+        <div class="formula-box">
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.8%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="3"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mfrac space="4"><mjx-frac type="d"><mjx-num><mjx-nstrut type="d"></mjx-nstrut><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D706 TEX-I"></mjx-c></mjx-mi></mjx-num><mjx-dbox><mjx-dtable><mjx-line type="d"></mjx-line><mjx-row><mjx-den><mjx-dstrut type="d"></mjx-dstrut><mjx-mn class="mjx-n"><mjx-c class="mjx-c32"></mjx-c></mjx-mn></mjx-den></mjx-row></mjx-dtable></mjx-dbox></mjx-frac></mjx-mfrac><mjx-mstyle><mjx-mspace style="width: 0.278em;"></mjx-mspace></mjx-mstyle><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c27F9"></mjx-c></mjx-mo><mjx-mstyle><mjx-mspace style="width: 0.278em;"></mjx-mspace></mjx-mstyle><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D706 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>d</mi><mo>=</mo><mfrac><mi>λ</mi><mn>2</mn></mfrac><mstyle scriptlevel="0"><mspace width="0.278em"></mspace></mstyle><mo stretchy="false">⟹</mo><mstyle scriptlevel="0"><mspace width="0.278em"></mspace></mstyle><mi>λ</mi><mo>=</mo><mn>2</mn><mi>d</mi></math></mjx-assistive-mml></mjx-container>
+            <br>
+            Since Velocity <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.8%; position: relative;" tabindex="0" ctxtmenu_counter="4"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mi class="mjx-i" space="4"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D706 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi><mo>=</mo><mi>ν</mi><mi>λ</mi></math></mjx-assistive-mml></mjx-container>, substituting <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.8%; position: relative;" tabindex="0" ctxtmenu_counter="5"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D706 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>λ</mi></math></mjx-assistive-mml></mjx-container>:
+            <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.8%; position: relative;" display="true" tabindex="0" ctxtmenu_counter="6"><mjx-math display="true" style="margin-left: 0px; margin-right: 0px;" class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>V</mi><mo>=</mo><mn>2</mn><mi>ν</mi><mi>d</mi></math></mjx-assistive-mml></mjx-container>
+        </div>
+        <p style="text-align: center;">Where: <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="7"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math></mjx-assistive-mml></mjx-container> = Velocity (m/s), <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="8"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ν</mi></math></mjx-assistive-mml></mjx-container> = Frequency (Hz), <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="9"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container> = Distance (m).</p>
+    </div>
+
+    <!-- 3. CIRCUIT DIAGRAM -->
+    <div class="card">
+        <h2>3. Circuit Connections</h2>
+        <p>Make connections as per the diagram below. Ensure common ground between all components.</p>
+        <div class="svg-container">
+            <svg viewBox="0 0 700 300">
+                <!-- COMPONENTS -->
+                
+                <!-- Function Gen -->
+                <rect x="30" y="80" width="100" height="80" rx="4" fill="#f8fafc" stroke="#334155" stroke-width="2"></rect>
+                <text x="80" y="120" text-anchor="middle" class="comp-label">FUNC GEN</text>
+                <circle cx="130" cy="100" r="4" fill="#ef4444"></circle> <!-- Sig -->
+                <circle cx="130" cy="140" r="4" fill="#0f172a"></circle> <!-- Gnd -->
+
+                <!-- Buzzer -->
+                <circle cx="250" cy="120" r="30" fill="#f1f5f9" stroke="#334155" stroke-width="2"></circle>
+                <text x="250" y="125" text-anchor="middle" class="comp-label">BUZZER</text>
+                <text x="250" y="80" text-anchor="middle" font-size="10" fill="#64748b">Source</text>
+
+                <!-- CRO -->
+                <rect x="350" y="20" width="160" height="120" rx="5" fill="#1e293b" stroke="#000" stroke-width="2"></rect>
+                <rect x="360" y="30" width="140" height="80" fill="#000"></rect>
+                <!-- CRO Waves -->
+                <path d="M365,70 Q380,40 400,70 T435,70" stroke="#3b82f6" stroke-width="2" fill="none"></path>
+                <path d="M365,70 Q380,100 400,70 T435,70" stroke="#f59e0b" stroke-width="2" fill="none"></path>
+                <text x="430" y="130" text-anchor="middle" fill="#fff" font-size="10">CRO (CH1 &amp; CH2)</text>
+
+                <!-- Mic Amp -->
+                <rect x="550" y="180" width="90" height="80" rx="4" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"></rect>
+                <text x="595" y="210" text-anchor="middle" class="comp-label">MAX4466 MIC</text>
+                <text x="595" y="275" text-anchor="middle" font-size="10" fill="#64748b">Receiver</text>
+                <circle cx="560" cy="250" r="3" fill="#ef4444"></circle> <text x="560" y="240" font-size="9">VCC</text>
+                <circle cx="595" cy="250" r="3" fill="#0f172a"></circle> <text x="595" y="240" font-size="9">GND</text>
+                <circle cx="630" cy="250" r="3" fill="#f59e0b"></circle> <text x="630" y="240" font-size="9">OUT</text>
+
+                <!-- Battery -->
+                <rect x="620" y="100" width="40" height="60" fill="#ddd" stroke="#333"></rect>
+                <text x="640" y="135" text-anchor="middle" font-size="10" font-weight="bold">5V</text>
+
+                <!-- WIRING -->
+                <!-- FG Red -> Buzzer & CRO CH1 -->
+                <path d="M130,100 L220,100" class="wire" stroke="#ef4444"></path>
+                <path d="M160,100 L160,50 L350,50" class="wire" stroke="#ef4444"></path> <!-- To CRO -->
+                
+                <!-- FG Black -> Buzzer & Common GND -->
+                <path d="M130,140 L220,140" class="wire" stroke="#0f172a"></path>
+                <path d="M160,140 L160,160 L350,160" class="wire" stroke="#0f172a"></path> <!-- To CRO Gnd -->
+
+                <!-- Mic Wiring -->
+                <path d="M630,250 L630,280 L670,280 L670,70 L510,70" class="wire" stroke="#f59e0b" stroke-dasharray="4"></path> <!-- Out to CRO CH2 -->
+                <path d="M560,250 L560,130 L620,130" class="wire" stroke="#ef4444"></path> <!-- VCC -->
+                <path d="M595,250 L595,160 L620,160" class="wire" stroke="#0f172a"></path> <!-- GND to Batt -->
+                
+                <!-- Common Ground Link -->
+                <path d="M350,160 L595,160" class="wire" stroke="#0f172a"></path> 
+
+            </svg>
+        </div>
+        <ul>
+            <li><strong>Source:</strong> Connect Buzzer to Function Generator and CRO Channel 1 (X-Channel).</li>
+            <li><strong>Receiver:</strong> Connect MAX4466 OUT to CRO Channel 2. Connect VCC to 5V and GND to common ground.</li>
+        </ul>
+    </div>
+
+    <!-- 4. PROCEDURE -->
+    <div class="card">
+        <h2>4. Procedure</h2>
+        <ol>
+            <li>Switch on the Function Generator and set a frequency <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="10"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ν</mi></math></mjx-assistive-mml></mjx-container> (e.g., 3000 Hz).</li>
+            <li>Observe two waveforms on the CRO: one from the source (Buzzer) and one from the receiver (Mic).</li>
+            <li>Slowly move the microphone away from the buzzer to increase the distance <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="11"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container>.</li>
+            <li>Stop moving when the two waveforms become <strong>mirror images</strong> of each other (180° phase difference). This creates a shape like <code>()</code> on the screen.</li>
+            <li>Measure the distance <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="12"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container> between the buzzer and the mic using a scale.</li>
+            <li>Record <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="13"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ν</mi></math></mjx-assistive-mml></mjx-container> and <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="14"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container> in the observations table.</li>
+            <li>Repeat for different frequencies.</li>
+        </ol>
+    </div>
+
+    <!-- 5. SIMULATOR -->
+    <div class="card">
+        <h2>5. Virtual Experiment (Data Collection)</h2>
+        <p>Use the simulator below to mimic the lab procedure. Find the distance where the <strong>Green Badge</strong> appears.</p>
+        
+        <div class="sim-wrapper">
+            <div id="phaseStatus" class="status-badge">Phase Shift: 0°</div>
+            <canvas id="oscCanvas" width="600" height="250"></canvas>
+            
+            <div class="controls">
+                <div>
+                    <label>Frequency (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="15"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ν</mi></math></mjx-assistive-mml></mjx-container>): <span id="dispFreq" style="color: #3b82f6;">2930</span> Hz</label>
+                    <input type="range" id="inputFreq" min="2000" max="4500" step="10" value="2930">
+                </div>
+                <div>
+                    <label>Distance (<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="16"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container>): <span id="dispDist" style="color: #f59e0b;">0.0</span> cm</label>
+                    <input type="range" id="inputDist" min="0" max="15" step="0.1" value="0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. OBSERVATIONS -->
+    <div class="card">
+        <h2>6. Observations &amp; Calculations</h2>
+        <p>Enter the data obtained from the simulator (or use the pre-filled data from the lab note).</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Frequency of Source <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="17"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ν</mi></math></mjx-assistive-mml></mjx-container> (Hz)</th>
+                    <th>Distance (Source-Receiver) <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="18"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>d</mi></math></mjx-assistive-mml></mjx-container> (cm)</th>
+                    <th>Velocity of Sound <br> <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="19"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c32"></mjx-c></mjx-mn><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D708 TEX-I"></mjx-c></mjx-mi><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D451 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi><mo>=</mo><mn>2</mn><mi>ν</mi><mi>d</mi></math></mjx-assistive-mml></mjx-container> (m/s)</th>
+                </tr>
+            </thead>
+            <tbody id="obsTableBody">
+                <!-- Rows will be injected by JS -->
+            <tr>
+                <td>1</td>
+                <td><input type="number" class="data-input freq-inp" value="3180"></td>
+                <td><input type="number" class="data-input dist-inp" value="4.7"></td>
+                <td class="result-text">298.92</td>
+            </tr><tr>
+                <td>2</td>
+                <td><input type="number" class="data-input freq-inp" value="3300"></td>
+                <td><input type="number" class="data-input dist-inp" value="5"></td>
+                <td class="result-text">330.00</td>
+            </tr><tr>
+                <td>3</td>
+                <td><input type="number" class="data-input freq-inp" value="3230"></td>
+                <td><input type="number" class="data-input dist-inp" value="4.9"></td>
+                <td class="result-text">316.54</td>
+            </tr><tr>
+                <td>4</td>
+                <td><input type="number" class="data-input freq-inp" value="3270"></td>
+                <td><input type="number" class="data-input dist-inp" value="4.7"></td>
+                <td class="result-text">307.38</td>
+            </tr></tbody>
+            <tfoot>
+                <tr style="background-color: #f1f5f9;">
+                    <td colspan="3" style="text-align: right; font-weight: bold;">Mean Velocity <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" style="font-size: 116.7%; position: relative;" tabindex="0" ctxtmenu_counter="20"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mi class="mjx-i"><mjx-c class="mjx-c1D449 TEX-I"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math></mjx-assistive-mml></mjx-container>:</td>
+                    <td id="meanVelocity" style="font-weight: bold; font-size: 1.2em; color: var(--primary);">313.21</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #ecfdf5; border: 1px solid #10b981; border-radius: 6px;">
+            <h3>Result:</h3>
+            <p>The experimentally determined velocity of sound in air is <strong><span id="finalResult">313.21</span> m/s</strong>.</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /* =========================================
+       1. SIMULATOR LOGIC (Physics Based)
+       ========================================= */
+    const canvas = document.getElementById('oscCanvas');
+    const ctx = canvas.getContext('2d');
+    const SPEED_OF_SOUND_CM = 34300; // 343 m/s in cm/s
+
+    const inputFreq = document.getElementById('inputFreq');
+    const inputDist = document.getElementById('inputDist');
+    const dispFreq = document.getElementById('dispFreq');
+    const dispDist = document.getElementById('dispDist');
+    const phaseStatus = document.getElementById('phaseStatus');
+
+    let time = 0;
+
+    function drawSimulator() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const cy = h / 2;
+        
+        // 1. Clear Screen
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0,0,w,h);
+
+        // 2. Draw Grid
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for(let i=0; i<w; i+=50) { ctx.moveTo(i,0); ctx.lineTo(i,h); }
+        for(let i=0; i<h; i+=50) { ctx.moveTo(0,i); ctx.lineTo(w,i); }
+        ctx.stroke();
+
+        // 3. Get Values
+        let f = parseInt(inputFreq.value);
+        let d = parseFloat(inputDist.value);
+
+        // Update Labels
+        dispFreq.innerText = f;
+        dispDist.innerText = d.toFixed(1);
+
+        // 4. Physics Calculation
+        // Wavelength lambda = v/f
+        let lambda = SPEED_OF_SOUND_CM / f; 
+        
+        // Phase Difference (radians) = (d / lambda) * 2PI
+        // 180 degrees = PI radians. 
+        // We look for d = lambda/2
+        let phaseShift = (d / lambda) * 2 * Math.PI;
+        
+        // Convert to degrees for display/checking
+        let deg = (phaseShift * 180 / Math.PI) % 360;
+
+        // Check alignment (Antiphase is 180)
+        // Allow a small error margin of +/- 10 degrees like a real analog scope
+        let isAntiphase = Math.abs(deg - 180) < 10;
+
+        if(isAntiphase) {
+            phaseStatus.innerText = "ANTIPHASE DETECTED (180°)";
+            phaseStatus.className = "status-badge status-success";
+        } else {
+            phaseStatus.innerText = "Phase Shift: " + Math.round(deg) + "°";
+            phaseStatus.className = "status-badge";
+        }
+
+        // 5. Draw Waves
+        ctx.lineWidth = 3;
+        
+        // Source Wave (Blue) - Fixed Phase
+        ctx.beginPath();
+        ctx.strokeStyle = "#3b82f6";
+        for(let x=0; x<w; x++) {
+            let y = cy + 60 * Math.sin(x*0.04 - time);
+            if(x==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+
+        // Mic Wave (Orange) - Shifted Phase
+        ctx.beginPath();
+        ctx.strokeStyle = "#f59e0b";
+        for(let x=0; x<w; x++) {
+            let y = cy + 60 * Math.sin(x*0.04 - time - phaseShift);
+            if(x==0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+
+        // Legend
+        ctx.fillStyle = "#3b82f6"; ctx.fillText("Source (CH1)", 10, 20);
+        ctx.fillStyle = "#f59e0b"; ctx.fillText("Mic (CH2)", 10, 35);
+
+        time += 0.15;
+        requestAnimationFrame(drawSimulator);
+    }
+
+    inputFreq.addEventListener('input', drawSimulator);
+    inputDist.addEventListener('input', drawSimulator);
+    drawSimulator(); // Start loop
+
+    /* =========================================
+       2. TABLE LOGIC
+       ========================================= */
+    const rawData = [
+        { f: 3180, d: 4.7 }, // Data from handwritten note
+        { f: 3300, d: 5.0 },
+        { f: 3230, d: 4.9 },
+        { f: 3270, d: 4.7 }
+    ];
+
+    const tableBody = document.getElementById('obsTableBody');
+
+    function initTable() {
+        rawData.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td><input type="number" class="data-input freq-inp" value="${row.f}"></td>
+                <td><input type="number" class="data-input dist-inp" value="${row.d}"></td>
+                <td class="result-text">0</td>
+            `;
+            tableBody.appendChild(tr);
+        });
+
+        // Add listeners to inputs
+        const inputs = document.querySelectorAll('.data-input');
+        inputs.forEach(inp => inp.addEventListener('input', calculateResults));
+
+        calculateResults();
+    }
+
+    function calculateResults() {
+        let sumV = 0;
+        let count = 0;
+        const rows = tableBody.querySelectorAll('tr');
+
+        rows.forEach(row => {
+            let f = parseFloat(row.querySelector('.freq-inp').value);
+            let d_cm = parseFloat(row.querySelector('.dist-inp').value);
+            let resCell = row.querySelector('.result-text');
+
+            if (f && d_cm) {
+                // Formula: V = 2 * nu * d (convert d to meters)
+                let d_m = d_cm / 100;
+                let v = 2 * f * d_m;
+                
+                resCell.innerText = v.toFixed(2);
+                sumV += v;
+                count++;
+            } else {
+                resCell.innerText = "0";
+            }
+        });
+
+        let mean = count > 0 ? (sumV / count).toFixed(2) : "---";
+        document.getElementById('meanVelocity').innerText = mean;
+        document.getElementById('finalResult').innerText = mean;
+    }
+
+    // Init
+    initTable();
+
+</script>
+
+</body></html>
