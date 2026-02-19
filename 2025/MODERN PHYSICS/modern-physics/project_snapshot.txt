@@ -1,0 +1,320 @@
+Here is the detailed content for **Section 2: Relativistic Kinematics** of Module I. This file (`module1_2.ts`) focuses on the mathematical heart of Special Relativity, introducing Spacetime, the Twin Paradox in depth, and Advanced Transformations.
+
+```powershell
+touch src/data/modules/module1_2.ts
+```
+
+--- START OF FILE project_snapshot_out.txt ---
+
+--- START OF FILE src/data/modules/module1_2.ts ---
+import { Section } from '../../types';
+
+export const SECTION_2_KINEMATICS: Section = {
+  id: 'sect-1-2-kinematics',
+  title: 'Section 2: Advanced Kinematics',
+  description: 'The Lorentz Transformation, Spacetime Geometry, and Paradoxes.',
+  color: 'duo-blue',
+  units: [
+    {
+      id: 'unit-1-3-lorentz-depth',
+      title: 'The Lorentz Transformation',
+      description: 'The mathematical framework of Special Relativity.',
+      color: 'duo-blue',
+      lessons: [
+        {
+          id: 'lesson-1-3-deriv',
+          title: 'Deriving the Transformation',
+          description: 'From postulates to equations.',
+          icon: 'FunctionSquare',
+          slides: [
+            {
+              id: 's1-requirements',
+              type: 'theory',
+              title: 'Requirements for a New Transformation',
+              content: 'The Galilean transformation ($x\'=x-vt$) fails because it doesn\'t preserve the speed of light. We need a new set of equations relating $(x,t)$ to $(x\',t\')$ that satisfies:\n\n1.  **Linearity:** The transformation must be linear (no $x^2$ terms) to preserve the homogeneity of space and time.\n2.  **Correspondence:** It must reduce to Galilean at low speeds ($v \\ll c$).\n3.  **Light Speed Invariance:** A pulse of light must travel at $c$ in **both** frames.'
+            },
+            {
+              id: 's2-linearity',
+              type: 'theory',
+              title: 'The Form',
+              content: 'Because of linearity, we guess the form:\n\n$$ x\' = \\gamma (x - vt) $$\n$$ x = \\gamma\' (x\' + vt\') $$\n\nBy symmetry, the scaling factor $\\gamma$ must be the same for both observers ($\gamma = \gamma\'$). We just need to find $\\gamma$.'
+            },
+            {
+              id: 's3-finding-gamma',
+              type: 'proof',
+              title: 'Finding Gamma',
+              content: 'Track a light pulse emitted at $t=t\'=0$.',
+              proofSteps: [
+                'In frame S: $x = ct$.',
+                'In frame S\': $x\' = ct\'$.',
+                'Substitute into $x\' = \\gamma(x - vt)$: \n$ct\' = \\gamma(ct - vt) = \\gamma t (c-v)$.',
+                'Substitute into $x = \\gamma(x\' + vt\')$: \n$ct = \\gamma(ct\' + vt\') = \\gamma t\' (c+v)$.',
+                'Multiply the two time equations:\n$c^2 t t\' = \\gamma^2 t t\' (c-v)(c+v)$.',
+                '$c^2 = \\gamma^2 (c^2 - v^2)$.',
+                '$\\gamma^2 = \\frac{c^2}{c^2 - v^2} = \\frac{1}{1 - v^2/c^2}$.',
+                '$\\gamma = \\frac{1}{\\sqrt{1 - v^2/c^2}}$.'
+              ]
+            },
+            {
+              id: 's4-time-deriv',
+              type: 'proof',
+              title: 'Deriving the Time Equation',
+              content: 'Now find $t\'$.',
+              proofSteps: [
+                'Start with $x = \\gamma(x\' + vt\')$.',
+                'Substitute $x\' = \\gamma(x - vt)$.',
+                '$x = \\gamma(\\gamma(x - vt) + vt\')$.',
+                '$x/\\gamma = \\gamma x - \\gamma vt + vt\'$.',
+                '$vt\' = x/\\gamma - \\gamma x + \\gamma vt$.',
+                '$t\' = \\gamma t - \\frac{\\gamma x}{v} (1 - 1/\\gamma^2)$.',
+                'Use $1 - 1/\\gamma^2 = v^2/c^2$.',
+                '$t\' = \\gamma t - \\frac{\\gamma x}{v} (\\frac{v^2}{c^2}) = \\gamma (t - \\frac{vx}{c^2})$.'
+              ]
+            },
+            {
+              id: 'q-lorentz-check',
+              type: 'quiz',
+              title: 'Check Your Understanding',
+              content: 'Why does the time transformation $t\' = \\gamma(t - vx/c^2)$ depend on $x$?',
+              options: [
+                { id: '1', text: 'It\'s a mistake in the derivation.', isCorrect: false, explanation: '' },
+                { id: '2', text: 'Because clocks at different locations are not synchronized for the moving observer.', isCorrect: true, explanation: 'This is the relativity of simultaneity. Leading clocks lag.' },
+                { id: '3', text: 'Time moves backwards at large distances.', isCorrect: false, explanation: 'The term subtracts, but doesn\'t necessarily make time negative unless v > c.' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'lesson-1-3-spacetime',
+          title: 'Spacetime Diagrams',
+          description: 'Visualizing relativity geometrically.',
+          icon: 'Grid',
+          slides: [
+            {
+              id: 's1-minkowski',
+              type: 'theory',
+              title: 'Minkowski Diagrams',
+              content: 'A **Spacetime Diagram** plots time ($ct$) on the vertical axis and position ($x$) on the horizontal.\n\n*   **Worldline:** The path of an object through spacetime.\n*   **Light Rays:** Always travel at $45^\\circ$ angles (slope = 1, since $x=ct$).\n*   **Particle at Rest:** Vertical line.\n*   **Particle at speed $v$:** Line with slope $c/v > 1$.'
+            },
+            {
+              id: 's2-lightcone',
+              type: 'theory',
+              title: 'The Light Cone',
+              content: 'The paths of light rays emitted from the origin define the **Light Cone**.\n\n*   **Future Light Cone:** Events reachable from the origin ($v < c$).\n*   **Past Light Cone:** Events that could affect the origin.\n*   **Elsewhere:** Events outside the cone. These cannot affect or be affected by the origin without exceeding $c$.'
+            },
+            {
+              id: 's3-invariant',
+              type: 'theory',
+              title: 'The Invariant Interval',
+              content: 'Just as distance $d^2 = x^2 + y^2$ is invariant in rotation, the **Spacetime Interval** $s^2$ is invariant in Lorentz transformations:\n\n$$ s^2 = (c \\Delta t)^2 - (\\Delta x)^2 $$\n\nAll inertial observers agree on the value of $s^2$, even if they disagree on $\\Delta t$ and $\\Delta x$.'
+            },
+            {
+              id: 'q-interval',
+              type: 'quiz',
+              title: 'Classifying Intervals',
+              content: 'If $s^2 > 0$ (Time-like interval), what does this imply?',
+              options: [
+                { id: '1', text: 'The events are simultaneous.', isCorrect: false, explanation: 'This would be Space-like.' },
+                { id: '2', text: 'A causal connection is possible.', isCorrect: true, explanation: 'There is enough time for a signal traveling slower than light to connect the events.' },
+                { id: '3', text: 'The events happen at the same place.', isCorrect: false, explanation: 'Not necessarily, though there is a frame where they do.' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'unit-1-4-paradoxes',
+      title: 'Paradoxes & Puzzles',
+      description: 'Applying relativity to confusing situations.',
+      color: 'duo-blue',
+      lessons: [
+        {
+          id: 'lesson-1-4-twin',
+          title: 'The Twin Paradox',
+          description: 'A deep dive into proper time.',
+          icon: 'Users',
+          slides: [
+            {
+              id: 's1-setup',
+              type: 'theory',
+              title: 'The Scenario',
+              content: 'Twin A stays on Earth. Twin B travels to a star 8 light-years away at $v=0.8c$, then returns immediately.\n\n**Earth View:**\nDistance = 8 ly.\nTime out = $8/0.8 = 10$ years.\nTotal Time = 20 years.\nTwin A ages 20 years.'
+            },
+            {
+              id: 's2-traveler',
+              type: 'theory',
+              title: 'Traveler View (Outbound)',
+              content: 'Twin B sees distance contracted.\n$L = L_0 / \\gamma$. $\\gamma = 1/\\sqrt{1-0.8^2} = 1/0.6 = 1.66$.\n$L = 8 / 1.66 = 4.8$ ly.\nTime out = $4.8 / 0.8 = 6$ years.\nTotal trip = 12 years.\n\nTwin B is 8 years younger.'
+            },
+            {
+              id: 's3-paradox',
+              type: 'theory',
+              title: 'The Paradox',
+              content: 'If motion is relative, why can\'t B say "A moved away from me, so A should be younger"?'
+            },
+            {
+              id: 's4-resolution',
+              type: 'proof',
+              title: 'The Turnaround',
+              content: 'B changes inertial frames at the star. We must account for the shift in simultaneity.',
+              proofSteps: [
+                'In the Outbound frame, Earth clock reads 3.6 years when B arrives at star ($6 \\times \\sqrt{1-0.8^2}$).',
+                'In the Inbound frame, Earth clock reads 16.4 years ($20 - 3.6$).',
+                'During the turnaround (infinite acceleration), B switches frames.',
+                'The "gap" in simultaneity is 12.8 years.',
+                'Total Earth time seen by B = 3.6 (out) + 3.6 (in) + 12.8 (gap) = 20 years.',
+                'Consistency is restored.'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'lesson-1-4-pole-barn',
+          title: 'The Pole-Barn Paradox',
+          description: 'Fitting a long object in a short space.',
+          icon: 'Minimize',
+          slides: [
+            {
+              id: 's1-problem',
+              type: 'theory',
+              title: 'The Puzzle',
+              content: 'A runner carries a horizontal pole of rest length 20m. He runs at $0.866c$ ($\gamma = 2$) into a barn of length 10m.\n\n**Barn Frame:** Pole is contracted to $20/2 = 10m$. It fits momentarily. We close both doors.\n**Runner Frame:** Barn is contracted to $10/2 = 5m$. The pole is 20m. It cannot fit. How can the doors close?'
+            },
+            {
+              id: 's2-sol',
+              type: 'theory',
+              title: 'Relativity of Simultaneity',
+              content: 'The doors do not close simultaneously in both frames!\n\n**Barn Frame:** Front door and back door close at the same time $t=0$ when the pole is inside.\n\n**Runner Frame:** The back door (exit) closes *first*. The pole smashes through it. Then, much later, the front door (entry) closes. The pole was never fully "inside".'
+            },
+            {
+              id: 'q-pole',
+              type: 'quiz',
+              title: 'Physical Reality',
+              content: 'Does the pole get crushed if the doors are strong enough?',
+              options: [
+                { id: '1', text: 'No, it shrinks.', isCorrect: false, explanation: '' },
+                { id: '2', text: 'Yes, in both frames.', isCorrect: true, explanation: 'If the doors physically stop the pole, the shockwave travels at speed of sound (<< c). The rear of the pole continues moving while the front stops, physically crushing it.' },
+                { id: '3', text: 'Only in the barn frame.', isCorrect: false, explanation: 'Physical damage is invariant.' }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'unit-1-5-velocity-doppler',
+      title: 'Velocity & Doppler',
+      description: 'Composition of velocities and shifting frequencies.',
+      color: 'duo-blue',
+      lessons: [
+        {
+          id: 'lesson-1-5-fizeau',
+          title: 'Fizeau Experiment',
+          description: 'Light speed in moving water.',
+          icon: 'Droplet',
+          slides: [
+            {
+              id: 's1-drag',
+              type: 'theory',
+              title: 'Fresnel Drag',
+              content: 'Before Einstein, Fizeau measured the speed of light in moving water. He found:\n\n$$ u = \frac{c}{n} + v(1 - \frac{1}{n^2}) $$\n\nWhere $u$ is light speed in lab, $v$ is water speed, $n$ is refractive index. This "drag coefficient" was a mystery.'
+            },
+            {
+              id: 's2-relativistic',
+              type: 'proof',
+              title: 'Relativistic Explanation',
+              content: 'Einstein showed this is just Velocity Addition!',
+              proofSteps: [
+                'Speed of light in water frame: $v\' = c/n$.',
+                'Speed of water: $v$.',
+                'Use addition: $u = \\frac{v\' + v}{1 + v\'v/c^2} = \\frac{c/n + v}{1 + v/nc}$.',
+                'Approximation for $v \\ll c$: $(1 + x)^{-1} \\approx 1 - x$.',
+                '$u \\approx (c/n + v)(1 - v/nc) \\approx c/n + v - v/n^2 - v^2/nc$.',
+                'Neglecting $v^2$: $u = c/n + v(1 - 1/n^2)$.',
+                'Exact match with Fizeau!'
+              ]
+            }
+          ]
+        },
+        {
+          id: 'lesson-1-5-doppler-deriv',
+          title: 'Relativistic Doppler Derivation',
+          description: 'Deriving the frequency shift.',
+          icon: 'Radio',
+          slides: [
+            {
+              id: 's1-setup',
+              type: 'theory',
+              title: 'The Setup',
+              content: 'Source $S$ moves away from Receiver $R$ at speed $u$. $S$ emits pulses with period $T_0$ (in $S$ frame).'
+            },
+            {
+              id: 's2-deriv',
+              type: 'proof',
+              title: 'Step-by-Step',
+              content: 'Tracking the pulses.',
+              proofSteps: [
+                'In R frame, time between emissions is dilated: $T = \\gamma T_0$.',
+                'During time $T$, source moves distance $d = uT$.',
+                'The next pulse travels extra distance $d$.',
+                'Total time between arrivals at R: $T_{obs} = T + d/c = T + uT/c = T(1 + u/c)$.',
+                'Substitute $T = \\gamma T_0$: $T_{obs} = \\gamma T_0 (1 + u/c)$.',
+                'Frequency $f = 1/T$: $f_{obs} = \\frac{f_0}{\\gamma (1 + u/c)}$.',
+                'Algebra: $\\frac{\\sqrt{1-u^2/c^2}}{1+u/c} = \\sqrt{\\frac{(1-u/c)(1+u/c)}{(1+u/c)^2}} = \\sqrt{\\frac{1-u/c}{1+u/c}}$.',
+                'Result: $f_{obs} = f_0 \\sqrt{\\frac{1-u/c}{1+u/c}}$.'
+              ]
+            },
+            {
+              id: 's3-transverse',
+              type: 'theory',
+              title: 'Transverse Doppler Effect',
+              content: 'If the source moves **perpendicular** to the line of sight, there is still a shift!\n\nClassical Doppler says $\\Delta f = 0$.\nRelativity says $f_{obs} = f_0 / \\gamma$.\n\nThis is purely due to **Time Dilation** of the source clock.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'unit-1-6-exercises',
+      title: 'Module Exercises',
+      description: 'Test your understanding of Kinematics.',
+      color: 'duo-blue',
+      lessons: [
+        {
+          id: 'lesson-1-6-problems',
+          title: 'Practice Problems',
+          description: 'From Krane Chapter 2.',
+          icon: 'Edit3',
+          slides: [
+            {
+              id: 'ex-1',
+              type: 'question',
+              title: 'Problem: The Fast Proton',
+              content: 'A proton moves at $0.95c$. Calculate $\\gamma$. If it travels 1 km in the lab, how far does it think it traveled?'
+            },
+            {
+              id: 'sol-1',
+              type: 'solution',
+              title: 'Solution',
+              content: '$\\gamma = 1/\\sqrt{1-0.95^2} \\approx 3.2$.\n\nLength contraction: $L = L_0 / \\gamma$. The 1 km lab distance ($L_0$) appears contracted to the proton.\n$L = 1000 / 3.2 = 312.5$ meters.'
+            },
+            {
+              id: 'ex-2',
+              type: 'question',
+              title: 'Problem: Relative Speed',
+              content: 'Two galaxies move away from Earth in opposite directions, each at $0.8c$. What is the speed of one galaxy as seen from the other?'
+            },
+            {
+              id: 'sol-2',
+              type: 'solution',
+              title: 'Solution',
+              content: 'Use velocity addition.\n$v = (0.8c + 0.8c) / (1 + (0.8)(0.8))$\n$v = 1.6c / 1.64 \\approx 0.976c$.\nIt is less than $c$.'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/modules/module1_2.ts ---

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Supervised Learning Dojo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #2A2D3E;
+            --accent: #00E5FF;
+            --bg: #1F2029;
+            --card-bg: #2B2E3B;
+            --text: #E0E0E0;
+            --text-muted: #A0A0A0;
+            --success: #00D26A;
+            --warning: #F9A825;
+            --danger: #F44336;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: rgba(43, 46, 59, 0.95);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        header h1 { font-size: 1.5rem; color: var(--accent); }
+        header .stats { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Main Layout */
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr; }
+        }
+
+        /* Challenge Card (The Core Feature) */
+        .challenge-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card h2 { margin-bottom: 1rem; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        
+        .btn-generate {
+            background: linear-gradient(135deg, var(--primary), #4834d4);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6); }
+        .btn-generate:active { transform: translateY(0); }
+
+        /* Dynamic Content Styling */
+        .task-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.classification { background: rgba(0, 229, 255, 0.15); color: var(--accent); }
+        .badge.regression { background: rgba(249, 168, 37, 0.15); color: var(--warning); }
+        .badge.difficulty { background: rgba(244, 67, 54, 0.15); color: var(--danger); }
+
+        .task-content h3 { color: white; margin: 1.5rem 0 0.5rem; }
+        .task-content ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+        .task-content li { margin-bottom: 0.5rem; color: var(--text-muted); }
+
+        .book-ref {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Sidebar - Concepts Checklist */
+        aside {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .checklist-item:hover { color: var(--primary); }
+        
+        .checklist-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            display: grid;
+            place-items: center;
+        }
+
+        .checklist-item.completed .checklist-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .checklist-item.completed .checklist-checkbox::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 10px;
+            color: var(--secondary);
+        }
+
+        .checklist-item.completed span {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .code-block {
+            background: #111;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #00D26A;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-brain"></i> ML Chapter 2 Companion</h1>
+        <div class="stats">
+            Concepts Mastered: <span id="mastery-count">0</span>/12
+        </div>
+    </header>
+
+    <main>
+        <!-- Left Column: Challenge Generator -->
+        <section class="challenge-section">
+            <div class="card">
+                <h2>Generate Practice Task</h2>
+                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">
+                    Click the button below to receive a random machine learning challenge based on Chapter 2. 
+                    These tasks require you to find external datasets and apply specific algorithms.
+                </p>
+                <button class="btn-generate" onclick="generateChallenge()">
+                    <i class="fas fa-dice"></i> Give Me a Challenge
+                </button>
+            </div>
+
+            <!-- The Dynamic Challenge Display -->
+            <div id="challenge-display" class="card" style="display: none;">
+                <!-- Content injected via JS -->
+            </div>
+        </section>
+
+        <!-- Right Column: Concept Checklist -->
+        <aside>
+            <h2>Chapter Concepts</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Check these off as you encounter them in tasks.</p>
+            <div id="checklist-container">
+                <!-- Checklist injected via JS -->
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <p>Created for practicing "Introduction to Machine Learning with Python" - Chapter 2</p>
+    </footer>
+
+    <script>
+        // --- Data: Concepts from Chapter 2 ---
+        const concepts = [
+            "Overfitting vs Underfitting",
+            "k-Nearest Neighbors (k-NN)",
+            "Linear Regression (OLS)",
+            "Ridge & Lasso (Regularization)",
+            "Logistic Regression",
+            "Linear SVM (LinearSVC)",
+            "Naive Bayes",
+            "Decision Trees",
+            "Random Forests",
+            "Gradient Boosting",
+            "Kernelized SVM (RBF)",
+            "Neural Networks (MLP)"
+        ];
+
+        // --- Data: Challenges Logic ---
+        // This maps the PDF content to specific, actionable coding tasks.
+        const challenges = [
+            {
+                title: "The K-NN Boundary Explorer",
+                type: "Classification",
+                difficulty: "Beginner",
+                algo: "k-Nearest Neighbors",
+                datasetSearch: "Search Google for 'UCI Wine Quality Dataset' or 'Glass Identification Dataset'.",
+                tasks: [
+                    "Load the dataset and split into training/test sets.",
+                    "Run <code>KNeighborsClassifier</code> with n_neighbors = 1, 3, and 9.",
+                    "<strong>Visual Task:</strong> If possible, select only 2 features and plot the decision boundary (like Figure 2-6 in the text).",
+                    "<strong>Analysis:</strong> confirm if n_neighbors=1 gives 100% training accuracy. Does it generalize well?"
+                ],
+                bookRef: "Ref: Page 35-38. Remember: Lower 'k' = High Complexity (Overfitting risk)."
+            },
+            {
+                title: "The Ridge vs. Lasso Face-off",
+                type: "Regression",
+                difficulty: "Intermediate",
+                algo: "Linear Models",
+                datasetSearch: "Search for 'Auto MPG dataset' or 'Boston Housing Extended'.",
+                tasks: [
+                    "Use <code>LinearRegression</code> (OLS) first. Note the Training vs Test score.",
+                    "Apply <code>Ridge</code> regression. Tune <code>alpha</code> (try 0.1, 1, 10). Does it improve the test score?",
+                    "Apply <code>Lasso</code> regression. <strong>Crucial:</strong> Count how many coefficients became exactly 0.",
+                    "Visualize the coefficients using <code>plt.plot</code> (like Figure 2-12)."
+                ],
+                bookRef: "Ref: Page 49-53. Lasso is great for feature selection (sparse models)."
+            },
+            {
+                title: "Regularization Strength in Classification",
+                type: "Classification",
+                difficulty: "Intermediate",
+                algo: "Logistic Regression / LinearSVC",
+                datasetSearch: "Search for 'Pima Indians Diabetes Dataset' or 'Sonar Dataset'.",
+                tasks: [
+                    "Train a <code>LogisticRegression</code> model.",
+                    "The text warns that 'C' is the inverse of regularization. Train models with C=0.01, C=1, and C=100.",
+                    "Compare the Training set accuracy vs Test set accuracy for all three.",
+                    "<strong>Observation:</strong> Does High C lead to overfitting (high train, low test)?"
+                ],
+                bookRef: "Ref: Page 58-60. Low C = restricted model (underfitting). High C = complex model."
+            },
+            {
+                title: "Tree pruning and Feature Importance",
+                type: "Classification",
+                difficulty: "Easy",
+                algo: "Decision Trees",
+                datasetSearch: "Search for 'Titanic Dataset' or 'Heart Disease UCI'.",
+                tasks: [
+                    "Train a <code>DecisionTreeClassifier</code> without any pre-pruning.",
+                    "Check the depth of the tree <code>tree.get_depth()</code>. Is it very deep?",
+                    "Retrain with <code>max_depth=4</code>.",
+                    "<strong>Analysis:</strong> Plot <code>feature_importances_</code>. Which feature is the 'root' node equivalent?"
+                ],
+                bookRef: "Ref: Page 74-78. Unpruned trees tend to memorize data (100% train accuracy)."
+            },
+            {
+                title: "Ensemble Power",
+                type: "Classification",
+                difficulty: "Advanced",
+                algo: "Random Forest & Gradient Boosting",
+                datasetSearch: "Use a complex dataset like 'Fashion MNIST' (subset) or 'Covertype'.",
+                tasks: [
+                    "Train a single Decision Tree. Measure Test Accuracy.",
+                    "Train a <code>RandomForestClassifier</code> with 100 trees. Compare accuracy.",
+                    "Train a <code>GradientBoostingClassifier</code>. Experiment with <code>learning_rate</code> (0.01 vs 0.1).",
+                    "<strong>Thought Experiment:</strong> Which one took longer to train? Why? (Ref: Random Forest is parallelizable, GBRT is serial)."
+                ],
+                bookRef: "Ref: Page 83-90. Random Forests are robust; GBRT needs careful tuning."
+            },
+            {
+                title: "The Scaling Trap (SVMs & Neural Nets)",
+                type: "Classification",
+                difficulty: "Advanced",
+                algo: "SVM / MLP",
+                datasetSearch: "Search for 'Breast Cancer Wisconsin' (if not used yet) or any dataset with varying scales (e.g., age vs income).",
+                tasks: [
+                    "Train an <code>SVC</code> or <code>MLPClassifier</code> on raw data. Note the result.",
+                    "<strong>CRITICAL STEP:</strong> Apply <code>MinMaxScaler</code> or <code>StandardScaler</code> (Pre-processing).",
+                    "Retrain the model on scaled data.",
+                    "Compare results. The text mentions SVMs and MLPs are devastated by unscaled data."
+                ],
+                bookRef: "Ref: Page 101-103 (SVM) & Page 115 (MLP). Scaling is mandatory for these algorithms."
+            },
+            {
+                title: "Uncertainty Probability Check",
+                type: "Classification",
+                difficulty: "Intermediate",
+                algo: "Gradient Boosting / Logistic Regression",
+                datasetSearch: "Any binary classification dataset.",
+                tasks: [
+                    "Train a model that supports probabilities (e.g., LogisticRegression or GBRT).",
+                    "Pick 5 distinct test samples.",
+                    "Print <code>decision_function</code> output and <code>predict_proba</code> output for them.",
+                    "Verify manually: If predict_proba > 0.5, is the class 1? (Ref: Page 120)."
+                ],
+                bookRef: "Ref: Page 119-123. Understanding prediction confidence."
+            }
+        ];
+
+        // --- Logic: Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChecklist();
+            loadProgress();
+        });
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+            
+            concepts.forEach((concept, index) => {
+                const div = document.createElement('div');
+                div.className = 'checklist-item';
+                div.onclick = () => toggleConcept(index);
+                div.innerHTML = `
+                    <div class="checklist-checkbox"></div>
+                    <span>${concept}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- Logic: Challenge Generation ---
+        function generateChallenge() {
+            const display = document.getElementById('challenge-display');
+            
+            // Randomly select a challenge
+            const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+            
+            // Build HTML
+            const taskList = challenge.tasks.map(t => `<li>${t}</li>`).join('');
+            
+            const html = `
+                <div class="animate-in">
+                    <div class="task-meta">
+                        <span class="badge ${challenge.type.toLowerCase()}">${challenge.type}</span>
+                        <span class="badge difficulty">${challenge.difficulty}</span>
+                        <span class="badge" style="background:var(--secondary)">Algo: ${challenge.algo}</span>
+                    </div>
+                    
+                    <h2>${challenge.title}</h2>
+                    
+                    <div class="task-content">
+                        <h3><i class="fas fa-database"></i> Find a Dataset</h3>
+                        <p class="code-block">${challenge.datasetSearch}</p>
+                        
+                        <h3><i class="fas fa-code"></i> Your Operations</h3>
+                        <ul>${taskList}</ul>
+                        
+                        <div class="book-ref">
+                            <i class="fas fa-book"></i> ${challenge.bookRef}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            display.style.display = "block";
+            display.innerHTML = html;
+        }
+
+        // --- Logic: Progress Tracking (Local Storage) ---
+        function toggleConcept(index) {
+            const items = document.querySelectorAll('.checklist-item');
+            items[index].classList.toggle('completed');
+            saveProgress();
+            updateCount();
+        }
+
+        function saveProgress() {
+            const items = document.querySelectorAll('.checklist-item');
+            const status = Array.from(items).map(item => item.classList.contains('completed'));
+            localStorage.setItem('mlChapter2Progress', JSON.stringify(status));
+        }
+
+        function loadProgress() {
+            const saved = JSON.parse(localStorage.getItem('mlChapter2Progress'));
+            if (saved) {
+                const items = document.querySelectorAll('.checklist-item');
+                saved.forEach((isComplete, index) => {
+                    if (isComplete && items[index]) {
+                        items[index].classList.add('completed');
+                    }
+                });
+            }
+            updateCount();
+        }
+
+        function updateCount() {
+            const count = document.querySelectorAll('.checklist-item.completed').length;
+            document.getElementById('mastery-count').innerText = count;
+        }
+
+    </script>
+</body>
+</html>

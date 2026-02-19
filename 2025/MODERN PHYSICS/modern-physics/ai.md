@@ -1,8 +1,8 @@
 Make the following changes:
 
 	* the current application is for real analysis
-        - change it enitrely to mechanics-ii by using the given refrence and syllabus for first four modules
-        for now create oly files for each chapters, sections and give only little topics, later I populate it 
+        - change it enitrely to machine learning by using the given refrence and syllabus for first four modules
+        for now create only files for each chapters, sections and give only little topics, later I populate it 
         
 
 
