@@ -66,14 +66,13 @@ export default defineConfig([
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>arabic-duo</title>
+    <title>DuoFY4 - Arabic</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
 --- END OF FILE index.html ---
 
 --- START OF FILE vite.config.js ---
@@ -87,165 +86,604 @@ export default defineConfig({
 
 --- END OF FILE vite.config.js ---
 
+--- START OF FILE .firebaserc ---
+{
+  "projects": {
+    "default": "fy5-arabic"
+  }
+}
+
+--- END OF FILE .firebaserc ---
+
 --- START OF FILE public/vite.svg ---
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="31.88" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 257"><defs><linearGradient id="IconifyId1813088fe1fbc01fb466" x1="-.828%" x2="57.636%" y1="7.652%" y2="78.411%"><stop offset="0%" stop-color="#41D1FF"></stop><stop offset="100%" stop-color="#BD34FE"></stop></linearGradient><linearGradient id="IconifyId1813088fe1fbc01fb467" x1="43.376%" x2="50.316%" y1="2.242%" y2="89.03%"><stop offset="0%" stop-color="#FFEA83"></stop><stop offset="8.333%" stop-color="#FFDD35"></stop><stop offset="100%" stop-color="#FFA800"></stop></linearGradient></defs><path fill="url(#IconifyId1813088fe1fbc01fb466)" d="M255.153 37.938L134.897 252.976c-2.483 4.44-8.862 4.466-11.382.048L.875 37.958c-2.746-4.814 1.371-10.646 6.827-9.67l120.385 21.517a6.537 6.537 0 0 0 2.322-.004l117.867-21.483c5.438-.991 9.574 4.796 6.877 9.62Z"></path><path fill="url(#IconifyId1813088fe1fbc01fb467)" d="M185.432.063L96.44 17.501a3.268 3.268 0 0 0-2.634 3.014l-5.474 92.456a3.268 3.268 0 0 0 3.997 3.378l24.777-5.718c2.318-.535 4.413 1.507 3.936 3.838l-7.361 36.047c-.495 2.426 1.782 4.5 4.151 3.78l15.304-4.649c2.372-.72 4.652 1.36 4.15 3.788l-11.698 56.621c-.732 3.542 3.979 5.473 5.943 2.437l1.313-2.028l72.516-144.72c1.215-2.423-.88-5.186-3.54-4.672l-25.505 4.922c-2.396.462-4.435-1.77-3.759-4.114l16.646-57.705c.677-2.35-1.37-4.583-3.769-4.113Z"></path></svg>
 --- END OF FILE public/vite.svg ---
 
 --- START OF FILE src/App.css ---
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* App Container */
+.app-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+}
+
+/* Dashboard */
+.dashboard {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 3rem;
+  text-align: center;
+  background: linear-gradient(90deg, #41D1FF, #BD34FE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-card {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.section-card > h2 {
+  font-size: 2.2rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 16px;
+  color: var(--primary);
+}
+
+.unit-card {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--glass-border);
+}
+
+.unit-card h3 {
+  color: var(--text-main);
+  margin-bottom: 24px;
+  font-size: 1.6rem;
+}
+
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.lesson-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  padding: 24px 20px;
+  border-radius: 20px;
+  color: var(--text-main);
+  font-weight: 500;
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.lesson-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--primary);
+  transform: translateY(-2px);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.lesson-btn.completed {
+  border-color: var(--success);
+  background: rgba(74, 222, 128, 0.08);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.lesson-btn.practice-unit {
+  border-color: #BD34FE;
+  background: rgba(189, 52, 254, 0.08);
 }
 
-.card {
-  padding: 2em;
+.lesson-btn.practice-unit:hover {
+  border-color: #41D1FF;
+  background: rgba(65, 209, 255, 0.12);
 }
 
-.read-the-docs {
-  color: #888;
+/* Lesson View */
+.lesson-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 40px;
+  margin-bottom: 2rem;
 }
 
+.lesson-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.close-btn {
+  color: var(--text-dim);
+  padding: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.close-btn:hover {
+  color: var(--error);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.progress-bar-bg {
+  flex: 1;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #BD34FE);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  min-height: 50vh;
+}
+
+.lesson-footer {
+  padding-top: 32px;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+}
+
+/* Slides Common */
+.slide-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.arabic-large {
+  font-size: 3.5rem;
+  line-height: 2;
+  color: var(--primary);
+  text-shadow: 0 4px 15px rgba(65, 209, 255, 0.2);
+  padding: 0 20px;
+}
+
+.translation-text {
+  font-size: 1.6rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.tts-button {
+  color: var(--primary);
+  background: rgba(65, 209, 255, 0.1);
+  padding: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--primary-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tts-button.small {
+  padding: 10px;
+}
+
+.tts-button:hover {
+  background: rgba(65, 209, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-direction: column;
+}
+
+/* Match Slide */
+.match-columns {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  width: 100%;
+}
+
+.match-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  max-width: 300px;
+}
+
+.match-btn {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid var(--glass-border);
+  border-radius: 16px;
+  color: white;
+  font-size: 1.3rem;
+  transition: all 0.2s;
+}
+
+.match-btn.ar-text {
+  font-size: 2rem;
+  line-height: 1.5;
+}
+
+.match-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--primary);
+}
+
+.match-btn.selected {
+  border-color: var(--primary);
+  background: rgba(65, 209, 255, 0.15);
+  box-shadow: 0 0 20px var(--primary-glow);
+  transform: scale(1.02);
+}
+
+.match-btn.matched {
+  border-color: var(--success);
+  background: rgba(74, 222, 128, 0.1);
+  color: var(--success);
+  opacity: 0.4;
+  transform: scale(0.98);
+}
+
+/* Fill Blank Slide */
+.fill-blank-sentence {
+  font-size: 3rem;
+  line-height: 2.2;
+}
+
+.blank-space {
+  display: inline-block;
+  min-width: 120px;
+  border-bottom: 4px solid var(--primary);
+  padding: 0 20px;
+  color: var(--primary);
+  text-align: center;
+  margin: 0 10px;
+}
+
+.blank-space.correct-ans {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.blank-space.wrong-ans {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.options-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.opt-btn {
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--glass-border);
+  border-radius: 16px;
+  color: white;
+  font-size: 1.8rem;
+  line-height: 1.5;
+}
+
+.opt-btn:hover {
+  border-color: var(--primary);
+  background: rgba(65, 209, 255, 0.1);
+}
+
+.opt-btn.correct {
+  border-color: var(--success);
+  background: rgba(74, 222, 128, 0.15);
+  box-shadow: 0 0 20px var(--success-glow);
+}
+
+.opt-btn.wrong {
+  border-color: var(--error);
+  background: rgba(248, 113, 113, 0.15);
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Sentence Builder Slide */
+.builder-slide {
+  gap: 30px;
+}
+
+.builder-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.builder-question {
+  font-size: 1.8rem;
+  color: var(--text-main);
+}
+
+.builder-question.arabic-text {
+  font-size: 2.5rem;
+  color: var(--primary);
+}
+
+.builder-answer-zone {
+  min-height: 80px;
+  width: 100%;
+  border-bottom: 2px dashed var(--glass-border);
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-content: flex-start;
+  transition: all 0.3s ease;
+  border-radius: 12px 12px 0 0;
+  background: rgba(255,255,255,0.02);
+}
+
+.zone-error {
+  border-color: var(--error);
+  background: rgba(248, 113, 113, 0.05);
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.zone-success {
+  border-color: var(--success);
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.builder-options-zone {
+  min-height: 120px;
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+}
+
+.rtl-zone {
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+.ltr-zone {
+  flex-direction: row;
+  justify-content: center;
+}
+
+.word-block-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.word-tooltip {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  border: 1px solid var(--primary);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  animation: popIn 0.2s ease-out forwards;
+}
+
+.word-block {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.word-block.ar-block {
+  font-size: 1.8rem;
+}
+
+.word-block.en-block {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.word-block:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.word-block.selected-placeholder {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: transparent;
+  color: transparent;
+  box-shadow: none;
+  cursor: default;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
+  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard { padding: 24px; }
+  .lesson-view { padding: 24px; }
+  .arabic-large { font-size: 2.5rem; }
+  .fill-blank-sentence { font-size: 2.2rem; }
+  .match-columns { flex-direction: column; gap: 30px; }
+  .match-col { max-width: 100%; }
+  .word-block { padding: 10px 16px; }
+  .word-block.ar-block { font-size: 1.5rem; }
+}
 --- END OF FILE src/App.css ---
 
 --- START OF FILE src/App.jsx ---
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import './App.css';
+import { ProgressProvider } from './context/ProgressContext';
+import Dashboard from './components/Dashboard';
+import Lesson from './components/Lesson';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeLesson, setActiveLesson] = useState(null);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <ProgressProvider>
+      <div className="app-container">
+        {activeLesson ? (
+          <Lesson 
+            lesson={activeLesson} 
+            onClose={() => setActiveLesson(null)} 
+          />
+        ) : (
+          <Dashboard onSelectLesson={setActiveLesson} />
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </ProgressProvider>
+  );
 }
 
-export default App
-
+export default App;
 --- END OF FILE src/App.jsx ---
 
 --- START OF FILE src/index.css ---
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap');
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --primary: #41D1FF;
+  --primary-glow: rgba(65, 209, 255, 0.4);
+  --success: #4ade80;
+  --success-glow: rgba(74, 222, 128, 0.4);
+  --error: #f87171;
+  --error-glow: rgba(248, 113, 113, 0.4);
+  --glass-bg: rgba(20, 20, 25, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --text-main: #ffffff;
+  --text-dim: #a0a0b0;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: 'Tajawal', system-ui, sans-serif;
+  color: var(--text-main);
+  background: linear-gradient(135deg, #09090b, #1a1a24, #0f0f16);
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#root {
+  width: 100%;
+  max-width: 1000px; /* Increased width for better screen usage */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.arabic-text {
+  font-family: 'Amiri', serif;
+  direction: rtl;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border: none;
+  background: none;
+  transition: all 0.2s ease;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #41D1FF, #BD34FE);
+  color: white;
+  padding: 18px 40px;
+  border-radius: 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  box-shadow: 0 4px 20px var(--primary-glow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px var(--primary-glow);
+}
 --- END OF FILE src/index.css ---
 
 --- START OF FILE src/main.jsx ---
@@ -265,3 +703,1130 @@ createRoot(document.getElementById('root')).render(
 --- START OF FILE src/assets/react.svg ---
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
 --- END OF FILE src/assets/react.svg ---
+
+--- START OF FILE src/context/ProgressContext.jsx ---
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+const ProgressContext = createContext();
+
+export const useProgress = () => useContext(ProgressContext);
+
+export const ProgressProvider = ({ children }) => {
+  const [completedLessons, setCompletedLessons] = useState(() => {
+    const saved = localStorage.getItem('duofy5_progress');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('duofy5_progress', JSON.stringify(completedLessons));
+  }, [completedLessons]);
+
+  const markLessonComplete = (lessonId) => {
+    if (!completedLessons.includes(lessonId)) {
+      setCompletedLessons([...completedLessons, lessonId]);
+    }
+  };
+
+  return (
+    <ProgressContext.Provider value={{ completedLessons, markLessonComplete }}>
+      {children}
+    </ProgressContext.Provider>
+  );
+};
+--- END OF FILE src/context/ProgressContext.jsx ---
+
+--- START OF FILE src/data/section1_1.js ---
+export const unit1 = {
+  id: "u1",
+  title: "Introduction to Munnar",
+  lessons: [
+    {
+      id: "u1_l1",
+      title: "The Land of Waterfalls",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مُونَّار هِيَ أَرْضُ الشَّلَّالَاتِ، هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِين",
+          english: "Munnar is the land of waterfalls, this is how it is known among tourists."
+        },
+        {
+          type: "vocabulary",
+          words: [
+            { ar: "مُونَّار", en: "Munnar" },
+            { ar: "أَرْضُ", en: "Land" },
+            { ar: "الشَّلَّالَاتِ", en: "Waterfalls" },
+            { ar: "مَعْرُوفَةٌ", en: "Known" },
+            { ar: "السِّياحِين", en: "Tourists" },
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَرْض", en: "Land" },
+            { ar: "الشَّلَّالَات", en: "Waterfalls" },
+            { ar: "مَعْرُوفَة", en: "Known" },
+            { ar: "سِياحِين", en: "Tourists" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مُونَّار هِيَ ____ الشَّلَّالَاتِ",
+          english: "Munnar is the land of waterfalls",
+          answer: "أَرْضُ",
+          options: ["سَمَاء", "أَرْضُ", "بَحْر"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ ____",
+          english: "This is how it is known among tourists",
+          answer: "السِّياحِين",
+          options: ["الْعُلَمَاء", "السِّياحِين", "الْأَشْجَار"]
+        }
+      ]
+    },
+    {
+      id: "u1_l2",
+      title: "Three Rivers",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وسُمِّيَتْ بِهَذَا الاِسْمِ لِأَنَّهَا ثَلَاثَةُ أَنْهَارٍ تَجْرِي مِنْ مُخْتَلِفِ المَصَادِرِ",
+          english: "And it was named by this name because it is three rivers flowing from different sources."
+        },
+        {
+          type: "vocabulary",
+          words: [
+            { ar: "سُمِّيَتْ", en: "Named" },
+            { ar: "الاِسْم", en: "The Name" },
+            { ar: "ثَلَاثَةُ", en: "Three" },
+            { ar: "أَنْهَار", en: "Rivers" },
+            { ar: "تَجْرِي", en: "Flowing" },
+            { ar: "مُخْتَلِف", en: "Different" },
+            { ar: "المَصَادِر", en: "Sources" },
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "سُمِّيَتْ", en: "Named" },
+            { ar: "أَنْهَار", en: "Rivers" },
+            { ar: "مُخْتَلِف", en: "Different" },
+            { ar: "ثَلَاثَة", en: "Three" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "لِأَنَّهَا ____ أَنْهَارٍ",
+          english: "Because it is three rivers",
+          answer: "ثَلَاثَةُ",
+          options: ["وَاحِدَة", "اثْنَان", "ثَلَاثَةُ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَجْرِي مِنْ مُخْتَلِفِ ____",
+          english: "Flowing from different sources",
+          answer: "المَصَادِرِ",
+          options: ["المَصَادِرِ", "الجِبَال", "السَّمَاء"]
+        }
+      ]
+    },
+    {
+      id: "u1_l3",
+      title: "The Junction",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وتَسِيلُ مِنْ هَذَا المُلْتَقَي كَنَهْرٍ وَاحِدٍ. والمَاءُ يَتَدَفَّقُ مِنَ الجِبَالِ",
+          english: "And it pours from this junction as one river. And the water gushes from the mountains."
+        },
+        {
+          type: "vocabulary",
+          words: [
+            { ar: "تَسِيلُ", en: "Pours/Flows" },
+            { ar: "المُلْتَقَي", en: "Junction" },
+            { ar: "نَهْر", en: "River" },
+            { ar: "يَتَدَفَّقُ", en: "Gushes" },
+            { ar: "الجِبَال", en: "Mountains" },
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "تَسِيلُ", en: "Pours" },
+            { ar: "المُلْتَقَي", en: "Junction" },
+            { ar: "يَتَدَفَّقُ", en: "Gushes" },
+            { ar: "الجِبَال", en: "Mountains" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "والمَاءُ يَتَدَفَّقُ مِنَ ____",
+          english: "And the water gushes from the mountains",
+          answer: "الجِبَالِ",
+          options: ["الأَرْضِ", "الجِبَالِ", "الشَّجَرَةِ"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1_1.js ---
+
+--- START OF FILE src/data/sections.js ---
+import { unit1 } from './section1_1';
+import { unit2 } from './section1_2';
+import { practiceUnit } from './section1_practice';
+
+export const sections = [
+  {
+    id: "sec1",
+    title: "رحلة إلى مونار - أرض الشلالات",
+    units: [
+      unit1,
+      unit2,
+      practiceUnit
+    ]
+  },
+  {
+    id: "sec1",
+    title: "رحلة إلى مونار - أرض الشلالات",
+    units: [
+      unit1,
+      unit2,
+      practiceUnit
+    ]
+  }
+];
+
+// Same section was duplicated for testing.
+--- END OF FILE src/data/sections.js ---
+
+--- START OF FILE src/data/section1_2.js ---
+export const unit2 = {
+  id: "u2",
+  title: "The Journey Begins",
+  lessons: [
+    {
+      id: "u2_l1",
+      title: "Travel from Jordan",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "سَافَرْنَا مِنَ الأُرْدُنِ عَبْرَ الخُطُوطِ السِّيرِيلَانْكِيَّةِ",
+          english: "We traveled from Jordan via Sri Lankan Airlines."
+        },
+        {
+          type: "vocabulary",
+          words: [
+            { ar: "سَافَرْنَا", en: "We traveled" },
+            { ar: "الأُرْدُن", en: "Jordan" },
+            { ar: "عَبْرَ", en: "Via / Through" },
+            { ar: "الخُطُوط", en: "Airlines / Lines" },
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "سَافَرْنَا", en: "We traveled" },
+            { ar: "الأُرْدُن", en: "Jordan" },
+            { ar: "عَبْرَ", en: "Via" },
+            { ar: "الخُطُوط", en: "Airlines" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "____ مِنَ الأُرْدُنِ",
+          english: "We traveled from Jordan",
+          answer: "سَافَرْنَا",
+          options: ["ذَهَبْنَا", "سَافَرْنَا", "رَجَعْنَا"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "عَبْرَ ____ السِّيرِيلَانْكِيَّةِ",
+          english: "Via Sri Lankan Airlines",
+          answer: "الخُطُوطِ",
+          options: ["الخُطُوطِ", "البِحَارِ", "السُّفُنِ"]
+        }
+      ]
+    },
+    {
+      id: "u2_l2",
+      title: "Landing in Kerala",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وبَعْدَ يَوْمٍ وَاحِدٍ مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ، حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا",
+          english: "And after one day of completing visa procedures, our flight landed in the state of Kerala."
+        },
+        {
+          type: "vocabulary",
+          words: [
+            { ar: "يَوْم", en: "Day" },
+            { ar: "إِنْهَاء", en: "Completing" },
+            { ar: "التَّأْشِيرَة", en: "Visa" },
+            { ar: "حَطَّتْ", en: "Landed" },
+            { ar: "رِحْلَتُنَا", en: "Our flight" },
+            { ar: "وِلَايَة", en: "State" },
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "يَوْم", en: "Day" },
+            { ar: "التَّأْشِيرَة", en: "Visa" },
+            { ar: "حَطَّتْ", en: "Landed" },
+            { ar: "وِلَايَة", en: "State" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "حَطَّتْ ____ فِي وِلَايَةِ كِيرَلَا",
+          english: "Our flight landed in the state of Kerala",
+          answer: "رِحْلَتُنَا",
+          options: ["سَيَّارَتُنَا", "رِحْلَتُنَا", "سَفِينَتُنَا"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1_2.js ---
+
+--- START OF FILE src/data/section1_practice.js ---
+export const practiceUnit = {
+  id: "sec1_practice",
+  title: "Unit Practices: Test Your Knowledge",
+  lessons: [
+    {
+      id: "sec1_prac_l1",
+      title: "Reading Comprehension",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "بِمَاذَا تُعْرَفُ مُونَّار بَيْنَ السِّياحِين؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "هِيَ", trans: "It is" },
+            { id: 2, text: "أَرْضُ", trans: "Land" },
+            { id: 3, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "لِمَاذَا سُمِّيَتْ مُونَّار بِهَذَا الاِسْمِ؟",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "لِأَنَّهَا", trans: "Because it is" },
+            { id: 2, text: "ثَلَاثَةُ", trans: "Three" },
+            { id: 3, text: "أَنْهَارٍ", trans: "Rivers" },
+            { id: 4, text: "تَجْرِي", trans: "Flowing" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مِنْ أَيْنَ سَافَرَ الكَاتِبُ؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
+            { id: 2, text: "مِنَ", trans: "From" },
+            { id: 3, text: "الأُرْدُنِ", trans: "Jordan" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَاذَا سَمَّى تُجَّارُ العَرَبِ الأَوَائِلُ كِيرَلَا؟",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "سَمَّاهَا", trans: "Called it" },
+            { id: 2, text: "العَرَبُ", trans: "The Arabs" },
+            { id: 3, text: "خَيْرَ", trans: "Goodness of" },
+            { id: 4, text: "اللَّهِ", trans: "Allah" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "أَيْنَ حَطَّتِ الرِّحْلَةُ؟",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "حَطَّتْ", trans: "Landed" },
+            { id: 2, text: "رِحْلَتُنَا", trans: "Our flight" },
+            { id: 3, text: "فِي", trans: "In" },
+            { id: 4, text: "وِلَايَةِ", trans: "State of" },
+            { id: 5, text: "كِيرَلَا", trans: "Kerala" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l2",
+      title: "English to Arabic",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Munnar is the land of waterfalls",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "مُونَّار", trans: "Munnar" },
+            { id: 2, text: "هِيَ", trans: "Is / She" },
+            { id: 3, text: "أَرْضُ", trans: "Land" },
+            { id: 4, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The water gushes from the mountains",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "والمَاءُ", trans: "And the water" },
+            { id: 2, text: "يَتَدَفَّقُ", trans: "Gushes" },
+            { id: 3, text: "مِنَ", trans: "From" },
+            { id: 4, text: "الجِبَالِ", trans: "Mountains" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "We traveled via Sri Lankan airlines",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
+            { id: 2, text: "عَبْرَ", trans: "Via" },
+            { id: 3, text: "الخُطُوطِ", trans: "Airlines" },
+            { id: 4, text: "السِّيرِيلَانْكِيَّةِ", trans: "Sri Lankan" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "After one day of completing the visa",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "وَبَعْدَ", trans: "And after" },
+            { id: 2, text: "يَوْمٍ", trans: "Day" },
+            { id: 3, text: "وَاحِدٍ", trans: "One" },
+            { id: 4, text: "مِنْ", trans: "From" },
+            { id: 5, text: "إِنْهَاءِ", trans: "Completing" },
+            { id: 6, text: "التَّأْشِيرَةِ", trans: "The visa" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Flowing water and charming nature",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "المِيَاهُ", trans: "The water" },
+            { id: 2, text: "الجَارِيَةُ", trans: "Flowing" },
+            { id: 3, text: "وَالطَّبِيعَةُ", trans: "And nature" },
+            { id: 4, text: "السَّاحِرَةُ", trans: "Charming" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l3",
+      title: "Arabic to English",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِين",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "This is how", trans: "هَكَذَا" },
+            { id: 2, text: "it is", trans: "هِيَ" },
+            { id: 3, text: "known", trans: "مَعْرُوفَةٌ" },
+            { id: 4, text: "among", trans: "بَيْنَ" },
+            { id: 5, text: "tourists", trans: "السِّياحِين" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "تَجْرِي مِنْ مُخْتَلِفِ المَصَادِرِ",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "Flowing", trans: "تَجْرِي" },
+            { id: 2, text: "from", trans: "مِنْ" },
+            { id: 3, text: "different", trans: "مُخْتَلِفِ" },
+            { id: 4, text: "sources", trans: "المَصَادِرِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "فِي هَذِهِ الأَرْضِ المُبَارَكَةِ فِي الهِنْدِ",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "In", trans: "فِي" },
+            { id: 2, text: "this", trans: "هَذِهِ" },
+            { id: 3, text: "blessed", trans: "المُبَارَكَةِ" },
+            { id: 4, text: "land", trans: "الأَرْضِ" },
+            { id: 5, text: "in", trans: "فِي" },
+            { id: 6, text: "India", trans: "الهِنْدِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "بَلَدُ العَجَائِبِ",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "The land", trans: "بَلَدُ" },
+            { id: 2, text: "of", trans: "..." },
+            { id: 3, text: "wonders", trans: "العَجَائِبِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "وَجَدْنَا المَطَرَ الغَزِيرَ",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "We found", trans: "وَجَدْنَا" },
+            { id: 2, text: "heavy", trans: "الغَزِيرَ" },
+            { id: 3, text: "rain", trans: "المَطَرَ" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1_practice.js ---
+
+--- START OF FILE src/components/Dashboard.jsx ---
+import React from 'react';
+import { sections } from '../data/sections';
+import { useProgress } from '../context/ProgressContext';
+import { BookOpen, CheckCircle, Award } from 'lucide-react';
+
+const Dashboard = ({ onSelectLesson }) => {
+  const { completedLessons } = useProgress();
+
+  return (
+    <div className="dashboard glass-panel">
+      <div className="dashboard-header">
+        <h1>DuoFY4 - Arabic</h1>
+        <p style={{ textAlign: 'center', color: 'var(--text-dim)', marginTop: '8px' }}>
+          Learn Arabic step-by-step
+        </p>
+      </div>
+
+      {sections.map(section => (
+        <div key={section.id} className="section-card">
+          <h2 className="arabic-text">{section.title}</h2>
+          
+          {section.units.map((unit, uIdx) => {
+            const isPractice = unit.id.includes('practice');
+            return (
+              <div key={unit.id} className="unit-card" style={isPractice ? {borderColor: 'rgba(189, 52, 254, 0.4)'} : {}}>
+                <h3 style={isPractice ? {color: '#BD34FE'} : {}}>{unit.title}</h3>
+                <div className="lessons-grid">
+                  {unit.lessons.map(lesson => {
+                    const isCompleted = completedLessons.includes(lesson.id);
+                    return (
+                      <button
+                        key={lesson.id}
+                        className={`lesson-btn ${isCompleted ? 'completed' : ''} ${isPractice ? 'practice-unit' : ''}`}
+                        onClick={() => onSelectLesson(lesson)}
+                      >
+                        {isCompleted ? <CheckCircle size={32} /> : 
+                         isPractice ? <Award size={32} /> : <BookOpen size={32} />}
+                        <span>{lesson.title}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Dashboard;
+--- END OF FILE src/components/Dashboard.jsx ---
+
+--- START OF FILE src/components/Lesson.jsx ---
+import React, { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
+import { useProgress } from '../context/ProgressContext';
+import SentenceSlide from './slides/SentenceSlide';
+import VocabularySlide from './slides/VocabularySlide';
+import MatchSlide from './slides/MatchSlide';
+import FillBlankSlide from './slides/FillBlankSlide';
+import SentenceBuilderSlide from './slides/SentenceBuilderSlide';
+
+const Lesson = ({ lesson, onClose }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [canProceed, setCanProceed] = useState(false);
+  const { markLessonComplete } = useProgress();
+
+  const slide = lesson.slides[currentIndex];
+  const progressPercentage = ((currentIndex) / lesson.slides.length) * 100;
+
+  useEffect(() => {
+    // Auto-enable next for non-interactive slides
+    if (slide.type === 'sentence' || slide.type === 'vocabulary') {
+      setCanProceed(true);
+    } else {
+      setCanProceed(false);
+    }
+  }, [currentIndex, slide]);
+
+  const handleNext = () => {
+    if (currentIndex < lesson.slides.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      markLessonComplete(lesson.id);
+      onClose();
+    }
+  };
+
+  const renderSlide = () => {
+    switch (slide.type) {
+      case 'sentence':
+        return <SentenceSlide slide={slide} />;
+      case 'vocabulary':
+        return <VocabularySlide slide={slide} />;
+      case 'match':
+        return <MatchSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+      case 'fill-blank':
+        return <FillBlankSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+      case 'sentence-builder':
+        return <SentenceBuilderSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+      default:
+        return <div>Unknown slide type</div>;
+    }
+  };
+
+  return (
+    <div className="lesson-view glass-panel p-6">
+      <div className="lesson-header">
+        <button className="close-btn" onClick={onClose}>
+          <X size={28} />
+        </button>
+        <div className="progress-bar-bg">
+          <div 
+            className="progress-bar-fill" 
+            style={{ width: `${progressPercentage}%` }}
+          />
+        </div>
+      </div>
+
+      <div className="slide-container">
+        {renderSlide()}
+      </div>
+
+      <div className="lesson-footer">
+        <button 
+          className="btn-primary" 
+          onClick={handleNext}
+          disabled={!canProceed}
+        >
+          {currentIndex === lesson.slides.length - 1 ? 'Finish Lesson' : 'Continue'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Lesson;
+--- END OF FILE src/components/Lesson.jsx ---
+
+--- START OF FILE src/components/slides/SentenceSlide.jsx ---
+import React, { useEffect } from 'react';
+import { Volume2 } from 'lucide-react';
+import { useTTS } from '../../hooks/useTTS';
+
+const SentenceSlide = ({ slide }) => {
+  const { speak } = useTTS();
+
+  useEffect(() => {
+    // Auto-play when slide opens
+    const timer = setTimeout(() => speak(slide.arabic), 500);
+    return () => clearTimeout(timer);
+  }, [slide.arabic, speak]);
+
+  return (
+    <div className="slide-content">
+      <h2 className="text-dim">Read & Listen</h2>
+      
+      <div className="flex-center">
+        <div className="arabic-text arabic-large">
+          {slide.arabic}
+        </div>
+        
+        <button 
+          className="tts-button" 
+          onClick={() => speak(slide.arabic)}
+          title="Play Audio"
+        >
+          <Volume2 size={32} />
+        </button>
+      </div>
+
+      <p className="translation-text">
+        "{slide.english}"
+      </p>
+    </div>
+  );
+};
+
+export default SentenceSlide;
+--- END OF FILE src/components/slides/SentenceSlide.jsx ---
+
+--- START OF FILE src/components/slides/VocabularySlide.jsx ---
+import React from 'react';
+import { useTTS } from '../../hooks/useTTS';
+
+const VocabularySlide = ({ slide }) => {
+  const { speak } = useTTS();
+
+  return (
+    <div className="slide-content">
+      <h2 className="text-dim">New Words (Click to Listen)</h2>
+      <div className="vocab-grid">
+        {slide.words.map((word, idx) => (
+          <button 
+            key={idx} 
+            className="vocab-card"
+            onClick={() => speak(word.ar)}
+          >
+            <span className="arabic-text ar">{word.ar}</span>
+            <span className="en">{word.en}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default VocabularySlide;
+--- END OF FILE src/components/slides/VocabularySlide.jsx ---
+
+--- START OF FILE src/components/slides/MatchSlide.jsx ---
+import React, { useState, useEffect } from 'react';
+import { useTTS } from '../../hooks/useTTS';
+
+const MatchSlide = ({ slide, onComplete }) => {
+  const { speak } = useTTS();
+  const [shuffledAr, setShuffledAr] = useState([]);
+  const [shuffledEn, setShuffledEn] = useState([]);
+  const [selectedAr, setSelectedAr] = useState(null);
+  const [selectedEn, setSelectedEn] = useState(null);
+  const [matched, setMatched] = useState([]);
+
+  useEffect(() => {
+    setShuffledAr([...slide.pairs].sort(() => Math.random() - 0.5));
+    setShuffledEn([...slide.pairs].sort(() => Math.random() - 0.5));
+    setMatched([]);
+    setSelectedAr(null);
+    setSelectedEn(null);
+  }, [slide]);
+
+  useEffect(() => {
+    if (selectedAr && selectedEn) {
+      const pair = slide.pairs.find(p => p.ar === selectedAr);
+      if (pair && pair.en === selectedEn) {
+        setMatched(prev => [...prev, selectedAr]);
+      }
+      setTimeout(() => {
+        setSelectedAr(null);
+        setSelectedEn(null);
+      }, 400);
+    }
+  }, [selectedAr, selectedEn, slide.pairs]);
+
+  useEffect(() => {
+    if (matched.length === slide.pairs.length && slide.pairs.length > 0) {
+      onComplete();
+    }
+  }, [matched, slide.pairs.length, onComplete]);
+
+  const handleArClick = (arWord) => {
+    speak(arWord);
+    setSelectedAr(arWord);
+  };
+
+  return (
+    <div className="slide-content">
+      <h2 className="text-dim">Match the pairs</h2>
+      <div className="match-columns">
+        <div className="match-col">
+          {shuffledAr.map(p => {
+            const isMatched = matched.includes(p.ar);
+            const isSelected = selectedAr === p.ar;
+            return (
+              <button
+                key={`ar-${p.ar}`}
+                className={`match-btn arabic-text ar-text ${isMatched ? 'matched' : ''} ${isSelected ? 'selected' : ''}`}
+                onClick={() => !isMatched && handleArClick(p.ar)}
+                disabled={isMatched}
+              >
+                {p.ar}
+              </button>
+            );
+          })}
+        </div>
+        
+        <div className="match-col">
+          {shuffledEn.map(p => {
+            const parentAr = slide.pairs.find(pair => pair.en === p.en).ar;
+            const isMatched = matched.includes(parentAr);
+            const isSelected = selectedEn === p.en;
+            return (
+              <button
+                key={`en-${p.en}`}
+                className={`match-btn ${isMatched ? 'matched' : ''} ${isSelected ? 'selected' : ''}`}
+                onClick={() => !isMatched && setSelectedEn(p.en)}
+                disabled={isMatched}
+              >
+                {p.en}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MatchSlide;
+--- END OF FILE src/components/slides/MatchSlide.jsx ---
+
+--- START OF FILE src/components/slides/FillBlankSlide.jsx ---
+import React, { useState, useEffect } from 'react';
+import { Volume2 } from 'lucide-react';
+import { useTTS } from '../../hooks/useTTS';
+
+const FillBlankSlide = ({ slide, onComplete }) => {
+  const { speak } = useTTS();
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(null);
+
+  useEffect(() => {
+    setSelectedOption(null);
+    setIsCorrect(null);
+  }, [slide]);
+
+  const parts = slide.sentence.split('____');
+
+  const handleSelect = (opt) => {
+    if (isCorrect) return; 
+    
+    speak(opt); // Speak chosen word
+    setSelectedOption(opt);
+    
+    if (opt === slide.answer) {
+      setIsCorrect(true);
+      // Speak the whole completed sentence
+      const fullSentence = parts[0] + opt + parts[1];
+      setTimeout(() => speak(fullSentence), 800);
+      onComplete();
+    } else {
+      setIsCorrect(false);
+    }
+  };
+
+  const playSentenceWithBlank = () => {
+    speak(slide.sentence.replace('____', 'فَرَاغ')); // "faragh" means blank
+  };
+
+  return (
+    <div className="slide-content">
+      <h2 className="text-dim">Fill in the blank</h2>
+      
+      <div className="flex-center" style={{ flexDirection: 'row' }}>
+        <div className="arabic-text fill-blank-sentence">
+          {parts[0]}
+          <span className={`blank-space arabic-text ${isCorrect === true ? 'correct-ans' : isCorrect === false ? 'wrong-ans' : ''}`}>
+            {selectedOption || '____'}
+          </span>
+          {parts[1]}
+        </div>
+        
+        <button 
+          className="tts-button" 
+          style={{ padding: '12px' }}
+          onClick={playSentenceWithBlank}
+        >
+          <Volume2 size={24} />
+        </button>
+      </div>
+
+      <p className="translation-text">"{slide.english}"</p>
+
+      <div className="options-row">
+        {slide.options.map(opt => (
+          <button
+            key={opt}
+            className={`opt-btn arabic-text ${selectedOption === opt ? (isCorrect ? 'correct' : 'wrong') : ''}`}
+            onClick={() => handleSelect(opt)}
+            disabled={isCorrect}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default FillBlankSlide;
+--- END OF FILE src/components/slides/FillBlankSlide.jsx ---
+
+--- START OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
+import React, { useState, useEffect } from 'react';
+import { Volume2 } from 'lucide-react';
+import { useTTS } from '../../hooks/useTTS';
+import { useLongPress } from '../../hooks/useLongPress';
+
+const WordBlock = ({ block, onClick, onLongPress, isArabic, isSelected, showTooltip }) => {
+  const handlers = useLongPress(
+    (e) => onLongPress(block),
+    (e, isCancel) => {
+      if (!isCancel && onClick) onClick(block);
+    },
+    { delay: 400 }
+  );
+
+  return (
+    <div className="word-block-wrapper">
+      {showTooltip && (
+        <div className="word-tooltip glass-panel">
+          {block.trans}
+        </div>
+      )}
+      <button
+        {...handlers}
+        className={`word-block ${isArabic ? 'arabic-text ar-block' : 'en-block'} ${isSelected ? 'selected-placeholder' : ''}`}
+        disabled={isSelected && !onClick} // Disable in pool if selected
+        style={{ userSelect: 'none', WebkitTouchCallout: 'none' }}
+      >
+        {block.text}
+      </button>
+    </div>
+  );
+};
+
+const SentenceBuilderSlide = ({ slide, onComplete }) => {
+  const { speak } = useTTS();
+  const [availableBlocks, setAvailableBlocks] = useState([]);
+  const [selectedBlocks, setSelectedBlocks] = useState([]);
+  const [activeTooltip, setActiveTooltip] = useState(null);
+  const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const isArabicAnswer = slide.questionType !== 'ar-to-en';
+
+  useEffect(() => {
+    // Reset state and shuffle blocks on new slide
+    const shuffled = [...slide.blocks].sort(() => Math.random() - 0.5);
+    setAvailableBlocks(shuffled);
+    setSelectedBlocks([]);
+    setIsError(false);
+    setIsSuccess(false);
+    setActiveTooltip(null);
+  }, [slide]);
+
+  // Clear tooltip after a few seconds
+  useEffect(() => {
+    if (activeTooltip) {
+      const timer = setTimeout(() => setActiveTooltip(null), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [activeTooltip]);
+
+  const handleBlockSelect = (block) => {
+    if (isSuccess) return;
+    
+    // Play audio for Arabic words
+    if (isArabicAnswer) speak(block.text);
+
+    const newSelected = [...selectedBlocks, block];
+    setSelectedBlocks(newSelected);
+    setIsError(false);
+
+    // Auto-check if length matches
+    if (newSelected.length === slide.blocks.length) {
+      checkAnswer(newSelected);
+    }
+  };
+
+  const handleBlockRemove = (blockToRemove) => {
+    if (isSuccess) return;
+    setSelectedBlocks(selectedBlocks.filter(b => b.id !== blockToRemove.id));
+    setIsError(false);
+  };
+
+  const handleLongPress = (block) => {
+    // Speak on long press too if Arabic
+    if (isArabicAnswer) speak(block.text);
+    setActiveTooltip(block.id);
+  };
+
+  const checkAnswer = (currentSelected) => {
+    const isCorrect = currentSelected.every((b, i) => b.id === slide.correctOrder[i]);
+    
+    if (isCorrect) {
+      setIsSuccess(true);
+      // Construct full sentence and play it
+      if (isArabicAnswer) {
+        const fullSentence = currentSelected.map(b => b.text).join(' ');
+        setTimeout(() => speak(fullSentence), 500);
+      }
+      onComplete();
+    } else {
+      setIsError(true);
+    }
+  };
+
+  const playFullQuestion = () => {
+    if (slide.questionType === 'en-to-ar' || slide.questionType === 'comprehension') {
+      speak(slide.question);
+    }
+  };
+
+  return (
+    <div className="slide-content builder-slide">
+      <div className="builder-header">
+        <h2 className="text-dim">
+          {slide.questionType === 'comprehension' ? 'Answer the Question' : 
+           slide.questionType === 'en-to-ar' ? 'Translate to Arabic' : 
+           'Translate to English'}
+        </h2>
+        <div className="flex-center" style={{ flexDirection: 'row', marginBottom: '16px' }}>
+          <h3 className={`builder-question ${slide.questionType !== 'en-to-ar' ? 'arabic-text' : ''}`}>
+            {slide.question}
+          </h3>
+          {(slide.questionType === 'comprehension' || slide.questionType === 'ar-to-en') && (
+            <button className="tts-button small" onClick={playFullQuestion}>
+              <Volume2 size={20} />
+            </button>
+          )}
+        </div>
+        <p className="text-dim text-sm">(Long press words for meaning)</p>
+      </div>
+
+      <div className={`builder-answer-zone ${isArabicAnswer ? 'rtl-zone' : 'ltr-zone'} ${isError ? 'zone-error' : ''} ${isSuccess ? 'zone-success' : ''}`}>
+        {selectedBlocks.map((block) => (
+          <WordBlock 
+            key={`sel-${block.id}`} 
+            block={block} 
+            isArabic={isArabicAnswer}
+            onClick={() => handleBlockRemove(block)}
+            onLongPress={handleLongPress}
+            showTooltip={activeTooltip === block.id}
+          />
+        ))}
+      </div>
+
+      <div className={`builder-options-zone ${isArabicAnswer ? 'rtl-zone' : 'ltr-zone'}`}>
+        {availableBlocks.map((block) => {
+          const isSelected = selectedBlocks.some(b => b.id === block.id);
+          return (
+            <WordBlock 
+              key={`opt-${block.id}`} 
+              block={block} 
+              isArabic={isArabicAnswer}
+              onClick={isSelected ? null : () => handleBlockSelect(block)}
+              onLongPress={handleLongPress}
+              isSelected={isSelected}
+              showTooltip={activeTooltip === block.id && !isSelected}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default SentenceBuilderSlide;
+--- END OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
+
+--- START OF FILE src/hooks/useTTS.js ---
+import { useCallback } from 'react';
+
+export const useTTS = () => {
+  const speak = useCallback((text) => {
+    if (!('speechSynthesis' in window)) {
+      console.warn("Text-to-Speech is not supported in this browser.");
+      return;
+    }
+    
+    // Stop any ongoing speech
+    window.speechSynthesis.cancel(); 
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ar-SA'; // Arabic (Saudi Arabia) gives good classical pronunciation
+    utterance.rate = 0.85;    // Slower for learning
+    utterance.pitch = 1;
+
+    window.speechSynthesis.speak(utterance);
+  }, []);
+
+  return { speak };
+};
+--- END OF FILE src/hooks/useTTS.js ---
+
+--- START OF FILE src/hooks/useLongPress.js ---
+import { useCallback, useRef, useState } from 'react';
+
+export const useLongPress = (onLongPress, onClick, { delay = 500 } = {}) => {
+  const [longPressTriggered, setLongPressTriggered] = useState(false);
+  const timeout = useRef();
+  const target = useRef();
+
+  const start = useCallback(
+    (e, args) => {
+      // Prevent context menu on mobile
+      if (e.target) {
+        target.current = e.target;
+      }
+      setLongPressTriggered(false);
+      timeout.current = setTimeout(() => {
+        onLongPress(e, args);
+        setLongPressTriggered(true);
+      }, delay);
+    },
+    [onLongPress, delay]
+  );
+
+  const clear = useCallback(
+    (e, args) => {
+      if (timeout.current) clearTimeout(timeout.current);
+      if (!longPressTriggered) {
+        onClick(e, args);
+      }
+      setLongPressTriggered(false);
+    },
+    [onClick, longPressTriggered]
+  );
+
+  return {
+    onPointerDown: (e) => start(e),
+    onPointerUp: (e) => clear(e),
+    onPointerLeave: (e) => clear(e, true), // Treat leaving as cancelling short click
+    onContextMenu: (e) => e.preventDefault() // Prevent native long-press menus
+  };
+};
+--- END OF FILE src/hooks/useLongPress.js ---
+
+--- START OF FILE .firebase/hosting.ZGlzdA.cache ---
+vite.svg,1771595944514,9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68
+index.html,1771595944683,b97a3c8c3c05f2d3a98b84e80993047f1d167ad3b40ef0afdcb99dfbbf54a07c
+assets/index-BuSS2Pcq.css,1771595944683,afcdb7f76ad2401afc7f6e7fded97ec670d76b2ee4470cb61e672b606e933e29
+assets/index-DmAZdthr.js,1771595944684,e6b62b5f0ec64f48f5c14860653565ecbfa187fa35fd348747b3dd4ff1b9b452
+
+--- END OF FILE .firebase/hosting.ZGlzdA.cache ---

@@ -32,7 +32,8 @@ ADDITIONAL_IGNORE_PATTERNS = [
     "*.pyo",
     ".DS_Store",
     "build",
-    "android/app/build"
+    "android/app/build",
+    "project_snapshot.txt"
     # The script might add its own output file here if run multiple times
 ]
 

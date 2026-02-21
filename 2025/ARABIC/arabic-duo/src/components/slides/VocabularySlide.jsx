@@ -1,24 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Volume2 } from 'lucide-react';
 import { useTTS } from '../../hooks/useTTS';
 
 const VocabularySlide = ({ slide }) => {
   const { speak } = useTTS();
 
+  useEffect(() => {
+    // Auto-play pronunciation when slide loads
+    const timer = setTimeout(() => {
+      speak(slide.word);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [slide, speak]);
+
   return (
     <div className="slide-content">
-      <h2 className="text-dim">New Words (Click to Listen)</h2>
-      <div className="vocab-grid">
-        {slide.words.map((word, idx) => (
-          <button 
-            key={idx} 
-            className="vocab-card"
-            onClick={() => speak(word.ar)}
-          >
-            <span className="arabic-text ar">{word.ar}</span>
-            <span className="en">{word.en}</span>
-          </button>
-        ))}
+      <h2 className="text-dim">New Word</h2>
+      
+      <div className="vocab-card glass-panel">
+        <button className="tts-button large-tts" onClick={() => speak(slide.word)}>
+          <Volume2 size={36} />
+        </button>
+        
+        <div className="vocab-ar arabic-large">{slide.word}</div>
+        
+        <div className="vocab-divider"></div>
+        
+        {slide.transliteration && (
+          <div className="vocab-transliteration">{slide.transliteration}</div>
+        )}
+        <div className="vocab-en">{slide.translation}</div>
       </div>
+      
+      {slide.example && (
+        <div className="vocab-example">
+          <p className="arabic-text">{slide.example.ar}</p>
+          <p className="text-dim">{slide.example.en}</p>
+        </div>
+      )}
     </div>
   );
 };

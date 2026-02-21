@@ -1,10 +1,10 @@
 export const practiceUnit = {
   id: "sec1_practice",
-  title: "Unit Practices: Test Your Knowledge",
+  title: "Test Your Knowledge",
   lessons: [
     {
       id: "sec1_prac_l1",
-      title: "Practice 1: Reading Comprehension",
+      title: "Reading Comprehension",
       isPractice: true,
       slides: [
         {
@@ -70,7 +70,7 @@ export const practiceUnit = {
     },
     {
       id: "sec1_prac_l2",
-      title: "Practice 2: English to Arabic",
+      title: "English to Arabic",
       isPractice: true,
       slides: [
         {
@@ -139,7 +139,7 @@ export const practiceUnit = {
     },
     {
       id: "sec1_prac_l3",
-      title: "Practice 3: Arabic to English",
+      title: "Arabic to English",
       isPractice: true,
       slides: [
         {

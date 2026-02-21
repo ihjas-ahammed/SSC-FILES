@@ -1,412 +1,320 @@
---- START OF FILE src/hooks/useLongPress.js ---
-import { useCallback, useRef, useState } from 'react';
-
-export const useLongPress = (onLongPress, onClick, { delay = 500 } = {}) => {
-  const [longPressTriggered, setLongPressTriggered] = useState(false);
-  const timeout = useRef();
-  const target = useRef();
-
-  const start = useCallback(
-    (e, args) => {
-      // Prevent context menu on mobile
-      if (e.target) {
-        target.current = e.target;
-      }
-      setLongPressTriggered(false);
-      timeout.current = setTimeout(() => {
-        onLongPress(e, args);
-        setLongPressTriggered(true);
-      }, delay);
-    },
-    [onLongPress, delay]
-  );
-
-  const clear = useCallback(
-    (e, args) => {
-      if (timeout.current) clearTimeout(timeout.current);
-      if (!longPressTriggered) {
-        onClick(e, args);
-      }
-      setLongPressTriggered(false);
-    },
-    [onClick, longPressTriggered]
-  );
-
-  return {
-    onPointerDown: (e) => start(e),
-    onPointerUp: (e) => clear(e),
-    onPointerLeave: (e) => clear(e, true), // Treat leaving as cancelling short click
-    onContextMenu: (e) => e.preventDefault() // Prevent native long-press menus
-  };
-};
---- END OF FILE src/hooks/useLongPress.js ---
-
---- START OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
-import React, { useState, useEffect } from 'react';
-import { Volume2 } from 'lucide-react';
-import { useTTS } from '../../hooks/useTTS';
-import { useLongPress } from '../../hooks/useLongPress';
-
-const WordBlock = ({ block, onClick, onLongPress, isArabic, isSelected, showTooltip }) => {
-  const handlers = useLongPress(
-    (e) => onLongPress(block),
-    (e, isCancel) => {
-      if (!isCancel && onClick) onClick(block);
-    },
-    { delay: 400 }
-  );
-
-  return (
-    <div className="word-block-wrapper">
-      {showTooltip && (
-        <div className="word-tooltip glass-panel">
-          {block.trans}
-        </div>
-      )}
-      <button
-        {...handlers}
-        className={`word-block ${isArabic ? 'arabic-text ar-block' : 'en-block'} ${isSelected ? 'selected-placeholder' : ''}`}
-        disabled={isSelected && !onClick} // Disable in pool if selected
-        style={{ userSelect: 'none', WebkitTouchCallout: 'none' }}
-      >
-        {block.text}
-      </button>
-    </div>
-  );
-};
-
-const SentenceBuilderSlide = ({ slide, onComplete }) => {
-  const { speak } = useTTS();
-  const [availableBlocks, setAvailableBlocks] = useState([]);
-  const [selectedBlocks, setSelectedBlocks] = useState([]);
-  const [activeTooltip, setActiveTooltip] = useState(null);
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const isArabicAnswer = slide.questionType !== 'ar-to-en';
-
-  useEffect(() => {
-    // Reset state and shuffle blocks on new slide
-    const shuffled = [...slide.blocks].sort(() => Math.random() - 0.5);
-    setAvailableBlocks(shuffled);
-    setSelectedBlocks([]);
-    setIsError(false);
-    setIsSuccess(false);
-    setActiveTooltip(null);
-  }, [slide]);
-
-  // Clear tooltip after a few seconds
-  useEffect(() => {
-    if (activeTooltip) {
-      const timer = setTimeout(() => setActiveTooltip(null), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [activeTooltip]);
-
-  const handleBlockSelect = (block) => {
-    if (isSuccess) return;
-    
-    // Play audio for Arabic words
-    if (isArabicAnswer) speak(block.text);
-
-    const newSelected = [...selectedBlocks, block];
-    setSelectedBlocks(newSelected);
-    setIsError(false);
-
-    // Auto-check if length matches
-    if (newSelected.length === slide.blocks.length) {
-      checkAnswer(newSelected);
-    }
-  };
-
-  const handleBlockRemove = (blockToRemove) => {
-    if (isSuccess) return;
-    setSelectedBlocks(selectedBlocks.filter(b => b.id !== blockToRemove.id));
-    setIsError(false);
-  };
-
-  const handleLongPress = (block) => {
-    // Speak on long press too if Arabic
-    if (isArabicAnswer) speak(block.text);
-    setActiveTooltip(block.id);
-  };
-
-  const checkAnswer = (currentSelected) => {
-    const isCorrect = currentSelected.every((b, i) => b.id === slide.correctOrder[i]);
-    
-    if (isCorrect) {
-      setIsSuccess(true);
-      // Construct full sentence and play it
-      if (isArabicAnswer) {
-        const fullSentence = currentSelected.map(b => b.text).join(' ');
-        setTimeout(() => speak(fullSentence), 500);
-      }
-      onComplete();
-    } else {
-      setIsError(true);
-    }
-  };
-
-  const playFullQuestion = () => {
-    if (slide.questionType === 'en-to-ar' || slide.questionType === 'comprehension') {
-      speak(slide.question);
-    }
-  };
-
-  return (
-    <div className="slide-content builder-slide">
-      <div className="builder-header">
-        <h2 className="text-dim">
-          {slide.questionType === 'comprehension' ? 'Answer the Question' : 
-           slide.questionType === 'en-to-ar' ? 'Translate to Arabic' : 
-           'Translate to English'}
-        </h2>
-        <div className="flex-center" style={{ flexDirection: 'row', marginBottom: '16px' }}>
-          <h3 className={`builder-question ${slide.questionType !== 'en-to-ar' ? 'arabic-text' : ''}`}>
-            {slide.question}
-          </h3>
-          {(slide.questionType === 'comprehension' || slide.questionType === 'ar-to-en') && (
-            <button className="tts-button small" onClick={playFullQuestion}>
-              <Volume2 size={20} />
-            </button>
-          )}
-        </div>
-        <p className="text-dim text-sm">(Long press words for meaning)</p>
-      </div>
-
-      <div className={`builder-answer-zone ${isArabicAnswer ? 'rtl-zone' : 'ltr-zone'} ${isError ? 'zone-error' : ''} ${isSuccess ? 'zone-success' : ''}`}>
-        {selectedBlocks.map((block) => (
-          <WordBlock 
-            key={`sel-${block.id}`} 
-            block={block} 
-            isArabic={isArabicAnswer}
-            onClick={() => handleBlockRemove(block)}
-            onLongPress={handleLongPress}
-            showTooltip={activeTooltip === block.id}
-          />
-        ))}
-      </div>
-
-      <div className={`builder-options-zone ${isArabicAnswer ? 'rtl-zone' : 'ltr-zone'}`}>
-        {availableBlocks.map((block) => {
-          const isSelected = selectedBlocks.some(b => b.id === block.id);
-          return (
-            <WordBlock 
-              key={`opt-${block.id}`} 
-              block={block} 
-              isArabic={isArabicAnswer}
-              onClick={isSelected ? null : () => handleBlockSelect(block)}
-              onLongPress={handleLongPress}
-              isSelected={isSelected}
-              showTooltip={activeTooltip === block.id && !isSelected}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-export default SentenceBuilderSlide;
---- END OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
-
---- START OF FILE src/components/Lesson.jsx ---
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
-import { useProgress } from '../context/ProgressContext';
-import SentenceSlide from './slides/SentenceSlide';
-import VocabularySlide from './slides/VocabularySlide';
-import MatchSlide from './slides/MatchSlide';
-import FillBlankSlide from './slides/FillBlankSlide';
-import SentenceBuilderSlide from './slides/SentenceBuilderSlide';
-
-const Lesson = ({ lesson, onClose }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [canProceed, setCanProceed] = useState(false);
-  const { markLessonComplete } = useProgress();
-
-  const slide = lesson.slides[currentIndex];
-  const progressPercentage = ((currentIndex) / lesson.slides.length) * 100;
-
-  useEffect(() => {
-    // Auto-enable next for non-interactive slides
-    if (slide.type === 'sentence' || slide.type === 'vocabulary') {
-      setCanProceed(true);
-    } else {
-      setCanProceed(false);
-    }
-  }, [currentIndex, slide]);
-
-  const handleNext = () => {
-    if (currentIndex < lesson.slides.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      markLessonComplete(lesson.id);
-      onClose();
-    }
-  };
-
-  const renderSlide = () => {
-    switch (slide.type) {
-      case 'sentence':
-        return <SentenceSlide slide={slide} />;
-      case 'vocabulary':
-        return <VocabularySlide slide={slide} />;
-      case 'match':
-        return <MatchSlide slide={slide} onComplete={() => setCanProceed(true)} />;
-      case 'fill-blank':
-        return <FillBlankSlide slide={slide} onComplete={() => setCanProceed(true)} />;
-      case 'sentence-builder':
-        return <SentenceBuilderSlide slide={slide} onComplete={() => setCanProceed(true)} />;
-      default:
-        return <div>Unknown slide type</div>;
-    }
-  };
-
-  return (
-    <div className="lesson-view glass-panel p-6">
-      <div className="lesson-header">
-        <button className="close-btn" onClick={onClose}>
-          <X size={28} />
-        </button>
-        <div className="progress-bar-bg">
-          <div 
-            className="progress-bar-fill" 
-            style={{ width: `${progressPercentage}%` }}
-          />
-        </div>
-      </div>
-
-      <div className="slide-container">
-        {renderSlide()}
-      </div>
-
-      <div className="lesson-footer">
-        <button 
-          className="btn-primary" 
-          onClick={handleNext}
-          disabled={!canProceed}
-        >
-          {currentIndex === lesson.slides.length - 1 ? 'Finish Lesson' : 'Continue'}
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default Lesson;
---- END OF FILE src/components/Lesson.jsx ---
-
 --- START OF FILE src/App.css ---
-/* App Container */
+/* =========================================
+   Base Variables & Setup
+   ========================================= */
+:root {
+  --primary: #41D1FF;
+  --primary-glow: rgba(65, 209, 255, 0.4);
+  --success: #4ADE80;
+  --success-glow: rgba(74, 222, 128, 0.4);
+  --error: #F87171;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-main: #FFFFFF;
+  --text-dim: #9CA3AF;
+  --bg-dark: #121212;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
 .app-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 30px 20px;
+  min-height: 100vh;
 }
 
-/* Dashboard */
-.dashboard {
-  padding: 40px;
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+/* =========================================
+   Top Bar & Header
+   ========================================= */
+.top-bar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(18, 18, 18, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--glass-border);
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
 }
 
-.dashboard-header h1 {
-  font-size: 3rem;
+.app-title-bar {
   text-align: center;
+  padding: 12px 0 4px 0;
+}
+
+.app-title-bar h1 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin: 0;
   background: linear-gradient(90deg, #41D1FF, #BD34FE);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
 }
 
-.section-card {
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.section-dropdown-container {
+  position: relative;
+}
+
+.section-selector-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.section-selector-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.section-badge {
+  background: linear-gradient(135deg, var(--primary), #BD34FE);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(65, 209, 255, 0.4);
+}
+
+.section-badge.small {
+  width: 24px;
+  height: 24px;
+  font-size: 0.8rem;
+}
+
+.dropdown-chevron {
+  transition: transform 0.3s ease;
+  color: var(--text-dim);
+}
+
+.dropdown-chevron.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #1E1E1E;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 8px;
+  width: 260px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 4px;
+  transform-origin: top left;
+  animation: slideDownFade 0.2s ease-out forwards;
 }
 
-.section-card > h2 {
-  font-size: 2.2rem;
-  border-bottom: 1px solid var(--glass-border);
-  padding-bottom: 16px;
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  text-align: left;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-item.active {
+  background: rgba(65, 209, 255, 0.1);
   color: var(--primary);
 }
 
-.unit-card {
-  background: rgba(255, 255, 255, 0.02);
+.progress-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 28px;
   border: 1px solid var(--glass-border);
 }
 
-.unit-card h3 {
-  color: var(--text-main);
-  margin-bottom: 24px;
-  font-size: 1.6rem;
+.progress-text {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-.lessons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+/* =========================================
+   Mobile Dashboard & Unit Path
+   ========================================= */
+.dashboard-mobile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
 }
 
-.lesson-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--glass-border);
-  padding: 24px 20px;
-  border-radius: 20px;
-  color: var(--text-main);
-  font-weight: 500;
-  font-size: 1.1rem;
+.path-container {
+  padding: 30px 20px 80px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.unit-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  text-align: center;
+  width: 100%;
 }
 
-.lesson-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--primary);
-  transform: translateY(-2px);
+.unit-header {
+  width: 100%;
+  background: var(--primary);
+  color: #000;
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 0 rgba(65, 209, 255, 0.4);
+  text-align: left;
 }
 
-.lesson-btn.completed {
-  border-color: var(--success);
-  background: rgba(74, 222, 128, 0.08);
+.unit-header.practice-header {
+  background: #BD34FE;
+  color: white;
+  box-shadow: 0 4px 0 rgba(189, 52, 254, 0.4);
 }
 
-.lesson-btn.practice-unit {
-  border-color: #BD34FE;
-  background: rgba(189, 52, 254, 0.08);
+.unit-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
 }
 
-.lesson-btn.practice-unit:hover {
-  border-color: #41D1FF;
-  background: rgba(65, 209, 255, 0.12);
+.path-lessons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
 }
 
-/* Lesson View */
+.lesson-node-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.lesson-node {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.lesson-node.completed {
+  background: var(--success);
+  color: #000;
+  box-shadow: 0 6px 0 rgba(74, 222, 128, 0.5);
+}
+
+.lesson-node.unlocked {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 6px 0 rgba(65, 209, 255, 0.5);
+  animation: bounce-small 2s infinite ease-in-out;
+}
+
+.lesson-node.unlocked.practice {
+  background: #BD34FE;
+  color: white;
+  box-shadow: 0 6px 0 rgba(189, 52, 254, 0.5);
+}
+
+.lesson-node.locked {
+  background: #2A2A2A;
+  color: #666;
+  box-shadow: 0 6px 0 #1A1A1A;
+  cursor: not-allowed;
+}
+
+.lesson-node:active:not(.locked) {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 transparent;
+}
+
+/* =========================================
+   Lesson Screen & Footer Buttons
+   ========================================= */
 .lesson-view {
   flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 40px;
-  margin-bottom: 2rem;
+  padding: 24px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
 }
 
 .lesson-header {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .close-btn {
@@ -414,164 +322,263 @@ export default Lesson;
   padding: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.05);
-}
-
-.close-btn:hover {
-  color: var(--error);
-  background: rgba(248, 113, 113, 0.1);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progress-bar-bg {
   flex: 1;
   height: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .progress-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), #BD34FE);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
 }
 
+.lesson-footer {
+  padding-top: 24px;
+  display: flex;
+  justify-content: stretch;
+  margin-top: auto;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--success);
+  color: #000;
+  font-size: 1.2rem;
+  font-weight: 800;
+  padding: 16px 32px;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 6px 0 rgba(74, 222, 128, 0.5);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.1s;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn-primary:disabled {
+  background: #333;
+  color: #666;
+  box-shadow: 0 6px 0 #222;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   Slides (General)
+   ========================================= */
 .slide-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  padding: 10px 0;
   min-height: 50vh;
 }
 
-.lesson-footer {
-  padding-top: 32px;
-  border-top: 1px solid var(--glass-border);
-  display: flex;
-  justify-content: flex-end;
-  margin-top: auto;
-}
-
-/* Slides Common */
 .slide-content {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
   width: 100%;
-  max-width: 800px;
 }
 
 .arabic-large {
-  font-size: 3.5rem;
-  line-height: 2;
+  font-size: 2.5rem;
+  line-height: 1.8;
   color: var(--primary);
   text-shadow: 0 4px 15px rgba(65, 209, 255, 0.2);
-  padding: 0 20px;
 }
 
 .translation-text {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   color: var(--text-dim);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .tts-button {
   color: var(--primary);
   background: rgba(65, 209, 255, 0.1);
-  padding: 16px;
+  padding: 12px;
   border-radius: 50%;
   border: 1px solid var(--primary-glow);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tts-button.small {
-  padding: 10px;
-}
-
-.tts-button:hover {
-  background: rgba(65, 209, 255, 0.2);
-  transform: scale(1.05);
+  cursor: pointer;
 }
 
 .flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
   flex-direction: column;
 }
 
-/* Match Slide */
+/* =========================================
+   Vocabulary Slide
+   ========================================= */
+.vocab-card {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 30px;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.vocab-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--primary), #BD34FE);
+}
+
+.large-tts {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+.vocab-ar {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-shadow: 0 4px 15px var(--primary-glow);
+  line-height: 1.2;
+}
+
+.vocab-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--glass-border);
+  margin: 10px 0;
+}
+
+.vocab-transliteration {
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.vocab-en {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.vocab-example {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border-left: 4px solid var(--primary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vocab-example .arabic-text {
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+/* =========================================
+   Match Slide
+   ========================================= */
 .match-columns {
   display: flex;
   justify-content: center;
-  gap: 60px;
+  gap: 12px;
   width: 100%;
 }
 
 .match-col {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   flex: 1;
-  max-width: 300px;
+  max-width: 50%;
 }
 
 .match-btn {
-  padding: 20px;
+  padding: 12px 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  font-size: 1.3rem;
+  font-size: 1rem;
+  min-height: 60px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
 }
 
 .match-btn.ar-text {
-  font-size: 2rem;
-  line-height: 1.5;
-}
-
-.match-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--primary);
+  font-size: 1.4rem;
 }
 
 .match-btn.selected {
   border-color: var(--primary);
   background: rgba(65, 209, 255, 0.15);
-  box-shadow: 0 0 20px var(--primary-glow);
-  transform: scale(1.02);
+  box-shadow: 0 0 10px var(--primary-glow);
 }
 
 .match-btn.matched {
   border-color: var(--success);
   background: rgba(74, 222, 128, 0.1);
   color: var(--success);
-  opacity: 0.4;
-  transform: scale(0.98);
+  opacity: 0.5;
 }
 
-/* Fill Blank Slide */
+/* =========================================
+   Fill Blank Slide
+   ========================================= */
 .fill-blank-sentence {
-  font-size: 3rem;
-  line-height: 2.2;
+  font-size: 1.8rem;
+  line-height: 2;
 }
 
 .blank-space {
   display: inline-block;
-  min-width: 120px;
-  border-bottom: 4px solid var(--primary);
-  padding: 0 20px;
+  min-width: 80px;
+  border-bottom: 3px solid var(--primary);
+  padding: 0 10px;
   color: var(--primary);
   text-align: center;
-  margin: 0 10px;
+  margin: 0 8px;
 }
 
 .blank-space.correct-ans {
@@ -586,25 +593,20 @@ export default Lesson;
 
 .options-row {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .opt-btn {
-  padding: 16px 32px;
+  padding: 12px 20px;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  font-size: 1.8rem;
-  line-height: 1.5;
-}
-
-.opt-btn:hover {
-  border-color: var(--primary);
-  background: rgba(65, 209, 255, 0.1);
+  font-size: 1.4rem;
+  cursor: pointer;
 }
 
 .opt-btn.correct {
@@ -619,36 +621,32 @@ export default Lesson;
   animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
-/* Sentence Builder Slide */
+/* =========================================
+   Sentence Builder Slide
+   ========================================= */
 .builder-slide {
-  gap: 30px;
-}
-
-.builder-header {
-  text-align: center;
-  margin-bottom: 10px;
+  gap: 20px;
 }
 
 .builder-question {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   color: var(--text-main);
 }
 
 .builder-question.arabic-text {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   color: var(--primary);
 }
 
 .builder-answer-zone {
-  min-height: 80px;
+  min-height: 60px;
   width: 100%;
   border-bottom: 2px dashed var(--glass-border);
-  padding: 16px;
+  padding: 12px 8px;
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
   align-content: flex-start;
-  transition: all 0.3s ease;
   border-radius: 12px 12px 0 0;
   background: rgba(255,255,255,0.02);
 }
@@ -665,12 +663,12 @@ export default Lesson;
 }
 
 .builder-options-zone {
-  min-height: 120px;
+  min-height: 100px;
   width: 100%;
-  padding: 16px;
+  padding: 12px 8px;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 10px;
   align-content: flex-start;
 }
 
@@ -708,28 +706,27 @@ export default Lesson;
 }
 
 .word-block {
-  padding: 12px 24px;
+  padding: 8px 16px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+  transition: transform 0.1s;
+  cursor: pointer;
+}
+
+.word-block:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 transparent;
 }
 
 .word-block.ar-block {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 }
 
 .word-block.en-block {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.word-block:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--primary);
-  transform: translateY(-2px);
+  font-size: 1.1rem;
 }
 
 .word-block.selected-placeholder {
@@ -738,6 +735,19 @@ export default Lesson;
   color: transparent;
   box-shadow: none;
   cursor: default;
+}
+
+/* =========================================
+   Animations & Utils
+   ========================================= */
+@keyframes bounce-small {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: scaleY(0.9) translateY(-10px); }
+  to { opacity: 1; transform: scaleY(1) translateY(0); }
 }
 
 @keyframes popIn {
@@ -752,300 +762,14 @@ export default Lesson;
   40%, 60% { transform: translate3d(8px, 0, 0); }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .dashboard { padding: 24px; }
-  .lesson-view { padding: 24px; }
-  .arabic-large { font-size: 2.5rem; }
-  .fill-blank-sentence { font-size: 2.2rem; }
-  .match-columns { flex-direction: column; gap: 30px; }
-  .match-col { max-width: 100%; }
-  .word-block { padding: 10px 16px; }
-  .word-block.ar-block { font-size: 1.5rem; }
+/* Restrict Desktop over-scaling so it looks good as a mobile-simulator centered */
+@media (min-width: 769px) {
+  .dashboard-mobile, .lesson-view {
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    background: rgba(20, 20, 20, 0.6);
+  }
 }
 --- END OF FILE src/App.css ---
-
---- START OF FILE src/data/section1_practice.js ---
-export const practiceUnit = {
-  id: "sec1_practice",
-  title: "Unit Practices: Test Your Knowledge",
-  lessons: [
-    {
-      id: "sec1_prac_l1",
-      title: "Practice 1: Reading Comprehension",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "بِمَاذَا تُعْرَفُ مُونَّار بَيْنَ السِّياحِين؟",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "هِيَ", trans: "It is" },
-            { id: 2, text: "أَرْضُ", trans: "Land" },
-            { id: 3, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "لِمَاذَا سُمِّيَتْ مُونَّار بِهَذَا الاِسْمِ؟",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "لِأَنَّهَا", trans: "Because it is" },
-            { id: 2, text: "ثَلَاثَةُ", trans: "Three" },
-            { id: 3, text: "أَنْهَارٍ", trans: "Rivers" },
-            { id: 4, text: "تَجْرِي", trans: "Flowing" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مِنْ أَيْنَ سَافَرَ الكَاتِبُ؟",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
-            { id: 2, text: "مِنَ", trans: "From" },
-            { id: 3, text: "الأُرْدُنِ", trans: "Jordan" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مَاذَا سَمَّى تُجَّارُ العَرَبِ الأَوَائِلُ كِيرَلَا؟",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "سَمَّاهَا", trans: "Called it" },
-            { id: 2, text: "العَرَبُ", trans: "The Arabs" },
-            { id: 3, text: "خَيْرَ", trans: "Goodness of" },
-            { id: 4, text: "اللَّهِ", trans: "Allah" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "أَيْنَ حَطَّتِ الرِّحْلَةُ؟",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "حَطَّتْ", trans: "Landed" },
-            { id: 2, text: "رِحْلَتُنَا", trans: "Our flight" },
-            { id: 3, text: "فِي", trans: "In" },
-            { id: 4, text: "وِلَايَةِ", trans: "State of" },
-            { id: 5, text: "كِيرَلَا", trans: "Kerala" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec1_prac_l2",
-      title: "Practice 2: English to Arabic",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Munnar is the land of waterfalls",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "مُونَّار", trans: "Munnar" },
-            { id: 2, text: "هِيَ", trans: "Is / She" },
-            { id: 3, text: "أَرْضُ", trans: "Land" },
-            { id: 4, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "The water gushes from the mountains",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "والمَاءُ", trans: "And the water" },
-            { id: 2, text: "يَتَدَفَّقُ", trans: "Gushes" },
-            { id: 3, text: "مِنَ", trans: "From" },
-            { id: 4, text: "الجِبَالِ", trans: "Mountains" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "We traveled via Sri Lankan airlines",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
-            { id: 2, text: "عَبْرَ", trans: "Via" },
-            { id: 3, text: "الخُطُوطِ", trans: "Airlines" },
-            { id: 4, text: "السِّيرِيلَانْكِيَّةِ", trans: "Sri Lankan" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "After one day of completing the visa",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "وَبَعْدَ", trans: "And after" },
-            { id: 2, text: "يَوْمٍ", trans: "Day" },
-            { id: 3, text: "وَاحِدٍ", trans: "One" },
-            { id: 4, text: "مِنْ", trans: "From" },
-            { id: 5, text: "إِنْهَاءِ", trans: "Completing" },
-            { id: 6, text: "التَّأْشِيرَةِ", trans: "The visa" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Flowing water and charming nature",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "المِيَاهُ", trans: "The water" },
-            { id: 2, text: "الجَارِيَةُ", trans: "Flowing" },
-            { id: 3, text: "وَالطَّبِيعَةُ", trans: "And nature" },
-            { id: 4, text: "السَّاحِرَةُ", trans: "Charming" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec1_prac_l3",
-      title: "Practice 3: Arabic to English",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِين",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "This is how", trans: "هَكَذَا" },
-            { id: 2, text: "it is", trans: "هِيَ" },
-            { id: 3, text: "known", trans: "مَعْرُوفَةٌ" },
-            { id: 4, text: "among", trans: "بَيْنَ" },
-            { id: 5, text: "tourists", trans: "السِّياحِين" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "تَجْرِي مِنْ مُخْتَلِفِ المَصَادِرِ",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "Flowing", trans: "تَجْرِي" },
-            { id: 2, text: "from", trans: "مِنْ" },
-            { id: 3, text: "different", trans: "مُخْتَلِفِ" },
-            { id: 4, text: "sources", trans: "المَصَادِرِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "فِي هَذِهِ الأَرْضِ المُبَارَكَةِ فِي الهِنْدِ",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "In", trans: "فِي" },
-            { id: 2, text: "this", trans: "هَذِهِ" },
-            { id: 3, text: "blessed", trans: "المُبَارَكَةِ" },
-            { id: 4, text: "land", trans: "الأَرْضِ" },
-            { id: 5, text: "in", trans: "فِي" },
-            { id: 6, text: "India", trans: "الهِنْدِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "بَلَدُ العَجَائِبِ",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "The land", trans: "بَلَدُ" },
-            { id: 2, text: "of", trans: "..." },
-            { id: 3, text: "wonders", trans: "العَجَائِبِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "وَجَدْنَا المَطَرَ الغَزِيرَ",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "We found", trans: "وَجَدْنَا" },
-            { id: 2, text: "heavy", trans: "الغَزِيرَ" },
-            { id: 3, text: "rain", trans: "المَطَرَ" }
-          ]
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/section1_practice.js ---
-
---- START OF FILE src/data/sections.js ---
-import { unit1 } from './section1_1';
-import { unit2 } from './section1_2';
-import { practiceUnit } from './section1_practice';
-
-export const sections = [
-  {
-    id: "sec1",
-    title: "Section 1: رحلة إلى مونار - أرض الشلالات",
-    units: [
-      unit1,
-      unit2,
-      practiceUnit
-    ]
-  }
-];
---- END OF FILE src/data/sections.js ---
-
---- START OF FILE src/components/Dashboard.jsx ---
-import React from 'react';
-import { sections } from '../data/sections';
-import { useProgress } from '../context/ProgressContext';
-import { BookOpen, CheckCircle, Award } from 'lucide-react';
-
-const Dashboard = ({ onSelectLesson }) => {
-  const { completedLessons } = useProgress();
-
-  return (
-    <div className="dashboard glass-panel">
-      <div className="dashboard-header">
-        <h1>DuoFY5 - Arabic</h1>
-        <p style={{ textAlign: 'center', color: 'var(--text-dim)', marginTop: '8px' }}>
-          Learn Arabic step-by-step
-        </p>
-      </div>
-
-      {sections.map(section => (
-        <div key={section.id} className="section-card">
-          <h2 className="arabic-text">{section.title}</h2>
-          
-          {section.units.map((unit, uIdx) => {
-            const isPractice = unit.id.includes('practice');
-            return (
-              <div key={unit.id} className="unit-card" style={isPractice ? {borderColor: 'rgba(189, 52, 254, 0.4)'} : {}}>
-                <h3 style={isPractice ? {color: '#BD34FE'} : {}}>{unit.title}</h3>
-                <div className="lessons-grid">
-                  {unit.lessons.map(lesson => {
-                    const isCompleted = completedLessons.includes(lesson.id);
-                    return (
-                      <button
-                        key={lesson.id}
-                        className={`lesson-btn ${isCompleted ? 'completed' : ''} ${isPractice ? 'practice-unit' : ''}`}
-                        onClick={() => onSelectLesson(lesson)}
-                      >
-                        {isCompleted ? <CheckCircle size={32} /> : 
-                         isPractice ? <Award size={32} /> : <BookOpen size={32} />}
-                        <span>{lesson.title}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-export default Dashboard;
---- END OF FILE src/components/Dashboard.jsx ---

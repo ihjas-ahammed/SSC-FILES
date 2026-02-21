@@ -1,85 +1,213 @@
 export const unit2 = {
   id: "u2",
-  title: "Unit 2: The Journey Begins",
+  title: "Arrival in Kerala",
   lessons: [
     {
       id: "u2_l1",
-      title: "Lesson 1: Travel from Jordan",
+      title: "The Journey to Kerala",
       slides: [
         {
           type: "sentence",
-          arabic: "سَافَرْنَا مِنَ الأُرْدُنِ عَبْرَ الخُطُوطِ السِّيرِيلَانْكِيَّةِ",
-          english: "We traveled from Jordan via Sri Lankan Airlines."
+          arabic: "سَافَرْنَا مِنَ الْأُرْدُنِ عَبْرَ الْخُطُوطِ السِّيرِيلَانْكِيَّةِ، وَبَعْدَ يَوْمٍ وَاحِدٍ مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ، حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا.",
+          english: "We traveled from Jordan via Sri Lankan Airlines, and after one day of completing visa procedures, our flight landed in the state of Kerala."
         },
         {
-          type: "vocabulary",
-          words: [
-            { ar: "سَافَرْنَا", en: "We traveled" },
-            { ar: "الأُرْدُن", en: "Jordan" },
-            { ar: "عَبْرَ", en: "Via / Through" },
-            { ar: "الخُطُوط", en: "Airlines / Lines" },
-          ]
+          "type": "vocabulary",
+          "word": "سَافَرْنَا",
+          "transliteration": "Safarna",
+          "translation": "We traveled",
+          "example": {
+            "ar": "سَافَرْنَا إِلَى الْهِنْدِ",
+            "en": "We traveled to India"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "إِجْرَاءَاتِ",
+          "transliteration": "Ijra'at",
+          "translation": "Procedures",
+          "example": {
+            "ar": "انْتَهَتْ إِجْرَاءَاتُ السَّفَرِ",
+            "en": "Travel procedures are finished"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "التَّأْشِيرَةِ",
+          "transliteration": "At-ta'shirah",
+          "translation": "The visa",
+          "example": {
+            "ar": "حَصَلْتُ عَلَى التَّأْشِيرَةِ",
+            "en": "I got the visa"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "حَطَّتْ",
+          "transliteration": "Hattat",
+          "translation": "Landed / Set down",
+          "example": {
+            "ar": "حَطَّتِ الطَّائِرَةُ فِي الْمَطَارِ",
+            "en": "The plane landed at the airport"
+          }
         },
         {
           type: "match",
           pairs: [
             { ar: "سَافَرْنَا", en: "We traveled" },
-            { ar: "الأُرْدُن", en: "Jordan" },
-            { ar: "عَبْرَ", en: "Via" },
-            { ar: "الخُطُوط", en: "Airlines" }
+            { ar: "تَأْشِيرَة", en: "Visa" },
+            { ar: "إِجْرَاءَات", en: "Procedures" },
+            { ar: "رِحْلَة", en: "Trip / Flight" }
           ]
-        },
-        {
-          type: "fill-blank",
-          sentence: "____ مِنَ الأُرْدُنِ",
-          english: "We traveled from Jordan",
-          answer: "سَافَرْنَا",
-          options: ["ذَهَبْنَا", "سَافَرْنَا", "رَجَعْنَا"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "عَبْرَ ____ السِّيرِيلَانْكِيَّةِ",
-          english: "Via Sri Lankan Airlines",
-          answer: "الخُطُوطِ",
-          options: ["الخُطُوطِ", "البِحَارِ", "السُّفُنِ"]
         }
       ]
     },
     {
       id: "u2_l2",
-      title: "Lesson 2: Landing in Kerala",
+      title: "God's Own Country",
       slides: [
         {
           type: "sentence",
-          arabic: "وبَعْدَ يَوْمٍ وَاحِدٍ مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ، حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا",
-          english: "And after one day of completing visa procedures, our flight landed in the state of Kerala."
+          arabic: "سَمَّاهَا تُجَّارُ الْعَرَبِ الْمُسْلِمُونَ الْأَوَائِلُ \"خَيْرَ اللهِ\".",
+          english: "The early Arab Muslim merchants called it \"Khayr Allah\" (God's Bounty/Own Country)."
         },
         {
-          type: "vocabulary",
-          words: [
-            { ar: "يَوْم", en: "Day" },
-            { ar: "إِنْهَاء", en: "Completing" },
-            { ar: "التَّأْشِيرَة", en: "Visa" },
-            { ar: "حَطَّتْ", en: "Landed" },
-            { ar: "رِحْلَتُنَا", en: "Our flight" },
-            { ar: "وِلَايَة", en: "State" },
-          ]
+          "type": "vocabulary",
+          "word": "تُجَّارُ",
+          "transliteration": "Tujjar",
+          "translation": "Merchants",
+          "example": {
+            "ar": "الْتُجَّارُ يَبِيعُونَ الْبَضَائِعَ",
+            "en": "The merchants sell goods"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْأَوَائِلُ",
+          "transliteration": "Al-awa'il",
+          "translation": "The early / The first",
+          "example": {
+            "ar": "كَانَ الْمُسْلِمُونَ الْأَوَائِلُ كِرَامًا",
+            "en": "The early Muslims were generous"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "سَمَّاهَا",
+          "transliteration": "Sammaha",
+          "translation": "Called it / Named it",
+          "example": {
+            "ar": "سَمَّاهَا النَّاسُ أَرْضَ الْجَمَالِ",
+            "en": "People called it the land of beauty"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "سَمَّاهَا تُجَّارُ الْعَرَبِ ____ \"خَيْرَ اللهِ\"",
+          english: "Early Arab merchants called it \"God's Bounty\"",
+          answer: "الْأَوَائِلُ",
+          options: ["الْجُدُد", "الْأَوَائِلُ", "الْمُسَافِرُون"]
+        }
+      ]
+    },
+    {
+      id: "u2_l3",
+      title: "True to its Name",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَإِذَا بَحَثْنَا عَرَفْنَا هَذَا الاِسْمَ صَادِقًا عَلَى مُسَمَّاهُ.",
+          english: "And if we searched, we knew that this name is true to what it names."
+        },
+        {
+          "type": "vocabulary",
+          "word": "بَحَثْنَا",
+          "transliteration": "Bahathna",
+          "translation": "We searched / researched",
+          "example": {
+            "ar": "بَحَثْنَا عَنِ الْحَقِيقَةِ",
+            "en": "We searched for the truth"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "صَادِقًا",
+          "transliteration": "Sadiqan",
+          "translation": "True / Truthful",
+          "example": {
+            "ar": "هَذَا خَبَرٌ صَادِقٌ",
+            "en": "This is true news"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُسَمَّاهُ",
+          "transliteration": "Musammahu",
+          "translation": "Its namesake / what it refers to",
+          "example": {
+            "ar": "الاِسْمُ يَدُلُّ عَلَى مُسَمَّاهُ",
+            "en": "The name indicates its object"
+          }
+        }
+      ]
+    },
+    {
+      id: "u2_l4",
+      title: "The Enchanting Nature",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَيْثُمَا ذَهَبْنَا وَجَدْنَا الْمَطَرَ الْغَزِيرَ وَالْمِيَاهَ الْجَارِيَةَ وَالطَّبِيعَةَ السَّاحِرَةَ وَالْخُضْرَةَ الْمَلِيئَةَ فِي جَمِيعِ أَرَاضِيهَا وَلَا سِيَّمَا فِي الْمِنْطَقَةِ الْجَنُوبِيَّةِ.",
+          english: "Wherever we went, we found heavy rain, running water, enchanting nature, and full greenery in all its lands, especially in the southern region."
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمَطَرَ الْغَزِيرَ",
+          "transliteration": "Al-matara al-ghazir",
+          "translation": "The heavy rain",
+          "example": {
+            "ar": "سَقَطَ الْمَطَرُ الْغَزِيرُ",
+            "en": "Heavy rain fell"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمِيَاهَ الْجَارِيَةَ",
+          "transliteration": "Al-miyah al-jariyah",
+          "translation": "Running water",
+          "example": {
+            "ar": "أُحِبُّ صَوْتَ الْمِيَاهِ الْجَارِيَةِ",
+            "en": "I love the sound of running water"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "السَّاحِرَةَ",
+          "transliteration": "As-sahirah",
+          "translation": "Enchanting / Charming",
+          "example": {
+            "ar": "الْمَدِينَةُ سَاحِرَةٌ فِي اللَّيْلِ",
+            "en": "The city is enchanting at night"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "لَا سِيَّمَا",
+          "transliteration": "La siyama",
+          "translation": "Especially / particularly",
+          "example": {
+            "ar": "أُحِبُّ الْفَوَاكِهَ لَا سِيَّمَا التُّفَّاحَ",
+            "en": "I love fruits, especially apples"
+          }
         },
         {
           type: "match",
           pairs: [
-            { ar: "يَوْم", en: "Day" },
-            { ar: "التَّأْشِيرَة", en: "Visa" },
-            { ar: "حَطَّتْ", en: "Landed" },
-            { ar: "وِلَايَة", en: "State" }
+            { ar: "مَطَر غَزِير", en: "Heavy rain" },
+            { ar: "مِيَاه جَارِيَة", en: "Running water" },
+            { ar: "طَبِيعَة سَاحِرَة", en: "Charming nature" },
+            { ar: "مِنْطَقَة جَنُوبِيَّة", en: "Southern region" }
           ]
-        },
-        {
-          type: "fill-blank",
-          sentence: "حَطَّتْ ____ فِي وِلَايَةِ كِيرَلَا",
-          english: "Our flight landed in the state of Kerala",
-          answer: "رِحْلَتُنَا",
-          options: ["سَيَّارَتُنَا", "رِحْلَتُنَا", "سَفِينَتُنَا"]
         }
       ]
     }

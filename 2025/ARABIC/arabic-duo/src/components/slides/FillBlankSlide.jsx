@@ -4,72 +4,81 @@ import { useTTS } from '../../hooks/useTTS';
 
 const FillBlankSlide = ({ slide, onComplete }) => {
   const { speak } = useTTS();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedAns, setSelectedAns] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
-    setSelectedOption(null);
+    setSelectedAns(null);
     setIsCorrect(null);
   }, [slide]);
 
-  const parts = slide.sentence.split('____');
+  const handleSelect = (option) => {
+    if (isCorrect) return; // Prevent changing after correct answer
+    
+    setSelectedAns(option);
+    const correct = option === slide.answer;
+    setIsCorrect(correct);
 
-  const handleSelect = (opt) => {
-    if (isCorrect) return; 
-    
-    speak(opt); // Speak chosen word
-    setSelectedOption(opt);
-    
-    if (opt === slide.answer) {
-      setIsCorrect(true);
-      // Speak the whole completed sentence
-      const fullSentence = parts[0] + opt + parts[1];
-      setTimeout(() => speak(fullSentence), 800);
-      onComplete();
-    } else {
-      setIsCorrect(false);
+    if (correct) {
+      // Play full sentence when correct
+      const fullSentence = slide.sentence.replace(/_+/, option);
+      speak(fullSentence);
+      setTimeout(() => onComplete(), 1500);
     }
   };
 
-  const playSentenceWithBlank = () => {
-    speak(slide.sentence.replace('____', 'فَرَاغ')); // "faragh" means blank
+  const playAudio = () => {
+    // FIX: Remove the blank underscores before passing to text-to-speech
+    // so the TTS engine doesn't read out "underscore underscore underscore"
+    const textToSpeak = slide.sentence.replace(/_+/g, '').trim();
+    speak(textToSpeak);
   };
 
+  const parts = slide.sentence.split(/(_+)/);
+
   return (
-    <div className="slide-content">
-      <h2 className="text-dim">Fill in the blank</h2>
-      
-      <div className="flex-center" style={{ flexDirection: 'row' }}>
-        <div className="arabic-text fill-blank-sentence">
-          {parts[0]}
-          <span className={`blank-space arabic-text ${isCorrect === true ? 'correct-ans' : isCorrect === false ? 'wrong-ans' : ''}`}>
-            {selectedOption || '____'}
-          </span>
-          {parts[1]}
-        </div>
-        
-        <button 
-          className="tts-button" 
-          style={{ padding: '12px' }}
-          onClick={playSentenceWithBlank}
-        >
-          <Volume2 size={24} />
+    <div className="slide-content fill-blank-slide">
+      <div className="flex-center" style={{ flexDirection: 'row', marginBottom: '20px' }}>
+        <button className="tts-button" onClick={playAudio}>
+          <Volume2 size={28} />
         </button>
       </div>
 
-      <p className="translation-text">"{slide.english}"</p>
+      <div className="fill-blank-sentence arabic-large" dir="rtl">
+        {parts.map((part, i) => {
+          if (part.includes('_')) {
+            return (
+              <span 
+                key={i} 
+                className={`blank-space ${isCorrect === true ? 'correct-ans' : isCorrect === false ? 'wrong-ans' : ''}`}
+              >
+                {selectedAns || ''}
+              </span>
+            );
+          }
+          return <span key={i}>{part}</span>;
+        })}
+      </div>
 
-      <div className="options-row">
-        {slide.options.map(opt => (
-          <button
-            key={opt}
-            className={`opt-btn arabic-text ${selectedOption === opt ? (isCorrect ? 'correct' : 'wrong') : ''}`}
-            onClick={() => handleSelect(opt)}
-            disabled={isCorrect}
-          >
-            {opt}
-          </button>
-        ))}
+      <p className="translation-text">{slide.translation}</p>
+
+      <div className="options-row" dir="rtl">
+        {slide.options.map((opt, i) => {
+          let btnClass = 'opt-btn arabic-text';
+          if (selectedAns === opt) {
+            btnClass += isCorrect ? ' correct' : ' wrong';
+          }
+          return (
+            <button 
+              key={i} 
+              className={btnClass}
+              onClick={() => handleSelect(opt)}
+              disabled={isCorrect === true}
+            >
+              {opt}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
