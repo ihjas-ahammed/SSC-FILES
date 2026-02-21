@@ -27,8 +27,8 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
     setIsDropdownOpen(false);
   };
 
-  // Extract a number from the section ID (e.g., 'sec1' -> 1)
-  const currentSectionNum = activeSection.id.replace(/\D/g, '') || 1;
+  // Dynamically calculate actual 1-based index instead of relying on regex ID parsing
+  const currentSectionNum = sections.findIndex(s => s.id === activeSection.id) + 1;
 
   return (
     <div className="top-bar-wrapper">
@@ -42,7 +42,7 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
             className="section-selector-btn" 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <div className="section-badge">{currentSectionNum}</div>
+            <div className="section-badge">{currentSectionNum > 0 ? currentSectionNum : 1}</div>
             <span className="section-title-compact">
               {activeSection.title.split(':')[0]}
             </span>

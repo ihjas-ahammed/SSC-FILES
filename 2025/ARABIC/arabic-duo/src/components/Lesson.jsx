@@ -34,19 +34,21 @@ const Lesson = ({ lesson, onClose }) => {
   };
 
   const renderSlide = () => {
+    // We pass key={currentIndex} to force React to unmount the old slide and mount a fresh one.
+    // This entirely prevents "stale state" bugs when consecutive slides are of the same type.
     switch (slide.type) {
       case 'sentence':
-        return <SentenceSlide slide={slide} />;
+        return <SentenceSlide key={currentIndex} slide={slide} />;
       case 'vocabulary':
-        return <VocabularySlide slide={slide} />;
+        return <VocabularySlide key={currentIndex} slide={slide} />;
       case 'match':
-        return <MatchSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+        return <MatchSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       case 'fill-blank':
-        return <FillBlankSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+        return <FillBlankSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       case 'sentence-builder':
-        return <SentenceBuilderSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+        return <SentenceBuilderSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       default:
-        return <div>Unknown slide type</div>;
+        return <div key={currentIndex}>Unknown slide type</div>;
     }
   };
 

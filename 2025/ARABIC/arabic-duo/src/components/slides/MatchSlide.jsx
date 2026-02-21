@@ -3,12 +3,15 @@ import { useTTS } from '../../hooks/useTTS';
 
 const MatchSlide = ({ slide, onComplete }) => {
   const { speak } = useTTS();
-  const [shuffledAr, setShuffledAr] = useState([]);
-  const [shuffledEn, setShuffledEn] = useState([]);
+  
+  // Initialize state directly from the current slide
+  const [shuffledAr, setShuffledAr] = useState(() => [...slide.pairs].sort(() => Math.random() - 0.5));
+  const [shuffledEn, setShuffledEn] = useState(() => [...slide.pairs].sort(() => Math.random() - 0.5));
   const [selectedAr, setSelectedAr] = useState(null);
   const [selectedEn, setSelectedEn] = useState(null);
   const [matched, setMatched] = useState([]);
 
+  // Reset state if slide changes without component unmounting
   useEffect(() => {
     setShuffledAr([...slide.pairs].sort(() => Math.random() - 0.5));
     setShuffledEn([...slide.pairs].sort(() => Math.random() - 0.5));
@@ -64,9 +67,12 @@ const MatchSlide = ({ slide, onComplete }) => {
         
         <div className="match-col">
           {shuffledEn.map(p => {
-            const parentAr = slide.pairs.find(pair => pair.en === p.en).ar;
-            const isMatched = matched.includes(parentAr);
+            // Defensive lookup with optional chaining `?.ar`
+            const parentPair = slide.pairs.find(pair => pair.en === p.en);
+            const parentAr = parentPair?.ar; 
+            const isMatched = parentAr ? matched.includes(parentAr) : false;
             const isSelected = selectedEn === p.en;
+            
             return (
               <button
                 key={`en-${p.en}`}

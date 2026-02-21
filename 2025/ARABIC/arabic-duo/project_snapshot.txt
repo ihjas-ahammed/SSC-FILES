@@ -1,775 +1,864 @@
---- START OF FILE src/App.css ---
-/* =========================================
-   Base Variables & Setup
-   ========================================= */
-:root {
-  --primary: #41D1FF;
-  --primary-glow: rgba(65, 209, 255, 0.4);
-  --success: #4ADE80;
-  --success-glow: rgba(74, 222, 128, 0.4);
-  --error: #F87171;
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --text-main: #FFFFFF;
-  --text-dim: #9CA3AF;
-  --bg-dark: #121212;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background: var(--bg-dark);
-  color: var(--text-main);
-  font-family: system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-}
-
-.app-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-}
-
-/* =========================================
-   Top Bar & Header
-   ========================================= */
-.top-bar-wrapper {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(18, 18, 18, 0.98);
-  backdrop-filter: blur(10px);
-  border-bottom: 2px solid var(--glass-border);
-  display: flex;
-  flex-direction: column;
-}
-
-.app-title-bar {
-  text-align: center;
-  padding: 12px 0 4px 0;
-}
-
-.app-title-bar h1 {
-  font-size: 1.4rem;
-  font-weight: 900;
-  margin: 0;
-  background: linear-gradient(90deg, #41D1FF, #BD34FE);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 1px;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-}
-
-.section-dropdown-container {
-  position: relative;
-}
-
-.section-selector-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 12px;
-  transition: background 0.2s;
-}
-
-.section-selector-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.section-badge {
-  background: linear-gradient(135deg, var(--primary), #BD34FE);
-  color: #fff;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(65, 209, 255, 0.4);
-}
-
-.section-badge.small {
-  width: 24px;
-  height: 24px;
-  font-size: 0.8rem;
-}
-
-.dropdown-chevron {
-  transition: transform 0.3s ease;
-  color: var(--text-dim);
-}
-
-.dropdown-chevron.open {
-  transform: rotate(180deg);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background: #1E1E1E;
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
-  padding: 8px;
-  width: 260px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transform-origin: top left;
-  animation: slideDownFade 0.2s ease-out forwards;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px;
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  text-align: left;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.dropdown-item.active {
-  background: rgba(65, 209, 255, 0.1);
-  color: var(--primary);
-}
-
-.progress-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  border: 1px solid var(--glass-border);
-}
-
-.progress-text {
-  color: #FFD700;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-/* =========================================
-   Mobile Dashboard & Unit Path
-   ========================================= */
-.dashboard-mobile {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  min-height: 100vh;
-}
-
-.path-container {
-  padding: 30px 20px 80px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
-}
-
-.unit-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.unit-header {
-  width: 100%;
-  background: var(--primary);
-  color: #000;
-  padding: 16px 24px;
-  border-radius: 16px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 0 rgba(65, 209, 255, 0.4);
-  text-align: left;
-}
-
-.unit-header.practice-header {
-  background: #BD34FE;
-  color: white;
-  box-shadow: 0 4px 0 rgba(189, 52, 254, 0.4);
-}
-
-.unit-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin: 0;
-}
-
-.path-lessons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  width: 100%;
-}
-
-.lesson-node-wrap {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.lesson-node {
-  width: 75px;
-  height: 75px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s;
-  outline: none;
-}
-
-.lesson-node.completed {
-  background: var(--success);
-  color: #000;
-  box-shadow: 0 6px 0 rgba(74, 222, 128, 0.5);
-}
-
-.lesson-node.unlocked {
-  background: var(--primary);
-  color: #000;
-  box-shadow: 0 6px 0 rgba(65, 209, 255, 0.5);
-  animation: bounce-small 2s infinite ease-in-out;
-}
-
-.lesson-node.unlocked.practice {
-  background: #BD34FE;
-  color: white;
-  box-shadow: 0 6px 0 rgba(189, 52, 254, 0.5);
-}
-
-.lesson-node.locked {
-  background: #2A2A2A;
-  color: #666;
-  box-shadow: 0 6px 0 #1A1A1A;
-  cursor: not-allowed;
-}
-
-.lesson-node:active:not(.locked) {
-  transform: translateY(6px);
-  box-shadow: 0 0 0 transparent;
-}
-
-/* =========================================
-   Lesson Screen & Footer Buttons
-   ========================================= */
-.lesson-view {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 24px;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 600px;
-}
-
-.lesson-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.close-btn {
-  color: var(--text-dim);
-  padding: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.progress-bar-bg {
-  flex: 1;
-  height: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary), #BD34FE);
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 8px;
-}
-
-.lesson-footer {
-  padding-top: 24px;
-  display: flex;
-  justify-content: stretch;
-  margin-top: auto;
-}
-
-.btn-primary {
-  width: 100%;
-  background: var(--success);
-  color: #000;
-  font-size: 1.2rem;
-  font-weight: 800;
-  padding: 16px 32px;
-  border-radius: 16px;
-  border: none;
-  box-shadow: 0 6px 0 rgba(74, 222, 128, 0.5);
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.1s;
-}
-
-.btn-primary:active:not(:disabled) {
-  transform: translateY(6px);
-  box-shadow: 0 0 0 transparent;
-}
-
-.btn-primary:disabled {
-  background: #333;
-  color: #666;
-  box-shadow: 0 6px 0 #222;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* =========================================
-   Slides (General)
-   ========================================= */
-.slide-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
-  min-height: 50vh;
-}
-
-.slide-content {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  align-items: center;
-  width: 100%;
-}
-
-.arabic-large {
-  font-size: 2.5rem;
-  line-height: 1.8;
-  color: var(--primary);
-  text-shadow: 0 4px 15px rgba(65, 209, 255, 0.2);
-}
-
-.translation-text {
-  font-size: 1.2rem;
-  color: var(--text-dim);
-  line-height: 1.5;
-}
-
-.tts-button {
-  color: var(--primary);
-  background: rgba(65, 209, 255, 0.1);
-  padding: 12px;
-  border-radius: 50%;
-  border: 1px solid var(--primary-glow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-direction: column;
-}
-
-/* =========================================
-   Vocabulary Slide
-   ========================================= */
-.vocab-card {
-  width: 100%;
-  max-width: 400px;
-  aspect-ratio: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 30px;
-  gap: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.vocab-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 4px;
-  background: linear-gradient(90deg, var(--primary), #BD34FE);
-}
-
-.large-tts {
-  width: 70px;
-  height: 70px;
-  margin-bottom: 10px;
-}
-
-.vocab-ar {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: var(--primary);
-  text-shadow: 0 4px 15px var(--primary-glow);
-  line-height: 1.2;
-}
-
-.vocab-divider {
-  width: 40px;
-  height: 2px;
-  background: var(--glass-border);
-  margin: 10px 0;
-}
-
-.vocab-transliteration {
-  font-size: 1.2rem;
-  color: var(--text-dim);
-  font-style: italic;
-}
-
-.vocab-en {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-.vocab-example {
-  margin-top: 30px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 16px;
-  border-left: 4px solid var(--primary);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.vocab-example .arabic-text {
-  font-size: 1.5rem;
-  color: var(--text-main);
-}
-
-/* =========================================
-   Match Slide
-   ========================================= */
-.match-columns {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-}
-
-.match-col {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-  max-width: 50%;
-}
-
-.match-btn {
-  padding: 12px 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 2px solid var(--glass-border);
-  border-radius: 12px;
-  color: white;
-  font-size: 1rem;
-  min-height: 60px;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
-}
-
-.match-btn.ar-text {
-  font-size: 1.4rem;
-}
-
-.match-btn.selected {
-  border-color: var(--primary);
-  background: rgba(65, 209, 255, 0.15);
-  box-shadow: 0 0 10px var(--primary-glow);
-}
-
-.match-btn.matched {
-  border-color: var(--success);
-  background: rgba(74, 222, 128, 0.1);
-  color: var(--success);
-  opacity: 0.5;
-}
-
-/* =========================================
-   Fill Blank Slide
-   ========================================= */
-.fill-blank-sentence {
-  font-size: 1.8rem;
-  line-height: 2;
-}
-
-.blank-space {
-  display: inline-block;
-  min-width: 80px;
-  border-bottom: 3px solid var(--primary);
-  padding: 0 10px;
-  color: var(--primary);
-  text-align: center;
-  margin: 0 8px;
-}
-
-.blank-space.correct-ans {
-  border-color: var(--success);
-  color: var(--success);
-}
-
-.blank-space.wrong-ans {
-  border-color: var(--error);
-  color: var(--error);
-}
-
-.options-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.opt-btn {
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid var(--glass-border);
-  border-radius: 12px;
-  color: white;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-.opt-btn.correct {
-  border-color: var(--success);
-  background: rgba(74, 222, 128, 0.15);
-  box-shadow: 0 0 20px var(--success-glow);
-}
-
-.opt-btn.wrong {
-  border-color: var(--error);
-  background: rgba(248, 113, 113, 0.15);
-  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-/* =========================================
-   Sentence Builder Slide
-   ========================================= */
-.builder-slide {
-  gap: 20px;
-}
-
-.builder-question {
-  font-size: 1.3rem;
-  color: var(--text-main);
-}
-
-.builder-question.arabic-text {
-  font-size: 1.8rem;
-  color: var(--primary);
-}
-
-.builder-answer-zone {
-  min-height: 60px;
-  width: 100%;
-  border-bottom: 2px dashed var(--glass-border);
-  padding: 12px 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-content: flex-start;
-  border-radius: 12px 12px 0 0;
-  background: rgba(255,255,255,0.02);
-}
-
-.zone-error {
-  border-color: var(--error);
-  background: rgba(248, 113, 113, 0.05);
-  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-.zone-success {
-  border-color: var(--success);
-  background: rgba(74, 222, 128, 0.08);
-}
-
-.builder-options-zone {
-  min-height: 100px;
-  width: 100%;
-  padding: 12px 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-content: flex-start;
-}
-
-.rtl-zone {
-  flex-direction: row-reverse;
-  justify-content: center;
-}
-
-.ltr-zone {
-  flex-direction: row;
-  justify-content: center;
-}
-
-.word-block-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.word-tooltip {
-  position: absolute;
-  bottom: 110%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 8px;
-  font-size: 1rem;
-  white-space: nowrap;
-  z-index: 10;
-  pointer-events: none;
-  border: 1px solid var(--primary);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  animation: popIn 0.2s ease-out forwards;
-}
-
-.word-block {
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  color: white;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.3);
-  transition: transform 0.1s;
-  cursor: pointer;
-}
-
-.word-block:active:not(:disabled) {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 transparent;
-}
-
-.word-block.ar-block {
-  font-size: 1.4rem;
-}
-
-.word-block.en-block {
-  font-size: 1.1rem;
-}
-
-.word-block.selected-placeholder {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: transparent;
-  color: transparent;
-  box-shadow: none;
-  cursor: default;
-}
-
-/* =========================================
-   Animations & Utils
-   ========================================= */
-@keyframes bounce-small {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes slideDownFade {
-  from { opacity: 0; transform: scaleY(0.9) translateY(-10px); }
-  to { opacity: 1; transform: scaleY(1) translateY(0); }
-}
-
-@keyframes popIn {
-  0% { opacity: 0; transform: translate(-50%, 10px) scale(0.9); }
-  100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-}
-
-@keyframes shake {
-  10%, 90% { transform: translate3d(-2px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
-  40%, 60% { transform: translate3d(8px, 0, 0); }
-}
 
-/* Restrict Desktop over-scaling so it looks good as a mobile-simulator centered */
-@media (min-width: 769px) {
-  .dashboard-mobile, .lesson-view {
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    background: rgba(20, 20, 20, 0.6);
+--- START OF FILE src/App.jsx ---
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './App.css';
+import './styles/NewFeatures.css';
+import { ProgressProvider } from './context/ProgressContext';
+
+import DashboardRoute from './pages/DashboardRoute';
+import LessonRoute from './pages/LessonRoute';
+import SummaryRoute from './pages/SummaryRoute';
+
+function App() {
+  return (
+    <ProgressProvider>
+      <div className="app-container">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<DashboardRoute />} />
+            <Route path="/lesson/:lessonId" element={<LessonRoute />} />
+            <Route path="/summary/:sectionId" element={<SummaryRoute />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ProgressProvider>
+  );
+}
+
+export default App;
+--- END OF FILE src/App.jsx ---
+
+--- START OF FILE src/context/ProgressContext.jsx ---
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+const ProgressContext = createContext();
+
+export const useProgress = () => useContext(ProgressContext);
+
+export const ProgressProvider = ({ children }) => {
+  const [completedLessons, setCompletedLessons] = useState(() => {
+    const saved = localStorage.getItem('duofy5_progress');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [activeSectionId, setActiveSectionId] = useState(() => {
+    return localStorage.getItem('duofy5_active_sec') || 'sec1-5';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('duofy5_progress', JSON.stringify(completedLessons));
+  }, [completedLessons]);
+
+  useEffect(() => {
+    localStorage.setItem('duofy5_active_sec', activeSectionId);
+  }, [activeSectionId]);
+
+  const markLessonComplete = (lessonId) => {
+    if (!completedLessons.includes(lessonId)) {
+      setCompletedLessons([...completedLessons, lessonId]);
+    }
+  };
+
+  return (
+    <ProgressContext.Provider value={{ 
+      completedLessons, 
+      markLessonComplete,
+      activeSectionId,
+      setActiveSectionId
+    }}>
+      {children}
+    </ProgressContext.Provider>
+  );
+};
+--- END OF FILE src/context/ProgressContext.jsx ---
+
+--- START OF FILE src/pages/DashboardRoute.jsx ---
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useProgress } from '../context/ProgressContext';
+import { sections } from '../data/sections';
+import Dashboard from '../components/Dashboard';
+
+const DashboardRoute = () => {
+  const navigate = useNavigate();
+  const { activeSectionId, setActiveSectionId } = useProgress();
+  
+  // Restore scroll position
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const activeSection = sections.find(s => s.id === activeSectionId) || sections[0];
+
+  return (
+    <Dashboard 
+      activeSection={activeSection}
+      setActiveSection={(sec) => setActiveSectionId(sec.id)}
+      onSelectLesson={(lesson) => navigate(`/lesson/${lesson.id}`)}
+      onShowSummary={() => navigate(`/summary/${activeSection.id}`)}
+    />
+  );
+};
+
+export default DashboardRoute;
+--- END OF FILE src/pages/DashboardRoute.jsx ---
+
+--- START OF FILE src/pages/LessonRoute.jsx ---
+import React, { useEffect, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { sections } from '../data/sections';
+import Lesson from '../components/Lesson';
+
+const LessonRoute = () => {
+  const { lessonId } = useParams();
+  const navigate = useNavigate();
+
+  // Scroll to top when lesson mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Find the requested lesson data
+  const lessonData = useMemo(() => {
+    for (const section of sections) {
+      for (const unit of section.units) {
+        const found = unit.lessons.find(l => l.id === lessonId);
+        if (found) return found;
+      }
+    }
+    return null;
+  }, [lessonId]);
+
+  if (!lessonData) {
+    return (
+      <div className="flex-center" style={{ minHeight: '100vh', color: 'white' }}>
+        <h2>Lesson not found!</h2>
+        <button className="btn-primary mt-4" onClick={() => navigate('/')}>Return Home</button>
+      </div>
+    );
   }
+
+  return (
+    <Lesson 
+      lesson={lessonData} 
+      onClose={() => navigate(-1)} 
+    />
+  );
+};
+
+export default LessonRoute;
+--- END OF FILE src/pages/LessonRoute.jsx ---
+
+--- START OF FILE src/pages/SummaryRoute.jsx ---
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { timelineEvents } from '../data/timelineEvents';
+import SectionSummary from '../components/SectionSummary';
+
+const SummaryRoute = () => {
+  const { sectionId } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const events = timelineEvents[sectionId] || [];
+
+  return (
+    <SectionSummary 
+      events={events}
+      onClose={() => navigate(-1)} 
+    />
+  );
+};
+
+export default SummaryRoute;
+--- END OF FILE src/pages/SummaryRoute.jsx ---
+
+--- START OF FILE src/components/Dashboard.jsx ---
+import React from 'react';
+import { sections } from '../data/sections';
+import { useProgress } from '../context/ProgressContext';
+import { Map } from 'lucide-react';
+import TopBar from './TopBar';
+import UnitPath from './UnitPath';
+
+const Dashboard = ({ activeSection, setActiveSection, onSelectLesson, onShowSummary }) => {
+  const { completedLessons } = useProgress();
+
+  return (
+    <div className="dashboard-mobile route-transition">
+      <TopBar 
+        sections={sections} 
+        activeSection={activeSection} 
+        setActiveSection={setActiveSection}
+        completedLessons={completedLessons}
+      />
+      
+      <div className="summary-btn-container" style={{ padding: '24px 20px 0 20px' }}>
+        <button
+          className="btn-primary flex-center summary-action-btn"
+          onClick={onShowSummary}
+        >
+          <Map size={24} color="var(--primary)" />
+          <span>View Journey Summary</span>
+        </button>
+      </div>
+
+      <div className="path-container">
+        {activeSection.units.map((unit) => (
+          <UnitPath 
+            key={unit.id} 
+            unit={unit} 
+            completedLessons={completedLessons} 
+            onSelectLesson={onSelectLesson}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+--- END OF FILE src/components/Dashboard.jsx ---
+
+--- START OF FILE src/components/TopBar.jsx ---
+import React, { useState, useRef, useEffect } from 'react';
+import { Trophy, ChevronDown } from 'lucide-react';
+
+const TopBar = ({ sections, activeSection, setActiveSection, completedLessons }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Calculate overall progress across all sections
+  const totalLessons = sections.reduce((acc, sec) => 
+    acc + sec.units.reduce((uAcc, unit) => uAcc + unit.lessons.length, 0), 0
+  );
+  const progressPercentage = Math.round((completedLessons.length / totalLessons) * 100) || 0;
+
+  // Handle clicking outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSectionSelect = (section) => {
+    setActiveSection(section);
+    setIsDropdownOpen(false);
+  };
+
+  // Dynamically calculate actual 1-based index instead of relying on regex ID parsing
+  const currentSectionNum = sections.findIndex(s => s.id === activeSection.id) + 1;
+
+  return (
+    <div className="top-bar-wrapper">
+      <div className="app-title-bar">
+        <h1>DuoFY4 - Arabic</h1>
+      </div>
+      
+      <div className="top-bar">
+        <div className="section-dropdown-container" ref={dropdownRef}>
+          <button 
+            className="section-selector-btn" 
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <div className="section-badge">{currentSectionNum > 0 ? currentSectionNum : 1}</div>
+            <span className="section-title-compact">
+              {activeSection.title.split(':')[0]}
+            </span>
+            <ChevronDown 
+              size={20} 
+              className={`dropdown-chevron ${isDropdownOpen ? 'open' : ''}`} 
+            />
+          </button>
+
+          {isDropdownOpen && (
+            <div className="dropdown-menu active">
+              {sections.map((s, index) => (
+                <button 
+                  key={s.id} 
+                  className={`dropdown-item ${activeSection.id === s.id ? 'active' : ''}`}
+                  onClick={() => handleSectionSelect(s)}
+                >
+                  <div className="section-badge small">{index + 1}</div>
+                  <span>{s.title}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="progress-pill glass-panel">
+          <Trophy size={18} color="#FFD700" fill="#FFD700" />
+          <span className="progress-text">{progressPercentage}%</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TopBar;
+--- END OF FILE src/components/TopBar.jsx ---
+
+--- START OF FILE src/components/SectionSummary.jsx ---
+import React from 'react';
+import { ArrowLeft } from 'lucide-react';
+import './SectionSummary.css';
+
+const SectionSummary = ({ events, onClose }) => {
+  return (
+    <div className="summary-container route-transition">
+      <div className="summary-header">
+        <button className="close-btn" onClick={onClose} aria-label="Go back">
+          <ArrowLeft size={28} />
+        </button>
+        <h2>Journey Summary</h2>
+      </div>
+
+      <div className="timeline">
+        {events.length > 0 ? (
+          events.map((event) => (
+            <div key={event.id} className="timeline-item">
+              <div className="timeline-dot"></div>
+              <div className="timeline-content">
+                <h3 className="timeline-title-ar" dir="rtl">{event.titleAr}</h3>
+                <h4 className="timeline-title-en">{event.titleEn}</h4>
+                <p className="timeline-desc-ar" dir="rtl">{event.descAr}</p>
+                <p className="timeline-desc-en">{event.descEn}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="flex-center p-6 text-dim text-center">
+            <p>Summary for this section is currently unavailable.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SectionSummary;
+--- END OF FILE src/components/SectionSummary.jsx ---
+
+--- START OF FILE src/data/timelineEvents.js ---
+export const timelineEvents = {
+  "sec1-5": [
+    {
+      id: 1,
+      titleAr: "الوصول إلى كيرلا",
+      titleEn: "Arrival in Kerala",
+      descAr: "حطت الرحلة في مطار كوتشين، الولاية التي سماها العرب الأوائل 'خير الله'. استقبلهم المطر الغزير والطبيعة الساحرة.",
+      descEn: "The flight landed at Cochin Airport in the state the early Arabs called 'Khayr Allah' (God's Bounty). They were welcomed by heavy rain and charming nature."
+    },
+    {
+      id: 2,
+      titleAr: "استكشاف كوتشين",
+      titleEn: "Exploring Cochin",
+      descAr: "أقاموا في فندق 'هاربر فيو' بشارع أم جي رود. قضوا ثلاثة أيام يستمتعون ببشاشة الناس، النظافة، والمساجد الجميلة.",
+      descEn: "They stayed at 'Harbor View' hotel on MG Road. They spent three days enjoying the people's cheerfulness, cleanliness, and beautiful mosques."
+    },
+    {
+      id: 3,
+      titleAr: "الطريق إلى مونار",
+      titleEn: "The Road to Munnar",
+      descAr: "استأجروا سيارة وانطلقوا نحو مونار (تبعد 145 كم). الطريق كان كلوحة خضراء من الغابات الكثيفة وشلالات المياه المتدفقة.",
+      descEn: "They rented a car and headed to Munnar (145 km away). The road was like a green painting of dense forests and gushing waterfalls."
+    },
+    {
+      id: 4,
+      titleAr: "الإقامة في منتجع بلاك بري",
+      titleEn: "Stay at Blackberry Resort",
+      descAr: "وصلوا مع حلول الليل وناموا في سبات عميق تحت أنغام المطر في أكواخ صغيرة توفر السكينة المطلقة.",
+      descEn: "They arrived at nightfall and fell into a deep slumber under the tunes of the rain in small cottages offering absolute tranquility."
+    },
+    {
+      id: 5,
+      titleAr: "زيارة المنتزه الوطني",
+      titleEn: "Visiting the National Park",
+      descAr: "رأوا الماعز الجبلي المخطط والغيوم التي تلامس قمم الجبال، وتذكر الكاتب وصف الشاعر ابن سعد للأندلس.",
+      descEn: "They saw the striped mountain goat and clouds touching mountain peaks. The author remembered poet Ibn Sa'd's description of Andalusia."
+    },
+    {
+      id: 6,
+      titleAr: "العودة والذكريات",
+      titleEn: "Return and Memories",
+      descAr: "عادوا إلى كوتشين في اليوم الرابع واشتروا المصنوعات اليدوية، حاملين حباً أكبر للحياة ويقيناً بوجود جنات في الأرض.",
+      descEn: "They returned to Cochin on the fourth day, bought handicrafts, carrying a greater love for life and certainty of earthly paradises."
+    }
+  ],
+  "sec2-6": [
+    {
+      id: 1,
+      titleAr: "البيئة والموارد الطبيعية",
+      titleEn: "Environment & Natural Resources",
+      descAr: "البيئة هي الموارد الطبيعية كالأرض والماء والهواء والحيوانات والنباتات، وتعتبر أمانة يجب الحفاظ عليها.",
+      descEn: "The environment comprises natural resources like earth, water, air, animals, and plants. It is considered a trust that must be preserved."
+    },
+    {
+      id: 2,
+      titleAr: "المسؤولية الدينية",
+      titleEn: "Religious Responsibility",
+      descAr: "حث القرآن الكريم على حماية البيئة واعتبر الإسلام ذلك واجباً دينياً. الإنسان خليفة الله في الأرض ومسؤول عن إعمارها.",
+      descEn: "The Holy Quran urged protecting the environment, considering it a religious duty. Man is Allah's successor on earth, responsible for its development."
+    },
+    {
+      id: 3,
+      titleAr: "التوجيهات النبوية",
+      titleEn: "Prophetic Directives",
+      descAr: "أمر النبي ﷺ بإماطة الأذى عن الطريق، وحث على التشجير والزراعة، ونهى عن الإسراف في الماء حتى أثناء الوضوء.",
+      descEn: "The Prophet (PBUH) commanded removing harm from paths, urged planting, and forbade wasting water even during ablution."
+    },
+    {
+      id: 4,
+      titleAr: "الزراعة وإحياء الأرض",
+      titleEn: "Agriculture & Reviving Land",
+      descAr: "اهتم الإسلام بتخضير الأرض وإحياء الأراضي الجدباء. فالأرض لمن يزرعها وكل غرس يؤكل منه يعتبر صدقة.",
+      descEn: "Islam focused on greening and reviving barren lands. Land belongs to its cultivator, and whatever is eaten from a planted tree is charity."
+    },
+    {
+      id: 5,
+      titleAr: "تأمل المخلوقات",
+      titleEn: "Contemplating Creations",
+      descAr: "دعا القرآن للنظر والتأمل في خلق الإبل والسماء والماء. وسميت عدة سور بأسماء حيوانات تعظيماً لخلق الله.",
+      descEn: "The Quran calls for contemplating the creation of camels, the sky, and water. Several chapters are named after animals to honor Allah's creation."
+    }
+  ]
+};
+--- END OF FILE src/data/timelineEvents.js ---
+
+--- START OF FILE src/data/section2/section2_preview.js ---
+export const previewUnit2 = {
+  id: "sec2_preview",
+  title: "Section Preview",
+  lessons: [
+    {
+      id: "sec2_prev_l1",
+      title: "Core Concepts",
+      slides: [
+        {
+          type: "vocabulary",
+          word: "الْبِيئَةُ",
+          transliteration: "Al-bee'ah",
+          translation: "The Environment",
+          example: {
+            ar: "حِمَايَةُ الْبِيئَةِ وَاجِبٌ",
+            en: "Protecting the environment is a duty"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَرْض", en: "Earth/Land" },
+            { ar: "مَاء", en: "Water" },
+            { ar: "هَوَاء", en: "Air" },
+            { ar: "نَبَاتَات", en: "Plants" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Protecting the environment is a duty",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "حِمَايَةُ", trans: "Protecting" },
+            { id: 2, text: "الْبِيئَةِ", trans: "Environment" },
+            { id: 3, text: "وَاجِبٌ", trans: "Duty" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prev_l2",
+      title: "Islamic View",
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "الإِنْسَانُ ____ اللهِ فِي الْأَرْضِ",
+          translation: "Man is Allah's successor (caliph) on earth",
+          correctAnswer: "خَلِيفَةُ",
+          options: ["عَدُوُّ", "خَلِيفَةُ", "صَدِيقُ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "نَهَى الْإِسْلَامُ عَنِ ____ فِي الْمَاءِ",
+          translation: "Islam forbade extravagance (waste) in water",
+          correctAnswer: "الْإِسْرَافِ",
+          options: ["الشُّرْبِ", "الْإِسْرَافِ", "اللَّعِبِ"]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَمَانَة", en: "Trust" },
+            { ar: "إِفْسَاد", en: "Corruption" },
+            { ar: "صَدَقَة", en: "Charity" },
+            { ar: "وُضُوء", en: "Ablution" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section2/section2_preview.js ---
+
+--- START OF FILE src/data/section2/section2_practice.js ---
+export const practiceUnit2 = {
+  id: "sec2_practice",
+  title: "End of Chapter Exercises",
+  lessons: [
+    {
+      id: "sec2_prac_l1",
+      title: "أ) أكمل الفراغ (Fill in the blanks)",
+      isPractice: true,
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "خَلَقَ اللهُ الْإِنْسَانَ وَجَعَلَهُ ____ فِي الْأَرْضِ.",
+          translation: "Allah created man and made him a successor (caliph) on earth.",
+          answer: "خَلِيفَةً",
+          options: ["مَلِكًا", "خَلِيفَةً", "عَبْدًا"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ وَاجِبِ الْمُسْلِمِ ____ عَلَى الْبِيئَةِ.",
+          translation: "It is the duty of a Muslim to preserve the environment.",
+          answer: "الْمُحَافَظَةُ",
+          options: ["التَّعَدِّي", "الْمُحَافَظَةُ", "الْإِفْسَادُ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "نَهَى النَّبِيُّ ﷺ عَنِ ____ فِي الْمَاءِ الرَّاكِدِ.",
+          translation: "The Prophet (PBUH) forbade urinating in stagnant water.",
+          answer: "التَّبَوُّلِ",
+          options: ["الشُّرْبِ", "التَّبَوُّلِ", "الِاغْتِسَالِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يُعَدُّ الْمَاءُ مِنْ أَهَمِّ ____ الْحَيَاةِ.",
+          translation: "Water is considered one of the most important basics of life.",
+          answer: "أَسَاسِيَّاتِ",
+          options: ["أَسَاسِيَّاتِ", "أَلْوَانِ", "زِينَةِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "قَالَ اللهُ تَعَالَى: \"وَلَا تُفْسِدُوا ____ الْأَرْضِ\".",
+          translation: "Allah Almighty said: 'And do not cause corruption upon the earth'.",
+          answer: "فِي",
+          options: ["عَلَى", "فِي", "تَحْتَ"]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l2",
+      title: "ب) الاستيعاب (Comprehension)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "بِمَاذَا أَمَرَ النَّبِيُّ ﷺ تُجَاهَ الْأَذَى فِي الطَّرِيقِ؟",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "بِإِمَاطَةِ", trans: "Removing" },
+            { id: 2, text: "الْأَذَى", trans: "the harm" },
+            { id: 3, text: "عَنِ", trans: "from" },
+            { id: 4, text: "الطَّرِيقِ", trans: "the path" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَا حُكْمُ الْإِسْرَافِ فِي الْمَاءِ أَثْنَاءَ الْوُضُوءِ؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "مَكْرُوهٌ", trans: "Disliked" },
+            { id: 2, text: "وَمَنْهِيٌّ", trans: "and forbidden" },
+            { id: 3, text: "عَنْهُ", trans: "it" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَا مَوْقِفُ الْإِسْلَامِ مِنْ قَطْعِ الْأَشْجَارِ الْمُثْمِرَةِ؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "نَهَى", trans: "Forbade" },
+            { id: 2, text: "الْإِسْلَامُ", trans: "Islam" },
+            { id: 3, text: "عَنْهُ", trans: "it" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l3",
+      title: "ج) صل بين العمودين (Matching Definitions)",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "الْمَاءُ", en: "أَسَاسُ الْحَيَاةِ" },
+            { ar: "الْهَوَاءُ", en: "يُذْكَرُ بِلَفْظِ الرِّيَاحِ" },
+            { ar: "الْأَشْجَارُ", en: "نَهَى الْإِسْلَامُ عَنْ قَطْعِهَا" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "الْإِنْسَانُ", en: "خَلِيفَةُ اللهِ فِي الْأَرْضِ" },
+            { ar: "النَّظَافَةُ", en: "مِنَ الْإِيمَانِ" },
+            { ar: "الْبِيئَةُ", en: "أَمَانَةٌ وَاجِبَةٌ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l4",
+      title: "د / هـ) المفرد والجمع (Singular & Plural)",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "نَبَاتَات", en: "نَبَات" },
+            { ar: "حَيَوَانَات", en: "حَيَوَان" },
+            { ar: "طُرُق", en: "طَرِيق" },
+            { ar: "جِبَال", en: "جَبَل" },
+            { ar: "مَوَارِد", en: "مَوْرِد" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَنْهَار", en: "نَهْر" },
+            { ar: "سَمَاوَات", en: "سَمَاء" },
+            { ar: "مُكَوِّنَات", en: "مُكَوِّن" },
+            { ar: "نِعَم", en: "نِعْمَة" },
+            { ar: "بِحَار", en: "بَحْر" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l5",
+      title: "ح) جمل للترجمة إلى الإنجليزية (Translate to English)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْمَاءُ أَسَاسُ الْحَيَاةِ عَلَى الْأَرْضِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "Water", trans: "الْمَاءُ" },
+            { id: 2, text: "is", trans: "" },
+            { id: 3, text: "the basis", trans: "أَسَاسُ" },
+            { id: 4, text: "of life", trans: "الْحَيَاةِ" },
+            { id: 5, text: "on", trans: "عَلَى" },
+            { id: 6, text: "earth", trans: "الْأَرْضِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "يَجِبُ عَلَيْنَا أَنْ نُحَافِظَ عَلَى نَظَافَةِ الْبِيئَةِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "We", trans: "عَلَيْنَا" },
+            { id: 2, text: "must", trans: "يَجِبُ" },
+            { id: 3, text: "preserve", trans: "نُحَافِظَ" },
+            { id: 4, text: "the cleanliness", trans: "نَظَافَةِ" },
+            { id: 5, text: "of the", trans: "" },
+            { id: 6, text: "environment", trans: "الْبِيئَةِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْهَوَاءُ النَّقِيُّ ضَرُورِيٌّ لِصِحَّةِ الْإِنْسَانِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "Fresh", trans: "النَّقِيُّ" },
+            { id: 2, text: "air", trans: "الْهَوَاءُ" },
+            { id: 3, text: "is", trans: "" },
+            { id: 4, text: "necessary", trans: "ضَرُورِيٌّ" },
+            { id: 5, text: "for human", trans: "لِصِحَّةِ" },
+            { id: 6, text: "health", trans: "الْإِنْسَانِ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l6",
+      title: "ط) جمل للترجمة إلى العربية (Translate to Arabic)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The Quran encourages us to protect nature.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "يُشَجِّعُنَا", trans: "Encourages us" },
+            { id: 2, text: "الْقُرْآنُ", trans: "The Quran" },
+            { id: 3, text: "عَلَى", trans: "on/to" },
+            { id: 4, text: "حِمَايَةِ", trans: "protect" },
+            { id: 5, text: "الطَّبِيعَةِ", trans: "nature" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "We should not waste water during ablution.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "يَجِبُ", trans: "We must" },
+            { id: 2, text: "أَلَّا", trans: "not" },
+            { id: 3, text: "نُسْرِفَ", trans: "waste" },
+            { id: 4, text: "فِي", trans: "in" },
+            { id: 5, text: "الْمَاءِ", trans: "water" },
+            { id: 6, text: "بِالْوُضُوءِ", trans: "during ablution" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Cleanliness is a part of faith.",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "النَّظَافَةُ", trans: "Cleanliness" },
+            { id: 2, text: "مِنَ", trans: "is a part of" },
+            { id: 3, text: "الْإِيمَانِ", trans: "faith" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section2/section2_practice.js ---
+
+--- START OF FILE src/data/sections.js ---
+import { previewUnit } from './section1_preview';
+import { unit1 } from './section1_1';
+import { unit2 } from './section1_2';
+import { practiceUnit } from './section1_practice';
+import { unit3 } from './section1/section1_3';
+import { unit4 } from './section1/section1_4';
+import { unit5 } from './section1/section1_5';
+import { unit6 } from './section1/section1_6';
+import { unit7 } from './section1/section1_7';
+import { unit8 } from './section1/section1_8';
+import { unit9 } from './section1/section1_9';
+import { unit10 } from './section1/section1_10';
+import { unit11 } from './section1/section1_11';
+import { unit12 } from './section1/section1_12';
+
+import { previewUnit2 } from './section2/section2_preview';
+import { unit61 } from './section2/section2_1';
+import { unit62, unit63 } from './section2/section2_3';
+import { unit64, unit65, unit66, unit67, unit68, unit69, unit70, unit71, unit72, unit73 } from './section2/section2_7';
+import { practiceUnit2 } from './section2/section2_practice';
+
+export const sections = [
+  {
+    id: "sec1-5",
+    title: "رحلة إلى مونار",
+    units: [
+      previewUnit,
+      unit1,
+      unit2,
+      unit3,
+      unit4,
+      unit5,
+      unit6,
+      unit7,
+      unit8,
+      unit9,
+      unit10,
+      unit11,
+      unit12,
+      practiceUnit
+    ]
+  },
+  {
+    id: "sec2-6",
+    title: "الْقُرْآنُ وَالْبِيئَةُ",
+    units: [
+      previewUnit2,
+      unit61,
+      unit62,
+      unit63,
+      unit64,
+      unit65,
+      unit66,
+      unit67,
+      unit68,
+      unit69,
+      unit70,
+      unit71,
+      unit72,
+      unit73,
+      practiceUnit2
+    ]
+  }
+];
+--- END OF FILE src/data/sections.js ---
+
+--- START OF FILE src/styles/NewFeatures.css ---
+/* =========================================
+   New CSS Additions for Routers & Utilities
+   ========================================= */
+
+/* General page transitions */
+.route-transition {
+  animation: fadeIn 0.4s ease-out;
 }
---- END OF FILE src/App.css ---
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhancing the generic summary button look */
+.summary-action-btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(65, 209, 255, 0.1), rgba(189, 52, 254, 0.1));
+  border: 1px solid var(--primary);
+  color: white;
+  flex-direction: row;
+  gap: 12px;
+  font-size: 1.1rem;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border-radius: 16px;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-action-btn:hover {
+  background: linear-gradient(135deg, rgba(65, 209, 255, 0.2), rgba(189, 52, 254, 0.2));
+  transform: translateY(-2px);
+}
+
+.summary-action-btn:active {
+  transform: translateY(2px);
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+--- END OF FILE src/styles/NewFeatures.css ---

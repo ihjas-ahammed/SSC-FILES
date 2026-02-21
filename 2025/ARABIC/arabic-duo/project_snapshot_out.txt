@@ -89,10 +89,12 @@ export default defineConfig({
 --- START OF FILE .firebaserc ---
 {
   "projects": {
-    "default": "fy5-arabic"
-  }
+    "default": "fy4-arabic",
+    "production": "fy4-arabic"
+  },
+  "targets": {},
+  "etags": {}
 }
-
 --- END OF FILE .firebaserc ---
 
 --- START OF FILE public/vite.svg ---
@@ -100,115 +102,322 @@ export default defineConfig({
 --- END OF FILE public/vite.svg ---
 
 --- START OF FILE src/App.css ---
-/* App Container */
+/* =========================================
+   Base Variables & Setup
+   ========================================= */
+:root {
+  --primary: #41D1FF;
+  --primary-glow: rgba(65, 209, 255, 0.4);
+  --success: #4ADE80;
+  --success-glow: rgba(74, 222, 128, 0.4);
+  --error: #F87171;
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-main: #FFFFFF;
+  --text-dim: #9CA3AF;
+  --bg-dark: #121212;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
 .app-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 30px 20px;
+  min-height: 100vh;
 }
 
-/* Dashboard */
-.dashboard {
-  padding: 40px;
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+/* =========================================
+   Top Bar & Header
+   ========================================= */
+.top-bar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(18, 18, 18, 0.98);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--glass-border);
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
 }
 
-.dashboard-header h1 {
-  font-size: 3rem;
+.app-title-bar {
   text-align: center;
+  padding: 12px 0 4px 0;
+}
+
+.app-title-bar h1 {
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin: 0;
   background: linear-gradient(90deg, #41D1FF, #BD34FE);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
 }
 
-.section-card {
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.section-dropdown-container {
+  position: relative;
+}
+
+.section-selector-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.section-selector-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.section-badge {
+  background: linear-gradient(135deg, var(--primary), #BD34FE);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(65, 209, 255, 0.4);
+}
+
+.section-badge.small {
+  width: 24px;
+  height: 24px;
+  font-size: 0.8rem;
+}
+
+.dropdown-chevron {
+  transition: transform 0.3s ease;
+  color: var(--text-dim);
+}
+
+.dropdown-chevron.open {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: #1E1E1E;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 8px;
+  width: 260px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 4px;
+  transform-origin: top left;
+  animation: slideDownFade 0.2s ease-out forwards;
 }
 
-.section-card > h2 {
-  font-size: 2.2rem;
-  border-bottom: 1px solid var(--glass-border);
-  padding-bottom: 16px;
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  text-align: left;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-item.active {
+  background: rgba(65, 209, 255, 0.1);
   color: var(--primary);
 }
 
-.unit-card {
-  background: rgba(255, 255, 255, 0.02);
+.progress-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 20px;
-  padding: 28px;
   border: 1px solid var(--glass-border);
 }
 
-.unit-card h3 {
-  color: var(--text-main);
-  margin-bottom: 24px;
-  font-size: 1.6rem;
+.progress-text {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
-.lessons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+/* =========================================
+   Mobile Dashboard & Unit Path
+   ========================================= */
+.dashboard-mobile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
 }
 
-.lesson-btn {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--glass-border);
-  padding: 24px 20px;
-  border-radius: 20px;
-  color: var(--text-main);
-  font-weight: 500;
-  font-size: 1.1rem;
+.path-container {
+  padding: 30px 20px 80px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.unit-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  text-align: center;
+  width: 100%;
 }
 
-.lesson-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--primary);
-  transform: translateY(-2px);
+.unit-header {
+  width: 100%;
+  background: var(--primary);
+  color: #000;
+  padding: 16px 24px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 0 rgba(65, 209, 255, 0.4);
+  text-align: left;
 }
 
-.lesson-btn.completed {
-  border-color: var(--success);
-  background: rgba(74, 222, 128, 0.08);
+.unit-header.practice-header {
+  background: #BD34FE;
+  color: white;
+  box-shadow: 0 4px 0 rgba(189, 52, 254, 0.4);
 }
 
-.lesson-btn.practice-unit {
-  border-color: #BD34FE;
-  background: rgba(189, 52, 254, 0.08);
+.unit-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0;
 }
 
-.lesson-btn.practice-unit:hover {
-  border-color: #41D1FF;
-  background: rgba(65, 209, 255, 0.12);
+.path-lessons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
 }
 
-/* Lesson View */
+.lesson-node-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.lesson-node {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.lesson-node.completed {
+  background: var(--success);
+  color: #000;
+  box-shadow: 0 6px 0 rgba(74, 222, 128, 0.5);
+}
+
+.lesson-node.unlocked {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 6px 0 rgba(65, 209, 255, 0.5);
+  animation: bounce-small 2s infinite ease-in-out;
+}
+
+.lesson-node.unlocked.practice {
+  background: #BD34FE;
+  color: white;
+  box-shadow: 0 6px 0 rgba(189, 52, 254, 0.5);
+}
+
+.lesson-node.locked {
+  background: #2A2A2A;
+  color: #666;
+  box-shadow: 0 6px 0 #1A1A1A;
+  cursor: not-allowed;
+}
+
+.lesson-node:active:not(.locked) {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 transparent;
+}
+
+/* =========================================
+   Lesson Screen & Footer Buttons
+   ========================================= */
 .lesson-view {
   flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 40px;
-  margin-bottom: 2rem;
+  padding: 24px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
 }
 
 .lesson-header {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .close-btn {
@@ -216,164 +425,263 @@ export default defineConfig({
   padding: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.05);
-}
-
-.close-btn:hover {
-  color: var(--error);
-  background: rgba(248, 113, 113, 0.1);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .progress-bar-bg {
   flex: 1;
   height: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .progress-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), #BD34FE);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
 }
 
+.lesson-footer {
+  padding-top: 24px;
+  display: flex;
+  justify-content: stretch;
+  margin-top: auto;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--success);
+  color: #000;
+  font-size: 1.2rem;
+  font-weight: 800;
+  padding: 16px 32px;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 6px 0 rgba(74, 222, 128, 0.5);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.1s;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn-primary:disabled {
+  background: #333;
+  color: #666;
+  box-shadow: 0 6px 0 #222;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   Slides (General)
+   ========================================= */
 .slide-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  padding: 10px 0;
   min-height: 50vh;
 }
 
-.lesson-footer {
-  padding-top: 32px;
-  border-top: 1px solid var(--glass-border);
-  display: flex;
-  justify-content: flex-end;
-  margin-top: auto;
-}
-
-/* Slides Common */
 .slide-content {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
   width: 100%;
-  max-width: 800px;
 }
 
 .arabic-large {
-  font-size: 3.5rem;
-  line-height: 2;
+  font-size: 2.5rem;
+  line-height: 1.8;
   color: var(--primary);
   text-shadow: 0 4px 15px rgba(65, 209, 255, 0.2);
-  padding: 0 20px;
 }
 
 .translation-text {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   color: var(--text-dim);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .tts-button {
   color: var(--primary);
   background: rgba(65, 209, 255, 0.1);
-  padding: 16px;
+  padding: 12px;
   border-radius: 50%;
   border: 1px solid var(--primary-glow);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.tts-button.small {
-  padding: 10px;
-}
-
-.tts-button:hover {
-  background: rgba(65, 209, 255, 0.2);
-  transform: scale(1.05);
+  cursor: pointer;
 }
 
 .flex-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
   flex-direction: column;
 }
 
-/* Match Slide */
+/* =========================================
+   Vocabulary Slide
+   ========================================= */
+.vocab-card {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 30px;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.vocab-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--primary), #BD34FE);
+}
+
+.large-tts {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+.vocab-ar {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-shadow: 0 4px 15px var(--primary-glow);
+  line-height: 1.2;
+}
+
+.vocab-divider {
+  width: 40px;
+  height: 2px;
+  background: var(--glass-border);
+  margin: 10px 0;
+}
+
+.vocab-transliteration {
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.vocab-en {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.vocab-example {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border-left: 4px solid var(--primary);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vocab-example .arabic-text {
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+/* =========================================
+   Match Slide
+   ========================================= */
 .match-columns {
   display: flex;
   justify-content: center;
-  gap: 60px;
+  gap: 12px;
   width: 100%;
 }
 
 .match-col {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
   flex: 1;
-  max-width: 300px;
+  max-width: 50%;
 }
 
 .match-btn {
-  padding: 20px;
+  padding: 12px 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 2px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  font-size: 1.3rem;
+  font-size: 1rem;
+  min-height: 60px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
 }
 
 .match-btn.ar-text {
-  font-size: 2rem;
-  line-height: 1.5;
-}
-
-.match-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--primary);
+  font-size: 1.4rem;
 }
 
 .match-btn.selected {
   border-color: var(--primary);
   background: rgba(65, 209, 255, 0.15);
-  box-shadow: 0 0 20px var(--primary-glow);
-  transform: scale(1.02);
+  box-shadow: 0 0 10px var(--primary-glow);
 }
 
 .match-btn.matched {
   border-color: var(--success);
   background: rgba(74, 222, 128, 0.1);
   color: var(--success);
-  opacity: 0.4;
-  transform: scale(0.98);
+  opacity: 0.5;
 }
 
-/* Fill Blank Slide */
+/* =========================================
+   Fill Blank Slide
+   ========================================= */
 .fill-blank-sentence {
-  font-size: 3rem;
-  line-height: 2.2;
+  font-size: 1.8rem;
+  line-height: 2;
 }
 
 .blank-space {
   display: inline-block;
-  min-width: 120px;
-  border-bottom: 4px solid var(--primary);
-  padding: 0 20px;
+  min-width: 80px;
+  border-bottom: 3px solid var(--primary);
+  padding: 0 10px;
   color: var(--primary);
   text-align: center;
-  margin: 0 10px;
+  margin: 0 8px;
 }
 
 .blank-space.correct-ans {
@@ -388,25 +696,20 @@ export default defineConfig({
 
 .options-row {
   display: flex;
-  gap: 20px;
+  gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .opt-btn {
-  padding: 16px 32px;
+  padding: 12px 20px;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  font-size: 1.8rem;
-  line-height: 1.5;
-}
-
-.opt-btn:hover {
-  border-color: var(--primary);
-  background: rgba(65, 209, 255, 0.1);
+  font-size: 1.4rem;
+  cursor: pointer;
 }
 
 .opt-btn.correct {
@@ -421,36 +724,32 @@ export default defineConfig({
   animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
-/* Sentence Builder Slide */
+/* =========================================
+   Sentence Builder Slide
+   ========================================= */
 .builder-slide {
-  gap: 30px;
-}
-
-.builder-header {
-  text-align: center;
-  margin-bottom: 10px;
+  gap: 20px;
 }
 
 .builder-question {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   color: var(--text-main);
 }
 
 .builder-question.arabic-text {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   color: var(--primary);
 }
 
 .builder-answer-zone {
-  min-height: 80px;
+  min-height: 60px;
   width: 100%;
   border-bottom: 2px dashed var(--glass-border);
-  padding: 16px;
+  padding: 12px 8px;
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
   align-content: flex-start;
-  transition: all 0.3s ease;
   border-radius: 12px 12px 0 0;
   background: rgba(255,255,255,0.02);
 }
@@ -467,12 +766,12 @@ export default defineConfig({
 }
 
 .builder-options-zone {
-  min-height: 120px;
+  min-height: 100px;
   width: 100%;
-  padding: 16px;
+  padding: 12px 8px;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 10px;
   align-content: flex-start;
 }
 
@@ -510,28 +809,27 @@ export default defineConfig({
 }
 
 .word-block {
-  padding: 12px 24px;
+  padding: 8px 16px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+  transition: transform 0.1s;
+  cursor: pointer;
+}
+
+.word-block:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 transparent;
 }
 
 .word-block.ar-block {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
 }
 
 .word-block.en-block {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.word-block:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--primary);
-  transform: translateY(-2px);
+  font-size: 1.1rem;
 }
 
 .word-block.selected-placeholder {
@@ -540,6 +838,19 @@ export default defineConfig({
   color: transparent;
   box-shadow: none;
   cursor: default;
+}
+
+/* =========================================
+   Animations & Utils
+   ========================================= */
+@keyframes bounce-small {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: scaleY(0.9) translateY(-10px); }
+  to { opacity: 1; transform: scaleY(1) translateY(0); }
 }
 
 @keyframes popIn {
@@ -554,16 +865,15 @@ export default defineConfig({
   40%, 60% { transform: translate3d(8px, 0, 0); }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .dashboard { padding: 24px; }
-  .lesson-view { padding: 24px; }
-  .arabic-large { font-size: 2.5rem; }
-  .fill-blank-sentence { font-size: 2.2rem; }
-  .match-columns { flex-direction: column; gap: 30px; }
-  .match-col { max-width: 100%; }
-  .word-block { padding: 10px 16px; }
-  .word-block.ar-block { font-size: 1.5rem; }
+/* Restrict Desktop over-scaling so it looks good as a mobile-simulator centered */
+@media (min-width: 769px) {
+  .dashboard-mobile, .lesson-view {
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    background: rgba(20, 20, 20, 0.6);
+  }
 }
 --- END OF FILE src/App.css ---
 
@@ -573,9 +883,11 @@ import './App.css';
 import { ProgressProvider } from './context/ProgressContext';
 import Dashboard from './components/Dashboard';
 import Lesson from './components/Lesson';
+import SectionSummary from './components/SectionSummary';
 
 function App() {
   const [activeLesson, setActiveLesson] = useState(null);
+  const [showSummary, setShowSummary] = useState(false);
 
   return (
     <ProgressProvider>
@@ -585,8 +897,15 @@ function App() {
             lesson={activeLesson} 
             onClose={() => setActiveLesson(null)} 
           />
+        ) : showSummary ? (
+          <SectionSummary 
+            onClose={() => setShowSummary(false)} 
+          />
         ) : (
-          <Dashboard onSelectLesson={setActiveLesson} />
+          <Dashboard 
+            onSelectLesson={setActiveLesson} 
+            onShowSummary={() => setShowSummary(true)}
+          />
         )}
       </div>
     </ProgressProvider>
@@ -684,6 +1003,8 @@ button:disabled {
   transform: translateY(-3px);
   box-shadow: 0 8px 25px var(--primary-glow);
 }
+
+
 --- END OF FILE src/index.css ---
 
 --- START OF FILE src/main.jsx ---
@@ -738,7 +1059,7 @@ export const ProgressProvider = ({ children }) => {
 --- START OF FILE src/data/section1_1.js ---
 export const unit1 = {
   id: "u1",
-  title: "Introduction to Munnar",
+  title: "A Trip to Munnar",
   lessons: [
     {
       id: "u1_l1",
@@ -746,124 +1067,161 @@ export const unit1 = {
       slides: [
         {
           type: "sentence",
-          arabic: "مُونَّار هِيَ أَرْضُ الشَّلَّالَاتِ، هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِين",
-          english: "Munnar is the land of waterfalls, this is how it is known among tourists."
+          arabic: "مُونَّار هِيَ أَرْضُ الشَّلَّالَاتِ، هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِينِ.",
+          english: "Munnar is the land of waterfalls; this is how it is known among tourists."
         },
         {
           type: "vocabulary",
-          words: [
-            { ar: "مُونَّار", en: "Munnar" },
-            { ar: "أَرْضُ", en: "Land" },
-            { ar: "الشَّلَّالَاتِ", en: "Waterfalls" },
-            { ar: "مَعْرُوفَةٌ", en: "Known" },
-            { ar: "السِّياحِين", en: "Tourists" },
-          ]
+          word: "أَرْضُ",
+          transliteration: "Ard",
+          translation: "Land",
+          example: { ar: "هَذِهِ أَرْضٌ طَيِّبَةٌ", en: "This is a good land." }
+        },
+        {
+          type: "vocabulary",
+          word: "الشَّلَّالَاتِ",
+          transliteration: "Ash-shallalat",
+          translation: "Waterfalls",
+          example: { ar: "الشَّلَّالَاتُ جَمِيلَةٌ جِدًّا", en: "The waterfalls are very beautiful." }
         },
         {
           type: "match",
           pairs: [
             { ar: "أَرْض", en: "Land" },
-            { ar: "الشَّلَّالَات", en: "Waterfalls" },
-            { ar: "مَعْرُوفَة", en: "Known" },
+            { ar: "شَلَّالَات", en: "Waterfalls" },
             { ar: "سِياحِين", en: "Tourists" }
           ]
-        },
-        {
-          type: "fill-blank",
-          sentence: "مُونَّار هِيَ ____ الشَّلَّالَاتِ",
-          english: "Munnar is the land of waterfalls",
-          answer: "أَرْضُ",
-          options: ["سَمَاء", "أَرْضُ", "بَحْر"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ ____",
-          english: "This is how it is known among tourists",
-          answer: "السِّياحِين",
-          options: ["الْعُلَمَاء", "السِّياحِين", "الْأَشْجَار"]
         }
       ]
     },
     {
       id: "u1_l2",
-      title: "Three Rivers",
+      title: "The Three Rivers",
       slides: [
         {
           type: "sentence",
-          arabic: "وسُمِّيَتْ بِهَذَا الاِسْمِ لِأَنَّهَا ثَلَاثَةُ أَنْهَارٍ تَجْرِي مِنْ مُخْتَلِفِ المَصَادِرِ",
-          english: "And it was named by this name because it is three rivers flowing from different sources."
+          arabic: "وَسُمِّيَتْ بِهَذَا الاِسْمِ لِأَنَّهَا ثَلَاثَةُ أَنْهَارٍ تَجْرِي مِنْ مُخْتَلَفِ الْمَصَادِرِ وَتَسِيلُ مِنْ هَذَا الْمُلْتَقِي كَنَهْرٍ وَاحِدٍ.",
+          english: "And it was named by this name because it is three rivers running from different sources and flowing from this meeting point as one river."
         },
         {
           type: "vocabulary",
-          words: [
-            { ar: "سُمِّيَتْ", en: "Named" },
-            { ar: "الاِسْم", en: "The Name" },
-            { ar: "ثَلَاثَةُ", en: "Three" },
-            { ar: "أَنْهَار", en: "Rivers" },
-            { ar: "تَجْرِي", en: "Flowing" },
-            { ar: "مُخْتَلِف", en: "Different" },
-            { ar: "المَصَادِر", en: "Sources" },
-          ]
+          word: "أَنْهَارٍ",
+          transliteration: "Anhar",
+          translation: "Rivers",
+          example: { ar: "الْهِنْدُ فِيهَا أَنْهَارٌ كَثِيرَةٌ", en: "India has many rivers." }
         },
         {
-          type: "match",
-          pairs: [
-            { ar: "سُمِّيَتْ", en: "Named" },
-            { ar: "أَنْهَار", en: "Rivers" },
-            { ar: "مُخْتَلِف", en: "Different" },
-            { ar: "ثَلَاثَة", en: "Three" }
-          ]
+          type: "vocabulary",
+          word: "الْمُلْتَقِي",
+          transliteration: "Al-multaqi",
+          translation: "Meeting point / Confluence",
+          example: { ar: "هَذَا مُلْتَقَى الطُّرُقِ", en: "This is the crossroads." }
         },
         {
           type: "fill-blank",
-          sentence: "لِأَنَّهَا ____ أَنْهَارٍ",
-          english: "Because it is three rivers",
-          answer: "ثَلَاثَةُ",
-          options: ["وَاحِدَة", "اثْنَان", "ثَلَاثَةُ"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "تَجْرِي مِنْ مُخْتَلِفِ ____",
-          english: "Flowing from different sources",
-          answer: "المَصَادِرِ",
-          options: ["المَصَادِرِ", "الجِبَال", "السَّمَاء"]
+          sentence: "سُمِّيَتْ بِهَذَا الاِسْمِ لِأَنَّهَا ثَلَاثَةُ ____",
+          english: "It was named by this name because it is three rivers",
+          answer: "أَنْهَارٍ",
+          options: ["أَنْهَارٍ", "جِبَالٍ", "بِحَارٍ"]
         }
       ]
     },
     {
       id: "u1_l3",
-      title: "The Junction",
+      title: "Flowing Mountains",
       slides: [
         {
           type: "sentence",
-          arabic: "وتَسِيلُ مِنْ هَذَا المُلْتَقَي كَنَهْرٍ وَاحِدٍ. والمَاءُ يَتَدَفَّقُ مِنَ الجِبَالِ",
-          english: "And it pours from this junction as one river. And the water gushes from the mountains."
+          arabic: "وَالْمَاءُ يَتَدَفَّقُ مِنَ الْجِبَالِ حَوْلَهَا وَيَنْحَدِرُ بَيْنَ الصُّخُورِ فِي كُلِّ مَكَانٍ.",
+          english: "And water gushes from the mountains around it and descends between the rocks in every place."
         },
         {
           type: "vocabulary",
-          words: [
-            { ar: "تَسِيلُ", en: "Pours/Flows" },
-            { ar: "المُلْتَقَي", en: "Junction" },
-            { ar: "نَهْر", en: "River" },
-            { ar: "يَتَدَفَّقُ", en: "Gushes" },
-            { ar: "الجِبَال", en: "Mountains" },
-          ]
+          word: "يَتَدَفَّقُ",
+          transliteration: "Yatadaffaq",
+          translation: "Gushing / Flowing",
+          example: { ar: "الْمَاءُ يَتَدَفَّقُ بِقُوَّةٍ", en: "The water flows strongly." }
+        },
+        {
+          type: "vocabulary",
+          word: "الصُّخُورِ",
+          transliteration: "As-sukhur",
+          translation: "The Rocks",
+          example: { ar: "الْمَاءُ يَنْحَدِرُ بَيْنَ الصُّخُورِ", en: "The water descends between the rocks." }
         },
         {
           type: "match",
           pairs: [
-            { ar: "تَسِيلُ", en: "Pours" },
-            { ar: "المُلْتَقَي", en: "Junction" },
-            { ar: "يَتَدَفَّقُ", en: "Gushes" },
-            { ar: "الجِبَال", en: "Mountains" }
+            { ar: "جِبَال", en: "Mountains" },
+            { ar: "صُخُور", en: "Rocks" },
+            { ar: "مَكَان", en: "Place" }
           ]
+        }
+      ]
+    },
+    {
+      id: "u1_l4",
+      title: "The Blessed Land",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَتَّى يُخَيَّلُ إِلَيْكَ أَنَّ أَزِقَّةَ الْمِيَاهِ فِي الْعَالَمِ تَسِيلُ إِلَى هَذِهِ الْأَرْضِ الْمُبَارَكَةِ فِي الْهِنْدِ.",
+          english: "Until you imagine that the water alleys of the world are flowing to this blessed land in India."
+        },
+        {
+          type: "vocabulary",
+          word: "أَزِقَّةَ",
+          transliteration: "Aziqqah",
+          translation: "Alleys / Narrow paths",
+          example: { ar: "أَزِقَّةُ الْمَدِينَةِ ضَيِّقَةٌ", en: "The city alleys are narrow." }
+        },
+        {
+          type: "vocabulary",
+          word: "الْمُبَارَكَةِ",
+          transliteration: "Al-mubarakah",
+          translation: "The Blessed",
+          example: { ar: "هَذِهِ أَرْضٌ مُبَارَكَةٌ", en: "This is a blessed land." }
         },
         {
           type: "fill-blank",
-          sentence: "والمَاءُ يَتَدَفَّقُ مِنَ ____",
-          english: "And the water gushes from the mountains",
-          answer: "الجِبَالِ",
-          options: ["الأَرْضِ", "الجِبَالِ", "الشَّجَرَةِ"]
+          sentence: "تَسِيلُ إِلَى هَذِهِ الْأَرْضِ ____ فِي الْهِنْدِ",
+          english: "Flowing to this blessed land in India",
+          answer: "الْمُبَارَكَةِ",
+          options: ["الْكَبِيرَةِ", "الْمُبَارَكَةِ", "الْبَعِيدَةِ"]
+        }
+      ]
+    },
+    {
+      id: "u1_l5",
+      title: "Land of Wonders",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الَّذِي يُسَمَّى بَلَدَ الْعَجَائِبِ الَّتِي تَدْهَشُكَ بِأَنْهَارِهَا وَجِبَالِهَا وَبِحَارِهَا وَعُلَمَائِهَا وَشَعْبِهَا.",
+          english: "Which is called the country of wonders that amazes you with its rivers, mountains, seas, scholars, and people."
+        },
+        {
+          type: "vocabulary",
+          word: "الْعَجَائِبِ",
+          transliteration: "Al-'aja'ib",
+          translation: "Wonders",
+          example: { ar: "عَجَائِبُ الدُّنْيَا سَبْعٌ", en: "The wonders of the world are seven." }
+        },
+        {
+          type: "vocabulary",
+          word: "تَدْهَشُكَ",
+          transliteration: "Tad-hashuka",
+          translation: "Amazes you",
+          example: { ar: "تَدْهَشُنِي جَمَالُ الطَّبِيعَةِ", en: "The beauty of nature amazes me." }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "بَلَد", en: "Country" },
+            { ar: "بِحَار", en: "Seas" },
+            { ar: "عُلَمَاء", en: "Scholars" },
+            { ar: "شَعْب", en: "People" }
+          ]
         }
       ]
     }
@@ -872,117 +1230,267 @@ export const unit1 = {
 --- END OF FILE src/data/section1_1.js ---
 
 --- START OF FILE src/data/sections.js ---
+import { previewUnit } from './section1_preview';
 import { unit1 } from './section1_1';
 import { unit2 } from './section1_2';
 import { practiceUnit } from './section1_practice';
+import { unit3 } from './section1/section1_3';
+import { unit4 } from './section1/section1_4';
+import { unit5 } from './section1/section1_5';
+import { unit6 } from './section1/section1_6';
+import { unit7 } from './section1/section1_7';
+import { unit8 } from './section1/section1_8';
+import { unit9 } from './section1/section1_9';
+import { unit10 } from './section1/section1_10';
+import { unit11 } from './section1/section1_11';
+import { unit12 } from './section1/section1_12';
+import { unit61 } from './section2/section2_1';
+import { unit62, unit63 } from './section2/section2_3';
 
 export const sections = [
   {
-    id: "sec1",
-    title: "رحلة إلى مونار - أرض الشلالات",
+    id: "sec1-5",
+    title: "رحلة إلى مونار",
     units: [
+      previewUnit,
       unit1,
       unit2,
+      unit3,
+      unit4,
+      unit5,
+      unit6,
+      unit7,
+      unit8,
+      unit9,
+      unit10,
+      unit11,
+      unit12,
       practiceUnit
     ]
   },
   {
-    id: "sec1",
-    title: "رحلة إلى مونار - أرض الشلالات",
-    units: [
-      unit1,
-      unit2,
-      practiceUnit
+    id:"sec2-6",
+    title: "الْقُرْآنُ وَالْبِيئَةُ",
+    units:[
+      unit61,
+      unit62,
+      unit63,
     ]
   }
-];
-
-// Same section was duplicated for testing.
+]
 --- END OF FILE src/data/sections.js ---
 
 --- START OF FILE src/data/section1_2.js ---
 export const unit2 = {
   id: "u2",
-  title: "The Journey Begins",
+  title: "Arrival in Kerala",
   lessons: [
     {
       id: "u2_l1",
-      title: "Travel from Jordan",
+      title: "The Journey to Kerala",
       slides: [
         {
           type: "sentence",
-          arabic: "سَافَرْنَا مِنَ الأُرْدُنِ عَبْرَ الخُطُوطِ السِّيرِيلَانْكِيَّةِ",
-          english: "We traveled from Jordan via Sri Lankan Airlines."
+          arabic: "سَافَرْنَا مِنَ الْأُرْدُنِ عَبْرَ الْخُطُوطِ السِّيرِيلَانْكِيَّةِ، وَبَعْدَ يَوْمٍ وَاحِدٍ مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ، حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا.",
+          english: "We traveled from Jordan via Sri Lankan Airlines, and after one day of completing visa procedures, our flight landed in the state of Kerala."
         },
         {
-          type: "vocabulary",
-          words: [
-            { ar: "سَافَرْنَا", en: "We traveled" },
-            { ar: "الأُرْدُن", en: "Jordan" },
-            { ar: "عَبْرَ", en: "Via / Through" },
-            { ar: "الخُطُوط", en: "Airlines / Lines" },
-          ]
+          "type": "vocabulary",
+          "word": "سَافَرْنَا",
+          "transliteration": "Safarna",
+          "translation": "We traveled",
+          "example": {
+            "ar": "سَافَرْنَا إِلَى الْهِنْدِ",
+            "en": "We traveled to India"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "إِجْرَاءَاتِ",
+          "transliteration": "Ijra'at",
+          "translation": "Procedures",
+          "example": {
+            "ar": "انْتَهَتْ إِجْرَاءَاتُ السَّفَرِ",
+            "en": "Travel procedures are finished"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "التَّأْشِيرَةِ",
+          "transliteration": "At-ta'shirah",
+          "translation": "The visa",
+          "example": {
+            "ar": "حَصَلْتُ عَلَى التَّأْشِيرَةِ",
+            "en": "I got the visa"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "حَطَّتْ",
+          "transliteration": "Hattat",
+          "translation": "Landed / Set down",
+          "example": {
+            "ar": "حَطَّتِ الطَّائِرَةُ فِي الْمَطَارِ",
+            "en": "The plane landed at the airport"
+          }
         },
         {
           type: "match",
           pairs: [
             { ar: "سَافَرْنَا", en: "We traveled" },
-            { ar: "الأُرْدُن", en: "Jordan" },
-            { ar: "عَبْرَ", en: "Via" },
-            { ar: "الخُطُوط", en: "Airlines" }
+            { ar: "تَأْشِيرَة", en: "Visa" },
+            { ar: "إِجْرَاءَات", en: "Procedures" },
+            { ar: "رِحْلَة", en: "Trip / Flight" }
           ]
-        },
-        {
-          type: "fill-blank",
-          sentence: "____ مِنَ الأُرْدُنِ",
-          english: "We traveled from Jordan",
-          answer: "سَافَرْنَا",
-          options: ["ذَهَبْنَا", "سَافَرْنَا", "رَجَعْنَا"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "عَبْرَ ____ السِّيرِيلَانْكِيَّةِ",
-          english: "Via Sri Lankan Airlines",
-          answer: "الخُطُوطِ",
-          options: ["الخُطُوطِ", "البِحَارِ", "السُّفُنِ"]
         }
       ]
     },
     {
       id: "u2_l2",
-      title: "Landing in Kerala",
+      title: "God's Own Country",
       slides: [
         {
           type: "sentence",
-          arabic: "وبَعْدَ يَوْمٍ وَاحِدٍ مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ، حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا",
-          english: "And after one day of completing visa procedures, our flight landed in the state of Kerala."
+          arabic: "سَمَّاهَا تُجَّارُ الْعَرَبِ الْمُسْلِمُونَ الْأَوَائِلُ \"خَيْرَ اللهِ\".",
+          english: "The early Arab Muslim merchants called it \"Khayr Allah\" (God's Bounty/Own Country)."
         },
         {
-          type: "vocabulary",
-          words: [
-            { ar: "يَوْم", en: "Day" },
-            { ar: "إِنْهَاء", en: "Completing" },
-            { ar: "التَّأْشِيرَة", en: "Visa" },
-            { ar: "حَطَّتْ", en: "Landed" },
-            { ar: "رِحْلَتُنَا", en: "Our flight" },
-            { ar: "وِلَايَة", en: "State" },
-          ]
+          "type": "vocabulary",
+          "word": "تُجَّارُ",
+          "transliteration": "Tujjar",
+          "translation": "Merchants",
+          "example": {
+            "ar": "الْتُجَّارُ يَبِيعُونَ الْبَضَائِعَ",
+            "en": "The merchants sell goods"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْأَوَائِلُ",
+          "transliteration": "Al-awa'il",
+          "translation": "The early / The first",
+          "example": {
+            "ar": "كَانَ الْمُسْلِمُونَ الْأَوَائِلُ كِرَامًا",
+            "en": "The early Muslims were generous"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "سَمَّاهَا",
+          "transliteration": "Sammaha",
+          "translation": "Called it / Named it",
+          "example": {
+            "ar": "سَمَّاهَا النَّاسُ أَرْضَ الْجَمَالِ",
+            "en": "People called it the land of beauty"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "سَمَّاهَا تُجَّارُ الْعَرَبِ ____ \"خَيْرَ اللهِ\"",
+          english: "Early Arab merchants called it \"God's Bounty\"",
+          answer: "الْأَوَائِلُ",
+          options: ["الْجُدُد", "الْأَوَائِلُ", "الْمُسَافِرُون"]
+        }
+      ]
+    },
+    {
+      id: "u2_l3",
+      title: "True to its Name",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَإِذَا بَحَثْنَا عَرَفْنَا هَذَا الاِسْمَ صَادِقًا عَلَى مُسَمَّاهُ.",
+          english: "And if we searched, we knew that this name is true to what it names."
+        },
+        {
+          "type": "vocabulary",
+          "word": "بَحَثْنَا",
+          "transliteration": "Bahathna",
+          "translation": "We searched / researched",
+          "example": {
+            "ar": "بَحَثْنَا عَنِ الْحَقِيقَةِ",
+            "en": "We searched for the truth"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "صَادِقًا",
+          "transliteration": "Sadiqan",
+          "translation": "True / Truthful",
+          "example": {
+            "ar": "هَذَا خَبَرٌ صَادِقٌ",
+            "en": "This is true news"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُسَمَّاهُ",
+          "transliteration": "Musammahu",
+          "translation": "Its namesake / what it refers to",
+          "example": {
+            "ar": "الاِسْمُ يَدُلُّ عَلَى مُسَمَّاهُ",
+            "en": "The name indicates its object"
+          }
+        }
+      ]
+    },
+    {
+      id: "u2_l4",
+      title: "The Enchanting Nature",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَيْثُمَا ذَهَبْنَا وَجَدْنَا الْمَطَرَ الْغَزِيرَ وَالْمِيَاهَ الْجَارِيَةَ وَالطَّبِيعَةَ السَّاحِرَةَ وَالْخُضْرَةَ الْمَلِيئَةَ فِي جَمِيعِ أَرَاضِيهَا وَلَا سِيَّمَا فِي الْمِنْطَقَةِ الْجَنُوبِيَّةِ.",
+          english: "Wherever we went, we found heavy rain, running water, enchanting nature, and full greenery in all its lands, especially in the southern region."
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمَطَرَ الْغَزِيرَ",
+          "transliteration": "Al-matara al-ghazir",
+          "translation": "The heavy rain",
+          "example": {
+            "ar": "سَقَطَ الْمَطَرُ الْغَزِيرُ",
+            "en": "Heavy rain fell"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمِيَاهَ الْجَارِيَةَ",
+          "transliteration": "Al-miyah al-jariyah",
+          "translation": "Running water",
+          "example": {
+            "ar": "أُحِبُّ صَوْتَ الْمِيَاهِ الْجَارِيَةِ",
+            "en": "I love the sound of running water"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "السَّاحِرَةَ",
+          "transliteration": "As-sahirah",
+          "translation": "Enchanting / Charming",
+          "example": {
+            "ar": "الْمَدِينَةُ سَاحِرَةٌ فِي اللَّيْلِ",
+            "en": "The city is enchanting at night"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "لَا سِيَّمَا",
+          "transliteration": "La siyama",
+          "translation": "Especially / particularly",
+          "example": {
+            "ar": "أُحِبُّ الْفَوَاكِهَ لَا سِيَّمَا التُّفَّاحَ",
+            "en": "I love fruits, especially apples"
+          }
         },
         {
           type: "match",
           pairs: [
-            { ar: "يَوْم", en: "Day" },
-            { ar: "التَّأْشِيرَة", en: "Visa" },
-            { ar: "حَطَّتْ", en: "Landed" },
-            { ar: "وِلَايَة", en: "State" }
+            { ar: "مَطَر غَزِير", en: "Heavy rain" },
+            { ar: "مِيَاه جَارِيَة", en: "Running water" },
+            { ar: "طَبِيعَة سَاحِرَة", en: "Charming nature" },
+            { ar: "مِنْطَقَة جَنُوبِيَّة", en: "Southern region" }
           ]
-        },
-        {
-          type: "fill-blank",
-          sentence: "حَطَّتْ ____ فِي وِلَايَةِ كِيرَلَا",
-          english: "Our flight landed in the state of Kerala",
-          answer: "رِحْلَتُنَا",
-          options: ["سَيَّارَتُنَا", "رِحْلَتُنَا", "سَفِينَتُنَا"]
         }
       ]
     }
@@ -993,24 +1501,218 @@ export const unit2 = {
 --- START OF FILE src/data/section1_practice.js ---
 export const practiceUnit = {
   id: "sec1_practice",
-  title: "Unit Practices: Test Your Knowledge",
+  title: "End of Chapter Exercises",
   lessons: [
     {
       id: "sec1_prac_l1",
-      title: "Reading Comprehension",
+      title: "Fill in the Blanks",
+      isPractice: true,
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "تَقَعُ مَدِينَةُ مُونَّار فِي وِلَايَةِ ____",
+          translation: "The city of Munnar is located in the state of Kerala.",
+          answer: "كِيرَلَا",
+          options: ["كِيرَلَا", "تَامِيل نَادُو", "دِلْهِي"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُعْرَفُ كِيرَلَا عِنْدَ التُّجَّارِ الْعَرَبِ بِاسْمِ ____",
+          translation: "Kerala is known to Arab merchants by the name 'God's Bounty'.",
+          answer: "خَيْرِ اللهِ",
+          options: ["أَرْضِ الْجَمَالِ", "خَيْرِ اللهِ", "بِلَادِ السِّحْرِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَشْتَهِرُ أَهْلُ كُوتْشِين بِالطِّيبَةِ وَ ____ فِي التَّعَامُلِ",
+          translation: "The people of Cochin are famous for their kindness and cheerfulness in dealing.",
+          answer: "الْبَشَاشَةِ",
+          options: ["الْبَشَاشَةِ", "الْقَسْوَةِ", "الْغَضَبِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ أَبْرَزِ الْمَنَاظِرِ فِي طَرِيقِ مُونَّار ____ الْكَثِيفَةُ",
+          translation: "One of the most prominent views on the Munnar road is the dense forests.",
+          answer: "الْغَابَاتُ",
+          options: ["الْغَابَاتُ", "الصَّحَارِي", "الْمَبَانِي"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "وَصَفَ الشَّاعِرُ ابْنُ سَعْدٍ الْأَرْضَ بِأَنَّهَا لَبِسَتْ ____",
+          translation: "The poet Ibn Sa'd described the earth as having worn a green robe.",
+          answer: "رِدَاءً أَخْضَرًا",
+          options: ["رِدَاءً أَبْيَضًا", "رِدَاءً أَخْضَرًا", "ثَوْبًا أَزْرَقًا"]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l2",
+      title: "Match the Meanings",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "كِيرَلَا", en: "معروف باسم خير الله" },
+            { ar: "أَمْ جِي رُود", en: "شارع حيوي في كوتشين" },
+            { ar: "مُونَّار", en: "أرض الشلالات" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "بْلَاك بَرِي", en: "منتجع في سفح جبل" },
+            { ar: "مَطَارُ كُوتْشِين", en: "حديث وجميل" },
+            { ar: "خَيْرُ اللهِ", en: "Kerala's ancient name" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l3",
+      title: "Singular and Plural",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "جِبَال", en: "جَبَل" },
+            { ar: "وِدْيَان", en: "وَادٍ" },
+            { ar: "أَكْوَاخ", en: "كُوخ" },
+            { ar: "مَسَاجِد", en: "مَسْجِد" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مُدُن", en: "مَدِينَة" },
+            { ar: "مَطَارَات", en: "مَطَار" },
+            { ar: "فَنَادِق", en: "فُنْدُق" },
+            { ar: "أَشْجَار", en: "شَجَرَة" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l4",
+      title: "Translate to English",
       isPractice: true,
       slides: [
         {
           type: "sentence-builder",
-          questionType: "comprehension",
-          question: "بِمَاذَا تُعْرَفُ مُونَّار بَيْنَ السِّياحِين؟",
-          correctOrder: [1, 2, 3],
+          questionType: "ar-to-en",
+          question: "جَوُّ الْيَوْمِ جَمِيلٌ وَمُمْطِرٌ",
+          correctOrder: [1, 2, 3, 4, 5, 6],
           blocks: [
-            { id: 1, text: "هِيَ", trans: "It is" },
-            { id: 2, text: "أَرْضُ", trans: "Land" },
-            { id: 3, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
+            { id: 1, text: "Today's", trans: "" },
+            { id: 2, text: "weather", trans: "جَوُّ" },
+            { id: 3, text: "is", trans: "" },
+            { id: 4, text: "beautiful", trans: "جَمِيلٌ" },
+            { id: 5, text: "and", trans: "وَ" },
+            { id: 6, text: "rainy", trans: "مُمْطِرٌ" }
           ]
         },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "أُحِبُّ السَّفَرَ إِلَى الْأَمَاكِنِ الْهَادِئَةِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "I love", trans: "أُحِبُّ" },
+            { id: 2, text: "traveling", trans: "السَّفَرَ" },
+            { id: 3, text: "to", trans: "إِلَى" },
+            { id: 4, text: "quiet", trans: "الْهَادِئَةِ" },
+            { id: 5, text: "places", trans: "الْأَمَاكِنِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْهِنْدُ بَلَدٌ وَاسِعٌ مُتَعَدِّدُ الثَّقَافَاتِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "India", trans: "الْهِنْدُ" },
+            { id: 2, text: "is", trans: "" },
+            { id: 3, text: "a vast", trans: "وَاسِعٌ" },
+            { id: 4, text: "multicultural", trans: "مُتَعَدِّدُ الثَّقَافَاتِ" },
+            { id: 5, text: "country", trans: "بَلَدٌ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "نَزَلْنَا فِي فُنْدُقٍ قَرِيبٍ مِنَ الْبَحْرِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "We stayed", trans: "نَزَلْنَا" },
+            { id: 2, text: "in", trans: "فِي" },
+            { id: 3, text: "a hotel", trans: "فُنْدُقٍ" },
+            { id: 4, text: "near", trans: "قَرِيبٍ مِنَ" },
+            { id: 5, text: "the sea", trans: "الْبَحْرِ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l5",
+      title: "Translate to Arabic",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The sky is full of clouds.",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "السَّمَاءُ", trans: "The sky" },
+            { id: 2, text: "مَلِيئَةٌ", trans: "is full" },
+            { id: 3, text: "بِالْغُيُومِ", trans: "of clouds" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "They visited the resort yesterday.",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "زَارُوا", trans: "They visited" },
+            { id: 2, text: "الْمُنْتَجَعَ", trans: "the resort" },
+            { id: 3, text: "أَمْسِ", trans: "yesterday" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The tea in India is very delicious.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "الشَّايُ", trans: "The tea" },
+            { id: 2, text: "فِي", trans: "in" },
+            { id: 3, text: "الْهِنْدِ", trans: "India" },
+            { id: 4, text: "لَذِيذٌ", trans: "delicious" },
+            { id: 5, text: "جِدًّا", trans: "very" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "We met kind people in the village.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "الْتَقَيْنَا", trans: "We met" },
+            { id: 2, text: "بِأَشْخَاصٍ", trans: "people" },
+            { id: 3, text: "طَيِّبِينَ", trans: "kind" },
+            { id: 4, text: "فِي", trans: "in" },
+            { id: 5, text: "الْقَرْيَةِ", trans: "the village" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l6",
+      title: "Comprehension Check",
+      isPractice: true,
+      slides: [
         {
           type: "sentence-builder",
           questionType: "comprehension",
@@ -1018,182 +1720,32 @@ export const practiceUnit = {
           correctOrder: [1, 2, 3, 4],
           blocks: [
             { id: 1, text: "لِأَنَّهَا", trans: "Because it is" },
-            { id: 2, text: "ثَلَاثَةُ", trans: "Three" },
-            { id: 3, text: "أَنْهَارٍ", trans: "Rivers" },
-            { id: 4, text: "تَجْرِي", trans: "Flowing" }
+            { id: 2, text: "مُلْتَقَى", trans: "confluence" },
+            { id: 3, text: "ثَلَاثَةِ", trans: "three" },
+            { id: 4, text: "أَنْهَارٍ", trans: "rivers" }
           ]
         },
         {
           type: "sentence-builder",
           questionType: "comprehension",
-          question: "مِنْ أَيْنَ سَافَرَ الكَاتِبُ؟",
-          correctOrder: [1, 2, 3],
+          question: "مَا مَعْنَى اسْمِ كِيرَلَا كَمَا سَمَّاهَا الْعَرَبُ الْأَوَائِلُ؟",
+          correctOrder: [1, 2, 3, 4],
           blocks: [
-            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
-            { id: 2, text: "مِنَ", trans: "From" },
-            { id: 3, text: "الأُرْدُنِ", trans: "Jordan" }
+            { id: 1, text: "سَمَّاهَا", trans: "Named it" },
+            { id: 2, text: "الْعَرَبُ", trans: "the Arabs" },
+            { id: 3, text: "خَيْرَ", trans: "Bounty of" },
+            { id: 4, text: "اللهِ", trans: "Allah" }
           ]
         },
         {
           type: "sentence-builder",
           questionType: "comprehension",
-          question: "مَاذَا سَمَّى تُجَّارُ العَرَبِ الأَوَائِلُ كِيرَلَا؟",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "سَمَّاهَا", trans: "Called it" },
-            { id: 2, text: "العَرَبُ", trans: "The Arabs" },
-            { id: 3, text: "خَيْرَ", trans: "Goodness of" },
-            { id: 4, text: "اللَّهِ", trans: "Allah" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "أَيْنَ حَطَّتِ الرِّحْلَةُ؟",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "حَطَّتْ", trans: "Landed" },
-            { id: 2, text: "رِحْلَتُنَا", trans: "Our flight" },
-            { id: 3, text: "فِي", trans: "In" },
-            { id: 4, text: "وِلَايَةِ", trans: "State of" },
-            { id: 5, text: "كِيرَلَا", trans: "Kerala" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec1_prac_l2",
-      title: "English to Arabic",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Munnar is the land of waterfalls",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "مُونَّار", trans: "Munnar" },
-            { id: 2, text: "هِيَ", trans: "Is / She" },
-            { id: 3, text: "أَرْضُ", trans: "Land" },
-            { id: 4, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "The water gushes from the mountains",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "والمَاءُ", trans: "And the water" },
-            { id: 2, text: "يَتَدَفَّقُ", trans: "Gushes" },
-            { id: 3, text: "مِنَ", trans: "From" },
-            { id: 4, text: "الجِبَالِ", trans: "Mountains" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "We traveled via Sri Lankan airlines",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
-            { id: 2, text: "عَبْرَ", trans: "Via" },
-            { id: 3, text: "الخُطُوطِ", trans: "Airlines" },
-            { id: 4, text: "السِّيرِيلَانْكِيَّةِ", trans: "Sri Lankan" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "After one day of completing the visa",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "وَبَعْدَ", trans: "And after" },
-            { id: 2, text: "يَوْمٍ", trans: "Day" },
-            { id: 3, text: "وَاحِدٍ", trans: "One" },
-            { id: 4, text: "مِنْ", trans: "From" },
-            { id: 5, text: "إِنْهَاءِ", trans: "Completing" },
-            { id: 6, text: "التَّأْشِيرَةِ", trans: "The visa" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Flowing water and charming nature",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "المِيَاهُ", trans: "The water" },
-            { id: 2, text: "الجَارِيَةُ", trans: "Flowing" },
-            { id: 3, text: "وَالطَّبِيعَةُ", trans: "And nature" },
-            { id: 4, text: "السَّاحِرَةُ", trans: "Charming" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec1_prac_l3",
-      title: "Arabic to English",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِين",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "This is how", trans: "هَكَذَا" },
-            { id: 2, text: "it is", trans: "هِيَ" },
-            { id: 3, text: "known", trans: "مَعْرُوفَةٌ" },
-            { id: 4, text: "among", trans: "بَيْنَ" },
-            { id: 5, text: "tourists", trans: "السِّياحِين" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "تَجْرِي مِنْ مُخْتَلِفِ المَصَادِرِ",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "Flowing", trans: "تَجْرِي" },
-            { id: 2, text: "from", trans: "مِنْ" },
-            { id: 3, text: "different", trans: "مُخْتَلِفِ" },
-            { id: 4, text: "sources", trans: "المَصَادِرِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "فِي هَذِهِ الأَرْضِ المُبَارَكَةِ فِي الهِنْدِ",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "In", trans: "فِي" },
-            { id: 2, text: "this", trans: "هَذِهِ" },
-            { id: 3, text: "blessed", trans: "المُبَارَكَةِ" },
-            { id: 4, text: "land", trans: "الأَرْضِ" },
-            { id: 5, text: "in", trans: "فِي" },
-            { id: 6, text: "India", trans: "الهِنْدِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "بَلَدُ العَجَائِبِ",
+          question: "مَا الْحَيَوَانُ الْعَجِيبُ الَّذِي رَآهُ الْكَاتِبُ فِي الْمُنْتَزَهِ؟",
           correctOrder: [1, 2, 3],
           blocks: [
-            { id: 1, text: "The land", trans: "بَلَدُ" },
-            { id: 2, text: "of", trans: "..." },
-            { id: 3, text: "wonders", trans: "العَجَائِبِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "وَجَدْنَا المَطَرَ الغَزِيرَ",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "We found", trans: "وَجَدْنَا" },
-            { id: 2, text: "heavy", trans: "الغَزِيرَ" },
-            { id: 3, text: "rain", trans: "المَطَرَ" }
+            { id: 1, text: "الْمَاعِزُ", trans: "The goat" },
+            { id: 2, text: "الْجَبَلِيُّ", trans: "mountain" },
+            { id: 3, text: "الْمُخَطَّطُ", trans: "striped" }
           ]
         }
       ]
@@ -1202,54 +1754,2685 @@ export const practiceUnit = {
 };
 --- END OF FILE src/data/section1_practice.js ---
 
+--- START OF FILE src/data/section1_preview.js ---
+export const previewUnit = {
+  id: "sec1_preview",
+  title: "Section Preview",
+  lessons: [
+    {
+      id: "sec1_prev_l1",
+      title: "Preview 1: Basic Words",
+      slides: [
+        {
+          type: "vocabulary",
+          word: "شَلَّالَات",
+          transliteration: "Shallalat",
+          translation: "Waterfalls",
+          example: {
+            ar: "أَرْضُ الشَّلَّالَاتِ",
+            en: "Land of waterfalls"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "جِبَال", en: "Mountains" },
+            { ar: "مُنْتَجَع", en: "Resort" },
+            { ar: "بَشَاشَة", en: "Cheerfulness" },
+            { ar: "رِحْلَة", en: "Journey" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Nature and Faith",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "الطَّبِيعَةُ", trans: "Nature" },
+            { id: 2, text: "وَ", trans: "And" },
+            { id: 3, text: "الإِيمَانُ", trans: "Faith" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prev_l2",
+      title: "Preview 2: Complete the Sentence",
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "حَطَّتْ رِحْلَتُنَا فِي ____ كِيرَلَا",
+          translation: "Our flight landed in the state of Kerala",
+          correctAnswer: "وِلَايَةِ",
+          options: ["مَدِينَةِ", "وِلَايَةِ", "قَرْيَةِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مُونَّار هِيَ أَرْضُ ____",
+          translation: "Munnar is the land of waterfalls",
+          correctAnswer: "الشَّلَّالَاتِ",
+          options: ["الأَنْهَارِ", "الشَّلَّالَاتِ", "الأَسْوَاقِ"]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شَاي", en: "Tea" },
+            { ar: "يَنْسَابُ", en: "Flows" },
+            { ar: "نَقَاء", en: "Purity" },
+            { ar: "مَطَر", en: "Rain" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prev_l3",
+      title: "Preview 3: Translate",
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "رَكِبْنَا سَيَّارَةَ أُجْرَةٍ",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "We took", trans: "رَكِبْنَا" },
+            { id: 2, text: "a", trans: "" },
+            { id: 3, text: "taxi", trans: "سَيَّارَةَ أُجْرَةٍ" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "سَمَّاهَا الْعَرَبُ ____ اللهِ",
+          translation: "The Arabs called it God's Bounty (Khayr Allah)",
+          correctAnswer: "خَيْرَ",
+          options: ["أَرْضَ", "خَيْرَ", "جَمَالَ"]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The heavy rain",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "الْمَطَرَ", trans: "The rain" },
+            { id: 2, text: "الْغَزِيرَ", trans: "The heavy" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "أَيْنَ هَبَطَتِ الطَّائِرَةُ؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "مَطَارِ", trans: "Airport of" },
+            { id: 2, text: "كُوتْشِين", trans: "Cochin" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1_preview.js ---
+
+--- START OF FILE src/data/timelineEvents.js ---
+export const timelineEvents = [
+  {
+    id: 1,
+    titleAr: "الوصول إلى كيرلا",
+    titleEn: "Arrival in Kerala",
+    descAr: "حطت الرحلة في مطار كوتشين، الولاية التي سماها العرب الأوائل 'خير الله'. استقبلهم المطر الغزير والطبيعة الساحرة.",
+    descEn: "The flight landed at Cochin Airport in the state the early Arabs called 'Khayr Allah' (God's Bounty). They were welcomed by heavy rain and charming nature."
+  },
+  {
+    id: 2,
+    titleAr: "استكشاف كوتشين",
+    titleEn: "Exploring Cochin",
+    descAr: "أقاموا في فندق 'هاربر فيو' بشارع أم جي رود. قضوا ثلاثة أيام يستمتعون ببشاشة الناس، النظافة، والمساجد الجميلة.",
+    descEn: "They stayed at 'Harbor View' hotel on MG Road. They spent three days enjoying the people's cheerfulness, cleanliness, and beautiful mosques."
+  },
+  {
+    id: 3,
+    titleAr: "الطريق إلى مونار",
+    titleEn: "The Road to Munnar",
+    descAr: "استأجروا سيارة وانطلقوا نحو مونار (تبعد 145 كم). الطريق كان كلوحة خضراء من الغابات الكثيفة وشلالات المياه المتدفقة.",
+    descEn: "They rented a car and headed to Munnar (145 km away). The road was like a green painting of dense forests and gushing waterfalls."
+  },
+  {
+    id: 4,
+    titleAr: "الإقامة في منتجع بلاك بري",
+    titleEn: "Stay at Blackberry Resort",
+    descAr: "وصلوا مع حلول الليل وناموا في سبات عميق تحت أنغام المطر في أكواخ صغيرة توفر السكينة المطلقة.",
+    descEn: "They arrived at nightfall and fell into a deep slumber under the tunes of the rain in small cottages offering absolute tranquility."
+  },
+  {
+    id: 5,
+    titleAr: "زيارة المنتزه الوطني",
+    titleEn: "Visiting the National Park",
+    descAr: "رأوا الماعز الجبلي المخطط والغيوم التي تلامس قمم الجبال، وتذكر الكاتب وصف الشاعر ابن سعد للأندلس.",
+    descEn: "They saw the striped mountain goat and clouds touching mountain peaks. The author remembered poet Ibn Sa'd's description of Andalusia."
+  },
+  {
+    id: 6,
+    titleAr: "العودة والذكريات",
+    titleEn: "Return and Memories",
+    descAr: "عادوا إلى كوتشين في اليوم الرابع واشتروا المصنوعات اليدوية، حاملين حباً أكبر للحياة ويقيناً بوجود جنات في الأرض.",
+    descEn: "They returned to Cochin on the fourth day, bought handicrafts, carrying a greater love for life and certainty of earthly paradises."
+  }
+];
+--- END OF FILE src/data/timelineEvents.js ---
+
+--- START OF FILE src/data/section1/section1_3.js ---
+export const unit3 = {
+  id: "u3",
+  title: "Landing in Cochin",
+  lessons: [
+    {
+      id: "u3_l1",
+      title: "The Beautiful Airport",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "هَبَطْنَا فِي مَطَارِ كُوتْشِين، أَحَدِ أَجْمَلِ الْمَطَارَاتِ فِي الْوِلَايَةِ.",
+          english: "We landed at Cochin Airport, one of the most beautiful airports in the state."
+        },
+        {
+          "type": "vocabulary",
+          "word": "هَبَطْنَا",
+          "transliteration": "Habatna",
+          "translation": "We landed",
+          "example": {
+            "ar": "هَبَطْنَا بِسَلَامٍ",
+            "en": "We landed safely"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مَطَارِ",
+          "transliteration": "Matar",
+          "translation": "Airport",
+          "example": {
+            "ar": "الْمَطَارُ بَعِيدٌ",
+            "en": "The airport is far"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "أَجْمَلِ",
+          "transliteration": "Ajmal",
+          "translation": "Most beautiful",
+          "example": {
+            "ar": "هَذَا أَجْمَلُ ثَوْبٍ",
+            "en": "This is the most beautiful dress"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "هَبَطْنَا فِي ____ كُوتْشِين",
+          english: "We landed in Cochin Airport",
+          answer: "مَطَارِ",
+          options: ["سُوقِ", "مَطَارِ", "بَيْتِ"]
+        }
+      ]
+    },
+    {
+      id: "u3_l2",
+      title: "To the City Center",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "ثُمَّ رَكِبْنَا سَيَّارَةَ أُجْرَةٍ نَحْوَ وَسَطِ الْمَدِينَةِ.",
+          english: "Then we took a taxi towards the city center."
+        },
+        {
+          "type": "vocabulary",
+          "word": "رَكِبْنَا",
+          "transliteration": "Rakibna",
+          "translation": "We rode / We took",
+          "example": {
+            "ar": "رَكِبْنَا الْقِطَارَ",
+            "en": "We took the train"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "سَيَّارَةَ أُجْرَةٍ",
+          "transliteration": "Sayyarata ujrah",
+          "translation": "A taxi",
+          "example": {
+            "ar": "أَيْنَ سَيَّارَةُ الْأُجْرَةِ؟",
+            "en": "Where is the taxi?"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "وَسَطِ",
+          "transliteration": "Wasat",
+          "translation": "Center / Middle",
+          "example": {
+            "ar": "نَحْنُ فِي وَسَطِ الشَّارِعِ",
+            "en": "We are in the middle of the street"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "سَيَّارَة", en: "Car" },
+            { ar: "أُجْرَة", en: "Rent / Fare" },
+            { ar: "مَدِينَة", en: "City" },
+            { ar: "وَسَط", en: "Center" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u3_l3",
+      title: "The Rainy Weather",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْجَوُّ كَانَ مُمْطِرًا عَلِيلًا.",
+          english: "The weather was rainy and refreshing."
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْجَوُّ",
+          "transliteration": "Al-jawwu",
+          "translation": "The weather",
+          "example": {
+            "ar": "الْجَوُّ جَمِيلٌ الْيَوْمَ",
+            "en": "The weather is beautiful today"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُمْطِرًا",
+          "transliteration": "Mumtiran",
+          "translation": "Rainy",
+          "example": {
+            "ar": "الشِّتَاءُ فَصْلٌ مُمْطِرٌ",
+            "en": "Winter is a rainy season"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "عَلِيلًا",
+          "transliteration": "Alilan",
+          "translation": "Refreshing / Breezy",
+          "example": {
+            "ar": "نَسِيمٌ عَلِيلٌ",
+            "en": "A refreshing breeze"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "الْجَوُّ كَانَ ____ عَلِيلًا",
+          english: "The weather was rainy and refreshing",
+          answer: "مُمْطِرًا",
+          options: ["حَارًّا", "مُمْطِرًا", "جَافًّا"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_3.js ---
+
+--- START OF FILE src/data/section1/section1_4.js ---
+export const unit4 = {
+  id: "u4",
+  title: "The Harbor View Hotel",
+  lessons: [
+    {
+      id: "u4_l1",
+      title: "The Vibrant Street",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "بُنِيَ بِرِحْلَةِ تَسْلِيَةٍ فِي الْحَيَاةِ.. نَزَلْنَا فِي فُنْدُقِ ”هَارْبَر فِيو“ الْمُطِلِّ عَلَى الشَّارِعِ الْحَيَوِيِّ ”مَهَاتِمَا غَانْدِي“ (أَمْ. جِي)، الْمَلِيءِ بِالْمَحَالِّ وَالْمَطَاعِمِ وَالْأَسْوَاقِ التِّجَارِيَّةِ الْكَبِيرَةِ.",
+          english: "Built on a trip of leisure in life... we stayed at the 'Harbor View' Hotel, overlooking the vibrant 'Mahatma Gandhi' (MG) Street, which is full of shops, restaurants, and large commercial markets."
+        },
+        {
+          "type": "vocabulary",
+          "word": "فُنْدُقِ",
+          "transliteration": "Funduq",
+          "translation": "Hotel",
+          "example": {
+            "ar": "الْفُنْدُقُ مَرِيحٌ جِدًّا",
+            "en": "The hotel is very comfortable"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمُطِلِّ",
+          "transliteration": "Al-mutil",
+          "translation": "Overlooking",
+          "example": {
+            "ar": "الْبَيْتُ مُطِلٌّ عَلَى الْبَحْرِ",
+            "en": "The house is overlooking the sea"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "حَيَوِيّ",
+          "transliteration": "Hayawiy",
+          "translation": "Vibrant / Lively",
+          "example": {
+            "ar": "هَذَا شَارِعٌ حَيَوِيٌّ",
+            "en": "This is a vibrant street"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمَحَالِّ",
+          "transliteration": "Al-mahall",
+          "translation": "Shops / Stores",
+          "example": {
+            "ar": "الْمَحَالُّ مَفْتُوحَةٌ الْآنَ",
+            "en": "The shops are open now"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "فُنْدُق", en: "Hotel" },
+            { ar: "شَارِع", en: "Street" },
+            { ar: "مَطَاعِم", en: "Restaurants" },
+            { ar: "أَسْوَاق", en: "Markets" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u4_l2",
+      title: "Warm Welcome",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "اسْتَقْبَلَتْنَا مُوَظَّفَةُ اسْتِقْبَالِ الْفُنْدُقِ بِابْتِسَامَةٍ دَافِئَةٍ وَتَرْحِيبٍ كَرِيمٍ.",
+          english: "The hotel receptionist greeted us with a warm smile and a gracious welcome."
+        },
+        {
+          "type": "vocabulary",
+          "word": "اسْتَقْبَلَتْنَا",
+          "transliteration": "Istaqbalatna",
+          "translation": "She greeted/received us",
+          "example": {
+            "ar": "اسْتَقْبَلَتْنَا الْعَائِلَةُ بِفَرَحٍ",
+            "en": "The family greeted us with joy"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "ابْتِسَامَةٍ",
+          "transliteration": "Ibtisamah",
+          "translation": "A smile",
+          "example": {
+            "ar": "لَدَيْهِ ابْتِسَامَةٌ جَمِيلَةٌ",
+            "en": "He has a beautiful smile"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَرْحِيبٍ",
+          "transliteration": "Tarhib",
+          "translation": "Welcome",
+          "example": {
+            "ar": "شُكْرًا عَلَى التَّرْحِيبِ",
+            "en": "Thank you for the welcome"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "اسْتَقْبَلَتْنَا مُوَظَّفَةُ الاسْتِقْبَالِ بِـ ____ دَافِئَةٍ",
+          english: "The receptionist greeted us with a warm smile",
+          answer: "ابْتِسَامَةٍ",
+          options: ["ابْتِسَامَةٍ", "صَيْحَةٍ", "نَظْرَةٍ"]
+        }
+      ]
+    },
+    {
+      id: "u4_l3",
+      title: "Feeling at Home",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَجَدْنَا الْغُرَفَ كُلَّهَا نَظِيفَةً وَمُرَتَّبَةً، فَشَعَرْنَا أَنَّنَا فِي مَسْكَنٍ رَائِعٍ وَضِيَافَةٍ حَارَّةٍ بَيْنَ أَصْدِقَاءَ لَا غُرَبَاءَ.",
+          english: "We found all the rooms clean and tidy, so we felt that we were in a wonderful home and warm hospitality among friends, not strangers."
+        },
+        {
+          "type": "vocabulary",
+          "word": "نَظِيفَةً",
+          "transliteration": "Nazifah",
+          "translation": "Clean",
+          "example": {
+            "ar": "الْغُرْفَةُ نَظِيفَةٌ",
+            "en": "The room is clean"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُرَتَّبَةً",
+          "transliteration": "Murattabah",
+          "translation": "Tidy / Organized",
+          "example": {
+            "ar": "الْمَكْتَبَةُ مُرَتَّبَةٌ",
+            "en": "The library is organized"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "ضِيَافَةٍ",
+          "transliteration": "Diyafah",
+          "translation": "Hospitality",
+          "example": {
+            "ar": "الْعَرَبُ كِرَامٌ فِي الضِّيَافَةِ",
+            "en": "Arabs are generous in hospitality"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "غُرَبَاءَ",
+          "transliteration": "Ghuraba'",
+          "translation": "Strangers",
+          "example": {
+            "ar": "نَحْنُ لَسْنَا غُرَبَاءَ",
+            "en": "We are not strangers"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "غُرَف", en: "Rooms" },
+            { ar: "نَظِيفَة", en: "Clean" },
+            { ar: "أَصْدِقَاء", en: "Friends" },
+            { ar: "غُرَبَاء", en: "Strangers" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_4.js ---
+
+--- START OF FILE src/data/section1/section1_5.js ---
+export const unit5 = {
+  id: "u5",
+  title: "Exploring Cochin",
+  lessons: [
+    {
+      id: "u5_l1",
+      title: "Three Beautiful Days",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "قَضَيْنَا فِي كُوتْشِين ثَلَاثَةَ أَيَّامٍ جَمِيلَةٍ، اكْتَشَفْنَا خِلَالَهَا تِلْكَ الْمَدِينَةَ الَّتِي تَمْتَازُ بِالْحَيَوِيَّةِ وَالنَّظَافَةِ وَالتَّنْظِيمِ.",
+          english: "We spent three beautiful days in Cochin, during which we discovered that city which is characterized by vitality, cleanliness, and organization."
+        },
+        {
+          "type": "vocabulary",
+          "word": "قَضَيْنَا",
+          "transliteration": "Qadayna",
+          "translation": "We spent (time)",
+          "example": {
+            "ar": "قَضَيْنَا وَقْتًا مُمْتِعًا",
+            "en": "We spent an enjoyable time"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "اكْتَشَفْنَا",
+          "transliteration": "Iktashafna",
+          "translation": "We discovered",
+          "example": {
+            "ar": "اكْتَشَفْنَا مَكَانًا جَدِيدًا",
+            "en": "We discovered a new place"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَمْتَازُ",
+          "transliteration": "Tamtazu",
+          "translation": "Is characterized by / excels in",
+          "example": {
+            "ar": "الْمَدِينَةُ تَمْتَازُ بِالْجَمَالِ",
+            "en": "The city is characterized by beauty"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "التَّنْظِيمِ",
+          "transliteration": "At-tanzim",
+          "translation": "Organization",
+          "example": {
+            "ar": "النَّظَافَةُ وَالتَّنْظِيمُ ضَرُورِيَّانِ",
+            "en": "Cleanliness and organization are necessary"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "قَضَيْنَا", en: "We spent" },
+            { ar: "أَيَّام", en: "Days" },
+            { ar: "حَيَوِيَّة", en: "Vitality" },
+            { ar: "نَظَافَة", en: "Cleanliness" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u5_l2",
+      title: "The Kind People",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "لَاحَظْنَا فِيهَا طِيبَةَ أَهْلِهَا وَبَسَاطَتَهُمْ، فَلَمْ نَجِدْ فِي وُجُوهِهِمْ إِلَّا الْبَشَاشَةَ، وَلَا فِي طُرُقِهِمْ إِلَّا النِّظَامَ.",
+          english: "We noticed in it the kindness of its people and their simplicity; we found nothing on their faces but cheerfulness, and nothing in their streets but order."
+        },
+        {
+          "type": "vocabulary",
+          "word": "لَاحَظْنَا",
+          "transliteration": "Lahazna",
+          "translation": "We noticed",
+          "example": {
+            "ar": "لَاحَظْنَا الْفَرْقَ",
+            "en": "We noticed the difference"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْبَشَاشَةَ",
+          "transliteration": "Al-bashashah",
+          "translation": "Cheerfulness / Friendliness",
+          "example": {
+            "ar": "الْبَشَاشَةُ تَجْذِبُ النَّاسَ",
+            "en": "Cheerfulness attracts people"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "النِّظَامَ",
+          "transliteration": "An-nizam",
+          "translation": "Order / Discipline",
+          "example": {
+            "ar": "النِّظَامُ فِي كُلِّ مَكَانٍ",
+            "en": "Order is everywhere"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "لَاحَظْنَا فِيهَا ____ أَهْلِهَا",
+          english: "We noticed the kindness of its people",
+          answer: "طِيبَةَ",
+          options: ["طِيبَةَ", "غَضَبَ", "خَوْفَ"]
+        }
+      ]
+    },
+    {
+      id: "u5_l3",
+      title: "Mosques and Faith",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "انْتَشَرَ فِيهَا الْمَسَاجِدُ الْجَمِيلَةُ تَشْعُرُ بِرُوحِ الْإِسْلَامِ وَإِلْفَةِ الْإِيمَانِ.",
+          english: "Beautiful mosques are spread throughout it; you feel the spirit of Islam and the intimacy of faith."
+        },
+        {
+          "type": "vocabulary",
+          "word": "انْتَشَرَ",
+          "transliteration": "Intashara",
+          "translation": "Spread / Scattered",
+          "example": {
+            "ar": "انْتَشَرَ الْخَبَرُ سَرِيعًا",
+            "en": "The news spread quickly"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "إِلْفَةِ",
+          "transliteration": "Ilfah",
+          "translation": "Intimacy / Familiarity",
+          "example": {
+            "ar": "بَيْنَهُمْ إِلْفَةٌ كَبِيرَةٌ",
+            "en": "There is a great intimacy between them"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْإِيمَانِ",
+          "transliteration": "Al-iman",
+          "translation": "Faith",
+          "example": {
+            "ar": "الْإِيمَانُ فِي الْقَلْبِ",
+            "en": "Faith is in the heart"
+          }
+        }
+      ]
+    },
+    {
+      id: "u5_l4",
+      title: "Traditional Massage",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "كَمَا تَشْتَهِرُ الْمَدِينَةُ بِالْمَسَاجِ الْعِلَاجِيِّ بِالزُّيُوتِ الطَّبِيعِيَّةِ الْمُسْتَخْلَصَةِ مِنَ الْأَعْشَابِ، الْمَسَاجُ هُوَ تَقْلِيدٌ قَدِيمٌ يَعْكِسُ ارْتِبَاطَ الْهَنُودِ بِطَبِيعَتِهِمْ وَعُلُومِهِمُ الطِّبِّيَّةِ الْعَتِيقَةِ النَّاجِحَةِ.",
+          english: "The city is also famous for therapeutic massage with natural oils extracted from herbs; massage is an ancient tradition reflecting the Indians' connection to their nature and their successful ancient medical sciences."
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَشْتَهِرُ",
+          "transliteration": "Tashtahiru",
+          "translation": "Is famous for",
+          "example": {
+            "ar": "تَشْتَهِرُ الْمَدِينَةُ بِتِجَارَتِهَا",
+            "en": "The city is famous for its trade"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْأَعْشَابِ",
+          "transliteration": "Al-a'shab",
+          "translation": "Herbs",
+          "example": {
+            "ar": "نَسْتَخْدِمُ الْأَعْشَابَ لِلْعِلَاجِ",
+            "en": "We use herbs for treatment"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَقْلِيدٌ قَدِيمٌ",
+          "transliteration": "Taqlidun qadim",
+          "translation": "An ancient tradition",
+          "example": {
+            "ar": "هَذَا تَقْلِيدٌ قَدِيمٌ عِنْدَنَا",
+            "en": "This is an ancient tradition for us"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْعَتِيقَةِ",
+          "transliteration": "Al-atiqah",
+          "translation": "Ancient / Antique",
+          "example": {
+            "ar": "هَذِهِ بِنَايَةٌ عَتِيقَةٌ",
+            "en": "This is an ancient building"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "زُيُوت", en: "Oils" },
+            { ar: "أَعْشَاب", en: "Herbs" },
+            { ar: "طَبِيعِيَّة", en: "Natural" },
+            { ar: "تَقْلِيد", en: "Tradition" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_5.js ---
+
+--- START OF FILE src/data/section1/section1_6.js ---
+export const unit6 = {
+  id: "u6",
+  title: "Heading to Munnar",
+  lessons: [
+    {
+      id: "u6_l1",
+      title: "The Road Trip",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "بَعْدَ أَيَّامٍ ثَلَاثٍ اسْتَأْجَرْنَا سَيَّارَةً مُتَّجِهِينَ إِلَى مُونَّارَ، الَّتِي تَبْعُدُ نَحْوَ ١٤٥ كِيلُومِتْرًا عَنْ كُوتْشِينَ.",
+          english: "After three days, we rented a car heading to Munnar, which is about 145 kilometers away from Cochin."
+        },
+        {
+          "type": "vocabulary",
+          "word": "اسْتَأْجَرْنَا",
+          "transliteration": "Ista'jarna",
+          "translation": "We rented",
+          "example": {
+            "ar": "اسْتَأْجَرْنَا مَنْزِلًا لِلْعُطْلَةِ",
+            "en": "We rented a house for the holiday"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُتَّجِهِينَ",
+          "transliteration": "Muttajihin",
+          "translation": "Heading / Directed",
+          "example": {
+            "ar": "نَحْنُ مُتَّجِهُونَ إِلَى الشِّمَالِ",
+            "en": "We are heading North"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَبْعُدُ",
+          "transliteration": "Tab'udu",
+          "translation": "Is distant / Away",
+          "example": {
+            "ar": "الْمَدْرَسَةُ تَبْعُدُ عَنِ الْبَيْتِ",
+            "en": "The school is away from the house"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "اسْتَأْجَرْنَا ____ مُتَّجِهِينَ إِلَى مُونَّار",
+          english: "We rented a car heading to Munnar",
+          answer: "سَيَّارَةً",
+          options: ["سَيَّارَةً", "دَرَّاجَةً", "طَائِرَةً"]
+        }
+      ]
+    },
+    {
+      id: "u6_l2",
+      title: "A Green Landscape",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "كَانَ الطَّرِيقُ كَلَوْحَةٍ خَضْرَاءَ مُتَّصِلَةٍ مَا بَيْنَ غَابَاتٍ كَثِيفَةٍ وَجِبَالٍ مَكْسُوَّةٍ بِأَشْجَارِ الشَّايِ.",
+          english: "The road was like a continuous green painting between dense forests and mountains covered with tea trees."
+        },
+        {
+          "type": "vocabulary",
+          "word": "لَوْحَةٍ",
+          "transliteration": "Lawhah",
+          "translation": "Painting / Board",
+          "example": {
+            "ar": "رَسَمَ الْفَنَّانُ لَوْحَةً",
+            "en": "The artist drew a painting"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "غَابَاتٍ كَثِيفَةٍ",
+          "transliteration": "Ghabatin kathifah",
+          "translation": "Dense forests",
+          "example": {
+            "ar": "الْغَابَاتُ الْكَثِيفَةُ جَمِيلَةٌ",
+            "en": "Dense forests are beautiful"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مَكْسُوَّةٍ",
+          "transliteration": "Maksuwwah",
+          "translation": "Covered / Clothed",
+          "example": {
+            "ar": "الْأَرْضُ مَكْسُوَّةٌ بِالثَّلْجِ",
+            "en": "The ground is covered with snow"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "طَرِيق", en: "Road" },
+            { ar: "لَوْحَة", en: "Painting" },
+            { ar: "غَابَات", en: "Forests" },
+            { ar: "شَاي", en: "Tea" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u6_l3",
+      title: "Racing Waterfalls",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَشَلَّالَاتٍ تَتَسَابَقُ فِي الانْحِدَارِ مِنْ أَعَالِي الْجِبَالِ كَأَنَّهَا تَتَفَاخَرُ بِجَمَالِهَا.",
+          english: "And waterfalls racing in descent from the mountain peaks as if they were boasting of their beauty."
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَتَسَابَقُ",
+          "transliteration": "Tatasabaqu",
+          "translation": "Racing / Competing",
+          "example": {
+            "ar": "تَتَسَابَقُ السَّيَّارَاتُ فِي الطَّرِيقِ",
+            "en": "The cars are racing on the road"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الانْحِدَارِ",
+          "transliteration": "Al-inhidar",
+          "translation": "The descent / Slope",
+          "example": {
+            "ar": "الانْحِدَارُ خَطِيرٌ جِدًّا",
+            "en": "The descent is very dangerous"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَتَفَاخَرُ",
+          "transliteration": "Tatafakharu",
+          "translation": "Boasting / Proud",
+          "example": {
+            "ar": "تَتَفَاخَرُ الْبِنْتُ بِنَجَاحِهَا",
+            "en": "The girl is proud of her success"
+          }
+        }
+      ]
+    },
+    {
+      id: "u6_l4",
+      title: "Climbing Higher",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَكُلَّمَا صَعِدْنَا أَكْثَرَ، ازْدَادَ الْجَوُّ بُرُودَةً وَالْهَوَاءُ نَقَاءً.",
+          english: "And the more we climbed, the colder the weather became and the purer the air."
+        },
+        {
+          "type": "vocabulary",
+          "word": "صَعِدْنَا",
+          "transliteration": "Sa'idna",
+          "translation": "We climbed / ascended",
+          "example": {
+            "ar": "صَعِدْنَا إِلَى قِمَّةِ الْجَبَلِ",
+            "en": "We climbed to the mountain peak"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "ازْدَادَ",
+          "transliteration": "Izdada",
+          "translation": "Increased",
+          "example": {
+            "ar": "ازْدَادَ عَدَدُ السُّكَّانِ",
+            "en": "The population increased"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "نَقَاءً",
+          "transliteration": "Naqa'an",
+          "translation": "Purity",
+          "example": {
+            "ar": "نُحِبُّ نَقَاءَ الْقُلُوبِ",
+            "en": "We love the purity of hearts"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "ازْدَادَ الْجَوُّ ____ وَالْهَوَاءُ نَقَاءً",
+          english: "The weather became colder and the air purer",
+          answer: "بُرُودَةً",
+          options: ["حَرَارَةً", "بُرُودَةً", "رُطُوبَةً"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_6.js ---
+
+--- START OF FILE src/data/section1/section1_7.js ---
+export const unit7 = {
+  id: "u7",
+  title: "The Blackberry Resort",
+  lessons: [
+    {
+      id: "u7_l1",
+      title: "Arrival at Night",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَصَلْنَا إِلَى مُونَّار مَعَ حُلُولِ اللَّيْلِ، وَاسْتَقْبَلَنَا الْعَامِلُونَ فِي مُنْتَجَعِ ”بْلَاك بَرِي“ بِابْتِسَامَةٍ وَكَرَمٍ وَضِيَافَةٍ خَالِصَةٍ.",
+          english: "We arrived in Munnar at nightfall, and the staff at the 'Blackberry' Resort welcomed us with a smile, generosity, and pure hospitality."
+        },
+        {
+          "type": "vocabulary",
+          "word": "حُلُولِ اللَّيْلِ",
+          "transliteration": "Hulul al-layl",
+          "translation": "Nightfall / Arrival of night",
+          "example": {
+            "ar": "نَامَ النَّاسُ مَعَ حُلُولِ اللَّيْلِ",
+            "en": "People slept at nightfall"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُنْتَجَعِ",
+          "transliteration": "Muntaja'",
+          "translation": "Resort",
+          "example": {
+            "ar": "الْمُنْتَجَعُ مَكَانٌ لِلرَّاحَةِ",
+            "en": "The resort is a place for rest"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "خَالِصَةٍ",
+          "transliteration": "Khalisah",
+          "translation": "Pure / Sincere",
+          "example": {
+            "ar": "هَذِهِ مَحَبَّةٌ خَالِصَةٌ",
+            "en": "This is pure love"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "لَيْل", en: "Night" },
+            { ar: "عَامِلُون", en: "Workers/Staff" },
+            { ar: "كَرَم", en: "Generosity" },
+            { ar: "ضِيَافَة", en: "Hospitality" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u7_l2",
+      title: "Kindness After Hours",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَتَّى حَفِظُوا لَنَا الْعَشَاءَ بَعْدَ وَقْتِ إِغْلَاقِ مَطْعَمِ الْمُنْتَجَعِ.",
+          english: "They even saved dinner for us after the resort's restaurant closing time."
+        },
+        {
+          "type": "vocabulary",
+          "word": "حَفِظُوا",
+          "transliteration": "Hafizu",
+          "translation": "They saved / kept",
+          "example": {
+            "ar": "الْأَصْدِقَاءُ حَفِظُوا الْعَهْدَ",
+            "en": "The friends kept the promise"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْعَشَاءَ",
+          "transliteration": "Al-'asha'",
+          "translation": "Dinner",
+          "example": {
+            "ar": "تَنَاوَلْنَا الْعَشَاءَ مَعًا",
+            "en": "We had dinner together"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "إِغْلَاقِ",
+          "transliteration": "Ighlaq",
+          "translation": "Closing",
+          "example": {
+            "ar": "مَوْعِدُ إِغْلَاقِ الْمَحَلِّ قَرِيبٌ",
+            "en": "The shop's closing time is soon"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "حَفِظُوا لَنَا ____ بَعْدَ وَقْتِ الإِغْلَاقِ",
+          english: "They saved dinner for us after closing time",
+          answer: "الْعَشَاءَ",
+          options: ["الْفُطُورَ", "الْعَشَاءَ", "الْغَدَاءَ"]
+        }
+      ]
+    },
+    {
+      id: "u7_l3",
+      title: "Overlooking the Valleys",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الَّذِي يَقَعُ عَلَى سَفْحِ جَبَلٍ يُطِلُّ عَلَى وِدْيَانٍ مُغَطَّاةٍ بِأَشْجَارِ الشَّايِ.",
+          english: "Which is located on the foot of a mountain overlooking valleys covered with tea trees."
+        },
+        {
+          "type": "vocabulary",
+          "word": "سَفْحِ",
+          "transliteration": "Safh",
+          "translation": "Foot / Slope (of a mountain)",
+          "example": {
+            "ar": "بَنَى الرَّجُلُ بَيْتًا فِي سَفْحِ الْجَبَلِ",
+            "en": "The man built a house at the foot of the mountain"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "وِدْيَانٍ",
+          "transliteration": "Widyan",
+          "translation": "Valleys",
+          "example": {
+            "ar": "الْوِدْيَانُ خَضْرَاءُ فِي الرَّبِيعِ",
+            "en": "The valleys are green in spring"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُغَطَّاةٍ",
+          "transliteration": "Mughattah",
+          "translation": "Covered",
+          "example": {
+            "ar": "الطَّاوِلَةُ مُغَطَّاةٌ بِالثَّوْبِ",
+            "en": "The table is covered with cloth"
+          }
+        }
+      ]
+    },
+    {
+      id: "u7_l4",
+      title: "Tranquility and Solitude",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "تَتَنَاثَرُ فِيهِ الْأَكْوَاخُ الصَّغِيرَةُ الَّتِي تَمْنَحُ إِحْسَاسًا بِالسَّكِينَةِ الْمُطْمَئِنَّةِ وَالْعُزْلَةِ الْهَادِئَةِ.",
+          english: "Small cottages are scattered in it, providing a sense of reassuring tranquility and quiet solitude."
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَتَنَاثَرُ",
+          "transliteration": "Tatanatharu",
+          "translation": "Are scattered",
+          "example": {
+            "ar": "تَتَنَاثَرُ النُّجُومُ فِي السَّمَاءِ",
+            "en": "Stars are scattered in the sky"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْأَكْوَاخُ",
+          "transliteration": "Al-akwakh",
+          "translation": "The huts / cottages",
+          "example": {
+            "ar": "الْأَكْوَاخُ مَصْنُوعَةٌ مِنَ الْخَشَبِ",
+            "en": "The huts are made of wood"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "السَّكِينَةِ",
+          "transliteration": "As-sakinah",
+          "translation": "Tranquility / Peace",
+          "example": {
+            "ar": "أَشْعُرُ بِالسَّكِينَةِ فِي الْمَسْجِدِ",
+            "en": "I feel tranquility in the mosque"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْعُزْلَةِ",
+          "transliteration": "Al-'uzlah",
+          "translation": "Isolation / Solitude",
+          "example": {
+            "ar": "الْعُزْلَةُ مَفِيدَةٌ لِلتَّفْكِيرِ",
+            "en": "Solitude is useful for thinking"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَكْوَاخ", en: "Huts" },
+            { ar: "إِحْسَاس", en: "Feeling/Sense" },
+            { ar: "سَكِينَة", en: "Tranquility" },
+            { ar: "هَادِئَة", en: "Quiet/Calm" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_7.js ---
+
+--- START OF FILE src/data/section1/section1_8.js ---
+export const unit8 = {
+  id: "u8",
+  title: "Exploring Munnar Village",
+  lessons: [
+    {
+      id: "u8_l1",
+      title: "Slumber under the Rain",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "نِمْنَا لَيْلَتَنَا الْأُولَى فِي سُبَاتٍ عَمِيقٍ تَحْتَ أَنْغَامِ الْمَطَرِ.",
+          english: "We slept our first night in a deep slumber under the tunes of the rain."
+        },
+        {
+          "type": "vocabulary",
+          "word": "نِمْنَا",
+          "transliteration": "Nimna",
+          "translation": "We slept",
+          "example": {
+            "ar": "نِمْنَا مُبَكِّرًا أَمْسِ",
+            "en": "We slept early yesterday"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "سُبَاتٍ",
+          "transliteration": "Subatin",
+          "translation": "Slumber / Deep sleep",
+          "example": {
+            "ar": "دَخَلَ الدُّبُّ فِي سُبَاتٍ شَتَوِيٍّ",
+            "en": "The bear went into winter hibernation"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "أَنْغَامِ",
+          "transliteration": "Anghami",
+          "translation": "Tunes / Melodies",
+          "example": {
+            "ar": "أَنْغَامُ الْمُوسِيقَى هَادِئَةٌ",
+            "en": "The music melodies are quiet"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "نِمْنَا فِي سُبَاتٍ ____",
+          english: "We slept in a deep slumber",
+          answer: "عَمِيقٍ",
+          options: ["طَوِيلٍ", "عَمِيقٍ", "خَفِيفٍ"]
+        }
+      ]
+    },
+    {
+      id: "u8_l2",
+      title: "The Mountain Village",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَفِي الصَّبَاحِ انْطَلَقْنَا لِاسْتِكْشَافِ مَنَاطِقِ مُونَّار الَّتِي لَيْسَتْ مَدِينَةً كَبِيرَةً بَلْ هِيَ قَرْيَةٌ جَبَلِيَّةٌ جَمِيلَةٌ، تَتَنَاثَرُ فِيهَا الْمَزَارِعُ وَالشَّلَّالَاتُ وَالزُّهُورُ الْبَرِّيَّةُ.",
+          english: "In the morning, we set out to explore the areas of Munnar, which is not a large city but a beautiful mountain village, where farms, waterfalls, and wildflowers are scattered."
+        },
+        {
+          "type": "vocabulary",
+          "word": "انْطَلَقْنَا",
+          "transliteration": "Intalaqna",
+          "translation": "We set out / launched",
+          "example": {
+            "ar": "انْطَلَقْنَا إِلَى الْمَدْرَسَةِ",
+            "en": "We set out to school"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "اسْتِكْشَافِ",
+          "transliteration": "Istikshafi",
+          "translation": "Exploring / Discovery",
+          "example": {
+            "ar": "نُحِبُّ اسْتِكْشَافَ الْغَابَةِ",
+            "en": "We love exploring the forest"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "قَرْيَةٌ",
+          "transliteration": "Qaryatun",
+          "translation": "Village",
+          "example": {
+            "ar": "هَذِهِ قَرْيَةٌ هَادِئَةٌ",
+            "en": "This is a quiet village"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْبَرِّيَّةُ",
+          "transliteration": "Al-barriyyatu",
+          "translation": "Wild",
+          "example": {
+            "ar": "الْحَيَوَانَاتُ الْبَرِّيَّةُ قَوِيَّةٌ",
+            "en": "Wild animals are strong"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "صَبَاح", en: "Morning" },
+            { ar: "مَدِينَة", en: "City" },
+            { ar: "قَرْيَة", en: "Village" },
+            { ar: "مَزَارِع", en: "Farms" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_8.js ---
+
+--- START OF FILE src/data/section1/section1_9.js ---
+export const unit9 = {
+  id: "u9",
+  title: "The National Park and Poetry",
+  lessons: [
+    {
+      id: "u9_l1",
+      title: "Visiting the Park",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "قُمْنَا بِزِيَارَةِ الْمُنْتَزَهِ الْوَطَنِيِّ نَحْوَ ٢٥ دَقِيقَةً، حَيْثُ الْجِبَالُ الْخَضْرَاءُ وَالْحَيَوَانَاتُ الْبَرِّيَّةُ وَالْمَاعِزُ الْجَبَلِيُّ الْمُخَطَّطُ.",
+          english: "We visited the National Park for about 25 minutes, where there are green mountains, wild animals, and the striped mountain goat."
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمُنْتَزَهِ الْوَطَنِيِّ",
+          "transliteration": "Al-muntazahi al-wataniyyi",
+          "translation": "The National Park",
+          "example": {
+            "ar": "الْمُنْتَزَهُ الْوَطَنِيُّ مَحْمِيَّةٌ طَبِيعِيَّةٌ",
+            "en": "The national park is a nature reserve"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمَاعِزُ الْجَبَلِيُّ",
+          "transliteration": "Al-ma'izu al-jaballiyu",
+          "translation": "The mountain goat",
+          "example": {
+            "ar": "الْمَاعِزُ الْجَبَلِيُّ يَعِيشُ فِي الْقِمَمِ",
+            "en": "The mountain goat lives on the peaks"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْمُخَطَّطُ",
+          "transliteration": "Al-mukhattatu",
+          "translation": "Striped / Patterned",
+          "example": {
+            "ar": "النَّمِرُ حَيَوَانٌ مُخَطَّطٌ",
+            "en": "The tiger is a striped animal"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "زِيَارَة", en: "Visit" },
+            { ar: "دَقِيقَة", en: "Minute" },
+            { ar: "حَيَوَانَات", en: "Animals" },
+            { ar: "مَاعِز", en: "Goat" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u9_l2",
+      title: "Nature's Jewels",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْجَوُّ هُنَاكَ بَارِدٌ مُنْعِشٌ، وَالْغُيُومُ تُلَامِسُ قِمَمَ الْجِبَالِ، وَالنَّدَى يُرَطِّبُ الْأَرْضَ كَالْجَوَاهِرِ الْمُتَنَاثِرَةِ.",
+          english: "The weather there is cold and refreshing, the clouds touch the mountain peaks, and the dew moistens the ground like scattered jewels."
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُنْعِشٌ",
+          "transliteration": "Mun'ishun",
+          "translation": "Refreshing",
+          "example": {
+            "ar": "شَرِبْتُ عَصِيرًا مُنْعِشًا",
+            "en": "I drank a refreshing juice"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تُلَامِسُ",
+          "transliteration": "Tulamisu",
+          "translation": "Touching / Contacting",
+          "example": {
+            "ar": "يَدِي تُلَامِسُ الْمَاءَ",
+            "en": "My hand is touching the water"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "النَّدَى",
+          "transliteration": "An-nada",
+          "translation": "The dew",
+          "example": {
+            "ar": "النَّدَى عَلَى الْأَزْهَارِ جَمِيلٌ",
+            "en": "Dew on flowers is beautiful"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْجَوَاهِرِ",
+          "transliteration": "Al-jawahiri",
+          "translation": "The jewels",
+          "example": {
+            "ar": "الْجَوَاهِرُ ثَمِينَةٌ جِدًّا",
+            "en": "Jewels are very valuable"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "النَّدَى يُرَطِّبُ الْأَرْضَ كَـ ____ الْمُتَنَاثِرَةِ",
+          english: "Dew moistens the earth like scattered jewels",
+          answer: "الْجَوَاهِرِ",
+          options: ["الْجَوَاهِرِ", "الصُّخُورِ", "الْأَشْجَارِ"]
+        }
+      ]
+    },
+    {
+      id: "u9_l3",
+      title: "Poetic Memory",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "فِي تِلْكَ اللَّحَظَاتِ تَذَكَّرْتُ وَصْفَ الشَّاعِرِ الْأَنْدَلُسِيِّ ابْنِ سَعْدٍ الْأَشْبِيلِيِّ عَنْ وَطَنِهِ الْأَنْدَلُسِ: ”الْأَرْضُ قَدْ لَبِسَتْ رِدَاءً أَخْضَرًا وَالطَّلُّ يَنْثُرُ فِي رُبَاهَا جَوْهَرًا“",
+          english: "In those moments, I remembered the description of the Andalusian poet Ibn Sa'd al-Ishbili about his homeland, Andalusia: 'The earth has donned a green robe, and the dew scatters jewels upon its hills.'"
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَذَكَّرْتُ",
+          "transliteration": "Tadhakkartu",
+          "translation": "I remembered",
+          "example": {
+            "ar": "تَذَكَّرْتُ مَوْعِدِي الْمُهِمَّ",
+            "en": "I remembered my important appointment"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "رِدَاءً",
+          "transliteration": "Rida'an",
+          "translation": "Robe / Garment",
+          "example": {
+            "ar": "لَبِسَ الْمَلِكُ رِدَاءً جَمِيلًا",
+            "en": "The king wore a beautiful robe"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الطَّلُّ",
+          "transliteration": "At-tallu",
+          "translation": "Light rain / Dew",
+          "example": {
+            "ar": "سَقَطَ الطَّلُّ فِي الصَّبَاحِ",
+            "en": "Light rain fell in the morning"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "رُبَاهَا",
+          "transliteration": "Rubaha",
+          "translation": "Its hills / highlands",
+          "example": {
+            "ar": "الْخُضْرَةُ تَكْسُو الرُّبَى",
+            "en": "Greenery covers the hills"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شَاعِر", en: "Poet" },
+            { ar: "وَطَن", en: "Homeland" },
+            { ar: "أَخْضَر", en: "Green" },
+            { ar: "جَوْهَر", en: "Jewel" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_9.js ---
+
+--- START OF FILE src/data/section1/section1_10.js ---
+export const unit10 = {
+  id: "u10",
+  title: "Munnar: A Reflection of Beauty",
+  lessons: [
+    {
+      id: "u10_l1",
+      title: "The Unending Greenery",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "صَدَقَ هَذَا الْوَصْفُ فِي مُونَّار كَمَا صَدَقَ فِي الْأَنْدَلُسِ، لِأَنَّ الْخُضْرَةَ هُنَا لَا تَنْتَهِي، وَالْمَاءَ يَنْسَابُ فِي كُلِّ دَرْبٍ.",
+          english: "This description was true in Munnar just as it was true in Andalusia, because the greenery here never ends, and water flows in every path."
+        },
+        {
+          "type": "vocabulary",
+          "word": "صَدَقَ",
+          "transliteration": "Sadaqa",
+          "translation": "Was true / proved right",
+          "example": {
+            "ar": "صَدَقَ الصَّدِيقُ فِي قَوْلِهِ",
+            "en": "The friend was truthful in what he said"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَنْتَهِي",
+          "transliteration": "Tantahi",
+          "translation": "Ends / Finishes",
+          "example": {
+            "ar": "الْعُطْلَةُ لَا تَنْتَهِي أَبَدًا",
+            "en": "The holiday never ends"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "يَنْسَابُ",
+          "transliteration": "Yansabu",
+          "translation": "Flows / Glides",
+          "example": {
+            "ar": "الْمَاءُ يَنْسَابُ بِهُدُوءٍ",
+            "en": "The water flows quietly"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "دَرْبٍ",
+          "transliteration": "Darbin",
+          "translation": "Path / Way",
+          "example": {
+            "ar": "مَشَيْنَا فِي دَرْبٍ طَوِيلٍ",
+            "en": "We walked in a long path"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "خُضْرَة", en: "Greenery" },
+            { ar: "مَاء", en: "Water" },
+            { ar: "دَرْب", en: "Path" },
+            { ar: "أَنْدَلُس", en: "Andalusia" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u10_l2",
+      title: "Contemplating Nature",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "جَلَسْتُ أَتَأَمَّلُ الطَّبِيعَةَ، وَأَحْمَدُ اللهَ عَلَى هَذَا الْجَمَالِ الْبَدِيعِ الَّذِي يَشْرَحُ الْقَلْبَ وَيُبْهِجُ الرُّوحَ.",
+          english: "I sat contemplating nature, thanking God for this exquisite beauty that expands the heart and delights the soul."
+        },
+        {
+          "type": "vocabulary",
+          "word": "أَتَأَمَّلُ",
+          "transliteration": "Ata'ammalu",
+          "translation": "I contemplate / observe",
+          "example": {
+            "ar": "أَتَأَمَّلُ مَنْظَرَ الْغُرُوبِ",
+            "en": "I contemplate the sunset view"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْبَدِيعِ",
+          "transliteration": "Al-badi'i",
+          "translation": "The exquisite / wonderful",
+          "example": {
+            "ar": "اللهُ خَالِقُ الْجَمَالِ الْبَدِيعِ",
+            "en": "God is the creator of exquisite beauty"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "يَشْرَحُ",
+          "transliteration": "Yashrahu",
+          "translation": "Expands / Relieves",
+          "example": {
+            "ar": "هَذَا الْخَبَرُ يَشْرَحُ الصَّدْرَ",
+            "en": "This news expands the chest (brings joy)"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "يُبْهِجُ",
+          "transliteration": "Yubhiju",
+          "translation": "Delights / Gladdens",
+          "example": {
+            "ar": "النَّجَاحُ يُبْهِجُ الْوَالِدَيْنِ",
+            "en": "Success delights the parents"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "أَحْمَدُ اللهَ عَلَى هَذَا الْجَمَالِ الْبَدِيعِ الَّذِي يُبْهِجُ ____",
+          english: "I thank God for this exquisite beauty that delights the soul",
+          answer: "الرُّوحَ",
+          options: ["الرُّوحَ", "الْجِسْمَ", "الْبَيْتَ"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_10.js ---
+
+--- START OF FILE src/data/section1/section1_11.js ---
+export const unit11 = {
+  id: "u11",
+  title: "The Return to Cochin",
+  lessons: [
+    {
+      id: "u11_l1",
+      title: "The Best Days",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "قَضَيْنَا فِي مُونَّار ثَلَاثَةَ أَيَّامٍ هِيَ أَجْمَلُ الْأَيَّامِ فِي رِحْلَاتِي، بَيْنَ الضَّبَابِ وَالْمَطَرِ وَنَسِيمِ الْجِبَالِ الْبَارِدِ، وَفِي الْيَوْمِ الرَّابِعِ عُدْنَا إِلَى كُوتْشِين.",
+          english: "We spent three days in Munnar, which were the most beautiful days of my travels, among the fog, rain, and the cool mountain breeze, and on the fourth day we returned to Cochin."
+        },
+        {
+          "type": "vocabulary",
+          "word": "الضَّبَابِ",
+          "transliteration": "Ad-dabab",
+          "translation": "The fog",
+          "example": {
+            "ar": "الضَّبَابُ كَثِيفٌ فِي الصَّبَاحِ",
+            "en": "The fog is thick in the morning"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "نَسِيمِ",
+          "transliteration": "Nasim",
+          "translation": "Breeze",
+          "example": {
+            "ar": "نَسِيمُ الْبَحْرِ عَلِيلٌ",
+            "en": "The sea breeze is refreshing"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "عُدْنَا",
+          "transliteration": "Udna",
+          "translation": "We returned",
+          "example": {
+            "ar": "عُدْنَا إِلَى الْبَيْتِ مَسَاءً",
+            "en": "We returned home in the evening"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "ضَبَاب", en: "Fog" },
+            { ar: "نَسِيم", en: "Breeze" },
+            { ar: "بَارِد", en: "Cold" },
+            { ar: "عُدْنَا", en: "We returned" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u11_l2",
+      title: "The Wooden Rest Room",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَفِي الطَّرِيقِ تَوَقَّفْنَا فِي مَطْعَمٍ صَغِيرٍ بَنَى فِيهِ صَاحِبُهُ غُرْفَةَ اسْتِرَاحَةٍ خَشَبِيَّةٍ فَوْقَ شَجَرَةٍ ضَخْمَةٍ، كَانَ هَذَا مَشْهَدًا طَرِيفًا، أَعَادَ إِلَى ذَاكِرَتِي قِصَصَ الطُّفُولَةِ.",
+          english: "On the way, we stopped at a small restaurant where the owner had built a wooden rest room atop a massive tree; it was a quaint sight that brought childhood stories back to my memory."
+        },
+        {
+          "type": "vocabulary",
+          "word": "غُرْفَةَ اسْتِرَاحَةٍ",
+          "transliteration": "Ghurfata istirahah",
+          "translation": "Rest room / lounge",
+          "example": {
+            "ar": "نَحْنُ فِي غُرْفَةِ الاسْتِرَاحَةِ",
+            "en": "We are in the rest room"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "ضَخْمَةٍ",
+          "transliteration": "Dakhmati",
+          "translation": "Massive / Huge",
+          "example": {
+            "ar": "رَأَيْتُ شَجَرَةً ضَخْمَةً",
+            "en": "I saw a massive tree"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "طَرِيفًا",
+          "transliteration": "Tarifan",
+          "translation": "Quaint / Funny",
+          "example": {
+            "ar": "هَذَا مَوْقِفٌ طَرِيفٌ",
+            "en": "This is a quaint/funny situation"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الطُّفُولَةِ",
+          "transliteration": "At-tufulah",
+          "translation": "Childhood",
+          "example": {
+            "ar": "ذِكْرَيَاتُ الطُّفُولَةِ جَمِيلَةٌ",
+            "en": "Childhood memories are beautiful"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "أَعَادَ إِلَى ذَاكِرَتِي قِصَصَ ____",
+          english: "It brought back childhood stories to my memory",
+          answer: "الطُّفُولَةِ",
+          options: ["الْمَدْرَسَةِ", "الطُّفُولَةِ", "السَّفَرِ"]
+        }
+      ]
+    },
+    {
+      id: "u11_l3",
+      title: "Markets and Memories",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَصَلْنَا الْمَدِينَةَ مَعَ هُطُولِ الْأَمْطَارِ مُجَدَّدًا، وَقَضَيْنَا يَوْمَنَا الْأَخِيرَ نَتَجَوَّلُ بَيْنَ الْأَسْوَاقِ قَبْلَ الْعَوْدَةِ إِلَى الْمَطَارِ حَامِلِينَ ذِكْرَيَاتٍ لَا تُنْسَى عَنْ زِيَارَتِنَا فِي ”أَرَاضِي هَذِهِ الشَّلَّالَاتِ“ وَجَمَالِهَا الْأَخَّاذِ وَشِرَاءِ مَصْنُوعَاتٍ يَدَوِيَّةٍ لِلْمَاهِرِينَ الْهِنُودِ.",
+          english: "We reached the city as the rain fell again, and spent our last day wandering through the markets before returning to the airport, carrying unforgettable memories of our visit to 'the lands of these waterfalls' and its breathtaking beauty, and buying handicrafts of the skilled Indians."
+        },
+        {
+          "type": "vocabulary",
+          "word": "نَتَجَوَّلُ",
+          "transliteration": "Natajawwalu",
+          "translation": "We wander / roam",
+          "example": {
+            "ar": "نُحِبُّ أَنْ نَتَجَوَّلَ فِي السُّوقِ",
+            "en": "We like to wander in the market"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْأَخَّاذِ",
+          "transliteration": "Al-akhath",
+          "translation": "Captivating / Breathtaking",
+          "example": {
+            "ar": "هَذَا مَنْظَرٌ أَخَّاذٌ",
+            "en": "This is a breathtaking view"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "مَصْنُوعَاتٍ يَدَوِيَّةٍ",
+          "transliteration": "Masnu'atin yadawiyyah",
+          "translation": "Handicrafts",
+          "example": {
+            "ar": "اشْتَرَيْتُ مَصْنُوعَاتٍ يَدَوِيَّةً",
+            "en": "I bought some handicrafts"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَمْطَار", en: "Rains" },
+            { ar: "أَسْوَاق", en: "Markets" },
+            { ar: "ذِكْرَيَات", en: "Memories" },
+            { ar: "مَصْنُوعَات", en: "Handicrafts" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_11.js ---
+
+--- START OF FILE src/data/section1/section1_12.js ---
+export const unit12 = {
+  id: "u12",
+  title: "A Unique Experience",
+  lessons: [
+    {
+      id: "u12_l1",
+      title: "Nature and Spirit",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "كَانَتْ رِحْلَتُنَا تَجْرِبَةً فَرِيدَةً، اجْتَمَعْنَا بَيْنَ جِبَالِ الطَّبِيعَةِ وَدِفْءِ النَّاسِ وَرُوحِ الْإِيمَانِ، وَالْكَرَامَةِ الصَّادِقَةِ.",
+          english: "Our trip was a unique experience; we gathered between the mountains of nature, the warmth of the people, the spirit of faith, and sincere dignity."
+        },
+        {
+          "type": "vocabulary",
+          "word": "تَجْرِبَةً",
+          "transliteration": "Tajribah",
+          "translation": "Experience",
+          "example": {
+            "ar": "السَّفَرُ تَجْرِبَةٌ مُفِيدَةٌ",
+            "en": "Traveling is a useful experience"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "فَرِيدَةً",
+          "transliteration": "Faridah",
+          "translation": "Unique",
+          "example": {
+            "ar": "هَذِهِ فُرْصَةٌ فَرِيدَةٌ",
+            "en": "This is a unique opportunity"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "دِفْءِ",
+          "transliteration": "Dif'",
+          "translation": "Warmth",
+          "example": {
+            "ar": "أُحِبُّ دِفْءَ الشَّمْسِ",
+            "en": "I love the warmth of the sun"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "الْكَرَامَةِ",
+          "transliteration": "Al-karamah",
+          "translation": "Dignity",
+          "example": {
+            "ar": "الْإِنْسَانُ يَعِيشُ بِالْكَرَامَةِ",
+            "en": "Man lives with dignity"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "تَجْرِبَة", en: "Experience" },
+            { ar: "فَرِيدَة", en: "Unique" },
+            { ar: "دِفْء", en: "Warmth" },
+            { ar: "إِيمَان", en: "Faith" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u12_l2",
+      title: "Heaven on Earth",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "فَنَعُودُ مِنْهَا مُمْتَعِينَ، وَأَكْثَرَ حُبًّا لِلْحَيَاةِ وَأَكْبَرَ يَقِينًا بِأَنَّ فِي الْأَرْضِ جَنَّاتٍ مَا كُنَّا اكْتَشَفْنَا حَتَّى الْيَوْمِ.",
+          english: "So we return from it delighted, with more love for life and greater certainty that there are paradises on earth that we had not discovered until today."
+        },
+        {
+          "type": "vocabulary",
+          "word": "مُمْتَعِينَ",
+          "transliteration": "Mumta'in",
+          "translation": "Delighted / Pleased",
+          "example": {
+            "ar": "رَجَعْنَا مِنَ الرِّحْلَةِ مُمْتَعِينَ",
+            "en": "We returned from the trip delighted"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "يَقِينًا",
+          "transliteration": "Yaqinan",
+          "translation": "Certainty / Conviction",
+          "example": {
+            "ar": "عِنْدِي يَقِينٌ بِالنَّجَاحِ",
+            "en": "I have certainty of success"
+          }
+        },
+        {
+          "type": "vocabulary",
+          "word": "جَنَّاتٍ",
+          "transliteration": "Jannat",
+          "translation": "Paradises / Gardens",
+          "example": {
+            "ar": "فِي الْهِنْدِ جَنَّاتٌ طَبِيعِيَّةٌ",
+            "en": "In India, there are natural paradises"
+          }
+        },
+        {
+          type: "fill-blank",
+          sentence: "أَكْبَرَ يَقِينًا بِأَنَّ فِي الْأَرْضِ ____",
+          english: "Greater certainty that there are paradises on earth",
+          answer: "جَنَّاتٍ",
+          options: ["جِبَالًا", "جَنَّاتٍ", "بُحَيْرَاتٍ"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section1/section1_12.js ---
+
+--- START OF FILE src/data/section2/section2_1.js ---
+export const unit61 = {
+  id: "u61",
+  title: "The Quran and the Environment",
+  lessons: [
+    {
+      id: "u61_l1",
+      title: "Natural Resources",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْمَوَارِدُ الطَّبِيعِيَّةُ بِمَا فِيهَا مِنَ الْأَرْضِ وَالْهَوَاءِ وَالْمَاءِ وَالْحَيَوَانَاتِ وَالنَّبَاتَاتِ",
+          english: "Natural resources, including land, air, water, animals, and plants."
+        },
+        {
+          type: "vocabulary",
+          word: "الْمَوَارِدُ",
+          transliteration: "Al-mawarid",
+          translation: "Resources",
+          example: {
+            ar: "الْمَوَارِدُ الطَّبِيعِيَّةُ كَثِيرَةٌ",
+            en: "Natural resources are plenty"
+          }
+        },
+        {
+          type: "vocabulary",
+          word: "الطَّبِيعِيَّةُ",
+          transliteration: "At-tabi'iyyah",
+          translation: "Natural",
+          example: {
+            ar: "الْبِيئَةُ الطَّبِيعِيَّةُ جَمِيلَةٌ",
+            en: "The natural environment is beautiful"
+          }
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَرْضِ",
+          transliteration: "Al-ard",
+          translation: "The Earth/Land",
+          example: {
+            ar: "نَحْنُ نَعِيشُ عَلَى الْأَرْضِ",
+            en: "We live on the earth"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "الْمَوَارِد", en: "Resources" },
+            { ar: "الْهَوَاء", en: "Air" },
+            { ar: "الْمَاء", en: "Water" },
+            { ar: "النَّبَاتَات", en: "Plants" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "الْمَوَارِدُ ____ بِمَا فِيهَا مِنَ الْأَرْضِ",
+          english: "Natural resources including the land",
+          answer: "الطَّبِيعِيَّةُ",
+          options: ["الْجَمِيلَةُ", "الطَّبِيعِيَّةُ", "الْكَبِيرَةُ"]
+        }
+      ]
+    },
+    {
+      id: "u61_l2",
+      title: "Protecting Systems",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَخَاصَّةً الْعَيِّنَاتِ الْمُمَثِّلَةِ لِلنُّظُمِ الطَّبِيعِيَّةِ يَتَوَجَّبُ حِمَايَتُهَا لِصَالِحِ الْأَجْيَالِ",
+          english: "Especially representative samples of natural systems, it is mandatory to protect them for the benefit of generations."
+        },
+        {
+          type: "vocabulary",
+          word: "يَتَوَجَّبُ",
+          transliteration: "Yatawajjabu",
+          translation: "Mandatory / Required",
+          example: {
+            ar: "يَتَوَجَّبُ عَلَيْنَا الْحِمَايَةُ",
+            en: "Protection is mandatory for us"
+          }
+        },
+        {
+          type: "vocabulary",
+          word: "حِمَايَتُهَا",
+          transliteration: "Himayatuha",
+          translation: "Its protection",
+          example: {
+            ar: "حِمَايَةُ الْبِيئَةِ وَاجِبٌ",
+            en: "Protecting the environment is a duty"
+          }
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَجْيَالِ",
+          transliteration: "Al-ajyal",
+          translation: "Generations",
+          example: {
+            ar: "لِصَالِحِ الْأَجْيَالِ الْقَادِمَةِ",
+            en: "For the benefit of future generations"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "يَتَوَجَّب", en: "Required" },
+            { ar: "حِمَايَة", en: "Protection" },
+            { ar: "صَالِح", en: "Benefit" },
+            { ar: "أَجْيَال", en: "Generations" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَتَوَجَّبُ حِمَايَتُهَا لِصَالِحِ ____",
+          english: "It must be protected for the benefit of generations",
+          answer: "الْأَجْيَالِ",
+          options: ["الْحَيَوَانَاتِ", "الْأَجْيَالِ", "النَّبَاتَاتِ"]
+        }
+      ]
+    },
+    {
+      id: "u61_l3",
+      title: "Management and Planning",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مِنْ خِلَالِ الْإِدَارَةِ وَالتَّخْطِيطِ فِي حَيَاةِ الْإِنْسَانِ فِي الْأَرْضِ",
+          english: "Through management and planning in human life on earth."
+        },
+        {
+          type: "vocabulary",
+          word: "الْإِدَارَةِ",
+          transliteration: "Al-idarah",
+          translation: "Management",
+          example: {
+            ar: "الْإِدَارَةُ الْجَيِّدَةُ مُهِمَّةٌ",
+            en: "Good management is important"
+          }
+        },
+        {
+          type: "vocabulary",
+          word: "التَّخْطِيطِ",
+          transliteration: "At-takhtit",
+          translation: "Planning",
+          example: {
+            ar: "التَّخْطِيطُ لِلْمُسْتَقْبَلِ",
+            en: "Planning for the future"
+          }
+        },
+        {
+          type: "vocabulary",
+          word: "الْإِنْسَانِ",
+          transliteration: "Al-insan",
+          translation: "Human / Man",
+          example: {
+            ar: "حَيَاةُ الْإِنْسَانِ ثَمِينَةٌ",
+            en: "Human life is precious"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "إِدَارَة", en: "Management" },
+            { ar: "تَخْطِيط", en: "Planning" },
+            { ar: "حَيَاة", en: "Life" },
+            { ar: "إِنْسَان", en: "Human" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ خِلَالِ الْإِدَارَةِ وَ____",
+          english: "Through management and planning",
+          answer: "التَّخْطِيطِ",
+          options: ["التَّخْطِيطِ", "اللَّعِبِ", "السَّفَرِ"]
+        }
+      ]
+    }
+  ]
+};
+
+--- END OF FILE src/data/section2/section2_1.js ---
+
+--- START OF FILE src/data/section2/section2_3.js ---
+export const unit62 = {
+  id: "unit62",
+  title: "Environment as a Religious Duty",
+  lessons: [
+    {
+      id: "u62_l1",
+      title: "Protection Urged by Quran",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَثَّ الْقُرْآنُ الْكَرِيمُ الْإِنْسَانَ عَلَى حِمَايَةِ الْبِيئَةِ وَالْمُحَافَظَةِ عَلَيْهَا، وَعَدَّ الْإِسْلَامُ ذَلِكَ بِأَنَّهَا وَاجِبٌ دِينِيٌّ.",
+          english: "The Holy Quran urged humans to protect the environment and preserve it, and Islam considered that a religious duty."
+        },
+        {
+          type: "vocabulary",
+          word: "حَثَّ",
+          transliteration: "Hath-tha",
+          translation: "Urged"
+        },
+        {
+          type: "vocabulary",
+          word: "وَاجِبٌ",
+          transliteration: "Wajib",
+          translation: "Duty"
+        }
+      ]
+    },
+    {
+      id: "u62_l2",
+      title: "Public Ownership and Trust",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَأَمَرَ اللهُ تَعَالَى بِالتَّعَامُلِ مَعَ الْبِيئَةِ عَلَى أَنَّهَا مِلْكِيَّةٌ عَامَّةٌ يَتَوَجَّبُ عَلَى الْمُسْلِمِ الْمُحَافَظَةُ عَلَى مُكَوِّنَاتِهَا.",
+          english: "Allah Almighty commanded dealing with the environment as public property that a Muslim must preserve its components."
+        },
+        {
+          type: "vocabulary",
+          word: "مِلْكِيَّةٌ عَامَّةٌ",
+          transliteration: "Milkiyyah 'Ammah",
+          translation: "Public property"
+        }
+      ]
+    },
+    {
+      id: "u62_l3",
+      title: "Human as a Successor",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَحِينَ خَلَقَهُ اللهُ تَعَالَى جَعَلَهُ خَلِيفَةً فِي الْأَرْضِ. فَالْأَرْضُ أَمَانَةٌ يَجِبُ عَلَى الْإِنْسَانِ حِمَايَتُهَا.",
+          english: "When Allah Almighty created man, He made him a successor (caliph) on earth. The earth is a trust (amanah) that humans must protect."
+        },
+        {
+          type: "vocabulary",
+          word: "خَلِيفَةً",
+          transliteration: "Khalifah",
+          translation: "Successor / Caliph"
+        },
+        {
+          type: "vocabulary",
+          word: "أَمَانَةٌ",
+          transliteration: "Amanah",
+          translation: "Trust"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit63 = {
+  id: "unit63",
+  title: "Environment in Prophetic Traditions",
+  lessons: [
+    {
+      id: "u63_l1",
+      title: "Prohibition of Harm",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "جَاءَتِ السُّنَّةُ النَّبَوِيَّةُ بِالْحَثِّ عَلَى الْمُحَافَظَةِ عَلَى الْبِيئَةِ وَعَدَمِ الْإِضْرَارِ بِهَا بِأَيِّ شَكْلٍ مِنَ الْأَشْكَالِ.",
+          english: "The Prophetic Sunnah urged the preservation of the environment and not harming it in any form."
+        },
+        {
+          type: "vocabulary",
+          word: "الْإِضْرَارِ",
+          transliteration: "Al-idrar",
+          translation: "Harming"
+        }
+      ]
+    },
+    {
+      id: "u63_l2",
+      title: "Removing Harm from Paths",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَقَدْ أَمَرَ النَّبِيُّ -صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ- بِإِمَاطَةِ الْأَذَى عَنِ الطَّرِيقِ وَهَذَا يَشْمَلُ جَمِيعَ الْأَنْوَاعِ مِنَ الْأَذَى.",
+          english: "The Prophet (PBUH) commanded removing harm from the path, and this includes all types of harm."
+        },
+        {
+          type: "vocabulary",
+          word: "إِمَاطَةِ الْأَذَى",
+          transliteration: "Imatat al-adha",
+          translation: "Removing harm"
+        }
+      ]
+    },
+    {
+      id: "u63_l3",
+      title: "Planting and Moderation",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "كَمَا اهْتَمَّتِ السُّنَّةُ بِتَخْضِيرِ الْأَرْضِ وَالْغَرْسِ وَالتَّشْجِيرِ، فَعَلَى الْإِنْسَانِ الْمُسْلِمِ أَنْ يُرَاعِيَ الِاعْتِدَالَ وَالتَّوَسُّطَ.",
+          english: "The Sunnah also cared about greening the land, planting, and afforestation; so a Muslim must observe moderation and balance."
+        },
+        {
+          type: "vocabulary",
+          word: "التَّشْجِيرِ",
+          transliteration: "At-tashjir",
+          translation: "Afforestation"
+        },
+        {
+          type: "vocabulary",
+          word: "الِاعْتِدَالَ",
+          transliteration: "Al-i'tidal",
+          translation: "Moderation"
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section2/section2_3.js ---
+
+--- START OF FILE src/data/section2/section2_7.js ---
+export const unit64 = {
+  id: "unit64",
+  title: "Building and Social Welfare",
+  lessons: [
+    {
+      id: "u64_l1",
+      title: "Principles of Reconstruction",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَرَكَّزَ الْإِسْلَامُ عَلَى مَبْدَأٍ مُهِمٍّ حِينَ يُحَاوِلُ بِقِيَامِهِ بِتَعْمِيرِ الْمَبَانِي عَلَى الْأَرْضِ، وَالسَّعْيِ فِيهَا بِرِعَايَةٍ عَمِيقَةٍ فِي الْإِجْرَاءَاتِ لِتَحْقِيقِ الْعَمَلِيَّاتِ وَالرَّغَبَاتِ.",
+          english: "Islam focused on an important principle when undertaking the construction of buildings on earth, seeking deep care in procedures to achieve operations and desires."
+        },
+        {
+          type: "vocabulary",
+          word: "تَعْمِيرِ",
+          transliteration: "Ta'mir",
+          translation: "Construction / Development"
+        }
+      ]
+    },
+    {
+      id: "u64_l2",
+      title: "Cooperation and Virtue",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَأَنْ يَكُونَ مَقَاصِدُهُ التَّعَاوُنَ عَلَى الْبِرِّ وَالتَّقْوَى فِي الْمُجْتَمَعِ لَا يَكُونُ لِاسْتِفَادَةِ نَفْسِهِ وَلِتَوْفِيرِ الْمَالِ لَهُ.",
+          english: "And its purpose should be cooperation in righteousness and piety in society, not just for self-benefit and saving money."
+        },
+        {
+          type: "vocabulary",
+          word: "الْبِرِّ",
+          transliteration: "Al-birr",
+          translation: "Righteousness"
+        }
+      ]
+    },
+    {
+      id: "u64_l3",
+      title: "Avoiding Corruption",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمِنَ اللَّازِمِ الِابْتِعَادُ عَنْ إِفْسَادِ الْأَرْضِ فِي تُرْبَتِهَا وَمَائِهَا وَهَوَائِهَا وَكُلِّ مَا فِيهَا مِنَ الْمَوَادِّ الطَّبِيعِيَّةِ.",
+          english: "It is necessary to stay away from corrupting the earth in its soil, water, air, and all the natural materials it contains."
+        },
+        {
+          type: "vocabulary",
+          word: "إِفْسَادِ",
+          transliteration: "Ifsad",
+          translation: "Corruption / Spoiling"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit65 = {
+  id: "unit65",
+  title: "Water Conservation and Hygiene",
+  lessons: [
+    {
+      id: "u65_l1",
+      title: "Value of Water Resources",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَبِالنِّسْبَةِ لِلْمِيَاهِ فَقَدْ حَثَّتِ السُّنَّةُ النَّبَوِيَّةُ بِالْمُحَافَظَةِ عَلَى الثَّرْوَةِ الْمَائِيَّةِ وَعَدَمِ الْإِسْرَافِ بِهَا.",
+          english: "Regarding water, the Prophetic Sunnah urged the preservation of water resources and avoiding waste."
+        },
+        {
+          type: "vocabulary",
+          word: "الثَّرْوَةِ الْمَائِيَّةِ",
+          transliteration: "Al-tharwah al-ma'iyyah",
+          translation: "Water resources"
+        }
+      ]
+    },
+    {
+      id: "u65_l2",
+      title: "Moderation in Ablution",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مِنْهَا كَرَاهِيَةُ الْإِسْرَافِ بِالْمَاءِ حَتَّى عِنْدَ الْوُضُوءِ حَيْثُ مَنَعَ النَّبِيُّ مُبَاشِرًا أَكْثَرَ مِنْ ثَلَاثِ مَرَّاتٍ فِي غَسْلِ الْأَعْضَاءِ.",
+          english: "This includes the dislike of wasting water even during ablution, as the Prophet directly forbade washing limbs more than three times."
+        },
+        {
+          type: "vocabulary",
+          word: "الْإِسْرَافِ",
+          transliteration: "Al-israf",
+          translation: "Wastefulness"
+        }
+      ]
+    },
+    {
+      id: "u65_l3",
+      title: "Cleanliness and Drinking Etiquette",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَأَمَرَ بِالْمُحَافَظَةِ عَلَى تَلَوُّثِ الْمَاءِ، فَنَهَى عَنِ التَّبَوُّلِ فِي الْمَاءِ الرَّاكِدِ، وَمَنَعَ التَّنَفُّسَ فِي الْإِنَاءِ عِنْدَ الشُّرْبِ.",
+          english: "He also commanded protection against water pollution, forbidding urinating in stagnant water and preventing breathing into the vessel while drinking."
+        },
+        {
+          type: "vocabulary",
+          word: "الرَّاكِدِ",
+          transliteration: "Al-rakid",
+          translation: "Stagnant"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit66 = {
+  id: "unit66",
+  title: "Land Cultivation and Usage",
+  lessons: [
+    {
+      id: "u66_l1",
+      title: "Encouraging Agriculture",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمِنَ التَّوْجِيهَاتِ النَّبَوِيَّةِ فِيمَا يَتَعَلَّقُ بِالْبِيئَةِ عَدَمُ احْتِجَازِ الْأَرْضِ عَنِ الزِّرَاعَةِ، وَحَثَّ عَلَى زِرَاعَتِهَا.",
+          english: "Among the Prophetic directives regarding the environment is not withholding land from agriculture and encouraging its cultivation."
+        },
+        {
+          type: "vocabulary",
+          word: "احْتِجَازِ",
+          transliteration: "Ihtijaz",
+          translation: "Withholding / Reserving"
+        }
+      ]
+    },
+    {
+      id: "u66_l2",
+      title: "Reviving Barren Land",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَقَالَ إِنَّ الْأَرْضَ لِمَنْ يَزْرَعُهَا لَا لِمَنْ يَمْلِكُهَا، فَلَا يُتْرَكُ الْأَرَاضِي جَدْبَاءَ بِدُونِ إِحْيَائِهَا.",
+          english: "He said the land belongs to the one who cultivates it, not just the one who owns it, so lands should not be left barren without reviving them."
+        },
+        {
+          type: "vocabulary",
+          word: "جَدْبَاءَ",
+          transliteration: "Jadba'",
+          translation: "Barren / Dry"
+        }
+      ]
+    },
+    {
+      id: "u66_l3",
+      title: "Rejection of Corruption",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَكُلُّ هَذِهِ الْمُعَامَلَاتِ الْفَسَادِيَّةِ نَهَاهَا الْقُرْآنُ الْكَرِيمُ وَالْأَحَادِيثُ النَّبَوِيَّةُ.",
+          english: "All these corrupt practices were forbidden by the Holy Quran and Prophetic Hadiths."
+        }
+      ]
+    }
+  ]
+};
+
+export const unit67 = {
+  id: "unit67",
+  title: "Divine Signs in Creation",
+  lessons: [
+    {
+      id: "u67_l1",
+      title: "Diversity on Earth",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "قَالَ اللهُ سُبْحَانَهُ وَتَعَالَى: 'وَمَا ذَرَأَ لَكُمْ فِي الْأَرْضِ مُخْتَلِفًا أَلْوَانُهُ إِنَّ فِي ذَلِكَ لَآيَةً لِقَوْمٍ يَذَّكَّرُونَ'.",
+          english: "Allah Glorified and Exalted said: 'And whatever He has multiplied for you on the earth of varying colors - indeed in that is a sign for a people who remember.'"
+        },
+        {
+          type: "vocabulary",
+          word: "ذَرَأَ",
+          transliteration: "Dhara'a",
+          translation: "Created / Multiplied"
+        }
+      ]
+    },
+    {
+      id: "u67_l2",
+      title: "The Bounties of the Sea",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "'وَهُوَ الَّذِي سَخَّرَ الْبَحْرَ لِتَأْكُلُوا مِنْهُ لَحْمًا طَرِيًّا وَتَسْتَخْرِجُوا مِنْهُ حِلْيَةً تَلْبَسُونَهَا'.",
+          english: "'And it is He who subjected the sea for you to eat from it tender meat and to extract from it ornaments which you wear.'"
+        },
+        {
+          type: "vocabulary",
+          word: "سَخَّرَ",
+          transliteration: "Sakh-khara",
+          translation: "Subjected / Made subservient"
+        }
+      ]
+    },
+    {
+      id: "u67_l3",
+      title: "Stability and Guidance",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "'وَأَلْقَى فِي الْأَرْضِ رَوَاسِيَ أَنْ تَمِيدَ بِكُمْ وَأَنْهَارًا وَسُبُلًا لَعَلَّكُمْ تَهْتَدُونَ'.",
+          english: "'And He has cast into the earth firmly set mountains, lest it shift with you, and rivers and roads, that you may be guided.'"
+        },
+        {
+          type: "vocabulary",
+          word: "رَوَاسِيَ",
+          transliteration: "Rawasiya",
+          translation: "Firm mountains"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit68 = {
+  id: "unit68",
+  title: "Planting and Purity",
+  lessons: [
+    {
+      id: "u68_l1",
+      title: "The Reward of Planting",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "قَالَ النَّبِيُّ عَلَيْهِ الصَّلَاةُ وَالسَّلَامُ: 'مَا مِنْ مُسْلِمٍ يَغْرِسُ غَرْسًا إِلَّا كَانَ مَا أُكِلَ مِنْهُ لَهُ صَدَقَةً'.",
+          english: "The Prophet (PBUH) said: 'There is no Muslim who plants a tree except that whatever is eaten from it is a charity for him.'"
+        },
+        {
+          type: "vocabulary",
+          word: "يَغْرِسُ",
+          transliteration: "Yaghrisu",
+          translation: "Plants"
+        }
+      ]
+    },
+    {
+      id: "u68_l2",
+      title: "Love for Beauty and Cleanliness",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "رُوِيَ عَنْ سَعْدِ بْنِ أَبِي وَقَّاصٍ أَنَّهُ قَالَ: 'إِنَّ اللهَ تَعَالَى طَيِّبٌ يُحِبُّ الطَّيِّبَ، نَظِيفٌ يُحِبُّ النَّظَافَةَ، كَرِيمٌ يُحِبُّ الْكَرَمَ، جَوَادٌ يُحِبُّ الْجُودَ، فَنَظِّفُوا أَفْنِيَتَكُمْ'.",
+          english: "Narrated from Sa'd bin Abi Waqqas that he said: 'Indeed Allah Almighty is Good and loves goodness, Clean and loves cleanliness, Generous and loves generosity, Munificent and loves munificence, so clean your courtyards.'"
+        },
+        {
+          type: "vocabulary",
+          word: "أَفْنِيَتَكُمْ",
+          transliteration: "Afniyatakum",
+          translation: "Your courtyards"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit69 = {
+  id: "unit69",
+  title: "The Sky and Heavenly Protection",
+  lessons: [
+    {
+      id: "u69_l1",
+      title: "The Sky as a Ceiling",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "تَحَدَّثَ الْقُرْآنُ الْكَرِيمُ عَنْ مُكَوِّنَاتِ الْبِيئَةِ كَثِيرًا، وَمِنْهَا: السَّمَاءُ، وَالسَّمَاءُ مَصْدَرُ الْجَمَالِ وَزِينَةُ الْأَرْضِ، وَهِيَ السَّقْفُ الَّذِي يُحِيطُ الْأَرْضَ مِنْ جَمِيعِ الْجَوَانِبِ.",
+          english: "The Holy Quran spoke much about environmental components, including: the sky, which is a source of beauty and ornament for the earth, and the ceiling that surrounds the earth from all sides."
+        },
+        {
+          type: "vocabulary",
+          word: "زِينَةُ",
+          transliteration: "Zinatu",
+          translation: "Ornament / Decoration"
+        }
+      ]
+    },
+    {
+      id: "u69_l2",
+      title: "Sun, Moon, and Radiation",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "لِيَحْمِيَهَا مِنَ الْأَشِعَّةِ الَّتِي قَدْ تُشَكِّلُ الضَّرَرَ عَلَى النَّاسِ، وَالسَّمَاءُ مُسَخَّرَةٌ بِمَا فِيهَا مِنَ الشَّمْسِ وَالْقَمَرِ لِلْإِنْسَانِ.",
+          english: "To protect it from radiation that may cause harm to people, and the sky is subjected with the sun and moon within it for mankind."
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَشِعَّةِ",
+          transliteration: "Al-ashi'ah",
+          translation: "Radiation / Rays"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit70 = {
+  id: "unit70",
+  title: "Vital Elements: Water and Air",
+  lessons: [
+    {
+      id: "u70_l1",
+      title: "Water: Basis of Life",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَالْمَاءُ مِنَ الْمُكَوِّنَاتِ الَّتِي تُعَدُّ أَسَاسَ الْحَيَاةِ لِجَمِيعِ الْأَشْجَارِ وَالنَّبَاتَاتِ وَالْحَيْوَانَاتِ وَالْإِنْسَانِ، وَلَا تُوجَدُ حَيَاةٌ أَوْ حَضَارَةٌ بِدُونِ الْمَاءِ وَالْهَوَاءِ.",
+          english: "Water is one of the components considered the basis of life for all trees, plants, animals, and humans; no life or civilization exists without water and air."
+        },
+        {
+          type: "vocabulary",
+          word: "حَضَارَةٌ",
+          transliteration: "Hadarah",
+          translation: "Civilization"
+        }
+      ]
+    },
+    {
+      id: "u70_l2",
+      title: "The Air and Winds",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "لَا يَمْتَلِكُهَا وَلَا يُلَوِّثُهَا وَلَا يُفْسِدُهَا أَحَدٌ لِأَنَّهُ يَحْتَاجُ إِلَيْهَا الْجَمِيعُ، ذُكِرَ الْهَوَاءُ فِي الْقُرْآنِ بِلَفْظِ الرِّيحِ.",
+          english: "No one owns, pollutes, or spoils it because everyone needs it; air is mentioned in the Quran with the term 'wind'."
+        },
+        {
+          type: "vocabulary",
+          word: "الرِّيحِ",
+          transliteration: "Al-rih",
+          translation: "Wind"
+        }
+      ]
+    }
+  ]
+};
+
+export const unit71 = {
+  id: "unit71",
+  title: "Plants and Animals in Quran",
+  lessons: [
+    {
+      id: "u71_l1",
+      title: "Plants as Food and Oxygen",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَالنَّبَاتَاتُ وَالْحَيْوَانَاتُ مَصَادِرُ الْغِذَاءِ، كَمَا أَنَّ النَّبَاتَ هُوَ الْمَصْدَرُ الْأَوَّلُ لِلْأُوكْسِجِينِ الَّذِي لَا يُمْكِنُ لِأَحَدٍ الِاسْتِغْنَاءُ عَنْهُ.",
+          english: "Plants and animals are sources of food, and plants are the primary source of oxygen that no one can do without."
+        },
+        {
+          type: "vocabulary",
+          word: "الِاسْتِغْنَاءُ",
+          transliteration: "Al-istighna'",
+          translation: "Doing without"
+        }
+      ]
+    },
+    {
+      id: "u71_l2",
+      title: "Chapters Named After Animals",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَالْحَيْوَانَاتُ جَاءَ ذِكْرُهَا فِي الْقُرْآنِ، أَنَّ بَعْضَ السُّوَرِ فِي الْقُرْآنِ جَاءَتْ مُسَمَّاةً بِأَسْمَاءِ بَعْضِ الْحَيْوَانَاتِ مِنْهَا الْبَقَرَةُ، وَالنَّمْلُ، وَالْعَنْكَبُوتُ، وَالنَّحْلُ.",
+          english: "Animals were mentioned in the Quran, and some chapters in the Quran were named after certain animals, including Al-Baqarah (The Cow), Al-Naml (The Ant), Al-Ankabut (The Spider), and Al-Nahl (The Bee)."
+        }
+      ]
+    }
+  ]
+};
+
+export const unit72 = {
+  id: "unit72",
+  title: "Contemplation and Divine Purpose",
+  lessons: [
+    {
+      id: "u72_l1",
+      title: "Studying Creation",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "يَطْلُبُ اللهُ مِنَ الْإِنْسَانِ أَنْ يَدْرُسَ عَنِ الْحَيْوَانَاتِ وَالْمُكَوِّنَاتِ الطَّبِيعِيَّةِ قَالَ اللهُ تَعَالَى: 'أَفَلَا يَنْظُرُونَ إِلَى الْإِبِلِ كَيْفَ خُلِقَتْ، وَإِلَى السَّمَاءِ كَيْفَ رُفِعَتْ'.",
+          english: "Allah asks humans to study animals and natural components; Allah Almighty said: 'Do they not look at the camels - how they are created? And at the sky - how it is raised?'"
+        },
+        {
+          type: "vocabulary",
+          word: "الْإِبِلِ",
+          transliteration: "Al-ibil",
+          translation: "Camels"
+        }
+      ]
+    },
+    {
+      id: "u72_l2",
+      title: "Purpose of Scientific Insight",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "كُلُّ هَذَا مِمَّا ذُكِرَتْ مِنْ بَابِ تَنْبِيهِ الْإِنْسَانِ إِلَى أَنَّ فِي الدِّرَاسَةِ عَنْ كُلِّ خَلْقٍ مِنْ مَخْلُوقَاتِهِ تَعَالَى بَيَانٌ عِلْمِيٌّ يَقُودُ النَّاسَ إِلَى الْحَيَاةِ النَّاجِحَةِ وَالْإِيمَانِ الْكَامِلِ.",
+          english: "All of this was mentioned to alert humans that studying every creation of Allah Almighty provides a scientific insight that leads people to a successful life and complete faith."
+        }
+      ]
+    },
+    {
+      id: "u72_l3",
+      title: "Subservience and Gratitude",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَجَعَلَ اللهُ كُلَّ هَذِهِ الْحَيْوَانَاتِ وَالْمَوَادَّ مُسَخَّرَةً لِلْإِنْسَانِ وَفِيهَا مَنَافِعُ عَدِيدَةٌ، فَعَلَى الْإِنْسَانِ أَنْ يُحَافِظَ عَلَيْهَا مَعَ اسْتِخْدَامِهَا لِحَوَائِجِهِ اللَّازِمَةِ فَقَدْ، وَأَنْ يَسْتَمِرَّ فِي شُكْرِ اللهِ تَعَالَى.",
+          english: "Allah made all these animals and materials subservient to man with numerous benefits; so man must preserve them while using them only for necessary needs, and continue to thank Allah Almighty."
+        }
+      ]
+    }
+  ]
+};
+
+export const unit73 = {
+  id: "unit73",
+  title: "Responsible Use and Divine Justice",
+  lessons: [
+    {
+      id: "u73_l1",
+      title: "Avoiding Arrogance in Resource Use",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَلَا يَسْتَخْدِمُهَا أَبَدًا بِغَيْرِ نِظَامٍ وَصَلَاحِيَّةٍ، تَكَبُّرًا بِعِلْمِهِ، وَمَانِعًا عَنْ غَيْرِهِ وَاسْتِكْبَارًا عَلَى خَالِقِهِ.",
+          english: "And he should never use them without order or suitability, out of pride in his knowledge, or by withholding them from others and showing arrogance toward his Creator."
+        },
+        {
+          type: "vocabulary",
+          word: "صَلَاحِيَّةٍ",
+          transliteration: "Salahiyyah",
+          translation: "Suitability / Validity"
+        },
+        {
+          type: "vocabulary",
+          word: "اسْتِكْبَارًا",
+          transliteration: "Istikbaran",
+          translation: "Arrogance"
+        }
+      ]
+    },
+    {
+      id: "u73_l2",
+      title: "The Consequence of Corruption",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "لِأَنَّهَا يَكُونُ سَبَبًا لِعَذَابِ اللهِ كَمَا حَدَثَ مَعَ بَعْضِ الْأَقْوَامِ السَّابِقَةِ مِنْ قَبْلِنَا فِي التَّارِيخِ.",
+          english: "Because this becomes a cause for Allah's punishment, as happened with some previous nations before us in history."
+        },
+        {
+          type: "vocabulary",
+          word: "عَذَابِ",
+          transliteration: "Adhab",
+          translation: "Punishment / Torment"
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَقْوَامِ",
+          transliteration: "Al-aqwam",
+          translation: "Nations / Peoples"
+        }
+      ]
+    }
+  ]
+};
+
+--- END OF FILE src/data/section2/section2_7.js ---
+
 --- START OF FILE src/components/Dashboard.jsx ---
-import React from 'react';
+import React, { useState } from 'react';
 import { sections } from '../data/sections';
 import { useProgress } from '../context/ProgressContext';
-import { BookOpen, CheckCircle, Award } from 'lucide-react';
+import { Map } from 'lucide-react';
+import TopBar from './TopBar';
+import UnitPath from './UnitPath';
 
-const Dashboard = ({ onSelectLesson }) => {
+const Dashboard = ({ onSelectLesson, onShowSummary }) => {
   const { completedLessons } = useProgress();
+  const [activeSection, setActiveSection] = useState(sections[0]);
 
   return (
-    <div className="dashboard glass-panel">
-      <div className="dashboard-header">
-        <h1>DuoFY4 - Arabic</h1>
-        <p style={{ textAlign: 'center', color: 'var(--text-dim)', marginTop: '8px' }}>
-          Learn Arabic step-by-step
-        </p>
+    <div className="dashboard-mobile">
+      <TopBar 
+        sections={sections} 
+        activeSection={activeSection} 
+        setActiveSection={setActiveSection}
+        completedLessons={completedLessons}
+      />
+      
+      <div className="summary-btn-container" style={{ padding: '24px 20px 0 20px' }}>
+        <button
+          className="btn-primary flex-center"
+          style={{ 
+            width: '100%', 
+            background: 'linear-gradient(135deg, rgba(65, 209, 255, 0.1), rgba(189, 52, 254, 0.1))',
+            border: '1px solid var(--primary)',
+            color: 'white',
+            flexDirection: 'row',
+            gap: '12px',
+            fontSize: '1.1rem',
+            padding: '16px',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+          }}
+          onClick={onShowSummary}
+        >
+          <Map size={24} color="var(--primary)" />
+          <span>View Journey Summary</span>
+        </button>
       </div>
 
-      {sections.map(section => (
-        <div key={section.id} className="section-card">
-          <h2 className="arabic-text">{section.title}</h2>
-          
-          {section.units.map((unit, uIdx) => {
-            const isPractice = unit.id.includes('practice');
-            return (
-              <div key={unit.id} className="unit-card" style={isPractice ? {borderColor: 'rgba(189, 52, 254, 0.4)'} : {}}>
-                <h3 style={isPractice ? {color: '#BD34FE'} : {}}>{unit.title}</h3>
-                <div className="lessons-grid">
-                  {unit.lessons.map(lesson => {
-                    const isCompleted = completedLessons.includes(lesson.id);
-                    return (
-                      <button
-                        key={lesson.id}
-                        className={`lesson-btn ${isCompleted ? 'completed' : ''} ${isPractice ? 'practice-unit' : ''}`}
-                        onClick={() => onSelectLesson(lesson)}
-                      >
-                        {isCompleted ? <CheckCircle size={32} /> : 
-                         isPractice ? <Award size={32} /> : <BookOpen size={32} />}
-                        <span>{lesson.title}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ))}
+      <div className="path-container">
+        {activeSection.units.map((unit) => (
+          <UnitPath 
+            key={unit.id} 
+            unit={unit} 
+            completedLessons={completedLessons} 
+            onSelectLesson={onSelectLesson}
+          />
+        ))}
+      </div>
     </div>
   );
 };
@@ -1294,19 +4477,21 @@ const Lesson = ({ lesson, onClose }) => {
   };
 
   const renderSlide = () => {
+    // We pass key={currentIndex} to force React to unmount the old slide and mount a fresh one.
+    // This entirely prevents "stale state" bugs when consecutive slides are of the same type.
     switch (slide.type) {
       case 'sentence':
-        return <SentenceSlide slide={slide} />;
+        return <SentenceSlide key={currentIndex} slide={slide} />;
       case 'vocabulary':
-        return <VocabularySlide slide={slide} />;
+        return <VocabularySlide key={currentIndex} slide={slide} />;
       case 'match':
-        return <MatchSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+        return <MatchSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       case 'fill-blank':
-        return <FillBlankSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+        return <FillBlankSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       case 'sentence-builder':
-        return <SentenceBuilderSlide slide={slide} onComplete={() => setCanProceed(true)} />;
+        return <SentenceBuilderSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       default:
-        return <div>Unknown slide type</div>;
+        return <div key={currentIndex}>Unknown slide type</div>;
     }
   };
 
@@ -1343,6 +4528,338 @@ const Lesson = ({ lesson, onClose }) => {
 
 export default Lesson;
 --- END OF FILE src/components/Lesson.jsx ---
+
+--- START OF FILE src/components/TopBar.jsx ---
+import React, { useState, useRef, useEffect } from 'react';
+import { Trophy, ChevronDown } from 'lucide-react';
+
+const TopBar = ({ sections, activeSection, setActiveSection, completedLessons }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Calculate overall progress across all sections
+  const totalLessons = sections.reduce((acc, sec) => 
+    acc + sec.units.reduce((uAcc, unit) => uAcc + unit.lessons.length, 0), 0
+  );
+  const progressPercentage = Math.round((completedLessons.length / totalLessons) * 100) || 0;
+
+  // Handle clicking outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSectionSelect = (section) => {
+    setActiveSection(section);
+    setIsDropdownOpen(false);
+  };
+
+  // Extract a number from the section ID (e.g., 'sec1' -> 1)
+  const currentSectionNum = activeSection.id.replace(/\D/g, '') || 1;
+
+  return (
+    <div className="top-bar-wrapper">
+      <div className="app-title-bar">
+        <h1>DuoFY4 - Arabic</h1>
+      </div>
+      
+      <div className="top-bar">
+        <div className="section-dropdown-container" ref={dropdownRef}>
+          <button 
+            className="section-selector-btn" 
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            <div className="section-badge">{currentSectionNum}</div>
+            <span className="section-title-compact">
+              {activeSection.title.split(':')[0]}
+            </span>
+            <ChevronDown 
+              size={20} 
+              className={`dropdown-chevron ${isDropdownOpen ? 'open' : ''}`} 
+            />
+          </button>
+
+          {isDropdownOpen && (
+            <div className="dropdown-menu active">
+              {sections.map((s, index) => (
+                <button 
+                  key={s.id} 
+                  className={`dropdown-item ${activeSection.id === s.id ? 'active' : ''}`}
+                  onClick={() => handleSectionSelect(s)}
+                >
+                  <div className="section-badge small">{index + 1}</div>
+                  <span>{s.title}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="progress-pill glass-panel">
+          <Trophy size={18} color="#FFD700" fill="#FFD700" />
+          <span className="progress-text">{progressPercentage}%</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TopBar;
+--- END OF FILE src/components/TopBar.jsx ---
+
+--- START OF FILE src/components/UnitPath.jsx ---
+import React from 'react';
+import { Check, Star, BookOpen, Lock } from 'lucide-react';
+
+const UnitPath = ({ unit, completedLessons, onSelectLesson }) => {
+  const isPractice = unit.id.includes('practice');
+  
+  // Track if we've found the first uncompleted lesson to mark it as "current"
+  let foundFirstUncompleted = false;
+
+  // Snake-like path offsets for Duolingo style
+  const pathOffsets = [0, -30, -50, -30, 0, 30, 50, 30];
+
+  return (
+    <div className="unit-section">
+      <div className={`unit-header ${isPractice ? 'practice-header' : ''}`}>
+        <h3 className="unit-title">{unit.title}</h3>
+      </div>
+      
+      <div className="path-lessons">
+        {unit.lessons.map((lesson, idx) => {
+          const isCompleted = completedLessons.includes(lesson.id);
+          
+          let status = 'locked';
+          if (isCompleted) {
+            status = 'completed';
+          } else if (!foundFirstUncompleted) {
+            status = 'unlocked';
+            foundFirstUncompleted = true;
+          }
+
+          const offset = pathOffsets[idx % pathOffsets.length];
+
+          return (
+            <div 
+              className="lesson-node-wrap" 
+              key={lesson.id} 
+              style={{ transform: `translateX(${offset}px)` }}
+            >
+              <button 
+                className={`lesson-node ${status} ${isPractice ? 'practice' : ''}`}
+                onClick={() => status !== 'locked' && onSelectLesson(lesson)}
+                disabled={status === 'locked'}
+              >
+                {status === 'completed' ? (
+                  <Check size={28} strokeWidth={3} />
+                ) : status === 'locked' ? (
+                  <Lock size={24} />
+                ) : isPractice ? (
+                  <Star size={28} fill="currentColor" />
+                ) : (
+                  <BookOpen size={24} />
+                )}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default UnitPath;
+--- END OF FILE src/components/UnitPath.jsx ---
+
+--- START OF FILE src/components/SectionSummary.css ---
+/* =========================================
+   Section Summary Component Styles
+   ========================================= */
+.summary-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 20px;
+  background: var(--bg-dark);
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--glass-border);
+}
+
+.summary-header h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #41D1FF, #BD34FE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+/* Vertical Line */
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 24px;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--primary), #BD34FE);
+  border-radius: 4px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+  padding-left: 60px;
+  opacity: 0;
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* Generate animation delays for children */
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+.timeline-item:nth-child(6) { animation-delay: 0.6s; }
+
+/* The Dot */
+.timeline-dot {
+  position: absolute;
+  left: 14px;
+  top: 20px;
+  width: 24px;
+  height: 24px;
+  background: #1E1E1E;
+  border: 4px solid var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary-glow);
+  z-index: 2;
+}
+
+.timeline-content {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.timeline-content:hover {
+  transform: translateY(-5px);
+  border-color: rgba(65, 209, 255, 0.3);
+}
+
+.timeline-title-ar {
+  font-family: 'Amiri', serif;
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.timeline-title-en {
+  font-size: 1rem;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.timeline-desc-ar {
+  font-size: 1.3rem;
+  color: var(--text-main);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.timeline-desc-en {
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Adjust Desktop View for Timeline */
+@media (min-width: 769px) {
+  .summary-container {
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    background: rgba(20, 20, 20, 0.6);
+  }
+}
+--- END OF FILE src/components/SectionSummary.css ---
+
+--- START OF FILE src/components/SectionSummary.jsx ---
+import React from 'react';
+import { ArrowLeft } from 'lucide-react';
+import { timelineEvents } from '../data/timelineEvents';
+import './SectionSummary.css';
+
+const SectionSummary = ({ onClose }) => {
+  return (
+    <div className="summary-container">
+      <div className="summary-header">
+        <button className="close-btn" onClick={onClose} aria-label="Go back">
+          <ArrowLeft size={28} />
+        </button>
+        <h2>Journey Summary</h2>
+      </div>
+
+      <div className="timeline">
+        {timelineEvents.map((event) => (
+          <div key={event.id} className="timeline-item">
+            <div className="timeline-dot"></div>
+            <div className="timeline-content">
+              <h3 className="timeline-title-ar" dir="rtl">{event.titleAr}</h3>
+              <h4 className="timeline-title-en">{event.titleEn}</h4>
+              <p className="timeline-desc-ar" dir="rtl">{event.descAr}</p>
+              <p className="timeline-desc-en">{event.descEn}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default SectionSummary;
+--- END OF FILE src/components/SectionSummary.jsx ---
 
 --- START OF FILE src/components/slides/SentenceSlide.jsx ---
 import React, { useEffect } from 'react';
@@ -1387,27 +4904,46 @@ export default SentenceSlide;
 --- END OF FILE src/components/slides/SentenceSlide.jsx ---
 
 --- START OF FILE src/components/slides/VocabularySlide.jsx ---
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Volume2 } from 'lucide-react';
 import { useTTS } from '../../hooks/useTTS';
 
 const VocabularySlide = ({ slide }) => {
   const { speak } = useTTS();
 
+  useEffect(() => {
+    // Auto-play pronunciation when slide loads
+    const timer = setTimeout(() => {
+      speak(slide.word);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [slide, speak]);
+
   return (
     <div className="slide-content">
-      <h2 className="text-dim">New Words (Click to Listen)</h2>
-      <div className="vocab-grid">
-        {slide.words.map((word, idx) => (
-          <button 
-            key={idx} 
-            className="vocab-card"
-            onClick={() => speak(word.ar)}
-          >
-            <span className="arabic-text ar">{word.ar}</span>
-            <span className="en">{word.en}</span>
-          </button>
-        ))}
+      <h2 className="text-dim">New Word</h2>
+      
+      <div className="vocab-card glass-panel">
+        <button className="tts-button large-tts" onClick={() => speak(slide.word)}>
+          <Volume2 size={36} />
+        </button>
+        
+        <div className="vocab-ar arabic-large">{slide.word}</div>
+        
+        <div className="vocab-divider"></div>
+        
+        {slide.transliteration && (
+          <div className="vocab-transliteration">{slide.transliteration}</div>
+        )}
+        <div className="vocab-en">{slide.translation}</div>
       </div>
+      
+      {slide.example && (
+        <div className="vocab-example">
+          <p className="arabic-text">{slide.example.ar}</p>
+          <p className="text-dim">{slide.example.en}</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -1421,12 +4957,15 @@ import { useTTS } from '../../hooks/useTTS';
 
 const MatchSlide = ({ slide, onComplete }) => {
   const { speak } = useTTS();
-  const [shuffledAr, setShuffledAr] = useState([]);
-  const [shuffledEn, setShuffledEn] = useState([]);
+  
+  // Initialize state directly from the current slide
+  const [shuffledAr, setShuffledAr] = useState(() => [...slide.pairs].sort(() => Math.random() - 0.5));
+  const [shuffledEn, setShuffledEn] = useState(() => [...slide.pairs].sort(() => Math.random() - 0.5));
   const [selectedAr, setSelectedAr] = useState(null);
   const [selectedEn, setSelectedEn] = useState(null);
   const [matched, setMatched] = useState([]);
 
+  // Reset state if slide changes without component unmounting
   useEffect(() => {
     setShuffledAr([...slide.pairs].sort(() => Math.random() - 0.5));
     setShuffledEn([...slide.pairs].sort(() => Math.random() - 0.5));
@@ -1482,9 +5021,12 @@ const MatchSlide = ({ slide, onComplete }) => {
         
         <div className="match-col">
           {shuffledEn.map(p => {
-            const parentAr = slide.pairs.find(pair => pair.en === p.en).ar;
-            const isMatched = matched.includes(parentAr);
+            // Defensive lookup with optional chaining `?.ar`
+            const parentPair = slide.pairs.find(pair => pair.en === p.en);
+            const parentAr = parentPair?.ar; 
+            const isMatched = parentAr ? matched.includes(parentAr) : false;
             const isSelected = selectedEn === p.en;
+            
             return (
               <button
                 key={`en-${p.en}`}
@@ -1512,72 +5054,81 @@ import { useTTS } from '../../hooks/useTTS';
 
 const FillBlankSlide = ({ slide, onComplete }) => {
   const { speak } = useTTS();
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedAns, setSelectedAns] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
 
   useEffect(() => {
-    setSelectedOption(null);
+    setSelectedAns(null);
     setIsCorrect(null);
   }, [slide]);
 
-  const parts = slide.sentence.split('____');
+  const handleSelect = (option) => {
+    if (isCorrect) return; // Prevent changing after correct answer
+    
+    setSelectedAns(option);
+    const correct = option === slide.answer;
+    setIsCorrect(correct);
 
-  const handleSelect = (opt) => {
-    if (isCorrect) return; 
-    
-    speak(opt); // Speak chosen word
-    setSelectedOption(opt);
-    
-    if (opt === slide.answer) {
-      setIsCorrect(true);
-      // Speak the whole completed sentence
-      const fullSentence = parts[0] + opt + parts[1];
-      setTimeout(() => speak(fullSentence), 800);
-      onComplete();
-    } else {
-      setIsCorrect(false);
+    if (correct) {
+      // Play full sentence when correct
+      const fullSentence = slide.sentence.replace(/_+/, option);
+      speak(fullSentence);
+      setTimeout(() => onComplete(), 1500);
     }
   };
 
-  const playSentenceWithBlank = () => {
-    speak(slide.sentence.replace('____', 'فَرَاغ')); // "faragh" means blank
+  const playAudio = () => {
+    // FIX: Remove the blank underscores before passing to text-to-speech
+    // so the TTS engine doesn't read out "underscore underscore underscore"
+    const textToSpeak = slide.sentence.replace(/_+/g, '').trim();
+    speak(textToSpeak);
   };
 
+  const parts = slide.sentence.split(/(_+)/);
+
   return (
-    <div className="slide-content">
-      <h2 className="text-dim">Fill in the blank</h2>
-      
-      <div className="flex-center" style={{ flexDirection: 'row' }}>
-        <div className="arabic-text fill-blank-sentence">
-          {parts[0]}
-          <span className={`blank-space arabic-text ${isCorrect === true ? 'correct-ans' : isCorrect === false ? 'wrong-ans' : ''}`}>
-            {selectedOption || '____'}
-          </span>
-          {parts[1]}
-        </div>
-        
-        <button 
-          className="tts-button" 
-          style={{ padding: '12px' }}
-          onClick={playSentenceWithBlank}
-        >
-          <Volume2 size={24} />
+    <div className="slide-content fill-blank-slide">
+      <div className="flex-center" style={{ flexDirection: 'row', marginBottom: '20px' }}>
+        <button className="tts-button" onClick={playAudio}>
+          <Volume2 size={28} />
         </button>
       </div>
 
-      <p className="translation-text">"{slide.english}"</p>
+      <div className="fill-blank-sentence arabic-large" dir="rtl">
+        {parts.map((part, i) => {
+          if (part.includes('_')) {
+            return (
+              <span 
+                key={i} 
+                className={`blank-space ${isCorrect === true ? 'correct-ans' : isCorrect === false ? 'wrong-ans' : ''}`}
+              >
+                {selectedAns || ''}
+              </span>
+            );
+          }
+          return <span key={i}>{part}</span>;
+        })}
+      </div>
 
-      <div className="options-row">
-        {slide.options.map(opt => (
-          <button
-            key={opt}
-            className={`opt-btn arabic-text ${selectedOption === opt ? (isCorrect ? 'correct' : 'wrong') : ''}`}
-            onClick={() => handleSelect(opt)}
-            disabled={isCorrect}
-          >
-            {opt}
-          </button>
-        ))}
+      <p className="translation-text">{slide.translation}</p>
+
+      <div className="options-row" dir="rtl">
+        {slide.options.map((opt, i) => {
+          let btnClass = 'opt-btn arabic-text';
+          if (selectedAns === opt) {
+            btnClass += isCorrect ? ' correct' : ' wrong';
+          }
+          return (
+            <button 
+              key={i} 
+              className={btnClass}
+              onClick={() => handleSelect(opt)}
+              disabled={isCorrect === true}
+            >
+              {opt}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -1824,9 +5375,10 @@ export const useLongPress = (onLongPress, onClick, { delay = 500 } = {}) => {
 --- END OF FILE src/hooks/useLongPress.js ---
 
 --- START OF FILE .firebase/hosting.ZGlzdA.cache ---
-vite.svg,1771595944514,9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68
-index.html,1771595944683,b97a3c8c3c05f2d3a98b84e80993047f1d167ad3b40ef0afdcb99dfbbf54a07c
-assets/index-BuSS2Pcq.css,1771595944683,afcdb7f76ad2401afc7f6e7fded97ec670d76b2ee4470cb61e672b606e933e29
-assets/index-DmAZdthr.js,1771595944684,e6b62b5f0ec64f48f5c14860653565ecbfa187fa35fd348747b3dd4ff1b9b452
+vite.svg,1771640914205,9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68
+index.html,1771640914421,fcbacd48675ba569307523e735b0b03f7a362247db21a71bc0d994d8da9c54fe
+404.html,1771641009285,6537619fa0edb6a05c3fa83265461172fea2307ecff34424f323310c8c8eb4be
+assets/index-Drs2F0Vg.css,1771640914421,cc8cda3c99b25fdbce9edb8d23ce129796b534d9741d92c93cea5118257864ec
+assets/index-BidbWU1W.js,1771640914421,7666a8891da644883082619d422da103b6e5213719747157afc8fda0d516f595
 
 --- END OF FILE .firebase/hosting.ZGlzdA.cache ---

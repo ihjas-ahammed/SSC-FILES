@@ -1,23 +1,217 @@
 export const practiceUnit = {
   id: "sec1_practice",
-  title: "Test Your Knowledge",
+  title: "End of Chapter Exercises",
   lessons: [
     {
       id: "sec1_prac_l1",
-      title: "Reading Comprehension",
+      title: "Fill in the Blanks",
+      isPractice: true,
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "تَقَعُ مَدِينَةُ مُونَّار فِي وِلَايَةِ ____",
+          translation: "The city of Munnar is located in the state of Kerala.",
+          answer: "كِيرَلَا",
+          options: ["كِيرَلَا", "تَامِيل نَادُو", "دِلْهِي"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُعْرَفُ كِيرَلَا عِنْدَ التُّجَّارِ الْعَرَبِ بِاسْمِ ____",
+          translation: "Kerala is known to Arab merchants by the name 'God's Bounty'.",
+          answer: "خَيْرِ اللهِ",
+          options: ["أَرْضِ الْجَمَالِ", "خَيْرِ اللهِ", "بِلَادِ السِّحْرِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَشْتَهِرُ أَهْلُ كُوتْشِين بِالطِّيبَةِ وَ ____ فِي التَّعَامُلِ",
+          translation: "The people of Cochin are famous for their kindness and cheerfulness in dealing.",
+          answer: "الْبَشَاشَةِ",
+          options: ["الْبَشَاشَةِ", "الْقَسْوَةِ", "الْغَضَبِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ أَبْرَزِ الْمَنَاظِرِ فِي طَرِيقِ مُونَّار ____ الْكَثِيفَةُ",
+          translation: "One of the most prominent views on the Munnar road is the dense forests.",
+          answer: "الْغَابَاتُ",
+          options: ["الْغَابَاتُ", "الصَّحَارِي", "الْمَبَانِي"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "وَصَفَ الشَّاعِرُ ابْنُ سَعْدٍ الْأَرْضَ بِأَنَّهَا لَبِسَتْ ____",
+          translation: "The poet Ibn Sa'd described the earth as having worn a green robe.",
+          answer: "رِدَاءً أَخْضَرًا",
+          options: ["رِدَاءً أَبْيَضًا", "رِدَاءً أَخْضَرًا", "ثَوْبًا أَزْرَقًا"]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l2",
+      title: "Match the Meanings",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "كِيرَلَا", en: "معروف باسم خير الله" },
+            { ar: "أَمْ جِي رُود", en: "شارع حيوي في كوتشين" },
+            { ar: "مُونَّار", en: "أرض الشلالات" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "بْلَاك بَرِي", en: "منتجع في سفح جبل" },
+            { ar: "مَطَارُ كُوتْشِين", en: "حديث وجميل" },
+            { ar: "خَيْرُ اللهِ", en: "Kerala's ancient name" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l3",
+      title: "Singular and Plural",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "جِبَال", en: "جَبَل" },
+            { ar: "وِدْيَان", en: "وَادٍ" },
+            { ar: "أَكْوَاخ", en: "كُوخ" },
+            { ar: "مَسَاجِد", en: "مَسْجِد" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مُدُن", en: "مَدِينَة" },
+            { ar: "مَطَارَات", en: "مَطَار" },
+            { ar: "فَنَادِق", en: "فُنْدُق" },
+            { ar: "أَشْجَار", en: "شَجَرَة" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l4",
+      title: "Translate to English",
       isPractice: true,
       slides: [
         {
           type: "sentence-builder",
-          questionType: "comprehension",
-          question: "بِمَاذَا تُعْرَفُ مُونَّار بَيْنَ السِّياحِين؟",
-          correctOrder: [1, 2, 3],
+          questionType: "ar-to-en",
+          question: "جَوُّ الْيَوْمِ جَمِيلٌ وَمُمْطِرٌ",
+          correctOrder: [1, 2, 3, 4, 5, 6],
           blocks: [
-            { id: 1, text: "هِيَ", trans: "It is" },
-            { id: 2, text: "أَرْضُ", trans: "Land" },
-            { id: 3, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
+            { id: 1, text: "Today's", trans: "" },
+            { id: 2, text: "weather", trans: "جَوُّ" },
+            { id: 3, text: "is", trans: "" },
+            { id: 4, text: "beautiful", trans: "جَمِيلٌ" },
+            { id: 5, text: "and", trans: "وَ" },
+            { id: 6, text: "rainy", trans: "مُمْطِرٌ" }
           ]
         },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "أُحِبُّ السَّفَرَ إِلَى الْأَمَاكِنِ الْهَادِئَةِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "I love", trans: "أُحِبُّ" },
+            { id: 2, text: "traveling", trans: "السَّفَرَ" },
+            { id: 3, text: "to", trans: "إِلَى" },
+            { id: 4, text: "quiet", trans: "الْهَادِئَةِ" },
+            { id: 5, text: "places", trans: "الْأَمَاكِنِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْهِنْدُ بَلَدٌ وَاسِعٌ مُتَعَدِّدُ الثَّقَافَاتِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "India", trans: "الْهِنْدُ" },
+            { id: 2, text: "is", trans: "" },
+            { id: 3, text: "a vast", trans: "وَاسِعٌ" },
+            { id: 4, text: "multicultural", trans: "مُتَعَدِّدُ الثَّقَافَاتِ" },
+            { id: 5, text: "country", trans: "بَلَدٌ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "نَزَلْنَا فِي فُنْدُقٍ قَرِيبٍ مِنَ الْبَحْرِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "We stayed", trans: "نَزَلْنَا" },
+            { id: 2, text: "in", trans: "فِي" },
+            { id: 3, text: "a hotel", trans: "فُنْدُقٍ" },
+            { id: 4, text: "near", trans: "قَرِيبٍ مِنَ" },
+            { id: 5, text: "the sea", trans: "الْبَحْرِ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l5",
+      title: "Translate to Arabic",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The sky is full of clouds.",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "السَّمَاءُ", trans: "The sky" },
+            { id: 2, text: "مَلِيئَةٌ", trans: "is full" },
+            { id: 3, text: "بِالْغُيُومِ", trans: "of clouds" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "They visited the resort yesterday.",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "زَارُوا", trans: "They visited" },
+            { id: 2, text: "الْمُنْتَجَعَ", trans: "the resort" },
+            { id: 3, text: "أَمْسِ", trans: "yesterday" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The tea in India is very delicious.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "الشَّايُ", trans: "The tea" },
+            { id: 2, text: "فِي", trans: "in" },
+            { id: 3, text: "الْهِنْدِ", trans: "India" },
+            { id: 4, text: "لَذِيذٌ", trans: "delicious" },
+            { id: 5, text: "جِدًّا", trans: "very" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "We met kind people in the village.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "الْتَقَيْنَا", trans: "We met" },
+            { id: 2, text: "بِأَشْخَاصٍ", trans: "people" },
+            { id: 3, text: "طَيِّبِينَ", trans: "kind" },
+            { id: 4, text: "فِي", trans: "in" },
+            { id: 5, text: "الْقَرْيَةِ", trans: "the village" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec1_prac_l6",
+      title: "Comprehension Check",
+      isPractice: true,
+      slides: [
         {
           type: "sentence-builder",
           questionType: "comprehension",
@@ -25,182 +219,32 @@ export const practiceUnit = {
           correctOrder: [1, 2, 3, 4],
           blocks: [
             { id: 1, text: "لِأَنَّهَا", trans: "Because it is" },
-            { id: 2, text: "ثَلَاثَةُ", trans: "Three" },
-            { id: 3, text: "أَنْهَارٍ", trans: "Rivers" },
-            { id: 4, text: "تَجْرِي", trans: "Flowing" }
+            { id: 2, text: "مُلْتَقَى", trans: "confluence" },
+            { id: 3, text: "ثَلَاثَةِ", trans: "three" },
+            { id: 4, text: "أَنْهَارٍ", trans: "rivers" }
           ]
         },
         {
           type: "sentence-builder",
           questionType: "comprehension",
-          question: "مِنْ أَيْنَ سَافَرَ الكَاتِبُ؟",
-          correctOrder: [1, 2, 3],
+          question: "مَا مَعْنَى اسْمِ كِيرَلَا كَمَا سَمَّاهَا الْعَرَبُ الْأَوَائِلُ؟",
+          correctOrder: [1, 2, 3, 4],
           blocks: [
-            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
-            { id: 2, text: "مِنَ", trans: "From" },
-            { id: 3, text: "الأُرْدُنِ", trans: "Jordan" }
+            { id: 1, text: "سَمَّاهَا", trans: "Named it" },
+            { id: 2, text: "الْعَرَبُ", trans: "the Arabs" },
+            { id: 3, text: "خَيْرَ", trans: "Bounty of" },
+            { id: 4, text: "اللهِ", trans: "Allah" }
           ]
         },
         {
           type: "sentence-builder",
           questionType: "comprehension",
-          question: "مَاذَا سَمَّى تُجَّارُ العَرَبِ الأَوَائِلُ كِيرَلَا؟",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "سَمَّاهَا", trans: "Called it" },
-            { id: 2, text: "العَرَبُ", trans: "The Arabs" },
-            { id: 3, text: "خَيْرَ", trans: "Goodness of" },
-            { id: 4, text: "اللَّهِ", trans: "Allah" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "أَيْنَ حَطَّتِ الرِّحْلَةُ؟",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "حَطَّتْ", trans: "Landed" },
-            { id: 2, text: "رِحْلَتُنَا", trans: "Our flight" },
-            { id: 3, text: "فِي", trans: "In" },
-            { id: 4, text: "وِلَايَةِ", trans: "State of" },
-            { id: 5, text: "كِيرَلَا", trans: "Kerala" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec1_prac_l2",
-      title: "English to Arabic",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Munnar is the land of waterfalls",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "مُونَّار", trans: "Munnar" },
-            { id: 2, text: "هِيَ", trans: "Is / She" },
-            { id: 3, text: "أَرْضُ", trans: "Land" },
-            { id: 4, text: "الشَّلَّالَاتِ", trans: "Waterfalls" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "The water gushes from the mountains",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "والمَاءُ", trans: "And the water" },
-            { id: 2, text: "يَتَدَفَّقُ", trans: "Gushes" },
-            { id: 3, text: "مِنَ", trans: "From" },
-            { id: 4, text: "الجِبَالِ", trans: "Mountains" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "We traveled via Sri Lankan airlines",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "سَافَرْنَا", trans: "We traveled" },
-            { id: 2, text: "عَبْرَ", trans: "Via" },
-            { id: 3, text: "الخُطُوطِ", trans: "Airlines" },
-            { id: 4, text: "السِّيرِيلَانْكِيَّةِ", trans: "Sri Lankan" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "After one day of completing the visa",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "وَبَعْدَ", trans: "And after" },
-            { id: 2, text: "يَوْمٍ", trans: "Day" },
-            { id: 3, text: "وَاحِدٍ", trans: "One" },
-            { id: 4, text: "مِنْ", trans: "From" },
-            { id: 5, text: "إِنْهَاءِ", trans: "Completing" },
-            { id: 6, text: "التَّأْشِيرَةِ", trans: "The visa" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Flowing water and charming nature",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "المِيَاهُ", trans: "The water" },
-            { id: 2, text: "الجَارِيَةُ", trans: "Flowing" },
-            { id: 3, text: "وَالطَّبِيعَةُ", trans: "And nature" },
-            { id: 4, text: "السَّاحِرَةُ", trans: "Charming" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec1_prac_l3",
-      title: "Arabic to English",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِين",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "This is how", trans: "هَكَذَا" },
-            { id: 2, text: "it is", trans: "هِيَ" },
-            { id: 3, text: "known", trans: "مَعْرُوفَةٌ" },
-            { id: 4, text: "among", trans: "بَيْنَ" },
-            { id: 5, text: "tourists", trans: "السِّياحِين" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "تَجْرِي مِنْ مُخْتَلِفِ المَصَادِرِ",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "Flowing", trans: "تَجْرِي" },
-            { id: 2, text: "from", trans: "مِنْ" },
-            { id: 3, text: "different", trans: "مُخْتَلِفِ" },
-            { id: 4, text: "sources", trans: "المَصَادِرِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "فِي هَذِهِ الأَرْضِ المُبَارَكَةِ فِي الهِنْدِ",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "In", trans: "فِي" },
-            { id: 2, text: "this", trans: "هَذِهِ" },
-            { id: 3, text: "blessed", trans: "المُبَارَكَةِ" },
-            { id: 4, text: "land", trans: "الأَرْضِ" },
-            { id: 5, text: "in", trans: "فِي" },
-            { id: 6, text: "India", trans: "الهِنْدِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "بَلَدُ العَجَائِبِ",
+          question: "مَا الْحَيَوَانُ الْعَجِيبُ الَّذِي رَآهُ الْكَاتِبُ فِي الْمُنْتَزَهِ؟",
           correctOrder: [1, 2, 3],
           blocks: [
-            { id: 1, text: "The land", trans: "بَلَدُ" },
-            { id: 2, text: "of", trans: "..." },
-            { id: 3, text: "wonders", trans: "العَجَائِبِ" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "وَجَدْنَا المَطَرَ الغَزِيرَ",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "We found", trans: "وَجَدْنَا" },
-            { id: 2, text: "heavy", trans: "الغَزِيرَ" },
-            { id: 3, text: "rain", trans: "المَطَرَ" }
+            { id: 1, text: "الْمَاعِزُ", trans: "The goat" },
+            { id: 2, text: "الْجَبَلِيُّ", trans: "mountain" },
+            { id: 3, text: "الْمُخَطَّطُ", trans: "striped" }
           ]
         }
       ]

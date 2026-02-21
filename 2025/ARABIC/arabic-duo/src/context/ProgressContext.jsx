@@ -10,9 +10,17 @@ export const ProgressProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [activeSectionId, setActiveSectionId] = useState(() => {
+    return localStorage.getItem('duofy5_active_sec') || 'sec1-5';
+  });
+
   useEffect(() => {
     localStorage.setItem('duofy5_progress', JSON.stringify(completedLessons));
   }, [completedLessons]);
+
+  useEffect(() => {
+    localStorage.setItem('duofy5_active_sec', activeSectionId);
+  }, [activeSectionId]);
 
   const markLessonComplete = (lessonId) => {
     if (!completedLessons.includes(lessonId)) {
@@ -21,7 +29,12 @@ export const ProgressProvider = ({ children }) => {
   };
 
   return (
-    <ProgressContext.Provider value={{ completedLessons, markLessonComplete }}>
+    <ProgressContext.Provider value={{ 
+      completedLessons, 
+      markLessonComplete,
+      activeSectionId,
+      setActiveSectionId
+    }}>
       {children}
     </ProgressContext.Provider>
   );
