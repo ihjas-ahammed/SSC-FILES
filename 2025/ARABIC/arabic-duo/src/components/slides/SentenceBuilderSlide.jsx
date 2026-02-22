@@ -69,8 +69,8 @@ const SentenceBuilderSlide = ({ slide, onComplete }) => {
     setSelectedBlocks(newSelected);
     setIsError(false);
 
-    // Auto-check if length matches
-    if (newSelected.length === slide.blocks.length) {
+    // Auto-check if length matches the required correct order length
+    if (newSelected.length === slide.correctOrder.length) {
       checkAnswer(newSelected);
     }
   };

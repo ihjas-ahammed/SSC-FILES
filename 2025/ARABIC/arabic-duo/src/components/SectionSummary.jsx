@@ -9,7 +9,7 @@ const SectionSummary = ({ events, onClose }) => {
         <button className="close-btn" onClick={onClose} aria-label="Go back">
           <ArrowLeft size={28} />
         </button>
-        <h2>Journey Summary</h2>
+        <h2>Summary</h2>
       </div>
 
       <div className="timeline">

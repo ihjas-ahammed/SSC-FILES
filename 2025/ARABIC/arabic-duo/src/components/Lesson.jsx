@@ -6,6 +6,8 @@ import VocabularySlide from './slides/VocabularySlide';
 import MatchSlide from './slides/MatchSlide';
 import FillBlankSlide from './slides/FillBlankSlide';
 import SentenceBuilderSlide from './slides/SentenceBuilderSlide';
+import ConversationSlide from './slides/ConversationSlide';
+import ActivitySlide from './slides/ActivitySlide';
 
 const Lesson = ({ lesson, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,7 +19,7 @@ const Lesson = ({ lesson, onClose }) => {
 
   useEffect(() => {
     // Auto-enable next for non-interactive slides
-    if (slide.type === 'sentence' || slide.type === 'vocabulary') {
+    if (slide.type === 'sentence' || slide.type === 'vocabulary' || slide.type === 'conversation' || slide.type === 'activity') {
       setCanProceed(true);
     } else {
       setCanProceed(false);
@@ -34,13 +36,15 @@ const Lesson = ({ lesson, onClose }) => {
   };
 
   const renderSlide = () => {
-    // We pass key={currentIndex} to force React to unmount the old slide and mount a fresh one.
-    // This entirely prevents "stale state" bugs when consecutive slides are of the same type.
     switch (slide.type) {
       case 'sentence':
         return <SentenceSlide key={currentIndex} slide={slide} />;
       case 'vocabulary':
         return <VocabularySlide key={currentIndex} slide={slide} />;
+      case 'conversation':
+        return <ConversationSlide key={currentIndex} slide={slide} />;
+      case 'activity':
+        return <ActivitySlide key={currentIndex} slide={slide} />;
       case 'match':
         return <MatchSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
       case 'fill-blank':

@@ -27,8 +27,8 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
     setIsDropdownOpen(false);
   };
 
-  // Dynamically calculate actual 1-based index instead of relying on regex ID parsing
-  const currentSectionNum = sections.findIndex(s => s.id === activeSection.id) + 1;
+  // Uses custom sectionNumber defined in JSON, else falls back to chronological sequence
+  const currentSectionNum = activeSection.sectionNumber || (sections.findIndex(s => s.id === activeSection.id) + 1);
 
   return (
     <div className="top-bar-wrapper">
@@ -60,7 +60,7 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
                   className={`dropdown-item ${activeSection.id === s.id ? 'active' : ''}`}
                   onClick={() => handleSectionSelect(s)}
                 >
-                  <div className="section-badge small">{index + 1}</div>
+                  <div className="section-badge small">{s.sectionNumber || (index + 1)}</div>
                   <span>{s.title}</span>
                 </button>
               ))}

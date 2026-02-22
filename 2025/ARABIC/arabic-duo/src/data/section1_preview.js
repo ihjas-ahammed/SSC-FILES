@@ -46,14 +46,14 @@ export const previewUnit = {
           type: "fill-blank",
           sentence: "حَطَّتْ رِحْلَتُنَا فِي ____ كِيرَلَا",
           translation: "Our flight landed in the state of Kerala",
-          correctAnswer: "وِلَايَةِ",
+          answer: "وِلَايَةِ",
           options: ["مَدِينَةِ", "وِلَايَةِ", "قَرْيَةِ"]
         },
         {
           type: "fill-blank",
           sentence: "مُونَّار هِيَ أَرْضُ ____",
           translation: "Munnar is the land of waterfalls",
-          correctAnswer: "الشَّلَّالَاتِ",
+          answer: "الشَّلَّالَاتِ",
           options: ["الأَنْهَارِ", "الشَّلَّالَاتِ", "الأَسْوَاقِ"]
         },
         {
@@ -86,7 +86,7 @@ export const previewUnit = {
           type: "fill-blank",
           sentence: "سَمَّاهَا الْعَرَبُ ____ اللهِ",
           translation: "The Arabs called it God's Bounty (Khayr Allah)",
-          correctAnswer: "خَيْرَ",
+          answer: "خَيْرَ",
           options: ["أَرْضَ", "خَيْرَ", "جَمَالَ"]
         },
         {

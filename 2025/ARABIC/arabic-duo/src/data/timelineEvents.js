@@ -79,5 +79,79 @@ export const timelineEvents = {
       descAr: "دعا القرآن للنظر والتأمل في خلق الإبل والسماء والماء. وسميت عدة سور بأسماء حيوانات تعظيماً لخلق الله.",
       descEn: "The Quran calls for contemplating the creation of camels, the sky, and water. Several chapters are named after animals to honor Allah's creation."
     }
+  ],
+  "sec3-7": [
+    {
+      id: 1,
+      titleAr: "تاريخ وأساطير",
+      titleEn: "History and Legends",
+      descAr: "تُعرف الهند بحكمتها وقصصها القديمة، مثل كتاب 'كليلة ودمنة' الذي ترجم من السنسكريتية.",
+      descEn: "India is known for its wisdom and ancient stories, like the book 'Kalila and Dimna' which was translated from Sanskrit."
+    },
+    {
+      id: 2,
+      titleAr: "عصر المغول",
+      titleEn: "Mughal Era",
+      descAr: "حكم المغول الهند من القرن السادس عشر، تاركين وراءهم معالم عظيمة مثل تاج محل الذي بناه شاه جهان.",
+      descEn: "The Mughals ruled India from the 16th century, leaving behind great monuments like the Taj Mahal built by Shah Jahan."
+    },
+    {
+      id: 3,
+      titleAr: "الاستقلال و دلهي",
+      titleEn: "Independence and Delhi",
+      descAr: "نالت الهند استقلالها عام 1947. وعاصمتها دلهي تمزج بين الآثار العتيقة والمباني العصرية الشاهقة.",
+      descEn: "India gained independence in 1947. Its capital Delhi blends ancient ruins with towering modern buildings."
+    },
+    {
+      id: 4,
+      titleAr: "تنوع المدن الكبرى",
+      titleEn: "Diversity of Major Cities",
+      descAr: "من أكراه ومعالمها المغولية إلى جايبور 'المدينة الزهرية'، ومومباي العاصمة التجارية، ومدراس بوابة الجنوب.",
+      descEn: "From Agra and its Mughal landmarks to Jaipur the 'Pink City', Mumbai the commercial capital, and Madras the gateway to the South."
+    },
+    {
+      id: 5,
+      titleAr: "الثقافة والتعليم",
+      titleEn: "Culture and Education",
+      descAr: "الهند موطن لمئات الجامعات، وصناعات يدوية غنية، وتتميز بتعدد دياناتها وثقافاتها.",
+      descEn: "India is home to hundreds of universities, rich handicrafts, and is characterized by its multiplicity of religions and cultures."
+    }
+  ],
+  "sec4-8": [
+    {
+      id: 1,
+      titleAr: "وصول الغريب",
+      titleEn: "The Stranger's Arrival",
+      descAr: "هاجمت الكلاب رجلاً غريباً في الليل، فأنقذته رقية وأدخلته الكوخ ليعالج جروحه.",
+      descEn: "Dogs attacked a strange man at night, so Ruqayya saved him and brought him into the hut to treat his wounds."
+    },
+    {
+      id: 2,
+      titleAr: "حوار مع الغريب",
+      titleEn: "Conversation in the Dark",
+      descAr: "أخبر الرجل رقية أنه ضل الطريق وكان ذاهباً إلى السوق لشراء جاموسة بماله.",
+      descEn: "The man told Ruqayya that he lost his way and was heading to the market to buy a buffalo with his money."
+    },
+    {
+      id: 3,
+      titleAr: "كرم الضيافة",
+      titleEn: "Hospitality",
+      descAr: "قدمت له رقية الطعام والماء وفرشت له لينام ويرتاح، حتى عاد زوجها همام وصافحه.",
+      descEn: "Ruqayya offered him food and water, preparing a bed for him to rest until her husband Hammam returned and shook his hand."
+    },
+    {
+      id: 4,
+      titleAr: "خيانة همام",
+      titleEn: "Hammam's Betrayal",
+      descAr: "رافق همام الغريب في الصباح الباكر بحجة حمايته، لكنه قتله وسرق نقوده ليعود بها إلى الكوخ.",
+      descEn: "Hammam accompanied the stranger early morning under the pretext of protection, but killed him and stole his money, returning to the hut with it."
+    },
+    {
+      id: 5,
+      titleAr: "انتقام رقية",
+      titleEn: "Ruqayya's Revenge",
+      descAr: "أدركت رقية الحقيقة، فأخذت البندقية وقتلت زوجها الشرير ثأراً، ثم ظهرت حمامة بيضاء ترمز للسلام.",
+      descEn: "Ruqayya realized the truth, grabbed the rifle, and shot her evil husband in vengeance, after which a white dove symbolizing peace appeared."
+    }
   ]
 };

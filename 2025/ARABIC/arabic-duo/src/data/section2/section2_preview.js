@@ -46,14 +46,14 @@ export const previewUnit2 = {
           type: "fill-blank",
           sentence: "الإِنْسَانُ ____ اللهِ فِي الْأَرْضِ",
           translation: "Man is Allah's successor (caliph) on earth",
-          correctAnswer: "خَلِيفَةُ",
+          answer: "خَلِيفَةُ",
           options: ["عَدُوُّ", "خَلِيفَةُ", "صَدِيقُ"]
         },
         {
           type: "fill-blank",
           sentence: "نَهَى الْإِسْلَامُ عَنِ ____ فِي الْمَاءِ",
           translation: "Islam forbade extravagance (waste) in water",
-          correctAnswer: "الْإِسْرَافِ",
+          answer: "الْإِسْرَافِ",
           options: ["الشُّرْبِ", "الْإِسْرَافِ", "اللَّعِبِ"]
         },
         {

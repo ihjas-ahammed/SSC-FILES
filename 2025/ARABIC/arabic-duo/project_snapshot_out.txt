@@ -878,35 +878,27 @@ body {
 --- END OF FILE src/App.css ---
 
 --- START OF FILE src/App.jsx ---
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import './styles/NewFeatures.css';
 import { ProgressProvider } from './context/ProgressContext';
-import Dashboard from './components/Dashboard';
-import Lesson from './components/Lesson';
-import SectionSummary from './components/SectionSummary';
+
+import DashboardRoute from './pages/DashboardRoute';
+import LessonRoute from './pages/LessonRoute';
+import SummaryRoute from './pages/SummaryRoute';
 
 function App() {
-  const [activeLesson, setActiveLesson] = useState(null);
-  const [showSummary, setShowSummary] = useState(false);
-
   return (
     <ProgressProvider>
       <div className="app-container">
-        {activeLesson ? (
-          <Lesson 
-            lesson={activeLesson} 
-            onClose={() => setActiveLesson(null)} 
-          />
-        ) : showSummary ? (
-          <SectionSummary 
-            onClose={() => setShowSummary(false)} 
-          />
-        ) : (
-          <Dashboard 
-            onSelectLesson={setActiveLesson} 
-            onShowSummary={() => setShowSummary(true)}
-          />
-        )}
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<DashboardRoute />} />
+            <Route path="/lesson/:lessonId" element={<LessonRoute />} />
+            <Route path="/summary/:sectionId" element={<SummaryRoute />} />
+          </Routes>
+        </BrowserRouter>
       </div>
     </ProgressProvider>
   );
@@ -1038,9 +1030,17 @@ export const ProgressProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [activeSectionId, setActiveSectionId] = useState(() => {
+    return localStorage.getItem('duofy5_active_sec') || 'sec1-5';
+  });
+
   useEffect(() => {
     localStorage.setItem('duofy5_progress', JSON.stringify(completedLessons));
   }, [completedLessons]);
+
+  useEffect(() => {
+    localStorage.setItem('duofy5_active_sec', activeSectionId);
+  }, [activeSectionId]);
 
   const markLessonComplete = (lessonId) => {
     if (!completedLessons.includes(lessonId)) {
@@ -1049,7 +1049,12 @@ export const ProgressProvider = ({ children }) => {
   };
 
   return (
-    <ProgressContext.Provider value={{ completedLessons, markLessonComplete }}>
+    <ProgressContext.Provider value={{ 
+      completedLessons, 
+      markLessonComplete,
+      activeSectionId,
+      setActiveSectionId
+    }}>
       {children}
     </ProgressContext.Provider>
   );
@@ -1244,8 +1249,21 @@ import { unit9 } from './section1/section1_9';
 import { unit10 } from './section1/section1_10';
 import { unit11 } from './section1/section1_11';
 import { unit12 } from './section1/section1_12';
+
+import { previewUnit2 } from './section2/section2_preview';
 import { unit61 } from './section2/section2_1';
 import { unit62, unit63 } from './section2/section2_3';
+import { unit64, unit65, unit66, unit67, unit68, unit69, unit70, unit71, unit72, unit73 } from './section2/section2_7';
+import { practiceUnit2 } from './section2/section2_practice';
+
+import { previewUnit3 } from './section3/section3_preview';
+import { unit81 } from './section3/section3_1';
+import { unit82 } from './section3/section3_2';
+import { unit83 } from './section3/section3_3';
+import { unit84 } from './section3/section3_4';
+import { unit85 } from './section3/section3_5';
+import { unit86 } from './section3/section3_6';
+import { practiceUnit3 } from './section3/section3_practice';
 
 export const sections = [
   {
@@ -1269,15 +1287,41 @@ export const sections = [
     ]
   },
   {
-    id:"sec2-6",
+    id: "sec2-6",
     title: "الْقُرْآنُ وَالْبِيئَةُ",
-    units:[
+    units: [
+      previewUnit2,
       unit61,
       unit62,
       unit63,
+      unit64,
+      unit65,
+      unit66,
+      unit67,
+      unit68,
+      unit69,
+      unit70,
+      unit71,
+      unit72,
+      unit73,
+      practiceUnit2
+    ]
+  },
+  {
+    id: "sec3-7",
+    title: "الهند... أرض الحكمة والأساطير",
+    units: [
+      previewUnit3,
+      unit81,
+      unit82,
+      unit83,
+      unit84,
+      unit85,
+      unit86,
+      practiceUnit3
     ]
   }
-]
+];
 --- END OF FILE src/data/sections.js ---
 
 --- START OF FILE src/data/section1_2.js ---
@@ -1803,14 +1847,14 @@ export const previewUnit = {
           type: "fill-blank",
           sentence: "حَطَّتْ رِحْلَتُنَا فِي ____ كِيرَلَا",
           translation: "Our flight landed in the state of Kerala",
-          correctAnswer: "وِلَايَةِ",
+          answer: "وِلَايَةِ",
           options: ["مَدِينَةِ", "وِلَايَةِ", "قَرْيَةِ"]
         },
         {
           type: "fill-blank",
           sentence: "مُونَّار هِيَ أَرْضُ ____",
           translation: "Munnar is the land of waterfalls",
-          correctAnswer: "الشَّلَّالَاتِ",
+          answer: "الشَّلَّالَاتِ",
           options: ["الأَنْهَارِ", "الشَّلَّالَاتِ", "الأَسْوَاقِ"]
         },
         {
@@ -1843,7 +1887,7 @@ export const previewUnit = {
           type: "fill-blank",
           sentence: "سَمَّاهَا الْعَرَبُ ____ اللهِ",
           translation: "The Arabs called it God's Bounty (Khayr Allah)",
-          correctAnswer: "خَيْرَ",
+          answer: "خَيْرَ",
           options: ["أَرْضَ", "خَيْرَ", "جَمَالَ"]
         },
         {
@@ -1873,50 +1917,126 @@ export const previewUnit = {
 --- END OF FILE src/data/section1_preview.js ---
 
 --- START OF FILE src/data/timelineEvents.js ---
-export const timelineEvents = [
-  {
-    id: 1,
-    titleAr: "الوصول إلى كيرلا",
-    titleEn: "Arrival in Kerala",
-    descAr: "حطت الرحلة في مطار كوتشين، الولاية التي سماها العرب الأوائل 'خير الله'. استقبلهم المطر الغزير والطبيعة الساحرة.",
-    descEn: "The flight landed at Cochin Airport in the state the early Arabs called 'Khayr Allah' (God's Bounty). They were welcomed by heavy rain and charming nature."
-  },
-  {
-    id: 2,
-    titleAr: "استكشاف كوتشين",
-    titleEn: "Exploring Cochin",
-    descAr: "أقاموا في فندق 'هاربر فيو' بشارع أم جي رود. قضوا ثلاثة أيام يستمتعون ببشاشة الناس، النظافة، والمساجد الجميلة.",
-    descEn: "They stayed at 'Harbor View' hotel on MG Road. They spent three days enjoying the people's cheerfulness, cleanliness, and beautiful mosques."
-  },
-  {
-    id: 3,
-    titleAr: "الطريق إلى مونار",
-    titleEn: "The Road to Munnar",
-    descAr: "استأجروا سيارة وانطلقوا نحو مونار (تبعد 145 كم). الطريق كان كلوحة خضراء من الغابات الكثيفة وشلالات المياه المتدفقة.",
-    descEn: "They rented a car and headed to Munnar (145 km away). The road was like a green painting of dense forests and gushing waterfalls."
-  },
-  {
-    id: 4,
-    titleAr: "الإقامة في منتجع بلاك بري",
-    titleEn: "Stay at Blackberry Resort",
-    descAr: "وصلوا مع حلول الليل وناموا في سبات عميق تحت أنغام المطر في أكواخ صغيرة توفر السكينة المطلقة.",
-    descEn: "They arrived at nightfall and fell into a deep slumber under the tunes of the rain in small cottages offering absolute tranquility."
-  },
-  {
-    id: 5,
-    titleAr: "زيارة المنتزه الوطني",
-    titleEn: "Visiting the National Park",
-    descAr: "رأوا الماعز الجبلي المخطط والغيوم التي تلامس قمم الجبال، وتذكر الكاتب وصف الشاعر ابن سعد للأندلس.",
-    descEn: "They saw the striped mountain goat and clouds touching mountain peaks. The author remembered poet Ibn Sa'd's description of Andalusia."
-  },
-  {
-    id: 6,
-    titleAr: "العودة والذكريات",
-    titleEn: "Return and Memories",
-    descAr: "عادوا إلى كوتشين في اليوم الرابع واشتروا المصنوعات اليدوية، حاملين حباً أكبر للحياة ويقيناً بوجود جنات في الأرض.",
-    descEn: "They returned to Cochin on the fourth day, bought handicrafts, carrying a greater love for life and certainty of earthly paradises."
-  }
-];
+export const timelineEvents = {
+  "sec1-5": [
+    {
+      id: 1,
+      titleAr: "الوصول إلى كيرلا",
+      titleEn: "Arrival in Kerala",
+      descAr: "حطت الرحلة في مطار كوتشين، الولاية التي سماها العرب الأوائل 'خير الله'. استقبلهم المطر الغزير والطبيعة الساحرة.",
+      descEn: "The flight landed at Cochin Airport in the state the early Arabs called 'Khayr Allah' (God's Bounty). They were welcomed by heavy rain and charming nature."
+    },
+    {
+      id: 2,
+      titleAr: "استكشاف كوتشين",
+      titleEn: "Exploring Cochin",
+      descAr: "أقاموا في فندق 'هاربر فيو' بشارع أم جي رود. قضوا ثلاثة أيام يستمتعون ببشاشة الناس، النظافة، والمساجد الجميلة.",
+      descEn: "They stayed at 'Harbor View' hotel on MG Road. They spent three days enjoying the people's cheerfulness, cleanliness, and beautiful mosques."
+    },
+    {
+      id: 3,
+      titleAr: "الطريق إلى مونار",
+      titleEn: "The Road to Munnar",
+      descAr: "استأجروا سيارة وانطلقوا نحو مونار (تبعد 145 كم). الطريق كان كلوحة خضراء من الغابات الكثيفة وشلالات المياه المتدفقة.",
+      descEn: "They rented a car and headed to Munnar (145 km away). The road was like a green painting of dense forests and gushing waterfalls."
+    },
+    {
+      id: 4,
+      titleAr: "الإقامة في منتجع بلاك بري",
+      titleEn: "Stay at Blackberry Resort",
+      descAr: "وصلوا مع حلول الليل وناموا في سبات عميق تحت أنغام المطر في أكواخ صغيرة توفر السكينة المطلقة.",
+      descEn: "They arrived at nightfall and fell into a deep slumber under the tunes of the rain in small cottages offering absolute tranquility."
+    },
+    {
+      id: 5,
+      titleAr: "زيارة المنتزه الوطني",
+      titleEn: "Visiting the National Park",
+      descAr: "رأوا الماعز الجبلي المخطط والغيوم التي تلامس قمم الجبال، وتذكر الكاتب وصف الشاعر ابن سعد للأندلس.",
+      descEn: "They saw the striped mountain goat and clouds touching mountain peaks. The author remembered poet Ibn Sa'd's description of Andalusia."
+    },
+    {
+      id: 6,
+      titleAr: "العودة والذكريات",
+      titleEn: "Return and Memories",
+      descAr: "عادوا إلى كوتشين في اليوم الرابع واشتروا المصنوعات اليدوية، حاملين حباً أكبر للحياة ويقيناً بوجود جنات في الأرض.",
+      descEn: "They returned to Cochin on the fourth day, bought handicrafts, carrying a greater love for life and certainty of earthly paradises."
+    }
+  ],
+  "sec2-6": [
+    {
+      id: 1,
+      titleAr: "البيئة والموارد الطبيعية",
+      titleEn: "Environment & Natural Resources",
+      descAr: "البيئة هي الموارد الطبيعية كالأرض والماء والهواء والحيوانات والنباتات، وتعتبر أمانة يجب الحفاظ عليها.",
+      descEn: "The environment comprises natural resources like earth, water, air, animals, and plants. It is considered a trust that must be preserved."
+    },
+    {
+      id: 2,
+      titleAr: "المسؤولية الدينية",
+      titleEn: "Religious Responsibility",
+      descAr: "حث القرآن الكريم على حماية البيئة واعتبر الإسلام ذلك واجباً دينياً. الإنسان خليفة الله في الأرض ومسؤول عن إعمارها.",
+      descEn: "The Holy Quran urged protecting the environment, considering it a religious duty. Man is Allah's successor on earth, responsible for its development."
+    },
+    {
+      id: 3,
+      titleAr: "التوجيهات النبوية",
+      titleEn: "Prophetic Directives",
+      descAr: "أمر النبي ﷺ بإماطة الأذى عن الطريق، وحث على التشجير والزراعة، ونهى عن الإسراف في الماء حتى أثناء الوضوء.",
+      descEn: "The Prophet (PBUH) commanded removing harm from paths, urged planting, and forbade wasting water even during ablution."
+    },
+    {
+      id: 4,
+      titleAr: "الزراعة وإحياء الأرض",
+      titleEn: "Agriculture & Reviving Land",
+      descAr: "اهتم الإسلام بتخضير الأرض وإحياء الأراضي الجدباء. فالأرض لمن يزرعها وكل غرس يؤكل منه يعتبر صدقة.",
+      descEn: "Islam focused on greening and reviving barren lands. Land belongs to its cultivator, and whatever is eaten from a planted tree is charity."
+    },
+    {
+      id: 5,
+      titleAr: "تأمل المخلوقات",
+      titleEn: "Contemplating Creations",
+      descAr: "دعا القرآن للنظر والتأمل في خلق الإبل والسماء والماء. وسميت عدة سور بأسماء حيوانات تعظيماً لخلق الله.",
+      descEn: "The Quran calls for contemplating the creation of camels, the sky, and water. Several chapters are named after animals to honor Allah's creation."
+    }
+  ],
+  "sec3-7": [
+    {
+      id: 1,
+      titleAr: "تاريخ وأساطير",
+      titleEn: "History and Legends",
+      descAr: "تُعرف الهند بحكمتها وقصصها القديمة، مثل كتاب 'كليلة ودمنة' الذي ترجم من السنسكريتية.",
+      descEn: "India is known for its wisdom and ancient stories, like the book 'Kalila and Dimna' which was translated from Sanskrit."
+    },
+    {
+      id: 2,
+      titleAr: "عصر المغول",
+      titleEn: "Mughal Era",
+      descAr: "حكم المغول الهند من القرن السادس عشر، تاركين وراءهم معالم عظيمة مثل تاج محل الذي بناه شاه جهان.",
+      descEn: "The Mughals ruled India from the 16th century, leaving behind great monuments like the Taj Mahal built by Shah Jahan."
+    },
+    {
+      id: 3,
+      titleAr: "الاستقلال و دلهي",
+      titleEn: "Independence and Delhi",
+      descAr: "نالت الهند استقلالها عام 1947. وعاصمتها دلهي تمزج بين الآثار العتيقة والمباني العصرية الشاهقة.",
+      descEn: "India gained independence in 1947. Its capital Delhi blends ancient ruins with towering modern buildings."
+    },
+    {
+      id: 4,
+      titleAr: "تنوع المدن الكبرى",
+      titleEn: "Diversity of Major Cities",
+      descAr: "من أكراه ومعالمها المغولية إلى جايبور 'المدينة الزهرية'، ومومباي العاصمة التجارية، ومدراس بوابة الجنوب.",
+      descEn: "From Agra and its Mughal landmarks to Jaipur the 'Pink City', Mumbai the commercial capital, and Madras the gateway to the South."
+    },
+    {
+      id: 5,
+      titleAr: "الثقافة والتعليم",
+      titleEn: "Culture and Education",
+      descAr: "الهند موطن لمئات الجامعات، وصناعات يدوية غنية، وتتميز بتعدد دياناتها وثقافاتها.",
+      descEn: "India is home to hundreds of universities, rich handicrafts, and is characterized by its multiplicity of religions and cultures."
+    }
+  ]
+};
 --- END OF FILE src/data/timelineEvents.js ---
 
 --- START OF FILE src/data/section1/section1_3.js ---
@@ -4381,20 +4501,2527 @@ export const unit73 = {
 
 --- END OF FILE src/data/section2/section2_7.js ---
 
+--- START OF FILE src/data/section2/section2_preview.js ---
+export const previewUnit2 = {
+  id: "sec2_preview",
+  title: "Section Preview",
+  lessons: [
+    {
+      id: "sec2_prev_l1",
+      title: "Core Concepts",
+      slides: [
+        {
+          type: "vocabulary",
+          word: "الْبِيئَةُ",
+          transliteration: "Al-bee'ah",
+          translation: "The Environment",
+          example: {
+            ar: "حِمَايَةُ الْبِيئَةِ وَاجِبٌ",
+            en: "Protecting the environment is a duty"
+          }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَرْض", en: "Earth/Land" },
+            { ar: "مَاء", en: "Water" },
+            { ar: "هَوَاء", en: "Air" },
+            { ar: "نَبَاتَات", en: "Plants" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Protecting the environment is a duty",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "حِمَايَةُ", trans: "Protecting" },
+            { id: 2, text: "الْبِيئَةِ", trans: "Environment" },
+            { id: 3, text: "وَاجِبٌ", trans: "Duty" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prev_l2",
+      title: "Islamic View",
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "الإِنْسَانُ ____ اللهِ فِي الْأَرْضِ",
+          translation: "Man is Allah's successor (caliph) on earth",
+          answer: "خَلِيفَةُ",
+          options: ["عَدُوُّ", "خَلِيفَةُ", "صَدِيقُ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "نَهَى الْإِسْلَامُ عَنِ ____ فِي الْمَاءِ",
+          translation: "Islam forbade extravagance (waste) in water",
+          answer: "الْإِسْرَافِ",
+          options: ["الشُّرْبِ", "الْإِسْرَافِ", "اللَّعِبِ"]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَمَانَة", en: "Trust" },
+            { ar: "إِفْسَاد", en: "Corruption" },
+            { ar: "صَدَقَة", en: "Charity" },
+            { ar: "وُضُوء", en: "Ablution" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section2/section2_preview.js ---
+
+--- START OF FILE src/data/section2/section2_practice.js ---
+export const practiceUnit2 = {
+  id: "sec2_practice",
+  title: "End of Chapter Exercises",
+  lessons: [
+    {
+      id: "sec2_prac_l1",
+      title: "أ) أكمل الفراغ (Fill in the blanks)",
+      isPractice: true,
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "خَلَقَ اللهُ الْإِنْسَانَ وَجَعَلَهُ ____ فِي الْأَرْضِ.",
+          translation: "Allah created man and made him a successor (caliph) on earth.",
+          answer: "خَلِيفَةً",
+          options: ["مَلِكًا", "خَلِيفَةً", "عَبْدًا"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ وَاجِبِ الْمُسْلِمِ ____ عَلَى الْبِيئَةِ.",
+          translation: "It is the duty of a Muslim to preserve the environment.",
+          answer: "الْمُحَافَظَةُ",
+          options: ["التَّعَدِّي", "الْمُحَافَظَةُ", "الْإِفْسَادُ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "نَهَى النَّبِيُّ ﷺ عَنِ ____ فِي الْمَاءِ الرَّاكِدِ.",
+          translation: "The Prophet (PBUH) forbade urinating in stagnant water.",
+          answer: "التَّبَوُّلِ",
+          options: ["الشُّرْبِ", "التَّبَوُّلِ", "الِاغْتِسَالِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يُعَدُّ الْمَاءُ مِنْ أَهَمِّ ____ الْحَيَاةِ.",
+          translation: "Water is considered one of the most important basics of life.",
+          answer: "أَسَاسِيَّاتِ",
+          options: ["أَسَاسِيَّاتِ", "أَلْوَانِ", "زِينَةِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "قَالَ اللهُ تَعَالَى: \"وَلَا تُفْسِدُوا ____ الْأَرْضِ\".",
+          translation: "Allah Almighty said: 'And do not cause corruption upon the earth'.",
+          answer: "فِي",
+          options: ["عَلَى", "فِي", "تَحْتَ"]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l2",
+      title: "ب) الاستيعاب (Comprehension)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "بِمَاذَا أَمَرَ النَّبِيُّ ﷺ تُجَاهَ الْأَذَى فِي الطَّرِيقِ؟",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "بِإِمَاطَةِ", trans: "Removing" },
+            { id: 2, text: "الْأَذَى", trans: "the harm" },
+            { id: 3, text: "عَنِ", trans: "from" },
+            { id: 4, text: "الطَّرِيقِ", trans: "the path" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَا حُكْمُ الْإِسْرَافِ فِي الْمَاءِ أَثْنَاءَ الْوُضُوءِ؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "مَكْرُوهٌ", trans: "Disliked" },
+            { id: 2, text: "وَمَنْهِيٌّ", trans: "and forbidden" },
+            { id: 3, text: "عَنْهُ", trans: "it" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَا مَوْقِفُ الْإِسْلَامِ مِنْ قَطْعِ الْأَشْجَارِ الْمُثْمِرَةِ؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "نَهَى", trans: "Forbade" },
+            { id: 2, text: "الْإِسْلَامُ", trans: "Islam" },
+            { id: 3, text: "عَنْهُ", trans: "it" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l3",
+      title: "ج) صل بين العمودين (Matching Definitions)",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "الْمَاءُ", en: "أَسَاسُ الْحَيَاةِ" },
+            { ar: "الْهَوَاءُ", en: "يُذْكَرُ بِلَفْظِ الرِّيَاحِ" },
+            { ar: "الْأَشْجَارُ", en: "نَهَى الْإِسْلَامُ عَنْ قَطْعِهَا" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "الْإِنْسَانُ", en: "خَلِيفَةُ اللهِ فِي الْأَرْضِ" },
+            { ar: "النَّظَافَةُ", en: "مِنَ الْإِيمَانِ" },
+            { ar: "الْبِيئَةُ", en: "أَمَانَةٌ وَاجِبَةٌ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l4",
+      title: "د / هـ) المفرد والجمع (Singular & Plural)",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "نَبَاتَات", en: "نَبَات" },
+            { ar: "حَيَوَانَات", en: "حَيَوَان" },
+            { ar: "طُرُق", en: "طَرِيق" },
+            { ar: "جِبَال", en: "جَبَل" },
+            { ar: "مَوَارِد", en: "مَوْرِد" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَنْهَار", en: "نَهْر" },
+            { ar: "سَمَاوَات", en: "سَمَاء" },
+            { ar: "مُكَوِّنَات", en: "مُكَوِّن" },
+            { ar: "نِعَم", en: "نِعْمَة" },
+            { ar: "بِحَار", en: "بَحْر" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l5",
+      title: "ح) جمل للترجمة إلى الإنجليزية (Translate to English)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْمَاءُ أَسَاسُ الْحَيَاةِ عَلَى الْأَرْضِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "Water", trans: "الْمَاءُ" },
+            { id: 2, text: "is", trans: "" },
+            { id: 3, text: "the basis", trans: "أَسَاسُ" },
+            { id: 4, text: "of life", trans: "الْحَيَاةِ" },
+            { id: 5, text: "on", trans: "عَلَى" },
+            { id: 6, text: "earth", trans: "الْأَرْضِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "يَجِبُ عَلَيْنَا أَنْ نُحَافِظَ عَلَى نَظَافَةِ الْبِيئَةِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "We", trans: "عَلَيْنَا" },
+            { id: 2, text: "must", trans: "يَجِبُ" },
+            { id: 3, text: "preserve", trans: "نُحَافِظَ" },
+            { id: 4, text: "the cleanliness", trans: "نَظَافَةِ" },
+            { id: 5, text: "of the", trans: "" },
+            { id: 6, text: "environment", trans: "الْبِيئَةِ" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْهَوَاءُ النَّقِيُّ ضَرُورِيٌّ لِصِحَّةِ الْإِنْسَانِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "Fresh", trans: "النَّقِيُّ" },
+            { id: 2, text: "air", trans: "الْهَوَاءُ" },
+            { id: 3, text: "is", trans: "" },
+            { id: 4, text: "necessary", trans: "ضَرُورِيٌّ" },
+            { id: 5, text: "for human", trans: "لِصِحَّةِ" },
+            { id: 6, text: "health", trans: "الْإِنْسَانِ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec2_prac_l6",
+      title: "ط) جمل للترجمة إلى العربية (Translate to Arabic)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "The Quran encourages us to protect nature.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "يُشَجِّعُنَا", trans: "Encourages us" },
+            { id: 2, text: "الْقُرْآنُ", trans: "The Quran" },
+            { id: 3, text: "عَلَى", trans: "on/to" },
+            { id: 4, text: "حِمَايَةِ", trans: "protect" },
+            { id: 5, text: "الطَّبِيعَةِ", trans: "nature" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "We should not waste water during ablution.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "يَجِبُ", trans: "We must" },
+            { id: 2, text: "أَلَّا", trans: "not" },
+            { id: 3, text: "نُسْرِفَ", trans: "waste" },
+            { id: 4, text: "فِي", trans: "in" },
+            { id: 5, text: "الْمَاءِ", trans: "water" },
+            { id: 6, text: "بِالْوُضُوءِ", trans: "during ablution" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Cleanliness is a part of faith.",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "النَّظَافَةُ", trans: "Cleanliness" },
+            { id: 2, text: "مِنَ", trans: "is a part of" },
+            { id: 3, text: "الْإِيمَانِ", trans: "faith" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section2/section2_practice.js ---
+
+--- START OF FILE src/data/section3/section3_preview.js ---
+export const previewUnit3 = {
+  id: "sec3_preview",
+  title: "Section Preview",
+  lessons: [
+    {
+      id: "sec3_prev_l1",
+      title: "Preview 1: History and Legends",
+      slides: [
+        {
+          type: "vocabulary",
+          word: "الْأَسَاطِيرِ",
+          transliteration: "Al-Asateer",
+          translation: "Legends / Myths",
+          example: { ar: "هِنْدُ أَرْضُ الْأَسَاطِيرِ", en: "India is the land of legends" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "قِصَص", en: "Stories" },
+            { ar: "حِكْمَة", en: "Wisdom" },
+            { ar: "قَلْعَة", en: "Fort/Castle" },
+            { ar: "ضَرِيح", en: "Tomb" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "الْهِنْدُ أَرْضُ الْحِكْمَةِ",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "India", trans: "الْهِنْدُ" },
+            { id: 2, text: "is", trans: "" },
+            { id: 3, text: "the land", trans: "أَرْضُ" },
+            { id: 4, text: "of", trans: "" },
+            { id: 5, text: "wisdom", trans: "الْحِكْمَةِ" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prev_l2",
+      title: "Preview 2: Famous Landmarks",
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "بُنِيَ تَاج مَحَل فِي مَدِينَةِ ____",
+          translation: "Taj Mahal was built in the city of Agra",
+          answer: "أَكْرَاه",
+          options: ["مَدْرَاس", "أَكْرَاه", "مُومْبَاي"]
+        },
+        {
+          type: "sentence",
+          arabic: "دِلْهِي هِيَ عَاصِمَةُ الْهِنْدِ وَمَدِينَةٌ حَافِلَةٌ بِالْمُفَاجَآتِ",
+          english: "Delhi is the capital of India and a city full of surprises"
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عَاصِمَة", en: "Capital" },
+            { ar: "مُفَاجَآت", en: "Surprises" },
+            { ar: "مُسْتَقِلَّة", en: "Independent" },
+            { ar: "مُزْدَحِمَة", en: "Crowded" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_preview.js ---
+
+--- START OF FILE src/data/section3/section3_1.js ---
+export const unit81 = {
+  id: "u81",
+  title: "History and Legends",
+  lessons: [
+    {
+      id: "u81_l1",
+      title: "India in History",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْهِنْدُ مَعْرُوفَةٌ فِي التَّارِيخِ وَالْأَدَبِ بِالْقِصَصِ وَالْأَسَاطِيرِ.",
+          english: "India is known in history and literature for stories and legends."
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَسَاطِيرِ",
+          transliteration: "Al-asateer",
+          translation: "Legends / Myths",
+          example: { ar: "أُحِبُّ قِرَاءَةَ الْأَسَاطِيرِ", en: "I love reading legends" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "تَارِيخ", en: "History" },
+            { ar: "أَدَب", en: "Literature" },
+            { ar: "قِصَص", en: "Stories" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "الْهِنْدُ مَعْرُوفَةٌ فِي ____ وَالْأَدَبِ",
+          translation: "India is known in history and literature",
+          answer: "التَّارِيخِ",
+          options: ["الْعُلُومِ", "التَّارِيخِ", "الرِّيَاضَةِ"]
+        }
+      ]
+    },
+    {
+      id: "u81_l2",
+      title: "Wisdom and Science",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "كَمَا عُرِفَ أَهْلُهَا بِكُتُبِ الْحِكْمَةِ وَالْقِصَصِ وَالْعُلُومِ وَالْفَلْسَفَاتِ الَّتِي تُرْجِمَتْ كَثِيرٌ مِنْهَا إِلَى اللُّغَاتِ الْعَالَمِيَّةِ الْمُخْتَلِفَةِ.",
+          english: "Its people were also known for books of wisdom, stories, sciences, and philosophies, many of which were translated into various international languages."
+        },
+        {
+          type: "vocabulary",
+          word: "الْحِكْمَةِ",
+          transliteration: "Al-hikmah",
+          translation: "Wisdom",
+          example: { ar: "الْحِكْمَةُ ضَالَّةُ الْمُؤْمِنِ", en: "Wisdom is the lost property of the believer" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عُلُوم", en: "Sciences" },
+            { ar: "فَلْسَفَات", en: "Philosophies" },
+            { ar: "لُغَات", en: "Languages" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُرْجِمَتْ كَثِيرٌ مِنْهَا إِلَى ____ الْعَالَمِيَّةِ",
+          translation: "Many of them were translated into international languages",
+          answer: "اللُّغَاتِ",
+          options: ["الْمُدُنِ", "اللُّغَاتِ", "الْجَامِعَاتِ"]
+        }
+      ]
+    },
+    {
+      id: "u81_l3",
+      title: "Kalila and Dimna",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "أَشْهَرُ وَأَقْدَمُ مَا وَصَلَ إِلَيْنَا مِنْهَا كِتَابُ 'كَلِيلَة وَدِمْنَة' الَّذِي كُتِبَ أَصْلُهَا فِي لُغَةِ السَّنْسِكْرِيتِيَّةِ.",
+          english: "The most famous and oldest of what reached us from them is the book 'Kalila and Dimna', whose original was written in the Sanskrit language."
+        },
+        {
+          type: "vocabulary",
+          word: "السَّنْسِكْرِيتِيَّةِ",
+          transliteration: "As-sanskritiyyah",
+          translation: "Sanskrit",
+          example: { ar: "اللُّغَةُ السَّنْسِكْرِيتِيَّةُ قَدِيمَةٌ", en: "The Sanskrit language is ancient" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَشْهَر", en: "Most famous" },
+            { ar: "أَقْدَم", en: "Oldest" },
+            { ar: "أَصْل", en: "Origin" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "كُتِبَ أَصْلُهَا فِي لُغَةِ ____",
+          translation: "Its original was written in the Sanskrit language",
+          answer: "السَّنْسِكْرِيتِيَّةِ",
+          options: ["الْعَرَبِيَّةِ", "السَّنْسِكْرِيتِيَّةِ", "الْفَارِسِيَّةِ"]
+        }
+      ]
+    },
+    {
+      id: "u81_l4",
+      title: "Great Kings",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "سَيْطَرَ فِي الْهِنْدِ كَثِيرٌ مِنَ الْمُلُوكِ مِنْهُمُ الْهَنَادِكَةُ وَالْمُسْلِمُونَ وَغَيْرُهُمْ مِثْلَ أَشُوكَا وَشِفَاجِي وَأَكْبَرَ وَأَمْثَالِهِمْ.",
+          english: "Many kings controlled India, among them Hindus, Muslims, and others like Ashoka, Shivaji, Akbar, and their likes."
+        },
+        {
+          type: "vocabulary",
+          word: "الْمُلُوكِ",
+          transliteration: "Al-muluk",
+          translation: "The Kings",
+          example: { ar: "عَاشَ الْمُلُوكُ فِي الْقُصُورِ", en: "Kings lived in palaces" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "هَنَادِكَة", en: "Hindus" },
+            { ar: "مُسْلِمُون", en: "Muslims" },
+            { ar: "سَيْطَرَ", en: "Controlled" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "سَيْطَرَ فِي الْهِنْدِ كَثِيرٌ مِنَ ____",
+          translation: "Many kings controlled India",
+          answer: "الْمُلُوكِ",
+          options: ["التُّجَّارِ", "الْمُلُوكِ", "الْعُلَمَاءِ"]
+        }
+      ]
+    },
+    {
+      id: "u81_l5",
+      title: "Architecture",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَلِكُلٍّ مِنْهُمْ آثَارٌ قَيِّمَةٌ لَهَا أَهَمِّيَّةٌ كَبِيرَةٌ فِي الْهَنْدَسَةِ وَالتَّعَامِيرِ الْعَجِيبَةِ.",
+          english: "And each of them has valuable monuments that have great importance in engineering and wondrous constructions."
+        },
+        {
+          type: "vocabulary",
+          word: "التَّعَامِيرِ",
+          transliteration: "At-ta'amir",
+          translation: "Constructions / Architecture",
+          example: { ar: "التَّعَامِيرُ الْقَدِيمَةُ رَائِعَةٌ", en: "Ancient constructions are wonderful" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "آثَار", en: "Monuments/Ruins" },
+            { ar: "هَنْدَسَة", en: "Engineering" },
+            { ar: "عَجِيبَة", en: "Wondrous" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "لَهَا أَهَمِّيَّةٌ كَبِيرَةٌ فِي ____",
+          translation: "It has great importance in engineering",
+          answer: "الْهَنْدَسَةِ",
+          options: ["الزِّرَاعَةِ", "الْهَنْدَسَةِ", "التِّجَارَةِ"]
+        }
+      ]
+    },
+    {
+      id: "u81_l6",
+      title: "Mughal Architecture",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمُلُوكُ الْمَغُولِ هُمُ الَّذِينَ جَاءُوا فِيهَا بِالتَّعَامِيرِ 'الْفَارِسِيَّةِ الْهِنْدِيَّةِ' مِثْلَ تَاج مَحَل الَّتِي هِيَ مِنَ الْأُعْجُوبَةِ الْعَالَمِيَّةِ، وَقَلْعَةِ الْحَمْرَاءِ.",
+          english: "The Mughal kings are the ones who brought 'Persian-Indian' architecture into it, such as the Taj Mahal, which is a global wonder, and the Red Fort."
+        },
+        {
+          type: "vocabulary",
+          word: "الْأُعْجُوبَةِ",
+          transliteration: "Al-u'jubah",
+          translation: "The Wonder",
+          example: { ar: "تَاج مَحَل أُعْجُوبَةٌ", en: "Taj Mahal is a wonder" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "فَارِسِيَّة", en: "Persian" },
+            { ar: "هِنْدِيَّة", en: "Indian" },
+            { ar: "قَلْعَة", en: "Fort" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَاج مَحَل مِنَ ____ الْعَالَمِيَّةِ",
+          translation: "Taj Mahal is one of the global wonders",
+          answer: "الْأُعْجُوبَةِ",
+          options: ["الْأُعْجُوبَةِ", "الْمَشَاكِلِ", "الْأَلْعَابِ"]
+        }
+      ]
+    },
+    {
+      id: "u81_l7",
+      title: "Mughal Rulers",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَكَمَ الْمَغُولُ فِي الْهِنْدِ مِنَ الْقَرْنِ السَّادِسِ عَشَرَ، كَانَتْ عَاصِمَتُهُمْ دِلْهِي، وَمِنْ أَشْهَرِهِمْ أَكْبَر وَشَاه جَهَان.",
+          english: "The Mughals ruled India from the sixteenth century, their capital was Delhi, and among their most famous are Akbar and Shah Jahan."
+        },
+        {
+          type: "vocabulary",
+          word: "عَاصِمَتُهُمْ",
+          transliteration: "Asimatuhum",
+          translation: "Their capital",
+          example: { ar: "دِلْهِي هِيَ عَاصِمَةُ الْهِنْدِ", en: "Delhi is the capital of India" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "قَرْن", en: "Century" },
+            { ar: "سَادِس عَشَر", en: "Sixteenth" },
+            { ar: "أَشْهَر", en: "Most famous" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "كَانَتْ عَاصِمَتُهُمْ ____",
+          translation: "Their capital was Delhi",
+          answer: "دِلْهِي",
+          options: ["أَكْرَاه", "دِلْهِي", "مُومْبَاي"]
+        }
+      ]
+    },
+    {
+      id: "u81_l8",
+      title: "End of an Era",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "تَتَابَعَتْ سَلْطَنَتُهُمْ حَتَّى اسْتَوْلَى عَلَيْهِمُ الِاحْتِلَالُ الْبَرِيطَانِيُّ.",
+          english: "Their sultanate continued until the British occupation took over them."
+        },
+        {
+          type: "vocabulary",
+          word: "الِاحْتِلَالُ",
+          transliteration: "Al-ihtilal",
+          translation: "Occupation",
+          example: { ar: "قَاوَمَ الشَّعْبُ الِاحْتِلَالَ", en: "The people resisted the occupation" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "سَلْطَنَة", en: "Sultanate" },
+            { ar: "اسْتَوْلَى", en: "Took over" },
+            { ar: "بَرِيطَانِيّ", en: "British" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "اسْتَوْلَى عَلَيْهِمُ الِاحْتِلَالُ ____",
+          translation: "The British occupation took over them",
+          answer: "الْبَرِيطَانِيُّ",
+          options: ["الْفَرَنْسِيُّ", "الْبَرِيطَانِيُّ", "الْبُرْتُغَالِيُّ"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_1.js ---
+
+--- START OF FILE src/data/section3/section3_2.js ---
+export const unit82 = {
+  id: "u82",
+  title: "Occupation and Independence",
+  lessons: [
+    {
+      id: "u82_l1",
+      title: "Divide and Rule",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "بَعْدَ أَنِ احْتَلَّتِ الْإِنْجِلِيزُ أَهْرَبُوا الْمُلُوكَ الْأَهَالِيَّ وَاحِداً بَعْدَ وَاحِدٍ وَذَلِكَ لِأَنَّ هَؤُلَاءِ الْمُلُوكَ الْأَهَالِيَّ كَانُوا يَحَارِبُونَ فِيمَا بَيْنَهُمْ بِالْحَمِيَّةِ الدِّينِيَّةِ وَالرَّغْبَةِ الِامْتِلَاكِيَّةِ.",
+          english: "After the English occupied, they drove away the native kings one after another because these native kings were fighting among themselves with religious zeal and possessive desire."
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَهَالِيَّ",
+          transliteration: "Al-ahali",
+          translation: "The Native / Local",
+          example: { ar: "السُّكَّانُ الْأَهَالِيُّونَ", en: "The native population" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "إِنْجِلِيز", en: "English" },
+            { ar: "حَمِيَّة", en: "Zeal" },
+            { ar: "دِينِيَّة", en: "Religious" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "كَانُوا يَحَارِبُونَ بِالْحَمِيَّةِ ____",
+          translation: "They were fighting with religious zeal",
+          answer: "الدِّينِيَّةِ",
+          options: ["الْقَوْمِيَّةِ", "الدِّينِيَّةِ", "السِّيَاسِيَّةِ"]
+        }
+      ]
+    },
+    {
+      id: "u82_l2",
+      title: "Internal Conflict",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَالْإِنْجِلِيزُ انْتَهَزُوا هَذِهِ الْفُرْصَةَ بِمُسَاعَدَةِ وَاحِدِهِمْ عَلَى عَدُوِّهِ، حَتَّى شَتَّتُوا فِيمَا بَيْنَهُمْ وَشَدَّدُوا فِي قُلُوبِهِمُ الْحَمِيَّةَ وَجَعَلُوهُمْ مُتَنَازِعِينَ دَائِماً فِيمَا بَيْنَهُمْ.",
+          english: "And the English seized this opportunity by helping one of them against his enemy, until they divided them, intensified the zeal in their hearts, and made them constantly in conflict among themselves."
+        },
+        {
+          type: "vocabulary",
+          word: "انْتَهَزُوا",
+          transliteration: "Intahazu",
+          translation: "Seized / Took opportunity",
+          example: { ar: "انْتَهَزَ الطَّالِبُ الْفُرْصَةَ", en: "The student seized the opportunity" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "فُرْصَة", en: "Opportunity" },
+            { ar: "عَدُوّ", en: "Enemy" },
+            { ar: "مُتَنَازِعِين", en: "Disputing/Conflicting" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "جَعَلُوهُمْ ____ دَائِماً فِيمَا بَيْنَهُمْ",
+          translation: "They made them constantly in conflict",
+          answer: "مُتَنَازِعِينَ",
+          options: ["مُتَّحِدِينَ", "مُتَنَازِعِينَ", "أَصْدِقَاءَ"]
+        }
+      ]
+    },
+    {
+      id: "u82_l3",
+      title: "Colonial Control",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "خَضَعَتْ لَهُمُ الْكَثِيرُ مِنَ الْمُلُوكِ الْأَهَالِيِّ لِحِمَايَتِهِمْ مِنَ الْأَعْدَاءِ، حَتَّى صَارَتِ الْهِنْدُ تَحْتَ الِاسْتِعْمَارِ الْبَرِيطَانِيِّ.",
+          english: "Many native kings submitted to them to protect them from enemies, until India fell under British colonialism."
+        },
+        {
+          type: "vocabulary",
+          word: "الِاسْتِعْمَارِ",
+          transliteration: "Al-isti'mar",
+          translation: "Colonialism",
+          example: { ar: "انْتَهَى عَهْدُ الِاسْتِعْمَارِ", en: "The era of colonialism ended" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "خَضَعَتْ", en: "Submitted" },
+            { ar: "حِمَايَة", en: "Protection" },
+            { ar: "أَعْدَاء", en: "Enemies" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "صَارَتِ الْهِنْدُ تَحْتَ ____ الْبَرِيطَانِيِّ",
+          translation: "India became under British colonialism",
+          answer: "الِاسْتِعْمَارِ",
+          options: ["الْحُكْمِ", "الِاسْتِعْمَارِ", "الْعَلَمِ"]
+        }
+      ]
+    },
+    {
+      id: "u82_l4",
+      title: "Gaining Independence",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَأَخِيراً بِنِضَالِ أَبْنَائِهَا وَرَاءَ الزُّعَمَاءِ الْوَطَنِيِّينَ مَهَاتْمَا غَانْدِي، وَنَهْرُو، وَأَزَاد وَأَمْثَالِهِمْ اسْتَطَاعَتِ الْهِنْدُ نَيْلَ اسْتِقْلَالِهَا عَامَ 1947م.",
+          english: "Finally, through the struggle of its sons behind the national leaders Mahatma Gandhi, Nehru, Azad, and their likes, India was able to attain its independence in 1947 AD."
+        },
+        {
+          type: "vocabulary",
+          word: "نِضَالِ",
+          transliteration: "Nidal",
+          translation: "Struggle",
+          example: { ar: "نِضَالُ الشَّعْبِ مُسْتَمِرٌّ", en: "The people's struggle continues" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "زُعَمَاء", en: "Leaders" },
+            { ar: "وَطَنِيِّين", en: "National" },
+            { ar: "اسْتِقْلَال", en: "Independence" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "نَالَتِ الْهِنْدُ اسْتِقْلَالَهَا عَامَ ____",
+          translation: "India attained its independence in 1947",
+          answer: "1947",
+          options: ["1950", "1947", "1930"]
+        }
+      ]
+    },
+    {
+      id: "u82_l5",
+      title: "Partition",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "رَغْمَ أَنْ انْقَسَمَتْ إِلَى دَوْلَتَيْنِ الْهِنْد وَبَاكِسْتَان.",
+          english: "Although it was divided into two states: India and Pakistan."
+        },
+        {
+          type: "vocabulary",
+          word: "انْقَسَمَتْ",
+          transliteration: "Inqasamat",
+          translation: "Divided / Split",
+          example: { ar: "انْقَسَمَتِ الْأَرْضُ", en: "The land was divided" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "دَوْلَتَيْن", en: "Two states" },
+            { ar: "رَغْمَ", en: "Although/Despite" },
+            { ar: "بَاكِسْتَان", en: "Pakistan" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "انْقَسَمَتْ إِلَى ____ الْهِنْد وَبَاكِسْتَان",
+          translation: "Divided into two states India and Pakistan",
+          answer: "دَوْلَتَيْنِ",
+          options: ["مَدِينَتَيْنِ", "دَوْلَتَيْنِ", "قَرْيَتَيْنِ"]
+        }
+      ]
+    },
+    {
+      id: "u82_l6",
+      title: "Major Cities",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَفِي الْهِنْدِ مُدُنٌ كَبِيرَةٌ وَمَشْهُورَةٌ مِثْلَ دِلْهِي وَكُولْكُوتَا وَمُومْبَاي وَتِشْنَاي وَغَيْرِهَا.",
+          english: "And in India are large and famous cities like Delhi, Kolkata, Mumbai, Chennai, and others."
+        },
+        {
+          type: "vocabulary",
+          word: "مَشْهُورَةٌ",
+          transliteration: "Mashhurah",
+          translation: "Famous",
+          example: { ar: "هَذِهِ مَدِينَةٌ مَشْهُورَةٌ", en: "This is a famous city" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مُدُن", en: "Cities" },
+            { ar: "كَبِيرَة", en: "Large" },
+            { ar: "غَيْرِهَا", en: "Others" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "فِي الْهِنْدِ مُدُنٌ كَبِيرَةٌ مِثْلَ ____",
+          translation: "In India are large cities like Delhi",
+          answer: "دِلْهِي",
+          options: ["بَارِيس", "دِلْهِي", "لَنْدَن"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_2.js ---
+
+--- START OF FILE src/data/section3/section3_3.js ---
+export const unit83 = {
+  id: "u83",
+  title: "Delhi: The Capital",
+  lessons: [
+    {
+      id: "u83_l1",
+      title: "City of Surprises",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "دِلْهِي: هِيَ عَاصِمَةُ الْهِنْدِ وَمَدِينَةٌ حَافِلَةٌ بِالْمُفَاجَآتِ وَالْأَخْبَارِ. تُمَثِّلُ بِدَايَةً رَائِعَةً لِلرَّحَلَاتِ لِاكْتِشَافِ الْهِنْدِ خِلَالَ عُمْرِهَا الَّذِي يَعُودُ إِلَى ثَلَاثَةِ آلَافِ عَامٍ.",
+          english: "Delhi: It is the capital of India and a city full of surprises and news. It represents a wonderful starting point for trips to discover India through its age that goes back three thousand years."
+        },
+        {
+          type: "vocabulary",
+          word: "حَافِلَةٌ",
+          transliteration: "Hafilah",
+          translation: "Full of / Teeming",
+          example: { ar: "الْحَيَاةُ حَافِلَةٌ بِالْأَحْدَاثِ", en: "Life is full of events" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عَاصِمَة", en: "Capital" },
+            { ar: "مُفَاجَآت", en: "Surprises" },
+            { ar: "اكْتِشَاف", en: "Discovering" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَعُودُ عُمْرُهَا إِلَى ثَلَاثَةِ آلَافِ ____",
+          translation: "Its age goes back three thousand years",
+          answer: "عَامٍ",
+          options: ["يَوْمٍ", "عَامٍ", "شَهْرٍ"]
+        }
+      ]
+    },
+    {
+      id: "u83_l2",
+      title: "Old and New",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "تَنْقَسِمُ دِلْهِي الْيَوْمَ إِلَى دِلْهِي الْقَدِيمَةِ وَدِلْهِي الْجَدِيدَةِ. زَائِرُ دِلْهِي يَتَمَتَّعُ بِمَزِيجٍ رَائِعٍ مِنَ الْقَدِيمِ وَالْحَدِيثِ.",
+          english: "Delhi is divided today into Old Delhi and New Delhi. A visitor to Delhi enjoys a wonderful mix of the old and the new."
+        },
+        {
+          type: "vocabulary",
+          word: "مَزِيجٍ",
+          transliteration: "Mazeej",
+          translation: "Mix / Blend",
+          example: { ar: "مَزِيجٌ مِنَ الْأَلْوَانِ", en: "A mix of colors" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "تَنْقَسِمُ", en: "Is divided" },
+            { ar: "قَدِيمَة", en: "Old" },
+            { ar: "حَدِيث", en: "Modern/New" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "زَائِرُ دِلْهِي يَتَمَتَّعُ بِـ ____ رَائِعٍ",
+          translation: "A visitor to Delhi enjoys a wonderful mix",
+          answer: "مَزِيجٍ",
+          options: ["طَعَامٍ", "مَزِيجٍ", "نَوْمٍ"]
+        }
+      ]
+    },
+    {
+      id: "u83_l3",
+      title: "Landmarks Side by Side",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "حَيْثُ تَقَعُ فِيهَا الْقُصُورُ وَالْمَعَالِمُ الْأَثَرِيَّةُ وَالْأَسْوَاقُ الْقَدِيمَةُ وَالْجَدِيدَةُ جَنْباً إِلَى جَنْبٍ مَعَ الْمَبَانِي الشَّاهِقَةِ وَمَعَالِمِ الْحَيَاةِ الْعَصْرِيَّةِ.",
+          english: "Where palaces, archaeological landmarks, and old and new markets are located side by side with towering buildings and landmarks of modern life."
+        },
+        {
+          type: "vocabulary",
+          word: "الشَّاهِقَةِ",
+          transliteration: "Ash-shahiqah",
+          translation: "Towering / High",
+          example: { ar: "جِبَالٌ شَاهِقَةٌ", en: "Towering mountains" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "قُصُور", en: "Palaces" },
+            { ar: "أَسْوَاق", en: "Markets" },
+            { ar: "عَصْرِيَّة", en: "Modern" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَقَعُ الْقُصُورُ جَنْباً إِلَى ____ مَعَ الْمَبَانِي",
+          translation: "Palaces are located side by side with buildings",
+          answer: "جَنْبٍ",
+          options: ["خَلْفٍ", "جَنْبٍ", "فَوْقَ"]
+        }
+      ]
+    },
+    {
+      id: "u83_l4",
+      title: "Famous Buildings",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مِنْ أَهَمِّ الْمَبَانِي الْمَشْهُورَةِ فِي الْهِنْدِ قُطُب مِينَار وَقَلْعَةُ الْحَمْرَاءِ وَتَاج مَحَل وَضَرِيحُ هُومَايُون وَالْمَسْجِدُ الْجَامِعُ بِدِلْهِي.",
+          english: "Among the most important famous buildings in India are Qutb Minar, the Red Fort, Taj Mahal, Humayun's Tomb, and the Jama Masjid in Delhi."
+        },
+        {
+          type: "vocabulary",
+          word: "الْمَبَانِي",
+          transliteration: "Al-mabani",
+          translation: "Buildings",
+          example: { ar: "الْمَبَانِي جَمِيلَةٌ", en: "The buildings are beautiful" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "قَلْعَة", en: "Fort" },
+            { ar: "ضَرِيح", en: "Tomb" },
+            { ar: "مَسْجِد", en: "Mosque" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ أَهَمِّ الْمَبَانِي ____ تَاج مَحَل",
+          translation: "Among the most important buildings is Taj Mahal",
+          answer: "مَثَلاً",
+          options: ["أَبَداً", "مِثْلَ", "رُبَّمَا"]
+        }
+      ]
+    },
+    {
+      id: "u83_l5",
+      title: "Qutb Minar",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "قُطُب مِينَار، وَهُوَ الْبُرْجُ الرَّائِعُ الرَّفِيعُ الَّذِي بُنِيَ عَامَ 1193 م حِينَ يَسِيطَرُهَا قُطُب الدِّين الْأَيْبَاك كأَكْبَرِ بُرْجٍ فِي الْعَالَمِ فِي تِلْكَ الْأَيَّامِ، يَبْلُغُ ارْتِفَاعُهُ 83 مِتْراً.",
+          english: "Qutb Minar, which is the wonderful slender tower built in 1193 AD when Qutb al-Din Aibak controlled it as the largest tower in the world in those days, its height reaches 83 meters."
+        },
+        {
+          type: "vocabulary",
+          word: "الْبُرْجُ",
+          transliteration: "Al-burj",
+          translation: "The Tower",
+          example: { ar: "هَذَا بُرْجٌ عَالٍ", en: "This is a high tower" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "رَائِع", en: "Wonderful" },
+            { ar: "رَفِيع", en: "Slender/Thin" },
+            { ar: "ارْتِفَاع", en: "Height" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَبْلُغُ ارْتِفَاعُهُ ____ مِتْراً",
+          translation: "Its height reaches 83 meters",
+          answer: "83",
+          options: ["100", "83", "50"]
+        }
+      ]
+    },
+    {
+      id: "u83_l6",
+      title: "The Old Fort",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْقَلْعَةُ الْقَدِيمَةُ، وَبُنِيَتْ هَذِهِ الْقَلْعَةُ الْأَثَرِيَّةُ عَلَى عَهْدِ شِير شَاه فِي الْقَرْنِ السَّادِسِ عَشَرَ.",
+          english: "The Old Fort, and this archaeological fort was built during the era of Sher Shah in the sixteenth century."
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَثَرِيَّةُ",
+          transliteration: "Al-athariyyah",
+          translation: "Archaeological / Ancient",
+          example: { ar: "الْمَوَاقِعُ الْأَثَرِيَّةُ مُهِمَّةٌ", en: "Archaeological sites are important" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "بُنِيَتْ", en: "Was built" },
+            { ar: "عَهْد", en: "Era" },
+            { ar: "سَادِس عَشَر", en: "Sixteenth" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "بُنِيَتْ فِي الْقَرْنِ ____",
+          translation: "It was built in the sixteenth century",
+          answer: "السَّادِسِ عَشَرَ",
+          options: ["الْعِشْرِينَ", "السَّادِسِ عَشَرَ", "الْعَاشِرِ"]
+        }
+      ]
+    },
+    {
+      id: "u83_l7",
+      title: "Humayun's Tomb",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "ضَرِيحُ هُومَايُون، وَهُوَ نُصُبٌ تِذْكَارِيٌّ بُنِيَ إِحْيَاءً لِذِكْرَى الْإِمْبِرَاطُورِ الْمَغُولِيِّ هُومَايُون، وَقَدِ اسْتُوحِيَ تَصْمِيمُ تَاج مَحَل مِنْ تَصْمِيمِ ضَرِيحِ هُومَايُون.",
+          english: "Humayun's Tomb, which is a memorial monument built in memory of the Mughal Emperor Humayun, and the design of the Taj Mahal was inspired by the design of Humayun's Tomb."
+        },
+        {
+          type: "vocabulary",
+          word: "تِذْكَارِيٌّ",
+          transliteration: "Tidhkariyyun",
+          translation: "Memorial",
+          example: { ar: "صُورَةٌ تِذْكَارِيَّةٌ", en: "A memorial photo" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "نُصُب", en: "Monument" },
+            { ar: "إِحْيَاء", en: "Revival/Commemoration" },
+            { ar: "اسْتُوحِيَ", en: "Was inspired" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "اسْتُوحِيَ تَصْمِيمُ ____ مِنْهُ",
+          translation: "The design of Taj Mahal was inspired by it",
+          answer: "تَاج مَحَل",
+          options: ["الْقَلْعَةِ", "تَاج مَحَل", "الْبُرْجِ"]
+        }
+      ]
+    },
+    {
+      id: "u83_l8",
+      title: "Jama Masjid",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْمَسْجِدُ الْجَامِعُ، هُوَ مَسْجِدُ عَاصِمَةِ مَمْلَكَةِ شَاه جَهَان فِي دِلْهِي، وَقَدْ أُنْجِزَ فِي عَامِ 1657م وَيُعَدُّ مِنْ أَكْبَرِ الْمَسَاجِدِ فِي زَمَنِهِ فِي آسِيَا.",
+          english: "The Jama Masjid is the mosque of the capital of Shah Jahan's kingdom in Delhi, and it was completed in the year 1657 AD and is considered one of the largest mosques of its time in Asia."
+        },
+        {
+          type: "vocabulary",
+          word: "أُنْجِزَ",
+          transliteration: "Unjiza",
+          translation: "Was completed",
+          example: { ar: "أُنْجِزَ الْعَمَلُ", en: "The work was completed" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مَمْلَكَة", en: "Kingdom" },
+            { ar: "أَكْبَر", en: "Largest" },
+            { ar: "زَمَن", en: "Time/Era" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يُعَدُّ مِنْ ____ الْمَسَاجِدِ فِي آسِيَا",
+          translation: "It is considered one of the largest mosques in Asia",
+          answer: "أَكْبَرِ",
+          options: ["أَصْغَرِ", "أَكْبَرِ", "أَقْدَمِ"]
+        }
+      ]
+    },
+    {
+      id: "u83_l9",
+      title: "National Museum",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْمَتْحَفُ الْوَطَنِيُّ، يَضُمُّ مَجْمُوعَةً رَائِعَةً ضَخْمَةً مِنَ التُّحَفِ وَالْقِطَعِ الْبُرُونْزِيَّةِ وَالْمَعْدِنِيَّةِ وَاللَّوْحَاتِ الْفَنِّيَّةِ وَالْأَزْيَاءِ لِلْمُلُوكِ وَالسَّلَاطِينِ الْقُدَمَاءِ فِي الْهِنْدِ.",
+          english: "The National Museum houses a huge wonderful collection of antiques, bronze and metal pieces, paintings, and costumes for the ancient kings and sultans in India."
+        },
+        {
+          type: "vocabulary",
+          word: "الْأَزْيَاءِ",
+          transliteration: "Al-azya'",
+          translation: "Costumes / Fashion",
+          example: { ar: "أَزْيَاءٌ تَقْلِيدِيَّةٌ", en: "Traditional costumes" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مَتْحَف", en: "Museum" },
+            { ar: "تُحَف", en: "Antiques" },
+            { ar: "لَوْحَات", en: "Paintings" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَضُمُّ مَجْمُوعَةً ____ مِنَ التُّحَفِ",
+          translation: "It houses a huge collection of antiques",
+          answer: "ضَخْمَةً",
+          options: ["صَغِيرَةً", "ضَخْمَةً", "قَلِيلَةً"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_3.js ---
+
+--- START OF FILE src/data/section3/section3_4.js ---
+export const unit84 = {
+  id: "u84",
+  title: "Climate and Agra",
+  lessons: [
+    {
+      id: "u84_l1",
+      title: "Three Seasons",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "تَتَمَيَّزُ مُنَاخُ الْهِنْدِ بِثَلَاثَةِ مَوَاسِمَ مُنَاخِيَّةٍ هِيَ الشِّتَاءُ وَالصَّيْفُ وَمَوْسِمُ الْأَمْطَارِ (مُونْسُون).",
+          english: "India's climate is characterized by three climatic seasons: winter, summer, and the rainy season (monsoon)."
+        },
+        {
+          type: "vocabulary",
+          word: "مُنَاخُ",
+          transliteration: "Munakh",
+          translation: "Climate",
+          example: { ar: "مُنَاخُ الْمِنْطَقَةِ مُعْتَدِلٌ", en: "The region's climate is moderate" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شِتَاء", en: "Winter" },
+            { ar: "صَيْف", en: "Summer" },
+            { ar: "أَمْطَار", en: "Rains" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَتَمَيَّزُ بـ____ مَوَاسِمَ مُنَاخِيَّةٍ",
+          translation: "Characterized by three climatic seasons",
+          answer: "ثَلَاثَةِ",
+          options: ["أَرْبَعَةِ", "ثَلَاثَةِ", "خَمْسَةِ"]
+        }
+      ]
+    },
+    {
+      id: "u84_l2",
+      title: "Winter Season",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "شُهُورُ الشِّتَاءِ تَمْتَدُّ مِنْ نُوفَمْبَر حَتَّى مَارِس فِيهَا تَكُونُ الشَّمْسُ مُشْرِقَةً، كَمَا تَتَسَاقَطُ الثُّلُوجُ عَلَى الْجِبَالِ الشِّمَالِيَّةِ.",
+          english: "The winter months extend from November to March, in which the sun is shining, and snow falls on the northern mountains."
+        },
+        {
+          type: "vocabulary",
+          word: "مُشْرِقَةً",
+          transliteration: "Mushriqah",
+          translation: "Shining / Bright",
+          example: { ar: "الْشَّمْسُ مُشْرِقَةٌ الْيَوْمَ", en: "The sun is shining today" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شُهُور", en: "Months" },
+            { ar: "ثُلُوج", en: "Snow" },
+            { ar: "جِبَال", en: "Mountains" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَتَسَاقَطُ ____ عَلَى الْجِبَالِ",
+          translation: "Snow falls on the mountains",
+          answer: "الثُّلُوجُ",
+          options: ["الْأَزْهَارُ", "الثُّلُوجُ", "الْأَوْرَاقُ"]
+        }
+      ]
+    },
+    {
+      id: "u84_l3",
+      title: "Summer Season",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمَوْسِمُ الصَّيْفِ يَمْتَدُّ مِنْ أَبْرِيل إِلَى يُونِيُو، وَفِي الصَّيْفِ يَشْتَدُّ الْحَرَارَةُ فِي دِلْهِي فَتَكُونُ الْمَدِينَةُ حَارّاً شَدِيداً وَفِي أَيَّامِ الشِّتَاءِ تَكُونُ بِالْعَكْسِ، حَيْثُ يَذْهَبُ الْمُوَاطِنُونَ إِلَى الْمُنْتَجَعَاتِ الْجَبَلِيَّةِ ذَاتِ الطَّقْسِ الرَّائِعِ.",
+          english: "The summer season extends from April to June, and in summer the heat intensifies in Delhi making the city intensely hot, and in winter days it is the opposite, where citizens go to mountain resorts with wonderful weather."
+        },
+        {
+          type: "vocabulary",
+          word: "يَشْتَدُّ",
+          transliteration: "Yashtaddu",
+          translation: "Intensifies",
+          example: { ar: "يَشْتَدُّ الْبَرْدُ فِي اللَّيْلِ", en: "The cold intensifies at night" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "حَرَارَة", en: "Heat" },
+            { ar: "عَكْس", en: "Opposite" },
+            { ar: "مُنْتَجَعَات", en: "Resorts" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "يَذْهَبُ الْمُوَاطِنُونَ إِلَى ____ الْجَبَلِيَّةِ",
+          translation: "Citizens go to mountain resorts",
+          answer: "الْمُنْتَجَعَاتِ",
+          options: ["الْمُسْتَشْفَيَاتِ", "الْمُنْتَجَعَاتِ", "الْمَكَاتِبِ"]
+        }
+      ]
+    },
+    {
+      id: "u84_l4",
+      title: "Rainy Season",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَفِي مَوْسِمِ الْأَمْطَارِ تَهْطِلُ الْمَطَرُ بِغَزَارَةٍ عَلَى طُولِ السَّاحِلِ الْغَرْبِيِّ بَيْنَ شَهْرَيْ يُونِيُو وَسِبْتَمْبَر، وَعَلَى طُولِ السَّاحِلِ الشَّرْقِيِّ مِنْ مُنْتَصَفِ أُكْتُوبَر إِلَى دِيسَمْبَر.",
+          english: "And in the rainy season, rain falls heavily along the western coast between the months of June and September, and along the eastern coast from mid-October to December."
+        },
+        {
+          type: "vocabulary",
+          word: "تَهْطِلُ",
+          transliteration: "Tahtilu",
+          translation: "Falls (rain)",
+          example: { ar: "تَهْطِلُ الْأَمْطَارُ كَثِيراً", en: "Rains fall a lot" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "غَزَارَة", en: "Heavily/Abundance" },
+            { ar: "سَاحِل", en: "Coast" },
+            { ar: "مُنْتَصَف", en: "Middle" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَهْطِلُ الْمَطَرُ ____",
+          translation: "The rain falls heavily",
+          answer: "بِغَزَارَةٍ",
+          options: ["بِقِلَّةٍ", "بِغَزَارَةٍ", "بِبُطْءٍ"]
+        }
+      ]
+    },
+    {
+      id: "u84_l5",
+      title: "Keys of History",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَفِي مُدُنِ الْهِنْدِ مَفَاتِيحُ التَّارِيخِ الْقَادِمَةِ مِنَ التَّارِيخِ الْعَتِيدِ الْمَحْفُوفَةِ بِالْأَسَاطِيرِ وَالْمَدْرُوسَةِ بِالْفَلْسَفَاتِ وَالْحِكَمِ وَمِنْ مَهَامِّهَا أَكْرَاه وَجَايْبُور وَمُومْبَاي.",
+          english: "And in the cities of India are the keys of history coming from the ancient history, surrounded by legends and studied with philosophies and wisdom, and among its important ones are Agra, Jaipur, and Mumbai."
+        },
+        {
+          type: "vocabulary",
+          word: "مَفَاتِيحُ",
+          transliteration: "Mafateeh",
+          translation: "Keys",
+          example: { ar: "مَفَاتِيحُ النَّجَاحِ", en: "Keys to success" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عَتِيد", en: "Ancient/Deep" },
+            { ar: "مَحْفُوفَة", en: "Surrounded" },
+            { ar: "مَهَامّ", en: "Important ones" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مِنْ مَهَامِّهَا أَكْرَاه وَ____",
+          translation: "Among its important ones are Agra and Jaipur",
+          answer: "جَايْبُور",
+          options: ["بَارِيس", "جَايْبُور", "لَنْدَن"]
+        }
+      ]
+    },
+    {
+      id: "u84_l6",
+      title: "Agra's Prosperity",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "أَكْرَاه: هِيَ مَدِينَةٌ ازْدَهَرَتْ عَلَى عَهْدِ الْحَضَارَةِ الْمَغُولِيَّةِ، حَيْثُ كَانَتْ عَاصِمَةً لَهَا خِلَالَ الْقَرْنَيْنِ السَّادِسِ عَشَرَ وَالسَّابِعِ عَشَرَ، تُزَخْرَفُ أَكْرَاه بِالْمَعَالِمِ الْأَثَرِيَّةِ الرَّائِعَةِ، أَشْهَرُهَا 'تَاج مَحَل'.",
+          english: "Agra: It is a city that flourished during the era of the Mughal civilization, where it was its capital during the sixteenth and seventeenth centuries, Agra is adorned with wonderful archaeological landmarks, the most famous of which is 'Taj Mahal'."
+        },
+        {
+          type: "vocabulary",
+          word: "ازْدَهَرَتْ",
+          transliteration: "Izdaharat",
+          translation: "Flourished",
+          example: { ar: "ازْدَهَرَتِ التِّجَارَةُ", en: "Trade flourished" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "حَضَارَة", en: "Civilization" },
+            { ar: "تُزَخْرَفُ", en: "Adorned/Decorated" },
+            { ar: "مَعَالِم", en: "Landmarks" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "أَشْهَرُهَا ____",
+          translation: "The most famous of which is Taj Mahal",
+          answer: "تَاج مَحَل",
+          options: ["الْقَلْعَة", "تَاج مَحَل", "الْمَسْجِد"]
+        }
+      ]
+    },
+    {
+      id: "u84_l7",
+      title: "Taj Mahal",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "هُوَ ضَرِيحُ مَلِكَةٍ مُمْتَاز زَوْجَةِ شَاه جَهَان بَنَاهُ الْمَلِكُ تِذْكَاراً لِحُبِّهِ الْعَمِيقِ لِشَرِيكَةِ حَيَاتِهِ. وَهُوَ الْيَوْمَ مِنَ الْمَعَالِمِ السِّيَاحِيَّةِ فِي الْهِنْدِ، وَفِي جَوَانِبِهِ حِصْنٌ مُشَدَّدَةٌ بِجُدْرَانِهَا الْمُشَيَّدَةِ مِنَ الْحَجَرِ الرَّمْلِيِّ الْأَحْمَرِ، وَيَضُمُّ عَدَداً مِنَ الْمَبَانِي الْمَهِيبَةِ الْأُخْرَى.",
+          english: "It is the tomb of Queen Mumtaz, the wife of Shah Jahan, built by the king as a memorial to his deep love for his life partner. And today it is one of the tourist landmarks in India, and on its sides is a fortified fort with walls built of red sandstone, and it includes a number of other majestic buildings."
+        },
+        {
+          type: "vocabulary",
+          word: "تِذْكَاراً",
+          transliteration: "Tidhkaran",
+          translation: "Memorial",
+          example: { ar: "هَدِيَّةٌ تِذْكَارِيَّةٌ", en: "A memorial gift" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "حُبّ عَمِيق", en: "Deep love" },
+            { ar: "حِصْن", en: "Fort/Fortress" },
+            { ar: "مَهِيبَة", en: "Majestic" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "بَنَاهُ الْمَلِكُ ____ لِحُبِّهِ",
+          translation: "The king built it as a memorial to his love",
+          answer: "تِذْكَاراً",
+          options: ["بَيْتاً", "تِذْكَاراً", "سُوقاً"]
+        }
+      ]
+    },
+    {
+      id: "u84_l8",
+      title: "Jaipur City",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "جَايْبُور: إِنَّهَا مَدِينَةٌ جَمِيلَةٌ عَتِيقَةٌ تُسَمَّى الْمَدِينَةَ الزَّهْرِيَّةَ مِنْ نَاحِيَةٍ. تَبْدُو قَلْعَةً قَادِمَةً مِنَ الْقُرُونِ الْوُسْطَى، وَمِنْ جِهَةٍ أُخْرَى فَهِيَ الْمَدِينَةُ الصَّاخِبَةُ وَبَلَدُ التَّقَالِيدِ الْفِلْكِلُورِيَّةِ الْغَرِيبَةِ الْهِنْدِيَّةِ.",
+          english: "Jaipur: It is a beautiful ancient city called the Pink City on one hand. It looks like a castle coming from the Middle Ages, and on the other hand, it is the bustling city and the land of strange Indian folkloric traditions."
+        },
+        {
+          type: "vocabulary",
+          word: "الزَّهْرِيَّةَ",
+          transliteration: "Az-zahriyyah",
+          translation: "Pink",
+          example: { ar: "لَوْنُهَا زَهْرِيٌّ", en: "Its color is pink" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عَتِيقَة", en: "Ancient" },
+            { ar: "صَاخِبَة", en: "Bustling/Noisy" },
+            { ar: "تَقَالِيد", en: "Traditions" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُسَمَّى الْمَدِينَةَ ____",
+          translation: "It is called the Pink City",
+          answer: "الزَّهْرِيَّةَ",
+          options: ["الْحَمْرَاءَ", "الزَّهْرِيَّةَ", "الْبَيْضَاءَ"]
+        }
+      ]
+    },
+    {
+      id: "u84_l9",
+      title: "Pink Walls",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "عِنْدَ دُخُولِ الْمَدِينَةِ يَتَّضِحُ مَعْنَى اسْمِ الزَّهْرِيِّ الَّذِي أُطْلِقَ عَلَى الْمَدِينَةِ. فَقَدْ شُيِّدَ الْقِطَاعُ الْقَدِيمُ مِنَ الْمَدِينَةِ بِأَكْمَلِهِ مِنْ أَسْوَارٍ زَهْرِيَّةٍ مُخْتَلِفَةِ الْأَلْوَانِ.",
+          english: "Upon entering the city, the meaning of the name Pink given to the city becomes clear. The entire old sector of the city was built from pink walls of various colors."
+        },
+        {
+          type: "vocabulary",
+          word: "أَسْوَارٍ",
+          transliteration: "Aswar",
+          translation: "Walls",
+          example: { ar: "أَسْوَارُ الْمَدِينَةِ عَالِيَةٌ", en: "The city walls are high" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "دُخُول", en: "Entering" },
+            { ar: "يَتَّضِحُ", en: "Becomes clear" },
+            { ar: "شُيِّدَ", en: "Was built" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "شُيِّدَ الْقِطَاعُ الْقَدِيمُ مِنْ ____ زَهْرِيَّةٍ",
+          translation: "The old sector was built from pink walls",
+          answer: "أَسْوَارٍ",
+          options: ["أَحْجَارٍ", "أَسْوَارٍ", "أَخْشَابٍ"]
+        }
+      ]
+    },
+    {
+      id: "u84_l10",
+      title: "Shoppers' Paradise",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "يُقَالُ إِنَّ جَايْبُور جَنَّةُ الْمُتَسَوِّقِينَ وَقِبْلَتُهُمْ لِلرِّحْلَةِ. يَحْرِصُ الزُّوَّارُ عَلَى اقْتِنَاءِ اللَّوْحَاتِ، وَشِرَاءِ الْمُجَوْهَرَاتِ وَالْأَقْمِشَةِ الْمُزَخْرَفَةِ وَالْفَخَّارَاتِ الْمُلَوَّنَةِ وَالْمَصْنُوعَاتِ الْجِلْدِيَّةِ.",
+          english: "It is said that Jaipur is a shoppers' paradise and their destination for travel. Visitors are keen on acquiring paintings, and buying jewelry, decorated fabrics, colored pottery, and leather goods."
+        },
+        {
+          type: "vocabulary",
+          word: "جَنَّةُ",
+          transliteration: "Jannah",
+          translation: "Paradise",
+          example: { ar: "جَنَّةُ الْأَرْضِ", en: "Paradise on earth" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مُتَسَوِّقِين", en: "Shoppers" },
+            { ar: "مُجَوْهَرَات", en: "Jewelry" },
+            { ar: "فَخَّارَات", en: "Pottery" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "جَايْبُور ____ الْمُتَسَوِّقِينَ",
+          translation: "Jaipur is shoppers' paradise",
+          answer: "جَنَّةُ",
+          options: ["مَدِينَةُ", "جَنَّةُ", "سُوقُ"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_4.js ---
+
+--- START OF FILE src/data/section3/section3_5.js ---
+export const unit85 = {
+  id: "u85",
+  title: "Mumbai and Madras",
+  lessons: [
+    {
+      id: "u85_l1",
+      title: "Vibrant Mumbai",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مُومْبَاي: تَعْتَبِرُ مُومْبَاي مَدِينَةً نَابِضَةً بِالْحَيَوِيَّةِ وَالنَّشَاطِ وَالْحَرَكَةِ الدَّائِبَةِ لِوِلَايَةِ 'مَاهَا رَاشْتِرَا'، وَمِنَ الْمَدِينَةِ الْأُولَى فِي الْهِنْدِ الْغَرْبِيَّةِ.",
+          english: "Mumbai: Mumbai is considered a city pulsating with vitality, activity, and constant movement for the state of 'Maharashtra', and the primary city in Western India."
+        },
+        {
+          type: "vocabulary",
+          word: "نَابِضَةً",
+          transliteration: "Nabidatan",
+          translation: "Pulsating / Vibrant",
+          example: { ar: "مَدِينَةٌ نَابِضَةٌ بِالْحَيَاةِ", en: "A city pulsating with life" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "حَيَوِيَّة", en: "Vitality" },
+            { ar: "نَشَاط", en: "Activity" },
+            { ar: "حَرَكَة", en: "Movement" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَعْتَبِرُ مُومْبَاي مَدِينَةً ____ بِالْحَيَوِيَّةِ",
+          translation: "Mumbai is considered a city pulsating with vitality",
+          answer: "نَابِضَةً",
+          options: ["هَادِئَةً", "نَابِضَةً", "قَدِيمَةً"]
+        }
+      ]
+    },
+    {
+      id: "u85_l2",
+      title: "Cinema City",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْيَوْمَ مُومْبَاي أَكْبَرُ مَدِينَةٍ فِي الشَّرْقِ لِلْإِنْتَاجِ السِّينِمَائِيِّ بِحَيْثُ تُنْتِجُ كُلَّ عَامٍ 1000 فِيلْم سِينِمَاوِي.",
+          english: "Today, Mumbai is the largest city in the East for cinematic production, producing 1000 cinematic films every year."
+        },
+        {
+          type: "vocabulary",
+          word: "السِّينِمَائِيِّ",
+          transliteration: "As-sinima'iyyi",
+          translation: "Cinematic",
+          example: { ar: "الْإِنْتَاجُ السِّينِمَائِيُّ", en: "Cinematic production" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "إِنْتَاج", en: "Production" },
+            { ar: "شَرْق", en: "East" },
+            { ar: "عَام", en: "Year" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُنْتِجُ كُلَّ عَامٍ 1000 ____",
+          translation: "Produces 1000 films every year",
+          answer: "فِيلْم",
+          options: ["كِتَاب", "فِيلْم", "لُعْبَة"]
+        }
+      ]
+    },
+    {
+      id: "u85_l3",
+      title: "Gateway of India",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "بَوَّابَةُ الْهِنْدِ الْوَاقِعَةِ فِي مُومْبَاي مِنْ أَهَمِّ مَعَالِمِ الْهِنْدِ الْأَثَرِيَّةِ، فَهِيَ بَوَّابَةُ الْهِنْدِ الَّتِي بَنَاهَا الْحُكُومَةُ الْبَرِيطَانِيَّةُ تِذْكَاراً لِقُدُومِ مَلِكِهِمْ جُورْج الْخَامِسِ فِي الْهِنْدِ.",
+          english: "The Gateway of India located in Mumbai is one of the most important archaeological landmarks of India, it is the Gateway of India built by the British government as a memorial for the arrival of their King George V in India."
+        },
+        {
+          type: "vocabulary",
+          word: "بَوَّابَةُ",
+          transliteration: "Bawwabah",
+          translation: "Gateway / Gate",
+          example: { ar: "فَتَحَ الْبَوَّابَةَ", en: "He opened the gate" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "وَاقِعَة", en: "Located" },
+            { ar: "حُكُومَة", en: "Government" },
+            { ar: "قُدُوم", en: "Arrival" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "بَنَتْهَا الْحُكُومَةُ ____",
+          translation: "The British government built it",
+          answer: "الْبَرِيطَانِيَّةُ",
+          options: ["الْهِنْدِيَّةُ", "الْبَرِيطَانِيَّةُ", "الْفَرَنْسِيَّةُ"]
+        }
+      ]
+    },
+    {
+      id: "u85_l4",
+      title: "Architecture Design",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "تُشْبِهُ فِي تَصْمِيمِهَا الْمِعْمَارِيِّ قَوْسَ النَّصْرِ فِي بَارِيس.",
+          english: "It resembles the Arc de Triomphe in Paris in its architectural design."
+        },
+        {
+          type: "vocabulary",
+          word: "تُشْبِهُ",
+          transliteration: "Tushbihu",
+          translation: "Resembles",
+          example: { ar: "الْبِنْتُ تُشْبِهُ أُمَّهَا", en: "The girl resembles her mother" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "تَصْمِيم", en: "Design" },
+            { ar: "مِعْمَارِيّ", en: "Architectural" },
+            { ar: "قَوْس", en: "Arch" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُشْبِهُ قَوْسَ النَّصْرِ فِي ____",
+          translation: "It resembles Arc de Triomphe in Paris",
+          answer: "بَارِيس",
+          options: ["لَنْدَن", "بَارِيس", "دُبَي"]
+        }
+      ]
+    },
+    {
+      id: "u85_l5",
+      title: "Caves and Campus",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مُومْبَاي مَدْخَلٌ إِلَى كُهُوفِ كَانْهِيرِي الْعَتِيقَةِ الْمَشْهُورَةِ لِنُقُوشِهَا وَتَصَاوِيرِهَا الْأُسْطُورِيَّةِ الْهِنْدِيَّةِ، تَقَعُ عَلَى بُعْدِ 28 كِيلُومِتْراً مِنْ بَوَّابَةِ الْهِنْدِ. وَمِنْ أَهَمِّ الْمَبْنِيَّاتِ فِي مُومْبَاي مَبْنِيَّاتُ جَامِعَةِ مُومْبَاي الْمَبْنِيَّةِ عَلَى نَمَطِ الْفَرَنْسِيِّ الْقَدِيمِ.",
+          english: "Mumbai is an entrance to the ancient Kanheri Caves, famous for their Indian mythological inscriptions and depictions, located 28 kilometers away from the Gateway of India. And among the most important buildings in Mumbai are the buildings of Mumbai University built in the old French style."
+        },
+        {
+          type: "vocabulary",
+          word: "كُهُوفِ",
+          transliteration: "Kuhuf",
+          translation: "Caves",
+          example: { ar: "الْكُهُوفُ مُظْلِمَةٌ", en: "The caves are dark" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "نُقُوش", en: "Inscriptions" },
+            { ar: "أُسْطُورِيَّة", en: "Mythological" },
+            { ar: "نَمَط", en: "Style/Pattern" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَقَعُ عَلَى بُعْدِ 28 ____",
+          translation: "Located 28 kilometers away",
+          answer: "كِيلُومِتْراً",
+          options: ["مِتْراً", "كِيلُومِتْراً", "مِيلاً"]
+        }
+      ]
+    },
+    {
+      id: "u85_l6",
+      title: "Madras Location",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مَدْرَاس: تَقَعُ مَدِينَةُ مَدْرَاس أَوْ تَشْنَاي عَلَى الشَّاطِئِ الشَّرْقِيِّ لِلْهِنْدِ، حَيْثُ اجْتَذَبَتِ التُّجَّارَ مِنَ الرُّومِ وَالْيُونَانِ وَشِبْهِ الْجَزِيرَةِ الْعَرَبِيَّةِ.",
+          english: "Madras: The city of Madras or Chennai is located on the eastern coast of India, where it attracted merchants from the Romans, Greeks, and the Arabian Peninsula."
+        },
+        {
+          type: "vocabulary",
+          word: "اجْتَذَبَتِ",
+          transliteration: "Ijtadhabat",
+          translation: "Attracted",
+          example: { ar: "الْأَزْهَارُ اجْتَذَبَتِ النَّحْلَ", en: "Flowers attracted the bees" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شَاطِئ", en: "Coast/Beach" },
+            { ar: "شَرْقِيّ", en: "Eastern" },
+            { ar: "تُجَّار", en: "Merchants" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَقَعُ عَلَى الشَّاطِئِ ____ لِلْهِنْدِ",
+          translation: "Located on the eastern coast of India",
+          answer: "الشَّرْقِيِّ",
+          options: ["الْغَرْبِيِّ", "الشَّرْقِيِّ", "الْجَنُوبِيِّ"]
+        }
+      ]
+    },
+    {
+      id: "u85_l7",
+      title: "Gateway of South",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "شَهِدَتْ هَذِهِ الْمَدِينَةُ خَطَوَاتِ التَّارِيخِ الْأُولَى لِتَشْيِيدِ وَبِنَاءِ الْهِنْدِ الْحَدِيثَةِ، وَأَصْبَحَتْ تُعْرَفُ بِاسْمِ بَوَّابَةِ الْجَنُوبِ.",
+          english: "This city witnessed the first steps of history in the construction and building of modern India, and became known as the Gateway of the South."
+        },
+        {
+          type: "vocabulary",
+          word: "تَشْيِيدِ",
+          transliteration: "Tashyeed",
+          translation: "Construction",
+          example: { ar: "تَشْيِيدُ الْمَبَانِي", en: "Construction of buildings" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شَهِدَتْ", en: "Witnessed" },
+            { ar: "خَطَوَات", en: "Steps" },
+            { ar: "جَنُوب", en: "South" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُعْرَفُ بِاسْمِ بَوَّابَةِ ____",
+          translation: "Known as the Gateway of the South",
+          answer: "الْجَنُوبِ",
+          options: ["الشِّمَالِ", "الْجَنُوبِ", "الشَّرْقِ"]
+        }
+      ]
+    },
+    {
+      id: "u85_l8",
+      title: "Madras Landmarks",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمِنْ أَهَمِّ الْمَعَالِمِ السِّيَاحِيَّةِ وَالْأَثَرِيَّةِ فِي مَدْرَاس مَتْحَفُ مَدْرَاس الشَّهِيرَةُ، وَمَسْجِدُهَا الْكَبِيرُ، وَأَكَادِمِيَّةُ مَدْرَاس الْفَنِّيَّةُ، وَحَدِيقَةُ الْحَيَوَانَاتِ. هَذَا الْمَسْجِدُ بُنِيَ فِي عَصْرِ الْأُمَرَاءِ عَامَ 1795م، وَهُوَ أَرْوَعُ الْمَسَاجِدِ فِي جَنُوبِ الْهِنْدِ.",
+          english: "And among the most important tourist and archaeological landmarks in Madras are the famous Madras Museum, its great mosque, the Madras Art Academy, and the zoo. This mosque was built in the era of princes in 1795 AD, and it is the most wonderful of mosques in South India."
+        },
+        {
+          type: "vocabulary",
+          word: "أَرْوَعُ",
+          transliteration: "Arwa'",
+          translation: "Most wonderful",
+          example: { ar: "هَذَا أَرْوَعُ مَنْظَرٍ", en: "This is the most wonderful view" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَكَادِمِيَّة", en: "Academy" },
+            { ar: "حَدِيقَة", en: "Garden/Park" },
+            { ar: "أُمَرَاء", en: "Princes" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "بُنِيَ الْمَسْجِدُ عَامَ ____",
+          translation: "The mosque was built in 1795 AD",
+          answer: "1795",
+          options: ["1800", "1795", "1900"]
+        }
+      ]
+    },
+    {
+      id: "u85_l9",
+      title: "Museum and Academy",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَالْمَتْحَفُ يَضُمُّ مَجْمُوعَةً مِنْ أَشْهَرِ التُّحَفِ وَالْآثَارِ الْقَدِيمَةِ لِجَنُوبِ الْهِنْدِ، وَأَكَادِمِيَّةُ مَدْرَاس الْفَنِّيَّةُ تُعَدُّ مُؤَسَّسَةً كَبِيرَةً وَهَامَّةً لِرِعَايَةِ الْفُنُونِ وَحَدِيقَةُ الْحَيَوَانَاتِ فِي مَدْرَاس يَعْتَبِرُ وَاحِداً مِنْ أَرْوَعِ حَدَائِقِ الْحَيَوَانَاتِ فِي الْمِنْطَقَةِ الْجَنُوبِيَّةِ.",
+          english: "And the museum includes a collection of the most famous antiques and ancient artifacts of South India, and the Madras Art Academy is considered a large and important institution for the sponsorship of arts, and the zoo in Madras is considered one of the most wonderful zoos in the southern region."
+        },
+        {
+          type: "vocabulary",
+          word: "مُؤَسَّسَةً",
+          transliteration: "Mu'assasah",
+          translation: "Institution",
+          example: { ar: "مُؤَسَّسَةٌ تَعْلِيمِيَّةٌ", en: "Educational institution" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "يَضُمُّ", en: "Includes" },
+            { ar: "فُنُون", en: "Arts" },
+            { ar: "حَيَوَانَات", en: "Animals" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تُعَدُّ مُؤَسَّسَةً هَامَّةً لِرِعَايَةِ ____",
+          translation: "Considered an important institution for art sponsorship",
+          answer: "الْفُنُونِ",
+          options: ["الْأَطْفَالِ", "الْفُنُونِ", "الْمَرْضَى"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_5.js ---
+
+--- START OF FILE src/data/section3/section3_6.js ---
+export const unit86 = {
+  id: "u86",
+  title: "Education and Culture",
+  lessons: [
+    {
+      id: "u86_l1",
+      title: "Indian Universities",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الْجَامِعَاتُ: تَخْدِمُ فِي التَّعْلِيمِ الْعَالِي فِي الْهِنْدِ حَوَالِي 900 جَامِعَةٍ مِنْ بَيْنِهَا 30 جَامِعَةٍ تَدْرُسُ بِهَا اللُّغَةَ الْعَرَبِيَّةَ وَالدِّرَاسَاتِ الْإِسْلَامِيَّةَ.",
+          english: "Universities: About 900 universities serve in higher education in India, among which 30 universities teach the Arabic language and Islamic studies."
+        },
+        {
+          type: "vocabulary",
+          word: "التَّعْلِيمِ",
+          transliteration: "At-ta'leem",
+          translation: "Education",
+          example: { ar: "التَّعْلِيمُ مُهِمٌّ لِلْجَمِيعِ", en: "Education is important for everyone" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عَالِي", en: "Higher/High" },
+            { ar: "حَوَالِي", en: "About/Around" },
+            { ar: "دِرَاسَات", en: "Studies" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَخْدِمُ حَوَالِي 900 ____",
+          translation: "About 900 universities serve",
+          answer: "جَامِعَةٍ",
+          options: ["مَدْرَسَةٍ", "جَامِعَةٍ", "كُلِّيَّةٍ"]
+        }
+      ]
+    },
+    {
+      id: "u86_l2",
+      title: "Delhi Universities",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "مِنْهَا ثَلَاثُ جَامِعَاتٍ شَهِيرَةٍ فِي دِلْهِي وَهِيَ جَامِعَةُ جَوَاهِر لَال نَهْرُو، وَجَامِعَةُ دِلْهِي، وَالْجَامِعَةُ الْمِلِّيَّةُ الْإِسْلَامِيَّةُ.",
+          english: "Among them are three famous universities in Delhi: Jawaharlal Nehru University, Delhi University, and Jamia Millia Islamia."
+        },
+        {
+          type: "vocabulary",
+          word: "شَهِيرَةٍ",
+          transliteration: "Shahirah",
+          translation: "Famous",
+          example: { ar: "شَخْصِيَّةٌ شَهِيرَةٌ", en: "A famous personality" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "ثَلَاث", en: "Three" },
+            { ar: "مِلِّيَّة", en: "National/Community" },
+            { ar: "إِسْلَامِيَّة", en: "Islamic" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "جَامِعَةُ جَوَاهِر لَال ____",
+          translation: "Jawaharlal Nehru University",
+          answer: "نَهْرُو",
+          options: ["غَانْدِي", "نَهْرُو", "أَزَاد"]
+        }
+      ]
+    },
+    {
+      id: "u86_l3",
+      title: "Major Universities",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمِنْ أَشْهَرِ الْجَامِعَاتِ الْهِنْدِيَّةِ الْكَبِيرَةِ جَامِعَاتُ عَلِيكَرْه وَعُثْمَانِيَّة وَهَمْدَرْد وَمَيْسُور وَكُولْكُوتَا وَمَدْرَاس وَمُومْبَاي، وَكِيرَالَا وَكَالِيكُوت وَأَمْثَالُهَا.",
+          english: "And among the most famous large Indian universities are the universities of Aligarh, Osmania, Hamdard, Mysore, Kolkata, Madras, Mumbai, Kerala, Calicut, and their likes."
+        },
+        {
+          type: "vocabulary",
+          word: "أَمْثَالُهَا",
+          transliteration: "Amthaluha",
+          translation: "Their likes / Similar ones",
+          example: { ar: "وَغَيْرُهَا وَأَمْثَالُهَا", en: "And others and their likes" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "كَبِيرَة", en: "Large" },
+            { ar: "هِنْدِيَّة", en: "Indian" },
+            { ar: "أَشْهَر", en: "Most famous" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "جَامِعَاتُ عَلِيكَرْه وَ____",
+          translation: "Universities of Aligarh and Osmania",
+          answer: "عُثْمَانِيَّة",
+          options: ["أَمْرِيكِيَّة", "عُثْمَانِيَّة", "صِينِيَّة"]
+        }
+      ]
+    },
+    {
+      id: "u86_l4",
+      title: "Handicrafts",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الصِّنَاعَاتُ التَّقْلِيدِيَّةُ: تَتَمَيَّزُ أَسْوَاقُ الْهِنْدِ بِالْمَصْنُوعَاتِ الْيَدَوِيَّةِ مِثْلَ الْعُقُودِ الذَّهَبِيَّةِ وَالْفِضِّيَّةِ وَالزُّجَاجِيَّةِ الْمَصْنُوعَةِ يَدَوِيّاً، وَالْأَقْمِشَةِ وَالْأَحْذِيَةِ الْحَرِيرِيَّةِ الْمُزَخْرَفَةِ بِخُيُوطٍ ذَهَبِيَّةٍ.",
+          english: "Traditional Crafts: Indian markets are distinguished by handicrafts such as handmade gold, silver, and glass necklaces, and silk fabrics and shoes decorated with golden threads."
+        },
+        {
+          type: "vocabulary",
+          word: "يَدَوِيّاً",
+          transliteration: "Yadawiyyan",
+          translation: "Handmade / Manually",
+          example: { ar: "صُنِعَ يَدَوِيّاً", en: "Made manually" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "تَقْلِيدِيَّة", en: "Traditional" },
+            { ar: "عُقُود", en: "Necklaces" },
+            { ar: "ذَهَبِيَّة", en: "Golden" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَتَمَيَّزُ بِالْمَصْنُوعَاتِ ____",
+          translation: "Distinguished by handicrafts",
+          answer: "الْيَدَوِيَّةِ",
+          options: ["الْآلِيَّةِ", "الْيَدَوِيَّةِ", "الْحَدِيثَةِ"]
+        }
+      ]
+    },
+    {
+      id: "u86_l5",
+      title: "Fabrics and Items",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَمِنْ مَزِيَّةِ الْأَقْمِشَةِ الْهِنْدِيَّةِ السَّارِي بِأَشْغَالٍ وَرُسُومٍ هِنْدِيَّةٍ، وَحَقَائِبُ كُجَرَات الْجِلْدِيَّةِ الْمُرَصَّعَةِ وَالْمُعَلَّقَاتِ الْجِدَارِيَّةِ وَالزُّجَاجِيَّةِ، وَمِنْهَا أَطْبَاقُ الْمُطَعَّمَةِ الْمُزَخْرَفَةِ بِالرُّخَامِ الْفَاخِرِ.",
+          english: "And among the merits of Indian fabrics is the Sari with Indian works and drawings, the studded leather bags of Gujarat, wall and glass hangings, and among them are inlaid dishes decorated with luxurious marble."
+        },
+        {
+          type: "vocabulary",
+          word: "الْمُزَخْرَفَةِ",
+          transliteration: "Al-muzakhrafah",
+          translation: "Decorated / Ornamented",
+          example: { ar: "غُرْفَةٌ مُزَخْرَفَةٌ", en: "A decorated room" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَقْمِشَة", en: "Fabrics" },
+            { ar: "رُسُوم", en: "Drawings" },
+            { ar: "جِلْدِيَّة", en: "Leather" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "حَقَائِبُ كُجَرَات ____",
+          translation: "Gujarat leather bags",
+          answer: "الْجِلْدِيَّةِ",
+          options: ["الْبْلَاسْتِيكِيَّةِ", "الْجِلْدِيَّةِ", "الْوَرَقِيَّةِ"]
+        }
+      ]
+    },
+    {
+      id: "u86_l6",
+      title: "Wooden Antiques",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَالتُّحَفُ الْخَشَبِيَّةُ الْمَصْنُوعَةُ مِنَ الصَّنْدَلِ وَالسَّاجِ، وَالْآلَاتُ الْمُوسِيقِيَّةُ الَّتِي تَشْتَهِرُ بِهَا الْوَطَنُ الْهِنْدِيُّ.",
+          english: "And wooden antiques made of sandalwood and teak, and musical instruments for which the Indian homeland is famous."
+        },
+        {
+          type: "vocabulary",
+          word: "الْمُوسِيقِيَّةُ",
+          transliteration: "Al-musiqiyyah",
+          translation: "Musical",
+          example: { ar: "آلَاتٌ مُوسِيقِيَّةٌ", en: "Musical instruments" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "خَشَبِيَّة", en: "Wooden" },
+            { ar: "صَنْدَل", en: "Sandalwood" },
+            { ar: "وَطَن", en: "Homeland" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "التُّحَفُ الْخَشَبِيَّةُ الْمَصْنُوعَةُ مِنَ ____",
+          translation: "Wooden antiques made of sandalwood",
+          answer: "الصَّنْدَلِ",
+          options: ["الْحَدِيدِ", "الصَّنْدَلِ", "الذَّهَبِ"]
+        }
+      ]
+    },
+    {
+      id: "u86_l7",
+      title: "National Emblem",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "شِعَارُ الْهِنْدِ الْوَطَنِيُّ: شِعَارُ الْهِنْدِ الرَّسْمِيُّ عِبَارَةٌ عَنْ أَرْبَعَةِ أُسُودٍ تَرْمُزُ إِلَى الْقُوَّةِ، كُتِبَتْ فِي أَسْفَلِهَا عِبَارَةُ: 'الصِّدْقُ دَائِمًا هُوَ الظَّافِرُ'.",
+          english: "The National Emblem of India: The official emblem of India consists of four lions symbolizing strength, written at its bottom is the phrase: 'Truth alone always triumphs'."
+        },
+        {
+          type: "vocabulary",
+          word: "الظَّافِرُ",
+          transliteration: "Az-zafir",
+          translation: "The Triumphant / Winner",
+          example: { ar: "الْحَقُّ هُوَ الظَّافِرُ", en: "Truth is the winner" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "شِعَار", en: "Emblem/Logo" },
+            { ar: "أُسُود", en: "Lions" },
+            { ar: "قُوَّة", en: "Strength" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "الصِّدْقُ دَائِمًا هُوَ ____",
+          translation: "Truth alone always triumphs",
+          answer: "الظَّافِرُ",
+          options: ["الْخَاسِرُ", "الظَّافِرُ", "الْكَذِبُ"]
+        }
+      ]
+    },
+    {
+      id: "u86_l8",
+      title: "National Flag",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "لِوَاءُ الْهِنْدِ مُثَلَّثُ اللَّوْنِ، الزَّعْفَرَانِيُّ وَالْأَبْيَضُ وَالْأَخْضَرُ وَفِي وَسَطِهِ دُولَابٌ أَزْرَقُ يُسَمَّى دُولَابَ أَشُوكَا، إِشَارَةً إِلَى مَلِكِنَا الْقَدِيمِ أَشُوكَا الْمُعَظَّمِ الْمَشْهُورِ بِصِفَةِ اللَّاعُنْفِيَّةِ وَالْأَمْنِ وَالسَّلَامَةِ لِلرَّعِيَّةِ.",
+          english: "The flag of India is tricolor, saffron, white, and green, and in its center is a blue wheel called the Ashoka Chakra, a reference to our ancient great King Ashoka, famous for the attribute of non-violence, security, and safety for the subjects."
+        },
+        {
+          type: "vocabulary",
+          word: "دُولَابٌ",
+          transliteration: "Dulab",
+          translation: "Wheel",
+          example: { ar: "دُولَابُ السَّيَّارَةِ", en: "Car wheel" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أَبْيَض", en: "White" },
+            { ar: "أَخْضَر", en: "Green" },
+            { ar: "أَزْرَق", en: "Blue" }
+          ]
+        },
+        {
+          type: "fill-blank",
+          sentence: "فِي وَسَطِهِ ____ أَزْرَقُ",
+          translation: "In its center is a blue wheel",
+          answer: "دُولَابٌ",
+          options: ["نَجْمٌ", "دُولَابٌ", "قَمَرٌ"]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_6.js ---
+
+--- START OF FILE src/data/section3/section3_practice.js ---
+export const practiceUnit3 = {
+  id: "sec3_practice",
+  title: "تدريبات نهاية الفصل",
+  lessons: [
+    {
+      id: "sec3_prac_l1",
+      title: "أ) أكمل الفراغ بكلمة مناسبة",
+      isPractice: true,
+      slides: [
+        {
+          type: "fill-blank",
+          sentence: "اسْتَقَلَّتِ الْهِنْدُ عَامَ ____.",
+          translation: "India gained independence in the year 1947.",
+          answer: "1947",
+          options: ["1947", "1950", "1962"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "قُطُب مِينَار بُرْجٌ رَائِعٌ بُنِيَ عَامَ ____ م.",
+          translation: "Qutb Minar is a wonderful tower built in 1193 AD.",
+          answer: "1193",
+          options: ["1657", "1193", "1947"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "أَكْرَاه مَدِينَةٌ ازْدَهَرَتْ فِي عَهْدِ الْحَضَارَةِ ____.",
+          translation: "The city of Agra flourished during the Mughal civilization era.",
+          answer: "الْمَغُولِيَّةِ",
+          options: ["الْمَغُولِيَّةِ", "الْبَرِيطَانِيَّةِ", "الْقَدِيمَةِ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "لِوَاءُ الْهِنْدِ ____ اللَّوْنِ الزَّعْفَرَانِيُّ وَالْأَبْيَضُ وَالْأَخْضَرُ.",
+          translation: "The flag of India is tricolor: saffron, white, and green.",
+          answer: "مُثَلَّثُ",
+          options: ["ثُنَائِيُّ", "مُثَلَّثُ", "رُبَاعِيُّ"]
+        },
+        {
+          type: "fill-blank",
+          sentence: "مَدِينَةُ ____ تَشْتَهِرُ بِبَوَّابَةِ الْهِنْدِ.",
+          translation: "The city of Mumbai is famous for the Gateway of India.",
+          answer: "مُومْبَاي",
+          options: ["جَايْبُور", "مُومْبَاي", "كُولْكُوتَا"]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l2",
+      title: "ب) الاستيعاب (الجزء الأول)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَا عَاصِمَةُ الْهِنْدِ؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "مَدِينَةُ", trans: "City of" },
+            { id: 2, text: "دِلْهِي", trans: "Delhi" },
+            { id: 3, text: "أَكْرَاه", trans: "Agra" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "أَيْنَ تَقَعُ تَاج مَحَل؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "فِي", trans: "In" },
+            { id: 2, text: "أَكْرَاه", trans: "Agra" },
+            { id: 3, text: "دِلْهِي", trans: "Delhi" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَنْ بَنَى مَنَارَةَ قُطُب؟",
+          correctOrder: [1, 2, 3],
+          blocks: [
+            { id: 1, text: "قُطُب", trans: "Qutb" },
+            { id: 2, text: "الدِّين", trans: "Al-Din" },
+            { id: 3, text: "أَيْبَك", trans: "Aibak" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَنْ بَنَى الْمَسْجِدَ الْجَامِعَ بِدِلْهِي؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "شَاه", trans: "Shah" },
+            { id: 2, text: "جَهَان", trans: "Jahan" },
+            { id: 3, text: "أَكْبَر", trans: "Akbar" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "فِي أَيِّ لُغَةٍ كَانَ كِتَابُ كَلِيلَة وَدِمْنَة؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "اللُّغَةِ", trans: "Language" },
+            { id: 2, text: "السَّنْسِكْرِيتِيَّةِ", trans: "Sanskrit" },
+            { id: 3, text: "الْعَرَبِيَّةِ", trans: "Arabic" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l3",
+      title: "ب) الاستيعاب (الجزء الثاني)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَنْ شَاه جَهَان؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "مَلِكٌ", trans: "King" },
+            { id: 2, text: "مَغُولِيٌّ", trans: "Mughal" },
+            { id: 3, text: "بَرِيطَانِيٌّ", trans: "British" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "مَتَى بُنِيَتْ بَوَّابَةُ الْهِنْدِ فِي مُومْبَاي؟",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "تِذْكَاراً", trans: "As a memorial" },
+            { id: 2, text: "لِقُدُومِ", trans: "for the arrival" },
+            { id: 3, text: "جُورْج", trans: "George" },
+            { id: 4, text: "الْخَامِسِ", trans: "the Fifth" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "إِلَى أَيِّ مَلِكٍ يُنْسَبُ شِعَارُ الْهِنْدِ؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "أَشُوكَا", trans: "Ashoka" },
+            { id: 2, text: "الْمُعَظَّمِ", trans: "The Great" },
+            { id: 3, text: "أَكْبَر", trans: "Akbar" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "comprehension",
+          question: "أَيْنَ تَقَعُ أَرْوَعُ حَدِيقَةِ الْحَيَوَانَاتِ فِي جَنُوبِ الْهِنْدِ؟",
+          correctOrder: [1, 2],
+          blocks: [
+            { id: 1, text: "فِي", trans: "In" },
+            { id: 2, text: "مَدْرَاس", trans: "Madras" },
+            { id: 3, text: "دِلْهِي", trans: "Delhi" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l4",
+      title: "ج) صل بين العمودين (أ) و (ب)",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "كَلِيلَة وَدِمْنَة", en: "كِتَابٌ كُتِبَ أَصْلُهُ بِاللُّغَةِ السَّنْسِكْرِيتِيَّةِ" },
+            { ar: "ضَرِيح هُومَايُون", en: "اسْتُوحِيَ تَصْمِيم تَاج مَحَل مِنْ تَصْمِيمِهِ" },
+            { ar: "تَاج مَحَل", en: "ضَرِيحُ مُمْتَاز زَوْجَة شَاه جَهَان" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "الْمَسْجِد الْجَامِع", en: "بُنِيَ عَامَ 1657م" },
+            { ar: "قُطُب مِينَار", en: "بُنِيَ عَامَ 1193م وَيَبْلُغُ ارْتِفَاعُهُ 83 مِتْراً" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l5",
+      title: "د/هـ) المفرد والجمع",
+      isPractice: true,
+      slides: [
+        {
+          type: "match",
+          pairs: [
+            { ar: "مَعَالِم", en: "مَعْلَم" },
+            { ar: "مَسَاجِد", en: "مَسْجِد" },
+            { ar: "أَسَاطِير", en: "أُسْطُورَة" },
+            { ar: "مَتَاحِف", en: "مَتْحَف" },
+            { ar: "قُصُور", en: "قَصْر" }
+          ]
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "مُدُن", en: "مَدِينَة" },
+            { ar: "أَضْرِحَة", en: "ضَرِيح" },
+            { ar: "أَشْهُر", en: "شَهْر" },
+            { ar: "مَبَانِي", en: "مَبْنَى" },
+            { ar: "جَامِعَات", en: "جَامِعَة" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l6",
+      title: "ح) الترجمة إلى الإنجليزية (الجزء الأول)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "فِي أَيَّةِ سَاعَةٍ تَنْتَهِضُ مِنَ النَّوْمِ صَبَاحاً يَا جُونْسُون؟",
+          correctOrder: [1, 2, 3, 4, 5, 6, 7],
+          blocks: [
+            { id: 1, text: "At what time", trans: "فِي أَيَّةِ سَاعَةٍ" },
+            { id: 2, text: "do you", trans: "" },
+            { id: 3, text: "wake up", trans: "تَنْتَهِضُ مِنَ النَّوْمِ" },
+            { id: 4, text: "in", trans: "" },
+            { id: 5, text: "the morning,", trans: "صَبَاحاً" },
+            { id: 6, text: "Johnson?", trans: "يَا جُونْسُون؟" },
+            { id: 7, text: "sleep", trans: "" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "أَبْتَدِئُ أَعْمَالِي الصَّبَاحِيَّةَ فِي السَّاعَةِ السَّابِعَةِ وَالنِّصْفِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6, 7],
+          blocks: [
+            { id: 1, text: "I start", trans: "أَبْتَدِئُ" },
+            { id: 2, text: "my morning", trans: "الصَّبَاحِيَّةَ" },
+            { id: 3, text: "activities", trans: "أَعْمَالِي" },
+            { id: 4, text: "at", trans: "فِي" },
+            { id: 5, text: "seven", trans: "السَّابِعَةِ" },
+            { id: 6, text: "thirty.", trans: "وَالنِّصْفِ" },
+            { id: 7, text: "nine", trans: "" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "كَيْفَ تُسَافِرُ إِلَى مَكَانِ عَمَلِكَ؟",
+          correctOrder: [1, 2, 3, 4, 5, 6, 7],
+          blocks: [
+            { id: 1, text: "How", trans: "كَيْفَ" },
+            { id: 2, text: "do you", trans: "" },
+            { id: 3, text: "travel", trans: "تُسَافِرُ" },
+            { id: 4, text: "to", trans: "إِلَى" },
+            { id: 5, text: "your", trans: "ـكَ" },
+            { id: 6, text: "workplace?", trans: "مَكَانِ عَمَلِ" },
+            { id: 7, text: "go", trans: "" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "أَذْهَبُ أَحْيَاناً بِالسَّيَّارَةِ وَأَحْيَاناً عَلَى الدَّرَّاجَةِ إِنَّهُ لَيْسَ بَعِيداً.",
+          correctOrder: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+          blocks: [
+            { id: 1, text: "I go", trans: "أَذْهَبُ" },
+            { id: 2, text: "sometimes", trans: "أَحْيَاناً" },
+            { id: 3, text: "by car", trans: "بِالسَّيَّارَةِ" },
+            { id: 4, text: "and", trans: "وَ" },
+            { id: 5, text: "sometimes", trans: "أَحْيَاناً" },
+            { id: 6, text: "by", trans: "عَلَى" },
+            { id: 7, text: "bicycle,", trans: "الدَّرَّاجَةِ" },
+            { id: 8, text: "it", trans: "إِنَّهُ" },
+            { id: 9, text: "is not", trans: "لَيْسَ" },
+            { id: 10, text: "far.", trans: "بَعِيداً" },
+            { id: 11, text: "close", trans: "" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l7",
+      title: "ح) الترجمة إلى الإنجليزية (الجزء الثاني)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "هَلْ تَعْمَلُ فِي مَكْتَبٍ حُكُومِيٍّ؟",
+          correctOrder: [1, 2, 3, 4, 5, 6, 7],
+          blocks: [
+            { id: 1, text: "Do you", trans: "هَلْ" },
+            { id: 2, text: "work", trans: "تَعْمَلُ" },
+            { id: 3, text: "in", trans: "فِي" },
+            { id: 4, text: "a", trans: "" },
+            { id: 5, text: "government", trans: "حُكُومِيٍّ" },
+            { id: 6, text: "office?", trans: "مَكْتَبٍ" },
+            { id: 7, text: "school", trans: "" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "لَا أَنَا أَعْمَلُ فِي بَنْك.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "No", trans: "لَا" },
+            { id: 2, text: "I", trans: "أَنَا" },
+            { id: 3, text: "work", trans: "أَعْمَلُ" },
+            { id: 4, text: "in", trans: "فِي" },
+            { id: 5, text: "a", trans: "" },
+            { id: 6, text: "bank.", trans: "بَنْك" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "هَلْ هُوَ عَمَلٌ مُمْتِعٌ؟",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "Is it", trans: "هَلْ هُوَ" },
+            { id: 2, text: "enjoyable", trans: "مُمْتِعٌ" },
+            { id: 3, text: "work?", trans: "عَمَلٌ" },
+            { id: 4, text: "boring", trans: "" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "ar-to-en",
+          question: "عَلَمُ الْهِنْدِ مُثَلَّثُ اللَّوْنِ.",
+          correctOrder: [1, 2, 3, 4, 5, 6],
+          blocks: [
+            { id: 1, text: "The flag", trans: "عَلَمُ" },
+            { id: 2, text: "of", trans: "" },
+            { id: 3, text: "India", trans: "الْهِنْدِ" },
+            { id: 4, text: "is", trans: "" },
+            { id: 5, text: "tricolor.", trans: "مُثَلَّثُ اللَّوْنِ" },
+            { id: 6, text: "beautiful", trans: "" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l8",
+      title: "ط) الترجمة إلى العربية (الجزء الأول)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "It is holiday tomorrow, it is the new year",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "غَداً", trans: "Tomorrow" },
+            { id: 2, text: "عُطْلَةٌ،", trans: "holiday" },
+            { id: 3, text: "إِنَّهُ", trans: "it is" },
+            { id: 4, text: "الْعَامُ", trans: "year" },
+            { id: 5, text: "الْجَدِيدُ", trans: "new" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Does every one celebrate it?",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "هَلْ", trans: "Does" },
+            { id: 2, text: "يَحْتَفِلُ", trans: "celebrate" },
+            { id: 3, text: "بِهِ", trans: "it" },
+            { id: 4, text: "الْجَمِيعُ؟", trans: "everyone" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Yes the most of the people does.",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "نَعَمْ،", trans: "Yes" },
+            { id: 2, text: "مُعْظَمُ", trans: "most of" },
+            { id: 3, text: "النَّاسِ", trans: "the people" },
+            { id: 4, text: "يَفْعَلُونَ.", trans: "does" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "sec3_prac_l9",
+      title: "ط) الترجمة إلى العربية (الجزء الثاني)",
+      isPractice: true,
+      slides: [
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "Keralites celebrate Onam.",
+          correctOrder: [1, 2, 3, 4],
+          blocks: [
+            { id: 1, text: "يَحْتَفِلُ", trans: "celebrate" },
+            { id: 2, text: "أَهْلُ كِيرَالَا", trans: "Keralites" },
+            { id: 3, text: "بِمِهْرَجَانِ", trans: "festival of" },
+            { id: 4, text: "أُونَام.", trans: "Onam" }
+          ]
+        },
+        {
+          type: "sentence-builder",
+          questionType: "en-to-ar",
+          question: "And all Indians celebrate Independence Day.",
+          correctOrder: [1, 2, 3, 4, 5],
+          blocks: [
+            { id: 1, text: "وَيَحْتَفِلُ", trans: "And celebrate" },
+            { id: 2, text: "جَمِيعُ", trans: "all" },
+            { id: 3, text: "الْهُنُودِ", trans: "Indians" },
+            { id: 4, text: "بِيَوْمِ", trans: "Day" },
+            { id: 5, text: "الِاسْتِقْلَالِ.", trans: "Independence" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section3/section3_practice.js ---
+
 --- START OF FILE src/components/Dashboard.jsx ---
-import React, { useState } from 'react';
+import React from 'react';
 import { sections } from '../data/sections';
 import { useProgress } from '../context/ProgressContext';
 import { Map } from 'lucide-react';
 import TopBar from './TopBar';
 import UnitPath from './UnitPath';
 
-const Dashboard = ({ onSelectLesson, onShowSummary }) => {
+const Dashboard = ({ activeSection, setActiveSection, onSelectLesson, onShowSummary }) => {
   const { completedLessons } = useProgress();
-  const [activeSection, setActiveSection] = useState(sections[0]);
 
   return (
-    <div className="dashboard-mobile">
+    <div className="dashboard-mobile route-transition">
       <TopBar 
         sections={sections} 
         activeSection={activeSection} 
@@ -4404,22 +7031,11 @@ const Dashboard = ({ onSelectLesson, onShowSummary }) => {
       
       <div className="summary-btn-container" style={{ padding: '24px 20px 0 20px' }}>
         <button
-          className="btn-primary flex-center"
-          style={{ 
-            width: '100%', 
-            background: 'linear-gradient(135deg, rgba(65, 209, 255, 0.1), rgba(189, 52, 254, 0.1))',
-            border: '1px solid var(--primary)',
-            color: 'white',
-            flexDirection: 'row',
-            gap: '12px',
-            fontSize: '1.1rem',
-            padding: '16px',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-          }}
+          className="btn-primary flex-center summary-action-btn"
           onClick={onShowSummary}
         >
           <Map size={24} color="var(--primary)" />
-          <span>View Journey Summary</span>
+          <span>View Chapter Summary</span>
         </button>
       </div>
 
@@ -4559,8 +7175,8 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
     setIsDropdownOpen(false);
   };
 
-  // Extract a number from the section ID (e.g., 'sec1' -> 1)
-  const currentSectionNum = activeSection.id.replace(/\D/g, '') || 1;
+  // Dynamically calculate actual 1-based index instead of relying on regex ID parsing
+  const currentSectionNum = sections.findIndex(s => s.id === activeSection.id) + 1;
 
   return (
     <div className="top-bar-wrapper">
@@ -4574,7 +7190,7 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
             className="section-selector-btn" 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-            <div className="section-badge">{currentSectionNum}</div>
+            <div className="section-badge">{currentSectionNum > 0 ? currentSectionNum : 1}</div>
             <span className="section-title-compact">
               {activeSection.title.split(':')[0]}
             </span>
@@ -4828,12 +7444,11 @@ export default UnitPath;
 --- START OF FILE src/components/SectionSummary.jsx ---
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { timelineEvents } from '../data/timelineEvents';
 import './SectionSummary.css';
 
-const SectionSummary = ({ onClose }) => {
+const SectionSummary = ({ events, onClose }) => {
   return (
-    <div className="summary-container">
+    <div className="summary-container route-transition">
       <div className="summary-header">
         <button className="close-btn" onClick={onClose} aria-label="Go back">
           <ArrowLeft size={28} />
@@ -4842,17 +7457,23 @@ const SectionSummary = ({ onClose }) => {
       </div>
 
       <div className="timeline">
-        {timelineEvents.map((event) => (
-          <div key={event.id} className="timeline-item">
-            <div className="timeline-dot"></div>
-            <div className="timeline-content">
-              <h3 className="timeline-title-ar" dir="rtl">{event.titleAr}</h3>
-              <h4 className="timeline-title-en">{event.titleEn}</h4>
-              <p className="timeline-desc-ar" dir="rtl">{event.descAr}</p>
-              <p className="timeline-desc-en">{event.descEn}</p>
+        {events.length > 0 ? (
+          events.map((event) => (
+            <div key={event.id} className="timeline-item">
+              <div className="timeline-dot"></div>
+              <div className="timeline-content">
+                <h3 className="timeline-title-ar" dir="rtl">{event.titleAr}</h3>
+                <h4 className="timeline-title-en">{event.titleEn}</h4>
+                <p className="timeline-desc-ar" dir="rtl">{event.descAr}</p>
+                <p className="timeline-desc-en">{event.descEn}</p>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="flex-center p-6 text-dim text-center">
+            <p>Summary for this section is currently unavailable.</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
@@ -4907,12 +7528,12 @@ export default SentenceSlide;
 import React, { useEffect } from 'react';
 import { Volume2 } from 'lucide-react';
 import { useTTS } from '../../hooks/useTTS';
+import './VocabularySlide.css';
 
 const VocabularySlide = ({ slide }) => {
   const { speak } = useTTS();
 
   useEffect(() => {
-    // Auto-play pronunciation when slide loads
     const timer = setTimeout(() => {
       speak(slide.word);
     }, 500);
@@ -4923,19 +7544,19 @@ const VocabularySlide = ({ slide }) => {
     <div className="slide-content">
       <h2 className="text-dim">New Word</h2>
       
-      <div className="vocab-card glass-panel">
+      <div className="vocab-card-modern">
         <button className="tts-button large-tts" onClick={() => speak(slide.word)}>
           <Volume2 size={36} />
         </button>
         
-        <div className="vocab-ar arabic-large">{slide.word}</div>
+        <div className="vocab-ar-modern arabic-text">{slide.word}</div>
         
         <div className="vocab-divider"></div>
         
         {slide.transliteration && (
           <div className="vocab-transliteration">{slide.transliteration}</div>
         )}
-        <div className="vocab-en">{slide.translation}</div>
+        <div className="vocab-en-modern">{slide.translation}</div>
       </div>
       
       {slide.example && (
@@ -5306,6 +7927,54 @@ const SentenceBuilderSlide = ({ slide, onComplete }) => {
 export default SentenceBuilderSlide;
 --- END OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
 
+--- START OF FILE src/components/slides/VocabularySlide.css ---
+/* Modern, responsive, overflow-safe vocabulary card */
+.vocab-card-modern {
+  width: 100%;
+  max-width: 380px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 30px 20px;
+  gap: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.vocab-card-modern::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--primary), #BD34FE);
+}
+
+.vocab-ar-modern {
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  font-weight: 800;
+  color: var(--primary);
+  text-shadow: 0 4px 15px var(--primary-glow);
+  line-height: 1.4;
+  text-align: center;
+  word-wrap: break-word;
+  width: 100%;
+}
+
+.vocab-en-modern {
+  font-size: clamp(1.2rem, 5vw, 1.6rem);
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  word-wrap: break-word;
+}
+--- END OF FILE src/components/slides/VocabularySlide.css ---
+
 --- START OF FILE src/hooks/useTTS.js ---
 import { useCallback } from 'react';
 
@@ -5374,11 +8043,166 @@ export const useLongPress = (onLongPress, onClick, { delay = 500 } = {}) => {
 };
 --- END OF FILE src/hooks/useLongPress.js ---
 
+--- START OF FILE src/pages/DashboardRoute.jsx ---
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useProgress } from '../context/ProgressContext';
+import { sections } from '../data/sections';
+import Dashboard from '../components/Dashboard';
+
+const DashboardRoute = () => {
+  const navigate = useNavigate();
+  const { activeSectionId, setActiveSectionId } = useProgress();
+  
+  // Restore scroll position
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const activeSection = sections.find(s => s.id === activeSectionId) || sections[0];
+
+  return (
+    <Dashboard 
+      activeSection={activeSection}
+      setActiveSection={(sec) => setActiveSectionId(sec.id)}
+      onSelectLesson={(lesson) => navigate(`/lesson/${lesson.id}`)}
+      onShowSummary={() => navigate(`/summary/${activeSection.id}`)}
+    />
+  );
+};
+
+export default DashboardRoute;
+--- END OF FILE src/pages/DashboardRoute.jsx ---
+
+--- START OF FILE src/pages/LessonRoute.jsx ---
+import React, { useEffect, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { sections } from '../data/sections';
+import Lesson from '../components/Lesson';
+
+const LessonRoute = () => {
+  const { lessonId } = useParams();
+  const navigate = useNavigate();
+
+  // Scroll to top when lesson mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Find the requested lesson data
+  const lessonData = useMemo(() => {
+    for (const section of sections) {
+      for (const unit of section.units) {
+        const found = unit.lessons.find(l => l.id === lessonId);
+        if (found) return found;
+      }
+    }
+    return null;
+  }, [lessonId]);
+
+  if (!lessonData) {
+    return (
+      <div className="flex-center" style={{ minHeight: '100vh', color: 'white' }}>
+        <h2>Lesson not found!</h2>
+        <button className="btn-primary mt-4" onClick={() => navigate('/')}>Return Home</button>
+      </div>
+    );
+  }
+
+  return (
+    <Lesson 
+      lesson={lessonData} 
+      onClose={() => navigate(-1)} 
+    />
+  );
+};
+
+export default LessonRoute;
+--- END OF FILE src/pages/LessonRoute.jsx ---
+
+--- START OF FILE src/pages/SummaryRoute.jsx ---
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { timelineEvents } from '../data/timelineEvents';
+import SectionSummary from '../components/SectionSummary';
+
+const SummaryRoute = () => {
+  const { sectionId } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const events = timelineEvents[sectionId] || [];
+
+  return (
+    <SectionSummary 
+      events={events}
+      onClose={() => navigate(-1)} 
+    />
+  );
+};
+
+export default SummaryRoute;
+--- END OF FILE src/pages/SummaryRoute.jsx ---
+
+--- START OF FILE src/styles/NewFeatures.css ---
+/* =========================================
+   New CSS Additions for Routers & Utilities
+   ========================================= */
+
+/* General page transitions */
+.route-transition {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhancing the generic summary button look */
+.summary-action-btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(65, 209, 255, 0.1), rgba(189, 52, 254, 0.1));
+  border: 1px solid var(--primary);
+  color: white;
+  flex-direction: row;
+  gap: 12px;
+  font-size: 1.1rem;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border-radius: 16px;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-action-btn:hover {
+  background: linear-gradient(135deg, rgba(65, 209, 255, 0.2), rgba(189, 52, 254, 0.2));
+  transform: translateY(-2px);
+}
+
+.summary-action-btn:active {
+  transform: translateY(2px);
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+--- END OF FILE src/styles/NewFeatures.css ---
+
 --- START OF FILE .firebase/hosting.ZGlzdA.cache ---
-vite.svg,1771640914205,9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68
-index.html,1771640914421,fcbacd48675ba569307523e735b0b03f7a362247db21a71bc0d994d8da9c54fe
-404.html,1771641009285,6537619fa0edb6a05c3fa83265461172fea2307ecff34424f323310c8c8eb4be
-assets/index-Drs2F0Vg.css,1771640914421,cc8cda3c99b25fdbce9edb8d23ce129796b534d9741d92c93cea5118257864ec
-assets/index-BidbWU1W.js,1771640914421,7666a8891da644883082619d422da103b6e5213719747157afc8fda0d516f595
+vite.svg,1771655103716,9de4d3c4e50257d9874f07e9efc929efefc85e51f931a9af716f9a7ebb23ef68
+index.html,1771655103924,d0fef9536a1cb3edbaa52e870c5d5a7c246463cacbbb3ae7c2faf9c2b4aeecda
+assets/index-C-5wc72g.css,1771655103922,ee023066be6b479a29a06c4e4821efb903caf4c269f60328b9b0d3f0eab59a74
+assets/index-D7zYcRqK.js,1771655103924,e5c5ffa125ba8893960bef705aec48982fe181650d87192934b26c08e886b3f5
 
 --- END OF FILE .firebase/hosting.ZGlzdA.cache ---

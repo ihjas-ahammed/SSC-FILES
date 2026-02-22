@@ -23,7 +23,7 @@ const Dashboard = ({ activeSection, setActiveSection, onSelectLesson, onShowSumm
           onClick={onShowSummary}
         >
           <Map size={24} color="var(--primary)" />
-          <span>View Journey Summary</span>
+          <span>View Chapter Summary</span>
         </button>
       </div>
 
