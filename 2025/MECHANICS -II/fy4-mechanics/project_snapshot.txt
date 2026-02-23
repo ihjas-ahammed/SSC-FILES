@@ -1,0 +1,1037 @@
+--- START OF FILE index.html ---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>DuoFY 4 - Mechanics</title>
+    <style>
+      body {
+        background-color: #0f1923; /* Valorant Dark Navy */
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+--- END OF FILE index.html ---
+
+--- START OF FILE src/App.jsx ---
+import React, { useState } from 'react';
+import AppHeader from './components/AppHeader';
+import Dashboard from './components/Dashboard';
+import LessonPlayer from './components/LessonPlayer';
+import { section1 } from './data/section1';
+import { section2 } from './data/section2';
+import './styles/valorant.css';
+import './styles/layout.css';
+import './styles/path.css';
+import './styles/lesson.css';
+import 'katex/dist/katex.min.css';
+
+function App() {
+  const [completedLessons, setCompletedLessons] = useState({});
+  const [currentLesson, setCurrentLesson] = useState(null);
+  const [activeSectionId, setActiveSectionId] = useState(section1.id);
+
+  const sections = [section1, section2];
+  const activeSection = sections.find(s => s.id === activeSectionId) || sections[0];
+
+  // Calculate progress purely for the active section (or globally if preferred)
+  const totalLessons = activeSection.units.reduce((acc, unit) => acc + unit.lessons.length, 0);
+  const completedInSection = activeSection.units.flatMap(u => u.lessons).filter(l => completedLessons[l.id]).length;
+  const progressPercent = totalLessons === 0 ? 0 : Math.round((completedInSection / totalLessons) * 100);
+
+  // Find current active lesson in the selected section
+  const allSectionLessons = activeSection.units.flatMap(u => u.lessons);
+  const currentActiveLesson = allSectionLessons.find(l => !completedLessons[l.id]) || allSectionLessons[allSectionLessons.length - 1];
+
+  const handleLessonComplete = (lessonId) => {
+    setCompletedLessons(prev => ({ ...prev, [lessonId]: true }));
+    setCurrentLesson(null);
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <div className="val-app">
+      {!currentLesson && (
+        <AppHeader 
+          sections={sections}
+          activeSectionId={activeSectionId}
+          onSectionChange={setActiveSectionId}
+          progressPercent={progressPercent}
+        />
+      )}
+      
+      <main className="main-content">
+        {currentLesson ? (
+          <LessonPlayer 
+            lesson={currentLesson} 
+            onComplete={() => handleLessonComplete(currentLesson.id)}
+            onExit={() => setCurrentLesson(null)}
+          />
+        ) : (
+          <div className="feed-wrapper">
+            <Dashboard 
+              section={activeSection} 
+              completedLessons={completedLessons}
+              currentActiveLesson={currentActiveLesson}
+              onStartLesson={setCurrentLesson}
+            />
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export default App;
+--- END OF FILE src/App.jsx ---
+
+--- START OF FILE src/components/AppHeader.jsx ---
+import React from 'react';
+
+function AppHeader({ sections, activeSectionId, onSectionChange, progressPercent }) {
+  return (
+    <header className="top-bar glass-panel">
+      <div className="top-bar-left">
+        <div className="logo-accent"></div>
+        <select 
+          className="val-select" 
+          value={activeSectionId} 
+          onChange={(e) => onSectionChange(e.target.value)}
+        >
+          {sections.map(sec => (
+            <option key={sec.id} value={sec.id}>
+              {sec.title.split(':')[0]} {/* e.g., "Section I" */}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="top-bar-right">
+        <div className="val-progress-container">
+          <span className="val-progress-text">{progressPercent}% COMPLETED</span>
+          <div className="val-progress-track">
+            <div 
+              className="val-progress-fill" 
+              style={{ width: `${progressPercent}%` }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export default AppHeader;
+--- END OF FILE src/components/AppHeader.jsx ---
+
+--- START OF FILE src/components/Dashboard.jsx ---
+import React from 'react';
+import UnitSection from './UnitSection';
+
+function Dashboard({ section, completedLessons, currentActiveLesson, onStartLesson }) {
+  return (
+    <div className="dashboard">
+      <h1 className="section-main-title">{section.title}</h1>
+      <div className="unit-list">
+        {section.units.map((unit, index) => (
+          <UnitSection 
+            key={unit.id} 
+            unit={unit} 
+            unitIndex={index}
+            completedLessons={completedLessons} 
+            currentActiveLesson={currentActiveLesson}
+            onStartLesson={onStartLesson} 
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Dashboard;
+--- END OF FILE src/components/Dashboard.jsx ---
+
+--- START OF FILE src/components/UnitSection.jsx ---
+import React from 'react';
+import LessonPath from './LessonPath';
+
+function UnitSection({ unit, unitIndex, completedLessons, currentActiveLesson, onStartLesson }) {
+  return (
+    <div className="unit-container">
+      <div className="unit-header glass-panel">
+        <div className="unit-header-content">
+          <h2 className="unit-title">UNIT {unitIndex + 1}</h2>
+          <p className="unit-desc">{unit.title.split(': ')[1] || unit.title}</p>
+        </div>
+      </div>
+      
+      <LessonPath 
+        lessons={unit.lessons} 
+        completedLessons={completedLessons}
+        currentActiveLesson={currentActiveLesson}
+        onStartLesson={onStartLesson}
+      />
+    </div>
+  );
+}
+
+export default UnitSection;
+--- END OF FILE src/components/UnitSection.jsx ---
+
+--- START OF FILE src/components/LessonPath.jsx ---
+import React from 'react';
+
+function LessonPath({ lessons, completedLessons, currentActiveLesson, onStartLesson }) {
+  return (
+    <div className="val-path">
+      {lessons.map((lesson, index) => {
+        const isCompleted = completedLessons[lesson.id];
+        const isCurrent = currentActiveLesson && lesson.id === currentActiveLesson.id && !isCompleted;
+        const isLocked = !isCompleted && !isCurrent;
+
+        let statusClass = isCompleted ? 'completed' : isCurrent ? 'current' : 'locked';
+
+        return (
+          <div key={lesson.id} className="val-node-wrapper">
+            <button 
+              className={`val-node ${statusClass}`}
+              onClick={() => (isCompleted || isCurrent) && onStartLesson(lesson)}
+              disabled={isLocked}
+            >
+              <div className="node-inner">
+                {isCompleted ? '✓' : isCurrent ? '▶' : '🔒'}
+              </div>
+            </button>
+            <div className={`node-label ${statusClass}`}>{lesson.title}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default LessonPath;
+--- END OF FILE src/components/LessonPath.jsx ---
+
+--- START OF FILE src/components/LessonPlayer.jsx ---
+import React, { useState } from 'react';
+import TheorySlide from './slides/TheorySlide';
+import MCQSlide from './slides/MCQSlide';
+import FillBlankSlide from './slides/FillBlankSlide';
+import NumericalSlide from './slides/NumericalSlide';
+
+function LessonPlayer({ lesson, onComplete, onExit }) {
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [userAnswer, setUserAnswer] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(null);
+
+  const slide = lesson.slides[currentSlideIndex];
+  const progressPercent = ((currentSlideIndex) / lesson.slides.length) * 100;
+  const isInteractive = ['mcq', 'fill', 'numerical'].includes(slide.type);
+
+  const handleCheck = () => {
+    let correct = false;
+    if (slide.type === 'mcq') {
+      correct = userAnswer === slide.answer;
+    } else if (slide.type === 'fill') {
+      correct = userAnswer.trim().toLowerCase() === slide.answer.toLowerCase();
+    } else if (slide.type === 'numerical') {
+      correct = parseFloat(userAnswer) === parseFloat(slide.answer);
+    }
+    setIsCorrect(correct);
+    setIsSubmitted(true);
+  };
+
+  const handleNext = () => {
+    if (currentSlideIndex < lesson.slides.length - 1) {
+      setCurrentSlideIndex(prev => prev + 1);
+      setUserAnswer(null);
+      setIsSubmitted(false);
+      setIsCorrect(null);
+    } else {
+      onComplete();
+    }
+  };
+
+  const renderSlide = () => {
+    switch (slide.type) {
+      case 'theory':
+      case 'example':
+      case 'proof':
+        return <TheorySlide slide={slide} />;
+      case 'mcq':
+        return <MCQSlide slide={slide} userAnswer={userAnswer} setUserAnswer={setUserAnswer} isSubmitted={isSubmitted} />;
+      case 'fill':
+        return <FillBlankSlide slide={slide} userAnswer={userAnswer} setUserAnswer={setUserAnswer} isSubmitted={isSubmitted} />;
+      case 'numerical':
+        return <NumericalSlide slide={slide} userAnswer={userAnswer} setUserAnswer={setUserAnswer} isSubmitted={isSubmitted} />;
+      default:
+        return <div>Unknown slide type: {slide.type}</div>;
+    }
+  };
+
+  const getCorrectAnswerDisplay = () => {
+    if (slide.type === 'mcq') return slide.options[slide.answer];
+    return slide.answer;
+  };
+
+  let feedbackClass = isSubmitted ? (isCorrect ? 'status-correct' : 'status-incorrect') : '';
+
+  return (
+    <div className="lesson-screen">
+      {/* Top Header */}
+      <div className="lesson-header glass-panel">
+        <button className="btn-icon" onClick={onExit}>✕</button>
+        <div className="lesson-progress-container">
+          <div className="lesson-progress-track">
+            <div className="lesson-progress-fill" style={{ width: `${progressPercent}%` }}></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="lesson-body">
+        <div className="slide-wrapper">
+          <div className="slide-badge">{slide.type.toUpperCase()}</div>
+          {renderSlide()}
+        </div>
+      </div>
+
+      {/* Bottom Action Bar */}
+      <div className={`lesson-footer glass-panel ${feedbackClass}`}>
+        <div className="footer-inner">
+          {isSubmitted ? (
+            <div className="feedback-message">
+              <h3>{isCorrect ? 'TARGET ACQUIRED' : 'MISSION FAILED'}</h3>
+              {!isCorrect && <p>Correct Answer: {getCorrectAnswerDisplay()}</p>}
+            </div>
+          ) : (
+            <div className="feedback-message"></div>
+          )}
+
+          <div className="footer-actions">
+            {!isInteractive ? (
+              <button className="val-btn val-btn-primary" onClick={handleNext}>PROCEED</button>
+            ) : !isSubmitted ? (
+              <button 
+                className="val-btn val-btn-primary" 
+                disabled={userAnswer === null || userAnswer === ''} 
+                onClick={handleCheck}
+              >
+                EVALUATE
+              </button>
+            ) : (
+              <button className="val-btn val-btn-primary" onClick={handleNext}>CONTINUE</button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default LessonPlayer;
+--- END OF FILE src/components/LessonPlayer.jsx ---
+
+--- START OF FILE src/components/slides/TheorySlide.jsx ---
+import React from 'react';
+import { BlockMath } from 'react-katex';
+
+function TheorySlide({ slide }) {
+  return (
+    <div className="slide-theory">
+      <div className="info-panel glass-panel">
+        <h3 className="slide-title">{slide.title}</h3>
+        <p className="slide-text">{slide.content}</p>
+        
+        {slide.formula && (
+          <div className="formula-display">
+            <BlockMath math={slide.formula} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default TheorySlide;
+--- END OF FILE src/components/slides/TheorySlide.jsx ---
+
+--- START OF FILE src/components/slides/MCQSlide.jsx ---
+import React from 'react';
+
+function MCQSlide({ slide, userAnswer, setUserAnswer, isSubmitted }) {
+  return (
+    <div className="slide-mcq">
+      <h2 className="question-text">{slide.question}</h2>
+      
+      <div className="options-container">
+        {slide.options.map((option, index) => {
+          const isSelected = userAnswer === index;
+          return (
+            <button 
+              key={index} 
+              className={`option-btn ${isSelected ? 'selected' : ''}`}
+              onClick={() => { if(!isSubmitted) setUserAnswer(index); }}
+              disabled={isSubmitted}
+            >
+              <span className="option-index">0{index + 1}</span>
+              <span className="option-content">{option}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export default MCQSlide;
+--- END OF FILE src/components/slides/MCQSlide.jsx ---
+
+--- START OF FILE src/components/slides/FillBlankSlide.jsx ---
+import React from 'react';
+
+function FillBlankSlide({ slide, userAnswer, setUserAnswer, isSubmitted }) {
+  const parts = slide.text.split('{blank}');
+
+  return (
+    <div className="slide-fill">
+      <div className="info-panel glass-panel">
+        <p className="fill-text">
+          {parts[0]}
+          <input 
+            type="text" 
+            className="val-input inline-input" 
+            value={userAnswer || ''}
+            onChange={(e) => setUserAnswer(e.target.value)}
+            disabled={isSubmitted}
+            placeholder="[...]"
+            autoComplete="off"
+            autoFocus
+          />
+          {parts[1]}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default FillBlankSlide;
+--- END OF FILE src/components/slides/FillBlankSlide.jsx ---
+
+--- START OF FILE src/styles/valorant.css ---
+:root {
+  --val-bg: #0f1923;
+  --val-dark: #111111;
+  --val-red: #ff4655;
+  --val-red-hover: #ff5866;
+  --val-white: #ece8e1;
+  --val-gray: #768079;
+  --val-light-gray: rgba(236, 232, 225, 0.1);
+  
+  --val-font-head: 'Teko', sans-serif;
+  --val-font-body: 'Rajdhani', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--val-bg);
+  color: var(--val-white);
+  font-family: var(--val-font-body);
+  font-size: 18px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--val-font-head);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Glassy utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(236, 232, 225, 0.1);
+}
+
+/* Buttons */
+.val-btn {
+  font-family: var(--val-font-head);
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 32px;
+  background: transparent;
+  border: 1px solid var(--val-white);
+  color: var(--val-white);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.val-btn-primary {
+  background: var(--val-red);
+  border-color: var(--val-red);
+  color: #fff;
+}
+
+.val-btn-primary:hover:not(:disabled) {
+  background: var(--val-red-hover);
+  box-shadow: 0 0 15px rgba(255, 70, 85, 0.4);
+}
+
+.val-btn:disabled {
+  background: var(--val-gray);
+  border-color: var(--val-gray);
+  color: #333;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Base inputs */
+.val-input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--val-gray);
+  color: var(--val-red);
+  font-family: var(--val-font-body);
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.val-input:focus {
+  border-color: var(--val-red);
+}
+--- END OF FILE src/styles/valorant.css ---
+
+--- START OF FILE src/styles/layout.css ---
+.val-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Top Bar */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-accent {
+  width: 12px;
+  height: 24px;
+  background-color: var(--val-red);
+}
+
+.val-select {
+  background: transparent;
+  color: var(--val-white);
+  border: none;
+  font-family: var(--val-font-head);
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+}
+
+.val-select option {
+  background: var(--val-bg);
+  color: var(--val-white);
+}
+
+.val-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.val-progress-text {
+  font-family: var(--val-font-head);
+  font-size: 1.2rem;
+  color: var(--val-gray);
+}
+
+.val-progress-track {
+  width: 150px;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+}
+
+.val-progress-fill {
+  height: 100%;
+  background: var(--val-red);
+  transition: width 0.3s ease;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.feed-wrapper {
+  width: 100%;
+  max-width: 600px;
+  padding: 40px 16px;
+}
+
+.section-main-title {
+  font-size: 2.5rem;
+  color: var(--val-white);
+  margin-bottom: 40px;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+.unit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+--- END OF FILE src/styles/layout.css ---
+
+--- START OF FILE src/styles/path.css ---
+/* Dashboard Unit Header */
+.unit-header {
+  border-left: 4px solid var(--val-red);
+  padding: 16px 24px;
+  margin-bottom: 30px;
+}
+
+.unit-title {
+  font-size: 2rem;
+  color: var(--val-red);
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.unit-desc {
+  font-size: 1.2rem;
+  color: var(--val-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Path styling - Linear & Angular */
+.val-path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  padding: 20px 0;
+}
+
+/* Thin line connecting nodes */
+.val-path::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255,255,255,0.1);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.val-node-wrapper {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 200px;
+}
+
+/* Stagger labels left and right */
+.val-node-wrapper:nth-child(even) { flex-direction: row-reverse; }
+
+.val-node {
+  width: 48px; 
+  height: 48px;
+  background: var(--val-bg);
+  border: 2px solid var(--val-gray);
+  transform: rotate(45deg);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+  outline: none;
+  margin: 0 auto;
+}
+
+.node-inner {
+  transform: rotate(-45deg);
+  font-size: 1.2rem;
+  color: var(--val-gray);
+}
+
+.val-node.completed {
+  border-color: var(--val-white);
+  background: rgba(255,255,255,0.1);
+}
+
+.val-node.completed .node-inner {
+  color: var(--val-white);
+}
+
+.val-node.current {
+  border-color: var(--val-red);
+  background: rgba(255, 70, 85, 0.2);
+  box-shadow: 0 0 15px rgba(255, 70, 85, 0.4);
+}
+
+.val-node.current .node-inner {
+  color: var(--val-red);
+}
+
+.val-node:hover:not(:disabled) {
+  transform: rotate(45deg) scale(1.1);
+}
+
+.node-label {
+  position: absolute;
+  font-family: var(--val-font-head);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  width: 120px;
+  color: var(--val-gray);
+}
+
+.val-node-wrapper:nth-child(odd) .node-label { left: 140px; text-align: left; }
+.val-node-wrapper:nth-child(even) .node-label { right: 140px; text-align: right; }
+
+.node-label.completed { color: var(--val-white); }
+.node-label.current { color: var(--val-red); }
+--- END OF FILE src/styles/path.css ---
+
+--- START OF FILE src/styles/lesson.css ---
+/* Full Screen Lesson Wrapper */
+.lesson-screen {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--val-bg);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+/* Header */
+.lesson-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  color: var(--val-gray);
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 24px;
+}
+.btn-icon:hover { color: var(--val-white); }
+
+.lesson-progress-container {
+  flex: 1;
+}
+
+.lesson-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+}
+
+.lesson-progress-fill {
+  height: 100%;
+  background: var(--val-red);
+  transition: width 0.3s;
+}
+
+/* Body / Slide Area */
+.lesson-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px 120px 20px;
+}
+
+.slide-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.slide-badge {
+  display: inline-block;
+  font-family: var(--val-font-head);
+  font-size: 1.2rem;
+  color: var(--val-red);
+  border: 1px solid var(--val-red);
+  padding: 2px 12px;
+  margin-bottom: 24px;
+  letter-spacing: 2px;
+}
+
+/* Footer / Action Bar */
+.lesson-footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 24px;
+}
+
+.lesson-footer.status-correct {
+  border-top-color: var(--val-red);
+  background: rgba(255, 70, 85, 0.05);
+}
+
+.lesson-footer.status-incorrect {
+  border-top-color: var(--val-gray);
+}
+
+.footer-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feedback-message h3 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+.status-correct .feedback-message h3 { color: var(--val-red); }
+.status-incorrect .feedback-message h3 { color: var(--val-gray); }
+
+.feedback-message p {
+  font-family: var(--val-font-body);
+  color: var(--val-white);
+  font-size: 1.2rem;
+  margin-top: 4px;
+}
+
+/* Custom Slide Styles */
+.info-panel {
+  padding: 32px;
+  border-left: 4px solid var(--val-red);
+}
+
+.slide-title {
+  font-size: 2.2rem;
+  color: var(--val-white);
+  margin-bottom: 16px;
+}
+
+.slide-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--val-gray);
+}
+
+.formula-display {
+  background: rgba(0,0,0,0.5);
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  margin-top: 24px;
+  text-align: center;
+  font-size: 1.3rem;
+  color: var(--val-white);
+}
+
+/* MCQ Options */
+.question-text {
+  font-size: 1.8rem;
+  color: var(--val-white);
+  margin-bottom: 32px;
+  line-height: 1.3;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.option-btn {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.option-btn.selected {
+  border-color: var(--val-red);
+  background: rgba(255, 70, 85, 0.1);
+}
+
+.option-index {
+  font-family: var(--val-font-head);
+  font-size: 1.5rem;
+  color: var(--val-gray);
+}
+
+.option-btn.selected .option-index {
+  color: var(--val-red);
+}
+
+.option-content {
+  font-family: var(--val-font-body);
+  font-size: 1.2rem;
+  font-weight: 600;
+  /* Set to off-white so it's readable in dark mode */
+  color: var(--val-white); 
+}
+
+.option-btn.selected .option-content {
+  color: var(--val-red);
+}
+
+/* Fill & Numerical */
+.inline-input {
+  width: 100px;
+  margin: 0 10px;
+  border-top: none; border-left: none; border-right: none;
+  background: transparent;
+  padding: 4px;
+}
+--- END OF FILE src/styles/lesson.css ---
+
+--- START OF FILE src/data/section2.js ---
+export const section2 = {
+  id: 'sec_2',
+  title: 'Section II: Harmonic Motion',
+  units: [
+    {
+      id: 'u2_1',
+      title: 'Unit 1: Springs and Pendulums',
+      lessons: [
+        {
+          id: 'l2_1_1',
+          title: "Simple Harmonic Motion Basics",
+          slides: [
+            { type: 'theory', title: "Restoring Force", content: "SHM occurs when the restoring force is proportional to the displacement from equilibrium.", formula: "F = -kx \\implies m\\ddot{x} + kx = 0" },
+            { type: 'proof', title: "Energy of Undamped Oscillator", content: "Total energy is the sum of kinetic and potential energy, and remains constant over time.", formula: "E = \\frac{1}{2}m\\dot{x}^2 + \\frac{1}{2}kx^2" },
+            { type: 'numerical', question: "A spring of constant k=10 N/m is stretched to x=0.5m. What is the potential energy?", content: "Use V = 0.5 * k * x^2", answer: "1.25", unit: "J" },
+            { type: 'mcq', question: "In Simple Harmonic Motion, the acceleration is proportional to:", options: ["Velocity", "Displacement", "Time", "Mass"], answer: 1 },
+            { type: 'fill', text: "The restoring force is negatively proportional to the {blank} from equilibrium.", answer: "displacement" }
+          ]
+        },
+        {
+          id: 'l2_1_2',
+          title: "The Simple Pendulum",
+          slides: [
+            { type: 'theory', title: "Pendulum Equation", content: "For small angles, a simple pendulum behaves as a harmonic oscillator.", formula: "\\ddot{\\theta} + \\frac{g}{l}\\theta = 0" },
+            { type: 'proof', title: "Small Angle Approximation", content: "The restoring force is mg sin(θ). For small θ, sin(θ) ≈ θ.", formula: "ml^2\\ddot{\\theta} + mgl\\theta = 0" },
+            { type: 'numerical', question: "If g=9.8 m/s² and l=0.2 m, find the angular frequency squared (ω²).", answer: "49", unit: "rad²/s²" },
+            { type: 'mcq', question: "The small angle approximation requires θ to be approximately less than:", options: ["90 degrees", "45 degrees", "20 degrees", "180 degrees"], answer: 2 },
+            { type: 'fill', text: "For a pendulum, we approximate sin(θ) ≈ {blank} for small angles.", answer: "theta" }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'u2_2',
+      title: 'Unit 2: Damped Harmonic Oscillator',
+      lessons: [
+        {
+          id: 'l2_2_1',
+          title: "Introduction to Damping",
+          slides: [
+            { type: 'theory', title: "Damping Force", content: "Real oscillators lose energy due to retarding forces, often proportional to velocity.", formula: "m\\ddot{x} + b\\dot{x} + kx = 0" },
+            { type: 'proof', title: "Auxiliary Equation", content: "Assuming x = e^(pt), we get a quadratic equation for p.", formula: "p^2 + \\frac{b}{m}p + \\frac{k}{m} = 0" },
+            { type: 'mcq', question: "What does the term 'b' represent in the damped oscillator equation?", options: ["Spring constant", "Damping coefficient", "Mass", "Angular frequency"], answer: 1 },
+            { type: 'fill', text: "A force proportional to velocity that opposes motion is called a {blank} force.", answer: "damping" }
+          ]
+        },
+        {
+          id: 'l2_2_2',
+          title: "Types of Damping",
+          slides: [
+            { type: 'theory', title: "Under, Over, and Critical", content: "The system's behavior depends on (b/2m)² compared to k/m.", formula: "\\gamma = \\frac{b}{2m}, \\quad \\omega_0^2 = \\frac{k}{m}" },
+            { type: 'mcq', question: "If (b/2m)² < k/m, the system is:", options: ["Overdamped", "Underdamped", "Critically damped", "Undamped"], answer: 1 },
+            { type: 'mcq', question: "Which damping causes the system to return to equilibrium fastest without oscillating?", options: ["Underdamped", "Overdamped", "Critically damped", "None of the above"], answer: 2 },
+            { type: 'fill', text: "If the roots of the auxiliary equation are complex, the system exhibits {blank} motion.", answer: "oscillatory" }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'u2_3',
+      title: 'Unit 3: Forced Oscillations & Resonance',
+      lessons: [
+        {
+          id: 'l2_3_1',
+          title: "Forced Harmonic Oscillator",
+          slides: [
+            { type: 'theory', title: "External Driving Force", content: "An oscillator subjected to a periodic external force will eventually oscillate at the driving frequency.", formula: "m\\ddot{x} + b\\dot{x} + kx = F_0 \\sin(\\omega_d t)" },
+            { type: 'proof', title: "Particular Solution", content: "The full solution is the sum of the transient (homogeneous) and steady-state (particular) solutions.", formula: "x(t) = x_g(t) + x_p(t)" },
+            { type: 'mcq', question: "The steady-state frequency of a forced oscillator is determined by:", options: ["The natural frequency", "The damping coefficient", "The driving frequency", "The initial displacement"], answer: 2 },
+            { type: 'fill', text: "The solution to the inhomogeneous equation is the sum of the complementary function and the {blank} solution.", answer: "particular" }
+          ]
+        },
+        {
+          id: 'l2_3_2',
+          title: "Resonance and Q Factor",
+          slides: [
+            { type: 'theory', title: "Resonance", content: "Amplitude peaks when the driving frequency is close to the natural frequency. The sharpness of this peak is defined by the Q factor.", formula: "Q = \\frac{\\omega_0}{\\Delta \\omega}" },
+            { type: 'numerical', question: "If resonant frequency is 100 rad/s and the width at half maximum is 2 rad/s, what is the Q factor?", answer: "50", unit: "" },
+            { type: 'mcq', question: "A highly damped system will have a resonance curve that is:", options: ["Tall and thin", "Short and wide", "Perfectly flat", "Inverted"], answer: 1 },
+            { type: 'fill', text: "The {blank} factor measures the ratio of energy stored to energy lost per cycle.", answer: "quality" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/section2.js ---

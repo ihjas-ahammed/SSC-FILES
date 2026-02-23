@@ -2,296 +2,256 @@ import { Section } from '../types';
 
 export const SECTION_1_3: Section = {
   "id": "section-1-3",
-  "title": "Section 1.3: Finite and Infinite Sets",
-  "description": "Counting beyond numbers: Cardinality, Countability, and Cantor's Theorem.",
-  "color": "duo-red",
+  "title": "Section 3: The Orbit Equation & Kepler Revisited",
+  "description": "Determining the path of the orbit and proving Kepler's empirical laws.",
+  "color": "duo-green",
   "units": [
     {
-      "id": "unit-1-3-1",
-      "title": "Finite Sets",
-      "description": "Defining 'size' for sets that end.",
-      "color": "duo-red",
+      "id": "unit-1-6",
+      "title": "The Equation of the Orbit",
+      "description": "Transforming the radial equation to find the path r(θ).",
+      "color": "duo-green",
       "lessons": [
         {
-          "id": "lesson-1-3-finite-def",
-          "title": "Defining Finite",
-          "description": "Definition 1.3.1: Mapping to natural numbers.",
-          "icon": "Hash",
+          "id": "lesson-1-6-1-orbit-eq",
+          "title": "Finding the Orbit Path",
+          "description": "Using a mathematical trick to solve for r(θ).",
+          "icon": "Aperture",
           "slides": [
             {
-              "id": "s1-empty",
+              "id": "s1-theory",
               "type": "theory",
-              "title": "The Empty Set",
-              "content": "The empty set $\\emptyset$ is the unique set with no elements. We say it has **0 elements**."
+              "title": "Why r(θ)?",
+              "content": "To describe the physical shape of an orbit, we often aren't interested in the position at a specific time $t$. Instead, we want the path: the relationship between the radius $r$ and the angle $\\theta$.\n\nTo find $r(\\theta)$, we need to eliminate time from our differential equations. We do this by using the chain rule:\n$$\\frac{dr}{dt} = \\frac{dr}{d\\theta}\\frac{d\\theta}{dt} = \\frac{dr}{d\\theta}\\dot{\\theta}$$"
             },
             {
-              "id": "s2-finite",
-              "type": "theory",
-              "title": "Finite Sets",
-              "content": "For $n \\in \\mathbb{N}$, a set $S$ has **n elements** if there exists a bijection from the set $\\mathbb{N}_n = \\{1, 2, ..., n\\}$ onto $S$.\n\nA set is **Finite** if it is either $\\emptyset$ or has $n$ elements for some $n$.\n\nA set is **Infinite** if it is not finite."
+              "id": "s2-example",
+              "type": "example",
+              "title": "The Substitution Variable 'u'",
+              "content": "Even after eliminating $dt$, the differential equation is extremely complex and difficult to integrate directly.\n\nThe 'sophisticated technique' to solve this introduces a new variable $u$, defined as the inverse of $r$:\n$$u = \\frac{1}{r}$$\nThis seemingly simple substitution miraculously simplifies the math."
             },
             {
-              "id": "s3-uniqueness",
-              "type": "theory",
-              "title": "Theorem 1.3.2: Uniqueness",
-              "content": "If $S$ is a finite set, the number of elements in $S$ is a unique number in $\\mathbb{N}$.\n\nYou cannot have a bijection to $\\{1, 2\\}$ AND a bijection to $\\{1, 2, 3\\}$ for the same set."
-            }
-          ]
-        },
-        {
-          "id": "lesson-1-3-props",
-          "title": "Properties of Finite Sets",
-          "description": "Theorems 1.3.4 & 1.3.5: Subsets and Unions.",
-          "icon": "Grid",
-          "slides": [
-            {
-              "id": "s1-subset-finite",
-              "type": "theory",
-              "title": "Subsets",
-              "content": "**Theorem 1.3.5:**\n(a) If $S$ is a finite set and $T \\subseteq S$, then $T$ is finite.\n(b) If $T$ is an infinite set and $T \\subseteq S$, then $S$ is infinite.\n\nBasically: You can't fit an infinite thing inside a finite box."
-            },
-            {
-              "id": "s2-union-finite",
-              "type": "theory",
-              "title": "Unions",
-              "content": "**Theorem 1.3.4:** If $A$ has $m$ elements and $B$ has $n$ elements, and they are disjoint ($A \\cap B = \\emptyset$), then $A \\cup B$ has $m + n$ elements."
-            },
-            {
-              "id": "q-finite-check",
-              "type": "quiz",
-              "title": "Logic Check",
-              "content": "If set $A$ is infinite and $A \\subseteq B$, is $B$ finite or infinite?",
-              "options": [
-                { "id": "1", "text": "Finite", "isCorrect": false, "explanation": "If B were finite, its subset A would have to be finite." },
-                { "id": "2", "text": "Infinite", "isCorrect": true, "explanation": "A 'larger' container of an infinite set must be infinite." }
+              "id": "s3-proof",
+              "type": "proof",
+              "title": "Interactive Proof: Transforming the Equation",
+              "content": "Let's see how substituting $u = 1/r$ transforms our differential equation.",
+              "interactiveSteps": [
+                {
+                  "stepText": "We know $l = mr^2\\dot{\\theta}$. In terms of $u$, this is $\\dot{\\theta} = \\frac{lu^2}{m}$."
+                },
+                {
+                  "prompt": "Using the chain rule $\\frac{dr}{dt} = \\frac{dr}{d\\theta}\\dot{\\theta}$ and $r = u^{-1}$, what is $\\frac{dr}{dt}$ in terms of $u$?",
+                  "stepText": "Since $\\frac{dr}{d\\theta} = -u^{-2}\\frac{du}{d\\theta}$, we get $\\frac{dr}{dt} = -u^{-2}\\frac{du}{d\\theta} \\left(\\frac{lu^2}{m}\\right) = -\\frac{l}{m}\\frac{du}{d\\theta}$.",
+                  "options": [
+                    { "id": "A", "text": "$\\frac{dr}{dt} = \\frac{l}{m}\\frac{du}{d\\theta}$", "isCorrect": false, "explanation": "Don't forget the negative sign from differentiating $u^{-1}$!" },
+                    { "id": "B", "text": "$\\frac{dr}{dt} = -\\frac{l}{m}\\frac{du}{d\\theta}$", "isCorrect": true, "explanation": "The $u^{-2}$ and $u^2$ cancel beautifully, leaving a simple constant coefficient." }
+                  ]
+                },
+                {
+                  "stepText": "Taking the second derivative with respect to time yields: $\\ddot{r} = -\\frac{l^2u^2}{m^2}\\frac{d^2u}{d\\theta^2}$."
+                },
+                {
+                  "prompt": "Substitute this $\\ddot{r}$ into the original radial equation $\\ddot{r} - \\frac{l^2}{m^2r^3} = -\\frac{GM}{r^2}$. What form does it take?",
+                  "stepText": "It simplifies to: $\\frac{d^2u}{d\\theta^2} + u = \\frac{GMm^2}{l^2}$.",
+                  "options": [
+                    { "id": "A", "text": "$\\frac{d^2u}{d\\theta^2} + u = \\frac{GMm^2}{l^2}$", "isCorrect": true, "explanation": "Correct! Notice how this looks exactly like the equation for a Simple Harmonic Oscillator!" },
+                    { "id": "B", "text": "$\\frac{d^2u}{d\\theta^2} - u^2 = 0$", "isCorrect": false, "explanation": "Check your algebraic reduction." }
+                  ]
+                }
               ]
+            },
+            {
+              "id": "s4-numerical",
+              "type": "numerical",
+              "title": "Calculate the Forcing Constant",
+              "content": "In the equation $\\frac{d^2u}{d\\theta^2} + u = \\frac{GMm^2}{l^2}$, the right-hand side is a constant.\n\nIf $G = 1$, $M = 100$, $m = 2$, and $l = 20$, calculate the numerical value of this constant $\\frac{GMm^2}{l^2}$.",
+              "numericAnswer": 1,
+              "numericTolerance": 0.05
+            },
+            {
+              "id": "s5-quiz",
+              "type": "quiz",
+              "title": "Significance of the Result",
+              "content": "The differential equation $\\frac{d^2u}{d\\theta^2} + u = Constant$ is mathematically identical to which common physical system?",
+              "options": [
+                { "id": "1", "text": "A damped pendulum", "isCorrect": false, "explanation": "There is no damping (first derivative) term." },
+                { "id": "2", "text": "A simple harmonic oscillator", "isCorrect": true, "explanation": "It's exactly the SHM equation with a constant driving force, yielding a sinusoidal solution!" },
+                { "id": "3", "text": "A particle in free fall", "isCorrect": false, "explanation": "Free fall is constant acceleration, not proportional to position." }
+              ]
+            },
+            {
+              "id": "s6-blank",
+              "type": "fill_in_blank",
+              "title": "The Magic Variable",
+              "content": "To solve the orbital equation, we introduce a new variable $u$, defined as the ___ of the radius $r$.",
+              "blankAnswer": "inverse"
             }
           ]
         }
       ]
     },
     {
-      "id": "unit-1-3-2",
-      "title": "Countable Sets",
-      "description": "Sets that can be listed: N, Z, and Q.",
-      "color": "duo-red",
+      "id": "unit-1-7",
+      "title": "The Equation of an Ellipse",
+      "description": "Connecting the physics to pure geometry.",
+      "color": "duo-green",
       "lessons": [
         {
-          "id": "lesson-1-3-countable",
-          "title": "Countable vs Uncountable",
-          "description": "Definition 1.3.6: Denumerable sets.",
-          "icon": "ListOrdered",
+          "id": "lesson-1-7-1-ellipse",
+          "title": "Geometry of Conic Sections",
+          "description": "Defining orbits mathematically.",
+          "icon": "Vector",
           "slides": [
             {
-              "id": "s1-denum",
+              "id": "s1-theory",
               "type": "theory",
-              "title": "Denumerable",
-              "content": "A set $S$ is **denumerable** (or countably infinite) if there exists a bijection from $\\mathbb{N}$ onto $S$.\n\nIn plain English: You can list the elements in a sequence $s_1, s_2, s_3, ...$ without missing any."
+              "title": "The Ellipse",
+              "content": "An ellipse is defined geometrically as the locus of points whose distances from two fixed points (the foci, $F$ and $F'$) sum to a constant ($2a$).\n\n$$r + r' = 2a$$\n\nIn polar coordinates, placing the origin at one focus, the equation of a general conic section is:\n$$r = \\frac{p}{1 + e\\cos\\theta}$$"
             },
             {
-              "id": "s2-countable",
+              "id": "s2-canvas",
               "type": "theory",
-              "title": "Countable",
-              "content": "A set is **countable** if it is either finite or denumerable.\n\nA set is **uncountable** if it is not countable."
+              "title": "Visualizing the Ellipse Geometry",
+              "content": "The sum of the distances from the planet to the two foci ($r + r'$) is always equal to the major axis $2a$.",
+              "canvasId": "ellipse-geometry"
             },
             {
-              "id": "s3-integers",
-              "type": "theory",
-              "title": "Example: The Integers",
-              "content": "Is $\\mathbb{Z}$ countable? Yes. We can map $\\mathbb{N}$ to $\\mathbb{Z}$ by \"folding\" it:\n\n$1 \\to 0$\n$2 \\to 1$\n$3 \\to -1$\n$4 \\to 2$\n$5 \\to -2$\n\nThis covers every integer eventually."
-            }
-          ]
-        },
-        {
-          "id": "lesson-1-3-rationals",
-          "title": "The Rationals are Countable",
-          "description": "Theorem 1.3.8 & 1.3.11: The Diagonal Argument.",
-          "icon": "Minimize2",
-          "slides": [
-            {
-              "id": "s1-nxn",
-              "type": "theory",
-              "title": "Theorem 1.3.8: Pairs",
-              "content": "The set $\\mathbb{N} \\times \\mathbb{N}$ is denumerable.\n\n**Proof Method (Cantor's Diagonal):**\nList pairs $(1,1), (1,2), (2,1), (1,3)...$ by traversing diagonals where the sum $m+n$ is constant."
-            },
-            {
-              "id": "s2-rationals",
-              "type": "theory",
-              "title": "Theorem 1.3.11: Q is Countable",
-              "content": "The set of rational numbers $\\mathbb{Q}$ is denumerable.\n\nSince every rational is a fraction $m/n$, it maps to a pair in $\\mathbb{Z} \\times \\mathbb{N}$. Since products of countable sets are countable, $\\mathbb{Q}$ is countable."
-            },
-            {
-              "id": "q-dense",
-              "type": "quiz",
-              "title": "Counter-Intuitive",
-              "content": "There are infinitely many rationals between 0 and 1. Does this make them uncountable?",
-              "options": [
-                { "id": "1", "text": "Yes, they are too dense.", "isCorrect": false, "explanation": "Density does not imply uncountability." },
-                { "id": "2", "text": "No, they can still be listed.", "isCorrect": true, "explanation": "We can list them by denominator size (1/2, 1/3, 2/3, 1/4...)." }
+              "id": "s3-proof",
+              "type": "proof",
+              "title": "Matching Physics to Geometry",
+              "content": "Our solution to the orbit equation was $u = A\\cos(\\theta - \\theta_0) + \\frac{GMm^2}{l^2}$. \nConverting back to $r$, we got $r = \\frac{l^2/GMm^2}{1 + \\frac{Al^2}{GMm^2}\\cos\\theta}$.",
+              "interactiveSteps": [
+                {
+                  "stepText": "Compare the physical equation $r = \\frac{l^2/GMm^2}{1 + \\frac{Al^2}{GMm^2}\\cos\\theta}$ to the geometric equation $r = \\frac{a(1-e^2)}{1+e\\cos\\theta}$."
+                },
+                {
+                  "prompt": "By matching the denominators, what physical quantity represents the eccentricity $e$?",
+                  "stepText": "The eccentricity is $e = \\frac{Al^2}{GMm^2}$. (Where $A$ is the amplitude of the SHM oscillation).",
+                  "options": [
+                    { "id": "A", "text": "$e = \\frac{l^2}{GMm^2}$", "isCorrect": false, "explanation": "Look at the coefficient in front of the cosine term." },
+                    { "id": "B", "text": "$e = \\frac{Al^2}{GMm^2}$", "isCorrect": true, "explanation": "Matching the terms exactly gives this identity." }
+                  ]
+                },
+                {
+                  "prompt": "By matching the numerators, we set $\\frac{l^2}{GMm^2} = a(1-e^2)$. Earlier we found $e^2 = 1 + \\frac{2El^2}{m(GMm)^2}$. What does this make the semimajor axis $a$?",
+                  "stepText": "Substituting $e^2$, we get $a = -\\frac{GMm}{2E}$.",
+                  "options": [
+                    { "id": "A", "text": "$a = -\\frac{GMm}{2E}$", "isCorrect": true, "explanation": "The semimajor axis depends strictly on the total mechanical energy $E$!" },
+                    { "id": "B", "text": "$a = E \\cdot l^2$", "isCorrect": false, "explanation": "Check the algebra substitution." }
+                  ]
+                }
               ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-1-3-theorems",
-          "title": "Theorems on Countability",
-          "description": "Subsets and Unions of countable sets.",
-          "icon": "GitBranch",
-          "slides": [
-            {
-              "id": "s1-subsets",
-              "type": "theory",
-              "title": "Theorem 1.3.9: Subsets",
-              "content": "If $S$ is a countable set and $T \\subseteq S$, then $T$ is countable.\n\nIf you take elements *out* of a list, the remaining elements can still be listed."
             },
             {
-              "id": "s2-unions",
-              "type": "theory",
-              "title": "Theorem 1.3.12: Unions",
-              "content": "The union of a countable collection of countable sets is countable.\n\nIf $A_1, A_2, A_3...$ are all countable, then $\\bigcup A_n$ is countable."
+              "id": "s4-numerical",
+              "type": "numerical",
+              "title": "Calculate the Semimajor Axis",
+              "content": "A planet has a total mechanical energy $E = -5 \\times 10^9$ Joules. \nThe system's parameter $GMm = 3 \\times 10^{20}$ $J \\cdot m$.\n\nCalculate the semimajor axis $a = -\\frac{GMm}{2E}$ in meters.",
+              "numericAnswer": 30000000000,
+              "numericTolerance": 10000
+            },
+            {
+              "id": "s5-quiz",
+              "type": "quiz",
+              "title": "Eccentricity Values",
+              "content": "Different values of eccentricity $e$ dictate the shape of the orbit. If $e = 0$, what is the shape of the orbit?",
+              "options": [
+                { "id": "1", "text": "Ellipse", "isCorrect": false, "explanation": "An ellipse has $0 < e < 1$." },
+                { "id": "2", "text": "Circle", "isCorrect": true, "explanation": "A circle is a special case of an ellipse with zero eccentricity." },
+                { "id": "3", "text": "Parabola", "isCorrect": false, "explanation": "A parabola has exactly $e = 1$." },
+                { "id": "4", "text": "Hyperbola", "isCorrect": false, "explanation": "A hyperbola has $e > 1$." }
+              ]
+            },
+            {
+              "id": "s6-blank",
+              "type": "fill_in_blank",
+              "title": "Energy Connection",
+              "content": "The minus sign in the semimajor axis formula $a = -GMm/2E$ is necessary because the total energy is ___ for bounded elliptical orbits.",
+              "blankAnswer": "negative"
             }
           ]
         }
       ]
     },
     {
-      "id": "unit-1-3-3",
-      "title": "Cantor's Theorem",
-      "description": "Uncountable sets and hierarchies of infinity.",
-      "color": "duo-red",
+      "id": "unit-1-8",
+      "title": "Kepler's Laws Revisited",
+      "description": "Proving Kepler's Third Law theoretically.",
+      "color": "duo-green",
       "lessons": [
         {
-          "id": "lesson-1-3-cantor",
-          "title": "Cantor's Theorem",
-          "description": "Theorem 1.3.13: The Power Set is larger.",
-          "icon": "Layers",
+          "id": "lesson-1-8-1-proofs",
+          "title": "Newton Proves Kepler",
+          "description": "Deriving Kepler's Third Law.",
+          "icon": "Award",
           "slides": [
             {
-              "id": "s1-statement",
+              "id": "s1-theory",
               "type": "theory",
-              "title": "The Theorem",
-              "content": "**Cantor's Theorem:** If $A$ is any set, there is **no** surjection from $A$ onto the set of all subsets of $A$, denoted $\\mathcal{P}(A)$.\n\nThis means $\\mathcal{P}(A)$ is strictly \"larger\" than $A$."
+              "title": "The First Two Laws",
+              "content": "We have now theoretically proven Kepler's first two laws:\n\n**Law 1 (Ellipses):** We solved Newton's 2nd Law and derived $r(\\theta)$ representing a conic section. For $E < 0$, it is an ellipse.\n**Law 2 (Equal Areas):** The areal velocity $\\frac{dS}{dt} = \\frac{l}{2m}$. Since angular momentum $l$ is conserved, the areal velocity is constant."
             },
             {
               "id": "s2-proof",
               "type": "proof",
-              "title": "Proof by Contradiction",
-              "content": "Suppose there is a surjection $\\varphi: A \\to \\mathcal{P}(A)$.",
-              "proofSteps": [
-                "Consider the set $D = \\{a \\in A : a \\notin \\varphi(a)\\}$.",
-                "Since $D$ is a subset of $A$, and $\\varphi$ is surjective, there must be some $a_0 \\in A$ such that $\\varphi(a_0) = D$.",
-                "**Ask:** Is $a_0 \\in D$?",
-                "If $a_0 \\in D$, then by definition of $D$, $a_0 \\notin \\varphi(a_0)$. But $\\varphi(a_0) = D$, so $a_0 \\notin D$. Contradiction.",
-                "If $a_0 \\notin D$, then by definition, $a_0 \\in \\varphi(a_0) = D$. Contradiction.",
-                "Therefore, $\\varphi$ cannot exist."
+              "title": "Interactive Proof: Kepler's Third Law",
+              "content": "Let's prove $\\tau^2 \\propto a^3$ where $\\tau$ is the orbital period.",
+              "interactiveSteps": [
+                {
+                  "stepText": "The period $\\tau$ is the total area of the ellipse $S$ divided by the constant areal velocity $\\frac{dS}{dt}$."
+                },
+                {
+                  "prompt": "If the area of an ellipse is $S = \\pi ab$, and the areal velocity is $\\frac{l}{2m}$, what is $\\tau$?",
+                  "stepText": "$\\tau = \\frac{\\pi ab}{l/2m} = \\frac{2\\pi m a b}{l}$",
+                  "options": [
+                    { "id": "A", "text": "$\\tau = \\frac{2\\pi m a b}{l}$", "isCorrect": true, "explanation": "Just simple division: Area / Rate." },
+                    { "id": "B", "text": "$\\tau = \\pi a b \\cdot l$", "isCorrect": false, "explanation": "Divide by the rate, don't multiply." }
+                  ]
+                },
+                {
+                  "stepText": "Square both sides: $\\tau^2 = \\frac{4\\pi^2 m^2 a^2 b^2}{l^2}$. Recall that for an ellipse, $b = a(1-e^2)^{1/2}$, so $b^2 = a^2(1-e^2)$."
+                },
+                {
+                  "prompt": "We also know from our geometry-physics match that $(1-e^2) = \\frac{l^2}{GMm^2 a}$. Substitute this into $b^2$, then substitute $b^2$ into $\\tau^2$. What remains?",
+                  "stepText": "$\\tau^2 = \\frac{4\\pi^2 m^2 a^2}{l^2} \\left( a^2 \\frac{l^2}{GMm^2 a} \\right) = \\frac{4\\pi^2}{GM}a^3$. Kepler's 3rd Law is proven!",
+                  "options": [
+                    { "id": "A", "text": "$\\tau^2 = \\frac{4\\pi^2}{GM}a^3$", "isCorrect": true, "explanation": "The $m^2$ and $l^2$ terms perfectly cancel out!" },
+                    { "id": "B", "text": "$\\tau^2 = \\frac{G}{M}a^2$", "isCorrect": false, "explanation": "Follow the algebra closely, the result is proportional to $a^3$." }
+                  ]
+                }
               ]
             },
             {
-              "id": "s3-implication",
-              "type": "theory",
-              "title": "The Consequence",
-              "content": "Since $\\mathcal{P}(\\mathbb{N})$ cannot be mapped onto by $\\mathbb{N}$, the set of all subsets of natural numbers is **Uncountable**.\n\nThis implies there are different *sizes* of infinity."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "unit-1-3-ex",
-      "title": "Exercises 1.3",
-      "description": "Practice with cardinality.",
-      "color": "duo-red",
-      "lessons": [
-        {
-          "id": "ex-1-3-finite",
-          "title": "Finite Sets Problems",
-          "description": "Q1-3: Bijections and Operations.",
-          "icon": "Edit3",
-          "slides": [
-            {
-              "id": "q1",
-              "type": "theory",
-              "title": "Exercise 1: Bijections",
-              "content": "Prove a nonempty set $T_1$ is finite if and only if there is a bijection from $T_1$ onto a finite set $T_2$.\n\n**Solution:** Composition of bijections is a bijection. If $T_2 \\to \\mathbb{N}_n$ exists, and $T_1 \\to T_2$ exists, then $T_1 \\to \\mathbb{N}_n$ exists."
+              "id": "s3-example",
+              "type": "example",
+              "title": "Newton's Correction",
+              "content": "Kepler stated $\\tau^2 = K a^3$, where $K$ is identical for all planets.\n\nNewton's derivation showed $K = \\frac{4\\pi^2}{GM}$. However, Newton also realized the Sun is not perfectly stationary; they both orbit the center of mass. The exact mass term in the denominator should be $(M + m)$. Since $M_{sun} \\gg m_{planet}$, Kepler's approximation was incredibly accurate."
             },
             {
-              "id": "q3",
+              "id": "s4-numerical",
+              "type": "numerical",
+              "title": "Calculate Period",
+              "content": "Assume a star has $GM = 4\\pi^2$ in some chosen unit system. A planet orbits with a semimajor axis $a = 4$ units.\n\nUsing $\\tau^2 = \\frac{4\\pi^2}{GM}a^3$, calculate the orbital period $\\tau$.",
+              "numericAnswer": 8,
+              "numericTolerance": 0.1
+            },
+            {
+              "id": "s5-quiz",
               "type": "quiz",
-              "title": "Exercise 3: Counting Injections",
-              "content": "Let $S = \\{1, 2\\}$ and $T = \\{a, b, c\\}$. How many **injections** are there from $S$ to $T$?",
+              "title": "Constants of Proportionality",
+              "content": "According to Newton's theoretical derivation of Kepler's 3rd law (ignoring the reduced mass correction), the ratio $\\tau^2/a^3$ depends ONLY on:",
               "options": [
-                { "id": "1", "text": "6", "isCorrect": true, "explanation": "3 choices for first element $\\times$ 2 choices for second element = 6." },
-                { "id": "2", "text": "9", "isCorrect": false, "explanation": "That is total functions ($3^2$)." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "ex-1-3-count",
-          "title": "Countability Problems",
-          "description": "Q4-10: Constructing bijections.",
-          "icon": "Link",
-          "slides": [
-            {
-              "id": "q4",
-              "type": "theory",
-              "title": "Exercise 4: Odd Integers",
-              "content": "Exhibit a bijection between $\\mathbb{N}$ and the set of all odd integers greater than 13.\n\nSet: $\\{15, 17, 19, ...\\}$.\nFormula: $f(n) = 13 + 2n$ for $n \\in \\mathbb{N}$."
-            },
-            {
-              "id": "q10",
-              "type": "quiz",
-              "title": "Exercise 10: Diagonal Counting",
-              "content": "Calculate the number of the point $(2,3)$ in the diagonal counting scheme of $\\mathbb{N} \\times \\mathbb{N}$.\n(Sum $k = m+n = 5$).",
-              "options": [
-                { "id": "1", "text": "12", "isCorrect": true, "explanation": "Diagonals 2,3,4 have $1+2+3=6$ points. In diag 5, $(1,4), (2,3)$... it is the 2nd point. Total $6+2+4 (\text{shift}) = 12$?" },
-                { "id": "2", "text": "11", "isCorrect": false, "explanation": "Let's check the formula: $\\frac{1}{2}(m+n-2)(m+n-1) + m$. Here $m=2, n=3$. Sum=5. Formula: $\\frac{1}{2}(3)(4) + 2 = 6+2 = 8$. Wait, standard diag starts $(1,1)$. Diag 1: (1,1). Diag 2: (1,2), (2,1). Diag 3: (1,3), (2,2), (3,1). (2,3) is in Diag 4 (sum 5). Prev diags have $1+2+3=6$ pts. (2,3) is usually 2nd or 3rd in diag depending on direction." }
+                { "id": "1", "text": "The mass of the planet.", "isCorrect": false, "explanation": "The mass of the planet $m$ canceled out in the derivation." },
+                { "id": "2", "text": "The mass of the Sun (the primary).", "isCorrect": true, "explanation": "The ratio is $\\frac{4\\pi^2}{GM}$, which only contains the constant $G$ and the Sun's mass $M$." },
+                { "id": "3", "text": "The angular momentum of the orbit.", "isCorrect": false, "explanation": "Angular momentum dictates the eccentricity, but does not affect the period-axis ratio." }
               ]
             },
             {
-              "id": "q10-sol",
-              "type": "theory",
-              "title": "Exercise 10 Correction",
-              "content": "Using the standard formula from the text $h(m,n) = \\frac{1}{2}(m+n-2)(m+n-1) + m$.\n\nFor $(2,3)$: $m+n=5$.\n$h(2,3) = \\frac{1}{2}(3)(4) + 2 = 6 + 2 = 8$."
-            }
-          ]
-        },
-        {
-          "id": "ex-1-3-sets",
-          "title": "Power Sets & Cardinality",
-          "description": "Q11-13: Advanced Counting.",
-          "icon": "Database",
-          "slides": [
-            {
-              "id": "q11",
-              "type": "quiz",
-              "title": "Exercise 11",
-              "content": "Determine number of elements in $\\mathcal{P}(S)$ if $S = \\{1, 2\\}$.",
-              "options": [
-                { "id": "1", "text": "2", "isCorrect": false, "explanation": "" },
-                { "id": "2", "text": "4", "isCorrect": true, "explanation": "$\\{\\emptyset, \\{1\\}, \\{2\\}, \\{1,2\\}\\}$" }
-              ]
-            },
-            {
-              "id": "q12",
-              "type": "proof",
-              "title": "Exercise 12: Power Set Size",
-              "content": "Prove by induction that if $S$ has $n$ elements, $\\mathcal{P}(S)$ has $2^n$ elements.",
-              "proofSteps": [
-                "Base n=0: $\\emptyset$ has 1 subset ($\\{\\emptyset\\}$). $2^0=1$.",
-                "Assume for $k$ elements, subsets = $2^k$.",
-                "For $k+1$, let $S' = S \\cup \\{x\\}$.",
-                "Subsets of $S'$ either contain $x$ or don't.",
-                "Those that don't: exactly subsets of $S$ ($2^k$).",
-                "Those that do: exact subsets of $S$ with $x$ added ($2^k$).",
-                "Total: $2^k + 2^k = 2 \\cdot 2^k = 2^{k+1}$."
-              ]
-            },
-            {
-              "id": "q13",
-              "type": "theory",
-              "title": "Exercise 13: Finite Subsets",
-              "content": "Prove that the collection $\\mathcal{F}(\\mathbb{N})$ of all **finite** subsets of $\\mathbb{N}$ is countable.\n\nThis is different from the full power set (which includes infinite subsets). Each finite subset can be mapped to a unique integer (e.g., using binary representations or prime powers)."
+              "id": "s6-blank",
+              "type": "fill_in_blank",
+              "title": "The Third Law",
+              "content": "The square of a planet's period is proportional to the ___ of its semimajor axis.",
+              "blankAnswer": "cube"
             }
           ]
         }

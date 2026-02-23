@@ -1,4 +1,12 @@
-export type SlideType = 'theory' | 'proof' | 'quiz' | 'info';
+export type SlideType = 
+  | 'theory' 
+  | 'example'
+  | 'proof' 
+  | 'numerical'
+  | 'quiz' 
+  | 'fill_in_blank'
+  | 'example_q'
+  | 'solution';
 
 export interface QuizOption {
   id: string;
@@ -7,21 +15,32 @@ export interface QuizOption {
   explanation: string;
 }
 
+export interface InteractiveStep {
+  prompt?: string; // The question asking what the next step is
+  stepText?: string; // The formal text added to the proof list after completion
+  options?: QuizOption[]; // If provided, user must choose the correct one
+}
+
 export interface Slide {
   id: string;
   type: SlideType;
   title?: string;
-  content: string; // Supports LaTeX via $...$ and Markdown
-  image?: string; // URL for topic-specific image
-  options?: QuizOption[]; // Only for quiz type
-  proofSteps?: string[]; // Only for proof type, step by step breakdown
+  content: string; 
+  image?: string; 
+  canvasId?: string; 
+  options?: QuizOption[]; 
+  proofSteps?: string[]; // Legacy fallback 
+  interactiveSteps?: InteractiveStep[]; // Interactive Proof/Solution steps
+  blankAnswer?: string; 
+  numericAnswer?: number; // Used for numerical type slides
+  numericTolerance?: number; // Allowed delta for correct answer
 }
 
 export interface Lesson {
   id: string;
   title: string;
   description: string;
-  icon: string; // Lucid icon name
+  icon: string; 
   slides: Slide[];
 }
 
@@ -41,7 +60,6 @@ export interface Section {
   units: Unit[];
 }
 
-// New Interface for Course Level
 export interface Course {
   id: string;
   title: string;
@@ -50,7 +68,7 @@ export interface Course {
 }
 
 export interface UserProgress {
-  completedLessons: string[]; // IDs of completed lessons
+  completedLessons: string[];
   xp: number;
-  currentCourseId: string; // Track which course the user is on
+  currentCourseId: string;
 }

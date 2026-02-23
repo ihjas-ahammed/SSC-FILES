@@ -1,19 +1,32 @@
 import { Course } from '../types';
-import { CHAPTER_1_CONTENT } from './chapter1';
-import { CHAPTER_2_CONTENT } from './chapter2';
+import { MODULE_1_SECTIONS } from './module1';
+import { MODULE_2_SECTIONS } from './module2';
+import { MODULE_3_SECTIONS } from './module3';
+import { MODULE_4_SECTIONS } from './module4';
 
-// In a real app, you might want to lazily load these or fetch them
 export const COURSES: Course[] = [
   {
-    id: 'course-ch1',
-    title: 'Chapter 1: Preliminaries',
-    description: 'Sets, Functions, Induction, and Infinity.',
-    sections: CHAPTER_1_CONTENT
+    id: 'module-1',
+    title: 'Module I: Central Force Motion',
+    description: 'The Kepler Problem, Orbits, and Central Forces.',
+    sections: MODULE_1_SECTIONS
   },
   {
-    id: 'course-ch2',
-    title: 'Chapter 2: The Real Numbers',
-    description: 'Algebraic properties, Order, and Completeness.',
-    sections: CHAPTER_2_CONTENT
+    id: 'module-2',
+    title: 'Module II: Harmonic Motion',
+    description: 'Springs, Pendulums, and Oscillators.',
+    sections: MODULE_2_SECTIONS
+  },
+  {
+    id: 'module-3',
+    title: 'Module III: Waves',
+    description: 'Stretched strings, Wave equations, and Energy Flow.',
+    sections: MODULE_3_SECTIONS 
+  },
+  {
+    id: 'module-4',
+    title: 'Module IV: Accelerated Frames',
+    description: 'Linearly accelerating systems and rotating coordinates.',
+    sections: MODULE_4_SECTIONS
   }
 ];

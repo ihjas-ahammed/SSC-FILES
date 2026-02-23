@@ -1,0 +1,113 @@
+/* Dashboard Unit Header */
+.unit-header {
+  border-left: 4px solid var(--val-red);
+  padding: 16px 24px;
+  margin-bottom: 30px;
+}
+
+.unit-title {
+  font-size: 2rem;
+  color: var(--val-red);
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.unit-desc {
+  font-size: 1.2rem;
+  color: var(--val-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Path styling - Linear & Angular */
+.val-path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  padding: 20px 0;
+}
+
+/* Thin line connecting nodes */
+.val-path::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255,255,255,0.1);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.val-node-wrapper {
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 200px;
+}
+
+/* Stagger labels left and right */
+.val-node-wrapper:nth-child(even) { flex-direction: row-reverse; }
+
+.val-node {
+  width: 48px; 
+  height: 48px;
+  background: var(--val-bg);
+  border: 2px solid var(--val-gray);
+  transform: rotate(45deg);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+  outline: none;
+  margin: 0 auto;
+}
+
+.node-inner {
+  transform: rotate(-45deg);
+  font-size: 1.2rem;
+  color: var(--val-gray);
+}
+
+.val-node.completed {
+  border-color: var(--val-white);
+  background: rgba(255,255,255,0.1);
+}
+
+.val-node.completed .node-inner {
+  color: var(--val-white);
+}
+
+.val-node.current {
+  border-color: var(--val-red);
+  background: rgba(255, 70, 85, 0.2);
+  box-shadow: 0 0 15px rgba(255, 70, 85, 0.4);
+}
+
+.val-node.current .node-inner {
+  color: var(--val-red);
+}
+
+.val-node:hover:not(:disabled) {
+  transform: rotate(45deg) scale(1.1);
+}
+
+.node-label {
+  position: absolute;
+  font-family: var(--val-font-head);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  width: 120px;
+  color: var(--val-gray);
+}
+
+.val-node-wrapper:nth-child(odd) .node-label { left: 140px; text-align: left; }
+.val-node-wrapper:nth-child(even) .node-label { right: 140px; text-align: right; }
+
+.node-label.completed { color: var(--val-white); }
+.node-label.current { color: var(--val-red); }
