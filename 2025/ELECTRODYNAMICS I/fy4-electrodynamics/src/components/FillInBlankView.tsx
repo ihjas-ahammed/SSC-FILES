@@ -6,9 +6,10 @@ import { CheckCircle, XCircle } from 'lucide-react';
 interface Props {
   slide: Slide;
   onComplete: () => void;
+  onInteraction?: (correct: boolean) => void;
 }
 
-const FillInBlankView: React.FC<Props> = ({ slide, onComplete }) => {
+const FillInBlankView: React.FC<Props> = ({ slide, onComplete, onInteraction }) => {
   const [inputValue, setInputValue] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -21,6 +22,8 @@ const FillInBlankView: React.FC<Props> = ({ slide, onComplete }) => {
     
     setIsSubmitted(true);
     setIsCorrect(correct);
+    
+    if (onInteraction) onInteraction(correct);
   };
 
   // Splitting content assuming ___ is the blank

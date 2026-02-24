@@ -1,859 +1,313 @@
-Here are the files and modifications to create **Section 3 of Module III: Problem Solving & Applications (Magnetostatics)**. This section includes 4 units, each containing exactly 16 lessons, covering the examples and exercise problems from Chapter 5. 
 
-I've also created two new interactive canvas arts:
-1. `CycloidMotionInteractive`: Visualizes the incredible cycloid path a particle takes in crossed E and B fields (Example 5.2).
-2. `HelmholtzCoilsInteractive`: Visualizes how two current loops combine to create an ultra-uniform magnetic field (Problem 5.50).
-
-### Bash Commands to Create New Files
-*(No new packages required)*
-
---- START OF FILE src/data/chapter3_3.ts ---
-import { Section } from '../types';
-
-export const SECTION_3_3: Section = {
-  id: "section-3-3",
-  title: "Section 3: Problem Solving & Applications",
-  description: "Comprehensive examples and exercises for Lorentz Force, Biot-Savart, Ampère's Law, and Vector Potential.",
-  color: "duo-red",
-  units: [
-    {
-      id: "unit-1-lorentz-problems",
-      title: "Lorentz Force & Currents",
-      description: "Trajectories of moving charges and continuous current distributions.",
-      color: "duo-red",
-      lessons: [
-        {
-          id: "les-m1-1", title: "Ex 5.1: Cyclotron Motion", description: "Circular orbits", icon: "RefreshCw",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.1", content: "**Problem:** A charge $Q$ moves with speed $v$ in a uniform magnetic field $\\mathbf{B}$ pointing into the page. Describe its motion and find momentum." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Balance Lorentz and Centripetal forces.**", interactiveSteps: [ { stepText: "The force $\\mathbf{F} = Q(\\mathbf{v} \\times \\mathbf{B})$ is always perpendicular to velocity." }, { stepText: "This provides a perfect centripetal force: $F = m\\frac{v^2}{R}$." }, { stepText: "Equate them: $QvB = m\\frac{v^2}{R}$." }, { stepText: "Cancel $v$ and solve for momentum $p = mv$. Result: $p = QBR$. Goal reached!" } ] },
-            { id: "s2", type: "numerical", title: "Momentum", content: "If $Q=1$ C, $B=2$ T, and $R=3$ m, what is the momentum?", numericAnswer: 6, numericTolerance: 0.1 }
-          ]
-        },
-        {
-          id: "les-m1-2", title: "Ex 5.2: Cycloid Motion", description: "Crossed E and B fields", icon: "Activity",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.2", content: "**Problem:** A particle is released from rest in crossed fields: $\\mathbf{E} = E\\mathbf{\\hat{z}}$ and $\\mathbf{B} = B\\mathbf{\\hat{x}}$. Describe its trajectory." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Set up equations of motion.**", interactiveSteps: [ { stepText: "Initially $v=0$, so $\\mathbf{F}_{mag} = 0$. $\\mathbf{E}$ accelerates it upwards (z-direction)." }, { stepText: "As it gains $v_z$, it feels a magnetic force $\\mathbf{F}_{mag} = Q(v_z\\mathbf{\\hat{z}} \\times B\\mathbf{\\hat{x}}) = Qv_z B\\mathbf{\\hat{y}}$." }, { stepText: "It curves to the right (y-direction). As it moves right, it feels a downward magnetic force $Q(v_y\\mathbf{\\hat{y}} \\times B\\mathbf{\\hat{x}}) = -Qv_y B\\mathbf{\\hat{z}}$." }, { stepText: "This eventually overcomes the E field, pulling it back to $z=0$, bringing it to rest, and the cycle repeats. Goal reached!" } ] },
-            { id: "s2", type: "interactive_canvas", title: "Cycloid Explorer", content: "Watch the particle accelerate upwards via E, and then get curled downwards by B!", interactiveCanvasId: "cycloid-motion-interactive" }
-          ]
-        },
-        {
-          id: "les-m1-3", title: "Ex 5.3: Magnetic Crane", description: "Magnetic forces do no work", icon: "ArrowUpRight",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.3", content: "**Problem:** A rectangular loop hangs vertically in a B field pointing into the page. If current $I$ flows, it lifts a mass $m$. Does the B field do work?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Resolve the work paradox.**", interactiveSteps: [ { stepText: "The upward magnetic force is $F = I B a$. It balances $mg$." }, { stepText: "When it lifts the mass, the wire moves up at speed $u$." }, { stepText: "The charges now have velocity $\\mathbf{v} = w\\mathbf{\\hat{x}} + u\\mathbf{\\hat{z}}$." }, { stepText: "The magnetic force tilts backwards! It provides vertical lift, but creates a HORIZONTAL drag $quB$ opposing the current." }, { stepText: "The battery must push against this drag. The battery does the work, the magnetic field just redirects it. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-4", title: "Ex 5.4: Current Densities", description: "Volume and Surface J", icon: "Layers",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.4", content: "**Problem:** Find total current $I$ if volume current density is proportional to distance from axis: $J = ks$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate J over the cross-section.**", interactiveSteps: [ { stepText: "Current is $I = \\int \\mathbf{J} \\cdot d\\mathbf{a}$." }, { stepText: "Area element of a circle is $da = s ds d\\phi$." }, { stepText: "$I = \\int_0^{2\\pi} \\int_0^a (ks) s ds d\\phi$." }, { stepText: "$= 2\\pi k \\int_0^a s^2 ds = \\frac{2\\pi k a^3}{3}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-5", title: "Prob 5.1: Particle Deflection", description: "Finding momentum", icon: "Move",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.1", content: "**Problem:** Charge $q$ enters a uniform B field and is deflected a distance $d$ over width $a$. Find its momentum." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use geometry of cyclotron circle.**", interactiveSteps: [ { stepText: "The path is an arc of a circle of radius $R$." }, { stepText: "From geometry of a chord: $R^2 = (R-d)^2 + a^2$." }, { stepText: "$R^2 = R^2 - 2Rd + d^2 + a^2 \\implies R = \\frac{a^2+d^2}{2d}$." }, { stepText: "Since $p = qBR$, momentum is $p = qB \\frac{a^2+d^2}{2d}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-6", title: "Prob 5.2: Cycloid Variations", description: "Initial velocities", icon: "TrendingUp",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.2", content: "**Problem:** For Ex 5.2, what if the particle starts with initial velocity $v(0) = (E/B)\\mathbf{\\hat{y}}$?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Check the Lorentz force.**", interactiveSteps: [ { stepText: "Velocity is $\\mathbf{v} = (E/B)\\mathbf{\\hat{y}}$. B is $B\\mathbf{\\hat{x}}$." }, { stepText: "Magnetic force is $q(\\mathbf{v} \\times \\mathbf{B}) = q(E/B\\mathbf{\\hat{y}} \\times B\\mathbf{\\hat{x}}) = -qE\\mathbf{\\hat{z}}$." }, { stepText: "Electric force is $qE\\mathbf{\\hat{z}}$." }, { stepText: "Total force is ZERO! The particle moves in a perfect straight line at constant speed $E/B$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Velocity Filter", content: "This specific setup of crossed fields is used in physics as a:", options: [ { id: "A", text: "Velocity Selector", isCorrect: true, explanation: "Only particles with exactly v = E/B pass through undeflected." }, { id: "B", text: "Mass Spectrometer", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m1-7", title: "Prob 5.3: J.J. Thomson", description: "Discovering the electron", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.3", content: "**Problem:** In 1897, J.J. Thomson measured $q/m$ for electrons using crossed fields to find $v$, then turning off E to measure cyclotron radius $R$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Solve for $q/m$.**", interactiveSteps: [ { stepText: "Step 1: Crossed fields yield straight path. Thus $v = E/B$." }, { stepText: "Step 2: Turn off E. Particle moves in circle of radius $R$." }, { stepText: "$p = qBR \\implies mv = qBR$." }, { stepText: "Substitute $v = E/B$: $m(E/B) = qBR \\implies q/m = \\frac{E}{B^2 R}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-8", title: "Prob 5.4: Square Loop Force", description: "Current in B field", icon: "Square",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.4", content: "**Problem:** Find the force on a square loop (side $a$) in the yz plane carrying current $I$ counter-clockwise. The field is $\\mathbf{B} = kz\\mathbf{\\hat{x}}$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate $d\\mathbf{F} = I(d\\mathbf{l} \\times \\mathbf{B})$.**", interactiveSteps: [ { stepText: "Top side ($z=a/2$): $\\mathbf{B} = k(a/2)\\mathbf{\\hat{x}}$. $d\\mathbf{l} = -dy\\mathbf{\\hat{y}}$. $\\mathbf{F}_{top} = I(-a\\mathbf{\\hat{y}} \\times k\\frac{a}{2}\\mathbf{\\hat{x}}) = Ika^2/2 \\mathbf{\\hat{z}}$." }, { stepText: "Bottom side ($z=-a/2$): $\\mathbf{B} = -k(a/2)\\mathbf{\\hat{x}}$. $d\\mathbf{l} = dy\\mathbf{\\hat{y}}$. $\\mathbf{F}_{bot} = Ika^2/2 \\mathbf{\\hat{z}}$." }, { stepText: "Left and right sides have forces that cancel." }, { stepText: "Total force = $I k a^2 \\mathbf{\\hat{z}}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-9", title: "Prob 5.5: Wire Densities", description: "Surface vs Volume J", icon: "Database",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.5", content: "**Problem:** Current $I$ flows down a wire of radius $a$. (a) If uniformly distributed over surface, what is $K$? (b) If volume density $J \\propto 1/s$, what is $J$?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use $I = \\int K dl$ and $I = \\int J da$.**", interactiveSteps: [ { stepText: "(a) Surface: $I = K (2\\pi a) \\implies K = \\frac{I}{2\\pi a}$." }, { stepText: "(b) Volume: Let $J = c/s$. $I = \\int_0^a (c/s) (s ds d\\phi) = 2\\pi c \\int_0^a ds = 2\\pi c a$." }, { stepText: "So $c = \\frac{I}{2\\pi a}$." }, { stepText: "Therefore $J(s) = \\frac{I}{2\\pi a s}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-10", title: "Prob 5.6: Spinning Charge", description: "Moving electrostatics", icon: "Disc",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.6", content: "**Problem:** A record (radius $R$) carries uniform surface charge $\\sigma$ and spins at $\\omega$. What is the surface current $K$ at radius $r$?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply $K = \\sigma v$.**", interactiveSteps: [ { stepText: "Velocity of a point on the record is $v = \\omega r$." }, { stepText: "The direction is azimuthal, $\\mathbf{\\hat{\\phi}}$." }, { stepText: "$K = \\sigma v = \\sigma \\omega r$." }, { stepText: "$\\mathbf{K} = \\sigma \\omega r \\mathbf{\\hat{\\phi}}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-11", title: "Prob 5.41: Particle near Wire", description: "Complex trajectories", icon: "Minus",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.41", content: "**Problem:** Analyze motion of charge $q$ near an infinite straight wire carrying $I$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Look at conservation laws.**", interactiveSteps: [ { stepText: "Is kinetic energy conserved? Yes, magnetic forces do NO work." }, { stepText: "The B field is $\\frac{\\mu_0 I}{2\\pi s} \\mathbf{\\hat{\\phi}}$." }, { stepText: "Force is $q(\\mathbf{v} \\times \\mathbf{B})$. If the particle moves parallel to the wire, it gets pulled towards it (if q, I same sign)." }, { stepText: "This creates complex helical/drifting motions that require numerical methods to solve fully. Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m1-12", title: "Prob 5.46: Circular B Field", description: "Angular momentum", icon: "Circle",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.46", content: "**Problem:** A circularly symmetric B field points perpendicular to the page. Show how a particle entering it gains angular momentum." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use torque.**", interactiveSteps: [ { stepText: "Torque $\\mathbf{N} = \\mathbf{r} \\times \\mathbf{F} = \\mathbf{r} \\times q(\\mathbf{v} \\times \\mathbf{B})$." }, { stepText: "Since $\\mathbf{B} = B(s)\\mathbf{\\hat{z}}$, expanding the cross product shows the change in angular momentum is proportional to the total magnetic flux passed." }, { stepText: "If total flux is zero, the particle exits exactly radially! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m1-13", title: "Prob 5.48: Magnetic Monopole", description: "Hypothetical motion", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.48", content: "**Problem:** Consider the motion of an electric charge $q_e$ in the field of a stationary magnetic monopole $q_m$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Analyze the trajectory.**", interactiveSteps: [ { stepText: "$\\mathbf{B} = \\frac{\\mu_0 q_m}{4\\pi r^2}\\mathbf{\\hat{r}}$." }, { stepText: "Force is $\\mathbf{F} = q_e (\\mathbf{v} \\times \\mathbf{B})$. Note this is always perpendicular to $\\mathbf{r}$." }, { stepText: "The particle orbits on the surface of a cone (a geodesic)." }, { stepText: "This is mathematically equivalent to the Störmer problem (aurora borealis particles hitting Earth's poles). Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m1-14", title: "Prob 5.66: Numerical Verlet", description: "Algorithm for B fields", icon: "Monitor",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.66", content: "**Problem:** Implement a magnetic velocity Verlet algorithm to simulate particle trajectories." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Why a special algorithm?**", interactiveSteps: [ { stepText: "Standard Euler methods fail quickly for magnetic fields because the force depends on velocity, causing energy to mathematically drift." }, { stepText: "Magnetic forces should do NO work (constant speed)." }, { stepText: "The Boris or Magnetic Verlet algorithm explicitly updates position and velocity in half-steps that strictly preserve kinetic energy." }, { stepText: "This allows stable long-term simulation of cycloids and helices! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m1-15", title: "Prob 5.67: Crossed Wires", description: "Intersecting fields", icon: "XSquare",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.67", content: "**Problem:** Infinite wire on y-axis, another on z-axis. Both carry $I$. Plus a constant $\\mathbf{B}_0$. What do the field lines look like?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Chaos.**", interactiveSteps: [ { stepText: "$\\mathbf{B} = B_{wire1} + B_{wire2} + \\mathbf{B}_0$." }, { stepText: "This is a classic problem demonstrating that magnetic field lines in 3D can be completely chaotic." }, { stepText: "They don't form closed loops. A single field line can wander infinitely, filling a volume ergodically. Goal reached." } ] },
-            { id: "s2", type: "quiz", title: "Field lines real?", content: "Does this mean field lines are physical entities?", options: [ { id: "A", text: "No", isCorrect: true, explanation: "They are just visual aids. Real fields are vectors at points." }, { id: "B", text: "Yes", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m1-16", title: "Unit Recap: Lorentz Force", description: "Forces and Currents", icon: "CheckSquare",
-          slides: [
-            { id: "s0", type: "quiz", title: "Knowledge Check", content: "What is the single most defining physical characteristic of the magnetic force?", options: [ { id: "A", text: "It falls off as 1/r^2", isCorrect: false, explanation: "" }, { id: "B", text: "It does no work", isCorrect: true, explanation: "Because it is perpendicular to velocity." } ] },
-            { id: "s1", type: "theory", title: "Unit 1 Summary", content: "The **Lorentz Force** $\\mathbf{F} = Q(\\mathbf{v} \\times \\mathbf{B})$ dictates that magnetic forces are perpendicular to motion, leading to circular/helical trajectories and zero net work.\n\nWe defined continuous currents using Line ($I$), Surface ($K$), and Volume ($J$) current densities, which obey the continuity equation $\\nabla \\cdot \\mathbf{J} = -\\partial \\rho / \\partial t$. For steady currents, this is zero." }
-          ]
-        }
-      ]
-    },
-    {
-      id: "unit-2-biot-savart-problems",
-      title: "Biot-Savart Law Problems",
-      description: "Calculating B-fields for various current geometries.",
-      color: "duo-red",
-      lessons: [
-        {
-          id: "les-m2-1", title: "Ex 5.5/5.6 Recap", description: "Straight wire and circle", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Biot-Savart Recap", content: "**Recall:** The field of an infinite wire is $B = \\frac{\\mu_0 I}{2\\pi s}$. The field on the axis of a circular loop is $B = \\frac{\\mu_0 I}{2} \\frac{R^2}{(R^2+z^2)^{3/2}}$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply these to harder problems.**", interactiveSteps: [ { stepText: "Most Biot-Savart problems are just superposition of straight lines and circular arcs." }, { stepText: "We will use these base formulas repeatedly." } ] }
-          ]
-        },
-        {
-          id: "les-m2-2", title: "Prob 5.8a: Square Loop Center", description: "4 wire segments", icon: "Square",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.8a", content: "**Problem:** Find the magnetic field at the center of a square loop (distance $R$ from center to side)." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Sum 4 finite wires.**", interactiveSteps: [ { stepText: "A finite wire gives $B = \\frac{\\mu_0 I}{4\\pi s}(\\sin\\theta_2 - \\sin\\theta_1)$." }, { stepText: "For one side of a square from the center, $\\theta_1 = -45^\\circ$ and $\\theta_2 = 45^\\circ$." }, { stepText: "$B_{side} = \\frac{\\mu_0 I}{4\\pi R} (\\frac{1}{\\sqrt{2}} - (-\\frac{1}{\\sqrt{2}})) = \\frac{\\mu_0 I}{4\\pi R} \\sqrt{2}$." }, { stepText: "Multiply by 4 sides: $B_{total} = \\frac{\\sqrt{2} \\mu_0 I}{\\pi R}$. Goal reached!" } ] },
-            { id: "s2", type: "numerical", title: "Coefficient", content: "What is the multiplier for $\\frac{\\mu_0 I}{\\pi R}$?", numericAnswer: 1.414, numericTolerance: 0.01 }
-          ]
-        },
-        {
-          id: "les-m2-3", title: "Prob 5.8b: Polygon Center", description: "n-sided loop", icon: "Circle",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.8b", content: "**Problem:** Find the field at the center of a regular $n$-sided polygon." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Generalize the angle.**", interactiveSteps: [ { stepText: "The angle subtended by half a side is $\\theta = \\pi/n$." }, { stepText: "One side gives $B_{side} = \\frac{\\mu_0 I}{4\\pi R} (2\\sin(\\pi/n))$." }, { stepText: "Multiply by $n$ sides: $B = \\frac{n \\mu_0 I}{2\\pi R} \\sin(\\pi/n)$." }, { stepText: "As $n \\to \\infty$, $n\\sin(\\pi/n) \\to \\pi$. Thus $B \\to \\frac{\\mu_0 I}{2R}$, which is exactly a circular loop! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m2-4", title: "Prob 5.9a: Hairpin Loop", description: "Two rays and a semi-circle", icon: "UturnRight",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.9a", content: "**Problem:** Find B at the center of a 'hairpin' loop (two infinite wires connected by a semi-circle of radius R)." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superposition of 3 parts.**", interactiveSteps: [ { stepText: "Top wire (half-infinite): $B_1 = \\frac{1}{2} (\\frac{\\mu_0 I}{2\\pi R}) = \\frac{\\mu_0 I}{4\\pi R}$." }, { stepText: "Bottom wire (half-infinite): $B_2 = \\frac{\\mu_0 I}{4\\pi R}$." }, { stepText: "Semi-circle (half-loop): $B_3 = \\frac{1}{2} (\\frac{\\mu_0 I}{2R}) = \\frac{\\mu_0 I}{4R}$." }, { stepText: "Sum: $B = \\frac{\\mu_0 I}{4R} (1 + \\frac{2}{\\pi})$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m2-5", title: "Prob 5.9b: D-Loop", description: "Semi-circle and straight line", icon: "Minimize",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.9b", content: "**Problem:** Find B at the center of a 'D' shaped loop (semi-circle of radius R and a straight base)." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superposition of 2 parts.**", interactiveSteps: [ { stepText: "Semi-circle: $B_1 = \\frac{\\mu_0 I}{4R}$." }, { stepText: "Straight base (length $2R$, distance $0$ from center? No, if it's a D, the center of the arc is ON the straight line)." }, { stepText: "If the straight line passes through the point P, $d\\mathbf{l} \\times \\mathbf{\\hat{r}} = 0$! It contributes nothing." }, { stepText: "Total $B = \\frac{\\mu_0 I}{4R}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m2-6", title: "Prob 5.10a: Force on Square", description: "Wire pulling a loop", icon: "ArrowRight",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.10a", content: "**Problem:** Find force on a square loop (side $a$) near an infinite straight wire (distance $s$). Loop is coplanar." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Sum 4 forces.**", interactiveSteps: [ { stepText: "Wire field $B = \\frac{\\mu_0 I_1}{2\\pi r}$." }, { stepText: "Near side of loop (parallel to wire, distance $s$): attractive force $F_1 = I_2 a B(s) = \\frac{\\mu_0 I_1 I_2 a}{2\\pi s}$." }, { stepText: "Far side (anti-parallel, distance $s+a$): repulsive force $F_2 = - \\frac{\\mu_0 I_1 I_2 a}{2\\pi (s+a)}$." }, { stepText: "Top and bottom sides feel lateral forces that perfectly cancel." }, { stepText: "Net force is attractive: $F_1 - F_2$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m2-7", title: "Prob 5.10b: Force on Triangle", description: "Angled wires in B field", icon: "Activity",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.10b", content: "**Problem:** Find force on a triangular loop near an infinite wire." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate force on angled sides.**", interactiveSteps: [ { stepText: "Base of triangle is parallel to wire. Force is easy: $F_{base} = \\frac{\\mu_0 I_1 I_2 a}{2\\pi s}$." }, { stepText: "For the angled sides, the B field changes with distance $y$. You must integrate $dF = I (d\\mathbf{l} \\times \\mathbf{B})$." }, { stepText: "Since they slope opposite ways, the lateral forces cancel, and the repulsive parts sum together." }, { stepText: "Result yields a complex logarithmic term subtracting from the base force. Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m2-8", title: "Prob 5.11: Solenoid Axis", description: "Integrating rings", icon: "Database",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.11", content: "**Problem:** Find B on the axis of a finite solenoid (radius $a$, turns $n$). Express in terms of angles $\\theta_1, \\theta_2$ to the ends." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superpose circular loops.**", interactiveSteps: [ { stepText: "Treat solenoid as a stack of rings. $dI = I n dz$." }, { stepText: "$dB = \\frac{\\mu_0 (I n dz)}{2} \\frac{a^2}{(a^2+z^2)^{3/2}}$." }, { stepText: "Substitute $z = a \\cot\\theta$, $dz = -a \\csc^2\\theta d\\theta$." }, { stepText: "Integral simplifies beautifully to $B = \\frac{\\mu_0 n I}{2} \\int_{\\theta_1}^{\\theta_2} \\sin\\theta d\\theta$." }, { stepText: "Result: $B = \\frac{\\mu_0 n I}{2} (\\cos\\theta_2 - \\cos\\theta_1)$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Infinite limit", content: "For an infinite solenoid, $\\theta_1 \\to \\pi$ and $\\theta_2 \\to 0$. What is $\\cos(0) - \\cos(\\pi)$?", options: [ { id: "A", text: "2", isCorrect: true, explanation: "1 - (-1) = 2. This gives the standard mu0 n I." }, { id: "B", text: "0", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m2-9", title: "Prob 5.12: Spinning Sphere B", description: "Biot-Savart for sphere", icon: "Globe",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.12", content: "**Problem:** Find B at the center of a spinning spherical shell of radius R and charge Q." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate spinning rings.**", interactiveSteps: [ { stepText: "A spherical shell is made of rings of radius $r = R\\sin\\theta$." }, { stepText: "Surface current $K = \\sigma \\omega R \\sin\\theta$. Ring current $dI = K (R d\\theta)$." }, { stepText: "Use ring formula at center ($z=R\\cos\\theta$): $dB = \\frac{\\mu_0 dI}{2} \\frac{r^2}{(r^2+z^2)^{3/2}}$." }, { stepText: "Integrate over $\\theta$ from $0$ to $\\pi$." }, { stepText: "Result: $B = \\frac{2}{3} \\mu_0 \\sigma \\omega R$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m2-10", title: "Prob 5.13: Moving Line Charges", description: "Magnetic vs Electric force", icon: "Move",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.13", content: "**Problem:** Two infinite line charges $\\lambda$ move at speed $v$. How fast to balance electrical repulsion and magnetic attraction?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Equate $F_{elec} = F_{mag}$.**", interactiveSteps: [ { stepText: "$E = \\frac{\\lambda}{2\\pi\\epsilon_0 d}$. $F_{elec} = \\lambda E$." }, { stepText: "Current $I = \\lambda v$. $B = \\frac{\\mu_0 I}{2\\pi d} = \\frac{\\mu_0 \\lambda v}{2\\pi d}$." }, { stepText: "$F_{mag} = I B = \\lambda v B = \\frac{\\mu_0 \\lambda^2 v^2}{2\\pi d}$." }, { stepText: "Equate: $\\frac{\\lambda^2}{2\\pi\\epsilon_0 d} = \\frac{\\mu_0 \\lambda^2 v^2}{2\\pi d}$." }, { stepText: "$\\frac{1}{\\epsilon_0} = \\mu_0 v^2 \\implies v = \\frac{1}{\\sqrt{\\mu_0 \\epsilon_0}}$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Speed of Light", content: "What is the value of $1/\\sqrt{\\mu_0 \\epsilon_0}$?", options: [ { id: "A", text: "The speed of sound", isCorrect: false, explanation: "" }, { id: "B", text: "The speed of light ($c$)", isCorrect: true, explanation: "Magnetic and electric forces only perfectly balance if charges move at the speed of light!" } ] }
-          ]
-        },
-        {
-          id: "les-m2-11", title: "Prob 5.42: Intersecting Wires", description: "Force between skewed lines", icon: "XSquare",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.42", content: "**Problem:** Two infinite straight wires intersect at an angle $\\alpha$, separated by distance $d$. Find the magnetic force." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Set up the 3D integral.**", interactiveSteps: [ { stepText: "Wire 1 along z-axis. Wire 2 rotated by $\\alpha$ in a plane parallel to xz, offset by $d$ in y." }, { stepText: "Calculate B of Wire 1 at location of Wire 2." }, { stepText: "Evaluate $d\\mathbf{F} = I_2 d\\mathbf{l}_2 \\times \\mathbf{B}_1$." }, { stepText: "The integration from $-\\infty$ to $\\infty$ evaluates to exactly $\\frac{\\mu_0 I_1 I_2}{2} \\cot\\alpha$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m2-12", title: "Prob 5.43: Pinch Effect", description: "Why wires don't crush themselves", icon: "Minimize",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.43", content: "**Problem:** Since parallel currents attract, why doesn't a wire contract into a tiny stream (pinch effect)?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Understand relativistic charge density.**", interactiveSteps: [ { stepText: "Positive ions are stationary. Electrons move." }, { stepText: "By special relativity, length contraction increases the electron density $\\rho_-$ slightly." }, { stepText: "This creates a tiny net negative charge, generating an outward electrical repulsion." }, { stepText: "For normal wires, $v \\ll c$, so this effect is negligible, and structural forces keep the wire intact. In plasmas, the pinch effect is huge! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m2-13", title: "Prob 5.44: Hall Effect", description: "Determining charge sign", icon: "Activity",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.44", content: "**Problem:** Current $I$ flows through a rectangular bar in a B field. Find the Hall voltage." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Balance Lorentz and Electric forces.**", interactiveSteps: [ { stepText: "B field pushes moving charges to one side of the bar ($F = qvB$)." }, { stepText: "This buildup creates a transverse electric field $E = V_H / w$." }, { stepText: "Equilibrium: $qE = qvB \\implies V_H/w = vB$." }, { stepText: "Hall voltage $V_H = v B w$. The sign of the voltage reveals if positive or negative charges are flowing! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m2-14", title: "Prob 5.45: Irregular Loop Force", description: "Uniform B field", icon: "Cloud",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.45", content: "**Problem:** A plane wire loop of irregular shape enters a uniform B field. Part is inside, part is outside. Find the force." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Vector displacement.**", interactiveSteps: [ { stepText: "Force is $\\int I(d\\mathbf{l} \\times \\mathbf{B})$." }, { stepText: "Since B is uniform in the shaded region, pull it out: $I (\\int d\\mathbf{l}) \\times \\mathbf{B}$." }, { stepText: "$\\int d\\mathbf{l}$ is just the vector $\\mathbf{w}$ from where the wire enters the field to where it exits!" }, { stepText: "Force is exactly $F = I B w$, as if it were a straight wire spanning the gap. Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m2-15", title: "Prob 5.50: Helmholtz Coil", description: "Uniformizing the B field", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.50", content: "**Problem:** Two circular loops radius $R$ are distance $d$ apart. Find $d$ such that $\\partial^2 B/\\partial z^2 = 0$ midway." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Evaluate derivatives.**", interactiveSteps: [ { stepText: "Total B is the sum of two loop fields: $B(z) = B_{loop}(z - d/2) + B_{loop}(z + d/2)$." }, { stepText: "Take first derivative $\\partial B/\\partial z$. By symmetry at $z=0$, this is naturally 0." }, { stepText: "Take second derivative $\\partial^2 B/\\partial z^2$. Set it to 0 at $z=0$." }, { stepText: "Solving the algebra yields $d = R$. A Helmholtz coil has spacing equal to radius! Goal reached." } ] },
-            { id: "s2", type: "interactive_canvas", title: "Helmholtz Coil Simulator", content: "Adjust the distance between the two coils. Notice how the magnetic field becomes incredibly flat and uniform exactly when d = R.", interactiveCanvasId: "helmholtz-coils-interactive" }
-          ]
-        },
-        {
-          id: "les-m2-16", title: "Unit Recap: Biot-Savart", description: "Superposition and Integration", icon: "CheckSquare",
-          slides: [
-            { id: "s0", type: "quiz", title: "Knowledge Check", content: "When using the Biot-Savart law to find the magnetic field of a complex wire shape, you should:", options: [ { id: "A", text: "Give up and use Ampère's law", isCorrect: false, explanation: "Ampère's law only works for perfect symmetry." }, { id: "B", text: "Break the wire into straight and curved segments, and add the B vectors", isCorrect: true, explanation: "Superposition is your best friend." } ] },
-            { id: "s1", type: "theory", title: "Unit 2 Summary", content: "The **Biot-Savart Law** is the brute-force integration tool for Magnetostatics. \n\nBy breaking complex geometries (like polygons, hairpins, and D-loops) into simple lines and arcs, we can evaluate $\\mathbf{B}$ at any point. We also saw how interacting currents create Lorentz forces that pull, push, and create Hall voltages." }
-          ]
-        }
-      ]
-    },
-    {
-      id: "unit-3-ampere-problems",
-      title: "Ampère's Law Problems",
-      description: "Exploiting symmetry for magnetic fields.",
-      color: "duo-red",
-      lessons: [
-        {
-          id: "les-m3-1", title: "Ex 5.7/5.8 Recap", description: "Ampere symmetries", icon: "Layers",
-          slides: [
-            { id: "s0", type: "example_q", title: "Ampère's Law Recap", content: "**Recall:** Ampère's law $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$ only works when you can pull $B$ out of the integral.\n\nThis requires specific symmetries: Cylindrical (wires), Planar (sheets), and Solenoidal (coils/toroids)." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply to advanced cases.**", interactiveSteps: [ { stepText: "Identify the symmetry." }, { stepText: "Draw the correct Amperian loop (circle or rectangle)." }, { stepText: "Calculate $I_{enc}$ carefully by integrating $\\mathbf{J}$ or $\\mathbf{K}$ if necessary." } ] }
-          ]
-        },
-        {
-          id: "les-m3-2", title: "Prob 5.14a: Thick Wire Uniform", description: "Field inside a wire", icon: "Database",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.14a", content: "**Problem:** Find B inside and outside a solid cylindrical wire of radius $a$ with *uniform* current $I$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Find $I_{enc}$.**", interactiveSteps: [ { stepText: "Outside ($s>a$): Loop encloses all $I$. $B(2\\pi s) = \\mu_0 I \\implies B = \\frac{\\mu_0 I}{2\\pi s}$." }, { stepText: "Inside ($s<a$): Loop encloses a fraction of current. $I_{enc} = I \\frac{\\pi s^2}{\\pi a^2} = I (s^2/a^2)$." }, { stepText: "$B(2\\pi s) = \\mu_0 I (s^2/a^2)$." }, { stepText: "$B = \\frac{\\mu_0 I s}{2\\pi a^2}$. Field grows linearly inside! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m3-3", title: "Prob 5.14b: Thick Wire Variable", description: "Integrating J", icon: "Database",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.14b", content: "**Problem:** Same wire, but current density is $J = k s$. Find B inside." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate J for $I_{enc}$.**", interactiveSteps: [ { stepText: "Inside ($s<a$): $I_{enc} = \\int_0^s J da = \\int_0^s (k s') (2\\pi s' ds') = 2\\pi k \\int_0^s s'^2 ds' = \\frac{2\\pi k s^3}{3}$." }, { stepText: "Ampere's law: $B(2\\pi s) = \\mu_0 (\\frac{2\\pi k s^3}{3})$." }, { stepText: "$B = \\frac{\\mu_0 k s^2}{3}$. Goal reached!" } ] },
-            { id: "s2", type: "numerical", title: "Power", content: "Inside the wire, B is proportional to $s^n$. What is n?", numericAnswer: 2, numericTolerance: 0.1 }
-          ]
-        },
-        {
-          id: "les-m3-4", title: "Prob 5.15: Thick Slab", description: "Planar symmetry", icon: "Layers",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.15", content: "**Problem:** A thick slab from $z=-a$ to $z=+a$ carries uniform volume current $\\mathbf{J} = J\\mathbf{\\hat{x}}$. Find B." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use rectangular Amperian loop.**", interactiveSteps: [ { stepText: "By right hand rule, B points $-\\mathbf{\\hat{y}}$ above $z=0$ and $+\\mathbf{\\hat{y}}$ below $z=0$." }, { stepText: "Inside ($z<a$): Draw loop from $-z$ to $z$, length $l$. $I_{enc} = J (2z) l$." }, { stepText: "Loop integral is $B l + B l = 2 B l$." }, { stepText: "$2 B l = \\mu_0 J 2z l \\implies B = \\mu_0 J z$. Vector: $\\mathbf{B} = -\\mu_0 J z \\mathbf{\\hat{y}}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m3-5", title: "Prob 5.16: Crossing the Sheet", description: "Particle trajectory", icon: "Activity",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.16", content: "**Problem:** Current sheet in xy plane creates $B = \\pm B_0 \\mathbf{\\hat{y}}$. A particle executes cyclotron motion but crosses $z=0$. Describe motion." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Analyze alternating B field.**", interactiveSteps: [ { stepText: "Above sheet: B is $-y$, particle curls one way." }, { stepText: "Below sheet: B is $+y$, particle curls the OTHER way." }, { stepText: "The trajectory looks like a snake slithering along the surface! It's a sequence of alternating semicircles." }, { stepText: "It drifts continuously in the x direction. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m3-6", title: "Prob 5.17a: Coaxial Solenoids (In)", description: "Superposition of coils", icon: "Database",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.17a", content: "**Problem:** Two coaxial solenoids (radii $a, b$) have $n_1, n_2$ turns carrying $I$ in opposite directions. Find B inside $a$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Sum the fields.**", interactiveSteps: [ { stepText: "Inside inner solenoid ($s<a$), you are inside BOTH solenoids." }, { stepText: "Inner creates $B_1 = \\mu_0 n_1 I \\mathbf{\\hat{z}}$." }, { stepText: "Outer creates $B_2 = -\\mu_0 n_2 I \\mathbf{\\hat{z}}$ (opposite current)." }, { stepText: "Total $B = \\mu_0 I (n_1 - n_2) \\mathbf{\\hat{z}}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m3-7", title: "Prob 5.17b: Coaxial Solenoids (Mid)", description: "Region between coils", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.17b", content: "**Problem:** Find B between the two solenoids ($a < s < b$)." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply boundary rules.**", interactiveSteps: [ { stepText: "You are OUTSIDE the inner solenoid. Its contribution is 0." }, { stepText: "You are INSIDE the outer solenoid. Its contribution is $-\\mu_0 n_2 I \\mathbf{\\hat{z}}$." }, { stepText: "Total $B = -\\mu_0 n_2 I \\mathbf{\\hat{z}}$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Outside both", content: "What is the magnetic field completely outside both solenoids ($s > b$)?", options: [ { id: "A", text: "$\\mu_0 I (n_1+n_2)$", isCorrect: false, explanation: "" }, { id: "B", text: "0", isCorrect: true, explanation: "You are outside both, and B outside an ideal solenoid is zero." } ] }
-          ]
-        },
-        {
-          id: "les-m3-8", title: "Prob 5.18: Moving Capacitor", description: "Creating surface currents", icon: "Layers",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.18", content: "**Problem:** Parallel plate capacitor ($\\sigma$ and $-\\sigma$) moves at speed $v$. Find the magnetic field." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Treat moving charge as current.**", interactiveSteps: [ { stepText: "Moving surface charge creates surface current: $K = \\sigma v$." }, { stepText: "Top plate creates $B_{top} = \\pm \\frac{\\mu_0 \\sigma v}{2}$." }, { stepText: "Bottom plate ($-\\sigma$) creates $B_{bot} = \\mp \\frac{\\mu_0 \\sigma v}{2}$." }, { stepText: "Between plates, they add: $B = \\mu_0 \\sigma v$. Outside, they cancel: $B = 0$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m3-9", title: "Prob 5.19: Solenoid Parallel B", description: "Why B is parallel to axis", icon: "Minus",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.19", content: "**Problem:** Show that the field of an infinite solenoid runs parallel to the axis, regardless of cross-sectional shape." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Rule out other components.**", interactiveSteps: [ { stepText: "Radial component $B_s$: If you reverse current, $B_s$ reverses. But turning solenoid upside down does the same thing without reversing $B_s$. Thus $B_s$ must be 0." }, { stepText: "Azimuthal component $B_\\phi$: $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = B_\\phi 2\\pi s = \\mu_0 I_{enc}$. But a loop enclosing the z-axis encloses 0 net axial current. Thus $B_\\phi = 0$." }, { stepText: "Only $B_z$ remains! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m3-10", title: "Prob 5.21: Copper Wire", description: "Mobile charges", icon: "Activity",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.21", content: "**Problem:** Calculate the average electron velocity in a 1 mm copper wire carrying 1 A." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use $I = n A e v$.**", interactiveSteps: [ { stepText: "Find $n$ (electrons/volume) using copper's density and atomic mass: $\\approx 8.5 \\times 10^{28} m^{-3}$." }, { stepText: "Area $A = \\pi (0.0005)^2 \\approx 7.8 \\times 10^{-7} m^2$." }, { stepText: "$v = I / (n A e) = 1 / (8.5\\times 10^{28} \\times 7.8\\times 10^{-7} \\times 1.6\\times 10^{-19})$." }, { stepText: "$v \\approx 9 \\times 10^{-5}$ m/s. This is 0.1 mm per second—a snail's pace! Goal reached." } ] },
-            { id: "s2", type: "quiz", title: "Signal Speed", content: "If electrons move so slowly, why do lights turn on instantly?", options: [ { id: "A", text: "The electromagnetic wave (signal) travels near the speed of light.", isCorrect: true, explanation: "Electrons just push their neighbors; the wave propagates instantly." }, { id: "B", text: "Electrons teleport.", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m3-11", title: "Prob 5.22: General Ampere", description: "Why it fails outside statics", icon: "XCircle",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.22", content: "**Problem:** Is Ampere's law $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ consistent with $\\nabla \\cdot (\\nabla \\times \\mathbf{v}) = 0$ in general?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Take the divergence.**", interactiveSteps: [ { stepText: "$\\nabla \\cdot (\\nabla \\times \\mathbf{B}) = \\mu_0 \\nabla \\cdot \\mathbf{J}$." }, { stepText: "Left side is mathematically identically 0." }, { stepText: "Right side is $\\mu_0 \\nabla \\cdot \\mathbf{J}$. By continuity, this is $-\\mu_0 \\frac{\\partial \\rho}{\\partial t}$." }, { stepText: "So $0 = -\\mu_0 \\frac{\\partial \\rho}{\\partial t}$. This ONLY works if $\\partial \\rho / \\partial t = 0$ (Magnetostatics!). For changing charges, Ampere's law is incomplete. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m3-12", title: "Prob 5.23: Magnetic Monopoles", description: "Modifying Maxwell", icon: "AlertTriangle",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.23", content: "**Problem:** If magnetic monopoles ($\\rho_m$) and magnetic currents ($\\mathbf{J}_m$) existed, how would Maxwell's equations change?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Introduce symmetry.**", interactiveSteps: [ { stepText: "Gauss's law for magnetism would no longer be 0. $\\nabla \\cdot \\mathbf{B} = \\mu_0 \\rho_m$." }, { stepText: "Faraday's law (which we'll see later) would gain a magnetic current term: $\\nabla \\times \\mathbf{E} = -\\mu_0 \\mathbf{J}_m - \\partial\\mathbf{B}/\\partial t$." }, { stepText: "The equations would become beautifully symmetric between E and B! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m3-13", title: "Prob 5.24: E Field Lines", description: "Why E lines are nice", icon: "CheckSquare",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.24", content: "**Problem:** The text noted that magnetic field lines can be 'chaotic' and not close cleanly. Why doesn't this happen to Electrostatic field lines?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Look at the curl.**", interactiveSteps: [ { stepText: "Magnetic field lines form chaotic non-closing helices when a curl is present in 3D." }, { stepText: "Electrostatic fields ALWAYS have $\\nabla \\times \\mathbf{E} = 0$." }, { stepText: "Zero curl prevents the twisting and spiraling that makes B lines chaotic. E lines just go straight from + to -. Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m3-14", title: "Ampère's Law Review", description: "Integral vs Differential", icon: "RefreshCw",
-          slides: [
-            { id: "s0", type: "quiz", title: "Review", content: "Which form is better for finding B if the problem has infinite cylindrical symmetry?", options: [ { id: "A", text: "Integral Form ($\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$)", isCorrect: true, explanation: "Allows you to pull B out of the integral." }, { id: "B", text: "Differential Form ($\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$)", isCorrect: false, explanation: "Harder to solve directly." } ] }
-          ]
-        },
-        {
-          id: "les-m3-15", title: "Symmetry Checklist", description: "When it works", icon: "List",
-          slides: [
-            { id: "s0", type: "quiz", title: "Review", content: "Which geometry is NOT solvable with Ampère's law?", options: [ { id: "A", text: "Infinite straight wire", isCorrect: false, explanation: "" }, { id: "B", text: "Finite straight wire", isCorrect: true, explanation: "Lacks translational symmetry. Must use Biot-Savart." }, { id: "C", text: "Infinite plane", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m3-16", title: "Unit Recap: Ampère's Law", description: "Div and Curl of B", icon: "CheckSquare",
-          slides: [
-            { id: "s0", type: "theory", title: "Unit 3 Summary", content: "Because $\\nabla \\cdot \\mathbf{B} = 0$, there are no magnetic monopoles.\n\nAmpère's Law ($\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ and $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$) allows us to easily calculate magnetic fields for geometries with high symmetry, such as infinite wires, planes, solenoids, and toroids. However, we proved it mathematically fails if the current is not steady ($\\partial \\rho / \\partial t \\neq 0$)." }
-          ]
-        }
-      ]
-    },
-    {
-      id: "unit-4-vector-potential-problems",
-      title: "Vector Potential & Dipoles",
-      description: "Working with A and the magnetic dipole moment.",
-      color: "duo-red",
-      lessons: [
-        {
-          id: "les-m4-1", title: "Ex 5.11: Spinning Shell A", description: "Vector potential of sphere", icon: "Globe",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.11", content: "**Problem:** Find the vector potential $\\mathbf{A}$ of a spherical shell (radius $R$, charge $\\sigma$) spinning at $\\omega$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Evaluate $\\mathbf{A} = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{K}}{\\cal{r}} da'$.**", interactiveSteps: [ { stepText: "Surface current is $\\mathbf{K} = \\sigma \\mathbf{v} = \\sigma (\\boldsymbol{\\omega} \\times \\mathbf{r}')$." }, { stepText: "Set $\\mathbf{r}$ on the z-axis. The integration over the spherical angles is complex." }, { stepText: "Inside ($r<R$): $\\mathbf{A} = \\frac{\\mu_0 R \\sigma}{3} (\\boldsymbol{\\omega} \\times \\mathbf{r})$. This yields a uniform B field! $B = \\frac{2}{3}\\mu_0 \\sigma \\omega R$." }, { stepText: "Outside ($r>R$): $\\mathbf{A} = \\frac{\\mu_0 R^4 \\sigma}{3 r^3} (\\boldsymbol{\\omega} \\times \\mathbf{r})$. This is exactly a perfect dipole field! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m4-2", title: "Ex 5.12: Solenoid A", description: "A from flux", icon: "Database",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.12", content: "**Problem:** Find $\\mathbf{A}$ for an infinite solenoid. We can't use the integral formula because it diverges." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use Stokes' theorem on A.**", interactiveSteps: [ { stepText: "$\\oint \\mathbf{A} \\cdot d\\mathbf{l} = \\int (\\nabla \\times \\mathbf{A}) \\cdot d\\mathbf{a} = \\int \\mathbf{B} \\cdot d\\mathbf{a} = \\Phi_B$." }, { stepText: "Inside: $\\Phi_B = B \\pi s^2 = \\mu_0 n I \\pi s^2$. So $A(2\\pi s) = \\mu_0 n I \\pi s^2 \\implies \\mathbf{A} = \\frac{\\mu_0 n I s}{2} \\mathbf{\\hat{\\phi}}$." }, { stepText: "Outside: Flux is capped at $R$. $\\Phi_B = \\mu_0 n I \\pi R^2$. So $\\mathbf{A} = \\frac{\\mu_0 n I R^2}{2 s} \\mathbf{\\hat{\\phi}}$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Aharonov-Bohm", content: "Outside the solenoid, B is zero. Is A zero?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "A falls off as 1/s. This proves A exists even where B is absent!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-3", title: "Ex 5.13: Bookend Dipole", description: "Vector area addition", icon: "Square",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 5.13", content: "**Problem:** Find the magnetic dipole moment of a 'bookend' shaped loop (bent at 90 degrees)." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superpose two flat loops.**", interactiveSteps: [ { stepText: "Treat the bent loop as TWO separate square loops, one in xy plane, one in xz plane." }, { stepText: "The shared edge has currents running in opposite directions, so they perfectly cancel out!" }, { stepText: "Dipole moment of xy loop: $\\mathbf{m}_1 = I w^2 \\mathbf{\\hat{z}}$." }, { stepText: "Dipole moment of xz loop: $\\mathbf{m}_2 = I w^2 \\mathbf{\\hat{y}}$." }, { stepText: "Total $\\mathbf{m} = I w^2 (\\mathbf{\\hat{y}} + \\mathbf{\\hat{z}})$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-4", title: "Prob 5.25: A of Segment", description: "Finite wire potential", icon: "Minus",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.25", content: "**Problem:** Find $\\mathbf{A}$ for a finite segment of wire from $z_1$ to $z_2$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Evaluate integral.**", interactiveSteps: [ { stepText: "$\\mathbf{A} = \\frac{\\mu_0 I}{4\\pi} \\int_{z_1}^{z_2} \\frac{1}{\\sqrt{s^2+z^2}} dz \\mathbf{\\hat{z}}$." }, { stepText: "This evaluates to a natural log function: $\\frac{\\mu_0 I}{4\\pi} \\ln \\left( \\frac{z_2 + \\sqrt{s^2+z_2^2}}{z_1 + \\sqrt{s^2+z_1^2}} \\right) \\mathbf{\\hat{z}}$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Direction", content: "What is the direction of the vector potential A here?", options: [ { id: "A", text: "Azimuthal (phi)", isCorrect: false, explanation: "That's the direction of B." }, { id: "B", text: "Parallel to the current (z)", isCorrect: true, explanation: "A follows the direction of the current." } ] }
-          ]
-        },
-        {
-          id: "les-m4-5", title: "Prob 5.26a: Azimuthal A", description: "Guessing the current", icon: "RefreshCw",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.26a", content: "**Problem:** What current density would produce the vector potential $\\mathbf{A} = k \\mathbf{\\hat{\\phi}}$?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply $\\nabla^2 \\mathbf{A} = -\\mu_0 \\mathbf{J}$ or take curl twice.**", interactiveSteps: [ { stepText: "Find $\\mathbf{B} = \\nabla \\times \\mathbf{A}$." }, { stepText: "Curl of $k \\mathbf{\\hat{\\phi}}$ in cylindrical is $\\frac{1}{s} \\frac{\\partial}{\\partial s}(sk) \\mathbf{\\hat{z}} = \\frac{k}{s} \\mathbf{\\hat{z}}$." }, { stepText: "Now find $\\mathbf{J} = \\frac{1}{\\mu_0} \\nabla \\times \\mathbf{B}$." }, { stepText: "Curl of $\\frac{k}{s} \\mathbf{\\hat{z}}$ is $-\\frac{\\partial}{\\partial s}(k/s) \\mathbf{\\hat{\\phi}} = \\frac{k}{s^2} \\mathbf{\\hat{\\phi}}$." }, { stepText: "$\\mathbf{J} = \\frac{k}{\\mu_0 s^2} \\mathbf{\\hat{\\phi}}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-6", title: "Prob 5.27: Uniform B", description: "A = -1/2 (r x B)", icon: "Grid",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.27", content: "**Problem:** If $\\mathbf{B}$ is uniform, show that $\\mathbf{A} = -\\frac{1}{2}(\\mathbf{r} \\times \\mathbf{B})$ works." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Check $\\nabla \\times \\mathbf{A} = \\mathbf{B}$.**", interactiveSteps: [ { stepText: "$\\nabla \\times (-\\frac{1}{2} \\mathbf{r} \\times \\mathbf{B}) = -\\frac{1}{2} \\left[ \\mathbf{r}(\\nabla \\cdot \\mathbf{B}) - \\mathbf{B}(\\nabla \\cdot \\mathbf{r}) + (\\mathbf{B} \\cdot \\nabla)\\mathbf{r} - (\\mathbf{r} \\cdot \\nabla)\\mathbf{B} \\right]$." }, { stepText: "$\\nabla \\cdot \\mathbf{B} = 0$. $\\nabla \\cdot \\mathbf{r} = 3$." }, { stepText: "$(\\mathbf{r} \\cdot \\nabla)\\mathbf{B} = 0$ (since B is uniform)." }, { stepText: "$(\\mathbf{B} \\cdot \\nabla)\\mathbf{r} = \\mathbf{B}$." }, { stepText: "Result: $-\\frac{1}{2} [0 - 3\\mathbf{B} + \\mathbf{B} - 0] = -\\frac{1}{2} [-2\\mathbf{B}] = \\mathbf{B}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-7", title: "Prob 5.28: A of Infinite Wire", description: "Ampere's law for A", icon: "Minus",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.28", content: "**Problem:** Find $\\mathbf{A}$ for an infinite straight wire carrying $I$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate B directly.**", interactiveSteps: [ { stepText: "We know $\\mathbf{B} = \\frac{\\mu_0 I}{2\\pi s} \\mathbf{\\hat{\\phi}}$." }, { stepText: "Also $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. Assume $\\mathbf{A} = A_z(s) \\mathbf{\\hat{z}}$." }, { stepText: "Then $\\nabla \\times \\mathbf{A} = -\\frac{\\partial A_z}{\\partial s} \\mathbf{\\hat{\\phi}}$." }, { stepText: "So $-\\frac{\\partial A_z}{\\partial s} = \\frac{\\mu_0 I}{2\\pi s}$." }, { stepText: "Integrate: $A_z = -\\frac{\\mu_0 I}{2\\pi} \\ln s$. Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Reference point", content: "Why can't we set A=0 at infinity here?", options: [ { id: "A", text: "Because ln(s) blows up at infinity", isCorrect: true, explanation: "Just like the potential of an infinite line charge!" }, { id: "B", text: "Because it's a vector.", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m4-8", title: "Prob 5.29: A of Surface Current", description: "Infinite plane", icon: "Layers",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.29", content: "**Problem:** Find $\\mathbf{A}$ for an infinite surface current $\\mathbf{K} = K \\mathbf{\\hat{x}}$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate B.**", interactiveSteps: [ { stepText: "We know $\\mathbf{B} = \\pm \\frac{\\mu_0 K}{2} \\mathbf{\\hat{y}}$." }, { stepText: "Assume $\\mathbf{A}$ is parallel to $\\mathbf{K}$, so $\\mathbf{A} = A_x(z) \\mathbf{\\hat{x}}$." }, { stepText: "$\\nabla \\times \\mathbf{A} = \\frac{\\partial A_x}{\\partial z} \\mathbf{\\hat{y}}$." }, { stepText: "Integrate: $A_x = -\\frac{\\mu_0 K}{2} |z|$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-9", title: "Prob 5.31: Scalar Potential U", description: "B = -Grad U", icon: "Activity",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.31", content: "**Problem:** Try defining a magnetic scalar potential $U$ such that $\\mathbf{B} = -\\nabla U$. Why does this fail for closed paths around a wire?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Show U is multivalued.**", interactiveSteps: [ { stepText: "If $\\mathbf{B} = -\\nabla U$, then $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = 0$." }, { stepText: "But Ampere's law says $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I$." }, { stepText: "This implies $U(\\text{start}) - U(\\text{end}) = \\mu_0 I$. If you go in a circle, you return to the exact same point, but $U$ has dropped by $\\mu_0 I$!" }, { stepText: "$U$ is like a spiral staircase (Escher stairs); it's multi-valued, so it's a mathematically bad potential. Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m4-10", title: "Prob 5.34/35: Boundary Conditions", description: "Checking continuity", icon: "Maximize",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.34", content: "**Problem:** Check the boundary conditions on A and B for the infinite solenoid." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Test at $s=R$.**", interactiveSteps: [ { stepText: "Inside $A = \\frac{\\mu_0 n I R}{2}$. Outside $A = \\frac{\\mu_0 n I R^2}{2R} = \\frac{\\mu_0 n I R}{2}$. Continuous! Check." }, { stepText: "Inside $B = \\mu_0 n I$. Outside $B = 0$." }, { stepText: "The tangential component jumps by $\\mu_0 n I$. The surface current is $K = n I$. Jump is exactly $\\mu_0 K$. Check! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m4-11", title: "Prob 5.36: Coordinate-Free Dipole", description: "B_dipole", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.36", content: "**Problem:** Show the field of a dipole can be written as $\\mathbf{B}_{dip} = \\frac{\\mu_0}{4\\pi} \\frac{1}{r^3} [3(\\mathbf{m} \\cdot \\mathbf{\\hat{r}})\\mathbf{\\hat{r}} - \\mathbf{m}]$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Convert from spherical to vectors.**", interactiveSteps: [ { stepText: "We know $\\mathbf{B} = \\frac{\\mu_0 m}{4\\pi r^3} (2\\cos\\theta\\mathbf{\\hat{r}} + \\sin\\theta\\mathbf{\\hat{\\theta}})$." }, { stepText: "Substitute $\\mathbf{m} = m\\cos\\theta\\mathbf{\\hat{r}} - m\\sin\\theta\\mathbf{\\hat{\\theta}}$." }, { stepText: "So $\\sin\\theta\\mathbf{\\hat{\\theta}} = \\cos\\theta\\mathbf{\\hat{r}} - \\mathbf{m}/m$." }, { stepText: "Substitute into B: $2\\cos\\theta\\mathbf{\\hat{r}} + \\cos\\theta\\mathbf{\\hat{r}} - \\mathbf{m}/m = 3\\cos\\theta\\mathbf{\\hat{r}} - \\mathbf{m}/m$." }, { stepText: "Since $\\mathbf{m} \\cdot \\mathbf{\\hat{r}} = m \\cos\\theta$, we get the coordinate-free formula! Goal reached." } ] }
-          ]
-        },
-        {
-          id: "les-m4-12", title: "Prob 5.37: Circular Loop Dipole", description: "Dipole moment", icon: "Circle",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.37", content: "**Problem:** Find the magnetic dipole moment of a circular loop of radius R." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: $\\mathbf{m} = I \\mathbf{a}$.**", interactiveSteps: [ { stepText: "Area of circle is $\\pi R^2$." }, { stepText: "Magnitude is $m = I \\pi R^2$." }, { stepText: "Direction is $\\mathbf{\\hat{z}}$ (by right hand rule). Goal reached!" } ] },
-            { id: "s2", type: "quiz", title: "Far field", content: "At large distances ($z \\gg R$), does the exact Biot-Savart formula reduce to the dipole formula?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "B = mu0 I R^2 / 2z^3 matches the dipole formula precisely." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] }
-          ]
-        },
-        {
-          id: "les-m4-13", title: "Prob 5.39: Record Dipole", description: "Spinning disk", icon: "Disc",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.39", content: "**Problem:** Find the dipole moment of a record (radius R, charge $\\sigma$) spinning at $\\omega$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate $dm = dI a$.**", interactiveSteps: [ { stepText: "Break disk into rings of radius $r$, width $dr$." }, { stepText: "Charge is $dq = \\sigma 2\\pi r dr$. Current is $dI = \\frac{dq}{dt} = \\sigma \\omega r dr$." }, { stepText: "Dipole moment of one ring is $dm = dI (\\pi r^2) = \\pi \\sigma \\omega r^3 dr$." }, { stepText: "Integrate from 0 to R: $m = \\frac{\\pi \\sigma \\omega R^4}{4}$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-14", title: "Prob 5.40: Volume Dipole", description: "m for J", icon: "Box",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.40", content: "**Problem:** Show that for a volume current $\\mathbf{J}$, the dipole moment is $\\mathbf{m} = \\frac{1}{2} \\int (\\mathbf{r} \\times \\mathbf{J}) d\\tau$." },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Translate $I \\mathbf{a}$ to volume integral.**", interactiveSteps: [ { stepText: "For a line current, $\\mathbf{m} = \\frac{1}{2} \\oint \\mathbf{r} \\times I d\\mathbf{l}$." }, { stepText: "Using the dictionary, $I d\\mathbf{l} \\to \\mathbf{J} d\\tau$." }, { stepText: "Substitute: $\\mathbf{m} = \\frac{1}{2} \\int (\\mathbf{r} \\times \\mathbf{J}) d\\tau$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-15", title: "Prob 5.58: Vector Potential of A", description: "A = Curl W", icon: "Wind",
-          slides: [
-            { id: "s0", type: "example_q", title: "Problem 5.58", content: "**Problem:** Since $\\nabla \\cdot \\mathbf{A} = 0$, we can write $\\mathbf{A} = \\nabla \\times \\mathbf{W}$. What is the formula for $\\mathbf{W}$?" },
-            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use analogy.**", interactiveSteps: [ { stepText: "$\\mathbf{B} = \\nabla \\times \\mathbf{A} \\implies \\mathbf{A} = \\frac{\\mu_0}{4\\pi}\\int \\frac{\\mathbf{J}}{\\cal{r}} d\\tau$." }, { stepText: "Notice $\\mu_0 \\mathbf{J} = \\nabla \\times \\mathbf{B}$." }, { stepText: "By exact analogy, $\\mathbf{A} = \\nabla \\times \\mathbf{W} \\implies \\mathbf{W} = \\frac{1}{4\\pi} \\int \\frac{\\mathbf{B}}{\\cal{r}} d\\tau$. Goal reached!" } ] }
-          ]
-        },
-        {
-          id: "les-m4-16", title: "Unit Recap: A and Dipoles", description: "Summary", icon: "CheckSquare",
-          slides: [
-            { id: "s0", type: "quiz", title: "Knowledge Check", content: "Because $\\nabla \\cdot \\mathbf{B} = 0$, the magnetic monopole moment is always:", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "No magnetic monopoles exist." }, { id: "B", text: "Proportional to current", isCorrect: false, explanation: "" } ] },
-            { id: "s1", type: "theory", title: "Unit 4 Summary", content: "The **Magnetic Vector Potential $\\mathbf{A}$** simplifies finding B, since $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. In the Coulomb gauge, it mirrors the math of electrostatics.\n\nAt large distances, the field of a current loop is dominated by the **Magnetic Dipole Moment** ($\\mathbf{m} = I\\mathbf{a}$). This dipole field is mathematically identical in shape to the electric dipole field, forming the basis of how we model magnetic materials." }
-          ]
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/chapter3_3.ts ---
-
---- START OF FILE src/components/interactive-arts/CycloidMotionInteractive.tsx ---
-import React, { useRef, useEffect } from 'react';
-
-const CycloidMotionInteractive: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  const state = useRef({
-    time: 0,
-    trail: [] as {x: number, y: number}[]
-  });
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const width = canvas.parentElement?.clientWidth || 300;
-    const height = 280;
-    canvas.width = width;
-    canvas.height = height;
-
-    const E = 40; // Scale factor for E
-    const B = 1;  // Scale factor for B
-    const omega = B; 
-    const R = E / omega; // Radius of the rolling circle
-    
-    // Origin for drawing
-    const originY = height - 40;
-    const originX = 20;
-
-    let animationId: number;
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      // Draw E and B field indicators
-      ctx.fillStyle = '#ef4444'; // Red E field UP
-      ctx.font = 'bold 16px Nunito';
-      ctx.fillText('E ↑', width - 40, 30);
-      
-      ctx.fillStyle = '#3b82f6'; // Blue B field OUT
-      ctx.fillText('B ⊙', width - 40, 50);
-
-      // Draw Axes
-      ctx.strokeStyle = '#94a3b8';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(10, originY); ctx.lineTo(width - 10, originY); // x-axis
-      ctx.moveTo(originX, height - 20); ctx.lineTo(originX, 20); // z-axis (drawn as y on screen)
-      ctx.stroke();
-
-      // Cycloid equations (x is horizontal, z is vertical on screen)
-      // x(t) = R(wt - sin wt)
-      // z(t) = R(1 - cos wt)
-      
-      const t = state.current.time;
-      const x = R * (omega * t - Math.sin(omega * t));
-      const z = R * (1 - Math.cos(omega * t));
-
-      const px = originX + x;
-      const py = originY - z;
-
-      // Add to trail
-      if (t === 0) {
-        state.current.trail = [{x: px, y: py}];
-      } else {
-        state.current.trail.push({x: px, y: py});
-      }
-
-      // Draw Trail
-      ctx.strokeStyle = '#10b981'; // Green path
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      if (state.current.trail.length > 0) {
-        ctx.moveTo(state.current.trail[0].x, state.current.trail[0].y);
-        for (let i = 1; i < state.current.trail.length; i++) {
-          ctx.lineTo(state.current.trail[i].x, state.current.trail[i].y);
-        }
-      }
-      ctx.stroke();
-
-      // Draw Particle
-      ctx.beginPath();
-      ctx.arc(px, py, 6, 0, 2*Math.PI);
-      ctx.fillStyle = '#f59e0b';
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Draw Rolling Circle (Ghost)
-      const cx = originX + R * omega * t;
-      const cy = originY - R;
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, 0, 2*Math.PI);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.setLineDash([4, 4]);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      
-      // Draw spoke to particle
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(px, py);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.stroke();
-
-      // Increment time
-      state.current.time += 0.05;
-      
-      // Reset if off screen
-      if (px > width) {
-          state.current.time = 0;
-      }
-
-      animationId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      cancelAnimationFrame(animationId);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="touch-none-canvas"></canvas>;
-};
-
-export default CycloidMotionInteractive;
---- END OF FILE src/components/interactive-arts/CycloidMotionInteractive.tsx ---
-
---- START OF FILE src/components/interactive-arts/HelmholtzCoilsInteractive.tsx ---
-import React, { useRef, useEffect } from 'react';
-
-const HelmholtzCoilsInteractive: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  
-  const state = useRef({
-    distance: 1.0, // Ratio d/R from 0 to 2
-    dragging: false
-  });
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const width = canvas.parentElement?.clientWidth || 300;
-    const height = 280;
-    canvas.width = width;
-    canvas.height = height;
-    
-    const cx = width / 2;
-    const cy = height / 2 + 20; 
-    const R = 40; // visual radius of coil
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      const d = state.current.distance * R;
-
-      // Draw Coils
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 4;
-      
-      // Left coil
-      ctx.beginPath();
-      ctx.ellipse(cx - d/2, cy, 10, R, 0, 0, 2*Math.PI);
-      ctx.stroke();
-
-      // Right coil
-      ctx.beginPath();
-      ctx.ellipse(cx + d/2, cy, 10, R, 0, 0, 2*Math.PI);
-      ctx.stroke();
-
-      // Plot B Field on Z-axis
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      
-      const plotHeight = 80;
-      const plotYBase = cy - R - 20;
-      
-      for(let z = -cx; z < cx; z++) {
-          // B formula: B(z) ~ (R^2) / (R^2 + (z - d/2)^2)^1.5 + (R^2) / (R^2 + (z + d/2)^2)^1.5
-          const b1 = Math.pow(R, 2) / Math.pow(R*R + Math.pow(z - d/2, 2), 1.5);
-          const b2 = Math.pow(R, 2) / Math.pow(R*R + Math.pow(z + d/2, 2), 1.5);
-          
-          const Btotal = b1 + b2;
-          
-          // scale for visual
-          const plotY = plotYBase - Btotal * (plotHeight * R);
-
-          if (z === -cx) ctx.moveTo(cx + z, plotY);
-          else ctx.lineTo(cx + z, plotY);
-      }
-      ctx.stroke();
-
-      // Draw axis
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(0, plotYBase); ctx.lineTo(width, plotYBase);
-      ctx.stroke();
-
-      // Highlight flatness when d/R approx 1
-      if (Math.abs(state.current.distance - 1.0) < 0.05) {
-          ctx.fillStyle = '#3b82f6';
-          ctx.font = 'bold 14px Nunito';
-          ctx.fillText('d = R (Helmholtz Configuration)', cx - 100, 30);
-          ctx.fillText('Perfectly uniform B field in center!', cx - 110, 50);
-      } else {
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = '14px Nunito';
-          ctx.fillText(`d/R = ${state.current.distance.toFixed(2)}`, cx - 30, 30);
-      }
-
-      // Slider UI
-      ctx.fillStyle = '#334155';
-      ctx.fillRect(40, height - 20, width - 80, 6);
-      
-      const sliderX = 40 + (state.current.distance / 2) * (width - 80);
-      ctx.fillStyle = '#ef4444'; 
-      ctx.beginPath();
-      ctx.arc(sliderX, height - 17, 10, 0, 2*Math.PI);
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '12px Nunito';
-      ctx.fillText('Drag to change coil separation d', cx - 80, height - 30);
-    };
-
-    const getX = (e: MouseEvent | TouchEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
-      return (clientX - rect.left) * (width / rect.width);
-    };
-
-    const onStart = (e: MouseEvent | TouchEvent) => {
-      e.preventDefault();
-      const currX = getX(e);
-      const sliderX = 40 + (state.current.distance / 2) * (width - 80);
-      if (Math.abs(currX - sliderX) < 30) {
-        state.current.dragging = true;
-      }
-    };
-
-    const onMove = (e: MouseEvent | TouchEvent) => {
-      if (!state.current.dragging) return;
-      e.preventDefault();
-      let newX = getX(e);
-      if (newX < 40) newX = 40;
-      if (newX > width - 40) newX = width - 40;
-      
-      state.current.distance = ((newX - 40) / (width - 80)) * 2;
-      requestAnimationFrame(draw);
-    };
-
-    const onEnd = () => { state.current.dragging = false; };
-
-    canvas.addEventListener('mousedown', onStart);
-    canvas.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onEnd);
-    canvas.addEventListener('touchstart', onStart, { passive: false });
-    canvas.addEventListener('touchmove', onMove, { passive: false });
-    window.addEventListener('touchend', onEnd);
-
-    draw();
-
-    return () => {
-      canvas.removeEventListener('mousedown', onStart);
-      canvas.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onEnd);
-      canvas.removeEventListener('touchstart', onStart);
-      canvas.removeEventListener('touchmove', onMove);
-      window.removeEventListener('touchend', onEnd);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="touch-none-canvas"></canvas>;
-};
-
-export default HelmholtzCoilsInteractive;
---- END OF FILE src/components/interactive-arts/HelmholtzCoilsInteractive.tsx ---
-
---- START OF FILE src/components/InteractiveCanvasArt.tsx ---
+--- START OF FILE src/components/PathConnector.tsx ---
 import React from 'react';
-import VectorAdditionInteractive from './interactive-arts/VectorAdditionInteractive';
-import ComponentFormInteractive from './interactive-arts/ComponentFormInteractive';
-import GradientInteractive from './interactive-arts/GradientInteractive';
-import DivergenceInteractive from './interactive-arts/DivergenceInteractive';
-import CurlInteractive from './interactive-arts/CurlInteractive';
-import LaplacianInteractive from './interactive-arts/LaplacianInteractive';
-import WorkPathInteractive from './interactive-arts/WorkPathInteractive';
-import ConductorChargesInteractive from './interactive-arts/ConductorChargesInteractive';
-import CapacitorInteractive from './interactive-arts/CapacitorInteractive';
-import LorentzForceInteractive from './interactive-arts/LorentzForceInteractive';
-import BiotSavartInteractive from './interactive-arts/BiotSavartInteractive';
-import AmperesLawInteractive from './interactive-arts/AmperesLawInteractive';
-import MagBoundaryInteractive from './interactive-arts/MagBoundaryInteractive';
-import ClockFaceChargesInteractive from './interactive-arts/ClockFaceChargesInteractive';
-import CycloidMotionInteractive from './interactive-arts/CycloidMotionInteractive';
-import HelmholtzCoilsInteractive from './interactive-arts/HelmholtzCoilsInteractive';
 
-interface Props {
-  canvasId: string;
+interface Point {
+  x: number;
+  y: number;
+  id: string;
 }
 
-const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
-  const renderInteractive = () => {
-    switch (canvasId) {
-      case 'vector-addition-interactive': return <VectorAdditionInteractive />;
-      case 'component-form-interactive': return <ComponentFormInteractive />;
-      case 'gradient-interactive': return <GradientInteractive />;
-      case 'divergence-interactive': return <DivergenceInteractive />;
-      case 'curl-interactive': return <CurlInteractive />;
-      case 'laplacian-interactive': return <LaplacianInteractive />;
-      case 'work-path-interactive': return <WorkPathInteractive />;
-      case 'conductor-charges-interactive': return <ConductorChargesInteractive />;
-      case 'capacitor-interactive': return <CapacitorInteractive />;
-      case 'lorentz-force-interactive': return <LorentzForceInteractive />;
-      case 'biot-savart-interactive': return <BiotSavartInteractive />;
-      case 'amperes-law-interactive': return <AmperesLawInteractive />;
-      case 'mag-boundary-interactive': return <MagBoundaryInteractive />;
-      case 'clock-face-interactive': return <ClockFaceChargesInteractive />;
-      case 'cycloid-motion-interactive': return <CycloidMotionInteractive />;
-      case 'helmholtz-coils-interactive': return <HelmholtzCoilsInteractive />;
-      default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found</p>;
-    }
+interface Props {
+  points: Point[];
+  completedLessons: string[];
+  recentlyCompleted: string | null;
+  colorHex: string;
+}
+
+const PathConnector: React.FC<Props> = ({ points, completedLessons, recentlyCompleted, colorHex }) => {
+  if (points.length < 2) return null;
+
+  const getPathData = (p1: Point, p2: Point) => {
+    // Creates a smooth S-curve connecting p1 and p2 vertically
+    const cy = (p1.y + p2.y) / 2;
+    return `M ${p1.x} ${p1.y} C ${p1.x} ${cy}, ${p2.x} ${cy}, ${p2.x} ${p2.y}`;
   };
 
   return (
-    <div className="interactive-canvas-container">
-      {renderInteractive()}
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+      {/* Draw background paths for all segments */}
+      {points.slice(0, -1).map((p1, i) => {
+        const p2 = points[i + 1];
+        return (
+          <path
+            key={`bg-${p1.id}-${p2.id}`}
+            d={getPathData(p1, p2)}
+            stroke="#334155" // slate-700
+            strokeWidth="8"
+            fill="none"
+            strokeLinecap="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        );
+      })}
+
+      {/* Draw active paths and animated paths */}
+      {points.slice(0, -1).map((p1, i) => {
+        const p2 = points[i + 1];
+        
+        // Lit if p1 is completed.
+        const isCompleted = completedLessons.includes(p1.id);
+        const isNewlyCompleted = recentlyCompleted === p1.id;
+
+        if (!isCompleted && !isNewlyCompleted) return null;
+
+        return (
+          <path
+            key={`fg-${p1.id}-${p2.id}`}
+            d={getPathData(p1, p2)}
+            stroke={colorHex}
+            strokeWidth="8"
+            fill="none"
+            strokeLinecap="round"
+            pathLength="1"
+            vectorEffect="non-scaling-stroke"
+            className={`path-connector ${isNewlyCompleted ? 'animate-draw-path' : ''}`}
+          />
+        );
+      })}
+    </svg>
+  );
+};
+
+export default PathConnector;
+--- END OF FILE src/components/PathConnector.tsx ---
+
+--- START OF FILE src/components/LessonNode.tsx ---
+import React from 'react';
+import * as Icons from 'lucide-react';
+import { Lesson } from '../types';
+
+interface Props {
+  lesson: Lesson;
+  x: number;
+  y: number;
+  isCompleted: boolean;
+  isNextToStart: boolean;
+  colorName: string;
+  onStart: () => void;
+}
+
+const LessonNode: React.FC<Props> = ({ lesson, x, y, isCompleted, isNextToStart, colorName, onStart }) => {
+  const LucideIcon = (Icons as any)[lesson.icon] || Icons.BookOpen;
+
+  return (
+    <div 
+      id={`lesson-node-${lesson.id}`}
+      className="absolute flex flex-col items-center pointer-events-auto"
+      style={{ left: `${(x / 400) * 100}%`, top: `${y}px`, transform: 'translate(-50%, -50%)', zIndex: 10 }}
+    >
+      <button
+        onClick={onStart}
+        className={`
+          relative group flex flex-col items-center justify-center
+          w-20 h-20 rounded-full border-b-[6px] active:border-b-0 active:translate-y-[6px] transition-all
+          ${isNextToStart ? 'next-node-pop' : ''}
+          ${isCompleted 
+            ? 'bg-amber-500 border-amber-700 text-white' 
+            : `bg-${colorName} border-${colorName}-dark hover:brightness-110 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
+        `}
+      >
+        <LucideIcon className="w-8 h-8" strokeWidth={3} />
+        
+        {isCompleted && (
+          <div className="absolute -right-1 -top-1 bg-slate-800 rounded-full p-1 border-2 border-amber-500 shadow-sm">
+            <Icons.Check className="w-4 h-4 text-amber-500" strokeWidth={4} />
+          </div>
+        )}
+      </button>
+      
+      <div className="absolute top-full mt-4 w-40 flex flex-col items-center pointer-events-none">
+        <div className="glass-panel px-3 py-2 rounded-xl flex items-center justify-center shadow-lg">
+          <p className="text-center text-[10px] font-black uppercase text-slate-200 leading-tight">
+            {lesson.title}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default InteractiveCanvasArt;
---- END OF FILE src/components/InteractiveCanvasArt.tsx ---
+export default LessonNode;
+--- END OF FILE src/components/LessonNode.tsx ---
+
+--- START OF FILE src/components/LessonPath.tsx ---
+import React, { useEffect, useState } from 'react';
+import { Section, Lesson, Unit } from '../types';
+import * as Icons from 'lucide-react';
+import PathConnector from './PathConnector';
+import LessonNode from './LessonNode';
+
+interface Props {
+  section: Section;
+  completedLessons: string[];
+  onStartLesson: (unitId: string, lessonId: string) => void;
+  onOpenSectionSelector: () => void;
+}
+
+const colorHexMap: Record<string, string> = {
+  'duo-blue': '#1cb0f6',
+  'duo-green': '#58cc02',
+  'duo-red': '#ff4b4b'
+};
+
+const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson, onOpenSectionSelector }) => {
+  const [recentlyCompleted, setRecentlyCompleted] = useState<string | null>(null);
+
+  // Effect to handle auto-scrolling to the current lesson on load
+  useEffect(() => {
+    const allLessonsList = section.units.flatMap(u => u.lessons.map(l => l.id));
+    let targetId = allLessonsList.find(id => !completedLessons.includes(id));
+    
+    // If all are completed, default to the last lesson in the section
+    if (!targetId && allLessonsList.length > 0) {
+       targetId = allLessonsList[allLessonsList.length - 1];
+    }
+
+    if (targetId) {
+       const timer = setTimeout(() => {
+          const el = document.getElementById(`lesson-node-${targetId}`);
+          if (el) {
+             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+       }, 150); // slight delay to allow rendering and animation setup to settle
+       return () => clearTimeout(timer);
+    }
+  }, [section.id, completedLessons]); // Trigger when section changes or a lesson finishes
+
+  // Effect to handle the recently completed path animation and auto-start
+  useEffect(() => {
+    const rc = localStorage.getItem('recently_completed');
+    if (rc) {
+      setRecentlyCompleted(rc);
+      
+      const allLessonsList = section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id })));
+      const idx = allLessonsList.findIndex(l => l.id === rc);
+      
+      if (idx !== -1 && idx < allLessonsList.length - 1) {
+         const nextL = allLessonsList[idx + 1];
+         // Auto start next lesson precisely after animation completes
+         const timer = setTimeout(() => {
+            onStartLesson(nextL.unitId, nextL.id);
+            localStorage.removeItem('recently_completed');
+            setRecentlyCompleted(null);
+         }, 2600);
+         
+         return () => clearTimeout(timer);
+      } else {
+         localStorage.removeItem('recently_completed');
+         setRecentlyCompleted(null);
+      }
+    }
+  }, [section, onStartLesson]);
+
+  const colorHex = colorHexMap[section.color] || '#1cb0f6';
+  const allLessons = section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id })));
+
+  let nextLessonId: string | null = null;
+  if (recentlyCompleted) {
+     const idx = allLessons.findIndex(l => l.id === recentlyCompleted);
+     if (idx !== -1 && idx < allLessons.length - 1) {
+        nextLessonId = allLessons[idx + 1].id;
+     }
+  }
+
+  let currentY = 0;
+  const pathPoints: { x: number, y: number, id: string }[] = [];
+  const renderElements: { type: 'header' | 'lesson', unit: Unit, y: number, x?: number, lesson?: Lesson }[] = [];
+  
+  let globalLessonIdx = 0;
+
+  section.units.forEach((unit) => {
+    currentY += 80;
+    renderElements.push({ type: 'header', unit, y: currentY });
+    currentY += 100;
+
+    unit.lessons.forEach((lesson) => {
+      const offset = globalLessonIdx % 2 === 0 ? 0 : (globalLessonIdx % 4 === 1 ? -65 : 65);
+      const x = 200 + offset; 
+      const y = currentY;
+      
+      pathPoints.push({ x, y, id: lesson.id });
+      renderElements.push({ type: 'lesson', unit, lesson, x, y });
+
+      currentY += 140;
+      globalLessonIdx++;
+    });
+    currentY += 60; 
+  });
+
+  const containerHeight = currentY + 40;
+
+  return (
+    <div className="pb-32 max-w-md mx-auto relative">
+      <div 
+        onClick={onOpenSectionSelector}
+        className={`sticky top-16 mx-4 mt-4 z-30 py-3 px-5 glass-panel rounded-2xl cursor-pointer hover:bg-white/10 transition-all active:scale-[0.98] flex items-center justify-between border-b-4 border-${section.color}`}
+      >
+        <div className="flex items-center gap-2">
+           <h2 className="text-xs font-black uppercase tracking-widest leading-none drop-shadow-sm text-white">{section.title}</h2>
+        </div>
+        <Icons.ChevronDown className="w-4 h-4 text-slate-300" />
+      </div>
+
+      <div className="mt-8 relative w-full max-w-[400px] mx-auto overflow-hidden" style={{ height: `${containerHeight}px` }}>
+        
+        <svg 
+           viewBox={`0 0 400 ${containerHeight}`} 
+           preserveAspectRatio="none"
+           className="absolute inset-0 w-full h-full pointer-events-none" 
+           style={{ zIndex: 0 }}
+        >
+           <PathConnector 
+             points={pathPoints} 
+             completedLessons={completedLessons} 
+             recentlyCompleted={recentlyCompleted}
+             colorHex={colorHex}
+           />
+        </svg>
+
+        {renderElements.map((el, i) => {
+          if (el.type === 'header') {
+            return (
+              <div 
+                key={`header-${el.unit.id}`}
+                className="absolute w-full px-8 pointer-events-none"
+                style={{ top: `${el.y}px`, transform: 'translateY(-50%)', zIndex: 10 }}
+              >
+                <div className="glass-panel p-5 rounded-3xl text-center shadow-2xl bg-black/60 backdrop-blur-md border border-white/10">
+                  <h3 className="font-extrabold text-white text-sm uppercase tracking-tight mb-1.5">{el.unit.title}</h3>
+                  <p className="text-slate-400 font-bold text-[10px] uppercase tracking-wider">{el.unit.description}</p>
+                </div>
+              </div>
+            );
+          }
+
+          if (el.type === 'lesson' && el.lesson && el.x !== undefined) {
+             const isCompleted = completedLessons.includes(el.lesson.id);
+             const isNextToStart = el.lesson.id === nextLessonId;
+
+             return (
+               <LessonNode 
+                 key={`lesson-${el.lesson.id}`}
+                 lesson={el.lesson}
+                 x={el.x}
+                 y={el.y}
+                 isCompleted={isCompleted}
+                 isNextToStart={isNextToStart}
+                 colorName={section.color}
+                 onStart={() => onStartLesson(el.unit.id, el.lesson!.id)}
+               />
+             );
+          }
+
+          return null;
+        })}
+
+      </div>
+    </div>
+  );
+};
+
+export default LessonPath;
+--- END OF FILE src/components/LessonPath.tsx ---

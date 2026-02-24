@@ -6,9 +6,10 @@ import { CheckCircle, XCircle } from 'lucide-react';
 interface Props {
   slide: Slide;
   onComplete: () => void;
+  onInteraction?: (correct: boolean) => void;
 }
 
-const NumericalView: React.FC<Props> = ({ slide, onComplete }) => {
+const NumericalView: React.FC<Props> = ({ slide, onComplete, onInteraction }) => {
   const [inputValue, setInputValue] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -24,6 +25,8 @@ const NumericalView: React.FC<Props> = ({ slide, onComplete }) => {
     
     setIsSubmitted(true);
     setIsCorrect(correct);
+    
+    if (onInteraction) onInteraction(correct);
   };
 
   return (

@@ -6,9 +6,10 @@ import { CheckCircle, XCircle } from 'lucide-react';
 interface Props {
   slide: Slide;
   onComplete: () => void;
+  onInteraction?: (correct: boolean) => void;
 }
 
-const QuizView: React.FC<Props> = ({ slide, onComplete }) => {
+const QuizView: React.FC<Props> = ({ slide, onComplete, onInteraction }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -26,6 +27,8 @@ const QuizView: React.FC<Props> = ({ slide, onComplete }) => {
     
     setIsSubmitted(true);
     setIsCorrect(isAnswerCorrect);
+    
+    if (onInteraction) onInteraction(isAnswerCorrect);
   };
 
   const getOptionStyle = (option: QuizOption) => {

@@ -6,6 +6,7 @@ import LessonPage from './pages/LessonPage';
 import ChapterSummaryPage from './pages/ChapterSummaryPage';
 import './App.css';
 import './styles/interactive.css'; 
+import './styles/path.css'; 
 
 const App: React.FC = () => {
   const [progress, setProgress] = useState<UserProgress>(() => {

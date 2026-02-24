@@ -76,11 +76,5 @@ export const COURSES: Course[] = [
           content: "**Ampère's Law:** The fundamental equations of magnetostatics are $\\nabla \\cdot \\mathbf{B} = 0$ (no monopoles) and $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ (Ampère's law). The integral form $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$ is extremely powerful for calculating fields in highly symmetric systems (infinite wires, planes, solenoids, toroids).\n\n**Vector Potential:** Because $\\nabla \\cdot \\mathbf{B} = 0$, we can express $\\mathbf{B}$ as the curl of a vector potential: $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. Choosing the Coulomb gauge ($\\nabla \\cdot \\mathbf{A} = 0$) allows us to solve for $\\mathbf{A}$ using a Poisson-like integral. Finally, at a surface current $\\mathbf{K}$, the tangential component of $\\mathbf{B}$ is discontinuous, while the normal component of $\\mathbf{B}$ and the entire vector potential $\\mathbf{A}$ remain continuous."
         }
     ]
-  },
-  {
-    id: 'module-4',
-    title: 'Module IV: Electrical Measurements',
-    description: 'Kirchhoff’s laws, Bridges, Potentiometer, and Network Theorems.',
-    sections: []
   }
 ];

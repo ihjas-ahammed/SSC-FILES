@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Lesson, Slide } from '../types';
 import MathRenderer from './MathRenderer';
 import QuizView from './QuizView';
@@ -13,7 +13,7 @@ import { X } from 'lucide-react';
 
 interface Props {
   lesson: Lesson;
-  onFinishLesson: () => void;
+  onFinishLesson: (stats: { timeSpent: number, accuracy: number }) => void;
   onExit: () => void;
 }
 
@@ -22,22 +22,37 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
   const currentSlide = lesson.slides[currentSlideIndex];
   
   const progress = ((currentSlideIndex) / lesson.slides.length) * 100;
+  
+  const startTime = useRef(Date.now());
+  const stats = useRef({ total: 0, mistakes: 0 });
+
+  const handleInteraction = (correct: boolean) => {
+    stats.current.total += 1;
+    if (!correct) {
+      stats.current.mistakes += 1;
+    }
+  };
 
   const handleContinue = () => {
     if (currentSlideIndex < lesson.slides.length - 1) {
       setCurrentSlideIndex(prev => prev + 1);
     } else {
-      onFinishLesson();
+      const timeSpent = Math.floor((Date.now() - startTime.current) / 1000);
+      let accuracy = 100;
+      if (stats.current.total > 0) {
+        accuracy = Math.round(((stats.current.total - stats.current.mistakes) / stats.current.total) * 100);
+      }
+      onFinishLesson({ timeSpent, accuracy: Math.max(0, accuracy) });
     }
   };
 
   const renderContent = () => {
     if (currentSlide.type === 'quiz') {
-      return <QuizView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} />;
+      return <QuizView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} onInteraction={handleInteraction} />;
     }
     
     if (currentSlide.type === 'fill_in_blank') {
-      return <FillInBlankView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} />;
+      return <FillInBlankView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} onInteraction={handleInteraction} />;
     }
 
     if (currentSlide.type === 'example_q') {
@@ -45,11 +60,11 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
     }
 
     if (currentSlide.type === 'numerical') {
-      return <NumericalView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} />;
+      return <NumericalView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} onInteraction={handleInteraction} />;
     }
 
     if (currentSlide.type === 'proof' || currentSlide.type === 'solution') {
-      return <InteractiveProofView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} />;
+      return <InteractiveProofView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} onInteraction={handleInteraction} />;
     }
 
     if (currentSlide.type === 'interactive_canvas') {
@@ -104,7 +119,7 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#0b0f19] z-[9999] flex flex-col max-w-md mx-auto h-full overflow-hidden shadow-2xl">
+    <div className="absolute inset-0 bg-[#0b0f19] z-[9999] flex flex-col w-full h-full overflow-hidden shadow-2xl">
       <div className="h-16 flex items-center justify-between px-4 glass-panel border-t-0 border-x-0 rounded-none shrink-0 z-[10005] relative">
         <button 
           onClick={(e) => { e.preventDefault(); onExit(); }}

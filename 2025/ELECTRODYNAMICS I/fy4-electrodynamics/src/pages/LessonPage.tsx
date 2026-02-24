@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { COURSES } from '../data/courses';
 import { UserProgress, Lesson } from '../types';
 import LessonView from '../components/LessonView';
-import { Trophy } from 'lucide-react';
+import LessonCompleteScreen from '../components/LessonCompleteScreen';
 
 interface Props {
   progress: UserProgress;
@@ -13,7 +13,9 @@ interface Props {
 const LessonPage: React.FC<Props> = ({ progress, setProgress }) => {
   const { courseId, unitId, lessonId } = useParams<{ courseId: string; unitId: string; lessonId: string }>();
   const navigate = useNavigate();
+  
   const [showCompletion, setShowCompletion] = useState(false);
+  const [lessonStats, setLessonStats] = useState({ timeSpent: 0, accuracy: 100, xpEarned: 0 });
 
   const course = COURSES.find(c => c.id === courseId);
   let activeLesson: Lesson | undefined;
@@ -28,20 +30,27 @@ const LessonPage: React.FC<Props> = ({ progress, setProgress }) => {
     }
   }
 
-  const handleFinishLesson = () => {
+  const handleFinishLesson = (stats: { timeSpent: number, accuracy: number }) => {
     if (lessonId) {
       const isNewCompletion = !progress.completedLessons.includes(lessonId);
+      const xpEarned = isNewCompletion ? 20 : 5;
+      
       setProgress(prev => ({
         ...prev,
         completedLessons: isNewCompletion 
           ? [...prev.completedLessons, lessonId] 
           : prev.completedLessons,
-        xp: prev.xp + (isNewCompletion ? 20 : 5)
+        xp: prev.xp + xpEarned
       }));
+      
+      setLessonStats({ ...stats, xpEarned });
+      
+      // Mark as recently completed for path animation
+      if (isNewCompletion) {
+         localStorage.setItem('recently_completed', lessonId);
+      }
+      
       setShowCompletion(true);
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
     }
   };
 
@@ -51,11 +60,12 @@ const LessonPage: React.FC<Props> = ({ progress, setProgress }) => {
 
   if (showCompletion) {
     return (
-      <div className="fixed inset-0 bg-duo-green flex flex-col items-center justify-center text-white z-50 animate-in fade-in duration-300 max-w-md mx-auto">
-        <Trophy className="w-32 h-32 mb-6 text-yellow-300 drop-shadow-lg" />
-        <h1 className="text-4xl font-extrabold mb-2 text-center px-4">Lesson Complete!</h1>
-        <p className="text-xl opacity-90">+20 XP earned</p>
-      </div>
+       <LessonCompleteScreen 
+          xp={lessonStats.xpEarned} 
+          timeSpent={lessonStats.timeSpent} 
+          accuracy={lessonStats.accuracy} 
+          onContinue={handleExitLesson} 
+       />
     );
   }
 

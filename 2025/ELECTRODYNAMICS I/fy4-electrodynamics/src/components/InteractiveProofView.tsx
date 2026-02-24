@@ -6,10 +6,10 @@ import { CheckCircle, XCircle, ArrowRight, BrainCircuit, Check } from 'lucide-re
 interface Props {
   slide: Slide;
   onComplete: () => void;
+  onInteraction?: (correct: boolean) => void;
 }
 
-const InteractiveProofView: React.FC<Props> = ({ slide, onComplete }) => {
-  // Normalize steps to gracefully support legacy `proofSteps` as click-to-reveal steps
+const InteractiveProofView: React.FC<Props> = ({ slide, onComplete, onInteraction }) => {
   const steps: InteractiveStep[] = slide.interactiveSteps || slide.proofSteps?.map(text => ({ stepText: text })) || [];
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -21,7 +21,6 @@ const InteractiveProofView: React.FC<Props> = ({ slide, onComplete }) => {
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to active question
   useEffect(() => {
     if (bottomRef.current) {
       setTimeout(() => {
@@ -52,6 +51,8 @@ const InteractiveProofView: React.FC<Props> = ({ slide, onComplete }) => {
     const correct = correctOpt?.id === selectedOption;
     setIsSubmitted(true);
     setIsCorrect(correct);
+    
+    if (onInteraction) onInteraction(correct);
   };
 
   const handleNextInteractive = () => {
@@ -101,7 +102,6 @@ const InteractiveProofView: React.FC<Props> = ({ slide, onComplete }) => {
            </div>
          )}
 
-         {/* History of Completed Steps */}
          <div className="space-y-4 mb-8 mx-1">
            {revealedSteps.map((step, idx) => (
              <div key={idx} className="flex items-start glass-panel p-4 rounded-2xl animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -113,7 +113,6 @@ const InteractiveProofView: React.FC<Props> = ({ slide, onComplete }) => {
            ))}
          </div>
 
-         {/* Active Step Prompts */}
          {!isFinished && currentStep && (
            <div className="bg-blue-900/10 border border-blue-500/30 p-5 rounded-3xl relative animate-in zoom-in-95 duration-500 mx-1 mt-6 shadow-xl">
              <div className="absolute -top-5 left-4 bg-[#0b0f19] p-1.5 rounded-full text-blue-400 border border-blue-500/30">
