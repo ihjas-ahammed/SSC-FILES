@@ -1,479 +1,348 @@
 import { Section } from '../types';
 
 export const SECTION_2_1: Section = {
-  "id": "section-2-1",
-  "title": "Section 1: Simple Harmonic Motion",
-  "description": "Springs, pendulums, differential equations, and energy in undamped systems.",
-  "color": "duo-blue",
-  "units": [
+  id: "section-2-1",
+  title: "Section 1: The Electric Field",
+  description: "Coulomb's law, the electric field definition, and continuous charge distributions.",
+  color: "duo-blue",
+  units: [
     {
-      "id": "unit-2-1",
-      "title": "Springs & Pendulums",
-      "description": "The fundamental equations of motion for basic oscillators.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-5-electric-field",
+      title: "The Electric Field",
+      description: "Coulomb's Law, Point Charges, and Continuous Distributions.",
+      color: "duo-blue",
+      lessons: [
         {
-          "id": "lesson-2-1-1-springs",
-          "title": "Mass on a Spring",
-          "description": "Deriving SHM from Hooke's Law and the Lagrangian.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Spring-Mass System",
-              "content": "A very simple oscillatory system consists of a mass $m$ connected to a spring of constant $k$ on a frictionless horizontal surface.\n\nThe kinetic energy is $T = \\frac{1}{2}m\\dot{x}^2$ and the potential energy of the spring is $V = \\frac{1}{2}kx^2$.\n\nThe Lagrangian is $L = T - V = \\frac{1}{2}m\\dot{x}^2 - \\frac{1}{2}kx^2$."
-            },
-            {
-              "id": "s2-canvas",
-              "type": "theory",
-              "title": "Visualization: Spring-Mass",
-              "content": "The mass moves back and forth around the equilibrium position ($x=0$), constantly exchanging kinetic and potential energy.",
-              "canvasId": "spring-mass"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Derivation: Equation of Motion",
-              "content": "Let's derive the equation of motion using Lagrange's equation: $\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{x}} - \\frac{\\partial L}{\\partial x} = 0$.",
-              "interactiveSteps": [
+          id: "les-5-1-intro", title: "Introduction to Electrostatics", description: "Source charges and test charges", icon: "Zap",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you have two charges repelling each other, and you bring a third charge nearby, does the original repulsion force between the first two charges change?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Forces simply add together." }, { id: "B", text: "No", isCorrect: true, explanation: "The individual interaction remains unaffected. This is the Principle of Superposition." } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "In electrostatics, we assume the 'source' charges are:", options: [ { id: "A", text: "Moving at constant velocity", isCorrect: false, explanation: "That would be magnetostatics." }, { id: "B", text: "Stationary", isCorrect: true, explanation: "Electro-STATIC means the sources are at rest." } ] },
+            { id: "s2", type: "theory", title: "The Fundamental Problem", content: "The fundamental problem of electrodynamics is: given a set of **source charges** ($q_1, q_2, ...$), what force do they exert on a **test charge** ($Q$)?\n\nIn **electrostatics**, all source charges are completely stationary (though the test charge may move).\n\nWe rely on the **Principle of Superposition**: The interaction between any two charges is completely unaffected by the presence of others. We just compute the individual forces and take their vector sum." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Superposition", 
+              content: "**Goal: Understand how total force is calculated.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "We have $L = \\frac{1}{2}m\\dot{x}^2 - \\frac{1}{2}kx^2$."
-                },
-                {
-                  "prompt": "What is the partial derivative of $L$ with respect to velocity, $\\frac{\\partial L}{\\partial \\dot{x}}$?",
-                  "stepText": "$\\frac{\\partial L}{\\partial \\dot{x}} = m\\dot{x}$ (This is the linear momentum).",
-                  "options": [
-                    { "id": "A", "text": "$m\\dot{x}$", "isCorrect": true, "explanation": "The derivative of $\\frac{1}{2}m\\dot{x}^2$ is $m\\dot{x}$." },
-                    { "id": "B", "text": "$-kx$", "isCorrect": false, "explanation": "That's the derivative with respect to $x$, not $\\dot{x}$." }
-                  ]
-                },
-                {
-                  "prompt": "What is the partial derivative of $L$ with respect to position, $\\frac{\\partial L}{\\partial x}$?",
-                  "stepText": "$\\frac{\\partial L}{\\partial x} = -kx$ (This is the restoring force).",
-                  "options": [
-                    { "id": "A", "text": "$kx$", "isCorrect": false, "explanation": "Don't forget the minus sign from $L = T - V$." },
-                    { "id": "B", "text": "$-kx$", "isCorrect": true, "explanation": "Correct. $V = \\frac{1}{2}kx^2$, so $-V$ gives $-kx$." }
-                  ]
-                },
-                {
-                  "stepText": "Putting it together: $\\frac{d}{dt}(m\\dot{x}) - (-kx) = 0 \\implies m\\ddot{x} + kx = 0$."
-                },
-                {
-                  "stepText": "Dividing by $m$ gives the classic Simple Harmonic Motion (SHM) equation: $\\ddot{x} + \\frac{k}{m}x = 0$."
+                  prompt: "If charge $q_1$ pulls test charge $Q$ with force $\\mathbf{F}_1$, and charge $q_2$ pushes $Q$ with force $\\mathbf{F}_2$, how do we find the total force $\\mathbf{F}$?",
+                  options: [
+                    { id: "A", text: "Add their magnitudes: $F_1 + F_2$", isCorrect: false, explanation: "Forces are vectors, direction matters!" },
+                    { id: "B", text: "Take the vector sum: $\\mathbf{F}_1 + \\mathbf{F}_2$", isCorrect: true, explanation: "Superposition is a vector addition." }
+                  ],
+                  stepText: "The total force is $\\mathbf{F}_{total} = \\mathbf{F}_1 + \\mathbf{F}_2 + \\mathbf{F}_3 + ...$"
                 }
               ]
             },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Find the Angular Frequency",
-              "content": "A mass of $m = 2$ kg is attached to a spring with constant $k = 50$ N/m. \n\nWhat is the angular frequency $\\omega = \\sqrt{k/m}$ in rad/s?",
-              "numericAnswer": 5,
-              "numericTolerance": 0.1
-            },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Check Your Understanding",
-              "content": "What is the defining characteristic of the equation $\\ddot{x} + \\frac{k}{m}x = 0$?",
-              "options": [
-                { "id": "1", "text": "Acceleration is constant.", "isCorrect": false, "explanation": "Acceleration $\\ddot{x}$ depends on $x$, so it changes continuously." },
-                { "id": "2", "text": "Acceleration is proportional to velocity.", "isCorrect": false, "explanation": "It is proportional to position, not velocity." },
-                { "id": "3", "text": "Acceleration is negatively proportional to displacement.", "isCorrect": true, "explanation": "$\\ddot{x} = -\\frac{k}{m}x$. This indicates a restoring force always pointing towards equilibrium." }
+            { id: "s6", type: "quiz", title: "Superposition Truth", content: "Is the Principle of Superposition a logical mathematical necessity?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "It is strictly an experimental fact! If electric force depended on the square of total charge, it wouldn't hold." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Charges that create the field are called ___ charges.", blankAnswer: "source" }
+          ]
+        },
+        {
+          id: "les-5-2-coulomb", title: "Coulomb's Law", description: "The force between point charges", icon: "Magnet",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you double the distance between two point charges, what happens to the electrical force between them?", options: [ { id: "A", text: "It halves", isCorrect: false, explanation: "" }, { id: "B", text: "It drops to one quarter (1/4)", isCorrect: true, explanation: "It follows an inverse-square law." }, { id: "C", text: "It doubles", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Like charges ______, and opposite charges ______.", options: [ { id: "A", text: "Repel, Attract", isCorrect: true, explanation: "Basic rule of electric charges." }, { id: "B", text: "Attract, Repel", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Coulomb's Law", content: "The force on a test charge $Q$ due to a point charge $q$ is:\n\n$\\mathbf{F} = \\frac{1}{4\\pi\\epsilon_0} \\frac{qQ}{\\cal{r}^2} {\\hat{\\cal{r}}}$\n\n- $\\epsilon_0 = 8.85 \\times 10^{-12} \\frac{C^2}{N \\cdot m^2}$ (Permittivity of free space)\n- ${\\cal{r}} = \\mathbf{r} - \\mathbf{r}'$ is the separation vector from the source to the test charge." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: The Separation Vector", 
+              content: "**Goal: Understand the direction of the force.**", 
+              interactiveSteps: [
+                {
+                  prompt: "In the formula, what does the unit vector ${\\hat{\\cal{r}}}$ do?",
+                  options: [
+                    { id: "A", text: "It determines the magnitude of the force", isCorrect: false, explanation: "Unit vectors have magnitude 1." },
+                    { id: "B", text: "It points the force along the line connecting the charges", isCorrect: true, explanation: "It gives the force its spatial direction." }
+                  ],
+                  stepText: "${\\hat{\\cal{r}}}$ points directly from $q$ to $Q$."
+                },
+                {
+                  prompt: "If the product $qQ$ is negative (opposite charges), what happens to the force vector?",
+                  options: [
+                    { id: "A", text: "It points in the $-{\\hat{\\cal{r}}}$ direction", isCorrect: true, explanation: "The negative sign reverses the vector, pointing it back toward the source (attraction)." },
+                    { id: "B", text: "It becomes zero", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "A negative product means the force is attractive!"
+                }
               ]
             },
-            {
-              "id": "s6-blank",
-              "type": "fill_in_blank",
-              "title": "Terminology",
-              "content": "A force that always acts to pull a system back toward its equilibrium position is called a ___ force.",
-              "blankAnswer": "restoring"
+            { id: "s5", type: "numerical", title: "Inverse Square", content: "If the force between two charges at $1$ meter is $100$ N, what is the force in Newtons if they are moved to $2$ meters apart?", numericAnswer: 25, numericTolerance: 0.1 },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The constant $\\epsilon_0$ is called the ___ of free space.", blankAnswer: "permittivity" }
+          ]
+        },
+        {
+          id: "les-5-3-e-field", title: "The Electric Field", description: "Removing the test charge", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Does a single isolated charge create a field in space even if there are no other charges to feel it?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "The field exists independently of the test charge." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "How is the electric field conceptually defined from force?", options: [ { id: "A", text: "Force times test charge", isCorrect: false, explanation: "" }, { id: "B", text: "Force per unit test charge", isCorrect: true, explanation: "E = F / Q" } ] },
+            { id: "s2", type: "theory", title: "Definition of the Electric Field", content: "Instead of writing the force on $Q$ for every problem, we define the **Electric Field** $\\mathbf{E}$ of the source charges, such that:\n\n$\\mathbf{F} = Q\\mathbf{E}$\n\nFor a single point charge at the origin, the field is:\n$\\mathbf{E}(\\mathbf{r}) = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\mathbf{\\hat{r}}$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: E-Field Nature", 
+              content: "**Goal: Understand what E(r) mathematically depends on.**", 
+              interactiveSteps: [
+                {
+                  prompt: "Does the electric field $\\mathbf{E}$ depend on the value of the test charge $Q$?",
+                  options: [
+                    { id: "A", text: "Yes", isCorrect: false, explanation: "The force F depends on Q, but we factored Q out to get E." },
+                    { id: "B", text: "No", isCorrect: true, explanation: "E is a property of the source charges only." }
+                  ],
+                  stepText: "$\\mathbf{E}$ is entirely independent of $Q$."
+                },
+                {
+                  stepText: "$\\mathbf{E}(\\mathbf{r})$ is a vector field: it assigns a specific vector (magnitude and direction) to every single point $\\mathbf{r}$ in space."
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Units of E", content: "What are the SI units of the Electric Field?", options: [ { id: "A", text: "Newtons (N)", isCorrect: false, explanation: "That's force." }, { id: "B", text: "Newtons per Coulomb (N/C)", isCorrect: true, explanation: "Force divided by charge." }, { id: "C", text: "Joules (J)", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The force on a charge Q is simply Q multiplied by the ___ field.", blankAnswer: "electric" }
+          ]
+        },
+        {
+          id: "les-5-4-multiple-charges", title: "Multiple Point Charges", description: "Superposition of E-fields", icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you have a positive charge pulling a test field vector Right, and a negative charge pulling it Left, how do you find the net field?", options: [ { id: "A", text: "Multiply them", isCorrect: false, explanation: "" }, { id: "B", text: "Add them as vectors", isCorrect: true, explanation: "Superposition principle applies to E-fields too." } ] },
+            { id: "s2", type: "theory", title: "Superposition of Electric Fields", content: "Since Force obeys superposition, and $\\mathbf{E} = \\mathbf{F}/Q$, the Electric Field also obeys superposition. \n\nFor a collection of point charges $q_1, q_2, ... q_n$, the total field at point $\\mathbf{r}$ is:\n\n$\\mathbf{E}(\\mathbf{r}) = \\frac{1}{4\\pi\\epsilon_0} \\sum_{i=1}^{n} \\frac{q_i}{\\cal{r}_i^2} {\\hat{\\cal{r}}}_i$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Summation", 
+              content: "**Goal: Understand the summation formula.**", 
+              interactiveSteps: [
+                {
+                  prompt: "In the formula, what does $\\cal{r}_i$ represent?",
+                  options: [
+                    { id: "A", text: "Distance from the origin to the i-th charge", isCorrect: false, explanation: "That would be r_i (position vector magnitude)." },
+                    { id: "B", text: "Distance from the i-th source charge to the field point", isCorrect: true, explanation: "It is the separation distance for that specific charge." }
+                  ],
+                  stepText: "Each charge has its own separation vector pointing to the location where we are evaluating the field."
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Field of nothing", content: "If there are zero source charges in the universe, what is the electric field everywhere?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "No sources, no field." }, { id: "B", text: "Undefined", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The total electric field is the vector ___ of the individual fields.", blankAnswer: "sum" }
+          ]
+        },
+        {
+          id: "les-5-5-example-2-1", title: "Example 2.1: Two Equal Charges", description: "Finding the field at the midpoint", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.1", content: "**Problem:** Find the electric field a distance $z$ directly above the midpoint between two equal charges $q$, separated by a distance $d$.\n\n*Hint:* Draw the vectors. What happens to the horizontal components?" },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find the net electric field.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Let $\\mathbf{E}_1$ be the field from the left charge, and $\\mathbf{E}_2$ from the right charge."
+                },
+                {
+                  prompt: "By symmetry, what happens to the horizontal (x) components of the two fields?",
+                  options: [
+                    { id: "A", text: "They add together", isCorrect: false, explanation: "They point in opposite directions." },
+                    { id: "B", text: "They perfectly cancel", isCorrect: true, explanation: "Left pushes right, right pushes left equally." }
+                  ],
+                  stepText: "The horizontal components cancel out."
+                },
+                {
+                  stepText: "The vertical (z) components point in the same direction and add: $E_z = 2 |E_1| \\cos\\theta$."
+                },
+                {
+                  stepText: "Using geometry, $\\cal{r} = \\sqrt{z^2 + (d/2)^2}$ and $\\cos\\theta = z/\\cal{r}$."
+                },
+                {
+                  stepText: "Substituting these in: $\\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\frac{2qz}{[z^2 + (d/2)^2]^{3/2}} \\mathbf{\\hat{z}}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Far away limit", content: "What happens to the formula when you are very far away ($z \\gg d$)?", options: [ { id: "A", text: "It goes to zero immediately", isCorrect: false, explanation: "" }, { id: "B", text: "It looks like the field of a single charge $2q$", isCorrect: true, explanation: "The $d$ term becomes negligible, yielding $\\frac{2q}{z^2}$." } ] }
+          ]
+        },
+        {
+          id: "les-5-6-dipole", title: "Example: The Dipole", description: "Field of equal and opposite charges", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Dipole Field", content: "**Problem:** Find the electric field a distance $z$ above the midpoint between equal and *opposite* charges $+q$ and $-q$, a distance $d$ apart.\n\n*Hint:* Compare this to the previous example. Which components cancel now?" },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find the net field of a dipole on its bisector.**", 
+              interactiveSteps: [
+                {
+                  stepText: "The $+q$ charge pushes a test charge up and away. The $-q$ charge pulls it down and towards itself."
+                },
+                {
+                  prompt: "By symmetry, which components cancel out this time?",
+                  options: [
+                    { id: "A", text: "The horizontal (x) components", isCorrect: false, explanation: "They both point in the same horizontal direction now!" },
+                    { id: "B", text: "The vertical (z) components", isCorrect: true, explanation: "One pushes UP, one pulls DOWN equally." }
+                  ],
+                  stepText: "The vertical components cancel completely."
+                },
+                {
+                  stepText: "The horizontal components add: $E_x = 2 |E_1| \\sin\\theta$."
+                },
+                {
+                  stepText: "Using geometry, $\\sin\\theta = (d/2)/\\cal{r}$. This gives $\\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\frac{qd}{[z^2 + (d/2)^2]^{3/2}} \\mathbf{\\hat{x}}$."
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Far away limit", content: "For a dipole, when you are very far away ($z \\gg d$), how does the electric field fall off?", options: [ { id: "A", text: "Like $1/z^2$", isCorrect: false, explanation: "That's for a net point charge." }, { id: "B", text: "Like $1/z^3$", isCorrect: true, explanation: "The denominator becomes $z^3$. Dipole fields fall off faster!" } ] }
+          ]
+        },
+        {
+          id: "les-5-7-continuous", title: "Continuous Charge Distributions", description: "From sums to integrals", icon: "Cloud",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you have trillions of electrons smeared out over a wire, is it practical to sum them one by one?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "It would take forever." }, { id: "B", text: "No, we should use calculus (integration)", isCorrect: true, explanation: "Integrals are continuous sums." } ] },
+            { id: "s2", type: "theory", title: "Continuous Distributions", content: "When charge is distributed continuously, the discrete sum $\\sum q_i$ becomes an integral over infinitesimal charge elements $dq$:\n\n$\\mathbf{E}(\\mathbf{r}) = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{1}{\\cal{r}^2} {\\hat{\\cal{r}}} dq$\n\nWe define three types of charge densities:\n- **Line charge ($\\lambda$)**: charge per unit length. $dq = \\lambda dl'$\n- **Surface charge ($\\sigma$)**: charge per unit area. $dq = \\sigma da'$\n- **Volume charge ($\\rho$)**: charge per unit volume. $dq = \\rho d\\tau'$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Densities", 
+              content: "**Goal: Understand how to rewrite $dq$.**", 
+              interactiveSteps: [
+                {
+                  prompt: "If a wire of length $L$ has a uniform total charge $Q$, what is its line charge density $\\lambda$?",
+                  options: [
+                    { id: "A", text: "$Q / L$", isCorrect: true, explanation: "Total charge divided by total length." },
+                    { id: "B", text: "$Q \\cdot L$", isCorrect: false, explanation: "Units would be Coulomb-meters." }
+                  ],
+                  stepText: "$\\lambda = Q / L$."
+                },
+                {
+                  stepText: "For an infinitesimal slice $dl'$, the tiny charge inside is $dq = \\lambda dl'$."
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Units of Volume Charge", content: "What are the SI units of volume charge density ($\\rho$)?", options: [ { id: "A", text: "C / m", isCorrect: false, explanation: "" }, { id: "B", text: "C / m^2", isCorrect: false, explanation: "" }, { id: "C", text: "C / m^3", isCorrect: true, explanation: "Coulombs per cubic meter." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "For a 2D sheet of charge, we use the ___ charge density, denoted by $\\sigma$.", blankAnswer: "surface" }
+          ]
+        },
+        {
+          id: "les-5-8-line-charges", title: "Line Charges", description: "Integrating over 1D", icon: "Minus",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "To find the field of a line charge, we integrate over:", options: [ { id: "A", text: "A volume", isCorrect: false, explanation: "" }, { id: "B", text: "A path (length)", isCorrect: true, explanation: "Using $dl'$." } ] },
+            { id: "s2", type: "theory", title: "Electric Field of a Line Charge", content: "Substituting $dq = \\lambda(\\mathbf{r}') dl'$ into our continuous field equation gives:\n\n$\\mathbf{E}(\\mathbf{r}) = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{\\lambda(\\mathbf{r}')}{\\cal{r}^2} {\\hat{\\cal{r}}} dl'$\n\nThe integral is evaluated over the path of the wire. The source coordinates are primed ($x', y', z'$) to distinguish them from the field point ($x, y, z$)." },
+            { id: "s5", type: "numerical", title: "Total Charge", content: "A straight wire of length 3 meters has a uniform line charge density of $\\lambda = 2$ C/m. What is the total charge Q in Coulombs?", numericAnswer: 6, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Variable Lambda", content: "Can $\\lambda$ be pulled outside the integral?", options: [ { id: "A", text: "Yes, always", isCorrect: false, explanation: "What if it's not uniform?" }, { id: "B", text: "Only if the charge density is uniform (constant)", isCorrect: true, explanation: "If it varies with position, it must stay inside the integral." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "In integration formulas, we use primed coordinates like $x'$ to denote the position of the ___.", blankAnswer: "source" }
+          ]
+        },
+        {
+          id: "les-5-9-surface-volume", title: "Surface & Volume Charges", description: "Integrating over 2D and 3D", icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "For a solid block of charge, which density do we use?", options: [ { id: "A", text: "Sigma", isCorrect: false, explanation: "That's for a surface." }, { id: "B", text: "Rho", isCorrect: true, explanation: "Volume charge density." } ] },
+            { id: "s2", type: "theory", title: "Fields of Surfaces and Volumes", content: "**Surface Charge**:\n$\\mathbf{E}(\\mathbf{r}) = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{\\sigma(\\mathbf{r}')}{\\cal{r}^2} {\\hat{\\cal{r}}} da'$\n\n**Volume Charge** (The most general form of Coulomb's Law):\n$\\mathbf{E}(\\mathbf{r}) = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{\\rho(\\mathbf{r}')}{\\cal{r}^2} {\\hat{\\cal{r}}} d\\tau'$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Most General Form", 
+              content: "**Goal: Understand why Volume Charge is the ultimate form.**", 
+              interactiveSteps: [
+                {
+                  prompt: "Can a point charge be described using a volume charge density $\\rho$?",
+                  options: [
+                    { id: "A", text: "No, a point has no volume.", isCorrect: false, explanation: "Think about the Dirac Delta function!" },
+                    { id: "B", text: "Yes, using the Dirac Delta function.", isCorrect: true, explanation: "A point charge is just an infinitely dense volume charge at a single spot." }
+                  ],
+                  stepText: "Using $\\rho(\\mathbf{r}) = q \\delta^3(\\mathbf{r})$, the volume integral perfectly reduces to the point charge formula."
+                },
+                {
+                  stepText: "Therefore, the volume charge integral is the most general and mathematically complete version of Coulomb's law."
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Surface element", content: "What is $da'$ physically?", options: [ { id: "A", text: "A tiny patch of area on the source object", isCorrect: true, explanation: "" }, { id: "B", text: "A vector pointing to the field point", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The equation for a volume charge is often just referred to generally as ___'s law.", blankAnswer: "Coulomb" }
+          ]
+        },
+        {
+          id: "les-5-10-ex2-2-setup", title: "Example 2.2: Line Segment Setup", description: "Setting up the integral", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.2", content: "**Problem:** Find the electric field a distance $z$ above the midpoint of a straight line segment of length $2L$ that carries a uniform line charge $\\lambda$." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution: Setup", 
+              content: "**Goal: Define ${\\cal{r}}$ and $dl'$ for the integral.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Put the wire on the x-axis from $-L$ to $+L$. The field point is at $(0, 0, z)$."
+                },
+                {
+                  prompt: "What is the source point $\\mathbf{r}'$?",
+                  options: [
+                    { id: "A", text: "$x\\mathbf{\\hat{x}}$", isCorrect: true, explanation: "A generic point along the wire." },
+                    { id: "B", text: "$z\\mathbf{\\hat{z}}$", isCorrect: false, explanation: "That's the field point." }
+                  ],
+                  stepText: "$\\mathbf{r}' = x\\mathbf{\\hat{x}}$, and $dl' = dx$."
+                },
+                {
+                  stepText: "The field point is $\\mathbf{r} = z\\mathbf{\\hat{z}}$. Thus the separation vector is ${\\cal{r}} = z\\mathbf{\\hat{z}} - x\\mathbf{\\hat{x}}$."
+                },
+                {
+                  stepText: "Its magnitude is $\\cal{r} = \\sqrt{z^2+x^2}$, and ${\\hat{\\cal{r}}} = \\frac{z\\mathbf{\\hat{z}} - x\\mathbf{\\hat{x}}}{\\sqrt{z^2+x^2}}$. Setup complete!"
+                }
+              ]
             }
           ]
         },
         {
-          "id": "lesson-2-1-2-pendulum",
-          "title": "The Simple Pendulum",
-          "description": "Small angle approximations and angular SHM.",
-          "icon": "Clock",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Simple Pendulum",
-              "content": "A simple pendulum consists of a mass $m$ (the bob) on a massless string of length $l$.\n\nIn polar coordinates, kinetic energy is $T = \\frac{1}{2}ml^2\\dot{\\theta}^2$ and potential energy is $V = -mgl\\cos\\theta$ (relative to the pivot).\n\nThe Lagrangian gives the equation of motion: $ml^2\\ddot{\\theta} + mgl\\sin\\theta = 0$."
-            },
-            {
-              "id": "s2-canvas",
-              "type": "theory",
-              "title": "Visualization: Pendulum",
-              "content": "The pendulum swings back and forth. The restoring force relies on gravity.",
-              "canvasId": "pendulum"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Small Angle Approximation",
-              "content": "The equation $ml^2\\ddot{\\theta} + mgl\\sin\\theta = 0$ is non-linear due to the $\\sin\\theta$ term. Let's simplify it.",
-              "interactiveSteps": [
+          id: "les-5-11-ex2-2-solve", title: "Example 2.2: Integration", description: "Evaluating the line charge", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.2 (Continued)", content: "**Problem:** Evaluate the integral: \n$\\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\int_{-L}^{L} \\frac{\\lambda}{z^2+x^2} \\frac{z\\mathbf{\\hat{z}} - x\\mathbf{\\hat{x}}}{\\sqrt{z^2+x^2}} dx$" },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution: Evaluation", 
+              content: "**Goal: Perform the calculus and interpret the result.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Divide the entire equation by $ml^2$ to isolate the acceleration term: $\\ddot{\\theta} + \\frac{g}{l}\\sin\\theta = 0$."
+                  prompt: "Look at the x-component integral: $\\int_{-L}^{L} \\frac{-x}{(z^2+x^2)^{3/2}} dx$. What is its value?",
+                  options: [
+                    { id: "A", text: "0", isCorrect: true, explanation: "It's an odd function integrated over a symmetric interval." },
+                    { id: "B", text: "Infinity", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The horizontal component cancels out to zero, just as we expect from symmetry."
                 },
                 {
-                  "prompt": "For small angles ($\\theta \\lesssim 20^\\circ$ or $\\approx 0.35$ rad), what is a valid approximation for $\\sin\\theta$?",
-                  "stepText": "Using the Taylor series $\\sin\\theta = \\theta - \\frac{\\theta^3}{3!} + ...$, for small $\\theta$, we can approximate $\\sin\\theta \\approx \\theta$ (in radians).",
-                  "options": [
-                    { "id": "A", "text": "$\\sin\\theta \\approx 1$", "isCorrect": false, "explanation": "That would be $\\cos\\theta$ for small angles." },
-                    { "id": "B", "text": "$\\sin\\theta \\approx \\theta$", "isCorrect": true, "explanation": "This is the standard small-angle approximation." }
-                  ]
+                  stepText: "We are left with the z-component: $\\frac{\\lambda z}{4\\pi\\epsilon_0} \\int_{-L}^{L} \\frac{1}{(z^2+x^2)^{3/2}} dx$."
                 },
                 {
-                  "stepText": "Substituting this approximation gives: $\\ddot{\\theta} + \\frac{g}{l}\\theta = 0$."
-                },
-                {
-                  "prompt": "Notice this has the exact same form as the spring equation $\\ddot{x} + \\frac{k}{m}x = 0$. What is the equivalent 'angular frequency squared' ($\\omega^2$) for the pendulum?",
-                  "stepText": "By direct comparison, $\\omega^2 = \\frac{g}{l}$, so $\\omega = \\sqrt{\\frac{g}{l}}$.",
-                  "options": [
-                    { "id": "A", "text": "$g/l$", "isCorrect": true, "explanation": "Yes, $\\frac{g}{l}$ takes the place of $\\frac{k}{m}$." },
-                    { "id": "B", "text": "$l/g$", "isCorrect": false, "explanation": "It's the coefficient in front of $\\theta$." }
-                  ]
+                  stepText: "This evaluates to $\\frac{1}{4\\pi\\epsilon_0} \\frac{2\\lambda L}{z\\sqrt{z^2+L^2}} \\mathbf{\\hat{z}}$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Calculate Pendulum Frequency",
-              "content": "A simple pendulum is located on Earth where $g = 9.8$ m/s$^2$. \nIf the string length $l = 0.2$ meters, calculate the angular frequency $\\omega$ in rad/s.",
-              "numericAnswer": 7,
-              "numericTolerance": 0.1
-            },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Pendulum Mass",
-              "content": "According to the derived equation $\\ddot{\\theta} + \\frac{g}{l}\\theta = 0$, how does changing the mass of the pendulum bob affect its period?",
-              "options": [
-                { "id": "1", "text": "A heavier mass increases the period.", "isCorrect": false, "explanation": "Look closely at the equation." },
-                { "id": "2", "text": "A heavier mass decreases the period.", "isCorrect": false, "explanation": "Does mass appear in the final equation?" },
-                { "id": "3", "text": "Mass has no effect on the period.", "isCorrect": true, "explanation": "Mass $m$ canceled out entirely! Only gravity $g$ and length $l$ matter." }
-              ]
-            },
-            {
-              "id": "s6-blank",
-              "type": "fill_in_blank",
-              "title": "Approximations",
-              "content": "To reduce the pendulum equation to simple harmonic motion, we must use the ___ angle approximation.",
-              "blankAnswer": "small"
-            }
+            { id: "s2", type: "quiz", title: "Infinite Wire Limit", content: "What happens if the wire is infinitely long ($L \\to \\infty$)?", options: [ { id: "A", text: "The field goes to zero", isCorrect: false, explanation: "" }, { id: "B", text: "The field becomes $\\frac{1}{4\\pi\\epsilon_0} \\frac{2\\lambda}{z}$", isCorrect: true, explanation: "The $L$ terms cancel, leaving a $1/z$ dependence." } ] }
           ]
         },
         {
-          "id": "lesson-2-1-3-diff-eqs",
-          "title": "Solving the Differential Equation",
-          "description": "Using auxiliary equations to find the general solution.",
-          "icon": "FunctionSquare",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Linear Homogeneous Equations",
-              "content": "An equation like $m\\ddot{x} + kx = 0$ is a second-order linear homogeneous differential equation with constant coefficients.\n\nTo solve it, we guess a solution of the form $x = e^{pt}$. \nSubstituting $x = e^{pt}$ and $\\ddot{x} = p^2 e^{pt}$ gives:\n$$mp^2 e^{pt} + k e^{pt} = 0$$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Auxiliary Equation",
-              "content": "Dividing by $e^{pt}$, we get the **auxiliary equation**:\n$$mp^2 + k = 0$$\n\nSolving for $p$ gives $p = \\pm \\sqrt{-\\frac{k}{m}} = \\pm i\\sqrt{\\frac{k}{m}} = \\pm i\\omega$.\nThus we have two solutions: $x_1 = e^{i\\omega t}$ and $x_2 = e^{-i\\omega t}$."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Euler's Formula",
-              "content": "The general solution is a linear combination: $x(t) = C_1 e^{i\\omega t} + C_2 e^{-i\\omega t}$. Let's convert this to sines and cosines.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Euler's formula states: $e^{\\pm i\\theta} = \\cos\\theta \\pm i\\sin\\theta$."
-                },
-                {
-                  "prompt": "Substitute Euler's formula into $x(t)$. Group the cosine and sine terms. What do you get for the coefficient of $\\cos\\omega t$?",
-                  "stepText": "$x = C_1(\\cos\\omega t + i\\sin\\omega t) + C_2(\\cos\\omega t - i\\sin\\omega t) = (C_1 + C_2)\\cos\\omega t + i(C_1 - C_2)\\sin\\omega t$.",
-                  "options": [
-                    { "id": "A", "text": "$(C_1 + C_2)$", "isCorrect": true, "explanation": "Correct. Both exponential terms contribute a positive cosine." },
-                    { "id": "B", "text": "$(C_1 - C_2)$", "isCorrect": false, "explanation": "That is the coefficient for the imaginary sine term." }
-                  ]
-                },
-                {
-                  "stepText": "Let $A_1 = C_1 + C_2$ and $A_2 = i(C_1 - C_2)$. The solution is $x(t) = A_1\\cos\\omega t + A_2\\sin\\omega t$."
-                },
-                {
-                  "stepText": "By trigonometric identities, this can also be written in the very convenient form: $x(t) = A\\cos(\\omega t + \\beta)$ or $x(t) = x_0\\sin(\\omega t + \\phi)$."
-                }
-              ]
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Period Calculation",
-              "content": "If the auxiliary equation yields $p = \\pm 3.14i$, then $\\omega = 3.14$ rad/s.\n\nThe period of oscillation is $P = \\frac{2\\pi}{\\omega}$. Calculate the period $P$ (use $\\pi \\approx 3.14$).",
-              "numericAnswer": 2,
-              "numericTolerance": 0.05
-            },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Superposition Principle",
-              "content": "Why are we allowed to just add $C_1 e^{i\\omega t}$ and $C_2 e^{-i\\omega t}$ together to get a general solution?",
-              "options": [
-                { "id": "1", "text": "Because it's a first-order equation.", "isCorrect": false, "explanation": "It's a second-order equation." },
-                { "id": "2", "text": "Because the differential equation is linear and homogeneous.", "isCorrect": true, "explanation": "For linear homogeneous equations, the sum of any two solutions is also a solution." },
-                { "id": "3", "text": "Because energy is conserved.", "isCorrect": false, "explanation": "While true, superposition is a mathematical property of the differential equation." }
-              ]
-            },
-            {
-              "id": "s6-blank",
-              "type": "fill_in_blank",
-              "title": "Equation Roots",
-              "content": "The algebraic equation $mp^2 + k = 0$ is known as the ___ equation.",
-              "blankAnswer": "auxiliary"
-            }
+          id: "les-5-12-warning", title: "The Unit Vector Caveat", description: "A crucial warning for integrals", icon: "AlertTriangle",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Can you pull a constant outside of an integral?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "Basic calculus rule." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Is the separation unit vector ${\\hat{\\cal{r}}}$ a constant?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "It points from the source $dq$ to the field point, which changes as we integrate over different $dq$s!" } ] },
+            { id: "s2", type: "theory", title: "A Crucial Warning", content: "**Warning:** The unit vector ${\\hat{\\cal{r}}}$ is *not constant*; its direction depends on the source point $\\mathbf{r}'$.\n\nHence, **it cannot be taken outside the integrals** (Eqs 2.5 - 2.8). In practice, you must always resolve ${\\hat{\\cal{r}}}$ into Cartesian components ($\\mathbf{\\hat{x}}, \\mathbf{\\hat{y}}, \\mathbf{\\hat{z}}$) before integrating, because the Cartesian unit vectors *are* constant and do come out of the integral." },
+            { id: "s6", type: "quiz", title: "Curvilinear Coordinates", content: "Even if you evaluate the integral using spherical coordinates, what must you do with the unit vectors first?", options: [ { id: "A", text: "Express them in Cartesian components", isCorrect: true, explanation: "Because spherical unit vectors change direction, but Cartesian ones do not." }, { id: "B", text: "Leave them as r-hat", isCorrect: false, explanation: "That will lead to incorrect integration." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Cartesian unit vectors are safe to pull out of integrals because they are completely ___.", blankAnswer: "constant" }
           ]
         }
       ]
     },
     {
-      "id": "unit-2-2",
-      "title": "Energy & Solving Problems",
-      "description": "Energy conservation and working through specific examples.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-6-summary",
+      title: "Section 1 Summary",
+      description: "Recap of The Electric Field.",
+      color: "duo-green",
+      lessons: [
         {
-          "id": "lesson-2-2-1-energy",
-          "title": "Energy of an Undamped Oscillator",
-          "description": "Kinetic, Potential, and Total Energy.",
-          "icon": "Zap",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Energy Components",
-              "content": "The total energy $E = T + V$ for an undamped oscillator is constant.\n\n$$E = \\frac{1}{2}m\\dot{x}^2 + \\frac{1}{2}kx^2$$\n\nIf we substitute the solution $x = A\\sin(\\omega t + \\beta)$ and $\\dot{x} = A\\omega\\cos(\\omega t + \\beta)$, we can find the total energy."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Deriving Total Energy",
-              "content": "$E = \\frac{1}{2}m(A\\omega\\cos(\\omega t + \\beta))^2 + \\frac{1}{2}k(A\\sin(\\omega t + \\beta))^2$\n\nRecall that $\\omega^2 = k/m$, so $m\\omega^2 = k$. Substituting this in:\n$E = \\frac{1}{2}kA^2\\cos^2(...) + \\frac{1}{2}kA^2\\sin^2(...)$\n\n$E = \\frac{1}{2}kA^2(\\cos^2 + \\sin^2) = \\frac{1}{2}kA^2$"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Velocity vs Position",
-              "content": "Let's use energy to relate position $x_0$ and velocity $v_0$ at any instant.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Total energy is $E = \\frac{1}{2}mv_0^2 + \\frac{1}{2}kx_0^2$ at some initial time."
-                },
-                {
-                  "prompt": "If the amplitude is $A$, we know maximum potential energy occurs when velocity is zero, and $E = \\frac{1}{2}kA^2$. Set these equal.",
-                  "stepText": "$\\frac{1}{2}kA^2 = \\frac{1}{2}mv_0^2 + \\frac{1}{2}kx_0^2$.",
-                  "options": [
-                    { "id": "A", "text": "$\\frac{1}{2}kA^2 = \\frac{1}{2}mv_0^2 + \\frac{1}{2}kx_0^2$", "isCorrect": true, "explanation": "Energy is conserved, so energy at amplitude equals energy at any point." },
-                    { "id": "B", "text": "$A = x_0 + v_0$", "isCorrect": false, "explanation": "Energies sum quadratically, not linearly." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply by 2 and solve for $v_0^2$: $mv_0^2 = kA^2 - kx_0^2 = k(A^2 - x_0^2)$."
-                },
-                {
-                  "prompt": "Take the square root to find $v_0$.",
-                  "stepText": "$v_0 = \\pm\\sqrt{\\frac{k}{m}(A^2 - x_0^2)} = \\pm\\omega\\sqrt{A^2 - x_0^2}$.",
-                  "options": [
-                    { "id": "A", "text": "$v_0 = \\pm\\omega\\sqrt{A^2 - x_0^2}$", "isCorrect": true, "explanation": "Correct. This gives velocity at any position $x_0$." },
-                    { "id": "B", "text": "$v_0 = \\pm\\omega(A - x_0)$", "isCorrect": false, "explanation": "You cannot distribute a square root over subtraction." }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Calculate Total Energy",
-              "content": "A spring with $k = 10$ N/m oscillates with an amplitude $A = 2$ meters.\n\nCalculate the total energy $E$ of the system.",
-              "numericAnswer": 20,
-              "numericTolerance": 0.1
-            },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Energy Dependence",
-              "content": "The total energy of a simple harmonic oscillator is proportional to:",
-              "options": [
-                { "id": "1", "text": "The amplitude.", "isCorrect": false, "explanation": "It scales faster than linearly." },
-                { "id": "2", "text": "The square of the amplitude.", "isCorrect": true, "explanation": "$E = \\frac{1}{2}kA^2$." },
-                { "id": "3", "text": "The inverse of the amplitude.", "isCorrect": false, "explanation": "It grows as amplitude grows." }
-              ]
-            },
-            {
-              "id": "s6-blank",
-              "type": "fill_in_blank",
-              "title": "Conservation",
-              "content": "For an undamped oscillator, the total mechanical energy remains ___ over time.",
-              "blankAnswer": "constant"
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-2-2-worked-examples",
-          "title": "Worked Examples 11.1 & 11.2",
-          "description": "Applying the concepts to specific numerical problems.",
-          "icon": "PenTool",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Example 11.1: Differential Eq",
-              "content": "Solve the differential equation $\\frac{d^2x}{dt^2} - 4x = 0$, given the initial conditions $x(0) = 0$ and $\\dot{x}(0) = 3$ m/s.\n\n*Notice that this is NOT the SHM equation because the coefficient of $x$ is negative!*"
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution: Example 11.1",
-              "content": "We use the auxiliary equation method.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Substitute $x = e^{pt}$. This gives $p^2 - 4 = 0$."
-                },
-                {
-                  "prompt": "What are the roots for $p$?",
-                  "stepText": "$p = \\pm 2$. Notice these are real roots, not imaginary.",
-                  "options": [
-                    { "id": "A", "text": "$p = \\pm 2i$", "isCorrect": false, "explanation": "The equation was $p^2 - 4 = 0$, so $p^2 = 4$, which has real roots." },
-                    { "id": "B", "text": "$p = \\pm 2$", "isCorrect": true, "explanation": "Correct. $2^2 = 4$ and $(-2)^2 = 4$." }
-                  ]
-                },
-                {
-                  "stepText": "The general solution is $x(t) = C_1 e^{2t} + C_2 e^{-2t}$."
-                },
-                {
-                  "prompt": "Apply $x(0) = 0$. What relationship between $C_1$ and $C_2$ does this give?",
-                  "stepText": "$0 = C_1 e^0 + C_2 e^0 \implies C_2 = -C_1$. So $x(t) = C_1(e^{2t} - e^{-2t})$.",
-                  "options": [
-                    { "id": "A", "text": "$C_1 = C_2$", "isCorrect": false, "explanation": "Then $x(0)$ would be $2C_1$, not 0." },
-                    { "id": "B", "text": "$C_2 = -C_1$", "isCorrect": true, "explanation": "Correct, they must cancel out at $t=0$." }
-                  ]
-                },
-                {
-                  "stepText": "Apply $\\dot{x}(0) = 3$. The derivative is $\\dot{x}(t) = 2C_1 e^{2t} + 2C_1 e^{-2t}$. At $t=0$, $4C_1 = 3 \implies C_1 = 3/4$."
-                },
-                {
-                  "stepText": "Final Solution: $x(t) = \\frac{3}{4}(e^{2t} - e^{-2t}) = \\frac{3}{2}\\sinh(2t)$."
-                }
-              ]
-            },
-            {
-              "id": "s3-q",
-              "type": "example_q",
-              "title": "Example 11.2: Initial Velocity",
-              "content": "A mass of 0.25 kg is attached to a spring of force constant 1.0 N/m. The mass is displaced 0.15 m from equilibrium and released from rest ($v_0 = 0$).\n\nEvaluate the total energy. What is the maximum velocity?"
-            },
-            {
-              "id": "s4-sol",
-              "type": "solution",
-              "title": "Interactive Solution: Example 11.2",
-              "content": "Let's find Energy and Velocity.",
-              "interactiveSteps": [
-                {
-                  "prompt": "Since it is released from rest, what is the initial kinetic energy?",
-                  "stepText": "Initial KE is 0.",
-                  "options": [
-                    { "id": "A", "text": "0", "isCorrect": true, "explanation": "$v_0 = 0$ means kinetic energy is zero." },
-                    { "id": "B", "text": "1/2 m v^2", "isCorrect": false, "explanation": "It's released from rest, so $v$ is 0." }
-                  ]
-                },
-                {
-                  "stepText": "Total Energy $E = \\frac{1}{2}kx_0^2 = \\frac{1}{2}(1.0)(0.15)^2 = 0.01125$ Joules."
-                },
-                {
-                  "prompt": "Maximum velocity occurs when $x = 0$ and all energy is kinetic. How do we find $v_{max}$?",
-                  "stepText": "$E = \\frac{1}{2}mv_{max}^2 \\implies v_{max} = \\sqrt{2E/m}$.",
-                  "options": [
-                    { "id": "A", "text": "$v_{max} = E/m$", "isCorrect": false, "explanation": "Don't forget the $1/2$ and the square root." },
-                    { "id": "B", "text": "$v_{max} = \\sqrt{2E/m}$", "isCorrect": true, "explanation": "Rearranging $1/2 m v^2 = E$ correctly." }
-                  ]
-                },
-                {
-                  "stepText": "$v_{max} = \\sqrt{2(0.01125)/0.25} = \\sqrt{0.09} = 0.3$ m/s."
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-2-3-exercises",
-          "title": "Chapter Exercises",
-          "description": "Exercises 11.1, 11.2, 11.3",
-          "icon": "Target",
-          "slides": [
-            {
-              "id": "s1-numerical",
-              "type": "numerical",
-              "title": "Exercise 11.2: Find the frequency",
-              "content": "A certain spring stretches 6 cm (0.06 m) when a force of 6 N is applied to it. \nCalculate the spring constant $k$ (in N/m).",
-              "numericAnswer": 100,
-              "numericTolerance": 1
-            },
-            {
-              "id": "s2-quiz",
-              "type": "quiz",
-              "title": "Exercise 11.2 Continued",
-              "content": "A 5 kg mass is attached to this spring ($k=100$ N/m). It is stretched 3 cm (0.03 m) and released with a push so its initial speed is -6 cm/s (-0.06 m/s).\n\nWhat is the angular frequency $\\omega$?",
-              "options": [
-                { "id": "1", "text": "20 rad/s", "isCorrect": false, "explanation": "You forgot to take the square root of $k/m$." },
-                { "id": "2", "text": "4.47 rad/s", "isCorrect": true, "explanation": "$\\omega = \\sqrt{k/m} = \\sqrt{100/5} = \\sqrt{20} \\approx 4.47$ rad/s." },
-                { "id": "3", "text": "0.22 rad/s", "isCorrect": false, "explanation": "That's $\\sqrt{m/k}$." }
-              ]
-            },
-            {
-              "id": "s3-q",
-              "type": "example_q",
-              "title": "Exercise 11.3: Find Amplitude",
-              "content": "At time $t=0$, a simple harmonic oscillator with $\\omega = 2$ rad/s is at $x=3$ cm and has a speed of $v=1$ cm/s.\n\nWe know $x(t) = C_1\\cos\\omega t + C_2\\sin\\omega t$. Let's find $C_1$ and $C_2$."
-            },
-            {
-              "id": "s4-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Finding the coefficients from initial conditions.",
-              "interactiveSteps": [
-                {
-                  "stepText": "We have $x(t) = C_1\\cos(2t) + C_2\\sin(2t)$."
-                },
-                {
-                  "prompt": "At $t=0$, $x=3$. What does this tell us about $C_1$?",
-                  "stepText": "Since $\\sin(0) = 0$ and $\\cos(0) = 1$, we get $x(0) = C_1 = 3$.",
-                  "options": [
-                    { "id": "A", "text": "$C_1 = 3$", "isCorrect": true, "explanation": "Direct substitution at t=0 isolates $C_1$." },
-                    { "id": "B", "text": "$C_2 = 3$", "isCorrect": false, "explanation": "$C_2$ is tied to the sine term, which vanishes at t=0." }
-                  ]
-                },
-                {
-                  "stepText": "Now find velocity: $\\dot{x}(t) = -2C_1\\sin(2t) + 2C_2\\cos(2t)$."
-                },
-                {
-                  "prompt": "At $t=0$, $\\dot{x} = 1$. What is $C_2$?",
-                  "stepText": "$\\dot{x}(0) = 2C_2 = 1 \\implies C_2 = 1/2$.",
-                  "options": [
-                    { "id": "A", "text": "$C_2 = 1/2$", "isCorrect": true, "explanation": "Correct!" },
-                    { "id": "B", "text": "$C_2 = 1$", "isCorrect": false, "explanation": "You forgot the chain rule factor of $\\omega=2$ coming out of the derivative." }
-                  ]
-                },
-                {
-                  "stepText": "Final Equation: $x(t) = 3\\cos(2t) + 0.5\\sin(2t)$."
-                }
-              ]
-            }
+          id: "les-6-1-recap", title: "Section Recap", description: "Review of Unit 5", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "Coulomb's Law shows that force falls off as:", options: [ { id: "A", text: "1/r", isCorrect: false, explanation: "" }, { id: "B", text: "1/r^2", isCorrect: true, explanation: "Inverse square law." } ] },
+            { id: "s1", type: "quiz", title: "Knowledge Check 2", content: "To calculate the field of a continuous charge, you must:", options: [ { id: "A", text: "Take a derivative", isCorrect: false, explanation: "" }, { id: "B", text: "Integrate the charge density over the region", isCorrect: true, explanation: "Using the integral form of Coulomb's Law." } ] },
+            { id: "s2", type: "theory", title: "Section 1 Summary", content: "Electrostatics is governed by the **Principle of Superposition** and **Coulomb's Law**.\n\nThe **Electric Field** $\\mathbf{E}$ represents force per unit charge. \nFor continuous distributions, we replace the discrete sum with an integral over line ($\\lambda$), surface ($\\sigma$), or volume ($\\rho$) charge densities. Crucially, the separation unit vector ${\\hat{\\cal{r}}}$ must be resolved into constant Cartesian components before integrating." }
           ]
         }
       ]

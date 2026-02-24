@@ -1,643 +1,399 @@
 import { Section } from '../types';
 
 export const SECTION_2_2: Section = {
-  "id": "section-2-2",
-  "title": "Section 2: Damped & Forced Oscillators",
-  "description": "Friction, resonance, the Q factor, and inhomogeneous differential equations.",
-  "color": "duo-red",
-  "units": [
+  id: "section-2-2",
+  title: "Section 2: Divergence and Curl of Electrostatic Fields",
+  description: "Field lines, Gauss's Law, calculating divergence and curl, and Maxwell's equations for electrostatics.",
+  color: "duo-blue",
+  units: [
     {
-      "id": "unit-2-3",
-      "title": "The Damped Harmonic Oscillator",
-      "description": "Underdamped, overdamped, and critically damped systems.",
-      "color": "duo-red",
-      "lessons": [
+      id: "unit-6-div-curl",
+      title: "Divergence and Curl of E",
+      description: "Gauss's Law and the irrotational nature of static electric fields.",
+      color: "duo-blue",
+      lessons: [
         {
-          "id": "lesson-2-3-1-damping-force",
-          "title": "Introduction to Damping",
-          "description": "Adding a retarding force to the harmonic oscillator.",
-          "icon": "Wind",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Retarding Force",
-              "content": "In reality, oscillators lose energy and eventually stop due to retarding forces like air resistance or friction.\n\nLet the system be a mass on a spring acted upon by a resistive force proportional to its velocity. The total force is:\n$$F = -kx - b\\dot{x}$$\nwhere $b$ is the **damping coefficient**."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Equation of Motion",
-              "content": "Using Newton's Second Law ($F = m\\ddot{x}$), the equation of motion for a damped harmonic oscillator becomes:\n$$m\\ddot{x} + b\\dot{x} + kx = 0$$\n\nThis is a second-order linear homogeneous differential equation with constant coefficients."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Derivation: The Auxiliary Equation",
-              "content": "Let's find the roots of this differential equation.",
-              "interactiveSteps": [
+          id: "les-6-1-field-lines", title: "Electric Field Lines", description: "Visualizing the electric field", icon: "Eye",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Can two electric field lines ever cross each other?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "If they crossed, the field would point in two directions at once!" }, { id: "B", text: "No", isCorrect: true, explanation: "The field has a unique direction at every point in space." } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Where do electric field lines originate and terminate?", options: [ { id: "A", text: "Originate on negative, terminate on positive", isCorrect: false, explanation: "" }, { id: "B", text: "Originate on positive, terminate on negative", isCorrect: true, explanation: "They can also extend to infinity." } ] },
+            { id: "s2", type: "theory", title: "Electric Field Lines", content: "We visualize vector fields using **field lines**.\n\n- The tangent to a field line at any point gives the **direction** of $\\mathbf{E}$.\n- The **density** of the lines (number per unit cross-sectional area) is proportional to the **magnitude** of $\\mathbf{E}$.\n\nLines begin on positive charges and end on negative ones (or extend to infinity). They can never cross." },
+            { id: "s3", type: "interactive_canvas", title: "Field Line Density", content: "Notice how the lines spread out. As area increases with $r^2$, density drops as $1/r^2$, perfectly matching Coulomb's law.", interactiveCanvasId: "divergence-interactive" },
+            { id: "s6", type: "quiz", title: "Line Density", content: "If a point charge $+q$ has 8 field lines drawn coming out of it, how many should be drawn for a $+2q$ charge?", options: [ { id: "A", text: "8", isCorrect: false, explanation: "Density must be proportional to charge." }, { id: "B", text: "16", isCorrect: true, explanation: "Double the charge, double the field, double the lines." }, { id: "C", text: "4", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Electric field lines point away from ___ charges.", blankAnswer: "positive" }
+          ]
+        },
+        {
+          id: "les-6-2-flux", title: "Electric Flux", description: "Number of field lines passing through a surface", icon: "Grid",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you hold a net perpendicular to a river's flow, you catch maximum water. What if you hold it parallel to the flow?", options: [ { id: "A", text: "Maximum water", isCorrect: false, explanation: "" }, { id: "B", text: "Zero water", isCorrect: true, explanation: "The water just flows past the net, not through it." } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Flux depends on the electric field and the...", options: [ { id: "A", text: "Area of the surface", isCorrect: true, explanation: "More area = more field lines intercepted." }, { id: "B", text: "Charge of the test particle", isCorrect: false, explanation: "Flux is a property of the field itself." } ] },
+            { id: "s2", type: "theory", title: "Electric Flux", content: "The **flux** of $\\mathbf{E}$ through a surface $\\mathcal{S}$ is defined as:\n\n$\\Phi_E \\equiv \\int_{\\mathcal{S}} \\mathbf{E} \\cdot d\\mathbf{a}$\n\nIt is a measure of the \"number of field lines\" passing through $\\mathcal{S}$. For a closed surface, flux represents the net flow outward from the enclosed volume." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Dot Product", 
+              content: "**Goal: Understand why we use the dot product in flux.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "We assume a solution of the form $x = e^{pt}$. Therefore, $\\dot{x} = pe^{pt}$ and $\\ddot{x} = p^2e^{pt}$."
+                  prompt: "The area vector $d\\mathbf{a}$ points perpendicular (normal) to the surface. If the electric field $\\mathbf{E}$ is parallel to the surface, what is the angle between $\\mathbf{E}$ and $d\\mathbf{a}$?",
+                  options: [
+                    { id: "A", text: "0 degrees", isCorrect: false, explanation: "That would mean E is perpendicular to the surface." },
+                    { id: "B", text: "90 degrees", isCorrect: true, explanation: "E is along the surface, da is perpendicular to it." }
+                  ],
+                  stepText: "The angle is $90^\\circ$."
                 },
                 {
-                  "prompt": "Substitute these into $m\\ddot{x} + b\\dot{x} + kx = 0$. What equation do you get after factoring out $e^{pt}$?",
-                  "stepText": "The auxiliary equation is $mp^2 + bp + k = 0$.",
-                  "options": [
-                    { "id": "A", "text": "$mp^2 + bp + k = 0$", "isCorrect": true, "explanation": "Correct. This is a standard quadratic equation for p." },
-                    { "id": "B", "text": "$m + bp + kp^2 = 0$", "isCorrect": false, "explanation": "Match the powers of $p$ with the order of the derivatives." }
-                  ]
-                },
-                {
-                  "stepText": "To simplify, we divide by $m$: $p^2 + \\frac{b}{m}p + \\frac{k}{m} = 0$."
-                },
-                {
-                  "prompt": "Using the quadratic formula $p = \\frac{-B \\pm \\sqrt{B^2 - 4AC}}{2A}$, what are the roots for $p$?",
-                  "stepText": "The roots are $p = -\\frac{b}{2m} \\pm \\sqrt{\\left(\\frac{b}{2m}\\right)^2 - \\frac{k}{m}}$.",
-                  "options": [
-                    { "id": "A", "text": "$p = -\\frac{b}{m} \\pm \\sqrt{\\frac{b^2}{m^2} - \\frac{k}{m}}$", "isCorrect": false, "explanation": "Don't forget to divide by $2A$ (which is 2 here)." },
-                    { "id": "B", "text": "$p = -\\frac{b}{2m} \\pm \\sqrt{\\left(\\frac{b}{2m}\\right)^2 - \\frac{k}{m}}$", "isCorrect": true, "explanation": "Perfect application of the quadratic formula." }
-                  ]
+                  stepText: "Since $\\cos(90^\\circ) = 0$, the dot product $\\mathbf{E} \\cdot d\\mathbf{a} = 0$, perfectly capturing that NO field lines poke through the surface."
                 }
               ]
             },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Understanding the Roots",
-              "content": "The behavior of the oscillator entirely depends on the term under the square root: $\\left(\\frac{b}{2m}\\right)^2 - \\frac{k}{m}$. If this term is negative, what kind of roots do we get?",
-              "options": [
-                { "id": "1", "text": "Real and positive", "isCorrect": false, "explanation": "A negative square root produces imaginary numbers." },
-                { "id": "2", "text": "Complex / Imaginary", "isCorrect": true, "explanation": "The square root of a negative number yields an imaginary component, leading to oscillatory sine/cosine solutions." },
-                { "id": "3", "text": "Zero", "isCorrect": false, "explanation": "It's only zero if the terms are exactly equal." }
-              ]
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Terminology",
-              "content": "The retarding force in our model is directly proportional to the ___ of the mass.",
-              "blankAnswer": "velocity"
-            }
+            { id: "s5", type: "numerical", title: "Calculate Flux", content: "A uniform field of magnitude $E = 5$ N/C passes perpendicularly through a flat surface of area $A = 2$ m$^2$. What is the flux?", numericAnswer: 10, numericTolerance: 0.1 },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The flux through a surface is a measure of the number of field ___ passing through it.", blankAnswer: "lines" }
           ]
         },
         {
-          "id": "lesson-2-3-2-underdamped",
-          "title": "The Underdamped Oscillator",
-          "description": "Oscillations with an exponentially decaying amplitude.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Underdamped Condition",
-              "content": "An oscillator is **underdamped** when the damping is small: $\\left(\\frac{b}{2m}\\right)^2 < \\frac{k}{m}$.\n\nLet's define two new constants to make the math cleaner:\n*   $\\omega_0^2 = \\frac{k}{m}$ (Natural frequency squared)\n*   $\\gamma = \\frac{b}{2m}$ (Damping coefficient)\n\nThe roots become: $p = -\\gamma \\pm \\sqrt{\\gamma^2 - \\omega_0^2}$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Complex Roots",
-              "content": "Since $\\gamma^2 < \\omega_0^2$ for underdamped systems, the square root is negative. We factor out $-1$ to get an imaginary number:\n$$p = -\\gamma \\pm i\\omega_1$$\nwhere $\\omega_1 = \\sqrt{\\omega_0^2 - \\gamma^2}$ is the new, slightly slower frequency of the damped oscillator."
-            },
-            {
-              "id": "s3-canvas",
-              "type": "theory",
-              "title": "Visualizing Underdamped Motion",
-              "content": "The solution is $x(t) = Ae^{-\\gamma t}\\cos(\\omega_1 t + \\theta)$. It oscillates rapidly (cosine term), but the amplitude is squeezed by an exponentially decreasing envelope ($e^{-\\gamma t}$).",
-              "canvasId": "damped-oscillation"
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Calculate Damped Frequency",
-              "content": "An underdamped oscillator has a natural frequency $\\omega_0 = 5$ rad/s and a damping coefficient $\\gamma = 3$ s$^{-1}$.\n\nCalculate the damped angular frequency $\\omega_1 = \\sqrt{\\omega_0^2 - \\gamma^2}$.",
-              "numericAnswer": 4,
-              "numericTolerance": 0.05
-            },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Frequency Comparison",
-              "content": "How does the damped frequency $\\omega_1$ compare to the natural (undamped) frequency $\\omega_0$?",
-              "options": [
-                { "id": "1", "text": "It is always greater (faster oscillations).", "isCorrect": false, "explanation": "Look at the formula: $\\omega_1 = \\sqrt{\\omega_0^2 - \\gamma^2}$." },
-                { "id": "2", "text": "It is always equal.", "isCorrect": false, "explanation": "Only if $\\gamma = 0$." },
-                { "id": "3", "text": "It is always smaller (slower oscillations).", "isCorrect": true, "explanation": "The friction slows down the oscillatory back-and-forth motion." }
+          id: "les-6-3-gauss-integral", title: "Gauss's Law (Integral)", description: "Flux relates to enclosed charge", icon: "Box",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you put a charge +q inside a closed box, a certain number of field lines poke out. If you make the box twice as large, how many lines poke out?", options: [ { id: "A", text: "Half as many", isCorrect: false, explanation: "" }, { id: "B", text: "The exact same amount", isCorrect: true, explanation: "The lines don't stop; they just keep going and pierce the larger box too." } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Does the shape of the closed box matter for the total number of lines poking out?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Any closed surface enclosing the charge will intercept all its lines." } ] },
+            { id: "s2", type: "theory", title: "Gauss's Law (Integral Form)", content: "For *any* closed surface, the total electric flux is directly proportional to the total charge enclosed within it:\n\n$\\oint \\mathbf{E} \\cdot d\\mathbf{a} = \\frac{1}{\\epsilon_0} Q_{enc}$\n\nThis is Gauss's Law. It is a direct consequence of the $1/r^2$ nature of Coulomb's Law." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Derivation: Point Charge Flux", 
+              content: "**Goal: Show that flux equals $q/\\epsilon_0$ for a sphere.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Place a charge $q$ at the origin. Surround it with a sphere of radius $r$."
+                },
+                {
+                  prompt: "What is $\\mathbf{E} \\cdot d\\mathbf{a}$ on the surface?",
+                  options: [
+                    { id: "A", text: "$E \\, da$", isCorrect: true, explanation: "E and da both point radially outward, so cos(0)=1." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "Since $\\mathbf{E}$ is radial, $\\mathbf{E} \\cdot d\\mathbf{a} = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} da$."
+                },
+                {
+                  stepText: "Integrating over the sphere, $\\int da = 4\\pi r^2$."
+                },
+                {
+                  stepText: "Multiply them: $\\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} (4\\pi r^2)$. The $4\\pi r^2$ completely cancels out, leaving exactly $q/\\epsilon_0$. Goal reached!"
+                }
               ]
-            }
+            },
+            { id: "s6", type: "quiz", title: "Charges Outside", content: "If a charge $q$ is placed OUTSIDE the closed surface, what is its contribution to the net flux?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "Its field lines enter one side and exit the other, netting zero." }, { id: "B", text: "q / eps_0", isCorrect: false, explanation: "Only enclosed charge matters." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Gauss's Law states that the flux through a closed surface is proportional to the ___ charge.", blankAnswer: "enclosed" }
           ]
         },
         {
-          "id": "lesson-2-3-3-worked-example",
-          "title": "Worked Example 11.3",
-          "description": "Calculating amplitude decay over time.",
-          "icon": "PenTool",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "The Problem",
-              "content": "An underdamped harmonic oscillator has $k = 2$ N/m, $m = 1$ kg, and $b = 0.1$ kg/s.\n\nHow many oscillations does the system make before the amplitude decreases to $1/e$ of its initial value?"
+          id: "les-6-4-gauss-diff", title: "Gauss's Law (Differential)", description: "Local charge density", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Gauss's theorem (from calculus) converts a closed surface integral into a...", options: [ { id: "A", text: "Line integral", isCorrect: false, explanation: "" }, { id: "B", text: "Volume integral of a divergence", isCorrect: true, explanation: "$\\oint \\mathbf{v} \\cdot d\\mathbf{a} = \\int (\\nabla \\cdot \\mathbf{v}) d\\tau$" } ] },
+            { id: "s2", type: "theory", title: "Gauss's Law (Differential Form)", content: "By applying the divergence theorem to the integral form of Gauss's Law, we obtain its differential form:\n\n$\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}$\n\nThis states that the divergence of the electric field at any point in space is equal to the volume charge density $\\rho$ at that exact point divided by $\\epsilon_0$." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Derivation: Differential Form", 
+              content: "**Goal: Convert Integral Gauss to Differential Gauss.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Start with $\\oint \\mathbf{E} \\cdot d\\mathbf{a} = \\frac{1}{\\epsilon_0} Q_{enc}$."
+                },
+                {
+                  stepText: "Rewrite $Q_{enc}$ as a volume integral of charge density: $Q_{enc} = \\int_V \\rho \\, d\\tau$."
+                },
+                {
+                  prompt: "Use the Divergence Theorem on the left side. What does $\\oint \\mathbf{E} \\cdot d\\mathbf{a}$ become?",
+                  options: [
+                    { id: "A", text: "$\\int_V (\\nabla \\cdot \\mathbf{E}) d\\tau$", isCorrect: true, explanation: "Converts surface flux to volume divergence." },
+                    { id: "B", text: "$\\int_V (\\nabla \\times \\mathbf{E}) d\\tau$", isCorrect: false, explanation: "That's curl, not divergence." }
+                  ],
+                  stepText: "We get $\\int_V (\\nabla \\cdot \\mathbf{E}) d\\tau = \\int_V \\frac{\\rho}{\\epsilon_0} d\\tau$."
+                },
+                {
+                  stepText: "Since this holds for ANY arbitrary volume V, the integrands must be equal: $\\nabla \\cdot \\mathbf{E} = \\rho / \\epsilon_0$. Goal reached!"
+                }
+              ]
             },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We need to find the time it takes to reach $1/e$, and then divide by the period of one oscillation.",
-              "interactiveSteps": [
+            { id: "s6", type: "quiz", title: "Meaning of Differential Form", content: "What does $\\nabla \\cdot \\mathbf{E} = \\rho / \\epsilon_0$ mean physically?", options: [ { id: "A", text: "Electric fields swirl around charges.", isCorrect: false, explanation: "Divergence measures outflow, not swirl." }, { id: "B", text: "Electric charge acts as a local source (or sink) of electric field lines.", isCorrect: true, explanation: "Exactly." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The differential form of Gauss's law relates the ___ of the electric field to the charge density.", blankAnswer: "divergence" }
+          ]
+        },
+        {
+          id: "les-6-5-div-direct", title: "Divergence of E (Direct)", description: "Using the Dirac Delta", icon: "Target",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "We know $\\nabla \\cdot (\\mathbf{\\hat{r}}/r^2) = 0$ everywhere EXCEPT at the origin. What is it at the origin?", options: [ { id: "A", text: "0", isCorrect: false, explanation: "There's a source there!" }, { id: "B", text: "Infinity (handled by Dirac delta)", isCorrect: true, explanation: "It blows up to create a finite flux." } ] },
+            { id: "s2", type: "theory", title: "Direct Calculation", content: "If we calculate the divergence of $\\mathbf{E}$ directly from Coulomb's Law, we encounter the term $\\nabla \\cdot \\left(\\frac{\\boldsymbol{\\hat{\\cal{r}}}}{\\cal{r}^2}\\right)$.\n\nFrom Chapter 1, we know this is exactly $4\\pi\\delta^3(\\boldsymbol{\\cal{r}})$.\n\n$\\nabla \\cdot \\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\int \\nabla \\cdot \\left(\\frac{\\boldsymbol{\\hat{\\cal{r}}}}{\\cal{r}^2}\\right) \\rho(\\mathbf{r}') d\\tau'$\nThis simplifies exactly to $\\rho(\\mathbf{r})/\\epsilon_0$." },
+            { id: "s6", type: "quiz", title: "Dirac Delta Magic", content: "What happens when you integrate a function $f(x)$ multiplied by $\\delta(x-a)$?", options: [ { id: "A", text: "You get 0", isCorrect: false, explanation: "" }, { id: "B", text: "You get f(a)", isCorrect: true, explanation: "The delta function picks out the value of the function at the spike." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The mathematical function used to represent the density of a point charge is the ___ Delta function.", blankAnswer: "Dirac" }
+          ]
+        },
+        {
+          id: "les-6-6-symmetry", title: "Symmetry & Gauss's Law", description: "When is Gauss's Law useful?", icon: "Maximize",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Is Gauss's Law ALWAYS true?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "It's a fundamental law of physics." }, { id: "B", text: "No, only for symmetrical objects", isCorrect: false, explanation: "It is always true, but only USEFUL for symmetric objects." } ] },
+            { id: "s1", type: "quiz", title: "Warm-up 2", content: "If Gauss's law is always true, why don't we use it for every problem?", options: [ { id: "A", text: "Because we can't pull |E| out of the integral without symmetry.", isCorrect: true, explanation: "If E varies over the surface, you can't solve for it." }, { id: "B", text: "Because it's mathematically harder.", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "The Three Symmetries", content: "Gauss's law is always true, but it is only *useful* for calculating fields when symmetry allows us to pull $|\\mathbf{E}|$ outside the integral.\n\nThis requires the field magnitude to be constant over the chosen Gaussian surface. There are only three symmetries that work:\n1. **Spherical symmetry**: Use a concentric Gaussian sphere.\n2. **Cylindrical symmetry**: Use a coaxial Gaussian cylinder.\n3. **Plane symmetry**: Use a Gaussian 'pillbox' straddling the surface." },
+            { id: "s6", type: "quiz", title: "Choosing a surface", content: "For a uniformly charged infinite straight wire, what Gaussian surface should you choose?", options: [ { id: "A", text: "A sphere", isCorrect: false, explanation: "The field is not constant over a sphere here." }, { id: "B", text: "A cylinder", isCorrect: true, explanation: "The field is constant at a fixed radius from the wire." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "To use Gauss's law effectively, we choose a Gaussian surface over which the magnitude of the electric field is ___.", blankAnswer: "constant" }
+          ]
+        },
+        {
+          id: "les-6-7-sphere-out", title: "Example: Solid Sphere (Outside)", description: "Applying spherical symmetry", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.3", content: "**Problem:** Find the electric field outside a uniformly charged solid sphere of radius $R$ and total charge $q$.\n\n*Hint:* Draw a Gaussian sphere of radius $r > R$." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find E outside the sphere.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The amplitude function is $A(t) = A_0 e^{-\\gamma t}$. We want the time $t$ when $A(t) = \\frac{1}{e}A_0$."
+                  stepText: "Draw a Gaussian sphere of radius $r > R$. The enclosed charge is simply $q$."
                 },
                 {
-                  "prompt": "Using $e^{-\\gamma t} = e^{-1}$, what is the time $t$ in terms of the damping coefficient $\\gamma$?",
-                  "stepText": "$t = 1/\\gamma$.",
-                  "options": [
-                    { "id": "A", "text": "$t = 1/\\gamma$", "isCorrect": true, "explanation": "Since $-\\gamma t = -1$, $t = 1/\\gamma$." },
-                    { "id": "B", "text": "$t = \\gamma$", "isCorrect": false, "explanation": "Check the algebra." }
-                  ]
+                  prompt: "By symmetry, which way does $\\mathbf{E}$ point?",
+                  options: [
+                    { id: "A", text: "Radially outward", isCorrect: true, explanation: "There is no preferred 'north/south' or 'east/west' direction." },
+                    { id: "B", text: "Along the z-axis", isCorrect: false, explanation: "The sphere is symmetric in all directions." }
+                  ],
+                  stepText: "$\\mathbf{E}$ points radially outward, parallel to $d\\mathbf{a}$."
                 },
                 {
-                  "prompt": "Recall that $\\gamma = \\frac{b}{2m}$. Calculate the value of $t$ using the given numbers ($m=1, b=0.1$).",
-                  "stepText": "$\\gamma = \\frac{0.1}{2(1)} = 0.05$. Therefore $t = 1/0.05 = 20$ seconds.",
-                  "options": [
-                    { "id": "A", "text": "$t = 10$ s", "isCorrect": false, "explanation": "You forgot the $2$ in the denominator of $\\gamma$." },
-                    { "id": "B", "text": "$t = 20$ s", "isCorrect": true, "explanation": "Correct. $1 / 0.05 = 20$." }
-                  ]
+                  stepText: "So $\\oint \\mathbf{E} \\cdot d\\mathbf{a} = \\oint |E| da = |E| \\oint da = |E| (4\\pi r^2)$."
                 },
                 {
-                  "stepText": "Now we need the number of oscillations. First, calculate the damped frequency: $\\omega_1 = \\sqrt{k/m - \\gamma^2} = \\sqrt{2 - 0.05^2} \\approx \\sqrt{1.9975} \\approx 1.413$ rad/s."
+                  stepText: "By Gauss's Law: $|E| (4\\pi r^2) = \\frac{q}{\\epsilon_0}$. Thus $\\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\mathbf{\\hat{r}}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Amazing Fact", content: "What is remarkable about this result?", options: [ { id: "A", text: "It is zero.", isCorrect: false, explanation: "" }, { id: "B", text: "The field outside is exactly the same as if all charge were concentrated at the center.", isCorrect: true, explanation: "Just like a point charge!" } ] }
+          ]
+        },
+        {
+          id: "les-6-8-sphere-in", title: "Example: Solid Sphere (Inside)", description: "Field inside a volume charge", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 2.13", content: "**Problem:** Find the electric field *inside* a uniformly charged solid sphere of radius $R$ and total charge $q$.\n\n*Hint:* For a Gaussian sphere of radius $r < R$, how much charge is enclosed?" },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find E inside the sphere ($r < R$).**", 
+              interactiveSteps: [
+                {
+                  stepText: "Draw a Gaussian sphere of radius $r < R$ inside the object. The LHS of Gauss's Law is still $|E| 4\\pi r^2$."
                 },
                 {
-                  "stepText": "Total radians covered in 20 seconds is $\\omega_1 t = 1.413 \\times 20 = 28.26$ radians."
+                  prompt: "Is the enclosed charge $q$?",
+                  options: [
+                    { id: "A", text: "Yes", isCorrect: false, explanation: "The Gaussian sphere doesn't cover the whole object." },
+                    { id: "B", text: "No, it's only a fraction of the total charge.", isCorrect: true, explanation: "We only enclose the charge within radius r." }
+                  ],
+                  stepText: "The enclosed charge is $Q_{enc} = \\rho V_{enc}$."
                 },
                 {
-                  "prompt": "One full oscillation is $2\\pi$ radians. How many oscillations is $28.26$ radians?",
-                  "stepText": "Number of oscillations = $28.26 / (2\\pi) \\approx 4.5$.",
-                  "options": [
-                    { "id": "A", "text": "4.5 oscillations", "isCorrect": true, "explanation": "Correct! $28.26 / 6.28 \\approx 4.5$." },
-                    { "id": "B", "text": "9.0 oscillations", "isCorrect": false, "explanation": "You divided by $\\pi$ instead of $2\\pi$." }
-                  ]
+                  stepText: "Since $\\rho = \\frac{q}{\\frac{4}{3}\\pi R^3}$ and $V_{enc} = \\frac{4}{3}\\pi r^3$, we get $Q_{enc} = q \\frac{r^3}{R^3}$."
+                },
+                {
+                  stepText: "Equating: $|E| 4\\pi r^2 = \\frac{1}{\\epsilon_0} q \\frac{r^3}{R^3} \\implies \\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\frac{q r}{R^3} \\mathbf{\\hat{r}}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Center of the Sphere", content: "Based on the formula $E \\propto r$, what is the electric field at the exact center of the sphere ($r=0$)?", options: [ { id: "A", text: "Infinity", isCorrect: false, explanation: "" }, { id: "B", text: "Zero", isCorrect: true, explanation: "All forces push equally from all sides." } ] }
+          ]
+        },
+        {
+          id: "les-6-9-cylinder", title: "Example: Infinite Cylinder", description: "Applying cylindrical symmetry", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.4", content: "**Problem:** A long cylinder carries a charge density proportional to the distance from the axis: $\\rho = k s$, for some constant $k$. Find the electric field inside." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find E inside the cylinder.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Draw a Gaussian cylinder of length $l$ and radius $s$."
+                },
+                {
+                  stepText: "Integrate to find $Q_{enc}$: $\\int (ks')(s' ds' d\\phi dz) = 2\\pi k l \\int_0^s s'^2 ds' = \\frac{2}{3}\\pi k l s^3$."
+                },
+                {
+                  prompt: "What is the flux $\\oint \\mathbf{E} \\cdot d\\mathbf{a}$ through the Gaussian cylinder?",
+                  options: [
+                    { id: "A", text: "$|E| 2\\pi s l$", isCorrect: true, explanation: "The ends contribute nothing; only the curved surface area matters." },
+                    { id: "B", text: "$|E| \\pi s^2$", isCorrect: false, explanation: "That's the area of the caps, where flux is zero." }
+                  ],
+                  stepText: "The flux is $|E| 2\\pi s l$."
+                },
+                {
+                  stepText: "Equating them: $|E| 2\\pi s l = \\frac{1}{\\epsilon_0} \\frac{2}{3}\\pi k l s^3 \\implies \\mathbf{E} = \\frac{1}{3\\epsilon_0} k s^2 \\mathbf{\\hat{s}}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "End Caps", content: "Why do the flat ends of the Gaussian cylinder contribute nothing to the flux?", options: [ { id: "A", text: "The field is zero there", isCorrect: false, explanation: "" }, { id: "B", text: "The field is parallel to the end caps", isCorrect: true, explanation: "E points radially outward (s-hat), which is perpendicular to the normal (z-hat) of the caps." } ] }
+          ]
+        },
+        {
+          id: "les-6-10-plane", title: "Example: Infinite Plane", description: "Applying planar symmetry", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.5", content: "**Problem:** An infinite plane carries a uniform surface charge $\\sigma$. Find its electric field." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find E for an infinite sheet.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Draw a 'Gaussian pillbox' extending equal distances above and below the plane, with cross-sectional area $A$."
+                },
+                {
+                  prompt: "By symmetry, E must point strictly away from the plane. Which parts of the pillbox have non-zero flux?",
+                  options: [
+                    { id: "A", text: "The sides", isCorrect: false, explanation: "E is parallel to the sides." },
+                    { id: "B", text: "The top and bottom lids", isCorrect: true, explanation: "E pierces straight through the lids." }
+                  ],
+                  stepText: "Only the top and bottom lids contribute. Total flux = $2 A |E|$."
+                },
+                {
+                  stepText: "The enclosed charge is $Q_{enc} = \\sigma A$."
+                },
+                {
+                  stepText: "Gauss's Law: $2 A |E| = \\frac{\\sigma A}{\\epsilon_0} \\implies \\mathbf{E} = \\frac{\\sigma}{2\\epsilon_0} \\mathbf{\\hat{n}}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Distance Dependence", content: "Does the field of an infinite plane depend on how far away you are ($z$)?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Look at the formula." }, { id: "B", text: "No", isCorrect: true, explanation: "The formula is simply $\\sigma / 2\\epsilon_0$, which is constant!" } ] },
+            { id: "s3", type: "theory", title: "Why constant?", content: "It seems surprising that the field doesn't fall off. But as you move farther away, more and more of the infinite charge comes into your 'field of view', exactly compensating for the $1/r^2$ drop-off of individual pieces." }
+          ]
+        },
+        {
+          id: "les-6-11-two-planes", title: "Example: Two Parallel Planes", description: "Superposition of infinite sheets", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.6", content: "**Problem:** Two infinite parallel planes carry equal but opposite uniform charge densities $+\\sigma$ and $-\\sigma$. Find the field (i) to the left, (ii) between them, and (iii) to the right." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Apply superposition to the fields.**", 
+              interactiveSteps: [
+                {
+                  stepText: "From the previous example, a single plate produces a constant field $E = \\frac{\\sigma}{2\\epsilon_0}$ pointing away from positive, toward negative."
+                },
+                {
+                  prompt: "In the region strictly BETWEEN the plates, what are the directions of the two fields?",
+                  options: [
+                    { id: "A", text: "They point in opposite directions", isCorrect: false, explanation: "Think about the signs of the plates." },
+                    { id: "B", text: "They point in the same direction (towards the negative plate)", isCorrect: true, explanation: "The + plate pushes right, the - plate pulls right." }
+                  ],
+                  stepText: "Between the plates, they add up: $\\frac{\\sigma}{2\\epsilon_0} + \\frac{\\sigma}{2\\epsilon_0} = \\frac{\\sigma}{\\epsilon_0}$."
+                },
+                {
+                  stepText: "Outside the plates (regions i and iii), the fields point in opposite directions and exactly cancel each other out to 0. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Capacitor Field", content: "This configuration (two parallel plates) is a simple model for a:", options: [ { id: "A", text: "Capacitor", isCorrect: true, explanation: "Ideal parallel plate capacitor." }, { id: "B", text: "Solenoid", isCorrect: false, explanation: "" } ] }
+          ]
+        },
+        {
+          id: "les-6-12-curl-line", title: "Line Integral of E", description: "Evaluating closed loops", icon: "RotateCw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you move a charge in a closed loop in a purely electrostatic field, what is the net work done?", options: [ { id: "A", text: "Positive", isCorrect: false, explanation: "" }, { id: "B", text: "Zero", isCorrect: true, explanation: "Electrostatic fields are conservative." } ] },
+            { id: "s2", type: "theory", title: "Line Integral of Point Charge", content: "Let's calculate the line integral of $\\mathbf{E}$ for a point charge from $\\mathbf{a}$ to $\\mathbf{b}$.\n\n$\\mathbf{E} = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} \\mathbf{\\hat{r}}$\n$d\\mathbf{l} = dr\\mathbf{\\hat{r}} + r d\\theta\\mathbf{\\hat{\\theta}} + r\\sin\\theta d\\phi\\mathbf{\\hat{\\phi}}$\n\nBecause $\\mathbf{E}$ is entirely radial, $\\mathbf{E} \\cdot d\\mathbf{l} = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2} dr$." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Integration", 
+              content: "**Goal: Evaluate $\\int_a^b \\mathbf{E} \\cdot d\\mathbf{l}$**", 
+              interactiveSteps: [
+                {
+                  stepText: "We need to integrate $\\frac{q}{4\\pi\\epsilon_0} \\int_{r_a}^{r_b} \\frac{1}{r^2} dr$."
+                },
+                {
+                  prompt: "What is the integral of $1/r^2$?",
+                  options: [
+                    { id: "A", text: "-1/r", isCorrect: true, explanation: "Power rule: r^(-2) -> -r^(-1)." },
+                    { id: "B", text: "ln(r)", isCorrect: false, explanation: "That's the integral of 1/r." }
+                  ],
+                  stepText: "The integral evaluates to $[-\\frac{1}{r}]_{r_a}^{r_b}$."
+                },
+                {
+                  stepText: "So, $\\int_{\\mathbf{a}}^{\\mathbf{b}} \\mathbf{E} \\cdot d\\mathbf{l} = \\frac{1}{4\\pi\\epsilon_0} (\\frac{q}{r_a} - \\frac{q}{r_b})$."
                 }
               ]
             }
           ]
         },
         {
-          "id": "lesson-2-3-4-overdamped",
-          "title": "The Overdamped Oscillator",
-          "description": "When friction dominates the spring.",
-          "icon": "ArrowDownToLine",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Overdamped Condition",
-              "content": "An oscillator is **overdamped** when the damping is very large: $\\left(\\frac{b}{2m}\\right)^2 > \\frac{k}{m}$.\n\nIn our $\\gamma$ notation, this means $\\gamma^2 > \\omega_0^2$. The term under the square root is positive, so the roots $p_1$ and $p_2$ are strictly real and negative."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Solution",
-              "content": "Let the roots be $-\\gamma_1$ and $-\\gamma_2$. The general solution is a sum of two exponentially decaying terms:\n$$x(t) = C_1 e^{-\\gamma_1 t} + C_2 e^{-\\gamma_2 t}$$\n\nBecause there are no imaginary parts, there are **no sines or cosines**. The mass does not cross the equilibrium point back and forth; it just slowly oozes back toward $x=0$."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive: Finding Constants",
-              "content": "Let's find $C_1$ and $C_2$ for an overdamped mass pulled to $x_0$ and released from rest ($v_0 = 0$).",
-              "interactiveSteps": [
+          id: "les-6-13-path-indep", title: "Path Independence of E", description: "Why paths don't matter", icon: "TrendingUp",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "In the previous lesson, did the result $\\frac{1}{4\\pi\\epsilon_0} (\\frac{q}{r_a} - \\frac{q}{r_b})$ depend on the angular path taken?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Angles don't appear in the formula." }, { id: "B", text: "No", isCorrect: true, explanation: "It only depends on the starting and ending radii." } ] },
+            { id: "s2", type: "theory", title: "Path Independence", content: "Because $\\mathbf{E} \\cdot d\\mathbf{l}$ only picks up the radial component $dr$, the line integral from $\\mathbf{a}$ to $\\mathbf{b}$ depends *only* on the radial distances $r_a$ and $r_b$ from the origin.\n\nIt makes absolutely no reference to the specific path taken between those points. The electrostatic field is **path-independent**." },
+            { id: "s6", type: "quiz", title: "Superposition", content: "If a single point charge's field is path independent, what about a collection of many charges?", options: [ { id: "A", text: "It might depend on path", isCorrect: false, explanation: "" }, { id: "B", text: "It is also path independent", isCorrect: true, explanation: "By the principle of superposition, the sum of path-independent fields is path-independent." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A force field whose line integral is independent of path is called a ___ field.", blankAnswer: "conservative" }
+          ]
+        },
+        {
+          id: "les-6-14-closed-loop", title: "Closed Loop Integral", description: "Zero circulation", icon: "RotateCcw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If a line integral is path-independent, what must its value be around a closed loop?", options: [ { id: "A", text: "Infinity", isCorrect: false, explanation: "" }, { id: "B", text: "Zero", isCorrect: true, explanation: "Start and end points are the same." } ] },
+            { id: "s2", type: "theory", title: "Zero Circulation", content: "Since the integral $\\int_{\\mathbf{a}}^{\\mathbf{b}} \\mathbf{E} \\cdot d\\mathbf{l} = \\frac{1}{4\\pi\\epsilon_0} (\\frac{q}{r_a} - \\frac{q}{r_b})$, what happens if the path is closed?\n\nFor a closed path, point $\\mathbf{a}$ and point $\\mathbf{b}$ are the exact same location, so $r_a = r_b$.\n\nTherefore, $\\oint \\mathbf{E} \\cdot d\\mathbf{l} = 0$." },
+            { id: "s6", type: "quiz", title: "Escher Stairs", content: "Could an electrostatic field push a charge around a loop in a way that it continually gains energy forever (like an Escher staircase)?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "The closed loop integral is exactly zero. You can't extract infinite free energy." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The line integral of the electrostatic field around any closed loop is exactly ___.", blankAnswer: "zero" }
+          ]
+        },
+        {
+          id: "les-6-15-curl-e", title: "Curl of E", description: "Applying Stokes' Theorem", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Stokes' theorem connects a closed line integral to the flux of the...", options: [ { id: "A", text: "Divergence", isCorrect: false, explanation: "" }, { id: "B", text: "Curl", isCorrect: true, explanation: "$\\oint \\mathbf{E} \\cdot d\\mathbf{l} = \\int (\\nabla \\times \\mathbf{E}) \\cdot d\\mathbf{a}$" } ] },
+            { id: "s2", type: "theory", title: "Curl of E", content: "We established that for any closed path, $\\oint \\mathbf{E} \\cdot d\\mathbf{l} = 0$.\n\nBy applying Stokes' Theorem:\n$\\oint \\mathbf{E} \\cdot d\\mathbf{l} = \\int_{\\mathcal{S}} (\\nabla \\times \\mathbf{E}) \\cdot d\\mathbf{a} = 0$\n\nSince this is true for *any* arbitrary surface $\\mathcal{S}$, the integrand itself must be zero:\n$\\nabla \\times \\mathbf{E} = 0$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Significance", 
+              content: "**Goal: Understand what $\\nabla \\times \\mathbf{E} = 0$ means.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "We have $x(t) = C_1 e^{-\\gamma_1 t} + C_2 e^{-\\gamma_2 t}$ and $\\dot{x}(t) = -\\gamma_1 C_1 e^{-\\gamma_1 t} - \\gamma_2 C_2 e^{-\\gamma_2 t}$."
+                  prompt: "If the curl is zero, does the electric field have local 'swirls' or 'eddies'?",
+                  options: [
+                    { id: "A", text: "Yes", isCorrect: false, explanation: "" },
+                    { id: "B", text: "No", isCorrect: true, explanation: "Zero curl means it is irrotational." }
+                  ],
+                  stepText: "Electrostatic fields never swirl back on themselves."
                 },
                 {
-                  "prompt": "At $t=0$, $x(0) = x_0$. What is the resulting equation?",
-                  "stepText": "$x_0 = C_1 + C_2 \\implies C_1 = x_0 - C_2$.",
-                  "options": [
-                    { "id": "A", "text": "$x_0 = C_1 + C_2$", "isCorrect": true, "explanation": "Because $e^0 = 1$." },
-                    { "id": "B", "text": "$x_0 = C_1 - C_2$", "isCorrect": false, "explanation": "The terms are added in the general solution." }
-                  ]
-                },
-                {
-                  "prompt": "At $t=0$, $v_0 = 0$. What is the resulting equation?",
-                  "stepText": "$0 = -\\gamma_1 C_1 - \\gamma_2 C_2 \\implies \\gamma_1 C_1 = -\\gamma_2 C_2$.",
-                  "options": [
-                    { "id": "A", "text": "$0 = C_1 + C_2$", "isCorrect": false, "explanation": "That is the position equation." },
-                    { "id": "B", "text": "$0 = -\\gamma_1 C_1 - \\gamma_2 C_2$", "isCorrect": true, "explanation": "Derived from the velocity equation at t=0." }
-                  ]
-                },
-                {
-                  "stepText": "Solving this system yields $C_1 = -\\frac{\\gamma_2}{\\gamma_1 - \\gamma_2}x_0$ and $C_2 = \\frac{\\gamma_1}{\\gamma_1 - \\gamma_2}x_0$."
+                  stepText: "Because $\\nabla \\times \\mathbf{E} = 0$, we know from vector calculus identities that $\\mathbf{E}$ can always be written as the gradient of a scalar potential. This is a massive simplification we will use in the next section!"
                 }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Overdamped Behavior",
-              "content": "Can an overdamped oscillator ever cross the equilibrium point ($x=0$)?",
-              "options": [
-                { "id": "1", "text": "Yes, it crosses exactly once before stopping.", "isCorrect": false, "explanation": "While it CAN cross once if pushed hard initially, if simply released from rest, it will approach zero asymptotically without crossing." },
-                { "id": "2", "text": "No, it just decays toward zero asymptotically.", "isCorrect": true, "explanation": "Without a violent initial push, the sum of two decaying exponentials from a starting position will smoothly approach 0 but never cross it." },
-                { "id": "3", "text": "Yes, it oscillates but very slowly.", "isCorrect": false, "explanation": "There is strictly no oscillation." }
               ]
             }
           ]
         },
         {
-          "id": "lesson-2-3-5-critical-damping",
-          "title": "Critically Damped Oscillator",
-          "description": "The exact boundary between oscillating and not oscillating.",
-          "icon": "Crosshair",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Critical Damping Condition",
-              "content": "Critical damping occurs exactly when $\\left(\\frac{b}{2m}\\right)^2 = \\frac{k}{m}$.\n\nHere, the term under the square root is exactly zero. We define $\\gamma_c = \\frac{b}{2m} = \\omega_0$. The auxiliary equation yields a single, repeated root: $p = -\\gamma_c$."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Solution for Repeated Roots",
-              "content": "When a second-order differential equation has a repeated root, the general solution requires a factor of $t$ in the second term to maintain linear independence:\n$$x(t) = C_1 e^{-\\gamma_c t} + C_2 t e^{-\\gamma_c t}$$\n\nor\n\n$$x(t) = (C_1 + C_2 t)e^{-\\gamma_c t}$$"
-            },
-            {
-              "id": "s3-numerical",
-              "type": "numerical",
-              "title": "Critical Damping Constant",
-              "content": "For a system to be critically damped, $b = 2m\\sqrt{k/m} = 2\\sqrt{km}$.\n\nIf a car's suspension has a mass $m = 500$ kg and a spring constant $k = 2000$ N/m, what must the shock absorber's damping coefficient $b$ be to achieve critical damping?",
-              "numericAnswer": 2000,
-              "numericTolerance": 10
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Why Critical Damping?",
-              "content": "Why do engineers often design systems (like car suspensions or closing doors) to be critically damped rather than overdamped?",
-              "options": [
-                { "id": "1", "text": "It uses less fluid in the shock absorbers.", "isCorrect": false, "explanation": "Fluid volume isn't the primary physics reason." },
-                { "id": "2", "text": "It returns the system to equilibrium in the fastest possible time without oscillating.", "isCorrect": true, "explanation": "Overdamped systems are 'sluggish' and take a long time to return to 0. Critically damped is the mathematically fastest return without bouncing." },
-                { "id": "3", "text": "It allows for a small, comfortable amount of bouncing.", "isCorrect": false, "explanation": "Critical damping prevents all bouncing." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-3-6-damping-summary",
-          "title": "Damping Summary & Exercises",
-          "description": "Comparing the three regimes.",
-          "icon": "Layers",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Three Regimes",
-              "content": "Let $\\gamma = b/2m$ and $\\omega_0 = \\sqrt{k/m}$.\n\n1. **Underdamped:** $\\gamma < \\omega_0$. Oscillates. $x(t) = A e^{-\\gamma t}\\cos(\\omega_1 t + \\theta)$.\n2. **Critically Damped:** $\\gamma = \\omega_0$. Fastest decay, no oscillation. $x(t) = (C_1 + C_2 t)e^{-\\gamma t}$.\n3. **Overdamped:** $\\gamma > \\omega_0$. Slow decay, no oscillation. $x(t) = C_1 e^{-\\gamma_1 t} + C_2 e^{-\\gamma_2 t}$."
-            },
-            {
-              "id": "s2-q",
-              "type": "example_q",
-              "title": "Exercise 11.17",
-              "content": "A critically damped harmonic oscillator has $b=0.3$ kg/s and $k=0.4$ N/m. It is released from rest at $x=0.04$ m. \n\nEvaluate the constants $C_1$ and $C_2$ in $x(t) = (C_1 + C_2 t)e^{-\\gamma t}$."
-            },
-            {
-              "id": "s3-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "First, we must find $\\gamma_c$.",
-              "interactiveSteps": [
-                {
-                  "prompt": "For critical damping, $\\frac{b^2}{4m^2} = \\frac{k}{m} \\implies m = \\frac{b^2}{4k}$. Calculate $m$.",
-                  "stepText": "$m = \\frac{0.3^2}{4(0.4)} = \\frac{0.09}{1.6} = 0.05625$ kg.",
-                  "options": [
-                    { "id": "A", "text": "$0.05625$ kg", "isCorrect": true, "explanation": "Correct calculation." },
-                    { "id": "B", "text": "$0.56$ kg", "isCorrect": false, "explanation": "Check the decimal places." }
-                  ]
-                },
-                {
-                  "stepText": "Now calculate $\\gamma_c = b / 2m = 0.3 / (2 \\times 0.05625) = 2.667$ s$^{-1}$."
-                },
-                {
-                  "stepText": "At $t=0$, $x = C_1 = 0.04$."
-                },
-                {
-                  "prompt": "Velocity is $\\dot{x} = C_2 e^{-\\gamma_c t} - \\gamma_c(C_1 + C_2 t)e^{-\\gamma_c t}$. Since $v_0 = 0$, what is $C_2$?",
-                  "stepText": "$0 = C_2 - \\gamma_c C_1 \\implies C_2 = \\gamma_c C_1 = 2.667 \\times 0.04 = 0.107$.",
-                  "options": [
-                    { "id": "A", "text": "$C_2 = -C_1$", "isCorrect": false, "explanation": "Apply the product rule correctly to the derivative." },
-                    { "id": "B", "text": "$C_2 = \\gamma_c C_1$", "isCorrect": true, "explanation": "Correct. At t=0, the $t$ terms vanish, leaving $C_2 - \\gamma_c C_1 = 0$." }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "s4-blank",
-              "type": "fill_in_blank",
-              "title": "Regimes",
-              "content": "An oscillator that decays to zero as fast as mathematically possible without crossing the equilibrium point is ___ damped.",
-              "blankAnswer": "critically"
-            }
+          id: "les-6-16-maxwell-es", title: "Maxwell's Electrostatic Equations", description: "Summary of Divergence and Curl", icon: "Star",
+          slides: [
+            { id: "s0", type: "quiz", title: "Warm-up 1", content: "According to Helmholtz's theorem, a vector field is uniquely determined if you know its:", options: [ { id: "A", text: "Divergence and Curl", isCorrect: true, explanation: "Knowing both completely defines the field (with boundary conditions)." }, { id: "B", text: "Magnitude and direction at one point", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Maxwell's Equations for Electrostatics", content: "We have now derived the two fundamental differential equations of electrostatics:\n\n1. **Divergence**: $\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\epsilon_0}$ (Gauss's Law)\n2. **Curl**: $\\nabla \\times \\mathbf{E} = 0$ (Irrotational nature)\n\nTogether with the boundary condition that $\\mathbf{E} \\to 0$ far from all charges, these equations completely determine the electrostatic field for any given charge distribution $\\rho$." },
+            { id: "s6", type: "quiz", title: "Moving Charges", content: "Are these two equations exactly correct if the source charges are accelerating rapidly?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "These are for ELECTROSTATICS." }, { id: "B", text: "No", isCorrect: true, explanation: "In electrodynamics, a changing magnetic field creates a non-zero curl of E (Faraday's Law)." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Because $\\nabla \\times \\mathbf{E} = 0$, the electrostatic field is said to be ___.", blankAnswer: "irrotational" }
           ]
         }
       ]
     },
     {
-      "id": "unit-2-4",
-      "title": "The Forced Harmonic Oscillator",
-      "description": "Inhomogeneous equations, driving forces, and resonance.",
-      "color": "duo-red",
-      "lessons": [
+      id: "unit-7-summary-2-2",
+      title: "Section 2 Summary",
+      description: "Recap of Divergence, Curl, and Gauss's Law.",
+      color: "duo-green",
+      lessons: [
         {
-          "id": "lesson-2-4-1-inhomogeneous",
-          "title": "Driven Oscillators & Differential Math",
-          "description": "The math behind forced oscillators.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Forced Oscillator",
-              "content": "If we apply an external driving force $F(t)$ to our system, the equation of motion becomes:\n$$m\\ddot{x} + b\\dot{x} + kx = F(t)$$\n\nThis is an **inhomogeneous** differential equation because the right side is not zero."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Rule 3: Superposition of Solutions",
-              "content": "The solution to an inhomogeneous differential equation is the sum of two parts:\n$$x(t) = x_g(t) + x_p(t)$$\n\n1.  **$x_g(t)$ (General Solution):** The solution to the homogeneous equation (where $F(t) = 0$). Also called the *complementary function*.\n2.  **$x_p(t)$ (Particular Solution):** ANY single function that satisfies the full inhomogeneous equation."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Why add them?",
-              "content": "Let's prove why $x_g + x_p$ is a valid solution.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Let the differential operator be $D = m\\frac{d^2}{dt^2} + b\\frac{d}{dt} + k$. The equation is $D(x) = F(t)$."
-                },
-                {
-                  "prompt": "By definition, what does $D(x_g)$ equal?",
-                  "stepText": "$D(x_g) = 0$, because $x_g$ is the solution to the unforced (homogeneous) equation.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": true, "explanation": "Correct. Homogeneous means it evaluates to 0." },
-                    { "id": "B", "text": "$F(t)$", "isCorrect": false, "explanation": "That is the definition of the particular solution." }
-                  ]
-                },
-                {
-                  "prompt": "By definition, what does $D(x_p)$ equal?",
-                  "stepText": "$D(x_p) = F(t)$, because it is a particular solution to the driven equation.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": false, "explanation": "No, it must satisfy the inhomogeneous part." },
-                    { "id": "B", "text": "$F(t)$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Because the operator $D$ is linear, $D(x_g + x_p) = D(x_g) + D(x_p) = 0 + F(t) = F(t)$. The sum works!"
-                }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Initial Conditions",
-              "content": "When applying initial conditions ($x(0)$ and $v(0)$) to find the constants $C_1$ and $C_2$, which function must you use?",
-              "options": [
-                { "id": "1", "text": "Only the homogeneous solution $x_g(t)$", "isCorrect": false, "explanation": "You must use the complete total motion of the system." },
-                { "id": "2", "text": "Only the particular solution $x_p(t)$", "isCorrect": false, "explanation": "The particular solution rarely contains the arbitrary constants." },
-                { "id": "3", "text": "The full solution $x(t) = x_g(t) + x_p(t)$", "isCorrect": true, "explanation": "Initial conditions apply to the real, total physical state of the system." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-2-constant-force",
-          "title": "Finding Particular Solutions",
-          "description": "Gravity as a constant driving force.",
-          "icon": "ArrowDown",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "A Constant Force",
-              "content": "Suppose a mass hangs from a spring in a constant gravitational field. The driving force is $F(t) = mg$ (a constant).\n\n$$m\\ddot{x} + b\\dot{x} + kx = mg$$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Solution by Inspection",
-              "content": "To find $x_p(t)$, we need *any* function that makes the equation true.\n\nGuess a constant: $x_p = C$. \nThen $\\dot{x}_p = 0$ and $\\ddot{x}_p = 0$.\n\nSubstitute into the equation: $0 + 0 + kC = mg \\implies C = mg/k$.\nSo, $x_p = mg/k$."
-            },
-            {
-              "id": "s3-theory",
-              "type": "theory",
-              "title": "The Full Solution",
-              "content": "The full solution is $x(t) = x_g(t) + mg/k$. \n\nIf underdamped, $x(t) = A e^{-\\gamma t}\\cos(\\omega_1 t + \\theta) + \\frac{mg}{k}$.\n\nPhysically, this just means the mass oscillates around a new, lower equilibrium point shifted by exactly the stretch of the spring under gravity!"
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Calculate the Shift",
-              "content": "A 2 kg mass hangs from a spring with $k = 98$ N/m. \nUsing $g = 9.8$ m/s$^2$, what is the equilibrium shift $x_p$ in meters?",
-              "numericAnswer": 0.2,
-              "numericTolerance": 0.01
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Differential Equations",
-              "content": "Finding a solution by simply looking at the equation and guessing an obvious answer is called solving by ___.",
-              "blankAnswer": "inspection"
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-3-undamped-forced",
-          "title": "Forced Undamped Oscillator",
-          "description": "Sinusoidal driving forces and infinite resonance.",
-          "icon": "Radio",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Sinusoidal Driving Force",
-              "content": "Let's apply a periodic driving force $F(t) = F_0 \\sin \\omega_d t$ to an **undamped** oscillator.\n\n$$m\\ddot{x} + kx = F_0 \\sin \\omega_d t$$\nDividing by $m$ and using $\\omega_0^2 = k/m$:\n$$\\ddot{x} + \\omega_0^2 x = \\frac{F_0}{m} \\sin \\omega_d t$$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Complex Trick",
-              "content": "To solve this, we replace $\\sin \\omega_d t$ with $e^{i\\omega_d t}$, solve the equation, and take the imaginary part of the answer at the end. \n\nLet $\\xi_p(t) = C e^{i\\omega_d t}$. Substituting this in yields:\n$(-\\omega_d^2 + \\omega_0^2)C = \\frac{F_0}{m}$"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Derivation: Amplitude",
-              "content": "Let's isolate the amplitude $C$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "We have $(-\\omega_d^2 + \\omega_0^2)C = \\frac{F_0}{m}$."
-                },
-                {
-                  "prompt": "Solve for C.",
-                  "stepText": "$C = \\frac{F_0 / m}{\\omega_0^2 - \\omega_d^2}$",
-                  "options": [
-                    { "id": "A", "text": "$C = \\frac{F_0 / m}{\\omega_0^2 - \\omega_d^2}$", "isCorrect": true, "explanation": "Simple algebraic isolation." },
-                    { "id": "B", "text": "$C = \\frac{F_0 / m}{\\omega_d^2 - \\omega_0^2}$", "isCorrect": false, "explanation": "Check the signs on the omegas." }
-                  ]
-                },
-                {
-                  "stepText": "Taking the imaginary part gives the particular solution: $x_p(t) = \\frac{F_0 / m}{\\omega_0^2 - \\omega_d^2} \\sin \\omega_d t$."
-                }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "The Catastrophe of Resonance",
-              "content": "Looking at the amplitude $\\frac{F_0 / m}{\\omega_0^2 - \\omega_d^2}$, what happens if the driving frequency $\\omega_d$ is exactly equal to the natural frequency $\\omega_0$?",
-              "options": [
-                { "id": "1", "text": "The amplitude becomes zero.", "isCorrect": false, "explanation": "The denominator becomes zero, not the whole fraction." },
-                { "id": "2", "text": "The amplitude becomes infinite.", "isCorrect": true, "explanation": "Division by zero implies the amplitude grows without bound. This is pure resonance in an undamped system." },
-                { "id": "3", "text": "The amplitude stays constant.", "isCorrect": false, "explanation": "It blows up." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-4-damped-forced",
-          "title": "Forced Damped Oscillator",
-          "description": "How friction tames resonance.",
-          "icon": "ActivitySquare",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Adding Damping Back",
-              "content": "Real systems have damping, which prevents the amplitude from actually reaching infinity. \n\n$$m\\ddot{x} + b\\dot{x} + kx = F_0 \\sin \\omega_d t$$\n\nUsing the complex exponential trick $Ce^{i\\omega_d t}$, the first derivative adds an $i\\omega_d b/m$ term to the denominator."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Real Amplitude",
-              "content": "After taking the imaginary part and using trig identities, the steady-state particular solution is:\n$$x_p(t) = A_\\omega \\cos(\\omega_d t - \\phi)$$\nwhere the Amplitude is:\n$$A_\\omega = \\frac{F_0}{\\sqrt{m^2(\\omega_0^2 - \\omega_d^2)^2 + \\omega_d^2 b^2}}$$"
-            },
-            {
-              "id": "s3-canvas",
-              "type": "theory",
-              "title": "Visualization: The Resonance Curve",
-              "content": "Plotting $A^2$ vs $\\omega_d$ shows a peak. Because of the $b^2$ term in the denominator, the peak is finite, not infinite.",
-              "canvasId": "resonance-curve"
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "The Resonant Frequency",
-              "content": "Is the peak amplitude exactly at $\\omega_d = \\omega_0$ for a damped oscillator?",
-              "options": [
-                { "id": "1", "text": "Yes, always.", "isCorrect": false, "explanation": "The extra $\\omega_d^2 b^2$ term shifts the minimum of the denominator slightly." },
-                { "id": "2", "text": "No, it is at a slightly lower frequency.", "isCorrect": true, "explanation": "By taking the derivative of the denominator, we find the peak is actually at $\\omega' = \\sqrt{\\omega_0^2 - b^2/2m^2}$." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-5-q-factor",
-          "title": "The Q Factor",
-          "description": "Measuring the quality of a resonance.",
-          "icon": "Wifi",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "What is the Q Factor?",
-              "content": "The **Q factor** (Quality factor) describes how \"sharp\" the resonance peak is, and inversely, how fast the oscillator loses energy.\n\nDefined by the shape of the curve:\n$$Q = \\frac{\\omega_0}{\\Delta\\omega}$$\nwhere $\\Delta\\omega$ is the full width of the resonance curve at half maximum (FWHM)."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Q in terms of parameters",
-              "content": "Mathematically, the width $\\Delta\\omega$ is approximately $b/m$. Therefore:\n$$Q = \\frac{m\\omega_0}{b}$$\n\n*   **High Q:** Small damping ($b$), sharp thin peak, rings for a long time (like a tuning fork).\n*   **Low Q:** Large damping, broad peak, stops quickly (like a car suspension)."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive: Energy Loss",
-              "content": "Let's see how Q relates to energy loss per cycle in an unforced oscillator.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Energy decays as $E(t) = E_0 e^{-2\\gamma t}$, where $\\gamma = b/2m$."
-                },
-                {
-                  "stepText": "The time for one complete cycle (period) is $T = 2\\pi/\\omega_0$."
-                },
-                {
-                  "prompt": "Substitute $T$ and $\\gamma$ into the exponent $-2\\gamma T$. What is the result?",
-                  "stepText": "$-2\\left(\\frac{b}{2m}\\right)\\left(\\frac{2\\pi}{\\omega_0}\\right) = -\\frac{2\\pi b}{m\\omega_0}$.",
-                  "options": [
-                    { "id": "A", "text": "$-\\frac{2\\pi b}{m\\omega_0}$", "isCorrect": true, "explanation": "Correct substitution." },
-                    { "id": "B", "text": "$-\\pi b m \\omega_0$", "isCorrect": false, "explanation": "Watch the denominators." }
-                  ]
-                },
-                {
-                  "stepText": "Since $Q = \\frac{m\\omega_0}{b}$, the exponent is exactly $-2\\pi / Q$!"
-                },
-                {
-                  "stepText": "Thus, the ratio of energy after one cycle is $\\frac{E}{E_0} = e^{-2\\pi/Q}$."
-                }
-              ]
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Calculate Q",
-              "content": "A bell has a mass of 5 kg, a natural frequency of 100 rad/s, and a damping coefficient $b = 0.5$ kg/s.\n\nCalculate its Q factor.",
-              "numericAnswer": 1000,
-              "numericTolerance": 5
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Audio Electronics",
-              "content": "To tune a radio precisely to one station without interference from a nearby frequency, the circuit needs a very ___ Q factor.",
-              "blankAnswer": "high"
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-6-lrc-circuits",
-          "title": "Application: Electrical Circuits",
-          "description": "The exact analogy between mechanics and electronics.",
-          "icon": "Cpu",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The LRC Circuit",
-              "content": "An electrical circuit with an Inductor ($L$), Resistor ($R$), and Capacitor ($C$) obeys Kirchhoff's voltage law:\n$$L\\frac{d^2q}{dt^2} + R\\frac{dq}{dt} + \\frac{1}{C}q = V_{emf}(t)$$\nwhere $q$ is the charge on the capacitor."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Mechanical Analogy",
-              "content": "Compare this to $m\\ddot{x} + b\\dot{x} + kx = F(t)$:\n\n*   **Charge $q$** $\\iff$ Position $x$\n*   **Current $I=\\dot{q}$** $\\iff$ Velocity $\\dot{x}$\n*   **Inductance $L$** $\\iff$ Mass $m$ (Inertia)\n*   **Resistance $R$** $\\iff$ Damping $b$ (Friction)\n*   **Inverse Capacitance $1/C$** $\\iff$ Spring constant $k$"
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Resonant Frequency of a Circuit",
-              "content": "Based on the mechanical analogy where $\\omega_0 = \\sqrt{k/m}$, what is the natural resonant frequency of an LC circuit?",
-              "options": [
-                { "id": "1", "text": "$\\sqrt{RC}$", "isCorrect": false, "explanation": "Resistance is damping, not the spring constant." },
-                { "id": "2", "text": "$\\sqrt{1/LC}$", "isCorrect": true, "explanation": "Substituting $k = 1/C$ and $m = L$ gives $\\omega_0 = \\sqrt{1/LC}$." },
-                { "id": "3", "text": "$L/C$", "isCorrect": false, "explanation": "Missing the square root." }
-              ]
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Calculate Circuit Resonance",
-              "content": "An RLC series circuit has a $10 \\Omega$ resistor, a $6 \\times 10^{-6}$ F capacitor, and a $0.2$ H inductor.\n\nDetermine the resonant frequency $\\omega_0$ in rad/s.",
-              "numericAnswer": 912.87,
-              "numericTolerance": 2
-            }
+          id: "les-7-1-divcurl-recap", title: "Divergence and Curl Recap", description: "Review of Unit 6", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "What does the divergence of E equal?", options: [ { id: "A", text: "Zero", isCorrect: false, explanation: "" }, { id: "B", text: "rho / epsilon_0", isCorrect: true, explanation: "Gauss's Law in differential form." } ] },
+            { id: "s1", type: "quiz", title: "Knowledge Check 2", content: "What does the curl of a static E field equal?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "Electrostatic fields are irrotational." }, { id: "B", text: "rho / epsilon_0", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Section 2 Summary", content: "**Gauss's Law** states that the flux of $\\mathbf{E}$ through a closed surface is proportional to the enclosed charge ($Q_{enc}/\\epsilon_0$). In differential form, $\\nabla \\cdot \\mathbf{E} = \\rho/\\epsilon_0$. This provides a powerful tool for calculating fields of highly symmetric charge distributions (spheres, cylinders, planes).\n\nFurthermore, the line integral of a static $\\mathbf{E}$ field around any closed loop is zero, meaning the field is path-independent and its **curl is zero** ($\\nabla \\times \\mathbf{E} = 0$)." }
           ]
         }
       ]

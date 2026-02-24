@@ -1,1340 +1,859 @@
+Here are the files and modifications to create **Section 3 of Module III: Problem Solving & Applications (Magnetostatics)**. This section includes 4 units, each containing exactly 16 lessons, covering the examples and exercise problems from Chapter 5. 
 
---- START OF FILE src/data/chapter4_4.ts ---
+I've also created two new interactive canvas arts:
+1. `CycloidMotionInteractive`: Visualizes the incredible cycloid path a particle takes in crossed E and B fields (Example 5.2).
+2. `HelmholtzCoilsInteractive`: Visualizes how two current loops combine to create an ultra-uniform magnetic field (Problem 5.50).
+
+### Bash Commands to Create New Files
+*(No new packages required)*
+
+--- START OF FILE src/data/chapter3_3.ts ---
 import { Section } from '../types';
 
-export const SECTION_4_4: Section = {
-  "id": "section-4-4",
-  "title": "Section 4: Comprehensive Accelerated Frames Practice",
-  "description": "Exhaustive collection of all worked examples and exercises regarding non-inertial systems and Foucault pendulums.",
-  "color": "duo-blue",
-  "units": [
+export const SECTION_3_3: Section = {
+  id: "section-3-3",
+  title: "Section 3: Problem Solving & Applications",
+  description: "Comprehensive examples and exercises for Lorentz Force, Biot-Savart, Ampère's Law, and Vector Potential.",
+  color: "duo-red",
+  units: [
     {
-      "id": "unit-4-4-1",
-      "title": "Linearly & Rotating Accelerated Frames",
-      "description": "Deep dive into operator equations, invariant derivatives, and merry-go-round kinematics.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-1-lorentz-problems",
+      title: "Lorentz Force & Currents",
+      description: "Trajectories of moving charges and continuous current distributions.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "l-441-1",
-          "title": "Linear Acceleration Concept",
-          "description": "Defining the position vector relationship.",
-          "icon": "BoxSelect",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Position Transformation",
-              "content": "Given an inertial frame $O$ and a frame $O'$ accelerating linearly, write the vector equation relating the position of a particle $\\mathbf{r}_O$ to its position in the moving frame $\\mathbf{r}_{O'}$ and the frame offset $\\mathbf{r}$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Vector addition from the origin.",
-              "interactiveSteps": [
-                {
-                  "stepText": "To find the particle from $O$, you first draw a vector to $O'$."
-                },
-                {
-                  "prompt": "What is the vector from $O$ to $O'$ called?",
-                  "stepText": "It is $\\mathbf{r}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{r}$", "isCorrect": true, "explanation": "This represents the displacement of the moving frame." },
-                    { "id": "B", "text": "$\\mathbf{r}_{O'}$", "isCorrect": false, "explanation": "That is the position relative to O'." }
-                  ]
-                },
-                {
-                  "stepText": "From $O'$, you draw the local position vector $\\mathbf{r}_{O'}$. The sum is $\\mathbf{r}_O = \\mathbf{r} + \\mathbf{r}_{O'}$."
-                }
-              ]
-            }
+          id: "les-m1-1", title: "Ex 5.1: Cyclotron Motion", description: "Circular orbits", icon: "RefreshCw",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.1", content: "**Problem:** A charge $Q$ moves with speed $v$ in a uniform magnetic field $\\mathbf{B}$ pointing into the page. Describe its motion and find momentum." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Balance Lorentz and Centripetal forces.**", interactiveSteps: [ { stepText: "The force $\\mathbf{F} = Q(\\mathbf{v} \\times \\mathbf{B})$ is always perpendicular to velocity." }, { stepText: "This provides a perfect centripetal force: $F = m\\frac{v^2}{R}$." }, { stepText: "Equate them: $QvB = m\\frac{v^2}{R}$." }, { stepText: "Cancel $v$ and solve for momentum $p = mv$. Result: $p = QBR$. Goal reached!" } ] },
+            { id: "s2", type: "numerical", title: "Momentum", content: "If $Q=1$ C, $B=2$ T, and $R=3$ m, what is the momentum?", numericAnswer: 6, numericTolerance: 0.1 }
           ]
         },
         {
-          "id": "l-441-2",
-          "title": "Linear Fictitious Force",
-          "description": "Deriving the apparent force.",
-          "icon": "TrendingUp",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Fictitious Derivation",
-              "content": "Using $\\mathbf{r}_O = \\mathbf{r} + \\mathbf{r}_{O'}$ and Newton's Second Law, isolate the apparent acceleration $m\\ddot{\\mathbf{r}}_{O'}$ to reveal the fictitious force."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Take time derivatives.",
-              "interactiveSteps": [
-                {
-                  "prompt": "Take the second time derivative of the position equation. What is it?",
-                  "stepText": "$\\ddot{\\mathbf{r}}_O = \\ddot{\\mathbf{r}} + \\ddot{\\mathbf{r}}_{O'}$",
-                  "options": [
-                    { "id": "A", "text": "$\\ddot{\\mathbf{r}}_O = \\ddot{\\mathbf{r}} + \\ddot{\\mathbf{r}}_{O'}$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply by mass $m$: $m\\ddot{\\mathbf{r}}_O = m\\ddot{\\mathbf{r}} + m\\ddot{\\mathbf{r}}_{O'}$. Since $m\\ddot{\\mathbf{r}}_O = \\mathbf{F}$ (the real force)..."
-                },
-                {
-                  "stepText": "Rearrange to isolate the moving frame: $m\\ddot{\\mathbf{r}}_{O'} = \\mathbf{F} - m\\ddot{\\mathbf{r}}$. The term $-m\\ddot{\\mathbf{r}}$ is the fictitious force."
-                }
-              ]
-            },
-            {
-              "id": "s3",
-              "type": "quiz",
-              "title": "Sign Meaning",
-              "content": "The negative sign implies the fictitious force acts in the ___ direction of the frame's acceleration.",
-              "options": [
-                { "id": "1", "text": "Same", "isCorrect": false, "explanation": "" },
-                { "id": "2", "text": "Opposite", "isCorrect": true, "explanation": "If the frame accelerates right, you feel pushed left." }
-              ]
-            }
+          id: "les-m1-2", title: "Ex 5.2: Cycloid Motion", description: "Crossed E and B fields", icon: "Activity",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.2", content: "**Problem:** A particle is released from rest in crossed fields: $\\mathbf{E} = E\\mathbf{\\hat{z}}$ and $\\mathbf{B} = B\\mathbf{\\hat{x}}$. Describe its trajectory." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Set up equations of motion.**", interactiveSteps: [ { stepText: "Initially $v=0$, so $\\mathbf{F}_{mag} = 0$. $\\mathbf{E}$ accelerates it upwards (z-direction)." }, { stepText: "As it gains $v_z$, it feels a magnetic force $\\mathbf{F}_{mag} = Q(v_z\\mathbf{\\hat{z}} \\times B\\mathbf{\\hat{x}}) = Qv_z B\\mathbf{\\hat{y}}$." }, { stepText: "It curves to the right (y-direction). As it moves right, it feels a downward magnetic force $Q(v_y\\mathbf{\\hat{y}} \\times B\\mathbf{\\hat{x}}) = -Qv_y B\\mathbf{\\hat{z}}$." }, { stepText: "This eventually overcomes the E field, pulling it back to $z=0$, bringing it to rest, and the cycle repeats. Goal reached!" } ] },
+            { id: "s2", type: "interactive_canvas", title: "Cycloid Explorer", content: "Watch the particle accelerate upwards via E, and then get curled downwards by B!", interactiveCanvasId: "cycloid-motion-interactive" }
           ]
         },
         {
-          "id": "l-441-3",
-          "title": "Exercise 15.1 (a): Merry-go-round v_rot",
-          "description": "Velocity of a stationary child.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.1 (a)",
-              "content": "A child sits on a wooden horse a distance $R$ from the axis of a merry-go-round rotating at angular velocity $\\mathbf{\\Omega}$.\n\n(a) What is the velocity of the child in the rotating frame?"
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Analyze the motion relative to the horse.",
-              "interactiveSteps": [
-                {
-                  "stepText": "The rotating frame is attached rigidly to the merry-go-round."
-                },
-                {
-                  "prompt": "Is the child moving relative to the wooden horse they are sitting on?",
-                  "stepText": "No, they are sitting still on the horse. Thus, $v_{rot} = 0$.",
-                  "options": [
-                    { "id": "A", "text": "Yes, at speed $\\Omega R$", "isCorrect": false, "explanation": "That is the speed relative to the ground outside the ride." },
-                    { "id": "B", "text": "No, velocity is 0", "isCorrect": true, "explanation": "In the rotating frame, the child's position vector is constant." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m1-3", title: "Ex 5.3: Magnetic Crane", description: "Magnetic forces do no work", icon: "ArrowUpRight",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.3", content: "**Problem:** A rectangular loop hangs vertically in a B field pointing into the page. If current $I$ flows, it lifts a mass $m$. Does the B field do work?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Resolve the work paradox.**", interactiveSteps: [ { stepText: "The upward magnetic force is $F = I B a$. It balances $mg$." }, { stepText: "When it lifts the mass, the wire moves up at speed $u$." }, { stepText: "The charges now have velocity $\\mathbf{v} = w\\mathbf{\\hat{x}} + u\\mathbf{\\hat{z}}$." }, { stepText: "The magnetic force tilts backwards! It provides vertical lift, but creates a HORIZONTAL drag $quB$ opposing the current." }, { stepText: "The battery must push against this drag. The battery does the work, the magnetic field just redirects it. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-4",
-          "title": "Exercise 15.1 (b): Merry-go-round v_i",
-          "description": "Inertial velocity calculation.",
-          "icon": "ArrowRight",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.1 (b)",
-              "content": "For the same child sitting still on the merry-go-round at radius $R$:\n\n(b) What is the velocity of the child in the inertial frame?"
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Apply the transformation $\\mathbf{v}_i = \\mathbf{v}_r + \\mathbf{\\Omega} \\times \\mathbf{r}$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "We found $\\mathbf{v}_r = 0$."
-                },
-                {
-                  "prompt": "What does the equation reduce to?",
-                  "stepText": "$\\mathbf{v}_i = \\mathbf{\\Omega} \\times \\mathbf{r}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{v}_i = \\mathbf{\\Omega} \\times \\mathbf{r}$", "isCorrect": true, "explanation": "Correct." },
-                    { "id": "B", "text": "$\\mathbf{v}_i = 0$", "isCorrect": false, "explanation": "The Earth is rotating, so the inertial observer sees motion." }
-                  ]
-                },
-                {
-                  "stepText": "Let $\\mathbf{\\Omega} = \\Omega\\mathbf{\\hat{k}}$ and $\\mathbf{r} = R\\mathbf{\\hat{\\rho}}$. The cross product $\\mathbf{\\hat{k}} \\times \\mathbf{\\hat{\\rho}} = \\mathbf{\\hat{\\phi}}$. So $\\mathbf{v}_i = \\Omega R \\mathbf{\\hat{\\phi}}$."
-                }
-              ]
-            }
+          id: "les-m1-4", title: "Ex 5.4: Current Densities", description: "Volume and Surface J", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.4", content: "**Problem:** Find total current $I$ if volume current density is proportional to distance from axis: $J = ks$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate J over the cross-section.**", interactiveSteps: [ { stepText: "Current is $I = \\int \\mathbf{J} \\cdot d\\mathbf{a}$." }, { stepText: "Area element of a circle is $da = s ds d\\phi$." }, { stepText: "$I = \\int_0^{2\\pi} \\int_0^a (ks) s ds d\\phi$." }, { stepText: "$= 2\\pi k \\int_0^a s^2 ds = \\frac{2\\pi k a^3}{3}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-5",
-          "title": "Exercise 15.1 (c): Merry-go-round a_rot",
-          "description": "Acceleration in the rotating frame.",
-          "icon": "Target",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.1 (c)",
-              "content": "(c) What is the apparent acceleration of the child in the rotating frame?"
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Again, analyze the relative motion.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Acceleration is the time derivative of velocity."
-                },
-                {
-                  "prompt": "If the child's velocity in the rotating frame $\\mathbf{v}_r$ is constantly zero, what is $\\mathbf{a}_r$?",
-                  "stepText": "$\\mathbf{a}_r = 0$.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": true, "explanation": "The derivative of zero is zero." },
-                    { "id": "B", "text": "$\\Omega^2 R$", "isCorrect": false, "explanation": "That is the centripetal acceleration seen by the inertial observer." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m1-5", title: "Prob 5.1: Particle Deflection", description: "Finding momentum", icon: "Move",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.1", content: "**Problem:** Charge $q$ enters a uniform B field and is deflected a distance $d$ over width $a$. Find its momentum." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use geometry of cyclotron circle.**", interactiveSteps: [ { stepText: "The path is an arc of a circle of radius $R$." }, { stepText: "From geometry of a chord: $R^2 = (R-d)^2 + a^2$." }, { stepText: "$R^2 = R^2 - 2Rd + d^2 + a^2 \\implies R = \\frac{a^2+d^2}{2d}$." }, { stepText: "Since $p = qBR$, momentum is $p = qB \\frac{a^2+d^2}{2d}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-6",
-          "title": "Exercise 15.1 (d): Merry-go-round a_i (Elementary)",
-          "description": "Basic physics formulation of centripetal acceleration.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.1 (d)",
-              "content": "(d) Determine the acceleration of the child in the inertial frame by elementary methods (using the definition of centripetal acceleration)."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Use standard circular motion formulas.",
-              "interactiveSteps": [
-                {
-                  "stepText": "The child moves in a perfect circle of radius $R$ at speed $v = \\Omega R$."
-                },
-                {
-                  "prompt": "What is the formula for the magnitude of centripetal acceleration?",
-                  "stepText": "$a_c = v^2/R = (\\Omega R)^2/R = \\Omega^2 R$.",
-                  "options": [
-                    { "id": "A", "text": "$v^2/R$", "isCorrect": true, "explanation": "Standard physics formula." },
-                    { "id": "B", "text": "$vR^2$", "isCorrect": false, "explanation": "Incorrect." }
-                  ]
-                },
-                {
-                  "stepText": "Centripetal acceleration points directly toward the center. In cylindrical coordinates, outward is $\\mathbf{\\hat{\\rho}}$, so inward is $-\\mathbf{\\hat{\\rho}}$."
-                },
-                {
-                  "stepText": "Therefore, $\\mathbf{a}_i = -\\Omega^2 R \\mathbf{\\hat{\\rho}}$."
-                }
-              ]
-            }
+          id: "les-m1-6", title: "Prob 5.2: Cycloid Variations", description: "Initial velocities", icon: "TrendingUp",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.2", content: "**Problem:** For Ex 5.2, what if the particle starts with initial velocity $v(0) = (E/B)\\mathbf{\\hat{y}}$?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Check the Lorentz force.**", interactiveSteps: [ { stepText: "Velocity is $\\mathbf{v} = (E/B)\\mathbf{\\hat{y}}$. B is $B\\mathbf{\\hat{x}}$." }, { stepText: "Magnetic force is $q(\\mathbf{v} \\times \\mathbf{B}) = q(E/B\\mathbf{\\hat{y}} \\times B\\mathbf{\\hat{x}}) = -qE\\mathbf{\\hat{z}}$." }, { stepText: "Electric force is $qE\\mathbf{\\hat{z}}$." }, { stepText: "Total force is ZERO! The particle moves in a perfect straight line at constant speed $E/B$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Velocity Filter", content: "This specific setup of crossed fields is used in physics as a:", options: [ { id: "A", text: "Velocity Selector", isCorrect: true, explanation: "Only particles with exactly v = E/B pass through undeflected." }, { id: "B", text: "Mass Spectrometer", isCorrect: false, explanation: "" } ] }
           ]
         },
         {
-          "id": "l-441-7",
-          "title": "Exercise 15.1 (e): Merry-go-round a_i (Operator)",
-          "description": "Using the rigorous operator to find acceleration.",
-          "icon": "Layers",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.1 (e)",
-              "content": "(e) Determine the acceleration of the child in the inertial frame using the operator Equation (15.3)."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Apply the operator to $\\mathbf{v}_i$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "The operator is $\\mathbf{a}_i = \\left[\\frac{d\\mathbf{v}_i}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times \\mathbf{v}_i$. We know $\\mathbf{v}_i = \\Omega R \\mathbf{\\hat{\\phi}}$."
-                },
-                {
-                  "prompt": "Evaluate $\\left[\\frac{d\\mathbf{v}_i}{dt}\\right]_{rot}$. Is $\\mathbf{v}_i$ changing from the perspective of the rotating observer?",
-                  "stepText": "No. To the rotating child, the vector 'Forward' (tangential) always looks exactly the same, and the speed is constant. So this derivative is $0$.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": true, "explanation": "The vector $\\Omega R \\hat{\\phi}$ is entirely static in the rotating frame's basis." },
-                    { "id": "B", "text": "$-\\Omega^2 R \\hat{\\rho}$", "isCorrect": false, "explanation": "That is the rate of change in the inertial frame." }
-                  ]
-                },
-                {
-                  "prompt": "Now evaluate the cross product $\\mathbf{\\Omega} \\times \\mathbf{v}_i$.",
-                  "stepText": "$(\\Omega\\mathbf{\\hat{k}}) \\times (\\Omega R \\mathbf{\\hat{\\phi}}) = \\Omega^2 R (\\mathbf{\\hat{k}} \\times \\mathbf{\\hat{\\phi}}) = -\\Omega^2 R \\mathbf{\\hat{\\rho}}$.",
-                  "options": [
-                    { "id": "A", "text": "$-\\Omega^2 R \\mathbf{\\hat{\\rho}}$", "isCorrect": true, "explanation": "This perfectly matches the elementary derivation." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m1-7", title: "Prob 5.3: J.J. Thomson", description: "Discovering the electron", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.3", content: "**Problem:** In 1897, J.J. Thomson measured $q/m$ for electrons using crossed fields to find $v$, then turning off E to measure cyclotron radius $R$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Solve for $q/m$.**", interactiveSteps: [ { stepText: "Step 1: Crossed fields yield straight path. Thus $v = E/B$." }, { stepText: "Step 2: Turn off E. Particle moves in circle of radius $R$." }, { stepText: "$p = qBR \\implies mv = qBR$." }, { stepText: "Substitute $v = E/B$: $m(E/B) = qBR \\implies q/m = \\frac{E}{B^2 R}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-8",
-          "title": "The Operator Equation Theory",
-          "description": "Understanding the structure of the transformation.",
-          "icon": "FunctionSquare",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "theory",
-              "title": "Operator Structure",
-              "content": "The operator equation is fundamental to rotating frames:\n\n$$\\left[\\frac{d}{dt}\\right]_{inertial} = \\left[\\frac{d}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times$$\n\nIt states that the rate of change of ANY vector in absolute space is equal to its rate of change observed locally, PLUS a geometric term accounting for the fact that the local basis vectors are themselves spinning."
-            },
-            {
-              "id": "s2",
-              "type": "quiz",
-              "title": "Valid Inputs",
-              "content": "Which of the following can be 'plugged into' the empty slot of the operator equation?",
-              "options": [
-                { "id": "1", "text": "Only the position vector $\\mathbf{r}$.", "isCorrect": false, "explanation": "It works for any vector." },
-                { "id": "2", "text": "Any arbitrary vector $\\mathbf{U}$ (velocity, acceleration, momentum, etc).", "isCorrect": true, "explanation": "Because it is a pure geometric transformation between reference frames, it works universally for all vectors." }
-              ]
-            }
+          id: "les-m1-8", title: "Prob 5.4: Square Loop Force", description: "Current in B field", icon: "Square",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.4", content: "**Problem:** Find the force on a square loop (side $a$) in the yz plane carrying current $I$ counter-clockwise. The field is $\\mathbf{B} = kz\\mathbf{\\hat{x}}$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate $d\\mathbf{F} = I(d\\mathbf{l} \\times \\mathbf{B})$.**", interactiveSteps: [ { stepText: "Top side ($z=a/2$): $\\mathbf{B} = k(a/2)\\mathbf{\\hat{x}}$. $d\\mathbf{l} = -dy\\mathbf{\\hat{y}}$. $\\mathbf{F}_{top} = I(-a\\mathbf{\\hat{y}} \\times k\\frac{a}{2}\\mathbf{\\hat{x}}) = Ika^2/2 \\mathbf{\\hat{z}}$." }, { stepText: "Bottom side ($z=-a/2$): $\\mathbf{B} = -k(a/2)\\mathbf{\\hat{x}}$. $d\\mathbf{l} = dy\\mathbf{\\hat{y}}$. $\\mathbf{F}_{bot} = Ika^2/2 \\mathbf{\\hat{z}}$." }, { stepText: "Left and right sides have forces that cancel." }, { stepText: "Total force = $I k a^2 \\mathbf{\\hat{z}}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-9",
-          "title": "Applying the Operator to Position",
-          "description": "Extracting the velocity equation.",
-          "icon": "ArrowRightCircle",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Position Transformation",
-              "content": "Using the operator equation, formally derive the relation between $\\mathbf{v}_i$ and $\\mathbf{v}_r$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Plug $\\mathbf{r}$ into the operator.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Operator: $\\left[\\frac{d}{dt}\\right]_{i} [\\dots] = \\left[\\frac{d}{dt}\\right]_{r} [\\dots] + \\mathbf{\\Omega} \\times [\\dots]$"
-                },
-                {
-                  "prompt": "Substitute $\\mathbf{r}$ into the brackets. What is $\\left[\\frac{d\\mathbf{r}}{dt}\\right]_i$ defined as?",
-                  "stepText": "It is defined as the inertial velocity $\\mathbf{v}_i$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{v}_i$", "isCorrect": true, "explanation": "Definition of velocity in the inertial frame." }
-                  ]
-                },
-                {
-                  "stepText": "Similarly, $\\left[\\frac{d\\mathbf{r}}{dt}\\right]_r$ is the rotating velocity $\\mathbf{v}_r$."
-                },
-                {
-                  "stepText": "Therefore, $\\mathbf{v}_i = \\mathbf{v}_r + \\mathbf{\\Omega} \\times \\mathbf{r}$."
-                }
-              ]
-            }
+          id: "les-m1-9", title: "Prob 5.5: Wire Densities", description: "Surface vs Volume J", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.5", content: "**Problem:** Current $I$ flows down a wire of radius $a$. (a) If uniformly distributed over surface, what is $K$? (b) If volume density $J \\propto 1/s$, what is $J$?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use $I = \\int K dl$ and $I = \\int J da$.**", interactiveSteps: [ { stepText: "(a) Surface: $I = K (2\\pi a) \\implies K = \\frac{I}{2\\pi a}$." }, { stepText: "(b) Volume: Let $J = c/s$. $I = \\int_0^a (c/s) (s ds d\\phi) = 2\\pi c \\int_0^a ds = 2\\pi c a$." }, { stepText: "So $c = \\frac{I}{2\\pi a}$." }, { stepText: "Therefore $J(s) = \\frac{I}{2\\pi a s}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-10",
-          "title": "Exercise 15.2: Omega Part 1",
-          "description": "Applying the operator to the angular velocity vector.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.2",
-              "content": "Prove that the rate of change of the angular velocity of the rotating system is the same in both the inertial and the rotating reference frame."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Plug $\\mathbf{\\Omega}$ into the operator.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Insert $\\mathbf{\\Omega}$ into the operator equation: $\\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{i} = \\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{r} + \\mathbf{\\Omega} \\times \\mathbf{\\Omega}$."
-                },
-                {
-                  "prompt": "By definition of the vector cross product, what is $\\mathbf{\\Omega} \\times \\mathbf{\\Omega}$?",
-                  "stepText": "$0$. The cross product of any vector with itself is the zero vector.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": true, "explanation": "Since the angle is 0, $\\sin(0)=0$." },
-                    { "id": "B", "text": "$|\\mathbf{\\Omega}|^2$", "isCorrect": false, "explanation": "That is the dot product." }
-                  ]
-                },
-                {
-                  "stepText": "Thus, $\\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{i} = \\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{r}$. They are perfectly identical!"
-                }
-              ]
-            }
+          id: "les-m1-10", title: "Prob 5.6: Spinning Charge", description: "Moving electrostatics", icon: "Disc",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.6", content: "**Problem:** A record (radius $R$) carries uniform surface charge $\\sigma$ and spins at $\\omega$. What is the surface current $K$ at radius $r$?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply $K = \\sigma v$.**", interactiveSteps: [ { stepText: "Velocity of a point on the record is $v = \\omega r$." }, { stepText: "The direction is azimuthal, $\\mathbf{\\hat{\\phi}}$." }, { stepText: "$K = \\sigma v = \\sigma \\omega r$." }, { stepText: "$\\mathbf{K} = \\sigma \\omega r \\mathbf{\\hat{\\phi}}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-441-11",
-          "title": "Exercise 15.2: Omega Part 2",
-          "description": "Conceptualizing angular acceleration.",
-          "icon": "Wind",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "theory",
-              "title": "Angular Acceleration Invariance",
-              "content": "Because $\\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{i} = \\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{r}$, angular acceleration is an invariant quantity between these two frames.\n\nIf the Earth's rotation suddenly begins to speed up, a person standing on Earth and an astronaut floating in space will both measure the exact same value for the angular acceleration vector."
-            },
-            {
-              "id": "s2",
-              "type": "quiz",
-              "title": "Why doesn't this apply to velocity?",
-              "content": "Why is angular acceleration invariant, but linear acceleration ($\\mathbf{a}_i$ vs $\\mathbf{a}_r$) is completely different between frames?",
-              "options": [
-                { "id": "1", "text": "Because linear acceleration relies on the vector $\\mathbf{v}_i$, which produces a non-zero cross product $\\mathbf{\\Omega} \\times \\mathbf{v}_i$.", "isCorrect": true, "explanation": "The cross product only vanished for $\\Omega$ because it was crossed with itself. For any other vector, the term survives, altering the values between frames." },
-                { "id": "2", "text": "Because linear acceleration is a scalar.", "isCorrect": false, "explanation": "It is a vector." }
-              ]
-            }
+          id: "les-m1-11", title: "Prob 5.41: Particle near Wire", description: "Complex trajectories", icon: "Minus",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.41", content: "**Problem:** Analyze motion of charge $q$ near an infinite straight wire carrying $I$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Look at conservation laws.**", interactiveSteps: [ { stepText: "Is kinetic energy conserved? Yes, magnetic forces do NO work." }, { stepText: "The B field is $\\frac{\\mu_0 I}{2\\pi s} \\mathbf{\\hat{\\phi}}$." }, { stepText: "Force is $q(\\mathbf{v} \\times \\mathbf{B})$. If the particle moves parallel to the wire, it gets pulled towards it (if q, I same sign)." }, { stepText: "This creates complex helical/drifting motions that require numerical methods to solve fully. Goal reached." } ] }
           ]
         },
         {
-          "id": "l-441-12",
-          "title": "Derivatives of Unit Vectors",
-          "description": "Understanding why the operator works.",
-          "icon": "BoxSelect",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "theory",
-              "title": "The Moving Basis",
-              "content": "The fundamental reason the operator equation exists is because the unit vectors of the rotating frame ($\\mathbf{\\hat{i}'}, \\mathbf{\\hat{j}'}, \\mathbf{\\hat{k}'}$) are spinning relative to the inertial frame.\n\nCalculus shows that the inertial time derivative of a rotating unit vector $\\mathbf{\\hat{e}'}$ is exactly $\\frac{d\\mathbf{\\hat{e}'}}{dt} = \\mathbf{\\Omega} \\times \\mathbf{\\hat{e}'}$."
-            },
-            {
-              "id": "s2",
-              "type": "fill_in_blank",
-              "title": "Product Rule",
-              "content": "When taking the inertial derivative of a vector $\\mathbf{r} = x'\\mathbf{\\hat{i}'} + y'\\mathbf{\\hat{j}'} + z'\\mathbf{\\hat{k}'}$, you must use the product rule because BOTH the coordinates $(x', y', z')$ and the unit ___ are changing over time.",
-              "blankAnswer": "vectors"
-            }
+          id: "les-m1-12", title: "Prob 5.46: Circular B Field", description: "Angular momentum", icon: "Circle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.46", content: "**Problem:** A circularly symmetric B field points perpendicular to the page. Show how a particle entering it gains angular momentum." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use torque.**", interactiveSteps: [ { stepText: "Torque $\\mathbf{N} = \\mathbf{r} \\times \\mathbf{F} = \\mathbf{r} \\times q(\\mathbf{v} \\times \\mathbf{B})$." }, { stepText: "Since $\\mathbf{B} = B(s)\\mathbf{\\hat{z}}$, expanding the cross product shows the change in angular momentum is proportional to the total magnetic flux passed." }, { stepText: "If total flux is zero, the particle exits exactly radially! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m1-13", title: "Prob 5.48: Magnetic Monopole", description: "Hypothetical motion", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.48", content: "**Problem:** Consider the motion of an electric charge $q_e$ in the field of a stationary magnetic monopole $q_m$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Analyze the trajectory.**", interactiveSteps: [ { stepText: "$\\mathbf{B} = \\frac{\\mu_0 q_m}{4\\pi r^2}\\mathbf{\\hat{r}}$." }, { stepText: "Force is $\\mathbf{F} = q_e (\\mathbf{v} \\times \\mathbf{B})$. Note this is always perpendicular to $\\mathbf{r}$." }, { stepText: "The particle orbits on the surface of a cone (a geodesic)." }, { stepText: "This is mathematically equivalent to the Störmer problem (aurora borealis particles hitting Earth's poles). Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m1-14", title: "Prob 5.66: Numerical Verlet", description: "Algorithm for B fields", icon: "Monitor",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.66", content: "**Problem:** Implement a magnetic velocity Verlet algorithm to simulate particle trajectories." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Why a special algorithm?**", interactiveSteps: [ { stepText: "Standard Euler methods fail quickly for magnetic fields because the force depends on velocity, causing energy to mathematically drift." }, { stepText: "Magnetic forces should do NO work (constant speed)." }, { stepText: "The Boris or Magnetic Verlet algorithm explicitly updates position and velocity in half-steps that strictly preserve kinetic energy." }, { stepText: "This allows stable long-term simulation of cycloids and helices! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m1-15", title: "Prob 5.67: Crossed Wires", description: "Intersecting fields", icon: "XSquare",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.67", content: "**Problem:** Infinite wire on y-axis, another on z-axis. Both carry $I$. Plus a constant $\\mathbf{B}_0$. What do the field lines look like?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Chaos.**", interactiveSteps: [ { stepText: "$\\mathbf{B} = B_{wire1} + B_{wire2} + \\mathbf{B}_0$." }, { stepText: "This is a classic problem demonstrating that magnetic field lines in 3D can be completely chaotic." }, { stepText: "They don't form closed loops. A single field line can wander infinitely, filling a volume ergodically. Goal reached." } ] },
+            { id: "s2", type: "quiz", title: "Field lines real?", content: "Does this mean field lines are physical entities?", options: [ { id: "A", text: "No", isCorrect: true, explanation: "They are just visual aids. Real fields are vectors at points." }, { id: "B", text: "Yes", isCorrect: false, explanation: "" } ] }
+          ]
+        },
+        {
+          id: "les-m1-16", title: "Unit Recap: Lorentz Force", description: "Forces and Currents", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check", content: "What is the single most defining physical characteristic of the magnetic force?", options: [ { id: "A", text: "It falls off as 1/r^2", isCorrect: false, explanation: "" }, { id: "B", text: "It does no work", isCorrect: true, explanation: "Because it is perpendicular to velocity." } ] },
+            { id: "s1", type: "theory", title: "Unit 1 Summary", content: "The **Lorentz Force** $\\mathbf{F} = Q(\\mathbf{v} \\times \\mathbf{B})$ dictates that magnetic forces are perpendicular to motion, leading to circular/helical trajectories and zero net work.\n\nWe defined continuous currents using Line ($I$), Surface ($K$), and Volume ($J$) current densities, which obey the continuity equation $\\nabla \\cdot \\mathbf{J} = -\\partial \\rho / \\partial t$. For steady currents, this is zero." }
           ]
         }
       ]
     },
     {
-      "id": "unit-4-4-2",
-      "title": "Fictitious Forces & The Plumb Bob",
-      "description": "Centrifugal force, effective gravity, and detailed analysis of moving bodies on a rotating disc.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-2-biot-savart-problems",
+      title: "Biot-Savart Law Problems",
+      description: "Calculating B-fields for various current geometries.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "l-442-1",
-          "title": "Deriving Fictitious Forces",
-          "description": "Rearranging the acceleration equation.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "The Setup",
-              "content": "Given $\\mathbf{a}_i = \\mathbf{a}_r + 2\\mathbf{\\Omega} \\times \\mathbf{v}_r + \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$ and Newton's law $\\mathbf{F} = m\\mathbf{a}_i$, derive the equation of motion for $\\mathbf{a}_r$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Isolate the rotating acceleration.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Substitute $\\mathbf{a}_i$: $\\mathbf{F} = m[\\mathbf{a}_r + 2\\mathbf{\\Omega} \\times \\mathbf{v}_r + \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})]$."
-                },
-                {
-                  "prompt": "Rearrange to solve for $m\\mathbf{a}_r$. What are the signs of the rotational terms?",
-                  "stepText": "They must both be negative.",
-                  "options": [
-                    { "id": "A", "text": "$m\\mathbf{a}_r = \\mathbf{F} - 2m\\mathbf{\\Omega} \\times \\mathbf{v}_r - m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$", "isCorrect": true, "explanation": "Correctly moved across the equals sign." },
-                    { "id": "B", "text": "$m\\mathbf{a}_r = \\mathbf{F} + 2m\\mathbf{\\Omega} \\times \\mathbf{v}_r + m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$", "isCorrect": false, "explanation": "You didn't flip the signs." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m2-1", title: "Ex 5.5/5.6 Recap", description: "Straight wire and circle", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Biot-Savart Recap", content: "**Recall:** The field of an infinite wire is $B = \\frac{\\mu_0 I}{2\\pi s}$. The field on the axis of a circular loop is $B = \\frac{\\mu_0 I}{2} \\frac{R^2}{(R^2+z^2)^{3/2}}$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply these to harder problems.**", interactiveSteps: [ { stepText: "Most Biot-Savart problems are just superposition of straight lines and circular arcs." }, { stepText: "We will use these base formulas repeatedly." } ] }
           ]
         },
         {
-          "id": "l-442-2",
-          "title": "Defining the Forces",
-          "description": "Identifying Coriolis and Centrifugal terms.",
-          "icon": "Wind",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "theory",
-              "title": "Naming the Terms",
-              "content": "The equation $m\\mathbf{a}_r = \\mathbf{F} + \\mathbf{F}_{cor} + \\mathbf{F}_{cf}$ defines two fictitious forces:\n\n1.  **Coriolis Force:** $\\mathbf{F}_{cor} = -2m\\mathbf{\\Omega} \\times \\mathbf{v}_r$. (Depends on velocity).\n2.  **Centrifugal Force:** $\\mathbf{F}_{cf} = -m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$. (Depends on position)."
-            },
-            {
-              "id": "s2",
-              "type": "quiz",
-              "title": "Identifying Factors",
-              "content": "Which fictitious force acts on a perfectly stationary house on the surface of the Earth?",
-              "options": [
-                { "id": "1", "text": "Only the Centrifugal Force", "isCorrect": true, "explanation": "Because $\\mathbf{v}_r = 0$, the Coriolis force is zero. But $\\mathbf{r} \\neq 0$, so centrifugal exists." },
-                { "id": "2", "text": "Only the Coriolis Force", "isCorrect": false, "explanation": "" },
-                { "id": "3", "text": "Both", "isCorrect": false, "explanation": "" }
-              ]
-            }
+          id: "les-m2-2", title: "Prob 5.8a: Square Loop Center", description: "4 wire segments", icon: "Square",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.8a", content: "**Problem:** Find the magnetic field at the center of a square loop (distance $R$ from center to side)." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Sum 4 finite wires.**", interactiveSteps: [ { stepText: "A finite wire gives $B = \\frac{\\mu_0 I}{4\\pi s}(\\sin\\theta_2 - \\sin\\theta_1)$." }, { stepText: "For one side of a square from the center, $\\theta_1 = -45^\\circ$ and $\\theta_2 = 45^\\circ$." }, { stepText: "$B_{side} = \\frac{\\mu_0 I}{4\\pi R} (\\frac{1}{\\sqrt{2}} - (-\\frac{1}{\\sqrt{2}})) = \\frac{\\mu_0 I}{4\\pi R} \\sqrt{2}$." }, { stepText: "Multiply by 4 sides: $B_{total} = \\frac{\\sqrt{2} \\mu_0 I}{\\pi R}$. Goal reached!" } ] },
+            { id: "s2", type: "numerical", title: "Coefficient", content: "What is the multiplier for $\\frac{\\mu_0 I}{\\pi R}$?", numericAnswer: 1.414, numericTolerance: 0.01 }
           ]
         },
         {
-          "id": "l-442-3",
-          "title": "Worked Example 15.1 (a): Bug v_i",
-          "description": "Re-deriving the bug's velocity.",
-          "icon": "Target",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Worked Example 15.1a Review",
-              "content": "A bug crawls outward on a record player ($\\mathbf{\\Omega}_0 = \\Omega_0 \\mathbf{\\hat{k}}$) at speed $v_b = \\Omega_b r$. \n\nRecall that $\\mathbf{v}_i = \\mathbf{v}_{rot} + \\mathbf{\\Omega}_0 \\times \\mathbf{r}$. Show that this evaluates to $\\mathbf{v}_i = \\Omega_b r \\mathbf{\\hat{\\rho}} + \\Omega_0 r \\mathbf{\\hat{\\phi}}$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Substitute components.",
-              "interactiveSteps": [
-                {
-                  "stepText": "$\\mathbf{v}_{rot}$ points radially outward, so $\\mathbf{v}_{rot} = v_b \\mathbf{\\hat{\\rho}} = \\Omega_b r \\mathbf{\\hat{\\rho}}$."
-                },
-                {
-                  "stepText": "The rotational component is $(\\Omega_0 \\mathbf{\\hat{k}}) \\times (r \\mathbf{\\hat{\\rho}}) = \\Omega_0 r (\\mathbf{\\hat{k}} \\times \\mathbf{\\hat{\\rho}})$."
-                },
-                {
-                  "prompt": "What is $\\mathbf{\\hat{k}} \\times \\mathbf{\\hat{\\rho}}$?",
-                  "stepText": "$\\mathbf{\\hat{\\phi}}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{\\hat{\\phi}}$", "isCorrect": true, "explanation": "Up crossed with Out is Tangential." }
-                  ]
-                },
-                {
-                  "stepText": "Summing them gives the result."
-                }
-              ]
-            }
+          id: "les-m2-3", title: "Prob 5.8b: Polygon Center", description: "n-sided loop", icon: "Circle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.8b", content: "**Problem:** Find the field at the center of a regular $n$-sided polygon." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Generalize the angle.**", interactiveSteps: [ { stepText: "The angle subtended by half a side is $\\theta = \\pi/n$." }, { stepText: "One side gives $B_{side} = \\frac{\\mu_0 I}{4\\pi R} (2\\sin(\\pi/n))$." }, { stepText: "Multiply by $n$ sides: $B = \\frac{n \\mu_0 I}{2\\pi R} \\sin(\\pi/n)$." }, { stepText: "As $n \\to \\infty$, $n\\sin(\\pi/n) \\to \\pi$. Thus $B \\to \\frac{\\mu_0 I}{2R}$, which is exactly a circular loop! Goal reached." } ] }
           ]
         },
         {
-          "id": "l-442-4",
-          "title": "Worked Example 15.1 (b): Bug a_i",
-          "description": "Elementary acceleration derivation.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Worked Example 15.1b Review",
-              "content": "Assume the bug crawling at $v_b$ suddenly stops, so it only moves tangentially at speed $v_i = (\\Omega_b + \\Omega_0)r$.\n\nFind its centripetal acceleration."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Use $a = v^2/r$.",
-              "interactiveSteps": [
-                {
-                  "prompt": "Calculate $v_i^2/r$ using $v_i = (\\Omega_b + \\Omega_0)r$.",
-                  "stepText": "$\\frac{[(\\Omega_b + \\Omega_0)r]^2}{r} = r(\\Omega_b + \\Omega_0)^2$.",
-                  "options": [
-                    { "id": "A", "text": "$r(\\Omega_b + \\Omega_0)^2$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Assign the inward direction $-\\mathbf{\\hat{\\rho}}$ to get $\\mathbf{a}_i = -r(\\Omega_b + \\Omega_0)^2\\mathbf{\\hat{\\rho}}$."
-                }
-              ]
-            }
+          id: "les-m2-4", title: "Prob 5.9a: Hairpin Loop", description: "Two rays and a semi-circle", icon: "UturnRight",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.9a", content: "**Problem:** Find B at the center of a 'hairpin' loop (two infinite wires connected by a semi-circle of radius R)." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superposition of 3 parts.**", interactiveSteps: [ { stepText: "Top wire (half-infinite): $B_1 = \\frac{1}{2} (\\frac{\\mu_0 I}{2\\pi R}) = \\frac{\\mu_0 I}{4\\pi R}$." }, { stepText: "Bottom wire (half-infinite): $B_2 = \\frac{\\mu_0 I}{4\\pi R}$." }, { stepText: "Semi-circle (half-loop): $B_3 = \\frac{1}{2} (\\frac{\\mu_0 I}{2R}) = \\frac{\\mu_0 I}{4R}$." }, { stepText: "Sum: $B = \\frac{\\mu_0 I}{4R} (1 + \\frac{2}{\\pi})$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-442-5",
-          "title": "Worked Example 15.1 (c): Bug [dv/dt]rot",
-          "description": "First half of the operator equation.",
-          "icon": "BoxSelect",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Worked Example 15.1c Step 1",
-              "content": "We must apply the operator to $\\mathbf{v}_i = (\\Omega_b + \\Omega_0)r \\mathbf{\\hat{\\phi}}$.\n\nEvaluate the first term: $\\left[\\frac{d\\mathbf{v}_i}{dt}\\right]_{rot}$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Take the derivative from the perspective of the record.",
-              "interactiveSteps": [
-                {
-                  "stepText": "The only thing changing over time in the rotating frame is the direction of the bug's unit vector $\\mathbf{\\hat{\\phi}}$ as it crawls."
-                },
-                {
-                  "prompt": "Because the bug crawls at angular rate $\\Omega_b$, the derivative of its tangential unit vector is $\\left[\\frac{d\\mathbf{\\hat{\\phi}}}{dt}\\right]_{rot} = -\\Omega_b \\mathbf{\\hat{\\rho}}$. Substitute this in.",
-                  "stepText": "$-r(\\Omega_b + \\Omega_0)\\Omega_b \\mathbf{\\hat{\\rho}}$.",
-                  "options": [
-                    { "id": "A", "text": "$-r(\\Omega_b + \\Omega_0)\\Omega_b \\mathbf{\\hat{\\rho}}$", "isCorrect": true, "explanation": "Correctly replaced the derivative." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m2-5", title: "Prob 5.9b: D-Loop", description: "Semi-circle and straight line", icon: "Minimize",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.9b", content: "**Problem:** Find B at the center of a 'D' shaped loop (semi-circle of radius R and a straight base)." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superposition of 2 parts.**", interactiveSteps: [ { stepText: "Semi-circle: $B_1 = \\frac{\\mu_0 I}{4R}$." }, { stepText: "Straight base (length $2R$, distance $0$ from center? No, if it's a D, the center of the arc is ON the straight line)." }, { stepText: "If the straight line passes through the point P, $d\\mathbf{l} \\times \\mathbf{\\hat{r}} = 0$! It contributes nothing." }, { stepText: "Total $B = \\frac{\\mu_0 I}{4R}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-442-6",
-          "title": "Worked Example 15.1 (c): Cross Product",
-          "description": "Second half of the operator equation.",
-          "icon": "Layers",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Worked Example 15.1c Step 2",
-              "content": "Now evaluate the second term of the operator: $\\mathbf{\\Omega}_0 \\times \\mathbf{v}_i$.\nGiven $\\mathbf{\\Omega}_0 = \\Omega_0 \\mathbf{\\hat{k}}$ and $\\mathbf{v}_i = (\\Omega_b + \\Omega_0)r \\mathbf{\\hat{\\phi}}$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Evaluate the cross product.",
-              "interactiveSteps": [
-                {
-                  "prompt": "What is $\\mathbf{\\hat{k}} \\times \\mathbf{\\hat{\\phi}}$?",
-                  "stepText": "$-\\mathbf{\\hat{\\rho}}$.",
-                  "options": [
-                    { "id": "A", "text": "$-\\mathbf{\\hat{\\rho}}$", "isCorrect": true, "explanation": "Up crossed with Tangential points inward." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply the scalars: $-r(\\Omega_b + \\Omega_0)\\Omega_0 \\mathbf{\\hat{\\rho}}$."
-                }
-              ]
-            }
+          id: "les-m2-6", title: "Prob 5.10a: Force on Square", description: "Wire pulling a loop", icon: "ArrowRight",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.10a", content: "**Problem:** Find force on a square loop (side $a$) near an infinite straight wire (distance $s$). Loop is coplanar." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Sum 4 forces.**", interactiveSteps: [ { stepText: "Wire field $B = \\frac{\\mu_0 I_1}{2\\pi r}$." }, { stepText: "Near side of loop (parallel to wire, distance $s$): attractive force $F_1 = I_2 a B(s) = \\frac{\\mu_0 I_1 I_2 a}{2\\pi s}$." }, { stepText: "Far side (anti-parallel, distance $s+a$): repulsive force $F_2 = - \\frac{\\mu_0 I_1 I_2 a}{2\\pi (s+a)}$." }, { stepText: "Top and bottom sides feel lateral forces that perfectly cancel." }, { stepText: "Net force is attractive: $F_1 - F_2$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-442-7",
-          "title": "Worked Example 15.1 (c): Total Acceleration",
-          "description": "Summing the components.",
-          "icon": "TerminalSquare",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Worked Example 15.1c Step 3",
-              "content": "Add the two terms together to find the final inertial acceleration $\\mathbf{a}_i$.\nTerm 1: $-r(\\Omega_b + \\Omega_0)\\Omega_b \\mathbf{\\hat{\\rho}}$\nTerm 2: $-r(\\Omega_b + \\Omega_0)\\Omega_0 \\mathbf{\\hat{\\rho}}$"
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Factor and simplify.",
-              "interactiveSteps": [
-                {
-                  "prompt": "Factor out the common $-r(\\Omega_b + \\Omega_0)\\mathbf{\\hat{\\rho}}$. What is left?",
-                  "stepText": "$(\\Omega_b + \\Omega_0)$.",
-                  "options": [
-                    { "id": "A", "text": "$(\\Omega_b + \\Omega_0)$", "isCorrect": true, "explanation": "Sum of the two trailing omegas." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply the factored parts: $-r(\\Omega_b + \\Omega_0)^2 \\mathbf{\\hat{\\rho}}$."
-                },
-                {
-                  "stepText": "This perfectly matches the elementary result from Part (b)!"
-                }
-              ]
-            }
+          id: "les-m2-7", title: "Prob 5.10b: Force on Triangle", description: "Angled wires in B field", icon: "Activity",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.10b", content: "**Problem:** Find force on a triangular loop near an infinite wire." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate force on angled sides.**", interactiveSteps: [ { stepText: "Base of triangle is parallel to wire. Force is easy: $F_{base} = \\frac{\\mu_0 I_1 I_2 a}{2\\pi s}$." }, { stepText: "For the angled sides, the B field changes with distance $y$. You must integrate $dF = I (d\\mathbf{l} \\times \\mathbf{B})$." }, { stepText: "Since they slope opposite ways, the lateral forces cancel, and the repulsive parts sum together." }, { stepText: "Result yields a complex logarithmic term subtracting from the base force. Goal reached." } ] }
           ]
         },
         {
-          "id": "l-442-8",
-          "title": "Plumb Bob Forces",
-          "description": "Setting up the tension and gravity balance.",
-          "icon": "Anchor",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "theory",
-              "title": "The Hanging Bob",
-              "content": "A plumb bob hangs at rest on Earth. The equation of motion is $m\\mathbf{a}_r = \\mathbf{T} + m\\mathbf{g} + \\mathbf{F}_{cor} + \\mathbf{F}_{cf}$.\n\nBecause it is at rest, $\\mathbf{a}_r = 0$ and $\\mathbf{F}_{cor} = 0$."
-            },
-            {
-              "id": "s2",
-              "type": "example",
-              "title": "Force Balance",
-              "content": "We are left with $0 = \\mathbf{T} + m\\mathbf{g} - m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$.\n\nThis means the tension must balance BOTH true gravity (pointing to the center of the Earth) AND the centrifugal force (pointing outward from the rotation axis)."
-            },
-            {
-              "id": "s3",
-              "type": "quiz",
-              "title": "Vector Addition",
-              "content": "Because the centrifugal force points outward from the axis (not the center), the vector sum $m\\mathbf{g} + \\mathbf{F}_{cf}$:",
-              "options": [
-                { "id": "1", "text": "Points exactly toward the center of the Earth.", "isCorrect": false, "explanation": "Only if F_cf was parallel to g." },
-                { "id": "2", "text": "Is slightly deflected away from the center.", "isCorrect": true, "explanation": "The outward push causes a slight lateral deflection." }
-              ]
-            }
+          id: "les-m2-8", title: "Prob 5.11: Solenoid Axis", description: "Integrating rings", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.11", content: "**Problem:** Find B on the axis of a finite solenoid (radius $a$, turns $n$). Express in terms of angles $\\theta_1, \\theta_2$ to the ends." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superpose circular loops.**", interactiveSteps: [ { stepText: "Treat solenoid as a stack of rings. $dI = I n dz$." }, { stepText: "$dB = \\frac{\\mu_0 (I n dz)}{2} \\frac{a^2}{(a^2+z^2)^{3/2}}$." }, { stepText: "Substitute $z = a \\cot\\theta$, $dz = -a \\csc^2\\theta d\\theta$." }, { stepText: "Integral simplifies beautifully to $B = \\frac{\\mu_0 n I}{2} \\int_{\\theta_1}^{\\theta_2} \\sin\\theta d\\theta$." }, { stepText: "Result: $B = \\frac{\\mu_0 n I}{2} (\\cos\\theta_2 - \\cos\\theta_1)$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Infinite limit", content: "For an infinite solenoid, $\\theta_1 \\to \\pi$ and $\\theta_2 \\to 0$. What is $\\cos(0) - \\cos(\\pi)$?", options: [ { id: "A", text: "2", isCorrect: true, explanation: "1 - (-1) = 2. This gives the standard mu0 n I." }, { id: "B", text: "0", isCorrect: false, explanation: "" } ] }
           ]
         },
         {
-          "id": "l-442-9",
-          "title": "Effective Gravity Definition",
-          "description": "Lumping real and fictitious gravity together.",
-          "icon": "ArrowDownToLine",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "theory",
-              "title": "Effective Gravity",
-              "content": "To simplify physics on Earth, we define **effective gravitational acceleration** $\\mathbf{g}_e$ as the sum of true gravity and centrifugal acceleration:\n\n$$\\mathbf{g}_e = \\mathbf{g} - \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$$"
-            },
-            {
-              "id": "s2",
-              "type": "quiz",
-              "title": "Measuring g",
-              "content": "When a scientist on Earth drops an apple to measure 'g', what are they actually measuring?",
-              "options": [
-                { "id": "1", "text": "True gravity $\\mathbf{g}$", "isCorrect": false, "explanation": "They cannot turn off the Earth's rotation to isolate true gravity." },
-                { "id": "2", "text": "Effective gravity $\\mathbf{g}_e$", "isCorrect": true, "explanation": "Every measurement on the surface inherently includes the centrifugal force." }
-              ]
-            }
+          id: "les-m2-9", title: "Prob 5.12: Spinning Sphere B", description: "Biot-Savart for sphere", icon: "Globe",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.12", content: "**Problem:** Find B at the center of a spinning spherical shell of radius R and charge Q." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate spinning rings.**", interactiveSteps: [ { stepText: "A spherical shell is made of rings of radius $r = R\\sin\\theta$." }, { stepText: "Surface current $K = \\sigma \\omega R \\sin\\theta$. Ring current $dI = K (R d\\theta)$." }, { stepText: "Use ring formula at center ($z=R\\cos\\theta$): $dB = \\frac{\\mu_0 dI}{2} \\frac{r^2}{(r^2+z^2)^{3/2}}$." }, { stepText: "Integrate over $\\theta$ from $0$ to $\\pi$." }, { stepText: "Result: $B = \\frac{2}{3} \\mu_0 \\sigma \\omega R$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-442-10",
-          "title": "Exercise 15.3: Smooth Spherical Planet",
-          "description": "Why a spherical planet is unstable.",
-          "icon": "Globe",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.3 (a)",
-              "content": "Draw the force diagram for a particle on the surface of a perfectly smooth, spherical, rotating planet and show that the particle accelerates towards the equator."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Decompose the centrifugal force.",
-              "interactiveSteps": [
-                {
-                  "stepText": "On a perfect sphere, the surface is exactly perpendicular to true gravity $\\mathbf{g}$."
-                },
-                {
-                  "stepText": "The centrifugal force points outward from the polar axis. At mid-latitudes, this is NOT perpendicular to the surface."
-                },
-                {
-                  "prompt": "If a force is not perpendicular to a smooth surface, what happens?",
-                  "stepText": "It produces a lateral (tangential) component along the surface.",
-                  "options": [
-                    { "id": "A", "text": "It produces a tangential component.", "isCorrect": true, "explanation": "This tangential force is completely unbalanced." }
-                  ]
-                },
-                {
-                  "stepText": "Because the outward vector is angled towards the equator relative to the surface normal, the unbalanced tangential force pushes all matter towards the equator!"
-                }
-              ]
-            }
+          id: "les-m2-10", title: "Prob 5.13: Moving Line Charges", description: "Magnetic vs Electric force", icon: "Move",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.13", content: "**Problem:** Two infinite line charges $\\lambda$ move at speed $v$. How fast to balance electrical repulsion and magnetic attraction?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Equate $F_{elec} = F_{mag}$.**", interactiveSteps: [ { stepText: "$E = \\frac{\\lambda}{2\\pi\\epsilon_0 d}$. $F_{elec} = \\lambda E$." }, { stepText: "Current $I = \\lambda v$. $B = \\frac{\\mu_0 I}{2\\pi d} = \\frac{\\mu_0 \\lambda v}{2\\pi d}$." }, { stepText: "$F_{mag} = I B = \\lambda v B = \\frac{\\mu_0 \\lambda^2 v^2}{2\\pi d}$." }, { stepText: "Equate: $\\frac{\\lambda^2}{2\\pi\\epsilon_0 d} = \\frac{\\mu_0 \\lambda^2 v^2}{2\\pi d}$." }, { stepText: "$\\frac{1}{\\epsilon_0} = \\mu_0 v^2 \\implies v = \\frac{1}{\\sqrt{\\mu_0 \\epsilon_0}}$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Speed of Light", content: "What is the value of $1/\\sqrt{\\mu_0 \\epsilon_0}$?", options: [ { id: "A", text: "The speed of sound", isCorrect: false, explanation: "" }, { id: "B", text: "The speed of light ($c$)", isCorrect: true, explanation: "Magnetic and electric forces only perfectly balance if charges move at the speed of light!" } ] }
           ]
         },
         {
-          "id": "l-442-11",
-          "title": "Exercise 15.3: Oblate Planet",
-          "description": "How the equatorial bulge creates equilibrium.",
-          "icon": "ActivitySquare",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.3 (b)",
-              "content": "Demonstrate that for a planet with an equatorial bulge, there is no net lateral force."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "The surface tilts to cancel the force.",
-              "interactiveSteps": [
-                {
-                  "stepText": "As matter flows to the equator, the equator bulges, effectively tilting the surface 'uphill' toward the equator."
-                },
-                {
-                  "prompt": "If the surface tilts, what happens to the direction of true gravity relative to the surface?",
-                  "stepText": "True gravity is no longer perfectly perpendicular to the surface; it now has a small tangential component pointing 'downhill' toward the poles.",
-                  "options": [
-                    { "id": "A", "text": "It gains a component pointing to the poles.", "isCorrect": true, "explanation": "Gravity tries to pull matter back down the bulge." }
-                  ]
-                },
-                {
-                  "stepText": "Equilibrium is reached exactly when the 'downhill' pull of true gravity perfectly cancels the 'equator-ward' push of the centrifugal force."
-                },
-                {
-                  "stepText": "At this point, the net effective gravity $\\mathbf{g}_e$ is perfectly perpendicular to the bulged surface everywhere!"
-                }
-              ]
-            }
+          id: "les-m2-11", title: "Prob 5.42: Intersecting Wires", description: "Force between skewed lines", icon: "XSquare",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.42", content: "**Problem:** Two infinite straight wires intersect at an angle $\\alpha$, separated by distance $d$. Find the magnetic force." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Set up the 3D integral.**", interactiveSteps: [ { stepText: "Wire 1 along z-axis. Wire 2 rotated by $\\alpha$ in a plane parallel to xz, offset by $d$ in y." }, { stepText: "Calculate B of Wire 1 at location of Wire 2." }, { stepText: "Evaluate $d\\mathbf{F} = I_2 d\\mathbf{l}_2 \\times \\mathbf{B}_1$." }, { stepText: "The integration from $-\\infty$ to $\\infty$ evaluates to exactly $\\frac{\\mu_0 I_1 I_2}{2} \\cot\\alpha$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-442-12",
-          "title": "Magnitude Calculation",
-          "description": "Calculating the difference in weight at the equator.",
-          "icon": "Calculator",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "numerical",
-              "title": "Weight Difference",
-              "content": "Assume Earth's mass is $5.97 \\times 10^{24}$ kg, $G = 6.67 \\times 10^{-11}$, and radius is $6.37 \\times 10^6$ m. \nTrue gravity at the equator is $g = GM/r^2 \approx 9.814$ m/s$^2$.\n\nCalculate the magnitude of the centrifugal acceleration $\\Omega^2 r$ at the equator (where $\\Omega = 7.27 \\times 10^{-5}$ rad/s).",
-              "numericAnswer": 0.0337,
-              "numericTolerance": 0.001
-            },
-            {
-              "id": "s2",
-              "type": "quiz",
-              "title": "Effective Gravity",
-              "content": "Therefore, the effective gravity $g_e$ at the equator is $g - \Omega^2 r = 9.814 - 0.034 = 9.780$ m/s$^2$. How does this compare to the poles?",
-              "options": [
-                { "id": "1", "text": "It is exactly the same.", "isCorrect": false, "explanation": "Centrifugal force is zero at poles." },
-                { "id": "2", "text": "It is lower than at the poles.", "isCorrect": true, "explanation": "At the poles, $g_e = g$ (actually even higher due to the oblateness bringing the poles closer to the center). This is why you weigh slightly less at the equator!" }
-              ]
-            }
+          id: "les-m2-12", title: "Prob 5.43: Pinch Effect", description: "Why wires don't crush themselves", icon: "Minimize",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.43", content: "**Problem:** Since parallel currents attract, why doesn't a wire contract into a tiny stream (pinch effect)?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Understand relativistic charge density.**", interactiveSteps: [ { stepText: "Positive ions are stationary. Electrons move." }, { stepText: "By special relativity, length contraction increases the electron density $\\rho_-$ slightly." }, { stepText: "This creates a tiny net negative charge, generating an outward electrical repulsion." }, { stepText: "For normal wires, $v \\ll c$, so this effect is negligible, and structural forces keep the wire intact. In plasmas, the pinch effect is huge! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m2-13", title: "Prob 5.44: Hall Effect", description: "Determining charge sign", icon: "Activity",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.44", content: "**Problem:** Current $I$ flows through a rectangular bar in a B field. Find the Hall voltage." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Balance Lorentz and Electric forces.**", interactiveSteps: [ { stepText: "B field pushes moving charges to one side of the bar ($F = qvB$)." }, { stepText: "This buildup creates a transverse electric field $E = V_H / w$." }, { stepText: "Equilibrium: $qE = qvB \\implies V_H/w = vB$." }, { stepText: "Hall voltage $V_H = v B w$. The sign of the voltage reveals if positive or negative charges are flowing! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m2-14", title: "Prob 5.45: Irregular Loop Force", description: "Uniform B field", icon: "Cloud",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.45", content: "**Problem:** A plane wire loop of irregular shape enters a uniform B field. Part is inside, part is outside. Find the force." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Vector displacement.**", interactiveSteps: [ { stepText: "Force is $\\int I(d\\mathbf{l} \\times \\mathbf{B})$." }, { stepText: "Since B is uniform in the shaded region, pull it out: $I (\\int d\\mathbf{l}) \\times \\mathbf{B}$." }, { stepText: "$\\int d\\mathbf{l}$ is just the vector $\\mathbf{w}$ from where the wire enters the field to where it exits!" }, { stepText: "Force is exactly $F = I B w$, as if it were a straight wire spanning the gap. Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m2-15", title: "Prob 5.50: Helmholtz Coil", description: "Uniformizing the B field", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.50", content: "**Problem:** Two circular loops radius $R$ are distance $d$ apart. Find $d$ such that $\\partial^2 B/\\partial z^2 = 0$ midway." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Evaluate derivatives.**", interactiveSteps: [ { stepText: "Total B is the sum of two loop fields: $B(z) = B_{loop}(z - d/2) + B_{loop}(z + d/2)$." }, { stepText: "Take first derivative $\\partial B/\\partial z$. By symmetry at $z=0$, this is naturally 0." }, { stepText: "Take second derivative $\\partial^2 B/\\partial z^2$. Set it to 0 at $z=0$." }, { stepText: "Solving the algebra yields $d = R$. A Helmholtz coil has spacing equal to radius! Goal reached." } ] },
+            { id: "s2", type: "interactive_canvas", title: "Helmholtz Coil Simulator", content: "Adjust the distance between the two coils. Notice how the magnetic field becomes incredibly flat and uniform exactly when d = R.", interactiveCanvasId: "helmholtz-coils-interactive" }
+          ]
+        },
+        {
+          id: "les-m2-16", title: "Unit Recap: Biot-Savart", description: "Superposition and Integration", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check", content: "When using the Biot-Savart law to find the magnetic field of a complex wire shape, you should:", options: [ { id: "A", text: "Give up and use Ampère's law", isCorrect: false, explanation: "Ampère's law only works for perfect symmetry." }, { id: "B", text: "Break the wire into straight and curved segments, and add the B vectors", isCorrect: true, explanation: "Superposition is your best friend." } ] },
+            { id: "s1", type: "theory", title: "Unit 2 Summary", content: "The **Biot-Savart Law** is the brute-force integration tool for Magnetostatics. \n\nBy breaking complex geometries (like polygons, hairpins, and D-loops) into simple lines and arcs, we can evaluate $\\mathbf{B}$ at any point. We also saw how interacting currents create Lorentz forces that pull, push, and create Hall voltages." }
           ]
         }
       ]
     },
     {
-      "id": "unit-4-4-3",
-      "title": "The Coriolis Force & Foucault Pendulum",
-      "description": "Complete derivation of projectile motion and the rotating pendulum plane.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-3-ampere-problems",
+      title: "Ampère's Law Problems",
+      description: "Exploiting symmetry for magnetic fields.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "l-443-1",
-          "title": "Exercise 15.4 (a): Falling Stone",
-          "description": "Coriolis force direction on a dropped object.",
-          "icon": "ArrowDown",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.4 (a)",
-              "content": "Determine the direction of the Coriolis force on a falling stone in the Northern Hemisphere."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "$\\mathbf{f}_c = -2m\\mathbf{\\Omega} \\times \\mathbf{v}$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Velocity $\\mathbf{v}$ is Down ($-\\mathbf{\\hat{k}}$)."
-                },
-                {
-                  "stepText": "$\\mathbf{\\Omega}$ points North ($\\mathbf{\\hat{j}}$) and Up ($\\mathbf{\\hat{k}}$)."
-                },
-                {
-                  "prompt": "Evaluate $\\mathbf{\\hat{j}} \\times (-\\mathbf{\\hat{k}})$.",
-                  "stepText": "North $\\times$ Down = West ($-\\mathbf{\\hat{i}}$).",
-                  "options": [
-                    { "id": "A", "text": "West", "isCorrect": true, "explanation": "Right hand rule." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply by the leading $-2m$: Force is East ($+\\mathbf{\\hat{i}}$)."
-                }
-              ]
-            }
+          id: "les-m3-1", title: "Ex 5.7/5.8 Recap", description: "Ampere symmetries", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Ampère's Law Recap", content: "**Recall:** Ampère's law $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$ only works when you can pull $B$ out of the integral.\n\nThis requires specific symmetries: Cylindrical (wires), Planar (sheets), and Solenoidal (coils/toroids)." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply to advanced cases.**", interactiveSteps: [ { stepText: "Identify the symmetry." }, { stepText: "Draw the correct Amperian loop (circle or rectangle)." }, { stepText: "Calculate $I_{enc}$ carefully by integrating $\\mathbf{J}$ or $\\mathbf{K}$ if necessary." } ] }
           ]
         },
         {
-          "id": "l-443-2",
-          "title": "Exercise 15.4 (b): Fired North",
-          "description": "Coriolis force on a Northward projectile.",
-          "icon": "ArrowUpCircle",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.4 (b)",
-              "content": "Determine the direction of the Coriolis force on a projectile fired due North in the Northern Hemisphere."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Evaluate cross product.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Velocity is North ($\\mathbf{\\hat{j}}$)."
-                },
-                {
-                  "prompt": "$\\mathbf{\\Omega} = \\Omega_y\\mathbf{\\hat{j}} + \\Omega_z\\mathbf{\\hat{k}}$. Which term survives the cross product with $\\mathbf{\\hat{j}}$?",
-                  "stepText": "Only $\\Omega_z\\mathbf{\\hat{k}}$ survives.",
-                  "options": [
-                    { "id": "A", "text": "$\\Omega_z\\mathbf{\\hat{k}}$", "isCorrect": true, "explanation": "Parallel cross products are zero." }
-                  ]
-                },
-                {
-                  "stepText": "Up $\\times$ North = West ($-\\mathbf{\\hat{i}}$)."
-                },
-                {
-                  "stepText": "Multiply by $-2m$: Force is East. (To the right of the path)."
-                }
-              ]
-            }
+          id: "les-m3-2", title: "Prob 5.14a: Thick Wire Uniform", description: "Field inside a wire", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.14a", content: "**Problem:** Find B inside and outside a solid cylindrical wire of radius $a$ with *uniform* current $I$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Find $I_{enc}$.**", interactiveSteps: [ { stepText: "Outside ($s>a$): Loop encloses all $I$. $B(2\\pi s) = \\mu_0 I \\implies B = \\frac{\\mu_0 I}{2\\pi s}$." }, { stepText: "Inside ($s<a$): Loop encloses a fraction of current. $I_{enc} = I \\frac{\\pi s^2}{\\pi a^2} = I (s^2/a^2)$." }, { stepText: "$B(2\\pi s) = \\mu_0 I (s^2/a^2)$." }, { stepText: "$B = \\frac{\\mu_0 I s}{2\\pi a^2}$. Field grows linearly inside! Goal reached." } ] }
           ]
         },
         {
-          "id": "l-443-3",
-          "title": "Exercise 15.4 (c): Fired East",
-          "description": "Coriolis force on an Eastward projectile.",
-          "icon": "ArrowRightCircle",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.4 (c)",
-              "content": "Determine the direction of the Coriolis force on a projectile fired due East in the Northern Hemisphere."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Velocity is East ($\\mathbf{\\hat{i}}$).",
-              "interactiveSteps": [
-                {
-                  "stepText": "Cross $\\mathbf{\\Omega}$ components with East."
-                },
-                {
-                  "prompt": "North ($\\mathbf{\\hat{j}}$) $\\times$ East ($\\mathbf{\\hat{i}}$) = ?",
-                  "stepText": "Down ($-\\mathbf{\\hat{k}}$).",
-                  "options": [
-                    { "id": "A", "text": "Down", "isCorrect": true, "explanation": "Correct RHR." }
-                  ]
-                },
-                {
-                  "prompt": "Up ($\\mathbf{\\hat{k}}$) $\\times$ East ($\\mathbf{\\hat{i}}$) = ?",
-                  "stepText": "North ($\\mathbf{\\hat{j}}$).",
-                  "options": [
-                    { "id": "A", "text": "North", "isCorrect": true, "explanation": "Correct RHR." }
-                  ]
-                },
-                {
-                  "stepText": "The vector points Down and North. Multiply by $-2m$: The force is UP and SOUTH. (South is to the right of East)."
-                }
-              ]
-            }
+          id: "les-m3-3", title: "Prob 5.14b: Thick Wire Variable", description: "Integrating J", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.14b", content: "**Problem:** Same wire, but current density is $J = k s$. Find B inside." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate J for $I_{enc}$.**", interactiveSteps: [ { stepText: "Inside ($s<a$): $I_{enc} = \\int_0^s J da = \\int_0^s (k s') (2\\pi s' ds') = 2\\pi k \\int_0^s s'^2 ds' = \\frac{2\\pi k s^3}{3}$." }, { stepText: "Ampere's law: $B(2\\pi s) = \\mu_0 (\\frac{2\\pi k s^3}{3})$." }, { stepText: "$B = \\frac{\\mu_0 k s^2}{3}$. Goal reached!" } ] },
+            { id: "s2", type: "numerical", title: "Power", content: "Inside the wire, B is proportional to $s^n$. What is n?", numericAnswer: 2, numericTolerance: 0.1 }
           ]
         },
         {
-          "id": "l-443-4",
-          "title": "Exercise 15.4 (d): Southern Hemisphere",
-          "description": "Flipping the hemisphere.",
-          "icon": "Globe",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.4 (d)",
-              "content": "Determine the direction of the Coriolis force on a projectile fired due East in the Southern Hemisphere."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Adjust $\\mathbf{\\Omega}$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "In the Southern Hemisphere, the z-component of $\\mathbf{\\Omega}$ points DOWN ($-\\mathbf{\\hat{k}}$)."
-                },
-                {
-                  "prompt": "Calculate Down ($-\\mathbf{\\hat{k}}$) $\\times$ East ($\\mathbf{\\hat{i}}$).",
-                  "stepText": "South ($-\\mathbf{\\hat{j}}$).",
-                  "options": [
-                    { "id": "A", "text": "South", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply by $-2m$: Force is NORTH. (Which is to the LEFT of East)."
-                }
-              ]
-            }
+          id: "les-m3-4", title: "Prob 5.15: Thick Slab", description: "Planar symmetry", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.15", content: "**Problem:** A thick slab from $z=-a$ to $z=+a$ carries uniform volume current $\\mathbf{J} = J\\mathbf{\\hat{x}}$. Find B." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use rectangular Amperian loop.**", interactiveSteps: [ { stepText: "By right hand rule, B points $-\\mathbf{\\hat{y}}$ above $z=0$ and $+\\mathbf{\\hat{y}}$ below $z=0$." }, { stepText: "Inside ($z<a$): Draw loop from $-z$ to $z$, length $l$. $I_{enc} = J (2z) l$." }, { stepText: "Loop integral is $B l + B l = 2 B l$." }, { stepText: "$2 B l = \\mu_0 J 2z l \\implies B = \\mu_0 J z$. Vector: $\\mathbf{B} = -\\mu_0 J z \\mathbf{\\hat{y}}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-443-5",
-          "title": "Exercise 15.5: Numerical Falling Stone",
-          "description": "Calculating exact deflection.",
-          "icon": "Calculator",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "numerical",
-              "title": "Exercise 15.5",
-              "content": "A stone is dropped from 50m at latitude $60^\\circ$N ($\\lambda = 30^\\circ$).\nGiven $\\Omega = 7.27 \\times 10^{-5}$ rad/s and $g = 9.8$ m/s$^2$.\nTime of flight $t = \\sqrt{2(50)/9.8} \\approx 3.194$ s.\n\nCalculate the Eastward deflection $x = \\frac{1}{3}g t^3 \\Omega \\sin\\lambda$ in cm.",
-              "numericAnswer": 0.39,
-              "numericTolerance": 0.05
-            }
+          id: "les-m3-5", title: "Prob 5.16: Crossing the Sheet", description: "Particle trajectory", icon: "Activity",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.16", content: "**Problem:** Current sheet in xy plane creates $B = \\pm B_0 \\mathbf{\\hat{y}}$. A particle executes cyclotron motion but crosses $z=0$. Describe motion." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Analyze alternating B field.**", interactiveSteps: [ { stepText: "Above sheet: B is $-y$, particle curls one way." }, { stepText: "Below sheet: B is $+y$, particle curls the OTHER way." }, { stepText: "The trajectory looks like a snake slithering along the surface! It's a sequence of alternating semicircles." }, { stepText: "It drifts continuously in the x direction. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-443-6",
-          "title": "Exercise 15.6: Coriolis Cross Product",
-          "description": "Verifying the explicit formula.",
-          "icon": "TerminalSquare",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.6",
-              "content": "Carry out $\\mathbf{\\Omega} \\times \\mathbf{v}$ using $\\mathbf{\\Omega} = \\Omega\\sin\\lambda \\mathbf{\\hat{j}} + \\Omega\\cos\\lambda \\mathbf{\\hat{k}}$ and $\\mathbf{v} = v_x\\mathbf{\\hat{i}} + v_y\\mathbf{\\hat{j}} + v_z\\mathbf{\\hat{k}}$ to verify Eq 15.7."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Determinant method.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Setup matrix row 2: $0, \\Omega\\sin\\lambda, \\Omega\\cos\\lambda$."
-                },
-                {
-                  "prompt": "Evaluate the $\\mathbf{\\hat{i}}$ component: $(\\Omega\\sin\\lambda)v_z - (\\Omega\\cos\\lambda)v_y$. Multiply by $-2$. What is $a_x$?",
-                  "stepText": "$a_x = 2v_y\\Omega\\cos\\lambda - 2v_z\\Omega\\sin\\lambda$.",
-                  "options": [
-                    { "id": "A", "text": "$2v_y\\Omega\\cos\\lambda - 2v_z\\Omega\\sin\\lambda$", "isCorrect": true, "explanation": "Matches perfectly." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m3-6", title: "Prob 5.17a: Coaxial Solenoids (In)", description: "Superposition of coils", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.17a", content: "**Problem:** Two coaxial solenoids (radii $a, b$) have $n_1, n_2$ turns carrying $I$ in opposite directions. Find B inside $a$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Sum the fields.**", interactiveSteps: [ { stepText: "Inside inner solenoid ($s<a$), you are inside BOTH solenoids." }, { stepText: "Inner creates $B_1 = \\mu_0 n_1 I \\mathbf{\\hat{z}}$." }, { stepText: "Outer creates $B_2 = -\\mu_0 n_2 I \\mathbf{\\hat{z}}$ (opposite current)." }, { stepText: "Total $B = \\mu_0 I (n_1 - n_2) \\mathbf{\\hat{z}}$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-443-7",
-          "title": "Worked Example 15.2: Southward Accel",
-          "description": "Second-order setup.",
-          "icon": "BoxSelect",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Second Order Deflection",
-              "content": "Set up the acceleration $a_y$ to find the Southward deflection of a falling body, using the first-order velocity $v_x = gt^2 \\Omega\\sin\\lambda$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Substitute into $a_y$.",
-              "interactiveSteps": [
-                {
-                  "prompt": "The formula is $a_y = -2v_x\\Omega\\cos\\lambda$. Substitute $v_x$.",
-                  "stepText": "$a_y = -2(gt^2 \\Omega\\sin\\lambda)\\Omega\\cos\\lambda = -2g\\Omega^2 \\sin\\lambda \\cos\\lambda \\cdot t^2$.",
-                  "options": [
-                    { "id": "A", "text": "$-2g\\Omega^2 \\sin\\lambda \\cos\\lambda \\cdot t^2$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m3-7", title: "Prob 5.17b: Coaxial Solenoids (Mid)", description: "Region between coils", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.17b", content: "**Problem:** Find B between the two solenoids ($a < s < b$)." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply boundary rules.**", interactiveSteps: [ { stepText: "You are OUTSIDE the inner solenoid. Its contribution is 0." }, { stepText: "You are INSIDE the outer solenoid. Its contribution is $-\\mu_0 n_2 I \\mathbf{\\hat{z}}$." }, { stepText: "Total $B = -\\mu_0 n_2 I \\mathbf{\\hat{z}}$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Outside both", content: "What is the magnetic field completely outside both solenoids ($s > b$)?", options: [ { id: "A", text: "$\\mu_0 I (n_1+n_2)$", isCorrect: false, explanation: "" }, { id: "B", text: "0", isCorrect: true, explanation: "You are outside both, and B outside an ideal solenoid is zero." } ] }
           ]
         },
         {
-          "id": "l-443-8",
-          "title": "Worked Example 15.2: Southward Deflection",
-          "description": "Double integration.",
-          "icon": "ArrowDownToLine",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Integration",
-              "content": "Integrate $a_y = -2g\\Omega^2 \\sin\\lambda \\cos\\lambda \\cdot t^2$ twice."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Find position.",
-              "interactiveSteps": [
-                {
-                  "stepText": "First integral: $v_y = -\\frac{2}{3}g\\Omega^2 \\sin\\lambda \\cos\\lambda \\cdot t^3$."
-                },
-                {
-                  "prompt": "Second integral?",
-                  "stepText": "$y = -\\frac{1}{6}g\\Omega^2 \\sin\\lambda \\cos\\lambda \\cdot t^4$.",
-                  "options": [
-                    { "id": "A", "text": "$-\\frac{1}{6}g\\Omega^2 \\sin\\lambda \\cos\\lambda \\cdot t^4$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                }
-              ]
-            }
+          id: "les-m3-8", title: "Prob 5.18: Moving Capacitor", description: "Creating surface currents", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.18", content: "**Problem:** Parallel plate capacitor ($\\sigma$ and $-\\sigma$) moves at speed $v$. Find the magnetic field." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Treat moving charge as current.**", interactiveSteps: [ { stepText: "Moving surface charge creates surface current: $K = \\sigma v$." }, { stepText: "Top plate creates $B_{top} = \\pm \\frac{\\mu_0 \\sigma v}{2}$." }, { stepText: "Bottom plate ($-\\sigma$) creates $B_{bot} = \\mp \\frac{\\mu_0 \\sigma v}{2}$." }, { stepText: "Between plates, they add: $B = \\mu_0 \\sigma v$. Outside, they cancel: $B = 0$. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-443-9",
-          "title": "Worked Example 15.3: Projectile Accel",
-          "description": "Unperturbed velocities into acceleration.",
-          "icon": "Target",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Projectile Unperturbed",
-              "content": "Write expressions for $a_x, a_y, a_z$ using the unperturbed velocities $v_{0x}, v_{0y}, v_{0z}-gt$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Substitution.",
-              "interactiveSteps": [
-                {
-                  "prompt": "Substitute into $a_x = 2v_y\\Omega \\cos\\lambda - 2v_z\\Omega \\sin\\lambda$.",
-                  "stepText": "$a_x = 2v_{0y}\\Omega \\cos\\lambda - 2(v_{0z}-gt)\\Omega \\sin\\lambda$.",
-                  "options": [
-                    { "id": "A", "text": "$2v_{0y}\\Omega \\cos\\lambda - 2(v_{0z}-gt)\\Omega \\sin\\lambda$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "$a_y = -2v_{0x}\\Omega \\cos\\lambda$."
-                },
-                {
-                  "stepText": "$a_z = 2v_{0x}\\Omega \\sin\\lambda - g$."
-                }
-              ]
-            }
+          id: "les-m3-9", title: "Prob 5.19: Solenoid Parallel B", description: "Why B is parallel to axis", icon: "Minus",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.19", content: "**Problem:** Show that the field of an infinite solenoid runs parallel to the axis, regardless of cross-sectional shape." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Rule out other components.**", interactiveSteps: [ { stepText: "Radial component $B_s$: If you reverse current, $B_s$ reverses. But turning solenoid upside down does the same thing without reversing $B_s$. Thus $B_s$ must be 0." }, { stepText: "Azimuthal component $B_\\phi$: $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = B_\\phi 2\\pi s = \\mu_0 I_{enc}$. But a loop enclosing the z-axis encloses 0 net axial current. Thus $B_\\phi = 0$." }, { stepText: "Only $B_z$ remains! Goal reached." } ] }
           ]
         },
         {
-          "id": "l-443-10",
-          "title": "Exercise 15.7: Numerical Projectile",
-          "description": "Initial acceleration calculation.",
-          "icon": "Calculator",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "numerical",
-              "title": "Exercise 15.7",
-              "content": "Projectile fired at $60^\\circ$N ($\\lambda = 30^\\circ$) due East at 300 m/s, $25^\\circ$ elevation.\n$v_{0y} = 0, v_{0z} = 300\\sin(25^\\circ)$.\nEvaluate $a_x(t=0)$ in m/s$^2$.",
-              "numericAnswer": -0.0092,
-              "numericTolerance": 0.0005
-            }
+          id: "les-m3-10", title: "Prob 5.21: Copper Wire", description: "Mobile charges", icon: "Activity",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.21", content: "**Problem:** Calculate the average electron velocity in a 1 mm copper wire carrying 1 A." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use $I = n A e v$.**", interactiveSteps: [ { stepText: "Find $n$ (electrons/volume) using copper's density and atomic mass: $\\approx 8.5 \\times 10^{28} m^{-3}$." }, { stepText: "Area $A = \\pi (0.0005)^2 \\approx 7.8 \\times 10^{-7} m^2$." }, { stepText: "$v = I / (n A e) = 1 / (8.5\\times 10^{28} \\times 7.8\\times 10^{-7} \\times 1.6\\times 10^{-19})$." }, { stepText: "$v \\approx 9 \\times 10^{-5}$ m/s. This is 0.1 mm per second—a snail's pace! Goal reached." } ] },
+            { id: "s2", type: "quiz", title: "Signal Speed", content: "If electrons move so slowly, why do lights turn on instantly?", options: [ { id: "A", text: "The electromagnetic wave (signal) travels near the speed of light.", isCorrect: true, explanation: "Electrons just push their neighbors; the wave propagates instantly." }, { id: "B", text: "Electrons teleport.", isCorrect: false, explanation: "" } ] }
           ]
         },
         {
-          "id": "l-443-11",
-          "title": "Worked Example 15.4: Foucault Complex Roots",
-          "description": "Extracting Real and Imaginary parts.",
-          "icon": "Layers",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Foucault Extraction",
-              "content": "From $\\zeta = C e^{-iKt} \\cos(\\omega t + \\theta)$, extract $x(t)$ and $y(t)$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Apply Euler.",
-              "interactiveSteps": [
-                {
-                  "prompt": "What is the real part of $e^{-iKt}$?",
-                  "stepText": "$\\cos(Kt)$.",
-                  "options": [
-                    { "id": "A", "text": "$\\cos(Kt)$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "So $x(t) = Re(\\zeta) = C\\cos(Kt)\\cos(\\omega t + \\theta)$."
-                },
-                {
-                  "stepText": "And $y(t) = Im(\\zeta) = -C\\sin(Kt)\\cos(\\omega t + \\theta)$."
-                }
-              ]
-            }
+          id: "les-m3-11", title: "Prob 5.22: General Ampere", description: "Why it fails outside statics", icon: "XCircle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.22", content: "**Problem:** Is Ampere's law $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ consistent with $\\nabla \\cdot (\\nabla \\times \\mathbf{v}) = 0$ in general?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Take the divergence.**", interactiveSteps: [ { stepText: "$\\nabla \\cdot (\\nabla \\times \\mathbf{B}) = \\mu_0 \\nabla \\cdot \\mathbf{J}$." }, { stepText: "Left side is mathematically identically 0." }, { stepText: "Right side is $\\mu_0 \\nabla \\cdot \\mathbf{J}$. By continuity, this is $-\\mu_0 \\frac{\\partial \\rho}{\\partial t}$." }, { stepText: "So $0 = -\\mu_0 \\frac{\\partial \\rho}{\\partial t}$. This ONLY works if $\\partial \\rho / \\partial t = 0$ (Magnetostatics!). For changing charges, Ampere's law is incomplete. Goal reached!" } ] }
           ]
         },
         {
-          "id": "l-443-12",
-          "title": "Worked Example 15.5: Rotating Frame Trick",
-          "description": "Solving Foucault without complex numbers.",
-          "icon": "SplitSquareHorizontal",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Rotating Coordinate System",
-              "content": "Substitute $x = s\\cos Kt, y = -s\\sin Kt$ into $\\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0$ to prove the pendulum undergoes 1D SHM in a frame rotating at $K$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "The massive cancellation.",
-              "interactiveSteps": [
-                {
-                  "stepText": "As proven in Ex 15.9, substituting these yields $\\ddot{s} + (K^2 + \\omega^2)s = 0$."
-                },
-                {
-                  "prompt": "Why can we drop $K^2$?",
-                  "stepText": "Because Earth's rotation $K$ is tiny compared to swing frequency $\\omega$.",
-                  "options": [
-                    { "id": "A", "text": "$K \\ll \\omega$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Leaves $\\ddot{s} + \\omega^2 s = 0$, perfect 1D SHM."
-                }
-              ]
-            }
+          id: "les-m3-12", title: "Prob 5.23: Magnetic Monopoles", description: "Modifying Maxwell", icon: "AlertTriangle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.23", content: "**Problem:** If magnetic monopoles ($\\rho_m$) and magnetic currents ($\\mathbf{J}_m$) existed, how would Maxwell's equations change?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Introduce symmetry.**", interactiveSteps: [ { stepText: "Gauss's law for magnetism would no longer be 0. $\\nabla \\cdot \\mathbf{B} = \\mu_0 \\rho_m$." }, { stepText: "Faraday's law (which we'll see later) would gain a magnetic current term: $\\nabla \\times \\mathbf{E} = -\\mu_0 \\mathbf{J}_m - \\partial\\mathbf{B}/\\partial t$." }, { stepText: "The equations would become beautifully symmetric between E and B! Goal reached." } ] }
           ]
         },
         {
-          "id": "l-443-13",
-          "title": "Exercise 15.8: Foucault Initial Velocity",
-          "description": "Initial velocity at origin.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.8",
-              "content": "Foucault pendulum has velocity $v_0$ in $+x$ at $t=0$ passing through origin. Find expressions."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Use sine forms.",
-              "interactiveSteps": [
-                {
-                  "stepText": "$x = C\\cos(Kt)\\sin(\\omega t)$, $y = -C\\sin(Kt)\\sin(\\omega t)$."
-                },
-                {
-                  "prompt": "Evaluate $\\dot{x}(0)$ taking advantage of $\\omega \\gg K$.",
-                  "stepText": "$\\dot{x}(0) \\approx C\\omega$.",
-                  "options": [
-                    { "id": "A", "text": "$C\\omega$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "So $C = v_0 / \\omega$."
-                }
-              ]
-            }
+          id: "les-m3-13", title: "Prob 5.24: E Field Lines", description: "Why E lines are nice", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.24", content: "**Problem:** The text noted that magnetic field lines can be 'chaotic' and not close cleanly. Why doesn't this happen to Electrostatic field lines?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Look at the curl.**", interactiveSteps: [ { stepText: "Magnetic field lines form chaotic non-closing helices when a curl is present in 3D." }, { stepText: "Electrostatic fields ALWAYS have $\\nabla \\times \\mathbf{E} = 0$." }, { stepText: "Zero curl prevents the twisting and spiraling that makes B lines chaotic. E lines just go straight from + to -. Goal reached." } ] }
           ]
         },
         {
-          "id": "l-443-14",
-          "title": "Exercise 15.9: Missing Foucault Steps",
-          "description": "The brutal derivative math.",
-          "icon": "TerminalSquare",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Missing Steps",
-              "content": "Detail the product rule derivatives for $x = s\\cos Kt, y = -s\\sin Kt$."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Double product rule.",
-              "interactiveSteps": [
-                {
-                  "stepText": "$\\dot{x} = \\dot{s}\\cos(Kt) - sK\\sin(Kt)$."
-                },
-                {
-                  "stepText": "$\\ddot{x} = \\ddot{s}\\cos Kt - 2\\dot{s}K\\sin Kt - sK^2\\cos Kt$."
-                },
-                {
-                  "stepText": "Notice how the $-2\\dot{s}K\\sin Kt$ term exactly cancels the cross term from $-2K\\dot{y}$!"
-                }
-              ]
-            }
+          id: "les-m3-14", title: "Ampère's Law Review", description: "Integral vs Differential", icon: "RefreshCw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Review", content: "Which form is better for finding B if the problem has infinite cylindrical symmetry?", options: [ { id: "A", text: "Integral Form ($\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$)", isCorrect: true, explanation: "Allows you to pull B out of the integral." }, { id: "B", text: "Differential Form ($\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$)", isCorrect: false, explanation: "Harder to solve directly." } ] }
           ]
         },
         {
-          "id": "l-443-15",
-          "title": "Exercise 15.10: Root Equivalence",
-          "description": "Reconciling exact roots with rotating frame.",
-          "icon": "ActivitySquare",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "example_q",
-              "title": "Exercise 15.10",
-              "content": "Show that roots $p = -iK \\pm i\\sqrt{K^2 + \\omega^2}$ lead to the identical result as the rotating frame trick."
-            },
-            {
-              "id": "s2",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Factoring exact roots.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Let $\\omega' = \\sqrt{K^2 + \\omega^2}$."
-                },
-                {
-                  "stepText": "$\\zeta = e^{-iKt}(A e^{i\\omega't} + B e^{-i\\omega't})$."
-                },
-                {
-                  "prompt": "Does the inner term perfectly satisfy $\\ddot{s} + \\omega'^2 s = 0$?",
-                  "stepText": "Yes.",
-                  "options": [
-                    { "id": "A", "text": "Yes", "isCorrect": true, "explanation": "It perfectly matches $\\ddot{s} + (K^2 + \\omega^2)s = 0$ from Ex 15.9!" }
-                  ]
-                }
-              ]
-            }
+          id: "les-m3-15", title: "Symmetry Checklist", description: "When it works", icon: "List",
+          slides: [
+            { id: "s0", type: "quiz", title: "Review", content: "Which geometry is NOT solvable with Ampère's law?", options: [ { id: "A", text: "Infinite straight wire", isCorrect: false, explanation: "" }, { id: "B", text: "Finite straight wire", isCorrect: true, explanation: "Lacks translational symmetry. Must use Biot-Savart." }, { id: "C", text: "Infinite plane", isCorrect: false, explanation: "" } ] }
           ]
         },
         {
-          "id": "l-443-16",
-          "title": "Exercise 15.11: San Francisco Pendulum",
-          "description": "Calculating real precession rate.",
-          "icon": "Clock",
-          "slides": [
-            {
-              "id": "s1",
-              "type": "numerical",
-              "title": "Exercise 15.11",
-              "content": "A 20m Foucault pendulum is in San Francisco (latitude $37.77^\\circ$, so $\\lambda = 52.23^\\circ$).\nEarth rotates at $\\Omega = 15^\\circ$/hr.\nCalculate the precession rate $K = \\Omega\\cos\\lambda$ in degrees/hour.",
-              "numericAnswer": 9.18,
-              "numericTolerance": 0.1
-            }
+          id: "les-m3-16", title: "Unit Recap: Ampère's Law", description: "Div and Curl of B", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "theory", title: "Unit 3 Summary", content: "Because $\\nabla \\cdot \\mathbf{B} = 0$, there are no magnetic monopoles.\n\nAmpère's Law ($\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ and $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$) allows us to easily calculate magnetic fields for geometries with high symmetry, such as infinite wires, planes, solenoids, and toroids. However, we proved it mathematically fails if the current is not steady ($\\partial \\rho / \\partial t \\neq 0$)." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-4-vector-potential-problems",
+      title: "Vector Potential & Dipoles",
+      description: "Working with A and the magnetic dipole moment.",
+      color: "duo-red",
+      lessons: [
+        {
+          id: "les-m4-1", title: "Ex 5.11: Spinning Shell A", description: "Vector potential of sphere", icon: "Globe",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.11", content: "**Problem:** Find the vector potential $\\mathbf{A}$ of a spherical shell (radius $R$, charge $\\sigma$) spinning at $\\omega$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Evaluate $\\mathbf{A} = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{K}}{\\cal{r}} da'$.**", interactiveSteps: [ { stepText: "Surface current is $\\mathbf{K} = \\sigma \\mathbf{v} = \\sigma (\\boldsymbol{\\omega} \\times \\mathbf{r}')$." }, { stepText: "Set $\\mathbf{r}$ on the z-axis. The integration over the spherical angles is complex." }, { stepText: "Inside ($r<R$): $\\mathbf{A} = \\frac{\\mu_0 R \\sigma}{3} (\\boldsymbol{\\omega} \\times \\mathbf{r})$. This yields a uniform B field! $B = \\frac{2}{3}\\mu_0 \\sigma \\omega R$." }, { stepText: "Outside ($r>R$): $\\mathbf{A} = \\frac{\\mu_0 R^4 \\sigma}{3 r^3} (\\boldsymbol{\\omega} \\times \\mathbf{r})$. This is exactly a perfect dipole field! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m4-2", title: "Ex 5.12: Solenoid A", description: "A from flux", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.12", content: "**Problem:** Find $\\mathbf{A}$ for an infinite solenoid. We can't use the integral formula because it diverges." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use Stokes' theorem on A.**", interactiveSteps: [ { stepText: "$\\oint \\mathbf{A} \\cdot d\\mathbf{l} = \\int (\\nabla \\times \\mathbf{A}) \\cdot d\\mathbf{a} = \\int \\mathbf{B} \\cdot d\\mathbf{a} = \\Phi_B$." }, { stepText: "Inside: $\\Phi_B = B \\pi s^2 = \\mu_0 n I \\pi s^2$. So $A(2\\pi s) = \\mu_0 n I \\pi s^2 \\implies \\mathbf{A} = \\frac{\\mu_0 n I s}{2} \\mathbf{\\hat{\\phi}}$." }, { stepText: "Outside: Flux is capped at $R$. $\\Phi_B = \\mu_0 n I \\pi R^2$. So $\\mathbf{A} = \\frac{\\mu_0 n I R^2}{2 s} \\mathbf{\\hat{\\phi}}$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Aharonov-Bohm", content: "Outside the solenoid, B is zero. Is A zero?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "A falls off as 1/s. This proves A exists even where B is absent!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-3", title: "Ex 5.13: Bookend Dipole", description: "Vector area addition", icon: "Square",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.13", content: "**Problem:** Find the magnetic dipole moment of a 'bookend' shaped loop (bent at 90 degrees)." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Superpose two flat loops.**", interactiveSteps: [ { stepText: "Treat the bent loop as TWO separate square loops, one in xy plane, one in xz plane." }, { stepText: "The shared edge has currents running in opposite directions, so they perfectly cancel out!" }, { stepText: "Dipole moment of xy loop: $\\mathbf{m}_1 = I w^2 \\mathbf{\\hat{z}}$." }, { stepText: "Dipole moment of xz loop: $\\mathbf{m}_2 = I w^2 \\mathbf{\\hat{y}}$." }, { stepText: "Total $\\mathbf{m} = I w^2 (\\mathbf{\\hat{y}} + \\mathbf{\\hat{z}})$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-4", title: "Prob 5.25: A of Segment", description: "Finite wire potential", icon: "Minus",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.25", content: "**Problem:** Find $\\mathbf{A}$ for a finite segment of wire from $z_1$ to $z_2$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Evaluate integral.**", interactiveSteps: [ { stepText: "$\\mathbf{A} = \\frac{\\mu_0 I}{4\\pi} \\int_{z_1}^{z_2} \\frac{1}{\\sqrt{s^2+z^2}} dz \\mathbf{\\hat{z}}$." }, { stepText: "This evaluates to a natural log function: $\\frac{\\mu_0 I}{4\\pi} \\ln \\left( \\frac{z_2 + \\sqrt{s^2+z_2^2}}{z_1 + \\sqrt{s^2+z_1^2}} \\right) \\mathbf{\\hat{z}}$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Direction", content: "What is the direction of the vector potential A here?", options: [ { id: "A", text: "Azimuthal (phi)", isCorrect: false, explanation: "That's the direction of B." }, { id: "B", text: "Parallel to the current (z)", isCorrect: true, explanation: "A follows the direction of the current." } ] }
+          ]
+        },
+        {
+          id: "les-m4-5", title: "Prob 5.26a: Azimuthal A", description: "Guessing the current", icon: "RefreshCw",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.26a", content: "**Problem:** What current density would produce the vector potential $\\mathbf{A} = k \\mathbf{\\hat{\\phi}}$?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Apply $\\nabla^2 \\mathbf{A} = -\\mu_0 \\mathbf{J}$ or take curl twice.**", interactiveSteps: [ { stepText: "Find $\\mathbf{B} = \\nabla \\times \\mathbf{A}$." }, { stepText: "Curl of $k \\mathbf{\\hat{\\phi}}$ in cylindrical is $\\frac{1}{s} \\frac{\\partial}{\\partial s}(sk) \\mathbf{\\hat{z}} = \\frac{k}{s} \\mathbf{\\hat{z}}$." }, { stepText: "Now find $\\mathbf{J} = \\frac{1}{\\mu_0} \\nabla \\times \\mathbf{B}$." }, { stepText: "Curl of $\\frac{k}{s} \\mathbf{\\hat{z}}$ is $-\\frac{\\partial}{\\partial s}(k/s) \\mathbf{\\hat{\\phi}} = \\frac{k}{s^2} \\mathbf{\\hat{\\phi}}$." }, { stepText: "$\\mathbf{J} = \\frac{k}{\\mu_0 s^2} \\mathbf{\\hat{\\phi}}$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-6", title: "Prob 5.27: Uniform B", description: "A = -1/2 (r x B)", icon: "Grid",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.27", content: "**Problem:** If $\\mathbf{B}$ is uniform, show that $\\mathbf{A} = -\\frac{1}{2}(\\mathbf{r} \\times \\mathbf{B})$ works." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Check $\\nabla \\times \\mathbf{A} = \\mathbf{B}$.**", interactiveSteps: [ { stepText: "$\\nabla \\times (-\\frac{1}{2} \\mathbf{r} \\times \\mathbf{B}) = -\\frac{1}{2} \\left[ \\mathbf{r}(\\nabla \\cdot \\mathbf{B}) - \\mathbf{B}(\\nabla \\cdot \\mathbf{r}) + (\\mathbf{B} \\cdot \\nabla)\\mathbf{r} - (\\mathbf{r} \\cdot \\nabla)\\mathbf{B} \\right]$." }, { stepText: "$\\nabla \\cdot \\mathbf{B} = 0$. $\\nabla \\cdot \\mathbf{r} = 3$." }, { stepText: "$(\\mathbf{r} \\cdot \\nabla)\\mathbf{B} = 0$ (since B is uniform)." }, { stepText: "$(\\mathbf{B} \\cdot \\nabla)\\mathbf{r} = \\mathbf{B}$." }, { stepText: "Result: $-\\frac{1}{2} [0 - 3\\mathbf{B} + \\mathbf{B} - 0] = -\\frac{1}{2} [-2\\mathbf{B}] = \\mathbf{B}$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-7", title: "Prob 5.28: A of Infinite Wire", description: "Ampere's law for A", icon: "Minus",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.28", content: "**Problem:** Find $\\mathbf{A}$ for an infinite straight wire carrying $I$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate B directly.**", interactiveSteps: [ { stepText: "We know $\\mathbf{B} = \\frac{\\mu_0 I}{2\\pi s} \\mathbf{\\hat{\\phi}}$." }, { stepText: "Also $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. Assume $\\mathbf{A} = A_z(s) \\mathbf{\\hat{z}}$." }, { stepText: "Then $\\nabla \\times \\mathbf{A} = -\\frac{\\partial A_z}{\\partial s} \\mathbf{\\hat{\\phi}}$." }, { stepText: "So $-\\frac{\\partial A_z}{\\partial s} = \\frac{\\mu_0 I}{2\\pi s}$." }, { stepText: "Integrate: $A_z = -\\frac{\\mu_0 I}{2\\pi} \\ln s$. Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Reference point", content: "Why can't we set A=0 at infinity here?", options: [ { id: "A", text: "Because ln(s) blows up at infinity", isCorrect: true, explanation: "Just like the potential of an infinite line charge!" }, { id: "B", text: "Because it's a vector.", isCorrect: false, explanation: "" } ] }
+          ]
+        },
+        {
+          id: "les-m4-8", title: "Prob 5.29: A of Surface Current", description: "Infinite plane", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.29", content: "**Problem:** Find $\\mathbf{A}$ for an infinite surface current $\\mathbf{K} = K \\mathbf{\\hat{x}}$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate B.**", interactiveSteps: [ { stepText: "We know $\\mathbf{B} = \\pm \\frac{\\mu_0 K}{2} \\mathbf{\\hat{y}}$." }, { stepText: "Assume $\\mathbf{A}$ is parallel to $\\mathbf{K}$, so $\\mathbf{A} = A_x(z) \\mathbf{\\hat{x}}$." }, { stepText: "$\\nabla \\times \\mathbf{A} = \\frac{\\partial A_x}{\\partial z} \\mathbf{\\hat{y}}$." }, { stepText: "Integrate: $A_x = -\\frac{\\mu_0 K}{2} |z|$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-9", title: "Prob 5.31: Scalar Potential U", description: "B = -Grad U", icon: "Activity",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.31", content: "**Problem:** Try defining a magnetic scalar potential $U$ such that $\\mathbf{B} = -\\nabla U$. Why does this fail for closed paths around a wire?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Show U is multivalued.**", interactiveSteps: [ { stepText: "If $\\mathbf{B} = -\\nabla U$, then $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = 0$." }, { stepText: "But Ampere's law says $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I$." }, { stepText: "This implies $U(\\text{start}) - U(\\text{end}) = \\mu_0 I$. If you go in a circle, you return to the exact same point, but $U$ has dropped by $\\mu_0 I$!" }, { stepText: "$U$ is like a spiral staircase (Escher stairs); it's multi-valued, so it's a mathematically bad potential. Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m4-10", title: "Prob 5.34/35: Boundary Conditions", description: "Checking continuity", icon: "Maximize",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.34", content: "**Problem:** Check the boundary conditions on A and B for the infinite solenoid." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Test at $s=R$.**", interactiveSteps: [ { stepText: "Inside $A = \\frac{\\mu_0 n I R}{2}$. Outside $A = \\frac{\\mu_0 n I R^2}{2R} = \\frac{\\mu_0 n I R}{2}$. Continuous! Check." }, { stepText: "Inside $B = \\mu_0 n I$. Outside $B = 0$." }, { stepText: "The tangential component jumps by $\\mu_0 n I$. The surface current is $K = n I$. Jump is exactly $\\mu_0 K$. Check! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m4-11", title: "Prob 5.36: Coordinate-Free Dipole", description: "B_dipole", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.36", content: "**Problem:** Show the field of a dipole can be written as $\\mathbf{B}_{dip} = \\frac{\\mu_0}{4\\pi} \\frac{1}{r^3} [3(\\mathbf{m} \\cdot \\mathbf{\\hat{r}})\\mathbf{\\hat{r}} - \\mathbf{m}]$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Convert from spherical to vectors.**", interactiveSteps: [ { stepText: "We know $\\mathbf{B} = \\frac{\\mu_0 m}{4\\pi r^3} (2\\cos\\theta\\mathbf{\\hat{r}} + \\sin\\theta\\mathbf{\\hat{\\theta}})$." }, { stepText: "Substitute $\\mathbf{m} = m\\cos\\theta\\mathbf{\\hat{r}} - m\\sin\\theta\\mathbf{\\hat{\\theta}}$." }, { stepText: "So $\\sin\\theta\\mathbf{\\hat{\\theta}} = \\cos\\theta\\mathbf{\\hat{r}} - \\mathbf{m}/m$." }, { stepText: "Substitute into B: $2\\cos\\theta\\mathbf{\\hat{r}} + \\cos\\theta\\mathbf{\\hat{r}} - \\mathbf{m}/m = 3\\cos\\theta\\mathbf{\\hat{r}} - \\mathbf{m}/m$." }, { stepText: "Since $\\mathbf{m} \\cdot \\mathbf{\\hat{r}} = m \\cos\\theta$, we get the coordinate-free formula! Goal reached." } ] }
+          ]
+        },
+        {
+          id: "les-m4-12", title: "Prob 5.37: Circular Loop Dipole", description: "Dipole moment", icon: "Circle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.37", content: "**Problem:** Find the magnetic dipole moment of a circular loop of radius R." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: $\\mathbf{m} = I \\mathbf{a}$.**", interactiveSteps: [ { stepText: "Area of circle is $\\pi R^2$." }, { stepText: "Magnitude is $m = I \\pi R^2$." }, { stepText: "Direction is $\\mathbf{\\hat{z}}$ (by right hand rule). Goal reached!" } ] },
+            { id: "s2", type: "quiz", title: "Far field", content: "At large distances ($z \\gg R$), does the exact Biot-Savart formula reduce to the dipole formula?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "B = mu0 I R^2 / 2z^3 matches the dipole formula precisely." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] }
+          ]
+        },
+        {
+          id: "les-m4-13", title: "Prob 5.39: Record Dipole", description: "Spinning disk", icon: "Disc",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.39", content: "**Problem:** Find the dipole moment of a record (radius R, charge $\\sigma$) spinning at $\\omega$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Integrate $dm = dI a$.**", interactiveSteps: [ { stepText: "Break disk into rings of radius $r$, width $dr$." }, { stepText: "Charge is $dq = \\sigma 2\\pi r dr$. Current is $dI = \\frac{dq}{dt} = \\sigma \\omega r dr$." }, { stepText: "Dipole moment of one ring is $dm = dI (\\pi r^2) = \\pi \\sigma \\omega r^3 dr$." }, { stepText: "Integrate from 0 to R: $m = \\frac{\\pi \\sigma \\omega R^4}{4}$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-14", title: "Prob 5.40: Volume Dipole", description: "m for J", icon: "Box",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.40", content: "**Problem:** Show that for a volume current $\\mathbf{J}$, the dipole moment is $\\mathbf{m} = \\frac{1}{2} \\int (\\mathbf{r} \\times \\mathbf{J}) d\\tau$." },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Translate $I \\mathbf{a}$ to volume integral.**", interactiveSteps: [ { stepText: "For a line current, $\\mathbf{m} = \\frac{1}{2} \\oint \\mathbf{r} \\times I d\\mathbf{l}$." }, { stepText: "Using the dictionary, $I d\\mathbf{l} \\to \\mathbf{J} d\\tau$." }, { stepText: "Substitute: $\\mathbf{m} = \\frac{1}{2} \\int (\\mathbf{r} \\times \\mathbf{J}) d\\tau$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-15", title: "Prob 5.58: Vector Potential of A", description: "A = Curl W", icon: "Wind",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 5.58", content: "**Problem:** Since $\\nabla \\cdot \\mathbf{A} = 0$, we can write $\\mathbf{A} = \\nabla \\times \\mathbf{W}$. What is the formula for $\\mathbf{W}$?" },
+            { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Use analogy.**", interactiveSteps: [ { stepText: "$\\mathbf{B} = \\nabla \\times \\mathbf{A} \\implies \\mathbf{A} = \\frac{\\mu_0}{4\\pi}\\int \\frac{\\mathbf{J}}{\\cal{r}} d\\tau$." }, { stepText: "Notice $\\mu_0 \\mathbf{J} = \\nabla \\times \\mathbf{B}$." }, { stepText: "By exact analogy, $\\mathbf{A} = \\nabla \\times \\mathbf{W} \\implies \\mathbf{W} = \\frac{1}{4\\pi} \\int \\frac{\\mathbf{B}}{\\cal{r}} d\\tau$. Goal reached!" } ] }
+          ]
+        },
+        {
+          id: "les-m4-16", title: "Unit Recap: A and Dipoles", description: "Summary", icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check", content: "Because $\\nabla \\cdot \\mathbf{B} = 0$, the magnetic monopole moment is always:", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "No magnetic monopoles exist." }, { id: "B", text: "Proportional to current", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "theory", title: "Unit 4 Summary", content: "The **Magnetic Vector Potential $\\mathbf{A}$** simplifies finding B, since $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. In the Coulomb gauge, it mirrors the math of electrostatics.\n\nAt large distances, the field of a current loop is dominated by the **Magnetic Dipole Moment** ($\\mathbf{m} = I\\mathbf{a}$). This dipole field is mathematically identical in shape to the electric dipole field, forming the basis of how we model magnetic materials." }
           ]
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/chapter4_4.ts ---
+--- END OF FILE src/data/chapter3_3.ts ---
 
---- START OF FILE src/data/module4.ts ---
-import { Section } from '../types';
-import { SECTION_4_1 } from './chapter4_1';
-import { SECTION_4_2 } from './chapter4_2';
-import { SECTION_4_3 } from './chapter4_3';
-import { SECTION_4_4 } from './chapter4_4';
+--- START OF FILE src/components/interactive-arts/CycloidMotionInteractive.tsx ---
+import React, { useRef, useEffect } from 'react';
 
-export const MODULE_4_SECTIONS: Section[] = [
-  SECTION_4_1,
-  SECTION_4_2,
-  SECTION_4_3,
-  SECTION_4_4
-];
---- END OF FILE src/data/module4.ts ---
+const CycloidMotionInteractive: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  const state = useRef({
+    time: 0,
+    trail: [] as {x: number, y: number}[]
+  });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.parentElement?.clientWidth || 300;
+    const height = 280;
+    canvas.width = width;
+    canvas.height = height;
+
+    const E = 40; // Scale factor for E
+    const B = 1;  // Scale factor for B
+    const omega = B; 
+    const R = E / omega; // Radius of the rolling circle
+    
+    // Origin for drawing
+    const originY = height - 40;
+    const originX = 20;
+
+    let animationId: number;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw E and B field indicators
+      ctx.fillStyle = '#ef4444'; // Red E field UP
+      ctx.font = 'bold 16px Nunito';
+      ctx.fillText('E ↑', width - 40, 30);
+      
+      ctx.fillStyle = '#3b82f6'; // Blue B field OUT
+      ctx.fillText('B ⊙', width - 40, 50);
+
+      // Draw Axes
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(10, originY); ctx.lineTo(width - 10, originY); // x-axis
+      ctx.moveTo(originX, height - 20); ctx.lineTo(originX, 20); // z-axis (drawn as y on screen)
+      ctx.stroke();
+
+      // Cycloid equations (x is horizontal, z is vertical on screen)
+      // x(t) = R(wt - sin wt)
+      // z(t) = R(1 - cos wt)
+      
+      const t = state.current.time;
+      const x = R * (omega * t - Math.sin(omega * t));
+      const z = R * (1 - Math.cos(omega * t));
+
+      const px = originX + x;
+      const py = originY - z;
+
+      // Add to trail
+      if (t === 0) {
+        state.current.trail = [{x: px, y: py}];
+      } else {
+        state.current.trail.push({x: px, y: py});
+      }
+
+      // Draw Trail
+      ctx.strokeStyle = '#10b981'; // Green path
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      if (state.current.trail.length > 0) {
+        ctx.moveTo(state.current.trail[0].x, state.current.trail[0].y);
+        for (let i = 1; i < state.current.trail.length; i++) {
+          ctx.lineTo(state.current.trail[i].x, state.current.trail[i].y);
+        }
+      }
+      ctx.stroke();
+
+      // Draw Particle
+      ctx.beginPath();
+      ctx.arc(px, py, 6, 0, 2*Math.PI);
+      ctx.fillStyle = '#f59e0b';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw Rolling Circle (Ghost)
+      const cx = originX + R * omega * t;
+      const cy = originY - R;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, 2*Math.PI);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Draw spoke to particle
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(px, py);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.stroke();
+
+      // Increment time
+      state.current.time += 0.05;
+      
+      // Reset if off screen
+      if (px > width) {
+          state.current.time = 0;
+      }
+
+      animationId = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="touch-none-canvas"></canvas>;
+};
+
+export default CycloidMotionInteractive;
+--- END OF FILE src/components/interactive-arts/CycloidMotionInteractive.tsx ---
+
+--- START OF FILE src/components/interactive-arts/HelmholtzCoilsInteractive.tsx ---
+import React, { useRef, useEffect } from 'react';
+
+const HelmholtzCoilsInteractive: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  const state = useRef({
+    distance: 1.0, // Ratio d/R from 0 to 2
+    dragging: false
+  });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = canvas.parentElement?.clientWidth || 300;
+    const height = 280;
+    canvas.width = width;
+    canvas.height = height;
+    
+    const cx = width / 2;
+    const cy = height / 2 + 20; 
+    const R = 40; // visual radius of coil
+
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      const d = state.current.distance * R;
+
+      // Draw Coils
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 4;
+      
+      // Left coil
+      ctx.beginPath();
+      ctx.ellipse(cx - d/2, cy, 10, R, 0, 0, 2*Math.PI);
+      ctx.stroke();
+
+      // Right coil
+      ctx.beginPath();
+      ctx.ellipse(cx + d/2, cy, 10, R, 0, 0, 2*Math.PI);
+      ctx.stroke();
+
+      // Plot B Field on Z-axis
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      
+      const plotHeight = 80;
+      const plotYBase = cy - R - 20;
+      
+      for(let z = -cx; z < cx; z++) {
+          // B formula: B(z) ~ (R^2) / (R^2 + (z - d/2)^2)^1.5 + (R^2) / (R^2 + (z + d/2)^2)^1.5
+          const b1 = Math.pow(R, 2) / Math.pow(R*R + Math.pow(z - d/2, 2), 1.5);
+          const b2 = Math.pow(R, 2) / Math.pow(R*R + Math.pow(z + d/2, 2), 1.5);
+          
+          const Btotal = b1 + b2;
+          
+          // scale for visual
+          const plotY = plotYBase - Btotal * (plotHeight * R);
+
+          if (z === -cx) ctx.moveTo(cx + z, plotY);
+          else ctx.lineTo(cx + z, plotY);
+      }
+      ctx.stroke();
+
+      // Draw axis
+      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, plotYBase); ctx.lineTo(width, plotYBase);
+      ctx.stroke();
+
+      // Highlight flatness when d/R approx 1
+      if (Math.abs(state.current.distance - 1.0) < 0.05) {
+          ctx.fillStyle = '#3b82f6';
+          ctx.font = 'bold 14px Nunito';
+          ctx.fillText('d = R (Helmholtz Configuration)', cx - 100, 30);
+          ctx.fillText('Perfectly uniform B field in center!', cx - 110, 50);
+      } else {
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '14px Nunito';
+          ctx.fillText(`d/R = ${state.current.distance.toFixed(2)}`, cx - 30, 30);
+      }
+
+      // Slider UI
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(40, height - 20, width - 80, 6);
+      
+      const sliderX = 40 + (state.current.distance / 2) * (width - 80);
+      ctx.fillStyle = '#ef4444'; 
+      ctx.beginPath();
+      ctx.arc(sliderX, height - 17, 10, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px Nunito';
+      ctx.fillText('Drag to change coil separation d', cx - 80, height - 30);
+    };
+
+    const getX = (e: MouseEvent | TouchEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
+      return (clientX - rect.left) * (width / rect.width);
+    };
+
+    const onStart = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault();
+      const currX = getX(e);
+      const sliderX = 40 + (state.current.distance / 2) * (width - 80);
+      if (Math.abs(currX - sliderX) < 30) {
+        state.current.dragging = true;
+      }
+    };
+
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      if (!state.current.dragging) return;
+      e.preventDefault();
+      let newX = getX(e);
+      if (newX < 40) newX = 40;
+      if (newX > width - 40) newX = width - 40;
+      
+      state.current.distance = ((newX - 40) / (width - 80)) * 2;
+      requestAnimationFrame(draw);
+    };
+
+    const onEnd = () => { state.current.dragging = false; };
+
+    canvas.addEventListener('mousedown', onStart);
+    canvas.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+    canvas.addEventListener('touchstart', onStart, { passive: false });
+    canvas.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+
+    draw();
+
+    return () => {
+      canvas.removeEventListener('mousedown', onStart);
+      canvas.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onEnd);
+      canvas.removeEventListener('touchstart', onStart);
+      canvas.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onEnd);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="touch-none-canvas"></canvas>;
+};
+
+export default HelmholtzCoilsInteractive;
+--- END OF FILE src/components/interactive-arts/HelmholtzCoilsInteractive.tsx ---
+
+--- START OF FILE src/components/InteractiveCanvasArt.tsx ---
+import React from 'react';
+import VectorAdditionInteractive from './interactive-arts/VectorAdditionInteractive';
+import ComponentFormInteractive from './interactive-arts/ComponentFormInteractive';
+import GradientInteractive from './interactive-arts/GradientInteractive';
+import DivergenceInteractive from './interactive-arts/DivergenceInteractive';
+import CurlInteractive from './interactive-arts/CurlInteractive';
+import LaplacianInteractive from './interactive-arts/LaplacianInteractive';
+import WorkPathInteractive from './interactive-arts/WorkPathInteractive';
+import ConductorChargesInteractive from './interactive-arts/ConductorChargesInteractive';
+import CapacitorInteractive from './interactive-arts/CapacitorInteractive';
+import LorentzForceInteractive from './interactive-arts/LorentzForceInteractive';
+import BiotSavartInteractive from './interactive-arts/BiotSavartInteractive';
+import AmperesLawInteractive from './interactive-arts/AmperesLawInteractive';
+import MagBoundaryInteractive from './interactive-arts/MagBoundaryInteractive';
+import ClockFaceChargesInteractive from './interactive-arts/ClockFaceChargesInteractive';
+import CycloidMotionInteractive from './interactive-arts/CycloidMotionInteractive';
+import HelmholtzCoilsInteractive from './interactive-arts/HelmholtzCoilsInteractive';
+
+interface Props {
+  canvasId: string;
+}
+
+const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
+  const renderInteractive = () => {
+    switch (canvasId) {
+      case 'vector-addition-interactive': return <VectorAdditionInteractive />;
+      case 'component-form-interactive': return <ComponentFormInteractive />;
+      case 'gradient-interactive': return <GradientInteractive />;
+      case 'divergence-interactive': return <DivergenceInteractive />;
+      case 'curl-interactive': return <CurlInteractive />;
+      case 'laplacian-interactive': return <LaplacianInteractive />;
+      case 'work-path-interactive': return <WorkPathInteractive />;
+      case 'conductor-charges-interactive': return <ConductorChargesInteractive />;
+      case 'capacitor-interactive': return <CapacitorInteractive />;
+      case 'lorentz-force-interactive': return <LorentzForceInteractive />;
+      case 'biot-savart-interactive': return <BiotSavartInteractive />;
+      case 'amperes-law-interactive': return <AmperesLawInteractive />;
+      case 'mag-boundary-interactive': return <MagBoundaryInteractive />;
+      case 'clock-face-interactive': return <ClockFaceChargesInteractive />;
+      case 'cycloid-motion-interactive': return <CycloidMotionInteractive />;
+      case 'helmholtz-coils-interactive': return <HelmholtzCoilsInteractive />;
+      default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found</p>;
+    }
+  };
+
+  return (
+    <div className="interactive-canvas-container">
+      {renderInteractive()}
+    </div>
+  );
+};
+
+export default InteractiveCanvasArt;
+--- END OF FILE src/components/InteractiveCanvasArt.tsx ---

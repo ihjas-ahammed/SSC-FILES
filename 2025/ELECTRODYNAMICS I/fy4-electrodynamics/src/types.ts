@@ -6,7 +6,8 @@ export type SlideType =
   | 'quiz' 
   | 'fill_in_blank'
   | 'example_q'
-  | 'solution';
+  | 'solution'
+  | 'interactive_canvas'; 
 
 export interface QuizOption {
   id: string;
@@ -16,9 +17,9 @@ export interface QuizOption {
 }
 
 export interface InteractiveStep {
-  prompt?: string; // The question asking what the next step is
-  stepText?: string; // The formal text added to the proof list after completion
-  options?: QuizOption[]; // If provided, user must choose the correct one
+  prompt?: string;
+  stepText?: string;
+  options?: QuizOption[];
 }
 
 export interface Slide {
@@ -28,12 +29,13 @@ export interface Slide {
   content: string; 
   image?: string; 
   canvasId?: string; 
+  interactiveCanvasId?: string; 
   options?: QuizOption[]; 
-  proofSteps?: string[]; // Legacy fallback 
-  interactiveSteps?: InteractiveStep[]; // Interactive Proof/Solution steps
+  proofSteps?: string[]; 
+  interactiveSteps?: InteractiveStep[]; 
   blankAnswer?: string; 
-  numericAnswer?: number; // Used for numerical type slides
-  numericTolerance?: number; // Allowed delta for correct answer
+  numericAnswer?: number; 
+  numericTolerance?: number; 
 }
 
 export interface Lesson {
@@ -65,6 +67,7 @@ export interface Course {
   title: string;
   description: string;
   sections: Section[];
+  chapterSummary?: Slide[]; // Added for Chapter Summary Pages
 }
 
 export interface UserProgress {

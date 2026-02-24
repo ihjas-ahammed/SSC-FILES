@@ -1,706 +1,408 @@
 import { Section } from '../types';
 
 export const SECTION_3_1: Section = {
-  "id": "section-3-1",
-  "title": "Section 1: Waves in Stretched Strings",
-  "description": "Wave equations, Fourier Series, Standing Waves, Traveling Waves, and Energy Flow.",
-  "color": "duo-blue",
-  "units": [
+  id: "section-3-1",
+  title: "Section 1: Lorentz Force & Biot-Savart Law",
+  description: "Introduction to magnetic forces, moving charges, and the generation of magnetic fields by steady currents.",
+  color: "duo-red",
+  units: [
     {
-      "id": "unit-3-1",
-      "title": "Fundamentals of Waves",
-      "description": "Wave properties, the wave equation, and separation of variables.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-10-lorentz",
+      title: "The Lorentz Force Law",
+      description: "Magnetic fields, cyclotron motion, and the realization that magnetic forces do no work.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "lesson-3-1-1-properties",
-          "title": "Wave Properties & Terminology",
-          "description": "Defining amplitude, wavelength, frequency, and wave number.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Characteristics of a Wave",
-              "content": "A wave is characterized by several physical parameters:\n\n*   **Amplitude ($A$):** Maximum displacement from equilibrium.\n*   **Wavelength ($\\lambda$):** Distance between two corresponding points (like peak to peak).\n*   **Period ($\\tau$):** Time for one complete oscillation.\n*   **Frequency ($f$):** Number of oscillations per unit time ($f = 1/\\tau$).\n*   **Speed ($v$):** How fast the waveform is displaced ($v = \\lambda / \\tau = \\lambda f$).\n*   **Angular frequency ($\\omega$):** $\\omega = 2\\pi f = 2\\pi/\\tau$.\n*   **Wave number ($k$):** $k = 2\\pi / \\lambda$. (Notice $k = \\omega / v$)."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Snapshot vs Video",
-              "content": "A photograph of a string at a specific instant shows displacement $y$ as a function of position $x$, giving $y(x) = A\\sin(kx)$.\n\nA video shows the string moving over time, so displacement depends on both position and time: $y(x,t)$. This is where $\\omega t$ will enter the argument."
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Wave Number vs Angular Frequency",
-              "content": "Angular frequency $\\omega$ represents an inverse time. What does the wave number $k$ represent?",
-              "options": [
-                { "id": "1", "text": "An inverse length", "isCorrect": true, "explanation": "Since $k = 2\\pi/\\lambda$, its units are radians per meter. It describes spatial frequency." },
-                { "id": "2", "text": "A velocity", "isCorrect": false, "explanation": "Velocity is $\\omega/k$." },
-                { "id": "3", "text": "An inverse time", "isCorrect": false, "explanation": "That is angular frequency." }
-              ]
-            },
-            {
-              "id": "s4-blank",
-              "type": "fill_in_blank",
-              "title": "Wave Speed",
-              "content": "The speed $v$ of a wave can be found by multiplying its wavelength $\\lambda$ by its ___ $f$.",
-              "blankAnswer": "frequency"
-            }
-          ]
-        },
-        {
-          "id": "lesson-3-1-2-wave-equation",
-          "title": "The Wave Equation",
-          "description": "Deriving the wave equation from Newton's Second Law.",
-          "icon": "TrendingUp",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "String Dynamics",
-              "content": "Consider a string of mass density $\\rho$ under tension $F$. A small segment $dx$ has mass $dm = \\rho dx$. \n\nThe horizontal tension forces cancel out, but curvature creates a net vertical restoring force. Using the small angle approximation $\\sin\\theta \\approx \\tan\\theta = \\partial y / \\partial x$, we can apply $F_{net} = ma$."
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: The Wave Equation",
-              "content": "Let's derive the equation of motion for a wave on a string.",
-              "interactiveSteps": [
+          id: "les-10-1-mag-fields-intro", title: "Magnetic Fields", description: "Currents and forces", icon: "Magnet",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If you hang two parallel wires next to each other and pass a current UP through both of them, what happens?", options: [ { id: "A", text: "They repel each other", isCorrect: false, explanation: "That would be true for like electrostatic charges, but this is magnetism!" }, { id: "B", text: "They attract each other", isCorrect: true, explanation: "Parallel currents attract in magnetism." } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "Are the wires in the previous example electrically charged?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Current is moving charge, but the wire has equal protons and electrons." }, { id: "B", text: "No, they are electrically neutral", isCorrect: true, explanation: "The force must be purely magnetic, not electrostatic." } ] },
+            { id: "s2", type: "theory", title: "Introduction to Magnetic Fields", content: "Stationary charges produce electric fields ($\\mathbf{E}$). However, **moving charges** (currents) generate an additional field: the **Magnetic Field** ($\\mathbf{B}$).\n\nIf you hold a compass near a current-carrying wire, the needle doesn't point toward or away from the wire; it circles *around* the wire. If you grab the wire with your right hand—thumb pointing in the direction of current—your fingers curl in the direction of the magnetic field." },
+            { id: "s3", type: "interactive_canvas", title: "The Right-Hand Rule", content: "Drag the field point around the wire. Notice how the magnetic field $\\mathbf{B}$ always forms a circle around the current direction.", interactiveCanvasId: "biot-savart-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Attraction of Parallel Currents", 
+              content: "**Goal: Understand why parallel currents attract.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The net vertical force is $F_{net} = F\\sin\\phi - F\\sin\\theta$, where $\\phi$ is the angle at $x+dx$ and $\\theta$ is the angle at $x$."
+                  stepText: "Imagine Wire 1 and Wire 2, both carrying current UP the screen."
                 },
                 {
-                  "prompt": "Using $\\sin\\theta \\approx \\frac{\\partial y}{\\partial x}$, how do we write the force difference?",
-                  "stepText": "$F_{net} = F \\left[ \\frac{\\partial y(x+dx, t)}{\\partial x} - \\frac{\\partial y(x, t)}{\\partial x} \\right]$.",
-                  "options": [
-                    { "id": "A", "text": "$F \\left[ \\frac{\\partial y(x+dx, t)}{\\partial x} - \\frac{\\partial y(x, t)}{\\partial x} \\right]$", "isCorrect": true, "explanation": "It is the difference in slopes between the two ends." },
-                    { "id": "B", "text": "$F \\frac{\\partial^2 y}{\\partial x^2}$", "isCorrect": false, "explanation": "This is the next step, after dividing by $dx$." }
-                  ]
+                  prompt: "Using the right-hand rule on Wire 1, what is the direction of its magnetic field at the location of Wire 2 (which is to its right)?",
+                  options: [
+                    { id: "A", text: "Pointing INTO the screen", isCorrect: true, explanation: "Thumb up, fingers curl into the screen on the right side." },
+                    { id: "B", text: "Pointing OUT OF the screen", isCorrect: false, explanation: "That would be on the left side of Wire 1." }
+                  ],
+                  stepText: "The magnetic field from Wire 1 points INTO the screen at Wire 2."
                 },
                 {
-                  "stepText": "Newton's second law is $F_{net} = (\\rho dx) \\frac{\\partial^2 y}{\\partial t^2}$."
-                },
-                {
-                  "prompt": "Divide both sides by $dx$ and take the limit as $dx \\to 0$. What does the left side become?",
-                  "stepText": "$F \\frac{\\partial^2 y}{\\partial x^2}$.",
-                  "options": [
-                    { "id": "A", "text": "$F \\frac{\\partial^2 y}{\\partial x^2}$", "isCorrect": true, "explanation": "The limit of the difference quotient of the first derivative is the second derivative." },
-                    { "id": "B", "text": "$\\rho \\frac{\\partial y}{\\partial t}$", "isCorrect": false, "explanation": "That is momentum density, not force." }
-                  ]
-                },
-                {
-                  "stepText": "Equating them: $F \\frac{\\partial^2 y}{\\partial x^2} = \\rho \\frac{\\partial^2 y}{\\partial t^2}$. By defining $v = \\sqrt{F/\\rho}$, we get the standard wave equation: $\\frac{\\partial^2 y}{\\partial x^2} = \\frac{1}{v^2}\\frac{\\partial^2 y}{\\partial t^2}$."
+                  stepText: "Later we'll learn that a current moving UP through a field pointing IN experiences a force to the LEFT (towards Wire 1). Thus, they attract!"
                 }
               ]
             },
-            {
-              "id": "s3-numerical",
-              "type": "numerical",
-              "title": "Exercise 13.1: Longest Standing Wave",
-              "content": "A string of length $6$ m is fixed at both ends. Its mass is $0.1$ kg and the tension is $50$ N.\n\nWhat is the wavelength of the longest possible standing wave in this string (in meters)?",
-              "numericAnswer": 12,
-              "numericTolerance": 0.1
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Exercise 13.1 (Part B): Wave Frequency",
-              "content": "For the same string ($L=6$m, $m=0.1$kg, $T=50$N), the wave speed is $v = \\sqrt{50 / (0.1/6)} = \\sqrt{3000} \\approx 54.77$ m/s. The longest wavelength is $\\lambda = 12$m. What is the frequency of that wave?",
-              "options": [
-                { "id": "1", "text": "4.56 Hz", "isCorrect": true, "explanation": "$f = v / \\lambda = 54.77 / 12 \\approx 4.56$ Hz." },
-                { "id": "2", "text": "9.13 Hz", "isCorrect": false, "explanation": "This would be the second harmonic." },
-                { "id": "3", "text": "54.77 Hz", "isCorrect": false, "explanation": "This is the wave speed, not frequency." }
-              ]
-            }
+            { id: "s5", type: "numerical", title: "Units of B", content: "The magnetic field is measured in Teslas (T). If 1 Tesla equals $10^x$ Gauss, what is $x$?", numericAnswer: 4, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Antiparallel Currents", content: "If parallel currents attract, what do antiparallel currents (one UP, one DOWN) do?", options: [ { id: "A", text: "Repel", isCorrect: true, explanation: "Opposite current directions result in repulsion." }, { id: "B", text: "Attract", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "While stationary charges create electric fields, ___ charges create magnetic fields.", blankAnswer: "moving" }
           ]
         },
         {
-          "id": "lesson-3-1-3-separation-variables",
-          "title": "Direct Solution: Separation of Variables",
-          "description": "Solving the PDE by splitting space and time.",
-          "icon": "SplitSquareHorizontal",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Separation of Variables",
-              "content": "To solve the PDE $\\frac{\\partial^2 y}{\\partial x^2} = \\frac{1}{v^2}\\frac{\\partial^2 y}{\\partial t^2}$, we assume the solution can be factored into two independent functions:\n\n$$y(x,t) = X(x)T(t)$$\n\nSubstituting this into the wave equation gives:\n$$T(t)\\frac{\\partial^2 X}{\\partial x^2} = \\frac{1}{v^2}X(x)\\frac{\\partial^2 T}{\\partial t^2}$$"
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: The Separation Constant",
-              "content": "Let's separate the variables onto different sides of the equals sign.",
-              "interactiveSteps": [
+          id: "les-10-2-lorentz-force", title: "Lorentz Force Law", description: "F = Q(v x B)", icon: "ArrowUpRight",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If a charged particle is completely at rest in a strong magnetic field, what is the magnetic force on it?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "Magnetic fields only exert force on MOVING charges." }, { id: "B", text: "Very strong", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "What mathematical operation relates the velocity, magnetic field, and resulting force?", options: [ { id: "A", text: "Dot Product", isCorrect: false, explanation: "Dot product yields a scalar." }, { id: "B", text: "Cross Product", isCorrect: true, explanation: "The force is mutually perpendicular to velocity and the field." } ] },
+            { id: "s2", type: "theory", title: "The Lorentz Force Law", content: "The magnetic force on a charge $Q$, moving with velocity $\\mathbf{v}$ in a magnetic field $\\mathbf{B}$, is:\n\n$\\mathbf{F}_{mag} = Q(\\mathbf{v} \\times \\mathbf{B})$\n\nIn the presence of both electric and magnetic fields, the net force on $Q$ is the complete Lorentz force law:\n$\\mathbf{F} = Q[\\mathbf{E} + (\\mathbf{v} \\times \\mathbf{B})]$\n\nNotice that the magnetic force is always *perpendicular* to both the velocity of the charge and the magnetic field." },
+            { id: "s3", type: "interactive_canvas", title: "Cross Product Force", content: "Drag the velocity vector to change the direction of the moving charge. Notice how the resulting Force vector is always perpendicular to velocity.", interactiveCanvasId: "lorentz-force-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Negative Charges", 
+              content: "**Goal: Determine the direction of force on an electron.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Start with $T \\frac{d^2 X}{dx^2} = \\frac{1}{v^2} X \\frac{d^2 T}{dt^2}$."
+                  stepText: "Suppose a proton ($+e$) moves UP in a magnetic field pointing INTO the screen."
                 },
                 {
-                  "prompt": "Divide both sides by $X(x)T(t)$ to separate the variables. What is the result?",
-                  "stepText": "$\\frac{1}{X} \\frac{d^2 X}{dx^2} = \\frac{1}{v^2 T} \\frac{d^2 T}{dt^2}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\frac{1}{X} \\frac{d^2 X}{dx^2} = \\frac{1}{v^2 T} \\frac{d^2 T}{dt^2}$", "isCorrect": true, "explanation": "Now the left side depends ONLY on x, and the right side depends ONLY on t." },
-                    { "id": "B", "text": "$X \\frac{d^2 X}{dx^2} = T \\frac{d^2 T}{dt^2}$", "isCorrect": false, "explanation": "Division puts X and T in the denominators." }
-                  ]
+                  prompt: "Using the right hand rule for $\\mathbf{v} \\times \\mathbf{B}$ (fingers UP, curl INTO screen), where does the thumb point?",
+                  options: [
+                    { id: "A", text: "LEFT", isCorrect: true, explanation: "Correct!" },
+                    { id: "B", text: "RIGHT", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The force on the proton is to the LEFT."
                 },
                 {
-                  "stepText": "Since a function of purely $x$ equals a function of purely $t$ for all possible values, they must both equal a constant. Call this constant $-\\omega^2 / v^2$."
-                },
-                {
-                  "prompt": "This yields two ordinary differential equations. For $X$, we have $\\frac{d^2 X}{dx^2} = -\\frac{\\omega^2}{v^2} X$. What kind of motion does this represent?",
-                  "stepText": "It is the Simple Harmonic Motion equation! $\\frac{d^2 X}{dx^2} + k^2 X = 0$, where $k = \\omega/v$.",
-                  "options": [
-                    { "id": "A", "text": "Exponential decay", "isCorrect": false, "explanation": "The constant is negative, leading to oscillatory (sine/cosine) solutions." },
-                    { "id": "B", "text": "Simple Harmonic Motion", "isCorrect": true, "explanation": "Exactly. The spatial part is just a sine/cosine wave." }
-                  ]
+                  prompt: "Now suppose an electron ($-e$) moves UP in the same field. What is the direction of the force?",
+                  options: [
+                    { id: "A", text: "LEFT", isCorrect: false, explanation: "Don't forget to multiply by the negative charge!" },
+                    { id: "B", text: "RIGHT", isCorrect: true, explanation: "The negative charge flips the direction of the force vector." }
+                  ],
+                  stepText: "Because $Q$ is negative, the force is in the opposite direction: RIGHT. Goal reached."
                 }
               ]
             },
-            {
-              "id": "s3-example",
-              "type": "example",
-              "title": "The General Solution",
-              "content": "Both ODEs yield harmonic solutions:\n$X(x) = A\\cos kx + B\\sin kx$\n$T(t) = C\\cos \\omega t + D\\sin \\omega t$\n\nThe full solution is their product:\n$y(x,t) = (A\\cos kx + B\\sin kx)(C\\cos \\omega t + D\\sin \\omega t)$"
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Logic Check",
-              "content": "Why do we choose the separation constant to be negative ( $-\\omega^2/v^2$ ) rather than positive?",
-              "options": [
-                { "id": "1", "text": "To force the solutions to be sines and cosines (oscillatory) rather than growing exponentials.", "isCorrect": true, "explanation": "A positive constant would yield $e^{kx}$ and $e^{-kx}$, which blow up at infinity, unphysical for a bounded string." },
-                { "id": "2", "text": "Because frequency must be negative.", "isCorrect": false, "explanation": "Frequency $\\omega$ is positive; we manually add the minus sign to the square." },
-                { "id": "3", "text": "To satisfy gravity.", "isCorrect": false, "explanation": "Gravity isn't in this equation." }
-              ]
-            }
+            { id: "s5", type: "numerical", title: "Calculate Force", content: "A 2 C charge moves at 3 m/s strictly along the x-axis. The magnetic field is 4 T entirely along the y-axis. What is the magnitude of the magnetic force in Newtons?", numericAnswer: 24, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Parallel Motion", content: "What is the magnetic force if the charge moves exactly parallel to the magnetic field?", options: [ { id: "A", text: "Maximum", isCorrect: false, explanation: "" }, { id: "B", text: "Zero", isCorrect: true, explanation: "The cross product of parallel vectors is zero (sin 0 = 0)." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The magnetic force is always ___ to the velocity of the particle.", blankAnswer: "perpendicular" }
           ]
         },
         {
-          "id": "lesson-3-1-4-general-solutions",
-          "title": "Exercises & Superposition",
-          "description": "Applying initial conditions and phase identities.",
-          "icon": "PenTool",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 13.2",
-              "content": "If $n$ is the number of half wavelengths that fit on a string of length $L$, show that the frequency of the standing wave is $f = nv/2L$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Let's connect wavelengths, length, and frequency.",
-              "interactiveSteps": [
+          id: "les-10-3-cyclotron", title: "Cyclotron Motion", description: "Circular paths in B-fields", icon: "RefreshCw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If a force is always perpendicular to your velocity, what kind of motion does it produce?", options: [ { id: "A", text: "Linear acceleration", isCorrect: false, explanation: "" }, { id: "B", text: "Circular motion", isCorrect: true, explanation: "It acts purely as a centripetal force." } ] },
+            { id: "s2", type: "theory", title: "Cyclotron Motion", content: "Because the magnetic force is perpendicular to velocity, a charged particle moving in a uniform magnetic field will travel in a circle.\n\nThe magnetic force provides the exact centripetal acceleration needed:\n$QvB = m \\frac{v^2}{R}$\n\nSolving for momentum $p = mv$, we get:\n$p = QBR$\n\nThis simple formula allows physicists to measure the momentum of subatomic particles by observing the radius of their curved paths in a known magnetic field." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Cyclotron Frequency", 
+              content: "**Goal: Find the frequency of orbit.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The length of the string $L$ fits exactly $n$ half-wavelengths: $L = n(\\lambda/2)$."
+                  stepText: "We know $QvB = m v^2 / R$. Let's divide both sides by $v$."
                 },
                 {
-                  "prompt": "Solve this for $\\lambda$.",
-                  "stepText": "$\\lambda = 2L/n$.",
-                  "options": [
-                    { "id": "A", "text": "$\\lambda = nL/2$", "isCorrect": false, "explanation": "Check your algebra." },
-                    { "id": "B", "text": "$\\lambda = 2L/n$", "isCorrect": true, "explanation": "Correct." }
-                  ]
+                  stepText: "This leaves $QB = m (v/R)$."
                 },
                 {
-                  "prompt": "We know wave speed $v = \\lambda f$. Substitute our expression for $\\lambda$ and solve for $f$.",
-                  "stepText": "$v = (2L/n)f \\implies f = nv / 2L$.",
-                  "options": [
-                    { "id": "A", "text": "$f = nv / 2L$", "isCorrect": true, "explanation": "Correct. This gives the allowed harmonic frequencies of a string." },
-                    { "id": "B", "text": "$f = vL / 2n$", "isCorrect": false, "explanation": "Wrong algebraic manipulation." }
-                  ]
+                  prompt: "In circular motion, what is the angular velocity $\\omega$ in terms of $v$ and $R$?",
+                  options: [
+                    { id: "A", text: "$\\omega = v/R$", isCorrect: true, explanation: "Basic kinematic relation." },
+                    { id: "B", text: "$\\omega = vR$", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "Substituting $\\omega = v/R$, we get $QB = m\\omega$."
+                },
+                {
+                  stepText: "Thus, the cyclotron frequency is $\\omega = \\frac{QB}{m}$. Notice it does NOT depend on the speed $v$ or radius $R$! Goal reached."
                 }
               ]
             },
-            {
-              "id": "s3-q",
-              "type": "example_q",
-              "title": "Exercise 13.3",
-              "content": "Show that the spatial expression $y = A\\sin kx + B\\cos kx$ can be expressed as $y = C\\cos(kx + \\alpha)$. \n\nExpress $C$ and $\\alpha$ in terms of $A$ and $B$."
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Exercise 13.3 Solution",
-              "content": "Expanding $C\\cos(kx + \\alpha)$ gives $C\\cos kx \\cos\\alpha - C\\sin kx \\sin\\alpha$. Matching coefficients to $A\\sin kx + B\\cos kx$, we find $B = C\\cos\\alpha$ and $A = -C\\sin\\alpha$. \nWhat are $C$ and $\\alpha$?",
-              "options": [
-                { "id": "1", "text": "$C = A+B$, $\\alpha = A/B$", "isCorrect": false, "explanation": "Trigonometric coefficients combine via Pythagoras." },
-                { "id": "2", "text": "$C = \\sqrt{A^2 + B^2}$, $\\alpha = \\tan^{-1}(-A/B)$", "isCorrect": true, "explanation": "$A^2+B^2 = C^2(\\sin^2\\alpha+\\cos^2\\alpha)=C^2$. And $A/B = -\\sin\\alpha/\\cos\\alpha = -\\tan\\alpha$." },
-                { "id": "3", "text": "$C = \\sqrt{A^2 - B^2}$, $\\alpha = \\tan^{-1}(B/A)$", "isCorrect": false, "explanation": "The sum under the square root must be positive." }
+            { id: "s5", type: "numerical", title: "Radius Calculation", content: "A particle with charge $Q=2$ C and mass $m=4$ kg moves at $v=5$ m/s in a field $B=10$ T. What is the radius of its circular orbit in meters?", numericAnswer: 1, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Helical Motion", content: "What if the particle has a component of velocity parallel to B?", options: [ { id: "A", text: "It stops", isCorrect: false, explanation: "" }, { id: "B", text: "It moves in a helix (corkscrew)", isCorrect: true, explanation: "The perpendicular velocity makes a circle, the parallel velocity moves it forward." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The equation $p = QBR$ is known as the ___ formula.", blankAnswer: "cyclotron" }
+          ]
+        },
+        {
+          id: "les-10-4-no-work", title: "Magnetic Forces Do No Work", description: "A peculiar property", icon: "XCircle",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In physics, work is defined as Force dotted with displacement ($\\mathbf{F} \\cdot d\\mathbf{l}$). Since $\\mathbf{F}_{mag}$ is perpendicular to velocity, what is the work done?", options: [ { id: "A", text: "Maximum", isCorrect: false, explanation: "" }, { id: "B", text: "Zero", isCorrect: true, explanation: "The dot product of perpendicular vectors is zero." } ] },
+            { id: "s2", type: "theory", title: "Magnetic Forces Do No Work", content: "One of the most profound implications of the Lorentz force law is that **magnetic forces do no work** on a charge.\n\n$dW_{mag} = \\mathbf{F}_{mag} \\cdot d\\mathbf{l} = Q(\\mathbf{v} \\times \\mathbf{B}) \\cdot \\mathbf{v} dt = 0$\n\nBecause $(\\mathbf{v} \\times \\mathbf{B})$ is strictly perpendicular to $\\mathbf{v}$, their dot product vanishes exactly. Magnetic forces can alter the *direction* in which a particle moves, but they can never speed it up or slow it down. They cannot change a particle's kinetic energy." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: The Magnetic Crane", 
+              content: "**Goal: Resolve a paradox.**", 
+              interactiveSteps: [
+                {
+                  stepText: "A magnetic crane lifts a heavy junked car. It certainly seems like the magnetic force is doing work!"
+                },
+                {
+                  prompt: "If the magnetic force doesn't do work, what is actually supplying the energy to lift the car?",
+                  options: [
+                    { id: "A", text: "The battery/generator running the electromagnet", isCorrect: true, explanation: "The magnetic field merely redirects the force; the power source does the actual work." },
+                    { id: "B", text: "Gravity", isCorrect: false, explanation: "Gravity is pulling down." }
+                  ],
+                  stepText: "The power supply pushes charges through the wire. The magnetic field acts like a frictionless ramp, redirecting horizontal work into vertical lift."
+                },
+                {
+                  stepText: "Ultimately, the magnetic force itself does no net work; it is the active agent (the battery) that expends energy."
+                }
               ]
-            }
+            },
+            { id: "s6", type: "quiz", title: "Kinetic Energy", content: "If an electron enters a region of purely magnetic field, what happens to its kinetic energy?", options: [ { id: "A", text: "It increases", isCorrect: false, explanation: "" }, { id: "B", text: "It remains exactly constant", isCorrect: true, explanation: "Since W=0, change in KE=0." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Magnetic forces can change a particle's direction, but never its ___.", blankAnswer: "speed" }
+          ]
+        },
+        {
+          id: "les-10-5-currents", title: "Currents & Density", description: "Line, Surface, and Volume Currents", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "By historical convention, the direction of electric current is:", options: [ { id: "A", text: "The direction positive charges would move", isCorrect: true, explanation: "Thanks, Ben Franklin!" }, { id: "B", text: "The actual direction electrons move", isCorrect: false, explanation: "Electrons move opposite to conventional current." } ] },
+            { id: "s2", type: "theory", title: "Currents", content: "The **current** ($I$) in a wire is the charge per unit time passing a given point. $I = \\lambda v$, where $\\lambda$ is the line charge density and $v$ is velocity.\n\nWhen charge flows over a 2D surface, we use the **surface current density** $\\mathbf{K}$. $\\mathbf{K} = \\sigma \\mathbf{v}$. It represents current per unit width.\n\nWhen charge flows through a 3D region, we use the **volume current density** $\\mathbf{J}$. $\\mathbf{J} = \\rho \\mathbf{v}$. It represents current per unit area." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Dictionary of Currents", 
+              content: "**Goal: Learn how to translate between distributions.**", 
+              interactiveSteps: [
+                {
+                  stepText: "In electrostatics, we translated charge $Q$ to $\\lambda dl$, $\\sigma da$, or $\\rho d\\tau$."
+                },
+                {
+                  prompt: "The magnetic force on a point charge is $\\int (\\mathbf{v} \\times \\mathbf{B}) dq$. For a line current, $dq = \\lambda dl$. What does $\\mathbf{v} \\lambda$ become?",
+                  options: [
+                    { id: "A", text: "Current $\\mathbf{I}$", isCorrect: true, explanation: "Since I = lambda * v." },
+                    { id: "B", text: "$\\mathbf{K}$", isCorrect: false, explanation: "That's surface current." }
+                  ],
+                  stepText: "So $\\mathbf{v} dq \\rightarrow \\mathbf{I} dl$ for a wire."
+                },
+                {
+                  stepText: "Similarly, $\\mathbf{v} dq \\rightarrow \\mathbf{K} da$ for a surface, and $\\mathbf{v} dq \\rightarrow \\mathbf{J} d\\tau$ for a volume. This 'dictionary' easily translates equations!"
+                }
+              ]
+            },
+            { id: "s5", type: "numerical", title: "Current Calculation", content: "A wire has a line charge density $\\lambda = 3$ C/m moving at $v = 4$ m/s. What is the current $I$ in Amperes?", numericAnswer: 12, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Units of J", content: "What are the SI units of Volume Current Density $\\mathbf{J}$?", options: [ { id: "A", text: "Amperes / meter", isCorrect: false, explanation: "That's K." }, { id: "B", text: "Amperes / meter squared", isCorrect: true, explanation: "Current per unit cross-sectional area." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The surface current density is denoted by the letter ___.", blankAnswer: "K" }
+          ]
+        },
+        {
+          id: "les-10-6-continuity", title: "The Continuity Equation", description: "Conservation of charge", icon: "Waves",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If more water flows out of a bathtub than flows in, what must happen to the water level inside?", options: [ { id: "A", text: "It goes up", isCorrect: false, explanation: "" }, { id: "B", text: "It goes down", isCorrect: true, explanation: "Conservation of mass!" } ] },
+            { id: "s2", type: "theory", title: "The Continuity Equation", content: "Charge is conserved. If current flows out through a closed surface, the total charge inside must decrease.\n\nThe outward flux of current is $\\oint \\mathbf{J} \\cdot d\\mathbf{a}$. By the divergence theorem, this equals $\\int (\\nabla \\cdot \\mathbf{J}) d\\tau$.\n\nThe rate of charge decrease is $-\\frac{d}{dt} \\int \\rho d\\tau = \\int \\left(-\\frac{\\partial \\rho}{\\partial t}\\right) d\\tau$.\n\nEquating the integrands gives the **Continuity Equation**:\n$\\nabla \\cdot \\mathbf{J} = -\\frac{\\partial \\rho}{\\partial t}$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Steady Currents", 
+              content: "**Goal: Apply continuity to magnetostatics.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Magnetostatics is the study of *steady* currents, meaning they have been going on forever without change, and charge is not piling up anywhere."
+                },
+                {
+                  prompt: "If charge density $\\rho$ is not changing anywhere, what is $\\frac{\\partial \\rho}{\\partial t}$?",
+                  options: [
+                    { id: "A", text: "Zero", isCorrect: true, explanation: "The derivative of a constant is zero." },
+                    { id: "B", text: "Infinity", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "For steady currents, $\\frac{\\partial \\rho}{\\partial t} = 0$."
+                },
+                {
+                  stepText: "Therefore, the continuity equation for steady currents simplifies to $\\nabla \\cdot \\mathbf{J} = 0$."
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Physical Meaning", content: "What does $\\nabla \\cdot \\mathbf{J} = 0$ mean physically?", options: [ { id: "A", text: "What goes in must come out.", isCorrect: true, explanation: "No net accumulation of charge anywhere." }, { id: "B", text: "The current is zero everywhere.", isCorrect: false, explanation: "It just means it doesn't diverge from a point." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The equation $\\nabla \\cdot \\mathbf{J} = -\\partial \\rho / \\partial t$ is the precise mathematical statement of local charge ___.", blankAnswer: "conservation" }
           ]
         }
       ]
     },
     {
-      "id": "unit-3-2",
-      "title": "Fourier Series & Standing Waves",
-      "description": "Matching boundary conditions and decomposing complex shapes.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-11-biot-savart",
+      title: "The Biot-Savart Law",
+      description: "Calculating magnetic fields from steady currents.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "lesson-3-2-1-fourier",
-          "title": "Fourier Series Fundamentals",
-          "description": "Representing periodic functions as sums of sines and cosines.",
-          "icon": "Layers",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Fourier Series",
-              "content": "Any periodic function (or a function on a finite interval) can be represented as an infinite sum of sines and cosines:\n\n$$f(x) = \\frac{a_0}{2} + \\sum_{n=1}^\\infty a_n \\cos(nx) + \\sum_{n=1}^\\infty b_n \\sin(nx)$$\n\nThis is highly useful for matching the initial shape of a plucked string to the infinite set of possible standing wave solutions."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Finding the Coefficients",
-              "content": "We find $a_n$ and $b_n$ using the **orthogonality** of sines and cosines. For an interval $-\\pi$ to $\\pi$:\n\n*   $a_0 = \\frac{1}{\\pi} \\int_{-\\pi}^{\\pi} f(x) dx$\n*   $a_m = \\frac{1}{\\pi} \\int_{-\\pi}^{\\pi} f(x) \\cos(mx) dx$\n*   $b_m = \\frac{1}{\\pi} \\int_{-\\pi}^{\\pi} f(x) \\sin(mx) dx$"
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Labor Saving Fact",
-              "content": "If $f(x)$ is an **odd** function ($f(x) = -f(-x)$), which coefficients will entirely disappear (evaluate to zero) from the series?",
-              "options": [
-                { "id": "1", "text": "The $b_n$ coefficients (sine terms).", "isCorrect": false, "explanation": "Sine is an odd function. An odd function times an odd function is even, which survives integration." },
-                { "id": "2", "text": "The $a_n$ coefficients (cosine terms).", "isCorrect": true, "explanation": "Cosine is even. Odd times Even is Odd. The integral of an odd function from $-\\pi$ to $\\pi$ is exactly zero!" },
-                { "id": "3", "text": "All of them.", "isCorrect": false, "explanation": "Then the function would be zero everywhere." }
-              ]
-            },
-            {
-              "id": "s4-blank",
-              "type": "fill_in_blank",
-              "title": "Orthogonality",
-              "content": "The integral of $\\sin(nx)\\cos(mx)$ over a full period is always equal to ___ for all integers $m$ and $n$.",
-              "blankAnswer": "zero"
-            }
+          id: "les-11-1-steady-currents", title: "Steady Currents", description: "The regime of Magnetostatics", icon: "Clock",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Can a single, moving point charge constitute a 'steady current'?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "It's here one second, gone the next." }, { id: "B", text: "No", isCorrect: true, explanation: "A point charge creates a rapidly changing field, not a static one." } ] },
+            { id: "s2", type: "theory", title: "Magnetostatics", content: "Just as *stationary charges* produce electric fields that are constant in time (electrostatics), *steady currents* produce magnetic fields that are constant in time (magnetostatics).\n\nBy steady current, we mean a continuous flow that doesn't change with time: $\\frac{\\partial \\mathbf{J}}{\\partial t} = 0$ and $\\frac{\\partial \\rho}{\\partial t} = 0$.\n\nBecause moving point charges don't form steady currents, we cannot build magnetostatics starting from a single point charge. We are forced to deal with extended, continuous wires right from the start." },
+            { id: "s6", type: "quiz", title: "Everyday Magnetostatics", content: "Is an alternating household current (AC) strictly magnetostatic?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No, but it's often a good approximation.", isCorrect: true, explanation: "It changes 120 times a second, but for many calculations, we treat it quasi-statically." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The theory of steady currents is called ___.", blankAnswer: "magnetostatics" }
           ]
         },
         {
-          "id": "lesson-3-2-2-standing-waves",
-          "title": "Standing Waves & Boundary Conditions",
-          "description": "Quantizing the wave number to fit the string.",
-          "icon": "Aperture",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Tying Down the Ends",
-              "content": "Consider a string tied down at $x=0$ and $x=L$. The boundary conditions are $y(0,t) = y(L,t) = 0$.\n\nRecall our general solution: \n$y(x,t) = (A\\cos kx + B\\sin kx)(C\\cos \\omega t + D\\sin \\omega t)$"
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Quantization",
-              "content": "Let's apply the boundary conditions to find allowed wave numbers $k$.",
-              "interactiveSteps": [
+          id: "les-11-2-biot-savart-eq", title: "The Biot-Savart Law", description: "The fundamental formula", icon: "Target",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, Coulomb's law gives the E-field from charge. What law gives the B-field from current?", options: [ { id: "A", text: "Faraday's Law", isCorrect: false, explanation: "That's for induction." }, { id: "B", text: "The Biot-Savart Law", isCorrect: true, explanation: "It is the magnetic equivalent of Coulomb's Law." } ] },
+            { id: "s2", type: "theory", title: "The Biot-Savart Law", content: "The magnetic field of a steady line current is given by the empirical **Biot-Savart Law**:\n\n$\\mathbf{B}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{I} \\times \\mathbf{\\hat{\\cal{r}}}}{\\cal{r}^2} dl'$\n\nThe constant $\\mu_0 = 4\\pi \\times 10^{-7}$ N/A$^2$ is the permeability of free space.\n\nLike Coulomb's law, it features an inverse-square dependence ($1/\\cal{r}^2$). However, the cross product perfectly accounts for the fact that the magnetic field circles *around* the wire." },
+            { id: "s3", type: "interactive_canvas", title: "Biot-Savart Explorer", content: "Drag the observation point around the wire. Notice how the cross product $\\mathbf{dl} \\times \\mathbf{\\hat{r}}$ forces the $\\mathbf{B}$ vector to remain tangential to a circle.", interactiveCanvasId: "biot-savart-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Direction of B", 
+              content: "**Goal: Deduce the field direction from the formula.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "First boundary: $y(0,t) = 0$. Since $\\sin(0)=0$ and $\\cos(0)=1$, the spatial part becomes $A(1) + B(0) = A$."
+                  prompt: "If current $\\mathbf{I}$ flows in the $+z$ direction, and we look at a point on the $+x$ axis, $\\mathbf{\\hat{\\cal{r}}}$ points roughly in $+x$. What is $\\hat{z} \\times \\hat{x}$?",
+                  options: [
+                    { id: "A", text: "$\\hat{y}$", isCorrect: true, explanation: "Standard cross product rule." },
+                    { id: "B", text: "$-\\hat{y}$", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The cross product yields a field in the $+y$ direction."
                 },
                 {
-                  "prompt": "To make $y(0,t) = 0$ for ALL times $t$, what must $A$ be?",
-                  "stepText": "We must set $A = 0$. The spatial part is now just $B\\sin kx$.",
-                  "options": [
-                    { "id": "A", "text": "$A = 0$", "isCorrect": true, "explanation": "If A is not zero, the string would move up and down at x=0." },
-                    { "id": "B", "text": "$A = -B$", "isCorrect": false, "explanation": "At x=0, B doesn't contribute at all." }
-                  ]
-                },
-                {
-                  "stepText": "Second boundary: $y(L,t) = 0$. The spatial part at $x=L$ is $B\\sin(kL)$."
-                },
-                {
-                  "prompt": "If $B\\sin(kL) = 0$, and $B$ cannot be zero (otherwise there's no wave), what is the condition on $kL$?",
-                  "stepText": "$\\sin(kL) = 0$, which means $kL = n\\pi$ for $n = 1, 2, 3, ...$",
-                  "options": [
-                    { "id": "A", "text": "$kL = n\\pi/2$", "isCorrect": false, "explanation": "Sine is 1 at $\\pi/2$." },
-                    { "id": "B", "text": "$kL = n\\pi$", "isCorrect": true, "explanation": "Sine is zero at integer multiples of $\\pi$." }
-                  ]
-                },
-                {
-                  "stepText": "Therefore, the wave number is quantized: $k_n = \\frac{n\\pi}{L}$. Since $\\omega = kv$, the angular frequencies are also quantized: $\\omega_n = \\frac{n\\pi v}{L}$."
+                  stepText: "This confirms the Right-Hand Rule mathematically: current UP, field on the right points INTO the page."
                 }
               ]
             },
-            {
-              "id": "s3-example",
-              "type": "example",
-              "title": "The General Standing Wave",
-              "content": "Since any integer $n$ works, the most general solution is a sum of all possible valid standing waves (a Fourier Series!):\n\n$$y(x,t) = \\sum_{n=1}^\\infty (A_n \\cos \\omega_n t + B_n \\sin \\omega_n t) \\sin\\left(\\frac{n\\pi x}{L}\\right)$$\n\nWhere $\\omega_n = n\\pi v / L$."
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Nodes",
-              "content": "The points on the string where $\\sin(n\\pi x / L) = 0$ do not move at all during the oscillation. What are these points called?",
-              "options": [
-                { "id": "1", "text": "Antinodes", "isCorrect": false, "explanation": "Antinodes are points of maximum displacement." },
-                { "id": "2", "text": "Nodes", "isCorrect": true, "explanation": "Nodes are points of zero displacement." },
-                { "id": "3", "text": "Harmonics", "isCorrect": false, "explanation": "Harmonics refer to the frequencies." }
-              ]
-            }
+            { id: "s5", type: "numerical", title: "Permeability", content: "If you calculate $\\frac{\\mu_0}{4\\pi}$, what is the exact value? (Format: $1 \\times 10^x$. Provide $x$)", numericAnswer: -7, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Distance Dependence", content: "The magnetic field contribution from a tiny segment of wire $dl'$ falls off with distance as:", options: [ { id: "A", text: "$1/r$", isCorrect: false, explanation: "An infinite wire falls off as 1/r, but a single segment does not." }, { id: "B", text: "$1/r^2$", isCorrect: true, explanation: "The formula explicitly has $\\cal{r}^2$ in the denominator." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The constant $\\mu_0$ is called the ___ of free space.", blankAnswer: "permeability" }
           ]
         },
         {
-          "id": "lesson-3-2-3-worked-example-13-1",
-          "title": "Worked Example 13.1: The Plucked String",
-          "description": "Applying initial conditions to find the Fourier coefficients.",
-          "icon": "PenTool",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Worked Example 13.1",
-              "content": "A string of length $L$ is pulled up at its midpoint a distance $b$ and then released from rest.\n\nDetermine the coefficients $A_n$ and $B_n$ for the general solution."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We use the initial velocity to eliminate half the coefficients instantly.",
-              "interactiveSteps": [
+          id: "les-11-3-infinite-wire", title: "Example: Infinite Straight Wire", description: "B = mu0 I / 2 pi s", icon: "Minus",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.5", content: "**Problem:** Find the magnetic field a distance $s$ from a long, straight wire carrying a steady current $I$.\n\n*Hint:* Use Biot-Savart. Express $dl'$ and $\\cal{r}$ in terms of the angle $\\theta$." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Evaluate the Biot-Savart integral.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The general solution is $y(x,t) = \\sum (A_n \\cos \\omega_n t + B_n \\sin \\omega_n t) \\sin(n\\pi x / L)$."
+                  stepText: "The cross product $d\\mathbf{l}' \\times \\mathbf{\\hat{\\cal{r}}}$ points out of the page with magnitude $dl' \\sin\\alpha = dl' \\cos\\theta$."
                 },
                 {
-                  "prompt": "Take the time derivative $\\partial y / \\partial t$. At $t=0$, the string is released from rest, so $\\partial y / \\partial t = 0$. Which terms survive in the derivative at $t=0$?",
-                  "stepText": "The derivative of cosine is sine (becomes 0 at t=0). The derivative of sine is cosine (becomes 1 at t=0). So only the $B_n \\omega_n$ terms survive.",
-                  "options": [
-                    { "id": "A", "text": "Only the $A_n$ terms.", "isCorrect": false, "explanation": "The derivative of $\\cos(\\omega t)$ has a $\\sin(\\omega t)$ which is zero at $t=0$." },
-                    { "id": "B", "text": "Only the $B_n$ terms.", "isCorrect": true, "explanation": "Correct. $B_n \\omega_n \\cos(0) = B_n \\omega_n$." }
-                  ]
+                  prompt: "Using trigonometry, $l' = s \\tan\\theta$. What is $dl'$ in terms of $d\\theta$?",
+                  options: [
+                    { id: "A", text: "$\\frac{s}{\\cos^2\\theta} d\\theta$", isCorrect: true, explanation: "Derivative of tan is sec^2." },
+                    { id: "B", text: "$s \\cos\\theta d\\theta$", isCorrect: false, explanation: "That would be derivative of sin." }
+                  ],
+                  stepText: "$dl' = \\frac{s}{\\cos^2\\theta} d\\theta$."
                 },
                 {
-                  "stepText": "Thus $0 = \\sum B_n \\omega_n \\sin(n\\pi x / L)$ for all $x$. This implies $B_n = 0$ for all $n$."
+                  stepText: "Also, $\\cal{r} = \\frac{s}{\\cos\\theta}$, so $\\frac{1}{\\cal{r}^2} = \\frac{\\cos^2\\theta}{s^2}$."
                 },
                 {
-                  "stepText": "Now apply the initial position $y(x,0)$. The solution reduces to $y(x,0) = \\sum A_n \\sin(n\\pi x / L)$."
+                  stepText: "Putting it all into the integral: $B = \\frac{\\mu_0 I}{4\\pi} \\int \\left( \\frac{\\cos^2\\theta}{s^2} \\right) \\left( \\frac{s}{\\cos^2\\theta} \\right) \\cos\\theta d\\theta = \\frac{\\mu_0 I}{4\\pi s} \\int_{\\theta_1}^{\\theta_2} \\cos\\theta d\\theta$."
                 },
                 {
-                  "stepText": "To find $A_n$, we calculate the Fourier sine coefficients of the triangular plucked shape. The math yields $A_n = \\frac{8b}{n^2 \\pi^2} \\sin(\\frac{n\\pi}{2})$."
+                  stepText: "For an *infinite* wire, limits are $-\\pi/2$ to $\\pi/2$. The integral of $\\cos$ is $2$. Result: $B = \\frac{\\mu_0 I}{2\\pi s}$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Interpreting the Result",
-              "content": "The expression $A_n = \\frac{8b}{n^2 \\pi^2} \\sin(\\frac{n\\pi}{2})$ contains a $\\sin(n\\pi / 2)$ term. What happens to the EVEN harmonics ($n=2,4,6...$)?",
-              "options": [
-                { "id": "1", "text": "They are exactly zero.", "isCorrect": true, "explanation": "$\\sin(2\\pi/2) = \\sin(\\pi) = 0$. Plucking exactly at the center excites only odd harmonics!" },
-                { "id": "2", "text": "They are the strongest.", "isCorrect": false, "explanation": "They evaluate to zero." }
-              ]
-            },
-            {
-              "id": "s4-blank",
-              "type": "fill_in_blank",
-              "title": "Initial Velocity",
-              "content": "Because the string was released from rest, all the coefficients attached to the ___ time-dependence term became zero.",
-              "blankAnswer": "sine"
-            }
+            { id: "s2", type: "numerical", title: "Evaluate Field", content: "If $I = 10$ A and $s = 0.02$ m (2 cm), use $B = \\frac{\\mu_0 I}{2\\pi s}$ where $\\mu_0 = 4\\pi \\times 10^{-7}$. What is B in microTeslas ($\\mu$T)?", numericAnswer: 100, numericTolerance: 0.1 },
+            { id: "s3", type: "quiz", title: "Fall off", content: "How does the magnetic field of an infinite straight wire fall off with distance $s$?", options: [ { id: "A", text: "$1/s^2$", isCorrect: false, explanation: "That's for a point charge." }, { id: "B", text: "$1/s$", isCorrect: true, explanation: "The integration over the infinite length reduces the power by 1." } ] }
           ]
         },
         {
-          "id": "lesson-3-2-4-fourier-exercises",
-          "title": "Fourier Exercises",
-          "description": "Exercises 13.4 and 13.5",
-          "icon": "Target",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 13.4",
-              "content": "We derived Fourier coefficients for the interval $-\\pi$ to $\\pi$. \n\nShow that if $f(x)$ is defined in an arbitrary interval $0 < x < l$ (or $-l < x < l$), the cosine coefficient formula becomes:\n$a_m = \\frac{2}{l} \\int_0^l f(x) \\cos\\left(\\frac{m\\pi}{l} x\\right) dx$"
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "This is a simple change of variables.",
-              "interactiveSteps": [
+          id: "les-11-4-parallel-wires", title: "Force Between Parallel Wires", description: "Applying Lorentz and Biot-Savart", icon: "Pause",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "We previously stated that parallel currents attract. Now let's calculate it. What two formulas must we combine?", options: [ { id: "A", text: "Biot-Savart and Lorentz Force", isCorrect: true, explanation: "Biot-Savart gets the field, Lorentz gets the force." }, { id: "B", text: "Coulomb and Gauss", isCorrect: false, explanation: "That's electrostatics." } ] },
+            { id: "s2", type: "theory", title: "Force Between Parallel Wires", content: "Let Wire 1 carry $I_1$ and Wire 2 carry $I_2$, separated by distance $d$.\n\n1. Wire 1 produces a magnetic field at Wire 2: $B_1 = \\frac{\\mu_0 I_1}{2\\pi d}$ (pointing INTO the page).\n2. Wire 2 feels a force: $\\mathbf{F} = I_2 \\int (d\\mathbf{l} \\times \\mathbf{B}_1)$.\n\nThe total force per unit length is:\n$f = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$\n\nIf the currents are parallel, the right-hand rule shows the force is attractive. If antiparallel, it is repulsive." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Official Ampere", 
+              content: "**Goal: Understand how the Ampere was officially defined.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The original formula relies on the variable having a period of $2\\pi$. If our physical string has length $2l$ (from $-l$ to $l$), we need a new variable."
+                  stepText: "The equation $f = \\frac{\\mu_0 I_1 I_2}{2\\pi d}$ was historically used to *define* the Ampere."
                 },
                 {
-                  "prompt": "Let $\\theta = c \\cdot x$. If we want $x = l$ to correspond to $\\theta = \\pi$, what is $c$?",
-                  "stepText": "$\\pi = c \\cdot l \\implies c = \\pi/l$. So $\\theta = \\frac{\\pi x}{l}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\theta = \\frac{\\pi x}{l}$", "isCorrect": true, "explanation": "Correct scaling factor." },
-                    { "id": "B", "text": "$\\theta = \\frac{l x}{\\pi}$", "isCorrect": false, "explanation": "Check your algebra." }
-                  ]
+                  prompt: "If $I_1 = I_2 = 1$ Ampere, and $d = 1$ meter, what is the force per unit length $f$?",
+                  options: [
+                    { id: "A", text: "$2 \\times 10^{-7}$ N/m", isCorrect: true, explanation: "mu0 is 4pi x 10^-7. Divided by 2pi gives 2 x 10^-7." },
+                    { id: "B", text: "1 N/m", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The force is exactly $2 \\times 10^{-7}$ N/m."
                 },
                 {
-                  "stepText": "Substituting this $\\theta$ into $\\cos(m\\theta)$ yields $\\cos(\\frac{m\\pi}{l}x)$."
-                },
-                {
-                  "stepText": "The normalization factor $1/\\pi$ becomes $1/l$. For a symmetric interval $0$ to $l$, we can double the integral and integrate from $0$ to $l$, giving the factor $2/l$."
+                  stepText: "For decades, the SI Ampere was officially defined as the current required to produce exactly this force!"
                 }
-              ]
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Exercise 13.5: Harmonics",
-              "content": "In a standing wave, the integer $n$ is the harmonic number. If $n=3$ (the third harmonic), how many 'loops' or antinodes are visible on the string?",
-              "options": [
-                { "id": "1", "text": "1", "isCorrect": false, "explanation": "That is the fundamental ($n=1$)." },
-                { "id": "2", "text": "3", "isCorrect": true, "explanation": "The $n$-th harmonic always has $n$ loops and $n+1$ nodes (including the ends)." },
-                { "id": "3", "text": "4", "isCorrect": false, "explanation": "That would be the number of nodes." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "unit-3-3",
-      "title": "Traveling Waves & Energy Flow",
-      "description": "Moving pulses, superposition, and impedance matching.",
-      "color": "duo-blue",
-      "lessons": [
-        {
-          "id": "lesson-3-3-1-traveling-waves",
-          "title": "Traveling Waves",
-          "description": "Functions of (x - vt) and the complex representation.",
-          "icon": "ArrowRight",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Traveling Wave",
-              "content": "A pulse moving down an infinite string without changing shape means the displacement at position $x$ at time $t$ is the same as the displacement at position $x-vt$ at time zero.\n\nThe functional form for a wave traveling to the **right** is $y(x,t) = f(x - vt)$.\nA wave traveling to the **left** is $y(x,t) = g(x + vt)$."
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Checking the Solution",
-              "content": "Let's prove that $f(x-vt)$ satisfies the wave equation $\\frac{\\partial^2 y}{\\partial x^2} = \\frac{1}{v^2}\\frac{\\partial^2 y}{\\partial t^2}$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Let $u = x - vt$. Then $y = f(u)$."
-                },
-                {
-                  "prompt": "Using the chain rule, $\\frac{\\partial y}{\\partial t} = \\frac{\\partial f}{\\partial u} \\frac{\\partial u}{\\partial t}$. What is $\\frac{\\partial u}{\\partial t}$?",
-                  "stepText": "$\\frac{\\partial}{\\partial t}(x - vt) = -v$. So $\\frac{\\partial y}{\\partial t} = -v \\frac{\\partial f}{\\partial u}$.",
-                  "options": [
-                    { "id": "A", "text": "$-v$", "isCorrect": true, "explanation": "The derivative of $x-vt$ with respect to $t$ is $-v$." },
-                    { "id": "B", "text": "$v$", "isCorrect": false, "explanation": "Don't forget the negative sign." }
-                  ]
-                },
-                {
-                  "stepText": "Taking the second derivative: $\\frac{\\partial^2 y}{\\partial t^2} = -v \\frac{\\partial}{\\partial t}(\\frac{\\partial f}{\\partial u}) = (-v)(-v)\\frac{\\partial^2 f}{\\partial u^2} = v^2 \\frac{\\partial^2 f}{\\partial u^2}$."
-                },
-                {
-                  "stepText": "Now for $x$: $\\frac{\\partial y}{\\partial x} = \\frac{\\partial f}{\\partial u} \\frac{\\partial u}{\\partial x}$. Since $\\frac{\\partial u}{\\partial x} = 1$, we get $\\frac{\\partial^2 y}{\\partial x^2} = \\frac{\\partial^2 f}{\\partial u^2}$."
-                },
-                {
-                  "stepText": "Comparing the two: $\\frac{\\partial^2 y}{\\partial t^2} = v^2 \\frac{\\partial^2 y}{\\partial x^2}$. It works perfectly!"
-                }
-              ]
-            },
-            {
-              "id": "s3-example",
-              "type": "example",
-              "title": "Complex Representation",
-              "content": "A very common way to write a sinusoidal traveling wave is using Euler's relation:\n$$y(x,t) = A e^{i(kx - \\omega t)}$$\n\nBy taking the real part, we get $A\\cos(kx - \\omega t)$. The constant $k$ must be the wave number because $v = \\omega/k$ matches the $(x-vt)$ form perfectly: $k(x - \\omega/k t) = kx - \\omega t$."
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Direction of Travel",
-              "content": "Which of the following represents a wave traveling in the negative x-direction (to the left)?",
-              "options": [
-                { "id": "1", "text": "$A\\sin(kx - \\omega t)$", "isCorrect": false, "explanation": "This travels to the right." },
-                { "id": "2", "text": "$A\\sin(kx + \\omega t)$", "isCorrect": true, "explanation": "The '+' sign indicates $g(x+vt)$, which moves to the left." },
-                { "id": "3", "text": "$A\\cos(kx)\\sin(\\omega t)$", "isCorrect": false, "explanation": "This is a standing wave." }
               ]
             }
           ]
         },
         {
-          "id": "lesson-3-3-2-superposition",
-          "title": "Superposition: Standing as Traveling",
-          "description": "How two traveling waves create a standing wave.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Superposition Principle",
-              "content": "Are the standing wave solutions we found earlier equivalent to traveling waves?\n\nYes! A standing wave can be considered the sum (superposition) of two traveling waves moving in opposite directions."
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Trig Identities",
-              "content": "Let's add a right-traveling wave and a left-traveling wave.",
-              "interactiveSteps": [
+          id: "les-11-5-circular-loop", title: "Example: Circular Loop", description: "Field on the axis", icon: "Circle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.6", content: "**Problem:** Find the magnetic field a distance $z$ above the center of a circular loop of radius $R$, carrying steady current $I$.\n\n*Hint:* Consider the symmetry. Which components cancel?" },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Find B on the z-axis.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Let $y_1 = A\\sin(kx - \\omega t)$ and $y_2 = A\\sin(kx + \\omega t)$."
+                  stepText: "The field $d\\mathbf{B}$ from a segment $dl'$ sweeps out a cone as we integrate around the loop."
                 },
                 {
-                  "stepText": "Recall the identity: $\\sin(\\alpha) + \\sin(\\beta) = 2\\sin\\left(\\frac{\\alpha+\\beta}{2}\\right)\\cos\\left(\\frac{\\alpha-\\beta}{2}\\right)$."
+                  prompt: "By symmetry, which components cancel out?",
+                  options: [
+                    { id: "A", text: "The horizontal components", isCorrect: true, explanation: "Every segment has an opposite segment across the circle that cancels its horizontal pull." },
+                    { id: "B", text: "The vertical component", isCorrect: false, explanation: "The vertical components all point straight UP." }
+                  ],
+                  stepText: "Only the vertical (z) component survives: $dB_z = dB \\cos\\theta$."
                 },
                 {
-                  "prompt": "Apply this to $y_1 + y_2$. What is $\\frac{\\alpha+\\beta}{2}$?",
-                  "stepText": "$\\frac{(kx-\\omega t) + (kx+\\omega t)}{2} = \\frac{2kx}{2} = kx$.",
-                  "options": [
-                    { "id": "A", "text": "$kx$", "isCorrect": true, "explanation": "The $\\omega t$ terms cancel." },
-                    { "id": "B", "text": "$\\omega t$", "isCorrect": false, "explanation": "Check the addition." }
-                  ]
+                  stepText: "From Biot-Savart, $dB = \\frac{\\mu_0 I}{4\\pi} \\frac{dl'}{\\cal{r}^2}$. Note $dl'$ and $\\cal{r}$ are perpendicular."
                 },
                 {
-                  "prompt": "What is $\\frac{\\alpha-\\beta}{2}$?",
-                  "stepText": "$\\frac{(kx-\\omega t) - (kx+\\omega t)}{2} = \\frac{-2\\omega t}{2} = -\\omega t$.",
-                  "options": [
-                    { "id": "A", "text": "$-\\omega t$", "isCorrect": true, "explanation": "The $kx$ terms cancel." },
-                    { "id": "B", "text": "$kx$", "isCorrect": false, "explanation": "Check the subtraction." }
-                  ]
+                  stepText: "$B(z) = \\frac{\\mu_0 I}{4\\pi \\cal{r}^2} \\cos\\theta \\int dl'$. The integral $\\int dl'$ is the circumference $2\\pi R$."
                 },
                 {
-                  "stepText": "So $y_1 + y_2 = 2A\\sin(kx)\\cos(-\\omega t)$. Since cosine is even, this is $2A\\sin(kx)\\cos(\\omega t)$."
-                },
-                {
-                  "stepText": "This perfectly matches the standing wave equation $y = C\\sin(kx)\\cos(\\omega t)$! A standing wave is just two traveling waves passing through each other."
+                  stepText: "Substitute $\\cos\\theta = R/\\cal{r}$ and $\\cal{r} = \\sqrt{R^2+z^2}$. We get $B(z) = \\frac{\\mu_0 I}{2} \\frac{R^2}{(R^2+z^2)^{3/2}} \\mathbf{\\hat{z}}$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Exercise 13.8: Trivial Zero",
-              "content": "For the standing wave $y(x,t) = [2A\\sin(kx)]\\cos\\omega t$, we must satisfy the boundary $y(L) = 0$. This requires $2A\\sin(kL) = 0$. \nWhich of the following is true?",
-              "options": [
-                { "id": "1", "text": "We must set $A=0$ to solve it.", "isCorrect": false, "explanation": "That gives the trivial solution (no wave)." },
-                { "id": "2", "text": "We quantize $k$ such that $kL = n\\pi$.", "isCorrect": true, "explanation": "This restricts the allowed traveling wave frequencies that can form a standing wave." }
-              ]
-            },
-            {
-              "id": "s4-blank",
-              "type": "fill_in_blank",
-              "title": "Standing Waves",
-              "content": "A standing wave is generated by the ___ of two identical traveling waves moving in opposite directions.",
-              "blankAnswer": "superposition"
-            }
+            { id: "s2", type: "numerical", title: "Center of Loop", content: "What is the magnetic field exactly at the center of the loop ($z=0$)? Formula is $\\mu_0 I / (X * R)$. What is X?", numericAnswer: 2, numericTolerance: 0.1 }
           ]
         },
         {
-          "id": "lesson-3-3-3-energy",
-          "title": "Energy of a Wave",
-          "description": "Integrating kinetic and potential energy.",
-          "icon": "Zap",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Kinetic and Potential Elements",
-              "content": "For a standing wave $y = A\\sin(\\frac{\\pi x}{L})\\cos(\\omega t)$, the energy in a small mass element $dm = \\rho dx$ is:\n\n*   **Kinetic:** $dT = \\frac{1}{2} \\rho dx (\\frac{\\partial y}{\\partial t})^2$\n*   **Potential:** The work done to stretch the string $ds - dx$ against tension $F$. $dV = F(ds - dx)$."
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Potential Energy",
-              "content": "Let's simplify the $dV$ expression using geometry.",
-              "interactiveSteps": [
+          id: "les-11-6-surface-volume-bs", title: "B for Surface & Volume Currents", description: "Biot-Savart expanded", icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "To find the field of a continuous volume current, we replace $I d\\mathbf{l}'$ with:", options: [ { id: "A", text: "$\\mathbf{K} da'$", isCorrect: false, explanation: "That's for a surface." }, { id: "B", text: "$\\mathbf{J} d\\tau'$", isCorrect: true, explanation: "Volume current density times volume element." } ] },
+            { id: "s2", type: "theory", title: "Biot-Savart for Extended Currents", content: "Using our 'dictionary', we can easily write the Biot-Savart law for surface and volume currents.\n\n**Surface Current:**\n$\\mathbf{B}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{K}(\\mathbf{r}') \\times \\mathbf{\\hat{\\cal{r}}}}{\\cal{r}^2} da'$\n\n**Volume Current:**\n$\\mathbf{B}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{J}(\\mathbf{r}') \\times \\mathbf{\\hat{\\cal{r}}}}{\\cal{r}^2} d\\tau'$\n\nThese are the most general forms of the Biot-Savart law." },
+            { id: "s6", type: "quiz", title: "Cross Product Warning", content: "Can you safely pull the $\\mathbf{\\hat{\\cal{r}}}$ vector outside the integral?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Just like in electrostatics, the separation vector changes direction as you integrate over different source points!" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The magnetic equivalent of integrating $\\rho$ to find $\\mathbf{E}$ is integrating $\\mathbf{J}$ to find ___.", blankAnswer: "\\mathbf{B}" }
+          ]
+        },
+        {
+          id: "les-11-7-superposition", title: "Superposition Principle", description: "Adding B fields", icon: "PlusCircle",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If you have two separate wire loops creating magnetic fields, the total field is:", options: [ { id: "A", text: "The vector sum of their individual fields", isCorrect: true, explanation: "Superposition holds for magnetism too!" }, { id: "B", text: "The product of their fields", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Superposition in Magnetostatics", content: "The superposition principle applies to magnetic fields exactly as it does to electric fields.\n\n$\\mathbf{B}_{total} = \\mathbf{B}_1 + \\mathbf{B}_2 + \\dots$\n\nIf you have a complex circuit, you can break it into simple segments (straight lines, arcs), use the Biot-Savart law on each segment, and vector-add the results together to find the total field." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Why does it work?", 
+              content: "**Goal: See the mathematical basis of superposition.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The stretched length is $ds = \\sqrt{dx^2 + dy^2} = dx\\sqrt{1 + (\\frac{\\partial y}{\\partial x})^2}$."
+                  prompt: "Look at the Biot-Savart law: $\\int \\frac{\\mathbf{J} \\times \\mathbf{\\hat{\\cal{r}}}}{\\cal{r}^2} d\\tau$. Is the relationship between $\\mathbf{J}$ and $\\mathbf{B}$ linear?",
+                  options: [
+                    { id: "A", text: "Yes", isCorrect: true, explanation: "B is directly proportional to J." },
+                    { id: "B", text: "No", isCorrect: false, explanation: "There are no squared terms of J." }
+                  ],
+                  stepText: "Because it's a linear integral, $\\int (\\mathbf{J}_1 + \\mathbf{J}_2) = \\int \\mathbf{J}_1 + \\int \\mathbf{J}_2$."
                 },
                 {
-                  "prompt": "Since the slope $\\frac{\\partial y}{\\partial x}$ is small, apply the binomial expansion $\\sqrt{1+\\epsilon} \\approx 1 + \\frac{1}{2}\\epsilon$. What does the bracket become?",
-                  "stepText": "$\\sqrt{1 + (\\frac{\\partial y}{\\partial x})^2} \\approx 1 + \\frac{1}{2}(\\frac{\\partial y}{\\partial x})^2$.",
-                  "options": [
-                    { "id": "A", "text": "$1 + \\frac{1}{2}(\\frac{\\partial y}{\\partial x})^2$", "isCorrect": true, "explanation": "Standard 1st order binomial expansion." },
-                    { "id": "B", "text": "$1 + (\\frac{\\partial y}{\\partial x})^2$", "isCorrect": false, "explanation": "You missed the $1/2$ factor from the square root." }
-                  ]
-                },
-                {
-                  "stepText": "So $ds \\approx dx[1 + \\frac{1}{2}(\\frac{\\partial y}{\\partial x})^2]$. The stretch is $ds - dx = \\frac{1}{2}(\\frac{\\partial y}{\\partial x})^2 dx$."
-                },
-                {
-                  "stepText": "Therefore, the potential energy element is $dV = F(ds-dx) = \\frac{1}{2}F(\\frac{\\partial y}{\\partial x})^2 dx$."
+                  stepText: "This linearity mathematically guarantees the principle of superposition."
                 }
-              ]
-            },
-            {
-              "id": "s3-example",
-              "type": "example",
-              "title": "Total Energy Integration",
-              "content": "Integrating $dT + dV$ from $0$ to $L$ requires evaluating $\\int_0^L \\sin^2(\\frac{\\pi x}{L}) dx$ and $\\int_0^L \\cos^2(\\frac{\\pi x}{L}) dx$. \n\nBoth integrals equal $L/2$. Substituting $\\omega^2 = F\\pi^2 / \\rho L^2$ leads to the total energy:\n\n$$E = \\frac{1}{4} A^2 \\rho \\omega^2 L$$\n\nEnergy is proportional to the square of the amplitude and square of the frequency."
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Energy Dependence",
-              "content": "If you double the amplitude of a wave on a string, what happens to the total energy contained in that wave?",
-              "options": [
-                { "id": "1", "text": "It doubles.", "isCorrect": false, "explanation": "Look at the $A^2$ term." },
-                { "id": "2", "text": "It quadruples.", "isCorrect": true, "explanation": "Because $E \\propto A^2$, $(2A)^2 = 4A^2$, the energy increases by a factor of 4." },
-                { "id": "3", "text": "It stays the same.", "isCorrect": false, "explanation": "Energy depends on amplitude." }
               ]
             }
           ]
         },
         {
-          "id": "lesson-3-3-4-energy-flow",
-          "title": "Energy Flow & Boundary Reflection",
-          "description": "Worked Example 13.2 and Exercise 13.10",
-          "icon": "ActivitySquare",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Two Strings Interface",
-              "content": "Consider two strings of different densities $\\rho_1$ and $\\rho_2$ tied together at $x=0$. \nAn incident wave $y_i$ hits the junction, causing a reflected wave $y_r$ and a transmitted wave $y_t$.\n\nBecause the strings are tied, the position must be continuous: $y_i + y_r = y_t$ at $x=0$.\nBecause the tension $F$ is uniform, the slope must be continuous: $\\partial y_i/\\partial x + \\partial y_r/\\partial x = \\partial y_t/\\partial x$ at $x=0$."
-            },
-            {
-              "id": "s2-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Reflection Amplitude",
-              "content": "Let's find the ratio of reflected amplitude $A_r$ to incident amplitude $A_i$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "From continuity of position at $x=0$, $A_i + A_r = A_t$."
-                },
-                {
-                  "stepText": "From continuity of slope, taking derivatives brings down wave numbers: $k_1 A_i - k_1 A_r = k_2 A_t$."
-                },
-                {
-                  "prompt": "Substitute $A_t = A_i + A_r$ into the slope equation. What do you get?",
-                  "stepText": "$k_1(A_i - A_r) = k_2(A_i + A_r)$.",
-                  "options": [
-                    { "id": "A", "text": "$k_1(A_i - A_r) = k_2(A_i + A_r)$", "isCorrect": true, "explanation": "Correct substitution." },
-                    { "id": "B", "text": "$k_1(A_i + A_r) = k_2(A_i - A_r)$", "isCorrect": false, "explanation": "You swapped the signs." }
-                  ]
-                },
-                {
-                  "stepText": "Rearrange to solve for $A_r/A_i$: \n$k_1 A_i - k_2 A_i = k_1 A_r + k_2 A_r \\implies A_i(k_1 - k_2) = A_r(k_1 + k_2)$."
-                },
-                {
-                  "stepText": "Result: $\\frac{A_r}{A_i} = \\frac{k_1 - k_2}{k_1 + k_2} = \\frac{v_2 - v_1}{v_2 + v_1}$."
-                }
-              ]
-            },
-            {
-              "id": "s3-example",
-              "type": "example",
-              "title": "Worked Example 13.2: Reflection Coefficient",
-              "content": "The reflection coefficient $R$ is defined as the ratio of reflected intensity to incident intensity. \nIntensity is proportional to amplitude squared.\n\n$$R = \\frac{I_r}{I_i} = \\frac{A_r^2}{A_i^2} = \\left(\\frac{k_1 - k_2}{k_1 + k_2}\\right)^2$$"
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Exercise 13.10: Knot Mass",
-              "content": "If the two strings are joined by a knot of mass $m$, the slope is NO LONGER continuous. The difference in vertical tension forces must now accelerate the mass $m$. What is the new boundary condition at $x=0$?",
-              "options": [
-                { "id": "1", "text": "$F\\left(\\frac{\\partial y}{\\partial x}|_{0^+} - \\frac{\\partial y}{\\partial x}|_{0^-}\\right) = 0$", "isCorrect": false, "explanation": "This assumes the knot is massless." },
-                { "id": "2", "text": "$F\\left(\\frac{\\partial y}{\\partial x}|_{0^+} - \\frac{\\partial y}{\\partial x}|_{0^-}\\right) = m\\frac{\\partial^2 y}{\\partial t^2}|_0$", "isCorrect": true, "explanation": "Newton's Second Law applied to the knot: Net vertical force = mass * acceleration." },
-                { "id": "3", "text": "$y(0^+) = -y(0^-)$", "isCorrect": false, "explanation": "The string must still be attached, so position is continuous." }
-              ]
-            }
+          id: "les-11-8-point-charge-warning", title: "Point Charge Warning", description: "Moving point charges in magnetostatics", icon: "AlertTriangle",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Can we use the Biot-Savart law to find the EXACT magnetic field of a single electron flying through space?", options: [ { id: "A", text: "Yes, just plug in $qv$ for $I dl$", isCorrect: false, explanation: "It seems tempting, but it's physically wrong." }, { id: "B", text: "No, a single charge is not a steady current", isCorrect: true, explanation: "Magnetostatics only applies to steady currents." } ] },
+            { id: "s2", type: "theory", title: "The Point Charge Fallacy", content: "You might be tempted to write down a Biot-Savart law for a moving point charge by replacing $\\mathbf{I}dl$ with $q\\mathbf{v}$:\n\n$\\mathbf{B}(\\mathbf{r}) \\approx \\frac{\\mu_0}{4\\pi} \\frac{q\\mathbf{v} \\times \\mathbf{\\hat{\\cal{r}}}}{\\cal{r}^2}$  (WRONG)\n\n**This is strictly incorrect.** A moving point charge does not constitute a steady current (it's here one instant, gone the next). The Biot-Savart law, which only holds for steady currents, does not correctly determine its field. \n\n(It is approximately correct for very slow, non-relativistic charges where retardation can be neglected, but it is not a fundamental law like Coulomb's law)." },
+            { id: "s6", type: "quiz", title: "Retardation", content: "Why do rapidly moving point charges break the simple laws?", options: [ { id: "A", text: "Because they get tired.", isCorrect: false, explanation: "" }, { id: "B", text: "Because electromagnetic 'news' travels at the speed of light, not instantly.", isCorrect: true, explanation: "This requires full Electrodynamics (Jefimenko's equations), not Magneto-statics." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The Biot-Savart law is strictly valid only for ___ currents.", blankAnswer: "steady" }
           ]
         }
       ]

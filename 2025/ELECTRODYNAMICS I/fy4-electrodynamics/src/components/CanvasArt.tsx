@@ -13,6 +13,7 @@ import LinearAccelFrame from './canvas-arts/LinearAccelFrame';
 import RotatingFrame from './canvas-arts/RotatingFrame';
 import CoriolisAxes from './canvas-arts/CoriolisAxes';
 import FoucaultPrecess from './canvas-arts/FoucaultPrecess';
+import { VectorAddition, GradientField, DivergenceField, CurlField } from './canvas-arts/VectorArts';
 
 interface Props {
   canvasId: string;
@@ -21,6 +22,7 @@ interface Props {
 const CanvasArt: React.FC<Props> = ({ canvasId }) => {
   const renderArt = () => {
     switch (canvasId) {
+      // Mechanics visuals retained for compatibility if needed
       case 'kepler-orbits': return <KeplerOrbits />;
       case 'central-force': return <CentralForce />;
       case 'polar-coords': return <PolarCoords />;
@@ -35,6 +37,13 @@ const CanvasArt: React.FC<Props> = ({ canvasId }) => {
       case 'rotating-frame': return <RotatingFrame />;
       case 'coriolis-axes': return <CoriolisAxes />;
       case 'foucault-precess': return <FoucaultPrecess />;
+      
+      // New Vector Arts
+      case 'vector-addition': return <VectorAddition />;
+      case 'gradient-field': return <GradientField />;
+      case 'divergence-field': return <DivergenceField />;
+      case 'curl-field': return <CurlField />;
+
       default: return <p className="text-slate-500 py-10 text-center w-full">Visualization component not found</p>;
     }
   };

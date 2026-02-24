@@ -1,795 +1,467 @@
 import { Section } from '../types';
 
 export const SECTION_2_4: Section = {
-  "id": "section-2-4",
-  "title": "Section 4: Comprehensive Oscillator Problems",
-  "description": "Complete worked examples and chapter exercises covering SHM, Damping, and Inhomogeneous Forcing.",
-  "color": "duo-blue",
-  "units": [
+  id: "section-2-4",
+  title: "Section 4: Work, Energy & Conductors",
+  description: "Electrostatic energy, properties of ideal conductors, shielding, and capacitors.",
+  color: "duo-blue",
+  units: [
     {
-      "id": "unit-2-4-1",
-      "title": "Fundamentals of SHM",
-      "description": "Trigonometric equivalences and initial condition derivations.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-8-work-energy",
+      title: "Work & Energy",
+      description: "Work done to move charges and energy stored in electric fields.",
+      color: "duo-blue",
+      lessons: [
         {
-          "id": "lesson-2-4-1-ex11-10",
-          "title": "Exercise 11.10: Sine and Cosine Equivalence",
-          "description": "Proving different forms of the SHM general solution.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.10",
-              "content": "Show mathematically that the single-phase expression $x = x_0 \\sin(\\omega t + \\beta)$ is perfectly equivalent to the linear combination $x = C_1 \\cos \\omega t + C_2 \\sin \\omega t$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We will use trigonometric angle addition formulas to expand the first expression.",
-              "interactiveSteps": [
+          id: "les-8-1-work-move", title: "Work to Move a Charge", description: "W = Q(V_b - V_a)", icon: "Move",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "To move a positive test charge *against* an electric field (towards another positive charge), you must do:", options: [ { id: "A", text: "Positive work", isCorrect: true, explanation: "You must push it against the repulsive force." }, { id: "B", text: "Negative work", isCorrect: false, explanation: "The field does negative work; YOU do positive work." } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "Does the work you do depend on the path you take?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Electrostatic fields are conservative, so work is path-independent." } ] },
+            { id: "s2", type: "theory", title: "The Work to Move a Charge", content: "Suppose you have a stationary configuration of source charges, and you want to move a test charge $Q$ from point $\\mathbf{a}$ to point $\\mathbf{b}$.\n\nThe electric force is $\\mathbf{F}_{elec} = Q\\mathbf{E}$. The force *you* must exert to move it at constant speed is exactly opposite: $\\mathbf{F}_{you} = -Q\\mathbf{E}$.\n\nThe work you do is:\n$W = \\int_{\\mathbf{a}}^{\\mathbf{b}} \\mathbf{F}_{you} \\cdot d\\mathbf{l} = -Q \\int_{\\mathbf{a}}^{\\mathbf{b}} \\mathbf{E} \\cdot d\\mathbf{l}$\n\nBy definition of potential, this is exactly:\n$W = Q[V(\\mathbf{b}) - V(\\mathbf{a})]$" },
+            { id: "s3", type: "interactive_canvas", title: "Path Independence", content: "Drag the charge from A to B. Notice that regardless of how much you wander around, the total net work done solely depends on the starting and ending potentials.", interactiveCanvasId: "work-path-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Bringing from Infinity", 
+              content: "**Goal: Find the work to bring a charge from far away.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Recall the sine addition identity: $\\sin(A + B) = \\sin A \\cos B + \\cos A \\sin B$."
+                  stepText: "Let point $\\mathbf{a}$ be at infinity, and point $\\mathbf{b}$ be our target location $\\mathbf{r}$."
                 },
                 {
-                  "prompt": "Apply this identity to expand $\\sin(\\omega t + \\beta)$. What do you get?",
-                  "stepText": "$\\sin(\\omega t + \\beta) = \\sin \\omega t \\cos \\beta + \\cos \\omega t \\sin \\beta$",
-                  "options": [
-                    { "id": "A", "text": "$\\sin \\omega t \\cos \\beta + \\cos \\omega t \\sin \\beta$", "isCorrect": true, "explanation": "Correct application of the angle sum identity." },
-                    { "id": "B", "text": "$\\sin \\omega t \\sin \\beta - \\cos \\omega t \\cos \\beta$", "isCorrect": false, "explanation": "This resembles the cosine addition formula." }
-                  ]
+                  prompt: "By convention, what is $V(\\infty)$?",
+                  options: [
+                    { id: "A", text: "0", isCorrect: true, explanation: "Infinity is our standard reference point." },
+                    { id: "B", text: "1", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "Since $V(\\infty) = 0$, the formula simplifies."
                 },
                 {
-                  "stepText": "Multiply the expansion by $x_0$: $x(t) = (x_0 \\cos \\beta)\\sin \\omega t + (x_0 \\sin \\beta)\\cos \\omega t$."
-                },
-                {
-                  "prompt": "By matching this to $C_1 \\cos \\omega t + C_2 \\sin \\omega t$, what are $C_1$ and $C_2$?",
-                  "stepText": "$C_1 = x_0 \\sin \\beta$ and $C_2 = x_0 \\cos \\beta$.",
-                  "options": [
-                    { "id": "A", "text": "$C_1 = x_0 \\sin \\beta$, $C_2 = x_0 \\cos \\beta$", "isCorrect": true, "explanation": "Matching the coefficient of $\\cos \\omega t$ to $C_1$ and $\\sin \\omega t$ to $C_2$." },
-                    { "id": "B", "text": "$C_1 = x_0 \\cos \\beta$, $C_2 = x_0 \\sin \\beta$", "isCorrect": false, "explanation": "Look closely at which trig function corresponds to which constant." }
-                  ]
+                  stepText: "The work to bring a charge $Q$ from infinity to point $\\mathbf{r}$ is simply $W = Q V(\\mathbf{r})$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Understanding Constants",
-              "content": "In the form $x = C_1 \\cos \\omega t + C_2 \\sin \\omega t$, how many independent arbitrary constants are there?",
-              "options": [
-                { "id": "1", "text": "One", "isCorrect": false, "explanation": "There are two separate terms." },
-                { "id": "2", "text": "Two", "isCorrect": true, "explanation": "A second-order differential equation requires two independent constants (like $C_1$ and $C_2$, or $x_0$ and $\\beta$)." },
-                { "id": "3", "text": "Three", "isCorrect": false, "explanation": "$\\omega$ is defined by the physical system, not arbitrary." }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Relating Amplitudes",
-              "content": "Given $C_1 = x_0 \\sin \\beta$ and $C_2 = x_0 \\cos \\beta$, what is the relationship for the total amplitude $x_0$ in terms of $C_1$ and $C_2$?",
-              "options": [
-                { "id": "1", "text": "$x_0 = C_1 + C_2$", "isCorrect": false, "explanation": "Try squaring them and adding." },
-                { "id": "2", "text": "$x_0 = \\sqrt{C_1^2 + C_2^2}$", "isCorrect": true, "explanation": "$C_1^2 + C_2^2 = x_0^2(\\sin^2\\beta + \\cos^2\\beta) = x_0^2$." },
-                { "id": "3", "text": "$x_0 = C_1 / C_2$", "isCorrect": false, "explanation": "That gives $\\tan \\beta$." }
-              ]
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Phase Shift",
-              "content": "The ratio $C_1 / C_2$ evaluates to $x_0 \\sin \\beta / x_0 \\cos \\beta$, which simplifies to the trigonometric function ___ of $\\beta$.",
-              "blankAnswer": "tan"
-            }
+            { id: "s5", type: "numerical", title: "Calculate Work", content: "If the potential at point P is 12 Volts, how much work (in Joules) does it take to bring a 3 Coulomb charge from infinity to P?", numericAnswer: 36, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Potential Definition", content: "Based on $W = Q V(\\mathbf{r})$, what is another way to define Electric Potential?", options: [ { id: "A", text: "Force per unit charge", isCorrect: false, explanation: "That is the Electric Field." }, { id: "B", text: "Potential Energy per unit charge", isCorrect: true, explanation: "V = W / Q." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The potential difference between two points is the ___ required per unit charge to move a particle between them.", blankAnswer: "work" }
           ]
         },
         {
-          "id": "lesson-2-4-1-ex11-11",
-          "title": "Exercise 11.11: Finding the Amplitude",
-          "description": "Using initial conditions to evaluate amplitude.",
-          "icon": "Target",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.11",
-              "content": "A spring of constant $10$ N/m is connected to a mass of $2$ kg. It is initially at rest in an unstretched position ($x=0$). It is given an initial speed of $3$ m/s.\n\nWhat is the amplitude of the oscillation?"
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We can solve this using either kinematics or energy conservation. Let's use kinematics.",
-              "interactiveSteps": [
+          id: "les-8-2-energy-point-charges", title: "Energy of Point Charges", description: "Assembling a collection", icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "How much work does it take to place the very FIRST charge in an empty universe?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "There's no field to fight against yet!" }, { id: "B", text: "Infinite", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "If you bring in a second charge $q_2$ near $q_1$, the work depends on:", options: [ { id: "A", text: "Only $q_2$", isCorrect: false, explanation: "" }, { id: "B", text: "Both $q_1$ and $q_2$ and their distance", isCorrect: true, explanation: "Work is $q_2 V_1$." } ] },
+            { id: "s2", type: "theory", title: "Energy of a Point Charge Distribution", content: "To assemble a collection of point charges, you bring them in one by one. \n- $q_1$ takes 0 work.\n- $q_2$ takes $W_2 = q_2 V_1(\\mathbf{r}_2) = \\frac{1}{4\\pi\\epsilon_0}\\frac{q_1 q_2}{\\cal{r}_{12}}$.\n- $q_3$ takes $W_3 = q_3 (V_1 + V_2)$.\n\nSumming all pairs gives the total energy stored in the configuration:\n$W = \\frac{1}{2} \\sum_{i=1}^n q_i V(\\mathbf{r}_i)$\n\n*(The 1/2 prevents double-counting each pair).*" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: The Factor of 1/2", 
+              content: "**Goal: Understand why the 1/2 is necessary.**", 
+              interactiveSteps: [
                 {
-                  "prompt": "First, calculate the natural angular frequency $\\omega$.",
-                  "stepText": "$\\omega = \\sqrt{k/m} = \\sqrt{10/2} = \\sqrt{5}$ rad/s.",
-                  "options": [
-                    { "id": "A", "text": "$\\sqrt{5}$ rad/s", "isCorrect": true, "explanation": "Correct. $\\omega = \\sqrt{k/m}$." },
-                    { "id": "B", "text": "$5$ rad/s", "isCorrect": false, "explanation": "Don't forget the square root." }
-                  ]
+                  stepText: "Consider just two charges. The total work is $W = \\frac{1}{4\\pi\\epsilon_0} \\frac{q_1 q_2}{\\cal{r}_{12}}$."
                 },
                 {
-                  "stepText": "The general equation is $x(t) = A \\sin(\\omega t + \\phi)$. Since $x(0) = 0$, $A \\sin(\\phi) = 0 \\implies \\phi = 0$. So $x(t) = A \\sin(\\omega t)$."
+                  prompt: "If we evaluate $\\sum q_i V(\\mathbf{r}_i)$, we get $q_1 V(\\mathbf{r}_1) + q_2 V(\\mathbf{r}_2)$. What is $V(\\mathbf{r}_1)$ here?",
+                  options: [
+                    { id: "A", text: "The potential due to $q_2$", isCorrect: true, explanation: "The potential AT q1 is created BY q2." },
+                    { id: "B", text: "The potential due to $q_1$", isCorrect: false, explanation: "A charge doesn't feel its own potential in this sum." }
+                  ],
+                  stepText: "$V(\\mathbf{r}_1) = \\frac{1}{4\\pi\\epsilon_0} \\frac{q_2}{\\cal{r}_{12}}$ and $V(\\mathbf{r}_2) = \\frac{1}{4\\pi\\epsilon_0} \\frac{q_1}{\\cal{r}_{12}}$."
                 },
                 {
-                  "prompt": "Take the derivative to find the velocity equation $v(t)$. What is $v(t)$?",
-                  "stepText": "$v(t) = A\\omega \\cos(\\omega t)$.",
-                  "options": [
-                    { "id": "A", "text": "$v(t) = A\\omega \\cos(\\omega t)$", "isCorrect": true, "explanation": "The chain rule brings $\\omega$ outside." },
-                    { "id": "B", "text": "$v(t) = -A\\omega \\cos(\\omega t)$", "isCorrect": false, "explanation": "Derivative of sine is positive cosine." }
-                  ]
+                  stepText: "So the sum gives $q_1 (k \\frac{q_2}{\\cal{r}}) + q_2 (k \\frac{q_1}{\\cal{r}}) = 2 \\left( k \\frac{q_1 q_2}{\\cal{r}} \\right)$. It counted the pair twice!"
                 },
                 {
-                  "stepText": "At $t=0$, the velocity is $v(0) = A\\omega \\cos(0) = A\\omega$."
-                },
-                {
-                  "prompt": "We are given $v(0) = 3$. Solve for $A$.",
-                  "stepText": "$A = \\frac{v(0)}{\\omega} = \\frac{3}{\\sqrt{5}} \\approx 1.34$ m.",
-                  "options": [
-                    { "id": "A", "text": "$1.34$ m", "isCorrect": true, "explanation": "$3 / 2.236 \\approx 1.34$ m." },
-                    { "id": "B", "text": "$6.7$ m", "isCorrect": false, "explanation": "You multiplied instead of divided." }
-                  ]
+                  stepText: "Multiplying by 1/2 corrects this double-counting. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Energy Method",
-              "content": "If we had used energy conservation instead, the total initial energy $E$ would be:",
-              "options": [
-                { "id": "1", "text": "$E = \\frac{1}{2}mv_0^2$", "isCorrect": true, "explanation": "Since initial position is unstretched ($x=0$), all energy is purely kinetic initially." },
-                { "id": "2", "text": "$E = \\frac{1}{2}kx_0^2$", "isCorrect": false, "explanation": "Initial stretch is 0, so potential energy is 0." },
-                { "id": "3", "text": "$E = 0$", "isCorrect": false, "explanation": "It has an initial velocity, so it has energy." }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Checking Energy Balance",
-              "content": "Equating the initial kinetic energy to the maximum potential energy gives $\\frac{1}{2}mv_0^2 = \\frac{1}{2}kA^2$. Solving for A gives:",
-              "options": [
-                { "id": "1", "text": "$A = v_0 \\sqrt{m/k}$", "isCorrect": true, "explanation": "This perfectly matches $v_0 / \\omega$!" },
-                { "id": "2", "text": "$A = v_0 \\sqrt{k/m}$", "isCorrect": false, "explanation": "The ratio is inverted." }
-              ]
-            },
-            {
-              "id": "s5-numerical",
-              "type": "numerical",
-              "title": "Calculate Maximum Force",
-              "content": "At the maximum amplitude $A = 1.3416$ m, what is the magnitude of the maximum restoring force in Newtons? ($k=10$ N/m)",
-              "numericAnswer": 13.416,
-              "numericTolerance": 0.1
-            }
+            { id: "s5", type: "numerical", title: "Two Charges", content: "Two charges, each 2 C, are separated by 1 meter. Assuming $\\frac{1}{4\\pi\\epsilon_0} = 9 \\times 10^9$, what is the stored energy in Joules? (Write your answer divided by $10^9$)", numericAnswer: 36, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Sign of Energy", content: "Can the total electrostatic energy of a point charge distribution be negative?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "If attractive forces dominate, you extract energy bringing them together (negative work)." }, { id: "B", text: "No", isCorrect: false, explanation: "It can be negative for opposite charges." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The total work required to assemble a charge distribution represents the ___ energy stored in the configuration.", blankAnswer: "potential" }
           ]
         },
         {
-          "id": "lesson-2-4-1-ex11-12",
-          "title": "Exercise 11.12: Complex Constants",
-          "description": "Evaluating the independence of complex constants.",
-          "icon": "Hash",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.12",
-              "content": "The complex constants $C_1$ and $C_2$ can be written in the form $C_1 = a_1 + ib_1$ and $C_2 = a_2 + ib_2$. But there can only be two independent constants.\n\nUsing Equation (11.14) where $C_1 = \\frac{1}{2}A e^{i\\theta}$ and $C_2 = \\frac{1}{2}A e^{-i\\theta}$, show that $a_2 = a_1$ and $b_2 = -b_1$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We will use Euler's formula to expand the exponentials.",
-              "interactiveSteps": [
+          id: "les-8-3-energy-continuous", title: "Continuous Energy", description: "Integrating over volume", icon: "Cloud",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "To convert the discrete sum $W = \\frac{1}{2} \\sum q_i V_i$ into a continuous formula, what does $q_i$ become?", options: [ { id: "A", text: "$\\rho d\\tau$", isCorrect: true, explanation: "Charge density times volume element." }, { id: "B", text: "$E d\\tau$", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Energy of a Continuous Charge Distribution", content: "For a volume charge density $\\rho$, the sum translates directly into an integral:\n\n$W = \\frac{1}{2} \\int \\rho V d\\tau$\n\nIf the charge is localized to surfaces or lines, we use $\\sigma$ or $\\lambda$ respectively:\n$W = \\frac{1}{2} \\int \\sigma V da$\n$W = \\frac{1}{2} \\int \\lambda V dl$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Eliminating Rho", 
+              content: "**Goal: Prepare to express energy solely in terms of fields.**", 
+              interactiveSteps: [
                 {
-                  "prompt": "Apply Euler's formula $e^{\\pm i\\theta} = \\cos \\theta \\pm i \\sin \\theta$ to expand $C_1 = \\frac{1}{2}A e^{i\\theta}$.",
-                  "stepText": "$C_1 = \\frac{1}{2}A (\\cos \\theta + i \\sin \\theta)$.",
-                  "options": [
-                    { "id": "A", "text": "$C_1 = \\frac{1}{2}A (\\cos \\theta + i \\sin \\theta)$", "isCorrect": true, "explanation": "Correct expansion for positive exponent." },
-                    { "id": "B", "text": "$C_1 = \\frac{1}{2}A (\\sin \\theta + i \\cos \\theta)$", "isCorrect": false, "explanation": "Euler's formula places 'i' with the sine." }
-                  ]
+                  stepText: "We have $W = \\frac{1}{2} \\int \\rho V d\\tau$."
                 },
                 {
-                  "stepText": "Expanding $C_2 = \\frac{1}{2}A e^{-i\\theta}$ yields $C_2 = \\frac{1}{2}A (\\cos \\theta - i \\sin \\theta)$."
+                  prompt: "By Gauss's law, how can we rewrite $\\rho$ in terms of the electric field?",
+                  options: [
+                    { id: "A", text: "$\\rho = \\epsilon_0 \\nabla \\cdot \\mathbf{E}$", isCorrect: true, explanation: "Differential form of Gauss's Law." },
+                    { id: "B", text: "$\\rho = -\\nabla V$", isCorrect: false, explanation: "That's E." }
+                  ],
+                  stepText: "Substitute this in: $W = \\frac{\\epsilon_0}{2} \\int (\\nabla \\cdot \\mathbf{E}) V d\\tau$."
                 },
                 {
-                  "prompt": "Compare this with $C_1 = a_1 + ib_1$. What is $a_1$ and $b_1$?",
-                  "stepText": "$a_1 = \\frac{1}{2}A \\cos \\theta$ and $b_1 = \\frac{1}{2}A \\sin \\theta$.",
-                  "options": [
-                    { "id": "A", "text": "$a_1 = \\frac{1}{2}A \\cos \\theta$, $b_1 = \\frac{1}{2}A \\sin \\theta$", "isCorrect": true, "explanation": "Just splitting real and imaginary parts." },
-                    { "id": "B", "text": "$a_1 = \\frac{1}{2}A \\sin \\theta$, $b_1 = \\frac{1}{2}A \\cos \\theta$", "isCorrect": false, "explanation": "Match the real part with cosine." }
-                  ]
-                },
-                {
-                  "stepText": "Comparing $C_2$ with $C_2 = a_2 + ib_2$ yields $a_2 = \\frac{1}{2}A \\cos \\theta$ and $b_2 = -\\frac{1}{2}A \\sin \\theta$."
-                },
-                {
-                  "stepText": "Thus, substituting $a_1$ and $b_1$, we clearly see $a_2 = a_1$ and $b_2 = -b_1$. They are complex conjugates!"
+                  stepText: "This sets the stage for integration by parts, which we will do in the next lesson to find a beautiful new formula!"
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Complex Conjugates",
-              "content": "The relationship $a_2 = a_1$ and $b_2 = -b_1$ means that the complex constants $C_1$ and $C_2$ must be:",
-              "options": [
-                { "id": "1", "text": "Identical", "isCorrect": false, "explanation": "The imaginary parts have opposite signs." },
-                { "id": "2", "text": "Complex conjugates", "isCorrect": true, "explanation": "By definition, if $Z = x + iy$, its conjugate is $Z^* = x - iy$." },
-                { "id": "3", "text": "Orthogonal", "isCorrect": false, "explanation": "This describes vectors." }
+            { id: "s6", type: "quiz", title: "Factor of 1/2", content: "Does the continuous energy formula still require the factor of 1/2?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "It inherits the 1/2 from the discrete sum (avoiding double counting)." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "For a continuous volume charge, the energy is one-half the integral of $\\rho$ times ___.", blankAnswer: "V" }
+          ]
+        },
+        {
+          id: "les-8-4-energy-field", title: "Energy in the Field", description: "Integrating E-squared", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Can energy be stored in empty space where there is no charge?", options: [ { id: "A", text: "Yes, in the electric field itself.", isCorrect: true, explanation: "The field carries energy." }, { id: "B", text: "No, only matter holds energy.", isCorrect: false, explanation: "Fields have physical reality and carry energy." } ] },
+            { id: "s2", type: "theory", title: "Energy Stored in the Electric Field", content: "Using integration by parts on $W = \\frac{\\epsilon_0}{2} \\int (\\nabla \\cdot \\mathbf{E}) V d\\tau$, we can transfer the derivative from $\\mathbf{E}$ to $V$.\n\nSince $\\nabla V = -\\mathbf{E}$, and assuming we integrate over *all space* so the boundary surface terms vanish at infinity, we obtain a magnificent result:\n\n$W = \\frac{\\epsilon_0}{2} \\int_{\\text{all space}} E^2 d\\tau$\n\nThis implies that energy is stored directly in the electric field, with an **energy density** of $\\frac{\\epsilon_0}{2} E^2$." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Derivation", 
+              content: "**Goal: Derive the $E^2$ formula.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Start with $\\frac{\\epsilon_0}{2} \\int_{\\mathcal{V}} (\\nabla \\cdot \\mathbf{E}) V d\\tau$."
+                },
+                {
+                  stepText: "Use the product rule: $\\nabla \\cdot (V\\mathbf{E}) = V(\\nabla \\cdot \\mathbf{E}) + \\mathbf{E} \\cdot (\\nabla V)$."
+                },
+                {
+                  prompt: "Substitute $V(\\nabla \\cdot \\mathbf{E}) = \\nabla \\cdot (V\\mathbf{E}) - \\mathbf{E} \\cdot (\\nabla V)$. What does $-\\mathbf{E} \\cdot (\\nabla V)$ become?",
+                  options: [
+                    { id: "A", text: "$E^2$", isCorrect: true, explanation: "Since -Grad V = E, it becomes E dot E = E^2." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The integral splits: $\\frac{\\epsilon_0}{2} \\int E^2 d\\tau + \\frac{\\epsilon_0}{2} \\int \\nabla \\cdot (V\\mathbf{E}) d\\tau$."
+                },
+                {
+                  stepText: "By the Divergence Theorem, the second term becomes a surface integral $\\oint V\\mathbf{E} \\cdot d\\mathbf{a}$. If we expand the volume to all space, V and E go to zero at infinity, killing the surface term. Goal reached!"
+                }
               ]
             },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Why Conjugates?",
-              "content": "Why is it physically necessary for $C_1$ and $C_2$ to be complex conjugates of each other in the general solution $x(t) = C_1 e^{i\\omega t} + C_2 e^{-i\\omega t}$?",
-              "options": [
-                { "id": "1", "text": "To ensure the final displacement $x(t)$ is a purely real number.", "isCorrect": true, "explanation": "When you add a complex number and its conjugate, the imaginary parts cancel out, leaving a strictly real physical position." },
-                { "id": "2", "text": "To satisfy energy conservation.", "isCorrect": false, "explanation": "While true overall, the mathematical reason is to ensure real-valued output." },
-                { "id": "3", "text": "To prevent resonance.", "isCorrect": false, "explanation": "Resonance is about forcing functions, not homogeneous constants." }
+            { id: "s6", type: "quiz", title: "Limits of Integration", content: "To use the formula $W = \\frac{\\epsilon_0}{2} \\int E^2 d\\tau$, over what region MUST you integrate?", options: [ { id: "A", text: "Only where the charge is.", isCorrect: false, explanation: "E extends beyond the charge." }, { id: "B", text: "Over all space.", isCorrect: true, explanation: "To ensure the boundary surface integral goes to zero at infinity." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The quantity $\\frac{\\epsilon_0}{2} E^2$ represents the electrostatic energy ___ in space.", blankAnswer: "density" }
+          ]
+        },
+        {
+          id: "les-8-5-energy-location", title: "Where is the Energy?", description: "Charge vs Field", icon: "MapPin",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "We have two formulas for energy: one integrating $\\rho V$ and one integrating $E^2$. Which is physically 'correct'?", options: [ { id: "A", text: "Both give the exact same total energy.", isCorrect: true, explanation: "They are mathematically equivalent over all space." }, { id: "B", text: "Only the E-field one is correct.", isCorrect: false, explanation: "Both yield the correct total." } ] },
+            { id: "s2", type: "theory", title: "Where is the Energy Stored?", content: "Equations $W = \\frac{1}{2} \\int \\rho V d\\tau$ and $W = \\frac{\\epsilon_0}{2} \\int E^2 d\\tau$ offer two different views.\n\n- The first implies energy is stored **in the charge**.\n- The second implies energy is stored **in the electric field**.\n\nIn electrostatics, there is no way to prove one over the other; it's a matter of bookkeeping. However, in electrodynamics (when radiation and light carry energy across empty space), it becomes absolutely essential to view the energy as being stored in the **field**." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Point Charge Dilemma", 
+              content: "**Goal: See why $E^2$ gives infinity for a point charge.**", 
+              interactiveSteps: [
+                {
+                  stepText: "A point charge has field $E = \\frac{1}{4\\pi\\epsilon_0} \\frac{q}{r^2}$."
+                },
+                {
+                  prompt: "If we try to find its self-energy using $\\int E^2 d\\tau$, what is the integrand proportional to?",
+                  options: [
+                    { id: "A", text: "$1/r^4$", isCorrect: true, explanation: "Squaring E squares the 1/r^2." },
+                    { id: "B", text: "$1/r^2$", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The integral is $\\int_0^\\infty (1/r^4) (r^2 dr) \\sim \\int (1/r^2) dr$."
+                },
+                {
+                  stepText: "Evaluated at the lower limit (r=0), this integral blows up to infinity! The $E^2$ formula includes the infinite 'fabrication' energy of the point charges themselves."
+                }
               ]
-            }
+            },
+            { id: "s6", type: "quiz", title: "Inconsistency?", content: "Why do we use the discrete sum $\\frac{1}{2}\\sum q_i V_i$ for point charges if it ignores this infinite self-energy?", options: [ { id: "A", text: "Because we only care about the work to *assemble* them, not create the particles themselves.", isCorrect: true, explanation: "The electrons already exist; we just move them." }, { id: "B", text: "Because the E^2 formula is wrong.", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "In general relativity and advanced electrodynamics, energy is strictly regarded as being stored in the ___.", blankAnswer: "field" }
+          ]
+        },
+        {
+          id: "les-8-6-superposition-energy", title: "Superposition and Energy", description: "Cross terms", icon: "XSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If you double the charge everywhere in a system, what happens to the total electric field?", options: [ { id: "A", text: "It doubles", isCorrect: true, explanation: "E is linear with charge." }, { id: "B", text: "It quadruples", isCorrect: false, explanation: "" } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "If you double the charge everywhere, what happens to the total stored ENERGY?", options: [ { id: "A", text: "It doubles", isCorrect: false, explanation: "Energy depends on E squared!" }, { id: "B", text: "It quadruples", isCorrect: true, explanation: "Since W ~ E^2, doubling E makes it 4 times larger." } ] },
+            { id: "s2", type: "theory", title: "Energy does NOT obey Superposition", content: "Because electrostatic energy is quadratic in the fields (it depends on $E^2$ or $\\rho V$), it **does not** obey the superposition principle.\n\nIf you have two systems, the total energy is NOT $W_1 + W_2$. \n$W_{tot} = \\frac{\\epsilon_0}{2} \\int (\\mathbf{E}_1 + \\mathbf{E}_2)^2 d\\tau$\n$W_{tot} = \\frac{\\epsilon_0}{2} \\int (E_1^2 + E_2^2 + 2\\mathbf{E}_1 \\cdot \\mathbf{E}_2) d\\tau$\n\n$W_{tot} = W_1 + W_2 + \\epsilon_0 \\int (\\mathbf{E}_1 \\cdot \\mathbf{E}_2) d\\tau$\n\nThe third term is the **interaction energy**. It represents the work required to bring the two systems together." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Interaction Energy", 
+              content: "**Goal: Understand the meaning of the cross term.**", 
+              interactiveSteps: [
+                {
+                  prompt: "If system 1 and system 2 are infinitely far apart, what is their interaction energy?",
+                  options: [
+                    { id: "A", text: "Zero", isCorrect: true, explanation: "E1 and E2 don't overlap significantly anywhere, so E1 dot E2 is zero." },
+                    { id: "B", text: "Infinite", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "If they are far apart, the cross term vanishes."
+                },
+                {
+                  stepText: "As you bring them together, the fields overlap. The integral $\\epsilon_0 \\int (\\mathbf{E}_1 \\cdot \\mathbf{E}_2) d\\tau$ exactly equals the mechanical work you did to push system 2 into the field of system 1!"
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Quadratic Nature", content: "Which of the following quantities does NOT obey the superposition principle?", options: [ { id: "A", text: "Electric Field", isCorrect: false, explanation: "It does." }, { id: "B", text: "Electric Potential", isCorrect: false, explanation: "It does." }, { id: "C", text: "Electrostatic Energy", isCorrect: true, explanation: "It is quadratic." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The energy of a combined system includes the self-energies plus the ___ energy.", blankAnswer: "interaction" }
+          ]
+        },
+        {
+          id: "les-8-7-ex2-9-shell", title: "Example 2.9: Energy of a Shell", description: "Using the V formula", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 2.9", content: "**Problem:** Find the energy of a uniformly charged spherical shell of total charge $q$ and radius $R$.\n\n*Hint:* Use the surface charge formula $W = \\frac{1}{2} \\int \\sigma V da$. Recall that $V$ is constant on the surface." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Evaluate $W = \\frac{1}{2} \\int \\sigma V da$.**", 
+              interactiveSteps: [
+                {
+                  prompt: "From earlier examples, what is the potential $V$ exactly on the surface of the shell?",
+                  options: [
+                    { id: "A", text: "$\\frac{1}{4\\pi\\epsilon_0}\\frac{q}{R}$", isCorrect: true, explanation: "Correct." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "$V = \\frac{1}{4\\pi\\epsilon_0}\\frac{q}{R}$."
+                },
+                {
+                  stepText: "Since V is a constant, it pulls out of the integral: $W = \\frac{1}{2} V \\int \\sigma da$."
+                },
+                {
+                  prompt: "What is $\\int \\sigma da$ (the surface density integrated over the surface)?",
+                  options: [
+                    { id: "A", text: "The total charge $q$", isCorrect: true, explanation: "Definition of total charge." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "It evaluates to $q$."
+                },
+                {
+                  stepText: "Therefore, $W = \\frac{1}{2} \\left(\\frac{1}{4\\pi\\epsilon_0}\\frac{q}{R}\\right) q = \\frac{1}{8\\pi\\epsilon_0}\\frac{q^2}{R}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "quiz", title: "Alternate Method", content: "Could we have solved this using the $E^2$ formula?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "We would integrate E^2 from R to infinity (since E=0 inside). It gives the exact same result." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] }
+          ]
+        },
+        {
+          id: "les-8-8-ex-solid-sphere", title: "Energy of a Solid Sphere", description: "Using the E-squared formula", icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 2.35", content: "**Problem:** Find the energy stored in a uniformly charged *solid* sphere of radius $R$ and total charge $q$.\n\n*Hint:* Use $W = \\frac{\\epsilon_0}{2} \\int E^2 d\\tau$. Remember to integrate over ALL space (inside AND outside the sphere)." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Evaluate the $E^2$ integral over all space.**", 
+              interactiveSteps: [
+                {
+                  stepText: "We must split the integral: $\\int_{inside} E_{in}^2 d\\tau + \\int_{outside} E_{out}^2 d\\tau$."
+                },
+                {
+                  prompt: "What is $E_{in}$ and $E_{out}$?",
+                  options: [
+                    { id: "A", text: "$E_{in} \\propto r$, $E_{out} \\propto 1/r^2$", isCorrect: true, explanation: "Inside it grows linearly, outside it falls off like a point charge." },
+                    { id: "B", text: "$E_{in} = 0$, $E_{out} \\propto 1/r^2$", isCorrect: false, explanation: "That's a hollow shell, not a solid sphere." }
+                  ],
+                  stepText: "$E_{in} = \\frac{1}{4\\pi\\epsilon_0}\\frac{q r}{R^3}$ and $E_{out} = \\frac{1}{4\\pi\\epsilon_0}\\frac{q}{r^2}$."
+                },
+                {
+                  stepText: "Inside integral: $\\int_0^R (\\frac{q r}{R^3})^2 (4\\pi r^2 dr) = \\frac{4\\pi q^2}{R^6} \\int_0^R r^4 dr = \\frac{4\\pi q^2}{5 R}$."
+                },
+                {
+                  stepText: "Outside integral: $\\int_R^\\infty (\\frac{q}{r^2})^2 (4\\pi r^2 dr) = 4\\pi q^2 \\int_R^\\infty \\frac{1}{r^2} dr = \\frac{4\\pi q^2}{R}$."
+                },
+                {
+                  stepText: "Adding them and multiplying by $\\frac{\\epsilon_0}{2 (4\\pi\\epsilon_0)^2}$ gives $W = \\frac{3}{20\\pi\\epsilon_0} \\frac{q^2}{R}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s2", type: "numerical", title: "Compare Energies", content: "The energy of the shell was $\\frac{1}{8\\pi\\epsilon_0} \\frac{q^2}{R}$. The solid sphere is $\\frac{3}{20\\pi\\epsilon_0} \\frac{q^2}{R}$. Which has a higher coefficient (1/8 or 3/20)? (Answer in decimals)", numericAnswer: 0.15, numericTolerance: 0.01 }
           ]
         }
       ]
     },
     {
-      "id": "unit-2-4-2",
-      "title": "Damping Variations",
-      "description": "Analyzing different damping conditions mathematically.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-9-conductors",
+      title: "Conductors",
+      description: "Properties of ideal conductors, shielding, and capacitors.",
+      color: "duo-blue",
+      lessons: [
         {
-          "id": "lesson-2-4-2-ex11-13",
-          "title": "Exercise 11.13: Anti-Damping",
-          "description": "Solving non-standard signs in differential equations.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.13",
-              "content": "Obtain the general solution of the following differential equations (assume $m, b, k > 0$):\n(a) $m\\ddot{x} + b\\dot{x} - kx = 0$\n(b) $m\\ddot{x} - b\\dot{x} + kx = 0$"
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution for (a)",
-              "content": "Let's analyze $m\\ddot{x} + b\\dot{x} - kx = 0$. Note the negative spring constant!",
-              "interactiveSteps": [
+          id: "les-9-1-conductor-properties", title: "Ideal Conductors", description: "Basic electrostatic properties", icon: "Zap",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In a metal, what is free to move?", options: [ { id: "A", text: "Protons", isCorrect: false, explanation: "Protons are locked in the lattice." }, { id: "B", text: "Electrons", isCorrect: true, explanation: "Conduction electrons can roam freely." } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "If you place a conductor in an external electric field, what happens?", options: [ { id: "A", text: "The field passes straight through unchanged.", isCorrect: false, explanation: "" }, { id: "B", text: "The free charges move until they cancel the internal field.", isCorrect: true, explanation: "They rearrange to kill the field inside." } ] },
+            { id: "s2", type: "theory", title: "Basic Properties of Conductors", content: "An ideal conductor contains an unlimited supply of free charges. From this, several electrostatic properties strictly follow:\n\n1. **$\\mathbf{E} = 0$ inside:** If there were a field, charges would move. They stop moving only when the field is exactly canceled.\n2. **$\\rho = 0$ inside:** Since $\\nabla \\cdot \\mathbf{E} = \\rho/\\epsilon_0$, and $\\mathbf{E}=0$, the net charge density inside must be zero.\n3. **Net charge resides on the surface:** Since it can't be inside, any excess charge must sit on the outer boundary.\n4. **It is an equipotential:** Since $\\mathbf{E}=0$ inside, $\\Delta V = 0$ between any two points. The whole conductor is at a single uniform potential.\n5. **$\\mathbf{E}$ is perpendicular to the surface:** If it had a tangential component, surface charges would flow." },
+            { id: "s3", type: "interactive_canvas", title: "Charge Rearrangement", content: "When an external field is applied, electrons rush to one side, leaving positive nuclei exposed on the other, creating an opposing internal field.", interactiveCanvasId: "conductor-charges-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: E is Perpendicular", 
+              content: "**Goal: Understand why field lines hit metals exactly at 90 degrees.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The auxiliary equation is $mp^2 + bp - k = 0$."
+                  prompt: "Suppose a field line hits the surface of a metal at an angle, meaning it has a component parallel (tangential) to the surface. What will happen to a free electron sitting there?",
+                  options: [
+                    { id: "A", text: "It will be pushed along the surface.", isCorrect: true, explanation: "The tangential force causes lateral current." },
+                    { id: "B", text: "It will sit still.", isCorrect: false, explanation: "It's free to move!" }
+                  ],
+                  stepText: "A tangential field creates a surface current."
                 },
                 {
-                  "prompt": "Using the quadratic formula, what is the expression under the square root (the discriminant)?",
-                  "stepText": "$\\Delta = b^2 - 4(m)(-k) = b^2 + 4mk$.",
-                  "options": [
-                    { "id": "A", "text": "$b^2 - 4mk$", "isCorrect": false, "explanation": "The 'c' term is $-k$, so $-4ac$ becomes $+4mk$." },
-                    { "id": "B", "text": "$b^2 + 4mk$", "isCorrect": true, "explanation": "Correct. Notice this guarantees the square root is always positive!" }
-                  ]
-                },
-                {
-                  "prompt": "Since $b^2 + 4mk > 0$, the roots $p_1$ and $p_2$ are strictly real. What does this mean for the physical motion?",
-                  "stepText": "Because the roots are real, the solution $x(t) = C_1 e^{p_1 t} + C_2 e^{p_2 t}$ does not contain sines or cosines. It does not oscillate.",
-                  "options": [
-                    { "id": "A", "text": "It oscillates indefinitely.", "isCorrect": false, "explanation": "Real roots mean exponential growth/decay, not oscillation." },
-                    { "id": "B", "text": "It does not oscillate.", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Furthermore, one root $p = \\frac{-b + \\sqrt{b^2 + 4mk}}{2m}$ is strictly positive because $\\sqrt{b^2 + 4mk} > b$. Thus, $e^{p t}$ grows exponentially towards infinity. (This makes sense: a repulsive spring pushes the mass away forever)."
+                  stepText: "But we are studying electro*statics*. All charges must be at rest. Therefore, the tangential field must be exactly zero."
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Part (b): Negative Damping",
-              "content": "Now look at equation (b): $m\\ddot{x} - b\\dot{x} + kx = 0$. Here the damping term is negative. What are the roots of its auxiliary equation $mp^2 - bp + k = 0$?",
-              "options": [
-                { "id": "1", "text": "$p = \\frac{b \\pm \\sqrt{b^2 - 4mk}}{2m}$", "isCorrect": true, "explanation": "The $-B$ in the quadratic formula flips the sign of the $-b$ term to positive." },
-                { "id": "2", "text": "$p = \\frac{-b \\pm \\sqrt{b^2 - 4mk}}{2m}$", "isCorrect": false, "explanation": "Watch the leading sign." }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Physical Interpretation of (b)",
-              "content": "If $b^2 < 4mk$, the roots for equation (b) are complex, yielding $p = \\gamma \\pm i\\omega_1$. What does the positive real part $\\gamma$ imply?",
-              "options": [
-                { "id": "1", "text": "The amplitude decays to zero.", "isCorrect": false, "explanation": "That would require a negative exponent $-\\gamma t$." },
-                { "id": "2", "text": "The amplitude grows exponentially while oscillating.", "isCorrect": true, "explanation": "The solution is $e^{+\\gamma t}\\cos(\\omega_1 t)$. Negative friction adds energy to the system!" }
-              ]
-            }
+            { id: "s6", type: "quiz", title: "Charge location", content: "If you inject 5 Coulombs of charge deep into the interior of a solid block of copper, where does it end up?", options: [ { id: "A", text: "It stays in the interior.", isCorrect: false, explanation: "" }, { id: "B", text: "It immediately flows to the outer surface.", isCorrect: true, explanation: "Because rho must be zero inside." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The entire volume and surface of a conductor forms a single ___ volume (same V everywhere).", blankAnswer: "equipotential" }
           ]
         },
         {
-          "id": "lesson-2-4-2-ex11-14",
-          "title": "Exercises 11.14 & 11.15: Overdamped Initial Conditions",
-          "description": "Solving for constants in overdamped motion.",
-          "icon": "ArrowDownToLine",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.15",
-              "content": "Obtain $C_1$ and $C_2$ for an overdamped oscillator if it is pushed from the equilibrium position.\n\nThe initial conditions are $x(t=0) = 0$ and $\\dot{x}(t=0) = v_0$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "The general solution for an overdamped oscillator is $x(t) = C_1 e^{-\\gamma_1 t} + C_2 e^{-\\gamma_2 t}$.",
-              "interactiveSteps": [
+          id: "les-9-2-induced-charges", title: "Induced Charges", description: "Shielding and Cavities", icon: "Shield",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If you bring a positive charge near a neutral block of metal, the metal will:", options: [ { id: "A", text: "Repel the charge", isCorrect: false, explanation: "Think about what the electrons do." }, { id: "B", text: "Attract the charge", isCorrect: true, explanation: "Electrons are drawn near, creating a net attractive force." } ] },
+            { id: "s2", type: "theory", title: "Induced Charges & Cavities", content: "When a charge is brought near a conductor, it pulls opposite charges near and pushes like charges away. These are **induced charges**.\n\n**Cavities:** If there is a hollow cavity inside a conductor, and you put a charge $+q$ inside it, it induces $-q$ on the inner wall to cancel the field in the metal. If the conductor is neutral, a $+q$ charge must appear on the *outer* surface.\n\nRemarkably, the external field outside the conductor knows *nothing* about the exact location or shape of the cavity inside; it only 'sees' the uniform $+q$ distributed on the outer surface. The conductor completely isolates the inside from the outside!" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Faraday Cage", 
+              content: "**Goal: Understand why an empty cavity has no field.**", 
+              interactiveSteps: [
                 {
-                  "prompt": "Apply $x(0) = 0$. What equation do you get?",
-                  "stepText": "$0 = C_1 + C_2 \\implies C_2 = -C_1$.",
-                  "options": [
-                    { "id": "A", "text": "$C_2 = -C_1$", "isCorrect": true, "explanation": "Because $e^0=1$." },
-                    { "id": "B", "text": "$C_1 = C_2$", "isCorrect": false, "explanation": "They sum to zero, they aren't equal." }
-                  ]
+                  stepText: "Suppose an empty cavity is inside a conductor subjected to a massive external lightning storm."
                 },
                 {
-                  "stepText": "The derivative is $\\dot{x}(t) = -\\gamma_1 C_1 e^{-\\gamma_1 t} - \\gamma_2 C_2 e^{-\\gamma_2 t}$."
+                  prompt: "Could a field line cross the empty cavity? If it did, it must start on a + charge and end on a - charge on the cavity walls. What does $\\oint \\mathbf{E} \\cdot d\\mathbf{l}$ equal for a loop tracing that line and returning through the metal?",
+                  options: [
+                    { id: "A", text: "Zero", isCorrect: true, explanation: "Loop integrals must be zero." },
+                    { id: "B", text: "Positive", isCorrect: false, explanation: "It can't be." }
+                  ],
+                  stepText: "The integral through the metal is 0. If the cavity had a field, the total loop wouldn't be 0, violating electrostatics."
                 },
                 {
-                  "prompt": "Apply $\\dot{x}(0) = v_0$ and substitute $C_2 = -C_1$.",
-                  "stepText": "$v_0 = -\\gamma_1 C_1 - \\gamma_2 (-C_1) = C_1(\\gamma_2 - \\gamma_1)$.",
-                  "options": [
-                    { "id": "A", "text": "$v_0 = C_1(\\gamma_2 - \\gamma_1)$", "isCorrect": true, "explanation": "Correct substitution and factoring." },
-                    { "id": "B", "text": "$v_0 = C_1(\\gamma_1 + \\gamma_2)$", "isCorrect": false, "explanation": "Watch the signs." }
-                  ]
-                },
-                {
-                  "stepText": "Therefore, $C_1 = \\frac{v_0}{\\gamma_2 - \\gamma_1}$ and $C_2 = -C_1$."
+                  stepText: "Conclusion: An empty cavity inside a conductor has absolutely NO electric field, regardless of external storms. This is a Faraday Cage."
                 }
               ]
             },
-            {
-              "id": "s3-numerical",
-              "type": "numerical",
-              "title": "Exercise 11.14: Numeric Overdamped",
-              "content": "Assume initially $x(0) = 1$ and $v(0) = 0$. Let $\\gamma_1 = 3.414$ and $\\gamma_2 = 0.586$.\n\nThe equation derived in the textbook for this is $C_1 = -\\frac{\\gamma_2}{\\gamma_1 - \\gamma_2} x_0$.\n\nCalculate $C_1$ numerically to three decimal places.",
-              "numericAnswer": -0.207,
-              "numericTolerance": 0.01
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Comparing Gammas",
-              "content": "In overdamping, $\\gamma_1 = \\gamma + \\sqrt{\\gamma^2 - \\omega_0^2}$ and $\\gamma_2 = \\gamma - \\sqrt{\\gamma^2 - \\omega_0^2}$. Which decay term dies out faster?",
-              "options": [
-                { "id": "1", "text": "The $\\gamma_1$ term", "isCorrect": true, "explanation": "Since $\\gamma_1 > \\gamma_2$, $e^{-\\gamma_1 t}$ decays much faster. The long-term behavior is entirely dictated by the slower $\\gamma_2$ term." },
-                { "id": "2", "text": "The $\\gamma_2$ term", "isCorrect": false, "explanation": "Smaller exponent means slower decay." }
-              ]
-            }
+            { id: "s6", type: "quiz", title: "Car in a storm", content: "Why are you safe inside a metal car during a lightning strike?", options: [ { id: "A", text: "Rubber tires block the electricity.", isCorrect: false, explanation: "Lightning just jumped miles of air, an inch of rubber won't stop it." }, { id: "B", text: "The metal chassis acts as a Faraday cage, keeping E=0 inside.", isCorrect: true, explanation: "Charges flow over the skin of the car." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A grounded metallic enclosure used to block out external electric fields is called a ___ cage.", blankAnswer: "Faraday" }
           ]
         },
         {
-          "id": "lesson-2-4-2-ex11-16",
-          "title": "Exercise 11.16: Critical Damping Initial Conditions",
-          "description": "Solving for constants in critical damping.",
-          "icon": "Crosshair",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.16",
-              "content": "A critically damped harmonic oscillator is initially at its equilibrium position ($x=0$) and is struck, giving it a velocity $v_0$.\n\nObtain expressions for the constants $C_1$ and $C_2$ in the solution $x(t) = (C_1 + C_2 t)e^{-\\gamma_c t}$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We need to plug $t=0$ into the position and velocity equations.",
-              "interactiveSteps": [
+          id: "les-9-3-surface-force", title: "Force on a Conductor", description: "Electrostatic pressure", icon: "ArrowUpRight",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If you have a patch of positive charge on a surface, does it push itself away?", options: [ { id: "A", text: "Yes, the charges repel each other.", isCorrect: true, explanation: "Like charges repel, creating an outward pressure." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Surface Charge and Force", content: "The field just outside a conductor is $\\mathbf{E} = \\frac{\\sigma}{\\epsilon_0}\\mathbf{\\hat{n}}$.\n\nThe charge on the surface experiences a force due to this field. But wait! The field is discontinuous (it's 0 inside, and $E$ outside). Which field value does the surface charge 'feel'?\n\nIt feels the **average** of the field above and below it: $\\mathbf{E}_{avg} = \\frac{1}{2}(\\mathbf{E}_{out} + \\mathbf{E}_{in}) = \\frac{1}{2}(\\frac{\\sigma}{\\epsilon_0}\\mathbf{\\hat{n}} + 0)$.\n\nThe force per unit area (pressure) is $\\mathbf{f} = \\sigma \\mathbf{E}_{avg} = \\frac{\\sigma^2}{2\\epsilon_0}\\mathbf{\\hat{n}}$." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Why the Average?", 
+              content: "**Goal: Understand why we use $1/2$ the field.**", 
+              interactiveSteps: [
                 {
-                  "prompt": "For position: At $t=0$, what does $(C_1 + C_2(0))e^0$ evaluate to?",
-                  "stepText": "$C_1$. Since $x(0) = 0$, we conclude $C_1 = 0$.",
-                  "options": [
-                    { "id": "A", "text": "$C_1$", "isCorrect": true, "explanation": "Correct, the $C_2 t$ term vanishes." },
-                    { "id": "B", "text": "$C_1 + C_2$", "isCorrect": false, "explanation": "$C_2$ is multiplied by $t=0$." }
-                  ]
+                  stepText: "A patch of charge cannot exert a net force on *itself*. It only feels the field produced by *other* charges."
                 },
                 {
-                  "stepText": "Now find the velocity derivative: $\\dot{x}(t) = C_2 e^{-\\gamma_c t} - \\gamma_c(C_1 + C_2 t)e^{-\\gamma_c t}$."
+                  prompt: "The total field outside is $\\mathbf{E}_{patch} + \\mathbf{E}_{other}$. The field inside is $-\\mathbf{E}_{patch} + \\mathbf{E}_{other} = 0$. From this, what is $\\mathbf{E}_{other}$?",
+                  options: [
+                    { id: "A", text: "$\\mathbf{E}_{patch}$", isCorrect: true, explanation: "Because they must cancel inside." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "$\\mathbf{E}_{other} = \\mathbf{E}_{patch}$. Thus the total field outside is $2\\mathbf{E}_{other}$."
                 },
                 {
-                  "prompt": "Evaluate this at $t=0$. What do you get?",
-                  "stepText": "$\\dot{x}(0) = C_2 - \\gamma_c C_1$.",
-                  "options": [
-                    { "id": "A", "text": "$C_2 - \\gamma_c C_1$", "isCorrect": true, "explanation": "Correct application of the product rule at $t=0$." },
-                    { "id": "B", "text": "$- \\gamma_c C_2$", "isCorrect": false, "explanation": "Don't forget the derivative of the polynomial part." }
-                  ]
-                },
-                {
-                  "stepText": "Since $C_1 = 0$ and $\\dot{x}(0) = v_0$, we have $v_0 = C_2 - 0 \\implies C_2 = v_0$."
+                  stepText: "The patch only feels $\\mathbf{E}_{other}$, which is exactly HALF of the total external field. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Final Equation Form",
-              "content": "With $C_1 = 0$ and $C_2 = v_0$, what is the final equation of motion for this struck oscillator?",
-              "options": [
-                { "id": "1", "text": "$x(t) = v_0 t e^{-\\gamma_c t}$", "isCorrect": true, "explanation": "Substitute the constants back into $x(t) = (C_1 + C_2 t)e^{-\\gamma_c t}$." },
-                { "id": "2", "text": "$x(t) = v_0 e^{-\\gamma_c t}$", "isCorrect": false, "explanation": "You forgot the factor of $t$ on $C_2$." },
-                { "id": "3", "text": "$x(t) = (v_0 + t)e^{-\\gamma_c t}$", "isCorrect": false, "explanation": "Algebra is incorrect." }
+            { id: "s5", type: "numerical", title: "Pressure Calculation", content: "If $E_{outside} = 100$ V/m, what is the electrostatic pressure $P = \\frac{\\epsilon_0}{2} E^2$ in terms of $\\epsilon_0$?", numericAnswer: 5000, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Pressure Direction", content: "Does the electrostatic pressure pull the conductor outward, or push it inward?", options: [ { id: "A", text: "Always outward (pulls into the field)", isCorrect: true, explanation: "Because sigma squared is always positive." }, { id: "B", text: "Inward for negative charges.", isCorrect: false, explanation: "Negative times negative is positive." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The outward force per unit area on a conductor is known as electrostatic ___.", blankAnswer: "pressure" }
+          ]
+        },
+        {
+          id: "les-9-4-capacitors", title: "Capacitors", description: "Storing charge", icon: "Battery",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "If you have two metal plates and put +Q on one and -Q on the other, the voltage between them is:", options: [ { id: "A", text: "Proportional to Q", isCorrect: true, explanation: "E is proportional to Q, so V is too." }, { id: "B", text: "Independent of Q", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Capacitance", content: "Suppose we have two conductors, carrying charge $+Q$ and $-Q$. Since $V$ is constant over each conductor, there is a well-defined potential difference $V$ between them.\n\nBecause the electric field is proportional to $Q$, the potential difference $V$ is also strictly proportional to $Q$.\nThe constant of proportionality is called **Capacitance** ($C$):\n\n$C \\equiv \\frac{Q}{V}$\n\nCapacitance is a purely geometrical quantity, depending only on the size, shape, and separation of the conductors. It is measured in **Farads** (Coulombs per Volt)." },
+            { id: "s3", type: "interactive_canvas", title: "Parallel Plate Capacitor", content: "Adjust the distance between the plates. Notice that bringing them closer increases the capacitance (ability to store charge at a given voltage).", interactiveCanvasId: "capacitor-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Derivation: Parallel Plates", 
+              content: "**Goal: Find $C$ for two plates of area $A$ separated by $d$.**", 
+              interactiveSteps: [
+                {
+                  prompt: "The field of a single plate is $\\frac{\\sigma}{2\\epsilon_0}$. Between two opposite plates, the fields add. What is the total $E$?",
+                  options: [
+                    { id: "A", text: "$\\frac{\\sigma}{\\epsilon_0}$", isCorrect: true, explanation: "Half plus half is a whole." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "That's outside the plates." }
+                  ],
+                  stepText: "$E = \\frac{\\sigma}{\\epsilon_0} = \\frac{Q}{A\\epsilon_0}$."
+                },
+                {
+                  stepText: "The potential difference is $V = E d = \\frac{Q d}{A \\epsilon_0}$."
+                },
+                {
+                  stepText: "Substitute into $C = Q/V$. We get $C = \\frac{\\epsilon_0 A}{d}$. Goal reached!"
+                }
               ]
             },
-            {
-              "id": "s4-blank",
-              "type": "fill_in_blank",
-              "title": "Shape of the Curve",
-              "content": "The function $x(t) = v_0 t e^{-\\gamma_c t}$ starts at zero, rises to a maximum, and then exponentially decays back to zero. It will cross the x-axis exactly ___ times after $t=0$.",
-              "blankAnswer": "zero"
-            }
+            { id: "s5", type: "numerical", title: "Calculate Capacitance", content: "If $Q = 10 \\mu\\text{C}$ and $V = 5$ Volts, what is the capacitance in microfarads ($\\mu\\text{F}$)?", numericAnswer: 2, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Geometrical Nature", content: "If you double the charge on a capacitor, what happens to its capacitance?", options: [ { id: "A", text: "It doubles", isCorrect: false, explanation: "Voltage doubles too, ratio is constant." }, { id: "B", text: "It stays exactly the same", isCorrect: true, explanation: "Capacitance is strictly based on physical geometry." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The SI unit of capacitance is the ___, which equals one Coulomb per Volt.", blankAnswer: "Farad" }
+          ]
+        },
+        {
+          id: "les-9-5-work-capacitor", title: "Charging a Capacitor", description: "Work required", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Is it harder to put the first electron on a capacitor plate, or the last electron?", options: [ { id: "A", text: "First", isCorrect: false, explanation: "The plate is neutral at first." }, { id: "B", text: "Last", isCorrect: true, explanation: "You must fight the repulsion of all the electrons already there." } ] },
+            { id: "s2", type: "theory", title: "Work to Charge a Capacitor", content: "To 'charge up' a capacitor, you have to rip electrons off the positive plate and shove them onto the negative plate, fighting the electric field the whole way.\n\nIf the current charge is $q$, the voltage is $v = q/C$. The work $dW$ to move a tiny extra charge $dq$ across this voltage is $dW = v dq = \\frac{q}{C} dq$.\n\nIntegrating from $q=0$ to $q=Q$ gives the total work:\n$W = \\int_0^Q \\frac{q}{C} dq = \\frac{1}{2} \\frac{Q^2}{C}$\n\nUsing $Q=CV$, this is equivalently $W = \\frac{1}{2} C V^2$." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Comparing Formulas", 
+              content: "**Goal: Connect this to the field energy formula.**", 
+              interactiveSteps: [
+                {
+                  stepText: "We know $W = \\frac{1}{2} C V^2$. Let's test this on a parallel plate capacitor where $C = \\epsilon_0 A / d$ and $V = E d$."
+                },
+                {
+                  prompt: "Substitute these in: $W = \\frac{1}{2} (\\frac{\\epsilon_0 A}{d}) (E d)^2$. What does this simplify to?",
+                  options: [
+                    { id: "A", text: "$\\frac{1}{2} \\epsilon_0 E^2 (A d)$", isCorrect: true, explanation: "Correct algebraic simplification." },
+                    { id: "B", text: "$\\frac{1}{2} \\epsilon_0 E^2$", isCorrect: false, explanation: "Don't forget the volume." }
+                  ],
+                  stepText: "It simplifies to $\\frac{\\epsilon_0}{2} E^2 \\times (A d)$."
+                },
+                {
+                  stepText: "Notice that $A \\times d$ is exactly the VOLUME of the capacitor! This perfectly matches our fundamental formula $W = \\int \\frac{\\epsilon_0}{2} E^2 d\\tau$."
+                }
+              ]
+            },
+            { id: "s5", type: "numerical", title: "Stored Energy", content: "A $2 \\mu\\text{F}$ capacitor is charged to 10 Volts. What is the stored energy in microjoules?", numericAnswer: 100, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Factor of 1/2", content: "Why is the energy $\\frac{1}{2} Q V$ and not simply $Q V$?", options: [ { id: "A", text: "Because the voltage starts at 0 and grows to V, so the average voltage is V/2.", isCorrect: true, explanation: "Exactly. The first charges are 'free' to move." }, { id: "B", text: "Because there are two plates.", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The energy stored in a capacitor can be written as one-half $C$ times $V$ ___.", blankAnswer: "squared" }
           ]
         }
       ]
     },
     {
-      "id": "unit-2-4-3",
-      "title": "Inhomogeneous Proofs & Phase",
-      "description": "Understanding forced mechanics mathematically.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-10-summary-2-4",
+      title: "Section Summary",
+      description: "Recap of Work, Energy, and Conductors.",
+      color: "duo-green",
+      lessons: [
         {
-          "id": "lesson-2-4-3-ex11-18",
-          "title": "Exercise 11.18: Inhomogeneous Superposition",
-          "description": "Proof of Rule 3 for inhomogeneous equations.",
-          "icon": "Layers",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.18",
-              "content": "Show mathematically that the general solution of an inhomogeneous differential equation $D(x) = f(t)$ is the sum of a particular solution $x_p$ and the general solution of the homogeneous equation $x_g$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "Let the linear differential operator be $D$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "By definition, the homogeneous solution $x_g$ satisfies $D(x_g) = 0$."
-                },
-                {
-                  "stepText": "By definition, the particular solution $x_p$ satisfies $D(x_p) = f(t)$."
-                },
-                {
-                  "prompt": "Because $D$ represents linear derivatives, it is a linear operator. What does $D(A + B)$ equal?",
-                  "stepText": "$D(A + B) = D(A) + D(B)$.",
-                  "options": [
-                    { "id": "A", "text": "$D(A) + D(B)$", "isCorrect": true, "explanation": "The derivative of a sum is the sum of the derivatives." },
-                    { "id": "B", "text": "$D(A) \\cdot D(B)$", "isCorrect": false, "explanation": "That violates linearity." }
-                  ]
-                },
-                {
-                  "prompt": "Therefore, evaluate $D(x_g + x_p)$.",
-                  "stepText": "$D(x_g + x_p) = D(x_g) + D(x_p) = 0 + f(t) = f(t)$.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": false, "explanation": "$D(x_p)$ is not zero." },
-                    { "id": "B", "text": "$f(t)$", "isCorrect": true, "explanation": "Since it evaluates to $f(t)$, the sum $x_g + x_p$ is a valid solution to the full equation!" }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Why add the homogeneous part?",
-              "content": "If $x_p$ alone already equals $f(t)$, why do we bother adding $x_g$ to form the general solution?",
-              "options": [
-                { "id": "1", "text": "To make the math look more complex.", "isCorrect": false, "explanation": "" },
-                { "id": "2", "text": "Because $x_p$ usually lacks the arbitrary constants needed to match initial position and velocity.", "isCorrect": true, "explanation": "A second-order system requires two constants to fit the starting conditions. $x_g$ provides exactly these." },
-                { "id": "3", "text": "To satisfy energy conservation.", "isCorrect": false, "explanation": "Energy is not conserved in an externally forced system." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-3-ex11-24",
-          "title": "Exercise 11.24: Phase Shift Identity",
-          "description": "Converting sine and cosine sums into a single phase-shifted wave.",
-          "icon": "ActivitySquare",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.24",
-              "content": "Show that the sum of a sine and cosine wave of the same frequency:\n$A \\sin \\omega t + B \\cos \\omega t$\n\nCan always be rewritten as a single phase-shifted wave:\n$\\sqrt{A^2 + B^2} \\cos(\\omega t - \\phi)$\nwhere $\\tan \\phi = A/B$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We will expand the target expression and match coefficients.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Expand $\\cos(\\omega t - \\phi)$ using the cosine difference identity."
-                },
-                {
-                  "prompt": "What is the expansion?",
-                  "stepText": "$\\cos(\\omega t)\\cos\\phi + \\sin(\\omega t)\\sin\\phi$.",
-                  "options": [
-                    { "id": "A", "text": "$\\cos(\\omega t)\\cos\\phi + \\sin(\\omega t)\\sin\\phi$", "isCorrect": true, "explanation": "Correct cosine difference identity." },
-                    { "id": "B", "text": "$\\cos(\\omega t)\\cos\\phi - \\sin(\\omega t)\\sin\\phi$", "isCorrect": false, "explanation": "That is for $\\cos(A+B)$." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply by the amplitude $R = \\sqrt{A^2+B^2}$. The expression is $(R\\sin\\phi)\\sin\\omega t +  (R\\cos\\phi)\\cos\\omega t$."
-                },
-                {
-                  "prompt": "By matching this to the original expression $A \\sin \\omega t + B \\cos \\omega t$, what must $A$ equal?",
-                  "stepText": "$A = R\\sin\\phi = \\sqrt{A^2+B^2}\\sin\\phi$.",
-                  "options": [
-                    { "id": "A", "text": "$A = \\sqrt{A^2+B^2}\\sin\\phi$", "isCorrect": true, "explanation": "Matches the coefficient of $\\sin \\omega t$." },
-                    { "id": "B", "text": "$A = \\sqrt{A^2+B^2}\\cos\\phi$", "isCorrect": false, "explanation": "That belongs to $B$." }
-                  ]
-                },
-                {
-                  "stepText": "Similarly, $B = \\sqrt{A^2+B^2}\\cos\\phi$."
-                },
-                {
-                  "stepText": "Dividing $A$ by $B$ yields $A/B = \\frac{\\sin\\phi}{\\cos\\phi} = \\tan\\phi$. The proof is complete!"
-                }
-              ]
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Phase Angle Applications",
-              "content": "In a forced damped oscillator, the phase angle $\\phi$ represents:",
-              "options": [
-                { "id": "1", "text": "The amount the mass is displaced initially.", "isCorrect": false, "explanation": "Initial displacement determines homogeneous constants." },
-                { "id": "2", "text": "The time delay (lag) between the applied force and the mass's response.", "isCorrect": true, "explanation": "Because of damping, the mass doesn't perfectly follow the force; it lags behind by angle $\\phi$." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-3-ex11-23",
-          "title": "Exercise 11.23 & 11.22: Resonance Frequency",
-          "description": "Calculus condition for maximum amplitude.",
-          "icon": "Wifi",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.23",
-              "content": "The amplitude of a forced damped oscillator is given by:\n$A = \\frac{F_0}{\\left[ m^2(\\omega_0^2 - \\omega_d^2)^2 + \\omega_d^2 b^2 \\right]^{1/2}}$\n\nFind the exact driving frequency $\\omega_d$ that maximizes this amplitude."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "To maximize $A$, we must minimize its denominator.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Let $f(\\omega_d) = m^2(\\omega_0^2 - \\omega_d^2)^2 + \\omega_d^2 b^2$. We take the derivative with respect to $\\omega_d$ and set it to zero."
-                },
-                {
-                  "prompt": "Apply the chain rule to the first term $m^2(\\omega_0^2 - \\omega_d^2)^2$. What is its derivative?",
-                  "stepText": "$2m^2(\\omega_0^2 - \\omega_d^2)(-2\\omega_d)$.",
-                  "options": [
-                    { "id": "A", "text": "$2m^2(\\omega_0^2 - \\omega_d^2)$", "isCorrect": false, "explanation": "You forgot the inner derivative of $-\\omega_d^2$." },
-                    { "id": "B", "text": "$2m^2(\\omega_0^2 - \\omega_d^2)(-2\\omega_d)$", "isCorrect": true, "explanation": "Correct chain rule application." }
-                  ]
-                },
-                {
-                  "stepText": "The derivative of the second term $\\omega_d^2 b^2$ is $2\\omega_d b^2$."
-                },
-                {
-                  "stepText": "Setting the sum to zero: $-4\\omega_d m^2(\\omega_0^2 - \\omega_d^2) + 2\\omega_d b^2 = 0$."
-                },
-                {
-                  "prompt": "Assuming $\\omega_d \\neq 0$, we can divide by $2\\omega_d$ and solve for $\\omega_d^2$. What is the result?",
-                  "stepText": "$\\omega_d^2 = \\omega_0^2 - \\frac{b^2}{2m^2}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\omega_d^2 = \\omega_0^2 + \\frac{b^2}{2m^2}$", "isCorrect": false, "explanation": "Watch the algebraic signs." },
-                    { "id": "B", "text": "$\\omega_d^2 = \\omega_0^2 - \\frac{b^2}{2m^2}$", "isCorrect": true, "explanation": "This proves the resonant frequency is slightly lower than the natural frequency." }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "s3-numerical",
-              "type": "numerical",
-              "title": "Exercise 11.22: Calculation",
-              "content": "A simple harmonic oscillator consists of a mass of 3 kg on a spring of constant 0.15 N/m. Assuming damping is negligibly small ($b \\approx 0$).\n\nDetermine the driving frequency $\\omega_d$ which will cause the amplitude to grow extremely large (resonance).",
-              "numericAnswer": 0.22,
-              "numericTolerance": 0.02
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Resonance Limit",
-              "content": "Look closely at the resonant frequency $\\omega' = \\sqrt{\\omega_0^2 - \\frac{b^2}{2m^2}}$. What happens if the damping $b$ is extremely large, specifically $b^2 > 2m^2 \\omega_0^2$?",
-              "options": [
-                { "id": "1", "text": "The resonance peak shifts to a higher frequency.", "isCorrect": false, "explanation": "The term is subtracted." },
-                { "id": "2", "text": "There is no resonance peak; amplitude strictly decreases as driving frequency increases.", "isCorrect": true, "explanation": "The term under the root becomes negative, meaning no real non-zero frequency maximizes amplitude." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "unit-2-4-4",
-      "title": "Advanced Forced Oscillators",
-      "description": "Solving complex inhomogeneous differential equations.",
-      "color": "duo-blue",
-      "lessons": [
-        {
-          "id": "lesson-2-4-4-ex11-4",
-          "title": "Worked Example 11.4: Polynomial Forcing",
-          "description": "Integrating factor technique for linear forcing.",
-          "icon": "FunctionSquare",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Worked Example 11.4",
-              "content": "Find the general solution for $(D^2 - 4)x = 2 - 8t$\n\nInitial conditions: $t=0, x=0, \\dot{x}=5$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "We factor the operator and use an integrating factor.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Factor the operator: $(D - 2)(D + 2)x = 2 - 8t$. Let $u = (D + 2)x$. Then $(D - 2)u = 2 - 8t$."
-                },
-                {
-                  "prompt": "This is $\\frac{du}{dt} - 2u = 2 - 8t$. The integrating factor is $e^{\\int -2 dt}$. What is the integrating factor?",
-                  "stepText": "The integrating factor is $e^{-2t}$.",
-                  "options": [
-                    { "id": "A", "text": "$e^{2t}$", "isCorrect": false, "explanation": "The coefficient of u is -2." },
-                    { "id": "B", "text": "$e^{-2t}$", "isCorrect": true, "explanation": "Correct." }
-                  ]
-                },
-                {
-                  "stepText": "Multiply equation by $e^{-2t}$: $\\frac{d}{dt}(u e^{-2t}) = 2e^{-2t} - 8te^{-2t}$."
-                },
-                {
-                  "stepText": "Integrating both sides yields $u e^{-2t} = -e^{-2t} - 8\\int t e^{-2t} dt$. Using integration by parts, $u = C_1 e^{2t} + 4t + 1$."
-                },
-                {
-                  "stepText": "Now replace $u = (D+2)x = \\frac{dx}{dt} + 2x = C_1 e^{2t} + 4t + 1$."
-                },
-                {
-                  "stepText": "Use integrating factor $e^{2t}$ this time: $\\frac{d}{dt}(x e^{2t}) = C_1 e^{4t} + 4t e^{2t} + e^{2t}$."
-                },
-                {
-                  "stepText": "Integrating again gives the complete general solution: $x(t) = C_2 e^{-2t} + \\frac{1}{4}C_1 e^{2t} + 2t - \\frac{1}{2}$."
-                }
-              ]
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Applying Initial Conditions",
-              "content": "If $x(t) = C_a e^{2t} + C_b e^{-2t} + 2t - 0.5$, applying $x(0) = 0$ gives $C_a + C_b = 0.5$. \nApplying $\\dot{x}(0) = 5$ gives $2C_a - 2C_b + 2 = 5$. \nSolving these yields:",
-              "options": [
-                { "id": "1", "text": "$C_a = 1, C_b = -0.5$", "isCorrect": true, "explanation": "$1 - 0.5 = 0.5$, and $2(1) - 2(-0.5) + 2 = 2 + 1 + 2 = 5$. Correct!" },
-                { "id": "2", "text": "$C_a = 2, C_b = -1.5$", "isCorrect": false, "explanation": "Doesn't satisfy the velocity equation." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-4-ex11-19",
-          "title": "Exercise 11.19: Constant Forcing",
-          "description": "Solving via inspection and operator factoring.",
-          "icon": "PenTool",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.19",
-              "content": "Obtain the general solution to $(D^2 - D - 6)x = 8$."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "This relies on finding the roots of the homogeneous part, and guessing the particular part.",
-              "interactiveSteps": [
-                {
-                  "prompt": "Find the roots of the auxiliary equation $p^2 - p - 6 = 0$.",
-                  "stepText": "Factoring $(p-3)(p+2) = 0$ gives $p=3$ and $p=-2$.",
-                  "options": [
-                    { "id": "A", "text": "$p=3, p=-2$", "isCorrect": true, "explanation": "Correct factorization." },
-                    { "id": "B", "text": "$p=-3, p=2$", "isCorrect": false, "explanation": "Check signs: $(-3)(2) = -6$, but $-3+2 = -1$ which would give $+p$." }
-                  ]
-                },
-                {
-                  "stepText": "So the homogeneous solution is $x_g(t) = C_1 e^{3t} + C_2 e^{-2t}$."
-                },
-                {
-                  "prompt": "Since the RHS is a constant ($8$), guess a constant particular solution $x_p = A$. What is $D(A)$ and $D^2(A)$?",
-                  "stepText": "Derivatives of a constant are zero.",
-                  "options": [
-                    { "id": "A", "text": "$0$", "isCorrect": true, "explanation": "Correct." },
-                    { "id": "B", "text": "$A$", "isCorrect": false, "explanation": "The derivative is zero." }
-                  ]
-                },
-                {
-                  "stepText": "Substitute into $(D^2 - D - 6)A = 8 \\implies -6A = 8 \\implies A = -8/6 = -4/3$."
-                },
-                {
-                  "stepText": "Final Solution: $x(t) = C_1 e^{3t} + C_2 e^{-2t} - \\frac{4}{3}$."
-                }
-              ]
-            },
-            {
-              "id": "s3-blank",
-              "type": "fill_in_blank",
-              "title": "Superposition",
-              "content": "The total solution is simply the ___ of the homogeneous solution and the particular solution.",
-              "blankAnswer": "sum"
-            }
-          ]
-        },
-        {
-          "id": "lesson-2-4-4-ex11-25",
-          "title": "Exercise 11.25: Exponential Driving Force",
-          "description": "Applying Trick #1 to physical equations.",
-          "icon": "Wind",
-          "slides": [
-            {
-              "id": "s1-q",
-              "type": "example_q",
-              "title": "Exercise 11.25",
-              "content": "A damped harmonic oscillator is driven by an exponentially decaying force $F_0 e^{-\\alpha t}$. \n\nFind the general solution. (Assume standard underdamped conditions for the homogeneous part)."
-            },
-            {
-              "id": "s2-sol",
-              "type": "solution",
-              "title": "Interactive Solution",
-              "content": "The equation is $m\\ddot{x} + b\\dot{x} + kx = F_0 e^{-\\alpha t}$.",
-              "interactiveSteps": [
-                {
-                  "stepText": "The homogeneous solution (assuming underdamped) is $x_g = A e^{-\\gamma t}\\cos(\\omega_1 t + \\theta)$."
-                },
-                {
-                  "prompt": "For the particular solution, Trick #1 suggests we guess $x_p = C e^{-\\alpha t}$. What are $\\dot{x}_p$ and $\\ddot{x}_p$?",
-                  "stepText": "$\\dot{x}_p = -\\alpha C e^{-\\alpha t}$ and $\\ddot{x}_p = \\alpha^2 C e^{-\\alpha t}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\dot{x}_p = -\\alpha C e^{-\\alpha t}$, $\\ddot{x}_p = \\alpha^2 C e^{-\\alpha t}$", "isCorrect": true, "explanation": "Chain rule pulls out a $-\\alpha$ each time." },
-                    { "id": "B", "text": "$\\dot{x}_p = \\alpha C e^{-\\alpha t}$, $\\ddot{x}_p = \\alpha^2 C e^{-\\alpha t}$", "isCorrect": false, "explanation": "Don't drop the negative sign." }
-                  ]
-                },
-                {
-                  "stepText": "Substitute into the equation: $C(m\\alpha^2 - b\\alpha + k)e^{-\\alpha t} = F_0 e^{-\\alpha t}$."
-                },
-                {
-                  "stepText": "Cancel the exponential and solve for $C$: $C = \\frac{F_0}{m\\alpha^2 - b\\alpha + k}$."
-                },
-                {
-                  "stepText": "The general solution is $x(t) = A e^{-\\gamma t}\\cos(\\omega_1 t + \\theta) + \\frac{F_0}{m\\alpha^2 - b\\alpha + k} e^{-\\alpha t}$."
-                }
-              ]
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Trick Failure Condition",
-              "content": "When does Trick #1 fail, requiring us to multiply our guess by $t$?",
-              "options": [
-                { "id": "1", "text": "When the forcing exponent $-\\alpha$ exactly matches one of the homogeneous roots.", "isCorrect": true, "explanation": "If $-\\alpha$ was a root of the auxiliary equation, the denominator $m\\alpha^2 - b\\alpha + k$ would be exactly zero! The math trick brilliantly predicts its own failure." },
-                { "id": "2", "text": "When the force is too large.", "isCorrect": false, "explanation": "Linear equations scale perfectly with amplitude." },
-                { "id": "3", "text": "When there is no damping.", "isCorrect": false, "explanation": "It works fine without damping, as long as $-\\alpha$ isn't a root." }
-              ]
-            }
+          id: "les-10-1-recap",
+          title: "Work & Conductors Recap",
+          description: "Review of Units 8 & 9",
+          icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "Electrostatic energy is stored in the electric field with a density proportional to:", options: [ { id: "A", text: "$E$", isCorrect: false, explanation: "" }, { id: "B", text: "$E^2$", isCorrect: true, explanation: "Energy density is $\\frac{\\epsilon_0}{2} E^2$." } ] },
+            { id: "s1", type: "quiz", title: "Knowledge Check 2", content: "Inside an ideal conductor in electrostatics, the electric field is always:", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "Charges rearrange to kill any internal field." }, { id: "B", text: "Constant, but non-zero", isCorrect: false, explanation: "" } ] },
+            { id: "s2", type: "theory", title: "Section 4 Summary", content: "**Work and Energy:** The work required to assemble a charge distribution represents stored potential energy. It can be calculated by summing over the charges ($\\frac{1}{2}\\int \\rho V d\\tau$) or by integrating over the field ($\\frac{\\epsilon_0}{2}\\int E^2 d\\tau$). Because it depends on $E^2$, energy does *not* obey superposition.\n\n**Conductors:** In electrostatics, ideal conductors have $\\mathbf{E}=0$ and $\\rho=0$ inside. Any net charge resides on the surface. The entire conductor is an equipotential, and the external field is perpendicular to the surface. Capacitors store charge and energy, with $C = Q/V$ and $W = \\frac{1}{2}CV^2$." }
           ]
         }
       ]

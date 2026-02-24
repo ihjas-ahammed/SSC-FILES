@@ -6,6 +6,7 @@ import FillInBlankView from './FillInBlankView';
 import ExampleView from './ExampleView';
 import InteractiveProofView from './InteractiveProofView';
 import NumericalView from './NumericalView';
+import InteractiveCanvasView from './InteractiveCanvasView';
 import CanvasArt from './CanvasArt';
 import ProgressBar from './ProgressBar';
 import { X } from 'lucide-react';
@@ -49,6 +50,10 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
 
     if (currentSlide.type === 'proof' || currentSlide.type === 'solution') {
       return <InteractiveProofView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} />;
+    }
+
+    if (currentSlide.type === 'interactive_canvas') {
+      return <InteractiveCanvasView key={currentSlide.id} slide={currentSlide} onComplete={handleContinue} />;
     }
 
     // Default for 'theory', 'example'

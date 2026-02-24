@@ -1,724 +1,540 @@
 import { Section } from '../types';
 
 export const SECTION_3_2: Section = {
-  "id": "section-3-2",
-  "title": "Section 2: Accelerated Frames & Practicals",
-  "description": "Fictitious forces, Coriolis effects, Foucault's Pendulum, and Experimental Physics.",
-  "color": "duo-blue",
-  "units": [
+  id: "section-3-2",
+  title: "Section 2: Divergence, Curl of B & Vector Potential",
+  description: "Ampère's Law, the magnetic vector potential, and magnetostatic boundary conditions.",
+  color: "duo-red",
+  units: [
     {
-      "id": "unit-3-4",
-      "title": "Accelerated Reference Frames",
-      "description": "Understanding motion from the perspective of accelerating and rotating bodies.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-12-ampere",
+      title: "Divergence and Curl of B",
+      description: "Ampère's Law and the absence of magnetic monopoles.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "lesson-3-4-1-linear-accel",
-          "title": "Linearly Accelerating Frames",
-          "description": "Newton's laws in non-inertial systems.",
-          "icon": "ArrowRight",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Non-Inertial Reference Frames",
-              "content": "Newton's laws of motion are only valid in inertial (non-accelerating) frames. However, we live on a rotating Earth, which is an accelerating frame!\n\nIf frame $O'$ accelerates at a constant rate $\\ddot{\\mathbf{r}}$ relative to an inertial frame $O$, the position of a particle is $\\mathbf{r}_O = \\mathbf{r} + \\mathbf{r}_{O'}$.\nTaking the second derivative gives the accelerations: $\\ddot{\\mathbf{r}}_O = \\ddot{\\mathbf{r}}_{O'} + \\ddot{\\mathbf{r}}$."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Fictitious Force",
-              "content": "In the inertial frame, Newton's second law is $\\mathbf{F} = m\\ddot{\\mathbf{r}}_O$.\n\nSubstituting our acceleration equation gives $\\mathbf{F} = m(\\ddot{\\mathbf{r}}_{O'} + \\ddot{\\mathbf{r}})$.\nRearranging for the observer in the accelerating frame $O'$:\n$$m\\ddot{\\mathbf{r}}_{O'} = \\mathbf{F} - m\\ddot{\\mathbf{r}}$$\n\nThe term $\\mathbf{f} = -m\\ddot{\\mathbf{r}}$ is called a **fictitious force**. It appears to act on the particle solely due to the observer's acceleration."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Feeling the Acceleration",
-              "content": "Let's apply this to a real-world scenario: sitting in a car that suddenly accelerates forward.",
-              "interactiveSteps": [
+          id: "les-12-1-div-b", title: "Divergence of B", description: "No magnetic monopoles", icon: "Minimize",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, electric field lines start on positive charges and end on negative charges. Where do magnetic field lines begin?", options: [ { id: "A", text: "North poles", isCorrect: false, explanation: "Magnetic field lines actually form continuous closed loops." }, { id: "B", text: "They don't begin or end anywhere", isCorrect: true, explanation: "Magnetic field lines form closed loops with no start or end." } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "What is the mathematical condition for a vector field having no 'sources' or 'sinks'?", options: [ { id: "A", text: "Curl is zero", isCorrect: false, explanation: "That means it's irrotational." }, { id: "B", text: "Divergence is zero", isCorrect: true, explanation: "Zero divergence means what flows into a region must flow out." } ] },
+            { id: "s2", type: "theory", title: "The Divergence of B", content: "Applying the divergence operator to the Biot-Savart law yields a profound result:\n\n$\\nabla \\cdot \\mathbf{B} = 0$\n\nUnlike the electric field ($\\nabla \\cdot \\mathbf{E} = \\rho/\\epsilon_0$), the divergence of the magnetic field is always exactly zero. This reflects the physical fact that there are no **magnetic monopoles** in classical electrodynamics. You cannot isolate a 'North' or 'South' pole; magnetic charges do not exist. Magnetic fields do not diverge away from a point; they curl around currents." },
+            { id: "s3", type: "interactive_canvas", title: "Magnetic Field Lines", content: "Notice how magnetic field lines always close back on themselves. If you cut a magnet in half, you just get two smaller magnets, never an isolated pole.", interactiveCanvasId: "curl-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Gauss's Law for Magnetism", 
+              content: "**Goal: Find the magnetic flux through a closed surface.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Let the ground be the inertial frame $O$, and the car be the accelerating frame $O'$ moving with acceleration $\\ddot{\\mathbf{r}} = +a\\mathbf{\\hat{i}}$."
+                  stepText: "By the Divergence Theorem, the flux $\\oint \\mathbf{B} \\cdot d\\mathbf{a} = \\int (\\nabla \\cdot \\mathbf{B}) d\\tau$."
                 },
                 {
-                  "prompt": "According to the equation $\\mathbf{f} = -m\\ddot{\\mathbf{r}}$, what is the fictitious force vector experienced by you (mass $m$) inside the car?",
-                  "stepText": "The fictitious force is $\\mathbf{f} = -ma\\mathbf{\\hat{i}}$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{f} = +ma\\mathbf{\\hat{i}}$", "isCorrect": false, "explanation": "The formula requires a negative sign." },
-                    { "id": "B", "text": "$\\mathbf{f} = -ma\\mathbf{\\hat{i}}$", "isCorrect": true, "explanation": "This perfectly explains why you feel pushed backwards (negative x direction) into your seat!" }
-                  ]
+                  prompt: "Since $\\nabla \\cdot \\mathbf{B} = 0$, what is the total magnetic flux through ANY closed surface?",
+                  options: [
+                    { id: "A", text: "Zero", isCorrect: true, explanation: "The integral of zero is zero." },
+                    { id: "B", text: "Depends on the current inside", isCorrect: false, explanation: "That's Ampere's law for a loop, not Gauss's law for a surface." }
+                  ],
+                  stepText: "The total magnetic flux through a closed surface is always exactly 0."
                 },
                 {
-                  "prompt": "If no physical force $\\mathbf{F}$ is pushing you forward yet, what is your apparent acceleration $\\ddot{\\mathbf{r}}_{O'}$ in the car's frame?",
-                  "stepText": "$\\ddot{\\mathbf{r}}_{O'} = -a\\mathbf{\\hat{i}}$. You accelerate backwards relative to the car until the seat pushes you forward.",
-                  "options": [
-                    { "id": "A", "text": "$-a\\mathbf{\\hat{i}}$", "isCorrect": true, "explanation": "Correct. Your body tries to stay still while the car moves forward." },
-                    { "id": "B", "text": "$0$", "isCorrect": false, "explanation": "You would only have 0 relative acceleration if you were strapped tightly to the car." }
-                  ]
+                  stepText: "This is the magnetic equivalent of Gauss's Law: Every magnetic field line that enters a closed volume must also exit it. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Nature of Fictitious Forces",
-              "content": "Which of the following is true about fictitious forces?",
-              "options": [
-                { "id": "1", "text": "They represent real physical interactions between bodies.", "isCorrect": false, "explanation": "They do not arise from fundamental interactions like gravity or electromagnetism." },
-                { "id": "2", "text": "They are a mathematical consequence of expressing motion in a non-inertial coordinate system.", "isCorrect": true, "explanation": "They are simply $ma$ terms moved to the other side of Newton's equation." },
-                { "id": "3", "text": "They only exist in quantum mechanics.", "isCorrect": false, "explanation": "They are purely classical mechanics concepts." }
-              ]
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Terminology",
-              "content": "A reference frame that is at rest or moving at a constant velocity with respect to the fixed stars is called an ___ reference frame.",
-              "blankAnswer": "inertial"
-            }
+            { id: "s5", type: "numerical", title: "Magnetic Flux", content: "If a magnet is placed entirely inside a sealed plastic sphere, what is the net magnetic flux (in Weber) passing through the surface of the sphere?", numericAnswer: 0, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Maxwell's Equations", content: "Which of Maxwell's equations states that there are no magnetic monopoles?", options: [ { id: "A", text: "$\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$", isCorrect: false, explanation: "That's Ampere's Law." }, { id: "B", text: "$\\nabla \\cdot \\mathbf{B} = 0$", isCorrect: true, explanation: "Correct." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Because $\\nabla \\cdot \\mathbf{B} = 0$, magnetic field lines must always form closed ___.", blankAnswer: "loops" }
           ]
         },
         {
-          "id": "lesson-3-4-2-rotating-frames",
-          "title": "Rotating Coordinate Frames",
-          "description": "Translating time derivatives between fixed and rotating axes.",
-          "icon": "RotateCw",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Vector Derivatives in Rotating Frames",
-              "content": "Consider a coordinate system rigidly attached to the Earth, rotating with angular velocity $\\mathbf{\\Omega}$. \n\nThe time derivative of ANY vector $\\mathbf{U}$ evaluated in the inertial frame is related to the derivative in the rotating frame by the operator equation:\n\n$$\\left[\\frac{d\\mathbf{U}}{dt}\\right]_{inertial} = \\left[\\frac{d\\mathbf{U}}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times \\mathbf{U}$$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Velocity Relationship",
-              "content": "Applying this to the position vector $\\mathbf{r}$:\n$$\\left[\\frac{d\\mathbf{r}}{dt}\\right]_{inertial} = \\left[\\frac{d\\mathbf{r}}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times \\mathbf{r}$$\n\nThis translates to: $\\mathbf{v}_i = \\mathbf{v}_r + \\mathbf{\\Omega} \\times \\mathbf{r}$. \nIf a person is standing still on Earth ($\\mathbf{v}_r = 0$), an observer in space sees them moving with velocity $\\mathbf{v}_i = \\mathbf{\\Omega} \\times \\mathbf{r}$."
-            },
-            {
-              "id": "s3-q",
-              "type": "example_q",
-              "title": "Worked Example 15.1: Bug on a Record",
-              "content": "A bug crawls with constant speed $v_b$ outward along a radial line on a record player rotating at $\\mathbf{\\Omega}_0 = \\Omega_0\\mathbf{\\hat{k}}$.\n\nUse the operator equation to find the acceleration of the bug in the inertial frame, $\\mathbf{a}_i$."
-            },
-            {
-              "id": "s4-sol",
-              "type": "solution",
-              "title": "Interactive Solution: Bug Acceleration",
-              "content": "We must apply the operator equation to the velocity vector.",
-              "interactiveSteps": [
+          id: "les-12-2-curl-b-wire", title: "Curl of B (Straight Wire)", description: "Line integral of B", icon: "RotateCw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "For an electrostatic field, the line integral around a closed loop is zero. Is this true for a magnetic field?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Magnetic fields curl around currents!" }, { id: "B", text: "No", isCorrect: true, explanation: "The line integral of B around a current is non-zero." } ] },
+            { id: "s2", type: "theory", title: "Line Integral of B", content: "Consider the magnetic field of an infinite straight wire: $B = \\frac{\\mu_0 I}{2\\pi s} \\mathbf{\\hat{\\phi}}$.\n\nIf we integrate $\\mathbf{B}$ around a circular path of radius $s$ centered on the wire, the field and the path $d\\mathbf{l}$ are parallel everywhere:\n$\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\oint \\left(\\frac{\\mu_0 I}{2\\pi s}\\right) s d\\phi = \\frac{\\mu_0 I}{2\\pi s} (2\\pi s) = \\mu_0 I$\n\nNotice that the radius $s$ completely cancels out! The line integral depends only on the current enclosed by the loop." },
+            { id: "s3", type: "interactive_canvas", title: "Ampère's Loop", content: "Drag to change the radius of the loop. Notice that as the loop gets larger, B gets weaker, but the path gets longer in exact proportion, keeping the integral constant.", interactiveCanvasId: "amperes-law-interactive" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Path Independence of the Loop", 
+              content: "**Goal: Understand why the shape of the loop doesn't matter.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The velocity in the inertial frame is $\\mathbf{v}_i = \\mathbf{v}_r + \\mathbf{\\Omega}_0 \\times \\mathbf{r}$. We must apply the operator $\\left[\\frac{d}{dt}\\right]_{rot} + \\mathbf{\\Omega}_0 \\times$ to $\\mathbf{v}_i$."
+                  stepText: "We found $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I$ for a perfect circle."
                 },
                 {
-                  "prompt": "What is the first term, $\\left[\\frac{d\\mathbf{v}_i}{dt}\\right]_{rot}$?",
-                  "stepText": "$\\left[\\frac{d}{dt}(\\mathbf{v}_r + \\mathbf{\\Omega}_0 \\times \\mathbf{r})\\right]_{rot} = \\mathbf{a}_r + \\mathbf{\\Omega}_0 \\times \\mathbf{v}_r$. Since the bug moves at constant speed radially, $\\mathbf{a}_r = 0$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{a}_r + \\mathbf{\\Omega}_0 \\times \\mathbf{v}_r$", "isCorrect": true, "explanation": "Correctly applying the rotational time derivative to both parts of v_i." },
-                    { "id": "B", "text": "$\\mathbf{a}_r$ only", "isCorrect": false, "explanation": "You must also take the derivative of the $\\Omega_0 \\times r$ term." }
-                  ]
+                  prompt: "If we use a weird, wavy loop that still encloses the wire once, what happens to the radial movements ($ds$)?",
+                  options: [
+                    { id: "A", text: "They add to the integral", isCorrect: false, explanation: "B is strictly azimuthal (phi direction)." },
+                    { id: "B", text: "They contribute zero to the dot product", isCorrect: true, explanation: "B dot ds = 0." }
+                  ],
+                  stepText: "Radial movements contribute nothing. The $\\phi$ movements must eventually add up to exactly $2\\pi$ to close the loop."
                 },
                 {
-                  "prompt": "Now, what is the second term of the operator, $\\mathbf{\\Omega}_0 \\times \\mathbf{v}_i$?",
-                  "stepText": "$\\mathbf{\\Omega}_0 \\times (\\mathbf{v}_r + \\mathbf{\\Omega}_0 \\times \\mathbf{r}) = \\mathbf{\\Omega}_0 \\times \\mathbf{v}_r + \\mathbf{\\Omega}_0 \\times (\\mathbf{\\Omega}_0 \\times \\mathbf{r})$.",
-                  "options": [
-                    { "id": "A", "text": "$\\mathbf{\\Omega}_0 \\times \\mathbf{v}_r + \\mathbf{\\Omega}_0 \\times (\\mathbf{\\Omega}_0 \\times \\mathbf{r})$", "isCorrect": true, "explanation": "Distributing the cross product correctly." },
-                    { "id": "B", "text": "$\\mathbf{\\Omega}_0 \\times \\mathbf{v}_r$", "isCorrect": false, "explanation": "You missed substituting the full expression for v_i." }
-                  ]
-                },
-                {
-                  "stepText": "Adding them together gives $\\mathbf{a}_i = \\mathbf{a}_r + 2\\mathbf{\\Omega}_0 \\times \\mathbf{v}_r + \\mathbf{\\Omega}_0 \\times (\\mathbf{\\Omega}_0 \\times \\mathbf{r})$. This is the general formula for acceleration!"
+                  stepText: "Thus, ANY loop enclosing the wire yields exactly $\\mu_0 I$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Exercise 15.2: Angular Velocity Invariance",
-              "content": "Prove that the rate of change of the angular velocity of the rotating system is the same in both the inertial and rotating frames. That is, show $\\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{inertial} = \\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{rot}$.",
-              "options": [
-                { "id": "1", "text": "Because $\\mathbf{\\Omega} \times \\mathbf{\\Omega} = 0$.", "isCorrect": true, "explanation": "Applying the operator to $\\mathbf{\\Omega}$ gives $\\left[\\frac{d\\mathbf{\\Omega}}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times \\mathbf{\\Omega}$. The cross product of a vector with itself is always zero." },
-                { "id": "2", "text": "Because angular velocity is always constant.", "isCorrect": false, "explanation": "Even if it is accelerating (angular acceleration), the rate of change is measured the same in both frames." },
-                { "id": "3", "text": "Because it is a scalar.", "isCorrect": false, "explanation": "Angular velocity is a pseudovector." }
-              ]
-            }
+            { id: "s6", type: "quiz", title: "Loop outside", content: "If you draw a closed loop that does NOT enclose the current wire, what is $\\oint \\mathbf{B} \\cdot d\\mathbf{l}$?", options: [ { id: "A", text: "$\\mu_0 I$", isCorrect: false, explanation: "" }, { id: "B", text: "0", isCorrect: true, explanation: "The angle $\\phi$ goes out and comes back, netting zero." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The line integral of $\\mathbf{B}$ around a loop is proportional to the current ___ by that loop.", blankAnswer: "enclosed" }
           ]
         },
         {
-          "id": "lesson-3-4-3-fictitious-forces",
-          "title": "Fictitious Forces Formulation",
-          "description": "Coriolis and Centrifugal force equations.",
-          "icon": "Wind",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Full Acceleration Equation",
-              "content": "From the previous lesson, we found the inertial acceleration $\\mathbf{a}_i$ in terms of the rotating frame parameters (assuming $d\\mathbf{\\Omega}/dt = 0$):\n\n$$\\mathbf{a}_i = \\mathbf{a}_r + 2\\mathbf{\\Omega} \\times \\mathbf{v}_r + \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$$\n\nMultiply by mass $m$ to get $\\mathbf{F} = m\\mathbf{a}_i$, and rearrange to isolate the apparent acceleration $\\mathbf{a}_r$ seen by the rotating observer:"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Newton's Second Law on Earth",
-              "content": "Rearranging yields the equation of motion for an observer in a rotating frame:\n\n$$m\\mathbf{a}_r = \\mathbf{F} - 2m\\mathbf{\\Omega} \\times \\mathbf{v}_r - m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$$\n\n*   **$\\mathbf{F}$:** Real, physical external forces.\n*   **$-2m\\mathbf{\\Omega} \\times \\mathbf{v}_r$:** The **Coriolis force** (depends on velocity).\n*   **$-m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$:** The **Centrifugal force** (depends on position)."
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Direction of Centrifugal Force",
-              "content": "Consider the vector $\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$. What is the direction of the resulting fictitious centrifugal force (which has a negative sign in front)?",
-              "options": [
-                { "id": "1", "text": "Directly towards the axis of rotation.", "isCorrect": false, "explanation": "That is the direction of the centripetal acceleration $\\Omega \times (\\Omega \times r)$." },
-                { "id": "2", "text": "Directly away from the axis of rotation.", "isCorrect": true, "explanation": "The negative sign flips the centripetal direction, making it point radially outward." },
-                { "id": "3", "text": "Tangential to the rotation.", "isCorrect": false, "explanation": "Cross products with the axis twice return a radial vector." }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Coriolis Dependence",
-              "content": "If an object is placed perfectly at rest on the surface of the rotating Earth (relative to the surface), which fictitious force does it NOT experience?",
-              "options": [
-                { "id": "1", "text": "Centrifugal Force", "isCorrect": false, "explanation": "It experiences this as long as it has a position vector $r$ not on the axis." },
-                { "id": "2", "text": "Coriolis Force", "isCorrect": true, "explanation": "The Coriolis force is proportional to $v_r$. If velocity is zero, Coriolis is zero." }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "lesson-3-4-4-centrifugal",
-          "title": "Centrifugal Force & The Plumb Bob",
-          "description": "Effective gravity and the shape of the Earth.",
-          "icon": "Anchor",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Effective Gravitational Acceleration",
-              "content": "A hanging plumb bob on Earth is acted upon by Tension $\\mathbf{T}$, physical gravity $m\\mathbf{g}$, and the centrifugal force. (It is at rest, so Coriolis is zero).\n\n$$m\\mathbf{a}_r = 0 = \\mathbf{T} + m\\mathbf{g} - m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$$\n\nWe define **effective gravitational acceleration** $\\mathbf{g}_e$ as:\n$$\\mathbf{g}_e = \\mathbf{g} - \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Plumb Bob Deflection",
-              "content": "Because of the centrifugal term pointing outward from the axis, $\\mathbf{g}_e$ does not point exactly towards the center of the Earth (except at the poles and equator).\n\n*   **Northern Hemisphere:** The plumb bob points slightly *below* the center of the Earth.\n*   **Southern Hemisphere:** It points slightly *above* the center."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: The Equatorial Bulge (Exercise 15.3)",
-              "content": "Why is the Earth an oblate spheroid?",
-              "interactiveSteps": [
+          id: "les-12-3-ampere-integral", title: "Ampère's Law (Integral)", description: "The general theorem", icon: "Maximize",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "What is the magnetostatic equivalent of Gauss's Law for calculating fields using symmetry?", options: [ { id: "A", text: "Coulomb's Law", isCorrect: false, explanation: "" }, { id: "B", text: "Ampère's Law", isCorrect: true, explanation: "Ampère's law allows quick calculations of B for highly symmetric currents." } ] },
+            { id: "s2", type: "theory", title: "Ampère's Law (Integral Form)", content: "We generalize the result from the straight wire to any bundle of steady currents. The line integral of $\\mathbf{B}$ around any closed loop is equal to $\\mu_0$ times the total current passing through the surface bounded by the loop:\n\n$\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$\n\nThis is the integral version of **Ampère's Law**. The direction of positive current is determined by the right-hand rule with respect to the direction of integration around the loop." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Current Density", 
+              content: "**Goal: Express $I_{enc}$ using current density $\\mathbf{J}$.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Imagine a particle on a perfectly smooth, perfectly spherical rotating planet. The forces are gravity (pointing to center) and normal force (pointing away from center)."
+                  stepText: "If the current is distributed over a volume, we describe it with the volume current density $\\mathbf{J}$."
                 },
                 {
-                  "prompt": "What does the centrifugal force do?",
-                  "stepText": "It points strictly perpendicular and outward from the axis of rotation.",
-                  "options": [
-                    { "id": "A", "text": "It points towards the equator.", "isCorrect": false, "explanation": "It points outward from the axis." },
-                    { "id": "B", "text": "It points outward, perpendicular to the polar axis.", "isCorrect": true, "explanation": "Correct." }
-                  ]
+                  prompt: "How do we find the total current $I_{enc}$ passing through a surface $\\mathcal{S}$ bounded by our loop?",
+                  options: [
+                    { id: "A", text: "$\\int_{\\mathcal{S}} \\mathbf{J} \\cdot d\\mathbf{a}$", isCorrect: true, explanation: "Current is the flux of J." },
+                    { id: "B", text: "$\\int \\mathbf{J} d\\tau$", isCorrect: false, explanation: "That would integrate over a volume, not a surface." }
+                  ],
+                  stepText: "The enclosed current is $I_{enc} = \\int_{\\mathcal{S}} \\mathbf{J} \\cdot d\\mathbf{a}$."
                 },
                 {
-                  "prompt": "If you resolve this centrifugal force into components parallel and perpendicular to the spherical surface, what happens?",
-                  "stepText": "The parallel component is unbalanced and points towards the equator!",
-                  "options": [
-                    { "id": "A", "text": "It points towards the poles.", "isCorrect": false, "explanation": "Draw the geometry: outward from the axis pushes things 'down' towards the fatter equator." },
-                    { "id": "B", "text": "It points towards the equator.", "isCorrect": true, "explanation": "This unbalanced force caused the early molten Earth to bulge at the equator until the surface sloped enough to perfectly balance it." }
-                  ]
+                  stepText: "So Ampère's law becomes $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 \\int_{\\mathcal{S}} \\mathbf{J} \\cdot d\\mathbf{a}$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Local Perpendicular",
-              "content": "Despite not pointing at the exact center of the Earth, a plumb line DOES accurately define the local perpendicular to the surface. Why?",
-              "options": [
-                { "id": "1", "text": "Because liquids (like the oceans) align their surfaces perpendicular to the effective gravity $\\mathbf{g}_e$.", "isCorrect": true, "explanation": "The Earth's equatorial bulge evolved exactly to make the surface perpendicular to the effective gravity vector everywhere!" },
-                { "id": "2", "text": "Because the Coriolis force corrects it.", "isCorrect": false, "explanation": "Coriolis force is zero for a stationary plumb bob." },
-                { "id": "3", "text": "It is an optical illusion.", "isCorrect": false, "explanation": "It's a physical reality." }
-              ]
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Earth's Shape",
-              "content": "Because of the centrifugal force, the Earth is not a perfect sphere, but an oblate ___.",
-              "blankAnswer": "spheroid"
-            }
+            { id: "s5", type: "numerical", title: "Evaluate Integral", content: "A loop encloses three wires. Two wires carry 5 A upward, and one carries 3 A downward. What is $I_{enc}$ (assuming upward is positive)?", numericAnswer: 7, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Sign Convention", content: "How do you determine which direction of current is positive?", options: [ { id: "A", text: "Up is always positive", isCorrect: false, explanation: "It depends on the loop." }, { id: "B", text: "Use the Right-Hand Rule", isCorrect: true, explanation: "Fingers curl in the direction of the loop integral, thumb points to positive current." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Ampère's law relates the line integral of B to the total ___ enclosed by the loop.", blankAnswer: "current" }
           ]
         },
         {
-          "id": "lesson-3-4-5-coriolis-falling",
-          "title": "The Coriolis Force: Falling Body",
-          "description": "Calculating the eastward deflection of dropped objects.",
-          "icon": "ArrowDown",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Coordinate System",
-              "content": "To study Coriolis effects, we define a local coordinate system:\n*   **z-axis:** Points Up (opposite to $\\mathbf{g}_e$).\n*   **x-axis:** Points East.\n*   **y-axis:** Points North.\n\nLet $\\lambda$ be the colatitude. The Earth's rotation vector is $\\mathbf{\\Omega} = \\Omega\\cos\\lambda \\mathbf{\\hat{j}} + \\Omega\\sin\\lambda \\mathbf{\\hat{k}}$."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "A Falling Body",
-              "content": "If you drop an object from height $h$, its velocity is primarily downward: $\\mathbf{v}_r \\approx -gt\\mathbf{\\hat{k}}$.\n\nThe Coriolis acceleration is $\\mathbf{a}_c = -2\\mathbf{\\Omega} \\times \\mathbf{v}_r$. \nTaking the cross product of $\\mathbf{\\hat{j}}$ (North) and $-\\mathbf{\\hat{k}}$ (Down) yields an acceleration in the $+\\mathbf{\\hat{i}}$ (East) direction!"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Eastward Deflection",
-              "content": "Let's calculate the exact distance $x$ it deflects East.",
-              "interactiveSteps": [
+          id: "les-12-4-ampere-diff", title: "Ampère's Law (Differential)", description: "Curl of B", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Which mathematical theorem converts a closed line integral into a surface integral of a curl?", options: [ { id: "A", text: "Divergence Theorem", isCorrect: false, explanation: "That converts a closed surface to a volume." }, { id: "B", text: "Stokes' Theorem", isCorrect: true, explanation: "Stokes' connects a loop to its bounded surface." } ] },
+            { id: "s2", type: "theory", title: "Ampère's Law (Differential Form)", content: "We start with the integral form: $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 \\int_{\\mathcal{S}} \\mathbf{J} \\cdot d\\mathbf{a}$.\n\nApply Stokes' theorem to the left side: $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\int_{\\mathcal{S}} (\\nabla \\times \\mathbf{B}) \\cdot d\\mathbf{a}$.\n\nEquating the two surface integrals:\n$\\int_{\\mathcal{S}} (\\nabla \\times \\mathbf{B}) \\cdot d\\mathbf{a} = \\int_{\\mathcal{S}} \\mu_0 \\mathbf{J} \\cdot d\\mathbf{a}$\n\nSince this holds for *any* surface, the integrands must be identical:\n$\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Symmetry of Equations", 
+              content: "**Goal: Compare Electrostatics and Magnetostatics.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The eastward acceleration is $a_x = 2g_e t \\Omega \\sin\\lambda$."
+                  stepText: "In electrostatics, we found $\\nabla \\cdot \\mathbf{E} = \\rho/\\epsilon_0$ and $\\nabla \\times \\mathbf{E} = 0$."
                 },
                 {
-                  "prompt": "Integrate $a_x$ with respect to time to find the eastward velocity $v_x$. The initial $v_x$ is 0.",
-                  "stepText": "$v_x = \\int 2g_e t \\Omega \\sin\\lambda dt = g_e t^2 \\Omega \\sin\\lambda$.",
-                  "options": [
-                    { "id": "A", "text": "$g_e t^2 \\Omega \\sin\\lambda$", "isCorrect": true, "explanation": "The integral of $t$ is $t^2/2$, which cancels the 2." },
-                    { "id": "B", "text": "$2g_e t^2 \\Omega \\sin\\lambda$", "isCorrect": false, "explanation": "Remember to divide by 2 when integrating." }
-                  ]
+                  prompt: "In magnetostatics, what are the corresponding equations for $\\mathbf{B}$?",
+                  options: [
+                    { id: "A", text: "$\\nabla \\cdot \\mathbf{B} = 0$ and $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$", isCorrect: true, explanation: "Exactly. The roles of div and curl are somewhat flipped." },
+                    { id: "B", text: "$\\nabla \\cdot \\mathbf{B} = \\mu_0 \\mathbf{J}$ and $\\nabla \\times \\mathbf{B} = 0$", isCorrect: false, explanation: "Magnetic fields curl; they don't diverge." }
+                  ],
+                  stepText: "The equations are $\\nabla \\cdot \\mathbf{B} = 0$ and $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$."
                 },
                 {
-                  "prompt": "Integrate $v_x$ with respect to time to find the position $x$.",
-                  "stepText": "$x = \\int g_e t^2 \\Omega \\sin\\lambda dt = \\frac{1}{3}g_e t^3 \\Omega \\sin\\lambda$.",
-                  "options": [
-                    { "id": "A", "text": "$\\frac{1}{3}g_e t^3 \\Omega \\sin\\lambda$", "isCorrect": true, "explanation": "The integral of $t^2$ is $t^3/3$." },
-                    { "id": "B", "text": "$\\frac{1}{2}g_e t^3 \\Omega \\sin\\lambda$", "isCorrect": false, "explanation": "Basic calculus error." }
-                  ]
-                },
-                {
-                  "stepText": "Substitute the unperturbed time of flight $t = \\sqrt{2h/g_e}$ into this equation to get the total eastward deflection."
+                  stepText: "These represent the steady-state Maxwell's equations. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Exercise 15.5: Calculate Deflection",
-              "content": "A stone is dropped from a height of $50$ m. \nHow far is it deflected towards the East? Assume the latitude is $60^\\circ$ N. (So colatitude $\\lambda = 90 - 60 = 30^\\circ$). \n$\\Omega \\approx 7.27 \\times 10^{-5}$ rad/s and $g = 9.8$ m/s$^2$.\n\nAnswer in cm.",
-              "numericAnswer": 0.39,
-              "numericTolerance": 0.05
-            },
-            {
-              "id": "s5-quiz",
-              "type": "quiz",
-              "title": "Conservation Explanation",
-              "content": "Physically, why does a dropped object deflect Eastward?",
-              "options": [
-                { "id": "1", "text": "The Earth rotates Westward underneath it.", "isCorrect": false, "explanation": "If the Earth rotated under it, it would appear to deflect West." },
-                { "id": "2", "text": "Conservation of angular momentum.", "isCorrect": true, "explanation": "At height $h$, it has a larger radius from the Earth's axis. As it falls, $r$ decreases, so its eastward linear velocity must increase to conserve $L = mvr$." }
-              ]
-            }
+            { id: "s6", type: "quiz", title: "What produces Curl?", content: "According to $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$, what physically creates the 'swirl' or curl of a magnetic field?", options: [ { id: "A", text: "Magnetic charges", isCorrect: false, explanation: "They don't exist." }, { id: "B", text: "Local current density", isCorrect: true, explanation: "J is the source of the curl of B." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The differential form of Ampère's law states that the ___ of B equals $\\mu_0 \\mathbf{J}$.", blankAnswer: "curl" }
           ]
         },
         {
-          "id": "lesson-3-4-6-coriolis-projectile",
-          "title": "The Coriolis Force: Projectiles",
-          "description": "General equations for artillery and wind.",
-          "icon": "Crosshair",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "General Projectile Equations",
-              "content": "For a projectile with velocity components $(v_x, v_y, v_z)$, the full acceleration vector including gravity and Coriolis is:\n\n$a_x = 2v_y\\Omega \\cos\\lambda - 2v_z\\Omega \\sin\\lambda$\n$a_y = -2v_x\\Omega \\cos\\lambda$\n$a_z = 2v_x\\Omega \\sin\\lambda - g$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Worked Example 15.3: Firing East",
-              "content": "If you fire a projectile due East in the Northern Hemisphere:\n*   $v_x$ is positive.\n*   $a_y = -2v_x\\Omega \\cos\\lambda$. Since this is negative, the projectile is deflected South.\n*   This means it veers to the **Right** of its intended path."
-            },
-            {
-              "id": "s3-quiz",
-              "type": "quiz",
-              "title": "Exercise 15.4: Hemispheres",
-              "content": "A projectile fired due North in the Northern Hemisphere is deflected to the East (its right). What happens to a projectile fired due East in the Southern Hemisphere?",
-              "options": [
-                { "id": "1", "text": "Deflected South (to its right).", "isCorrect": false, "explanation": "In the Southern Hemisphere, Coriolis deflections are to the left." },
-                { "id": "2", "text": "Deflected North (to its left).", "isCorrect": true, "explanation": "Because the sign of $\\cos\\lambda$ changes when you pass the equator, the deflection is always to the left of motion in the South." }
-              ]
-            },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Exercise 15.7: Initial Acceleration",
-              "content": "A projectile at $60^\\circ$N ($\\lambda = 30^\\circ$) is fired due East with velocity $300$ m/s at an angle $25^\\circ$ above the horizontal.\n\nCalculate the initial $x$-component of the Coriolis acceleration $a_x(t=0)$ in m/s$^2$. \n*(Note: Firing East means $v_y = 0$, so $a_x = -2v_z\\Omega\\sin\\lambda$. $\\Omega = 7.27 \\times 10^{-5}$)*",
-              "numericAnswer": -0.00922,
-              "numericTolerance": 0.0005
-            },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "Cyclones",
-              "content": "The Coriolis force is responsible for the rotation of weather systems. In the Northern Hemisphere, winds flowing inward toward a low-pressure center are deflected to the right, causing hurricanes to rotate ___.",
-              "blankAnswer": "counterclockwise"
-            }
+          id: "les-12-5-ampere-applications", title: "Applying Ampère's Law", description: "When is it useful?", icon: "Target",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Is Ampère's Law always true for steady currents?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "It is a fundamental law of magnetostatics." }, { id: "B", text: "No, only for symmetrical ones", isCorrect: false, explanation: "It is always true, just not always USEFUL." } ] },
+            { id: "s2", type: "theory", title: "When to Use Ampère's Law", content: "Like Gauss's law, Ampère's law is always true, but it is only *useful* for calculating the magnetic field when symmetry allows us to pull $|\\mathbf{B}|$ outside the integral.\n\nThe current configurations that can be handled by Ampère's law are very limited:\n1. **Infinite straight lines** (cylindrical symmetry).\n2. **Infinite planes** (planar symmetry).\n3. **Infinite solenoids**.\n4. **Toroids**.\n\nIf the problem lacks these specific symmetries, you must fall back on the Biot-Savart Law." },
+            { id: "s6", type: "quiz", title: "Finite Wire", content: "Can you use Ampère's law to easily find the magnetic field of a short, 10 cm wire?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "The field is not constant along an Amperian loop." }, { id: "B", text: "No", isCorrect: true, explanation: "It lacks infinite cylindrical symmetry. Use Biot-Savart." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "To use Ampère's law effectively, we must draw an ___ loop where the field is constant.", blankAnswer: "Amperian" }
           ]
         },
         {
-          "id": "lesson-3-4-7-foucault-setup",
-          "title": "The Foucault Pendulum: Setup",
-          "description": "Setting up the differential equations for the precessing pendulum.",
-          "icon": "Clock",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Foucault Pendulum",
-              "content": "A massive bob on a very long string, free to swing in any direction. Because the Earth rotates beneath it, an Earth-bound observer sees the plane of the pendulum's swing slowly rotate (precess).\n\nThe forces are Tension $\\mathbf{T}$, Gravity $m\\mathbf{g}$, and Coriolis $-2m\\mathbf{\\Omega} \\times \\mathbf{v}$.\n\n$m\\mathbf{a} = \\mathbf{T} + m\\mathbf{g} - 2m(\\mathbf{\\Omega} \\times \\mathbf{v})$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Simplifying the Equations",
-              "content": "By projecting the motion onto the x-y plane and assuming the vertical velocity $v_z$ is negligible (because the string is very long), the x and y equations become:\n\n$m\\ddot{x} = -T\\frac{x}{l} + 2mv_y\\Omega \\cos\\lambda$\n$m\\ddot{y} = -T\\frac{y}{l} - 2mv_x\\Omega \\cos\\lambda$"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Coupled Equations",
-              "content": "Let's clean up these equations using pendulum constants.",
-              "interactiveSteps": [
+          id: "les-12-6-plane-current", title: "Example: Infinite Plane", description: "Surface current K", icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.8", content: "**Problem:** Find the magnetic field of an infinite uniform surface current $\\mathbf{K} = K\\mathbf{\\hat{x}}$, flowing over the xy plane.\n\n*Hint:* Use an Amperian loop perpendicular to the current (in the yz plane)." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Apply Ampère's law to a rectangular loop.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "For small angles, the tension $T \approx mg$. Thus $T/l \approx mg/l$."
+                  prompt: "By symmetry, which direction must $\\mathbf{B}$ point above the plane (if current is in +x)?",
+                  options: [
+                    { id: "A", text: "$-\\mathbf{\\hat{y}}$", isCorrect: true, explanation: "Right hand rule: thumb in +x, fingers curl pointing -y above the plane." },
+                    { id: "B", text: "$\\mathbf{\\hat{z}}$", isCorrect: false, explanation: "B must be perpendicular to K and the normal." }
+                  ],
+                  stepText: "Above the plane $\\mathbf{B} = -B\\mathbf{\\hat{y}}$. Below the plane, $\\mathbf{B} = +B\\mathbf{\\hat{y}}$."
                 },
                 {
-                  "prompt": "Substitute $T = mg$ and divide the entire $x$ equation by $m$. What is the result?",
-                  "stepText": "$\\ddot{x} = -\\frac{g}{l}x + 2\\dot{y}\\Omega \\cos\\lambda$.",
-                  "options": [
-                    { "id": "A", "text": "$\\ddot{x} = -\\frac{g}{l}x + 2\\dot{y}\\Omega \\cos\\lambda$", "isCorrect": true, "explanation": "Correct substitution." },
-                    { "id": "B", "text": "$\\ddot{x} = -gx + 2\\dot{y}\\Omega \\cos\\lambda$", "isCorrect": false, "explanation": "You lost the string length $l$." }
-                  ]
+                  stepText: "Draw a rectangular Amperian loop of width $l$ parallel to the y-axis, extending equally above and below the plane."
                 },
                 {
-                  "stepText": "We define $\\omega^2 = g/l$ (the natural pendulum frequency) and $K = \\Omega \\cos\\lambda$ (the expected precession rate)."
+                  stepText: "The integral $\\oint \\mathbf{B} \\cdot d\\mathbf{l}$ gets contributions only from the top and bottom horizontal segments: $B l + B l = 2 B l$."
                 },
                 {
-                  "prompt": "Rewrite the equations using $\\omega$ and $K$.",
-                  "stepText": "$\\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0$\n$\\ddot{y} + 2K\\dot{x} + \\omega^2 y = 0$",
-                  "options": [
-                    { "id": "A", "text": "$\\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0$ \\n $\\ddot{y} + 2K\\dot{x} + \\omega^2 y = 0$", "isCorrect": true, "explanation": "These are the fundamental coupled differential equations of the Foucault pendulum." },
-                    { "id": "B", "text": "$\\ddot{x} + \\omega^2 x = 0$", "isCorrect": false, "explanation": "You ignored the Coriolis terms." }
-                  ]
+                  stepText: "The enclosed current is $I_{enc} = K l$."
+                },
+                {
+                  stepText: "Equating: $2 B l = \\mu_0 K l \\implies B = \\frac{\\mu_0 K}{2}$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Physics at the Equator",
-              "content": "Looking at the definition $K = \\Omega \\cos\\lambda$, what happens to a Foucault pendulum situated exactly on the equator?",
-              "options": [
-                { "id": "1", "text": "It precesses very fast.", "isCorrect": false, "explanation": "Check the value of $\\cos\\lambda$ at the equator." },
-                { "id": "2", "text": "It does not precess at all.", "isCorrect": true, "explanation": "At the equator, the colatitude $\\lambda = 90^\\circ$. Since $\\cos(90^\\circ) = 0$, $K=0$ and the Coriolis cross-terms vanish." }
-              ]
-            }
+            { id: "s2", type: "quiz", title: "Distance Dependence", content: "Does the magnetic field of an infinite uniform surface current depend on the distance $z$ from the plane?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Like the electric field of an infinite charged plane, it is uniform everywhere." } ] }
           ]
         },
         {
-          "id": "lesson-3-4-8-foucault-solution",
-          "title": "The Foucault Pendulum: Solution",
-          "description": "Solving the coupled equations using complex numbers.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "The Complex Trick",
-              "content": "To solve:\n$\\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0$\n$\\ddot{y} + 2K\\dot{x} + \\omega^2 y = 0$\n\nWe introduce a complex variable $\\zeta = x + iy$. Multiply the second equation by $i$ and add it to the first to get a single equation:\n\n$$\\ddot{\\zeta} + 2iK\\dot{\\zeta} + \\omega^2\\zeta = 0$$"
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "The Solution",
-              "content": "This acts like a damped harmonic oscillator. The roots of the auxiliary equation are $p = -iK \\pm i\\sqrt{K^2 + \\omega^2}$.\n\nSince $\\Omega$ (Earth's rotation) is much slower than $\\omega$ (pendulum swing), $K \\ll \\omega$. We can ignore $K^2$ under the root, leaving $p = -iK \\pm i\\omega$."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Proof: Extracting Precession",
-              "content": "Let's see how this creates a precessing plane.",
-              "interactiveSteps": [
+          id: "les-12-7-solenoid", title: "Example: Infinite Solenoid", description: "Magnetic field of a coil", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.9", content: "**Problem:** Find the magnetic field of a very long (infinite) solenoid, consisting of $n$ closely wound turns per unit length, carrying a steady current $I$.\n\n*Hint:* The field outside an infinite solenoid is zero. Use a rectangular loop partly inside, partly outside." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Apply Ampère's law to find B inside.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "The solution is $\\zeta(t) = C e^{i(\\omega - K)t} + D e^{-i(\\omega + K)t}$."
+                  stepText: "The magnetic field inside runs parallel to the axis (let's say the z-axis). $\\mathbf{B} = B \\mathbf{\\hat{z}}$."
                 },
                 {
-                  "prompt": "Factor out the common term $e^{-iKt}$ from both parts. What is left inside?",
-                  "stepText": "$\\zeta(t) = e^{-iKt} (C e^{i\\omega t} + D e^{-i\\omega t})$.",
-                  "options": [
-                    { "id": "A", "text": "$e^{-iKt} (C e^{i\\omega t} + D e^{-i\\omega t})$", "isCorrect": true, "explanation": "Factoring exponents means subtracting the power." },
-                    { "id": "B", "text": "$e^{-iKt} (C e^{iK t} + D e^{-iK t})$", "isCorrect": false, "explanation": "The omega terms are left inside." }
-                  ]
+                  stepText: "Draw a rectangular Amperian loop of length $L$ along the z-axis. One side is inside the solenoid, the other is outside."
                 },
                 {
-                  "stepText": "Notice the structure: $e^{-iKt}$ represents a slow rotation clockwise in the complex plane at angular velocity $K$. The inner part $(C e^{i\\omega t} + D e^{-i\\omega t})$ represents standard fast 1D harmonic motion."
+                  prompt: "Since $B=0$ outside, and the radial sides are perpendicular to B, what is $\\oint \\mathbf{B} \\cdot d\\mathbf{l}$?",
+                  options: [
+                    { id: "A", text: "$B L$", isCorrect: true, explanation: "Only the inner vertical side contributes." },
+                    { id: "B", text: "$2 B L$", isCorrect: false, explanation: "The outer side has B=0." }
+                  ],
+                  stepText: "The line integral is exactly $B L$."
                 },
                 {
-                  "stepText": "Conclusion: The pendulum oscillates back and forth rapidly, while its entire plane of oscillation slowly rotates at rate $K = \\Omega \\cos\\lambda$."
+                  stepText: "The number of turns enclosed by the loop is $n L$. So $I_{enc} = n L I$."
+                },
+                {
+                  stepText: "Equating: $B L = \\mu_0 (n L I) \\implies B = \\mu_0 n I$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-numerical",
-              "type": "numerical",
-              "title": "Exercise 15.11: San Francisco",
-              "content": "A Foucault pendulum is mounted in San Francisco (latitude $37.77^\\circ$, so colatitude $\\lambda = 90 - 37.77 = 52.23^\\circ$).\n\nThe Earth rotates at $15^\\circ$ per hour. \nCalculate the precession rate $K = \\Omega\\cos\\lambda$ in degrees per hour.",
-              "numericAnswer": 9.18,
-              "numericTolerance": 0.1
+            { id: "s2", type: "numerical", title: "Calculate B", content: "A solenoid has $n = 1000$ turns per meter and carries a current $I = 2$ A. Using $\\mu_0 \\approx 1.25 \\times 10^{-6}$, what is the magnetic field inside in milliTeslas (mT)?", numericAnswer: 2.5, numericTolerance: 0.1 },
+            { id: "s3", type: "quiz", title: "Uniformity", content: "Is the field stronger near the center axis or near the coils inside an ideal infinite solenoid?", options: [ { id: "A", text: "Stronger near the coils", isCorrect: false, explanation: "" }, { id: "B", text: "It is perfectly uniform everywhere inside", isCorrect: true, explanation: "The formula B = mu0 n I has no dependence on the radial distance." } ] }
+          ]
+        },
+        {
+          id: "les-12-8-toroid", title: "Example: The Toroid", description: "A donut shaped coil", icon: "Circle",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.10", content: "**Problem:** Find the magnetic field inside a toroidal coil (a donut) consisting of $N$ total turns carrying current $I$.\n\n*Hint:* Use a circular Amperian loop of radius $s$ inside the donut." },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution", 
+              content: "**Goal: Apply Ampère's law to the toroid.**", 
+              interactiveSteps: [
+                {
+                  stepText: "By symmetry, the magnetic field is purely circumferential ($\\mathbf{B} = B \\mathbf{\\hat{\\phi}}$)."
+                },
+                {
+                  stepText: "Draw a circular Amperian loop of radius $s$ inside the toroid."
+                },
+                {
+                  prompt: "What is the line integral $\\oint \\mathbf{B} \\cdot d\\mathbf{l}$?",
+                  options: [
+                    { id: "A", text: "$B (2\\pi s)$", isCorrect: true, explanation: "B is constant along the circle of circumference 2*pi*s." },
+                    { id: "B", text: "$B s$", isCorrect: false, explanation: "Don't forget 2*pi." }
+                  ],
+                  stepText: "$\\oint \\mathbf{B} \\cdot d\\mathbf{l} = B (2\\pi s)$."
+                },
+                {
+                  stepText: "The total current enclosed by this loop is exactly $N I$ (since it encloses all $N$ loops passing through the center hole)."
+                },
+                {
+                  stepText: "Equating: $B (2\\pi s) = \\mu_0 N I \\implies B = \\frac{\\mu_0 N I}{2\\pi s}$. Goal reached!"
+                }
+              ]
             },
-            {
-              "id": "s5-blank",
-              "type": "fill_in_blank",
-              "title": "The North Pole",
-              "content": "If you set up a Foucault pendulum exactly at the North Pole, the plane of oscillation will rotate exactly ___ degrees per day.",
-              "blankAnswer": "360"
-            }
+            { id: "s2", type: "quiz", title: "Field Outside", content: "If you draw an Amperian loop completely OUTSIDE the toroid (enclosing the whole donut), what is the enclosed current?", options: [ { id: "A", text: "N I", isCorrect: false, explanation: "For every wire going down, one comes up." }, { id: "B", text: "Zero", isCorrect: true, explanation: "The current goes down the inner edge and up the outer edge, cancelling perfectly. Thus B=0 outside a toroid." } ] }
           ]
         }
       ]
     },
     {
-      "id": "unit-3-5",
-      "title": "Practicals: Experimental Mechanics",
-      "description": "Applying physical theories in the laboratory.",
-      "color": "duo-blue",
-      "lessons": [
+      id: "unit-13-vector-potential",
+      title: "Magnetic Vector Potential",
+      description: "Introducing A, Coulomb gauge, and boundary conditions.",
+      color: "duo-red",
+      lessons: [
         {
-          "id": "lesson-3-5-1-pendulums",
-          "title": "Pendulums & Gravity (Exp 3, 4, 10)",
-          "description": "Measuring 'g' using Compound and Kater's pendulums.",
-          "icon": "Clock",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Compound & Kater's Pendulums",
-              "content": "**Compound Pendulum (Exp 3):** A rigid body swinging about an arbitrary pivot. The period is $T = 2\\pi\\sqrt{\\frac{I_{pivot}}{mgd}}$, where $d$ is distance from CM. Used to verify the Parallel Axis Theorem.\n\n**Kater's Pendulum (Exp 4):** A reversible pendulum with two knife edges. By adjusting masses so the period is identical from both pivots ($T_1 \\approx T_2$), it provides a highly accurate measurement of $g$ without needing to know the exact center of mass."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Large Angle Limits (Exp 10)",
-              "content": "The standard pendulum equation $T = 2\\pi\\sqrt{l/g}$ relies on the small angle approximation $\\sin\\theta \\approx \\theta$.\n\nIf the initial displacement $\\theta_0$ is large, the period increases. In the lab, you measure $T$ at $10^\\circ, 20^\\circ, 30^\\circ...$ and compare it to the theoretical series expansion $T = T_0(1 + \\frac{1}{16}\\theta_0^2 + ...)$."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Lab: Parallel Axis Verification",
-              "content": "How do you use Exp 3 data to verify the Parallel Axis Theorem?",
-              "interactiveSteps": [
+          id: "les-13-1-intro-A", title: "Introduction to Vector Potential", description: "B = Curl A", icon: "Wind",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, because $\\nabla \\times \\mathbf{E} = 0$, we could define $E$ as the gradient of a scalar potential $V$. Can we do this for $\\mathbf{B}$?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "The curl of B is not generally zero (Ampere's law)." }, { id: "B", text: "No", isCorrect: true, explanation: "Because $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J} \\neq 0$." } ] },
+            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "However, we DO know that $\\nabla \\cdot \\mathbf{B} = 0$. What vector identity can we exploit here?", options: [ { id: "A", text: "The divergence of a curl is always zero", isCorrect: true, explanation: "$\\nabla \\cdot (\\nabla \\times \\mathbf{A}) = 0$." }, { id: "B", text: "The curl of a gradient is always zero", isCorrect: false, explanation: "This was used for E = -Grad V." } ] },
+            { id: "s2", type: "theory", title: "The Magnetic Vector Potential", content: "Because the divergence of $\\mathbf{B}$ is everywhere zero ($\\nabla \\cdot \\mathbf{B} = 0$), a fundamental theorem of vector calculus guarantees that $\\mathbf{B}$ can be expressed as the **curl** of another vector field.\n\nWe define the **Magnetic Vector Potential** $\\mathbf{A}$ such that:\n$\\mathbf{B} = \\nabla \\times \\mathbf{A}$\n\nUnlike the electric potential $V$, which is a scalar, the magnetic potential $\\mathbf{A}$ is a vector quantity. It simplifies some calculations and plays a massive role in quantum mechanics and advanced electrodynamics." },
+            { id: "s6", type: "quiz", title: "Identity check", content: "By setting $\\mathbf{B} = \\nabla \\times \\mathbf{A}$, which of Maxwell's equations is automatically satisfied?", options: [ { id: "A", text: "$\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$", isCorrect: false, explanation: "We still need to solve for this." }, { id: "B", text: "$\\nabla \\cdot \\mathbf{B} = 0$", isCorrect: true, explanation: "Because Div(Curl(A)) is mathematically identically zero." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The magnetic field $\\mathbf{B}$ is defined as the ___ of the vector potential $\\mathbf{A}$.", blankAnswer: "curl" }
+          ]
+        },
+        {
+          id: "les-13-2-coulomb-gauge", title: "Gauge Freedom", description: "Choosing Div A = 0", icon: "Sliders",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, we could add any constant to $V$ without changing $\\mathbf{E}$. What can we add to $\\mathbf{A}$ without changing $\\mathbf{B}$?", options: [ { id: "A", text: "A constant vector", isCorrect: false, explanation: "Yes, but we can do even more." }, { id: "B", text: "The gradient of any scalar function", isCorrect: true, explanation: "Because the curl of a gradient is zero!" } ] },
+            { id: "s2", type: "theory", title: "Gauge Transformations", content: "The definition $\\mathbf{B} = \\nabla \\times \\mathbf{A}$ specifies the *curl* of $\\mathbf{A}$, but it says absolutely nothing about its *divergence*. We are free to specify $\\nabla \\cdot \\mathbf{A}$ however we like to make the math easier.\n\nIf we have an $\\mathbf{A}_0$, we can create a new $\\mathbf{A} = \\mathbf{A}_0 + \\nabla \\lambda$. \nThe curl remains the same: $\\nabla \\times \\mathbf{A} = \\nabla \\times \\mathbf{A}_0 + \\nabla \\times (\\nabla \\lambda) = \\mathbf{B} + 0 = \\mathbf{B}$.\n\nThis freedom to choose $\\lambda$ is called **Gauge Freedom**. In magnetostatics, the smartest choice is to set:\n$\\nabla \\cdot \\mathbf{A} = 0$\nThis is known as the **Coulomb Gauge**." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Poisson's Eq for A", 
+              content: "**Goal: See why the Coulomb gauge is so smart.**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Measure the period $T$ about a pivot distance $d$ from the Center of Mass."
+                  stepText: "Plug $\\mathbf{B} = \\nabla \\times \\mathbf{A}$ into Ampère's Law: $\\nabla \\times (\\nabla \\times \\mathbf{A}) = \\mu_0 \\mathbf{J}$."
                 },
                 {
-                  "prompt": "Using $T = 2\\pi\\sqrt{\\frac{I_{pivot}}{mgd}}$, how do you experimentally determine $I_{pivot}$?",
-                  "stepText": "$I_{pivot} = mgd \\frac{T^2}{4\\pi^2}$.",
-                  "options": [
-                    { "id": "A", "text": "$I_{pivot} = mgd \\frac{T^2}{4\\pi^2}$", "isCorrect": true, "explanation": "Just rearranging the period formula." },
-                    { "id": "B", "text": "$I_{pivot} = \\frac{4\\pi^2 mgd}{T^2}$", "isCorrect": false, "explanation": "Algebra is inverted." }
-                  ]
+                  stepText: "Use the vector identity: $\\nabla \\times (\\nabla \\times \\mathbf{A}) = \\nabla(\\nabla \\cdot \\mathbf{A}) - \\nabla^2 \\mathbf{A}$."
                 },
                 {
-                  "stepText": "Calculate the theoretical $I_{CM} = ML^2 / 12$."
+                  prompt: "If we choose the Coulomb gauge ($\\nabla \\cdot \\mathbf{A} = 0$), what does this equation collapse into?",
+                  options: [
+                    { id: "A", text: "$\\nabla^2 \\mathbf{A} = -\\mu_0 \\mathbf{J}$", isCorrect: true, explanation: "The gradient of the divergence vanishes." },
+                    { id: "B", text: "$\\nabla^2 \\mathbf{A} = 0$", isCorrect: false, explanation: "Ampere's law has a source J." }
+                  ],
+                  stepText: "It becomes $\\nabla^2 \\mathbf{A} = -\\mu_0 \\mathbf{J}$."
                 },
                 {
-                  "prompt": "What equation do you check your experimental $I_{pivot}$ against?",
-                  "stepText": "$I_{pivot} = I_{CM} + md^2$.",
-                  "options": [
-                    { "id": "A", "text": "$I_{pivot} = I_{CM} + md^2$", "isCorrect": true, "explanation": "This is the Parallel Axis Theorem!" },
-                    { "id": "B", "text": "$I_{pivot} = I_{CM} + md$", "isCorrect": false, "explanation": "It is mass times distance squared." }
-                  ]
+                  stepText: "This is exactly Poisson's equation, just applied to all three components of A! Goal reached."
                 }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Kater's Pendulum Advantage",
-              "content": "Why is Kater's Pendulum superior to a simple pendulum for measuring $g$?",
-              "options": [
-                { "id": "1", "text": "It uses a much heavier mass.", "isCorrect": false, "explanation": "Mass doesn't affect the period of a pendulum." },
-                { "id": "2", "text": "It eliminates the need to precisely locate the Center of Mass.", "isCorrect": true, "explanation": "Because it relies on the reversibility principle ($l_1 + l_2 = L$), the internal mass distribution doesn't need to be perfectly known." },
-                { "id": "3", "text": "It ignores air resistance.", "isCorrect": false, "explanation": "It still suffers from air resistance." }
               ]
             }
           ]
         },
         {
-          "id": "lesson-3-5-2-inertia",
-          "title": "Inertia & Energy (Exp 1, 2, 9)",
-          "description": "Flywheels, Torsion, and Rolling Objects.",
-          "icon": "Repeat",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Rotational Dynamics Labs",
-              "content": "**Flywheel (Exp 1):** A mass falls, pulling a string wound around an axle, converting potential energy into rotational kinetic energy. Used to find the flywheel's Moment of Inertia $I$.\n\n**Torsion Pendulum (Exp 2):** A disc twists a wire. The restoring torque is proportional to the angle. Used to find the Rigidity Modulus $n = \\frac{8\\pi I L}{r^4 T^2}$ of the wire.\n\n**Rolling Cylinder (Exp 9):** A cylinder rolls down a plane. Potential energy ($mgh$) converts into both translational ($\\frac{1}{2}mv^2$) and rotational ($\\frac{1}{2}I\\omega^2$) kinetic energy."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Energy Transformation",
-              "content": "In Exp 9, you use a smartphone's gyroscope inserted into a hollow cylinder to record angular velocity $\\omega$.\n\nThe total kinetic energy at the bottom is $KE = \\frac{1}{2}mv^2 + \\frac{1}{2}I\\omega^2$. Since $v = \\omega r$, you can calculate the total $KE$ purely from the gyroscope data and compare it to the initial $PE = mgh$ to estimate energy lost to heat and sound."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Lab: Torsion Pendulum",
-              "content": "How do you verify the moment of inertia in Exp 2?",
-              "interactiveSteps": [
-                {
-                  "stepText": "Place identical masses on the disc to experimentally determine $I_{experimental}$ through period measurements."
-                },
-                {
-                  "prompt": "You must verify this against the theoretical formula for a uniform solid disc of Mass $M$ and Radius $R$. What is that formula?",
-                  "stepText": "$I_{direct} = \\frac{1}{2}MR^2$.",
-                  "options": [
-                    { "id": "A", "text": "$\\frac{1}{2}MR^2$", "isCorrect": true, "explanation": "The standard moment of inertia for a solid disc rotating about its central axis." },
-                    { "id": "B", "text": "$MR^2$", "isCorrect": false, "explanation": "This is for a thin ring or hoop." }
-                  ]
-                },
-                {
-                  "stepText": "Once $I$ is confirmed, you use it to find the rigidity modulus $n$ of the wire using $n = \\frac{8\\pi I L}{r^4 T^2}$."
-                }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Smartphone Sensors",
-              "content": "In the rolling cylinder experiment, which smartphone sensor is specifically listed in the syllabus to record the rotation?",
-              "options": [
-                { "id": "1", "text": "Accelerometer", "isCorrect": false, "explanation": "While useful, it measures linear acceleration, not rotation rate." },
-                { "id": "2", "text": "Gyroscope", "isCorrect": true, "explanation": "The gyroscope directly measures angular velocity (rad/s)." },
-                { "id": "3", "text": "Magnetometer", "isCorrect": false, "explanation": "This measures magnetic fields (compass)." }
-              ]
-            }
+          id: "les-13-3-integral-form-A", title: "Calculating A", description: "The integral solution", icon: "Target",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "We know the solution to Poisson's equation $\\nabla^2 V = -\\rho/\\epsilon_0$ is $V = \\frac{1}{4\\pi\\epsilon_0} \\int \\frac{\\rho}{\\cal{r}} d\\tau$. By direct analogy, what is the solution for $\\nabla^2 \\mathbf{A} = -\\mu_0 \\mathbf{J}$?", options: [ { id: "A", text: "$\\mathbf{A} = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{J}}{\\cal{r}} d\\tau$", isCorrect: true, explanation: "Just swap the constants and source variables." }, { id: "B", text: "$\\mathbf{A} = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{J}}{\\cal{r}^2} d\\tau$", isCorrect: false, explanation: "Potential uses 1/r, field uses 1/r^2." } ] },
+            { id: "s2", type: "theory", title: "Integral Formula for A", content: "Assuming the current density $\\mathbf{J}$ goes to zero at infinity, the solution to the vector Poisson equation ($\\nabla^2 \\mathbf{A} = -\\mu_0 \\mathbf{J}$) is exactly analogous to the electric potential:\n\n$\\mathbf{A}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{J}(\\mathbf{r}')}{\\cal{r}} d\\tau'$\n\nNotice that the vector $\\mathbf{A}$ tends to point in the same direction as the current $\\mathbf{J}$ that produces it! (A current in the +z direction produces an A field in the +z direction)." },
+            { id: "s6", type: "quiz", title: "Comparison to Biot-Savart", content: "Why might evaluating $\\mathbf{A}$ be easier than evaluating $\\mathbf{B}$ directly from Biot-Savart?", options: [ { id: "A", text: "There is no cross product in the integral for A.", isCorrect: true, explanation: "Cross products in integrals are messy because they introduce changing unit vectors." }, { id: "B", text: "A is a scalar.", isCorrect: false, explanation: "A is still a vector." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The vector potential $\\mathbf{A}$ generally points in the same direction as the ___ $\\mathbf{J}$.", blankAnswer: "current" }
           ]
         },
         {
-          "id": "lesson-3-5-3-waves-sound",
-          "title": "Waves & Sound (Exp 5, 6, 7, 8)",
-          "description": "Melde's string, Sonometer, and Speed of Sound.",
-          "icon": "Activity",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Vibrations in Strings",
-              "content": "**Melde's String (Exp 5):** An electrically maintained tuning fork vibrates a string. Used to verify the $\\lambda^2 - T$ law (wavelength squared is proportional to Tension).\n\n**Sonometer (Exp 6):** An AC electromagnet plucks a wire. By drawing an $l^2 - m$ graph (length squared vs mass), you calculate the frequency of the AC current."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Fourier Analysis (Exp 7)",
-              "content": "You record the sound of a plucked guitar string using a smartphone microphone. \nUsing an app like Phyphox, you take the **Fast Fourier Transform (FFT)** of the audio. The FFT decomposes the complex sound wave into its constituent sine waves, showing distinct peaks at the fundamental frequency and its harmonics ($2f, 3f...$)."
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Lab: Velocity of Sound (Exp 8)",
-              "content": "Measuring the speed of sound using phase differences.",
-              "interactiveSteps": [
-                {
-                  "stepText": "Generate a known frequency sine wave using a piezo buzzer. Record it with a microphone placed a distance $d$ away."
-                },
-                {
-                  "stepText": "Compare the electrical signal of the generator with the microphone's signal on an oscilloscope (or using ExpEYES) via an X-Y plot."
-                },
-                {
-                  "prompt": "An X-Y plot of two sine waves creates a Lissajous figure. If the two waves are perfectly IN PHASE, what does the Lissajous figure look like?",
-                  "stepText": "A straight diagonal line.",
-                  "options": [
-                    { "id": "A", "text": "A perfect circle", "isCorrect": false, "explanation": "A circle means they are 90 degrees out of phase." },
-                    { "id": "B", "text": "A straight diagonal line", "isCorrect": true, "explanation": "In phase means $X = Y$, which plots as a line $y = x$." }
-                  ]
-                },
-                {
-                  "stepText": "You move the microphone until the figure is a straight line, mark the distance, then move it further until it forms a straight line again. The distance moved is exactly one wavelength $\\lambda$!"
-                },
-                {
-                  "stepText": "Multiply the known frequency $f$ by the measured $\\lambda$ to find the velocity of sound $v = f\\lambda$."
-                }
-              ]
-            },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Melde's Law",
-              "content": "In Melde's experiment, the syllabus asks you to verify the $\\lambda^2 - T$ law. Why are they proportional?",
-              "options": [
-                { "id": "1", "text": "Because $v = \\lambda f$ and $v = \\sqrt{T/\\mu}$. Squaring both sides yields $\\lambda^2 f^2 = T/\\mu$, so $\\lambda^2 \\propto T$.", "isCorrect": true, "explanation": "Since the frequency $f$ of the tuning fork and mass density $\\mu$ are constant, $\\lambda^2$ scales linearly with Tension $T$." },
-                { "id": "2", "text": "Because wavelength increases as frequency decreases.", "isCorrect": false, "explanation": "Frequency is held constant by the tuning fork." }
-              ]
-            }
+          id: "les-13-4-line-surface-A", title: "A for Line & Surface Currents", description: "1D and 2D currents", icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "To adapt the formula to a surface current, we replace $\\mathbf{J} d\\tau'$ with:", options: [ { id: "A", text: "$\\mathbf{K} da'$", isCorrect: true, explanation: "Surface current density times area element." }, { id: "B", text: "$\\mathbf{I} dl'$", isCorrect: false, explanation: "That's for a line current." } ] },
+            { id: "s2", type: "theory", title: "A for Lines and Surfaces", content: "Using our standard dictionary for current elements, we can write the vector potential for line and surface currents:\n\n**Line Current:**\n$\\mathbf{A}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{I}}{\\cal{r}} dl' = \\frac{\\mu_0 I}{4\\pi} \\int \\frac{1}{\\cal{r}} d\\mathbf{l}'$\n\n**Surface Current:**\n$\\mathbf{A}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\int \\frac{\\mathbf{K}(\\mathbf{r}')}{\\cal{r}} da'$\n\nRemember that while these integrals look simpler than Biot-Savart, $\\mathbf{A}$ is still a vector, so you must integrate each Cartesian component separately." },
+            { id: "s6", type: "quiz", title: "When the integral fails", content: "What happens to these integrals if the current extends to infinity (like an infinite straight wire)?", options: [ { id: "A", text: "They converge to zero", isCorrect: false, explanation: "" }, { id: "B", text: "They diverge (blow up)", isCorrect: true, explanation: "Just like V for an infinite line charge, you can't use these integrals if the source goes to infinity. You must use Ampere's Law for B, then deduce A." } ] }
           ]
         },
         {
-          "id": "lesson-3-5-4-data-analysis",
-          "title": "Data Analysis & Python (Exp 11)",
-          "description": "Standard deviation, errors, and computational physics.",
-          "icon": "Cpu",
-          "slides": [
-            {
-              "id": "s1-theory",
-              "type": "theory",
-              "title": "Experimental Rigor",
-              "content": "The syllabus mandates several data analysis steps for ALL experiments:\n1. **Standard Deviation:** A measure of the amount of variation or dispersion in your set of trials.\n2. **Percentage Error:** $\\frac{|Experimental - Theoretical|}{Theoretical} \\times 100\\%$.\n3. **Python Plotting:** Using computational tools to plot graphs instead of manual graph paper."
-            },
-            {
-              "id": "s2-example",
-              "type": "example",
-              "title": "Smartphones as Minilabs",
-              "content": "The course heavily emphasizes using smartphones (via apps like Phyphox) as lab equipment. \n\n*Note of caution from syllabus:* \"Smartphone experiments primarily serve demonstration purposes, with result accuracy contingent upon the precision of phone sensors.\" Always safeguard your device!"
-            },
-            {
-              "id": "s3-proof",
-              "type": "proof",
-              "title": "Interactive Lab: Python Projects",
-              "content": "Exp 11 requires realizing computational projects in Python.",
-              "interactiveSteps": [
+          id: "les-13-5-solenoid-A", title: "Example: Vector Potential of Solenoid", description: "Finding A from B", icon: "Database",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 5.12", content: "**Problem:** Find the vector potential of an infinite solenoid with $n$ turns per length, radius $R$, and current $I$.\n\n*Hint:* We cannot use the integral formula because the current goes to infinity. But notice that $\\oint \\mathbf{A} \\cdot d\\mathbf{l} = \\int (\\nabla \\times \\mathbf{A}) \\cdot d\\mathbf{a} = \\int \\mathbf{B} \\cdot d\\mathbf{a} = \\Phi_B$. Use this like Ampère's law!" },
+            { 
+              id: "s1", 
+              type: "solution", 
+              title: "Interactive Solution: Inside", 
+              content: "**Goal: Find A inside the solenoid ($s < R$).**", 
+              interactiveSteps: [
                 {
-                  "stepText": "Suppose you are plotting damped oscillations $x(t) = A e^{-\\gamma t}\\cos(\\omega_1 t)$ using Python."
+                  stepText: "Since current is azimuthal ($\\mathbf{\\hat{\\phi}}$), $\\mathbf{A}$ is also azimuthal. Draw a circular loop of radius $s$ inside."
                 },
                 {
-                  "prompt": "Which Python library is the standard choice for plotting 2D graphs like this?",
-                  "stepText": "Matplotlib (specifically `matplotlib.pyplot`) is the standard.",
-                  "options": [
-                    { "id": "A", "text": "Matplotlib", "isCorrect": true, "explanation": "The industry standard for basic plotting in Python." },
-                    { "id": "B", "text": "TensorFlow", "isCorrect": false, "explanation": "That is for machine learning." }
-                  ]
+                  prompt: "What is $\\oint \\mathbf{A} \\cdot d\\mathbf{l}$ for this loop?",
+                  options: [
+                    { id: "A", text: "$A (2\\pi s)$", isCorrect: true, explanation: "A is constant along the circle." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "$\\oint \\mathbf{A} \\cdot d\\mathbf{l} = A (2\\pi s)$."
                 },
                 {
-                  "prompt": "Which Python library is best for handling the arrays of numerical data ($t$ and $x$) efficiently?",
-                  "stepText": "NumPy.",
-                  "options": [
-                    { "id": "A", "text": "NumPy", "isCorrect": true, "explanation": "Provides the `np.array` object and fast math functions like `np.cos()` and `np.exp()`." },
-                    { "id": "B", "text": "Django", "isCorrect": false, "explanation": "That is a web framework." }
-                  ]
+                  stepText: "This must equal the magnetic flux $\\Phi_B$ through the loop. The field inside is uniform $B = \\mu_0 n I$."
+                },
+                {
+                  stepText: "Flux $\\Phi_B = B(\\pi s^2) = \\mu_0 n I \\pi s^2$."
+                },
+                {
+                  stepText: "Equating: $A(2\\pi s) = \\mu_0 n I \\pi s^2 \\implies \\mathbf{A} = \\frac{\\mu_0 n I}{2} s \\mathbf{\\hat{\\phi}}$. Goal reached!"
                 }
               ]
             },
-            {
-              "id": "s4-quiz",
-              "type": "quiz",
-              "title": "Experimental Error",
-              "content": "If you perform the Kater's pendulum experiment and calculate $g = 9.6$ m/s$^2$, and the accepted theoretical value is $9.8$ m/s$^2$, what is your approximate percentage error?",
-              "options": [
-                { "id": "1", "text": "0.2 %", "isCorrect": false, "explanation": "That is the absolute difference." },
-                { "id": "2", "text": "2.0 %", "isCorrect": true, "explanation": "$(|9.6 - 9.8| / 9.8) \\times 100 \\approx (0.2 / 9.8) \\times 100 \\approx 2.04\\%$." },
-                { "id": "3", "text": "9.8 %", "isCorrect": false, "explanation": "Incorrect formula." }
+            { 
+              id: "s2", 
+              type: "solution", 
+              title: "Interactive Solution: Outside", 
+              content: "**Goal: Find A outside the solenoid ($s > R$).**", 
+              interactiveSteps: [
+                {
+                  stepText: "Draw a circular loop of radius $s > R$. The left side is still $A(2\\pi s)$."
+                },
+                {
+                  prompt: "What is the total magnetic flux $\\Phi_B$ through this larger loop?",
+                  options: [
+                    { id: "A", text: "$\\mu_0 n I (\\pi s^2)$", isCorrect: false, explanation: "The B field is ZERO outside the solenoid (r > R)!" },
+                    { id: "B", text: "$\\mu_0 n I (\\pi R^2)$", isCorrect: true, explanation: "Flux only exists in the core (up to radius R)." }
+                  ],
+                  stepText: "The flux is capped at $\\mu_0 n I \\pi R^2$."
+                },
+                {
+                  stepText: "Equating: $A(2\\pi s) = \\mu_0 n I \\pi R^2 \\implies \\mathbf{A} = \\frac{\\mu_0 n I R^2}{2 s} \\mathbf{\\hat{\\phi}}$. Goal reached!"
+                }
               ]
-            }
+            },
+            { id: "s3", type: "quiz", title: "A Quantum Surprise", content: "Outside the solenoid, $\\mathbf{B} = 0$. Is $\\mathbf{A}$ zero outside?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Look at our result: it falls off as 1/s, but it's not zero." }, { id: "B", text: "No, $\\mathbf{A}$ is non-zero even where $\\mathbf{B}$ is zero!", isCorrect: true, explanation: "This leads to the famous Aharonov-Bohm effect in quantum mechanics." } ] }
+          ]
+        },
+        {
+          id: "les-13-6-bc-normal-B", title: "Boundary Conditions: Normal B", description: "Continuity of perpendicular B", icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, the normal component of E jumps by $\\sigma/\\epsilon_0$ because $\\nabla \\cdot \\mathbf{E} = \\rho/\\epsilon_0$. What is the divergence of B?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "$\\nabla \\cdot \\mathbf{B} = 0$ everywhere." }, { id: "B", text: "$\\mu_0 J$", isCorrect: false, explanation: "That's the curl." } ] },
+            { id: "s2", type: "theory", title: "Continuity of Normal B", content: "Because $\\nabla \\cdot \\mathbf{B} = 0$, applying the divergence theorem to a thin Gaussian pillbox straddling a surface current $\\mathbf{K}$ yields:\n\n$\\oint \\mathbf{B} \\cdot d\\mathbf{a} = 0$\n\nAs the pillbox thickness shrinks to zero, the flux through the sides vanishes. The flux through the top and bottom must cancel out.\n\nTherefore, the component of $\\mathbf{B}$ perpendicular to the surface is **always continuous**:\n\n$B^{\\perp}_{above} = B^{\\perp}_{below}$" },
+            { id: "s3", type: "interactive_canvas", title: "Normal B Continuous", content: "No matter what surface current exists, the magnetic field lines cannot end on it. They must pass continuously through the boundary.", interactiveCanvasId: "mag-boundary-interactive" },
+            { id: "s6", type: "quiz", title: "Magnetic Monopoles", content: "If magnetic monopoles DID exist and accumulated on a surface, what would happen to $B^{\\perp}$?", options: [ { id: "A", text: "It would still be continuous.", isCorrect: false, explanation: "" }, { id: "B", text: "It would be discontinuous.", isCorrect: true, explanation: "Just like electric charges cause E to jump, magnetic charges would cause B to jump." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Because there are no magnetic monopoles, the ___ component of B is always continuous.", blankAnswer: "normal" }
+          ]
+        },
+        {
+          id: "les-13-7-bc-tangential-B", title: "Boundary Conditions: Tangential B", description: "Discontinuity at surface currents", icon: "Activity",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "For a uniform surface current $\\mathbf{K}$, we found the field is $+\\frac{\\mu_0 K}{2}$ on one side and $-\\frac{\\mu_0 K}{2}$ on the other. What is the total jump?", options: [ { id: "A", text: "Zero", isCorrect: false, explanation: "They are in opposite directions." }, { id: "B", text: "$\\mu_0 K$", isCorrect: true, explanation: "$K/2 - (-K/2) = K$." } ] },
+            { id: "s2", type: "theory", title: "Discontinuity of Tangential B", content: "While the normal component of B is continuous, the tangential component is discontinuous across a surface current $\\mathbf{K}$.\n\nBy applying Ampère's law ($\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$) to a thin rectangular loop straddling the surface, we find that the parallel component of B jumps:\n\n$B^{\\parallel}_{above} - B^{\\parallel}_{below} = \\mu_0 K$\n\nVectorially, this is written combining both normal and tangential parts as:\n$\\mathbf{B}_{above} - \\mathbf{B}_{below} = \\mu_0 (\\mathbf{K} \\times \\mathbf{\\hat{n}})$" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Derivation: Tangential Jump", 
+              content: "**Goal: Derive the tangential boundary condition.**", 
+              interactiveSteps: [
+                {
+                  stepText: "Draw a narrow Amperian loop of length $l$ parallel to the surface, perpendicular to the current flow $\\mathbf{K}$."
+                },
+                {
+                  stepText: "As the loop height goes to zero, the vertical sides contribute nothing."
+                },
+                {
+                  prompt: "What is the line integral from the top and bottom edges?",
+                  options: [
+                    { id: "A", text: "$(B^{\\parallel}_{above} - B^{\\parallel}_{below}) l$", isCorrect: true, explanation: "Top goes forward, bottom goes backward." },
+                    { id: "B", text: "0", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The integral is $(B^{\\parallel}_{above} - B^{\\parallel}_{below}) l$."
+                },
+                {
+                  stepText: "The enclosed current is $I_{enc} = K l$. Thus $(B^{\\parallel}_{above} - B^{\\parallel}_{below}) l = \\mu_0 K l$. Canceling $l$ gives the result. Goal reached!"
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Parallel to Current?", content: "What if you draw the Amperian loop parallel to the current flow $\\mathbf{K}$?", options: [ { id: "A", text: "The enclosed current is zero.", isCorrect: true, explanation: "Current flows ALONG the loop, not THROUGH it." }, { id: "B", text: "The enclosed current is K l.", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The tangential component of the magnetic field jumps by an amount proportional to the surface ___ density.", blankAnswer: "current" }
+          ]
+        },
+        {
+          id: "les-13-8-bc-A", title: "Boundary Conditions on A", description: "Continuity of Vector Potential", icon: "Waves",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, the electric field E is discontinuous at a surface charge. Is the potential V discontinuous there?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "V is an integral, so it remains continuous." }, { id: "B", text: "No, V is continuous.", isCorrect: true, explanation: "Correct." } ] },
+            { id: "s2", type: "theory", title: "Boundary Conditions on A", content: "Like the scalar potential in electrostatics, the magnetic vector potential $\\mathbf{A}$ is **continuous** across any boundary:\n\n$\\mathbf{A}_{above} = \\mathbf{A}_{below}$\n\nThis holds because $\\mathbf{B} = \\nabla \\times \\mathbf{A}$ and $\\nabla \\cdot \\mathbf{A} = 0$ (Coulomb gauge). Since B is finite, the derivatives of A must be finite, meaning A itself cannot have sudden jumps.\n\nHowever, the *derivative* of A inherits the discontinuity of B." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Derivative Jump", 
+              content: "**Goal: Find the boundary condition for the derivative of A.**", 
+              interactiveSteps: [
+                {
+                  stepText: "We know $\\mathbf{B}_{above} - \\mathbf{B}_{below} = \\mu_0 (\\mathbf{K} \\times \\mathbf{\\hat{n}})$."
+                },
+                {
+                  stepText: "Since $\\mathbf{A}$ is continuous, any discontinuity in $\\mathbf{B} = \\nabla \\times \\mathbf{A}$ must come from the derivatives of $\\mathbf{A}$ perpendicular to the surface."
+                },
+                {
+                  prompt: "This is mathematically identical to the scalar case where $\\frac{\\partial V_{above}}{\\partial n} - \\frac{\\partial V_{below}}{\\partial n} = -\\frac{\\sigma}{\\epsilon_0}$. What is the magnetic equivalent for A?",
+                  options: [
+                    { id: "A", text: "$\\frac{\\partial \\mathbf{A}_{above}}{\\partial n} - \\frac{\\partial \\mathbf{A}_{below}}{\\partial n} = -\\mu_0 \\mathbf{K}$", isCorrect: true, explanation: "Just swap the constants and source terms." },
+                    { id: "B", text: "$\\frac{\\partial \\mathbf{A}_{above}}{\\partial n} = 0$", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The normal derivative of A jumps by $-\\mu_0 \\mathbf{K}$. Goal reached!"
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Significance of Continuity", content: "The fact that A is continuous makes it useful for what mathematical technique?", options: [ { id: "A", text: "Solving differential equations across boundaries", isCorrect: true, explanation: "Matching boundary conditions is essential for solving Laplace/Poisson equations." }, { id: "B", text: "Nothing, it's useless.", isCorrect: false, explanation: "" } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "While B has a discontinuity at a surface current, the vector potential A is always ___.", blankAnswer: "continuous" }
+          ]
+        },
+        {
+          id: "les-13-9-multipole-A", title: "Multipole Expansion of A", description: "Far field approximations", icon: "ZoomIn",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "In electrostatics, the multipole expansion represents the potential as a series. What is the first term (1/r) called?", options: [ { id: "A", text: "Dipole", isCorrect: false, explanation: "Dipole is 1/r^2." }, { id: "B", text: "Monopole", isCorrect: true, explanation: "The monopole term dominates at large distances." } ] },
+            { id: "s2", type: "theory", title: "Multipole Expansion of Vector Potential", content: "If you want an approximate formula for the vector potential of a localized current loop far away, we use a multipole expansion of $\\frac{1}{\\cal{r}}$.\n\n$\\mathbf{A}(\\mathbf{r}) = \\frac{\\mu_0 I}{4\\pi} \\oint \\frac{1}{\\cal{r}} d\\mathbf{l}' = \\frac{\\mu_0 I}{4\\pi} \\sum_{n=0}^{\\infty} \\frac{1}{r^{n+1}} \\oint (r')^n P_n(\\cos\\alpha) d\\mathbf{l}'$\n\nWhere $P_n$ are Legendre polynomials. \n- $n=0$: Monopole term ($1/r$)\n- $n=1$: Dipole term ($1/r^2$)\n- $n=2$: Quadrupole term ($1/r^3$)" },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: The Magnetic Monopole", 
+              content: "**Goal: Evaluate the magnetic monopole term.**", 
+              interactiveSteps: [
+                {
+                  stepText: "The $n=0$ monopole term is $\\mathbf{A}_{mono} = \\frac{\\mu_0 I}{4\\pi r} \\oint d\\mathbf{l}'$."
+                },
+                {
+                  prompt: "What is the integral of $d\\mathbf{l}'$ around a closed loop?",
+                  options: [
+                    { id: "A", text: "The circumference", isCorrect: false, explanation: "That's the integral of the *scalar* dl'." },
+                    { id: "B", text: "Zero", isCorrect: true, explanation: "The total vector displacement around a closed loop is zero." }
+                  ],
+                  stepText: "$\\oint d\\mathbf{l}' = 0$."
+                },
+                {
+                  stepText: "Therefore, the magnetic monopole term is ALWAYS zero! This mathematically reflects the physical fact that there are no magnetic monopoles. Goal reached!"
+                }
+              ]
+            },
+            { id: "s6", type: "quiz", title: "Dominant Term", content: "Since the monopole term is zero, which term usually dominates the magnetic field of a current loop at large distances?", options: [ { id: "A", text: "Quadrupole", isCorrect: false, explanation: "" }, { id: "B", text: "Dipole", isCorrect: true, explanation: "The 1/r^2 term is the lowest non-vanishing term." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Because $\\oint d\\mathbf{l}' = 0$, there is no magnetic ___ term in the expansion.", blankAnswer: "monopole" }
+          ]
+        },
+        {
+          id: "les-13-10-magnetic-dipole", title: "Magnetic Dipole Moment", description: "m = I a", icon: "Navigation",
+          slides: [
+            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "An electric dipole consists of two opposite charges. A magnetic dipole is best modeled as:", options: [ { id: "A", text: "Two opposite magnetic monopoles", isCorrect: false, explanation: "Monopoles don't exist." }, { id: "B", text: "A small loop of current", isCorrect: true, explanation: "A current loop creates a dipole field." } ] },
+            { id: "s2", type: "theory", title: "Magnetic Dipole Moment", content: "Since the monopole term is zero, the dominant term is the Dipole:\n$\\mathbf{A}_{dip}(\\mathbf{r}) = \\frac{\\mu_0}{4\\pi} \\frac{\\mathbf{m} \\times \\mathbf{\\hat{r}}}{r^2}$\n\nHere, $\\mathbf{m}$ is the **magnetic dipole moment** of the loop:\n$\\mathbf{m} \\equiv I \\int d\\mathbf{a} = I \\mathbf{a}$\n\nWhere $\\mathbf{a}$ is the 'vector area' of the loop. Its magnitude is the area, and its direction is determined by the right-hand rule (fingers curl with current, thumb points to $\\mathbf{a}$)." },
+            { 
+              id: "s4", 
+              type: "proof", 
+              title: "Interactive Insight: Independence of Origin", 
+              content: "**Goal: Understand a unique property of the magnetic dipole.**", 
+              interactiveSteps: [
+                {
+                  stepText: "In electrostatics, the electric dipole moment $\\mathbf{p} = \\sum q_i \\mathbf{r}_i'$ depends on the choice of origin UNLESS the total net charge (monopole) is zero."
+                },
+                {
+                  prompt: "What is the total 'magnetic charge' (magnetic monopole moment) of any current loop?",
+                  options: [
+                    { id: "A", text: "Zero", isCorrect: true, explanation: "As proven in the previous lesson." },
+                    { id: "B", text: "Depends on the current", isCorrect: false, explanation: "" }
+                  ],
+                  stepText: "The magnetic monopole moment is strictly zero."
+                },
+                {
+                  stepText: "Because the monopole moment is always zero, the magnetic dipole moment $\\mathbf{m} = I \\mathbf{a}$ is ALWAYS independent of the choice of origin!"
+                }
+              ]
+            },
+            { id: "s5", type: "numerical", title: "Calculate Dipole Moment", content: "A circular wire loop of radius 2 meters carries a 3 Ampere current. What is the magnitude of its magnetic dipole moment (in A·m²)? (Use $\\pi \\approx 3.14$, round to 1 decimal place)", numericAnswer: 37.7, numericTolerance: 0.2 },
+            { id: "s6", type: "quiz", title: "Dipole Field Similarity", content: "Far away, how does the structure of the magnetic field of a current loop compare to the electric field of two opposite charges?", options: [ { id: "A", text: "It is completely different.", isCorrect: false, explanation: "" }, { id: "B", text: "It is mathematically identical in structure.", isCorrect: true, explanation: "Both yield the classic 'dipole' field shape." } ] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The magnetic dipole moment is the product of the current and the vector ___ of the loop.", blankAnswer: "area" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-14-summary-3-2",
+      title: "Section Summary",
+      description: "Recap of Divergence, Curl, Ampère's Law, and Vector Potential.",
+      color: "duo-green",
+      lessons: [
+        {
+          id: "les-14-1-recap",
+          title: "Ampère's Law & A Recap",
+          description: "Review of Units 12 & 13",
+          icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "Because there are no magnetic monopoles, which of the following is true?", options: [ { id: "A", text: "$\\nabla \\times \\mathbf{B} = 0$", isCorrect: false, explanation: "That's for electrostatics." }, { id: "B", text: "$\\nabla \\cdot \\mathbf{B} = 0$", isCorrect: true, explanation: "Divergence of B is zero everywhere." } ] },
+            { id: "s1", type: "quiz", title: "Knowledge Check 2", content: "Which boundary condition states that $\\mathbf{B}$ cannot 'jump' through a surface?", options: [ { id: "A", text: "$B^{\\perp}$ is continuous", isCorrect: true, explanation: "Normal B is continuous." }, { id: "B", text: "$B^{\\parallel}$ is continuous", isCorrect: false, explanation: "Tangential B jumps by $\\mu_0 K$." } ] },
+            { id: "s2", type: "theory", title: "Section 2 Summary", content: "**Ampère's Law:** The fundamental equations of magnetostatics are $\\nabla \\cdot \\mathbf{B} = 0$ (no monopoles) and $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ (Ampère's law). The integral form $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$ is extremely powerful for calculating fields in highly symmetric systems (infinite wires, planes, solenoids, toroids).\n\n**Vector Potential:** Because $\\nabla \\cdot \\mathbf{B} = 0$, we can express $\\mathbf{B}$ as the curl of a vector potential: $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. Choosing the Coulomb gauge ($\\nabla \\cdot \\mathbf{A} = 0$) allows us to solve for $\\mathbf{A}$ using a Poisson-like integral $\\mathbf{A} = \\frac{\\mu_0}{4\\pi}\\int \\frac{\\mathbf{J}}{\\cal{r}} d\\tau$. Finally, at a surface current $\\mathbf{K}$, the tangential component of $\\mathbf{B}$ is discontinuous, while the normal component of $\\mathbf{B}$ and the entire vector potential $\\mathbf{A}$ remain continuous." }
           ]
         }
       ]
