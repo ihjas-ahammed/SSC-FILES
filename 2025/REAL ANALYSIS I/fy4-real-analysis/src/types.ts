@@ -62,16 +62,16 @@ export interface Section {
   units: Unit[];
 }
 
-export interface Course {
+export interface Module {
   id: string;
   title: string;
   description: string;
   sections: Section[];
-  chapterSummary?: Slide[]; // Added for Chapter Summary Pages
+  moduleSummary?: Slide[]; // Added for Module Summary Pages
 }
 
 export interface UserProgress {
   completedLessons: string[];
   xp: number;
-  currentCourseId: string;
+  currentModuleId: string;
 }

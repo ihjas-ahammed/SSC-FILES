@@ -1,140 +1,102 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/drive/1lGn6szG7LokQficj8bOhXrPpwLaQp27V
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
-
-
-Based on the provided PDF and OCR, here is the catalog of sections, definitions (D), theorems (T), examples (E), practice problems (P), and exercises (exe) starting from Section 6.1.Here is the catalog of Section 6.1 through 7.4, organized by page number and split by logical lesson groups.
-
-### **Chapter 6: Orthogonality and Least Squares**
-
-**Section 6.1: Inner Product, Length, and Orthogonality**
-*   **331:** D1 E1 T1 (3 lessons)
-*   **332:** D2 (1 lesson)
-*   **333:** D3 E2 E3 D4 (4 lessons)
-*   **334:** E4 E5 (2 lessons)
-*   **335:** D5 T2 D6 E6 (4 lessons)
-*   **336:** T3 (1 lesson)
-*   **337:** P1 P2 P3 P4 (4 lessons)
-*   **318:** exe 1-8 (8 lessons)
-*   **319:** exe 9-12 (4 lessons)
-*   **3110:** exe 13-14 (2 lessons)
-*   **3111:** exe 15-18 (4 lessons)
-*   **3112:** exe 19-24 (6 lessons)
-*   **3113:** exe 25-31 (7 lessons)
-*   **3114:** exe 32-34 (3 lessons)
-
-**Section 6.2: Orthogonal Sets**
-*   **321:** D1 E1 T4 (3 lessons)
-*   **322:** D2 T5 E2 (3 lessons)
-*   **323:** E3 (1 lesson)
-*   **324:** E4 D3 (2 lessons)
-*   **325:** E5 T6 T7 (3 lessons)
-*   **326:** E6 D4 E7 P1 P2 P3 (6 lessons)
-*   **327:** exe 1-6 (6 lessons)
-*   **328:** exe 7-10 (4 lessons)
-*   **329:** exe 11-14 (4 lessons)
-*   **3210:** exe 15-16 (2 lessons)
-*   **3211:** exe 17-22 (6 lessons)
-*   **3212:** exe 23-24 (2 lessons)
-*   **3213:** exe 25-34 (10 lessons)
-*   **3214:** exe 35-36 (2 lessons)
-
-**Section 6.3: Orthogonal Projections**
-*   **331:** T8 E1 (2 lessons)
-*   **332:** E2 (1 lesson)
-*   **333:** T9 (1 lesson)
-*   **334:** E3 E4 T10 (3 lessons)
-*   **335:** P1 (1 lesson)
-*   **336:** exe 1-2 (2 lessons)
-*   **337:** exe 3-6 (4 lessons)
-*   **338:** exe 7-10 (4 lessons)
-*   **339:** exe 11-16 (6 lessons)
-*   **3310:** exe 17-20 (4 lessons)
-*   **3311:** exe 21-22 (2 lessons)
-*   **3312:** exe 23-26 (4 lessons)
-
-**Section 6.4: The Gram-Schmidt Process**
-*   **341:** E1 (1 lesson)
-*   **342:** E2 (1 lesson)
-*   **343:** T11 (1 lesson)
-*   **344:** E3 (1 lesson)
-*   **345:** T12 E4 (2 lessons)
-*   **346:** P1 (1 lesson)
-*   **347:** exe 1-8 (8 lessons)
-*   **348:** exe 9-12 (4 lessons)
-*   **349:** exe 13-16 (4 lessons)
-*   **3410:** exe 17-18 (2 lessons)
-*   **3411:** exe 19-26 (8 lessons)
+I have split the large exercise sets into smaller logical blocks (approx. 6–10 lessons each) while maintaining the original numbering modularity (where the first two digits represent the section and the third digit represents the block within that section).
 
 ---
 
-### **Chapter 7: Symmetric Matrices and Quadratic Forms**
+### **Module I: Introduction to Set Theory**
 
-**Section 7.1: Diagonalization of Symmetric Matrices**
-*   **411:** D1 E1 E2 T1 (4 lessons)
-*   **412:** D2 T2 E3 (3 lessons)
-*   **413:** T3 (1 lesson)
-*   **414:** E4 P1 P2 (3 lessons)
-*   **415:** exe 1-6 (6 lessons)
-*   **416:** exe 7-12 (6 lessons)
-*   **417:** exe 13-22 (10 lessons)
-*   **418:** exe 23-24 (2 lessons)
-*   **419:** exe 25-26 (2 lessons)
-*   **4110:** exe 27-40 (14 lessons)
+**Section 1.1: Sets and Functions** (duo-blue)
+*   **111 (Set Fundamentals):** D1.1.1 D1.1.2 D1.1.3 Fig1.1.1 T1.1.4 (5 lessons)
+*   **112 (Mapping & Composition):** D1.1.5 Fig1.1.2 Fig1.1.3 D1.1.6 Fig1.1.4 D1.1.11 D1.1.12 E1.1.13 (8 lessons)
+*   **113 (Set Exercises):** exe 1–6 (Symmetric Difference/Set Algebra) (6 lessons)
+*   **114 (Index Set Exercises):** exe 7–12 (Union/Intersection of Families) (6 lessons)
+*   **115 (Composition Exercises):** exe 13–18 (Image/Inverse Image Proofs) (6 lessons)
+*   **116 (Inverse Exercises):** exe 19–24 (Injective/Surjective/Bijective) (6 lessons)
 
-**Section 7.2: Quadratic Forms**
-*   **421:** D1 E1 (2 lessons)
-*   **422:** E2 (1 lesson)
-*   **423:** E3 E4 (2 lessons)
-*   **424:** T4 (1 lesson)
-*   **425:** E5 (1 lesson)
-*   **426:** D2 T5 E6 (3 lessons)
-*   **427:** P1 (1 lesson)
-*   **428:** exe 1-4 (4 lessons)
-*   **429:** exe 5-6 (2 lessons)
-*   **4210:** exe 7-18 (12 lessons)
-*   **4211:** exe 19-20 (2 lessons)
-*   **4212:** exe 21-22 (2 lessons)
-*   **4213:** exe 23-28 (6 lessons)
+**Section 1.2: Mathematical Induction** (duo-green)
+*   **121 (The Principle):** T1.2.1 T1.2.2 T1.2.3 E1.2.4a E1.2.4b (5 lessons)
+*   **122 (Induction Examples):** E1.2.4c E1.2.4d E1.2.4e E1.2.4f (4 lessons)
+*   **123 (Arithmetic Exercises):** exe 1–10 (Finite Sums and Divisibility) (10 lessons)
+*   **124 (Inequality Exercises):** exe 11–20 (Sequences and Exponents) (10 lessons)
 
-**Section 7.3: Constrained Optimization**
-*   **431:** E1 (1 lesson)
-*   **432:** E2 T6 (2 lessons)
-*   **433:** E3 T7 (2 lessons)
-*   **434:** E4 E5 (2 lessons)
-*   **435:** T8 E6 (2 lessons)
-*   **436:** P1 P2 (2 lessons)
-*   **437:** exe 1-6 (6 lessons)
-*   **438:** exe 7-11 (5 lessons)
-*   **439:** exe 12-17 (6 lessons)
+**Section 1.3: Finite and Infinite Sets** (duo-violet)
+*   **131 (Cardinality Theory):** D1.3.1 T1.3.2 T1.3.3 T1.3.4 T1.3.5 (5 lessons)
+*   **132 (Countability Theory):** D1.3.6 E1.3.7 T1.3.8 Fig1.3.1 T1.3.11 T1.3.13 (6 lessons)
+*   **133 (Mapping Exercises):** exe 1–6 (Existence of Bijections) (6 lessons)
+*   **134 (Countability Exercises):** exe 7–13 (Power Sets & Subset Cardinality) (7 lessons)
 
-**Section 7.4: The Singular Value Decomposition**
-*   **441:** E1 (1 lesson)
-*   **442:** D1 E2 (2 lessons)
-*   **443:** T9 (1 lesson)
-*   **444:** T10 (1 lesson)
-*   **445:** E3 (1 lesson)
-*   **446:** E4 E5 (2 lessons)
-*   **447:** E6 E7 E8 (3 lessons)
-*   **448:** P1 (1 lesson)
-*   **449:** exe 1-4 (4 lessons)
-*   **4410:** exe 5-14 (10 lessons)
-*   **4411:** exe 15-20 (6 lessons)
-*   **4412:** exe 21-29 (9 lessons)
+---
+
+### **Module II: The Real Numbers**
+
+**Section 2.1: Algebraic and Order Properties** (duo-blue)
+*   **211 (Field Axioms):** D2.1.1 T2.1.2 T2.1.3 T2.1.4 (4 lessons)
+*   **212 (Order & Inequalities):** D2.1.5 D2.1.6 T2.1.7 T2.1.8 T2.1.9 T2.1.10 (6 lessons)
+*   **213 (Algebraic Exercises):** exe 1–13 (Basic Field Property Proofs) (13 lessons)
+*   **214 (Order Exercises):** exe 14–26 (Advanced Inequality Proofs) (13 lessons)
+
+**Section 2.2: Absolute Value and The Real Line** (duo-ted)
+*   **221 (Absolute Value):** D2.2.1 T2.2.2 T2.2.3 C2.2.4 C2.2.5 (5 lessons)
+*   **222 (Neighborhoods):** E2.2.6 Fig2.2.1 D2.2.7 Fig2.2.4 T2.2.8 E2.2.9 (6 lessons)
+*   **223 (Absolute Value Exercises):** exe 1–10 (Basic Properties & Inequalities) (10 lessons)
+*   **224 (Line Exercises):** exe 11–19 (Intervals & Geometric Proofs) (9 lessons)
+
+**Section 2.3: Completeness Property** (duo-orange)
+*   **231 (Suprema & Infima):** D2.3.1 Fig2.3.1 D2.3.2 L2.3.3 L2.3.4 (5 lessons)
+*   **232 (Completeness Axiom):** E2.3.5 T2.3.6 (2 lessons + Practicum Proofs) (4 lessons)
+*   **233 (Bounds Exercises):** exe 1–7 (Finding Inf/Sup of Specific Sets) (7 lessons)
+*   **234 (Set Property Exercises):** exe 8–14 (Proofs on Bounded Sets) (7 lessons)
+
+**Section 2.4/2.5: Applications and Intervals** (duo-grey)
+*   **241 (Archimedean/Density):** T2.4.3 C2.4.4 C2.4.5 C2.4.6 T2.4.8 C2.4.9 (6 lessons)
+*   **242 (Density Exercises):** exe 1–10 (Suprema and Rational Density) (10 lessons)
+*   **251 (Interval Theory):** T2.5.1 T2.5.2 Fig2.5.1 T2.5.3 T2.5.4 (5 lessons)
+*   **252 (Interval Exercises):** exe 1–9 (Nested Intervals and Cantor Sets) (9 lessons)
+
+---
+
+### **Module III: Sequences and Limits**
+
+**Section 3.1: Sequences and Their Limits** (duo-bleu)
+*   **311 (Definitions):** D3.1.1 E3.1.2 D3.1.3 T3.1.4 T3.1.5 (5 lessons)
+*   **312 (Convergence Examples):** E3.1.6 E3.1.7 D3.1.8 T3.1.9 T3.1.10 E3.1.11 (6 lessons)
+*   **313 (Limit Exercises):** exe 1–9 (Finding Formulae and Limits) (9 lessons)
+*   **314 (Proof Exercises):** exe 10–18 (Rigorous Convergence Proofs) (9 lessons)
+
+**Section 3.2: Limit Theorems** (duo-red)
+*   **321 (Algebraic Laws):** D3.2.1 T3.2.2 T3.2.3 (4 lessons)
+*   **322 (Order/Squeeze):** T3.2.4 T3.2.5 T3.2.6 T3.2.7 E3.2.8 T3.2.9 T3.2.11 (7 lessons)
+*   **323 (Computation Exercises):** exe 1–12 (Applying Limit Laws) (12 lessons)
+*   **324 (Theorem Exercises):** exe 13–24 (Sequences via Theorems) (12 lessons)
+
+**Section 3.3: Monotone Sequences** (duo-green)
+*   **331 (MCT Theory):** D3.3.1 T3.3.2 E3.3.3 E3.3.4 E3.3.5 E3.3.6 (6 lessons)
+*   **332 (Monotone Exercises):** exe 1–8 (Establishing Monotonicity) (8 lessons)
+*   **333 (Recursive Exercises):** exe 9–16 (Limits of Recursive Definitions) (8 lessons)
+
+---
+
+### **Module IV: Sequences (Cont.) and Function Limits**
+
+**Section 3.4: Subsequences** (duo-yellow)
+*   **341 (BW Theory):** D3.4.1 T3.4.2 E3.4.3 T3.4.4 T3.4.5 T3.4.7 T3.4.8 (7 lessons)
+*   **342 (Subsequence Exercises):** exe 1–10 (LimSup and Divergence) (10 lessons)
+*   **343 (Advanced Subsequence Exe):** exe 11–19 (Bounded Subsequences) (9 lessons)
+
+**Section 3.5: Cauchy Criterion** (duo0-blue)
+*   **351 (Cauchy Theory):** D3.5.1 E3.5.2 L3.5.3 L3.5.4 T3.5.5 E3.5.6 D3.5.7 T3.5.8 (8 lessons)
+*   **352 (Cauchy Exercises):** exe 1–7 (Testing for Cauchy Property) (7 lessons)
+*   **353 (Contractive Exercises):** exe 8–14 (Error Estimation) (7 lessons)
+
+**Section 4.1: Limits of Functions** (duo-green)
+*   **411 (The Limit Theory):** D4.1.1 T4.1.2 D4.1.4 T4.1.5 T4.1.6 T4.1.8 T4.1.9 (7 lessons)
+*   **412 (Delta-Epsilon Exercises):** exe 1–8 (Linear and Quadratic Limits) (8 lessons)
+*   **413 (Divergence Exercises):** exe 9–17 (Limits at Boundary Points) (9 lessons)
+
+**Section 4.2/4.3: Theorems and Extensions** (duo-red)
+*   **421 (Limit Theorems):** D4.2.1 T4.2.2 D4.2.3 T4.2.4 T4.2.6 T4.2.7 T4.2.9 (7 lessons)
+*   **422 (Theorems Exercises):** exe 1–15 (Limit Law Proofs) (15 lessons)
+*   **431 (Extensions Theory):** D4.3.1 T4.3.2 T4.3.3 E4.3.4 D4.3.5 T4.3.7 D4.3.8 (7 lessons)
+*   **432 (Infinity Theory):** D4.3.10 T4.3.11 D4.3.13 T4.3.14 T4.3.15 (5 lessons)
+*   **433 (Extension Exercises):** exe 1–13 (One-Sided and Infinite Limits) (13 lessons)
+
+---

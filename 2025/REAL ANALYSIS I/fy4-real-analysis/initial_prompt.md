@@ -4,8 +4,11 @@ Make the following changes:
 
 * Your task is to create units..
 
-111: (replace old content)
+### **Module II: The Real Numbers**
 
+**Section 2.1: Algebraic and Order Properties** (duo-blue)
+*   **211 (Field Axioms):** D2.1.1 T2.1.2 T2.1.3 T2.1.4 (4 lessons)
+*   **212 (Order & Inequalities):** D2.1.5 D2.1.6 T2.1.7 T2.1.8 T2.1.9 T2.1.10 (6 lessons)
 
 
 Note: this time we are giving units also seperate file because in linear algebra we have to be too modular because there is a lot to generate
@@ -20,6 +23,8 @@ P- practice problem
 
 
 Note: You are allowed to edit any core functionality and add new type of slides as needed if the topics demand that
+
+Note: When creating solutions for questions and proofs, instead of saying by some defintion (number), by name, state that definition and give its name so user can remember better
 
 Base:
 
