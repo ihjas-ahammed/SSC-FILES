@@ -15,7 +15,9 @@ const colorHexMap: Record<string, string> = {
   'duo-blue': '#1cb0f6',
   'duo-green': '#58cc02',
   'duo-red': '#ff4b4b',
-  'duo-violet': '#ce82ff'
+  'duo-violet': '#ce82ff',
+  'duo-orange': '#ff9600',
+  'duo-gray': '#9ca3af' // Visible gray on dark background
 };
 
 const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson, onOpenSectionSelector }) => {

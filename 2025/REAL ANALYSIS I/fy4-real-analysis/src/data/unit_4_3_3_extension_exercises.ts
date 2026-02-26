@@ -1,8 +1,3 @@
-```bash
-# No bash commands needed
-```
-
---- START OF FILE src/data/unit_4_3_3_extension_exercises.ts ---
 import { Unit } from '../types';
 
 export const UNIT_4_3_3: Unit = {
@@ -193,32 +188,3 @@ export const UNIT_4_3_3: Unit = {
     }
   ]
 };
---- END OF FILE src/data/unit_4_3_3_extension_exercises.ts ---
-
---- START OF FILE src/data/section_4_2_theorems_extensions.ts ---
-import { Section } from '../types';
-import { UNIT_4_2_1 } from './unit_4_2_1_limit_theorems';
-import { UNIT_4_2_2 } from './unit_4_2_2_theorems_exercises';
-import { UNIT_4_3_1 } from './unit_4_3_1_extensions_theory';
-import { UNIT_4_3_2 } from './unit_4_3_2_infinity_theory';
-import { UNIT_4_3_3 } from './unit_4_3_3_extension_exercises';
-
-export const SECTION_4_2_THEOREMS_EXTENSIONS: Section = {
-  id: "section-4-2",
-  title: "Section 4.2/4.3: Theorems and Extensions",
-  description: "Limit theorems, algebraic properties, and the Squeeze Theorem.",
-  color: "duo-red",
-  units: [
-    UNIT_4_2_1,
-    UNIT_4_2_2,
-    UNIT_4_3_1,
-    UNIT_4_3_2,
-    UNIT_4_3_3
-  ]
-};
---- END OF FILE src/data/section_4_2_theorems_extensions.ts ---
-
---- START OF FILE project_snapshot_out.txt ---
-src/data/unit_4_3_3_extension_exercises.ts
-src/data/section_4_2_theorems_extensions.ts
---- END OF FILE project_snapshot_out.txt ---

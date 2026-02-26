@@ -17,6 +17,15 @@ const ZMappingCanvas = lazy(() => import('./canvas/ZMappingCanvas'));
 const DiagonalCountingCanvas = lazy(() => import('./canvas/DiagonalCountingCanvas'));
 const AbsoluteValueCanvas = lazy(() => import('./canvas/AbsoluteValueCanvas'));
 const EpsilonNeighborhoodCanvas = lazy(() => import('./canvas/EpsilonNeighborhoodCanvas'));
+const BoundsCanvas = lazy(() => import('./canvas/BoundsCanvas'));
+const NestedIntervalsCanvas = lazy(() => import('./canvas/NestedIntervalsCanvas'));
+const SequenceConvergenceCanvas = lazy(() => import('./canvas/SequenceConvergenceCanvas'));
+const SqueezeTheoremCanvas = lazy(() => import('./canvas/SqueezeTheoremCanvas'));
+const MonotoneConvergenceCanvas = lazy(() => import('./canvas/MonotoneConvergenceCanvas'));
+const SubsequenceCanvas = lazy(() => import('./canvas/SubsequenceCanvas'));
+const CauchySequenceCanvas = lazy(() => import('./canvas/CauchySequenceCanvas'));
+const ClusterPointCanvas = lazy(() => import('./canvas/ClusterPointCanvas'));
+const EpsilonDeltaCanvas = lazy(() => import('./canvas/EpsilonDeltaCanvas'));
 
 interface Props {
   canvasId: string;
@@ -41,6 +50,15 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       case 'diagonal-counting-canvas': return <DiagonalCountingCanvas />;
       case 'absolute-value-canvas': return <AbsoluteValueCanvas />;
       case 'epsilon-neighborhood-canvas': return <EpsilonNeighborhoodCanvas />;
+      case 'bounds-canvas': return <BoundsCanvas />;
+      case 'nested-intervals-canvas': return <NestedIntervalsCanvas />;
+      case 'sequence-convergence-canvas': return <SequenceConvergenceCanvas />;
+      case 'squeeze-theorem-canvas': return <SqueezeTheoremCanvas />;
+      case 'monotone-convergence-canvas': return <MonotoneConvergenceCanvas />;
+      case 'subsequence-canvas': return <SubsequenceCanvas />;
+      case 'cauchy-sequence-canvas': return <CauchySequenceCanvas />;
+      case 'cluster-point-canvas': return <ClusterPointCanvas />;
+      case 'epsilon-delta-canvas': return <EpsilonDeltaCanvas />;
       default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>;
     }
   };

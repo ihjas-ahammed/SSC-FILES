@@ -17,6 +17,8 @@ const colorStyles: Record<string, { bg: string, border: string, ring: string }> 
   'duo-green': { bg: 'bg-duo-green', border: 'border-duo-green-dark', ring: 'ring-duo-green/30' },
   'duo-red': { bg: 'bg-duo-red', border: 'border-duo-red-dark', ring: 'ring-duo-red/30' },
   'duo-violet': { bg: 'bg-duo-violet', border: 'border-duo-violet-dark', ring: 'ring-duo-violet/30' },
+  'duo-orange': { bg: 'bg-duo-orange', border: 'border-duo-orange-dark', ring: 'ring-duo-orange/30' },
+  'duo-gray': { bg: 'bg-slate-500', border: 'border-slate-700', ring: 'ring-slate-500/30' },
 };
 
 const LessonNode: React.FC<Props> = ({ lesson, x, y, status, isNextToStart, colorName, onStart }) => {

@@ -4,11 +4,9 @@ Make the following changes:
 
 * Your task is to create units..
 
-### **Module II: The Real Numbers**
+*   **352 (Cauchy Exercises):** exe 1–7 (Testing for Cauchy Property) (7 lessons)
+*   **353 (Contractive Exercises):** exe 8–14 (Error Estimation) (7 lessons)
 
-**Section 2.1: Algebraic and Order Properties** (duo-blue)
-*   **211 (Field Axioms):** D2.1.1 T2.1.2 T2.1.3 T2.1.4 (4 lessons)
-*   **212 (Order & Inequalities):** D2.1.5 D2.1.6 T2.1.7 T2.1.8 T2.1.9 T2.1.10 (6 lessons)
 
 
 Note: this time we are giving units also seperate file because in linear algebra we have to be too modular because there is a lot to generate
