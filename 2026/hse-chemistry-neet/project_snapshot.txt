@@ -1,0 +1,1223 @@
+To implement the requested changes, I will add the new **Electrochemistry** section to Module V, including the corresponding units, lessons, exercises, and interactive visualizations.
+
+Here is the updated project snapshot.
+
+--- START OF FILE src/components/canvasart/Module5Electro.tsx ---
+import React from 'react';
+
+export const renderModule5ElectroArt = (id: string) => {
+  switch (id) {
+    case 'electro-galvanic-cell':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full p-4 relative">
+           <div className="flex gap-8 items-center">
+              {/* Anode */}
+              <div className="relative w-20 h-32 border-2 border-white/20 rounded-b bg-white/5">
+                 <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 w-4 h-24 bg-gray-400 border border-white/50"></div>
+                 <div className="absolute bottom-0 w-full h-20 bg-blue-200/20"></div>
+                 <div className="absolute bottom-[-20px] text-xs text-center w-full">Zn (Anode) -</div>
+              </div>
+              
+              {/* Salt Bridge */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 w-32 h-12 border-t-8 border-x-8 border-white/30 rounded-t-xl"></div>
+
+              {/* Cathode */}
+              <div className="relative w-20 h-32 border-2 border-white/20 rounded-b bg-white/5">
+                 <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 w-4 h-24 bg-orange-400 border border-white/50"></div>
+                 <div className="absolute bottom-0 w-full h-20 bg-blue-500/20"></div>
+                 <div className="absolute bottom-[-20px] text-xs text-center w-full">Cu (Cathode) +</div>
+              </div>
+           </div>
+           {/* Flow */}
+           <div className="absolute top-0 w-40 h-1 bg-yellow-400 animate-pulse"></div>
+           <div className="absolute top-[-10px] text-xs text-yellow-300">e⁻ →</div>
+        </div>
+      );
+
+    case 'electro-she':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full p-4">
+           <div className="relative w-32 h-40 border-2 border-white/30 rounded-b bg-blue-100/10">
+              {/* Inverted Funnel */}
+              <div className="absolute top-[-20px] left-1/2 -translate-x-1/2 w-12 h-32 border-2 border-white/50 rounded-t-xl"></div>
+              {/* Platinum Foil */}
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-4 h-6 bg-gray-300"></div>
+              {/* H2 Bubbles */}
+              <div className="absolute bottom-12 left-1/2 w-1 h-1 bg-white rounded-full animate-bounce"></div>
+              <div className="absolute bottom-16 left-1/2 -translate-x-2 w-1 h-1 bg-white rounded-full animate-bounce delay-100"></div>
+              
+              <div className="absolute top-2 left-2 text-[10px]">H₂(g) 1 bar</div>
+              <div className="absolute bottom-2 left-2 text-[10px]">H⁺(aq) 1M</div>
+           </div>
+        </div>
+      );
+
+    case 'electro-conductivity-cell':
+      return (
+        <div className="flex items-center justify-center h-full w-full p-4 gap-4">
+           <div className="relative w-24 h-40 border-2 border-white/20 rounded-full bg-blue-50/5 flex items-center justify-center">
+              <div className="w-2 h-24 bg-gray-400 absolute left-6 top-4"></div>
+              <div className="w-2 h-24 bg-gray-400 absolute right-6 top-4"></div>
+              <div className="w-4 h-4 bg-black absolute left-5 bottom-12"></div> {/* Pt black */}
+              <div className="w-4 h-4 bg-black absolute right-5 bottom-12"></div>
+              <div className="absolute bottom-2 text-[10px]">Platinized Pt</div>
+           </div>
+        </div>
+      );
+
+    case 'electro-molar-conductivity-graph':
+      return (
+        <div className="flex items-center justify-center h-full w-full p-4">
+           <svg viewBox="0 0 100 80" className="w-full h-full overflow-visible">
+              <line x1="10" y1="70" x2="90" y2="70" stroke="white" strokeWidth="1" />
+              <line x1="10" y1="70" x2="10" y2="10" stroke="white" strokeWidth="1" />
+              <text x="90" y="75" className="text-[6px] fill-slate-400">√c</text>
+              <text x="5" y="10" className="text-[6px] fill-slate-400">Λm</text>
+              
+              {/* Strong Electrolyte (KCl) - Linear */}
+              <line x1="10" y1="30" x2="80" y2="60" stroke="cyan" strokeWidth="2" />
+              <text x="82" y="60" className="text-[6px] fill-cyan">Strong (KCl)</text>
+              
+              {/* Weak Electrolyte (CH3COOH) - Curve */}
+              <path d="M 10 10 Q 15 60 90 65" fill="none" stroke="yellow" strokeWidth="2" />
+              <text x="60" y="30" className="text-[6px] fill-yellow">Weak (HAc)</text>
+           </svg>
+        </div>
+      );
+
+    case 'electro-battery-dry':
+      return (
+        <div className="flex items-center justify-center h-full w-full p-4">
+           <div className="relative w-24 h-40 bg-gray-700 rounded-t-lg border-b-4 border-gray-900 overflow-hidden">
+              <div className="absolute top-[-5px] left-1/2 -translate-x-1/2 w-6 h-4 bg-yellow-600 rounded-t"></div> {/* Cap */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-full bg-black"></div> {/* Carbon Rod */}
+              <div className="absolute inset-0 bg-gray-500/30 m-2 rounded"></div> {/* MnO2 Paste */}
+              <div className="absolute bottom-2 left-2 text-[8px] text-white">Zinc Container (Anode)</div>
+           </div>
+        </div>
+      );
+
+    case 'electro-fuel-cell':
+      return (
+        <div className="flex items-center justify-center h-full w-full p-4">
+           <div className="w-48 h-32 border border-white/20 relative flex bg-white/5 rounded">
+              {/* Electrodes */}
+              <div className="w-2 h-24 bg-gray-500 absolute left-10 top-4"></div>
+              <div className="w-2 h-24 bg-gray-500 absolute right-10 top-4"></div>
+              
+              {/* Inlets */}
+              <div className="absolute left-0 top-10 text-[10px] animate-pulse">H₂ →</div>
+              <div className="absolute right-0 top-10 text-[10px] animate-pulse">← O₂</div>
+              <div className="absolute bottom-2 right-10 text-[10px]">H₂O out ↘</div>
+              
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] text-blue-300">Electrolyte (NaOH)</div>
+           </div>
+        </div>
+      );
+
+    case 'electro-corrosion':
+      return (
+        <div className="flex items-center justify-center h-full w-full p-4">
+           <div className="relative w-full h-32 bg-gray-600 rounded-lg overflow-hidden">
+              {/* Water Drop */}
+              <div className="absolute top-0 left-1/4 w-20 h-10 bg-blue-400/50 rounded-b-full"></div>
+              {/* Rust Spot */}
+              <div className="absolute top-0 left-1/3 w-4 h-1 bg-red-700 rounded-full blur-[1px]"></div>
+              
+              <div className="absolute top-4 left-10 text-[8px] text-white">Anode (Fe → Fe²⁺)</div>
+              <div className="absolute top-4 left-32 text-[8px] text-white">Cathode (O₂ + H⁺ → H₂O)</div>
+              
+              <div className="absolute bottom-2 w-full text-center text-[10px] text-white">Iron Surface</div>
+           </div>
+        </div>
+      );
+
+    default:
+      return <div className="flex items-center justify-center h-full">Visualization not found</div>;
+  }
+};
+--- END OF FILE src/components/canvasart/Module5Electro.tsx ---
+
+--- START OF FILE src/components/InteractiveCanvasArt.tsx ---
+import React, { Suspense } from 'react';
+import { renderModule1Art } from './canvasart/Module1Chem';
+import { renderModule2Art } from './canvasart/Module2Physical';
+import { renderModule3Art } from './canvasart/Module3Inorganic';
+import { renderModule4Art } from './canvasart/Module4Organic';
+import { renderModule5Art } from './canvasart/Module5Solutions';
+import { renderModule5ElectroArt } from './canvasart/Module5Electro';
+
+interface Props {
+  canvasId: string;
+}
+
+const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
+  const renderInteractive = () => {
+    // Try to find the component in each module
+    return (
+      renderModule1Art(canvasId) ||
+      renderModule2Art(canvasId) ||
+      renderModule3Art(canvasId) ||
+      renderModule4Art(canvasId) ||
+      renderModule5Art(canvasId) ||
+      renderModule5ElectroArt(canvasId) ||
+      <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
+    );
+  };
+
+  return (
+    <div className="interactive-canvas-container relative w-full aspect-video flex items-center justify-center bg-black/40 rounded-2xl overflow-hidden shadow-inner border border-white/5">
+      <Suspense fallback={<div className="animate-pulse text-slate-500">Loading interactive...</div>}>
+        {renderInteractive()}
+      </Suspense>
+    </div>
+  );
+};
+
+export default InteractiveCanvasArt;
+--- END OF FILE src/components/InteractiveCanvasArt.tsx ---
+
+--- START OF FILE src/data/chem_units/unit_5_2_1_cells.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_5_2_1: Unit = {
+  id: "unit-5-2-1",
+  title: "Cells & Nernst Equation",
+  description: "Electrochemical Cells & Potentials",
+  color: "duo-blue",
+  lessons: [
+    {
+      id: "les-5-2-1-1",
+      title: "Electrochemical Cells",
+      description: "Galvanic vs Electrolytic",
+      icon: "Battery",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept Check", content: "A device converting chemical energy to electrical energy is:", options: [{id: "A", text: "Galvanic Cell", isCorrect: true, explanation: "Spontaneous redox generates current."}, {id: "B", text: "Electrolytic Cell", isCorrect: false, explanation: "Uses electrical energy for reaction."}] },
+        { id: "init-2", type: "quiz", title: "Concept Check", content: "In a Galvanic cell, the anode is:", options: [{id: "A", text: "Negative", isCorrect: true, explanation: "Source of electrons (Oxidation)."}, {id: "B", text: "Positive", isCorrect: false, explanation: "That's cathode."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Electrochemical Cells",
+          content: "**Electrochemistry:** Study of production of electricity from spontaneous chemical reactions and use of electrical energy to bring about non-spontaneous transformations.\n\n**Two Types:**\n1. **Galvanic (Voltaic) Cell:** Chemical Energy $\\to$ Electrical Energy (e.g., Daniell Cell).\n2. **Electrolytic Cell:** Electrical Energy $\\to$ Chemical Energy."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "The Daniell Cell",
+          content: "Visualizing Zn-Cu cell. Zn dissolves (Anode), Cu deposits (Cathode).",
+          interactiveCanvasId: "electro-galvanic-cell"
+        },
+        {
+          id: "ret-1",
+          type: "fill_in_blank",
+          title: "NCERT Check",
+          content: "In a galvanic cell, the half-cell in which oxidation takes place is called ___ and it has a negative potential.",
+          blankAnswer: "anode"
+        },
+        {
+          id: "ar-1",
+          type: "quiz",
+          title: "Assertion-Reason",
+          content: "**Assertion:** In Daniell cell, electrons flow from Zn to Cu.\n**Reason:** Current flows from Cu to Zn.",
+          options: [
+            { id: "A", text: "Both True, R explains A", isCorrect: false, explanation: "Conventionally current is opposite to electron flow, but reason is just a restatement of direction." },
+            { id: "B", text: "Both True, R does not explain A", isCorrect: true, explanation: "Both are facts of the setup." }
+          ]
+        },
+        {
+          id: "app-1",
+          type: "quiz",
+          title: "External Potential",
+          content: "If external opposing potential $E_{ext} > 1.1 V$ is applied to Daniell cell ($E^0 = 1.1 V$), what happens?",
+          options: [
+            { id: "A", text: "Electrons flow Cu to Zn", isCorrect: true, explanation: "Cell behaves as Electrolytic cell (Reverse reaction)." },
+            { id: "B", text: "Reaction stops", isCorrect: false, explanation: "Stops only at E_ext = 1.1 V." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Oxidation state of Zn in ZnSO4?", options: [{id: "A", text: "+2", isCorrect: true, explanation: "Correct"}, {id: "B", text: "+1", isCorrect: false, explanation: "Zn is group 12"}]}
+      ]
+    },
+    {
+      id: "les-5-2-1-2",
+      title: "Electrode Potential",
+      description: "Standard Hydrogen Electrode",
+      icon: "Thermometer",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept Check", content: "Absolute potential of a single electrode:", options: [{id: "A", text: "Can be measured", isCorrect: false, explanation: "Needs a reference."}, {id: "B", text: "Cannot be measured", isCorrect: true, explanation: "Only difference is measurable."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Standard Hydrogen Electrode (SHE)",
+          content: "Reference electrode assigned **zero potential** at all temperatures.\n- **Setup:** Pt foil coated with Pt black, $H_2$ gas at 1 bar, $H^+$ solution at 1 M.\n- **Reaction:** $H^+(aq) + e^- \\to \\frac{1}{2} H_2(g)$ (Reduction)."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "SHE Setup",
+          content: "Visual of the Standard Hydrogen Electrode.",
+          interactiveCanvasId: "electro-she"
+        },
+        {
+          id: "ret-1",
+          type: "fill_in_blank",
+          title: "NCERT Check",
+          content: "According to IUPAC convention, standard reduction potentials are now called standard ___ potentials.",
+          blankAnswer: "electrode"
+        },
+        {
+          id: "app-1",
+          type: "quiz",
+          title: "Application",
+          content: "If $E^0$ of metal M is negative, it means:",
+          options: [
+            { id: "A", text: "M is a stronger reducing agent than H2", isCorrect: true, explanation: "M oxidizes easily to M+." },
+            { id: "B", text: "M is a weaker reducing agent", isCorrect: false, explanation: "Positive E0 means weaker." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Pressure of gas in SHE?", options: [{id: "A", text: "1 bar", isCorrect: true, explanation: "Standard state"}, {id: "B", text: "1 atm", isCorrect: false, explanation: "Old convention"}]}
+      ]
+    },
+    {
+      id: "les-5-2-1-3",
+      title: "Electrochemical Series",
+      description: "E0 Values & Strength",
+      icon: "List",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept Check", content: "Fluorine ($F_2$) has highest positive $E^0$. It is:", options: [{id: "A", text: "Strongest Oxidising Agent", isCorrect: true, explanation: "Gets reduced easily."}, {id: "B", text: "Strongest Reducing Agent", isCorrect: false, explanation: "Incorrect."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Electrochemical Series",
+          content: "Arrangement of elements in order of increasing standard reduction potentials.\n- **Top (High +ve):** Strong Oxidising Agents ($F_2, Au^{3+}, MnO_4^-$).\n- **Bottom (High -ve):** Strong Reducing Agents ($Li, K, Mg$).\n\n$E^0_{cell} = E^0_{cathode} - E^0_{anode}$."
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Calculation",
+          content: "Calculate $E^0_{cell}$ for $Zn|Zn^{2+} || Cu^{2+}|Cu$. Given $E^0_{Cu} = 0.34V, E^0_{Zn} = -0.76V$.",
+          numericAnswer: 1.1,
+          numericTolerance: 0
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Solution",
+          content: "Cathode (Cu) - Anode (Zn).",
+          interactiveSteps: [
+            { stepText: "$E^0_{cell} = 0.34 - (-0.76)$" },
+            { stepText: "$= 1.10$ V." }
+          ]
+        },
+        {
+          id: "pyq-1",
+          type: "quiz",
+          title: "NEET PYQ",
+          content: "Reaction is feasible if $E^0_{cell}$ is:",
+          options: [
+            { id: "A", text: "Positive", isCorrect: true, explanation: "Corresponds to negative Delta G." },
+            { id: "B", text: "Negative", isCorrect: false, explanation: "Non-spontaneous." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Li is in Group?", options: [{id: "A", text: "1", isCorrect: true, explanation: "Alkali metal"}, {id: "B", text: "2", isCorrect: false, explanation: "Alkaline earth"}]}
+      ]
+    },
+    {
+      id: "les-5-2-1-4",
+      title: "Nernst Equation I",
+      description: "Concept & Formula",
+      icon: "FunctionSquare",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept", content: "Does electrode potential depend on concentration?", options: [{id: "A", text: "Yes", isCorrect: true, explanation: "Nernst equation."}, {id: "B", text: "No", isCorrect: false, explanation: "Only E0 is constant."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Nernst Equation",
+          content: "For reaction $M^{n+} + ne^- \\to M(s)$:\n$$ E = E^0 - \\frac{RT}{nF} \\ln \\frac{1}{[M^{n+}]} $$\n\nFor Cell Reaction $aA + bB \\to cC + dD$ at 298K:\n$$ E_{cell} = E^0_{cell} - \\frac{0.059}{n} \\log \\frac{[C]^c [D]^d}{[A]^a [B]^b} $$"
+        },
+        {
+          id: "ret-1",
+          type: "fill_in_blank",
+          title: "NCERT Check",
+          content: "In Nernst equation, the concentration of solid M is taken as ___.",
+          blankAnswer: "unity"
+        },
+        {
+          id: "app-1",
+          type: "quiz",
+          title: "Trend",
+          content: "For $Zn^{2+} + 2e^- \\to Zn$, if $[Zn^{2+}]$ increases, $E_{red}$ will:",
+          options: [
+            { id: "A", text: "Increase", isCorrect: true, explanation: "$E = E^0 - (- \\log [Zn^{2+}]) = E^0 + \\log [Zn^{2+}]$. Higher conc favors reduction." },
+            { id: "B", text: "Decrease", isCorrect: false, explanation: "Check the sign." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Log 10 is?", options: [{id: "A", text: "1", isCorrect: true, explanation: "Correct"}, {id: "B", text: "0", isCorrect: false, explanation: "Log 1"}]}
+      ]
+    },
+    {
+      id: "les-5-2-1-5",
+      title: "Nernst Numerical",
+      description: "Calculating EMF",
+      icon: "Calculator",
+      slides: [
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Challenge",
+          content: "Calculate EMF of cell: $Mg | Mg^{2+}(0.001M) || Cu^{2+}(0.0001M) | Cu$.\n$E^0_{cell} = 2.71 V$. n=2. (Use log 10 = 1).",
+          numericAnswer: 2.68,
+          numericTolerance: 0.05
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Step-by-Step",
+          content: "Apply Nernst Equation.",
+          interactiveSteps: [
+            { stepText: "$Q = [Mg^{2+}] / [Cu^{2+}] = 10^{-3} / 10^{-4} = 10$." },
+            { stepText: "$E = 2.71 - (0.059/2) \\log(10)$" },
+            { stepText: "$E = 2.71 - 0.0295(1) = 2.68$ V." }
+          ]
+        },
+        {
+          id: "trap-1",
+          type: "quiz",
+          title: "Spot the Error",
+          content: "Common mistake in this calculation:",
+          options: [
+            { id: "A", text: "Inverting Anode/Cathode in Q", isCorrect: true, explanation: "Remember Q = Products(Anode ion) / Reactants(Cathode ion)." },
+            { id: "B", text: "Using 0.059 at 298K", isCorrect: false, explanation: "That is correct." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "R value?", options: [{id: "A", text: "8.314 J/K mol", isCorrect: true, explanation: "Correct"}, {id: "B", text: "0.0821", isCorrect: false, explanation: "Gas constant"}]}
+      ]
+    },
+    {
+      id: "les-5-2-1-6",
+      title: "Equilibrium Constant K",
+      description: "Relation to E0",
+      icon: "Scale",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept", content: "At equilibrium, $E_{cell}$ is:", options: [{id: "A", text: "Zero", isCorrect: true, explanation: "No current flows."}, {id: "B", text: "$E^0_{cell}$", isCorrect: false, explanation: "Only at standard states."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Equilibrium Constant",
+          content: "At equilibrium, $E_{cell} = 0$ and $Q = K_c$.\nSubstituting in Nernst Equation:\n\n$$ E^0_{cell} = \\frac{0.059}{n} \\log K_c $$\n\nAllows calculation of $K_c$ from standard potential."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Equilibrium Point",
+          content: "Reaction stops when potential difference is zero.",
+          interactiveCanvasId: "electro-galvanic-cell" // Placeholder
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Calculate K",
+          content: "For a cell with $E^0 = 0.59 V$ and $n=1$, calculate $\\log K_c$.",
+          numericAnswer: 10,
+          numericTolerance: 0.1
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Calculation",
+          content: "Rearranging formula.",
+          interactiveSteps: [
+            { stepText: "$\\log K_c = n E^0 / 0.059$" },
+            { stepText: "$1 \\times 0.59 / 0.059 = 10$." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Is Delta G zero at equilibrium?", options: [{id: "A", text: "Yes", isCorrect: true, explanation: "Correct"}, {id: "B", text: "No", isCorrect: false, explanation: "Incorrect"}]}
+      ]
+    },
+    {
+      id: "les-5-2-1-7",
+      title: "Gibbs Energy",
+      description: "Work & Potential",
+      icon: "Zap",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Gibbs Energy & Cell Potential",
+          content: "Electrical work done in one second = Electrical potential $\\times$ Total charge.\nReversible work done = $-\\Delta G$.\n\n$$ \\Delta_r G = -nFE_{cell} $$\n$$ \\Delta_r G^0 = -nFE^0_{cell} $$\n\n$E$ is intensive, $\\Delta G$ is extensive."
+        },
+        {
+          id: "ret-1",
+          type: "fill_in_blank",
+          title: "Formula",
+          content: "The value of Faraday constant F is approx ___ C/mol.",
+          blankAnswer: "96500"
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Calculate Delta G",
+          content: "For Daniell cell ($E^0=1.1V, n=2$), calc $\\Delta_r G^0$ in kJ/mol. ($F=96500$).",
+          numericAnswer: -212.3,
+          numericTolerance: 1
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Steps",
+          content: "Calculation",
+          interactiveSteps: [
+            { stepText: "$\\Delta G = -2 \\times 96500 \\times 1.1$" },
+            { stepText: "$= -212300$ J/mol" },
+            { stepText: "$= -212.3$ kJ/mol." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Unit of G?", options: [{id: "A", text: "J/mol", isCorrect: true, explanation: "Energy"}, {id: "B", text: "Volts", isCorrect: false, explanation: "Potential"}]}
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chem_units/unit_5_2_1_cells.ts ---
+
+--- START OF FILE src/data/chem_units/unit_5_2_2_conductance.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_5_2_2: Unit = {
+  id: "unit-5-2-2",
+  title: "Conductance & Electrolysis",
+  description: "Ions in Motion",
+  color: "duo-blue",
+  lessons: [
+    {
+      id: "les-5-2-2-1",
+      title: "Conductance Terms",
+      description: "R, G, Kappa",
+      icon: "Activity",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept", content: "Inverse of Resistance (R) is:", options: [{id: "A", text: "Conductance (G)", isCorrect: true, explanation: "Correct."}, {id: "B", text: "Resistivity", isCorrect: false, explanation: "That's rho."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Definitions",
+          content: "**Resistance ($R$):** Obstruction to flow. $\\Omega$. $R = \\rho l/A$.\n**Resistivity ($\\rho$):** Resistance of 1m length, $1m^2$ area. $\\Omega m$.\n**Conductance ($G$):** $1/R$. Siemens ($S$).\n**Conductivity ($\\kappa$):** $1/\\rho$. $S m^{-1}$ or $S cm^{-1}$.\n$\\kappa = G \\times (l/A)$."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Conductivity Cell",
+          content: "Visualizing electrodes and Cell Constant G*.",
+          interactiveCanvasId: "electro-conductivity-cell"
+        },
+        {
+          id: "ret-1",
+          type: "fill_in_blank",
+          title: "NCERT Check",
+          content: "The quantity l/A is called ___ constant denoted by G*.",
+          blankAnswer: "cell"
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Cell Constant",
+          content: "If $R=100 \\Omega$ and $\\kappa=1.29 S/m$, find cell constant $G^*$ ($m^{-1}$).",
+          numericAnswer: 129,
+          numericTolerance: 0.1
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "SI unit of length?", options: [{id: "A", text: "Metre", isCorrect: true, explanation: "Correct"}, {id: "B", text: "cm", isCorrect: false, explanation: "CGS"}]}
+      ]
+    },
+    {
+      id: "les-5-2-2-2",
+      title: "Molar Conductivity",
+      description: "Lambda_m",
+      icon: "TrendingUp",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept", content: "Conductivity of a solution depends on:", options: [{id: "A", text: "Number of ions", isCorrect: true, explanation: "Charge carriers."}, {id: "B", text: "Only solvent", isCorrect: false, explanation: "Solute matters."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Molar Conductivity ($\\Lambda_m$)",
+          content: "Conducting power of all ions produced by **1 mole** of electrolyte.\n\n$$ \\Lambda_m = \\frac{\\kappa}{c} $$\n\nUnits: If $\\kappa$ in $S cm^{-1}$ and $c$ in $mol L^{-1}$:\n$$ \\Lambda_m (S cm^2 mol^{-1}) = \\frac{\\kappa \\times 1000}{Molarity} $$"
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Calc Lambda",
+          content: "$\\kappa = 0.0248 S cm^{-1}$, $C = 0.20 M$. Calculate $\\Lambda_m$ in $S cm^2 mol^{-1}$.",
+          numericAnswer: 124,
+          numericTolerance: 1
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Steps",
+          content: "Calc",
+          interactiveSteps: [
+            { stepText: "$\\Lambda_m = (0.0248 \\times 1000) / 0.20$" },
+            { stepText: "$= 24.8 / 0.2 = 124$." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Molarity unit?", options: [{id: "A", text: "mol/L", isCorrect: true, explanation: "Correct"}, {id: "B", text: "mol/kg", isCorrect: false, explanation: "Molality"}]}
+      ]
+    },
+    {
+      id: "les-5-2-2-3",
+      title: "Variation with Concentration",
+      description: "Strong vs Weak",
+      icon: "GitBranch",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Variation of Conductance",
+          content: "1. **Conductivity ($\\kappa$):** Decreases with dilution (Less ions per unit volume).\n2. **Molar Conductivity ($\\Lambda_m$):** Increases with dilution (Volume increases significantly, interionic attraction decreases).\n\n**Strong Electrolytes:** Linear increase (Debye-Huckel Onsager eq).\n**Weak Electrolytes:** Steep increase at infinite dilution (Ostwald dilution)."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Graphs",
+          content: "Plot of Lambda vs Root C.",
+          interactiveCanvasId: "electro-molar-conductivity-graph"
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Check",
+          content: "Upon dilution, conductivity (kappa) will:",
+          options: [
+            { id: "A", text: "Decrease", isCorrect: true, explanation: "Number of ions per mL decreases." },
+            { id: "B", text: "Increase", isCorrect: false, explanation: "Molar conductivity increases." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Weak electrolyte example?", options: [{id: "A", text: "Acetic Acid", isCorrect: true, explanation: "Partial dissociation"}, {id: "B", text: "NaCl", isCorrect: false, explanation: "Strong"}]}
+      ]
+    },
+    {
+      id: "les-5-2-2-4",
+      title: "Kohlrausch Law",
+      description: "Limiting Molar Conductivity",
+      icon: "Plus",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Kohlrausch Law",
+          content: "Limiting molar conductivity of an electrolyte ($\\Lambda_m^0$) is the sum of the individual contributions of the anion and cation.\n\n$$ \\Lambda_m^0 = \\nu_+ \\lambda_+^0 + \\nu_- \\lambda_-^0 $$\n\nAllows calculation of $\\Lambda_m^0$ for weak electrolytes (e.g., $CH_3COOH$) using strong ones ($CH_3COONa, HCl, NaCl$)."
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Calculation",
+          content: "Given $\\lambda^0(Na^+) = 50, \\lambda^0(Cl^-) = 76$. Find $\\Lambda_m^0(NaCl)$.",
+          numericAnswer: 126,
+          numericTolerance: 0
+        },
+        {
+          id: "app-1",
+          type: "quiz",
+          title: "Degree of Dissociation",
+          content: "For weak electrolyte, $\\alpha = $?",
+          options: [
+            { id: "A", text: "$\\Lambda_m / \\Lambda_m^0$", isCorrect: true, explanation: "Ratio of conductivity." },
+            { id: "B", text: "$\\Lambda_m^0 / \\Lambda_m$", isCorrect: false, explanation: "Incorrect." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Ionic bond?", options: [{id: "A", text: "Transfer of e-", isCorrect: true, explanation: "Correct"}, {id: "B", text: "Sharing", isCorrect: false, explanation: "Covalent"}]}
+      ]
+    },
+    {
+      id: "les-5-2-2-5",
+      title: "Electrolysis",
+      description: "Faraday's Laws",
+      icon: "Zap",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Faraday's Laws",
+          content: "**First Law:** Mass deposited ($w$) is proportional to charge passed ($Q$).\n$w = ZQ = ZIt$.\n\n**Second Law:** For same charge, mass proportional to Equivalent Weight ($E$).\n$w_1/w_2 = E_1/E_2$."
+        },
+        {
+          id: "core-2",
+          type: "theory",
+          title: "Charge & Moles",
+          content: "Charge on 1 mole electrons = 1 Faraday (F) $\\approx 96500$ C.\n\nReaction: $M^{n+} + ne^- \\to M$.\n$n$ moles of electrons (nF charge) deposit 1 mole of M."
+        },
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Calculation",
+          content: "Charge required to reduce 1 mol $Al^{3+}$ to Al? (n=3). Answer in Coulombs. $3 \\times 96500$.",
+          numericAnswer: 289500,
+          numericTolerance: 100
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Charge of electron?", options: [{id: "A", text: "1.6e-19 C", isCorrect: true, explanation: "Correct"}, {id: "B", text: "9.1e-31 kg", isCorrect: false, explanation: "Mass"}]}
+      ]
+    },
+    {
+      id: "les-5-2-2-6",
+      title: "Products of Electrolysis",
+      description: "Preferential Discharge",
+      icon: "Filter",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Rules for Discharge",
+          content: "Depends on electrode potential and overpotential.\n\n**Molten NaCl:** Cathode: Na, Anode: $Cl_2$.\n**Aqueous NaCl:**\n- Cathode: $H_2$ (Preferred over Na due to lower reduction potential of water... wait, actually high reduction potential of water vs Na+? $E^0(H_2O) > E^0(Na^+)$).\n- Anode: $Cl_2$ (Preferred over $O_2$ due to **Overpotential** of oxygen)."
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Predict Product",
+          content: "Electrolysis of dilute H2SO4 with Pt electrodes. Anode product?",
+          options: [
+            { id: "A", text: "Oxygen", isCorrect: true, explanation: "Water oxidized." },
+            { id: "B", text: "Hydrogen", isCorrect: false, explanation: "Cathode product." }
+          ]
+        },
+        {
+          id: "pyq-1",
+          type: "quiz",
+          title: "NEET PYQ",
+          content: "During electrolysis of molten sodium hydride, hydrogen is liberated at:",
+          options: [
+            { id: "A", text: "Anode", isCorrect: true, explanation: "$H^-$ ions oxidized to $H_2$." },
+            { id: "B", text: "Cathode", isCorrect: false, explanation: "Usually H+ goes to cathode, but here H- exists." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Chlorine gas color?", options: [{id: "A", text: "Greenish Yellow", isCorrect: true, explanation: "Correct"}, {id: "B", text: "Red", isCorrect: false, explanation: "Bromine"}]}
+      ]
+    },
+    {
+      id: "les-5-2-2-7",
+      title: "Numerical Practice",
+      description: "Drill",
+      icon: "Calculator",
+      slides: [
+        {
+          id: "num-1",
+          type: "numerical",
+          title: "Mass Deposited",
+          content: "Current 1.5A for 10 min. Mass of Cu ($M=63.5$) from $CuSO_4$ ($n=2$)?",
+          numericAnswer: 0.296,
+          numericTolerance: 0.01
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Steps",
+          content: "$w = ZIt$",
+          interactiveSteps: [
+            { stepText: "$Q = 1.5 \\times 600 = 900$ C." },
+            { stepText: "Moles e- = $900/96500$." },
+            { stepText: "Moles Cu = Moles e- / 2." },
+            { stepText: "Mass = Moles Cu $\\times$ 63.5 = 0.296 g." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chem_units/unit_5_2_2_conductance.ts ---
+
+--- START OF FILE src/data/chem_units/unit_5_2_3_applications.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_5_2_3: Unit = {
+  id: "unit-5-2-3",
+  title: "Batteries & Corrosion",
+  description: "Electrochemistry in Daily Life",
+  color: "duo-blue",
+  lessons: [
+    {
+      id: "les-5-2-3-1",
+      title: "Primary Batteries",
+      description: "Non-rechargeable",
+      icon: "Battery",
+      slides: [
+        { id: "init-1", type: "quiz", title: "Concept", content: "Primary cells can be:", options: [{id: "A", text: "Used only once", isCorrect: true, explanation: "Reaction is irreversible."}, {id: "B", text: "Recharged", isCorrect: false, explanation: "Secondary cells."}] },
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Dry Cell (Leclanche)",
+          content: "Anode: Zinc container.\nCathode: Carbon (graphite) rod.\nElectrolyte: $MnO_2 + C + NH_4Cl + ZnCl_2$ paste.\nReaction: $Zn \\to Zn^{2+}$. $MnO_2 + NH_4^+ + e^- \\to MnO(OH) + NH_3$."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Dry Cell",
+          content: "Cross-section of a standard battery.",
+          interactiveCanvasId: "electro-battery-dry"
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Mercury Cell",
+          content: "Used in watches. Anode is Zn-Hg. Cathode is:",
+          options: [
+            { id: "A", text: "HgO + C", isCorrect: true, explanation: "Mercury(II) oxide." },
+            { id: "B", text: "MnO2", isCorrect: false, explanation: "Dry cell." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Mn oxidation state in MnO2?", options: [{id: "A", text: "+4", isCorrect: true, explanation: "Correct"}, {id: "B", text: "+2", isCorrect: false, explanation: "No"}]}
+      ]
+    },
+    {
+      id: "les-5-2-3-2",
+      title: "Secondary Batteries",
+      description: "Rechargeable",
+      icon: "RefreshCw",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Lead Storage Battery",
+          content: "Used in cars. Rechargeable.\n- **Anode:** Pb\n- **Cathode:** $PbO_2$\n- **Electrolyte:** 38% $H_2SO_4$\n\n**Discharge Reaction:**\n$Pb + PbO_2 + 2H_2SO_4 \\to 2PbSO_4 + 2H_2O$.\n(Both electrodes form $PbSO_4$)."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Lead Acid",
+          content: "Schematic of plates.",
+          interactiveCanvasId: "electro-battery-dry" // Placeholder
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Recharging",
+          content: "During recharging, the cell acts as:",
+          options: [
+            { id: "A", text: "Electrolytic Cell", isCorrect: true, explanation: "Energy supplied to reverse reaction." },
+            { id: "B", text: "Galvanic Cell", isCorrect: false, explanation: "That's discharging." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Sulphuric acid formula?", options: [{id: "A", text: "H2SO4", isCorrect: true, explanation: "Correct"}, {id: "B", text: "HCl", isCorrect: false, explanation: "Hydrochloric"}]}
+      ]
+    },
+    {
+      id: "les-5-2-3-3",
+      title: "Ni-Cd Battery",
+      description: "Longer Life",
+      icon: "BatteryCharging",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Nickel-Cadmium Cell",
+          content: "Longer life than Lead storage but more expensive.\nReaction:\n$Cd(s) + 2Ni(OH)_3(s) \\to CdO(s) + 2Ni(OH)_2(s) + H_2O(l)$."
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Components",
+          content: "The anode in Ni-Cd cell is:",
+          options: [
+            { id: "A", text: "Cadmium", isCorrect: true, explanation: "Oxidizes to CdO." },
+            { id: "B", text: "Nickel", isCorrect: false, explanation: "Cathode material." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Is Cd a transition metal?", options: [{id: "A", text: "No", isCorrect: true, explanation: "Group 12 (d10)"}, {id: "B", text: "Yes", isCorrect: false, explanation: "Incorrect"}]}
+      ]
+    },
+    {
+      id: "les-5-2-3-4",
+      title: "Fuel Cells",
+      description: "High Efficiency",
+      icon: "Flame",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Hydrogen-Oxygen Fuel Cell",
+          content: "Converts energy of combustion directly to electricity. Used in Apollo space program.\n- **Anode:** $2H_2 + 4OH^- \\to 4H_2O + 4e^-$\n- **Cathode:** $O_2 + 2H_2O + 4e^- \\to 4OH^-$\n- **Net:** $2H_2 + O_2 \\to 2H_2O$."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Fuel Cell",
+          content: "H2 and O2 entering, Water leaving.",
+          interactiveCanvasId: "electro-fuel-cell"
+        },
+        {
+          id: "ret-1",
+          type: "fill_in_blank",
+          title: "NCERT Check",
+          content: "Fuel cells produce electricity with an efficiency of about ___ %.",
+          blankAnswer: "70"
+        },
+        {
+          id: "app-1",
+          type: "quiz",
+          title: "Advantage",
+          content: "Main advantage of fuel cells?",
+          options: [
+            { id: "A", text: "Pollution free and continuous", isCorrect: true, explanation: "Reactants fed continuously." },
+            { id: "B", text: "Low cost", isCorrect: false, explanation: "Catalysts are expensive (Pt)." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Product of H2 combustion?", options: [{id: "A", text: "Water", isCorrect: true, explanation: "Correct"}, {id: "B", text: "CO2", isCorrect: false, explanation: "No Carbon"}]}
+      ]
+    },
+    {
+      id: "les-5-2-3-5",
+      title: "Corrosion",
+      description: "Electrochemical Phenomenon",
+      icon: "AlertTriangle",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Corrosion (Rusting)",
+          content: "Iron surface acts as small electrochemical cell.\n- **Anode:** $Fe \\to Fe^{2+} + 2e^-$.\n- **Cathode:** $O_2 + 4H^+ + 4e^- \\to 2H_2O$ (H+ from carbonic acid in air).\n- $Fe^{2+}$ further oxidised to $Fe_2O_3 \\cdot xH_2O$ (Rust)."
+        },
+        {
+          id: "vis-1",
+          type: "interactive_canvas",
+          title: "Rusting Mechanism",
+          content: "Electron flow on iron surface.",
+          interactiveCanvasId: "electro-corrosion"
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Prevention",
+          content: "Sacrificial protection uses:",
+          options: [
+            { id: "A", text: "More reactive metal (Mg/Zn)", isCorrect: true, explanation: "It oxidises instead of Fe." },
+            { id: "B", text: "Less reactive metal", isCorrect: false, explanation: "Coating." }
+          ]
+        },
+        { id: "flash-1", type: "quiz", title: "Flashback", content: "Reduction potential of Fe?", options: [{id: "A", text: "-0.44 V", isCorrect: true, explanation: "Standard"}, {id: "B", text: "+0.34 V", isCorrect: false, explanation: "Cu"}]}
+      ]
+    },
+    {
+      id: "les-5-2-3-6",
+      title: "Hydrogen Economy",
+      description: "Future Energy",
+      icon: "Sun",
+      slides: [
+        {
+          id: "core-1",
+          type: "theory",
+          title: "Hydrogen Economy",
+          content: "Use of Hydrogen as renewable, non-polluting fuel. Production via electrolysis of water. Storage and transport are challenges."
+        },
+        {
+          id: "ret-1",
+          type: "quiz",
+          title: "Check",
+          content: "Combustion of hydrogen produces:",
+          options: [
+            { id: "A", text: "Water only", isCorrect: true, explanation: "Zero carbon emissions." },
+            { id: "B", text: "CO2", isCorrect: false, explanation: "No." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chem_units/unit_5_2_3_applications.ts ---
+
+--- START OF FILE src/data/chem_units/unit_5_2_4_practice.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_5_2_4: Unit = {
+  id: "unit-5-2-4",
+  title: "Electrochemistry Practice",
+  description: "NCERT Exercises & Numericals",
+  color: "duo-blue",
+  lessons: [
+    {
+      id: "exe-5-2-4-1",
+      title: "Nernst Calculation",
+      description: "Q 2.5",
+      icon: "Calculator",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "numerical", 
+          title: "Exercise 2.5", 
+          content: "Calculate EMF of $Ni|Ni^{2+}(0.160M)||Ag^+(0.002M)|Ag$. $E^0 = 1.05 V$.", 
+          numericAnswer: 0.91, 
+          numericTolerance: 0.02 
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Solution",
+          content: "Steps",
+          interactiveSteps: [
+            {stepText: "$E = 1.05 - (0.059/2) \\log([0.160] / [0.002]^2)$"},
+            {stepText: "$[0.002]^2 = 4 \\times 10^{-6}$. Ratio = $40000$."},
+            {stepText: "$\\log(40000) = 4.6$. $E = 1.05 - 0.14 = 0.91$ V."}
+          ]
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-2",
+      title: "Equilibrium Constant",
+      description: "Q 2.6",
+      icon: "Scale",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "numerical", 
+          title: "Exercise 2.6", 
+          content: "Cell $2Fe^{3+} + 2I^- \\to 2Fe^{2+} + I_2$ has $E^0 = 0.236 V$. Calculate $\\Delta G^0$ (kJ/mol).", 
+          numericAnswer: -45.54, 
+          numericTolerance: 0.1 
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Logic",
+          content: "$-nFE^0$. n=2.",
+          interactiveSteps: [
+            {stepText: "$-2 \\times 96500 \\times 0.236 = -45548$ J."}
+          ]
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-3",
+      title: "Molar Conductivity",
+      description: "Q 2.8",
+      icon: "Activity",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "numerical", 
+          title: "Exercise 2.8", 
+          content: "Conductivity of 0.20 M KCl is 0.0248 S/cm. Calc Molar Conductivity.", 
+          numericAnswer: 124, 
+          numericTolerance: 0.1 
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-4",
+      title: "Kohlrausch Law",
+      description: "Q 2.11",
+      icon: "Plus",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "numerical", 
+          title: "Exercise 2.11", 
+          content: "Conductivity of 0.00241 M acetic acid is $7.896 \\times 10^{-5}$ S/cm. $\\Lambda_m^0 = 390.5$. Calculate dissociation constant $K_a$ (Enter $X$ for $X \\times 10^{-5}$).", 
+          numericAnswer: 1.86, 
+          numericTolerance: 0.2 
+        },
+        {
+          id: "sol-1",
+          type: "solution",
+          title: "Steps",
+          content: "Alpha and Ka",
+          interactiveSteps: [
+            {stepText: "$\\Lambda_m = (7.896e-5 \\times 1000) / 0.00241 = 32.76$."},
+            {stepText: "$\\alpha = 32.76 / 390.5 = 0.084$."},
+            {stepText: "$K_a = C \\alpha^2 / (1-\\alpha) \\approx 1.86 \\times 10^{-5}$."}
+          ]
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-5",
+      title: "Faraday's Law",
+      description: "Q 2.12 - 2.13",
+      icon: "Zap",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "numerical", 
+          title: "Exercise 2.12", 
+          content: "Charge required for $1 \\text{mol } Al^{3+} \\to Al$? (In Coulombs, $X \\times 10^5$).", 
+          numericAnswer: 2.89, 
+          numericTolerance: 0.05 
+        },
+        { 
+          id: "q-2", 
+          type: "numerical", 
+          title: "Exercise 2.13", 
+          content: "How much electricity in terms of Faraday to produce 20g Ca from molten $CaCl_2$? (Ca=40).", 
+          numericAnswer: 1, 
+          numericTolerance: 0 
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-6",
+      title: "Electrolysis Products",
+      description: "Q 2.18",
+      icon: "Filter",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "quiz", 
+          title: "Exercise 2.18", 
+          content: "Electrolysis of aqueous AgNO3 with Silver electrodes. Anode product?", 
+          options: [
+            { id: "A", text: "Ag dissolves ($Ag \\to Ag^+$)", isCorrect: true, explanation: "Active electrode oxidizes." },
+            { id: "B", text: "Oxygen gas", isCorrect: false, explanation: "Only with inert Pt electrode." }
+          ] 
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-7",
+      title: "Battery Reactions",
+      description: "Q 2.17",
+      icon: "Battery",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "quiz", 
+          title: "Lead Storage", 
+          content: "During discharge, $H_2SO_4$ is:", 
+          options: [
+            { id: "A", text: "Consumed", isCorrect: true, explanation: "Density decreases." },
+            { id: "B", text: "Produced", isCorrect: false, explanation: "During recharge." }
+          ] 
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-8",
+      title: "Mixed Problems",
+      description: "Q 2.15",
+      icon: "Star",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "numerical", 
+          title: "Exercise 2.15", 
+          content: "Ni(NO3)2 electrolysed with 5A for 20 min. Mass of Ni? (M=58.7).", 
+          numericAnswer: 1.82, 
+          numericTolerance: 0.1 
+        }
+      ]
+    },
+    {
+      id: "exe-5-2-4-9",
+      title: "NEET PYQs",
+      description: "Past Paper",
+      icon: "Award",
+      slides: [
+        { 
+          id: "q-1", 
+          type: "quiz", 
+          title: "NEET 2020", 
+          content: "On electrolysis of dil sulphuric acid using Pt electrode, product at anode is:", 
+          options: [
+            { id: "A", text: "Oxygen", isCorrect: true, explanation: "Water oxidation." },
+            { id: "B", text: "SO2", isCorrect: false, explanation: "No." }
+          ] 
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chem_units/unit_5_2_4_practice.ts ---
+
+--- START OF FILE src/data/chem_units/unit_5_2_5_summary.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_5_2_5: Unit = {
+  id: "unit-5-2-5",
+  title: "Section Summary",
+  description: "Review of Electrochemistry",
+  color: "duo-blue",
+  lessons: [
+    {
+      id: "sum-5-2-1",
+      title: "Cells Recap",
+      description: "Nernst & Potentials",
+      icon: "BookOpen",
+      slides: [
+        { id: "s-1", type: "theory", title: "Nernst", content: "$E = E^0 - (0.059/n) \\log Q$. Relates conc to potential." },
+        { id: "s-2", type: "theory", title: "Gibbs", content: "$\\Delta G = -nFE$. Feasibility condition." }
+      ]
+    },
+    {
+      id: "sum-5-2-2",
+      title: "Conduction Recap",
+      description: "Ions & Laws",
+      icon: "BookOpen",
+      slides: [
+        { id: "s-1", type: "theory", title: "Kohlrausch", content: "Limiting molar conductivity is sum of ions." },
+        { id: "s-2", type: "theory", title: "Faraday", content: "Mass $\\propto$ Charge. 1 F deposits 1 eq mass." }
+      ]
+    },
+    {
+      id: "sum-5-2-3",
+      title: "Applications Recap",
+      description: "Batteries",
+      icon: "BookOpen",
+      slides: [
+        { id: "s-1", type: "theory", title: "Batteries", content: "Primary (Dry, Mercury) vs Secondary (Lead, NiCd). Fuel cells ($H_2-O_2$)." },
+        { id: "s-2", type: "theory", title: "Corrosion", content: "Electrochemical process. Fe oxidized, $O_2$ reduced." }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chem_units/unit_5_2_5_summary.ts ---
+
+--- START OF FILE src/data/section_5_2_electrochemistry.ts ---
+import { Section } from '../types';
+import { UNIT_5_2_1 } from './chem_units/unit_5_2_1_cells';
+import { UNIT_5_2_2 } from './chem_units/unit_5_2_2_conductance';
+import { UNIT_5_2_3 } from './chem_units/unit_5_2_3_applications';
+import { UNIT_5_2_4 } from './chem_units/unit_5_2_4_practice';
+import { UNIT_5_2_5 } from './chem_units/unit_5_2_5_summary';
+
+export const SECTION_5_2_ELECTROCHEMISTRY: Section = {
+  id: "section-5-2-electrochemistry",
+  title: "Section 5.2: Electrochemistry",
+  description: "Cells, Conductance & Nernst Equation",
+  color: "duo-blue",
+  units: [
+    UNIT_5_2_1,
+    UNIT_5_2_2,
+    UNIT_5_2_3,
+    UNIT_5_2_4,
+    UNIT_5_2_5
+  ]
+};
+--- END OF FILE src/data/section_5_2_electrochemistry.ts ---
+
+--- START OF FILE src/data/module_5_physical.ts ---
+import { Module } from '../types';
+import { SECTION_5_1_SOLUTIONS } from './section_5_1_solutions';
+import { SECTION_5_2_ELECTROCHEMISTRY } from './section_5_2_electrochemistry';
+
+export const MODULE_5_PHYSICAL: Module = {
+  id: 'module-5-physical',
+  title: 'Module V: Advanced Physical Chemistry',
+  description: 'Class 12 Physical Chemistry: Solutions & Electrochemistry',
+  sections: [
+    SECTION_5_1_SOLUTIONS,
+    SECTION_5_2_ELECTROCHEMISTRY
+  ],
+  moduleSummary: [
+    {
+      id: "mod-sum-5-1",
+      type: "theory",
+      title: "Module Overview",
+      content: "This module covers **Solutions** and **Electrochemistry**. We explore how mixtures behave, and the interplay between chemical and electrical energy."
+    },
+    {
+      id: "mod-sum-5-2",
+      type: "theory",
+      title: "Key Concepts: Solutions",
+      content: "1. **Concentration:** Molarity vs Molality.\n2. **Laws:** Henry's & Raoult's Laws.\n3. **Colligative Properties:** $\\Delta T_b, \\Delta T_f, \\Pi$ depend on particle count ($i$)."
+    },
+    {
+      id: "mod-sum-5-3",
+      type: "theory",
+      title: "Key Concepts: Electrochemistry",
+      content: "1. **Galvanic Cells:** $E^0_{cell}$, Nernst Equation, Gibbs Energy.\n2. **Conductance:** $\\Lambda_m$, Kohlrausch Law.\n3. **Electrolysis:** Faraday's Laws, Products.\n4. **Batteries:** Primary, Secondary, Fuel Cells."
+    }
+  ]
+};
+--- END OF FILE src/data/module_5_physical.ts ---

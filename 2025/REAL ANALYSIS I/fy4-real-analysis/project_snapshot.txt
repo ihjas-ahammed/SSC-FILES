@@ -2,223 +2,248 @@
 # No bash commands needed
 ```
 
---- START OF FILE src/data/unit_4_3_3_extension_exercises.ts ---
+--- START OF FILE src/components/MathRenderer.tsx ---
+import React, { useEffect, useRef, useMemo } from 'react';
+import { parse } from 'marked';
+
+interface Props {
+  content: string;
+  className?: string;
+}
+
+declare global {
+  interface Window {
+    MathJax: any;
+  }
+}
+
+const MathRenderer: React.FC<Props> = ({ content, className }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parse markdown while protecting LaTeX syntax
+  const htmlContent = useMemo(() => {
+    try {
+      // 1. Tokenize Math: Replace LaTeX patterns with placeholders to prevent Markdown parser from mangling them
+      const mathSegments: string[] = [];
+      const placeholderPrefix = "MATH_SEGMENT_PLACEHOLDER_";
+      
+      // Matches $...$, $$...$$, \[...\], \(...\)
+      const regex = /\$\$([\s\S]*?)\$\$|\$([\s\S]*?)\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)/g;
+      
+      const textWithPlaceholders = content.replace(regex, (match) => {
+        const index = mathSegments.length;
+        mathSegments.push(match);
+        return `${placeholderPrefix}${index}`;
+      });
+
+      // 2. Parse Markdown
+      let parsedHtml = parse(textWithPlaceholders, { breaks: true, async: false }) as string;
+
+      // 3. Restore Math
+      mathSegments.forEach((segment, i) => {
+        // USE A REPLACER FUNCTION () => segment 
+        // This prevents JavaScript from interpreting special patterns like $1 or $$ in the math string!
+        parsedHtml = parsedHtml.replace(new RegExp(`${placeholderPrefix}${i}`, 'g'), () => segment);
+      });
+
+      return parsedHtml;
+    } catch (e) {
+      console.error("Error parsing markdown", e);
+      return content; // Fallback to raw content
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (containerRef.current && window.MathJax) {
+      // Inject HTML
+      containerRef.current.innerHTML = htmlContent;
+      
+      // Tell MathJax to process the new content
+      window.MathJax.typesetPromise([containerRef.current])
+        .catch((err: any) => console.error('MathJax typeset failed: ', err));
+    }
+  }, [htmlContent]);
+
+  return (
+    <div 
+      ref={containerRef} 
+      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none ${className || ''}`}
+      style={{ overflowWrap: 'break-word' }}
+    />
+  );
+};
+
+export default MathRenderer;
+--- END OF FILE src/components/MathRenderer.tsx ---
+
+--- START OF FILE src/data/unit_2_1_1_field_axioms.ts ---
 import { Unit } from '../types';
 
-export const UNIT_4_3_3: Unit = {
-  id: "unit-4-3-3",
-  title: "Extension Exercises",
-  description: "Exercises 1-13: One-Sided and Infinite Limits",
-  color: "duo-red",
+export const UNIT_2_1_1: Unit = {
+  id: "unit-2-1-1",
+  title: "Field Axioms",
+  description: "Algebraic Properties of the Real Numbers",
+  color: "duo-blue",
   lessons: [
     {
-      id: "les-4-3-3-ex1", title: "Exercise 1: Right-Hand Sequential Criterion", description: "Proving Theorem 4.3.2", icon: "ListOrdered",
+      id: "les-2-1-1-1", title: "Algebraic Properties of R", description: "The foundational axioms of real numbers", icon: "Layers",
       slides: [
-        { id: "s0", type: "example_q", title: "Exercise 1", content: "Prove Theorem 4.3.2: $\\lim_{x \\to c^+} f(x) = L$ if and only if for every sequence $(x_n)$ converging to $c$ with $x_n > c$, the sequence $(f(x_n))$ converges to $L$." },
-        { id: "s1", type: "proof", title: "Interactive Proof: Forward Direction", content: "**Goal: Assume the limit is L, prove the sequence converges.**", interactiveSteps: [
-            { stepText: "Assume $\\lim_{x \\to c^+} f(x) = L$. Let $\\epsilon > 0$." },
-            { stepText: "By definition, there exists $\\delta > 0$ such that $0 < x - c < \\delta \\implies |f(x) - L| < \\epsilon$." },
-            { prompt: "Let $(x_n)$ be a sequence such that $x_n \\to c$ and $x_n > c$. What happens for large $n$?", options: [{ id: "A", text: "$0 < x_n - c < \\delta$", isCorrect: true, explanation: "Since $x_n \\to c$ and $x_n > c$, it eventually enters the right-hand $\\delta$-neighborhood." }, { id: "B", text: "$0 < |x_n - c| < \\epsilon$", isCorrect: false, explanation: "The sequence controls the inputs, which must satisfy the $\\delta$ bound." }], stepText: "There exists $K$ such that for $n \\ge K$, $0 < x_n - c < \\delta$." },
-            { stepText: "Therefore, for $n \\ge K$, we have $|f(x_n) - L| < \\epsilon$." },
-            { stepText: "This means $\\lim f(x_n) = L$. The backward direction follows by a similar contrapositive argument as in Theorem 4.1.8. Goal reached!" }
-        ]}
+        { id: "s0", type: "theory", title: "Algebraic Properties of $\\mathbb{R}$", content: "The real numbers $\\mathbb{R}$ possess two binary operations, **addition** ($+$) and **multiplication** ($\\cdot$), satisfying the Field Axioms:\n\n**Addition Properties:**\n(A1) Commutative: $a + b = b + a$\n(A2) Associative: $(a + b) + c = a + (b + c)$\n(A3) Identity: There exists an element $0$ such that $0 + a = a$ and $a + 0 = a$ for all $a \\in \\mathbb{R}$.\n(A4) Inverse: For each $a \\in \\mathbb{R}$, there exists $-a \\in \\mathbb{R}$ such that $a + (-a) = 0$ and $(-a) + a = 0$.\n\n**Multiplication Properties:**\n(M1) Commutative: $a \\cdot b = b \\cdot a$\n(M2) Associative: $(a \\cdot b) \\cdot c = a \\cdot (b \\cdot c)$\n(M3) Identity: There exists an element $1 \\neq 0$ such that $1 \\cdot a = a$ and $a \\cdot 1 = a$ for all $a \\in \\mathbb{R}$.\n(M4) Inverse: For each $a \\neq 0$, there exists $1/a$ such that $a \\cdot (1/a) = 1$ and $(1/a) \\cdot a = 1$.\n\n**Distributive Property:**\n(D) $a \\cdot (b + c) = (a \\cdot b) + (a \\cdot c)$ and $(b + c) \\cdot a = (b \\cdot a) + (c \\cdot a)$ for all $a, b, c \\in \\mathbb{R}$." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If you add two numbers, does the order matter?", options: [{ id: "A", text: "No, a+b = b+a", isCorrect: true, explanation: "This is known as the commutative property of addition (A1)." }, { id: "B", text: "Yes", isCorrect: false, explanation: "Addition in real numbers is strictly commutative." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "What is the result of multiplying any real number by 1?", options: [{ id: "A", text: "The number itself", isCorrect: true, explanation: "1 is the unique multiplicative identity (M3)." }, { id: "B", text: "1", isCorrect: false, explanation: "That would be true if we multiplied by 0." }] },
+        { id: "s3", type: "numerical", title: "Distributive Calculation", content: "Evaluate the expression $2 \\cdot (3 + 4)$ using the distributive property.", numericAnswer: 14, numericTolerance: 0 },
+        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "The property that states $(a \\cdot b) \\cdot c = a \\cdot (b \\cdot c)$ is called the ___ property of multiplication.", blankAnswer: "associative" }
       ]
     },
     {
-      id: "les-4-3-3-ex2", title: "Exercise 2: One-Sided Existence", description: "A function with only one limit", icon: "SplitSquareHorizontal",
+      id: "les-2-1-1-2", title: "Theorem 2.1.2: Uniqueness Properties", description: "Proving that 0 and 1 are unique", icon: "Fingerprint",
       slides: [
-        { id: "s0", type: "example_q", title: "Exercise 2", content: "Give an example of a function that has a right-hand limit but not a left-hand limit at a point." },
-        { id: "s1", type: "solution", title: "Interactive Solution", content: "**Goal: Construct a piecewise function.**", interactiveSteps: [
-            { stepText: "We need a function that behaves nicely on the right side of $0$, but oscillates wildly on the left side." },
-            { prompt: "Which of the following piecewise functions works?", options: [{ id: "A", text: "$f(x) = x$ for $x > 0$, $f(x) = \\sin(1/x)$ for $x < 0$", isCorrect: true, explanation: "As $x \\to 0^+$, limit is 0. As $x \\to 0^-$, it oscillates and diverges." }, { id: "B", text: "$f(x) = \\text{sgn}(x)$", isCorrect: false, explanation: "sgn(x) has both a left and right limit, they just don't match." }], stepText: "Let $f(x) = x$ for $x > 0$, and $f(x) = \\sin(1/x)$ for $x < 0$." },
-            { stepText: "From the right, $\\lim_{x \\to 0^+} f(x) = \\lim_{x \\to 0^+} x = 0$." },
-            { stepText: "From the left, $\\lim_{x \\to 0^-} f(x) = \\lim_{x \\to 0^-} \\sin(1/x)$, which does not exist." }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex3", title: "Exercise 3: Infinite Limit at Zero", description: "Proving a function blows up", icon: "TrendingUp",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 3", content: "Let $f(x) := |x|^{-1/2}$ for $x \\neq 0$. Show that $\\lim_{x \\to 0^+} f(x) = \\lim_{x \\to 0^-} f(x) = +\\infty$." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Find $\\delta$ for any given $\\alpha$.**", interactiveSteps: [
-            { stepText: "Let $\\alpha > 0$ be given. We want $f(x) > \\alpha$." },
-            { stepText: "This means $|x|^{-1/2} > \\alpha$." },
-            { prompt: "Solve this inequality for $|x|$.", options: [{ id: "A", text: "$|x| < 1/\\alpha^2$", isCorrect: true, explanation: "Square both sides: $|x|^{-1} > \\alpha^2$. Take reciprocal: $|x| < 1/\\alpha^2$." }, { id: "B", text: "$|x| > 1/\\alpha^2$", isCorrect: false, explanation: "Taking the reciprocal flips the inequality sign." }], stepText: "We need $|x| < 1/\\alpha^2$." },
-            { stepText: "Choose $\\delta = 1/\\alpha^2$. Then if $0 < x < \\delta$ (right limit) or $-\\delta < x < 0$ (left limit), we have $|x| < \\delta$." },
-            { stepText: "This guarantees $f(x) > \\alpha$ in both cases. Thus both one-sided limits are $+\\infty$. Goal reached!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex4", title: "Exercise 4: Infinity and Zero", description: "Relating f -> infinity to 1/f -> 0", icon: "ArrowDownUp",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 4", content: "Let $c \\in \\mathbb{R}$ and let $f$ be defined for $x \\in (c, \\infty)$ and $f(x) > 0$. \nShow that $\\lim_{x \\to c^+} f = \\infty$ if and only if $\\lim_{x \\to c^+} 1/f = 0$." },
-        { id: "s1", type: "proof", title: "Interactive Proof: Forward Direction", content: "**Goal: Assume $f \\to \\infty$, prove $1/f \\to 0$.**", interactiveSteps: [
-            { stepText: "Assume $\\lim_{x \\to c^+} f = \\infty$. We want to show that for any $\\epsilon > 0$, $1/f(x) < \\epsilon$." },
-            { prompt: "To use the definition of infinite limits, what target $\\alpha$ should we give to $f$?", options: [{ id: "A", text: "$\\alpha = 1/\\epsilon$", isCorrect: true, explanation: "If $f(x) > 1/\\epsilon$, then $1/f(x) < \\epsilon$." }, { id: "B", text: "$\\alpha = \\epsilon$", isCorrect: false, explanation: "This would mean $1/f(x) < 1/\\epsilon$, which doesn't prove the limit is 0." }], stepText: "Let $\\alpha = 1/\\epsilon$. Since $f \\to \\infty$, there is a $\\delta > 0$ such that $0 < x - c < \\delta \\implies f(x) > 1/\\epsilon$." },
-            { stepText: "Since $f(x) > 0$, taking the reciprocal gives $1/f(x) < \\epsilon$. Thus $\\lim 1/f = 0$." }
+        { id: "s0", type: "theory", title: "Theorem 2.1.2", content: "**Theorem 2.1.2** establishes three vital uniqueness facts derived strictly from the Field Axioms:\n\n(a) If $z$ and $a$ are elements in $\\mathbb{R}$ with $z + a = a$, then $z = 0$.\n(b) If $u$ and $b \\neq 0$ are elements in $\\mathbb{R}$ with $u \\cdot b = b$, then $u = 1$.\n(c) If $a \\in \\mathbb{R}$, then $a \\cdot 0 = 0$.\n\n*These show that the zero element and unit element are absolutely unique.*" },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If adding a mysterious number $z$ to $a$ gives you exactly $a$ back, what must $z$ be?", options: [{ id: "A", text: "0", isCorrect: true, explanation: "Theorem 2.1.2(a) proves 0 is the unique additive identity." }, { id: "B", text: "1", isCorrect: false, explanation: "1 is the multiplicative identity." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "What is always the result of multiplying any real number by 0?", options: [{ id: "A", text: "0", isCorrect: true, explanation: "Multiplying by zero always yields zero (Theorem 2.1.2c)." }, { id: "B", text: "The number itself", isCorrect: false, explanation: "That's multiplying by 1." }] },
+        { id: "s3", type: "proof", title: "Interactive Proof: Multiplying by Zero", content: "**Goal: Prove $a \\cdot 0 = 0$ using only the Field Axioms.**", interactiveSteps: [
+            { stepText: "Consider the expression $a + a \\cdot 0$. By the identity property (M3), we know $a = a \\cdot 1$." },
+            { stepText: "Thus, we can rewrite it as $a \\cdot 1 + a \\cdot 0$." },
+            { prompt: "By the distributive property (D), what does $a \\cdot 1 + a \\cdot 0$ factor into?", options: [{ id: "A", text: "$a \\cdot (1 + 0)$", isCorrect: true, explanation: "We factor out the 'a' on the left side." }, { id: "B", text: "$a \\cdot 1 \\cdot 0$", isCorrect: false, explanation: "Addition doesn't turn into multiplication." }], stepText: "It factors to $a \\cdot (1 + 0)$." },
+            { stepText: "Since $1 + 0 = 1$ by (A3), we have $a \\cdot (1 + 0) = a \\cdot 1 = a$." },
+            { stepText: "We have established $a + a \\cdot 0 = a$. By part (a) of this theorem, any number added to $a$ that results in $a$ must be $0$. Thus $a \\cdot 0 = 0$. Goal reached!" }
         ]},
-        { id: "s2", type: "proof", title: "Interactive Proof: Backward Direction", content: "**Goal: Assume $1/f \\to 0$, prove $f \\to \\infty$.**", interactiveSteps: [
-            { stepText: "Assume $\\lim_{x \\to c^+} 1/f = 0$. Let $\\alpha > 0$ be given." },
-            { stepText: "Choose $\\epsilon = 1/\\alpha$. There is a $\\delta > 0$ such that $0 < x - c < \\delta \\implies 1/f(x) < 1/\\alpha$." },
-            { stepText: "Taking reciprocals (since all terms are positive) yields $f(x) > \\alpha$." },
-            { stepText: "This proves $f \to \\infty$. Goal reached!" }
-        ]}
+        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "Theorem 2.1.2 proves that the additive identity ($0$) and the multiplicative identity ($1$) are completely ___.", blankAnswer: "unique" }
       ]
     },
     {
-      id: "les-4-3-3-ex5", title: "Exercise 5: Evaluating Extensions", description: "Calculating limits at boundaries and infinity", icon: "Calculator",
+      id: "les-2-1-1-3", title: "Theorem 2.1.3: Zero Product Property", description: "Dealing with reciprocals and zeros", icon: "CircleDot",
       slides: [
-        { id: "s0", type: "example_q", title: "Exercise 5", content: "Evaluate the following limits, or show they do not exist:\n(a) $\\lim_{x \\to 1^+} \\frac{x}{x-1}$\n(b) $\\lim_{x \\to 1^-} \\frac{x}{x-1}$\n(c) $\\lim_{x \\to \\infty} \\frac{\\sqrt{x}-x}{\\sqrt{x}+x}$" },
-        { id: "s1", type: "solution", title: "Interactive Solution: Parts (a) & (b)", content: "**Goal: Analyze the signs near 1.**", interactiveSteps: [
-            { stepText: "For $\\frac{x}{x-1}$, as $x \\to 1$, the numerator approaches $1$." },
-            { prompt: "As $x \\to 1^+$ (meaning $x > 1$), what does the denominator $x-1$ approach?", options: [{ id: "A", text: "$0$ from the positive side ($0^+$)", isCorrect: true, explanation: "If $x>1$, then $x-1 > 0$." }, { id: "B", text: "$0$ from the negative side ($0^-$)", isCorrect: false, explanation: "That would happen if $x<1$." }], stepText: "Since numerator is positive and denominator approaches $0^+$, the quotient grows to $+\\infty$. So (a) is $\\infty$." },
-            { stepText: "As $x \\to 1^-$, $x-1 < 0$. The quotient is a positive over a tiny negative, yielding $-\\infty$. So (b) is $-\\infty$." }
+        { id: "s0", type: "theory", title: "Theorem 2.1.3", content: "**Theorem 2.1.3** establishes two more fundamental rules of algebra:\n\n(a) If $a \\neq 0$ and $b$ in $\\mathbb{R}$ are such that $a \\cdot b = 1$, then $b = 1/a$.\n(b) If $a \\cdot b = 0$, then either $a = 0$ or $b = 0$.\n\n*This formalizes why we can divide both sides of an equation by a non-zero number to find a unique solution, and why factoring works for solving quadratics!*" },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If $ab = 1$, can either $a$ or $b$ be zero?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Because anything multiplied by 0 is 0, not 1." }, { id: "B", text: "Yes", isCorrect: false, explanation: "0 has no reciprocal." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "If a product of two numbers is zero ($ab=0$), what can we definitively conclude?", options: [{ id: "A", text: "At least one of the numbers must be 0", isCorrect: true, explanation: "This is the Zero Product Property." }, { id: "B", text: "Both numbers must be 0", isCorrect: false, explanation: "Only one needs to be 0 for the product to be 0." }] },
+        { id: "s3", type: "proof", title: "Interactive Proof: Zero Product", content: "**Goal: Prove if $a \\cdot b = 0$, then either $a = 0$ or $b = 0$.**", interactiveSteps: [
+            { stepText: "Let's assume $a \\cdot b = 0$. We want to show that if $a$ is not zero, then $b$ must be zero. Assume $a \\neq 0$." },
+            { stepText: "Since $a \\neq 0$, the inverse property (M4) guarantees the existence of a reciprocal $1/a$. Let's multiply both sides of $a \\cdot b = 0$ by $1/a$." },
+            { prompt: "Using the associative property (M2), how does $(1/a)(a \\cdot b)$ group?", options: [{ id: "A", text: "$((1/a) \\cdot a) \\cdot b$", isCorrect: true, explanation: "We group the inverses together to cancel them out." }, { id: "B", text: "$(1/a) \\cdot b$", isCorrect: false, explanation: "You dropped the 'a'." }], stepText: "We get $((1/a) \\cdot a) \\cdot b = (1/a) \\cdot 0$." },
+            { stepText: "The right side $(1/a) \\cdot 0 = 0$ by Theorem 2.1.2(c). The left side is $1 \\cdot b = b$." },
+            { stepText: "Therefore, equating them yields $b = 0$. We have proven that if $a \\neq 0$, then $b$ MUST be $0$. Goal reached!" }
         ]},
-        { id: "s2", type: "solution", title: "Interactive Solution: Part (c)", content: "**Goal: Evaluate at infinity.**", interactiveSteps: [
-            { stepText: "For $\\lim_{x \\to \\infty} \\frac{\\sqrt{x}-x}{\\sqrt{x}+x}$, divide the numerator and denominator by the highest power, $x$." },
-            { stepText: "This yields $\\frac{x^{-1/2} - 1}{x^{-1/2} + 1}$." },
-            { stepText: "As $x \\to \\infty$, $x^{-1/2} = 1/\\sqrt{x} \\to 0$." },
-            { stepText: "The expression becomes $\\frac{0 - 1}{0 + 1} = -1$. Goal reached!" }
-        ]}
+        { id: "s4", type: "numerical", title: "Application", content: "If $(x-3)(x-5) = 0$ and we know $x \\neq 3$, what must the value of $x$ be?", numericAnswer: 5, numericTolerance: 0 },
+        { id: "s5", type: "fill_in_blank", title: "Concept Check", content: "If $ab=1$, then $b$ is the unique multiplicative ___ of $a$.", blankAnswer: "inverse" }
       ]
     },
     {
-      id: "les-4-3-3-ex6", title: "Exercise 6: Sequential Criterion for Infinity", description: "Proving Theorem 4.3.11", icon: "List",
+      id: "les-2-1-1-4", title: "Theorem 2.1.4: Irrationality of √2", description: "Why rational numbers are incomplete", icon: "AlertTriangle",
       slides: [
-        { id: "s0", type: "example_q", title: "Exercise 6", content: "Prove Theorem 4.3.11: $\\lim_{x \\to \\infty} f(x) = L$ if and only if for every sequence $(x_n)$ with $x_n \\to \\infty$, the sequence $(f(x_n))$ converges to $L$." },
-        { id: "s1", type: "proof", title: "Interactive Proof: Forward", content: "**Goal: Translate definitions.**", interactiveSteps: [
-            { stepText: "Assume $\\lim_{x \\to \\infty} f = L$. Let $(x_n)$ be a sequence such that $x_n \\to \\infty$." },
-            { stepText: "Given $\\epsilon > 0$, there exists $K$ such that $x > K \\implies |f(x) - L| < \\epsilon$." },
-            { prompt: "Since $x_n \\to \\infty$, what must happen eventually?", options: [{ id: "A", text: "There exists $N$ such that $n \\ge N \\implies x_n > K$", isCorrect: true, explanation: "Definition of infinite sequence limit." }, { id: "B", text: "There exists $N$ such that $n \\ge N \\implies x_n < \\epsilon$", isCorrect: false, explanation: "The sequence goes to infinity." }], stepText: "There exists $N$ such that for $n \\ge N$, $x_n > K$." },
-            { stepText: "For these $n$, we have $x_n > K$, so $|f(x_n) - L| < \\epsilon$. Thus $f(x_n) \\to L$." }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex7", title: "Exercise 7: Order Preservation at Infinity", description: "Inequalities hold in the limit", icon: "AlignEndHorizontal",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 7", content: "Suppose $f, g$ have limits in $\\mathbb{R}$ as $x \\to \\infty$, and $f(x) \\le g(x)$ for all $x \\in (a, \\infty)$. \nProve that $\\lim_{x \\to \\infty} f \\le \\lim_{x \\to \\infty} g$." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Use the sequential criterion to transfer the problem to sequences.**", interactiveSteps: [
-            { stepText: "Let $(x_n)$ be a sequence in $(a, \\infty)$ such that $x_n \\to \\infty$ (e.g., $x_n = a + n$)." },
-            { prompt: "By the sequential criterion (Theorem 4.3.11), what do the sequences $(f(x_n))$ and $(g(x_n))$ converge to?", options: [{ id: "A", text: "$\\lim_{x \\to \\infty} f$ and $\\lim_{x \\to \\infty} g$", isCorrect: true, explanation: "They converge to the respective function limits." }, { id: "B", text: "They diverge.", isCorrect: false, explanation: "We are given that the function limits exist." }], stepText: "They converge to $L_f = \\lim_{x\\to\\infty} f$ and $L_g = \\lim_{x\\to\\infty} g$." },
-            { stepText: "Since $f(x) \\le g(x)$ everywhere in the interval, we have $f(x_n) \\le g(x_n)$ for all $n$." },
-            { stepText: "By Theorem 3.2.6 (Order Preservation for Sequences), $L_f \\le L_g$. Goal reached!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex8", title: "Exercise 8: Inverting the Domain", description: "Limit at infinity equals right limit of 1/x at 0", icon: "RefreshCw",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 8", content: "Let $f$ be defined on $(0, \\infty)$. \nProve that $\\lim_{x \\to \\infty} f(x) = L$ if and only if $\\lim_{x \\to 0^+} f(1/x) = L$." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Substitute variables carefully.**", interactiveSteps: [
-            { stepText: "Assume $\\lim_{x \\to \\infty} f(x) = L$. For any $\\epsilon > 0$, there exists $K > 0$ such that $x > K \\implies |f(x) - L| < \\epsilon$." },
-            { prompt: "Let $t = 1/x$. If $x > K > 0$, what inequality describes $t$?", options: [{ id: "A", text: "$0 < t < 1/K$", isCorrect: true, explanation: "Taking the reciprocal of positive numbers reverses the inequality." }, { id: "B", text: "$t > 1/K$", isCorrect: false, explanation: "Inequality must flip." }], stepText: "We have $0 < t < 1/K$." },
-            { stepText: "Let $\\delta = 1/K$. Then $0 < t - 0 < \\delta \\implies 1/t > K$." },
-            { stepText: "This implies $|f(1/t) - L| < \\epsilon$. This exactly means $\\lim_{t \\to 0^+} f(1/t) = L$." },
-            { stepText: "The reverse logic holds identically by setting $K = 1/\\delta$. Goal reached!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex9", title: "Exercise 9: Fast Decay", description: "If x f(x) has a limit, f(x) goes to 0", icon: "ArrowDown",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 9", content: "Show that if $f: (a, \\infty) \\to \\mathbb{R}$ is such that $\\lim_{x \\to \\infty} x f(x) = L$ where $L \\in \\mathbb{R}$, then $\\lim_{x \\to \\infty} f(x) = 0$." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Use algebraic limit theorems.**", interactiveSteps: [
-            { stepText: "We are given that $g(x) = x f(x)$ has limit $L$." },
-            { prompt: "How can we express $f(x)$ using $g(x)$ and $x$?", options: [{ id: "A", text: "$f(x) = \\frac{g(x)}{x}$", isCorrect: true, explanation: "Simply divide by x." }, { id: "B", text: "$f(x) = g(x) \\cdot x$", isCorrect: false, explanation: "That would be $x^2 f(x)$." }], stepText: "We can write $f(x) = g(x) \\cdot \\frac{1}{x}$." },
-            { stepText: "We know $\\lim_{x\\to\\infty} g(x) = L$ and $\\lim_{x\\to\\infty} \\frac{1}{x} = 0$." },
-            { stepText: "By the Product Rule for limits at infinity, $\\lim f(x) = L \\cdot 0 = 0$. Goal reached!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex10", title: "Exercise 10: Infinite Sequential Criterion", description: "Proving Theorem 4.3.14", icon: "ChevronsUp",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 10", content: "Prove Theorem 4.3.14: $\\lim_{x \\to \\infty} f(x) = \\infty$ if and only if for every sequence $x_n \\to \\infty$, we have $f(x_n) \\to \\infty$." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Translate bounds.**", interactiveSteps: [
-            { stepText: "Forward: Assume $\\lim_{x \\to \\infty} f(x) = \\infty$. Given $\\alpha \\in \\mathbb{R}$, there exists $K$ such that $x > K \\implies f(x) > \\alpha$." },
-            { stepText: "Let $x_n \\to \\infty$. Then there is an $N$ such that $n \\ge N \\implies x_n > K$." },
-            { stepText: "For these $n$, $f(x_n) > \\alpha$. Thus $f(x_n) \\to \\infty$." },
-            { prompt: "Backward (Contrapositive): If $\\lim f \\neq \\infty$, what exists?", options: [{ id: "A", text: "An $\\alpha$ where for any $K$, we can find $x > K$ with $f(x) \\le \\alpha$.", isCorrect: true, explanation: "Negation of the infinite limit definition." }, { id: "B", text: "An $\\alpha$ where $f(x) > \\alpha$ everywhere.", isCorrect: false, explanation: "That would mean it DOES go to infinity." }], stepText: "There exists $\\alpha$ such that for any $n \\in \\mathbb{N}$, there is $x_n > n$ with $f(x_n) \\le \\alpha$." },
-            { stepText: "The sequence $(x_n) \\to \\infty$, but $(f(x_n))$ never passes $\\alpha$, so it doesn't go to $\\infty$. This proves the equivalence!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex11", title: "Exercise 11: Product of Finite and Infinite Limit", description: "L * infinity = infinity", icon: "X",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 11", content: "Suppose $\\lim_{x \\to c} f(x) = L$ where $L > 0$, and $\\lim_{x \\to c} g(x) = \\infty$. Show that $\\lim_{x \\to c} f(x)g(x) = \\infty$.\nIf $L=0$, show by example that this may fail." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Bound f away from 0.**", interactiveSteps: [
-            { stepText: "Since $\\lim f = L > 0$, there exists a neighborhood around $c$ where $f(x) > L/2$." },
-            { stepText: "Let $\\alpha > 0$ be our target for the product. We need $f(x)g(x) > \\alpha$." },
-            { prompt: "Since $f(x) > L/2$, what condition on $g(x)$ will guarantee the product is $> \\alpha$?", options: [{ id: "A", text: "$g(x) > 2\\alpha / L$", isCorrect: true, explanation: "Then $f(x)g(x) > (L/2) (2\\alpha/L) = \\alpha$." }, { id: "B", text: "$g(x) > \\alpha$", isCorrect: false, explanation: "If f(x) is a small fraction, alpha might not be reached." }], stepText: "We need $g(x) > 2\\alpha / L$." },
-            { stepText: "Since $\\lim g = \\infty$, there is a neighborhood where this holds. In the intersection of these neighborhoods, $f(x)g(x) > \\alpha$." }
+        { id: "s0", type: "theory", title: "Theorem 2.1.4: No rational square root of 2", content: "**Theorem 2.1.4:** There does not exist a rational number $r \\in \\mathbb{Q}$ such that $r^2 = 2$.\n\nElements of $\\mathbb{R}$ that can be written as $b/a$ ($a, b \\in \\mathbb{Z}$, $a \\neq 0$) are **rational numbers** ($\\mathbb{Q}$).\n\nThis is a historic proof (attributed to the Pythagoreans) that shattered the Greek belief that all lengths could be represented as ratios of integers. It proves the existence of **irrational numbers** (real numbers not in $\\mathbb{Q}$)." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "Are all real numbers perfectly expressible as fractions of integers?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Irrational numbers like √2 and pi cannot be expressed as fractions." }, { id: "B", text: "Yes", isCorrect: false, explanation: "The Greeks discovered this was false long ago." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "If the square of an integer $p^2$ is an even number, what must be true about $p$ itself?", options: [{ id: "A", text: "p must be even", isCorrect: true, explanation: "The square of an odd number is always odd ($ (2k+1)^2 = 4k^2+4k+1 $)." }, { id: "B", text: "p could be odd", isCorrect: false, explanation: "An odd times an odd is always odd." }] },
+        { id: "s3", type: "proof", title: "Interactive Proof: Irrationality of √2", content: "**Goal: Prove no rational $r$ satisfies $r^2 = 2$ by contradiction.**", interactiveSteps: [
+            { stepText: "Assume for contradiction that a rational number exists such that $(p/q)^2 = 2$. We assume $p$ and $q$ are positive integers with NO common factors other than 1 (lowest terms)." },
+            { stepText: "Squaring both sides gives $p^2/q^2 = 2$, which rearranges to $p^2 = 2q^2$. Since $p^2$ is a multiple of 2, $p^2$ is even." },
+            { prompt: "Since $p^2$ is even, what do we know about $p$?", options: [{ id: "A", text: "p is even", isCorrect: true, explanation: "If p were odd, p squared would be odd." }, { id: "B", text: "p is odd", isCorrect: false, explanation: "An odd times an odd is odd." }], stepText: "Thus, $p$ is even. This means we can write $p = 2m$ for some integer $m$." },
+            { stepText: "Substitute $p = 2m$ back into our equation: $(2m)^2 = 2q^2$, which simplifies to $4m^2 = 2q^2$." },
+            { stepText: "Divide by 2 to get $2m^2 = q^2$. This implies that $q^2$ is even, which in turn means $q$ must be even." },
+            { stepText: "If both $p$ and $q$ are even, they share a common factor of 2. But we initially assumed they had NO common factors! This contradiction means our initial assumption is false. Goal reached!" }
         ]},
-        { id: "s2", type: "solution", title: "Counterexample for L=0", content: "**Goal: Find functions where f->0 and g->infinity.**", interactiveSteps: [
-            { stepText: "Let $c = 0$, $f(x) = x^2$ and $g(x) = 1/x^2$." },
-            { stepText: "Here, $f \to 0$ and $g \to \infty$ as $x \to 0$." },
-            { stepText: "However, $f(x)g(x) = x^2 (1/x^2) = 1$. The limit is 1, not $\\infty$!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex12", title: "Exercise 12: Infinite Differences and Quotients", description: "Why infinity minus infinity is undefined", icon: "MinusSquare",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 12", content: "Find functions $f, g$ on $(0, \\infty)$ such that $\\lim_{x \\to \\infty} f = \\infty$ and $\\lim_{x \\to \\infty} g = \\infty$, but $\\lim_{x \\to \\infty} (f-g) = 0$.\nCan you find such functions where $\\lim_{x \\to \\infty} f/g = 0$?" },
-        { id: "s1", type: "solution", title: "Interactive Solution: Difference", content: "**Goal: Find functions that grow together.**", interactiveSteps: [
-            { stepText: "We need $f$ and $g$ to go to infinity, but their difference to shrink." },
-            { prompt: "Which pair works?", options: [{ id: "A", text: "$f(x) = x + 1/x$, $g(x) = x$", isCorrect: true, explanation: "Both go to infinity, difference is 1/x which goes to 0." }, { id: "B", text: "$f(x) = x^2$, $g(x) = x$", isCorrect: false, explanation: "Difference is $x^2-x \\to \\infty$." }], stepText: "Let $f(x) = x + 1/x$ and $g(x) = x$." },
-            { stepText: "$\\lim(f-g) = \\lim(1/x) = 0$." }
-        ]},
-        { id: "s2", type: "solution", title: "Interactive Solution: Quotient", content: "**Goal: Find functions where $g$ outgrows $f$.**", interactiveSteps: [
-            { stepText: "We need $f, g \to \\infty$ but $f/g \to 0$." },
-            { stepText: "Let $f(x) = x$ and $g(x) = x^2$. Both go to infinity." },
-            { stepText: "Their quotient is $f/g = x/x^2 = 1/x$, which converges to $0$ as $x \to \\infty$. Goal reached!" }
-        ]}
-      ]
-    },
-    {
-      id: "les-4-3-3-ex13", title: "Exercise 13: Composition at Infinity", description: "If g -> infinity and f(y) -> L", icon: "Link",
-      slides: [
-        { id: "s0", type: "example_q", title: "Exercise 13", content: "Let $f, g$ be defined on $(a, \\infty)$. Suppose $\\lim_{x \\to \\infty} f = L$ and $\\lim_{x \\to \\infty} g = \\infty$. \nProve that $\\lim_{x \\to \\infty} f \\circ g = L$." },
-        { id: "s1", type: "proof", title: "Interactive Proof", content: "**Goal: Chain the limit definitions.**", interactiveSteps: [
-            { stepText: "Let $\\epsilon > 0$. Since $\\lim_{y \\to \\infty} f(y) = L$, there exists $K_f$ such that $y > K_f \\implies |f(y) - L| < \\epsilon$." },
-            { prompt: "Since $\\lim_{x \\to \\infty} g(x) = \\infty$, we can force $g(x)$ to be larger than ANY number. What number should we use as the target?", options: [{ id: "A", text: "$K_f$", isCorrect: true, explanation: "We want the output of g to trigger the epsilon condition for f." }, { id: "B", text: "$\\epsilon$", isCorrect: false, explanation: "g goes to infinity, not epsilon." }], stepText: "There exists $K_g$ such that $x > K_g \\implies g(x) > K_f$." },
-            { stepText: "Therefore, if $x > K_g$, we have $y = g(x) > K_f$." },
-            { stepText: "By the first statement, this implies $|f(g(x)) - L| < \\epsilon$." },
-            { stepText: "This exactly proves $\\lim_{x \\to \\infty} f(g(x)) = L$. Goal reached!" }
-        ]}
+        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "A real number that cannot be written as a ratio of integers is called an ___ number.", blankAnswer: "irrational" }
       ]
     }
   ]
 };
---- END OF FILE src/data/unit_4_3_3_extension_exercises.ts ---
+--- END OF FILE src/data/unit_2_1_1_field_axioms.ts ---
 
---- START OF FILE src/data/section_4_2_theorems_extensions.ts ---
-import { Section } from '../types';
-import { UNIT_4_2_1 } from './unit_4_2_1_limit_theorems';
-import { UNIT_4_2_2 } from './unit_4_2_2_theorems_exercises';
-import { UNIT_4_3_1 } from './unit_4_3_1_extensions_theory';
-import { UNIT_4_3_2 } from './unit_4_3_2_infinity_theory';
-import { UNIT_4_3_3 } from './unit_4_3_3_extension_exercises';
+--- START OF FILE src/data/unit_2_1_2_order_inequalities.ts ---
+import { Unit } from '../types';
 
-export const SECTION_4_2_THEOREMS_EXTENSIONS: Section = {
-  id: "section-4-2",
-  title: "Section 4.2/4.3: Theorems and Extensions",
-  description: "Limit theorems, algebraic properties, and the Squeeze Theorem.",
-  color: "duo-red",
-  units: [
-    UNIT_4_2_1,
-    UNIT_4_2_2,
-    UNIT_4_3_1,
-    UNIT_4_3_2,
-    UNIT_4_3_3
+export const UNIT_2_1_2: Unit = {
+  id: "unit-2-1-2",
+  title: "Order & Inequalities",
+  description: "Positivity and rules of inequalities",
+  color: "duo-blue",
+  lessons: [
+    {
+      id: "les-2-1-2-1", title: "Definition 2.1.5: Order Properties", description: "The set of positive real numbers", icon: "ArrowUpRight",
+      slides: [
+        { id: "s0", type: "theory", title: "The Order Properties of $\\mathbb{R}$", content: "**Definition 2.1.5:** There is a nonempty subset $\\mathbb{P}$ of $\\mathbb{R}$, called the set of **positive real numbers**, that satisfies the following properties:\n\n(i) If $a, b \\in \\mathbb{P}$, then $a + b \\in \\mathbb{P}$ (closure under addition).\n(ii) If $a, b \\in \\mathbb{P}$, then $a \\cdot b \\in \\mathbb{P}$ (closure under multiplication).\n(iii) **Trichotomy Property:** If $a \\in \\mathbb{R}$, then exactly ONE of the following holds:\n$$a \\in \\mathbb{P}, \\quad a = 0, \\quad -a \\in \\mathbb{P}$$" },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If you add two positive numbers together, what type of number do you definitively get?", options: [{ id: "A", text: "A positive number", isCorrect: true, explanation: "Positive numbers are closed under addition (Axiom i)." }, { id: "B", text: "A negative number", isCorrect: false, explanation: "Two positives cannot make a negative." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "Can a real number be both strictly positive and strictly negative at the same time?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "This relies on the Trichotomy Property, which states EXACTLY ONE condition holds." }, { id: "B", text: "Yes", isCorrect: false, explanation: "A number can only have one sign." }] },
+        { id: "s3", type: "fill_in_blank", title: "Concept Check", content: "The property dividing all real numbers strictly into positive, zero, and negative categories is called the ___ Property.", blankAnswer: "Trichotomy" }
+      ]
+    },
+    {
+      id: "les-2-1-2-2", title: "Definition 2.1.6: Inequality", description: "Formalizing greater than and less than", icon: "ArrowRightLeft",
+      slides: [
+        { id: "s0", type: "theory", title: "Defining Inequality", content: "**Definition 2.1.6:** Let $a, b$ be elements of $\\mathbb{R}$.\n\n(a) If $a - b \\in \\mathbb{P}$, then we write $a > b$ or $b < a$.\n(b) If $a - b \\in \\mathbb{P} \\cup \\{0\\}$, then we write $a \\ge b$ or $b \\le a$.\n\nThe Trichotomy Property ensures that for any $a, b \\in \\mathbb{R}$, exactly one of the following holds: $a > b$, $a = b$, or $a < b$." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If we say $x > y$, what does that physically mean in terms of their difference?", options: [{ id: "A", text: "x - y is a positive number", isCorrect: true, explanation: "This is the formal definition of inequality." }, { id: "B", text: "y - x is a positive number", isCorrect: false, explanation: "That would mean y > x." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "What does $a \\ge b$ imply about $a - b$?", options: [{ id: "A", text: "It is either positive or zero.", isCorrect: true, explanation: "It belongs to $\\mathbb{P} \\cup \\{0\\}$." }, { id: "B", text: "It is strictly positive.", isCorrect: false, explanation: "That would be a > b." }] },
+        { id: "s3", type: "numerical", title: "Evaluating Difference", content: "If $a - b = 5$, what is the strictly smaller number? (Type 1 for 'a', 0 for 'b')", numericAnswer: 0, numericTolerance: 0 },
+        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "If $b < a$, then the difference $a - b$ must be a ___ real number.", blankAnswer: "positive" }
+      ]
+    },
+    {
+      id: "les-2-1-2-3", title: "Theorem 2.1.7: Rules of Inequalities", description: "Transitivity and operations on inequalities", icon: "Scale",
+      slides: [
+        { id: "s0", type: "theory", title: "Theorem 2.1.7", content: "Let $a, b, c$ be any elements of $\\mathbb{R}$.\n\n(a) **Transitivity:** If $a > b$ and $b > c$, then $a > c$.\n(b) **Addition:** If $a > b$, then $a + c > b + c$.\n(c) **Multiplication:** \n$\\quad$ If $a > b$ and $c > 0$, then $ca > cb$.\n$\\quad$ If $a > b$ and $c < 0$, then $ca < cb$." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If $a > b$, what happens when you multiply both sides by a strictly negative number $c$?", options: [{ id: "A", text: "The inequality sign flips: ca < cb", isCorrect: true, explanation: "Multiplying by a negative reverses the inequality." }, { id: "B", text: "It stays the same: ca > cb", isCorrect: false, explanation: "That is only true if c is positive." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "Does adding the same negative number to both sides of an inequality flip the sign?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Addition (positive or negative) never flips the inequality." }, { id: "B", text: "Yes", isCorrect: false, explanation: "Only multiplication/division by negatives flips the sign." }] },
+        { id: "s3", type: "proof", title: "Interactive Proof: Multiplication by Negative", content: "**Goal: Prove if $a > b$ and $c < 0$, then $ca < cb$.**", interactiveSteps: [
+            { stepText: "We are given $a > b$, meaning $(a - b) \\in \\mathbb{P}$. We are also given $c < 0$, which means $-c \\in \\mathbb{P}$." },
+            { prompt: "What happens when we multiply the two positive elements $-c$ and $(a-b)$?", options: [{ id: "A", text: "$(-c)(a - b) \\in \\mathbb{P}$", isCorrect: true, explanation: "By the closure of P under multiplication (Axiom 2.1.5(ii))." }, { id: "B", text: "$(-c)(a - b) \\notin \\mathbb{P}$", isCorrect: false, explanation: "Multiplying two positives yields a positive." }], stepText: "By closure under multiplication, $(-c)(a - b) \\in \\mathbb{P}$." },
+            { stepText: "Distributing the $-c$ yields $-ca + cb$, which is algebraically the same as $cb - ca$." },
+            { stepText: "Therefore $cb - ca \\in \\mathbb{P}$. By the definition of inequality, this means $cb > ca$, or $ca < cb$. Goal reached!" }
+        ]},
+        { id: "s4", type: "numerical", title: "Evaluate", content: "If $x > 5$ and we multiply both sides by $-2$, we get $-2x < y$. What is $y$?", numericAnswer: -10, numericTolerance: 0 },
+        { id: "s5", type: "fill_in_blank", title: "Concept Check", content: "The property stating that if $a > b$ and $b > c$ then $a > c$ is called ___.", blankAnswer: "transitivity" }
+      ]
+    },
+    {
+      id: "les-2-1-2-4", title: "Theorem 2.1.8: Positivity of Squares", description: "Why squares are always non-negative", icon: "Square",
+      slides: [
+        { id: "s0", type: "theory", title: "Theorem 2.1.8", content: "**Theorem 2.1.8:**\n(a) If $a \\in \\mathbb{R}$ and $a \\neq 0$, then $a^2 > 0$.\n(b) $1 > 0$.\n(c) If $n \\in \\mathbb{N}$, then $n > 0$.\n\nA remarkable consequence of this is that no smallest positive real number can exist. If $a > 0$, then $0 < \\frac{1}{2}a < a$." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "Can the square of any real number ever be strictly negative?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Squares of real numbers are always >= 0." }, { id: "B", text: "Yes", isCorrect: false, explanation: "Only in complex numbers (imaginary numbers)." }] },
+        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "Is the number 1 a positive real number?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "Since 1 = 1^2, and squares of non-zero numbers are positive, 1 > 0." }, { id: "B", text: "No", isCorrect: false, explanation: "1 is definitely positive." }] },
+        { id: "s3", type: "proof", title: "Interactive Proof: Positivity of Squares", content: "**Goal: Prove if $a \\neq 0$, then $a^2 > 0$.**", interactiveSteps: [
+            { stepText: "By the Trichotomy Property, since $a \\neq 0$, exactly one of these is true: either $a \\in \\mathbb{P}$ or $-a \\in \\mathbb{P}$." },
+            { prompt: "Case 1: If $a \\in \\mathbb{P}$, what does closure under multiplication tell us about $a \\cdot a$?", options: [{ id: "A", text: "$a \\cdot a \\in \\mathbb{P}$", isCorrect: true, explanation: "Positive times positive is positive." }, { id: "B", text: "$a \\cdot a = 0$", isCorrect: false, explanation: "a is not zero." }], stepText: "So $a^2 \\in \\mathbb{P}$, which means $a^2 > 0$." },
+            { stepText: "Case 2: If $-a \\in \\mathbb{P}$, then by closure under multiplication, $(-a)(-a) \\in \\mathbb{P}$." },
+            { stepText: "Since $(-a)(-a) = a^2$, we again conclude $a^2 \\in \\mathbb{P}$, so $a^2 > 0$." },
+            { stepText: "In both possible cases, $a^2 > 0$. Goal reached!" }
+        ]},
+        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "For any real number $x$, the value of $x^2$ must be ___.", blankAnswer: "non-negative" }
+      ]
+    },
+    {
+      id: "les-2-1-2-5", title: "Theorem 2.1.9: Bounded by Epsilon", description: "A powerful proof technique", icon: "Minimize2",
+      slides: [
+        { id: "s0", type: "theory", title: "Theorem 2.1.9", content: "**Theorem 2.1.9:** If $a \\in \\mathbb{R}$ is such that $0 \\le a < \\epsilon$ for every $\\epsilon > 0$, then $a = 0$.\n\nThis theorem is frequently used as a method of proof. To prove that a number $a \\ge 0$ is actually equal to zero, we simply show that $a$ is smaller than an arbitrarily small positive number $\\epsilon$." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up", content: "If a non-negative number $a$ is smaller than every single positive number you can possibly think of, what must $a$ be?", options: [{ id: "A", text: "0", isCorrect: true, explanation: "0 is the only non-negative number smaller than all positive numbers." }, { id: "B", text: "A tiny decimal", isCorrect: false, explanation: "Even a tiny decimal is greater than an even tinier decimal." }] },
+        { id: "s2", type: "proof", title: "Interactive Proof: Bounded by Epsilon", content: "**Goal: Prove if $0 \\le a < \\epsilon$ for every $\\epsilon > 0$, then $a = 0$.**", interactiveSteps: [
+            { stepText: "We will use a proof by contradiction. Assume the conclusion is false, meaning $a > 0$." },
+            { prompt: "If $a > 0$, we can choose a specific positive $\\epsilon_0$. Which choice will cause a contradiction with $a < \\epsilon$?", options: [{ id: "A", text: "$\\epsilon_0 = a/2$", isCorrect: true, explanation: "If we pick a/2, then a > a/2, contradicting a < epsilon." }, { id: "B", text: "$\\epsilon_0 = a + 1$", isCorrect: false, explanation: "a < a + 1 does not cause a contradiction." }], stepText: "Let's pick $\\epsilon_0 = \\frac{1}{2}a$. Since $a > 0$, we know $\\epsilon_0 > 0$." },
+            { stepText: "By our choice, $0 < \\epsilon_0 < a$. But the theorem hypothesis stated that $a < \\epsilon$ for EVERY $\\epsilon > 0$." },
+            { stepText: "We have found an $\\epsilon_0$ where it is false that $a < \\epsilon_0$. This contradiction means our assumption $a > 0$ must be false. Since $a \\ge 0$, we must have $a = 0$. Goal reached!" }
+        ]},
+        { id: "s3", type: "fill_in_blank", title: "Concept Check", content: "If $0 \\le x < \\epsilon$ for every strictly positive $\\epsilon$, then $x$ must exactly equal ___.", blankAnswer: "0" }
+      ]
+    },
+    {
+      id: "les-2-1-2-6", title: "Theorem 2.1.10: Product Rule for Inequalities", description: "Deducing signs from products", icon: "Divide",
+      slides: [
+        { id: "s0", type: "theory", title: "Theorem 2.1.10", content: "**Theorem 2.1.10:** If $ab > 0$, then either:\n(i) $a > 0$ and $b > 0$, or\n(ii) $a < 0$ and $b < 0$.\n\n**Corollary 2.1.11:** If $ab < 0$, then either:\n(i) $a < 0$ and $b > 0$, or\n(ii) $a > 0$ and $b < 0$." },
+        { id: "s1", type: "quiz", title: "Conceptual Warm-up", content: "If the product of two numbers is strictly positive, what do we know about their signs?", options: [{ id: "A", text: "They have the same sign", isCorrect: true, explanation: "Either both positive or both negative." }, { id: "B", text: "One is positive, one is negative", isCorrect: false, explanation: "That would make the product negative." }] },
+        { id: "s2", type: "proof", title: "Interactive Proof: Product Rule", content: "**Goal: Prove if $ab > 0$, then either both are positive or both are negative.**", interactiveSteps: [
+            { stepText: "First note that $ab > 0$ implies $a \\neq 0$ and $b \\neq 0$. By Trichotomy, either $a > 0$ or $a < 0$." },
+            { prompt: "Case 1: Suppose $a > 0$. What can we multiply the inequality $ab > 0$ by to isolate $b$?", options: [{ id: "A", text: "$1/a$", isCorrect: true, explanation: "Since a > 0, 1/a is also > 0, preserving the inequality direction." }, { id: "B", text: "$-a$", isCorrect: false, explanation: "That would not isolate b." }], stepText: "Multiplying by $1/a$ gives $b = (1/a)(ab) > 0$. So if $a > 0$, then $b > 0$." },
+            { stepText: "Case 2: Suppose $a < 0$. Then $1/a < 0$." },
+            { stepText: "Multiplying the inequality $ab > 0$ by the negative number $1/a$ flips the sign, yielding $b = (1/a)(ab) < 0$. So if $a < 0$, then $b < 0$. Goal reached!" }
+        ]},
+        { id: "s3", type: "numerical", title: "Sign Check", content: "If $ab < 0$ and we know $a = -4$, is $b$ greater than 0? (1 for Yes, 0 for No)", numericAnswer: 1, numericTolerance: 0 },
+        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "If $xy > 0$ and $x$ is negative, then $y$ must also be ___.", blankAnswer: "negative" }
+      ]
+    }
   ]
 };
---- END OF FILE src/data/section_4_2_theorems_extensions.ts ---
+--- END OF FILE src/data/unit_2_1_2_order_inequalities.ts ---
 
 --- START OF FILE project_snapshot_out.txt ---
-src/data/unit_4_3_3_extension_exercises.ts
-src/data/section_4_2_theorems_extensions.ts
+src/components/MathRenderer.tsx
+src/data/unit_2_1_1_field_axioms.ts
+src/data/unit_2_1_2_order_inequalities.ts
 --- END OF FILE project_snapshot_out.txt ---
