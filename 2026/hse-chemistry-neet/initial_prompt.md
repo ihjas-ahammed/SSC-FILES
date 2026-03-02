@@ -5,12 +5,13 @@ Make the following changes:
 * Your task is create
 
 
-### **Module V: Advanced Physical Chemistry (Class 12)**
+### **Module VI: Advanced Organic & Bio-Chemistry (Class 12)**
 
-**Section 5.3: Chemical Kinetics** (duo-red)
-*   **531 (Rate Laws):** Unit 3.1 Rate, 3.2 Factors, 3.3 Integrated Rate Equations (8 lessons)
-*   **532 (Temp & Collisions):** Unit 3.4 Temperature Dependence, 3.5 Collision Theory (6 lessons)
-*   **533 (Practice):** NCERT Chapter 3 Exercises (Order & Half-life Calculations) (8 lessons)
+**Section 6.4: Amines & Biomolecules** (duo-green)
+*   **641 (Amines):** Unit 9.1–9.6 (Structure, Prep, Properties, Reactions) (8 lessons)
+*   **642 (Diazonium):** Unit 9.7–9.10 (Diazonium Prep, Properties, Synthetic Use) (6 lessons)
+*   **643 (Biomolecules):** Unit 10.1–10.6 (Carbs, Proteins, Enzymes, Vitamins, Nucleic Acids) (10 lessons)
+*   **644 (Practice):** NCERT Exercises for Amines & Biomolecules (10 lessons)
 
 ---
 Note: You are allowed to edit any core functionality and add new type of slides as needed if the topics demand that

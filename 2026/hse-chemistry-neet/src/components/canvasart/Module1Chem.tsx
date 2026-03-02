@@ -5,12 +5,18 @@ export const renderModule1Art = (id: string) => {
     // --- SECTION 1.1: CONCEPTS ---
     case 'chem-molecule-viewer':
       return (
-        <div className="flex items-center justify-center h-full text-center p-4">
-          <div className="text-slate-300">
-            <p className="font-bold text-lg mb-2">Structure Visualization</p>
-            <div className="text-4xl">Molecule 3D</div>
-            <p className="text-sm mt-2 text-slate-400">(Placeholder for 3D Model)</p>
-          </div>
+        <div className="flex flex-col items-center justify-center h-full w-full p-4">
+           <div className="relative w-32 h-32 flex items-center justify-center mt-2">
+              {/* Cisplatin structure */}
+              <div className="absolute w-24 h-1 bg-white/30 rotate-45"></div>
+              <div className="absolute w-24 h-1 bg-white/30 -rotate-45"></div>
+              <div className="z-10 w-12 h-12 rounded-full bg-slate-600 border-2 border-slate-400 flex items-center justify-center font-bold text-white text-sm shadow-lg">Pt</div>
+              <div className="absolute top-0 left-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold text-white text-[10px] shadow-md">Cl</div>
+              <div className="absolute bottom-0 left-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center font-bold text-white text-[10px] shadow-md">Cl</div>
+              <div className="absolute top-0 right-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-[8px] shadow-md">NH₃</div>
+              <div className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-[8px] shadow-md">NH₃</div>
+           </div>
+           <p className="text-[10px] font-bold tracking-widest uppercase text-slate-400 mt-6 text-center">Cisplatin (Square Planar)</p>
         </div>
       );
     case 'chem-states-matter':

@@ -5,6 +5,11 @@ import { renderModule3Art } from './canvasart/Module3Inorganic';
 import { renderModule4Art } from './canvasart/Module4Organic';
 import { renderModule5Art } from './canvasart/Module5Solutions';
 import { renderModule5ElectroArt } from './canvasart/Module5Electro';
+import { renderModule5KineticsArt } from './canvasart/Module5Kinetics';
+import { renderModule6Art } from './canvasart/Module6Organic12';
+import { renderModule6AlcoholsArt } from './canvasart/Module6Alcohols';
+import { renderModule6CarbonylsArt } from './canvasart/Module6Carbonyls';
+import { renderModule6AminesBioArt } from './canvasart/Module6AminesBiomol';
 
 interface Props {
   canvasId: string;
@@ -20,6 +25,11 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       renderModule4Art(canvasId) ||
       renderModule5Art(canvasId) ||
       renderModule5ElectroArt(canvasId) ||
+      renderModule5KineticsArt(canvasId) ||
+      renderModule6Art(canvasId) ||
+      renderModule6AlcoholsArt(canvasId) ||
+      renderModule6CarbonylsArt(canvasId) ||
+      renderModule6AminesBioArt(canvasId) ||
       <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
     );
   };

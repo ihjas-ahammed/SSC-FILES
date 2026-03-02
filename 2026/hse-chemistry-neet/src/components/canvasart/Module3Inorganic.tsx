@@ -3,6 +3,41 @@ import React from 'react';
 export const renderModule3Art = (id: string) => {
   switch (id) {
     // --- D-BLOCK ---
+    case 'd-block-oxidation-trends':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full p-2 relative">
+           <svg viewBox="0 0 100 60" className="w-full h-full overflow-visible">
+              <line x1="10" y1="50" x2="90" y2="50" stroke="white" strokeWidth="0.5" />
+              <line x1="10" y1="50" x2="10" y2="10" stroke="white" strokeWidth="0.5" />
+              <path d="M 15 45 L 25 40 L 35 30 L 45 20 L 55 15 L 65 30 L 75 40 L 85 45" fill="none" stroke="#fbbf24" strokeWidth="1.5" />
+              <circle cx="55" cy="15" r="2" fill="#ef4444" />
+              <text x="55" y="10" className="text-[6px] fill-white text-center" textAnchor="middle">Mn (+7)</text>
+              <text x="15" y="55" className="text-[5px] fill-slate-400">Sc</text>
+              <text x="85" y="55" className="text-[5px] fill-slate-400">Zn</text>
+           </svg>
+        </div>
+      );
+    case 'd-block-colour-wheel':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full">
+           <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-white/20 shadow-lg" style={{background: 'conic-gradient(#ef4444 0 60deg, #f97316 60deg 120deg, #eab308 120deg 180deg, #22c55e 180deg 240deg, #3b82f6 240deg 300deg, #a855f7 300deg 360deg)'}}>
+              <div className="absolute inset-0 m-auto w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center text-[8px] font-bold text-white">White</div>
+           </div>
+           <p className="text-[8px] text-slate-400 mt-2 font-bold tracking-widest uppercase">Absorb Red → Appear Green</p>
+        </div>
+      );
+    case 'd-block-interstitial':
+      return (
+        <div className="flex items-center justify-center h-full w-full">
+           <div className="grid grid-cols-4 gap-1 p-2 bg-white/5 rounded-xl border border-white/10 relative shadow-inner">
+              {[...Array(16)].map((_, i) => (
+                 <div key={i} className="w-6 h-6 rounded-full bg-gray-400 border border-gray-500 shadow-sm flex items-center justify-center text-[6px] text-gray-800">M</div>
+              ))}
+              <div className="absolute top-[28px] left-[28px] w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_red]"></div>
+              <div className="absolute bottom-[28px] right-[28px] w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_red]"></div>
+           </div>
+        </div>
+      );
     case 'd-block-melting-points':
       return (
         <div className="flex items-center justify-center h-full w-full p-4 relative">
@@ -73,6 +108,42 @@ export const renderModule3Art = (id: string) => {
       );
 
     // --- COORDINATION ---
+    case 'coordination-structural-isomers':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full gap-4 text-xs">
+           <div className="flex items-center gap-2 bg-white/5 p-3 rounded-xl border border-purple-500/30">
+              <span className="font-mono text-sm">[Co(NH₃)₅<span className="text-red-400 font-bold">Br</span>]</span>
+              <span className="font-mono text-blue-400 font-bold text-sm">SO₄</span>
+           </div>
+           <div className="flex items-center gap-2">
+              <span className="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Ionisation Isomers (Swap)</span>
+           </div>
+           <div className="flex items-center gap-2 bg-white/5 p-3 rounded-xl border border-blue-500/30">
+              <span className="font-mono text-sm">[Co(NH₃)₅<span className="text-blue-400 font-bold">SO₄</span>]</span>
+              <span className="font-mono text-red-400 font-bold text-sm">Br</span>
+           </div>
+        </div>
+      );
+    case 'coordination-vbt-hybridisation':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full gap-2 p-2">
+           <div className="flex gap-1 items-end">
+              <span className="text-[10px] mr-2 mb-1 text-slate-400">3d</span>
+              <div className="flex border border-white/30 rounded overflow-hidden shadow-sm">
+                 {[1,2,3,4,5].map(i => <div key={i} className="w-6 h-6 border-r border-white/30 last:border-r-0 flex items-center justify-center bg-blue-900/40 text-[10px]">↑↓</div>)}
+              </div>
+           </div>
+           <div className="flex gap-1 items-end mt-2">
+              <span className="text-[10px] mr-2 mb-1 text-slate-400">4s</span>
+              <div className="w-6 h-6 border border-white/30 rounded flex items-center justify-center bg-green-900/40 text-[10px] text-green-300 shadow-sm">xx</div>
+              <span className="text-[10px] mx-2 mb-1 text-slate-400">4p</span>
+              <div className="flex border border-white/30 rounded overflow-hidden shadow-sm">
+                 {[1,2,3].map(i => <div key={i} className="w-6 h-6 border-r border-white/30 last:border-r-0 flex items-center justify-center bg-green-900/40 text-[10px] text-green-300">xx</div>)}
+              </div>
+           </div>
+           <div className="text-[10px] font-bold tracking-widest uppercase text-green-400 mt-2 pt-2 border-t border-green-500/30">sp³ Hybridisation (Ligand pairs 'xx')</div>
+        </div>
+      );
     case 'coordination-werner':
       return (
         <div className="flex items-center justify-center h-full w-full p-4 gap-4">

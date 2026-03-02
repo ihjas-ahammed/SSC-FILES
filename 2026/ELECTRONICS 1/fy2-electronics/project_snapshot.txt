@@ -1,0 +1,1115 @@
+Here are the new and modified files to implement the Hexadecimal and BCD Code sections for Module IV.
+
+--- START OF FILE project_snapshot_out.txt ---
+
+--- START OF FILE src/data/module_4_digital.ts ---
+import { Module } from '../types';
+import { SECTION_4_1_SIGNALS } from './section_4_1_signals';
+import { SECTION_4_2_BINARY } from './section_4_2_binary';
+import { SECTION_4_3_CONVERSION } from './section_4_3_conversion';
+import { SECTION_4_4_HEXADECIMAL } from './section_4_4_hexadecimal';
+import { SECTION_4_5_BCD } from './section_4_5_bcd';
+
+export const MODULE_4_DIGITAL: Module = {
+  id: 'module-4-digital',
+  title: 'Module IV: Digital Fundamentals',
+  description: 'Signals, Logic States, and Number Systems',
+  sections: [
+    SECTION_4_1_SIGNALS,
+    SECTION_4_2_BINARY,
+    SECTION_4_3_CONVERSION,
+    SECTION_4_4_HEXADECIMAL,
+    SECTION_4_5_BCD
+  ],
+  moduleSummary: [
+    {
+      id: "mod-sum-4-1",
+      type: "theory",
+      title: "Module Overview",
+      content: "This module introduces **Digital Electronics**, distinguishing between analog and digital domains, and defining the fundamental binary nature of modern circuitry."
+    },
+    {
+      id: "mod-sum-4-2",
+      type: "theory",
+      title: "Key Concepts",
+      content: "1. **Analog:** Continuous values (e.g., Sine wave).\n2. **Digital:** Discrete values (e.g., Square wave).\n3. **Logic:** High (+5V) = 1, Low (0V) = 0."
+    },
+    {
+      id: "mod-sum-4-3",
+      type: "theory",
+      title: "Number Systems",
+      content: "**Hexadecimal** (Base 16) is used for compact representation. **BCD** (Binary Coded Decimal) maps decimal digits individually to 4-bit binary codes for interfacing."
+    }
+  ]
+};
+--- END OF FILE src/data/module_4_digital.ts ---
+
+--- START OF FILE src/data/section_4_4_hexadecimal.ts ---
+import { Section } from '../types';
+import { UNIT_4_4_1 } from './digital_units/unit_4_4_1_hex_fundamentals';
+import { UNIT_4_4_2 } from './digital_units/unit_4_4_2_hex_conversions';
+import { UNIT_4_4_3 } from './digital_units/unit_4_4_3_other_systems';
+import { UNIT_4_4_4 } from './digital_units/unit_4_4_4_exercises';
+
+export const SECTION_4_4_HEXADECIMAL: Section = {
+  id: "section-4-4-hexadecimal",
+  title: "Section 4.4: Hexadecimal System",
+  description: "Base 16 and Octal",
+  color: "duo-indigo",
+  units: [
+    UNIT_4_4_1,
+    UNIT_4_4_2,
+    UNIT_4_4_3,
+    UNIT_4_4_4
+  ]
+};
+--- END OF FILE src/data/section_4_4_hexadecimal.ts ---
+
+--- START OF FILE src/data/section_4_5_bcd.ts ---
+import { Section } from '../types';
+import { UNIT_4_5_1 } from './digital_units/unit_4_5_1_bcd_theory';
+import { UNIT_4_5_2 } from './digital_units/unit_4_5_2_bcd_analysis';
+import { UNIT_4_5_3 } from './digital_units/unit_4_5_3_applications';
+import { UNIT_4_5_4 } from './digital_units/unit_4_5_4_exercises';
+
+export const SECTION_4_5_BCD: Section = {
+  id: "section-4-5-bcd",
+  title: "Section 4.5: BCD Code",
+  description: "Binary Coded Decimal",
+  color: "duo-indigo",
+  units: [
+    UNIT_4_5_1,
+    UNIT_4_5_2,
+    UNIT_4_5_3,
+    UNIT_4_5_4
+  ]
+};
+--- END OF FILE src/data/section_4_5_bcd.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_4_1_hex_fundamentals.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_4_1: Unit = {
+  id: "unit-4-4-1",
+  title: "Hex Fundamentals",
+  description: "Understanding Base 16",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-4-1-1",
+      title: "Why Hexadecimal?",
+      description: "Beyond 0-9",
+      icon: "Grid",
+      slides: [
+        {
+          id: "priming",
+          type: "quiz",
+          title: "Intuition Check",
+          content: "We run out of unique single digits after 9. If we want to count in a base larger than 10 (like 16), what symbols should we use for 10, 11, 12...?",
+          options: [
+            { id: "A", text: "Create entirely new squiggly lines", isCorrect: false, explanation: "Too hard to learn/type." },
+            { id: "B", text: "Use Letters (A, B, C...)", isCorrect: true, explanation: "Correct. We use the alphabet." }
+          ]
+        },
+        {
+          id: "def",
+          type: "theory",
+          title: "Definition: Hexadecimal",
+          content: "The **Hexadecimal** system uses a **Radix of 16**.\n\nIt uses 16 distinct symbols:\n- Digits: **0, 1, 2, 3, 4, 5, 6, 7, 8, 9**\n- Letters: **A, B, C, D, E, F**"
+        },
+        {
+          id: "vis",
+          type: "interactive_canvas",
+          title: "The Hex Clock",
+          content: "Visualizing the cycle of 16 digits.",
+          interactiveCanvasId: "hex-circle-diagram"
+        },
+        {
+          id: "check",
+          type: "fill_in_blank",
+          title: "Recall",
+          content: "In Hexadecimal, the letter **F** represents the decimal value ___.",
+          blankAnswer: "15"
+        }
+      ]
+    },
+    {
+      id: "les-4-4-1-2",
+      title: "Hex-Decimal Map",
+      description: "Table 24.15",
+      icon: "List",
+      slides: [
+        {
+          id: "table",
+          type: "theory",
+          title: "The Mapping",
+          content: "| Dec | Hex | Binary |\n|---|---|---|\n| 0-9 | 0-9 | 0000-1001 |\n| 10 | A | 1010 |\n| 11 | B | 1011 |\n| 12 | C | 1100 |\n| 13 | D | 1101 |\n| 14 | E | 1110 |\n| 15 | F | 1111 |"
+        },
+        {
+          id: "quiz",
+          type: "quiz",
+          title: "Quick Conversion",
+          content: "Which Hex digit corresponds to Binary **1100**?",
+          options: [
+            { id: "A", text: "B", isCorrect: false, explanation: "B is 11 (1011)." },
+            { id: "B", text: "C", isCorrect: true, explanation: "C is 12 (8+4=12)." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-4-1-3",
+      title: "Positional Weight",
+      description: "Powers of 16",
+      icon: "TrendingUp",
+      slides: [
+        {
+          id: "theory",
+          type: "theory",
+          title: "Weights",
+          content: "Just as decimal uses $10^n$ and binary uses $2^n$, Hexadecimal uses powers of 16.\n\n$$ 16^0 = 1 $$\n$$ 16^1 = 16 $$\n$$ 16^2 = 256 $$\n$$ 16^3 = 4096 $$"
+        },
+        {
+          id: "calc",
+          type: "numerical",
+          title: "Calculate Value",
+          content: "Calculate the decimal value of Hex number **2A**.\nHint: $2 \\times 16^1 + 10 \\times 16^0$.",
+          numericAnswer: 42,
+          numericTolerance: 0
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_4_1_hex_fundamentals.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_4_2_hex_conversions.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_4_2: Unit = {
+  id: "unit-4-4-2",
+  title: "Hex Conversions",
+  description: "Translating to Base 16",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-4-2-1",
+      title: "Decimal to Hex",
+      description: "Division Method",
+      icon: "Divide",
+      slides: [
+        {
+          id: "dest",
+          type: "theory",
+          title: "The Goal",
+          content: "Convert Decimal **423** to Hexadecimal. \n\n**Method:** Repeated division by 16."
+        },
+        {
+          id: "proof",
+          type: "proof",
+          title: "Step-by-Step",
+          content: "Divide and keep the remainder.",
+          proofSteps: [
+            "1. $423 \\div 16 = 26$, Remainder **7** (LSB)",
+            "2. $26 \\div 16 = 1$, Remainder **10** (which is **A**)",
+            "3. $1 \\div 16 = 0$, Remainder **1** (MSB)",
+            "4. Read Up: **1A7**"
+          ],
+          interactiveSteps: [
+            {
+              prompt: "What is the remainder of $423 \\div 16$?",
+              options: [
+                { id: "A", text: "7", isCorrect: true, explanation: "$16 \\times 26 = 416$. $423 - 416 = 7$." },
+                { id: "B", text: "15", isCorrect: false, explanation: "Incorrect math." }
+              ]
+            }
+          ]
+        },
+        {
+          id: "verify",
+          type: "numerical",
+          title: "Verify",
+          content: "Calculate $1 \\times 256 + 10 \\times 16 + 7 \\times 1$.",
+          numericAnswer: 423,
+          numericTolerance: 0
+        }
+      ]
+    },
+    {
+      id: "les-4-4-2-2",
+      title: "Fractional Conversion",
+      description: "Example 24.22",
+      icon: "Percent",
+      slides: [
+        {
+          id: "dest",
+          type: "theory",
+          title: "The Goal",
+          content: "Convert Decimal **0.75** to Hex.\n\n**Method:** Repeated Multiplication by 16."
+        },
+        {
+          id: "proof",
+          type: "proof",
+          title: "Calculation",
+          content: "Multiply fraction by 16.",
+          proofSteps: [
+            "1. $0.75 \\times 16 = 12.00$",
+            "2. Integer part is **12**.",
+            "3. Convert 12 to Hex symbol: **C**.",
+            "4. Result: **0.C**"
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-4-2-3",
+      title: "Binary to Hex",
+      description: "The Shortcut",
+      icon: "Zap",
+      slides: [
+        {
+          id: "priming",
+          type: "theory",
+          title: "Why Hex is Popular",
+          content: "Hex is a 'shorthand' for Binary. \n\nSince $2^4 = 16$, exactly **4 bits** map to **1 Hex digit**. This makes conversion trivial compared to decimal."
+        },
+        {
+          id: "vis",
+          type: "interactive_canvas",
+          title: "Grouping Visual",
+          content: "Group bits by 4 starting from the LSB.",
+          interactiveCanvasId: "hex-grouping-visual"
+        },
+        {
+          id: "quiz",
+          type: "quiz",
+          title: "Practice",
+          content: "Convert binary **1111 0010** to Hex.",
+          options: [
+            { id: "A", text: "F2", isCorrect: true, explanation: "1111=F, 0010=2." },
+            { id: "B", text: "E2", isCorrect: false, explanation: "1110 is E." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_4_2_hex_conversions.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_4_3_other_systems.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_4_3: Unit = {
+  id: "unit-4-4-3",
+  title: "Octal System",
+  description: "Base 8 Fundamentals",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-4-3-1",
+      title: "Octal Basics",
+      description: "Radix 8",
+      icon: "Box",
+      slides: [
+        {
+          id: "def",
+          type: "theory",
+          title: "Definition",
+          content: "The **Octal** number system has a **Radix of 8**.\n\nIt uses eight digits: **0, 1, 2, 3, 4, 5, 6, 7**.\n\nLike Hex, it is useful because $8 = 2^3$, allowing easy conversion from binary (groups of 3)."
+        },
+        {
+          id: "quiz",
+          type: "quiz",
+          title: "Valid Digits",
+          content: "Is the number **18** valid in the Octal system?",
+          options: [
+            { id: "A", text: "Yes", isCorrect: false, explanation: "There is no digit '8' in base 8." },
+            { id: "B", text: "No", isCorrect: true, explanation: "Digits go from 0 to 7." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-4-3-2",
+      title: "Binary to Octal",
+      description: "Example 24.13",
+      icon: "Layers",
+      slides: [
+        {
+          id: "method",
+          type: "theory",
+          title: "Grouping by 3",
+          content: "To convert Binary to Octal, group bits in **threes** starting from the binary point."
+        },
+        {
+          id: "vis",
+          type: "interactive_canvas",
+          title: "Grouping",
+          content: "Visualizing 101010110 -> 0.526 (Octal).",
+          interactiveCanvasId: "octal-grouping-visual"
+        },
+        {
+          id: "check",
+          type: "numerical",
+          title: "Quick Calc",
+          content: "Convert binary **101 011** to Octal (enter integer).",
+          numericAnswer: 53,
+          numericTolerance: 0
+        }
+      ]
+    },
+    {
+      id: "les-4-4-3-3",
+      title: "Comparison",
+      description: "Example 24.14",
+      icon: "GitCompare",
+      slides: [
+        {
+          id: "scenario",
+          type: "theory",
+          title: "Multi-System Conversion",
+          content: "Consider binary **101011**.\n\n- **Decimal:** $32+8+2+1 = 43$\n- **Octal:** $101 | 011 \\to 53$"
+        },
+        {
+          id: "quiz",
+          type: "quiz",
+          title: "Efficiency",
+          content: "Which representation is more compact (fewer digits) for large numbers?",
+          options: [
+            { id: "A", text: "Binary", isCorrect: false, explanation: "Binary is the longest." },
+            { id: "B", text: "Hexadecimal", isCorrect: true, explanation: "Base 16 is most dense." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_4_3_other_systems.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_4_4_exercises.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_4_4: Unit = {
+  id: "unit-4-4-4",
+  title: "Section 4.4 Exercises",
+  description: "Test your Base Conversions",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-4-4-1",
+      title: "Hex Conversions",
+      description: "Drill",
+      icon: "Hash",
+      slides: [
+        {
+          id: "q1",
+          type: "numerical",
+          title: "Hex to Decimal",
+          content: "Convert Hex **2B** to Decimal.\nHint: $2 \\times 16 + 11$.",
+          numericAnswer: 43,
+          numericTolerance: 0
+        },
+        {
+          id: "q2",
+          type: "quiz",
+          title: "Binary to Hex",
+          content: "Convert **1110 0101** to Hex.",
+          options: [
+            { id: "A", text: "E5", isCorrect: true, explanation: "1110=14(E), 0101=5." },
+            { id: "B", text: "F5", isCorrect: false, explanation: "1111 is F." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-4-4-2",
+      title: "Octal Conversions",
+      description: "Drill",
+      icon: "Box",
+      slides: [
+        {
+          id: "q3",
+          type: "numerical",
+          title: "Octal to Decimal",
+          content: "Convert Octal **23** to Decimal.\nHint: $2 \\times 8 + 3$.",
+          numericAnswer: 19,
+          numericTolerance: 0
+        },
+        {
+          id: "q4",
+          type: "quiz",
+          title: "Binary Grouping",
+          content: "To convert binary to Octal, we group bits by:",
+          options: [
+            { id: "A", text: "3", isCorrect: true, explanation: "2^3 = 8." },
+            { id: "B", text: "4", isCorrect: false, explanation: "That's for Hex." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_4_4_exercises.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_5_1_bcd_theory.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_5_1: Unit = {
+  id: "unit-4-5-1",
+  title: "BCD Theory",
+  description: "Binary Coded Decimal",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-5-1-1",
+      title: "What is BCD?",
+      description: "Hybrid Code",
+      icon: "Code",
+      slides: [
+        {
+          id: "priming",
+          type: "quiz",
+          title: "The Problem",
+          content: "Computers use binary. Humans use decimal. Pure binary conversion logic is complex to build in hardware. Is there a way to represent decimal digits directly using bits?",
+          options: [
+            { id: "A", text: "Yes, use ASCII", isCorrect: false, explanation: "ASCII is for text." },
+            { id: "B", text: "Yes, use BCD", isCorrect: true, explanation: "Binary Coded Decimal encodes each digit separately." }
+          ]
+        },
+        {
+          id: "def",
+          type: "theory",
+          title: "Definition",
+          content: "In **BCD (Binary-Coded Decimal)**, each decimal digit is represented by a **4-bit binary number**.\n\nExample: Decimal **12** is not $1100_2$. \nIt is $0001$ (1) $0010$ (2) in BCD."
+        },
+        {
+          id: "vis",
+          type: "interactive_canvas",
+          title: "BCD Mapping",
+          content: "Visualizing decimal digits 0-9 mapping to 4-bit blocks.",
+          interactiveCanvasId: "bcd-decimal-mapping"
+        }
+      ]
+    },
+    {
+      id: "les-4-5-1-2",
+      title: "The 8421 Code",
+      description: "Weights",
+      icon: "Hash",
+      slides: [
+        {
+          id: "theory",
+          type: "theory",
+          title: "8421 Weights",
+          content: "The most common BCD code uses standard binary weights ($2^3, 2^2, 2^1, 2^0$) for the 4 bits.\n\n$8-4-2-1$\n\nExample: 9 is $1001$ ($8+1$)."
+        },
+        {
+          id: "check",
+          type: "fill_in_blank",
+          title: "Bits per Digit",
+          content: "To represent the decimal number 489 in BCD, we need a total of ___ bits.",
+          blankAnswer: "12" // 3 digits * 4 bits
+        }
+      ]
+    },
+    {
+      id: "les-4-5-1-3",
+      title: "Mapping Table",
+      description: "Valid Codes",
+      icon: "List",
+      slides: [
+        {
+          id: "table",
+          type: "theory",
+          title: "Table 24.16",
+          content: "| Decimal | BCD Code |\n|---|---|\n| 0 | 0000 |\n| ... | ... |\n| 9 | 1001 |\n\nCrucially, binary patterns **1010 through 1111** are never used in BCD. They are **Invalid**."
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_5_1_bcd_theory.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_5_2_bcd_analysis.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_5_2: Unit = {
+  id: "unit-4-5-2",
+  title: "BCD Analysis",
+  description: "Valid vs Invalid",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-5-2-1",
+      title: "Valid Codes",
+      description: "0 to 9 Only",
+      icon: "CheckCircle",
+      slides: [
+        {
+          id: "rule",
+          type: "theory",
+          title: "The Constraint",
+          content: "A 4-bit binary number can represent 16 values (0-15). \n\nHowever, decimal digits only go from 0-9. \nTherefore, the codes **1010 (10)** to **1111 (15)** are **Forbidden** or Invalid in BCD."
+        },
+        {
+          id: "quiz",
+          type: "quiz",
+          title: "Validation",
+          content: "Is **1100** a valid BCD number?",
+          options: [
+            { id: "A", text: "Yes", isCorrect: false, explanation: "1100 is 12. Decimal digits can't be 12." },
+            { id: "B", text: "No", isCorrect: true, explanation: "Correct. It is an invalid code." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-5-2-2",
+      title: "BCD vs Pure Binary",
+      description: "Comparison",
+      icon: "GitCompare",
+      slides: [
+        {
+          id: "vis",
+          type: "interactive_canvas",
+          title: "Visual Comparison",
+          content: "See how Decimal 12 differs in Binary vs BCD.",
+          interactiveCanvasId: "bcd-vs-binary-visual"
+        },
+        {
+          id: "theory",
+          type: "theory",
+          title: "Efficiency",
+          content: "**Binary** is more efficient (fewer bits for large numbers). \n**BCD** is less efficient but easier to display (direct digit mapping)."
+        }
+      ]
+    },
+    {
+      id: "les-4-5-2-3",
+      title: "Conversion Example",
+      description: "Decimal to BCD",
+      icon: "ArrowRight",
+      slides: [
+        {
+          id: "prob",
+          type: "example_q",
+          title: "Convert 489",
+          content: "Convert Decimal 489 to BCD."
+        },
+        {
+          id: "sol",
+          type: "solution",
+          title: "Solution",
+          content: "Encode each digit separately.",
+          interactiveSteps: [
+            { stepText: "4 -> 0100" },
+            { stepText: "8 -> 1000" },
+            { stepText: "9 -> 1001" },
+            { stepText: "Result: 0100 1000 1001" }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_5_2_bcd_analysis.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_5_3_applications.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_5_3: Unit = {
+  id: "unit-4-5-3",
+  title: "BCD Applications",
+  description: "Why we use it",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-5-3-1",
+      title: "Human Interface",
+      description: "Digital Displays",
+      icon: "Monitor",
+      slides: [
+        {
+          id: "theory",
+          type: "theory",
+          title: "Interfacing",
+          content: "Digital voltmeters, frequency counters, and digital clocks use BCD.\n\nWhy? Because the display (7-segment) expects to show decimal digits (0-9). It is easier to decode BCD to 7-segment than pure binary to 7-segment."
+        },
+        {
+          id: "quiz",
+          type: "quiz",
+          title: "Application",
+          content: "A digital clock needs to display '12'. In BCD, the internal logic stores this as:",
+          options: [
+            { id: "A", text: "Two separate codes (1 and 2)", isCorrect: true, explanation: "Allows driving separate display digits." },
+            { id: "B", text: "One binary number (1100)", isCorrect: false, explanation: "Harder to split for display." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-5-3-2",
+      title: "Calculators",
+      description: "Precision",
+      icon: "Calculator",
+      slides: [
+        {
+          id: "theory",
+          type: "theory",
+          title: "Rounding Errors",
+          content: "Pure binary (floating point) can have rounding errors with decimal fractions (e.g., 0.1 is repeating in binary). \n\nFinancial calculators often use BCD math to ensure $0.1 + 0.1 = 0.2$ exactly."
+        }
+      ]
+    },
+    {
+      id: "les-4-5-3-3",
+      title: "Summary",
+      description: "Pros Cons",
+      icon: "ThumbsUp",
+      slides: [
+        {
+          id: "table",
+          type: "theory",
+          title: "Trade-offs",
+          content: "**Pros:** Easy conversion to decimal digits. Essential for displays.\n\n**Cons:** Wastes bits (10-15 unused). Arithmetic is more complex."
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_5_3_applications.ts ---
+
+--- START OF FILE src/data/digital_units/unit_4_5_4_exercises.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_5_4: Unit = {
+  id: "unit-4-5-4",
+  title: "Section 4.5 Exercises",
+  description: "BCD Problems",
+  color: "duo-indigo",
+  lessons: [
+    {
+      id: "les-4-5-4-1",
+      title: "Encoding",
+      description: "Decimal to BCD",
+      icon: "Code",
+      slides: [
+        {
+          id: "q1",
+          type: "quiz",
+          title: "Encode 35",
+          content: "Convert Decimal 35 to BCD.",
+          options: [
+            { id: "A", text: "0011 0101", isCorrect: true, explanation: "3 -> 0011, 5 -> 0101." },
+            { id: "B", text: "100011", isCorrect: false, explanation: "That is pure binary (35)." }
+          ]
+        },
+        {
+          id: "q2",
+          type: "quiz",
+          title: "Identify",
+          content: "Which of these is a valid BCD sequence?",
+          options: [
+            { id: "A", text: "1001 1100", isCorrect: false, explanation: "1100 (12) is invalid." },
+            { id: "B", text: "1001 0000", isCorrect: true, explanation: "9 and 0 are valid digits." }
+          ]
+        }
+      ]
+    },
+    {
+      id: "les-4-5-4-2",
+      title: "Decoding",
+      description: "BCD to Decimal",
+      icon: "Terminal",
+      slides: [
+        {
+          id: "q3",
+          type: "numerical",
+          title: "Decode",
+          content: "BCD Code: **0010 1001**. What is the decimal number?",
+          numericAnswer: 29,
+          numericTolerance: 0
+        },
+        {
+          id: "q4",
+          type: "fill_in_blank",
+          title: "Bit Count",
+          content: "A 4-digit decimal number requires ___ bits in BCD.",
+          blankAnswer: "16"
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/digital_units/unit_4_5_4_exercises.ts ---
+
+--- START OF FILE src/components/canvasart/Module4NumberSystems.tsx ---
+import React, { useState } from 'react';
+
+export const renderModule4NumberSystems = (id: string) => {
+  switch (id) {
+    case 'binary-positional-weights':
+      return <BinaryWeightsInteractive />;
+    case 'msb-lsb-identifier':
+      return <MsbLsbVisual />;
+    case 'double-dabble-vis':
+      return <DoubleDabbleVisual />;
+    case 'fractional-mult-vis':
+      return <FractionalMultVisual />;
+    case 'hex-circle-diagram':
+      return <HexCircleVisual />;
+    case 'hex-grouping-visual':
+      return <HexGroupingVisual />;
+    case 'octal-grouping-visual':
+      return <OctalGroupingVisual />;
+    case 'bcd-decimal-mapping':
+      return <BcdMappingVisual />;
+    case 'bcd-vs-binary-visual':
+      return <BcdVsBinaryVisual />;
+    default:
+      return null;
+  }
+};
+
+const BinaryWeightsInteractive = () => {
+  const [bits, setBits] = useState([0, 0, 0, 0]); // 4 bits: 8, 4, 2, 1
+
+  const toggleBit = (index: number) => {
+    const newBits = [...bits];
+    newBits[index] = newBits[index] === 0 ? 1 : 0;
+    setBits(newBits);
+  };
+
+  const calculateDecimal = () => {
+    return bits[0] * 8 + bits[1] * 4 + bits[2] * 2 + bits[3] * 1;
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-4 gap-6">
+      <div className="flex gap-2">
+        {bits.map((bit, index) => {
+          const power = 3 - index;
+          const weight = Math.pow(2, power);
+          return (
+            <div key={index} className="flex flex-col items-center gap-1">
+              <span className="text-[10px] text-slate-400 font-mono">2^{power}</span>
+              <span className="text-xs text-blue-400 font-bold mb-1">({weight})</span>
+              <button
+                onClick={() => toggleBit(index)}
+                className={`w-12 h-12 rounded-xl border-2 flex items-center justify-center text-2xl font-black transition-all ${
+                  bit === 1
+                    ? 'bg-blue-500 border-blue-400 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]'
+                    : 'bg-slate-800 border-slate-600 text-slate-500'
+                }`}
+              >
+                {bit}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex items-center gap-2 bg-slate-900/50 px-6 py-3 rounded-2xl border border-white/10">
+        <span className="text-slate-400 text-sm uppercase tracking-widest font-bold">Decimal:</span>
+        <span className="text-2xl font-black text-yellow-400">{calculateDecimal()}</span>
+      </div>
+    </div>
+  );
+};
+
+const MsbLsbVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-4">
+      <div className="flex items-center gap-1 mb-8">
+        <div className="flex flex-col items-center relative group">
+          <div className="w-10 h-12 bg-purple-900/40 border-2 border-purple-500 rounded flex items-center justify-center text-xl font-bold text-white relative z-10">
+            1
+          </div>
+          <div className="absolute -top-8 bg-purple-500 text-white text-[10px] font-bold px-2 py-1 rounded animate-bounce">
+            MSB
+          </div>
+          <div className="absolute -bottom-6 text-[10px] text-purple-300">Most Weight</div>
+        </div>
+        <div className="w-10 h-12 bg-slate-800/40 border border-slate-700 rounded flex items-center justify-center text-xl font-bold text-slate-500">0</div>
+        <div className="w-10 h-12 bg-slate-800/40 border border-slate-700 rounded flex items-center justify-center text-xl font-bold text-slate-500">0</div>
+        <div className="flex flex-col items-center relative group">
+          <div className="w-10 h-12 bg-green-900/40 border-2 border-green-500 rounded flex items-center justify-center text-xl font-bold text-white relative z-10">
+            1
+          </div>
+          <div className="absolute -top-8 bg-green-500 text-white text-[10px] font-bold px-2 py-1 rounded animate-bounce" style={{ animationDelay: '0.5s' }}>
+            LSB
+          </div>
+          <div className="absolute -bottom-6 text-[10px] text-green-300">Least Weight</div>
+        </div>
+      </div>
+      <p className="text-xs text-slate-400 text-center max-w-[200px]">
+        MSB has the highest positional value.<br/>LSB has the lowest ($2^0=1$).
+      </p>
+    </div>
+  );
+};
+
+const DoubleDabbleVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-2">
+      <div className="grid grid-cols-4 gap-x-2 gap-y-2 text-sm w-full max-w-[280px]">
+        {/* Header */}
+        <div className="col-span-2 text-slate-400 border-b border-slate-600 pb-1">Div by 2</div>
+        <div className="text-slate-400 border-b border-slate-600 pb-1 text-center">Rem</div>
+        <div className="text-slate-400 border-b border-slate-600 pb-1 text-center">Bit</div>
+
+        {/* Row 1 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>13</span> <span>÷ 2 = 6</span>
+        </div>
+        <div className="text-center font-bold text-yellow-400 bg-yellow-900/20 rounded">1</div>
+        <div className="text-[10px] flex items-center justify-center text-slate-500">LSB</div>
+
+        {/* Row 2 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>6</span> <span>÷ 2 = 3</span>
+        </div>
+        <div className="text-center font-bold text-slate-200 bg-slate-700/30 rounded">0</div>
+        <div className="text-[10px]"></div>
+
+        {/* Row 3 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>3</span> <span>÷ 2 = 1</span>
+        </div>
+        <div className="text-center font-bold text-yellow-400 bg-yellow-900/20 rounded">1</div>
+        <div className="text-[10px]"></div>
+
+        {/* Row 4 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>1</span> <span>÷ 2 = 0</span>
+        </div>
+        <div className="text-center font-bold text-yellow-400 bg-yellow-900/20 rounded">1</div>
+        <div className="text-[10px] flex items-center justify-center text-purple-400 font-bold">MSB</div>
+      </div>
+      
+      <div className="absolute right-4 top-1/2 h-32 w-1 bg-gradient-to-t from-purple-500 to-slate-700 rounded-full"></div>
+      <div className="absolute right-2 top-[30%] text-[10px] text-purple-400 rotate-90 origin-left">Read Up</div>
+    </div>
+  );
+};
+
+const FractionalMultVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-2">
+      <div className="grid grid-cols-3 gap-x-2 gap-y-2 text-sm w-full max-w-[280px]">
+        {/* Header */}
+        <div className="col-span-2 text-slate-400 border-b border-slate-600 pb-1">Mult by 2</div>
+        <div className="text-slate-400 border-b border-slate-600 pb-1 text-center">Integer</div>
+
+        {/* Row 1 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>0.625</span> <span>× 2 = 1.25</span>
+        </div>
+        <div className="text-center font-bold text-purple-400 bg-purple-900/20 rounded border border-purple-500/50">1</div>
+
+        {/* Row 2 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>0.25</span> <span>× 2 = 0.50</span>
+        </div>
+        <div className="text-center font-bold text-slate-200 bg-slate-700/30 rounded">0</div>
+
+        {/* Row 3 */}
+        <div className="col-span-2 flex justify-between px-2 bg-slate-800/50 rounded">
+          <span>0.50</span> <span>× 2 = 1.00</span>
+        </div>
+        <div className="text-center font-bold text-yellow-400 bg-yellow-900/20 rounded border border-yellow-500/50">1</div>
+      </div>
+      
+      <div className="flex items-center gap-2 mt-4 text-lg">
+        <span className="text-slate-400">Result: </span>
+        <span className="font-mono font-black tracking-widest">
+          0.<span className="text-purple-400">1</span><span className="text-white">0</span><span className="text-yellow-400">1</span>
+        </span>
+      </div>
+      <div className="text-[10px] text-slate-500 mt-1">Read Downwards</div>
+    </div>
+  );
+};
+
+const HexCircleVisual = () => {
+  const digits = "0123456789ABCDEF".split('');
+  return (
+    <div className="flex items-center justify-center w-full h-full p-4 relative">
+      <div className="w-48 h-48 rounded-full border-2 border-slate-600 relative">
+        {digits.map((d, i) => {
+          const angle = (i * (360 / 16)) - 90;
+          const radius = 80;
+          const x = Math.cos((angle * Math.PI) / 180) * radius;
+          const y = Math.sin((angle * Math.PI) / 180) * radius;
+          
+          const isLetter = i >= 10;
+          
+          return (
+            <div 
+              key={d} 
+              className={`absolute w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold transform -translate-x-1/2 -translate-y-1/2
+                ${isLetter ? 'bg-indigo-600 text-white shadow-lg' : 'bg-slate-800 text-slate-400'}
+              `}
+              style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
+            >
+              {d}
+            </div>
+          );
+        })}
+        <div className="absolute inset-0 flex items-center justify-center flex-col">
+           <span className="text-indigo-400 font-black text-2xl">16</span>
+           <span className="text-slate-500 text-[10px] uppercase tracking-widest">Radix</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HexGroupingVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-2">
+       <div className="flex gap-2">
+          {/* Group 2 */}
+          <div className="flex flex-col items-center">
+             <div className="flex gap-1 bg-slate-800 p-2 rounded-t-xl border-b-2 border-indigo-500">
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">0</span>
+                <span className="w-4 text-center">1</span>
+             </div>
+             <div className="bg-indigo-900/30 w-full p-2 rounded-b-xl text-center border-x border-b border-indigo-500/30">
+                <span className="text-xl font-black text-indigo-400">D</span>
+                <div className="text-[8px] text-slate-400">(13)</div>
+             </div>
+          </div>
+          
+          {/* Group 1 */}
+          <div className="flex flex-col items-center">
+             <div className="flex gap-1 bg-slate-800 p-2 rounded-t-xl border-b-2 border-purple-500">
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">0</span>
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">0</span>
+             </div>
+             <div className="bg-purple-900/30 w-full p-2 rounded-b-xl text-center border-x border-b border-purple-500/30">
+                <span className="text-xl font-black text-purple-400">A</span>
+                <div className="text-[8px] text-slate-400">(10)</div>
+             </div>
+          </div>
+       </div>
+       <div className="mt-4 text-xs text-slate-400">Groups of 4 bits</div>
+    </div>
+  );
+};
+
+const OctalGroupingVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-2">
+       <div className="flex gap-2">
+          <div className="text-slate-500 text-sm py-4">0.</div>
+          {/* Group 1 */}
+          <div className="flex flex-col items-center">
+             <div className="flex gap-1 bg-slate-800 p-2 rounded-t-xl border-b-2 border-green-500">
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">0</span>
+                <span className="w-4 text-center">1</span>
+             </div>
+             <div className="w-full text-center py-1">
+                <span className="text-lg font-bold text-green-400">5</span>
+             </div>
+          </div>
+          
+          {/* Group 2 */}
+          <div className="flex flex-col items-center">
+             <div className="flex gap-1 bg-slate-800 p-2 rounded-t-xl border-b-2 border-teal-500">
+                <span className="w-4 text-center">0</span>
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">0</span>
+             </div>
+             <div className="w-full text-center py-1">
+                <span className="text-lg font-bold text-teal-400">2</span>
+             </div>
+          </div>
+
+          {/* Group 3 */}
+          <div className="flex flex-col items-center">
+             <div className="flex gap-1 bg-slate-800 p-2 rounded-t-xl border-b-2 border-cyan-500">
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">1</span>
+                <span className="w-4 text-center">0</span>
+             </div>
+             <div className="w-full text-center py-1">
+                <span className="text-lg font-bold text-cyan-400">6</span>
+             </div>
+          </div>
+       </div>
+       <div className="mt-4 text-xs text-slate-400">Groups of 3 bits</div>
+    </div>
+  );
+};
+
+const BcdMappingVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-2 gap-4">
+       <div className="flex items-center gap-4">
+          <div className="w-16 h-16 border-2 border-slate-600 rounded-xl flex items-center justify-center bg-slate-800">
+             <span className="text-3xl font-black text-white">9</span>
+          </div>
+          <div className="text-xl text-slate-500">&rarr;</div>
+          <div className="flex gap-1">
+             <div className="w-8 h-10 border border-slate-500 rounded bg-slate-900 flex items-center justify-center text-sm font-bold text-yellow-400">1</div>
+             <div className="w-8 h-10 border border-slate-500 rounded bg-slate-900 flex items-center justify-center text-sm font-bold text-slate-500">0</div>
+             <div className="w-8 h-10 border border-slate-500 rounded bg-slate-900 flex items-center justify-center text-sm font-bold text-slate-500">0</div>
+             <div className="w-8 h-10 border border-slate-500 rounded bg-slate-900 flex items-center justify-center text-sm font-bold text-yellow-400">1</div>
+          </div>
+       </div>
+       
+       <div className="flex items-center gap-4 opacity-50">
+          <div className="w-16 h-16 border-2 border-slate-700 rounded-xl flex items-center justify-center bg-slate-900">
+             <span className="text-3xl font-black text-slate-500">5</span>
+          </div>
+          <div className="text-xl text-slate-700">&rarr;</div>
+          <div className="flex gap-1">
+             <div className="w-8 h-10 border border-slate-700 rounded bg-black flex items-center justify-center text-xs text-slate-600">0</div>
+             <div className="w-8 h-10 border border-slate-700 rounded bg-black flex items-center justify-center text-xs text-slate-400">1</div>
+             <div className="w-8 h-10 border border-slate-700 rounded bg-black flex items-center justify-center text-xs text-slate-600">0</div>
+             <div className="w-8 h-10 border border-slate-700 rounded bg-black flex items-center justify-center text-xs text-slate-400">1</div>
+          </div>
+       </div>
+    </div>
+  );
+};
+
+const BcdVsBinaryVisual = () => {
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-2">
+       <div className="text-2xl font-black text-white mb-6">Decimal 12</div>
+       
+       <div className="grid grid-cols-2 gap-8 w-full max-w-sm">
+          <div className="flex flex-col items-center">
+             <span className="text-xs text-blue-400 font-bold uppercase tracking-widest mb-2">Binary</span>
+             <div className="bg-blue-900/20 border border-blue-500/50 px-4 py-2 rounded-lg">
+                <span className="font-mono text-xl">1100</span>
+             </div>
+             <span className="text-[10px] text-slate-500 mt-1">Efficient</span>
+          </div>
+          
+          <div className="flex flex-col items-center">
+             <span className="text-xs text-green-400 font-bold uppercase tracking-widest mb-2">BCD</span>
+             <div className="flex gap-2">
+                <div className="bg-green-900/20 border border-green-500/50 px-2 py-2 rounded-lg">
+                   <span className="font-mono text-sm block text-center mb-1 text-slate-400">1</span>
+                   <span className="font-mono text-lg">0001</span>
+                </div>
+                <div className="bg-green-900/20 border border-green-500/50 px-2 py-2 rounded-lg">
+                   <span className="font-mono text-sm block text-center mb-1 text-slate-400">2</span>
+                   <span className="font-mono text-lg">0010</span>
+                </div>
+             </div>
+             <span className="text-[10px] text-slate-500 mt-1">Separated Digits</span>
+          </div>
+       </div>
+    </div>
+  );
+};
+--- END OF FILE src/components/canvasart/Module4NumberSystems.tsx ---
+--- END OF FILE project_snapshot_out.txt ---

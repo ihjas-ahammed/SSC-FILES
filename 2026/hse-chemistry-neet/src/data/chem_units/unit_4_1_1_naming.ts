@@ -76,7 +76,7 @@ export const UNIT_4_1_1: Unit = {
           type: "interactive_canvas",
           title: "Bond Line",
           content: "Converting structures to bond-line notation.",
-          interactiveCanvasId: "chem-molecule-viewer" 
+          interactiveCanvasId: "goc-bond-line" 
         },
         {
           id: "ret-1",
@@ -192,7 +192,7 @@ export const UNIT_4_1_1: Unit = {
           type: "interactive_canvas",
           title: "Groups Table",
           content: "Visual list of prefixes and suffixes.",
-          interactiveCanvasId: "chem-si-units" // Placeholder for table
+          interactiveCanvasId: "goc-functional-groups" 
         },
         {
           id: "num-1",

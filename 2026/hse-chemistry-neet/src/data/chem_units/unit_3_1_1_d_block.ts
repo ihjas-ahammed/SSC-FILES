@@ -211,7 +211,7 @@ export const UNIT_3_1_1: Unit = {
           type: "interactive_canvas",
           title: "Oxidation Trends",
           content: "Graph or Table showing OS from Sc to Zn.",
-          interactiveCanvasId: "d-block-melting-points" // Reusing graph placeholder
+          interactiveCanvasId: "d-block-oxidation-trends"
         },
         {
           id: "ret-1",
@@ -288,7 +288,7 @@ export const UNIT_3_1_1: Unit = {
           type: "interactive_canvas",
           title: "Colour Wheel",
           content: "Visualizing complementary colours (e.g. Absorb Red -> Appear Green).",
-          interactiveCanvasId: "chem-orbital-shapes" // Placeholder
+          interactiveCanvasId: "d-block-colour-wheel"
         },
         {
           id: "num-1",

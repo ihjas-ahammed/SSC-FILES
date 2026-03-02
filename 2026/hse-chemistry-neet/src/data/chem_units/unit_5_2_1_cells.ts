@@ -230,7 +230,7 @@ export const UNIT_5_2_1: Unit = {
           type: "interactive_canvas",
           title: "Equilibrium Point",
           content: "Reaction stops when potential difference is zero.",
-          interactiveCanvasId: "electro-galvanic-cell" // Placeholder
+          interactiveCanvasId: "electro-equilibrium" 
         },
         {
           id: "num-1",

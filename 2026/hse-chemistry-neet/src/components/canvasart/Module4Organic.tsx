@@ -3,6 +3,63 @@ import React from 'react';
 export const renderModule4Art = (id: string) => {
   switch (id) {
     // --- GOC ---
+    case 'goc-functional-groups':
+      return (
+        <div className="flex items-center justify-center h-full w-full p-2">
+           <div className="flex flex-col gap-1.5 w-full max-w-[220px] text-xs">
+              <div className="bg-red-900/40 border border-red-500/50 px-3 py-1.5 rounded-lg text-center font-bold text-red-200">-COOH (Carboxylic Acid)</div>
+              <div className="bg-orange-900/40 border border-orange-500/50 px-3 py-1.5 rounded-lg text-center text-orange-200">-SO₃H (Sulfonic Acid)</div>
+              <div className="bg-yellow-900/40 border border-yellow-500/50 px-3 py-1.5 rounded-lg text-center text-yellow-200">-COOR (Ester)</div>
+              <div className="bg-green-900/40 border border-green-500/50 px-3 py-1.5 rounded-lg text-center text-green-200">-COCl (Acyl Chloride)</div>
+              <div className="bg-blue-900/40 border border-blue-500/50 px-3 py-1.5 rounded-lg text-center text-blue-200">-CONH₂ (Amide)</div>
+              <div className="bg-purple-900/40 border border-purple-500/50 px-3 py-1.5 rounded-lg text-center text-purple-200">-CN (Nitrile)</div>
+              <div className="bg-slate-800 border border-slate-600 px-3 py-1.5 rounded-lg text-center text-[10px] text-slate-400 font-bold tracking-wider">... &gt; Aldehyde &gt; Ketone &gt; Alcohol</div>
+           </div>
+        </div>
+      );
+    case 'goc-bond-line':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full gap-6">
+           <div className="font-mono text-sm tracking-widest bg-white/10 px-4 py-2 rounded-xl border border-white/20 shadow-md">CH₃-CH₂-CH₃</div>
+           <div className="text-slate-400 text-xs font-bold uppercase tracking-widest">is represented as</div>
+           <svg viewBox="0 0 100 40" className="w-32 h-16 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]">
+              <path d="M 10 30 L 50 10 L 90 30" fill="none" stroke="#22c55e" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="10" cy="30" r="4" fill="white" />
+              <circle cx="50" cy="10" r="4" fill="white" />
+              <circle cx="90" cy="30" r="4" fill="white" />
+           </svg>
+        </div>
+      );
+    case 'hydrocarbon-alkane-isomers':
+      return (
+        <div className="flex items-center justify-center h-full w-full gap-8">
+           <div className="flex flex-col items-center">
+              <div className="font-mono text-[10px] mb-3 bg-white/10 px-2 py-1 rounded border border-blue-500/30 text-blue-200">n-Butane</div>
+              <svg viewBox="0 0 100 40" className="w-24 h-12">
+                 <path d="M 10 30 L 36 10 L 63 30 L 90 10" fill="none" stroke="#3b82f6" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+           </div>
+           <div className="w-px h-24 bg-white/20"></div>
+           <div className="flex flex-col items-center">
+              <div className="font-mono text-[10px] mb-3 bg-white/10 px-2 py-1 rounded border border-red-500/30 text-red-200">Isobutane</div>
+              <svg viewBox="0 0 100 60" className="w-16 h-12">
+                 <path d="M 10 50 L 50 20 L 90 50 M 50 20 L 50 0" fill="none" stroke="#ef4444" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+           </div>
+        </div>
+      );
+    case 'hydrocarbon-combustion':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full p-4 relative">
+           <div className="flex items-center gap-2 font-mono text-sm bg-black/60 px-5 py-3 rounded-2xl border border-orange-500/50 z-10 shadow-xl backdrop-blur-md">
+              <span className="text-white font-bold">CH₄ + 2O₂</span>
+              <span className="text-yellow-400 font-black px-2">→</span>
+              <span className="text-slate-200 font-bold">CO₂ + 2H₂O</span>
+           </div>
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-orange-500/30 rounded-full blur-2xl animate-pulse"></div>
+           <div className="mt-8 text-orange-400 font-black text-xl animate-bounce drop-shadow-[0_0_5px_#f97316]">ΔH = -ve (Heat!)</div>
+        </div>
+      );
     case 'goc-hybridisation':
       return (
         <div className="flex items-center justify-center h-full w-full p-2 gap-2 text-center">

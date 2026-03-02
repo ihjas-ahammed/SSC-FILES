@@ -25,7 +25,7 @@ export const UNIT_4_2_1: Unit = {
           type: "interactive_canvas",
           title: "Isomerism",
           content: "Structural isomers of Butane.",
-          interactiveCanvasId: "chem-molecule-viewer" // Placeholder, maybe specific later
+          interactiveCanvasId: "hydrocarbon-alkane-isomers"
         },
         {
           id: "ret-1",
@@ -106,7 +106,7 @@ export const UNIT_4_2_1: Unit = {
           type: "interactive_canvas",
           title: "Combustion",
           content: "Visual of bond breaking and energy release.",
-          interactiveCanvasId: "thermo-enthalpy-plot" // Reusing
+          interactiveCanvasId: "hydrocarbon-combustion"
         },
         {
           id: "ret-1",

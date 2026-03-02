@@ -2,6 +2,49 @@ import React from 'react';
 
 export const renderModule5ElectroArt = (id: string) => {
   switch (id) {
+    case 'electro-equilibrium':
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full p-2">
+           <div className="w-40 h-20 bg-slate-800 rounded-2xl border-4 border-slate-600 flex items-center justify-center shadow-inner relative overflow-hidden drop-shadow-xl">
+              <div className="absolute top-1 text-[10px] text-slate-400 font-bold uppercase tracking-widest">Voltmeter</div>
+              <span className="text-3xl font-mono font-black text-red-500 tracking-widest drop-shadow-[0_0_8px_rgba(239,68,68,0.8)] mt-2">0.00 V</span>
+           </div>
+           <div className="mt-6 flex flex-col items-center gap-2">
+              <div className="flex items-center gap-3">
+                 <span className="bg-white/10 px-3 py-1.5 rounded-lg text-sm font-bold border border-white/20">E_cell = 0</span>
+                 <span className="text-yellow-400 font-bold text-xl">⇒</span>
+                 <span className="bg-yellow-900/30 px-3 py-1.5 rounded-lg text-sm font-bold text-yellow-300 border border-yellow-500/50 shadow-[0_0_10px_rgba(234,179,8,0.3)]">Q = K_c</span>
+              </div>
+              <span className="text-[10px] text-slate-400 mt-2 uppercase tracking-widest">Equilibrium Reached</span>
+           </div>
+        </div>
+      );
+    case 'electro-battery-lead':
+      return (
+        <div className="flex items-center justify-center h-full w-full">
+           <div className="relative w-32 h-40 bg-gray-300 rounded-xl border-4 border-gray-400 flex justify-evenly items-end pb-3 overflow-hidden shadow-2xl">
+              {/* Electrolyte */}
+              <div className="absolute top-0 w-full h-[60%] bg-blue-500/30 flex items-center justify-center border-b-[3px] border-blue-400/50">
+                 <span className="text-[10px] text-blue-900 font-black tracking-widest drop-shadow-sm">38% H₂SO₄</span>
+              </div>
+              {/* Plates */}
+              <div className="w-5 h-28 bg-slate-600 border border-slate-700 rounded-t-sm relative z-10 shadow-sm">
+                 <div className="absolute -top-3 w-3 h-3 bg-slate-800 left-1 rounded-t-sm"></div>
+                 <div className="absolute bottom-1 w-full text-center text-[8px] text-white font-bold drop-shadow-md">Pb</div>
+              </div>
+              <div className="w-5 h-28 bg-orange-900 border border-orange-800 rounded-t-sm relative z-10 shadow-sm">
+                 <div className="absolute -top-3 w-3 h-3 bg-orange-950 left-1 rounded-t-sm"></div>
+                 <div className="absolute bottom-1 w-full text-center text-[8px] text-white font-bold drop-shadow-md">PbO₂</div>
+              </div>
+              <div className="w-5 h-28 bg-slate-600 border border-slate-700 rounded-t-sm relative z-10 shadow-sm hidden sm:block">
+                 <div className="absolute -top-3 w-3 h-3 bg-slate-800 left-1 rounded-t-sm"></div>
+              </div>
+              <div className="w-5 h-28 bg-orange-900 border border-orange-800 rounded-t-sm relative z-10 shadow-sm hidden sm:block">
+                 <div className="absolute -top-3 w-3 h-3 bg-orange-950 left-1 rounded-t-sm"></div>
+              </div>
+           </div>
+        </div>
+      );
     case 'electro-galvanic-cell':
       return (
         <div className="flex flex-col items-center justify-center h-full w-full p-4 relative">
@@ -128,6 +171,6 @@ export const renderModule5ElectroArt = (id: string) => {
       );
 
     default:
-      return <div className="flex items-center justify-center h-full">Visualization not found</div>;
+      return null;
   }
 };

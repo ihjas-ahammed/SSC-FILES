@@ -23,7 +23,7 @@ export const UNIT_3_4_2: Unit = {
           type: "interactive_canvas",
           title: "Isomers",
           content: "Visualizing Linkage and Ionisation isomers.",
-          interactiveCanvasId: "chem-molecule-viewer" // Placeholder
+          interactiveCanvasId: "coordination-structural-isomers"
         },
         {
           id: "ret-1",
@@ -112,7 +112,7 @@ export const UNIT_3_4_2: Unit = {
           type: "interactive_canvas",
           title: "Hybridisation",
           content: "Visual of orbital mixing.",
-          interactiveCanvasId: "chem-hybridisation" // Placeholder
+          interactiveCanvasId: "coordination-vbt-hybridisation"
         },
         {
           id: "ret-1",

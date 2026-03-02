@@ -73,7 +73,7 @@ export const UNIT_3_1_2: Unit = {
           type: "interactive_canvas",
           title: "Interstitial Site",
           content: "Visual of small atom in lattice void.",
-          interactiveCanvasId: "chem-ionic-lattice" // Placeholder
+          interactiveCanvasId: "d-block-interstitial"
         },
         {
           id: "ret-1",
