@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { COURSES } from '../data/courses';
-import LessonPath from '../components/LessonPath';
-import SectionSelector from '../components/SectionSelector';
-import CourseSelector from '../components/CourseSelector';
 import { UserProgress, Course } from '../types';
-import { BookOpen, Zap, ChevronDown } from 'lucide-react';
+import BottomNav, { Tab } from '../components/BottomNav';
+import LearnTab from '../components/LearnTab';
+import PracticeTab from '../components/PracticeTab';
+import NotesTab from '../components/NotesTab';
 
 interface Props {
   progress: UserProgress;
@@ -16,87 +16,73 @@ interface Props {
 
 const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex, setCurrentSectionIndex }) => {
   const navigate = useNavigate();
-  const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
-  const [isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false);
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<Tab>('learn');
 
   const currentCourse: Course = COURSES.find(c => c.id === progress.currentCourseId) || COURSES[0];
-  const currentSection = currentCourse.sections && currentCourse.sections.length > 0 
-      ? currentCourse.sections[currentSectionIndex] || currentCourse.sections[0] 
-      : null;
+
+  // Sync URL path with activeTab state
+  useEffect(() => {
+    const path = location.pathname.substring(1); // remove leading slash
+    if (path === 'learn' || path === 'practice' || path === 'notes') {
+      setActiveTab(path as Tab);
+    } else if (path === '') {
+      // should be handled by router redirect but just in case
+      setActiveTab('learn');
+    }
+  }, [location.pathname]);
+
+  // Restore scroll when switching tabs via bottom nav (handled in BottomNav click mostly, but ensures sync)
+  useEffect(() => {
+    // Optional: could save scroll position per tab here
+  }, [activeTab]);
 
   const handleStartLesson = (unitId: string, lessonId: string) => {
     navigate(`/lesson/${currentCourse.id}/${unitId}/${lessonId}`);
   };
 
+  const handleGoToSummary = () => {
+    navigate(`/summary/${currentCourse.id}`);
+  };
+
   const handleCourseChange = (courseId: string) => {
+    window.scrollTo(0, 0);
     setProgress(prev => ({ ...prev, currentCourseId: courseId }));
-    setIsCourseSelectorOpen(false);
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'learn':
+        return (
+          <LearnTab 
+            progress={progress}
+            setProgress={setProgress}
+            currentSectionIndex={currentSectionIndex}
+            setCurrentSectionIndex={setCurrentSectionIndex}
+            currentCourse={currentCourse}
+            courses={COURSES}
+            handleCourseChange={handleCourseChange}
+            handleStartLesson={handleStartLesson}
+            handleGoToSummary={handleGoToSummary}
+          />
+        );
+      case 'practice':
+        return <PracticeTab progress={progress} />;
+      case 'notes':
+        return <NotesTab 
+          course={currentCourse} 
+          courses={COURSES} 
+          onChangeCourse={handleCourseChange} 
+        />;
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-10 overflow-x-hidden border-x border-white/5">
-      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
-        <div 
-          onClick={() => setIsCourseSelectorOpen(true)}
-          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
-        >
-          <div className="relative">
-             <BookOpen className="w-8 h-8 text-duo-blue" />
-             <div className="absolute -bottom-1 -right-1 bg-slate-800 rounded-full border border-slate-600">
-                <ChevronDown className="w-3 h-3 text-slate-300" />
-             </div>
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-3">
-          {currentCourse.chapterSummary && (
-             <button 
-                onClick={() => navigate(`/summary/${currentCourse.id}`)}
-                className="flex items-center gap-1.5 bg-duo-blue/20 text-duo-blue px-3 py-1.5 rounded-xl font-bold hover:bg-duo-blue/30 transition-colors"
-             >
-                <BookOpen className="w-4 h-4" />
-             </button>
-          )}
-
-          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl">
-            <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
-            <span className="text-amber-400">{progress.xp} XP</span>
-          </div>
-        </div>
-      </header>
-
-      <main className="p-0 flex-grow relative">
-        {currentSection ? (
-          <>
-            <LessonPath 
-              section={currentSection} 
-              completedLessons={progress.completedLessons}
-              onStartLesson={handleStartLesson}
-              onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
-            />
-
-            <SectionSelector 
-              sections={currentCourse.sections}
-              activeSectionIndex={currentSectionIndex}
-              onSelectSection={setCurrentSectionIndex}
-              isOpen={isSectionSelectorOpen}
-              onClose={() => setIsSectionSelectorOpen(false)}
-            />
-          </>
-        ) : (
-          <div className="p-10 text-center text-slate-500 mt-20">
-            <p>More modules coming soon!</p>
-          </div>
-        )}
-
-        <CourseSelector 
-           courses={COURSES}
-           activeCourseId={progress.currentCourseId}
-           onSelectCourse={handleCourseChange}
-           isOpen={isCourseSelectorOpen}
-           onClose={() => setIsCourseSelectorOpen(false)}
-        />
-      </main>
+    <div className="min-h-screen flex flex-col pb-20 overflow-x-hidden border-x border-white/5">
+      {renderContent()}
+      <BottomNav activeTab={activeTab} />
     </div>
   );
 };

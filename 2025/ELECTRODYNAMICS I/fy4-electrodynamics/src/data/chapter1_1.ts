@@ -2,726 +2,637 @@ import { Section } from '../types';
 
 export const SECTION_1_1: Section = {
   id: "section-1-1",
-  title: "Section 1: Vector Algebra & Differential Calculus",
-  description: "Vector operations, component form, gradients, divergence, and curl.",
+  title: "Section 1.1: Vector Algebra",
+  description: "Foundations of vector analysis: operations, components, triple products, and separation vectors.",
   color: "duo-blue",
   units: [
     {
-      id: "unit-1-vector-algebra",
-      title: "Vector Algebra",
-      description: "Vector Operations, Component Form, and Triple Products.",
+      id: "unit-1-1-1",
+      title: "1.1.1 Operations & Geometry",
+      description: "Definition of Vectors, Addition, Subtraction, and Products.",
       color: "duo-blue",
       lessons: [
         {
-          id: "les-1-1-operations", title: "Vector Operations", description: "Addition and Scalar Multiplication", icon: "ArrowUpRight",
+          id: "les-1-1-1-1",
+          title: "Scalars vs Vectors",
+          description: "Fundamental definitions and notation.",
+          icon: "ArrowRight",
           slides: [
-            { id: "s0", type: "quiz", title: "Conceptual Warm-up 1", content: "Is distance travelled the same as displacement?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Displacement is a vector, distance is a scalar." }, { id: "B", text: "No", isCorrect: true, explanation: "Correct! Displacement considers direction." }, { id: "C", text: "Sometimes", isCorrect: false, explanation: "Only in 1D unidirectional motion." }, { id: "D", text: "Never", isCorrect: false, explanation: "They can be equal in 1D." } ] },
-            { id: "s1", type: "quiz", title: "Conceptual Warm-up 2", content: "Can a scalar quantity be negative?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "Yes, like temperature (e.g. -5 °C)." }, { id: "B", text: "No", isCorrect: false, explanation: "Scalars can indeed be negative." }, { id: "C", text: "Only in vectors", isCorrect: false, explanation: "Scalars are independent of vectors." }, { id: "D", text: "Always", isCorrect: false, explanation: "Mass is always positive, so not always." } ] },
-            { id: "s2", type: "theory", title: "Vectors vs Scalars", content: "A **scalar** has magnitude only (e.g., mass, temperature). A **vector** has magnitude and direction (e.g., velocity, displacement).\n\n**Addition**: $\\mathbf{A} + \\mathbf{B} = \\mathbf{B} + \\mathbf{A}$\n**Scalar Multiplication**: $a(\\mathbf{A} + \\mathbf{B}) = a\\mathbf{A} + a\\mathbf{B}$" },
-            { id: "s3", type: "interactive_canvas", title: "Vector Addition", content: "Observe how vectors A and B add head-to-tail to form A+B.", interactiveCanvasId: "vector-addition-interactive" },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Commutativity", 
-              content: "**Goal: Prove $\\mathbf{A} + \\mathbf{B} = \\mathbf{B} + \\mathbf{A}$**\n\nWe will prove this geometrically using the head-to-tail method.", 
-              interactiveSteps: [ 
-                { 
-                  prompt: "If we place the tail of vector $\\mathbf{B}$ at the head of $\\mathbf{A}$, we get a resultant vector. If we also place the tail of $\\mathbf{A}$ at the head of $\\mathbf{B}$ from the origin, what geometric shape is outlined?", 
-                  options: [
-                    { id: "A", text: "A Parallelogram", isCorrect: true, explanation: "Correct! The two paths form the adjacent sides of a parallelogram." },
-                    { id: "B", text: "A Triangle", isCorrect: false, explanation: "A triangle only shows one path, not both simultaneously." }
-                  ],
-                  stepText: "The paths $\\mathbf{A}+\\mathbf{B}$ and $\\mathbf{B}+\\mathbf{A}$ form a parallelogram." 
-                }, 
-                { 
-                  prompt: "Since opposite sides of a parallelogram are equal and parallel, where do both paths end?", 
-                  options: [
-                    { id: "A", text: "At different points", isCorrect: false, explanation: "Look at the geometry again." },
-                    { id: "B", text: "At the exact same opposite vertex", isCorrect: true, explanation: "Because the shape closes perfectly." }
-                  ],
-                  stepText: "Since both paths terminate at the exact same vertex, the resultant vector is identical. Thus, $\\mathbf{A} + \\mathbf{B} = \\mathbf{B} + \\mathbf{A}$." 
-                } 
-              ] 
-            },
-            { id: "s5", type: "numerical", title: "Vector Scaling", content: "If vector A has a magnitude of 5, what is the magnitude of the vector $-3\\mathbf{A}$?", numericAnswer: 15, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Objective Check", content: "Which of these is a vector?", options: [ { id: "A", text: "Mass", isCorrect: false, explanation: "Mass has no direction." }, { id: "B", text: "Speed", isCorrect: false, explanation: "Speed is the scalar magnitude of velocity." }, { id: "C", text: "Momentum", isCorrect: true, explanation: "Momentum is mass times velocity (a vector)." }, { id: "D", text: "Time", isCorrect: false, explanation: "Time flows, but isn't a spatial vector." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A physical quantity that requires both a magnitude and a direction is called a ___.", blankAnswer: "vector" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Can a scalar quantity be negative?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "Temperature, for example, can be -10°C." }, { id: "B", text: "No", isCorrect: false, explanation: "Scalars like charge or temperature can be negative." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Does a vector have a specific location in space?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "Vectors are defined by magnitude and direction, not location." }, { id: "B", text: "No", isCorrect: true, explanation: "A vector can be moved parallel to itself without changing." }] },
+            { id: "s2", type: "theory", title: "Definition", content: "A **scalar** has magnitude only (mass, charge, density). A **vector** has both magnitude and direction (velocity, force).\n\nVectors are written in boldface ($\\mathbf{A}$) or with arrows ($\\vec{A}$). The magnitude is written as $|\\mathbf{A}|$ or $A$." },
+            { id: "s3", type: "interactive_canvas", title: "Vector Visualizer", content: "Vectors are arrows. Length = Magnitude. Arrowhead = Direction.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Geometric Property", content: "**Property:** Vectors are movable.\n\nSince a vector is defined only by length and direction, you can slide the arrow around at will, as long as you don't change its length or direction.", proofSteps: ["Draw vector $\\mathbf{A}$ at the origin.", "Draw vector $\\mathbf{A}'$ at point (2,2) with same length/angle.", "Mathematically $\\mathbf{A} = \\mathbf{A}'$."] },
+            { id: "s5", type: "numerical", title: "Displacement", content: "If you walk 4 miles North and 3 miles East, what is the magnitude of your total displacement vector?", numericAnswer: 5, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Example Check", content: "Which of the following is a vector?", options: [{ id: "A", text: "Time", isCorrect: false, explanation: "" }, { id: "B", text: "Acceleration", isCorrect: true, explanation: "It has a direction." }, { id: "C", text: "Energy", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A quantity with magnitude but no direction is called a ___.", blankAnswer: "scalar" }
           ]
         },
         {
-          id: "les-1-2-dot", title: "The Dot Product", description: "Scalar product of two vectors", icon: "CircleDot",
+          id: "les-1-1-1-2",
+          title: "Vector Addition",
+          description: "Head-to-tail rule and commutativity.",
+          icon: "Plus",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Does the dot product of two vectors yield a scalar or a vector?", options: [ { id: "A", text: "Scalar", isCorrect: true, explanation: "Yes, hence it's often called the scalar product." }, { id: "B", text: "Vector", isCorrect: false, explanation: "The result is just a number." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Under what condition is the dot product of two non-zero vectors exactly zero?", options: [ { id: "A", text: "When they are parallel", isCorrect: false, explanation: "The dot product is maximum then." }, { id: "B", text: "When they are perpendicular", isCorrect: true, explanation: "Because cos(90°) = 0." }, { id: "C", text: "When they are anti-parallel", isCorrect: false, explanation: "It would be maximally negative." } ] },
-            { id: "s2", type: "theory", title: "Dot Product Definition", content: "$\\mathbf{A} \\cdot \\mathbf{B} \\equiv AB \\cos \\theta$\n\nGeometrically, it is the magnitude of A multiplied by the projection of B onto A. \nIt is commutative: $\\mathbf{A} \\cdot \\mathbf{B} = \\mathbf{B} \\cdot \\mathbf{A}$." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Law of Cosines", 
-              content: "**Goal: Prove $C^2 = A^2 + B^2 - 2AB\\cos\\theta$ using the dot product.**\n\nConsider a triangle formed by vectors $\\mathbf{A}$, $\\mathbf{B}$, and $\\mathbf{C}$.", 
-              interactiveSteps: [ 
-                { 
-                  prompt: "Let the third side of the triangle be $\\mathbf{C} = \\mathbf{A} - \\mathbf{B}$. How can we find the square of its magnitude, $C^2$?", 
-                  options: [
-                    { id: "A", text: "$\\mathbf{C} \\cdot \\mathbf{C}$", isCorrect: true, explanation: "The dot product of a vector with itself gives its magnitude squared." },
-                    { id: "B", text: "$\\mathbf{C} \\times \\mathbf{C}$", isCorrect: false, explanation: "The cross product of a vector with itself is zero." }
-                  ],
-                  stepText: "We write $C^2 = \\mathbf{C} \\cdot \\mathbf{C} = (\\mathbf{A} - \\mathbf{B}) \\cdot (\\mathbf{A} - \\mathbf{B})$." 
-                }, 
-                { 
-                  prompt: "Expand $(\\mathbf{A} - \\mathbf{B}) \\cdot (\\mathbf{A} - \\mathbf{B})$ using the distributive property.", 
-                  options: [
-                    { id: "A", text: "$\\mathbf{A}\\cdot\\mathbf{A} - \\mathbf{B}\\cdot\\mathbf{B}$", isCorrect: false, explanation: "You missed the cross terms!" },
-                    { id: "B", text: "$\\mathbf{A}\\cdot\\mathbf{A} - 2\\mathbf{A}\\cdot\\mathbf{B} + \\mathbf{B}\\cdot\\mathbf{B}$", isCorrect: true, explanation: "Correctly expanded using FOIL." }
-                  ],
-                  stepText: "Expansion gives: $A^2 - 2(\\mathbf{A}\\cdot\\mathbf{B}) + B^2$." 
-                }, 
-                { 
-                  prompt: "Finally, apply the geometric definition of $\\mathbf{A}\\cdot\\mathbf{B}$. What do we get?", 
-                  options: [
-                    { id: "A", text: "$A^2 + B^2 - 2AB \\sin \\theta$", isCorrect: false, explanation: "Dot product uses cosine, not sine." },
-                    { id: "B", text: "$A^2 + B^2 - 2AB \\cos \\theta$", isCorrect: true, explanation: "Spot on!" }
-                  ],
-                  stepText: "Substituting $\\mathbf{A}\\cdot\\mathbf{B} = AB\\cos\\theta$, we arrive at the Law of Cosines: $C^2 = A^2 + B^2 - 2AB \\cos \\theta$." 
-                } 
-              ] 
-            },
-            { id: "s5", type: "numerical", title: "Calculate Dot Product", content: "Vector A has magnitude 2, Vector B has magnitude 3, and the angle between them is $60^\\circ$. What is $\\mathbf{A} \\cdot \\mathbf{B}$?", numericAnswer: 3, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Dot Product Property", content: "Which of the following is true for any vector A?", options: [ { id: "A", text: "A . A = 0", isCorrect: false, explanation: "" }, { id: "B", text: "A . A = A^2", isCorrect: true, explanation: "The angle is 0, cos(0)=1." }, { id: "C", text: "A . A = 1", isCorrect: false, explanation: "" } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Because it yields a single number, the dot product is also called the ___ product.", blankAnswer: "scalar" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Is vector addition commutative (i.e., is A+B = B+A)?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "The order of addition does not matter." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "How do you geometrically add two vectors?", options: [{ id: "A", text: "Tail to Tail", isCorrect: false, explanation: "" }, { id: "B", text: "Head to Tail", isCorrect: true, explanation: "Place the tail of the second at the head of the first." }] },
+            { id: "s2", type: "theory", title: "Vector Addition", content: "To add $\\mathbf{A}$ and $\\mathbf{B}$, place the tail of $\\mathbf{B}$ at the head of $\\mathbf{A}$. The sum $\\mathbf{A}+\\mathbf{B}$ is the vector from the tail of $\\mathbf{A}$ to the head of $\\mathbf{B}$.\n\nAddition is commutative:\n$$\\mathbf{A} + \\mathbf{B} = \\mathbf{B} + \\mathbf{A}$$" },
+            { id: "s3", type: "interactive_canvas", title: "Visual Addition", content: "Manipulate the vectors to see the resultant sum.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Commutativity", content: "**Goal:** Show $\\mathbf{A} + \\mathbf{B} = \\mathbf{B} + \\mathbf{A}$", proofSteps: ["Construct a parallelogram with sides $\\mathbf{A}$ and $\\mathbf{B}$.", "One path is $\\mathbf{A}$ then $\\mathbf{B}$.", "The other path is $\\mathbf{B}$ then $\\mathbf{A}$.", "Both paths arrive at the same opposite corner."] },
+            { id: "s5", type: "numerical", title: "Net Magnitude", content: "Vector A is 3 units East. Vector B is 4 units East. What is the magnitude of A+B?", numericAnswer: 7, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Associativity", content: "Is vector addition associative? $(\\mathbf{A}+\\mathbf{B})+\\mathbf{C} = \\mathbf{A}+(\\mathbf{B}+\\mathbf{C})$", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "" }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The geometric rule for adding vectors is often called the ___ rule.", blankAnswer: "parallelogram" }
           ]
         },
         {
-          id: "les-1-3-cross", title: "The Cross Product", description: "Vector product of two vectors", icon: "X",
+          id: "les-1-1-1-3",
+          title: "Vector Subtraction",
+          description: "Adding the negative.",
+          icon: "Minus",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "What does the cross product of two vectors yield?", options: [ { id: "A", text: "A Scalar", isCorrect: false, explanation: "No, that's the dot product." }, { id: "B", text: "A Vector", isCorrect: true, explanation: "Yes, hence it is called the vector product." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "What is the direction of $\\mathbf{A} \\times \\mathbf{B}$ relative to A and B?", options: [ { id: "A", text: "Parallel to A", isCorrect: false, explanation: "" }, { id: "B", text: "Perpendicular to both A and B", isCorrect: true, explanation: "It points orthogonal to the plane containing A and B." }, { id: "C", text: "Random", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "Cross Product Definition", content: "$\\mathbf{A} \\times \\mathbf{B} \\equiv AB \\sin \\theta \\,\\mathbf{\\hat{n}}$\n\nWhere $\\mathbf{\\hat{n}}$ is a unit vector pointing perpendicular to the plane of A and B, determined by the **right-hand rule**.\nGeometrically, $|\\mathbf{A} \\times \\mathbf{B}|$ is the area of the parallelogram generated by A and B." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Anti-commutativity", 
-              content: "**Goal: Prove $\\mathbf{A} \\times \\mathbf{B} = -(\\mathbf{B} \\times \\mathbf{A})$**", 
-              interactiveSteps: [ 
-                { 
-                  prompt: "Do the magnitudes of $\\mathbf{A} \\times \\mathbf{B}$ and $\\mathbf{B} \\times \\mathbf{A}$ differ?", 
-                  options: [
-                    { id: "A", text: "Yes", isCorrect: false, explanation: "Both equal AB sin(theta)." },
-                    { id: "B", text: "No", isCorrect: true, explanation: "Their magnitudes are identical: $AB\\sin\\theta$." }
-                  ],
-                  stepText: "Magnitudes are equal: $|\\mathbf{A}\\times\\mathbf{B}| = |\\mathbf{B}\\times\\mathbf{A}| = AB\\sin\\theta$." 
-                }, 
-                { 
-                  prompt: "Using the right-hand rule, if you curl your fingers from A to B and your thumb points UP, where does your thumb point if you curl from B to A?", 
-                  options: [
-                    { id: "A", text: "UP", isCorrect: false, explanation: "Try it with your right hand." },
-                    { id: "B", text: "DOWN", isCorrect: true, explanation: "Your hand flips upside down to curl the other way." }
-                  ],
-                  stepText: "Sweeping B to A flips the normal vector $\\mathbf{\\hat{n}}$ to $-\\mathbf{\\hat{n}}$. Thus, the sign reverses: $\\mathbf{A} \\times \\mathbf{B} = -(\\mathbf{B} \\times \\mathbf{A})$." 
-                } 
-              ] 
-            },
-            { id: "s5", type: "numerical", title: "Calculate Area", content: "Vector A has length 4, Vector B has length 5, and the angle between them is $30^\\circ$. What is the magnitude of $\\mathbf{A} \\times \\mathbf{B}$?", numericAnswer: 10, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Zero Cross Product", content: "When is $\\mathbf{A} \\times \\mathbf{B} = 0$? (Assuming non-zero vectors)", options: [ { id: "A", text: "When they are perpendicular", isCorrect: false, explanation: "It is maximum then." }, { id: "B", text: "When they are parallel", isCorrect: true, explanation: "Because sin(0) = 0." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The direction of the cross product is conventionally determined by the ___ hand rule.", blankAnswer: "right" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "What is the vector $-\\mathbf{A}$?", options: [{ id: "A", text: "A vector with negative magnitude", isCorrect: false, explanation: "Magnitude is always positive." }, { id: "B", text: "Same magnitude, opposite direction", isCorrect: true, explanation: "Correct." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "How is $\\mathbf{A} - \\mathbf{B}$ defined?", options: [{ id: "A", text: "$\\mathbf{A} + (-\\mathbf{B})$", isCorrect: true, explanation: "Addition of the opposite." }, { id: "B", text: "$\\mathbf{B} - \\mathbf{A}$", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Subtraction", content: "To subtract a vector, add its opposite:\n$$\\mathbf{A} - \\mathbf{B} = \\mathbf{A} + (-\\mathbf{B})$$\n\nGeometrically, $\\mathbf{A} - \\mathbf{B}$ is the vector that goes from the head of $\\mathbf{B}$ to the head of $\\mathbf{A}$ when their tails are together." },
+            { id: "s3", type: "interactive_canvas", title: "Visual Subtraction", content: "See how subtraction relates to the difference between two points.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Geometric Interpretation", content: "**Goal:** Visualize $\\mathbf{A} - \\mathbf{B}$", proofSteps: ["Place tails of $\\mathbf{A}$ and $\\mathbf{B}$ at the origin.", "Draw vector from head of $\\mathbf{B}$ to head of $\\mathbf{A}$.", "This vector is $\\mathbf{A} - \\mathbf{B}$ because $\\mathbf{B} + (\\mathbf{A} - \\mathbf{B}) = \\mathbf{A}$."] },
+            { id: "s5", type: "numerical", title: "Zero Vector", content: "What is the magnitude of $\\mathbf{A} - \\mathbf{A}$?", numericAnswer: 0, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Direction", content: "If $\\mathbf{A}$ is North and $\\mathbf{B}$ is South, $\\mathbf{A}-\\mathbf{B}$ points:", options: [{ id: "A", text: "North", isCorrect: true, explanation: "North - (South) = North + North." }, { id: "B", text: "South", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Subtraction is defined as the addition of the ___ vector.", blankAnswer: "opposite" }
           ]
         },
         {
-          id: "les-1-4-components", title: "Component Form", description: "Cartesian coordinates", icon: "Grid",
+          id: "les-1-1-1-4",
+          title: "Scalar Multiplication",
+          description: "Scaling vectors.",
+          icon: "X",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "What is $\\hat{x} \\cdot \\hat{x}$?", options: [ { id: "A", text: "0", isCorrect: false, explanation: "They are parallel." }, { id: "B", text: "1", isCorrect: true, explanation: "Magnitude 1, angle 0, cos(0)=1." }, { id: "C", text: "-1", isCorrect: false, explanation: "" } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "What is $\\hat{x} \\times \\hat{y}$?", options: [ { id: "A", text: "z-hat", isCorrect: true, explanation: "Follows the cyclic right-hand rule." }, { id: "B", text: "0", isCorrect: false, explanation: "They are perpendicular, so magnitude is 1." }, { id: "C", text: "-z-hat", isCorrect: false, explanation: "That would be y cross x." } ] },
-            { id: "s2", type: "theory", title: "Basis Vectors & Components", content: "An arbitrary vector can be expressed in terms of basis vectors:\n$\\mathbf{A} = A_x\\mathbf{\\hat{x}} + A_y\\mathbf{\\hat{y}} + A_z\\mathbf{\\hat{z}}$.\n\nBecause basis vectors are mutually perpendicular:\n$\\mathbf{\\hat{x}}\\cdot\\mathbf{\\hat{x}} = 1$, $\\mathbf{\\hat{x}}\\cdot\\mathbf{\\hat{y}} = 0$\n$\\mathbf{\\hat{x}}\\times\\mathbf{\\hat{y}} = \\mathbf{\\hat{z}}$" },
-            { id: "s3", type: "interactive_canvas", title: "Components Explorer", content: "See how moving the vector changes its X and Y components. The vector is simply the sum of these orthogonal parts.", interactiveCanvasId: "component-form-interactive" },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Derivation: Dot Product in Components", 
-              content: "**Goal: Derive $\\mathbf{A}\\cdot\\mathbf{B} = A_x B_x + A_y B_y + A_z B_z$**", 
-              interactiveSteps: [ 
-                { 
-                  stepText: "Expand: $(A_x\\hat{x} + A_y\\hat{y} + A_z\\hat{z}) \\cdot (B_x\\hat{x} + B_y\\hat{y} + B_z\\hat{z})$. This yields 9 terms." 
-                }, 
-                { 
-                  prompt: "What happens to cross-terms like $A_x B_y (\\hat{x}\\cdot\\hat{y})$?", 
-                  options: [
-                    { id: "A", text: "They become 1", isCorrect: false, explanation: "x and y are perpendicular." },
-                    { id: "B", text: "They vanish (become 0)", isCorrect: true, explanation: "Because dot product of perpendicular vectors is 0." }
-                  ],
-                  stepText: "All 6 cross terms vanish because the basis vectors are orthogonal." 
-                }, 
-                { 
-                  prompt: "What happens to terms like $A_x B_x (\\hat{x}\\cdot\\hat{x})$?", 
-                  options: [
-                    { id: "A", text: "They vanish", isCorrect: false, explanation: "x.x is 1." },
-                    { id: "B", text: "They survive as $A_x B_x$", isCorrect: true, explanation: "Because x.x = 1." }
-                  ],
-                  stepText: "Only the 3 matching component terms survive, leaving $A_x B_x + A_y B_y + A_z B_z$. Goal reached!" 
-                } 
-              ] 
-            },
-            { id: "s5", type: "numerical", title: "Magnitude Calculation", content: "Find the magnitude of the vector $\\mathbf{A} = 3\\mathbf{\\hat{x}} + 4\\mathbf{\\hat{y}}$.", numericAnswer: 5, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Cross Product Determinant", content: "To easily calculate the cross product of two vectors in component form, we evaluate a 3x3:", options: [ { id: "A", text: "Derivative", isCorrect: false, explanation: "" }, { id: "B", text: "Determinant", isCorrect: true, explanation: "With x, y, z unit vectors in the top row." }, { id: "C", text: "Integral", isCorrect: false, explanation: "" } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The vectors $\\hat{x}, \\hat{y}, \\hat{z}$ are called ___ vectors.", blankAnswer: "basis" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Multiplying a vector by a scalar changes its:", options: [{ id: "A", text: "Direction only", isCorrect: false, explanation: "" }, { id: "B", text: "Magnitude (and possibly direction sign)", isCorrect: true, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Is scalar multiplication distributive? $a(\\mathbf{A} + \\mathbf{B}) = a\\mathbf{A} + a\\mathbf{B}$?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "Correct." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Scalar Multiplication", content: "Multiplication of a vector $\\mathbf{A}$ by a positive scalar $a$ multiplies the magnitude but leaves the direction unchanged.\n\nIf $a$ is negative, the direction is reversed.\n$$|a\\mathbf{A}| = |a| |\\mathbf{A}|$$" },
+            { id: "s3", type: "interactive_canvas", title: "Scaling", content: "Observe how a vector stretches or shrinks.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Distributivity", content: "**Goal:** Show $a(\\mathbf{A}+\\mathbf{B}) = a\\mathbf{A} + a\\mathbf{B}$", proofSteps: ["Form the triangle of $\\mathbf{A}$, $\\mathbf{B}$, and $\\mathbf{A}+\\mathbf{B}$.", "Scale all sides by factor $a$.", "The new triangle is similar to the old one.", "The third side is $a(\\mathbf{A}+\\mathbf{B})$ and also $a\\mathbf{A} + a\\mathbf{B}$."] },
+            { id: "s5", type: "numerical", title: "Scaling", content: "If vector A has magnitude 5, what is magnitude of 3A?", numericAnswer: 15, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Unit Vector", content: "If you multiply a vector by 1 divided by its magnitude, you get:", options: [{ id: "A", text: "The zero vector", isCorrect: false, explanation: "" }, { id: "B", text: "A unit vector", isCorrect: true, explanation: "Length becomes 1." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A vector of length 1 is called a ___ vector.", blankAnswer: "unit" }
           ]
         },
         {
-          id: "les-1-5-cube-example", title: "Example 1.2: Angles in a Cube", description: "Finding the angle between face diagonals", icon: "Box",
+          id: "les-1-1-1-5",
+          title: "Dot Product Definition",
+          description: "The scalar product.",
+          icon: "CircleDot",
           slides: [
-            { id: "s0", type: "example_q", title: "Example 1.2", content: "**Problem:** Find the angle between the face diagonals of a cube.\n\n*Hint:* Align a cube of side length 1 with the coordinate axes. Try to find the components of the diagonals first!" },
-            { 
-              id: "s1", 
-              type: "solution", 
-              title: "Interactive Solution", 
-              content: "**Goal: Find the angle $\\theta$ between the diagonals.**", 
-              interactiveSteps: [ 
-                { 
-                  prompt: "Let's take the diagonal on the $xz$-face (Vector A) and the $yz$-face (Vector B). What are their components?", 
-                  options: [
-                    { id: "A", text: "A=(1,0,1), B=(0,1,1)", isCorrect: true, explanation: "Correct! They go from origin to (1,0,1) and (0,1,1)." },
-                    { id: "B", text: "A=(1,1,0), B=(0,1,1)", isCorrect: false, explanation: "A is on the xz face, so y=0." }
-                  ],
-                  stepText: "$\\mathbf{A} = 1\\hat{x} + 0\\hat{y} + 1\\hat{z}$ and $\\mathbf{B} = 0\\hat{x} + 1\\hat{y} + 1\\hat{z}$." 
-                }, 
-                { 
-                  prompt: "What is the dot product $\\mathbf{A}\\cdot\\mathbf{B}$?", 
-                  options: [
-                    { id: "A", text: "2", isCorrect: false, explanation: "Multiply components: (1*0) + (0*1) + (1*1)." },
-                    { id: "B", text: "1", isCorrect: true, explanation: "Only the z-components overlap: 1*1 = 1." }
-                  ],
-                  stepText: "$\\mathbf{A}\\cdot\\mathbf{B} = 1$." 
-                }, 
-                { 
-                  prompt: "What is the magnitude of $\\mathbf{A}$ and $\\mathbf{B}$?", 
-                  options: [
-                    { id: "A", text: "Both are $\\sqrt{2}$", isCorrect: true, explanation: "sqrt(1^2 + 1^2) = sqrt(2)." },
-                    { id: "B", text: "Both are 2", isCorrect: false, explanation: "Don't forget the square root." }
-                  ],
-                  stepText: "$A = \\sqrt{2}$, $B = \\sqrt{2}$." 
-                }, 
-                { 
-                  stepText: "Using the abstract definition: $\\mathbf{A}\\cdot\\mathbf{B} = AB\\cos\\theta \\implies 1 = \\sqrt{2}\\sqrt{2}\\cos\\theta \\implies 1 = 2\\cos\\theta$. Thus, $\\cos\\theta = 1/2$, so $\\theta = 60^\\circ$. Goal reached!" 
-                } 
-              ] 
-            },
-            { id: "s2", type: "numerical", title: "Body Diagonal", content: "What is the squared length ($r^2$) of the main body diagonal of a unit cube?", numericAnswer: 3, numericTolerance: 0.1 },
-            { id: "s3", type: "quiz", title: "Adjacent Edges", content: "What is the dot product of two adjacent edges of a cube?", options: [ { id: "A", text: "1", isCorrect: false, explanation: "" }, { id: "B", text: "0", isCorrect: true, explanation: "Edges are perpendicular, so dot product is zero." }, { id: "C", text: "sqrt(2)", isCorrect: false, explanation: "" } ] }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "The result of a dot product is a:", options: [{ id: "A", text: "Vector", isCorrect: false, explanation: "" }, { id: "B", text: "Scalar", isCorrect: true, explanation: "Hence the name Scalar Product." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "If two vectors are perpendicular, their dot product is:", options: [{ id: "A", text: "Zero", isCorrect: true, explanation: "cos(90) = 0." }, { id: "B", text: "Maximum", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Dot Product", content: "The dot product of two vectors is defined as:\n$$\\mathbf{A} \\cdot \\mathbf{B} \\equiv AB \\cos \\theta$$\nwhere $\\theta$ is the angle between them.\n\nIt is commutative: $\\mathbf{A} \\cdot \\mathbf{B} = \\mathbf{B} \\cdot \\mathbf{A}$." },
+            { id: "s3", type: "interactive_canvas", title: "Projection", content: "Visualizing A dot B as a projection.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Self-Dot", content: "**Goal:** Show $\\mathbf{A} \\cdot \\mathbf{A} = A^2$", proofSteps: ["The angle between $\\mathbf{A}$ and itself is $\\theta = 0$.", "$\\cos(0) = 1$.", "$\\mathbf{A} \\cdot \\mathbf{A} = |A| |A| (1) = A^2$."] },
+            { id: "s5", type: "numerical", title: "Calculation", content: "If A=2, B=4, and angle is 60 degrees, what is A dot B?", numericAnswer: 4, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Interpretation", content: "$\\mathbf{A} \\cdot \\mathbf{B}$ equals:", options: [{ id: "A", text: "A times the projection of B along A", isCorrect: true, explanation: "" }, { id: "B", text: "The area between them", isCorrect: false, explanation: "That's cross product." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The dot product is also known as the ___ product.", blankAnswer: "scalar" }
           ]
         },
         {
-          id: "les-1-6-scalar-triple", title: "Scalar Triple Product", description: "A . (B x C)", icon: "Layers",
+          id: "les-1-1-1-6",
+          title: "Dot Product Properties",
+          description: "Rules of the scalar product.",
+          icon: "List",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "What does the scalar triple product $\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C})$ represent geometrically?", options: [ { id: "A", text: "Area of a triangle", isCorrect: false, explanation: "" }, { id: "B", text: "Volume of a parallelepiped", isCorrect: true, explanation: "Base area |B x C| times perpendicular height." }, { id: "C", text: "Length of a diagonal", isCorrect: false, explanation: "" } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "If three vectors are entirely coplanar (flat on a page), what is their scalar triple product?", options: [ { id: "A", text: "Zero", isCorrect: true, explanation: "The volume of a flat shape is zero." }, { id: "B", text: "One", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "Scalar Triple Product", content: "$\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C})$ yields a scalar. It computes the volume of the parallelepiped generated by A, B, and C.\n\n**Cyclic Permutation:** Alphabetical order preserves the sign.\n$\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C}) = \\mathbf{B} \\cdot (\\mathbf{C} \\times \\mathbf{A}) = \\mathbf{C} \\cdot (\\mathbf{A} \\times \\mathbf{B})$" },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Cyclic Permutation", 
-              content: "**Goal: Prove $\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C}) = \\mathbf{B} \\cdot (\\mathbf{C} \\times \\mathbf{A})$**", 
-              interactiveSteps: [ 
-                { 
-                  stepText: "Express the scalar triple product as a 3x3 determinant with A in row 1, B in row 2, C in row 3." 
-                }, 
-                { 
-                  prompt: "In linear algebra, what happens to the determinant if you swap two rows?", 
-                  options: [
-                    { id: "A", text: "It becomes zero", isCorrect: false, explanation: "" },
-                    { id: "B", text: "It flips sign", isCorrect: true, explanation: "A standard property of determinants." }
-                  ],
-                  stepText: "Swapping two rows flips the sign of the determinant." 
-                }, 
-                { 
-                  prompt: "How many swaps does it take to go from ABC to BCA?", 
-                  options: [
-                    { id: "A", text: "One swap", isCorrect: false, explanation: "ABC -> BAC (1). Then BAC -> BCA (2)." },
-                    { id: "B", text: "Two swaps", isCorrect: true, explanation: "Two sign flips means the overall sign is unchanged." }
-                  ],
-                  stepText: "Because it takes two swaps (a cyclic shift), the sign flips twice and remains positive. Goal reached!" 
-                } 
-              ] 
-            },
-            { id: "s5", type: "numerical", title: "Volume Calculation", content: "If A=(1,0,0), B=(0,2,0), C=(0,0,3). What is A.(BxC)?", numericAnswer: 6, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Non-Cyclic Permutation", content: "What is $\\mathbf{A} \\cdot (\\mathbf{C} \\times \\mathbf{B})$?", options: [ { id: "A", text: "A . (B x C)", isCorrect: false, explanation: "You swapped B and C, which is not cyclic." }, { id: "B", text: "-(A . (B x C))", isCorrect: true, explanation: "One swap flips the sign." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The scalar triple product computes the ___ of the parallelepiped formed by three vectors.", blankAnswer: "volume" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Is the dot product distributive? $\\mathbf{A} \\cdot (\\mathbf{B} + \\mathbf{C}) = \\mathbf{A} \\cdot \\mathbf{B} + \\mathbf{A} \\cdot \\mathbf{C}$?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "" }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Is $(\\mathbf{A} \\cdot \\mathbf{B}) \\mathbf{C}$ the same as $\\mathbf{A} (\\mathbf{B} \\cdot \\mathbf{C})$?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "One is a vector parallel to C, the other parallel to A." }] },
+            { id: "s2", type: "theory", title: "Properties", content: "1. Distributive: $\\mathbf{A} \\cdot (\\mathbf{B} + \\mathbf{C}) = \\mathbf{A} \\cdot \\mathbf{B} + \\mathbf{A} \\cdot \\mathbf{C}$\n2. Scalar Multiplier: $\\mathbf{A} \\cdot (k\\mathbf{B}) = k(\\mathbf{A} \\cdot \\mathbf{B})$\n3. Orthogonality: If $\\mathbf{A} \\cdot \\mathbf{B} = 0$ (and neither is 0), they are perpendicular." },
+            { id: "s3", type: "interactive_canvas", title: "Distributivity", content: "Check the distributive law geometrically.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Law of Cosines", content: "**Goal:** Derive $C^2 = A^2 + B^2 - 2AB\\cos\\theta$", proofSteps: ["Let $\\mathbf{C} = \\mathbf{A} - \\mathbf{B}$.", "Dot $\\mathbf{C}$ with itself: $C^2 = (\\mathbf{A}-\\mathbf{B})\\cdot(\\mathbf{A}-\\mathbf{B})$.", "Expand: $A^2 + B^2 - 2\\mathbf{A}\\cdot\\mathbf{B}$.", "Substitute definition: $A^2 + B^2 - 2AB\\cos\\theta$."] },
+            { id: "s5", type: "numerical", title: "Orthogonality", content: "Vector A has length 5. Vector B has length 5. Their dot product is 0. What is the angle in degrees?", numericAnswer: 90, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Negative Dot Product", content: "A negative dot product implies the angle is:", options: [{ id: "A", text: "Acute (< 90)", isCorrect: false, explanation: "" }, { id: "B", text: "Obtuse (> 90)", isCorrect: true, explanation: "Cosine is negative in the second quadrant." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "If $\\mathbf{A} \\cdot \\mathbf{B} = 0$, the vectors are said to be ___.", blankAnswer: "orthogonal" }
           ]
         },
         {
-          id: "les-1-7-vector-triple", title: "Vector Triple Product", description: "A x (B x C)", icon: "Wind",
+          id: "les-1-1-1-7",
+          title: "Cross Product Definition",
+          description: "The vector product.",
+          icon: "X",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Is the cross product associative? (i.e. is A x (B x C) equal to (A x B) x C?)", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "No, the placement of parentheses completely changes the result." }, { id: "B", text: "No", isCorrect: true, explanation: "Vector products are generally not associative." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "What does A x (B x C) yield?", options: [ { id: "A", text: "A scalar", isCorrect: false, explanation: "Cross products yield vectors." }, { id: "B", text: "A vector", isCorrect: true, explanation: "It is a vector." } ] },
-            { id: "s2", type: "theory", title: "BAC-CAB Rule", content: "The vector triple product can be simplified using the incredibly useful BAC-CAB rule:\n\n$\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C}) = \\mathbf{B}(\\mathbf{A} \\cdot \\mathbf{C}) - \\mathbf{C}(\\mathbf{A} \\cdot \\mathbf{B})$\n\nNotice that the result is a linear combination of vectors B and C." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Insight: Why the B-C Plane?", 
-              content: "**Goal: Understand why $\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$ must lie entirely in the plane of B and C.**", 
-              interactiveSteps: [ 
-                { 
-                  stepText: "Let $\\mathbf{D} = \\mathbf{B} \\times \\mathbf{C}$. Vector D points strictly perpendicular to the plane formed by B and C." 
-                }, 
-                { 
-                  prompt: "The final vector is $\\mathbf{A} \\times \\mathbf{D}$. By the definition of the cross product, how does this relate to D?", 
-                  options: [
-                    { id: "A", text: "It is parallel to D", isCorrect: false, explanation: "" },
-                    { id: "B", text: "It is perpendicular to D", isCorrect: true, explanation: "Cross product results are perpendicular to their operands." }
-                  ],
-                  stepText: "The final vector is perpendicular to D." 
-                }, 
-                { 
-                  stepText: "If the final vector is perpendicular to D (which is the normal to the B-C plane), it MUST lie perfectly flat within the B-C plane. Hence, it can be written as $c_1\\mathbf{B} + c_2\\mathbf{C}$. The BAC-CAB rule provides exactly these coefficients!" 
-                } 
-              ] 
-            },
-            { id: "s6", type: "quiz", title: "Resulting Plane", content: "The vector $\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$ lies in the plane formed by:", options: [ { id: "A", text: "A and B", isCorrect: false, explanation: "" }, { id: "B", text: "A and C", isCorrect: false, explanation: "" }, { id: "C", text: "B and C", isCorrect: true, explanation: "As proven, it's a linear combination of B and C." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The mnemonic formula for the vector triple product is called the ___-CAB rule.", blankAnswer: "BAC" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "The result of a cross product is a:", options: [{ id: "A", text: "Scalar", isCorrect: false, explanation: "" }, { id: "B", text: "Vector", isCorrect: true, explanation: "Hence the name Vector Product." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "The magnitude of $\\mathbf{A} \\times \\mathbf{B}$ is related to:", options: [{ id: "A", text: "Cosine of angle", isCorrect: false, explanation: "" }, { id: "B", text: "Sine of angle", isCorrect: true, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Cross Product", content: "$\\mathbf{A} \\times \\mathbf{B} \\equiv AB \\sin \\theta \\,\\mathbf{\\hat{n}}$\n\n$\\mathbf{\\hat{n}}$ is a unit vector perpendicular to both $\\mathbf{A}$ and $\\mathbf{B}$, determined by the **Right-Hand Rule**.\n\nMagnitude is the area of the parallelogram formed by $\\mathbf{A}$ and $\\mathbf{B}$." },
+            { id: "s3", type: "interactive_canvas", title: "Right Hand Rule", content: "Curl fingers from A to B. Thumb points along n.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Parallel Vectors", content: "**Goal:** Show $\\mathbf{A} \\times \\mathbf{A} = 0$", proofSteps: ["Angle $\\theta = 0$.", "$\\sin(0) = 0$.", "Thus magnitude is 0."] },
+            { id: "s5", type: "numerical", title: "Area", content: "A=3, B=4, angle=90. What is magnitude of A x B?", numericAnswer: 12, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Direction", content: "If A is East and B is North, A x B is:", options: [{ id: "A", text: "Up", isCorrect: true, explanation: "Right hand rule." }, { id: "B", text: "Down", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The direction of the cross product is determined by the ___ hand rule.", blankAnswer: "right" }
           ]
         },
         {
-          id: "les-1-8-separation", title: "Position and Separation Vectors", description: "The cursive r", icon: "MapPin",
+          id: "les-1-1-1-8",
+          title: "Cross Product Properties",
+          description: "Anti-commutativity and distributivity.",
+          icon: "List",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "In electrostatics, what is the difference between a source point and a field point?", options: [ { id: "A", text: "None", isCorrect: false, explanation: "They are conceptually different." }, { id: "B", text: "Source is where the charge is, field is where we measure the effect.", isCorrect: true, explanation: "Exactly." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "In Coulomb's law denominator ($r^2$), what does 'r' represent?", options: [ { id: "A", text: "Distance from the origin", isCorrect: false, explanation: "Only true if the charge is at the origin." }, { id: "B", text: "Distance from the source charge to the field point", isCorrect: true, explanation: "It represents the separation distance." } ] },
-            { id: "s2", type: "theory", title: "The Separation Vector", content: "**Position vector ($\\mathbf{r}$)**: Vector from origin to a point. $\\mathbf{r} = x\\hat{x} + y\\hat{y} + z\\hat{z}$.\n\n**Separation vector (${\\cal{r}}$)**: Vector from the source point $\\mathbf{r}'$ to the field point $\\mathbf{r}$.\n${\\cal{r}} = \\mathbf{r} - \\mathbf{r}'$" },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Derivation: Magnitude", 
-              content: "**Goal: Write the magnitude of the separation vector.**", 
-              interactiveSteps: [ 
-                { 
-                  stepText: "Let the source point be $\\mathbf{r}' = (x', y', z')$ and the field point be $\\mathbf{r} = (x, y, z)$." 
-                }, 
-                { 
-                  prompt: "What is the vector subtraction $\\mathbf{r} - \\mathbf{r}'$?", 
-                  options: [
-                    { id: "A", text: "$(x-x')\\hat{x} + (y-y')\\hat{y} + (z-z')\\hat{z}$", isCorrect: true, explanation: "Subtract component by component." },
-                    { id: "B", text: "$(x+x')\\hat{x} + (y+y')\\hat{y} + (z+z')\\hat{z}$", isCorrect: false, explanation: "That would be addition." }
-                  ],
-                  stepText: "The separation vector is $(x-x')\\hat{x} + (y-y')\\hat{y} + (z-z')\\hat{z}$." 
-                }, 
-                { 
-                  stepText: "Applying the 3D Pythagorean theorem, the magnitude is $\\cal{r} = \\sqrt{(x-x')^2 + (y-y')^2 + (z-z')^2}$. Goal reached!" 
-                } 
-              ] 
-            },
-            { id: "s5", type: "numerical", title: "Calculate Separation", content: "A source charge is at (1,0,0) meters. You want the field at (4,4,0) meters. What is the magnitude of the separation vector (in meters)?", numericAnswer: 5, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Unit Separation Vector", content: "How do we form the unit separation vector ${\\hat{\\cal{r}}}$?", options: [ { id: "A", text: "Divide the position vector r by its magnitude", isCorrect: false, explanation: "That gives r-hat, not script-r-hat." }, { id: "B", text: "Divide the separation vector by its magnitude", isCorrect: true, explanation: "Normalizing the vector." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The vector that points from the origin to your location is called the ___ vector.", blankAnswer: "position" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Is the cross product commutative ($A \\times B = B \\times A$)?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "It is anti-commutative." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "What is $B \\times A$ in terms of $A \\times B$?", options: [{ id: "A", text: "$-(A \\times B)$", isCorrect: true, explanation: "Sign flip." }, { id: "B", text: "$A \\times B$", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Properties", content: "1. Distributive: $\\mathbf{A} \\times (\\mathbf{B} + \\mathbf{C}) = (\\mathbf{A} \\times \\mathbf{B}) + (\\mathbf{A} \\times \\mathbf{C})$\n2. Anti-commutative: $\\mathbf{B} \\times \\mathbf{A} = -(\\mathbf{A} \\times \\mathbf{B})$\n3. Not Associative: $\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C}) \\neq (\\mathbf{A} \\times \\mathbf{B}) \\times \\mathbf{C}$" },
+            { id: "s3", type: "interactive_canvas", title: "Anti-commutativity", content: "Visualizing the sign flip.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Sign Flip", content: "**Goal:** Show $\\mathbf{B} \\times \\mathbf{A} = -\\mathbf{A} \\times \\mathbf{B}$", proofSteps: ["Magnitude $AB \\sin\\theta$ is same.", "Right hand rule direction flips.", "Curling B to A is opposite to A to B.", "Thus vector is negated."] },
+            { id: "s5", type: "numerical", title: "Calculation", content: "If |A x B| = 5, what is |B x A|?", numericAnswer: 5, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Zero Cross Product", content: "Cross product is zero if vectors are:", options: [{ id: "A", text: "Perpendicular", isCorrect: false, explanation: "" }, { id: "B", text: "Parallel", isCorrect: true, explanation: "Sin(0)=0." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The cross product of two parallel vectors is always ___.", blankAnswer: "zero" }
           ]
         }
       ]
     },
     {
-      id: "unit-2-differential-calculus",
-      title: "Differential Calculus",
-      description: "Gradient, Divergence, Curl, and Second Derivatives.",
+      id: "unit-1-1-2",
+      title: "1.1.2 Component Algebra",
+      description: "Cartesian coordinates, Basis vectors, and Component rules.",
       color: "duo-blue",
       lessons: [
         {
-          id: "les-2-1-ordinary", title: "Ordinary Derivatives", description: "Review of 1D Calculus", icon: "TrendingUp",
+          id: "les-1-1-2-1",
+          title: "Cartesian Coordinates",
+          description: "x, y, z and basis vectors.",
+          icon: "Grid",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "What does the derivative represent geometrically?", options: [ { id: "A", text: "Area under curve", isCorrect: false, explanation: "That's the integral." }, { id: "B", text: "Slope of the tangent", isCorrect: true, explanation: "Rise over run." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "If $df/dx = 0$, the point is a:", options: [ { id: "A", text: "Stationary point", isCorrect: true, explanation: "Max, min or inflection." }, { id: "B", text: "Discontinuity", isCorrect: false, explanation: "Derivatives don't exist at discontinuities." } ] },
-            { id: "s2", type: "theory", title: "The Ordinary Derivative", content: "$df = \\left(\\frac{df}{dx}\\right) dx$\n\nThe derivative tells us how rapidly the function $f(x)$ varies when we change $x$ by an infinitesimal amount $dx$." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Insight: Differentials", 
-              content: "**Goal: Understand infinitesimal increments.**", 
-              interactiveSteps: [ 
-                { 
-                  prompt: "If you move a tiny distance $dx$ along the x-axis, the function's value changes by a tiny amount. What do we call this amount?", 
-                  options: [
-                    { id: "A", text: "$df$", isCorrect: true, explanation: "The differential change in f." },
-                    { id: "B", text: "$\\Delta x$", isCorrect: false, explanation: "That's a finite change." }
-                  ],
-                  stepText: "The function changes by $df$." 
-                }, 
-                { 
-                  stepText: "The proportionality factor linking the push $dx$ to the response $df$ is precisely the derivative $df/dx$." 
-                } 
-              ] 
-            },
-            { id: "s6", type: "quiz", title: "What is dx?", content: "In calculus, what does $dx$ represent?", options: [ { id: "A", text: "A finite step", isCorrect: false, explanation: "" }, { id: "B", text: "An infinitesimal displacement", isCorrect: true, explanation: "It is infinitely small." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The derivative df/dx represents the ___ of the graph of f versus x.", blankAnswer: "slope" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Are the unit vectors $\\hat{x}, \\hat{y}, \\hat{z}$ constant?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "In Cartesian coords, they point in fixed directions." }, { id: "B", text: "No", isCorrect: false, explanation: "This would be true for spherical coords." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "What is the magnitude of $\\hat{x}$?", options: [{ id: "A", text: "0", isCorrect: false, explanation: "" }, { id: "B", text: "1", isCorrect: true, explanation: "It is a unit vector." }] },
+            { id: "s2", type: "theory", title: "Basis Vectors", content: "Any vector $\\mathbf{A}$ can be expressed as:\n$$\\mathbf{A} = A_x\\mathbf{\\hat{x}} + A_y\\mathbf{\\hat{y}} + A_z\\mathbf{\\hat{z}}$$\n\n$A_x, A_y, A_z$ are components.\n$\\mathbf{\\hat{x}}, \\mathbf{\\hat{y}}, \\mathbf{\\hat{z}}$ are mutually perpendicular unit vectors." },
+            { id: "s3", type: "interactive_canvas", title: "Component Explorer", content: "See how a vector decomposes into x and y components.", interactiveCanvasId: "component-form-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Orthogonality", content: "**Goal:** Show $\\mathbf{\\hat{x}} \\cdot \\mathbf{\\hat{y}} = 0$", proofSteps: ["$\\mathbf{\\hat{x}}$ is perpendicular to $\\mathbf{\\hat{y}}$.", "Angle is 90 degrees.", "$\\cos(90) = 0$.", "Therefore dot product is 0."] },
+            { id: "s5", type: "numerical", title: "Components", content: "If A = 3x + 4y, what is A_x?", numericAnswer: 3, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Basis", content: "The set of vectors {x, y, z} forms a:", options: [{ id: "A", text: "Basis", isCorrect: true, explanation: "They span the space." }, { id: "B", text: "Scalar", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The unit vectors along the Cartesian axes are called ___ vectors.", blankAnswer: "basis" }
           ]
         },
         {
-          id: "les-2-2-gradient", title: "Gradient Definition", description: "Generalizing derivative to 3D", icon: "Mountain",
+          id: "les-1-1-2-2",
+          title: "Component Operations",
+          description: "Adding and Scaling.",
+          icon: "Plus",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you are standing on a hill blindfolded and want to reach the peak, which direction should you step?", options: [ { id: "A", text: "Along the flat contour", isCorrect: false, explanation: "That keeps you at the same height." }, { id: "B", text: "The direction of steepest ascent", isCorrect: true, explanation: "This is the gradient direction!" } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Is the gradient of a scalar function a scalar or a vector?", options: [ { id: "A", text: "Scalar", isCorrect: false, explanation: "It has a specific direction (steepest uphill)." }, { id: "B", text: "Vector", isCorrect: true, explanation: "It has magnitude and direction." } ] },
-            { id: "s2", type: "theory", title: "The Gradient", content: "For a 3D scalar function $T(x,y,z)$, the derivative depends on the direction you move.\n\n$\\nabla T = \\frac{\\partial T}{\\partial x}\\hat{x} + \\frac{\\partial T}{\\partial y}\\hat{y} + \\frac{\\partial T}{\\partial z}\\hat{z}$\n\nThe Gradient is a vector pointing in the direction of maximum increase. Its magnitude gives the slope in that direction." },
-            { id: "s3", type: "interactive_canvas", title: "Gradient Explorer", content: "Drag the probe. Notice the red gradient vector always points perpendicularly across contour lines, straight 'uphill'.", interactiveCanvasId: "gradient-interactive" },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Max Increase Direction", 
-              content: "**Goal: Prove mathematically that the gradient points uphill.**\n\nThe change in T is $dT = \\nabla T \\cdot d\\mathbf{l}$.", 
-              interactiveSteps: [ 
-                { 
-                  prompt: "Using the dot product formula, rewrite $dT = \\nabla T \\cdot d\\mathbf{l}$.", 
-                  options: [
-                    { id: "A", text: "$|\\nabla T| |dl| \\cos\\theta$", isCorrect: true, explanation: "Correct." },
-                    { id: "B", text: "$|\\nabla T| |dl| \\sin\\theta$", isCorrect: false, explanation: "Dot product uses cosine." }
-                  ],
-                  stepText: "$dT = |\\nabla T| |dl| \\cos\\theta$" 
-                }, 
-                { 
-                  prompt: "To maximize the change $dT$ for a fixed step size $|dl|$, what must $\\cos\\theta$ be?", 
-                  options: [
-                    { id: "A", text: "0", isCorrect: false, explanation: "That would mean no change." },
-                    { id: "B", text: "1", isCorrect: true, explanation: "Max value of cosine is 1." }
-                  ],
-                  stepText: "$\\cos\\theta$ must be 1, meaning $\\theta = 0$. Thus, you must step exactly parallel to $\\nabla T$. Goal reached!" 
-                } 
-              ] 
-            },
-            { id: "s6", type: "quiz", title: "Stationary Point", content: "If $\\nabla T = 0$ at a point, what do we know about that point?", options: [ { id: "A", text: "It is a stationary point", isCorrect: true, explanation: "Local max, min, or saddle." }, { id: "B", text: "The function is discontinuous there", isCorrect: false, explanation: "The derivative exists and is zero." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The gradient is always ___ to the equipotential contour lines.", blankAnswer: "perpendicular" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "To add two vectors in component form, you:", options: [{ id: "A", text: "Add their magnitudes", isCorrect: false, explanation: "" }, { id: "B", text: "Add like components", isCorrect: true, explanation: "(Ax+Bx, Ay+By, ...)" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "To multiply a vector by scalar k:", options: [{ id: "A", text: "Multiply only x component", isCorrect: false, explanation: "" }, { id: "B", text: "Multiply all components by k", isCorrect: true, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Rule (i) & (ii)", content: "**Addition:**\n$\\mathbf{A} + \\mathbf{B} = (A_x+B_x)\\mathbf{\\hat{x}} + (A_y+B_y)\\mathbf{\\hat{y}} + (A_z+B_z)\\mathbf{\\hat{z}}$\n\n**Scalar Mult:**\n$a\\mathbf{A} = aA_x\\mathbf{\\hat{x}} + aA_y\\mathbf{\\hat{y}} + aA_z\\mathbf{\\hat{z}}$" },
+            { id: "s3", type: "interactive_canvas", title: "Visualizing Components", content: "Addition in grid view.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Component Addition", content: "**Goal:** Justify component rule.", proofSteps: ["Write A as sum of basis vectors.", "Write B as sum of basis vectors.", "Group terms with same basis vector (distributive law)."] },
+            { id: "s5", type: "numerical", title: "Addition", content: "A = (1, 2), B = (3, 4). What is the x-component of A+B?", numericAnswer: 4, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Subtraction", content: "Subtraction works by:", options: [{ id: "A", text: "Subtracting components", isCorrect: true, explanation: "" }, { id: "B", text: "Dividing components", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "When adding vectors, we add corresponding ___.", blankAnswer: "components" }
           ]
         },
         {
-          id: "les-2-3-gradient-ex", title: "Gradient Example", description: "Gradient of r", icon: "Target",
+          id: "les-1-1-2-3",
+          title: "Dot Product (Components)",
+          description: "Calculating A dot B.",
+          icon: "CircleDot",
           slides: [
-            { id: "s0", type: "example_q", title: "Example 1.3", content: "**Problem:** Find the gradient of $r = \\sqrt{x^2 + y^2 + z^2}$ (the magnitude of the position vector).\n\nTry taking the partial derivative with respect to x first." },
-            { 
-              id: "s1", 
-              type: "solution", 
-              title: "Interactive Solution", 
-              content: "**Goal: Calculate $\\nabla r$**", 
-              interactiveSteps: [
-                {
-                  prompt: "Using the chain rule, what is $\\frac{\\partial}{\\partial x} (x^2 + y^2 + z^2)^{1/2}$?",
-                  options: [
-                    { id: "A", text: "$\\frac{x}{\\sqrt{x^2+y^2+z^2}}$", isCorrect: true, explanation: "1/2 * (inner)^(-1/2) * 2x. The 2s cancel." },
-                    { id: "B", text: "$2x$", isCorrect: false, explanation: "Forgot the outer square root derivative." }
-                  ],
-                  stepText: "$\\frac{\\partial r}{\\partial x} = \\frac{x}{r}$."
-                },
-                {
-                  stepText: "By symmetry, the y and z derivatives are $y/r$ and $z/r$."
-                },
-                {
-                  prompt: "Assemble the vector: $\\frac{x}{r}\\hat{x} + \\frac{y}{r}\\hat{y} + \\frac{z}{r}\\hat{z}$. What does this equal?",
-                  options: [
-                    { id: "A", text: "$\\mathbf{r}$", isCorrect: false, explanation: "You forgot the 1/r denominator." },
-                    { id: "B", text: "$\\hat{r}$", isCorrect: true, explanation: "Vector r divided by its magnitude r is the unit vector r-hat." }
-                  ],
-                  stepText: "The result is $\\hat{r}$!"
-                }
-              ]
-            },
-            { id: "s2", type: "quiz", title: "Physical Meaning", content: "What does $\\nabla r = \\hat{r}$ physically mean?", options: [ { id: "A", text: "Distance from the origin increases most rapidly moving straight outward.", isCorrect: true, explanation: "And the slope is exactly 1." }, { id: "B", text: "Distance is constant.", isCorrect: false, explanation: "No, it changes." } ] }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "What is $\\mathbf{\\hat{x}} \\cdot \\mathbf{\\hat{x}}$?", options: [{ id: "A", text: "1", isCorrect: true, explanation: "" }, { id: "B", text: "0", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "What is $\\mathbf{\\hat{x}} \\cdot \\mathbf{\\hat{y}}$?", options: [{ id: "A", text: "1", isCorrect: false, explanation: "" }, { id: "B", text: "0", isCorrect: true, explanation: "Orthogonal." }] },
+            { id: "s2", type: "theory", title: "Rule (iii)", content: "$\\mathbf{A} \\cdot \\mathbf{B} = A_x B_x + A_y B_y + A_z B_z$\n\nTo calculate dot product, multiply like components and sum them." },
+            { id: "s3", type: "interactive_canvas", title: "Dot Product Calc", content: "Calculator tool.", interactiveCanvasId: "component-form-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Component Rule", content: "**Goal:** Derive formula.", proofSteps: ["Expand $(A_x \\hat{x} + ...) \\cdot (B_x \\hat{x} + ...)$", "This gives 9 terms.", "Cross terms like $\\hat{x} \\cdot \\hat{y}$ vanish.", "Self terms like $\\hat{x} \\cdot \\hat{x}$ become 1.", "Result: $A_x B_x + A_y B_y + A_z B_z$."] },
+            { id: "s5", type: "numerical", title: "Calculation", content: "A=(1,2,3), B=(4, -5, 6). Calculate A dot B.", numericAnswer: 12, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Result Type", content: "The result is:", options: [{ id: "A", text: "A Vector", isCorrect: false, explanation: "" }, { id: "B", text: "A Scalar", isCorrect: true, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The dot product of perpendicular basis vectors is ___.", blankAnswer: "zero" }
           ]
         },
         {
-          id: "les-2-4-del", title: "The Del Operator", description: "Introducing Nabla", icon: "Activity",
+          id: "les-1-1-2-4",
+          title: "Cross Product (Components)",
+          description: "Determinant rule.",
+          icon: "Grid",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Is the Del ($\\nabla$) operator a standard vector?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "It doesn't 'multiply' things normally." }, { id: "B", text: "No, it's a vector operator", isCorrect: true, explanation: "It's an instruction to differentiate." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "How many ways can an ordinary vector multiply other things?", options: [ { id: "A", text: "3 ways", isCorrect: true, explanation: "By a scalar, dot product, cross product." }, { id: "B", text: "1 way", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "The Del Operator", content: "$\\nabla = \\hat{x}\\frac{\\partial}{\\partial x} + \\hat{y}\\frac{\\partial}{\\partial y} + \\hat{z}\\frac{\\partial}{\\partial z}$\n\nLike an ordinary vector, it acts in three ways:\n1. On a scalar ($T$): $\\nabla T$ (Gradient)\n2. On a vector via dot product: $\\nabla \\cdot \\mathbf{v}$ (Divergence)\n3. On a vector via cross product: $\\nabla \\times \\mathbf{v}$ (Curl)" },
-            { id: "s6", type: "quiz", title: "Del Property", content: "Does Del commute like ordinary vectors? (i.e. is $\\nabla \\cdot \\mathbf{A}$ the same as $\\mathbf{A} \\cdot \\nabla$?)", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "Ordinary dot products commute, Del does not." }, { id: "B", text: "No", isCorrect: true, explanation: "$\\mathbf{A}\\cdot\\nabla$ is a completely different differential operator." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The upside-down triangle symbol $\\nabla$ is called ___.", blankAnswer: "del" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "What is $\\mathbf{\\hat{x}} \\times \\mathbf{\\hat{y}}$?", options: [{ id: "A", text: "$\\mathbf{\\hat{z}}$", isCorrect: true, explanation: "Right hand cyclic." }, { id: "B", text: "$-\\mathbf{\\hat{z}}$", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "How many components does the cross product have?", options: [{ id: "A", text: "1", isCorrect: false, explanation: "" }, { id: "B", text: "3", isCorrect: true, explanation: "It is a vector." }] },
+            { id: "s2", type: "theory", title: "Rule (iv)", content: "The cross product can be calculated as a determinant:\n\n$$ \\mathbf{A} \\times \\mathbf{B} = \\begin{vmatrix} \\hat{x} & \\hat{y} & \\hat{z} \\\\ A_x & A_y & A_z \\\\ B_x & B_y & B_z \\end{vmatrix} $$" },
+            { id: "s3", type: "interactive_canvas", title: "Cross Product", content: "Visualizing the orthogonal result.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Component Expansion", content: "**Goal:** Show x-component.", proofSteps: ["Expand $(A_x \\hat{x} + ...) \\times (B_x \\hat{x} + ...)$", "Terms like $\\hat{x} \\times \\hat{x}$ vanish.", "Terms like $\\hat{y} \\times \\hat{z}$ give $\\hat{x}$.", "Terms like $\\hat{z} \\times \\hat{y}$ give $-\\hat{x}$.", "Sum x terms: $A_y B_z - A_z B_y$."] },
+            { id: "s5", type: "numerical", title: "Calculation", content: "A=(1,0,0), B=(0,1,0). What is z-component of A x B?", numericAnswer: 1, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Determinant", content: "The determinant method ensures:", options: [{ id: "A", text: "Correct signs and components", isCorrect: true, explanation: "" }, { id: "B", text: "Scalar result", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The cross product of $\\hat{x}$ and $\\hat{x}$ is ___.", blankAnswer: "zero" }
           ]
         },
         {
-          id: "les-2-5-divergence", title: "Divergence Definition", description: "Measuring outflow", icon: "Maximize",
+          id: "les-1-1-2-5",
+          title: "Magnitude & Direction",
+          description: "Using components.",
+          icon: "Maximize",
           slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you sprinkle sawdust on a pond and it spreads outward from a point, that point acts as a:", options: [ { id: "A", text: "Source (Faucet)", isCorrect: true, explanation: "Positive divergence." }, { id: "B", text: "Sink (Drain)", isCorrect: false, explanation: "Negative divergence." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Does the divergence of a vector field result in a scalar or a vector?", options: [ { id: "A", text: "Scalar", isCorrect: true, explanation: "It uses the dot product." }, { id: "B", text: "Vector", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "The Divergence", content: "$\\nabla \\cdot \\mathbf{v} = \\frac{\\partial v_x}{\\partial x} + \\frac{\\partial v_y}{\\partial y} + \\frac{\\partial v_z}{\\partial z}$\n\nIt is a **scalar** that measures how much the vector field $\\mathbf{v}$ spreads out (diverges) from the point in question.\n- Positive = Source (Faucet)\n- Negative = Sink (Drain)" },
-            { id: "s3", type: "interactive_canvas", title: "Divergence Field", content: "Notice how vectors radiate outward. This is a field with positive divergence.", interactiveCanvasId: "divergence-interactive" },
-            { id: "s5", type: "numerical", title: "Calculate Divergence", content: "Given $\\mathbf{v} = 2x \\hat{x} + 3y \\hat{y} - z \\hat{z}$, what is $\\nabla \\cdot \\mathbf{v}$?", numericAnswer: 4, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Incompressible Fluid", content: "Water flowing steadily in a rigid pipe can't compress. What is the divergence everywhere inside?", options: [ { id: "A", text: "Positive", isCorrect: false, explanation: "" }, { id: "B", text: "Zero", isCorrect: true, explanation: "What goes in must come out, no accumulation." }, { id: "C", text: "Negative", isCorrect: false, explanation: "" } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A point with negative divergence acts like a ___ drawing fluid in.", blankAnswer: "sink" }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "How do you find the magnitude of a vector from components?", options: [{ id: "A", text: "Sum of components", isCorrect: false, explanation: "" }, { id: "B", text: "Square root of sum of squares", isCorrect: true, explanation: "Pythagorean theorem." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "What is $\\mathbf{A} \\cdot \\mathbf{A}$ in components?", options: [{ id: "A", text: "$A_x^2 + A_y^2 + A_z^2$", isCorrect: true, explanation: "" }, { id: "B", text: "$A^2$", isCorrect: true, explanation: "Both are correct." }] },
+            { id: "s2", type: "theory", title: "Magnitude", content: "$$A = \\sqrt{A_x^2 + A_y^2 + A_z^2}$$\n\nThis is the 3D generalization of the Pythagorean theorem." },
+            { id: "s3", type: "interactive_canvas", title: "3D Pythagorean", content: "Visualizing the diagonal of a box.", interactiveCanvasId: "component-form-interactive" },
+            { id: "s4", type: "proof", title: "Proof: From Dot Product", content: "**Goal:** Show $A = \\sqrt{A \\cdot A}$", proofSteps: ["$A^2 = \\mathbf{A} \\cdot \\mathbf{A}$", "In components: $A_x A_x + A_y A_y + A_z A_z$.", "So $A = \\sqrt{\\sum A_i^2}$."] },
+            { id: "s5", type: "numerical", title: "Magnitude", content: "A = (3, 4, 0). What is |A|?", numericAnswer: 5, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Unit Vector", content: "To normalize vector A, you divide by:", options: [{ id: "A", text: "$|A|$", isCorrect: true, explanation: "" }, { id: "B", text: "$A^2$", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The magnitude is always a ___ real number.", blankAnswer: "positive" }
           ]
         },
         {
-          id: "les-2-6-divergence-ex", title: "Divergence Example", description: "Divergence of r", icon: "Target",
+          id: "les-1-1-2-6",
+          title: "Algebraic Properties",
+          description: "Unit vectors and identities.",
+          icon: "Book",
           slides: [
-            { id: "s0", type: "example_q", title: "Example 1.4", content: "**Problem:** Calculate the divergence of the position vector $\\mathbf{v} = \\mathbf{r} = x\\hat{x} + y\\hat{y} + z\\hat{z}$." },
-            { 
-              id: "s1", 
-              type: "solution", 
-              title: "Interactive Solution", 
-              content: "**Goal: Calculate $\\nabla \\cdot \\mathbf{r}$**", 
-              interactiveSteps: [
-                {
-                  prompt: "What is the partial derivative $\\frac{\\partial}{\\partial x}(x)$?",
-                  options: [
-                    { id: "A", text: "1", isCorrect: true, explanation: "Derivative of x wrt x is 1." },
-                    { id: "B", text: "0", isCorrect: false, explanation: "That would be wrt y or z." }
-                  ],
-                  stepText: "$\\frac{\\partial x}{\\partial x} = 1$."
-                },
-                {
-                  prompt: "Since $\\frac{\\partial y}{\\partial y} = 1$ and $\\frac{\\partial z}{\\partial z} = 1$, what is the sum?",
-                  options: [
-                    { id: "A", text: "1", isCorrect: false, explanation: "Add all three." },
-                    { id: "B", text: "3", isCorrect: true, explanation: "1 + 1 + 1 = 3." }
-                  ],
-                  stepText: "$\\nabla \\cdot \\mathbf{r} = 1 + 1 + 1 = 3$. Goal reached!"
-                }
-              ]
-            },
-            { id: "s2", type: "quiz", title: "Physical Meaning", content: "Since the divergence is exactly 3 everywhere, what does this mean?", options: [ { id: "A", text: "The field is spreading out uniformly everywhere.", isCorrect: true, explanation: "It's a uniform source." }, { id: "B", text: "The field has no sources.", isCorrect: false, explanation: "Divergence is not zero." } ] }
-          ]
-        },
-        {
-          id: "les-2-7-curl", title: "Curl Definition", description: "Measuring swirl", icon: "RotateCw",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If you drop a paddlewheel into a uniformly flowing river, will it spin?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "The water pushes evenly on all sides." }, { id: "B", text: "No", isCorrect: true, explanation: "Uniform flow has no swirl (curl is zero)." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Does the curl of a vector field result in a scalar or a vector?", options: [ { id: "A", text: "Scalar", isCorrect: false, explanation: "Divergence is a scalar." }, { id: "B", text: "Vector", isCorrect: true, explanation: "It uses the cross product." } ] },
-            { id: "s2", type: "theory", title: "The Curl", content: "$\\nabla \\times \\mathbf{v} = \\left(\\frac{\\partial v_z}{\\partial y} - \\frac{\\partial v_y}{\\partial z}\\right)\\hat{x} + \\dots$\n\nIt is a **vector** that measures how much the field swirls around a point. The direction points along the axis of rotation of a hypothetical paddlewheel (right-hand rule)." },
-            { id: "s3", type: "interactive_canvas", title: "Curl Field", content: "Notice the paddlewheel turning in the field. This indicates a non-zero curl.", interactiveCanvasId: "curl-interactive" },
-            { id: "s6", type: "quiz", title: "Irrotational Field", content: "If a vector field has exactly zero curl everywhere ($\\nabla \\times \\mathbf{v} = 0$), it is called:", options: [ { id: "A", text: "Incompressible", isCorrect: false, explanation: "That means divergence is zero." }, { id: "B", text: "Irrotational", isCorrect: true, explanation: "Zero curl means no rotation." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "To test for curl, imagine dropping a tiny ___ into the field to see if it spins.", blankAnswer: "paddlewheel" }
-          ]
-        },
-        {
-          id: "les-2-8-curl-ex", title: "Curl Example", description: "Swirling Field", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Example 1.5", content: "**Problem:** Calculate the curl of the swirling field $\\mathbf{v} = -y\\hat{x} + x\\hat{y}$." },
-            { 
-              id: "s1", 
-              type: "solution", 
-              title: "Interactive Solution", 
-              content: "**Goal: Calculate $\\nabla \\times \\mathbf{v}$**", 
-              interactiveSteps: [
-                {
-                  stepText: "Set up the 3x3 determinant with $\\hat{x}, \\hat{y}, \\hat{z}$ in row 1, derivatives in row 2, and $-y, x, 0$ in row 3."
-                },
-                {
-                  prompt: "Let's find the z-component: $\\frac{\\partial}{\\partial x}(x) - \\frac{\\partial}{\\partial y}(-y)$. What does this equal?",
-                  options: [
-                    { id: "A", text: "1 - 1 = 0", isCorrect: false, explanation: "Careful with the double negative." },
-                    { id: "B", text: "1 - (-1) = 2", isCorrect: true, explanation: "Yes, 1 + 1 = 2." }
-                  ],
-                  stepText: "The z-component is 2."
-                },
-                {
-                  stepText: "The x and y components evaluate to 0. Thus, the curl is $2\\hat{z}$. Goal reached!"
-                }
-              ]
-            },
-            { id: "s2", type: "quiz", title: "Follow-up Q1", content: "What does the result $2\\hat{z}$ tell us about the paddlewheel?", options: [ { id: "A", text: "It spins around the z-axis.", isCorrect: true, explanation: "The curl points along the axis of rotation." }, { id: "B", text: "It moves along the z-axis.", isCorrect: false, explanation: "Curl measures rotation, not linear push." } ] }
-          ]
-        },
-        {
-          id: "les-2-9-product-rules", title: "Product Rules Overview", description: "Calculus identities", icon: "Book",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "In 1D calculus, what is $\\frac{d}{dx}(fg)$?", options: [ { id: "A", text: "f'g'", isCorrect: false, explanation: "" }, { id: "B", text: "fg' + gf'", isCorrect: true, explanation: "The standard product rule." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Because vector calculus has dot and cross products, how many distinct product rules are there?", options: [ { id: "A", text: "2", isCorrect: false, explanation: "" }, { id: "B", text: "6", isCorrect: true, explanation: "Two for grad, two for div, two for curl." } ] },
-            { id: "s2", type: "theory", title: "Vector Product Rules", content: "We can form products in multiple ways (scalar*scalar, scalar*vector, vector.vector, vector x vector).\n\nKey rules you will use often:\n$\\nabla(fg) = f\\nabla g + g\\nabla f$\n$\\nabla \\cdot (f\\mathbf{A}) = f(\\nabla\\cdot\\mathbf{A}) + \\mathbf{A}\\cdot(\\nabla f)$" },
-            { id: "s6", type: "quiz", title: "Divergence of a cross product", content: "According to the rules, what is $\\nabla \\cdot (\\mathbf{A} \\times \\mathbf{B})$?", options: [ { id: "A", text: "\\mathbf{B}\\cdot(\\nabla\\times\\mathbf{A}) - \\mathbf{A}\\cdot(\\nabla\\times\\mathbf{B})", isCorrect: true, explanation: "This is Product Rule #4." }, { id: "B", text: "0", isCorrect: false, explanation: "" } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Vector product rules are built upon the standard 1D ___ rule.", blankAnswer: "product" }
-          ]
-        },
-        {
-          id: "les-2-10-product-ex", title: "Deriving a Product Rule", description: "Interactive Proof", icon: "Target",
-          slides: [
-            { id: "s0", type: "example_q", title: "Derivation", content: "**Problem:** Derive the rule: $\\nabla \\cdot (f\\mathbf{A}) = f(\\nabla\\cdot\\mathbf{A}) + \\mathbf{A}\\cdot(\\nabla f)$." },
-            { 
-              id: "s1", 
-              type: "solution", 
-              title: "Interactive Solution", 
-              content: "**Goal: Prove the divergence product rule.**", 
-              interactiveSteps: [
-                {
-                  stepText: "Expand the divergence: $\\nabla \\cdot (f\\mathbf{A}) = \\frac{\\partial (f A_x)}{\\partial x} + \\frac{\\partial (f A_y)}{\\partial y} + \\frac{\\partial (f A_z)}{\\partial z}$."
-                },
-                {
-                  prompt: "Apply the 1D product rule to the first term. What is $\\frac{\\partial (f A_x)}{\\partial x}$?",
-                  options: [
-                    { id: "A", text: "$f \\frac{\\partial A_x}{\\partial x} + A_x \\frac{\\partial f}{\\partial x}$", isCorrect: true, explanation: "Standard product rule." },
-                    { id: "B", text: "$f \\frac{\\partial A_x}{\\partial x}$", isCorrect: false, explanation: "Missing the second half." }
-                  ],
-                  stepText: "It expands to $f \\frac{\\partial A_x}{\\partial x} + A_x \\frac{\\partial f}{\\partial x}$."
-                },
-                {
-                  stepText: "Grouping all the $f$ terms together gives $f (\\frac{\\partial A_x}{\\partial x} + ...)$, which is exactly $f(\\nabla\\cdot\\mathbf{A})$."
-                },
-                {
-                  stepText: "Grouping the $A$ terms together gives $A_x \\frac{\\partial f}{\\partial x} + ...$, which is exactly $\\mathbf{A}\\cdot(\\nabla f)$. Goal reached!"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: "les-2-11-quotient", title: "Quotient Rules", description: "Deriving from product rules", icon: "Divide",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up", content: "In 1D, how can you derive the quotient rule d(f/g)/dx?", options: [ { id: "A", text: "Apply the product rule to f * (1/g)", isCorrect: true, explanation: "Yes, product rule handles quotients too." }, { id: "B", text: "It cannot be derived", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "Quotient Rules", content: "Just like in 1D, we can formulate three quotient rules for vector calculus.\nExample: $\\nabla(f/g) = \\frac{g\\nabla f - f\\nabla g}{g^2}$.\n\nHowever, they can be obtained so quickly from the product rules that we rarely memorize them separately." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Derivation", 
-              content: "**Goal: Derive $\\nabla(f/g)$**", 
-              interactiveSteps: [
-                {
-                  prompt: "To apply the product rule $\\nabla(uv) = u\\nabla v + v\\nabla u$, what should we set $u$ and $v$ to?",
-                  options: [
-                    { id: "A", text: "$u = f, v = 1/g$", isCorrect: true, explanation: "Correct." },
-                    { id: "B", text: "$u = f, v = g$", isCorrect: false, explanation: "We want a quotient." }
-                  ],
-                  stepText: "Set $u = f$ and $v = 1/g$."
-                },
-                {
-                  stepText: "$\\nabla(f \\cdot 1/g) = f \\nabla(1/g) + (1/g) \\nabla f$."
-                },
-                {
-                  stepText: "Since $\\nabla(1/g) = -1/g^2 \\nabla g$, substituting this back gives $\\frac{g\\nabla f - f\\nabla g}{g^2}$. Goal reached!"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          id: "les-2-12-second-deriv", title: "Second Derivatives Intro", description: "Applying Del twice", icon: "Layers",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "Since we have 3 operators (Grad, Div, Curl), how many mathematical combinations of applying Del twice exist?", options: [ { id: "A", text: "9", isCorrect: true, explanation: "3x3 combinations." }, { id: "B", text: "3", isCorrect: false, explanation: "" } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Out of the 9 combinations, how many actually produce valid outputs (e.g. you can't take the curl of a scalar)?", options: [ { id: "A", text: "5", isCorrect: true, explanation: "Only 5 make mathematical sense." }, { id: "B", text: "9", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "The Five Second Derivatives", content: "1. Div of Grad: $\\nabla \\cdot (\\nabla T) = \\nabla^2 T$ (Laplacian)\n2. Curl of Grad: $\\nabla \\times (\\nabla T) = 0$\n3. Grad of Div: $\\nabla(\\nabla \\cdot \\mathbf{v})$\n4. Div of Curl: $\\nabla \\cdot (\\nabla \\times \\mathbf{v}) = 0$\n5. Curl of Curl: $\\nabla \\times (\\nabla \\times \\mathbf{v}) = \\nabla(\\nabla\\cdot\\mathbf{v}) - \\nabla^2\\mathbf{v}$" },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Applying Divergence to a Gradient gives the ___.", blankAnswer: "Laplacian" }
-          ]
-        },
-        {
-          id: "les-2-13-laplacian", title: "The Laplacian", description: "Divergence of a Gradient", icon: "Waves",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "In 1D calculus, if the first derivative is 'slope', what is the second derivative?", options: [ { id: "A", text: "Area", isCorrect: false, explanation: "" }, { id: "B", text: "Concavity", isCorrect: true, explanation: "Exactly." } ] },
-            { id: "s1", type: "quiz", title: "Warm-up 2", content: "Is the Laplacian of a scalar function a scalar or a vector?", options: [ { id: "A", text: "Scalar", isCorrect: true, explanation: "Divergence (dot product) of a gradient." }, { id: "B", text: "Vector", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "The Laplacian", content: "$\\nabla^2 T = \\frac{\\partial^2 T}{\\partial x^2} + \\frac{\\partial^2 T}{\\partial y^2} + \\frac{\\partial^2 T}{\\partial z^2}$\n\nIt measures whether a point is a local 'hotspot' or 'coldspot' compared to its immediate surroundings (concavity). It is fundamental to Poisson's and Laplace's equations." },
-            { id: "s3", type: "interactive_canvas", title: "Laplacian Explorer", content: "Drag the probe along the 1D curve. Notice it is positive in 'valleys' (concave up) and negative on 'hills' (concave down).", interactiveCanvasId: "laplacian-interactive" },
-            { id: "s6", type: "quiz", title: "Laplacian of a Vector", content: "Can we take the Laplacian of a vector?", options: [ { id: "A", text: "Yes", isCorrect: true, explanation: "You apply the scalar Laplacian to each Cartesian component." }, { id: "B", text: "No", isCorrect: false, explanation: "" } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Functions for which the Laplacian is everywhere zero are called ___ functions.", blankAnswer: "harmonic" }
-          ]
-        },
-        {
-          id: "les-2-14-curl-grad", title: "Curl of a Gradient", description: "Golden Identity 1", icon: "RotateCcw",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If a field is created purely by a scalar gradient (like a hill), does it swirl?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Gravity doesn't swirl you in circles on a hillside." } ] },
-            { id: "s2", type: "theory", title: "Curl of a Gradient", content: "$\\nabla \\times (\\nabla T) = 0$\n\nThis is a tremendously important vector identity. Any gradient field is automatically irrotational." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Curl of Gradient", 
-              content: "**Goal: Prove $\\nabla \\times (\\nabla T) = 0$**", 
-              interactiveSteps: [
-                {
-                  stepText: "The gradient is $\\nabla T = \\frac{\\partial T}{\\partial x}\\hat{x} + \\frac{\\partial T}{\\partial y}\\hat{y} + \\frac{\\partial T}{\\partial z}\\hat{z}$."
-                },
-                {
-                  prompt: "Calculate the z-component of the curl: $\\frac{\\partial}{\\partial x}(\\text{y-comp}) - \\frac{\\partial}{\\partial y}(\\text{x-comp})$. What is it?",
-                  options: [
-                    { id: "A", text: "$\\frac{\\partial}{\\partial x}(\\frac{\\partial T}{\\partial y}) - \\frac{\\partial}{\\partial y}(\\frac{\\partial T}{\\partial x})$", isCorrect: true, explanation: "Correct substitution." },
-                    { id: "B", text: "$\\frac{\\partial^2 T}{\\partial x^2}$", isCorrect: false, explanation: "" }
-                  ],
-                  stepText: "The z-component is $\\frac{\\partial^2 T}{\\partial x \\partial y} - \\frac{\\partial^2 T}{\\partial y \\partial x}$."
-                },
-                {
-                  prompt: "By Clairaut's theorem, partial derivatives commute. What does this term equal?",
-                  options: [
-                    { id: "A", text: "0", isCorrect: true, explanation: "They perfectly cancel." },
-                    { id: "B", text: "1", isCorrect: false, explanation: "" }
-                  ],
-                  stepText: "It evaluates exactly to 0. Symmetrically, all components are 0. Goal reached!"
-                }
-              ]
-            },
-            { id: "s6", type: "quiz", title: "Consequence", content: "If you know a field has zero curl everywhere, what can you definitively conclude?", options: [ { id: "A", text: "It can be written as the gradient of some scalar potential.", isCorrect: true, explanation: "This is a fundamental theorem we will use constantly." }, { id: "B", text: "It has zero divergence.", isCorrect: false, explanation: "Not necessarily." } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The curl of a gradient is always ___.", blankAnswer: "zero" }
-          ]
-        },
-        {
-          id: "les-2-15-div-curl", title: "Divergence of a Curl", description: "Golden Identity 2", icon: "Minimize",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "If a field is purely swirling in closed loops, does it have a net outward flow from a point?", options: [ { id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Swirling means it comes back around, not diverging away." } ] },
-            { id: "s2", type: "theory", title: "Divergence of a Curl", content: "$\\nabla \\cdot (\\nabla \\times \\mathbf{v}) = 0$\n\nJust like the curl of a gradient, the divergence of a curl is always identically zero." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Proof: Div of Curl", 
-              content: "**Goal: Prove $\\nabla \\cdot (\\nabla \\times \\mathbf{v}) = 0$**", 
-              interactiveSteps: [
-                {
-                  stepText: "Expand the divergence dot product on the curl vector."
-                },
-                {
-                  prompt: "What will the x-derivative term look like?",
-                  options: [
-                    { id: "A", text: "$\\frac{\\partial}{\\partial x} (\\frac{\\partial v_z}{\\partial y} - \\frac{\\partial v_y}{\\partial z})$", isCorrect: true, explanation: "Derivative of the x-component of the curl." },
-                    { id: "B", text: "$\\frac{\\partial v_x}{\\partial x}$", isCorrect: false, explanation: "" }
-                  ],
-                  stepText: "You get terms like $\\frac{\\partial^2 v_z}{\\partial x \\partial y}$."
-                },
-                {
-                  stepText: "When you expand all three components, every mixed partial derivative appears exactly twice with opposite signs (e.g., $\\frac{\\partial^2 v_z}{\\partial x \\partial y}$ and $-\\frac{\\partial^2 v_z}{\\partial y \\partial x}$). By Clairaut's theorem, they all cancel to 0. Goal reached!"
-                }
-              ]
-            },
-            { id: "s6", type: "quiz", title: "Consequence", content: "If a field has zero divergence everywhere, what can we conclude?", options: [ { id: "A", text: "It can be written as the curl of some vector potential.", isCorrect: true, explanation: "This is the basis of the Magnetic Vector Potential!" }, { id: "B", text: "It is irrotational.", isCorrect: false, explanation: "" } ] },
-            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A vector field whose divergence is zero is called a ___ field.", blankAnswer: "solenoidal" }
-          ]
-        },
-        {
-          id: "les-2-16-curl-curl", title: "Curl of a Curl", description: "Identity 3", icon: "Repeat",
-          slides: [
-            { id: "s0", type: "quiz", title: "Warm-up 1", content: "What kind of output do you get from taking the curl of a curl?", options: [ { id: "A", text: "Scalar", isCorrect: false, explanation: "Curl always yields a vector." }, { id: "B", text: "Vector", isCorrect: true, explanation: "Correct." } ] },
-            { id: "s2", type: "theory", title: "Curl of a Curl Formula", content: "$\\nabla \\times (\\nabla \\times \\mathbf{v}) = \\nabla(\\nabla\\cdot\\mathbf{v}) - \\nabla^2\\mathbf{v}$\n\nThis is the vector calculus equivalent of the BAC-CAB rule, and it's heavily used in deriving the electromagnetic wave equation." },
-            { 
-              id: "s4", 
-              type: "proof", 
-              title: "Interactive Insight: Formula Structure", 
-              content: "**Goal: Understand the components of the Curl-of-Curl formula.**\n\n$\\nabla \\times (\\nabla \\times \\mathbf{v}) = \\nabla(\\nabla\\cdot\\mathbf{v}) - \\nabla^2\\mathbf{v}$", 
-              interactiveSteps: [
-                {
-                  prompt: "Look at the first term on the right: $\\nabla(\\nabla\\cdot\\mathbf{v})$. What operations are happening?",
-                  options: [
-                    { id: "A", text: "Gradient of a Divergence", isCorrect: true, explanation: "Divergence makes a scalar, then Gradient makes it a vector." },
-                    { id: "B", text: "Divergence of a Gradient", isCorrect: false, explanation: "That would be the Laplacian." }
-                  ],
-                  stepText: "The first term is the Gradient of the Divergence."
-                },
-                {
-                  prompt: "Look at the second term: $\\nabla^2\\mathbf{v}$. What is this?",
-                  options: [
-                    { id: "A", text: "The vector Laplacian", isCorrect: true, explanation: "Applying the scalar Laplacian to each component of v." },
-                    { id: "B", text: "A scalar", isCorrect: false, explanation: "It remains a vector." }
-                  ],
-                  stepText: "The second term is the Vector Laplacian. Goal reached!"
-                }
-              ]
-            },
-            { id: "s5", type: "numerical", title: "Practice Laplacian", content: "If $T = x^2 + y^2$, what is $\\nabla^2 T$?", numericAnswer: 4, numericTolerance: 0.1 },
-            { id: "s6", type: "quiz", title: "Wave Equation Teaser", content: "In empty space, Maxwell's equations say $\\nabla \\cdot \\mathbf{E} = 0$. Using the curl of curl formula, what does $\\nabla \\times (\\nabla \\times \\mathbf{E})$ simplify to?", options: [ { id: "A", text: "$-\\nabla^2 \\mathbf{E}$", isCorrect: true, explanation: "The div term vanishes!" }, { id: "B", text: "0", isCorrect: false, explanation: "" } ] }
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Are Cartesian unit vectors right-handed?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "x cross y = z." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "What is $\\hat{z} \\times \\hat{x}$?", options: [{ id: "A", text: "$\\hat{y}$", isCorrect: true, explanation: "Cyclic order x-y-z-x..." }, { id: "B", text: "$-\\hat{y}$", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Cyclic Permutation", content: "$\n\\hat{x} \\times \\hat{y} = \\hat{z}\n\\\\\n\\hat{y} \\times \\hat{z} = \\hat{x}\n\\\\\n\\hat{z} \\times \\hat{x} = \\hat{y}\n$\n\nReversing order flips sign." },
+            { id: "s3", type: "interactive_canvas", title: "Right Hand System", content: "Check the axes.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Cyclic Property", content: "**Goal:** Visualize cycle.", proofSteps: ["Write x, y, z in a circle.", "Going clockwise (x->y->z) is positive.", "Going counter-clockwise is negative."] },
+            { id: "s5", type: "numerical", title: "Cross Product", content: "If A = z, B = x. A x B = ?", numericAnswer: 1, numericTolerance: 0, notes: "Answer represents y-direction magnitude." },
+            { id: "s6", type: "quiz", title: "Permutation", content: "x, y, z is a ___ permutation.", options: [{ id: "A", text: "Cyclic/Even", isCorrect: true, explanation: "" }, { id: "B", text: "Odd", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The system (x, y, z) forms a ___ handed coordinate system.", blankAnswer: "right" }
           ]
         }
       ]
     },
     {
-      id: "unit-3-summary",
-      title: "Section Summary",
-      description: "Recap of Section 1",
+      id: "unit-1-1-3",
+      title: "1.1.3 Advanced Products",
+      description: "Triple products, identities, and transformations.",
+      color: "duo-blue",
+      lessons: [
+        {
+          id: "les-1-1-3-1",
+          title: "Scalar Triple Product",
+          description: "Volume of parallelepiped.",
+          icon: "Box",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "What kind of quantity is $\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C})$?", options: [{ id: "A", text: "Vector", isCorrect: false, explanation: "" }, { id: "B", text: "Scalar", isCorrect: true, explanation: "It ends with a dot product." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Geometrically, it represents:", options: [{ id: "A", text: "Area", isCorrect: false, explanation: "" }, { id: "B", text: "Volume", isCorrect: true, explanation: "Of the parallelepiped formed by A, B, C." }] },
+            { id: "s2", type: "theory", title: "Scalar Triple Product", content: "$$\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C})$$\n\nThis equals the volume of the parallelepiped defined by the three vectors. \n\nProperty: $\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C}) = \\mathbf{B} \\cdot (\\mathbf{C} \\times \\mathbf{A}) = \\mathbf{C} \\cdot (\\mathbf{A} \\times \\mathbf{B})$ (Cyclic)." },
+            { id: "s3", type: "interactive_canvas", title: "Volume Visualizer", content: "Base area x Height.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Cyclic", content: "**Goal:** Show A.(BxC) = B.(CxA)", proofSteps: ["BxC is area vector of base.", "Dot with A gives altitude times area.", "Volume is invariant of which face is 'base'."] },
+            { id: "s5", type: "numerical", title: "Calculation", content: "A=(1,0,0), B=(0,1,0), C=(0,0,2). Volume?", numericAnswer: 2, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Coplanar Vectors", content: "If A, B, C are in the same plane, the triple product is:", options: [{ id: "A", text: "Zero", isCorrect: true, explanation: "Volume is zero." }, { id: "B", text: "Infinite", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The scalar triple product is invariant under ___ permutation of the vectors.", blankAnswer: "cyclic" }
+          ]
+        },
+        {
+          id: "les-1-1-3-2",
+          title: "Vector Triple Product",
+          description: "Ax(BxC).",
+          icon: "Layers",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Is $\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$ a vector or scalar?", options: [{ id: "A", text: "Scalar", isCorrect: false, explanation: "" }, { id: "B", text: "Vector", isCorrect: true, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Is it associative? $(\\mathbf{A} \\times \\mathbf{B}) \\times \\mathbf{C} = \\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Generally not." }] },
+            { id: "s2", type: "theory", title: "BAC-CAB Rule", content: "$$\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C}) = \\mathbf{B}(\\mathbf{A} \\cdot \\mathbf{C}) - \\mathbf{C}(\\mathbf{A} \\cdot \\mathbf{B})$$\n\nMnemonic: \"BAC minus CAB\"." },
+            { id: "s3", type: "interactive_canvas", title: "Vector Direction", content: "Result lies in the plane of B and C.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Planarity", content: "**Goal:** Show result is in B-C plane.", proofSteps: ["$\\mathbf{D} = \\mathbf{B} \\times \\mathbf{C}$ is normal to B-C plane.", "$\\mathbf{A} \\times \\mathbf{D}$ is normal to D.", "A vector normal to the normal of a plane lies IN the plane.", "Thus result is $c_1 \\mathbf{B} + c_2 \\mathbf{C}$."] },
+            { id: "s5", type: "numerical", title: "Calculation", content: "A=z, B=x, C=y. A.(C) = 0. A.(B) = 0. Result?", numericAnswer: 0, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Rule Name", content: "The identity is known as:", options: [{ id: "A", text: "ABC rule", isCorrect: false, explanation: "" }, { id: "B", text: "BAC-CAB rule", isCorrect: true, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The vector triple product $\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$ lies in the plane defined by ___ and ___.", blankAnswer: "B, C" }
+          ]
+        },
+        {
+          id: "les-1-1-3-3",
+          title: "Triple Product Properties",
+          description: "Identities.",
+          icon: "Book",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Does $(\\mathbf{A} \\times \\mathbf{B}) \\times \\mathbf{C} = \\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Cross product is not associative." }, { id: "B", text: "Yes", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Can you swap dot and cross in scalar triple product?", options: [{ id: "A", text: "Yes: A.(BxC) = (AxB).C", isCorrect: true, explanation: "This is a property." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Identities", content: "1. Scalar Triple: Dot and Cross interchangeable.\n2. Vector Triple: Use BAC-CAB.\n3. $(\\mathbf{A} \\times \\mathbf{B}) \\times \\mathbf{C} = -\\mathbf{C} \\times (\\mathbf{A} \\times \\mathbf{B}) = -(\\mathbf{A}(\\mathbf{C} \\cdot \\mathbf{B}) - \\mathbf{B}(\\mathbf{C} \\cdot \\mathbf{A}))$." },
+            { id: "s3", type: "interactive_canvas", title: "Visualization", content: "Abstract vector relations.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Non-associativity", content: "**Goal:** Counterexample.", proofSteps: ["$(x \\times x) \\times y = 0 \\times y = 0$.", "$x \\times (x \\times y) = x \\times z = -y$.", "$0 \\neq -y$."] },
+            { id: "s5", type: "numerical", title: "Zero check", content: "A. (A x B) is always?", numericAnswer: 0, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Perpendicularity", content: "A x B is perpendicular to:", options: [{ id: "A", text: "Only A", isCorrect: false, explanation: "" }, { id: "B", text: "Both A and B", isCorrect: true, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The scalar triple product represents the ___ of a parallelepiped.", blankAnswer: "volume" }
+          ]
+        },
+        {
+          id: "les-1-1-3-4",
+          title: "Vector Transformations",
+          description: "How vectors behave under rotation.",
+          icon: "RefreshCw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "If you rotate the coordinate system, does the physical vector $\\mathbf{A}$ change?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "The vector stays, its components change." }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "If you rotate coordinates, do the components $A_x, A_y, A_z$ change?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "" }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Transformation Law", content: "Under a rotation of coordinates, vector components transform as:\n$$\\bar{A}_i = \\sum_{j=1}^3 R_{ij} A_j$$\nwhere $R_{ij}$ is the rotation matrix. This is the definition of a tensor of rank 1 (a vector)." },
+            { id: "s3", type: "interactive_canvas", title: "Rotation", content: "Rotating axes.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Invariance of Length", content: "**Goal:** Show $|A|$ is invariant.", proofSteps: ["$|A|^2 = \\sum A_i A_i$.", "Substitute transformed components.", "Use orthogonality of R matrix.", "Result is $\\sum \\bar{A}_i \\bar{A}_i = \\sum A_i A_i$."] },
+            { id: "s5", type: "numerical", title: "Rotation", content: "Rotate vector (1,0) by 90 degrees. New x-component?", numericAnswer: 0, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Scalars", content: "How do scalars transform under rotation?", options: [{ id: "A", text: "They change", isCorrect: false, explanation: "" }, { id: "B", text: "They stay the same", isCorrect: true, explanation: "Invariant." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A vector is defined by how its components ___ under coordinate rotation.", blankAnswer: "transform" }
+          ]
+        },
+        {
+          id: "les-1-1-3-5",
+          title: "Rotation Matrices (2D)",
+          description: "2D rotation.",
+          icon: "RotateCw",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Rotation matrix elements involve:", options: [{ id: "A", text: "Sin and Cos", isCorrect: true, explanation: "" }, { id: "B", text: "Squares", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Determinant of a proper rotation matrix is:", options: [{ id: "A", text: "1", isCorrect: true, explanation: "" }, { id: "B", text: "0", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "2D Rotation", content: "$$\\begin{pmatrix} \\bar{A}_y \\\\ \\bar{A}_z \\end{pmatrix} = \\begin{pmatrix} \\cos\\phi & \\sin\\phi \\\\ -\\sin\\phi & \\cos\\phi \\end{pmatrix} \\begin{pmatrix} A_y \\\\ A_z \\end{pmatrix}$$\n\n(Rotation about x-axis)." },
+            { id: "s3", type: "interactive_canvas", title: "2D Rotation", content: "Visualizing the matrix operation.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Geometry", content: "**Goal:** Derive terms.", proofSteps: ["Project old axes onto new axes.", "$\\bar{y}$ axis is at angle $\\phi$ to y.", "$\\bar{z}$ axis is at angle $\\phi$ to z."] },
+            { id: "s5", type: "numerical", title: "Cos(0)", content: "What is cos(0)?", numericAnswer: 1, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Inverse", content: "Inverse of rotation by phi is:", options: [{ id: "A", text: "Rotation by -phi", isCorrect: true, explanation: "" }, { id: "B", text: "Same rotation", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The rotation matrix is an ___ matrix.", blankAnswer: "orthogonal" }
+          ]
+        },
+        {
+          id: "les-1-1-3-6",
+          title: "Rotation Matrices (3D)",
+          description: "General rotations.",
+          icon: "Globe",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "A 3D rotation matrix is size:", options: [{ id: "A", text: "2x2", isCorrect: false, explanation: "" }, { id: "B", text: "3x3", isCorrect: true, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "How many independent parameters define a 3D rotation?", options: [{ id: "A", text: "3 (Euler angles)", isCorrect: true, explanation: "" }, { id: "B", text: "9", isCorrect: false, explanation: "Constraints reduce it." }] },
+            { id: "s2", type: "theory", title: "3D Transformation", content: "$$\\bar{A}_i = \\sum_{j=1}^3 R_{ij} A_j$$\n\n$R_{ij}$ is the cosine of the angle between the i-th new axis and the j-th old axis." },
+            { id: "s3", type: "interactive_canvas", title: "3D Axes", content: "Rotating coordinate system.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Orthogonality", content: "**Goal:** $R R^T = I$", proofSteps: ["Required to preserve lengths.", "Rows are orthonormal vectors.", "Columns are orthonormal vectors."] },
+            { id: "s5", type: "numerical", title: "Identity", content: "If angle is 0, what is R_11?", numericAnswer: 1, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Determinant", content: "Det(R) = 1 means:", options: [{ id: "A", text: "Proper rotation", isCorrect: true, explanation: "No reflection." }, { id: "B", text: "Improper rotation", isCorrect: false, explanation: "That would be -1." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The summation convention implies summing over repeated ___.", blankAnswer: "indices" }
+          ]
+        },
+        {
+          id: "les-1-1-3-7",
+          title: "Vectors vs Pseudovectors",
+          description: "Reflection properties.",
+          icon: "Mirror",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "If you invert coordinates ($x \\to -x$, etc.), does a displacement vector change sign?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "It points the other way relative to new axes." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Does a cross product of two vectors change sign under inversion?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "(-A) x (-B) = A x B." }, { id: "B", text: "No", isCorrect: true, explanation: "Signs cancel." }] },
+            { id: "s2", type: "theory", title: "Pseudovectors", content: "**Vector (Polar):** Changes sign under inversion (e.g., position, force).\n**Pseudovector (Axial):** Does NOT change sign under inversion (e.g., cross product, angular momentum, magnetic field)." },
+            { id: "s3", type: "interactive_canvas", title: "Mirror World", content: "Visualize reflection.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Cross Product", content: "**Goal:** Check inversion.", proofSteps: ["$\\bar{\\mathbf{A}} = -\\mathbf{A}$", "$\\bar{\\mathbf{B}} = -\\mathbf{B}$", "$\\bar{\\mathbf{A}} \\times \\bar{\\mathbf{B}} = (-\\mathbf{A}) \\times (-\\mathbf{B}) = \\mathbf{A} \\times \\mathbf{B}$", "Thus it does not flip."] },
+            { id: "s5", type: "numerical", title: "Sign", content: "Parity of a pseudovector is (+1 or -1)?", numericAnswer: 1, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Example", content: "Angular momentum $\\mathbf{L} = \\mathbf{r} \\times \\mathbf{p}$ is a:", options: [{ id: "A", text: "Vector", isCorrect: false, explanation: "" }, { id: "B", text: "Pseudovector", isCorrect: true, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Vectors that do not change sign under inversion are called ___.", blankAnswer: "pseudovectors" }
+          ]
+        },
+        {
+          id: "les-1-1-3-8",
+          title: "Scalars vs Pseudoscalars",
+          description: "Triple product parity.",
+          icon: "Circle",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Is the dot product of two vectors a scalar?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "(-A).(-B) = A.B (unchanged)." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Is the scalar triple product $\\mathbf{A} \\cdot (\\mathbf{B} \\times \\mathbf{C})$ invariant under inversion?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "(-A).(( -B)x(-C)) = - (A.(BxC)). It flips sign." }] },
+            { id: "s2", type: "theory", title: "Pseudoscalars", content: "A **scalar** is invariant under inversion (e.g. mass).\nA **pseudoscalar** changes sign under inversion (e.g. scalar triple product).\n\nPseudoscalars are formed by dotting a vector with a pseudovector." },
+            { id: "s3", type: "interactive_canvas", title: "Volume Reflection", content: "A right-handed volume becomes left-handed.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Triple Product", content: "**Goal:** Check sign.", proofSteps: ["$\\mathbf{B} \\times \\mathbf{C}$ is a pseudovector (no sign change).", "$\\mathbf{A}$ is a vector (sign change).", "Dot product of vector and pseudovector changes sign."] },
+            { id: "s5", type: "numerical", title: "Parity", content: "Parity of a pseudoscalar (+1 or -1)?", numericAnswer: -1, numericTolerance: 0 },
+            { id: "s6", type: "quiz", title: "Magnetic Flux", content: "Magnetic flux $\\int \\mathbf{B} \\cdot d\\mathbf{a}$ is a:", options: [{ id: "A", text: "Scalar", isCorrect: true, explanation: "B is pseudovector, da is pseudovector (area). Pseudo.Pseudo = Scalar." }, { id: "B", text: "Pseudoscalar", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "A quantity that changes sign under inversion is called a ___.", blankAnswer: "pseudoscalar" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-1-1-4",
+      title: "1.1.4 Position & Separation",
+      description: "Definitions of r and script r.",
+      color: "duo-blue",
+      lessons: [
+        {
+          id: "les-1-1-4-1",
+          title: "Position Vector",
+          description: "Coordinates as a vector.",
+          icon: "MapPin",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "What is the origin?", options: [{ id: "A", text: "(0,0,0)", isCorrect: true, explanation: "" }, { id: "B", text: "(1,1,1)", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Does the position vector depend on the choice of origin?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "It points FROM the origin." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Position Vector", content: "$$\\mathbf{r} \\equiv x\\mathbf{\\hat{x}} + y\\mathbf{\\hat{y}} + z\\mathbf{\\hat{z}}$$\n\nThe position vector points from the origin to the point $(x, y, z)$." },
+            { id: "s3", type: "interactive_canvas", title: "Position", content: "Visualizing r.", interactiveCanvasId: "component-form-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Magnitude", content: "**Goal:** Find $r$.", proofSteps: ["$r = |\\mathbf{r}| = \\sqrt{\\mathbf{r} \\cdot \\mathbf{r}}$", "$= \\sqrt{x^2 + y^2 + z^2}$."] },
+            { id: "s5", type: "numerical", title: "Magnitude", content: "Point (3,4,0). What is r?", numericAnswer: 5, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Unit Vector", content: "The unit vector $\\mathbf{\\hat{r}}$ points:", options: [{ id: "A", text: "Radially outward", isCorrect: true, explanation: "" }, { id: "B", text: "Tangentially", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The vector from the origin to a point is called the ___ vector.", blankAnswer: "position" }
+          ]
+        },
+        {
+          id: "les-1-1-4-2",
+          title: "Infinitesimal Displacement",
+          description: "dl vector.",
+          icon: "ArrowRight",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "If you move by dx, dy, dz, what is your displacement vector?", options: [{ id: "A", text: "$dx\\mathbf{\\hat{x}} + dy\\mathbf{\\hat{y}} + dz\\mathbf{\\hat{z}}$", isCorrect: true, explanation: "" }, { id: "B", text: "$dx + dy + dz$", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Is $d\\mathbf{l}$ a vector?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "" }, { id: "B", text: "No", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Displacement Vector", content: "$$d\\mathbf{l} = dx\\mathbf{\\hat{x}} + dy\\mathbf{\\hat{y}} + dz\\mathbf{\\hat{z}}$$\n\nThis represents an infinitesimal step in space." },
+            { id: "s3", type: "interactive_canvas", title: "Path Step", content: "Visualizing a small step along a curve.", interactiveCanvasId: "work-path-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Differential", content: "**Goal:** Relate to r.", proofSteps: ["$\\mathbf{r} = x\\mathbf{\\hat{x}} + ...$", "$d\\mathbf{r} = dx\\mathbf{\\hat{x}} + ...$", "Thus $d\\mathbf{l} = d\\mathbf{r}$."] },
+            { id: "s5", type: "numerical", title: "Length", content: "If dx=3, dy=4, dz=0. What is length of dl?", numericAnswer: 5, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Usage", content: "We use $d\\mathbf{l}$ in:", options: [{ id: "A", text: "Line Integrals", isCorrect: true, explanation: "" }, { id: "B", text: "Volume Integrals", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The infinitesimal displacement vector is denoted by ___.", blankAnswer: "dl" }
+          ]
+        },
+        {
+          id: "les-1-1-4-3",
+          title: "Separation Vector",
+          description: "Source to Field point.",
+          icon: "Minus",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "Electrostatics involves source charges and field points. The vector between them is:", options: [{ id: "A", text: "Position Vector", isCorrect: false, explanation: "" }, { id: "B", text: "Separation Vector", isCorrect: true, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Direction of separation vector:", options: [{ id: "A", text: "Source to Field", isCorrect: true, explanation: "" }, { id: "B", text: "Field to Source", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Separation Vector", content: "$${\\mathcal{r}} = \\mathbf{r} - \\mathbf{r}'$$\n\nWhere $\\mathbf{r}$ is the field point (observer) and $\\mathbf{r}'$ is the source point." },
+            { id: "s3", type: "interactive_canvas", title: "Separation", content: "Two points and the vector between them.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Geometry", content: "**Goal:** Show $\\mathbf{r} = \\mathbf{r}' + {\\mathcal{r}}$", proofSteps: ["Vector addition head-to-tail.", "Start at origin.", "Go to source (r').", "Add separation (script r).", "Arrive at field point (r)."] },
+            { id: "s5", type: "numerical", title: "Calc", content: "Field at (0,0,10). Source at (0,0,2). Separation magnitude?", numericAnswer: 8, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Notation", content: "In Griffiths, this vector is denoted by:", options: [{ id: "A", text: "Script r ($\\mathcal{r}$)", isCorrect: true, explanation: "" }, { id: "B", text: "S", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The separation vector points from the source to the ___ point.", blankAnswer: "field" }
+          ]
+        },
+        {
+          id: "les-1-1-4-4",
+          title: "Calculating Separation",
+          description: "Component subtraction.",
+          icon: "List",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "If $\\mathbf{r} = (x,y,z)$ and $\\mathbf{r}' = (x',y',z')$, what is ${\\mathcal{r}}_x$?", options: [{ id: "A", text: "$x - x'$", isCorrect: true, explanation: "" }, { id: "B", text: "$x + x'$", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "What is $|{\\mathcal{r}}|$?", options: [{ id: "A", text: "$\\sqrt{(x-x')^2 + ...}$", isCorrect: true, explanation: "" }, { id: "B", text: "$x-x'$", isCorrect: false, explanation: "" }] },
+            { id: "s2", type: "theory", title: "Calculation", content: "$${\\mathcal{r}} = (x-x')\\mathbf{\\hat{x}} + (y-y')\\mathbf{\\hat{y}} + (z-z')\\mathbf{\\hat{z}}$$\n\nMagnitude $\\mathcal{r} = \\sqrt{(x-x')^2 + (y-y')^2 + (z-z')^2}$." },
+            { id: "s3", type: "interactive_canvas", title: "Component Diff", content: "Visualizing difference.", interactiveCanvasId: "component-form-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Derivation", content: "**Goal:** Formula", proofSteps: ["$\mathbf{r} = x\mathbf{\hat{x}}...$", "$\mathbf{r}' = x'\mathbf{\hat{x}}...$", "Subtract component-wise."] },
+            { id: "s5", type: "numerical", title: "Calc", content: "x=5, x'=2. What is x-component of separation?", numericAnswer: 3, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Importance", content: "Why is this important?", options: [{ id: "A", text: "Coulomb's law uses this distance", isCorrect: true, explanation: "Force depends on distance between charges." }, { id: "B", text: "It's not", isCorrect: false, explanation: "" }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The magnitude of the separation vector is the ___ between the points.", blankAnswer: "distance" }
+          ]
+        },
+        {
+          id: "les-1-1-4-5",
+          title: "Unit Separation Vector",
+          description: "Direction only.",
+          icon: "Compass",
+          slides: [
+            { id: "s0", type: "quiz", title: "Concept Check", content: "How do you find $\\mathbf{\\hat{\\mathcal{r}}}$?", options: [{ id: "A", text: "${\\mathcal{r}} / \\mathcal{r}$", isCorrect: true, explanation: "Vector divided by magnitude." }, { id: "B", text: "${\\mathcal{r}}$", isCorrect: false, explanation: "" }] },
+            { id: "s1", type: "quiz", title: "Concept Check", content: "Does $\\mathbf{\\hat{\\mathcal{r}}}$ have units?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "Meters/Meters cancels." }] },
+            { id: "s2", type: "theory", title: "Unit Vector", content: "$$\\mathbf{\\hat{\\mathcal{r}}} = \\frac{\\mathbf{r} - \\mathbf{r}'}{|\\mathbf{r} - \\mathbf{r}'|}$$\n\nUsed to denote direction in Coulomb's Law." },
+            { id: "s3", type: "interactive_canvas", title: "Direction", content: "Pure direction vector.", interactiveCanvasId: "vector-addition-interactive" },
+            { id: "s4", type: "proof", title: "Proof: Norm", content: "**Goal:** Show $|\\hat{\\mathcal{r}}| = 1$", proofSteps: ["$|\\mathbf{v}/v| = |\\mathbf{v}|/v = v/v = 1$."] },
+            { id: "s5", type: "numerical", title: "Calc", content: "Sep vector (3, 4, 0). Magnitude 5. x-component of unit vector?", numericAnswer: 0.6, numericTolerance: 0.1 },
+            { id: "s6", type: "quiz", title: "Comparison", content: "Is $\\mathbf{\\hat{\\mathcal{r}}}$ the same as $\\mathbf{\\hat{r}}$?", options: [{ id: "A", text: "Yes", isCorrect: false, explanation: "" }, { id: "B", text: "No", isCorrect: true, explanation: "One is from source, one is from origin." }] },
+            { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The unit separation vector has a magnitude of ___.", blankAnswer: "one" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-1-1-5",
+      title: "1.1.5 Algebra Practice",
+      description: "Examples and Problems 1.1-1.10.",
+      color: "duo-blue",
+      lessons: [
+        {
+          id: "les-1-1-5-1",
+          title: "Ex 1.1 Law of Cosines",
+          description: "Derivation using dot product.",
+          icon: "Target",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 1.1", content: "**Problem:** Use vector algebra to prove the Law of Cosines.\n\nHint: Consider a triangle formed by $\\mathbf{C} = \\mathbf{A} - \\mathbf{B}$." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. Let $\\mathbf{C} = \\mathbf{A} - \\mathbf{B}$.\n2. Dot $\\mathbf{C}$ with itself: $C^2 = (\\mathbf{A}-\\mathbf{B})\\cdot(\\mathbf{A}-\\mathbf{B})$.\n3. Distribute: $A^2 + B^2 - 2\\mathbf{A}\\cdot\\mathbf{B}$.\n4. Use def: $\\mathbf{A}\\cdot\\mathbf{B} = AB\\cos\\theta$.\n5. Result: $C^2 = A^2 + B^2 - 2AB\\cos\\theta$." },
+            { id: "s2", type: "quiz", title: "Review", content: "If theta=90, what does it become?", options: [{ id: "A", text: "Pythagorean Theorem", isCorrect: true, explanation: "" }, { id: "B", text: "Zero", isCorrect: false, explanation: "" }] },
+            { id: "s3", type: "quiz", title: "Step check", content: "What is $\\mathbf{B} \\cdot \\mathbf{B}$?", options: [{ id: "A", text: "$B^2$", isCorrect: true, explanation: "" }, { id: "B", text: "2B", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-2",
+          title: "Ex 1.2 Cube Diagonals",
+          description: "Angle between face diagonals.",
+          icon: "Box",
+          slides: [
+            { id: "s0", type: "example_q", title: "Example 1.2", content: "**Problem:** Find the angle between the face diagonals of a cube." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. Define cube edges as $\\mathbf{\\hat{x}}, \\mathbf{\\hat{y}}, \\mathbf{\\hat{z}}$.\n2. Diagonals on faces: $\\mathbf{A} = (1,0,1)$ and $\\mathbf{B} = (0,1,1)$.\n3. Dot product: $1*0 + 0*1 + 1*1 = 1$.\n4. Magnitudes: $\\sqrt{2}$.\n5. $\\cos\\theta = 1 / (\\sqrt{2}\\sqrt{2}) = 0.5$.\n6. $\\theta = 60^\\circ$." },
+            { id: "s2", type: "quiz", title: "Check", content: "What are the magnitudes of the face diagonals?", options: [{ id: "A", text: "$\\sqrt{2}$", isCorrect: true, explanation: "" }, { id: "B", text: "1", isCorrect: false, explanation: "" }] },
+            { id: "s3", type: "quiz", title: "Check", content: "Angle result?", options: [{ id: "A", text: "60 degrees", isCorrect: true, explanation: "" }, { id: "B", text: "45 degrees", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-3",
+          title: "Prob 1.1 Distributive",
+          description: "Proving distribution.",
+          icon: "List",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.1", content: "**Problem:** Prove $\\mathbf{A} \\cdot (\\mathbf{B} + \\mathbf{C}) = \\mathbf{A} \\cdot \\mathbf{B} + \\mathbf{A} \\cdot \\mathbf{C}$." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. Orient x-axis along $\\mathbf{A}$.\n2. Then $\\mathbf{A} \\cdot \\mathbf{B} = A B_x$.\n3. $\\mathbf{B} + \\mathbf{C}$ has x-component $B_x + C_x$.\n4. $\\mathbf{A} \\cdot (\\mathbf{B}+\\mathbf{C}) = A(B_x + C_x) = A B_x + A C_x$.\n5. This is $\\mathbf{A} \\cdot \\mathbf{B} + \\mathbf{A} \\cdot \\mathbf{C}$." },
+            { id: "s2", type: "quiz", title: "Key Insight", content: "The proof relies on the linearity of:", options: [{ id: "A", text: "Projections / Components", isCorrect: true, explanation: "" }, { id: "B", text: "Magnitude", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-4",
+          title: "Prob 1.2 Associativity",
+          description: "Cross product failure.",
+          icon: "X",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.2", content: "**Problem:** Is $(\\mathbf{A} \\times \\mathbf{B}) \\times \\mathbf{C} = \\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C})$?" },
+            { id: "s1", type: "solution", title: "Solution", content: "Counter-example:\nLet $\\mathbf{A}=\\mathbf{\\hat{x}}, \\mathbf{B}=\\mathbf{\\hat{x}}, \\mathbf{C}=\\mathbf{\\hat{y}}$.\n\nLHS: $(\\mathbf{\\hat{x}} \\times \\mathbf{\\hat{x}}) \\times \\mathbf{\\hat{y}} = 0 \\times \\mathbf{\\hat{y}} = 0$.\nRHS: $\\mathbf{\\hat{x}} \\times (\\mathbf{\\hat{x}} \\times \\mathbf{\\hat{y}}) = \\mathbf{\\hat{x}} \\times \\mathbf{\\hat{z}} = -\\mathbf{\\hat{y}}$.\n\n$0 \\neq -\\mathbf{\\hat{y}}$. Not associative." },
+            { id: "s2", type: "quiz", title: "Conclusion", content: "Is it associative?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "" }, { id: "B", text: "Yes", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-5",
+          title: "Prob 1.3 Body Diagonals",
+          description: "Cube angle continued.",
+          icon: "Box",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.3", content: "**Problem:** Find angle between body diagonals of a cube." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. Diagonals: $\\mathbf{A}=(1,1,1)$ and $\\mathbf{B}=(1,1,-1)$ (crossing center).\n2. Dot: $1+1-1 = 1$.\n3. Magnitudes: $\\sqrt{3}$.\n4. $\\cos\\theta = 1 / (\\sqrt{3}\\sqrt{3}) = 1/3$.\n5. $\\theta \\approx 70.5^\\circ$." },
+            { id: "s2", type: "quiz", title: "Comparison", content: "Is this angle larger than the face diagonal angle (60)?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "70.5 > 60." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-6",
+          title: "Prob 1.4 Plane Normal",
+          description: "Using cross product.",
+          icon: "Compass",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.4", content: "**Problem:** Find unit normal to plane with points (1,0,0), (0,2,0), (0,0,3)." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. Vectors in plane: $\\mathbf{A} = (-1, 2, 0)$ and $\\mathbf{B} = (-1, 0, 3)$.\n2. Cross: $\\mathbf{A} \\times \\mathbf{B} = (6, 3, 2)$.\n3. Magnitude: $\\sqrt{36+9+4} = 7$.\n4. Unit normal: $(6/7, 3/7, 2/7)$." },
+            { id: "s2", type: "quiz", title: "Method", content: "Why use cross product?", options: [{ id: "A", text: "It gives a perpendicular vector", isCorrect: true, explanation: "" }, { id: "B", text: "It gives area", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-7",
+          title: "Prob 1.5 BAC-CAB",
+          description: "Proof component-wise.",
+          icon: "Layers",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.5", content: "**Problem:** Prove $\\mathbf{A} \\times (\\mathbf{B} \\times \\mathbf{C}) = \\mathbf{B}(\\mathbf{A}\\cdot\\mathbf{C}) - \\mathbf{C}(\\mathbf{A}\\cdot\\mathbf{B})$." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. Expand x-component of $\\mathbf{B} \\times \\mathbf{C}$ as $D_x$.\n2. Expand x-component of $\\mathbf{A} \\times \\mathbf{D}$.\n3. Algebra shows it equals $B_x(A_y C_y + A_z C_z) - ...$\n4. Add/subtract $A_x B_x C_x$ term.\n5. Factor into dot products." },
+            { id: "s2", type: "quiz", title: "Usefulness", content: "This rule allows us to:", options: [{ id: "A", text: "Convert double cross products to dot products", isCorrect: true, explanation: "" }, { id: "B", text: "Find volume", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-8",
+          title: "Prob 1.7 Separation",
+          description: "Calculating r script.",
+          icon: "Minus",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.7", content: "**Problem:** Source at (2,8,7), Field point at (4,6,8). Find ${\\mathcal{r}}$, magnitude, and direction." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. ${\\mathcal{r}} = (4-2, 6-8, 8-7) = (2, -2, 1)$.\n2. Magnitude: $\\sqrt{4+4+1} = 3$.\n3. Unit vector: $(2/3, -2/3, 1/3)$." },
+            { id: "s2", type: "quiz", title: "Check", content: "Does the unit vector have length 1?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "Sqrt(4/9 + 4/9 + 1/9) = 1." }, { id: "B", text: "No", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-9",
+          title: "Prob 1.8 Rotation",
+          description: "Transforming components.",
+          icon: "RefreshCw",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.8", content: "**Problem:** Show dot product is conserved under rotation." },
+            { id: "s1", type: "solution", title: "Solution", content: "1. $\\bar{A}_y = A_y \\cos\\phi + A_z \\sin\\phi$, etc.\n2. Form $\\bar{A}_y \\bar{B}_y + ...$\n3. Use $\\cos^2 + \\sin^2 = 1$.\n4. Cross terms cancel.\n5. Result: $A_y B_y + A_z B_z$." },
+            { id: "s2", type: "quiz", title: "Meaning", content: "Conservation means:", options: [{ id: "A", text: "Scalar value doesn't depend on coordinate system", isCorrect: true, explanation: "" }, { id: "B", text: "Vector doesn't move", isCorrect: false, explanation: "" }] }
+          ]
+        },
+        {
+          id: "les-1-1-5-10",
+          title: "Prob 1.10 Transformations",
+          description: "Translation vs Inversion.",
+          icon: "Move",
+          slides: [
+            { id: "s0", type: "example_q", title: "Problem 1.10", content: "**Problem:** How does a vector transform under translation? Under inversion?" },
+            { id: "s1", type: "solution", title: "Solution", content: "**Translation:** Vector $\\mathbf{A}$ is a difference in coordinates $\\Delta x$. Shifts cancel. Components unchanged.\n\n**Inversion:** Coordinates flip $x \\to -x$. Vector components flip sign. $\\mathbf{A} \\to -\\mathbf{A}$." },
+            { id: "s2", type: "quiz", title: "Cross Product", content: "Under inversion, $\\mathbf{A} \\times \\mathbf{B}$:", options: [{ id: "A", text: "Flips sign", isCorrect: false, explanation: "" }, { id: "B", text: "Stays same", isCorrect: true, explanation: "(-A) x (-B) = A x B. It is a pseudovector." }] }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-1-1-summary",
+      title: "Section 1.1 Summary",
+      description: "Review of Vector Algebra.",
       color: "duo-green",
       lessons: [
         {
-          id: "les-3-1-vector-recap", title: "Vector Algebra Recap", description: "Review of Unit 1", icon: "CheckSquare",
+          id: "les-1-1-sum-1",
+          title: "Summary: Operations",
+          description: "Basic arithmetic.",
+          icon: "CheckSquare",
           slides: [
-            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "The dot product of two vectors gives a:", options: [ { id: "A", text: "Scalar", isCorrect: true, explanation: "Correct." }, { id: "B", text: "Vector", isCorrect: false, explanation: "Cross product gives a vector." } ] },
-            { id: "s1", type: "quiz", title: "Knowledge Check 2", content: "The separation vector ${\\cal{r}}$ points from:", options: [ { id: "A", text: "Field point to source point", isCorrect: false, explanation: "" }, { id: "B", text: "Source point to field point", isCorrect: true, explanation: "$\\mathbf{r} - \\mathbf{r}'$" } ] },
-            { id: "s2", type: "theory", title: "Unit 1 Summary", content: "Vectors have magnitude and direction. \n\n- **Dot product**: $\\mathbf{A}\\cdot\\mathbf{B} = AB\\cos\\theta$ (Scalar).\n- **Cross product**: $\\mathbf{A}\\times\\mathbf{B} = AB\\sin\\theta \\mathbf{\\hat{n}}$ (Vector).\n- **Separation vector**: ${\\cal{r}} = \\mathbf{r} - \\mathbf{r}'$ points from source to field." }
+            { id: "s0", type: "theory", title: "Vectors", content: "Defined by magnitude and direction. Add via parallelogram rule. Subtraction is adding negative." },
+            { id: "s1", type: "theory", title: "Products", content: "**Dot Product:** Scalar. Projection. $\\mathbf{A}\\cdot\\mathbf{B} = AB\\cos\\theta$.\n**Cross Product:** Vector. Area. $\\mathbf{A}\\times\\mathbf{B} = AB\\sin\\theta \\hat{n}$." }
           ]
         },
         {
-          id: "les-3-2-diff-recap", title: "Differential Calculus Recap", description: "Review of Unit 2", icon: "CheckSquare",
+          id: "les-1-1-sum-2",
+          title: "Summary: Components",
+          description: "Calculations.",
+          icon: "CheckSquare",
           slides: [
-            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "The divergence of a curl is always:", options: [ { id: "A", text: "0", isCorrect: true, explanation: "Fundamental identity." }, { id: "B", text: "The Laplacian", isCorrect: false, explanation: "" } ] },
-            { id: "s1", type: "quiz", title: "Knowledge Check 2", content: "The curl of a gradient is always:", options: [ { id: "A", text: "0", isCorrect: true, explanation: "Fundamental identity." }, { id: "B", text: "The Laplacian", isCorrect: false, explanation: "" } ] },
-            { id: "s2", type: "theory", title: "Unit 2 Summary", content: "The operator $\\nabla$ acts in three primary ways:\n\n1. **Gradients** (vectors pointing uphill).\n2. **Divergences** (scalars measuring outflow/sources).\n3. **Curls** (vectors measuring rotation/swirl).\n\n**Golden Identities**:\n- $\\nabla \\times (\\nabla T) = 0$\n- $\\nabla \\cdot (\\nabla \\times \\mathbf{v}) = 0$" }
+            { id: "s0", type: "theory", title: "Component Form", content: "Vectors expressed in basis $\\hat{x}, \\hat{y}, \\hat{z}$.\nOperations performed component-wise." },
+            { id: "s1", type: "theory", title: "Formulas", content: "$$\\mathbf{A}\\cdot\\mathbf{B} = A_x B_x + ...$$\n$$\\mathbf{A}\\times\\mathbf{B} = \\text{Determinant}$$" }
+          ]
+        },
+        {
+          id: "les-1-1-sum-3",
+          title: "Summary: Advanced",
+          description: "Triples and Transformations.",
+          icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "theory", title: "Triple Products", content: "**Scalar Triple:** Volume. Cyclic.\n**Vector Triple:** BAC-CAB rule." },
+            { id: "s1", type: "theory", title: "Transformations", content: "Vectors transform with rotation matrix R. \n**Pseudovectors** (like cross products) do not flip sign under inversion." }
+          ]
+        },
+        {
+          id: "les-1-1-sum-4",
+          title: "Summary: Separation",
+          description: "The r vector.",
+          icon: "CheckSquare",
+          slides: [
+            { id: "s0", type: "theory", title: "Separation Vector", content: "$${\\mathcal{r}} = \\mathbf{r} - \\mathbf{r}'$$\n\nPoints from Source to Field. Essential for Coulomb's Law." }
           ]
         }
       ]

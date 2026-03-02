@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Section, Lesson, Unit } from '../types';
 import * as Icons from 'lucide-react';
 import PathConnector from './PathConnector';
@@ -9,101 +9,99 @@ interface Props {
   completedLessons: string[];
   onStartLesson: (unitId: string, lessonId: string) => void;
   onOpenSectionSelector: () => void;
+  nextContext: { type: 'section' | 'course' | 'none', label: string };
+  onNavigateNext: () => void;
 }
 
 const colorHexMap: Record<string, string> = {
   'duo-blue': '#1cb0f6',
   'duo-green': '#58cc02',
-  'duo-red': '#ff4b4b'
+  'duo-red': '#ff4b4b',
+  'duo-violet': '#ce82ff',
+  'duo-orange': '#ff9600'
 };
 
-const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson, onOpenSectionSelector }) => {
+const LessonPath: React.FC<Props> = ({ 
+  section, 
+  completedLessons, 
+  onStartLesson, 
+  onOpenSectionSelector,
+  nextContext,
+  onNavigateNext
+}) => {
   const [recentlyCompleted, setRecentlyCompleted] = useState<string | null>(null);
 
-  // Effect to handle auto-scrolling to the current lesson on load
-  useEffect(() => {
-    const allLessonsList = section.units.flatMap(u => u.lessons.map(l => l.id));
-    let targetId = allLessonsList.find(id => !completedLessons.includes(id));
-    
-    // If all are completed, default to the last lesson in the section
-    if (!targetId && allLessonsList.length > 0) {
-       targetId = allLessonsList[allLessonsList.length - 1];
-    }
+  // Flatten lessons
+  const allLessons = useMemo(() => section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id }))), [section]);
 
-    if (targetId) {
-       const timer = setTimeout(() => {
-          const el = document.getElementById(`lesson-node-${targetId}`);
-          if (el) {
-             el.scrollIntoView({ behavior: 'instant', block: 'center' });
-          }
-       }, 150); // slight delay to allow rendering and animation setup to settle
-       return () => clearTimeout(timer);
-    }
-  }, [section.id, completedLessons]); // Trigger when section changes or a lesson finishes
+  const currentLessonId = useMemo(() => {
+    const firstUncompleted = allLessons.find(l => !completedLessons.includes(l.id));
+    return firstUncompleted ? firstUncompleted.id : null;
+  }, [allLessons, completedLessons]);
 
-  // Effect to handle the recently completed path animation and auto-start
+  const isSectionComplete = useMemo(() => {
+    return allLessons.every(l => completedLessons.includes(l.id));
+  }, [allLessons, completedLessons]);
+
   useEffect(() => {
     const rc = localStorage.getItem('recently_completed');
     if (rc) {
       setRecentlyCompleted(rc);
-      
-      const allLessonsList = section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id })));
-      const idx = allLessonsList.findIndex(l => l.id === rc);
-      
-      if (idx !== -1 && idx < allLessonsList.length - 1) {
-         const nextL = allLessonsList[idx + 1];
-         // Auto start next lesson precisely after animation completes
-         const timer = setTimeout(() => {
-            onStartLesson(nextL.unitId, nextL.id);
-            localStorage.removeItem('recently_completed');
-            setRecentlyCompleted(null);
-         }, 2600);
-         
-         return () => clearTimeout(timer);
-      } else {
-         localStorage.removeItem('recently_completed');
-         setRecentlyCompleted(null);
-      }
+      const timer = setTimeout(() => {
+        setRecentlyCompleted(null);
+        localStorage.removeItem('recently_completed');
+      }, 2500);
+      return () => clearTimeout(timer);
     }
-  }, [section, onStartLesson]);
+  }, []);
+
+  useEffect(() => {
+    if (currentLessonId) {
+      setTimeout(() => {
+        const el = document.getElementById(`lesson-node-${currentLessonId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500);
+    } else if (isSectionComplete) {
+      // Scroll to bottom if complete
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  }, [section.id, currentLessonId, isSectionComplete]);
 
   const colorHex = colorHexMap[section.color] || '#1cb0f6';
-  const allLessons = section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id })));
 
-  let nextLessonId: string | null = null;
-  if (recentlyCompleted) {
-     const idx = allLessons.findIndex(l => l.id === recentlyCompleted);
-     if (idx !== -1 && idx < allLessons.length - 1) {
-        nextLessonId = allLessons[idx + 1].id;
-     }
-  }
-
-  let currentY = 0;
+  let currentY = 40;
   const pathPoints: { x: number, y: number, id: string }[] = [];
   const renderElements: { type: 'header' | 'lesson', unit: Unit, y: number, x?: number, lesson?: Lesson }[] = [];
   
   let globalLessonIdx = 0;
 
-  section.units.forEach((unit) => {
-    currentY += 80;
+  section.units.forEach((unit, uIdx) => {
+    if (uIdx > 0) {
+      currentY += 60; 
+    }
     renderElements.push({ type: 'header', unit, y: currentY });
-    currentY += 100;
+    currentY += 100; 
 
     unit.lessons.forEach((lesson) => {
-      const offset = globalLessonIdx % 2 === 0 ? 0 : (globalLessonIdx % 4 === 1 ? -65 : 65);
+      let offset = 0;
+      if (globalLessonIdx % 4 === 1) offset = 65;
+      if (globalLessonIdx % 4 === 2) offset = 0;
+      if (globalLessonIdx % 4 === 3) offset = -65;
+
       const x = 200 + offset; 
       const y = currentY;
       
       pathPoints.push({ x, y, id: lesson.id });
       renderElements.push({ type: 'lesson', unit, lesson, x, y });
 
-      currentY += 140;
+      currentY += 140; 
       globalLessonIdx++;
     });
-    currentY += 60; 
   });
 
-  const containerHeight = currentY + 40;
+  const containerHeight = currentY + (isSectionComplete && nextContext.type !== 'none' ? 100 : 40);
 
   return (
     <div className="pb-32 max-w-md mx-auto relative">
@@ -133,7 +131,7 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
            />
         </svg>
 
-        {renderElements.map((el, i) => {
+        {renderElements.map((el) => {
           if (el.type === 'header') {
             return (
               <div 
@@ -151,7 +149,7 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
 
           if (el.type === 'lesson' && el.lesson && el.x !== undefined) {
              const isCompleted = completedLessons.includes(el.lesson.id);
-             const isNextToStart = el.lesson.id === nextLessonId;
+             const isNextToStart = el.lesson.id === currentLessonId;
 
              return (
                <LessonNode 
@@ -166,10 +164,26 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
                />
              );
           }
-
           return null;
         })}
 
+        {isSectionComplete && nextContext.type !== 'none' && (
+          <div 
+            className="absolute w-full flex justify-center z-20 animate-in fade-in slide-in-from-bottom-4 duration-700"
+            style={{ top: `${currentY}px` }}
+          >
+            <button
+              onClick={onNavigateNext}
+              className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-white shadow-lg transition-all active:scale-95
+                ${nextContext.type === 'course' 
+                  ? 'bg-amber-500 border-b-4 border-amber-700 hover:bg-amber-400' 
+                  : 'bg-duo-blue border-b-4 border-duo-blue-dark hover:bg-blue-400'}`}
+            >
+              <span>{nextContext.label}</span>
+              <Icons.ArrowRight className="w-5 h-5 animate-pulse" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

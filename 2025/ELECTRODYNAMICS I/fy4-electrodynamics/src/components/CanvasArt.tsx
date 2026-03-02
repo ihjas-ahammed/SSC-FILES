@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import KeplerOrbits from './canvas-arts/KeplerOrbits';
 import CentralForce from './canvas-arts/CentralForce';
 import PolarCoords from './canvas-arts/PolarCoords';
@@ -14,6 +14,7 @@ import RotatingFrame from './canvas-arts/RotatingFrame';
 import CoriolisAxes from './canvas-arts/CoriolisAxes';
 import FoucaultPrecess from './canvas-arts/FoucaultPrecess';
 import { VectorAddition, GradientField, DivergenceField, CurlField } from './canvas-arts/VectorArts';
+import InteractiveCanvasArt from './InteractiveCanvasArt';
 
 interface Props {
   canvasId: string;
@@ -21,8 +22,8 @@ interface Props {
 
 const CanvasArt: React.FC<Props> = ({ canvasId }) => {
   const renderArt = () => {
+    // Check if it's one of the older hardcoded arts
     switch (canvasId) {
-      // Mechanics visuals retained for compatibility if needed
       case 'kepler-orbits': return <KeplerOrbits />;
       case 'central-force': return <CentralForce />;
       case 'polar-coords': return <PolarCoords />;
@@ -38,19 +39,22 @@ const CanvasArt: React.FC<Props> = ({ canvasId }) => {
       case 'coriolis-axes': return <CoriolisAxes />;
       case 'foucault-precess': return <FoucaultPrecess />;
       
-      // New Vector Arts
+      // Vector Arts
       case 'vector-addition': return <VectorAddition />;
       case 'gradient-field': return <GradientField />;
       case 'divergence-field': return <DivergenceField />;
       case 'curl-field': return <CurlField />;
 
-      default: return <p className="text-slate-500 py-10 text-center w-full">Visualization component not found</p>;
+      // Delegate the rest to the Interactive handler
+      default: return <InteractiveCanvasArt canvasId={canvasId} />;
     }
   };
 
   return (
     <div className="glass-panel p-2 rounded-3xl shadow-lg w-full flex justify-center bg-black/30">
-      {renderArt()}
+      <Suspense fallback={<div className="animate-pulse text-slate-500 p-10">Loading visual...</div>}>
+        {renderArt()}
+      </Suspense>
     </div>
   );
 };

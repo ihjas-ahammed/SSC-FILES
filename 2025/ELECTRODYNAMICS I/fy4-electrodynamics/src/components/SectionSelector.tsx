@@ -1,16 +1,26 @@
 import React from 'react';
 import { Section } from '../types';
-import { ChevronRight, CheckCircle } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import MiniProgressBar from './MiniProgressBar';
+import { calculateSectionProgress } from '../utils/progressUtils';
 
 interface Props {
   sections: Section[];
   activeSectionIndex: number;
+  completedLessons: string[];
   onSelectSection: (index: number) => void;
   onClose: () => void;
   isOpen: boolean;
 }
 
-const SectionSelector: React.FC<Props> = ({ sections, activeSectionIndex, onSelectSection, onClose, isOpen }) => {
+const SectionSelector: React.FC<Props> = ({ 
+  sections, 
+  activeSectionIndex, 
+  completedLessons,
+  onSelectSection, 
+  onClose, 
+  isOpen 
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -28,6 +38,7 @@ const SectionSelector: React.FC<Props> = ({ sections, activeSectionIndex, onSele
            <div className="space-y-4">
              {sections.map((section, index) => {
                const isActive = index === activeSectionIndex;
+               const progress = calculateSectionProgress(section, completedLessons);
                
                return (
                  <button
@@ -40,36 +51,32 @@ const SectionSelector: React.FC<Props> = ({ sections, activeSectionIndex, onSele
                      }
                    `}
                  >
-                   <div className="p-6 flex items-center">
-                     <div className="flex-grow">
-                       <h3 className={`font-bold text-lg mb-1 ${isActive ? 'text-white' : 'text-slate-300'}`}>
-                         {section.title}
-                       </h3>
-                       <p className={`text-sm font-medium ${isActive ? 'text-white/80' : 'text-slate-500'}`}>
-                         {section.description}
-                       </p>
+                   <div className="p-6">
+                     <div className="flex items-center mb-3">
+                       <div className="flex-grow">
+                         <h3 className={`font-bold text-lg mb-1 ${isActive ? 'text-white' : 'text-slate-300'}`}>
+                           {section.title}
+                         </h3>
+                         <p className={`text-sm font-medium ${isActive ? 'text-white/80' : 'text-slate-500'}`}>
+                           {section.description}
+                         </p>
+                       </div>
                        
-                       <div className="mt-4 inline-flex items-center text-xs font-bold uppercase tracking-wider">
-                          {isActive ? (
-                            <span className="bg-white/10 text-white px-2 py-1 rounded">Current</span>
-                          ) : (
-                            <span className="text-slate-400 flex items-center">
-                              Available
-                            </span>
-                          )}
+                       <div className="ml-4">
+                         {isActive ? (
+                           <div className="bg-white/10 p-2 rounded-full">
+                             <ChevronRight className="w-6 h-6 text-white" />
+                           </div>
+                         ) : (
+                           <div className="bg-white/5 p-2 rounded-full">
+                             <ChevronRight className="w-6 h-6 text-slate-500" />
+                           </div>
+                         )}
                        </div>
                      </div>
-                     
-                     <div className="ml-4">
-                       {isActive ? (
-                         <div className="bg-white/10 p-2 rounded-full">
-                           <ChevronRight className="w-6 h-6 text-white" />
-                         </div>
-                       ) : (
-                         <div className="bg-white/5 p-2 rounded-full">
-                           <ChevronRight className="w-6 h-6 text-slate-500" />
-                         </div>
-                       )}
+
+                     <div className="mt-2">
+                        <MiniProgressBar percentage={progress} height="h-1.5" />
                      </div>
                    </div>
                  </button>

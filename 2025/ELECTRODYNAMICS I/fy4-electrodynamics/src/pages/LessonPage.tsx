@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { COURSES } from '../data/courses';
-import { UserProgress, Lesson } from '../types';
+import { PRACTICE_COURSE } from '../data/practice'; // Import practice data
+import { UserProgress, Lesson, Course } from '../types';
 import LessonView from '../components/LessonView';
 import LessonCompleteScreen from '../components/LessonCompleteScreen';
 
@@ -17,7 +18,14 @@ const LessonPage: React.FC<Props> = ({ progress, setProgress }) => {
   const [showCompletion, setShowCompletion] = useState(false);
   const [lessonStats, setLessonStats] = useState({ timeSpent: 0, accuracy: 100, xpEarned: 0 });
 
-  const course = COURSES.find(c => c.id === courseId);
+  // Check if it's practice mode
+  let course: Course | undefined;
+  if (courseId === 'practice-mode') {
+    course = PRACTICE_COURSE;
+  } else {
+    course = COURSES.find(c => c.id === courseId);
+  }
+
   let activeLesson: Lesson | undefined;
 
   if (course && course.sections) {
@@ -45,8 +53,7 @@ const LessonPage: React.FC<Props> = ({ progress, setProgress }) => {
       
       setLessonStats({ ...stats, xpEarned });
       
-      // Mark as recently completed for path animation
-      if (isNewCompletion) {
+      if (isNewCompletion && courseId !== 'practice-mode') {
          localStorage.setItem('recently_completed', lessonId);
       }
       

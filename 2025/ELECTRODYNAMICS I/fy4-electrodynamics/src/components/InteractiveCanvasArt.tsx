@@ -15,6 +15,15 @@ import MagBoundaryInteractive from './interactive-arts/MagBoundaryInteractive';
 import ClockFaceChargesInteractive from './interactive-arts/ClockFaceChargesInteractive';
 import CycloidMotionInteractive from './interactive-arts/CycloidMotionInteractive';
 import HelmholtzCoilsInteractive from './interactive-arts/HelmholtzCoilsInteractive';
+import LineIntegralInteractive from './interactive-arts/LineIntegralInteractive';
+import SphericalCoordsInteractive from './interactive-arts/SphericalCoordsInteractive';
+import CoulombForceInteractive from './interactive-arts/CoulombForceInteractive';
+import ContinuousIntegrationInteractive from './interactive-arts/ContinuousIntegrationInteractive';
+import ElectricBoundaryInteractive from './interactive-arts/ElectricBoundaryInteractive';
+import SolidSphereFieldPlot from './interactive-arts/SolidSphereFieldPlot';
+import CoordSystemInteractive from './interactive-arts/CoordSystemInteractive';
+import GaussianCylinderInteractive from './interactive-arts/GaussianCylinderInteractive';
+import GaussianPillboxInteractive from './interactive-arts/GaussianPillboxInteractive';
 
 interface Props {
   canvasId: string;
@@ -39,7 +48,16 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       case 'clock-face-interactive': return <ClockFaceChargesInteractive />;
       case 'cycloid-motion-interactive': return <CycloidMotionInteractive />;
       case 'helmholtz-coils-interactive': return <HelmholtzCoilsInteractive />;
-      default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found</p>;
+      case 'line-integral-interactive': return <LineIntegralInteractive />;
+      case 'spherical-coords-interactive': return <SphericalCoordsInteractive />;
+      case 'coulomb-force-interactive': return <CoulombForceInteractive />;
+      case 'continuous-integration-interactive': return <ContinuousIntegrationInteractive />;
+      case 'electric-boundary-interactive': return <ElectricBoundaryInteractive />;
+      case 'solid-sphere-plot': return <SolidSphereFieldPlot />;
+      case 'coord-system-interactive': return <CoordSystemInteractive />;
+      case 'gaussian-cylinder-interactive': return <GaussianCylinderInteractive />;
+      case 'gaussian-pillbox-interactive': return <GaussianPillboxInteractive />;
+      default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found: {canvasId}</p>;
     }
   };
 

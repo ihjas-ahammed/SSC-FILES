@@ -1,138 +1,198 @@
+--- START OF FILE project_snapshot_out.txt ---
 
---- START OF FILE src/components/PathConnector.tsx ---
-import React from 'react';
+--- START OF FILE src/utils/courseUtils.ts ---
+import { Course, Section } from '../types';
 
-interface Point {
-  x: number;
-  y: number;
-  id: string;
-}
+export const getNextContext = (
+  courses: Course[], 
+  currentCourseId: string, 
+  currentSectionIndex: number
+): { type: 'section' | 'course' | 'none', label: string, targetId?: string, targetIndex?: number } => {
+  
+  const courseIndex = courses.findIndex(c => c.id === currentCourseId);
+  if (courseIndex === -1) return { type: 'none', label: '' };
 
-interface Props {
-  points: Point[];
-  completedLessons: string[];
-  recentlyCompleted: string | null;
-  colorHex: string;
-}
+  const currentCourse = courses[courseIndex];
 
-const PathConnector: React.FC<Props> = ({ points, completedLessons, recentlyCompleted, colorHex }) => {
-  if (points.length < 2) return null;
+  // Check if there is a next section in the current course
+  if (currentSectionIndex < currentCourse.sections.length - 1) {
+    const nextSection = currentCourse.sections[currentSectionIndex + 1];
+    return {
+      type: 'section',
+      label: `Next Section: ${nextSection.title.split(':')[0]}`, // e.g. "Next Section: Section 1.2"
+      targetIndex: currentSectionIndex + 1
+    };
+  }
 
-  const getPathData = (p1: Point, p2: Point) => {
-    // Creates a smooth S-curve connecting p1 and p2 vertically
-    const cy = (p1.y + p2.y) / 2;
-    return `M ${p1.x} ${p1.y} C ${p1.x} ${cy}, ${p2.x} ${cy}, ${p2.x} ${p2.y}`;
-  };
+  // Check if there is a next course
+  if (courseIndex < courses.length - 1) {
+    const nextCourse = courses[courseIndex + 1];
+    return {
+      type: 'course',
+      label: `Next Module: ${nextCourse.title.split(':')[0]}`, // e.g. "Next Module: Module II"
+      targetId: nextCourse.id
+    };
+  }
+
+  return { type: 'none', label: '' };
+};
+
+export const getNextCourseId = (courses: Course[], currentCourseId: string): string | null => {
+  const index = courses.findIndex(c => c.id === currentCourseId);
+  if (index !== -1 && index < courses.length - 1) {
+    return courses[index + 1].id;
+  }
+  return null;
+};
+--- END OF FILE src/utils/courseUtils.ts ---
+
+--- START OF FILE src/App.tsx ---
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { UserProgress } from './types';
+import Dashboard from './pages/Dashboard';
+import LessonPage from './pages/LessonPage';
+import ChapterSummaryPage from './pages/ChapterSummaryPage';
+import './App.css';
+import './styles/interactive.css'; 
+import './styles/path.css'; 
+import './styles/progress.css';
+import './styles/bottom-nav.css';
+
+const App: React.FC = () => {
+  const [progress, setProgress] = useState<UserProgress>(() => {
+    const saved = localStorage.getItem('duofy4_progress'); 
+    let initialProgress: UserProgress = {
+      completedLessons: [],
+      xp: 0,
+      currentCourseId: 'module-1'
+    };
+    
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        initialProgress = {
+          completedLessons: parsed.completedLessons || [],
+          xp: parsed.xp || 0,
+          currentCourseId: parsed.currentCourseId || 'module-1'
+        };
+      } catch(e) {
+        console.error("Failed to parse progress", e);
+      }
+    }
+    return initialProgress;
+  });
+
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem('duofy4_progress', JSON.stringify(progress));
+  }, [progress]);
+
+  useEffect(() => {
+    setCurrentSectionIndex(0);
+  }, [progress.currentCourseId]);
 
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-      {/* Draw background paths for all segments */}
-      {points.slice(0, -1).map((p1, i) => {
-        const p2 = points[i + 1];
-        return (
-          <path
-            key={`bg-${p1.id}-${p2.id}`}
-            d={getPathData(p1, p2)}
-            stroke="#334155" // slate-700
-            strokeWidth="8"
-            fill="none"
-            strokeLinecap="round"
-            vectorEffect="non-scaling-stroke"
+    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/learn" replace />} />
+          
+          <Route 
+             path="/*" 
+             element={<Dashboard 
+                progress={progress} 
+                setProgress={setProgress} 
+                currentSectionIndex={currentSectionIndex} 
+                setCurrentSectionIndex={setCurrentSectionIndex} 
+             />} 
           />
-        );
-      })}
-
-      {/* Draw active paths and animated paths */}
-      {points.slice(0, -1).map((p1, i) => {
-        const p2 = points[i + 1];
-        
-        // Lit if p1 is completed.
-        const isCompleted = completedLessons.includes(p1.id);
-        const isNewlyCompleted = recentlyCompleted === p1.id;
-
-        if (!isCompleted && !isNewlyCompleted) return null;
-
-        return (
-          <path
-            key={`fg-${p1.id}-${p2.id}`}
-            d={getPathData(p1, p2)}
-            stroke={colorHex}
-            strokeWidth="8"
-            fill="none"
-            strokeLinecap="round"
-            pathLength="1"
-            vectorEffect="non-scaling-stroke"
-            className={`path-connector ${isNewlyCompleted ? 'animate-draw-path' : ''}`}
+          
+          <Route 
+             path="/lesson/:courseId/:unitId/:lessonId" 
+             element={<LessonPage 
+                progress={progress} 
+                setProgress={setProgress} 
+             />} 
           />
-        );
-      })}
-    </svg>
+          <Route 
+             path="/summary/:courseId" 
+             element={<ChapterSummaryPage />} 
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 };
 
-export default PathConnector;
---- END OF FILE src/components/PathConnector.tsx ---
+export default App;
+--- END OF FILE src/App.tsx ---
 
---- START OF FILE src/components/LessonNode.tsx ---
+--- START OF FILE src/components/BottomNav.tsx ---
 import React from 'react';
-import * as Icons from 'lucide-react';
-import { Lesson } from '../types';
+import { BookOpen, Edit3, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/bottom-nav.css';
+
+export type Tab = 'learn' | 'practice' | 'notes';
 
 interface Props {
-  lesson: Lesson;
-  x: number;
-  y: number;
-  isCompleted: boolean;
-  isNextToStart: boolean;
-  colorName: string;
-  onStart: () => void;
+  activeTab: Tab;
 }
 
-const LessonNode: React.FC<Props> = ({ lesson, x, y, isCompleted, isNextToStart, colorName, onStart }) => {
-  const LucideIcon = (Icons as any)[lesson.icon] || Icons.BookOpen;
+const BottomNav: React.FC<Props> = ({ activeTab }) => {
+  const navigate = useNavigate();
+
+  const handleNav = (path: string) => {
+    if (activeTab !== path) {
+      navigate(`/${path}`);
+      window.scrollTo(0, 0);
+    }
+  };
 
   return (
-    <div 
-      id={`lesson-node-${lesson.id}`}
-      className="absolute flex flex-col items-center pointer-events-auto"
-      style={{ left: `${(x / 400) * 100}%`, top: `${y}px`, transform: 'translate(-50%, -50%)', zIndex: 10 }}
-    >
-      <button
-        onClick={onStart}
-        className={`
-          relative group flex flex-col items-center justify-center
-          w-20 h-20 rounded-full border-b-[6px] active:border-b-0 active:translate-y-[6px] transition-all
-          ${isNextToStart ? 'next-node-pop' : ''}
-          ${isCompleted 
-            ? 'bg-amber-500 border-amber-700 text-white' 
-            : `bg-${colorName} border-${colorName}-dark hover:brightness-110 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]`}
-        `}
-      >
-        <LucideIcon className="w-8 h-8" strokeWidth={3} />
-        
-        {isCompleted && (
-          <div className="absolute -right-1 -top-1 bg-slate-800 rounded-full p-1 border-2 border-amber-500 shadow-sm">
-            <Icons.Check className="w-4 h-4 text-amber-500" strokeWidth={4} />
+    <div className="bottom-nav-container">
+      <div className="bottom-nav-wrapper">
+        <button 
+          onClick={() => handleNav('learn')}
+          className={`nav-item ${activeTab === 'learn' ? 'active' : ''}`}
+        >
+          <div className="icon-container">
+            <BookOpen size={24} strokeWidth={2.5} />
           </div>
-        )}
-      </button>
-      
-      <div className="absolute top-full mt-4 w-40 flex flex-col items-center pointer-events-none">
-        <div className="glass-panel px-3 py-2 rounded-xl flex items-center justify-center shadow-lg">
-          <p className="text-center text-[10px] font-black uppercase text-slate-200 leading-tight">
-            {lesson.title}
-          </p>
-        </div>
+          <span className="label">Learn</span>
+        </button>
+
+        <button 
+          onClick={() => handleNav('practice')}
+          className={`nav-item ${activeTab === 'practice' ? 'active' : ''}`}
+        >
+          <div className="icon-container">
+            <Edit3 size={24} strokeWidth={2.5} />
+          </div>
+          <span className="label">Practice</span>
+        </button>
+
+        <button 
+          onClick={() => handleNav('notes')}
+          className={`nav-item ${activeTab === 'notes' ? 'active' : ''}`}
+        >
+          <div className="icon-container">
+            <FileText size={24} strokeWidth={2.5} />
+          </div>
+          <span className="label">Notes</span>
+        </button>
       </div>
     </div>
   );
 };
 
-export default LessonNode;
---- END OF FILE src/components/LessonNode.tsx ---
+export default BottomNav;
+--- END OF FILE src/components/BottomNav.tsx ---
 
 --- START OF FILE src/components/LessonPath.tsx ---
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Section, Lesson, Unit } from '../types';
 import * as Icons from 'lucide-react';
 import PathConnector from './PathConnector';
@@ -143,101 +203,99 @@ interface Props {
   completedLessons: string[];
   onStartLesson: (unitId: string, lessonId: string) => void;
   onOpenSectionSelector: () => void;
+  nextContext: { type: 'section' | 'course' | 'none', label: string };
+  onNavigateNext: () => void;
 }
 
 const colorHexMap: Record<string, string> = {
   'duo-blue': '#1cb0f6',
   'duo-green': '#58cc02',
-  'duo-red': '#ff4b4b'
+  'duo-red': '#ff4b4b',
+  'duo-violet': '#ce82ff',
+  'duo-orange': '#ff9600'
 };
 
-const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson, onOpenSectionSelector }) => {
+const LessonPath: React.FC<Props> = ({ 
+  section, 
+  completedLessons, 
+  onStartLesson, 
+  onOpenSectionSelector,
+  nextContext,
+  onNavigateNext
+}) => {
   const [recentlyCompleted, setRecentlyCompleted] = useState<string | null>(null);
 
-  // Effect to handle auto-scrolling to the current lesson on load
-  useEffect(() => {
-    const allLessonsList = section.units.flatMap(u => u.lessons.map(l => l.id));
-    let targetId = allLessonsList.find(id => !completedLessons.includes(id));
-    
-    // If all are completed, default to the last lesson in the section
-    if (!targetId && allLessonsList.length > 0) {
-       targetId = allLessonsList[allLessonsList.length - 1];
-    }
+  // Flatten lessons
+  const allLessons = useMemo(() => section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id }))), [section]);
 
-    if (targetId) {
-       const timer = setTimeout(() => {
-          const el = document.getElementById(`lesson-node-${targetId}`);
-          if (el) {
-             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-       }, 150); // slight delay to allow rendering and animation setup to settle
-       return () => clearTimeout(timer);
-    }
-  }, [section.id, completedLessons]); // Trigger when section changes or a lesson finishes
+  const currentLessonId = useMemo(() => {
+    const firstUncompleted = allLessons.find(l => !completedLessons.includes(l.id));
+    return firstUncompleted ? firstUncompleted.id : null;
+  }, [allLessons, completedLessons]);
 
-  // Effect to handle the recently completed path animation and auto-start
+  const isSectionComplete = useMemo(() => {
+    return allLessons.every(l => completedLessons.includes(l.id));
+  }, [allLessons, completedLessons]);
+
   useEffect(() => {
     const rc = localStorage.getItem('recently_completed');
     if (rc) {
       setRecentlyCompleted(rc);
-      
-      const allLessonsList = section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id })));
-      const idx = allLessonsList.findIndex(l => l.id === rc);
-      
-      if (idx !== -1 && idx < allLessonsList.length - 1) {
-         const nextL = allLessonsList[idx + 1];
-         // Auto start next lesson precisely after animation completes
-         const timer = setTimeout(() => {
-            onStartLesson(nextL.unitId, nextL.id);
-            localStorage.removeItem('recently_completed');
-            setRecentlyCompleted(null);
-         }, 2600);
-         
-         return () => clearTimeout(timer);
-      } else {
-         localStorage.removeItem('recently_completed');
-         setRecentlyCompleted(null);
-      }
+      const timer = setTimeout(() => {
+        setRecentlyCompleted(null);
+        localStorage.removeItem('recently_completed');
+      }, 2500);
+      return () => clearTimeout(timer);
     }
-  }, [section, onStartLesson]);
+  }, []);
+
+  useEffect(() => {
+    if (currentLessonId) {
+      setTimeout(() => {
+        const el = document.getElementById(`lesson-node-${currentLessonId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 500);
+    } else if (isSectionComplete) {
+      // Scroll to bottom if complete
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  }, [section.id, currentLessonId, isSectionComplete]);
 
   const colorHex = colorHexMap[section.color] || '#1cb0f6';
-  const allLessons = section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id })));
 
-  let nextLessonId: string | null = null;
-  if (recentlyCompleted) {
-     const idx = allLessons.findIndex(l => l.id === recentlyCompleted);
-     if (idx !== -1 && idx < allLessons.length - 1) {
-        nextLessonId = allLessons[idx + 1].id;
-     }
-  }
-
-  let currentY = 0;
+  let currentY = 40;
   const pathPoints: { x: number, y: number, id: string }[] = [];
   const renderElements: { type: 'header' | 'lesson', unit: Unit, y: number, x?: number, lesson?: Lesson }[] = [];
   
   let globalLessonIdx = 0;
 
-  section.units.forEach((unit) => {
-    currentY += 80;
+  section.units.forEach((unit, uIdx) => {
+    if (uIdx > 0) {
+      currentY += 60; 
+    }
     renderElements.push({ type: 'header', unit, y: currentY });
-    currentY += 100;
+    currentY += 100; 
 
     unit.lessons.forEach((lesson) => {
-      const offset = globalLessonIdx % 2 === 0 ? 0 : (globalLessonIdx % 4 === 1 ? -65 : 65);
+      let offset = 0;
+      if (globalLessonIdx % 4 === 1) offset = 65;
+      if (globalLessonIdx % 4 === 2) offset = 0;
+      if (globalLessonIdx % 4 === 3) offset = -65;
+
       const x = 200 + offset; 
       const y = currentY;
       
       pathPoints.push({ x, y, id: lesson.id });
       renderElements.push({ type: 'lesson', unit, lesson, x, y });
 
-      currentY += 140;
+      currentY += 140; 
       globalLessonIdx++;
     });
-    currentY += 60; 
   });
 
-  const containerHeight = currentY + 40;
+  const containerHeight = currentY + (isSectionComplete && nextContext.type !== 'none' ? 100 : 40);
 
   return (
     <div className="pb-32 max-w-md mx-auto relative">
@@ -267,7 +325,7 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
            />
         </svg>
 
-        {renderElements.map((el, i) => {
+        {renderElements.map((el) => {
           if (el.type === 'header') {
             return (
               <div 
@@ -285,7 +343,7 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
 
           if (el.type === 'lesson' && el.lesson && el.x !== undefined) {
              const isCompleted = completedLessons.includes(el.lesson.id);
-             const isNextToStart = el.lesson.id === nextLessonId;
+             const isNextToStart = el.lesson.id === currentLessonId;
 
              return (
                <LessonNode 
@@ -300,10 +358,26 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
                />
              );
           }
-
           return null;
         })}
 
+        {isSectionComplete && nextContext.type !== 'none' && (
+          <div 
+            className="absolute w-full flex justify-center z-20 animate-in fade-in slide-in-from-bottom-4 duration-700"
+            style={{ top: `${currentY}px` }}
+          >
+            <button
+              onClick={onNavigateNext}
+              className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-white shadow-lg transition-all active:scale-95
+                ${nextContext.type === 'course' 
+                  ? 'bg-amber-500 border-b-4 border-amber-700 hover:bg-amber-400' 
+                  : 'bg-duo-blue border-b-4 border-duo-blue-dark hover:bg-blue-400'}`}
+            >
+              <span>{nextContext.label}</span>
+              <Icons.ArrowRight className="w-5 h-5 animate-pulse" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -311,3 +385,358 @@ const LessonPath: React.FC<Props> = ({ section, completedLessons, onStartLesson,
 
 export default LessonPath;
 --- END OF FILE src/components/LessonPath.tsx ---
+
+--- START OF FILE src/components/NotesTab.tsx ---
+import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Course, Lesson } from '../types';
+import MathRenderer from './MathRenderer';
+import CanvasArt from './CanvasArt';
+import { ArrowRight, BookOpen } from 'lucide-react';
+import { getNextCourseId } from '../utils/courseUtils';
+
+interface Props {
+  course: Course;
+  courses: Course[];
+  onChangeCourse: (id: string) => void;
+}
+
+const NotesTab: React.FC<Props> = ({ course, courses, onChangeCourse }) => {
+  const navigate = useNavigate();
+
+  // Helper to check if a lesson is an "Example" lesson
+  const isExampleLesson = (lesson: Lesson) => {
+    return lesson.title.startsWith("Ex") || lesson.title.startsWith("Prob") || lesson.slides.some(s => s.type === 'example_q');
+  };
+
+  // Logic to prevent duplicate interactive canvases
+  const renderedCanvasIds = useMemo(() => new Set<string>(), [course.id]);
+
+  const nextCourseId = getNextCourseId(courses, course.id);
+  const nextCourse = courses.find(c => c.id === nextCourseId);
+
+  return (
+    <div className="pb-32 px-4 pt-4">
+      <h2 className="text-2xl font-black text-white mb-2 text-center">{course.title}</h2>
+      <p className="text-slate-400 text-center mb-8 text-xs font-bold uppercase tracking-widest">Digital Notebook</p>
+
+      <div className="space-y-12">
+        {course.sections.flatMap(section => 
+          section.units.map(unit => {
+            // Filter theory slides
+            const theorySlides = unit.lessons.flatMap(l => l.slides).filter(s => s.type === 'theory' || s.canvasId || s.interactiveCanvasId);
+            
+            // Find relevant example lessons in this unit
+            const exampleLessons = unit.lessons.filter(l => isExampleLesson(l));
+
+            if (theorySlides.length === 0) return null;
+
+            return (
+              <div key={unit.id} className="space-y-6">
+                <div className="flex items-center gap-4 mb-4">
+                   <div className={`h-1 w-10 rounded-full bg-${unit.color || 'duo-blue'}`} />
+                   <h3 className="text-xl font-bold text-slate-200">{unit.title}</h3>
+                </div>
+
+                {theorySlides.map((slide, i) => {
+                  const canvasId = slide.canvasId || slide.interactiveCanvasId;
+                  let showCanvas = false;
+                  
+                  if (canvasId) {
+                    if (!renderedCanvasIds.has(canvasId)) {
+                      renderedCanvasIds.add(canvasId);
+                      showCanvas = true;
+                    }
+                  }
+
+                  return (
+                    <div key={slide.id} className="glass-panel p-6 rounded-2xl border border-white/5 relative overflow-hidden">
+                      <div className={`absolute top-0 left-0 w-1 h-full bg-${unit.color || 'duo-blue'}/50`} />
+                      
+                      {slide.title && (
+                        <h4 className="text-lg font-bold text-blue-400 mb-3 border-b border-white/10 pb-2 pl-2">
+                          {slide.title}
+                        </h4>
+                      )}
+                      
+                      {slide.content && (
+                        <div className="mb-4 pl-2">
+                          <MathRenderer content={slide.content} className="text-slate-300 text-sm leading-relaxed" />
+                        </div>
+                      )}
+
+                      {showCanvas && (
+                         <div className="mt-4 bg-black/20 rounded-xl p-2 overflow-hidden">
+                            <CanvasArt canvasId={canvasId!} />
+                            <p className="text-center text-[10px] text-slate-500 mt-2 uppercase tracking-wide">Interactive Visual</p>
+                         </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* Reference to Examples */}
+                {exampleLessons.length > 0 && (
+                  <div className="pl-4 border-l-2 border-white/10">
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Practice Examples</p>
+                    <div className="grid grid-cols-1 gap-2">
+                      {exampleLessons.map(exLesson => (
+                        <button
+                          key={exLesson.id}
+                          onClick={() => navigate(`/lesson/${course.id}/${unit.id}/${exLesson.id}`)}
+                          className="flex items-center justify-between glass-panel p-3 rounded-xl hover:bg-white/10 transition-colors text-left group"
+                        >
+                          <span className="text-sm font-semibold text-slate-300 group-hover:text-white transition-colors">{exLesson.title}</span>
+                          <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
+
+        {/* Navigation to Next Module */}
+        {nextCourse && (
+          <div className="pt-8 pb-4 flex justify-center">
+            <button
+              onClick={() => onChangeCourse(nextCourse.id)}
+              className="bg-slate-800 border-slate-700 border-b-4 hover:bg-slate-700 text-white font-bold py-4 px-8 rounded-2xl uppercase tracking-widest transition-all active:border-b-0 active:translate-y-1 flex items-center gap-3"
+            >
+              <BookOpen className="w-5 h-5 text-amber-400" />
+              <span>Next: {nextCourse.title}</span>
+            </button>
+          </div>
+        )}
+
+        {course.sections.every(s => s.units.every(u => u.lessons.every(l => l.slides.filter(s => s.type === 'theory').length === 0))) && (
+          <div className="text-center text-slate-500 py-10">
+            No notes available for this module.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default NotesTab;
+--- END OF FILE src/components/NotesTab.tsx ---
+
+--- START OF FILE src/components/LearnTab.tsx ---
+import React, { useState } from 'react';
+import { Course, UserProgress } from '../types';
+import LessonPath from './LessonPath';
+import SectionSelector from './SectionSelector';
+import CourseSelector from './CourseSelector';
+import { BookOpen, Zap, ChevronDown } from 'lucide-react';
+import { getNextContext } from '../utils/courseUtils';
+
+interface Props {
+  progress: UserProgress;
+  setProgress: React.Dispatch<React.SetStateAction<UserProgress>>;
+  currentSectionIndex: number;
+  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
+  currentCourse: Course;
+  courses: Course[];
+  handleCourseChange: (id: string) => void;
+  handleStartLesson: (uId: string, lId: string) => void;
+  handleGoToSummary: () => void;
+}
+
+const LearnTab: React.FC<Props> = ({ 
+  progress, 
+  currentSectionIndex, 
+  setCurrentSectionIndex, 
+  currentCourse,
+  courses,
+  handleCourseChange,
+  handleStartLesson,
+  handleGoToSummary
+}) => {
+  const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
+  const [isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false);
+
+  const currentSection = currentCourse.sections && currentCourse.sections.length > 0 
+      ? currentCourse.sections[currentSectionIndex] || currentCourse.sections[0] 
+      : null;
+
+  const nextContext = getNextContext(courses, currentCourse.id, currentSectionIndex);
+
+  const handleNavigateNext = () => {
+    if (nextContext.type === 'section' && nextContext.targetIndex !== undefined) {
+      setCurrentSectionIndex(nextContext.targetIndex);
+      window.scrollTo(0, 0);
+    } else if (nextContext.type === 'course' && nextContext.targetId) {
+      handleCourseChange(nextContext.targetId);
+    }
+  };
+
+  return (
+    <>
+      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
+        <div 
+          onClick={() => setIsCourseSelectorOpen(true)}
+          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
+        >
+          <div className="relative">
+             <BookOpen className="w-8 h-8 text-duo-blue" />
+             <div className="absolute -bottom-1 -right-1 bg-slate-800 rounded-full border border-slate-600">
+                <ChevronDown className="w-3 h-3 text-slate-300" />
+             </div>
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-3">
+          {currentCourse.chapterSummary && (
+             <button 
+                onClick={handleGoToSummary}
+                className="flex items-center gap-1.5 bg-duo-blue/20 text-duo-blue px-3 py-1.5 rounded-xl font-bold hover:bg-duo-blue/30 transition-colors"
+             >
+                <BookOpen className="w-4 h-4" />
+             </button>
+          )}
+
+          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl">
+            <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
+            <span className="text-amber-400">{progress.xp} XP</span>
+          </div>
+        </div>
+      </header>
+
+      <main className="p-0 flex-grow relative">
+        {currentSection ? (
+          <>
+            <LessonPath 
+              section={currentSection} 
+              completedLessons={progress.completedLessons}
+              onStartLesson={handleStartLesson}
+              onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
+              nextContext={nextContext}
+              onNavigateNext={handleNavigateNext}
+            />
+
+            <SectionSelector 
+              sections={currentCourse.sections}
+              activeSectionIndex={currentSectionIndex}
+              completedLessons={progress.completedLessons}
+              onSelectSection={setCurrentSectionIndex}
+              isOpen={isSectionSelectorOpen}
+              onClose={() => setIsSectionSelectorOpen(false)}
+            />
+          </>
+        ) : (
+          <div className="p-10 text-center text-slate-500 mt-20">
+            <p>More modules coming soon!</p>
+          </div>
+        )}
+
+        <CourseSelector 
+           courses={courses}
+           activeCourseId={progress.currentCourseId}
+           completedLessons={progress.completedLessons}
+           onSelectCourse={handleCourseChange}
+           isOpen={isCourseSelectorOpen}
+           onClose={() => setIsCourseSelectorOpen(false)}
+        />
+      </main>
+    </>
+  );
+};
+
+export default LearnTab;
+--- END OF FILE src/components/LearnTab.tsx ---
+
+--- START OF FILE src/pages/Dashboard.tsx ---
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { COURSES } from '../data/courses';
+import { UserProgress, Course } from '../types';
+import BottomNav, { Tab } from '../components/BottomNav';
+import LearnTab from '../components/LearnTab';
+import PracticeTab from '../components/PracticeTab';
+import NotesTab from '../components/NotesTab';
+
+interface Props {
+  progress: UserProgress;
+  setProgress: React.Dispatch<React.SetStateAction<UserProgress>>;
+  currentSectionIndex: number;
+  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex, setCurrentSectionIndex }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState<Tab>('learn');
+
+  const currentCourse: Course = COURSES.find(c => c.id === progress.currentCourseId) || COURSES[0];
+
+  // Sync URL path with activeTab state
+  useEffect(() => {
+    const path = location.pathname.substring(1); // remove leading slash
+    if (path === 'learn' || path === 'practice' || path === 'notes') {
+      setActiveTab(path as Tab);
+    } else if (path === '') {
+      // should be handled by router redirect but just in case
+      setActiveTab('learn');
+    }
+  }, [location.pathname]);
+
+  // Restore scroll when switching tabs via bottom nav (handled in BottomNav click mostly, but ensures sync)
+  useEffect(() => {
+    // Optional: could save scroll position per tab here
+  }, [activeTab]);
+
+  const handleStartLesson = (unitId: string, lessonId: string) => {
+    navigate(`/lesson/${currentCourse.id}/${unitId}/${lessonId}`);
+  };
+
+  const handleGoToSummary = () => {
+    navigate(`/summary/${currentCourse.id}`);
+  };
+
+  const handleCourseChange = (courseId: string) => {
+    window.scrollTo(0, 0);
+    setProgress(prev => ({ ...prev, currentCourseId: courseId }));
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'learn':
+        return (
+          <LearnTab 
+            progress={progress}
+            setProgress={setProgress}
+            currentSectionIndex={currentSectionIndex}
+            setCurrentSectionIndex={setCurrentSectionIndex}
+            currentCourse={currentCourse}
+            courses={COURSES}
+            handleCourseChange={handleCourseChange}
+            handleStartLesson={handleStartLesson}
+            handleGoToSummary={handleGoToSummary}
+          />
+        );
+      case 'practice':
+        return <PracticeTab progress={progress} />;
+      case 'notes':
+        return <NotesTab 
+          course={currentCourse} 
+          courses={COURSES} 
+          onChangeCourse={handleCourseChange} 
+        />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col pb-20 overflow-x-hidden border-x border-white/5">
+      {renderContent()}
+      <BottomNav activeTab={activeTab} />
+    </div>
+  );
+};
+
+export default Dashboard;
+--- END OF FILE src/pages/Dashboard.tsx ---

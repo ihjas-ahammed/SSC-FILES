@@ -24,7 +24,7 @@ const PathConnector: React.FC<Props> = ({ points, completedLessons, recentlyComp
 
   return (
     <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-      {/* Draw background paths for all segments */}
+      {/* Draw background paths for all segments (locked state color) */}
       {points.slice(0, -1).map((p1, i) => {
         const p2 = points[i + 1];
         return (
@@ -44,23 +44,39 @@ const PathConnector: React.FC<Props> = ({ points, completedLessons, recentlyComp
       {points.slice(0, -1).map((p1, i) => {
         const p2 = points[i + 1];
         
-        // Lit if p1 is completed.
-        const isCompleted = completedLessons.includes(p1.id);
-        const isNewlyCompleted = recentlyCompleted === p1.id;
+        // A path is "active" if the starting node is completed.
+        // We assume sequential unlocking for simplicity here.
+        const p1Completed = completedLessons.includes(p1.id);
+        const p2Completed = completedLessons.includes(p2.id);
+        
+        // Special case: Animation for the path leading TO the next lesson
+        const isAnimating = recentlyCompleted === p1.id;
+        
+        // Active path logic: 
+        // 1. If p1 is done, the path to p2 is colored (either fully completed or current target).
+        const isActive = p1Completed;
 
-        if (!isCompleted && !isNewlyCompleted) return null;
+        if (!isActive) return null;
+
+        // Color logic:
+        // - Gold/Amber if both ends are completed (historical path)
+        // - Theme Color if it connects completed -> current
+        let strokeColor = colorHex;
+        if (p1Completed && p2Completed) {
+          strokeColor = '#fbbf24'; // amber-400
+        }
 
         return (
           <path
             key={`fg-${p1.id}-${p2.id}`}
             d={getPathData(p1, p2)}
-            stroke={colorHex}
+            stroke={strokeColor}
             strokeWidth="8"
             fill="none"
             strokeLinecap="round"
             pathLength="1"
             vectorEffect="non-scaling-stroke"
-            className={`path-connector ${isNewlyCompleted ? 'animate-draw-path' : ''}`}
+            className={`path-connector ${isAnimating ? 'animate-draw-path' : ''}`}
           />
         );
       })}

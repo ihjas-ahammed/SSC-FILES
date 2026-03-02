@@ -36,6 +36,7 @@ export interface Slide {
   blankAnswer?: string; 
   numericAnswer?: number; 
   numericTolerance?: number; 
+  notes?: string;
 }
 
 export interface Lesson {

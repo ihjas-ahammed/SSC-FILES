@@ -2,11 +2,14 @@
 Make the following changes:
 
 
-* Your task is to recreate chapter1_1 based on the syllabus 
+* Your task is to recreate chapter2_3 based on the syllabus 
 Give units:
 
-1Vector Algebra (8 lessons)
-2Differential Calculus (16 lessons)
+### **Module II: Electrostatics**
+
+**Section 2.3: Conductors**
+*   **231 (Basic Properties):** Definition of Ideal Conductors, Theory of $E=0$ inside, Induced Charges, Faraday Cages, Example 2.10. (6 lessons)
+*   **232 (Advanced Electrostatics):** Problems 2.31–2.67 (Force on conductors, Diode space-charge, Multipole expansions). (12 lessons)
 
 Base:
 
@@ -54,3 +57,7 @@ For new css, add new files (dont edit App css)
 
 
 
+
+
+CREATE DETAILED SLIDES AND LESSONS, ALSO CANVAS ART BOTH INTRACTIVE AND DEFAULT
+YOU CAN GO UPTO 4000 LINES OF CODE
