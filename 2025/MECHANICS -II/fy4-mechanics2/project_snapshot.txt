@@ -1,0 +1,784 @@
+# Changed / New Files Only
+# Apply these on top of the existing project.
+
+--- START OF FILE src/App.tsx ---
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserProgress } from './types';
+import Dashboard from './pages/Dashboard';
+import LessonPage from './pages/LessonPage';
+import ModuleSummaryPage from './pages/ModuleSummaryPage';
+import ExamQuestionsPage from './pages/ExamQuestionsPage';
+import ModuleNotesPage from './pages/ModuleNotesPage';
+import MainLayout from './components/MainLayout';
+import { useAnalytics } from './hooks/useAnalytics';
+import './App.css';
+import './styles/interactive.css';
+import './styles/path.css';
+import './styles/progress.css';
+
+// Component to handle analytics on route change
+const AnalyticsTracker = () => {
+  useAnalytics();
+  return null;
+};
+
+const App: React.FC = () => {
+  const [progress, setProgress] = useState<UserProgress>(() => {
+    const saved = localStorage.getItem('duofy_electronics_progress');
+    let initialProgress: UserProgress = {
+      completedLessons: [],
+      xp: 0,
+      currentModuleId: 'module-1-mechanics',
+    };
+
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        initialProgress = {
+          completedLessons: parsed.completedLessons || [],
+          xp: parsed.xp || 0,
+          currentModuleId: parsed.currentModuleId || 'module-1-mechanics',
+        };
+      } catch (e) {
+        console.error('Failed to parse progress', e);
+      }
+    }
+    return initialProgress;
+  });
+
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem('duofy_electronics_progress', JSON.stringify(progress));
+  }, [progress]);
+
+  useEffect(() => {
+    setCurrentSectionIndex(0);
+  }, [progress.currentModuleId]);
+
+  const handleModuleChange = (moduleId: string) => {
+    setProgress(prev => ({ ...prev, currentModuleId: moduleId }));
+    setCurrentSectionIndex(0);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+      <BrowserRouter>
+        <AnalyticsTracker />
+        <Routes>
+          {/* Main layout containing the bottom navigation tabs */}
+          <Route element={<MainLayout />}>
+            <Route
+              path="/"
+              element={
+                <Dashboard
+                  progress={progress}
+                  setProgress={setProgress}
+                  currentSectionIndex={currentSectionIndex}
+                  setCurrentSectionIndex={setCurrentSectionIndex}
+                />
+              }
+            />
+            <Route path="/exam" element={<ExamQuestionsPage />} />
+            <Route
+              path="/notes"
+              element={
+                <ModuleNotesPage
+                  progress={progress}
+                  onModuleChange={handleModuleChange}
+                />
+              }
+            />
+          </Route>
+
+          {/* Full screen routes (no bottom nav) */}
+          <Route
+            path="/lesson/:moduleId/:unitId/:lessonId"
+            element={<LessonPage progress={progress} setProgress={setProgress} />}
+          />
+          <Route path="/summary/:moduleId" element={<ModuleSummaryPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
+
+export default App;
+
+--- END OF FILE src/App.tsx ---
+
+--- START OF FILE src/pages/Dashboard.tsx ---
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MODULES } from '../data/modules';
+import LessonPath from '../components/LessonPath';
+import SectionSelector from '../components/SectionSelector';
+import ModuleSelector from '../components/ModuleSelector';
+import { UserProgress, Module } from '../types';
+import { BookOpen, Zap, ChevronDown } from 'lucide-react';
+
+interface Props {
+  progress: UserProgress;
+  setProgress: React.Dispatch<React.SetStateAction<UserProgress>>;
+  currentSectionIndex: number;
+  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Dashboard: React.FC<Props> = ({
+  progress,
+  setProgress,
+  currentSectionIndex,
+  setCurrentSectionIndex,
+}) => {
+  const navigate = useNavigate();
+  const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
+  const [isModuleSelectorOpen, setIsModuleSelectorOpen] = useState(false);
+
+  const currentModule: Module =
+    MODULES.find(m => m.id === progress.currentModuleId) || MODULES[0];
+
+  const currentSection =
+    currentModule.sections && currentModule.sections.length > 0
+      ? currentModule.sections[currentSectionIndex] || currentModule.sections[0]
+      : null;
+
+  const nextSection =
+    currentModule.sections && currentSectionIndex < currentModule.sections.length - 1
+      ? currentModule.sections[currentSectionIndex + 1]
+      : undefined;
+
+  // Restore scroll position on mount if we're coming back from a lesson
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem('dashboard_scroll');
+    if (savedScroll) {
+      setTimeout(() => {
+        window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+      }, 10);
+    }
+  }, []);
+
+  const handleStartLesson = (unitId: string, lessonId: string) => {
+    sessionStorage.setItem('dashboard_scroll', window.scrollY.toString());
+    navigate(`/lesson/${currentModule.id}/${unitId}/${lessonId}`);
+  };
+
+  const handleGoToSummary = () => {
+    sessionStorage.setItem('dashboard_scroll', window.scrollY.toString());
+    navigate(`/summary/${currentModule.id}`);
+  };
+
+  const handleModuleChange = (moduleId: string) => {
+    sessionStorage.removeItem('dashboard_scroll');
+    window.scrollTo(0, 0);
+    setProgress(prev => ({ ...prev, currentModuleId: moduleId }));
+    setIsModuleSelectorOpen(false);
+  };
+
+  const handleSectionChange = (idx: number) => {
+    sessionStorage.removeItem('dashboard_scroll');
+    window.scrollTo(0, 0);
+    setCurrentSectionIndex(idx);
+  };
+
+  const handleGoNextSection = () => {
+    if (nextSection) {
+      sessionStorage.removeItem('dashboard_scroll');
+      window.scrollTo(0, 0);
+      setCurrentSectionIndex(currentSectionIndex + 1);
+    }
+  };
+
+  return (
+    <div className="flex-grow flex flex-col pb-28 overflow-x-hidden border-x border-white/5">
+      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
+        <div
+          onClick={() => setIsModuleSelectorOpen(true)}
+          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
+        >
+          <div className="relative">
+            <BookOpen className="w-8 h-8 text-duo-blue" />
+            <div className="absolute -bottom-1 -right-1 bg-slate-800 rounded-full border border-slate-600">
+              <ChevronDown className="w-3 h-3 text-slate-300" />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-3">
+          {currentModule.moduleSummary && (
+            <button
+              onClick={handleGoToSummary}
+              className="flex items-center gap-1.5 bg-duo-blue/20 text-duo-blue px-3 py-1.5 rounded-xl font-bold hover:bg-duo-blue/30 transition-colors"
+            >
+              <BookOpen className="w-4 h-4" />
+            </button>
+          )}
+
+          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl">
+            <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
+            <span className="text-amber-400">{progress.xp} XP</span>
+          </div>
+        </div>
+      </header>
+
+      <main className="p-0 flex-grow relative">
+        {currentSection ? (
+          <>
+            <LessonPath
+              section={currentSection}
+              nextSection={nextSection}
+              completedLessons={progress.completedLessons}
+              onStartLesson={handleStartLesson}
+              onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
+              onGoNextSection={handleGoNextSection}
+            />
+
+            <SectionSelector
+              sections={currentModule.sections}
+              activeSectionIndex={currentSectionIndex}
+              completedLessons={progress.completedLessons}
+              onSelectSection={handleSectionChange}
+              isOpen={isSectionSelectorOpen}
+              onClose={() => setIsSectionSelectorOpen(false)}
+            />
+          </>
+        ) : (
+          <div className="p-10 text-center text-slate-500 mt-20">
+            <p>More modules coming soon!</p>
+          </div>
+        )}
+
+        <ModuleSelector
+          modules={MODULES}
+          activeModuleId={progress.currentModuleId}
+          completedLessons={progress.completedLessons}
+          onSelectModule={handleModuleChange}
+          isOpen={isModuleSelectorOpen}
+          onClose={() => setIsModuleSelectorOpen(false)}
+        />
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+--- END OF FILE src/pages/Dashboard.tsx ---
+
+--- START OF FILE src/pages/ModuleNotesPage.tsx ---
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MODULES } from '../data/modules';
+import { UserProgress } from '../types';
+import MathRenderer from '../components/MathRenderer';
+import InteractiveCanvasArt from '../components/InteractiveCanvasArt';
+import InteractiveProofButton from '../components/InteractiveProofButton';
+import NextModuleButton from '../components/NextModuleButton';
+import { FileText } from 'lucide-react';
+
+interface Props {
+  progress: UserProgress;
+  onModuleChange?: (moduleId: string) => void;
+}
+
+/**
+ * A wrapper that renders an InteractiveCanvasArt but hides itself if the
+ * canvas id is not registered (the component renders a fallback text node).
+ */
+const SafeCanvasArt: React.FC<{ canvasId: string; title?: string }> = ({ canvasId, title }) => {
+  const [hidden, setHidden] = useState(false);
+
+  const handleRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    // Use a MutationObserver to detect when the fallback "not found" text appears
+    const observer = new MutationObserver(() => {
+      if (node.textContent?.includes('not found')) {
+        setHidden(true);
+        observer.disconnect();
+      }
+    });
+    observer.observe(node, { childList: true, subtree: true });
+    // Also do an immediate check
+    if (node.textContent?.includes('not found')) {
+      setHidden(true);
+    }
+  }, []);
+
+  if (hidden) return null;
+
+  return (
+    <div ref={handleRef} className="glass-panel p-3 rounded-2xl bg-black/40 border border-slate-800">
+      {title && (
+        <h5 className="font-bold text-xs text-center text-slate-400 uppercase tracking-widest mb-3">
+          {title}
+        </h5>
+      )}
+      <InteractiveCanvasArt canvasId={canvasId} />
+    </div>
+  );
+};
+
+const ModuleNotesPage: React.FC<Props> = ({ progress, onModuleChange }) => {
+  const navigate = useNavigate();
+  const currentModuleIndex = MODULES.findIndex(m => m.id === progress.currentModuleId);
+  const currentModule = currentModuleIndex !== -1 ? MODULES[currentModuleIndex] : MODULES[0];
+  const nextModule =
+    currentModuleIndex !== -1 && currentModuleIndex < MODULES.length - 1
+      ? MODULES[currentModuleIndex + 1]
+      : undefined;
+
+  const handleNavigateToLesson = (unitId: string, lessonId: string) => {
+    // Find the section that contains this unit to build the lesson URL
+    for (const section of currentModule.sections) {
+      const unit = section.units.find(u => u.id === unitId);
+      if (unit) {
+        navigate(`/lesson/${currentModule.id}/${unitId}/${lessonId}`);
+        return;
+      }
+    }
+  };
+
+  const handleGoNextModule = () => {
+    if (nextModule && onModuleChange) {
+      onModuleChange(nextModule.id);
+    }
+  };
+
+  return (
+    <div className="flex-grow overflow-y-auto pb-28 pt-6 px-4 no-scrollbar border-x border-white/5 relative">
+      <div className="flex items-center justify-center mb-8">
+        <FileText className="w-8 h-8 text-duo-violet mr-3" />
+        <h1 className="text-2xl font-black text-white tracking-tight">Module Notes</h1>
+      </div>
+
+      <div className="text-center mb-10">
+        <h2 className="text-xl font-bold text-white mb-1">{currentModule.title}</h2>
+        <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">
+          {currentModule.description}
+        </p>
+      </div>
+
+      <div className="space-y-12">
+        {currentModule.sections.map(section => (
+          <div key={section.id} className="relative">
+            <div
+              className="sticky top-0 z-10 glass-panel py-3 px-4 rounded-xl border-b-2 mb-6 shadow-md backdrop-blur-xl"
+              style={{ borderBottomColor: `var(--tw-colors-${section.color})` }}
+            >
+              <h2 className={`text-sm font-black uppercase tracking-wider text-${section.color}`}>
+                {section.title}
+              </h2>
+            </div>
+
+            <div className="space-y-8 pl-2">
+              {section.units.map(unit => (
+                <div key={unit.id} className="border-l-2 border-slate-800 pl-4 relative">
+                  <div className="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-slate-800 border-2 border-[#0b0f19]" />
+                  <h3 className="text-lg font-bold text-white mb-4">{unit.title}</h3>
+
+                  <div className="space-y-6">
+                    {unit.lessons.map(lesson => (
+                      <div key={lesson.id} className="space-y-4">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">
+                          {lesson.title}
+                        </h4>
+
+                        <div className="space-y-3">
+                          {lesson.slides.map(slide => {
+                            // Theory slides — always show
+                            if (slide.type === 'theory') {
+                              return (
+                                <div
+                                  key={slide.id}
+                                  className="glass-panel p-5 rounded-2xl bg-white/5"
+                                >
+                                  {slide.title && (
+                                    <h5 className="font-bold text-slate-300 mb-2">{slide.title}</h5>
+                                  )}
+                                  <MathRenderer
+                                    content={slide.content}
+                                    className="text-sm text-slate-300"
+                                  />
+                                </div>
+                              );
+                            }
+
+                            // Interactive canvas — auto-hide if art not found
+                            if (slide.type === 'interactive_canvas' && slide.interactiveCanvasId) {
+                              return (
+                                <SafeCanvasArt
+                                  key={slide.id}
+                                  canvasId={slide.interactiveCanvasId}
+                                  title={slide.title}
+                                />
+                              );
+                            }
+
+                            // Proof / Solution slides — render as a clickable button that opens the lesson
+                            if (slide.type === 'proof' || slide.type === 'solution') {
+                              return (
+                                <InteractiveProofButton
+                                  key={slide.id}
+                                  lessonTitle={lesson.title}
+                                  lessonId={lesson.id}
+                                  unitId={unit.id}
+                                  moduleId={currentModule.id}
+                                  onNavigate={handleNavigateToLesson}
+                                />
+                              );
+                            }
+
+                            // Other interactive types (quiz, fill_in_blank, numerical, example_q)
+                            // — keep as a subtle non-clickable reference tag (no button, no clutter)
+                            return null;
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Next Module Button */}
+      {nextModule && onModuleChange && (
+        <NextModuleButton nextModule={nextModule} onGoNext={handleGoNextModule} />
+      )}
+    </div>
+  );
+};
+
+export default ModuleNotesPage;
+
+--- END OF FILE src/pages/ModuleNotesPage.tsx ---
+
+--- START OF FILE src/components/LessonPath.tsx ---
+import React, { useEffect, useState, useMemo } from 'react';
+import { Section, Lesson, Unit } from '../types';
+import * as Icons from 'lucide-react';
+import PathConnector from './PathConnector';
+import LessonNode from './LessonNode';
+import NextSectionButton from './NextSectionButton';
+
+interface Props {
+  section: Section;
+  nextSection?: Section;
+  completedLessons: string[];
+  onStartLesson: (unitId: string, lessonId: string) => void;
+  onOpenSectionSelector: () => void;
+  onGoNextSection?: () => void;
+}
+
+const colorHexMap: Record<string, string> = {
+  'duo-blue': '#1cb0f6',
+  'duo-green': '#58cc02',
+  'duo-red': '#ff4b4b',
+  'duo-violet': '#ce82ff',
+  'duo-orange': '#ff9600',
+  'duo-gray': '#9ca3af',
+  'duo-maroon': '#800000',
+  'duo-indigo': '#6366f1',
+  'duo-pink': '#ec4899',
+};
+
+const LessonPath: React.FC<Props> = ({
+  section,
+  nextSection,
+  completedLessons,
+  onStartLesson,
+  onOpenSectionSelector,
+  onGoNextSection,
+}) => {
+  const [recentlyCompleted, setRecentlyCompleted] = useState<string | null>(null);
+
+  const allLessons = useMemo(
+    () => section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id }))),
+    [section]
+  );
+
+  const unlockedLessonIds = useMemo(() => {
+    const unlocked = new Set<string>();
+    section.units.forEach(unit => {
+      unit.lessons.forEach((lesson, idx) => {
+        if (idx === 0) {
+          unlocked.add(lesson.id);
+        } else {
+          const prevId = unit.lessons[idx - 1].id;
+          if (completedLessons.includes(prevId)) {
+            unlocked.add(lesson.id);
+          }
+        }
+      });
+    });
+    return unlocked;
+  }, [section, completedLessons]);
+
+  const isSectionComplete = useMemo(
+    () => allLessons.length > 0 && allLessons.every(l => completedLessons.includes(l.id)),
+    [allLessons, completedLessons]
+  );
+
+  useEffect(() => {
+    const rc = localStorage.getItem('recently_completed');
+    if (rc) {
+      setRecentlyCompleted(rc);
+      const idx = allLessons.findIndex(l => l.id === rc);
+      if (idx !== -1 && idx < allLessons.length - 1) {
+        const nextId = allLessons[idx + 1].id;
+        const scrollTimer = setTimeout(() => {
+          const el = document.getElementById(`lesson-node-${nextId}`);
+          if (el) {
+            const y = el.getBoundingClientRect().top + window.scrollY - window.innerHeight / 2 + 100;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        }, 800);
+        const clearTimer = setTimeout(() => {
+          localStorage.removeItem('recently_completed');
+          setRecentlyCompleted(null);
+        }, 2500);
+        return () => {
+          clearTimeout(scrollTimer);
+          clearTimeout(clearTimer);
+        };
+      } else {
+        localStorage.removeItem('recently_completed');
+        setRecentlyCompleted(null);
+      }
+    }
+  }, [section.id, allLessons]);
+
+  const colorHex = colorHexMap[section.color] || '#1cb0f6';
+
+  let currentY = 40;
+  const pathPoints: { x: number; y: number; id: string }[] = [];
+  const renderElements: {
+    type: 'header' | 'lesson';
+    unit: Unit;
+    y: number;
+    x?: number;
+    lesson?: Lesson;
+  }[] = [];
+
+  let globalLessonIdx = 0;
+
+  section.units.forEach((unit, uIdx) => {
+    if (uIdx > 0) {
+      currentY += 50;
+    }
+    renderElements.push({ type: 'header', unit, y: currentY });
+    currentY += 120;
+
+    unit.lessons.forEach(lesson => {
+      let offset = 0;
+      if (globalLessonIdx % 4 === 1) offset = 65;
+      if (globalLessonIdx % 4 === 3) offset = -65;
+
+      const x = 200 + offset;
+      const y = currentY;
+
+      pathPoints.push({ x, y, id: lesson.id });
+      renderElements.push({ type: 'lesson', unit, lesson, x, y });
+
+      currentY += 155;
+      globalLessonIdx++;
+    });
+  });
+
+  const containerHeight = currentY + 40;
+
+  return (
+    <div className="pb-32 max-w-md mx-auto relative">
+      <div
+        onClick={onOpenSectionSelector}
+        className={`sticky top-16 mx-4 mt-4 z-30 py-3 px-5 glass-panel rounded-2xl cursor-pointer hover:bg-white/10 transition-all active:scale-[0.98] flex items-center justify-between border-b-4 border-${section.color}`}
+      >
+        <div className="flex items-center gap-2">
+          <h2 className="text-xs font-black uppercase tracking-widest leading-none drop-shadow-sm text-white">
+            {section.title}
+          </h2>
+        </div>
+        <Icons.ChevronDown className="w-4 h-4 text-slate-300" />
+      </div>
+
+      <div
+        className="mt-8 relative w-full max-w-[400px] mx-auto overflow-hidden"
+        style={{ height: `${containerHeight}px` }}
+      >
+        <svg
+          viewBox={`0 0 400 ${containerHeight}`}
+          preserveAspectRatio="none"
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 0 }}
+        >
+          <PathConnector
+            points={pathPoints}
+            completedLessons={completedLessons}
+            recentlyCompleted={recentlyCompleted}
+            unlockedLessonIds={unlockedLessonIds}
+            colorHex={colorHex}
+          />
+        </svg>
+
+        {renderElements.map(el => {
+          if (el.type === 'header') {
+            return (
+              <div
+                key={`header-${el.unit.id}`}
+                className="absolute w-full px-8 pointer-events-none"
+                style={{ top: `${el.y}px`, transform: 'translateY(-50%)', zIndex: 10 }}
+              >
+                <div className="glass-panel p-5 rounded-3xl text-center shadow-2xl bg-black/60 backdrop-blur-md border border-white/10">
+                  <h3 className="font-extrabold text-white text-sm uppercase tracking-tight mb-1.5">
+                    {el.unit.title}
+                  </h3>
+                  <p className="text-slate-400 font-bold text-[10px] uppercase tracking-wider">
+                    {el.unit.description}
+                  </p>
+                </div>
+              </div>
+            );
+          }
+          if (el.type === 'lesson' && el.lesson && el.x !== undefined) {
+            const isCompleted = completedLessons.includes(el.lesson.id);
+            const isUnlocked = unlockedLessonIds.has(el.lesson.id);
+            const isNewlyCompletedPathTarget = recentlyCompleted
+              ? allLessons[allLessons.findIndex(l => l.id === recentlyCompleted) + 1]?.id === el.lesson.id
+              : false;
+
+            return (
+              <LessonNode
+                key={`lesson-${el.lesson.id}`}
+                lesson={el.lesson}
+                x={el.x}
+                y={el.y}
+                status={isCompleted ? 'completed' : isUnlocked ? 'current' : 'locked'}
+                isNextToStart={isNewlyCompletedPathTarget}
+                colorName={section.color}
+                onStart={() => onStartLesson(el.unit.id, el.lesson!.id)}
+              />
+            );
+          }
+          return null;
+        })}
+      </div>
+
+      {/* Next Section Button — only shows when the section is fully complete and a next section exists */}
+      {isSectionComplete && nextSection && onGoNextSection && (
+        <NextSectionButton nextSection={nextSection} onGoNext={onGoNextSection} />
+      )}
+    </div>
+  );
+};
+
+export default LessonPath;
+
+--- END OF FILE src/components/LessonPath.tsx ---
+
+--- START OF FILE src/components/InteractiveProofButton.tsx ---
+import React from 'react';
+import { BrainCircuit } from 'lucide-react';
+
+interface Props {
+  lessonTitle: string;
+  lessonId: string;
+  unitId: string;
+  moduleId: string;
+  onNavigate: (unitId: string, lessonId: string) => void;
+}
+
+const InteractiveProofButton: React.FC<Props> = ({ lessonTitle, lessonId, unitId, onNavigate }) => {
+  return (
+    <button
+      onClick={() => onNavigate(unitId, lessonId)}
+      className="w-full p-3 bg-blue-900/10 rounded-xl border border-blue-500/20 flex items-center gap-3 hover:bg-blue-900/30 hover:border-blue-500/40 transition-all active:scale-[0.98] cursor-pointer text-left group"
+    >
+      <BrainCircuit className="w-4 h-4 text-blue-400 shrink-0 mt-0.5 group-hover:text-blue-300 transition-colors" />
+      <div className="flex-grow">
+        <p className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-0.5 group-hover:text-blue-300 transition-colors">Interactive Proof / Solution</p>
+        <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors">Tap to open: "{lessonTitle}"</p>
+      </div>
+      <div className="shrink-0 bg-blue-500/20 rounded-lg px-2 py-1">
+        <span className="text-[10px] font-black text-blue-400 uppercase tracking-wider">Open →</span>
+      </div>
+    </button>
+  );
+};
+
+export default InteractiveProofButton;
+
+--- END OF FILE src/components/InteractiveProofButton.tsx ---
+
+--- START OF FILE src/components/NextSectionButton.tsx ---
+import React from 'react';
+import { ChevronRight, Sparkles } from 'lucide-react';
+import { Section } from '../types';
+
+interface Props {
+  nextSection: Section;
+  onGoNext: () => void;
+}
+
+const NextSectionButton: React.FC<Props> = ({ nextSection, onGoNext }) => {
+  return (
+    <div className="mx-4 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="glass-panel rounded-3xl p-5 border border-white/10 text-center shadow-xl">
+        <div className="flex justify-center mb-3">
+          <Sparkles className="w-6 h-6 text-amber-400" />
+        </div>
+        <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Section Complete!</p>
+        <p className="text-white font-bold text-sm mb-4">Ready for the next section?</p>
+        <button
+          onClick={onGoNext}
+          className={`w-full py-3 rounded-2xl font-black text-white uppercase tracking-widest text-sm border-b-4 transition-all active:border-b-0 active:translate-y-1 flex items-center justify-center gap-2 bg-${nextSection.color} border-b-[6px]`}
+          style={{ borderBottomColor: 'rgba(0,0,0,0.3)' }}
+        >
+          {nextSection.title}
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default NextSectionButton;
+
+--- END OF FILE src/components/NextSectionButton.tsx ---
+
+--- START OF FILE src/components/NextModuleButton.tsx ---
+import React from 'react';
+import { ArrowRight, BookOpen } from 'lucide-react';
+import { Module } from '../types';
+
+interface Props {
+  nextModule: Module;
+  onGoNext: () => void;
+}
+
+const NextModuleButton: React.FC<Props> = ({ nextModule, onGoNext }) => {
+  return (
+    <div className="mt-12 mb-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="glass-panel rounded-3xl p-6 border border-white/10 text-center shadow-xl">
+        <div className="flex justify-center mb-3">
+          <BookOpen className="w-7 h-7 text-duo-blue" />
+        </div>
+        <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Next Module</p>
+        <h3 className="text-white font-black text-lg mb-1">{nextModule.title}</h3>
+        <p className="text-slate-400 text-xs font-medium mb-5">{nextModule.description}</p>
+        <button
+          onClick={onGoNext}
+          className="w-full py-3.5 rounded-2xl font-black text-white uppercase tracking-widest text-sm border-b-4 border-duo-blue-dark bg-duo-blue transition-all active:border-b-0 active:translate-y-1 flex items-center justify-center gap-2 hover:bg-blue-500"
+        >
+          Switch to Module
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default NextModuleButton;
+
+--- END OF FILE src/components/NextModuleButton.tsx ---
