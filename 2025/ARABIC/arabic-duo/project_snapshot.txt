@@ -1,591 +1,809 @@
---- START OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
-import React, { useState, useEffect } from 'react';
-import { Volume2 } from 'lucide-react';
-import { useTTS } from '../../hooks/useTTS';
-import { useLongPress } from '../../hooks/useLongPress';
+Here are the changes to create the concise chapter summaries in a separate file, fix the lesson screen scrolling/sizing, and update the Practice and Summary tabs to meet your exact specifications (English instructions, step-by-step UI, and proper progress tracking).
 
-const WordBlock = ({ block, onClick, onLongPress, isArabic, isSelected, showTooltip }) => {
-  const handlers = useLongPress(
-    (e) => onLongPress(block),
-    (e, isCancel) => {
-      if (!isCancel && onClick) onClick(block);
-    },
-    { delay: 400 }
-  );
+### New Files
 
-  return (
-    <div className="word-block-wrapper">
-      {showTooltip && (
-        <div className="word-tooltip glass-panel">
-          {block.trans}
-        </div>
-      )}
-      <button
-        {...handlers}
-        className={`word-block ${isArabic ? 'arabic-text ar-block' : 'en-block'} ${isSelected ? 'selected-placeholder' : ''}`}
-        disabled={isSelected && !onClick} // Disable in pool if selected
-        style={{ userSelect: 'none', WebkitTouchCallout: 'none' }}
-      >
-        {block.text}
-      </button>
-    </div>
-  );
-};
-
-const SentenceBuilderSlide = ({ slide, onComplete }) => {
-  const { speak } = useTTS();
-  const [availableBlocks, setAvailableBlocks] = useState([]);
-  const [selectedBlocks, setSelectedBlocks] = useState([]);
-  const [activeTooltip, setActiveTooltip] = useState(null);
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const isArabicAnswer = slide.questionType !== 'ar-to-en';
-
-  useEffect(() => {
-    // Reset state and shuffle blocks on new slide
-    const shuffled = [...slide.blocks].sort(() => Math.random() - 0.5);
-    setAvailableBlocks(shuffled);
-    setSelectedBlocks([]);
-    setIsError(false);
-    setIsSuccess(false);
-    setActiveTooltip(null);
-  }, [slide]);
-
-  // Clear tooltip after a few seconds
-  useEffect(() => {
-    if (activeTooltip) {
-      const timer = setTimeout(() => setActiveTooltip(null), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [activeTooltip]);
-
-  const handleBlockSelect = (block) => {
-    if (isSuccess) return;
-    
-    // Play audio for Arabic words
-    if (isArabicAnswer) speak(block.text);
-
-    const newSelected = [...selectedBlocks, block];
-    setSelectedBlocks(newSelected);
-    setIsError(false);
-
-    // Auto-check if length matches the required correct order length
-    if (newSelected.length === slide.correctOrder.length) {
-      checkAnswer(newSelected);
-    }
-  };
-
-  const handleBlockRemove = (blockToRemove) => {
-    if (isSuccess) return;
-    setSelectedBlocks(selectedBlocks.filter(b => b.id !== blockToRemove.id));
-    setIsError(false);
-  };
-
-  const handleLongPress = (block) => {
-    // Speak on long press too if Arabic
-    if (isArabicAnswer) speak(block.text);
-    setActiveTooltip(block.id);
-  };
-
-  const checkAnswer = (currentSelected) => {
-    const isCorrect = currentSelected.every((b, i) => b.id === slide.correctOrder[i]);
-    
-    if (isCorrect) {
-      setIsSuccess(true);
-      // Construct full sentence and play it
-      if (isArabicAnswer) {
-        const fullSentence = currentSelected.map(b => b.text).join(' ');
-        setTimeout(() => speak(fullSentence), 500);
+--- START OF FILE src/data/summaries.js ---
+export const sectionSummaries = {
+  "sec1-5": [
+    {
+      id: "s1_1",
+      sentence: {
+        type: "sentence",
+        arabic: "سَافَرْنَا إِلَى وِلَايَةِ كِيرَلَا الَّتِي سَمَّاهَا الْعَرَبُ 'خَيْرَ اللهِ'.",
+        english: "We traveled to the state of Kerala, which the Arabs called 'God's Bounty'.",
+        parts: [
+          { ar: "سَافَرْنَا إِلَى وِلَايَةِ كِيرَلَا", en: "We traveled to the state of Kerala" },
+          { ar: "الَّتِي سَمَّاهَا الْعَرَبُ", en: "which the Arabs called" },
+          { ar: "'خَيْرَ اللهِ'.", en: "'God's Bounty'." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "سَافَرْنَا", translation: "We traveled", transliteration: "Safarna" },
+        { type: "vocabulary", word: "وِلَايَةِ", translation: "State", transliteration: "Wilayah" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "سَافَرْنَا إِلَى ____ كِيرَلَا",
+        translation: "We traveled to the state of Kerala",
+        answer: "وِلَايَةِ",
+        options: ["وِلَايَةِ", "مَدِينَةِ", "قَرْيَةِ"]
       }
-      onComplete();
-    } else {
-      setIsError(true);
+    },
+    {
+      id: "s1_2",
+      sentence: {
+        type: "sentence",
+        arabic: "وَذَهَبْنَا إِلَى مُونَّار أَرْضِ الشَّلَّالَاتِ وَالْجِبَالِ الْخَضْرَاءِ.",
+        english: "And we went to Munnar, the land of waterfalls and green mountains.",
+        parts: [
+          { ar: "وَذَهَبْنَا إِلَى مُونَّار", en: "And we went to Munnar" },
+          { ar: "أَرْضِ الشَّلَّالَاتِ", en: "the land of waterfalls" },
+          { ar: "وَالْجِبَالِ الْخَضْرَاءِ.", en: "and green mountains." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "أَرْضِ", translation: "Land", transliteration: "Ard" },
+        { type: "vocabulary", word: "الشَّلَّالَاتِ", translation: "Waterfalls", transliteration: "Ash-shallalat" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "مُونَّار أَرْضِ ____ وَالْجِبَالِ",
+        translation: "Munnar is the land of waterfalls and mountains",
+        answer: "الشَّلَّالَاتِ",
+        options: ["الأَنْهَارِ", "الشَّلَّالَاتِ", "الأَسْوَاقِ"]
+      }
+    },
+    {
+      id: "s1_3",
+      sentence: {
+        type: "sentence",
+        arabic: "قَضَيْنَا أَيَّاماً جَمِيلَةً بَيْنَ الطَّبِيعَةِ السَّاحِرَةِ وَبَشَاشَةِ النَّاسِ.",
+        english: "We spent beautiful days among the enchanting nature and the cheerfulness of the people.",
+        parts: [
+          { ar: "قَضَيْنَا أَيَّاماً جَمِيلَةً", en: "We spent beautiful days" },
+          { ar: "بَيْنَ الطَّبِيعَةِ السَّاحِرَةِ", en: "among the enchanting nature" },
+          { ar: "وَبَشَاشَةِ النَّاسِ.", en: "and the cheerfulness of the people." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "قَضَيْنَا", translation: "We spent", transliteration: "Qadayna" },
+        { type: "vocabulary", word: "السَّاحِرَةِ", translation: "Enchanting", transliteration: "As-sahirah" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "قَضَيْنَا أَيَّاماً جَمِيلَةً بَيْنَ الطَّبِيعَةِ ____",
+        translation: "We spent beautiful days among the enchanting nature",
+        answer: "السَّاحِرَةِ",
+        options: ["الْبَارِدَةِ", "السَّاحِرَةِ", "الْمُمِلَّةِ"]
+      }
     }
-  };
-
-  const playFullQuestion = () => {
-    if (slide.questionType === 'en-to-ar' || slide.questionType === 'comprehension') {
-      speak(slide.question);
+  ],
+  "sec2-6": [
+    {
+      id: "s2_1",
+      sentence: {
+        type: "sentence",
+        arabic: "الْبِيئَةُ أَمَانَةٌ وَحِمَايَتُهَا وَاجِبٌ دِينِيٌّ فِي الْإِسْلَامِ.",
+        english: "The environment is a trust, and protecting it is a religious duty in Islam.",
+        parts: [
+          { ar: "الْبِيئَةُ أَمَانَةٌ", en: "The environment is a trust" },
+          { ar: "وَحِمَايَتُهَا وَاجِبٌ دِينِيٌّ", en: "and protecting it is a religious duty" },
+          { ar: "فِي الْإِسْلَامِ.", en: "in Islam." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "أَمَانَةٌ", translation: "Trust", transliteration: "Amanah" },
+        { type: "vocabulary", word: "حِمَايَتُهَا", translation: "Protecting it", transliteration: "Himayatuha" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "الْبِيئَةُ أَمَانَةٌ وَحِمَايَتُهَا ____ دِينِيٌّ",
+        translation: "The environment is a trust, and protecting it is a religious duty",
+        answer: "وَاجِبٌ",
+        options: ["خِيَارٌ", "وَاجِبٌ", "عَمَلٌ"]
+      }
+    },
+    {
+      id: "s2_2",
+      sentence: {
+        type: "sentence",
+        arabic: "نَهَى النَّبِيُّ عَنِ الْإِسْرَافِ فِي الْمَاءِ وَحَثَّ عَلَى الزِّرَاعَةِ.",
+        english: "The Prophet forbade wasting water and urged agriculture.",
+        parts: [
+          { ar: "نَهَى النَّبِيُّ", en: "The Prophet forbade" },
+          { ar: "عَنِ الْإِسْرَافِ فِي الْمَاءِ", en: "wasting water" },
+          { ar: "وَحَثَّ عَلَى الزِّرَاعَةِ.", en: "and urged agriculture." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "الْإِسْرَافِ", translation: "Wasting", transliteration: "Al-israf" },
+        { type: "vocabulary", word: "الزِّرَاعَةِ", translation: "Agriculture", transliteration: "Az-zira'ah" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "نَهَى النَّبِيُّ عَنِ ____ فِي الْمَاءِ",
+        translation: "The Prophet forbade wasting water",
+        answer: "الْإِسْرَافِ",
+        options: ["الشُّرْبِ", "الْإِسْرَافِ", "اللَّعِبِ"]
+      }
+    },
+    {
+      id: "s2_3",
+      sentence: {
+        type: "sentence",
+        arabic: "أَمَرَ اللهُ بِالتَّأَمُّلِ فِي الطَّبِيعَةِ وَعَدَمِ إِفْسَادِ الْأَرْضِ.",
+        english: "Allah commanded reflecting on nature and not corrupting the earth.",
+        parts: [
+          { ar: "أَمَرَ اللهُ بِالتَّأَمُّلِ", en: "Allah commanded reflecting" },
+          { ar: "فِي الطَّبِيعَةِ", en: "on nature" },
+          { ar: "وَعَدَمِ إِفْسَادِ الْأَرْضِ.", en: "and not corrupting the earth." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "بِالتَّأَمُّلِ", translation: "Reflecting", transliteration: "Bit-ta'ammul" },
+        { type: "vocabulary", word: "إِفْسَادِ", translation: "Corrupting", transliteration: "Ifsad" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "أَمَرَ اللهُ بِالتَّأَمُّلِ فِي الطَّبِيعَةِ وَعَدَمِ ____ الْأَرْضِ",
+        translation: "Allah commanded reflecting on nature and not corrupting the earth",
+        answer: "إِفْسَادِ",
+        options: ["إِصْلَاحِ", "إِفْسَادِ", "زِرَاعَةِ"]
+      }
     }
-  };
-
-  return (
-    <div className="slide-content builder-slide">
-      <div className="builder-header">
-        <h2 className="text-dim">
-          {slide.questionType === 'comprehension' ? 'Answer the Question' : 
-           slide.questionType === 'en-to-ar' ? 'Translate to Arabic' : 
-           'Translate to English'}
-        </h2>
-        <div className="flex-center" style={{ flexDirection: 'row', marginBottom: '16px' }}>
-          <h3 className={`builder-question ${slide.questionType !== 'en-to-ar' ? 'arabic-text' : ''}`}>
-            {slide.question}
-          </h3>
-          {(slide.questionType === 'comprehension' || slide.questionType === 'ar-to-en') && (
-            <button className="tts-button small" onClick={playFullQuestion}>
-              <Volume2 size={20} />
-            </button>
-          )}
-        </div>
-        <p className="text-dim text-sm">(Long press words for meaning)</p>
-      </div>
-
-      <div className={`builder-answer-zone ${isArabicAnswer ? 'rtl-zone' : 'ltr-zone'} ${isError ? 'zone-error' : ''} ${isSuccess ? 'zone-success' : ''}`}>
-        {selectedBlocks.map((block) => (
-          <WordBlock 
-            key={`sel-${block.id}`} 
-            block={block} 
-            isArabic={isArabicAnswer}
-            onClick={() => handleBlockRemove(block)}
-            onLongPress={handleLongPress}
-            showTooltip={activeTooltip === block.id}
-          />
-        ))}
-      </div>
-
-      <div className={`builder-options-zone ${isArabicAnswer ? 'rtl-zone' : 'ltr-zone'}`}>
-        {availableBlocks.map((block) => {
-          const isSelected = selectedBlocks.some(b => b.id === block.id);
-          return (
-            <WordBlock 
-              key={`opt-${block.id}`} 
-              block={block} 
-              isArabic={isArabicAnswer}
-              onClick={isSelected ? null : () => handleBlockSelect(block)}
-              onLongPress={handleLongPress}
-              isSelected={isSelected}
-              showTooltip={activeTooltip === block.id && !isSelected}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-export default SentenceBuilderSlide;
---- END OF FILE src/components/slides/SentenceBuilderSlide.jsx ---
-
---- START OF FILE src/data/section3/section3_practice.js ---
-export const practiceUnit3 = {
-  id: "sec3_practice",
-  title: "تدريبات نهاية الفصل",
-  lessons: [
+  ],
+  "sec3-7": [
     {
-      id: "sec3_prac_l1",
-      title: "أ) أكمل الفراغ بكلمة مناسبة",
-      isPractice: true,
-      slides: [
-        {
-          type: "fill-blank",
-          sentence: "اسْتَقَلَّتِ الْهِنْدُ عَامَ ____.",
-          translation: "India gained independence in the year 1947.",
-          answer: "1947",
-          options: ["1947", "1950", "1962"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "قُطُب مِينَار بُرْجٌ رَائِعٌ بُنِيَ عَامَ ____ م.",
-          translation: "Qutb Minar is a wonderful tower built in 1193 AD.",
-          answer: "1193",
-          options: ["1657", "1193", "1947"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "أَكْرَاه مَدِينَةٌ ازْدَهَرَتْ فِي عَهْدِ الْحَضَارَةِ ____.",
-          translation: "The city of Agra flourished during the Mughal civilization era.",
-          answer: "الْمَغُولِيَّةِ",
-          options: ["الْمَغُولِيَّةِ", "الْبَرِيطَانِيَّةِ", "الْقَدِيمَةِ"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "لِوَاءُ الْهِنْدِ ____ اللَّوْنِ الزَّعْفَرَانِيُّ وَالْأَبْيَضُ وَالْأَخْضَرُ.",
-          translation: "The flag of India is tricolor: saffron, white, and green.",
-          answer: "مُثَلَّثُ",
-          options: ["ثُنَائِيُّ", "مُثَلَّثُ", "رُبَاعِيُّ"]
-        },
-        {
-          type: "fill-blank",
-          sentence: "مَدِينَةُ ____ تَشْتَهِرُ بِبَوَّابَةِ الْهِنْدِ.",
-          translation: "The city of Mumbai is famous for the Gateway of India.",
-          answer: "مُومْبَاي",
-          options: ["جَايْبُور", "مُومْبَاي", "كُولْكُوتَا"]
-        }
-      ]
+      id: "s3_1",
+      sentence: {
+        type: "sentence",
+        arabic: "الْهِنْدُ أَرْضُ الْحِكْمَةِ وَالْأَسَاطِيرِ وَالْحَضَارَاتِ الْقَدِيمَةِ.",
+        english: "India is the land of wisdom, legends, and ancient civilizations.",
+        parts: [
+          { ar: "الْهِنْدُ أَرْضُ الْحِكْمَةِ", en: "India is the land of wisdom" },
+          { ar: "وَالْأَسَاطِيرِ", en: "and legends" },
+          { ar: "وَالْحَضَارَاتِ الْقَدِيمَةِ.", en: "and ancient civilizations." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "الْحِكْمَةِ", translation: "Wisdom", transliteration: "Al-hikmah" },
+        { type: "vocabulary", word: "الْأَسَاطِيرِ", translation: "Legends", transliteration: "Al-asateer" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "الْهِنْدُ أَرْضُ الْحِكْمَةِ وَ____",
+        translation: "India is the land of wisdom and legends",
+        answer: "الْأَسَاطِيرِ",
+        options: ["الْمَصَانِعِ", "الْأَسَاطِيرِ", "الْغَابَاتِ"]
+      }
     },
     {
-      id: "sec3_prac_l2",
-      title: "ب) الاستيعاب (الجزء الأول)",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مَا عَاصِمَةُ الْهِنْدِ؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "مَدِينَةُ", trans: "City of" },
-            { id: 2, text: "دِلْهِي", trans: "Delhi" },
-            { id: 3, text: "أَكْرَاه", trans: "Agra" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "أَيْنَ تَقَعُ تَاج مَحَل؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "فِي", trans: "In" },
-            { id: 2, text: "أَكْرَاه", trans: "Agra" },
-            { id: 3, text: "دِلْهِي", trans: "Delhi" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مَنْ بَنَى مَنَارَةَ قُطُب؟",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "قُطُب", trans: "Qutb" },
-            { id: 2, text: "الدِّين", trans: "Al-Din" },
-            { id: 3, text: "أَيْبَك", trans: "Aibak" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مَنْ بَنَى الْمَسْجِدَ الْجَامِعَ بِدِلْهِي؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "شَاه", trans: "Shah" },
-            { id: 2, text: "جَهَان", trans: "Jahan" },
-            { id: 3, text: "أَكْبَر", trans: "Akbar" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "فِي أَيِّ لُغَةٍ كَانَ كِتَابُ كَلِيلَة وَدِمْنَة؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "اللُّغَةِ", trans: "Language" },
-            { id: 2, text: "السَّنْسِكْرِيتِيَّةِ", trans: "Sanskrit" },
-            { id: 3, text: "الْعَرَبِيَّةِ", trans: "Arabic" }
-          ]
-        }
-      ]
+      id: "s3_2",
+      sentence: {
+        type: "sentence",
+        arabic: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ مِثْلَ تَاج مَحَل وَقُطُب مِينَار.",
+        english: "It is famous for wonderful landmarks like Taj Mahal and Qutb Minar.",
+        parts: [
+          { ar: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ", en: "It is famous for wonderful landmarks" },
+          { ar: "مِثْلَ تَاج مَحَل", en: "like Taj Mahal" },
+          { ar: "وَقُطُب مِينَار.", en: "and Qutb Minar." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "تَشْتَهِرُ", translation: "Is famous for", transliteration: "Tashtahiru" },
+        { type: "vocabulary", word: "مَعَالِمَ", translation: "Landmarks", transliteration: "Ma'alim" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ مِثْلَ ____",
+        translation: "It is famous for wonderful landmarks like Taj Mahal",
+        answer: "تَاج مَحَل",
+        options: ["الْأَهْرَامَاتِ", "تَاج مَحَل", "سُورِ الصِّينِ"]
+      }
     },
     {
-      id: "sec3_prac_l3",
-      title: "ب) الاستيعاب (الجزء الثاني)",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مَنْ شَاه جَهَان؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "مَلِكٌ", trans: "King" },
-            { id: 2, text: "مَغُولِيٌّ", trans: "Mughal" },
-            { id: 3, text: "بَرِيطَانِيٌّ", trans: "British" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "مَتَى بُنِيَتْ بَوَّابَةُ الْهِنْدِ فِي مُومْبَاي؟",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "تِذْكَاراً", trans: "As a memorial" },
-            { id: 2, text: "لِقُدُومِ", trans: "for the arrival" },
-            { id: 3, text: "جُورْج", trans: "George" },
-            { id: 4, text: "الْخَامِسِ", trans: "the Fifth" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "إِلَى أَيِّ مَلِكٍ يُنْسَبُ شِعَارُ الْهِنْدِ؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "أَشُوكَا", trans: "Ashoka" },
-            { id: 2, text: "الْمُعَظَّمِ", trans: "The Great" },
-            { id: 3, text: "أَكْبَر", trans: "Akbar" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "comprehension",
-          question: "أَيْنَ تَقَعُ أَرْوَعُ حَدِيقَةِ الْحَيَوَانَاتِ فِي جَنُوبِ الْهِنْدِ؟",
-          correctOrder: [1, 2],
-          blocks: [
-            { id: 1, text: "فِي", trans: "In" },
-            { id: 2, text: "مَدْرَاس", trans: "Madras" },
-            { id: 3, text: "دِلْهِي", trans: "Delhi" }
-          ]
-        }
-      ]
+      id: "s3_3",
+      sentence: {
+        type: "sentence",
+        arabic: "وَفِيهَا مُدُنٌ كَبِيرَةٌ كَدِلْهِي وَمُومْبَاي تَنْبِضُ بِالْحَيَاةِ.",
+        english: "And it has large cities like Delhi and Mumbai pulsating with life.",
+        parts: [
+          { ar: "وَفِيهَا مُدُنٌ كَبِيرَةٌ", en: "And it has large cities" },
+          { ar: "كَدِلْهِي وَمُومْبَاي", en: "like Delhi and Mumbai" },
+          { ar: "تَنْبِضُ بِالْحَيَاةِ.", en: "pulsating with life." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "مُدُنٌ", translation: "Cities", transliteration: "Mudun" },
+        { type: "vocabulary", word: "تَنْبِضُ", translation: "Pulsating", transliteration: "Tanbidu" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "وَفِيهَا مُدُنٌ كَبِيرَةٌ ____ بِالْحَيَاةِ",
+        translation: "And it has large cities pulsating with life",
+        answer: "تَنْبِضُ",
+        options: ["تَنَامُ", "تَنْبِضُ", "تَمُوتُ"]
+      }
+    }
+  ],
+  "sec4-8": [
+    {
+      id: "s4_1",
+      sentence: {
+        type: "sentence",
+        arabic: "أَنْقَذَتْ رُقَيَّةُ رَجُلاً غَرِيباً مِنَ الْكِلَابِ الْمَسْعُورَةِ فِي اللَّيْلِ.",
+        english: "Ruqayya saved a strange man from the fierce dogs at night.",
+        parts: [
+          { ar: "أَنْقَذَتْ رُقَيَّةُ رَجُلاً غَرِيباً", en: "Ruqayya saved a strange man" },
+          { ar: "مِنَ الْكِلَابِ الْمَسْعُورَةِ", en: "from the fierce dogs" },
+          { ar: "فِي اللَّيْلِ.", en: "at night." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "أَنْقَذَتْ", translation: "Saved", transliteration: "Anqathat" },
+        { type: "vocabulary", word: "الْمَسْعُورَةِ", translation: "Fierce / Rabid", transliteration: "Al-mas'urah" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "أَنْقَذَتْ رُقَيَّةُ رَجُلاً غَرِيباً مِنَ ____",
+        translation: "Ruqayya saved a strange man from the dogs",
+        answer: "الْكِلَابِ",
+        options: ["النَّاسِ", "الْكِلَابِ", "الذِّئَابِ"]
+      }
     },
     {
-      id: "sec3_prac_l4",
-      title: "ج) صل بين العمودين (أ) و (ب)",
-      isPractice: true,
-      slides: [
-        {
-          type: "match",
-          pairs: [
-            { ar: "كَلِيلَة وَدِمْنَة", en: "كِتَابٌ كُتِبَ أَصْلُهُ بِاللُّغَةِ السَّنْسِكْرِيتِيَّةِ" },
-            { ar: "ضَرِيح هُومَايُون", en: "اسْتُوحِيَ تَصْمِيم تَاج مَحَل مِنْ تَصْمِيمِهِ" },
-            { ar: "تَاج مَحَل", en: "ضَرِيحُ مُمْتَاز زَوْجَة شَاه جَهَان" }
-          ]
-        },
-        {
-          type: "match",
-          pairs: [
-            { ar: "الْمَسْجِد الْجَامِع", en: "بُنِيَ عَامَ 1657م" },
-            { ar: "قُطُب مِينَار", en: "بُنِيَ عَامَ 1193م وَيَبْلُغُ ارْتِفَاعُهُ 83 مِتْراً" }
-          ]
-        }
-      ]
+      id: "s4_2",
+      sentence: {
+        type: "sentence",
+        arabic: "وَلَكِنَّ زَوْجَهَا هَمَّام قَتَلَ الْغَرِيبَ لِيَسْرِقَ نُقُودَهُ.",
+        english: "But her husband Hammam killed the stranger to steal his money.",
+        parts: [
+          { ar: "وَلَكِنَّ زَوْجَهَا هَمَّام", en: "But her husband Hammam" },
+          { ar: "قَتَلَ الْغَرِيبَ", en: "killed the stranger" },
+          { ar: "لِيَسْرِقَ نُقُودَهُ.", en: "to steal his money." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "قَتَلَ", translation: "Killed", transliteration: "Qatala" },
+        { type: "vocabulary", word: "لِيَسْرِقَ", translation: "To steal", transliteration: "Liyasriqa" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "قَتَلَ الْغَرِيبَ لِيَسْرِقَ ____",
+        translation: "He killed the stranger to steal his money",
+        answer: "نُقُودَهُ",
+        options: ["طَعَامَهُ", "نُقُودَهُ", "مَلَابِسَهُ"]
+      }
     },
     {
-      id: "sec3_prac_l5",
-      title: "د/هـ) المفرد والجمع",
-      isPractice: true,
-      slides: [
-        {
-          type: "match",
-          pairs: [
-            { ar: "مَعَالِم", en: "مَعْلَم" },
-            { ar: "مَسَاجِد", en: "مَسْجِد" },
-            { ar: "أَسَاطِير", en: "أُسْطُورَة" },
-            { ar: "مَتَاحِف", en: "مَتْحَف" },
-            { ar: "قُصُور", en: "قَصْر" }
-          ]
-        },
-        {
-          type: "match",
-          pairs: [
-            { ar: "مُدُن", en: "مَدِينَة" },
-            { ar: "أَضْرِحَة", en: "ضَرِيح" },
-            { ar: "أَشْهُر", en: "شَهْر" },
-            { ar: "مَبَانِي", en: "مَبْنَى" },
-            { ar: "جَامِعَات", en: "جَامِعَة" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec3_prac_l6",
-      title: "ح) الترجمة إلى الإنجليزية (الجزء الأول)",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "فِي أَيَّةِ سَاعَةٍ تَنْتَهِضُ مِنَ النَّوْمِ صَبَاحاً يَا جُونْسُون؟",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "At what time", trans: "فِي أَيَّةِ سَاعَةٍ" },
-            { id: 2, text: "do you", trans: "" },
-            { id: 3, text: "wake up", trans: "تَنْتَهِضُ مِنَ النَّوْمِ" },
-            { id: 4, text: "in", trans: "" },
-            { id: 5, text: "the morning,", trans: "صَبَاحاً" },
-            { id: 6, text: "Johnson?", trans: "يَا جُونْسُون؟" },
-            { id: 7, text: "sleep", trans: "" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "أَبْتَدِئُ أَعْمَالِي الصَّبَاحِيَّةَ فِي السَّاعَةِ السَّابِعَةِ وَالنِّصْفِ.",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "I start", trans: "أَبْتَدِئُ" },
-            { id: 2, text: "my morning", trans: "الصَّبَاحِيَّةَ" },
-            { id: 3, text: "activities", trans: "أَعْمَالِي" },
-            { id: 4, text: "at", trans: "فِي" },
-            { id: 5, text: "seven", trans: "السَّابِعَةِ" },
-            { id: 6, text: "thirty.", trans: "وَالنِّصْفِ" },
-            { id: 7, text: "nine", trans: "" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "كَيْفَ تُسَافِرُ إِلَى مَكَانِ عَمَلِكَ؟",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "How", trans: "كَيْفَ" },
-            { id: 2, text: "do you", trans: "" },
-            { id: 3, text: "travel", trans: "تُسَافِرُ" },
-            { id: 4, text: "to", trans: "إِلَى" },
-            { id: 5, text: "your", trans: "ـكَ" },
-            { id: 6, text: "workplace?", trans: "مَكَانِ عَمَلِ" },
-            { id: 7, text: "go", trans: "" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "أَذْهَبُ أَحْيَاناً بِالسَّيَّارَةِ وَأَحْيَاناً عَلَى الدَّرَّاجَةِ إِنَّهُ لَيْسَ بَعِيداً.",
-          correctOrder: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          blocks: [
-            { id: 1, text: "I go", trans: "أَذْهَبُ" },
-            { id: 2, text: "sometimes", trans: "أَحْيَاناً" },
-            { id: 3, text: "by car", trans: "بِالسَّيَّارَةِ" },
-            { id: 4, text: "and", trans: "وَ" },
-            { id: 5, text: "sometimes", trans: "أَحْيَاناً" },
-            { id: 6, text: "by", trans: "عَلَى" },
-            { id: 7, text: "bicycle,", trans: "الدَّرَّاجَةِ" },
-            { id: 8, text: "it", trans: "إِنَّهُ" },
-            { id: 9, text: "is not", trans: "لَيْسَ" },
-            { id: 10, text: "far.", trans: "بَعِيداً" },
-            { id: 11, text: "close", trans: "" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec3_prac_l7",
-      title: "ح) الترجمة إلى الإنجليزية (الجزء الثاني)",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "هَلْ تَعْمَلُ فِي مَكْتَبٍ حُكُومِيٍّ؟",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "Do you", trans: "هَلْ" },
-            { id: 2, text: "work", trans: "تَعْمَلُ" },
-            { id: 3, text: "in", trans: "فِي" },
-            { id: 4, text: "a", trans: "" },
-            { id: 5, text: "government", trans: "حُكُومِيٍّ" },
-            { id: 6, text: "office?", trans: "مَكْتَبٍ" },
-            { id: 7, text: "school", trans: "" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "لَا أَنَا أَعْمَلُ فِي بَنْك.",
-          correctOrder: [1, 2, 3, 4, 5, 6],
-          blocks: [
-            { id: 1, text: "No", trans: "لَا" },
-            { id: 2, text: "I", trans: "أَنَا" },
-            { id: 3, text: "work", trans: "أَعْمَلُ" },
-            { id: 4, text: "in", trans: "فِي" },
-            { id: 5, text: "a", trans: "" },
-            { id: 6, text: "bank.", trans: "بَنْك" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "هَلْ هُوَ عَمَلٌ مُمْتِعٌ؟",
-          correctOrder: [1, 2, 3],
-          blocks: [
-            { id: 1, text: "Is it", trans: "هَلْ هُوَ" },
-            { id: 2, text: "enjoyable", trans: "مُمْتِعٌ" },
-            { id: 3, text: "work?", trans: "عَمَلٌ" },
-            { id: 4, text: "boring", trans: "" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "ar-to-en",
-          question: "عَلَمُ الْهِنْدِ مُثَلَّثُ اللَّوْنِ.",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "The flag", trans: "عَلَمُ" },
-            { id: 2, text: "of", trans: "" },
-            { id: 3, text: "India", trans: "الْهِنْدِ" },
-            { id: 4, text: "is", trans: "" },
-            { id: 5, text: "tricolor.", trans: "مُثَلَّثُ اللَّوْنِ" },
-            { id: 6, text: "beautiful", trans: "" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec3_prac_l8",
-      title: "ط) الترجمة إلى العربية (الجزء الأول)",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "It is holiday tomorrow, it is the new year",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "غَداً", trans: "Tomorrow" },
-            { id: 2, text: "عُطْلَةٌ،", trans: "holiday" },
-            { id: 3, text: "إِنَّهُ", trans: "it is" },
-            { id: 4, text: "الْعَامُ", trans: "year" },
-            { id: 5, text: "الْجَدِيدُ", trans: "new" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Does every one celebrate it?",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "هَلْ", trans: "Does" },
-            { id: 2, text: "يَحْتَفِلُ", trans: "celebrate" },
-            { id: 3, text: "بِهِ", trans: "it" },
-            { id: 4, text: "الْجَمِيعُ؟", trans: "everyone" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Yes the most of the people does.",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "نَعَمْ،", trans: "Yes" },
-            { id: 2, text: "مُعْظَمُ", trans: "most of" },
-            { id: 3, text: "النَّاسِ", trans: "the people" },
-            { id: 4, text: "يَفْعَلُونَ.", trans: "does" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "sec3_prac_l9",
-      title: "ط) الترجمة إلى العربية (الجزء الثاني)",
-      isPractice: true,
-      slides: [
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "Keralites celebrate Onam.",
-          correctOrder: [1, 2, 3, 4],
-          blocks: [
-            { id: 1, text: "يَحْتَفِلُ", trans: "celebrate" },
-            { id: 2, text: "أَهْلُ كِيرَالَا", trans: "Keralites" },
-            { id: 3, text: "بِمِهْرَجَانِ", trans: "festival of" },
-            { id: 4, text: "أُونَام.", trans: "Onam" }
-          ]
-        },
-        {
-          type: "sentence-builder",
-          questionType: "en-to-ar",
-          question: "And all Indians celebrate Independence Day.",
-          correctOrder: [1, 2, 3, 4, 5],
-          blocks: [
-            { id: 1, text: "وَيَحْتَفِلُ", trans: "And celebrate" },
-            { id: 2, text: "جَمِيعُ", trans: "all" },
-            { id: 3, text: "الْهُنُودِ", trans: "Indians" },
-            { id: 4, text: "بِيَوْمِ", trans: "Day" },
-            { id: 5, text: "الِاسْتِقْلَالِ.", trans: "Independence" }
-          ]
-        }
-      ]
+      id: "s4_3",
+      sentence: {
+        type: "sentence",
+        arabic: "فَانْتَقَمَتْ رُقَيَّةُ لِلْعَدَالَةِ، وَظَهَرَتْ حَمَامَةٌ بَيْضَاءُ تَرْمُزُ لِلسَّلَامِ.",
+        english: "So Ruqayya took revenge for justice, and a white dove appeared symbolizing peace.",
+        parts: [
+          { ar: "فَانْتَقَمَتْ رُقَيَّةُ لِلْعَدَالَةِ،", en: "So Ruqayya took revenge for justice," },
+          { ar: "وَظَهَرَتْ حَمَامَةٌ بَيْضَاءُ", en: "and a white dove appeared" },
+          { ar: "تَرْمُزُ لِلسَّلَامِ.", en: "symbolizing peace." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "فَانْتَقَمَتْ", translation: "Took revenge", transliteration: "Fantaqamat" },
+        { type: "vocabulary", word: "تَرْمُزُ", translation: "Symbolizes", transliteration: "Tarmuzu" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "وَظَهَرَتْ حَمَامَةٌ بَيْضَاءُ تَرْمُزُ لِـ ____",
+        translation: "And a white dove appeared symbolizing peace",
+        answer: "السَّلَامِ",
+        options: ["الْحَرْبِ", "السَّلَامِ", "الْخَوْفِ"]
+      }
     }
   ]
 };
---- END OF FILE src/data/section3/section3_practice.js ---
+--- END OF FILE src/data/summaries.js ---
+
+--- START OF FILE src/components/Lesson.css ---
+/* Strict bounding constraints to prevent double scrollbars */
+.lesson-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-dark);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Stop outer page scroll completely */
+}
+
+.lesson-view-fixed {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  height: 100dvh; /* Exact viewport height to prevent cutoff on mobile browsers */
+  background: var(--bg-dark);
+  position: relative;
+}
+
+@media (min-width: 769px) {
+  .lesson-view-fixed {
+    height: 90vh; /* Don't stretch full screen on desktop */
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+}
+
+.lesson-header-fixed {
+  flex-shrink: 0; /* Never shrink */
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(18, 18, 18, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 10;
+}
+
+.slide-scroll-area {
+  flex: 1;
+  overflow-y: auto; /* This is the ONLY scrollable part */
+  overflow-x: hidden;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content if small */
+}
+
+.lesson-footer-fixed {
+  flex-shrink: 0; /* Never shrink */
+  padding: 20px;
+  background: rgba(18, 18, 18, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--glass-border);
+  z-index: 10;
+}
+--- END OF FILE src/components/Lesson.css ---
+
+--- START OF FILE src/components/Lesson.jsx ---
+import React, { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
+import { useProgress } from '../context/ProgressContext';
+import SentenceSlideV2 from './slides/SentenceSlideV2';
+import VocabularySlide from './slides/VocabularySlide';
+import MatchSlide from './slides/MatchSlide';
+import FillBlankSlide from './slides/FillBlankSlide';
+import SentenceBuilderSlide from './slides/SentenceBuilderSlide';
+import ConversationSlide from './slides/ConversationSlide';
+import ActivitySlide from './slides/ActivitySlide';
+import './Lesson.css';
+
+const Lesson = ({ lesson, onClose }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [canProceed, setCanProceed] = useState(false);
+  const { markLessonComplete } = useProgress();
+
+  const slide = lesson.slides[currentIndex];
+  const progressPercentage = ((currentIndex) / lesson.slides.length) * 100;
+
+  useEffect(() => {
+    // Auto-enable next for non-interactive slides
+    if (slide.type === 'sentence' || slide.type === 'vocabulary' || slide.type === 'conversation' || slide.type === 'activity') {
+      setCanProceed(true);
+    } else {
+      setCanProceed(false);
+    }
+  }, [currentIndex, slide]);
+
+  const handleNext = () => {
+    if (currentIndex < lesson.slides.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      // Mark complete if it's an official path lesson (not a summary memorization block)
+      if (!lesson.id.startsWith('summary_mem')) {
+        markLessonComplete(lesson.id);
+      }
+      onClose();
+    }
+  };
+
+  const renderSlide = () => {
+    switch (slide.type) {
+      case 'sentence':
+        return <SentenceSlideV2 key={currentIndex} slide={slide} />;
+      case 'vocabulary':
+        return <VocabularySlide key={currentIndex} slide={slide} />;
+      case 'conversation':
+        return <ConversationSlide key={currentIndex} slide={slide} />;
+      case 'activity':
+        return <ActivitySlide key={currentIndex} slide={slide} />;
+      case 'match':
+        return <MatchSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
+      case 'fill-blank':
+        return <FillBlankSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
+      case 'sentence-builder':
+        return <SentenceBuilderSlide key={currentIndex} slide={slide} onComplete={() => setCanProceed(true)} />;
+      default:
+        return <div key={currentIndex}>Unknown slide type</div>;
+    }
+  };
+
+  return (
+    <div className="lesson-overlay route-transition">
+      <div className="lesson-view-fixed">
+        
+        <div className="lesson-header-fixed">
+          <button className="close-btn" onClick={onClose}>
+            <X size={28} />
+          </button>
+          <div className="progress-bar-bg">
+            <div 
+              className="progress-bar-fill" 
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="slide-scroll-area">
+          {renderSlide()}
+        </div>
+
+        <div className="lesson-footer-fixed">
+          <button 
+            className="btn-primary" 
+            onClick={handleNext}
+            disabled={!canProceed}
+          >
+            {currentIndex === lesson.slides.length - 1 ? 'Finish' : 'Continue'}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default Lesson;
+--- END OF FILE src/components/Lesson.jsx ---
+
+--- START OF FILE src/components/SummaryTab.jsx ---
+import React, { useState } from 'react';
+import { PlayCircle, Volume2 } from 'lucide-react';
+import { useTTS } from '../hooks/useTTS';
+import { sectionSummaries } from '../data/summaries';
+import Lesson from './Lesson';
+import './SummaryTab.css';
+
+const SummaryTab = ({ activeSection }) => {
+  const { speak } = useTTS();
+  const [activeLesson, setActiveLesson] = useState(null);
+
+  // Fetch concise summary from summaries.js based on active section
+  const summaryChunks = sectionSummaries[activeSection.id] || [];
+  
+  const fullParagraph = summaryChunks.length > 0 
+    ? summaryChunks.map(c => c.sentence.arabic).join(' ')
+    : "No concise summary data available yet.";
+
+  // Auto-generate Sentence Builder Slide (Step 4)
+  const generateBuilderSlide = (sentenceSlide) => {
+    if (!sentenceSlide.parts || sentenceSlide.parts.length === 0) return null;
+    
+    return {
+      type: 'sentence-builder',
+      questionType: 'en-to-ar',
+      question: sentenceSlide.english,
+      correctOrder: sentenceSlide.parts.map((_, i) => i + 1),
+      blocks: sentenceSlide.parts.map((p, i) => ({
+        id: i + 1,
+        text: p.ar.trim(),
+        trans: p.en.trim()
+      }))
+    };
+  };
+
+  const handleStartMemorizeAll = () => {
+    if (summaryChunks.length === 0) return;
+
+    const allSlides = [];
+    
+    // Assemble the slides sequentially for the entire chapter summary
+    summaryChunks.forEach(chunk => {
+      allSlides.push(chunk.sentence);
+      allSlides.push(...chunk.vocabs);
+      if (chunk.fillBlank) allSlides.push(chunk.fillBlank);
+      
+      const builderSlide = generateBuilderSlide(chunk.sentence);
+      if (builderSlide) allSlides.push(builderSlide);
+    });
+
+    setActiveLesson({
+      id: `summary_mem_full_${activeSection.id}`,
+      title: "Memorize Chapter Outline",
+      slides: allSlides
+    });
+  };
+
+  return (
+    <div className="summary-tab-container route-transition">
+      {/* If a lesson is active, render it over the tab */}
+      {activeLesson && (
+        <Lesson 
+          lesson={activeLesson} 
+          onClose={() => setActiveLesson(null)} 
+        />
+      )}
+
+      <div className="summary-paragraph-card">
+        <h2>Key Points to Memorize</h2>
+        
+        {summaryChunks.length > 0 ? (
+          <>
+            <div className="flex-center" style={{ flexDirection: 'row' }}>
+              <button className="tts-button" onClick={() => speak(fullParagraph)}>
+                <Volume2 size={24} />
+              </button>
+            </div>
+            
+            <p className="full-paragraph-ar arabic-text" dir="rtl">
+              {fullParagraph}
+            </p>
+
+            <button 
+              className="memorize-all-btn"
+              onClick={handleStartMemorizeAll}
+            >
+              <PlayCircle size={28} />
+              <span>Start Memorization</span>
+            </button>
+            
+            <p className="text-dim text-center" style={{ fontSize: '0.95rem', lineHeight: '1.4' }}>
+              Master the core ideas of this chapter. You will read, learn the vocabulary, fill in the blanks, and rebuild the sentences from scratch.
+            </p>
+          </>
+        ) : (
+          <p className="text-dim">Summary content is being prepared for this section.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SummaryTab;
+--- END OF FILE src/components/SummaryTab.jsx ---
+
+--- START OF FILE src/components/PracticeTab.jsx ---
+import React, { useState, useMemo } from 'react';
+import { Volume2, CheckCircle, ArrowRight, RotateCcw } from 'lucide-react';
+import { useTTS } from '../hooks/useTTS';
+import './PracticeTab.css';
+
+// Helper to get 3 random wrong options
+const getOptions = (correct, allPool) => {
+  const pool = allPool.filter(w => w !== correct);
+  pool.sort(() => Math.random() - 0.5);
+  const options = pool.slice(0, 3);
+  options.push(correct);
+  return options.sort(() => Math.random() - 0.5);
+};
+
+const PracticeTab = ({ activeSection }) => {
+  const { speak } = useTTS();
+  
+  // States for one-by-one quiz flow
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [score, setScore] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const questions = useMemo(() => {
+    let vocabs = [];
+    let fillBlanks = [];
+
+    activeSection.units.forEach(unit => {
+      if (unit.id.includes('preview') || unit.id.includes('practice')) return;
+      unit.lessons.forEach(lesson => {
+        vocabs.push(...lesson.slides.filter(s => s.type === 'vocabulary'));
+        fillBlanks.push(...lesson.slides.filter(s => s.type === 'fill-blank'));
+      });
+    });
+
+    const vocabMap = new Map();
+    vocabs.forEach(v => vocabMap.set(v.word, v.translation));
+
+    const allArWords = [...new Set(vocabs.map(v => v.word))];
+    const allEnWords = [...new Set(vocabs.map(v => v.translation))];
+    let qList = [];
+
+    vocabs.forEach((v, i) => {
+      // Type 1: Question is Arabic word, Instruction & Options are English
+      qList.push({
+        id: `v_ar_en_${v.word}_${i}`,
+        instruction: "Select the correct meaning for:",
+        mainText: v.word,
+        mainIsAr: true,
+        options: getOptions(v.translation, allEnWords).map(text => ({ 
+          text, 
+          isAr: false 
+        })),
+        answer: v.translation
+      });
+
+      // Type 2: Question is English word, Instruction & Options are Arabic
+      qList.push({
+        id: `v_en_ar_${v.word}_${i}`,
+        instruction: "Select the Arabic translation for:",
+        mainText: v.translation,
+        mainIsAr: false,
+        options: getOptions(v.word, allArWords).map(text => ({ 
+          text, 
+          isAr: true,
+          en: vocabMap.get(text) || "" // Show English hint in option after selected
+        })),
+        answer: v.word
+      });
+    });
+
+    fillBlanks.forEach((fb, i) => {
+      let fbOptions = fb.options ? [...fb.options] : getOptions(fb.answer, allArWords);
+      qList.push({
+        id: `fb_${i}`,
+        instruction: "Fill in the missing word:",
+        mainText: fb.sentence.replace(/_+/g, '____'),
+        mainIsAr: true,
+        options: fbOptions.map(text => ({ 
+          text, 
+          isAr: true,
+          en: vocabMap.get(text) || "" 
+        })),
+        answer: fb.answer
+      });
+    });
+
+    qList.sort(() => Math.random() - 0.5);
+    return qList.slice(0, 30); // Present 30 questions for optimal practice
+  }, [activeSection]);
+
+  const handleSelect = (optionText) => {
+    if (isAnswered) return;
+    setSelectedOption(optionText);
+    setIsAnswered(true);
+
+    const currentQ = questions[currentIndex];
+    if (optionText === currentQ.answer) {
+      setScore(prev => prev + 1);
+      
+      // Auto Play audio if it was a fill-in-the-blank
+      if (currentQ.id.startsWith('fb_')) {
+        const fullSentence = currentQ.mainText.replace(/____/g, optionText);
+        speak(fullSentence);
+      }
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+      setSelectedOption(null);
+      setIsAnswered(false);
+    } else {
+      setIsFinished(true);
+    }
+  };
+
+  const handleRetry = () => {
+    setCurrentIndex(0);
+    setSelectedOption(null);
+    setIsAnswered(false);
+    setScore(0);
+    setIsFinished(false);
+  };
+
+  if (questions.length === 0) {
+    return <div className="text-center p-6 text-dim">No practice data available for this section yet.</div>;
+  }
+
+  if (isFinished) {
+    return (
+      <div className="practice-tab-container route-transition">
+        <div className="question-card score-screen">
+          <CheckCircle size={64} color="var(--success)" />
+          <h2>Practice Complete!</h2>
+          <div className="final-score">{score} / {questions.length}</div>
+          <p className="text-dim">Great job completing the review for this chapter.</p>
+          <button className="btn-primary flex-center mt-4" onClick={handleRetry} style={{ flexDirection: 'row', width: '100%' }}>
+            <RotateCcw size={20} />
+            <span>Practice Again</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const q = questions[currentIndex];
+  const progressPercentage = ((currentIndex) / questions.length) * 100;
+
+  return (
+    <div className="practice-tab-container route-transition">
+      <div className="practice-header">
+        <div className="practice-progress-container">
+          <div 
+            className="practice-progress-fill" 
+            style={{ width: `${progressPercentage}%` }}
+          />
+        </div>
+        <p className="text-dim" style={{ fontSize: '0.9rem' }}>Question {currentIndex + 1} of {questions.length}</p>
+      </div>
+
+      <div className="question-card">
+        <div className="q-top-row">
+          <span className="q-text-en">{q.instruction}</span>
+          {q.mainIsAr && (
+            <button 
+              className="tts-mini-btn" 
+              onClick={() => speak(q.mainText.replace(/_+/g, ''))}
+              title="Listen"
+            >
+              <Volume2 size={24} />
+            </button>
+          )}
+        </div>
+        
+        <div className={`q-text-ar ${q.mainIsAr ? 'arabic-text' : ''}`} dir={q.mainIsAr ? "rtl" : "ltr"}>
+          {q.mainText}
+        </div>
+
+        <div className="options-grid" dir={q.options[0].isAr ? "rtl" : "ltr"}>
+          {q.options.map((opt, i) => {
+            const isSelected = selectedOption === opt.text;
+            const isCorrectOpt = opt.text === q.answer;
+            
+            let btnClass = 'omr-option';
+            
+            if (isAnswered) {
+              if (isCorrectOpt) btnClass += ' correct-answer';
+              else if (isSelected && !isCorrectOpt) btnClass += ' wrong-answer';
+            } else if (isSelected) {
+              btnClass += ' selected';
+            }
+
+            return (
+              <button 
+                key={i} 
+                className={btnClass}
+                onClick={() => handleSelect(opt.text)}
+                disabled={isAnswered}
+              >
+                <div className={`opt-text-main ${opt.isAr ? 'arabic-text' : ''}`}>
+                  {opt.text}
+                </div>
+                {/* Reveal English meaning for Arabic options after answering to help learning */}
+                {isAnswered && opt.en && (
+                  <div className="opt-text-sub" dir="ltr">{opt.en}</div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="practice-footer">
+        <button 
+          className="btn-primary" 
+          onClick={handleNext}
+          disabled={!isAnswered}
+          style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}
+        >
+          <span>{currentIndex === questions.length - 1 ? 'Finish Practice' : 'Next Question'}</span>
+          <ArrowRight size={20} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default PracticeTab;
+--- END OF FILE src/components/PracticeTab.jsx ---

@@ -1,16 +1,20 @@
 Make the following changes:
 
-       Add the chapter given in photos, make sure its the same text with harqats:
-        - Each units are each paragraph
-        - Each sentences are each lessons
-        - Each lessons will have that sentneces, vocabularies, fill in the blanks and match the following
-        - Make sure you dont lose any content (write them all as in textbook)
-        - Practice questions are same as chapter end questions
-        - As for this chapter it is a conversation, so instead of a sentence card create a new compatable card for conversation
-        - Similarly create new kind of slides if needed for chapter end questions
+       - Add bottom tabs:
+              - One: Lesson Path (original lesson path)
+              - Two: Summary,
+                     like this time it will create a summary of the whole chapter in one paragraph, and split it, and help user memorize it with arabic and its meaning:
+                            Slide 1: the senetnece part
+                            Slide 2: New word cards
+                            SLide 3: Fill in the blank
+                            Slide 4: Rewrite in order
+              - Three: Practice:
+                     Here there will be 30-45 OMR questions based on the chapter with question and options both in arabic and english, also TTS (only on arabic) when I click at them
+       Make sure, while creating content, only use the words and sentence in original data, dont use anything else so litrally it is meant for user to memorize the whole chapter in both languages
 
-       Make it possible to specify section number with section and show that in the selector because it will be good if I can modify it, because the numbers are not as in textbook
- 
+       first, apply it for section1
+
+DO NOT LOSE ANY EXISTING CONTENT
 
 After applying the changes recreate project_snapshot.txt only for new files and files with changes, each time improve modularity of the program by introducing new component files (only on modified or new files), don't modify system files like pubspec, if we need new packages, or file path cahnges, removal etc, give the command for bash
 

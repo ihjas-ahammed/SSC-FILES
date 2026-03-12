@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { sections } from '../data/sections';
 import { useProgress } from '../context/ProgressContext';
-import { Map } from 'lucide-react';
 import TopBar from './TopBar';
 import UnitPath from './UnitPath';
+import BottomTabs from './BottomTabs';
+import SummaryTab from './SummaryTab';
+import PracticeTab from './PracticeTab';
 
-const Dashboard = ({ activeSection, setActiveSection, onSelectLesson, onShowSummary }) => {
+const Dashboard = ({ activeSection, setActiveSection, onSelectLesson }) => {
   const { completedLessons } = useProgress();
+  const [activeTab, setActiveTab] = useState('path'); // 'path', 'summary', 'practice'
 
   return (
     <div className="dashboard-mobile route-transition">
@@ -17,26 +20,31 @@ const Dashboard = ({ activeSection, setActiveSection, onSelectLesson, onShowSumm
         completedLessons={completedLessons}
       />
       
-      <div className="summary-btn-container" style={{ padding: '24px 20px 0 20px' }}>
-        <button
-          className="btn-primary flex-center summary-action-btn"
-          onClick={onShowSummary}
-        >
-          <Map size={24} color="var(--primary)" />
-          <span>View Chapter Summary</span>
-        </button>
+      {/* Content wrapper with bottom padding for the fixed nav */}
+      <div className="tab-content-wrapper" style={{ paddingBottom: '90px' }}>
+        {activeTab === 'path' && (
+          <div className="path-container">
+            {activeSection.units.map((unit) => (
+              <UnitPath 
+                key={unit.id} 
+                unit={unit} 
+                completedLessons={completedLessons} 
+                onSelectLesson={onSelectLesson}
+              />
+            ))}
+          </div>
+        )}
+
+        {activeTab === 'summary' && (
+          <SummaryTab activeSection={activeSection} />
+        )}
+
+        {activeTab === 'practice' && (
+          <PracticeTab activeSection={activeSection} />
+        )}
       </div>
 
-      <div className="path-container">
-        {activeSection.units.map((unit) => (
-          <UnitPath 
-            key={unit.id} 
-            unit={unit} 
-            completedLessons={completedLessons} 
-            onSelectLesson={onSelectLesson}
-          />
-        ))}
-      </div>
+      <BottomTabs activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 };

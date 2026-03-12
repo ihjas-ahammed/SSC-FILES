@@ -9,7 +9,12 @@ export const unit8 = {
         {
           type: "sentence",
           arabic: "نِمْنَا لَيْلَتَنَا الْأُولَى فِي سُبَاتٍ عَمِيقٍ تَحْتَ أَنْغَامِ الْمَطَرِ.",
-          english: "We slept our first night in a deep slumber under the tunes of the rain."
+          english: "We slept our first night in a deep slumber under the tunes of the rain.",
+          parts: [
+            { ar: "نِمْنَا لَيْلَتَنَا الْأُولَى", en: "We slept our first night" },
+            { ar: "فِي سُبَاتٍ عَمِيقٍ", en: "in a deep slumber" },
+            { ar: "تَحْتَ أَنْغَامِ الْمَطَرِ.", en: "under the tunes of the rain." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -57,7 +62,15 @@ export const unit8 = {
         {
           type: "sentence",
           arabic: "وَفِي الصَّبَاحِ انْطَلَقْنَا لِاسْتِكْشَافِ مَنَاطِقِ مُونَّار الَّتِي لَيْسَتْ مَدِينَةً كَبِيرَةً بَلْ هِيَ قَرْيَةٌ جَبَلِيَّةٌ جَمِيلَةٌ، تَتَنَاثَرُ فِيهَا الْمَزَارِعُ وَالشَّلَّالَاتُ وَالزُّهُورُ الْبَرِّيَّةُ.",
-          english: "In the morning, we set out to explore the areas of Munnar, which is not a large city but a beautiful mountain village, where farms, waterfalls, and wildflowers are scattered."
+          english: "In the morning, we set out to explore the areas of Munnar, which is not a large city but a beautiful mountain village, where farms, waterfalls, and wildflowers are scattered.",
+          parts: [
+            { ar: "وَفِي الصَّبَاحِ انْطَلَقْنَا", en: "In the morning, we set out" },
+            { ar: "لِاسْتِكْشَافِ مَنَاطِقِ مُونَّار", en: "to explore the areas of Munnar," },
+            { ar: "الَّتِي لَيْسَتْ مَدِينَةً كَبِيرَةً", en: "which is not a large city" },
+            { ar: "بَلْ هِيَ قَرْيَةٌ جَبَلِيَّةٌ جَمِيلَةٌ،", en: "but a beautiful mountain village," },
+            { ar: "تَتَنَاثَرُ فِيهَا الْمَزَارِعُ", en: "where farms are scattered," },
+            { ar: "وَالشَّلَّالَاتُ وَالزُّهُورُ الْبَرِّيَّةُ.", en: "and waterfalls, and wildflowers." }
+          ]
         },
         {
           "type": "vocabulary",

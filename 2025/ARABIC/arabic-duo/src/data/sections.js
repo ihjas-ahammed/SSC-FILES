@@ -16,7 +16,7 @@ import { unit12 } from './section1/section1_12';
 import { previewUnit2 } from './section2/section2_preview';
 import { unit61 } from './section2/section2_1';
 import { unit62, unit63 } from './section2/section2_3';
-import { unit64, unit65, unit66, unit67, unit68, unit69, unit70, unit71, unit72, unit73 } from './section2/section2_7';
+import { unit64, unit65, unit66, unit67, unit68, unit69, unit70} from './section2/section2_7';
 import { practiceUnit2 } from './section2/section2_practice';
 
 import { previewUnit3 } from './section3/section3_preview';
@@ -54,7 +54,7 @@ export const sections = [
     sectionNumber: 6,
     title: "الْقُرْآنُ وَالْبِيئَةُ",
     units: [
-      previewUnit2, unit61, unit62, unit63, unit64, unit65, unit66, unit67, unit68, unit69, unit70, unit71, unit72, unit73, practiceUnit2
+      previewUnit2, unit61, unit62, unit63, unit64, unit65, unit66, unit67, unit68, unit69, unit70, practiceUnit2
     ]
   },
  

@@ -9,7 +9,13 @@ export const unit10 = {
         {
           type: "sentence",
           arabic: "صَدَقَ هَذَا الْوَصْفُ فِي مُونَّار كَمَا صَدَقَ فِي الْأَنْدَلُسِ، لِأَنَّ الْخُضْرَةَ هُنَا لَا تَنْتَهِي، وَالْمَاءَ يَنْسَابُ فِي كُلِّ دَرْبٍ.",
-          english: "This description was true in Munnar just as it was true in Andalusia, because the greenery here never ends, and water flows in every path."
+          english: "This description was true in Munnar just as it was true in Andalusia, because the greenery here never ends, and water flows in every path.",
+          parts: [
+            { ar: "صَدَقَ هَذَا الْوَصْفُ فِي مُونَّار", en: "This description was true in Munnar" },
+            { ar: "كَمَا صَدَقَ فِي الْأَنْدَلُسِ،", en: "just as it was true in Andalusia," },
+            { ar: "لِأَنَّ الْخُضْرَةَ هُنَا لَا تَنْتَهِي،", en: "because the greenery here never ends," },
+            { ar: "وَالْمَاءَ يَنْسَابُ فِي كُلِّ دَرْبٍ.", en: "and water flows in every path." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -69,7 +75,13 @@ export const unit10 = {
         {
           type: "sentence",
           arabic: "جَلَسْتُ أَتَأَمَّلُ الطَّبِيعَةَ، وَأَحْمَدُ اللهَ عَلَى هَذَا الْجَمَالِ الْبَدِيعِ الَّذِي يَشْرَحُ الْقَلْبَ وَيُبْهِجُ الرُّوحَ.",
-          english: "I sat contemplating nature, thanking God for this exquisite beauty that expands the heart and delights the soul."
+          english: "I sat contemplating nature, thanking God for this exquisite beauty that expands the heart and delights the soul.",
+          parts: [
+            { ar: "جَلَسْتُ أَتَأَمَّلُ الطَّبِيعَةَ،", en: "I sat contemplating nature," },
+            { ar: "وَأَحْمَدُ اللهَ عَلَى هَذَا الْجَمَالِ الْبَدِيعِ", en: "thanking God for this exquisite beauty" },
+            { ar: "الَّذِي يَشْرَحُ الْقَلْبَ", en: "that expands the heart" },
+            { ar: "وَيُبْهِجُ الرُّوحَ.", en: "and delights the soul." }
+          ]
         },
         {
           "type": "vocabulary",

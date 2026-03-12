@@ -9,7 +9,12 @@ export const unit1 = {
         {
           type: "sentence",
           arabic: "مُونَّار هِيَ أَرْضُ الشَّلَّالَاتِ، هَكَذَا هِيَ مَعْرُوفَةٌ بَيْنَ السِّياحِينِ.",
-          english: "Munnar is the land of waterfalls; this is how it is known among tourists."
+          english: "Munnar is the land of waterfalls; this is how it is known among tourists.",
+          parts: [
+            { ar: "مُونَّار هِيَ أَرْضُ الشَّلَّالَاتِ،", en: "Munnar is the land of waterfalls;" },
+            { ar: "هَكَذَا هِيَ مَعْرُوفَةٌ", en: "this is how it is known" },
+            { ar: "بَيْنَ السِّياحِينِ.", en: "among tourists." }
+          ]
         },
         {
           type: "vocabulary",
@@ -42,7 +47,14 @@ export const unit1 = {
         {
           type: "sentence",
           arabic: "وَسُمِّيَتْ بِهَذَا الاِسْمِ لِأَنَّهَا ثَلَاثَةُ أَنْهَارٍ تَجْرِي مِنْ مُخْتَلَفِ الْمَصَادِرِ وَتَسِيلُ مِنْ هَذَا الْمُلْتَقِي كَنَهْرٍ وَاحِدٍ.",
-          english: "And it was named by this name because it is three rivers running from different sources and flowing from this meeting point as one river."
+          english: "And it was named by this name because it is three rivers running from different sources and flowing from this meeting point as one river.",
+          parts: [
+            { ar: "وَسُمِّيَتْ بِهَذَا الاِسْمِ", en: "And it was named by this name" },
+            { ar: "لِأَنَّهَا ثَلَاثَةُ أَنْهَارٍ", en: "because it is three rivers" },
+            { ar: "تَجْرِي مِنْ مُخْتَلَفِ الْمَصَادِرِ", en: "running from different sources" },
+            { ar: "وَتَسِيلُ مِنْ هَذَا الْمُلْتَقِي", en: "and flowing from this meeting point" },
+            { ar: "كَنَهْرٍ وَاحِدٍ.", en: "as one river." }
+          ]
         },
         {
           type: "vocabulary",
@@ -74,7 +86,13 @@ export const unit1 = {
         {
           type: "sentence",
           arabic: "وَالْمَاءُ يَتَدَفَّقُ مِنَ الْجِبَالِ حَوْلَهَا وَيَنْحَدِرُ بَيْنَ الصُّخُورِ فِي كُلِّ مَكَانٍ.",
-          english: "And water gushes from the mountains around it and descends between the rocks in every place."
+          english: "And water gushes from the mountains around it and descends between the rocks in every place.",
+          parts: [
+            { ar: "وَالْمَاءُ يَتَدَفَّقُ", en: "And water gushes" },
+            { ar: "مِنَ الْجِبَالِ حَوْلَهَا", en: "from the mountains around it" },
+            { ar: "وَيَنْحَدِرُ بَيْنَ الصُّخُورِ", en: "and descends between the rocks" },
+            { ar: "فِي كُلِّ مَكَانٍ.", en: "in every place." }
+          ]
         },
         {
           type: "vocabulary",
@@ -107,7 +125,13 @@ export const unit1 = {
         {
           type: "sentence",
           arabic: "حَتَّى يُخَيَّلُ إِلَيْكَ أَنَّ أَزِقَّةَ الْمِيَاهِ فِي الْعَالَمِ تَسِيلُ إِلَى هَذِهِ الْأَرْضِ الْمُبَارَكَةِ فِي الْهِنْدِ.",
-          english: "Until you imagine that the water alleys of the world are flowing to this blessed land in India."
+          english: "Until you imagine that the water alleys of the world are flowing to this blessed land in India.",
+          parts: [
+            { ar: "حَتَّى يُخَيَّلُ إِلَيْكَ", en: "Until you imagine" },
+            { ar: "أَنَّ أَزِقَّةَ الْمِيَاهِ فِي الْعَالَمِ", en: "that the water alleys of the world" },
+            { ar: "تَسِيلُ إِلَى هَذِهِ الْأَرْضِ الْمُبَارَكَةِ", en: "are flowing to this blessed land" },
+            { ar: "فِي الْهِنْدِ.", en: "in India." }
+          ]
         },
         {
           type: "vocabulary",
@@ -139,7 +163,13 @@ export const unit1 = {
         {
           type: "sentence",
           arabic: "الَّذِي يُسَمَّى بَلَدَ الْعَجَائِبِ الَّتِي تَدْهَشُكَ بِأَنْهَارِهَا وَجِبَالِهَا وَبِحَارِهَا وَعُلَمَائِهَا وَشَعْبِهَا.",
-          english: "Which is called the country of wonders that amazes you with its rivers, mountains, seas, scholars, and people."
+          english: "Which is called the country of wonders that amazes you with its rivers, mountains, seas, scholars, and people.",
+          parts: [
+            { ar: "الَّذِي يُسَمَّى بَلَدَ الْعَجَائِبِ", en: "Which is called the country of wonders" },
+            { ar: "الَّتِي تَدْهَشُكَ", en: "that amazes you" },
+            { ar: "بِأَنْهَارِهَا وَجِبَالِهَا وَبِحَارِهَا", en: "with its rivers, mountains, and seas," },
+            { ar: "وَعُلَمَائِهَا وَشَعْبِهَا.", en: "and its scholars, and people." }
+          ]
         },
         {
           type: "vocabulary",

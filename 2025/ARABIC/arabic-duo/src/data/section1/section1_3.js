@@ -9,7 +9,12 @@ export const unit3 = {
         {
           type: "sentence",
           arabic: "هَبَطْنَا فِي مَطَارِ كُوتْشِين، أَحَدِ أَجْمَلِ الْمَطَارَاتِ فِي الْوِلَايَةِ.",
-          english: "We landed at Cochin Airport, one of the most beautiful airports in the state."
+          english: "We landed at Cochin Airport, one of the most beautiful airports in the state.",
+          parts: [
+            { ar: "هَبَطْنَا فِي مَطَارِ كُوتْشِين،", en: "We landed at Cochin Airport," },
+            { ar: "أَحَدِ أَجْمَلِ الْمَطَارَاتِ", en: "one of the most beautiful airports" },
+            { ar: "فِي الْوِلَايَةِ.", en: "in the state." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -57,7 +62,12 @@ export const unit3 = {
         {
           type: "sentence",
           arabic: "ثُمَّ رَكِبْنَا سَيَّارَةَ أُجْرَةٍ نَحْوَ وَسَطِ الْمَدِينَةِ.",
-          english: "Then we took a taxi towards the city center."
+          english: "Then we took a taxi towards the city center.",
+          parts: [
+            { ar: "ثُمَّ رَكِبْنَا", en: "Then we took" },
+            { ar: "سَيَّارَةَ أُجْرَةٍ", en: "a taxi" },
+            { ar: "نَحْوَ وَسَطِ الْمَدِينَةِ.", en: "towards the city center." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -107,7 +117,12 @@ export const unit3 = {
         {
           type: "sentence",
           arabic: "الْجَوُّ كَانَ مُمْطِرًا عَلِيلًا.",
-          english: "The weather was rainy and refreshing."
+          english: "The weather was rainy and refreshing.",
+          parts: [
+            { ar: "الْجَوُّ كَانَ", en: "The weather was" },
+            { ar: "مُمْطِرًا", en: "rainy" },
+            { ar: "عَلِيلًا.", en: "and refreshing." }
+          ]
         },
         {
           "type": "vocabulary",

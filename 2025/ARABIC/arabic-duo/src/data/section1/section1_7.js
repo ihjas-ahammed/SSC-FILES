@@ -9,7 +9,15 @@ export const unit7 = {
         {
           type: "sentence",
           arabic: "وَصَلْنَا إِلَى مُونَّار مَعَ حُلُولِ اللَّيْلِ، وَاسْتَقْبَلَنَا الْعَامِلُونَ فِي مُنْتَجَعِ ”بْلَاك بَرِي“ بِابْتِسَامَةٍ وَكَرَمٍ وَضِيَافَةٍ خَالِصَةٍ.",
-          english: "We arrived in Munnar at nightfall, and the staff at the 'Blackberry' Resort welcomed us with a smile, generosity, and pure hospitality."
+          english: "We arrived in Munnar at nightfall, and the staff at the 'Blackberry' Resort welcomed us with a smile, generosity, and pure hospitality.",
+          parts: [
+            { ar: "وَصَلْنَا إِلَى مُونَّار", en: "We arrived in Munnar" },
+            { ar: "مَعَ حُلُولِ اللَّيْلِ،", en: "at nightfall," },
+            { ar: "وَاسْتَقْبَلَنَا الْعَامِلُونَ", en: "and the staff welcomed us" },
+            { ar: "فِي مُنْتَجَعِ ”بْلَاك بَرِي“", en: "at the 'Blackberry' Resort" },
+            { ar: "بِابْتِسَامَةٍ وَكَرَمٍ", en: "with a smile, generosity," },
+            { ar: "وَضِيَافَةٍ خَالِصَةٍ.", en: "and pure hospitality." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -59,7 +67,12 @@ export const unit7 = {
         {
           type: "sentence",
           arabic: "حَتَّى حَفِظُوا لَنَا الْعَشَاءَ بَعْدَ وَقْتِ إِغْلَاقِ مَطْعَمِ الْمُنْتَجَعِ.",
-          english: "They even saved dinner for us after the resort's restaurant closing time."
+          english: "They even saved dinner for us after the resort's restaurant closing time.",
+          parts: [
+            { ar: "حَتَّى حَفِظُوا لَنَا الْعَشَاءَ", en: "They even saved dinner for us" },
+            { ar: "بَعْدَ وَقْتِ إِغْلَاقِ", en: "after the closing time" },
+            { ar: "مَطْعَمِ الْمُنْتَجَعِ.", en: "of the resort's restaurant." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -107,7 +120,13 @@ export const unit7 = {
         {
           type: "sentence",
           arabic: "الَّذِي يَقَعُ عَلَى سَفْحِ جَبَلٍ يُطِلُّ عَلَى وِدْيَانٍ مُغَطَّاةٍ بِأَشْجَارِ الشَّايِ.",
-          english: "Which is located on the foot of a mountain overlooking valleys covered with tea trees."
+          english: "Which is located on the foot of a mountain overlooking valleys covered with tea trees.",
+          parts: [
+            { ar: "الَّذِي يَقَعُ", en: "Which is located" },
+            { ar: "عَلَى سَفْحِ جَبَلٍ", en: "on the foot of a mountain" },
+            { ar: "يُطِلُّ عَلَى وِدْيَانٍ", en: "overlooking valleys" },
+            { ar: "مُغَطَّاةٍ بِأَشْجَارِ الشَّايِ.", en: "covered with tea trees." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -148,7 +167,13 @@ export const unit7 = {
         {
           type: "sentence",
           arabic: "تَتَنَاثَرُ فِيهِ الْأَكْوَاخُ الصَّغِيرَةُ الَّتِي تَمْنَحُ إِحْسَاسًا بِالسَّكِينَةِ الْمُطْمَئِنَّةِ وَالْعُزْلَةِ الْهَادِئَةِ.",
-          english: "Small cottages are scattered in it, providing a sense of reassuring tranquility and quiet solitude."
+          english: "Small cottages are scattered in it, providing a sense of reassuring tranquility and quiet solitude.",
+          parts: [
+            { ar: "تَتَنَاثَرُ فِيهِ الْأَكْوَاخُ الصَّغِيرَةُ", en: "Small cottages are scattered in it," },
+            { ar: "الَّتِي تَمْنَحُ إِحْسَاسًا", en: "providing a sense" },
+            { ar: "بِالسَّكِينَةِ الْمُطْمَئِنَّةِ", en: "of reassuring tranquility" },
+            { ar: "وَالْعُزْلَةِ الْهَادِئَةِ.", en: "and quiet solitude." }
+          ]
         },
         {
           "type": "vocabulary",

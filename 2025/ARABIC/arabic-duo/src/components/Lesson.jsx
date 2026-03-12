@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
-import SentenceSlide from './slides/SentenceSlide';
+import SentenceSlideV2 from './slides/SentenceSlideV2';
 import VocabularySlide from './slides/VocabularySlide';
 import MatchSlide from './slides/MatchSlide';
 import FillBlankSlide from './slides/FillBlankSlide';
 import SentenceBuilderSlide from './slides/SentenceBuilderSlide';
 import ConversationSlide from './slides/ConversationSlide';
 import ActivitySlide from './slides/ActivitySlide';
+import './Lesson.css';
 
 const Lesson = ({ lesson, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -30,7 +31,10 @@ const Lesson = ({ lesson, onClose }) => {
     if (currentIndex < lesson.slides.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      markLessonComplete(lesson.id);
+      // Mark complete if it's an official path lesson (not a summary memorization block)
+      if (!lesson.id.startsWith('summary_mem')) {
+        markLessonComplete(lesson.id);
+      }
       onClose();
     }
   };
@@ -38,7 +42,7 @@ const Lesson = ({ lesson, onClose }) => {
   const renderSlide = () => {
     switch (slide.type) {
       case 'sentence':
-        return <SentenceSlide key={currentIndex} slide={slide} />;
+        return <SentenceSlideV2 key={currentIndex} slide={slide} />;
       case 'vocabulary':
         return <VocabularySlide key={currentIndex} slide={slide} />;
       case 'conversation':
@@ -57,31 +61,35 @@ const Lesson = ({ lesson, onClose }) => {
   };
 
   return (
-    <div className="lesson-view glass-panel p-6">
-      <div className="lesson-header">
-        <button className="close-btn" onClick={onClose}>
-          <X size={28} />
-        </button>
-        <div className="progress-bar-bg">
-          <div 
-            className="progress-bar-fill" 
-            style={{ width: `${progressPercentage}%` }}
-          />
+    <div className="lesson-overlay route-transition">
+      <div className="lesson-view-fixed">
+        
+        <div className="lesson-header-fixed">
+          <button className="close-btn" onClick={onClose}>
+            <X size={28} />
+          </button>
+          <div className="progress-bar-bg">
+            <div 
+              className="progress-bar-fill" 
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="slide-container">
-        {renderSlide()}
-      </div>
+        <div className="slide-scroll-area">
+          {renderSlide()}
+        </div>
 
-      <div className="lesson-footer">
-        <button 
-          className="btn-primary" 
-          onClick={handleNext}
-          disabled={!canProceed}
-        >
-          {currentIndex === lesson.slides.length - 1 ? 'Finish Lesson' : 'Continue'}
-        </button>
+        <div className="lesson-footer-fixed">
+          <button 
+            className="btn-primary" 
+            onClick={handleNext}
+            disabled={!canProceed}
+          >
+            {currentIndex === lesson.slides.length - 1 ? 'Finish' : 'Continue'}
+          </button>
+        </div>
+
       </div>
     </div>
   );

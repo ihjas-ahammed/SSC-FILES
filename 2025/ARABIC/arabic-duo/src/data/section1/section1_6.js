@@ -9,7 +9,14 @@ export const unit6 = {
         {
           type: "sentence",
           arabic: "بَعْدَ أَيَّامٍ ثَلَاثٍ اسْتَأْجَرْنَا سَيَّارَةً مُتَّجِهِينَ إِلَى مُونَّارَ، الَّتِي تَبْعُدُ نَحْوَ ١٤٥ كِيلُومِتْرًا عَنْ كُوتْشِينَ.",
-          english: "After three days, we rented a car heading to Munnar, which is about 145 kilometers away from Cochin."
+          english: "After three days, we rented a car heading to Munnar, which is about 145 kilometers away from Cochin.",
+          parts: [
+            { ar: "بَعْدَ أَيَّامٍ ثَلَاثٍ", en: "After three days," },
+            { ar: "اسْتَأْجَرْنَا سَيَّارَةً", en: "we rented a car" },
+            { ar: "مُتَّجِهِينَ إِلَى مُونَّارَ،", en: "heading to Munnar," },
+            { ar: "الَّتِي تَبْعُدُ نَحْوَ ١٤٥ كِيلُومِتْرًا", en: "which is about 145 kilometers away" },
+            { ar: "عَنْ كُوتْشِينَ.", en: "from Cochin." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -57,7 +64,13 @@ export const unit6 = {
         {
           type: "sentence",
           arabic: "كَانَ الطَّرِيقُ كَلَوْحَةٍ خَضْرَاءَ مُتَّصِلَةٍ مَا بَيْنَ غَابَاتٍ كَثِيفَةٍ وَجِبَالٍ مَكْسُوَّةٍ بِأَشْجَارِ الشَّايِ.",
-          english: "The road was like a continuous green painting between dense forests and mountains covered with tea trees."
+          english: "The road was like a continuous green painting between dense forests and mountains covered with tea trees.",
+          parts: [
+            { ar: "كَانَ الطَّرِيقُ", en: "The road was" },
+            { ar: "كَلَوْحَةٍ خَضْرَاءَ مُتَّصِلَةٍ", en: "like a continuous green painting" },
+            { ar: "مَا بَيْنَ غَابَاتٍ كَثِيفَةٍ", en: "between dense forests" },
+            { ar: "وَجِبَالٍ مَكْسُوَّةٍ بِأَشْجَارِ الشَّايِ.", en: "and mountains covered with tea trees." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -107,13 +120,18 @@ export const unit6 = {
         {
           type: "sentence",
           arabic: "وَشَلَّالَاتٍ تَتَسَابَقُ فِي الانْحِدَارِ مِنْ أَعَالِي الْجِبَالِ كَأَنَّهَا تَتَفَاخَرُ بِجَمَالِهَا.",
-          english: "And waterfalls racing in descent from the mountain peaks as if they were boasting of their beauty."
+          english: "And waterfalls racing in descent from the mountain peaks as if they were boasting of their beauty.",
+          parts: [
+            { ar: "وَشَلَّالَاتٍ تَتَسَابَقُ", en: "And waterfalls racing" },
+            { ar: "فِي الانْحِدَارِ مِنْ أَعَالِي الْجِبَالِ", en: "in descent from the mountain peaks" },
+            { ar: "كَأَنَّهَا تَتَفَاخَرُ بِجَمَالِهَا.", en: "as if they were boasting of their beauty." }
+          ]
         },
         {
           "type": "vocabulary",
           "word": "تَتَسَابَقُ",
           "transliteration": "Tatasabaqu",
-          "translation": "Racing / Competing",
+          translation: "Racing / Competing",
           "example": {
             "ar": "تَتَسَابَقُ السَّيَّارَاتُ فِي الطَّرِيقِ",
             "en": "The cars are racing on the road"
@@ -133,7 +151,7 @@ export const unit6 = {
           "type": "vocabulary",
           "word": "تَتَفَاخَرُ",
           "transliteration": "Tatafakharu",
-          "translation": "Boasting / Proud",
+          translation: "Boasting / Proud",
           "example": {
             "ar": "تَتَفَاخَرُ الْبِنْتُ بِنَجَاحِهَا",
             "en": "The girl is proud of her success"
@@ -148,7 +166,12 @@ export const unit6 = {
         {
           type: "sentence",
           arabic: "وَكُلَّمَا صَعِدْنَا أَكْثَرَ، ازْدَادَ الْجَوُّ بُرُودَةً وَالْهَوَاءُ نَقَاءً.",
-          english: "And the more we climbed, the colder the weather became and the purer the air."
+          english: "And the more we climbed, the colder the weather became and the purer the air.",
+          parts: [
+            { ar: "وَكُلَّمَا صَعِدْنَا أَكْثَرَ،", en: "And the more we climbed," },
+            { ar: "ازْدَادَ الْجَوُّ بُرُودَةً", en: "the colder the weather became" },
+            { ar: "وَالْهَوَاءُ نَقَاءً.", en: "and the purer the air." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -164,7 +187,7 @@ export const unit6 = {
           "type": "vocabulary",
           "word": "ازْدَادَ",
           "transliteration": "Izdada",
-          "translation": "Increased",
+          translation: "Increased",
           "example": {
             "ar": "ازْدَادَ عَدَدُ السُّكَّانِ",
             "en": "The population increased"

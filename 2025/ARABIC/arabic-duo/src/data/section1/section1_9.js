@@ -9,7 +9,14 @@ export const unit9 = {
         {
           type: "sentence",
           arabic: "قُمْنَا بِزِيَارَةِ الْمُنْتَزَهِ الْوَطَنِيِّ نَحْوَ ٢٥ دَقِيقَةً، حَيْثُ الْجِبَالُ الْخَضْرَاءُ وَالْحَيَوَانَاتُ الْبَرِّيَّةُ وَالْمَاعِزُ الْجَبَلِيُّ الْمُخَطَّطُ.",
-          english: "We visited the National Park for about 25 minutes, where there are green mountains, wild animals, and the striped mountain goat."
+          english: "We visited the National Park for about 25 minutes, where there are green mountains, wild animals, and the striped mountain goat.",
+          parts: [
+            { ar: "قُمْنَا بِزِيَارَةِ الْمُنْتَزَهِ الْوَطَنِيِّ", en: "We visited the National Park" },
+            { ar: "نَحْوَ ٢٥ دَقِيقَةً،", en: "for about 25 minutes," },
+            { ar: "حَيْثُ الْجِبَالُ الْخَضْرَاءُ", en: "where there are green mountains," },
+            { ar: "وَالْحَيَوَانَاتُ الْبَرِّيَّةُ", en: "and wild animals," },
+            { ar: "وَالْمَاعِزُ الْجَبَلِيُّ الْمُخَطَّطُ.", en: "and the striped mountain goat." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -59,7 +66,13 @@ export const unit9 = {
         {
           type: "sentence",
           arabic: "الْجَوُّ هُنَاكَ بَارِدٌ مُنْعِشٌ، وَالْغُيُومُ تُلَامِسُ قِمَمَ الْجِبَالِ، وَالنَّدَى يُرَطِّبُ الْأَرْضَ كَالْجَوَاهِرِ الْمُتَنَاثِرَةِ.",
-          english: "The weather there is cold and refreshing, the clouds touch the mountain peaks, and the dew moistens the ground like scattered jewels."
+          english: "The weather there is cold and refreshing, the clouds touch the mountain peaks, and the dew moistens the ground like scattered jewels.",
+          parts: [
+            { ar: "الْجَوُّ هُنَاكَ بَارِدٌ مُنْعِشٌ،", en: "The weather there is cold and refreshing," },
+            { ar: "وَالْغُيُومُ تُلَامِسُ قِمَمَ الْجِبَالِ،", en: "the clouds touch the mountain peaks," },
+            { ar: "وَالنَّدَى يُرَطِّبُ الْأَرْضَ", en: "and the dew moistens the ground" },
+            { ar: "كَالْجَوَاهِرِ الْمُتَنَاثِرَةِ.", en: "like scattered jewels." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -117,7 +130,15 @@ export const unit9 = {
         {
           type: "sentence",
           arabic: "فِي تِلْكَ اللَّحَظَاتِ تَذَكَّرْتُ وَصْفَ الشَّاعِرِ الْأَنْدَلُسِيِّ ابْنِ سَعْدٍ الْأَشْبِيلِيِّ عَنْ وَطَنِهِ الْأَنْدَلُسِ: ”الْأَرْضُ قَدْ لَبِسَتْ رِدَاءً أَخْضَرًا وَالطَّلُّ يَنْثُرُ فِي رُبَاهَا جَوْهَرًا“",
-          english: "In those moments, I remembered the description of the Andalusian poet Ibn Sa'd al-Ishbili about his homeland, Andalusia: 'The earth has donned a green robe, and the dew scatters jewels upon its hills.'"
+          english: "In those moments, I remembered the description of the Andalusian poet Ibn Sa'd al-Ishbili about his homeland, Andalusia: 'The earth has donned a green robe, and the dew scatters jewels upon its hills.'",
+          parts: [
+            { ar: "فِي تِلْكَ اللَّحَظَاتِ تَذَكَّرْتُ", en: "In those moments, I remembered" },
+            { ar: "وَصْفَ الشَّاعِرِ الْأَنْدَلُسِيِّ", en: "the description of the Andalusian poet" },
+            { ar: "ابْنِ سَعْدٍ الْأَشْبِيلِيِّ", en: "Ibn Sa'd al-Ishbili" },
+            { ar: "عَنْ وَطَنِهِ الْأَنْدَلُسِ:", en: "about his homeland, Andalusia:" },
+            { ar: "”الْأَرْضُ قَدْ لَبِسَتْ رِدَاءً أَخْضَرًا", en: "'The earth has donned a green robe," },
+            { ar: "وَالطَّلُّ يَنْثُرُ فِي رُبَاهَا جَوْهَرًا“", en: "and the dew scatters jewels upon its hills.'" }
+          ]
         },
         {
           "type": "vocabulary",

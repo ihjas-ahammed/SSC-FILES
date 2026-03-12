@@ -9,7 +9,14 @@ export const unit5 = {
         {
           type: "sentence",
           arabic: "قَضَيْنَا فِي كُوتْشِين ثَلَاثَةَ أَيَّامٍ جَمِيلَةٍ، اكْتَشَفْنَا خِلَالَهَا تِلْكَ الْمَدِينَةَ الَّتِي تَمْتَازُ بِالْحَيَوِيَّةِ وَالنَّظَافَةِ وَالتَّنْظِيمِ.",
-          english: "We spent three beautiful days in Cochin, during which we discovered that city which is characterized by vitality, cleanliness, and organization."
+          english: "We spent three beautiful days in Cochin, during which we discovered that city which is characterized by vitality, cleanliness, and organization.",
+          parts: [
+            { ar: "قَضَيْنَا فِي كُوتْشِين", en: "We spent in Cochin" },
+            { ar: "ثَلَاثَةَ أَيَّامٍ جَمِيلَةٍ،", en: "three beautiful days," },
+            { ar: "اكْتَشَفْنَا خِلَالَهَا تِلْكَ الْمَدِينَةَ", en: "during which we discovered that city" },
+            { ar: "الَّتِي تَمْتَازُ", en: "which is characterized by" },
+            { ar: "بِالْحَيَوِيَّةِ وَالنَّظَافَةِ وَالتَّنْظِيمِ.", en: "vitality, cleanliness, and organization." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -69,7 +76,14 @@ export const unit5 = {
         {
           type: "sentence",
           arabic: "لَاحَظْنَا فِيهَا طِيبَةَ أَهْلِهَا وَبَسَاطَتَهُمْ، فَلَمْ نَجِدْ فِي وُجُوهِهِمْ إِلَّا الْبَشَاشَةَ، وَلَا فِي طُرُقِهِمْ إِلَّا النِّظَامَ.",
-          english: "We noticed in it the kindness of its people and their simplicity; we found nothing on their faces but cheerfulness, and nothing in their streets but order."
+          english: "We noticed in it the kindness of its people and their simplicity; we found nothing on their faces but cheerfulness, and nothing in their streets but order.",
+          parts: [
+            { ar: "لَاحَظْنَا فِيهَا طِيبَةَ أَهْلِهَا", en: "We noticed in it the kindness of its people" },
+            { ar: "وَبَسَاطَتَهُمْ،", en: "and their simplicity;" },
+            { ar: "فَلَمْ نَجِدْ فِي وُجُوهِهِمْ", en: "we found nothing on their faces" },
+            { ar: "إِلَّا الْبَشَاشَةَ،", en: "but cheerfulness," },
+            { ar: "وَلَا فِي طُرُقِهِمْ إِلَّا النِّظَامَ.", en: "and nothing in their streets but order." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -117,7 +131,12 @@ export const unit5 = {
         {
           type: "sentence",
           arabic: "انْتَشَرَ فِيهَا الْمَسَاجِدُ الْجَمِيلَةُ تَشْعُرُ بِرُوحِ الْإِسْلَامِ وَإِلْفَةِ الْإِيمَانِ.",
-          english: "Beautiful mosques are spread throughout it; you feel the spirit of Islam and the intimacy of faith."
+          english: "Beautiful mosques are spread throughout it; you feel the spirit of Islam and the intimacy of faith.",
+          parts: [
+            { ar: "انْتَشَرَ فِيهَا الْمَسَاجِدُ الْجَمِيلَةُ", en: "Beautiful mosques are spread throughout it;" },
+            { ar: "تَشْعُرُ بِرُوحِ الْإِسْلَامِ", en: "you feel the spirit of Islam" },
+            { ar: "وَإِلْفَةِ الْإِيمَانِ.", en: "and the intimacy of faith." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -158,7 +177,15 @@ export const unit5 = {
         {
           type: "sentence",
           arabic: "كَمَا تَشْتَهِرُ الْمَدِينَةُ بِالْمَسَاجِ الْعِلَاجِيِّ بِالزُّيُوتِ الطَّبِيعِيَّةِ الْمُسْتَخْلَصَةِ مِنَ الْأَعْشَابِ، الْمَسَاجُ هُوَ تَقْلِيدٌ قَدِيمٌ يَعْكِسُ ارْتِبَاطَ الْهَنُودِ بِطَبِيعَتِهِمْ وَعُلُومِهِمُ الطِّبِّيَّةِ الْعَتِيقَةِ النَّاجِحَةِ.",
-          english: "The city is also famous for therapeutic massage with natural oils extracted from herbs; massage is an ancient tradition reflecting the Indians' connection to their nature and their successful ancient medical sciences."
+          english: "The city is also famous for therapeutic massage with natural oils extracted from herbs; massage is an ancient tradition reflecting the Indians' connection to their nature and their successful ancient medical sciences.",
+          parts: [
+            { ar: "كَمَا تَشْتَهِرُ الْمَدِينَةُ", en: "The city is also famous for" },
+            { ar: "بِالْمَسَاجِ الْعِلَاجِيِّ", en: "therapeutic massage" },
+            { ar: "بِالزُّيُوتِ الطَّبِيعِيَّةِ الْمُسْتَخْلَصَةِ مِنَ الْأَعْشَابِ،", en: "with natural oils extracted from herbs;" },
+            { ar: "الْمَسَاجُ هُوَ تَقْلِيدٌ قَدِيمٌ", en: "massage is an ancient tradition" },
+            { ar: "يَعْكِسُ ارْتِبَاطَ الْهَنُودِ بِطَبِيعَتِهِمْ", en: "reflecting the Indians' connection to their nature" },
+            { ar: "وَعُلُومِهِمُ الطِّبِّيَّةِ الْعَتِيقَةِ النَّاجِحَةِ.", en: "and their successful ancient medical sciences." }
+          ]
         },
         {
           "type": "vocabulary",

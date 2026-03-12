@@ -9,7 +9,14 @@ export const unit2 = {
         {
           type: "sentence",
           arabic: "سَافَرْنَا مِنَ الْأُرْدُنِ عَبْرَ الْخُطُوطِ السِّيرِيلَانْكِيَّةِ، وَبَعْدَ يَوْمٍ وَاحِدٍ مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ، حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا.",
-          english: "We traveled from Jordan via Sri Lankan Airlines, and after one day of completing visa procedures, our flight landed in the state of Kerala."
+          english: "We traveled from Jordan via Sri Lankan Airlines, and after one day of completing visa procedures, our flight landed in the state of Kerala.",
+          parts: [
+            { ar: "سَافَرْنَا مِنَ الْأُرْدُنِ", en: "We traveled from Jordan" },
+            { ar: "عَبْرَ الْخُطُوطِ السِّيرِيلَانْكِيَّةِ،", en: "via Sri Lankan Airlines," },
+            { ar: "وَبَعْدَ يَوْمٍ وَاحِدٍ", en: "and after one day" },
+            { ar: "مِنْ إِنْهَاءِ إِجْرَاءَاتِ التَّأْشِيرَةِ،", en: "of completing visa procedures," },
+            { ar: "حَطَّتْ رِحْلَتُنَا فِي وِلَايَةِ كِيرَلَا.", en: "our flight landed in the state of Kerala." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -69,7 +76,12 @@ export const unit2 = {
         {
           type: "sentence",
           arabic: "سَمَّاهَا تُجَّارُ الْعَرَبِ الْمُسْلِمُونَ الْأَوَائِلُ \"خَيْرَ اللهِ\".",
-          english: "The early Arab Muslim merchants called it \"Khayr Allah\" (God's Bounty/Own Country)."
+          english: "The early Arab Muslim merchants called it \"Khayr Allah\" (God's Bounty/Own Country).",
+          parts: [
+            { ar: "سَمَّاهَا", en: "Called it" },
+            { ar: "تُجَّارُ الْعَرَبِ الْمُسْلِمُونَ الْأَوَائِلُ", en: "the early Arab Muslim merchants" },
+            { ar: "\"خَيْرَ اللهِ\".", en: "\"Khayr Allah\" (God's Bounty)." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -117,7 +129,12 @@ export const unit2 = {
         {
           type: "sentence",
           arabic: "وَإِذَا بَحَثْنَا عَرَفْنَا هَذَا الاِسْمَ صَادِقًا عَلَى مُسَمَّاهُ.",
-          english: "And if we searched, we knew that this name is true to what it names."
+          english: "And if we searched, we knew that this name is true to what it names.",
+          parts: [
+            { ar: "وَإِذَا بَحَثْنَا", en: "And if we searched," },
+            { ar: "عَرَفْنَا هَذَا الاِسْمَ صَادِقًا", en: "we knew that this name is true" },
+            { ar: "عَلَى مُسَمَّاهُ.", en: "to what it names." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -158,7 +175,16 @@ export const unit2 = {
         {
           type: "sentence",
           arabic: "حَيْثُمَا ذَهَبْنَا وَجَدْنَا الْمَطَرَ الْغَزِيرَ وَالْمِيَاهَ الْجَارِيَةَ وَالطَّبِيعَةَ السَّاحِرَةَ وَالْخُضْرَةَ الْمَلِيئَةَ فِي جَمِيعِ أَرَاضِيهَا وَلَا سِيَّمَا فِي الْمِنْطَقَةِ الْجَنُوبِيَّةِ.",
-          english: "Wherever we went, we found heavy rain, running water, enchanting nature, and full greenery in all its lands, especially in the southern region."
+          english: "Wherever we went, we found heavy rain, running water, enchanting nature, and full greenery in all its lands, especially in the southern region.",
+          parts: [
+            { ar: "حَيْثُمَا ذَهَبْنَا", en: "Wherever we went," },
+            { ar: "وَجَدْنَا الْمَطَرَ الْغَزِيرَ", en: "we found heavy rain," },
+            { ar: "وَالْمِيَاهَ الْجَارِيَةَ", en: "running water," },
+            { ar: "وَالطَّبِيعَةَ السَّاحِرَةَ", en: "enchanting nature," },
+            { ar: "وَالْخُضْرَةَ الْمَلِيئَةَ", en: "and full greenery" },
+            { ar: "فِي جَمِيعِ أَرَاضِيهَا", en: "in all its lands," },
+            { ar: "وَلَا سِيَّمَا فِي الْمِنْطَقَةِ الْجَنُوبِيَّةِ.", en: "especially in the southern region." }
+          ]
         },
         {
           "type": "vocabulary",

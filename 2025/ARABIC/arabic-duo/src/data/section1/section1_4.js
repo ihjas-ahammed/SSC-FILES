@@ -9,7 +9,15 @@ export const unit4 = {
         {
           type: "sentence",
           arabic: "بُنِيَ بِرِحْلَةِ تَسْلِيَةٍ فِي الْحَيَاةِ.. نَزَلْنَا فِي فُنْدُقِ ”هَارْبَر فِيو“ الْمُطِلِّ عَلَى الشَّارِعِ الْحَيَوِيِّ ”مَهَاتِمَا غَانْدِي“ (أَمْ. جِي)، الْمَلِيءِ بِالْمَحَالِّ وَالْمَطَاعِمِ وَالْأَسْوَاقِ التِّجَارِيَّةِ الْكَبِيرَةِ.",
-          english: "Built on a trip of leisure in life... we stayed at the 'Harbor View' Hotel, overlooking the vibrant 'Mahatma Gandhi' (MG) Street, which is full of shops, restaurants, and large commercial markets."
+          english: "Built on a trip of leisure in life... we stayed at the 'Harbor View' Hotel, overlooking the vibrant 'Mahatma Gandhi' (MG) Street, which is full of shops, restaurants, and large commercial markets.",
+          parts: [
+            { ar: "بُنِيَ بِرِحْلَةِ تَسْلِيَةٍ فِي الْحَيَاةِ..", en: "Built on a trip of leisure in life..." },
+            { ar: "نَزَلْنَا فِي فُنْدُقِ ”هَارْبَر فِيو“", en: "we stayed at the 'Harbor View' Hotel," },
+            { ar: "الْمُطِلِّ عَلَى الشَّارِعِ الْحَيَوِيِّ", en: "overlooking the vibrant street" },
+            { ar: "”مَهَاتِمَا غَانْدِي“ (أَمْ. جِي)،", en: "'Mahatma Gandhi' (MG)," },
+            { ar: "الْمَلِيءِ بِالْمَحَالِّ وَالْمَطَاعِمِ", en: "which is full of shops, restaurants," },
+            { ar: "وَالْأَسْوَاقِ التِّجَارِيَّةِ الْكَبِيرَةِ.", en: "and large commercial markets." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -69,7 +77,13 @@ export const unit4 = {
         {
           type: "sentence",
           arabic: "اسْتَقْبَلَتْنَا مُوَظَّفَةُ اسْتِقْبَالِ الْفُنْدُقِ بِابْتِسَامَةٍ دَافِئَةٍ وَتَرْحِيبٍ كَرِيمٍ.",
-          english: "The hotel receptionist greeted us with a warm smile and a gracious welcome."
+          english: "The hotel receptionist greeted us with a warm smile and a gracious welcome.",
+          parts: [
+            { ar: "اسْتَقْبَلَتْنَا", en: "Greeted us" },
+            { ar: "مُوَظَّفَةُ اسْتِقْبَالِ الْفُنْدُقِ", en: "the hotel receptionist" },
+            { ar: "بِابْتِسَامَةٍ دَافِئَةٍ", en: "with a warm smile" },
+            { ar: "وَتَرْحِيبٍ كَرِيمٍ.", en: "and a gracious welcome." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -117,7 +131,14 @@ export const unit4 = {
         {
           type: "sentence",
           arabic: "وَجَدْنَا الْغُرَفَ كُلَّهَا نَظِيفَةً وَمُرَتَّبَةً، فَشَعَرْنَا أَنَّنَا فِي مَسْكَنٍ رَائِعٍ وَضِيَافَةٍ حَارَّةٍ بَيْنَ أَصْدِقَاءَ لَا غُرَبَاءَ.",
-          english: "We found all the rooms clean and tidy, so we felt that we were in a wonderful home and warm hospitality among friends, not strangers."
+          english: "We found all the rooms clean and tidy, so we felt that we were in a wonderful home and warm hospitality among friends, not strangers.",
+          parts: [
+            { ar: "وَجَدْنَا الْغُرَفَ كُلَّهَا", en: "We found all the rooms" },
+            { ar: "نَظِيفَةً وَمُرَتَّبَةً،", en: "clean and tidy," },
+            { ar: "فَشَعَرْنَا أَنَّنَا فِي مَسْكَنٍ رَائِعٍ", en: "so we felt that we were in a wonderful home" },
+            { ar: "وَضِيَافَةٍ حَارَّةٍ", en: "and warm hospitality" },
+            { ar: "بَيْنَ أَصْدِقَاءَ لَا غُرَبَاءَ.", en: "among friends, not strangers." }
+          ]
         },
         {
           "type": "vocabulary",

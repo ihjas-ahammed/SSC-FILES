@@ -9,7 +9,14 @@ export const unit12 = {
         {
           type: "sentence",
           arabic: "كَانَتْ رِحْلَتُنَا تَجْرِبَةً فَرِيدَةً، اجْتَمَعْنَا بَيْنَ جِبَالِ الطَّبِيعَةِ وَدِفْءِ النَّاسِ وَرُوحِ الْإِيمَانِ، وَالْكَرَامَةِ الصَّادِقَةِ.",
-          english: "Our trip was a unique experience; we gathered between the mountains of nature, the warmth of the people, the spirit of faith, and sincere dignity."
+          english: "Our trip was a unique experience; we gathered between the mountains of nature, the warmth of the people, the spirit of faith, and sincere dignity.",
+          parts: [
+            { ar: "كَانَتْ رِحْلَتُنَا تَجْرِبَةً فَرِيدَةً،", en: "Our trip was a unique experience;" },
+            { ar: "اجْتَمَعْنَا بَيْنَ جِبَالِ الطَّبِيعَةِ", en: "we gathered between the mountains of nature," },
+            { ar: "وَدِفْءِ النَّاسِ", en: "the warmth of the people," },
+            { ar: "وَرُوحِ الْإِيمَانِ،", en: "the spirit of faith," },
+            { ar: "وَالْكَرَامَةِ الصَّادِقَةِ.", en: "and sincere dignity." }
+          ]
         },
         {
           "type": "vocabulary",
@@ -69,7 +76,14 @@ export const unit12 = {
         {
           type: "sentence",
           arabic: "فَنَعُودُ مِنْهَا مُمْتَعِينَ، وَأَكْثَرَ حُبًّا لِلْحَيَاةِ وَأَكْبَرَ يَقِينًا بِأَنَّ فِي الْأَرْضِ جَنَّاتٍ مَا كُنَّا اكْتَشَفْنَا حَتَّى الْيَوْمِ.",
-          english: "So we return from it delighted, with more love for life and greater certainty that there are paradises on earth that we had not discovered until today."
+          english: "So we return from it delighted, with more love for life and greater certainty that there are paradises on earth that we had not discovered until today.",
+          parts: [
+            { ar: "فَنَعُودُ مِنْهَا مُمْتَعِينَ،", en: "So we return from it delighted," },
+            { ar: "وَأَكْثَرَ حُبًّا لِلْحَيَاةِ", en: "with more love for life" },
+            { ar: "وَأَكْبَرَ يَقِينًا", en: "and greater certainty" },
+            { ar: "بِأَنَّ فِي الْأَرْضِ جَنَّاتٍ", en: "that there are paradises on earth" },
+            { ar: "مَا كُنَّا اكْتَشَفْنَا حَتَّى الْيَوْمِ.", en: "that we had not discovered until today." }
+          ]
         },
         {
           "type": "vocabulary",
