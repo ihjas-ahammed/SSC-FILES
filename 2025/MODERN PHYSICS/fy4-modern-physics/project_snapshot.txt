@@ -1,562 +1,654 @@
-```bash
-echo "No new packages or file path changes needed."
-```
-
---- START OF FILE src/data/modern_units/unit_2_4_1_compton_effect.ts ---
+--- START OF FILE src/data/modern_units/unit_4_3_1_franck_hertz.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_2_4_1_COMPTON_EFFECT: Unit = {
-  id: "unit-2-4-1",
-  title: "The Compton Effect",
-  description: "Exp: X-ray photon scattering · Der: Shifts · Math Ex 3.8, Ex 3.9",
+export const UNIT_4_3_1_FRANCK_HERTZ: Unit = {
+  id: "unit-4-3-1",
+  title: "The Franck-Hertz Experiment",
+  description: "Exp: Franck-Hertz apparatus · T: Energy quantization confirmed · Ex: Franck-Hertz levels",
   color: "duo-blue",
   lessons: [
-    // ── 1. Activation ─────────────────────────────────────────────────────
+    // ── LESSON 1: Priming ─────────────────────────────────────────────────────────
     {
-      id: "les-2-4-1-act",
-      title: "Priming: Light Collisions",
-      description: "Activate prior thinking",
+      id: "les-4-3-1-act",
+      title: "Warm-Up: Electron Collisions",
+      description: "Activate prior knowledge",
       icon: "Brain",
       slides: [
         {
-          id: "omp-qq1",
+          id: "fh-prime-1",
           type: "quiz",
-          title: "Warm-Up Check",
-          content: "If a billiard ball hits a stationary cue ball, it transfers some of its energy. If we treat light as a rigid particle (photon) making a clean elastic collision with an electron, what must happen to the photon's energy?",
+          title: "Priming Question",
+          content: "In classical physics, an electron colliding with a gas atom can transfer any fraction of its kinetic energy to the atom. If Bohr's model of discrete energy levels is correct, what should happen when a slow electron (with very little kinetic energy) collides with an atom?",
           options: [
-            { id: "A", text: "It must decrease, passing kinetic energy to the electron.", isCorrect: true, explanation: "Conservation of energy! Since the electron moves, the photon must lose energy." },
-            { id: "B", text: "It remains exactly the same; it's a wave bouncing off.", isCorrect: false, explanation: "If it were a perfect wave, its speed and frequency might remain unshifted in standard reflections, but as a Particle, energy must be shed." }
+            { id: "A", text: "The electron will give a small continuous amount of energy to the atom.", isCorrect: false, explanation: "If energy levels are discrete, the atom cannot accept energy that is less than the gap to its first excited state." },
+            { id: "B", text: "The collision must be perfectly elastic; the electron transfers no internal energy to the atom.", isCorrect: true, explanation: "Correct! If the electron doesn't have enough energy to boost the atom to its exact next energy level, the atom cannot absorb any internal energy. The electron just bounces off." }
           ]
         },
         {
-          id: "omp-qq2",
+          id: "fh-prime-2",
           type: "quiz",
-          title: "From Energy to Wavelength",
-          content: "If that photon loses energy (but stays a photon), how will it look afterwards?",
+          title: "Excitation Thresholds",
+          content: "What happens the moment the colliding electron's kinetic energy perfectly matches or just exceeds the gap to the atom's first excited state?",
           options: [
-            { id: "A", text: "It will move slower than $c$.", isCorrect: false, explanation: "Photons MUST always travel at $c$. $v$ NEVER drops." },
-            { id: "B", text: "Its wavelength will INCREASE (it gets redder).", isCorrect: true, explanation: "Since $E = hf = hc/\\lambda$, if $E$ decreases, $\\lambda$ MUST increase." }
+            { id: "A", text: "The electron can undergo an inelastic collision, losing exactly that specific amount of energy to the atom.", isCorrect: true, explanation: "Yes! The atom absorbs the exact quantum of energy needed, leaving the scattered electron with whatever kinetic energy remains." },
+            { id: "B", text: "The electron is completely absorbed by the nucleus.", isCorrect: false, explanation: "The electron is scattered, not absorbed." }
           ]
         }
       ]
     },
 
-    // ── 2. Compton Experiment & Setup ─────────────────────────────────────
+    // ── LESSON 2: Exp: Franck-Hertz Apparatus ─────────────────────────────────────
     {
-      id: "les-2-4-1-comp-exst",
-      title: "Compton's Experiment",
-      description: "Direct observation of X-Ray Scattering",
+      id: "les-4-3-1-1",
+      title: "Exp: The Franck-Hertz Setup",
+      description: "Exp: Direct evidence of discrete atomic states",
       icon: "Activity",
       slides: [
         {
-          id: "c-exp-bg",
+          id: "fh-exp-theory",
           type: "theory",
-          title: "Compton Scattering Setup (1923)",
-          content: "Arthur Compton fired a beam of X-rays having a precise wavelength $\\lambda$ at a target of carbon. Carbon was chosen because its outer electrons are so loosely bound they effectively behave as *free, stationary particles* against the intense energy of an incoming X-ray.\n\nClassically, oscillating electromagnetic waves should cause electrons to wiggle, radiating outgoing waves of the *identical* frequency and $\\lambda$. \n\nHowever, tracking the scattered rays via moving detectors revealed that as the deflection angle $\\theta$ grew steeper, the wavelength of the reflected X-ray fundamentally *Stretched*!"
+          title: "The Franck-Hertz Experiment (1914)",
+          content: "James Franck and Gustav Hertz designed an experiment to bombard atoms with electrons and measure the energy lost in the collisions.\n\n**The Setup:**\n1. A heated cathode emits electrons.\n2. An adjustable voltage $V$ accelerates these electrons toward a wire grid.\n3. Beyond the grid is a collector plate, kept at a slightly lower (retarding) voltage $V_0$.\n4. The tube is filled with a low-pressure gas (originally mercury vapor).\n\nIf electrons pass through the gas without losing energy, they easily overcome the small retarding voltage and reach the plate, creating a measurable current. But if they lose significant energy in a collision, they won't have enough kinetic energy left to reach the plate, and the current will drop!"
         },
         {
-           id: "c-visk1",
-           type: "interactive_canvas",
-           title: "Particle Billiards Geometry",
-           content: "We picture light as a single particle (photon) executing a purely mechanical collision with a localized electron (mass $m_e$).",
-           interactiveCanvasId: "compton-scatter"
+          id: "fh-exp-canvas",
+          type: "interactive_canvas",
+          title: "Franck-Hertz Graph",
+          content: "Notice the periodic dips in current as the accelerating voltage increases.",
+          interactiveCanvasId: "franck-hertz-graph"
         },
         {
-          id: "cq-2s",
+          id: "fh-exp-q1",
           type: "quiz",
           title: "Observation",
-          content: "According to the observed results shown in Figure 3.20 of your textbook, what do the peaks look like at different scattering angles $\\theta$?",
+          content: "When Franck and Hertz steadily increased the accelerating voltage $V$ in the mercury tube, what happened to the current reading?",
           options: [
-            { id: "A", text: "There is one peak that matches the initial wavelength everywhere.", isCorrect: false, explanation: "That would happen if the classical wave theory were right." },
-            { id: "B", text: "Two peaks occur: a primary unshifted one, and a newly shifted peak trailing to longer $\\lambda'$ which drifts farther at greater angles.", isCorrect: true, explanation: "Correct! The stationary 'unshifted' peak occurs from scattering off whole carbon atoms rigidly resisting momentum, while the separated peak originates from free electrons." }
+            { id: "A", text: "It increased steadily without interruption.", isCorrect: false, explanation: "That would happen if the tube was a pure vacuum, but the gas atoms interfere." },
+            { id: "B", text: "It rose, but dropped sharply whenever $V$ reached multiples of 4.9 Volts.", isCorrect: true, explanation: "Exactly. The current plummeted at 4.9 V, 9.8 V, 14.7 V, etc. This periodic dropping is the hallmark of the Franck-Hertz experiment." }
           ]
         },
         {
-          id: "cq-impl",
+          id: "fh-exp-q2",
           type: "quiz",
           title: "Implication",
-          content: "What does the existence of the shifted wavelength peak imply about the nature of light?",
+          content: "Why did the current drop sharply at $V = 4.9$ V?",
           options: [
-            { id: "A", text: "Light interacts with electrons exactly like a particle undergoing a momentum-conserving collision.", isCorrect: true, explanation: "Yes! The shift perfectly matches the kinematics of a particle collision." },
-            { id: "B", text: "Light waves are stretched by the gravity of the nucleus.", isCorrect: false, explanation: "Gravity is far too weak here. The effect is due to momentum transfer in a collision." }
+            { id: "A", text: "Because 4.9 eV is exactly the energy gap between the ground state and the first excited state of mercury.", isCorrect: true, explanation: "When electrons reach 4.9 eV of kinetic energy, they finally have enough energy to excite a mercury atom. They lose all 4.9 eV in the collision, leaving them with ~0 eV, which isn't enough to reach the collector plate!" },
+            { id: "B", text: "Because 4.9 V ionized the mercury gas.", isCorrect: false, explanation: "Ionization requires much more energy (10.4 eV for Hg). This was an excitation to a bound state." }
+          ]
+        },
+        {
+          id: "fh-num",
+          type: "numerical",
+          title: "Multiple Collisions",
+          content: "If the current drops at 4.9 V, 9.8 V, and 14.7 V, what is happening at 14.7 V?",
+          options: [
+            { id: "A", text: "The electron excites three different mercury atoms in succession.", isCorrect: true, explanation: "Yes! At 14.7 eV, an electron can excite one atom (losing 4.9 eV), accelerate again, excite a second atom, accelerate, and excite a third, losing all its energy before the plate." }
           ]
         }
       ]
     },
 
-    // ── 3. Theory: Compton Shift Formula ──────────────────────────────────
+    // ── LESSON 3: T: Energy Quantization Confirmed ────────────────────────────────
     {
-      id: "les-2-4-1-cmpeq",
-      title: "The Compton Equation",
-      description: "Equations Mapping Quantum Collision Geometry",
-      icon: "FunctionSquare",
+      id: "les-4-3-1-2",
+      title: "Energy Quantization Confirmed",
+      description: "T: Linking the collisions to spectral emission",
+      icon: "Target",
       slides: [
         {
-           id: "ceqz-11s",
-           type: "theory",
-           title: "Calculating the Wavelength penalty",
-           content: "Applying strict Relativistic Dynamic conservation (Total relativistic $E$ and localized $p$) yields one of physics' most elegant and powerful derivations.\n\n**Equation 3.47:** \n$$ \\lambda' - \\lambda = \\frac{h}{m_e c} (1 - \\cos \\theta) $$\n\nWhere:\n- $\\lambda' =$ new, longer wavelength.\n- $\\lambda =$ initial incident wave.\n- $\\theta =$ Angle between incident vector and scattered photon output flight.\n- Factor $\\frac{h}{m_e c}$ is defined as the **Compton Wavelength of the electron**, structurally valued at $\\sim 0.00243 \\text{ nm}$."
+          id: "fh-quant-theory",
+          type: "theory",
+          title: "Independent Confirmation of Bohr",
+          content: "The Franck-Hertz experiment was incredible because it provided direct evidence for atomic energy levels entirely independent of analyzing light spectra.\n\nHowever, it perfectly aligned with spectroscopy!\nWhen a mercury atom is excited by a 4.9 eV electron, it enters its first excited state. Shortly after, the atom drops back to the ground state, emitting a photon of energy $E = 4.9$ eV.\n\nUsing $\\lambda = \\frac{hc}{E}$, an energy of 4.9 eV corresponds to a wavelength of $254$ nm, which is a strong ultraviolet line in the mercury emission spectrum!"
         },
         {
-            id: "chk-eq1xa",
-            type: "quiz",
-             title : "Conceptual Boundary: Maximum Yield",
-             content : "From the expression $\\lambda' - \\lambda = \\frac{h}{m_ec}(1 - \\cos\\theta)$, at what viewing angle $\\theta$ will you record the largest shift in wavelength (meaning maximum energy dumped into the electron)?",
-             options: [
-                 { id : "X", text : "Straight forward 0 degrees", isCorrect: false, explanation: "$(1 - \\cos(0)) = 1 - 1 = 0$. No energy transfers!"},
-                 { id : "Y", text : "180 degrees (direct backscatter)", isCorrect: true , explanation : "$(1 - \\cos(180)) = 1 - (-1) = 2$. It peaks out yielding $2 \\times$ Compton wavelength! Total direct head-on collision."}
-             ]
+          id: "fh-quant-q1",
+          type: "quiz",
+          title: "Conceptual Check 1",
+          content: "If the accelerating voltage is set to 4.0 V, what kind of collisions occur in the tube?",
+          options: [
+            { id: "A", text: "Perfectly elastic collisions.", isCorrect: true, explanation: "At 4.0 eV, the electron doesn't have enough energy to bridge the 4.9 eV gap. It bounces elastically off the massive mercury atoms, losing essentially no energy, and reaches the collector plate." },
+            { id: "B", text: "Inelastic collisions.", isCorrect: false, explanation: "Inelastic collisions only begin when the electron hits 4.9 eV." }
+          ]
         },
         {
-            id: "chk-eq2xa",
-            type: "quiz",
-             title : "Conceptual Boundary: Minimum Yield",
-             content : "If you measure the scattered X-rays at an angle of $\\theta = 0^\\circ$ (straight through), what is the shift in wavelength?",
-             options: [
-                 { id : "X", text : "Zero", isCorrect: true, explanation: "$(1 - \\cos(0^\\circ)) = 1 - 1 = 0$. The photon transfers no energy if it doesn't deflect."},
-                 { id : "Y", text : "The Compton wavelength", isCorrect: false , explanation : "That would occur at 90 degrees."}
-             ]
+          id: "fh-quant-q2",
+          type: "quiz",
+          title: "Visual Evidence",
+          content: "In modern lab versions of this experiment using Neon gas, the excitation energy is 18.7 eV, and the atom emits a 2.1 eV photon (orange light) as it cascades down. If the voltage is cranked up high enough, what will you physically see in the tube?",
+          options: [
+            { id: "A", text: "A single glowing orange line at the collector.", isCorrect: false, explanation: "The emission happens right where the collision occurs, not just at the end." },
+            { id: "B", text: "Distinct glowing bands of orange light between the cathode and grid.", isCorrect: true, explanation: "Yes! As the electrons accelerate, they hit 18.7 eV, collide, and excite the gas. The gas glows orange exactly at that physical location. If you double the voltage, you'll see TWO distinct glowing bands!" }
+          ]
         },
         {
-          id: "cmp-canvas1",
+          id: "fh-quant-canvas",
           type: "interactive_canvas",
-          title: "Visualizing the Shift",
-          content: "Notice how the scattering angle affects the energy of both the photon and the recoiling electron.",
-          interactiveCanvasId: "compton-scatter"
+          title: "Franck-Hertz Graph",
+          content: "The graph is a direct electrical map of the quantum energy states of the atom.",
+          interactiveCanvasId: "franck-hertz-graph"
         },
         {
-          id: "fitb-comp",
+          id: "fh-fitb",
           type: "fill_in_blank",
           title: "Fill in the Blank",
-          content: "The quantity $h/(m_e c)$ is known as the ___ wavelength of the electron.",
-          blankAnswer: "Compton"
+          content: "The Franck-Hertz experiment confirmed the existence of discrete atomic energy levels using ___ collisions rather than by analyzing light.",
+          blankAnswer: "electron"
         }
       ]
     },
 
-    // ── 4. Deriving the Equation ──────────────────────────────────────────
+    // ── LESSON 4: Ex: Franck-Hertz Energy Levels ──────────────────────────────────
     {
-      id: "les-2-4-1-drcqsq",
-      title: "Deriving Compton's Core",
-      description: "Relativistic Kinematics Step by Step",
-      icon: "ListTree",
-      slides: [
-         {
-           id:"dr1",
-           type:"theory",
-           title:"Target: Equation 3.47",
-           content:"**Setting up values:** \nPhoton Initial: $E = pc$ \nPhoton Final: $E' = p'c$ \nElectron Initial: System rest Energy $=  m_e c^2$ \nElectron Final: $E_e$, momentum $p_e$, exit angle $\\phi$. \n\n**Mission:** Combine conservation vectors bridging equations linking to Eq 3.47 via eliminating the unobserved variable $p_e$, $\\phi$, and $E_e$!"
-         },
-         {
-            id: "drs2",
-            type: "proof",
-             title: "Derivation Mapping",
-             content: "Follow Relativistic Energy rules mapping outputs bridging initial and final frameworks:\n\n**Eq 3.42b, 3.42c (Momenta components):**\n$X: \\; p = p_e \\cos\\phi + p' \\cos\\theta$\n$Y: \\; 0 = p_e \\sin\\phi - p' \\sin\\theta$ ",
-             interactiveSteps: [
-                {
-                   prompt : "Our next step is trying to get rid of angle $\\phi$. By isolating the $p_e\\cos\\phi$ and $p_e\\sin\\phi$ terms and summing their squares uniformly! Expand what $(p_e \\cos\\phi)^2 + (p_e \\sin\\phi)^2$ equates to!",
-                   stepText :"It simplifies directly to purely $(p_e)^2$ thanks to Pythagorean identity $\\cos^2\\phi+\\sin^2\\phi = 1$!\n\nTherefore, doing this to the right side constraints factors gives Eq 3.44:\n$$  p_e^2 = p^2 - 2 p p' \\cos \\theta + (p')^2$$",
-                   options : [ 
-                     { id: "a", text: "Proceed, I understand squared addition cancellation trick.", isCorrect : true , explanation : "Excellent. Trigonometry cancellation saves tracking arbitrary flight paths."}
-                   ]
-                },
-                {
-                   prompt: "Because we have $(p_e)^2$, we must link it toward Energy using the triangle invariant Identity equation matching! What is that Relativistic constraint relationship?",
-                    stepText :"**(Eq 2.39): The Triangle Limit!** \n$E_e^2 = (p_e c)^2 + (m_e c^2)^2$, which expands by multiplying our entire squared $p_e$ above entirely universally by $c^2$ to plug it back in cleanly limiting variables completely!",
-                    options : [ 
-                      { id: "b" , text:"$E_{e}^2 = c^2 p_e^2 + (m_ec^2)^2$", isCorrect: true, explanation: "Correct mapping rule constraints."}
-                    ]
-                },
-                 {
-                   stepText :"Combined fully matching Conservation mapped equations boundaries, one applies pure arithmetic solving limiting fractions variables $E = pc \\rightarrow p = E/c$. Result forms equations dependencies fully mapping $\\lambda'$ variables: \n \n$$ \\frac{1}{E'} - \\frac{1}{E} = \\frac{1}{m_e c^2} (1 - \\cos\\theta) $$\nSubstituting $E = hc/\\lambda$, we obtain the final Compton formula."
-                 }
-             ]  
-         },
-         {
-          id: "dr-assump",
-          type: "quiz",
-          title: "Assumptions Check",
-          content: "In this derivation, we assume the initial electron is stationary and free. Why is this a valid assumption for outer electrons in carbon struck by X-rays?",
-          options: [
-            { id: "A", text: "The X-ray photon energy is vastly greater than the binding energy of the electron.", isCorrect: true, explanation: "Outer electrons are bound by only a few eV. X-rays carry thousands of eV, making the binding energy negligible." },
-            { id: "B", text: "Carbon has no nucleus to bind the electrons.", isCorrect: false, explanation: "Carbon absolutely has a nucleus. The binding energy is just very small relative to the X-ray." }
-          ]
-         }
-      ]
-    },    
-
-    // ── 5. Ex 3.8  ────────────────────────────────────────────────────────
-    {
-      id: "les-2-4-1-ex8",
-      title: "Ex 3.8: Changing Wavelengths",
-      description: "Conceptual properties of the Compton Shift",
-      icon: "Eye",
-      slides: [
-        {
-          id: "ex38-concept",
-          type: "example_q",
-          title: "Example 3.8 — Wavelength Source Impact",
-          content: "You run the standard carbon setup shooting X-rays of $\\lambda$. Scattered output is observed at angle $\\theta$, producing photon wavelength shift $\\Delta \\lambda = \\lambda' - \\lambda $ and an electron kinetic energy $K_e$. \n\n*Question:* IF you switch to generating significantly *LARGER* incident wavelength $\\lambda$.\nWhat happens at the IDENTICAL scattering angle $\\theta$? \n(a) Does the shift $\\Delta \\lambda$ increase, decrease or stay identical?\n(b) Does ejected electron $K_e$ values increase, decrease or stay identical?  "
-        },
-        {
-          id: "ex38-solsqq",
-          type: "proof",
-          title: "Exploratory Resolution",
-          content: "Checking formulas mappings: $\\lambda' - \\lambda = \\frac{h}{m_e c} (1 - \\cos \\theta)$ ",
-           interactiveSteps: [
-              {
-                prompt:"(a) Given the formula, compare the shift with input changing limitations. ",
-                 stepText :"The formula for $\\Delta\\lambda$ depends strictly on the parameter constant $(h / m_e c)$ combined with the angle $\\theta$. It DOES NOT depend on the original $\\lambda$. \nSo the Shift $\\Delta \\lambda$ **remains precisely unchanged**. \n*(1 nm input = 1+shift nm out. 5nm input = 5+shift nm out!)* ",
-                 options : [ {id:"a" , text :"$\\Delta \\lambda$ remains equal and constant.", isCorrect : true , explanation : "Yes purely geometric and constant."}]
-              }, 
-               {
-                prompt:"(b) What concerning electron configurations $K_e$ ?",
-                 stepText :"If initial $\\lambda$ is larger, the initial total photon energy $E= hc/ \\lambda$ represents a **smaller total energy budget**. Since $\\Delta \\lambda$ is constant, a fixed wavelength shift on a larger wavelength represents a smaller fractional energy loss. Thus $K_e$ MUST **Decrease**.",
-                 options : [ {id:"b" , text :"$K_e$ decreases! ", isCorrect : true , explanation : "Yes! Lower energy incident light transfers less kinetic energy to the electron."}]
-              }
-           ]             
-        },
-        {
-          id: "ex38-interp",
-          type: "quiz",
-          title: "Physical Interpretation",
-          content: "Because $\\Delta\\lambda$ is independent of the incident wavelength, why don't we observe the Compton effect with visible light bouncing off a mirror?",
-          options: [
-            { id: "A", text: "Visible light has a wavelength of ~500 nm. A shift of ~0.002 nm is too tiny to easily detect as a fraction of the total.", isCorrect: true, explanation: "Correct. For X-rays (~0.1 nm), a 0.002 nm shift is a measurable 2% change. For visible light, it's a 0.0004% change." },
-            { id: "B", text: "Visible light doesn't interact with electrons.", isCorrect: false, explanation: "It does (e.g., photoelectric effect). The shift is just too proportionally small." }
-          ]
-        }
-      ]
-    },    
-
-    // ── 6. Ex 3.9 Numerics ────────────────────────────────────────────────
-    {
-      id: "les-2-4-1-ex9",
-      title: "Ex 3.9: Compton Calculation",
-      description: "Direct numerical resolution",
+      id: "les-4-3-1-3",
+      title: "Ex: Franck-Hertz Levels",
+      description: "Ex: Extracting wavelengths from collision data",
       icon: "Calculator",
       slides: [
-         {
-          id: "c-ex3a91",
+        {
+          id: "ex-fh-q",
           type: "example_q",
-          title: "Example 3.9",
-          content: "X-rays of incident wavelength $\\lambda = 0.2400 \\text{ nm}$ hit and scatter. We observe them at an angle of $\\theta = 60.0^\\circ$ .\n\nFind:\n(a) Scattered wavelength $\\lambda'$ \n(b) Kinetic energy of the scattered electron $K_e$."
+          title: "Example — Analyzing Franck-Hertz Data",
+          content: "**Problem:**\nYou perform the Franck-Hertz experiment using a mystery gas. You observe sharp drops in the measured current at accelerating voltages of $6.2$ V, $12.4$ V, and $18.6$ V.\n\n(a) What is the energy of the first excited state of this atom relative to its ground state?\n(b) When these excited atoms return to the ground state, what wavelength of light will they emit?"
         },
-        { 
-             id: "e0jnn33nsxl12as", 
-             type: "numerical" ,  
-             title: "Computing Wavelength",
-             content: "$$\\lambda' = \\lambda + (0.00243 \\text{ nm}) ( 1 - \\cos(60^\\circ) )$$ \n Compute the final wavelength in nm. ($\\cos 60^\\circ = 0.5$)",
-               numericAnswer: 0.2412 , 
-               numericTolerance: 0.0005
+        {
+          id: "ex-fh-sol",
+          type: "proof",
+          title: "Interactive Solution",
+          content: "Use the voltage spacing to find $\\Delta E$, then find $\\lambda$.",
+          interactiveSteps: [
+            {
+              stepText: "The drops occur at multiples of $6.2$ V. The kinetic energy lost in each inelastic collision is therefore exactly $6.2$ eV."
+            },
+            {
+              prompt: "What is the energy of the first excited state?",
+              stepText: "The energy difference between the ground state and the first excited state is $\\Delta E = 6.2$ eV.",
+              options: [
+                { id: "A", text: "$6.2$ eV", isCorrect: true, explanation: "Correct. The first dip gives the primary excitation energy." }
+              ]
+            },
+            {
+              prompt: "Calculate the wavelength emitted when the atom relaxes back to the ground state. Use $hc = 1240$ eV·nm.",
+              stepText: "$$\\lambda = \\frac{hc}{\\Delta E} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{6.2 \\text{ eV}}$$",
+              options: [
+                { id: "A", text: "Proceed", isCorrect: true, explanation: "" }
+              ]
+            },
+            {
+              prompt: "Evaluate the final wavelength.",
+              stepText: "$$\\lambda = 200 \\text{ nm}$$",
+              options: [
+                { id: "A", text: "$200$ nm", isCorrect: true, explanation: "This wavelength is in the ultraviolet range." }
+              ]
+            }
+          ]
         },
-         {
-           id: "1as2qds-eq2aasszx" , type: "proof", 
-           title : "Remaining outputs",
-           content : "Now calculate the energies.", 
-           interactiveSteps:[
-             {
-               stepText:"$$ E'_{\\text{photon}} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}} {0.2412 \\text{ nm}} = 5141 \\text{ eV} $$ "
-             },
-             {
-             prompt :"If incident $E_{\\text{initial}} = hc/ \\lambda_{\\text{original}} = 1240 / 0.2400 = 5167 \\text{ eV}$, what is the kinetic energy of the electron $K_e$?",          
-             stepText :"$$ K_{e} = E_{\\text{initial}} - E'_{\\text{final}}  $$\n \n$$ = ( 5167 \\text{ eV} )  -  ( 5141  \\text{ eV} ) =  26  \\text{ eV} $$",            
-                   options : [ {id:"wxxazswwqa1" , text: "$26 \\text{ eV} $ ", isCorrect : true , explanation : "Yes purely balancing equations!"}]            }
-           ]             
-         },
-         {
-           id: "num-followup",
-           type: "numerical",
-           title: "Follow-up",
-           content: "If the angle was $\\theta = 90^\\circ$, what would $\\lambda'$ be? (Use $\\cos 90^\\circ = 0$)",
-           numericAnswer: 0.2424,
-           numericTolerance: 0.0005
-         }
+        {
+          id: "ex-fh-method",
+          type: "quiz",
+          title: "Method Check",
+          content: "Why are the drops in current not perfectly sharp vertical cliffs?",
+          options: [
+            { id: "A", text: "The electrons emitted from the heated cathode have a small, random thermal spread of initial kinetic energies.", isCorrect: true, explanation: "Because the electrons boil off the cathode with slightly different starting speeds, they don't all hit 6.2 eV at the exact same physical plane. This 'smears' the drop slightly." },
+            { id: "B", text: "The energy levels of the atom are fuzzy and uncertain.", isCorrect: false, explanation: "While true (Heisenberg), the thermal spread of the incoming electrons is the dominant cause of the rounded peaks." }
+          ]
+        }
       ]
     }
   ]
 };
---- END OF FILE src/data/modern_units/unit_2_4_1_compton_effect.ts ---
+--- END OF FILE src/data/modern_units/unit_4_3_1_franck_hertz.ts ---
 
---- START OF FILE src/data/modern_units/unit_2_4_2_other_processes.ts ---
+--- START OF FILE src/data/modern_units/unit_4_3_2_correspondence_failure.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_2_4_2_OTHER_PROCESSES: Unit = {
-  id: "unit-2-4-2",
-  title: "Other Photon Processes",
-  description: "Bremsstrahlung · Pair production · Photoelectric comparisons",
-  color: "duo-orange",
+export const UNIT_4_3_2_CORRESPONDENCE_FAILURE: Unit = {
+  id: "unit-4-3-2",
+  title: "Correspondence Principle & Failure of Bohr",
+  description: "T: Bohr correspondence principle · T: Deficiencies of the Bohr model · D: Full QM requirements",
+  color: "duo-red",
   lessons: [
-    // ── 0. Activation ─────────────────────────────────────────────────────
+    // ── LESSON 1: Priming ─────────────────────────────────────────────────────────
     {
-      id: "les-2-4-2-act",
-      title: "Priming: Mass and Energy",
-      description: "Activate prior thinking about mass/energy equivalence",
+      id: "les-4-3-2-act",
+      title: "Warm-Up: Classical vs Quantum",
+      description: "Activate prior knowledge",
       icon: "Brain",
       slides: [
         {
-          id: "op-prime-1",
+          id: "cf-prime-1",
           type: "quiz",
-          title: "Warm-Up Check",
-          content: "Einstein's $E = mc^2$ implies that mass and energy are interchangeable. If you have enough pure energy (like a very high-energy photon), what could potentially happen?",
+          title: "Priming Question",
+          content: "If a quantum theory perfectly explains the behavior of atoms, what must it predict when applied to large, macroscopic objects (like baseballs or planets)?",
           options: [
-            { id: "A", text: "The photon could literally turn into particles with mass.", isCorrect: true, explanation: "Yes! This is called Pair Production, where light becomes matter." },
-            { id: "B", text: "Nothing, photons cannot change into matter because they lack rest mass.", isCorrect: false, explanation: "Energy is energy. If the photon has enough energy, it can create mass." }
+            { id: "A", text: "It should predict exactly the same behavior as classical physics.", isCorrect: true, explanation: "Yes. Classical physics works flawlessly for large objects. Any new quantum theory must reduce to classical physics at macroscopic scales. This is the heart of the Correspondence Principle." },
+            { id: "B", text: "It should reveal new, bizarre quantum behaviors for large objects.", isCorrect: false, explanation: "If it did, we would see baseballs diffracting. Since we don't, the theory must predict classical behavior at large scales." }
           ]
         },
         {
-          id: "op-prime-2",
+          id: "cf-prime-2",
           type: "quiz",
-          title: "Warm-Up Check 2",
-          content: "If an electron crashes into a solid wall and suddenly stops, where does its kinetic energy go?",
+          title: "The Helium Problem",
+          content: "The Bohr model works perfectly for Hydrogen and He+. Why might it fail for neutral Helium (2 protons, 2 electrons)?",
           options: [
-            { id: "A", text: "It is destroyed completely.", isCorrect: false, explanation: "Energy cannot be destroyed." },
-            { id: "B", text: "It is emitted as new photons (X-rays).", isCorrect: true, explanation: "The sudden deceleration of charges produces radiation. This is called Bremsstrahlung." }
+            { id: "A", text: "Because the two electrons repel each other.", isCorrect: true, explanation: "The Bohr math only accounts for the electron-nucleus attraction. As soon as you add a second electron, the complex electron-electron repulsion ruins the simple orbit math." },
+            { id: "B", text: "Helium doesn't have quantized energy levels.", isCorrect: false, explanation: "All atoms have quantized levels. The Bohr model just isn't complex enough to calculate them." }
           ]
         }
       ]
     },
 
-    // ── 1. Bremsstrahlung ─────────────────────────────────────────────────
+    // ── LESSON 2: T: The Correspondence Principle ─────────────────────────────────
     {
-      id: "les-2-4-2-brems",
-      title: "Bremsstrahlung (Braking Radiation)",
-      description: "Essentially the reverse of Photoelectric emissions",
-      icon: "Radiation",
+      id: "les-4-3-2-1",
+      title: "The Correspondence Principle",
+      description: "T: Bridging the quantum and classical worlds",
+      icon: "ArrowRightLeft",
       slides: [
-         {
-          id: "bq-1aa",
+        {
+          id: "cp-theory",
           type: "theory",
-          title: "Bremsstrahlung Processes",
-          content: "In German, it translates precisely as *'Braking Radiation'*.\nRather than using photons to punch electrons loose (Photoelectric Effect), we accelerate a beam of electrons directly toward a dense metal target.\n\nThe electrons aggressively brake and curve as they pass massive atomic nuclei. \n\nThe suddenly lost kinetic energy is shed instantly by creating **a Photon (an X-Ray)**.\n\nEnergy Conservation dictates:\n\n$$hf = \\frac{hc}{\\lambda} =  K_{e,\\text{before}} - K_{e,\\text{after}} $$"
-         },
-         {
-          id: "b-canvasq12s",
-          type: "interactive_canvas",
-          title: "Interaction Visualized",
-          content: "An electron deflects near a nucleus and emits an X-ray photon.",
-          interactiveCanvasId: "bremsstrahlung-diagram"
-         }, 
-         {
-           id : "chkjsjaslqxl", 
-            type :"quiz",
-             title :"Cutoff boundaries", 
-         content : "An electron can make many small collisions, losing a bit of energy each time. But what happens if the electron loses ALL of its kinetic energy $K$ in a single massive braking event?", 
-           options : [
-             { id:"wsa", text: "It emits a photon with the maximum possible energy, resulting in a minimum cutoff wavelength $\\lambda_{\\min} = hc / K$.", isCorrect :true , explanation: "Yes. If $K_{\\text{after}} = 0$, the photon gets all the energy, resulting in the shortest possible wavelength." },
-             { id:"wsb", text: "It emits a photon with the minimum possible energy.", isCorrect: false, explanation: "If it loses all its energy, the photon gets the MAXIMUM energy, not minimum."}
-           ]        
+          title: "The Correspondence Principle",
+          content: "Bohr's model was a strange hybrid of classical physics (Newton's laws for orbits) and radical new postulates (quantized $L$, non-radiating states). To justify this, Bohr proposed the **Correspondence Principle**:\n\n> *Quantum theory must agree with classical theory in the limit of large quantum numbers ($n \\to \\infty$).*\n\nIf we make a Bohr atom so large that it reaches laboratory size ($n \\sim 10^4$), the discrete energy steps become so tiny that the energy appears continuous. In this limit, the frequency of the emitted photon must exactly match the classical orbital frequency of the spiraling electron!"
         },
         {
-          id: "num-brems",
-          type: "numerical",
-          title: "Calculating $\\lambda_{\\min}$",
-          content: "If electrons are accelerated through a potential of 10,000 V, their kinetic energy is $K = 10,000$ eV. What is the minimum wavelength $\\lambda_{\\min}$ produced? (Use $hc = 1240$ eV nm)",
-          numericAnswer: 0.124,
-          numericTolerance: 0.005
-        }         
-      ]
-    },    
-
-    // ── 2. Pair Production ────────────────────────────────────────────────
-    {
-      id: "les-2-4-2-pair",
-      title: "Pair Production",
-      description: "Creating tangible Mass strictly generating from light.",
-      icon: "Infinity",
-      slides: [
-         {
-           id: "pxqjksa13sx", 
-           type:"theory", 
-           title :  "Pair Production and Annihilation",          
-           content : "In **Pair Production**, a photon loses all its energy and in the process two particles are created: an electron ($e^-$) and a positron ($e^+$).\n\n$$ hf  = (m_e c^2 + K_{+} ) + (m_e c^2 + K_{-} ) $$\n\nBecause $K_+$ and $K_-$ are always positive, the photon must have an energy of at least $2 m_e c^2$ for this process to occur.\n\nIn the reverse process, **Electron-Positron Annihilation**, an electron and positron collide, disappear, and are replaced by two photons moving in opposite directions (to conserve momentum)."  
-         },
-         {
-           id: "pair-q1",
-           type: "quiz",
-           title: "Recoil Requirements",
-           content: "Like Bremsstrahlung, Pair Production cannot happen for a free photon in empty space. It must happen near a heavy atomic nucleus. Why?",
-           options: [
-             { id: "A", text: "To absorb the recoil momentum.", isCorrect: true, explanation: "A single photon cannot just split into two massive particles and conserve both energy and momentum without a heavy nucleus nearby to absorb some momentum." },
-             { id: "B", text: "Because the nucleus provides the energy.", isCorrect: false, explanation: "The photon provides the energy; the nucleus just anchors the momentum." }
-           ]
-         },
-         {
-              id: "cxasasaqx-x", type: "numerical", title:"Threshold Energy", 
-               content :"The rest energy of an electron is $0.511$ MeV. What is the absolute minimum (threshold) energy in MeV a photon must have to undergo pair production?",
-               numericAnswer: 1.022 , numericTolerance : 0.01
-         }
-      ]
-    },    
-
-    // ── 3. Overview table ─────────────────────────────────────────────────
-    {
-      id: "les-optis1gx3vj0w2y",
-      title: "Consolidated Interaction Map",
-      description: "Comparing all three major photon-matter interactions.",
-      icon: "Network",
-      slides: [
-         {
-          id : "zxsasa1sl2xasx", 
-           type : "theory", title :  "Dominant interactions mapped",          
-           content : "1. **Photoelectric Effect:** (Low energy photons, $<1$ MeV). Photon totally disappears. EJECTS a bound electron from an atom. Energy is transferred to the work function and kinetic energy.\n\n2. **Compton Scattering:** (Medium energy, $\\sim 1$ MeV). Photon scatters off a loosely bound electron. Photon SURVIVES but loses energy (longer wavelength). Electron recoils.\n\n3. **Pair Production:** (High energy, $>1.02$ MeV). Photon totally disappears near a nucleus. CREATES an electron-positron pair."                    
-         },          
-         {
-          id: "optis1jjs0lpo011wkl1gqw",type:"quiz",title:"Identify the process",              
-          content :"A 2.5 MeV gamma-ray photon enters a lead block and disappears completely, resulting in two charged particles curling in opposite directions in a magnetic field. What process occurred?",                 
+          id: "cp-q1",
+          type: "quiz",
+          title: "Classical Radiation",
+          content: "Classically, an electron orbiting at frequency $f_{\\text{orbit}}$ radiates light at what frequency?",
           options: [
-            {id: "Zq1j11aa2", text: "Pair Production", isCorrect : true , explanation : "Energy is > 1.02 MeV, photon disappears, and an electron/positron pair (which curl oppositely in magnetic fields) is created." }, 
-            {id: "jasskl001i1xx", text:"Photoelectric Effect", isCorrect : false , explanation : "Photoelectric effect ejects ONE electron, not two oppositely charged particles."}
+            { id: "A", text: "Exactly $f_{\\text{orbit}}$.", isCorrect: true, explanation: "Classical electromagnetism says the emitted wave matches the oscillation frequency of the charge." },
+            { id: "B", text: "It doesn't radiate.", isCorrect: false, explanation: "That's Bohr's quantum postulate. Classically, it MUST radiate." }
           ]
-         },
-         {
-          id: "fitb-overview",
+        },
+        {
+          id: "cp-q2",
+          type: "quiz",
+          title: "Quantum Agreement",
+          content: "For a transition from $n$ to $n-1$ where $n$ is very large (e.g., $10,000 \\to 9,999$), how does the emitted photon's frequency $f_{\\text{photon}}$ compare to the classical orbital frequency $f_{\\text{orbit}}$?",
+          options: [
+            { id: "A", text: "They are completely different.", isCorrect: false, explanation: "No, this is where the theories must overlap." },
+            { id: "B", text: "$f_{\\text{photon}} \\approx f_{\\text{orbit}}$", isCorrect: true, explanation: "Exactly. Bohr proved mathematically that as $n \to \infty$, the photon frequency derived from $E_n - E_{n-1}$ perfectly matches the classical orbital frequency. This validated his radical postulates." }
+          ]
+        },
+        {
+          id: "cp-canvas",
+          type: "interactive_canvas",
+          title: "Quantum vs Classical Orbits",
+          content: "At large n, the discrete quantum jumps blur into a continuous classical spiral.",
+          interactiveCanvasId: "correspondence-principle"
+        },
+        {
+          id: "cp-fitb",
           type: "fill_in_blank",
           title: "Fill in the Blank",
-          content: "In Compton scattering, the photon does not disappear; it merely ___ off the electron and changes its wavelength.",
-          blankAnswer: "scatters"
-         }     
+          content: "The requirement that quantum mechanics must yield classical results at macroscopic scales is known as the ___ principle.",
+          blankAnswer: "correspondence"
+        }
       ]
-    }     
-  ]
-};
---- END OF FILE src/data/modern_units/unit_2_4_2_other_processes.ts ---
+    },
 
---- START OF FILE src/data/modern_units/unit_2_4_3_wave_particle.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_2_4_3_WAVE_PARTICLE: Unit = {
-  id: "unit-2-4-3",
-  title: "Particles or Waves",
-  description: "T: Duality and Complementarity",
-  color: "duo-pink",
-  lessons: [
-    // ── Introduction to the Duality Paradox ──────────────────────────────
+    // ── LESSON 3: T: Deficiencies of the Bohr Model ───────────────────────────────
     {
-      id: "les-2-4-3-1",
-      title: "Wave-Particle Duality",
-      description: "How can it possibly be both?",
-      icon: "AlignHorizontalCenter",
-      slides: [
-         {
-          id: "dual-th1",
-          type: "theory",
-          title: "The Ultimate Dilemma",
-          content: "Is Light a wave spreading evenly across space to perform interferences and diffractions? Yes, it physically perfectly maps to Maxwell.\n\nIs Light a particle, carrying exact packet bounds of $p = h/\\lambda$ and $E = hf$ to impact specifically against localized electrons instantly (Compton / Photo-electric)? Yes! \n\nNo single theory encapsulates both simultaneously. Trying to squeeze light completely into the \"Classical Wave\" mental bucket, or completely into the \"Classical Baseball Point Particle\" bucket, simply fails!"
-         },
-         {
-            id: "chkxsxz1ssxa", 
-            type :"quiz",
-             title :"Logic Test", 
-             content : "Which framework behavior is revealed dynamically depends strictly upon what factor?",
-             options : [  
-                 { id : "asaqxcqqd-qw", text : "It relies identically upon the TYPE of detector / Experiment apparatus utilized." , isCorrect :true , explanation  : "Exactly. The type of experiment we choose dictates which behavior is revealed."} , 
-                 {id : "zxcasx" , text : "Its completely randomized by nature." , isCorrect: false , explanation: "Behavior is strictly determined by the experimental setup."}
-            ]
-        }     
-      ]
-    },    
-
-    // ── Complementarity Principle ──────────────────────────────────────────
-    {
-      id: "les-2-4-3-2",
-      title: "Complementarity Principle",
-      description: "Niels Bohr philosophical parameters",
-      icon: "Aperture",
-      slides: [
-         {
-           id: "pxqjkssa1xxx-3sx", 
-           type:"theory", 
-           title :  "Bohr's Principle of Complementarity",          
-           content : "Niels Bohr established **The Principle of Complementarity** to resolve this paradox:\n\n1. Both sets of properties (Wave and Particle) are required for a complete understanding of light (and matter).\n2. They are mutually exclusive — you cannot observe both wave and particle behaviors simultaneously in the same measurement.\n3. ONE experimental setup reveals one property, while hiding the other."  
-         },
-         {
-           id: "comp-q1",
-           type: "quiz",
-           title: "Conceptual Check",
-           content: "According to the principle of complementarity, if you set up a perfect double-slit experiment that clearly shows interference fringes (wave behavior), can you also perfectly track which slit each photon went through (particle behavior)?",
-           options: [
-             { id: "A", text: "Yes, with good enough cameras.", isCorrect: false, explanation: "No, observing the path destroys the interference pattern." },
-             { id: "B", text: "No, measuring which slit it goes through destroys the wave behavior.", isCorrect: true, explanation: "You can only see one behavior at a time. If you measure the particle path, the wave interference vanishes." }
-           ]
-         },
-         {
-              id: "cxasasasaqsasax1-xxqxwx-x", type: "fill_in_blank", title:"Definitions", 
-               content :"The Principle of ___ asserts that wave and particle natures cannot be observed simultaneously.",
-               blankAnswer: "Complementarity"
-         }
-      ]
-    },    
-
-    // ── Statistical Interpretation photons double slit ─────────────────────
-    {
-      id: "les-optisswxza1ghn2yy",
-      title: "Double-Slit with Single Photons!",
-      description: "How probability connects waves and particles.",
-      icon: "Fingerprint",
-      slides: [
-         {
-          id : "zxssasajksaqqw2x2", 
-           type : "theory", 
-           title :  "Bridging the Gap: Probability",          
-           content : "How do we connect the wave and the particle? \n\nSuppose we fire photons through a double slit *one at a time*. Each photon hits the screen at a single, localized point (particle behavior). \n\nHowever, if we wait and let millions of single photons hit the screen, their random landing spots slowly build up to form the exact interference fringes predicted by classical wave theory!\n\nThe connection: **The Classical Wave intensity dictates the Quantum Probability.**\n\n$$\\text{Probability to observe photons} \\propto |\\text{electric field amplitude}|^2$$\n\nWhere the wave is strong, many photons land. Where the wave cancels out, no photons land."          
-         },   
-         {
-          id: "sim-photonc-x-12sa32c",
-          type: "interactive_canvas",
-          title: "Visualizing the impossible",
-          content: "As random dots arrive singularly, they appear random. But over time, the wave interference pattern emerges.",
-          interactiveCanvasId: "photon-buildup"
-         },        
-         {
-          id: "optis1jjsxxwx0wq01aassaaqw",
-          type:"quiz",
-          title:"Probability Rules",              
-          content :"If the electric field amplitude of a light wave at a certain spot on a screen is precisely ZERO due to destructive interference, what is the probability of a single photon striking that spot?",                 
-          options: [
-            {id: "Zsq1jxwsxa2", text: "Zero. No photons will ever hit there.", isCorrect : true , explanation : "Because Probability $\\propto |E|^2$. If E is 0, Probability is 0." }, 
-            {id: "jasks1xxzzx", text:"50%. Particles are random.", isCorrect : false , explanation : "They are random, but their randomness is strictly guided by the wave probability distribution."}
-          ]
-         }     
-      ]
-    }     
-  ]
-};
---- END OF FILE src/data/modern_units/unit_2_4_3_wave_particle.ts ---
-
---- START OF FILE src/data/modern_units/unit_2_4_summary.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_2_4_SUMMARY: Unit = {
-  id: "unit-2-4-summary",
-  title: "Section 2.4 Summary",
-  description: "Photon Interactions & the Duality Revolution Recap",
-  color: "duo-orange",
-  lessons: [
-    {
-      id: "les-sum-2-4",
-      title: "Summary: Photons meet electrons",
-      description: "Key ideas from Section 2.4",
-      icon: "BookCheck",
+      id: "les-4-3-2-2",
+      title: "Deficiencies of the Bohr Model",
+      description: "T: Why the Bohr model is ultimately incorrect",
+      icon: "Unlink",
       slides: [
         {
-          id: "sum-244sxcczs1-xsxqa0s0wa",
+          id: "def-theory-1",
           type: "theory",
-          title: "Section 2.4 Summary",
-          content: "**Compton Effect:**\nX-rays scattered by electrons increase in wavelength because the photon loses energy in a particle-like collision.\n$$\\lambda' - \\lambda = \\frac{h}{m_e c} (1 - \\cos \\theta)$$\n\n**Other Photon Processes:**\n- *Bremsstrahlung:* Fast electrons decelerate near a nucleus, emitting X-ray photons.\n- *Pair Production:* A high-energy photon ($>1.02$ MeV) vanishes near a nucleus, creating an electron-positron pair.\n\n**Particle-Wave Duality:**\nLight exhibits both wave and particle properties, but never both in the same experiment (Bohr's Principle of Complementarity). The connection is statistical: the wave's intensity determines the probability of finding the photon particles ($P \\propto |E|^2$)."
+          title: "Where Bohr Failed",
+          content: "Despite its massive success with Hydrogen, the Bohr model is fundamentally incomplete. Its major failures include:\n\n1. **Multi-Electron Atoms:** It fails completely for any atom with more than one electron (like neutral Helium) because it cannot account for electron-electron repulsion.\n2. **Angular Momentum:** Bohr predicted the ground state of hydrogen has angular momentum $L = \\hbar$. True quantum mechanics shows the ground state has $L = 0$ (a spherical cloud, not a flat orbit).\n3. **Spectral Intensities:** It can predict the wavelengths of spectral lines, but not their *intensities* (how bright they are, or how probable a transition is).\n4. **Fine Structure:** High-resolution spectroscopy showed that single lines are actually closely spaced doublets. Bohr's model couldn't explain this fine splitting."
         },
         {
-          id: "sum-244-q1",
+          id: "def-q1",
           type: "quiz",
-          title: "Summary Check",
-          content: "Which process involves a photon completely disappearing to create matter?",
+          title: "The Uncertainty Violation",
+          content: "The Bohr model describes an electron moving in a perfectly circular orbit of exact radius $r_n$ with exact momentum $p_n$. Which fundamental law of nature does this violate?",
           options: [
-            { id: "A", text: "Pair Production", isCorrect: true, explanation: "The photon converts entirely into the mass of an electron and a positron." },
-            { id: "B", text: "Compton Scattering", isCorrect: false, explanation: "The photon survives but loses energy." }
+            { id: "A", text: "Conservation of Energy.", isCorrect: false, explanation: "Energy is conserved in the model." },
+            { id: "B", text: "The Heisenberg Uncertainty Principle.", isCorrect: true, explanation: "If $r$ is known exactly and $p$ is known exactly, then $\\Delta x \\Delta p_x = 0$. This violates $\\Delta x \\Delta p_x \\ge \\hbar/2$. An electron cannot have a perfectly defined trajectory." }
           ]
+        },
+        {
+          id: "def-q2",
+          type: "quiz",
+          title: "The Ground State",
+          content: "Bohr predicted $L = n\\hbar$. For $n=1$, $L=\\hbar$. How does an electron with $L=0$ (the true quantum mechanical ground state) behave?",
+          options: [
+            { id: "A", text: "It travels in a straight line.", isCorrect: false, explanation: "It's still bound to the nucleus." },
+            { id: "B", text: "It doesn't 'orbit' in a circle; it exists as a spherical probability cloud.", isCorrect: true, explanation: "An angular momentum of zero means it has no net rotational motion. It simply pulses in and out spherically. Bohr's planetary model is wrong." }
+          ]
+        },
+        {
+          id: "def-fitb",
+          type: "fill_in_blank",
+          title: "Fill in the Blank",
+          content: "The Bohr model fails for neutral Helium because it cannot mathematically account for the repulsive forces between multiple ___.",
+          blankAnswer: "electrons"
+        }
+      ]
+    },
+
+    // ── LESSON 4: D: What Full QM Must Address ────────────────────────────────────
+    {
+      id: "les-4-3-2-3",
+      title: "The Dawn of True Quantum Mechanics",
+      description: "D: Moving beyond orbits to probability waves",
+      icon: "Waves",
+      slides: [
+        {
+          id: "qm-theory",
+          type: "theory",
+          title: "Replacing the Bohr Atom",
+          content: "To build a truly correct model of the atom, physicists (led by Schrödinger and Heisenberg in 1925) had to abandon planetary orbits entirely.\n\nA full quantum mechanical treatment requires:\n1. **Wave Functions ($\\psi$):** Electrons are not point particles on tracks; they are 3D probability clouds describing the likelihood of finding the electron.\n2. **The Schrödinger Equation:** A rigorous wave equation that automatically yields quantized energy levels and correct angular momenta without arbitrary postulates.\n3. **Spin and Relativity:** Later additions (Dirac equation) explained fine structure by introducing electron 'spin' and relativistic corrections."
+        },
+        {
+          id: "qm-q1",
+          type: "quiz",
+          title: "The Fate of the Bohr Model",
+          content: "If the Bohr model is fundamentally incorrect, why do we still learn it?",
+          options: [
+            { id: "A", text: "It provides an intuitive, visual stepping-stone that correctly predicts hydrogen energies and introduces key concepts like stationary states and quantum leaps.", isCorrect: true, explanation: "It's an excellent transitional model. It introduced the core ideas of quantization and energy transitions that carried over directly into modern quantum mechanics." },
+            { id: "B", text: "Because the Schrödinger equation is just a minor adjustment to it.", isCorrect: false, explanation: "Schrödinger's approach is mathematically and conceptually entirely different." }
+          ]
+        },
+        {
+          id: "qm-q2",
+          type: "quiz",
+          title: "The Big Shift",
+          content: "What is the primary conceptual shift from the Bohr model to the Schrödinger model?",
+          options: [
+            { id: "A", text: "Replacing continuous energies with quantized energies.", isCorrect: false, explanation: "Bohr already did this." },
+            { id: "B", text: "Replacing exact planetary orbits with probabilistic wave clouds.", isCorrect: true, explanation: "This is the essence of true quantum mechanics. Abandoning determinism for probability amplitudes." }
+          ]
+        },
+        {
+          id: "qm-fitb",
+          type: "fill_in_blank",
+          title: "Fill in the Blank",
+          content: "In modern quantum mechanics, the exact planetary orbit is replaced by a 3D ___ cloud representing the likelihood of finding the electron.",
+          blankAnswer: "probability"
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/modern_units/unit_2_4_summary.ts ---
+--- END OF FILE src/data/modern_units/unit_4_3_2_correspondence_failure.ts ---
+
+--- START OF FILE src/data/modern_units/unit_4_3_summary.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_3_SUMMARY: Unit = {
+  id: "unit-4-3-summary",
+  title: "Section 4.3 Summary",
+  description: "Franck-Hertz & The Limits of Bohr Recap",
+  color: "duo-orange",
+  lessons: [
+    {
+      id: "les-sum-4-3-1",
+      title: "Summary: The Franck-Hertz Experiment",
+      description: "Key ideas from Unit 4.3.1",
+      icon: "BookCheck",
+      slides: [
+        {
+          id: "sum-431",
+          type: "theory",
+          title: "Unit 4.3.1 — Franck-Hertz Experiment",
+          content: "**The Setup:** Electrons are accelerated through a low-pressure gas (e.g., Mercury).\n\n**The Observation:** The current drops sharply at specific accelerating voltages (multiples of 4.9 V for Hg).\n\n**The Meaning:** Electrons undergo perfectly elastic collisions until they have exactly enough kinetic energy to excite the atom to its next discrete energy level. At that exact threshold, the collision becomes inelastic, the electron loses its energy, and the current drops.\n\n**Significance:** Provided independent, non-optical proof of the existence of discrete, quantized atomic energy levels, perfectly corroborating the energy gaps seen in emission spectra."
+        }
+      ]
+    },
+    {
+      id: "les-sum-4-3-2",
+      title: "Summary: Limits of the Bohr Model",
+      description: "Key ideas from Unit 4.3.2",
+      icon: "BookCheck",
+      slides: [
+        {
+          id: "sum-432",
+          type: "theory",
+          title: "Unit 4.3.2 — Correspondence & Deficiencies",
+          content: "**Correspondence Principle:** Quantum mechanics must yield classical results at macroscopic scales ($n \\to \\infty$). Bohr showed that for massive orbits, the emitted photon frequency matches the classical orbital frequency.\n\n**Failures of the Bohr Model:**\n1. **Multi-electron atoms:** Fails to account for electron-electron repulsion.\n2. **Angular momentum:** Incorrectly predicts $L = \hbar$ for the ground state (should be 0).\n3. **Uncertainty Principle:** Postulates exact orbits ($r$ and $p$ known perfectly), violating $\\Delta x \\Delta p \\ge \\hbar/2$.\n4. **Intensities & Fine Structure:** Cannot predict line brightness or doublet splitting.\n\n**The Solution:** The planetary model had to be replaced by full quantum mechanics (Schrödinger), treating electrons as 3D probability clouds."
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/modern_units/unit_4_3_summary.ts ---
+
+--- START OF FILE src/data/section_4_3_franck_hertz.ts ---
+import { Section } from '../types';
+import { UNIT_4_3_1_FRANCK_HERTZ } from './modern_units/unit_4_3_1_franck_hertz';
+import { UNIT_4_3_2_CORRESPONDENCE_FAILURE } from './modern_units/unit_4_3_2_correspondence_failure';
+import { UNIT_4_3_SUMMARY } from './modern_units/unit_4_3_summary';
+
+export const SECTION_4_3_FRANCK_HERTZ: Section = {
+  id: "section-4-3-franck-hertz",
+  title: "Section 4.3: Franck-Hertz & The Limits of Bohr",
+  description: "Direct proof of energy levels and the eventual breakdown of planetary orbits",
+  color: "duo-blue",
+  units: [
+    UNIT_4_3_1_FRANCK_HERTZ,
+    UNIT_4_3_2_CORRESPONDENCE_FAILURE,
+    UNIT_4_3_SUMMARY
+  ]
+};
+--- END OF FILE src/data/section_4_3_franck_hertz.ts ---
+
+--- START OF FILE src/data/module_4_rutherford_bohr.ts ---
+import { Module } from '../types';
+import { SECTION_4_1_ATOMIC_STRUCTURE } from './section_4_1_atomic_structure';
+import { SECTION_4_2_LINE_SPECTRA_BOHR } from './section_4_2_line_spectra_bohr';
+import { SECTION_4_3_FRANCK_HERTZ } from './section_4_3_franck_hertz';
+
+export const MODULE_4_RUTHERFORD_BOHR: Module = {
+  id: 'module-4-rutherford-bohr',
+  title: 'Module IV: The Rutherford-Bohr Model of the Atom',
+  description: 'Uncovering the structure of the atom (Krane Ch. 6, §6.1 – 6.8)',
+  sections: [
+    SECTION_4_1_ATOMIC_STRUCTURE,
+    SECTION_4_2_LINE_SPECTRA_BOHR,
+    SECTION_4_3_FRANCK_HERTZ
+  ],
+  moduleSummary: [
+    {
+      id: "mod-sum-rb-1",
+      type: "theory",
+      title: "Module IV Overview",
+      content: "This module covers the early development of atomic models, culminating in the Rutherford Nuclear Atom, the Bohr Model of Hydrogen, and the experiments that both validated and ultimately broke the planetary model."
+    },
+    {
+      id: "mod-sum-rb-2",
+      type: "theory",
+      title: "Section 4.1 Summary",
+      content: "**The Nuclear Atom:** Rutherford's scattering of alpha particles disproved the Thomson model and showed that atoms have a tiny, massively dense, positively charged nucleus."
+    },
+    {
+      id: "mod-sum-rb-3",
+      type: "theory",
+      title: "Section 4.2 Summary",
+      content: "**The Bohr Model:** Bohr proposed that electrons occupy quantized circular orbits without radiating, and emit or absorb photons only when jumping between these stationary states. This successfully predicted the discrete line spectra of hydrogen and hydrogen-like ions."
+    },
+    {
+      id: "mod-sum-rb-4",
+      type: "theory",
+      title: "Section 4.3 Summary",
+      content: "**Franck-Hertz & Limits:** The Franck-Hertz experiment provided independent, mechanical proof of discrete energy levels. However, Bohr's model ultimately failed to explain multi-electron atoms, fine structure, and violated the Uncertainty Principle, demanding a fully probabilistic wave-mechanical replacement."
+    }
+  ]
+};
+--- END OF FILE src/data/module_4_rutherford_bohr.ts ---
+
+--- START OF FILE src/components/canvasart/ModernPhysicsAtomic3.tsx ---
+import React, { useState, useEffect } from 'react';
+
+export const renderModernPhysicsAtomic3 = (id: string): React.ReactElement | null => {
+  switch (id) {
+    // ── Franck-Hertz Graph ──────────────────────────────────────────
+    case 'franck-hertz-graph': {
+      return (
+        <div className="flex flex-col items-center justify-center w-full h-full p-2">
+          <svg className="w-full max-w-[320px]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <marker id="axArr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            
+            {/* Axes */}
+            <line x1="30" y1="170" x2="300" y2="170" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#axArr)"/>
+            <line x1="30" y1="170" x2="30" y2="10" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#axArr)"/>
+            
+            <text x="250" y="185" fill="#cbd5e1" fontSize="10">Voltage (V)</text>
+            <text x="5" y="90" fill="#cbd5e1" fontSize="10" transform="rotate(-90, 10, 90)">Current (I)</text>
+            
+            {/* Grid Lines */}
+            <line x1="90" y1="165" x2="90" y2="175" stroke="#94a3b8" strokeWidth="1" />
+            <text x="80" y="185" fill="#60a5fa" fontSize="10">4.9 V</text>
+
+            <line x1="150" y1="165" x2="150" y2="175" stroke="#94a3b8" strokeWidth="1" />
+            <text x="140" y="185" fill="#60a5fa" fontSize="10">9.8 V</text>
+
+            <line x1="210" y1="165" x2="210" y2="175" stroke="#94a3b8" strokeWidth="1" />
+            <text x="195" y="185" fill="#60a5fa" fontSize="10">14.7 V</text>
+
+            {/* Simulated Data Curve */}
+            <path 
+              d="M 30 170 Q 70 80 85 40 Q 95 140 100 120 Q 130 50 145 20 Q 155 120 160 100 Q 190 30 205 10 Q 215 100 220 80" 
+              fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinejoin="round"
+            />
+
+            {/* Explanatory Annotations */}
+            <circle cx="85" cy="40" r="4" fill="#f43f5e" />
+            <circle cx="145" cy="20" r="4" fill="#f43f5e" />
+            <circle cx="205" cy="10" r="4" fill="#f43f5e" />
+
+            <text x="95" y="30" fill="#f43f5e" fontSize="9">1st Inelastic Collision</text>
+            <text x="155" y="10" fill="#f43f5e" fontSize="9">2nd Collision</text>
+          </svg>
+        </div>
+      );
+    }
+
+    // ── Correspondence Principle ────────────────────────────────────
+    case 'correspondence-principle': {
+      const SpiralOrbits = () => {
+        const [phase, setPhase] = useState(0);
+        
+        useEffect(() => {
+          const id = setInterval(() => setPhase(p => (p + 0.05) % (2 * Math.PI)), 30);
+          return () => clearInterval(id);
+        }, []);
+
+        const cx = 150;
+        const cy = 75;
+        
+        // Classical continuous spiral position
+        const radius = 50 + 20 * Math.cos(phase * 0.5); // fake spiral
+        const cx1 = cx - 80 + radius * Math.cos(phase * 2);
+        const cy1 = cy + radius * Math.sin(phase * 2);
+
+        // Quantum discrete jump position
+        const qRadius = Math.cos(phase * 0.5) > 0 ? 70 : 50; 
+        const cx2 = cx + 80 + qRadius * Math.cos(phase * 2);
+        const cy2 = cy + qRadius * Math.sin(phase * 2);
+
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full p-2">
+            <svg className="w-full" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid meet">
+              
+              {/* Left Side: Classical Spiral */}
+              <text x="70" y="15" fill="#f43f5e" fontSize="10" textAnchor="middle" fontWeight="bold">Classical Atom</text>
+              <circle cx={cx - 80} cy={cy} r="3" fill="#facc15" />
+              <path d={`M ${cx-80} ${cy} m 0 -70 a 70 70 0 1 1 0 140 a 70 70 0 1 1 0 -140`} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
+              <path d={`M ${cx-80} ${cy} m 0 -50 a 50 50 0 1 1 0 100 a 50 50 0 1 1 0 -100`} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
+              
+              {/* Spiral path trace */}
+              <path d={`M ${cx-80+70} ${cy} Q ${cx-80+60} ${cy+60} ${cx-80} ${cy+50} T ${cx-80-40} ${cy}`} fill="none" stroke="#f43f5e" strokeWidth="1.5" />
+              
+              <circle cx={cx1} cy={cy1} r="3" fill="#60a5fa" />
+              <text x="70" y="145" fill="#cbd5e1" fontSize="8" textAnchor="middle">Continuous radiation</text>
+
+
+              {/* Right Side: Quantum Jumps */}
+              <text x="230" y="15" fill="#4ade80" fontSize="10" textAnchor="middle" fontWeight="bold">Quantum Atom (large n)</text>
+              <circle cx={cx + 80} cy={cy} r="3" fill="#facc15" />
+              <circle cx={cx + 80} cy={cy} r="70" fill="none" stroke="#4ade80" strokeWidth="1.5" />
+              <circle cx={cx + 80} cy={cy} r="50" fill="none" stroke="#4ade80" strokeWidth="1.5" />
+              
+              <circle cx={cx2} cy={cy2} r="3" fill="#60a5fa" />
+              <text x="230" y="145" fill="#cbd5e1" fontSize="8" textAnchor="middle">Discrete jumps approach spiral</text>
+              
+              {/* Jump photon indicator */}
+              {Math.cos(phase * 0.5) <= 0 && Math.cos(phase * 0.5) > -0.1 && (
+                 <path d={`M ${cx+80} ${cy-60} L ${cx+120} ${cy-80}`} fill="none" stroke="#facc15" strokeWidth="2" strokeDasharray="3 2" />
+              )}
+            </svg>
+          </div>
+        );
+      }
+      return <SpiralOrbits />;
+    }
+
+    default:
+      return null;
+  }
+};
+--- END OF FILE src/components/canvasart/ModernPhysicsAtomic3.tsx ---
+
+--- START OF FILE src/components/InteractiveCanvasArt.tsx ---
+import React, { Suspense } from 'react';
+import { renderModernPhysicsRelativity1 } from './canvasart/ModernPhysicsRelativity1';
+import { renderModernPhysicsRelativity2 } from './canvasart/ModernPhysicsRelativity2';
+import { renderModernPhysicsRelativity3 } from './canvasart/ModernPhysicsRelativity3';
+import { renderModernPhysicsRelativity4 } from './canvasart/ModernPhysicsRelativity4';
+import { renderModernPhysicsEM1 } from './canvasart/ModernPhysicsEM1';
+import { renderModernPhysicsEM2 } from './canvasart/ModernPhysicsEM2';
+import { renderModernPhysicsEM3 } from './canvasart/ModernPhysicsEM3';
+import { renderModernPhysicsEM4 } from './canvasart/ModernPhysicsEM4';
+import { renderModernPhysicsWaveParticle1 } from './canvasart/ModernPhysicsWaveParticle1';
+import { renderModernPhysicsWaveParticle2 } from './canvasart/ModernPhysicsWaveParticle2';
+import { renderModernPhysicsWaveParticle3 } from './canvasart/ModernPhysicsWaveParticle3';
+import { renderModernPhysicsAtomic1 } from './canvasart/ModernPhysicsAtomic1';
+import { renderModernPhysicsAtomic2 } from './canvasart/ModernPhysicsAtomic2';
+import { renderModernPhysicsAtomic3 } from './canvasart/ModernPhysicsAtomic3';
+
+interface Props {
+  canvasId: string;
+}
+
+const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
+  const renderInteractive = () => {
+    return (
+      renderModernPhysicsRelativity1(canvasId) ||
+      renderModernPhysicsRelativity2(canvasId) ||
+      renderModernPhysicsRelativity3(canvasId) ||
+      renderModernPhysicsRelativity4(canvasId) ||
+      renderModernPhysicsEM1(canvasId) ||
+      renderModernPhysicsEM2(canvasId) ||
+      renderModernPhysicsEM3(canvasId) ||
+      renderModernPhysicsEM4(canvasId) ||
+      renderModernPhysicsWaveParticle1(canvasId) ||
+      renderModernPhysicsWaveParticle2(canvasId) ||
+      renderModernPhysicsWaveParticle3(canvasId) ||
+      renderModernPhysicsAtomic1(canvasId) ||
+      renderModernPhysicsAtomic2(canvasId) ||
+      renderModernPhysicsAtomic3(canvasId) ||
+      <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
+    );
+  };
+
+  return (
+    <div className="interactive-canvas-container relative w-full aspect-video flex items-center justify-center bg-black/40 rounded-2xl overflow-hidden shadow-inner border border-white/5">
+      <Suspense fallback={<div className="animate-pulse text-slate-500">Loading interactive...</div>}>
+        {renderInteractive()}
+      </Suspense>
+    </div>
+  );
+};
+
+export default InteractiveCanvasArt;
+--- END OF FILE src/components/InteractiveCanvasArt.tsx ---

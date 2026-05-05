@@ -17,7 +17,7 @@ const FillInBlankView: React.FC<Props> = ({ slide, onComplete, onInteraction }) 
   const checkAnswer = () => {
     if (!inputValue.trim()) return;
     
-    // Simple case-insensitive match for demo
+    // Simple case-insensitive match
     const correct = slide.blankAnswer?.toLowerCase().trim() === inputValue.toLowerCase().trim();
     
     setIsSubmitted(true);
@@ -26,11 +26,11 @@ const FillInBlankView: React.FC<Props> = ({ slide, onComplete, onInteraction }) 
     if (onInteraction) onInteraction(correct);
   };
 
-  // Splitting content assuming ___ is the blank
-  const parts = slide.content.split('___');
+  // Splitting content assuming ___ or \_\_\_ is the blank (robust regex)
+  const parts = slide.content.split(/_{3,}|\\_\\_\\_/g);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full animate-in fade-in duration-300">
       <div className="flex-grow overflow-y-auto no-scrollbar pb-4 px-1">
         <h2 className="text-xl font-bold mb-6 text-white">Fill in the blank</h2>
         
@@ -55,7 +55,7 @@ const FillInBlankView: React.FC<Props> = ({ slide, onComplete, onInteraction }) 
         </div>
       </div>
 
-      <div className={`mt-4 border-t-2 pt-4 shrink-0 ${isSubmitted ? (isCorrect ? 'border-green-500/50 bg-green-900/20 -mx-4 px-4 pb-4' : 'border-red-500/50 bg-red-900/20 -mx-4 px-4 pb-4') : 'border-transparent'}`}>
+      <div className={`mt-4 border-t-2 pt-4 shrink-0 transition-colors duration-300 ${isSubmitted ? (isCorrect ? 'border-green-500/50 bg-green-900/20 -mx-4 px-4 pb-4' : 'border-red-500/50 bg-red-900/20 -mx-4 px-4 pb-4') : 'border-transparent'}`}>
         {!isSubmitted ? (
           <button
             onClick={checkAnswer}
@@ -81,13 +81,13 @@ const FillInBlankView: React.FC<Props> = ({ slide, onComplete, onInteraction }) 
             </div>
             
             <button
-              onClick={onComplete}
+              onClick={isCorrect ? onComplete : () => { setIsSubmitted(false); setInputValue(''); }}
               className={`w-full py-3 rounded-xl font-bold text-white text-lg uppercase tracking-wide border-b-4 transition-all mt-4
                 ${isCorrect 
-                  ? 'bg-duo-green border-duo-green-dark' 
-                  : 'bg-duo-red border-duo-red-dark'}`}
+                  ? 'bg-duo-green border-duo-green-dark active:border-b-0 active:translate-y-1' 
+                  : 'bg-duo-red border-duo-red-dark active:border-b-0 active:translate-y-1'}`}
             >
-              Continue
+              {isCorrect ? 'Continue' : 'Try Again'}
             </button>
           </div>
         )}

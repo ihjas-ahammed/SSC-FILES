@@ -3,10 +3,11 @@ Make the following changes:
 * Your task is to recreate units for:
 
 
-**Section 2.4: Compton Effect, Other Photon Processes & Wave-Particle Duality**
-- **241 (The Compton Effect):** `Exp` Compton scattering experiment setup and observed wavelength shift, `T` Compton shift formula (Eq 3.47), `Der` Derivation of Compton wavelength shift (relativistic kinematics of photon–electron), `Ex 3.8` Compton scattering — scattered photon energy, `Ex 3.9` Compton scattering at different angles (6 lessons)
-- **242 (Other Photon Processes):** `T` Bremsstrahlung and cutoff wavelength (Eq — minimum wavelength), `T` Pair production — threshold energy condition, `T` Photoelectric absorption summary, `D` Overview of photon interaction processes (4 lessons)
-- **243 (Particles or Waves):** `T` Wave–particle duality of light, `D` Complementarity principle (Bohr), `T` Conceptual double-slit with single photons — statistical pattern (3 lessons)
+
+**Section 4.3: Franck–Hertz, Correspondence Principle & Failure of Bohr**
+- **431 (The Franck–Hertz Experiment):** `Exp` Franck–Hertz apparatus setup — electron beam through mercury/argon vapor, `T` Energy quantization confirmed — current dips at discrete voltages, `Ex 5.8` Franck–Hertz energy levels from graph data (4 lessons)
+- **432 (Correspondence Principle & Failure of Bohr Model):** `T` Bohr correspondence principle — quantum → classical at large n, `T` Deficiencies of the Bohr model — multi-electron atoms, spectral intensities, fine structure, Zeeman effect, `D` What a full quantum mechanical treatment must address (4 lessons)
+
 
 
 Because you made critical mistakes last time
