@@ -1,290 +1,11 @@
 
---- START OF FILE src/components/interactive-arts/TheveninInteractive.tsx ---
-import React, { useState } from 'react';
-
-const TheveninInteractive: React.FC = () => {
-  const [vs, setVs] = useState(12);
-  const[r1, setR1] = useState(6);
-  const [r2, setR2] = useState(3);
-  const [rl, setRl] = useState(4);
-  const[showEquivalent, setShowEquivalent] = useState(false);
-
-  // Thevenin calculations
-  const vth = vs * (r2 / (r1 + r2));
-  const rth = (r1 * r2) / (r1 + r2);
-  const il = vth / (rth + rl);
-  const vl = il * rl;
-
-  return (
-    <div className="flex flex-col items-center w-full pb-4">
-      <div className="w-full max-w-[320px] h-[200px] bg-black/30 rounded-xl mb-4 border border-white/10 relative flex flex-col items-center justify-center p-4 transition-all duration-500">
-        
-        <svg width="280" height="150" viewBox="0 0 280 150" className="absolute top-2">
-           {showEquivalent ? (
-             // Thevenin Equivalent Circuit
-             <>
-               <path d="M 60 40 L 220 40 L 220 110 L 60 110 Z" stroke="#64748b" strokeWidth="3" fill="none" />
-               
-               {/* Vth Source */}
-               <rect x="45" y="65" width="30" height="20" fill="#0b0f19" />
-               <line x1="45" y1="75" x2="75" y2="75" stroke="#22c55e" strokeWidth="2" />
-               <line x1="50" y1="65" x2="50" y2="85" stroke="#22c55e" strokeWidth="2" />
-               <line x1="60" y1="55" x2="60" y2="95" stroke="#22c55e" strokeWidth="4" />
-               <text x="35" y="80" fill="#22c55e" fontSize="12" textAnchor="end" fontWeight="bold">V_th = {vth.toFixed(1)}V</text>
-
-               {/* Rth Resistor */}
-               <rect x="120" y="30" width="40" height="20" fill="#0b0f19" stroke="#f59e0b" strokeWidth="2" />
-               <text x="140" y="44" fill="#fff" fontSize="10" textAnchor="middle" fontWeight="bold">R_th={rth.toFixed(1)}Ω</text>
-
-               {/* RL Resistor */}
-               <rect x="210" y="55" width="20" height="40" fill="#0b0f19" stroke="#3b82f6" strokeWidth="2" />
-               <text x="235" y="75" fill="#3b82f6" fontSize="10" textAnchor="start" fontWeight="bold">R_L={rl}Ω</text>
-               
-               {/* Current Arrow */}
-               <text x="140" y="20" fill="#3b82f6" fontSize="12" textAnchor="middle" fontWeight="bold">I_L = {il.toFixed(2)}A →</text>
-             </>
-           ) : (
-             // Original Circuit
-             <>
-               <path d="M 60 40 L 220 40 L 220 110 L 60 110 Z" stroke="#64748b" strokeWidth="3" fill="none" />
-               <path d="M 140 40 L 140 110" stroke="#64748b" strokeWidth="3" fill="none" />
-               
-               {/* Vs Source */}
-               <rect x="45" y="65" width="30" height="20" fill="#0b0f19" />
-               <line x1="45" y1="75" x2="75" y2="75" stroke="#22c55e" strokeWidth="2" />
-               <line x1="50" y1="65" x2="50" y2="85" stroke="#22c55e" strokeWidth="2" />
-               <line x1="60" y1="55" x2="60" y2="95" stroke="#22c55e" strokeWidth="4" />
-               <text x="35" y="80" fill="#22c55e" fontSize="12" textAnchor="end" fontWeight="bold">{vs}V</text>
-
-               {/* R1 Resistor */}
-               <rect x="80" y="30" width="40" height="20" fill="#0b0f19" stroke="#f59e0b" strokeWidth="2" />
-               <text x="100" y="44" fill="#fff" fontSize="10" textAnchor="middle" fontWeight="bold">R₁={r1}Ω</text>
-
-               {/* R2 Resistor */}
-               <rect x="130" y="55" width="20" height="40" fill="#0b0f19" stroke="#f59e0b" strokeWidth="2" />
-               <text x="155" y="75" fill="#fff" fontSize="10" textAnchor="start" fontWeight="bold">R₂={r2}Ω</text>
-
-               {/* RL Resistor */}
-               <rect x="210" y="55" width="20" height="40" fill="#0b0f19" stroke="#3b82f6" strokeWidth="2" />
-               <text x="235" y="75" fill="#3b82f6" fontSize="10" textAnchor="start" fontWeight="bold">R_L={rl}Ω</text>
-               
-               {/* Current Arrow */}
-               <text x="180" y="30" fill="#3b82f6" fontSize="10" textAnchor="middle" fontWeight="bold">I_L = {il.toFixed(2)}A →</text>
-             </>
-           )}
-        </svg>
-
-      </div>
-
-      <div className="text-center mb-4 flex gap-4 w-full px-4">
-         <button 
-           onClick={() => setShowEquivalent(false)}
-           className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-b-4 ${!showEquivalent ? 'bg-amber-600 border-amber-800 text-white' : 'bg-slate-700 border-slate-900 text-slate-300'}`}
-         >
-           Original Circuit
-         </button>
-         <button 
-           onClick={() => setShowEquivalent(true)}
-           className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-b-4 ${showEquivalent ? 'bg-amber-600 border-amber-800 text-white' : 'bg-slate-700 border-slate-900 text-slate-300'}`}
-         >
-           Thevenin Equivalent
-         </button>
-      </div>
-
-      <div className="w-full px-4 space-y-4">
-         <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 w-8">R₁</span>
-            <input type="range" min="1" max="20" step="1" value={r1} onChange={(e) => setR1(parseFloat(e.target.value))} className="flex-grow accent-amber-500" />
-         </div>
-         <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 w-8">R₂</span>
-            <input type="range" min="1" max="20" step="1" value={r2} onChange={(e) => setR2(parseFloat(e.target.value))} className="flex-grow accent-amber-500" />
-         </div>
-         <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 w-8">R_L</span>
-            <input type="range" min="1" max="20" step="1" value={rl} onChange={(e) => setRl(parseFloat(e.target.value))} className="flex-grow accent-blue-500" />
-         </div>
-      </div>
-    </div>
-  );
-};
-
-export default TheveninInteractive;
---- END OF FILE src/components/interactive-arts/TheveninInteractive.tsx ---
-
---- START OF FILE src/components/interactive-arts/MaxPowerInteractive.tsx ---
-import React, { useState } from 'react';
-
-const MaxPowerInteractive: React.FC = () => {
-  const[rl, setRl] = useState(5);
-  const vth = 10;
-  const rth = 5;
-
-  const calculatePower = (rLoad: number) => {
-    const i = vth / (rth + rLoad);
-    return i * i * rLoad;
-  };
-
-  const currentPower = calculatePower(rl);
-  const maxPower = calculatePower(rth);
-
-  // Generate curve points
-  const points =[];
-  for (let r = 0; r <= 20; r += 0.5) {
-    const p = calculatePower(r);
-    const x = (r / 20) * 260; // 260 is max width
-    const y = 120 - (p / maxPower) * 100; // 120 is max height, 100 is amplitude
-    points.push(`${x},${y}`);
-  }
-
-  const currentX = (rl / 20) * 260;
-  const currentY = 120 - (currentPower / maxPower) * 100;
-
-  return (
-    <div className="flex flex-col items-center w-full pb-4">
-      <div className="w-full max-w-[320px] h-[180px] bg-black/30 rounded-xl mb-6 border border-white/10 relative p-4 flex flex-col items-center justify-center">
-        
-        {/* Graph */}
-        <svg width="280" height="140" viewBox="0 0 280 140" className="absolute top-2 left-[20px]">
-           {/* Axes */}
-           <line x1="0" y1="120" x2="260" y2="120" stroke="#64748b" strokeWidth="2" />
-           <line x1="0" y1="0" x2="0" y2="120" stroke="#64748b" strokeWidth="2" />
-           <text x="260" y="135" fill="#64748b" fontSize="10" textAnchor="end">R_L (Ω)</text>
-           <text x="10" y="10" fill="#64748b" fontSize="10" textAnchor="start">Power (W)</text>
-
-           {/* Power Curve */}
-           <polyline points={points.join(' ')} fill="none" stroke="#3b82f6" strokeWidth="3" />
-           
-           {/* Marker for Rth */}
-           <line x1={(rth/20)*260} y1="20" x2={(rth/20)*260} y2="120" stroke="#f59e0b" strokeWidth="1" strokeDasharray="4" />
-           <text x={(rth/20)*260} y="135" fill="#f59e0b" fontSize="10" textAnchor="middle">R_th = {rth}Ω</text>
-
-           {/* Current Value Marker */}
-           <circle cx={currentX} cy={currentY} r="5" fill="#ef4444" stroke="#fff" strokeWidth="2" />
-           <line x1={currentX} y1={currentY} x2={currentX} y2="120" stroke="#ef4444" strokeWidth="1" strokeDasharray="2" />
-        </svg>
-
-        <div className="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-[10px] text-white font-bold border border-white/10">
-           P = {currentPower.toFixed(2)} W
-        </div>
-      </div>
-
-      <div className="text-center mb-4 w-full px-4">
-         <span className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${rl === rth ? 'bg-green-900/50 text-green-400 border border-green-500/50' : 'bg-blue-900/50 text-blue-400 border border-blue-500/50'}`}>
-            {rl === rth ? 'Maximum Power Achieved!' : `Adjust R_L to maximize power`}
-         </span>
-      </div>
-
-      <div className="w-full px-4 space-y-4">
-         <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 w-16">R_L (Ω)</span>
-            <input type="range" min="0" max="20" step="0.5" value={rl} onChange={(e) => setRl(parseFloat(e.target.value))} className="flex-grow accent-red-500" />
-         </div>
-      </div>
-    </div>
-  );
-};
-
-export default MaxPowerInteractive;
---- END OF FILE src/components/interactive-arts/MaxPowerInteractive.tsx ---
-
---- START OF FILE src/components/InteractiveCanvasArt.tsx ---
-import React from 'react';
-import VectorAdditionInteractive from './interactive-arts/VectorAdditionInteractive';
-import ComponentFormInteractive from './interactive-arts/ComponentFormInteractive';
-import GradientInteractive from './interactive-arts/GradientInteractive';
-import DivergenceInteractive from './interactive-arts/DivergenceInteractive';
-import CurlInteractive from './interactive-arts/CurlInteractive';
-import LaplacianInteractive from './interactive-arts/LaplacianInteractive';
-import WorkPathInteractive from './interactive-arts/WorkPathInteractive';
-import ConductorChargesInteractive from './interactive-arts/ConductorChargesInteractive';
-import CapacitorInteractive from './interactive-arts/CapacitorInteractive';
-import LorentzForceInteractive from './interactive-arts/LorentzForceInteractive';
-import BiotSavartInteractive from './interactive-arts/BiotSavartInteractive';
-import AmperesLawInteractive from './interactive-arts/AmperesLawInteractive';
-import MagBoundaryInteractive from './interactive-arts/MagBoundaryInteractive';
-import ClockFaceChargesInteractive from './interactive-arts/ClockFaceChargesInteractive';
-import CycloidMotionInteractive from './interactive-arts/CycloidMotionInteractive';
-import HelmholtzCoilsInteractive from './interactive-arts/HelmholtzCoilsInteractive';
-import LineIntegralInteractive from './interactive-arts/LineIntegralInteractive';
-import SphericalCoordsInteractive from './interactive-arts/SphericalCoordsInteractive';
-import CoulombForceInteractive from './interactive-arts/CoulombForceInteractive';
-import ContinuousIntegrationInteractive from './interactive-arts/ContinuousIntegrationInteractive';
-import ElectricBoundaryInteractive from './interactive-arts/ElectricBoundaryInteractive';
-import SolidSphereFieldPlot from './interactive-arts/SolidSphereFieldPlot';
-import CoordSystemInteractive from './interactive-arts/CoordSystemInteractive';
-import GaussianCylinderInteractive from './interactive-arts/GaussianCylinderInteractive';
-import GaussianPillboxInteractive from './interactive-arts/GaussianPillboxInteractive';
-import KclInteractive from './interactive-arts/KclInteractive';
-import KvlInteractive from './interactive-arts/KvlInteractive';
-import WheatstoneInteractive from './interactive-arts/WheatstoneInteractive';
-import CareyFosterInteractive from './interactive-arts/CareyFosterInteractive';
-import PotentiometerInteractive from './interactive-arts/PotentiometerInteractive';
-import SuperpositionInteractive from './interactive-arts/SuperpositionInteractive';
-import TheveninInteractive from './interactive-arts/TheveninInteractive';
-import MaxPowerInteractive from './interactive-arts/MaxPowerInteractive';
-
-interface Props {
-  canvasId: string;
-}
-
-const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
-  const renderInteractive = () => {
-    switch (canvasId) {
-      case 'vector-addition-interactive': return <VectorAdditionInteractive />;
-      case 'component-form-interactive': return <ComponentFormInteractive />;
-      case 'gradient-interactive': return <GradientInteractive />;
-      case 'divergence-interactive': return <DivergenceInteractive />;
-      case 'curl-interactive': return <CurlInteractive />;
-      case 'laplacian-interactive': return <LaplacianInteractive />;
-      case 'work-path-interactive': return <WorkPathInteractive />;
-      case 'conductor-charges-interactive': return <ConductorChargesInteractive />;
-      case 'capacitor-interactive': return <CapacitorInteractive />;
-      case 'lorentz-force-interactive': return <LorentzForceInteractive />;
-      case 'biot-savart-interactive': return <BiotSavartInteractive />;
-      case 'amperes-law-interactive': return <AmperesLawInteractive />;
-      case 'mag-boundary-interactive': return <MagBoundaryInteractive />;
-      case 'clock-face-interactive': return <ClockFaceChargesInteractive />;
-      case 'cycloid-motion-interactive': return <CycloidMotionInteractive />;
-      case 'helmholtz-coils-interactive': return <HelmholtzCoilsInteractive />;
-      case 'line-integral-interactive': return <LineIntegralInteractive />;
-      case 'spherical-coords-interactive': return <SphericalCoordsInteractive />;
-      case 'coulomb-force-interactive': return <CoulombForceInteractive />;
-      case 'continuous-integration-interactive': return <ContinuousIntegrationInteractive />;
-      case 'electric-boundary-interactive': return <ElectricBoundaryInteractive />;
-      case 'solid-sphere-plot': return <SolidSphereFieldPlot />;
-      case 'coord-system-interactive': return <CoordSystemInteractive />;
-      case 'gaussian-cylinder-interactive': return <GaussianCylinderInteractive />;
-      case 'gaussian-pillbox-interactive': return <GaussianPillboxInteractive />;
-      case 'kcl-interactive': return <KclInteractive />;
-      case 'kvl-interactive': return <KvlInteractive />;
-      case 'wheatstone-interactive': return <WheatstoneInteractive />;
-      case 'carey-foster-interactive': return <CareyFosterInteractive />;
-      case 'potentiometer-interactive': return <PotentiometerInteractive />;
-      case 'superposition-interactive': return <SuperpositionInteractive />;
-      case 'thevenin-interactive': return <TheveninInteractive />;
-      case 'max-power-interactive': return <MaxPowerInteractive />;
-      default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found: {canvasId}</p>;
-    }
-  };
-
-  return (
-    <div className="interactive-canvas-container">
-      {renderInteractive()}
-    </div>
-  );
-};
-
-export default InteractiveCanvasArt;
---- END OF FILE src/components/InteractiveCanvasArt.tsx ---
-
 --- START OF FILE src/data/chapter4_5.ts ---
 import { Section } from '../types';
 
 export const SECTION_4_5: Section = {
   id: "section-4-5",
-  title: "Section 4.5: Thevenin's, Norton's & Max Power Theorems",
-  description: "Simplifying complex networks to equivalent sources and understanding power transfer.",
+  title: "Section 4.5: Thevenin's & Norton's Theorems",
+  description: "Simplifying complex networks to equivalent voltage or current sources.",
   color: "duo-orange",
   units:[
     {
@@ -347,43 +68,19 @@ export const SECTION_4_5: Section = {
       ]
     },
     {
-      id: "unit-453-max-power",
-      title: "Maximum Power Transfer",
-      description: "Optimizing the load for power delivery.",
-      color: "duo-orange",
-      lessons:[
-        {
-          id: "les-453-1",
-          title: "Maximum Power Transfer Theorem",
-          description: "Matching impedances.",
-          icon: "Zap",
-          slides:[
-             { id: "s0", type: "quiz", title: "Conceptual Objective", content: "If you connect a $0\\Omega$ load (short circuit) to a battery, how much power is delivered to the load?", options:[{id:"A", text:"Maximum", isCorrect:false, explanation:"Power = I^2 R. If R is 0, Power is 0."}, {id:"B", text:"Zero", isCorrect:true, explanation:"All the power is burned up inside the battery's internal resistance."}] },
-             { id: "s1", type: "quiz", title: "Conceptual Objective", content: "If you connect an infinite $\\Omega$ load (open circuit) to a battery, how much power is delivered?", options:[{id:"A", text:"Zero", isCorrect:true, explanation:"No current flows, so Power is zero."}, {id:"B", text:"Maximum", isCorrect:false, explanation:""}] },
-             { id: "s2", type: "theory", title: "Statement of the Theorem", content: "The maximum power will be delivered to a load by a generator when:\n1. The resistive components of the impedances of the load and generator are **equal** ($R_L = R_{th}$).\n2. The reactive components are equal in magnitude but **opposite in sign** ($X_L = -X_{th}$).\n\nFor simple DC circuits containing only resistors, this means maximum power transfer occurs exactly when the load resistance matches the Thevenin equivalent resistance of the source: **$R_L = R_{th}$**." },
-             { id: "s3", type: "interactive_canvas", title: "Power Curve", content: "Adjust the load resistance. Notice how the power delivered starts at zero, peaks exactly when RL = Rth, and then slowly decays.", interactiveCanvasId: "max-power-interactive" },
-             { id: "s4", type: "proof", title: "Proof: Differentiation", content: "**Result: Maximum at $R_L = R_{th}$**\n\n1. Let the Thevenin circuit be $E$ and $R_{th}$. The load is $R_L$.\n2. Current $I = \\frac{E}{R_{th} + R_L}$.\n3. Power to load $P = I^2 R_L = \\frac{E^2 R_L}{(R_{th} + R_L)^2}$.\n4. To find the maximum, take the derivative $dP/dR_L$ and set it to zero.\n5. $\\frac{d}{dR_L} \\left[ E^2 R_L (R_{th} + R_L)^{-2} \\right] = E^2 \\left[ (R_{th}+R_L)^{-2} - 2R_L(R_{th}+R_L)^{-3} \\right] = 0$.\n6. Dividing out terms yields $1 - \\frac{2R_L}{R_{th}+R_L} = 0 \implies R_{th} + R_L = 2R_L \implies R_L = R_{th}$." },
-             { id: "s5", type: "numerical", title: "Maximum Power", content: "A source has $E_{th} = 10$V and $R_{th} = 5\\Omega$. What is the maximum possible power (in Watts) that can be delivered to a load?", numericAnswer: 5, numericTolerance: 0.1, notes: "P_max = E^2 / (4 * R_th)" },
-             { id: "s6", type: "quiz", title: "Efficiency", content: "At maximum power transfer ($R_L = R_{th}$), what is the efficiency of the system (Power to load / Total Power generated)?", options:[{id:"A", text:"100%", isCorrect:false, explanation:""}, {id:"B", text:"50%", isCorrect:true, explanation:"Exactly half the power is lost as heat inside the source's internal resistance."}] },
-             { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Maximum power transfer occurs when the load resistance is ___ to the internal resistance of the source.", blankAnswer: "equal" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "unit-454-summary",
+      id: "unit-453-summary",
       title: "Section Summary",
       description: "Recap of Network Theorems.",
       color: "duo-orange",
       lessons:[
         {
           id: "les-sum-theorems",
-          title: "Network Theorems Recap",
-          description: "Review of Thevenin, Norton, and Max Power.",
+          title: "Theorems Recap",
+          description: "Review of Thevenin and Norton.",
           icon: "CheckSquare",
           slides:[
             { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "Thevenin's and Norton's theorems are fundamentally forms of:", options:[{id:"A", text:"Source Transformations", isCorrect:true, explanation:"They transform complex active networks into simple ideal sources with impedance."}, {id:"B", text:"Energy Conservation", isCorrect:false, explanation:""}] },
-            { id: "s1", type: "theory", title: "Summary: Theorems", content: "**Thevenin's Theorem:** Any linear active network can be replaced by a single voltage source ($E_{th} = V_{open-circuit}$) in series with an impedance ($Z_{th}$). \n\n**Norton's Theorem:** The same network can be replaced by a current source ($I_N = I_{short-circuit}$) in parallel with the same impedance ($Z_{th}$).\n\n**Max Power Transfer:** To extract the maximum possible power from any given source, the load resistance must perfectly match the source's internal Thevenin resistance ($R_L = R_{th}$). At this peak, efficiency is exactly 50%." }
+            { id: "s1", type: "theory", title: "Summary: Theorems", content: "**Thevenin's Theorem:** Any linear active network can be replaced by a single voltage source ($E_{th} = V_{open-circuit}$) in series with an impedance ($Z_{th}$). \n\n**Norton's Theorem:** The same network can be replaced by a current source ($I_N = I_{short-circuit}$) in parallel with the same impedance ($Z_{th}$)." }
           ]
         }
       ]
@@ -392,6 +89,61 @@ export const SECTION_4_5: Section = {
 };
 --- END OF FILE src/data/chapter4_5.ts ---
 
+--- START OF FILE src/data/chapter4_6.ts ---
+import { Section } from '../types';
+
+export const SECTION_4_6: Section = {
+  id: "section-4-6",
+  title: "Section 4.6: Maximum Power Transfer Theorem",
+  description: "Optimizing the load for maximum power delivery from a source.",
+  color: "duo-orange",
+  units:[
+    {
+      id: "unit-461-max-power",
+      title: "Maximum Power Transfer",
+      description: "Optimizing the load for power delivery.",
+      color: "duo-orange",
+      lessons:[
+        {
+          id: "les-461-1",
+          title: "Maximum Power Transfer Theorem",
+          description: "Matching impedances.",
+          icon: "Zap",
+          slides:[
+             { id: "s0", type: "quiz", title: "Conceptual Objective", content: "If you connect a $0\\Omega$ load (short circuit) to a battery, how much power is delivered to the load?", options:[{id:"A", text:"Maximum", isCorrect:false, explanation:"Power = I^2 R. If R is 0, Power is 0."}, {id:"B", text:"Zero", isCorrect:true, explanation:"All the power is burned up inside the battery's internal resistance."}] },
+             { id: "s1", type: "quiz", title: "Conceptual Objective", content: "If you connect an infinite $\\Omega$ load (open circuit) to a battery, how much power is delivered?", options:[{id:"A", text:"Zero", isCorrect:true, explanation:"No current flows, so Power is zero."}, {id:"B", text:"Maximum", isCorrect:false, explanation:""}] },
+             { id: "s2", type: "theory", title: "Statement of the Theorem", content: "The maximum power will be delivered to a load by a generator when:\n1. The resistive components of the impedances of the load and generator are **equal** ($R_L = R_{th}$).\n2. The reactive components are equal in magnitude but **opposite in sign** ($X_L = -X_{th}$).\n\nFor simple DC circuits containing only resistors, this means maximum power transfer occurs exactly when the load resistance matches the Thevenin equivalent resistance of the source: **$R_L = R_{th}$**." },
+             { id: "s3", type: "interactive_canvas", title: "Power Curve", content: "Adjust the load resistance. Notice how the power delivered starts at zero, peaks exactly when RL = Rth, and then slowly decays.", interactiveCanvasId: "max-power-interactive" },
+             { id: "s4", type: "proof", title: "Proof: Differentiation", content: "**Result: Maximum at $R_L = R_{th}$**\n\n1. Let the Thevenin circuit be $E$ and $R_{th}$. The load is $R_L$.\n2. Current $I = \\frac{E}{R_{th} + R_L}$.\n3. Power to load $P = I^2 R_L = \\frac{E^2 R_L}{(R_{th} + R_L)^2}$.\n4. To find the maximum, take the derivative $dP/dR_L$ and set it to zero.\n5. $\\frac{d}{dR_L} \\left[ E^2 R_L (R_{th} + R_L)^{-2} \\right] = E^2 \\left[ (R_{th}+R_L)^{-2} - 2R_L(R_{th}+R_L)^{-3} \\right] = 0$.\n6. Dividing out terms yields $1 - \\frac{2R_L}{R_{th}+R_L} = 0 \\implies R_{th} + R_L = 2R_L \\implies R_L = R_{th}$." },
+             { id: "s5", type: "numerical", title: "Maximum Power", content: "A source has $E_{th} = 10$V and $R_{th} = 5\\Omega$. What is the maximum possible power (in Watts) that can be delivered to a load?", numericAnswer: 5, numericTolerance: 0.1, notes: "P_max = E^2 / (4 * R_th)" },
+             { id: "s6", type: "quiz", title: "Efficiency", content: "At maximum power transfer ($R_L = R_{th}$), what is the efficiency of the system (Power to load / Total Power generated)?", options:[{id:"A", text:"100%", isCorrect:false, explanation:""}, {id:"B", text:"50%", isCorrect:true, explanation:"Exactly half the power is lost as heat inside the source's internal resistance."}] },
+             { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Maximum power transfer occurs when the load resistance is ___ to the internal resistance of the source.", blankAnswer: "equal" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-462-summary",
+      title: "Section Summary",
+      description: "Recap of Maximum Power Transfer.",
+      color: "duo-orange",
+      lessons:[
+        {
+          id: "les-sum-max-power",
+          title: "Max Power Recap",
+          description: "Review of optimization.",
+          icon: "CheckSquare",
+          slides:[
+            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "To deliver maximum power, a DC load must be set to:", options:[{id:"A", text:"Zero ohms", isCorrect:false, explanation:""}, {id:"B", text:"The Thevenin resistance of the source", isCorrect:true, explanation:"Impedance matching."}] },
+            { id: "s1", type: "theory", title: "Summary: Max Power", content: "**Max Power Transfer Theorem:** To extract the maximum possible power from any given source, the load resistance must perfectly match the source's internal Thevenin resistance ($R_L = R_{th}$). At this peak power delivery state, the efficiency of the overall system is exactly 50%." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chapter4_6.ts ---
+
 --- START OF FILE src/data/module4.ts ---
 import { Course } from '../types';
 import { SECTION_4_1 } from './chapter4_1';
@@ -399,6 +151,7 @@ import { SECTION_4_2 } from './chapter4_2';
 import { SECTION_4_3 } from './chapter4_3';
 import { SECTION_4_4 } from './chapter4_4';
 import { SECTION_4_5 } from './chapter4_5';
+import { SECTION_4_6 } from './chapter4_6';
 
 export const MODULE_4: Course = {
   id: 'module-4',
@@ -409,7 +162,8 @@ export const MODULE_4: Course = {
     SECTION_4_2,
     SECTION_4_3,
     SECTION_4_4,
-    SECTION_4_5
+    SECTION_4_5,
+    SECTION_4_6
   ],
   chapterSummary:[
     {
@@ -428,13 +182,19 @@ export const MODULE_4: Course = {
       id: "chap-sum-4-3",
       type: "theory",
       title: "Chapter Summary: The Potentiometer",
-      content: "We explored the **Potentiometer**, an ideal measurement tool that balances unknown voltages against a uniform wire without drawing *any* current from the test circuit ($V \propto l$). \n\nBecause it acts as an ideal infinite-impedance voltmeter, it allows precise measurement of cell EMFs and internal resistance ($r = R(l_1/l_2 - 1)$), measurement of unknown coils ($P/Q = l_1/l_2$), and exact calibration of standard ammeters and voltmeters against a known reference cell."
+      content: "We explored the **Potentiometer**, an ideal measurement tool that balances unknown voltages against a uniform wire without drawing *any* current from the test circuit ($V \\propto l$). \n\nBecause it acts as an ideal infinite-impedance voltmeter, it allows precise measurement of cell EMFs and internal resistance ($r = R(l_1/l_2 - 1)$), measurement of unknown coils ($P/Q = l_1/l_2$), and exact calibration of standard ammeters and voltmeters against a known reference cell."
     },
     {
       id: "chap-sum-4-4",
       type: "theory",
       title: "Chapter Summary: Network Theorems",
-      content: "We transitioned to formal Network Analysis, defining active/passive and linear/non-linear networks. We introduced the **Superposition Theorem**, which states that in a linear multi-source network, the total current in any branch is the algebraic sum of the currents produced by each source acting independently.\n\nWe then learned **Thevenin's and Norton's Theorems**, which allow us to dramatically simplify any linear active network down to a single voltage source and series resistor, or a single current source and parallel resistor. Finally, the **Maximum Power Transfer Theorem** proved that to extract the most power from a source, the load resistance must exactly match the source's internal Thevenin resistance ($R_L = R_{th}$)."
+      content: "We transitioned to formal Network Analysis, defining active/passive and linear/non-linear networks. We introduced the **Superposition Theorem**, which states that in a linear multi-source network, the total current in any branch is the algebraic sum of the currents produced by each source acting independently.\n\nWe then learned **Thevenin's and Norton's Theorems**, which allow us to dramatically simplify any linear active network down to a single voltage source and series resistor, or a single current source and parallel resistor."
+    },
+    {
+      id: "chap-sum-4-5",
+      type: "theory",
+      title: "Chapter Summary: Maximum Power Transfer",
+      content: "Finally, the **Maximum Power Transfer Theorem** proved that to extract the most power from a source, the load resistance must exactly match the source's internal Thevenin resistance ($R_L = R_{th}$). At this point, the system transfers maximum energy, though at a limited efficiency of 50%."
     }
   ]
 };
