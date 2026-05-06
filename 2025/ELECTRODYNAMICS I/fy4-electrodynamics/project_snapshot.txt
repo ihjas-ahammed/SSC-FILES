@@ -1,742 +1,441 @@
---- START OF FILE project_snapshot_out.txt ---
 
---- START OF FILE src/utils/courseUtils.ts ---
-import { Course, Section } from '../types';
+--- START OF FILE src/components/interactive-arts/TheveninInteractive.tsx ---
+import React, { useState } from 'react';
 
-export const getNextContext = (
-  courses: Course[], 
-  currentCourseId: string, 
-  currentSectionIndex: number
-): { type: 'section' | 'course' | 'none', label: string, targetId?: string, targetIndex?: number } => {
-  
-  const courseIndex = courses.findIndex(c => c.id === currentCourseId);
-  if (courseIndex === -1) return { type: 'none', label: '' };
+const TheveninInteractive: React.FC = () => {
+  const [vs, setVs] = useState(12);
+  const[r1, setR1] = useState(6);
+  const [r2, setR2] = useState(3);
+  const [rl, setRl] = useState(4);
+  const[showEquivalent, setShowEquivalent] = useState(false);
 
-  const currentCourse = courses[courseIndex];
-
-  // Check if there is a next section in the current course
-  if (currentSectionIndex < currentCourse.sections.length - 1) {
-    const nextSection = currentCourse.sections[currentSectionIndex + 1];
-    return {
-      type: 'section',
-      label: `Next Section: ${nextSection.title.split(':')[0]}`, // e.g. "Next Section: Section 1.2"
-      targetIndex: currentSectionIndex + 1
-    };
-  }
-
-  // Check if there is a next course
-  if (courseIndex < courses.length - 1) {
-    const nextCourse = courses[courseIndex + 1];
-    return {
-      type: 'course',
-      label: `Next Module: ${nextCourse.title.split(':')[0]}`, // e.g. "Next Module: Module II"
-      targetId: nextCourse.id
-    };
-  }
-
-  return { type: 'none', label: '' };
-};
-
-export const getNextCourseId = (courses: Course[], currentCourseId: string): string | null => {
-  const index = courses.findIndex(c => c.id === currentCourseId);
-  if (index !== -1 && index < courses.length - 1) {
-    return courses[index + 1].id;
-  }
-  return null;
-};
---- END OF FILE src/utils/courseUtils.ts ---
-
---- START OF FILE src/App.tsx ---
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { UserProgress } from './types';
-import Dashboard from './pages/Dashboard';
-import LessonPage from './pages/LessonPage';
-import ChapterSummaryPage from './pages/ChapterSummaryPage';
-import './App.css';
-import './styles/interactive.css'; 
-import './styles/path.css'; 
-import './styles/progress.css';
-import './styles/bottom-nav.css';
-
-const App: React.FC = () => {
-  const [progress, setProgress] = useState<UserProgress>(() => {
-    const saved = localStorage.getItem('duofy4_progress'); 
-    let initialProgress: UserProgress = {
-      completedLessons: [],
-      xp: 0,
-      currentCourseId: 'module-1'
-    };
-    
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        initialProgress = {
-          completedLessons: parsed.completedLessons || [],
-          xp: parsed.xp || 0,
-          currentCourseId: parsed.currentCourseId || 'module-1'
-        };
-      } catch(e) {
-        console.error("Failed to parse progress", e);
-      }
-    }
-    return initialProgress;
-  });
-
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-
-  useEffect(() => {
-    localStorage.setItem('duofy4_progress', JSON.stringify(progress));
-  }, [progress]);
-
-  useEffect(() => {
-    setCurrentSectionIndex(0);
-  }, [progress.currentCourseId]);
+  // Thevenin calculations
+  const vth = vs * (r2 / (r1 + r2));
+  const rth = (r1 * r2) / (r1 + r2);
+  const il = vth / (rth + rl);
+  const vl = il * rl;
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/learn" replace />} />
-          
-          <Route 
-             path="/*" 
-             element={<Dashboard 
-                progress={progress} 
-                setProgress={setProgress} 
-                currentSectionIndex={currentSectionIndex} 
-                setCurrentSectionIndex={setCurrentSectionIndex} 
-             />} 
-          />
-          
-          <Route 
-             path="/lesson/:courseId/:unitId/:lessonId" 
-             element={<LessonPage 
-                progress={progress} 
-                setProgress={setProgress} 
-             />} 
-          />
-          <Route 
-             path="/summary/:courseId" 
-             element={<ChapterSummaryPage />} 
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
-};
-
-export default App;
---- END OF FILE src/App.tsx ---
-
---- START OF FILE src/components/BottomNav.tsx ---
-import React from 'react';
-import { BookOpen, Edit3, FileText } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/bottom-nav.css';
-
-export type Tab = 'learn' | 'practice' | 'notes';
-
-interface Props {
-  activeTab: Tab;
-}
-
-const BottomNav: React.FC<Props> = ({ activeTab }) => {
-  const navigate = useNavigate();
-
-  const handleNav = (path: string) => {
-    if (activeTab !== path) {
-      navigate(`/${path}`);
-      window.scrollTo(0, 0);
-    }
-  };
-
-  return (
-    <div className="bottom-nav-container">
-      <div className="bottom-nav-wrapper">
-        <button 
-          onClick={() => handleNav('learn')}
-          className={`nav-item ${activeTab === 'learn' ? 'active' : ''}`}
-        >
-          <div className="icon-container">
-            <BookOpen size={24} strokeWidth={2.5} />
-          </div>
-          <span className="label">Learn</span>
-        </button>
-
-        <button 
-          onClick={() => handleNav('practice')}
-          className={`nav-item ${activeTab === 'practice' ? 'active' : ''}`}
-        >
-          <div className="icon-container">
-            <Edit3 size={24} strokeWidth={2.5} />
-          </div>
-          <span className="label">Practice</span>
-        </button>
-
-        <button 
-          onClick={() => handleNav('notes')}
-          className={`nav-item ${activeTab === 'notes' ? 'active' : ''}`}
-        >
-          <div className="icon-container">
-            <FileText size={24} strokeWidth={2.5} />
-          </div>
-          <span className="label">Notes</span>
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default BottomNav;
---- END OF FILE src/components/BottomNav.tsx ---
-
---- START OF FILE src/components/LessonPath.tsx ---
-import React, { useEffect, useState, useMemo } from 'react';
-import { Section, Lesson, Unit } from '../types';
-import * as Icons from 'lucide-react';
-import PathConnector from './PathConnector';
-import LessonNode from './LessonNode';
-
-interface Props {
-  section: Section;
-  completedLessons: string[];
-  onStartLesson: (unitId: string, lessonId: string) => void;
-  onOpenSectionSelector: () => void;
-  nextContext: { type: 'section' | 'course' | 'none', label: string };
-  onNavigateNext: () => void;
-}
-
-const colorHexMap: Record<string, string> = {
-  'duo-blue': '#1cb0f6',
-  'duo-green': '#58cc02',
-  'duo-red': '#ff4b4b',
-  'duo-violet': '#ce82ff',
-  'duo-orange': '#ff9600'
-};
-
-const LessonPath: React.FC<Props> = ({ 
-  section, 
-  completedLessons, 
-  onStartLesson, 
-  onOpenSectionSelector,
-  nextContext,
-  onNavigateNext
-}) => {
-  const [recentlyCompleted, setRecentlyCompleted] = useState<string | null>(null);
-
-  // Flatten lessons
-  const allLessons = useMemo(() => section.units.flatMap(u => u.lessons.map(l => ({ ...l, unitId: u.id }))), [section]);
-
-  const currentLessonId = useMemo(() => {
-    const firstUncompleted = allLessons.find(l => !completedLessons.includes(l.id));
-    return firstUncompleted ? firstUncompleted.id : null;
-  }, [allLessons, completedLessons]);
-
-  const isSectionComplete = useMemo(() => {
-    return allLessons.every(l => completedLessons.includes(l.id));
-  }, [allLessons, completedLessons]);
-
-  useEffect(() => {
-    const rc = localStorage.getItem('recently_completed');
-    if (rc) {
-      setRecentlyCompleted(rc);
-      const timer = setTimeout(() => {
-        setRecentlyCompleted(null);
-        localStorage.removeItem('recently_completed');
-      }, 2500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (currentLessonId) {
-      setTimeout(() => {
-        const el = document.getElementById(`lesson-node-${currentLessonId}`);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 500);
-    } else if (isSectionComplete) {
-      // Scroll to bottom if complete
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-  }, [section.id, currentLessonId, isSectionComplete]);
-
-  const colorHex = colorHexMap[section.color] || '#1cb0f6';
-
-  let currentY = 40;
-  const pathPoints: { x: number, y: number, id: string }[] = [];
-  const renderElements: { type: 'header' | 'lesson', unit: Unit, y: number, x?: number, lesson?: Lesson }[] = [];
-  
-  let globalLessonIdx = 0;
-
-  section.units.forEach((unit, uIdx) => {
-    if (uIdx > 0) {
-      currentY += 60; 
-    }
-    renderElements.push({ type: 'header', unit, y: currentY });
-    currentY += 100; 
-
-    unit.lessons.forEach((lesson) => {
-      let offset = 0;
-      if (globalLessonIdx % 4 === 1) offset = 65;
-      if (globalLessonIdx % 4 === 2) offset = 0;
-      if (globalLessonIdx % 4 === 3) offset = -65;
-
-      const x = 200 + offset; 
-      const y = currentY;
-      
-      pathPoints.push({ x, y, id: lesson.id });
-      renderElements.push({ type: 'lesson', unit, lesson, x, y });
-
-      currentY += 140; 
-      globalLessonIdx++;
-    });
-  });
-
-  const containerHeight = currentY + (isSectionComplete && nextContext.type !== 'none' ? 100 : 40);
-
-  return (
-    <div className="pb-32 max-w-md mx-auto relative">
-      <div 
-        onClick={onOpenSectionSelector}
-        className={`sticky top-16 mx-4 mt-4 z-30 py-3 px-5 glass-panel rounded-2xl cursor-pointer hover:bg-white/10 transition-all active:scale-[0.98] flex items-center justify-between border-b-4 border-${section.color}`}
-      >
-        <div className="flex items-center gap-2">
-           <h2 className="text-xs font-black uppercase tracking-widest leading-none drop-shadow-sm text-white">{section.title}</h2>
-        </div>
-        <Icons.ChevronDown className="w-4 h-4 text-slate-300" />
-      </div>
-
-      <div className="mt-8 relative w-full max-w-[400px] mx-auto overflow-hidden" style={{ height: `${containerHeight}px` }}>
+    <div className="flex flex-col items-center w-full pb-4">
+      <div className="w-full max-w-[320px] h-[200px] bg-black/30 rounded-xl mb-4 border border-white/10 relative flex flex-col items-center justify-center p-4 transition-all duration-500">
         
-        <svg 
-           viewBox={`0 0 400 ${containerHeight}`} 
-           preserveAspectRatio="none"
-           className="absolute inset-0 w-full h-full pointer-events-none" 
-           style={{ zIndex: 0 }}
-        >
-           <PathConnector 
-             points={pathPoints} 
-             completedLessons={completedLessons} 
-             recentlyCompleted={recentlyCompleted}
-             colorHex={colorHex}
-           />
+        <svg width="280" height="150" viewBox="0 0 280 150" className="absolute top-2">
+           {showEquivalent ? (
+             // Thevenin Equivalent Circuit
+             <>
+               <path d="M 60 40 L 220 40 L 220 110 L 60 110 Z" stroke="#64748b" strokeWidth="3" fill="none" />
+               
+               {/* Vth Source */}
+               <rect x="45" y="65" width="30" height="20" fill="#0b0f19" />
+               <line x1="45" y1="75" x2="75" y2="75" stroke="#22c55e" strokeWidth="2" />
+               <line x1="50" y1="65" x2="50" y2="85" stroke="#22c55e" strokeWidth="2" />
+               <line x1="60" y1="55" x2="60" y2="95" stroke="#22c55e" strokeWidth="4" />
+               <text x="35" y="80" fill="#22c55e" fontSize="12" textAnchor="end" fontWeight="bold">V_th = {vth.toFixed(1)}V</text>
+
+               {/* Rth Resistor */}
+               <rect x="120" y="30" width="40" height="20" fill="#0b0f19" stroke="#f59e0b" strokeWidth="2" />
+               <text x="140" y="44" fill="#fff" fontSize="10" textAnchor="middle" fontWeight="bold">R_th={rth.toFixed(1)}Ω</text>
+
+               {/* RL Resistor */}
+               <rect x="210" y="55" width="20" height="40" fill="#0b0f19" stroke="#3b82f6" strokeWidth="2" />
+               <text x="235" y="75" fill="#3b82f6" fontSize="10" textAnchor="start" fontWeight="bold">R_L={rl}Ω</text>
+               
+               {/* Current Arrow */}
+               <text x="140" y="20" fill="#3b82f6" fontSize="12" textAnchor="middle" fontWeight="bold">I_L = {il.toFixed(2)}A →</text>
+             </>
+           ) : (
+             // Original Circuit
+             <>
+               <path d="M 60 40 L 220 40 L 220 110 L 60 110 Z" stroke="#64748b" strokeWidth="3" fill="none" />
+               <path d="M 140 40 L 140 110" stroke="#64748b" strokeWidth="3" fill="none" />
+               
+               {/* Vs Source */}
+               <rect x="45" y="65" width="30" height="20" fill="#0b0f19" />
+               <line x1="45" y1="75" x2="75" y2="75" stroke="#22c55e" strokeWidth="2" />
+               <line x1="50" y1="65" x2="50" y2="85" stroke="#22c55e" strokeWidth="2" />
+               <line x1="60" y1="55" x2="60" y2="95" stroke="#22c55e" strokeWidth="4" />
+               <text x="35" y="80" fill="#22c55e" fontSize="12" textAnchor="end" fontWeight="bold">{vs}V</text>
+
+               {/* R1 Resistor */}
+               <rect x="80" y="30" width="40" height="20" fill="#0b0f19" stroke="#f59e0b" strokeWidth="2" />
+               <text x="100" y="44" fill="#fff" fontSize="10" textAnchor="middle" fontWeight="bold">R₁={r1}Ω</text>
+
+               {/* R2 Resistor */}
+               <rect x="130" y="55" width="20" height="40" fill="#0b0f19" stroke="#f59e0b" strokeWidth="2" />
+               <text x="155" y="75" fill="#fff" fontSize="10" textAnchor="start" fontWeight="bold">R₂={r2}Ω</text>
+
+               {/* RL Resistor */}
+               <rect x="210" y="55" width="20" height="40" fill="#0b0f19" stroke="#3b82f6" strokeWidth="2" />
+               <text x="235" y="75" fill="#3b82f6" fontSize="10" textAnchor="start" fontWeight="bold">R_L={rl}Ω</text>
+               
+               {/* Current Arrow */}
+               <text x="180" y="30" fill="#3b82f6" fontSize="10" textAnchor="middle" fontWeight="bold">I_L = {il.toFixed(2)}A →</text>
+             </>
+           )}
         </svg>
 
-        {renderElements.map((el) => {
-          if (el.type === 'header') {
-            return (
-              <div 
-                key={`header-${el.unit.id}`}
-                className="absolute w-full px-8 pointer-events-none"
-                style={{ top: `${el.y}px`, transform: 'translateY(-50%)', zIndex: 10 }}
-              >
-                <div className="glass-panel p-5 rounded-3xl text-center shadow-2xl bg-black/60 backdrop-blur-md border border-white/10">
-                  <h3 className="font-extrabold text-white text-sm uppercase tracking-tight mb-1.5">{el.unit.title}</h3>
-                  <p className="text-slate-400 font-bold text-[10px] uppercase tracking-wider">{el.unit.description}</p>
-                </div>
-              </div>
-            );
-          }
+      </div>
 
-          if (el.type === 'lesson' && el.lesson && el.x !== undefined) {
-             const isCompleted = completedLessons.includes(el.lesson.id);
-             const isNextToStart = el.lesson.id === currentLessonId;
+      <div className="text-center mb-4 flex gap-4 w-full px-4">
+         <button 
+           onClick={() => setShowEquivalent(false)}
+           className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-b-4 ${!showEquivalent ? 'bg-amber-600 border-amber-800 text-white' : 'bg-slate-700 border-slate-900 text-slate-300'}`}
+         >
+           Original Circuit
+         </button>
+         <button 
+           onClick={() => setShowEquivalent(true)}
+           className={`flex-1 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all border-b-4 ${showEquivalent ? 'bg-amber-600 border-amber-800 text-white' : 'bg-slate-700 border-slate-900 text-slate-300'}`}
+         >
+           Thevenin Equivalent
+         </button>
+      </div>
 
-             return (
-               <LessonNode 
-                 key={`lesson-${el.lesson.id}`}
-                 lesson={el.lesson}
-                 x={el.x}
-                 y={el.y}
-                 isCompleted={isCompleted}
-                 isNextToStart={isNextToStart}
-                 colorName={section.color}
-                 onStart={() => onStartLesson(el.unit.id, el.lesson!.id)}
-               />
-             );
-          }
-          return null;
-        })}
-
-        {isSectionComplete && nextContext.type !== 'none' && (
-          <div 
-            className="absolute w-full flex justify-center z-20 animate-in fade-in slide-in-from-bottom-4 duration-700"
-            style={{ top: `${currentY}px` }}
-          >
-            <button
-              onClick={onNavigateNext}
-              className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-white shadow-lg transition-all active:scale-95
-                ${nextContext.type === 'course' 
-                  ? 'bg-amber-500 border-b-4 border-amber-700 hover:bg-amber-400' 
-                  : 'bg-duo-blue border-b-4 border-duo-blue-dark hover:bg-blue-400'}`}
-            >
-              <span>{nextContext.label}</span>
-              <Icons.ArrowRight className="w-5 h-5 animate-pulse" />
-            </button>
-          </div>
-        )}
+      <div className="w-full px-4 space-y-4">
+         <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 w-8">R₁</span>
+            <input type="range" min="1" max="20" step="1" value={r1} onChange={(e) => setR1(parseFloat(e.target.value))} className="flex-grow accent-amber-500" />
+         </div>
+         <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 w-8">R₂</span>
+            <input type="range" min="1" max="20" step="1" value={r2} onChange={(e) => setR2(parseFloat(e.target.value))} className="flex-grow accent-amber-500" />
+         </div>
+         <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 w-8">R_L</span>
+            <input type="range" min="1" max="20" step="1" value={rl} onChange={(e) => setRl(parseFloat(e.target.value))} className="flex-grow accent-blue-500" />
+         </div>
       </div>
     </div>
   );
 };
 
-export default LessonPath;
---- END OF FILE src/components/LessonPath.tsx ---
+export default TheveninInteractive;
+--- END OF FILE src/components/interactive-arts/TheveninInteractive.tsx ---
 
---- START OF FILE src/components/NotesTab.tsx ---
-import React, { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Course, Lesson } from '../types';
-import MathRenderer from './MathRenderer';
-import CanvasArt from './CanvasArt';
-import { ArrowRight, BookOpen } from 'lucide-react';
-import { getNextCourseId } from '../utils/courseUtils';
-
-interface Props {
-  course: Course;
-  courses: Course[];
-  onChangeCourse: (id: string) => void;
-}
-
-const NotesTab: React.FC<Props> = ({ course, courses, onChangeCourse }) => {
-  const navigate = useNavigate();
-
-  // Helper to check if a lesson is an "Example" lesson
-  const isExampleLesson = (lesson: Lesson) => {
-    return lesson.title.startsWith("Ex") || lesson.title.startsWith("Prob") || lesson.slides.some(s => s.type === 'example_q');
-  };
-
-  // Logic to prevent duplicate interactive canvases
-  const renderedCanvasIds = useMemo(() => new Set<string>(), [course.id]);
-
-  const nextCourseId = getNextCourseId(courses, course.id);
-  const nextCourse = courses.find(c => c.id === nextCourseId);
-
-  return (
-    <div className="pb-32 px-4 pt-4">
-      <h2 className="text-2xl font-black text-white mb-2 text-center">{course.title}</h2>
-      <p className="text-slate-400 text-center mb-8 text-xs font-bold uppercase tracking-widest">Digital Notebook</p>
-
-      <div className="space-y-12">
-        {course.sections.flatMap(section => 
-          section.units.map(unit => {
-            // Filter theory slides
-            const theorySlides = unit.lessons.flatMap(l => l.slides).filter(s => s.type === 'theory' || s.canvasId || s.interactiveCanvasId);
-            
-            // Find relevant example lessons in this unit
-            const exampleLessons = unit.lessons.filter(l => isExampleLesson(l));
-
-            if (theorySlides.length === 0) return null;
-
-            return (
-              <div key={unit.id} className="space-y-6">
-                <div className="flex items-center gap-4 mb-4">
-                   <div className={`h-1 w-10 rounded-full bg-${unit.color || 'duo-blue'}`} />
-                   <h3 className="text-xl font-bold text-slate-200">{unit.title}</h3>
-                </div>
-
-                {theorySlides.map((slide, i) => {
-                  const canvasId = slide.canvasId || slide.interactiveCanvasId;
-                  let showCanvas = false;
-                  
-                  if (canvasId) {
-                    if (!renderedCanvasIds.has(canvasId)) {
-                      renderedCanvasIds.add(canvasId);
-                      showCanvas = true;
-                    }
-                  }
-
-                  return (
-                    <div key={slide.id} className="glass-panel p-6 rounded-2xl border border-white/5 relative overflow-hidden">
-                      <div className={`absolute top-0 left-0 w-1 h-full bg-${unit.color || 'duo-blue'}/50`} />
-                      
-                      {slide.title && (
-                        <h4 className="text-lg font-bold text-blue-400 mb-3 border-b border-white/10 pb-2 pl-2">
-                          {slide.title}
-                        </h4>
-                      )}
-                      
-                      {slide.content && (
-                        <div className="mb-4 pl-2">
-                          <MathRenderer content={slide.content} className="text-slate-300 text-sm leading-relaxed" />
-                        </div>
-                      )}
-
-                      {showCanvas && (
-                         <div className="mt-4 bg-black/20 rounded-xl p-2 overflow-hidden">
-                            <CanvasArt canvasId={canvasId!} />
-                            <p className="text-center text-[10px] text-slate-500 mt-2 uppercase tracking-wide">Interactive Visual</p>
-                         </div>
-                      )}
-                    </div>
-                  );
-                })}
-
-                {/* Reference to Examples */}
-                {exampleLessons.length > 0 && (
-                  <div className="pl-4 border-l-2 border-white/10">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Practice Examples</p>
-                    <div className="grid grid-cols-1 gap-2">
-                      {exampleLessons.map(exLesson => (
-                        <button
-                          key={exLesson.id}
-                          onClick={() => navigate(`/lesson/${course.id}/${unit.id}/${exLesson.id}`)}
-                          className="flex items-center justify-between glass-panel p-3 rounded-xl hover:bg-white/10 transition-colors text-left group"
-                        >
-                          <span className="text-sm font-semibold text-slate-300 group-hover:text-white transition-colors">{exLesson.title}</span>
-                          <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-blue-400 transition-colors" />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })
-        )}
-
-        {/* Navigation to Next Module */}
-        {nextCourse && (
-          <div className="pt-8 pb-4 flex justify-center">
-            <button
-              onClick={() => onChangeCourse(nextCourse.id)}
-              className="bg-slate-800 border-slate-700 border-b-4 hover:bg-slate-700 text-white font-bold py-4 px-8 rounded-2xl uppercase tracking-widest transition-all active:border-b-0 active:translate-y-1 flex items-center gap-3"
-            >
-              <BookOpen className="w-5 h-5 text-amber-400" />
-              <span>Next: {nextCourse.title}</span>
-            </button>
-          </div>
-        )}
-
-        {course.sections.every(s => s.units.every(u => u.lessons.every(l => l.slides.filter(s => s.type === 'theory').length === 0))) && (
-          <div className="text-center text-slate-500 py-10">
-            No notes available for this module.
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default NotesTab;
---- END OF FILE src/components/NotesTab.tsx ---
-
---- START OF FILE src/components/LearnTab.tsx ---
+--- START OF FILE src/components/interactive-arts/MaxPowerInteractive.tsx ---
 import React, { useState } from 'react';
-import { Course, UserProgress } from '../types';
-import LessonPath from './LessonPath';
-import SectionSelector from './SectionSelector';
-import CourseSelector from './CourseSelector';
-import { BookOpen, Zap, ChevronDown } from 'lucide-react';
-import { getNextContext } from '../utils/courseUtils';
 
-interface Props {
-  progress: UserProgress;
-  setProgress: React.Dispatch<React.SetStateAction<UserProgress>>;
-  currentSectionIndex: number;
-  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
-  currentCourse: Course;
-  courses: Course[];
-  handleCourseChange: (id: string) => void;
-  handleStartLesson: (uId: string, lId: string) => void;
-  handleGoToSummary: () => void;
-}
+const MaxPowerInteractive: React.FC = () => {
+  const[rl, setRl] = useState(5);
+  const vth = 10;
+  const rth = 5;
 
-const LearnTab: React.FC<Props> = ({ 
-  progress, 
-  currentSectionIndex, 
-  setCurrentSectionIndex, 
-  currentCourse,
-  courses,
-  handleCourseChange,
-  handleStartLesson,
-  handleGoToSummary
-}) => {
-  const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
-  const [isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false);
-
-  const currentSection = currentCourse.sections && currentCourse.sections.length > 0 
-      ? currentCourse.sections[currentSectionIndex] || currentCourse.sections[0] 
-      : null;
-
-  const nextContext = getNextContext(courses, currentCourse.id, currentSectionIndex);
-
-  const handleNavigateNext = () => {
-    if (nextContext.type === 'section' && nextContext.targetIndex !== undefined) {
-      setCurrentSectionIndex(nextContext.targetIndex);
-      window.scrollTo(0, 0);
-    } else if (nextContext.type === 'course' && nextContext.targetId) {
-      handleCourseChange(nextContext.targetId);
-    }
+  const calculatePower = (rLoad: number) => {
+    const i = vth / (rth + rLoad);
+    return i * i * rLoad;
   };
 
+  const currentPower = calculatePower(rl);
+  const maxPower = calculatePower(rth);
+
+  // Generate curve points
+  const points =[];
+  for (let r = 0; r <= 20; r += 0.5) {
+    const p = calculatePower(r);
+    const x = (r / 20) * 260; // 260 is max width
+    const y = 120 - (p / maxPower) * 100; // 120 is max height, 100 is amplitude
+    points.push(`${x},${y}`);
+  }
+
+  const currentX = (rl / 20) * 260;
+  const currentY = 120 - (currentPower / maxPower) * 100;
+
   return (
-    <>
-      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
-        <div 
-          onClick={() => setIsCourseSelectorOpen(true)}
-          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
-        >
-          <div className="relative">
-             <BookOpen className="w-8 h-8 text-duo-blue" />
-             <div className="absolute -bottom-1 -right-1 bg-slate-800 rounded-full border border-slate-600">
-                <ChevronDown className="w-3 h-3 text-slate-300" />
-             </div>
-          </div>
-        </div>
+    <div className="flex flex-col items-center w-full pb-4">
+      <div className="w-full max-w-[320px] h-[180px] bg-black/30 rounded-xl mb-6 border border-white/10 relative p-4 flex flex-col items-center justify-center">
         
-        <div className="flex items-center space-x-3">
-          {currentCourse.chapterSummary && (
-             <button 
-                onClick={handleGoToSummary}
-                className="flex items-center gap-1.5 bg-duo-blue/20 text-duo-blue px-3 py-1.5 rounded-xl font-bold hover:bg-duo-blue/30 transition-colors"
-             >
-                <BookOpen className="w-4 h-4" />
-             </button>
-          )}
+        {/* Graph */}
+        <svg width="280" height="140" viewBox="0 0 280 140" className="absolute top-2 left-[20px]">
+           {/* Axes */}
+           <line x1="0" y1="120" x2="260" y2="120" stroke="#64748b" strokeWidth="2" />
+           <line x1="0" y1="0" x2="0" y2="120" stroke="#64748b" strokeWidth="2" />
+           <text x="260" y="135" fill="#64748b" fontSize="10" textAnchor="end">R_L (Ω)</text>
+           <text x="10" y="10" fill="#64748b" fontSize="10" textAnchor="start">Power (W)</text>
 
-          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl">
-            <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
-            <span className="text-amber-400">{progress.xp} XP</span>
-          </div>
+           {/* Power Curve */}
+           <polyline points={points.join(' ')} fill="none" stroke="#3b82f6" strokeWidth="3" />
+           
+           {/* Marker for Rth */}
+           <line x1={(rth/20)*260} y1="20" x2={(rth/20)*260} y2="120" stroke="#f59e0b" strokeWidth="1" strokeDasharray="4" />
+           <text x={(rth/20)*260} y="135" fill="#f59e0b" fontSize="10" textAnchor="middle">R_th = {rth}Ω</text>
+
+           {/* Current Value Marker */}
+           <circle cx={currentX} cy={currentY} r="5" fill="#ef4444" stroke="#fff" strokeWidth="2" />
+           <line x1={currentX} y1={currentY} x2={currentX} y2="120" stroke="#ef4444" strokeWidth="1" strokeDasharray="2" />
+        </svg>
+
+        <div className="absolute top-2 right-2 bg-black/60 px-2 py-1 rounded text-[10px] text-white font-bold border border-white/10">
+           P = {currentPower.toFixed(2)} W
         </div>
-      </header>
+      </div>
 
-      <main className="p-0 flex-grow relative">
-        {currentSection ? (
-          <>
-            <LessonPath 
-              section={currentSection} 
-              completedLessons={progress.completedLessons}
-              onStartLesson={handleStartLesson}
-              onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
-              nextContext={nextContext}
-              onNavigateNext={handleNavigateNext}
-            />
+      <div className="text-center mb-4 w-full px-4">
+         <span className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${rl === rth ? 'bg-green-900/50 text-green-400 border border-green-500/50' : 'bg-blue-900/50 text-blue-400 border border-blue-500/50'}`}>
+            {rl === rth ? 'Maximum Power Achieved!' : `Adjust R_L to maximize power`}
+         </span>
+      </div>
 
-            <SectionSelector 
-              sections={currentCourse.sections}
-              activeSectionIndex={currentSectionIndex}
-              completedLessons={progress.completedLessons}
-              onSelectSection={setCurrentSectionIndex}
-              isOpen={isSectionSelectorOpen}
-              onClose={() => setIsSectionSelectorOpen(false)}
-            />
-          </>
-        ) : (
-          <div className="p-10 text-center text-slate-500 mt-20">
-            <p>More modules coming soon!</p>
-          </div>
-        )}
-
-        <CourseSelector 
-           courses={courses}
-           activeCourseId={progress.currentCourseId}
-           completedLessons={progress.completedLessons}
-           onSelectCourse={handleCourseChange}
-           isOpen={isCourseSelectorOpen}
-           onClose={() => setIsCourseSelectorOpen(false)}
-        />
-      </main>
-    </>
-  );
-};
-
-export default LearnTab;
---- END OF FILE src/components/LearnTab.tsx ---
-
---- START OF FILE src/pages/Dashboard.tsx ---
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { COURSES } from '../data/courses';
-import { UserProgress, Course } from '../types';
-import BottomNav, { Tab } from '../components/BottomNav';
-import LearnTab from '../components/LearnTab';
-import PracticeTab from '../components/PracticeTab';
-import NotesTab from '../components/NotesTab';
-
-interface Props {
-  progress: UserProgress;
-  setProgress: React.Dispatch<React.SetStateAction<UserProgress>>;
-  currentSectionIndex: number;
-  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex, setCurrentSectionIndex }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [activeTab, setActiveTab] = useState<Tab>('learn');
-
-  const currentCourse: Course = COURSES.find(c => c.id === progress.currentCourseId) || COURSES[0];
-
-  // Sync URL path with activeTab state
-  useEffect(() => {
-    const path = location.pathname.substring(1); // remove leading slash
-    if (path === 'learn' || path === 'practice' || path === 'notes') {
-      setActiveTab(path as Tab);
-    } else if (path === '') {
-      // should be handled by router redirect but just in case
-      setActiveTab('learn');
-    }
-  }, [location.pathname]);
-
-  // Restore scroll when switching tabs via bottom nav (handled in BottomNav click mostly, but ensures sync)
-  useEffect(() => {
-    // Optional: could save scroll position per tab here
-  }, [activeTab]);
-
-  const handleStartLesson = (unitId: string, lessonId: string) => {
-    navigate(`/lesson/${currentCourse.id}/${unitId}/${lessonId}`);
-  };
-
-  const handleGoToSummary = () => {
-    navigate(`/summary/${currentCourse.id}`);
-  };
-
-  const handleCourseChange = (courseId: string) => {
-    window.scrollTo(0, 0);
-    setProgress(prev => ({ ...prev, currentCourseId: courseId }));
-  };
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'learn':
-        return (
-          <LearnTab 
-            progress={progress}
-            setProgress={setProgress}
-            currentSectionIndex={currentSectionIndex}
-            setCurrentSectionIndex={setCurrentSectionIndex}
-            currentCourse={currentCourse}
-            courses={COURSES}
-            handleCourseChange={handleCourseChange}
-            handleStartLesson={handleStartLesson}
-            handleGoToSummary={handleGoToSummary}
-          />
-        );
-      case 'practice':
-        return <PracticeTab progress={progress} />;
-      case 'notes':
-        return <NotesTab 
-          course={currentCourse} 
-          courses={COURSES} 
-          onChangeCourse={handleCourseChange} 
-        />;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex flex-col pb-20 overflow-x-hidden border-x border-white/5">
-      {renderContent()}
-      <BottomNav activeTab={activeTab} />
+      <div className="w-full px-4 space-y-4">
+         <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 w-16">R_L (Ω)</span>
+            <input type="range" min="0" max="20" step="0.5" value={rl} onChange={(e) => setRl(parseFloat(e.target.value))} className="flex-grow accent-red-500" />
+         </div>
+      </div>
     </div>
   );
 };
 
-export default Dashboard;
---- END OF FILE src/pages/Dashboard.tsx ---
+export default MaxPowerInteractive;
+--- END OF FILE src/components/interactive-arts/MaxPowerInteractive.tsx ---
+
+--- START OF FILE src/components/InteractiveCanvasArt.tsx ---
+import React from 'react';
+import VectorAdditionInteractive from './interactive-arts/VectorAdditionInteractive';
+import ComponentFormInteractive from './interactive-arts/ComponentFormInteractive';
+import GradientInteractive from './interactive-arts/GradientInteractive';
+import DivergenceInteractive from './interactive-arts/DivergenceInteractive';
+import CurlInteractive from './interactive-arts/CurlInteractive';
+import LaplacianInteractive from './interactive-arts/LaplacianInteractive';
+import WorkPathInteractive from './interactive-arts/WorkPathInteractive';
+import ConductorChargesInteractive from './interactive-arts/ConductorChargesInteractive';
+import CapacitorInteractive from './interactive-arts/CapacitorInteractive';
+import LorentzForceInteractive from './interactive-arts/LorentzForceInteractive';
+import BiotSavartInteractive from './interactive-arts/BiotSavartInteractive';
+import AmperesLawInteractive from './interactive-arts/AmperesLawInteractive';
+import MagBoundaryInteractive from './interactive-arts/MagBoundaryInteractive';
+import ClockFaceChargesInteractive from './interactive-arts/ClockFaceChargesInteractive';
+import CycloidMotionInteractive from './interactive-arts/CycloidMotionInteractive';
+import HelmholtzCoilsInteractive from './interactive-arts/HelmholtzCoilsInteractive';
+import LineIntegralInteractive from './interactive-arts/LineIntegralInteractive';
+import SphericalCoordsInteractive from './interactive-arts/SphericalCoordsInteractive';
+import CoulombForceInteractive from './interactive-arts/CoulombForceInteractive';
+import ContinuousIntegrationInteractive from './interactive-arts/ContinuousIntegrationInteractive';
+import ElectricBoundaryInteractive from './interactive-arts/ElectricBoundaryInteractive';
+import SolidSphereFieldPlot from './interactive-arts/SolidSphereFieldPlot';
+import CoordSystemInteractive from './interactive-arts/CoordSystemInteractive';
+import GaussianCylinderInteractive from './interactive-arts/GaussianCylinderInteractive';
+import GaussianPillboxInteractive from './interactive-arts/GaussianPillboxInteractive';
+import KclInteractive from './interactive-arts/KclInteractive';
+import KvlInteractive from './interactive-arts/KvlInteractive';
+import WheatstoneInteractive from './interactive-arts/WheatstoneInteractive';
+import CareyFosterInteractive from './interactive-arts/CareyFosterInteractive';
+import PotentiometerInteractive from './interactive-arts/PotentiometerInteractive';
+import SuperpositionInteractive from './interactive-arts/SuperpositionInteractive';
+import TheveninInteractive from './interactive-arts/TheveninInteractive';
+import MaxPowerInteractive from './interactive-arts/MaxPowerInteractive';
+
+interface Props {
+  canvasId: string;
+}
+
+const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
+  const renderInteractive = () => {
+    switch (canvasId) {
+      case 'vector-addition-interactive': return <VectorAdditionInteractive />;
+      case 'component-form-interactive': return <ComponentFormInteractive />;
+      case 'gradient-interactive': return <GradientInteractive />;
+      case 'divergence-interactive': return <DivergenceInteractive />;
+      case 'curl-interactive': return <CurlInteractive />;
+      case 'laplacian-interactive': return <LaplacianInteractive />;
+      case 'work-path-interactive': return <WorkPathInteractive />;
+      case 'conductor-charges-interactive': return <ConductorChargesInteractive />;
+      case 'capacitor-interactive': return <CapacitorInteractive />;
+      case 'lorentz-force-interactive': return <LorentzForceInteractive />;
+      case 'biot-savart-interactive': return <BiotSavartInteractive />;
+      case 'amperes-law-interactive': return <AmperesLawInteractive />;
+      case 'mag-boundary-interactive': return <MagBoundaryInteractive />;
+      case 'clock-face-interactive': return <ClockFaceChargesInteractive />;
+      case 'cycloid-motion-interactive': return <CycloidMotionInteractive />;
+      case 'helmholtz-coils-interactive': return <HelmholtzCoilsInteractive />;
+      case 'line-integral-interactive': return <LineIntegralInteractive />;
+      case 'spherical-coords-interactive': return <SphericalCoordsInteractive />;
+      case 'coulomb-force-interactive': return <CoulombForceInteractive />;
+      case 'continuous-integration-interactive': return <ContinuousIntegrationInteractive />;
+      case 'electric-boundary-interactive': return <ElectricBoundaryInteractive />;
+      case 'solid-sphere-plot': return <SolidSphereFieldPlot />;
+      case 'coord-system-interactive': return <CoordSystemInteractive />;
+      case 'gaussian-cylinder-interactive': return <GaussianCylinderInteractive />;
+      case 'gaussian-pillbox-interactive': return <GaussianPillboxInteractive />;
+      case 'kcl-interactive': return <KclInteractive />;
+      case 'kvl-interactive': return <KvlInteractive />;
+      case 'wheatstone-interactive': return <WheatstoneInteractive />;
+      case 'carey-foster-interactive': return <CareyFosterInteractive />;
+      case 'potentiometer-interactive': return <PotentiometerInteractive />;
+      case 'superposition-interactive': return <SuperpositionInteractive />;
+      case 'thevenin-interactive': return <TheveninInteractive />;
+      case 'max-power-interactive': return <MaxPowerInteractive />;
+      default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found: {canvasId}</p>;
+    }
+  };
+
+  return (
+    <div className="interactive-canvas-container">
+      {renderInteractive()}
+    </div>
+  );
+};
+
+export default InteractiveCanvasArt;
+--- END OF FILE src/components/InteractiveCanvasArt.tsx ---
+
+--- START OF FILE src/data/chapter4_5.ts ---
+import { Section } from '../types';
+
+export const SECTION_4_5: Section = {
+  id: "section-4-5",
+  title: "Section 4.5: Thevenin's, Norton's & Max Power Theorems",
+  description: "Simplifying complex networks to equivalent sources and understanding power transfer.",
+  color: "duo-orange",
+  units:[
+    {
+      id: "unit-451-thevenin",
+      title: "Thevenin's Theorem",
+      description: "Reducing a network to a single voltage source and series impedance.",
+      color: "duo-orange",
+      lessons:[
+        {
+          id: "les-451-1",
+          title: "Introduction to Thevenin's Theorem",
+          description: "Statement of the theorem.",
+          icon: "Minimize",
+          slides:[
+             { id: "s0", type: "quiz", title: "Conceptual Objective", content: "If you have a highly complex circuit with 50 batteries and 100 resistors, how does it behave from the perspective of a single output resistor?", options:[{id:"A", text:"Like a highly complex system with non-linear outputs.", isCorrect:false, explanation:""}, {id:"B", text:"Like a single battery and a single resistor in series.", isCorrect:true, explanation:"This remarkable fact is the core of Thevenin's theorem."}] },
+             { id: "s1", type: "quiz", title: "Conceptual Objective", content: "When calculating the equivalent resistance of a network, what do we do with ideal voltage sources?", options:[{id:"A", text:"Replace them with open circuits.", isCorrect:false, explanation:""}, {id:"B", text:"Replace them with their internal impedances (short circuits for ideal sources).", isCorrect:true, explanation:"We turn the 'active' generation off."}] },
+             { id: "s2", type: "theory", title: "Statement of Thevenin's Theorem", content: "The current in a load impedance connected between two terminals of a network of generators and linear impedances is exactly the same as if it were connected to a **single voltage generator**.\n\n- The EMF of this generator ($E_{th}$) is equal to the **open-circuit voltage** between the two terminals.\n- The internal impedance of this generator ($Z_{th}$) is the impedance of the network looking back into the terminals, with all independent generators replaced by their **internal impedances**." },
+             { id: "s3", type: "interactive_canvas", title: "Circuit Simplification", content: "Observe how a complex T-network can be simplified into a single Thevenin equivalent without changing the load current.", interactiveCanvasId: "thevenin-interactive" },
+             { id: "s4", type: "proof", title: "Proof: Thevenin's Theorem", content: "**Result: $I_L = \\frac{E_{th}}{Z_{th} + Z_L}$**\n\n1. Consider a T-network with a source $E$, resistors $Z_1, Z_2, Z_3$, and load $Z_L$.\n2. Applying KVL mesh analysis yields the load current: $I_L = \\frac{E Z_3}{(Z_1 Z_2 + Z_2 Z_3 + Z_3 Z_1) + Z_L(Z_1+Z_3)}$.\n3. Now find the open-circuit voltage (remove $Z_L$): $E_{th} = E \\frac{Z_3}{Z_1 + Z_3}$.\n4. Find the equivalent impedance (short $E$): $Z_{th} = Z_2 + \\frac{Z_1 Z_3}{Z_1 + Z_3}$.\n5. Substitute $E_{th}$ and $Z_{th}$ into $\\frac{E_{th}}{Z_{th} + Z_L}$. Algebraic simplification proves it identically matches the complex $I_L$ formula from step 2." },
+             { id: "s5", type: "numerical", title: "Thevenin Voltage", content: "A 12V battery is in series with $R_1 = 6\\Omega$. A resistor $R_2 = 6\\Omega$ is in parallel. What is the open-circuit Thevenin voltage $E_{th}$ across $R_2$?", numericAnswer: 6, numericTolerance: 0.1 },
+             { id: "s6", type: "quiz", title: "Network Condition", content: "Thevenin's theorem only applies if the network consists of:", options:[{id:"A", text:"Linear impedances", isCorrect:true, explanation:"It relies on superposition and linearity."}, {id:"B", text:"Non-linear components", isCorrect:false, explanation:""}] },
+             { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "The equivalent voltage $E_{th}$ is calculated under ___-circuit conditions.", blankAnswer: "open" }
+          ]
+        },
+        {
+          id: "les-451-2",
+          title: "Example: Finding Thevenin Equivalent",
+          description: "Step-by-step calculation.",
+          icon: "Target",
+          slides:[
+             { id: "s0", type: "example_q", title: "Example Calculation", content: "**Problem:** A circuit has a 10V battery. In series with the battery is a $10\\Omega$ resistor. In parallel with that combination is a $5\\Omega$ resistor. Finally, another $10\\Omega$ resistor connects to output terminal A. Terminal B connects to the negative side. Find $E_{th}$ and $R_{th}$." },
+             { id: "s1", type: "solution", title: "Step 1: Find Eth", content: "**Goal: Calculate Open-Circuit Voltage.**\n\n1. With the load removed, no current flows through the final $10\\Omega$ series resistor. Thus, there is no voltage drop across it.\n2. The voltage at terminals A-B is simply the voltage across the $5\\Omega$ resistor.\n3. The 10V battery drives current through the $10\\Omega$ and $5\\Omega$ resistors in series. Current $I = 10V / (10 + 5)\\Omega = 10/15$ A.\n4. Voltage across $5\\Omega$ is $V = I \\times 5 = (10/15) \\times 5 = 10/3$ Volts.\n5. Therefore, $E_{th} = 3.33$ V." },
+             { id: "s2", type: "solution", title: "Step 2: Find Rth", content: "**Goal: Calculate Equivalent Resistance.**\n\n1. Replace the 10V battery with a short circuit.\n2. Looking back from A-B, the $10\\Omega$ and $5\\Omega$ resistors are in parallel. $R_p = (10 \\times 5) / (10 + 5) = 50/15 = 10/3 \\Omega$.\n3. The final $10\\Omega$ resistor is in series with this parallel combination.\n4. $R_{th} = 10/3 + 10 = 40/3 \\Omega \\approx 13.33 \\Omega$.\n5. The circuit is now simplified!" },
+             { id: "s3", type: "quiz", title: "Load Calculation", content: "If you now connect a $100\\Omega$ load to this Thevenin circuit, how do you find the current?", options:[{id:"A", text:"I = E_th / (R_th + 100)", isCorrect:true, explanation:"Simple series circuit calculation."}, {id:"B", text:"I = E_th / 100", isCorrect:false, explanation:""}] }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-452-norton",
+      title: "Norton's Theorem",
+      description: "Reducing a network to a single current source and parallel impedance.",
+      color: "duo-orange",
+      lessons:[
+        {
+          id: "les-452-1",
+          title: "Introduction to Norton's Theorem",
+          description: "Statement and equivalence.",
+          icon: "ArrowRight",
+          slides:[
+             { id: "s0", type: "quiz", title: "Conceptual Objective", content: "If Thevenin's theorem models a complex circuit as a voltage source, Norton's theorem models it as a:", options:[{id:"A", text:"Capacitor", isCorrect:false, explanation:""}, {id:"B", text:"Current source", isCorrect:true, explanation:"It uses a constant current generator."}] },
+             { id: "s1", type: "quiz", title: "Conceptual Objective", content: "To find the Norton current, what must you do to the output terminals?", options:[{id:"A", text:"Leave them open", isCorrect:false, explanation:""}, {id:"B", text:"Short them together", isCorrect:true, explanation:"It relies on the short-circuit current."}] },
+             { id: "s2", type: "theory", title: "Statement of Norton's Theorem", content: "Any two-terminal active network, consisting of linear impedances and generators, may be replaced by a **current generator** in parallel with an impedance.\n\n- The current ($I_N$) is equal to the current obtained through a **short circuit** placed across the two terminals.\n- The impedance ($Z_N$) is that viewed across the two terminals when all generators are replaced by their internal impedances. (Notice that $Z_N = Z_{th}$)." },
+             { id: "s3", type: "proof", title: "Proof: Source Transformation", content: "**Result: Norton is exactly equivalent to Thevenin.**\n\n1. In a Thevenin circuit ($E_{th}$ in series with $Z_{th}$), if we short the load terminals, the short-circuit current is $I_{sc} = E_{th} / Z_{th}$.\n2. In a Norton circuit ($I_N$ in parallel with $Z_N$), if we short the load terminals, all current bypasses $Z_N$. Thus $I_{sc} = I_N$.\n3. Therefore, $I_N = E_{th} / Z_{th}$.\n4. For open circuit, Norton voltage is $I_N Z_N$. We know this must equal $E_{th}$. Thus $(E_{th} / Z_{th}) Z_N = E_{th}$, meaning $Z_N = Z_{th}$.\n5. The two theorems are mathematically identical source transformations!" },
+             { id: "s4", type: "numerical", title: "Norton Conversion", content: "A Thevenin equivalent circuit has $E_{th} = 12$V and $R_{th} = 4\\Omega$. What is the Norton current $I_N$ in Amperes?", numericAnswer: 3, numericTolerance: 0.1 },
+             { id: "s5", type: "quiz", title: "Impedance Location", content: "In Norton's equivalent, where is the impedance placed?", options:[{id:"A", text:"In parallel with the current source", isCorrect:true, explanation:""}, {id:"B", text:"In series with the current source", isCorrect:false, explanation:""}] },
+             { id: "s6", type: "fill_in_blank", title: "Fill in the blank", content: "The Norton current is calculated under ___-circuit conditions.", blankAnswer: "short" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-453-max-power",
+      title: "Maximum Power Transfer",
+      description: "Optimizing the load for power delivery.",
+      color: "duo-orange",
+      lessons:[
+        {
+          id: "les-453-1",
+          title: "Maximum Power Transfer Theorem",
+          description: "Matching impedances.",
+          icon: "Zap",
+          slides:[
+             { id: "s0", type: "quiz", title: "Conceptual Objective", content: "If you connect a $0\\Omega$ load (short circuit) to a battery, how much power is delivered to the load?", options:[{id:"A", text:"Maximum", isCorrect:false, explanation:"Power = I^2 R. If R is 0, Power is 0."}, {id:"B", text:"Zero", isCorrect:true, explanation:"All the power is burned up inside the battery's internal resistance."}] },
+             { id: "s1", type: "quiz", title: "Conceptual Objective", content: "If you connect an infinite $\\Omega$ load (open circuit) to a battery, how much power is delivered?", options:[{id:"A", text:"Zero", isCorrect:true, explanation:"No current flows, so Power is zero."}, {id:"B", text:"Maximum", isCorrect:false, explanation:""}] },
+             { id: "s2", type: "theory", title: "Statement of the Theorem", content: "The maximum power will be delivered to a load by a generator when:\n1. The resistive components of the impedances of the load and generator are **equal** ($R_L = R_{th}$).\n2. The reactive components are equal in magnitude but **opposite in sign** ($X_L = -X_{th}$).\n\nFor simple DC circuits containing only resistors, this means maximum power transfer occurs exactly when the load resistance matches the Thevenin equivalent resistance of the source: **$R_L = R_{th}$**." },
+             { id: "s3", type: "interactive_canvas", title: "Power Curve", content: "Adjust the load resistance. Notice how the power delivered starts at zero, peaks exactly when RL = Rth, and then slowly decays.", interactiveCanvasId: "max-power-interactive" },
+             { id: "s4", type: "proof", title: "Proof: Differentiation", content: "**Result: Maximum at $R_L = R_{th}$**\n\n1. Let the Thevenin circuit be $E$ and $R_{th}$. The load is $R_L$.\n2. Current $I = \\frac{E}{R_{th} + R_L}$.\n3. Power to load $P = I^2 R_L = \\frac{E^2 R_L}{(R_{th} + R_L)^2}$.\n4. To find the maximum, take the derivative $dP/dR_L$ and set it to zero.\n5. $\\frac{d}{dR_L} \\left[ E^2 R_L (R_{th} + R_L)^{-2} \\right] = E^2 \\left[ (R_{th}+R_L)^{-2} - 2R_L(R_{th}+R_L)^{-3} \\right] = 0$.\n6. Dividing out terms yields $1 - \\frac{2R_L}{R_{th}+R_L} = 0 \implies R_{th} + R_L = 2R_L \implies R_L = R_{th}$." },
+             { id: "s5", type: "numerical", title: "Maximum Power", content: "A source has $E_{th} = 10$V and $R_{th} = 5\\Omega$. What is the maximum possible power (in Watts) that can be delivered to a load?", numericAnswer: 5, numericTolerance: 0.1, notes: "P_max = E^2 / (4 * R_th)" },
+             { id: "s6", type: "quiz", title: "Efficiency", content: "At maximum power transfer ($R_L = R_{th}$), what is the efficiency of the system (Power to load / Total Power generated)?", options:[{id:"A", text:"100%", isCorrect:false, explanation:""}, {id:"B", text:"50%", isCorrect:true, explanation:"Exactly half the power is lost as heat inside the source's internal resistance."}] },
+             { id: "s7", type: "fill_in_blank", title: "Fill in the blank", content: "Maximum power transfer occurs when the load resistance is ___ to the internal resistance of the source.", blankAnswer: "equal" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "unit-454-summary",
+      title: "Section Summary",
+      description: "Recap of Network Theorems.",
+      color: "duo-orange",
+      lessons:[
+        {
+          id: "les-sum-theorems",
+          title: "Network Theorems Recap",
+          description: "Review of Thevenin, Norton, and Max Power.",
+          icon: "CheckSquare",
+          slides:[
+            { id: "s0", type: "quiz", title: "Knowledge Check 1", content: "Thevenin's and Norton's theorems are fundamentally forms of:", options:[{id:"A", text:"Source Transformations", isCorrect:true, explanation:"They transform complex active networks into simple ideal sources with impedance."}, {id:"B", text:"Energy Conservation", isCorrect:false, explanation:""}] },
+            { id: "s1", type: "theory", title: "Summary: Theorems", content: "**Thevenin's Theorem:** Any linear active network can be replaced by a single voltage source ($E_{th} = V_{open-circuit}$) in series with an impedance ($Z_{th}$). \n\n**Norton's Theorem:** The same network can be replaced by a current source ($I_N = I_{short-circuit}$) in parallel with the same impedance ($Z_{th}$).\n\n**Max Power Transfer:** To extract the maximum possible power from any given source, the load resistance must perfectly match the source's internal Thevenin resistance ($R_L = R_{th}$). At this peak, efficiency is exactly 50%." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/chapter4_5.ts ---
+
+--- START OF FILE src/data/module4.ts ---
+import { Course } from '../types';
+import { SECTION_4_1 } from './chapter4_1';
+import { SECTION_4_2 } from './chapter4_2';
+import { SECTION_4_3 } from './chapter4_3';
+import { SECTION_4_4 } from './chapter4_4';
+import { SECTION_4_5 } from './chapter4_5';
+
+export const MODULE_4: Course = {
+  id: 'module-4',
+  title: 'Module IV: Electrical Measurements',
+  description: 'Kirchhoff\'s laws, Wheatstone\'s Bridge, Carey Foster Bridge, Potentiometer, and Network Theorems.',
+  sections:[
+    SECTION_4_1,
+    SECTION_4_2,
+    SECTION_4_3,
+    SECTION_4_4,
+    SECTION_4_5
+  ],
+  chapterSummary:[
+    {
+      id: "chap-sum-4-1",
+      type: "theory",
+      title: "Chapter Summary: Kirchhoff & Wheatstone",
+      content: "We began by studying complex circuits using **Kirchhoff's Laws**: the Junction Rule ($\\sum I = 0$) resulting from charge conservation, and the Loop Rule ($\\sum \\Delta V = 0$) resulting from energy conservation.\n\nApplying these to the **Wheatstone Bridge**, we proved the balance condition $P/Q = R/S$ when the galvanometer current is zero. We explored its sensitivity, showing that accuracy is maximized when all four arms are of the same order of magnitude (Maxwell/Callendar rules)."
+    },
+    {
+      id: "chap-sum-4-2",
+      type: "theory",
+      title: "Chapter Summary: Precision Bridges",
+      content: "We examined the **Carey Foster Bridge**, a clever modification of the Wheatstone bridge designed to measure extremely small resistance differences by swapping the standard and unknown resistors, completely eliminating errors from end-resistances ($R - S = \\rho(l_2 - l_1)$).\n\nThis method is highly effective for precisely determining the resistivity of a material sample."
+    },
+    {
+      id: "chap-sum-4-3",
+      type: "theory",
+      title: "Chapter Summary: The Potentiometer",
+      content: "We explored the **Potentiometer**, an ideal measurement tool that balances unknown voltages against a uniform wire without drawing *any* current from the test circuit ($V \propto l$). \n\nBecause it acts as an ideal infinite-impedance voltmeter, it allows precise measurement of cell EMFs and internal resistance ($r = R(l_1/l_2 - 1)$), measurement of unknown coils ($P/Q = l_1/l_2$), and exact calibration of standard ammeters and voltmeters against a known reference cell."
+    },
+    {
+      id: "chap-sum-4-4",
+      type: "theory",
+      title: "Chapter Summary: Network Theorems",
+      content: "We transitioned to formal Network Analysis, defining active/passive and linear/non-linear networks. We introduced the **Superposition Theorem**, which states that in a linear multi-source network, the total current in any branch is the algebraic sum of the currents produced by each source acting independently.\n\nWe then learned **Thevenin's and Norton's Theorems**, which allow us to dramatically simplify any linear active network down to a single voltage source and series resistor, or a single current source and parallel resistor. Finally, the **Maximum Power Transfer Theorem** proved that to extract the most power from a source, the load resistance must exactly match the source's internal Thevenin resistance ($R_L = R_{th}$)."
+    }
+  ]
+};
+--- END OF FILE src/data/module4.ts ---

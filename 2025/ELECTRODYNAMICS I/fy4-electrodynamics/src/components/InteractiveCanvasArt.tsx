@@ -25,6 +25,12 @@ import CoordSystemInteractive from './interactive-arts/CoordSystemInteractive';
 import GaussianCylinderInteractive from './interactive-arts/GaussianCylinderInteractive';
 import GaussianPillboxInteractive from './interactive-arts/GaussianPillboxInteractive';
 
+import CareyFosterInteractive from './interactive-arts/CareyFosterInteractive';
+import PotentiometerInteractive from './interactive-arts/PotentiometerInteractive';
+import SuperpositionInteractive from './interactive-arts/SuperpositionInteractive';
+import TheveninInteractive from './interactive-arts/TheveninInteractive';
+import MaxPowerInteractive from './interactive-arts/MaxPowerInteractive';
+
 interface Props {
   canvasId: string;
 }
@@ -57,6 +63,14 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       case 'coord-system-interactive': return <CoordSystemInteractive />;
       case 'gaussian-cylinder-interactive': return <GaussianCylinderInteractive />;
       case 'gaussian-pillbox-interactive': return <GaussianPillboxInteractive />;
+      case 'kcl-interactive': return <KclInteractive />;
+      case 'kvl-interactive': return <KvlInteractive />;
+      case 'wheatstone-interactive': return <WheatstoneInteractive />;
+      case 'carey-foster-interactive': return <CareyFosterInteractive />;
+      case 'potentiometer-interactive': return <PotentiometerInteractive />;
+      case 'superposition-interactive': return <SuperpositionInteractive />;
+      case 'thevenin-interactive': return <TheveninInteractive />;
+      case 'max-power-interactive': return <MaxPowerInteractive />;
       default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found: {canvasId}</p>;
     }
   };

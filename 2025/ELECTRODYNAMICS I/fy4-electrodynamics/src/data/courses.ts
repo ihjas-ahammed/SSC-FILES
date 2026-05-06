@@ -7,21 +7,22 @@ import { SECTION_2_4 } from './chapter2_4';
 import { SECTION_2_5 } from './chapter2_5';
 import { SECTION_3_1 } from './chapter3_1';
 import { SECTION_3_2 } from './chapter3_2';
+import { MODULE_4 } from './module4';
 
-export const COURSES: Course[] = [
+export const COURSES: Course[] =[
   MODULE_1,
   {
     id: 'module-2',
     title: 'Module II: Electrostatics',
     description: 'Electric fields, potentials, and work & energy.',
-    sections: [
+    sections:[
         SECTION_2_1,
         SECTION_2_2,
         SECTION_2_3,
         SECTION_2_4,
         SECTION_2_5
     ],
-    chapterSummary: [
+    chapterSummary:[
         {
           id: "chap-sum-2-1",
           type: "theory",
@@ -58,11 +59,11 @@ export const COURSES: Course[] = [
     id: 'module-3',
     title: 'Module III: Magnetostatics',
     description: 'Lorentz force, Biot-Savart, and Ampère’s law.',
-    sections: [
+    sections:[
         SECTION_3_1,
         SECTION_3_2
     ],
-    chapterSummary: [
+    chapterSummary:[
         {
           id: "chap-sum-3-1",
           type: "theory",
@@ -76,5 +77,6 @@ export const COURSES: Course[] = [
           content: "**Ampère's Law:** The fundamental equations of magnetostatics are $\\nabla \\cdot \\mathbf{B} = 0$ (no monopoles) and $\\nabla \\times \\mathbf{B} = \\mu_0 \\mathbf{J}$ (Ampère's law). The integral form $\\oint \\mathbf{B} \\cdot d\\mathbf{l} = \\mu_0 I_{enc}$ is extremely powerful for calculating fields in highly symmetric systems (infinite wires, planes, solenoids, toroids).\n\n**Vector Potential:** Because $\\nabla \\cdot \\mathbf{B} = 0$, we can express $\\mathbf{B}$ as the curl of a vector potential: $\\mathbf{B} = \\nabla \\times \\mathbf{A}$. Choosing the Coulomb gauge ($\\nabla \\cdot \\mathbf{A} = 0$) allows us to solve for $\\mathbf{A}$ using a Poisson-like integral. Finally, at a surface current $\\mathbf{K}$, the tangential component of $\\mathbf{B}$ is discontinuous, while the normal component of $\\mathbf{B}$ and the entire vector potential $\\mathbf{A}$ remain continuous."
         }
     ]
-  }
+  },
+  MODULE_4
 ];
