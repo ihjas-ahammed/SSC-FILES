@@ -24,12 +24,14 @@ import SolidSphereFieldPlot from './interactive-arts/SolidSphereFieldPlot';
 import CoordSystemInteractive from './interactive-arts/CoordSystemInteractive';
 import GaussianCylinderInteractive from './interactive-arts/GaussianCylinderInteractive';
 import GaussianPillboxInteractive from './interactive-arts/GaussianPillboxInteractive';
-
 import CareyFosterInteractive from './interactive-arts/CareyFosterInteractive';
 import PotentiometerInteractive from './interactive-arts/PotentiometerInteractive';
 import SuperpositionInteractive from './interactive-arts/SuperpositionInteractive';
 import TheveninInteractive from './interactive-arts/TheveninInteractive';
 import MaxPowerInteractive from './interactive-arts/MaxPowerInteractive';
+import MeshAnalysisInteractive from './interactive-arts/MeshAnalysisInteractive';
+import TorqueInteractive from './interactive-arts/TorqueInteractive';
+import BallisticInteractive from './interactive-arts/BallisticInteractive';
 
 interface Props {
   canvasId: string;
@@ -71,6 +73,9 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       case 'superposition-interactive': return <SuperpositionInteractive />;
       case 'thevenin-interactive': return <TheveninInteractive />;
       case 'max-power-interactive': return <MaxPowerInteractive />;
+      case 'mesh-analysis-interactive': return <MeshAnalysisInteractive />;
+      case 'torque-interactive': return <TorqueInteractive />;
+      case 'ballistic-interactive': return <BallisticInteractive />;
       default: return <p className="text-slate-500 py-10 text-center w-full">Interactive component not found: {canvasId}</p>;
     }
   };

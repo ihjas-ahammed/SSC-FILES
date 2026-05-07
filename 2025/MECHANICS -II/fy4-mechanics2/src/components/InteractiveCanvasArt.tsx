@@ -5,6 +5,8 @@ import { renderMechModule1Energy } from './canvasart/MechModule1Energy';
 import { renderMechModule1Orbit } from './canvasart/MechModule1Orbit';
 import { renderMechModule1Geometry } from './canvasart/MechModule1Geometry';
 import { renderMechModule2Harmonic } from './canvasart/MechModule2Harmonic';
+import { renderWaveCanvasArt } from './canvasart/WaveCanvasArt';
+import { renderMechModule4CanvasArt } from './canvasart/MechModule4CanvasArt';
 
 interface Props {
   canvasId: string;
@@ -19,6 +21,8 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       renderMechModule1Orbit(canvasId) ||
       renderMechModule1Geometry(canvasId) ||
       renderMechModule2Harmonic(canvasId) ||
+      renderWaveCanvasArt(canvasId) ||
+      renderMechModule4CanvasArt(canvasId) ||
       <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
     );
   };

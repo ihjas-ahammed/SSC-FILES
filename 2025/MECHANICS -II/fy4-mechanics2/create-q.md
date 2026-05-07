@@ -1,17 +1,14 @@
-Now create chapter1_3 with every example questions we missed in the other units
-give new units with their questions
-also with eevry excercise quetsions
-
-at least 16 questions (lessons) per unit (total 4 units, with name of previous for units)
-use canvas art if needed
 
 
 Make the following changes:
 
 
-* Your task is to create chapter2_3 with:
+* Your task is to create 
 
-7Electric Potential; Electrostatic Boundary Conditions (16 lessons)
+**Section 3.5: Special Case of Traveling Waves (Syllabus Unit 19)**
+*   **351 (Wave Superposition):**
+    *   Lesson 1 (Derivation): Combining two traveling waves to make a standing wave.
+    *   Lesson 2 (Numerical): Exercise 13.8 - Proving $y=0$ at $x=L$.
 
 
 Base:
