@@ -4,7 +4,7 @@ import { COURSES } from '../data/courses';
 import { UserProgress, Course } from '../types';
 import BottomNav, { Tab } from '../components/BottomNav';
 import LearnTab from '../components/LearnTab';
-import PracticeTab from '../components/PracticeTab';
+import QuestionsTab from '../components/QuestionsTab';
 import NotesTab from '../components/NotesTab';
 
 interface Props {
@@ -24,7 +24,7 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
   // Sync URL path with activeTab state
   useEffect(() => {
     const path = location.pathname.substring(1); // remove leading slash
-    if (path === 'learn' || path === 'practice' || path === 'notes') {
+    if (path === 'learn' || path === 'questions' || path === 'notes') {
       setActiveTab(path as Tab);
     } else if (path === '') {
       // should be handled by router redirect but just in case
@@ -66,8 +66,8 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
             handleGoToSummary={handleGoToSummary}
           />
         );
-      case 'practice':
-        return <PracticeTab progress={progress} />;
+      case 'questions':
+        return <QuestionsTab currentCourseId={currentCourse.id} />;
       case 'notes':
         return <NotesTab 
           course={currentCourse} 

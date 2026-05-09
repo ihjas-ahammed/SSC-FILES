@@ -1,614 +1,454 @@
 
 
 
-An elite Instructional Design pass has been executed for **Module 2: Data Visualization**. 
+An elite Instructional Design pass has been executed for **Module 4: Sagemath – An Introduction (Section 4.2: Calculus with Sagemath)**.
 
-I have created 4 deep-dive units (Units 7-10) and a Section Summary unit that map exactly to Section 2.1: The Matplotlib Module. 
+I have constructed the units maintaining the rigorous pedagogical constraints: **Priming**, **Scaffolded Solutions (Faded Parsons)**, **Concept/Logic Error Checks**, and **Targeted Syntax Drills**. 
 
-### Key Pedagogical Implementations:
-1. **Interactive Pyodide Sandboxes:** Every single plot type (Basic 2D, Error Bars, Parametric Astroids, Polar Spirals, Colormaps/Fractals, and 3D Surfaces) has been pre-configured to execute flawlessly in your `PythonRunner` component. The user will instantly see the rendered PNG output inline.
-2. **Algorithmic Scaffolded Solutions (Faded Parsons):** Complex scripts like `julia.py` (Fractals) and `ylm.py` (Spherical Harmonics) have been broken down step-by-step. Users must select the correct NumPy/Matplotlib logic at each stage before the full code is revealed.
-3. **Cognitive Safety for Wasm/Pyodide:** I have bounded the Julia set computation to a 100x100 grid to ensure the browser does not hang during the fractal generation in the web assembly environment, while still demonstrating the `imshow` mechanics.
+Because SageMath requires a dedicated backend pre-parser to interpret syntax like `f(x) = x^2` and exact mathematical operators, standard Python WebAssembly environments (like Pyodide) will throw syntax errors if attempting to run raw Sage code. Therefore, I have mapped the interactive execution sandboxes into **Algorithmic Tracing (Interactive Solutions)**, which force the user to build the precise SageMath syntax step-by-step, mimicking the CoCalc/Sage environment safely and effectively.
 
-Run the following command to create the new directories if they do not exist:
+Run the following command to ensure the new files are correctly situated:
 ```bash
 mkdir -p src/data/python_units
 ```
 
-Here are the exact file additions and modifications to integrate the new curriculum:
+Here are the precise additions and modifications required:
 
---- START OF FILE src/data/python_units/unit_2_1_1_matplotlib_basics.ts ---
+--- START OF FILE src/data/python_units/unit_4_2_1_sagemath_graphing.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_2_1_1_MATPLOTLIB_BASICS: Unit = {
-  id: 'unit-2-1-1-matplotlib-basics',
-  title: '211: Matplotlib Basics',
-  description: 'Figures, Axes, and plotting 1D arrays.',
+export const UNIT_4_2_1_SAGEMATH_GRAPHING: Unit = {
+  id: 'unit-4-2-1-sagemath-graphing',
+  title: '421: Graphing in Sage',
+  description: 'Plotting functions, setting bounds, and customizing visual options.',
   color: 'duo-blue',
   lessons:[
-    // Lesson 1 (Theory): 4.1 The Matplotlib Module
+    // L1: Plotting Graphs
     {
-      id: 'l211-1-theory',
-      title: 'L1: Introduction to Matplotlib',
-      description: 'The implicit vs explicit plotting interfaces.',
-      icon: 'Image',
-      slides:[
-        {
-          id: 'l211-1-s1',
-          type: 'quiz',
-          title: 'Priming: Data Visualization',
-          content: 'Why is visual representation critical when dealing with NumPy arrays?',
-          options:[
-            { id: 'a', text: 'It reduces the memory footprint of the array.', isCorrect: false, explanation: 'Visualization does not alter memory size.' },
-            { id: 'b', text: 'It converts vast numerical arrays into identifiable patterns, aiding human pattern recognition.', isCorrect: true, explanation: 'Humans process visual patterns instantly, whereas reading a 10,000-element raw text array is impossible.' }
-          ]
-        },
-        {
-          id: 'l211-1-s2',
-          type: 'theory',
-          title: 'The Matplotlib Module',
-          content: 'Matplotlib is a Python package that produces publication-quality figures. \n\n**Two Interfaces:**\n1. **Explicit ("Axes") Interface:** You create a `Figure` object (the entire window) and one or more `Axes` objects (the actual plotting areas). e.g., `fig = plt.figure()`, `ax = fig.add_subplot()`.\n2. **Implicit ("pyplot") Interface:** You just call `plt.plot()` and Matplotlib automatically manages the current Figure and Axes in the background.'
-        },
-        {
-          id: 'l211-1-s3',
-          type: 'quiz',
-          title: 'Concept Check: Interface Choice',
-          content: 'Which interface is generally better for simple, quick, single-graph plots?',
-          options:[
-            { id: 'a', text: 'The Explicit "Axes" Interface', isCorrect: false, explanation: 'While powerful, it requires more boilerplate code.' },
-            { id: 'b', text: 'The Implicit "pyplot" Interface', isCorrect: true, explanation: 'For simple 2D plots, `plt.plot()` directly is faster and easier.' }
-          ]
-        }
-      ]
-    },
-    // Lesson 2 (Example): plot1.py and plot2.py
-    {
-      id: 'l211-2-example',
-      title: 'L2: Your First Plots',
-      description: 'Plotting lists and formatting strings.',
+      id: 'l421-1-theory',
+      title: 'L1: Plotting Graphs',
+      description: 'The mathematical plotting paradigm.',
       icon: 'LineChart',
       slides:[
         {
-          id: 'l211-2-s1',
-          type: 'example_q',
-          title: 'Problem: plot1.py',
-          content: 'Write a program using the implicit `pyplot` interface to plot a simple list `[1, 2, 5]`.'
-        },
-        {
-          id: 'l211-2-s2',
-          type: 'solution',
-          title: 'Interactive Solution',
-          content: 'Constructing the plot step-by-step.',
-          interactiveSteps:[
-            {
-              prompt: 'First, how do you import the pyplot submodule?',
-              options:[
-                { id: 'a', text: 'import matplotlib.pyplot as plt', isCorrect: true, explanation: 'This is the standard abbreviation.' },
-                { id: 'b', text: 'import matplotlib as plt', isCorrect: false, explanation: 'You specifically need the `pyplot` submodule.' }
-              ]
-            },
-            {
-              prompt: 'If you pass a single list `plt.plot([1, 2, 5])`, what does Matplotlib assume about the X-axis?',
-              options:[
-                { id: 'a', text: 'It assumes the X-axis is the indices: [0, 1, 2]', isCorrect: true, explanation: 'If only one array is provided, it is treated as the Y-values, and the X-values default to 0, 1, 2...' },
-                { id: 'b', text: 'It throws an error requiring an X array.', isCorrect: false, explanation: 'Matplotlib is smart enough to auto-generate the X indices.' }
-              ]
-            }
+          id: 'l421-1-s1',
+          type: 'quiz',
+          title: 'Priming: Sage vs Matplotlib',
+          content: 'You learned to plot using Matplotlib with `np.linspace()` to generate arrays of points. How do you think SageMath approaches plotting?',
+          options:[
+            { id: 'a', text: 'It requires you to generate arrays using standard Python loops.', isCorrect: false, explanation: 'This would be a step backward in efficiency.' },
+            { id: 'b', text: 'You simply pass the mathematical function and the domain bounds. Sage automatically generates the arrays and handles the backend rendering.', isCorrect: true, explanation: 'SageMath wraps Matplotlib, allowing you to plot continuous mathematical functions using simple one-liners.' }
           ]
         },
         {
-          id: 'l211-2-s3',
-          type: 'python_example',
-          title: 'Interactive Sandbox: plot2.py',
-          content: 'Now, provide BOTH x and y lists to plot them against each other.',
-          code: "import matplotlib.pyplot as plt\n\nx = [1, 2, 5]\ny =[4, 5, 6]\n\nplt.plot(x, y)\nprint('Plotting...')\n# The figure will automatically render below."
+          id: 'l421-1-s2',
+          type: 'theory',
+          title: 'Plotting in Sage',
+          content: 'In SageMath, if you have defined a function `f(x) = x^2 - 4*x + 2`, you do not need to create NumPy arrays to visualize it.\n\nYou simply use the `plot()` command, which mathematically analyzes the function to ensure smooth curves.'
         }
       ]
     },
-    // Lesson 3 (Theory): 4.1.1 2D plots
+    // L2: Basics Plot
     {
-      id: 'l211-3-theory',
-      title: 'L3: Plot Formatting & Markers',
-      description: 'Customizing lines, colors, and markers.',
+      id: 'l421-2-definition',
+      title: 'L2: Basic Plot Syntax',
+      description: 'plot(f, x, a, b)',
+      icon: 'Maximize',
+      slides:[
+        {
+          id: 'l421-2-s1',
+          type: 'theory',
+          title: 'plot(f, x, a, b)',
+          content: 'The basic syntax for plotting the graph of a function $y = f(x)$ with $x$ ranging in value from $a$ to $b$ is:\n\n`plot(f, x, a, b)`\nor\n`plot(f(x), x, a, b)`\n\nExample:\n`plot(2*x^2 - 4*x + 2, x, -3, 5)` plots the quadratic curve from $x = -3$ to $x = 5$.'
+        },
+        {
+          id: 'l421-2-s2',
+          type: 'quiz',
+          title: 'Concept Check: Multiple Plots',
+          content: 'If you want to plot two functions on the SAME set of axes to show their points of intersection, how is this achieved in Sage?',
+          options:[
+            { id: 'a', text: 'Pass them as a tuple/list: plot((f(x), g(x)), x, -3, 5)', isCorrect: true, explanation: 'By grouping the functions in a tuple `(f(x), g(x))`, Sage plots them both on the same canvas.' },
+            { id: 'b', text: 'You cannot plot two functions at once in Sage.', isCorrect: false, explanation: 'Sage fully supports superimposing graphics.' }
+          ]
+        },
+        {
+          id: 'l421-2-s3',
+          type: 'fill_in_blank',
+          title: 'Syntax Drill',
+          content: 'To plot the function `sin(2*x)` from `x = -3` to `x = 3`, you type: `plot(sin(2*x), ___, -3, 3)`',
+          blankAnswer: 'x'
+        }
+      ]
+    },
+    // L3: Plot Options
+    {
+      id: 'l421-3-theory',
+      title: 'L3: Plot Options',
+      description: 'Colors, thickness, and view windows.',
       icon: 'Palette',
       slides:[
         {
-          id: 'l211-3-s1',
+          id: 'l421-3-s1',
           type: 'theory',
-          title: 'Format Strings',
-          content: 'By default, plots use a continuous blue line. \n\nYou can add an optional format string argument: `plt.plot(x, y, "ro")`.\n\nThe format string consists of:\n*   **Color:** `b` (blue), `r` (red), `g` (green), `k` (black)\n*   **Marker:** `o` (circle), `^` (triangle), `*` (star)\n*   **Line style:** `-` (solid), `--` (dashed)'
+          title: 'Customizing Plots',
+          content: 'You can pass optional arguments to `plot()` to customize the graphic:\n\n*   `ymin` and `ymax`: Restrict the vertical viewing window (crucial for functions with asymptotes like $1/x$).\n*   `color`: Set the line color (`color="red"`).\n*   `linestyle`: Change the line pattern (`linestyle="--"`).\n*   `thickness`: Make the line bolder (`thickness=2`).\n*   `legend_label`: Add a label to the legend.\n*   `figsize`: Control the output image size.'
         },
         {
-          id: 'l211-3-s2',
-          type: 'quiz',
-          title: 'Format String Interpretation',
-          content: 'What does the format string `"g--"` represent?',
-          options:[
-            { id: 'a', text: 'Green continuous line', isCorrect: false, explanation: 'Continuous is a single dash `-`.' },
-            { id: 'b', text: 'Green dashed line', isCorrect: true, explanation: 'Correct. `g` = green, `--` = dashed.' }
+          id: 'l421-3-s2',
+          type: 'solution',
+          title: 'Algorithmic Tracing',
+          content: 'Construct a customized plot command.',
+          interactiveSteps:[
+            {
+              prompt: 'We want to plot $1/x$ from -5 to 5. What must we add to prevent the Y-axis from stretching to infinity at the vertical asymptote ($x=0$)?',
+              options:[
+                { id: 'a', text: "ymin=-10, ymax=10", isCorrect: true, explanation: 'Restricting the y-bounds prevents the plot from zooming out infinitely.' },
+                { id: 'b', text: "detect_poles='show'", isCorrect: false, explanation: 'While this helps disjoint the line, ymin/ymax actually restricts the viewing window height.' }
+              ]
+            },
+            {
+              prompt: 'If we want the line to be dashed and green, what parameters are passed?',
+              options:[
+                { id: 'a', text: "color='green', linestyle='--'", isCorrect: true, explanation: 'Correct.' }
+              ]
+            }
           ]
         },
         {
-          id: 'l211-3-s3',
+          id: 'l421-3-s3',
           type: 'fill_in_blank',
           title: 'Syntax Drill',
-          content: 'To plot red circles without connecting lines, use the format string "___".',
-          blankAnswer: 'ro'
-        }
-      ]
-    },
-    // Lesson 4 (Example): plot3.py and plot4.py
-    {
-      id: 'l211-4-example',
-      title: 'L4: Labels, Legends, & Axes',
-      description: 'Making plots publication-ready.',
-      icon: 'Tag',
-      slides:[
-        {
-          id: 'l211-4-s1',
-          type: 'theory',
-          title: 'Annotating the Plot',
-          content: 'A plot without labels is just a drawing. \n\n*   `plt.xlabel("text")` / `plt.ylabel("text")` adds axis labels.\n*   `plt.axis([xmin, xmax, ymin, ymax])` manually sets the viewing window.\n*   `plt.legend()` displays the legend based on the `label` parameters passed to `plot()`.'
-        },
-        {
-          id: 'l211-4-s2',
-          type: 'python_example',
-          title: 'Interactive Sandbox: plot4.py',
-          content: 'Combining NumPy arrays with Matplotlib legends and LaTeX formatting.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nt = np.arange(0.0, 5.0, 0.2)\n\n# Plot three different functions using format strings\nplt.plot(t, t**2, 'x', label='t^2')\nplt.plot(t, t**3, 'ro', label='t^3')\n\n# Add legend with some transparency\nplt.legend(framealpha=0.5)\nprint('Rendering polynomial comparisons...')"
+          content: 'To add a title to your plot, use the parameter: `___="My Graph"` inside the plot command.',
+          blankAnswer: 'title'
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_2_1_1_matplotlib_basics.ts ---
+--- END OF FILE src/data/python_units/unit_4_2_1_sagemath_graphing.ts ---
 
---- START OF FILE src/data/python_units/unit_2_1_2_math_error_anim.ts ---
+--- START OF FILE src/data/python_units/unit_4_2_2_sagemath_derivatives.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_2_1_2_MATH_ERROR_ANIM: Unit = {
-  id: 'unit-2-1-2-math-error-anim',
-  title: '212: Math Functions & Errors',
-  description: 'Visualizing equations, parity, error bars, and animation concepts.',
+export const UNIT_4_2_2_SAGEMATH_DERIVATIVES: Unit = {
+  id: 'unit-4-2-2-sagemath-derivatives',
+  title: '422: Derivatives',
+  description: 'First derivatives, higher-order derivatives, and tangent lines.',
   color: 'duo-red',
   lessons:[
-    // Lesson 5 (Theory): 4.2 Plotting mathematical functions
+    // L4: The Derivative
     {
-      id: 'l212-1-theory',
-      title: 'L5: Plotting Mathematical Functions',
-      description: 'Generating continuous curve datasets.',
-      icon: 'Activity',
+      id: 'l422-4-theory',
+      title: 'L4: The diff() Command',
+      description: 'Taking exact analytical derivatives.',
+      icon: 'TrendingUp',
       slides:[
         {
-          id: 'l212-1-s1',
+          id: 'l422-4-s1',
           type: 'quiz',
-          title: 'Priming: Continuous Curves',
-          content: 'Computers cannot plot true continuous math functions; they plot discrete points. Which NumPy function is best for generating smooth data for plotting?',
+          title: 'Priming: Calculating Derivatives',
+          content: 'In Sage, how do we analytically find the derivative of a function like $f(x) = \\cos(x^2)$?',
           options:[
-            { id: 'a', text: 'np.arange()', isCorrect: false, explanation: 'arange uses a step size, making it harder to specify exactly how many points you want for a perfectly smooth curve.' },
-            { id: 'b', text: 'np.linspace()', isCorrect: true, explanation: 'linspace lets you request exactly e.g., 200 points between two bounds, ensuring high-resolution smoothness.' }
+            { id: 'a', text: 'Using the diff() or .derivative() command.', isCorrect: true, explanation: 'Sage uses `diff(f(x), x)` to analytically derive the function.' },
+            { id: 'b', text: 'Using the limit() command exclusively.', isCorrect: false, explanation: 'While limits are the definition of a derivative, `diff()` is the direct built-in command.' }
           ]
         },
         {
-          id: 'l212-1-s2',
+          id: 'l422-4-s2',
           type: 'theory',
-          title: 'Bridging NumPy and Matplotlib',
-          content: 'To plot a function $y = f(x)$:\n1. Generate the independent variable `x` using `np.linspace(start, stop, num_points)`.\n2. Vectorize the math using NumPy: `y = np.sin(x)`.\n3. Plot it: `plt.plot(x, y)`.'
+          title: 'Syntax of diff()',
+          content: 'To differentiate $f(x, y)$ with respect to $x$:\n`diff(f(x,y), x)`\n\nAlternatively, if $f$ is defined as a Sage function `f(x) = x^3`, you can use the object method:\n`f.derivative(x)` or `f(x).derivative(x)`'
         }
       ]
     },
-    // Lesson 6 (Example): npsin.py
+    // L5: Slope of Tangent
     {
-      id: 'l212-2-example',
-      title: 'L6: Sine and Friends',
-      description: 'Plotting trigonometric symmetries.',
-      icon: 'Waves',
+      id: 'l422-5-lemma',
+      title: 'L5: Slope of the Tangent Line',
+      description: 'Using derivatives to find tangent equations.',
+      icon: 'ArrowUpRight',
       slides:[
         {
-          id: 'l212-2-s1',
+          id: 'l422-5-s1',
           type: 'example_q',
-          title: 'Problem: npsin.py',
-          content: 'Plot $\\sin(x)$ and $\\sin(x^2)$ from $-\\pi$ to $+\\pi$. Observe the odd and even symmetries.'
+          title: 'Problem: Tangent Line',
+          content: 'Find the equation of the tangent line to the graph of $f(x) = x^2 + 1$ at the point where $x = 2$.'
         },
         {
-          id: 'l212-2-s2',
+          id: 'l422-5-s2',
           type: 'solution',
-          title: 'Tracing the Trigonometry',
-          content: 'Setting up the space.',
+          title: 'Interactive Solution',
+          content: 'Build the tangent line equation using Sage.',
           interactiveSteps:[
             {
-              prompt: 'How do you create an array of 200 points exactly from $-\\pi$ to $\\pi$?',
+              prompt: 'First, we need the slope of the tangent line at $x=2$. How do we evaluate $f\'(2)$ in Sage?',
               options:[
-                { id: 'a', text: 'x = np.linspace(-np.pi, np.pi, 200)', isCorrect: true, explanation: 'Correct. NumPy provides `np.pi` as a constant.' },
-                { id: 'b', text: 'x = np.arange(-3.14, 3.14, 200)', isCorrect: false, explanation: 'arange\'s third argument is step size, not number of elements.' }
+                { id: 'a', text: 'diff(f(x)).substitute(x=2)', isCorrect: true, explanation: 'Take the derivative, then substitute $x=2$.' },
+                { id: 'b', text: 'diff(f(2))', isCorrect: false, explanation: 'This takes the derivative of a constant, which evaluates to 0!' }
+              ]
+            },
+            {
+              prompt: 'The point-slope form of a line is $L(x) = m(x-a) + f(a)$. If `m = diff(f(x)).substitute(x=2)`, what is the full tangent line formula $L(x)$?',
+              options:[
+                { id: 'a', text: 'L(x) = m * (x - 2) + f(2)', isCorrect: true, explanation: 'Correct. This yields the exact equation of the tangent line.' }
               ]
             }
           ]
-        },
-        {
-          id: 'l212-2-s3',
-          type: 'python_example',
-          title: 'Interactive Sandbox: Sine waves',
-          content: 'Notice how $\\sin(x^2)$ is an EVEN function (symmetric across the Y-axis).',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.linspace(-np.pi, np.pi, 200)\ny1 = np.sin(x)\ny2 = np.sin(x*x)\n\nplt.plot(x, y1, 'b-', label='sin(x)')\nplt.plot(x, y2, 'r-', label='sin(x^2)')\n\n# Adding grid and origin lines for clarity\nplt.axhline(0, color='black', lw=0.5)\nplt.axvline(0, color='black', lw=0.5)\nplt.legend()\nprint('Plotting symmetric functions...')"
         }
       ]
     },
-    // Lesson 7 & 8 (Theory/Example): 4.3 Error Bars
+    // L6: Higher-Order Derivatives
     {
-      id: 'l212-3-theory',
-      title: 'L7: Error Bars',
-      description: 'Representing uncertainty visually.',
-      icon: 'BarChart2',
+      id: 'l422-6-theory',
+      title: 'L6: Higher-Order Derivatives',
+      description: 'Taking the nth derivative.',
+      icon: 'Layers',
       slides:[
         {
-          id: 'l212-3-s1',
+          id: 'l422-6-s1',
           type: 'theory',
-          title: 'plt.errorbar()',
-          content: 'In experimental physics and statistics, data points have uncertainty. \n\nInstead of `plt.plot()`, you use `plt.errorbar(x, y, yerr=dy)` where `dy` is an array of uncertainty bounds for the Y-axis.'
+          title: 'diff(f(x), x, n)',
+          content: 'To compute the $n^{th}$ derivative with respect to $x$, simply pass $n$ as the third argument to the `diff()` function.\n\nExample: To find the 255th derivative of $\\cos(x)$:\n`diff(cos(x), x, 255)`\n\nSage returns `sin(x)` instantly, recognizing the modulo-4 cyclic nature of trigonometric derivatives.'
         },
         {
-          id: 'l212-3-s2',
-          type: 'python_example',
-          title: 'Interactive Sandbox: errbar.py',
-          content: 'See how error bars attach to individual data points.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(10)\ny = 5 * np.sin(x / 5)\n# Constant error of 0.3 for all points\ndy = np.linspace(0.1, 0.3, 10)\n\nplt.plot(x, y, 'b--') # Plot the underlying trend line\nplt.errorbar(x, y, yerr=dy, fmt='ro', capsize=4)\nprint('Plotting data with uncertainty...')"
+          id: 'l422-6-s2',
+          type: 'fill_in_blank',
+          title: 'Syntax Drill',
+          content: 'To find the 3rd derivative of $x^4$ with respect to $x$, you type: `diff(x^4, x, ___)`',
+          blankAnswer: '3'
         }
       ]
     },
-    // Lesson 9 & 10 (Theory/Example): 4.4 Animations
+    // L7: Chain Rule and Implicit Differentiation
     {
-      id: 'l212-4-theory',
-      title: 'L9: Simple 2D Animation',
-      description: 'Event-driven plotting over time.',
-      icon: 'PlayCircle',
+      id: 'l422-7-theory',
+      title: 'L7: Implicit Differentiation',
+      description: 'Differentiating equations directly.',
+      icon: 'Link',
       slides:[
         {
-          id: 'l212-4-s1',
+          id: 'l422-7-s1',
           type: 'theory',
-          title: 'FuncAnimation',
-          content: 'Matplotlib supports animation via `matplotlib.animation.FuncAnimation`.\n\nIt works by:\n1. Creating a base plot (`fig, ax = plt.subplots()`).\n2. Creating an `update(frame_number)` function that changes the data of the plot.\n3. Calling `FuncAnimation` which loops `update` rapidly.'
+          title: 'Chain Rule and Implicit',
+          content: 'Sage handles the Chain Rule automatically for composite functions (e.g., `diff(cos(x^2), x)` yields `-2*x*sin(x^2)`).\n\nFor **Implicit Differentiation** (e.g., finding $dy/dx$ for $x^2 + y^2 = 25$), you must explicitly tell Sage that $y$ is a function of $x$:\n\n```python\ny = function("y")(x)\neq = x^2 + y^2 == 25\ndiff(eq, x)\n```\nSage will return `2*x + 2*y(x)*D[0](y)(x) == 0`. Here, `D[0](y)(x)` represents $dy/dx$.'
         },
         {
-          id: 'l212-4-s2',
+          id: 'l422-7-s2',
           type: 'quiz',
-          title: 'Animation in Web Environments',
-          content: 'Why might `FuncAnimation` fail to display in a static web environment or exported PDF?',
+          title: 'Concept Check: Dependent Variables',
+          content: 'Why must we declare `y = function("y")(x)` before implicitly differentiating?',
           options:[
-            { id: 'a', text: 'Because animations require a live interactive GUI backend, not static image generation.', isCorrect: true, explanation: 'Web shells often render Matplotlib via the `Agg` backend, which spits out static PNGs. True animation requires interactive backends.' },
-            { id: 'b', text: 'Because NumPy cannot update arrays fast enough.', isCorrect: false, explanation: 'NumPy is extremely fast; the limitation is the rendering backend.' }
+            { id: 'a', text: 'To explicitly inform Sage that y depends on x, so the Chain Rule applies to y terms.', isCorrect: true, explanation: 'If you just use a standard variable `y`, Sage assumes it is a constant independent of `x`, and its derivative with respect to `x` would be 0.' },
+            { id: 'b', text: 'To convert y into a matrix.', isCorrect: false, explanation: 'This is strictly for tracking calculus dependencies.' }
           ]
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_2_1_2_math_error_anim.ts ---
+--- END OF FILE src/data/python_units/unit_4_2_2_sagemath_derivatives.ts ---
 
---- START OF FILE src/data/python_units/unit_2_1_3_curves_colors.ts ---
+--- START OF FILE src/data/python_units/unit_4_2_3_sagemath_integrals.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_2_1_3_CURVES_COLORS: Unit = {
-  id: 'unit-2-1-3-curves-colors',
-  title: '213: Famous Curves & Colormaps',
-  description: 'Parametric equations, Polar plots, and 2D arrays via imshow.',
-  color: 'duo-green',
-  lessons:[
-    // Lesson 11 & 12 (Theory/Example): Astroid
-    {
-      id: 'l213-1-theory',
-      title: 'L11: Parametric Curves (Astroid)',
-      description: 'Plotting functions mapped to a parameter t.',
-      icon: 'Star',
-      slides:[
-        {
-          id: 'l213-1-s1',
-          type: 'theory',
-          title: 'Parametric Equations',
-          content: 'Some curves cannot be expressed as simple $y = f(x)$ functions because a single $x$ value maps to multiple $y$ values. \n\nInstead, both $x$ and $y$ are functions of a third parameter, $t$.\n\nThe **Astroid** (a tetracuspid curve) is given by:\n$x = a\\cos^3(t)$\n$y = a\\sin^3(t)$'
-        },
-        {
-          id: 'l213-1-s2',
-          type: 'python_example',
-          title: 'Interactive Sandbox: astro.py',
-          content: 'Notice how we generate `t` first, then calculate `x` and `y`.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\na = 2\nt = np.linspace(0, 2*np.pi, 200)\n\n# Parametric equations\nx = a * np.cos(t)**3\ny = a * np.sin(t)**3\n\nplt.plot(x, y, 'b-')\nplt.axis('equal') # Forces aspect ratio 1:1 so it looks correct\nprint('Rendering Astroid...')"
-        }
-      ]
-    },
-    // Lesson 13 (Example): Ellipse and Lissajous
-    {
-      id: 'l213-2-example',
-      title: 'L13: Lissajous Figures',
-      description: 'Complex parametric oscillations.',
-      icon: 'Activity',
-      slides:[
-        {
-          id: 'l213-2-s1',
-          type: 'example_q',
-          title: 'Lissajous Curves',
-          content: 'A Lissajous figure is generated when $x$ and $y$ oscillate at different frequencies.\n\n$x = a\\cos(n t)$\n$y = b\\sin(m t)$'
-        },
-        {
-          id: 'l213-2-s2',
-          type: 'python_example',
-          title: 'Interactive Sandbox: lissa.py',
-          content: 'Change the multipliers inside the `sin` and `cos` functions to see different Lissajous knots.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\na = 2\nt = np.linspace(-2*np.pi, 2*np.pi, 400)\n\n# Frequency ratio 3:2\nx = a * np.cos(3*t)\ny = a * np.sin(2*t)\n\nplt.plot(x, y, 'g-')\nplt.title('Lissajous Figure (3:2)')\nprint('Plotting...')"
-        }
-      ]
-    },
-    // Lesson 14: Polar Plots
-    {
-      id: 'l213-3-theory',
-      title: 'L14: Polar Plots & Spirals',
-      description: 'Switching the coordinate system to r and theta.',
-      icon: 'Compass',
-      slides:[
-        {
-          id: 'l213-3-s1',
-          type: 'theory',
-          title: 'Polar Coordinates',
-          content: 'Instead of Cartesian $(x, y)$, polar coordinates locate points using an angle $\\theta$ and a radius $r$.\n\nMatplotlib supports this via the `plt.polar(theta, r)` function. \n\n**Archimedes Spiral:** $r = a\\theta$'
-        },
-        {
-          id: 'l213-3-s2',
-          type: 'python_example',
-          title: 'Interactive Sandbox: archi.py',
-          content: 'Watch the radius grow linearly with the angle.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\na = 2\nth = np.linspace(0, 10 * np.pi, 500) # 5 full rotations\nr = a * th\n\nplt.polar(th, r, color='purple')\nprint('Rendering Archimedes Spiral...')"
-        }
-      ]
-    },
-    // Lesson 15 & 16: Colormaps and Fractals
-    {
-      id: 'l213-4-theory',
-      title: 'L15: 2D Plots using Colors (imshow)',
-      description: 'Mapping 2D matrix values to colors.',
-      icon: 'Image',
-      slides:[
-        {
-          id: 'l213-4-s1',
-          type: 'theory',
-          title: 'plt.imshow()',
-          content: 'A two-dimensional matrix can be represented graphically by assigning a color to each point proportional to the value of that element.\n\n`plt.imshow(matrix)` visualizes the 2D array, treating it like a heat map or image.'
-        },
-        {
-          id: 'l213-4-s2',
-          type: 'solution',
-          title: 'The Julia Set Algorithm',
-          content: 'Fractals are created by iteratively applying an equation $f(z) \\rightarrow z^2 + c$ to complex numbers in a 2D plane.',
-          interactiveSteps:[
-            {
-              prompt: 'To compute a 2D image of a fractal, what matrix structure do we need?',
-              options:[
-                { id: 'a', text: 'A 2D NumPy array initialized to store iteration counts.', isCorrect: true, explanation: 'We create a 2D array, map each (row, col) to a complex coordinate, run the iteration, and store the escape step count in the array.' },
-                { id: 'b', text: 'A 1D array of imaginary numbers.', isCorrect: false, explanation: 'A 1D array only creates a line, not a 2D image.' }
-              ]
-            }
-          ]
-        },
-        {
-          id: 'l213-4-s3',
-          type: 'python_example',
-          title: 'Interactive Sandbox: julia.py',
-          content: 'Calculate and visualize a Julia set. (Grid restricted to 100x100 for browser speed).',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nsize = 100\nmax_iter = 50\nc = -0.4 + 0.6j # The complex constant\n\n# Pre-allocate 2D array\nm = np.zeros((size, size))\n\nfor x in range(size):\n    for y in range(size):\n        # Map pixel (x,y) to complex plane (-1.5 to 1.5)\n        re = 1.5 * (x - size/2) / (size/2)\n        im = 1.5 * (y - size/2) / (size/2)\n        z = complex(re, im)\n        \n        # Iterate\n        for k in range(max_iter):\n            if abs(z) > 2.0:\n                break\n            z = z**2 + c\n        m[y, x] = k\n\nplt.imshow(m, cmap='jet')\nprint('Fractal generation complete.')"
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/python_units/unit_2_1_3_curves_colors.ts ---
-
---- START OF FILE src/data/python_units/unit_2_1_4_3d_plots.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_2_1_4_3D_PLOTS: Unit = {
-  id: 'unit-2-1-4-3d-plots',
-  title: '214: 3D Plots & Surfaces',
-  description: 'Expanding into the Z-axis with meshgrids and Axes3D.',
+export const UNIT_4_2_3_SAGEMATH_INTEGRALS: Unit = {
+  id: 'unit-4-2-3-sagemath-integrals',
+  title: '423: Integrals',
+  description: 'Antiderivatives, definite integrals, and Riemann sums.',
   color: 'duo-violet',
   lessons:[
-    // Lesson 17 & 18: 3D Line plots
+    // L8: Antiderivatives
     {
-      id: 'l214-1-theory',
-      title: 'L17: 3D Projections',
-      description: 'Enabling 3D axes in Matplotlib.',
-      icon: 'Box',
+      id: 'l423-8-theory',
+      title: 'L8: Antiderivatives (Indefinite)',
+      description: 'Solving the indefinite integral.',
+      icon: 'Sigma',
       slides:[
         {
-          id: 'l214-1-s1',
+          id: 'l423-8-s1',
           type: 'quiz',
-          title: 'Priming: 3D Math',
-          content: 'If `plt.plot(x, y)` draws a 2D line, what additional dimension data is fundamentally required for 3D?',
+          title: 'Priming: Integration Constants',
+          content: 'If you compute an indefinite integral analytically on paper, you must append `+ C`. Does SageMath append `+ C` to its answers?',
           options:[
-            { id: 'a', text: 'A Z-axis array of equal size.', isCorrect: true, explanation: 'Every point in 3D space requires (X, Y, Z) coordinates.' },
-            { id: 'b', text: 'A color map array.', isCorrect: false, explanation: 'Color is a 4th dimension visualizer, not the spatial Z-axis.' }
+            { id: 'a', text: 'No, SageMath returns the primitive function without the constant of integration.', isCorrect: true, explanation: 'It returns the raw antiderivative. The mathematician must remember the arbitrary constant applies to families of functions.' },
+            { id: 'b', text: 'Yes, it automatically adds + C.', isCorrect: false, explanation: 'Sage does not include + C.' }
           ]
         },
         {
-          id: 'l214-1-s2',
+          id: 'l423-8-s2',
           type: 'theory',
-          title: 'Setting up 3D',
-          content: 'To unlock 3D plotting, you must use the explicit Object-Oriented interface.\n\n```python\nfrom mpl_toolkits.mplot3d import Axes3D\nfig = plt.figure()\nax = fig.add_subplot(projection="3d")\n```\n\nOnce configured, you can call `ax.plot3D(x, y, z)` or `ax.scatter3D(x, y, z)`.'
-        },
-        {
-          id: 'l214-1-s3',
-          type: 'python_example',
-          title: 'Interactive Sandbox: line3d.py',
-          content: 'Plotting a 3D helix.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nfig = plt.figure()\nax = fig.add_subplot(projection='3d')\n\nz = np.linspace(0, 15, 200)\nx = np.sin(z)\ny = np.cos(z)\n\nax.plot3D(x, y, z, 'red')\nprint('Plotting 3D Helix...')"
+          title: 'The integral() Command',
+          content: 'To compute the indefinite integral of $f(x)$ with respect to $x$:\n\n`integral(f(x), x)`\n\n*(Note: `integrate()` is a synonym for `integral()`).*'
         }
       ]
     },
-    // Lesson 19 & 20: Meshgrids and Surfaces
+    // L9: Definite Integrals
     {
-      id: 'l214-2-theory',
-      title: 'L19: Meshgrids & Surfaces',
-      description: 'Creating 2D coordinate networks for 3D surfaces.',
-      icon: 'Grid',
+      id: 'l423-9-theory',
+      title: 'L9: Definite Integrals',
+      description: 'Evaluating over a boundary.',
+      icon: 'ListOrdered',
       slides:[
         {
-          id: 'l214-2-s1',
+          id: 'l423-9-s1',
           type: 'theory',
-          title: 'np.meshgrid()',
-          content: 'To plot a 3D **surface** (like a blanket), you cannot just use two 1D arrays for X and Y. You must create a complete grid covering the X-Y plane.\n\n`X, Y = np.meshgrid(x_array, y_array)`\n\nThis takes an $N$ element array and an $M$ element array, and creates two massive $M \\times N$ 2D matrices representing every possible coordinate pair on the floor plane.'
+          title: 'Definite Bounds',
+          content: 'To compute a definite integral (which evaluates to a number or a bounded algebraic expression), add the lower and upper bounds:\n\n`integral(f(x), x, a, b)`\n\nExample:\n`integral(x^2, x, 0, 1)` returns `1/3`.'
         },
         {
-          id: 'l214-2-s2',
+          id: 'l423-9-s2',
+          type: 'fill_in_blank',
+          title: 'Syntax Drill',
+          content: 'To evaluate the definite integral of `sin(x)` from `0` to `pi`, type: `integral(sin(x), x, 0, ___)`',
+          blankAnswer: 'pi'
+        }
+      ]
+    },
+    // L10: Riemann Sums
+    {
+      id: 'l423-10-definition',
+      title: 'L10: Riemann Sums',
+      description: 'Numerical approximation via Left Endpoints.',
+      icon: 'BarChart',
+      slides:[
+        {
+          id: 'l423-10-s1',
+          type: 'example_q',
+          title: 'Problem: Area Approximation',
+          content: 'The definite integral is defined as the limit of a Riemann sum. \n\nHow do we approximate the area under $f(x) = x^2$ from $x=0$ to $x=2$ using a Left Endpoint Riemann sum with $n=4$ rectangles?'
+        },
+        {
+          id: 'l423-10-s2',
           type: 'solution',
-          title: 'Building the Surface',
-          content: 'How do we calculate the Z heights?',
+          title: 'Algorithmic Tracing',
+          content: 'Construct the Riemann sum in Sage.',
           interactiveSteps:[
             {
-              prompt: 'Once you have the 2D matrices `X` and `Y` from meshgrid, how do you find Z?',
+              prompt: 'First, calculate the width of each rectangle, $\\Delta x$. If the interval is $[0, 2]$ and $n=4$, what is $\\Delta x$?',
               options:[
-                { id: 'a', text: 'Z = np.sin(X) + np.cos(Y)', isCorrect: true, explanation: 'Because X and Y are now 2D matrices, vectorized NumPy math will automatically output a 2D matrix Z representing the height at every single grid point!' },
-                { id: 'b', text: 'Use a nested for loop to calculate z at each point.', isCorrect: false, explanation: 'That defeats the entire purpose of NumPy vectorization.' }
+                { id: 'a', text: 'dx = (2 - 0) / 4 = 0.5', isCorrect: true, explanation: 'The width of each subinterval is (b - a) / n.' }
+              ]
+            },
+            {
+              prompt: 'For a Left Riemann sum, we evaluate the function at the left edge of each subinterval. What are the 4 evaluation points?',
+              options:[
+                { id: 'a', text: 'x = 0, 0.5, 1.0, 1.5', isCorrect: true, explanation: 'We start at a=0 and take 4 steps of dx=0.5, stopping before the right edge (2.0).' }
+              ]
+            },
+            {
+              prompt: 'To calculate the total area, we sum $f(x_i) \\cdot \\Delta x$. How is this written as a list comprehension in Python/Sage?',
+              options:[
+                { id: 'a', text: 'sum([f(i) * dx for i in srange(0, 2, dx)])', isCorrect: true, explanation: 'The `srange` function creates the list of evaluation points[0, 0.5, 1.0, 1.5], we evaluate the area of each rectangle, and sum them up.' }
               ]
             }
           ]
-        },
-        {
-          id: 'l214-2-s3',
-          type: 'python_example',
-          title: 'Interactive Sandbox: surface3d.py',
-          content: 'Generating a gravity-well surface.',
-          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nfig = plt.figure()\nax = fig.add_subplot(projection='3d')\n\n# 1D axes\nx = np.linspace(-5, 5, 50)\ny = np.linspace(-5, 5, 50)\n\n# 2D Grid\nX, Y = np.meshgrid(x, y)\n\n# Vectorized Z calculation over the 2D grid\nZ = X**2 + Y**2\n\nax.plot_surface(X, Y, Z, cmap='viridis')\nprint('Rendering Surface...')"
-        }
-      ]
-    },
-    // Lesson 21: Spherical Harmonics
-    {
-      id: 'l214-3-example',
-      title: 'L21: Spherical Harmonics',
-      description: 'Advanced 3D surface mapping.',
-      icon: 'Globe',
-      slides:[
-        {
-          id: 'l214-3-s1',
-          type: 'example_q',
-          title: 'Problem: ylm.py',
-          content: 'Plotting complex mathematical objects like Spherical Harmonics $Y_{l}^{m}$ requires mapping spherical coordinates $(\\phi, \\theta)$ to Cartesian $(x, y, z)$.'
-        },
-        {
-          id: 'l214-3-s2',
-          type: 'theory',
-          title: 'Coordinate Transformation',
-          content: 'To plot a spherical object in Matplotlib:\n1. Create a `meshgrid` of angles $\\theta$ and $\\phi$.\n2. Calculate the radius $r$ at every point based on the spherical harmonic equation.\n3. Convert to Cartesian:\n   $X = r \\cdot \\sin(\\phi) \\cdot \\cos(\\theta)$\n   $Y = r \\cdot \\sin(\\phi) \\cdot \\sin(\\theta)$\n   $Z = r \\cdot \\cos(\\phi)$'
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_2_1_4_3d_plots.ts ---
+--- END OF FILE src/data/python_units/unit_4_2_3_sagemath_integrals.ts ---
 
---- START OF FILE src/data/python_units/unit_2_1_5_section_summary.ts ---
+--- START OF FILE src/data/python_units/unit_4_2_4_section_summary.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_2_1_5_SECTION_SUMMARY: Unit = {
-  id: 'unit-2-1-5-section-summary',
+export const UNIT_4_2_4_SECTION_SUMMARY: Unit = {
+  id: 'unit-4-2-4-section-summary',
   title: 'Section Summary',
-  description: 'Consolidation of the Matplotlib ecosystem.',
+  description: 'Consolidation of SageMath Calculus operations.',
   color: 'duo-blue',
   lessons:[
     {
-      id: 'l215-1-summary',
-      title: 'Review: 2D & Parameters',
-      description: 'A look back at Units 7, 8 & 9.',
+      id: 'l424-1-summary',
+      title: 'Review: Plotting & Bounds',
+      description: 'A look back at Unit 20.',
       icon: 'BookOpen',
       slides:[
         {
-          id: 'l215-1-s1',
+          id: 'l424-1-s1',
           type: 'theory',
-          title: 'Matplotlib Interfaces & Projections',
-          content: 'Matplotlib connects NumPy arrays to visual pixels.\n\nYou learned to use the implicit `plt.plot()` for rapid 2D prototyping, formatting lines with strings like `"ro-"`. You then expanded to **Parametric** and **Polar** projections, recognizing that $X$ and $Y$ don\'t have to be directly related; they can both depend independently on a parameter $t$ or $\\theta$.'
+          title: 'The Continuous Plot',
+          content: 'Sage wraps Matplotlib to allow direct plotting of mathematical equations without manual array generation. \n\nBy typing `plot(f(x), x, a, b)`, Sage maps the function smoothly. You learned to constrain infinite bounds using `ymin` and `ymax`, and to superimpose multiple functions by passing them as a tuple or adding their plots together (`plot(f) + plot(g)`).'
         }
       ]
     },
     {
-      id: 'l215-2-summary',
-      title: 'Review: Colormaps & 3D',
-      description: 'A look back at Units 9 & 10.',
+      id: 'l424-2-summary',
+      title: 'Review: Exact Calculus',
+      description: 'A look back at Units 21 & 22.',
       icon: 'BookOpen',
       slides:[
         {
-          id: 'l215-2-s1',
+          id: 'l424-2-s1',
           type: 'theory',
-          title: 'Adding Dimensions',
-          content: 'To display more complex relationships, you utilized `plt.imshow()` to map a full 2D $M \\times N$ matrix to a color gradient, enabling the visualization of Fractals.\n\nFinally, you crossed into 3D explicitly using `projection="3d"`. The critical mental leap here was the `np.meshgrid()` function, which broadcasts 1D axes into the 2D coordinate floor required to compute heights for a continuous `plot_surface`.'
+          title: 'Analytical Engines',
+          content: 'Sage executes precise analytical calculus through its unified interface. \n\n*   **Differentiation:** `diff(f(x), x, n)` calculates the $n^{th}$ derivative. To manage implicit differentiation, you must strictly bind variables to dependencies: `y = function("y")(x)`.\n*   **Integration:** `integral(f(x), x, a, b)` manages both indefinite and definite integrals analytically. When you need approximations, you revert to classical algorithms like building Riemann Sums using `sum()` and `srange()`.'
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_2_1_5_section_summary.ts ---
+--- END OF FILE src/data/python_units/unit_4_2_4_section_summary.ts ---
 
---- START OF FILE src/data/section_2_1_matplotlib.ts ---
+--- START OF FILE src/data/section_4_2_calculus.ts ---
 import { Section } from '../types';
-import { UNIT_2_1_1_MATPLOTLIB_BASICS } from './python_units/unit_2_1_1_matplotlib_basics';
-import { UNIT_2_1_2_MATH_ERROR_ANIM } from './python_units/unit_2_1_2_math_error_anim';
-import { UNIT_2_1_3_CURVES_COLORS } from './python_units/unit_2_1_3_curves_colors';
-import { UNIT_2_1_4_3D_PLOTS } from './python_units/unit_2_1_4_3d_plots';
-import { UNIT_2_1_5_SECTION_SUMMARY } from './python_units/unit_2_1_5_section_summary';
+import { UNIT_4_2_1_SAGEMATH_GRAPHING } from './python_units/unit_4_2_1_sagemath_graphing';
+import { UNIT_4_2_2_SAGEMATH_DERIVATIVES } from './python_units/unit_4_2_2_sagemath_derivatives';
+import { UNIT_4_2_3_SAGEMATH_INTEGRALS } from './python_units/unit_4_2_3_sagemath_integrals';
+import { UNIT_4_2_4_SECTION_SUMMARY } from './python_units/unit_4_2_4_section_summary';
 
-export const SECTION_2_1_MATPLOTLIB: Section = {
-  id: 'section-2-1-matplotlib',
-  title: 'Section 2.1: The Matplotlib Module',
-  description: 'Data visualization from 2D plots and error bars to fractals and 3D surface mapping.',
-  color: 'duo-blue',
+export const SECTION_4_2_CALCULUS: Section = {
+  id: 'section-4-2-calculus',
+  title: 'Section 4.2: Calculus with Sagemath',
+  description: 'Graphing functions, limits, derivatives, and analytical integration in Sage.',
+  color: 'duo-green',
   units:[
-    UNIT_2_1_1_MATPLOTLIB_BASICS,
-    UNIT_2_1_2_MATH_ERROR_ANIM,
-    UNIT_2_1_3_CURVES_COLORS,
-    UNIT_2_1_4_3D_PLOTS,
-    UNIT_2_1_5_SECTION_SUMMARY
+    UNIT_4_2_1_SAGEMATH_GRAPHING,
+    UNIT_4_2_2_SAGEMATH_DERIVATIVES,
+    UNIT_4_2_3_SAGEMATH_INTEGRALS,
+    UNIT_4_2_4_SECTION_SUMMARY
   ]
 };
---- END OF FILE src/data/section_2_1_matplotlib.ts ---
+--- END OF FILE src/data/section_4_2_calculus.ts ---
 
---- START OF FILE src/data/module_2_data_visualization.ts ---
+--- START OF FILE src/data/module_4_sagemath.ts ---
 import { Module } from '../types';
-import { SECTION_2_1_MATPLOTLIB } from './section_2_1_matplotlib';
+import { SECTION_4_1_SAGEMATH } from './section_4_1_sagemath';
+import { SECTION_4_2_CALCULUS } from './section_4_2_calculus';
 
-export const MODULE_2_DATA_VISUALIZATION: Module = {
-  id: 'module-2-data-visualization',
-  title: 'Module II: Data Visualization',
-  description: 'Transforming numerical arrays into geometric insights using Matplotlib.',
-  sections: [
-    SECTION_2_1_MATPLOTLIB
+export const MODULE_4_SAGEMATH: Module = {
+  id: 'module-4-sagemath',
+  title: 'Module IV: Sagemath – An Introduction',
+  description: 'Unifying python and mathematics using the SageMath Computer Algebra System.',
+  sections:[
+    SECTION_4_1_SAGEMATH,
+    SECTION_4_2_CALCULUS
   ],
   moduleSummary:[
     {
-      id: 'mod-sum-dv-1',
+      id: 'mod-sum-sage-1',
       type: 'theory',
-      title: 'Mental Model: The Canvas',
-      content: 'In this module, you bridged the gap between abstract numbers and human intuition. Matplotlib is fundamentally an engine that maps NumPy arrays to pixel coordinates. The basic interface (`plt.plot`) maps 1D arrays against each other in Cartesian space.'
+      title: 'Mental Model: The Ultimate CAS',
+      content: 'SageMath acts as a massive umbrella, unifying dozens of disparate mathematical software packages under a single, highly readable Python interface. It completely bridges the gap between programming and natural mathematics.'
     },
     {
-      id: 'mod-sum-dv-2',
+      id: 'mod-sum-sage-2',
       type: 'theory',
-      title: 'Mental Model: Parameterization',
-      content: 'You learned that $X$ does not always have to be the independent variable. In parametric (Astroids, Lissajous) and Polar systems, both $X$ and $Y$ are derived from a unified underlying variable (time $t$ or angle $\\theta$), allowing loops and curves impossible in standard $y=f(x)$ logic.'
+      title: 'Mental Model: The Pre-Parser',
+      content: 'To achieve natural mathematical syntax, SageMath intercepts your code before Python executes it. This "pre-parser" enables features that standard Python forbids, such as defining mathematical functions directly (`f(x) = x^3 - x`), utilizing the caret `^` for exponents instead of `**`, and preserving absolute exactness with fractions and roots instead of collapsing them into floats.'
     },
     {
-      id: 'mod-sum-dv-3',
+      id: 'mod-sum-sage-3',
       type: 'theory',
-      title: 'Mental Model: Dimensional Scaling',
-      content: 'To visualize 3D surfaces or Color Maps (Fractals), 1D arrays are insufficient. You mastered `np.meshgrid()` to generate a fully realized 2D coordinate network, allowing vectorized NumPy equations to instantly calculate a Z-height (or color density) for every discrete point on the plane.'
+      title: 'Mental Model: Solving Paradigms',
+      content: 'In Sage, you command different solving engines based on the mathematical reality of the problem. You reduce linear systems to matrices and apply `.rref()`. You solve algebraic equations exactly using `solve()`. And when analytical boundaries are hit (like transcendental intersections), you deploy bounded numerical approximations using `find_root()`.'
+    },
+    {
+      id: 'mod-sum-sage-4',
+      type: 'theory',
+      title: 'Mental Model: Calculus & Geometry',
+      content: 'Rather than generating discrete NumPy grids to plot curves, Sage analyzes continuous functions via `plot(f, x, a, b)` to guarantee smooth geometries. You learned to execute the fundamental theorems of calculus analytically using `diff()` and `integral()`, translating paper-and-pencil exactness directly into computational logic.'
     }
   ]
 };
---- END OF FILE src/data/module_2_data_visualization.ts ---
-
---- START OF FILE src/data/modules.ts ---
-import { Module } from '../types';
-import { MODULE_1_PYTHON_SAGEMATH } from './module_1_python_sagemath';
-import { MODULE_2_DATA_VISUALIZATION } from './module_2_data_visualization';
-
-export const MODULES: Module[] =[
-  MODULE_1_PYTHON_SAGEMATH,
-  MODULE_2_DATA_VISUALIZATION
-];
---- END OF FILE src/data/modules.ts ---
+--- END OF FILE src/data/module_4_sagemath.ts ---

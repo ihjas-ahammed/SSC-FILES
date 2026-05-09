@@ -6,7 +6,6 @@ export const loadGlobalPyodide = (): Promise<any> => {
   if (!pyodidePromise) {
     pyodidePromise = new Promise((resolve, reject) => {
       try {
-        // If already loaded via script tag somehow
         if ((window as any).loadPyodide) {
           initPyodide((window as any).loadPyodide).then(resolve).catch(reject);
           return;
@@ -37,27 +36,20 @@ const initPyodide = async (loadPyodideFn: any) => {
     indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.0/full/',
   });
 
-  // Pre-load heavy mathematical packages
-  await pyodide.loadPackage(['numpy', 'pandas', 'matplotlib']);
+  // Pre-load heavy mathematical packages (added sympy)
+  await pyodide.loadPackage(['numpy', 'pandas', 'matplotlib', 'sympy']);
 
-  // Set up the Python environment:
-  // 1. Override standard stdout/stderr
-  // 2. Setup Matplotlib Agg backend for base64 image extraction
-  // 3. Override standard input() to use synchronous JS window.prompt
   await pyodide.runPythonAsync(`
 import sys, io, os, base64, warnings
 from io import BytesIO
 import js
 import builtins
 
-# Redirect stdout and stderr
 sys.stdout = io.StringIO()
 sys.stderr = sys.stdout
 
-# Silence warnings
 warnings.filterwarnings('ignore')
 
-# Matplotlib configuration
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -72,9 +64,7 @@ def _capture_plot():
         return png_data
     return ''
 
-# Synchronous input override
 def custom_input(prompt_text=""):
-    # js.prompt blocks the thread natively and returns string or None
     val = js.prompt(prompt_text)
     return val if val is not None else ""
 

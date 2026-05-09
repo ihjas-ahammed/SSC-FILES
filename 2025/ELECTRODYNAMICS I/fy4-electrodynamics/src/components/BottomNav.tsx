@@ -1,9 +1,9 @@
 import React from 'react';
-import { BookOpen, Edit3, FileText } from 'lucide-react';
+import { BookOpen, BookCheck, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/bottom-nav.css';
 
-export type Tab = 'learn' | 'practice' | 'notes';
+export type Tab = 'learn' | 'questions' | 'notes';
 
 interface Props {
   activeTab: Tab;
@@ -33,13 +33,13 @@ const BottomNav: React.FC<Props> = ({ activeTab }) => {
         </button>
 
         <button 
-          onClick={() => handleNav('practice')}
-          className={`nav-item ${activeTab === 'practice' ? 'active' : ''}`}
+          onClick={() => handleNav('questions')}
+          className={`nav-item ${activeTab === 'questions' ? 'active' : ''}`}
         >
           <div className="icon-container">
-            <Edit3 size={24} strokeWidth={2.5} />
+            <BookCheck size={24} strokeWidth={2.5} />
           </div>
-          <span className="label">Practice</span>
+          <span className="label">Questions</span>
         </button>
 
         <button 
