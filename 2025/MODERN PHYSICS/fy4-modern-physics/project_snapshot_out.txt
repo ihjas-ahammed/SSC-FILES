@@ -717,6 +717,7 @@ import { renderModernPhysicsWaveParticle2 } from './canvasart/ModernPhysicsWaveP
 import { renderModernPhysicsWaveParticle3 } from './canvasart/ModernPhysicsWaveParticle3';
 import { renderModernPhysicsAtomic1 } from './canvasart/ModernPhysicsAtomic1';
 import { renderModernPhysicsAtomic2 } from './canvasart/ModernPhysicsAtomic2';
+import { renderModernPhysicsAtomic3 } from './canvasart/ModernPhysicsAtomic3';
 
 interface Props {
   canvasId: string;
@@ -738,6 +739,7 @@ const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
       renderModernPhysicsWaveParticle3(canvasId) ||
       renderModernPhysicsAtomic1(canvasId) ||
       renderModernPhysicsAtomic2(canvasId) ||
+      renderModernPhysicsAtomic3(canvasId) ||
       <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
     );
   };
@@ -2591,6 +2593,123 @@ export const renderModernPhysicsAtomic2 = (id: string): React.ReactElement | nul
   }
 };
 --- END OF FILE src/components/canvasart/ModernPhysicsAtomic2.tsx ---
+
+--- START OF FILE src/components/canvasart/ModernPhysicsAtomic3.tsx ---
+import React, { useState, useEffect } from 'react';
+
+export const renderModernPhysicsAtomic3 = (id: string): React.ReactElement | null => {
+  switch (id) {
+    // ── Franck-Hertz Graph ──────────────────────────────────────────
+    case 'franck-hertz-graph': {
+      return (
+        <div className="flex flex-col items-center justify-center w-full h-full p-2">
+          <svg className="w-full max-w-[320px]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <marker id="axArr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            
+            {/* Axes */}
+            <line x1="30" y1="170" x2="300" y2="170" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#axArr)"/>
+            <line x1="30" y1="170" x2="30" y2="10" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#axArr)"/>
+            
+            <text x="250" y="185" fill="#cbd5e1" fontSize="10">Voltage (V)</text>
+            <text x="5" y="90" fill="#cbd5e1" fontSize="10" transform="rotate(-90, 10, 90)">Current (I)</text>
+            
+            {/* Grid Lines */}
+            <line x1="90" y1="165" x2="90" y2="175" stroke="#94a3b8" strokeWidth="1" />
+            <text x="80" y="185" fill="#60a5fa" fontSize="10">4.9 V</text>
+
+            <line x1="150" y1="165" x2="150" y2="175" stroke="#94a3b8" strokeWidth="1" />
+            <text x="140" y="185" fill="#60a5fa" fontSize="10">9.8 V</text>
+
+            <line x1="210" y1="165" x2="210" y2="175" stroke="#94a3b8" strokeWidth="1" />
+            <text x="195" y="185" fill="#60a5fa" fontSize="10">14.7 V</text>
+
+            {/* Simulated Data Curve */}
+            <path 
+              d="M 30 170 Q 70 80 85 40 Q 95 140 100 120 Q 130 50 145 20 Q 155 120 160 100 Q 190 30 205 10 Q 215 100 220 80" 
+              fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinejoin="round"
+            />
+
+            {/* Explanatory Annotations */}
+            <circle cx="85" cy="40" r="4" fill="#f43f5e" />
+            <circle cx="145" cy="20" r="4" fill="#f43f5e" />
+            <circle cx="205" cy="10" r="4" fill="#f43f5e" />
+
+            <text x="95" y="30" fill="#f43f5e" fontSize="9">1st Inelastic Collision</text>
+            <text x="155" y="10" fill="#f43f5e" fontSize="9">2nd Collision</text>
+          </svg>
+        </div>
+      );
+    }
+
+    // ── Correspondence Principle ────────────────────────────────────
+    case 'correspondence-principle': {
+      const SpiralOrbits = () => {
+        const [phase, setPhase] = useState(0);
+        
+        useEffect(() => {
+          const id = setInterval(() => setPhase(p => (p + 0.05) % (2 * Math.PI)), 30);
+          return () => clearInterval(id);
+        }, []);
+
+        const cx = 150;
+        const cy = 75;
+        
+        // Classical continuous spiral position
+        const radius = 50 + 20 * Math.cos(phase * 0.5); // fake spiral
+        const cx1 = cx - 80 + radius * Math.cos(phase * 2);
+        const cy1 = cy + radius * Math.sin(phase * 2);
+
+        // Quantum discrete jump position
+        const qRadius = Math.cos(phase * 0.5) > 0 ? 70 : 50; 
+        const cx2 = cx + 80 + qRadius * Math.cos(phase * 2);
+        const cy2 = cy + qRadius * Math.sin(phase * 2);
+
+        return (
+          <div className="flex flex-col items-center justify-center w-full h-full p-2">
+            <svg className="w-full" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid meet">
+              
+              {/* Left Side: Classical Spiral */}
+              <text x="70" y="15" fill="#f43f5e" fontSize="10" textAnchor="middle" fontWeight="bold">Classical Atom</text>
+              <circle cx={cx - 80} cy={cy} r="3" fill="#facc15" />
+              <path d={`M ${cx-80} ${cy} m 0 -70 a 70 70 0 1 1 0 140 a 70 70 0 1 1 0 -140`} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
+              <path d={`M ${cx-80} ${cy} m 0 -50 a 50 50 0 1 1 0 100 a 50 50 0 1 1 0 -100`} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
+              
+              {/* Spiral path trace */}
+              <path d={`M ${cx-80+70} ${cy} Q ${cx-80+60} ${cy+60} ${cx-80} ${cy+50} T ${cx-80-40} ${cy}`} fill="none" stroke="#f43f5e" strokeWidth="1.5" />
+              
+              <circle cx={cx1} cy={cy1} r="3" fill="#60a5fa" />
+              <text x="70" y="145" fill="#cbd5e1" fontSize="8" textAnchor="middle">Continuous radiation</text>
+
+
+              {/* Right Side: Quantum Jumps */}
+              <text x="230" y="15" fill="#4ade80" fontSize="10" textAnchor="middle" fontWeight="bold">Quantum Atom (large n)</text>
+              <circle cx={cx + 80} cy={cy} r="3" fill="#facc15" />
+              <circle cx={cx + 80} cy={cy} r="70" fill="none" stroke="#4ade80" strokeWidth="1.5" />
+              <circle cx={cx + 80} cy={cy} r="50" fill="none" stroke="#4ade80" strokeWidth="1.5" />
+              
+              <circle cx={cx2} cy={cy2} r="3" fill="#60a5fa" />
+              <text x="230" y="145" fill="#cbd5e1" fontSize="8" textAnchor="middle">Discrete jumps approach spiral</text>
+              
+              {/* Jump photon indicator */}
+              {Math.cos(phase * 0.5) <= 0 && Math.cos(phase * 0.5) > -0.1 && (
+                 <path d={`M ${cx+80} ${cy-60} L ${cx+120} ${cy-80}`} fill="none" stroke="#facc15" strokeWidth="2" strokeDasharray="3 2" />
+              )}
+            </svg>
+          </div>
+        );
+      }
+      return <SpiralOrbits />;
+    }
+
+    default:
+      return null;
+  }
+};
+--- END OF FILE src/components/canvasart/ModernPhysicsAtomic3.tsx ---
 
 --- START OF FILE src/components/canvasart/ModernPhysicsEM1.tsx ---
 import React, { useState, useEffect } from 'react';
@@ -4899,6 +5018,7 @@ export const MODULE_3_WAVE_LIKE_PARTICLES: Module = {
 import { Module } from '../types';
 import { SECTION_4_1_ATOMIC_STRUCTURE } from './section_4_1_atomic_structure';
 import { SECTION_4_2_LINE_SPECTRA_BOHR } from './section_4_2_line_spectra_bohr';
+import { SECTION_4_3_FRANCK_HERTZ } from './section_4_3_franck_hertz';
 
 export const MODULE_4_RUTHERFORD_BOHR: Module = {
   id: 'module-4-rutherford-bohr',
@@ -4906,14 +5026,15 @@ export const MODULE_4_RUTHERFORD_BOHR: Module = {
   description: 'Uncovering the structure of the atom (Krane Ch. 6, §6.1 – 6.8)',
   sections: [
     SECTION_4_1_ATOMIC_STRUCTURE,
-    SECTION_4_2_LINE_SPECTRA_BOHR
+    SECTION_4_2_LINE_SPECTRA_BOHR,
+    SECTION_4_3_FRANCK_HERTZ
   ],
   moduleSummary: [
     {
       id: "mod-sum-rb-1",
       type: "theory",
       title: "Module IV Overview",
-      content: "This module covers the early development of atomic models, culminating in the Rutherford Nuclear Atom and the Bohr Model of Hydrogen."
+      content: "This module covers the early development of atomic models, culminating in the Rutherford Nuclear Atom, the Bohr Model of Hydrogen, and the experiments that both validated and ultimately broke the planetary model."
     },
     {
       id: "mod-sum-rb-2",
@@ -4926,10 +5047,15 @@ export const MODULE_4_RUTHERFORD_BOHR: Module = {
       type: "theory",
       title: "Section 4.2 Summary",
       content: "**The Bohr Model:** Bohr proposed that electrons occupy quantized circular orbits without radiating, and emit or absorb photons only when jumping between these stationary states. This successfully predicted the discrete line spectra of hydrogen and hydrogen-like ions."
+    },
+    {
+      id: "mod-sum-rb-4",
+      type: "theory",
+      title: "Section 4.3 Summary",
+      content: "**Franck-Hertz & Limits:** The Franck-Hertz experiment provided independent, mechanical proof of discrete energy levels. However, Bohr's model ultimately failed to explain multi-electron atoms, fine structure, and violated the Uncertainty Principle, demanding a fully probabilistic wave-mechanical replacement."
     }
   ]
 };
-
 --- END OF FILE src/data/module_4_rutherford_bohr.ts ---
 
 --- START OF FILE src/data/section_1_1_classical_foundations.ts ---
@@ -5208,6 +5334,25 @@ export const SECTION_4_2_LINE_SPECTRA_BOHR: Section = {
 };
 
 --- END OF FILE src/data/section_4_2_line_spectra_bohr.ts ---
+
+--- START OF FILE src/data/section_4_3_franck_hertz.ts ---
+import { Section } from '../types';
+import { UNIT_4_3_1_FRANCK_HERTZ } from './modern_units/unit_4_3_1_franck_hertz';
+import { UNIT_4_3_2_CORRESPONDENCE_FAILURE } from './modern_units/unit_4_3_2_correspondence_failure';
+import { UNIT_4_3_SUMMARY } from './modern_units/unit_4_3_summary';
+
+export const SECTION_4_3_FRANCK_HERTZ: Section = {
+  id: "section-4-3-franck-hertz",
+  title: "Section 4.3: Franck-Hertz & The Limits of Bohr",
+  description: "Direct proof of energy levels and the eventual breakdown of planetary orbits",
+  color: "duo-blue",
+  units: [
+    UNIT_4_3_1_FRANCK_HERTZ,
+    UNIT_4_3_2_CORRESPONDENCE_FAILURE,
+    UNIT_4_3_SUMMARY
+  ]
+};
+--- END OF FILE src/data/section_4_3_franck_hertz.ts ---
 
 --- START OF FILE src/data/modern_units/unit_1_1_1_classical_relativity.ts ---
 import { Unit } from '../../types';
@@ -12893,6 +13038,427 @@ export const UNIT_4_2_SUMMARY: Unit = {
   ]
 };
 --- END OF FILE src/data/modern_units/unit_4_2_summary.ts ---
+
+--- START OF FILE src/data/modern_units/unit_4_3_1_franck_hertz.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_3_1_FRANCK_HERTZ: Unit = {
+  id: "unit-4-3-1",
+  title: "The Franck-Hertz Experiment",
+  description: "Exp: Franck-Hertz apparatus · T: Energy quantization confirmed · Ex: Franck-Hertz levels",
+  color: "duo-blue",
+  lessons: [
+    // ── LESSON 1: Priming ─────────────────────────────────────────────────────────
+    {
+      id: "les-4-3-1-act",
+      title: "Warm-Up: Electron Collisions",
+      description: "Activate prior knowledge",
+      icon: "Brain",
+      slides: [
+        {
+          id: "fh-prime-1",
+          type: "quiz",
+          title: "Priming Question",
+          content: "In classical physics, an electron colliding with a gas atom can transfer any fraction of its kinetic energy to the atom. If Bohr's model of discrete energy levels is correct, what should happen when a slow electron (with very little kinetic energy) collides with an atom?",
+          options: [
+            { id: "A", text: "The electron will give a small continuous amount of energy to the atom.", isCorrect: false, explanation: "If energy levels are discrete, the atom cannot accept energy that is less than the gap to its first excited state." },
+            { id: "B", text: "The collision must be perfectly elastic; the electron transfers no internal energy to the atom.", isCorrect: true, explanation: "Correct! If the electron doesn't have enough energy to boost the atom to its exact next energy level, the atom cannot absorb any internal energy. The electron just bounces off." }
+          ]
+        },
+        {
+          id: "fh-prime-2",
+          type: "quiz",
+          title: "Excitation Thresholds",
+          content: "What happens the moment the colliding electron's kinetic energy perfectly matches or just exceeds the gap to the atom's first excited state?",
+          options: [
+            { id: "A", text: "The electron can undergo an inelastic collision, losing exactly that specific amount of energy to the atom.", isCorrect: true, explanation: "Yes! The atom absorbs the exact quantum of energy needed, leaving the scattered electron with whatever kinetic energy remains." },
+            { id: "B", text: "The electron is completely absorbed by the nucleus.", isCorrect: false, explanation: "The electron is scattered, not absorbed." }
+          ]
+        }
+      ]
+    },
+
+    // ── LESSON 2: Exp: Franck-Hertz Apparatus ─────────────────────────────────────
+    {
+      id: "les-4-3-1-1",
+      title: "Exp: The Franck-Hertz Setup",
+      description: "Exp: Direct evidence of discrete atomic states",
+      icon: "Activity",
+      slides: [
+        {
+          id: "fh-exp-theory",
+          type: "theory",
+          title: "The Franck-Hertz Experiment (1914)",
+          content: "James Franck and Gustav Hertz designed an experiment to bombard atoms with electrons and measure the energy lost in the collisions.\n\n**The Setup:**\n1. A heated cathode emits electrons.\n2. An adjustable voltage $V$ accelerates these electrons toward a wire grid.\n3. Beyond the grid is a collector plate, kept at a slightly lower (retarding) voltage $V_0$.\n4. The tube is filled with a low-pressure gas (originally mercury vapor).\n\nIf electrons pass through the gas without losing energy, they easily overcome the small retarding voltage and reach the plate, creating a measurable current. But if they lose significant energy in a collision, they won't have enough kinetic energy left to reach the plate, and the current will drop!"
+        },
+        {
+          id: "fh-exp-canvas",
+          type: "interactive_canvas",
+          title: "Franck-Hertz Graph",
+          content: "Notice the periodic dips in current as the accelerating voltage increases.",
+          interactiveCanvasId: "franck-hertz-graph"
+        },
+        {
+          id: "fh-exp-q1",
+          type: "quiz",
+          title: "Observation",
+          content: "When Franck and Hertz steadily increased the accelerating voltage $V$ in the mercury tube, what happened to the current reading?",
+          options: [
+            { id: "A", text: "It increased steadily without interruption.", isCorrect: false, explanation: "That would happen if the tube was a pure vacuum, but the gas atoms interfere." },
+            { id: "B", text: "It rose, but dropped sharply whenever $V$ reached multiples of 4.9 Volts.", isCorrect: true, explanation: "Exactly. The current plummeted at 4.9 V, 9.8 V, 14.7 V, etc. This periodic dropping is the hallmark of the Franck-Hertz experiment." }
+          ]
+        },
+        {
+          id: "fh-exp-q2",
+          type: "quiz",
+          title: "Implication",
+          content: "Why did the current drop sharply at $V = 4.9$ V?",
+          options: [
+            { id: "A", text: "Because 4.9 eV is exactly the energy gap between the ground state and the first excited state of mercury.", isCorrect: true, explanation: "When electrons reach 4.9 eV of kinetic energy, they finally have enough energy to excite a mercury atom. They lose all 4.9 eV in the collision, leaving them with ~0 eV, which isn't enough to reach the collector plate!" },
+            { id: "B", text: "Because 4.9 V ionized the mercury gas.", isCorrect: false, explanation: "Ionization requires much more energy (10.4 eV for Hg). This was an excitation to a bound state." }
+          ]
+        },
+        {
+          id: "fh-num",
+          type: "numerical",
+          title: "Multiple Collisions",
+          content: "If the current drops at 4.9 V, 9.8 V, and 14.7 V, what is happening at 14.7 V?",
+          options: [
+            { id: "A", text: "The electron excites three different mercury atoms in succession.", isCorrect: true, explanation: "Yes! At 14.7 eV, an electron can excite one atom (losing 4.9 eV), accelerate again, excite a second atom, accelerate, and excite a third, losing all its energy before the plate." }
+          ]
+        }
+      ]
+    },
+
+    // ── LESSON 3: T: Energy Quantization Confirmed ────────────────────────────────
+    {
+      id: "les-4-3-1-2",
+      title: "Energy Quantization Confirmed",
+      description: "T: Linking the collisions to spectral emission",
+      icon: "Target",
+      slides: [
+        {
+          id: "fh-quant-theory",
+          type: "theory",
+          title: "Independent Confirmation of Bohr",
+          content: "The Franck-Hertz experiment was incredible because it provided direct evidence for atomic energy levels entirely independent of analyzing light spectra.\n\nHowever, it perfectly aligned with spectroscopy!\nWhen a mercury atom is excited by a 4.9 eV electron, it enters its first excited state. Shortly after, the atom drops back to the ground state, emitting a photon of energy $E = 4.9$ eV.\n\nUsing $\\lambda = \\frac{hc}{E}$, an energy of 4.9 eV corresponds to a wavelength of $254$ nm, which is a strong ultraviolet line in the mercury emission spectrum!"
+        },
+        {
+          id: "fh-quant-q1",
+          type: "quiz",
+          title: "Conceptual Check 1",
+          content: "If the accelerating voltage is set to 4.0 V, what kind of collisions occur in the tube?",
+          options: [
+            { id: "A", text: "Perfectly elastic collisions.", isCorrect: true, explanation: "At 4.0 eV, the electron doesn't have enough energy to bridge the 4.9 eV gap. It bounces elastically off the massive mercury atoms, losing essentially no energy, and reaches the collector plate." },
+            { id: "B", text: "Inelastic collisions.", isCorrect: false, explanation: "Inelastic collisions only begin when the electron hits 4.9 eV." }
+          ]
+        },
+        {
+          id: "fh-quant-q2",
+          type: "quiz",
+          title: "Visual Evidence",
+          content: "In modern lab versions of this experiment using Neon gas, the excitation energy is 18.7 eV, and the atom emits a 2.1 eV photon (orange light) as it cascades down. If the voltage is cranked up high enough, what will you physically see in the tube?",
+          options: [
+            { id: "A", text: "A single glowing orange line at the collector.", isCorrect: false, explanation: "The emission happens right where the collision occurs, not just at the end." },
+            { id: "B", text: "Distinct glowing bands of orange light between the cathode and grid.", isCorrect: true, explanation: "Yes! As the electrons accelerate, they hit 18.7 eV, collide, and excite the gas. The gas glows orange exactly at that physical location. If you double the voltage, you'll see TWO distinct glowing bands!" }
+          ]
+        },
+        {
+          id: "fh-quant-canvas",
+          type: "interactive_canvas",
+          title: "Franck-Hertz Graph",
+          content: "The graph is a direct electrical map of the quantum energy states of the atom.",
+          interactiveCanvasId: "franck-hertz-graph"
+        },
+        {
+          id: "fh-fitb",
+          type: "fill_in_blank",
+          title: "Fill in the Blank",
+          content: "The Franck-Hertz experiment confirmed the existence of discrete atomic energy levels using ___ collisions rather than by analyzing light.",
+          blankAnswer: "electron"
+        }
+      ]
+    },
+
+    // ── LESSON 4: Ex: Franck-Hertz Energy Levels ──────────────────────────────────
+    {
+      id: "les-4-3-1-3",
+      title: "Ex: Franck-Hertz Levels",
+      description: "Ex: Extracting wavelengths from collision data",
+      icon: "Calculator",
+      slides: [
+        {
+          id: "ex-fh-q",
+          type: "example_q",
+          title: "Example — Analyzing Franck-Hertz Data",
+          content: "**Problem:**\nYou perform the Franck-Hertz experiment using a mystery gas. You observe sharp drops in the measured current at accelerating voltages of $6.2$ V, $12.4$ V, and $18.6$ V.\n\n(a) What is the energy of the first excited state of this atom relative to its ground state?\n(b) When these excited atoms return to the ground state, what wavelength of light will they emit?"
+        },
+        {
+          id: "ex-fh-sol",
+          type: "proof",
+          title: "Interactive Solution",
+          content: "Use the voltage spacing to find $\\Delta E$, then find $\\lambda$.",
+          interactiveSteps: [
+            {
+              stepText: "The drops occur at multiples of $6.2$ V. The kinetic energy lost in each inelastic collision is therefore exactly $6.2$ eV."
+            },
+            {
+              prompt: "What is the energy of the first excited state?",
+              stepText: "The energy difference between the ground state and the first excited state is $\\Delta E = 6.2$ eV.",
+              options: [
+                { id: "A", text: "$6.2$ eV", isCorrect: true, explanation: "Correct. The first dip gives the primary excitation energy." }
+              ]
+            },
+            {
+              prompt: "Calculate the wavelength emitted when the atom relaxes back to the ground state. Use $hc = 1240$ eV·nm.",
+              stepText: "$$\\lambda = \\frac{hc}{\\Delta E} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{6.2 \\text{ eV}}$$",
+              options: [
+                { id: "A", text: "Proceed", isCorrect: true, explanation: "" }
+              ]
+            },
+            {
+              prompt: "Evaluate the final wavelength.",
+              stepText: "$$\\lambda = 200 \\text{ nm}$$",
+              options: [
+                { id: "A", text: "$200$ nm", isCorrect: true, explanation: "This wavelength is in the ultraviolet range." }
+              ]
+            }
+          ]
+        },
+        {
+          id: "ex-fh-method",
+          type: "quiz",
+          title: "Method Check",
+          content: "Why are the drops in current not perfectly sharp vertical cliffs?",
+          options: [
+            { id: "A", text: "The electrons emitted from the heated cathode have a small, random thermal spread of initial kinetic energies.", isCorrect: true, explanation: "Because the electrons boil off the cathode with slightly different starting speeds, they don't all hit 6.2 eV at the exact same physical plane. This 'smears' the drop slightly." },
+            { id: "B", text: "The energy levels of the atom are fuzzy and uncertain.", isCorrect: false, explanation: "While true (Heisenberg), the thermal spread of the incoming electrons is the dominant cause of the rounded peaks." }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/modern_units/unit_4_3_1_franck_hertz.ts ---
+
+--- START OF FILE src/data/modern_units/unit_4_3_2_correspondence_failure.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_3_2_CORRESPONDENCE_FAILURE: Unit = {
+  id: "unit-4-3-2",
+  title: "Correspondence Principle & Failure of Bohr",
+  description: "T: Bohr correspondence principle · T: Deficiencies of the Bohr model · D: Full QM requirements",
+  color: "duo-red",
+  lessons: [
+    // ── LESSON 1: Priming ─────────────────────────────────────────────────────────
+    {
+      id: "les-4-3-2-act",
+      title: "Warm-Up: Classical vs Quantum",
+      description: "Activate prior knowledge",
+      icon: "Brain",
+      slides: [
+        {
+          id: "cf-prime-1",
+          type: "quiz",
+          title: "Priming Question",
+          content: "If a quantum theory perfectly explains the behavior of atoms, what must it predict when applied to large, macroscopic objects (like baseballs or planets)?",
+          options: [
+            { id: "A", text: "It should predict exactly the same behavior as classical physics.", isCorrect: true, explanation: "Yes. Classical physics works flawlessly for large objects. Any new quantum theory must reduce to classical physics at macroscopic scales. This is the heart of the Correspondence Principle." },
+            { id: "B", text: "It should reveal new, bizarre quantum behaviors for large objects.", isCorrect: false, explanation: "If it did, we would see baseballs diffracting. Since we don't, the theory must predict classical behavior at large scales." }
+          ]
+        },
+        {
+          id: "cf-prime-2",
+          type: "quiz",
+          title: "The Helium Problem",
+          content: "The Bohr model works perfectly for Hydrogen and He+. Why might it fail for neutral Helium (2 protons, 2 electrons)?",
+          options: [
+            { id: "A", text: "Because the two electrons repel each other.", isCorrect: true, explanation: "The Bohr math only accounts for the electron-nucleus attraction. As soon as you add a second electron, the complex electron-electron repulsion ruins the simple orbit math." },
+            { id: "B", text: "Helium doesn't have quantized energy levels.", isCorrect: false, explanation: "All atoms have quantized levels. The Bohr model just isn't complex enough to calculate them." }
+          ]
+        }
+      ]
+    },
+
+    // ── LESSON 2: T: The Correspondence Principle ─────────────────────────────────
+    {
+      id: "les-4-3-2-1",
+      title: "The Correspondence Principle",
+      description: "T: Bridging the quantum and classical worlds",
+      icon: "ArrowRightLeft",
+      slides: [
+        {
+          id: "cp-theory",
+          type: "theory",
+          title: "The Correspondence Principle",
+          content: "Bohr's model was a strange hybrid of classical physics (Newton's laws for orbits) and radical new postulates (quantized $L$, non-radiating states). To justify this, Bohr proposed the **Correspondence Principle**:\n\n> *Quantum theory must agree with classical theory in the limit of large quantum numbers ($n \\to \\infty$).*\n\nIf we make a Bohr atom so large that it reaches laboratory size ($n \\sim 10^4$), the discrete energy steps become so tiny that the energy appears continuous. In this limit, the frequency of the emitted photon must exactly match the classical orbital frequency of the spiraling electron!"
+        },
+        {
+          id: "cp-q1",
+          type: "quiz",
+          title: "Classical Radiation",
+          content: "Classically, an electron orbiting at frequency $f_{\\text{orbit}}$ radiates light at what frequency?",
+          options: [
+            { id: "A", text: "Exactly $f_{\\text{orbit}}$.", isCorrect: true, explanation: "Classical electromagnetism says the emitted wave matches the oscillation frequency of the charge." },
+            { id: "B", text: "It doesn't radiate.", isCorrect: false, explanation: "That's Bohr's quantum postulate. Classically, it MUST radiate." }
+          ]
+        },
+        {
+          id: "cp-q2",
+          type: "quiz",
+          title: "Quantum Agreement",
+          content: "For a transition from $n$ to $n-1$ where $n$ is very large (e.g., $10,000 \\to 9,999$), how does the emitted photon's frequency $f_{\\text{photon}}$ compare to the classical orbital frequency $f_{\\text{orbit}}$?",
+          options: [
+            { id: "A", text: "They are completely different.", isCorrect: false, explanation: "No, this is where the theories must overlap." },
+            { id: "B", text: "$f_{\\text{photon}} \\approx f_{\\text{orbit}}$", isCorrect: true, explanation: "Exactly. Bohr proved mathematically that as $n \to \infty$, the photon frequency derived from $E_n - E_{n-1}$ perfectly matches the classical orbital frequency. This validated his radical postulates." }
+          ]
+        },
+        {
+          id: "cp-canvas",
+          type: "interactive_canvas",
+          title: "Quantum vs Classical Orbits",
+          content: "At large n, the discrete quantum jumps blur into a continuous classical spiral.",
+          interactiveCanvasId: "correspondence-principle"
+        },
+        {
+          id: "cp-fitb",
+          type: "fill_in_blank",
+          title: "Fill in the Blank",
+          content: "The requirement that quantum mechanics must yield classical results at macroscopic scales is known as the ___ principle.",
+          blankAnswer: "correspondence"
+        }
+      ]
+    },
+
+    // ── LESSON 3: T: Deficiencies of the Bohr Model ───────────────────────────────
+    {
+      id: "les-4-3-2-2",
+      title: "Deficiencies of the Bohr Model",
+      description: "T: Why the Bohr model is ultimately incorrect",
+      icon: "Unlink",
+      slides: [
+        {
+          id: "def-theory-1",
+          type: "theory",
+          title: "Where Bohr Failed",
+          content: "Despite its massive success with Hydrogen, the Bohr model is fundamentally incomplete. Its major failures include:\n\n1. **Multi-Electron Atoms:** It fails completely for any atom with more than one electron (like neutral Helium) because it cannot account for electron-electron repulsion.\n2. **Angular Momentum:** Bohr predicted the ground state of hydrogen has angular momentum $L = \\hbar$. True quantum mechanics shows the ground state has $L = 0$ (a spherical cloud, not a flat orbit).\n3. **Spectral Intensities:** It can predict the wavelengths of spectral lines, but not their *intensities* (how bright they are, or how probable a transition is).\n4. **Fine Structure:** High-resolution spectroscopy showed that single lines are actually closely spaced doublets. Bohr's model couldn't explain this fine splitting."
+        },
+        {
+          id: "def-q1",
+          type: "quiz",
+          title: "The Uncertainty Violation",
+          content: "The Bohr model describes an electron moving in a perfectly circular orbit of exact radius $r_n$ with exact momentum $p_n$. Which fundamental law of nature does this violate?",
+          options: [
+            { id: "A", text: "Conservation of Energy.", isCorrect: false, explanation: "Energy is conserved in the model." },
+            { id: "B", text: "The Heisenberg Uncertainty Principle.", isCorrect: true, explanation: "If $r$ is known exactly and $p$ is known exactly, then $\\Delta x \\Delta p_x = 0$. This violates $\\Delta x \\Delta p_x \\ge \\hbar/2$. An electron cannot have a perfectly defined trajectory." }
+          ]
+        },
+        {
+          id: "def-q2",
+          type: "quiz",
+          title: "The Ground State",
+          content: "Bohr predicted $L = n\\hbar$. For $n=1$, $L=\\hbar$. How does an electron with $L=0$ (the true quantum mechanical ground state) behave?",
+          options: [
+            { id: "A", text: "It travels in a straight line.", isCorrect: false, explanation: "It's still bound to the nucleus." },
+            { id: "B", text: "It doesn't 'orbit' in a circle; it exists as a spherical probability cloud.", isCorrect: true, explanation: "An angular momentum of zero means it has no net rotational motion. It simply pulses in and out spherically. Bohr's planetary model is wrong." }
+          ]
+        },
+        {
+          id: "def-fitb",
+          type: "fill_in_blank",
+          title: "Fill in the Blank",
+          content: "The Bohr model fails for neutral Helium because it cannot mathematically account for the repulsive forces between multiple ___.",
+          blankAnswer: "electrons"
+        }
+      ]
+    },
+
+    // ── LESSON 4: D: What Full QM Must Address ────────────────────────────────────
+    {
+      id: "les-4-3-2-3",
+      title: "The Dawn of True Quantum Mechanics",
+      description: "D: Moving beyond orbits to probability waves",
+      icon: "Waves",
+      slides: [
+        {
+          id: "qm-theory",
+          type: "theory",
+          title: "Replacing the Bohr Atom",
+          content: "To build a truly correct model of the atom, physicists (led by Schrödinger and Heisenberg in 1925) had to abandon planetary orbits entirely.\n\nA full quantum mechanical treatment requires:\n1. **Wave Functions ($\\psi$):** Electrons are not point particles on tracks; they are 3D probability clouds describing the likelihood of finding the electron.\n2. **The Schrödinger Equation:** A rigorous wave equation that automatically yields quantized energy levels and correct angular momenta without arbitrary postulates.\n3. **Spin and Relativity:** Later additions (Dirac equation) explained fine structure by introducing electron 'spin' and relativistic corrections."
+        },
+        {
+          id: "qm-q1",
+          type: "quiz",
+          title: "The Fate of the Bohr Model",
+          content: "If the Bohr model is fundamentally incorrect, why do we still learn it?",
+          options: [
+            { id: "A", text: "It provides an intuitive, visual stepping-stone that correctly predicts hydrogen energies and introduces key concepts like stationary states and quantum leaps.", isCorrect: true, explanation: "It's an excellent transitional model. It introduced the core ideas of quantization and energy transitions that carried over directly into modern quantum mechanics." },
+            { id: "B", text: "Because the Schrödinger equation is just a minor adjustment to it.", isCorrect: false, explanation: "Schrödinger's approach is mathematically and conceptually entirely different." }
+          ]
+        },
+        {
+          id: "qm-q2",
+          type: "quiz",
+          title: "The Big Shift",
+          content: "What is the primary conceptual shift from the Bohr model to the Schrödinger model?",
+          options: [
+            { id: "A", text: "Replacing continuous energies with quantized energies.", isCorrect: false, explanation: "Bohr already did this." },
+            { id: "B", text: "Replacing exact planetary orbits with probabilistic wave clouds.", isCorrect: true, explanation: "This is the essence of true quantum mechanics. Abandoning determinism for probability amplitudes." }
+          ]
+        },
+        {
+          id: "qm-fitb",
+          type: "fill_in_blank",
+          title: "Fill in the Blank",
+          content: "In modern quantum mechanics, the exact planetary orbit is replaced by a 3D ___ cloud representing the likelihood of finding the electron.",
+          blankAnswer: "probability"
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/modern_units/unit_4_3_2_correspondence_failure.ts ---
+
+--- START OF FILE src/data/modern_units/unit_4_3_summary.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_4_3_SUMMARY: Unit = {
+  id: "unit-4-3-summary",
+  title: "Section 4.3 Summary",
+  description: "Franck-Hertz & The Limits of Bohr Recap",
+  color: "duo-orange",
+  lessons: [
+    {
+      id: "les-sum-4-3-1",
+      title: "Summary: The Franck-Hertz Experiment",
+      description: "Key ideas from Unit 4.3.1",
+      icon: "BookCheck",
+      slides: [
+        {
+          id: "sum-431",
+          type: "theory",
+          title: "Unit 4.3.1 — Franck-Hertz Experiment",
+          content: "**The Setup:** Electrons are accelerated through a low-pressure gas (e.g., Mercury).\n\n**The Observation:** The current drops sharply at specific accelerating voltages (multiples of 4.9 V for Hg).\n\n**The Meaning:** Electrons undergo perfectly elastic collisions until they have exactly enough kinetic energy to excite the atom to its next discrete energy level. At that exact threshold, the collision becomes inelastic, the electron loses its energy, and the current drops.\n\n**Significance:** Provided independent, non-optical proof of the existence of discrete, quantized atomic energy levels, perfectly corroborating the energy gaps seen in emission spectra."
+        }
+      ]
+    },
+    {
+      id: "les-sum-4-3-2",
+      title: "Summary: Limits of the Bohr Model",
+      description: "Key ideas from Unit 4.3.2",
+      icon: "BookCheck",
+      slides: [
+        {
+          id: "sum-432",
+          type: "theory",
+          title: "Unit 4.3.2 — Correspondence & Deficiencies",
+          content: "**Correspondence Principle:** Quantum mechanics must yield classical results at macroscopic scales ($n \\to \\infty$). Bohr showed that for massive orbits, the emitted photon frequency matches the classical orbital frequency.\n\n**Failures of the Bohr Model:**\n1. **Multi-electron atoms:** Fails to account for electron-electron repulsion.\n2. **Angular momentum:** Incorrectly predicts $L = \hbar$ for the ground state (should be 0).\n3. **Uncertainty Principle:** Postulates exact orbits ($r$ and $p$ known perfectly), violating $\\Delta x \\Delta p \\ge \\hbar/2$.\n4. **Intensities & Fine Structure:** Cannot predict line brightness or doublet splitting.\n\n**The Solution:** The planetary model had to be replaced by full quantum mechanics (Schrödinger), treating electrons as 3D probability clouds."
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/modern_units/unit_4_3_summary.ts ---
 
 --- START OF FILE src/hooks/useAnalytics.ts ---
 import { useEffect } from 'react';

@@ -12,6 +12,7 @@ import './App.css';
 import './styles/interactive.css';
 import './styles/path.css';
 import './styles/progress.css';
+import './styles/exam.css';
 
 // Component to handle analytics on route change
 const AnalyticsTracker = () => {
@@ -20,10 +21,10 @@ const AnalyticsTracker = () => {
 };
 
 const App: React.FC = () => {
-  const [progress, setProgress] = useState<UserProgress>(() => {
+  const[progress, setProgress] = useState<UserProgress>(() => {
     const saved = localStorage.getItem('duofy_electronics_progress');
     let initialProgress: UserProgress = {
-      completedLessons: [],
+      completedLessons:[],
       xp: 0,
       currentModuleId: 'module-1-mechanics',
     };
@@ -32,7 +33,7 @@ const App: React.FC = () => {
       try {
         const parsed = JSON.parse(saved);
         initialProgress = {
-          completedLessons: parsed.completedLessons || [],
+          completedLessons: parsed.completedLessons ||[],
           xp: parsed.xp || 0,
           currentModuleId: parsed.currentModuleId || 'module-1-mechanics',
         };
@@ -76,7 +77,15 @@ const App: React.FC = () => {
                 />
               }
             />
-            <Route path="/exam" element={<ExamQuestionsPage />} />
+            <Route 
+              path="/exam" 
+              element={
+                <ExamQuestionsPage 
+                  progress={progress} 
+                  onModuleChange={handleModuleChange} 
+                />
+              } 
+            />
             <Route
               path="/notes"
               element={

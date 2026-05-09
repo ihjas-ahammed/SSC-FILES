@@ -23,7 +23,7 @@ const App: React.FC = () => {
   const [progress, setProgress] = useState<UserProgress>(() => {
     const saved = localStorage.getItem('duofy_modern_physics_progress');
     let initialProgress: UserProgress = {
-      completedLessons: [],
+      completedLessons:[],
       xp: 0,
       currentModuleId: 'module-1-modern-physics',
     };
@@ -32,7 +32,7 @@ const App: React.FC = () => {
       try {
         const parsed = JSON.parse(saved);
         initialProgress = {
-          completedLessons: parsed.completedLessons || [],
+          completedLessons: parsed.completedLessons ||[],
           xp: parsed.xp || 0,
           currentModuleId: parsed.currentModuleId || 'module-1-modern-physics',
         };
@@ -76,7 +76,15 @@ const App: React.FC = () => {
                 />
               }
             />
-            <Route path="/exam" element={<ExamQuestionsPage />} />
+            <Route 
+              path="/exam" 
+              element={
+                <ExamQuestionsPage 
+                  progress={progress} 
+                  onModuleChange={handleModuleChange} 
+                />
+              } 
+            />
             <Route
               path="/notes"
               element={

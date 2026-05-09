@@ -1,654 +1,524 @@
---- START OF FILE src/data/modern_units/unit_4_3_1_franck_hertz.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_4_3_1_FRANCK_HERTZ: Unit = {
-  id: "unit-4-3-1",
-  title: "The Franck-Hertz Experiment",
-  description: "Exp: Franck-Hertz apparatus · T: Energy quantization confirmed · Ex: Franck-Hertz levels",
-  color: "duo-blue",
-  lessons: [
-    // ── LESSON 1: Priming ─────────────────────────────────────────────────────────
-    {
-      id: "les-4-3-1-act",
-      title: "Warm-Up: Electron Collisions",
-      description: "Activate prior knowledge",
-      icon: "Brain",
-      slides: [
-        {
-          id: "fh-prime-1",
-          type: "quiz",
-          title: "Priming Question",
-          content: "In classical physics, an electron colliding with a gas atom can transfer any fraction of its kinetic energy to the atom. If Bohr's model of discrete energy levels is correct, what should happen when a slow electron (with very little kinetic energy) collides with an atom?",
-          options: [
-            { id: "A", text: "The electron will give a small continuous amount of energy to the atom.", isCorrect: false, explanation: "If energy levels are discrete, the atom cannot accept energy that is less than the gap to its first excited state." },
-            { id: "B", text: "The collision must be perfectly elastic; the electron transfers no internal energy to the atom.", isCorrect: true, explanation: "Correct! If the electron doesn't have enough energy to boost the atom to its exact next energy level, the atom cannot absorb any internal energy. The electron just bounces off." }
-          ]
-        },
-        {
-          id: "fh-prime-2",
-          type: "quiz",
-          title: "Excitation Thresholds",
-          content: "What happens the moment the colliding electron's kinetic energy perfectly matches or just exceeds the gap to the atom's first excited state?",
-          options: [
-            { id: "A", text: "The electron can undergo an inelastic collision, losing exactly that specific amount of energy to the atom.", isCorrect: true, explanation: "Yes! The atom absorbs the exact quantum of energy needed, leaving the scattered electron with whatever kinetic energy remains." },
-            { id: "B", text: "The electron is completely absorbed by the nucleus.", isCorrect: false, explanation: "The electron is scattered, not absorbed." }
-          ]
-        }
-      ]
-    },
-
-    // ── LESSON 2: Exp: Franck-Hertz Apparatus ─────────────────────────────────────
-    {
-      id: "les-4-3-1-1",
-      title: "Exp: The Franck-Hertz Setup",
-      description: "Exp: Direct evidence of discrete atomic states",
-      icon: "Activity",
-      slides: [
-        {
-          id: "fh-exp-theory",
-          type: "theory",
-          title: "The Franck-Hertz Experiment (1914)",
-          content: "James Franck and Gustav Hertz designed an experiment to bombard atoms with electrons and measure the energy lost in the collisions.\n\n**The Setup:**\n1. A heated cathode emits electrons.\n2. An adjustable voltage $V$ accelerates these electrons toward a wire grid.\n3. Beyond the grid is a collector plate, kept at a slightly lower (retarding) voltage $V_0$.\n4. The tube is filled with a low-pressure gas (originally mercury vapor).\n\nIf electrons pass through the gas without losing energy, they easily overcome the small retarding voltage and reach the plate, creating a measurable current. But if they lose significant energy in a collision, they won't have enough kinetic energy left to reach the plate, and the current will drop!"
-        },
-        {
-          id: "fh-exp-canvas",
-          type: "interactive_canvas",
-          title: "Franck-Hertz Graph",
-          content: "Notice the periodic dips in current as the accelerating voltage increases.",
-          interactiveCanvasId: "franck-hertz-graph"
-        },
-        {
-          id: "fh-exp-q1",
-          type: "quiz",
-          title: "Observation",
-          content: "When Franck and Hertz steadily increased the accelerating voltage $V$ in the mercury tube, what happened to the current reading?",
-          options: [
-            { id: "A", text: "It increased steadily without interruption.", isCorrect: false, explanation: "That would happen if the tube was a pure vacuum, but the gas atoms interfere." },
-            { id: "B", text: "It rose, but dropped sharply whenever $V$ reached multiples of 4.9 Volts.", isCorrect: true, explanation: "Exactly. The current plummeted at 4.9 V, 9.8 V, 14.7 V, etc. This periodic dropping is the hallmark of the Franck-Hertz experiment." }
-          ]
-        },
-        {
-          id: "fh-exp-q2",
-          type: "quiz",
-          title: "Implication",
-          content: "Why did the current drop sharply at $V = 4.9$ V?",
-          options: [
-            { id: "A", text: "Because 4.9 eV is exactly the energy gap between the ground state and the first excited state of mercury.", isCorrect: true, explanation: "When electrons reach 4.9 eV of kinetic energy, they finally have enough energy to excite a mercury atom. They lose all 4.9 eV in the collision, leaving them with ~0 eV, which isn't enough to reach the collector plate!" },
-            { id: "B", text: "Because 4.9 V ionized the mercury gas.", isCorrect: false, explanation: "Ionization requires much more energy (10.4 eV for Hg). This was an excitation to a bound state." }
-          ]
-        },
-        {
-          id: "fh-num",
-          type: "numerical",
-          title: "Multiple Collisions",
-          content: "If the current drops at 4.9 V, 9.8 V, and 14.7 V, what is happening at 14.7 V?",
-          options: [
-            { id: "A", text: "The electron excites three different mercury atoms in succession.", isCorrect: true, explanation: "Yes! At 14.7 eV, an electron can excite one atom (losing 4.9 eV), accelerate again, excite a second atom, accelerate, and excite a third, losing all its energy before the plate." }
-          ]
-        }
-      ]
-    },
-
-    // ── LESSON 3: T: Energy Quantization Confirmed ────────────────────────────────
-    {
-      id: "les-4-3-1-2",
-      title: "Energy Quantization Confirmed",
-      description: "T: Linking the collisions to spectral emission",
-      icon: "Target",
-      slides: [
-        {
-          id: "fh-quant-theory",
-          type: "theory",
-          title: "Independent Confirmation of Bohr",
-          content: "The Franck-Hertz experiment was incredible because it provided direct evidence for atomic energy levels entirely independent of analyzing light spectra.\n\nHowever, it perfectly aligned with spectroscopy!\nWhen a mercury atom is excited by a 4.9 eV electron, it enters its first excited state. Shortly after, the atom drops back to the ground state, emitting a photon of energy $E = 4.9$ eV.\n\nUsing $\\lambda = \\frac{hc}{E}$, an energy of 4.9 eV corresponds to a wavelength of $254$ nm, which is a strong ultraviolet line in the mercury emission spectrum!"
-        },
-        {
-          id: "fh-quant-q1",
-          type: "quiz",
-          title: "Conceptual Check 1",
-          content: "If the accelerating voltage is set to 4.0 V, what kind of collisions occur in the tube?",
-          options: [
-            { id: "A", text: "Perfectly elastic collisions.", isCorrect: true, explanation: "At 4.0 eV, the electron doesn't have enough energy to bridge the 4.9 eV gap. It bounces elastically off the massive mercury atoms, losing essentially no energy, and reaches the collector plate." },
-            { id: "B", text: "Inelastic collisions.", isCorrect: false, explanation: "Inelastic collisions only begin when the electron hits 4.9 eV." }
-          ]
-        },
-        {
-          id: "fh-quant-q2",
-          type: "quiz",
-          title: "Visual Evidence",
-          content: "In modern lab versions of this experiment using Neon gas, the excitation energy is 18.7 eV, and the atom emits a 2.1 eV photon (orange light) as it cascades down. If the voltage is cranked up high enough, what will you physically see in the tube?",
-          options: [
-            { id: "A", text: "A single glowing orange line at the collector.", isCorrect: false, explanation: "The emission happens right where the collision occurs, not just at the end." },
-            { id: "B", text: "Distinct glowing bands of orange light between the cathode and grid.", isCorrect: true, explanation: "Yes! As the electrons accelerate, they hit 18.7 eV, collide, and excite the gas. The gas glows orange exactly at that physical location. If you double the voltage, you'll see TWO distinct glowing bands!" }
-          ]
-        },
-        {
-          id: "fh-quant-canvas",
-          type: "interactive_canvas",
-          title: "Franck-Hertz Graph",
-          content: "The graph is a direct electrical map of the quantum energy states of the atom.",
-          interactiveCanvasId: "franck-hertz-graph"
-        },
-        {
-          id: "fh-fitb",
-          type: "fill_in_blank",
-          title: "Fill in the Blank",
-          content: "The Franck-Hertz experiment confirmed the existence of discrete atomic energy levels using ___ collisions rather than by analyzing light.",
-          blankAnswer: "electron"
-        }
-      ]
-    },
-
-    // ── LESSON 4: Ex: Franck-Hertz Energy Levels ──────────────────────────────────
-    {
-      id: "les-4-3-1-3",
-      title: "Ex: Franck-Hertz Levels",
-      description: "Ex: Extracting wavelengths from collision data",
-      icon: "Calculator",
-      slides: [
-        {
-          id: "ex-fh-q",
-          type: "example_q",
-          title: "Example — Analyzing Franck-Hertz Data",
-          content: "**Problem:**\nYou perform the Franck-Hertz experiment using a mystery gas. You observe sharp drops in the measured current at accelerating voltages of $6.2$ V, $12.4$ V, and $18.6$ V.\n\n(a) What is the energy of the first excited state of this atom relative to its ground state?\n(b) When these excited atoms return to the ground state, what wavelength of light will they emit?"
-        },
-        {
-          id: "ex-fh-sol",
-          type: "proof",
-          title: "Interactive Solution",
-          content: "Use the voltage spacing to find $\\Delta E$, then find $\\lambda$.",
-          interactiveSteps: [
-            {
-              stepText: "The drops occur at multiples of $6.2$ V. The kinetic energy lost in each inelastic collision is therefore exactly $6.2$ eV."
-            },
-            {
-              prompt: "What is the energy of the first excited state?",
-              stepText: "The energy difference between the ground state and the first excited state is $\\Delta E = 6.2$ eV.",
-              options: [
-                { id: "A", text: "$6.2$ eV", isCorrect: true, explanation: "Correct. The first dip gives the primary excitation energy." }
-              ]
-            },
-            {
-              prompt: "Calculate the wavelength emitted when the atom relaxes back to the ground state. Use $hc = 1240$ eV·nm.",
-              stepText: "$$\\lambda = \\frac{hc}{\\Delta E} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{6.2 \\text{ eV}}$$",
-              options: [
-                { id: "A", text: "Proceed", isCorrect: true, explanation: "" }
-              ]
-            },
-            {
-              prompt: "Evaluate the final wavelength.",
-              stepText: "$$\\lambda = 200 \\text{ nm}$$",
-              options: [
-                { id: "A", text: "$200$ nm", isCorrect: true, explanation: "This wavelength is in the ultraviolet range." }
-              ]
-            }
-          ]
-        },
-        {
-          id: "ex-fh-method",
-          type: "quiz",
-          title: "Method Check",
-          content: "Why are the drops in current not perfectly sharp vertical cliffs?",
-          options: [
-            { id: "A", text: "The electrons emitted from the heated cathode have a small, random thermal spread of initial kinetic energies.", isCorrect: true, explanation: "Because the electrons boil off the cathode with slightly different starting speeds, they don't all hit 6.2 eV at the exact same physical plane. This 'smears' the drop slightly." },
-            { id: "B", text: "The energy levels of the atom are fuzzy and uncertain.", isCorrect: false, explanation: "While true (Heisenberg), the thermal spread of the incoming electrons is the dominant cause of the rounded peaks." }
-          ]
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/modern_units/unit_4_3_1_franck_hertz.ts ---
-
---- START OF FILE src/data/modern_units/unit_4_3_2_correspondence_failure.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_4_3_2_CORRESPONDENCE_FAILURE: Unit = {
-  id: "unit-4-3-2",
-  title: "Correspondence Principle & Failure of Bohr",
-  description: "T: Bohr correspondence principle · T: Deficiencies of the Bohr model · D: Full QM requirements",
-  color: "duo-red",
-  lessons: [
-    // ── LESSON 1: Priming ─────────────────────────────────────────────────────────
-    {
-      id: "les-4-3-2-act",
-      title: "Warm-Up: Classical vs Quantum",
-      description: "Activate prior knowledge",
-      icon: "Brain",
-      slides: [
-        {
-          id: "cf-prime-1",
-          type: "quiz",
-          title: "Priming Question",
-          content: "If a quantum theory perfectly explains the behavior of atoms, what must it predict when applied to large, macroscopic objects (like baseballs or planets)?",
-          options: [
-            { id: "A", text: "It should predict exactly the same behavior as classical physics.", isCorrect: true, explanation: "Yes. Classical physics works flawlessly for large objects. Any new quantum theory must reduce to classical physics at macroscopic scales. This is the heart of the Correspondence Principle." },
-            { id: "B", text: "It should reveal new, bizarre quantum behaviors for large objects.", isCorrect: false, explanation: "If it did, we would see baseballs diffracting. Since we don't, the theory must predict classical behavior at large scales." }
-          ]
-        },
-        {
-          id: "cf-prime-2",
-          type: "quiz",
-          title: "The Helium Problem",
-          content: "The Bohr model works perfectly for Hydrogen and He+. Why might it fail for neutral Helium (2 protons, 2 electrons)?",
-          options: [
-            { id: "A", text: "Because the two electrons repel each other.", isCorrect: true, explanation: "The Bohr math only accounts for the electron-nucleus attraction. As soon as you add a second electron, the complex electron-electron repulsion ruins the simple orbit math." },
-            { id: "B", text: "Helium doesn't have quantized energy levels.", isCorrect: false, explanation: "All atoms have quantized levels. The Bohr model just isn't complex enough to calculate them." }
-          ]
-        }
-      ]
-    },
-
-    // ── LESSON 2: T: The Correspondence Principle ─────────────────────────────────
-    {
-      id: "les-4-3-2-1",
-      title: "The Correspondence Principle",
-      description: "T: Bridging the quantum and classical worlds",
-      icon: "ArrowRightLeft",
-      slides: [
-        {
-          id: "cp-theory",
-          type: "theory",
-          title: "The Correspondence Principle",
-          content: "Bohr's model was a strange hybrid of classical physics (Newton's laws for orbits) and radical new postulates (quantized $L$, non-radiating states). To justify this, Bohr proposed the **Correspondence Principle**:\n\n> *Quantum theory must agree with classical theory in the limit of large quantum numbers ($n \\to \\infty$).*\n\nIf we make a Bohr atom so large that it reaches laboratory size ($n \\sim 10^4$), the discrete energy steps become so tiny that the energy appears continuous. In this limit, the frequency of the emitted photon must exactly match the classical orbital frequency of the spiraling electron!"
-        },
-        {
-          id: "cp-q1",
-          type: "quiz",
-          title: "Classical Radiation",
-          content: "Classically, an electron orbiting at frequency $f_{\\text{orbit}}$ radiates light at what frequency?",
-          options: [
-            { id: "A", text: "Exactly $f_{\\text{orbit}}$.", isCorrect: true, explanation: "Classical electromagnetism says the emitted wave matches the oscillation frequency of the charge." },
-            { id: "B", text: "It doesn't radiate.", isCorrect: false, explanation: "That's Bohr's quantum postulate. Classically, it MUST radiate." }
-          ]
-        },
-        {
-          id: "cp-q2",
-          type: "quiz",
-          title: "Quantum Agreement",
-          content: "For a transition from $n$ to $n-1$ where $n$ is very large (e.g., $10,000 \\to 9,999$), how does the emitted photon's frequency $f_{\\text{photon}}$ compare to the classical orbital frequency $f_{\\text{orbit}}$?",
-          options: [
-            { id: "A", text: "They are completely different.", isCorrect: false, explanation: "No, this is where the theories must overlap." },
-            { id: "B", text: "$f_{\\text{photon}} \\approx f_{\\text{orbit}}$", isCorrect: true, explanation: "Exactly. Bohr proved mathematically that as $n \to \infty$, the photon frequency derived from $E_n - E_{n-1}$ perfectly matches the classical orbital frequency. This validated his radical postulates." }
-          ]
-        },
-        {
-          id: "cp-canvas",
-          type: "interactive_canvas",
-          title: "Quantum vs Classical Orbits",
-          content: "At large n, the discrete quantum jumps blur into a continuous classical spiral.",
-          interactiveCanvasId: "correspondence-principle"
-        },
-        {
-          id: "cp-fitb",
-          type: "fill_in_blank",
-          title: "Fill in the Blank",
-          content: "The requirement that quantum mechanics must yield classical results at macroscopic scales is known as the ___ principle.",
-          blankAnswer: "correspondence"
-        }
-      ]
-    },
-
-    // ── LESSON 3: T: Deficiencies of the Bohr Model ───────────────────────────────
-    {
-      id: "les-4-3-2-2",
-      title: "Deficiencies of the Bohr Model",
-      description: "T: Why the Bohr model is ultimately incorrect",
-      icon: "Unlink",
-      slides: [
-        {
-          id: "def-theory-1",
-          type: "theory",
-          title: "Where Bohr Failed",
-          content: "Despite its massive success with Hydrogen, the Bohr model is fundamentally incomplete. Its major failures include:\n\n1. **Multi-Electron Atoms:** It fails completely for any atom with more than one electron (like neutral Helium) because it cannot account for electron-electron repulsion.\n2. **Angular Momentum:** Bohr predicted the ground state of hydrogen has angular momentum $L = \\hbar$. True quantum mechanics shows the ground state has $L = 0$ (a spherical cloud, not a flat orbit).\n3. **Spectral Intensities:** It can predict the wavelengths of spectral lines, but not their *intensities* (how bright they are, or how probable a transition is).\n4. **Fine Structure:** High-resolution spectroscopy showed that single lines are actually closely spaced doublets. Bohr's model couldn't explain this fine splitting."
-        },
-        {
-          id: "def-q1",
-          type: "quiz",
-          title: "The Uncertainty Violation",
-          content: "The Bohr model describes an electron moving in a perfectly circular orbit of exact radius $r_n$ with exact momentum $p_n$. Which fundamental law of nature does this violate?",
-          options: [
-            { id: "A", text: "Conservation of Energy.", isCorrect: false, explanation: "Energy is conserved in the model." },
-            { id: "B", text: "The Heisenberg Uncertainty Principle.", isCorrect: true, explanation: "If $r$ is known exactly and $p$ is known exactly, then $\\Delta x \\Delta p_x = 0$. This violates $\\Delta x \\Delta p_x \\ge \\hbar/2$. An electron cannot have a perfectly defined trajectory." }
-          ]
-        },
-        {
-          id: "def-q2",
-          type: "quiz",
-          title: "The Ground State",
-          content: "Bohr predicted $L = n\\hbar$. For $n=1$, $L=\\hbar$. How does an electron with $L=0$ (the true quantum mechanical ground state) behave?",
-          options: [
-            { id: "A", text: "It travels in a straight line.", isCorrect: false, explanation: "It's still bound to the nucleus." },
-            { id: "B", text: "It doesn't 'orbit' in a circle; it exists as a spherical probability cloud.", isCorrect: true, explanation: "An angular momentum of zero means it has no net rotational motion. It simply pulses in and out spherically. Bohr's planetary model is wrong." }
-          ]
-        },
-        {
-          id: "def-fitb",
-          type: "fill_in_blank",
-          title: "Fill in the Blank",
-          content: "The Bohr model fails for neutral Helium because it cannot mathematically account for the repulsive forces between multiple ___.",
-          blankAnswer: "electrons"
-        }
-      ]
-    },
-
-    // ── LESSON 4: D: What Full QM Must Address ────────────────────────────────────
-    {
-      id: "les-4-3-2-3",
-      title: "The Dawn of True Quantum Mechanics",
-      description: "D: Moving beyond orbits to probability waves",
-      icon: "Waves",
-      slides: [
-        {
-          id: "qm-theory",
-          type: "theory",
-          title: "Replacing the Bohr Atom",
-          content: "To build a truly correct model of the atom, physicists (led by Schrödinger and Heisenberg in 1925) had to abandon planetary orbits entirely.\n\nA full quantum mechanical treatment requires:\n1. **Wave Functions ($\\psi$):** Electrons are not point particles on tracks; they are 3D probability clouds describing the likelihood of finding the electron.\n2. **The Schrödinger Equation:** A rigorous wave equation that automatically yields quantized energy levels and correct angular momenta without arbitrary postulates.\n3. **Spin and Relativity:** Later additions (Dirac equation) explained fine structure by introducing electron 'spin' and relativistic corrections."
-        },
-        {
-          id: "qm-q1",
-          type: "quiz",
-          title: "The Fate of the Bohr Model",
-          content: "If the Bohr model is fundamentally incorrect, why do we still learn it?",
-          options: [
-            { id: "A", text: "It provides an intuitive, visual stepping-stone that correctly predicts hydrogen energies and introduces key concepts like stationary states and quantum leaps.", isCorrect: true, explanation: "It's an excellent transitional model. It introduced the core ideas of quantization and energy transitions that carried over directly into modern quantum mechanics." },
-            { id: "B", text: "Because the Schrödinger equation is just a minor adjustment to it.", isCorrect: false, explanation: "Schrödinger's approach is mathematically and conceptually entirely different." }
-          ]
-        },
-        {
-          id: "qm-q2",
-          type: "quiz",
-          title: "The Big Shift",
-          content: "What is the primary conceptual shift from the Bohr model to the Schrödinger model?",
-          options: [
-            { id: "A", text: "Replacing continuous energies with quantized energies.", isCorrect: false, explanation: "Bohr already did this." },
-            { id: "B", text: "Replacing exact planetary orbits with probabilistic wave clouds.", isCorrect: true, explanation: "This is the essence of true quantum mechanics. Abandoning determinism for probability amplitudes." }
-          ]
-        },
-        {
-          id: "qm-fitb",
-          type: "fill_in_blank",
-          title: "Fill in the Blank",
-          content: "In modern quantum mechanics, the exact planetary orbit is replaced by a 3D ___ cloud representing the likelihood of finding the electron.",
-          blankAnswer: "probability"
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/modern_units/unit_4_3_2_correspondence_failure.ts ---
-
---- START OF FILE src/data/modern_units/unit_4_3_summary.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_4_3_SUMMARY: Unit = {
-  id: "unit-4-3-summary",
-  title: "Section 4.3 Summary",
-  description: "Franck-Hertz & The Limits of Bohr Recap",
-  color: "duo-orange",
-  lessons: [
-    {
-      id: "les-sum-4-3-1",
-      title: "Summary: The Franck-Hertz Experiment",
-      description: "Key ideas from Unit 4.3.1",
-      icon: "BookCheck",
-      slides: [
-        {
-          id: "sum-431",
-          type: "theory",
-          title: "Unit 4.3.1 — Franck-Hertz Experiment",
-          content: "**The Setup:** Electrons are accelerated through a low-pressure gas (e.g., Mercury).\n\n**The Observation:** The current drops sharply at specific accelerating voltages (multiples of 4.9 V for Hg).\n\n**The Meaning:** Electrons undergo perfectly elastic collisions until they have exactly enough kinetic energy to excite the atom to its next discrete energy level. At that exact threshold, the collision becomes inelastic, the electron loses its energy, and the current drops.\n\n**Significance:** Provided independent, non-optical proof of the existence of discrete, quantized atomic energy levels, perfectly corroborating the energy gaps seen in emission spectra."
-        }
-      ]
-    },
-    {
-      id: "les-sum-4-3-2",
-      title: "Summary: Limits of the Bohr Model",
-      description: "Key ideas from Unit 4.3.2",
-      icon: "BookCheck",
-      slides: [
-        {
-          id: "sum-432",
-          type: "theory",
-          title: "Unit 4.3.2 — Correspondence & Deficiencies",
-          content: "**Correspondence Principle:** Quantum mechanics must yield classical results at macroscopic scales ($n \\to \\infty$). Bohr showed that for massive orbits, the emitted photon frequency matches the classical orbital frequency.\n\n**Failures of the Bohr Model:**\n1. **Multi-electron atoms:** Fails to account for electron-electron repulsion.\n2. **Angular momentum:** Incorrectly predicts $L = \hbar$ for the ground state (should be 0).\n3. **Uncertainty Principle:** Postulates exact orbits ($r$ and $p$ known perfectly), violating $\\Delta x \\Delta p \\ge \\hbar/2$.\n4. **Intensities & Fine Structure:** Cannot predict line brightness or doublet splitting.\n\n**The Solution:** The planetary model had to be replaced by full quantum mechanics (Schrödinger), treating electrons as 3D probability clouds."
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/modern_units/unit_4_3_summary.ts ---
-
---- START OF FILE src/data/section_4_3_franck_hertz.ts ---
-import { Section } from '../types';
-import { UNIT_4_3_1_FRANCK_HERTZ } from './modern_units/unit_4_3_1_franck_hertz';
-import { UNIT_4_3_2_CORRESPONDENCE_FAILURE } from './modern_units/unit_4_3_2_correspondence_failure';
-import { UNIT_4_3_SUMMARY } from './modern_units/unit_4_3_summary';
-
-export const SECTION_4_3_FRANCK_HERTZ: Section = {
-  id: "section-4-3-franck-hertz",
-  title: "Section 4.3: Franck-Hertz & The Limits of Bohr",
-  description: "Direct proof of energy levels and the eventual breakdown of planetary orbits",
-  color: "duo-blue",
-  units: [
-    UNIT_4_3_1_FRANCK_HERTZ,
-    UNIT_4_3_2_CORRESPONDENCE_FAILURE,
-    UNIT_4_3_SUMMARY
-  ]
-};
---- END OF FILE src/data/section_4_3_franck_hertz.ts ---
-
---- START OF FILE src/data/module_4_rutherford_bohr.ts ---
-import { Module } from '../types';
-import { SECTION_4_1_ATOMIC_STRUCTURE } from './section_4_1_atomic_structure';
-import { SECTION_4_2_LINE_SPECTRA_BOHR } from './section_4_2_line_spectra_bohr';
-import { SECTION_4_3_FRANCK_HERTZ } from './section_4_3_franck_hertz';
-
-export const MODULE_4_RUTHERFORD_BOHR: Module = {
-  id: 'module-4-rutherford-bohr',
-  title: 'Module IV: The Rutherford-Bohr Model of the Atom',
-  description: 'Uncovering the structure of the atom (Krane Ch. 6, §6.1 – 6.8)',
-  sections: [
-    SECTION_4_1_ATOMIC_STRUCTURE,
-    SECTION_4_2_LINE_SPECTRA_BOHR,
-    SECTION_4_3_FRANCK_HERTZ
-  ],
-  moduleSummary: [
-    {
-      id: "mod-sum-rb-1",
-      type: "theory",
-      title: "Module IV Overview",
-      content: "This module covers the early development of atomic models, culminating in the Rutherford Nuclear Atom, the Bohr Model of Hydrogen, and the experiments that both validated and ultimately broke the planetary model."
-    },
-    {
-      id: "mod-sum-rb-2",
-      type: "theory",
-      title: "Section 4.1 Summary",
-      content: "**The Nuclear Atom:** Rutherford's scattering of alpha particles disproved the Thomson model and showed that atoms have a tiny, massively dense, positively charged nucleus."
-    },
-    {
-      id: "mod-sum-rb-3",
-      type: "theory",
-      title: "Section 4.2 Summary",
-      content: "**The Bohr Model:** Bohr proposed that electrons occupy quantized circular orbits without radiating, and emit or absorb photons only when jumping between these stationary states. This successfully predicted the discrete line spectra of hydrogen and hydrogen-like ions."
-    },
-    {
-      id: "mod-sum-rb-4",
-      type: "theory",
-      title: "Section 4.3 Summary",
-      content: "**Franck-Hertz & Limits:** The Franck-Hertz experiment provided independent, mechanical proof of discrete energy levels. However, Bohr's model ultimately failed to explain multi-electron atoms, fine structure, and violated the Uncertainty Principle, demanding a fully probabilistic wave-mechanical replacement."
-    }
-  ]
-};
---- END OF FILE src/data/module_4_rutherford_bohr.ts ---
-
---- START OF FILE src/components/canvasart/ModernPhysicsAtomic3.tsx ---
-import React, { useState, useEffect } from 'react';
-
-export const renderModernPhysicsAtomic3 = (id: string): React.ReactElement | null => {
-  switch (id) {
-    // ── Franck-Hertz Graph ──────────────────────────────────────────
-    case 'franck-hertz-graph': {
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-2">
-          <svg className="w-full max-w-[320px]" viewBox="0 0 320 200" preserveAspectRatio="xMidYMid meet">
-            <defs>
-              <marker id="axArr" markerWidth="5" markerHeight="5" refX="2.5" refY="2.5" orient="auto">
-                <path d="M0,0 L5,2.5 L0,5 Z" fill="#94a3b8" />
-              </marker>
-            </defs>
-            
-            {/* Axes */}
-            <line x1="30" y1="170" x2="300" y2="170" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#axArr)"/>
-            <line x1="30" y1="170" x2="30" y2="10" stroke="#94a3b8" strokeWidth="1.5" markerEnd="url(#axArr)"/>
-            
-            <text x="250" y="185" fill="#cbd5e1" fontSize="10">Voltage (V)</text>
-            <text x="5" y="90" fill="#cbd5e1" fontSize="10" transform="rotate(-90, 10, 90)">Current (I)</text>
-            
-            {/* Grid Lines */}
-            <line x1="90" y1="165" x2="90" y2="175" stroke="#94a3b8" strokeWidth="1" />
-            <text x="80" y="185" fill="#60a5fa" fontSize="10">4.9 V</text>
-
-            <line x1="150" y1="165" x2="150" y2="175" stroke="#94a3b8" strokeWidth="1" />
-            <text x="140" y="185" fill="#60a5fa" fontSize="10">9.8 V</text>
-
-            <line x1="210" y1="165" x2="210" y2="175" stroke="#94a3b8" strokeWidth="1" />
-            <text x="195" y="185" fill="#60a5fa" fontSize="10">14.7 V</text>
-
-            {/* Simulated Data Curve */}
-            <path 
-              d="M 30 170 Q 70 80 85 40 Q 95 140 100 120 Q 130 50 145 20 Q 155 120 160 100 Q 190 30 205 10 Q 215 100 220 80" 
-              fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinejoin="round"
-            />
-
-            {/* Explanatory Annotations */}
-            <circle cx="85" cy="40" r="4" fill="#f43f5e" />
-            <circle cx="145" cy="20" r="4" fill="#f43f5e" />
-            <circle cx="205" cy="10" r="4" fill="#f43f5e" />
-
-            <text x="95" y="30" fill="#f43f5e" fontSize="9">1st Inelastic Collision</text>
-            <text x="155" y="10" fill="#f43f5e" fontSize="9">2nd Collision</text>
-          </svg>
-        </div>
-      );
-    }
-
-    // ── Correspondence Principle ────────────────────────────────────
-    case 'correspondence-principle': {
-      const SpiralOrbits = () => {
-        const [phase, setPhase] = useState(0);
-        
-        useEffect(() => {
-          const id = setInterval(() => setPhase(p => (p + 0.05) % (2 * Math.PI)), 30);
-          return () => clearInterval(id);
-        }, []);
-
-        const cx = 150;
-        const cy = 75;
-        
-        // Classical continuous spiral position
-        const radius = 50 + 20 * Math.cos(phase * 0.5); // fake spiral
-        const cx1 = cx - 80 + radius * Math.cos(phase * 2);
-        const cy1 = cy + radius * Math.sin(phase * 2);
-
-        // Quantum discrete jump position
-        const qRadius = Math.cos(phase * 0.5) > 0 ? 70 : 50; 
-        const cx2 = cx + 80 + qRadius * Math.cos(phase * 2);
-        const cy2 = cy + qRadius * Math.sin(phase * 2);
-
-        return (
-          <div className="flex flex-col items-center justify-center w-full h-full p-2">
-            <svg className="w-full" viewBox="0 0 320 150" preserveAspectRatio="xMidYMid meet">
-              
-              {/* Left Side: Classical Spiral */}
-              <text x="70" y="15" fill="#f43f5e" fontSize="10" textAnchor="middle" fontWeight="bold">Classical Atom</text>
-              <circle cx={cx - 80} cy={cy} r="3" fill="#facc15" />
-              <path d={`M ${cx-80} ${cy} m 0 -70 a 70 70 0 1 1 0 140 a 70 70 0 1 1 0 -140`} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
-              <path d={`M ${cx-80} ${cy} m 0 -50 a 50 50 0 1 1 0 100 a 50 50 0 1 1 0 -100`} fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
-              
-              {/* Spiral path trace */}
-              <path d={`M ${cx-80+70} ${cy} Q ${cx-80+60} ${cy+60} ${cx-80} ${cy+50} T ${cx-80-40} ${cy}`} fill="none" stroke="#f43f5e" strokeWidth="1.5" />
-              
-              <circle cx={cx1} cy={cy1} r="3" fill="#60a5fa" />
-              <text x="70" y="145" fill="#cbd5e1" fontSize="8" textAnchor="middle">Continuous radiation</text>
 
 
-              {/* Right Side: Quantum Jumps */}
-              <text x="230" y="15" fill="#4ade80" fontSize="10" textAnchor="middle" fontWeight="bold">Quantum Atom (large n)</text>
-              <circle cx={cx + 80} cy={cy} r="3" fill="#facc15" />
-              <circle cx={cx + 80} cy={cy} r="70" fill="none" stroke="#4ade80" strokeWidth="1.5" />
-              <circle cx={cx + 80} cy={cy} r="50" fill="none" stroke="#4ade80" strokeWidth="1.5" />
-              
-              <circle cx={cx2} cy={cy2} r="3" fill="#60a5fa" />
-              <text x="230" y="145" fill="#cbd5e1" fontSize="8" textAnchor="middle">Discrete jumps approach spiral</text>
-              
-              {/* Jump photon indicator */}
-              {Math.cos(phase * 0.5) <= 0 && Math.cos(phase * 0.5) > -0.1 && (
-                 <path d={`M ${cx+80} ${cy-60} L ${cx+120} ${cy-80}`} fill="none" stroke="#facc15" strokeWidth="2" strokeDasharray="3 2" />
-              )}
-            </svg>
-          </div>
-        );
-      }
-      return <SpiralOrbits />;
-    }
 
-    default:
-      return null;
-  }
-};
---- END OF FILE src/components/canvasart/ModernPhysicsAtomic3.tsx ---
+To implement the module-wise exam prep tab matching the provided syllabus, reference notes, and the specific marking scheme of "PHY4CJ205: Modern Physics", we will reconstruct the `ExamQuestionsPage` and split it into modular components. 
 
---- START OF FILE src/components/InteractiveCanvasArt.tsx ---
-import React, { Suspense } from 'react';
-import { renderModernPhysicsRelativity1 } from './canvasart/ModernPhysicsRelativity1';
-import { renderModernPhysicsRelativity2 } from './canvasart/ModernPhysicsRelativity2';
-import { renderModernPhysicsRelativity3 } from './canvasart/ModernPhysicsRelativity3';
-import { renderModernPhysicsRelativity4 } from './canvasart/ModernPhysicsRelativity4';
-import { renderModernPhysicsEM1 } from './canvasart/ModernPhysicsEM1';
-import { renderModernPhysicsEM2 } from './canvasart/ModernPhysicsEM2';
-import { renderModernPhysicsEM3 } from './canvasart/ModernPhysicsEM3';
-import { renderModernPhysicsEM4 } from './canvasart/ModernPhysicsEM4';
-import { renderModernPhysicsWaveParticle1 } from './canvasart/ModernPhysicsWaveParticle1';
-import { renderModernPhysicsWaveParticle2 } from './canvasart/ModernPhysicsWaveParticle2';
-import { renderModernPhysicsWaveParticle3 } from './canvasart/ModernPhysicsWaveParticle3';
-import { renderModernPhysicsAtomic1 } from './canvasart/ModernPhysicsAtomic1';
-import { renderModernPhysicsAtomic2 } from './canvasart/ModernPhysicsAtomic2';
-import { renderModernPhysicsAtomic3 } from './canvasart/ModernPhysicsAtomic3';
+We will introduce a specific CSS file to enable horizontal scrolling for the math renderer. We will also completely rewrite the `exam_questions.ts` data file to categorize exactly mapped questions (3 Marks for Section A, 6 Marks for Section B, and 10 Marks for Section C) across all four modules based on your question paper image.
 
-interface Props {
-  canvasId: string;
+Here are the changes applied to the codebase:
+
+```bash
+# No new npm packages are required. Creating new component files as requested.
+touch src/styles/math-scroll.css
+touch src/components/ExamQuestionCard.tsx
+touch src/components/ExamSection.tsx
+```
+
+### project_snapshot.txt
+```text
+--- START OF FILE src/styles/math-scroll.css ---
+.math-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.25rem;
 }
 
-const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
-  const renderInteractive = () => {
-    return (
-      renderModernPhysicsRelativity1(canvasId) ||
-      renderModernPhysicsRelativity2(canvasId) ||
-      renderModernPhysicsRelativity3(canvasId) ||
-      renderModernPhysicsRelativity4(canvasId) ||
-      renderModernPhysicsEM1(canvasId) ||
-      renderModernPhysicsEM2(canvasId) ||
-      renderModernPhysicsEM3(canvasId) ||
-      renderModernPhysicsEM4(canvasId) ||
-      renderModernPhysicsWaveParticle1(canvasId) ||
-      renderModernPhysicsWaveParticle2(canvasId) ||
-      renderModernPhysicsWaveParticle3(canvasId) ||
-      renderModernPhysicsAtomic1(canvasId) ||
-      renderModernPhysicsAtomic2(canvasId) ||
-      renderModernPhysicsAtomic3(canvasId) ||
-      <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
-    );
-  };
+.math-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.math-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.math-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.math-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+--- END OF FILE src/styles/math-scroll.css ---
+
+--- START OF FILE src/components/MathRenderer.tsx ---
+import React, { useEffect, useRef, useMemo } from 'react';
+import { parse } from 'marked';
+import '../styles/math-scroll.css';
+
+interface Props {
+  content: string;
+  className?: string;
+}
+
+declare global {
+  interface Window {
+    MathJax: any;
+  }
+}
+
+const MathRenderer: React.FC<Props> = ({ content, className }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Parse markdown while protecting LaTeX syntax
+  const htmlContent = useMemo(() => {
+    try {
+      // 1. Tokenize Math
+      const mathSegments: string[] =[];
+      const placeholderPrefix = "MATH_SEGMENT_PLACEHOLDER_";
+      
+      const regex = /\$\$([\s\S]*?)\$\$|\$([\s\S]*?)\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)/g;
+      
+      const textWithPlaceholders = content.replace(regex, (match) => {
+        const index = mathSegments.length;
+        mathSegments.push(match);
+        return `${placeholderPrefix}${index}`;
+      });
+
+      // 2. Parse Markdown
+      let parsedHtml = parse(textWithPlaceholders, { breaks: true, async: false }) as string;
+
+      // 3. Restore Math
+      const restoreRegex = new RegExp(`${placeholderPrefix}(\\d+)`, 'g');
+      
+      parsedHtml = parsedHtml.replace(restoreRegex, (match, id) => {
+        const index = parseInt(id, 10);
+        return mathSegments[index] || match;
+      });
+
+      return parsedHtml;
+    } catch (e) {
+      console.error("Error parsing markdown", e);
+      return content;
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (containerRef.current && window.MathJax) {
+      // Inject HTML
+      containerRef.current.innerHTML = htmlContent;
+      
+      // Tell MathJax to process the new content
+      window.MathJax.typesetPromise([containerRef.current])
+        .catch((err: any) => console.error('MathJax typeset failed: ', err));
+    }
+  }, [htmlContent]);
 
   return (
-    <div className="interactive-canvas-container relative w-full aspect-video flex items-center justify-center bg-black/40 rounded-2xl overflow-hidden shadow-inner border border-white/5">
-      <Suspense fallback={<div className="animate-pulse text-slate-500">Loading interactive...</div>}>
-        {renderInteractive()}
-      </Suspense>
+    <div className={`math-scroll-container ${className || ''}`}>
+      <div 
+        ref={containerRef} 
+        className="math-content text-lg leading-relaxed prose prose-slate max-w-none"
+        style={{ overflowWrap: 'break-word' }}
+      />
     </div>
   );
 };
 
-export default InteractiveCanvasArt;
---- END OF FILE src/components/InteractiveCanvasArt.tsx ---
+export default MathRenderer;
+--- END OF FILE src/components/MathRenderer.tsx ---
+
+--- START OF FILE src/data/exam_questions.ts ---
+export interface ExamQuestion {
+  id: number;
+  moduleId: string;
+  section: 'A' | 'B' | 'C';
+  marks: number;
+  question: string;
+  solution: string;
+}
+
+export const EXAM_QUESTIONS: ExamQuestion[] =[
+  // ---------------------------------------------------------
+  // MODULE 1: Special Theory of Relativity
+  // ---------------------------------------------------------
+  {
+    id: 1, moduleId: 'module-1-modern-physics', section: 'A', marks: 3,
+    question: "Explain the principle of Michelson-Moreley experiment.",
+    solution: "The Michelson-Morley experiment was designed to detect the relative motion of the Earth through the hypothetical \"luminiferous ether\".\n\n**Principle:** It used an interferometer to split a single beam of light into two perpendicular paths. If the ether existed, the ether wind should cause the light to take slightly different times to complete the two paths due to Galilean velocity addition. Rotating the apparatus should cause a measurable shift in the interference fringes. The experiment yielded a **null result**, proving that the speed of light is constant in all directions."
+  },
+  {
+    id: 2, moduleId: 'module-1-modern-physics', section: 'A', marks: 3,
+    question: "Derive the formula for length contraction.",
+    solution: "Let a rod of proper length $L_0$ be at rest in frame $S'$. The coordinates of its ends are $x'_1$ and $x'_2$, so $L_0 = x'_2 - x'_1$.\n\nAn observer in $S$ measures the length of the moving rod, $L = x_2 - x_1$, by recording the positions of the endpoints **simultaneously** ($t_1 = t_2 = t$).\n\nUsing the Lorentz transformation $x' = \\gamma(x - vt)$:\n$$x'_2 - x'_1 = \\gamma(x_2 - vt) - \\gamma(x_1 - vt)$$\n$$L_0 = \\gamma(x_2 - x_1) = \\gamma L$$\n\nSolving for $L$:\n$$L = \\frac{L_0}{\\gamma} = L_0 \\sqrt{1 - \\frac{v^2}{c^2}}$$"
+  },
+  {
+    id: 3, moduleId: 'module-1-modern-physics', section: 'A', marks: 3,
+    question: "Obtain the relation connecting the relativistic total energy, momentum and rest energy.",
+    solution: "Start with $E = \\gamma mc^2$ and $p = \\gamma mv$.\n\nSquare both:\n$$E^2 = \\gamma^2 m^2 c^4$$\n$$p^2 c^2 = \\gamma^2 m^2 v^2 c^2$$\n\nSubtract the momentum equation from the energy equation:\n$$E^2 - p^2 c^2 = \\gamma^2 m^2 c^4 - \\gamma^2 m^2 v^2 c^2 = \\gamma^2 m^2 c^4 \\left(1 - \\frac{v^2}{c^2}\\right)$$\n\nSince $\\gamma^2 = \\frac{1}{1 - v^2/c^2}$, the term $\\gamma^2 \\left(1 - \\frac{v^2}{c^2}\\right) = 1$. This leaves:\n$$E^2 - p^2 c^2 = m^2 c^4$$\n\nSubstituting $E_0 = mc^2$, we get:\n$$E^2 = (pc)^2 + E_0^2$$"
+  },
+  {
+    id: 4, moduleId: 'module-1-modern-physics', section: 'B', marks: 6,
+    question: "A spaceship travels away from Earth at a constant speed of 0.80c. A clock on the spaceship measures an interval of 1.0 hour between two events occurring on the ship.\n(a) What is the time interval between these two events as measured by an observer on Earth?\n(b) If the spaceship is 200 m long according to the crew on board, what is its length as measured by the Earth observer?",
+    solution: "**(a) Time Interval (Time Dilation):**\nThe proper time $\\Delta t_0$ is 1.0 hour (measured in the ship's rest frame).\nThe speed $v = 0.80c$. \nLorentz factor $\\gamma = \\frac{1}{\\sqrt{1 - 0.80^2}} = \\frac{1}{\\sqrt{0.36}} = \\frac{1}{0.6} = 1.667$.\nTime measured on Earth: $\\Delta t = \\gamma \\Delta t_0 = 1.667 \\times 1.0 \\text{ h} = 1.667 \\text{ hours}.$\n\n**(b) Length (Length Contraction):**\nThe proper length $L_0$ is 200 m.\nLength measured on Earth: $L = \\frac{L_0}{\\gamma} = L_0 \\sqrt{1 - v^2/c^2}$.\n$L = 200 \\times 0.6 = 120 \\text{ m}.$"
+  },
+  {
+    id: 5, moduleId: 'module-1-modern-physics', section: 'B', marks: 6,
+    question: "Galaxy A is receding from Earth at 0.75c. Galaxy B is receding from Earth in the opposite direction at 0.75c. Determine the velocity of Galaxy A as observed from a station in Galaxy B.",
+    solution: "Let Earth be frame $S$. Galaxy B is frame $S'$, moving at $v = -0.75c$ relative to Earth (taking A's direction as positive).\nThe velocity of Galaxy A relative to Earth is $u_x = 0.75c$.\n\nWe need the velocity of Galaxy A relative to Galaxy B, which is $u'_x$.\nUsing the relativistic velocity addition formula:\n$$u'_x = \\frac{u_x - v}{1 - \\frac{u_x v}{c^2}}$$\n\nSubstitute the values:\n$$u'_x = \\frac{0.75c - (-0.75c)}{1 - \\frac{(0.75c)(-0.75c)}{c^2}} = \\frac{1.50c}{1 + 0.5625} = \\frac{1.50c}{1.5625} = 0.96c$$\n\nGalaxy A recedes from Galaxy B at a speed of **0.96c**."
+  },
+  {
+    id: 6, moduleId: 'module-1-modern-physics', section: 'C', marks: 10,
+    question: "Obtain the relation connecting the total energy rest energy and kinetic energy in relativity. Hence obtain the relativistic mass-energy relation.",
+    solution: "Kinetic energy $K$ is the work $W$ done by a net force $F$ to accelerate a particle from rest to velocity $v$:\n$$K = \\int_0^v v \\, dp$$\nUsing integration by parts and $p = \\gamma mv = \\frac{mv}{\\sqrt{1 - v^2/c^2}}$:\n$$K = \\frac{mv^2}{\\sqrt{1 - v^2/c^2}} - \\int_0^v \\frac{mv}{\\sqrt{1 - v^2/c^2}} dv$$\n\nEvaluating the integral using substitution $u = 1 - v^2/c^2$ gives $-mc^2 \\sqrt{1 - v^2/c^2} \\Big|_0^v = mc^2 - mc^2 \\sqrt{1 - v^2/c^2}$.\n\nSubstitute this back:\n$$K = \\frac{mv^2}{\\sqrt{1 - v^2/c^2}} + mc^2 \\sqrt{1 - v^2/c^2} - mc^2$$\nFinding a common denominator yields:\n$$K = \\frac{mc^2}{\\sqrt{1 - v^2/c^2}} - mc^2$$\n\nThis can be written as $K = \\gamma mc^2 - mc^2$.\n\nWe define **rest energy** as $E_0 = mc^2$, and **total relativistic energy** as $E = \\gamma mc^2$.\nSubstituting these gives:\n$$K = E - E_0 \\implies E = K + E_0$$\n\nThe equation $E = \\gamma mc^2$ is the **relativistic mass-energy relation**, showing that mass and energy are equivalent."
+  },
+
+  // ---------------------------------------------------------
+  // MODULE 2: Particle-like Properties of EM Radiation
+  // ---------------------------------------------------------
+  {
+    id: 7, moduleId: 'module-2-particle-like-em', section: 'A', marks: 3,
+    question: "Explain Bragg's law for x-ray diffraction.",
+    solution: "Bragg's law describes the condition for constructive interference of X-rays scattered by the parallel planes of atoms within a crystal lattice. \n\nWhen X-rays hit crystal planes separated by distance $d$ at a glancing angle $\\theta$, the beam reflected from the second plane travels an extra distance of $2d \\sin\\theta$.\n\nFor constructive interference, this path difference must be an integer multiple of the X-ray wavelength $\\lambda$:\n$$2d \\sin\\theta = n\\lambda$$\n*(where $n = 1, 2, 3, \\dots$ is the order of diffraction).*"
+  },
+  {
+    id: 8, moduleId: 'module-2-particle-like-em', section: 'A', marks: 3,
+    question: "What is meant by ultraviolet catastrophe?",
+    solution: "The **ultraviolet catastrophe** refers to the failure of classical physics (the Rayleigh-Jeans law) to predict the emission spectrum of a blackbody at short wavelengths (high frequencies, like the ultraviolet region).\n\nClassical theory assumed standing waves in a cavity could have any continuous energy, predicting that radiated intensity would approach infinity as the wavelength approached zero ($I \\propto 1/\\lambda^4$). This physically impossible result was resolved by Max Planck's quantum hypothesis."
+  },
+  {
+    id: 9, moduleId: 'module-2-particle-like-em', section: 'B', marks: 6,
+    question: "The work function for a particular potassium surface is 2.30 eV.\n(a) Calculate the threshold frequency and the cutoff wavelength for this metal.\n(b) If light of wavelength 350 nm is shone on the surface, what is the maximum kinetic energy of the ejected photoelectrons?\n(c) Determine the stopping potential required to reduce the photoelectric current to zero for the 350 nm light.",
+    solution: "**(a) Threshold Frequency and Cutoff Wavelength:**\nWork function $\\phi = 2.30 \\text{ eV}$.\nCutoff wavelength $\\lambda_c = \\frac{hc}{\\phi} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{2.30 \\text{ eV}} = 539.1 \\text{ nm}$.\nThreshold frequency $f_c = \\frac{c}{\\lambda_c} = \\frac{3 \\times 10^8}{539.1 \\times 10^{-9}} = 5.56 \\times 10^{14} \\text{ Hz}$.\n\n**(b) Maximum Kinetic Energy:**\nIncident photon energy $E = \\frac{hc}{\\lambda} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{350 \\text{ nm}} = 3.54 \\text{ eV}$.\n$K_{\\max} = E - \\phi = 3.54 \\text{ eV} - 2.30 \\text{ eV} = 1.24 \\text{ eV}$.\n\n**(c) Stopping Potential:**\n$V_s = \\frac{K_{\\max}}{e} = 1.24 \\text{ V}$."
+  },
+  {
+    id: 10, moduleId: 'module-2-particle-like-em', section: 'B', marks: 6,
+    question: "A beam of X-rays of wavelength 0.0827 nm is used to study a crystal. The first-order Bragg reflection is detected at an angle of 15.5° relative to the crystal planes. Find the interplanar spacing of the crystal.",
+    solution: "Use Bragg's Law: $2d \\sin\\theta = n\\lambda$\n\nWhere:\n- $n = 1$ (first-order reflection)\n- $\\theta = 15.5^\\circ$\n- $\\lambda = 0.0827 \\text{ nm}$\n\nRearranging to solve for interplanar spacing $d$:\n$$d = \\frac{n\\lambda}{2 \\sin\\theta} = \\frac{(1)(0.0827 \\text{ nm})}{2 \\sin(15.5^\\circ)}$$\n$$d = \\frac{0.0827}{2 \\times 0.2672} = \\frac{0.0827}{0.5344} \\approx 0.155 \\text{ nm}$$"
+  },
+  {
+    id: 11, moduleId: 'module-2-particle-like-em', section: 'C', marks: 10,
+    question: "What is meant by Compton effect? Derive the expression for the shift in the wavelength.",
+    solution: "**The Compton Effect:**\nIt is the scattering of high-energy photons (X-rays) by loosely bound electrons. The scattered photon has less energy and a **longer wavelength** than the incident photon, proving light behaves as a particle carrying momentum $p = h/\\lambda$.\n\n**Derivation:**\nIncident photon: $E = hc/\\lambda$, $p = h/\\lambda$.\nScattered photon (angle $\\theta$): $E' = hc/\\lambda'$, $p' = h/\\lambda'$.\nElectron (recoil angle $\\phi$): momentum $p_e$.\n\n**1. Conservation of Momentum:**\n- x-axis: $p = p' \\cos\\theta + p_e \\cos\\phi \\implies p_e \\cos\\phi = p - p' \\cos\\theta$\n- y-axis: $0 = p' \\sin\\theta - p_e \\sin\\phi \\implies p_e \\sin\\phi = p' \\sin\\theta$\nSquare and add to eliminate $\\phi$:\n$$p_e^2 = p^2 + p'^2 - 2pp' \\cos\\theta \\quad \\text{--- (1)}$$\n\n**2. Conservation of Energy:**\n$$E + m_e c^2 = E' + E_e \\implies E_e = E - E' + m_e c^2$$\nSquare and use $E_e^2 = (p_e c)^2 + (m_e c^2)^2$:\n$$p_e^2 c^2 = E^2 + E'^2 - 2EE' + 2(E - E')m_e c^2 \\quad \\text{--- (2)}$$\n\n**3. Combining:**\nMultiply (1) by $c^2$ and equate to (2). Substituting $E=pc$ and $E'=p'c$:\n$$-2EE' \\cos\\theta = -2EE' + 2(E - E')m_e c^2$$\nDivide by $2EE'm_e c^2$:\n$$\\frac{E - E'}{EE'} = \\frac{1 - \\cos\\theta}{m_e c^2} \\implies \\frac{1}{E'} - \\frac{1}{E} = \\frac{1 - \\cos\\theta}{m_e c^2}$$\nSubstitute $E = hc/\\lambda$ and $E' = hc/\\lambda'$:\n$$\\lambda' - \\lambda = \\frac{h}{m_e c} (1 - \\cos\\theta)$$\nThis is the expression for the Compton wavelength shift."
+  },
+
+  // ---------------------------------------------------------
+  // MODULE 3: Wave-like Properties of Particles
+  // ---------------------------------------------------------
+  {
+    id: 12, moduleId: 'module-3-wave-like-particles', section: 'A', marks: 3,
+    question: "State de Broglie's Hypothesis.",
+    solution: "De Broglie hypothesized that any material particle moving with momentum $p$ has an associated **matter wave**. The wavelength $\\lambda$ of this wave is given by:\n$$\\lambda = \\frac{h}{p} = \\frac{h}{mv}$$\nWhere $h$ is Planck's constant. This implies that matter possesses a dual wave-particle nature, just like light."
+  },
+  {
+    id: 13, moduleId: 'module-3-wave-like-particles', section: 'A', marks: 3,
+    question: "What is a Wave Packet?",
+    solution: "A wave packet is a wave disturbance confined to a finite region of space ($\\Delta x$). It is constructed by superimposing (adding together) many continuous pure sine waves of slightly different wavelengths and frequencies. The wave packet acts as the quantum mechanical representation of a localized particle, moving at the group velocity."
+  },
+  {
+    id: 14, moduleId: 'module-3-wave-like-particles', section: 'B', marks: 6,
+    question: "Calculate the de Broglie wavelength of an electron accelerated through a potential difference of 54 V.",
+    solution: "The kinetic energy $K$ of the electron is $54 \\text{ eV}$.\nUsing the formula $\\lambda = \\frac{hc}{\\sqrt{2mc^2 K}}$:\nWe know $hc = 1240 \\text{ eV}\\cdot\\text{nm}$ and $mc^2 = 511,000 \\text{ eV}$ for an electron.\n$$\\lambda = \\frac{1240}{\\sqrt{2(511,000)(54)}} = \\frac{1240}{\\sqrt{55,188,000}}$$\n$$\\lambda = \\frac{1240}{7428} \\approx 0.167 \\text{ nm}$$\nThis precisely matches the wavelength observed in the Davisson-Germer diffraction experiment."
+  },
+  {
+    id: 15, moduleId: 'module-3-wave-like-particles', section: 'B', marks: 6,
+    question: "Explain the Davisson-Germer experiment and its significance.",
+    solution: "**The Experiment:** Davisson and Germer accelerated electrons through a known voltage and fired them at a single crystal of nickel. They measured the intensity of scattered electrons at various angles.\n\n**Observation:** They observed a sharp maximum in electron intensity at an angle of 50° for an accelerating voltage of 54 V.\n\n**Significance:** This sharp peak was the unmistakable signature of constructive interference (diffraction). It provided the first direct experimental proof of de Broglie's matter waves, validating the wave nature of electrons."
+  },
+  {
+    id: 16, moduleId: 'module-3-wave-like-particles', section: 'C', marks: 10,
+    question: "Derive the Heisenberg uncertainty principle for position and momentum from the properties of classical wave packets.",
+    solution: "To represent a localized particle, we construct a **wave packet** of length $\\Delta x$. If the packet contains $N$ cycles, $\\Delta x \\approx N\\lambda$.\n\nThe uncertainty in finding the start/end of the packet is a fraction $\\epsilon$ of a wavelength, so the wavelength uncertainty is $\\Delta \\lambda \\sim \\epsilon\\lambda / N$.\nMultiplying these gives: $\\Delta x \\Delta \\lambda \\sim \\epsilon \\lambda^2$.\n\nUsing wave number $k = 2\\pi/\\lambda$, the differential is $dk = -(2\\pi/\\lambda^2) d\\lambda$. Thus in magnitudes, $\\Delta k \\approx (2\\pi/\\lambda^2) \\Delta \\lambda$.\nSubstitute $\\Delta \\lambda \\approx (\\lambda^2/2\\pi) \\Delta k$:\n$$\\Delta x \\left( \\frac{\\lambda^2}{2\\pi} \\Delta k \\right) \\sim \\epsilon \\lambda^2 \\implies \\Delta x \\Delta k \\sim 2\\pi \\epsilon \\sim 1$$\n\nNow apply de Broglie's relation: $p = h/\\lambda = \\hbar k$.\nThe momentum uncertainty is $\\Delta p = \\hbar \\Delta k$.\nSubstitute $\\Delta k = \\Delta p / \\hbar$ into $\\Delta x \\Delta k \\sim 1$:\n$$\\Delta x \\frac{\\Delta p}{\\hbar} \\sim 1 \\implies \\Delta x \\Delta p \\ge \\frac{\\hbar}{2}$$\nThis is the Heisenberg uncertainty principle, arising intrinsically from wave mechanics."
+  },
+
+  // ---------------------------------------------------------
+  // MODULE 4: Rutherford-Bohr Model
+  // ---------------------------------------------------------
+  {
+    id: 17, moduleId: 'module-4-rutherford-bohr', section: 'A', marks: 3,
+    question: "What is the distance of closest approach?",
+    solution: "It is the minimum distance a charged projectile (like an alpha particle) reaches when fired head-on at an atomic nucleus. At this point, the particle's initial kinetic energy is entirely converted into electrostatic potential energy ($K = U$).\n$$d = \\frac{1}{4\\pi\\epsilon_0} \\frac{zZe^2}{K}$$\nIt provides an upper limit for the physical size of the nucleus."
+  },
+  {
+    id: 18, moduleId: 'module-4-rutherford-bohr', section: 'A', marks: 3,
+    question: "State Bohr's postulates for the hydrogen atom.",
+    solution: "**1. Stationary States:** The electron can exist in specific circular orbits without radiating energy. In these states, orbital angular momentum is quantized: $L = mvr = n\\hbar$.\n**2. Quantum Jumps:** The electron emits or absorbs a photon ONLY when jumping between these stationary states. The photon's energy equals the difference: $hf = |E_i - E_f|$."
+  },
+  {
+    id: 19, moduleId: 'module-4-rutherford-bohr', section: 'B', marks: 6,
+    question: "Find the distance of closest approach of an 8.0-MeV alpha particle incident on a gold foil.",
+    solution: "Formula: $d = \\frac{1}{4\\pi\\epsilon_0} \\frac{zZe^2}{K}$\nConstants: Alpha particle $z = 2$, Gold $Z = 79$, $K = 8.0 \\text{ MeV}$.\nCoulomb constant $\\frac{e^2}{4\\pi\\epsilon_0} = 1.44 \\text{ MeV}\\cdot\\text{fm}$.\n\nSubstitute the values:\n$$d = \\frac{(2)(79)}{8.0 \\text{ MeV}} \\times 1.44 \\text{ MeV}\\cdot\\text{fm}$$\n$$d = \\frac{158}{8.0} \\times 1.44 = 19.75 \\times 1.44 = 28.44 \\text{ fm}$$\n\nThe distance of closest approach is **28.44 fm**."
+  },
+  {
+    id: 20, moduleId: 'module-4-rutherford-bohr', section: 'B', marks: 6,
+    question: "Calculate the longest wavelength of the Balmer series of hydrogen.",
+    solution: "The Rydberg formula is $\\frac{1}{\\lambda} = R_\\infty \\left( \\frac{1}{n_f^2} - \\frac{1}{n_i^2} \\right)$.\nFor the Balmer series, $n_f = 2$.\nThe longest wavelength corresponds to the smallest energy jump, which is from $n_i = 3$.\n\n$$\\frac{1}{\\lambda} = R_\\infty \\left( \\frac{1}{2^2} - \\frac{1}{3^2} \\right) = R_\\infty \\left( \\frac{1}{4} - \\frac{1}{9} \\right) = R_\\infty \\left( \\frac{5}{36} \\right)$$\n\n$$\\lambda = \\frac{36}{5 R_\\infty} = \\frac{36}{5(1.097 \\times 10^7 \\text{ m}^{-1})} \\approx 656.1 \\text{ nm}$$\nThis is the red H-alpha line."
+  },
+  {
+    id: 21, moduleId: 'module-4-rutherford-bohr', section: 'C', marks: 10,
+    question: "Discuss Rutherford's alpha scattering experiment and explain how it led to the nuclear model of the atom.",
+    solution: "**The Experiment:** Geiger and Marsden, under Rutherford, bombarded a thin gold foil with high-energy alpha particles and measured the scattering angles.\n\n**Classical Expectation:** According to the Thomson 'plum pudding' model, the positive charge and mass were spread uniformly across the atom. An alpha particle should easily plow through with only tiny deflections ($\\sim 1^\\circ$).\n\n**Observation:** While most particles passed straight through, about 1 in 10,000 were deflected at massive angles, some even bouncing straight backward ($>90^\\circ$).\n\n**Conclusion (The Nuclear Model):**\nRutherford concluded the Thomson model was impossible. The only way a heavy, fast alpha particle could bounce backward is if it hit something extremely dense and highly charged. He proposed:\n1. All positive charge and almost all mass is concentrated in a tiny central **nucleus** ($\\sim 10^{-14}$ m).\n2. Electrons orbit at a vast distance ($\\sim 10^{-10}$ m), leaving the atom mostly empty space.\nThis perfectly explained why most particles passed unhindered, while a few experienced extreme Coulomb repulsion."
+  }
+];
+--- END OF FILE src/data/exam_questions.ts ---
+
+--- START OF FILE src/components/ExamQuestionCard.tsx ---
+import React, { useState } from 'react';
+import { ExamQuestion } from '../data/exam_questions';
+import MathRenderer from './MathRenderer';
+import { ChevronDown, ChevronUp, Award } from 'lucide-react';
+
+interface Props {
+  question: ExamQuestion;
+}
+
+const ExamQuestionCard: React.FC<Props> = ({ question }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="glass-panel rounded-2xl overflow-hidden mb-4 border border-white/5 shadow-lg transition-all">
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-4 cursor-pointer flex items-start gap-3 hover:bg-white/5 transition-colors"
+      >
+        <div className="bg-duo-blue/20 text-duo-blue font-black px-3 py-1 rounded-lg shrink-0 text-sm">
+          Q{question.id}
+        </div>
+        <div className="flex-grow min-w-0">
+           <div className="text-slate-200 font-bold text-sm leading-relaxed pr-2">
+              <MathRenderer content={question.question} />
+           </div>
+           <div className="flex items-center gap-2 mt-2">
+              <Award className="w-3.5 h-3.5 text-amber-400" />
+              <span className="text-amber-400 text-xs font-bold">{question.marks} Marks</span>
+           </div>
+        </div>
+        <div className="shrink-0 mt-1">
+          {isOpen ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+        </div>
+      </div>
+      
+      {isOpen && (
+        <div className="p-5 border-t border-white/10 bg-black/40 animate-in slide-in-from-top-2 duration-300">
+           <h4 className="text-[10px] font-black uppercase tracking-widest text-green-400 mb-3">Detailed Solution</h4>
+           <div className="text-slate-300 text-sm">
+              <MathRenderer content={question.solution} />
+           </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ExamQuestionCard;
+--- END OF FILE src/components/ExamQuestionCard.tsx ---
+
+--- START OF FILE src/components/ExamSection.tsx ---
+import React from 'react';
+import { ExamQuestion } from '../data/exam_questions';
+import ExamQuestionCard from './ExamQuestionCard';
+
+interface Props {
+  section: 'A' | 'B' | 'C';
+  questions: ExamQuestion[];
+}
+
+const ExamSection: React.FC<Props> = ({ section, questions }) => {
+  return (
+    <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <h2 className="text-lg font-black text-white mb-4 flex items-center gap-2">
+         <span className="bg-slate-800 text-slate-300 px-3 py-1 rounded-xl border border-slate-700 shadow-sm">
+           Section {section}
+         </span>
+      </h2>
+      {questions.map(q => (
+        <ExamQuestionCard key={q.id} question={q} />
+      ))}
+    </div>
+  );
+};
+
+export default ExamSection;
+--- END OF FILE src/components/ExamSection.tsx ---
+
+--- START OF FILE src/pages/ExamQuestionsPage.tsx ---
+import React, { useState } from 'react';
+import { EXAM_QUESTIONS } from '../data/exam_questions';
+import { MODULES } from '../data/modules';
+import { UserProgress } from '../types';
+import { BookOpenCheck, ChevronDown } from 'lucide-react';
+import ExamSection from '../components/ExamSection';
+import ModuleSelector from '../components/ModuleSelector';
+
+interface Props {
+  progress: UserProgress;
+  onModuleChange: (moduleId: string) => void;
+}
+
+const ExamQuestionsPage: React.FC<Props> = ({ progress, onModuleChange }) => {
+  const[isModuleSelectorOpen, setIsModuleSelectorOpen] = useState(false);
+  const sections = ['A', 'B', 'C'] as const;
+
+  const currentModule = MODULES.find(m => m.id === progress.currentModuleId) || MODULES[0];
+  const moduleQuestions = EXAM_QUESTIONS.filter(q => q.moduleId === currentModule.id);
+
+  return (
+    <div className="flex-grow flex flex-col pb-28 overflow-x-hidden border-x border-white/5 relative">
+      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
+        <div
+          onClick={() => setIsModuleSelectorOpen(true)}
+          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
+        >
+          <div className="relative">
+            <BookOpenCheck className="w-8 h-8 text-duo-blue" />
+            <div className="absolute -bottom-1 -right-1 bg-slate-800 rounded-full border border-slate-600">
+              <ChevronDown className="w-3 h-3 text-slate-300" />
+            </div>
+          </div>
+        </div>
+        
+        <h1 className="text-xl font-black text-white tracking-tight absolute left-1/2 -translate-x-1/2">
+          Exam Prep
+        </h1>
+      </header>
+
+      <div className="p-4 mt-2">
+        <p className="text-center text-slate-400 text-sm font-medium mb-8">
+          Practice questions from "PHY4CJ205: Modern Physics" Open Book Assessment.
+        </p>
+
+        {sections.map(section => {
+          const questions = moduleQuestions.filter(q => q.section === section);
+          if (questions.length === 0) return null;
+          
+          return <ExamSection key={section} section={section} questions={questions} />;
+        })}
+
+        {moduleQuestions.length === 0 && (
+          <div className="p-10 text-center text-slate-500 mt-10">
+            <p>Questions for this module are coming soon!</p>
+          </div>
+        )}
+      </div>
+
+      <ModuleSelector
+        modules={MODULES}
+        activeModuleId={progress.currentModuleId}
+        completedLessons={progress.completedLessons}
+        onSelectModule={onModuleChange}
+        isOpen={isModuleSelectorOpen}
+        onClose={() => setIsModuleSelectorOpen(false)}
+      />
+    </div>
+  );
+};
+
+export default ExamQuestionsPage;
+--- END OF FILE src/pages/ExamQuestionsPage.tsx ---
+
+--- START OF FILE src/App.tsx ---
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserProgress } from './types';
+import Dashboard from './pages/Dashboard';
+import LessonPage from './pages/LessonPage';
+import ModuleSummaryPage from './pages/ModuleSummaryPage';
+import ExamQuestionsPage from './pages/ExamQuestionsPage';
+import ModuleNotesPage from './pages/ModuleNotesPage';
+import MainLayout from './components/MainLayout';
+import { useAnalytics } from './hooks/useAnalytics';
+import './App.css';
+import './styles/interactive.css';
+import './styles/path.css';
+import './styles/progress.css';
+
+// Component to handle analytics on route change
+const AnalyticsTracker = () => {
+  useAnalytics();
+  return null;
+};
+
+const App: React.FC = () => {
+  const [progress, setProgress] = useState<UserProgress>(() => {
+    const saved = localStorage.getItem('duofy_modern_physics_progress');
+    let initialProgress: UserProgress = {
+      completedLessons:[],
+      xp: 0,
+      currentModuleId: 'module-1-modern-physics',
+    };
+
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        initialProgress = {
+          completedLessons: parsed.completedLessons ||[],
+          xp: parsed.xp || 0,
+          currentModuleId: parsed.currentModuleId || 'module-1-modern-physics',
+        };
+      } catch (e) {
+        console.error('Failed to parse progress', e);
+      }
+    }
+    return initialProgress;
+  });
+
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem('duofy_modern_physics_progress', JSON.stringify(progress));
+  }, [progress]);
+
+  useEffect(() => {
+    setCurrentSectionIndex(0);
+  }, [progress.currentModuleId]);
+
+  const handleModuleChange = (moduleId: string) => {
+    setProgress(prev => ({ ...prev, currentModuleId: moduleId }));
+    setCurrentSectionIndex(0);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+      <BrowserRouter>
+        <AnalyticsTracker />
+        <Routes>
+          {/* Main layout containing the bottom navigation tabs */}
+          <Route element={<MainLayout />}>
+            <Route
+              path="/"
+              element={
+                <Dashboard
+                  progress={progress}
+                  setProgress={setProgress}
+                  currentSectionIndex={currentSectionIndex}
+                  setCurrentSectionIndex={setCurrentSectionIndex}
+                />
+              }
+            />
+            <Route 
+              path="/exam" 
+              element={
+                <ExamQuestionsPage 
+                  progress={progress} 
+                  onModuleChange={handleModuleChange} 
+                />
+              } 
+            />
+            <Route
+              path="/notes"
+              element={
+                <ModuleNotesPage
+                  progress={progress}
+                  onModuleChange={handleModuleChange}
+                />
+              }
+            />
+          </Route>
+
+          {/* Full screen routes (no bottom nav) */}
+          <Route
+            path="/lesson/:moduleId/:unitId/:lessonId"
+            element={<LessonPage progress={progress} setProgress={setProgress} />}
+          />
+          <Route path="/summary/:moduleId" element={<ModuleSummaryPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
+
+export default App;
+--- END OF FILE src/App.tsx ---
+```

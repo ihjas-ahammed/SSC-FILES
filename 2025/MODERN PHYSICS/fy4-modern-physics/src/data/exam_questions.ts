@@ -1,168 +1,131 @@
 export interface ExamQuestion {
   id: number;
+  moduleId: string;
   section: 'A' | 'B' | 'C';
   marks: number;
   question: string;
   solution: string;
 }
 
-export const EXAM_QUESTIONS: ExamQuestion[] = [
+export const EXAM_QUESTIONS: ExamQuestion[] =[
   // ---------------------------------------------------------
-  // SECTION A (3 Marks Each)
+  // MODULE 1: Special Theory of Relativity
   // ---------------------------------------------------------
   {
-    id: 1,
-    section: 'A',
-    marks: 3,
+    id: 1, moduleId: 'module-1-modern-physics', section: 'A', marks: 3,
+    question: "Explain the principle of Michelson-Moreley experiment.",
+    solution: "The Michelson-Morley experiment was designed to detect the relative motion of the Earth through the hypothetical \"luminiferous ether\".\n\n**Principle:** It used an interferometer to split a single beam of light into two perpendicular paths. If the ether existed, the ether wind should cause the light to take slightly different times to complete the two paths due to Galilean velocity addition. Rotating the apparatus should cause a measurable shift in the interference fringes. The experiment yielded a **null result**, proving that the speed of light is constant in all directions."
+  },
+  {
+    id: 2, moduleId: 'module-1-modern-physics', section: 'A', marks: 3,
     question: "Derive the formula for length contraction.",
-    solution: "Let a rod of proper length $L_0$ be at rest in frame $S'$. The coordinates of its ends are $x'_1$ and $x'_2$, so $L_0 = x'_2 - x'_1$.\n\nFrame $S'$ moves at a constant velocity $v$ relative to frame $S$. An observer in $S$ measures the length of the moving rod, $L = x_2 - x_1$, by recording the positions of the endpoints **simultaneously** in their frame (so $t_1 = t_2 = t$).\n\nUsing the Lorentz transformation for position, $x' = \\gamma(x - vt)$:\n$$x'_2 - x'_1 = \\gamma(x_2 - vt) - \\gamma(x_1 - vt)$$\n$$L_0 = \\gamma(x_2 - x_1) = \\gamma L$$\n\nSolving for $L$:\n$$L = \\frac{L_0}{\\gamma} = L_0 \\sqrt{1 - \\frac{v^2}{c^2}}$$\nSince $\\gamma > 1$, the measured length $L$ is less than the proper length $L_0$. This is length contraction."
+    solution: "Let a rod of proper length $L_0$ be at rest in frame $S'$. The coordinates of its ends are $x'_1$ and $x'_2$, so $L_0 = x'_2 - x'_1$.\n\nAn observer in $S$ measures the length of the moving rod, $L = x_2 - x_1$, by recording the positions of the endpoints **simultaneously** ($t_1 = t_2 = t$).\n\nUsing the Lorentz transformation $x' = \\gamma(x - vt)$:\n$$x'_2 - x'_1 = \\gamma(x_2 - vt) - \\gamma(x_1 - vt)$$\n$$L_0 = \\gamma(x_2 - x_1) = \\gamma L$$\n\nSolving for $L$:\n$$L = \\frac{L_0}{\\gamma} = L_0 \\sqrt{1 - \\frac{v^2}{c^2}}$$"
   },
   {
-    id: 2,
-    section: 'A',
-    marks: 3,
-    question: "An electron is moving with a kinetic energy of 0.923 MeV. What is its speed?",
-    solution: "The rest energy of an electron is $E_0 = mc^2 = 0.511$ MeV.\n\nThe total relativistic energy $E$ is the sum of kinetic and rest energy:\n$$E = K + E_0 = 0.923 \\text{ MeV} + 0.511 \\text{ MeV} = 1.434 \\text{ MeV}$$\n\nWe also know that $E = \\gamma mc^2 = \\gamma E_0$. Solving for $\\gamma$:\n$$\\gamma = \\frac{E}{E_0} = \\frac{1.434}{0.511} \\approx 2.806$$\n\nUsing the definition of $\\gamma = \\frac{1}{\\sqrt{1 - v^2/c^2}}$:\n$$1 - \\frac{v^2}{c^2} = \\frac{1}{\\gamma^2} = \\frac{1}{(2.806)^2} \\approx 0.127$$\n$$\\frac{v^2}{c^2} = 1 - 0.127 = 0.873$$\n$$v = \\sqrt{0.873}c \\approx 0.934c$$"
-  },
-  {
-    id: 3,
-    section: 'A',
-    marks: 3,
-    question: "Explain the principle of Michelson-Morley experiment.",
-    solution: "The Michelson-Morley experiment was designed to detect the relative motion of the Earth through the hypothetical \"luminiferous ether\" (the supposed stationary medium for light propagation).\n\n**Principle:** It used an interferometer to split a single beam of light into two perpendicular paths. One path was parallel to the Earth's supposed motion through the ether, and the other was perpendicular. According to Galilean velocity addition, the ether wind should cause the light to take slightly different times to complete the two paths. \n\nWhen the beams recombined, they formed an interference pattern. Rotating the apparatus by 90° should have caused a measurable shift in the interference fringes due to the changing travel times. The experiment yielded a **null result** (no shift), proving that the speed of light is constant in all directions and that the ether does not exist."
-  },
-  {
-    id: 4,
-    section: 'A',
-    marks: 3,
-    question: "Give the expressions for relativistic momentum and relativistic kinetic energy.",
-    solution: "**Relativistic Momentum ($\\mathbf{p}$):**\n$$\\mathbf{p} = \\gamma m \\mathbf{v} = \\frac{m \\mathbf{v}}{\\sqrt{1 - v^2/c^2}}$$\n\n**Relativistic Kinetic Energy ($K$):**\n$$K = E - E_0 = \\gamma mc^2 - mc^2 = mc^2 \\left( \\frac{1}{\\sqrt{1 - v^2/c^2}} - 1 \\right)$$\n\n*(Where $m$ is the rest mass, $v$ is the velocity, $c$ is the speed of light, and $\\gamma$ is the Lorentz factor).*"
-  },
-  {
-    id: 5,
-    section: 'A',
-    marks: 3,
+    id: 3, moduleId: 'module-1-modern-physics', section: 'A', marks: 3,
     question: "Obtain the relation connecting the relativistic total energy, momentum and rest energy.",
-    solution: "Start with the equations for total energy and momentum:\n$$E = \\gamma mc^2 \\quad \\text{and} \\quad p = \\gamma mv$$\n\nSquare both equations:\n$$E^2 = \\gamma^2 m^2 c^4$$\n$$p^2 c^2 = \\gamma^2 m^2 v^2 c^2$$\n\nSubtract the momentum equation from the energy equation:\n$$E^2 - p^2 c^2 = \\gamma^2 m^2 c^4 - \\gamma^2 m^2 v^2 c^2 = \\gamma^2 m^2 c^4 \\left(1 - \\frac{v^2}{c^2}\\right)$$\n\nSince $\\gamma^2 = \\frac{1}{1 - v^2/c^2}$, the term $\\gamma^2 \\left(1 - \\frac{v^2}{c^2}\\right) = 1$. This leaves:\n$$E^2 - p^2 c^2 = m^2 c^4$$\n\nSubstituting the rest energy $E_0 = mc^2$, we get the final relation:\n$$E^2 = (pc)^2 + E_0^2$$"
+    solution: "Start with $E = \\gamma mc^2$ and $p = \\gamma mv$.\n\nSquare both:\n$$E^2 = \\gamma^2 m^2 c^4$$\n$$p^2 c^2 = \\gamma^2 m^2 v^2 c^2$$\n\nSubtract the momentum equation from the energy equation:\n$$E^2 - p^2 c^2 = \\gamma^2 m^2 c^4 - \\gamma^2 m^2 v^2 c^2 = \\gamma^2 m^2 c^4 \\left(1 - \\frac{v^2}{c^2}\\right)$$\n\nSince $\\gamma^2 = \\frac{1}{1 - v^2/c^2}$, the term $\\gamma^2 \\left(1 - \\frac{v^2}{c^2}\\right) = 1$. This leaves:\n$$E^2 - p^2 c^2 = m^2 c^4$$\n\nSubstituting $E_0 = mc^2$, we get:\n$$E^2 = (pc)^2 + E_0^2$$"
   },
   {
-    id: 6,
-    section: 'A',
-    marks: 3,
-    question: "Explain Bragg's law for x-ray diffraction.",
-    solution: "Bragg's law describes the condition for constructive interference of X-rays scattered by the parallel planes of atoms within a crystal lattice. \n\nWhen X-rays hit crystal planes separated by a distance $d$ at a glancing angle $\\theta$ (measured from the surface of the plane, not the normal), the beam reflected from the second plane travels an extra distance of $2d \\sin\\theta$ compared to the beam reflected from the first plane.\n\nFor constructive interference to occur (producing a bright diffraction spot), this path difference must be an integer multiple of the X-ray wavelength $\\lambda$:\n$$2d \\sin\\theta = n\\lambda$$\n*(where $n = 1, 2, 3, \\dots$ is the order of diffraction).*"
+    id: 4, moduleId: 'module-1-modern-physics', section: 'B', marks: 6,
+    question: "A spaceship travels away from Earth at a constant speed of 0.80c. A clock on the spaceship measures an interval of 1.0 hour between two events occurring on the ship.\n(a) What is the time interval between these two events as measured by an observer on Earth?\n(b) If the spaceship is 200 m long according to the crew on board, what is its length as measured by the Earth observer?",
+    solution: "**(a) Time Interval (Time Dilation):**\nThe proper time $\\Delta t_0$ is 1.0 hour (measured in the ship's rest frame).\nThe speed $v = 0.80c$. \nLorentz factor $\\gamma = \\frac{1}{\\sqrt{1 - 0.80^2}} = \\frac{1}{\\sqrt{0.36}} = \\frac{1}{0.6} = 1.667$.\nTime measured on Earth: $\\Delta t = \\gamma \\Delta t_0 = 1.667 \\times 1.0 \\text{ h} = 1.667 \\text{ hours}.$\n\n**(b) Length (Length Contraction):**\nThe proper length $L_0$ is 200 m.\nLength measured on Earth: $L = \\frac{L_0}{\\gamma} = L_0 \\sqrt{1 - v^2/c^2}$.\n$L = 200 \\times 0.6 = 120 \\text{ m}.$"
   },
   {
-    id: 7,
-    section: 'A',
-    marks: 3,
-    question: "What is meant by work function of a photoelectric material?",
-    solution: "The **work function** ($\\phi$ or $W$) of a material is the minimum amount of energy required to completely remove an electron from the surface of that material. It is a characteristic property of the specific metal.\n\nIn Einstein's photoelectric equation ($K_{\\max} = hf - \\phi$), it represents the \"binding energy\" cost. An incident photon must have an energy ($hf$) at least equal to the work function for the photoelectric effect to occur. Any photon energy in excess of the work function is converted into the kinetic energy of the ejected photoelectron."
+    id: 5, moduleId: 'module-1-modern-physics', section: 'B', marks: 6,
+    question: "Galaxy A is receding from Earth at 0.75c. Galaxy B is receding from Earth in the opposite direction at 0.75c. Determine the velocity of Galaxy A as observed from a station in Galaxy B.",
+    solution: "Let Earth be frame $S$. Galaxy B is frame $S'$, moving at $v = -0.75c$ relative to Earth (taking A's direction as positive).\nThe velocity of Galaxy A relative to Earth is $u_x = 0.75c$.\n\nWe need the velocity of Galaxy A relative to Galaxy B, which is $u'_x$.\nUsing the relativistic velocity addition formula:\n$$u'_x = \\frac{u_x - v}{1 - \\frac{u_x v}{c^2}}$$\n\nSubstitute the values:\n$$u'_x = \\frac{0.75c - (-0.75c)}{1 - \\frac{(0.75c)(-0.75c)}{c^2}} = \\frac{1.50c}{1 + 0.5625} = \\frac{1.50c}{1.5625} = 0.96c$$\n\nGalaxy A recedes from Galaxy B at a speed of **0.96c**."
   },
   {
-    id: 8,
-    section: 'A',
-    marks: 3,
-    question: "What is meant by ultraviolet catastrophe?",
-    solution: "The **ultraviolet catastrophe** refers to the catastrophic failure of classical physics (specifically the Rayleigh-Jeans law) to predict the emission spectrum of a blackbody at short wavelengths (high frequencies, like the ultraviolet region).\n\nClassical thermodynamics assumed that standing waves in a cavity could have any continuous energy value ($E_{avg} = kT$). This led to the prediction that the radiated intensity would approach infinity as the wavelength approached zero ($I \\propto 1/\\lambda^4$). This physically impossible result was resolved by Max Planck's quantum hypothesis, which restricted energy to discrete bundles ($E = nhf$)."
-  },
-  {
-    id: 9,
-    section: 'A',
-    marks: 3,
-    question: "Explain Bremsstrahlung for x-ray production.",
-    solution: "**Bremsstrahlung** (German for \"braking radiation\") is the electromagnetic radiation produced when a high-speed charged particle, such as an electron, is rapidly decelerated or deflected by the strong electric field of an atomic nucleus.\n\nAs the electron loses kinetic energy during this scattering process, the lost energy is emitted as an X-ray photon ($hf = K_{\\text{initial}} - K_{\\text{final}}$). Because the electrons can lose varying amounts of energy in these collisions, Bremsstrahlung produces a *continuous* X-ray spectrum, up to a sharp cutoff wavelength ($\\lambda_{\\min}$) corresponding to an electron losing 100% of its kinetic energy in a single encounter."
-  },
-  {
-    id: 10,
-    section: 'A',
-    marks: 3,
-    question: "Light of wavelength 304.2 nm illuminates a metal surface whose cutoff wavelength is 352.8 nm. What is the stopping potential?",
-    solution: "First, find the work function $\\phi$ using the cutoff wavelength $\\lambda_c = 352.8$ nm:\n$$\\phi = \\frac{hc}{\\lambda_c} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{352.8 \\text{ nm}} \\approx 3.515 \\text{ eV}$$\n\nNext, find the energy $E$ of the incident photons ($\\lambda = 304.2$ nm):\n$$E = \\frac{hc}{\\lambda} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{304.2 \\text{ nm}} \\approx 4.076 \\text{ eV}$$\n\nThe maximum kinetic energy of the photoelectrons is:\n$$K_{\\max} = E - \\phi = 4.076 \\text{ eV} - 3.515 \\text{ eV} = 0.561 \\text{ eV}$$\n\nSince $K_{\\max} = e V_s$, the stopping potential $V_s$ is simply the kinetic energy divided by the elementary charge $e$:\n$$V_s = 0.561 \\text{ V}$$"
-  },
-
-  // ---------------------------------------------------------
-  // SECTION B (6 Marks Each)
-  // ---------------------------------------------------------
-  {
-    id: 11,
-    section: 'B',
-    marks: 6,
-    question: "Obtain the relativistic velocity transformation equations.",
-    solution: "Start with the Lorentz transformation equations relating frame $S$ to frame $S'$ (where $S'$ moves at velocity $v$ along the $+x$ axis relative to $S$):\n$$x = \\gamma(x' + vt')$$\n$$y = y'$$\n$$z = z'$$- \n$$t = \\gamma\\left(t' + \\frac{vx'}{c^2}\\right)$$\n\nTake the differentials of these equations to represent small changes in position and time:\n$$dx = \\gamma(dx' + v dt')$$\n$$dy = dy'$$\n$$dz = dz'$$\n$$dt = \\gamma\\left(dt' + \\frac{v dx'}{c^2}\\right)$$\n\nThe velocity components in frame $S$ are defined as $u_x = \\frac{dx}{dt}$, $u_y = \\frac{dy}{dt}$, and $u_z = \\frac{dz}{dt}$.\n\n**For the x-component:**\nDivide $dx$ by $dt$:\n$$u_x = \\frac{\\gamma(dx' + v dt')}{\\gamma(dt' + \\frac{v dx'}{c^2})}$$\nThe $\\gamma$ factors cancel. Divide the numerator and denominator by $dt'$:\n$$u_x = \\frac{\\frac{dx'}{dt'} + v}{1 + \\frac{v}{c^2} \\frac{dx'}{dt'}}$$\nSince $u'_x = \\frac{dx'}{dt'}$ (the velocity in $S'$), we get:\n$$u_x = \\frac{u'_x + v}{1 + \\frac{u'_x v}{c^2}}$$\n\n**For the y-component:**\n$$u_y = \\frac{dy}{dt} = \\frac{dy'}{\\gamma(dt' + \\frac{v dx'}{c^2})}$$\nDivide numerator and denominator by $dt'$:\n$$u_y = \\frac{\\frac{dy'}{dt'}}{\\gamma\\left(1 + \\frac{v}{c^2} \\frac{dx'}{dt'}\\right)} = \\frac{u'_y}{\\gamma\\left(1 + \\frac{u'_x v}{c^2}\\right)}$$\n\n**For the z-component:**\nBy identical logic to the y-component:\n$$u_z = \\frac{u'_z}{\\gamma\\left(1 + \\frac{u'_x v}{c^2}\\right)}$$"
-  },
-  {
-    id: 12,
-    section: 'B',
-    marks: 6,
-    question: "The proper lifetime of a certain particle is 120.0 ns. (a) How long does it live in the laboratory if it moves at v = 0.950c? (b) How far does it travel in the laboratory during that time? (c) What is the distance traveled in the laboratory according to an observer moving with the particle?",
-    solution: "**(a) Lifetime in the laboratory:**\nThe proper time (measured in the particle's rest frame) is $\\Delta t_0 = 120.0$ ns. The particle moves at $v = 0.950c$.\nFirst, calculate the Lorentz factor $\\gamma$:\n$$\\gamma = \\frac{1}{\\sqrt{1 - v^2/c^2}} = \\frac{1}{\\sqrt{1 - 0.950^2}} = \\frac{1}{\\sqrt{1 - 0.9025}} = \\frac{1}{\\sqrt{0.0975}} \\approx 3.2026$$\nUsing the time dilation formula, the lifetime in the lab is:\n$$\\Delta t = \\gamma \\Delta t_0 = 3.2026 \\times 120.0 \\text{ ns} = 384.3 \\text{ ns}$$\n\n**(b) Distance traveled in the laboratory:**\nUsing the lab frame time $\\Delta t$ and the velocity $v$:\n$$d = v \\Delta t = (0.950 \\times 3 \\times 10^8 \\text{ m/s}) \\times (384.3 \\times 10^{-9} \\text{ s})$$\n$$d = (2.85 \\times 10^8) \\times (384.3 \\times 10^{-9}) \\approx 109.5 \\text{ m}$$\n\n**(c) Distance traveled according to an observer moving with the particle:**\nTo an observer moving *with* the particle, the particle is at rest, so it travels **0 m** relative to them.\n\n*(Note: If the question implies \"how long is the laboratory path as measured by the particle\", we use length contraction. The proper length of the path is $L_0 = 109.5$ m. The particle sees the lab moving, so the path is contracted: $L = L_0 / \\gamma = 109.5 / 3.2026 = 34.2$ m. This also matches $d' = v \\Delta t_0 = (2.85 \\times 10^8)(120 \\times 10^{-9}) = 34.2$ m).* Both interpretations yield consistent relativistic physics, but strictly speaking, the particle travels 0 distance relative to itself."
-  },
-  {
-    id: 13,
-    section: 'B',
-    marks: 6,
-    question: "Rocket A leaves a space station with a speed of 0.811c. Later, rocket B leaves in the same direction with a speed of 0.665c. What is the velocity of rocket A as observed from rocket B?",
-    solution: "Let the space station be the stationary frame $S$.\nLet Rocket B be the moving frame $S'$, which moves at velocity $v = +0.665c$ relative to $S$.\nRocket A moves at velocity $u_x = +0.811c$ relative to $S$.\n\nWe need to find the velocity of Rocket A relative to Rocket B, which is $u'_x$.\n\nWe use the inverse relativistic velocity transformation formula:\n$$u'_x = \\frac{u_x - v}{1 - \\frac{u_x v}{c^2}}$$\n\nSubstitute the known values:\n$$u'_x = \\frac{0.811c - 0.665c}{1 - (0.811)(0.665)}$$\n$$u'_x = \\frac{0.146c}{1 - 0.539315}$$\n$$u'_x = \\frac{0.146c}{0.460685} \\approx 0.317c$$\n\nThe velocity of Rocket A as observed from Rocket B is **0.317c** in the forward direction."
-  },
-  {
-    id: 14,
-    section: 'B',
-    marks: 6,
-    question: "Two events occur at locations separated by a distance of 49.5 m and by a time interval of 0.528 $\\mu$s, according to observer O. Observer O' is in motion away from O with a speed of 0.685c in the x direction. According to O', what are the spatial and time separations of the events?",
-    solution: "Let frame $S$ be Observer O, and frame $S'$ be Observer O'.\nIn frame $S$: $\\Delta x = 49.5$ m, $\\Delta t = 0.528 \\times 10^{-6}$ s.\nVelocity of $S'$ relative to $S$: $v = 0.685c = 0.685 \\times 3 \\times 10^8 = 2.055 \\times 10^8$ m/s.\n\nFirst, calculate the Lorentz factor $\\gamma$:\n$$\\gamma = \\frac{1}{\\sqrt{1 - 0.685^2}} = \\frac{1}{\\sqrt{1 - 0.4692}} = \\frac{1}{\\sqrt{0.5308}} \\approx 1.3726$$\n\n**Spatial Separation in O' ($\\Delta x'$):**\nUsing the Lorentz transformation for intervals:\n$$\\Delta x' = \\gamma(\\Delta x - v \\Delta t)$$\n$$\\Delta x' = 1.3726 \\times [49.5 - (2.055 \\times 10^8)(0.528 \\times 10^{-6})]$$\n$$\\Delta x' = 1.3726 \\times [49.5 - 108.5] = 1.3726 \\times (-59.0) \\approx -81.0 \\text{ m}$$\nThe spatial separation is **81.0 m**.\n\n**Time Separation in O' ($\\Delta t'$):**\n$$\\Delta t' = \\gamma\\left(\\Delta t - \\frac{v \\Delta x}{c^2}\\right)$$\n$$\\Delta t' = 1.3726 \\times \\left[0.528 \\times 10^{-6} - \\frac{(0.685c)(49.5)}{c^2}\\right]$$\n$$\\Delta t' = 1.3726 \\times \\left[0.528 \\times 10^{-6} - \\frac{(0.685)(49.5)}{3 \\times 10^8}\\right]$$\n$$\\Delta t' = 1.3726 \\times [0.528 \\times 10^{-6} - 0.113 \\times 10^{-6}]$$\n$$\\Delta t' = 1.3726 \\times [0.415 \\times 10^{-6}] \\approx 0.570 \\times 10^{-6} \\text{ s} = 0.570 \\ \\mu\\text{s}$$\nThe time separation is **0.570 $\\mu$s**."
-  },
-  {
-    id: 15,
-    section: 'B',
-    marks: 6,
-    question: "A single crystal of table salt (NaCl) is irradiated with a beam of X rays of wavelength 0.250 nm, and the first Bragg reflection is observed at an angle of 26.3°. What is the atomic spacing of NaCl?",
-    solution: "We use Bragg's Law for X-ray diffraction:\n$$2d \\sin\\theta = n\\lambda$$\n\nWhere:\n- $d$ is the atomic spacing (distance between crystal planes).\n- $\\theta = 26.3^\\circ$ is the glancing angle of incidence.\n- $n = 1$ (since it is the first Bragg reflection).\n- $\\lambda = 0.250$ nm is the wavelength of the X-rays.\n\nRearrange the formula to solve for $d$:\n$$d = \\frac{n\\lambda}{2 \\sin\\theta}$$\n\nSubstitute the given values:\n$$d = \\frac{(1)(0.250 \\text{ nm})}{2 \\sin(26.3^\\circ)}$$\n\nCalculate $\\sin(26.3^\\circ)$:\n$$\\sin(26.3^\\circ) \\approx 0.443$$\n\nCalculate $d$:\n$$d = \\frac{0.250}{2 \\times 0.443} = \\frac{0.250}{0.886} \\approx 0.282 \\text{ nm}$$\n\nThe atomic spacing of NaCl is **0.282 nm**."
-  },
-  {
-    id: 16,
-    section: 'B',
-    marks: 6,
-    question: "a) What are the energy and momentum of a photon of red light of wavelength 650 nm? (b) What is the wavelength of a photon of energy 2.40 eV?",
-    solution: "**Part (a): Energy and momentum of a 650 nm photon**\nUsing the convenient constant $hc = 1240 \\text{ eV}\\cdot\\text{nm}$:\nEnergy $E = \\frac{hc}{\\lambda} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{650 \\text{ nm}} \\approx 1.91 \\text{ eV}$.\n\nFor a photon, $E = pc$, so momentum $p = \\frac{E}{c} = 1.91 \\text{ eV}/c$.\n\n*(Alternatively, in SI units:)*\n$E = \\frac{hc}{\\lambda} = \\frac{(6.626 \\times 10^{-34} \\text{ J}\\cdot\\text{s})(3 \\times 10^8 \\text{ m/s})}{650 \\times 10^{-9} \\text{ m}} = 3.06 \\times 10^{-19} \\text{ J}$.\n$p = \\frac{h}{\\lambda} = \\frac{6.626 \\times 10^{-34}}{650 \\times 10^{-9}} = 1.02 \\times 10^{-27} \\text{ kg}\\cdot\\text{m/s}$.\n\n**Part (b): Wavelength of a 2.40 eV photon**\nRearrange the energy equation to solve for wavelength:\n$$\\lambda = \\frac{hc}{E}$$\n$$\\lambda = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{2.40 \\text{ eV}} \\approx 516.7 \\text{ nm}$$"
-  },
-  {
-    id: 17,
-    section: 'B',
-    marks: 6,
-    question: "The universe is filled with thermal radiation, which has a blackbody spectrum at an effective temperature of 2.7 K. What is the peak wavelength of this radiation? What is the energy (in eV) of quanta at the peak wavelength? In what region of the electromagnetic spectrum is this peak wavelength?",
-    solution: "**1. Peak Wavelength:**\nUse Wien's Displacement Law: $\\lambda_{\\max} T = 2.898 \\times 10^{-3} \\text{ m}\\cdot\\text{K}$.\n$$\\lambda_{\\max} = \\frac{2.898 \\times 10^{-3}}{T} = \\frac{2.898 \\times 10^{-3}}{2.7 \\text{ K}} \\approx 1.07 \\times 10^{-3} \\text{ m} = 1.07 \\text{ mm}$$\n\n**2. Energy of Quanta:**\nUse $E = \\frac{hc}{\\lambda}$ with $hc = 1240 \\text{ eV}\\cdot\\text{nm}$.\nConvert $\\lambda_{\\max}$ to nm: $1.07 \\times 10^{-3} \\text{ m} = 1.07 \\times 10^6 \\text{ nm}$.\n$$E = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{1.07 \\times 10^6 \\text{ nm}} \\approx 1.16 \\times 10^{-3} \\text{ eV}$$\n\n**3. Region of the Electromagnetic Spectrum:**\nA wavelength of $\\sim 1$ mm falls squarely in the **Microwave** region. (This is the famous Cosmic Microwave Background radiation)."
-  },
-  {
-    id: 18,
-    section: 'B',
-    marks: 6,
-    question: "The work function for tungsten metal is 4.52 eV. (a) What is the cutoff wavelength $\\lambda_c$ for tungsten? (b) What is the maximum kinetic energy of the electrons when radiation of wavelength 198 nm is used? (c) What is the stopping potential in this case?",
-    solution: "**(a) Cutoff Wavelength ($\\lambda_c$):**\nThe cutoff wavelength corresponds to a photon having exactly the energy of the work function ($\\phi = 4.52$ eV).\n$$\\lambda_c = \\frac{hc}{\\phi} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{4.52 \\text{ eV}} \\approx 274.3 \\text{ nm}$$\n\n**(b) Maximum Kinetic Energy ($K_{\\max}$):**\nFirst, find the energy of the incident 198 nm photons:\n$$E = \\frac{hc}{\\lambda} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{198 \\text{ nm}} \\approx 6.263 \\text{ eV}$$\nUsing Einstein's photoelectric equation:\n$$K_{\\max} = E - \\phi = 6.263 \\text{ eV} - 4.52 \\text{ eV} = 1.743 \\text{ eV}$$\n\n**(c) Stopping Potential ($V_s$):**\nThe stopping potential is the voltage required to stop the most energetic electrons. Since $K_{\\max} = e V_s$:\n$$V_s = \\frac{K_{\\max}}{e} = \\frac{1.743 \\text{ eV}}{e} = 1.743 \\text{ V}$$"
-  },
-
-  // ---------------------------------------------------------
-  // SECTION C (10 Marks Each)
-  // ---------------------------------------------------------
-  {
-    id: 19,
-    section: 'C',
-    marks: 10,
+    id: 6, moduleId: 'module-1-modern-physics', section: 'C', marks: 10,
     question: "Obtain the relation connecting the total energy rest energy and kinetic energy in relativity. Hence obtain the relativistic mass-energy relation.",
-    solution: "We derive the relativistic kinetic energy using the work-energy theorem. Kinetic energy $K$ is the work $W$ done by a net force $F$ to accelerate a particle from rest to velocity $v$:\n$$K = W = \\int_0^x F \\, dx$$\n\nUsing Newton's second law $F = \\frac{dp}{dt}$:\n$$K = \\int_0^x \\frac{dp}{dt} dx = \\int_0^v \\frac{dx}{dt} dp = \\int_0^v v \\, dp$$\n\nWe use integration by parts ($\\int v \\, dp = pv - \\int p \\, dv$) and substitute the relativistic momentum $p = \\gamma mv = \\frac{mv}{\\sqrt{1 - v^2/c^2}}$:\n$$K = \\frac{mv^2}{\\sqrt{1 - v^2/c^2}} - \\int_0^v \\frac{mv}{\\sqrt{1 - v^2/c^2}} dv$$\n\nTo evaluate the integral, let $u = 1 - v^2/c^2$, which means $du = -\\frac{2v}{c^2} dv$, or $v \\, dv = -\\frac{c^2}{2} du$. The integral becomes:\n$$\\int m \\left(-\\frac{c^2}{2}\\right) u^{-1/2} du = -mc^2 u^{1/2} = -mc^2 \\sqrt{1 - v^2/c^2}$$\n\nEvaluating this from $0$ to $v$:\n$$\\left[ -mc^2 \\sqrt{1 - v^2/c^2} \\right]_0^v = -mc^2 \\sqrt{1 - v^2/c^2} - (-mc^2(1)) = mc^2 - mc^2 \\sqrt{1 - v^2/c^2}$$\n\nSubstitute this back into the equation for $K$:\n$$K = \\frac{mv^2}{\\sqrt{1 - v^2/c^2}} + mc^2 \\sqrt{1 - v^2/c^2} - mc^2$$\n\nFind a common denominator for the first two terms:\n$$K = \\frac{mv^2 + mc^2(1 - v^2/c^2)}{\\sqrt{1 - v^2/c^2}} - mc^2$$\n$$K = \\frac{mv^2 + mc^2 - mv^2}{\\sqrt{1 - v^2/c^2}} - mc^2$$\n$$K = \\frac{mc^2}{\\sqrt{1 - v^2/c^2}} - mc^2$$\n\nThis can be written as:\n$$K = \\gamma mc^2 - mc^2$$\n\nWe define the **rest energy** of the particle as $E_0 = mc^2$, and the **total relativistic energy** as $E = \\gamma mc^2$. \nSubstituting these definitions into our kinetic energy equation yields the relation connecting them:\n$$K = E - E_0 \\implies E = K + E_0$$\n\nThe equation $E = \\gamma mc^2$ is the **relativistic mass-energy relation**. It demonstrates that mass and energy are fundamentally equivalent. Even when a particle is completely at rest ($K = 0$, $\\gamma = 1$), it possesses an enormous amount of inherent energy $E = mc^2$ simply by virtue of having mass."
+    solution: "Kinetic energy $K$ is the work $W$ done by a net force $F$ to accelerate a particle from rest to velocity $v$:\n$$K = \\int_0^v v \\, dp$$\nUsing integration by parts and $p = \\gamma mv = \\frac{mv}{\\sqrt{1 - v^2/c^2}}$:\n$$K = \\frac{mv^2}{\\sqrt{1 - v^2/c^2}} - \\int_0^v \\frac{mv}{\\sqrt{1 - v^2/c^2}} dv$$\n\nEvaluating the integral using substitution $u = 1 - v^2/c^2$ gives $-mc^2 \\sqrt{1 - v^2/c^2} \\Big|_0^v = mc^2 - mc^2 \\sqrt{1 - v^2/c^2}$.\n\nSubstitute this back:\n$$K = \\frac{mv^2}{\\sqrt{1 - v^2/c^2}} + mc^2 \\sqrt{1 - v^2/c^2} - mc^2$$\nFinding a common denominator yields:\n$$K = \\frac{mc^2}{\\sqrt{1 - v^2/c^2}} - mc^2$$\n\nThis can be written as $K = \\gamma mc^2 - mc^2$.\n\nWe define **rest energy** as $E_0 = mc^2$, and **total relativistic energy** as $E = \\gamma mc^2$.\nSubstituting these gives:\n$$K = E - E_0 \\implies E = K + E_0$$\n\nThe equation $E = \\gamma mc^2$ is the **relativistic mass-energy relation**, showing that mass and energy are equivalent."
+  },
+
+  // ---------------------------------------------------------
+  // MODULE 2: Particle-like Properties of EM Radiation
+  // ---------------------------------------------------------
+  {
+    id: 7, moduleId: 'module-2-particle-like-em', section: 'A', marks: 3,
+    question: "Explain Bragg's law for x-ray diffraction.",
+    solution: "Bragg's law describes the condition for constructive interference of X-rays scattered by the parallel planes of atoms within a crystal lattice. \n\nWhen X-rays hit crystal planes separated by distance $d$ at a glancing angle $\\theta$, the beam reflected from the second plane travels an extra distance of $2d \\sin\\theta$.\n\nFor constructive interference, this path difference must be an integer multiple of the X-ray wavelength $\\lambda$:\n$$2d \\sin\\theta = n\\lambda$$\n*(where $n = 1, 2, 3, \\dots$ is the order of diffraction).*"
   },
   {
-    id: 20,
-    section: 'C',
-    marks: 10,
-    question: "Explain the quantum theory of photoelectric effect. How does the quantum theory account for the inadequacies of the classical theory.",
-    solution: "**Inadequacies of Classical Wave Theory:**\nBefore 1905, light was modeled purely as a continuous electromagnetic wave. This classical model failed to explain three key experimental observations of the photoelectric effect:\n1. **Intensity vs. Kinetic Energy:** Classically, a brighter (more intense) light has a larger wave amplitude and should impart more kinetic energy to the electrons. Experimentally, the maximum kinetic energy ($K_{\\max}$) depends *only* on the light's frequency, not its intensity.\n2. **Threshold Frequency:** Classically, light of any frequency should eventually eject electrons if it is intense enough or shines long enough to accumulate energy. Experimentally, no electrons are emitted below a specific cutoff frequency ($f_c$), regardless of how bright the light is.\n3. **Time Delay:** Classically, a very dim light wave would take measurable time (seconds or minutes) to pool enough energy over an atom to eject an electron. Experimentally, emission is virtually instantaneous ($< 10^{-9}$ s), even at extremely low intensities.\n\n**Einstein's Quantum Theory (1905):**\nTo resolve this, Albert Einstein applied Max Planck's idea of quantization directly to light itself. He proposed that light is not a continuous wave, but rather a stream of discrete, localized bundles of energy called **photons** (or quanta).\n\n- The energy of a single photon is directly proportional to its frequency: $E = hf$ (where $h$ is Planck's constant).\n- In the photoelectric effect, a single photon interacts with a single electron. The photon transfers its *entire* energy to the electron instantaneously.\n- To escape the metal, the electron must pay a minimum energy \"toll\" called the work function ($\\phi$).\n\nThis leads to Einstein's Photoelectric Equation:\n$$K_{\\max} = hf - \\phi$$\n\n**How Quantum Theory Accounts for the Inadequacies:**\n1. **Kinetic Energy:** The equation $K_{\\max} = hf - \\phi$ shows that kinetic energy depends strictly on the frequency $f$ of the individual photon, not the total intensity. Increasing intensity just means *more* photons hit the metal, ejecting *more* electrons, but each electron still gets the same $hf$ energy.\n2. **Threshold Frequency:** If the photon's energy $hf$ is less than the work function $\\phi$, the electron cannot escape. This perfectly explains why there is a hard cutoff frequency ($f_c = \\phi/h$) below which no emission occurs.\n3. **No Time Delay:** Because the energy is delivered in a concentrated particle-like bundle (a photon) rather than spread out over a wave front, the collision is a 1-to-1 instantaneous event. No \"accumulation\" time is needed."
+    id: 8, moduleId: 'module-2-particle-like-em', section: 'A', marks: 3,
+    question: "What is meant by ultraviolet catastrophe?",
+    solution: "The **ultraviolet catastrophe** refers to the failure of classical physics (the Rayleigh-Jeans law) to predict the emission spectrum of a blackbody at short wavelengths (high frequencies, like the ultraviolet region).\n\nClassical theory assumed standing waves in a cavity could have any continuous energy, predicting that radiated intensity would approach infinity as the wavelength approached zero ($I \\propto 1/\\lambda^4$). This physically impossible result was resolved by Max Planck's quantum hypothesis."
   },
   {
-    id: 21,
-    section: 'C',
-    marks: 10,
+    id: 9, moduleId: 'module-2-particle-like-em', section: 'B', marks: 6,
+    question: "The work function for a particular potassium surface is 2.30 eV.\n(a) Calculate the threshold frequency and the cutoff wavelength for this metal.\n(b) If light of wavelength 350 nm is shone on the surface, what is the maximum kinetic energy of the ejected photoelectrons?\n(c) Determine the stopping potential required to reduce the photoelectric current to zero for the 350 nm light.",
+    solution: "**(a) Threshold Frequency and Cutoff Wavelength:**\nWork function $\\phi = 2.30 \\text{ eV}$.\nCutoff wavelength $\\lambda_c = \\frac{hc}{\\phi} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{2.30 \\text{ eV}} = 539.1 \\text{ nm}$.\nThreshold frequency $f_c = \\frac{c}{\\lambda_c} = \\frac{3 \\times 10^8}{539.1 \\times 10^{-9}} = 5.56 \\times 10^{14} \\text{ Hz}$.\n\n**(b) Maximum Kinetic Energy:**\nIncident photon energy $E = \\frac{hc}{\\lambda} = \\frac{1240 \\text{ eV}\\cdot\\text{nm}}{350 \\text{ nm}} = 3.54 \\text{ eV}$.\n$K_{\\max} = E - \\phi = 3.54 \\text{ eV} - 2.30 \\text{ eV} = 1.24 \\text{ eV}$.\n\n**(c) Stopping Potential:**\n$V_s = \\frac{K_{\\max}}{e} = 1.24 \\text{ V}$."
+  },
+  {
+    id: 10, moduleId: 'module-2-particle-like-em', section: 'B', marks: 6,
+    question: "A beam of X-rays of wavelength 0.0827 nm is used to study a crystal. The first-order Bragg reflection is detected at an angle of 15.5° relative to the crystal planes. Find the interplanar spacing of the crystal.",
+    solution: "Use Bragg's Law: $2d \\sin\\theta = n\\lambda$\n\nWhere:\n- $n = 1$ (first-order reflection)\n- $\\theta = 15.5^\\circ$\n- $\\lambda = 0.0827 \\text{ nm}$\n\nRearranging to solve for interplanar spacing $d$:\n$$d = \\frac{n\\lambda}{2 \\sin\\theta} = \\frac{(1)(0.0827 \\text{ nm})}{2 \\sin(15.5^\\circ)}$$\n$$d = \\frac{0.0827}{2 \\times 0.2672} = \\frac{0.0827}{0.5344} \\approx 0.155 \\text{ nm}$$"
+  },
+  {
+    id: 11, moduleId: 'module-2-particle-like-em', section: 'C', marks: 10,
     question: "What is meant by Compton effect? Derive the expression for the shift in the wavelength.",
-    solution: "**The Compton Effect:**\nThe Compton effect is the scattering of high-energy photons (like X-rays or gamma rays) by loosely bound electrons in a target material. When the photon scatters, it transfers some of its energy and momentum to the electron. As a result, the scattered photon has less energy, and therefore a **longer wavelength**, than the incident photon. This experiment provided definitive proof that light behaves as a particle (photon) carrying momentum $p = h/\\lambda$.\n\n**Derivation of the Wavelength Shift:**\nConsider an incident photon of energy $E = hc/\\lambda$ and momentum $p = h/\\lambda$ colliding with a stationary electron of rest mass $m_e$.\nAfter the collision, the photon scatters at an angle $\\theta$ with energy $E' = hc/\\lambda'$ and momentum $p' = h/\\lambda'$. The electron recoils at an angle $\\phi$ with momentum $p_e$ and total relativistic energy $E_e$.\n\n**1. Conservation of Momentum:**\nSince momentum is a vector, we conserve it in the x and y directions.\n- x-axis: $p = p' \\cos\\theta + p_e \\cos\\phi \\implies p_e \\cos\\phi = p - p' \\cos\\theta$\n- y-axis: $0 = p' \\sin\\theta - p_e \\sin\\phi \\implies p_e \\sin\\phi = p' \\sin\\theta$\n\nSquare both equations and add them to eliminate the electron's angle $\\phi$:\n$$p_e^2 (\\cos^2\\phi + \\sin^2\\phi) = (p - p' \\cos\\theta)^2 + (p' \\sin\\theta)^2$$\n$$p_e^2 = p^2 - 2pp' \\cos\\theta + p'^2 \\cos^2\\theta + p'^2 \\sin^2\\theta$$\n$$p_e^2 = p^2 + p'^2 - 2pp' \\cos\\theta \\quad \\text{--- (Equation 1)}$$\n\n**2. Conservation of Energy:**\nTotal initial energy = Total final energy\n$$E + m_e c^2 = E' + E_e \\implies E_e = E - E' + m_e c^2$$\n\nWe use the relativistic energy-momentum relation for the electron: $E_e^2 = (p_e c)^2 + (m_e c^2)^2$. Substitute $E_e$ into this:\n$$(E - E' + m_e c^2)^2 = p_e^2 c^2 + m_e^2 c^4$$\nExpand the left side:\n$$(E - E')^2 + 2(E - E')m_e c^2 + m_e^2 c^4 = p_e^2 c^2 + m_e^2 c^4$$\n$$E^2 - 2EE' + E'^2 + 2(E - E')m_e c^2 = p_e^2 c^2 \\quad \\text{--- (Equation 2)}$$\n\n**3. Combining the Equations:**\nSubstitute $p = E/c$ and $p' = E'/c$ into Equation 1, and multiply the whole equation by $c^2$:\n$$p_e^2 c^2 = E^2 + E'^2 - 2EE' \\cos\\theta \\quad \\text{--- (Equation 3)}$$\n\nNow equate Equation 2 and Equation 3 (since both equal $p_e^2 c^2$):\n$$E^2 - 2EE' + E'^2 + 2(E - E')m_e c^2 = E^2 + E'^2 - 2EE' \\cos\\theta$$\n\nCancel $E^2$ and $E'^2$ from both sides:\n$$-2EE' + 2(E - E')m_e c^2 = -2EE' \\cos\\theta$$\n\nDivide by 2 and rearrange:\n$$(E - E')m_e c^2 = EE' - EE' \\cos\\theta = EE'(1 - \\cos\\theta)$$\n\nDivide both sides by $E E' m_e c^2$:\n$$\\frac{E - E'}{EE'} = \\frac{1 - \\cos\\theta}{m_e c^2}$$\n$$\\frac{1}{E'} - \\frac{1}{E} = \\frac{1 - \\cos\\theta}{m_e c^2}$$\n\nFinally, substitute $E = hc/\\lambda$ and $E' = hc/\\lambda'$:\n$$\\frac{\\lambda'}{hc} - \\frac{\\lambda}{hc} = \\frac{1 - \\cos\\theta}{m_e c^2}$$\n$$\\lambda' - \\lambda = \\frac{h}{m_e c} (1 - \\cos\\theta)$$\n\nThis is the final expression for the Compton wavelength shift $\\Delta \\lambda$."
+    solution: "**The Compton Effect:**\nIt is the scattering of high-energy photons (X-rays) by loosely bound electrons. The scattered photon has less energy and a **longer wavelength** than the incident photon, proving light behaves as a particle carrying momentum $p = h/\\lambda$.\n\n**Derivation:**\nIncident photon: $E = hc/\\lambda$, $p = h/\\lambda$.\nScattered photon (angle $\\theta$): $E' = hc/\\lambda'$, $p' = h/\\lambda'$.\nElectron (recoil angle $\\phi$): momentum $p_e$.\n\n**1. Conservation of Momentum:**\n- x-axis: $p = p' \\cos\\theta + p_e \\cos\\phi \\implies p_e \\cos\\phi = p - p' \\cos\\theta$\n- y-axis: $0 = p' \\sin\\theta - p_e \\sin\\phi \\implies p_e \\sin\\phi = p' \\sin\\theta$\nSquare and add to eliminate $\\phi$:\n$$p_e^2 = p^2 + p'^2 - 2pp' \\cos\\theta \\quad \\text{--- (1)}$$\n\n**2. Conservation of Energy:**\n$$E + m_e c^2 = E' + E_e \\implies E_e = E - E' + m_e c^2$$\nSquare and use $E_e^2 = (p_e c)^2 + (m_e c^2)^2$:\n$$p_e^2 c^2 = E^2 + E'^2 - 2EE' + 2(E - E')m_e c^2 \\quad \\text{--- (2)}$$\n\n**3. Combining:**\nMultiply (1) by $c^2$ and equate to (2). Substituting $E=pc$ and $E'=p'c$:\n$$-2EE' \\cos\\theta = -2EE' + 2(E - E')m_e c^2$$\nDivide by $2EE'm_e c^2$:\n$$\\frac{E - E'}{EE'} = \\frac{1 - \\cos\\theta}{m_e c^2} \\implies \\frac{1}{E'} - \\frac{1}{E} = \\frac{1 - \\cos\\theta}{m_e c^2}$$\nSubstitute $E = hc/\\lambda$ and $E' = hc/\\lambda'$:\n$$\\lambda' - \\lambda = \\frac{h}{m_e c} (1 - \\cos\\theta)$$\nThis is the expression for the Compton wavelength shift."
+  },
+
+  // ---------------------------------------------------------
+  // MODULE 3: Wave-like Properties of Particles
+  // ---------------------------------------------------------
+  {
+    id: 12, moduleId: 'module-3-wave-like-particles', section: 'A', marks: 3,
+    question: "State de Broglie's Hypothesis.",
+    solution: "De Broglie hypothesized that any material particle moving with momentum $p$ has an associated **matter wave**. The wavelength $\\lambda$ of this wave is given by:\n$$\\lambda = \\frac{h}{p} = \\frac{h}{mv}$$\nWhere $h$ is Planck's constant. This implies that matter possesses a dual wave-particle nature, just like light."
+  },
+  {
+    id: 13, moduleId: 'module-3-wave-like-particles', section: 'A', marks: 3,
+    question: "What is a Wave Packet?",
+    solution: "A wave packet is a wave disturbance confined to a finite region of space ($\\Delta x$). It is constructed by superimposing (adding together) many continuous pure sine waves of slightly different wavelengths and frequencies. The wave packet acts as the quantum mechanical representation of a localized particle, moving at the group velocity."
+  },
+  {
+    id: 14, moduleId: 'module-3-wave-like-particles', section: 'B', marks: 6,
+    question: "Calculate the de Broglie wavelength of an electron accelerated through a potential difference of 54 V.",
+    solution: "The kinetic energy $K$ of the electron is $54 \\text{ eV}$.\nUsing the formula $\\lambda = \\frac{hc}{\\sqrt{2mc^2 K}}$:\nWe know $hc = 1240 \\text{ eV}\\cdot\\text{nm}$ and $mc^2 = 511,000 \\text{ eV}$ for an electron.\n$$\\lambda = \\frac{1240}{\\sqrt{2(511,000)(54)}} = \\frac{1240}{\\sqrt{55,188,000}}$$\n$$\\lambda = \\frac{1240}{7428} \\approx 0.167 \\text{ nm}$$\nThis precisely matches the wavelength observed in the Davisson-Germer diffraction experiment."
+  },
+  {
+    id: 15, moduleId: 'module-3-wave-like-particles', section: 'B', marks: 6,
+    question: "Explain the Davisson-Germer experiment and its significance.",
+    solution: "**The Experiment:** Davisson and Germer accelerated electrons through a known voltage and fired them at a single crystal of nickel. They measured the intensity of scattered electrons at various angles.\n\n**Observation:** They observed a sharp maximum in electron intensity at an angle of 50° for an accelerating voltage of 54 V.\n\n**Significance:** This sharp peak was the unmistakable signature of constructive interference (diffraction). It provided the first direct experimental proof of de Broglie's matter waves, validating the wave nature of electrons."
+  },
+  {
+    id: 16, moduleId: 'module-3-wave-like-particles', section: 'C', marks: 10,
+    question: "Derive the Heisenberg uncertainty principle for position and momentum from the properties of classical wave packets.",
+    solution: "To represent a localized particle, we construct a **wave packet** of length $\\Delta x$. If the packet contains $N$ cycles, $\\Delta x \\approx N\\lambda$.\n\nThe uncertainty in finding the start/end of the packet is a fraction $\\epsilon$ of a wavelength, so the wavelength uncertainty is $\\Delta \\lambda \\sim \\epsilon\\lambda / N$.\nMultiplying these gives: $\\Delta x \\Delta \\lambda \\sim \\epsilon \\lambda^2$.\n\nUsing wave number $k = 2\\pi/\\lambda$, the differential is $dk = -(2\\pi/\\lambda^2) d\\lambda$. Thus in magnitudes, $\\Delta k \\approx (2\\pi/\\lambda^2) \\Delta \\lambda$.\nSubstitute $\\Delta \\lambda \\approx (\\lambda^2/2\\pi) \\Delta k$:\n$$\\Delta x \\left( \\frac{\\lambda^2}{2\\pi} \\Delta k \\right) \\sim \\epsilon \\lambda^2 \\implies \\Delta x \\Delta k \\sim 2\\pi \\epsilon \\sim 1$$\n\nNow apply de Broglie's relation: $p = h/\\lambda = \\hbar k$.\nThe momentum uncertainty is $\\Delta p = \\hbar \\Delta k$.\nSubstitute $\\Delta k = \\Delta p / \\hbar$ into $\\Delta x \\Delta k \\sim 1$:\n$$\\Delta x \\frac{\\Delta p}{\\hbar} \\sim 1 \\implies \\Delta x \\Delta p \\ge \\frac{\\hbar}{2}$$\nThis is the Heisenberg uncertainty principle, arising intrinsically from wave mechanics."
+  },
+
+  // ---------------------------------------------------------
+  // MODULE 4: Rutherford-Bohr Model
+  // ---------------------------------------------------------
+  {
+    id: 17, moduleId: 'module-4-rutherford-bohr', section: 'A', marks: 3,
+    question: "What is the distance of closest approach?",
+    solution: "It is the minimum distance a charged projectile (like an alpha particle) reaches when fired head-on at an atomic nucleus. At this point, the particle's initial kinetic energy is entirely converted into electrostatic potential energy ($K = U$).\n$$d = \\frac{1}{4\\pi\\epsilon_0} \\frac{zZe^2}{K}$$\nIt provides an upper limit for the physical size of the nucleus."
+  },
+  {
+    id: 18, moduleId: 'module-4-rutherford-bohr', section: 'A', marks: 3,
+    question: "State Bohr's postulates for the hydrogen atom.",
+    solution: "**1. Stationary States:** The electron can exist in specific circular orbits without radiating energy. In these states, orbital angular momentum is quantized: $L = mvr = n\\hbar$.\n**2. Quantum Jumps:** The electron emits or absorbs a photon ONLY when jumping between these stationary states. The photon's energy equals the difference: $hf = |E_i - E_f|$."
+  },
+  {
+    id: 19, moduleId: 'module-4-rutherford-bohr', section: 'B', marks: 6,
+    question: "Find the distance of closest approach of an 8.0-MeV alpha particle incident on a gold foil.",
+    solution: "Formula: $d = \\frac{1}{4\\pi\\epsilon_0} \\frac{zZe^2}{K}$\nConstants: Alpha particle $z = 2$, Gold $Z = 79$, $K = 8.0 \\text{ MeV}$.\nCoulomb constant $\\frac{e^2}{4\\pi\\epsilon_0} = 1.44 \\text{ MeV}\\cdot\\text{fm}$.\n\nSubstitute the values:\n$$d = \\frac{(2)(79)}{8.0 \\text{ MeV}} \\times 1.44 \\text{ MeV}\\cdot\\text{fm}$$\n$$d = \\frac{158}{8.0} \\times 1.44 = 19.75 \\times 1.44 = 28.44 \\text{ fm}$$\n\nThe distance of closest approach is **28.44 fm**."
+  },
+  {
+    id: 20, moduleId: 'module-4-rutherford-bohr', section: 'B', marks: 6,
+    question: "Calculate the longest wavelength of the Balmer series of hydrogen.",
+    solution: "The Rydberg formula is $\\frac{1}{\\lambda} = R_\\infty \\left( \\frac{1}{n_f^2} - \\frac{1}{n_i^2} \\right)$.\nFor the Balmer series, $n_f = 2$.\nThe longest wavelength corresponds to the smallest energy jump, which is from $n_i = 3$.\n\n$$\\frac{1}{\\lambda} = R_\\infty \\left( \\frac{1}{2^2} - \\frac{1}{3^2} \\right) = R_\\infty \\left( \\frac{1}{4} - \\frac{1}{9} \\right) = R_\\infty \\left( \\frac{5}{36} \\right)$$\n\n$$\\lambda = \\frac{36}{5 R_\\infty} = \\frac{36}{5(1.097 \\times 10^7 \\text{ m}^{-1})} \\approx 656.1 \\text{ nm}$$\nThis is the red H-alpha line."
+  },
+  {
+    id: 21, moduleId: 'module-4-rutherford-bohr', section: 'C', marks: 10,
+    question: "Discuss Rutherford's alpha scattering experiment and explain how it led to the nuclear model of the atom.",
+    solution: "**The Experiment:** Geiger and Marsden, under Rutherford, bombarded a thin gold foil with high-energy alpha particles and measured the scattering angles.\n\n**Classical Expectation:** According to the Thomson 'plum pudding' model, the positive charge and mass were spread uniformly across the atom. An alpha particle should easily plow through with only tiny deflections ($\\sim 1^\\circ$).\n\n**Observation:** While most particles passed straight through, about 1 in 10,000 were deflected at massive angles, some even bouncing straight backward ($>90^\\circ$).\n\n**Conclusion (The Nuclear Model):**\nRutherford concluded the Thomson model was impossible. The only way a heavy, fast alpha particle could bounce backward is if it hit something extremely dense and highly charged. He proposed:\n1. All positive charge and almost all mass is concentrated in a tiny central **nucleus** ($\\sim 10^{-14}$ m).\n2. Electrons orbit at a vast distance ($\\sim 10^{-10}$ m), leaving the atom mostly empty space.\nThis perfectly explained why most particles passed unhindered, while a few experienced extreme Coulomb repulsion."
   }
 ];

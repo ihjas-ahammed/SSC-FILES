@@ -64,8 +64,8 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
   return (
     <div 
       ref={containerRef} 
-      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none ${className || ''}`}
-      style={{ overflowWrap: 'break-word' }}
+      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none overflow-auto ${className || ''}`}
+      style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}
     />
   );
 };

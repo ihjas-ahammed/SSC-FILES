@@ -2,1165 +2,553 @@
 
 
 ```bash
-# No new packages or path changes are required.
+# No new packages are required for these changes.
 ```
 
---- START OF FILE src/data/mech_units/unit_4_6_1_pendulum_dynamics.ts ---
-import { Unit } from '../../types';
+--- START OF FILE src/App.tsx ---
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserProgress } from './types';
+import Dashboard from './pages/Dashboard';
+import LessonPage from './pages/LessonPage';
+import ModuleSummaryPage from './pages/ModuleSummaryPage';
+import ExamQuestionsPage from './pages/ExamQuestionsPage';
+import ModuleNotesPage from './pages/ModuleNotesPage';
+import MainLayout from './components/MainLayout';
+import { useAnalytics } from './hooks/useAnalytics';
+import './App.css';
+import './styles/interactive.css';
+import './styles/path.css';
+import './styles/progress.css';
+import './styles/exam.css';
 
-export const UNIT_4_6_1_PENDULUM_DYNAMICS: Unit = {
-  id: "unit-4-6-1",
-  title: "461 (Pendulum Dynamics)",
-  description: "Setting up the Foucault Pendulum",
-  color: "duo-blue",
-  lessons:[
-    {
-      id: "les-4-6-1-1",
-      title: "History and Behavior",
-      description: "Visualizing Earth's rotation",
-      icon: "Clock",
-      slides:[
-        {
-          id: "wu1",
-          type: "quiz",
-          title: "Conceptual Warm-up",
-          content: "If you were to swing a pendulum exactly at the North Pole, and wait 24 hours, what would you observe?",
-          options:[
-            { id: "A", text: "The pendulum's swing plane would rotate exactly once.", isCorrect: true, explanation: "The Earth rotates entirely underneath the pendulum, so relative to the ground, the pendulum's plane appears to rotate 360 degrees in one day." },
-            { id: "B", text: "The pendulum would swing in the exact same plane.", isCorrect: false }
-          ]
-        },
-        {
-          id: "wu2",
-          type: "quiz",
-          title: "Conceptual Warm-up 2",
-          content: "What if you set up the same pendulum exactly at the Equator?",
-          options:[
-            { id: "A", text: "It would rotate once per day.", isCorrect: false },
-            { id: "B", text: "It would not rotate at all.", isCorrect: true, explanation: "At the equator, the axis of the Earth's rotation is perpendicular to the local vertical, so there is no rotation of the ground *around* the vertical axis." }
-          ]
-        },
-        {
-          id: "theory",
-          type: "theory",
-          title: "The Foucault Pendulum",
-          content: "In 1851, the French physicist L\u00e9on Foucault suspended a massive pendulum inside the Pantheon in Paris. Large crowds gathered to watch it, as it provided direct, visible proof that the Earth was rotating.\n\nThe plane of motion of a long pendulum slowly precesses over time. At the North Pole it precesses one revolution per day, and at the equator it does not precess. We want to analyze the motion at an arbitrary latitude."
-        },
-        {
-          id: "mcq",
-          type: "quiz",
-          title: "Knowledge Check",
-          content: "Which fictitious force is primarily responsible for the precession of the Foucault pendulum?",
-          options:[
-            { id: "A", text: "The Centrifugal Force", isCorrect: false, explanation: "Centrifugal force pushes the bob slightly outward, but doesn't deflect moving objects sideways." },
-            { id: "B", text: "The Coriolis Force", isCorrect: true, explanation: "As the pendulum swings, its velocity interacts with the Earth's rotation, creating a sideways Coriolis force that slowly rotates its plane." }
-          ]
-        },
-        {
-          id: "fib",
-          type: "fill_in_blank",
-          title: "Key Takeaway",
-          content: "The slow rotation of the swing plane of a Foucault pendulum is called ___.",
-          blankAnswer: "precession"
-        }
-      ]
-    },
-    {
-      id: "les-4-6-1-2",
-      title: "Coordinate Frame",
-      description: "Figure 15.7 Analysis",
-      icon: "Map",
-      slides:[
-        {
-          id: "wu1",
-          type: "quiz",
-          title: "Conceptual Warm-up",
-          content: "To describe the position of the pendulum bob swinging back and forth over the ground, how many coordinate axes do we need for the horizontal plane?",
-          options:[
-            { id: "A", text: "One", isCorrect: false },
-            { id: "B", text: "Two", isCorrect: true, explanation: "We need x and y to describe a 2D plane over the ground." }
-          ]
-        },
-        {
-          id: "theory",
-          type: "theory",
-          title: "The Local Axes",
-          content: "Consider a long pendulum at an arbitrary latitude. Let the z-axis be oriented along the local vertical (Up).\n\nThe projection of the path of the pendulum onto the xy-plane makes an angle $\\psi$ with the x-axis. The precession of the pendulum causes $\\psi$ to change as a function of time."
-        },
-        {
-          id: "canvas",
-          type: "interactive_canvas",
-          title: "Figure 15.7: Pendulum Setup",
-          content: "The path of the pendulum bob is projected onto the horizontal xy-plane.",
-          interactiveCanvasId: "foucault-pendulum-frame"
-        },
-        {
-          id: "target",
-          type: "theory",
-          title: "The Goal",
-          content: "The basic problem consists in demonstrating that the rate of change of the angle $\\psi$ is:\n$$ \\frac{d\\psi}{dt} = \\Omega \\cos \\lambda $$\n\nWhere $\\Omega$ is the Earth's angular velocity and $\\lambda$ is the colatitude."
-        }
-      ]
-    },
-    {
-      id: "les-4-6-1-3",
-      title: "Equations of Motion",
-      description: "Deriving the coupled ODEs",
-      icon: "FunctionSquare",
-      slides:[
-        {
-          id: "theory",
-          type: "theory",
-          title: "Forces on the Bob",
-          content: "The pendulum bob is acted upon by two real forces: the tension in the string $\\mathbf{T}$ and gravity $m\\mathbf{g}$.\n\nIt is also acted upon by two fictitious forces: the Coriolis force ($-2m\\mathbf{\\Omega} \\times \\mathbf{v}$) and the centrifugal force. We assume the centrifugal force is absorbed into effective gravity $m\\mathbf{g}_e$ (which we just write as $m\\mathbf{g}$). Therefore:\n$$ m\\mathbf{a} = \\mathbf{T} + m\\mathbf{g} - 2m(\\mathbf{\\Omega} \\times \\mathbf{v}) $$"
-        },
-        {
-          id: "proof1",
-          type: "proof",
-          title: "Component Form (Eq 15.8 - 15.10)",
-          content: "Expanding this into components is tedious but straightforward.",
-          proofSteps:[
-            "Let string length be $l$. The bob is displaced by angle $\\theta$ from vertical.",
-            "Tension components: $T_z = T\\cos\\theta$, horizontal $T_{xy} = -T\\sin\\theta$.",
-            "Projecting $T_{xy}$ onto axes: $T_x = -T\\sin\\theta \\cos\\psi$, $T_y = -T\\sin\\theta \\sin\\psi$.",
-            "Coriolis components were found earlier: $a_{cx} = 2\\Omega(v_y \\cos\\lambda - v_z \\sin\\lambda)$, $a_{cy} = -2\\Omega v_x \\cos\\lambda$, $a_{cz} = 2\\Omega v_x \\sin\\lambda$.",
-            "x-equation: $ma_x = -T\\sin\\theta\\cos\\psi + 2m\\Omega(v_y\\cos\\lambda - v_z\\sin\\lambda)$.",
-            "y-equation: $ma_y = -T\\sin\\theta\\sin\\psi - 2m\\Omega v_x\\cos\\lambda$."
-          ]
-        },
-        {
-          id: "proof2",
-          type: "proof",
-          title: "Simplifying the Equations",
-          content: "We make approximations for a very long pendulum.",
-          proofSteps:[
-            "Since the pendulum is very long, $\\theta$ is small, so $T_z = T\\cos\\theta \\approx T \\approx mg$.",
-            "Also, vertical velocity $v_z$ is much smaller than horizontal velocity, so we ignore terms with $v_z$.",
-            "From geometry: $x = l\\sin\\theta\\cos\\psi$ and $y = l\\sin\\theta\\sin\\psi$.",
-            "Substitute $T \\approx mg$: $-T\\sin\\theta\\cos\\psi \\approx -mg(x/l) = -(\\frac{mg}{l})x$.",
-            "Let $\\omega^2 = g/l$ (the natural pendulum frequency) and $K = \\Omega\\cos\\lambda$.",
-            "Resulting coupled ODEs: $\\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0$ and $\\ddot{y} + 2K\\dot{x} + \\omega^2 y = 0$."
-          ]
-        },
-        {
-          id: "mcq",
-          type: "quiz",
-          title: "Analyzing the ODEs",
-          content: "What causes the x and y equations to be coupled (meaning the x equation contains y terms)?",
-          options:[
-            { id: "A", text: "The restoring force of gravity.", isCorrect: false },
-            { id: "B", text: "The Coriolis terms $2K\\dot{y}$ and $2K\\dot{x}$.", isCorrect: true, explanation: "These terms mix the horizontal velocities, causing the pendulum to constantly curve away from a straight line." }
-          ]
-        }
-      ]
+// Component to handle analytics on route change
+const AnalyticsTracker = () => {
+  useAnalytics();
+  return null;
+};
+
+const App: React.FC = () => {
+  const[progress, setProgress] = useState<UserProgress>(() => {
+    const saved = localStorage.getItem('duofy_electronics_progress');
+    let initialProgress: UserProgress = {
+      completedLessons:[],
+      xp: 0,
+      currentModuleId: 'module-1-mechanics',
+    };
+
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        initialProgress = {
+          completedLessons: parsed.completedLessons ||[],
+          xp: parsed.xp || 0,
+          currentModuleId: parsed.currentModuleId || 'module-1-mechanics',
+        };
+      } catch (e) {
+        console.error('Failed to parse progress', e);
+      }
     }
-  ]
+    return initialProgress;
+  });
+
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem('duofy_electronics_progress', JSON.stringify(progress));
+  }, [progress]);
+
+  useEffect(() => {
+    setCurrentSectionIndex(0);
+  }, [progress.currentModuleId]);
+
+  const handleModuleChange = (moduleId: string) => {
+    setProgress(prev => ({ ...prev, currentModuleId: moduleId }));
+    setCurrentSectionIndex(0);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+      <BrowserRouter>
+        <AnalyticsTracker />
+        <Routes>
+          {/* Main layout containing the bottom navigation tabs */}
+          <Route element={<MainLayout />}>
+            <Route
+              path="/"
+              element={
+                <Dashboard
+                  progress={progress}
+                  setProgress={setProgress}
+                  currentSectionIndex={currentSectionIndex}
+                  setCurrentSectionIndex={setCurrentSectionIndex}
+                />
+              }
+            />
+            <Route 
+              path="/exam" 
+              element={
+                <ExamQuestionsPage 
+                  progress={progress} 
+                  onModuleChange={handleModuleChange} 
+                />
+              } 
+            />
+            <Route
+              path="/notes"
+              element={
+                <ModuleNotesPage
+                  progress={progress}
+                  onModuleChange={handleModuleChange}
+                />
+              }
+            />
+          </Route>
+
+          {/* Full screen routes (no bottom nav) */}
+          <Route
+            path="/lesson/:moduleId/:unitId/:lessonId"
+            element={<LessonPage progress={progress} setProgress={setProgress} />}
+          />
+          <Route path="/summary/:moduleId" element={<ModuleSummaryPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 };
---- END OF FILE src/data/mech_units/unit_4_6_1_pendulum_dynamics.ts ---
 
---- START OF FILE src/data/mech_units/unit_4_6_2_the_solution.ts ---
-import { Unit } from '../../types';
+export default App;
+--- END OF FILE src/App.tsx ---
 
-export const UNIT_4_6_2_THE_SOLUTION: Unit = {
-  id: "unit-4-6-2",
-  title: "462 (The Solution)",
-  description: "Solving the Foucault Precession",
-  color: "duo-orange",
-  lessons:[
-    {
-      id: "les-4-6-2-1",
-      title: "The Complex Variable Trick",
-      description: "Combining two equations into one",
-      icon: "Layers",
-      slides:[
-        {
-          id: "wu1",
-          type: "quiz",
-          title: "Conceptual Warm-up",
-          content: "We have two coupled equations: $\\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0$ and $\\ddot{y} + 2K\\dot{x} + \\omega^2 y = 0$. How can we solve them?",
-          options:[
-            { id: "A", text: "Combine them into a single equation using complex numbers.", isCorrect: true, explanation: "By defining $\\zeta = x + iy$, we can merge them into one elegantly solvable ODE." },
-            { id: "B", text: "Ignore the y equation entirely.", isCorrect: false }
-          ]
-        },
-        {
-          id: "proof",
-          type: "proof",
-          title: "Creating the Complex ODE",
-          content: "Let $\\zeta = x + iy$.",
-          proofSteps:[
-            "Take the y-equation and multiply by $i$: $i\\ddot{y} + 2iK\\dot{x} + i\\omega^2 y = 0$.",
-            "Add it to the x-equation: $(\\ddot{x} + i\\ddot{y}) + 2K(i\\dot{x} - \\dot{y}) + \\omega^2(x + iy) = 0$.",
-            "Note that $i\\dot{x} - \\dot{y} = i(\\dot{x} + i\\dot{y}) = i\\dot{\\zeta}$.",
-            "Substitute $\\zeta$: $\\ddot{\\zeta} + 2iK\\dot{\\zeta} + \\omega^2\\zeta = 0$."
-          ]
-        },
-        {
-          id: "theory",
-          type: "theory",
-          title: "The New Equation",
-          content: "We now have a single, uncoupled differential equation:\n$$ \\ddot{\\zeta} + 2iK\\dot{\\zeta} + \\omega^2\\zeta = 0 $$\n\nThis looks exactly like the damped harmonic oscillator equation, but with an imaginary damping coefficient!"
-        }
-      ]
-    },
-    {
-      id: "les-4-6-2-2",
-      title: "Solving the Complex ODE",
-      description: "Finding the roots",
-      icon: "FunctionSquare",
-      slides:[
-        {
-          id: "proof",
-          type: "proof",
-          title: "Auxiliary Equation",
-          content: "We guess a solution of the form $\\zeta = e^{pt}$.",
-          proofSteps:[
-            "Substitute into ODE: $p^2 e^{pt} + 2iK p e^{pt} + \\omega^2 e^{pt} = 0$.",
-            "Divide by $e^{pt}$: $p^2 + 2iK p + \\omega^2 = 0$.",
-            "Use quadratic formula: $p = \\frac{-2iK \\pm \\sqrt{-4K^2 - 4\\omega^2}}{2}$.",
-            "Simplify: $p = -iK \\pm i\\sqrt{K^2 + \\omega^2}$."
-          ]
-        },
-        {
-          id: "theory",
-          type: "theory",
-          title: "Approximating the Roots",
-          content: "Recall that $K = \\Omega \\cos\\lambda$. $\\Omega$ is the rotation rate of the Earth ($\\approx 7.29 \\times 10^{-5}$ rad/s).\n$\\omega$ is the pendulum frequency $\\sqrt{g/l}$ (e.g. $\\approx 1$ rad/s).\n\nSince $K \\ll \\omega$, we can ignore $K^2$ under the square root compared to $\\omega^2$.\nThus, $\\sqrt{K^2 + \\omega^2} \\approx \\omega$."
-        },
-        {
-          id: "proof2",
-          type: "proof",
-          title: "The Final Roots",
-          content: "Using the approximation.",
-          proofSteps:[
-            "The roots become: $p \\approx -iK \\pm i\\omega$.",
-            "The general solution is a sum of these two roots: $\\zeta = A e^{-i(K+\\omega)t} + B e^{-i(K-\\omega)t}$.",
-            "Factor out the common term: $\\zeta = e^{-iKt} (A e^{-i\\omega t} + B e^{i\\omega t})$."
-          ]
-        }
-      ]
-    },
-    {
-      id: "les-4-6-2-3",
-      title: "The Precession Rate",
-      description: "Interpreting the solution",
-      icon: "RefreshCcw",
-      slides:[
-        {
-          id: "theory",
-          type: "theory",
-          title: "Interpreting the Math",
-          content: "The solution is $\\zeta = e^{-iKt}[A e^{-i\\omega t} + B e^{i\\omega t}]$.\n\n*   The bracketed term $[A e^{-i\\omega t} + B e^{i\\omega t}]$ represents a standard, fast 1D oscillation with frequency $\\omega$ (the regular back-and-forth swing).\n*   The outer term $e^{-iKt}$ is a complex rotation operator. It slowly rotates the entire inner solution in the complex plane at angular velocity $K$."
-        },
-        {
-          id: "mcq",
-          type: "quiz",
-          title: "The Rate",
-          content: "What is the physical meaning of $K$ in this context?",
-          options:[
-            { id: "A", text: "The frequency of the pendulum's back-and-forth swing.", isCorrect: false },
-            { id: "B", text: "The rate at which the plane of the swing rotates (precesses).", isCorrect: true, explanation: "Since $K = \\Omega \\cos\\lambda$, this proves the precession rate formula!" }
-          ]
-        },
-        {
-          id: "fib",
-          type: "fill_in_blank",
-          title: "Key Takeaway",
-          content: "The plane of the Foucault pendulum precesses at a rate of $\\Omega$ multiplied by the ___ of the colatitude.",
-          blankAnswer: "cosine"
-        }
-      ]
-    },
-    {
-      id: "les-4-6-2-4",
-      title: "Visualizing the Amplitudes",
-      description: "Figure 15.8",
-      icon: "BarChart",
-      slides:[
-        {
-          id: "theory",
-          type: "theory",
-          title: "X and Y Components",
-          content: "If we split $\\zeta$ back into its real ($x$) and imaginary ($y$) parts, we get expressions that look like:\n$x(t) = [\\text{Amplitude}(t)] \\cos \\omega t$\n$y(t) = -[\\text{Amplitude}(t)] \\cos \\omega t$\n\nWhere the Amplitudes themselves slowly vary as $\\cos(Kt)$ and $\\sin(Kt)$."
-        },
-        {
-          id: "canvas",
-          type: "interactive_canvas",
-          title: "Figure 15.8: Amplitude Modulation",
-          content: "The rapid swing $\\omega$ is enveloped by the slow rotation $K$. As x's amplitude dies down, y's amplitude grows.",
-          interactiveCanvasId: "foucault-amplitude-plots"
-        }
-      ]
-    },
-    {
-      id: "les-4-6-2-5",
-      title: "Worked Example 15.4",
-      description: "Determining Constants",
-      icon: "Target",
-      slides:[
-        {
-          id: "q",
-          type: "example_q",
-          title: "Worked Example 15.4",
-          content: "At time $t=0$, the Foucault pendulum is released from rest at position $x=\\mathcal{A}, y=0$.\n\nObtain explicit real expressions for $x(t)$ and $y(t)$."
-        },
-        {
-          id: "sol",
-          type: "solution",
-          title: "Solving the Constants",
-          content: "Use the general solution $\\zeta = e^{-iKt} (A e^{-i\\omega t} + B e^{i\\omega t})$.",
-          interactiveSteps:[
-            {
-              prompt: "To satisfy the initial conditions easily, let's pick complex constants $A = \\frac{1}{2} C e^{-i\\theta}$ and $B = \\frac{1}{2} C e^{i\\theta}$. What does the bracketed term become using Euler's formula?",
-              options:[
-                { id: "A", text: "$C \\cos(\\omega t + \\theta)$", isCorrect: true, explanation: "Yes, $\\frac{1}{2}C(e^{-i(\\omega t + \\theta)} + e^{i(\\omega t + \\theta)}) = C \\cos(\\omega t + \\theta)$." }
-              ]
-            },
-            {
-              prompt: "So $\\zeta = e^{-iKt} C \\cos(\\omega t + \\theta)$. Expanding $e^{-iKt} = \\cos Kt - i\\sin Kt$, what are $x(t)$ (real part) and $y(t)$ (imaginary part)?",
-              options:[
-                { id: "A", text: "$x = C \\cos Kt \\cos(\\omega t + \\theta)$ and $y = -C \\sin Kt \\cos(\\omega t + \\theta)$", isCorrect: true, explanation: "Correct." }
-              ]
-            },
-            {
-              prompt: "Apply $t=0$: $x(0) = C \\cos(0) \\cos(\\theta) = C \\cos\\theta = \\mathcal{A}$. And $y(0) = 0$. For velocity to be zero, $\\theta=0$. What is $C$?",
-              options:[
-                { id: "A", text: "$C = \\mathcal{A}$", isCorrect: true, explanation: "Correct. The final solutions are $x(t) = \\mathcal{A} \\cos Kt \\cos \\omega t$ and $y(t) = -\\mathcal{A} \\sin Kt \\cos \\omega t$." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: "les-4-6-2-6",
-      title: "Worked Example 15.5",
-      description: "The Starred Coordinate System",
-      icon: "Activity",
-      slides:[
-        {
-          id: "q",
-          type: "example_q",
-          title: "Worked Example 15.5",
-          content: "Solve for the precession rate by considering the problem in a rotating reference frame in which the pendulum does **not** precess."
-        },
-        {
-          id: "canvas",
-          type: "interactive_canvas",
-          title: "Figure 15.9: The Starred Frame",
-          content: "The starred frame rotates at angular velocity K relative to the Earth frame.",
-          interactiveCanvasId: "foucault-starred-system"
-        },
-        {
-          id: "sol",
-          type: "solution",
-          title: "Solution Steps",
-          content: "Transform the coordinates.",
-          interactiveSteps:[
-            {
-              prompt: "If the bob swings purely along the x* axis with displacement $s$, then $x^* = s$ and $y^* = 0$. If the starred frame rotates at $K$, what are the x and y coordinates in the Earth frame?",
-              options:[
-                { id: "A", text: "$x = s \\cos Kt$ and $y = -s \\sin Kt$", isCorrect: true, explanation: "The negative sign is because the Earth frame sees the pendulum plane rotating clockwise (negative direction)." }
-              ]
-            },
-            {
-              prompt: "If you plug these into the sum of the equations of motion $\\ddot{x} + \\ddot{y} + 2K(\\dot{x}-\\dot{y}) + \\omega^2(x+y) = 0$, what equation do you get for $s$ after assuming $K \\ll \\omega$?",
-              options:[
-                { id: "A", text: "$\\ddot{s} + \\omega^2 s = 0$", isCorrect: true, explanation: "This proves that in the precessing frame, the pendulum simply executes perfect 1D simple harmonic motion!" }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/mech_units/unit_4_6_2_the_solution.ts ---
+--- START OF FILE src/data/exam_questions.ts ---
+export interface ExamQuestion {
+  id: number;
+  moduleId: string;
+  section: 'A' | 'B' | 'C';
+  marks: number;
+  question: string;
+  solution: string;
+}
 
---- START OF FILE src/data/mech_units/unit_4_6_3_final_practice.ts ---
-import { Unit } from '../../types';
+export const EXAM_QUESTIONS: ExamQuestion[] =[
+  // ================= MODULE 1: CENTRAL FORCE MOTION =================
+  {
+    id: 1,
+    moduleId: 'module-1-mechanics',
+    section: 'A',
+    marks: 3,
+    question: "A particle acted upon by a central force will move in a plane. Why?",
+    solution: "For a central force, the force vector $\\mathbf{F}$ is always parallel to the position vector $\\mathbf{r}$.\n\nTorque is given by $\\boldsymbol{\\tau} = \\mathbf{r} \\times \\mathbf{F}$. Since $\\mathbf{r} \\parallel \\mathbf{F}$, the cross product is zero: $\\boldsymbol{\\tau} = 0$.\n\nBecause torque is the rate of change of angular momentum ($\\boldsymbol{\\tau} = d\\mathbf{L}/dt$), $\\mathbf{L}$ must be a constant vector. \n\nBy definition, $\\mathbf{L} = \\mathbf{r} \\times m\\mathbf{v}$, which means $\\mathbf{r}$ is always perpendicular to $\\mathbf{L}$. Since $\\mathbf{L}$ is fixed in space, the position vector $\\mathbf{r}$ is locked into a 2D plane perpendicular to $\\mathbf{L}$."
+  },
+  {
+    id: 2,
+    moduleId: 'module-1-mechanics',
+    section: 'A',
+    marks: 3,
+    question: "Determine the semimajor axis of Saturn in AU, given its period is 29.5 Earth years.",
+    solution: "By Kepler's Third Law, when comparing objects orbiting the Sun and measuring $T$ in Earth years and $a$ in Astronomical Units (AU):\n$$ T^2 = a^3 $$\nGiven $T = 29.5$ years:\n$$ a^3 = (29.5)^2 = 870.25 $$\n$$ a = \\sqrt[3]{870.25} \\approx 9.55 \\text{ AU} $$"
+  },
+  {
+    id: 3,
+    moduleId: 'module-1-mechanics',
+    section: 'A',
+    marks: 3,
+    question: "Show that the total energy of a planet can be written as the sum of radial kinetic energy and effective potential energy.",
+    solution: "Total energy $E = T + V$.\nIn polar coordinates, kinetic energy is $T = \\frac{1}{2}m(\\dot{r}^2 + r^2\\dot{\\theta}^2)$.\n\nSubstitute angular momentum $l = mr^2\\dot{\\theta} \\implies \\dot{\\theta} = \\frac{l}{mr^2}$ into the tangential kinetic energy term:\n$$ \\frac{1}{2}mr^2\\left(\\frac{l}{mr^2}\\right)^2 = \\frac{l^2}{2mr^2} $$\n\nTotal Energy becomes:\n$$ E = \\frac{1}{2}m\\dot{r}^2 + \\left( \\frac{l^2}{2mr^2} + V(r) \\right) $$\nThe term $\\frac{1}{2}m\\dot{r}^2$ is the **radial kinetic energy**. The remaining term $V_{eff}(r) = \\frac{l^2}{2mr^2} + V(r)$ depends only on $r$ and acts as the **Effective Potential Energy**."
+  },
+  {
+    id: 4,
+    moduleId: 'module-1-mechanics',
+    section: 'B',
+    marks: 6,
+    question: "Obtain the equation of motion for the radial co-ordinate of a planet moving under the gravitational force of sun.",
+    solution: "Using the Lagrangian approach:\n$$ L = T - V = \\frac{1}{2}m(\\dot{r}^2 + r^2\\dot{\\theta}^2) - \\left( -\\frac{GMm}{r} \\right) $$\nThe Euler-Lagrange equation for the radial coordinate $r$ is:\n$$ \\frac{d}{dt}\\left( \\frac{\\partial L}{\\partial \\dot{r}} \\right) - \\frac{\\partial L}{\\partial r} = 0 $$\nCalculate the derivatives:\n$$ \\frac{\\partial L}{\\partial \\dot{r}} = m\\dot{r} \\implies \\frac{d}{dt}(m\\dot{r}) = m\\ddot{r} $$\n$$ \\frac{\\partial L}{\\partial r} = mr\\dot{\\theta}^2 - \\frac{GMm}{r^2} $$\nAssemble the equation:\n$$ m\\ddot{r} - mr\\dot{\\theta}^2 = -\\frac{GMm}{r^2} $$\nUsing angular momentum $l = mr^2\\dot{\\theta} \\implies \\dot{\\theta} = l/mr^2$, we can eliminate $\\theta$:\n$$ m\\ddot{r} - \\frac{l^2}{mr^3} = -\\frac{GMm}{r^2} $$"
+  },
+  {
+    id: 5,
+    moduleId: 'module-1-mechanics',
+    section: 'B',
+    marks: 6,
+    question: "a) An asteroid is observed to have an eccentricity of e = 1.05. Classify the shape of its trajectory and state whether the object is bound to the solar system.\nb) A newly discovered dwarf planet has a semi-major axis of 9 AU. Calculate its orbital period in Earth years.",
+    solution: "**Part a):**\nEccentricity determines the conic section.\n- Circle: $e = 0$\n- Ellipse: $0 < e < 1$\n- Parabola: $e = 1$\n- Hyperbola: $e > 1$\n\nSince $e = 1.05 > 1$, the trajectory is a **hyperbola**. It is an unbound, open orbit; the asteroid will fly by the Sun once and eventually escape the solar system forever.\n\n**Part b):**\nUsing Kepler's Third Law in Earth units (Years and AU):\n$$ T^2 = a^3 $$\nGiven $a = 9$ AU:\n$$ T^2 = 9^3 = 729 $$\n$$ T = \\sqrt{729} = 27 \\text{ Earth years} $$"
+  },
+  {
+    id: 6,
+    moduleId: 'module-1-mechanics',
+    section: 'B',
+    marks: 6,
+    question: "Prove Kepler's third law.",
+    solution: "Kepler's Second Law gives the constant rate at which area is swept:\n$$ \\frac{dA}{dt} = \\frac{l}{2m} $$\nIntegrating over one full period $T$, the total area of the ellipse $A$ is swept out:\n$$ A = \\int_0^T \\frac{l}{2m} dt = \\frac{l}{2m} T $$\nThe geometric area of an ellipse is $A = \\pi a b$, where $b = a\\sqrt{1-e^2}$.\n$$ \\frac{l}{2m} T = \\pi a^2 \\sqrt{1-e^2} $$\nWe also know angular momentum $l$ for an elliptical orbit relates to eccentricity by $e = \\sqrt{1 - l^2 / (m k a)}$ (where $k = GMm$), which means $l = \\sqrt{m k a (1-e^2)}$.\nSubstitute $l$ into the period equation:\n$$ \\frac{\\sqrt{m k a (1-e^2)}}{2m} T = \\pi a^2 \\sqrt{1-e^2} $$\nThe $\\sqrt{1-e^2}$ terms cancel. Solving for $T$:\n$$ T = \\frac{2\\pi m a^2}{\\sqrt{m k a}} = 2\\pi \\sqrt{\\frac{m}{k}} a^{3/2} $$\nSquaring both sides:\n$$ T^2 = \\left( \\frac{4\\pi^2 m}{k} \\right) a^3 $$\nSince $k = GMm$, the mass $m$ cancels out, proving $T^2 \\propto a^3$."
+  },
+  {
+    id: 7,
+    moduleId: 'module-1-mechanics',
+    section: 'C',
+    marks: 10,
+    question: "State and prove Kepler's first law. Hence obtain the expression for the eccentricity of the orbit in terms of the total energy E.",
+    solution: "**Statement:** The orbit of a planet is an ellipse with the Sun at one focus.\n\n**Proof:**\nStart with the radial Newtonian equation with angular momentum substituted:\n$$ m\\ddot{r} - \\frac{l^2}{mr^3} = f(r) $$\nFor gravity, $f(r) = -k/r^2$. Let $u = 1/r$. Time derivatives become angle derivatives via $\\frac{d}{dt} = \\frac{l u^2}{m} \\frac{d}{d\\theta}$.\nApplying this transformation yields Binet's Equation:\n$$ \\frac{d^2u}{d\\theta^2} + u = -\\frac{m}{l^2 u^2}\\left(-ku^2\\right) = \\frac{mk}{l^2} $$\nThis is the equation of a shifted harmonic oscillator. The general solution is:\n$$ u(\\theta) = C \\cos(\\theta - \\theta_0) + \\frac{mk}{l^2} $$\nSet $\\theta_0 = 0$ for perihelion, and substitute $r = 1/u$:\n$$ r = \\frac{1}{\\frac{mk}{l^2} + C\\cos\\theta} = \\frac{l^2/mk}{1 + \\frac{Cl^2}{mk}\\cos\\theta} $$\nThis is the standard polar equation of a conic section $r = \\frac{p}{1 + e\\cos\\theta}$, where $p = l^2/mk$ and eccentricity $e = Cl^2/mk$. Since $0 \\le e < 1$ for bound planets, the conic is an **ellipse**.\n\n**Deriving Eccentricity $e$ from Energy $E$:**\nTotal energy is constant. Evaluate $E$ at perihelion ($\\theta=0$), where $r = p/(1+e)$ and $\\dot{r}=0$.\n$$ E = \\frac{l^2}{2mr^2} - \\frac{k}{r} = \\frac{1}{r} \\left( \\frac{l^2}{2mr} - k \\right) $$\nSubstitute $1/r = (1+e)/p$ and $p = l^2/mk$:\n$$ E = \\frac{1+e}{p} \\left( \\frac{l^2(1+e)}{2mp} - k \\right) $$\n$$ E = \\frac{mk(1+e)}{l^2} \\left( \\frac{l^2 mk(1+e)}{2m l^2} - k \\right) $$\n$$ E = \\frac{mk(1+e)}{l^2} \\left( \\frac{k(1+e)}{2} - k \\right) = \\frac{mk(1+e)}{l^2} \\left( \\frac{k e - k}{2} \\right) $$\n$$ E = \\frac{mk^2}{2l^2} (e^2 - 1) $$\nSolving for $e^2$:\n$$ e^2 - 1 = \\frac{2El^2}{mk^2} \\implies e = \\sqrt{1 + \\frac{2El^2}{mk^2}} $$"
+  },
 
-export const UNIT_4_6_3_FINAL_PRACTICE: Unit = {
-  id: "unit-4-6-3",
-  title: "463 (Final Practice)",
-  description: "Numerical Evaluation and Checking",
-  color: "duo-pink",
-  lessons:[
-    {
-      id: "les-4-6-3-1",
-      title: "Exercise 15.8",
-      description: "Velocity Initial Conditions",
-      icon: "Crosshair",
-      slides:[
-        {
-          id: "q",
-          type: "example_q",
-          title: "Exercise 15.8",
-          content: "A Foucault pendulum is observed to have a velocity $v_0$ in the $+x$-direction at time $t=0$ when it passes through the origin.\n\nObtain expressions for $x$ and $y$ as functions of $t$."
-        },
-        {
-          id: "sol",
-          type: "solution",
-          title: "Solution Steps",
-          content: "Use the complex solution $\\zeta = C[\\cos Kt \\cos(\\omega t + \\theta) - i \\sin Kt \\cos(\\omega t + \\theta)]$.",
-          interactiveSteps:[
-            {
-              prompt: "At $t=0$, position is origin. So $x(0)=0$ and $y(0)=0$. What does this mean for $\\theta$?",
-              options:[
-                { id: "A", text: "$\\cos(\\theta) = 0 \\implies \\theta = -\\pi/2$", isCorrect: true, explanation: "So $\\cos(\\omega t - \\pi/2) = \\sin \\omega t$." }
-              ]
-            },
-            {
-              prompt: "So $\\zeta = C \\sin \\omega t (\\cos Kt - i \\sin Kt)$. We need the velocity $\\dot{x}(0) = v_0$. Taking the time derivative and evaluating at $t=0$, what is $C$?",
-              options:[
-                { id: "A", text: "$C = v_0 / \\omega$", isCorrect: true, explanation: "The derivative of $\\sin \\omega t$ brings out an $\\omega$. So $C\\omega = v_0$." }
-              ]
-            },
-            {
-              prompt: "What are the final expressions for $x$ and $y$?",
-              options:[
-                { id: "A", text: "$x = \\frac{v_0}{\\omega} \\sin \\omega t \\cos Kt$ and $y = -\\frac{v_0}{\\omega} \\sin \\omega t \\sin Kt$", isCorrect: true, explanation: "Correct." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: "les-4-6-3-2",
-      title: "Exercise 15.9",
-      description: "Filling the Math Steps",
-      icon: "PenTool",
-      slides:[
-        {
-          id: "q",
-          type: "example_q",
-          title: "Exercise 15.9",
-          content: "Fill in the missing steps between substituting $x = s\\cos Kt$ and $y = -s\\sin Kt$ into the ODEs, to arrive at $\\ddot{s} + \\omega^2 s = 0$."
-        },
-        {
-          id: "sol",
-          type: "solution",
-          title: "The Algebra",
-          content: "Calculus practice.",
-          interactiveSteps:[
-            {
-              prompt: "First, what is $\\dot{x}$?",
-              options:[
-                { id: "A", text: "$\\dot{s}\\cos Kt - sK\\sin Kt$", isCorrect: true, explanation: "Product rule." }
-              ]
-            },
-            {
-              prompt: "After calculating all second derivatives and plugging them in, the $K^2$ terms are dropped because $K \\ll \\omega$. The resulting equation simplifies exactly to:",
-              options:[
-                { id: "A", text: "$\\ddot{s} + \\omega^2 s = 0$", isCorrect: true, explanation: "The Coriolis terms $2K\\dot{x}$ perfectly cancel out the cross terms from the second derivatives." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: "les-4-6-3-3",
-      title: "Exercise 15.11",
-      description: "Precession in San Francisco",
-      icon: "Calculator",
-      slides:[
-        {
-          id: "prob",
-          type: "numerical",
-          title: "Calculating Precession Rate",
-          content: "Suppose a 20 m Foucault pendulum is mounted at San Francisco, California (latitude $37.77^\\circ$).\n\nDetermine the precession rate of its plane of motion in degrees per hour.\n\nRecall that the Earth rotates $360^\\circ$ in $24$ hours. Also remember that the formula uses COLATITUDE $\\lambda$, but you are given LATITUDE.",
-          numericAnswer: 9.19, // Formula is Omega * cos(colatitude). Colatitude = 90 - latitude.
-          // Wait, cos(colatitude) = sin(latitude).
-          // Precession rate = Omega * sin(latitude) = (360 deg / 24 hr) * sin(37.77)
-          // 15 * sin(37.77) = 15 * 0.61249 = 9.187 deg/hr.
-          numericTolerance: 0.1
-        },
-        {
-          id: "sol",
-          type: "solution",
-          title: "Step-by-Step",
-          content: "Convert latitude to the proper factor.",
-          interactiveSteps:[
-            {
-              prompt: "The formula is $K = \\Omega \\cos\\lambda$ where $\\lambda$ is colatitude ($90^\\circ - \\text{latitude}$). What is another way to write $\\cos\\lambda$?",
-              options:[
-                { id: "A", text: "$\\sin(\\text{latitude})$", isCorrect: true, explanation: "$\\cos(90^\\circ - \\theta) = \\sin(\\theta)$." }
-              ]
-            },
-            {
-              prompt: "The Earth's rotation rate $\\Omega$ in degrees per hour is:",
-              options:[
-                { id: "A", text: "$360 / 24 = 15^\\circ$/hr", isCorrect: true, explanation: "Correct." }
-              ]
-            },
-            {
-              prompt: "Calculate $15 \\times \\sin(37.77^\\circ)$.",
-              options:[
-                { id: "A", text: "$\\approx 9.19^\\circ$/hr", isCorrect: true, explanation: "Correct. Notice the text answer key says 11.9. Wait, let me check the text." }
-              ]
-            }
-          ]
-        },
-        {
-          id: "correction",
-          type: "theory",
-          title: "Note on the Text Answer",
-          content: "The text provides an answer of $11.9^\\circ$/h. \nIf we compute $15 \\times \\cos(37.77^\\circ)$, we get $15 \\times 0.79 = 11.86^\\circ$/h. \n\nThis means the author accidentally used $\\cos(\\text{latitude})$ instead of $\\cos(\\text{colatitude})$! The correct physical answer is $9.19^\\circ$/h."
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/mech_units/unit_4_6_3_final_practice.ts ---
+  // ================= MODULE 2: HARMONIC MOTION =================
+  {
+    id: 8,
+    moduleId: 'module-2-harmonic',
+    section: 'A',
+    marks: 3,
+    question: "Differentiate between underdamped, overdamped, and critically damped harmonic oscillators, discussing their respective behaviors.",
+    solution: "Let $\\gamma = b/2m$ (damping parameter) and $\\omega_0 = \\sqrt{k/m}$ (natural frequency).\n\n1. **Underdamped ($\\gamma < \\omega_0$):** The system oscillates with an exponentially decaying envelope. Roots of the auxiliary equation are complex.\n2. **Critically Damped ($\\gamma = \\omega_0$):** The system returns to equilibrium in the fastest time possible without oscillating or overshooting. Roots are real and repeated.\n3. **Overdamped ($\\gamma > \\omega_0$):** The system returns to equilibrium very slowly without oscillating, governed by two decaying exponential terms. Roots are real and distinct."
+  },
+  {
+    id: 9,
+    moduleId: 'module-2-harmonic',
+    section: 'A',
+    marks: 3,
+    question: "A spring of constant 10 N/m is connected to a mass of 2 kg. It is initially at rest in an unstretched position. It is given an initial speed of 3 m/s. What is the amplitude of the oscillation?",
+    solution: "Natural angular frequency $\\omega = \\sqrt{\\frac{k}{m}} = \\sqrt{\\frac{10}{2}} = \\sqrt{5}$ rad/s.\n\nThe initial position is $x(0) = 0$ (equilibrium). At equilibrium, all energy is kinetic, so the initial speed is the maximum speed $v_{max}$.\nFor Simple Harmonic Motion, $v_{max} = A\\omega$.\n\n$$ 3 = A\\sqrt{5} \\implies A = \\frac{3}{\\sqrt{5}} \\approx 1.34 \\text{ m} $$"
+  },
+  {
+    id: 10,
+    moduleId: 'module-2-harmonic',
+    section: 'A',
+    marks: 3,
+    question: "Define the quality factor (Q factor) of a harmonic oscillator and discuss its significance in characterizing the sharpness of resonance and damping in the system.",
+    solution: "**Definition:** The Q factor is a dimensionless parameter defined as the ratio of the resonant frequency to the full width at half maximum (FWHM) of the resonance energy curve:\n$$ Q = \\frac{\\omega_0}{\\Delta\\omega} $$\n\n**Significance:** It measures how 'good' an oscillator is at storing energy compared to losing it per cycle. A high Q factor means the system has low damping, resulting in a very tall, sharp resonance peak (highly selective tuning). A low Q factor implies high damping and a broad, flat resonance curve."
+  },
+  {
+    id: 11,
+    moduleId: 'module-2-harmonic',
+    section: 'B',
+    marks: 6,
+    question: "A 0.5 kg block is attached to a horizontal spring on a frictionless surface. When pulled 0.15 m from equilibrium and released, it completes 10 full oscillations in 5 seconds.\na) Determine the period (T) and the frequency (f) of the motion.\nb) Calculate the spring constant (k) of the spring.",
+    solution: "**Part a): Period and Frequency**\nThe block completes 10 oscillations in 5 seconds.\nPeriod $T$ is the time for one oscillation:\n$$ T = \\frac{5 \\text{ s}}{10 \\text{ osc}} = 0.5 \\text{ s} $$\nFrequency $f$ is oscillations per second:\n$$ f = \\frac{1}{T} = \\frac{1}{0.5} = 2 \\text{ Hz} $$\n\n**Part b): Spring Constant**\nAngular frequency $\\omega = 2\\pi f = 2\\pi(2) = 4\\pi$ rad/s.\nWe know $\\omega = \\sqrt{\\frac{k}{m}}$, so $\\omega^2 = \\frac{k}{m}$.\n$$ k = m \\omega^2 = (0.5) (4\\pi)^2 = 0.5 (16\\pi^2) = 8\\pi^2 $$\n$$ k \\approx 8(9.87) \\approx 78.96 \\text{ N/m} $$"
+  },
+  {
+    id: 12,
+    moduleId: 'module-2-harmonic',
+    section: 'B',
+    marks: 6,
+    question: "A mass-spring system is defined by the equation x(t) = 0.25 cos(4t), where x is in meters and t is in seconds.\na) Identify the amplitude and the angular frequency (ω) of the system.\nb) Calculate the maximum acceleration (a_max) experienced by the mass.",
+    solution: "**Part a): Amplitude and Angular Frequency**\nComparing $x(t) = 0.25 \\cos(4t)$ to the standard form $x(t) = A \\cos(\\omega t)$:\n- Amplitude $A = 0.25$ m\n- Angular Frequency $\\omega = 4$ rad/s\n\n**Part b): Maximum Acceleration**\nVelocity $v(t) = \\dot{x}(t) = -A\\omega \\sin(\\omega t) = -0.25(4)\\sin(4t) = -1.0 \\sin(4t)$.\nAcceleration $a(t) = \\ddot{x}(t) = -A\\omega^2 \\cos(\\omega t) = -1.0(4)\\cos(4t) = -4 \\cos(4t)$.\nThe maximum value of $\\cos(4t)$ is 1, so the maximum magnitude of acceleration is:\n$$ a_{max} = A\\omega^2 = 0.25(4^2) = 0.25(16) = 4 \\text{ m/s}^2 $$"
+  },
+  {
+    id: 13,
+    moduleId: 'module-2-harmonic',
+    section: 'B',
+    marks: 6,
+    question: "Bring out the analogy between a damped harmonic oscillator and a RLC circuit. How does resonance arise in RLC circuits?",
+    solution: "The mechanical equation is:\n$$ m\\ddot{x} + b\\dot{x} + kx = F(t) $$\nThe electrical equation for an RLC series circuit is:\n$$ L\\ddot{q} + R\\dot{q} + \\frac{1}{C}q = V(t) $$\n\n**Analogy Dictionary:**\n- Mass $m$ $\\iff$ Inductance $L$ (Inertia)\n- Damping $b$ $\\iff$ Resistance $R$ (Energy dissipation)\n- Stiffness $k$ $\\iff$ Inverse Capacitance $1/C$ (Restoring factor)\n- Displacement $x$ $\\iff$ Charge $q$\n- Velocity $\\dot{x}$ $\\iff$ Current $I = \\dot{q}$\n- Driving Force $F(t)$ $\\iff$ Driving Voltage $V(t)$\n\n**Resonance in RLC:**\nResonance arises when the frequency of the driving AC voltage $V(t)$ matches the natural frequency of the circuit $\\omega_0 = 1/\\sqrt{LC}$. At this frequency, the inductive reactance and capacitive reactance perfectly cancel each other out, minimizing the circuit's total impedance to just the resistance $R$. This causes the current $I$ to spike to its maximum value, allowing radios to 'tune' into specific signals."
+  },
+  {
+    id: 14,
+    moduleId: 'module-2-harmonic',
+    section: 'C',
+    marks: 10,
+    question: "What is meant by a forced harmonic oscillator? Show that the amplitude of oscillations of a forced harmonic oscillator depends on the frequency of the driving force. Obtain the expression for the resonant frequency.",
+    solution: "**Definition:** A forced harmonic oscillator is a damped oscillating system that is subjected to an external, continuously applied time-varying driving force.\n\n**Differential Equation:**\n$$ m\\ddot{x} + b\\dot{x} + kx = F_0 \\sin(\\omega_d t) $$\nwhere $\\omega_d$ is the driving frequency.\n\n**Amplitude Dependence:**\nTo find the steady-state amplitude, we use the complex substitution $F(t) = F_0 e^{i\\omega_d t}$ and guess $\\xi = C e^{i\\omega_d t}$. Substituting into the ODE yields:\n$$ C(-m\\omega_d^2 + ib\\omega_d + k) = F_0 $$\n$$ C = \\frac{F_0}{(k - m\\omega_d^2) + i(b\\omega_d)} $$\nDividing numerator and denominator by $m$ and using $\\omega_0^2 = k/m$:\n$$ C = \\frac{F_0/m}{(\\omega_0^2 - \\omega_d^2) + i(b\\omega_d/m)} $$\nThe physical amplitude $A$ is the magnitude of the complex constant $C$:\n$$ A = |C| = \\frac{F_0/m}{\\sqrt{(\\omega_0^2 - \\omega_d^2)^2 + (b\\omega_d/m)^2}} $$\nThis formula clearly shows that the amplitude $A$ is a strong function of the driving frequency $\\omega_d$.\n\n**Resonant Frequency:**\nResonance occurs when the amplitude $A$ is maximized. This happens when the denominator is minimized. Let $D = (\\omega_0^2 - \\omega_d^2)^2 + (b\\omega_d/m)^2$. To find the minimum, take the derivative with respect to $\\omega_d$ and set it to zero:\n$$ \\frac{dD}{d\\omega_d} = 2(\\omega_0^2 - \\omega_d^2)(-2\\omega_d) + 2\\left(\\frac{b}{m}\\right)^2 \\omega_d = 0 $$\nDivide by $4\\omega_d$ (assuming $\\omega_d \\neq 0$):\n$$ -(\\omega_0^2 - \\omega_d^2) + \\frac{b^2}{2m^2} = 0 \\implies \\omega_d^2 = \\omega_0^2 - \\frac{b^2}{2m^2} $$\nTherefore, the resonant frequency $\\omega_r$ is $\\omega_r = \\sqrt{\\omega_0^2 - 2\\gamma^2}$ where $\\gamma = b/2m$."
+  },
 
---- START OF FILE src/data/mech_units/unit_4_6_4_section_summary.ts ---
-import { Unit } from '../../types';
+  // ================= MODULE 3: WAVES =================
+  {
+    id: 15,
+    moduleId: 'module-3-waves',
+    section: 'A',
+    marks: 3,
+    question: "Define the parameters amplitude, wavelength, period, frequency, and phase velocity of a wave.",
+    solution: "- **Amplitude ($A$):** The maximum displacement of the medium from its equilibrium position.\n- **Wavelength ($\\lambda$):** The spatial distance between two consecutive corresponding points on the wave (e.g., peak to peak).\n- **Period ($\\tau$):** The time taken for one complete oscillation at a single point.\n- **Frequency ($f$):** The number of oscillations per unit time ($f = 1/\\tau$).\n- **Phase Velocity ($v$):** The speed at which the waveform itself propagates through space ($v = \\lambda f = \\omega/k$)."
+  },
+  {
+    id: 16,
+    moduleId: 'module-3-waves',
+    section: 'A',
+    marks: 3,
+    question: "Differentiate between transverse and longitudinal waves with an example for each.",
+    solution: "- **Transverse Waves:** The particles of the medium oscillate perpendicular to the direction of wave propagation. Example: A wave propagating down a plucked guitar string.\n- **Longitudinal Waves:** The particles of the medium oscillate back and forth parallel to the direction of wave propagation. Example: Sound waves traveling through the air."
+  },
+  {
+    id: 17,
+    moduleId: 'module-3-waves',
+    section: 'A',
+    marks: 3,
+    question: "What are nodes and antinodes in a standing wave?",
+    solution: "In a standing wave, the spatial shape is fixed and does not travel left or right.\n- **Nodes:** Points on the wave where the displacement is always zero. The medium is perfectly stationary at these locations due to destructive interference.\n- **Antinodes:** Points exactly midway between the nodes where the spatial amplitude of oscillation reaches its maximum absolute value (the 'loops' of the wave) due to constructive interference."
+  },
+  {
+    id: 18,
+    moduleId: 'module-3-waves',
+    section: 'B',
+    marks: 6,
+    question: "Derive the 1D linear wave equation for a stretched string.",
+    solution: "Consider a string segment of length $dx$ and mass $dm = \\rho dx$ under uniform tension $F$.\nLet $y(x,t)$ be the vertical displacement.\nApplying Newton's second law ($F_y = ma_y$) to the segment:\n$$ F_y = F\\sin\\theta_{right} - F\\sin\\theta_{left} = \\rho dx \\frac{\\partial^2 y}{\\partial t^2} $$\nFor small amplitudes, $\\sin\\theta \\approx \\tan\\theta = \\frac{\\partial y}{\\partial x}$ (the spatial slope).\nSubstitute the slopes:\n$$ F \\left( \\left. \\frac{\\partial y}{\\partial x} \\right|_{x+dx} - \\left. \\frac{\\partial y}{\\partial x} \\right|_{x} \\right) = \\rho dx \\frac{\\partial^2 y}{\\partial t^2} $$\nDivide by $dx$ and take the limit as $dx \\to 0$, which yields the second spatial derivative:\n$$ F \\frac{\\partial^2 y}{\\partial x^2} = \\rho \\frac{\\partial^2 y}{\\partial t^2} $$\nRearranging gives the linear wave equation:\n$$ \\frac{\\partial^2 y}{\\partial x^2} = \\frac{1}{v^2} \\frac{\\partial^2 y}{\\partial t^2} $$\nwhere phase velocity $v = \\sqrt{F/\\rho}$."
+  },
+  {
+    id: 19,
+    moduleId: 'module-3-waves',
+    section: 'B',
+    marks: 6,
+    question: "Show that a standing wave is mathematically equivalent to the superposition of two identical waves traveling in opposite directions.",
+    solution: "Consider two traveling waves with the same amplitude, wave number, and frequency, but moving in opposite directions:\n$y_{right} = A \\sin(kx - \\omega t)$\n$y_{left} = A \\sin(kx + \\omega t)$\n\nThe superposition is their sum:\n$y(x,t) = A[\\sin(kx - \\omega t) + \\sin(kx + \\omega t)]$\n\nUse the trigonometric identity: $\\sin \\alpha + \\sin \\beta = 2 \\sin \\left(\\frac{\\alpha + \\beta}{2}\\right) \\cos \\left(\\frac{\\alpha - \\beta}{2}\\right)$.\nLet $\\alpha = kx + \\omega t$ and $\\beta = kx - \\omega t$.\n$\\frac{\\alpha + \\beta}{2} = kx$ and $\\frac{\\alpha - \\beta}{2} = \\omega t$.\n\nSubstitute back:\n$y(x,t) = 2A \\sin(kx) \\cos(\\omega t)$\n\nThis result has separated variables: a spatial envelope $\\sin(kx)$ and an oscillating time component $\\cos(\\omega t)$. This is the exact mathematical definition of a standing wave."
+  },
+  {
+    id: 20,
+    moduleId: 'module-3-waves',
+    section: 'B',
+    marks: 6,
+    question: "A wave traveling on a string of linear density $\\rho_1$ meets a junction with a second string of density $\\rho_2$. State the boundary conditions at the junction and explain their physical meaning.",
+    solution: "Let the junction be at $x=0$. The boundary conditions are:\n\n1. **Continuity of Displacement:**\n$$ y_{incident}(0,t) + y_{reflected}(0,t) = y_{transmitted}(0,t) $$\n*Physical Meaning:* The string cannot break or tear at the knot. The end of string 1 and the start of string 2 must always be at the exact same vertical position.\n\n2. **Continuity of Slope (for a massless knot):**\n$$ \\frac{\\partial}{\\partial x}(y_{incident} + y_{reflected}) = \\frac{\\partial y_{transmitted}}{\\partial x} $$\n*Physical Meaning:* The vertical force components must balance. If the slopes were different, there would be a net transverse force on a zero-mass knot, causing infinite acceleration, which is physically impossible."
+  },
+  {
+    id: 21,
+    moduleId: 'module-3-waves',
+    section: 'C',
+    marks: 10,
+    question: "Using the method of separation of variables, solve the linear wave equation for a string of length L fixed at both ends.",
+    solution: "1. **Ansatz:** Assume the solution is $y(x,t) = X(x)T(t)$.\n2. **Substitute** into the wave equation $\\frac{\\partial^2 y}{\\partial x^2} = \\frac{1}{v^2} \\frac{\\partial^2 y}{\\partial t^2}$:\n$$ T \\frac{d^2 X}{dx^2} = \\frac{1}{v^2} X \\frac{d^2 T}{dt^2} $$\n3. **Separate:** Divide by $XT$:\n$$ \\frac{1}{X} \\frac{d^2 X}{dx^2} = \\frac{1}{v^2 T} \\frac{d^2 T}{dt^2} $$\n4. **Constant:** Since LHS depends only on $x$ and RHS only on $t$, both must equal a constant, $-k^2$ (negative to ensure oscillatory solutions).\n5. **Spatial ODE:** $X'' + k^2 X = 0 \\implies X(x) = A \\cos(kx) + B \\sin(kx)$.\n6. **Temporal ODE:** $T'' + (kv)^2 T = 0$. Let $\\omega = kv$, so $T(t) = C \\cos(\\omega t) + D \\sin(\\omega t)$.\n7. **Boundary Conditions:** Fixed at $x=0 \\implies X(0) = 0 \\implies A(1) + B(0) = 0 \\implies A=0$. Thus $X(x) = B \\sin(kx)$.\nFixed at $x=L \\implies X(L) = 0 \\implies B \\sin(kL) = 0$. For non-trivial solutions ($B \\neq 0$), $kL = n\\pi$, so $k_n = \\frac{n\\pi}{L}$ ($n=1,2,...$).\n8. **General Solution:** Summing over all normal modes $n$:\n$$ y(x,t) = \\sum_{n=1}^\\infty \\sin\\left(\\frac{n\\pi x}{L}\\right) (C_n \\cos \\omega_n t + D_n \\sin \\omega_n t) $$\nwhere $\\omega_n = \\frac{n\\pi v}{L}$."
+  },
 
-export const UNIT_4_6_4_SECTION_SUMMARY: Unit = {
-  id: "unit-4-6-4",
-  title: "Section 4.6 Summary",
-  description: "Review of The Foucault Pendulum",
-  color: "duo-blue",
-  lessons:[
-    {
-      id: "les-4-6-4-1",
-      title: "Summary: Pendulum Dynamics",
-      description: "Recap of Unit 461",
-      icon: "List",
-      slides:[
-        {
-          id: "wu1",
-          type: "quiz",
-          title: "Conceptual Warm-up",
-          content: "Why does the Foucault pendulum's plane of swing appear to rotate?",
-          options:[
-            { id: "A", text: "Because the Coriolis force continually deflects it sideways.", isCorrect: true, explanation: "As the pendulum moves, the Coriolis force pushes it perpendicular to its velocity, causing the swing plane to slowly precess." },
-            { id: "B", text: "Because of friction in the pivot.", isCorrect: false }
-          ]
-        },
-        {
-          id: "theory",
-          type: "theory",
-          title: "Coupled Equations",
-          content: "By applying Newton's laws in the rotating frame and including the Coriolis acceleration components, we derived the horizontal equations of motion for the pendulum bob:\n$$ \\ddot{x} - 2K\\dot{y} + \\omega^2 x = 0 $$\n$$ \\ddot{y} + 2K\\dot{x} + \\omega^2 y = 0 $$\n\nWhere $K = \\Omega \\cos \\lambda$ is the precession rate, and $\\omega^2 = g/l$ is the natural frequency."
-        }
-      ]
-    },
-    {
-      id: "les-4-6-4-2",
-      title: "Summary: The Solution",
-      description: "Recap of Unit 462",
-      icon: "FunctionSquare",
-      slides:[
-        {
-          id: "theory",
-          type: "theory",
-          title: "Complex Variable Trick",
-          content: "To solve the coupled equations, we defined a complex variable $\\zeta = x + iy$. This combined the two equations into one:\n$$ \\ddot{\\zeta} + 2iK\\dot{\\zeta} + \\omega^2\\zeta = 0 $$\n\nThe solution, assuming $K \\ll \\omega$, is $\\zeta = e^{-iKt} (A e^{-i\\omega t} + B e^{i\\omega t})$.\n\nThis represents a fast oscillation at frequency $\\omega$ whose entire plane slowly rotates (precesses) at angular velocity $K = \\Omega \\cos\\lambda$."
-        },
-        {
-          id: "canvas",
-          type: "interactive_canvas",
-          title: "Visual Summary",
-          content: "The amplitude modulation created by the precession.",
-          interactiveCanvasId: "foucault-amplitude-plots"
-        },
-        {
-          id: "mcq",
-          type: "quiz",
-          title: "Knowledge Check",
-          content: "What is the precession rate of a Foucault pendulum exactly at the equator (colatitude $\\lambda = 90^\\circ$)?",
-          options:[
-            { id: "A", text: "0 degrees per hour", isCorrect: true, explanation: "Since $\\cos(90^\\circ) = 0$, $K=0$. It does not precess at the equator." },
-            { id: "B", text: "15 degrees per hour", isCorrect: false }
-          ]
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/mech_units/unit_4_6_4_section_summary.ts ---
-
---- START OF FILE src/data/section_4_6_foucault_pendulum.ts ---
-import { Section } from '../types';
-import { UNIT_4_6_1_PENDULUM_DYNAMICS } from './mech_units/unit_4_6_1_pendulum_dynamics';
-import { UNIT_4_6_2_THE_SOLUTION } from './mech_units/unit_4_6_2_the_solution';
-import { UNIT_4_6_3_FINAL_PRACTICE } from './mech_units/unit_4_6_3_final_practice';
-import { UNIT_4_6_4_SECTION_SUMMARY } from './mech_units/unit_4_6_4_section_summary';
-
-export const SECTION_4_6_FOUCAULT_PENDULUM: Section = {
-  id: "section-4-6-foucault-pendulum",
-  title: "Section 4.6: The Foucault Pendulum",
-  description: "Analyzing the famous Earth rotation proof",
-  color: "duo-violet",
-  units:[
-    UNIT_4_6_1_PENDULUM_DYNAMICS,
-    UNIT_4_6_2_THE_SOLUTION,
-    UNIT_4_6_3_FINAL_PRACTICE,
-    UNIT_4_6_4_SECTION_SUMMARY
-  ]
-};
---- END OF FILE src/data/section_4_6_foucault_pendulum.ts ---
-
---- START OF FILE src/data/module_4_accelerated_frames.ts ---
-import { Module } from '../types';
-import { SECTION_4_1_LINEARLY_ACCELERATING_FRAME } from './section_4_1_linearly_accelerating_frame';
-import { SECTION_4_2_ROTATING_FRAME } from './section_4_2_rotating_frame';
-import { SECTION_4_3_FICTITIOUS_FORCES } from './section_4_3_fictitious_forces';
-import { SECTION_4_4_CENTRIFUGAL_PLUMB_BOB } from './section_4_4_centrifugal_plumb_bob';
-import { SECTION_4_5_CORIOLIS_FORCE } from './section_4_5_coriolis_force';
-import { SECTION_4_6_FOUCAULT_PENDULUM } from './section_4_6_foucault_pendulum';
-
-export const MODULE_4_ACCELERATED_FRAMES: Module = {
-  id: 'module-4-accelerated-frames',
-  title: 'Module IV: Accelerated Reference Frames',
-  description: 'Non-Inertial Frames, Fictitious Forces, and Earth\'s Rotation',
-  sections:[
-    SECTION_4_1_LINEARLY_ACCELERATING_FRAME,
-    SECTION_4_2_ROTATING_FRAME,
-    SECTION_4_3_FICTITIOUS_FORCES,
-    SECTION_4_4_CENTRIFUGAL_PLUMB_BOB,
-    SECTION_4_5_CORIOLIS_FORCE,
-    SECTION_4_6_FOUCAULT_PENDULUM
-  ],
-  moduleSummary:[
-    {
-      id: "mod-sum-1",
-      type: "theory",
-      title: "Module Overview",
-      content: "This module introduces physics in **Accelerated (Non-Inertial) Reference Frames**. We explore how to adapt Newton's laws when the observer's frame is accelerating or rotating."
-    },
-    {
-      id: "mod-sum-2",
-      type: "theory",
-      title: "Unit 1: Fictitious Forces",
-      content: "By applying vector transformations between an inertial frame $O$ and an accelerating frame $O'$, we find that Newton's second law takes the form $m\\ddot{\\mathbf{r}}_{O'} = \\mathbf{F} - m\\ddot{\\mathbf{r}}$. The extra term $-m\\ddot{\\mathbf{r}}$ acts like an additional force, which we call a **fictitious force** or pseudo-force."
-    },
-    {
-      id: "mod-sum-3",
-      type: "theory",
-      title: "Unit 2: Rotating Frames",
-      content: "For a frame rotating at angular velocity $\\mathbf{\\Omega}$, time derivatives of vectors must account for the rotation of the axes themselves: $[d/dt]_{in} =[d/dt]_{rot} + \\mathbf{\\Omega} \\times$. This allows us to translate velocities and accelerations between observers."
-    },
-    {
-      id: "mod-sum-4",
-      type: "theory",
-      title: "Unit 3: Centrifugal and Coriolis Forces",
-      content: "Expanding the acceleration gives two key fictitious forces in a rotating frame:\n\n*   **Centrifugal Force**: $-m\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$. Pushes outwards, depends only on position.\n*   **Coriolis Force**: $-2m\\mathbf{\\Omega} \\times \\mathbf{v}_{rot}$. Deflects sideways, depends on velocity."
-    },
-    {
-      id: "mod-sum-5",
-      type: "theory",
-      title: "Unit 4: Effective Gravity",
-      content: "The centrifugal force on the Earth alters the perceived direction of gravity. We define **effective gravity** as $\\mathbf{g}_e = \\mathbf{g} - \\mathbf{\\Omega} \times (\\mathbf{\\Omega} \times \\mathbf{r})$. A plumb bob aligns with $\\mathbf{g}_e$, pointing slightly away from the geometric center. This tangential centrifugal force is also what causes the Earth's equatorial bulge."
-    },
-    {
-      id: "mod-sum-6",
-      type: "theory",
-      title: "Unit 5: The Coriolis Force",
-      content: "Because of the Coriolis force, moving objects are deflected. A falling body is deflected slightly to the East. A projectile fired in any horizontal direction in the Northern Hemisphere is deflected to its right. We solve these problems using the method of successive approximations, because the Coriolis force is velocity-dependent."
-    },
-    {
-      id: "mod-sum-7",
-      type: "theory",
-      title: "Unit 6: The Foucault Pendulum",
-      content: "The Foucault Pendulum is a direct visual proof of Earth's rotation. Due to the Coriolis force, the plane of oscillation of a long pendulum slowly precesses over time at a rate of $\\Omega \\cos \\lambda$. It rotates once a day at the poles and does not rotate at all at the equator."
-    }
-  ]
-};
---- END OF FILE src/data/module_4_accelerated_frames.ts ---
-
---- START OF FILE src/components/canvasart/MechModule4CanvasArt.tsx ---
-import React from 'react';
-
-export const renderMechModule4CanvasArt = (id: string) => {
-  switch (id) {
-    case 'accelerated-frame-fig15-1':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 300 200">
-            <defs>
-              <marker id="pink-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f472b6" />
-              </marker>
-              <marker id="green-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#4ade80" />
-              </marker>
-              <marker id="blue-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#60a5fa" />
-              </marker>
-            </defs>
-
-            {/* O axes (Static) */}
-            <line x1="40" y1="160" x2="100" y2="160" stroke="#94a3b8" strokeWidth="2" />
-            <line x1="40" y1="160" x2="40" y2="100" stroke="#94a3b8" strokeWidth="2" />
-            <text x="30" y="175" fill="#f8fafc" fontSize="14" fontWeight="bold">O</text>
-
-            {/* Mass m (Static) */}
-            <circle cx="240" cy="50" r="4" fill="#facc15" />
-            <text x="250" y="55" fill="#facc15" fontSize="14" fontWeight="bold">m</text>
-
-            {/* Vector r_O from O to m (Static) */}
-            <line x1="40" y1="160" x2="240" y2="50" stroke="#60a5fa" strokeWidth="2" markerEnd="url(#blue-arrow)" />
-            <text x="120" y="150" fill="#60a5fa" fontSize="14" fontWeight="bold">r_O</text>
-
-            {/* Animated O' and Vectors with direct coordinate animation so endpoints match */}
-            <line x1="40" y1="160" x2="100" y2="130" stroke="#4ade80" strokeWidth="2" markerEnd="url(#green-arrow)">
-               <animate attributeName="x2" values="100; 140; 100" dur="4s" repeatCount="indefinite" />
-               <animate attributeName="y2" values="130; 100; 130" dur="4s" repeatCount="indefinite" />
-            </line>
-            <text x="60" y="135" fill="#4ade80" fontSize="14" fontWeight="bold">
-               <animate attributeName="x" values="60; 80; 60" dur="4s" repeatCount="indefinite" />
-               <animate attributeName="y" values="135; 120; 135" dur="4s" repeatCount="indefinite" />
-               r
-            </text>
-
-            <line x1="100" y1="130" x2="240" y2="50" stroke="#f472b6" strokeWidth="2" markerEnd="url(#pink-arrow)">
-               <animate attributeName="x1" values="100; 140; 100" dur="4s" repeatCount="indefinite" />
-               <animate attributeName="y1" values="130; 100; 130" dur="4s" repeatCount="indefinite" />
-            </line>
-            <text x="180" y="100" fill="#f472b6" fontSize="14" fontWeight="bold">
-               <animate attributeName="x" values="180; 200; 180" dur="4s" repeatCount="indefinite" />
-               <animate attributeName="y" values="100; 80; 100" dur="4s" repeatCount="indefinite" />
-               r_O'
-            </text>
-
-            <g>
-               <animateTransform attributeName="transform" type="translate" values="0 0; 40 -30; 0 0" dur="4s" repeatCount="indefinite" />
-               <line x1="100" y1="130" x2="160" y2="130" stroke="#94a3b8" strokeWidth="2" />
-               <line x1="100" y1="130" x2="100" y2="70" stroke="#94a3b8" strokeWidth="2" />
-               <text x="105" y="145" fill="#f8fafc" fontSize="14" fontWeight="bold">O'</text>
-            </g>
-          </svg>
-        </div>
-      );
-
-    case 'rotating-earth-fig15-2':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f8fafc" />
-              </marker>
-              <marker id="red-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f87171" />
-              </marker>
-            </defs>
-
-            {/* Earth Sphere */}
-            <circle cx="100" cy="100" r="50" fill="none" stroke="#64748b" strokeWidth="1" strokeDasharray="4" />
-            <ellipse cx="100" cy="100" rx="50" ry="15" fill="none" stroke="#64748b" strokeWidth="1" strokeDasharray="4" />
-            
-            {/* Z axis (Fixed & Rotating align) */}
-            <line x1="100" y1="100" x2="100" y2="30" stroke="#f8fafc" strokeWidth="2" markerEnd="url(#arrow)" />
-            <text x="90" y="25" fill="#f8fafc" fontSize="10">z, z'</text>
-
-            {/* Fixed axes x, y */}
-            <line x1="100" y1="100" x2="40" y2="140" stroke="#f8fafc" strokeWidth="2" markerEnd="url(#arrow)" />
-            <text x="30" y="150" fill="#f8fafc" fontSize="10">x</text>
-            <line x1="100" y1="100" x2="170" y2="100" stroke="#f8fafc" strokeWidth="2" markerEnd="url(#arrow)" />
-            <text x="175" y="105" fill="#f8fafc" fontSize="10">y</text>
-
-            {/* Rotating axes x', y' */}
-            <g>
-              <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="8s" repeatCount="indefinite" />
-              <line x1="100" y1="100" x2="100" y2="170" stroke="#f87171" strokeWidth="2" markerEnd="url(#red-arrow)" />
-              <text x="105" y="180" fill="#f87171" fontSize="10">x'</text>
-              <line x1="100" y1="100" x2="170" y2="100" stroke="#f87171" strokeWidth="2" markerEnd="url(#red-arrow)" />
-              <text x="175" y="105" fill="#f87171" fontSize="10">y'</text>
-            </g>
-            
-            {/* Omega rotation arrow */}
-            <path d="M 90 40 A 10 10 0 0 1 110 40" fill="none" stroke="#facc15" strokeWidth="2" markerEnd="url(#arrow)" />
-            <text x="75" y="45" fill="#facc15" fontSize="10">Ω</text>
-          </svg>
-        </div>
-      );
-
-    case 'centrifugal-force-vector':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="pink-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f87171" />
-              </marker>
-              <marker id="green-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#4ade80" />
-              </marker>
-              <marker id="blue-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f8fafc" />
-              </marker>
-            </defs>
-             {/* Earth Sphere */}
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#64748b" strokeWidth="1" strokeDasharray="4" />
-            <ellipse cx="100" cy="100" rx="60" ry="15" fill="none" stroke="#64748b" strokeWidth="1" strokeDasharray="4" />
-            
-            {/* Z axis */}
-            <line x1="100" y1="180" x2="100" y2="20" stroke="#f8fafc" strokeWidth="2" markerEnd="url(#blue-arrow)" />
-            <text x="90" y="15" fill="#f8fafc" fontSize="10">Ω</text>
-            
-            {/* Position r */}
-            <line x1="100" y1="100" x2="140" y2="60" stroke="#4ade80" strokeWidth="2" markerEnd="url(#green-arrow)" />
-            <text x="110" y="70" fill="#4ade80" fontSize="10">r</text>
-            
-            {/* Distance from axis */}
-            <line x1="100" y1="60" x2="140" y2="60" stroke="#94a3b8" strokeWidth="1" strokeDasharray="2" />
-            
-            {/* Centrifugal force */}
-            <line x1="140" y1="60" x2="180" y2="60" stroke="#f87171" strokeWidth="2" markerEnd="url(#pink-arrow)" />
-            <text x="135" y="50" fill="#f87171" fontSize="10">-Ω × (Ω × r)</text>
-          </svg>
-        </div>
-      );
-
-    case 'bug-on-record':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="blue-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#facc15" />
-              </marker>
-            </defs>
-            {/* Record */}
-            <circle cx="100" cy="100" r="80" fill="#1e293b" />
-            <circle cx="100" cy="100" r="5" fill="#0f172a" />
-            <circle cx="100" cy="100" r="50" fill="none" stroke="#334155" strokeWidth="1" />
-            
-            {/* Rotating reference mark on record */}
-            <g>
-               <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="6s" repeatCount="indefinite" />
-               <line x1="100" y1="100" x2="100" y2="20" stroke="#475569" strokeWidth="2" />
-            </g>
-            
-            {/* Bug moving along groove at radius 50 */}
-            <g>
-               {/* Bug moves FASTER than record to show relative velocity */}
-               <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="3s" repeatCount="indefinite" />
-               <circle cx="100" cy="50" r="4" fill="#facc15" />
-               <path d="M 100 50 A 10 10 0 0 1 120 50" fill="none" stroke="#facc15" strokeWidth="2" markerEnd="url(#blue-arrow)"/>
-               <text x="125" y="55" fill="#facc15" fontSize="10">v_b</text>
-            </g>
-          </svg>
-        </div>
-      );
-
-    case 'plumb-bob-forces':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="currentColor" />
-              </marker>
-              <marker id="pink-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f87171" />
-              </marker>
-              <marker id="yellow-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#facc15" />
-              </marker>
-              <marker id="green-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#4ade80" />
-              </marker>
-            </defs>
-            
-            {/* Earth Sphere */}
-            <circle cx="100" cy="100" r="80" fill="none" stroke="#475569" strokeWidth="1" />
-            <line x1="100" y1="10" x2="100" y2="190" stroke="#475569" strokeWidth="1" strokeDasharray="4" />
-            
-            {/* Bob at latitude ~30 degrees North */}
-            <circle cx="150" cy="40" r="4" fill="#38bdf8" />
-            
-            {/* True Gravity */}
-            <line x1="150" y1="40" x2="115" y2="82" stroke="#4ade80" strokeWidth="2" markerEnd="url(#green-arrow)" />
-            <text x="125" y="70" fill="#4ade80" fontSize="10">mg</text>
-            
-            {/* Centrifugal Force */}
-            <line x1="150" y1="40" x2="185" y2="40" stroke="#f87171" strokeWidth="2" markerEnd="url(#pink-arrow)" />
-            <text x="190" y="45" fill="#f87171" fontSize="10">F_c</text>
-            
-            {/* Tension */}
-            <line x1="150" y1="40" x2="125" y2="10" stroke="#facc15" strokeWidth="2" markerEnd="url(#yellow-arrow)" />
-            <text x="120" y="25" fill="#facc15" fontSize="10">T</text>
-          </svg>
-        </div>
-      );
-
-    case 'effective-gravity-vector':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="green-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#4ade80" />
-              </marker>
-              <marker id="pink-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f87171" />
-              </marker>
-              <marker id="purple-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#c084fc" />
-              </marker>
-            </defs>
-
-            {/* Earth outline piece */}
-            <path d="M 180 100 A 80 80 0 0 0 100 20" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="4" />
-            <circle cx="100" cy="100" r="3" fill="#475569" />
-            <text x="105" y="105" fill="#475569" fontSize="10">Center</text>
-
-            <circle cx="160" cy="48" r="4" fill="#38bdf8" />
-            
-            {/* True gravity */}
-            <line x1="160" y1="48" x2="110" y2="92" stroke="#4ade80" strokeWidth="2" markerEnd="url(#green-arrow)" />
-            <text x="130" y="80" fill="#4ade80" fontSize="10">g</text>
-
-            {/* Centrifugal acceleration */}
-            <line x1="160" y1="48" x2="185" y2="48" stroke="#f87171" strokeWidth="2" markerEnd="url(#pink-arrow)" />
-            <text x="190" y="52" fill="#f87171" fontSize="10">a_c</text>
-
-            {/* Effective gravity (resultant) */}
-            {/* To show g_e = g + a_c, we can draw a_c at the tip of g */}
-            <line x1="110" y1="92" x2="135" y2="92" stroke="#f87171" strokeWidth="1" strokeDasharray="2" markerEnd="url(#pink-arrow)" />
-            <line x1="160" y1="48" x2="135" y2="92" stroke="#c084fc" strokeWidth="3" markerEnd="url(#purple-arrow)" />
-            <text x="145" y="75" fill="#c084fc" fontSize="12" fontWeight="bold">g_e</text>
-          </svg>
-        </div>
-      );
-
-    case 'reference-frame-latitude':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f8fafc" />
-              </marker>
-              <marker id="blue-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#60a5fa" />
-              </marker>
-            </defs>
-
-            {/* Earth Sphere */}
-            <circle cx="100" cy="100" r="60" fill="none" stroke="#475569" strokeWidth="1" />
-            <ellipse cx="100" cy="100" rx="60" ry="15" fill="none" stroke="#475569" strokeWidth="1" strokeDasharray="4" />
-            
-            {/* Rotation Axis */}
-            <line x1="100" y1="160" x2="100" y2="20" stroke="#f8fafc" strokeWidth="2" markerEnd="url(#arrow)" />
-            <text x="105" y="25" fill="#f8fafc" fontSize="12" fontWeight="bold">Ω</text>
-
-            {/* Local Frame Origin */}
-            <circle cx="142" cy="58" r="3" fill="#facc15" />
-            
-            {/* Local z-axis (Up) */}
-            <line x1="142" y1="58" x2="170" y2="30" stroke="#60a5fa" strokeWidth="2" markerEnd="url(#blue-arrow)" />
-            <text x="175" y="30" fill="#60a5fa" fontSize="10">z (Up)</text>
-
-            {/* Local y-axis (North) */}
-            <line x1="142" y1="58" x2="114" y2="30" stroke="#60a5fa" strokeWidth="2" markerEnd="url(#blue-arrow)" />
-            <text x="90" y="30" fill="#60a5fa" fontSize="10">y (North)</text>
-
-            {/* Local x-axis (East, into screen) */}
-            <circle cx="142" cy="58" r="6" fill="none" stroke="#60a5fa" strokeWidth="1" />
-            <line x1="139" y1="55" x2="145" y2="61" stroke="#60a5fa" strokeWidth="1" />
-            <line x1="145" y1="55" x2="139" y2="61" stroke="#60a5fa" strokeWidth="1" />
-            <text x="150" y="65" fill="#60a5fa" fontSize="10">x (East)</text>
-
-            {/* Colatitude Angle */}
-            <path d="M 100 40 Q 120 40 130 50" fill="none" stroke="#facc15" strokeWidth="1" />
-            <text x="110" y="55" fill="#facc15" fontSize="10">λ</text>
-            <line x1="100" y1="100" x2="142" y2="58" stroke="#475569" strokeWidth="1" strokeDasharray="2" />
-          </svg>
-        </div>
-      );
-
-    case 'falling-body-deflection':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            {/* Tower */}
-            <rect x="90" y="40" width="10" height="140" fill="#1e293b" stroke="#334155" strokeWidth="2" />
-            
-            {/* Ground */}
-            <line x1="20" y1="180" x2="180" y2="180" stroke="#94a3b8" strokeWidth="3" />
-            
-            {/* True Plumb Line */}
-            <line x1="105" y1="40" x2="105" y2="180" stroke="#4ade80" strokeWidth="1" strokeDasharray="4" />
-            <text x="110" y="170" fill="#4ade80" fontSize="8">True Plumb</text>
-
-            {/* Deflected Path */}
-            <path d="M 105 40 Q 105 120 135 180" fill="none" stroke="#f87171" strokeWidth="2" />
-            
-            {/* Falling Ball */}
-            <circle cx="120" cy="120" r="4" fill="#facc15">
-               <animateMotion dur="2s" repeatCount="indefinite" path="M 105 40 Q 105 120 135 180" />
-            </circle>
-
-            <text x="140" y="175" fill="#f87171" fontSize="10">Deflects East</text>
-          </svg>
-        </div>
-      );
-
-    case 'projectile-east-north':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="axis-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#94a3b8" />
-              </marker>
-              <marker id="v-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#facc15" />
-              </marker>
-            </defs>
-
-            {/* Axes */}
-            {/* y-axis (North) */}
-            <line x1="100" y1="150" x2="170" y2="150" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="175" y="155" fill="#94a3b8" fontSize="10">y (North)</text>
-
-            {/* z-axis (Up) */}
-            <line x1="100" y1="150" x2="100" y2="50" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="95" y="45" fill="#94a3b8" fontSize="10">z (Up)</text>
-
-            {/* x-axis (East, drawn diagonally downwards) */}
-            <line x1="100" y1="150" x2="40" y2="180" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="25" y="190" fill="#94a3b8" fontSize="10">x (East)</text>
-
-            {/* Velocity Vector */}
-            <line x1="100" y1="150" x2="140" y2="80" stroke="#facc15" strokeWidth="2" markerEnd="url(#v-arrow)" />
-            <text x="145" y="75" fill="#facc15" fontSize="12" fontWeight="bold">v_0</text>
-
-            {/* Projection on xy plane */}
-            <line x1="100" y1="150" x2="140" y2="130" stroke="#475569" strokeWidth="1" strokeDasharray="4" />
-            <line x1="140" y1="130" x2="140" y2="80" stroke="#475569" strokeWidth="1" strokeDasharray="4" />
-
-            {/* Azimuth angle phi */}
-            <path d="M 130 150 A 30 30 0 0 0 120 140" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-            <text x="135" y="145" fill="#38bdf8" fontSize="10">φ</text>
-
-            {/* Elevation angle theta */}
-            <path d="M 120 140 A 40 40 0 0 0 115 125" fill="none" stroke="#f87171" strokeWidth="1.5" />
-            <text x="125" y="125" fill="#f87171" fontSize="10">θ</text>
-          </svg>
-        </div>
-      );
-
-    case 'foucault-pendulum-frame':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="axis-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#94a3b8" />
-              </marker>
-              <marker id="force-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#f87171" />
-              </marker>
-            </defs>
-
-            {/* Axes */}
-            <line x1="100" y1="150" x2="170" y2="150" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="175" y="155" fill="#94a3b8" fontSize="10">y</text>
-            <line x1="100" y1="150" x2="100" y2="50" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="95" y="45" fill="#94a3b8" fontSize="10">z</text>
-            <line x1="100" y1="150" x2="40" y2="180" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="25" y="190" fill="#94a3b8" fontSize="10">x</text>
-
-            {/* Pendulum */}
-            <line x1="100" y1="70" x2="140" y2="120" stroke="#facc15" strokeWidth="2" />
-            <circle cx="140" cy="120" r="5" fill="#38bdf8" />
-            
-            {/* Projection */}
-            <line x1="140" y1="120" x2="140" y2="160" stroke="#475569" strokeWidth="1" strokeDasharray="4" />
-            <line x1="100" y1="150" x2="140" y2="160" stroke="#60a5fa" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            
-            {/* Precession Angle */}
-            <path d="M 80 160 Q 90 165 110 152" fill="none" stroke="#c084fc" strokeWidth="1.5" />
-            <text x="115" y="165" fill="#c084fc" fontSize="12">ψ</text>
-
-            {/* Forces */}
-            <line x1="140" y1="120" x2="110" y2="82" stroke="#f87171" strokeWidth="1" markerEnd="url(#force-arrow)" />
-            <text x="115" y="75" fill="#f87171" fontSize="10">T</text>
-            <line x1="140" y1="120" x2="140" y2="150" stroke="#f87171" strokeWidth="1" markerEnd="url(#force-arrow)" />
-            <text x="145" y="140" fill="#f87171" fontSize="10">mg</text>
-          </svg>
-        </div>
-      );
-
-    case 'foucault-amplitude-plots':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 300 200">
-            {/* X Plot */}
-            <g transform="translate(0, 50)">
-               <line x1="20" y1="0" x2="280" y2="0" stroke="#475569" strokeWidth="1" />
-               <text x="10" y="5" fill="#94a3b8" fontSize="10">x</text>
-               {/* Envelope */}
-               <path d="M 20 40 Q 150 -40 280 40" fill="none" stroke="#c084fc" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
-               <path d="M 20 -40 Q 150 40 280 -40" fill="none" stroke="#c084fc" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
-               {/* Fast wave */}
-               <path d="M 20 40 Q 25 -40 30 35 Q 35 -35 40 30 Q 45 -30 50 25 Q 55 -25 60 20 Q 65 -20 70 15 Q 75 -15 80 10 Q 85 -10 90 5 Q 95 -5 100 0 Q 105 0 110 -5 Q 115 5 120 -10 Q 125 10 130 -15 Q 135 15 140 -20 Q 145 20 150 -25 Q 155 25 160 -30 Q 165 30 170 -35 Q 175 35 180 -40 Q 185 40 190 -35 Q 195 35 200 -30 Q 205 30 210 -25 Q 215 25 220 -20 Q 225 20 230 -15 Q 235 15 240 -10 Q 245 10 250 -5 Q 255 5 260 0" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-            </g>
-
-            {/* Y Plot */}
-            <g transform="translate(0, 150)">
-               <line x1="20" y1="0" x2="280" y2="0" stroke="#475569" strokeWidth="1" />
-               <text x="10" y="5" fill="#94a3b8" fontSize="10">y</text>
-               {/* Envelope */}
-               <path d="M 20 0 Q 150 80 280 0" fill="none" stroke="#c084fc" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
-               <path d="M 20 0 Q 150 -80 280 0" fill="none" stroke="#c084fc" strokeWidth="1" strokeDasharray="4" opacity="0.6" />
-               {/* Fast wave (Starts at 0, grows as x dies) */}
-               <path d="M 20 0 Q 25 5 30 -5 Q 35 10 40 -10 Q 45 15 50 -15 Q 55 20 60 -20 Q 65 25 70 -25 Q 75 30 80 -30 Q 85 35 90 -35 Q 95 40 100 -40 Q 105 40 110 -35 Q 115 35 120 -30 Q 125 30 130 -25 Q 135 25 140 -20 Q 145 20 150 -15 Q 155 15 160 -10 Q 165 10 170 -5 Q 175 5 180 0" fill="none" stroke="#f87171" strokeWidth="1.5" />
-            </g>
-          </svg>
-        </div>
-      );
-
-    case 'foucault-starred-system':
-      return (
-        <div className="flex flex-col items-center justify-center w-full h-full p-4 relative">
-          <svg className="w-full h-full" viewBox="0 0 200 200">
-            <defs>
-              <marker id="axis-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#94a3b8" />
-              </marker>
-              <marker id="star-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <polygon points="0 0, 6 3, 0 6" fill="#facc15" />
-              </marker>
-            </defs>
-
-            {/* Earth axes */}
-            <line x1="100" y1="150" x2="100" y2="50" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="90" y="55" fill="#94a3b8" fontSize="12">y</text>
-            <line x1="50" y1="100" x2="150" y2="100" stroke="#94a3b8" strokeWidth="2" markerEnd="url(#axis-arrow)" />
-            <text x="145" y="90" fill="#94a3b8" fontSize="12">x</text>
-
-            {/* Starred axes */}
-            <g>
-               <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="10s" repeatCount="indefinite" />
-               <line x1="65" y1="135" x2="135" y2="65" stroke="#facc15" strokeWidth="2" markerEnd="url(#star-arrow)" />
-               <text x="140" y="65" fill="#facc15" fontSize="12">x*</text>
-               <line x1="65" y1="65" x2="135" y2="135" stroke="#facc15" strokeWidth="2" markerEnd="url(#star-arrow)" />
-               <text x="140" y="140" fill="#facc15" fontSize="12">y*</text>
-               
-               {/* Pendulum bob on x* axis */}
-               <line x1="100" y1="100" x2="120" y2="80" stroke="#4ade80" strokeWidth="2" strokeDasharray="2" />
-               <circle cx="120" cy="80" r="4" fill="#4ade80" />
-               <text x="110" y="75" fill="#4ade80" fontSize="10">s</text>
-            </g>
-
-            {/* Rotation indicator */}
-            <path d="M 120 100 A 20 20 0 0 0 114 86" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-            <text x="125" y="95" fill="#38bdf8" fontSize="10">Kt</text>
-          </svg>
-        </div>
-      );
-
-    default:
-      return null;
+  // ================= MODULE 4: ACCELERATED FRAMES =================
+  {
+    id: 22,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'A',
+    marks: 3,
+    question: "What is a fictitious force? Give two examples.",
+    solution: "A fictitious force (or pseudo-force) is an apparent force that acts on all masses in a non-inertial (accelerating) frame of reference. It does not arise from any physical interaction between objects, but rather from the acceleration of the observer's coordinate system itself. \n\nWhen we try to apply Newton's Second Law ($F=ma$) in an accelerating frame, we must invent these terms to make the equation balance.\n\n**Examples:**\n1. Centrifugal force\n2. Coriolis force"
+  },
+  {
+    id: 23,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'A',
+    marks: 3,
+    question: "Define effective gravity and explain why a plumb bob doesn't point to the Earth's geometric center.",
+    solution: "Effective gravity $\\mathbf{g}_e$ is the vector sum of the true gravitational acceleration (directed toward the Earth's center) and the outward centrifugal acceleration caused by the Earth's rotation.\n$$ \\mathbf{g}_e = \\mathbf{g} - \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r}) $$\nBecause the centrifugal term pushes outwards (perpendicular to the axis of rotation), the resultant vector $\\mathbf{g}_e$ is deflected slightly toward the equator. A plumb bob aligns with this effective gravity, not true gravity."
+  },
+  {
+    id: 24,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'A',
+    marks: 3,
+    question: "What is the Coriolis force? On what does its magnitude and direction depend?",
+    solution: "The Coriolis force is a fictitious force in a rotating reference frame given by $\\mathbf{F}_{coriolis} = -2m\\mathbf{\\Omega} \\times \\mathbf{v}_{rot}$.\n\nIt only acts on objects that are **moving** relative to the rotating frame. \n- Its **magnitude** depends on the mass $m$, the frame's angular velocity $\\Omega$, the object's speed $v_{rot}$, and the angle between $\\mathbf{\\Omega}$ and $\\mathbf{v}_{rot}$.\n- Its **direction** is always mutually perpendicular to both the rotation axis $\\mathbf{\\Omega}$ and the velocity vector $\\mathbf{v}_{rot}$, determined by the right-hand rule."
+  },
+  {
+    id: 25,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'B',
+    marks: 6,
+    question: "Obtain the transformation equations for velocity and acceleration in a rotating coordinate frame.",
+    solution: "Let $\\mathbf{r}$ be the position vector from the common origin of an inertial frame and a frame rotating with angular velocity $\\mathbf{\\Omega}$.\n\nThe fundamental operator linking time derivatives in the two frames is:\n$$ \\left[\\frac{d}{dt}\\right]_{in} = \\left[\\frac{d}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times $$\n\n**Velocity:** Apply the operator to $\\mathbf{r}$:\n$$ \\mathbf{v}_{in} = \\left[\\frac{d\\mathbf{r}}{dt}\\right]_{rot} + \\mathbf{\\Omega} \\times \\mathbf{r} = \\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times \\mathbf{r} $$\n\n**Acceleration:** Apply the operator again to $\\mathbf{v}_{in}$:\n$$ \\mathbf{a}_{in} = \\left[\\frac{d}{dt}\\right]_{in} (\\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times \\mathbf{r}) $$\n$$ \\mathbf{a}_{in} = \\left[\\frac{d}{dt}\\right]_{rot} (\\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times \\mathbf{r}) + \\mathbf{\\Omega} \\times (\\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times \\mathbf{r}) $$\nAssuming $\\dot{\\mathbf{\\Omega}} = 0$:\n$$ \\mathbf{a}_{in} = \\mathbf{a}_{rot} + \\mathbf{\\Omega} \\times \\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times \\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r}) $$\n$$ \\mathbf{a}_{in} = \\mathbf{a}_{rot} + 2\\mathbf{\\Omega} \\times \\mathbf{v}_{rot} + \\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r}) $$"
+  },
+  {
+    id: 26,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'B',
+    marks: 6,
+    question: "Explain the equatorial bulge of the Earth using the concept of centrifugal force.",
+    solution: "The centrifugal acceleration is $\\mathbf{a}_c = -\\mathbf{\\Omega} \\times (\\mathbf{\\Omega} \\times \\mathbf{r})$, which points radially outward from the axis of rotation.\n\nIf the Earth were a perfect sphere, we could resolve this centrifugal vector into two components at the surface:\n1. A perpendicular component (adds to gravity, slightly reducing weight).\n2. A tangential component (parallel to the surface) that points toward the equator.\n\nBecause of this tangential component, any loose matter (like water and magma) experiences a net force pushing it \"downhill\" toward the equator. Over geological time, matter migrated equator-ward until the surface itself tilted enough so that the normal force precisely canceled the tangential centrifugal force. The result is an oblate spheroid—a planet that is fatter at the equator than at the poles."
+  },
+  {
+    id: 27,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'B',
+    marks: 6,
+    question: "Calculate the eastward deflection of a stone dropped from a height h at colatitude λ using the zeroth and first-order approximations.",
+    solution: "1. **Zeroth-order approximation (ignore Coriolis):**\nThe stone falls under effective gravity $g_e$ (z-axis is up).\n$a_z = -g_e \\implies v_z = -g_et$.\nThe time of flight is $t_f = \\sqrt{2h/g_e}$.\n\n2. **First-order approximation:**\nThe Coriolis acceleration is $\\mathbf{a}_{cor} = -2\\mathbf{\\Omega} \\times \\mathbf{v}$.\nWith $\\mathbf{\\Omega} = \\Omega\\sin\\lambda \\mathbf{\\hat{j}} + \\Omega\\cos\\lambda \\mathbf{\\hat{k}}$ and zeroth-order $\\mathbf{v} = -g_et \\mathbf{\\hat{k}}$:\n$$ \\mathbf{a}_{cor} = -2 (\\Omega\\sin\\lambda \\mathbf{\\hat{j}}) \\times (-g_et \\mathbf{\\hat{k}}) = 2\\Omega g_et\\sin\\lambda (\\mathbf{\\hat{j}} \\times \\mathbf{\\hat{k}}) $$\nSince $\\mathbf{\\hat{j}} \\times \\mathbf{\\hat{k}} = \\mathbf{\\hat{i}}$ (East):\n$a_x = 2\\Omega g_e t \\sin\\lambda$\n\n3. **Integrate for deflection:**\n$v_x = \\int a_x dt = \\Omega g_e t^2 \\sin\\lambda$\n$x = \\int v_x dt = \\frac{1}{3} \\Omega g_e t^3 \\sin\\lambda$\n\nSubstitute $t_f = \\sqrt{2h/g_e}$ to find the final eastward deflection:\n$$ x = \\frac{1}{3} \\Omega g_e \\left(\\frac{2h}{g_e}\\right)^{3/2} \\sin\\lambda $$"
+  },
+  {
+    id: 28,
+    moduleId: 'module-4-accelerated-frames',
+    section: 'C',
+    marks: 10,
+    question: "What is a Foucault pendulum? Derive its horizontal equations of motion and show that its plane of oscillation precesses.",
+    solution: "**Definition:** The Foucault pendulum is a very long, massive pendulum free to oscillate in any direction. Its slow change in swing direction provides direct, visible proof of the Earth's rotation.\n\n**Equations of Motion:**\nLet the origin be the equilibrium point on the Earth's surface. $z$ is up, $y$ is North, $x$ is East.\nForces: Tension $\\mathbf{T}$ and gravity $m\\mathbf{g}$. Fictitious: Coriolis $-2m\\mathbf{\\Omega} \\times \\mathbf{v}$.\nNewton's 2nd Law: $m\\mathbf{a} = \\mathbf{T} + m\\mathbf{g} - 2m(\\mathbf{\\Omega} \\times \\mathbf{v})$.\n\nFor a long pendulum, small angles mean $T_z \\approx mg$. Tension components are $T_x = -mg(x/l)$ and $T_y = -mg(y/l)$. Let $\\omega^2 = g/l$.\nEvaluating the Coriolis cross product and ignoring $v_z$ (which is very small), we get the coupled horizontal equations:\n$$ \\ddot{x} - 2(\\Omega\\cos\\lambda)\\dot{y} + \\omega^2x = 0 $$\n$$ \\ddot{y} + 2(\\Omega\\cos\\lambda)\\dot{x} + \\omega^2y = 0 $$\nLet $K = \\Omega\\cos\\lambda$.\n\n**Precession:**\nDefine a complex variable $\\zeta = x + iy$. Multiply the $y$-equation by $i$ and add it to the $x$-equation:\n$$ \\ddot{\\zeta} + 2iK\\dot{\\zeta} + \\omega^2\\zeta = 0 $$\nSubstitute $\\zeta = e^{pt}$ to find roots: $p^2 + 2iKp + \\omega^2 = 0 \\implies p = -iK \\pm i\\sqrt{K^2+\\omega^2}$.\nSince $K \\ll \\omega$ (Earth rotates much slower than the pendulum swings), $\\sqrt{K^2+\\omega^2} \\approx \\omega$.\nSo $p \\approx -iK \\pm i\\omega$.\nThe general solution is $\\zeta(t) = e^{-iKt}(A e^{i\\omega t} + B e^{-i\\omega t})$.\n\nThe term in the parentheses is the fast back-and-forth oscillation. The term $e^{-iKt}$ slowly rotates this entire solution in the complex plane (clockwise) at a rate $K = \\Omega\\cos\\lambda$. This proves the precession."
   }
+];
+--- END OF FILE src/data/exam_questions.ts ---
+
+--- START OF FILE src/components/ExamQuestionCard.tsx ---
+import React, { useState } from 'react';
+import MathRenderer from './MathRenderer';
+import { ExamQuestion } from '../data/exam_questions';
+import { ChevronDown, ChevronUp, Award } from 'lucide-react';
+
+interface Props {
+  question: ExamQuestion;
+}
+
+const ExamQuestionCard: React.FC<Props> = ({ question }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="glass-panel rounded-2xl mb-4 overflow-hidden border border-white/5 shadow-lg transition-all bg-[#131b26]/80 backdrop-blur-xl">
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="p-5 cursor-pointer flex items-start gap-4 hover:bg-white/5 transition-colors"
+      >
+        <div className="bg-[#1a2c42] text-duo-blue font-black px-3 py-1.5 rounded-xl shrink-0 text-sm h-fit shadow-inner">
+          Q{question.id}
+        </div>
+        <div className="flex-grow">
+           <div className="text-white font-semibold text-base leading-relaxed">
+              <MathRenderer content={question.question} />
+           </div>
+           <div className="flex items-center gap-1.5 mt-4">
+              <Award className="w-4 h-4 text-amber-400" />
+              <span className="text-amber-400 text-xs font-bold">{question.marks} Marks</span>
+           </div>
+        </div>
+        <div className="shrink-0 mt-1">
+          {isOpen ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+        </div>
+      </div>
+      
+      {isOpen && (
+        <div className="p-6 border-t border-white/10 bg-black/50 animate-in slide-in-from-top-2 duration-300">
+           <h4 className="text-[10px] font-black uppercase tracking-widest text-duo-green mb-4">Detailed Solution</h4>
+           <div className="text-slate-300 text-sm font-medium">
+              <MathRenderer content={question.solution} />
+           </div>
+        </div>
+      )}
+    </div>
+  );
 };
---- END OF FILE src/components/canvasart/MechModule4CanvasArt.tsx ---
+
+export default ExamQuestionCard;
+--- END OF FILE src/components/ExamQuestionCard.tsx ---
+
+--- START OF FILE src/pages/ExamQuestionsPage.tsx ---
+import React, { useState } from 'react';
+import { MODULES } from '../data/modules';
+import { UserProgress } from '../types';
+import { EXAM_QUESTIONS } from '../data/exam_questions';
+import ExamQuestionCard from '../components/ExamQuestionCard';
+import NextModuleButton from '../components/NextModuleButton';
+import ModuleSelector from '../components/ModuleSelector';
+import { BookOpenCheck, ChevronDown } from 'lucide-react';
+
+interface Props {
+  progress: UserProgress;
+  onModuleChange: (moduleId: string) => void;
+}
+
+const ExamQuestionsPage: React.FC<Props> = ({ progress, onModuleChange }) => {
+  const [isModuleSelectorOpen, setIsModuleSelectorOpen] = useState(false);
+  
+  const currentModuleIndex = MODULES.findIndex(m => m.id === progress.currentModuleId);
+  const currentModule = currentModuleIndex !== -1 ? MODULES[currentModuleIndex] : MODULES[0];
+  
+  const nextModule =
+    currentModuleIndex !== -1 && currentModuleIndex < MODULES.length - 1
+      ? MODULES[currentModuleIndex + 1]
+      : undefined;
+
+  const handleGoNextModule = () => {
+    if (nextModule && onModuleChange) {
+      onModuleChange(nextModule.id);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const sections =['A', 'B', 'C'] as const;
+  const currentModuleQuestions = EXAM_QUESTIONS.filter(q => q.moduleId === currentModule.id);
+
+  return (
+    <div className="flex-grow flex flex-col pb-28 overflow-x-hidden border-x border-white/5 relative">
+      
+      {/* Module Selector Header (Similar to Dashboard) */}
+      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0 shadow-lg backdrop-blur-xl bg-[#0b0f19]/80">
+        <div
+          onClick={() => setIsModuleSelectorOpen(true)}
+          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group w-full"
+        >
+          <BookOpenCheck className="w-6 h-6 text-duo-blue mr-3 shrink-0" />
+          <div className="flex flex-col flex-grow min-w-0">
+             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Exam Prep</span>
+             <span className="font-bold text-sm text-white line-clamp-1">{currentModule.title}</span>
+          </div>
+          <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
+        </div>
+      </header>
+
+      <div className="p-4 mt-2 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="text-center mb-10 mt-4">
+          <p className="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed">
+            Practice questions from "PHY4CJ204: Mechanics II"<br />Open Book Assessment.
+          </p>
+        </div>
+
+        {currentModuleQuestions.length === 0 ? (
+          <div className="p-10 text-center text-slate-500 mt-10 glass-panel rounded-3xl">
+            <p>No exam questions available for this module yet.</p>
+          </div>
+        ) : (
+          <div className="space-y-10">
+            {sections.map(section => {
+              const questions = currentModuleQuestions.filter(q => q.section === section);
+              if (questions.length === 0) return null;
+              
+              return (
+                <div key={section} className="relative">
+                  <div className="mb-5 inline-block">
+                     <span className="bg-slate-800 text-slate-300 px-4 py-1.5 rounded-lg font-bold text-sm border border-slate-700 shadow-sm">
+                       Section {section}
+                     </span>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {questions.map(q => (
+                      <ExamQuestionCard key={q.id} question={q} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Next Module Button */}
+        {nextModule && (
+          <NextModuleButton nextModule={nextModule} onGoNext={handleGoNextModule} />
+        )}
+      </div>
+
+      <ModuleSelector
+        modules={MODULES}
+        activeModuleId={progress.currentModuleId}
+        completedLessons={progress.completedLessons}
+        onSelectModule={(id) => { onModuleChange(id); window.scrollTo(0,0); }}
+        isOpen={isModuleSelectorOpen}
+        onClose={() => setIsModuleSelectorOpen(false)}
+      />
+    </div>
+  );
+};
+
+export default ExamQuestionsPage;
+--- END OF FILE src/pages/ExamQuestionsPage.tsx ---
+
+--- START OF FILE src/styles/exam.css ---
+/* Exam Prep Specific Styles */
+
+/* Subtle glow for the exam cards */
+.exam-card-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.05);
+}
+
+/* Animations for expanding solutions */
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.solution-animate {
+  animation: slideDownFade 0.3s ease-out forwards;
+}
+--- END OF FILE src/styles/exam.css ---
+```
