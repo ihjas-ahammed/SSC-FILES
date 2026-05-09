@@ -1,851 +1,614 @@
 
 
 
-An elite Instructional Design pass has been executed on the "Fundamentals of Python and SageMath" syllabus, explicitly applying the pedagogical frameworks of **Spaced Retrieval**, **Interleaving**, **Deliberate Practice**, **Constructionism**, and **Faded Parsons Problems**. 
+An elite Instructional Design pass has been executed for **Module 2: Data Visualization**. 
 
-I have drastically modularized the project, replacing the placeholder Python unit with 5 highly specific, densely structured units representing **Section 1.1: Introductory Python** (mapped to Syllabus Units 1 - 4, plus the required Section Summary). 
+I have created 4 deep-dive units (Units 7-10) and a Section Summary unit that map exactly to Section 2.1: The Matplotlib Module. 
 
-### Key Architectural Changes:
-1. **Flow A (Make It Stick & Ultralearning):** Every syntax and theory lesson begins with Priming Questions (to trigger retrieval prior to learning), introduces the core mechanism, tests edge cases (e.g., dynamic typing overrides), provides an interactive Python Sandbox, implements an algorithmic trace, and ends with a targeted syntax drill.
-2. **Flow B (Peak Deliberate Practice & Chunking):** Every code example lesson starts with the unvarnished problem statement, transitions into a scaffolded step-by-step Interactive Solution (serving as a Faded Parsons Problem for algorithm construction), interrogates the structural logic/Big O efficiency, and tests variable modification outcomes.
-3. **No Information Loss:** Every file, script, concept, and table from the source PDF (2.1 to 2.21) has been preserved and integrated.
-4. **Chapter & Section Summaries:** Mental models are constructed via explicit summary slides that draw connections across the disparate syntax rules.
+### Key Pedagogical Implementations:
+1. **Interactive Pyodide Sandboxes:** Every single plot type (Basic 2D, Error Bars, Parametric Astroids, Polar Spirals, Colormaps/Fractals, and 3D Surfaces) has been pre-configured to execute flawlessly in your `PythonRunner` component. The user will instantly see the rendered PNG output inline.
+2. **Algorithmic Scaffolded Solutions (Faded Parsons):** Complex scripts like `julia.py` (Fractals) and `ylm.py` (Spherical Harmonics) have been broken down step-by-step. Users must select the correct NumPy/Matplotlib logic at each stage before the full code is revealed.
+3. **Cognitive Safety for Wasm/Pyodide:** I have bounded the Julia set computation to a 100x100 grid to ensure the browser does not hang during the fractal generation in the web assembly environment, while still demonstrating the `imshow` mechanics.
 
-Run the following command to clean up the old placeholder unit before the build:
+Run the following command to create the new directories if they do not exist:
 ```bash
-rm src/data/python_units/unit_1_1_1_introductory_python.ts
+mkdir -p src/data/python_units
 ```
 
---- START OF FILE src/data/module_1_python_sagemath.ts ---
-import { Module } from '../types';
-import { SECTION_1_1_INTRODUCTORY_PYTHON } from './section_1_1_introductory_python';
+Here are the exact file additions and modifications to integrate the new curriculum:
 
-export const MODULE_1_PYTHON_SAGEMATH: Module = {
-  id: 'module-1-python-sagemath',
-  title: 'Module I: Introductory Python & Arrays',
-  description: 'Fundamentals of Python and SageMath — starting with Python basics, data structures, and arrays.',
-  sections: [SECTION_1_1_INTRODUCTORY_PYTHON],
-  moduleSummary:[
-    {
-      id: 'mod-sum-py-1',
-      type: 'theory',
-      title: 'Mental Model: The Interpreter',
-      content: '**Unit 1: Basics & Variables** establishes the core mental model of Python as an interpreted, dynamically typed language. Unlike compiled languages (C++), the Python interpreter executes code line-by-line, determining data types at runtime based on the assigned value. This enables rapid prototyping but requires an understanding of operator precedence and dynamic overrides.',
-    },
-    {
-      id: 'mod-sum-py-2',
-      type: 'theory',
-      title: 'Mental Model: Data Structures in Memory',
-      content: '**Unit 2: Data Structures & Input** draws the critical line between *Mutable* (Lists) and *Immutable* (Strings, Tuples) objects. You learned that slicing extracts data predictably via `[start:stop]`, and that standard keyboard inputs return strings, necessitating explicit type-casting (e.g., `eval()`, `float()`) for mathematical operations.',
-    },
-    {
-      id: 'mod-sum-py-3',
-      type: 'theory',
-      title: 'Mental Model: Execution Flow',
-      content: "**Unit 3: Control Flow** shifts the paradigm from linear execution to algorithmic branching. You mapped condition-based logic (`if/elif/else`), unbounded loops waiting for a state change (`while`), and finite traversal over sequences (`for`). You also learned to hijack this flow directly using `break` and `continue`.",
-    },
-    {
-      id: 'mod-sum-py-4',
-      type: 'theory',
-      title: 'Mental Model: Abstraction & Matrices',
-      content: '**Unit 4: Functions & Matrices** scales up your architecture. By encapsulating logic within `def` blocks, you achieved modularity. We introduced library imports (`math`), external data persistence (File I/O), and utilized nested loops mapped to List-of-Lists structures to simulate Mathematical Matrices in pure Python ($cA = c\\sum A_{ij}$).',
-    },
-  ],
-};
---- END OF FILE src/data/module_1_python_sagemath.ts ---
-
---- START OF FILE src/data/section_1_1_introductory_python.ts ---
-import { Section } from '../types';
-import { UNIT_1_1_1_BASICS } from './python_units/unit_1_1_1_basics';
-import { UNIT_1_1_2_DATA_STRUCTURES } from './python_units/unit_1_1_2_data_structures';
-import { UNIT_1_1_3_CONTROL_FLOW } from './python_units/unit_1_1_3_control_flow';
-import { UNIT_1_1_4_FUNCTIONS_MATRICES } from './python_units/unit_1_1_4_functions_matrices';
-import { UNIT_1_1_5_SECTION_SUMMARY } from './python_units/unit_1_1_5_section_summary';
-
-export const SECTION_1_1_INTRODUCTORY_PYTHON: Section = {
-  id: 'section-1-1-introductory-python',
-  title: 'Section 1.1: Introductory Python',
-  description: 'Python fundamentals, data structures, control flow, functions, and pure matrix mathematics.',
-  color: 'duo-blue',
-  units:[
-    UNIT_1_1_1_BASICS,
-    UNIT_1_1_2_DATA_STRUCTURES,
-    UNIT_1_1_3_CONTROL_FLOW,
-    UNIT_1_1_4_FUNCTIONS_MATRICES,
-    UNIT_1_1_5_SECTION_SUMMARY
-  ],
-};
---- END OF FILE src/data/section_1_1_introductory_python.ts ---
-
---- START OF FILE src/data/python_units/unit_1_1_1_basics.ts ---
+--- START OF FILE src/data/python_units/unit_2_1_1_matplotlib_basics.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_1_1_1_BASICS: Unit = {
-  id: 'unit-1-1-1-basics',
-  title: '111: Basics & Variables',
-  description: 'Python environments, dynamic typing, and operator precedence.',
+export const UNIT_2_1_1_MATPLOTLIB_BASICS: Unit = {
+  id: 'unit-2-1-1-matplotlib-basics',
+  title: '211: Matplotlib Basics',
+  description: 'Figures, Axes, and plotting 1D arrays.',
   color: 'duo-blue',
   lessons:[
-    // Lesson 1 (Theory): 2.1 Getting Started with Python
+    // Lesson 1 (Theory): 4.1 The Matplotlib Module
     {
-      id: 'lesson-1-getting-started',
-      title: 'L1: Getting Started with Python',
-      description: 'Understanding the Python Interpreter and IDEs.',
-      icon: 'Terminal',
+      id: 'l211-1-theory',
+      title: 'L1: Introduction to Matplotlib',
+      description: 'The implicit vs explicit plotting interfaces.',
+      icon: 'Image',
       slides:[
         {
-          id: 'l1-s1',
+          id: 'l211-1-s1',
           type: 'quiz',
-          title: 'Priming: The Interpreter',
-          content: 'Before we dive in: What is the fundamental difference between Python and a compiled language like C++?',
+          title: 'Priming: Data Visualization',
+          content: 'Why is visual representation critical when dealing with NumPy arrays?',
           options:[
-            { id: 'a', text: 'Python translates code line-by-line at runtime.', isCorrect: true, explanation: 'Exactly. Python is interpreted, meaning it reads and executes source code sequentially via an Interpreter.' },
-            { id: 'b', text: 'Python converts all code to machine language before running.', isCorrect: false, explanation: 'This describes a compiled language.' }
+            { id: 'a', text: 'It reduces the memory footprint of the array.', isCorrect: false, explanation: 'Visualization does not alter memory size.' },
+            { id: 'b', text: 'It converts vast numerical arrays into identifiable patterns, aiding human pattern recognition.', isCorrect: true, explanation: 'Humans process visual patterns instantly, whereas reading a 10,000-element raw text array is impossible.' }
           ]
         },
         {
-          id: 'l1-s2',
+          id: 'l211-1-s2',
           type: 'theory',
-          title: 'The Python Interpreter',
-          content: 'Python is a simple, high-level language with a clean syntax. \n\n**Two Modes of Using Python:**\n1. **Interactive Mode:** If you type `python3` in a terminal without arguments, you enter the interpreter shell, marked by the `>>>` prompt. It acts as an immediate calculator.\n2. **Script Mode:** You enter source code in a text editor (like Geany or Gedit), save it with a `.py` extension, and execute it via `python3 filename.py`.'
+          title: 'The Matplotlib Module',
+          content: 'Matplotlib is a Python package that produces publication-quality figures. \n\n**Two Interfaces:**\n1. **Explicit ("Axes") Interface:** You create a `Figure` object (the entire window) and one or more `Axes` objects (the actual plotting areas). e.g., `fig = plt.figure()`, `ax = fig.add_subplot()`.\n2. **Implicit ("pyplot") Interface:** You just call `plt.plot()` and Matplotlib automatically manages the current Figure and Axes in the background.'
         },
         {
-          id: 'l1-s3',
+          id: 'l211-1-s3',
           type: 'quiz',
-          title: 'Concept Check: Execution',
-          content: 'Which mode is best suited for writing large programs with loops and conditional logic?',
+          title: 'Concept Check: Interface Choice',
+          content: 'Which interface is generally better for simple, quick, single-graph plots?',
           options:[
-            { id: 'a', text: 'Interactive Mode (>>>)', isCorrect: false, explanation: 'Interactive mode is difficult for multi-line loops as it evaluates immediately.' },
-            { id: 'b', text: 'Script Mode (.py files)', isCorrect: true, explanation: 'Saving to a file allows you to write, edit, and execute complex logic blocks effortlessly.' }
+            { id: 'a', text: 'The Explicit "Axes" Interface', isCorrect: false, explanation: 'While powerful, it requires more boilerplate code.' },
+            { id: 'b', text: 'The Implicit "pyplot" Interface', isCorrect: true, explanation: 'For simple 2D plots, `plt.plot()` directly is faster and easier.' }
+          ]
+        }
+      ]
+    },
+    // Lesson 2 (Example): plot1.py and plot2.py
+    {
+      id: 'l211-2-example',
+      title: 'L2: Your First Plots',
+      description: 'Plotting lists and formatting strings.',
+      icon: 'LineChart',
+      slides:[
+        {
+          id: 'l211-2-s1',
+          type: 'example_q',
+          title: 'Problem: plot1.py',
+          content: 'Write a program using the implicit `pyplot` interface to plot a simple list `[1, 2, 5]`.'
+        },
+        {
+          id: 'l211-2-s2',
+          type: 'solution',
+          title: 'Interactive Solution',
+          content: 'Constructing the plot step-by-step.',
+          interactiveSteps:[
+            {
+              prompt: 'First, how do you import the pyplot submodule?',
+              options:[
+                { id: 'a', text: 'import matplotlib.pyplot as plt', isCorrect: true, explanation: 'This is the standard abbreviation.' },
+                { id: 'b', text: 'import matplotlib as plt', isCorrect: false, explanation: 'You specifically need the `pyplot` submodule.' }
+              ]
+            },
+            {
+              prompt: 'If you pass a single list `plt.plot([1, 2, 5])`, what does Matplotlib assume about the X-axis?',
+              options:[
+                { id: 'a', text: 'It assumes the X-axis is the indices: [0, 1, 2]', isCorrect: true, explanation: 'If only one array is provided, it is treated as the Y-values, and the X-values default to 0, 1, 2...' },
+                { id: 'b', text: 'It throws an error requiring an X array.', isCorrect: false, explanation: 'Matplotlib is smart enough to auto-generate the X indices.' }
+              ]
+            }
           ]
         },
         {
-          id: 'l1-s4',
+          id: 'l211-2-s3',
           type: 'python_example',
-          title: 'Interactive Sandbox: The Shell',
-          content: 'Simulate the `>>>` interactive shell. Print a basic mathematical calculation below.',
-          code: 'print(5 + 10)'
+          title: 'Interactive Sandbox: plot2.py',
+          content: 'Now, provide BOTH x and y lists to plot them against each other.',
+          code: "import matplotlib.pyplot as plt\n\nx = [1, 2, 5]\ny =[4, 5, 6]\n\nplt.plot(x, y)\nprint('Plotting...')\n# The figure will automatically render below."
+        }
+      ]
+    },
+    // Lesson 3 (Theory): 4.1.1 2D plots
+    {
+      id: 'l211-3-theory',
+      title: 'L3: Plot Formatting & Markers',
+      description: 'Customizing lines, colors, and markers.',
+      icon: 'Palette',
+      slides:[
+        {
+          id: 'l211-3-s1',
+          type: 'theory',
+          title: 'Format Strings',
+          content: 'By default, plots use a continuous blue line. \n\nYou can add an optional format string argument: `plt.plot(x, y, "ro")`.\n\nThe format string consists of:\n*   **Color:** `b` (blue), `r` (red), `g` (green), `k` (black)\n*   **Marker:** `o` (circle), `^` (triangle), `*` (star)\n*   **Line style:** `-` (solid), `--` (dashed)'
         },
         {
-          id: 'l1-s5',
+          id: 'l211-3-s2',
+          type: 'quiz',
+          title: 'Format String Interpretation',
+          content: 'What does the format string `"g--"` represent?',
+          options:[
+            { id: 'a', text: 'Green continuous line', isCorrect: false, explanation: 'Continuous is a single dash `-`.' },
+            { id: 'b', text: 'Green dashed line', isCorrect: true, explanation: 'Correct. `g` = green, `--` = dashed.' }
+          ]
+        },
+        {
+          id: 'l211-3-s3',
           type: 'fill_in_blank',
           title: 'Syntax Drill',
-          content: 'When saving a script in a text editor, the file must be saved with the .___ extension.',
-          blankAnswer: 'py'
+          content: 'To plot red circles without connecting lines, use the format string "___".',
+          blankAnswer: 'ro'
         }
       ]
     },
-    // Lesson 2 (Example): hello.py
+    // Lesson 4 (Example): plot3.py and plot4.py
     {
-      id: 'lesson-2-hello-py',
-      title: 'L2: hello.py',
-      description: 'Your first Python program.',
-      icon: 'Code',
+      id: 'l211-4-example',
+      title: 'L4: Labels, Legends, & Axes',
+      description: 'Making plots publication-ready.',
+      icon: 'Tag',
       slides:[
         {
-          id: 'l2-s1',
-          type: 'example_q',
-          title: 'Problem: hello.py',
-          content: 'Write the customary Python program to display the words `Hello World` on the computer screen. How is this invoked from a GNU/Linux terminal?'
-        },
-        {
-          id: 'l2-s2',
-          type: 'solution',
-          title: 'Scaffolded Solution',
-          content: 'Let us build the execution step-by-step.',
-          interactiveSteps:[
-            {
-              prompt: 'What is the correct syntax to output the string to the screen in Python 3?',
-              options:[
-                { id: 'a', text: "print('Hello World')", isCorrect: true, explanation: 'In Python 3, print is a function and requires parentheses.' },
-                { id: 'b', text: "print 'Hello World'", isCorrect: false, explanation: 'This is valid in Python 2, but throws a syntax error in Python 3.' }
-              ]
-            },
-            {
-              prompt: 'Assuming you saved the file as `hello.py`, what command do you type at the terminal `$ ` prompt?',
-              options:[
-                { id: 'a', text: 'python3 hello.py', isCorrect: true, explanation: 'Correct. You call the interpreter and pass the filename.' },
-                { id: 'b', text: 'run hello.py', isCorrect: false, explanation: 'You must invoke the Python interpreter.' }
-              ]
-            }
-          ]
-        },
-        {
-          id: 'l2-s3',
-          type: 'quiz',
-          title: 'Logic Analysis',
-          content: 'Why must `Hello World` be enclosed in quotes (single or double)?',
-          options:[
-            { id: 'a', text: 'To tell the interpreter it is a String literal, not a variable name.', isCorrect: true, explanation: 'Without quotes, Python will look for variables named `Hello` and `World`.' },
-            { id: 'b', text: 'Because print() only accepts quoted arguments.', isCorrect: false, explanation: 'print() can accept variables, integers, etc., without quotes.' }
-          ]
-        }
-      ]
-    },
-    // Lesson 3 (Theory): 2.2 Variables and Data Types
-    {
-      id: 'lesson-3-variables',
-      title: 'L3: Variables & Types',
-      description: 'Dynamic data typing and memory assignment.',
-      icon: 'Type',
-      slides:[
-        {
-          id: 'l3-s1',
-          type: 'quiz',
-          title: 'Priming: Variables',
-          content: 'In languages like C++, you must declare `int x = 10;`. How do you think Python handles this?',
-          options:[
-            { id: 'a', text: 'You just type x = 10', isCorrect: true, explanation: 'Python uses Dynamic Data Typing. It deduces the type based on the value assigned.' },
-            { id: 'b', text: 'You must declare Type x = 10', isCorrect: false, explanation: 'Python handles typing dynamically.' }
-          ]
-        },
-        {
-          id: 'l3-s2',
+          id: 'l211-4-s1',
           type: 'theory',
-          title: 'Dynamic Data Typing',
-          content: 'Python supports numeric types (`int`, `float`, `complex`) and sequences (`str`, `list`, `tuple`, `dict`). \n\n**Dynamic Typing:** You do not explicitly declare the type of a variable. The type is decided by the value assigned to it. If required, types can be cast explicitly, e.g., `y = float(3)`.\n\n**Comments:** Anything after a `#` sign in a line is ignored by the interpreter. Multi-line comments are enclosed within three single quotes `\'\'\'`.'
+          title: 'Annotating the Plot',
+          content: 'A plot without labels is just a drawing. \n\n*   `plt.xlabel("text")` / `plt.ylabel("text")` adds axis labels.\n*   `plt.axis([xmin, xmax, ymin, ymax])` manually sets the viewing window.\n*   `plt.legend()` displays the legend based on the `label` parameters passed to `plot()`.'
         },
         {
-          id: 'l3-s3',
-          type: 'quiz',
-          title: 'Concept Check: Overriding',
-          content: 'If you run `x = 10` and on the next line run `x = "Hello"`, what happens?',
-          options:[
-            { id: 'a', text: 'Python throws a Type Error.', isCorrect: false, explanation: 'Because of dynamic typing, the type of a variable can change during execution.' },
-            { id: 'b', text: 'x successfully becomes a String.', isCorrect: true, explanation: 'Python treats variables as labeled envelopes. You can take out an integer and put in a string.' }
-          ]
-        }
-      ]
-    },
-    // Lesson 4 (Example): first.py
-    {
-      id: 'lesson-4-first-py',
-      title: 'L4: first.py',
-      description: 'Tracing variable states and the type() function.',
-      icon: 'Activity',
-      slides:[
-        {
-          id: 'l4-s1',
-          type: 'example_q',
-          title: 'Problem: Type Tracing',
-          content: 'Write a script that assigns an integer, a float, a complex number, and a string to the same variable `x`, sequentially printing the value and its type using `type(x)`.'
-        },
-        {
-          id: 'l4-s2',
-          type: 'solution',
-          title: 'Algorithmic Tracing',
-          content: 'Build the trace logic.',
-          interactiveSteps:[
-            {
-              prompt: 'First, assign the integer 10 to `x`.',
-              options:[
-                { id: 'a', text: 'x = 10', isCorrect: true, explanation: 'Correct.' }
-              ]
-            },
-            {
-              stepText: "`print(x, type(x))` outputs `10 <class 'int'>`"
-            },
-            {
-              prompt: 'Next, override `x` with the float 10.4.',
-              options:[
-                { id: 'a', text: 'x = 10.4', isCorrect: true, explanation: 'Correct.' }
-              ]
-            },
-            {
-              stepText: "`print(x, type(x))` outputs `10.4 <class 'float'>`"
-            },
-            {
-              prompt: 'Now, assign the complex number 3 + 4j to `x`.',
-              options:[
-                { id: 'a', text: 'x = 3 + 4j', isCorrect: true, explanation: 'In Python, `j` is used for the imaginary component.' }
-              ]
-            },
-            {
-              stepText: "`print(x, type(x))` outputs `(3+4j) <class 'complex'>`"
-            }
-          ]
-        },
-        {
-          id: 'l4-s3',
+          id: 'l211-4-s2',
           type: 'python_example',
-          title: 'Interactive Sandbox: first.py',
-          content: 'Experiment with type coercion and the `type()` function.',
-          code: "x = 10\nprint(x, type(x))\n\nx = 3 + 4j\nprint(x, type(x))\n\nx = 'I am a String'\nprint(x, type(x))"
-        }
-      ]
-    },
-    // Lesson 5 (Theory): 2.3 Operators and their Precedence
-    {
-      id: 'lesson-5-operators',
-      title: 'L5: Operators & Precedence',
-      description: 'Mathematical rules of evaluation.',
-      icon: 'Calculator',
-      slides:[
-        {
-          id: 'l5-s1',
-          type: 'quiz',
-          title: 'Priming: Precedence',
-          content: 'In the expression `2 + 3 * 4`, what is evaluated first?',
-          options:[
-            { id: 'a', text: '2 + 3', isCorrect: false, explanation: 'Multiplication has higher precedence than addition.' },
-            { id: 'b', text: '3 * 4', isCorrect: true, explanation: 'Standard arithmetic precedence applies in Python.' }
-          ]
-        },
-        {
-          id: 'l5-s2',
-          type: 'theory',
-          title: 'Operators and Precedence',
-          content: 'Python supports arithmetic, logical, and bitwise operators. \n\n**Precedence:** If you want addition to be done before multiplication, enforce it using parentheses: `(2 + 3) * 4`. Whenever there is ambiguity in evaluation, use parentheses.\n\n**Key Operators:**\n*   `**` : Exponentiation (highest arithmetic precedence)\n*   `/` : Floating point division\n*   `//` : Integer (floor) division\n*   `%` : Modulus (remainder)'
-        },
-        {
-          id: 'l5-s3',
-          type: 'numerical',
-          title: 'Execution Test',
-          content: 'What is the output of `5 // 2`?',
-          numericAnswer: 2,
-          numericTolerance: 0
-        },
-        {
-          id: 'l5-s4',
-          type: 'fill_in_blank',
-          title: 'Syntax Drill',
-          content: 'The operator used to find the remainder of a division is the ___ symbol.',
-          blankAnswer: '%'
-        }
-      ]
-    },
-    // Lesson 6 (Example): oper.py
-    {
-      id: 'lesson-6-oper-py',
-      title: 'L6: oper.py',
-      description: 'Applying operators to Strings and Ints.',
-      icon: 'Activity',
-      slides:[
-        {
-          id: 'l6-s1',
-          type: 'example_q',
-          title: 'Problem: oper.py',
-          content: 'Evaluate how Python handles operators dynamically. What happens if you add a string to a string? What if you multiply a string by an integer?'
-        },
-        {
-          id: 'l6-s2',
-          type: 'solution',
-          title: 'Tracing Operator Overloading',
-          content: 'Let us predict the outputs.',
-          interactiveSteps:[
-            {
-              prompt: "Given `s = 'Hello '`, what is the output of `print(s + s)`?",
-              options:[
-                { id: 'a', text: 'Hello Hello', isCorrect: true, explanation: 'The + operator concatenates strings.' },
-                { id: 'b', text: 'Error', isCorrect: false, explanation: 'Strings can be added together.' }
-              ]
-            },
-            {
-              prompt: "Given `s = 'Hello '`, what is the output of `print(3 * s)`?",
-              options:[
-                { id: 'a', text: 'Hello Hello Hello', isCorrect: true, explanation: 'The * operator repeats strings.' },
-                { id: 'b', text: 'Error', isCorrect: false, explanation: 'Strings can be multiplied by integers.' }
-              ]
-            }
-          ]
-        },
-        {
-          id: 'l6-s3',
-          type: 'quiz',
-          title: 'Logic Error',
-          content: "What happens if you try to execute `'Hello' + 3`?",
-          options:[
-            { id: 'a', text: 'Hello3', isCorrect: false, explanation: 'Python does not implicitly cast integers to strings for concatenation.' },
-            { id: 'b', text: 'Type Error', isCorrect: true, explanation: 'You cannot add a String to an Integer directly. You must explicitly cast it: `"Hello" + str(3)`.' }
-          ]
-        },
-        {
-          id: 'l6-s4',
-          type: 'python_example',
-          title: 'Interactive Sandbox: oper.py',
-          content: 'Run the code below to see floating vs integer division.',
-          code: 'print(5 / 2)\nprint(5 // 2)'
-        }
-      ]
-    },
-    // Lesson 7 (Table): Table 2.1
-    {
-      id: 'lesson-7-operator-table',
-      title: 'L7: Reference - Operator Precedence',
-      description: 'Table 2.1 mapping.',
-      icon: 'List',
-      slides:[
-        {
-          id: 'l7-s1',
-          type: 'theory',
-          title: 'Table 2.1: Python Operators',
-          content: 'Operators from highest to lowest precedence:\n\n1. `x[index]` (Subscription)\n2. `**` (Exponentiation)\n3. `+x, -x, ~x` (Positive, Negative, Bitwise NOT)\n4. `*, /, //, %` (Multiply, divide, integer divide, remainder)\n5. `+, -` (Add, Subtract)\n6. `<<, >>` (Bitwise Shifting)\n7. `&` (Bitwise AND)\n8. `^, |` (Bitwise XOR, OR)\n9. `<, <=, >, >=, !=, ==` (Comparisons)\n10. `in, not in` (Membership)\n11. `not x, and, or` (Boolean Logic)'
-        },
-        {
-          id: 'l7-s2',
-          type: 'quiz',
-          title: 'Precedence Check',
-          content: 'Which evaluates first: `in` (Membership) or `==` (Comparison)?',
-          options:[
-            { id: 'a', text: 'Comparison (==)', isCorrect: true, explanation: 'Comparisons evaluate before Membership tests.' },
-            { id: 'b', text: 'Membership (in)', isCorrect: false, explanation: 'Membership is lower precedence.' }
-          ]
+          title: 'Interactive Sandbox: plot4.py',
+          content: 'Combining NumPy arrays with Matplotlib legends and LaTeX formatting.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nt = np.arange(0.0, 5.0, 0.2)\n\n# Plot three different functions using format strings\nplt.plot(t, t**2, 'x', label='t^2')\nplt.plot(t, t**3, 'ro', label='t^3')\n\n# Add legend with some transparency\nplt.legend(framealpha=0.5)\nprint('Rendering polynomial comparisons...')"
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_1_1_1_basics.ts ---
+--- END OF FILE src/data/python_units/unit_2_1_1_matplotlib_basics.ts ---
 
---- START OF FILE src/data/python_units/unit_1_1_2_data_structures.ts ---
+--- START OF FILE src/data/python_units/unit_2_1_2_math_error_anim.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_1_1_2_DATA_STRUCTURES: Unit = {
-  id: 'unit-1-1-2-data-structures',
-  title: '112: Data Structures & Input',
-  description: 'Strings, Lists, Mutable vs Immutable, and reading I/O.',
-  color: 'duo-green',
-  lessons:[
-    // Lesson 8: Strings
-    {
-      id: 'lesson-8-strings',
-      title: 'L8: Python Strings',
-      description: 'Understanding strings as sequences.',
-      icon: 'Type',
-      slides:[
-        {
-          id: 'l8-s1',
-          type: 'theory',
-          title: 'Strings as Sequences',
-          content: 'A String is a sequence of characters. The individual elements of a String can be accessed by indexing. \n\nIndices start at `0`. You can also use negative indexing, where `-1` represents the last character, `-2` the second to last, etc.'
-        },
-        {
-          id: 'l8-s2',
-          type: 'python_example',
-          title: 'Interactive: string1.py',
-          content: 'Notice how indexing extracts characters.',
-          code: "s = 'hello world'\nprint(s[0])\nprint(s[1])\nprint(s[-1])"
-        }
-      ]
-    },
-    // Lesson 10: Slicing
-    {
-      id: 'lesson-10-slicing',
-      title: 'L10: Slicing Sequences',
-      description: 'Extracting substrings using[a:b].',
-      icon: 'Scissors',
-      slides:[
-        {
-          id: 'l10-s1',
-          type: 'theory',
-          title: 'String Slicing',
-          content: 'Part of a String can be extracted using the slicing operation. Indexing `s[a:b]` extracts elements from `s[a]` up to `s[b-1]`.\n\nIf the index on the left side of the colon is skipped `s[:b]`, slicing starts from the first element (index 0). If the index on the right side is skipped `s[a:]`, slicing ends with the last element.'
-        },
-        {
-          id: 'l10-s2',
-          type: 'solution',
-          title: 'Tracing Slices',
-          content: "Given `a = 'hello world'`...",
-          interactiveSteps:[
-            {
-              prompt: "What does `a[3:5]` output?",
-              options:[
-                { id: 'a', text: "'lo'", isCorrect: true, explanation: "Extracts index 3 ('l') and index 4 ('o'). Stops before index 5." }
-              ]
-            },
-            {
-              prompt: "What does `a[6:]` output?",
-              options:[
-                { id: 'a', text: "'world'", isCorrect: true, explanation: "Starts at index 6 ('w') to the end." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    // Lesson 11: Python Lists
-    {
-      id: 'lesson-11-lists',
-      title: 'L11: Python Lists',
-      description: 'Flexible, comma-separated collections.',
-      icon: 'List',
-      slides:[
-        {
-          id: 'l11-s1',
-          type: 'theory',
-          title: 'Lists',
-          content: 'A List is defined by enclosing elements inside a pair of square brackets `[ ]`, separated by commas. It is much more flexible than a String; individual elements can be of any type, even another list.'
-        },
-        {
-          id: 'l11-s2',
-          type: 'python_example',
-          title: 'Interactive: list1.py',
-          content: 'Lists can be indexed, sliced, added, and multiplied exactly like strings.',
-          code: "a =[2.3, 3.5, 234]\nprint(a[0])\na[1] = 'haha'\nprint(a)"
-        }
-      ]
-    },
-    // Lesson 13: Mutable vs Immutable
-    {
-      id: 'lesson-13-mutable',
-      title: 'L13: Mutable vs Immutable',
-      description: 'The critical difference in memory handling.',
-      icon: 'Lock',
-      slides:[
-        {
-          id: 'l13-s1',
-          type: 'theory',
-          title: 'Mutable and Immutable Types',
-          content: 'There is one major difference between String and List types: **List is mutable but String is not.**\n\nWe can change the value of an element in a list (`a[1] = 5`), add new elements, and remove existing ones. This is NOT possible with Strings (`s[2] = "a"` will throw a TypeError).\n\n*Note: Tuples `(1, 2, 3)` are similar to lists but are Immutable.*'
-        },
-        {
-          id: 'l13-s2',
-          type: 'quiz',
-          title: 'Concept Check',
-          content: 'Which of the following operations will throw a TypeError?',
-          options: [
-            { id: 'a', text: "my_str = 'hello'; my_str[0] = 'H'", isCorrect: true, explanation: 'Strings are immutable. You cannot assign to a specific index.' },
-            { id: 'b', text: "my_list = [1, 2]; my_list[0] = 5", isCorrect: false, explanation: 'Lists are mutable. This works perfectly.' }
-          ]
-        }
-      ]
-    },
-    // Lesson 14: Keyboard Input
-    {
-      id: 'lesson-14-input',
-      title: 'L14: Keyboard Input',
-      description: 'Reading dynamic data from the user.',
-      icon: 'Keyboard',
-      slides:[
-        {
-          id: 'l14-s1',
-          type: 'theory',
-          title: 'The input() Function',
-          content: 'The `input('prompt')` function reads String type data from the keyboard. \n\nBecause it always returns a String, if you need a number, you must cast it: `int()`, `float()`, or `eval()`. The `eval()` function evaluates a string as a Python expression.'
-        },
-        {
-          id: 'l14-s2',
-          type: 'solution',
-          title: 'Tracing Input Conversions',
-          content: 'Trace how data shifts through casting.',
-          interactiveSteps:[
-            {
-              prompt: "If a user enters `5` into `s = input()`, what happens if you run `print(s * 2)`?",
-              options:[
-                { id: 'a', text: "'55'", isCorrect: true, explanation: "Because `input()` returns a String, multiplying '5' by 2 repeats it." },
-                { id: 'b', text: "10", isCorrect: false, explanation: "You must cast the input to an integer first to get mathematical multiplication." }
-              ]
-            },
-            {
-              prompt: "How do you achieve mathematical multiplication (10)?",
-              options:[
-                { id: 'a', text: "a = float(s); print(a * 2)", isCorrect: true, explanation: "Casting the string '5' to a float makes it a number." }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    // Lesson 16: Syntax & Indentation
-    {
-      id: 'lesson-16-syntax',
-      title: 'L16: Syntax & Indentation',
-      description: 'Delimiting blocks of code in Python.',
-      icon: 'AlignLeft',
-      slides:[
-        {
-          id: 'l16-s1',
-          type: 'theory',
-          title: 'Colon & Indentation',
-          content: 'Python has a relatively uncluttered visual layout. \n\n**Python uses indentation to delimit blocks of code** (rather than curly braces `{}` used in C++ or Java). \n\n**Rule:** The line *before* any indented block must end with a colon `:` character.\n\n*Warning:* Mixing spaces and tabs can create bugs that are hard to track. Stick to standard 4 spaces.'
-        },
-        {
-          id: 'l16-s2',
-          type: 'fill_in_blank',
-          title: 'Syntax Drill',
-          content: 'The line before an indented code block must end with a ___ symbol.',
-          blankAnswer: ':'
-        }
-      ]
-    }
-  ]
-};
---- END OF FILE src/data/python_units/unit_1_1_2_data_structures.ts ---
-
---- START OF FILE src/data/python_units/unit_1_1_3_control_flow.ts ---
-import { Unit } from '../../types';
-
-export const UNIT_1_1_3_CONTROL_FLOW: Unit = {
-  id: 'unit-1-1-3-control-flow',
-  title: '113: Control Flow',
-  description: 'Loops, Conditionals, and breaking execution flow.',
+export const UNIT_2_1_2_MATH_ERROR_ANIM: Unit = {
+  id: 'unit-2-1-2-math-error-anim',
+  title: '212: Math Functions & Errors',
+  description: 'Visualizing equations, parity, error bars, and animation concepts.',
   color: 'duo-red',
   lessons:[
+    // Lesson 5 (Theory): 4.2 Plotting mathematical functions
     {
-      id: 'lesson-17-while',
-      title: 'L17: The While Loop',
-      description: 'Iterating until a condition becomes false.',
-      icon: 'RotateCw',
+      id: 'l212-1-theory',
+      title: 'L5: Plotting Mathematical Functions',
+      description: 'Generating continuous curve datasets.',
+      icon: 'Activity',
       slides:[
         {
-          id: 'l17-s1',
-          type: 'theory',
-          title: 'Iteration: while loops',
-          content: 'The `while` loop evaluates the logical expression in front of it. If it is True, the body of the while loop (the indented lines below) is executed. \n\nThe process repeats until the condition becomes False. You must have a statement inside the body that modifies the condition, otherwise the program will run in an infinite loop.'
+          id: 'l212-1-s1',
+          type: 'quiz',
+          title: 'Priming: Continuous Curves',
+          content: 'Computers cannot plot true continuous math functions; they plot discrete points. Which NumPy function is best for generating smooth data for plotting?',
+          options:[
+            { id: 'a', text: 'np.arange()', isCorrect: false, explanation: 'arange uses a step size, making it harder to specify exactly how many points you want for a perfectly smooth curve.' },
+            { id: 'b', text: 'np.linspace()', isCorrect: true, explanation: 'linspace lets you request exactly e.g., 200 points between two bounds, ensuring high-resolution smoothness.' }
+          ]
         },
         {
-          id: 'l17-s2',
-          type: 'python_example',
-          title: 'Table Generation',
-          content: 'Trace the execution of this basic while loop.',
-          code: "x = 1\nwhile x <= 5:\n    print(x * 8)\n    x = x + 1\nprint('Done')"
+          id: 'l212-1-s2',
+          type: 'theory',
+          title: 'Bridging NumPy and Matplotlib',
+          content: 'To plot a function $y = f(x)$:\n1. Generate the independent variable `x` using `np.linspace(start, stop, num_points)`.\n2. Vectorize the math using NumPy: `y = np.sin(x)`.\n3. Plot it: `plt.plot(x, y)`.'
         }
       ]
     },
+    // Lesson 6 (Example): npsin.py
     {
-      id: 'lesson-18-for',
-      title: 'L18: The For Loop',
-      description: 'Iterating over sequences.',
-      icon: 'ListOrdered',
+      id: 'l212-2-example',
+      title: 'L6: Sine and Friends',
+      description: 'Plotting trigonometric symmetries.',
+      icon: 'Waves',
       slides:[
         {
-          id: 'l18-s1',
-          type: 'theory',
-          title: 'Iteration: for loops',
-          content: 'Python `for` loops iterate over a sequence data type like a String, List, or Tuple. During each iteration, one member of the data is assigned to the loop variable.\n\nTo construct for loops that execute a fixed number of times, we use the `range(start, stop, step)` function. Note: the `stop` value is excluded.'
+          id: 'l212-2-s1',
+          type: 'example_q',
+          title: 'Problem: npsin.py',
+          content: 'Plot $\\sin(x)$ and $\\sin(x^2)$ from $-\\pi$ to $+\\pi$. Observe the odd and even symmetries.'
         },
         {
-          id: 'l18-s2',
+          id: 'l212-2-s2',
           type: 'solution',
-          title: 'Tracing range()',
-          content: 'Understanding the range object.',
+          title: 'Tracing the Trigonometry',
+          content: 'Setting up the space.',
           interactiveSteps:[
             {
-              prompt: "What sequence does `range(5, 51, 5)` generate?",
+              prompt: 'How do you create an array of 200 points exactly from $-\\pi$ to $\\pi$?',
               options:[
-                { id: 'a', text: '5, 10, 15 ... 50', isCorrect: true, explanation: 'Starts at 5, steps by 5, stops BEFORE 51.' },
-                { id: 'b', text: '5, 10, 15 ... 55', isCorrect: false, explanation: 'The stop value is excluded.' }
+                { id: 'a', text: 'x = np.linspace(-np.pi, np.pi, 200)', isCorrect: true, explanation: 'Correct. NumPy provides `np.pi` as a constant.' },
+                { id: 'b', text: 'x = np.arange(-3.14, 3.14, 200)', isCorrect: false, explanation: 'arange\'s third argument is step size, not number of elements.' }
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      id: 'lesson-20-if',
-      title: 'L20: Conditional Execution',
-      description: 'Branching logic with if, elif, and else.',
-      icon: 'GitBranch',
-      slides:[
-        {
-          id: 'l20-s1',
-          type: 'theory',
-          title: 'If, Elif, and Else',
-          content: 'Python implements conditional execution using the `if`, `elif`, and `else` keywords. \n\nThe indentation levels of `if` and the corresponding `elif` and `else` must be kept exactly the same.'
         },
         {
-          id: 'l20-s2',
+          id: 'l212-2-s3',
           type: 'python_example',
-          title: 'Conditional Branching',
-          content: 'Experiment with changing the value of x.',
-          code: "x = 15\nif x > 10:\n    print('Bigger Number')\nelif x < 10:\n    print('Smaller Number')\nelse:\n    print('Same Number')"
+          title: 'Interactive Sandbox: Sine waves',
+          content: 'Notice how $\\sin(x^2)$ is an EVEN function (symmetric across the Y-axis).',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.linspace(-np.pi, np.pi, 200)\ny1 = np.sin(x)\ny2 = np.sin(x*x)\n\nplt.plot(x, y1, 'b-', label='sin(x)')\nplt.plot(x, y2, 'r-', label='sin(x^2)')\n\n# Adding grid and origin lines for clarity\nplt.axhline(0, color='black', lw=0.5)\nplt.axvline(0, color='black', lw=0.5)\nplt.legend()\nprint('Plotting symmetric functions...')"
         }
       ]
     },
+    // Lesson 7 & 8 (Theory/Example): 4.3 Error Bars
     {
-      id: 'lesson-22-break',
-      title: 'L22: Break and Continue',
-      description: 'Modifying standard loop traversal.',
-      icon: 'SkipForward',
+      id: 'l212-3-theory',
+      title: 'L7: Error Bars',
+      description: 'Representing uncertainty visually.',
+      icon: 'BarChart2',
       slides:[
         {
-          id: 'l22-s1',
+          id: 'l212-3-s1',
           type: 'theory',
-          title: 'Modify loops: break and continue',
-          content: 'We can use the `break` statement to terminate a loop entirely if some condition is met.\n\nThe `continue` statement is used to skip the rest of the current block and immediately go back to the top of the loop for the next iteration.'
+          title: 'plt.errorbar()',
+          content: 'In experimental physics and statistics, data points have uncertainty. \n\nInstead of `plt.plot()`, you use `plt.errorbar(x, y, yerr=dy)` where `dy` is an array of uncertainty bounds for the Y-axis.'
         },
         {
-          id: 'l22-s2',
+          id: 'l212-3-s2',
+          type: 'python_example',
+          title: 'Interactive Sandbox: errbar.py',
+          content: 'See how error bars attach to individual data points.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nx = np.arange(10)\ny = 5 * np.sin(x / 5)\n# Constant error of 0.3 for all points\ndy = np.linspace(0.1, 0.3, 10)\n\nplt.plot(x, y, 'b--') # Plot the underlying trend line\nplt.errorbar(x, y, yerr=dy, fmt='ro', capsize=4)\nprint('Plotting data with uncertainty...')"
+        }
+      ]
+    },
+    // Lesson 9 & 10 (Theory/Example): 4.4 Animations
+    {
+      id: 'l212-4-theory',
+      title: 'L9: Simple 2D Animation',
+      description: 'Event-driven plotting over time.',
+      icon: 'PlayCircle',
+      slides:[
+        {
+          id: 'l212-4-s1',
+          type: 'theory',
+          title: 'FuncAnimation',
+          content: 'Matplotlib supports animation via `matplotlib.animation.FuncAnimation`.\n\nIt works by:\n1. Creating a base plot (`fig, ax = plt.subplots()`).\n2. Creating an `update(frame_number)` function that changes the data of the plot.\n3. Calling `FuncAnimation` which loops `update` rapidly.'
+        },
+        {
+          id: 'l212-4-s2',
           type: 'quiz',
-          title: 'Loop Hijacking',
-          content: 'If a loop encounters a `continue` statement, does the loop exit entirely?',
+          title: 'Animation in Web Environments',
+          content: 'Why might `FuncAnimation` fail to display in a static web environment or exported PDF?',
           options:[
-            { id: 'a', text: 'No, it just skips the rest of the current iteration.', isCorrect: true, explanation: 'Correct. Only `break` exits the loop entirely.' },
-            { id: 'b', text: 'Yes, it breaks the loop.', isCorrect: false, explanation: 'That is the function of the `break` statement.' }
+            { id: 'a', text: 'Because animations require a live interactive GUI backend, not static image generation.', isCorrect: true, explanation: 'Web shells often render Matplotlib via the `Agg` backend, which spits out static PNGs. True animation requires interactive backends.' },
+            { id: 'b', text: 'Because NumPy cannot update arrays fast enough.', isCorrect: false, explanation: 'NumPy is extremely fast; the limitation is the rendering backend.' }
           ]
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_1_1_3_control_flow.ts ---
+--- END OF FILE src/data/python_units/unit_2_1_2_math_error_anim.ts ---
 
---- START OF FILE src/data/python_units/unit_1_1_4_functions_matrices.ts ---
+--- START OF FILE src/data/python_units/unit_2_1_3_curves_colors.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_1_1_4_FUNCTIONS_MATRICES: Unit = {
-  id: 'unit-1-1-4-functions-matrices',
-  title: '114: Functions & Matrices',
-  description: 'Abstraction, Libraries, File I/O, and Pure Matrix Math.',
+export const UNIT_2_1_3_CURVES_COLORS: Unit = {
+  id: 'unit-2-1-3-curves-colors',
+  title: '213: Famous Curves & Colormaps',
+  description: 'Parametric equations, Polar plots, and 2D arrays via imshow.',
+  color: 'duo-green',
+  lessons:[
+    // Lesson 11 & 12 (Theory/Example): Astroid
+    {
+      id: 'l213-1-theory',
+      title: 'L11: Parametric Curves (Astroid)',
+      description: 'Plotting functions mapped to a parameter t.',
+      icon: 'Star',
+      slides:[
+        {
+          id: 'l213-1-s1',
+          type: 'theory',
+          title: 'Parametric Equations',
+          content: 'Some curves cannot be expressed as simple $y = f(x)$ functions because a single $x$ value maps to multiple $y$ values. \n\nInstead, both $x$ and $y$ are functions of a third parameter, $t$.\n\nThe **Astroid** (a tetracuspid curve) is given by:\n$x = a\\cos^3(t)$\n$y = a\\sin^3(t)$'
+        },
+        {
+          id: 'l213-1-s2',
+          type: 'python_example',
+          title: 'Interactive Sandbox: astro.py',
+          content: 'Notice how we generate `t` first, then calculate `x` and `y`.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\na = 2\nt = np.linspace(0, 2*np.pi, 200)\n\n# Parametric equations\nx = a * np.cos(t)**3\ny = a * np.sin(t)**3\n\nplt.plot(x, y, 'b-')\nplt.axis('equal') # Forces aspect ratio 1:1 so it looks correct\nprint('Rendering Astroid...')"
+        }
+      ]
+    },
+    // Lesson 13 (Example): Ellipse and Lissajous
+    {
+      id: 'l213-2-example',
+      title: 'L13: Lissajous Figures',
+      description: 'Complex parametric oscillations.',
+      icon: 'Activity',
+      slides:[
+        {
+          id: 'l213-2-s1',
+          type: 'example_q',
+          title: 'Lissajous Curves',
+          content: 'A Lissajous figure is generated when $x$ and $y$ oscillate at different frequencies.\n\n$x = a\\cos(n t)$\n$y = b\\sin(m t)$'
+        },
+        {
+          id: 'l213-2-s2',
+          type: 'python_example',
+          title: 'Interactive Sandbox: lissa.py',
+          content: 'Change the multipliers inside the `sin` and `cos` functions to see different Lissajous knots.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\na = 2\nt = np.linspace(-2*np.pi, 2*np.pi, 400)\n\n# Frequency ratio 3:2\nx = a * np.cos(3*t)\ny = a * np.sin(2*t)\n\nplt.plot(x, y, 'g-')\nplt.title('Lissajous Figure (3:2)')\nprint('Plotting...')"
+        }
+      ]
+    },
+    // Lesson 14: Polar Plots
+    {
+      id: 'l213-3-theory',
+      title: 'L14: Polar Plots & Spirals',
+      description: 'Switching the coordinate system to r and theta.',
+      icon: 'Compass',
+      slides:[
+        {
+          id: 'l213-3-s1',
+          type: 'theory',
+          title: 'Polar Coordinates',
+          content: 'Instead of Cartesian $(x, y)$, polar coordinates locate points using an angle $\\theta$ and a radius $r$.\n\nMatplotlib supports this via the `plt.polar(theta, r)` function. \n\n**Archimedes Spiral:** $r = a\\theta$'
+        },
+        {
+          id: 'l213-3-s2',
+          type: 'python_example',
+          title: 'Interactive Sandbox: archi.py',
+          content: 'Watch the radius grow linearly with the angle.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\na = 2\nth = np.linspace(0, 10 * np.pi, 500) # 5 full rotations\nr = a * th\n\nplt.polar(th, r, color='purple')\nprint('Rendering Archimedes Spiral...')"
+        }
+      ]
+    },
+    // Lesson 15 & 16: Colormaps and Fractals
+    {
+      id: 'l213-4-theory',
+      title: 'L15: 2D Plots using Colors (imshow)',
+      description: 'Mapping 2D matrix values to colors.',
+      icon: 'Image',
+      slides:[
+        {
+          id: 'l213-4-s1',
+          type: 'theory',
+          title: 'plt.imshow()',
+          content: 'A two-dimensional matrix can be represented graphically by assigning a color to each point proportional to the value of that element.\n\n`plt.imshow(matrix)` visualizes the 2D array, treating it like a heat map or image.'
+        },
+        {
+          id: 'l213-4-s2',
+          type: 'solution',
+          title: 'The Julia Set Algorithm',
+          content: 'Fractals are created by iteratively applying an equation $f(z) \\rightarrow z^2 + c$ to complex numbers in a 2D plane.',
+          interactiveSteps:[
+            {
+              prompt: 'To compute a 2D image of a fractal, what matrix structure do we need?',
+              options:[
+                { id: 'a', text: 'A 2D NumPy array initialized to store iteration counts.', isCorrect: true, explanation: 'We create a 2D array, map each (row, col) to a complex coordinate, run the iteration, and store the escape step count in the array.' },
+                { id: 'b', text: 'A 1D array of imaginary numbers.', isCorrect: false, explanation: 'A 1D array only creates a line, not a 2D image.' }
+              ]
+            }
+          ]
+        },
+        {
+          id: 'l213-4-s3',
+          type: 'python_example',
+          title: 'Interactive Sandbox: julia.py',
+          content: 'Calculate and visualize a Julia set. (Grid restricted to 100x100 for browser speed).',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nsize = 100\nmax_iter = 50\nc = -0.4 + 0.6j # The complex constant\n\n# Pre-allocate 2D array\nm = np.zeros((size, size))\n\nfor x in range(size):\n    for y in range(size):\n        # Map pixel (x,y) to complex plane (-1.5 to 1.5)\n        re = 1.5 * (x - size/2) / (size/2)\n        im = 1.5 * (y - size/2) / (size/2)\n        z = complex(re, im)\n        \n        # Iterate\n        for k in range(max_iter):\n            if abs(z) > 2.0:\n                break\n            z = z**2 + c\n        m[y, x] = k\n\nplt.imshow(m, cmap='jet')\nprint('Fractal generation complete.')"
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/python_units/unit_2_1_3_curves_colors.ts ---
+
+--- START OF FILE src/data/python_units/unit_2_1_4_3d_plots.ts ---
+import { Unit } from '../../types';
+
+export const UNIT_2_1_4_3D_PLOTS: Unit = {
+  id: 'unit-2-1-4-3d-plots',
+  title: '214: 3D Plots & Surfaces',
+  description: 'Expanding into the Z-axis with meshgrids and Axes3D.',
   color: 'duo-violet',
   lessons:[
+    // Lesson 17 & 18: 3D Line plots
     {
-      id: 'lesson-24-functions',
-      title: 'L24: Functions',
-      description: 'Defining reusable blocks of code.',
+      id: 'l214-1-theory',
+      title: 'L17: 3D Projections',
+      description: 'Enabling 3D axes in Matplotlib.',
       icon: 'Box',
       slides:[
         {
-          id: 'l24-s1',
-          type: 'theory',
-          title: 'Creating Functions',
-          content: 'Large programs need to be divided into small logical units. Python allows you to define functions using the `def` keyword. \n\nA function may have one or more variables as parameters, and returns values using the `return` statement. If there is no return statement, `None` is returned to the caller.'
-        },
-        {
-          id: 'l24-s2',
-          type: 'python_example',
-          title: 'Function Definition',
-          content: 'Notice the colon `:` and indentation required for the function block.',
-          code: "def sum(a, b):\n    return a + b\n\nprint(sum(3, 4))"
-        },
-        {
-          id: 'l24-s3',
+          id: 'l214-1-s1',
           type: 'quiz',
-          title: 'Scope of Variables',
-          content: 'Are variables defined inside a function known outside the function?',
+          title: 'Priming: 3D Math',
+          content: 'If `plt.plot(x, y)` draws a 2D line, what additional dimension data is fundamentally required for 3D?',
           options:[
-            { id: 'a', text: 'No, they have local scope.', isCorrect: true, explanation: 'Variables defined inside a function only exist within that function unless declared `global`.' },
-            { id: 'b', text: 'Yes, they exist globally.', isCorrect: false, explanation: 'This would cause memory and naming conflicts.' }
+            { id: 'a', text: 'A Z-axis array of equal size.', isCorrect: true, explanation: 'Every point in 3D space requires (X, Y, Z) coordinates.' },
+            { id: 'b', text: 'A color map array.', isCorrect: false, explanation: 'Color is a 4th dimension visualizer, not the spatial Z-axis.' }
           ]
-        }
-      ]
-    },
-    {
-      id: 'lesson-26-modules',
-      title: 'L26: Modules and Packages',
-      description: 'Importing external libraries.',
-      icon: 'Package',
-      slides:[
+        },
         {
-          id: 'l26-s1',
+          id: 'l214-1-s2',
           type: 'theory',
-          title: 'Importing Modules',
-          content: 'Modules are loaded using the `import` keyword. \n\n1. `import math` (invoked via `math.sin()`)\n2. `import math as m` (alias, invoked via `m.sin()`)\n3. `from math import sin` (invoked directly as `sin()`)\n4. `from math import *` (wildcard, imports all functions directly).'
-        }
-      ]
-    },
-    {
-      id: 'lesson-27-fileio',
-      title: 'L27: File Input/Output',
-      description: 'Reading and writing to disk.',
-      icon: 'FileText',
-      slides:[
+          title: 'Setting up 3D',
+          content: 'To unlock 3D plotting, you must use the explicit Object-Oriented interface.\n\n```python\nfrom mpl_toolkits.mplot3d import Axes3D\nfig = plt.figure()\nax = fig.add_subplot(projection="3d")\n```\n\nOnce configured, you can call `ax.plot3D(x, y, z)` or `ax.scatter3D(x, y, z)`.'
+        },
         {
-          id: 'l27-s1',
-          type: 'theory',
-          title: 'open() function',
-          content: 'Disk files can be opened using the function named `open()` that returns a File object. \n\n`f = open("test.dat", "w")` opens the file for writing. \n`f.write("Data")` writes to it. \n`f.close()` must be called to save changes and free memory.'
+          id: 'l214-1-s3',
+          type: 'python_example',
+          title: 'Interactive Sandbox: line3d.py',
+          content: 'Plotting a 3D helix.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nfig = plt.figure()\nax = fig.add_subplot(projection='3d')\n\nz = np.linspace(0, 15, 200)\nx = np.sin(z)\ny = np.cos(z)\n\nax.plot3D(x, y, z, 'red')\nprint('Plotting 3D Helix...')"
         }
       ]
     },
+    // Lesson 19 & 20: Meshgrids and Surfaces
     {
-      id: 'lesson-30-matrices',
-      title: 'L30: Matrices in pure Python',
-      description: 'Nested lists simulating matrix algebra.',
+      id: 'l214-2-theory',
+      title: 'L19: Meshgrids & Surfaces',
+      description: 'Creating 2D coordinate networks for 3D surfaces.',
       icon: 'Grid',
       slides:[
         {
-          id: 'l30-s1',
+          id: 'l214-2-s1',
           type: 'theory',
-          title: '2D Matrices via Lists',
-          content: 'Lists inside a list will be used to represent 2D matrices. This prepares us for NumPy later.\n\n`a =[ [1,2], [3,4] ]` is a 2x2 matrix. \n\n`a[1][0]` accesses the element at the second row, first column (which is `3`).'
+          title: 'np.meshgrid()',
+          content: 'To plot a 3D **surface** (like a blanket), you cannot just use two 1D arrays for X and Y. You must create a complete grid covering the X-Y plane.\n\n`X, Y = np.meshgrid(x_array, y_array)`\n\nThis takes an $N$ element array and an $M$ element array, and creates two massive $M \\times N$ 2D matrices representing every possible coordinate pair on the floor plane.'
         },
         {
-          id: 'l30-s2',
+          id: 'l214-2-s2',
           type: 'solution',
-          title: 'Matrix Multiplication Algorithm',
-          content: 'According to matrix algebra $cA = c\\sum A_{ij}$. How is this mapped to python?',
+          title: 'Building the Surface',
+          content: 'How do we calculate the Z heights?',
           interactiveSteps:[
             {
-              prompt: "To traverse rows and columns, what programmatic structure is required?",
+              prompt: 'Once you have the 2D matrices `X` and `Y` from meshgrid, how do you find Z?',
               options:[
-                { id: 'a', text: 'Nested for loops', isCorrect: true, explanation: 'One loop iterates through rows, an inner loop iterates through columns.' },
-                { id: 'b', text: 'A single while loop', isCorrect: false, explanation: 'You need two dimensions of traversal.' }
+                { id: 'a', text: 'Z = np.sin(X) + np.cos(Y)', isCorrect: true, explanation: 'Because X and Y are now 2D matrices, vectorized NumPy math will automatically output a 2D matrix Z representing the height at every single grid point!' },
+                { id: 'b', text: 'Use a nested for loop to calculate z at each point.', isCorrect: false, explanation: 'That defeats the entire purpose of NumPy vectorization.' }
               ]
             }
           ]
+        },
+        {
+          id: 'l214-2-s3',
+          type: 'python_example',
+          title: 'Interactive Sandbox: surface3d.py',
+          content: 'Generating a gravity-well surface.',
+          code: "import numpy as np\nimport matplotlib.pyplot as plt\n\nfig = plt.figure()\nax = fig.add_subplot(projection='3d')\n\n# 1D axes\nx = np.linspace(-5, 5, 50)\ny = np.linspace(-5, 5, 50)\n\n# 2D Grid\nX, Y = np.meshgrid(x, y)\n\n# Vectorized Z calculation over the 2D grid\nZ = X**2 + Y**2\n\nax.plot_surface(X, Y, Z, cmap='viridis')\nprint('Rendering Surface...')"
+        }
+      ]
+    },
+    // Lesson 21: Spherical Harmonics
+    {
+      id: 'l214-3-example',
+      title: 'L21: Spherical Harmonics',
+      description: 'Advanced 3D surface mapping.',
+      icon: 'Globe',
+      slides:[
+        {
+          id: 'l214-3-s1',
+          type: 'example_q',
+          title: 'Problem: ylm.py',
+          content: 'Plotting complex mathematical objects like Spherical Harmonics $Y_{l}^{m}$ requires mapping spherical coordinates $(\\phi, \\theta)$ to Cartesian $(x, y, z)$.'
+        },
+        {
+          id: 'l214-3-s2',
+          type: 'theory',
+          title: 'Coordinate Transformation',
+          content: 'To plot a spherical object in Matplotlib:\n1. Create a `meshgrid` of angles $\\theta$ and $\\phi$.\n2. Calculate the radius $r$ at every point based on the spherical harmonic equation.\n3. Convert to Cartesian:\n   $X = r \\cdot \\sin(\\phi) \\cdot \\cos(\\theta)$\n   $Y = r \\cdot \\sin(\\phi) \\cdot \\sin(\\theta)$\n   $Z = r \\cdot \\cos(\\phi)$'
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_1_1_4_functions_matrices.ts ---
+--- END OF FILE src/data/python_units/unit_2_1_4_3d_plots.ts ---
 
---- START OF FILE src/data/python_units/unit_1_1_5_section_summary.ts ---
+--- START OF FILE src/data/python_units/unit_2_1_5_section_summary.ts ---
 import { Unit } from '../../types';
 
-export const UNIT_1_1_5_SECTION_SUMMARY: Unit = {
-  id: 'unit-1-1-5-section-summary',
+export const UNIT_2_1_5_SECTION_SUMMARY: Unit = {
+  id: 'unit-2-1-5-section-summary',
   title: 'Section Summary',
-  description: 'Consolidation of Introductory Python paradigms.',
+  description: 'Consolidation of the Matplotlib ecosystem.',
   color: 'duo-blue',
   lessons:[
     {
-      id: 'lesson-summary-1',
-      title: 'Review: Basics & Typed Data',
-      description: 'A look back at Unit 1.',
+      id: 'l215-1-summary',
+      title: 'Review: 2D & Parameters',
+      description: 'A look back at Units 7, 8 & 9.',
       icon: 'BookOpen',
       slides:[
         {
-          id: 'sum-1-s1',
+          id: 'l215-1-s1',
           type: 'theory',
-          title: 'Dynamic Typing & Operators',
-          content: 'Python strips away explicit type declarations (`int x = 5`), deferring to the Interpreter to assess types dynamically at runtime. This fluidity allows rapid development but places the onus on the programmer to understand **Type Casting** (e.g., preventing errors when concatenating strings and integers) and strict adherence to **Operator Precedence** (PEMDAS equivalent in Python).'
+          title: 'Matplotlib Interfaces & Projections',
+          content: 'Matplotlib connects NumPy arrays to visual pixels.\n\nYou learned to use the implicit `plt.plot()` for rapid 2D prototyping, formatting lines with strings like `"ro-"`. You then expanded to **Parametric** and **Polar** projections, recognizing that $X$ and $Y$ don\'t have to be directly related; they can both depend independently on a parameter $t$ or $\\theta$.'
         }
       ]
     },
     {
-      id: 'lesson-summary-2',
-      title: 'Review: Memory & Mutability',
-      description: 'A look back at Unit 2.',
+      id: 'l215-2-summary',
+      title: 'Review: Colormaps & 3D',
+      description: 'A look back at Units 9 & 10.',
       icon: 'BookOpen',
       slides:[
         {
-          id: 'sum-2-s1',
+          id: 'l215-2-s1',
           type: 'theory',
-          title: 'Data Structures',
-          content: 'The dividing line between Python data structures is **Mutability**. \n\nStrings and Tuples are locked in memory (Immutable) — you can slice them to read, but you cannot overwrite an index. \n\nLists, however, are Mutable arrays of references, allowing dynamic memory updates (`a[0] = "new"`).'
-        }
-      ]
-    },
-    {
-      id: 'lesson-summary-3',
-      title: 'Review: Control Flow',
-      description: 'A look back at Unit 3.',
-      icon: 'BookOpen',
-      slides:[
-        {
-          id: 'sum-3-s1',
-          type: 'theory',
-          title: 'Algorithmic Control',
-          content: 'Control structures allow non-linear code execution. \n\n`if/elif/else` controls boolean-based branching. \n`while` loops continue until a condition degrades to False. \n`for` loops exhaust a finite sequence (like a List or `range()` object). \n\nAll of these structural blocks are strictly delimited by a colon `:` and standardized whitespace indentation.'
-        }
-      ]
-    },
-    {
-      id: 'lesson-summary-4',
-      title: 'Review: Modular Abstraction',
-      description: 'A look back at Unit 4.',
-      icon: 'BookOpen',
-      slides:[
-        {
-          id: 'sum-4-s1',
-          type: 'theory',
-          title: 'Functions & Matrices',
-          content: 'To prevent code duplication, logic is abstracted into `def` functions. Variables within have local scope unless defined otherwise. \n\nWe also introduced `import` protocols for leveraging libraries, File I/O for saving state, and utilized nested List arrays `[[x,y], [a,b]]` to map mathematical matrices into computational memory.'
+          title: 'Adding Dimensions',
+          content: 'To display more complex relationships, you utilized `plt.imshow()` to map a full 2D $M \\times N$ matrix to a color gradient, enabling the visualization of Fractals.\n\nFinally, you crossed into 3D explicitly using `projection="3d"`. The critical mental leap here was the `np.meshgrid()` function, which broadcasts 1D axes into the 2D coordinate floor required to compute heights for a continuous `plot_surface`.'
         }
       ]
     }
   ]
 };
---- END OF FILE src/data/python_units/unit_1_1_5_section_summary.ts ---
+--- END OF FILE src/data/python_units/unit_2_1_5_section_summary.ts ---
+
+--- START OF FILE src/data/section_2_1_matplotlib.ts ---
+import { Section } from '../types';
+import { UNIT_2_1_1_MATPLOTLIB_BASICS } from './python_units/unit_2_1_1_matplotlib_basics';
+import { UNIT_2_1_2_MATH_ERROR_ANIM } from './python_units/unit_2_1_2_math_error_anim';
+import { UNIT_2_1_3_CURVES_COLORS } from './python_units/unit_2_1_3_curves_colors';
+import { UNIT_2_1_4_3D_PLOTS } from './python_units/unit_2_1_4_3d_plots';
+import { UNIT_2_1_5_SECTION_SUMMARY } from './python_units/unit_2_1_5_section_summary';
+
+export const SECTION_2_1_MATPLOTLIB: Section = {
+  id: 'section-2-1-matplotlib',
+  title: 'Section 2.1: The Matplotlib Module',
+  description: 'Data visualization from 2D plots and error bars to fractals and 3D surface mapping.',
+  color: 'duo-blue',
+  units:[
+    UNIT_2_1_1_MATPLOTLIB_BASICS,
+    UNIT_2_1_2_MATH_ERROR_ANIM,
+    UNIT_2_1_3_CURVES_COLORS,
+    UNIT_2_1_4_3D_PLOTS,
+    UNIT_2_1_5_SECTION_SUMMARY
+  ]
+};
+--- END OF FILE src/data/section_2_1_matplotlib.ts ---
+
+--- START OF FILE src/data/module_2_data_visualization.ts ---
+import { Module } from '../types';
+import { SECTION_2_1_MATPLOTLIB } from './section_2_1_matplotlib';
+
+export const MODULE_2_DATA_VISUALIZATION: Module = {
+  id: 'module-2-data-visualization',
+  title: 'Module II: Data Visualization',
+  description: 'Transforming numerical arrays into geometric insights using Matplotlib.',
+  sections: [
+    SECTION_2_1_MATPLOTLIB
+  ],
+  moduleSummary:[
+    {
+      id: 'mod-sum-dv-1',
+      type: 'theory',
+      title: 'Mental Model: The Canvas',
+      content: 'In this module, you bridged the gap between abstract numbers and human intuition. Matplotlib is fundamentally an engine that maps NumPy arrays to pixel coordinates. The basic interface (`plt.plot`) maps 1D arrays against each other in Cartesian space.'
+    },
+    {
+      id: 'mod-sum-dv-2',
+      type: 'theory',
+      title: 'Mental Model: Parameterization',
+      content: 'You learned that $X$ does not always have to be the independent variable. In parametric (Astroids, Lissajous) and Polar systems, both $X$ and $Y$ are derived from a unified underlying variable (time $t$ or angle $\\theta$), allowing loops and curves impossible in standard $y=f(x)$ logic.'
+    },
+    {
+      id: 'mod-sum-dv-3',
+      type: 'theory',
+      title: 'Mental Model: Dimensional Scaling',
+      content: 'To visualize 3D surfaces or Color Maps (Fractals), 1D arrays are insufficient. You mastered `np.meshgrid()` to generate a fully realized 2D coordinate network, allowing vectorized NumPy equations to instantly calculate a Z-height (or color density) for every discrete point on the plane.'
+    }
+  ]
+};
+--- END OF FILE src/data/module_2_data_visualization.ts ---
+
+--- START OF FILE src/data/modules.ts ---
+import { Module } from '../types';
+import { MODULE_1_PYTHON_SAGEMATH } from './module_1_python_sagemath';
+import { MODULE_2_DATA_VISUALIZATION } from './module_2_data_visualization';
+
+export const MODULES: Module[] =[
+  MODULE_1_PYTHON_SAGEMATH,
+  MODULE_2_DATA_VISUALIZATION
+];
+--- END OF FILE src/data/modules.ts ---
