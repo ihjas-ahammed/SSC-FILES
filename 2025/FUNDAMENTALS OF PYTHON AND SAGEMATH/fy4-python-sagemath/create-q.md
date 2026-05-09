@@ -1,18 +1,17 @@
+Now create chapter1_3 with every example questions we missed in the other units
+give new units with their questions
+also with eevry excercise quetsions
+
+at least 16 questions (lessons) per unit (total 4 units, with name of previous for units)
+use canvas art if needed
 
 
 Make the following changes:
 
 
-* Your task is to create 
+* Your task is to create chapter2_3 with:
 
-
-**Section 4.4: Centrifugal Force and Plumb Bob (Syllabus Unit 24)**
-*   **441 (Gravitational Effects):**
-    *   Lesson 1 (Theory): Figure 15.4 - Forces on a Plumb Bob.
-    *   Lesson 2 (Derivation): Effective Gravity $\mathbf{g}_e$ definition.
-    *   Lesson 3 (Derivation): Calculating the Angle of Deflection from True North.
-    *   Lesson 4 (Numerical): Exercise 15.3 - Force diagram for Particle on Earth surface.
-
+7Electric Potential; Electrostatic Boundary Conditions (16 lessons)
 
 
 Base:
