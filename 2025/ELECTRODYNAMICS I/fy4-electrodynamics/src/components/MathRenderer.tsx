@@ -68,11 +68,9 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
       // 'prose' class comes from tailwind typography plugin usually, but we haven't included it.
       // We'll rely on base styles, but adding 'prose' is a good habit if we had the plugin.
       // Since we don't have typography plugin in the index.html setup, we rely on standard styling.
-      style={{ 
+      style={{
         overflowWrap: 'break-word',
-        overflowY: 'auto',
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none'
+        overflowY: 'auto'
       }}
     />
   );

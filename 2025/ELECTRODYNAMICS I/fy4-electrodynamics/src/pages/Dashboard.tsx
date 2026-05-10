@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { COURSES } from '../data/courses';
 import { UserProgress, Course } from '../types';
 import BottomNav, { Tab } from '../components/BottomNav';
+import SideNav from '../components/SideNav';
 import LearnTab from '../components/LearnTab';
 import QuestionsTab from '../components/QuestionsTab';
 import NotesTab from '../components/NotesTab';
@@ -80,8 +81,11 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-20 overflow-x-hidden border-x border-white/5">
-      {renderContent()}
+    <div className="min-h-screen flex flex-col pb-20 overflow-x-hidden border-x border-white/5 lg:pb-0 lg:pl-60 lg:border-x-0">
+      <SideNav progress={progress} />
+      <div className="flex flex-col flex-grow lg:max-w-3xl lg:w-full lg:mx-auto lg:px-2">
+        {renderContent()}
+      </div>
       <BottomNav activeTab={activeTab} />
     </div>
   );

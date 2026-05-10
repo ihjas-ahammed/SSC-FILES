@@ -20,7 +20,7 @@ const BottomNav: React.FC<Props> = ({ activeTab }) => {
   };
 
   return (
-    <div className="bottom-nav-container">
+    <div className="bottom-nav-container lg:hidden">
       <div className="bottom-nav-wrapper">
         <button 
           onClick={() => handleNav('learn')}

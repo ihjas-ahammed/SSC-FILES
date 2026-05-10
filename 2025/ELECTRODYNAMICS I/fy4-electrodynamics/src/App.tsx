@@ -45,7 +45,7 @@ const App: React.FC = () => {
   }, [progress.currentCourseId]);
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden lg:max-w-none lg:mx-0 lg:shadow-none lg:overflow-visible">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/learn" replace />} />

@@ -27,7 +27,7 @@ const SectionSelector: React.FC<Props> = ({
     <div className="fixed inset-0 z-50 flex flex-col bg-[#0b0f19]/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="flex-grow" onClick={onClose} />
       
-      <div className="glass-panel rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col animate-in slide-in-from-bottom duration-300 border-x-0 border-b-0">
+      <div className="glass-panel rounded-t-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col animate-in slide-in-from-bottom duration-300 border-x-0 border-b-0 lg:max-w-3xl lg:mx-auto lg:rounded-3xl lg:mb-8 lg:border-x lg:border-b lg:border-white/5">
         <div className="p-4 border-b border-white/5 flex justify-center">
            <div className="w-12 h-1.5 bg-slate-600 rounded-full" />
         </div>
