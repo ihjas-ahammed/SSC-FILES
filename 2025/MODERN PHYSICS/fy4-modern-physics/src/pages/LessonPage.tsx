@@ -79,11 +79,13 @@ const LessonPage: React.FC<Props> = ({ progress, setProgress }) => {
   }
 
   return (
-    <LessonView 
-      lesson={activeLesson}
-      onFinishLesson={handleFinishLesson}
-      onExit={handleExitLesson}
-    />
+    <div className="relative min-h-screen lg:max-w-3xl lg:mx-auto">
+      <LessonView
+        lesson={activeLesson}
+        onFinishLesson={handleFinishLesson}
+        onExit={handleExitLesson}
+      />
+    </div>
   );
 };
 
