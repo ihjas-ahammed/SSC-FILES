@@ -7,12 +7,13 @@ import ModuleSummaryPage from './pages/ModuleSummaryPage';
 import './App.css';
 import './styles/interactive.css'; 
 import './styles/path.css'; 
+import './styles/custom-scroll.css';
 
 const App: React.FC = () => {
   const [progress, setProgress] = useState<UserProgress>(() => {
     const saved = localStorage.getItem('duofy4_progress'); 
     let initialProgress: UserProgress = {
-      completedLessons: [],
+      completedLessons:[],
       xp: 0,
       currentModuleId: 'module-1'
     };
@@ -21,7 +22,7 @@ const App: React.FC = () => {
       try {
         const parsed = JSON.parse(saved);
         initialProgress = {
-          completedLessons: parsed.completedLessons || [],
+          completedLessons: parsed.completedLessons ||[],
           xp: parsed.xp || 0,
           currentModuleId: parsed.currentModuleId || parsed.currentCourseId || 'module-1'
         };
@@ -32,7 +33,7 @@ const App: React.FC = () => {
     return initialProgress;
   });
 
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const[currentSectionIndex, setCurrentSectionIndex] = useState(0);
 
   useEffect(() => {
     localStorage.setItem('duofy4_progress', JSON.stringify(progress));

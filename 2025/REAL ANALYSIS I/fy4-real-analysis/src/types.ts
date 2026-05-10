@@ -62,12 +62,33 @@ export interface Section {
   units: Unit[];
 }
 
+export interface ExamQuestion {
+  id: string;
+  number: string;
+  question: string;
+  marks: number;
+  solution: string;
+}
+
+export interface ExamSection {
+  id: string;
+  title: string;
+  instruction: string;
+  questions: ExamQuestion[];
+}
+
+export interface ExamPaper {
+  moduleId: string;
+  sections: ExamSection[];
+}
+
 export interface Module {
   id: string;
   title: string;
   description: string;
   sections: Section[];
-  moduleSummary?: Slide[]; // Added for Module Summary Pages
+  moduleSummary?: Slide[];
+  examPaper?: ExamPaper;
 }
 
 export interface UserProgress {

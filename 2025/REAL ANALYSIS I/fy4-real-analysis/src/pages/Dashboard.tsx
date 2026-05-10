@@ -4,8 +4,9 @@ import { MODULES } from '../data/modules';
 import LessonPath from '../components/LessonPath';
 import SectionSelector from '../components/SectionSelector';
 import ModuleSelector from '../components/ModuleSelector';
+import QuestionsTab from '../components/QuestionsTab';
 import { UserProgress, Module } from '../types';
-import { BookOpen, Zap, ChevronDown } from 'lucide-react';
+import { BookOpen, Zap, ChevronDown, Map, BookOpenCheck, FileText } from 'lucide-react';
 
 interface Props {
   progress: UserProgress;
@@ -18,6 +19,7 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
   const navigate = useNavigate();
   const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
   const [isModuleSelectorOpen, setIsModuleSelectorOpen] = useState(false);
+  const[activeTab, setActiveTab] = useState<'path' | 'questions' | 'notes'>('path');
 
   const currentModule: Module = MODULES.find(m => m.id === progress.currentModuleId) || MODULES[0];
   const currentSection = currentModule.sections && currentModule.sections.length > 0 
@@ -27,12 +29,12 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
   // Restore scroll position on mount if we're coming back from a lesson
   useEffect(() => {
     const savedScroll = sessionStorage.getItem('dashboard_scroll');
-    if (savedScroll) {
+    if (savedScroll && activeTab === 'path') {
       setTimeout(() => {
         window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
       }, 10);
     }
-  }, []);
+  }, [activeTab]);
 
   const handleStartLesson = (unitId: string, lessonId: string) => {
     sessionStorage.setItem('dashboard_scroll', window.scrollY.toString());
@@ -58,7 +60,7 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-10 overflow-x-hidden border-x border-white/5">
+    <div className="min-h-screen flex flex-col pb-24 overflow-x-hidden border-x border-white/5 relative">
       <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
         <div 
           onClick={() => setIsModuleSelectorOpen(true)}
@@ -82,7 +84,7 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
              </button>
           )}
 
-          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl">
+          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
             <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
             <span className="text-amber-400">{progress.xp} XP</span>
           </div>
@@ -90,27 +92,41 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
       </header>
 
       <main className="p-0 flex-grow relative">
-        {currentSection ? (
-          <>
-            <LessonPath 
-              section={currentSection} 
-              completedLessons={progress.completedLessons}
-              onStartLesson={handleStartLesson}
-              onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
-            />
+        {activeTab === 'path' && (
+          currentSection ? (
+            <>
+              <LessonPath 
+                section={currentSection} 
+                completedLessons={progress.completedLessons}
+                onStartLesson={handleStartLesson}
+                onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
+              />
 
-            <SectionSelector 
-              sections={currentModule.sections}
-              activeSectionIndex={currentSectionIndex}
-              onSelectSection={handleSectionChange}
-              isOpen={isSectionSelectorOpen}
-              onClose={() => setIsSectionSelectorOpen(false)}
-            />
-          </>
-        ) : (
-          <div className="p-10 text-center text-slate-500 mt-20">
-            <p>More modules coming soon!</p>
-          </div>
+              <SectionSelector 
+                sections={currentModule.sections}
+                activeSectionIndex={currentSectionIndex}
+                onSelectSection={handleSectionChange}
+                isOpen={isSectionSelectorOpen}
+                onClose={() => setIsSectionSelectorOpen(false)}
+              />
+            </>
+          ) : (
+            <div className="p-10 text-center text-slate-500 mt-20">
+              <p>More modules coming soon!</p>
+            </div>
+          )
+        )}
+
+        {activeTab === 'questions' && (
+           <QuestionsTab moduleId={progress.currentModuleId} />
+        )}
+
+        {activeTab === 'notes' && (
+           <div className="p-10 text-center text-slate-500 mt-20">
+             <FileText className="w-16 h-16 mx-auto mb-4 text-slate-700" />
+             <p className="font-bold text-lg text-slate-400">Notes Section</p>
+             <p className="text-sm mt-2">Comprehensive course notes will be available here soon.</p>
+           </div>
         )}
 
         <ModuleSelector 
@@ -121,6 +137,33 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
            onClose={() => setIsModuleSelectorOpen(false)}
         />
       </main>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
+         <div className="max-w-md mx-auto w-full pointer-events-auto bg-[#0b0f19]/95 backdrop-blur-md border-t border-white/10 flex justify-around p-2 pb-4">
+           <button 
+              onClick={() => { setActiveTab('path'); window.scrollTo(0,0); }} 
+              className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'path' ? 'text-duo-blue' : 'text-slate-500 hover:text-slate-300'}`}
+           >
+             <Map className="w-6 h-6 mb-1" />
+             <span className="text-[10px] font-bold tracking-widest">PATH</span>
+           </button>
+           <button 
+              onClick={() => { setActiveTab('questions'); window.scrollTo(0,0); }} 
+              className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'questions' ? 'text-duo-blue' : 'text-slate-500 hover:text-slate-300'}`}
+           >
+             <BookOpenCheck className="w-6 h-6 mb-1" />
+             <span className="text-[10px] font-bold tracking-widest">QUESTIONS</span>
+           </button>
+           <button 
+              onClick={() => { setActiveTab('notes'); window.scrollTo(0,0); }} 
+              className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'notes' ? 'text-duo-blue' : 'text-slate-500 hover:text-slate-300'}`}
+           >
+             <FileText className="w-6 h-6 mb-1" />
+             <span className="text-[10px] font-bold tracking-widest">NOTES</span>
+           </button>
+         </div>
+      </div>
     </div>
   );
 };

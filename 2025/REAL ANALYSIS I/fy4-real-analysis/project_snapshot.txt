@@ -1,6 +1,217 @@
+
+
+
+
 ```bash
-# No bash commands needed
+# No new packages are needed, but we will create a new CSS file for the custom scrollbar
 ```
+
+--- START OF FILE src/styles/custom-scroll.css ---
+/* Custom Scrollbar for Math Renderer and specific containers */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
+--- END OF FILE src/styles/custom-scroll.css ---
+
+--- START OF FILE src/types.ts ---
+export type SlideType = 
+  | 'theory' 
+  | 'example'
+  | 'proof' 
+  | 'numerical'
+  | 'quiz' 
+  | 'fill_in_blank'
+  | 'example_q'
+  | 'solution'
+  | 'interactive_canvas'; 
+
+export interface QuizOption {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  explanation: string;
+}
+
+export interface InteractiveStep {
+  prompt?: string;
+  stepText?: string;
+  options?: QuizOption[];
+}
+
+export interface Slide {
+  id: string;
+  type: SlideType;
+  title?: string;
+  content: string; 
+  image?: string; 
+  canvasId?: string; 
+  interactiveCanvasId?: string; 
+  options?: QuizOption[]; 
+  proofSteps?: string[]; 
+  interactiveSteps?: InteractiveStep[]; 
+  blankAnswer?: string; 
+  numericAnswer?: number; 
+  numericTolerance?: number; 
+}
+
+export interface Lesson {
+  id: string;
+  title: string;
+  description: string;
+  icon: string; 
+  slides: Slide[];
+}
+
+export interface Unit {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  lessons: Lesson[];
+}
+
+export interface Section {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  units: Unit[];
+}
+
+export interface ExamQuestion {
+  id: string;
+  number: string;
+  question: string;
+  marks: number;
+  solution: string;
+}
+
+export interface ExamSection {
+  id: string;
+  title: string;
+  instruction: string;
+  questions: ExamQuestion[];
+}
+
+export interface ExamPaper {
+  moduleId: string;
+  sections: ExamSection[];
+}
+
+export interface Module {
+  id: string;
+  title: string;
+  description: string;
+  sections: Section[];
+  moduleSummary?: Slide[];
+  examPaper?: ExamPaper;
+}
+
+export interface UserProgress {
+  completedLessons: string[];
+  xp: number;
+  currentModuleId: string;
+}
+--- END OF FILE src/types.ts ---
+
+--- START OF FILE src/App.tsx ---
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserProgress } from './types';
+import Dashboard from './pages/Dashboard';
+import LessonPage from './pages/LessonPage';
+import ModuleSummaryPage from './pages/ModuleSummaryPage';
+import './App.css';
+import './styles/interactive.css'; 
+import './styles/path.css'; 
+import './styles/custom-scroll.css';
+
+const App: React.FC = () => {
+  const [progress, setProgress] = useState<UserProgress>(() => {
+    const saved = localStorage.getItem('duofy4_progress'); 
+    let initialProgress: UserProgress = {
+      completedLessons:[],
+      xp: 0,
+      currentModuleId: 'module-1'
+    };
+    
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        initialProgress = {
+          completedLessons: parsed.completedLessons ||[],
+          xp: parsed.xp || 0,
+          currentModuleId: parsed.currentModuleId || parsed.currentCourseId || 'module-1'
+        };
+      } catch(e) {
+        console.error("Failed to parse progress", e);
+      }
+    }
+    return initialProgress;
+  });
+
+  const[currentSectionIndex, setCurrentSectionIndex] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem('duofy4_progress', JSON.stringify(progress));
+  }, [progress]);
+
+  useEffect(() => {
+    setCurrentSectionIndex(0);
+  }, [progress.currentModuleId]);
+
+  return (
+    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+      <BrowserRouter>
+        <Routes>
+          <Route 
+             path="/" 
+             element={<Dashboard 
+                progress={progress} 
+                setProgress={setProgress} 
+                currentSectionIndex={currentSectionIndex} 
+                setCurrentSectionIndex={setCurrentSectionIndex} 
+             />} 
+          />
+          <Route 
+             path="/lesson/:moduleId/:unitId/:lessonId" 
+             element={<LessonPage 
+                progress={progress} 
+                setProgress={setProgress} 
+             />} 
+          />
+          <Route 
+             path="/summary/:moduleId" 
+             element={<ModuleSummaryPage />} 
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
+};
+
+export default App;
+--- END OF FILE src/App.tsx ---
 
 --- START OF FILE src/components/MathRenderer.tsx ---
 import React, { useEffect, useRef, useMemo } from 'react';
@@ -23,11 +234,10 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
   // Parse markdown while protecting LaTeX syntax
   const htmlContent = useMemo(() => {
     try {
-      // 1. Tokenize Math: Replace LaTeX patterns with placeholders to prevent Markdown parser from mangling them
-      const mathSegments: string[] = [];
+      // 1. Tokenize Math
+      const mathSegments: string[] =[];
       const placeholderPrefix = "MATH_SEGMENT_PLACEHOLDER_";
       
-      // Matches $...$, $$...$$, \[...\], \(...\)
       const regex = /\$\$([\s\S]*?)\$\$|\$([\s\S]*?)\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)/g;
       
       const textWithPlaceholders = content.replace(regex, (match) => {
@@ -40,16 +250,17 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
       let parsedHtml = parse(textWithPlaceholders, { breaks: true, async: false }) as string;
 
       // 3. Restore Math
-      mathSegments.forEach((segment, i) => {
-        // USE A REPLACER FUNCTION () => segment 
-        // This prevents JavaScript from interpreting special patterns like $1 or $$ in the math string!
-        parsedHtml = parsedHtml.replace(new RegExp(`${placeholderPrefix}${i}`, 'g'), () => segment);
+      const restoreRegex = new RegExp(`${placeholderPrefix}(\\d+)`, 'g');
+      
+      parsedHtml = parsedHtml.replace(restoreRegex, (match, id) => {
+        const index = parseInt(id, 10);
+        return mathSegments[index] || match;
       });
 
       return parsedHtml;
     } catch (e) {
       console.error("Error parsing markdown", e);
-      return content; // Fallback to raw content
+      return content;
     }
   }, [content]);
 
@@ -62,12 +273,12 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
       window.MathJax.typesetPromise([containerRef.current])
         .catch((err: any) => console.error('MathJax typeset failed: ', err));
     }
-  }, [htmlContent]);
+  },[htmlContent]);
 
   return (
     <div 
       ref={containerRef} 
-      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none ${className || ''}`}
+      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none overflow-x-auto custom-scrollbar pb-2 ${className || ''}`}
       style={{ overflowWrap: 'break-word' }}
     />
   );
@@ -76,174 +287,721 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
 export default MathRenderer;
 --- END OF FILE src/components/MathRenderer.tsx ---
 
---- START OF FILE src/data/unit_2_1_1_field_axioms.ts ---
-import { Unit } from '../types';
+--- START OF FILE src/components/ExamQuestionItem.tsx ---
+import React, { useState } from 'react';
+import { ChevronDown, ChevronUp, Award } from 'lucide-react';
+import MathRenderer from './MathRenderer';
+import { ExamQuestion } from '../types';
 
-export const UNIT_2_1_1: Unit = {
-  id: "unit-2-1-1",
-  title: "Field Axioms",
-  description: "Algebraic Properties of the Real Numbers",
-  color: "duo-blue",
-  lessons: [
+interface Props {
+  question: ExamQuestion;
+}
+
+const ExamQuestionItem: React.FC<Props> = ({ question }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="glass-panel p-4 rounded-2xl mb-4 cursor-pointer transition-all border border-white/10 shadow-sm" onClick={() => setExpanded(!expanded)}>
+      <div className="flex items-start gap-3">
+        <div className="bg-blue-900/40 text-blue-400 font-black text-xs px-2.5 py-1 rounded-lg shrink-0 mt-0.5 border border-blue-500/20">
+          Q{question.number}
+        </div>
+        <div className="flex-grow">
+          <div className="text-white font-bold text-[15px] leading-snug">
+             <MathRenderer content={question.question} />
+          </div>
+          <div className="flex items-center gap-1.5 mt-3">
+            <Award className="w-4 h-4 text-yellow-500" />
+            <span className="text-yellow-500 font-bold text-xs">{question.marks} Marks</span>
+          </div>
+        </div>
+        <div className="shrink-0 text-slate-400 mt-1">
+          {expanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        </div>
+      </div>
+
+      {expanded && (
+        <div className="mt-4 pt-4 border-t border-white/5 animate-in fade-in duration-300 cursor-text" onClick={(e) => e.stopPropagation()}>
+          <p className="text-green-400 font-bold text-[10px] uppercase tracking-widest mb-3">Detailed Solution</p>
+          <div className="text-slate-300 text-sm">
+            <MathRenderer content={question.solution} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ExamQuestionItem;
+--- END OF FILE src/components/ExamQuestionItem.tsx ---
+
+--- START OF FILE src/components/QuestionsTab.tsx ---
+import React from 'react';
+import { MODULES } from '../data/modules';
+import ExamQuestionItem from './ExamQuestionItem';
+import { BookOpenCheck } from 'lucide-react';
+
+interface Props {
+  moduleId: string;
+}
+
+const QuestionsTab: React.FC<Props> = ({ moduleId }) => {
+  const module = MODULES.find(m => m.id === moduleId);
+  const paper = module?.examPaper;
+
+  if (!paper) {
+    return (
+      <div className="p-10 text-center text-slate-500 mt-20">
+        <p>No model exam paper available for this module yet.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 animate-in fade-in duration-300">
+      <div className="flex flex-col items-center justify-center text-center mb-8 mt-6">
+        <BookOpenCheck className="w-10 h-10 text-duo-blue mb-3" />
+        <h1 className="text-2xl font-black text-white mb-2">Exam Prep</h1>
+        <p className="text-slate-400 text-sm font-medium px-4">
+          Practice questions from "{module?.title}" Open Book Assessment.
+        </p>
+      </div>
+
+      {paper.sections.map((section) => (
+        <div key={section.id} className="mb-8">
+          <div className="bg-slate-800/80 inline-block px-4 py-2 rounded-xl mb-4 border border-white/5 shadow-sm">
+            <h2 className="text-white font-black text-sm">{section.title}</h2>
+          </div>
+          <p className="text-slate-400 text-xs font-bold mb-4 ml-1">{section.instruction}</p>
+
+          <div className="space-y-4">
+            {section.questions.map(q => (
+              <ExamQuestionItem key={q.id} question={q} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default QuestionsTab;
+--- END OF FILE src/components/QuestionsTab.tsx ---
+
+--- START OF FILE src/data/exam_module_1.ts ---
+import { ExamPaper } from '../types';
+
+export const EXAM_MODULE_1: ExamPaper = {
+  moduleId: 'module-1',
+  sections:[
     {
-      id: "les-2-1-1-1", title: "Algebraic Properties of R", description: "The foundational axioms of real numbers", icon: "Layers",
-      slides: [
-        { id: "s0", type: "theory", title: "Algebraic Properties of $\\mathbb{R}$", content: "The real numbers $\\mathbb{R}$ possess two binary operations, **addition** ($+$) and **multiplication** ($\\cdot$), satisfying the Field Axioms:\n\n**Addition Properties:**\n(A1) Commutative: $a + b = b + a$\n(A2) Associative: $(a + b) + c = a + (b + c)$\n(A3) Identity: There exists an element $0$ such that $0 + a = a$ and $a + 0 = a$ for all $a \\in \\mathbb{R}$.\n(A4) Inverse: For each $a \\in \\mathbb{R}$, there exists $-a \\in \\mathbb{R}$ such that $a + (-a) = 0$ and $(-a) + a = 0$.\n\n**Multiplication Properties:**\n(M1) Commutative: $a \\cdot b = b \\cdot a$\n(M2) Associative: $(a \\cdot b) \\cdot c = a \\cdot (b \\cdot c)$\n(M3) Identity: There exists an element $1 \\neq 0$ such that $1 \\cdot a = a$ and $a \\cdot 1 = a$ for all $a \\in \\mathbb{R}$.\n(M4) Inverse: For each $a \\neq 0$, there exists $1/a$ such that $a \\cdot (1/a) = 1$ and $(1/a) \\cdot a = 1$.\n\n**Distributive Property:**\n(D) $a \\cdot (b + c) = (a \\cdot b) + (a \\cdot c)$ and $(b + c) \\cdot a = (b \\cdot a) + (c \\cdot a)$ for all $a, b, c \\in \\mathbb{R}$." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If you add two numbers, does the order matter?", options: [{ id: "A", text: "No, a+b = b+a", isCorrect: true, explanation: "This is known as the commutative property of addition (A1)." }, { id: "B", text: "Yes", isCorrect: false, explanation: "Addition in real numbers is strictly commutative." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "What is the result of multiplying any real number by 1?", options: [{ id: "A", text: "The number itself", isCorrect: true, explanation: "1 is the unique multiplicative identity (M3)." }, { id: "B", text: "1", isCorrect: false, explanation: "That would be true if we multiplied by 0." }] },
-        { id: "s3", type: "numerical", title: "Distributive Calculation", content: "Evaluate the expression $2 \\cdot (3 + 4)$ using the distributive property.", numericAnswer: 14, numericTolerance: 0 },
-        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "The property that states $(a \\cdot b) \\cdot c = a \\cdot (b \\cdot c)$ is called the ___ property of multiplication.", blankAnswer: "associative" }
+      id: 'sec-a',
+      title: 'Section A',
+      instruction: 'Answer all. Each question carries 3 Marks. (Ceiling 12)',
+      questions:[
+        {
+          id: 'q1',
+          number: '1',
+          marks: 3,
+          question: 'Prove that if A and B are sets, then $A \\subseteq B$ if and only if $A \\cap B = A$.',
+          solution: '**Proof:**\n\n**Forward ($\\implies$):** Assume $A \\subseteq B$. We know $A \\cap B \\subseteq A$ is always true by definition of intersection. We must prove $A \\subseteq A \\cap B$. Let $x \\in A$. Since $A \\subseteq B$, it follows that $x \\in B$. Thus $x \\in A$ and $x \\in B$, so $x \\in A \\cap B$. Hence $A \\subseteq A \\cap B$. Since both inclusions hold, $A \\cap B = A$.\n\n**Backward ($\\impliedby$):** Assume $A \\cap B = A$. Let $x \\in A$. Then $x \\in A \\cap B$. By definition of intersection, $x \\in A$ and $x \\in B$. Since we established $x \\in B$ for any arbitrary $x \\in A$, we conclude $A \\subseteq B$. $\\blacksquare$'
+        },
+        {
+          id: 'q2',
+          number: '2',
+          marks: 3,
+          question: 'What does the Well-Ordering Property of $\\mathbb{N}$ state?',
+          solution: '**Statement:**\n\nThe Well-Ordering Property states that every nonempty subset of $\\mathbb{N}$ has a least element.\n\nMore formally: If $S$ is a subset of $\\mathbb{N}$ and if $S \\neq \\emptyset$, then there exists $m \\in S$ such that $m \\le k$ for all $k \\in S$. This serves as the foundation for the Principle of Mathematical Induction. $\\blacksquare$'
+        },
+        {
+          id: 'q3',
+          number: '3',
+          marks: 3,
+          question: 'Show that the set of even natural numbers is denumerable.',
+          solution: '**Proof:**\n\nLet $E := \\{2n : n \\in \\mathbb{N}\\}$ be the set of even natural numbers.\n\nA set is denumerable if there exists a bijection from $\\mathbb{N}$ onto it. Define a mapping $f: \\mathbb{N} \\to E$ by $f(n) := 2n$ for $n \\in \\mathbb{N}$.\n\n**Injective:** If $f(n_1) = f(n_2)$, then $2n_1 = 2n_2$, which implies $n_1 = n_2$.\n\n**Surjective:** For any even number $e \\in E$, by definition there exists some $k \\in \\mathbb{N}$ such that $e = 2k$. Then $f(k) = 2k = e$.\n\nSince $f$ is a bijection, $E$ is denumerable. $\\blacksquare$'
+        },
+        {
+          id: 'q4',
+          number: '4',
+          marks: 3,
+          question: 'Determine the sets $A \\cap B \\cap C$ where $A=\\{k : k \\in \\mathbb{N}, k \\le 20\\}$, $B=\\{3k-1 : k \\in \\mathbb{N}\\}$, $C=\\{2k+1 : k \\in \\mathbb{N}\\}$.',
+          solution: '**Solution:**\n\nThe universal set here is $A = \\{1, 2, 3, \\dots, 20\\}$.\n\n$B \\cap A$ (elements in $A$ of form $3k-1$): $\\{2, 5, 8, 11, 14, 17, 20\\}$\n\n$C \\cap A$ (elements in $A$ of form $2k+1$, i.e., odd numbers): $\\{3, 5, 7, 9, 11, 13, 15, 17, 19\\}$\n\nNow, $A \\cap B \\cap C$ is the intersection of these two sets. Looking at the two lists, the common elements are:\n\n$A \\cap B \\cap C = \\{5, 11, 17\\}$ $\\blacksquare$'
+        },
+        {
+          id: 'q5',
+          number: '5',
+          marks: 3,
+          question: 'Define the Cartesian Product of two sets.',
+          solution: '**Definition:**\n\nIf $A$ and $B$ are nonempty sets, then the Cartesian product $A \\times B$ of $A$ and $B$ is the set of all ordered pairs $(a, b)$ with $a \\in A$ and $b \\in B$.\n\nMathematically: $A \\times B := \\{(a, b) : a \\in A, b \\in B\\}$. $\\blacksquare$'
+        }
       ]
     },
     {
-      id: "les-2-1-1-2", title: "Theorem 2.1.2: Uniqueness Properties", description: "Proving that 0 and 1 are unique", icon: "Fingerprint",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.2", content: "**Theorem 2.1.2** establishes three vital uniqueness facts derived strictly from the Field Axioms:\n\n(a) If $z$ and $a$ are elements in $\\mathbb{R}$ with $z + a = a$, then $z = 0$.\n(b) If $u$ and $b \\neq 0$ are elements in $\\mathbb{R}$ with $u \\cdot b = b$, then $u = 1$.\n(c) If $a \\in \\mathbb{R}$, then $a \\cdot 0 = 0$.\n\n*These show that the zero element and unit element are absolutely unique.*" },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If adding a mysterious number $z$ to $a$ gives you exactly $a$ back, what must $z$ be?", options: [{ id: "A", text: "0", isCorrect: true, explanation: "Theorem 2.1.2(a) proves 0 is the unique additive identity." }, { id: "B", text: "1", isCorrect: false, explanation: "1 is the multiplicative identity." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "What is always the result of multiplying any real number by 0?", options: [{ id: "A", text: "0", isCorrect: true, explanation: "Multiplying by zero always yields zero (Theorem 2.1.2c)." }, { id: "B", text: "The number itself", isCorrect: false, explanation: "That's multiplying by 1." }] },
-        { id: "s3", type: "proof", title: "Interactive Proof: Multiplying by Zero", content: "**Goal: Prove $a \\cdot 0 = 0$ using only the Field Axioms.**", interactiveSteps: [
-            { stepText: "Consider the expression $a + a \\cdot 0$. By the identity property (M3), we know $a = a \\cdot 1$." },
-            { stepText: "Thus, we can rewrite it as $a \\cdot 1 + a \\cdot 0$." },
-            { prompt: "By the distributive property (D), what does $a \\cdot 1 + a \\cdot 0$ factor into?", options: [{ id: "A", text: "$a \\cdot (1 + 0)$", isCorrect: true, explanation: "We factor out the 'a' on the left side." }, { id: "B", text: "$a \\cdot 1 \\cdot 0$", isCorrect: false, explanation: "Addition doesn't turn into multiplication." }], stepText: "It factors to $a \\cdot (1 + 0)$." },
-            { stepText: "Since $1 + 0 = 1$ by (A3), we have $a \\cdot (1 + 0) = a \\cdot 1 = a$." },
-            { stepText: "We have established $a + a \\cdot 0 = a$. By part (a) of this theorem, any number added to $a$ that results in $a$ must be $0$. Thus $a \\cdot 0 = 0$. Goal reached!" }
-        ]},
-        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "Theorem 2.1.2 proves that the additive identity ($0$) and the multiplicative identity ($1$) are completely ___.", blankAnswer: "unique" }
+      id: 'sec-b',
+      title: 'Section B',
+      instruction: 'Answer all. Each question carries 6 Marks. (Ceiling 18)',
+      questions:[
+        {
+          id: 'q6',
+          number: '6',
+          marks: 6,
+          question: 'Prove that $A \\setminus (B \\cup C) = (A \\setminus B) \\cap (A \\setminus C)$.',
+          solution: '**Proof:**\n\nLet $x$ be an arbitrary element. We will show that $x$ belongs to the left side if and only if it belongs to the right side.\n\n$x \\in A \\setminus (B \\cup C)$\n$\\iff x \\in A$ and $x \\notin (B \\cup C)$\n$\\iff x \\in A$ and it is false that ($x \\in B$ or $x \\in C$)\n$\\iff x \\in A$ and ($x \\notin B$ and $x \\notin C$) \n$\\iff (x \\in A \\text{ and } x \\notin B)$ and $(x \\in A \\text{ and } x \\notin C)$\n$\\iff x \\in (A \\setminus B)$ and $x \\in (A \\setminus C)$\n$\\iff x \\in (A \\setminus B) \\cap (A \\setminus C)$.\n\nSince both sets contain exactly the same elements, they are equal. $\\blacksquare$'
+        },
+        {
+          id: 'q7',
+          number: '7',
+          marks: 6,
+          question: 'If $f: A \\to B$ and $g: B \\to C$ be functions and let $H$ be a subset of $C$. Then prove $(g \\circ f)^{-1}(H) = f^{-1}(g^{-1}(H))$.',
+          solution: '**Proof:**\n\nWe must show that any element $x$ in the left side is in the right side, and vice versa.\n\nLet $x \\in (g \\circ f)^{-1}(H)$.\nBy the definition of the inverse image, this means that the function evaluated at $x$ lands in $H$. So, $(g \\circ f)(x) \\in H$.\n\nBy definition of composition, $(g \\circ f)(x) = g(f(x))$. Thus, $g(f(x)) \\in H$.\n\nIf the function $g$ maps the element $f(x)$ into $H$, then by definition of inverse image, $f(x) \\in g^{-1}(H)$.\n\nIf the function $f$ maps the element $x$ into the set $g^{-1}(H)$, then by definition of inverse image, $x \\in f^{-1}(g^{-1}(H))$.\n\nSince all these steps are strictly reversible definitions, we conclude the sets are identical. $\\blacksquare$'
+        },
+        {
+          id: 'q8',
+          number: '8',
+          marks: 6,
+          question: 'Prove the set $\\mathbb{N} \\times \\mathbb{N}$ is denumerable.',
+          solution: '**Proof:**\n\nTo show a set is denumerable, we must find a bijection between it and $\\mathbb{N}$. We use Cantor\'s diagonal procedure.\n\nThe set $\\mathbb{N} \\times \\mathbb{N}$ consists of all ordered pairs $(m, n)$ for $m, n \\in \\mathbb{N}$. We enumerate these pairs according to increasing sum $k = m + n$, and within each sum, increasing $m$.\n\nDiagonals:\n$k=2: (1,1)$\n$k=3: (1,2), (2,1)$\n$k=4: (1,3), (2,2), (3,1)$\n\nThe number of elements in the first $k-1$ diagonals is $\\frac{1}{2}(k-1)k$. \nFor a pair $(m, n)$, it sits on the $k$-th diagonal where $k = m + n - 1$. The number of points in preceding diagonals is $\\frac{1}{2}(m+n-2)(m+n-1)$.\n\nSince $(m,n)$ is the $m$-th point on this diagonal, its position in the overall enumeration is:\n$h(m, n) = \\frac{1}{2}(m+n-2)(m+n-1) + m$\n\nThis explicit counting function $h: \\mathbb{N} \\times \\mathbb{N} \\to \\mathbb{N}$ is a bijection, thus $\\mathbb{N} \\times \\mathbb{N}$ is denumerable. $\\blacksquare$'
+        }
       ]
     },
     {
-      id: "les-2-1-1-3", title: "Theorem 2.1.3: Zero Product Property", description: "Dealing with reciprocals and zeros", icon: "CircleDot",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.3", content: "**Theorem 2.1.3** establishes two more fundamental rules of algebra:\n\n(a) If $a \\neq 0$ and $b$ in $\\mathbb{R}$ are such that $a \\cdot b = 1$, then $b = 1/a$.\n(b) If $a \\cdot b = 0$, then either $a = 0$ or $b = 0$.\n\n*This formalizes why we can divide both sides of an equation by a non-zero number to find a unique solution, and why factoring works for solving quadratics!*" },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If $ab = 1$, can either $a$ or $b$ be zero?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Because anything multiplied by 0 is 0, not 1." }, { id: "B", text: "Yes", isCorrect: false, explanation: "0 has no reciprocal." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "If a product of two numbers is zero ($ab=0$), what can we definitively conclude?", options: [{ id: "A", text: "At least one of the numbers must be 0", isCorrect: true, explanation: "This is the Zero Product Property." }, { id: "B", text: "Both numbers must be 0", isCorrect: false, explanation: "Only one needs to be 0 for the product to be 0." }] },
-        { id: "s3", type: "proof", title: "Interactive Proof: Zero Product", content: "**Goal: Prove if $a \\cdot b = 0$, then either $a = 0$ or $b = 0$.**", interactiveSteps: [
-            { stepText: "Let's assume $a \\cdot b = 0$. We want to show that if $a$ is not zero, then $b$ must be zero. Assume $a \\neq 0$." },
-            { stepText: "Since $a \\neq 0$, the inverse property (M4) guarantees the existence of a reciprocal $1/a$. Let's multiply both sides of $a \\cdot b = 0$ by $1/a$." },
-            { prompt: "Using the associative property (M2), how does $(1/a)(a \\cdot b)$ group?", options: [{ id: "A", text: "$((1/a) \\cdot a) \\cdot b$", isCorrect: true, explanation: "We group the inverses together to cancel them out." }, { id: "B", text: "$(1/a) \\cdot b$", isCorrect: false, explanation: "You dropped the 'a'." }], stepText: "We get $((1/a) \\cdot a) \\cdot b = (1/a) \\cdot 0$." },
-            { stepText: "The right side $(1/a) \\cdot 0 = 0$ by Theorem 2.1.2(c). The left side is $1 \\cdot b = b$." },
-            { stepText: "Therefore, equating them yields $b = 0$. We have proven that if $a \\neq 0$, then $b$ MUST be $0$. Goal reached!" }
-        ]},
-        { id: "s4", type: "numerical", title: "Application", content: "If $(x-3)(x-5) = 0$ and we know $x \\neq 3$, what must the value of $x$ be?", numericAnswer: 5, numericTolerance: 0 },
-        { id: "s5", type: "fill_in_blank", title: "Concept Check", content: "If $ab=1$, then $b$ is the unique multiplicative ___ of $a$.", blankAnswer: "inverse" }
-      ]
-    },
-    {
-      id: "les-2-1-1-4", title: "Theorem 2.1.4: Irrationality of √2", description: "Why rational numbers are incomplete", icon: "AlertTriangle",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.4: No rational square root of 2", content: "**Theorem 2.1.4:** There does not exist a rational number $r \\in \\mathbb{Q}$ such that $r^2 = 2$.\n\nElements of $\\mathbb{R}$ that can be written as $b/a$ ($a, b \\in \\mathbb{Z}$, $a \\neq 0$) are **rational numbers** ($\\mathbb{Q}$).\n\nThis is a historic proof (attributed to the Pythagoreans) that shattered the Greek belief that all lengths could be represented as ratios of integers. It proves the existence of **irrational numbers** (real numbers not in $\\mathbb{Q}$)." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "Are all real numbers perfectly expressible as fractions of integers?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Irrational numbers like √2 and pi cannot be expressed as fractions." }, { id: "B", text: "Yes", isCorrect: false, explanation: "The Greeks discovered this was false long ago." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "If the square of an integer $p^2$ is an even number, what must be true about $p$ itself?", options: [{ id: "A", text: "p must be even", isCorrect: true, explanation: "The square of an odd number is always odd ($ (2k+1)^2 = 4k^2+4k+1 $)." }, { id: "B", text: "p could be odd", isCorrect: false, explanation: "An odd times an odd is always odd." }] },
-        { id: "s3", type: "proof", title: "Interactive Proof: Irrationality of √2", content: "**Goal: Prove no rational $r$ satisfies $r^2 = 2$ by contradiction.**", interactiveSteps: [
-            { stepText: "Assume for contradiction that a rational number exists such that $(p/q)^2 = 2$. We assume $p$ and $q$ are positive integers with NO common factors other than 1 (lowest terms)." },
-            { stepText: "Squaring both sides gives $p^2/q^2 = 2$, which rearranges to $p^2 = 2q^2$. Since $p^2$ is a multiple of 2, $p^2$ is even." },
-            { prompt: "Since $p^2$ is even, what do we know about $p$?", options: [{ id: "A", text: "p is even", isCorrect: true, explanation: "If p were odd, p squared would be odd." }, { id: "B", text: "p is odd", isCorrect: false, explanation: "An odd times an odd is odd." }], stepText: "Thus, $p$ is even. This means we can write $p = 2m$ for some integer $m$." },
-            { stepText: "Substitute $p = 2m$ back into our equation: $(2m)^2 = 2q^2$, which simplifies to $4m^2 = 2q^2$." },
-            { stepText: "Divide by 2 to get $2m^2 = q^2$. This implies that $q^2$ is even, which in turn means $q$ must be even." },
-            { stepText: "If both $p$ and $q$ are even, they share a common factor of 2. But we initially assumed they had NO common factors! This contradiction means our initial assumption is false. Goal reached!" }
-        ]},
-        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "A real number that cannot be written as a ratio of integers is called an ___ number.", blankAnswer: "irrational" }
+      id: 'sec-c',
+      title: 'Section C',
+      instruction: 'Answer any ONE question. Each question carries 10 marks.',
+      questions:[
+        {
+          id: 'q9',
+          number: '9',
+          marks: 10,
+          question: '(a) Prove that $\\mathbb{Q}$ is denumerable.\n(b) State and prove Cantor\'s Theorem.',
+          solution: '**(a) Proof that $\\mathbb{Q}$ is denumerable:**\nThe positive rational numbers $\\mathbb{Q}^+$ can be formed by pairs of natural numbers $(m,n)$ representing $m/n$. Thus, we can create a surjection from $\\mathbb{N} \\times \\mathbb{N}$ to $\\mathbb{Q}^+$. Since $\\mathbb{N} \\times \\mathbb{N}$ is countable, $\\mathbb{Q}^+$ is countable (we just skip non-simplified fractions in our diagonal counting). Similarly, $\\mathbb{Q}^-$ is countable. Since $\\mathbb{Q} = \\mathbb{Q}^- \\cup \\{0\\} \\cup \\mathbb{Q}^+$ and the union of countable sets is countable, $\\mathbb{Q}$ is denumerable.\n\n**(b) Cantor\'s Theorem:** If $A$ is any set, there is no surjection from $A$ onto the set $\\mathcal{P}(A)$ of all subsets of $A$.\n\n*Proof:* Suppose $\\varphi : A \\to \\mathcal{P}(A)$ is a surjection. We define a subset $D = \\{a \\in A : a \\notin \\varphi(a)\\}$. Since $\\varphi$ is surjective and $D \\in \\mathcal{P}(A)$, there must exist $a_0 \\in A$ such that $\\varphi(a_0) = D$.\n\nDoes $a_0$ belong to $D$? \n- If $a_0 \\in D$, then by definition of $D$, $a_0 \\notin \\varphi(a_0) = D$, a contradiction.\n- If $a_0 \\notin D$, then $a_0 \\notin \\varphi(a_0)$. But the definition of $D$ says that any such element belongs to $D$, so $a_0 \\in D$, a contradiction.\nSince both cases lead to a paradox, no such surjection $\\varphi$ can exist. $\\blacksquare$'
+        },
+        {
+          id: 'q10',
+          number: '10',
+          marks: 10,
+          question: '(a) Prove by induction: $1^2 + 2^2 + \\dots + n^2 = \\frac{1}{6}n(n+1)(2n+1)$.\n(b) Prove that $2^n \\le (n+1)!$ for all $n \\in \\mathbb{N}$.',
+          solution: '**(a) Proof:**\n*Base Case ($n=1$):* LHS $= 1^2 = 1$. RHS $= \\frac{1}{6}(1)(2)(3) = 1$. True.\n*Inductive Step:* Assume true for $k$: $1^2 + \\dots + k^2 = \\frac{1}{6}k(k+1)(2k+1)$.\nAdd $(k+1)^2$ to both sides:\n$= \\frac{1}{6}k(k+1)(2k+1) + (k+1)^2$\n$= \\frac{1}{6}(k+1) [k(2k+1) + 6(k+1)]$\n$= \\frac{1}{6}(k+1) [2k^2 + 7k + 6]$\n$= \\frac{1}{6}(k+1)(k+2)(2k+3)$\nThis is exactly the formula for $n = k+1$. By induction, it holds for all $n$.\n\n**(b) Proof:**\n*Base Case ($n=1$):* $2^1 = 2$. $(1+1)! = 2! = 2$. $2 \\le 2$ is true.\n*Inductive Step:* Assume $2^k \\le (k+1)!$.\nMultiply both sides by 2: $2^{k+1} \\le 2 \\cdot (k+1)!$\nSince $k \\ge 1$, we know $2 \\le k+2$. \nThus, $2 \\cdot (k+1)! \\le (k+2) \\cdot (k+1)! = (k+2)!$.\nTherefore, $2^{k+1} \\le (k+2)!$, establishing the $k+1$ case. By induction, it holds for all $n$. $\\blacksquare$'
+        }
       ]
     }
   ]
 };
---- END OF FILE src/data/unit_2_1_1_field_axioms.ts ---
+--- END OF FILE src/data/exam_module_1.ts ---
 
---- START OF FILE src/data/unit_2_1_2_order_inequalities.ts ---
-import { Unit } from '../types';
+--- START OF FILE src/data/exam_module_2.ts ---
+import { ExamPaper } from '../types';
 
-export const UNIT_2_1_2: Unit = {
-  id: "unit-2-1-2",
-  title: "Order & Inequalities",
-  description: "Positivity and rules of inequalities",
-  color: "duo-blue",
-  lessons: [
+export const EXAM_MODULE_2: ExamPaper = {
+  moduleId: 'module-2',
+  sections:[
     {
-      id: "les-2-1-2-1", title: "Definition 2.1.5: Order Properties", description: "The set of positive real numbers", icon: "ArrowUpRight",
-      slides: [
-        { id: "s0", type: "theory", title: "The Order Properties of $\\mathbb{R}$", content: "**Definition 2.1.5:** There is a nonempty subset $\\mathbb{P}$ of $\\mathbb{R}$, called the set of **positive real numbers**, that satisfies the following properties:\n\n(i) If $a, b \\in \\mathbb{P}$, then $a + b \\in \\mathbb{P}$ (closure under addition).\n(ii) If $a, b \\in \\mathbb{P}$, then $a \\cdot b \\in \\mathbb{P}$ (closure under multiplication).\n(iii) **Trichotomy Property:** If $a \\in \\mathbb{R}$, then exactly ONE of the following holds:\n$$a \\in \\mathbb{P}, \\quad a = 0, \\quad -a \\in \\mathbb{P}$$" },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If you add two positive numbers together, what type of number do you definitively get?", options: [{ id: "A", text: "A positive number", isCorrect: true, explanation: "Positive numbers are closed under addition (Axiom i)." }, { id: "B", text: "A negative number", isCorrect: false, explanation: "Two positives cannot make a negative." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "Can a real number be both strictly positive and strictly negative at the same time?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "This relies on the Trichotomy Property, which states EXACTLY ONE condition holds." }, { id: "B", text: "Yes", isCorrect: false, explanation: "A number can only have one sign." }] },
-        { id: "s3", type: "fill_in_blank", title: "Concept Check", content: "The property dividing all real numbers strictly into positive, zero, and negative categories is called the ___ Property.", blankAnswer: "Trichotomy" }
+      id: 'sec-a',
+      title: 'Section A',
+      instruction: 'Answer all. Each question carries 3 Marks. (Ceiling 12)',
+      questions:[
+        {
+          id: 'q1',
+          number: '1',
+          marks: 3,
+          question: 'There does not exist a rational number $r$ such that $r^2 = 2$.',
+          solution: '**Proof:**\nSuppose, on the contrary, that $p$ and $q$ are integers such that $(p/q)^2 = 2$. We may assume that $p$ and $q$ are positive and have no common integer factors other than 1.\n\nSince $p^2 = 2q^2$, we see that $p^2$ is even. This implies that $p$ is also even (because if $p=2n-1$ is odd, its square is odd). Therefore, since $p$ and $q$ do not have 2 as a common factor, $q$ must be an odd natural number.\n\nSince $p$ is even, $p = 2m$ for some $m \\in \\mathbb{N}$, and hence $4m^2 = 2q^2$, so that $2m^2 = q^2$. Therefore, $q^2$ is even, and it follows that $q$ is an even natural number.\n\nSince the hypothesis that $(p/q)^2 = 2$ leads to the contradictory conclusion that $q$ is both even and odd, it must be false. $\\blacksquare$'
+        },
+        {
+          id: 'q2',
+          number: '2',
+          marks: 3,
+          question: 'State and prove triangle inequality.',
+          solution: '**Theorem (Triangle Inequality):** If $a, b \\in \\mathbb{R}$, then $|a + b| \\le |a| + |b|$.\n\n**Proof:**\nFrom the properties of absolute value, we know that any number is bounded by its absolute value:\n$-|a| \\le a \\le |a|$\n$-|b| \\le b \\le |b|$\n\nOn adding these two inequalities, we obtain:\n$-(|a| + |b|) \\le a + b \\le |a| + |b|$\n\nHence, by the property that $-c \\le x \\le c \\iff |x| \\le c$ (where $c = |a|+|b| \\ge 0$), we have:\n$|a + b| \\le |a| + |b|$. $\\blacksquare$'
+        },
+        {
+          id: 'q3',
+          number: '3',
+          marks: 3,
+          question: 'Determine the set $B = \\{x \\in \\mathbb{R} : |x - 1| < |x|\\}$.',
+          solution: '**Solution:**\nOne method is to square both sides since both absolute values are non-negative. Squaring preserves the strict inequality:\n$|x - 1|^2 < |x|^2$\n\nSince $|a|^2 = a^2$ for any real number $a$, we can expand the square to obtain:\n$x^2 - 2x + 1 < x^2$\n\nSubtracting $x^2$ from both sides simplifies this to:\n$-2x + 1 < 0$\n\n$1 < 2x \\implies x > \\frac{1}{2}$\n\nThus, we find that the set is $B = \\{x \\in \\mathbb{R} : x > 1/2\\}$. $\\blacksquare$'
+        },
+        {
+          id: 'q4',
+          number: '4',
+          marks: 3,
+          question: 'Prove that if $a \\in \\mathbb{R}, a \\neq 0$, then $a^2 > 0$.',
+          solution: '**Proof:**\nBy the Trichotomy Property of the order of real numbers, if $a \\neq 0$, then either $a \\in \\mathbb{P}$ (the set of positive real numbers) or $-a \\in \\mathbb{P}$.\n\n**Case 1:** If $a \\in \\mathbb{P}$, then by closure under multiplication, we have $a^2 = a \\cdot a \\in \\mathbb{P}$.\n\n**Case 2:** If $-a \\in \\mathbb{P}$, then again by closure under multiplication, $(-a)(-a) \\in \\mathbb{P}$. Since $(-a)(-a) = a^2$, we again conclude $a^2 \\in \\mathbb{P}$.\n\nIn both possible cases, $a^2 \\in \\mathbb{P}$, which means $a^2 > 0$. $\\blacksquare$'
+        },
+        {
+          id: 'q5',
+          number: '5',
+          marks: 3,
+          question: 'Define the supremum and infimum of a set of real numbers.',
+          solution: '**Definition:**\nLet $S$ be a nonempty subset of $\\mathbb{R}$.\n\n(a) If $S$ is bounded above, a number $u$ is a **supremum** (or least upper bound) of $S$ if:\n1. $u$ is an upper bound of $S$, and\n2. if $v$ is any upper bound of $S$, then $u \\le v$.\n\n(b) If $S$ is bounded below, a number $w$ is an **infimum** (or greatest lower bound) of $S$ if:\n1. $w$ is a lower bound of $S$, and\n2. if $t$ is any lower bound of $S$, then $t \\le w$. $\\blacksquare$'
+        }
       ]
     },
     {
-      id: "les-2-1-2-2", title: "Definition 2.1.6: Inequality", description: "Formalizing greater than and less than", icon: "ArrowRightLeft",
-      slides: [
-        { id: "s0", type: "theory", title: "Defining Inequality", content: "**Definition 2.1.6:** Let $a, b$ be elements of $\\mathbb{R}$.\n\n(a) If $a - b \\in \\mathbb{P}$, then we write $a > b$ or $b < a$.\n(b) If $a - b \\in \\mathbb{P} \\cup \\{0\\}$, then we write $a \\ge b$ or $b \\le a$.\n\nThe Trichotomy Property ensures that for any $a, b \\in \\mathbb{R}$, exactly one of the following holds: $a > b$, $a = b$, or $a < b$." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If we say $x > y$, what does that physically mean in terms of their difference?", options: [{ id: "A", text: "x - y is a positive number", isCorrect: true, explanation: "This is the formal definition of inequality." }, { id: "B", text: "y - x is a positive number", isCorrect: false, explanation: "That would mean y > x." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "What does $a \\ge b$ imply about $a - b$?", options: [{ id: "A", text: "It is either positive or zero.", isCorrect: true, explanation: "It belongs to $\\mathbb{P} \\cup \\{0\\}$." }, { id: "B", text: "It is strictly positive.", isCorrect: false, explanation: "That would be a > b." }] },
-        { id: "s3", type: "numerical", title: "Evaluating Difference", content: "If $a - b = 5$, what is the strictly smaller number? (Type 1 for 'a', 0 for 'b')", numericAnswer: 0, numericTolerance: 0 },
-        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "If $b < a$, then the difference $a - b$ must be a ___ real number.", blankAnswer: "positive" }
+      id: 'sec-b',
+      title: 'Section B',
+      instruction: 'Answer all. Each question carries 6 Marks. (Ceiling 18)',
+      questions:[
+        {
+          id: 'q6',
+          number: '6',
+          marks: 6,
+          question: 'State and prove Bernoulli\'s inequality.',
+          solution: '**Statement:** If $x > -1$, then $(1 + x)^n \\ge 1 + nx$ for all $n \\in \\mathbb{N}$.\n\n**Proof:**\nThe proof uses Mathematical Induction.\n*Base Case ($n=1$):* $(1+x)^1 = 1+x$, and $1 + 1x = 1+x$. The inequality yields $1+x \\ge 1+x$, which is true (equality holds).\n\n*Inductive Step:* Assume the validity of the inequality for $k \\in \\mathbb{N}$, so $(1 + x)^k \\ge 1 + kx$. We will deduce it for $k + 1$.\nSince $x > -1$, we know $1 + x > 0$. Therefore, multiplying the assumed inequality by the positive value $(1+x)$ preserves the direction of the inequality:\n$(1 + x)^{k+1} = (1 + x)^k \\cdot (1 + x) \\ge (1 + kx) \\cdot (1 + x)$\n\nExpanding the right side:\n$= 1 + kx + x + kx^2 = 1 + (k+1)x + kx^2$\n\nSince $k \\ge 1$ and $x^2 \\ge 0$, the term $kx^2 \\ge 0$. Therefore:\n$1 + (k+1)x + kx^2 \\ge 1 + (k+1)x$\n\nChaining the inequalities gives $(1 + x)^{k+1} \\ge 1 + (k+1)x$. By Mathematical Induction, the inequality holds for all $n \\in \\mathbb{N}$. $\\blacksquare$'
+        },
+        {
+          id: 'q7',
+          number: '7',
+          marks: 6,
+          question: 'State and prove Archimedean Property.',
+          solution: '**Statement:** If $x \\in \\mathbb{R}$, then there exists $n_x \\in \\mathbb{N}$ such that $x \\le n_x$.\n\n**Proof:**\nIf the assertion is false, then $n \\le x$ for all $n \\in \\mathbb{N}$; therefore, $x$ is an upper bound of $\\mathbb{N}$. \n\nBy the Completeness Property of $\\mathbb{R}$, the nonempty set $\\mathbb{N}$ has a supremum $u \in \\mathbb{R}$.\n\nSubtracting 1 from $u$ gives a number $u - 1$, which is strictly smaller than the supremum $u$ of $\\mathbb{N}$. Therefore, $u - 1$ is not an upper bound of $\\mathbb{N}$.\n\nSince it\'s not an upper bound, there exists some $m \\in \\mathbb{N}$ with $u - 1 < m$. \n\nAdding 1 to both sides gives $u < m + 1$. \n\nSince $m \\in \\mathbb{N}$, we know $m + 1 \\in \\mathbb{N}$. However, this inequality $m+1 > u$ contradicts the fact that $u$ is an upper bound of $\\mathbb{N}$. This contradiction implies our initial assumption was false, proving the property. $\\blacksquare$'
+        },
+        {
+          id: 'q8',
+          number: '8',
+          marks: 6,
+          question: 'State and prove Density Theorem.',
+          solution: '**Statement:** If $x$ and $y$ are any real numbers with $x < y$, then there exists a rational number $r \\in \\mathbb{Q}$ such that $x < r < y$.\n\n**Proof:**\nAssume without loss of generality that $x > 0$. Since $y - x > 0$, it follows from the Archimedean Property that there exists $n \\in \\mathbb{N}$ such that $1/n < y - x$. Therefore, $nx + 1 < ny$.\n\nIf we apply the Archimedean Property again to $nx > 0$, we can find a subset of integers and use the Well-Ordering Property to obtain a least integer $m \\in \\mathbb{N}$ with $m - 1 \\le nx < m$.\n\nTherefore, we have $m \\le nx + 1$. \n\nCombining this with our first inequality ($nx + 1 < ny$), we get:\n$nx < m \\le nx + 1 < ny$\nwhich simplifies to:\n$nx < m < ny$\n\nDividing the entire inequality by the positive integer $n$, we obtain $x < m/n < y$. Thus, the rational number $r := m/n$ satisfies $x < r < y$. $\\blacksquare$'
+        },
+        {
+          id: 'q9',
+          number: '9',
+          marks: 6,
+          question: 'Let $S$ be a nonempty subset of $\\mathbb{R}$ that is bounded below. Prove that $\\inf S = -\\sup\\{-s : s \\in S\\}$.',
+          solution: '**Proof:**\nLet $S\' = \\{-s : s \\in S\\}$. \nSince $S$ is bounded below, there exists a lower bound $w$ such that $w \\le s$ for all $s \\in S$. \nMultiplying by $-1$ flips the inequality: $-s \\le -w$. Thus $S\'$ is bounded above by $-w$.\n\nBy the Completeness Property, $S\'$ has a supremum. Let $u = \\sup S\'$. \nSince $-s \\le u$ for all $s \\in S$, we have $s \\ge -u$. Thus $-u$ is a lower bound for $S$.\n\nWe must show $-u$ is the *greatest* lower bound. Let $v$ be any lower bound for $S$ (so $s \\ge v$). Then $-s \\le -v$, making $-v$ an upper bound for $S\'$.\n\nSince $u$ is the *least* upper bound of $S\'$, we must have $u \\le -v$, which implies $-u \\ge v$. \n\nTherefore $-u$ is greater than or equal to any other lower bound $v$, making $-u$ the greatest lower bound of $S$. Thus $\\inf S = -\\sup S\'$. $\\blacksquare$'
+        }
       ]
     },
     {
-      id: "les-2-1-2-3", title: "Theorem 2.1.7: Rules of Inequalities", description: "Transitivity and operations on inequalities", icon: "Scale",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.7", content: "Let $a, b, c$ be any elements of $\\mathbb{R}$.\n\n(a) **Transitivity:** If $a > b$ and $b > c$, then $a > c$.\n(b) **Addition:** If $a > b$, then $a + c > b + c$.\n(c) **Multiplication:** \n$\\quad$ If $a > b$ and $c > 0$, then $ca > cb$.\n$\\quad$ If $a > b$ and $c < 0$, then $ca < cb$." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "If $a > b$, what happens when you multiply both sides by a strictly negative number $c$?", options: [{ id: "A", text: "The inequality sign flips: ca < cb", isCorrect: true, explanation: "Multiplying by a negative reverses the inequality." }, { id: "B", text: "It stays the same: ca > cb", isCorrect: false, explanation: "That is only true if c is positive." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "Does adding the same negative number to both sides of an inequality flip the sign?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Addition (positive or negative) never flips the inequality." }, { id: "B", text: "Yes", isCorrect: false, explanation: "Only multiplication/division by negatives flips the sign." }] },
-        { id: "s3", type: "proof", title: "Interactive Proof: Multiplication by Negative", content: "**Goal: Prove if $a > b$ and $c < 0$, then $ca < cb$.**", interactiveSteps: [
-            { stepText: "We are given $a > b$, meaning $(a - b) \\in \\mathbb{P}$. We are also given $c < 0$, which means $-c \\in \\mathbb{P}$." },
-            { prompt: "What happens when we multiply the two positive elements $-c$ and $(a-b)$?", options: [{ id: "A", text: "$(-c)(a - b) \\in \\mathbb{P}$", isCorrect: true, explanation: "By the closure of P under multiplication (Axiom 2.1.5(ii))." }, { id: "B", text: "$(-c)(a - b) \\notin \\mathbb{P}$", isCorrect: false, explanation: "Multiplying two positives yields a positive." }], stepText: "By closure under multiplication, $(-c)(a - b) \\in \\mathbb{P}$." },
-            { stepText: "Distributing the $-c$ yields $-ca + cb$, which is algebraically the same as $cb - ca$." },
-            { stepText: "Therefore $cb - ca \\in \\mathbb{P}$. By the definition of inequality, this means $cb > ca$, or $ca < cb$. Goal reached!" }
-        ]},
-        { id: "s4", type: "numerical", title: "Evaluate", content: "If $x > 5$ and we multiply both sides by $-2$, we get $-2x < y$. What is $y$?", numericAnswer: -10, numericTolerance: 0 },
-        { id: "s5", type: "fill_in_blank", title: "Concept Check", content: "The property stating that if $a > b$ and $b > c$ then $a > c$ is called ___.", blankAnswer: "transitivity" }
-      ]
-    },
-    {
-      id: "les-2-1-2-4", title: "Theorem 2.1.8: Positivity of Squares", description: "Why squares are always non-negative", icon: "Square",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.8", content: "**Theorem 2.1.8:**\n(a) If $a \\in \\mathbb{R}$ and $a \\neq 0$, then $a^2 > 0$.\n(b) $1 > 0$.\n(c) If $n \\in \\mathbb{N}$, then $n > 0$.\n\nA remarkable consequence of this is that no smallest positive real number can exist. If $a > 0$, then $0 < \\frac{1}{2}a < a$." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up 1", content: "Can the square of any real number ever be strictly negative?", options: [{ id: "A", text: "No", isCorrect: true, explanation: "Squares of real numbers are always >= 0." }, { id: "B", text: "Yes", isCorrect: false, explanation: "Only in complex numbers (imaginary numbers)." }] },
-        { id: "s2", type: "quiz", title: "Conceptual Warm-up 2", content: "Is the number 1 a positive real number?", options: [{ id: "A", text: "Yes", isCorrect: true, explanation: "Since 1 = 1^2, and squares of non-zero numbers are positive, 1 > 0." }, { id: "B", text: "No", isCorrect: false, explanation: "1 is definitely positive." }] },
-        { id: "s3", type: "proof", title: "Interactive Proof: Positivity of Squares", content: "**Goal: Prove if $a \\neq 0$, then $a^2 > 0$.**", interactiveSteps: [
-            { stepText: "By the Trichotomy Property, since $a \\neq 0$, exactly one of these is true: either $a \\in \\mathbb{P}$ or $-a \\in \\mathbb{P}$." },
-            { prompt: "Case 1: If $a \\in \\mathbb{P}$, what does closure under multiplication tell us about $a \\cdot a$?", options: [{ id: "A", text: "$a \\cdot a \\in \\mathbb{P}$", isCorrect: true, explanation: "Positive times positive is positive." }, { id: "B", text: "$a \\cdot a = 0$", isCorrect: false, explanation: "a is not zero." }], stepText: "So $a^2 \\in \\mathbb{P}$, which means $a^2 > 0$." },
-            { stepText: "Case 2: If $-a \\in \\mathbb{P}$, then by closure under multiplication, $(-a)(-a) \\in \\mathbb{P}$." },
-            { stepText: "Since $(-a)(-a) = a^2$, we again conclude $a^2 \\in \\mathbb{P}$, so $a^2 > 0$." },
-            { stepText: "In both possible cases, $a^2 > 0$. Goal reached!" }
-        ]},
-        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "For any real number $x$, the value of $x^2$ must be ___.", blankAnswer: "non-negative" }
-      ]
-    },
-    {
-      id: "les-2-1-2-5", title: "Theorem 2.1.9: Bounded by Epsilon", description: "A powerful proof technique", icon: "Minimize2",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.9", content: "**Theorem 2.1.9:** If $a \\in \\mathbb{R}$ is such that $0 \\le a < \\epsilon$ for every $\\epsilon > 0$, then $a = 0$.\n\nThis theorem is frequently used as a method of proof. To prove that a number $a \\ge 0$ is actually equal to zero, we simply show that $a$ is smaller than an arbitrarily small positive number $\\epsilon$." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up", content: "If a non-negative number $a$ is smaller than every single positive number you can possibly think of, what must $a$ be?", options: [{ id: "A", text: "0", isCorrect: true, explanation: "0 is the only non-negative number smaller than all positive numbers." }, { id: "B", text: "A tiny decimal", isCorrect: false, explanation: "Even a tiny decimal is greater than an even tinier decimal." }] },
-        { id: "s2", type: "proof", title: "Interactive Proof: Bounded by Epsilon", content: "**Goal: Prove if $0 \\le a < \\epsilon$ for every $\\epsilon > 0$, then $a = 0$.**", interactiveSteps: [
-            { stepText: "We will use a proof by contradiction. Assume the conclusion is false, meaning $a > 0$." },
-            { prompt: "If $a > 0$, we can choose a specific positive $\\epsilon_0$. Which choice will cause a contradiction with $a < \\epsilon$?", options: [{ id: "A", text: "$\\epsilon_0 = a/2$", isCorrect: true, explanation: "If we pick a/2, then a > a/2, contradicting a < epsilon." }, { id: "B", text: "$\\epsilon_0 = a + 1$", isCorrect: false, explanation: "a < a + 1 does not cause a contradiction." }], stepText: "Let's pick $\\epsilon_0 = \\frac{1}{2}a$. Since $a > 0$, we know $\\epsilon_0 > 0$." },
-            { stepText: "By our choice, $0 < \\epsilon_0 < a$. But the theorem hypothesis stated that $a < \\epsilon$ for EVERY $\\epsilon > 0$." },
-            { stepText: "We have found an $\\epsilon_0$ where it is false that $a < \\epsilon_0$. This contradiction means our assumption $a > 0$ must be false. Since $a \\ge 0$, we must have $a = 0$. Goal reached!" }
-        ]},
-        { id: "s3", type: "fill_in_blank", title: "Concept Check", content: "If $0 \\le x < \\epsilon$ for every strictly positive $\\epsilon$, then $x$ must exactly equal ___.", blankAnswer: "0" }
-      ]
-    },
-    {
-      id: "les-2-1-2-6", title: "Theorem 2.1.10: Product Rule for Inequalities", description: "Deducing signs from products", icon: "Divide",
-      slides: [
-        { id: "s0", type: "theory", title: "Theorem 2.1.10", content: "**Theorem 2.1.10:** If $ab > 0$, then either:\n(i) $a > 0$ and $b > 0$, or\n(ii) $a < 0$ and $b < 0$.\n\n**Corollary 2.1.11:** If $ab < 0$, then either:\n(i) $a < 0$ and $b > 0$, or\n(ii) $a > 0$ and $b < 0$." },
-        { id: "s1", type: "quiz", title: "Conceptual Warm-up", content: "If the product of two numbers is strictly positive, what do we know about their signs?", options: [{ id: "A", text: "They have the same sign", isCorrect: true, explanation: "Either both positive or both negative." }, { id: "B", text: "One is positive, one is negative", isCorrect: false, explanation: "That would make the product negative." }] },
-        { id: "s2", type: "proof", title: "Interactive Proof: Product Rule", content: "**Goal: Prove if $ab > 0$, then either both are positive or both are negative.**", interactiveSteps: [
-            { stepText: "First note that $ab > 0$ implies $a \\neq 0$ and $b \\neq 0$. By Trichotomy, either $a > 0$ or $a < 0$." },
-            { prompt: "Case 1: Suppose $a > 0$. What can we multiply the inequality $ab > 0$ by to isolate $b$?", options: [{ id: "A", text: "$1/a$", isCorrect: true, explanation: "Since a > 0, 1/a is also > 0, preserving the inequality direction." }, { id: "B", text: "$-a$", isCorrect: false, explanation: "That would not isolate b." }], stepText: "Multiplying by $1/a$ gives $b = (1/a)(ab) > 0$. So if $a > 0$, then $b > 0$." },
-            { stepText: "Case 2: Suppose $a < 0$. Then $1/a < 0$." },
-            { stepText: "Multiplying the inequality $ab > 0$ by the negative number $1/a$ flips the sign, yielding $b = (1/a)(ab) < 0$. So if $a < 0$, then $b < 0$. Goal reached!" }
-        ]},
-        { id: "s3", type: "numerical", title: "Sign Check", content: "If $ab < 0$ and we know $a = -4$, is $b$ greater than 0? (1 for Yes, 0 for No)", numericAnswer: 1, numericTolerance: 0 },
-        { id: "s4", type: "fill_in_blank", title: "Concept Check", content: "If $xy > 0$ and $x$ is negative, then $y$ must also be ___.", blankAnswer: "negative" }
+      id: 'sec-c',
+      title: 'Section C',
+      instruction: 'Answer any ONE question. Each question carries 10 marks.',
+      questions:[
+        {
+          id: 'q10',
+          number: '10',
+          marks: 10,
+          question: '(a) Prove the set of real numbers R is not countable.\n(b) State and prove nested Interval Property.',
+          solution: '**(a) Proof that $\\mathbb{R}$ is not countable:**\nWe will prove the unit interval $I = [0, 1]$ is uncountable. Assume for contradiction that $I$ is countable, so we can enumerate it as $I = \\{x_1, x_2, x_3, \\dots\\}$.\nWe select a closed subinterval $I_1$ of $I$ such that $x_1 \\notin I_1$. Then we select a closed subinterval $I_2$ of $I_1$ such that $x_2 \\notin I_2$, and so on. \nThis yields nested closed intervals $I_1 \\supseteq I_2 \\supseteq \\dots$ such that $x_n \\notin I_n$ for all $n$.\nBy the Nested Intervals Property, there exists a point $\\xi \\in I$ such that $\\xi \\in I_n$ for all $n$. \nTherefore $\\xi \\neq x_n$ for all $n \\in \\mathbb{N}$, so the enumeration of $I$ is incomplete. Hence, $I$ (and thus $\\mathbb{R}$) is uncountable. $\\blacksquare$\n\n**(b) Nested Intervals Property:**\n*Statement:* If $I_n =[a_n, b_n]$ is a nested sequence of closed bounded intervals ($I_1 \\supseteq I_2 \\supseteq \\dots$), then there exists a number $\\xi \\in \\mathbb{R}$ such that $\\xi \\in I_n$ for all $n \\in \\mathbb{N}$.\n*Proof:* Since nested, $I_n \\subseteq I_1$ for all $n$, so $a_n \\le b_1$. The set $\\{a_n : n \\in \\mathbb{N}\\}$ is bounded above by $b_1$. \nLet $\\xi = \\sup\\{a_n\\}$. Clearly $a_n \\le \\xi$ for all $n$.\nWe claim $\\xi \\le b_n$ for all $n$. For any $k, n$, if $n \\le k$, $a_k \\le b_k \\le b_n$. If $k < n$, $a_k \\le a_n \\le b_n$. Thus $b_n$ is an upper bound for $\\{a_k\\}$.\nHence, $\\xi \\le b_n$ for each $n$. Since $a_n \\le \\xi \\le b_n$ for all $n$, $\\xi \\in I_n$ for all $n$. $\\blacksquare$'
+        },
+        {
+          id: 'q11',
+          number: '11',
+          marks: 10,
+          question: '(a) Let S be a nonempty subset of R that is bounded above and let $a \\in \\mathbb{R}$, then prove $\\sup(a + S) = a + \\sup S$.\n(b) If a and b are positive real numbers, then state and prove the Arithmetic-Geometric Mean Inequality for a and b.',
+          solution: '**(a) Proof:**\nLet $u = \\sup S$. Then $x \\le u$ for all $x \\in S$, so $a + x \\le a + u$. Therefore, $a + u$ is an upper bound for the set $a + S$; consequently, $\\sup(a + S) \\le a + u$.\n\nNow let $v$ be any upper bound of the set $a + S$, then $a + x \\le v$ for all $x \\in S$. Consequently $x \\le v - a$ for all $x \\in S$, so that $v - a$ is an upper bound of $S$. \n\nTherefore, $u = \\sup S \\le v - a$, which gives us $a + u \\le v$. \nSince $v$ is any upper bound of $a + S$, replacing $v$ with $\\sup(a + S)$ gives $a + u \\le \\sup(a + S)$.\nCombining these inequalities, we conclude $\\sup(a + S) = a + u = a + \\sup S$. $\\blacksquare$\n\n**(b) Arithmetic-Geometric Mean Inequality:**\n*Statement:* If $a, b > 0$, then $\\sqrt{ab} \\le \\frac{1}{2}(a + b)$. Equality occurs if and only if $a = b$.\n*Proof:* Note that if $a > 0, b > 0$, and $a \\neq b$, then $\\sqrt{a} > 0, \\sqrt{b} > 0$, and $\\sqrt{a} \\neq \\sqrt{b}$.\nTherefore, the square of their difference is strictly positive: $(\\sqrt{a} - \\sqrt{b})^2 > 0$.\nExpanding this square, we obtain:\n$a - 2\\sqrt{a}\\sqrt{b} + b > 0$\nwhich implies $a + b > 2\\sqrt{ab}$.\nDividing by 2 yields $\\frac{1}{2}(a + b) > \\sqrt{ab}$.\nIf $a = b > 0$, then both sides equal $a$, so it becomes an equality. This proves $\\sqrt{ab} \\le \\frac{1}{2}(a + b)$ for all $a, b > 0$. $\\blacksquare$'
+        }
       ]
     }
   ]
 };
---- END OF FILE src/data/unit_2_1_2_order_inequalities.ts ---
+--- END OF FILE src/data/exam_module_2.ts ---
 
---- START OF FILE project_snapshot_out.txt ---
-src/components/MathRenderer.tsx
-src/data/unit_2_1_1_field_axioms.ts
-src/data/unit_2_1_2_order_inequalities.ts
---- END OF FILE project_snapshot_out.txt ---
+--- START OF FILE src/data/exam_module_3.ts ---
+import { ExamPaper } from '../types';
+
+export const EXAM_MODULE_3: ExamPaper = {
+  moduleId: 'module-3',
+  sections:[
+    {
+      id: 'sec-a',
+      title: 'Section A',
+      instruction: 'Answer all. Each question carries 3 Marks. (Ceiling 12)',
+      questions:[
+        {
+          id: 'q1',
+          number: '1',
+          marks: 3,
+          question: 'Define the limit of a sequence of real numbers.',
+          solution: '**Definition:**\nA sequence $X = (x_n)$ in $\\mathbb{R}$ is said to converge to $x \\in \\mathbb{R}$, or $x$ is said to be a limit of $(x_n)$, if for every $\\epsilon > 0$ there exists a natural number $K(\\epsilon)$ such that for all $n \\ge K(\\epsilon)$, the terms $x_n$ satisfy $|x_n - x| < \\epsilon$. $\\blacksquare$'
+        },
+        {
+          id: 'q2',
+          number: '2',
+          marks: 3,
+          question: 'Prove that $\\lim(1/n) = 0$.',
+          solution: '**Proof:**\nIf $\\epsilon > 0$ is given, then $1/\\epsilon > 0$. By the Archimedean Property, there is a natural number $K = K(\\epsilon)$ such that $1/K < \\epsilon$.\nThen, if $n \\ge K$, we have $1/n \\le 1/K < \\epsilon$. \nConsequently, if $n \\ge K$, then:\n$|1/n - 0| = 1/n < \\epsilon$.\nTherefore, we assert that the sequence $(1/n)$ converges to 0. $\\blacksquare$'
+        },
+        {
+          id: 'q3',
+          number: '3',
+          marks: 3,
+          question: 'Define what it means for a sequence to be bounded.',
+          solution: '**Definition:**\nA sequence $X = (x_n)$ of real numbers is said to be bounded if there exists a real number $M > 0$ such that $|x_n| \\le M$ for all $n \\in \\mathbb{N}$. This means the set of values $\\{x_n : n \\in \\mathbb{N}\\}$ is a bounded subset of $\\mathbb{R}$. $\\blacksquare$'
+        },
+        {
+          id: 'q4',
+          number: '4',
+          marks: 3,
+          question: 'What is a monotone sequence?',
+          solution: '**Definition:**\nA sequence $(x_n)$ is **increasing** if $x_1 \\le x_2 \\le \\dots \\le x_n \\le x_{n+1} \\dots$\nIt is **decreasing** if $x_1 \\ge x_2 \\ge \\dots \\ge x_n \\ge x_{n+1} \\dots$\nA sequence is **monotone** if it is either increasing or decreasing. $\\blacksquare$'
+        },
+        {
+          id: 'q5',
+          number: '5',
+          marks: 3,
+          question: 'State the Squeeze Theorem for sequences.',
+          solution: '**Squeeze Theorem:**\nSuppose that $X = (x_n)$, $Y = (y_n)$, and $Z = (z_n)$ are sequences of real numbers such that $x_n \\le y_n \\le z_n$ for all $n \\in \\mathbb{N}$, and that $\\lim(x_n) = \\lim(z_n)$. \nThen $Y = (y_n)$ is convergent and $\\lim(x_n) = \\lim(y_n) = \\lim(z_n)$. $\\blacksquare$'
+        }
+      ]
+    },
+    {
+      id: 'sec-b',
+      title: 'Section B',
+      instruction: 'Answer all. Each question carries 6 Marks. (Ceiling 18)',
+      questions:[
+        {
+          id: 'q6',
+          number: '6',
+          marks: 6,
+          question: 'Prove that a convergent sequence of real numbers is bounded.',
+          solution: '**Proof:**\nSuppose that $\\lim(x_n) = x$ and let $\\epsilon = 1$. Then there exists a natural number $K$ such that $|x_n - x| < 1$ for all $n \\ge K$.\nIf we apply the Triangle Inequality with $n \\ge K$ we obtain:\n$|x_n| = |x_n - x + x| \\le |x_n - x| + |x| < 1 + |x|$.\nIf we set $M := \\sup\\{|x_1|, |x_2|, \\dots, |x_{K-1}|, 1 + |x|\\}$,\nthen it follows that $|x_n| \\le M$ for all $n \\in \\mathbb{N}$. Thus, the sequence is bounded. $\\blacksquare$'
+        },
+        {
+          id: 'q7',
+          number: '7',
+          marks: 6,
+          question: 'Prove that a sequence in $\\mathbb{R}$ can have at most one limit.',
+          solution: '**Proof:**\nSuppose that $x\'$ and $x\'\'$ are both limits of $(x_n)$. For each $\\epsilon > 0$ there exist $K\'$ such that $|x_n - x\'| < \\epsilon/2$ for all $n \\ge K\'$, and there exists $K\'\'$ such that $|x_n - x\'\'| < \\epsilon/2$ for all $n \\ge K\'\'$.\nLet $K$ be the larger of $K\'$ and $K\'\'$. Then for $n \\ge K$ we apply the Triangle Inequality to get:\n$|x\' - x\'\'| = |x\' - x_n + x_n - x\'\'| \\le |x\' - x_n| + |x_n - x\'\'| < \\epsilon/2 + \\epsilon/2 = \\epsilon$.\nSince $\\epsilon > 0$ is an arbitrary positive number, we conclude that $|x\' - x\'\'| = 0$, so that $x\' = x\'\'$. $\\blacksquare$'
+        },
+        {
+          id: 'q8',
+          number: '8',
+          marks: 6,
+          question: 'Show that $\\lim(b^n) = 0$ if $0 < b < 1$.',
+          solution: '**Proof:**\nWe can write $b = 1/(1+a)$, where $a := (1/b) - 1$ so that $a > 0$.\nBy Bernoulli\'s Inequality, we have $(1+a)^n \\ge 1 + na$. Hence:\n$0 < b^n = \\frac{1}{(1+a)^n} \\le \\frac{1}{1+na} < \\frac{1}{na}$.\nSince $\\lim(1/n) = 0$, we may invoke the Domination Theorem (Theorem 3.1.10) with $C = 1/a$ to infer that $\\lim(b^n) = 0$. $\\blacksquare$'
+        },
+        {
+          id: 'q9',
+          number: '9',
+          marks: 6,
+          question: 'If $X = (x_n)$ converges to $x$ and $Y = (y_n)$ converges to $y$, prove that $\\lim(x_n + y_n) = x + y$.',
+          solution: '**Proof:**\nTo show that $\\lim(x_n + y_n) = x + y$, we need to estimate the magnitude of $|(x_n + y_n) - (x + y)|$.\nTo do this we use the Triangle Inequality to obtain:\n$|(x_n + y_n) - (x + y)| = |(x_n - x) + (y_n - y)| \\le |x_n - x| + |y_n - y|$.\nBy hypothesis, if $\\epsilon > 0$ there exists a natural number $K_1$ such that if $n \\ge K_1$, then $|x_n - x| < \\epsilon/2$; also there exists $K_2$ such that if $n \\ge K_2$, then $|y_n - y| < \\epsilon/2$.\nHence if $K(\\epsilon) := \\sup\\{K_1, K_2\\}$, it follows that if $n \\ge K(\\epsilon)$ then:\n$|(x_n + y_n) - (x + y)| \\le |x_n - x| + |y_n - y| < \\epsilon/2 + \\epsilon/2 = \\epsilon$.\nSince $\\epsilon > 0$ is arbitrary, we infer that $(x_n + y_n)$ converges to $x + y$. $\\blacksquare$'
+        }
+      ]
+    },
+    {
+      id: 'sec-c',
+      title: 'Section C',
+      instruction: 'Answer any ONE question. Each question carries 10 marks.',
+      questions:[
+        {
+          id: 'q10',
+          number: '10',
+          marks: 10,
+          question: '(a) State and prove the Monotone Convergence Theorem.\n(b) Give an example to show that the sequence $(1+1/n)^n$ is bounded and increasing.',
+          solution: '**(a) Monotone Convergence Theorem:** A monotone sequence of real numbers is convergent if and only if it is bounded.\n*Proof:* We know a convergent sequence is bounded. Conversely, let $X$ be bounded and monotone (assume increasing). Since $X$ is bounded above, $x^* = \\sup\\{x_n : n \\in \\mathbb{N}\\}$ exists. Let $\\epsilon > 0$. Since $x^* - \\epsilon$ is not an upper bound, there exists $x_K$ such that $x^* - \\epsilon < x_K$. Since $X$ is increasing, for all $n \\ge K$, $x_n \\ge x_K$. Thus $x^* - \\epsilon < x_K \\le x_n \\le x^* < x^* + \\epsilon$. Therefore $|x_n - x^*| < \\epsilon$ for all $n \\ge K$. So $X$ converges to $x^*$. $\\blacksquare$\n\n**(b)** Let $e_n = (1+1/n)^n$. By Binomial Theorem:\n$e_n = 1 + 1 + \\frac{1}{2!}(1-\\frac{1}{n}) + \\dots + \\frac{1}{n!}(1-\\frac{1}{n})\\dots(1-\\frac{n-1}{n})$.\n$e_{n+1}$ has an additional positive term and each $(1-k/n)$ is replaced by the larger $(1-k/(n+1))$. Thus $e_n < e_{n+1}$, sequence is increasing.\nSince $(1-k/n) < 1$ and $2^{p-1} \\le p!$, we have $e_n < 1 + 1 + \\frac{1}{2} + \\frac{1}{2^2} + \\dots + \\frac{1}{2^{n-1}} < 3$. Bounded above. $\\blacksquare$'
+        },
+        {
+          id: 'q11',
+          number: '11',
+          marks: 10,
+          question: '(a) Prove that if $\\lim(x_n) = x > 0$, then there exists a natural number $M$ such that $x_n > 0$ for all $n \\ge M$.\n(b) Show that $\\lim(\\sqrt{n+1} - \\sqrt{n}) = 0$.',
+          solution: '**(a) Proof:**\nLet $\\lim(x_n) = x > 0$. We choose $\\epsilon = x/2$, which is strictly positive.\nBy definition of limits, there exists a natural number $M$ such that for all $n \\ge M$, we have $|x_n - x| < x/2$.\nThis inequality unfolds to:\n$-x/2 < x_n - x < x/2$\nAdding $x$ to all parts gives:\n$x/2 < x_n < 3x/2$\nSince $x > 0$, $x/2 > 0$. Therefore, $x_n > x/2 > 0$ for all $n \\ge M$. $\\blacksquare$\n\n**(b) Proof:**\nWe multiply and divide the expression by its conjugate:\n$\\sqrt{n+1} - \\sqrt{n} = \\frac{(\\sqrt{n+1} - \\sqrt{n})(\\sqrt{n+1} + \\sqrt{n})}{\\sqrt{n+1} + \\sqrt{n}} = \\frac{n+1 - n}{\\sqrt{n+1} + \\sqrt{n}} = \\frac{1}{\\sqrt{n+1} + \\sqrt{n}}$.\nSince $\\sqrt{n+1} > 0$, we have $\\sqrt{n+1} + \\sqrt{n} > \\sqrt{n}$.\nTaking reciprocals reverses the inequality:\n$0 < \\frac{1}{\\sqrt{n+1} + \\sqrt{n}} < \\frac{1}{\\sqrt{n}}$.\nSince we know $\\lim(1/\\sqrt{n}) = 0$, by the Squeeze Theorem, the sequence converges to 0. $\\blacksquare$'
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/exam_module_3.ts ---
+
+--- START OF FILE src/data/exam_module_4.ts ---
+import { ExamPaper } from '../types';
+
+export const EXAM_MODULE_4: ExamPaper = {
+  moduleId: 'module-4',
+  sections:[
+    {
+      id: 'sec-a',
+      title: 'Section A',
+      instruction: 'Answer all. Each question carries 3 Marks. (Ceiling 12)',
+      questions:[
+        {
+          id: 'q1',
+          number: '1',
+          marks: 3,
+          question: 'Define a Cauchy Sequence.',
+          solution: '**Definition:**\nA sequence $X = (x_n)$ of real numbers is said to be a **Cauchy sequence** if for every $\\epsilon > 0$ there exists a natural number $H(\\epsilon)$ such that for all natural numbers $n, m \\ge H(\\epsilon)$, the terms satisfy $|x_n - x_m| < \\epsilon$. $\\blacksquare$'
+        },
+        {
+          id: 'q2',
+          number: '2',
+          marks: 3,
+          question: 'State the Bolzano-Weierstrass Theorem for sequences.',
+          solution: '**Bolzano-Weierstrass Theorem:**\nA bounded sequence of real numbers has a convergent subsequence.\n(Every sequence that is contained within a finite interval will have at least one subsequence that settles on a specific limit point.) $\\blacksquare$'
+        },
+        {
+          id: 'q3',
+          number: '3',
+          marks: 3,
+          question: 'Define a cluster point of a set.',
+          solution: '**Definition:**\nLet $A \\subseteq \\mathbb{R}$. A point $c \\in \\mathbb{R}$ is a **cluster point** of $A$ if for every $\\delta > 0$ there exists at least one point $x \\in A, x \\neq c$ such that $|x - c| < \\delta$.\nEquivalently, every $\\delta$-neighborhood of $c$ contains at least one point of $A$ distinct from $c$. $\\blacksquare$'
+        },
+        {
+          id: 'q4',
+          number: '4',
+          marks: 3,
+          question: 'Define the limit of a function at a point $c$.',
+          solution: '**Definition:**\nLet $A \\subseteq \\mathbb{R}$, and let $c$ be a cluster point of $A$. For a function $f : A \\to \\mathbb{R}$, a real number $L$ is said to be a limit of $f$ at $c$ if, given any $\\epsilon > 0$, there exists a $\\delta > 0$ such that if $x \\in A$ and $0 < |x - c| < \\delta$, then $|f(x) - L| < \\epsilon$. $\\blacksquare$'
+        },
+        {
+          id: 'q5',
+          number: '5',
+          marks: 3,
+          question: 'Evaluate $\\lim_{x \\to 0} x \\sin(1/x)$.',
+          solution: '**Solution:**\nWe know that for all $z$, $-1 \\le \\sin(z) \\le 1$. Let $z = 1/x$ for $x \\neq 0$.\nMultiplying by $|x|$ preserves inequalities: $-|x| \\le x \\sin(1/x) \\le |x|$.\nSince $\\lim_{x \\to 0} |x| = 0$ and $\\lim_{x \\to 0} -|x| = 0$, the Squeeze Theorem forces $\\lim_{x \\to 0} x \\sin(1/x) = 0$. $\\blacksquare$'
+        }
+      ]
+    },
+    {
+      id: 'sec-b',
+      title: 'Section B',
+      instruction: 'Answer all. Each question carries 6 Marks. (Ceiling 18)',
+      questions:[
+        {
+          id: 'q6',
+          number: '6',
+          marks: 6,
+          question: 'Prove that a Cauchy sequence of real numbers is bounded.',
+          solution: '**Proof:**\nLet $X = (x_n)$ be a Cauchy sequence and let $\\epsilon := 1$. By the Cauchy definition, there exists an $H := H(1)$ such that if $n, m \\ge H$, then $|x_n - x_m| < 1$.\nIn particular, fixing $m = H$, we have $|x_n - x_H| < 1$ for all $n \\ge H$.\nBy the Triangle Inequality, we have $|x_n| = |x_n - x_H + x_H| \\le |x_n - x_H| + |x_H| < 1 + |x_H|$ for all $n \\ge H$.\nIf we set $M := \\sup\\{|x_1|, |x_2|, \\dots, |x_{H-1}|, 1 + |x_H|\\}$, then it follows that $|x_n| \\le M$ for all $n \\in \\mathbb{N}$. Thus the sequence is bounded. $\\blacksquare$'
+        },
+        {
+          id: 'q7',
+          number: '7',
+          marks: 6,
+          question: 'State the Sequential Criterion for function limits.',
+          solution: '**Theorem (Sequential Criterion):**\nLet $f : A \\to \\mathbb{R}$ and let $c$ be a cluster point of $A$. Then $\\lim_{x \\to c} f(x) = L$ if and only if:\nFor every sequence $(x_n)$ in $A$ that converges to $c$ such that $x_n \\neq c$ for all $n \\in \\mathbb{N}$, the sequence $(f(x_n))$ converges to $L$.\nThis powerful theorem bridges the gap between limits of functions and limits of sequences, allowing sequence properties to be applied directly to functions. $\\blacksquare$'
+        },
+        {
+          id: 'q8',
+          number: '8',
+          marks: 6,
+          question: 'Show that $\\lim_{x \\to 0} \\sin(1/x)$ does not exist using the Divergence Criteria.',
+          solution: '**Proof:**\nWe use the Sequential Divergence Criteria. We must find two sequences converging to 0 that produce different limits.\nLet $x_n = \\frac{1}{n\\pi}$. Clearly $x_n \\to 0$ as $n \\to \\infty$. For this sequence, $f(x_n) = \\sin(n\\pi) = 0 \\to 0$.\nNow let $y_n = \\frac{1}{\\pi/2 + 2n\\pi}$. As $n \\to \\infty$, $y_n \\to 0$. For this sequence, $f(y_n) = \\sin(\\pi/2 + 2n\\pi) = 1 \\to 1$.\nSince $(x_n)$ and $(y_n)$ both go to 0, but $f(x_n) \\to 0$ and $f(y_n) \\to 1$, the function limit does not exist. $\\blacksquare$'
+        },
+        {
+          id: 'q9',
+          number: '9',
+          marks: 6,
+          question: 'Prove that if $f: A \\to \\mathbb{R}$ and if $c$ is a cluster point of $A$, then $f$ can have only one limit at $c$.',
+          solution: '**Proof:**\nSuppose that numbers $L$ and $L\'$ both satisfy the limit definition. For any $\\epsilon > 0$, there exists $\\delta_1 > 0$ such that $0 < |x - c| < \\delta_1 \\implies |f(x) - L| < \\epsilon/2$.\nAlso there exists $\\delta_2 > 0$ such that $0 < |x - c| < \\delta_2 \\implies |f(x) - L\'| < \\epsilon/2$.\nLet $\\delta = \\min(\\delta_1, \\delta_2)$. Since $c$ is a cluster point, there is an $x$ such that $0 < |x - c| < \\delta$. For this $x$, both inequalities hold.\nBy the Triangle Inequality:\n$|L - L\'| \\le |L - f(x)| + |f(x) - L\'| < \\epsilon/2 + \\epsilon/2 = \\epsilon$.\nSince $\\epsilon > 0$ is arbitrary, we conclude that $|L - L\'| = 0$, so $L = L\'$. $\\blacksquare$'
+        }
+      ]
+    },
+    {
+      id: 'sec-c',
+      title: 'Section C',
+      instruction: 'Answer any ONE question. Each question carries 10 marks.',
+      questions:[
+        {
+          id: 'q10',
+          number: '10',
+          marks: 10,
+          question: '(a) State and prove the Cauchy Convergence Criterion.\n(b) Prove that every contractive sequence is Cauchy.',
+          solution: '**(a) Cauchy Convergence Criterion:** A sequence of real numbers is convergent if and only if it is a Cauchy sequence.\n*Proof:* If $(x_n)$ converges to $x$, then given $\\epsilon > 0$, $\\exists K$ st $|x_n - x| < \\epsilon/2$ for $n \\ge K$. For $n, m \\ge K$, $|x_n - x_m| \\le |x_n - x| + |x_m - x| < \\epsilon$. Thus it is Cauchy.\nConversely, if $X$ is Cauchy, it is bounded. By Bolzano-Weierstrass, it has a convergent subsequence $X\' \\to x^*$. Since terms are Cauchy, the entire sequence tightly clusters around the subsequence\'s limit, forcing the whole sequence to converge to $x^*$. $\\blacksquare$\n\n**(b) Contractive Sequence is Cauchy:** A sequence is contractive if $|x_{n+2} - x_{n+1}| \\le C|x_{n+1} - x_n|$ with $0 < C < 1$.\n*Proof:* Iterating this yields $|x_{k+1} - x_k| \\le C^{k-1}|x_2 - x_1|$.\nFor $m > n$, $|x_m - x_n| \\le \\sum_{k=n}^{m-1} |x_{k+1} - x_k| \\le C^{n-1}(1 + C + \\dots + C^{m-n-1})|x_2 - x_1|$.\nThis is bounded by the infinite geometric series: $C^{n-1} \\frac{1}{1-C} |x_2 - x_1|$.\nSince $0 < C < 1$, $C^{n-1} \\to 0$. Thus for large $n, m$, distance is $< \\epsilon$, making it Cauchy. $\\blacksquare$'
+        },
+        {
+          id: 'q11',
+          number: '11',
+          marks: 10,
+          question: '(a) State and prove the Squeeze Theorem for functions.\n(b) Prove that $\\lim_{x \\to c} x^2 = c^2$ using the $\\epsilon-\\delta$ definition.',
+          solution: '**(a) Squeeze Theorem:** Let $A \\subseteq \\mathbb{R}$, let $f, g, h: A \\to \\mathbb{R}$, and $c$ be a cluster point. If $f(x) \\le g(x) \\le h(x)$ for all $x \\in A, x \\neq c$, and if $\\lim_{x\\to c} f = L = \\lim_{x\\to c} h$, then $\\lim_{x\\to c} g = L$.\n*Proof:* Let $\\epsilon > 0$. $\\exists \\delta_1$ st $L - \\epsilon < f(x)$ for $0 < |x-c| < \\delta_1$. $\\exists \\delta_2$ st $h(x) < L + \\epsilon$ for $0 < |x-c| < \\delta_2$. Let $\\delta = \\min(\\delta_1, \\delta_2)$. For $0 < |x-c| < \\delta$, $L - \\epsilon < f(x) \\le g(x) \\le h(x) < L + \\epsilon$. Thus $|g(x) - L| < \\epsilon$, proving the limit. $\\blacksquare$\n\n**(b) $\\epsilon-\\delta$ Proof for $x^2 \\to c^2$:**\nWe want $|x^2 - c^2| < \\epsilon$. Factor: $|x^2 - c^2| = |x - c||x + c|$.\nAssume preliminary bound $|x - c| < 1$. Then $|x| - |c| \\le |x - c| < 1 \\implies |x| < |c| + 1$.\nThus $|x + c| \\le |x| + |c| < 2|c| + 1$.\nThis gives $|x^2 - c^2| < (2|c| + 1)|x - c|$.\nWe want this $< \\epsilon$. Choose $\\delta = \\min(1, \\frac{\\epsilon}{2|c| + 1})$.\nFor $0 < |x-c| < \\delta$, we have $|x^2 - c^2| < (2|c| + 1) \\frac{\\epsilon}{2|c| + 1} = \\epsilon$. $\\blacksquare$'
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/exam_module_4.ts ---
+
+--- START OF FILE src/data/modules.ts ---
+import { Module } from '../types';
+import { MODULE_1 } from './module_1';
+import { MODULE_2 } from './module_2';
+import { MODULE_3 } from './module_3';
+import { MODULE_4 } from './module_4';
+import { EXAM_MODULE_1 } from './exam_module_1';
+import { EXAM_MODULE_2 } from './exam_module_2';
+import { EXAM_MODULE_3 } from './exam_module_3';
+import { EXAM_MODULE_4 } from './exam_module_4';
+
+export const MODULES: Module[] =[
+  { ...MODULE_1, examPaper: EXAM_MODULE_1 },
+  { ...MODULE_2, examPaper: EXAM_MODULE_2 },
+  { ...MODULE_3, examPaper: EXAM_MODULE_3 },
+  { ...MODULE_4, examPaper: EXAM_MODULE_4 }
+];
+--- END OF FILE src/data/modules.ts ---
+
+--- START OF FILE src/pages/Dashboard.tsx ---
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MODULES } from '../data/modules';
+import LessonPath from '../components/LessonPath';
+import SectionSelector from '../components/SectionSelector';
+import ModuleSelector from '../components/ModuleSelector';
+import QuestionsTab from '../components/QuestionsTab';
+import { UserProgress, Module } from '../types';
+import { BookOpen, Zap, ChevronDown, Map, BookOpenCheck, FileText } from 'lucide-react';
+
+interface Props {
+  progress: UserProgress;
+  setProgress: React.Dispatch<React.SetStateAction<UserProgress>>;
+  currentSectionIndex: number;
+  setCurrentSectionIndex: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex, setCurrentSectionIndex }) => {
+  const navigate = useNavigate();
+  const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
+  const [isModuleSelectorOpen, setIsModuleSelectorOpen] = useState(false);
+  const[activeTab, setActiveTab] = useState<'path' | 'questions' | 'notes'>('path');
+
+  const currentModule: Module = MODULES.find(m => m.id === progress.currentModuleId) || MODULES[0];
+  const currentSection = currentModule.sections && currentModule.sections.length > 0 
+      ? currentModule.sections[currentSectionIndex] || currentModule.sections[0] 
+      : null;
+
+  // Restore scroll position on mount if we're coming back from a lesson
+  useEffect(() => {
+    const savedScroll = sessionStorage.getItem('dashboard_scroll');
+    if (savedScroll && activeTab === 'path') {
+      setTimeout(() => {
+        window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+      }, 10);
+    }
+  }, [activeTab]);
+
+  const handleStartLesson = (unitId: string, lessonId: string) => {
+    sessionStorage.setItem('dashboard_scroll', window.scrollY.toString());
+    navigate(`/lesson/${currentModule.id}/${unitId}/${lessonId}`);
+  };
+
+  const handleGoToSummary = () => {
+    sessionStorage.setItem('dashboard_scroll', window.scrollY.toString());
+    navigate(`/summary/${currentModule.id}`);
+  };
+
+  const handleModuleChange = (moduleId: string) => {
+    sessionStorage.removeItem('dashboard_scroll');
+    window.scrollTo(0, 0);
+    setProgress(prev => ({ ...prev, currentModuleId: moduleId }));
+    setIsModuleSelectorOpen(false);
+  };
+
+  const handleSectionChange = (idx: number) => {
+    sessionStorage.removeItem('dashboard_scroll');
+    window.scrollTo(0, 0);
+    setCurrentSectionIndex(idx);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col pb-24 overflow-x-hidden border-x border-white/5 relative">
+      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
+        <div 
+          onClick={() => setIsModuleSelectorOpen(true)}
+          className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
+        >
+          <div className="relative">
+             <BookOpen className="w-8 h-8 text-duo-blue" />
+             <div className="absolute -bottom-1 -right-1 bg-slate-800 rounded-full border border-slate-600">
+                <ChevronDown className="w-3 h-3 text-slate-300" />
+             </div>
+          </div>
+        </div>
+        
+        <div className="flex items-center space-x-3">
+          {currentModule.moduleSummary && (
+             <button 
+                onClick={handleGoToSummary}
+                className="flex items-center gap-1.5 bg-duo-blue/20 text-duo-blue px-3 py-1.5 rounded-xl font-bold hover:bg-duo-blue/30 transition-colors"
+             >
+                <BookOpen className="w-4 h-4" />
+             </button>
+          )}
+
+          <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl border border-white/5">
+            <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
+            <span className="text-amber-400">{progress.xp} XP</span>
+          </div>
+        </div>
+      </header>
+
+      <main className="p-0 flex-grow relative">
+        {activeTab === 'path' && (
+          currentSection ? (
+            <>
+              <LessonPath 
+                section={currentSection} 
+                completedLessons={progress.completedLessons}
+                onStartLesson={handleStartLesson}
+                onOpenSectionSelector={() => setIsSectionSelectorOpen(true)}
+              />
+
+              <SectionSelector 
+                sections={currentModule.sections}
+                activeSectionIndex={currentSectionIndex}
+                onSelectSection={handleSectionChange}
+                isOpen={isSectionSelectorOpen}
+                onClose={() => setIsSectionSelectorOpen(false)}
+              />
+            </>
+          ) : (
+            <div className="p-10 text-center text-slate-500 mt-20">
+              <p>More modules coming soon!</p>
+            </div>
+          )
+        )}
+
+        {activeTab === 'questions' && (
+           <QuestionsTab moduleId={progress.currentModuleId} />
+        )}
+
+        {activeTab === 'notes' && (
+           <div className="p-10 text-center text-slate-500 mt-20">
+             <FileText className="w-16 h-16 mx-auto mb-4 text-slate-700" />
+             <p className="font-bold text-lg text-slate-400">Notes Section</p>
+             <p className="text-sm mt-2">Comprehensive course notes will be available here soon.</p>
+           </div>
+        )}
+
+        <ModuleSelector 
+           modules={MODULES}
+           activeModuleId={progress.currentModuleId}
+           onSelectModule={handleModuleChange}
+           isOpen={isModuleSelectorOpen}
+           onClose={() => setIsModuleSelectorOpen(false)}
+        />
+      </main>
+
+      {/* Bottom Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
+         <div className="max-w-md mx-auto w-full pointer-events-auto bg-[#0b0f19]/95 backdrop-blur-md border-t border-white/10 flex justify-around p-2 pb-4">
+           <button 
+              onClick={() => { setActiveTab('path'); window.scrollTo(0,0); }} 
+              className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'path' ? 'text-duo-blue' : 'text-slate-500 hover:text-slate-300'}`}
+           >
+             <Map className="w-6 h-6 mb-1" />
+             <span className="text-[10px] font-bold tracking-widest">PATH</span>
+           </button>
+           <button 
+              onClick={() => { setActiveTab('questions'); window.scrollTo(0,0); }} 
+              className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'questions' ? 'text-duo-blue' : 'text-slate-500 hover:text-slate-300'}`}
+           >
+             <BookOpenCheck className="w-6 h-6 mb-1" />
+             <span className="text-[10px] font-bold tracking-widest">QUESTIONS</span>
+           </button>
+           <button 
+              onClick={() => { setActiveTab('notes'); window.scrollTo(0,0); }} 
+              className={`flex flex-col items-center p-2 transition-colors ${activeTab === 'notes' ? 'text-duo-blue' : 'text-slate-500 hover:text-slate-300'}`}
+           >
+             <FileText className="w-6 h-6 mb-1" />
+             <span className="text-[10px] font-bold tracking-widest">NOTES</span>
+           </button>
+         </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
+--- END OF FILE src/pages/Dashboard.tsx ---

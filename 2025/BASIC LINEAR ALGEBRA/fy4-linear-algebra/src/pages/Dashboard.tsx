@@ -123,7 +123,7 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
         )}
 
         {activeTab === 'notes' && (
-          <NotesTab />
+          <NotesTab course={currentCourse} />
         )}
 
         <CourseSelector 

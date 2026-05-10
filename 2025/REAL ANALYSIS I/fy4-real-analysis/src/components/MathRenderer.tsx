@@ -19,7 +19,7 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
   const htmlContent = useMemo(() => {
     try {
       // 1. Tokenize Math
-      const mathSegments: string[] = [];
+      const mathSegments: string[] =[];
       const placeholderPrefix = "MATH_SEGMENT_PLACEHOLDER_";
       
       const regex = /\$\$([\s\S]*?)\$\$|\$([\s\S]*?)\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)/g;
@@ -33,9 +33,7 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
       // 2. Parse Markdown
       let parsedHtml = parse(textWithPlaceholders, { breaks: true, async: false }) as string;
 
-      // 3. Restore Math (THE FIX IS HERE)
-      // Instead of forEach, we use one regex to match the pattern + ID number
-      // This prevents "PLACEHOLDER_1" from matching inside "PLACEHOLDER_10"
+      // 3. Restore Math
       const restoreRegex = new RegExp(`${placeholderPrefix}(\\d+)`, 'g');
       
       parsedHtml = parsedHtml.replace(restoreRegex, (match, id) => {
@@ -59,12 +57,12 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
       window.MathJax.typesetPromise([containerRef.current])
         .catch((err: any) => console.error('MathJax typeset failed: ', err));
     }
-  }, [htmlContent]);
+  },[htmlContent]);
 
   return (
     <div 
       ref={containerRef} 
-      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none ${className || ''}`}
+      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none overflow-x-auto custom-scrollbar pb-2 ${className || ''}`}
       style={{ overflowWrap: 'break-word' }}
     />
   );
