@@ -67,11 +67,33 @@ export interface Course {
   title: string;
   description: string;
   sections: Section[];
-  chapterSummary?: Slide[]; // Added for Chapter Summary Pages
+  chapterSummary?: Slide[];
 }
 
 export interface UserProgress {
   completedLessons: string[];
   xp: number;
   currentCourseId: string;
+}
+
+// Exam & Question Types
+export interface ExamQuestion {
+  id: string;
+  qNumber: string;
+  question: string;
+  marks: number;
+  solution: string;
+}
+
+export interface ExamSection {
+  id: string;
+  title: string;
+  description: string;
+  questions: ExamQuestion[];
+}
+
+export interface ExamPaper {
+  moduleId: string;
+  title: string;
+  sections: ExamSection[];
 }

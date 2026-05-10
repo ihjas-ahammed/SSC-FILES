@@ -4,6 +4,9 @@ import { COURSES } from '../data/courses';
 import LessonPath from '../components/LessonPath';
 import SectionSelector from '../components/SectionSelector';
 import CourseSelector from '../components/CourseSelector';
+import BottomNav from '../components/BottomNav';
+import QuestionsTab from './QuestionsTab';
+import NotesTab from './NotesTab';
 import { UserProgress, Course } from '../types';
 import { BookOpen, Zap, ChevronDown } from 'lucide-react';
 
@@ -16,15 +19,15 @@ interface Props {
 
 const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex, setCurrentSectionIndex }) => {
   const navigate = useNavigate();
-  const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
-  const [isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false);
+  const[isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
+  const[isCourseSelectorOpen, setIsCourseSelectorOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'path' | 'questions' | 'notes'>('path');
 
   const currentCourse: Course = COURSES.find(c => c.id === progress.currentCourseId) || COURSES[0];
   const currentSection = currentCourse.sections && currentCourse.sections.length > 0 
       ? currentCourse.sections[currentSectionIndex] || currentCourse.sections[0] 
       : null;
 
-  // Restore scroll position on mount if we're coming back from a lesson
   useEffect(() => {
     const savedScroll = sessionStorage.getItem('dashboard_scroll');
     if (savedScroll) {
@@ -32,7 +35,7 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
         window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
       }, 10);
     }
-  }, []);
+  },[]);
 
   const handleStartLesson = (unitId: string, lessonId: string) => {
     sessionStorage.setItem('dashboard_scroll', window.scrollY.toString());
@@ -58,8 +61,8 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-10 overflow-x-hidden border-x border-white/5">
-      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
+    <div className="min-h-screen flex flex-col overflow-x-hidden border-x border-white/5 bg-[#0b0f19]">
+      <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0 bg-[#0b0f19]/90 backdrop-blur-md">
         <div 
           onClick={() => setIsCourseSelectorOpen(true)}
           className="flex items-center hover:bg-white/5 p-2 rounded-xl cursor-pointer transition-colors group"
@@ -89,8 +92,8 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
         </div>
       </header>
 
-      <main className="p-0 flex-grow relative">
-        {currentSection ? (
+      <main className="p-0 flex-grow relative pb-24">
+        {activeTab === 'path' && currentSection && (
           <>
             <LessonPath 
               section={currentSection} 
@@ -107,10 +110,20 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
               onClose={() => setIsSectionSelectorOpen(false)}
             />
           </>
-        ) : (
+        )}
+        
+        {activeTab === 'path' && !currentSection && (
           <div className="p-10 text-center text-slate-500 mt-20">
             <p>More modules coming soon!</p>
           </div>
+        )}
+
+        {activeTab === 'questions' && (
+          <QuestionsTab moduleId={currentCourse.id} />
+        )}
+
+        {activeTab === 'notes' && (
+          <NotesTab />
         )}
 
         <CourseSelector 
@@ -121,6 +134,8 @@ const Dashboard: React.FC<Props> = ({ progress, setProgress, currentSectionIndex
            onClose={() => setIsCourseSelectorOpen(false)}
         />
       </main>
+
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
 };

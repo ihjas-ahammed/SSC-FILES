@@ -7,12 +7,13 @@ import ChapterSummaryPage from './pages/ChapterSummaryPage';
 import './App.css';
 import './styles/interactive.css'; 
 import './styles/path.css'; 
+import './styles/scrollbar.css';
 
 const App: React.FC = () => {
-  const [progress, setProgress] = useState<UserProgress>(() => {
+  const[progress, setProgress] = useState<UserProgress>(() => {
     const saved = localStorage.getItem('duofy4_progress'); 
     return saved ? JSON.parse(saved) : {
-      completedLessons: [],
+      completedLessons:[],
       xp: 0,
       currentCourseId: 'module-1'
     };
