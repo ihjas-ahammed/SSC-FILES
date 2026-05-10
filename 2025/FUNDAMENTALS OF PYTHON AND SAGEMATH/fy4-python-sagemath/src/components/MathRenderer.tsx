@@ -19,7 +19,7 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
   const htmlContent = useMemo(() => {
     try {
       // 1. Tokenize Math
-      const mathSegments: string[] = [];
+      const mathSegments: string[] =[];
       const placeholderPrefix = "MATH_SEGMENT_PLACEHOLDER_";
       
       const regex = /\$\$([\s\S]*?)\$\$|\$([\s\S]*?)\$|\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)/g;
@@ -59,12 +59,12 @@ const MathRenderer: React.FC<Props> = ({ content, className }) => {
       window.MathJax.typesetPromise([containerRef.current])
         .catch((err: any) => console.error('MathJax typeset failed: ', err));
     }
-  }, [htmlContent]);
+  },[htmlContent]);
 
   return (
     <div 
       ref={containerRef} 
-      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none ${className || ''}`}
+      className={`math-content text-lg leading-relaxed prose prose-slate max-w-none overflow-x-auto custom-scrollbar ${className || ''}`}
       style={{ overflowWrap: 'break-word' }}
     />
   );

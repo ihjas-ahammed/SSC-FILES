@@ -12,6 +12,7 @@ import './App.css';
 import './styles/interactive.css';
 import './styles/path.css';
 import './styles/progress.css';
+import './styles/scrollbar.css';
 
 // Component to handle analytics on route change
 const AnalyticsTracker = () => {
@@ -20,10 +21,10 @@ const AnalyticsTracker = () => {
 };
 
 const App: React.FC = () => {
-  const [progress, setProgress] = useState<UserProgress>(() => {
+  const[progress, setProgress] = useState<UserProgress>(() => {
     const saved = localStorage.getItem('python_sage_progress');
     let initialProgress: UserProgress = {
-      completedLessons: [],
+      completedLessons:[],
       xp: 0,
       currentModuleId: 'module-1-python-sagemath',
     };
@@ -32,7 +33,7 @@ const App: React.FC = () => {
       try {
         const parsed = JSON.parse(saved);
         initialProgress = {
-          completedLessons: parsed.completedLessons || [],
+          completedLessons: parsed.completedLessons ||[],
           xp: parsed.xp || 0,
           currentModuleId: parsed.currentModuleId || 'module-1-python-sagemath',
         };
@@ -51,7 +52,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setCurrentSectionIndex(0);
-  }, [progress.currentModuleId]);
+  },[progress.currentModuleId]);
 
   const handleModuleChange = (moduleId: string) => {
     setProgress(prev => ({ ...prev, currentModuleId: moduleId }));
@@ -76,7 +77,15 @@ const App: React.FC = () => {
                 />
               }
             />
-            <Route path="/exam" element={<ExamQuestionsPage />} />
+            <Route 
+               path="/exam" 
+               element={
+                 <ExamQuestionsPage 
+                    progress={progress} 
+                    onModuleChange={handleModuleChange} 
+                 />
+               } 
+            />
             <Route
               path="/notes"
               element={
