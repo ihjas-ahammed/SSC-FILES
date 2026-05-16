@@ -69,7 +69,7 @@ const TopBar = ({ sections, activeSection, setActiveSection, completedLessons })
         </div>
 
         <div className="progress-pill glass-panel">
-          <Trophy size={18} color="#FFD700" fill="#FFD700" />
+          <Trophy size={18} color="#fbbf24" fill="#fbbf24" />
           <span className="progress-text">{progressPercentage}%</span>
         </div>
       </div>

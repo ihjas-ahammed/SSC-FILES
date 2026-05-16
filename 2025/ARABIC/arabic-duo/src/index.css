@@ -1,16 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;500;700;800;900&display=swap');
 
 :root {
-  --primary: #41D1FF;
-  --primary-glow: rgba(65, 209, 255, 0.4);
-  --success: #4ade80;
-  --success-glow: rgba(74, 222, 128, 0.4);
-  --error: #f87171;
-  --error-glow: rgba(248, 113, 113, 0.4);
-  --glass-bg: rgba(20, 20, 25, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --text-main: #ffffff;
-  --text-dim: #a0a0b0;
+  /* Duo-style accent palette (inspired by fy4-python-sagemath) */
+  --duo-green: #58cc02;
+  --duo-green-dark: #46a302;
+  --duo-blue: #1cb0f6;
+  --duo-blue-dark: #1899d6;
+  --duo-red: #ff4b4b;
+  --duo-red-dark: #ea2b2b;
+  --duo-violet: #ce82ff;
+  --duo-violet-dark: #a559ce;
+  --duo-orange: #ff9600;
+  --duo-orange-dark: #cc7800;
+  --duo-amber: #fbbf24;
+  --duo-amber-dark: #d97706;
+
+  /* Semantic tokens */
+  --primary: var(--duo-blue);
+  --primary-dark: var(--duo-blue-dark);
+  --primary-glow: rgba(28, 176, 246, 0.4);
+  --success: var(--duo-green);
+  --success-dark: var(--duo-green-dark);
+  --success-glow: rgba(88, 204, 2, 0.45);
+  --error: var(--duo-red);
+  --error-glow: rgba(255, 75, 75, 0.4);
+
+  /* Dark glassy theme surface */
+  --bg-dark: #030712;
+  --bg-panel: rgba(255, 255, 255, 0.03);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --text-main: #f1f5f9;
+  --text-dim: #94a3b8;
+  --text-muted: #64748b;
 }
 
 * {
@@ -20,9 +42,10 @@
 }
 
 body {
-  font-family: 'Tajawal', system-ui, sans-serif;
+  font-family: 'Nunito', system-ui, sans-serif;
   color: var(--text-main);
-  background: linear-gradient(135deg, #09090b, #1a1a24, #0f0f16);
+  background: radial-gradient(circle at top right, #111827, #030712);
+  background-attachment: fixed;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -32,7 +55,7 @@ body {
 
 #root {
   width: 100%;
-  max-width: 1000px; /* Increased width for better screen usage */
+  max-width: 1000px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -44,8 +67,8 @@ body {
 }
 
 h1, h2, h3, h4 {
-  font-weight: 700;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
 }
 
 button {
@@ -61,28 +84,35 @@ button:disabled {
   opacity: 0.5;
 }
 
-/* Glassmorphism Utilities */
+/* Glassmorphism Utilities (matches fy4 glass-panel) */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  border-radius: 28px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, #41D1FF, #BD34FE);
-  color: white;
-  padding: 18px 40px;
   border-radius: 20px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  box-shadow: 0 4px 20px var(--primary-glow);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px var(--primary-glow);
+/* Generic glass-button (Duolingo press-down style) */
+.glass-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom-width: 4px;
+  backdrop-filter: blur(4px);
+  transition: all 0.15s ease;
+  color: var(--text-main);
 }
 
+.glass-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.glass-button:active:not(:disabled) {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
