@@ -20,8 +20,8 @@ const Dashboard = ({ activeSection, setActiveSection, onSelectLesson }) => {
         completedLessons={completedLessons}
       />
       
-      {/* Content wrapper with bottom padding for the fixed nav */}
-      <div className="tab-content-wrapper" style={{ paddingBottom: '90px' }}>
+      {/* Content wrapper with extended bottom padding to accommodate fixed nav */}
+      <div className="tab-content-wrapper" style={{ paddingBottom: '120px', minHeight: '100dvh' }}>
         {activeTab === 'path' && (
           <div className="path-container">
             {activeSection.units.map((unit) => (

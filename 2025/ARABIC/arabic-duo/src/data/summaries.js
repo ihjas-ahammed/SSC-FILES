@@ -147,6 +147,130 @@ export const sectionSummaries = {
       }
     }
   ],
+  "sec7-3": [
+    {
+      id: "s_ch3_1",
+      sentence: {
+        type: "sentence",
+        arabic: "مَطَرُ اللَّيْلِ كَامْرَأَةٍ مَجْنُونَةٍ تَبْكِي وَتَضْحَكُ بِلَا سَبَبٍ، وَتَنْزَلِقُ إِلَى دَاخِلِ الْمُسْتَشْفَى كَعُوِيلٍ طَوِيلٍ.",
+        english: "Night rain is like a mad woman crying and laughing without reason, sliding into the hospital like a long wail.",
+        parts: [
+          { ar: "مَطَرُ اللَّيْلِ كَامْرَأَةٍ مَجْنُونَةٍ", en: "Night rain is like a mad woman" },
+          { ar: "تَبْكِي وَتَضْحَكُ بِلَا سَبَبٍ،", en: "crying and laughing without reason," },
+          { ar: "وَتَنْزَلِقُ إِلَى دَاخِلِ الْمُسْتَشْفَى كَعُوِيلٍ طَوِيلٍ.", en: "and sliding into the hospital like a long wail." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "مَجْنُونَةٍ", translation: "Mad", transliteration: "Majnunah" },
+        { type: "vocabulary", word: "تَنْزَلِقُ", translation: "Sliding", transliteration: "Tanzaliqu" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "مَطَرُ اللَّيْلِ كَامْرَأَةٍ ____ تَبْكِي وَتَضْحَكُ بِلَا سَبَبٍ",
+        translation: "Night rain is like a mad woman crying and laughing without reason",
+        answer: "مَجْنُونَةٍ",
+        options: ["حَكِيمَةٍ", "مَجْنُونَةٍ", "صَغِيرَةٍ"]
+      }
+    },
+    {
+      id: "s_ch3_2",
+      sentence: {
+        type: "sentence",
+        arabic: "يَأْتِي الْمَطَرُ كَصَدِيقٍ مُوَاسٍ يَمْسَحُ الْحُزْنَ، وَيُشَارِكُ الشَّاعِرَةَ أَلَمَهَا فِي السَّرِيرِ، فَكِلَاهُمَا وَحِيدٌ فِي اللَّيْلِ.",
+        english: "The rain comes as a comforting friend wiping away sorrow, and shares the poet's pain in the bed, for both are alone in the night.",
+        parts: [
+          { ar: "يَأْتِي الْمَطَرُ كَصَدِيقٍ مُوَاسٍ", en: "The rain comes as a comforting friend" },
+          { ar: "يَمْسَحُ الْحُزْنَ، وَيُشَارِكُ الشَّاعِرَةَ أَلَمَهَا", en: "wiping away sorrow, and sharing the poet's pain" },
+          { ar: "فِي السَّرِيرِ، فَكِلَاهُمَا وَحِيدٌ فِي اللَّيْلِ.", en: "in the bed, for both are alone in the night." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "مُوَاسٍ", translation: "Comforting", transliteration: "Muwasin" },
+        { type: "vocabulary", word: "وَحِيدٌ", translation: "Alone", transliteration: "Wahid" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "يَأْتِي الْمَطَرُ كَصَدِيقٍ ____ يَمْسَحُ الْحُزْنَ",
+        translation: "The rain comes as a comforting friend wiping away sorrow",
+        answer: "مُوَاسٍ",
+        options: ["بَعِيدٍ", "مُوَاسٍ", "غَرِيبٍ"]
+      }
+    }
+  ],
+  "sec3-4": [
+    {
+      id: "s3_1",
+      sentence: {
+        type: "sentence",
+        arabic: "الْهِنْدُ أَرْضُ الْحِكْمَةِ وَالْأَسَاطِيرِ وَالْحَضَارَاتِ الْقَدِيمَةِ.",
+        english: "India is the land of wisdom, legends, and ancient civilizations.",
+        parts: [
+          { ar: "الْهِنْدُ أَرْضُ الْحِكْمَةِ", en: "India is the land of wisdom" },
+          { ar: "وَالْأَسَاطِيرِ", en: "and legends" },
+          { ar: "وَالْحَضَارَاتِ الْقَدِيمَةِ.", en: "and ancient civilizations." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "الْحِكْمَةِ", translation: "Wisdom", transliteration: "Al-hikmah" },
+        { type: "vocabulary", word: "الْأَسَاطِيرِ", translation: "Legends", transliteration: "Al-asateer" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "الْهِنْدُ أَرْضُ الْحِكْمَةِ وَ____",
+        translation: "India is the land of wisdom and legends",
+        answer: "الْأَسَاطِيرِ",
+        options: ["الْمَصَانِعِ", "الْأَسَاطِيرِ", "الْغَابَاتِ"]
+      }
+    },
+    {
+      id: "s3_2",
+      sentence: {
+        type: "sentence",
+        arabic: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ مِثْلَ تَاج مَحَل وَقُطُب مِينَار.",
+        english: "It is famous for wonderful landmarks like Taj Mahal and Qutb Minar.",
+        parts: [
+          { ar: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ", en: "It is famous for wonderful landmarks" },
+          { ar: "مِثْلَ تَاج مَحَل", en: "like Taj Mahal" },
+          { ar: "وَقُطُب مِينَار.", en: "and Qutb Minar." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "تَشْتَهِرُ", translation: "Is famous for", transliteration: "Tashtahiru" },
+        { type: "vocabulary", word: "مَعَالِمَ", translation: "Landmarks", transliteration: "Ma'alim" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ مِثْلَ ____",
+        translation: "It is famous for wonderful landmarks like Taj Mahal",
+        answer: "تَاج مَحَل",
+        options: ["الْأَهْرَامَاتِ", "تَاج مَحَل", "سُورِ الصِّينِ"]
+      }
+    },
+    {
+      id: "s3_3",
+      sentence: {
+        type: "sentence",
+        arabic: "وَفِيهَا مُدُنٌ كَبِيرَةٌ كَدِلْهِي وَمُومْبَاي تَنْبِضُ بِالْحَيَاةِ.",
+        english: "And it has large cities like Delhi and Mumbai pulsating with life.",
+        parts: [
+          { ar: "وَفِيهَا مُدُنٌ كَبِيرَةٌ", en: "And it has large cities" },
+          { ar: "كَدِلْهِي وَمُومْبَاي", en: "like Delhi and Mumbai" },
+          { ar: "تَنْبِضُ بِالْحَيَاةِ.", en: "pulsating with life." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "مُدُنٌ", translation: "Cities", transliteration: "Mudun" },
+        { type: "vocabulary", word: "تَنْبِضُ", translation: "Pulsating", transliteration: "Tanbidu" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "وَفِيهَا مُدُنٌ كَبِيرَةٌ ____ بِالْحَيَاةِ",
+        translation: "And it has large cities pulsating with life",
+        answer: "تَنْبِضُ",
+        options: ["تَنَامُ", "تَنْبِضُ", "تَمُوتُ"]
+      }
+    }
+  ],
   "sec1-5": [
     {
       id: "s1_1",
@@ -295,77 +419,78 @@ export const sectionSummaries = {
       }
     }
   ],
-  "sec3-7": [
+  "sec8-7": [
     {
-      id: "s3_1",
+      id: "s8_1",
       sentence: {
         type: "sentence",
-        arabic: "الْهِنْدُ أَرْضُ الْحِكْمَةِ وَالْأَسَاطِيرِ وَالْحَضَارَاتِ الْقَدِيمَةِ.",
-        english: "India is the land of wisdom, legends, and ancient civilizations.",
+        arabic: "عَائِشَةُ فَتَاةٌ تَعِيشُ فِي قَرْيَةٍ بَسِيطَةٍ، وَتَعْمَلُ فِي الزِّرَاعَةِ، وَلَكِنَّهَا تَمْتَلِكُ سَعَادَةً وَرِضًا لَا يَمْلِكُهَا الْكَثِيرُ.",
+        english: "Aisha is a girl living in a simple village, working in agriculture, but she possesses happiness and contentment that many do not own.",
         parts: [
-          { ar: "الْهِنْدُ أَرْضُ الْحِكْمَةِ", en: "India is the land of wisdom" },
-          { ar: "وَالْأَسَاطِيرِ", en: "and legends" },
-          { ar: "وَالْحَضَارَاتِ الْقَدِيمَةِ.", en: "and ancient civilizations." }
+          { ar: "عَائِشَةُ فَتَاةٌ تَعِيشُ فِي قَرْيَةٍ بَسِيطَةٍ،", en: "Aisha is a girl living in a simple village," },
+          { ar: "وَتَعْمَلُ فِي الزِّرَاعَةِ،", en: "working in agriculture," },
+          { ar: "وَلَكِنَّهَا تَمْتَلِكُ سَعَادَةً وَرِضًا", en: "but she possesses happiness and contentment" },
+          { ar: "لَا يَمْلِكُهَا الْكَثِيرُ.", en: "that many do not own." }
         ]
       },
       vocabs: [
-        { type: "vocabulary", word: "الْحِكْمَةِ", translation: "Wisdom", transliteration: "Al-hikmah" },
-        { type: "vocabulary", word: "الْأَسَاطِيرِ", translation: "Legends", transliteration: "Al-asateer" }
+        { type: "vocabulary", word: "الزِّرَاعَةِ", translation: "Agriculture", transliteration: "Az-zira'ah" },
+        { type: "vocabulary", word: "تَمْتَلِكُ", translation: "Possesses", transliteration: "Tamtaliku" }
       ],
       fillBlank: {
         type: "fill-blank",
-        sentence: "الْهِنْدُ أَرْضُ الْحِكْمَةِ وَ____",
-        translation: "India is the land of wisdom and legends",
-        answer: "الْأَسَاطِيرِ",
-        options: ["الْمَصَانِعِ", "الْأَسَاطِيرِ", "الْغَابَاتِ"]
+        sentence: "وَلَكِنَّهَا تَمْتَلِكُ سَعَادَةً وَ____ لَا يَمْلِكُهَا الْكَثِيرُ",
+        translation: "But she possesses happiness and contentment that many do not own",
+        answer: "رِضًا",
+        options: ["مَالًا", "رِضًا", "بَيْتًا"]
       }
     },
     {
-      id: "s3_2",
+      id: "s8_2",
       sentence: {
         type: "sentence",
-        arabic: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ مِثْلَ تَاج مَحَل وَقُطُب مِينَار.",
-        english: "It is famous for wonderful landmarks like Taj Mahal and Qutb Minar.",
+        arabic: "زَارَتْهَا لَيْلَى الْغَنِيَّةُ وَتَعَجَّبَتْ مِنْ سَعَادَتِهَا بِالرَّغْمِ مِنَ التَّعَبِ، فَأَخْبَرَتْهَا أَنَّ الرَّاحَةَ فِي الْقَلْبِ لَا بِالْمَالِ.",
+        english: "Rich Layla visited her and was amazed at her happiness despite the fatigue, so she told her that comfort is in the heart, not in money.",
         parts: [
-          { ar: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ", en: "It is famous for wonderful landmarks" },
-          { ar: "مِثْلَ تَاج مَحَل", en: "like Taj Mahal" },
-          { ar: "وَقُطُب مِينَار.", en: "and Qutb Minar." }
+          { ar: "زَارَتْهَا لَيْلَى الْغَنِيَّةُ", en: "Rich Layla visited her" },
+          { ar: "وَتَعَجَّبَتْ مِنْ سَعَادَتِهَا بِالرَّغْمِ مِنَ التَّعَبِ،", en: "and was amazed at her happiness despite the fatigue," },
+          { ar: "فَأَخْبَرَتْهَا أَنَّ الرَّاحَةَ فِي الْقَلْبِ لَا بِالْمَالِ.", en: "so she told her that comfort is in the heart, not in money." }
         ]
       },
       vocabs: [
-        { type: "vocabulary", word: "تَشْتَهِرُ", translation: "Is famous for", transliteration: "Tashtahiru" },
-        { type: "vocabulary", word: "مَعَالِمَ", translation: "Landmarks", transliteration: "Ma'alim" }
+        { type: "vocabulary", word: "الْغَنِيَّةُ", translation: "The rich", transliteration: "Al-ghaniyyah" },
+        { type: "vocabulary", word: "الرَّاحَةَ", translation: "Comfort", transliteration: "Ar-rahah" }
       ],
       fillBlank: {
         type: "fill-blank",
-        sentence: "تَشْتَهِرُ بِمَعَالِمَ رَائِعَةٍ مِثْلَ ____",
-        translation: "It is famous for wonderful landmarks like Taj Mahal",
-        answer: "تَاج مَحَل",
-        options: ["الْأَهْرَامَاتِ", "تَاج مَحَل", "سُورِ الصِّينِ"]
+        sentence: "أَنَّ الرَّاحَةَ فِي الْقَلْبِ لَا بِـ ____",
+        translation: "That comfort is in the heart, not in money",
+        answer: "الْمَالِ",
+        options: ["الْمَالِ", "الْعَمَلِ", "الْبَيْتِ"]
       }
     },
     {
-      id: "s3_3",
+      id: "s8_3",
       sentence: {
         type: "sentence",
-        arabic: "وَفِيهَا مُدُنٌ كَبِيرَةٌ كَدِلْهِي وَمُومْبَاي تَنْبِضُ بِالْحَيَاةِ.",
-        english: "And it has large cities like Delhi and Mumbai pulsating with life.",
+        arabic: "تَعَلَّمَتْ لَيْلَى الدَّرْسَ وَعَادَتْ إِلَى الْمَدِينَةِ بِنَظْرَةٍ مُخْتَلِفَةٍ لِلْحَيَاةِ، بَيْنَمَا ظَلَّتْ عَائِشَةُ تَزْرَعُ الرِّضَا فِي الْقُلُوبِ.",
+        english: "Layla learned the lesson and returned to the city with a different outlook on life, while Aisha continued to plant contentment in hearts.",
         parts: [
-          { ar: "وَفِيهَا مُدُنٌ كَبِيرَةٌ", en: "And it has large cities" },
-          { ar: "كَدِلْهِي وَمُومْبَاي", en: "like Delhi and Mumbai" },
-          { ar: "تَنْبِضُ بِالْحَيَاةِ.", en: "pulsating with life." }
+          { ar: "تَعَلَّمَتْ لَيْلَى الدَّرْسَ", en: "Layla learned the lesson" },
+          { ar: "وَعَادَتْ إِلَى الْمَدِينَةِ بِنَظْرَةٍ مُخْتَلِفَةٍ لِلْحَيَاةِ،", en: "and returned to the city with a different outlook on life," },
+          { ar: "بَيْنَمَا ظَلَّتْ عَائِشَةُ تَزْرَعُ الرِّضَا فِي الْقُلُوبِ.", en: "while Aisha continued to plant contentment in hearts." }
         ]
       },
       vocabs: [
-        { type: "vocabulary", word: "مُدُنٌ", translation: "Cities", transliteration: "Mudun" },
-        { type: "vocabulary", word: "تَنْبِضُ", translation: "Pulsating", transliteration: "Tanbidu" }
+        { type: "vocabulary", word: "بِنَظْرَةٍ", translation: "With an outlook / view", transliteration: "Binazrah" },
+        { type: "vocabulary", word: "الرِّضَا", translation: "Contentment", transliteration: "Ar-rida" }
       ],
       fillBlank: {
         type: "fill-blank",
-        sentence: "وَفِيهَا مُدُنٌ كَبِيرَةٌ ____ بِالْحَيَاةِ",
-        translation: "And it has large cities pulsating with life",
-        answer: "تَنْبِضُ",
-        options: ["تَنَامُ", "تَنْبِضُ", "تَمُوتُ"]
+        sentence: "بَيْنَمَا ظَلَّتْ عَائِشَةُ ____ الرِّضَا فِي الْقُلُوبِ",
+        translation: "While Aisha continued to plant contentment in hearts",
+        answer: "تَزْرَعُ",
+        options: ["تَقْطِفُ", "تَزْرَعُ", "تَبِيعُ"]
       }
     }
   ],
@@ -440,6 +565,32 @@ export const sectionSummaries = {
         translation: "And a white dove appeared symbolizing peace",
         answer: "السَّلَامِ",
         options: ["الْحَرْبِ", "السَّلَامِ", "الْخَوْفِ"]
+      }
+    }
+  ],
+  "sec9-9": [
+    {
+      id: "s9_1",
+      sentence: {
+        type: "sentence",
+        arabic: "سَارَ الشَّاعِرُ فِي الرَّوْضِ وَقْتَ الْفَجْرِ، وَاسْتَمْتَعَ بِخَرِيرِ النَّهْرِ وَتَفَتُّحِ الْأَزْهَارِ.",
+        english: "The poet walked in the garden at dawn, and enjoyed the gurgling of the river and the blooming of the flowers.",
+        parts: [
+          { ar: "سَارَ الشَّاعِرُ فِي الرَّوْضِ وَقْتَ الْفَجْرِ،", en: "The poet walked in the garden at dawn," },
+          { ar: "وَاسْتَمْتَعَ بِخَرِيرِ النَّهْرِ", en: "and enjoyed the gurgling of the river" },
+          { ar: "وَتَفَتُّحِ الْأَزْهَارِ.", en: "and the blooming of the flowers." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "الرَّوْضِ", translation: "Garden", transliteration: "Ar-rawd" },
+        { type: "vocabulary", word: "خَرِيرِ", translation: "Gurgling", transliteration: "Kharir" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "وَاسْتَمْتَعَ بِـ ____ النَّهْرِ",
+        translation: "And enjoyed the gurgling of the river",
+        answer: "خَرِيرِ",
+        options: ["جَرَيَانِ", "خَرِيرِ", "صَوْتِ"]
       }
     }
   ]

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;500;700;800;900&display=swap');
 
 :root {
-  /* Duo-style accent palette (inspired by fy4-python-sagemath) */
+  /* Duo-style accent palette */
   --duo-green: #58cc02;
   --duo-green-dark: #46a302;
   --duo-blue: #1cb0f6;
@@ -15,7 +15,6 @@
   --duo-amber: #fbbf24;
   --duo-amber-dark: #d97706;
 
-  /* Semantic tokens */
   --primary: var(--duo-blue);
   --primary-dark: var(--duo-blue-dark);
   --primary-glow: rgba(28, 176, 246, 0.4);
@@ -25,7 +24,6 @@
   --error: var(--duo-red);
   --error-glow: rgba(255, 75, 75, 0.4);
 
-  /* Dark glassy theme surface */
   --bg-dark: #030712;
   --bg-panel: rgba(255, 255, 255, 0.03);
   --glass-bg: rgba(255, 255, 255, 0.03);
@@ -41,22 +39,28 @@
   padding: 0;
 }
 
+html, body {
+  /* Ensure fixed bottom tab respects mobile safe areas without pushing out bounds */
+  height: 100%;
+  width: 100%;
+}
+
 body {
   font-family: 'Nunito', system-ui, sans-serif;
   color: var(--text-main);
   background: radial-gradient(circle at top right, #111827, #030712);
   background-attachment: fixed;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* changed from center to allow normal scroll */
   overflow-x: hidden;
 }
 
 #root {
   width: 100%;
   max-width: 1000px;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -84,7 +88,6 @@ button:disabled {
   opacity: 0.5;
 }
 
-/* Glassmorphism Utilities (matches fy4 glass-panel) */
 .glass-panel {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
@@ -94,7 +97,6 @@ button:disabled {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Generic glass-button (Duolingo press-down style) */
 .glass-button {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid rgba(255, 255, 255, 0.1);

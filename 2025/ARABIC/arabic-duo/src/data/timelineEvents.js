@@ -175,7 +175,7 @@ export const timelineEvents = {
       descEn: "The Quran calls for contemplating the creation of camels, the sky, and water. Several chapters are named after animals to honor Allah's creation."
     }
   ],
-  "sec3-7": [
+  "sec3-4": [
     {
       id: 1,
       titleAr: "تاريخ وأساطير",
@@ -247,6 +247,117 @@ export const timelineEvents = {
       titleEn: "Ruqayya's Revenge",
       descAr: "أدركت رقية الحقيقة، فأخذت البندقية وقتلت زوجها الشرير ثأراً، ثم ظهرت حمامة بيضاء ترمز للسلام.",
       descEn: "Ruqayya realized the truth, grabbed the rifle, and shot her evil husband in vengeance, after which a white dove symbolizing peace appeared."
+    }
+  ],
+  "sec7-3": [
+    {
+      id: 1,
+      titleAr: "مقدمة المطر",
+      titleEn: "Introduction to the Rain",
+      descAr: "يصف الشاعر المطر كأنه امرأة مجنونة شابة، تبكي وتضحك وتئن بلا سبب في الظلام.",
+      descEn: "The poet describes the rain like a mad young woman, crying, laughing, and moaning without reason in the dark."
+    },
+    {
+      id: 2,
+      titleAr: "نافذة المستشفى",
+      titleEn: "The Hospital Window",
+      descAr: "ينزلق المطر مثل عويل طويل إلى داخل المستشفى، ويمد إصبعه الباردة ليلمس الشاعرة عبر النافذة.",
+      descEn: "The rain slides like a long wail into the hospital, extending its cold finger to touch the poet through the window."
+    },
+    {
+      id: 3,
+      titleAr: "صرخات الألم",
+      titleEn: "Cries of Pain",
+      descAr: "تسمع الشاعرة صرخات وآهات أم تتعذب في المستشفى، مما يثير حزنها وبكاءها في السرير.",
+      descEn: "The poet hears the screams and sighs of a suffering mother in the hospital, evoking her sorrow and weeping in bed."
+    },
+    {
+      id: 4,
+      titleAr: "الصديق المواسي",
+      titleEn: "The Comforting Friend",
+      descAr: "يأتي المطر كصديق عزيز ليواسيها ويقبلها في الظلام ويمسح حزنها بكلمات من الهدوء.",
+      descEn: "The rain comes like a dear friend to console her, kissing her in the dark and wiping her sorrow with words of calmness."
+    },
+    {
+      id: 5,
+      titleAr: "الحزن المشترك",
+      titleEn: "The Shared Sorrow",
+      descAr: "المطر الذي كان يمنحها الفرح في الماضي، أصبح الآن الشاهد الوحيد على حزنها وألمها.",
+      descEn: "The rain, which used to bring her joy in the past, has now become the sole witness to her sorrow and pain."
+    },
+    {
+      id: 6,
+      titleAr: "التوحد مع المطر",
+      titleEn: "Identification with Rain",
+      descAr: "تدرك الشاعرة في النهاية أنها تماماً كالمطر في الليل، وحيدة وحزينة وتبكي في صمت.",
+      descEn: "The poet finally realizes that she is exactly like the night rain, alone, sad, and crying in silence."
+    }
+  ],
+  "sec8-7": [
+    {
+      id: 1,
+      titleAr: "حياة عائشة البسيطة",
+      titleEn: "Aisha's Simple Life",
+      descAr: "تعيش عائشة في قرية محاطة بالحقول، حياة هادئة ومفعمة بالرضا والعمل مع أسرتها الزراعية.",
+      descEn: "Aisha lives in a village surrounded by fields, a quiet life full of contentment and work with her farming family."
+    },
+    {
+      id: 2,
+      titleAr: "العمل في الحقل",
+      titleEn: "Working in the Field",
+      descAr: "تستيقظ مبكراً للصلاة ومساعدة أمها، ثم تذهب للعمل في زراعة القمح مع أبيها بكل فخر.",
+      descEn: "She wakes up early to pray and help her mother, then goes to work in wheat farming with her father proudly."
+    },
+    {
+      id: 3,
+      titleAr: "زيارة ليلى",
+      titleEn: "Layla's Visit",
+      descAr: "تأتي ليلى، فتاة غنية من المدينة، إلى القرية لقضاء عطلة، وتتعجب من عمل عائشة الشاق.",
+      descEn: "Layla, a wealthy girl from the city, comes to the village for a holiday and is amazed by Aisha's hard work."
+    },
+    {
+      id: 4,
+      titleAr: "حوار السعادة",
+      titleEn: "Dialogue on Happiness",
+      descAr: "تسأل ليلى عائشة عن تعبها، فتجيب عائشة بأن العمل يجلب السرور، وأن الراحة الحقيقية في راحة الضمير وليس المال.",
+      descEn: "Layla asks Aisha about her fatigue, and Aisha replies that work brings joy, and true comfort is in a clear conscience, not money."
+    },
+    {
+      id: 5,
+      titleAr: "سماء القرية الصافية",
+      titleEn: "The Village's Clear Sky",
+      descAr: "تدرك ليلى في المساء تحت النجوم أن القرية تمتلك ما تفتقده المدينة: الهدوء والحب والرضا.",
+      descEn: "Under the stars in the evening, Layla realizes the village has what the city lacks: quietness, love, and contentment."
+    },
+    {
+      id: 6,
+      titleAr: "الدرس الباقي",
+      titleEn: "The Lasting Lesson",
+      descAr: "عادت ليلى إلى المدينة متغيرة وتفكر بإيجابية، بينما واصلت عائشة حياتها تزرع الرضا في قلوب الجميع.",
+      descEn: "Layla returned to the city changed and thinking positively, while Aisha continued her life planting contentment in everyone's hearts."
+    }
+  ],
+  "sec9-9": [
+    {
+      id: 1,
+      titleAr: "السير في الروض",
+      titleEn: "Walking in the Garden",
+      descAr: "سار الشاعر في الحديقة عند بزوغ الفجر الأول وتلاشي الظلام ببطء، مع نسيم الصباح العليل.",
+      descEn: "The poet walked in the garden at the first break of dawn as darkness slowly faded with the fresh morning breeze."
+    },
+    {
+      id: 2,
+      titleAr: "استيقاظ الطبيعة",
+      titleEn: "Nature Awakens",
+      descAr: "كان صوت النهر وكأنه سكران، والأزهار متفتحة، والسماء تظهر بجلال ووضوح في الفجر.",
+      descEn: "The river's sound was like a drunkard, the flowers were blooming, and the sky appeared with majesty and clarity at dawn."
+    },
+    {
+      id: 3,
+      titleAr: "بلقيس وعرش الليل",
+      titleEn: "Bilqis and the Throne of Night",
+      descAr: "ترتشف الأقاحي قطرات الندى كأنها خمر، وتجلس الملكة بلقيس على عرش الليل الرائع.",
+      descEn: "Daisies sip dew drops as if wine, and Queen Bilqis sits on the wondrous throne of the night."
     }
   ]
 };
