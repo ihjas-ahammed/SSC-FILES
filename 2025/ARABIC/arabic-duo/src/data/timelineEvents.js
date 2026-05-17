@@ -1,4 +1,99 @@
 export const timelineEvents = {
+  "sec5-1": [
+    {
+      id: 1,
+      titleAr: "أهمية السياحة اقتصادياً",
+      titleEn: "Economic Importance of Tourism",
+      descAr: "تعتبر السياحة من الركائز الأساسية في بناء اقتصاد الدول ومجتمعاتها، حيث تساهم في التنمية وتشغيل أعداد كبيرة من الناس.",
+      descEn: "Tourism is a basic pillar in building the economy of nations and their societies, contributing to development and employing large numbers of people."
+    },
+    {
+      id: 2,
+      titleAr: "السياحة تعكس الحضارة",
+      titleEn: "Tourism Reflects Civilization",
+      descAr: "السياحة مرآة تعكس حضارة الشعوب وثقافاتها وتاريخها العريق. كلما ازداد عدد السياح، دل ذلك على عمق الحضارة.",
+      descEn: "Tourism is a mirror reflecting the civilization, cultures, and ancient history of peoples. More tourists indicate the depth of civilization."
+    },
+    {
+      id: 3,
+      titleAr: "دعوة القرآن للتأمل",
+      titleEn: "Quran's Call to Contemplate",
+      descAr: "أشار القرآن الكريم إلى أهمية التأمل في الأرض والسير فيها، وهو دعوة للتفكر في عجائب خلق الله.",
+      descEn: "The Holy Quran pointed to the importance of contemplating the earth and traveling through it, calling to reflect on the wonders of God's creation."
+    },
+    {
+      id: 4,
+      titleAr: "أنواع السياحة المتعددة",
+      titleEn: "Various Types of Tourism",
+      descAr: "تتنوع أهداف السياحة بين ترفيهية للاستجمام، دينية لزيارة الأماكن المقدسة، وتجارية لعقد الصفقات وحضور المعارض.",
+      descEn: "Tourism goals vary between recreational for relaxation, religious to visit sacred places, and commercial for signing deals and attending exhibitions."
+    },
+    {
+      id: 5,
+      titleAr: "واجب الدولة نحو السياحة",
+      titleEn: "State's Duty Towards Tourism",
+      descAr: "يجب على الدولة تحسين البنية التحتية، وترميم الأماكن التاريخية، وتنظيم حملات دعاية لإبراز المعالم الجميلة.",
+      descEn: "The state must improve infrastructure, restore historical places, and organize advertising campaigns to highlight beautiful landmarks."
+    },
+    {
+      id: 6,
+      titleAr: "دور الأخلاق والمجتمع",
+      titleEn: "Role of Morals and Society",
+      descAr: "الحضارة ليست البنايات العالية، بل هي أخلاق المواطنين وحسن تعاملهم مع السياح بدون استغلال.",
+      descEn: "Civilization is not high buildings, but the morals of citizens and their good treatment of tourists without exploitation."
+    }
+  ],
+  "sec6-2": [
+    {
+      id: 1,
+      titleAr: "معاناة الأم المكلومة",
+      titleEn: "Suffering of the Heartbroken Mother",
+      descAr: "بكت الأم طويلاً ولجأت إلى المعابد وأنفقت أموالها لمحاولة إنقاذ ابنها الوحيد من براثن إدمان الهيروين.",
+      descEn: "The mother cried for a long time, visited temples, and spent her money trying to save her only son from the clutches of heroin addiction."
+    },
+    {
+      id: 2,
+      titleAr: "طالب متفوق في المقهى",
+      titleEn: "An Outstanding Student at the Cafe",
+      descAr: "كان الشاب متفوقاً ويحصد درجات عالية في امتحانات الطب، واعتاد على ارتياد مقهى محلي للراحة بعد دراسته الجادة.",
+      descEn: "The young man was outstanding, earning high grades in medical exams, and used to frequent a local cafe to rest after his serious studies."
+    },
+    {
+      id: 3,
+      titleAr: "التعرف على الغريب",
+      titleEn: "Meeting the Stranger",
+      descAr: "التقى الشاب برجل غريب ومقنع وحلو المنطق، تحدث معه في قضايا كثيرة واستحوذ على إعجابه وثقته.",
+      descEn: "The young man met a strange, persuasive, sweet-tongued man who talked with him about many issues and captured his admiration and trust."
+    },
+    {
+      id: 4,
+      titleAr: "السقوط في الفخ",
+      titleEn: "Falling into the Trap",
+      descAr: "في أحد اللقاءات، سكب الغريب مخدرات في عصير الشاب، مما أوقعه لاحقاً في فخ إدمان المنشطات وتغير عالمه تماماً.",
+      descEn: "In one of the meetings, the stranger poured drugs into the young man's juice, which later threw him into the trap of stimulant addiction, changing his world entirely."
+    },
+    {
+      id: 5,
+      titleAr: "اكتشاف الأم للخطر",
+      titleEn: "Mother's Discovery of the Danger",
+      descAr: "لاحظت الأم تغيرات سلبية على ابنها وغضبه غير المبرر، فاكتشفت أخيراً خطر الإدمان الذي يتعرض له.",
+      descEn: "The mother noticed negative changes in her son and his unjustified anger, finally discovering the danger of addiction he was exposed to."
+    },
+    {
+      id: 6,
+      titleAr: "حادث سير أليم",
+      titleEn: "Painful Traffic Accident",
+      descAr: "أثناء ذهاب الأم الحنون لاستشارة طبيب نفسي بشأن ابنها، صدمتها سيارة، مما جعلها في حالة حرجة.",
+      descEn: "While the affectionate mother was going to consult a psychiatrist about her son, a car hit her, putting her in a critical condition."
+    },
+    {
+      id: 7,
+      titleAr: "التعافي والنجاح كطبيب",
+      titleEn: "Recovery and Success as a Doctor",
+      descAr: "بسبب نصيحة الأم من سرير المستشفى، قرر الشاب التعافي، ونجح في التخلص من الإدمان وأصبح طبيباً نفسياً متخصصاً لعلاج المدمنين.",
+      descEn: "Due to the mother's advice from the hospital bed, the young man decided to recover, succeeded in overcoming addiction, and became a psychiatrist specializing in treating addicts."
+    }
+  ],
   "sec1-5": [
     {
       id: 1,

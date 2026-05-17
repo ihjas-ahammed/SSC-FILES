@@ -1,0 +1,212 @@
+export const u6_4 = {
+  id: "u6_4",
+  title: "The Tragic Accident and Recovery",
+  lessons: [
+    {
+      id: "u6_4_l1",
+      title: "The Treatment Center",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَاليَوْم أَنَا جَالِس بِكُل رَاحَة فِي مَرْكَز عِلَاج الإِدْمَان المَشْهُور عَالَمِيًا بِاسْمِه وَهُوَ اسْم أُمِّي فَاطِمَة وَدَارِي مُلْحَقَة بِهَذَا المَبْنَى الكَبِير لِعِلَاج مَرْضَى الإِدْمَان.",
+          english: "And today I sit in all comfort in the addiction treatment center, internationally famous by its name, which is my mother's name Fatima, and my house is attached to this large building for treating addiction patients."
+        },
+        {
+          type: "vocabulary",
+          word: "مَرْكَز",
+          transliteration: "Markaz",
+          translation: "Center",
+          example: { ar: "مَرْكَز عِلَاج", en: "Treatment center" }
+        },
+        {
+          type: "vocabulary",
+          word: "مُلْحَقَة",
+          transliteration: "Mulhaqah",
+          translation: "Attached / Annexed",
+          example: { ar: "دَارِي مُلْحَقَة بِالمَبْنَى", en: "My house is attached to the building" }
+        },
+        {
+          type: "fill-blank",
+          sentence: "أَنَا جَالِس فِي مَرْكَز عِلَاج ____ المَشْهُور",
+          translation: "I sit in the famous addiction treatment center",
+          answer: "الإِدْمَان",
+          options: ["المَرَض", "الإِدْمَان", "الجِسْم"]
+        }
+      ]
+    },
+    {
+      id: "u6_4_l2",
+      title: "Mother's Heart",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "لَا تَسْأَلُونِي عَن هَذِهِ الصُّدْفَة... لَحْظَة مِن فَضْلِكُم... أُصَارِحُكُم الآن... كَانَتْ أُمِّي الحَنُون الَّتِي كُنْتُ أُحِبُّهَا حُبًّا جَمًّا فِي طَرِيقِهَا إِلَى مَرْكَز عِلَاج الإِدْمَان لِاسْتِشَارَة الطَّبِيب النَّفْسَانِي فِي شَأْنِي... وَقَلْبُهَا كَانَ حَزِينًا وَمَوْجُوعًا وَلَا أَقُول مَلِيئًا لِأَنَّ قَلْبَهَا شَاسِع وَوَاسِع أَكْثَرَ مِن البَحْر وَلَيْسَتْ هَذِهِ سِمَة خَاصَّة بِهَا فَقَلْب كُلِّ إِنْسَان مِثْل العَالَم لَا يَمْتَلِئُ حَتَّى نِهَايَتِهِ.",
+          english: "Do not ask me about this coincidence... a moment please... I will be frank with you now... My affectionate mother, whom I loved abundantly, was on her way to the addiction treatment center to consult the psychiatrist regarding me... and her heart was sad and aching, and I won't say full because her heart is vast and wider than the sea, and this isn't a trait unique to her, for every human's heart is like the world, it doesn't fill up to its end."
+        },
+        {
+          type: "vocabulary",
+          word: "الحَنُون",
+          transliteration: "Al-hanun",
+          translation: "Affectionate",
+          example: { ar: "أُمِّي الحَنُون", en: "My affectionate mother" }
+        },
+        {
+          type: "vocabulary",
+          word: "النَّفْسَانِي",
+          transliteration: "An-nafsani",
+          translation: "Psychiatric",
+          example: { ar: "الطَّبِيب النَّفْسَانِي", en: "The psychiatrist" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "أُصَارِحُكُم", en: "I will be frank with you" },
+            { ar: "مَوْجُوعًا", en: "Aching" },
+            { ar: "شَاسِع", en: "Vast" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u6_4_l3",
+      title: "The Accident",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَعِنْدَمَا كَانَتْ تَعْبُر الشَّارِع، ارْتَطَمَتْ بِهَا سَيَّارَة وَجُرِجَتْ بِشَكْل خَطِير وَأَصْبَحَتْ فِي حَالَة حَرِجَة تَمَامًا. وَسُرْعَان مَا بَلَغَنِي هَذَا الخَبَر، هَرَوْلْتُ إِلَى المُسْتَشْفَى الَّذِي تَمَّ إِدْخَالُهَا...",
+          english: "And as she was crossing the street, a car collided with her and she was seriously injured and became in a completely critical condition. And as soon as this news reached me, I rushed to the hospital where she was admitted..."
+        },
+        {
+          type: "vocabulary",
+          word: "ارْتَطَمَتْ",
+          transliteration: "Irtatamat",
+          translation: "Collided",
+          example: { ar: "ارْتَطَمَتْ بِهَا سَيَّارَة", en: "A car collided with her" }
+        },
+        {
+          type: "vocabulary",
+          word: "حَرِجَة",
+          transliteration: "Harijah",
+          translation: "Critical",
+          example: { ar: "فِي حَالَة حَرِجَة", en: "In a critical condition" }
+        },
+        {
+          type: "fill-blank",
+          sentence: "عِنْدَمَا كَانَتْ تَعْبُر الشَّارِع، ____ بِهَا سَيَّارَة",
+          translation: "When she was crossing the street, a car collided with her",
+          answer: "ارْتَطَمَتْ",
+          options: ["لَعِبَتْ", "ارْتَطَمَتْ", "طَارَتْ"]
+        }
+      ]
+    },
+    {
+      id: "u6_4_l4",
+      title: "The Final Advice",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَعَايَنْتُهَا وَهِيَ مُتَنَفَّسَة وَالجُرُوح تُؤْلِمُهَا وَعَقْلُهَا نَشِيط... لَاحَظْتُ أَنَّ لِسَانَهَا يَنْصَحُنِي بِحَرَكَاتِهِ الرَّشِيقَة مِثْل حَرَكَات الأَوْرَاق فِي النَّسِيم - أَلَّا أَتَنَاوَل حُبُوب النَّشْوَة...",
+          english: "And I examined her while she was breathing, wounds hurting her and her mind active... I noticed that her tongue was advising me with its delicate movements like the movements of leaves in the breeze - not to take ecstasy pills..."
+        },
+        {
+          type: "vocabulary",
+          word: "الرَّشِيقَة",
+          transliteration: "Ar-rashiqah",
+          translation: "Delicate / Graceful",
+          example: { ar: "حَرَكَات رَشِيقَة", en: "Graceful movements" }
+        },
+        {
+          type: "vocabulary",
+          word: "النَّشْوَة",
+          transliteration: "An-nashwah",
+          translation: "Intoxication / Ecstasy",
+          example: { ar: "حُبُوب النَّشْوَة", en: "Ecstasy pills" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "عَايَنْتُهَا", en: "I examined her" },
+            { ar: "مُتَنَفَّسَة", en: "Breathing" },
+            { ar: "النَّسِيم", en: "Breeze" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u6_4_l5",
+      title: "Resolution",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "صَدَمَتْنِي حَقًّا هَذِهِ الحَالَة لِأُمِّي الحَنُون وَحَرَكَات لِسَانِهَا النَّاصِحَة... قَرَّرْتُ وَذَهَبْتُ مُبَاشَرَة بِحَزْم وَعَزْم إِلَى المَرْكَز لِعِلَاج الإِدْمَان وَقُمْتُ بِالتَّمَارِين اللَّازِمَة فِي ثَلَاثَة أَشْهُر...",
+          english: "This state of my affectionate mother truly shocked me, and the advising movements of her tongue... I decided and went directly with firmness and determination to the addiction treatment center and did the necessary exercises over three months..."
+        },
+        {
+          type: "vocabulary",
+          word: "عَزْم",
+          transliteration: "Azm",
+          translation: "Determination / Resolve",
+          example: { ar: "ذَهَبْتُ بِعَزْم", en: "I went with determination" }
+        },
+        {
+          type: "fill-blank",
+          sentence: "ذَهَبْتُ مُبَاشَرَة بِحَزْم وَ____ إِلَى المَرْكَز",
+          translation: "I went directly with firmness and determination to the center",
+          answer: "عَزْم",
+          options: ["خَوْف", "عَزْم", "أَلَم"]
+        }
+      ]
+    },
+    {
+      id: "u6_4_l6",
+      title: "Moving Forward",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "الحَمْدُ لله تَخَلَّصْتُ مِن ذَلِكَ العَذَاب وَمِن تِلْكَ الإصَابَة وَرَجَعْتُ إِلَى أُمِّي الَّتِي تَمَّ نَقْلُهَا إِلَى البَيْت وَبَدَأْتُ تَتَشَفَّى. وَرَكَزْتُ عَلَى دِرَاسَتِي وَهَذَا التَّرْكِيز أَدَّانِي إِلَى النَّجَاح المَلْحُوظ.",
+          english: "Praise be to God, I was saved from that torment and from that injury, and returned to my mother who had been transferred to the house and I began to heal. And I focused on my studies and this focus led me to noticeable success."
+        },
+        {
+          type: "vocabulary",
+          word: "تَخَلَّصْتُ",
+          transliteration: "Takhallastu",
+          translation: "I was saved / I got rid of",
+          example: { ar: "تَخَلَّصْتُ مِن العَذَاب", en: "I was saved from the torment" }
+        },
+        {
+          type: "match",
+          pairs: [
+            { ar: "الإصَابَة", en: "Injury" },
+            { ar: "تَتَشَفَّى", en: "To heal" },
+            { ar: "المَلْحُوظ", en: "Noticeable" }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u6_4_l7",
+      title: "A New Life",
+      slides: [
+        {
+          type: "sentence",
+          arabic: "وَتَخَصَّصْتُ فِي الطِّب النَّفْسِي مَع التَّرْكِيز الخَاص عَلَى عِلَاج الإِدْمَان. اليَوْم، أُمِّي الحَنُون فَاطِمَة مَع صِحَّتِهَا الكَامِلَة... عَمَّرَهَا الله.",
+          english: "And I specialized in psychiatry with a special focus on addiction treatment. Today, my affectionate mother Fatima is in complete health... May God give her a long life."
+        },
+        {
+          type: "vocabulary",
+          word: "تَخَصَّصْتُ",
+          transliteration: "Takhassastu",
+          translation: "I specialized",
+          example: { ar: "تَخَصَّصْتُ فِي الطِّب", en: "I specialized in medicine" }
+        },
+        {
+          type: "fill-blank",
+          sentence: "تَخَصَّصْتُ فِي الطِّب ____",
+          translation: "I specialized in psychiatry",
+          answer: "النَّفْسِي",
+          options: ["النَّفْسِي", "الْعَام", "الْأَسْنَان"]
+        }
+      ]
+    }
+  ]
+};

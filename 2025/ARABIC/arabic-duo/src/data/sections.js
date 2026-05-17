@@ -1,82 +1,81 @@
-import { previewUnit } from './section1_preview';
-import { unit1 } from './section1_1';
-import { unit2 } from './section1_2';
-import { practiceUnit } from './section1_practice';
-import { unit3 } from './section1/section1_3';
-import { unit4 } from './section1/section1_4';
-import { unit5 } from './section1/section1_5';
-import { unit6 } from './section1/section1_6';
-import { unit7 } from './section1/section1_7';
-import { unit8 } from './section1/section1_8';
-import { unit9 } from './section1/section1_9';
-import { unit10 } from './section1/section1_10';
-import { unit11 } from './section1/section1_11';
-import { unit12 } from './section1/section1_12';
+import { chapter1Units } from './chapter1/index';
 
-import { previewUnit2 } from './section2/section2_preview';
-import { unit61 } from './section2/section2_1';
-import { unit62, unit63 } from './section2/section2_3';
-import { unit64, unit65, unit66, unit67, unit68, unit69, unit70 } from './section2/section2_7';
-import { unit71 } from './section2/section2_8';
-import { unit72 } from './section2/section2_9';
-import { unit73 } from './section2/section2_10';
-import { unit74 } from './section2/section2_11';
-import { practiceUnit2 } from './section2/section2_practice';
+import { previewUnit } from './chapter5_preview';
+import { unit1 as c5_u1 } from './chapter5_1';
+import { unit2 as c5_u2 } from './chapter5_2';
+import { practiceUnit } from './chapter5_practice';
+import { unit3 } from './chapter5/chapter5_3';
+import { unit4 } from './chapter5/chapter5_4';
+import { unit5 } from './chapter5/chapter5_5';
+import { unit6 } from './chapter5/chapter5_6';
+import { unit7 } from './chapter5/chapter5_7';
+import { unit8 } from './chapter5/chapter5_8';
+import { unit9 } from './chapter5/chapter5_9';
+import { unit10 } from './chapter5/chapter5_10';
+import { unit11 } from './chapter5/chapter5_11';
+import { unit12 } from './chapter5/chapter5_12';
 
-import { previewUnit3 } from './section3/section3_preview';
-import { unit81 } from './section3/section3_1';
-import { unit82 } from './section3/section3_2';
-import { unit83 } from './section3/section3_3';
-import { unit84 } from './section3/section3_4';
-import { unit85 } from './section3/section3_5';
-import { unit86 } from './section3/section3_6';
-import { unit87 } from './section3/section3_7';
-import { unit88 } from './section3/section3_8';
-import { unit89 } from './section3/section3_9';
-import { unit90 } from './section3/section3_10';
-import { unit91 } from './section3/section3_11';
-import { practiceUnit3 } from './section3/section3_practice';
+import { previewUnit2 } from './chapter6/chapter6_preview';
+import { unit61 } from './chapter6/chapter6_1';
+import { unit62, unit63 } from './chapter6/chapter6_3';
+import { unit64, unit65, unit66, unit67, unit68, unit69, unit70 } from './chapter6/chapter6_7';
+import { unit71 } from './chapter6/chapter6_8';
+import { unit72 } from './chapter6/chapter6_9';
+import { unit73 } from './chapter6/chapter6_10';
+import { unit74 } from './chapter6/chapter6_11';
+import { practiceUnit2 } from './chapter6/chapter6_practice';
 
-import { u4_1, u4_2, u4_3, u4_4 } from './section4/section4_1';
-import { u4_5, u4_6, u4_7, u4_8 } from './section4/section4_2';
-import { practiceUnit4 } from './section4/section4_practice';
+import { previewUnit3 } from './chapter4/chapter4_preview';
+import { unit81 } from './chapter4/chapter4_1';
+import { unit82 } from './chapter4/chapter4_2';
+import { unit83 } from './chapter4/chapter4_3';
+import { unit84 } from './chapter4/chapter4_4';
+import { unit85 } from './chapter4/chapter4_5';
+import { unit86 } from './chapter4/chapter4_6';
+import { unit87 } from './chapter4/chapter4_7';
+import { unit88 } from './chapter4/chapter4_8';
+import { unit89 } from './chapter4/chapter4_9';
+import { unit90 } from './chapter4/chapter4_10';
+import { unit91 } from './chapter4/chapter4_11';
+import { practiceUnit3 } from './chapter4/chapter4_practice';
 
-import { u5_1 } from './section5/section5_1';
-import { u5_2 } from './section5/section5_2';
-import { u5_3 } from './section5/section5_3';
-import { u5_4 } from './section5/section5_4';
+import { u4_1, u4_2, u4_3, u4_4 } from './chapter8/chapter8_1';
+import { u4_5, u4_6, u4_7, u4_8 } from './chapter8/chapter8_2';
+import { practiceUnit4 } from './chapter8/chapter8_practice';
 
-import { u6_1 } from './section6/section6_1';
-import { u6_2 } from './section6/section6_2';
-import { u6_3 } from './section6/section6_3';
-import { u6_4 } from './section6/section6_4';
+import { u6_1 } from './chapter2/chapter2_1';
+import { u6_2 } from './chapter2/chapter2_2';
+import { u6_3 } from './chapter2/chapter2_3';
+import { u6_4 } from './chapter2/chapter2_4';
+import { previewUnit_ch2 } from './chapter2/chapter2_preview';
+import { practiceUnit_ch2 } from './chapter2/chapter2_practice';
 
-import { u7_1 } from './section7/section7_1';
-import { u7_2 } from './section7/section7_2';
-import { u7_3 } from './section7/section7_3';
-import { u7_4 } from './section7/section7_4';
+import { u7_1 } from './chapter3/chapter3_1';
+import { u7_2 } from './chapter3/chapter3_2';
+import { u7_3 } from './chapter3/chapter3_3';
+import { u7_4 } from './chapter3/chapter3_4';
 
-import { u8_1 } from './section8/section8_1';
-import { u8_2 } from './section8/section8_2';
-import { u8_3 } from './section8/section8_3';
-import { u8_4 } from './section8/section8_4';
+import { u8_1 } from './chapter7/chapter7_1';
+import { u8_2 } from './chapter7/chapter7_2';
+import { u8_3 } from './chapter7/chapter7_3';
+import { u8_4 } from './chapter7/chapter7_4';
 
-import { u9_1 } from './section9/section9_1';
-import { u9_2 } from './section9/section9_2';
-import { u9_3 } from './section9/section9_3';
+import { u9_1 } from './chapter9/chapter9_1';
+import { u9_2 } from './chapter9/chapter9_2';
+import { u9_3 } from './chapter9/chapter9_3';
 
 export const sections = [
   {
     id: "sec5-1",
     sectionNumber: 1,
     title: "السِّيَاحَةُ حَيَاةٌ وَالسَّفَرُ مَعْرِفَةٌ",
-    units: [u5_1, u5_2, u5_3, u5_4]
+    units: chapter1Units
   },
   {
     id: "sec6-2",
     sectionNumber: 2,
     title: "لِبَاسِي كَانَ مَعَ أُمِّي",
-    units: [u6_1, u6_2, u6_3, u6_4]
+    units: [previewUnit_ch2, u6_1, u6_2, u6_3, u6_4, practiceUnit_ch2]
   },
   {
     id: "sec7-3",
@@ -100,7 +99,7 @@ export const sections = [
     sectionNumber: 5,
     title: "رحلة إلى مونار",
     units: [
-      previewUnit, unit1, unit2, unit3, unit4, unit5, unit6,
+      previewUnit, c5_u1, c5_u2, unit3, unit4, unit5, unit6,
       unit7, unit8, unit9, unit10, unit11, unit12, practiceUnit
     ]
   },

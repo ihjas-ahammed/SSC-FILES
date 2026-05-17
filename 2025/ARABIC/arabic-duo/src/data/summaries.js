@@ -1,4 +1,152 @@
 export const sectionSummaries = {
+  "sec5-1": [
+    {
+      id: "s_ch1_1",
+      sentence: {
+        type: "sentence",
+        arabic: "السِّيَاحَةُ مِنَ الرَّكَائِزِ الأَسَاسِيَّةِ فِي بِنَاءِ اقْتِصَادِ الدُّوَلِ وَهِيَ مِرْآةٌ تَعْكِسُ حَضَارَةَ الشُّعُوبِ.",
+        english: "Tourism is one of the basic pillars in building the economy of nations, and it is a mirror reflecting the civilization of peoples.",
+        parts: [
+          { ar: "السِّيَاحَةُ مِنَ الرَّكَائِزِ الأَسَاسِيَّةِ", en: "Tourism is one of the basic pillars" },
+          { ar: "فِي بِنَاءِ اقْتِصَادِ الدُّوَلِ", en: "in building the economy of nations" },
+          { ar: "وَهِيَ مِرْآةٌ تَعْكِسُ حَضَارَةَ الشُّعُوبِ.", en: "and it is a mirror reflecting the civilization of peoples." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "الرَّكَائِزِ", translation: "Pillars", transliteration: "Ar-raka'iz" },
+        { type: "vocabulary", word: "مِرْآةٌ", translation: "Mirror", transliteration: "Mir'ah" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "وَهِيَ ____ تَعْكِسُ حَضَارَةَ الشُّعُوبِ",
+        translation: "And it is a mirror reflecting the civilization of peoples",
+        answer: "مِرْآةٌ",
+        options: ["نَافِذَةٌ", "مِرْآةٌ", "صُورَةٌ"]
+      }
+    },
+    {
+      id: "s_ch1_2",
+      sentence: {
+        type: "sentence",
+        arabic: "كَمَا أَنَّ السَّفَرَ يَفْتَحُ أَبْوَابَ التَّعَلُّمِ وَالِاكْتِشَافِ وَيُعَزِّزُ التَّوَاصُلَ الإِنْسَانِيَّ بَيْنَ الثَّقَافَاتِ.",
+        english: "Travel also opens doors to learning and discovery, and it strengthens human communication between cultures.",
+        parts: [
+          { ar: "كَمَا أَنَّ السَّفَرَ يَفْتَحُ أَبْوَابَ التَّعَلُّمِ وَالِاكْتِشَافِ", en: "Travel also opens doors to learning and discovery" },
+          { ar: "وَيُعَزِّزُ التَّوَاصُلَ الإِنْسَانِيَّ", en: "and strengthens human communication" },
+          { ar: "بَيْنَ الثَّقَافَاتِ.", en: "between cultures." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "الِاكْتِشَافِ", translation: "Discovery", transliteration: "Al-iktishaf" },
+        { type: "vocabulary", word: "يُعَزِّزُ", translation: "Strengthens", transliteration: "Yu'azzizu" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "السَّفَرُ يَفْتَحُ أَبْوَابَ التَّعَلُّمِ وَ____",
+        translation: "Travel opens doors to learning and discovery",
+        answer: "الِاكْتِشَافِ",
+        options: ["النَّوْمِ", "الِاكْتِشَافِ", "اللَّعِبِ"]
+      }
+    },
+    {
+      id: "s_ch1_3",
+      sentence: {
+        type: "sentence",
+        arabic: "وَيَجِبُ عَلَى الدَّوْلَةِ تَطْوِيرُ البِنْيَةِ التَّحْتِيَّةِ وَعَلَى الْمُوَاطِنِ حُسْنُ أَخْلَاقِهِ مَعَ السُّيَّاحِ.",
+        english: "The state must develop the infrastructure, and the citizen must have good morals with tourists.",
+        parts: [
+          { ar: "وَيَجِبُ عَلَى الدَّوْلَةِ تَطْوِيرُ البِنْيَةِ التَّحْتِيَّةِ", en: "The state must develop the infrastructure" },
+          { ar: "وَعَلَى الْمُوَاطِنِ حُسْنُ أَخْلَاقِهِ", en: "and the citizen must have good morals" },
+          { ar: "مَعَ السُّيَّاحِ.", en: "with tourists." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "البِنْيَة التَّحْتِيَّة", translation: "Infrastructure", transliteration: "Al-binyah At-tahtiyyah" },
+        { type: "vocabulary", word: "أَخْلَاقِهِ", translation: "His morals", transliteration: "Akhlaqihi" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "وَعَلَى الْمُوَاطِنِ حُسْنُ ____ مَعَ السُّيَّاحِ",
+        translation: "And the citizen must have good morals with tourists",
+        answer: "أَخْلَاقِهِ",
+        options: ["مَالِهِ", "أَخْلَاقِهِ", "بَيْتِهِ"]
+      }
+    }
+  ],
+  "sec6-2": [
+    {
+      id: "s_ch2_1",
+      sentence: {
+        type: "sentence",
+        arabic: "كَانَتْ أُمِّي تَبْكِي بِسَبَبِ إِدْمَانِي عَلَى الْمُخَدِّرَاتِ وَلَمْ أُبَالِ بِنَصَائِحِهَا فِي الْبِدَايَةِ.",
+        english: "My mother was crying because of my addiction to drugs, and I didn't care about her advice at first.",
+        parts: [
+          { ar: "كَانَتْ أُمِّي تَبْكِي", en: "My mother was crying" },
+          { ar: "بِسَبَبِ إِدْمَانِي عَلَى الْمُخَدِّرَاتِ", en: "because of my addiction to drugs" },
+          { ar: "وَلَمْ أُبَالِ بِنَصَائِحِهَا فِي الْبِدَايَةِ.", en: "and I didn't care about her advice at first." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "إِدْمَانِي", translation: "My addiction", transliteration: "Idmani" },
+        { type: "vocabulary", word: "أُبَالِ", translation: "Care / Mind", transliteration: "Ubali" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "كَانَتْ أُمِّي تَبْكِي بِسَبَبِ ____ عَلَى الْمُخَدِّرَاتِ",
+        translation: "My mother was crying because of my addiction to drugs",
+        answer: "إِدْمَانِي",
+        options: ["عَمَلِي", "إِدْمَانِي", "نَوْمِي"]
+      }
+    },
+    {
+      id: "s_ch2_2",
+      sentence: {
+        type: "sentence",
+        arabic: "تَعَرَّفْتُ عَلَى رَجُلٍ غَرِيبٍ خَدَعَنِي بِإِعْطَائِي مَشْرُوبًا مُنَشِّطًا حَتَّى أَصْبَحْتُ مُدْمِنًا.",
+        english: "I met a strange man who deceived me by giving me a stimulating drink until I became addicted.",
+        parts: [
+          { ar: "تَعَرَّفْتُ عَلَى رَجُلٍ غَرِيبٍ", en: "I met a strange man" },
+          { ar: "خَدَعَنِي بِإِعْطَائِي مَشْرُوبًا مُنَشِّطًا", en: "who deceived me by giving me a stimulating drink" },
+          { ar: "حَتَّى أَصْبَحْتُ مُدْمِنًا.", en: "until I became addicted." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "خَدَعَنِي", translation: "Deceived me", transliteration: "Khada'ani" },
+        { type: "vocabulary", word: "مُنَشِّطًا", translation: "Stimulating", transliteration: "Munashshitan" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "خَدَعَنِي بِإِعْطَائِي مَشْرُوبًا ____",
+        translation: "He deceived me by giving me a stimulating drink",
+        answer: "مُنَشِّطًا",
+        options: ["لَذِيذًا", "مُنَشِّطًا", "عَادِيًّا"]
+      }
+    },
+    {
+      id: "s_ch2_3",
+      sentence: {
+        type: "sentence",
+        arabic: "تَعَرَّضَتْ أُمِّي لِحَادِثِ سَيَّارَةٍ مُؤْلِمٍ، فَتُبْتُ عَنِ الْإِدْمَانِ وَأَصْبَحْتُ طَبِيبًا نَفْسَانِيًّا لِعِلَاجِ الْمُدْمِنِينَ.",
+        english: "My mother suffered a painful car accident, so I repented from addiction and became a psychiatrist to treat addicts.",
+        parts: [
+          { ar: "تَعَرَّضَتْ أُمِّي لِحَادِثِ سَيَّارَةٍ مُؤْلِمٍ،", en: "My mother suffered a painful car accident," },
+          { ar: "فَتُبْتُ عَنِ الْإِدْمَانِ", en: "so I repented from addiction" },
+          { ar: "وَأَصْبَحْتُ طَبِيبًا نَفْسَانِيًّا لِعِلَاجِ الْمُدْمِنِينَ.", en: "and became a psychiatrist to treat addicts." }
+        ]
+      },
+      vocabs: [
+        { type: "vocabulary", word: "مُؤْلِمٍ", translation: "Painful", transliteration: "Mu'limin" },
+        { type: "vocabulary", word: "نَفْسَانِيًّا", translation: "Psychiatrist", transliteration: "Nafsaniyyan" }
+      ],
+      fillBlank: {
+        type: "fill-blank",
+        sentence: "أَصْبَحْتُ طَبِيبًا ____ لِعِلَاجِ الْمُدْمِنِينَ",
+        translation: "I became a psychiatrist to treat addicts",
+        answer: "نَفْسَانِيًّا",
+        options: ["جَرَّاحًا", "نَفْسَانِيًّا", "أَطْفَالًا"]
+      }
+    }
+  ],
   "sec1-5": [
     {
       id: "s1_1",
