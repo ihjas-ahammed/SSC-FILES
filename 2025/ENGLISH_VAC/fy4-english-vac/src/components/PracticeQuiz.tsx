@@ -42,7 +42,7 @@ const PracticeQuiz: React.FC<Props> = ({ questions, onFinish, onExit }) => {
   };
 
   return (
-    <div className="absolute inset-0 bg-[#0b0f19] z-[9999] flex flex-col w-full h-full overflow-hidden">
+    <div className="fixed inset-0 w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto bg-[#0b0f19] z-[9999] flex flex-col overflow-hidden">
       {/* Header */}
       <div className="h-16 flex items-center justify-between px-4 glass-panel border-t-0 border-x-0 rounded-none shrink-0 z-10">
         <button onClick={onExit} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-90 transition-transform text-slate-400">

@@ -132,7 +132,7 @@ const LessonPath: React.FC<Props> = ({
   const containerHeight = currentY + 40;
 
   return (
-    <div className="pb-32 max-w-md mx-auto relative">
+    <div className="pb-32 w-full mx-auto relative">
       <div
         onClick={onOpenSectionSelector}
         className={`sticky top-16 mx-4 mt-4 z-30 py-3 px-5 glass-panel rounded-2xl cursor-pointer hover:bg-white/10 transition-all active:scale-[0.98] flex items-center justify-between border-b-4 border-${section.color}`}
@@ -146,12 +146,12 @@ const LessonPath: React.FC<Props> = ({
       </div>
 
       <div
-        className="mt-8 relative w-full max-w-[400px] mx-auto overflow-hidden"
+        className="mt-8 relative w-full max-w-[400px] mx-auto"
         style={{ height: `${containerHeight}px` }}
       >
         <svg
           viewBox={`0 0 400 ${containerHeight}`}
-          preserveAspectRatio="none"
+          preserveAspectRatio="xMidYMid meet"
           className="absolute inset-0 w-full h-full pointer-events-none"
           style={{ zIndex: 0 }}
         >

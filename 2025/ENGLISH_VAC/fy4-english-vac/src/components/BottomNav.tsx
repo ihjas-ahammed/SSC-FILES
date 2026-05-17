@@ -11,8 +11,8 @@ const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="fixed bottom-0 w-full max-w-md mx-auto z-50 glass-bottom-nav">
-      <div className="flex justify-around items-center p-2">
+    <nav className="fixed bottom-0 left-0 right-0 w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto z-50 glass-bottom-nav">
+      <div className="flex justify-around items-center p-2 sm:p-3">
         {navItems.map(item => (
           <NavLink
             key={item.to}
@@ -23,8 +23,8 @@ const BottomNav: React.FC = () => {
               }`
             }
           >
-            <item.icon className="w-5 h-5 mb-1" strokeWidth={2.5} />
-            <span className="text-[9px] font-black uppercase tracking-wider">{item.label}</span>
+            <item.icon className="w-5 h-5 sm:w-6 sm:h-6 mb-1" strokeWidth={2.5} />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider">{item.label}</span>
           </NavLink>
         ))}
       </div>

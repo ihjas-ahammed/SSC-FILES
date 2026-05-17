@@ -27,7 +27,7 @@ const ModuleSelector: React.FC<Props> = ({
     <div className="fixed inset-0 z-50 flex flex-col bg-[#0b0f19]/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="flex-grow" onClick={onClose} />
       
-      <div className="glass-panel absolute top-16 left-4 right-4 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-top-4 duration-300 max-w-md mx-auto">
+      <div className="glass-panel absolute top-16 left-4 right-4 rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-top-4 duration-300 max-w-md sm:max-w-lg md:max-w-xl mx-auto">
         <div className="p-4 border-b border-white/5 bg-black/20">
            <h2 className="text-lg font-extrabold text-white uppercase tracking-wide">Select Module</h2>
         </div>

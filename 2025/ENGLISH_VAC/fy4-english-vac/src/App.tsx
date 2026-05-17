@@ -17,6 +17,7 @@ import './styles/english.css';
 import './styles/practice.css'; 
 import './styles/exam.css';
 import './styles/policy.css';
+import './styles/microscope.css';
 
 const AnalyticsTracker = () => {
   useAnalytics();
@@ -63,7 +64,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-md mx-auto relative overflow-hidden">
+    <div className="app-shell min-h-screen bg-[#0b0f19] text-slate-200 shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto relative overflow-hidden">
       <BrowserRouter>
         <AnalyticsTracker />
         <Routes>
@@ -79,8 +80,8 @@ const App: React.FC = () => {
                 />
               }
             />
-            <Route path="/exam" element={<ExamQuestionsPage />} />
-            <Route path="/practice" element={<PracticePage />} />
+            <Route path="/exam" element={<ExamQuestionsPage progress={progress} />} />
+            <Route path="/practice" element={<PracticePage progress={progress} />} />
             <Route
               path="/notes"
               element={

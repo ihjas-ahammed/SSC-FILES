@@ -1,3 +1,55 @@
 .MathJax svg{
     display: inline;
 }
+
+/* Responsive base + small-screen safety */
+html,
+body {
+  /* Prevent any stray horizontal overflow at small widths */
+  overflow-x: hidden;
+  min-height: 100%;
+  background-color: #0b0f19;
+}
+
+body {
+  /* Use dynamic viewport units so mobile address-bar doesn't clip content */
+  min-height: 100dvh;
+}
+
+/* App shell ensures the inner column is at least viewport-tall and
+   absolutely-positioned overlays (lesson, quiz) fill the column. */
+.app-shell {
+  min-height: 100dvh;
+}
+
+/* Ensure long words / unbroken strings don't push layouts wider than
+   the screen on small mobile (e.g. transliterated terms, long URLs) */
+.app-shell p,
+.app-shell h1,
+.app-shell h2,
+.app-shell h3,
+.app-shell li {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Mathjax equations are allowed to scroll horizontally if
+   they're wider than the column so they don't break the layout */
+.app-shell mjx-container[jax="SVG"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Make images stay inside their containers on any screen */
+.app-shell img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Very small screens (e.g. 320px iPhone SE) — tighten root font slightly */
+@media (max-width: 360px) {
+  .app-shell {
+    font-size: 15px;
+  }
+}

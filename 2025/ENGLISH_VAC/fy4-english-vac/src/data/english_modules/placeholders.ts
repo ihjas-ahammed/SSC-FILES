@@ -32,19 +32,5 @@ const createPlaceholder = (id: string, title: string, desc: string): Section => 
   ]
 });
 
-// Module 2 Placeholders
-export const SEC_U6 = createPlaceholder("sec-u6", "Unit 6: Karma", "by Khushwant Singh");
-export const SEC_U7 = createPlaceholder("sec-u7", "Unit 7: In the Name of Science", "by Lori Alexander");
-export const SEC_U8 = createPlaceholder("sec-u8", "Unit 8: The Boy Who Harnessed the Wind", "Dir. Chiwetel Ejiofo");
-
-// Module 3 Placeholders
-export const SEC_U9 = createPlaceholder("sec-u9", "Unit 9: The Yellow Wallpaper", "by Charlotte Perkins Gilman");
-export const SEC_U10 = createPlaceholder("sec-u10", "Unit 10: Don't be Beautiful", "by Nikita Gill");
-export const SEC_U11 = createPlaceholder("sec-u11", "Unit 11: The Biology of Gender", "by Karissa Sanbonmatsu");
-export const SEC_U12 = createPlaceholder("sec-u12", "Unit 12: Empowerment of Women...", "UN Women");
-
 // Module 4 Placeholders
-export const SEC_U13 = createPlaceholder("sec-u13", "Unit 13: Factories are Eyesores", "by Baldoon Dhingra");
-export const SEC_U14 = createPlaceholder("sec-u14", "Unit 14: Stigma Shame and Silence", "by Kalpana Jain");
-export const SEC_U15 = createPlaceholder("sec-u15", "Unit 15: A Long Walk to Water", "by Linda Sue Park");
 export const SEC_U16 = createPlaceholder("sec-u16", "Unit 16: The Poisoned Bread", "by Bandhu Madhav");
