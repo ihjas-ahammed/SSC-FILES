@@ -3,14 +3,13 @@ Make the following changes:
 
 Initiate:
 
-    Create lesson1 based on lesson1.txt
+    Create lesson2 based on lesson2.txt
 
 Give the whole text as in the textbook (but splitted :)
 
-Give word cards for words in glossary
+Update the questions tab, each chapter must have thier own questions tab, also giev answre to alreday written questions for chapter1, u will be giving correct upadte to chapter 1 and 2 this way
 
-add questions to the questions tab from the model qp I gave (distinct for each chapter)
-
+Use model qp image as referarence
 
 Base:
 ```md

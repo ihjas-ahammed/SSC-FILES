@@ -319,6 +319,8 @@ import './styles/path.css';
 import './styles/progress.css';
 import './styles/english.css'; 
 import './styles/practice.css'; 
+import './styles/exam.css';
+import './styles/policy.css';
 
 const AnalyticsTracker = () => {
   useAnalytics();
@@ -641,6 +643,98 @@ const ExampleView: React.FC<Props> = ({ slide, onComplete }) => {
 export default ExampleView;
 --- END OF FILE src/components/ExampleView.tsx ---
 
+--- START OF FILE src/components/ExamQuestionCard.tsx ---
+import React, { useState } from 'react';
+import { ExamQuestion } from '../data/exam_data';
+import MathRenderer from './MathRenderer';
+import { ChevronDown, ChevronUp, Lightbulb, FileCheck } from 'lucide-react';
+import '../styles/exam.css';
+
+interface Props {
+  question: ExamQuestion;
+  index: number;
+}
+
+const ExamQuestionCard: React.FC<Props> = ({ question, index }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Styling based on section
+  const sectionColors = {
+    'A': { bg: 'bg-emerald-900/20', border: 'border-emerald-500/30', text: 'text-emerald-400', badge: 'bg-emerald-500/20 text-emerald-300' },
+    'B': { bg: 'bg-blue-900/20', border: 'border-blue-500/30', text: 'text-blue-400', badge: 'bg-blue-500/20 text-blue-300' },
+    'C': { bg: 'bg-purple-900/20', border: 'border-purple-500/30', text: 'text-purple-400', badge: 'bg-purple-500/20 text-purple-300' },
+  };
+
+  const style = sectionColors[question.section];
+
+  return (
+    <div className={`exam-card-container mb-4 rounded-2xl border ${style.border} ${style.bg} transition-all duration-300 overflow-hidden`}>
+      {/* Question Header (Always Visible) */}
+      <div 
+        className="p-5 cursor-pointer flex items-start gap-4 hover:bg-white/5 transition-colors"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-black text-lg bg-black/40 border border-white/10 ${style.text}`}>
+          Q{index + 1}
+        </div>
+        
+        <div className="flex-grow">
+          <div className="flex flex-wrap gap-2 mb-2">
+            <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${style.badge}`}>
+              Section {question.section}
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">
+              {question.marks} Marks
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-md bg-slate-800 text-slate-400">
+              {question.wordLimit}
+            </span>
+          </div>
+          <h3 className="text-white font-bold text-lg leading-snug">
+            <MathRenderer content={question.question} />
+          </h3>
+        </div>
+
+        <div className="shrink-0 mt-2 text-slate-400">
+          {isOpen ? <ChevronUp className="w-6 h-6" /> : <ChevronDown className="w-6 h-6" />}
+        </div>
+      </div>
+
+      {/* Answer Section (Expandable) */}
+      <div className={`exam-answer-collapse ${isOpen ? 'open' : ''}`}>
+        <div className="p-5 pt-0 border-t border-white/5 bg-black/20">
+          
+          <div className="mt-4 mb-5">
+            <div className="flex items-center gap-2 mb-3">
+              <FileCheck className={`w-5 h-5 ${style.text}`} />
+              <h4 className={`text-sm font-black uppercase tracking-widest ${style.text}`}>
+                Model Answer
+              </h4>
+            </div>
+            <div className="text-slate-300 text-[15px] leading-relaxed p-4 rounded-xl bg-black/40 border border-white/5 shadow-inner">
+              <MathRenderer content={question.modelAnswer} />
+            </div>
+          </div>
+
+          {question.examinerTips && (
+            <div className="exam-tip">
+              <div className="exam-tip-title">
+                <Lightbulb className="w-4 h-4" />
+                Examiner's Tip
+              </div>
+              <p>{question.examinerTips}</p>
+            </div>
+          )}
+          
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ExamQuestionCard;
+--- END OF FILE src/components/ExamQuestionCard.tsx ---
+
 --- START OF FILE src/components/FillInBlankView.tsx ---
 import React, { useState } from 'react';
 import { Slide } from '../types';
@@ -745,15 +839,25 @@ export default FillInBlankView;
 
 --- START OF FILE src/components/InteractiveCanvasArt.tsx ---
 import React from 'react';
+import HumanRightsScale from './interactive/HumanRightsScale';
 
 interface Props {
   canvasId: string;
 }
 
 const InteractiveCanvasArt: React.FC<Props> = ({ canvasId }) => {
+  const renderArt = () => {
+    switch (canvasId) {
+      case 'human_rights_scale':
+        return <HumanRightsScale />;
+      default:
+        return <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>;
+    }
+  };
+
   return (
-    <div className="interactive-canvas-container relative w-full aspect-video flex items-center justify-center bg-black/40 rounded-2xl overflow-hidden shadow-inner border border-white/5">
-      <p className="text-slate-500 py-10 text-center w-full">Interactive component '{canvasId}' not found</p>
+    <div className="interactive-canvas-container relative w-full aspect-video flex flex-col items-center justify-center bg-black/40 rounded-2xl overflow-hidden shadow-inner border border-white/5">
+      {renderArt()}
     </div>
   );
 };
@@ -2884,6 +2988,431 @@ const WordCardView: React.FC<Props> = ({ slide, onComplete }) => {
 export default WordCardView;
 --- END OF FILE src/components/WordCardView.tsx ---
 
+--- START OF FILE src/components/interactive/HumanRightsScale.tsx ---
+import React, { useState } from 'react';
+import { ArrowUp, ShieldCheck } from 'lucide-react';
+
+const HumanRightsScale: React.FC = () => {
+  const [level, setLevel] = useState(1);
+
+  const handleEmpower = () => {
+    if (level < 3) setLevel(l => l + 1);
+  };
+
+  // Rotation calculates based on level (1 = tilted left (-20deg), 3 = balanced (0deg))
+  const rotation = -20 + ((level - 1) * 10);
+  const isBalanced = level === 3;
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-4 select-none touch-none-canvas">
+      <div className="relative w-48 h-32 mb-6 mt-6">
+        {/* Stand Base */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-3 bg-slate-600 rounded-t-lg shadow-[0_5px_15px_rgba(0,0,0,0.5)]" />
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-3 h-24 bg-slate-500 rounded-t-full" />
+        
+        {/* Pivot Point */}
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-4 h-4 bg-slate-300 rounded-full z-20 shadow-sm" />
+
+        {/* Beam */}
+        <div 
+          className="absolute top-[1.10rem] left-1/2 w-44 h-1.5 bg-slate-300 origin-center transition-transform duration-700 ease-out z-10 rounded-full"
+          style={{ transform: `translateX(-50%) rotate(${rotation}deg)` }}
+        >
+          {/* Left Pan (Status Quo / Privileged) */}
+          <div 
+            className="absolute -left-4 top-0 w-10 h-16 border-x-2 border-b-2 border-slate-400 rounded-b-xl flex flex-col justify-end items-center pb-1 origin-top transition-transform duration-700 bg-white/5"
+            style={{ transform: `rotate(${-rotation}deg)` }}
+          >
+            <div className="w-7 h-4 bg-slate-400 mb-0.5 rounded-sm shadow-sm" />
+            <div className="w-7 h-4 bg-slate-400 mb-0.5 rounded-sm shadow-sm" />
+            <div className="w-7 h-4 bg-slate-400 rounded-sm shadow-sm" />
+          </div>
+
+          {/* Right Pan (Marginalized / Vulnerable) */}
+          <div 
+            className="absolute -right-4 top-0 w-10 h-16 border-x-2 border-b-2 border-slate-400 rounded-b-xl flex flex-col justify-end items-center pb-1 origin-top transition-transform duration-700 bg-white/5"
+            style={{ transform: `rotate(${-rotation}deg)` }}
+          >
+            {level >= 3 && <div className="w-7 h-4 bg-duo-violet mb-0.5 rounded-sm animate-in zoom-in duration-300 shadow-sm" />}
+            {level >= 2 && <div className="w-7 h-4 bg-duo-green mb-0.5 rounded-sm animate-in zoom-in duration-300 shadow-sm" />}
+            <div className="w-7 h-4 bg-duo-blue rounded-sm shadow-sm" />
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={handleEmpower}
+        disabled={isBalanced}
+        className={`relative overflow-hidden px-6 py-3 rounded-xl font-black uppercase tracking-widest transition-all flex items-center gap-2 shadow-lg mb-2
+          ${isBalanced
+            ? 'bg-duo-green text-white border-b-4 border-duo-green-dark scale-105'
+            : 'bg-duo-blue text-white hover:bg-blue-500 active:scale-95 border-b-4 border-duo-blue-dark active:border-b-0 active:translate-y-1'
+          }`}
+      >
+        {isBalanced ? (
+          <>
+            <ShieldCheck className="w-5 h-5" /> Equality Reached
+          </>
+        ) : (
+          <>
+            <ArrowUp className="w-5 h-5" /> Empower
+          </>
+        )}
+      </button>
+      
+      <p className="text-xs font-medium text-slate-400 text-center h-4 transition-opacity">
+        {isBalanced ? "A resilient society requires equality for all." : "Add support to balance the scale."}
+      </p>
+    </div>
+  );
+};
+
+export default HumanRightsScale;
+--- END OF FILE src/components/interactive/HumanRightsScale.tsx ---
+
+--- START OF FILE src/data/exam_data.ts ---
+export interface ExamQuestion {
+  id: string;
+  section: 'A' | 'B' | 'C';
+  question: string;
+  marks: number;
+  wordLimit: string;
+  modelAnswer: string;
+  examinerTips?: string;
+}
+
+export interface UnitExam {
+  unitId: string;
+  title: string;
+  description: string;
+  questions: ExamQuestion[];
+}
+
+export const EXAM_MODULES: UnitExam[] = [
+  {
+    unitId: 'sec-u1',
+    title: 'Unit 1: UN Cooperation Frameworks (SDGs)',
+    description: 'Questions on Global Agendas, UDHR, and systemic inclusion.',
+    questions: [
+      {
+        id: 'u1-a1',
+        section: 'A',
+        question: 'Expand UDHR and describe its significance.',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: 'UDHR stands for the Universal Declaration of Human Rights. Adopted by the UN in 1948, it is a milestone document that established, for the first time, fundamental human rights to be universally protected. It forms the foundation for modern international human rights law and global agendas like the SDGs.',
+        examinerTips: 'Always explicitly state the full form first, then provide a 1-2 sentence explanation of its historical or legal impact.'
+      },
+      {
+        id: 'u1-a2',
+        section: 'A',
+        question: 'What is the core principle of the 2030 Agenda for Sustainable Development?',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: 'The core principle of the 2030 Agenda is "Leave No One Behind" (LNOB). It emphasizes eradicating poverty, ending discrimination, and ensuring that the most marginalized and vulnerable populations are prioritized in global development efforts.',
+        examinerTips: 'Highlight the exact phrase "Leave No One Behind" as it is the central theme of the document.'
+      },
+      {
+        id: 'u1-b1',
+        section: 'B',
+        question: 'What are some systemic barriers that prevent full participation of women and girls with disabilities?',
+        marks: 6,
+        wordLimit: 'Max 100 words',
+        modelAnswer: 'Women and girls with disabilities face intersecting and compounded forms of discrimination. Systemic barriers include inaccessible physical environments, lack of inclusive educational and healthcare facilities, and discriminatory laws. Socially, they endure deep-rooted stigma, negative stereotypes, and a higher risk of gender-based violence. Furthermore, there is a severe lack of representation in decision-making processes, meaning their specific needs are often overlooked in policy design. To achieve full participation, frameworks must actively dismantle these institutional and attitudinal barriers through targeted inclusive policies.',
+        examinerTips: 'Ensure you address both physical/institutional barriers and social/attitudinal barriers. Use the term "intersectionality" if possible.'
+      },
+      {
+        id: 'u1-c1',
+        section: 'C',
+        question: 'Examine how international normative frameworks and global agendas contribute to the inclusion and empowerment of women and girls with disabilities.',
+        marks: 10,
+        wordLimit: 'Max 200 words',
+        modelAnswer: `International normative frameworks, such as the Convention on the Rights of Persons with Disabilities (CRPD) and the Convention on the Elimination of All Forms of Discrimination Against Women (CEDAW), provide legally binding architectures to protect vulnerable groups. When integrated with the 2030 Agenda's core principle of "Leave No One Behind", these frameworks mandate member states to actively dismantle systemic barriers.
+
+They contribute to empowerment by shifting the paradigm from viewing women with disabilities as objects of charity to recognizing them as active rights-holders. Frameworks compel governments to gather disaggregated data, ensuring that the unique, intersecting struggles of these women are made visible in public policy. 
+
+Furthermore, UN Cooperation Frameworks require national development plans to prioritize inclusive education, accessible healthcare, and protection from gender-based violence. By embedding these standards into national laws and holding governments accountable through international monitoring, global agendas create a structural foundation for equal participation, ensuring that women and girls with disabilities can claim their fundamental human rights and agency in society.`,
+        examinerTips: 'Structure your essay: 1. Name the frameworks (CRPD, CEDAW, 2030 Agenda). 2. Explain the paradigm shift (charity to rights-holders). 3. Detail practical applications (data, policy, healthcare). 4. Conclude with accountability.'
+      }
+    ]
+  },
+  {
+    unitId: 'sec-u2',
+    title: 'Unit 2: On The Rule of the Road',
+    description: 'Questions on Liberty, Social Contract, and Civic Conduct.',
+    questions: [
+      {
+        id: 'u2-a1',
+        section: 'A',
+        question: 'How, according to AG Gardiner can order be maintained in a society?',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: 'According to A.G. Gardiner, order is maintained through a social contract where individual liberties are mutually curtailed to preserve the liberties of all. By obeying laws, like the rule of the road, citizens prevent universal chaos and ensure that everyone can enjoy their freedom safely.',
+        examinerTips: 'Use the key phrase "curtailment of private liberty" or "accommodation of interests".'
+      },
+      {
+        id: 'u2-a2',
+        section: 'A',
+        question: 'What does the policeman at Piccadilly Circus symbolize?',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: 'The policeman stepping into the road and putting up his hand symbolizes liberty, not tyranny. By temporarily interfering with one person\'s free use of the highway, he prevents a "maelstrom" of chaos, ensuring that everyone\'s liberty to cross the road becomes a reality.',
+        examinerTips: 'Contrast "tyranny" with "liberty" to show you understand Gardiner\'s central paradox.'
+      },
+      {
+        id: 'u2-b1',
+        section: 'B',
+        question: 'Differentiate between personal liberty and social liberty with examples from the essay.',
+        marks: 6,
+        wordLimit: 'Max 100 words',
+        modelAnswer: 'Personal liberty applies to matters that do not touch anybody else\'s freedom. Gardiner illustrates this with examples like dyeing one\'s hair, wearing a dressing-gown on the Strand, or eating mustard with mutton; in this kingdom, the individual rules alone. Social liberty begins when one\'s actions affect others. For instance, playing the trombone at midnight on top of Helvellyn is a personal liberty, but doing it in a residential street infringes on the neighbors\' liberty to sleep. Therefore, social liberty requires an accommodation of interests, where personal freedom is qualified by the rights of others to maintain harmony.',
+        examinerTips: 'Provide at least one example for personal liberty (hair, mustard) and one for social liberty (trombone, gramophone).'
+      },
+      {
+        id: 'u2-c1',
+        section: 'C',
+        question: '"Liberty is not a personal affair only, but a social contract." Discuss this statement with reference to A.G. Gardiner\'s essay.',
+        marks: 10,
+        wordLimit: 'Max 200 words',
+        modelAnswer: `In "On the Rule of the Road," A.G. Gardiner brilliantly argues that absolute individual freedom is an illusion that leads to social anarchy. He asserts that "Liberty is not a personal affair only, but a social contract," meaning true freedom requires mutual compromise.
+
+Gardiner opens with the anecdote of a stout old lady in Petrograd walking down the middle of the road, claiming her "liberty." He points out that if her liberty entitles her to block traffic, it entitles the cab-driver to drive on the pavement, resulting in universal chaos. To prevent this, society establishes "rules of the road"—laws that curtail extreme private liberty to guarantee functional social liberty. 
+
+While individuals have absolute sovereignty in purely personal choices—like their diet, religion, or fashion—their freedom becomes "qualified" the moment it intersects with another's. Playing a blatant gramophone on a Sunday afternoon or boasting loudly in a train carriage are instances where individuals fail to recognize this social contract, acting as bullies who trample on the rights of quiet people. 
+
+Ultimately, Gardiner concludes that civilization is defined by our conduct in these small matters. By accommodating our liberties to others, we uphold a social order that makes everyone's liberty a reality.`,
+        examinerTips: 'Include the Petrograd lady anecdote. Clearly define the "social contract" as the curtailment of private liberty for collective freedom. Mention "small matters of conduct".'
+      }
+    ]
+  },
+  {
+    unitId: 'sec-u3',
+    title: 'Unit 3: Humanities v/s Science',
+    description: 'Questions on Dr. S. Radhakrishnan’s educational philosophy.',
+    questions: [
+      {
+        id: 'u3-a1',
+        section: 'A',
+        question: 'What are the three obstacles which stand in the way of national development?',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: 'According to Dr. S. Radhakrishnan, the three major obstacles to national development are ignorance, disease, and poverty. He emphasizes that out of these, ignorance is the primary root, and removing it will naturally help diminish the other two.',
+        examinerTips: 'List all three exactly as stated in the text. Highlight "ignorance" as the major one.'
+      },
+      {
+        id: 'u3-a2',
+        section: 'A',
+        question: 'What is the meaning of the Upanisadic phrase "Tat tvam asi"?',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: '"Tat tvam asi" translates to "That art thou" (You are that). Radhakrishnan uses it to explain that every human individual is a spark of the Divine, which forms the spiritual basis for treating everyone with compassion and a democratic spirit.',
+        examinerTips: 'Provide the literal translation and briefly mention its relevance to compassion.'
+      },
+      {
+        id: 'u3-b1',
+        section: 'B',
+        question: 'Analyse the predicament of Science without a moral compass.',
+        marks: 6,
+        wordLimit: 'Max 100 words',
+        modelAnswer: 'Dr. Radhakrishnan argues that while science and technology grant humanity unprecedented power, they lack inherent moral direction. Without the moral compass provided by the Humanities, technological education becomes "imperfect, lop-sided and deficient." Science enables us to control the forces of nature, giving us the power to either "bring about paradise on earth" or, by pressing a button, "destroy continents." Without studying humanities to understand human nature, ideals, and compassion, individuals become mere "mechanical robots." Thus, the predicament is a dangerous disproportion: our knowledge of nature rapidly increases while our wisdom to use it ethically diminishes.',
+        examinerTips: 'Quote the phrases "destroy continents", "mechanical robots", or "lop-sided and deficient".'
+      },
+      {
+        id: 'u3-c1',
+        section: 'C',
+        question: 'Examine how Dr. S. Radhakrishnan advocates for the integration of Humanities and Science to create a holistic educational system.',
+        marks: 10,
+        wordLimit: 'Max 200 words',
+        modelAnswer: `In his essay, Dr. S. Radhakrishnan vehemently opposes the separation of scientific and humanistic studies, arguing that a holistic educational system requires both. He acknowledges that science is absolutely essential to eradicate the nation's primary obstacles: ignorance, disease, and poverty. However, he warns that an exclusively technological education is "lop-sided and deficient."
+
+Science provides humanity with immense power—the ability to either build a paradise or "destroy continents." Yet, it is the humanities that provide the wisdom to use this power ethically. Radhakrishnan asserts that universities must not merely produce "mechanical robots" or "technicians," but whole individuals equipped with compassion and a "truly democratic spirit." The humanities teach us about our inner nature, impulses, and ideals, acting as the moral compass for scientific application.
+
+Furthermore, he refutes William Blake's notion that science is the "tree of death" and art the "tree of life." Radhakrishnan insists that Truth is indivisible; science and humanities are simply different approaches to the same ultimate reality. Therefore, to prevent a society where knowledge increases while wisdom diminishes, educational systems must treat sciences and humanities as deeply complementary, shaping individuals who are both technically competent and deeply humane.`,
+        examinerTips: 'Structure: 1. Acknowledge the need for science (eradicating poverty). 2. Explain the danger of science alone (power without wisdom). 3. Explain the role of humanities (compassion). 4. Mention the indivisibility of Truth (refuting Blake).'
+      }
+    ]
+  },
+  {
+    unitId: 'sec-u4',
+    title: 'Unit 4: I am a Cat',
+    description: 'Questions on satire, narrative perspective, and Meiji-era Japan.',
+    questions: [
+      {
+        id: 'u4-a1',
+        section: 'A',
+        question: 'What is the significance of the film\'s title I am a Cat?',
+        marks: 2,
+        wordLimit: 'Max 3 sentences',
+        modelAnswer: 'The title "I am a Cat" highlights the unique narrative perspective of the film, where human society is observed through the detached, critical eyes of an unnamed feline. This outsider viewpoint allows for a humorous and objective satire of the pretensions, follies, and superficial Westernization of intellectuals in Meiji-era Japan.',
+        examinerTips: 'Mention the "outsider perspective" and how it acts as a tool for "satire" against human follies.'
+      },
+      {
+        id: 'u4-b1',
+        section: 'B',
+        question: 'How does the film satirize the intellectuals of Meiji-era Japan through its characters?',
+        marks: 6,
+        wordLimit: 'Max 100 words',
+        modelAnswer: 'The film uses the detached perspective of a cat to expose the absurdities and pretensions of Meiji-era intellectuals. Mr. Kushami, the master, embodies the frustrated, ineffective scholar—lazy, complaining, and full of lofty ideas but incapable of practical action. His friend Meitei represents the superficial embrace of Western culture, constantly bombarding others with fabricated or misquoted Western philosophy to appear superior. By contrasting these pretentious, self-satisfied human characters with the simple, objective observations of the cat, the film brilliantly mocks the gap between their high-minded ideals and mundane, chaotic reality.',
+        examinerTips: 'Use Kushami and Meitei as your primary examples. Highlight the contrast between their self-importance and their actual foolishness.'
+      }
+    ]
+  },
+  {
+    unitId: 'sec-u5-self-unseeing',
+    title: 'Unit 5: The Self-Unseeing',
+    description: 'Questions on Thomas Hardy, nostalgia, and memory.',
+    questions: [
+      {
+        id: 'u5-b1',
+        section: 'B',
+        question: 'Comment on the central theme of The Self-Unseeing?',
+        marks: 6,
+        wordLimit: 'Max 100 words',
+        modelAnswer: 'The central theme of Thomas Hardy’s "The Self-Unseeing" is the human tendency to overlook the profound beauty and happiness of the present moment, only to realize its value in retrospect. Through a reflective memory of his childhood home, the speaker contrasts the physical decay of the present—the "footworn and hollowed" floor—with the vibrant warmth of the past, where his mother smiled by the fire and his father joyfully played music. Despite the scene glowing with "blessings," the final line, "Yet we were looking away!", highlights the tragedy of being oblivious ("unseeing") to our own joy while it is occurring.',
+        examinerTips: 'Make sure to explain the meaning of the title "Self-Unseeing" in relation to the final line "Yet we were looking away!"'
+      }
+    ]
+  }
+];
+--- END OF FILE src/data/exam_data.ts ---
+
+--- START OF FILE src/data/exam_questions.ts ---
+export interface ExamQuestion {
+  id: string;
+  section: 'A' | 'B' | 'C';
+  marks: number;
+  chapter: string;
+  question: string;
+}
+
+export const EXAM_QUESTIONS: ExamQuestion[] = [
+  // Section A (2 Marks)
+  {
+    id: "q1",
+    section: "A",
+    marks: 2,
+    chapter: "Factories are Eyesores",
+    question: "Why does the poet call factories \"eyesores\"?"
+  },
+  {
+    id: "q2",
+    section: "A",
+    marks: 2,
+    chapter: "On the Rule of the Road",
+    question: "How, according to AG Gardiner can order be maintained in a society?"
+  },
+  {
+    id: "q3",
+    section: "A",
+    marks: 2,
+    chapter: "I am a Cat",
+    question: "What is the significance of the film's title I am a Cat?"
+  },
+  {
+    id: "q4",
+    section: "A",
+    marks: 2,
+    chapter: "Karma",
+    question: "How is Lady Lal portrayed in contrast to her husband?"
+  },
+  {
+    id: "q5",
+    section: "A",
+    marks: 2,
+    chapter: "The Boy Who Harnessed the Wind",
+    question: "Why was William Kamkwamba forced to leave school?"
+  },
+  {
+    id: "q6",
+    section: "A",
+    marks: 2,
+    chapter: "The Yellow Wallpaper",
+    question: "What role does John, the narrator's husband, play in her mental decline?"
+  },
+  {
+    id: "q7",
+    section: "A",
+    marks: 2,
+    chapter: "Don't Be Beautiful",
+    question: "How does the poem \"Don't Be Beautiful\" reflect on society's obsession with physical appearance?"
+  },
+  {
+    id: "q8",
+    section: "A",
+    marks: 2,
+    chapter: "The Poisoned Bread",
+    question: "What is the significance of the grandfather's death in the \"Poisoned Bread\"?"
+  },
+  {
+    id: "q9",
+    section: "A",
+    marks: 2,
+    chapter: "Strategy: The Empowerment...",
+    question: "What are some systemic barriers that prevent full participation of women and girls with disabilities?"
+  },
+  {
+    id: "q10",
+    section: "A",
+    marks: 2,
+    chapter: "UN Frameworks (Unit 1)",
+    question: "Expand UDHR and describe its significance."
+  },
+
+  // Section B (6 Marks)
+  {
+    id: "q11",
+    section: "B",
+    marks: 6,
+    chapter: "A Long Walk to Water",
+    question: "Describe the circumstances that force Salva to leave his village."
+  },
+  {
+    id: "q12",
+    section: "B",
+    marks: 6,
+    chapter: "Humanities v/s Science",
+    question: "Analyse the predicament of Science without a moral compass."
+  },
+  {
+    id: "q13",
+    section: "B",
+    marks: 6,
+    chapter: "The Poisoned Bread",
+    question: "What does the \"poisoned bread\" symbolize in the story?"
+  },
+  {
+    id: "q14",
+    section: "B",
+    marks: 6,
+    chapter: "The Self-Unseeing",
+    question: "Comment on the central theme of The Self-Unseeing?"
+  },
+  {
+    id: "q15",
+    section: "B",
+    marks: 6,
+    chapter: "In the Name of Science",
+    question: "How did Antony's experiments challenge the common scientific beliefs of his time?"
+  },
+
+  // Section C (10 Marks)
+  {
+    id: "q16",
+    section: "C",
+    marks: 10,
+    chapter: "Strategy: The Empowerment...",
+    question: "Examine how international normative frameworks and global agendas contribute to the inclusion and empowerment of women and girls with disabilities."
+  },
+  {
+    id: "q17",
+    section: "C",
+    marks: 10,
+    chapter: "Karma",
+    question: "Explore the theme of identity and cultural alienation in Karma. How do the characters embody conflicting ideas of self-worth and tradition?"
+  }
+];
+--- END OF FILE src/data/exam_questions.ts ---
+
 --- START OF FILE src/data/modules.ts ---
 import { Module } from '../types';
 import { MODULE_1_HUMAN_RIGHTS } from './english_modules/module_1_human_rights';
@@ -2901,18 +3430,20 @@ export const MODULES: Module[] = [
 
 --- START OF FILE src/data/english_modules/module_1_human_rights.ts ---
 import { Module } from '../../types';
-import { SEC_U1, SEC_U2, SEC_U4 } from './placeholders';
+import { SEC_U1_HUMAN_RIGHTS } from './sec_u1_human_rights_un';
+import { SEC_U2_RULE_OF_ROAD } from './sec_u2_rule_of_the_road';
 import { SEC_U3_HUMANITIES_SCIENCE } from './sec_u3_humanities_science';
+import { SEC_U4_I_AM_A_CAT } from './sec_u4_i_am_a_cat';
 
 export const MODULE_1_HUMAN_RIGHTS: Module = {
   id: 'module-1-human-rights',
   title: 'Module I: Human Rights',
   description: 'Exploring human dignity, equality, and holistic development.',
   sections: [
-    SEC_U1,
-    SEC_U2,
+    SEC_U1_HUMAN_RIGHTS,
+    SEC_U2_RULE_OF_ROAD,
     SEC_U3_HUMANITIES_SCIENCE,
-    SEC_U4
+    SEC_U4_I_AM_A_CAT
   ],
   moduleSummary: [
     {
@@ -2927,14 +3458,15 @@ export const MODULE_1_HUMAN_RIGHTS: Module = {
 
 --- START OF FILE src/data/english_modules/module_2_ethics.ts ---
 import { Module } from '../../types';
-import { SEC_U5, SEC_U6, SEC_U7, SEC_U8 } from './placeholders';
+import { SEC_U5_SELF_UNSEEING } from './sec_u5_self_unseeing';
+import { SEC_U6, SEC_U7, SEC_U8 } from './placeholders';
 
 export const MODULE_2_ETHICS: Module = {
   id: 'module-2-ethics',
   title: 'Module II: Professional Ethics and Scientific Temper',
   description: 'Navigating moral responsibility and scientific innovation.',
   sections: [
-    SEC_U5,
+    SEC_U5_SELF_UNSEEING,
     SEC_U6,
     SEC_U7,
     SEC_U8
@@ -3014,13 +3546,7 @@ const createPlaceholder = (id: string, title: string, desc: string): Section => 
   ]
 });
 
-// Module 1 Placeholders
-export const SEC_U1 = createPlaceholder("sec-u1", "Unit 1: Integrating Human Rights...", "UNSDG Document");
-export const SEC_U2 = createPlaceholder("sec-u2", "Unit 2: On The Rule of the Road", "by A.G. Gardiner");
-export const SEC_U4 = createPlaceholder("sec-u4", "Unit 4: I am a Cat", "Dir. Kon Ichikawa");
-
 // Module 2 Placeholders
-export const SEC_U5 = createPlaceholder("sec-u5", "Unit 5: The Self-Unseeing", "by Thomas Hardy");
 export const SEC_U6 = createPlaceholder("sec-u6", "Unit 6: Karma", "by Khushwant Singh");
 export const SEC_U7 = createPlaceholder("sec-u7", "Unit 7: In the Name of Science", "by Lori Alexander");
 export const SEC_U8 = createPlaceholder("sec-u8", "Unit 8: The Boy Who Harnessed the Wind", "Dir. Chiwetel Ejiofo");
@@ -3209,6 +3735,593 @@ export const PRACTICE_U3: PracticeQuestion[] = [
   }
 ];
 --- END OF FILE src/data/english_modules/practice_u3.ts ---
+
+--- START OF FILE src/data/english_modules/sec_u1_human_rights_un.ts ---
+import { Section } from '../../types';
+
+export const SEC_U1_HUMAN_RIGHTS: Section = {
+  id: "sec-u1-human-rights-un",
+  title: "Unit 1: UN Frameworks",
+  description: "Integrating Human Rights, Leave No One Behind, and Gender Equality into UN Cooperation Frameworks.",
+  color: "duo-blue",
+  units: [
+    {
+      id: "u1-part1-intro",
+      title: "1. Introduction & Overview",
+      description: "Module overview and introduction to the UN Sustainable Development Group.",
+      color: "duo-blue",
+      lessons: [
+        {
+          id: "les-1-1-intro",
+          title: "Module 1 Overview",
+          description: "Understanding the thematic scope of the module.",
+          icon: "Map",
+          slides: [
+            {
+              id: "u1-hook",
+              type: "interactive_canvas",
+              title: "What are Human Rights?",
+              content: "Before we dive into the text, consider this: **Can a society truly develop if even one group of people is left behind?**\n\nThe United Nations argues that *true* sustainability is impossible without universal human rights and gender equality.",
+              interactiveCanvasId: "human_rights_scale"
+            },
+            {
+              id: "u1-mod-overview",
+              type: "theory",
+              title: "Framing Perspectives",
+              content: `> "The first module commences with the unit titled Integrating Human Rights, Leave No One Behind, and Gender Equality into UN Cooperation Frameworks... It enhances the argument by supporting the need for inclusivity in all fields."\n\n**The Rest of Module 1:**\n* **Unit 2:** *On the Rule of the Road* (A.G. Gardiner) – Liberty vs. Anarchy.\n* **Unit 3:** *Humanities V/S Science* (Dr. Radhakrishnan) – Knowledge without wisdom is disastrous.\n* **Unit 4:** *I Am a Cat* (Kon Ichikawa) – Satirical critique of societal norms.`
+            },
+            {
+              id: "u1-genre",
+              type: "theory",
+              title: "What are we reading?",
+              content: `**Genre:** Policy Document / Expository Text\n\n**The Core Focus:** \nWe are looking at the foundational ideology of the UN's **2030 Agenda**. Unlike a story or poem, this text sets a *framework*—a set of rules and goals intended to guide 193 nations toward a resilient, equitable future.`
+            },
+            {
+              id: "u1-pre-mcq",
+              type: "quiz",
+              title: "Pre-reading Check",
+              content: "Which of the following best describes the goal of 'Sustainable Development'?",
+              options: [
+                { id: "A", text: "Maximizing industrial output at all costs.", isCorrect: false, explanation: "This would likely destroy the planet and increase inequality." },
+                { id: "B", text: "Economic, social, and technological progress in harmony with nature.", isCorrect: true, explanation: "Exactly. The UN insists that progress cannot come at the cost of the environment or human rights." },
+                { id: "C", text: "Providing free technology to all countries.", isCorrect: false, explanation: "While helpful, it is not the holistic definition of sustainable development." }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u1-part2-text",
+      title: "2. The Policy Text",
+      description: "Reading the UN's 2030 Agenda framework.",
+      color: "duo-green",
+      lessons: [
+        {
+          id: "les-1-1-tx1",
+          title: "The 2030 Agenda",
+          description: "Poverty, prosperity, and peace.",
+          icon: "FileText",
+          slides: [
+            {
+              id: "u1-tx1-1",
+              type: "theory",
+              title: "Vision for Sustainable Development",
+              content: `<div class="policy-doc">
+"The United Nations' Department of Economic and Social Affairs envisions sustainable development based on human rights. They have set the 2030 Agenda for this reason."
+</div>\n\nThe 2030 Agenda is described as a plan of action for **people, planet and prosperity** with an intention to strengthen universal peace and freedom.`
+            },
+            {
+              id: "u1-tx1-2",
+              type: "theory",
+              title: "Eradicating Poverty",
+              content: `<div class="policy-doc">
+"On a larger scale this also aims to eradicate poverty in all its forms and dimensions. In fact, the objective is to free the human race from the tyranny of poverty and to heal and secure our planet."
+</div>\n\nTo shift the world onto a sustainable and resilient path, the UN states there must be "bold and transformative steps" unlocking certain principles for the world to follow.`
+            },
+            {
+              id: "u1-tx1-3",
+              type: "fill_in_blank",
+              title: "Understanding the Framework",
+              content: "To facilitate mission 2030, the UN envisages ___ Sustainable Development Goals and 169 targets.",
+              blankAnswer: "17"
+            },
+            {
+              id: "u1-tx1-4",
+              type: "theory",
+              title: "Harmony & Global Solidarity",
+              content: `<div class="policy-doc">
+"UN aims to ensure prosperous and fulfilling lives for all human beings and also insists the need for economic, social and technological progress in harmony with nature."
+</div>\n\nA revitalised Global Partnership for Sustainable Development is needed. Improved international peace and strengthened global solidarity will cater to the needs of the poorest and most vulnerable.`
+            }
+          ]
+        },
+        {
+          id: "les-1-1-tx2",
+          title: "Guiding Principles",
+          description: "The six components of resilience and equity.",
+          icon: "Target",
+          slides: [
+            {
+              id: "u1-tx2-1",
+              type: "theory",
+              title: "Women Empowerment",
+              content: `<div class="policy-doc">
+"The United Nations presents its 2030 agenda with the objective of integrating human rights into sustainable development... The UN acknowledges that without women empowerment, no resilient society could exist."
+</div>`
+            },
+            {
+              id: "u1-tx2-2",
+              type: "theory",
+              title: "The UNSDG Video Context",
+              content: `The prescribed video produced by UNSDG highlights human rights that incorporate all people irrespective of **gender, nation, race, class, and other differences**.\n\n*Watch the video here: [UNSDG Video](https://www.youtube.com/watch?v=mHHy1gDn4x8)*`
+            },
+            {
+              id: "u1-tx2-3",
+              type: "quiz",
+              title: "The Core Assumption",
+              content: "According to the UN framework, what is a necessary condition for creating a 'resilient society'?",
+              options: [
+                { id: "A", text: "Complete elimination of borders.", isCorrect: false, explanation: "Not mentioned as a requirement in this framework." },
+                { id: "B", text: "Gender equality and women empowerment.", isCorrect: true, explanation: "The text explicitly states: 'without women empowerment, no resilient society could exist.'" },
+                { id: "C", text: "Strict adherence to scientific research.", isCorrect: false, explanation: "While important, the specific social condition mentioned is gender equality." }
+              ]
+            },
+            {
+              id: "u1-tx2-4",
+              type: "theory",
+              title: "The Six Major Components",
+              content: `The video and text enhance the idea of sustainable development by incorporating **six major components**:\n\n1. Human rights-based approach (HRBA)\n2. Leave no one behind\n3. Gender equality and women's empowerment\n4. Resilience\n5. Sustainability\n6. Accountability`
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u1-part3-vocab",
+      title: "3. Glossary & Terms",
+      description: "Master the key acronyms and concepts.",
+      color: "duo-violet",
+      lessons: [
+        {
+          id: "les-1-1-vocab",
+          title: "Official UN Glossary",
+          description: "Key terminology required for the exam.",
+          icon: "BookOpen",
+          slides: [
+            {
+              id: "v-un",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "UN",
+                translation: "United Nations",
+                context: "An international organization founded in 1945.",
+                example: "Currently made up of 193 Member States, the UN and its work are guided by the purposes and principles contained in its founding charter."
+              }
+            },
+            {
+              id: "v-hrba",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "HRBA",
+                translation: "Human Rights-Based Approach",
+                context: "A conceptual framework for human development.",
+                example: "It is normatively based on international human rights standards and operationally directed to promoting and protecting human rights."
+              }
+            },
+            {
+              id: "v-udhr",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "UDHR",
+                translation: "Universal Declaration of Human Rights",
+                context: "A milestone document in the history of human rights.",
+                example: "Drafted by representatives from all regions, it set out, for the first time, fundamental human rights to be universally protected."
+              }
+            },
+            {
+              id: "v-sdg",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "SDG",
+                translation: "Sustainable Development Goals",
+                context: "Also known as the Global Goals, adopted in 2015.",
+                example: "A universal call to action to end poverty, protect the planet, and ensure that by 2030 all people enjoy peace and prosperity."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u1-part4-exam",
+      title: "4. Exam Preparation",
+      description: "Tackle model questions directly from the question paper.",
+      color: "duo-orange",
+      lessons: [
+        {
+          id: "les-1-1-exam",
+          title: "Model Questions",
+          description: "Section A, B, and C practice.",
+          icon: "PenTool",
+          slides: [
+            {
+              id: "u1-q-secA",
+              type: "theory",
+              title: "Section A (2 Marks) - Q10 from Model Paper",
+              content: `**Question:** Expand UDHR and describe its significance.\n\n**Model Answer:**\nUDHR stands for the Universal Declaration of Human Rights. It is a milestone document drafted by global representatives, which, for the first time in history, established fundamental human rights that must be universally protected.`
+            },
+            {
+              id: "u1-q-secB",
+              type: "quiz",
+              title: "Section B (6 Marks) - Builder",
+              content: "Q: Explain the six major components of sustainable development as envisaged by the UN.\n\nWhich of the following is NOT one of the six components?",
+              options: [
+                { id: "A", text: "Human rights-based approach (HRBA)", isCorrect: false, explanation: "This is one of the components." },
+                { id: "B", text: "Leave no one behind", isCorrect: false, explanation: "This is one of the components." },
+                { id: "C", text: "Technological superiority", isCorrect: true, explanation: "Correct! The six are: HRBA, Leave no one behind, Gender equality, Resilience, Sustainability, and Accountability." },
+                { id: "D", text: "Accountability", isCorrect: false, explanation: "This is one of the components." }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/english_modules/sec_u1_human_rights_un.ts ---
+
+--- START OF FILE src/data/english_modules/sec_u2_rule_of_the_road.ts ---
+import { Section } from '../../types';
+
+export const SEC_U2_RULE_OF_ROAD: Section = {
+  id: "sec-u2-rule-of-road",
+  title: "Unit 2: On The Rule of the Road",
+  description: "A.G. Gardiner's essay on liberty, civic sense, and the social contract.",
+  color: "duo-orange",
+  units: [
+    {
+      id: "u2-part1-intro",
+      title: "1. Introduction & Context",
+      description: "Author background and the core paradox of liberty.",
+      color: "duo-orange",
+      lessons: [
+        {
+          id: "les-u2-intro",
+          title: "The Author & Theme",
+          description: "Understanding A.G. Gardiner's perspective.",
+          icon: "Map",
+          slides: [
+            {
+              id: "s-u2-hook",
+              type: "quiz",
+              title: "The Paradox of Freedom",
+              content: "If absolutely everyone had the complete freedom to drive on any side of the road at any speed they wanted, what would be the result?",
+              options: [
+                { id: "A", text: "Ultimate freedom and happiness.", isCorrect: false, explanation: "Without rules, people would crash constantly." },
+                { id: "B", text: "Universal chaos where nobody gets anywhere.", isCorrect: true, explanation: "Correct. Absolute individual liberty leads to social anarchy." }
+              ]
+            },
+            {
+              id: "s-u2-author",
+              type: "theory",
+              title: "A.G. Gardiner (Alpha of the Plough)",
+              content: `Alfred George Gardiner (1865-1946) was a British journalist, editor, and author. He famously wrote essays under the pen name "Alpha of the Plough".\n\nHe was a social reformer who campaigned for minimum wages, but is best remembered for his graceful, humorous essays that use everyday anecdotes to explore deep philosophical ideas.\n\n*His style is conversational, simple, and relies heavily on humour, irony, and satire.*`
+            },
+            {
+              id: "s-u2-genre",
+              type: "theory",
+              title: "What are we reading?",
+              content: `**Genre:** Personal Reflective Essay\n\n**The Core Argument:** \n"Liberty is not a personal affair only, but a social contract." Gardiner argues that to preserve the liberties of all, the liberties of everybody must be curtailed. We must balance our personal freedom with social responsibility.`
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u2-part2-text",
+      title: "2. The Essay Text",
+      description: "Guided reading of 'On the Rule of the Road'. Complete text included.",
+      color: "duo-green",
+      lessons: [
+        {
+          id: "les-u2-tx1",
+          title: "The Petrograd Lady & The Policeman",
+          description: "The dangers of getting 'liberty-drunk'.",
+          icon: "Search",
+          slides: [
+            {
+              id: "s-u2-tx1-1",
+              type: "theory",
+              title: "Liberty-Drunk",
+              content: `> "A stout old lady was walking with her basket down the middle of a street in Petrograd to the great confusion of the traffic and with no small peril to herself. It was pointed out to her that the pavement was the place for foot-passengers, but she replied: 'I’m going to walk where I like. We’ve got liberty now.'"\n\n> "It did not occur to the dear old lady that if liberty entitled the foot-passenger to walk down the middle of the road it also entitled the cab-driver to drive on the pavement, and that the end of such liberty would be universal chaos. Everybody would be getting in everybody else’s way and nobody would get anywhere. Individual liberty would have become social anarchy."`
+            },
+            {
+              id: "s-u2-tx1-2",
+              type: "quiz",
+              title: "Comprehension Check",
+              content: "What does the old lady's attitude in Petrograd represent according to Gardiner?",
+              options: [
+                { id: "A", text: "A brave stand against oppressive governments.", isCorrect: false, explanation: "Gardiner uses her as an example of misunderstanding liberty." },
+                { id: "B", text: "The danger of confusing individual liberty with social anarchy.", isCorrect: true, explanation: "She thinks liberty means doing whatever she wants, which would lead to chaos." }
+              ]
+            },
+            {
+              id: "s-u2-tx1-3",
+              type: "theory",
+              title: "The Symbol of Liberty",
+              content: `> "There is a danger of the world getting liberty-drunk in these days like the old lady with the basket, and it is just as well to remind ourselves of what the rule of the road means. It means that in order that the liberties of all may be preserved the liberties of everybody must be curtailed."\n\n> "When the policeman, say, at Piccadilly Circus steps into the middle of the road and puts up his hand, he is the symbol not of tyranny, but of liberty. You may not think so. You may, being in a hurry and seeing your motor-car pulled up by this insolence of office, feel that your liberty has been outraged."`
+            },
+            {
+              id: "s-u2-tx1-4",
+              type: "theory",
+              title: "The Maelstrom",
+              content: `> "How dare this fellow interfere with your free use of the public highway? Then, if you are a reasonable person, you will reflect that if he did not, incidentally, interfere with you he would interfere with no one, and the result would be that Piccadilly Circus would be a maelstrom that you would never cross at all. You have submitted to a curtailment of private liberty in order that you may enjoy a social order which makes your liberty a reality."`
+            },
+            {
+              id: "s-u2-tx1-5",
+              type: "fill_in_blank",
+              title: "Core Principle",
+              content: "In order that the liberties of all may be preserved, the liberties of everybody must be ___.",
+              blankAnswer: "curtailed"
+            }
+          ]
+        },
+        {
+          id: "les-u2-tx2",
+          title: "Personal Affairs & The Trombone",
+          description: "When does our freedom end?",
+          icon: "Music",
+          slides: [
+            {
+              id: "s-u2-tx2-1",
+              type: "theory",
+              title: "A Social Contract",
+              content: `> "Liberty is not a personal affair only, but a social contract. It is an accommodation of interests. In matters which do not touch anybody else’s liberty, of course, I may be as free as I like. If I choose to go down the Strand in a dressing-gown, with long hair and bare feet, who shall say me nay? You have liberty to laugh at me, but I have liberty to be indifferent to you."`
+            },
+            {
+              id: "s-u2-tx2-2",
+              type: "theory",
+              title: "The Kingdom of Self",
+              content: `> "And if I have a fancy for dyeing my hair, or waxing my moustache (which heaven forbid), or wearing a tall hat, a frock-coat and sandals, or going to bed late or getting up early, I shall follow my fancy and ask no man’s permission. I shall not inquire of you whether I may eat mustard with my mutton. I may like mustard with my mutton. And you will not ask me whether you may be a Protestant or a Catholic, whether you may marry the dark lady or the fair lady, whether you may prefer Ella Wheeler Wilcox to Wordsworth, or champagne to shandygaff."`
+            },
+            {
+              id: "s-u2-tx2-3",
+              type: "theory",
+              title: "Stepping Out of the Kingdom",
+              content: `> "In all these and a thousand other details you and I please ourselves and ask no one’s leave. We have a whole kingdom, in which we rule alone, can do what we choose, be wise or ridiculous, harsh or easy, conventional or odd. But directly we step out of that kingdom our personal liberty of action becomes qualified by other people’s liberty."`
+            },
+            {
+              id: "s-u2-tx2-4",
+              type: "theory",
+              title: "The Trombone",
+              content: `> "I might like to practice on the trombone from midnight till three in the morning. If I went on to the top of Helvellyn to do it I could please myself, but if I do it in my bedroom my family will object, and if I do it out in the streets the neighbours will remind me that my liberty to blow the trombone must not interfere with their liberty to sleep in quiet. There are a lot of people in the world, and I have to accommodate my liberty to their liberties."`
+            },
+            {
+              id: "s-u2-tx2-5",
+              type: "quiz",
+              title: "Analyze the Metaphor",
+              content: "Why does Gardiner use the example of playing the trombone at midnight?",
+              options: [
+                { id: "A", text: "To show that musicians are generally inconsiderate people.", isCorrect: false, explanation: "He is using himself as a hypothetical example." },
+                { id: "B", text: "To illustrate the exact boundary where a personal liberty infringes upon a social liberty.", isCorrect: true, explanation: "The noise crosses from his 'kingdom' into his neighbors' ears, destroying their liberty to sleep." }
+              ]
+            }
+          ]
+        },
+        {
+          id: "les-u2-tx3",
+          title: "The Train Compartment",
+          description: "Lacking the social sense.",
+          icon: "Train",
+          slides: [
+            {
+              id: "s-u2-tx3-1",
+              type: "theory",
+              title: "Forgetting the Contract",
+              content: `> "We are all liable to forget this, and unfortunately we are much more conscious of the imperfections of others in this respect than of our own."\n\n> "I got into a railway carriage at a country station the other morning and settled down for what the schoolboys would call an hour’s 'swot' at a Blue-book. I was not reading it for pleasure. The truth is that I never do read Blue-books for pleasure. I read them as a barrister reads a brief, for the very humble purpose of turning an honest penny out of them."`
+            },
+            {
+              id: "s-u2-tx3-2",
+              type: "theory",
+              title: "The Pompous Voice",
+              content: `> "Now, if you are reading a book for pleasure it doesn’t matter what is going on around you. I think I could enjoy 'Tristram Shandy' or 'Treasure Island' in the midst of an earthquake. But when you are reading a thing as a task you need reasonable quiet, and that is what I didn’t get, for at the next station in came a couple of men, one of whom talked to his friend for the rest of the journey in a loud and pompous voice."`
+            },
+            {
+              id: "s-u2-tx3-3",
+              type: "theory",
+              title: "Someone in Particular",
+              content: `> "He was one of those people who remind one of that story of Horne Tooke who, meeting a person of immense swagger in the street, stopped him and said, 'Excuse me, sir, but are you someone in particular?' This gentleman was someone in particular. As I wrestled with clauses and sections, his voice rose like a gale, and his family history, the deeds of his sons in the war, and his criticisms of the generals and the politicians submerged my poor attempts to hang on to my job."`
+            },
+            {
+              id: "s-u2-tx3-4",
+              type: "theory",
+              title: "The Banal Song",
+              content: `> "I shut up the Blue-book, looked out of the window, and listened wearily while the voice thundered on with themes like these: 'Now what French ought to have done...' 'The mistake the Germans made...' 'If only Asquith had...' You know the sort of stuff. I had heard it all before, oh, so often. It was like a barrel-organ groaning out some banal song of long ago."`
+            },
+            {
+              id: "s-u2-tx3-5",
+              type: "theory",
+              title: "Lacking Social Sense",
+              content: `> "If I had asked him to be good enough to talk in a lower tone I daresay he would have thought I was a very rude fellow. It did not occur to him that anybody could have anything better to do than to listen to him, and I have no doubt he left the carriage convinced that everybody in it had, thanks to him, had a very illuminating journey, and would carry away a pleasing impression of his encyclopaedic range. He was obviously a well-intentioned person. The thing that was wrong with him was that he had not the social sense. He was not 'a clubbable man.'" `
+            }
+          ]
+        },
+        {
+          id: "les-u2-tx4",
+          title: "Bullies & Gramophones",
+          description: "Protecting the rights of the quiet.",
+          icon: "Car",
+          slides: [
+            {
+              id: "s-u2-tx4-1",
+              type: "theory",
+              title: "The Ticket Office",
+              content: `> "A reasonable consideration for the rights or feelings of others is the foundation of social conduct. It is commonly alleged against women that in this respect they are less civilised than men, and I am bound to confess that in my experience it is the woman – the well-dressed woman – who thrusts herself in front of you at the ticket office. The man would not attempt it, partly because he knows the thing would not be tolerated from him, but also because he has been better drilled in the small give-and-take of social relationships..."`
+            },
+            {
+              id: "s-u2-tx4-2",
+              type: "theory",
+              title: "The Spirit of Prussia",
+              content: `> "I believe that the rights of small people and quiet people are as important to preserve as the rights of small nationalities. When I hear the aggressive, bullying horn which some motorists deliberately use, I confess that I feel something boiling up in me which is very like what I felt when Germany came trampling like a bully over Belgium. By what right, my dear sir, do you go along our highways uttering that hideous curse on all who impede your path? Cannot you announce your coming like a gentleman?"`
+            },
+            {
+              id: "s-u2-tx4-3",
+              type: "theory",
+              title: "The Blatant Gramophone",
+              content: `> "And there is the more harmless person who has bought a very blatant gramophone, and on Sunday afternoon sets the thing going, opens the windows and fills the street with 'Keep the Home Fires Burning' or some similar banality. What are the right limits of social behaviour in a matter of this sort? Let us take the trombone as an illustration again."`
+            },
+            {
+              id: "s-u2-tx4-4",
+              type: "theory",
+              title: "Hazlitt's Trombone",
+              content: `> "Hazlitt said that a man who wanted to learn that fearsome instrument was entitled to learn it in his own house, even though he was a nuisance to his neighbours, but it was his business to make the nuisance as slight as possible. He must practise in the attic, and shut the window. He had no right to sit in his front room, open the window, and blow his noise into his neighbours’ ears with the maximum of violence."`
+            },
+            {
+              id: "s-u2-tx4-5",
+              type: "theory",
+              title: "Trespassing on Peace",
+              content: `> "And so with the gramophone. If you like the gramophone you are entitled to have it, but you are interfering with the liberties of your neighbours if you don’t do what you can to limit the noise to your own household. Your neighbours may not like 'Keep the Home Fires Burning.' They may prefer to have their Sunday afternoon undisturbed, and it is as great an impertinence for you to wilfully trespass on their peace as it would be to go, unasked, into their gardens and trample on their flower beds."`
+            }
+          ]
+        },
+        {
+          id: "les-u2-tx5",
+          title: "Compromise & Conclusion",
+          description: "The clash of liberties and the sum of life.",
+          icon: "CheckCircle",
+          slides: [
+            {
+              id: "s-u2-tx5-1",
+              type: "theory",
+              title: "The Clash of Liberties",
+              content: `> "There are cases, of course, where the clash of liberties seems to defy compromise. My dear old friend X, who lives in a West End square and who is an amazing mixture of good nature and irascibility, flies into a passion when he hears a street piano, and rushes out to order it away. But nearby lives a distinguished lady of romantic picturesque tastes, who dotes on street pianos, and attracts them as wasps are attracted to a jar of jam. Whose liberty in this case should surrender to the other? For the life of me I cannot say."`
+            },
+            {
+              id: "s-u2-tx5-2",
+              type: "theory",
+              title: "A Judicious Mixture",
+              content: `> "I suppose the fact is that we can be neither complete anarchists nor complete Socialists in this complex world – or rather we must be a judicious mixture of both. We have both liberties to preserve – our individual liberty and our social liberty. We must watch the bureaucrat on the one side and warn off the anarchist on the other. I am neither a Marxist, nor a Tolstoyan, but a compromise."`
+            },
+            {
+              id: "s-u2-tx5-3",
+              type: "theory",
+              title: "The Child's Education",
+              content: `> "I shall not permit any authority to say that my child must go to this school or that... These things are personal. But if I proceed to say that my child shall have no education at all, that he shall be brought up as a primeval savage, or at Mr. Fagin’s academy for pickpockets, then Society will politely but firmly tell me that it has no use for primeval savages and a very stern objection to pickpockets, and that my child must have a certain minimum of education whether I like it or not. I cannot have the liberty to be a nuisance to my neighbours or make my child a burden..."`
+            },
+            {
+              id: "s-u2-tx5-4",
+              type: "theory",
+              title: "The Small Matters",
+              content: `> "It is in the small matters of conduct, in the observance of the rule of the road, that we pass judgment upon ourselves, and declare that we are civilised or uncivilised. The great moments of heroism and sacrifice are rare. It is the little habits of commonplace intercourse that make up the great sum of life and sweeten or make bitter the journey."`
+            },
+            {
+              id: "s-u2-tx5-5",
+              type: "theory",
+              title: "The Final Thought",
+              content: `> "I hope my friend in the railway carriage will reflect on this. Then he will not cease, I am sure, to explain to his neighbour where French went wrong and where the Germans went ditto; but he will do it in a way that will permit me to read my Blue-book undisturbed."`
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u2-part3-mastery",
+      title: "3. Vocabulary & Reflection",
+      description: "Master the terminology and reflect on the themes.",
+      color: "duo-violet",
+      lessons: [
+        {
+          id: "les-u2-vocab",
+          title: "Vocabulary",
+          description: "Key terms from the essay.",
+          icon: "Type",
+          slides: [
+            {
+              id: "v-u2-1",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Anarchy",
+                translation: "A state of disorder due to absence of authority.",
+                context: "> \"Individual liberty would have become social anarchy.\"",
+                example: "Without the rule of the road, traffic becomes total anarchy."
+              }
+            },
+            {
+              id: "v-u2-2",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Maelstrom",
+                translation: "A powerful whirlpool in the sea or a river; a situation of state of confused movement or violent turmoil.",
+                context: "> \"...the result would be that Piccadilly Circus would be a maelstrom that you would never cross at all.\"",
+                example: "The sudden storm turned the peaceful crowd into a maelstrom of panic."
+              }
+            },
+            {
+              id: "v-u2-3",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Banal",
+                translation: "So lacking in originality as to be obvious and boring.",
+                context: "> \"It was like a barrel-organ groaning out some banal song of long ago.\"",
+                example: "His comments about the weather were completely banal."
+              }
+            },
+            {
+              id: "v-u2-4",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Swot",
+                translation: "Hard work, or a person who studies intensely (British slang).",
+                context: "> \"...settled down for what the schoolboys would call an hour’s 'swot' at a Blue-book.\"",
+                example: "I had to swot all night for my final exams."
+              }
+            }
+          ]
+        },
+        {
+          id: "les-u2-reflect",
+          title: "Exam Alignment & Reflection",
+          description: "Connect the text to your exams and the real world.",
+          icon: "PenTool",
+          slides: [
+            {
+              id: "s-u2-r1",
+              type: "quiz",
+              title: "Real World Connection",
+              content: "Which modern-day action is closest to Gardiner's 'man with the blatant gramophone'?",
+              options: [
+                { id: "A", text: "Wearing eccentric clothing to a grocery store.", isCorrect: false, explanation: "This is a personal liberty that doesn't infringe on others' senses." },
+                { id: "B", text: "Watching TikTok videos loudly on speakerphone on the metro.", isCorrect: true, explanation: "This directly infringes on the peace and liberty of others sharing the space." }
+              ]
+            },
+            {
+              id: "s-u2-r2",
+              type: "theory",
+              title: "Exam Focus: Section A",
+              content: `**Examiner Tip:**\nGardiner defines the "Rule of the Road" not just as traffic laws, but as the implicit social contract where we limit our own freedom to preserve everyone's freedom. \n\nIf asked about the **policeman at Piccadilly Circus**, remember he is the symbol of *liberty*, not tyranny, because his interference prevents a "maelstrom" of chaos.`
+            },
+            {
+              id: "s-u2-r3",
+              type: "theory",
+              title: "Exam Focus: Section B & C",
+              content: `**Key Anecdotes to Memorize:**\n1. **The Petrograd Lady:** Represents being "liberty-drunk" and leading to anarchy.\n2. **The Trombone/Gramophone:** Represents the line between personal liberty and social infringement.\n3. **The Railway Carriage Man:** Represents a lack of "social sense" and the importance of civic courtesy.\n\n*Use these examples when answering questions about the distinction between personal and social liberty.*`
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/english_modules/sec_u2_rule_of_the_road.ts ---
 
 --- START OF FILE src/data/english_modules/sec_u3_humanities_science.ts ---
 import { Section } from '../../types';
@@ -3609,6 +4722,445 @@ export const SEC_U3_HUMANITIES_SCIENCE: Section = {
 };
 --- END OF FILE src/data/english_modules/sec_u3_humanities_science.ts ---
 
+--- START OF FILE src/data/english_modules/sec_u4_i_am_a_cat.ts ---
+import { Section } from '../../types';
+
+export const SEC_U4_I_AM_A_CAT: Section = {
+  id: "sec-u4-i-am-a-cat",
+  title: "Unit 4: I am a Cat",
+  description: "Kon Ichikawa's satirical film adaptation of Natsume Soseki's novel.",
+  color: "duo-pink",
+  units: [
+    {
+      id: "u4-part1-intro",
+      title: "1. Introduction to the Film",
+      description: "Director, Author, and the satirical lens of a feline.",
+      color: "duo-pink",
+      lessons: [
+        {
+          id: "les-u4-intro",
+          title: "The Creators & The Cat",
+          description: "Understanding Ichikawa, Soseki, and Meiji Japan.",
+          icon: "Film",
+          slides: [
+            {
+              id: "s-u4-hook",
+              type: "quiz",
+              title: "A Different Perspective",
+              content: "If your pet could talk, what would it probably think about your daily stresses and arguments?",
+              options: [
+                { id: "A", text: "It would understand and deeply sympathize with my complex problems.", isCorrect: false, explanation: "Unlikely! Animals don't share our abstract anxieties." },
+                { id: "B", text: "It would probably find human behavior ridiculous and unnecessarily complicated.", isCorrect: true, explanation: "Correct! This is exactly the premise of 'I am a Cat'. The feline narrator exposes the absurdity of human pretensions." }
+              ]
+            },
+            {
+              id: "s-u4-author",
+              type: "theory",
+              title: "The Author: Natsume Soseki",
+              content: `**Natsume Soseki (1867–1916)** is one of Japan's greatest novelists.\n\nBorn in Edo (Tokyo) into a wealthy family, his early life was marred by feeling like an unwanted child. He later became a scholar of British literature.\n\nHis novel *I Am a Cat* (1905) uses a satirical lens to critique the political and social backdrop of **Meiji-era Japan**—a period of rapid, sometimes superficial, Westernization.`
+            },
+            {
+              id: "s-u4-director",
+              type: "theory",
+              title: "The Director: Kon Ichikawa",
+              content: `**Kon Ichikawa (1915–2008)** was a highly versatile Japanese filmmaker, once dubbed the "Japanese Frank Capra."\n\nNoted for a wry humor that often resembles black comedy, Ichikawa was an important modernist who bridged the gap between classic 1950s cinema and the experimental 1960s.\n\nIn 1975, he directed the cinematic adaptation of *I Am a Cat*, bringing Soseki's literary humor to life with his painter-like visual style.`
+            },
+            {
+              id: "s-u4-context",
+              type: "theory",
+              title: "The Setting: Meiji Japan",
+              content: `The story takes place around 1905, during the **Meiji Restoration**. \n\nJapan was transforming from an isolated feudal society into a modern imperialist power. The intellectuals of the time were caught between traditional Japanese culture and the influx of Western philosophy, often leading to pretension and identity crises—which the film brilliantly satirizes.`
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u4-part2-plot",
+      title: "2. The Story & Satire",
+      description: "Observing human follies through a cat's eyes.",
+      color: "duo-orange",
+      lessons: [
+        {
+          id: "les-u4-plot1",
+          title: "The Master & His Visitors",
+          description: "Kushami and the chaotic household.",
+          icon: "Users",
+          slides: [
+            {
+              id: "s-u4-plot-1",
+              type: "theory",
+              title: "The Unnamed Narrator",
+              content: `> "I am a cat. As yet I have no name. I’ve no idea where I was born..."\n\nThe film is narrated by a stray cat who adopts the household of **Mr. Kushami**, a middle-school English teacher. The cat observes human life with detached amusement, noting that humans are often "puffed up by their extreme self-satisfaction."`
+            },
+            {
+              id: "s-u4-plot-2",
+              type: "theory",
+              title: "Mr. Kushami (The Master)",
+              content: `Kushami is a lazybones and a ditherer. He constantly complains about his job, suffers from a bad stomach, and wastes huge amounts of time letting himself be distracted by his uselessly chattering friends.\n\nHe embodies the frustrated, ineffective intellectual of the era—full of lofty ideas but incapable of practical action.`
+            },
+            {
+              id: "s-u4-plot-3",
+              type: "theory",
+              title: "The Pretentious Friend: Meitei",
+              content: `Kushami's house is constantly invaded by visitors. The most prominent is **Meitei**, an intensely annoying friend who bombards everyone with fabricated or half-remembered Western quotations (like William James or Marcus Aurelius).\n\nMeitei represents the superficial Westernization of the Japanese elite—pretending to be educated to appear superior.`
+            },
+            {
+              id: "s-u4-quiz-1",
+              type: "quiz",
+              title: "Comprehension Check",
+              content: "What is the primary function of the character Meitei in the story?",
+              options: [
+                { id: "A", text: "To act as a wise mentor who guides Kushami to success.", isCorrect: false, explanation: "Meitei is annoying and unhelpful, not a wise mentor." },
+                { id: "B", text: "To satirize the superficial intellectualism and fake Westernization of the era.", isCorrect: true, explanation: "Meitei's fake erudition perfectly mocks the intellectuals of Meiji Japan." }
+              ]
+            }
+          ]
+        },
+        {
+          id: "les-u4-plot2",
+          title: "Subplots & Ending",
+          description: "Romance, burglary, and a philosophical demise.",
+          icon: "BookOpen",
+          slides: [
+            {
+              id: "s-u4-plot-4",
+              type: "theory",
+              title: "Kangetsu & The Kaneda Family",
+              content: `Another regular visitor is **Kangetsu**, a physics student and violinist who dithers over whether to pursue his doctorate or marry the daughter of the wealthy businessman **Kaneda**.\n\nThe Kaneda family represents the rising, arrogant capitalist class, contrasting sharply with Kushami's poor, intellectual household.`
+            },
+            {
+              id: "s-u4-plot-5",
+              type: "theory",
+              title: "Domestic Absurdities",
+              content: `The cat observes everyday chaos:\n* Kushami's three daughters struggling to eat rice.\n* A burglary where the police bring the thief for a personal apology, only to return some yams.\n* Baseballs constantly hit into the yard from a noisy, militaristic school next door.`
+            },
+            {
+              id: "s-u4-plot-6",
+              type: "theory",
+              title: "The Cat's Tragicomic End",
+              content: `The cat has its own subplots, including a rivalry with a tough neighborhood cat ("Blacky") and a tragic romance.\n\nIn the end, during a celebration, the cat tastes beer, becomes intoxicated, falls into a water barrel, and drowns. As it sinks, it achieves a sense of Buddhist peace—delivering a poignant, philosophical end to the comedy.`
+            },
+            {
+              id: "s-u4-quiz-2",
+              type: "quiz",
+              title: "Theme Connection",
+              content: "How does the film's narrative style support its themes?",
+              options: [
+                { id: "A", text: "By using an animal's perspective, it strips away human ego and exposes societal follies objectively.", isCorrect: true, explanation: "The cat acts as a detached, honest mirror to human ridiculousness." },
+                { id: "B", text: "By focusing on a cat, it becomes a simple children's story without deeper meaning.", isCorrect: false, explanation: "It is a highly sophisticated satire of society and class." }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u4-part3-mastery",
+      title: "3. Vocabulary & Exam Prep",
+      description: "Master key terms and the significance of the title.",
+      color: "duo-violet",
+      lessons: [
+        {
+          id: "les-u4-vocab",
+          title: "Glossary",
+          description: "Key words from the text.",
+          icon: "Type",
+          slides: [
+            {
+              id: "v-follies",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Follies",
+                translation: "Lack of understanding or sense; foolishness.",
+                context: "The cat wryly comments on human follies.",
+                example: "The play is a comedy about the follies of the upper class."
+              }
+            },
+            {
+              id: "v-mordant",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Mordant",
+                translation: "(Especially of humor) having or showing a sharp or critical quality; biting.",
+                context: "The movie is a real indulgence integrating mordant wit and humour.",
+                example: "His mordant sense of humor often offended sensitive listeners."
+              }
+            },
+            {
+              id: "v-ditherer",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Ditherer",
+                translation: "Someone who finds it difficult to make decisions.",
+                context: "Kushami is a lazybones and ditherer.",
+                example: "Stop being a ditherer and just pick a restaurant!"
+              }
+            },
+            {
+              id: "v-satire",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Satire",
+                translation: "The use of humor, irony, exaggeration, or ridicule to expose and criticize people's stupidity or vices.",
+                context: "His 1905 novel was a satirical look at Japanese society...",
+                example: "The movie is a brilliant satire of modern politics."
+              }
+            }
+          ]
+        },
+        {
+          id: "les-u4-exam",
+          title: "Model Questions",
+          description: "Practice answering in the format of the exam.",
+          icon: "Edit3",
+          slides: [
+            {
+              id: "s-u4-qa1",
+              type: "theory",
+              title: "Section A (2 Marks) - Title Significance",
+              content: `**Q: What is the significance of the film's title 'I am a Cat'?**\n\n**Model Answer:**\nThe title highlights the unique narrative perspective of the film, where human society is observed through the detached, critical eyes of an unnamed feline. This outsider viewpoint allows for a humorous and objective satire of the pretensions, follies, and superficial Westernization of intellectuals in Meiji-era Japan.`
+            },
+            {
+              id: "s-u4-qb1",
+              type: "quiz",
+              title: "Section B (6 Marks) - Character Analysis",
+              content: "Q: How does the film satirize the intellectuals of Meiji-era Japan through its characters?\n\nWhich point is essential to include in a 100-word response?",
+              options: [
+                { id: "A", text: "Kushami's great success as a painter and writer.", isCorrect: false, explanation: "Kushami is actually a failure who never gets anything done." },
+                { id: "B", text: "Meitei's habit of bombarding people with fabricated Western quotations.", isCorrect: true, explanation: "Meitei embodies the superficial, pretentious embrace of Western culture without true understanding." }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/english_modules/sec_u4_i_am_a_cat.ts ---
+
+--- START OF FILE src/data/english_modules/sec_u5_self_unseeing.ts ---
+import { Section } from '../../types';
+
+export const SEC_U5_SELF_UNSEEING: Section = {
+  id: "sec-u5-self-unseeing",
+  title: "Unit 5: The Self-Unseeing",
+  description: "Thomas Hardy's touching poem on memory, loss, and living in the present.",
+  color: "duo-blue",
+  units: [
+    {
+      id: "u5-part1-intro",
+      title: "1. Introduction & Context",
+      description: "Thomas Hardy and the Victorian transition.",
+      color: "duo-blue",
+      lessons: [
+        {
+          id: "les-u5-intro",
+          title: "The Author & Theme",
+          description: "Understanding Thomas Hardy's perspective.",
+          icon: "User",
+          slides: [
+            {
+              id: "s-u5-hook",
+              type: "quiz",
+              title: "The Present Moment",
+              content: "Have you ever looked back at an ordinary childhood memory and realized it was actually a moment of perfect happiness?",
+              options: [
+                { id: "A", text: "Yes, we often don't realize we are happy until the moment has passed.", isCorrect: true, explanation: "This exact realization—that we are 'oblivious' to our own happiness in the present—is the core theme of Hardy's poem." },
+                { id: "B", text: "No, I am always fully aware of my happiness in the moment.", isCorrect: false, explanation: "While a great skill, Hardy's poem suggests that humans naturally tend to 'look away' from the magic of the present." }
+              ]
+            },
+            {
+              id: "s-u5-author",
+              type: "theory",
+              title: "The Author: Thomas Hardy",
+              content: `**Thomas Hardy (1840–1928)** was a renowned English novelist and poet. He is best known for his vivid portrayal of rural life and tragic characters struggling against social and natural forces.\n\nHardy's work bridges the transition from Victorian realism to modernist themes. His novels are set in the fictional region of **Wessex**, a reimagined southwest England, and explore themes like class conflict, fate, sexuality, and the constraints of social norms.`
+            },
+            {
+              id: "s-u5-transition",
+              type: "theory",
+              title: "From Novels to Poetry",
+              content: `Hardy’s bleak yet beautiful depiction of human suffering challenged Victorian ideals and led to critical controversy—especially with *Jude the Obscure* (1895). After this, he stopped writing novels and turned exclusively to poetry.\n\nAs a poet, Hardy produced over 900 poems. His contributions to both fiction and poetry established him as a major literary figure whose work continues to influence writers and critics today.`
+            },
+            {
+              id: "s-u5-genre",
+              type: "theory",
+              title: "What are we reading?",
+              content: `**Genre:** Reflective Poetry\n**Form:** 3 stanzas, ABAB rhyme scheme.\n\n"The Self-Unseeing" is a touching poem that contemplates memory, loss, and the gentle beauty of bygone days. In just a handful of stanzas, Hardy reflects on a memory from his childhood residence, illustrating how individuals frequently overlook the importance of experiences while they are occurring.`
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u5-part2-text",
+      title: "2. The Poem",
+      description: "Reading and analyzing 'The Self-Unseeing'.",
+      color: "duo-violet",
+      lessons: [
+        {
+          id: "les-u5-tx1",
+          title: "Stanza 1: The Setting",
+          description: "Returning to the ancient floor.",
+          icon: "Home",
+          slides: [
+            {
+              id: "s-u5-tx1-1",
+              type: "theory",
+              title: "Stanza 1",
+              content: `> Here is the ancient floor,\n> Footworn and hollowed and thin,\n> Here was the former door\n> Where the dead feet walked in.`
+            },
+            {
+              id: "s-u5-tx1-2",
+              type: "quiz",
+              title: "Analyze the Imagery",
+              content: "What does the description of the floor ('Footworn and hollowed and thin') suggest?",
+              options: [
+                { id: "A", text: "The house was built with cheap materials.", isCorrect: false, explanation: "The focus is on the passage of time, not the quality of construction." },
+                { id: "B", text: "Generations of living, movement, and the passage of time.", isCorrect: true, explanation: "Correct! The physical wear on the floor represents the history and the lives of those who once lived there." }
+              ]
+            },
+            {
+              id: "s-u5-tx1-3",
+              type: "theory",
+              title: "Ghosts of the Past",
+              content: `The phrase **"Where the dead feet walked in"** introduces a somber, nostalgic tone immediately. The speaker is physically present in the room ("Here is"), but his mind is entirely occupied by those who are gone ("the dead").`
+            }
+          ]
+        },
+        {
+          id: "les-u5-tx2",
+          title: "Stanza 2: The Memory",
+          description: "A vision of the past.",
+          icon: "Users",
+          slides: [
+            {
+              id: "s-u5-tx2-1",
+              type: "theory",
+              title: "Stanza 2",
+              content: `> She sat here in her chair,\n> Smiling into the fire;\n> He who played stood there,\n> Bowing it higher and higher.`
+            },
+            {
+              id: "s-u5-tx2-2",
+              type: "quiz",
+              title: "Comprehension Check",
+              content: "Who are 'She' and 'He' most likely referring to?",
+              options: [
+                { id: "A", text: "Strangers the speaker is imagining.", isCorrect: false, explanation: "The poem is highly personal." },
+                { id: "B", text: "The speaker's parents or family members from his childhood.", isCorrect: true, explanation: "Yes, 'she' is likely his mother by the fire, and 'he' his father playing the fiddle." }
+              ]
+            },
+            {
+              id: "s-u5-tx2-3",
+              type: "theory",
+              title: "A Scene of Warmth",
+              content: `The imagery shifts from the cold, worn floor of the present to the warmth of the past. The mother is **"Smiling into the fire"**, a symbol of comfort and contentment, while the father is energetically playing an instrument (**"Bowing it higher and higher"**).`
+            }
+          ]
+        },
+        {
+          id: "les-u5-tx3",
+          title: "Stanza 3: The Realization",
+          description: "The core theme of the poem.",
+          icon: "EyeOff",
+          slides: [
+            {
+              id: "s-u5-tx3-1",
+              type: "theory",
+              title: "Stanza 3",
+              content: `> Childlike, I danced in a dream;\n> Blessings emblazoned that day;\n> Everything glowed with a gleam;\n> Yet we were looking away!`
+            },
+            {
+              id: "s-u5-tx3-2",
+              type: "quiz",
+              title: "The Irony of the Moment",
+              content: "What does the final line 'Yet we were looking away!' mean in the context of the poem?",
+              options: [
+                { id: "A", text: "They were literally looking out the window.", isCorrect: false, explanation: "It is a metaphorical 'looking away'." },
+                { id: "B", text: "They were oblivious to how perfectly happy they were at that exact moment.", isCorrect: true, explanation: "This is the 'Self-Unseeing'—being blind to the beauty of the present while it is happening." }
+              ]
+            },
+            {
+              id: "s-u5-tx3-3",
+              type: "theory",
+              title: "The Title's Meaning",
+              content: `**"The Self-Unseeing"** refers to this tragic human flaw: we often fail to recognize the "blessings" and the "gleam" of the present. The speaker, "Childlike," was dancing "in a dream," unaware that this ordinary evening was actually a peak moment of joy that he would long for years later.`
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: "u5-part3-vocab",
+      title: "3. Vocabulary & Exam Prep",
+      description: "Master key terms and tackle university questions.",
+      color: "duo-orange",
+      lessons: [
+        {
+          id: "les-u5-vocab",
+          title: "Glossary",
+          description: "Key vocabulary from the text.",
+          icon: "Type",
+          slides: [
+            {
+              id: "v-u5-1",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Emblazoned",
+                translation: "Conspicuously inscribed or displayed a design on; brightly illuminated.",
+                context: "> \"Blessings emblazoned that day;\"",
+                example: "The setting sun emblazoned the sky with brilliant colors."
+              }
+            },
+            {
+              id: "v-u5-2",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Gleam",
+                translation: "Shine brightly, especially with reflected light.",
+                context: "> \"Everything glowed with a gleam;\"",
+                example: "There was a hopeful gleam in her eye."
+              }
+            },
+            {
+              id: "v-u5-3",
+              type: "word_card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Footworn",
+                translation: "Worn out by footsteps over a long period of time.",
+                context: "> \"Footworn and hollowed and thin,\"",
+                example: "The footworn stone steps of the ancient temple told a story of countless pilgrims."
+              }
+            }
+          ]
+        },
+        {
+          id: "les-u5-exam",
+          title: "Exam Questions",
+          description: "Practice answering in the format of the exam.",
+          icon: "Edit3",
+          slides: [
+            {
+              id: "s-u5-qa1",
+              type: "theory",
+              title: "Section B (6 Marks) - Model Question",
+              content: `**Q: Comment on the central theme of The Self-Unseeing.**\n\n**Model Answer Outline:**\n1. **Core Theme:** The tragic human tendency to overlook the value of the present moment, realizing happiness only in retrospect.\n2. **The Contrast:** The poem contrasts the physical decay of the present ("footworn and hollowed" floor) with the warmth and vitality of the past memory (smiling mother, playing father).\n3. **The Conclusion:** The final line, "Yet we were looking away!", encapsulates the title. The "Self-Unseeing" means being blind to one's own blessings while they are happening, leading to profound nostalgia and a sense of loss later in life.`
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+--- END OF FILE src/data/english_modules/sec_u5_self_unseeing.ts ---
+
 --- START OF FILE src/hooks/useAnalytics.ts ---
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -3788,17 +5340,70 @@ export default Dashboard;
 --- END OF FILE src/pages/Dashboard.tsx ---
 
 --- START OF FILE src/pages/ExamQuestionsPage.tsx ---
-import React from 'react';
-import { BookOpenCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpenCheck, ChevronRight } from 'lucide-react';
+import { EXAM_MODULES, UnitExam } from '../data/exam_data';
+import ExamQuestionCard from '../components/ExamQuestionCard';
 
 const ExamQuestionsPage: React.FC = () => {
+  const [activeUnitId, setActiveUnitId] = useState<string>(EXAM_MODULES[0].unitId);
+
+  const activeUnit = EXAM_MODULES.find(u => u.unitId === activeUnitId) || EXAM_MODULES[0];
+
   return (
-    <div className="flex-grow overflow-y-auto pb-28 pt-6 px-4 no-scrollbar border-x border-white/5 flex flex-col items-center justify-center h-full">
-      <BookOpenCheck className="w-16 h-16 text-duo-green mb-4 opacity-50" />
-      <h1 className="text-2xl font-black text-white tracking-tight mb-2">Knowledge Check</h1>
-      <p className="text-center text-slate-400 text-sm font-medium">
-        Comprehensive Tafheem reviews and quizzes are coming soon!
-      </p>
+    <div className="flex-grow flex flex-col bg-[#0b0f19] border-x border-white/5 overflow-hidden h-full relative">
+      {/* Header */}
+      <div className="shrink-0 pt-8 pb-4 px-5 glass-panel rounded-b-3xl shadow-xl z-20">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2.5 bg-duo-violet/20 rounded-xl border border-duo-violet/30">
+            <BookOpenCheck className="w-7 h-7 text-duo-violet" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-white tracking-tight leading-none">Exam Bank</h1>
+            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-1">Model Questions & Answers</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Horizontal Unit Selector Tabs */}
+      <div className="shrink-0 py-3 px-2 border-b border-white/5 bg-black/20 z-10">
+        <div className="flex overflow-x-auto exam-tab-list gap-2 px-2 snap-x">
+          {EXAM_MODULES.map((unit) => {
+            const isActive = unit.unitId === activeUnitId;
+            return (
+              <button
+                key={unit.unitId}
+                onClick={() => setActiveUnitId(unit.unitId)}
+                className={`shrink-0 snap-start px-4 py-2.5 rounded-xl text-sm font-bold transition-all border-b-2
+                  ${isActive 
+                    ? 'bg-duo-violet border-duo-violet-dark text-white shadow-md' 
+                    : 'bg-white/5 border-transparent text-slate-400 hover:bg-white/10 hover:text-slate-200'
+                  }`}
+              >
+                {unit.title.split(':')[0]} {/* e.g., "Unit 1" */}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Content Area */}
+      <div className="flex-grow overflow-y-auto no-scrollbar px-4 pt-6 pb-28 relative">
+        <div className="mb-6 animate-in fade-in slide-in-from-right-4 duration-300">
+          <h2 className="text-xl font-extrabold text-white mb-1">{activeUnit.title}</h2>
+          <p className="text-sm font-medium text-slate-400">{activeUnit.description}</p>
+        </div>
+
+        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-8 duration-500 delay-100">
+          {activeUnit.questions.map((q, index) => (
+            <ExamQuestionCard key={q.id} question={q} index={index} />
+          ))}
+        </div>
+
+        <div className="mt-8 text-center text-slate-500 text-xs font-bold uppercase tracking-widest pb-6">
+          More questions will be added soon
+        </div>
+      </div>
     </div>
   );
 };
@@ -4283,6 +5888,36 @@ export default PracticePage;
 }
 --- END OF FILE src/styles/english.css ---
 
+--- START OF FILE src/styles/exam.css ---
+.exam-card-container {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.exam-answer-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exam-answer-collapse.open {
+  grid-template-rows: 1fr;
+}
+
+.exam-answer-collapse > div {
+  overflow: hidden;
+}
+
+/* Scrollbar hiding for the exam tab list */
+.exam-tab-list::-webkit-scrollbar {
+  display: none;
+}
+.exam-tab-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+--- END OF FILE src/styles/exam.css ---
+
 --- START OF FILE src/styles/graphs.css ---
 /* Graph specific animations */
 @keyframes phase-shift {
@@ -4391,6 +6026,29 @@ export default PracticePage;
   100% { transform: scale(1); filter: brightness(1); }
 }
 --- END OF FILE src/styles/path.css ---
+
+--- START OF FILE src/styles/policy.css ---
+/* Policy Document Visual Styling */
+.policy-doc {
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  padding: 1.5rem;
+  border-left: 4px solid #ce82ff;
+  background: rgba(206, 130, 255, 0.05);
+  border-radius: 0 1rem 1rem 0;
+  margin-bottom: 1.5rem;
+  color: #f1f5f9;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.15);
+  border-top: 1px solid rgba(206, 130, 255, 0.1);
+  border-right: 1px solid rgba(206, 130, 255, 0.1);
+  border-bottom: 1px solid rgba(206, 130, 255, 0.1);
+}
+
+.policy-doc strong {
+  color: #ce82ff;
+}
+--- END OF FILE src/styles/policy.css ---
 
 --- START OF FILE src/styles/practice.css ---
 .practice-header-bg {

@@ -32,13 +32,7 @@ const createPlaceholder = (id: string, title: string, desc: string): Section => 
   ]
 });
 
-// Module 1 Placeholders
-export const SEC_U1 = createPlaceholder("sec-u1", "Unit 1: Integrating Human Rights...", "UNSDG Document");
-export const SEC_U2 = createPlaceholder("sec-u2", "Unit 2: On The Rule of the Road", "by A.G. Gardiner");
-export const SEC_U4 = createPlaceholder("sec-u4", "Unit 4: I am a Cat", "Dir. Kon Ichikawa");
-
 // Module 2 Placeholders
-export const SEC_U5 = createPlaceholder("sec-u5", "Unit 5: The Self-Unseeing", "by Thomas Hardy");
 export const SEC_U6 = createPlaceholder("sec-u6", "Unit 6: Karma", "by Khushwant Singh");
 export const SEC_U7 = createPlaceholder("sec-u7", "Unit 7: In the Name of Science", "by Lori Alexander");
 export const SEC_U8 = createPlaceholder("sec-u8", "Unit 8: The Boy Who Harnessed the Wind", "Dir. Chiwetel Ejiofo");

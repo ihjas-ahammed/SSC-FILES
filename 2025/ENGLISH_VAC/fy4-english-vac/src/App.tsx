@@ -15,6 +15,8 @@ import './styles/path.css';
 import './styles/progress.css';
 import './styles/english.css'; 
 import './styles/practice.css'; 
+import './styles/exam.css';
+import './styles/policy.css';
 
 const AnalyticsTracker = () => {
   useAnalytics();
