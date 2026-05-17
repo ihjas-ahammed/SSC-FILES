@@ -1,21 +1,16 @@
 
 Make the following changes:
 
-Add more lessons to  the unit humanities vs science
+Initiate:
 
-Use all questions in the end of chapter
-
+    Create lesson1 based on lesson1.txt
 
 Give the whole text as in the textbook (but splitted :)
+
 Give word cards for words in glossary
 
-add qustions from the model qp I gave to Questions part
+add questions to the questions tab from the model qp I gave (distinct for each chapter)
 
-Also add a new tab called practice
-with many MCQ questions based on the text for current unit (40-50)
-       
-
-Fix the end lessons (becauase inline html wont work even though markdwon works)
 
 Base:
 ```md
@@ -408,6 +403,8 @@ GENERAL RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
        
+also write like u have infinite context length because if the system stops u we will just continue from where we left of
+
 
 After applying the changes recreate project_snapshot.txt only for new files and files with changes, each time improve modularity of the program by introducing new component files (only on modified or new files), don't modify system files like pubspec, if we need new packages, or file path cahnges, removal etc, give the command for bash
 
