@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Volume2 } from 'lucide-react';
 import { examDataBySection } from '../../data/examData';
+import { useTTS } from '../../hooks/useTTS';
 import './PracticeStyles.css';
 
 const QAFlashcards = ({ type, activeSection, onBack }) => {
+  const { speak } = useTTS();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -14,6 +16,11 @@ const QAFlashcards = ({ type, activeSection, onBack }) => {
     const raw = type === 'qa_short' ? (sectionData.shortQA || []) : (sectionData.longQA || []);
     return [...raw].sort(() => Math.random() - 0.5);
   }, [type, sectionData]);
+
+  const handleReveal = () => {
+    setShowAnswer(true);
+    speak(questions[currentIndex]?.a || '');
+  };
 
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
@@ -66,15 +73,26 @@ const QAFlashcards = ({ type, activeSection, onBack }) => {
       <div className="p-card">
         <div className="flashcard-inner">
           <div className="fc-q-box">
+            <div className="fc-box-header">
+              <span className="fc-label">Question</span>
+              <button className="tts-btn-inline" onClick={() => speak(q.q)} title="Listen to question">
+                <Volume2 size={18} />
+              </button>
+            </div>
             <div className="fc-ar-text">{q.q}</div>
             <div className="fc-en-text">{q.en_q}</div>
           </div>
 
           {showAnswer ? (
             <div className="fc-a-box">
+              <div className="fc-box-header">
+                <span className="fc-label fc-label-answer">Answer</span>
+                <button className="tts-btn-inline tts-green" onClick={() => speak(q.a)} title="Listen to answer">
+                  <Volume2 size={18} />
+                </button>
+              </div>
               <div className="fc-ar-text">{q.a}</div>
               <div className="fc-en-text">{q.en_a}</div>
-              
               <div className="fc-keywords" dir="rtl">
                 {q.keywords?.map((kw, i) => (
                   <span key={i} className="fc-keyword-chip arabic-text">{kw}</span>
@@ -90,7 +108,7 @@ const QAFlashcards = ({ type, activeSection, onBack }) => {
       </div>
 
       {!showAnswer ? (
-        <button className="btn-primary p-next-btn" onClick={() => setShowAnswer(true)}>
+        <button className="btn-primary p-next-btn" onClick={handleReveal}>
           Reveal Answer
         </button>
       ) : (

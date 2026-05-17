@@ -1,38 +1,55 @@
-/* Practice System Master Styles */
+/* =========================================
+   Practice System — Responsive Master Styles
+   ========================================= */
 
 .practice-system-container {
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
-/* 1. Menu Grid */
+/* ── 1. Menu Grid ── */
 .practice-menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+@media (min-width: 480px) {
+  .practice-menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .practice-menu-grid {
+    gap: 20px;
+  }
 }
 
 .menu-card {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 24px 16px;
+  border-radius: 18px;
+  padding: 20px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  min-height: 120px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .menu-card:hover {
@@ -53,35 +70,53 @@
 }
 
 .menu-title {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--text-main);
+  line-height: 1.2;
 }
 
 .menu-desc {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--text-dim);
+  line-height: 1.3;
 }
 
-/* 2. Top Bar for Internal Practice Modes */
+@media (max-width: 360px) {
+  .menu-desc {
+    display: none;
+  }
+  .menu-card {
+    padding: 16px 8px;
+    min-height: 100px;
+  }
+}
+
+/* ── 2. Top Bar ── */
 .practice-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   background: rgba(255, 255, 255, 0.03);
-  padding: 12px 20px;
-  border-radius: 16px;
+  padding: 10px 16px;
+  border-radius: 14px;
   border: 1px solid var(--glass-border);
 }
 
 .back-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--text-dim);
   font-weight: 700;
+  font-size: 0.9rem;
   transition: color 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .back-btn:hover {
@@ -89,7 +124,7 @@
 }
 
 .mode-title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 900;
   color: var(--duo-blue);
   text-transform: uppercase;
@@ -99,60 +134,135 @@
 .progress-text-small {
   color: var(--text-muted);
   font-weight: 800;
+  font-size: 0.9rem;
 }
 
-/* 3. Base Question Card */
+/* ── 3. Question Card ── */
 .p-card {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  padding: 30px;
+  padding: 24px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
 
+@media (min-width: 480px) {
+  .p-card {
+    padding: 28px 24px;
+    gap: 20px;
+  }
+}
+
 .p-instruction {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--duo-violet);
   font-weight: 800;
   text-align: center;
-  margin-bottom: 10px;
+}
+
+@media (min-width: 480px) {
+  .p-instruction {
+    font-size: 1.1rem;
+  }
+}
+
+/* Question row with TTS button */
+.p-question-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .p-question-arabic {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   color: var(--text-main);
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.7;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 480px) {
+  .p-question-arabic {
+    font-size: 2.2rem;
+  }
 }
 
 .p-question-english {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   color: var(--text-dim);
   text-align: center;
   font-style: italic;
 }
 
+/* TTS inline button (used in grammar & flashcards) */
+.tts-btn-inline {
+  background: rgba(28, 176, 246, 0.1);
+  border: 1px solid rgba(28, 176, 246, 0.3);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--duo-blue);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tts-btn-inline:hover {
+  background: rgba(28, 176, 246, 0.2);
+  transform: scale(1.1);
+}
+
+.tts-btn-inline:active {
+  transform: scale(0.95);
+}
+
+.tts-btn-inline.tts-green {
+  background: rgba(88, 204, 2, 0.1);
+  border-color: rgba(88, 204, 2, 0.3);
+  color: var(--duo-green);
+}
+
+.tts-btn-inline.tts-green:hover {
+  background: rgba(88, 204, 2, 0.2);
+}
+
+/* ── 4. Options Grid ── */
 .p-options-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 8px;
+}
+
+@media (min-width: 480px) {
+  .p-options-grid {
+    gap: 12px;
+    margin-top: 16px;
+  }
 }
 
 .p-opt-btn {
-  padding: 16px;
+  padding: 14px 16px;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid var(--glass-border);
   border-bottom-width: 4px;
-  border-radius: 16px;
+  border-radius: 14px;
   color: var(--text-main);
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -160,6 +270,16 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  font-family: inherit;
+  min-height: 56px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 480px) {
+  .p-opt-btn {
+    font-size: 1.4rem;
+    padding: 16px;
+  }
 }
 
 .p-opt-btn:hover:not(:disabled) {
@@ -172,11 +292,10 @@
 }
 
 .p-opt-btn .en-hint {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-dim);
 }
 
-/* State Colors */
 .p-opt-btn.correct {
   background: rgba(88, 204, 2, 0.15) !important;
   border-color: var(--duo-green) !important;
@@ -193,51 +312,77 @@
 
 .p-next-btn {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 4px;
 }
 
-/* 4. Flashcard specific */
+/* ── 5. Flashcard ── */
 .flashcard-inner {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  text-align: right; /* RTL friendly by default, overridden by classes */
+  gap: 16px;
+  text-align: right;
+}
+
+.fc-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.fc-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--duo-blue);
+}
+
+.fc-label-answer {
+  color: var(--duo-green);
 }
 
 .fc-q-box {
-  background: rgba(28, 176, 246, 0.1);
+  background: rgba(28, 176, 246, 0.08);
   border-left: 4px solid var(--duo-blue);
-  padding: 20px;
+  padding: 16px;
   border-radius: 12px;
 }
 
 .fc-a-box {
-  background: rgba(88, 204, 2, 0.1);
+  background: rgba(88, 204, 2, 0.08);
   border-left: 4px solid var(--duo-green);
-  padding: 20px;
+  padding: 16px;
   border-radius: 12px;
   animation: fadeIn 0.3s ease-out forwards;
 }
 
 .fc-ar-text {
   font-family: 'Amiri', serif;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: var(--text-main);
-  line-height: 1.7;
+  line-height: 1.8;
   direction: rtl;
 }
 
+@media (min-width: 480px) {
+  .fc-ar-text {
+    font-size: 1.6rem;
+  }
+}
+
 .fc-en-text {
-  font-size: 1rem;
+  font-size: 0.92rem;
   color: var(--text-dim);
-  margin-top: 10px;
+  margin-top: 8px;
   direction: ltr;
   text-align: left;
+  line-height: 1.5;
 }
 
 .fc-keywords {
-  margin-top: 15px;
+  margin-top: 14px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -249,24 +394,39 @@
   color: var(--duo-amber);
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 800;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Finish Screen */
+/* ── 6. Finish Screen ── */
 .finish-screen {
   text-align: center;
-  padding: 40px 20px;
+  padding: 32px 16px;
 }
+
 .finish-icon {
-  margin: 0 auto 20px;
+  margin: 0 auto 16px;
   display: inline-block;
   color: var(--duo-green);
 }
+
 .finish-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 900;
   color: var(--text-main);
   margin-bottom: 10px;
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
 }

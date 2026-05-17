@@ -14,6 +14,8 @@ export const ProgressProvider = ({ children }) => {
     return localStorage.getItem('duofy5_active_sec') || 'sec1-5';
   });
 
+  const [activeTab, setActiveTab] = useState('path');
+
   useEffect(() => {
     localStorage.setItem('duofy5_progress', JSON.stringify(completedLessons));
   }, [completedLessons]);
@@ -29,11 +31,13 @@ export const ProgressProvider = ({ children }) => {
   };
 
   return (
-    <ProgressContext.Provider value={{ 
-      completedLessons, 
+    <ProgressContext.Provider value={{
+      completedLessons,
       markLessonComplete,
       activeSectionId,
-      setActiveSectionId
+      setActiveSectionId,
+      activeTab,
+      setActiveTab
     }}>
       {children}
     </ProgressContext.Provider>

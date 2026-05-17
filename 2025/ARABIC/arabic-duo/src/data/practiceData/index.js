@@ -1,0 +1,9 @@
+export { chapter1Data } from './chapter1';
+export { chapter2Data } from './chapter2';
+export { chapter3Data } from './chapter3';
+export { chapter4Data } from './chapter4';
+export { chapter5Data } from './chapter5';
+export { chapter6Data } from './chapter6';
+export { chapter7Data } from './chapter7';
+export { chapter8Data } from './chapter8';
+export { chapter9Data } from './chapter9';

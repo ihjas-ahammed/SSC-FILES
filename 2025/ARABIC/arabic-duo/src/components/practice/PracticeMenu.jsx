@@ -46,7 +46,7 @@ const PracticeMenu = ({ onSelectMode }) => {
     <div className="practice-system-container route-transition">
       <div className="text-center">
         <h2 style={{ color: 'var(--duo-blue)', fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>
-          Exam Prep Center
+          Practice
         </h2>
         <p className="text-dim">Master every question format from the model papers.</p>
       </div>
