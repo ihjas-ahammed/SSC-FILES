@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Nunito:wght@400;500;700;800;900&display=swap');
 
 :root {
-  /* Duo-style accent palette */
+  /* Friendly Duo palette - slightly softened for warmth */
   --duo-green: #58cc02;
   --duo-green-dark: #46a302;
   --duo-blue: #1cb0f6;
@@ -14,23 +14,33 @@
   --duo-orange-dark: #cc7800;
   --duo-amber: #fbbf24;
   --duo-amber-dark: #d97706;
+  --duo-pink: #ff70a6;
 
   --primary: var(--duo-blue);
   --primary-dark: var(--duo-blue-dark);
-  --primary-glow: rgba(28, 176, 246, 0.4);
+  --primary-glow: rgba(28, 176, 246, 0.45);
   --success: var(--duo-green);
   --success-dark: var(--duo-green-dark);
-  --success-glow: rgba(88, 204, 2, 0.45);
+  --success-glow: rgba(88, 204, 2, 0.5);
   --error: var(--duo-red);
-  --error-glow: rgba(255, 75, 75, 0.4);
+  --error-glow: rgba(255, 75, 75, 0.45);
 
-  --bg-dark: #030712;
-  --bg-panel: rgba(255, 255, 255, 0.03);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --text-main: #f1f5f9;
-  --text-dim: #94a3b8;
-  --text-muted: #64748b;
+  /* Warmer, friendlier dark surface */
+  --bg-dark: #0b1226;
+  --bg-panel: rgba(255, 255, 255, 0.04);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-border-strong: rgba(255, 255, 255, 0.16);
+  --text-main: #f8fafc;
+  --text-dim: #a8b3c7;
+  --text-muted: #6f7c93;
+
+  /* Convenient mixins */
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 4px 18px rgba(0, 0, 0, 0.25);
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
 }
 
 * {
@@ -40,7 +50,6 @@
 }
 
 html, body {
-  /* Ensure fixed bottom tab respects mobile safe areas without pushing out bounds */
   height: 100%;
   width: 100%;
 }
@@ -48,13 +57,20 @@ html, body {
 body {
   font-family: 'Nunito', system-ui, sans-serif;
   color: var(--text-main);
-  background: radial-gradient(circle at top right, #111827, #030712);
+  /* Friendlier multi-stop gradient with hints of blue & violet */
+  background:
+    radial-gradient(900px 600px at 100% 0%, rgba(28, 176, 246, 0.18), transparent 60%),
+    radial-gradient(800px 600px at 0% 100%, rgba(206, 130, 255, 0.16), transparent 60%),
+    radial-gradient(1100px 800px at 50% 50%, rgba(88, 204, 2, 0.05), transparent 70%),
+    linear-gradient(180deg, #0b1226 0%, #060a18 100%);
   background-attachment: fixed;
   min-height: 100dvh;
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* changed from center to allow normal scroll */
+  align-items: flex-start;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -85,7 +101,15 @@ button {
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.55;
+}
+
+/* Improved focus visible (a11y + friendliness) */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--duo-blue);
+  outline-offset: 2px;
+  border-radius: 8px;
 }
 
 .glass-panel {
@@ -93,8 +117,8 @@ button:disabled {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
 .glass-button {
@@ -118,3 +142,24 @@ button:disabled {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.text-dim { color: var(--text-dim); }
+.text-muted { color: var(--text-muted); }
+.text-sm { font-size: 0.85rem; }
+
+/* Custom scrollbar (subtle) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Selection */
+::selection {
+  background: rgba(28, 176, 246, 0.35);
+  color: #fff;
+}

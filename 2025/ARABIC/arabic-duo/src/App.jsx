@@ -21,14 +21,22 @@ const AppInner = () => {
     }
   };
 
+  // Hide bottom tabs when inside an immersive lesson/summary view
+  // so they don't overlap the lesson's continue button.
+  const isImmersive =
+    location.pathname.startsWith('/lesson/') ||
+    location.pathname.startsWith('/summary/');
+
   return (
-    <div className="app-container">
+    <div className={`app-container ${isImmersive ? 'is-immersive' : ''}`}>
       <Routes>
         <Route path="/" element={<DashboardRoute />} />
         <Route path="/lesson/:lessonId" element={<LessonRoute />} />
         <Route path="/summary/:sectionId" element={<SummaryRoute />} />
       </Routes>
-      <BottomTabs activeTab={activeTab} setActiveTab={handleTabChange} />
+      {!isImmersive && (
+        <BottomTabs activeTab={activeTab} setActiveTab={handleTabChange} />
+      )}
     </div>
   );
 };

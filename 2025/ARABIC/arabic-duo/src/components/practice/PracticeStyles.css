@@ -46,16 +46,32 @@
   gap: 10px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  min-height: 120px;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-soft);
+  min-height: 124px;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(28,176,246,0), rgba(206,130,255,0));
+  transition: background 0.25s;
+  pointer-events: none;
 }
 
 .menu-card:hover {
   background: rgba(255, 255, 255, 0.08);
   transform: translateY(-4px);
-  border-color: rgba(28, 176, 246, 0.4);
+  border-color: rgba(28, 176, 246, 0.45);
+  box-shadow: 0 14px 32px rgba(28, 176, 246, 0.18);
+}
+
+.menu-card:hover::before {
+  background: linear-gradient(135deg, rgba(28,176,246,0.08), rgba(206,130,255,0.08));
 }
 
 .menu-card:active {
@@ -97,11 +113,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 10px 14px;
   border-radius: 14px;
   border: 1px solid var(--glass-border);
+  position: sticky;
+  top: 8px;
+  z-index: 5;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .back-btn {

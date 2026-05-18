@@ -18,7 +18,7 @@ const Dashboard = ({ activeSection, setActiveSection, onSelectLesson }) => {
         completedLessons={completedLessons}
       />
 
-      <div className="tab-content-wrapper" style={{ paddingBottom: '120px', minHeight: '100dvh' }}>
+      <div className="tab-content-wrapper" style={{ paddingBottom: 'calc(96px + env(safe-area-inset-bottom))' }}>
         {activeTab === 'path' && (
           <div className="path-container">
             {activeSection.units.map((unit) => (

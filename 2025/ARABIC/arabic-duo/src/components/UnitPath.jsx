@@ -3,12 +3,13 @@ import { Check, Star, BookOpen, Lock } from 'lucide-react';
 
 const UnitPath = ({ unit, completedLessons, onSelectLesson }) => {
   const isPractice = unit.id.includes('practice');
-  
+
   // Track if we've found the first uncompleted lesson to mark it as "current"
   let foundFirstUncompleted = false;
 
-  // Snake-like path offsets for Duolingo style
-  const pathOffsets = [0, -30, -50, -30, 0, 30, 50, 30];
+  // Snake-like path offsets as percentages so they scale with container width
+  // (prevents overflow on small phones)
+  const pathOffsetsPct = [0, -14, -22, -14, 0, 14, 22, 14];
 
   return (
     <div className="unit-section">
@@ -28,13 +29,13 @@ const UnitPath = ({ unit, completedLessons, onSelectLesson }) => {
             foundFirstUncompleted = true;
           }
 
-          const offset = pathOffsets[idx % pathOffsets.length];
+          const offsetPct = pathOffsetsPct[idx % pathOffsetsPct.length];
 
           return (
-            <div 
-              className="lesson-node-wrap" 
-              key={lesson.id} 
-              style={{ transform: `translateX(${offset}px)` }}
+            <div
+              className="lesson-node-wrap"
+              key={lesson.id}
+              style={{ transform: `translateX(${offsetPct}%)` }}
             >
               <button 
                 className={`lesson-node ${status} ${isPractice ? 'practice' : ''}`}
