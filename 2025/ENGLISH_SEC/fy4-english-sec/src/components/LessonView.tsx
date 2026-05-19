@@ -12,7 +12,8 @@ import QuranAyahCard from './QuranAyahCard';
 import WordCardView from './WordCardView';
 import MatchTheFollowingView from './MatchTheFollowingView';
 import ProgressBar from './ProgressBar';
-import { X, ChevronLeft, ChevronRight, Type, BookOpen } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Type, BookOpen, Volume2, VolumeX } from 'lucide-react';
+import { playTextAsync, TtsHandle } from '../utils/audio';
 import '../styles/quran.css';
 
 interface Props {
@@ -37,6 +38,8 @@ const FONT_SIZE_LABEL: Record<FontSize, string> = {
 
 const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const ttsHandle = useRef<TtsHandle>({ stopped: true });
   const [fontSize, setFontSize] = useState<FontSize>(() => {
     const saved = localStorage.getItem('ssc_reader_font_size');
     if (saved === 'sm' || saved === 'md' || saved === 'lg') return saved;
@@ -57,6 +60,33 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
   useEffect(() => {
     contentRef.current?.scrollTo({ top: 0, behavior: 'auto' });
   }, [currentSlideIndex]);
+
+  // Stop TTS when slide changes or component unmounts
+  useEffect(() => {
+    return () => {
+      ttsHandle.current.stopped = true;
+      ttsHandle.current.currentAudio?.pause();
+      setIsSpeaking(false);
+    };
+  }, [currentSlideIndex]);
+
+  const handleToggleTTS = async () => {
+    if (isSpeaking) {
+      ttsHandle.current.stopped = true;
+      ttsHandle.current.currentAudio?.pause();
+      setIsSpeaking(false);
+      return;
+    }
+
+    const slide = lesson.slides[currentSlideIndex];
+    const textToRead = [slide.title, slide.content].filter(Boolean).join('. ');
+    if (!textToRead) return;
+
+    ttsHandle.current = { stopped: false };
+    setIsSpeaking(true);
+    await playTextAsync(textToRead, 'Read this lesson content clearly and naturally.', ttsHandle.current);
+    setIsSpeaking(false);
+  };
 
   const handleInteraction = (correct: boolean) => {
     stats.current.total += 1;
@@ -236,7 +266,7 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
   const isReadingSlide = currentSlide.type === 'theory' || currentSlide.type === 'example';
 
   return (
-    <div className="absolute inset-0 bg-[#0b0f19] z-[9999] flex flex-col w-full h-full overflow-hidden shadow-2xl reader-bg">
+    <div className="fixed inset-0 bg-[#0b0f19] z-[9999] flex flex-col w-full h-full overflow-hidden shadow-2xl reader-bg">
       <div className="h-14 flex items-center justify-between px-3 sm:px-4 glass-panel border-t-0 border-x-0 rounded-none shrink-0 z-[10005] relative">
         <button
           onClick={(e) => { e.preventDefault(); onExit(); }}
@@ -252,15 +282,25 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
         </div>
 
         {isReadingSlide && (
-          <button
-            onClick={cycleFontSize}
-            className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-90 transition-transform text-slate-300 z-[10010] gap-0.5"
-            aria-label="Change font size"
-            title={`Font size: ${fontSize}`}
-          >
-            <Type className="w-4 h-4" />
-            <span className="text-[10px] font-black ml-0.5">{FONT_SIZE_LABEL[fontSize]}</span>
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={handleToggleTTS}
+              className={`w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-90 transition-transform z-[10010] ${isSpeaking ? 'text-duo-blue' : 'text-slate-300'}`}
+              aria-label={isSpeaking ? 'Stop reading' : 'Read aloud'}
+              title={isSpeaking ? 'Stop reading' : 'Read aloud'}
+            >
+              {isSpeaking ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </button>
+            <button
+              onClick={cycleFontSize}
+              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-90 transition-transform text-slate-300 z-[10010] gap-0.5"
+              aria-label="Change font size"
+              title={`Font size: ${fontSize}`}
+            >
+              <Type className="w-4 h-4" />
+              <span className="text-[10px] font-black ml-0.5">{FONT_SIZE_LABEL[fontSize]}</span>
+            </button>
+          </div>
         )}
       </div>
 

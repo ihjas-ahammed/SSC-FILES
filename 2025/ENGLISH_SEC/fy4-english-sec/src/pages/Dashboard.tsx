@@ -79,7 +79,7 @@ const Dashboard: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex-grow flex flex-col pb-28 overflow-x-hidden border-x border-white/5">
+    <div className="flex-grow flex flex-col pb-28 lg:pb-8 overflow-x-hidden border-x border-white/5">
       <header className="sticky top-0 glass-panel z-40 p-3 flex justify-between items-center rounded-b-2xl border-t-0">
         <div
           onClick={() => setIsModuleSelectorOpen(true)}

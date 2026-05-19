@@ -80,6 +80,91 @@ const createWavUrl = (base64Pcm: string, sampleRate: number, bitsPerSample: numb
   return URL.createObjectURL(blob);
 };
 
+const stripMarkdownForTTS = (text: string): string =>
+  text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/#{1,6}\s+/g, '')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\$\$?[^$]+\$\$?/g, '')  // strip math
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const splitIntoSentences = (text: string): string[] =>
+  (text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [])
+    .map(s => s.trim())
+    .filter(s => s.length > 5);
+
+const fetchAudioUrl = async (text: string, prompt: string): Promise<string | null> => {
+  const apiKey = "AIzaSyAT2oFfKW8mfPT8iP-SetxXfeFdwfFi0ro";
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: `${prompt}\n\n${text}` }] }],
+          generationConfig: {
+            temperature: 0.7,
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: { prebuiltVoiceConfig: { voiceName: 'Zephyr' } },
+            },
+          },
+        }),
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) return null;
+    const inlineData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+    if (!inlineData?.data) return null;
+    const mimeType: string = inlineData.mimeType || 'audio/pcm;rate=24000';
+    if (mimeType.includes('audio/pcm') || mimeType.includes('audio/L') || mimeType.includes('rate=')) {
+      const { bitsPerSample, rate } = parseAudioMimeType(mimeType);
+      return createWavUrl(inlineData.data, rate, bitsPerSample);
+    }
+    return `data:${mimeType};base64,${inlineData.data}`;
+  } catch {
+    return null;
+  }
+};
+
+export interface TtsHandle {
+  stopped: boolean;
+  currentAudio?: HTMLAudioElement;
+}
+
+export const playTextAsync = async (
+  text: string,
+  prompt: string,
+  handle: TtsHandle
+): Promise<void> => {
+  const sentences = splitIntoSentences(stripMarkdownForTTS(text));
+  if (sentences.length === 0) return;
+
+  // Kick off all fetches concurrently so later sentences are ready while earlier ones play
+  const urlPromises = sentences.map(s => fetchAudioUrl(s, prompt));
+
+  for (const urlPromise of urlPromises) {
+    if (handle.stopped) break;
+    const url = await urlPromise;
+    if (!url || handle.stopped) { if (url) URL.revokeObjectURL(url); continue; }
+
+    await new Promise<void>(resolve => {
+      if (handle.stopped) { URL.revokeObjectURL(url); resolve(); return; }
+      const audio = new Audio(url);
+      handle.currentAudio = audio;
+      const done = () => { URL.revokeObjectURL(url); handle.currentAudio = undefined; resolve(); };
+      audio.onended = done;
+      audio.onerror = done;
+      audio.play().catch(done);
+    });
+  }
+};
+
 export const playGeminiAudio = async (text: string, prompt: string): Promise<void> => {
   const apiKey = "AIzaSyAT2oFfKW8mfPT8iP-SetxXfeFdwfFi0ro";
   

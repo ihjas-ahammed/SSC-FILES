@@ -21,7 +21,7 @@ const ModuleSummaryPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col overflow-y-auto pb-20 bg-[#0b0f19] border-x border-white/5 no-scrollbar">
+    <div className="min-h-screen flex flex-col overflow-y-auto pb-20 lg:pb-8 bg-[#0b0f19] border-x border-white/5 no-scrollbar">
       <header className="sticky top-0 glass-panel z-40 p-4 flex items-center gap-4 rounded-b-2xl border-t-0">
          <button 
             onClick={() => navigate(-1)} 

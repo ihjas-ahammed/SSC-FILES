@@ -77,7 +77,7 @@ const ModuleNotesPage: React.FC<Props> = ({ progress, onModuleChange }) => {
   };
 
   return (
-    <div className="flex-grow overflow-y-auto pb-28 pt-6 px-4 no-scrollbar border-x border-white/5 relative">
+    <div className="flex-grow overflow-y-auto pb-28 lg:pb-8 pt-6 px-4 no-scrollbar border-x border-white/5 relative">
       <div className="flex items-center justify-center mb-8">
         <FileText className="w-8 h-8 text-duo-violet mr-3" />
         <h1 className="text-2xl font-black text-white tracking-tight">Module Notes</h1>

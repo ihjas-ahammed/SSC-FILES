@@ -115,7 +115,7 @@ const SummaryPage: React.FC<Props> = ({ progress, onModuleChange }) => {
   const moduleIndex = MODULES.findIndex(m => m.id === summary.moduleId);
 
   return (
-    <div className="flex-grow overflow-y-auto pb-28 pt-5 px-4 sm:px-5 no-scrollbar border-x border-white/5 relative">
+    <div className="flex-grow overflow-y-auto pb-28 lg:pb-8 pt-5 px-4 sm:px-5 no-scrollbar border-x border-white/5 relative">
       {/* Hero */}
       <div className={`rounded-3xl border ${accent.ring} bg-gradient-to-br ${accent.gradient} p-5 mb-5 relative overflow-hidden`}>
         <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-white/[0.02] blur-3xl pointer-events-none" />

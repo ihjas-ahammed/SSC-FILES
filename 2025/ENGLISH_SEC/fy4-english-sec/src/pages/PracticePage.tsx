@@ -137,7 +137,7 @@ const PracticePage: React.FC<Props> = ({ progress }) => {
     const pct = total ? Math.round((score / total) * 100) : 0;
     const msg = pct >= 90 ? 'Outstanding Mastery!' : pct >= 70 ? 'Great Job!' : 'Good Effort!';
     return (
-      <div className="flex-grow overflow-y-auto pb-28 pt-6 px-4 no-scrollbar border-x border-white/5 flex flex-col items-center justify-center h-full animate-in zoom-in-95 duration-500">
+      <div className="flex-grow overflow-y-auto pb-28 lg:pb-8 pt-6 px-4 no-scrollbar border-x border-white/5 flex flex-col items-center justify-center h-full animate-in zoom-in-95 duration-500">
         <CheckCircle className={`w-20 h-20 sm:w-24 sm:h-24 mb-6 ${pct >= 70 ? 'text-green-400' : 'text-amber-400'}`} />
         <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-2 text-center">{msg}</h1>
         <p className="text-slate-400 font-bold uppercase tracking-widest text-sm mb-2">
@@ -163,7 +163,7 @@ const PracticePage: React.FC<Props> = ({ progress }) => {
 
   // ── Menu ──
   return (
-    <div className="flex-grow overflow-y-auto pb-28 pt-6 px-4 no-scrollbar border-x border-white/5 relative practice-header-bg">
+    <div className="flex-grow overflow-y-auto pb-28 lg:pb-8 pt-6 px-4 no-scrollbar border-x border-white/5 relative practice-header-bg">
 
       {/* Hero */}
       <div className="flex items-center gap-3 mb-4">
