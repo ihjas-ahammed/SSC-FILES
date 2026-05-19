@@ -1,30 +1,29 @@
-export type TtsProvider = 'browser' | 'puter' | 'gemini';
+export type TtsProvider = 'browser' | 'translate' | 'gemini';
 
 const PROVIDER_KEY = 'tts_provider';
 const GEMINI_KEYS_KEY = 'tts_gemini_api_keys';
 const GEMINI_KEY_LEGACY = 'tts_gemini_api_key';
+const GEMINI_MODELS_KEY = 'tts_gemini_models';
 
 export const PROVIDER_LABELS: Record<TtsProvider, string> = {
   browser: 'System default',
-  puter: 'Puter (free cloud)',
+  translate: 'Google Translate (free)',
   gemini: 'Gemini Flash',
 };
 
-export const PUTER_VOICE = 'Joanna';
-export const PUTER_ENGINE: 'standard' | 'neural' | 'generative' = 'neural';
-
-export const GEMINI_MODELS = [
-  'gemini-2.5-flash-preview-tts',
-  'gemini-2.5-pro-preview-tts',
+export const GEMINI_AVAILABLE_MODELS: { id: string; label: string }[] = [
+  { id: 'gemini-2.5-flash-preview-tts', label: 'Gemini 2.5 Flash TTS' },
+  { id: 'gemini-2.5-pro-preview-tts', label: 'Gemini 2.5 Pro TTS' },
+  { id: 'gemini-3.1-flash-tts-preview', label: 'Gemini 3.1 Flash TTS' },
 ];
 
 export const GEMINI_VOICE = 'Kore';
 
 export const getProvider = (): TtsProvider => {
   const v = localStorage.getItem(PROVIDER_KEY) as string | null;
-  if (v === 'streamelements') return 'puter'; // migrate legacy
-  if (v === 'browser' || v === 'puter' || v === 'gemini') return v;
-  return 'puter';
+  if (v === 'streamelements' || v === 'puter') return 'translate'; // migrate legacy
+  if (v === 'browser' || v === 'translate' || v === 'gemini') return v;
+  return 'translate';
 };
 
 export const setProvider = (p: TtsProvider) => localStorage.setItem(PROVIDER_KEY, p);
@@ -45,6 +44,26 @@ export const getGeminiKeys = (): string[] => {
 export const setGeminiKeys = (keys: string[]) => {
   const cleaned = keys.map(k => k.trim()).filter(Boolean);
   localStorage.setItem(GEMINI_KEYS_KEY, cleaned.join('\n'));
+};
+
+export const getSelectedGeminiModels = (): string[] => {
+  const raw = localStorage.getItem(GEMINI_MODELS_KEY);
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        const valid = parsed.filter(
+          (m: any) => typeof m === 'string' && GEMINI_AVAILABLE_MODELS.some(am => am.id === m)
+        );
+        if (valid.length > 0) return valid;
+      }
+    } catch {}
+  }
+  return ['gemini-2.5-flash-preview-tts'];
+};
+
+export const setSelectedGeminiModels = (models: string[]) => {
+  localStorage.setItem(GEMINI_MODELS_KEY, JSON.stringify(models));
 };
 
 // ─── Sentence splitting ──────────────────────────────────────────────
@@ -169,69 +188,53 @@ const pcmBase64ToWavUrl = (b64: string, mime: string): string => {
   return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
 };
 
-// ─── Puter.js loader ─────────────────────────────────────────────────
+// ─── Google Translate TTS ────────────────────────────────────────────
+// Unofficial endpoint. Returns audio/mpeg, ~200 char limit per request,
+// CORS allows <audio> playback (cross-origin-resource-policy: cross-origin).
 
-let puterPromise: Promise<any> | null = null;
-const loadPuter = (): Promise<any> => {
-  if (puterPromise) return puterPromise;
-  const w = window as any;
-  if (w.puter?.ai?.txt2speech) {
-    puterPromise = Promise.resolve(w.puter);
-    return puterPromise;
-  }
-  puterPromise = new Promise((resolve, reject) => {
-    const existing = document.getElementById('puter-js-sdk') as HTMLScriptElement | null;
-    const onLoad = () => {
-      const p = (window as any).puter;
-      if (p?.ai?.txt2speech) resolve(p);
-      else reject(new Error('Puter.js loaded but txt2speech unavailable'));
-    };
-    if (existing) {
-      existing.addEventListener('load', onLoad);
-      existing.addEventListener('error', () => reject(new Error('Puter.js failed to load')));
-      return;
+const TRANSLATE_CHUNK = 180;
+
+const chunkForTranslate = (text: string): string[] => {
+  if (text.length <= TRANSLATE_CHUNK) return [text];
+  const out: string[] = [];
+  let cur = '';
+  for (const word of text.split(/\s+/)) {
+    if ((cur + ' ' + word).trim().length > TRANSLATE_CHUNK) {
+      if (cur) out.push(cur);
+      cur = word;
+    } else {
+      cur = cur ? `${cur} ${word}` : word;
     }
-    const s = document.createElement('script');
-    s.id = 'puter-js-sdk';
-    s.src = 'https://js.puter.com/v2/';
-    s.async = true;
-    s.onload = onLoad;
-    s.onerror = () => reject(new Error('Puter.js failed to load'));
-    document.head.appendChild(s);
-  });
-  return puterPromise;
+  }
+  if (cur) out.push(cur);
+  return out;
 };
 
-const fetchPuterSentence = async (text: string): Promise<{ url: string; objectUrl: string | null }> => {
-  const puter = await loadPuter();
-  const audio: HTMLAudioElement = await puter.ai.txt2speech(text, {
-    engine: PUTER_ENGINE,
-    voice: PUTER_VOICE,
-  });
-  if (!audio?.src) throw new Error('Puter TTS returned no audio src');
-  return { url: audio.src, objectUrl: null };
-};
+const translateUrl = (text: string) =>
+  `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(text)}`;
 
 // ─── Gemini key/model rotation ───────────────────────────────────────
 
 interface RotState {
   keys: string[];
+  models: string[];
   pairIdx: number; // round-robin index over (keys × models)
   exhausted: Set<string>;
 }
 
-const newRotState = (keys: string[]): RotState => ({
+const newRotState = (keys: string[], models: string[]): RotState => ({
   keys,
+  models,
   pairIdx: 0,
   exhausted: new Set(),
 });
 
-const pairCount = (r: RotState) => r.keys.length * GEMINI_MODELS.length;
+const pairCount = (r: RotState) => r.keys.length * r.models.length;
 
 const pairAt = (r: RotState, idx: number) => {
-  const keyI = Math.floor(idx / GEMINI_MODELS.length);
-  const modelI = idx % GEMINI_MODELS.length;
-  return { keyIdx: keyI, modelIdx: modelI, key: r.keys[keyI], model: GEMINI_MODELS[modelI] };
+  const keyI = Math.floor(idx / r.models.length);
+  const modelI = idx % r.models.length;
+  return { keyIdx: keyI, modelIdx: modelI, key: r.keys[keyI], model: r.models[modelI] };
 };
 
 const fetchGeminiSentence = async (text: string, rot: RotState): Promise<{ url: string; objectUrl: string }> => {
@@ -332,11 +335,38 @@ export const speakTts = async (text: string, opts: SpeakOpts = {}): Promise<void
     return;
   }
 
-  // URL-based providers: pipeline fetch + play
-  const rot = provider === 'gemini' ? newRotState(getGeminiKeys()) : null;
-  if (provider === 'gemini' && rot && rot.keys.length === 0) {
+  // Google Translate: direct URL playback, with sub-chunking for long sentences
+  if (provider === 'translate') {
+    const items: { url: string; sentenceIdx: number }[] = [];
+    for (let i = 0; i < sentences.length; i++) {
+      for (const chunk of chunkForTranslate(sentences[i])) {
+        items.push({ url: translateUrl(chunk), sentenceIdx: i });
+      }
+    }
+    opts.onProgress?.(items.length, items.length);
+    for (const item of items) {
+      if (session.cancelled) break;
+      opts.onSentence?.(item.sentenceIdx);
+      await playAudioOnce(item.url, null, session);
+    }
+    opts.onSentence?.(-1);
     opts.onEnd?.();
-    throw new Error('No Gemini API keys configured. Add at least one in voice settings.');
+    return;
+  }
+
+  // Gemini: pipeline with key/model rotation
+  const rot = provider === 'gemini'
+    ? newRotState(getGeminiKeys(), getSelectedGeminiModels())
+    : null;
+  if (provider === 'gemini' && rot) {
+    if (rot.keys.length === 0) {
+      opts.onEnd?.();
+      throw new Error('No Gemini API keys configured. Add at least one in voice settings.');
+    }
+    if (rot.models.length === 0) {
+      opts.onEnd?.();
+      throw new Error('No Gemini models selected. Pick at least one in voice settings.');
+    }
   }
 
   let readyCount = 0;
@@ -349,9 +379,7 @@ export const speakTts = async (text: string, opts: SpeakOpts = {}): Promise<void
       if (session.cancelled) return null;
       try {
         let result: { url: string; objectUrl: string | null };
-        if (provider === 'puter') {
-          result = await fetchPuterSentence(sentences[idx]);
-        } else if (provider === 'gemini' && rot) {
+        if (provider === 'gemini' && rot) {
           const { url, objectUrl } = await fetchGeminiSentence(sentences[idx], rot);
           result = { url, objectUrl };
         } else {

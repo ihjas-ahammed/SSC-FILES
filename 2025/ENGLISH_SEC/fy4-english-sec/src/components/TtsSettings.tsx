@@ -7,9 +7,11 @@ import {
   setProvider,
   getGeminiKeys,
   setGeminiKeys,
+  getSelectedGeminiModels,
+  setSelectedGeminiModels,
   speakTts,
   stopTts,
-  GEMINI_MODELS,
+  GEMINI_AVAILABLE_MODELS,
 } from '../utils/tts';
 import TtsLoadBar from './TtsLoadBar';
 
@@ -23,8 +25,8 @@ const SAMPLE =
 
 const PROVIDER_DESC: Record<TtsProvider, string> = {
   browser: "Uses your device's built-in voice. Instant, no network needed. Quality varies by device.",
-  puter: 'Free unlimited cloud voice (neural Polly Joanna via Puter.js). No API key, no signup.',
-  gemini: 'Google Gemini Flash neural TTS. Highest quality. Requires your own API key(s).',
+  translate: 'Google Translate TTS — free, unofficial, unlimited. Decent quality, English-leaning voice.',
+  gemini: 'Google Gemini neural TTS. Highest quality. Requires your own API key(s).',
 };
 
 const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
@@ -33,6 +35,7 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     const k = getGeminiKeys();
     return k.length ? k : [''];
   });
+  const [selectedModels, setSelectedModelsState] = useState<string[]>(getSelectedGeminiModels);
   const [testing, setTesting] = useState(false);
   const [progress, setProgress] = useState({ ready: 0, total: 0 });
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +65,15 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const handleRemoveKey = (i: number) => {
     const next = keys.filter((_, idx) => idx !== i);
     persistKeys(next.length ? next : ['']);
+  };
+
+  const toggleModel = (id: string) => {
+    const next = selectedModels.includes(id)
+      ? selectedModels.filter(m => m !== id)
+      : [...selectedModels, id];
+    if (next.length === 0) return; // require at least one
+    setSelectedModelsState(next);
+    setSelectedGeminiModels(next);
   };
 
   const handleTest = async () => {
@@ -94,7 +106,7 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     onClose();
   };
 
-  const totalGeminiPairs = keys.filter(k => k.trim()).length * GEMINI_MODELS.length;
+  const totalGeminiPairs = keys.filter(k => k.trim()).length * selectedModels.length;
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -114,7 +126,7 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
         <div className="flex-grow overflow-y-auto px-5 py-4 space-y-3">
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">TTS Provider</p>
-          {(['browser', 'puter', 'gemini'] as TtsProvider[]).map(p => {
+          {(['browser', 'translate', 'gemini'] as TtsProvider[]).map(p => {
             const active = provider === p;
             return (
               <button
@@ -139,7 +151,41 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
           {provider === 'gemini' && (
             <div className="pt-2 space-y-2">
-              <div className="flex items-center justify-between">
+              <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 block">
+                Models to use (rotates round-robin)
+              </label>
+              <div className="space-y-1.5">
+                {GEMINI_AVAILABLE_MODELS.map(m => {
+                  const checked = selectedModels.includes(m.id);
+                  return (
+                    <button
+                      key={m.id}
+                      onClick={() => toggleModel(m.id)}
+                      className={`w-full flex items-center justify-between rounded-xl border px-3 py-2.5 transition-all active:scale-[0.99] ${
+                        checked
+                          ? 'bg-duo-blue/10 border-duo-blue/40'
+                          : 'bg-white/[0.02] border-white/10 hover:bg-white/[0.05]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 ${
+                            checked ? 'bg-duo-blue border-duo-blue' : 'border-white/30'
+                          }`}
+                        >
+                          {checked && <Check className="w-3 h-3 text-white stroke-[3]" />}
+                        </div>
+                        <span className={`text-sm font-bold ${checked ? 'text-white' : 'text-slate-400'}`}>
+                          {m.label}
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-mono truncate ml-2">{m.id}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                   Gemini API Keys
                 </label>
@@ -172,7 +218,7 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                 <Plus className="w-3.5 h-3.5" /> Add another key
               </button>
               <p className="text-[11px] text-slate-500 leading-relaxed">
-                Get free keys at <span className="text-duo-blue">aistudio.google.com/apikey</span>. Each request rotates across keys × {GEMINI_MODELS.length} models for higher quota. Stored only on this device.
+                Get free keys at <span className="text-duo-blue">aistudio.google.com/apikey</span>. Each request rotates across keys × {selectedModels.length} selected model{selectedModels.length === 1 ? '' : 's'} to stack quotas. Stored only on this device.
               </p>
             </div>
           )}
