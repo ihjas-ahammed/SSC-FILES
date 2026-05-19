@@ -1,4 +1,4 @@
-export type TtsProvider = 'browser' | 'translate' | 'gemini';
+export type TtsProvider = 'browser' | 'gemini';
 
 const PROVIDER_KEY = 'tts_provider';
 const GEMINI_KEYS_KEY = 'tts_gemini_api_keys';
@@ -6,8 +6,7 @@ const GEMINI_KEY_LEGACY = 'tts_gemini_api_key';
 const GEMINI_MODELS_KEY = 'tts_gemini_models';
 
 export const PROVIDER_LABELS: Record<TtsProvider, string> = {
-  browser: 'System default',
-  translate: 'Google Translate (free)',
+  browser: 'System default (free, unlimited)',
   gemini: 'Gemini Flash',
 };
 
@@ -19,11 +18,13 @@ export const GEMINI_AVAILABLE_MODELS: { id: string; label: string }[] = [
 
 export const GEMINI_VOICE = 'Kore';
 
+const GEMINI_STYLE_PROMPT =
+  'Read the following sentence aloud in a calm, clear, neutral teacher voice. Keep the same tone, pace, and pitch every time. Pronounce each word distinctly at a moderate speed so an English-learning student can easily understand. Do not add any commentary, do not change voices, do not add emotion — just read the sentence exactly:';
+
 export const getProvider = (): TtsProvider => {
   const v = localStorage.getItem(PROVIDER_KEY) as string | null;
-  if (v === 'streamelements' || v === 'puter') return 'translate'; // migrate legacy
-  if (v === 'browser' || v === 'translate' || v === 'gemini') return v;
-  return 'translate';
+  if (v === 'gemini') return 'gemini';
+  return 'browser';
 };
 
 export const setProvider = (p: TtsProvider) => localStorage.setItem(PROVIDER_KEY, p);
@@ -125,19 +126,26 @@ export const stopTts = () => {
 const playAudioOnce = (url: string, objectUrl: string | null, session: Session): Promise<void> =>
   new Promise(resolve => {
     let done = false;
+    const audio = new Audio(url);
     const finish = () => {
       if (done) return;
       done = true;
       if (currentAudio === audio) releaseAudio();
       resolve();
     };
-    const audio = new Audio(url);
     currentAudio = audio;
     currentObjectUrl = objectUrl;
     audio.onended = finish;
     audio.onerror = finish;
     audio.onpause = () => { if (session.cancelled) finish(); };
-    audio.play().catch(finish);
+    try {
+      const p = audio.play();
+      if (p && typeof p.then === 'function') {
+        p.then(() => {}, () => finish());
+      }
+    } catch {
+      finish();
+    }
   });
 
 // ─── PCM → WAV helpers (for Gemini) ──────────────────────────────────
@@ -188,31 +196,6 @@ const pcmBase64ToWavUrl = (b64: string, mime: string): string => {
   return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
 };
 
-// ─── Google Translate TTS ────────────────────────────────────────────
-// Unofficial endpoint. Returns audio/mpeg, ~200 char limit per request,
-// CORS allows <audio> playback (cross-origin-resource-policy: cross-origin).
-
-const TRANSLATE_CHUNK = 180;
-
-const chunkForTranslate = (text: string): string[] => {
-  if (text.length <= TRANSLATE_CHUNK) return [text];
-  const out: string[] = [];
-  let cur = '';
-  for (const word of text.split(/\s+/)) {
-    if ((cur + ' ' + word).trim().length > TRANSLATE_CHUNK) {
-      if (cur) out.push(cur);
-      cur = word;
-    } else {
-      cur = cur ? `${cur} ${word}` : word;
-    }
-  }
-  if (cur) out.push(cur);
-  return out;
-};
-
-const translateUrl = (text: string) =>
-  `https://translate.google.com/translate_tts?ie=UTF-8&tl=en&client=tw-ob&q=${encodeURIComponent(text)}`;
-
 // ─── Gemini key/model rotation ───────────────────────────────────────
 
 interface RotState {
@@ -256,8 +239,9 @@ const fetchGeminiSentence = async (text: string, rot: RotState): Promise<{ url: 
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents: [{ role: 'user', parts: [{ text }] }],
+            contents: [{ role: 'user', parts: [{ text: `${GEMINI_STYLE_PROMPT} ${text}` }] }],
             generationConfig: {
+              temperature: 0.1,
               responseModalities: ['AUDIO'],
               speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: GEMINI_VOICE } } },
             },
@@ -332,25 +316,6 @@ export const speakTts = async (text: string, opts: SpeakOpts = {}): Promise<void
       };
       next();
     });
-    return;
-  }
-
-  // Google Translate: direct URL playback, with sub-chunking for long sentences
-  if (provider === 'translate') {
-    const items: { url: string; sentenceIdx: number }[] = [];
-    for (let i = 0; i < sentences.length; i++) {
-      for (const chunk of chunkForTranslate(sentences[i])) {
-        items.push({ url: translateUrl(chunk), sentenceIdx: i });
-      }
-    }
-    opts.onProgress?.(items.length, items.length);
-    for (const item of items) {
-      if (session.cancelled) break;
-      opts.onSentence?.(item.sentenceIdx);
-      await playAudioOnce(item.url, null, session);
-    }
-    opts.onSentence?.(-1);
-    opts.onEnd?.();
     return;
   }
 

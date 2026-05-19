@@ -24,9 +24,8 @@ const SAMPLE =
   "Hello! This is a sample of how questions and answers will sound. The voice reads naturally, one sentence at a time.";
 
 const PROVIDER_DESC: Record<TtsProvider, string> = {
-  browser: "Uses your device's built-in voice. Instant, no network needed. Quality varies by device.",
-  translate: 'Google Translate TTS — free, unofficial, unlimited. Decent quality, English-leaning voice.',
-  gemini: 'Google Gemini neural TTS. Highest quality. Requires your own API key(s).',
+  browser: "Free, unlimited. Uses your device's built-in voice. Instant, no network. Quality varies by device.",
+  gemini: 'Google Gemini neural TTS — highest quality. Requires your own free API key(s). Stack quotas with multiple keys × models.',
 };
 
 const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
@@ -126,7 +125,7 @@ const TtsSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
         <div className="flex-grow overflow-y-auto px-5 py-4 space-y-3">
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">TTS Provider</p>
-          {(['browser', 'translate', 'gemini'] as TtsProvider[]).map(p => {
+          {(['browser', 'gemini'] as TtsProvider[]).map(p => {
             const active = provider === p;
             return (
               <button
