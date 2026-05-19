@@ -76,9 +76,13 @@ Research shows that they aren't; in fact, teaching students new words without fi
               title: "The Power of Flocabulary",
               content: `The Power of Flocabulary for Science Vocabulary Instruction Flocabulary is a vocabulary-centered instructional platform that uses hip-hop songs to build and apply vocabulary in context. All lessons are designed with Bloom's Taxonomy in mind, promoting critical and creative thinking.
 
-With its many features, Flocabulary is the perfect teaching tool for science vocabulary using the explore-before-explain approach. Here's an example of the type of engaging videos you can find on Flocabulary!
-
-Students can use the Climate Change video to review environmental science vocabulary words and concepts, such as air pollutants, fossil fuels and weather. There are many fun and engaging strategies to teach vocabulary explicitly through direct instruction and/or independent acquisition skills.
+With its many features, Flocabulary is the perfect teaching tool for science vocabulary using the explore-before-explain approach. Here's an example of the type of engaging videos you can find on Flocabulary!`
+            },
+            {
+              id: "sl-u6-floc1-p2",
+              type: "theory",
+              title: "The Power of Flocabulary",
+              content: `Students can use the Climate Change video to review environmental science vocabulary words and concepts, such as air pollutants, fossil fuels and weather. There are many fun and engaging strategies to teach vocabulary explicitly through direct instruction and/or independent acquisition skills.
 
 Below are five ideas for incorporating vocabulary building as part of any science lesson.`
             }
@@ -104,9 +108,13 @@ Below are five ideas for incorporating vocabulary building as part of any scienc
               title: "1. Provide Context for New Words",
               content: `Below are five ideas for incorporating vocabulary building as part of any science lesson. 1.
 
-Provide Context for New Words Science vocabulary instruction should start with an explore-before-explain approach to give students context about the new words they will learn. Traditional approaches, in which a teacher's explanation comes first, do little to promote critical thinking or address any misconceptions students may have.
-
-Instead, with the explore-before-explain mind-set, teachers can expose students to new vocabulary words within a concept, rather than explaining or defining the vocabulary first. To start with this approach, teachers can assign a quick lab or activity, or conduct a demonstration to provide students with context before teaching a lesson.
+Provide Context for New Words Science vocabulary instruction should start with an explore-before-explain approach to give students context about the new words they will learn. Traditional approaches, in which a teacher's explanation comes first, do little to promote critical thinking or address any misconceptions students may have.`
+            },
+            {
+              id: "sl-u6-idea1a-p2",
+              type: "theory",
+              title: "1. Provide Context for New Words",
+              content: `Instead, with the explore-before-explain mind-set, teachers can expose students to new vocabulary words within a concept, rather than explaining or defining the vocabulary first. To start with this approach, teachers can assign a quick lab or activity, or conduct a demonstration to provide students with context before teaching a lesson.
 
 After teachers provide conceptual context, students are primed to learn and really understand the meaning of new vocabulary words. Students are then more likely to relate to and use the new vocabulary words because they have already seen them in use within a given topic.
 
@@ -126,9 +134,13 @@ Watch the video as a class together and then complete the Vocab Cards and Vocab 
               title: "2. Create Visual References",
               content: `Watch the video as a class together and then complete the Vocab Cards and Vocab Game activities. 2.
 
-Create Visual References Providing visual references can be another engaging and creative way to support and strengthen students' vocabulary. For example, students can collaborate to create and decorate the classroom's word wall for each unit taught.
-
-This promotes ownership of student learning and provides a visual reference for students to use throughout the unit. Students can also create a glossary with images in their science notebooks to refer to as needed.
+Create Visual References Providing visual references can be another engaging and creative way to support and strengthen students' vocabulary. For example, students can collaborate to create and decorate the classroom's word wall for each unit taught.`
+            },
+            {
+              id: "sl-u6-idea2a-p2",
+              type: "theory",
+              title: "2. Create Visual References",
+              content: `This promotes ownership of student learning and provides a visual reference for students to use throughout the unit. Students can also create a glossary with images in their science notebooks to refer to as needed.
 
 Furthermore, teachers can engage students in a class discussion to create word maps and Frayer models for new vocabulary. These can be hung up in the classroom for future reference.`
             },
@@ -154,9 +166,13 @@ These Vocab Cards include the vocabulary word, part of speech, definition, and a
               title: "3. Provide Repeated Exposure to New Words",
               content: `For example, if you're teaching about natural resources, use our "What is Wind?" lesson to teach Earth science vocabulary terms. 3.
 
-Provide Repeated Exposure to New Words Research shows that students need repeated exposure to new words over time to learn their meaning and how to use them. Therefore, providing students with multiple opportunities to think about and use vocabulary words is an important strategy.
-
-You can provide repeated exposure to vocabulary in science by using different modalities (speaking, writing, and listening) to practice. For instance, students can write journal entries in which they have to explain or summarize a topic using specific vocabulary words, with or without a word bank.
+Provide Repeated Exposure to New Words Research shows that students need repeated exposure to new words over time to learn their meaning and how to use them. Therefore, providing students with multiple opportunities to think about and use vocabulary words is an important strategy.`
+            },
+            {
+              id: "sl-u6-idea3a-p2",
+              type: "theory",
+              title: "3. Provide Repeated Exposure to New Words",
+              content: `You can provide repeated exposure to vocabulary in science by using different modalities (speaking, writing, and listening) to practice. For instance, students can write journal entries in which they have to explain or summarize a topic using specific vocabulary words, with or without a word bank.
 
 They can also practice paraphrasing or simplifying sentences that use the given vocabulary words, or complete a True or False activity in which students have to rewrite sentences that use the vocabulary words to make them true statements. Students can practice speaking about and listening to new vocabulary words with a Think-Pair-Share activity, a class discussion, a video/audio or a presentation.`
             },
@@ -207,13 +223,21 @@ Students can then work in pairs or small groups to predict the meaning of assign
               title: "5. Use a Creative Approach",
               content: `Students can then work in pairs or small groups to predict the meaning of assigned words, followed by a class discussion in which the groups take turns explaining their predictions about the meaning of the word. 5.
 
-Use a Creative Approach A creative approach can be a fun and memorable way to practice or teach science vocabulary lessons. It can also give students extra opportunities to use the learned vocabulary in various contexts.
+Use a Creative Approach A creative approach can be a fun and memorable way to practice or teach science vocabulary lessons. It can also give students extra opportunities to use the learned vocabulary in various contexts.`
+            },
+            {
+              id: "sl-u6-idea5a-p2",
+              type: "theory",
+              title: "5. Use a Creative Approach",
+              content: `Teachers can assign a comic strip contest where students explain a topic using lesson-specific vocabulary. Likewise, students can create or draw diagrams or models of scientific concepts, including labels, explanations, and definitions of specific vocabulary.
 
-Teachers can assign a comic strip contest where students explain a topic using lesson-specific vocabulary. Likewise, students can create or draw diagrams or models of scientific concepts, including labels, explanations, and definitions of specific vocabulary.
-
-And while these activities might be better suited for group work, they can also be completed individually, depending on the specific needs of each class. For instance, students can use Lyric Lab to create a rap or poem using vocabulary words from the lesson.
-
-This is the final activity in Flocabulary's lesson sequence, enabling students to demonstrate their mastery of the topic and the vocabulary. In Lyric Lab, students write their own rhymes line by line, utilizing the vocabulary word bank, our rhyme generator and musical beats.
+And while these activities might be better suited for group work, they can also be completed individually, depending on the specific needs of each class. For instance, students can use Lyric Lab to create a rap or poem using vocabulary words from the lesson.`
+            },
+            {
+              id: "sl-u6-idea5a-p3",
+              type: "theory",
+              title: "5. Use a Creative Approach",
+              content: `This is the final activity in Flocabulary's lesson sequence, enabling students to demonstrate their mastery of the topic and the vocabulary. In Lyric Lab, students write their own rhymes line by line, utilizing the vocabulary word bank, our rhyme generator and musical beats.
 
 Students can either perform their work live in front of the class as a song or slam poetry, record themselves performing it in a video, or simply save the rap as a PDF to send to their teacher.`
             },

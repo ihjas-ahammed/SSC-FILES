@@ -24,9 +24,13 @@ export const SEC_U16_TEAM_PRESENTATIONS: Section = {
               title: "Introduction",
               content: `Unit 16 Team Presentations: Best Practices to Collaborate More Efficiently Jordan Turner Introduction This unit emphasizes the importance of collaboration in team presentations. By dividing roles, coordinating effectively, and building on each other’s strengths, teams can deliver more structured and engaging presentations.
 
-Teamwork ensures clarity, balance, and smooth flow, helping audiences stay attentive and involved. In today’s fast-paced and technology-driven workplace, teams cannot afford to let technical obstacles stand in the way of productivity.
-
-The right methods and tools make it possible to overcome difficulties, helping teams stay on track and deliver professional, impactful presentations. By understanding why collaboration matters and by applying clear strategies, teams can work more efficiently, share responsibilities effectively, and maintain consistency in design and content.
+Teamwork ensures clarity, balance, and smooth flow, helping audiences stay attentive and involved. In today’s fast-paced and technology-driven workplace, teams cannot afford to let technical obstacles stand in the way of productivity.`
+            },
+            {
+              id: "sl-u16-intro1-p2",
+              type: "theory",
+              title: "Introduction",
+              content: `The right methods and tools make it possible to overcome difficulties, helping teams stay on track and deliver professional, impactful presentations. By understanding why collaboration matters and by applying clear strategies, teams can work more efficiently, share responsibilities effectively, and maintain consistency in design and content.
 
 This article discusses the importance of collaboration in presentation design and provides best practices to ensure that teamwork remains smooth, organized, and productive. Text https://www.beautiful.ai/blog/team-presentations-best-practices-to-reduce-collaboration-back-and-forth`
             }
@@ -52,9 +56,13 @@ This article discusses the importance of collaboration in presentation design an
               title: "Why Collaboration Matters",
               content: `Why collaboration matters There’s a popular phrase that states, “If you want to go fast, go alone; if you want to go far, go together.” Which translates to the modern statement, “teamwork makes the dream work.” Whichever way you spin it, it’s no secret that working together is more effective than working in a silo. You’re simply able to cover more ground with more talent.
 
-Every colleague boasts their own unique set of skills, ideas, and interests. Working together collaboratively allows each team member to share their ideas, understand how their peers think, and riff on new concepts together to achieve the best possible outcome.
-
-Collaboration encourages employees to bring their expertise to the table, in turn teaching one another new things along the way. Not only does it open up communication, and opportunities for teams to try new things, it also encourages problem-solving to eliminate roadblocks.
+Every colleague boasts their own unique set of skills, ideas, and interests. Working together collaboratively allows each team member to share their ideas, understand how their peers think, and riff on new concepts together to achieve the best possible outcome.`
+            },
+            {
+              id: "sl-u16-why1-p2",
+              type: "theory",
+              title: "Why Collaboration Matters",
+              content: `Collaboration encourages employees to bring their expertise to the table, in turn teaching one another new things along the way. Not only does it open up communication, and opportunities for teams to try new things, it also encourages problem-solving to eliminate roadblocks.
 
 As a business is trying to scale, collaboration is a key pillar in that growth.`
             },
@@ -64,9 +72,13 @@ As a business is trying to scale, collaboration is a key pillar in that growth.`
               title: "Challenges of Collaboration on Presentations",
               content: `Collaborating on team presentations Collaboration is not one-size-fits-all and can look different for every team. Some teams may collaborate on campaign specs, while others are working as a unit on a sales pitch presentation.
 
-Historically speaking, working collaboratively on PowerPoint presentations created a lot of bottlenecks for teams. Between going back and forth with version histories, getting approvals, and waiting on in-house designers to finesse each deck; it made the process painful and inefficient.
-
-In a 2021 survey, just under 20% of people said that collaboration was their biggest challenge when creating a new presentation. We’d be willing to bet that they weren’t using the right tools to facilitate said collaboration in their workplace.
+Historically speaking, working collaboratively on PowerPoint presentations created a lot of bottlenecks for teams. Between going back and forth with version histories, getting approvals, and waiting on in-house designers to finesse each deck; it made the process painful and inefficient.`
+            },
+            {
+              id: "sl-u16-challenge-p2",
+              type: "theory",
+              title: "Challenges of Collaboration on Presentations",
+              content: `In a 2021 survey, just under 20% of people said that collaboration was their biggest challenge when creating a new presentation. We’d be willing to bet that they weren’t using the right tools to facilitate said collaboration in their workplace.
 
 Luckily with modern technology and PowerPoint alternatives, collaboration has never been more seamless.`
             },

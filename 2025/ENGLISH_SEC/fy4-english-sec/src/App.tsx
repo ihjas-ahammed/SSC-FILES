@@ -4,11 +4,12 @@ import { UserProgress } from './types';
 import Dashboard from './pages/Dashboard';
 import LessonPage from './pages/LessonPage';
 import ModuleSummaryPage from './pages/ModuleSummaryPage';
-import ExamQuestionsPage from './pages/ExamQuestionsPage';
 import ModuleNotesPage from './pages/ModuleNotesPage';
 import PracticePage from './pages/PracticePage';
 import MainLayout from './components/MainLayout';
 import { useAnalytics } from './hooks/useAnalytics';
+import SummaryPage from './pages/SummaryPage';
+import { MODULES } from './data/modules';
 import './App.css';
 import './styles/interactive.css';
 import './styles/path.css';
@@ -27,19 +28,25 @@ const AnalyticsTracker = () => {
 const App: React.FC = () => {
   const [progress, setProgress] = useState<UserProgress>(() => {
     const saved = localStorage.getItem('duofy_english_vac_progress');
+    const DEFAULT_MODULE_ID = 'module-1-scientific-attitude';
+    const validIds = new Set(MODULES.map(m => m.id));
     let initialProgress: UserProgress = {
       completedLessons: [],
       xp: 0,
-      currentModuleId: 'module-1-human-rights',
+      currentModuleId: DEFAULT_MODULE_ID,
     };
 
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        const savedModuleId = parsed.currentModuleId;
         initialProgress = {
           completedLessons: parsed.completedLessons || [],
           xp: parsed.xp || 0,
-          currentModuleId: parsed.currentModuleId || 'module-1-human-rights',
+          currentModuleId:
+            savedModuleId && validIds.has(savedModuleId)
+              ? savedModuleId
+              : DEFAULT_MODULE_ID,
         };
       } catch (e) {
         console.error('Failed to parse progress', e);
@@ -80,8 +87,16 @@ const App: React.FC = () => {
                 />
               }
             />
-            <Route path="/exam" element={<ExamQuestionsPage progress={progress} />} />
             <Route path="/practice" element={<PracticePage progress={progress} />} />
+            <Route
+              path="/summary"
+              element={
+                <SummaryPage
+                  progress={progress}
+                  onModuleChange={handleModuleChange}
+                />
+              }
+            />
             <Route
               path="/notes"
               element={

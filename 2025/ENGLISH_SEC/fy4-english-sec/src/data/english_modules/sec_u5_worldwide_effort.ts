@@ -171,9 +171,13 @@ All of these, I believe, can be broached by science. Steve Mirsky: Jeremy Farrar
               title: "Jeremy Farrar's Campaign",
               content: `Steve Mirsky: Jeremy Farrar, director of the Wellcome Trust, one of the world's biggest non-governmental funders of scientific research, earlier today, January 23rd he spoke to Scientific American editor-in-chief, Mariette DiChristina at the World Economic Forum in Davos, after they both took part in the Global Science Outlook discussion at the Forum. Jeremy Farrar: And nobody- not myself, not our organization, Wellcome, no organization- is going to solve this on their own.
 
-And so we've launched a campaign called "Together Science Can", which brings together people from absolutely around the world to stand up for those things that we care about. That people can work together across borders, they can be friends, they can share their information, and they can eventually make the world a better place.
-
-Steve Mirsky: You can see video of the entire discussion that took place at Davos earlier today. Just google, World Economic Forum at Davos, Global Science Outlook.
+And so we've launched a campaign called "Together Science Can", which brings together people from absolutely around the world to stand up for those things that we care about. That people can work together across borders, they can be friends, they can share their information, and they can eventually make the world a better place.`
+            },
+            {
+              id: "sl-u5-tx2-p2",
+              type: "theory",
+              title: "Jeremy Farrar's Campaign",
+              content: `Steve Mirsky: You can see video of the entire discussion that took place at Davos earlier today. Just google, World Economic Forum at Davos, Global Science Outlook.
 
 For Scientific American's 60-Second Science, I'm Steve Mirsky.`
             },

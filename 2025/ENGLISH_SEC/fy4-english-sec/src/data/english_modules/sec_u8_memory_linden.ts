@@ -24,9 +24,13 @@ export const SEC_U8_MEMORY_LINDEN: Section = {
               title: "Who is David J. Linden?",
               content: `Unit 8 You Can't Completely Trust Your Memories- But That Doesn't Make Them Any Less Important David Linden Introduction David J. Linden is an American neuroscientist and author known for his research on the cellular substrates of memory storage and his efforts to popularize brain science.
 
-Born in 1961, he grew up in Santa Monica, California. His research primarily focuses on the cellular mechanisms of memory formation, the molecular basis of addiction and the recovery of function after brain injury.
-
-In 2010, he was recognized for his scientific contributions as a fellow of the American Association for the Advancement of Science. He served for many years as the chief editor of "Journal of Neurophysiology".
+Born in 1961, he grew up in Santa Monica, California. His research primarily focuses on the cellular mechanisms of memory formation, the molecular basis of addiction and the recovery of function after brain injury.`
+            },
+            {
+              id: "sl-u8-auth1-p2",
+              type: "theory",
+              title: "Who is David J. Linden?",
+              content: `In 2010, he was recognized for his scientific contributions as a fellow of the American Association for the Advancement of Science. He served for many years as the chief editor of "Journal of Neurophysiology".
 
 He has authored several popular science books on neuroscience, including: The Accidental Mind (2007), The Compass of Pleasure (2011), Touch (2016) and Unique (2020). Linden currently holds a position as a professor in the Department of Neuroscience at the Johns Hopkins University School of Medicine in Baltimore, Maryland.`
             },
@@ -46,9 +50,13 @@ Prominent figures such as Carl Sagan, Stephen Hawking, and Neil de Grasse Tyson 
               title: "Popular Science Magazine & the Text",
               content: `"Popular Science" is a long-established American magazine and digital pop sci platform that plays a significant role in communicating complex scientific ideas in a clear and engaging manner. It covers a wide range of topics including space exploration, environmental issues, health, innovation and emerging technologies.
 
-Through articles, videos and interactive contents, "Popular Science" aims to foster curiosity, promote scientific literacy and bridge the gap between researchers and the general public. The text is an excerpt adapted from David J.
-
-Linden's Unique: The New Science from Human Individuality published by Basic Books and reprinted in "Popular Science" digital platform. It explores the fascinating and often surprising nature of autobiographical memory.
+Through articles, videos and interactive contents, "Popular Science" aims to foster curiosity, promote scientific literacy and bridge the gap between researchers and the general public. The text is an excerpt adapted from David J.`
+            },
+            {
+              id: "sl-u8-auth3-p2",
+              type: "theory",
+              title: "Popular Science Magazine & the Text",
+              content: `Linden's Unique: The New Science from Human Individuality published by Basic Books and reprinted in "Popular Science" digital platform. It explores the fascinating and often surprising nature of autobiographical memory.
 
 Drawing on psychological research and evolutionary insights, Linden examines how our memories are not perfect recordings of the past but are instead flexible, emotionally shaped, and influenced by present knowledge and needs. Through examples ranging from everyday experiences to trauma, he highlights the ways in which memory functions less as a historical archive and more as a tool for learning, adaptation and decision-making.
 
@@ -96,9 +104,13 @@ Or people will say, "I always knew that candidate X would win the election," eve
               title: "Field Memory vs. Observer Memory",
               content: `Some of the ways autobiographical memory fails are well known. Generally, our memories of recent events are more accurate and detailed than our memories of the distant past.
 
-But there are other, less obvious changes. If I ask you to recall a recent event, you are most likely to imagine it from your own point of view, with the camera, as it were, in your own eyes.
-
-This is called field memory. But if I ask you to recall a memory from your childhood, there is a much greater probability that your point of view will shift to that of an observer; you will see yourself in the scene rather than seeing the event through your own eyes.
+But there are other, less obvious changes. If I ask you to recall a recent event, you are most likely to imagine it from your own point of view, with the camera, as it were, in your own eyes.`
+            },
+            {
+              id: "sl-u8-sin2-p2",
+              type: "theory",
+              title: "Field Memory vs. Observer Memory",
+              content: `This is called field memory. But if I ask you to recall a memory from your childhood, there is a much greater probability that your point of view will shift to that of an observer; you will see yourself in the scene rather than seeing the event through your own eyes.
 
 Furthermore, if asked to recall the emotional tone of a past event, you are more likely to evoke a field memory, while if asked to recall facts of an event, you are more likely to call forth an observer memory. The key point here is that the way we recall the memory is not set in stone.
 
@@ -110,9 +122,13 @@ It can be strongly influenced by the task at hand.`
               title: "Repetition Renders Memory Generic",
               content: `Another time-related phenomenon is that repetition of experience renders memories generic. If you've only been to the beach once, then you are likely to remember many details of that experience.
 
-But if you've been over 50 times, you're unlikely to remember details of visit number 37, unless something emotionally affecting occurred. Perhaps visit number 37 was the day a dead whale washed up on the beach or the day you met your future spouse.
-
-Then the details of that day would likely be written into your memory deeply and retained with greater detail and fidelity. Emotions, both positive and negative, are the currency of autobiographical memory.
+But if you've been over 50 times, you're unlikely to remember details of visit number 37, unless something emotionally affecting occurred. Perhaps visit number 37 was the day a dead whale washed up on the beach or the day you met your future spouse.`
+            },
+            {
+              id: "sl-u8-sin3-p2",
+              type: "theory",
+              title: "Repetition Renders Memory Generic",
+              content: `Then the details of that day would likely be written into your memory deeply and retained with greater detail and fidelity. Emotions, both positive and negative, are the currency of autobiographical memory.
 
 Emotions cause the brain to store memory in a stronger and more permanent fashion, set down in bold type and italics. This reinforcement of emotional memories is mostly good and sometimes bad.
 
@@ -152,13 +168,21 @@ It's good because emotionally salient events are often the ones you most need to
               title: "The Primary Purpose of Memory",
               content: `If our memories for events are often so inaccurate and changeable, then why do we even have them? What is memory for?
 
-The main answer is that memory allows us to learn: to adjust our behaviour based on individual experience and therefore efficiently find food, avoid predators, find and attract mates, and so on. In other words, memory does for the individual what evolution of the genome does for the species over many generations: it allows us to respond to the environment in a way that increases the chance of surviving and passing genes onto the next generation.
+The main answer is that memory allows us to learn: to adjust our behaviour based on individual experience and therefore efficiently find food, avoid predators, find and attract mates, and so on. In other words, memory does for the individual what evolution of the genome does for the species over many generations: it allows us to respond to the environment in a way that increases the chance of surviving and passing genes onto the next generation.`
+            },
+            {
+              id: "sl-u8-purp1-p2",
+              type: "theory",
+              title: "The Primary Purpose of Memory",
+              content: `That is endlessly useful. For example, a new born mouse has an inborn fear of foxes, even if it is the descendant of many generations of lab mice with no exposure to foxes at all.
 
-That is endlessly useful. For example, a new born mouse has an inborn fear of foxes, even if it is the descendant of many generations of lab mice with no exposure to foxes at all.
-
-This is a useful adaptation for mice in the wild, but it is not a good general strategy for dealing with a changing world. It is not possible to encode all useful behavioural responses into the genome in order to have a newborn equipped to deal with every eventuality.
-
-It's both more efficient and flexible to have animals remember and learn, even if they don't do so perfectly. And there is another benefit.
+This is a useful adaptation for mice in the wild, but it is not a good general strategy for dealing with a changing world. It is not possible to encode all useful behavioural responses into the genome in order to have a newborn equipped to deal with every eventuality.`
+            },
+            {
+              id: "sl-u8-purp1-p3",
+              type: "theory",
+              title: "The Primary Purpose of Memory",
+              content: `It's both more efficient and flexible to have animals remember and learn, even if they don't do so perfectly. And there is another benefit.
 
 The act of recollection allows us to mentally time travel to a past event, and this allows us to imagine a future as well as a past. Memory releases our mental life from the tyranny of the present moment.
 
@@ -170,9 +194,13 @@ And imagining a future allows us to make predictions, which is a requirement for
               title: "Failures as Features",
               content: `Another answer to the question of what memory is for is that the particular failures of autobiographical memory are actually features rather than bugs. For memory to be useful, it must be updated and integrated with subsequent experience, even if it alters the memory of the original event.
 
-In that way, it's helpful for recollection to render the memory of an event malleable, so that it may be integrated with the present. In most situations, a generic memory compiled from many trips to the beach is more useful in guiding future decisions and behavior than fifty stand-alone, detailed, and accurate beach trip memories.
-
-The repetition-driven loss of detail allows for the efficient use of the brain's limited memory resources. In other words, it's not surprising that our memories of events are often inaccurate because the particular way in which memories are compromised is often useful.
+In that way, it's helpful for recollection to render the memory of an event malleable, so that it may be integrated with the present. In most situations, a generic memory compiled from many trips to the beach is more useful in guiding future decisions and behavior than fifty stand-alone, detailed, and accurate beach trip memories.`
+            },
+            {
+              id: "sl-u8-purp2-p2",
+              type: "theory",
+              title: "Failures as Features",
+              content: `The repetition-driven loss of detail allows for the efficient use of the brain's limited memory resources. In other words, it's not surprising that our memories of events are often inaccurate because the particular way in which memories are compromised is often useful.
 
 What's surprising is that we mostly fail to recognize this in our daily lives. We humans all have an inborn tendency to create a plausible story out of memory fragments.
 

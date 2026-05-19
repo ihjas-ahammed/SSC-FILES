@@ -136,9 +136,13 @@ Like other great men, he invented himself.” Ramanujan is seen to be working ou
               title: "Persistence & Individuality — Diamond Quote",
               content: `Persistence and Individuality: Ramanujan is denied employment in British occupied India citing his lack of qualifications. Returning to Victoria Students’ Hostel where he stays with Viswanatha Sastri whom he had tutored previously, he laments - “I’m doomed, like Galileo.
 
-He died in poverty....” He treasures his notebooks filled with original mathematical equations but they were ignored by the society that valued wealth and academic degrees as foremost. When he approaches S.
-
-Narayana Iyer who was the treasurer of the Indian Mathematical Society and chief accountant at the Madras Port Trust office, he is appointed as a clerk there during the period 1912-1914 upon a condition that Ramanujan will share his mathematical knowledge with him every evening. Sir Francis Spring, the Chairman of the Trust, initially doubted his capacity based on his looks and warns him, “Your accounts had better be half as polished as your ego” in reply to Ramanujan’s self-introduction that, “What you might see now is ordinary glass, but I promise you will soon remain to see a diamond.” This interaction perfectly portrays Ramanujan as a man of self-worth and points to the insignificance of money in determining one’s dignity.
+He died in poverty....” He treasures his notebooks filled with original mathematical equations but they were ignored by the society that valued wealth and academic degrees as foremost. When he approaches S.`
+            },
+            {
+              id: "sl-u2-persist-p2",
+              type: "theory",
+              title: "Persistence & Individuality — Diamond Quote",
+              content: `Narayana Iyer who was the treasurer of the Indian Mathematical Society and chief accountant at the Madras Port Trust office, he is appointed as a clerk there during the period 1912-1914 upon a condition that Ramanujan will share his mathematical knowledge with him every evening. Sir Francis Spring, the Chairman of the Trust, initially doubted his capacity based on his looks and warns him, “Your accounts had better be half as polished as your ego” in reply to Ramanujan’s self-introduction that, “What you might see now is ordinary glass, but I promise you will soon remain to see a diamond.” This interaction perfectly portrays Ramanujan as a man of self-worth and points to the insignificance of money in determining one’s dignity.
 
 Subsequently, he proves himself and wins the support and admiration of these same people who ensure that he ends up in England along with prominent mathematicians of the time.`
             }
@@ -156,13 +160,21 @@ Subsequently, he proves himself and wins the support and admiration of these sam
               title: "Imagination & Humility",
               content: `Imagination and Humility: Anna, as Ramanujan lovingly addresses Narayana Iyer, wants him to be recognised on an international level. He states, “...
 
-British, even while they subjugate us, must recognise that our brightest matches theirs.” He instigates Ramanujan to “imagine”, to which he replies, “All I do is imagine.” Elsewhere, during his first trip to England, sitting on a ship when a fellow traveller comments on the distance and asks whether he can imagine that, Ramanujan humbly replies with a self-satisfied smile, “I have known larger numbers.” These pithy statements sum the work of his life and highlights the importance of being original in thoughts in order to invent something new. His criticsisers like Spring later turn out to be his ardent admirers.
+British, even while they subjugate us, must recognise that our brightest matches theirs.” He instigates Ramanujan to “imagine”, to which he replies, “All I do is imagine.” Elsewhere, during his first trip to England, sitting on a ship when a fellow traveller comments on the distance and asks whether he can imagine that, Ramanujan humbly replies with a self-satisfied smile, “I have known larger numbers.” These pithy statements sum the work of his life and highlights the importance of being original in thoughts in order to invent something new. His criticsisers like Spring later turn out to be his ardent admirers.`
+            },
+            {
+              id: "sl-u2-imag-p2",
+              type: "theory",
+              title: "Imagination & Humility",
+              content: `Hardy, initially, receives the letter containing Ramanujan’s formulas with reservation regarding its authenticity. He suspects it to have been written by his colleague, another great mathematician John Edensor Littlewood.
 
-Hardy, initially, receives the letter containing Ramanujan’s formulas with reservation regarding its authenticity. He suspects it to have been written by his colleague, another great mathematician John Edensor Littlewood.
-
-The first meeting between Littlewood and Ramanujan against the backdrop of the University is particularly significant for many reasons. It delineates the coloniser-colonised dichotomy as Ramanujan stares at the grand building and Littlewood remarks sarcastically, “Yes.
-
-The intended effect. Don’t be intimidated” and he is quick to add that “Great knowledge often comes from the humblest of origins”, a pointer towards Ramanujan’s own status and also proving Littlewood to be a true genius who is not overruled by ego.
+The first meeting between Littlewood and Ramanujan against the backdrop of the University is particularly significant for many reasons. It delineates the coloniser-colonised dichotomy as Ramanujan stares at the grand building and Littlewood remarks sarcastically, “Yes.`
+            },
+            {
+              id: "sl-u2-imag-p3",
+              type: "theory",
+              title: "Imagination & Humility",
+              content: `The intended effect. Don’t be intimidated” and he is quick to add that “Great knowledge often comes from the humblest of origins”, a pointer towards Ramanujan’s own status and also proving Littlewood to be a true genius who is not overruled by ego.
 
 In fact, it is Littlewood, an established mathematician, who initiates the conversation with Ramanujan at first.`
             },
@@ -172,9 +184,13 @@ In fact, it is Littlewood, an established mathematician, who initiates the conve
               title: "Racism at Cambridge",
               content: `The film also raises issues of racism at several levels. Hardy’s proposal to offer a Fellowship to Ramanujan is outvoted at Trinity College.
 
-This was foreseen by Littlewood, “I doubt a dark face will ever grace these walls, let alone become a Fellow”, referring to the feeble chance of Ramanujan occupying a place in the Royal Society amidst legends like Newton. Hardy’s reaction to this is a deliberate silence as if time will prove everything.
-
-Surely enough, the academia finally bestows the coveted Royal Society Fellowship (FRS) itself on Ramanujan. Besides, when Ramanujan attends lectures in order to compensate for his lack of degree, the harsh treatment of the professor is also exposed in a matter-of-fact manner.
+This was foreseen by Littlewood, “I doubt a dark face will ever grace these walls, let alone become a Fellow”, referring to the feeble chance of Ramanujan occupying a place in the Royal Society amidst legends like Newton. Hardy’s reaction to this is a deliberate silence as if time will prove everything.`
+            },
+            {
+              id: "sl-u2-racism-p2",
+              type: "theory",
+              title: "Racism at Cambridge",
+              content: `Surely enough, the academia finally bestows the coveted Royal Society Fellowship (FRS) itself on Ramanujan. Besides, when Ramanujan attends lectures in order to compensate for his lack of degree, the harsh treatment of the professor is also exposed in a matter-of-fact manner.
 
 Yet the fact that Trinity College permitted the scene to be shot there, points towards readiness to change, a hope for humanity. The director, in an interview in 2016, also notes the interesting fact that the president of the Royal Society, then, was an Indian.`
             },

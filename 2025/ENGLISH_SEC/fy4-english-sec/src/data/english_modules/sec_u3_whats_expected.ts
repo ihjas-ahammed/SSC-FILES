@@ -24,9 +24,13 @@ export const SEC_U3_WHATS_EXPECTED: Section = {
               title: "Who is Ted Chiang?",
               content: `Introduction Ted Chiang (b.1967 as Chiang Feng-nan) is an American author of speculative fiction. His parents were Chinese immigrants settled in America.
 
-He graduated in Computer Science from Brown University. His debut story Tower of Babylon (1990) won the Nebula Award.
-
-He is employed as a technical writer in Microsoft and settled in Seattle. His collected works include Stories of Your Life and Others (2002), Exhalation (2019).
+He graduated in Computer Science from Brown University. His debut story Tower of Babylon (1990) won the Nebula Award.`
+            },
+            {
+              id: "sl-u3-auth1-p2",
+              type: "theory",
+              title: "Who is Ted Chiang?",
+              content: `He is employed as a technical writer in Microsoft and settled in Seattle. His collected works include Stories of Your Life and Others (2002), Exhalation (2019).
 
 The short story “Story of Your Life” was adapted into the film Arrival (2016). “It’s by Chiang in the style of an op-ed published in The New York Times, about efforts to reduce inequality through genetic enhancement. He also writes articles on topics related to AI.
 
@@ -38,9 +42,13 @@ The themes of his works centre mostly on concepts like time, space, free will, t
               title: "Chiang's Themes & Impact",
               content: `Chiang’s works encourage readers to think critically about technology, ethics, and human agency in contemporary society. His stories are particularly valuable for students navigating the challenges of an increasingly digital and algorithm-driven world.
 
-His essay, “Why AI isn’t going to make art” published in The New Yorker stirred a lot of interest among the public. His academic expertise in the field in addition to creativity, authenticates his arguments unlike other writers.
-
-He warns that in a world that idealises AI, the repercussions of such an approach on society are to be thoroughly analysed. On the one hand, it can prove to be time saving.
+His essay, “Why AI isn’t going to make art” published in The New Yorker stirred a lot of interest among the public. His academic expertise in the field in addition to creativity, authenticates his arguments unlike other writers.`
+            },
+            {
+              id: "sl-u3-auth2-p2",
+              type: "theory",
+              title: "Chiang's Themes & Impact",
+              content: `He warns that in a world that idealises AI, the repercussions of such an approach on society are to be thoroughly analysed. On the one hand, it can prove to be time saving.
 
 Yet, the increasing dependence on such tools and the tendency to consider the matter generated through a few prompts to be original, demand urgent attention. Similarly, as companies utilise these tools to save money, the pertinent question is whether quality is compromised at some level and whether these are studied properly in terms of future impact.
 
@@ -72,9 +80,13 @@ As he states in an interview with Scott Detrow, he employs science fiction as �
               title: "The Story and Its Structure",
               content: `for humans who are fast transforming into machines in terms of behaviour. The story, through employing science fiction elements, attempts to alert us to this alarming transformation.
 
-It is structured like a warning from the future. A communication technology appears to have been developed in the future to send even lengthy messages to the past using a process called “negative delay” that is accurate to mega second range.
-
-Hence, the message is presented as having been received just over one year back in the past. The technology, in its infancy, is already popular in the present in the form of a small device called Predictor.
+It is structured like a warning from the future. A communication technology appears to have been developed in the future to send even lengthy messages to the past using a process called “negative delay” that is accurate to mega second range.`
+            },
+            {
+              id: "sl-u3-ctx1-p2",
+              type: "theory",
+              title: "The Story and Its Structure",
+              content: `Hence, the message is presented as having been received just over one year back in the past. The technology, in its infancy, is already popular in the present in the form of a small device called Predictor.
 
 Chiang emphasises the harmful impact of technological developments on the world if not handled in a mindful manner. It is leading to a community without freewill who are addicted to the make-belief world that it creates without even realising that it is not real.
 
@@ -86,13 +98,21 @@ The tragedy is that humanity has reached a point where even if one realises the 
               title: "Symbolic Readings",
               content: `The story, a speculative fiction, forces us to pause and think about our actions before it is too late. On one level, the Predictor could resemble gadgets like smart phones which are addictive in nature and on the other, it can be a symbol that represents human beings themselves.
 
-It resembles a smiling human face (green LED flash) which we find a lot around us and interests everyone but the fact that it appears even before there is a need for it, is something to be pondered on. If a smile is flashed (light blinks), one forms a bond (presses the button) without questioning its credibility.
+It resembles a smiling human face (green LED flash) which we find a lot around us and interests everyone but the fact that it appears even before there is a need for it, is something to be pondered on. If a smile is flashed (light blinks), one forms a bond (presses the button) without questioning its credibility.`
+            },
+            {
+              id: "sl-u3-ctx2-p2",
+              type: "theory",
+              title: "Symbolic Readings",
+              content: `The description of the device’s “heart” as consisting of circuits points further towards the human-machine resemblance. The story demands us to question whether what we term as choices are actually imposed on us by the social constructs.
 
-The description of the device’s “heart” as consisting of circuits points further towards the human-machine resemblance. The story demands us to question whether what we term as choices are actually imposed on us by the social constructs.
-
-The title of the story aptly refers to this dilemma. It vividly portrays the different stages of a relationship in human life- at first, one is so engrossed in what the relation represents that one feels proud about it and displays it before others.
-
-By the time the attraction fades and the reality sinks in, one is left to lead a robotic existence. Thus, the self-deception that is gradually becoming a way of life is projected as the ultimate threat to humans.
+The title of the story aptly refers to this dilemma. It vividly portrays the different stages of a relationship in human life- at first, one is so engrossed in what the relation represents that one feels proud about it and displays it before others.`
+            },
+            {
+              id: "sl-u3-ctx2-p3",
+              type: "theory",
+              title: "Symbolic Readings",
+              content: `By the time the attraction fades and the reality sinks in, one is left to lead a robotic existence. Thus, the self-deception that is gradually becoming a way of life is projected as the ultimate threat to humans.
 
 This is one point where the boundaries that separate the past from the present blur because humans have always engaged in this process of acting, the only difference being in the fact that earlier while we were unaware of what is fake, now we are both aware and open to it.`
             }
@@ -128,9 +148,13 @@ Specifically, the light flashes one second before you press the button.`
               title: "Description of the Predictor",
               content: `Specifically, the light flashes one second before you press the button. Most people say that when they first try it, it feels like they’re playing a strange game, one where the goal is to press the button after seeing the flash, and it’s easy to play.
 
-But when you try to break the rules, you find that you can’t. If you try to press the button without having seen a flash, the flash immediately appears, and no matter how fast you move, you never push the button until a second has elapsed.
-
-If you wait for the flash, intending to keep from pressing the button afterwards, the flash never appears. No matter what you do, the light always precedes the button press.
+But when you try to break the rules, you find that you can’t. If you try to press the button without having seen a flash, the flash immediately appears, and no matter how fast you move, you never push the button until a second has elapsed.`
+            },
+            {
+              id: "sl-u3-pred1-p2",
+              type: "theory",
+              title: "Description of the Predictor",
+              content: `If you wait for the flash, intending to keep from pressing the button afterwards, the flash never appears. No matter what you do, the light always precedes the button press.
 
 There’s no way to fool a Predictor.`
             },
@@ -176,13 +200,21 @@ The experience of having free will is too powerful for an argument to overrule. 
               title: "Akinetic Mutism — A Cognitive Plague",
               content: `Typically, a person plays with a Predictor compulsively for several days, showing it to friends, trying various schemes to outwit the device. The person may appear to lose interest in it, but no one can forget what it means — over the following weeks, the implications of an immutable future sink in.
 
-Some people, realizing that their choices don’t matter, refuse to make any choices at all. Like a legion of Bartleby the Scriveners, they no longer engage in spontaneous action.
+Some people, realizing that their choices don’t matter, refuse to make any choices at all. Like a legion of Bartleby the Scriveners, they no longer engage in spontaneous action.`
+            },
+            {
+              id: "sl-u3-fw2-p2",
+              type: "theory",
+              title: "Akinetic Mutism — A Cognitive Plague",
+              content: `Eventually, a third of those who play with a Predictor must be hospitalized because they won’t feed themselves. The end state is akinitic mutism, a kind of waking coma.
 
-Eventually, a third of those who play with a Predictor must be hospitalized because they won’t feed themselves. The end state is akinitic mutism, a kind of waking coma.
-
-They’ll track motion with their eyes, and change position occasionally, but nothing more. The ability to move remains, but the motivation is gone.
-
-Before people started playing with Predictors, akinitic mutism was very rare, a result of damage to the anterior cingulate region of the brain. Now it spreads like a cognitive plague.
+They’ll track motion with their eyes, and change position occasionally, but nothing more. The ability to move remains, but the motivation is gone.`
+            },
+            {
+              id: "sl-u3-fw2-p3",
+              type: "theory",
+              title: "Akinetic Mutism — A Cognitive Plague",
+              content: `Before people started playing with Predictors, akinitic mutism was very rare, a result of damage to the anterior cingulate region of the brain. Now it spreads like a cognitive plague.
 
 People used to speculate about a thought that destroys the thinker, some unspeakable Lovecraftian horror, or a Gödel sentence that crashes the human logical system. It turns out that the disabling thought is one that we’ve all encountered: the idea that free will doesn’t exist.
 
@@ -220,9 +252,13 @@ One dynamic system might fall into a basin of attraction and wind up at a fixed 
               title: "The Message",
               content: `the first lengthy message received when circuits with negative delays in the megasecond range are used to build communication devices. Other messages will follow, addressing other issues.
 
-My message to you is this: pretend that you have free will. It’s essential that you behave as if your decisions matter, even though you know that they don’t.
-
-The reality isn’t important: what’s important is your belief, and believing the lie is the only way to avoid a waking coma. Civilization now depends on self-deception.
+My message to you is this: pretend that you have free will. It’s essential that you behave as if your decisions matter, even though you know that they don’t.`
+            },
+            {
+              id: "sl-u3-warn1-p2",
+              type: "theory",
+              title: "The Message",
+              content: `The reality isn’t important: what’s important is your belief, and believing the lie is the only way to avoid a waking coma. Civilization now depends on self-deception.
 
 Perhaps it always has.`
             },

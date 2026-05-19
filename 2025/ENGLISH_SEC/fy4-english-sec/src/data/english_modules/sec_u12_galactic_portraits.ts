@@ -122,9 +122,13 @@ Human organs’ fractal structures and patterns appeared as stunning art - auric
               title: "From Galileo to JWST",
               content: `II. Ekphrasis With technological advancements in each age, the views alter and improve as does our experience – at the macro and micro level.
 
-In 1608 and 1609, Hans Lipperhey and Thomas Harriot turned the first telescopes skyward. Months later, Galileo Galilei began to use the telescope for work for which he would come to be known as the “father of observational astronomy.” He had made improvements to Lipperhey’s original version; the new device could enlarge objects 20-times more.
-
-The most recent development has been the launch of the James Webb Space Telescope (JWST) – the world’s largest and most powerful space telescope. On July 12, 2022, the first set of photographs from this telescope were shared with the world.
+In 1608 and 1609, Hans Lipperhey and Thomas Harriot turned the first telescopes skyward. Months later, Galileo Galilei began to use the telescope for work for which he would come to be known as the “father of observational astronomy.” He had made improvements to Lipperhey’s original version; the new device could enlarge objects 20-times more.`
+            },
+            {
+              id: "sl-u12-jwst1-p2",
+              type: "theory",
+              title: "From Galileo to JWST",
+              content: `The most recent development has been the launch of the James Webb Space Telescope (JWST) – the world’s largest and most powerful space telescope. On July 12, 2022, the first set of photographs from this telescope were shared with the world.
 
 I wonder, what elegant lyrics might the 16th century ‘Silver Poets’ – Wyatt, Howard, Raleigh and Sidney – have written, or Van Gogh painted, in response to these spectacular new images.`
             },
@@ -158,9 +162,13 @@ At the flick of a shutter, 4.6 billion years of stories tumble forth – the pas
               title: "Southern Ring Nebula",
               content: `Southern Ring Nebula (an interstellar cloud – a shell of gas and dust expelled into space by a dying star) My consciousness has an alter-ego – a bipolar binary, a twin ring. Our organs are mirrored, but we differ in subtle ways.
 
-Infrared vision reveals my blue core – the obverse, my red. Shaped as an oyster shell, light emanates from the centre to the periphery – in one, a single twinkle; the other, a couplet.
-
-Light then dissipates into outer darkness – travelling over terrains of dust, gas, ridges, canyons – millions of light-years passing swiftly in seeming slow-motion. A bird’s eye view mimics an island rock – ocean waves lashing its parabolic shores.
+Infrared vision reveals my blue core – the obverse, my red. Shaped as an oyster shell, light emanates from the centre to the periphery – in one, a single twinkle; the other, a couplet.`
+            },
+            {
+              id: "sl-u12-ring-p2",
+              type: "theory",
+              title: "Southern Ring Nebula",
+              content: `Light then dissipates into outer darkness – travelling over terrains of dust, gas, ridges, canyons – millions of light-years passing swiftly in seeming slow-motion. A bird’s eye view mimics an island rock – ocean waves lashing its parabolic shores.
 
 Stars die too – in their “dying throes, [they] shake, pulsate, and at the end, poof!” Births – equally dramatic, tectonic. I hear the heartbeat of distant galaxies, feel their sonic rumble, imagine their palpability and ginormous aggregation of materials – a magical orchestra, a nebula symphony.`
             },

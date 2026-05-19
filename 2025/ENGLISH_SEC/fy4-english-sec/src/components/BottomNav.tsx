@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Map, BookOpenCheck, FileText, PenTool } from 'lucide-react';
+import { Map, FileText, PenTool, Sparkles } from 'lucide-react';
 
 const BottomNav: React.FC = () => {
   const navItems = [
     { to: '/', icon: Map, label: 'Path' },
     { to: '/practice', icon: PenTool, label: 'Practice' },
-    { to: '/exam', icon: BookOpenCheck, label: 'Questions' },
+    { to: '/summary', icon: Sparkles, label: 'Summary' },
     { to: '/notes', icon: FileText, label: 'Notes' },
   ];
 

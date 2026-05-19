@@ -125,9 +125,7 @@ His imaginative leap paved the way for a new understanding of human physiology. 
               id: "sl-u1-newton",
               type: "theory",
               title: "Isaac Newton — Law of Gravity",
-              content: `His imaginative leap paved the way for a new understanding of human physiology. Similarly, Sir Isaac Newton, sitting under an apple tree, was struck by a simple question - why did the apple fall straight down and not sideways or upwards?
-
-This imaginative curiosity led to the formulation of the law of gravity, a fundamental principle that shaped our understanding of the physical world. And then there was Albert Einstein.
+              content: `This imaginative curiosity led to the formulation of the law of gravity, a fundamental principle that shaped our understanding of the physical world. And then there was Albert Einstein.
 
 His theory of relativity, a cornerstone of modern physics, was born out of his bold imagination.`
             },
@@ -135,13 +133,7 @@ His theory of relativity, a cornerstone of modern physics, was born out of his b
               id: "sl-u1-einstein",
               type: "theory",
               title: "Albert Einstein — Theory of Relativity",
-              content: `This imaginative curiosity led to the formulation of the law of gravity, a fundamental principle that shaped our understanding of the physical world. And then there was Albert Einstein.
-
-His theory of relativity, a cornerstone of modern physics, was born out of his bold imagination. He dared to visualize what it would be like to travel at the speed of light, a thought experiment that revolutionized our perception of time and space.
-
-These are but a few examples of how imagination has served as the catalyst for scientific innovation. It is the silent, often overlooked companion of logic and reason, sparking questions and breeding theories that push the boundaries of human knowledge.
-
-As we delve into the history of scientific discoveries, it is clear that the imagination has been a driving force behind many of the world's most incredible advancements. The power of imagination in science is not only about conjuring up novel ideas, but also about envisioning new ways to solve problems, to understand the universe, and to better the human condition.`
+              content: `He dared to visualize what it would be like to travel at the speed of light, a thought experiment that revolutionized our perception of time and space. These are but a few examples of how imagination has served as the catalyst for scientific innovation. It is the silent, often overlooked companion of logic and reason, sparking questions and breeding theories that push the boundaries of human knowledge. As we delve into the history of scientific discoveries, it is clear that the imagination has been a driving force behind many of the world's most incredible advancements. The power of imagination in science is not only about conjuring up novel ideas, but also about envisioning new ways to solve problems, to understand the universe, and to better the human condition.`
             },
             {
               id: "sl-u1-sci-quiz",
@@ -185,23 +177,13 @@ Take walking, for instance.`
               id: "sl-u1-walking",
               type: "theory",
               title: "1. Walking — Mind Wandering",
-              content: `In fact, it's quite straightforward and can be achieved through a series of activities that we engage in daily. Take walking, for instance.
-
-When we walk, we allow our minds to wander. This wandering, or daydreaming, stimulates our imagination, leading us to form images, ideas, and concepts that are not present to the senses.
-
-These could be the seeds of a new scientific theory, a groundbreaking discovery, or a novel solution to a complex problem. Reading, too, plays a significant role in fostering imagination.`
+              content: `When we walk, we allow our minds to wander. This wandering, or daydreaming, stimulates our imagination, leading us to form images, ideas, and concepts that are not present to the senses. These could be the seeds of a new scientific theory, a groundbreaking discovery, or a novel solution to a complex problem. Reading, too, plays a significant role in fostering imagination.`
             },
             {
               id: "sl-u1-reading",
               type: "theory",
               title: "2. Reading — Mental Flexibility",
-              content: `These could be the seeds of a new scientific theory, a groundbreaking discovery, or a novel solution to a complex problem. Reading, too, plays a significant role in fostering imagination.
-
-When we read, we step into the shoes of different characters, explore unknown territories and grapple with abstract ideas. This mental flexibility and adaptability are crucial for scientific discovery.
-
-It allows us to see things from different perspectives, question the status quo, and explore the uncharted realms of knowledge. Writing, on the other hand, helps us articulate our thoughts and ideas.
-
-It encourages us to construct coherent narratives, out of our chaotic thoughts, thereby refining our imagination.`
+              content: `When we read, we step into the shoes of different characters, explore unknown territories and grapple with abstract ideas. This mental flexibility and adaptability are crucial for scientific discovery. It allows us to see things from different perspectives, question the status quo, and explore the uncharted realms of knowledge. Writing, on the other hand, helps us articulate our thoughts and ideas. It encourages us to construct coherent narratives, out of our chaotic thoughts, thereby refining our imagination.`
             }
           ]
         },
@@ -215,31 +197,19 @@ It encourages us to construct coherent narratives, out of our chaotic thoughts, 
               id: "sl-u1-writing",
               type: "theory",
               title: "3. Writing — Articulating Thoughts",
-              content: `It allows us to see things from different perspectives, question the status quo, and explore the uncharted realms of knowledge. Writing, on the other hand, helps us articulate our thoughts and ideas.
-
-It encourages us to construct coherent narratives, out of our chaotic thoughts, thereby refining our imagination. This ability to articulate is key to scientific discovery.
-
-It enables us to communicate our ideas effectively, engage in meaningful discussions, and contribute to the scientific community. Meditation, in its own way, can also stimulate imagination.`
+              content: `This ability to articulate is key to scientific discovery. It enables us to communicate our ideas effectively, engage in meaningful discussions, and contribute to the scientific community. Meditation, in its own way, can also stimulate imagination.`
             },
             {
               id: "sl-u1-meditation",
               type: "theory",
               title: "4. Meditation — Tapping the Subconscious",
-              content: `It enables us to communicate our ideas effectively, engage in meaningful discussions, and contribute to the scientific community. Meditation, in its own way, can also stimulate imagination.
-
-By quieting the mind, meditation allows us to tap into our subconscious, where our deepest and most innovative ideas reside. It gives us the clarity and focus needed to sift through these ideas and bring them to the surface.
-
-Puzzle solving, too, can sharpen our imagination. It forces us to think outside the box, look at things from different angles, and find creative solutions to problems.`
+              content: `By quieting the mind, meditation allows us to tap into our subconscious, where our deepest and most innovative ideas reside. It gives us the clarity and focus needed to sift through these ideas and bring them to the surface. Puzzle solving, too, can sharpen our imagination. It forces us to think outside the box, look at things from different angles, and find creative solutions to problems.`
             },
             {
               id: "sl-u1-puzzle",
               type: "theory",
               title: "5. Puzzle Solving — Thinking Outside the Box",
-              content: `It gives us the clarity and focus needed to sift through these ideas and bring them to the surface. Puzzle solving, too, can sharpen our imagination.
-
-It forces us to think outside the box, look at things from different angles, and find creative solutions to problems. These skills are invaluable in the realm of science, where problems are complex and solutions are not always apparent.
-
-Therefore, nurturing our imagination is not just about creativity. It is also about fostering scientific thinking and problem solving.`
+              content: `These skills are invaluable in the realm of science, where problems are complex and solutions are not always apparent. Therefore, nurturing our imagination is not just about creativity. It is also about fostering scientific thinking and problem solving.`
             },
             {
               id: "sl-u1-nurture-quiz",
@@ -281,9 +251,13 @@ Therefore, nurturing our imagination is not just about creativity. It is also ab
               title: "A Tangible Influence",
               content: `Let's delve into that thought. Imagination, as abstract as it may seem, has a tangible influence on our perception of the world around us.
 
-It's much more than a mere tool for ideation, or a means to escape reality. It is a powerful force that moulds our reality.
-
-Think about it. Every great invention in human history began as a spark of imagination.
+It's much more than a mere tool for ideation, or a means to escape reality. It is a powerful force that moulds our reality.`
+            },
+            {
+              id: "sl-u1-real2-p2",
+              type: "theory",
+              title: "A Tangible Influence",
+              content: `Think about it. Every great invention in human history began as a spark of imagination.
 
 The telephone, the airplane, the Internet, all were once figments of someone's imagination before they became reality. The human mind has this fascinating ability to visualize the non-existent, to dream of the impossible, and then to convert those dreams into tangible, real world entities.
 
@@ -295,13 +269,21 @@ But it's not just about creating physical objects or technological wonders.`
               title: "Perception of Time, Space & Problem Solving",
               content: `But it's not just about creating physical objects or technological wonders. Our imagination shapes our reality in subtler ways, too.
 
-For instance, our perception of time and space can be influenced by our imagination. When we imagine ourselves in different situations or places, we are essentially creating alternate realities in our minds.
+For instance, our perception of time and space can be influenced by our imagination. When we imagine ourselves in different situations or places, we are essentially creating alternate realities in our minds.`
+            },
+            {
+              id: "sl-u1-real3-p2",
+              type: "theory",
+              title: "Perception of Time, Space & Problem Solving",
+              content: `These imagined realities can then impact how we interpret and interact with our actual reality. This is particularly evident in the scientific field.
 
-These imagined realities can then impact how we interpret and interact with our actual reality. This is particularly evident in the scientific field.
-
-Scientists often use their imagination to visualize complex concepts or phenomena that they cannot directly observe, like the structure of an atom or the curvature of spacetime. By imagining these concepts, they can gain a deeper understanding and come up with new theories or predictions.
-
-Imagination also plays a crucial role in problem solving. When faced with a complex problem, our minds automatically start generating possible solutions, often coming up with innovative approaches that we wouldn't have considered otherwise.
+Scientists often use their imagination to visualize complex concepts or phenomena that they cannot directly observe, like the structure of an atom or the curvature of spacetime. By imagining these concepts, they can gain a deeper understanding and come up with new theories or predictions.`
+            },
+            {
+              id: "sl-u1-real3-p3",
+              type: "theory",
+              title: "Perception of Time, Space & Problem Solving",
+              content: `Imagination also plays a crucial role in problem solving. When faced with a complex problem, our minds automatically start generating possible solutions, often coming up with innovative approaches that we wouldn't have considered otherwise.
 
 This ability to think outside the box, to imagine different possibilities, is what drives scientific discovery and technological advancement. So, when we look at it this way, we see that our imagination is not just a tool for scientific discovery.`
             },
@@ -309,9 +291,7 @@ This ability to think outside the box, to imagine different possibilities, is wh
               id: "sl-u1-real4",
               type: "theory",
               title: "An Integral Part of Reality",
-              content: `This ability to think outside the box, to imagine different possibilities, is what drives scientific discovery and technological advancement. So, when we look at it this way, we see that our imagination is not just a tool for scientific discovery.
-
-It is an integral part of our reality, shaping our perception, influencing our actions, and driving our progress. So, our imagination does not just help us solve problems or make discoveries.
+              content: `It is an integral part of our reality, shaping our perception, influencing our actions, and driving our progress. So, our imagination does not just help us solve problems or make discoveries.
 
 It also shapes our understanding of the world. Imagination is a powerful force, and by harnessing it, we can not only unlock new scientific insights, but also create a reality that is as boundless and as diverse as our minds can conceive.`
             },
@@ -360,25 +340,13 @@ Similarly, the rise of virtual and augmented reality technologies is reshaping t
               id: "sl-u1-fut3",
               type: "theory",
               title: "Virtual Reality & Interdisciplinary Research",
-              content: `As AI continues to advance, it will undoubtedly serve as a powerful tool to augment our imaginative capabilities, enabling us to explore realms previously out of reach. Similarly, the rise of virtual and augmented reality technologies is reshaping the landscape of scientific discovery.
-
-These platforms offer immersive experiences that can catalyze our creative thinking, allowing us to visualize complex scientific concepts and scenarios in unprecedented ways. Interdisciplinary research is another key player.
-
-By bridging gaps between different fields of study, it fosters a rich cross pollination of ideas, stimulating our imagination in novel and unexpected directions. Imagine the possibilities when a physicist collaborates with a biologist or when a chemist teams up with an artist.
-
-The interplay of diverse perspectives can spark innovative solutions to complex scientific problems. And let us not forget about the role of education in nurturing the scientists of tomorrow.`
+              content: `These platforms offer immersive experiences that can catalyze our creative thinking, allowing us to visualize complex scientific concepts and scenarios in unprecedented ways. Interdisciplinary research is another key player. By bridging gaps between different fields of study, it fosters a rich cross pollination of ideas, stimulating our imagination in novel and unexpected directions. Imagine the possibilities when a physicist collaborates with a biologist or when a chemist teams up with an artist. The interplay of diverse perspectives can spark innovative solutions to complex scientific problems. And let us not forget about the role of education in nurturing the scientists of tomorrow.`
             },
             {
               id: "sl-u1-fut4",
               type: "theory",
               title: "Education and the Next Generation",
-              content: `The interplay of diverse perspectives can spark innovative solutions to complex scientific problems. And let us not forget about the role of education in nurturing the scientists of tomorrow.
-
-As the world becomes more interconnected, it's vital that we cultivate a learning environment that encourages curiosity, creativity, and, yes, imagination. By doing so, we equip the next generation with the tools they need to tackle the scientific challenges of the future.
-
-So, to answer the question, the future of imagination in science is bright. It's dynamic, it's transformative.
-
-It's a future where the boundaries of what's possible are constantly being redefined. As we look to the future, it is clear that the role of imagination in science will continue to be pivotal, driving new discoveries and advancements.`
+              content: `As the world becomes more interconnected, it's vital that we cultivate a learning environment that encourages curiosity, creativity, and, yes, imagination. By doing so, we equip the next generation with the tools they need to tackle the scientific challenges of the future. So, to answer the question, the future of imagination in science is bright. It's dynamic, it's transformative. It's a future where the boundaries of what's possible are constantly being redefined. As we look to the future, it is clear that the role of imagination in science will continue to be pivotal, driving new discoveries and advancements.`
             },
             {
               id: "sl-u1-fut-quiz",

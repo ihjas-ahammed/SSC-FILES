@@ -24,9 +24,13 @@ export const SEC_U14_PRESENTATION_TIPS: Section = {
               title: "Introduction",
               content: `Unit 14 Tips for Creating and Giving Scientific Presentations Introduction When we share our ideas with others, it's not just about what we say but also about how we say it. Scientific presentations are a way of telling the story of our research in a clear and engaging manner.
 
-A good presentation helps the audience understand our work, even if they are not experts in our field. This chapter on Effective Scientific Presentations is based on a resource prepared for the Graduate Physics Orientation Course “Physics 596” (2013) at the University of Illinois Urbana-Champaign.
-
-It teaches us how to prepare and deliver a talk step by step. It explains how to know our audience, organize our slides, highlight only the most important points and present ideas with confidence.
+A good presentation helps the audience understand our work, even if they are not experts in our field. This chapter on Effective Scientific Presentations is based on a resource prepared for the Graduate Physics Orientation Course “Physics 596” (2013) at the University of Illinois Urbana-Champaign.`
+            },
+            {
+              id: "sl-u14-intro1-p2",
+              type: "theory",
+              title: "Introduction",
+              content: `It teaches us how to prepare and deliver a talk step by step. It explains how to know our audience, organize our slides, highlight only the most important points and present ideas with confidence.
 
 It also gives practical tips-like using simple visuals, avoiding too much text, and speaking clearly so that our message is understood and remembered. The chapter demonstrates that a scientific presentation is not just about data, but about communication, clarity and connection with the audience.`
             }

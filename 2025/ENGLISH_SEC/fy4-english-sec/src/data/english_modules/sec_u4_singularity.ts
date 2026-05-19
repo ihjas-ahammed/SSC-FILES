@@ -34,9 +34,13 @@ She teaches at both New York University and Sarah Lawrence College and resides i
               title: "The Poem — Core Ideas",
               content: `teaches at both New York University and Sarah Lawrence College and resides in New York City. “Singularity” is a poem that longingly looks back towards the origin of the world when it was created to be habitable in the true sense. The title itself signifies the feeling of oneness that existed between people in the past.
 
-The poem opens with a rhetorical question which many would have pondered on at times of hopelessness. It recalls the world where there was no poverty, diseases, segregations and draw inspiration from Stephen Hawking’s theories on black holes and the Big Bang.
-
-Through this scientific lens, Howe reflects on ideas of interconnectedness, loss and the quest for belonging. The poem juxtaposes the unity represented by the singularity with the fragmented, individualistic nature of modern life, highlighting the emergence of a deep sense of separation in the long run.
+The poem opens with a rhetorical question which many would have pondered on at times of hopelessness. It recalls the world where there was no poverty, diseases, segregations and draw inspiration from Stephen Hawking’s theories on black holes and the Big Bang.`
+            },
+            {
+              id: "sl-u4-auth2-p2",
+              type: "theory",
+              title: "The Poem — Core Ideas",
+              content: `Through this scientific lens, Howe reflects on ideas of interconnectedness, loss and the quest for belonging. The poem juxtaposes the unity represented by the singularity with the fragmented, individualistic nature of modern life, highlighting the emergence of a deep sense of separation in the long run.
 
 By weaving in a line from Walt Whitman’s “Song of Myself”, Howe suggests that we all originate from the same elements of the universe. The humankind seems to be in a deep slumber from which the poet exhorts it to “wake.” The elephant and coral reef are employed as symbols to highlight the limitations of our current understanding of animal and natural world experiences.
 
@@ -84,9 +88,13 @@ The poem concludes with a resonant invocation – ending on the timeless, powerf
               title: "The Full Poem",
               content: `Do you sometimes want to wake up to the singularity we once were? so compact nobody needed a bed, or food or money – nobody hiding in the school bathroom or home alone pulling open the drawer where the pills are kept. For every atom belonging to me as good Belongs to you.
 
-Remember? There was no Nature.
-
-No them. No tests to determine if the elephant grieves her calf or if the coral reef feels pain.
+Remember? There was no Nature.`
+            },
+            {
+              id: "sl-u4-poem-full-p2",
+              type: "theory",
+              title: "The Full Poem",
+              content: `No them. No tests to determine if the elephant grieves her calf or if the coral reef feels pain.
 
 Trashed oceans don’t speak English or Farsi or French; would that we could wake up to what we were – when we were ocean and before that to when sky was earth, and animal was energy, and rock was liquid and stars were space and space was not at all – nothing before we came to believe humans were so important before this awful loneliness. Can molecules recall it? what once was? before anything happened?
 
@@ -181,9 +189,13 @@ Nature transcends language barriers — but we have destroyed it. Points to envi
               title: "The Word 'Nothing' and Human Self-importance",
               content: `The **strategic placement of 'nothing'** just before mentioning human self-importance conveys the poem's essence:
 
-*'...sky was earth, and animal was energy, and rock was liquid and stars were space and space was not at all — nothing*
-
-*before we came to believe humans were so important before this awful loneliness.'*
+*'...sky was earth, and animal was energy, and rock was liquid and stars were space and space was not at all — nothing*`
+            },
+            {
+              id: "sl-u4-sym2-p2",
+              type: "theory",
+              title: "The Word 'Nothing' and Human Self-importance",
+              content: `*before we came to believe humans were so important before this awful loneliness.'*
 
 The word 'nothing' exposes the absurdity of human self-importance — we emerged from literally nothing.`
             },

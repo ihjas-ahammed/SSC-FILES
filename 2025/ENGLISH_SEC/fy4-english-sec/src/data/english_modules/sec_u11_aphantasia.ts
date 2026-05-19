@@ -32,13 +32,21 @@ This book is classified under Young Adult (YA) Fiction. She has also published t
               title: "Context of the Article",
               content: `This chapter is an article published online on November 4, 2022, on the webpage of Aphantasia Network, which is a platform for people living with the neurodiversity called aphantasia, to discover the world of aphantasia. It was originally published on the “Science Fiction & Fantasy Writers Association” (SFWA) webpage on October 4, 2022.
 
-In this article, Zarins introduces the neurodivergent condition called aphantasia, or mind blindness in simple terms, as it is relatively new to many people. Here, she primarily provides tips to writers to make their work inclusive by keeping in mind readers who are aphants while producing works of fiction.
+In this article, Zarins introduces the neurodivergent condition called aphantasia, or mind blindness in simple terms, as it is relatively new to many people. Here, she primarily provides tips to writers to make their work inclusive by keeping in mind readers who are aphants while producing works of fiction.`
+            },
+            {
+              id: "sl-u11-auth2-p2",
+              type: "theory",
+              title: "Context of the Article",
+              content: `The article is significant in many respects as it introduces a varied point of view of a section of readers who “feel” and cannot “see” the literary world due to an underlying neurological condition. It not only urges writers to consider such readers but also facilitates the others to magnify their outlook by taking into account the experiences of such divergent communities too, even if they are a minority.
 
-The article is significant in many respects as it introduces a varied point of view of a section of readers who “feel” and cannot “see” the literary world due to an underlying neurological condition. It not only urges writers to consider such readers but also facilitates the others to magnify their outlook by taking into account the experiences of such divergent communities too, even if they are a minority.
-
-Zarins also alludes to the methodology adopted by aphant writers to stretch the boundaries of the literary world further. The role of science in fulfilling this mission of developing a broad world view is noteworthy.
-
-This is a classic example of how interdisciplinary interactions between science and literature help to enhance society. In this context, the definition of “imagination” acquires novel implications as it incorporates not just visual images but sensory experiences too, which help aphants to relate to a fantasy world.
+Zarins also alludes to the methodology adopted by aphant writers to stretch the boundaries of the literary world further. The role of science in fulfilling this mission of developing a broad world view is noteworthy.`
+            },
+            {
+              id: "sl-u11-auth2-p3",
+              type: "theory",
+              title: "Context of the Article",
+              content: `This is a classic example of how interdisciplinary interactions between science and literature help to enhance society. In this context, the definition of “imagination” acquires novel implications as it incorporates not just visual images but sensory experiences too, which help aphants to relate to a fantasy world.
 
 While, on the one hand, this renders the writers more responsible; on the other, it instigates scientists to study areas hitherto unexplored. Ultimately, aphants who are unaware of their condition and left to question their ability, achieve self-awareness which is essential for the growth of any civilisation.`
             },
@@ -86,9 +94,13 @@ I’m an aphant, that is, someone with aphantasia, the condition of lacking a mi
               title: "Tolkien's 'Green Sun' — What an Aphant Experiences",
               content: `Aphantasia is the inability to visualize familiar people and places, as well as things that don’t exist, the province of speculative literature. J.
 
-R. R.
-
-Tolkien writes of language’s inherent power to create fantasy. Even putting an unlikely adjective next to a noun—he gives us “the green sun” as his example—evokes a strange image that many can picture.
+R. R.`
+            },
+            {
+              id: "sl-u11-tolkien-p2",
+              type: "theory",
+              title: "Tolkien's 'Green Sun' — What an Aphant Experiences",
+              content: `Tolkien writes of language’s inherent power to create fantasy. Even putting an unlikely adjective next to a noun—he gives us “the green sun” as his example—evokes a strange image that many can picture.
 
 However, I don’t see a green sun. I think of Green Eggs and Ham—an association, not an image.
 
@@ -120,9 +132,13 @@ Reading enhances the mind’s eye for most people, but not for me. It sounds lik
               title: "Skimming Descriptions",
               content: `Your gorgeous description of the spaceship or the landscape? Teenage me skimmed that paragraph like I skimmed Tolkien’s descriptions of Middle Earth.
 
-My head lacks a place for all those details to stick. I’ve tried.
-
-When Aslan asked Digory to look west and gave directions to the garden with the apple tree, that description seemed meaningless, a landscape beyond my grasp. Despite these readerly challenges, The Chronicles of Narnia and The Lord of the Rings began my path as a medievalist, reader, and writer.
+My head lacks a place for all those details to stick. I’ve tried.`
+            },
+            {
+              id: "sl-u11-scifi1-p2",
+              type: "theory",
+              title: "Skimming Descriptions",
+              content: `When Aslan asked Digory to look west and gave directions to the garden with the apple tree, that description seemed meaningless, a landscape beyond my grasp. Despite these readerly challenges, The Chronicles of Narnia and The Lord of the Rings began my path as a medievalist, reader, and writer.
 
 Today, diverse perspectives in speculative fiction are increasingly represented, including neurological diversity such as autism or synesthesia.`
             },
@@ -156,9 +172,13 @@ I await characters with aphantasia: say, an aphant at a wizarding school learns 
               title: "What Aphants Get from Speculative Fiction",
               content: `Thoughts and Feelings Many writers depend upon their mind’s eye; for example, C.S. Lewis’ process is highly visual: “All my seven Narnia books, and my three science fiction books, began with seeing pictures in my head ....The Lion began with a picture of a Faun carrying an umbrella and parcels in a snowy wood.” How magical to carry such an image in one’s mind and deliver it to readers through printed words!
 
-If you are a visual thinker, you might wonder what aphants get from speculative fiction. In short: thoughts and feelings.
-
-It’s no coincidence that, in his book Reasons and Persons, philosopher and aphant Derek Parfit used a science fiction narrative to think through his philosophy of the self. (His teleportation story explores the death of the self in one location while an identical self appears on Mars.) Speculative fiction helps people speculate.
+If you are a visual thinker, you might wonder what aphants get from speculative fiction. In short: thoughts and feelings.`
+            },
+            {
+              id: "sl-u11-feel1-p2",
+              type: "theory",
+              title: "What Aphants Get from Speculative Fiction",
+              content: `It’s no coincidence that, in his book Reasons and Persons, philosopher and aphant Derek Parfit used a science fiction narrative to think through his philosophy of the self. (His teleportation story explores the death of the self in one location while an identical self appears on Mars.) Speculative fiction helps people speculate.
 
 Speculative fiction also helps us feel things, sometimes deeply. One blogger with aphantasia explains how reading fantasy worlds evoke feelings: For me, “picturing” a setting is more of a feeling rather than actually seeing it.`
             },
