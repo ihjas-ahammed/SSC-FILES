@@ -7,34 +7,118 @@ export const SEC_U14_PRESENTATION_TIPS: Section = {
   color: "duo-green",
   units: [
     {
+      id: "u14-intro",
+      title: "1. Introduction",
+      description: "Why scientific presentations matter and the resource background.",
+      color: "duo-green",
+      lessons: [
+        {
+          id: "les-u14-intro",
+          title: "About the Resource",
+          description: "Context for the presentation guide.",
+          icon: "Info",
+          slides: [
+            {
+              id: "sl-u14-intro1",
+              type: "theory",
+              title: "Introduction",
+              content: `Unit 14 Tips for Creating and Giving Scientific Presentations Introduction When we share our ideas with others, it's not just about what we say but also about how we say it. Scientific presentations are a way of telling the story of our research in a clear and engaging manner.
+
+A good presentation helps the audience understand our work, even if they are not experts in our field. This chapter on Effective Scientific Presentations is based on a resource prepared for the Graduate Physics Orientation Course “Physics 596” (2013) at the University of Illinois Urbana-Champaign.
+
+It teaches us how to prepare and deliver a talk step by step. It explains how to know our audience, organize our slides, highlight only the most important points and present ideas with confidence.
+
+It also gives practical tips-like using simple visuals, avoiding too much text, and speaking clearly so that our message is understood and remembered. The chapter demonstrates that a scientific presentation is not just about data, but about communication, clarity and connection with the audience.`
+            }
+          ]
+        }
+      ]
+    },
+    {
       id: "u14-creating",
-      title: "1. Creating Your Talk",
-      description: "Organizing and preparing a scientific presentation.",
+      title: "2. Creating Your Talk",
+      description: "Four steps to get started and organize a 25-minute talk.",
       color: "duo-green",
       lessons: [
         {
           id: "les-u14-steps",
-          title: "Getting Started",
-          description: "Four steps to start preparing.",
+          title: "Getting Started — Four Steps",
+          description: "How to begin preparing your scientific presentation.",
           icon: "ClipboardList",
           slides: [
             {
-              id: "u14-step1",
+              id: "sl-u14-steps",
               type: "theory",
-              title: "Step 1–4: The Foundation",
-              content: `**Step 1:** Identify your **audience** — controls the level and amount of background needed.\n\n**Step 2:** Determine your **time** — controls how much to cover.\n\n**Step 3:** Identify the **main points** — reasonably convey only 2–3 main points in a 20–30 minute talk.\n\n**Step 4:** Create an **outline** — builds logical organization and helps decide what figures to include.`
+              title: "Steps 1–4: The Foundation",
+              content: `How to get started? Step 1: Identify your audience: this will control the level of your presentation and the amount of background material you need to orient everyone in the audience.
+
+Step 2: Determine how much time you have for your presentation: this will control how much time you have to talk about each part of your outline. Step 3: Identify the main points you want to convey: you can reasonably convey only 2-3 main points in a 20- or 30-minute talk.
+
+Step 4: Create an outline of your talk: this will build in the logical organization of your presentation and help you decide what figures and other supporting evidence you need to make your points.`
             },
             {
-              id: "u14-25min",
+              id: "sl-u14-25min",
               type: "theory",
               title: "Organizing a 25-Minute Talk",
-              content: `**Background & Introduction** (~6 min, 4–5 slides):\n- 1 title slide, 1 outline, 1 overview (why important?), 1–2 background slides\n\n**Methods** (~6 min, 2–3 slides):\n- Theoretical/experimental methods\n\n**Results** (~9 min, 4–5 slides):\n- Only 1–2 key results\n\n**Summary** (~1 min, 2 slides):\n- Summary of key points, acknowledgements`
+              content: `Organizing a 25-minute scientific talk Background and Introduction (~6 minutes) => 4-5 slides ~1 Title slide - Your names, date, citation to paper ~1 Outline slide - Organization of talk ~1 Overview slide - Why is this research important? ~1-2 Background slides - Provides essential background for non-experts Methods (~6 minutes) => 2-3 slides Theoretical/experimental methods used in paper Results (~9 minutes) => 4-5 slides ~ What did you (or the authors) find? Only develop 1-2 key results *Critique and Citation Summary (~3 minutes) => 2 slides 1 critique slide - What was wrong with/good about the paper?
+
+1 citation slide - What happened with the result/field after the paper? *Journal club only`
             },
             {
-              id: "u14-slide-tips",
+              id: "sl-u14-titleslide",
               type: "theory",
-              title: "Tips for Preparing Your Talk",
-              content: `Key slide design rules:\n- **1 idea per slide** — header states the main idea; body supports it.\n- **Use well-labeled graphs and figures** — makes slides real and interesting.\n- **Avoid too much text** — keep it minimal.\n- **Use figures** to: enliven slides, promote interest, provide evidence, explain complex ideas.\n- **Label all elements** in figures — both axes, captions, sources.\n- **Font:** San Serif (e.g., Arial), min 20pt. No calligraphy or serif fonts.\n- **Colors:** Avoid red/green or red/blue. No neon or pastels.`
+              title: "Title Slide & Outline",
+              content: `The title slide and outline prepares the audience to listen and shows organization of talk Title Slide Your names and affiliations Paper citation (for JC) Venue and date Attention-getting graphic Outline or overview of presentation Prepares the audience to listen Provides a logical structure for your talk Provides motivation and context Summarizes key points (limit to two or three for a 20- to 30-minute talk)`
+            },
+            {
+              id: "sl-u14-body",
+              type: "theory",
+              title: "Body and Summary Slide",
+              content: `The “body” of your presentation is the intellectual content of your talk Problem statement, motivation - ~1-2 slides Previous work - ~1-2 slides Methods - ~1-3 slides Key Results - ~5-6 slides Provide a “summary” slide Recap key results and conclusions Reiterate main critiques (for JC) This slide will probably stay on the screen during the question period and will thus get the longest audience exposure - make it count!`
+            },
+            {
+              id: "sl-u14-steps-quiz",
+              type: "quiz",
+              title: "Steps Check",
+              content: "According to the guide, how many main points can you reasonably convey in a 20–30 minute talk?",
+              options: [
+                { id: "A", text: "5–7 main points", isCorrect: false, explanation: "The guide says 2-3 main points only." },
+                { id: "B", text: "2–3 main points", isCorrect: true, explanation: "Step 3 says: 'you can reasonably convey only 2-3 main points in a 20- or 30-minute talk.'" },
+                { id: "C", text: "As many as you can fit", isCorrect: false, explanation: "The guide emphasizes less is more." },
+                { id: "D", text: "Exactly 4 main points", isCorrect: false, explanation: "The guide specifies 2-3 only." }
+              ]
+            }
+          ]
+        },
+        {
+          id: "les-u14-slides",
+          title: "Tips for Preparing Slides",
+          description: "Design principles for effective scientific slides.",
+          icon: "Layout",
+          slides: [
+            {
+              id: "sl-u14-slide-tips",
+              type: "theory",
+              title: "Key Slide Design Rules",
+              content: `TIPS FOR PREPARING YOUR TALK Have only 1 idea per slide Use the header to state the main idea of the slide, and use the body of the slide to support that idea Use well-labeled graphs and figures to illustrate your key points...this makes the slide more real and interesting to the audience Avoid too much text or too many distracting images Use figures to illustrate your key points Figures: • enliven slides • promote audience interest • provide supporting evidence for key points • help explain complex ideas and relationships quickly • show how things work, etc Label all elements in a figure • Point out important features • Label both axes of graphs and show units • Provide a brief caption • Give credit to source Presenting data is your most important and challenging task • Avoid copying a graph from a formal article - they have a different style, e.g., labels are too small • Use color and make lines thick, labels legible • Label axes and annotate important points with arrows and add words • Use tables sparingly - if used highlight important parts`
+            },
+            {
+              id: "sl-u14-figures",
+              type: "theory",
+              title: "Using Figures Effectively",
+              content: `Show the equipment IF it helps as part of your proof - but sparingly, not just because you love it • Photographs give scale and reality - but add labels • Schematics provide concept • Diagrams strip away unnecessary details • ALL OF THESE can be useful in combination Make sure you provide something to show scale, and include a short caption to explain what the audience is looking at.`
+            },
+            {
+              id: "sl-u14-data",
+              type: "theory",
+              title: "Presenting Data",
+              content: `Presenting data is your most important and challenging task • Avoid copying a graph from a formal article - they have a different style, e.g., labels are too small • Use color and make lines thick, labels legible • Label axes and annotate important points with arrows and add words • Use tables sparingly - if used highlight important parts Show the equipment IF it helps as part of your proof - but sparingly, not just because you love it • Photographs give scale and reality - but add labels • Schematics provide concept • Diagrams strip away unnecessary details • ALL OF THESE can be useful in combination Make sure you provide something to show scale, and include a short caption to explain what the audience is looking at.`
+            },
+            {
+              id: "sl-u14-fonts",
+              type: "theory",
+              title: "Fonts, Colors & Visual Design",
+              content: `Remember, your goal is to convey your ideas, so avoid distracting text and effects! • Don't overuse PowerPoint animations and sounds! • Make sure there is good contrast between text and background • Use simple (or no) backgrounds on slides • Eschew weird fonts • Use the same font throughout the talk • Don't use calligraphy or serif fonts • Make all text at least 20 pt • Use San Serif fonts • Use San Aarif font (e.g., Ariel) • Not Sarif font (e.g., Times New Roman) Skinny parts disappear when projected Use “normal” colors • DON'T use red/green or red/blue as contrasting colors • Make sure colors look the way you expect using an LCD projector! • Avoid neon colors and pastels • Don't use many random colors; people expect color to mean something • Strive for easy reading TIPS FOR GIVING A SCIENTIFIC PRESENTATION Pointers for giving the best possible talk: • Maintain eye contact with audience - Don't stare at screen or monitor • Do not read your talk!`
             }
           ]
         }
@@ -42,73 +126,120 @@ export const SEC_U14_PRESENTATION_TIPS: Section = {
     },
     {
       id: "u14-giving",
-      title: "2. Giving Your Talk",
-      description: "Delivery tips for effective presentations.",
+      title: "3. Giving Your Talk",
+      description: "Delivery tips and handling stage fright.",
       color: "duo-teal",
       lessons: [
         {
           id: "les-u14-delivery",
           title: "Delivery Tips",
-          description: "How to present confidently.",
+          description: "How to give the best possible talk.",
           icon: "Mic",
           slides: [
             {
-              id: "u14-delivery1",
+              id: "sl-u14-del1",
               type: "theory",
-              title: "Key Delivery Principles",
-              content: `Pointers for the best possible talk:\n- **Maintain eye contact** — don't stare at screen.\n- **Do not read your talk!**\n- **Avoid nervous mannerisms** — pacing, bobbing, waving arms.\n- **Speak slowly and distinctly** — practice!\n- **Avoid fillers**: "uh", "like", "um", "okay".\n- **Be enthusiastic!** — If you don't act excited, the audience won't be.\n- **Thank the audience** at the end.`
+              title: "Pointers for Giving the Best Talk",
+              content: `talk: • Maintain eye contact with audience - Don't stare at screen or monitor • Do not read your talk! • Avoid nervous mannerisms - Pacing, bobbing, waving arms, jingling coins • Use laser pointer or stick directed at screen Don't point directly at overhead on projector Don't block the screen • Train yourself to speak slowly and distinctly - practice! • Avoid “fillers”: “uh”, “like”, “um”, “okay” • Be enthusiastic! If you don't act excited by your results, don't expect the audience to be! • Don't show any material on slides (e.g., figures, equations, text, etc.) you can't explain!! • Rehearse how you'll end your talk Don't end with “Well, I guess that's it...” Don't just stop and let the committee guess that you're done Thank the audience!
+
+The best way to prepare for a talk is to Know Your Material • Practice, practice, practice • Focus on communicating, not performing Humor is good, but don't overdo it • Keep it simple • Prepare key phrases. It's okay to write out material first Write the key point to make for each slide If the slide doesn't have a point, eliminate it!!!`
             },
             {
-              id: "u14-practice",
+              id: "sl-u14-del2",
               type: "theory",
-              title: "Know Your Material",
-              content: `**Best preparation:** Know Your Material\n- **Practice, practice, practice** — ideally in front of people.\n- **Focus on communicating**, not performing.\n- Keep it simple. Prepare key phrases.\n- **Stay on track** — planned diversions are fine, but return.\n- **Rehearse your ending** — don't end with "Well, I guess that's it..."\n\n**A few days before:** Practice in front of friends; check timing; rehearse questions.\n**Night before:** Review once more; put materials in order.`
+              title: "Know Your Material & Practice",
+              content: `The best way to prepare for a talk is to Know Your Material • Practice, practice, practice • Focus on communicating, not performing Humor is good, but don't overdo it • Keep it simple • Prepare key phrases. It's okay to write out material first Write the key point to make for each slide If the slide doesn't have a point, eliminate it!!! • Stay on track Small (planned) digression is fine if motivated, but get back on track (shows you are paying attention to audience) • Bring a copy of your slides if giving a PowerPoint talk this will help you practice you can distribute these to interested people • Make appropriate use of the screen: don't underfill the screen, and don't put key information at the edges of the screen.`
             },
             {
-              id: "u14-quiz",
+              id: "sl-u14-rehearse",
+              type: "theory",
+              title: "Rehearsing Your Talk",
+              content: `Rehearse Your Talk! • A few days before: Practice in front of friends and check timing Rehearse likely questions Solicit feedback about logic and clarity Revise (shorten) • The night before: Go over one more time Put all materials in order (number your slides!) Check everything just before your talk • Check the projector Make sure you know how to turn it on See that it is plugged in Check which way to position your slides Adjust the focus • Check microphones, pointer, other tools • Arrange your slides, notes, and other materials Be able to reach everything without moving Be able to go through your slides without fumbling • Have a watch handy to check the time “Stage Fright”?`
+            },
+            {
+              id: "sl-u14-stagefright",
+              type: "theory",
+              title: "Stage Fright — Be Prepared",
+              content: `how to turn it on See that it is plugged in Check which way to position your slides Adjust the focus • Check microphones, pointer, other tools • Arrange your slides, notes, and other materials Be able to reach everything without moving Be able to go through your slides without fumbling • Have a watch handy to check the time “Stage Fright”? Be Prepared! • Know your subject thoroughly Practice in a big room in front of real people Have all your materials in order Arrive early Familiarize yourself with the equipment • Ask a friend to sit in the middle of the audience and speak primarily to him or her Tell him to look interested and nod frequently Ask her to smile and nod encouragingly whenever she catches your eye For Talks To an Inexpert Audience: • Do not use slang or ‘laboratory’ terms • Choose the simplest word • Don't use acronyms • Speak slowly and distinctly • Present less information than in a talk to an “expert” audience, go into more detail.`
+            },
+            {
+              id: "sl-u14-audience",
+              type: "theory",
+              title: "Inexpert Audiences & Handling Questions",
+              content: `For Talks To an Inexpert Audience: • Do not use slang or ‘laboratory’ terms • Choose the simplest word • Don't use acronyms • Speak slowly and distinctly • Present less information than in a talk to an “expert” audience, go into more detail. Handling questions is an essential part of giving a talk • As part of preparing your talk, try to anticipate questions you might get In each slide, try to identify what the weak points are, what questions you might ask, etc. • Be prepared to repeat simple derivations of equations or estimates presented on your slides • If you don't know the answer?
+
+Say “That's an excellent question. I'm not sure; I'll have to look into it” or “Let's talk about it afterward”`
+            },
+            {
+              id: "sl-u14-del-quiz",
               type: "quiz",
-              title: "Key Presentation Tip",
-              content: "How many main points should you convey in a 20–30 minute scientific talk?",
+              title: "Delivery Quiz",
+              content: "What should you NOT do according to the tips for giving a scientific presentation?",
               options: [
-                { id: "A", text: "5–7 main points", isCorrect: false, explanation: "Too many for a 20–30 minute talk." },
-                { id: "B", text: "2–3 main points", isCorrect: true, explanation: "You can reasonably convey only 2–3 main points in a 20–30 minute talk." },
-                { id: "C", text: "As many as possible", isCorrect: false, explanation: "Less is more — focusing on 2–3 points makes for a better presentation." },
-                { id: "D", text: "10 main points", isCorrect: false, explanation: "This would overwhelm the audience." }
+                { id: "A", text: "Maintain eye contact with the audience", isCorrect: false, explanation: "Eye contact is encouraged." },
+                { id: "B", text: "Read your talk word for word from notes", isCorrect: true, explanation: "The guide explicitly says 'Do not read your talk!' — talk directly to people as you would in conversation." },
+                { id: "C", text: "Be enthusiastic about your results", isCorrect: false, explanation: "The guide says 'Be enthusiastic! If you don't act excited by your results, don't expect the audience to be!'" },
+                { id: "D", text: "Thank the audience at the end", isCorrect: false, explanation: "The guide says to thank the audience." }
               ]
             },
             {
-              id: "u14-questions",
-              type: "theory",
-              title: "Handling Questions",
-              content: `Handling questions is an **essential part** of giving a talk:\n- **Anticipate questions** during preparation.\n- **Identify weak points** in each slide.\n- If you don't know: *"That's an excellent question. I'm not sure; I'll have to look into it"* or *"Let's talk about it afterward."*\n- Never bluff!`
+              id: "sl-u14-del-fib",
+              type: "fill_in_blank",
+              title: "Fill in the Blank",
+              content: "Avoid 'fillers': 'uh', '___, 'um', 'okay'.",
+              blankAnswer: "like"
             }
           ]
         }
       ]
     },
     {
-      id: "u14-exam",
-      title: "3. Exam Preparation",
-      description: "Model questions from the question paper.",
-      color: "duo-orange",
+      id: "u14-glossary",
+      title: "4. Glossary",
+      description: "Key terms from the unit.",
+      color: "duo-violet",
       lessons: [
         {
-          id: "les-u14-exam",
-          title: "Model Questions",
-          description: "Section A and B practice.",
-          icon: "PenTool",
+          id: "les-u14-vocab",
+          title: "Key Terms",
+          description: "Vocabulary from Tips for Scientific Presentations.",
+          icon: "BookOpen",
           slides: [
             {
-              id: "u14-secA-q5",
-              type: "theory",
-              title: "Section A (2 Marks) — Q5",
-              content: `**Question:** List two qualities of an effective scientific presentation.\n\n**Model Answer:**\nTwo qualities of an effective scientific presentation are: (1) **Clarity** — using simple, well-labeled visuals and clear language with minimal text so that the audience understands the key ideas easily; and (2) **Organization** — following a logical structure (introduction, methods, results, summary) where each slide has one central idea and transitions lead naturally from one point to the next.`
+              id: "v-methodology",
+              type: "word_card",
+              title: "Word Card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Methodology",
+                translation: "The systematic process or set of methods used in scientific research or presentations",
+                context: "Used to describe the structured approach to presenting scientific work.",
+                example: "Step 4: Create an outline of your talk — this will build in the logical organization of your methodology."
+              }
             },
             {
-              id: "u14-secB-q12",
-              type: "theory",
-              title: "Section B (6 Marks) — Q12",
-              content: `**Question:** Explain three practical tips that can make a scientific presentation effective.\n\n**Model Answer:**\n1. **Know your audience (Step 1):** Identifying the audience's expertise level controls the amount of background material and the technical complexity of your presentation. A non-expert audience needs more context and simpler language.\n\n2. **Use figures to illustrate key points:** Graphs, diagrams, and images make presentations more real and interesting. All elements must be labeled (axes, captions, sources) and sized for visibility from the back of the room.\n\n3. **Practice your delivery:** Rehearsing in front of others — checking timing, anticipating questions, and refining transitions — ensures confident delivery. It also helps to avoid fillers, maintain eye contact, and speak slowly and distinctly during the actual presentation.`
+              id: "v-citation",
+              type: "word_card",
+              title: "Word Card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Citation",
+                translation: "A reference to a published work used to support ideas or acknowledge the source of information",
+                context: "Required on the title slide for journal club presentations.",
+                example: "Title Slide: Your names and affiliations, paper citation (for JC), venue and date."
+              }
+            },
+            {
+              id: "v-journalclub",
+              type: "word_card",
+              title: "Word Card",
+              content: "Vocabulary",
+              wordCard: {
+                word: "Journal Club",
+                translation: "A scientific presentation gathering where members present and discuss published research papers",
+                context: "A specific type of scientific presentation where critique and citation summary are required.",
+                example: "Journal club presentations require a critique slide — what was wrong with/good about the paper?"
+              }
             }
           ]
         }

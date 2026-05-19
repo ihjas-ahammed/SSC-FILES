@@ -1,106 +1,158 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Slide } from '../types';
 import MathRenderer from './MathRenderer';
 import { playGeminiAudio } from '../utils/audio';
-import { BookOpen, Search, Code, Volume2, Loader2 } from 'lucide-react';
+import { BookOpen, Quote, Volume2, Loader2, GraduationCap, Sparkles } from 'lucide-react';
 
 interface Props {
   slide: Slide;
   onComplete: () => void;
 }
 
+/**
+ * Highlights the target word inside the example sentence so the learner sees
+ * the word in real use at a glance.
+ */
+const highlightWord = (sentence: string, word: string) => {
+  if (!sentence || !word) return sentence;
+  // Match the core stem so plurals/inflections also light up (e.g. "harness", "harnessed").
+  const stem = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').slice(0, Math.max(4, word.length - 2));
+  const re = new RegExp(`(${stem}[a-z]*)`, 'ig');
+  const parts = sentence.split(re);
+  return parts.map((p, i) =>
+    re.test(p) ? (
+      <mark key={i} className="bg-amber-400/20 text-amber-300 px-1 rounded-md font-bold">{p}</mark>
+    ) : (
+      <React.Fragment key={i}>{p}</React.Fragment>
+    )
+  );
+};
+
 const WordCardView: React.FC<Props> = ({ slide, onComplete }) => {
   const card = slide.wordCard;
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [revealed, setRevealed] = useState(false);
 
   if (!card) return null;
 
   const handleTTS = async (text: string, type: 'word' | 'example') => {
     if (playingId) return;
     setPlayingId(type);
-    
     try {
-      const prompt = "Read this Arabic text clearly and accurately:";
+      const prompt = "Read this English clearly and naturally, at a learner-friendly pace:";
       await playGeminiAudio(text, prompt);
     } finally {
       setPlayingId(null);
     }
   };
 
+  const highlighted = useMemo(
+    () => highlightWord(card.example, card.word),
+    [card.example, card.word]
+  );
+
   return (
     <div className="flex flex-col h-full animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* FIXED OVERFLOW: Allows long morphology/context blocks to scroll easily */}
       <div className="flex-grow overflow-y-auto no-scrollbar pb-6 px-1 flex flex-col">
-        
-        <h2 className="text-xl font-black text-white mb-4 text-center tracking-tight shrink-0 mt-4">Word Focus</h2>
-        
-        <div className="m-auto w-full space-y-4">
-          {/* Main Word Section */}
-          <div className="glass-panel p-6 rounded-3xl shadow-lg border-2 border-duo-violet/30 relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-32 h-32 bg-duo-violet opacity-10 rounded-full blur-3xl -mr-10 -mt-10"></div>
-             
-             <div className="flex justify-between items-start mb-2">
-               <span className="text-xs font-bold text-duo-violet uppercase tracking-widest">Vocabulary</span>
-               <button 
-                 onClick={() => handleTTS(card.word, 'word')} 
-                 disabled={playingId !== null}
-                 className={`p-2 rounded-full transition-all ${playingId === 'word' ? 'bg-purple-500/20 text-purple-400' : 'bg-white/5 hover:bg-white/10 active:scale-90 text-slate-300'}`}
-               >
-                 {playingId === 'word' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Volume2 className="w-4 h-4" />}
-               </button>
-             </div>
-             
-             <div className="text-center my-4">
-                <h3 className="arabic-text text-5xl font-bold text-white mb-4 drop-shadow-md">{card.word}</h3>
-                <p className="text-2xl font-black text-amber-400">{card.translation}</p>
-             </div>
+
+        <h2 className="text-xl font-black text-white mb-4 text-center tracking-tight shrink-0 mt-2">
+          Glossary
+        </h2>
+
+        <div className="w-full space-y-3">
+
+          {/* ─── Main Word + Pronunciation ─────────────────────────── */}
+          <div className="relative overflow-hidden rounded-3xl border-2 border-duo-violet/30 bg-gradient-to-br from-purple-900/30 via-slate-900/40 to-blue-900/20 p-6 shadow-xl">
+            <div className="absolute -top-12 -right-10 w-40 h-40 bg-duo-violet opacity-15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500 opacity-10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="flex items-center justify-between mb-3 relative">
+              <span className="text-[10px] font-black tracking-widest uppercase text-duo-violet/80 flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3" /> Word
+              </span>
+              <button
+                onClick={() => handleTTS(card.word, 'word')}
+                disabled={playingId !== null}
+                aria-label="Hear pronunciation"
+                className={`p-2 rounded-full transition-all ${
+                  playingId === 'word'
+                    ? 'bg-purple-500/25 text-purple-200'
+                    : 'bg-white/5 hover:bg-white/15 active:scale-90 text-slate-300'
+                }`}
+              >
+                {playingId === 'word'
+                  ? <Loader2 className="w-4 h-4 animate-spin" />
+                  : <Volume2 className="w-4 h-4" />}
+              </button>
+            </div>
+
+            <h3 className="text-center font-black text-white tracking-tight relative leading-none"
+                style={{ fontSize: 'clamp(2.25rem, 8vw, 3.25rem)' }}>
+              {card.word}
+            </h3>
+
+            {/* Tap to reveal meaning */}
+            <button
+              onClick={() => setRevealed(true)}
+              disabled={revealed}
+              className={`mt-5 w-full text-center rounded-2xl py-3 px-4 transition-all border ${
+                revealed
+                  ? 'bg-black/30 border-amber-400/30 cursor-default'
+                  : 'bg-white/5 hover:bg-white/10 border-white/10 active:scale-[0.98]'
+              }`}
+            >
+              {revealed ? (
+                <p className="text-amber-300 font-bold text-lg leading-snug">
+                  <MathRenderer content={card.translation} />
+                </p>
+              ) : (
+                <p className="text-slate-400 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                  <GraduationCap className="w-4 h-4" /> Tap to reveal meaning
+                </p>
+              )}
+            </button>
           </div>
 
-          {/* Context Section */}
-          <div className="glass-panel p-5 rounded-2xl bg-black/20">
+          {/* ─── How it's used in the chapter ──────────────────────── */}
+          <div className="rounded-2xl bg-black/30 border border-white/5 p-4">
             <div className="flex items-center gap-2 mb-2 text-duo-blue">
-              <Search className="w-4 h-4" />
-              <h4 className="font-bold text-sm uppercase tracking-wider">Context in Ayah</h4>
+              <BookOpen className="w-4 h-4" />
+              <h4 className="font-black text-[11px] uppercase tracking-widest">In Context</h4>
             </div>
-            <div className="text-slate-300 text-sm leading-relaxed">
-               <MathRenderer content={card.context} />
-            </div>
+            <p className="text-slate-300 text-sm leading-relaxed">
+              <MathRenderer content={card.context} />
+            </p>
           </div>
 
-          {/* Example Section */}
-          <div className="glass-panel p-5 rounded-2xl bg-black/20">
-            <div className="flex items-center justify-between mb-3">
-               <div className="flex items-center gap-2 text-duo-green">
-                 <BookOpen className="w-4 h-4" />
-                 <h4 className="font-bold text-sm uppercase tracking-wider">Example Usage</h4>
-               </div>
-               <button 
-                 onClick={() => handleTTS(card.example, 'example')} 
-                 disabled={playingId !== null}
-                 className={`transition-all ${playingId === 'example' ? 'text-green-400' : 'text-slate-400 hover:text-white'}`}
-               >
-                 {playingId === 'example' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Volume2 className="w-4 h-4" />}
-               </button>
+          {/* ─── Example with word highlighted ─────────────────────── */}
+          <div className="rounded-2xl bg-gradient-to-br from-slate-800/40 to-black/30 border border-amber-500/15 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2 text-amber-400">
+                <Quote className="w-4 h-4" />
+                <h4 className="font-black text-[11px] uppercase tracking-widest">Example</h4>
+              </div>
+              <button
+                onClick={() => handleTTS(card.example, 'example')}
+                disabled={playingId !== null}
+                aria-label="Listen to example"
+                className={`transition-all p-1.5 rounded-full ${
+                  playingId === 'example'
+                    ? 'text-amber-300 bg-amber-500/15'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {playingId === 'example'
+                  ? <Loader2 className="w-4 h-4 animate-spin" />
+                  : <Volume2 className="w-4 h-4" />}
+              </button>
             </div>
-            <p className="arabic-text text-2xl text-white mb-2 text-right">{card.example}</p>
-            <p className="text-slate-400 text-sm italic">{card.exampleTranslation}</p>
+            <p className="text-white text-[15px] leading-relaxed font-serif italic">
+              "{highlighted}"
+            </p>
           </div>
-
-          {/* Morphology Section (if exists) */}
-          {card.morphology && (
-            <div className="glass-panel p-5 rounded-2xl bg-black/20 border border-slate-700">
-              <div className="flex items-center gap-2 mb-2 text-duo-orange">
-                <Code className="w-4 h-4" />
-                <h4 className="font-bold text-sm uppercase tracking-wider">Word Roots & Forms</h4>
-              </div>
-              <div className="text-slate-300 text-sm leading-relaxed">
-                 <MathRenderer content={card.morphology} />
-              </div>
-            </div>
-          )}
         </div>
       </div>
-      
+
       <div className="pt-4 border-t border-white/10 shrink-0">
         <button
           onClick={onComplete}
