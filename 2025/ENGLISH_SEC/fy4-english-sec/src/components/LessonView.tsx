@@ -13,7 +13,9 @@ import WordCardView from './WordCardView';
 import MatchTheFollowingView from './MatchTheFollowingView';
 import ProgressBar from './ProgressBar';
 import { X, ChevronLeft, ChevronRight, Type, BookOpen, Volume2, VolumeX } from 'lucide-react';
-import { playTextAsync, TtsHandle } from '../utils/audio';
+import { speakTts, stopTts, splitSentences } from '../utils/tts';
+import SpokenText from './SpokenText';
+import TtsLoadBar from './TtsLoadBar';
 import '../styles/quran.css';
 
 interface Props {
@@ -38,8 +40,8 @@ const FONT_SIZE_LABEL: Record<FontSize, string> = {
 
 const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const ttsHandle = useRef<TtsHandle>({ stopped: true });
+  const [speakState, setSpeakState] = useState<{ idx: number; ready: number; total: number } | null>(null);
+  const isSpeaking = speakState !== null;
   const [fontSize, setFontSize] = useState<FontSize>(() => {
     const saved = localStorage.getItem('ssc_reader_font_size');
     if (saved === 'sm' || saved === 'md' || saved === 'lg') return saved;
@@ -61,20 +63,17 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
     contentRef.current?.scrollTo({ top: 0, behavior: 'auto' });
   }, [currentSlideIndex]);
 
-  // Stop TTS when slide changes or component unmounts
   useEffect(() => {
     return () => {
-      ttsHandle.current.stopped = true;
-      ttsHandle.current.currentAudio?.pause();
-      setIsSpeaking(false);
+      stopTts();
+      setSpeakState(null);
     };
   }, [currentSlideIndex]);
 
   const handleToggleTTS = async () => {
     if (isSpeaking) {
-      ttsHandle.current.stopped = true;
-      ttsHandle.current.currentAudio?.pause();
-      setIsSpeaking(false);
+      stopTts();
+      setSpeakState(null);
       return;
     }
 
@@ -82,10 +81,16 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
     const textToRead = [slide.title, slide.content].filter(Boolean).join('. ');
     if (!textToRead) return;
 
-    ttsHandle.current = { stopped: false };
-    setIsSpeaking(true);
-    await playTextAsync(textToRead, 'Read this lesson content clearly and naturally.', ttsHandle.current);
-    setIsSpeaking(false);
+    setSpeakState({ idx: -1, ready: 0, total: 0 });
+    try {
+      await speakTts(textToRead, {
+        onSentence: idx => setSpeakState(s => (s ? { ...s, idx } : s)),
+        onProgress: (ready, total) => setSpeakState(s => (s ? { ...s, ready, total } : s)),
+        onEnd: () => setSpeakState(null),
+      });
+    } catch {
+      setSpeakState(null);
+    }
   };
 
   const handleInteraction = (correct: boolean) => {
@@ -173,15 +178,34 @@ const LessonView: React.FC<Props> = ({ lesson, onFinishLesson, onExit }) => {
             </div>
 
             {/* Title */}
-            {currentSlide.title && (
-              <h1 className="reader-title text-white font-black text-2xl sm:text-[28px] leading-[1.2] mb-5 tracking-tight">
-                {currentSlide.title}
-              </h1>
+            {currentSlide.title && (() => {
+              const titleSentences = splitSentences(currentSlide.title);
+              const titleActiveIdx = speakState && speakState.idx >= 0 && speakState.idx < titleSentences.length
+                ? speakState.idx
+                : -1;
+              return (
+                <h1 className="reader-title text-white font-black text-2xl sm:text-[28px] leading-[1.2] mb-5 tracking-tight">
+                  <SpokenText content={currentSlide.title} activeIdx={titleActiveIdx} />
+                </h1>
+              );
+            })()}
+
+            {/* TTS progress bar */}
+            {speakState && speakState.total > 0 && (
+              <TtsLoadBar ready={speakState.ready} total={speakState.total} className="mb-3" />
             )}
 
             {/* Body */}
             <div className={`reader-body text-slate-100 ${FONT_SIZE_MAP[fontSize]} font-medium`}>
-              <MathRenderer content={currentSlide.content} />
+              {(() => {
+                const titleCount = splitSentences(currentSlide.title || '').length;
+                const bodyActiveIdx = speakState && speakState.idx >= titleCount
+                  ? speakState.idx - titleCount
+                  : -1;
+                return (
+                  <SpokenText content={currentSlide.content} activeIdx={bodyActiveIdx} />
+                );
+              })()}
             </div>
 
             {/* Canvas art */}

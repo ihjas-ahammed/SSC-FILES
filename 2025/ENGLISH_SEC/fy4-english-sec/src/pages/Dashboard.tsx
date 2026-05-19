@@ -5,7 +5,8 @@ import LessonPath from '../components/LessonPath';
 import SectionSelector from '../components/SectionSelector';
 import ModuleSelector from '../components/ModuleSelector';
 import { UserProgress, Module } from '../types';
-import { BookOpen, Zap, ChevronDown } from 'lucide-react';
+import { BookOpen, Zap, ChevronDown, Volume2 } from 'lucide-react';
+import TtsSettings from '../components/TtsSettings';
 
 interface Props {
   progress: UserProgress;
@@ -23,6 +24,7 @@ const Dashboard: React.FC<Props> = ({
   const navigate = useNavigate();
   const [isSectionSelectorOpen, setIsSectionSelectorOpen] = useState(false);
   const [isModuleSelectorOpen, setIsModuleSelectorOpen] = useState(false);
+  const [isTtsSettingsOpen, setIsTtsSettingsOpen] = useState(false);
 
   const currentModule: Module =
     MODULES.find(m => m.id === progress.currentModuleId) || MODULES[0];
@@ -103,6 +105,14 @@ const Dashboard: React.FC<Props> = ({
             </button>
           )}
 
+          <button
+            onClick={() => setIsTtsSettingsOpen(true)}
+            className="flex items-center gap-1.5 bg-purple-500/20 text-purple-300 px-3 py-1.5 rounded-xl font-bold hover:bg-purple-500/30 transition-colors"
+            aria-label="Voice settings"
+          >
+            <Volume2 className="w-4 h-4" />
+          </button>
+
           <div className="flex items-center font-bold text-slate-300 bg-black/30 px-3 py-1.5 rounded-xl">
             <Zap className="w-4 h-4 mr-1 text-amber-400 fill-amber-400" />
             <span className="text-amber-400">{progress.xp} XP</span>
@@ -144,6 +154,11 @@ const Dashboard: React.FC<Props> = ({
           onSelectModule={handleModuleChange}
           isOpen={isModuleSelectorOpen}
           onClose={() => setIsModuleSelectorOpen(false)}
+        />
+
+        <TtsSettings
+          isOpen={isTtsSettingsOpen}
+          onClose={() => setIsTtsSettingsOpen(false)}
         />
       </main>
     </div>
