@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Properties of Solids - Study Notes & Coursework</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- MathJax Configuration to enable $...$ delimiters for inline math -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- MathJax for high-quality mathematical rendering (SVG output to prevent CORS issues on file://) -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+    
+    <!-- Three.js and OrbitControls for 3D visualizations (r120 core matches r120 OrbitControls to prevent warnings, non-module works on file://) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r120/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        :root {
+            /* Light Theme Variables */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #2563eb;
+            --accent-secondary: #4f46e5;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --toc-width: 280px;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Variables */
+            --bg-primary: #0b0f19;
+            --bg-secondary: #111827;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #6366f1;
+            --border-color: #1e293b;
+            --card-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+        }
+
+        /* Sidebar - Table of Contents */
+        aside {
+            width: var(--toc-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .aside-header {
+            margin-bottom: 2rem;
+        }
+
+        .aside-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .aside-header p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .toc-menu {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            color: var(--accent-primary);
+            background-color: rgba(37, 99, 235, 0.08);
+        }
+
+        /* Main Content Container */
+        main {
+            margin-left: var(--toc-width);
+            flex: 1;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .theme-toggle-btn {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent-primary);
+        }
+
+        /* Section Layout */
+        section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 2rem;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            border-radius: 2px;
+        }
+
+        section h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            color: var(--accent-primary);
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        /* Info Alert / Highlight Card */
+        .alert-card {
+            background-color: rgba(37, 99, 235, 0.05);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1.5rem 0;
+        }
+
+        .alert-card.warning {
+            background-color: rgba(245, 158, 11, 0.05);
+            border-left-color: #f59e0b;
+        }
+
+        .alert-card p {
+            margin-bottom: 0;
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        /* Math Card Style */
+        .math-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        /* Grid for Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card h4 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(37, 99, 235, 0.05);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Diagrams Styles */
+        .diagram-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .diagram-caption {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .bravais-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .bravais-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .bravais-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bravais-placeholder {
+            width: 100%;
+            height: 220px;
+            background-color: #0b0f19;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+            touch-action: pan-y;
+        }
+
+        .display-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+
+        .display-canvas:active {
+            cursor: grabbing;
+        }
+
+        .lattice-params {
+            font-size: 0.9rem;
+            color: var(--accent-primary);
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* Interactive Widgets Styles */
+        .widget-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .widget-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            background-color: rgba(37, 99, 235, 0.03);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .control-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        select, input, button {
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            transition: filter 0.2s;
+        }
+
+        button:hover {
+            filter: brightness(0.9);
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .canvas-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .interactive-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            aside {
+                display: none;
+            }
+            main {
+                margin-left: 0;
+                padding: 2rem 1.25rem;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+            .bravais-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1rem;
+            }
+            .wigner-steps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+                gap: 1rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 1.5rem 0.75rem;
+            }
+            .bravais-grid {
+                grid-template-columns: 1fr;
+            }
+            .wigner-steps-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Responsive Table styling to prevent horizontal page overflow */
+        table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            border-collapse: collapse;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Print Media Stylesheet to fix PDF print overflows, colors, and layout cuts */
+        @media print {
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+
+            /* Hide interactive controls, sidebars, buttons */
+            aside, .toc-menu, button, .widget-controls, .interactive-tabs {
+                display: none !important;
+            }
+
+            /* Reset main layout margins to fit the page */
+            main {
+                margin-left: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                background: transparent !important;
+            }
+
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 11pt !important;
+                line-height: 1.4 !important;
+            }
+
+            :root {
+                --bg-primary: #ffffff !important;
+                --bg-secondary: #ffffff !important;
+                --text-primary: #000000 !important;
+                --text-secondary: #333333 !important;
+                --border-color: #cccccc !important;
+                --card-bg: #ffffff !important;
+            }
+
+            /* Prevent elements from breaking across page bounds */
+            .card, .bravais-card, .math-card, .diagram-container, tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            h1, h2, h3, h4, h5 {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+
+            /* Table print styling */
+            table {
+                display: table !important;
+                width: 100% !important;
+                overflow-x: visible !important;
+            }
+
+            th, td {
+                word-wrap: break-word !important;
+                white-space: normal !important;
+            }
+
+            /* Grid print layout */
+            .bravais-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 1rem !important;
+            }
+
+            .wigner-steps-grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 1rem !important;
+            }
+
+            svg, canvas, img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar / TOC -->
+    <aside>
+        <div class="aside-header">
+            <h1>Properties of Solids</h1>
+            <p>Coursework & Complete Study Notes</p>
+        </div>
+        <ul class="toc-menu">
+            <li class="toc-item"><a href="#intro" class="toc-link active">1. Intro & Material Science</a></li>
+            <li class="toc-item"><a href="#physics-solids" class="toc-link">2. Fundamental Physics</a></li>
+            <li class="toc-item"><a href="#crystal-vs-amorphous" class="toc-link">3. Crystalline vs. Amorphous</a></li>
+            <li class="toc-item"><a href="#lattice-basis" class="toc-link">4. Lattice & Basis</a></li>
+            <li class="toc-item"><a href="#de-broglie" class="toc-link">5. Electron Wavelength</a></li>
+            <li class="toc-item"><a href="#wigner-seitz" class="toc-link">6. Wigner-Seitz Cell</a></li>
+            <li class="toc-item"><a href="#symmetry-ops" class="toc-link">7. Symmetry Operations</a></li>
+            <li class="toc-item"><a href="#five-fold" class="toc-link">8. 5-Fold Symmetry Contradiction</a></li>
+            <li class="toc-item"><a href="#bravais-lattices" class="toc-link">9. Bravais Lattices</a></li>
+            <li class="toc-item"><a href="#miller-indices" class="toc-link">10. Miller Indices</a></li>
+            <li class="toc-item"><a href="#interplanar" class="toc-link">11. Interplanar Spacing</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+        <header>
+            <div>
+                <h2>Comprehensive Coursework</h2>
+                <p>Detailed notes compiled and verified with interactive models.</p>
+            </div>
+            <button class="theme-toggle-btn" id="themeToggle">
+                <span id="themeToggleText">Dark Mode</span>
+            </button>
+        </header>
+
+        <!-- Module 1 -->
+        <section id="intro">
+            <h2>1. Intro & Material Science</h2>
+            <p>
+                Material Science represents a multidisciplinary study that bridges <strong>Physics</strong> and <strong>Chemistry</strong> to create a unified <strong>Physical Science</strong> framework. The primary goal of this discipline is to establish a rigorous, mathematical, and observational link between the microscopic structure of materials and their macroscopic properties.
+            </p>
+            <div class="math-card">
+                $$\text{Physics} + \text{Chemistry} \longrightarrow \text{Physical Science}$$
+            </div>
+            <p>
+                By engineering the atomic-scale details of a solid, we directly influence its macroscopic behavior—such as its mechanical strength, electrical conductivity, refractive index, and thermal expansion. This is known as the <strong>Structure-Property Correlation</strong>.
+            </p>
+            <h3>Coursework Schedule Reference</h3>
+            <p>
+                The schedule details the designated periods dedicated to analyzing these properties:
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Period</th>
+                        <th>Subject Focus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Monday</td>
+                        <td>1</td>
+                        <td>Solid State Theory</td>
+                    </tr>
+                    <tr>
+                        <td>Tuesday</td>
+                        <td>5</td>
+                        <td>Materials Engineering</td>
+                    </tr>
+                    <tr>
+                        <td>Wednesday</td>
+                        <td>4</td>
+                        <td>Solid State Theory</td>
+                    </tr>
+                    <tr>
+                        <td>Thursday</td>
+                        <td>1, 2</td>
+                        <td>Solid State Theory (Extended Lab/Lecture)</td>
+                    </tr>
+                    <tr>
+                        <td>Friday</td>
+                        <td>4, 5</td>
+                        <td>Materials Engineering (Applications)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Module 2 -->
+        <section id="physics-solids">
+            <h2>2. Fundamental Physics of Solids</h2>
+            <p>
+                The physics of solids is divided into two primary axes of study: establishing the exact geometrical arrangement (<strong>Structure</strong>) and measuring or calculating the response to external forces/fields (<strong>Property</strong>).
+            </p>
+            <div class="math-card">
+                $$\text{Physics of Solids} \longrightarrow \begin{cases} \text{Structure} \\ \text{Property} \end{cases}$$
+            </div>
+            <p>
+                Solids are characterized by a <strong>strict geometry</strong>. This geometry is a direct consequence of thermodynamic stability: *a physical system will always search for a state of minimum free energy to maximize stability*.
+            </p>
+            <h3>Fundamental Principles Involved</h3>
+            <p>
+                The study of solids is built upon three pillar principles of modern physics:
+            </p>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>I. Energy Conservation</h4>
+                    <p>Lattice dynamics, phase changes, and electronic transitions are governed by thermodynamic conservation, where potential binding energy balances kinetic vibrational energy.</p>
+                </div>
+                <div class="card">
+                    <h4>II. Momentum Conservation</h4>
+                    <p>Scattering processes (like X-ray or neutron diffraction) in a periodic lattice conserve momentum modulo a reciprocal lattice vector (crystal momentum).</p>
+                </div>
+                <div class="card">
+                    <h4>III. Uncertainty Principle</h4>
+                    <p>Nature imposes a fundamental uncertainty limit on physical systems ($\Delta x \cdot \Delta p \ge \hbar/2$). On the atomic scale, matter and energy exist simultaneously: localized electrons represent mass, while delocalized waves/radiation represent energy.</p>
+                </div>
+            </div>
+            <div class="alert-card">
+                <p><strong>Note on Wave Mechanics:</strong> The primary function of a wave in a solid is to propagate and carry energy through <strong>spacetime</strong> without any net transport of the physical matter itself.</p>
+            </div>
+        </section>
+
+        <!-- Module 3 -->
+        <section id="crystal-vs-amorphous">
+            <h2>3. Crystalline vs. Amorphous Solids</h2>
+            <p>
+                Solids are classified based on the spatial order of their constituent particles. Crystalline materials possess long-range periodic order, while amorphous materials lack this long-range periodicity.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Crystalline Solids</th>
+                        <th>Amorphous Solids</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Ordering</strong></td>
+                        <td>Long-range periodic order (extends over thousands of atomic distances).</td>
+                        <td>Short-range order only (extends only to ~5 atomic spacings, denoted by $a_0 \rightarrow \approx 5$).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Directionality</strong></td>
+                        <td><strong>Anisotropic:</strong> Physical properties (e.g., refractive index, conductivity) vary with measuring direction.</td>
+                        <td><strong>Isotropic:</strong> Physical properties are identical in all directions due to spatial randomness.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Thermodynamic State</strong></td>
+                        <td>Low energy, thermodynamically stable state.</td>
+                        <td>High energy, metastable state.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cleavage & Fracture</strong></td>
+                        <td>Cleaves along flat, distinct crystallographic planes.</td>
+                        <td>Fractures along random, curved paths (conchoidal fracture). *e.g., glass breaks differently every time.*</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Randomness</strong></td>
+                        <td>Minimum randomness (entropy).</td>
+                        <td>High randomness (entropy).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="diagram-container">
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+                    <!-- Crystalline SVG -->
+                    <svg width="200" height="200" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-primary);">
+                        <defs>
+                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <circle cx="20" cy="20" r="6" fill="#2563eb" />
+                            </pattern>
+                        </defs>
+                        <rect width="200" height="200" fill="url(#grid)" />
+                    </svg>
+                    
+                    <!-- Amorphous SVG -->
+                    <svg id="amorphousSvg" width="200" height="200" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-primary);">
+                        <!-- Generated by JS -->
+                    </svg>
+                </div>
+                <div class="diagram-caption">
+                    Visual comparison of Crystalline (left, regular grid) vs. Amorphous (right, disordered with short-range order) configurations.
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 4 -->
+        <section id="lattice-basis">
+            <h2>4. Crystal Lattice & Basis</h2>
+            <p>
+                A physical crystal structure is mathematically constructed by associating a physical group of atoms (the <strong>Basis</strong>) with an infinite geometric array of points (the <strong>Lattice</strong>).
+            </p>
+            <div class="math-card">
+                $$\text{Lattice} + \text{Basis} = \text{Crystal Structure}$$
+            </div>
+            
+            <div class="diagram-container">
+                <svg width="600" height="150" viewBox="0 0 600 150" style="width: 100%; max-width: 600px;">
+                    <!-- Lattice points -->
+                    <g transform="translate(10, 10)">
+                        <circle cx="20" cy="20" r="3" fill="var(--text-secondary)" />
+                        <circle cx="60" cy="20" r="3" fill="var(--text-secondary)" />
+                        <circle cx="20" cy="60" r="3" fill="var(--text-secondary)" />
+                        <circle cx="60" cy="60" r="3" fill="var(--text-secondary)" />
+                        <text x="40" y="105" text-anchor="middle" fill="var(--text-primary)" font-size="12" font-weight="600">Lattice</text>
+                    </g>
+                    
+                    <!-- Plus sign -->
+                    <text x="120" y="65" font-size="32" font-weight="bold" fill="var(--text-primary)" text-anchor="middle">+</text>
+                    
+                    <!-- Basis (Motif) -->
+                    <g transform="translate(170, 20)">
+                        <line x1="30" y1="30" x2="60" y2="50" stroke="var(--text-secondary)" stroke-width="3" />
+                        <circle cx="30" cy="30" r="10" fill="#2563eb" />
+                        <circle cx="60" cy="50" r="7" fill="#f59e0b" />
+                        <text x="45" y="95" text-anchor="middle" fill="var(--text-primary)" font-size="12" font-weight="600">Basis</text>
+                    </g>
+                    
+                    <!-- Equals sign -->
+                    <text x="280" y="65" font-size="32" font-weight="bold" fill="var(--text-primary)" text-anchor="middle">=</text>
+                    
+                    <!-- Crystal Structure -->
+                    <g transform="translate(340, 10)">
+                        <!-- Point 1 -->
+                        <g transform="translate(0, 0)">
+                            <line x1="20" y1="20" x2="40" y2="35" stroke="var(--text-secondary)" stroke-width="1.5" />
+                            <circle cx="20" cy="20" r="6" fill="#2563eb" />
+                            <circle cx="40" cy="35" r="4.5" fill="#f59e0b" />
+                        </g>
+                        <!-- Point 2 -->
+                        <g transform="translate(60, 0)">
+                            <line x1="20" y1="20" x2="40" y2="35" stroke="var(--text-secondary)" stroke-width="1.5" />
+                            <circle cx="20" cy="20" r="6" fill="#2563eb" />
+                            <circle cx="40" cy="35" r="4.5" fill="#f59e0b" />
+                        </g>
+                        <!-- Point 3 -->
+                        <g transform="translate(0, 50)">
+                            <line x1="20" y1="20" x2="40" y2="35" stroke="var(--text-secondary)" stroke-width="1.5" />
+                            <circle cx="20" cy="20" r="6" fill="#2563eb" />
+                            <circle cx="40" cy="35" r="4.5" fill="#f59e0b" />
+                        </g>
+                        <!-- Point 4 -->
+                        <g transform="translate(60, 50)">
+                            <line x1="20" y1="20" x2="40" y2="35" stroke="var(--text-secondary)" stroke-width="1.5" />
+                            <circle cx="20" cy="20" r="6" fill="#2563eb" />
+                            <circle cx="40" cy="35" r="4.5" fill="#f59e0b" />
+                        </g>
+                        <text x="60" y="105" text-anchor="middle" fill="var(--text-primary)" font-size="12" font-weight="600">Crystal Structure</text>
+                    </g>
+                </svg>
+                <div class="diagram-caption">
+                    Lattice + Basis = Crystal Structure schematic representation.
+                </div>
+            </div>
+            
+            <p>
+                <strong>Primitive Unit Cell:</strong> A unit cell that contains exactly 1 effective lattice point ($n_{\text{eff}} = 1$). For example, a simple cubic (SC) cell has 8 corner points, each shared by 8 adjacent cells:
+                $$n_{\text{eff}} = 8 \times \frac{1}{8} = 1$$
+            </p>
+            <p>
+                <strong>Non-Primitive Unit Cell:</strong> A unit cell containing more than 1 effective lattice point ($n_{\text{eff}} \neq 1$). In Body-Centered Cubic (BCC) crystals, $n_{\text{eff}} = 2$, and in Face-Centered Cubic (FCC) crystals, $n_{\text{eff}} = 4$.
+            </p>
+        </section>
+
+        <!-- Module 5 -->
+        <section id="de-broglie">
+            <h2>5. Electron Wavelength & Zero-Point Energy</h2>
+            <p>
+                To probe the atomic lattices of solids, we employ diffraction techniques using waves whose wavelengths match the characteristic interatomic spacing ($d \approx 1-2 \text{ \AA}$).
+            </p>
+            <div class="math-card">
+                $$\lambda = \frac{h}{p}, \quad E = h\nu$$
+            </div>
+            
+            <h3>Wavelength Calculation for $E = 50 \text{ eV}$</h3>
+            <p>
+                If we model a photon of energy $E = 50 \text{ eV}$, its wavelength is calculated as:
+            </p>
+            <div class="math-card">
+                $$\lambda = \frac{hc}{E} = \frac{6.626 \times 10^{-34} \text{ J}\cdot\text{s} \times 3 \times 10^8 \text{ m/s}}{50 \times 1.602 \times 10^{-19} \text{ J}} \approx 24.75 \text{ nm}$$
+            </div>
+            <p>
+                In the handwritten notes, a rapid approximation $6.6 \approx 6.4$ was used to simplify divisions:
+            </p>
+            <div class="math-card">
+                $$\lambda \approx \frac{6.4 \times 3}{1.6 \times 50} \times 10^{-7} \text{ m} = \frac{4 \times 3}{50} \times 10^{-7} \text{ m} = \frac{6}{25} \times 10^{-7} \text{ m} = 24 \text{ nm}$$
+            </div>
+
+            <h3>Quantum Harmonic Oscillator & Zero-Point Motion</h3>
+            <p>
+                According to quantum mechanics, the atoms in a solid lattice behave like harmonic oscillators. The minimum possible energy of a quantum harmonic oscillator is not zero (unlike classical mechanics), but is bounded by the uncertainty principle:
+            </p>
+            <div class="math-card">
+                $$E_0 = \frac{1}{2}h\nu$$
+            </div>
+            <p>
+                Because this ground-state energy (zero-point energy) is strictly positive ($E_0 > 0$), <strong>the atoms in a crystal are never at absolute rest at any position, even at absolute zero ($0 \text{ K}$)</strong>.
+            </p>
+        </section>
+
+        <!-- Module 6 -->
+        <section id="wigner-seitz">
+            <h2>6. Wigner-Seitz Unit Cell</h2>
+            <p>
+                A Wigner-Seitz cell is a geometric method to define a primitive unit cell which preserves the full point symmetry of the underlying Bravais lattice.
+            </p>
+            
+            <div class="wigner-steps-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <!-- Step 1 -->
+                <div class="diagram-container" style="margin: 0; padding: 1rem; page-break-inside: avoid; break-inside: avoid;">
+                    <h5 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 0.95rem; text-align: center;">Step 1</h5>
+                    <svg class="wigner-svg" data-step="1" width="220" height="220" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-primary); display: block; margin: 0 auto;"></svg>
+                    <div class="diagram-caption" style="margin-top: 0.5rem; font-size: 0.85rem; line-height: 1.3;">
+                        Identify a central lattice point (gold).
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="diagram-container" style="margin: 0; padding: 1rem; page-break-inside: avoid; break-inside: avoid;">
+                    <h5 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 0.95rem; text-align: center;">Step 2</h5>
+                    <svg class="wigner-svg" data-step="2" width="220" height="220" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-primary); display: block; margin: 0 auto;"></svg>
+                    <div class="diagram-caption" style="margin-top: 0.5rem; font-size: 0.85rem; line-height: 1.3;">
+                        Connect the central point to all nearest neighbors with vector offsets.
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="diagram-container" style="margin: 0; padding: 1rem; page-break-inside: avoid; break-inside: avoid;">
+                    <h5 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 0.95rem; text-align: center;">Step 3</h5>
+                    <svg class="wigner-svg" data-step="3" width="220" height="220" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-primary); display: block; margin: 0 auto;"></svg>
+                    <div class="diagram-caption" style="margin-top: 0.5rem; font-size: 0.85rem; line-height: 1.3;">
+                        Construct perpendicular bisectors (normals) at the midpoints of the lines.
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="diagram-container" style="margin: 0; padding: 1rem; page-break-inside: avoid; break-inside: avoid;">
+                    <h5 style="margin-top: 0; margin-bottom: 0.5rem; font-size: 0.95rem; text-align: center;">Step 4</h5>
+                    <svg class="wigner-svg" data-step="4" width="220" height="220" style="border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-primary); display: block; margin: 0 auto;"></svg>
+                    <div class="diagram-caption" style="margin-top: 0.5rem; font-size: 0.85rem; line-height: 1.3;">
+                        The smallest enclosed volume forms the primitive Wigner-Seitz cell.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 7 -->
+        <section id="symmetry-ops">
+            <h2>7. Symmetry Operations & Group Theory</h2>
+            <p>
+                A symmetry operation maps the crystal lattice onto itself. These operations are categorized into:
+            </p>
+            <ul>
+                <li><strong>Translation:</strong> Pure vector offset $\vec{T} = n_1\vec{a}_1 + n_2\vec{a}_2 + n_3\vec{a}_3$ where $n_i \in \mathbb{Z}$ for primitive cells.</li>
+                <li><strong>Rotation:</strong> Rotates the crystal around an axis. Only specific angles ($360^\circ / n$) are compatible with translation periodicity.</li>
+                <li><strong>Reflection:</strong> Mirrors coordinates across a mirror plane ($m$).</li>
+                <li><strong>Inversion:</strong> Points are inverted through a central point ($\vec{r} \rightarrow -\vec{r}$). Only possible in 3D.</li>
+            </ul>
+            <p>
+                Symmetry operations that leave at least one point invariant are grouped into <strong>Point Groups</strong>. There are exactly <strong>10 point groups in 2D</strong> and <strong>32 point groups in 3D</strong>.
+            </p>
+        </section>
+
+        <!-- Module 8 -->
+        <section id="five-fold">
+            <h2>8. Proof: 5-Fold Symmetry Contradiction</h2>
+            <p>
+                Crystals cannot have 5-fold (or any $\ge 7$-fold) rotational symmetry. The following proof derives this limitation mathematically by demanding compatibility with translation symmetry.
+            </p>
+            
+            <div class="diagram-container">
+                <svg width="500" height="200" viewBox="0 0 500 200" style="width: 100%; max-width: 500px;">
+                    <!-- Bottom line (original lattice) -->
+                    <line x1="50" y1="150" x2="450" y2="150" stroke="var(--text-secondary)" stroke-width="1.5" stroke-dasharray="4" />
+                    <circle cx="100" cy="150" r="5" fill="#2563eb" /> <!-- P -->
+                    <circle cx="200" cy="150" r="5" fill="#2563eb" /> <!-- Q -->
+                    <circle cx="300" cy="150" r="5" fill="#2563eb" /> <!-- R -->
+                    <circle cx="400" cy="150" r="5" fill="#2563eb" /> <!-- S -->
+                    <text x="100" y="175" text-anchor="middle" fill="var(--text-primary)">P</text>
+                    <text x="200" y="175" text-anchor="middle" fill="var(--text-primary)">Q</text>
+                    <text x="300" y="175" text-anchor="middle" fill="var(--text-primary)">R</text>
+                    <text x="400" y="175" text-anchor="middle" fill="var(--text-primary)">S</text>
+                    <text x="250" y="140" text-anchor="middle" fill="var(--text-secondary)" font-size="12">a</text>
+                    
+                    <!-- Rotations -->
+                    <!-- R about Q by +theta -> Q' -->
+                    <!-- Q about R by -theta -> R' -->
+                    <!-- Let theta = 60 degrees (0.866, 0.5) for visualization -->
+                    <line x1="200" y1="150" x2="150" y2="63.4" stroke="var(--accent-secondary)" stroke-width="2" />
+                    <line x1="300" y1="150" x2="350" y2="63.4" stroke="var(--accent-secondary)" stroke-width="2" />
+                    <circle cx="150" cy="63.4" r="5" fill="#ef4444" /> <!-- Q' -->
+                    <circle cx="350" cy="63.4" r="5" fill="#ef4444" /> <!-- R' -->
+                    <text x="140" y="55" text-anchor="middle" fill="var(--text-primary)">Q'</text>
+                    <text x="360" y="55" text-anchor="middle" fill="var(--text-primary)">R'</text>
+                    
+                    <!-- Top Line -->
+                    <line x1="50" y1="63.4" x2="450" y2="63.4" stroke="var(--text-secondary)" stroke-width="1.5" stroke-dasharray="4" />
+                    
+                    <!-- Projections -->
+                    <line x1="150" y1="63.4" x2="150" y2="150" stroke="#f59e0b" stroke-width="1" stroke-dasharray="2" />
+                    <line x1="350" y1="63.4" x2="350" y2="150" stroke="#f59e0b" stroke-width="1" stroke-dasharray="2" />
+                    
+                    <!-- Labels -->
+                    <text x="180" y="100" fill="var(--text-secondary)" font-size="12">a cos θ</text>
+                    <text x="320" y="100" fill="var(--text-secondary)" font-size="12">a cos θ</text>
+                </svg>
+                <div class="diagram-caption">
+                    Geometry of the rotational symmetry proof. Points $Q'$ and $R'$ must be lattice points.
+                </div>
+            </div>
+
+            <p>
+                Consider a row of collinear lattice points spaced by distance $a$. Rotate point $R$ about $Q$ counter-clockwise by $\theta$, and rotate $Q$ about $R$ clockwise by $\theta$. The resulting points $Q'$ and $R'$ must also be lattice points. The distance $Q'R'$ must be an integer multiple of $a$:
+            </p>
+            <div class="math-card">
+                $$Q'R' = a + 2a\cos\theta = m \cdot a \quad (m \in \mathbb{Z})$$
+            </div>
+            <p>
+                This simplifies to:
+            </p>
+            <div class="math-card">
+                $$\cos\theta = \frac{m - 1}{2}$$
+            </div>
+            <p>
+                Since $-1 \le \cos\theta \le 1$, $m$ can only take integer values between $-1$ and $3$:
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>$m$</th>
+                        <th>$\cos\theta$</th>
+                        <th>Allowed Angle $\theta$</th>
+                        <th>Symmetry Fold $n = 2\pi/\theta$</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$-1$</td>
+                        <td>$-1$</td>
+                        <td>$180^\circ$</td>
+                        <td>$2$ (Diad)</td>
+                    </tr>
+                    <tr>
+                        <td>$0$</td>
+                        <td>$-1/2$</td>
+                        <td>$120^\circ$</td>
+                        <td>$3$ (Triad)</td>
+                    </tr>
+                    <tr>
+                        <td>$1$</td>
+                        <td>$0$</td>
+                        <td>$90^\circ$</td>
+                        <td>$4$ (Tetrad)</td>
+                    </tr>
+                    <tr>
+                        <td>$2$</td>
+                        <td>$1/2$</td>
+                        <td>$60^\circ$</td>
+                        <td>$6$ (Hexad)</td>
+                    </tr>
+                    <tr>
+                        <td>$3$</td>
+                        <td>$1$</td>
+                        <td>$360^\circ$</td>
+                        <td>$1$ (Monad)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Since no integer $m$ gives $\cos\theta = \cos(72^\circ) \approx 0.309$, <strong>5-fold rotational symmetry is not allowed in periodic crystals</strong>.
+            </p>
+        </section>
+
+        <!-- Module 9 -->
+        <section id="bravais-lattices">
+            <h2>9. Bravais Lattices & Crystal Systems</h2>
+            <p>
+                Crystal structures are classified into <strong>7 Crystal Systems</strong> based on their axial relationships and interaxial angles. In 3D space, these yield exactly <strong>14 Bravais Lattices</strong>.
+            </p>
+            
+            <div class="widget-panel">
+                <div class="widget-controls" style="margin-bottom: 2rem; justify-content: center;">
+                    <div class="control-group" style="flex-direction: row; align-items: center; gap: 1rem;">
+                        <span class="control-label" style="margin-bottom: 0;">Global Render Mode:</span>
+                        <button id="btnBallStick" class="active" onclick="setGlobalRenderMode('ballStick')">Ball & Stick</button>
+                        <button id="btnSpaceFill" onclick="setGlobalRenderMode('spaceFill')">Space Filling</button>
+                    </div>
+                </div>
+
+                <div class="bravais-grid">
+                    <!-- 1. Triclinic -->
+                    <div class="bravais-card">
+                        <h4>1. Triclinic (Simple / P)</h4>
+                        <div class="bravais-placeholder" data-lattice="triclinic_p">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha \neq \beta \neq \gamma \neq 90^\circ$</p>
+                    </div>
+                    <!-- 2. Monoclinic P -->
+                    <div class="bravais-card">
+                        <h4>2. Monoclinic (Simple / P)</h4>
+                        <div class="bravais-placeholder" data-lattice="monoclinic_p">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha = \gamma = 90^\circ, \beta \neq 90^\circ$</p>
+                    </div>
+                    <!-- 3. Monoclinic C -->
+                    <div class="bravais-card">
+                        <h4>3. Monoclinic (Base-Centered / C)</h4>
+                        <div class="bravais-placeholder" data-lattice="monoclinic_c">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha = \gamma = 90^\circ, \beta \neq 90^\circ$</p>
+                    </div>
+                    <!-- 4. Orthorhombic P -->
+                    <div class="bravais-card">
+                        <h4>4. Orthorhombic (Simple / P)</h4>
+                        <div class="bravais-placeholder" data-lattice="orthorhombic_p">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 5. Orthorhombic C -->
+                    <div class="bravais-card">
+                        <h4>5. Orthorhombic (Base-Centered / C)</h4>
+                        <div class="bravais-placeholder" data-lattice="orthorhombic_c">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 6. Orthorhombic I -->
+                    <div class="bravais-card">
+                        <h4>6. Orthorhombic (Body-Centered / I)</h4>
+                        <div class="bravais-placeholder" data-lattice="orthorhombic_i">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 7. Orthorhombic F -->
+                    <div class="bravais-card">
+                        <h4>7. Orthorhombic (Face-Centered / F)</h4>
+                        <div class="bravais-placeholder" data-lattice="orthorhombic_f">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a \neq b \neq c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 8. Tetragonal P -->
+                    <div class="bravais-card">
+                        <h4>8. Tetragonal (Simple / P)</h4>
+                        <div class="bravais-placeholder" data-lattice="tetragonal_p">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b \neq c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 9. Tetragonal I -->
+                    <div class="bravais-card">
+                        <h4>9. Tetragonal (Body-Centered / I)</h4>
+                        <div class="bravais-placeholder" data-lattice="tetragonal_i">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b \neq c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 10. Rhombohedral R -->
+                    <div class="bravais-card">
+                        <h4>10. Rhombohedral (R / Trigonal)</h4>
+                        <div class="bravais-placeholder" data-lattice="rhombohedral">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b = c$<br>$\alpha = \beta = \gamma \neq 90^\circ$</p>
+                    </div>
+                    <!-- 11. Hexagonal P -->
+                    <div class="bravais-card">
+                        <h4>11. Hexagonal (Simple / P)</h4>
+                        <div class="bravais-placeholder" data-lattice="hexagonal">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b \neq c$<br>$\alpha = \beta = 90^\circ, \gamma = 120^\circ$</p>
+                    </div>
+                    <!-- 12. Simple Cubic (SC / P) -->
+                    <div class="bravais-card">
+                        <h4>12. Simple Cubic (SC / P)</h4>
+                        <div class="bravais-placeholder" data-lattice="cubic_p">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b = c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 13. Cubic I -->
+                    <div class="bravais-card">
+                        <h4>13. Body-Centered Cubic (BCC / I)</h4>
+                        <div class="bravais-placeholder" data-lattice="cubic_i">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b = c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                    <!-- 14. Cubic F -->
+                    <div class="bravais-card">
+                        <h4>14. Face-Centered Cubic (FCC / F)</h4>
+                        <div class="bravais-placeholder" data-lattice="cubic_f">
+                            <canvas class="display-canvas" width="280" height="220"></canvas>
+                        </div>
+                        <p class="lattice-params">$a = b = c$<br>$\alpha = \beta = \gamma = 90^\circ$</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The 7 3D Crystal Systems</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Crystal System</th>
+                        <th>Axial Lengths</th>
+                        <th>Interaxial Angles</th>
+                        <th>Bravais Lattices</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cubic</strong></td>
+                        <td>$a = b = c$</td>
+                        <td>$\alpha = \beta = \gamma = 90^\circ$</td>
+                        <td>Simple (P), Body-Centered (I), Face-Centered (F)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tetragonal</strong></td>
+                        <td>$a = b \neq c$</td>
+                        <td>$\alpha = \beta = \gamma = 90^\circ$</td>
+                        <td>Simple (P), Body-Centered (I)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Orthorhombic</strong></td>
+                        <td>$a \neq b \neq c$</td>
+                        <td>$\alpha = \beta = \gamma = 90^\circ$</td>
+                        <td>Simple (P), Base-Centered (C), Body-Centered (I), Face-Centered (F)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monoclinic</strong></td>
+                        <td>$a \neq b \neq c$</td>
+                        <td>$\alpha = \gamma = 90^\circ, \beta \neq 90^\circ$</td>
+                        <td>Simple (P), Base-Centered (C)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Triclinic</strong></td>
+                        <td>$a \neq b \neq c$</td>
+                        <td>$\alpha \neq \beta \neq \gamma \neq 90^\circ$</td>
+                        <td>Simple (P)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hexagonal</strong></td>
+                        <td>$a = b \neq c$</td>
+                        <td>$\alpha = \beta = 90^\circ, \gamma = 120^\circ$</td>
+                        <td>Simple (P)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rhombohedral</strong></td>
+                        <td>$a = b = c$</td>
+                        <td>$\alpha = \beta = \gamma \neq 90^\circ$</td>
+                        <td>Simple (P)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Module 10 -->
+        <section id="miller-indices">
+            <h2>10. Miller Indices of Planes & Directions</h2>
+            <p>
+                Crystallographic directions and planes are represented by coordinates enclosed in specific brackets. A direction vector is denoted as $[hkl]$, and a plane is denoted as $(hkl)$.
+            </p>
+            
+            <h3>Recipe to Determine Miller Indices $(hkl)$ of a Plane</h3>
+            <ol style="margin-left: 2rem; margin-bottom: 1.5rem; color: var(--text-secondary);">
+                <li>Find the intercepts of the plane with the coordinate axes ($x, y, z$) in terms of lattice constants.</li>
+                <li>Take the reciprocals of these intercepts.</li>
+                <li>Clear fractions by multiplying by the lowest common multiple (LCM) to get integers.</li>
+                <li>Enclose the integers in parentheses: $(hkl)$. Write a bar over negative integers (e.g. $\bar{1}$).</li>
+            </ol>
+
+            <!-- Interactive 3D Miller Planes Grid -->
+            <div class="bravais-grid">
+                <!-- 1. (100) -->
+                <div class="bravais-card">
+                    <h4>Plane (100)</h4>
+                    <div class="bravais-placeholder" data-miller="1,0,0">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$x = 1$</p>
+                </div>
+                <!-- 2. (010) -->
+                <div class="bravais-card">
+                    <h4>Plane (010)</h4>
+                    <div class="bravais-placeholder" data-miller="0,1,0">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$y = 1$</p>
+                </div>
+                <!-- 3. (001) -->
+                <div class="bravais-card">
+                    <h4>Plane (001)</h4>
+                    <div class="bravais-placeholder" data-miller="0,0,1">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$z = 1$</p>
+                </div>
+                <!-- 4. (110) -->
+                <div class="bravais-card">
+                    <h4>Plane (110)</h4>
+                    <div class="bravais-placeholder" data-miller="1,1,0">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$x + y = 1$</p>
+                </div>
+                <!-- 5. (101) -->
+                <div class="bravais-card">
+                    <h4>Plane (101)</h4>
+                    <div class="bravais-placeholder" data-miller="1,0,1">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$x + z = 1$</p>
+                </div>
+                <!-- 6. (011) -->
+                <div class="bravais-card">
+                    <h4>Plane (011)</h4>
+                    <div class="bravais-placeholder" data-miller="0,1,1">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$y + z = 1$</p>
+                </div>
+                <!-- 7. (111) -->
+                <div class="bravais-card">
+                    <h4>Plane (111)</h4>
+                    <div class="bravais-placeholder" data-miller="1,1,1">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$x + y + z = 1$</p>
+                </div>
+                <!-- 8. (1-10) -->
+                <div class="bravais-card">
+                    <h4>Plane (1$\bar{1}$0)</h4>
+                    <div class="bravais-placeholder" data-miller="1,-1,0">
+                        <canvas class="display-canvas" width="280" height="220"></canvas>
+                    </div>
+                    <p class="lattice-params">$x - y = 1$</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Module 11 -->
+        <section id="interplanar">
+            <h2>11. Interplanar Spacing ($d_{hkl}$)</h2>
+            <p>
+                The interplanar spacing $d_{hkl}$ is the perpendicular distance between adjacent parallel planes with Miller indices $(hkl)$.
+            </p>
+            
+            <h3>Derivation for Orthogonal Lattices</h3>
+            <p>
+                Consider a plane that intersects the axes of an orthogonal coordinate system at $x = a/h$, $y = b/k$, and $z = c/l$. The normal vector from the origin to this plane has length $d$ and makes angles $\theta_1, \theta_2, \theta_3$ with the axes:
+            </p>
+            <div class="math-card">
+                $$\cos\theta_1 = \frac{d}{a/h} = \frac{hd}{a}, \quad \cos\theta_2 = \frac{kd}{b}, \quad \cos\theta_3 = \frac{ld}{c}$$
+            </div>
+            <p>
+                Using the geometric constraint for direction cosines ($\cos^2\theta_1 + \cos^2\theta_2 + \cos^2\theta_3 = 1$):
+            </p>
+            <div class="math-card">
+                $$d^2 \left( \frac{h^2}{a^2} + \frac{k^2}{b^2} + \frac{l^2}{c^2} \right) = 1 \implies d_{hkl} = \frac{1}{\sqrt{\frac{h^2}{a^2} + \frac{k^2}{b^2} + \frac{l^2}{c^2}}}$$
+            </div>
+            
+            <h3>Spacing Formulas by System</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Cubic ($a=b=c$)</h4>
+                    <div class="math-card" style="margin: 0.5rem 0; padding: 0.75rem;">
+                        $$d = \frac{a}{\sqrt{h^2 + k^2 + l^2}}$$
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Tetragonal ($a=b \neq c$)</h4>
+                    <div class="math-card" style="margin: 0.5rem 0; padding: 0.75rem;">
+                        $$d = \frac{ac}{\sqrt{c^2(h^2 + k^2) + a^2l^2}}$$
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>Orthorhombic ($a \neq b \neq c$)</h4>
+                    <div class="math-card" style="margin: 0.5rem 0; padding: 0.75rem;">
+                        $$d = \frac{1}{\sqrt{\frac{h^2}{a^2} + \frac{k^2}{b^2} + \frac{l^2}{c^2}}}$$
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeToggleText = document.getElementById('themeToggleText');
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggleText.textContent = 'Dark Mode';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggleText.textContent = 'Light Mode';
+            }
+        });
+
+        // Sidebar Active States
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.toc-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Generate Amorphous SVG points
+        const amorphousSvg = document.getElementById('amorphousSvg');
+        let points = [];
+        const width = 200;
+        const height = 200;
+        const radius = 6;
+        const minDistance = 16;
+        
+        // Poisson disc-like randomized distribution
+        for (let i = 0; i < 400; i++) {
+            let x = Math.random() * (width - 20) + 10;
+            let y = Math.random() * (height - 20) + 10;
+            let valid = true;
+            for (let p of points) {
+                let dist = Math.hypot(x - p.x, y - p.y);
+                if (dist < minDistance) {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid) {
+                points.push({x, y});
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', radius);
+                circle.setAttribute('fill', '#f97316');
+                amorphousSvg.appendChild(circle);
+            }
+        }
+
+        // Wigner-Seitz Cell SVG Logic
+        function renderAllWigner() {
+            const svgs = document.querySelectorAll('.wigner-svg');
+            svgs.forEach(svg => {
+                const step = parseInt(svg.dataset.step);
+                svg.innerHTML = '';
+
+                const center = 110;
+                const offset = 60;
+                const minN = center - offset;
+                const maxN = center + offset;
+
+                const points = [
+                    {x: center, y: center, type: 'center'},
+                    {x: minN, y: center, type: 'neighbor'},
+                    {x: maxN, y: center, type: 'neighbor'},
+                    {x: center, y: minN, type: 'neighbor'},
+                    {x: center, y: maxN, type: 'neighbor'},
+                    {x: minN, y: minN, type: 'neighbor'},
+                    {x: maxN, y: minN, type: 'neighbor'},
+                    {x: minN, y: maxN, type: 'neighbor'},
+                    {x: maxN, y: maxN, type: 'neighbor'}
+                ];
+
+                // Render background lines in step 2+
+                if (step >= 2) {
+                    points.forEach(p => {
+                        if (p.type === 'neighbor') {
+                            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line.setAttribute('x1', center);
+                            line.setAttribute('y1', center);
+                            line.setAttribute('x2', p.x);
+                            line.setAttribute('y2', p.y);
+                            line.setAttribute('stroke', '#94a3b8');
+                            line.setAttribute('stroke-dasharray', '4');
+                            svg.appendChild(line);
+                        }
+                    });
+                }
+
+                // Render normals in step 3+
+                if (step >= 3) {
+                    const halfOffset = offset / 2;
+                    const minNormal = center - halfOffset;
+                    const maxNormal = center + halfOffset;
+                    const padding = 30;
+
+                    const normals = [
+                        {x1: minNormal, y1: padding, x2: minNormal, y2: 220 - padding}, // left
+                        {x1: maxNormal, y1: padding, x2: maxNormal, y2: 220 - padding}, // right
+                        {x1: padding, y1: minNormal, x2: 220 - padding, y2: minNormal}, // top
+                        {x1: padding, y1: maxNormal, x2: 220 - padding, y2: maxNormal}  // bottom
+                    ];
+                    normals.forEach(n => {
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', n.x1);
+                        line.setAttribute('y1', n.y1);
+                        line.setAttribute('x2', n.x2);
+                        line.setAttribute('y2', n.y2);
+                        line.setAttribute('stroke', '#ef4444');
+                        line.setAttribute('stroke-width', '1.5');
+                        svg.appendChild(line);
+                    });
+                }
+
+                // Shade enclosed area in step 4
+                if (step >= 4) {
+                    const halfOffset = offset / 2;
+                    const minNormal = center - halfOffset;
+                    const rectSize = offset;
+
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', minNormal);
+                    rect.setAttribute('y', minNormal);
+                    rect.setAttribute('width', rectSize);
+                    rect.setAttribute('height', rectSize);
+                    rect.setAttribute('fill', 'rgba(245, 158, 11, 0.3)');
+                    rect.setAttribute('stroke', '#f59e0b');
+                    rect.setAttribute('stroke-width', '2');
+                    svg.appendChild(rect);
+                }
+
+                // Render dots
+                points.forEach(p => {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', p.x);
+                    circle.setAttribute('cy', p.y);
+                    circle.setAttribute('r', p.type === 'center' ? '7' : '5');
+                    circle.setAttribute('fill', p.type === 'center' ? '#eab308' : '#2563eb');
+                    svg.appendChild(circle);
+                });
+            });
+        }
+
+        renderAllWigner();
+
+            // Initialize 3D Lattices and Miller Planes Visualizer (shared high-res WebGL renderer)
+        const glCanvas = document.createElement('canvas');
+        glCanvas.width = 560; // 2x for high-DPI scaling
+        glCanvas.height = 440;
+        const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true, preserveDrawingBuffer: true });
+
+        const views = [];
+        let globalRenderMode = 'ballStick';
+
+        const placeholders = document.querySelectorAll('.bravais-placeholder');
+        placeholders.forEach(placeholder => {
+            const latticeName = placeholder.dataset.lattice;
+            const millerVal = placeholder.dataset.miller;
+            const canvas = placeholder.querySelector('.display-canvas');
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0b0f19);
+
+            const camera = new THREE.PerspectiveCamera(45, 280 / 220, 0.1, 100);
+            camera.position.set(3, 3, 5);
+
+            if (millerVal) {
+                camera.position.set(1.8, 1.8, 3.2);
+            }
+
+            const controls = new THREE.OrbitControls(camera, canvas);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = true;
+            controls.enablePan = false;
+
+            // Ambient & Directional Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+            scene.add(ambientLight);
+
+            const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.85);
+            dirLight1.position.set(5, 10, 7);
+            scene.add(dirLight1);
+
+            const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.35);
+            dirLight2.position.set(-5, -5, -5);
+            scene.add(dirLight2);
+
+            let group = new THREE.Group();
+            scene.add(group);
+
+            const viewItem = {
+                scene: scene,
+                camera: camera,
+                controls: controls,
+                canvas: canvas,
+                group: group,
+                placeholder: placeholder
+            };
+
+            if (latticeName) {
+                viewItem.type = 'lattice';
+                viewItem.name = latticeName;
+            } else if (millerVal) {
+                viewItem.type = 'miller';
+                const parts = millerVal.split(',').map(Number);
+                viewItem.h = parts[0];
+                viewItem.k = parts[1];
+                viewItem.l = parts[2];
+            }
+
+            views.push(viewItem);
+        });
+
+        function buildLattice(view, renderMode) {
+            let group = view.group;
+            while (group.children.length > 0) {
+                group.remove(group.children[0]);
+            }
+
+            let latticeName = view.name;
+            let u1 = new THREE.Vector3(2, 0, 0);
+            let u2 = new THREE.Vector3(0, 2, 0);
+            let u3 = new THREE.Vector3(0, 0, 2);
+            let centerType = 'P';
+            let isHexagonal = false;
+
+            if (latticeName === 'cubic_p') {
+                u1.set(2, 0, 0); u2.set(0, 2, 0); u3.set(0, 0, 2); centerType = 'P';
+            } else if (latticeName === 'cubic_i') {
+                u1.set(2, 0, 0); u2.set(0, 2, 0); u3.set(0, 0, 2); centerType = 'I';
+            } else if (latticeName === 'cubic_f') {
+                u1.set(2, 0, 0); u2.set(0, 2, 0); u3.set(0, 0, 2); centerType = 'F';
+            } else if (latticeName === 'tetragonal_p') {
+                u1.set(1.6, 0, 0); u2.set(0, 1.6, 0); u3.set(0, 0, 2.4); centerType = 'P';
+            } else if (latticeName === 'tetragonal_i') {
+                u1.set(1.6, 0, 0); u2.set(0, 1.6, 0); u3.set(0, 0, 2.4); centerType = 'I';
+            } else if (latticeName === 'orthorhombic_p') {
+                u1.set(1.2, 0, 0); u2.set(0, 1.8, 0); u3.set(0, 0, 2.4); centerType = 'P';
+            } else if (latticeName === 'orthorhombic_c') {
+                u1.set(1.2, 0, 0); u2.set(0, 1.8, 0); u3.set(0, 0, 2.4); centerType = 'C';
+            } else if (latticeName === 'orthorhombic_i') {
+                u1.set(1.2, 0, 0); u2.set(0, 1.8, 0); u3.set(0, 0, 2.4); centerType = 'I';
+            } else if (latticeName === 'orthorhombic_f') {
+                u1.set(1.2, 0, 0); u2.set(0, 1.8, 0); u3.set(0, 0, 2.4); centerType = 'F';
+            } else if (latticeName === 'monoclinic_p') {
+                u1.set(1.2, 0, 0); u2.set(0, 1.6, 0); u3.set(0.6, 0, 2.0); centerType = 'P';
+            } else if (latticeName === 'monoclinic_c') {
+                u1.set(1.2, 0, 0); u2.set(0, 1.6, 0); u3.set(0.6, 0, 2.0); centerType = 'C';
+            } else if (latticeName === 'triclinic_p') {
+                u1.set(1.2, 0, 0); u2.set(0.4, 1.4, 0); u3.set(0.3, 0.5, 1.8); centerType = 'P';
+            } else if (latticeName === 'rhombohedral') {
+                u1.set(1.4, 0.4, 0.4); u2.set(0.4, 1.4, 0.4); u3.set(0.4, 0.4, 1.4); centerType = 'P';
+            } else if (latticeName === 'hexagonal') {
+                isHexagonal = true;
+            }
+
+            let atomRadius = (renderMode === 'spaceFill') ? 0.6 : 0.15;
+            let cornerColor = 0x3b82f6;
+            let extraColor = 0xf59e0b;
+
+            if (isHexagonal) {
+                let hPoints = [];
+                let hHeight = 1.2;
+                let hRad = 0.9;
+                
+                for (let i = 0; i < 6; i++) {
+                    let theta = (i * 60) * Math.PI / 180;
+                    let cx = hRad * Math.cos(theta);
+                    let cy = hRad * Math.sin(theta);
+                    hPoints.push(new THREE.Vector3(cx, cy, hHeight));
+                    hPoints.push(new THREE.Vector3(cx, cy, -hHeight));
+                }
+                let topCenter = new THREE.Vector3(0, 0, hHeight);
+                let botCenter = new THREE.Vector3(0, 0, -hHeight);
+                
+                let allAtoms = [...hPoints, topCenter, botCenter];
+                allAtoms.forEach((pos, idx) => {
+                    let sphereGeo = new THREE.SphereGeometry(atomRadius, 32, 32);
+                    let sphereMat = new THREE.MeshStandardMaterial({ 
+                        color: (idx >= hPoints.length) ? extraColor : cornerColor, 
+                        roughness: 0.2 
+                    });
+                    let sphere = new THREE.Mesh(sphereGeo, sphereMat);
+                    sphere.position.copy(pos);
+                    group.add(sphere);
+                });
+
+                let lineVerts = [];
+                for (let i = 0; i < 6; i++) {
+                    let next = (i + 1) % 6;
+                    lineVerts.push(hPoints[i * 2].x, hPoints[i * 2].y, hPoints[i * 2].z);
+                    lineVerts.push(hPoints[next * 2].x, hPoints[next * 2].y, hPoints[next * 2].z);
+                }
+                for (let i = 0; i < 6; i++) {
+                    let next = (i + 1) % 6;
+                    lineVerts.push(hPoints[i * 2 + 1].x, hPoints[i * 2 + 1].y, hPoints[i * 2 + 1].z);
+                    lineVerts.push(hPoints[next * 2 + 1].x, hPoints[next * 2 + 1].y, hPoints[next * 2 + 1].z);
+                }
+                for (let i = 0; i < 6; i++) {
+                    lineVerts.push(hPoints[i * 2].x, hPoints[i * 2].y, hPoints[i * 2].z);
+                    lineVerts.push(hPoints[i * 2 + 1].x, hPoints[i * 2 + 1].y, hPoints[i * 2 + 1].z);
+                }
+                for (let i = 0; i < 6; i++) {
+                    lineVerts.push(0, 0, hHeight);
+                    lineVerts.push(hPoints[i * 2].x, hPoints[i * 2].y, hPoints[i * 2].z);
+                    lineVerts.push(0, 0, -hHeight);
+                    lineVerts.push(hPoints[i * 2 + 1].x, hPoints[i * 2 + 1].y, hPoints[i * 2 + 1].z);
+                }
+
+                let lineGeo = new THREE.BufferGeometry();
+                lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3));
+                let lineMat = new THREE.LineBasicMaterial({ color: 0x94a3b8 });
+                let wireframe = new THREE.LineSegments(lineGeo, lineMat);
+                group.add(wireframe);
+
+            } else {
+                let corners = [];
+                for (let c1 of [-0.5, 0.5]) {
+                    for (let c2 of [-0.5, 0.5]) {
+                        for (let c3 of [-0.5, 0.5]) {
+                            let pos = new THREE.Vector3()
+                                .addScaledVector(u1, c1)
+                                .addScaledVector(u2, c2)
+                                .addScaledVector(u3, c3);
+                            corners.push(pos);
+                        }
+                    }
+                }
+
+                let atoms = [];
+                corners.forEach(p => atoms.push({ pos: p, col: cornerColor }));
+
+                if (centerType === 'I') {
+                    atoms.push({ pos: new THREE.Vector3(0, 0, 0), col: extraColor });
+                } else if (centerType === 'F') {
+                    let faceCenters = [
+                        new THREE.Vector3().addScaledVector(u1, 0.5),
+                        new THREE.Vector3().addScaledVector(u1, -0.5),
+                        new THREE.Vector3().addScaledVector(u2, 0.5),
+                        new THREE.Vector3().addScaledVector(u2, -0.5),
+                        new THREE.Vector3().addScaledVector(u3, 0.5),
+                        new THREE.Vector3().addScaledVector(u3, -0.5)
+                    ];
+                    faceCenters.forEach(p => atoms.push({ pos: p, col: extraColor }));
+                } else if (centerType === 'C') {
+                    let baseCenters = [
+                        new THREE.Vector3().addScaledVector(u3, 0.5),
+                        new THREE.Vector3().addScaledVector(u3, -0.5)
+                    ];
+                    baseCenters.forEach(p => atoms.push({ pos: p, col: extraColor }));
+                }
+
+                if (renderMode === 'spaceFill') {
+                    let len1 = u1.length();
+                    let len2 = u2.length();
+                    let len3 = u3.length();
+                    let minLen = Math.min(len1, len2, len3);
+                    atomRadius = minLen * 0.25;
+                    if (centerType === 'P') {
+                        atomRadius = minLen * 0.5;
+                    } else if (centerType === 'I') {
+                        atomRadius = new THREE.Vector3().addScaledVector(u1, 0.5).addScaledVector(u2, 0.5).addScaledVector(u3, 0.5).length() * 0.5;
+                    } else if (centerType === 'F') {
+                        atomRadius = new THREE.Vector3().addScaledVector(u1, 0.5).addScaledVector(u2, 0.5).length() * 0.5;
+                    }
+                }
+
+                atoms.forEach(atom => {
+                    let sphereGeo = new THREE.SphereGeometry(atomRadius, 32, 32);
+                    let sphereMat = new THREE.MeshStandardMaterial({ 
+                        color: atom.col, 
+                        roughness: 0.2 
+                    });
+                    let sphere = new THREE.Mesh(sphereGeo, sphereMat);
+                    sphere.position.copy(atom.pos);
+                    group.add(sphere);
+                });
+
+                let edges = [
+                    [0, 1], [2, 3], [4, 5], [6, 7],
+                    [0, 2], [1, 3], [4, 6], [5, 7],
+                    [0, 4], [1, 5], [2, 6], [3, 7]
+                ];
+
+                let lineVerts = [];
+                edges.forEach(edge => {
+                    lineVerts.push(corners[edge[0]].x, corners[edge[0]].y, corners[edge[0]].z);
+                    lineVerts.push(corners[edge[1]].x, corners[edge[1]].y, corners[edge[1]].z);
+                });
+
+                let lineGeo = new THREE.BufferGeometry();
+                lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3));
+                let lineMat = new THREE.LineBasicMaterial({ color: 0x94a3b8 });
+                let wireframe = new THREE.LineSegments(lineGeo, lineMat);
+                group.add(wireframe);
+            }
+        }
+
+        function buildMillerPlane(view) {
+            let group = view.group;
+            while (group.children.length > 0) {
+                group.remove(group.children[0]);
+            }
+
+            const h = view.h;
+            const k = view.k;
+            const l = view.l;
+
+            const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+            const edgeGeo = new THREE.EdgesGeometry(boxGeo);
+            const edgeMat = new THREE.LineBasicMaterial({ color: 0x94a3b8 });
+            const box = new THREE.LineSegments(edgeGeo, edgeMat);
+            box.position.set(0, 0, 0);
+            group.add(box);
+
+            const arrowLength = 1.3;
+            const startPt = new THREE.Vector3(-0.5, -0.5, -0.5);
+            const xAxis = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), startPt, arrowLength, 0xef4444, 0.15, 0.08);
+            const yAxis = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), startPt, arrowLength, 0x10b981, 0.15, 0.08);
+            const zAxis = new THREE.ArrowHelper(new THREE.Vector3(0, 0, 1), startPt, arrowLength, 0x3b82f6, 0.15, 0.08);
+            group.add(xAxis, yAxis, zAxis);
+
+            if (h === 0 && k === 0 && l === 0) return;
+
+            let x_off = (h < 0) ? 1 : 0;
+            let y_off = (k < 0) ? 1 : 0;
+            let z_off = (l < 0) ? 1 : 0;
+
+            function H(x, y, z) {
+                return h * (x - x_off) + k * (y - y_off) + l * (z - z_off);
+            }
+
+            let edges = [
+                [[0,0,0], [1,0,0]], [[0,0,0], [0,1,0]], [[0,0,0], [0,0,1]],
+                [[1,0,0], [1,1,0]], [[1,0,0], [1,0,1]],
+                [[0,1,0], [1,1,0]], [[0,1,0], [0,1,1]],
+                [[0,0,1], [1,0,1]], [[0,0,1], [0,1,1]],
+                [[1,1,0], [1,1,1]], [[1,0,1], [1,1,1]], [[0,1,1], [1,1,1]]
+            ];
+
+            let points = [];
+            const EPSILON = 1e-5;
+
+            edges.forEach(edge => {
+                let A = new THREE.Vector3(...edge[0]);
+                let B = new THREE.Vector3(...edge[1]);
+                let valA = H(A.x, A.y, A.z) - 1;
+                let valB = H(B.x, B.y, B.z) - 1;
+
+                if (Math.abs(valA) < EPSILON) {
+                    if (!points.some(p => p.distanceTo(A) < EPSILON)) points.push(A);
+                }
+                if (Math.abs(valB) < EPSILON) {
+                    if (!points.some(p => p.distanceTo(B) < EPSILON)) points.push(B);
+                }
+                if (valA * valB < 0) {
+                    let t = -valA / (valB - valA);
+                    let P = new THREE.Vector3().lerpVectors(A, B, t);
+                    if (!points.some(p => p.distanceTo(P) < EPSILON)) points.push(P);
+                }
+            });
+
+            if (points.length >= 3) {
+                let centroid = new THREE.Vector3(0, 0, 0);
+                points.forEach(p => centroid.add(p));
+                centroid.divideScalar(points.length);
+
+                let normal = new THREE.Vector3(h, k, l).normalize();
+                let u = new THREE.Vector3();
+                if (Math.abs(normal.x) > 0.9) u.set(0, 1, 0);
+                else u.set(1, 0, 0);
+                let v = new THREE.Vector3().crossVectors(normal, u).normalize();
+                u.crossVectors(v, normal).normalize();
+
+                points.sort((a, b) => {
+                    let da = a.clone().sub(centroid);
+                    let db = b.clone().sub(centroid);
+                    let angleA = Math.atan2(da.dot(v), da.dot(u));
+                    let angleB = Math.atan2(db.dot(v), db.dot(u));
+                    return angleA - angleB;
+                });
+
+                const geom = new THREE.BufferGeometry();
+                const vertices = [];
+                
+                for (let i = 1; i < points.length - 1; i++) {
+                    vertices.push(points[0].x - 0.5, points[0].y - 0.5, points[0].z - 0.5);
+                    vertices.push(points[i].x - 0.5, points[i].y - 0.5, points[i].z - 0.5);
+                    vertices.push(points[i+1].x - 0.5, points[i+1].y - 0.5, points[i+1].z - 0.5);
+                }
+                
+                geom.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                geom.computeVertexNormals();
+
+                const planeMat = new THREE.MeshStandardMaterial({ 
+                    color: 0x4f46e5, 
+                    side: THREE.DoubleSide, 
+                    transparent: true, 
+                    opacity: 0.6,
+                    roughness: 0.3
+                });
+                const mesh = new THREE.Mesh(geom, planeMat);
+                group.add(mesh);
+
+                const lineGeo = new THREE.BufferGeometry();
+                const lineVerts = [];
+                points.forEach(p => lineVerts.push(p.x - 0.5, p.y - 0.5, p.z - 0.5));
+                lineVerts.push(points[0].x - 0.5, points[0].y - 0.5, points[0].z - 0.5);
+                lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3));
+                const lineMat = new THREE.LineBasicMaterial({ color: 0x4f46e5, linewidth: 3 });
+                const boundary = new THREE.Line(lineGeo, lineMat);
+                group.add(boundary);
+            }
+        }
+
+        function setGlobalRenderMode(mode) {
+            globalRenderMode = mode;
+            document.getElementById('btnBallStick').classList.toggle('active', mode === 'ballStick');
+            document.getElementById('btnSpaceFill').classList.toggle('active', mode === 'spaceFill');
+            views.forEach(view => {
+                if (view.type === 'lattice') {
+                    buildLattice(view, mode);
+                }
+            });
+        }
+
+        // Initialize all models
+        setGlobalRenderMode('ballStick');
+        views.forEach(view => {
+            if (view.type === 'miller') {
+                buildMillerPlane(view);
+            }
+        });
+
+        // 3D Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            views.forEach(view => {
+                view.controls.update();
+                let rect = view.placeholder.getBoundingClientRect();
+                let isVisible = (rect.bottom >= 0 && rect.top <= window.innerHeight && rect.right >= 0 && rect.left <= window.innerWidth);
+                if (isVisible) {
+                    renderer.render(view.scene, view.camera);
+                    let ctx = view.canvas.getContext('2d');
+                    ctx.clearRect(0, 0, 280, 220);
+                    ctx.drawImage(renderer.domElement, 0, 0, 560, 440, 0, 0, 280, 220);
+                }
+            });
+        }
+        animate();
+    </script>
+</body>
+</html>
