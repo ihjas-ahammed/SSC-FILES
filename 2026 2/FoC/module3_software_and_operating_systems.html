@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3: Software Systems, Operating Systems and Device Drivers</title>
+  <style>
+    :root {
+      --primary-color: #0f2b48;
+      --secondary-color: #1a5276;
+      --accent-color: #b9770e;
+      --text-color: #1c2833;
+      --bg-color: #ffffff;
+      --border-color: #d5dbdb;
+      --callout-bg: #ebf5fb;
+      --callout-border: #2980b9;
+      --table-header-bg: #1f3a52;
+      --code-bg: #f4f6f7;
+      --code-border: #d5d8dc;
+      --font-body: 'Merriweather', 'Georgia', 'Cambria', 'Times New Roman', serif;
+      --font-heading: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+      --font-mono: 'Consolas', 'Fira Code', 'Monaco', 'Courier New', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 11pt;
+      line-height: 1.65;
+      color: var(--text-color);
+      background-color: #f8f9f9;
+      padding: 0;
+      margin: 0;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .document-container {
+      max-width: 950px;
+      margin: 20px auto;
+      background: var(--bg-color);
+      padding: 45px 55px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      border: 1px solid var(--border-color);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      color: var(--primary-color);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: 24pt;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 8px;
+      margin-top: 0.5em;
+    }
+
+    h2 {
+      font-size: 18pt;
+      border-bottom: 1px solid var(--secondary-color);
+      padding-bottom: 5px;
+      margin-top: 1.6em;
+      color: var(--secondary-color);
+    }
+
+    h3 {
+      font-size: 14pt;
+      margin-top: 1.4em;
+      color: #2471a3;
+    }
+
+    h4 {
+      font-size: 12pt;
+      margin-top: 1.1em;
+      color: #2c3e50;
+    }
+
+    p {
+      margin-bottom: 1.1em;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-left: 28px;
+      margin-bottom: 1.2em;
+    }
+
+    li {
+      margin-bottom: 0.4em;
+    }
+
+    strong {
+      color: #111;
+      font-weight: 600;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    .course-header {
+      text-align: center;
+      border-bottom: 3px double var(--primary-color);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .course-header .institution {
+      font-family: var(--font-heading);
+      font-size: 12pt;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #566573;
+      margin-bottom: 5px;
+    }
+
+    .course-header .course-title {
+      font-size: 24pt;
+      color: var(--primary-color);
+      margin: 8px 0;
+      border: none;
+      padding: 0;
+    }
+
+    .course-header .course-meta {
+      font-family: var(--font-heading);
+      font-size: 10pt;
+      color: #7f8c8d;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 8px;
+    }
+
+    .module-banner {
+      background: #eaeded;
+      border-left: 6px solid var(--primary-color);
+      padding: 14px 20px;
+      margin: 35px 0 25px 0;
+    }
+
+    .module-banner h2 {
+      margin: 0;
+      padding: 0;
+      border: none;
+      color: var(--primary-color);
+      font-size: 16pt;
+    }
+
+    .module-banner .module-subtitle {
+      font-family: var(--font-heading);
+      font-size: 10pt;
+      color: #515a5a;
+      margin-top: 4px;
+    }
+
+    .definition-box, .theorem-box, .worked-example, .key-takeaway {
+      background-color: var(--callout-bg);
+      border-left: 4px solid var(--callout-border);
+      padding: 14px 18px;
+      margin: 18px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .definition-box {
+      border-left-color: #2980b9;
+      background-color: #ebf5fb;
+    }
+
+    .theorem-box {
+      border-left-color: #8e44ad;
+      background-color: #f4ecf7;
+    }
+
+    .worked-example {
+      border-left-color: #27ae60;
+      background-color: #eafaf1;
+    }
+
+    .key-takeaway {
+      border-left-color: #d35400;
+      background-color: #fdf2e9;
+    }
+
+    .box-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 10.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .definition-box .box-title { color: #1b4f72; }
+    .theorem-box .box-title { color: #512e5f; }
+    .worked-example .box-title { color: #145a32; }
+    .key-takeaway .box-title { color: #7e5109; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 9px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--table-header-bg);
+      color: #ffffff;
+      font-family: var(--font-heading);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fcfcfc;
+    }
+
+    tr:hover td {
+      background-color: #f2f4f4;
+    }
+
+    pre, code {
+      font-family: var(--font-mono);
+      font-size: 9.5pt;
+    }
+
+    code {
+      background-color: var(--code-bg);
+      border: 1px solid var(--code-border);
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #900c3f;
+    }
+
+    pre {
+      background-color: #f8f9fa;
+      border: 1px solid #dcdfe1;
+      border-left: 4px solid var(--secondary-color);
+      padding: 14px 18px;
+      overflow-x: auto;
+      margin: 18px 0;
+      line-height: 1.45;
+      color: #212529;
+    }
+
+    figure {
+      margin: 25px 0;
+      text-align: center;
+    }
+
+    figure svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figcaption {
+      font-family: var(--font-heading);
+      font-size: 9.5pt;
+      color: #566573;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff;
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+
+      .document-container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 18mm 14mm 18mm 14mm;
+      }
+
+      h1 { font-size: 20pt; margin-top: 0.5em; page-break-after: avoid; break-after: avoid; }
+      h2 { font-size: 15pt; margin-top: 1.2em; page-break-after: avoid; break-after: avoid; }
+      h3 { font-size: 12.5pt; margin-top: 1em; page-break-after: avoid; break-after: avoid; }
+      h4 { font-size: 11pt; margin-top: 0.8em; page-break-after: avoid; break-after: avoid; }
+
+      .avoid-break, .definition-box, .theorem-box, .worked-example, .key-takeaway, table, figure {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: {
+        fontCache: 'local'
+      },
+      startup: {
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady().then(() => {
+            document.body.classList.add('mathjax-ready');
+          });
+        }
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+</head>
+<body>
+<div class="document-container">
+
+    <div class="course-header">
+      <div class="institution">B.Sc. Computer Science &mdash; Semester I (Academic Level 100&ndash;199)</div>
+      <h1 class="course-title">Fundamentals of Computers and Computational Thinking</h1>
+      <div class="course-meta">
+        <span><strong>Course Code:</strong> CS101</span>
+        <span><strong>Credits:</strong> 4 (Lecture: 3, Practical: 2)</span>
+        <span><strong>Total Hours:</strong> 75 Hrs</span>
+      </div>
+    </div>
+
+    <div class="module-banner">
+      <h2>MODULE III: Software Systems, Operating Systems &amp; Device Drivers</h2>
+      <div class="module-subtitle">Comprehensive Academic Notes &mdash; Units 12 through 15 (Duration: 10 Hours, Weightage: 15 Marks)</div>
+    </div>
+
+    <!-- UNIT 12 -->
+    <section id="unit12">
+      <h2>Unit 12: Softwares &mdash; Classification, Taxonomy &amp; Translators</h2>
+      
+      <div class="definition-box">
+        <span class="box-title">Conceptual Definition: Software</span>
+        <strong>Software</strong> is an organized collection of computer programs, algorithmic procedures, data structures, and associated technical documentation that directs computer hardware on precisely how to execute data acquisition, processing, manipulation, transmission, and storage tasks.
+      </div>
+
+      <p>
+        While hardware represents the physical semiconductor circuitry and mechanical packaging, software represents the logical instructions that animate the machine. Software is classified into two overarching domains: <strong>System Software</strong> and <strong>Application Software</strong>.
+      </p>
+
+      <figure class="avoid-break">
+        <svg width="780" height="340" viewBox="0 0 780 340" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #d5dbdb; border-radius:6px; font-family:'Segoe UI', sans-serif;">
+          <rect x="0" y="0" width="780" height="30" fill="#1f3a52"/>
+          <text x="390" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">LAYERED OPERATING SYSTEM ARCHITECTURE &amp; PRIVILEGE BOUNDARIES</text>
+
+          <!-- Layer 1: User Applications (Ring 3) -->
+          <g transform="translate(40, 45)">
+            <rect x="0" y="0" width="700" height="50" rx="5" fill="#ebf5fb" stroke="#2980b9" stroke-width="2"/>
+            <text x="350" y="22" text-anchor="middle" fill="#1b4f72" font-size="12" font-weight="bold">USER MODE (RING 3): APPLICATION SOFTWARE</text>
+            <text x="350" y="40" text-anchor="middle" fill="#2c3e50" font-size="10">Web Browsers (Chrome), Word Processors, Compilers (GCC), Database Engines, Video Players</text>
+          </g>
+
+          <!-- System Call Interface Boundary -->
+          <g transform="translate(40, 105)">
+            <rect x="0" y="0" width="700" height="35" rx="3" fill="#fef9e7" stroke="#f39c12" stroke-width="1.5" stroke-dasharray="5 3"/>
+            <text x="350" y="22" text-anchor="middle" fill="#7e5109" font-size="11" font-weight="bold">SYSTEM CALL INTERFACE (POSIX API, Win32 API, Trap / sysenter / syscall Instructions)</text>
+          </g>
+
+          <!-- Layer 2: OS Kernel (Ring 0) -->
+          <g transform="translate(40, 150)">
+            <rect x="0" y="0" width="700" height="110" rx="6" fill="#f5eef8" stroke="#8e44ad" stroke-width="2"/>
+            <text x="350" y="25" text-anchor="middle" fill="#512e5f" font-size="13" font-weight="bold">KERNEL MODE (RING 0 / SUPERVISOR): OPERATING SYSTEM CORE</text>
+            
+            <rect x="15" y="40" width="125" height="55" rx="3" fill="#ffffff" stroke="#d7bde2"/>
+            <text x="77" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">Process Scheduler</text>
+            <text x="77" y="78" text-anchor="middle" fill="#7f8c8d" font-size="9">Threads, Context Sw.</text>
+
+            <rect x="150" y="40" width="125" height="55" rx="3" fill="#ffffff" stroke="#d7bde2"/>
+            <text x="212" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">Memory Manager</text>
+            <text x="212" y="78" text-anchor="middle" fill="#7f8c8d" font-size="9">Virtual Paging, TLB</text>
+
+            <rect x="285" y="40" width="125" height="55" rx="3" fill="#ffffff" stroke="#d7bde2"/>
+            <text x="347" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">File System</text>
+            <text x="347" y="78" text-anchor="middle" fill="#7f8c8d" font-size="9">VFS, NTFS, ext4</text>
+
+            <rect x="420" y="40" width="125" height="55" rx="3" fill="#ffffff" stroke="#d7bde2"/>
+            <text x="482" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">I/O &amp; Drivers</text>
+            <text x="482" y="78" text-anchor="middle" fill="#7f8c8d" font-size="9">HAL, ISRs, DMA</text>
+
+            <rect x="555" y="40" width="130" height="55" rx="3" fill="#ffffff" stroke="#d7bde2"/>
+            <text x="620" y="62" text-anchor="middle" fill="#2c3e50" font-size="10" font-weight="bold">Security Subsystem</text>
+            <text x="620" y="78" text-anchor="middle" fill="#7f8c8d" font-size="9">ACLs, Isolation</text>
+          </g>
+
+          <!-- Layer 3: Physical Hardware -->
+          <g transform="translate(40, 270)">
+            <rect x="0" y="0" width="700" height="50" rx="5" fill="#eaeded" stroke="#34495e" stroke-width="2"/>
+            <text x="350" y="22" text-anchor="middle" fill="#1a252f" font-size="12" font-weight="bold">PHYSICAL HARDWARE LAYER</text>
+            <text x="350" y="40" text-anchor="middle" fill="#566573" font-size="10">CPU, MMU, Physical DRAM, NVMe SSDs, GPU, Network Interface Cards, Peripherals</text>
+          </g>
+        </svg>
+        <figcaption>Figure 3.1: Layered Architecture of Computer Software and Operating System Kernel Subsystems.</figcaption>
+      </figure>
+
+      <h3>12.1 System Software</h3>
+      <p>
+        <strong>System Software</strong> comprises low-level programs that directly manage, control, and interact with the physical computer hardware, providing a stable, abstracted platform upon which application software executes.
+      </p>
+
+      <h4>1. Operating Systems (OS)</h4>
+      <p>
+        The primary supervisory control program managing hardware resources and presenting an abstract virtual machine interface (e.g., Windows 11, Ubuntu Linux, macOS, FreeBSD).
+      </p>
+
+      <h4>2. Programming Language Generations &amp; Taxonomy</h4>
+      <p>
+        Programming languages have evolved through five distinct generations (1GL to 5GL), spanning multiple computational paradigms:
+      </p>
+      <ul>
+        <li><strong>First-Generation Language (1GL):</strong> Pure binary machine code ($0\text{s and } 1\text{s}$) directly executed by CPU instruction decoders. Extremely tedious, non-portable, and prone to human error.</li>
+        <li><strong>Second-Generation Language (2GL):</strong> Assembly languages using symbolic mnemonics (e.g., <code>ADD</code>, <code>MOV</code>, <code>JMP</code>, <code>PUSH</code>) translated 1-to-1 to binary machine code by an <strong>Assembler</strong>.</li>
+        <li><strong>Third-Generation Language (3GL):</strong> High-level imperative procedural and object-oriented languages (C, C++, Fortran, Java, Pascal) using English keywords and mathematical expressions, translated via Compilers or Interpreters.</li>
+        <li><strong>Fourth-Generation Language (4GL):</strong> Non-procedural, declarative query and data manipulation languages focusing on <em>what</em> to achieve rather than <em>how</em> to compute (e.g., SQL, MATLAB, SAS).</li>
+        <li><strong>Fifth-Generation Language (5GL):</strong> Constraint-based and logic programming languages used in artificial intelligence and automated theorem proving (e.g., Prolog, Mercury).</li>
+      </ul>
+
+      <h4>3. Programming Paradigms and Typing Systems</h4>
+      <ul>
+        <li><strong>Imperative / Procedural Paradigm:</strong> Programs are organized around state variables and step-by-step sequences of imperative statements (C, Pascal).</li>
+        <li><strong>Object-Oriented Paradigm (OOP):</strong> Programs model domain entities as encapsulated objects containing private state attributes and public methods (Java, C++, C#). Enforces Encapsulation, Inheritance, and Polymorphism.</li>
+        <li><strong>Functional Paradigm:</strong> Computation is treated as the mathematical evaluation of pure, immutable functions without mutable side effects (Haskell, Lisp, Scala, Erlang).</li>
+        <li><strong>Type Systems:</strong>
+          <ul>
+            <li><em>Static Typing vs Dynamic Typing:</em> In statically typed languages (C, Rust, Java), variable data types are checked and verified at compile-time; in dynamically typed languages (Python, JavaScript, Ruby), types are associated with runtime values and checked during execution.</li>
+            <li><em>Strong Typing vs Weak Typing:</em> Strongly typed languages strictly disallow implicit invalid type coercion (e.g., adding an integer to a string raises a runtime error), whereas weakly typed languages perform implicit casting (e.g., C pointer casting, JavaScript string-number concatenation).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h4>4. Memory Management &amp; Garbage Collection</h4>
+      <ul>
+        <li><strong>Stack Memory vs Heap Memory:</strong>
+          <ul>
+            <li><em>Stack:</em> LIFO (Last-In First-Out) memory segment automatically managed by CPU stack pointer register (<code>RSP</code>). Stores local variables, return addresses, and function call frames. Extremely fast ($O(1)$ allocation/deallocation), but fixed in size.</li>
+            <li><em>Heap:</em> Dynamically allocated memory pool managed manually (<code>malloc()</code>/<code>free()</code> in C, <code>new</code>/<code>delete</code> in C++) or automatically via a runtime Garbage Collector (GC). Susceptible to memory fragmentation, buffer overflows, dangling pointers, and memory leaks.</li>
+          </ul>
+        </li>
+        <li><strong>Automatic Garbage Collection Strategies:</strong>
+          <ul>
+            <li><em>Reference Counting:</em> Tracks active references to every allocated object; frees memory when count drops to zero. <em>Limitation:</em> Fails to reclaim cyclic circular references unless augmented with cycle detection.</li>
+            <li><em>Tracing Garbage Collection (Mark-and-Sweep):</em> Traverses the graph of live object references starting from root pointers (stack frames, global registers). The <em>Mark phase</em> sets a bit on reachable objects; the <em>Sweep phase</em> traverses the entire heap, reclaiming memory occupied by unmarked unreachable objects.</li>
+            <li><em>Generational GC:</em> Exploits the weak generational hypothesis (most objects die shortly after allocation). The heap is partitioned into <em>Young Generation (Eden + Survivor spaces)</em> and <em>Old / Tenured Generation</em>. Frequent minor collections scavenge the Eden space with minimal pause latency.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h4>5. Language Translators: Compilers, Interpreters &amp; Assemblers</h4>
+      <ul>
+        <li><strong>Assembler:</strong> Translates assembly mnemonics into object code, resolving symbolic labels into relative memory offsets via two passes (Pass 1 builds Symbol Table, Pass 2 emits machine code).</li>
+        <li><strong>Compiler:</strong> Translates entire high-level source code programs into target machine code or intermediate bytecode in a single batch process before execution. Generates optimized standalone binaries (e.g., GCC, Clang, MSVC).</li>
+        <li><strong>Interpreter:</strong> Reads, parses, and executes high-level source code line-by-line in real time without creating standalone machine binaries (e.g., CPython, standard Ruby). Provides rapid development and dynamic typing at the cost of slower execution speeds.</li>
+        <li><strong>Hybrid / Just-In-Time (JIT) Compilers:</strong> Modern runtimes (Java Virtual Machine JVM, V8 JavaScript engine, .NET CLR) first compile source code into portable intermediate Bytecode, and then dynamically compile hot code loops into native CPU machine instructions at runtime using JIT compilation.</li>
+      </ul>
+
+      <h4>6. Deep Dive: Six Phases of a Modern Compiler</h4>
+      <ol>
+        <li><strong>Lexical Analysis (Scanner):</strong> Scans the input character stream and groups them into lexical units called <strong>Tokens</strong> (e.g., <code>&lt;KEYWORD, "while"&gt;</code>, <code>&lt;IDENTIFIER, "counter"&gt;</code>, <code>&lt;REL_OP, "&lt;="&gt;</code>, <code>&lt;NUM, 100&gt;</code>), while discarding whitespace and comments.</li>
+        <li><strong>Syntax Analysis (Parser):</strong> Implements formal Context-Free Grammars (CFG) using algorithms like LL(k), LR(k), or LALR to verify grammatical correctness and construct an <strong>Abstract Syntax Tree (AST)</strong>.</li>
+        <li><strong>Semantic Analysis:</strong> Verifies type safety, enforces variable scope and declaration rules, checks array bounds constraints, and ensures function parameter compatibility using the Symbol Table.</li>
+        <li><strong>Intermediate Code Generation (ICG):</strong> Translates the validated AST into a machine-independent intermediate language, typically <strong>Three-Address Code (TAC)</strong>:
+          $$t_1 = y \times z, \quad t_2 = x + t_1$$
+        </li>
+        <li><strong>Code Optimization:</strong> Transforms intermediate code to improve execution speed and reduce memory consumption:
+          <ul>
+            <li><em>Constant Folding &amp; Propagation:</em> Pre-calculating compile-time constants (e.g., replacing $3 + 5$ with $8$).</li>
+            <li><em>Dead Code Elimination:</em> Removing code segments that can never execute or whose results are never used.</li>
+            <li><em>Loop-Invariant Code Motion:</em> Moving computations outside loops if their results do not change across iterations.</li>
+            <li><em>Strength Reduction:</em> Replacing computationally expensive operations with cheaper ones (e.g., replacing $x \times 2$ with $x \ll 1$).</li>
+            <li><em>Common Subexpression Elimination:</em> Identifying redundant calculations and caching their results.</li>
+          </ul>
+        </li>
+        <li><strong>Target Code Generation:</strong> Maps intermediate variables to physical CPU registers using Graph Coloring Algorithms and emits native binary machine code instructions.</li>
+      </ol>
+
+      <h4>7. Linkers, Loaders &amp; Binary Formats</h4>
+      <ul>
+        <li><strong>Static Linking vs Dynamic Linking:</strong>
+          <ul>
+            <li><em>Static Linker:</em> Copies all required library routines (e.g., <code>libc.a</code>) directly into the final executable binary, resulting in larger files that run independently without external dependency issues.</li>
+            <li><em>Dynamic Linker:</em> Inserts symbolic references to shared libraries (Dynamic Link Libraries &mdash; <code>.dll</code> on Windows, Shared Objects &mdash; <code>.so</code> on Linux). Multiple executing programs share a single copy of library code in RAM, reducing memory footprint. Relocation is handled at runtime via the <strong>Global Offset Table (GOT)</strong> and <strong>Procedure Linkage Table (PLT)</strong> for Position-Independent Code (PIC).</li>
+          </ul>
+        </li>
+        <li><strong>Executable File Formats (ELF &amp; PE):</strong>
+          <ul>
+            <li><em>Executable and Linkable Format (ELF - Linux):</em> Contains an ELF Header, Program Header Table (segments mapped to memory), Section Header Table (<code>.text</code> code, <code>.data</code> initialized globals, <code>.bss</code> zero-initialized globals, <code>.rodata</code> read-only constants, <code>.symtab</code> symbol table), and dynamic linking tables.</li>
+            <li><em>Portable Executable (PE - Windows):</em> Extends the MS-DOS MZ header with PE Header, Optional Header, Data Directories (Export/Import tables), and section headers (<code>.text</code>, <code>.rdata</code>, <code>.data</code>, <code>.pdata</code>).</li>
+          </ul>
+        </li>
+        <li><strong>Loader:</strong> The OS program that reads the executable file header, allocates virtual memory segments (Code/Text, Initialized Data, BSS, Stack, Heap), maps shared libraries, initializes CPU registers, and transfers execution to the program entry point (<code>main()</code>).</li>
+      </ul>
+
+      <h3>12.2 Application Software</h3>
+      <p>
+        <strong>Application Software</strong> encompasses programs engineered to perform end-user tasks, productivity workflows, or business data processing:
+      </p>
+      <ul>
+        <li><strong>General-Purpose Software:</strong> Mass-market productivity applications: Word Processors (Microsoft Word, LibreOffice Writer), Spreadsheets (Microsoft Excel), Web Browsers (Google Chrome, Mozilla Firefox), and Media Players (VLC).</li>
+        <li><strong>Specialized / Bespoke Software:</strong> Custom-engineered software tailored to specific domains: Medical PACS DICOM imaging systems, Aircraft Avionics control, Electronic Design Automation (EDA - Cadence, KiCad), and CAD/CAM modeling (AutoCAD, SolidWorks).</li>
+        <li><strong>Enterprise Systems:</strong> Large-scale multi-user business platforms: Enterprise Resource Planning (ERP - SAP S/4HANA), Customer Relationship Management (CRM - Salesforce), and Relational Database Engines (PostgreSQL, Oracle DB).</li>
+      </ul>
+
+      <div class="avoid-break">
+        <h4>Comparative Matrix: System Software vs Application Software</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Evaluation Parameter</th>
+              <th>System Software</th>
+              <th>Application Software</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary Purpose</strong></td>
+              <td>Manages, controls, and abstracts physical hardware</td>
+              <td>Executes specific end-user business or creative tasks</td>
+            </tr>
+            <tr>
+              <td><strong>Hardware Access</strong></td>
+              <td>Direct register-level and physical I/O interaction</td>
+              <td>Zero direct hardware access (restricted to OS System Calls)</td>
+            </tr>
+            <tr>
+              <td><strong>Execution Privilege</strong></td>
+              <td>Privileged Kernel Mode (Ring 0 / Supervisor)</td>
+              <td>Unprivileged User Mode (Ring 3)</td>
+            </tr>
+            <tr>
+              <td><strong>Operational Dependency</strong></td>
+              <td>Runs autonomously; provides runtime environment</td>
+              <td>Completely dependent on an underlying OS to execute</td>
+            </tr>
+            <tr>
+              <td><strong>Programming Languages</strong></td>
+              <td>C, C++, Rust, Assembly</td>
+              <td>Python, Java, JavaScript, C#, Swift, PHP, Go</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 13 -->
+    <section id="unit13">
+      <h2>Unit 13: Operating Systems &mdash; Architecture, Scheduling, POST &amp; Booting</h2>
+
+      <h3>13.1 Fundamental Responsibilities of an Operating System</h3>
+      <p>
+        An <strong>Operating System (OS)</strong> is the master control program that acts as an intermediary between computer hardware and user applications. It fulfills two primary roles:
+      </p>
+      <ul>
+        <li><strong>Extended Machine (Virtual Machine):</strong> Provides clean, high-level abstractions (files, sockets, virtual memory, processes) that hide the low-level complexities of raw hardware registers, interrupts, and disk sectors.</li>
+        <li><strong>Resource Allocator &amp; Arbiter:</strong> Manages finite hardware resources (CPU cores, DRAM, storage space, network bandwidth) among competing user processes fairly, efficiently, and securely.</li>
+      </ul>
+
+      <h4>Core Operating System Subsystems:</h4>
+      <ol>
+        <li><strong>Process Management &amp; CPU Scheduling:</strong> Creating, scheduling, synchronizing, and terminating processes and threads.
+          <ul>
+            <li><strong>7-State Process Model:</strong> Processes transition through: <em>New</em> $\to$ <em>Ready</em> $\to$ <em>Running</em> $\to$ <em>Waiting/Blocked</em> $\to$ <em>Terminated</em>, along with <em>Ready-Suspended</em> and <em>Blocked-Suspended</em> when swapped out to disk secondary storage.</li>
+            <li><strong>Process Control Block (PCB):</strong> The kernel data structure storing process state, PID, Program Counter, CPU registers, memory limits, open file descriptors, and scheduling priority.</li>
+          </ul>
+        </li>
+        <li><strong>Process Synchronization &amp; Deadlocks:</strong>
+          <ul>
+            <li><strong>Critical Section Problem:</strong> Ensures mutual exclusion when multiple concurrent processes access shared memory. A valid solution must satisfy: <em>Mutual Exclusion</em>, <em>Progress</em>, and <em>Bounded Waiting</em>.</li>
+            <li><strong>Synchronization Primitives:</strong> Semaphores (Counting and Binary), Mutex Locks, Condition Variables, and Spinlocks.</li>
+            <li><strong>Deadlock &amp; Coffman Conditions:</strong> A state where two or more processes are permanently blocked waiting for resources held by each other. Deadlock can occur if and only if all four <strong>Coffman Conditions</strong> hold simultaneously:
+              <ol>
+                <li><em>Mutual Exclusion:</em> Resources cannot be shared simultaneously.</li>
+                <li><em>Hold and Wait:</em> Processes hold allocated resources while requesting new ones.</li>
+                <li><em>No Preemption:</em> Resources cannot be forcibly confiscated from a process.</li>
+                <li><em>Circular Wait:</em> A closed chain of processes exists where each process waits for a resource held by the next.</li>
+              </ol>
+            </li>
+            <li><strong>Deadlock Handling:</strong> Banker's Algorithm for deadlock avoidance, Resource Allocation Graphs (RAG) for detection, and process termination/preemption for recovery.</li>
+          </ul>
+        </li>
+        <li><strong>Memory Management &amp; Virtual Paging:</strong> Providing each process with an isolated, contiguous virtual address space mapped to physical DRAM via multi-level Page Tables and the hardware Memory Management Unit (MMU).</li>
+        <li><strong>File System &amp; Secondary Storage:</strong> Structuring persistent disk blocks into hierarchical directories, managing metadata inodes, and enforcing access control lists (ACLs).</li>
+        <li><strong>I/O Subsystem:</strong> Providing uniform driver interfaces, buffering, caching, spooling, and DMA coordination.</li>
+      </ol>
+
+      <div class="worked-example">
+        <span class="box-title">Worked Example 13.1: CPU Scheduling Comparison</span>
+        <strong>Problem:</strong> Four processes arrive at time $t=0$ with burst times: $P_1 = 6\text{ ms}$, $P_2 = 8\text{ ms}$, $P_3 = 7\text{ ms}$, $P_4 = 3\text{ ms}$. Calculate Average Waiting Time under FCFS and Shortest Job First (SJF).
+        <br><br>
+        <strong>1. First-Come First-Served (FCFS):</strong>
+        $$\text{Gantt Chart: } | \; P_1 \; (0\text{--}6) \; | \; P_2 \; (6\text{--}14) \; | \; P_3 \; (14\text{--}21) \; | \; P_4 \; (21\text{--}24) \; |$$
+        <ul>
+          <li>$WT(P_1) = 0\text{ ms}, \; WT(P_2) = 6\text{ ms}, \; WT(P_3) = 14\text{ ms}, \; WT(P_4) = 21\text{ ms}$</li>
+          <li><strong>Average Waiting Time (FCFS):</strong> $\frac{0 + 6 + 14 + 21}{4} = \frac{41}{4} = \mathbf{10.25\text{ ms}}$.</li>
+        </ul>
+        <strong>2. Shortest Job First (SJF - Non-preemptive):</strong>
+        $$\text{Execution Order: } P_4 (3\text{ms}) \to P_1 (6\text{ms}) \to P_3 (7\text{ms}) \to P_2 (8\text{ms})$$
+        $$\text{Gantt Chart: } | \; P_4 \; (0\text{--}3) \; | \; P_1 \; (3\text{--}9) \; | \; P_3 \; (9\text{--}16) \; | \; P_2 \; (16\text{--}24) \; |$$
+        <ul>
+          <li>$WT(P_4) = 0\text{ ms}, \; WT(P_1) = 3\text{ ms}, \; WT(P_3) = 9\text{ ms}, \; WT(P_2) = 16\text{ ms}$</li>
+          <li><strong>Average Waiting Time (SJF):</strong> $\frac{0 + 3 + 9 + 16}{4} = \frac{28}{4} = \mathbf{7.00\text{ ms}}$ (Optimal).</li>
+        </ul>
+      </div>
+
+      <div class="worked-example">
+        <span class="box-title">Worked Example 13.2: Banker's Algorithm Safety Evaluation</span>
+        Consider 5 processes ($P_0, P_1, P_2, P_3, P_4$) and 3 resource types ($A=10, B=5, C=7$).
+        <br>
+        Currently allocated resources:
+        $$P_0: (0, 1, 0), \quad P_1: (2, 0, 0), \quad P_2: (3, 0, 2), \quad P_3: (2, 1, 1), \quad P_4: (0, 0, 2)$$
+        $$\text{Total Allocated: } A = 7, B = 2, C = 5 \implies \mathbf{\text{Available: } A = 3, B = 3, C = 2}$$
+        Maximum Demand Matrix ($Max$):
+        $$P_0: (7, 5, 3), \quad P_1: (3, 2, 2), \quad P_2: (9, 0, 2), \quad P_3: (2, 2, 2), \quad P_4: (4, 3, 3)$$
+        Remaining Need Matrix ($\mathbf{Need = Max - Allocation}$):
+        $$P_0: (7, 4, 3), \quad P_1: (1, 2, 2), \quad P_2: (6, 0, 0), \quad P_3: (0, 1, 1), \quad P_4: (4, 3, 1)$$
+        <strong>Safety Algorithm Execution:</strong>
+        <ol>
+          <li>Check $P_1$: $\text{Need}(1, 2, 2) \le \text{Available}(3, 3, 2) \implies$ <strong>Execute $P_1$</strong>. New Available $= (3, 3, 2) + (2, 0, 0) = \mathbf{(5, 3, 2)}$.</li>
+          <li>Check $P_3$: $\text{Need}(0, 1, 1) \le \text{Available}(5, 3, 2) \implies$ <strong>Execute $P_3$</strong>. New Available $= (5, 3, 2) + (2, 1, 1) = \mathbf{(7, 4, 3)}$.</li>
+          <li>Check $P_0$: $\text{Need}(7, 4, 3) \le \text{Available}(7, 4, 3) \implies$ <strong>Execute $P_0$</strong>. New Available $= (7, 4, 3) + (0, 1, 0) = \mathbf{(7, 5, 3)}$.</li>
+          <li>Check $P_2$: $\text{Need}(6, 0, 0) \le \text{Available}(7, 5, 3) \implies$ <strong>Execute $P_2$</strong>. New Available $= (7, 5, 3) + (3, 0, 2) = \mathbf{(10, 5, 5)}$.</li>
+          <li>Check $P_4$: $\text{Need}(4, 3, 1) \le \text{Available}(10, 5, 5) \implies$ <strong>Execute $P_4$</strong>. New Available $= (10, 5, 5) + (0, 0, 2) = \mathbf{(10, 5, 7)}$.</li>
+        </ol>
+        <strong>Conclusion:</strong> The system is in a provably <strong>Safe State</strong> with safe sequence $\mathbf{\langle P_1, P_3, P_0, P_2, P_4 \rangle}$. No deadlock can occur.
+      </div>
+
+      <div class="worked-example">
+        <span class="box-title">Worked Example 13.3: Virtual Memory Page Replacement Comparison</span>
+        <strong>Problem:</strong> Given a page reference string: $\mathbf{7, 0, 1, 2, 0, 3, 0, 4, 2, 3}$ and $3$ physical memory page frames (initially empty). Compute the total page faults under <strong>FIFO</strong> and <strong>LRU (Least Recently Used)</strong>.
+        <br><br>
+        <strong>1. First-In First-Out (FIFO) Replacement:</strong>
+        <table>
+          <thead>
+            <tr><th>Ref</th><th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Status / Fault</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td>Page Fault (1)</td></tr>
+            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td>Page Fault (2)</td></tr>
+            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td>Page Fault (3)</td></tr>
+            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td>Page Fault (4) &mdash; Replaces 7 (oldest)</td></tr>
+            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td>Hit</td></tr>
+            <tr><td>3</td><td>2</td><td>3</td><td>1</td><td>Page Fault (5) &mdash; Replaces 0</td></tr>
+            <tr><td>0</td><td>2</td><td>3</td><td>0</td><td>Page Fault (6) &mdash; Replaces 1</td></tr>
+            <tr><td>4</td><td>4</td><td>3</td><td>0</td><td>Page Fault (7) &mdash; Replaces 2</td></tr>
+            <tr><td>2</td><td>4</td><td>2</td><td>0</td><td>Page Fault (8) &mdash; Replaces 3</td></tr>
+            <tr><td>3</td><td>4</td><td>2</td><td>3</td><td>Page Fault (9) &mdash; Replaces 0</td></tr>
+          </tbody>
+        </table>
+        <strong>Total FIFO Page Faults:</strong> $\mathbf{9 \text{ Faults}}$ (Suffers from <em>Belady's Anomaly</em> where adding frames can increase faults).
+        <br><br>
+        <strong>2. Least Recently Used (LRU) Replacement:</strong>
+        <table>
+          <thead>
+            <tr><th>Ref</th><th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Status / Fault</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td>Page Fault (1)</td></tr>
+            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td>Page Fault (2)</td></tr>
+            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td>Page Fault (3)</td></tr>
+            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td>Page Fault (4) &mdash; Replaces 7 (least recently used)</td></tr>
+            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td>Hit (0 becomes most recent)</td></tr>
+            <tr><td>3</td><td>2</td><td>0</td><td>3</td><td>Page Fault (5) &mdash; Replaces 1</td></tr>
+            <tr><td>0</td><td>2</td><td>0</td><td>3</td><td>Hit</td></tr>
+            <tr><td>4</td><td>4</td><td>0</td><td>3</td><td>Page Fault (6) &mdash; Replaces 2</td></tr>
+            <tr><td>2</td><td>4</td><td>0</td><td>2</td><td>Page Fault (7) &mdash; Replaces 3</td></tr>
+            <tr><td>3</td><td>4</td><td>3</td><td>2</td><td>Page Fault (8) &mdash; Replaces 0</td></tr>
+          </tbody>
+        </table>
+        <strong>Total LRU Page Faults:</strong> $\mathbf{8 \text{ Faults}}$ (LRU belongs to the stack algorithm class and never exhibits Belady's Anomaly).
+      </div>
+
+      <h3>13.2 Operating System Classifications</h3>
+      <ul>
+        <li><strong>Batch Operating Systems:</strong> Early non-interactive systems where jobs with similar requirements were batched together onto magnetic media and executed sequentially by an operator (e.g., IBM OS/360).</li>
+        <li><strong>Multiprogramming Systems:</strong> Increases CPU utilization by keeping multiple jobs in memory simultaneously. When the active job initiates an I/O wait, the OS switches the CPU to another ready job.</li>
+        <li><strong>Time-Sharing (Multitasking) Systems:</strong> Allocates CPU execution time into millisecond time slices (quantums) across multiple active processes via Round Robin scheduling, providing interactive responsiveness for multiple concurrent users.</li>
+        <li><strong>Multiprocessing Systems:</strong> Utilizes two or more physical CPUs or multi-core processors sharing common memory (Symmetric Multiprocessing &mdash; SMP) to achieve true parallel execution.</li>
+        <li><strong>Distributed Systems:</strong> Manages a network of physically separated computational nodes communicating over networks, appearing to end-users as a single unified computing facility.</li>
+        <li><strong>Real-Time Operating Systems (RTOS):</strong> Engineered for applications where correctness depends not only on logical output but on meeting strict deterministic timing deadlines:
+          <ul>
+            <li><strong>Hard RTOS:</strong> Missing a single deadline causes total system failure (e.g., pacemaker control, automotive airbag deployment, flight avionics).</li>
+            <li><strong>Soft RTOS:</strong> Missing a deadline degrades quality of service without system failure (e.g., video streaming, audio playback).</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>13.3 Kernel Architectures: Monolithic vs Microkernel vs Hybrid</h3>
+      <ul>
+        <li><strong>Monolithic Kernel (e.g., Linux, FreeBSD):</strong> Entire operating system core &mdash; Process Scheduler, Virtual Memory, File Systems, Network Stacks, and all Device Drivers &mdash; executes inside a single shared, highly privileged address space in <strong>Ring 0</strong>.
+          <ul>
+            <li><em>Advantages:</em> Maximum performance; inter-module communication occurs via ultra-fast direct C function calls.</li>
+            <li><em>Disadvantages:</em> Large kernel codebase; a bug or memory corruption in any third-party driver can crash the entire system.</li>
+          </ul>
+        </li>
+        <li><strong>Microkernel (e.g., Minix, QNX, seL4):</strong> Only the absolute bare essentials (Thread Scheduling, Low-level IPC, Address Space translation) run in Ring 0. All other services (File System, Networking, Device Drivers) run as isolated user-mode server processes in <strong>Ring 3</strong>.
+          <ul>
+            <li><em>Advantages:</em> High reliability, modularity, and fault tolerance; crashing drivers do not crash the system.</li>
+            <li><em>Disadvantages:</em> Performance overhead caused by frequent user/kernel context switches and message-passing IPC.</li>
+          </ul>
+        </li>
+        <li><strong>Hybrid Kernel (e.g., Windows NT, Apple macOS XNU):</strong> Combines monolithic speed with microkernel modularity, running subsystems in kernel space while maintaining modular driver interfaces.</li>
+      </ul>
+
+      <h3>13.4 Power-On Self-Test (POST) &amp; Bootstrapping Sequence</h3>
+
+      <figure class="avoid-break">
+        <svg width="780" height="320" viewBox="0 0 780 320" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #d5dbdb; border-radius:6px; font-family:'Segoe UI', sans-serif;">
+          <rect x="0" y="0" width="780" height="30" fill="#1a5276"/>
+          <text x="390" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">END-TO-END COMPUTER BOOTSTRAPPING &amp; OS INITIALIZATION FLOW</text>
+
+          <!-- Stage 1: Power ON & POST -->
+          <g transform="translate(20, 50)">
+            <rect x="0" y="0" width="135" height="100" rx="5" fill="#ebf5fb" stroke="#2980b9" stroke-width="1.5"/>
+            <text x="67" y="20" text-anchor="middle" fill="#1b4f72" font-size="10" font-weight="bold">1. POWER &amp; POST</text>
+            <text x="67" y="40" text-anchor="middle" fill="#2c3e50" font-size="8">SMPS signals PWR_OK</text>
+            <text x="67" y="55" text-anchor="middle" fill="#2c3e50" font-size="8">CPU Reset Vector</text>
+            <text x="67" y="70" text-anchor="middle" fill="#2c3e50" font-size="8">RAM / Hardware Check</text>
+            <text x="67" y="85" text-anchor="middle" fill="#7f8c8d" font-size="8">Beep Code Diagnostics</text>
+          </g>
+
+          <line x1="155" y1="100" x2="175" y2="100" stroke="#2c3e50" stroke-width="2"/>
+          <polygon points="175,100 168,96 168,104" fill="#2c3e50"/>
+
+          <!-- Stage 2: BIOS/UEFI Init -->
+          <g transform="translate(175, 50)">
+            <rect x="0" y="0" width="135" height="100" rx="5" fill="#ebf5fb" stroke="#2980b9" stroke-width="1.5"/>
+            <text x="67" y="20" text-anchor="middle" fill="#1b4f72" font-size="10" font-weight="bold">2. UEFI / FIRMWARE</text>
+            <text x="67" y="40" text-anchor="middle" fill="#2c3e50" font-size="8">Read NVRAM Settings</text>
+            <text x="67" y="55" text-anchor="middle" fill="#2c3e50" font-size="8">Init Bus Controllers</text>
+            <text x="67" y="70" text-anchor="middle" fill="#2c3e50" font-size="8">Validate Secure Boot</text>
+            <text x="67" y="85" text-anchor="middle" fill="#7f8c8d" font-size="8">Detect Boot Priority</text>
+          </g>
+
+          <line x1="310" y1="100" x2="330" y2="100" stroke="#2c3e50" stroke-width="2"/>
+          <polygon points="330,100 323,96 323,104" fill="#2c3e50"/>
+
+          <!-- Stage 3: Bootloader & MBR/ESP -->
+          <g transform="translate(330, 50)">
+            <rect x="0" y="0" width="135" height="100" rx="5" fill="#fef9e7" stroke="#f39c12" stroke-width="1.5"/>
+            <text x="67" y="20" text-anchor="middle" fill="#7e5109" font-size="10" font-weight="bold">3. BOOTLOADER</text>
+            <text x="67" y="40" text-anchor="middle" fill="#2c3e50" font-size="8">Load from ESP / MBR</text>
+            <text x="67" y="55" text-anchor="middle" fill="#2c3e50" font-size="8">GRUB2 / BOOTMGR</text>
+            <text x="67" y="70" text-anchor="middle" fill="#2c3e50" font-size="8">Display OS Menu</text>
+            <text x="67" y="85" text-anchor="middle" fill="#7f8c8d" font-size="8">Pass Kernel Parameters</text>
+          </g>
+
+          <line x1="465" y1="100" x2="485" y2="100" stroke="#2c3e50" stroke-width="2"/>
+          <polygon points="485,100 478,96 478,104" fill="#2c3e50"/>
+
+          <!-- Stage 4: Kernel Loading -->
+          <g transform="translate(485, 50)">
+            <rect x="0" y="0" width="135" height="100" rx="5" fill="#f5eef8" stroke="#8e44ad" stroke-width="1.5"/>
+            <text x="67" y="20" text-anchor="middle" fill="#512e5f" font-size="10" font-weight="bold">4. KERNEL INIT</text>
+            <text x="67" y="40" text-anchor="middle" fill="#2c3e50" font-size="8">Load vmlinuz / ntoskrnl</text>
+            <text x="67" y="55" text-anchor="middle" fill="#2c3e50" font-size="8">Unpack initramfs</text>
+            <text x="67" y="70" text-anchor="middle" fill="#2c3e50" font-size="8">Init Memory Paging</text>
+            <text x="67" y="85" text-anchor="middle" fill="#7f8c8d" font-size="8">Mount Root Filesystem</text>
+          </g>
+
+          <line x1="620" y1="100" x2="640" y2="100" stroke="#2c3e50" stroke-width="2"/>
+          <polygon points="640,100 633,96 633,104" fill="#2c3e50"/>
+
+          <!-- Stage 5: User Space Services -->
+          <g transform="translate(640, 50)">
+            <rect x="0" y="0" width="120" height="100" rx="5" fill="#eafaf1" stroke="#27ae60" stroke-width="1.5"/>
+            <text x="60" y="20" text-anchor="middle" fill="#145a32" font-size="10" font-weight="bold">5. USER SPACE</text>
+            <text x="60" y="40" text-anchor="middle" fill="#2c3e50" font-size="8">Spawn systemd (PID 1)</text>
+            <text x="60" y="55" text-anchor="middle" fill="#2c3e50" font-size="8">Start Daemons/Drivers</text>
+            <text x="60" y="70" text-anchor="middle" fill="#2c3e50" font-size="8">Launch Display Mgr</text>
+            <text x="60" y="85" text-anchor="middle" fill="#145a32" font-size="8">User Login Ready</text>
+          </g>
+
+          <!-- Dual Boot Callout Box -->
+          <g transform="translate(20, 180)">
+            <rect x="0" y="0" width="740" height="110" rx="6" fill="#fdfefe" stroke="#bdc3c7"/>
+            <text x="20" y="25" fill="#1a5276" font-size="11" font-weight="bold">DUAL BOOTING COEXISTENCE MECHANISM (Windows 11 + Linux Ubuntu):</text>
+            <text x="20" y="45" fill="#2c3e50" font-size="9.5">&bull; <strong>EFI System Partition (ESP):</strong> Formatted as FAT32 ($100\text{--}512\text{ MB}$), houses \EFI\Microsoft\Boot\bootmgfw.efi and \EFI\ubuntu\grubx64.efi.</text>
+            <text x="20" y="65" fill="#2c3e50" font-size="9.5">&bull; <strong>GRUB2 Boot Manager:</strong> Scans storage partitions via <code>os-prober</code>, detects Windows BCD, and presents user with interactive OS selection.</text>
+            <text x="20" y="85" fill="#2c3e50" font-size="9.5">&bull; <strong>Critical Setting:</strong> Disable Windows "Fast Startup" in Control Panel to prevent NTFS partition dirty-bit locking and data corruption.</text>
+          </g>
+        </svg>
+        <figcaption>Figure 3.2: Complete System Bootstrapping Sequence and Dual-Boot Architecture.</figcaption>
+      </figure>
+
+      <h4>Detailed Execution Steps of System Bootstrapping:</h4>
+      <ol>
+        <li><strong>Power Sequencing &amp; Reset Vector:</strong> The SMPS asserts <code>PWR_OK</code>. The CPU resets its registers and jumps to the hardcoded Reset Vector (x86: physical address <code>0xFFFFFFF0</code>), executing the initial jump to UEFI Flash ROM code.</li>
+        <li><strong>Power-On Self-Test (POST):</strong> Low-level firmware routines test CPU arithmetic logic, ROM checksums, RTC/NVRAM clocks, DRAM data lines, and enumerate PCIe devices. Hardware errors are signaled via piezoelectric beep codes or motherboard 2-digit 7-segment hex displays (Port 80h).</li>
+        <li><strong>Firmware Initialization &amp; Boot Selection:</strong> UEFI initializes bus controllers, validates Secure Boot digital signatures, reads boot priority from NVRAM, and loads the target EFI bootloader from the EFI System Partition (ESP).</li>
+        <li><strong>Bootloader Handover:</strong> Windows <code>bootmgfw.efi</code> or Linux <code>grubx64.efi</code> executes, loads kernel binary images into RAM (<code>ntoskrnl.exe</code> or <code>vmlinuz</code>), and passes hardware configuration parameters.</li>
+        <li><strong>Kernel Initialization:</strong> The kernel initializes memory management paging, unpacks the initial RAM disk (<code>initramfs</code>), mounts the root filesystem, initializes built-in drivers, and spawns the first user-space initialization process (<code>systemd</code> on Linux with PID 1 / <code>smss.exe</code> on Windows).</li>
+      </ol>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 14 -->
+    <section id="unit14">
+      <h2>Unit 14: OS Installation, Partitioning, Boot Managers &amp; File Systems</h2>
+
+      <h3>14.1 Bootable Media Creation &amp; Installation Workflow</h3>
+      <p>
+        Operating system installation begins with creating bootable installation media (typically a USB flash drive).
+      </p>
+      <ul>
+        <li><strong>ISO Image Architecture:</strong> An uncompressed optical disc sector image archive (ISO 9660 / UDF format) containing the entire OS installer, compressed kernel squashfs images, package repositories, and bootable El Torito boot records.</li>
+        <li><strong>Flashing Utilities (Rufus, Balena Etcher, Ventoy):</strong> Software tools that unpack the ISO and write raw sector boot blocks onto the USB drive. When using Rufus, users configure target partition scheme (MBR or GPT) and target system firmware (BIOS or UEFI).</li>
+      </ul>
+
+      <h3>14.2 Disk Partitioning: MBR vs GPT</h3>
+
+      <figure class="avoid-break">
+        <svg width="780" height="300" viewBox="0 0 780 300" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #d5dbdb; border-radius:6px; font-family:'Segoe UI', sans-serif;">
+          <rect x="0" y="0" width="780" height="30" fill="#2c3e50"/>
+          <text x="390" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">DISK PARTITIONING SCHEMAS: MBR (LEGACY) VS GPT (MODERN UEFI)</text>
+
+          <!-- MBR Diagram -->
+          <g transform="translate(30, 45)">
+            <rect x="0" y="0" width="340" height="230" rx="5" fill="#fcfcfc" stroke="#c0392b" stroke-width="2"/>
+            <text x="170" y="22" text-anchor="middle" fill="#922b21" font-size="11" font-weight="bold">MASTER BOOT RECORD (MBR - Sector 0)</text>
+            
+            <rect x="15" y="35" width="310" height="35" rx="3" fill="#ebf5fb" stroke="#aed6f1"/>
+            <text x="170" y="55" text-anchor="middle" fill="#1b4f72" font-size="9.5">Bootstrap Code (446 Bytes)</text>
+
+            <rect x="15" y="75" width="310" height="50" rx="3" fill="#fef9e7" stroke="#f9e79f"/>
+            <text x="170" y="93" text-anchor="middle" fill="#7e5109" font-size="9.5" font-weight="bold">Partition Table (64 Bytes = 4 Entries &times; 16B)</text>
+            <text x="170" y="112" text-anchor="middle" fill="#7e5109" font-size="8.5">Entry 1 (16B) | Entry 2 (16B) | Entry 3 (16B) | Entry 4 (16B)</text>
+
+            <rect x="15" y="130" width="310" height="25" rx="3" fill="#d5f5e3" stroke="#a9dfbf"/>
+            <text x="170" y="146" text-anchor="middle" fill="#1e8449" font-size="9">Boot Signature: 0x55AA (2 Bytes)</text>
+
+            <rect x="15" y="162" width="310" height="55" rx="3" fill="#f4f6f7" stroke="#bdc3c7"/>
+            <text x="170" y="180" text-anchor="middle" fill="#c0392b" font-size="9" font-weight="bold">LIMITATIONS:</text>
+            <text x="170" y="196" text-anchor="middle" fill="#2c3e50" font-size="8">&bull; Max 4 Primary Partitions (or 3 Pri + 1 Extended)</text>
+            <text x="170" y="210" text-anchor="middle" fill="#2c3e50" font-size="8">&bull; 32-bit LBA $\implies$ Max 2.2 TB Drive Capacity Barrier</text>
+          </g>
+
+          <!-- GPT Diagram -->
+          <g transform="translate(410, 45)">
+            <rect x="0" y="0" width="340" height="230" rx="5" fill="#fcfcfc" stroke="#27ae60" stroke-width="2"/>
+            <text x="170" y="22" text-anchor="middle" fill="#1e8449" font-size="11" font-weight="bold">GUID PARTITION TABLE (GPT - UEFI Standard)</text>
+            
+            <rect x="15" y="35" width="310" height="24" rx="3" fill="#eaeded" stroke="#bdc3c7"/>
+            <text x="170" y="50" text-anchor="middle" fill="#566573" font-size="8.5">LBA 0: Protective MBR (Prevents legacy overwrite)</text>
+
+            <rect x="15" y="63" width="310" height="24" rx="3" fill="#ebf5fb" stroke="#aed6f1"/>
+            <text x="170" y="78" text-anchor="middle" fill="#1b4f72" font-size="8.5">LBA 1: Primary GPT Header (Disk GUID &amp; CRC32)</text>
+
+            <rect x="15" y="91" width="310" height="24" rx="3" fill="#fef9e7" stroke="#f9e79f"/>
+            <text x="170" y="106" text-anchor="middle" fill="#7e5109" font-size="8.5">LBA 2&ndash;33: Partition Entries (128 Partitions &times; 128B)</text>
+
+            <rect x="15" y="119" width="310" height="24" rx="3" fill="#d4efdf" stroke="#a9dfbf"/>
+            <text x="170" y="134" text-anchor="middle" fill="#145a32" font-size="8.5">LBA 34+: Usable User Data Partitions</text>
+
+            <rect x="15" y="147" width="310" height="24" rx="3" fill="#f5eef8" stroke="#d7bde2"/>
+            <text x="170" y="162" text-anchor="middle" fill="#512e5f" font-size="8.5">Secondary / Backup GPT Table (End of Disk)</text>
+
+            <rect x="15" y="175" width="310" height="42" rx="3" fill="#eafaf1" stroke="#a9dfbf"/>
+            <text x="170" y="190" text-anchor="middle" fill="#1e8449" font-size="9" font-weight="bold">ADVANTAGES:</text>
+            <text x="170" y="206" text-anchor="middle" fill="#2c3e50" font-size="8">128 Partitions | 64-bit LBA (9.4 Zettabytes) | CRC32 Redundancy</text>
+          </g>
+        </svg>
+        <figcaption>Figure 3.3: Architectural Layout of MBR Partition Table vs Modern GPT Schema.</figcaption>
+      </figure>
+
+      <h4>1. Master Boot Record (MBR - Legacy Schema)</h4>
+      <p>
+        Resides at Sector 0 (exactly 512 bytes):
+      </p>
+      <ul>
+        <li><strong>Bootstrap Code (446 Bytes):</strong> Contains the Stage-1 machine code executed by BIOS to scan the partition table, find the partition flagged as active/bootable (<code>0x80</code>), and load its Volume Boot Record (VBR).</li>
+        <li><strong>Partition Table (64 Bytes):</strong> Exactly four 16-byte partition records. Each record stores:
+          <ul>
+            <li>Byte 0: Boot indicator (<code>0x80</code> = Active bootable, <code>0x00</code> = Inactive).</li>
+            <li>Bytes 1&ndash;3: Starting Cylinder-Head-Sector (CHS) coordinates.</li>
+            <li>Byte 4: Partition Type ID (e.g., <code>0x07</code> for NTFS, <code>0x83</code> for Linux native).</li>
+            <li>Bytes 5&ndash;7: Ending CHS coordinates.</li>
+            <li>Bytes 8&ndash;11: Starting Logical Block Address (LBA) sector number (32-bit integer).</li>
+            <li>Bytes 12&ndash;15: Total sector count in the partition (32-bit integer).</li>
+          </ul>
+        </li>
+        <li><strong>Boot Signature (2 Bytes):</strong> Hex word <code>0x55AA</code> verifying sector validity.</li>
+        <li><strong>The 2.2 TB Capacity Barrier:</strong> MBR uses 32-bit Logical Block Addressing (LBA) sector numbers. With standard 512-byte sectors:
+          $$\text{Max MBR Size} = 2^{32} \times 512\text{ bytes} = 2,199,023,255,552\text{ bytes} \approx \mathbf{2.19\text{ TB}}$$
+          Any storage capacity exceeding $2.2\text{ TB}$ on an MBR disk is completely unaddressable.
+        </li>
+      </ul>
+
+      <h4>2. GUID Partition Table (GPT - Modern UEFI Schema)</h4>
+      <p>
+        Developed as part of the Unified EFI standard, GPT replaces legacy MBR:
+      </p>
+      <ul>
+        <li><strong>64-Bit LBA Addressing:</strong> Supports drive capacities up to $\mathbf{2^{64} \times 512\text{ bytes} \approx 9.4\text{ Zettabytes}}$ ($9.4 \times 10^{21}\text{ bytes}$).</li>
+        <li><strong>Partition Count:</strong> Supports a minimum of <strong>128 distinct primary partitions</strong> without needing extended/logical partition hacks.</li>
+        <li><strong>Data Redundancy &amp; Integrity:</strong> GPT stores a Primary Header and Partition Table at the beginning of the disk (LBA 1&ndash;33) and a <strong>Secondary Backup GPT Header</strong> at the trailing end of the disk. Every partition entry and header is protected by <strong>CRC32 Checksums</strong>; if corruption occurs, UEFI automatically restores the partition table from the backup copy.</li>
+        <li><strong>Protective MBR:</strong> GPT places a dummy MBR at LBA 0 with a single partition type <code>0xEE</code> spanning the entire drive, preventing legacy MBR-only utilities from misidentifying the disk as unpartitioned and destroying user data.</li>
+      </ul>
+
+      <h3>14.3 Boot Managers: Windows BOOTMGR vs GNU GRUB2</h3>
+      <ul>
+        <li><strong>Windows Boot Manager (<code>BOOTMGR</code>):</strong> The proprietary bootloader for Windows. Reads configuration data from the <strong>Boot Configuration Data (BCD)</strong> registry hive, verifies driver digital signatures, loads <code>winload.efi</code> (or <code>winload.exe</code>), initializes the Windows Kernel (<code>ntoskrnl.exe</code>), and transfers execution.</li>
+        <li><strong>GNU GRand Unified Bootloader (GRUB2):</strong> The dominant open-source multi-boot loader in Linux environments:
+          <ul>
+            <li><strong>Stage 1 (<code>boot.img</code>):</strong> Tiny 512-byte code residing in MBR sector 0 or loaded by UEFI.</li>
+            <li><strong>Stage 1.5 / Core (<code>core.img</code>):</strong> Contains file system drivers (ext4, NTFS, FAT32) allowing GRUB to access Stage 2 files.</li>
+            <li><strong>Stage 2 (<code>/boot/grub/grub.cfg</code>):</strong> Displays the interactive multi-boot menu, allows runtime editing of kernel boot parameters, unpacks the <code>initramfs</code> RAM disk, loads the compressed Linux kernel (<code>vmlinuz</code>), and passes system control.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>14.4 Dual Booting Architecture (Windows &amp; Linux)</h3>
+      <p>
+        Dual booting enables a single physical computer to host multiple independent operating systems selectable via a boot menu at startup.
+      </p>
+      <ul>
+        <li><strong>Partition Layout:</strong>
+          <ul>
+            <li><strong>EFI System Partition (ESP):</strong> Formatted strictly as <strong>FAT32</strong> ($100\text{--}512\text{ MB}$). Contains <code>\EFI\Microsoft\Boot\bootmgfw.efi</code> and <code>\EFI\ubuntu\grubx64.efi</code> simultaneously.</li>
+            <li><strong>Windows C: Partition:</strong> Formatted as NTFS ($100\text{+ GB}$).</li>
+            <li><strong>Linux Root Partition (<code>/</code>):</strong> Formatted as ext4 ($50\text{+ GB}$).</li>
+            <li><strong>Linux Swap Partition:</strong> Dedicated virtual memory paging space.</li>
+          </ul>
+        </li>
+        <li><strong>Chainloading Mechanism:</strong> During UEFI boot, GRUB is executed as the primary boot manager. GRUB executes its <code>os-prober</code> script, discovers the Windows BCD entry on the ESP, and offers an interactive choice. Selecting Windows "chainloads" execution directly to <code>bootmgfw.efi</code>.</li>
+        <li><strong>Windows Fast Startup Caveat:</strong> Windows "Fast Startup" puts the OS into a hybrid hibernation state that locks the NTFS file system metadata dirty-bit. If Linux mounts that NTFS partition while Fast Startup is active, severe disk corruption occurs. Fast Startup <strong>must be disabled</strong> in dual-boot setups.</li>
+      </ul>
+
+      <h3>14.5 File Systems: FAT vs NTFS vs ext4</h3>
+      <div class="avoid-break">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature / Metric</th>
+              <th>FAT32</th>
+              <th>exFAT</th>
+              <th>NTFS</th>
+              <th>ext4</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primary OS</strong></td>
+              <td>Legacy Windows / Flash</td>
+              <td>Universal Flash Media</td>
+              <td>Modern Windows (10/11)</td>
+              <td>Linux Distributions</td>
+            </tr>
+            <tr>
+              <td><strong>Max Single File Size</strong></td>
+              <td>$\mathbf{4\text{ GB} - 1\text{ Byte}}$</td>
+              <td>$16\text{ Exabytes}$</td>
+              <td>$16\text{ Terabytes}$</td>
+              <td>$16\text{ Terabytes}$</td>
+            </tr>
+            <tr>
+              <td><strong>Max Volume Size</strong></td>
+              <td>$2\text{ TB} \text{ to } 16\text{ TB}$</td>
+              <td>$128\text{ Petabytes}$</td>
+              <td>$8\text{ Petabytes}$</td>
+              <td>$1\text{ Exabyte}$</td>
+            </tr>
+            <tr>
+              <td><strong>Journaling Support</strong></td>
+              <td>No (Prone to corruption)</td>
+              <td>No</td>
+              <td>Yes (USN Journal)</td>
+              <td>Yes (Superblock + Extents)</td>
+            </tr>
+            <tr>
+              <td><strong>File Permissions &amp; ACLs</strong></td>
+              <td>None</td>
+              <td>None</td>
+              <td>Granular Windows ACLs</td>
+              <td>POSIX (rwx, User/Group/Other)</td>
+            </tr>
+            <tr>
+              <td><strong>Compression / Encryption</strong></td>
+              <td>No</td>
+              <td>No</td>
+              <td>Native NTFS Compression &amp; EFS</td>
+              <td>Native transparent encryption</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Internal File System Architectures &amp; Journaling Modes:</h4>
+      <ul>
+        <li><strong>FAT32 Cluster Chains:</strong> Files are stored as linked lists of clusters in the File Allocation Table (FAT). Each entry contains a 28-bit cluster index pointing to the next cluster, with <code>0x0FFFFFFF</code> indicating End-Of-File (EOF). Because file access requires sequentially traversing the FAT chain, random access on fragmented drives suffers significant performance degradation.</li>
+        <li><strong>NTFS (Master File Table - MFT):</strong> Everything on an NTFS volume is a file, including metadata files (e.g., <code>$MFT</code>, <code>$LogFile</code>, <code>$Bitmap</code>). Each file has a 1024-byte record in the MFT containing resident data or non-resident data run-lists. Directories are indexed using balanced B-Trees for rapid $O(\log n)$ file lookups.</li>
+        <li><strong>ext4 (Inodes &amp; Extent Trees):</strong> An ext4 filesystem divides the disk into <strong>Block Groups</strong>. Each file is represented by an <strong>Inode</strong> containing file metadata (size, timestamps, POSIX permissions, owner UID/GID) and an <strong>Extent Tree</strong> (a contiguous run of physical blocks represented by starting block and length), replacing legacy indirect block pointers to drastically reduce disk fragmentation. ext4 supports three journaling modes:
+          <ul>
+            <li><em>Journal:</em> Both metadata and file data are written to the journal before committing to disk (highest integrity, lowest write speed).</li>
+            <li><em>Ordered:</em> Only metadata is journaled, but file data blocks are flushed to disk before committing metadata (default Linux mode).</li>
+            <li><em>Writeback:</em> Metadata is journaled without ordering guarantees for data blocks (highest performance, risk of stale data on crash).</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 15 -->
+    <section id="unit15">
+      <h2>Unit 15: Device Drivers &amp; Kernel Subsystems</h2>
+
+      <h3>15.1 Need and Role of Device Drivers</h3>
+      <p>
+        A <strong>Device Driver</strong> is a specialized system software program that serves as a translator and abstraction bridge between the generic I/O subsystem of the Operating System kernel and the specific electrical, register-level hardware mechanics of physical peripheral devices.
+      </p>
+
+      <div class="definition-box">
+        <span class="box-title">Why Device Drivers are Indispensable</span>
+        Hardware manufacturers build peripherals (Realtek audio chips, Intel Wi-Fi cards, NVIDIA GPUs, HP printers) with wildly differing internal register layouts, command timing sequences, and physical firmware interfaces. The OS kernel cannot include hardcoded machine logic for millions of peripheral models. Instead, the OS defines standardized abstract I/O interfaces (e.g., <code>read()</code>, <code>write()</code>, <code>open()</code>, <code>close()</code>, <code>ioctl()</code>). The device driver implements these standardized calls by issuing device-specific commands to hardware registers.
+      </div>
+
+      <h3>15.2 Protection Rings &amp; Driver Execution Modes</h3>
+      <p>
+        Modern x86/x64 processors implement hardware-enforced <strong>Hierarchical Protection Rings</strong> to isolate software components:
+      </p>
+      <ul>
+        <li><strong>Ring 0 (Supervisor / Kernel Mode):</strong> Highest privilege level. Code in Ring 0 has unrestricted direct access to all CPU instructions (including privileged instructions like <code>CLI</code>, <code>STI</code>, <code>IN</code>, <code>OUT</code>, <code>LIDT</code>), all physical memory addresses, and all I/O hardware ports.
+          <ul>
+            <li><strong>Kernel-Mode Device Drivers:</strong> Most high-performance drivers (GPU display drivers, storage controllers, network cards) execute in Ring 0. <em>Risk:</em> A single null-pointer dereference or unhandled exception in a Kernel-Mode driver immediately crashes the entire operating system, resulting in a <strong>Blue Screen of Death (BSOD)</strong> in Windows or a <strong>Kernel Panic</strong> in Linux.</li>
+          </ul>
+        </li>
+        <li><strong>Ring 3 (User Mode):</strong> Lowest privilege level. Standard user applications execute here with restricted virtual memory access. Direct hardware I/O instructions are strictly prohibited; any unauthorized attempt raises a hardware General Protection Fault (GPF).
+          <ul>
+            <li><strong>User-Mode Driver Framework (UMDF):</strong> Modern OS designs execute non-time-critical drivers (software printers, USB sensors, smart card readers) in Ring 3 isolated worker processes. If a User-Mode driver crashes, the OS simply restarts that specific process without affecting system stability.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>15.3 Driver-Hardware Interaction Mechanisms</h3>
+      <p>
+        Device drivers coordinate hardware communication through four foundational mechanisms:
+      </p>
+      <ol>
+        <li><strong>Port-Mapped I/O (PMIO):</strong> The CPU maintains a dedicated 16-bit physical I/O port address space separate from system RAM, accessed via specialized assembly instructions: <code>IN AL, DX</code> (read byte from port in <code>DX</code>) and <code>OUT DX, AL</code> (write byte to port). Legacy x86 architecture used by legacy keyboards (Port 60h/64h), floppy disk controllers (Port 3F0h), and serial COM ports.</li>
+        <li><strong>Memory-Mapped I/O (MMIO):</strong> Modern high-speed standard where peripheral device control registers and internal buffers are mapped directly into the physical memory address space of the CPU. The driver reads and writes to device hardware using standard memory instructions (e.g., <code>MOV</code>), benefiting from CPU memory caching, speculative execution pipelines, and high-speed bus interconnects.</li>
+        <li><strong>Interrupts, APIC, MSI-X &amp; ISR Architecture:</strong>
+          <ul>
+            <li><em>Legacy PIC vs Modern APIC:</em> Legacy systems routed 15 IRQ lines through two cascaded Intel 8259A Programmable Interrupt Controllers. Modern multi-core processors utilize the <strong>Advanced Programmable Interrupt Controller (APIC)</strong> architecture, consisting of a <em>Local APIC (LAPIC)</em> per CPU core and an <em>I/O APIC</em> on the motherboard chipset, supporting up to 240 interrupt vectors per core with inter-processor interrupts (IPI).</li>
+            <li><em>Message Signaled Interrupts (MSI / MSI-X):</em> PCIe devices eliminate dedicated physical interrupt sideband wires by writing special 32-bit/64-bit address data packets directly to the host memory controller, triggering CPU interrupts. <strong>MSI-X</strong> supports up to 2,048 individual interrupt vectors per device, allowing multi-queue NVMe drives and 100GbE NICs to bind separate hardware interrupt queues directly to individual CPU cores for zero-contention parallel processing.</li>
+            <li><em>Top-Half vs Bottom-Half Processing:</em> To prevent stalling the CPU, modern drivers divide interrupt handling: the <em>Top-Half (ISR)</em> runs immediately with hardware interrupts disabled to acknowledge the peripheral, clear hardware status bits, and copy packet/block buffers into RAM; the <em>Bottom-Half (Deferred Procedure Call DPC in Windows / Tasklets &amp; Workqueues in Linux)</em> processes the bulk data asynchronously at lower interrupt request levels (IRQL) with hardware interrupts re-enabled.</li>
+          </ul>
+        </li>
+        <li><strong>Direct Memory Access (DMA) &amp; Scatter-Gather Descriptors:</strong>
+          <ul>
+            <li>Without DMA, the CPU would be forced to read every incoming data byte from hardware into a CPU register and then write it to RAM (Programmed I/O - PIO), wasting 100% of CPU cycles and throttling system throughput.</li>
+            <li>A <strong>DMA Controller (DMAC)</strong> allows high-speed peripherals (NVMe SSDs, Gigabit NICs) to transfer massive data blocks directly into and out of system RAM over PCIe/system buses without CPU intervention. The driver initializes physical source/destination addresses and byte length, and the DMAC transfers data autonomously at memory bus speeds.</li>
+            <li><strong>Scatter-Gather DMA:</strong> Real-world operating systems allocate virtual memory in non-contiguous physical 4 KB pages. Standard DMA would require expensive memory buffer copies into contiguous bounce buffers. With <em>Scatter-Gather DMA</em>, the driver constructs a linked list of physical memory descriptors (called a <strong>Scatter-Gather List - SGL</strong>), where each descriptor contains a 64-bit physical memory pointer and byte length. The hardware DMAC traverses the descriptor chain automatically, reading from or writing to discontiguous physical RAM pages in a single uninterrupted hardware transaction.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h3>15.4 Linux Kernel Module (LKM) &amp; Windows Driver Framework (WDF)</h3>
+      <ul>
+        <li><strong>Linux Loadable Kernel Modules (LKM):</strong> LKMs are dynamically linked into the running kernel without rebooting using user-space utilities (<code>insmod</code>, <code>modprobe</code>, <code>rmmod</code>). LKMs provide standard entry/exit points (<code>module_init()</code> and <code>module_exit()</code>) and interface with user-space via Character (<code>/dev/chr</code>), Block (<code>/dev/sda</code>), or Network (<code>eth0</code>) abstractions.
+          <pre><code>#include &lt;linux/module.h&gt;
+#include &lt;linux/kernel.h&gt;
+#include &lt;linux/fs.h&gt;
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Computer Science Faculty");
+MODULE_DESCRIPTION("Sample Linux Character Device Driver");
+
+static int device_open(struct inode *inode, struct file *file) {
+    pr_info("Device opened successfully\n");
+    return 0;
+}
+
+static struct file_operations fops = {
+    .owner = THIS_MODULE,
+    .open  = device_open,
+};
+
+static int __init sample_driver_init(void) {
+    pr_info("Registering character device driver\n");
+    return register_chrdev(240, "sample_dev", &fops);
+}
+
+static void __exit sample_driver_exit(void) {
+    pr_info("Unregistering character device driver\n");
+    unregister_chrdev(240, "sample_dev");
+}
+
+module_init(sample_driver_init);
+module_exit(sample_driver_exit);</code></pre>
+        </li>
+        <li><strong>Windows Driver Framework (WDF):</strong> Modern unified driver architecture in Windows:
+          <ul>
+            <li><em>Kernel-Mode Driver Framework (KMDF):</em> Object-oriented C-based framework handling I/O Queuing, Plug and Play (PnP), and Power Management state machines for Ring 0 drivers. Handles I/O Request Packets (IRPs) through structured dispatch tables.</li>
+            <li><em>User-Mode Driver Framework (UMDF):</em> COM-based C++ framework running drivers inside isolated user-mode Host Processes (<code>WUDFHost.exe</code>). If a user-mode driver encounters an unhandled exception, the OS restarts the worker process without destabilizing the Windows kernel.</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+</div>
+</body>
+</html>

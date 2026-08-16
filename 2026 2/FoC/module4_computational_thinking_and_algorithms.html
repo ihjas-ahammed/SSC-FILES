@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4: Computational Thinking, Logic and Algorithms</title>
+  <style>
+    :root {
+      --primary-color: #0f2b48;
+      --secondary-color: #1a5276;
+      --accent-color: #b9770e;
+      --text-color: #1c2833;
+      --bg-color: #ffffff;
+      --border-color: #d5dbdb;
+      --callout-bg: #ebf5fb;
+      --callout-border: #2980b9;
+      --table-header-bg: #1f3a52;
+      --code-bg: #f4f6f7;
+      --code-border: #d5d8dc;
+      --font-body: 'Merriweather', 'Georgia', 'Cambria', 'Times New Roman', serif;
+      --font-heading: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+      --font-mono: 'Consolas', 'Fira Code', 'Monaco', 'Courier New', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 11pt;
+      line-height: 1.65;
+      color: var(--text-color);
+      background-color: #f8f9f9;
+      padding: 0;
+      margin: 0;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .document-container {
+      max-width: 950px;
+      margin: 20px auto;
+      background: var(--bg-color);
+      padding: 45px 55px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      border: 1px solid var(--border-color);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      color: var(--primary-color);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      letter-spacing: -0.01em;
+    }
+
+    h1 {
+      font-size: 24pt;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 8px;
+      margin-top: 0.5em;
+    }
+
+    h2 {
+      font-size: 18pt;
+      border-bottom: 1px solid var(--secondary-color);
+      padding-bottom: 5px;
+      margin-top: 1.6em;
+      color: var(--secondary-color);
+    }
+
+    h3 {
+      font-size: 14pt;
+      margin-top: 1.4em;
+      color: #2471a3;
+    }
+
+    h4 {
+      font-size: 12pt;
+      margin-top: 1.1em;
+      color: #2c3e50;
+    }
+
+    p {
+      margin-bottom: 1.1em;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-left: 28px;
+      margin-bottom: 1.2em;
+    }
+
+    li {
+      margin-bottom: 0.4em;
+    }
+
+    strong {
+      color: #111;
+      font-weight: 600;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    .course-header {
+      text-align: center;
+      border-bottom: 3px double var(--primary-color);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .course-header .institution {
+      font-family: var(--font-heading);
+      font-size: 12pt;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #566573;
+      margin-bottom: 5px;
+    }
+
+    .course-header .course-title {
+      font-size: 24pt;
+      color: var(--primary-color);
+      margin: 8px 0;
+      border: none;
+      padding: 0;
+    }
+
+    .course-header .course-meta {
+      font-family: var(--font-heading);
+      font-size: 10pt;
+      color: #7f8c8d;
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-top: 8px;
+    }
+
+    .module-banner {
+      background: #eaeded;
+      border-left: 6px solid var(--primary-color);
+      padding: 14px 20px;
+      margin: 35px 0 25px 0;
+    }
+
+    .module-banner h2 {
+      margin: 0;
+      padding: 0;
+      border: none;
+      color: var(--primary-color);
+      font-size: 16pt;
+    }
+
+    .module-banner .module-subtitle {
+      font-family: var(--font-heading);
+      font-size: 10pt;
+      color: #515a5a;
+      margin-top: 4px;
+    }
+
+    .definition-box, .theorem-box, .worked-example, .key-takeaway {
+      background-color: var(--callout-bg);
+      border-left: 4px solid var(--callout-border);
+      padding: 14px 18px;
+      margin: 18px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .definition-box {
+      border-left-color: #2980b9;
+      background-color: #ebf5fb;
+    }
+
+    .theorem-box {
+      border-left-color: #8e44ad;
+      background-color: #f4ecf7;
+    }
+
+    .worked-example {
+      border-left-color: #27ae60;
+      background-color: #eafaf1;
+    }
+
+    .key-takeaway {
+      border-left-color: #d35400;
+      background-color: #fdf2e9;
+    }
+
+    .box-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 10.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .definition-box .box-title { color: #1b4f72; }
+    .theorem-box .box-title { color: #512e5f; }
+    .worked-example .box-title { color: #145a32; }
+    .key-takeaway .box-title { color: #7e5109; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 9px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--table-header-bg);
+      color: #ffffff;
+      font-family: var(--font-heading);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fcfcfc;
+    }
+
+    tr:hover td {
+      background-color: #f2f4f4;
+    }
+
+    pre, code {
+      font-family: var(--font-mono);
+      font-size: 9.5pt;
+    }
+
+    code {
+      background-color: var(--code-bg);
+      border: 1px solid var(--code-border);
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #900c3f;
+    }
+
+    pre {
+      background-color: #f8f9fa;
+      border: 1px solid #dcdfe1;
+      border-left: 4px solid var(--secondary-color);
+      padding: 14px 18px;
+      overflow-x: auto;
+      margin: 18px 0;
+      line-height: 1.45;
+      color: #212529;
+    }
+
+    figure {
+      margin: 25px 0;
+      text-align: center;
+    }
+
+    figure svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    figcaption {
+      font-family: var(--font-heading);
+      font-size: 9.5pt;
+      color: #566573;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff;
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+
+      .document-container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border: none;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 18mm 14mm 18mm 14mm;
+      }
+
+      h1 { font-size: 20pt; margin-top: 0.5em; page-break-after: avoid; break-after: avoid; }
+      h2 { font-size: 15pt; margin-top: 1.2em; page-break-after: avoid; break-after: avoid; }
+      h3 { font-size: 12.5pt; margin-top: 1em; page-break-after: avoid; break-after: avoid; }
+      h4 { font-size: 11pt; margin-top: 0.8em; page-break-after: avoid; break-after: avoid; }
+
+      .avoid-break, .definition-box, .theorem-box, .worked-example, .key-takeaway, table, figure {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      svg: {
+        fontCache: 'local'
+      },
+      startup: {
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady().then(() => {
+            document.body.classList.add('mathjax-ready');
+          });
+        }
+      }
+    };
+  </script>
+  <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+  </script>
+</head>
+<body>
+<div class="document-container">
+
+    <div class="course-header">
+      <div class="institution">B.Sc. Computer Science &mdash; Semester I (Academic Level 100&ndash;199)</div>
+      <h1 class="course-title">Fundamentals of Computers and Computational Thinking</h1>
+      <div class="course-meta">
+        <span><strong>Course Code:</strong> CS101</span>
+        <span><strong>Credits:</strong> 4 (Lecture: 3, Practical: 2)</span>
+        <span><strong>Total Hours:</strong> 75 Hrs</span>
+      </div>
+    </div>
+
+    <div class="module-banner">
+      <h2>MODULE IV: Computational Thinking, Logic and Algorithms</h2>
+      <div class="module-subtitle">Comprehensive Academic Notes &mdash; Units 16 through 22 (Duration: 13 Hours, Weightage: 20 Marks)</div>
+    </div>
+
+    <!-- UNIT 16 -->
+    <section id="unit16">
+      <h2>Unit 16: Computer Science as a Discipline &mdash; Scope &amp; Grand Challenges</h2>
+
+      <div class="definition-box">
+        <span class="box-title">Conceptual Definition: Computer Science</span>
+        <strong>Computer Science</strong> is the systematic study of algorithmic processes, computational machines, information structures, and the theoretical foundations of automation, encompassing software design, hardware architecture, complexity analysis, and mathematical modeling of computation.
+      </div>
+
+      <p>
+        Computer Science is not merely the study of computer hardware or programming syntax; as Edsger W. Dijkstra famously noted, <em>"Computer science is no more about computers than astronomy is about telescopes."</em> It represents the formal science of problem-solving, information transformation, and the limits of automated computability. The discipline investigates three foundational questions: (1) <em>What can be computed?</em> (Computability Theory), (2) <em>How efficiently can it be computed?</em> (Computational Complexity), and (3) <em>How can practical physical and logical architectures be engineered to perform these computations reliably?</em> (Computer Systems and Software Engineering).
+      </p>
+
+      <h3>16.1 Sub-disciplines of Computer Science</h3>
+      <ul>
+        <li><strong>Theoretical Computer Science:</strong> Automata Theory, Formal Languages, Turing Machines, Computability, and Computational Complexity Classes ($P \text{ vs } NP$, $NP\text{-Complete}$). Investigates fundamental questions regarding what can be solved within finite polynomial time versus what is undecidable (e.g., Turing's Halting Problem).</li>
+        <li><strong>Computer Systems and Architecture:</strong> Microprocessor Microarchitectures, Multi-core Symmetric Multiprocessing (SMP), Instruction-Level Parallelism (ILP), Distributed Systems, Operating Systems, Computer Networks, and Real-Time Systems.</li>
+        <li><strong>Software Engineering:</strong> Methodologies, design patterns, and formal verification frameworks for designing, architecting, implementing, testing, and maintaining large-scale, robust, fault-tolerant software systems.</li>
+        <li><strong>Artificial Intelligence and Machine Learning:</strong> Artificial Neural Networks, Deep Learning, Natural Language Processing, Computer Vision, Robotics, Knowledge Representation, and Autonomous Agent systems.</li>
+        <li><strong>Data Science and Cryptography:</strong> Big Data Analytics, Database Management Engines, Relational and NoSQL storage models, Cryptographic Protocols, Information Security, and Post-Quantum Cryptography.</li>
+      </ul>
+
+      <h3>16.2 Mathematical Foundations: Automata &amp; The Turing Machine</h3>
+      <p>
+        In 1936, Alan Turing introduced the <strong>Turing Machine (TM)</strong>, a mathematical model of computation that defines the theoretical limits of automated computation. A Turing machine consists of an infinite memory tape divided into discrete cells, a read/write tape head that can scan, modify, and move left or right across tape cells, and a finite state control unit.
+      </p>
+      <p>
+        Formally, a deterministic Turing machine is defined as a 7-tuple:
+        $$M = \langle Q, \Sigma, \Gamma, \delta, q_0, q_{accept}, q_{reject} \rangle$$
+        where:
+      </p>
+      <ul>
+        <li>$Q$ is a finite non-empty set of internal machine states.</li>
+        <li>$\Sigma$ is the finite input alphabet not containing the blank symbol $\sqcup$.</li>
+        <li>$\Gamma$ is the finite tape alphabet ($\Sigma \subset \Gamma$ and $\sqcup \in \Gamma$).</li>
+        <li>$\delta: Q \times \Gamma \to Q \times \Gamma \times \{L, R\}$ is the transition function mapping the current state and scanned tape symbol to a next state, a replacement symbol to write on the tape, and a directional tape head movement (Left or Right).</li>
+        <li>$q_0 \in Q$ is the initial start state.</li>
+        <li>$q_{accept} \in Q$ is the accepting halting state.</li>
+        <li>$q_{reject} \in Q$ is the rejecting halting state ($q_{accept} \neq q_{reject}$).</li>
+      </ul>
+      <p>
+        The <strong>Church-Turing Thesis</strong> posits that any algorithmic calculation that can be naturally performed by a human mathematician following a deterministic effective procedure can be simulated by a Universal Turing Machine. This establishes the theoretical equivalence between Turing Machines, Lambda Calculus, and modern digital electronic computers.
+      </p>
+
+      <h3>16.3 Grand Challenges &amp; Turing Award Milestones</h3>
+      <p>
+        The discipline is defined by historic milestones recognized by the ACM A.M. Turing Award (the "Nobel Prize of Computing"):
+      </p>
+      <ul>
+        <li><strong>Alan Turing (1936):</strong> Universal Turing Machine and Computability foundations. Proved the undecidability of the Halting Problem.</li>
+        <li><strong>John von Neumann (1945):</strong> Stored-program computer architecture unifying code and data in common addressable memory.</li>
+        <li><strong>Claude Shannon (1948):</strong> Mathematical Theory of Communication and Information Entropy ($H = -\sum p_i \log_2 p_i$).</li>
+        <li><strong>Donald Knuth (1974):</strong> Formalization of Algorithm Analysis, asymptotic notations, and <em>The Art of Computer Programming</em>.</li>
+        <li><strong>Stephen Cook (1971) &amp; Richard Karp (1972):</strong> Foundations of $NP$-Completeness, Cook-Levin Theorem, and the 21 Karp reductions.</li>
+      </ul>
+
+      <div class="theorem-box">
+        <span class="box-title">Theoretical Proof: Turing's Halting Problem is Undecidable</span>
+        <strong>Theorem:</strong> There exists no general algorithm that can determine whether an arbitrary program $P$ will eventually halt (terminate) or run forever on an arbitrary input $I$.
+        <br><br>
+        <strong>Proof by Contradiction (Diagonalization):</strong>
+        <ol>
+          <li>Assume such a halting decider exists: a program $\text{Halt}(P, I)$ that returns <code>True</code> if $P(I)$ halts and <code>False</code> if $P(I)$ loops forever.</li>
+          <li>Construct an adversary program $\text{TuringOpposite}(P)$:
+            <pre><code>def TuringOpposite(P):
+    if Halt(P, P) == True:
+        while True: pass  # Loop infinitely
+    else:
+        return True       # Halt immediately</code></pre>
+          </li>
+          <li>What happens when we execute $\text{TuringOpposite}(\text{TuringOpposite})$?
+            <ul>
+              <li>If $\text{Halt}(\text{TuringOpposite}, \text{TuringOpposite})$ returns <code>True</code> (halts), $\text{TuringOpposite}$ enters an infinite loop (does not halt).</li>
+              <li>If $\text{Halt}(\text{TuringOpposite}, \text{TuringOpposite})$ returns <code>False</code> (loops forever), $\text{TuringOpposite}$ returns immediately (halts).</li>
+            </ul>
+          </li>
+          <li>In both cases, we reach a direct logical contradiction ($P \iff \neg P$).</li>
+        </ol>
+        <strong>Conclusion:</strong> The initial assumption that a general halting decider exists is false. The Halting Problem is undecidable.
+      </div>
+
+      <h3>16.4 Complexity Classes: $P$, $NP$, $NP$-Complete, and $NP$-Hard</h3>
+      <ul>
+        <li><strong>Class $P$ (Polynomial Time):</strong> The set of all decision problems that can be solved by a deterministic Turing machine in polynomial time $O(n^k)$ for some constant $k$ (e.g., Shortest Path via Dijkstra, Sorting, Linear Search).</li>
+        <li><strong>Class $NP$ (Nondeterministic Polynomial Time):</strong> The set of decision problems for which a candidate solution can be <em>verified</em> in polynomial time by a deterministic machine, or solved in polynomial time by a nondeterministic machine (e.g., Traveling Salesperson Problem, Boolean Satisfiability SAT, Subset Sum).</li>
+        <li><strong>Class $NP\text{-Complete}$ (NPC):</strong> A problem $X$ is $NP$-Complete if $X \in NP$ and every problem in $NP$ can be polynomial-time reduced to $X$ ($Y \le_p X \; \forall Y \in NP$). If any single $NP$-Complete problem is solved in polynomial time, then $P = NP$.</li>
+        <li><strong>Class $NP\text{-Hard}$:</strong> Problems at least as hard as the hardest problems in $NP$, but not necessarily in $NP$ (e.g., the Halting Problem, optimization version of TSP).</li>
+        <li><strong>The $P \text{ versus } NP$ Millennium Problem:</strong> The fundamental question asks: $\mathbf{P \stackrel{?}{=} NP}$. If $P = NP$, then every problem whose solution can be quickly verified could also be quickly solved, fundamentally revolutionizing cryptography, artificial intelligence, and mathematics.</li>
+        <li><strong>Post-Quantum Cryptography &amp; Quantum Supremacy:</strong> Shor's Algorithm solves prime factorization and discrete logarithms in polynomial time $O((\log N)^3)$ on a quantum computer, breaking RSA and ECC cryptography. The grand challenge is transitioning global cybersecurity to Lattice-based Post-Quantum Cryptography (e.g., CRYSTALS-Kyber and Dilithium).</li>
+      </ul>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 17 -->
+    <section id="unit17">
+      <h2>Unit 17: Problem Solving Fundamentals &amp; Software Development Lifecycle</h2>
+
+      <div class="definition-box">
+        <span class="box-title">Conceptual Definition: Problem Solving in Computing</span>
+        <strong>Problem Solving</strong> in computer science is the systematic, structured cognitive process of analyzing an ill-defined real-world situation, identifying precise input constraints and expected output criteria, and formulating an executable sequence of deterministic operations that transforms inputs into valid solutions.
+      </div>
+
+      <h3>17.1 Polya's Four-Step Problem-Solving Framework</h3>
+      <p>
+        Renowned mathematician George Polya formulated a universal 4-step framework for mathematical and computational problem solving:
+      </p>
+      <ol>
+        <li><strong>Understand the Problem:</strong> Identify the unknowns, data inputs, operational conditions, and edge-case boundary constraints. Restate the problem in formal terminology, identifying preconditions ($P_{pre}$) and postconditions ($P_{post}$).
+          <ul>
+            <li><em>Example:</em> Sorting an array requires knowing the data type, whether duplicate elements exist, memory constraints ($O(1)$ auxiliary space vs $O(N)$), and whether stability is required.</li>
+          </ul>
+        </li>
+        <li><strong>Devise a Plan:</strong> Find connections between data and unknowns. Look for familiar patterns, decompose into smaller sub-problems, consider related algorithms (Divide-and-Conquer, Greedy, Dynamic Programming), or formulate a mathematical recurrence relation.</li>
+        <li><strong>Carry Out the Plan:</strong> Implement the algorithmic steps into clean, structured pseudocode or high-level code, checking each step for logical correctness, loop invariants, and boundary safety.</li>
+        <li><strong>Look Back (Review &amp; Refine):</strong> Examine the resulting solution. Can you derive the result differently? Is the time and space complexity optimal? Does it handle extreme edge cases ($N=0$, negative inputs, arithmetic overflow)?</li>
+      </ol>
+
+      <h3>17.2 The Input-Process-Output (IPO) Architecture</h3>
+      <p>
+        Every computational system, from a simple calculator to a multi-node cloud platform, fundamentally operates on the <strong>Input-Process-Output (IPO)</strong> model:
+      </p>
+      <ul>
+        <li><strong>Input Phase ($I$):</strong> Acquisition and validation of raw data from external peripherals (keyboard, sensors, network sockets, databases). Requires strict data validation, type checking, range assertion, and sanitization to prevent injection vulnerabilities.</li>
+        <li><strong>Processing Phase ($P$):</strong> Execution of deterministic algorithmic transformations, mathematical calculations, logical comparisons, data structure manipulations, and state transitions within CPU registers and RAM.</li>
+        <li><strong>Output Phase ($O$):</strong> Presentation or transmission of structured results to target destinations (monitors, disk storage, actuators, external APIs).</li>
+      </ul>
+
+      <h3>17.3 The 7-Stage Software Development Lifecycle (SDLC)</h3>
+      <ol>
+        <li><strong>Problem Definition &amp; Requirements Analysis:</strong> Identifying stakeholder needs, specifying functional and non-functional requirements (SRS document), and establishing formal problem boundaries.</li>
+        <li><strong>System &amp; Algorithmic Design:</strong> Designing data structures, algorithm steps, modular architecture, and creating flowcharts, pseudocode specifications, and ER diagrams.</li>
+        <li><strong>Implementation / Coding:</strong> Translating algorithmic blueprints into high-level programming language code (C, Python, Java) adhering to best practices and coding standards.</li>
+        <li><strong>Verification, Formal Proofs &amp; Testing:</strong>
+          <ul>
+            <li><strong>Hoare Logic &amp; Program Verification Triples:</strong> Formal programs are verified using Hoare triples $\mathbf{\{P\} \; C \; \{Q\}}$, where $P$ is the precondition asserting state before command $C$ executes, and $Q$ is the postcondition guaranteed upon termination.</li>
+            <li><strong>Loop Invariant Verification:</strong> Proving algorithm correctness requires a loop invariant assertion $I$ that satisfies three properties:
+              <ol>
+                <li><em>Initialization:</em> $I$ is true prior to the first iteration of the loop.</li>
+                <li><em>Maintenance:</em> If $I$ is true before an iteration, it remains true before the next iteration.</li>
+                <li><em>Termination:</em> When the loop terminates, the invariant $I$ combined with the loop termination condition proves the algorithm's postcondition.</li>
+              </ol>
+            </li>
+            <li><em>Black-Box Testing Techniques:</em> Testing functional behavior without internal code knowledge:
+              <ul>
+                <li><strong>Equivalence Class Partitioning (ECP):</strong> Divides the input domain into valid and invalid equivalence classes, selecting representative values from each partition.</li>
+                <li><strong>Boundary Value Analysis (BVA):</strong> Selects test inputs at the extreme boundary edges: $\text{Min}, \text{Min}+1, \text{Nominal}, \text{Max}-1, \text{Max}$.</li>
+              </ul>
+            </li>
+            <li><em>White-Box Testing &amp; Cyclomatic Complexity:</em> Testing internal code structure, statement coverage, branch coverage, and path coverage. McCabe's Cyclomatic Complexity:
+              $$V(G) = E - N + 2P$$
+              where $E$ is the number of control flow edges, $N$ is the number of nodes, and $P$ is the number of connected components. $V(G)$ defines the upper bound on the number of linearly independent execution paths requiring dedicated test cases.
+            </li>
+          </ul>
+        </li>
+        <li><strong>Deployment:</strong> Releasing the verified binary executable or system into staging and production operational environments.</li>
+        <li><strong>Maintenance &amp; Evolution:</strong> Patching newly discovered defects (Corrective), optimizing performance (Perfective), adapting to new OS environments (Adaptive), and adding new features (Preventive).</li>
+      </ol>
+
+      <div class="avoid-break">
+        <h4>Comparative Matrix: Software Engineering Methodologies</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Methodology</th>
+              <th>Workflow Structure</th>
+              <th>Flexibility to Change</th>
+              <th>Ideal Project Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Waterfall Model</strong></td>
+              <td>Strict linear-sequential phases</td>
+              <td>Very Low (Rigid scope)</td>
+              <td>Mission-critical systems with unchanging specs (Avionics, Medical)</td>
+            </tr>
+            <tr>
+              <td><strong>V-Model (Verification/Validation)</strong></td>
+              <td>Paired development and testing stages</td>
+              <td>Low</td>
+              <td>Safety-critical embedded systems requiring rigorous test plans</td>
+            </tr>
+            <tr>
+              <td><strong>Agile / Scrum</strong></td>
+              <td>Iterative, incremental 2-4 week Sprints</td>
+              <td>Very High (Continuous feedback)</td>
+              <td>Commercial web apps, dynamic enterprise software, SaaS platforms</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 18 -->
+    <section id="unit18">
+      <h2>Unit 18: Four Pillars of Computational Thinking</h2>
+      
+      <div class="definition-box">
+        <span class="box-title">Conceptual Definition: Computational Thinking</span>
+        <strong>Computational Thinking (CT)</strong> is a formal thought process involved in formulating problems and their solutions in such a way that the solutions are represented in a form that can be effectively carried out by an information-processing agent (human or computer). Coined and popularized by Professor Jeannette Wing (2006).
+      </div>
+
+      <figure class="avoid-break">
+        <svg width="780" height="300" viewBox="0 0 780 300" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #d5dbdb; border-radius:6px; font-family:'Segoe UI', sans-serif;">
+          <rect x="0" y="0" width="780" height="30" fill="#1a5276"/>
+          <text x="390" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">THE FOUR FOUNDATIONAL PILLARS OF COMPUTATIONAL THINKING</text>
+
+          <!-- Pillar 1: Decomposition -->
+          <g transform="translate(30, 50)">
+            <rect x="0" y="0" width="165" height="225" rx="6" fill="#ebf5fb" stroke="#2980b9" stroke-width="2"/>
+            <circle cx="82" cy="40" r="22" fill="#2980b9"/>
+            <text x="82" y="46" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">1</text>
+            <text x="82" y="80" text-anchor="middle" fill="#1b4f72" font-size="11" font-weight="bold">DECOMPOSITION</text>
+            <line x1="20" y1="90" x2="145" y2="90" stroke="#aed6f1" stroke-width="1.5"/>
+            <text x="82" y="110" text-anchor="middle" fill="#2c3e50" font-size="9" font-weight="bold">Divide &amp; Conquer</text>
+            <text x="82" y="130" text-anchor="middle" fill="#566573" font-size="8.5">Breaking complex</text>
+            <text x="82" y="145" text-anchor="middle" fill="#566573" font-size="8.5">problems into small,</text>
+            <text x="82" y="160" text-anchor="middle" fill="#566573" font-size="8.5">manageable, isolated</text>
+            <text x="82" y="175" text-anchor="middle" fill="#566573" font-size="8.5">sub-tasks.</text>
+            <rect x="15" y="190" width="135" height="24" rx="3" fill="#d4e6f1"/>
+            <text x="82" y="206" text-anchor="middle" fill="#1b4f72" font-size="8" font-weight="bold">e.g., Modularity</text>
+          </g>
+
+          <!-- Pillar 2: Pattern Recognition -->
+          <g transform="translate(215, 50)">
+            <rect x="0" y="0" width="165" height="225" rx="6" fill="#fef9e7" stroke="#f39c12" stroke-width="2"/>
+            <circle cx="82" cy="40" r="22" fill="#f39c12"/>
+            <text x="82" y="46" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">2</text>
+            <text x="82" y="80" text-anchor="middle" fill="#7e5109" font-size="11" font-weight="bold">PATTERN RECOG.</text>
+            <line x1="20" y1="90" x2="145" y2="90" stroke="#f9e79f" stroke-width="1.5"/>
+            <text x="82" y="110" text-anchor="middle" fill="#2c3e50" font-size="9" font-weight="bold">Similarity &amp; Trends</text>
+            <text x="82" y="130" text-anchor="middle" fill="#566573" font-size="8.5">Identifying repeating</text>
+            <text x="82" y="145" text-anchor="middle" fill="#566573" font-size="8.5">structures, sequences,</text>
+            <text x="82" y="160" text-anchor="middle" fill="#566573" font-size="8.5">and mathematical</text>
+            <text x="82" y="175" text-anchor="middle" fill="#566573" font-size="8.5">recurrences.</text>
+            <rect x="15" y="190" width="135" height="24" rx="3" fill="#fdebd0"/>
+            <text x="82" y="206" text-anchor="middle" fill="#7e5109" font-size="8" font-weight="bold">e.g., Loops &amp; Classes</text>
+          </g>
+
+          <!-- Pillar 3: Abstraction -->
+          <g transform="translate(400, 50)">
+            <rect x="0" y="0" width="165" height="225" rx="6" fill="#f5eef8" stroke="#8e44ad" stroke-width="2"/>
+            <circle cx="82" cy="40" r="22" fill="#8e44ad"/>
+            <text x="82" y="46" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">3</text>
+            <text x="82" y="80" text-anchor="middle" fill="#512e5f" font-size="11" font-weight="bold">ABSTRACTION</text>
+            <line x1="20" y1="90" x2="145" y2="90" stroke="#d7bde2" stroke-width="1.5"/>
+            <text x="82" y="110" text-anchor="middle" fill="#2c3e50" font-size="9" font-weight="bold">Filtering Details</text>
+            <text x="82" y="130" text-anchor="middle" fill="#566573" font-size="8.5">Focusing on vital</text>
+            <text x="82" y="145" text-anchor="middle" fill="#566573" font-size="8.5">information while</text>
+            <text x="82" y="160" text-anchor="middle" fill="#566573" font-size="8.5">ignoring irrelevant</text>
+            <text x="82" y="175" text-anchor="middle" fill="#566573" font-size="8.5">mechanics.</text>
+            <rect x="15" y="190" width="135" height="24" rx="3" fill="#ebdef0"/>
+            <text x="82" y="206" text-anchor="middle" fill="#512e5f" font-size="8" font-weight="bold">e.g., API / Interfaces</text>
+          </g>
+
+          <!-- Pillar 4: Algorithm Design -->
+          <g transform="translate(585, 50)">
+            <rect x="0" y="0" width="165" height="225" rx="6" fill="#eafaf1" stroke="#27ae60" stroke-width="2"/>
+            <circle cx="82" cy="40" r="22" fill="#27ae60"/>
+            <text x="82" y="46" text-anchor="middle" fill="#ffffff" font-size="16" font-weight="bold">4</text>
+            <text x="82" y="80" text-anchor="middle" fill="#145a32" font-size="11" font-weight="bold">ALGORITHM DESIGN</text>
+            <line x1="20" y1="90" x2="145" y2="90" stroke="#a9dfbf" stroke-width="1.5"/>
+            <text x="82" y="110" text-anchor="middle" fill="#2c3e50" font-size="9" font-weight="bold">Step-by-Step Logic</text>
+            <text x="82" y="130" text-anchor="middle" fill="#566573" font-size="8.5">Developing finite,</text>
+            <text x="82" y="145" text-anchor="middle" fill="#566573" font-size="8.5">unambiguous, ordered</text>
+            <text x="82" y="160" text-anchor="middle" fill="#566573" font-size="8.5">rules to solve any</text>
+            <text x="82" y="175" text-anchor="middle" fill="#566573" font-size="8.5">problem instance.</text>
+            <rect x="15" y="190" width="135" height="24" rx="3" fill="#d5f5e3"/>
+            <text x="82" y="206" text-anchor="middle" fill="#145a32" font-size="8" font-weight="bold">e.g., Pseudocode</text>
+          </g>
+        </svg>
+        <figcaption>Figure 4.1: The Four Pillars of Computational Thinking.</figcaption>
+      </figure>
+
+      <h3>18.1 Deep Dive into the Four Pillars with Real-World Case Studies</h3>
+      <ol>
+        <li><strong>Decomposition:</strong> The analytical process of breaking down a large, complex, monolithic problem into smaller, self-contained, easily solvable sub-problems.
+          <ul>
+            <li><em>Case Study 1 (Autonomous Vehicle Navigation):</em> A self-driving car system is too complex for a single program. Decomposition divides the system into: (a) Computer Vision &amp; Sensor Fusion (processing camera, LIDAR, and radar streams), (b) Localization (GPS and IMU coordinate tracking), (c) Motion &amp; Path Planning (Dijkstra / A* trajectory calculations), and (d) Actuation Control (CAN-bus steering, acceleration, and braking).</li>
+            <li><em>Case Study 2 (Compiler Engineering):</em> Compilers decompose high-level programming language translation into distinct sequential phases: Lexical Analysis (Scanning source tokens), Syntax Analysis (Context-Free Grammar Parsing into Abstract Syntax Trees), Semantic Analysis (Type checking and scope validation), Intermediate Code Generation (Three-Address Code), Machine-Independent Optimization (Loop unrolling, dead code elimination), and Target Code Generation (Assembly / Machine Instructions).</li>
+          </ul>
+        </li>
+        <li><strong>Pattern Recognition:</strong> Observing and analyzing similarities, trends, periodic cycles, and recurring patterns within decomposed sub-problems to apply previously verified solutions.
+          <ul>
+            <li><em>Case Study 1 (Dynamic Programming &amp; Bioinformatics):</em> In computing the global sequence alignment between two DNA strands (e.g., Needleman-Wunsch algorithm), recognizing that optimal alignment of prefix sequences $S_1[1..i]$ and $S_2[1..j]$ depends only on three previously computed adjacent states:
+              $$M(i, j) = \max \begin{cases} M(i-1, j-1) + \text{Score}(S_1[i], S_2[j]) \\ M(i-1, j) + \text{GapPenalty} \\ M(i, j-1) + \text{GapPenalty} \end{cases}$$
+              allows $O(mn)$ dynamic programming tabulation instead of $O(2^{m+n})$ exponential recursion.
+            </li>
+            <li><em>Case Study 2 (Natural Language Processing):</em> Recognizing byte-pair encoding (BPE) subword patterns across vocabulary allows LLMs to tokenize arbitrary sentences into numerical embedding vectors efficiently.</li>
+          </ul>
+        </li>
+        <li><strong>Abstraction:</strong> The process of identifying the essential, high-level features of an object or process while filtering out and ignoring non-essential, low-level implementation details.
+          <ul>
+            <li><em>Case Study (GPS Map Routing):</em> A city road network is represented as an abstract mathematical Graph $G = (V, E)$ where road intersections are vertices ($V$) and streets are weighted edges ($E$). Irrelevant physical details (street tree counts, sidewalk material, building paint colors) are abstracted away, enabling graph algorithms (Dijkstra, Bellman-Ford) to find shortest routes efficiently.</li>
+            <li><em>Case Study (Abstract Data Types):</em> Abstracting a <code>Queue</code> interface as <code>enqueue()</code>, <code>dequeue()</code>, and <code>isEmpty()</code> hides whether the underlying implementation uses a circular array or a doubly-linked list.</li>
+          </ul>
+        </li>
+        <li><strong>Algorithm Design:</strong> Formulating an ordered, deterministic sequence of unambiguous step-by-step instructions that can be mechanically executed to produce the correct solution for every valid input instance.</li>
+      </ol>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 19 -->
+    <section id="unit19">
+      <h2>Unit 19: Logical Reasoning &amp; Propositional Logic</h2>
+
+      <h3>19.1 Modes of Logical Reasoning</h3>
+      <ul>
+        <li><strong>Deductive Reasoning (Top-Down Logic):</strong> Derives guaranteed, logically certain conclusions from established true general premises.
+          $$\text{Premise 1: All humans are mortal.} \quad \text{Premise 2: Socrates is human.} \implies \mathbf{\text{Conclusion: Socrates is mortal.}}$$
+          In programming, deductive reasoning guarantees that if an algorithm's preconditions and invariants hold, its postconditions must hold.
+          <ul>
+            <li><strong>Modus Ponens (Affirming the Antecedent):</strong> If $P \to Q$ is True and $P$ is True, then $Q$ is True ($[(P \to Q) \land P] \implies Q$).</li>
+            <li><strong>Modus Tollens (Denying the Consequent):</strong> If $P \to Q$ is True and $Q$ is False ($\neg Q$), then $P$ is False ($\neg P$) ($[(P \to Q) \land \neg Q] \implies \neg P$).</li>
+          </ul>
+        </li>
+        <li><strong>Inductive Reasoning (Bottom-Up Logic):</strong> Formulates broad general hypotheses and probabilistic rules from specific empirical observations.
+          $$\text{Observation: The sun rose in the east today, yesterday, and every recorded day.} \implies \mathbf{\text{Hypothesis: The sun always rises in the east.}}$$
+          Serves as the foundation of Machine Learning and Statistical Artificial Intelligence.
+        </li>
+        <li><strong>Abductive Reasoning:</strong> Starts with an incomplete set of observations and proceeds to the most likely or simplest explanation (diagnostic debugging).</li>
+      </ul>
+
+      <h3>19.2 Propositional Logic &amp; Truth Tables</h3>
+      <p>
+        A <strong>Proposition</strong> is a declarative statement that is either strictly <strong>True ($T / 1$)</strong> or strictly <strong>False ($F / 0$)</strong>, but never both simultaneously.
+      </p>
+
+      <div class="avoid-break">
+        <h4>Fundamental Boolean Operators and Truth Table</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>$P$</th>
+              <th>$Q$</th>
+              <th>$\text{NOT } \neg P$</th>
+              <th>$\text{AND } P \land Q$</th>
+              <th>$\text{OR } P \lor Q$</th>
+              <th>$\text{XOR } P \oplus Q$</th>
+              <th>$\text{Implication } P \to Q$</th>
+              <th>$\text{Biconditional } P \leftrightarrow Q$</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4>Fundamental Laws of Boolean Algebra:</h4>
+      <ul>
+        <li><strong>De Morgan's Laws:</strong>
+          $$\mathbf{\neg (P \land Q) \iff \neg P \lor \neg Q}$$
+          $$\mathbf{\neg (P \lor Q) \iff \neg P \land \neg Q}$$
+          <em>Algebraic Proof of $\overline{X \cdot Y} = \bar{X} + \bar{Y}$ using Huntington Postulates:</em>
+          <ol>
+            <li>Show $(X \cdot Y) + (\bar{X} + \bar{Y}) = 1$:
+              $$(X \cdot Y) + (\bar{X} + \bar{Y}) = ((X \cdot Y) + \bar{X}) + \bar{Y} = (X + \bar{X})(Y + \bar{X}) + \bar{Y} = 1 \cdot (Y + \bar{X}) + \bar{Y} = (Y + \bar{Y}) + \bar{X} = 1 + \bar{X} = 1$$
+            </li>
+            <li>Show $(X \cdot Y) \cdot (\bar{X} + \bar{Y}) = 0$:
+              $$(X \cdot Y) \cdot \bar{X} + (X \cdot Y) \cdot \bar{Y} = (X \cdot \bar{X}) \cdot Y + X \cdot (Y \cdot \bar{Y}) = 0 \cdot Y + X \cdot 0 = 0 + 0 = 0$$
+            </li>
+          </ol>
+          Since $\bar{X} + \bar{Y}$ satisfies both complementation axioms with respect to $(X \cdot Y)$, by uniqueness of complements, $\mathbf{\overline{X \cdot Y} = \bar{X} + \bar{Y}}$.
+        </li>
+        <li><strong>Distributive Laws:</strong>
+          $$P \land (Q \lor R) \iff (P \land Q) \lor (P \land R)$$
+          $$P \lor (Q \land R) \iff (P \lor Q) \land (P \lor R)$$
+        </li>
+        <li><strong>Absorption Laws:</strong>
+          $$P \lor (P \land Q) \iff P, \quad P \land (P \lor Q) \iff P$$
+        </li>
+        <li><strong>Consensus Theorem:</strong>
+          $$XY \lor \bar{X} Z \lor YZ \iff XY \lor \bar{X} Z$$
+          <em>Proof:</em> $XY + \bar{X}Z + YZ(X + \bar{X}) = XY + \bar{X}Z + XYZ + \bar{X}YZ = XY(1 + Z) + \bar{X}Z(1 + Y) = XY(1) + \bar{X}Z(1) = \mathbf{XY + \bar{X}Z}$.
+        </li>
+      </ul>
+
+      <h3>19.3 Karnaugh Maps (K-Maps) for Boolean Minimization</h3>
+      <p>
+        A <strong>Karnaugh Map (K-Map)</strong> is a graphical visual method for minimizing Boolean expressions into optimal Sum-of-Products (SOP) or Product-of-Sums (POS) forms without algebraic trial and error. Cells are arranged in a 2D grid where adjacent cells differ by exactly one binary bit (using <strong>Gray Code ordering: 00, 01, 11, 10</strong>). Groups of $2^k$ adjacent ones ($1, 2, 4, 8, 16$) are circled to eliminate redundant Boolean literals.
+      </p>
+
+      <div class="worked-example">
+        <span class="box-title">Worked Example 19.1: 3-Variable K-Map Minimization</span>
+        Minimize the Boolean function $F(A, B, C) = \sum m(1, 3, 5, 7) + \sum m(4, 5)$.
+        <br>
+        <strong>Minterm Expansion:</strong>
+        $$F = \bar{A}\bar{B}C + \bar{A}BC + A\bar{B}C + ABC + A\bar{B}\bar{C}$$
+        <strong>K-Map Grid (Rows: $A \in \{0, 1\}$, Columns: $BC \in \{00, 01, 11, 10\}$):</strong>
+        <ul>
+          <li>Row 0 ($A=0$): Cell 01 ($m_1$) = 1, Cell 11 ($m_3$) = 1.</li>
+          <li>Row 1 ($A=1$): Cell 00 ($m_4$) = 1, Cell 01 ($m_5$) = 1, Cell 11 ($m_7$) = 1.</li>
+        </ul>
+        <strong>Grouping:</strong>
+        <ol>
+          <li><strong>Quad Group:</strong> $m_1, m_3, m_5, m_7$ forms a $2 \times 2$ quad covering Column $C=1$. Common literal $= \mathbf{C}$.</li>
+          <li><strong>Pair Group:</strong> $m_4, m_5$ forms a horizontal pair in Row 1 ($A=1, B=0$). Common literal $= \mathbf{A\bar{B}}$.</li>
+        </ol>
+        <strong>Minimal Sum-of-Products (SOP) Expression:</strong> $\mathbf{F(A, B, C) = C + A\bar{B}}$.
+      </div>
+
+      <div class="worked-example">
+        <span class="box-title">Worked Example 19.2: 4-Variable K-Map with Don't Care Conditions</span>
+        Minimize $F(A, B, C, D) = \sum m(0, 2, 8, 10, 14) + d(5, 15)$.
+        <br><br>
+        <strong>K-Map Grid (Rows: $AB \in \{00, 01, 11, 10\}$, Columns: $CD \in \{00, 01, 11, 10\}$):</strong>
+        <ul>
+          <li>Row 00: $m_0(0000)=1, m_2(0010)=1$</li>
+          <li>Row 01: $d_5(0101)=X$</li>
+          <li>Row 11: $m_{14}(1110)=1, d_{15}(1111)=X$</li>
+          <li>Row 10: $m_8(1000)=1, m_{10}(1010)=1$</li>
+        </ul>
+        <strong>Optimal Grouping:</strong>
+        <ol>
+          <li><strong>Corner Quad:</strong> Cells $(0, 2, 8, 10)$ at the four corners of the map wrap around vertically and horizontally. Common literals: $B=0, D=0 \implies \mathbf{\bar{B}\bar{D}}$.</li>
+          <li><strong>Pair Group:</strong> Cells $14, 15$ in Row 11 ($AB=11, C=1$). Common literals: $\mathbf{ABC}$.</li>
+        </ol>
+        <strong>Minimal SOP Expression:</strong> $\mathbf{F(A, B, C, D) = \bar{B}\bar{D} + ABC}$.
+      </div>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 20 -->
+    <section id="unit20">
+      <h2>Unit 20: Algorithm Design &amp; Complexity Analysis</h2>
+
+      <div class="definition-box">
+        <span class="box-title">Conceptual Definition: Algorithm</span>
+        An <strong>Algorithm</strong> is a finite, well-defined sequence of unambiguous, computer-implementable instructions designed to solve a specific class of problems or perform a computation.
+      </div>
+
+      <h3>20.1 Formal Characteristics of an Algorithm (Donald Knuth)</h3>
+      <ol>
+        <li><strong>Input:</strong> An algorithm must have zero or more well-defined externally supplied quantities.</li>
+        <li><strong>Output:</strong> An algorithm must produce at least one well-defined result related to the inputs.</li>
+        <li><strong>Definiteness (Unambiguity):</strong> Every single step must be clear, precise, and have only one possible interpretation.</li>
+        <li><strong>Finiteness:</strong> The algorithm must terminate after a finite number of computational steps for all valid inputs.</li>
+        <li><strong>Effectiveness:</strong> Every operation must be sufficiently basic that it can in principle be executed exactly in finite time using pencil and paper.</li>
+      </ol>
+
+      <h3>20.2 Asymptotic Notations and Complexity Analysis</h3>
+      <p>
+        Algorithm efficiency is evaluated mathematically through asymptotic analysis of time and space complexity as input size $n \to \infty$:
+      </p>
+      <ul>
+        <li><strong>Big-O Notation ($O$ &mdash; Asymptotic Upper Bound):</strong> Defines worst-case performance:
+          $$f(n) = O(g(n)) \iff \exists \; c > 0, n_0 \ge 1 \text{ such that } 0 \le f(n) \le c \cdot g(n) \; \forall \; n \ge n_0$$
+        </li>
+        <li><strong>Big-Omega Notation ($\Omega$ &mdash; Asymptotic Lower Bound):</strong> Defines best-case performance:
+          $$f(n) = \Omega(g(n)) \iff \exists \; c > 0, n_0 \ge 1 \text{ such that } 0 \le c \cdot g(n) \le f(n) \; \forall \; n \ge n_0$$
+        </li>
+        <li><strong>Big-Theta Notation ($\Theta$ &mdash; Asymptotically Tight Bound):</strong> Defines exact growth rate:
+          $$f(n) = \Theta(g(n)) \iff \exists \; c_1, c_2 > 0, n_0 \ge 1 \text{ such that } c_1 g(n) \le f(n) \le c_2 g(n) \; \forall \; n \ge n_0$$
+        </li>
+        <li><strong>Little-o Notation ($o$ &mdash; Strict Upper Bound):</strong>
+          $$f(n) = o(g(n)) \iff \lim_{n \to \infty} \frac{f(n)}{g(n)} = 0$$
+        </li>
+        <li><strong>Little-omega Notation ($\omega$ &mdash; Strict Lower Bound):</strong>
+          $$f(n) = \omega(g(n)) \iff \lim_{n \to \infty} \frac{f(n)}{g(n)} = \infty$$
+        </li>
+      </ul>
+
+      <div class="theorem-box">
+        <span class="box-title">The Master Theorem for Divide-and-Conquer Recurrences</span>
+        For divide-and-conquer recurrences of the form $\mathbf{T(n) = a T\left(\frac{n}{b}\right) + f(n)}$, where $a \ge 1, b > 1$:
+        <ol>
+          <li>If $f(n) = O(n^{\log_b a - \epsilon})$ for some $\epsilon > 0$, then $\mathbf{T(n) = \Theta(n^{\log_b a})}$. (Tree leaves dominate).</li>
+          <li>If $f(n) = \Theta(n^{\log_b a} \log^k n)$ for $k \ge 0$, then $\mathbf{T(n) = \Theta(n^{\log_b a} \log^{k+1} n)}$. (e.g., Merge Sort: $T(n) = 2T(n/2) + \Theta(n) \implies a=2, b=2, \log_2 2 = 1 \implies \mathbf{\Theta(n \log n)}$).</li>
+          <li>If $f(n) = \Omega(n^{\log_b a + \epsilon})$ for some $\epsilon > 0$, and regularity condition $a f(n/b) \le c f(n)$ holds for $c < 1$, then $\mathbf{T(n) = \Theta(f(n))}$. (Root work dominates).</li>
+        </ol>
+      </div>
+
+      <div class="worked-example">
+        <span class="box-title">Mathematical Derivation: Merge Sort Recurrence via Recursion Tree</span>
+        <strong>Recurrence Relation:</strong> $T(n) = 2T(n/2) + c \cdot n$, with base case $T(1) = O(1)$.
+        <br><br>
+        <strong>Recursion Tree Structure:</strong>
+        <ul>
+          <li><strong>Level 0 (Root):</strong> 1 node of size $n \implies \text{Cost} = c \cdot n$.</li>
+          <li><strong>Level 1:</strong> 2 nodes of size $n/2 \implies \text{Cost} = 2 \times c(n/2) = c \cdot n$.</li>
+          <li><strong>Level 2:</strong> 4 nodes of size $n/4 \implies \text{Cost} = 4 \times c(n/4) = c \cdot n$.</li>
+          <li><strong>Level $k$:</strong> $2^k$ nodes of size $n/2^k \implies \text{Cost} = 2^k \times c(n/2^k) = c \cdot n$.</li>
+        </ul>
+        The recursion tree terminates when the subproblem size reaches $n/2^k = 1 \implies k = \log_2 n$.
+        <br>
+        <strong>Total Depth:</strong> $\log_2 n + 1 \text{ levels}$.
+        <br>
+        <strong>Total Cost:</strong>
+        $$T(n) = \sum_{k=0}^{\log_2 n} c \cdot n = c \cdot n (\log_2 n + 1) = c n \log_2 n + c n = \mathbf{\Theta(n \log_2 n)}$$
+      </div>
+
+      <h3>20.3 Classical Algorithmic Paradigms</h3>
+      <ul>
+        <li><strong>Binary Search ($O(\log n)$):</strong> In a sorted array, repeatedly halves the search interval. If target is less than midpoint, search left half; otherwise search right half. Recurrence: $T(n) = T(n/2) + O(1) \implies T(n) = O(\log n)$. Maximum comparisons: $\lfloor \log_2 n \rfloor + 1$.</li>
+        <li><strong>Bubble Sort ($O(n^2)$):</strong> Iteratively steps through the list, compares adjacent elements and swaps them if they are in the wrong order. Pass $i$ bubbles the $i$-th largest element to its correct position. Total comparisons $= \sum_{i=1}^{n-1} (n-i) = \frac{n(n-1)}{2}$. Space complexity: $O(1)$ in-place.</li>
+        <li><strong>Selection Sort ($O(n^2)$):</strong> Finds the minimum element from the unsorted subarray and swaps it with the leftmost unsorted element. Number of comparisons is $\frac{n(n-1)}{2} = O(n^2)$ in all cases; swaps are strictly $O(n)$. Space complexity: $O(1)$ in-place.</li>
+        <li><strong>Insertion Sort ($O(n^2)$ worst, $O(n)$ best):</strong> Iteratively builds a sorted subarray by shifting larger elements one position right to insert the current key into its correct relative position. Ideal for nearly-sorted data. Space complexity: $O(1)$ in-place.</li>
+        <li><strong>Merge Sort ($O(n \log n)$):</strong> Divide-and-conquer algorithm dividing array into two halves, recursively sorting both, and merging them in linear $O(n)$ time using $O(n)$ auxiliary memory space.</li>
+        <li><strong>Euclidean Algorithm for GCD ($O(\log(\min(a,b)))$):</strong> Computes the greatest common divisor of two integers $a$ and $b$ ($a > b$) using the principle $\gcd(a, b) = \gcd(b, a \bmod b)$ until remainder is zero.</li>
+      </ul>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 21 -->
+    <section id="unit21">
+      <h2>Unit 21: Flowcharts &amp; Visual Algorithm Modeling</h2>
+
+      <div class="definition-box">
+        <span class="box-title">Conceptual Definition: Flowchart</span>
+        A <strong>Flowchart</strong> is a formalized diagrammatic representation of an algorithm displaying the sequential step-by-step workflow, data transformations, decision branching, and loop iterations using standardized geometric symbols connected by directional flowlines.
+      </div>
+
+      <h3>21.1 Standard Flowchart Symbols (ISO 5807 / RAPTOR Standard)</h3>
+
+      <figure class="avoid-break">
+        <svg width="780" height="240" viewBox="0 0 780 240" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #d5dbdb; border-radius:6px; font-family:'Segoe UI', sans-serif;">
+          <rect x="0" y="0" width="780" height="30" fill="#1f3a52"/>
+          <text x="390" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">STANDARD ISO 5807 FLOWCHART SYMBOLS</text>
+
+          <!-- 1. Terminator -->
+          <g transform="translate(30, 45)">
+            <rect x="0" y="10" width="120" height="45" rx="22.5" fill="#ebf5fb" stroke="#2980b9" stroke-width="2"/>
+            <text x="60" y="38" text-anchor="middle" fill="#1b4f72" font-size="10" font-weight="bold">START / STOP</text>
+            <text x="60" y="75" text-anchor="middle" fill="#566573" font-size="9">Terminator (Oval)</text>
+          </g>
+
+          <!-- 2. Input/Output -->
+          <g transform="translate(180, 45)">
+            <polygon points="20,10 130,10 110,55 0,55" fill="#fef9e7" stroke="#f39c12" stroke-width="2"/>
+            <text x="65" y="38" text-anchor="middle" fill="#7e5109" font-size="10" font-weight="bold">INPUT / OUTPUT</text>
+            <text x="65" y="75" text-anchor="middle" fill="#566573" font-size="9">Data Parallelogram</text>
+          </g>
+
+          <!-- 3. Process -->
+          <g transform="translate(335, 45)">
+            <rect x="0" y="10" width="125" height="45" rx="3" fill="#eafaf1" stroke="#27ae60" stroke-width="2"/>
+            <text x="62" y="38" text-anchor="middle" fill="#145a32" font-size="10" font-weight="bold">PROCESS / CALC</text>
+            <text x="62" y="75" text-anchor="middle" fill="#566573" font-size="9">Action Rectangle</text>
+          </g>
+
+          <!-- 4. Decision -->
+          <g transform="translate(485, 45)">
+            <polygon points="65,5 130,33 65,60 0,33" fill="#f5eef8" stroke="#8e44ad" stroke-width="2"/>
+            <text x="65" y="37" text-anchor="middle" fill="#512e5f" font-size="10" font-weight="bold">DECISION</text>
+            <text x="65" y="75" text-anchor="middle" fill="#566573" font-size="9">Diamond (Branching)</text>
+          </g>
+
+          <!-- 5. Flowline & Connector -->
+          <g transform="translate(640, 45)">
+            <circle cx="35" cy="33" r="18" fill="#eaeded" stroke="#34495e" stroke-width="2"/>
+            <text x="35" y="38" text-anchor="middle" fill="#2c3e50" font-size="11" font-weight="bold">A</text>
+            <line x1="75" y1="33" x2="115" y2="33" stroke="#2c3e50" stroke-width="2"/>
+            <polygon points="115,33 107,29 107,37" fill="#2c3e50"/>
+            <text x="65" y="75" text-anchor="middle" fill="#566573" font-size="9">Connector &amp; Flowline</text>
+          </g>
+        </svg>
+        <figcaption>Figure 4.2: Standard Flowchart Graphical Elements for Algorithm Representation.</figcaption>
+      </figure>
+
+      <h3>21.2 Structured Programming Control Constructs</h3>
+      <p>
+        The <strong>Böhm-Jacopini Structured Programming Theorem (1966)</strong> established that any computable algorithm or Turing-computable function can be expressed using only three basic control flow structures without resorting to arbitrary <code>GOTO</code> jumps:
+      </p>
+      <ul>
+        <li><strong>Sequence Structure:</strong> Linear progression of instructions executed strictly in the order they appear without branching.</li>
+        <li><strong>Selection Structure (Conditional Branching):</strong> Chooses between alternative execution paths based on a Boolean condition:
+          <ul>
+            <li><code>IF-THEN</code> (Single alternative)</li>
+            <li><code>IF-THEN-ELSE</code> (Dual alternative)</li>
+            <li><code>SWITCH-CASE</code> (Multi-way branch evaluated via jump table)</li>
+          </ul>
+        </li>
+        <li><strong>Iteration Structure (Repetition / Loops):</strong> Repeatedly executes a block of statements while a condition remains true:
+          <ul>
+            <li><em>Pre-Test Loop (<code>WHILE</code> loop):</em> Condition tested before entering loop body; executes zero or more times.</li>
+            <li><em>Post-Test Loop (<code>DO-WHILE</code> loop):</em> Condition tested after executing loop body; executes at least once.</li>
+            <li><em>Count-Controlled Loop (<code>FOR</code> loop):</em> Uses initialization, test condition, and step increment variables.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>21.3 The RAPTOR Visual Programming Environment</h3>
+      <p>
+        <strong>RAPTOR (Rapid Algorithmic Prototyping Tool for Ordered Reasoning)</strong> is a visual flowchart-based programming environment developed specifically to help novice computer science students design and execute algorithms without syntax errors. RAPTOR executes flowcharts step-by-step, highlighting active nodes and displaying dynamic variable watches in real time.
+      </p>
+
+      <div class="avoid-break">
+        <h4>Comparative Analysis: Algorithm vs Flowchart vs Pseudocode</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Natural Language Algorithm</th>
+              <th>Graphical Flowchart</th>
+              <th>Structured Pseudocode</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Format</strong></td>
+              <td>Descriptive plain English text sentences</td>
+              <td>Standardized 2D geometric symbols (ISO 5807)</td>
+              <td>Language-independent structured text syntax</td>
+            </tr>
+            <tr>
+              <td><strong>Visual Scannability</strong></td>
+              <td>Low; requires reading full text paragraphs</td>
+              <td>Very High; branches and loops instantly visible</td>
+              <td>High; indentation reveals block nesting levels</td>
+            </tr>
+            <tr>
+              <td><strong>Ease of Modification</strong></td>
+              <td>High; simple text re-writing</td>
+              <td>Low; requires redrawing layout lines and shapes</td>
+              <td>Very High; direct keyboard edits</td>
+            </tr>
+            <tr>
+              <td><strong>Translability to Code</strong></td>
+              <td>Moderate; potential semantic ambiguities</td>
+              <td>High; maps directly to structured programming</td>
+              <td>Very High; almost 1-to-1 mapping with C/Python code</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #d5dbdb;">
+
+    <!-- UNIT 22 -->
+    <section id="unit22">
+      <h2>Unit 22: Practical Lab Implementations &mdash; Flowcharts &amp; Algorithms</h2>
+      <p>
+        Comprehensive step-by-step algorithms, mathematical formulations, and trace tables for all 6 prescribed syllabus laboratory problems.
+      </p>
+
+      <!-- LAB 1 -->
+      <div class="worked-example">
+        <span class="box-title">Lab Problem 1: Find the Largest of Three Numbers ($A, B, C$)</span>
+        <p><strong>Problem Statement:</strong> Read three distinct numerical values $A, B, C$ from standard input and determine which number holds the maximum value.</p>
+        <p><strong>Mathematical Formulation:</strong> $\text{Max}(A, B, C) = \max(A, \max(B, C))$.</p>
+        <pre><code>Algorithm FindLargest(A, B, C):
+1. START
+2. INPUT A, B, C
+3. IF (A >= B) THEN:
+     IF (A >= C) THEN:
+       DISPLAY "A is Largest"
+     ELSE:
+       DISPLAY "C is Largest"
+   ELSE:
+     IF (B >= C) THEN:
+       DISPLAY "B is Largest"
+     ELSE:
+       DISPLAY "C is Largest"
+4. STOP</code></pre>
+        <strong>Trace Table ($A=45, B=78, C=23$):</strong>
+        <table>
+          <thead>
+            <tr><th>Step</th><th>Condition Checked</th><th>Boolean Evaluation</th><th>Action Taken</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Input $A=45, B=78, C=23$</td><td>True</td><td>Variables assigned in memory</td></tr>
+            <tr><td>2</td><td>$A \ge B \implies 45 \ge 78$</td><td>False</td><td>Branch to Else ($B > A$)</td></tr>
+            <tr><td>3</td><td>$B \ge C \implies 78 \ge 23$</td><td>True</td><td>Execute: Display "B is Largest: 78"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LAB 2 -->
+      <div class="worked-example">
+        <span class="box-title">Lab Problem 2: Calculate Sum of First $N$ Natural Numbers</span>
+        <p><strong>Problem Statement:</strong> Compute the cumulative arithmetic sum $S = \sum_{i=1}^{N} i = 1 + 2 + 3 + \dots + N$ for a positive integer $N$.</p>
+        <p><strong>Closed-Form Formula:</strong> $\mathbf{S = \frac{N(N+1)}{2}}$. Time Complexity: Iterative $O(N)$, Closed-Form $O(1)$.</p>
+        <pre><code>Algorithm SumOfNaturalNumbers(N):
+1. START
+2. INPUT N
+3. INITIALIZE Sum = 0, Counter = 1
+4. WHILE (Counter <= N) DO:
+     Sum = Sum + Counter
+     Counter = Counter + 1
+5. DISPLAY "Sum is:", Sum
+6. STOP</code></pre>
+        <strong>Trace Table for $N = 5$:</strong>
+        <table>
+          <thead>
+            <tr><th>Iteration</th><th>Counter ($i$)</th><th>Condition ($i \le 5$)</th><th>Sum Expression</th><th>Updated Sum</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Initial</td><td>1</td><td>-</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>$1 \le 5$ (True)</td><td>$0 + 1$</td><td>1</td></tr>
+            <tr><td>2</td><td>2</td><td>$2 \le 5$ (True)</td><td>$1 + 2$</td><td>3</td></tr>
+            <tr><td>3</td><td>3</td><td>$3 \le 5$ (True)</td><td>$3 + 3$</td><td>6</td></tr>
+            <tr><td>4</td><td>4</td><td>$4 \le 5$ (True)</td><td>$6 + 4$</td><td>10</td></tr>
+            <tr><td>5</td><td>5</td><td>$5 \le 5$ (True)</td><td>$10 + 5$</td><td>15</td></tr>
+            <tr><td>Exit</td><td>6</td><td>$6 \le 5$ (False)</td><td>Loop Terminates</td><td><strong>Final: 15</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LAB 3 -->
+      <div class="worked-example">
+        <span class="box-title">Lab Problem 3: Compute Factorial of a Number ($N!$)</span>
+        <p><strong>Mathematical Formulation:</strong> $N! = \prod_{i=1}^N i = 1 \times 2 \times \dots \times N$, with base case $0! = 1$.</p>
+        <pre><code>Algorithm ComputeFactorial(N):
+1. START
+2. INPUT N
+3. IF (N < 0) THEN:
+     DISPLAY "Error: Negative numbers have no real factorial"
+     GOTO Step 7
+4. INITIALIZE Fact = 1, i = 1
+5. WHILE (i <= N) DO:
+     Fact = Fact * i
+     i = i + 1
+6. DISPLAY "Factorial is:", Fact
+7. STOP</code></pre>
+        <strong>Trace Table for $N = 4$:</strong>
+        <table>
+          <thead>
+            <tr><th>Step</th><th>Loop Variable ($i$)</th><th>Condition ($i \le 4$)</th><th>Calculation ($Fact \times i$)</th><th>Updated Fact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Init</td><td>1</td><td>-</td><td>-</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>$1 \le 4$ (True)</td><td>$1 \times 1$</td><td>1</td></tr>
+            <tr><td>2</td><td>2</td><td>$2 \le 4$ (True)</td><td>$1 \times 2$</td><td>2</td></tr>
+            <tr><td>3</td><td>3</td><td>$3 \le 4$ (True)</td><td>$2 \times 3$</td><td>6</td></tr>
+            <tr><td>4</td><td>4</td><td>$4 \le 4$ (True)</td><td>$6 \times 4$</td><td>24</td></tr>
+            <tr><td>Exit</td><td>5</td><td>$5 \le 4$ (False)</td><td>Loop Terminated</td><td><strong>Final: 24</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LAB 4 -->
+      <div class="worked-example">
+        <span class="box-title">Lab Problem 4: Generate Fibonacci Sequence up to $N$ Terms</span>
+        <p><strong>Recurrence Relation:</strong> $F_0 = 0, F_1 = 1$, and $F_n = F_{n-1} + F_{n-2}$ for $n \ge 2$.</p>
+        <pre><code>Algorithm GenerateFibonacci(N):
+1. START
+2. INPUT N
+3. IF (N <= 0) THEN GOTO Step 8
+4. INITIALIZE T1 = 0, T2 = 1, Count = 1
+5. WHILE (Count <= N) DO:
+     DISPLAY T1
+     NextTerm = T1 + T2
+     T1 = T2
+     T2 = NextTerm
+     Count = Count + 1
+6. STOP</code></pre>
+        <strong>Trace Table for $N=6$:</strong>
+        <table>
+          <thead>
+            <tr><th>Term Number</th><th>Displayed Value ($T_1$)</th><th>NextTerm ($T_1 + T_2$)</th><th>New $T_1$</th><th>New $T_2$</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><strong>0</strong></td><td>$0 + 1 = 1$</td><td>1</td><td>1</td></tr>
+            <tr><td>2</td><td><strong>1</strong></td><td>$1 + 1 = 2$</td><td>1</td><td>2</td></tr>
+            <tr><td>3</td><td><strong>1</strong></td><td>$1 + 2 = 3$</td><td>2</td><td>3</td></tr>
+            <tr><td>4</td><td><strong>2</strong></td><td>$2 + 3 = 5$</td><td>3</td><td>5</td></tr>
+            <tr><td>5</td><td><strong>3</strong></td><td>$3 + 5 = 8$</td><td>5</td><td>8</td></tr>
+            <tr><td>6</td><td><strong>5</strong></td><td>$5 + 8 = 13$</td><td>8</td><td>13</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LAB 5 -->
+      <div class="worked-example">
+        <span class="box-title">Lab Problem 5: Check Whether a Number is Prime</span>
+        <p><strong>Mathematical Definition:</strong> An integer $N > 1$ is prime if and only if it has no positive divisors other than $1$ and itself. Optimization: Test trial division up to $\lfloor\sqrt{N}\rfloor$, because if $N = a \times b$, at least one factor must satisfy $a \le \sqrt{N}$.</p>
+        <pre><code>Algorithm CheckPrime(N):
+1. START
+2. INPUT N
+3. IF (N <= 1) THEN:
+     DISPLAY "N is neither prime nor composite"
+     GOTO Step 8
+4. INITIALIZE IsPrime = True, Divisor = 2
+5. WHILE (Divisor * Divisor <= N) DO:
+     IF (N MOD Divisor == 0) THEN:
+       IsPrime = False
+       BREAK
+     Divisor = Divisor + 1
+6. IF (IsPrime == True) THEN:
+     DISPLAY "N is a Prime Number"
+   ELSE:
+     DISPLAY "N is a Composite Number"
+7. STOP</code></pre>
+        <strong>Trace Table for Test Case $N = 29$ ($\lfloor\sqrt{29}\rfloor = 5$):</strong>
+        <table>
+          <thead>
+            <tr><th>Step</th><th>Divisor</th><th>Divisor$^2 \le 29$</th><th>$29 \bmod \text{Divisor}$</th><th>IsPrime State</th><th>Loop Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Init</td><td>2</td><td>-</td><td>-</td><td>True</td><td>Enter Loop</td></tr>
+            <tr><td>1</td><td>2</td><td>$4 \le 29$ (True)</td><td>$29 \bmod 2 = 1 \neq 0$</td><td>True</td><td>Divisor $\to 3$</td></tr>
+            <tr><td>2</td><td>3</td><td>$9 \le 29$ (True)</td><td>$29 \bmod 3 = 2 \neq 0$</td><td>True</td><td>Divisor $\to 4$</td></tr>
+            <tr><td>3</td><td>4</td><td>$16 \le 29$ (True)</td><td>$29 \bmod 4 = 1 \neq 0$</td><td>True</td><td>Divisor $\to 5$</td></tr>
+            <tr><td>4</td><td>5</td><td>$25 \le 29$ (True)</td><td>$29 \bmod 5 = 4 \neq 0$</td><td>True</td><td>Divisor $\to 6$</td></tr>
+            <tr><td>Exit</td><td>6</td><td>$36 \le 29$ (False)</td><td>-</td><td>True</td><td><strong>Terminate: 29 is Prime</strong></td></tr>
+          </tbody>
+        </table>
+
+        <strong>Trace Table for Test Case $N = 35$ ($\lfloor\sqrt{35}\rfloor = 5$):</strong>
+        <table>
+          <thead>
+            <tr><th>Step</th><th>Divisor</th><th>Divisor$^2 \le 35$</th><th>$35 \bmod \text{Divisor}$</th><th>IsPrime State</th><th>Loop Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>2</td><td>$4 \le 35$ (True)</td><td>$35 \bmod 2 = 1 \neq 0$</td><td>True</td><td>Divisor $\to 3$</td></tr>
+            <tr><td>2</td><td>3</td><td>$9 \le 35$ (True)</td><td>$35 \bmod 3 = 2 \neq 0$</td><td>True</td><td>Divisor $\to 4$</td></tr>
+            <tr><td>3</td><td>4</td><td>$16 \le 35$ (True)</td><td>$35 \bmod 4 = 3 \neq 0$</td><td>True</td><td>Divisor $\to 5$</td></tr>
+            <tr><td>4</td><td>5</td><td>$25 \le 35$ (True)</td><td>$35 \bmod 5 = 0$</td><td>False</td><td><strong>Break: 35 is Composite</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LAB 6 -->
+      <div class="worked-example">
+        <span class="box-title">Lab Problem 6: Linear Search in an Array</span>
+        <p><strong>Problem Statement:</strong> Search for a target key element $K$ in an unsorted array $A$ of size $N$.</p>
+        <p><strong>Complexity:</strong> Best Case $O(1)$ (target at index 0), Worst Case $O(N)$ (target at last index or absent), Space Complexity $O(1)$.</p>
+        <pre><code>Algorithm LinearSearch(A, N, Key):
+1. START
+2. INPUT Array A, Size N, Search Key K
+3. INITIALIZE Index = 0, Found = False
+4. WHILE (Index < N) DO:
+     IF (A[Index] == Key) THEN:
+       DISPLAY "Element found at index:", Index
+       Found = True
+       BREAK
+     Index = Index + 1
+5. IF (Found == False) THEN:
+     DISPLAY "Element not present in array"
+6. STOP</code></pre>
+        <strong>Trace Table ($A = [42, 17, 89, 53, 26], N=5, \text{Key}=89$):</strong>
+        <table>
+          <thead>
+            <tr><th>Iteration</th><th>Index ($i$)</th><th>Condition ($i < 5$)</th><th>Array Element ($A[i]$)</th><th>Comparison ($A[i] == 89$)</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>0</td><td>$0 < 5$ (True)</td><td>42</td><td>$42 == 89$ (False)</td><td>$i \to 1$</td></tr>
+            <tr><td>2</td><td>1</td><td>$1 < 5$ (True)</td><td>17</td><td>$17 == 89$ (False)</td><td>$i \to 2$</td></tr>
+            <tr><td>3</td><td>2</td><td>$2 < 5$ (True)</td><td>89</td><td>$89 == 89$ (True)</td><td><strong>Found at Index 2; Break</strong></td></tr>
+          </tbody>
+        </table>
+        <br>
+        <strong>Trace Table for Absent Key ($A = [42, 17, 89, 53, 26], N=5, \text{Key}=99$):</strong>
+        <table>
+          <thead>
+            <tr><th>Iteration</th><th>Index ($i$)</th><th>Condition ($i < 5$)</th><th>Array Element ($A[i]$)</th><th>Comparison ($A[i] == 99$)</th><th>Action</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>0</td><td>$0 < 5$ (True)</td><td>42</td><td>$42 == 99$ (False)</td><td>$i \to 1$</td></tr>
+            <tr><td>2</td><td>1</td><td>$1 < 5$ (True)</td><td>17</td><td>$17 == 99$ (False)</td><td>$i \to 2$</td></tr>
+            <tr><td>3</td><td>2</td><td>$2 < 5$ (True)</td><td>89</td><td>$89 == 99$ (False)</td><td>$i \to 3$</td></tr>
+            <tr><td>4</td><td>3</td><td>$3 < 5$ (True)</td><td>53</td><td>$53 == 99$ (False)</td><td>$i \to 4$</td></tr>
+            <tr><td>5</td><td>4</td><td>$4 < 5$ (True)</td><td>26</td><td>$26 == 99$ (False)</td><td>$i \to 5$</td></tr>
+            <tr><td>Exit</td><td>5</td><td>$5 < 5$ (False)</td><td>-</td><td>-</td><td><strong>Display "Not present"</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+</div>
+</body>
+</html>
