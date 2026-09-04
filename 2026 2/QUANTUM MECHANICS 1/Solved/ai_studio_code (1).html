@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valorant - Match Progression</title>
+  <!-- Google Fonts: Valorant-like typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Rajdhani:wght@500;600;700&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    :root {
+      --bg-dark: #07111a;
+      --teal-primary: #16e5b4;
+      --teal-glow: rgba(22, 229, 180, 0.4);
+      --red-defeat: #ff4655;
+      --red-defeat-glow: rgba(255, 70, 85, 0.4);
+      --contract-yellow: #ece358;
+      --card-blue: #1c3243;
+      --card-blue-border: #29475e;
+      --card-red: #ff4655;
+      --text-white: #ece8e1;
+      --text-muted: #798e9c;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 50% 35%, #183344 0%, #0e202c 45%, #08131b 85%, #050b10 100%);
+      color: var(--text-white);
+      font-family: 'Rajdhani', sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Subtle background ambient smoke / texture overlay */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(22, 229, 180, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 30%, rgba(30, 90, 130, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ========================================================
+       1. TOP NAVIGATION BAR
+    ======================================================== */
+    .top-nav {
+      height: 48px;
+      background: rgba(4, 9, 13, 0.7);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 50;
+      position: relative;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .val-logo {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .currency-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ece8e1;
+      letter-spacing: 1px;
+    }
+
+    .nav-menu {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      height: 100%;
+      gap: 28px;
+    }
+
+    .nav-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #92a4b0;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: color 0.15s;
+      position: relative;
+      padding: 6px 4px;
+    }
+
+    .nav-item:hover {
+      color: #fff;
+    }
+
+    .nav-item.battlepass::after {
+      content: '';
+      position: absolute;
+      bottom: 0px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--teal-primary);
+    }
+
+    .nav-item.play-tab {
+      background: #ece8e1;
+      color: #0f1923;
+      padding: 6px 24px;
+      clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-right: 32px;
+    }
+
+    .currency-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ece8e1;
+    }
+
+    .settings-btn {
+      cursor: pointer;
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+    }
+    .settings-btn:hover {
+      opacity: 1;
+    }
+
+    /* Right Party Sidebar Bar */
+    .party-rail {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 42px;
+      background: rgba(5, 12, 18, 0.95);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 52px;
+      z-index: 60;
+    }
+
+    .party-card-avatar {
+      width: 32px;
+      height: 32px;
+      background: #111;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .party-card-avatar::after {
+      content: '';
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 5px;
+      height: 5px;
+      background: #16e5b4;
+    }
+
+    .party-rail-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: #8b9baa;
+      margin-top: 4px;
+    }
+
+    /* ========================================================
+       2. BACK BUTTON & MATCH HEADER / DEFEAT
+    ======================================================== */
+    .screen-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 48px 10px 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin-top: 4px;
+    }
+
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #ece8e1;
+      cursor: pointer;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+
+    .back-btn:hover {
+      opacity: 1;
+    }
+
+    .match-banner {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .score-green {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      color: #5de2a5;
+    }
+
+    .defeat-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      color: #ece8e1;
+      text-transform: uppercase;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .defeat-icon {
+      margin-top: -6px;
+    }
+
+    .score-red {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--red-defeat);
+    }
+
+    .match-meta {
+      text-align: right;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      line-height: 14px;
+      color: #728493;
+      text-transform: uppercase;
+    }
+
+    /* ========================================================
+       3. SUB TABS (PROGRESSION, SUMMARY, SCOREBOARD...)
+    ======================================================== */
+    .subtabs-container {
+      display: flex;
+      justify-content: center;
+      gap: 36px;
+      margin-top: 6px;
+      position: relative;
+    }
+
+    .subtab {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #798e9c;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      padding: 6px 12px;
+      transition: color 0.15s;
+    }
+
+    .subtab:hover {
+      color: #fff;
+    }
+
+    .subtab.active {
+      color: #ece8e1;
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .subtab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid #ece358;
+    }
+
+    /* Account AP Bar */
+    .ap-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .ap-badge-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ap-level-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ap-track-container {
+      width: 320px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+
+    .ap-track-fill {
+      height: 100%;
+      width: 18.2%;
+      background: #5de2c1;
+      box-shadow: 0 0 8px rgba(93, 226, 193, 0.8);
+    }
+
+    .ap-numbers {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: #7c909e;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* ========================================================
+       4. MAIN CARDS (MATCH RESULTS & PROGRESS)
+    ======================================================== */
+    .main-grid {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 0;
+      margin-top: 14px;
+      flex: 1;
+      max-height: 420px;
+    }
+
+    /* Left Panel: Match Results */
+    .match-results-panel {
+      width: 480px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #ece8e1;
+      text-align: center;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .frame-box {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(8, 20, 29, 0.45);
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* Corner tactical notches */
+    .frame-box::before, .frame-box::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      pointer-events: none;
+    }
+    .frame-box::before { top: -3px; left: -3px; }
+    .frame-box::after { bottom: -3px; right: -3px; }
+
+    .tactical-notch-tl { position: absolute; top: -3px; right: -3px; width: 6px; height: 6px; border: 1px solid rgba(255,255,255,0.6); }
+    .tactical-notch-bl { position: absolute; bottom: -3px; left: -3px; width: 6px; height: 6px; border: 1px solid rgba(255,255,255,0.6); }
+
+    .tactical-top-pill {
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 6px;
+      background: #0d1e2b;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+    }
+    .tactical-bottom-pill {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 6px;
+      background: #0d1e2b;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 3px;
+    }
+
+    .stat-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 30px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #9cb1bf;
+    }
+
+    .stat-xp {
+      color: #5de2c1;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .stat-xp sup {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .mission-row {
+      margin-top: auto;
+      margin-bottom: 20px;
+    }
+
+    .mission-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .mission-name-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ece8e1;
+    }
+
+    .mission-progress-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #8b9baa;
+      letter-spacing: 1px;
+    }
+
+    .mission-bar-track {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+
+    .mission-bar-fill {
+      width: 13.3%;
+      height: 100%;
+      background: #ece8e1;
+    }
+
+    /* Center Arrow Separator */
+    .center-connector {
+      width: 54px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      position: relative;
+    }
+
+    .connector-badge {
+      width: 24px;
+      height: 24px;
+      background: #5de2c1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0d1e2b;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    /* Right Panel: Progress */
+    .progress-panel {
+      width: 580px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .progress-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .progress-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #ece8e1;
+      text-transform: uppercase;
+    }
+
+    .next-rewards-lbl {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #728493;
+      text-transform: uppercase;
+    }
+
+    .progress-cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    /* Card 1: Anniversary Pass */
+    .anniversary-card {
+      background: var(--card-red);
+      height: 104px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .anniversary-art {
+      width: 130px;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    .anniversary-info {
+      flex: 1;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .event-pass-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: #111e28;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .anniversary-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #111e28;
+      text-transform: uppercase;
+      margin-top: -2px;
+    }
+
+    /* Diamond node line */
+    .nodes-track {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      position: relative;
+      margin: 8px 0 4px 0;
+    }
+
+    .nodes-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: #111e28;
+      z-index: 1;
+    }
+
+    .nodes-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 12px;
+    }
+
+    .node-diamond {
+      width: 14px;
+      height: 14px;
+      background: #111e28;
+      transform: rotate(45deg);
+      border: 2px solid #fff;
+    }
+
+    .node-diamond.completed {
+      background: #16e5b4;
+      border-color: #16e5b4;
+    }
+
+    .node-diamond.current {
+      background: #fff;
+      border-color: #fff;
+    }
+
+    .card-footer-nums {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #111e28;
+    }
+
+    .anniversary-reward-thumb {
+      width: 50px;
+      height: 50px;
+      margin-right: 14px;
+      flex-shrink: 0;
+      background: #15222c;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Card 2 & 3: Contracts */
+    .contract-card {
+      background: linear-gradient(90deg, #1b303f 0%, #29475c 100%);
+      border: 1px solid var(--card-blue-border);
+      height: 76px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      position: relative;
+    }
+
+    .contract-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contract-type-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: #7996aa;
+      text-align: center;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .contract-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ece8e1;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .contract-bar-track {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      position: relative;
+      margin: 6px 0 4px 0;
+    }
+
+    .contract-bar-fill {
+      height: 100%;
+      background: var(--contract-yellow);
+    }
+
+    .contract-footer-nums {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #7996aa;
+    }
+
+    .contract-reward-thumb {
+      width: 44px;
+      height: 44px;
+      margin-left: 12px;
+      flex-shrink: 0;
+      background: #0f1923;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ========================================================
+       5. BOTTOM TOTAL XP & PLAY AGAIN
+    ======================================================== */
+    .bottom-section {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .xp-divider-line {
+      width: 80%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.18) 20%, rgba(255, 255, 255, 0.18) 80%, transparent 100%);
+      margin-bottom: 8px;
+    }
+
+    .xp-summary-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .total-xp-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #8b9baa;
+      text-transform: uppercase;
+    }
+
+    .total-xp-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #5de2c1;
+      text-shadow: 0 0 16px rgba(93, 226, 193, 0.5);
+    }
+    .total-xp-val sup {
+      font-size: 16px;
+    }
+
+    .play-again-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #0b151e;
+      background: #5de2c1;
+      border: none;
+      padding: 12px 42px;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 0 20px rgba(93, 226, 193, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .play-again-btn:hover {
+      background: #7ef5d8;
+      box-shadow: 0 0 28px rgba(93, 226, 193, 0.6);
+      transform: scale(1.02);
+    }
+
+    .play-again-btn::before, .play-again-btn::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .play-again-btn::before { top: -3px; left: -3px; }
+    .play-again-btn::after { bottom: -3px; right: -3px; }
+
+    /* Bottom-left Party Audio Bar */
+    .party-bottom-bar {
+      position: absolute;
+      bottom: 12px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(7, 18, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 6px 14px;
+      width: 240px;
+      justify-content: space-between;
+    }
+
+    .party-bottom-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #8b9baa;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP NAVBAR
+  ======================================================== -->
+  <header class="top-nav">
+    <div class="nav-left">
+      <!-- Valorant V Logo -->
+      <div class="val-logo">
+        <svg width="24" height="18" viewBox="0 0 24 18" fill="none">
+          <path d="M0 0.8L8.6 17.2H14.2L5.6 0.8H0Z" fill="#ece8e1"/>
+          <path d="M15.4 0.8L24 17.2H18.4L9.8 0.8H15.4Z" fill="#ff4655"/>
+        </svg>
+      </div>
+
+      <!-- Currency: Radianite Info -->
+      <div class="currency-pill">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <polygon points="8,1 15,8 8,15 1,8" stroke="#ece8e1" stroke-width="1.5" fill="none"/>
+          <polygon points="8,4 12,8 8,12 4,8" fill="#ece8e1"/>
+        </svg>
+        <span>0 / 2</span>
+      </div>
+    </div>
+
+    <!-- Center Navigation Links -->
+    <nav class="nav-menu">
+      <div class="nav-item">HOME</div>
+      <div class="nav-item battlepass">BATTLEPASS</div>
+      <div class="nav-item">AGENTS</div>
+      <div class="nav-item play-tab">PLAY</div>
+      <div class="nav-item">CAREER</div>
+      <div class="nav-item">COLLECTION</div>
+      <div class="nav-item">STORE</div>
+    </nav>
+
+    <!-- Right Controls -->
+    <div class="nav-right">
+      <!-- VP Currency -->
+      <div class="currency-item">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <polygon points="8,1 15,8 8,15 1,8" stroke="#ece8e1" stroke-width="1.2" fill="none"/>
+          <path d="M5 6L8 11L11 6" stroke="#ece8e1" stroke-width="1.2" fill="none"/>
+        </svg>
+        <span>0</span>
+      </div>
+
+      <!-- Radianite Currency -->
+      <div class="currency-item">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="#ece8e1" stroke-width="1.2" fill="none"/>
+          <text x="8" y="11" font-size="8" font-weight="900" fill="#ece8e1" text-anchor="middle" font-family="sans-serif">R</text>
+        </svg>
+        <span>0</span>
+      </div>
+
+      <!-- Settings Gear -->
+      <div class="settings-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ece8e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Far Right Party Rail -->
+  <aside class="party-rail">
+    <div class="party-card-avatar">
+      <svg width="24" height="24" viewBox="0 0 32 32">
+        <rect width="32" height="32" fill="#ff4655"/>
+        <path d="M6 8L16 24L26 8H6Z" fill="#111"/>
+        <polygon points="16,12 21,20 11,20" fill="#ff4655"/>
+      </svg>
+    </div>
+    <span class="party-rail-count">0</span>
+  </aside>
+
+  <!-- ========================================================
+       SCREEN MAIN CONTENT
+  ======================================================== -->
+  <main class="screen-body">
+
+    <!-- Header Row: Back + DEFEAT Banner + Match Meta -->
+    <div class="header-row">
+      <div class="back-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ece8e1" stroke-width="2.5">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>BACK</span>
+      </div>
+
+      <!-- Match Result DEFEAT Banner -->
+      <div class="match-banner">
+        <span class="score-green">2</span>
+        <div class="defeat-title">
+          <span>DEFEAT</span>
+          <!-- Decorative bottom glyph -->
+          <svg class="defeat-icon" width="24" height="12" viewBox="0 0 24 12" fill="none">
+            <circle cx="12" cy="6" r="2" fill="#798e9c"/>
+            <line x1="2" y1="6" x2="8" y2="6" stroke="#798e9c" stroke-width="1.5"/>
+            <line x1="16" y1="6" x2="22" y2="6" stroke="#798e9c" stroke-width="1.5"/>
+            <line x1="12" y1="0" x2="12" y2="3" stroke="#798e9c" stroke-width="1.5"/>
+            <line x1="12" y1="9" x2="12" y2="12" stroke="#798e9c" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="score-red">7</span>
+      </div>
+
+      <!-- Top Right Match Details -->
+      <div class="match-meta">
+        <div>JUN 24, 2021</div>
+        <div>UNRATED</div>
+        <div>MAP - HAVEN</div>
+        <div>18:06</div>
+      </div>
+    </div>
+
+    <!-- Secondary Nav Tabs -->
+    <div class="subtabs-container">
+      <div class="subtab active">PROGRESSION</div>
+      <div class="subtab">SUMMARY</div>
+      <div class="subtab">SCOREBOARD</div>
+      <div class="subtab">TIMELINE</div>
+      <div class="subtab">PERFORMANCE</div>
+    </div>
+
+    <!-- AP Level Progress Tracker -->
+    <div class="ap-bar-wrap">
+      <div class="ap-badge-line">
+        <!-- Chevron accents left -->
+        <svg width="24" height="10" viewBox="0 0 24 10" fill="none">
+          <path d="M22 1L18 5L22 9" stroke="#798e9c" stroke-width="1.5"/>
+          <path d="M16 1L12 5L16 9" stroke="#798e9c" stroke-width="1.5"/>
+          <path d="M10 1L6 5L10 9" stroke="#798e9c" stroke-width="1.5"/>
+        </svg>
+
+        <!-- AP Level 1 Badge -->
+        <div class="ap-level-badge">
+          <svg width="34" height="24" viewBox="0 0 44 28" fill="none">
+            <polygon points="22,1 42,14 22,27 2,14" fill="#0d1e2b" stroke="#798e9c" stroke-width="1.5"/>
+            <polygon points="22,5 36,14 22,23 8,14" fill="none" stroke="#ece358" stroke-width="1"/>
+            <text x="22" y="18" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="13" fill="#ece8e1" text-anchor="middle">1</text>
+          </svg>
+        </div>
+
+        <!-- Chevron accents right -->
+        <svg width="24" height="10" viewBox="0 0 24 10" fill="none">
+          <path d="M2 1L6 5L2 9" stroke="#798e9c" stroke-width="1.5"/>
+          <path d="M8 1L12 5L8 9" stroke="#798e9c" stroke-width="1.5"/>
+          <path d="M14 1L18 5L14 9" stroke="#798e9c" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <div class="ap-track-container">
+        <div class="ap-track-fill"></div>
+      </div>
+      <div class="ap-numbers">910/5,000 AP to level 2</div>
+    </div>
+
+    <!-- ========================================================
+         MAIN GRID (LEFT: MATCH RESULTS, RIGHT: PROGRESS)
+    ======================================================== -->
+    <div class="main-grid">
+
+      <!-- Left Panel: MATCH RESULTS -->
+      <div class="match-results-panel">
+        <div class="panel-header-title">MATCH RESULTS</div>
+
+        <div class="frame-box">
+          <div class="tactical-notch-tl"></div>
+          <div class="tactical-notch-bl"></div>
+          <div class="tactical-top-pill"></div>
+          <div class="tactical-bottom-pill"></div>
+
+          <!-- Top Stats Rows -->
+          <div class="stat-rows">
+            <div class="stat-row">
+              <span>Rounds Played: 15</span>
+              <span class="stat-xp">+900<sup>XP</sup></span>
+            </div>
+            <div class="stat-row">
+              <span>Rounds Won: 2</span>
+              <span class="stat-xp">+400<sup>XP</sup></span>
+            </div>
+          </div>
+
+          <!-- Mission Progress at Bottom -->
+          <div class="mission-row">
+            <div class="mission-meta">
+              <div class="mission-name-wrap">
+                <!-- Star mission icon -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#ece8e1"/>
+                  <circle cx="12" cy="12" r="2.5" fill="#0d1e2b"/>
+                </svg>
+                <span>Use Your Abilities</span>
+              </div>
+              <span class="mission-progress-num">4 / 30</span>
+            </div>
+
+            <div class="mission-bar-track">
+              <div class="mission-bar-fill"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Connector -->
+      <div class="center-connector">
+        <div class="connector-badge">&gt;&gt;</div>
+        <div class="connector-badge">&gt;&gt;</div>
+      </div>
+
+      <!-- Right Panel: PROGRESS -->
+      <div class="progress-panel">
+        <div class="progress-header-row">
+          <div class="progress-title">PROGRESS</div>
+          <div class="next-rewards-lbl">NEXT REWARDS</div>
+        </div>
+
+        <div class="progress-cards-stack">
+
+          <!-- Card 1: YR1 ANNIVERSARY PASS -->
+          <div class="anniversary-card">
+            <!-- Phoenix / Omen Split Art in SVG -->
+            <div class="anniversary-art">
+              <svg width="100%" height="100%" viewBox="0 0 140 110" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="phoenixGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ff8c42"/>
+                    <stop offset="60%" stop-color="#ff4655"/>
+                    <stop offset="100%" stop-color="#701222"/>
+                  </linearGradient>
+                  <linearGradient id="omenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#00f5d4"/>
+                    <stop offset="40%" stop-color="#0b3c5d"/>
+                    <stop offset="100%" stop-color="#031422"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Left half: Phoenix -->
+                <rect x="0" y="0" width="70" height="110" fill="url(#phoenixGrad)"/>
+                <!-- Phoenix stylized face/hair cuts -->
+                <polygon points="20,15 55,20 62,60 30,55" fill="#302028" opacity="0.85"/>
+                <polygon points="24,24 50,28 46,75 22,65" fill="#f09671"/>
+                <polygon points="12,4 40,0 48,22 18,18" fill="#1b1216"/>
+                <polygon points="34,44 48,46 42,54 32,50" fill="#1b1216"/>
+                <polygon points="36,64 46,65 42,70 34,68" fill="#a83c2e"/>
+                <!-- Collar -->
+                <polygon points="10,75 60,82 52,110 5,110" fill="#ece8e1"/>
+                <polygon points="16,84 48,89 44,110 12,110" fill="#20242a"/>
+
+                <!-- Right half: Omen Split -->
+                <rect x="70" y="0" width="70" height="110" fill="url(#omenGrad)"/>
+                <!-- Glitch cut shapes -->
+                <polygon points="70,12 110,0 125,50 70,65" fill="#0c2333"/>
+                <polygon points="70,25 98,30 92,75 70,68" fill="#16e5b4" opacity="0.3"/>
+                <!-- Glowing eye slashes -->
+                <line x1="82" y1="42" x2="82" y2="56" stroke="#16e5b4" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="88" y1="40" x2="88" y2="58" stroke="#16e5b4" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="94" y1="44" x2="94" y2="54" stroke="#16e5b4" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Glitch fragments -->
+                <polygon points="70,65 115,80 135,110 70,110" fill="#040e17"/>
+                <polygon points="90,15 130,22 110,40" fill="#ff4655" opacity="0.6"/>
+              </svg>
+            </div>
+
+            <!-- Card Center Content -->
+            <div class="anniversary-info">
+              <span class="event-pass-lbl">Event Pass</span>
+              <div class="anniversary-title">YR1 ANNIVERSARY PASS</div>
+
+              <!-- Diamonds Track -->
+              <div class="nodes-track">
+                <div class="nodes-line"></div>
+                <div class="nodes-container">
+                  <div class="node-diamond completed"></div>
+                  <div class="node-diamond current"></div>
+                  <div class="node-diamond"></div>
+                  <div class="node-diamond"></div>
+                  <div class="node-diamond"></div>
+                  <div class="node-diamond"></div>
+                  <div class="node-diamond"></div>
+                </div>
+              </div>
+
+              <!-- Numbers Footer -->
+              <div class="card-footer-nums">
+                <span>1,300 / 3,000</span>
+                <span>NEXT LEVEL: 1</span>
+              </div>
+            </div>
+
+            <!-- Reward Preview Icon: Cake Card -->
+            <div class="anniversary-reward-thumb">
+              <svg width="40" height="40" viewBox="0 0 60 60">
+                <rect width="60" height="60" fill="#1c303d"/>
+                <!-- Cake base -->
+                <rect x="14" y="32" width="32" height="18" fill="#ece8e1" rx="2"/>
+                <rect x="14" y="38" width="32" height="4" fill="#ff4655"/>
+                <!-- Candle -->
+                <rect x="28" y="20" width="4" height="12" fill="#5de2c1"/>
+                <!-- Flame -->
+                <path d="M30 12 Q33 16 30 19 Q27 16 30 12Z" fill="#ffc83b"/>
+                <!-- Confetti dots -->
+                <circle cx="18" cy="18" r="1.5" fill="#ff4655"/>
+                <circle cx="42" cy="22" r="1.5" fill="#ece358"/>
+                <circle cx="40" cy="14" r="1.5" fill="#5de2c1"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Card 2: REFLECTION: ACT 1 -->
+          <div class="contract-card">
+            <div class="contract-info">
+              <span class="contract-type-lbl">Story Contract</span>
+              <div class="contract-title">REFLECTION: ACT 1</div>
+              <div class="contract-bar-track">
+                <div class="contract-bar-fill" style="width: 65%;"></div>
+              </div>
+              <div class="contract-footer-nums">
+                <span>1,300 / 2,000</span>
+                <span>NEXT LEVEL: 2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: PLAY TO UNLOCK FREE AGENTS -->
+          <div class="contract-card">
+            <div class="contract-info">
+              <span class="contract-type-lbl">Special Contract</span>
+              <div class="contract-title">PLAY TO UNLOCK FREE AGENTS</div>
+              <div class="contract-bar-track">
+                <div class="contract-bar-fill" style="width: 86.6%;"></div>
+              </div>
+              <div class="contract-footer-nums">
+                <span>1,300 / 1,500</span>
+                <span>NEXT LEVEL: 1</span>
+              </div>
+            </div>
+
+            <!-- Agent Unlock Card Reward -->
+            <div class="contract-reward-thumb">
+              <svg width="36" height="36" viewBox="0 0 50 50">
+                <rect width="50" height="50" fill="#ff4655"/>
+                <path d="M12 10H38V40H12Z" fill="#111"/>
+                <text x="25" y="24" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="12" fill="#fff" text-anchor="middle">VAL</text>
+                <circle cx="25" cy="32" r="4" fill="#ff4655"/>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================
+         BOTTOM SUMMARY & PLAY AGAIN BUTTON
+    ======================================================== -->
+    <div class="bottom-section">
+      <div class="xp-divider-line"></div>
+
+      <div class="xp-summary-block">
+        <span class="total-xp-lbl">TOTAL XP EARNED</span>
+        <div class="total-xp-val">+1,300<sup>XP</sup></div>
+      </div>
+
+      <button class="play-again-btn">PLAY AGAIN</button>
+    </div>
+
+    <!-- Bottom Left Party Capsule -->
+    <div class="party-bottom-bar">
+      <span class="party-bottom-text">Party:</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#798e9c" stroke-width="2">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+    </div>
+
+  </main>
+
+</body>
+</html>

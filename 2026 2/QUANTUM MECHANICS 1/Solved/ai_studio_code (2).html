@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ഓണം സൗഹൃദ സംഗമം</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;700;800;900&family=Gayathri:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 10%, #0d3b2e 0%, #06231b 50%, #02120e 100%);
+            --gold-bright: #fde047;
+            --gold-main: #d4af37;
+            --gold-dark: #8c6d1f;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(212, 175, 55, 0.35);
+            --text-gold: #fef08a;
+            --text-white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: #030a08;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+            font-family: 'Anek Malayalam', sans-serif;
+            color: var(--text-white);
+        }
+
+        /* Compact Poster Canvas */
+        .poster {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            height: auto;
+            background: var(--bg-gradient);
+            border: 2px solid var(--gold-main);
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85);
+        }
+
+        /* SVG Background Overlays */
+        .bg-decor {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .decor-top-left { top: 0; left: 0; width: 90px; opacity: 0.65; }
+        .decor-top-right { top: 0; right: 0; width: 90px; transform: scaleX(-1); opacity: 0.65; }
+        .decor-bottom-left { bottom: 0; left: 0; width: 75px; transform: scaleY(-1); opacity: 0.45; }
+        .decor-bottom-right { bottom: 0; right: 0; width: 75px; transform: scale(-1); opacity: 0.45; }
+
+        .mandala-bg {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            opacity: 0.07;
+            color: var(--gold-bright);
+            z-index: 0;
+        }
+
+        /* Inner Geometric Border */
+        .inner-border {
+            position: absolute;
+            inset: 6px;
+            border: 1px dashed rgba(212, 175, 55, 0.35);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Main Content Container */
+        .content {
+            position: relative;
+            z-index: 5;
+            padding: 20px 16px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+        }
+
+        /* Top Badge */
+        .top-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-bright);
+            padding: 3px 14px;
+            border-radius: 30px;
+            font-size: 11.5px;
+            font-weight: 700;
+            border: 1px solid var(--gold-main);
+        }
+
+        /* Title */
+        .main-title {
+            font-family: 'Gayathri', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1.15;
+            background: linear-gradient(180deg, #ffffff 10%, var(--gold-bright) 70%, var(--gold-main) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
+            margin: 2px 0 4px 0;
+        }
+
+        /* Date, Time & Venue Grid */
+        .meta-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+        }
+
+        .meta-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 6px 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .meta-box.full {
+            grid-column: span 2;
+            justify-content: center;
+            text-align: center;
+            background: rgba(212, 175, 55, 0.08);
+            border-color: var(--gold-main);
+            padding: 7px 10px;
+        }
+
+        .meta-icon {
+            width: 24px;
+            height: 24px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--gold-main);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-bright);
+            flex-shrink: 0;
+        }
+
+        .meta-box strong {
+            display: block;
+            font-size: 13px;
+            color: #ffffff;
+            font-weight: 800;
+            line-height: 1.15;
+        }
+
+        .meta-box span {
+            font-size: 11px;
+            color: var(--text-gold);
+            font-weight: 600;
+        }
+
+        /* Person / Chief Guest Card */
+        .guest-card {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border: 1px solid var(--gold-main);
+            border-radius: 12px;
+            padding: 14px 10px 10px 10px;
+            margin-top: 4px;
+        }
+
+        .inauguration-pill {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #e11d48, #9f1239);
+            color: #ffffff;
+            padding: 1px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            border: 1px solid #fecdd3;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            white-space: nowrap;
+        }
+
+        /* Arch Frame */
+        .person-frame-outer {
+            width: 110px;
+            height: 125px;
+            margin: 4px auto 6px auto;
+            padding: 3px;
+            background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold-dark) 100%);
+            border-radius: 55px 55px 10px 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+        }
+
+        .person-frame-inner {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 52px 52px 7px 7px;
+            overflow: hidden;
+            border: 1.5px solid #000;
+        }
+
+        .person-frame-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            display: block;
+        }
+
+        .guest-name {
+            font-size: 19px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .guest-title {
+            font-size: 12.5px;
+            color: var(--gold-bright);
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        /* Dignitaries List */
+        .dignitaries-box {
+            font-size: 12px;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.35;
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            border-left: 3px solid var(--gold-main);
+            width: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            padding-top: 6px;
+            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-subtitle {
+            font-size: 10.5px;
+            color: #94a3b8;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .footer-title {
+            font-size: 16.5px;
+            font-weight: 900;
+            color: var(--gold-bright);
+            letter-spacing: 0.3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="poster">
+        <!-- Inner Border Line -->
+        <div class="inner-border"></div>
+
+        <!-- Corner SVGs -->
+        <svg class="bg-decor decor-top-left" viewBox="0 0 100 100" fill="none">
+            <path d="M0 0 L70 0 C70 35 35 70 0 70 L0 0 Z" fill="var(--gold-main)" opacity="0.15"/>
+            <path d="M0 0 L50 0 C50 25 25 50 0 50 Z" stroke="var(--gold-main)" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="3.5" fill="var(--gold-bright)"/>
+        </svg>
+
+        <svg class="bg-decor decor-top-right" viewBox="0 0 100 100" fill="none">
+            <path d="M0 0 L70 0 C70 35 35 70 0 70 L0 0 Z" fill="var(--gold-main)" opacity="0.15"/>
+            <path d="M0 0 L50 0 C50 25 25 50 0 50 Z" stroke="var(--gold-main)" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="3.5" fill="var(--gold-bright)"/>
+        </svg>
+
+        <svg class="bg-decor decor-bottom-left" viewBox="0 0 100 100" fill="none">
+            <path d="M0 0 L50 0 C50 25 25 50 0 50 Z" stroke="var(--gold-main)" stroke-width="1.5"/>
+        </svg>
+
+        <svg class="bg-decor decor-bottom-right" viewBox="0 0 100 100" fill="none">
+            <path d="M0 0 L50 0 C50 25 25 50 0 50 Z" stroke="var(--gold-main)" stroke-width="1.5"/>
+        </svg>
+
+        <!-- Ambient Mandala SVG -->
+        <svg class="mandala-bg" viewBox="0 0 200 200" fill="currentColor">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,4"/>
+            <path d="M100 0 C105 50 150 95 200 100 C150 105 105 150 100 200 C95 150 50 105 0 100 C50 95 95 50 100 0 Z" fill="currentColor"/>
+        </svg>
+
+        <!-- Main Content -->
+        <div class="content">
+
+            <!-- Top Badge -->
+            <div class="top-tag">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <span>സ്നേഹ സംഗമം</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="main-title">ഓണം സൗഹൃദ സംഗമം</h1>
+
+            <!-- Meta Strip (Date, Time, Venue) -->
+            <div class="meta-container">
+                <div class="meta-box">
+                    <div class="meta-icon">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <strong>29 - 8 - 2026</strong>
+                        <span>ശനിയാഴ്ച</span>
+                    </div>
+                </div>
+
+                <!-- Time Box (Updated to 4:30 PM only) -->
+                <div class="meta-box">
+                    <div class="meta-icon">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <strong>4:30 PM</strong>
+                        <span>സമയം</span>
+                    </div>
+                </div>
+
+                <div class="meta-box full">
+                    <div class="meta-icon">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <strong>വേദി: എളമരം ഇസ്‌ലാമിക് സെൻ്റർ</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chief Guest / Inauguration Card -->
+            <div class="guest-card">
+                <div class="inauguration-pill">ഉദ്ഘാടനം</div>
+
+                <div class="person-frame-outer">
+                    <div class="person-frame-inner">
+                        <!-- person.png loads here -->
+                        <img src="person.png" alt="പി.എ ജബ്ബാർ ഹാജി" onerror="this.src='https://ui-avatars.com/api/?name=P+A+Jabbar+Haji&background=ffffff&color=08261e&size=250&bold=true';">
+                    </div>
+                </div>
+
+                <h2 class="guest-name">പി.എ ജബ്ബാർ ഹാജി</h2>
+                <p class="guest-title">( ജില്ലാ പഞ്ചായത്ത് പ്രസി. മലപ്പുറം )</p>
+            </div>
+
+            <!-- Dignitaries Box -->
+            <div class="dignitaries-box">
+                ജനപ്രതിനിധികൾ, രാഷ്‌ട്രീയ, സാമൂഹിക, സാംസ്‌കാരിക രംഗത്തെ പ്രമുഖർ സംബന്ധിക്കുന്നു
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <span class="footer-subtitle">സ്നേഹാദരങ്ങളോടെ</span>
+                <h3 class="footer-title">ജമാഅത്തെ ഇസ്‌ലാമി എളമരം</h3>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
