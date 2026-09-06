@@ -401,7 +401,7 @@ A collimated beam of laser light ($\lambda = 633\text{ nm}$) falls normally on t
 ---
 
 ### 14.5 Interference with White Light
-
+ 
 #### Problem 14.9
 **Original Question:**  
 In a double-hole experiment illuminated by white light ($4000\text{ \AA} \le \lambda \le 7000\text{ \AA}$), consider two points on the screen: one with an optical path difference of $5000\text{ \AA}$ and the other with an optical path difference of $40000\text{ \AA}$. Find the visible wavelengths that undergo constructive and destructive interference at these two points, and state the resulting color appearance at each point.

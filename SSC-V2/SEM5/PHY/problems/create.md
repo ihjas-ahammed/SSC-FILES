@@ -12,6 +12,8 @@ also expand solution in a way a plus two 9ncvert) studnet would understand
 
 also for equations outside plus two, derive them in the theory column from scratch
 
+write within a code block of md
+
 ---
 
 wRITE prompt for a image sheet with six cards, three in a row (column 1, quetsion, qulumn 2, theory needed, colymn3, solution) and as muxch as rows as the questions we have and each card is 16:7 (portrait) make sure its 16:7 (height vs width) (EACH CARD) VERY IMPORTANT!!!! dont generate image< write prompt, YOU CAN SPLIT IF IT WILL BE MORE THAN 3 MAIN QUESTIONS PERT SHEET SO TAHT IT FAILS TO KEEP ASPECT RATIO
@@ -25,3 +27,5 @@ MAKE SURE ONLY SPAN IF THE QUESTION IS BIG, FOCUS more into 3 questions per imag
 
 
 write prompt for each image inside different code block, including all details needed (ill use a different model so it has no memory)
+
+make sure the sheets are with white background

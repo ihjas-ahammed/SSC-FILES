@@ -201,7 +201,7 @@ $$R = \frac{V}{I} = \frac{b - a}{2\pi k L}$$
 The region between two concentric spherical shells of radii $a$ and $b$ ($a < b$) is filled with an inhomogeneous conductor whose conductivity varies as $\sigma(r) = \sigma_0 (a/r)$. Find the resistance $R$ between the shells.
 
 ---
-
+##
 ## 7.1.2 Electromotive Force
 
 ### Problem 7.5
@@ -393,7 +393,7 @@ $$1 - e^{-t_{90}/\tau} = 0.9 \implies t_{90} = \tau \ln(10) \approx (1.13\times 
 A thin square loop of mass $m$, resistance $R$, and side $a$ falls vertically into a horizontal uniform magnetic field $B$ that terminates sharply at a horizontal boundary. Determine the terminal velocity if the loop enters the field from above with its bottom edge parallel to the field boundary.
 
 ---
-
+##
 # 7.2 Electromagnetic Induction
 
 ## 7.2.1 Faraday’s Law
@@ -471,7 +471,7 @@ As the magnet falls, its motion creates a time-dependent magnetic flux through h
 A thin non-magnetic sheet of copper is pulled horizontally between the pole pieces of a strong horseshoe magnet. Explain the origin of the mechanical resistance felt by the person pulling the sheet, and predict the effect of cutting slits into the sheet.
 
 ---
-
+## *
 ## 7.2.2 The Induced Electric Field
 
 ### Example 7.8
@@ -671,7 +671,7 @@ The situation is non-physical as stated: a spatially uniform magnetic field fill
 A magnetic field is uniform and given by $\mathbf{B}(t) = B(t)\hat{\mathbf{z}}$ inside a long cylindrical region centered on the line $x = d, y = 0$. If $B(t)$ decreases with time, determine the direction and magnitude of the force exerted on a stationary charge $q$ located at the origin $(0,0,0)$.
 
 ---
-
+##
 ## 7.2.3 Inductance
 
 ### Example 7.11
@@ -886,7 +886,7 @@ $$I(t) = -\frac{dQ}{dt} = \frac{V}{\omega_d L}e^{-\gamma t}\sin(\omega_d t)$$
 In an underdamped series $RLC$ circuit with initial charge $Q_0$ on the capacitor and zero initial current, determine the total energy dissipated in the resistor from $t = 0$ to $t \to \infty$.
 
 ---
-
+##
 ## 7.2.4 Energy in Magnetic Fields
 
 ### Example 7.14
@@ -1066,7 +1066,7 @@ Both methods give identical results.
 A spherical shell of radius $R$ carries a uniform surface charge $\sigma$ and is spun up from rest to final angular velocity $\omega_f$ about its diameter. Determine the total work required by calculating the magnetic energy stored in the resulting dipole field throughout space.
 
 ---
-
+## *
 # 7.3 Maxwell’s Equations
 
 ## 7.3.1 & 7.3.2 How Maxwell Fixed Ampère’s Law
@@ -1243,7 +1243,7 @@ which is the Biot–Savart field of a long straight current-carrying wire.
 A steady current $I$ enters a small conducting sphere of radius $R$ through a thin wire along the negative $z$-axis and leaves through a thin wire along the positive $z$-axis, so that no net charge accumulates on the sphere. Find the magnetic field $\mathbf{B}(r, \theta)$ everywhere outside the sphere.
 
 ---
-
+## *
 ## 7.3.3 Maxwell’s Equations
 
 ### Problem 7.39
@@ -1324,3 +1324,5 @@ $$I = \frac{\mu_0 q_m}{L}$$
 
 **Practice Problem 7.41P:**  
 A magnetic monopole of strength $q_m$ moves at constant speed $v$ along the axis of a circular loop of radius $R$ and resistance $R_{\text{wire}}$ (with negligible self-inductance). Find the total electric charge $Q$ that circulates through the wire during the monopole's passage from $-\infty$ to $+\infty$.
+
+##
