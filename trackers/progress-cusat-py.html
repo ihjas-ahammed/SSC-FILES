@@ -38,6 +38,12 @@ body{
 .minibar{width:76px;height:6px;border-radius:99px;background:var(--card2);overflow:hidden}
 .minibar i{display:block;height:100%;width:0;border-radius:99px;
   background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .9s var(--ease)}
+.keychip{
+  display:inline-flex;align-items:center;max-width:96px;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:.66rem;font-weight:700;color:var(--ac);
+  background:rgba(124,140,255,.13);border-radius:99px;padding:3px 9px;
+}
+@media(max-width:420px){ .keychip{max-width:62px} }
 .minipct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}
 .iconbtn{
   background:var(--card);border:1px solid var(--line);color:var(--tx2);
@@ -326,6 +332,7 @@ footer{text-align:center;color:var(--tx3);font-size:.7rem;padding:26px 10px 10px
   <div class="topbar-in">
     <div class="brand">CUSAT Physics<small id="brandsub">CUSAT CAT · M.Sc. entrance</small></div>
     <div class="mini">
+      <span class="keychip" id="keyChip" style="display:none"></span>
       <div class="minibar"><i id="minibar"></i></div>
       <div class="minipct" id="minipct">0%</div>
       <button class="iconbtn" id="btn-sync" title="Cloud sync">
@@ -405,12 +412,13 @@ footer{text-align:center;color:var(--tx3);font-size:.7rem;padding:26px 10px 10px
 <div class="sheet" id="sheet">
   <div class="grab"></div>
   <h3>Cloud sync</h3>
-  <p>Pick any ID you'll remember. Enter the same ID on your phone and laptop and progress follows you.</p>
-  <label>Sync ID</label>
-  <input type="text" id="syncInp" placeholder="e.g. ihjas-prep" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <p>Pick a key name and use the same one on every device. Syncing <b>merges</b> — whatever is
+     finished here and whatever is finished in the cloud are combined, so nothing is ever
+     overwritten or lost.</p>
+  <label>Key name</label>
+  <input type="text" id="syncInp" placeholder="e.g. arun-ldc" autocomplete="off" autocapitalize="off" spellcheck="false">
   <div class="btnrow">
-    <button class="btn" id="btnPull">Load from cloud</button>
-    <button class="btn pri" id="btnPush">Save to cloud</button>
+    <button class="btn pri" id="btnSync">Sync now</button>
   </div>
   <div class="st" id="syncSt"></div>
   <div class="btnrow"><button class="btn" id="btnClose">Close</button></div>
@@ -431,7 +439,7 @@ const APP = "ep_cusat_py_v1";
 const LS = APP+"_state", LS_ID = APP+"_syncid";
 const PRIOR_EP = 45;            // strength of the "1 hour per EP" starting assumption
 
-let state = { done:{}, hours:{}, log:[], epDay:null, updated:0 };
+let state = { done:{}, undone:{}, hours:{}, log:[], epDay:null, updated:0 };
 let syncId = "";
 let filter = "All";
 let firstPaint = true;
@@ -443,13 +451,67 @@ const AREA_COLOR = {Mathematics:"var(--math)","Data Science":"var(--ds)",Physics
                     Aptitude:"var(--apt)",Practice:"var(--prac)"};
 
 function load(){
-  try{ const r = JSON.parse(localStorage.getItem(LS)||"null"); if(r) state = {done:{},hours:{},log:[],epDay:null,updated:0,...r}; }catch(e){}
+  try{ const r = JSON.parse(localStorage.getItem(LS)||"null"); if(r) state = {done:{},undone:{},hours:{},log:[],epDay:null,updated:0,...r}; }catch(e){}
   try{ syncId = localStorage.getItem(LS_ID)||""; }catch(e){}
 }
 function save(){
   state.updated = Date.now();
   try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
   if(syncId) schedulePush();
+}
+
+/* ---------------- merge ----------------
+   Two devices can both make progress offline. Merging has to be loss-free and
+   order-independent: merge(a,b) == merge(b,a), and merging twice changes nothing. */
+function mergeStates(A, B){
+  A = A||{}; B = B||{};
+
+  // tombstones — the most recent un-check for each topic
+  const undone = {};
+  for(const src of [A.undone||{}, B.undone||{}])
+    for(const k in src) if(!(undone[k] >= src[k])) undone[k] = src[k];
+
+  // completions — keep the most recent tick, then drop anything un-checked after it
+  const done = {};
+  for(const src of [A.done||{}, B.done||{}])
+    for(const k in src) if(!(done[k] >= src[k])) done[k] = src[k];
+  for(const k in undone) if(done[k] && undone[k] > done[k]) delete done[k];
+  for(const k in undone) if(done[k] && undone[k] <= done[k]) delete undone[k];   // spent tombstone
+
+  // session log — union, de-duplicated on (topic, timestamp, amount)
+  const seen = new Set(), log = [];
+  for(const src of [A.log||[], B.log||[]])
+    for(const e of src){
+      const key = e.i+"|"+e.t+"|"+e.h;
+      if(!seen.has(key)){ seen.add(key); log.push(e); }
+    }
+  // deterministic order, so merging A into B and B into A give byte-identical results
+  log.sort((x,y)=> x.t-y.t || (x.i<y.i?-1:x.i>y.i?1:0) || x.h-y.h);
+
+  // hours — never drop below what either side believed, and use the merged log
+  // where it is complete. Max (not sum) so a re-sync can't double-count.
+  const fromLog = {};
+  for(const e of log) fromLog[e.i] = (fromLog[e.i]||0) + e.h;
+  const hours = {};
+  const ids = new Set([...Object.keys(A.hours||{}), ...Object.keys(B.hours||{}), ...Object.keys(fromLog)]);
+  for(const k of ids){
+    const v = Math.max((A.hours||{})[k]||0, (B.hours||{})[k]||0, fromLog[k]||0);
+    if(v > 0) hours[k] = Math.round(v*10)/10;
+  }
+
+  const newer = (A.updated||0) >= (B.updated||0) ? A : B;
+  const sortKeys = o => Object.fromEntries(Object.entries(o).sort((x,y)=> x[0]<y[0]?-1:1));
+  return {
+    done: sortKeys(done), undone: sortKeys(undone), hours: sortKeys(hours),
+    log: log.slice(-600),
+    epDay: (newer.epDay ?? A.epDay ?? B.epDay ?? null),
+    updated: Math.max(A.updated||0, B.updated||0)
+  };
+}
+
+function tally(st){
+  return {topics: Object.keys(st.done||{}).length,
+          hours: Math.round(Object.values(st.hours||{}).reduce((s,v)=>s+v,0)*10)/10};
 }
 
 /* ---------------- effort-point maths ---------------- */
@@ -752,8 +814,9 @@ function setHours(id, nv){
   save(); refreshTopic(id);
 }
 function toggleDone(id){
-  if(state.done[id]) delete state.done[id];
+  if(state.done[id]){ delete state.done[id]; state.undone[id] = Date.now(); }
   else{
+    delete state.undone[id];
     state.done[id] = Date.now();
     const t = TOPICS.find(x=>x.id===id);
     if(!(state.hours[id]>0)) toast("Marked done — log the hours to tune predictions");
@@ -806,65 +869,89 @@ $("epDay").addEventListener("input", e=>{
   save(); renderStats();
 });
 
-/* ---------------- cloud sync ---------------- */
-let pushT=null;
+/* ---------------- cloud sync ----------------
+   Every sync is a merge: pull remote, merge with local, write the merged result back.
+   Nothing is ever replaced wholesale, so two devices can both work offline safely. */
+let pushT = null, syncing = false;
 function badge(cls){ $("btn-sync").className = "iconbtn"+(cls?" "+cls:""); }
-function schedulePush(){ clearTimeout(pushT); pushT = setTimeout(push, 900); }
-function push(){
-  if(!syncId) return;
-  badge("syncing");
-  fetch(`${DB}/${APP}/${encodeURIComponent(syncId)}.json`,{
-    method:"PUT", headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ payload: JSON.stringify(state), updated: state.updated, device: syncId })
-  }).then(r=>{
-    badge(r.ok?"synced":"error");
-    if($("syncSt")) $("syncSt").textContent = r.ok? "Saved to cloud ✓" : "Could not save — kept locally";
-  }).catch(()=>{ badge("error"); if($("syncSt")) $("syncSt").textContent="Offline — kept locally"; });
+function keyUrl(){ return `${DB}/${APP}/${encodeURIComponent(syncId)}.json`; }
+
+function setKeyChip(){
+  const el = $("keyChip");
+  if(!el) return;
+  el.textContent = syncId || "";
+  el.style.display = syncId ? "inline-flex" : "none";
 }
-function pull(cb){
-  if(!syncId){ cb&&cb(false); return; }
+
+function schedulePush(){
+  clearTimeout(pushT);
+  pushT = setTimeout(()=>syncNow(true), 1200);
+}
+
+/* merge-sync. quiet=true for the automatic background sync after an edit. */
+function syncNow(quiet, cb){
+  if(!syncId || syncing){ cb && cb(false); return; }
+  syncing = true;
   badge("syncing");
-  fetch(`${DB}/${APP}/${encodeURIComponent(syncId)}.json`)
-    .then(r=>r.ok?r.json():Promise.reject())
-    .then(rem=>{
-      let rs=null;
-      if(rem && typeof rem==="object"){
-        if(typeof rem.payload==="string"){ try{ rs = JSON.parse(rem.payload); }catch(e){} }
-        else if(rem.done) rs = rem;
+  const before = tally(state);
+  fetch(keyUrl(), {cache:"no-store"})
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP "+r.status)))
+    .then(remote => {
+      let rs = null;
+      if(remote && typeof remote === "object"){
+        if(typeof remote.payload === "string"){ try{ rs = JSON.parse(remote.payload); }catch(e){} }
+        else if(remote.done || remote.hours) rs = remote;
       }
-      if(rs && (rs.updated||0) >= (state.updated||0)){
-        state = {done:{},hours:{},log:[],epDay:null,updated:0,...rs};
-        try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
-        $("epDay").value = state.epDay>0 ? state.epDay : "";
-        renderStats(); renderList();
-        badge("synced"); cb&&cb(true);
-      }else{ badge("synced"); cb&&cb(false); }
-    }).catch(()=>{ badge("error"); cb&&cb(false); });
+      const merged = mergeStates(state, rs);
+      merged.updated = Date.now();
+      state = merged;
+      try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+      if($("epDay")) $("epDay").value = state.epDay > 0 ? state.epDay : "";
+      renderStats(); renderList();
+
+      return fetch(keyUrl(), {
+        method:"PUT", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ payload: JSON.stringify(state), updated: state.updated, device: syncId })
+      }).then(r => {
+        if(!r.ok) throw new Error("HTTP "+r.status);
+        const after = tally(state);
+        const gained = { topics: after.topics - before.topics,
+                         hours: Math.round((after.hours - before.hours)*10)/10 };
+        badge("synced");
+        const msg = (gained.topics || gained.hours)
+          ? `Merged in ${gained.topics} topic${gained.topics===1?"":"s"}` +
+            (gained.hours ? ` and ${gained.hours}h` : "") + " from the cloud"
+          : "Everything already in sync";
+        if($("syncSt")) $("syncSt").textContent = msg + " \u2713";
+        if(!quiet) toast(msg);
+        syncing = false; cb && cb(true);
+      });
+    })
+    .catch(err => {
+      syncing = false;
+      badge("error");
+      if($("syncSt")) $("syncSt").textContent = "Offline — your progress is safe on this device";
+      if(!quiet) toast("Offline — saved on this device");
+      cb && cb(false);
+    });
 }
 
 $("btn-sync").onclick = ()=>{
   $("syncInp").value = syncId;
-  $("syncSt").textContent = syncId? `Connected as "${syncId}"` : "";
+  $("syncSt").textContent = syncId ? `Using key "${syncId}"` : "";
   $("scrim").classList.add("on"); $("sheet").classList.add("on");
 };
 function closeSheet(){ $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); }
 $("scrim").onclick = closeSheet;
 $("btnClose").onclick = closeSheet;
-$("btnPush").onclick = ()=>{
+$("btnSync").onclick = ()=>{
   const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
-  if(!v){ $("syncSt").textContent = "Enter an ID first"; return; }
-  syncId = v; try{ localStorage.setItem(LS_ID, v); }catch(e){}
-  state.updated = Date.now(); push(); toast("Syncing…");
-};
-$("btnPull").onclick = ()=>{
-  const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
-  if(!v){ $("syncSt").textContent = "Enter an ID first"; return; }
-  syncId = v; try{ localStorage.setItem(LS_ID, v); }catch(e){}
-  $("syncSt").textContent = "Loading…";
-  pull(ok=>{
-    $("syncSt").textContent = ok? "Loaded from cloud ✓" : "Nothing newer in the cloud";
-    if(ok) toast("Loaded from cloud ✓");
-  });
+  if(!v){ $("syncSt").textContent = "Pick a key name first"; return; }
+  syncId = v;
+  try{ localStorage.setItem(LS_ID, v); }catch(e){}
+  setKeyChip();
+  $("syncSt").textContent = "Merging\u2026";
+  syncNow(false);
 };
 
 addEventListener("scroll", ()=>{
@@ -877,7 +964,8 @@ if(state.epDay>0) $("epDay").value = state.epDay;
 renderFilters();
 renderStats();
 renderList();
-if(syncId){ badge("synced"); pull(ok=>{ if(ok) toast("Synced from cloud"); }); }
+setKeyChip();
+if(syncId) syncNow(true);
 </script>
 </body>
 </html>
