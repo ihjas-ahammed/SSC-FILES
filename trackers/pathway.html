@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GATE + JAM Pathway</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1e222b; --border:#2a2f3a;
+    --text:#e8eaee; --muted:#9aa2b1; --accent:#6ea8fe;
+    --math:#6ea8fe; --phy:#f2b84b; --da:#8fd694; --intg:#e07bd0;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  .wrap{max-width:1100px;margin:0 auto;padding:32px 20px 80px}
+  h1{font-size:1.7rem;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:0.95rem;max-width:75ch}
+  @media (max-width:640px){
+    .wrap{padding:20px 14px 64px}
+    h1{font-size:1.3rem;line-height:1.3}
+    .sub{font-size:0.88rem}
+  }
+
+  .controls{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;margin:24px 0;
+  }
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+  .field input{
+    background:var(--panel2);border:1px solid var(--border);color:var(--text);
+    border-radius:8px;padding:8px 10px;font-size:16px;width:100%;
+  }
+  .field .hint{font-size:0.7rem;color:var(--muted)}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+  .stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .stat .n{font-size:1.5rem;font-weight:700}
+  .stat .l{font-size:0.75rem;color:var(--muted);margin-top:2px}
+  .stat.accent .n{color:var(--accent)}
+
+  .track-title{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:26px 0 10px}
+  .track-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+  .track-title h2{font-size:1rem;margin:0;font-weight:600}
+  .track-title .th{font-size:0.78rem;color:var(--muted);margin-left:auto}
+
+  @media (max-width:640px){
+    .controls{grid-template-columns:repeat(2,1fr);gap:10px;padding:14px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stat{padding:12px}
+    .stat .n{font-size:1.2rem}
+    .track-title{margin:22px 0 8px}
+    .track-title .th{margin-left:0;flex-basis:100%}
+  }
+
+  .gantt{
+    position:relative;height:52px;background:var(--panel);border:1px solid var(--border);
+    border-radius:10px;overflow:hidden;margin-bottom:6px;
+  }
+  .seg{
+    position:absolute;top:6px;bottom:6px;border-radius:6px;
+    display:flex;align-items:center;padding:0 8px;font-size:0.7rem;font-weight:600;
+    color:#0f1115;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    opacity:0.92;
+  }
+  .seg:hover{opacity:1}
+
+  table.blocks{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:0.83rem}
+  table.blocks th{text-align:left;color:var(--muted);font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:.03em;padding:6px 10px;border-bottom:1px solid var(--border)}
+  table.blocks td{padding:7px 10px;border-bottom:1px solid var(--border)}
+  table.blocks tr:last-child td{border-bottom:none}
+  .swatch{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:middle;flex-shrink:0}
+  table.blocks td.b-meta{color:var(--muted)}
+  table.blocks td.b-meta span{display:inline-flex}
+  table.blocks td.b-meta span + span{margin-left:16px}
+
+  @media (max-width:640px){
+    .gantt{display:none}
+    table.blocks thead{display:none}
+    table.blocks, table.blocks tbody, table.blocks tr, table.blocks td{display:block;width:100%}
+    table.blocks{background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+    table.blocks tr{padding:10px 12px;border-bottom:1px solid var(--border)}
+    table.blocks tr:last-child{border-bottom:none}
+    table.blocks td{padding:2px 0;border-bottom:none;font-size:0.82rem}
+    table.blocks td.b-name{display:flex;align-items:flex-start;font-weight:600;margin-bottom:6px;font-size:0.85rem}
+    table.blocks td.b-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:0.78rem}
+    table.blocks td.b-meta b{color:var(--text);font-weight:600}
+  }
+
+  .final-banner{
+    margin-top:36px;padding:20px 22px;border-radius:14px;
+    background:linear-gradient(135deg, rgba(110,168,254,0.12), rgba(224,123,208,0.12));
+    border:1px solid var(--border);
+  }
+  .final-banner .n{font-size:1.6rem;font-weight:700;color:var(--intg)}
+  .final-banner .l{color:var(--muted);font-size:0.85rem;margin-top:4px}
+
+  footer{margin-top:50px;color:var(--muted);font-size:0.8rem;text-align:center}
+
+  @media (max-width:640px){
+    .final-banner{padding:16px 16px;margin-top:28px}
+    .final-banner .n{font-size:1.25rem}
+    .final-banner .l{font-size:0.8rem}
+    footer{margin-top:36px;font-size:0.72rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>GATE (MA + DA) &amp; JAM (MA + PH) — Pathway</h1>
+    <p class="sub">Three tracks run in parallel — Math (feeds both GATE‑MA and JAM‑MA), Data Science (GATE‑DA specific), and Physics (JAM‑PH). Once all three finish, a final integration pass covers PYQs and full mocks for all four papers. Adjust the daily hours below to see how the finish date moves.</p>
+  </header>
+
+  <div class="controls">
+    <div class="field">
+      <label>Start date</label>
+      <input type="date" id="startDate" value="2026-09-20">
+    </div>
+    <div class="field">
+      <label>Math track — hrs/day</label>
+      <input type="number" id="rateMath" value="2.5" min="0.5" step="0.5">
+      <span class="hint">Real Analysis, Calculus, Algebra, ODE, etc.</span>
+    </div>
+    <div class="field">
+      <label>Physics track — hrs/day</label>
+      <input type="number" id="ratePhy" value="1" min="0.5" step="0.5">
+      <span class="hint">JAM‑PH only</span>
+    </div>
+    <div class="field">
+      <label>DA track — hrs/day</label>
+      <input type="number" id="rateDa" value="1" min="0.5" step="0.5">
+      <span class="hint">GATE‑DA specific topics</span>
+    </div>
+    <div class="field">
+      <label>Integration — hrs/day</label>
+      <input type="number" id="rateIntg" value="4" min="0.5" step="0.5">
+      <span class="hint">Final PYQ/mock phase, all 4 papers</span>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div id="tracks"></div>
+
+  <div class="final-banner" id="finalBanner"></div>
+
+  <footer>Estimates from a syllabus + starting-level analysis — actual pace will vary. Rebuild this page anytime the plan changes.</footer>
+</div>
+
+<script>
+const DATA = {
+  math: {
+    label: "Math (GATE‑MA + JAM‑MA)", color: "var(--math)", key:"math",
+    blocks: [
+      {name:"Foundation: Real Analysis + Multivariable Calculus + ODE + Linear Algebra depth", hours:490},
+      {name:"JAM extra: Permutations, Combinations & Binomial Theorem", hours:7},
+      {name:"Pure Math Core: Algebra (groups→rings→fields), Complex Analysis, Functional Analysis, Topology", hours:356},
+      {name:"Applied & Aptitude: Numerical Analysis, PDE, Linear Programming, General Aptitude", hours:184},
+      {name:"GATE MA — PYQ solving & mock practice", hours:258},
+      {name:"JAM MA — exam-pattern practice (NAT/MSQ, PYQs)", hours:40},
+    ]
+  },
+  phy: {
+    label: "Physics (JAM‑PH)", color: "var(--phy)", key:"phy",
+    blocks: [
+      {name:"Mathematical Methods (Fourier series, error analysis — the genuinely new bits)", hours:43},
+      {name:"Mechanics", hours:45},
+      {name:"Oscillations, Waves & Optics", hours:50},
+      {name:"Electricity & Magnetism", hours:65},
+      {name:"Kinetic Theory & Thermodynamics", hours:60},
+      {name:"Modern Physics", hours:57},
+      {name:"Solid State Physics, Devices & Electronics", hours:77},
+      {name:"JAM PH — PYQ solving & mock practice", hours:99},
+    ]
+  },
+  da: {
+    label: "Data Science (GATE‑DA)", color: "var(--da)", key:"da",
+    blocks: [
+      {name:"Probability & Statistics", hours:63},
+      {name:"Linear Algebra — DA extras (SVD/PCA, projections)", hours:12},
+      {name:"Calculus & Optimization — DA extras", hours:8},
+      {name:"Programming, Data Structures & Algorithms", hours:59},
+      {name:"Database Management & Warehousing", hours:53},
+      {name:"Machine Learning", hours:83},
+      {name:"Artificial Intelligence", hours:59},
+      {name:"GATE DA — PYQ solving & mock practice", hours:84},
+    ]
+  }
+};
+const INTEGRATION_HOURS = 100;
+
+function addDays(date, days){
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+function fmt(date){
+  return date.toLocaleDateString("en-IN", {year:"numeric", month:"short", day:"numeric"});
+}
+function daysBetween(a,b){ return Math.round((b-a)/86400000); }
+
+function computeTrack(startDate, blocks, rate){
+  let cursor = new Date(startDate);
+  const results = [];
+  for(const b of blocks){
+    const days = Math.max(1, Math.ceil(b.hours / rate));
+    const start = new Date(cursor);
+    const end = addDays(start, days - 1);
+    results.push({...b, start, end, days});
+    cursor = addDays(end, 1);
+  }
+  const trackEnd = results.length ? results[results.length-1].end : new Date(startDate);
+  const totalHours = blocks.reduce((s,b)=>s+b.hours,0);
+  return {results, trackEnd, totalHours};
+}
+
+function render(){
+  const startDate = new Date(document.getElementById("startDate").value + "T00:00:00");
+  const rateMath = parseFloat(document.getElementById("rateMath").value) || 0.5;
+  const ratePhy = parseFloat(document.getElementById("ratePhy").value) || 0.5;
+  const rateDa = parseFloat(document.getElementById("rateDa").value) || 0.5;
+  const rateIntg = parseFloat(document.getElementById("rateIntg").value) || 0.5;
+
+  const math = computeTrack(startDate, DATA.math.blocks, rateMath);
+  const phy = computeTrack(startDate, DATA.phy.blocks, ratePhy);
+  const da = computeTrack(startDate, DATA.da.blocks, rateDa);
+
+  const learningEnd = new Date(Math.max(math.trackEnd, phy.trackEnd, da.trackEnd));
+  const intgStart = addDays(learningEnd, 1);
+  const intgDays = Math.max(1, Math.ceil(INTEGRATION_HOURS / rateIntg));
+  const intgEnd = addDays(intgStart, intgDays - 1);
+
+  const grandHours = math.totalHours + phy.totalHours + da.totalHours + INTEGRATION_HOURS;
+  const totalCalendarDays = daysBetween(startDate, intgEnd) + 1;
+  const months = (totalCalendarDays/30.44).toFixed(1);
+
+  // stats
+  document.getElementById("stats").innerHTML = `
+    <div class="stat accent"><div class="n">${grandHours.toLocaleString()} h</div><div class="l">Total study hours, all 4 papers</div></div>
+    <div class="stat"><div class="n">${months} mo</div><div class="l">Calendar time (${totalCalendarDays} days)</div></div>
+    <div class="stat"><div class="n">${fmt(intgEnd)}</div><div class="l">Estimated exam-ready date</div></div>
+    <div class="stat"><div class="n">${math.totalHours} h</div><div class="l">Math track (feeds GATE‑MA + JAM‑MA)</div></div>
+    <div class="stat"><div class="n">${phy.totalHours} h</div><div class="l">Physics track (JAM‑PH)</div></div>
+    <div class="stat"><div class="n">${da.totalHours} h</div><div class="l">Data Science track (GATE‑DA)</div></div>
+  `;
+
+  const totalSpan = daysBetween(startDate, intgEnd) + 1;
+
+  function trackHTML(trackDef, result, rate){
+    const segs = result.results.map(b=>{
+      const left = (daysBetween(startDate, b.start) / totalSpan) * 100;
+      const width = Math.max(0.6, (b.days / totalSpan) * 100);
+      return `<div class="seg" style="left:${left}%;width:${width}%;background:${trackDef.color}" title="${b.name} — ${b.hours}h — ${fmt(b.start)} to ${fmt(b.end)}"><span>${b.name.split(':')[0].split('—')[0].slice(0,22)}</span></div>`;
+    }).join("");
+    const rows = result.results.map(b=>{
+      const weeks = Math.round(b.days/7*10)/10;
+      return `
+      <tr>
+        <td class="b-name"><span class="swatch" style="background:${trackDef.color}"></span>${b.name}</td>
+        <td class="b-meta"><span><b>${b.hours} h</b> · ${weeks} wk</span><span>${fmt(b.start)} → ${fmt(b.end)}</span></td>
+      </tr>`;
+    }).join("");
+    return `
+      <div class="track-title">
+        <span class="track-dot" style="background:${trackDef.color}"></span>
+        <h2>${trackDef.label}</h2>
+        <span class="th">${result.totalHours} h · finishes ${fmt(result.trackEnd)} · ${rate} h/day</span>
+      </div>
+      <div class="gantt">${segs}</div>
+      <table class="blocks">
+        <tr><th>Block</th><th>Schedule</th></tr>
+        ${rows}
+      </table>
+    `;
+  }
+
+  document.getElementById("tracks").innerHTML =
+    trackHTML(DATA.math, math, rateMath) +
+    trackHTML(DATA.phy, phy, ratePhy) +
+    trackHTML(DATA.da, da, rateDa);
+
+  document.getElementById("finalBanner").innerHTML = `
+    <div class="n">Final Integration — ${fmt(intgStart)} → ${fmt(intgEnd)}</div>
+    <div class="l">All three tracks converge here: full-length PYQs and timed mocks for GATE MA, GATE DA, JAM MA and JAM PH (${INTEGRATION_HOURS}h at ${rateIntg} h/day). After this, you're exam-ready for all four papers.</div>
+  `;
+}
+
+["startDate","rateMath","ratePhy","rateDa","rateIntg"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", render);
+});
+render();
+</script>
+</body>
+</html>

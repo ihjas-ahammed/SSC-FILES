@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f14">
+<title>Effort Points — GATE &amp; JAM Tracker</title>
+<style>
+:root{
+  --bg:#0d0f14; --bg2:#12151d; --card:#161a24; --card2:#1c2130; --line:#252b3a;
+  --tx:#e9ecf2; --tx2:#9aa3b6; --tx3:#6b7488;
+  --ac:#7c8cff; --ac2:#b07cff; --ok:#4ade80; --warn:#fbbf24;
+  --math:#7c8cff; --ds:#4ade80; --phy:#fbbf24; --apt:#f472b6; --prac:#c084fc;
+  --r:16px; --ease:cubic-bezier(.22,.9,.28,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,"Noto Sans Malayalam","Manjari","Meera","AnjaliOldLipi",sans-serif;
+  line-height:1.5;padding-bottom:env(safe-area-inset-bottom);
+  overflow-x:hidden;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 14px 90px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:rgba(13,15,20,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s, padding .3s var(--ease);
+  padding:14px 0 10px;
+}
+.topbar.stuck{border-bottom-color:var(--line)}
+.topbar-in{max-width:860px;margin:0 auto;padding:0 14px;display:flex;align-items:center;gap:10px}
+.brand{font-weight:700;font-size:.95rem;letter-spacing:-.01em}
+.brand small{display:block;font-weight:500;font-size:.68rem;color:var(--tx3);letter-spacing:.02em}
+.topbar .mini{margin-left:auto;display:flex;align-items:center;gap:8px}
+.minibar{width:76px;height:6px;border-radius:99px;background:var(--card2);overflow:hidden}
+.minibar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .9s var(--ease)}
+.keychip{
+  display:inline-flex;align-items:center;max-width:96px;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:.66rem;font-weight:700;color:var(--ac);
+  background:rgba(124,140,255,.13);border-radius:99px;padding:3px 9px;
+}
+@media(max-width:420px){ .keychip{max-width:62px} }
+.minipct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}
+.iconbtn{
+  background:var(--card);border:1px solid var(--line);color:var(--tx2);
+  width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+  cursor:pointer;transition:transform .15s var(--ease),background .2s,color .2s;
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn.syncing{color:var(--warn);animation:spin 1s linear infinite}
+.iconbtn.synced{color:var(--ok)}
+.iconbtn.error{color:#f87171}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- hero ---------- */
+.hero{
+  background:linear-gradient(160deg,var(--card) 0%,var(--bg2) 100%);
+  border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0 16px;
+  position:relative;overflow:hidden;
+  animation:rise .6s var(--ease) both;
+}
+.hero::before{
+  content:"";position:absolute;top:-70px;right:-50px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(124,140,255,.20),transparent 68%);pointer-events:none;
+}
+.hero-top{display:flex;align-items:center;gap:18px}
+.ring{position:relative;flex-shrink:0;width:104px;height:104px}
+.ring svg{transform:rotate(-90deg);width:104px;height:104px;display:block}
+.ring .trk{stroke:var(--card2)}
+.ring .prg{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.ring .lbl{
+  position:absolute;inset:0;display:grid;place-content:center;text-align:center;
+}
+.ring .lbl b{font-size:1.55rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ring .lbl span{font-size:.6rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em}
+.hero-side{flex:1;min-width:0}
+.hero-side .big{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+.hero-side .sm{font-size:.78rem;color:var(--tx2);margin-top:3px}
+.hero-side .eta{
+  margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:.74rem;
+  background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:5px 11px;color:var(--tx2);
+}
+.hero-side .eta b{color:var(--tx);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:13px;padding:10px 9px;text-align:center}
+.kpi b{display:block;font-size:.98rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi span{display:block;font-size:.6rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;line-height:1.25}
+@media(max-width:520px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .ring,.ring svg{width:88px;height:88px}
+  .ring .lbl b{font-size:1.3rem}
+  .hero{padding:16px}
+}
+
+/* pace planner */
+.pace{
+  margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:12px 13px;
+}
+.pace-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pace-l{font-size:.73rem;color:var(--tx2);flex:1;min-width:130px}
+.pace-l b{display:block;color:var(--tx);font-size:.8rem;font-weight:650;margin-bottom:1px}
+.epin{
+  background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:11px;
+  padding:9px 11px;font-size:16px;width:78px;font-weight:700;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.epin:focus{outline:none;border-color:var(--ac)}
+.pace-u{font-size:.72rem;color:var(--tx3)}
+.pace-out{
+  margin-top:11px;padding-top:11px;border-top:1px solid var(--line);
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+}
+.pace-out .d{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--ac)}
+.pace-out .x{font-size:.73rem;color:var(--tx3)}
+.pace-real{font-size:.69rem;color:var(--tx3);margin-top:7px;line-height:1.45}
+.pace-real b{color:var(--warn);font-weight:650}
+
+/* calibration strip */
+.calib{
+  margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px 13px;
+}
+.calib-h{display:flex;align-items:center;gap:8px;font-size:.73rem;color:var(--tx2)}
+.calib-h b{color:var(--tx);font-weight:600;font-size:.8rem}
+.calib-h .pill{margin-left:auto;font-size:.66rem;background:rgba(124,140,255,.14);color:var(--ac);
+  border-radius:99px;padding:3px 9px;font-weight:600}
+.calib-bar{margin-top:8px;height:5px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.calib-bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ac),var(--ok));transition:width .9s var(--ease)}
+.calib-note{font-size:.68rem;color:var(--tx3);margin-top:7px;line-height:1.45}
+
+/* ---------- filters ---------- */
+.filters{
+  position:sticky;top:58px;z-index:30;margin:0 -14px 12px;padding:9px 14px;
+  background:rgba(13,15,20,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+}
+.filters::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;background:var(--card);border:1px solid var(--line);color:var(--tx2);
+  border-radius:99px;padding:7px 13px;font-size:.76rem;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:transform .15s var(--ease),background .2s,color .2s,border-color .2s;
+}
+.chip:active{transform:scale(.94)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.chip i{font-style:normal;opacity:.55;margin-left:4px;font-size:.7rem}
+
+/* ---------- sections ---------- */
+.sec{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  margin-bottom:10px;overflow:hidden;
+  animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*38ms);
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sec-h{display:flex;align-items:center;gap:11px;padding:14px;cursor:pointer;user-select:none;
+  transition:background .2s}
+.sec-h:active{background:var(--card2)}
+.sec-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.sec-t{flex:1;min-width:0}
+.sec-t b{display:block;font-size:.89rem;font-weight:650;letter-spacing:-.01em;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sec-meta{display:flex;align-items:center;gap:7px;margin-top:4px;flex-wrap:wrap}
+.tag{font-size:.61rem;font-weight:700;letter-spacing:.03em;padding:2.5px 7px;border-radius:6px;
+  background:rgba(255,255,255,.06);color:var(--tx2);white-space:nowrap}
+.sec-meta .n{font-size:.68rem;color:var(--tx3);font-variant-numeric:tabular-nums}
+.sec-r{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.sec-pct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;font-weight:600}
+.sbar{width:46px;height:4px;border-radius:99px;background:var(--card2);overflow:hidden}
+.sbar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s var(--ease)}
+.chev{color:var(--tx3);transition:transform .35s var(--ease);flex-shrink:0}
+.sec.open .chev{transform:rotate(90deg)}
+.sec-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+.sec.open .sec-body{grid-template-rows:1fr}
+.sec-body>div{overflow:hidden;min-height:0}
+
+/* Malayalam / Indic text needs more room to breathe than Latin at the same size */
+.ml{font-size:.92rem;line-height:1.85;letter-spacing:0;word-break:break-word}
+.tp-t .d.ml{font-size:.8rem;line-height:1.75;-webkit-line-clamp:3}
+.sec-t b.ml{font-size:.93rem;line-height:1.6;white-space:normal}
+@media(max-width:640px){
+  .ml{font-size:.95rem;line-height:1.9}
+  .tp-t .d.ml{font-size:.82rem}
+}
+
+/* section index badge — replaces the bare "i." / "1." prefixes */
+.idx{
+  flex-shrink:0;min-width:26px;height:26px;padding:0 6px;border-radius:8px;
+  display:inline-grid;place-items:center;font-size:.66rem;font-weight:800;
+  background:rgba(255,255,255,.06);color:var(--tx2);letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;
+}
+
+/* part heading — one level of hierarchy above the section cards */
+.parthead{
+  display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:0 2px;
+  animation:rise .5s var(--ease) both;
+}
+.parthead:first-child{margin-top:4px}
+.parthead .bar{width:3px;height:26px;border-radius:2px;flex-shrink:0}
+.parthead h2{margin:0;font-size:.82rem;font-weight:750;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--tx2)}
+.parthead h2.ml{font-size:.9rem;text-transform:none;letter-spacing:0;line-height:1.5}
+.parthead .pn{margin-left:auto;font-size:.68rem;color:var(--tx3);
+  font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
+
+/* ---------- book / resource strip ---------- */
+.res{
+  margin:0;padding:13px 14px;border-top:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(124,140,255,.07),rgba(176,124,255,.04));
+}
+.res-l{display:flex;align-items:center;gap:6px;font-size:.6rem;color:var(--tx3);
+  text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:6px}
+.res-b{font-size:.85rem;font-weight:650;letter-spacing:-.01em;line-height:1.35}
+.res-c{font-size:.75rem;color:var(--tx2);margin-top:4px;line-height:1.45}
+.res-n{font-size:.72rem;color:var(--tx3);margin-top:7px;line-height:1.45;
+  padding-left:9px;border-left:2px solid var(--line)}
+.res-btns{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.rb{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  background:var(--card2);border:1px solid var(--line);color:var(--tx);
+  border-radius:10px;padding:8px 12px;font-size:.75rem;font-weight:650;
+  transition:transform .15s var(--ease),background .2s,border-color .2s;
+}
+.rb:active{transform:scale(.94)}
+.rb.free{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:var(--ok)}
+.rb svg{width:13px;height:13px;flex-shrink:0}
+.res-start{
+  display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.06em;
+  background:var(--ok);color:#0d0f14;border-radius:5px;padding:2px 6px;margin-left:6px;
+}
+
+/* ---------- topic rows ---------- */
+.tp{border-top:1px solid var(--line)}
+.tp-h{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;cursor:pointer;
+  transition:background .2s}
+.tp-h:active{background:var(--card2)}
+.tp.done .tp-h{background:rgba(74,222,128,.045)}
+.box{
+  width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;
+  display:grid;place-items:center;transition:border-color .25s,background .25s,transform .18s var(--ease);
+}
+.box:active{transform:scale(.85)}
+.box svg{width:12px;height:12px;stroke:var(--bg);stroke-width:3.2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:22;stroke-dashoffset:22}
+.tp.done .box{background:var(--ok);border-color:var(--ok)}
+.tp.done .box svg{stroke-dashoffset:0;transition:stroke-dashoffset .32s var(--ease) .05s}
+.tp.part .box{border-color:var(--warn);background:rgba(251,191,36,.14)}
+.tp-t{flex:1;min-width:0}
+.tp-t .n{font-size:.83rem;font-weight:500;line-height:1.35;transition:color .3s}
+.tp.done .tp-t .n{color:var(--tx3)}
+.tp-t .d{font-size:.73rem;color:var(--tx3);margin-top:2px;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tp-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.ep{font-size:.68rem;font-weight:700;color:var(--ac);font-variant-numeric:tabular-nums;
+  background:rgba(124,140,255,.12);border-radius:6px;padding:2px 7px}
+.tp.done .ep{color:var(--ok);background:rgba(74,222,128,.12)}
+.pred{font-size:.64rem;color:var(--tx3);font-variant-numeric:tabular-nums}
+
+.tp-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease)}
+.tp.open .tp-body{grid-template-rows:1fr}
+.tp-body>div{overflow:hidden;min-height:0}
+.logbox{padding:0 14px 14px 47px}
+.logrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hin{
+  background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:11px;
+  padding:9px 11px;font-size:16px;width:92px;font-variant-numeric:tabular-nums;font-weight:600;
+}
+.hin:focus{outline:none;border-color:var(--ac)}
+.qb{
+  background:var(--card2);border:1px solid var(--line);color:var(--tx2);border-radius:10px;
+  padding:8px 11px;font-size:.75rem;font-weight:600;cursor:pointer;
+  transition:transform .15s var(--ease),background .2s,color .2s;
+}
+.qb:active{transform:scale(.9)}
+.qb.go{background:var(--ac);border-color:var(--ac);color:#0d0f14;margin-left:auto}
+.qb.undo{background:transparent;color:var(--tx3)}
+.loghint{font-size:.68rem;color:var(--tx3);margin-top:9px;line-height:1.45}
+.loghint b{color:var(--tx2);font-weight:600}
+
+/* ---------- sheet ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;opacity:0;pointer-events:none;
+  transition:opacity .3s;backdrop-filter:blur(3px)}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--card);
+  border-radius:24px 24px 0 0;border-top:1px solid var(--line);
+  padding:8px 18px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(102%);transition:transform .42s var(--ease);max-height:86vh;overflow-y:auto;
+}
+.sheet.on{transform:none}
+.grab{width:38px;height:4px;border-radius:99px;background:var(--line);margin:6px auto 14px}
+.sheet h3{margin:0 0 4px;font-size:1rem}
+.sheet p{font-size:.78rem;color:var(--tx2);margin:0 0 14px;line-height:1.5}
+.sheet label{display:block;font-size:.68rem;color:var(--tx3);text-transform:uppercase;
+  letter-spacing:.05em;margin:12px 0 5px}
+.sheet input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--tx);
+  border-radius:12px;padding:12px;font-size:16px}
+.sheet input:focus{outline:none;border-color:var(--ac)}
+.btnrow{display:flex;gap:9px;margin-top:16px}
+.btn{
+  flex:1;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--card2);
+  color:var(--tx);font-size:.85rem;font-weight:650;cursor:pointer;
+  transition:transform .15s var(--ease),opacity .2s;
+}
+.btn:active{transform:scale(.96)}
+.btn.pri{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent;color:#0d0f14}
+.sheet .st{font-size:.73rem;color:var(--tx3);margin-top:11px;text-align:center;min-height:16px}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,26px);
+  background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:.8rem;font-weight:650;
+  z-index:80;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s var(--ease);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:88vw;text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.empty{text-align:center;padding:42px 20px;color:var(--tx3);font-size:.85rem}
+footer{text-align:center;color:var(--tx3);font-size:.7rem;padding:26px 10px 10px;line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-in">
+    <div class="brand">Effort Points<small id="brandsub">GATE MA · GATE DA · JAM MA</small></div>
+    <div class="mini">
+      <span class="keychip" id="keyChip" style="display:none"></span>
+      <div class="minibar"><i id="minibar"></i></div>
+      <div class="minipct" id="minipct">0%</div>
+      <button class="iconbtn" id="btn-sync" title="Cloud sync">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-7.6-4.2"/>
+          <path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 7.6 4.2"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="ring">
+        <svg viewBox="0 0 120 120">
+          <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7c8cff"/><stop offset="100%" stop-color="#b07cff"/>
+          </linearGradient></defs>
+          <circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="11"/>
+          <circle class="prg" id="prg" cx="60" cy="60" r="52" fill="none" stroke-width="11"
+                  stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="lbl"><b id="ringpct">0%</b><span>done</span></div>
+      </div>
+      <div class="hero-side">
+        <div class="big" id="heroBig">1,856 effort points to go</div>
+        <div class="sm" id="heroSm">Log the hours a topic actually took — everything else re-predicts itself.</div>
+        <div class="eta" id="etaPill" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b id="k1">0</b><span>EP done</span></div>
+      <div class="kpi"><b id="k2">0h</b><span>hours logged</span></div>
+      <div class="kpi"><b id="k3">—</b><span>your rate</span></div>
+      <div class="kpi"><b id="k4">1856h</b><span>est. remaining</span></div>
+    </div>
+
+    <div class="pace">
+      <div class="pace-r">
+        <div class="pace-l">
+          <b>Your daily pace</b>
+          How many effort points you reckon you clear on an average day
+        </div>
+        <input class="epin" type="number" id="epDay" inputmode="decimal" step="0.5" min="0" placeholder="—">
+        <span class="pace-u">EP&nbsp;/&nbsp;day</span>
+      </div>
+      <div class="pace-out" id="paceOut" style="display:none">
+        <span class="d" id="paceDate">—</span>
+        <span class="x" id="paceX"></span>
+      </div>
+      <div class="pace-real" id="paceReal"></div>
+    </div>
+
+    <div class="calib">
+      <div class="calib-h">
+        <b>Calibration</b>
+        <span id="calibTxt">starting at 1.0 h per effort point</span>
+        <span class="pill" id="calibPill">0% tuned</span>
+      </div>
+      <div class="calib-bar"><i id="calibBar"></i></div>
+      <div class="calib-note" id="calibNote">
+        Finish a topic and log the real hours. Every completed topic teaches the tracker your actual pace,
+        and all remaining predictions shift with it.
+      </div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div id="list"></div>
+
+  <footer>217 topics · 1,856 effort points<br>Progress saves on this device and syncs to any device using the same sync ID.<br><br><b>Open book</b> opens a copy hosted on GitHub, so it works on any device. <b>Free online</b> links point at the publisher's own free edition. Chapter numbers can shift by an edition — go by chapter titles if a number looks off.</footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <h3>Cloud sync</h3>
+  <p>Pick a key name and use the same one on every device. Syncing <b>merges</b> — whatever is
+     finished here and whatever is finished in the cloud are combined, so nothing is ever
+     overwritten or lost.</p>
+  <label>Key name</label>
+  <input type="text" id="syncInp" placeholder="e.g. arun-ldc" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <div class="btnrow">
+    <button class="btn pri" id="btnSync">Sync now</button>
+  </div>
+  <div class="st" id="syncSt"></div>
+  <div class="btnrow"><button class="btn" id="btnClose">Close</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GROUPS = [{"id":"gm.ga.verb","name":"Verbal Aptitude","area":"Aptitude","tag":"GATE","ep":9,"topics":[{"id":"gm.ga.verb.0","t":"English grammar","d":"Tenses, articles, adjectives, prepositions, conjunctions, verb-noun agreement, and other parts of speech.","ep":3},{"id":"gm.ga.verb.1","t":"Basic vocabulary","d":"Words, idioms and phrases in context.","ep":2},{"id":"gm.ga.verb.2","t":"Reading and comprehension","d":"Understanding a passage and answering inference questions.","ep":2},{"id":"gm.ga.verb.3","t":"Narrative sequencing","d":"Arranging jumbled sentences into a coherent paragraph.","ep":2}]},{"id":"gm.ga.quant","name":"Quantitative Aptitude","area":"Aptitude","tag":"GATE","ep":12,"topics":[{"id":"gm.ga.quant.0","t":"Data interpretation","d":"Data graphs (bar, pie, line, and other graphs representing data), 2- and 3-dimensional plots, maps and tables.","ep":3},{"id":"gm.ga.quant.1","t":"Numerical computation and estimation","d":"Ratios, percentages, powers, exponents and logarithms, permutations and combinations, series.","ep":3},{"id":"gm.ga.quant.2","t":"Mensuration and geometry","d":"Areas, volumes, and basic coordinate geometry.","ep":3},{"id":"gm.ga.quant.3","t":"Elementary statistics and probability","d":"Mean, median, mode, standard deviation, and basic probability.","ep":3}]},{"id":"gm.ga.anly","name":"Analytical Aptitude","area":"Aptitude","tag":"GATE","ep":9,"topics":[{"id":"gm.ga.anly.0","t":"Logic","d":"Deduction and induction.","ep":3},{"id":"gm.ga.anly.1","t":"Analogy and word groups","d":"Identifying relationships between pairs.","ep":2},{"id":"gm.ga.anly.2","t":"Numerical relations and reasoning","d":"Puzzles, arrangements, blood relations, directions.","ep":4}]},{"id":"gm.ga.spat","name":"Spatial Aptitude","area":"Aptitude","tag":"GATE","ep":6,"topics":[{"id":"gm.ga.spat.0","t":"Transformation of shapes","d":"Translation, rotation, scaling, mirroring, assembling and grouping.","ep":3},{"id":"gm.ga.spat.1","t":"Paper folding, cutting and patterns","d":"Patterns in 2 and 3 dimensions.","ep":3}]},{"id":"gm.ma.calc","name":"Section 1: Calculus","area":"Mathematics","tag":"GATE MA · JAM MA","ep":105,"topics":[{"id":"gm.ma.calc.0","t":"Functions of two or more variables","d":"Continuity, directional derivatives, partial derivatives, total derivative.","ep":19},{"id":"gm.ma.calc.1","t":"Taylor's theorem, maxima and minima","d":"Saddle points and the second derivative test in several variables.","ep":15},{"id":"gm.ma.calc.2","t":"Method of Lagrange's multipliers","d":"Constrained optimisation in several variables.","ep":11},{"id":"gm.ma.calc.3","t":"Double and triple integrals","d":"Jacobians and change of variables.","ep":19},{"id":"gm.ma.calc.4","t":"Applications to area, volume and surface area","d":"Computing geometric quantities with multiple integrals.","ep":11},{"id":"gm.ma.calc.5","t":"Vector calculus","d":"Gradient, divergence and curl; line integrals and surface integrals.","ep":15},{"id":"gm.ma.calc.6","t":"Integral theorems","d":"Green's theorem, Stokes' theorem and the Gauss divergence theorem.","ep":15}]},{"id":"gm.ma.la","name":"Section 2: Linear Algebra","area":"Mathematics","tag":"GATE MA · JAM MA","ep":70,"topics":[{"id":"gm.ma.la.0","t":"Finite dimensional vector spaces","d":"Vector spaces over real or complex fields, basis and dimension.","ep":9},{"id":"gm.ma.la.1","t":"Linear transformations","d":"Matrix representations, rank and nullity.","ep":10},{"id":"gm.ma.la.2","t":"Systems of linear equations","d":"Consistency, solution spaces and row reduction.","ep":6},{"id":"gm.ma.la.3","t":"Characteristic polynomial, eigenvalues and eigenvectors","d":"Algebraic and geometric multiplicity.","ep":6},{"id":"gm.ma.la.4","t":"Diagonalization, minimal polynomial, Cayley-Hamilton theorem","d":"Conditions for diagonalizability.","ep":9},{"id":"gm.ma.la.5","t":"Finite dimensional inner product spaces","d":"Gram-Schmidt orthonormalization process.","ep":9},{"id":"gm.ma.la.6","t":"Special classes of matrices","d":"Symmetric, skew-symmetric, Hermitian, skew-Hermitian, normal, orthogonal and unitary matrices; diagonalization by a unitary matrix.","ep":9},{"id":"gm.ma.la.7","t":"Jordan canonical form","d":"Computing the Jordan form from elementary divisors.","ep":6},{"id":"gm.ma.la.8","t":"Bilinear and quadratic forms","d":"Signature, rank and Sylvester's law of inertia.","ep":6}]},{"id":"gm.ma.ra","name":"Section 3: Real Analysis","area":"Mathematics","tag":"GATE MA","ep":110,"topics":[{"id":"gm.ma.ra.0","t":"Metric spaces","d":"Open and closed sets, convergence, limit points.","ep":8},{"id":"gm.ma.ra.1","t":"Completeness and Baire category theorem","d":"Complete metric spaces and their consequences.","ep":8},{"id":"gm.ma.ra.2","t":"Contraction mapping principle","d":"Banach fixed point theorem and applications.","ep":8},{"id":"gm.ma.ra.3","t":"Connectedness and compactness","d":"Equivalent characterisations in metric spaces.","ep":12},{"id":"gm.ma.ra.4","t":"Continuity and uniform continuity","d":"Of functions between metric spaces.","ep":8},{"id":"gm.ma.ra.5","t":"Sequences and series of functions","d":"Uniform convergence; Ascoli-Arzela theorem.","ep":15},{"id":"gm.ma.ra.6","t":"Weierstrass approximation theorem","d":"Density of polynomials in C[a,b].","ep":8},{"id":"gm.ma.ra.7","t":"Power series","d":"Radius of convergence and term-wise operations.","ep":8},{"id":"gm.ma.ra.8","t":"Differentiation of functions of several variables","d":"Inverse and implicit function theorems.","ep":8},{"id":"gm.ma.ra.9","t":"Lebesgue measure on the real line","d":"Measurable sets and measurable functions.","ep":11},{"id":"gm.ma.ra.10","t":"Lebesgue integral and convergence theorems","d":"Fatou's lemma, monotone convergence theorem, dominated convergence theorem.","ep":8},{"id":"gm.ma.ra.11","t":"Lp spaces","d":"Holder and Minkowski inequalities, completeness.","ep":8}]},{"id":"gm.ma.ca","name":"Section 4: Complex Analysis","area":"Mathematics","tag":"GATE MA","ep":81,"topics":[{"id":"gm.ma.ca.0","t":"Functions of a complex variable","d":"Continuity, differentiability, analytic functions, harmonic functions.","ep":14},{"id":"gm.ma.ca.1","t":"Complex integration","d":"Cauchy's integral theorem and Cauchy's integral formula.","ep":9},{"id":"gm.ma.ca.2","t":"Liouville's theorem, maximum modulus principle, Morera's theorem","d":"Consequences of analyticity.","ep":9},{"id":"gm.ma.ca.3","t":"Zeros and singularities","d":"Removable, pole and essential singularities.","ep":11},{"id":"gm.ma.ca.4","t":"Power series, Taylor's and Laurent's series","d":"Radius of convergence.","ep":9},{"id":"gm.ma.ca.5","t":"Residue theorem and applications","d":"Evaluating real integrals by residues.","ep":11},{"id":"gm.ma.ca.6","t":"Rouche's theorem, argument principle, Schwarz lemma","d":"Counting zeros and mapping bounds.","ep":9},{"id":"gm.ma.ca.7","t":"Conformal mappings and Mobius transformations","d":"Cross ratio and mapping of standard regions.","ep":9}]},{"id":"gm.ma.ode","name":"Section 5: Ordinary Differential Equations","area":"Mathematics","tag":"GATE MA · JAM MA","ep":133,"topics":[{"id":"gm.ma.ode.0","t":"First order ordinary differential equations","d":"Exact, separable, linear and reducible forms.","ep":10},{"id":"gm.ma.ode.1","t":"Existence and uniqueness theorems for initial value problems","d":"Picard-Lindelof and Peano.","ep":14},{"id":"gm.ma.ode.2","t":"Linear ODEs of higher order with constant coefficients","d":"Complementary function and particular integral.","ep":10},{"id":"gm.ma.ode.3","t":"Second order linear ODEs with variable coefficients","d":"Reduction of order and variation of parameters.","ep":10},{"id":"gm.ma.ode.4","t":"Cauchy-Euler equation","d":"Equidimensional equations and their solutions.","ep":10},{"id":"gm.ma.ode.5","t":"Laplace transforms","d":"Definition, basic properties and application to solving ODEs.","ep":13},{"id":"gm.ma.ode.6","t":"Series solutions","d":"Power series method and the Frobenius method.","ep":13},{"id":"gm.ma.ode.7","t":"Legendre and Bessel functions","d":"Orthogonality properties and generating functions.","ep":10},{"id":"gm.ma.ode.8","t":"Systems of linear first order ODEs","d":"Matrix exponential and fundamental matrices.","ep":10},{"id":"gm.ma.ode.9","t":"Sturm's oscillation and separation theorems","d":"Zeros of solutions of second order equations.","ep":10},{"id":"gm.ma.ode.10","t":"Sturm-Liouville eigenvalue problems","d":"Eigenvalues, eigenfunctions and orthogonality.","ep":10},{"id":"gm.ma.ode.11","t":"Planar autonomous systems","d":"Stability of stationary points for linear systems with constant coefficients, linearized stability, Lyapunov functions.","ep":13}]},{"id":"gm.ma.alg","name":"Section 6: Algebra","area":"Mathematics","tag":"GATE MA · JAM MA","ep":142,"topics":[{"id":"gm.ma.alg.0","t":"Groups, subgroups, normal subgroups, quotient groups","d":"Cosets and Lagrange's theorem.","ep":12},{"id":"gm.ma.alg.1","t":"Homomorphisms and automorphisms","d":"Isomorphism theorems.","ep":12},{"id":"gm.ma.alg.2","t":"Cyclic groups and permutation groups","d":"Order of elements, cycle structure, alternating groups.","ep":12},{"id":"gm.ma.alg.3","t":"Group action","d":"Orbit-stabilizer theorem and class equation.","ep":12},{"id":"gm.ma.alg.4","t":"Finite abelian groups","d":"Structure theorem and invariant factors.","ep":13},{"id":"gm.ma.alg.5","t":"Sylow's theorems and their applications","d":"Existence, conjugacy and counting of Sylow subgroups.","ep":16},{"id":"gm.ma.alg.6","t":"Rings and ideals","d":"Prime and maximal ideals, quotient rings.","ep":13},{"id":"gm.ma.alg.7","t":"Unique factorization domains, principal ideal domains, Euclidean domains","d":"The chain of inclusions and counterexamples.","ep":13},{"id":"gm.ma.alg.8","t":"Polynomial rings and Eisenstein's irreducibility criterion","d":"Irreducibility tests over Q and finite fields.","ep":13},{"id":"gm.ma.alg.9","t":"Fields and field extensions","d":"Algebraic extensions, degree of an extension, algebraically closed fields.","ep":13},{"id":"gm.ma.alg.10","t":"Finite fields","d":"Structure, existence and uniqueness, multiplicative group.","ep":13}]},{"id":"gm.ma.fa","name":"Section 7: Functional Analysis","area":"Mathematics","tag":"GATE MA","ep":70,"topics":[{"id":"gm.ma.fa.0","t":"Normed linear spaces and Banach spaces","d":"Completeness and equivalence of norms.","ep":7},{"id":"gm.ma.fa.1","t":"Separability","d":"Separable and non-separable classical spaces.","ep":7},{"id":"gm.ma.fa.2","t":"Bounded linear operators and compact linear operators","d":"Operator norm and basic properties.","ep":7},{"id":"gm.ma.fa.3","t":"Dual spaces and the Hahn-Banach theorem","d":"Extension and separation forms.","ep":7},{"id":"gm.ma.fa.4","t":"Open mapping and closed graph theorems","d":"Statements and standard applications.","ep":7},{"id":"gm.ma.fa.5","t":"Principle of uniform boundedness","d":"Banach-Steinhaus theorem and applications.","ep":7},{"id":"gm.ma.fa.6","t":"Inner product spaces and Hilbert spaces","d":"Parallelogram law and orthogonality.","ep":7},{"id":"gm.ma.fa.7","t":"Orthonormal bases and the projection theorem","d":"Bessel's inequality and Parseval's identity.","ep":7},{"id":"gm.ma.fa.8","t":"Riesz representation theorem","d":"Representation of bounded linear functionals on a Hilbert space.","ep":7},{"id":"gm.ma.fa.9","t":"Spectral theorem for compact self-adjoint operators","d":"Eigenvalue structure and diagonalization.","ep":7}]},{"id":"gm.ma.na","name":"Section 8: Numerical Analysis","area":"Mathematics","tag":"GATE MA","ep":41,"topics":[{"id":"gm.ma.na.0","t":"Direct methods for linear systems","d":"Gaussian elimination, LU decomposition, Cholesky factorization.","ep":7},{"id":"gm.ma.na.1","t":"Iterative methods for linear systems","d":"Gauss-Seidel and Jacobi methods and their convergence for diagonally dominant matrices.","ep":4},{"id":"gm.ma.na.2","t":"Numerical solutions of nonlinear equations","d":"Bisection method, secant method, Newton-Raphson method, fixed point iteration.","ep":6},{"id":"gm.ma.na.3","t":"Interpolation","d":"Lagrange and Newton forms of the interpolating polynomial.","ep":6},{"id":"gm.ma.na.4","t":"Error in polynomial interpolation","d":"Interpolation error formula.","ep":4},{"id":"gm.ma.na.5","t":"Numerical differentiation and error","d":"Forward, backward and central difference formulae.","ep":4},{"id":"gm.ma.na.6","t":"Numerical integration","d":"Trapezoidal and Simpson rules, Newton-Cotes formulae, composite rules and their errors.","ep":6},{"id":"gm.ma.na.7","t":"Numerical solution of initial value problems","d":"Euler's method and Runge-Kutta method of order 2.","ep":4}]},{"id":"gm.ma.pde","name":"Section 9: Partial Differential Equations","area":"Mathematics","tag":"GATE MA","ep":60,"topics":[{"id":"gm.ma.pde.0","t":"Method of characteristics","d":"For first order linear and quasilinear partial differential equations.","ep":8},{"id":"gm.ma.pde.1","t":"Second order PDEs in two independent variables","d":"Classification and canonical forms.","ep":12},{"id":"gm.ma.pde.2","t":"Method of separation of variables for Laplace equation","d":"In Cartesian and polar coordinates.","ep":8},{"id":"gm.ma.pde.3","t":"Maximum principle","d":"For the Laplace and heat equations.","ep":8},{"id":"gm.ma.pde.4","t":"Wave equation","d":"Cauchy problem, d'Alembert formula, domains of dependence and influence, non-homogeneous wave equation.","ep":8},{"id":"gm.ma.pde.5","t":"Heat equation","d":"Cauchy problem in one space variable.","ep":8},{"id":"gm.ma.pde.6","t":"Laplace and Fourier transform methods","d":"Solving PDEs by integral transforms.","ep":8}]},{"id":"gm.ma.top","name":"Section 10: Topology","area":"Mathematics","tag":"GATE MA","ep":63,"topics":[{"id":"gm.ma.top.0","t":"Basic concepts of topology","d":"Topological spaces, open and closed sets, closure and interior.","ep":7},{"id":"gm.ma.top.1","t":"Bases and subbases","d":"Generating a topology.","ep":7},{"id":"gm.ma.top.2","t":"Subspace, order and product topologies","d":"Definitions and standard examples.","ep":7},{"id":"gm.ma.top.3","t":"Quotient topology and metric topology","d":"Quotient maps and metrizability.","ep":7},{"id":"gm.ma.top.4","t":"Connectedness and path connectedness","d":"Components and standard counterexamples.","ep":7},{"id":"gm.ma.top.5","t":"Compactness","d":"Sequentially compact, limit point compact, and their relations.","ep":7},{"id":"gm.ma.top.6","t":"Tychonoff theorem","d":"Product of compact spaces.","ep":7},{"id":"gm.ma.top.7","t":"Countability and separation axioms","d":"First and second countable, Hausdorff, regular, normal.","ep":7},{"id":"gm.ma.top.8","t":"Urysohn's lemma and Tietze extension theorem","d":"Statements and consequences.","ep":7}]},{"id":"gm.ma.lp","name":"Section 11: Linear Programming","area":"Mathematics","tag":"GATE MA","ep":47,"topics":[{"id":"gm.ma.lp.0","t":"Linear programming models","d":"Formulation, standard and canonical forms.","ep":4},{"id":"gm.ma.lp.1","t":"Convex sets and extreme points","d":"Geometry of the feasible region.","ep":4},{"id":"gm.ma.lp.2","t":"Basic feasible solution and the graphical method","d":"Correspondence between extreme points and basic feasible solutions.","ep":4},{"id":"gm.ma.lp.3","t":"Simplex method","d":"Pivoting, optimality and the simplex tableau.","ep":5},{"id":"gm.ma.lp.4","t":"Two phase method and revised simplex method","d":"Handling artificial variables.","ep":5},{"id":"gm.ma.lp.5","t":"Infeasible and unbounded models, alternate optima","d":"Detecting each from the tableau.","ep":5},{"id":"gm.ma.lp.6","t":"Duality theory","d":"Weak duality and strong duality; complementary slackness.","ep":5},{"id":"gm.ma.lp.7","t":"Transportation problems","d":"Balanced and unbalanced; initial basic feasible solution by least cost method, north-west corner rule and Vogel's approximation method.","ep":5},{"id":"gm.ma.lp.8","t":"Optimal solution by modified distribution method","d":"MODI method and degeneracy.","ep":5},{"id":"gm.ma.lp.9","t":"Assignment problems and the Hungarian method","d":"Formulation and solution.","ep":5}]},{"id":"da.da.prob","name":"Section 1: Probability and Statistics","area":"Data Science","tag":"GATE DA","ep":63,"topics":[{"id":"da.da.prob.0","t":"Counting","d":"Permutations and combinations.","ep":4},{"id":"da.da.prob.1","t":"Probability axioms, sample space and events","d":"Independent events and mutually exclusive events.","ep":5},{"id":"da.da.prob.2","t":"Marginal, conditional and joint probability","d":"Working with joint tables.","ep":4},{"id":"da.da.prob.3","t":"Bayes theorem","d":"Prior, likelihood and posterior.","ep":6},{"id":"da.da.prob.4","t":"Conditional expectation and variance","d":"Law of total expectation and law of total variance.","ep":4},{"id":"da.da.prob.5","t":"Descriptive statistics","d":"Mean, median, mode and standard deviation.","ep":4},{"id":"da.da.prob.6","t":"Correlation and covariance","d":"Pearson correlation and its properties.","ep":4},{"id":"da.da.prob.7","t":"Discrete random variables","d":"Probability mass functions; uniform, Bernoulli and binomial distributions.","ep":4},{"id":"da.da.prob.8","t":"Continuous random variables","d":"Probability density function; uniform, exponential, Poisson, normal and standard normal distributions.","ep":6},{"id":"da.da.prob.9","t":"t-distribution and chi-squared distribution","d":"Shapes, degrees of freedom and use cases.","ep":4},{"id":"da.da.prob.10","t":"Cumulative distribution function and conditional PDF","d":"Relating CDF and PDF.","ep":4},{"id":"da.da.prob.11","t":"Central limit theorem","d":"Statement, conditions and sampling distribution of the mean.","ep":4},{"id":"da.da.prob.12","t":"Confidence intervals","d":"Interpretation and construction for a mean.","ep":4},{"id":"da.da.prob.13","t":"Hypothesis tests","d":"z-test, t-test and chi-squared test.","ep":6}]},{"id":"da.da.la","name":"Section 2: Linear Algebra","area":"Data Science","tag":"GATE DA","ep":12,"topics":[{"id":"da.da.la.0","t":"Vector spaces and subspaces","d":"Linear dependence and independence of vectors.","ep":2},{"id":"da.da.la.1","t":"Matrices and special matrices","d":"Projection matrix, orthogonal matrix, idempotent matrix, partition matrix and their properties.","ep":2},{"id":"da.da.la.2","t":"Quadratic forms","d":"Positive definiteness and its tests.","ep":2},{"id":"da.da.la.3","t":"Systems of linear equations and Gaussian elimination","d":"Consistency and solution sets.","ep":1},{"id":"da.da.la.4","t":"Eigenvalues and eigenvectors","d":"Characteristic polynomial and diagonalization.","ep":1},{"id":"da.da.la.5","t":"Determinant, rank and nullity","d":"Rank-nullity theorem.","ep":1},{"id":"da.da.la.6","t":"Projections","d":"Least squares and orthogonal projection onto a subspace.","ep":1},{"id":"da.da.la.7","t":"LU decomposition","d":"Existence and computation.","ep":1},{"id":"da.da.la.8","t":"Singular value decomposition","d":"Singular values, low-rank approximation and relation to PCA.","ep":1}]},{"id":"da.da.calc","name":"Section 3: Calculus and Optimization","area":"Data Science","tag":"GATE DA","ep":8,"topics":[{"id":"da.da.calc.0","t":"Functions of a single variable","d":"Limit, continuity and differentiability.","ep":2},{"id":"da.da.calc.1","t":"Taylor series","d":"Expansion and truncation error.","ep":2},{"id":"da.da.calc.2","t":"Maxima and minima","d":"First and second derivative tests.","ep":2},{"id":"da.da.calc.3","t":"Optimization involving a single variable","d":"Locating and classifying optima; convexity.","ep":2}]},{"id":"da.da.dsa","name":"Section 4: Programming, Data Structures and Algorithms","area":"Data Science","tag":"GATE DA","ep":59,"topics":[{"id":"da.da.dsa.0","t":"Programming in Python","d":"Core language constructs, lists, dicts, slicing, comprehension, functions.","ep":10},{"id":"da.da.dsa.1","t":"Stacks and queues","d":"Operations, implementation and applications.","ep":5},{"id":"da.da.dsa.2","t":"Linked lists","d":"Singly and doubly linked lists, traversal and insertion/deletion.","ep":5},{"id":"da.da.dsa.3","t":"Trees","d":"Binary trees, binary search trees, traversals and height.","ep":5},{"id":"da.da.dsa.4","t":"Hash tables","d":"Hash functions, collision resolution, load factor and complexity.","ep":5},{"id":"da.da.dsa.5","t":"Search algorithms","d":"Linear search and binary search; complexity.","ep":5},{"id":"da.da.dsa.6","t":"Basic sorting algorithms","d":"Selection sort, bubble sort and insertion sort.","ep":5},{"id":"da.da.dsa.7","t":"Divide and conquer sorting","d":"Mergesort and quicksort; recurrences and complexity.","ep":7},{"id":"da.da.dsa.8","t":"Introduction to graph theory","d":"Representations, degrees, paths, cycles, connectivity.","ep":5},{"id":"da.da.dsa.9","t":"Basic graph algorithms","d":"Traversals (BFS, DFS) and shortest path.","ep":7}]},{"id":"da.da.db","name":"Section 5: Database Management and Warehousing","area":"Data Science","tag":"GATE DA","ep":53,"topics":[{"id":"da.da.db.0","t":"ER-model","d":"Entities, relationships, cardinality and ER-to-relational mapping.","ep":5},{"id":"da.da.db.1","t":"Relational model and relational algebra","d":"Selection, projection, join, division.","ep":5},{"id":"da.da.db.2","t":"Tuple calculus","d":"Tuple relational calculus expressions.","ep":5},{"id":"da.da.db.3","t":"SQL","d":"Queries, joins, grouping and aggregation, nested queries.","ep":6},{"id":"da.da.db.4","t":"Integrity constraints","d":"Key, entity and referential integrity.","ep":5},{"id":"da.da.db.5","t":"Normal forms","d":"Functional dependencies, 1NF through BCNF, decomposition.","ep":6},{"id":"da.da.db.6","t":"File organization and indexing","d":"Heap, sorted files, B+ trees, clustered vs. unclustered indexes.","ep":5},{"id":"da.da.db.7","t":"Data types and data transformation","d":"Normalization, discretization, sampling, compression.","ep":5},{"id":"da.da.db.8","t":"Data warehouse modelling","d":"Schemas for multidimensional data models, concept hierarchies.","ep":6},{"id":"da.da.db.9","t":"Measures: categorization and computations","d":"Distributive, algebraic and holistic measures.","ep":5}]},{"id":"da.da.ml","name":"Section 6: Machine Learning","area":"Data Science","tag":"GATE DA","ep":83,"topics":[{"id":"da.da.ml.0","t":"Regression and classification problems","d":"Supervised learning setup, loss functions and evaluation metrics.","ep":6},{"id":"da.da.ml.1","t":"Simple and multiple linear regression","d":"Least squares estimation and interpretation.","ep":6},{"id":"da.da.ml.2","t":"Ridge regression","d":"Regularization and the bias-variance effect of the penalty.","ep":6},{"id":"da.da.ml.3","t":"Logistic regression","d":"Sigmoid, log-odds and maximum likelihood.","ep":6},{"id":"da.da.ml.4","t":"k-nearest neighbour","d":"Distance metrics and choice of k.","ep":6},{"id":"da.da.ml.5","t":"Naive Bayes classifier","d":"Conditional independence assumption and smoothing.","ep":5},{"id":"da.da.ml.6","t":"Linear discriminant analysis","d":"Assumptions and decision boundary.","ep":5},{"id":"da.da.ml.7","t":"Support vector machine","d":"Margin, support vectors, soft margin and kernels.","ep":5},{"id":"da.da.ml.8","t":"Decision trees","d":"Splitting criteria, entropy and Gini, pruning.","ep":5},{"id":"da.da.ml.9","t":"Bias-variance trade-off","d":"Underfitting, overfitting and model complexity.","ep":5},{"id":"da.da.ml.10","t":"Cross-validation methods","d":"Leave-one-out (LOO) and k-fold cross-validation.","ep":5},{"id":"da.da.ml.11","t":"Multi-layer perceptron and feed-forward neural networks","d":"Architecture, activation functions and backpropagation.","ep":5},{"id":"da.da.ml.12","t":"Clustering algorithms","d":"k-means and k-medoid.","ep":8},{"id":"da.da.ml.13","t":"Hierarchical clustering","d":"Top-down and bottom-up; single-linkage and multiple-linkage.","ep":5},{"id":"da.da.ml.14","t":"Dimensionality reduction and principal component analysis","d":"Variance explained and choice of components.","ep":5}]},{"id":"da.da.ai","name":"Section 7: Artificial Intelligence","area":"Data Science","tag":"GATE DA","ep":59,"topics":[{"id":"da.da.ai.0","t":"Uninformed search","d":"BFS, DFS, uniform cost search; completeness and optimality.","ep":8},{"id":"da.da.ai.1","t":"Informed search","d":"Greedy best-first and A*; heuristics, admissibility and consistency.","ep":8},{"id":"da.da.ai.2","t":"Adversarial search","d":"Minimax and alpha-beta pruning.","ep":8},{"id":"da.da.ai.3","t":"Propositional logic","d":"Syntax, semantics, satisfiability, CNF and resolution.","ep":7},{"id":"da.da.ai.4","t":"Predicate logic","d":"Quantifiers, unification and inference in first order logic.","ep":7},{"id":"da.da.ai.5","t":"Conditional independence representation","d":"Bayesian networks and d-separation.","ep":7},{"id":"da.da.ai.6","t":"Exact inference through variable elimination","d":"Factor operations and elimination ordering.","ep":7},{"id":"da.da.ai.7","t":"Approximate inference through sampling","d":"Rejection sampling, likelihood weighting and Gibbs sampling.","ep":7}]},{"id":"jm.ma.seq","name":"Sequences and Series of Real Numbers","area":"Mathematics","tag":"JAM MA · GATE MA","ep":34,"topics":[{"id":"jm.ma.seq.0","t":"Convergence of sequences","d":"Definition, limits and algebra of limits.","ep":4},{"id":"jm.ma.seq.1","t":"Bounded and monotone sequences","d":"Monotone convergence theorem.","ep":4},{"id":"jm.ma.seq.2","t":"Cauchy sequences","d":"Cauchy criterion and completeness of R.","ep":4},{"id":"jm.ma.seq.3","t":"Bolzano-Weierstrass theorem","d":"Existence of convergent subsequences.","ep":4},{"id":"jm.ma.seq.4","t":"Absolute convergence","d":"Absolute vs. conditional convergence; rearrangement.","ep":4},{"id":"jm.ma.seq.5","t":"Tests of convergence for series","d":"Comparison test, ratio test, root test.","ep":6},{"id":"jm.ma.seq.6","t":"Power series of one real variable","d":"Radius and interval of convergence.","ep":4},{"id":"jm.ma.seq.7","t":"Term-wise differentiation and integration of power series","d":"Validity inside the interval of convergence.","ep":4}]},{"id":"jm.ma.func","name":"Functions of One Real Variable","area":"Mathematics","tag":"JAM MA · GATE MA","ep":38,"topics":[{"id":"jm.ma.func.0","t":"Limit and continuity","d":"Epsilon-delta definition and algebra of continuous functions.","ep":5},{"id":"jm.ma.func.1","t":"Intermediate value property","d":"Statement and applications to root location.","ep":5},{"id":"jm.ma.func.2","t":"Differentiation","d":"Rules of differentiation and differentiability vs. continuity.","ep":4},{"id":"jm.ma.func.3","t":"Rolle's theorem and the mean value theorem","d":"Statements, hypotheses and applications.","ep":4},{"id":"jm.ma.func.4","t":"L'Hospital rule","d":"Indeterminate forms and correct use.","ep":4},{"id":"jm.ma.func.5","t":"Taylor's theorem and Taylor's series","d":"Remainder terms and expansions.","ep":4},{"id":"jm.ma.func.6","t":"Maxima and minima","d":"First and second derivative tests, global extrema.","ep":4},{"id":"jm.ma.func.7","t":"Riemann integration","d":"Definite integrals and their properties, integrability criteria.","ep":4},{"id":"jm.ma.func.8","t":"Fundamental theorem of calculus","d":"Both forms and their use.","ep":4}]},{"id":"jm.ma.basic","name":"Basic Algebra","area":"Mathematics","tag":"JAM MA","ep":7,"topics":[{"id":"jm.ma.basic.0","t":"Permutations and combinations","d":"Counting principles and standard arrangements.","ep":3},{"id":"jm.ma.basic.1","t":"Binomial theorem","d":"General term, middle term and coefficient problems.","ep":4}]},{"id":"pr.gm","name":"GATE MA — practice & mocks","area":"Practice","tag":"GATE MA","ep":258,"topics":[{"id":"pr.gm.0","t":"PYQ set 2015–2018 (timed, sectional)","d":"Four papers, section by section, untimed first then timed.","ep":50},{"id":"pr.gm.1","t":"PYQ set 2019–2022 (timed, sectional)","d":"Track which sections bleed marks.","ep":50},{"id":"pr.gm.2","t":"PYQ set 2023–2025 (full, timed)","d":"Closest to the current pattern and difficulty.","ep":50},{"id":"pr.gm.3","t":"Topic-wise problem drilling","d":"Hit the weakest 3 sections with volume.","ep":58},{"id":"pr.gm.4","t":"Full-length mocks ×8","d":"Three-hour sittings, strict timing, GA included.","ep":50}]},{"id":"pr.jm","name":"JAM MA — practice & mocks","area":"Practice","tag":"JAM MA","ep":40,"topics":[{"id":"pr.jm.0","t":"PYQ set 2015–2020","d":"Get used to NAT answer entry and MSQ all-or-nothing scoring.","ep":20},{"id":"pr.jm.1","t":"PYQ set 2021–2025 + mocks","d":"Recent pattern; never leave a NAT blank.","ep":20}]},{"id":"pr.da","name":"GATE DA — practice & mocks","area":"Practice","tag":"GATE DA","ep":84,"topics":[{"id":"pr.da.0","t":"PYQ 2024 & 2025 (both full papers)","d":"Only two official papers exist — save them for late prep.","ep":24},{"id":"pr.da.1","t":"GATE CS + ST cross-practice","d":"DSA/DBMS from CS, probability from ST — 20+ years of on-syllabus questions.","ep":30},{"id":"pr.da.2","t":"Full-length DA mocks ×6","d":"Three-hour sittings with GA.","ep":30}]},{"id":"pr.fin","name":"Final integration — all three papers","area":"Practice","tag":"ALL","ep":100,"topics":[{"id":"pr.fin.0","t":"Timed full mocks, rotating across all 3 papers","d":"GATE MA, GATE DA and JAM MA on rotation.","ep":60},{"id":"pr.fin.1","t":"Error-log review & weak-topic redo","d":"Re-solve everything you got wrong, by topic.","ep":40}]}];
+
+/* Book to start from for each section.
+   b=book, c=chapters, p=local file (works when this page is opened from the Banana folder),
+   u=legally-free online copy, n=extra note. */
+const RES = {"gm.ga.verb": {"b": "R.S. Aggarwal — Verbal & Non-Verbal Reasoning", "c": "Verbal reasoning part: analogy, series, comprehension-style sections", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/GENERAL%20APTITUDE/A%20Modern%20App.To%20Verbal%20x26%20Non%20Verbal%20Reasoning%20%28By%20R.S.%20Aggarwal%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf"}, "gm.ga.quant": {"b": "Dinesh Khattar — Quantitative Aptitude", "c": "Ratio & proportion, percentage, P&C, series, data interpretation chapters only", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/GENERAL%20APTITUDE/Quantitative%20Aptitude%20for%20Competitive%20Examinations%20%28Dinesh%20Khattar%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Skip everything GATE never asks — it's maybe a third of the book."}, "gm.ga.anly": {"b": "R.S. Aggarwal — Verbal & Non-Verbal Reasoning", "c": "Analytical reasoning: puzzles, seating, blood relations, directions, coding-decoding", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/GENERAL%20APTITUDE/A%20Modern%20App.To%20Verbal%20x26%20Non%20Verbal%20Reasoning%20%28By%20R.S.%20Aggarwal%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf"}, "gm.ga.spat": {"b": "R.S. Aggarwal — Verbal & Non-Verbal Reasoning", "c": "Non-verbal part: mirror/water images, paper folding & cutting, cubes and dice", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/GENERAL%20APTITUDE/A%20Modern%20App.To%20Verbal%20x26%20Non%20Verbal%20Reasoning%20%28By%20R.S.%20Aggarwal%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf"}, "gm.ma.calc": {"b": "Thomas' Calculus", "c": "Ch 12–16 (vectors, partial derivatives, multiple integrals, Green/Stokes/Divergence)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/CALCULUS/Thomas%20Calculus%20%28Joel%20R.%20Hass%2C%20Christopher%20D.%20Heil%20etc.%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "You've done ~50% of this book already — start at Ch 14, since Ch 1–11 is the single-variable half you've covered."}, "gm.ma.la": {"b": "Lay — Linear Algebra and Its Applications", "c": "Ch 4–7 (vector spaces, eigenvalues, orthogonality, quadratic forms)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2025/BASIC%20LINEAR%20ALGEBRA/Linear%20Algebra%20and%20Its%20Applications%2C%204th%20Edition%20%28David%20C.%20Lay%29%20%28Z-Library%29.pdf", "u": "https://archive.org/details/fcla-3.50", "n": "Your Ch 1–3 is solid, so start at Ch 4. Jordan form and Sylvester's law aren't in Lay — Beezer's free book (link) covers the vector-space rigour GATE wants."}, "gm.ma.ra": {"b": "Rudin — Principles of Mathematical Analysis", "c": "Ch 2 (topology), 3 (sequences), 4 (continuity), 7 (sequences of functions), 9 (several variables), 11 (Lebesgue)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Pure%20%26%20Applied%20Mathematics/Principles%20of%20Mathematical%20Analysis%20Third%20Edition%20%28Retyped%2C%20Edited%2C%20Updated%29%20%28Walter%20Rudin%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Do the Bartle section below FIRST. Rudin is brutal as a first pass — it's the GATE-depth second pass."}, "gm.ma.ca": {"b": "Churchill & Brown — Complex Variables and Applications", "c": "Ch 2 (analytic functions), 4 (integrals), 5 (series), 6–7 (residues), 8–9 (conformal mapping)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Pure%20%26%20Applied%20Mathematics/Complex%20Variables%20and%20Applications%20%28James%20Ward%20Brown%2C%20Ruel%20V.%20Churchill%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf"}, "gm.ma.ode": {"b": "Trench — Elementary Differential Equations (free)", "c": "Ch 2 (first order), 5 (linear second order), 7 (series solutions), 8 (Laplace), 9 (higher order), 10 (linear systems)", "u": "http://ramanujan.math.trinity.edu/wtrench/texts/TRENCH_DIFF_EQNS_I.PDF", "n": "Sturm-Liouville, Bessel/Legendre and phase-plane stability need Kreyszig Ch 5 & 11 as a top-up."}, "gm.ma.alg": {"b": "Gallian — Contemporary Abstract Algebra", "c": "Ch 2–11 + 24 (groups through Sylow), then Ch 12–22 (rings, ideals, fields, finite fields)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/ADVANCED%20MATHEMATICS/Contemporary%20Abstract%20Algebra%20%28Joseph%20A.%20Gallian%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Fraleigh is also in your library if Gallian's pace doesn't suit. You're pre-permutations, so start at Ch 2."}, "gm.ma.fa": {"b": "MIT 18.102 lecture notes (Melrose, free)", "c": "Normed & Banach spaces → bounded operators → Hahn-Banach → Hilbert spaces → spectral theorem", "u": "https://ocw.mit.edu/courses/18-102-introduction-to-functional-analysis-spring-2021/", "n": "Only start after Real Analysis — this leans on metric-space completeness throughout."}, "gm.ma.na": {"b": "S.S. Sastry — Introductory Methods of Numerical Analysis", "c": "Ch 2 (nonlinear equations), 3 (interpolation), 5 (differentiation & integration), 6 (linear systems), 7 (ODEs)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Calculus%2C%20Convex%20Optimization%20%26%20LP/Introductory%20methods%20of%20numerical%20analysis%20%28S.S.%20Sastry%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Code each method in Python as you go — fastest way to make the error formulas stick."}, "gm.ma.pde": {"b": "Miersemann — Partial Differential Equations (free)", "c": "Method of characteristics, classification, separation of variables, wave & heat equations", "u": "https://math.libretexts.org/Bookshelves/Differential_Equations/Partial_Differential_Equations_(Miersemann)", "n": "Read online — no single PDF exists. Kreyszig Ch 12 in your library covers transform methods."}, "gm.ma.top": {"b": "Munkres — Topology", "c": "Ch 2 (spaces & continuity), 3 (connectedness, compactness), 4 (countability & separation), 5 (Tychonoff)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Pure%20%26%20Applied%20Mathematics/James%20R.%20Munkres%20Topology%20Prentice%20Hall%2C%20Incorporated%2C%202000%20%28James%20R.%20Munkres%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Part I only — Part II is algebraic topology and off-syllabus."}, "gm.ma.lp": {"b": "Hamdy Taha — Operations Research", "c": "Ch 2 (LP models, graphical), 3 (simplex), 4 (duality), 5 (transportation & assignment)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Calculus%2C%20Convex%20Optimization%20%26%20LP/9-Operations-Research-An-Introduction-10th-Ed.-Hamdy-A-Taha.pdf"}, "jm.ma.seq": {"b": "Bartle & Sherbert — Introduction to Real Analysis", "c": "Ch 3 (sequences) and Ch 9 (infinite series)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2025/REAL%20ANALYSIS%20I/real-analysis-by-bartle.pdf", "n": "★ Start the whole plan here. This is your weakest area and everything later leans on it."}, "jm.ma.func": {"b": "Bartle & Sherbert — Introduction to Real Analysis", "c": "Ch 4 (limits), 5 (continuity), 6 (differentiation, MVT, Taylor), 7 (Riemann integral)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2025/REAL%20ANALYSIS%20I/real-analysis-by-bartle.pdf"}, "jm.ma.basic": {"b": "Hall & Knight — Higher Algebra (public domain)", "c": "Permutations & combinations, and the binomial theorem chapters", "u": "https://archive.org/details/HIGHERALGEBRA_201906", "n": "Small and self-contained — a good filler block for a low-energy day."}, "da.da.prob": {"b": "Sheldon Ross — A First Course in Probability", "c": "Ch 3 (conditional & Bayes) onward through Ch 8 (limit theorems, CLT)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/PROBABILITY%20AND%20STATISTICS/A%20First%20Course%20in%20Probability%2010th%20Edition%20%28Sheldon%20Ross%2C%20Sheldon%20M.%20Ross%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "u": "https://www.probabilitycourse.com", "n": "You've done Ch 1–2, so start at Ch 3. Hypothesis testing/confidence intervals are thin in Ross — Pishro-Nik (free link) covers them better."}, "da.da.la": {"b": "Beezer — A First Course in Linear Algebra (free)", "c": "Chapters E (eigenvalues) and R (representations); Lay Ch 6–7 for projections & least squares", "u": "https://archive.org/details/fcla-3.50", "n": "SVD and its PCA link: MIT 18.06 (Strang) lectures are the clearest free source."}, "da.da.calc": {"b": "Boyd & Vandenberghe — Convex Optimization (free)", "c": "Ch 2 (convex sets) and Ch 3 (convex functions) only", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Calculus%2C%20Convex%20Optimization%20%26%20LP/Convex%20Optimization%20%28Stephen%20Boyd%2C%20Lieven%20Vandenberghe%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29%20%281%29.pdf", "u": "https://web.stanford.edu/~boyd/cvxbook/", "n": "Single-variable limits/Taylor/optimisation come free with Thomas Ch 3–4, already on your shelf."}, "da.da.dsa": {"b": "CLRS — Introduction to Algorithms", "c": "Ch 10 (lists/stacks/queues), 11 (hashing), 12 (BSTs), 6–8 (sorting), 22 (BFS/DFS), 24 (shortest paths)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Computer%20Science%2C%20Logic%20%26%20Systems/Introduction%20to%20Algorithms%20%28Thomas%20H.%20Cormen%2C%20Charles%20E.%20Leiserson%20etc.%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Reference, not cover-to-cover. Your Python is strong — the gap is complexity analysis, not coding."}, "da.da.db": {"b": "Silberschatz — Database System Concepts", "c": "ER model, relational algebra, SQL, normalization & functional dependencies, B+ tree indexing", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/INTRODUCTION%20TO%20DATABASES/Database%20System%20Concepts%20%28Avi%20Silberschatz%2C%20Henry%20F.%20Korth%20etc.%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Warehousing, schemas and measures aren't here — use Han's Data Mining Ch 3–4 (also in your library)."}, "da.da.ml": {"b": "Géron — Hands-On Machine Learning", "c": "Ch 3 (classification), 4 (training models), 5 (SVM), 6 (trees), 8 (PCA), 9 (clustering), 10 (neural nets)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026/MACHINE%20LEARNING/Hands-on%20Machine%20Learning%20with%20Scikit-Learn%2C%20Keras%2C%20and%20TensorFlow%20%28Aur%C3%A9lien%20G%C3%A9ron%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "u": "https://www.statlearning.com", "n": "Géron builds intuition; GATE asks derivations. Use ISLR (free link) for the maths behind bias-variance and regularization."}, "da.da.ai": {"b": "Russell & Norvig — Artificial Intelligence: A Modern Approach", "c": "Ch 3 (search), 5 (adversarial), 7 (propositional logic), 8–9 (first-order logic), 12–13 (Bayesian networks)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/GATE%20PREP/Computer%20Science%2C%20Logic%20%26%20Systems/Artificial%20Intelligence%20A%20Modern%20Approach%20%284th%20ed.%29%20%28Stuart%20Russell%2C%20Peter%20Norvig%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf"}, "pr.gm": {"b": "Your own GATE MA paper archive", "c": "20 files — question papers 2015–2025 plus answer keys"}, "pr.jm": {"b": "Your own JAM MA paper archive", "c": "Question papers 2015–2025 plus available answer keys"}, "pr.da": {"b": "Your own GATE DA paper archive", "c": "2024 & 2025 papers + keys — the only two official DA papers that exist", "n": "Save these for late prep. Pad with GATE CS and ST papers for extra on-syllabus practice."}, "pr.fin": {"b": "Everything in GATE/source/pyq and JAM/source/pyq", "c": "Rotate full timed papers across all four; keep an error log by topic"}};
+
+/* ---------------- state ---------------- */
+const DB = "https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app";
+const APP = "ep_pathway_v1";
+const LS = APP+"_state", LS_ID = APP+"_syncid";
+const PRIOR_EP = 45;            // strength of the "1 hour per EP" starting assumption
+
+let state = { done:{}, undone:{}, hours:{}, log:[], epDay:null, updated:0 };
+let syncId = "";
+let filter = "All";
+let firstPaint = true;
+
+const TOPICS = [];
+GROUPS.forEach(g => g.topics.forEach(t => TOPICS.push({...t, gid:g.id, area:g.area, tag:g.tag})));
+const TOTAL_EP = TOPICS.reduce((s,t)=>s+t.ep,0);
+const AREA_COLOR = {Mathematics:"var(--math)","Data Science":"var(--ds)",Physics:"var(--phy)",
+                    Aptitude:"var(--apt)",Practice:"var(--prac)"};
+
+function load(){
+  try{ const r = JSON.parse(localStorage.getItem(LS)||"null"); if(r) state = {done:{},undone:{},hours:{},log:[],epDay:null,updated:0,...r}; }catch(e){}
+  try{ syncId = localStorage.getItem(LS_ID)||""; }catch(e){}
+}
+function save(){
+  state.updated = Date.now();
+  try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+  if(syncId) schedulePush();
+}
+
+/* ---------------- merge ----------------
+   Two devices can both make progress offline. Merging has to be loss-free and
+   order-independent: merge(a,b) == merge(b,a), and merging twice changes nothing. */
+function mergeStates(A, B){
+  A = A||{}; B = B||{};
+
+  // tombstones — the most recent un-check for each topic
+  const undone = {};
+  for(const src of [A.undone||{}, B.undone||{}])
+    for(const k in src) if(!(undone[k] >= src[k])) undone[k] = src[k];
+
+  // completions — keep the most recent tick, then drop anything un-checked after it
+  const done = {};
+  for(const src of [A.done||{}, B.done||{}])
+    for(const k in src) if(!(done[k] >= src[k])) done[k] = src[k];
+  for(const k in undone) if(done[k] && undone[k] > done[k]) delete done[k];
+  for(const k in undone) if(done[k] && undone[k] <= done[k]) delete undone[k];   // spent tombstone
+
+  // session log — union, de-duplicated on (topic, timestamp, amount)
+  const seen = new Set(), log = [];
+  for(const src of [A.log||[], B.log||[]])
+    for(const e of src){
+      const key = e.i+"|"+e.t+"|"+e.h;
+      if(!seen.has(key)){ seen.add(key); log.push(e); }
+    }
+  // deterministic order, so merging A into B and B into A give byte-identical results
+  log.sort((x,y)=> x.t-y.t || (x.i<y.i?-1:x.i>y.i?1:0) || x.h-y.h);
+
+  // hours — never drop below what either side believed, and use the merged log
+  // where it is complete. Max (not sum) so a re-sync can't double-count.
+  const fromLog = {};
+  for(const e of log) fromLog[e.i] = (fromLog[e.i]||0) + e.h;
+  const hours = {};
+  const ids = new Set([...Object.keys(A.hours||{}), ...Object.keys(B.hours||{}), ...Object.keys(fromLog)]);
+  for(const k of ids){
+    const v = Math.max((A.hours||{})[k]||0, (B.hours||{})[k]||0, fromLog[k]||0);
+    if(v > 0) hours[k] = Math.round(v*10)/10;
+  }
+
+  const newer = (A.updated||0) >= (B.updated||0) ? A : B;
+  const sortKeys = o => Object.fromEntries(Object.entries(o).sort((x,y)=> x[0]<y[0]?-1:1));
+  return {
+    done: sortKeys(done), undone: sortKeys(undone), hours: sortKeys(hours),
+    log: log.slice(-600),
+    epDay: (newer.epDay ?? A.epDay ?? B.epDay ?? null),
+    updated: Math.max(A.updated||0, B.updated||0)
+  };
+}
+
+function tally(st){
+  return {topics: Object.keys(st.done||{}).length,
+          hours: Math.round(Object.values(st.hours||{}).reduce((s,v)=>s+v,0)*10)/10};
+}
+
+/* ---------------- effort-point maths ---------------- */
+function calc(){
+  let doneEP=0, calEP=0, calH=0, allH=0;
+  TOPICS.forEach(t=>{
+    const h = state.hours[t.id]||0;
+    const d = !!state.done[t.id];
+    if(d) doneEP += t.ep;
+    if(d && h>0){ calEP += t.ep; calH += h; }
+    allH += h;
+  });
+  // shrink the personal rate toward 1.0 h/EP until there's enough evidence
+  const rate = (PRIOR_EP + calH) / (PRIOR_EP + calEP);
+  const conf = calEP / (calEP + PRIOR_EP);
+  const remEP = TOTAL_EP - doneEP;
+  const remH = remEP * rate;
+  // real pace from the last 28 days of logged sessions
+  const cut = Date.now() - 28*864e5;
+  const recentH = (state.log||[]).filter(e=>e.t>=cut).reduce((s,e)=>s+e.h,0);
+  let weekly = recentH/4;
+  if(weekly<=0 && (state.log||[]).length){
+    const first = Math.min(...state.log.map(e=>e.t));
+    const weeks = Math.max(1,(Date.now()-first)/(7*864e5));
+    weekly = allH/weeks;
+  }
+  const eta = weekly>0 ? new Date(Date.now() + (remH/weekly)*7*864e5) : null;
+
+  // planned pace: effort points per day, typed in by you
+  const epDay = state.epDay>0 ? state.epDay : null;
+  const planDays = epDay ? Math.ceil(remEP/epDay) : null;
+  const planDate = planDays ? new Date(Date.now() + planDays*864e5) : null;
+
+  // measured pace: EP actually finished in the last 28 days
+  const doneRecent = TOPICS.filter(t=>state.done[t.id] && state.done[t.id]>=cut)
+                           .reduce((s,t)=>s+t.ep,0);
+  const realEpDay = doneRecent>0 ? doneRecent/28 : 0;
+
+  return {doneEP, remEP, rate, conf, remH, allH, calEP, calH, weekly, eta,
+          epDay, planDays, planDate, realEpDay,
+          pct: TOTAL_EP? doneEP/TOTAL_EP*100 : 0};
+}
+
+/* ---------------- render ---------------- */
+const $ = id => document.getElementById(id);
+const ML = /[\u0D00-\u0D7F]/;                 // Malayalam block
+function mlc(t){ return ML.test(t||"") ? " ml" : ""; }
+function fmtH(h){ return h>=100 ? Math.round(h)+"h" : (Math.round(h*10)/10)+"h"; }
+function fmtDate(d){ return d.toLocaleDateString("en-IN",{month:"short",year:"numeric"}); }
+
+function tween(el, to, suffix, dur){
+  const from = parseFloat(el.dataset.v||"0"); el.dataset.v = to;
+  const t0 = performance.now();
+  (function step(now){
+    const p = Math.min(1,(now-t0)/(dur||700));
+    const e = 1-Math.pow(1-p,3);
+    const v = from+(to-from)*e;
+    el.textContent = (Math.abs(to)>=100? Math.round(v) : Math.round(v*10)/10).toLocaleString()+(suffix||"");
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function renderStats(){
+  const c = calc();
+  const C = 2*Math.PI*52;
+  $("prg").style.strokeDashoffset = C - C*Math.min(1,c.pct/100);
+  $("ringpct").textContent = Math.round(c.pct)+"%";
+  $("minibar").style.width = c.pct+"%";
+  $("minipct").textContent = Math.round(c.pct)+"%";
+
+  tween($("k1"), c.doneEP, "");
+  tween($("k2"), c.allH, "h");
+  $("k3").textContent = c.calEP ? (Math.round(c.rate*100)/100)+" h/EP" : "—";
+  tween($("k4"), c.remH, "h");
+
+  $("heroBig").textContent = c.remEP>0
+    ? c.remEP.toLocaleString()+" effort points to go"
+    : "Every topic ticked off 🎉";
+  $("heroSm").textContent = c.calEP
+    ? "At your measured pace that's about "+fmtH(c.remH)+" of study left."
+    : "Log the hours a topic actually took — everything else re-predicts itself.";
+
+  const eta = $("etaPill");
+  if(c.eta && c.remEP>0 && !c.epDay){
+    eta.style.display = "inline-flex";
+    eta.innerHTML = "~"+Math.round(c.weekly*10)/10+"h/week lately → <b>"+fmtDate(c.eta)+"</b>";
+  } else eta.style.display = "none";
+
+  // --- pace planner ---
+  const po = $("paceOut");
+  if(c.planDate && c.remEP>0){
+    po.style.display = "flex";
+    const mo = c.planDays/30.44;
+    $("paceDate").textContent = c.planDate.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+    $("paceX").textContent = `· ${c.planDays.toLocaleString()} days (${mo<1? "under a month" : mo.toFixed(1)+" months"}) at ${c.epDay} EP/day`;
+  } else if(c.remEP<=0){
+    po.style.display = "flex";
+    $("paceDate").textContent = "Finished 🎉"; $("paceX").textContent = "";
+  } else po.style.display = "none";
+
+  const pr = $("paceReal");
+  if(c.realEpDay>0){
+    const r = Math.round(c.realEpDay*10)/10;
+    let verdict = "";
+    if(c.epDay){
+      const ratio = c.realEpDay/c.epDay;
+      verdict = ratio>=0.95 ? " — you're on or ahead of plan."
+        : ratio>=0.6 ? " — a bit under plan, but moving."
+        : " — well under plan, so the date above is optimistic.";
+    }
+    pr.innerHTML = `Actually measured: <b>${r} EP/day</b> over the last 4 weeks${verdict}`;
+  } else {
+    pr.textContent = state.epDay
+      ? "Nothing ticked off in the last 4 weeks yet — this date is a plan, not a measurement."
+      : "Type a number above to get a finish date. Anything you tick off will be measured against it.";
+  }
+
+  $("calibBar").style.width = Math.round(c.conf*100)+"%";
+  $("calibPill").textContent = Math.round(c.conf*100)+"% tuned";
+  $("calibTxt").textContent = c.calEP
+    ? "you average "+(Math.round(c.rate*100)/100)+" h per effort point"
+    : "starting at 1.0 h per effort point";
+  $("calibNote").textContent = c.calEP
+    ? "Measured from "+c.calEP+" EP of finished topics ("+fmtH(c.calH||0)+" logged). "
+      + (c.rate>1.08 ? "You run slower than the baseline estimate, so remaining times were scaled up."
+        : c.rate<0.92 ? "You run faster than the baseline estimate, so remaining times were scaled down."
+        : "You're tracking close to the baseline estimate.")
+    : "Finish a topic and log the real hours. Every completed topic teaches the tracker your actual pace, and all remaining predictions shift with it.";
+}
+
+function renderFilters(){
+  const areas = ["All", ...[...new Set(GROUPS.map(g=>g.area))]];
+  $("filters").innerHTML = areas.map(a=>{
+    const n = a==="All" ? TOPICS.length : TOPICS.filter(t=>t.area===a).length;
+    return `<div class="chip${a===filter?" on":""}" data-a="${a}">${a}<i>${n}</i></div>`;
+  }).join("");
+}
+
+function renderList(){
+  const c = calc();
+  const gs = GROUPS.filter(g=>filter==="All"||g.area===filter);
+  let lastArea = null;
+  $("list").innerHTML = gs.length ? gs.map((g,i)=>{
+    let head = "";
+    if(g.area !== lastArea && filter === "All"){
+      lastArea = g.area;
+      const areaGroups = gs.filter(x=>x.area===g.area);
+      const aep = areaGroups.reduce((s,x)=>s+x.ep,0);
+      const adone = areaGroups.flatMap(x=>x.topics).filter(t=>state.done[t.id]).length;
+      const atot = areaGroups.flatMap(x=>x.topics).length;
+      head = `<div class="parthead" style="--i:${i}">
+        <span class="bar" style="background:${AREA_COLOR[g.area]||"var(--ac)"}"></span>
+        <h2 class="${mlc(g.area).trim()}">${g.area}</h2>
+        <span class="pn">${adone}/${atot} · ${aep} EP</span>
+      </div>`;
+    }
+    return head + sectionHTML(g,i,c);
+  }).join("") : `<div class="empty">Nothing here yet.</div>`;
+  firstPaint = false;
+}
+
+function sectionHTML(g,i,c){
+  {
+    const done = g.topics.filter(t=>state.done[t.id]).length;
+    const depDone = g.topics.filter(t=>state.done[t.id]).reduce((s,t)=>s+t.ep,0);
+    const pct = g.ep? depDone/g.ep*100 : 0;
+    const col = AREA_COLOR[g.area]||"var(--ac)";
+    const open = openSecs.has(g.id);
+    return `<div class="sec${open?" open":""}" data-g="${g.id}" style="--i:${i}">
+      <div class="sec-h" data-sec="${g.id}">
+        ${g.idx?`<span class="idx">${g.idx}</span>`:`<span class="sec-dot" style="background:${col}"></span>`}
+        <div class="sec-t">
+          <b class="${mlc(g.name).trim()}">${g.name}</b>
+          <div class="sec-meta">
+            <span class="tag">${g.tag}</span>
+            <span class="n">${done}/${g.topics.length} · ${g.ep} EP · ~${fmtH(g.ep*c.rate)}</span>
+          </div>
+        </div>
+        <div class="sec-r">
+          <span class="sec-pct">${Math.round(pct)}%</span>
+          <span class="sbar"><i style="width:${pct}%;background:${col}"></i></span>
+        </div>
+        <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="sec-body"><div>${resHTML(g.id)}${g.topics.map(t=>topicHTML(t,c)).join("")}</div></div>
+    </div>`;
+  }
+}
+
+const IC_PDF = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>`;
+const IC_WEB = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>`;
+
+function resHTML(gid){
+  const r = RES[gid];
+  if(!r) return "";
+  const star = /★/.test(r.n||"");
+  const btns = [];
+  if(r.p) btns.push(`<a class="rb" href="${r.p}" target="_blank" rel="noopener">${IC_PDF}${r.p.endsWith("/")?"Open folder":"Open PDF"}</a>`);
+  if(r.u) btns.push(`<a class="rb free" href="${r.u}" target="_blank" rel="noopener">${IC_WEB}Free online</a>`);
+  return `<div class="res">
+    <div class="res-l">Start from${star?`<span class="res-start">START HERE</span>`:""}</div>
+    <div class="res-b">${r.b}</div>
+    <div class="res-c">${r.c}</div>
+    ${r.n?`<div class="res-n">${r.n.replace("★ ","")}</div>`:""}
+    ${btns.length?`<div class="res-btns">${btns.join("")}</div>`:""}
+  </div>`;
+}
+
+function topicHTML(t,c){
+  const h = state.hours[t.id]||0, d = !!state.done[t.id];
+  const cls = d ? "done" : (h>0 ? "part" : "");
+  const open = openTopics.has(t.id);
+  const pred = fmtH(t.ep*c.rate);
+  return `<div class="tp ${cls}${open?" open":""}" data-t="${t.id}">
+    <div class="tp-h" data-row="${t.id}">
+      <span class="box" data-box="${t.id}">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </span>
+      <div class="tp-t">
+        <div class="n${mlc(t.t)}">${t.t}</div>
+        ${t.d?`<div class="d${mlc(t.d)}">${t.d}</div>`:""}
+      </div>
+      <div class="tp-r">
+        <span class="ep">${t.ep} EP</span>
+        <span class="pred">${h>0? fmtH(h)+" logged" : "~"+pred}</span>
+      </div>
+    </div>
+    <div class="tp-body"><div><div class="logbox">
+      <div class="logrow">
+        <input class="hin" type="number" inputmode="decimal" step="0.5" min="0"
+               value="${h||""}" placeholder="0" data-h="${t.id}">
+        <button class="qb" data-add="${t.id}" data-v="0.5">+½h</button>
+        <button class="qb" data-add="${t.id}" data-v="1">+1h</button>
+        <button class="qb" data-add="${t.id}" data-v="3">+3h</button>
+        <button class="qb go" data-done="${t.id}">${d?"Done ✓":"Mark done"}</button>
+      </div>
+      <div class="loghint">${d
+        ? `Counted in your calibration: <b>${t.ep} EP</b> took <b>${fmtH(h)}</b>.`
+        : `Baseline says <b>${t.ep} EP ≈ ${pred}</b>. Log what it really takes — even in bits — then mark it done.`}
+      </div>
+    </div></div></div>
+  </div>`;
+}
+
+/* ---------------- interaction ---------------- */
+const openSecs = new Set(), openTopics = new Set();
+
+function toast(m){
+  const el = $("toast"); el.textContent = m; el.classList.add("on");
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove("on"), 1900);
+}
+function haptic(){ if(navigator.vibrate) navigator.vibrate(12); }
+
+function refreshTopic(id){
+  const c = calc();
+  const t = TOPICS.find(x=>x.id===id);
+  const el = document.querySelector(`.tp[data-t="${CSS.escape(id)}"]`);
+  if(!el||!t) return;
+  const h = state.hours[id]||0, d = !!state.done[id];
+  el.className = "tp "+(d?"done":(h>0?"part":""))+(openTopics.has(id)?" open":"");
+  el.querySelector(".pred").textContent = h>0? fmtH(h)+" logged" : "~"+fmtH(t.ep*c.rate);
+  const btn = el.querySelector("[data-done]"); if(btn) btn.textContent = d?"Done ✓":"Mark done";
+  const hint = el.querySelector(".loghint");
+  if(hint) hint.innerHTML = d
+    ? `Counted in your calibration: <b>${t.ep} EP</b> took <b>${fmtH(h)}</b>.`
+    : `Baseline says <b>${t.ep} EP ≈ ${fmtH(t.ep*c.rate)}</b>. Log what it really takes — even in bits — then mark it done.`;
+  // section header numbers
+  const g = GROUPS.find(x=>x.id===t.gid);
+  const sec = document.querySelector(`.sec[data-g="${CSS.escape(t.gid)}"]`);
+  if(sec&&g){
+    const dn = g.topics.filter(x=>state.done[x.id]).length;
+    const de = g.topics.filter(x=>state.done[x.id]).reduce((s,x)=>s+x.ep,0);
+    const pct = g.ep? de/g.ep*100:0;
+    sec.querySelector(".sec-meta .n").textContent =
+      `${dn}/${g.topics.length} · ${g.ep} EP · ~${fmtH(g.ep*c.rate)}`;
+    sec.querySelector(".sec-pct").textContent = Math.round(pct)+"%";
+    sec.querySelector(".sbar i").style.width = pct+"%";
+  }
+  renderStats();
+}
+
+function addHours(id, v){
+  const cur = state.hours[id]||0;
+  const nv = Math.max(0, Math.round((cur+v)*10)/10);
+  state.hours[id] = nv;
+  state.log = state.log||[];
+  state.log.push({i:id, h:v, t:Date.now()});
+  if(state.log.length>600) state.log = state.log.slice(-600);
+  const inp = document.querySelector(`[data-h="${CSS.escape(id)}"]`);
+  if(inp) inp.value = nv||"";
+  save(); refreshTopic(id); haptic();
+}
+function setHours(id, nv){
+  const cur = state.hours[id]||0;
+  nv = Math.max(0, Math.round(nv*10)/10);
+  state.hours[id] = nv;
+  const d = nv-cur;
+  if(d!==0){ state.log = state.log||[]; state.log.push({i:id,h:d,t:Date.now()}); }
+  save(); refreshTopic(id);
+}
+function toggleDone(id){
+  if(state.done[id]){ delete state.done[id]; state.undone[id] = Date.now(); }
+  else{
+    delete state.undone[id];
+    state.done[id] = Date.now();
+    const t = TOPICS.find(x=>x.id===id);
+    if(!(state.hours[id]>0)) toast("Marked done — log the hours to tune predictions");
+    else{
+      const c = calc();
+      toast(`+${t.ep} EP · pace now ${Math.round(c.rate*100)/100} h/EP`);
+    }
+  }
+  save(); refreshTopic(id); haptic();
+}
+
+document.addEventListener("click", e=>{
+  const chip = e.target.closest(".chip");
+  if(chip){ filter = chip.dataset.a; renderFilters(); renderList(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+
+  const box = e.target.closest("[data-box]");
+  if(box){ e.stopPropagation(); toggleDone(box.dataset.box); return; }
+
+  const dn = e.target.closest("[data-done]");
+  if(dn){ toggleDone(dn.dataset.done); return; }
+
+  const add = e.target.closest("[data-add]");
+  if(add){ addHours(add.dataset.add, parseFloat(add.dataset.v)); return; }
+
+  const row = e.target.closest("[data-row]");
+  if(row){
+    const id = row.dataset.row;
+    const el = row.closest(".tp");
+    if(openTopics.has(id)){ openTopics.delete(id); el.classList.remove("open"); }
+    else{ openTopics.add(id); el.classList.add("open"); }
+    return;
+  }
+
+  const sh = e.target.closest("[data-sec]");
+  if(sh){
+    const id = sh.dataset.sec, el = sh.closest(".sec");
+    if(openSecs.has(id)){ openSecs.delete(id); el.classList.remove("open"); }
+    else{ openSecs.add(id); el.classList.add("open"); }
+    return;
+  }
+});
+document.addEventListener("change", e=>{
+  const h = e.target.closest("[data-h]");
+  if(h) setHours(h.dataset.h, parseFloat(h.value)||0);
+});
+
+$("epDay").addEventListener("input", e=>{
+  const v = parseFloat(e.target.value);
+  state.epDay = (v>0) ? v : null;
+  save(); renderStats();
+});
+
+/* ---------------- cloud sync ----------------
+   Every sync is a merge: pull remote, merge with local, write the merged result back.
+   Nothing is ever replaced wholesale, so two devices can both work offline safely. */
+let pushT = null, syncing = false;
+function badge(cls){ $("btn-sync").className = "iconbtn"+(cls?" "+cls:""); }
+function keyUrl(){ return `${DB}/${APP}/${encodeURIComponent(syncId)}.json`; }
+
+function setKeyChip(){
+  const el = $("keyChip");
+  if(!el) return;
+  el.textContent = syncId || "";
+  el.style.display = syncId ? "inline-flex" : "none";
+}
+
+function schedulePush(){
+  clearTimeout(pushT);
+  pushT = setTimeout(()=>syncNow(true), 1200);
+}
+
+/* merge-sync. quiet=true for the automatic background sync after an edit. */
+function syncNow(quiet, cb){
+  if(!syncId || syncing){ cb && cb(false); return; }
+  syncing = true;
+  badge("syncing");
+  const before = tally(state);
+  fetch(keyUrl(), {cache:"no-store"})
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP "+r.status)))
+    .then(remote => {
+      let rs = null;
+      if(remote && typeof remote === "object"){
+        if(typeof remote.payload === "string"){ try{ rs = JSON.parse(remote.payload); }catch(e){} }
+        else if(remote.done || remote.hours) rs = remote;
+      }
+      const merged = mergeStates(state, rs);
+      merged.updated = Date.now();
+      state = merged;
+      try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+      if($("epDay")) $("epDay").value = state.epDay > 0 ? state.epDay : "";
+      renderStats(); renderList();
+
+      return fetch(keyUrl(), {
+        method:"PUT", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ payload: JSON.stringify(state), updated: state.updated, device: syncId })
+      }).then(r => {
+        if(!r.ok) throw new Error("HTTP "+r.status);
+        const after = tally(state);
+        const gained = { topics: after.topics - before.topics,
+                         hours: Math.round((after.hours - before.hours)*10)/10 };
+        badge("synced");
+        const msg = (gained.topics || gained.hours)
+          ? `Merged in ${gained.topics} topic${gained.topics===1?"":"s"}` +
+            (gained.hours ? ` and ${gained.hours}h` : "") + " from the cloud"
+          : "Everything already in sync";
+        if($("syncSt")) $("syncSt").textContent = msg + " \u2713";
+        if(!quiet) toast(msg);
+        syncing = false; cb && cb(true);
+      });
+    })
+    .catch(err => {
+      syncing = false;
+      badge("error");
+      if($("syncSt")) $("syncSt").textContent = "Offline — your progress is safe on this device";
+      if(!quiet) toast("Offline — saved on this device");
+      cb && cb(false);
+    });
+}
+
+$("btn-sync").onclick = ()=>{
+  $("syncInp").value = syncId;
+  $("syncSt").textContent = syncId ? `Using key "${syncId}"` : "";
+  $("scrim").classList.add("on"); $("sheet").classList.add("on");
+};
+function closeSheet(){ $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); }
+$("scrim").onclick = closeSheet;
+$("btnClose").onclick = closeSheet;
+$("btnSync").onclick = ()=>{
+  const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
+  if(!v){ $("syncSt").textContent = "Pick a key name first"; return; }
+  syncId = v;
+  try{ localStorage.setItem(LS_ID, v); }catch(e){}
+  setKeyChip();
+  $("syncSt").textContent = "Merging\u2026";
+  syncNow(false);
+};
+
+addEventListener("scroll", ()=>{
+  $("topbar").classList.toggle("stuck", scrollY>6);
+}, {passive:true});
+
+/* ---------------- boot ---------------- */
+load();
+if(state.epDay>0) $("epDay").value = state.epDay;
+renderFilters();
+renderStats();
+renderList();
+setKeyChip();
+if(syncId) syncNow(true);
+</script>
+</body>
+</html>
