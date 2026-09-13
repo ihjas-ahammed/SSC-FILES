@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f14">
+<title>CUSAT Physics — Effort Points</title>
+<style>
+:root{
+  --bg:#0d0f14; --bg2:#12151d; --card:#161a24; --card2:#1c2130; --line:#252b3a;
+  --tx:#e9ecf2; --tx2:#9aa3b6; --tx3:#6b7488;
+  --ac:#7c8cff; --ac2:#b07cff; --ok:#4ade80; --warn:#fbbf24;
+  --math:#7c8cff; --ds:#4ade80; --phy:#fbbf24; --apt:#f472b6; --prac:#c084fc;
+  --r:16px; --ease:cubic-bezier(.22,.9,.28,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,"Noto Sans Malayalam","Manjari","Meera","AnjaliOldLipi",sans-serif;
+  line-height:1.5;padding-bottom:env(safe-area-inset-bottom);
+  overflow-x:hidden;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 14px 90px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:rgba(13,15,20,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s, padding .3s var(--ease);
+  padding:14px 0 10px;
+}
+.topbar.stuck{border-bottom-color:var(--line)}
+.topbar-in{max-width:860px;margin:0 auto;padding:0 14px;display:flex;align-items:center;gap:10px}
+.brand{font-weight:700;font-size:.95rem;letter-spacing:-.01em}
+.brand small{display:block;font-weight:500;font-size:.68rem;color:var(--tx3);letter-spacing:.02em}
+.topbar .mini{margin-left:auto;display:flex;align-items:center;gap:8px}
+.minibar{width:76px;height:6px;border-radius:99px;background:var(--card2);overflow:hidden}
+.minibar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .9s var(--ease)}
+.minipct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}
+.iconbtn{
+  background:var(--card);border:1px solid var(--line);color:var(--tx2);
+  width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+  cursor:pointer;transition:transform .15s var(--ease),background .2s,color .2s;
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn.syncing{color:var(--warn);animation:spin 1s linear infinite}
+.iconbtn.synced{color:var(--ok)}
+.iconbtn.error{color:#f87171}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- hero ---------- */
+.hero{
+  background:linear-gradient(160deg,var(--card) 0%,var(--bg2) 100%);
+  border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0 16px;
+  position:relative;overflow:hidden;
+  animation:rise .6s var(--ease) both;
+}
+.hero::before{
+  content:"";position:absolute;top:-70px;right:-50px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(124,140,255,.20),transparent 68%);pointer-events:none;
+}
+.hero-top{display:flex;align-items:center;gap:18px}
+.ring{position:relative;flex-shrink:0;width:104px;height:104px}
+.ring svg{transform:rotate(-90deg);width:104px;height:104px;display:block}
+.ring .trk{stroke:var(--card2)}
+.ring .prg{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.ring .lbl{
+  position:absolute;inset:0;display:grid;place-content:center;text-align:center;
+}
+.ring .lbl b{font-size:1.55rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ring .lbl span{font-size:.6rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em}
+.hero-side{flex:1;min-width:0}
+.hero-side .big{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+.hero-side .sm{font-size:.78rem;color:var(--tx2);margin-top:3px}
+.hero-side .eta{
+  margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:.74rem;
+  background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:5px 11px;color:var(--tx2);
+}
+.hero-side .eta b{color:var(--tx);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:13px;padding:10px 9px;text-align:center}
+.kpi b{display:block;font-size:.98rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi span{display:block;font-size:.6rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;line-height:1.25}
+@media(max-width:520px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .ring,.ring svg{width:88px;height:88px}
+  .ring .lbl b{font-size:1.3rem}
+  .hero{padding:16px}
+}
+
+/* pace planner */
+.pace{
+  margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:12px 13px;
+}
+.pace-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pace-l{font-size:.73rem;color:var(--tx2);flex:1;min-width:130px}
+.pace-l b{display:block;color:var(--tx);font-size:.8rem;font-weight:650;margin-bottom:1px}
+.epin{
+  background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:11px;
+  padding:9px 11px;font-size:16px;width:78px;font-weight:700;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.epin:focus{outline:none;border-color:var(--ac)}
+.pace-u{font-size:.72rem;color:var(--tx3)}
+.pace-out{
+  margin-top:11px;padding-top:11px;border-top:1px solid var(--line);
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+}
+.pace-out .d{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--ac)}
+.pace-out .x{font-size:.73rem;color:var(--tx3)}
+.pace-real{font-size:.69rem;color:var(--tx3);margin-top:7px;line-height:1.45}
+.pace-real b{color:var(--warn);font-weight:650}
+
+/* calibration strip */
+.calib{
+  margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px 13px;
+}
+.calib-h{display:flex;align-items:center;gap:8px;font-size:.73rem;color:var(--tx2)}
+.calib-h b{color:var(--tx);font-weight:600;font-size:.8rem}
+.calib-h .pill{margin-left:auto;font-size:.66rem;background:rgba(124,140,255,.14);color:var(--ac);
+  border-radius:99px;padding:3px 9px;font-weight:600}
+.calib-bar{margin-top:8px;height:5px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.calib-bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ac),var(--ok));transition:width .9s var(--ease)}
+.calib-note{font-size:.68rem;color:var(--tx3);margin-top:7px;line-height:1.45}
+
+/* ---------- filters ---------- */
+.filters{
+  position:sticky;top:58px;z-index:30;margin:0 -14px 12px;padding:9px 14px;
+  background:rgba(13,15,20,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+}
+.filters::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;background:var(--card);border:1px solid var(--line);color:var(--tx2);
+  border-radius:99px;padding:7px 13px;font-size:.76rem;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:transform .15s var(--ease),background .2s,color .2s,border-color .2s;
+}
+.chip:active{transform:scale(.94)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.chip i{font-style:normal;opacity:.55;margin-left:4px;font-size:.7rem}
+
+/* ---------- sections ---------- */
+.sec{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  margin-bottom:10px;overflow:hidden;
+  animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*38ms);
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sec-h{display:flex;align-items:center;gap:11px;padding:14px;cursor:pointer;user-select:none;
+  transition:background .2s}
+.sec-h:active{background:var(--card2)}
+.sec-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.sec-t{flex:1;min-width:0}
+.sec-t b{display:block;font-size:.89rem;font-weight:650;letter-spacing:-.01em;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sec-meta{display:flex;align-items:center;gap:7px;margin-top:4px;flex-wrap:wrap}
+.tag{font-size:.61rem;font-weight:700;letter-spacing:.03em;padding:2.5px 7px;border-radius:6px;
+  background:rgba(255,255,255,.06);color:var(--tx2);white-space:nowrap}
+.sec-meta .n{font-size:.68rem;color:var(--tx3);font-variant-numeric:tabular-nums}
+.sec-r{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.sec-pct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;font-weight:600}
+.sbar{width:46px;height:4px;border-radius:99px;background:var(--card2);overflow:hidden}
+.sbar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s var(--ease)}
+.chev{color:var(--tx3);transition:transform .35s var(--ease);flex-shrink:0}
+.sec.open .chev{transform:rotate(90deg)}
+.sec-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+.sec.open .sec-body{grid-template-rows:1fr}
+.sec-body>div{overflow:hidden;min-height:0}
+
+/* Malayalam / Indic text needs more room to breathe than Latin at the same size */
+.ml{font-size:.92rem;line-height:1.85;letter-spacing:0;word-break:break-word}
+.tp-t .d.ml{font-size:.8rem;line-height:1.75;-webkit-line-clamp:3}
+.sec-t b.ml{font-size:.93rem;line-height:1.6;white-space:normal}
+@media(max-width:640px){
+  .ml{font-size:.95rem;line-height:1.9}
+  .tp-t .d.ml{font-size:.82rem}
+}
+
+/* section index badge — replaces the bare "i." / "1." prefixes */
+.idx{
+  flex-shrink:0;min-width:26px;height:26px;padding:0 6px;border-radius:8px;
+  display:inline-grid;place-items:center;font-size:.66rem;font-weight:800;
+  background:rgba(255,255,255,.06);color:var(--tx2);letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;
+}
+
+/* part heading — one level of hierarchy above the section cards */
+.parthead{
+  display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:0 2px;
+  animation:rise .5s var(--ease) both;
+}
+.parthead:first-child{margin-top:4px}
+.parthead .bar{width:3px;height:26px;border-radius:2px;flex-shrink:0}
+.parthead h2{margin:0;font-size:.82rem;font-weight:750;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--tx2)}
+.parthead h2.ml{font-size:.9rem;text-transform:none;letter-spacing:0;line-height:1.5}
+.parthead .pn{margin-left:auto;font-size:.68rem;color:var(--tx3);
+  font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
+
+/* ---------- book / resource strip ---------- */
+.res{
+  margin:0;padding:13px 14px;border-top:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(124,140,255,.07),rgba(176,124,255,.04));
+}
+.res-l{display:flex;align-items:center;gap:6px;font-size:.6rem;color:var(--tx3);
+  text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:6px}
+.res-b{font-size:.85rem;font-weight:650;letter-spacing:-.01em;line-height:1.35}
+.res-c{font-size:.75rem;color:var(--tx2);margin-top:4px;line-height:1.45}
+.res-n{font-size:.72rem;color:var(--tx3);margin-top:7px;line-height:1.45;
+  padding-left:9px;border-left:2px solid var(--line)}
+.res-btns{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.rb{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  background:var(--card2);border:1px solid var(--line);color:var(--tx);
+  border-radius:10px;padding:8px 12px;font-size:.75rem;font-weight:650;
+  transition:transform .15s var(--ease),background .2s,border-color .2s;
+}
+.rb:active{transform:scale(.94)}
+.rb.free{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:var(--ok)}
+.rb svg{width:13px;height:13px;flex-shrink:0}
+.res-start{
+  display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.06em;
+  background:var(--ok);color:#0d0f14;border-radius:5px;padding:2px 6px;margin-left:6px;
+}
+
+/* ---------- topic rows ---------- */
+.tp{border-top:1px solid var(--line)}
+.tp-h{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;cursor:pointer;
+  transition:background .2s}
+.tp-h:active{background:var(--card2)}
+.tp.done .tp-h{background:rgba(74,222,128,.045)}
+.box{
+  width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;
+  display:grid;place-items:center;transition:border-color .25s,background .25s,transform .18s var(--ease);
+}
+.box:active{transform:scale(.85)}
+.box svg{width:12px;height:12px;stroke:var(--bg);stroke-width:3.2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:22;stroke-dashoffset:22}
+.tp.done .box{background:var(--ok);border-color:var(--ok)}
+.tp.done .box svg{stroke-dashoffset:0;transition:stroke-dashoffset .32s var(--ease) .05s}
+.tp.part .box{border-color:var(--warn);background:rgba(251,191,36,.14)}
+.tp-t{flex:1;min-width:0}
+.tp-t .n{font-size:.83rem;font-weight:500;line-height:1.35;transition:color .3s}
+.tp.done .tp-t .n{color:var(--tx3)}
+.tp-t .d{font-size:.73rem;color:var(--tx3);margin-top:2px;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tp-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.ep{font-size:.68rem;font-weight:700;color:var(--ac);font-variant-numeric:tabular-nums;
+  background:rgba(124,140,255,.12);border-radius:6px;padding:2px 7px}
+.tp.done .ep{color:var(--ok);background:rgba(74,222,128,.12)}
+.pred{font-size:.64rem;color:var(--tx3);font-variant-numeric:tabular-nums}
+
+.tp-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease)}
+.tp.open .tp-body{grid-template-rows:1fr}
+.tp-body>div{overflow:hidden;min-height:0}
+.logbox{padding:0 14px 14px 47px}
+.logrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hin{
+  background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:11px;
+  padding:9px 11px;font-size:16px;width:92px;font-variant-numeric:tabular-nums;font-weight:600;
+}
+.hin:focus{outline:none;border-color:var(--ac)}
+.qb{
+  background:var(--card2);border:1px solid var(--line);color:var(--tx2);border-radius:10px;
+  padding:8px 11px;font-size:.75rem;font-weight:600;cursor:pointer;
+  transition:transform .15s var(--ease),background .2s,color .2s;
+}
+.qb:active{transform:scale(.9)}
+.qb.go{background:var(--ac);border-color:var(--ac);color:#0d0f14;margin-left:auto}
+.qb.undo{background:transparent;color:var(--tx3)}
+.loghint{font-size:.68rem;color:var(--tx3);margin-top:9px;line-height:1.45}
+.loghint b{color:var(--tx2);font-weight:600}
+
+/* ---------- sheet ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;opacity:0;pointer-events:none;
+  transition:opacity .3s;backdrop-filter:blur(3px)}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--card);
+  border-radius:24px 24px 0 0;border-top:1px solid var(--line);
+  padding:8px 18px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(102%);transition:transform .42s var(--ease);max-height:86vh;overflow-y:auto;
+}
+.sheet.on{transform:none}
+.grab{width:38px;height:4px;border-radius:99px;background:var(--line);margin:6px auto 14px}
+.sheet h3{margin:0 0 4px;font-size:1rem}
+.sheet p{font-size:.78rem;color:var(--tx2);margin:0 0 14px;line-height:1.5}
+.sheet label{display:block;font-size:.68rem;color:var(--tx3);text-transform:uppercase;
+  letter-spacing:.05em;margin:12px 0 5px}
+.sheet input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--tx);
+  border-radius:12px;padding:12px;font-size:16px}
+.sheet input:focus{outline:none;border-color:var(--ac)}
+.btnrow{display:flex;gap:9px;margin-top:16px}
+.btn{
+  flex:1;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--card2);
+  color:var(--tx);font-size:.85rem;font-weight:650;cursor:pointer;
+  transition:transform .15s var(--ease),opacity .2s;
+}
+.btn:active{transform:scale(.96)}
+.btn.pri{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent;color:#0d0f14}
+.sheet .st{font-size:.73rem;color:var(--tx3);margin-top:11px;text-align:center;min-height:16px}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,26px);
+  background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:.8rem;font-weight:650;
+  z-index:80;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s var(--ease);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:88vw;text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.empty{text-align:center;padding:42px 20px;color:var(--tx3);font-size:.85rem}
+footer{text-align:center;color:var(--tx3);font-size:.7rem;padding:26px 10px 10px;line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-in">
+    <div class="brand">CUSAT Physics<small id="brandsub">CUSAT CAT · M.Sc. entrance</small></div>
+    <div class="mini">
+      <div class="minibar"><i id="minibar"></i></div>
+      <div class="minipct" id="minipct">0%</div>
+      <button class="iconbtn" id="btn-sync" title="Cloud sync">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-7.6-4.2"/>
+          <path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 7.6 4.2"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="ring">
+        <svg viewBox="0 0 120 120">
+          <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7c8cff"/><stop offset="100%" stop-color="#b07cff"/>
+          </linearGradient></defs>
+          <circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="11"/>
+          <circle class="prg" id="prg" cx="60" cy="60" r="52" fill="none" stroke-width="11"
+                  stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="lbl"><b id="ringpct">0%</b><span>done</span></div>
+      </div>
+      <div class="hero-side">
+        <div class="big" id="heroBig">690 effort points to go</div>
+        <div class="sm" id="heroSm">Log the hours a topic actually took — everything else re-predicts itself.</div>
+        <div class="eta" id="etaPill" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b id="k1">0</b><span>EP done</span></div>
+      <div class="kpi"><b id="k2">0h</b><span>hours logged</span></div>
+      <div class="kpi"><b id="k3">—</b><span>your rate</span></div>
+      <div class="kpi"><b id="k4">690h</b><span>est. remaining</span></div>
+    </div>
+
+    <div class="pace">
+      <div class="pace-r">
+        <div class="pace-l">
+          <b>Your daily pace</b>
+          How many effort points you reckon you clear on an average day
+        </div>
+        <input class="epin" type="number" id="epDay" inputmode="decimal" step="0.5" min="0" placeholder="—">
+        <span class="pace-u">EP&nbsp;/&nbsp;day</span>
+      </div>
+      <div class="pace-out" id="paceOut" style="display:none">
+        <span class="d" id="paceDate">—</span>
+        <span class="x" id="paceX"></span>
+      </div>
+      <div class="pace-real" id="paceReal"></div>
+    </div>
+
+    <div class="calib">
+      <div class="calib-h">
+        <b>Calibration</b>
+        <span id="calibTxt">starting at 1.0 h per effort point</span>
+        <span class="pill" id="calibPill">0% tuned</span>
+      </div>
+      <div class="calib-bar"><i id="calibBar"></i></div>
+      <div class="calib-note" id="calibNote">
+        Finish a topic and log the real hours. Every completed topic teaches the tracker your actual pace,
+        and all remaining predictions shift with it.
+      </div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div id="list"></div>
+
+  <footer>116 topics · 690 effort points<br><b>On the syllabus:</b> CUSAT publishes no detailed syllabus. Its 2026 prospectus defines this test (150 objective questions) only as &ldquo;at the Graduate level&rdquo;, so the scope here is standard B.Sc. coverage — the IIT JAM syllabus plus the extra topics a B.Sc. degree carries. Treat it as a well-founded map, not an official one.<br><br>Progress saves on this device and syncs to any device using the same sync ID.</footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <h3>Cloud sync</h3>
+  <p>Pick any ID you'll remember. Enter the same ID on your phone and laptop and progress follows you.</p>
+  <label>Sync ID</label>
+  <input type="text" id="syncInp" placeholder="e.g. ihjas-prep" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <div class="btnrow">
+    <button class="btn" id="btnPull">Load from cloud</button>
+    <button class="btn pri" id="btnPush">Save to cloud</button>
+  </div>
+  <div class="st" id="syncSt"></div>
+  <div class="btnrow"><button class="btn" id="btnClose">Close</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GROUPS = [{"id":"ph.ph.math","name":"Section 1: Mathematical Methods","area":"Mathematical Methods","tag":"B.Sc. level","ep":60,"topics":[{"id":"ph.ph.math.0","t":"Calculus of single and multiple variables","d":"Limits, differentiation and integration in one and several variables.","ep":4},{"id":"ph.ph.math.1","t":"Partial derivatives and Jacobian","d":"Chain rule, change of variables.","ep":4},{"id":"ph.ph.math.2","t":"Imperfect and perfect differentials","d":"Exactness condition and its use in thermodynamics.","ep":6},{"id":"ph.ph.math.3","t":"Taylor expansion","d":"Series expansion of standard functions and approximations.","ep":4},{"id":"ph.ph.math.4","t":"Fourier series","d":"Coefficients, even and odd functions, convergence.","ep":5},{"id":"ph.ph.math.5","t":"Vector algebra","d":"Dot and cross products, triple products, coordinate systems.","ep":4},{"id":"ph.ph.math.6","t":"Vector calculus","d":"Gradient, divergence, curl, Laplacian in Cartesian, spherical and cylindrical coordinates.","ep":4},{"id":"ph.ph.math.7","t":"Multiple integrals","d":"Line, surface and volume integrals.","ep":4},{"id":"ph.ph.math.8","t":"Divergence, Green's and Stokes' theorems","d":"Statements and applications to field problems.","ep":4},{"id":"ph.ph.math.9","t":"First order differential equations","d":"Separable, linear, exact equations and integrating factors.","ep":4},{"id":"ph.ph.math.10","t":"Linear second-order ODEs with constant coefficients","d":"Homogeneous and particular solutions.","ep":4},{"id":"ph.ph.math.11","t":"Matrices and determinants","d":"Eigenvalues, eigenvectors, diagonalization, special matrices.","ep":4},{"id":"ph.ph.math.12","t":"Complex numbers","d":"Argand plane, de Moivre's theorem, roots of unity, Euler form.","ep":4},{"id":"ph.ph.math.13","t":"Error analysis of experimental data","d":"Significant digits and rounding, types of errors, mean, median, standard deviation.","ep":5}]},{"id":"ph.ph.mech","name":"Section 2: Mechanics and General Properties of Matter","area":"Mechanics","tag":"B.Sc. level","ep":90,"topics":[{"id":"ph.ph.mech.0","t":"Newton's laws of motion and applications","d":"Free-body analysis, friction, constraints.","ep":5},{"id":"ph.ph.mech.1","t":"Velocity and acceleration in curvilinear coordinates","d":"Cartesian, polar and cylindrical coordinate systems.","ep":5},{"id":"ph.ph.mech.2","t":"Uniformly rotating frames","d":"Centrifugal and Coriolis forces.","ep":7},{"id":"ph.ph.mech.3","t":"Motion under a central force","d":"Effective potential, orbits and conserved quantities.","ep":6},{"id":"ph.ph.mech.4","t":"Kepler's laws","d":"Statement and derivation from the inverse square law.","ep":6},{"id":"ph.ph.mech.5","t":"Gravitational law and field","d":"Gravitational potential of extended bodies.","ep":6},{"id":"ph.ph.mech.6","t":"Conservative and non-conservative forces","d":"Potential energy and work-energy theorem.","ep":6},{"id":"ph.ph.mech.7","t":"System of particles and centre of mass","d":"Equation of motion of the CM.","ep":6},{"id":"ph.ph.mech.8","t":"Conservation of linear and angular momentum and energy","d":"Conditions and applications.","ep":6},{"id":"ph.ph.mech.9","t":"Variable mass systems","d":"Rocket equation and related problems.","ep":6},{"id":"ph.ph.mech.10","t":"Elastic and inelastic collisions","d":"Laboratory and centre-of-mass frames.","ep":6},{"id":"ph.ph.mech.11","t":"Rigid body motion","d":"Fixed axis rotations, combined rotation and translation.","ep":6},{"id":"ph.ph.mech.12","t":"Moments and products of inertia","d":"Parallel and perpendicular axes theorems.","ep":6},{"id":"ph.ph.mech.13","t":"Principal moments and axes","d":"Inertia tensor and its diagonalization.","ep":6},{"id":"ph.ph.mech.14","t":"Kinematics of moving fluids","d":"Equation of continuity, Euler's equation, Bernoulli's theorem.","ep":7}]},{"id":"ph.ph.wave","name":"Section 3: Oscillations, Waves and Optics","area":"Oscillations, Waves & Optics","tag":"B.Sc. level","ep":85,"topics":[{"id":"ph.ph.wave.0","t":"Simple harmonic oscillator","d":"Differential equation and its general solution.","ep":5},{"id":"ph.ph.wave.1","t":"Superposition of simple harmonic oscillators","d":"Beats and Lissajous figures.","ep":5},{"id":"ph.ph.wave.2","t":"Damped oscillations","d":"Under-, over- and critically damped motion; quality factor.","ep":5},{"id":"ph.ph.wave.3","t":"Forced oscillations and resonance","d":"Amplitude and phase response, resonance width.","ep":5},{"id":"ph.ph.wave.4","t":"Wave equation in one dimension","d":"Travelling and standing waves.","ep":5},{"id":"ph.ph.wave.5","t":"Energy density and energy transmission in waves","d":"Intensity and power.","ep":5},{"id":"ph.ph.wave.6","t":"Group velocity and phase velocity","d":"Dispersion relations.","ep":5},{"id":"ph.ph.wave.7","t":"Sound waves in media","d":"Speed of sound, Newton-Laplace correction.","ep":5},{"id":"ph.ph.wave.8","t":"Doppler effect","d":"Moving source and moving observer.","ep":5},{"id":"ph.ph.wave.9","t":"Fermat's principle","d":"Principle of least time and laws of reflection and refraction.","ep":5},{"id":"ph.ph.wave.10","t":"General theory of image formation","d":"Cardinal points, thin and thick lenses, aberrations.","ep":5},{"id":"ph.ph.wave.11","t":"Interference of light","d":"Optical path retardation, Young's experiment, thin films, Newton's rings.","ep":5},{"id":"ph.ph.wave.12","t":"Fraunhofer diffraction","d":"Single slit, double slit and circular aperture.","ep":5},{"id":"ph.ph.wave.13","t":"Rayleigh criterion and resolving power","d":"Of telescopes, microscopes and gratings.","ep":5},{"id":"ph.ph.wave.14","t":"Diffraction gratings","d":"Grating equation, dispersion and missing orders.","ep":5},{"id":"ph.ph.wave.15","t":"Polarization","d":"Linear, circular and elliptic polarization; Malus' law and Brewster's angle.","ep":5},{"id":"ph.ph.wave.16","t":"Double refraction and optical rotation","d":"Birefringence, retarders, specific rotation.","ep":5}]},{"id":"ph.ph.em","name":"Section 4: Electricity and Magnetism","area":"Electricity & Magnetism","tag":"B.Sc. level","ep":95,"topics":[{"id":"ph.ph.em.0","t":"Coulomb's law, electric field and potential","d":"Superposition and field of standard charge distributions.","ep":6},{"id":"ph.ph.em.1","t":"Gauss's law","d":"Applications to symmetric charge distributions.","ep":6},{"id":"ph.ph.em.2","t":"Electrostatic boundary conditions","d":"Discontinuity of field across a surface charge.","ep":5},{"id":"ph.ph.em.3","t":"Solution of Laplace's equation","d":"Simple cases up to two dimensions; method of images.","ep":5},{"id":"ph.ph.em.4","t":"Conductors and capacitors","d":"Capacitance of standard geometries, energy stored.","ep":5},{"id":"ph.ph.em.5","t":"Linear dielectrics","d":"Dielectric polarization, volume and surface bound charges.","ep":5},{"id":"ph.ph.em.6","t":"Electrostatic energy","d":"Energy of a charge distribution and field energy density.","ep":5},{"id":"ph.ph.em.7","t":"Biot-Savart law","d":"Magnetic field of currents in standard geometries.","ep":5},{"id":"ph.ph.em.8","t":"Ampere's law","d":"Applications and its magnetostatic limitations.","ep":5},{"id":"ph.ph.em.9","t":"Faraday's law of electromagnetic induction","d":"Motional and transformer EMF, Lenz's law.","ep":5},{"id":"ph.ph.em.10","t":"Self and mutual inductance","d":"Coupled circuits and stored magnetic energy.","ep":5},{"id":"ph.ph.em.11","t":"Alternating currents","d":"Phasors, impedance, resonance, power factor.","ep":5},{"id":"ph.ph.em.12","t":"Simple DC and AC circuits with R, L and C","d":"Transients and steady state response.","ep":5},{"id":"ph.ph.em.13","t":"Displacement current and Maxwell's equations","d":"Differential and integral forms.","ep":5},{"id":"ph.ph.em.14","t":"Plane electromagnetic waves","d":"Wave equation from Maxwell's equations, impedance of free space.","ep":5},{"id":"ph.ph.em.15","t":"Poynting vector and Poynting's theorem","d":"Energy of electromagnetic fields.","ep":5},{"id":"ph.ph.em.16","t":"Reflection and refraction at a dielectric interface","d":"Transmission and reflection coefficients at normal incidence.","ep":5},{"id":"ph.ph.em.17","t":"Lorentz force","d":"Motion of charged particles in electric and magnetic fields.","ep":8}]},{"id":"ph.ph.thermo","name":"Section 5: Kinetic Theory and Thermodynamics","area":"Thermodynamics","tag":"B.Sc. level","ep":80,"topics":[{"id":"ph.ph.thermo.0","t":"Elements of kinetic theory of gases","d":"Pressure, mean speeds and kinetic interpretation of temperature.","ep":5},{"id":"ph.ph.thermo.1","t":"Velocity distribution and equipartition of energy","d":"Maxwell speed distribution.","ep":5},{"id":"ph.ph.thermo.2","t":"Specific heat of mono-, di- and tri-atomic gases","d":"Degrees of freedom and Cp/Cv.","ep":5},{"id":"ph.ph.thermo.3","t":"Ideal gas, van der Waals gas and equation of state","d":"Critical constants and deviations from ideality.","ep":5},{"id":"ph.ph.thermo.4","t":"Mean free path","d":"Dependence on pressure, temperature and molecular size.","ep":5},{"id":"ph.ph.thermo.5","t":"Zeroth law and thermal equilibrium","d":"Concept of temperature.","ep":5},{"id":"ph.ph.thermo.6","t":"First law and its consequences","d":"Internal energy, work and heat in various processes.","ep":5},{"id":"ph.ph.thermo.7","t":"Isothermal and adiabatic processes","d":"Work done and PV relations.","ep":5},{"id":"ph.ph.thermo.8","t":"Reversible, irreversible and quasi-static processes","d":"Definitions and examples.","ep":5},{"id":"ph.ph.thermo.9","t":"Second law and entropy","d":"Entropy change in standard processes.","ep":5},{"id":"ph.ph.thermo.10","t":"Carnot cycle","d":"Efficiency and Carnot's theorem.","ep":5},{"id":"ph.ph.thermo.11","t":"Maxwell's thermodynamic relations","d":"Derivation and simple applications.","ep":5},{"id":"ph.ph.thermo.12","t":"Thermodynamic potentials","d":"Internal energy, enthalpy, Helmholtz and Gibbs free energies.","ep":5},{"id":"ph.ph.thermo.13","t":"Phase transitions and the Clausius-Clapeyron equation","d":"First order transitions and latent heat.","ep":5},{"id":"ph.ph.thermo.14","t":"Ideas of ensembles","d":"Microcanonical, canonical and grand canonical ensembles.","ep":5},{"id":"ph.ph.thermo.15","t":"Quantum and classical distributions","d":"Maxwell-Boltzmann, Fermi-Dirac and Bose-Einstein distributions.","ep":5}]},{"id":"ph.ph.modern","name":"Section 6: Modern Physics","area":"Modern Physics","tag":"B.Sc. level","ep":90,"topics":[{"id":"ph.ph.modern.0","t":"Inertial frames and Galilean invariance","d":"Galilean transformations and their limits.","ep":5},{"id":"ph.ph.modern.1","t":"Postulates of special relativity and Lorentz transformations","d":"Invariance of the speed of light.","ep":5},{"id":"ph.ph.modern.2","t":"Length contraction and time dilation","d":"Proper length and proper time.","ep":5},{"id":"ph.ph.modern.3","t":"Relativistic velocity addition","d":"Composition of velocities.","ep":5},{"id":"ph.ph.modern.4","t":"Mass-energy equivalence","d":"Relativistic energy and momentum.","ep":5},{"id":"ph.ph.modern.5","t":"Blackbody radiation","d":"Wien's law, Stefan-Boltzmann law, Planck's law.","ep":5},{"id":"ph.ph.modern.6","t":"Photoelectric effect","d":"Work function, stopping potential and Einstein's equation.","ep":5},{"id":"ph.ph.modern.7","t":"Compton effect","d":"Compton shift formula and its interpretation.","ep":5},{"id":"ph.ph.modern.8","t":"Bohr's atomic model","d":"Energy levels, spectral series and limitations.","ep":5},{"id":"ph.ph.modern.9","t":"X-rays","d":"Continuous and characteristic spectra, Moseley's law.","ep":5},{"id":"ph.ph.modern.10","t":"Wave-particle duality and the uncertainty principle","d":"de Broglie wavelength and Heisenberg relations.","ep":5},{"id":"ph.ph.modern.11","t":"Superposition principle and expectation values","d":"Wave function, normalization and operators.","ep":5},{"id":"ph.ph.modern.12","t":"Schrodinger equation for one, two and three dimensional boxes","d":"Energy eigenvalues and degeneracy.","ep":5},{"id":"ph.ph.modern.13","t":"One dimensional harmonic oscillator","d":"Energy spectrum and zero point energy.","ep":5},{"id":"ph.ph.modern.14","t":"Reflection and transmission at a step potential","d":"Tunnelling and transmission coefficients.","ep":5},{"id":"ph.ph.modern.15","t":"Pauli exclusion principle","d":"Application to atomic structure.","ep":5},{"id":"ph.ph.modern.16","t":"Structure of the atomic nucleus","d":"Mass and binding energy, binding energy curve.","ep":5},{"id":"ph.ph.modern.17","t":"Radioactivity and laws of radioactive decay","d":"Half-life, mean life, decay chains and applications.","ep":5}]},{"id":"ph.ph.solid","name":"Section 7: Solid State Physics, Devices and Electronics","area":"Solid State & Electronics","tag":"B.Sc. level","ep":90,"topics":[{"id":"ph.ph.solid.0","t":"Crystal structure","d":"Bravais lattices and basis, unit cells, packing fraction.","ep":6},{"id":"ph.ph.solid.1","t":"Miller indices","d":"Planes, directions and interplanar spacing.","ep":6},{"id":"ph.ph.solid.2","t":"X-ray diffraction and Bragg's law","d":"Determination of lattice parameters.","ep":6},{"id":"ph.ph.solid.3","t":"Intrinsic and extrinsic semiconductors","d":"Doping, carrier concentration, variation of resistivity with temperature.","ep":6},{"id":"ph.ph.solid.4","t":"Fermi level","d":"Position in intrinsic and doped semiconductors.","ep":6},{"id":"ph.ph.solid.5","t":"p-n junction diode","d":"I-V characteristics, depletion region, rectification.","ep":6},{"id":"ph.ph.solid.6","t":"Zener diode and its applications","d":"Breakdown mechanisms and voltage regulation.","ep":6},{"id":"ph.ph.solid.7","t":"Bipolar junction transistor","d":"Characteristics in CB, CE and CC modes.","ep":6},{"id":"ph.ph.solid.8","t":"Single stage amplifier","d":"Biasing, gain and frequency response.","ep":6},{"id":"ph.ph.solid.9","t":"Two stage R-C coupled amplifiers","d":"Overall gain and bandwidth.","ep":6},{"id":"ph.ph.solid.10","t":"Simple oscillators","d":"Barkhausen condition and sinusoidal oscillators.","ep":6},{"id":"ph.ph.solid.11","t":"OP-AMP and applications","d":"Inverting and non-inverting amplifiers, virtual ground.","ep":6},{"id":"ph.ph.solid.12","t":"Binary number systems","d":"Conversion between systems, binary addition and subtraction.","ep":6},{"id":"ph.ph.solid.13","t":"Logic gates","d":"AND, OR, NOT, NAND, NOR, exclusive OR; truth tables and combinations of gates.","ep":6},{"id":"ph.ph.solid.14","t":"Boolean algebra and de Morgan's theorem","d":"Simplification of logic expressions.","ep":6}]},{"id":"cu.ph.prac","name":"Practice & mocks","area":"Practice","tag":"CUSAT CAT","ep":100,"topics":[{"id":"cu.ph.prac.0","t":"CUSAT CAT past papers","d":"From the university's own repository — check the test code for your programme.","ep":34},{"id":"cu.ph.prac.1","t":"IIT JAM PH past papers","d":"Same B.Sc. level and plenty of them. The closest available proxy.","ep":33},{"id":"cu.ph.prac.2","t":"Objective-style speed practice","d":"150 MCQs in one sitting — pace matters more than depth.","ep":33}]}];
+
+/* Book to start from for each section.
+   b=book, c=chapters, p=local file (works when this page is opened from the Banana folder),
+   u=legally-free online copy, n=extra note. */
+const RES = {"ph.ph.math": {"b": "Nearing — Mathematical Tools for Physics (free)", "c": "Ch 5 (Fourier series), 8–9 & 13 (multivariable and vector calculus), 3 (complex algebra), 4 (ODEs)", "u": "https://www-mdp.eng.cam.ac.uk/web/library/enginfo/textbooks_dvd_only/nearing/math_methods.pdf", "n": "★ Best place to start — every other section uses these tools."}, "ph.ph.mech": {"b": "Kleppner & Kolenkow — An Introduction to Mechanics", "c": "Ch 1–5 (kinematics → energy), 6–8 (angular momentum, rigid bodies), 9 (rotating frames), 10 (central force)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2025/MECHANICS%20-II/An%20Introduction%20To%20Mechanics%20%28Daniel%20Kleppner%2C%20Robert%20Kolenkow%29%20%28Z-Library%29.pdf"}, "ph.ph.wave": {"b": "MIT 8.03 Vibrations & Waves textbook (free)", "c": "Harmonic → damped → forced oscillation → wave equation → sound; then Ghatak for optics", "u": "https://ocw.mit.edu/courses/8-03sc-physics-iii-vibrations-and-waves-fall-2016/", "n": "Interference, diffraction, polarization and resolving power come from Ghatak's Optics."}, "ph.ph.em": {"b": "Griffiths — Introduction to Electrodynamics", "c": "Ch 2–3 (electrostatics, potentials), 4 (dielectrics), 5–6 (magnetostatics), 7 (Faraday, Maxwell), 8 (Poynting), 9 (EM waves)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2025/ELECTRODYNAMICS%20I/Introduction%20to%20Electrodynamics%20%28Griffiths%2C%20David%20J.%29%20%28Z-Library%29.pdf", "n": "AC circuits and phasors aren't in Griffiths — use any standard circuits text."}, "ph.ph.thermo": {"b": "Zemansky & Dittman — Heat and Thermodynamics", "c": "Temperature & first law → ideal gas → second law & entropy → Carnot → Maxwell relations → phase transitions", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026%202/THERMODYNAMICS/Heat%20and%20thermodynamics%20%28M.%20W.%20Zemansky%2C%20Richard%20H.%20Dittman%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "For ensembles and Fermi-Dirac/Bose-Einstein distributions, switch to Reif."}, "ph.ph.modern": {"b": "Beiser — Concepts of Modern Physics", "c": "Ch 1 (relativity), 2 (photoelectric, Compton, blackbody), 3 (de Broglie, uncertainty), 4 (Bohr), 5 (Schrödinger, boxes, tunnelling), 11–12 (nuclear)", "p": "https://github.com/ihjas-ahammed/SSC-FILES/blob/main/2026%202/QUANTUM%20MECHANICS%201/Concepts%20of%20Modern%20Physics%20%28Arthur%20Beiser%29%20%28z-library.sk%2C%201lib.sk%2C%20z-lib.sk%29.pdf", "n": "Griffiths' QM is the better source if the Schrödinger topics feel thin."}, "ph.ph.solid": {"b": "Göhmann — Introduction to Solid State Physics (free, arXiv)", "c": "Crystal structure, Bravais lattices, reciprocal lattice, Miller indices, Bragg diffraction", "u": "https://arxiv.org/abs/2101.01780", "n": "⚠ Semiconductors, diodes, BJTs, op-amps and digital logic need a separate source — NPTEL's semiconductor devices course is the free option. Cheapest marks in the paper, so don't skip it."}, "ph.prac": {"b": "IIT JAM past papers", "c": "Official question papers and answer keys, 2015 onwards", "n": "Past papers are the highest-yield study there is — treat them as the real syllabus."}, "cu.ph.prac": {"b": "CUSAT CAT papers + IIT JAM papers", "c": "CUSAT publishes past papers through its question-paper repository; JAM PH papers are the best same-level substitute", "n": "Past papers are the highest-yield study there is — treat them as the real syllabus."}};
+
+/* ---------------- state ---------------- */
+const DB = "https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app";
+const APP = "ep_cusat_py_v1";
+const LS = APP+"_state", LS_ID = APP+"_syncid";
+const PRIOR_EP = 45;            // strength of the "1 hour per EP" starting assumption
+
+let state = { done:{}, hours:{}, log:[], epDay:null, updated:0 };
+let syncId = "";
+let filter = "All";
+let firstPaint = true;
+
+const TOPICS = [];
+GROUPS.forEach(g => g.topics.forEach(t => TOPICS.push({...t, gid:g.id, area:g.area, tag:g.tag})));
+const TOTAL_EP = TOPICS.reduce((s,t)=>s+t.ep,0);
+const AREA_COLOR = {Mathematics:"var(--math)","Data Science":"var(--ds)",Physics:"var(--phy)",
+                    Aptitude:"var(--apt)",Practice:"var(--prac)"};
+
+function load(){
+  try{ const r = JSON.parse(localStorage.getItem(LS)||"null"); if(r) state = {done:{},hours:{},log:[],epDay:null,updated:0,...r}; }catch(e){}
+  try{ syncId = localStorage.getItem(LS_ID)||""; }catch(e){}
+}
+function save(){
+  state.updated = Date.now();
+  try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+  if(syncId) schedulePush();
+}
+
+/* ---------------- effort-point maths ---------------- */
+function calc(){
+  let doneEP=0, calEP=0, calH=0, allH=0;
+  TOPICS.forEach(t=>{
+    const h = state.hours[t.id]||0;
+    const d = !!state.done[t.id];
+    if(d) doneEP += t.ep;
+    if(d && h>0){ calEP += t.ep; calH += h; }
+    allH += h;
+  });
+  // shrink the personal rate toward 1.0 h/EP until there's enough evidence
+  const rate = (PRIOR_EP + calH) / (PRIOR_EP + calEP);
+  const conf = calEP / (calEP + PRIOR_EP);
+  const remEP = TOTAL_EP - doneEP;
+  const remH = remEP * rate;
+  // real pace from the last 28 days of logged sessions
+  const cut = Date.now() - 28*864e5;
+  const recentH = (state.log||[]).filter(e=>e.t>=cut).reduce((s,e)=>s+e.h,0);
+  let weekly = recentH/4;
+  if(weekly<=0 && (state.log||[]).length){
+    const first = Math.min(...state.log.map(e=>e.t));
+    const weeks = Math.max(1,(Date.now()-first)/(7*864e5));
+    weekly = allH/weeks;
+  }
+  const eta = weekly>0 ? new Date(Date.now() + (remH/weekly)*7*864e5) : null;
+
+  // planned pace: effort points per day, typed in by you
+  const epDay = state.epDay>0 ? state.epDay : null;
+  const planDays = epDay ? Math.ceil(remEP/epDay) : null;
+  const planDate = planDays ? new Date(Date.now() + planDays*864e5) : null;
+
+  // measured pace: EP actually finished in the last 28 days
+  const doneRecent = TOPICS.filter(t=>state.done[t.id] && state.done[t.id]>=cut)
+                           .reduce((s,t)=>s+t.ep,0);
+  const realEpDay = doneRecent>0 ? doneRecent/28 : 0;
+
+  return {doneEP, remEP, rate, conf, remH, allH, calEP, calH, weekly, eta,
+          epDay, planDays, planDate, realEpDay,
+          pct: TOTAL_EP? doneEP/TOTAL_EP*100 : 0};
+}
+
+/* ---------------- render ---------------- */
+const $ = id => document.getElementById(id);
+const ML = /[\u0D00-\u0D7F]/;                 // Malayalam block
+function mlc(t){ return ML.test(t||"") ? " ml" : ""; }
+function fmtH(h){ return h>=100 ? Math.round(h)+"h" : (Math.round(h*10)/10)+"h"; }
+function fmtDate(d){ return d.toLocaleDateString("en-IN",{month:"short",year:"numeric"}); }
+
+function tween(el, to, suffix, dur){
+  const from = parseFloat(el.dataset.v||"0"); el.dataset.v = to;
+  const t0 = performance.now();
+  (function step(now){
+    const p = Math.min(1,(now-t0)/(dur||700));
+    const e = 1-Math.pow(1-p,3);
+    const v = from+(to-from)*e;
+    el.textContent = (Math.abs(to)>=100? Math.round(v) : Math.round(v*10)/10).toLocaleString()+(suffix||"");
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function renderStats(){
+  const c = calc();
+  const C = 2*Math.PI*52;
+  $("prg").style.strokeDashoffset = C - C*Math.min(1,c.pct/100);
+  $("ringpct").textContent = Math.round(c.pct)+"%";
+  $("minibar").style.width = c.pct+"%";
+  $("minipct").textContent = Math.round(c.pct)+"%";
+
+  tween($("k1"), c.doneEP, "");
+  tween($("k2"), c.allH, "h");
+  $("k3").textContent = c.calEP ? (Math.round(c.rate*100)/100)+" h/EP" : "—";
+  tween($("k4"), c.remH, "h");
+
+  $("heroBig").textContent = c.remEP>0
+    ? c.remEP.toLocaleString()+" effort points to go"
+    : "Every topic ticked off 🎉";
+  $("heroSm").textContent = c.calEP
+    ? "At your measured pace that's about "+fmtH(c.remH)+" of study left."
+    : "Log the hours a topic actually took — everything else re-predicts itself.";
+
+  const eta = $("etaPill");
+  if(c.eta && c.remEP>0 && !c.epDay){
+    eta.style.display = "inline-flex";
+    eta.innerHTML = "~"+Math.round(c.weekly*10)/10+"h/week lately → <b>"+fmtDate(c.eta)+"</b>";
+  } else eta.style.display = "none";
+
+  // --- pace planner ---
+  const po = $("paceOut");
+  if(c.planDate && c.remEP>0){
+    po.style.display = "flex";
+    const mo = c.planDays/30.44;
+    $("paceDate").textContent = c.planDate.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+    $("paceX").textContent = `· ${c.planDays.toLocaleString()} days (${mo<1? "under a month" : mo.toFixed(1)+" months"}) at ${c.epDay} EP/day`;
+  } else if(c.remEP<=0){
+    po.style.display = "flex";
+    $("paceDate").textContent = "Finished 🎉"; $("paceX").textContent = "";
+  } else po.style.display = "none";
+
+  const pr = $("paceReal");
+  if(c.realEpDay>0){
+    const r = Math.round(c.realEpDay*10)/10;
+    let verdict = "";
+    if(c.epDay){
+      const ratio = c.realEpDay/c.epDay;
+      verdict = ratio>=0.95 ? " — you're on or ahead of plan."
+        : ratio>=0.6 ? " — a bit under plan, but moving."
+        : " — well under plan, so the date above is optimistic.";
+    }
+    pr.innerHTML = `Actually measured: <b>${r} EP/day</b> over the last 4 weeks${verdict}`;
+  } else {
+    pr.textContent = state.epDay
+      ? "Nothing ticked off in the last 4 weeks yet — this date is a plan, not a measurement."
+      : "Type a number above to get a finish date. Anything you tick off will be measured against it.";
+  }
+
+  $("calibBar").style.width = Math.round(c.conf*100)+"%";
+  $("calibPill").textContent = Math.round(c.conf*100)+"% tuned";
+  $("calibTxt").textContent = c.calEP
+    ? "you average "+(Math.round(c.rate*100)/100)+" h per effort point"
+    : "starting at 1.0 h per effort point";
+  $("calibNote").textContent = c.calEP
+    ? "Measured from "+c.calEP+" EP of finished topics ("+fmtH(c.calH||0)+" logged). "
+      + (c.rate>1.08 ? "You run slower than the baseline estimate, so remaining times were scaled up."
+        : c.rate<0.92 ? "You run faster than the baseline estimate, so remaining times were scaled down."
+        : "You're tracking close to the baseline estimate.")
+    : "Finish a topic and log the real hours. Every completed topic teaches the tracker your actual pace, and all remaining predictions shift with it.";
+}
+
+function renderFilters(){
+  const areas = ["All", ...[...new Set(GROUPS.map(g=>g.area))]];
+  $("filters").innerHTML = areas.map(a=>{
+    const n = a==="All" ? TOPICS.length : TOPICS.filter(t=>t.area===a).length;
+    return `<div class="chip${a===filter?" on":""}" data-a="${a}">${a}<i>${n}</i></div>`;
+  }).join("");
+}
+
+function renderList(){
+  const c = calc();
+  const gs = GROUPS.filter(g=>filter==="All"||g.area===filter);
+  let lastArea = null;
+  $("list").innerHTML = gs.length ? gs.map((g,i)=>{
+    let head = "";
+    if(g.area !== lastArea && filter === "All"){
+      lastArea = g.area;
+      const areaGroups = gs.filter(x=>x.area===g.area);
+      const aep = areaGroups.reduce((s,x)=>s+x.ep,0);
+      const adone = areaGroups.flatMap(x=>x.topics).filter(t=>state.done[t.id]).length;
+      const atot = areaGroups.flatMap(x=>x.topics).length;
+      head = `<div class="parthead" style="--i:${i}">
+        <span class="bar" style="background:${AREA_COLOR[g.area]||"var(--ac)"}"></span>
+        <h2 class="${mlc(g.area).trim()}">${g.area}</h2>
+        <span class="pn">${adone}/${atot} · ${aep} EP</span>
+      </div>`;
+    }
+    return head + sectionHTML(g,i,c);
+  }).join("") : `<div class="empty">Nothing here yet.</div>`;
+  firstPaint = false;
+}
+
+function sectionHTML(g,i,c){
+  {
+    const done = g.topics.filter(t=>state.done[t.id]).length;
+    const depDone = g.topics.filter(t=>state.done[t.id]).reduce((s,t)=>s+t.ep,0);
+    const pct = g.ep? depDone/g.ep*100 : 0;
+    const col = AREA_COLOR[g.area]||"var(--ac)";
+    const open = openSecs.has(g.id);
+    return `<div class="sec${open?" open":""}" data-g="${g.id}" style="--i:${i}">
+      <div class="sec-h" data-sec="${g.id}">
+        ${g.idx?`<span class="idx">${g.idx}</span>`:`<span class="sec-dot" style="background:${col}"></span>`}
+        <div class="sec-t">
+          <b class="${mlc(g.name).trim()}">${g.name}</b>
+          <div class="sec-meta">
+            <span class="tag">${g.tag}</span>
+            <span class="n">${done}/${g.topics.length} · ${g.ep} EP · ~${fmtH(g.ep*c.rate)}</span>
+          </div>
+        </div>
+        <div class="sec-r">
+          <span class="sec-pct">${Math.round(pct)}%</span>
+          <span class="sbar"><i style="width:${pct}%;background:${col}"></i></span>
+        </div>
+        <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="sec-body"><div>${resHTML(g.id)}${g.topics.map(t=>topicHTML(t,c)).join("")}</div></div>
+    </div>`;
+  }
+}
+
+const IC_PDF = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>`;
+const IC_WEB = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>`;
+
+function resHTML(gid){
+  const r = RES[gid];
+  if(!r) return "";
+  const star = /★/.test(r.n||"");
+  const btns = [];
+  if(r.p) btns.push(`<a class="rb" href="${r.p}" target="_blank" rel="noopener">${IC_PDF}${r.p.endsWith("/")?"Open folder":"Open PDF"}</a>`);
+  if(r.u) btns.push(`<a class="rb free" href="${r.u}" target="_blank" rel="noopener">${IC_WEB}Free online</a>`);
+  return `<div class="res">
+    <div class="res-l">Start from${star?`<span class="res-start">START HERE</span>`:""}</div>
+    <div class="res-b">${r.b}</div>
+    <div class="res-c">${r.c}</div>
+    ${r.n?`<div class="res-n">${r.n.replace("★ ","")}</div>`:""}
+    ${btns.length?`<div class="res-btns">${btns.join("")}</div>`:""}
+  </div>`;
+}
+
+function topicHTML(t,c){
+  const h = state.hours[t.id]||0, d = !!state.done[t.id];
+  const cls = d ? "done" : (h>0 ? "part" : "");
+  const open = openTopics.has(t.id);
+  const pred = fmtH(t.ep*c.rate);
+  return `<div class="tp ${cls}${open?" open":""}" data-t="${t.id}">
+    <div class="tp-h" data-row="${t.id}">
+      <span class="box" data-box="${t.id}">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </span>
+      <div class="tp-t">
+        <div class="n${mlc(t.t)}">${t.t}</div>
+        ${t.d?`<div class="d${mlc(t.d)}">${t.d}</div>`:""}
+      </div>
+      <div class="tp-r">
+        <span class="ep">${t.ep} EP</span>
+        <span class="pred">${h>0? fmtH(h)+" logged" : "~"+pred}</span>
+      </div>
+    </div>
+    <div class="tp-body"><div><div class="logbox">
+      <div class="logrow">
+        <input class="hin" type="number" inputmode="decimal" step="0.5" min="0"
+               value="${h||""}" placeholder="0" data-h="${t.id}">
+        <button class="qb" data-add="${t.id}" data-v="0.5">+½h</button>
+        <button class="qb" data-add="${t.id}" data-v="1">+1h</button>
+        <button class="qb" data-add="${t.id}" data-v="3">+3h</button>
+        <button class="qb go" data-done="${t.id}">${d?"Done ✓":"Mark done"}</button>
+      </div>
+      <div class="loghint">${d
+        ? `Counted in your calibration: <b>${t.ep} EP</b> took <b>${fmtH(h)}</b>.`
+        : `Baseline says <b>${t.ep} EP ≈ ${pred}</b>. Log what it really takes — even in bits — then mark it done.`}
+      </div>
+    </div></div></div>
+  </div>`;
+}
+
+/* ---------------- interaction ---------------- */
+const openSecs = new Set(), openTopics = new Set();
+
+function toast(m){
+  const el = $("toast"); el.textContent = m; el.classList.add("on");
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove("on"), 1900);
+}
+function haptic(){ if(navigator.vibrate) navigator.vibrate(12); }
+
+function refreshTopic(id){
+  const c = calc();
+  const t = TOPICS.find(x=>x.id===id);
+  const el = document.querySelector(`.tp[data-t="${CSS.escape(id)}"]`);
+  if(!el||!t) return;
+  const h = state.hours[id]||0, d = !!state.done[id];
+  el.className = "tp "+(d?"done":(h>0?"part":""))+(openTopics.has(id)?" open":"");
+  el.querySelector(".pred").textContent = h>0? fmtH(h)+" logged" : "~"+fmtH(t.ep*c.rate);
+  const btn = el.querySelector("[data-done]"); if(btn) btn.textContent = d?"Done ✓":"Mark done";
+  const hint = el.querySelector(".loghint");
+  if(hint) hint.innerHTML = d
+    ? `Counted in your calibration: <b>${t.ep} EP</b> took <b>${fmtH(h)}</b>.`
+    : `Baseline says <b>${t.ep} EP ≈ ${fmtH(t.ep*c.rate)}</b>. Log what it really takes — even in bits — then mark it done.`;
+  // section header numbers
+  const g = GROUPS.find(x=>x.id===t.gid);
+  const sec = document.querySelector(`.sec[data-g="${CSS.escape(t.gid)}"]`);
+  if(sec&&g){
+    const dn = g.topics.filter(x=>state.done[x.id]).length;
+    const de = g.topics.filter(x=>state.done[x.id]).reduce((s,x)=>s+x.ep,0);
+    const pct = g.ep? de/g.ep*100:0;
+    sec.querySelector(".sec-meta .n").textContent =
+      `${dn}/${g.topics.length} · ${g.ep} EP · ~${fmtH(g.ep*c.rate)}`;
+    sec.querySelector(".sec-pct").textContent = Math.round(pct)+"%";
+    sec.querySelector(".sbar i").style.width = pct+"%";
+  }
+  renderStats();
+}
+
+function addHours(id, v){
+  const cur = state.hours[id]||0;
+  const nv = Math.max(0, Math.round((cur+v)*10)/10);
+  state.hours[id] = nv;
+  state.log = state.log||[];
+  state.log.push({i:id, h:v, t:Date.now()});
+  if(state.log.length>600) state.log = state.log.slice(-600);
+  const inp = document.querySelector(`[data-h="${CSS.escape(id)}"]`);
+  if(inp) inp.value = nv||"";
+  save(); refreshTopic(id); haptic();
+}
+function setHours(id, nv){
+  const cur = state.hours[id]||0;
+  nv = Math.max(0, Math.round(nv*10)/10);
+  state.hours[id] = nv;
+  const d = nv-cur;
+  if(d!==0){ state.log = state.log||[]; state.log.push({i:id,h:d,t:Date.now()}); }
+  save(); refreshTopic(id);
+}
+function toggleDone(id){
+  if(state.done[id]) delete state.done[id];
+  else{
+    state.done[id] = Date.now();
+    const t = TOPICS.find(x=>x.id===id);
+    if(!(state.hours[id]>0)) toast("Marked done — log the hours to tune predictions");
+    else{
+      const c = calc();
+      toast(`+${t.ep} EP · pace now ${Math.round(c.rate*100)/100} h/EP`);
+    }
+  }
+  save(); refreshTopic(id); haptic();
+}
+
+document.addEventListener("click", e=>{
+  const chip = e.target.closest(".chip");
+  if(chip){ filter = chip.dataset.a; renderFilters(); renderList(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+
+  const box = e.target.closest("[data-box]");
+  if(box){ e.stopPropagation(); toggleDone(box.dataset.box); return; }
+
+  const dn = e.target.closest("[data-done]");
+  if(dn){ toggleDone(dn.dataset.done); return; }
+
+  const add = e.target.closest("[data-add]");
+  if(add){ addHours(add.dataset.add, parseFloat(add.dataset.v)); return; }
+
+  const row = e.target.closest("[data-row]");
+  if(row){
+    const id = row.dataset.row;
+    const el = row.closest(".tp");
+    if(openTopics.has(id)){ openTopics.delete(id); el.classList.remove("open"); }
+    else{ openTopics.add(id); el.classList.add("open"); }
+    return;
+  }
+
+  const sh = e.target.closest("[data-sec]");
+  if(sh){
+    const id = sh.dataset.sec, el = sh.closest(".sec");
+    if(openSecs.has(id)){ openSecs.delete(id); el.classList.remove("open"); }
+    else{ openSecs.add(id); el.classList.add("open"); }
+    return;
+  }
+});
+document.addEventListener("change", e=>{
+  const h = e.target.closest("[data-h]");
+  if(h) setHours(h.dataset.h, parseFloat(h.value)||0);
+});
+
+$("epDay").addEventListener("input", e=>{
+  const v = parseFloat(e.target.value);
+  state.epDay = (v>0) ? v : null;
+  save(); renderStats();
+});
+
+/* ---------------- cloud sync ---------------- */
+let pushT=null;
+function badge(cls){ $("btn-sync").className = "iconbtn"+(cls?" "+cls:""); }
+function schedulePush(){ clearTimeout(pushT); pushT = setTimeout(push, 900); }
+function push(){
+  if(!syncId) return;
+  badge("syncing");
+  fetch(`${DB}/${APP}/${encodeURIComponent(syncId)}.json`,{
+    method:"PUT", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ payload: JSON.stringify(state), updated: state.updated, device: syncId })
+  }).then(r=>{
+    badge(r.ok?"synced":"error");
+    if($("syncSt")) $("syncSt").textContent = r.ok? "Saved to cloud ✓" : "Could not save — kept locally";
+  }).catch(()=>{ badge("error"); if($("syncSt")) $("syncSt").textContent="Offline — kept locally"; });
+}
+function pull(cb){
+  if(!syncId){ cb&&cb(false); return; }
+  badge("syncing");
+  fetch(`${DB}/${APP}/${encodeURIComponent(syncId)}.json`)
+    .then(r=>r.ok?r.json():Promise.reject())
+    .then(rem=>{
+      let rs=null;
+      if(rem && typeof rem==="object"){
+        if(typeof rem.payload==="string"){ try{ rs = JSON.parse(rem.payload); }catch(e){} }
+        else if(rem.done) rs = rem;
+      }
+      if(rs && (rs.updated||0) >= (state.updated||0)){
+        state = {done:{},hours:{},log:[],epDay:null,updated:0,...rs};
+        try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+        $("epDay").value = state.epDay>0 ? state.epDay : "";
+        renderStats(); renderList();
+        badge("synced"); cb&&cb(true);
+      }else{ badge("synced"); cb&&cb(false); }
+    }).catch(()=>{ badge("error"); cb&&cb(false); });
+}
+
+$("btn-sync").onclick = ()=>{
+  $("syncInp").value = syncId;
+  $("syncSt").textContent = syncId? `Connected as "${syncId}"` : "";
+  $("scrim").classList.add("on"); $("sheet").classList.add("on");
+};
+function closeSheet(){ $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); }
+$("scrim").onclick = closeSheet;
+$("btnClose").onclick = closeSheet;
+$("btnPush").onclick = ()=>{
+  const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
+  if(!v){ $("syncSt").textContent = "Enter an ID first"; return; }
+  syncId = v; try{ localStorage.setItem(LS_ID, v); }catch(e){}
+  state.updated = Date.now(); push(); toast("Syncing…");
+};
+$("btnPull").onclick = ()=>{
+  const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
+  if(!v){ $("syncSt").textContent = "Enter an ID first"; return; }
+  syncId = v; try{ localStorage.setItem(LS_ID, v); }catch(e){}
+  $("syncSt").textContent = "Loading…";
+  pull(ok=>{
+    $("syncSt").textContent = ok? "Loaded from cloud ✓" : "Nothing newer in the cloud";
+    if(ok) toast("Loaded from cloud ✓");
+  });
+};
+
+addEventListener("scroll", ()=>{
+  $("topbar").classList.toggle("stuck", scrollY>6);
+}, {passive:true});
+
+/* ---------------- boot ---------------- */
+load();
+if(state.epDay>0) $("epDay").value = state.epDay;
+renderFilters();
+renderStats();
+renderList();
+if(syncId){ badge("synced"); pull(ok=>{ if(ok) toast("Synced from cloud"); }); }
+</script>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0f14">
+<title>LDC — Effort Points</title>
+<style>
+:root{
+  --bg:#0d0f14; --bg2:#12151d; --card:#161a24; --card2:#1c2130; --line:#252b3a;
+  --tx:#e9ecf2; --tx2:#9aa3b6; --tx3:#6b7488;
+  --ac:#7c8cff; --ac2:#b07cff; --ok:#4ade80; --warn:#fbbf24;
+  --math:#7c8cff; --ds:#4ade80; --phy:#fbbf24; --apt:#f472b6; --prac:#c084fc;
+  --r:16px; --ease:cubic-bezier(.22,.9,.28,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--tx);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,"Noto Sans Malayalam","Manjari","Meera","AnjaliOldLipi",sans-serif;
+  line-height:1.5;padding-bottom:env(safe-area-inset-bottom);
+  overflow-x:hidden;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 14px 90px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:rgba(13,15,20,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s, padding .3s var(--ease);
+  padding:14px 0 10px;
+}
+.topbar.stuck{border-bottom-color:var(--line)}
+.topbar-in{max-width:860px;margin:0 auto;padding:0 14px;display:flex;align-items:center;gap:10px}
+.brand{font-weight:700;font-size:.95rem;letter-spacing:-.01em}
+.brand small{display:block;font-weight:500;font-size:.68rem;color:var(--tx3);letter-spacing:.02em}
+.topbar .mini{margin-left:auto;display:flex;align-items:center;gap:8px}
+.minibar{width:76px;height:6px;border-radius:99px;background:var(--card2);overflow:hidden}
+.minibar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .9s var(--ease)}
+.minipct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;min-width:30px;text-align:right}
+.iconbtn{
+  background:var(--card);border:1px solid var(--line);color:var(--tx2);
+  width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+  cursor:pointer;transition:transform .15s var(--ease),background .2s,color .2s;
+}
+.iconbtn:active{transform:scale(.9)}
+.iconbtn.syncing{color:var(--warn);animation:spin 1s linear infinite}
+.iconbtn.synced{color:var(--ok)}
+.iconbtn.error{color:#f87171}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- hero ---------- */
+.hero{
+  background:linear-gradient(160deg,var(--card) 0%,var(--bg2) 100%);
+  border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0 16px;
+  position:relative;overflow:hidden;
+  animation:rise .6s var(--ease) both;
+}
+.hero::before{
+  content:"";position:absolute;top:-70px;right:-50px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(124,140,255,.20),transparent 68%);pointer-events:none;
+}
+.hero-top{display:flex;align-items:center;gap:18px}
+.ring{position:relative;flex-shrink:0;width:104px;height:104px}
+.ring svg{transform:rotate(-90deg);width:104px;height:104px;display:block}
+.ring .trk{stroke:var(--card2)}
+.ring .prg{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.ring .lbl{
+  position:absolute;inset:0;display:grid;place-content:center;text-align:center;
+}
+.ring .lbl b{font-size:1.55rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ring .lbl span{font-size:.6rem;color:var(--tx3);text-transform:uppercase;letter-spacing:.08em}
+.hero-side{flex:1;min-width:0}
+.hero-side .big{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+.hero-side .sm{font-size:.78rem;color:var(--tx2);margin-top:3px}
+.hero-side .eta{
+  margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:.74rem;
+  background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:5px 11px;color:var(--tx2);
+}
+.hero-side .eta b{color:var(--tx);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:13px;padding:10px 9px;text-align:center}
+.kpi b{display:block;font-size:.98rem;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi span{display:block;font-size:.6rem;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.05em;line-height:1.25}
+@media(max-width:520px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .ring,.ring svg{width:88px;height:88px}
+  .ring .lbl b{font-size:1.3rem}
+  .hero{padding:16px}
+}
+
+/* pace planner */
+.pace{
+  margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:12px 13px;
+}
+.pace-r{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pace-l{font-size:.73rem;color:var(--tx2);flex:1;min-width:130px}
+.pace-l b{display:block;color:var(--tx);font-size:.8rem;font-weight:650;margin-bottom:1px}
+.epin{
+  background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:11px;
+  padding:9px 11px;font-size:16px;width:78px;font-weight:700;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.epin:focus{outline:none;border-color:var(--ac)}
+.pace-u{font-size:.72rem;color:var(--tx3)}
+.pace-out{
+  margin-top:11px;padding-top:11px;border-top:1px solid var(--line);
+  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+}
+.pace-out .d{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;color:var(--ac)}
+.pace-out .x{font-size:.73rem;color:var(--tx3)}
+.pace-real{font-size:.69rem;color:var(--tx3);margin-top:7px;line-height:1.45}
+.pace-real b{color:var(--warn);font-weight:650}
+
+/* calibration strip */
+.calib{
+  margin-top:14px;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px 13px;
+}
+.calib-h{display:flex;align-items:center;gap:8px;font-size:.73rem;color:var(--tx2)}
+.calib-h b{color:var(--tx);font-weight:600;font-size:.8rem}
+.calib-h .pill{margin-left:auto;font-size:.66rem;background:rgba(124,140,255,.14);color:var(--ac);
+  border-radius:99px;padding:3px 9px;font-weight:600}
+.calib-bar{margin-top:8px;height:5px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.calib-bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--ac),var(--ok));transition:width .9s var(--ease)}
+.calib-note{font-size:.68rem;color:var(--tx3);margin-top:7px;line-height:1.45}
+
+/* ---------- filters ---------- */
+.filters{
+  position:sticky;top:58px;z-index:30;margin:0 -14px 12px;padding:9px 14px;
+  background:rgba(13,15,20,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;
+}
+.filters::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;background:var(--card);border:1px solid var(--line);color:var(--tx2);
+  border-radius:99px;padding:7px 13px;font-size:.76rem;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:transform .15s var(--ease),background .2s,color .2s,border-color .2s;
+}
+.chip:active{transform:scale(.94)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.chip i{font-style:normal;opacity:.55;margin-left:4px;font-size:.7rem}
+
+/* ---------- sections ---------- */
+.sec{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  margin-bottom:10px;overflow:hidden;
+  animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*38ms);
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sec-h{display:flex;align-items:center;gap:11px;padding:14px;cursor:pointer;user-select:none;
+  transition:background .2s}
+.sec-h:active{background:var(--card2)}
+.sec-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.sec-t{flex:1;min-width:0}
+.sec-t b{display:block;font-size:.89rem;font-weight:650;letter-spacing:-.01em;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sec-meta{display:flex;align-items:center;gap:7px;margin-top:4px;flex-wrap:wrap}
+.tag{font-size:.61rem;font-weight:700;letter-spacing:.03em;padding:2.5px 7px;border-radius:6px;
+  background:rgba(255,255,255,.06);color:var(--tx2);white-space:nowrap}
+.sec-meta .n{font-size:.68rem;color:var(--tx3);font-variant-numeric:tabular-nums}
+.sec-r{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.sec-pct{font-size:.72rem;color:var(--tx2);font-variant-numeric:tabular-nums;font-weight:600}
+.sbar{width:46px;height:4px;border-radius:99px;background:var(--card2);overflow:hidden}
+.sbar i{display:block;height:100%;width:0;border-radius:99px;transition:width .8s var(--ease)}
+.chev{color:var(--tx3);transition:transform .35s var(--ease);flex-shrink:0}
+.sec.open .chev{transform:rotate(90deg)}
+.sec-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+.sec.open .sec-body{grid-template-rows:1fr}
+.sec-body>div{overflow:hidden;min-height:0}
+
+/* Malayalam / Indic text needs more room to breathe than Latin at the same size */
+.ml{font-size:.92rem;line-height:1.85;letter-spacing:0;word-break:break-word}
+.tp-t .d.ml{font-size:.8rem;line-height:1.75;-webkit-line-clamp:3}
+.sec-t b.ml{font-size:.93rem;line-height:1.6;white-space:normal}
+@media(max-width:640px){
+  .ml{font-size:.95rem;line-height:1.9}
+  .tp-t .d.ml{font-size:.82rem}
+}
+
+/* section index badge — replaces the bare "i." / "1." prefixes */
+.idx{
+  flex-shrink:0;min-width:26px;height:26px;padding:0 6px;border-radius:8px;
+  display:inline-grid;place-items:center;font-size:.66rem;font-weight:800;
+  background:rgba(255,255,255,.06);color:var(--tx2);letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;
+}
+
+/* part heading — one level of hierarchy above the section cards */
+.parthead{
+  display:flex;align-items:center;gap:10px;margin:26px 0 10px;padding:0 2px;
+  animation:rise .5s var(--ease) both;
+}
+.parthead:first-child{margin-top:4px}
+.parthead .bar{width:3px;height:26px;border-radius:2px;flex-shrink:0}
+.parthead h2{margin:0;font-size:.82rem;font-weight:750;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--tx2)}
+.parthead h2.ml{font-size:.9rem;text-transform:none;letter-spacing:0;line-height:1.5}
+.parthead .pn{margin-left:auto;font-size:.68rem;color:var(--tx3);
+  font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0}
+
+/* ---------- book / resource strip ---------- */
+.res{
+  margin:0;padding:13px 14px;border-top:1px solid var(--line);
+  background:linear-gradient(135deg,rgba(124,140,255,.07),rgba(176,124,255,.04));
+}
+.res-l{display:flex;align-items:center;gap:6px;font-size:.6rem;color:var(--tx3);
+  text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:6px}
+.res-b{font-size:.85rem;font-weight:650;letter-spacing:-.01em;line-height:1.35}
+.res-c{font-size:.75rem;color:var(--tx2);margin-top:4px;line-height:1.45}
+.res-n{font-size:.72rem;color:var(--tx3);margin-top:7px;line-height:1.45;
+  padding-left:9px;border-left:2px solid var(--line)}
+.res-btns{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.rb{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  background:var(--card2);border:1px solid var(--line);color:var(--tx);
+  border-radius:10px;padding:8px 12px;font-size:.75rem;font-weight:650;
+  transition:transform .15s var(--ease),background .2s,border-color .2s;
+}
+.rb:active{transform:scale(.94)}
+.rb.free{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:var(--ok)}
+.rb svg{width:13px;height:13px;flex-shrink:0}
+.res-start{
+  display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.06em;
+  background:var(--ok);color:#0d0f14;border-radius:5px;padding:2px 6px;margin-left:6px;
+}
+
+/* ---------- topic rows ---------- */
+.tp{border-top:1px solid var(--line)}
+.tp-h{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;cursor:pointer;
+  transition:background .2s}
+.tp-h:active{background:var(--card2)}
+.tp.done .tp-h{background:rgba(74,222,128,.045)}
+.box{
+  width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex-shrink:0;margin-top:1px;
+  display:grid;place-items:center;transition:border-color .25s,background .25s,transform .18s var(--ease);
+}
+.box:active{transform:scale(.85)}
+.box svg{width:12px;height:12px;stroke:var(--bg);stroke-width:3.2;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:22;stroke-dashoffset:22}
+.tp.done .box{background:var(--ok);border-color:var(--ok)}
+.tp.done .box svg{stroke-dashoffset:0;transition:stroke-dashoffset .32s var(--ease) .05s}
+.tp.part .box{border-color:var(--warn);background:rgba(251,191,36,.14)}
+.tp-t{flex:1;min-width:0}
+.tp-t .n{font-size:.83rem;font-weight:500;line-height:1.35;transition:color .3s}
+.tp.done .tp-t .n{color:var(--tx3)}
+.tp-t .d{font-size:.73rem;color:var(--tx3);margin-top:2px;line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tp-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.ep{font-size:.68rem;font-weight:700;color:var(--ac);font-variant-numeric:tabular-nums;
+  background:rgba(124,140,255,.12);border-radius:6px;padding:2px 7px}
+.tp.done .ep{color:var(--ok);background:rgba(74,222,128,.12)}
+.pred{font-size:.64rem;color:var(--tx3);font-variant-numeric:tabular-nums}
+
+.tp-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease)}
+.tp.open .tp-body{grid-template-rows:1fr}
+.tp-body>div{overflow:hidden;min-height:0}
+.logbox{padding:0 14px 14px 47px}
+.logrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hin{
+  background:var(--bg);border:1px solid var(--line);color:var(--tx);border-radius:11px;
+  padding:9px 11px;font-size:16px;width:92px;font-variant-numeric:tabular-nums;font-weight:600;
+}
+.hin:focus{outline:none;border-color:var(--ac)}
+.qb{
+  background:var(--card2);border:1px solid var(--line);color:var(--tx2);border-radius:10px;
+  padding:8px 11px;font-size:.75rem;font-weight:600;cursor:pointer;
+  transition:transform .15s var(--ease),background .2s,color .2s;
+}
+.qb:active{transform:scale(.9)}
+.qb.go{background:var(--ac);border-color:var(--ac);color:#0d0f14;margin-left:auto}
+.qb.undo{background:transparent;color:var(--tx3)}
+.loghint{font-size:.68rem;color:var(--tx3);margin-top:9px;line-height:1.45}
+.loghint b{color:var(--tx2);font-weight:600}
+
+/* ---------- sheet ---------- */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;opacity:0;pointer-events:none;
+  transition:opacity .3s;backdrop-filter:blur(3px)}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;background:var(--card);
+  border-radius:24px 24px 0 0;border-top:1px solid var(--line);
+  padding:8px 18px calc(24px + env(safe-area-inset-bottom));
+  transform:translateY(102%);transition:transform .42s var(--ease);max-height:86vh;overflow-y:auto;
+}
+.sheet.on{transform:none}
+.grab{width:38px;height:4px;border-radius:99px;background:var(--line);margin:6px auto 14px}
+.sheet h3{margin:0 0 4px;font-size:1rem}
+.sheet p{font-size:.78rem;color:var(--tx2);margin:0 0 14px;line-height:1.5}
+.sheet label{display:block;font-size:.68rem;color:var(--tx3);text-transform:uppercase;
+  letter-spacing:.05em;margin:12px 0 5px}
+.sheet input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--tx);
+  border-radius:12px;padding:12px;font-size:16px}
+.sheet input:focus{outline:none;border-color:var(--ac)}
+.btnrow{display:flex;gap:9px;margin-top:16px}
+.btn{
+  flex:1;padding:13px;border-radius:13px;border:1px solid var(--line);background:var(--card2);
+  color:var(--tx);font-size:.85rem;font-weight:650;cursor:pointer;
+  transition:transform .15s var(--ease),opacity .2s;
+}
+.btn:active{transform:scale(.96)}
+.btn.pri{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent;color:#0d0f14}
+.sheet .st{font-size:.73rem;color:var(--tx3);margin-top:11px;text-align:center;min-height:16px}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,26px);
+  background:var(--tx);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:.8rem;font-weight:650;
+  z-index:80;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s var(--ease);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:88vw;text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+.empty{text-align:center;padding:42px 20px;color:var(--tx3);font-size:.85rem}
+footer{text-align:center;color:var(--tx3);font-size:.7rem;padding:26px 10px 10px;line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-in">
+    <div class="brand">Kerala PSC LDC<small id="brandsub">Lower Division Clerk · Mains</small></div>
+    <div class="mini">
+      <div class="minibar"><i id="minibar"></i></div>
+      <div class="minipct" id="minipct">0%</div>
+      <button class="iconbtn" id="btn-sync" title="Cloud sync">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-7.6-4.2"/>
+          <path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 7.6 4.2"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="ring">
+        <svg viewBox="0 0 120 120">
+          <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7c8cff"/><stop offset="100%" stop-color="#b07cff"/>
+          </linearGradient></defs>
+          <circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="11"/>
+          <circle class="prg" id="prg" cx="60" cy="60" r="52" fill="none" stroke-width="11"
+                  stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="lbl"><b id="ringpct">0%</b><span>done</span></div>
+      </div>
+      <div class="hero-side">
+        <div class="big" id="heroBig">1,151 effort points to go</div>
+        <div class="sm" id="heroSm">Log the hours a topic actually took — everything else re-predicts itself.</div>
+        <div class="eta" id="etaPill" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b id="k1">0</b><span>EP done</span></div>
+      <div class="kpi"><b id="k2">0h</b><span>hours logged</span></div>
+      <div class="kpi"><b id="k3">—</b><span>your rate</span></div>
+      <div class="kpi"><b id="k4">1151h</b><span>est. remaining</span></div>
+    </div>
+
+    <div class="pace">
+      <div class="pace-r">
+        <div class="pace-l">
+          <b>Your daily pace</b>
+          How many effort points you reckon you clear on an average day
+        </div>
+        <input class="epin" type="number" id="epDay" inputmode="decimal" step="0.5" min="0" placeholder="—">
+        <span class="pace-u">EP&nbsp;/&nbsp;day</span>
+      </div>
+      <div class="pace-out" id="paceOut" style="display:none">
+        <span class="d" id="paceDate">—</span>
+        <span class="x" id="paceX"></span>
+      </div>
+      <div class="pace-real" id="paceReal"></div>
+    </div>
+
+    <div class="calib">
+      <div class="calib-h">
+        <b>Calibration</b>
+        <span id="calibTxt">starting at 1.0 h per effort point</span>
+        <span class="pill" id="calibPill">0% tuned</span>
+      </div>
+      <div class="calib-bar"><i id="calibBar"></i></div>
+      <div class="calib-note" id="calibNote">
+        Finish a topic and log the real hours. Every completed topic teaches the tracker your actual pace,
+        and all remaining predictions shift with it.
+      </div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div id="list"></div>
+
+  <footer>225 topics · 1,151 effort points, weighted by the official mark distribution<br>Progress saves on this device and syncs to any device using the same sync ID.</footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet">
+  <div class="grab"></div>
+  <h3>Cloud sync</h3>
+  <p>Pick any ID you'll remember. Enter the same ID on your phone and laptop and progress follows you.</p>
+  <label>Sync ID</label>
+  <input type="text" id="syncInp" placeholder="e.g. ihjas-prep" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <div class="btnrow">
+    <button class="btn" id="btnPull">Load from cloud</button>
+    <button class="btn pri" id="btnPush">Save to cloud</button>
+  </div>
+  <div class="st" id="syncSt"></div>
+  <div class="btnrow"><button class="btn" id="btnClose">Close</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GROUPS = [{"id":"ldc.1","name":"ചരിത്രം (History) · കേരള ചരിത്രം (Kerala History)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":14,"idx":"i.1","topics":[{"id":"ldc.1.0","t":"യൂറോപ്യന്മാരുടെ വരവ്","d":"പോർച്ചുഗീസുകാർ, ഡച്ചുകാർ, ഫ്രഞ്ചുകാർ, ബ്രിട്ടീഷുകാർ.","ep":1},{"id":"ldc.1.1","t":"യൂറോപ്യന്മാരുടെ സംഭാവനകൾ","d":"കൃഷി, വിദ്യാഭ്യാസം, വാസ്തുവിദ്യ, അച്ചടി, വ്യവസായം.","ep":1},{"id":"ldc.1.2","t":"തിരുവിതാംകൂർ ചരിത്രം","d":"മാർത്താണ്ഡവർമ്മ മുതൽ ശ്രീചിത്തിരതിരുനാൾ ബാലരാമവർമ്മ വരെയുള്ള തിരുവിതാംകൂറിന്റെ ചരിത്രം, പ്രധാന ഭരണപരിഷ്കാരങ്ങൾ.","ep":2},{"id":"ldc.1.3","t":"സാമൂഹ്യ, മത, നവോത്ഥാന പ്രസ്ഥാനങ്ങൾ","d":"ശ്രീനാരായണഗുരു, അയ്യങ്കാളി, ചട്ടമ്പിസ്വാമികൾ, വി.ടി. ഭട്ടതിരിപ്പാട്, മന്നത്ത് പത്മനാഭൻ, പൊയ്കയിൽ യോഹന്നാൻ, പണ്ഡിറ്റ് കറുപ്പൻ, വക്കം അബ്ദുൽ ഖാദർ മൗലവി തുടങ്ങിയ നവോത്ഥാന നായകരും അവരുടെ പ്രവർത്തനങ്ങളും.","ep":2},{"id":"ldc.1.4","t":"കേരളത്തിലെ ദേശീയ പ്രസ്ഥാനങ്ങൾ","d":"പഴശ്ശി വിപ്ലവം, വേലുത്തമ്പി ദളവ, കുണ്ടറ വിളംബരം, മലബാർ കലാപം, ഉപ്പുസത്യാഗ്രഹം, ഗുരുവായൂർ സത്യാഗ്രഹം, വൈക്കം സത്യാഗ്രഹം.","ep":2},{"id":"ldc.1.5","t":"കേരള ചരിത്രത്തിന്റെ സാഹിത്യ സ്രോതസ്സുകൾ","d":"യാത്രാവിവരണങ്ങൾ, ഗ്രന്ഥവരികൾ, ശാസനങ്ങൾ, ചരിത്രരേഖകൾ.","ep":2},{"id":"ldc.1.6","t":"ഐക്യകേരള പ്രസ്ഥാനം","d":"ഐക്യകേരള സമ്മേളനങ്ങൾ, സംസ്ഥാന പുനഃസംഘടനാ കമ്മീഷൻ, 1956 നവംബർ 1 കേരളപ്പിറവി.","ep":2},{"id":"ldc.1.7","t":"1956-നു ശേഷമുള്ള കേരളത്തിന്റെ സാമൂഹ്യ-രാഷ്ട്രീയ ചരിത്രം","d":"ആദ്യ മന്ത്രിസഭ, ഭൂപരിഷ്കരണം, വിമോചന സമരം, സാക്ഷരതാ പ്രസ്ഥാനം, ജനകീയാസൂത്രണം.","ep":2}]},{"id":"ldc.2","name":"ചരിത്രം (History) · ഇന്ത്യൻ ചരിത്രം (Indian History)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":21,"idx":"i.2","topics":[{"id":"ldc.2.0","t":"രാഷ്ട്രീയ ചരിത്രം & ബ്രിട്ടീഷ് ആധിപത്യം","d":"പ്ലാസി യുദ്ധം, ബക്സർ യുദ്ധം, ഈസ്റ്റ് ഇന്ത്യാ കമ്പനി ഭരണം, ബ്രിട്ടീഷ് സാമ്രാജ്യത്വ നയങ്ങൾ (ദത്തവകാശ നിരോധന നയം, സൈനിക സഹായ വ്യവസ്ഥ).","ep":1},{"id":"ldc.2.1","t":"ഒന്നാം സ്വാതന്ത്ര്യസമരം (1857)","d":"കാരണങ്ങൾ, പ്രധാന നേതാക്കൾ, കേന്ദ്രങ്ങൾ, അനന്തരഫലങ്ങൾ.","ep":1},{"id":"ldc.2.2","t":"ഇന്ത്യൻ നാഷണൽ കോൺഗ്രസ് (INC)","d":"രൂപീകരണം (1885), ആദ്യകാല സമ്മേളനങ്ങൾ, പ്രധാന നേതാക്കൾ, മിതവാദികളും തീവ്രവാദികളും.","ep":1},{"id":"ldc.2.3","t":"സ്വദേശി പ്രസ്ഥാനം & ബംഗാൾ വിഭജനം (1905)","d":"വിദേശവസ്ത്ര ബഹിഷ്കരണം, ദേശീയ വിദ്യാഭ്യാസ പ്രസ്ഥാനങ്ങൾ.","ep":2},{"id":"ldc.2.4","t":"സാമൂഹ്യ പരിഷ്കരണ പ്രസ്ഥാനങ്ങൾ","d":"ബ്രഹ്മസമാജം (രാജാറാം മോഹൻ റോയ്), ആര്യസമാജം (സ്വാമി ദയാനന്ദ സരസ്വതി), രാമകൃഷ്ണ മിഷൻ (സ്വാമി വിവേകാനന്ദൻ), തിയോസഫിക്കൽ സൊസൈറ്റി, അലിഗഡ് പ്രസ്ഥാനം.","ep":2},{"id":"ldc.2.5","t":"വർത്തമാനപത്രങ്ങൾ","d":"സ്വാതന്ത്ര്യസമര കാലത്തെ പ്രധാന പത്രങ്ങൾ, പത്രാധിപന്മാർ.","ep":2},{"id":"ldc.2.6","t":"സ്വാതന്ത്ര്യസമര ചരിത്രകാലത്തെ സാഹിത്യവും കലയും","d":"ദേശീയ ഗാനങ്ങൾ, ദേശഭക്തി കാവ്യങ്ങൾ, ചിത്രകല, സാഹിത്യ സംഭാവനകൾ.","ep":2},{"id":"ldc.2.7","t":"സ്വാതന്ത്ര്യ സമരവും മഹാത്മാഗാന്ധിയും","d":"ഗാന്ധിയൻ യുഗം - ചമ്പാരൻ, അഹമ്മദാബാദ്, ഖേഡ, നിസ്സഹകരണ പ്രസ്ഥാനം, ദണ്ഡി യാത്ര / ഉപ്പുസത്യാഗ്രഹം, ക്വിറ്റ് ഇന്ത്യാ സമരം.","ep":2},{"id":"ldc.2.8","t":"ഇന്ത്യയുടെ സ്വാതന്ത്ര്യാനന്തര കാലഘട്ടം","d":"വിഭജനവും പുനരധിവാസവും, നാട്ടുരാജ്യങ്ങളുടെ സംയോജനം (സർദാർ വല്ലഭഭായ് പട്ടേൽ).","ep":2},{"id":"ldc.2.9","t":"സംസ്ഥാനങ്ങളുടെ പുനഃസംഘടന","d":"ഫസൽ അലി കമ്മീഷൻ, ഭാഷാടിസ്ഥാനത്തിലുള്ള സംസ്ഥാന വിഭജനം.","ep":2},{"id":"ldc.2.10","t":"ശാസ്ത്ര വിദ്യാഭ്യാസ സാങ്കേതിക മേഖലയിലെ പുരോഗതി","d":"ശാസ്ത്ര ഗവേഷണ സ്ഥാപനങ്ങൾ (CSIR, ISRO, DRDO, DAE), വിദ്യാഭ്യാസ കമ്മീഷനുകൾ, ആണവ പദ്ധതികൾ.","ep":2},{"id":"ldc.2.11","t":"വിദേശ നയം","d":"ചേരിചേരാ നയം (Non-Aligned Movement), പഞ്ചശീല തത്വങ്ങൾ.","ep":2}]},{"id":"ldc.3","name":"ചരിത്രം (History) · ലോക ചരിത്രം (World History)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":12,"idx":"i.3","topics":[{"id":"ldc.3.0","t":"ഇംഗ്ലണ്ടിലെ മഹത്തായ വിപ്ലവം (Glorious Revolution / Great Revolution 1688)","d":"ബിൽ ഓഫ് റൈറ്റ്സ്.","ep":1},{"id":"ldc.3.1","t":"അമേരിക്കൻ സ്വാതന്ത്ര്യ സമരം (American War of Independence 1776)","d":"ബോസ്റ്റൺ ടീ പാർട്ടി, ഫിലഡൽഫിയ കോൺഗ്രസ്, സ്വാതന്ത്ര്യ പ്രഖ്യാപനം.","ep":1},{"id":"ldc.3.2","t":"ഫ്രഞ്ച് വിപ്ലവം (French Revolution 1789)","d":"ചിന്തകർ (റൂസ്സോ, വോൾട്ടയർ, മോണ്ടെസ്ക്യൂ), ബാസ്റ്റിൽ തകർച്ച, മനുഷ്യാവകാശ പ്രഖ്യാപനം.","ep":2},{"id":"ldc.3.3","t":"റഷ്യൻ വിപ്ലവം (Russian Revolution 1917)","d":"ഫെബ്രുവരി വിപ്ലവം, ഒക്ടോബർ വിപ്ലവം, ലെനിൻ.","ep":2},{"id":"ldc.3.4","t":"ചൈനീസ് വിപ്ലവം (Chinese Revolution)","d":"1911-ലെ സൺയാത്സൻ വിപ്ലവം, 1949-ലെ മാവോ സേതുങ്ങിന്റെ കമ്മ്യൂണിസ്റ്റ് വിപ്ലവം.","ep":2},{"id":"ldc.3.5","t":"രണ്ടാം ലോക മഹായുദ്ധാനന്തര രാഷ്ട്രീയ ചരിത്രം","d":"ശീതയുദ്ധം (Cold War), നാറ്റോ, വാഴ്സോ സഖ്യങ്ങൾ, സോവിയറ്റ് യൂണിയന്റെ തകർച്ച.","ep":2},{"id":"ldc.3.6","t":"ഐക്യരാഷ്ട്ര സംഘടന (UN) & മറ്റ് അന്താരാഷ്ട്ര സംഘടനകൾ","d":"യു.എൻ രൂപീകരണം, പ്രധാന ഘടകങ്ങൾ, പ്രത്യേക ഏജൻസികൾ (WHO, UNESCO, UNICEF, ILO), അന്താരാഷ്ട്ര കോടതി.","ep":2}]},{"id":"ldc.4","name":"ഭൂമിശാസ്ത്രം (Geography) · അടിസ്ഥാന തത്വങ്ങൾ (General Geography)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":19,"idx":"ii.1","topics":[{"id":"ldc.4.0","t":"ഭൂമിയുടെ ഘടന","d":"ഭൂവൽക്കം (Crust), മാന്റിൽ (Mantle), കാമ്പ് (Core).","ep":1},{"id":"ldc.4.1","t":"അന്തരീക്ഷം","d":"ഘടന (ട്രോപോസ്ഫിയർ, സ്ട്രാറ്റോസ്ഫിയർ, മെസോസ്ഫിയർ, തെർമോസ്ഫിയർ), അന്തരീക്ഷ വാതകങ്ങൾ.","ep":1},{"id":"ldc.4.2","t":"പാറകൾ & ഭൗമോപരിതലം","d":"ആഗ്നേയ ശിലകൾ, അവസാദ ശിലകൾ, കായാന്തരിത ശിലകൾ, മണ്ണൊലിപ്പ്, ശിലാശൈഥില്യം.","ep":1},{"id":"ldc.4.3","t":"അന്തരീക്ഷ മർദ്ദവും കാറ്റും","d":"മർദ്ദമേഖലകൾ, സ്ഥിരവാതങ്ങൾ, കാലികവാതങ്ങൾ, പ്രാദേശികവാതങ്ങൾ, ചുഴലിക്കാറ്റുകൾ.","ep":2},{"id":"ldc.4.4","t":"താപനിലയും ഋതുക്കളും","d":"ഭൂമിയുടെ പരിക്രമണവും ഭ്രമണവും, അയനാന്തങ്ങൾ (Solstice), സമരാത്രദിനങ്ങൾ (Equinox).","ep":2},{"id":"ldc.4.5","t":"ആഗോള പ്രശ്നങ്ങൾ","d":"ആഗോളതാപനം (Global Warming), ഹരിതഗൃഹ വാതകങ്ങൾ, ഓസോൺ ശോഷണം.","ep":2},{"id":"ldc.4.6","t":"മലിനീകരണങ്ങൾ","d":"വായു, ജല, ശബ്ദ, മണ്ണ് മലിനീകരണങ്ങൾ - കാരണങ്ങളും പ്രതിവിധികളും.","ep":2},{"id":"ldc.4.7","t":"മാപ്പുകൾ & അടയാളങ്ങൾ","d":"ടോപ്പോഗ്രാഫിക് മാപ്പുകൾ, മാപ്പ് റീഡിംഗ്, സർവേ ചിഹ്നങ്ങൾ.","ep":2},{"id":"ldc.4.8","t":"വിദൂരസംവേദനവും ജി.ഐ.എസും (Remote Sensing & GIS)","d":"ഉപഗ്രഹ ചിത്രങ്ങൾ, ജിയോഗ്രാഫിക് ഇൻഫർമേഷൻ സിസ്റ്റം, ജി.പി.എസ് (GPS).","ep":2},{"id":"ldc.4.9","t":"മഹാസമുദ്രങ്ങളും സമുദ്രചലനങ്ങളും","d":"സമുദ്രജല പ്രവാഹങ്ങൾ (Ocean Currents), വേലിയേറ്റ-വേലിയിറക്കങ്ങൾ, സമുദ്ര അടിത്തട്ട്.","ep":2},{"id":"ldc.4.10","t":"ഭൂഖണ്ഡങ്ങളും ലോകരാഷ്ട്രങ്ങളും","d":"ഏഴ് ഭൂഖണ്ഡങ്ങൾ, സവിശേഷതകൾ, പ്രധാന അന്താരാഷ്ട്ര അതിർത്തികൾ, പർവ്വതനിരകൾ, നദികൾ.","ep":2}]},{"id":"ldc.5","name":"ഭൂമിശാസ്ത്രം (Geography) · ഇന്ത്യൻ ഭൂമിശാസ്ത്രം (Indian Geography)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":14,"idx":"ii.2","topics":[{"id":"ldc.5.0","t":"ഭൂപ്രകൃതി","d":"ഉത്തരപർവ്വത മേഖല (ഹിമാലയം), ഉത്തരമഹാസമതലം, ഉപദ്വീപീയ പീഠഭൂമി, തീരസമതലങ്ങൾ, ദ്വീപുകൾ.","ep":1},{"id":"ldc.5.1","t":"സംസ്ഥാനങ്ങളും സവിശേഷതകളും","d":"അതിർത്തികൾ, തലസ്ഥാനങ്ങൾ, പ്രത്യേകതകൾ.","ep":1},{"id":"ldc.5.2","t":"നദികൾ","d":"ഹിമാലയൻ നദികൾ (സിന്ധു, ഗംഗ, ബ്രഹ്മപുത്ര), ഉപദ്വീപീയ നദികൾ (ഗോദാവരി, കൃഷ്ണ, കാവേരി, നർമ്മദ, താപ്തി).","ep":2},{"id":"ldc.5.3","t":"കാലാവസ്ഥ & സ്വാഭാവിക സസ്യപ്രകൃതി","d":"തെക്കുപടിഞ്ഞാറൻ കാലവർഷം, വടക്കുകിഴക്കൻ മൺസൂൺ, വനങ്ങൾ (നിത്യഹരിത, ഇലപൊഴിയും, കണ്ടൽ).","ep":2},{"id":"ldc.5.4","t":"കൃഷി","d":"പ്രധാന കാർഷിക വിളകൾ, ഭക്ഷ്യവിളകൾ, നാണ്യവിളകൾ, കൃഷി രീതികൾ.","ep":2},{"id":"ldc.5.5","t":"ധാതുക്കളും വ്യവസായവും","d":"ഇരുമ്പ്, കൽക്കരി, പെട്രോളിയം, ബോക്സൈറ്റ്, വ്യാവസായിക മേഖലകൾ.","ep":2},{"id":"ldc.5.6","t":"ഊർജ്ജ സ്രോതസ്സുകൾ","d":"പരമ്പരാഗത - അനെർജി സ്രോതസ്സുകൾ (താപ, ജല, ആണവ, സൗരോർജ്ജം, കാറ്റാടിയന്ത്രം).","ep":2},{"id":"ldc.5.7","t":"ഗതാഗത സംവിധാനങ്ങൾ","d":"റോഡ് (ദേശീയപാതകൾ, സുവർണ്ണ ചതുഷ്കോണം), റെയിൽവേ (റെയിൽവേ സോണുകൾ), ജലഗതാഗതം (ദേശീയ ജലപാതകൾ, തുറമുഖങ്ങൾ), വ്യോമഗതാഗതം (അന്താരാഷ്ട്ര വിമാനത്താവളങ്ങൾ).","ep":2}]},{"id":"ldc.6","name":"ഭൂമിശാസ്ത്രം (Geography) · കേരള ഭൂമിശാസ്ത്രം (Kerala Geography)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":14,"idx":"ii.3","topics":[{"id":"ldc.6.0","t":"ഭൂപ്രകൃതി","d":"മലനാട്, ഇടനാട്, തീരനാട്.","ep":1},{"id":"ldc.6.1","t":"ജില്ലകൾ & സവിശേഷതകൾ","d":"14 ജില്ലകളുടെ രൂപീകരണ ചരിത്രം, ഭൂമിശാസ്ത്രപരമായ അതിർത്തികൾ, പ്രത്യേകതകൾ.","ep":1},{"id":"ldc.6.2","t":"നദികളും കായലുകളും","d":"44 നദികൾ (41 പടിഞ്ഞാറോട്ടും 3 കിഴക്കോട്ടും), പ്രധാന അണക്കെട്ടുകൾ, ശുദ്ധജല തടാകങ്ങൾ, കായലുകൾ.","ep":2},{"id":"ldc.6.3","t":"കാലാവസ്ഥ & വനങ്ങൾ","d":"ഇടവപ്പാതി, തുലാവർഷം, വന്യജീവി സങ്കേതങ്ങൾ, ദേശീയോദ്യാനങ്ങൾ, ബയോസ്ഫിയർ റിസർവുകൾ.","ep":2},{"id":"ldc.6.4","t":"കൃഷിയും ഗവേഷണ സ്ഥാപനങ്ങളും","d":"കാർഷിക വിളകൾ, കേരളത്തിലെ പ്രമുഖ ഗവേഷണ സ്ഥാപനങ്ങൾ (CPCRI, CTCRI, RRII, KAU).","ep":2},{"id":"ldc.6.5","t":"ധാതുക്കളും വ്യവസായങ്ങളും","d":"ധാതുമണലുകൾ (ഇൽമനൈറ്റ്, റൂട്ടൈൽ), കളിമൺ, പ്രധാന പൊതുമേഖലാ വ്യവസായങ്ങൾ.","ep":2},{"id":"ldc.6.6","t":"ഊർജ്ജ സ്രോതസ്സുകൾ","d":"ഇടുക്കി ഉൾപ്പെടെയുള്ള ജലവൈദ്യുത പദ്ധതികൾ, സൗരോർജ്ജ പദ്ധതികൾ (സിയാൽ).","ep":2},{"id":"ldc.6.7","t":"ഗതാഗതം","d":"റോഡ്, ജലപാതകൾ (NW-3), റെയിൽ ശൃംഖല, 4 അന്താരാഷ്ട്ര വിമാനത്താവളങ്ങൾ.","ep":2}]},{"id":"ldc.7","name":"ധനതത്വശാസ്ത്രം (Economics)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":48,"idx":"iii","topics":[{"id":"ldc.7.0","t":"ഇന്ത്യൻ സമ്പദ്‌രംഗം","d":"വികസ്വര സമ്പദ്‌വ്യവസ്ഥ, മിശ്ര സാമ്പത്തിക വ്യവസ്ഥ, പ്രാഥമിക-ദ്വിതീയ-ത്രിതീയ മേഖലകൾ.","ep":6},{"id":"ldc.7.1","t":"പഞ്ചവത്സര പദ്ധതികൾ (Five Year Plans)","d":"1 മുതൽ 12 വരെയുള്ള പഞ്ചവത്സര പദ്ധതികളുടെ ലക്ഷ്യങ്ങളും നേട്ടങ്ങളും.","ep":7},{"id":"ldc.7.2","t":"പ്ലാനിംഗ് കമ്മീഷൻ & നീതി ആയോഗ് (NITI Aayog)","d":"രൂപീകരണം, ഘടന, പ്രധാന ലക്ഷ്യങ്ങൾ, പ്രവർത്തനങ്ങൾ, ആസൂത്രണ വികസന മാതൃകകൾ.","ep":7},{"id":"ldc.7.3","t":"നവസാമ്പത്തിക പരിഷ്കാരങ്ങൾ (1991)","d":"ഉദാരവൽക്കരണം (Liberalization), സ്വകാര്യവൽക്കരണം (Privatization), ആഗോളവൽക്കരണം (Globalization) - LPG മോഡൽ.","ep":7},{"id":"ldc.7.4","t":"ധനകാര്യ സ്ഥാപനങ്ങൾ","d":"റിസർവ് ബാങ്ക് ഓഫ് ഇന്ത്യ (RBI) - ധനനയം, നബാർഡ് (NABARD), സെബി (SEBI), ഐ.ആർ.ഡി.എ.ഐ (IRDAI), വാണിജ്യ ബാങ്കുകൾ, സഹകരണ ബാങ്കുകൾ.","ep":7},{"id":"ldc.7.5","t":"കാർഷിക വിളകളും ഹരിത വിപ്ലവവും (Green Revolution)","d":"എം.എസ്. സ്വാമിനാഥൻ, നോർമൻ ബോർലോഗ്, വിവിധ വിപ്ലവങ്ങൾ (ധവള വിപ്ലവം, നീല വിപ്ലവം, മഞ്ഞ വിപ്ലവം മുതലായവ).","ep":7},{"id":"ldc.7.6","t":"ധാതു വിഭവങ്ങളും സാമ്പത്തിക പ്രാധാന്യവും.","d":"","ep":7}]},{"id":"ldc.8","name":"ഇന്ത്യൻ ഭരണഘടന (Indian Constitution)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":48,"idx":"iv","topics":[{"id":"ldc.8.0","t":"ഭരണഘടനാ നിർമ്മാണ സമിതി (Constituent Assembly)","d":"ചരിത്രം, കാബിനറ്റ് മിഷൻ, അധ്യക്ഷന്മാർ (ഡോ. രാജേന്ദ്ര പ്രസാദ്, സച്ചിദാനന്ദ സിൻഹ), ഡ്രാഫ്റ്റിംഗ് കമ്മിറ്റി (ഡോ. ബി.ആർ. അംബേദ്കർ), സമയപരിധി, അംഗീകാരം (1949 നവംബർ 26), നിലവിൽ വന്ന തീയതി (1950 ജനുവരി 26).","ep":4},{"id":"ldc.8.1","t":"ആമുഖം (Preamble)","d":"സോഷ്യലിസ്റ്റ്, മതേതര, പരമാധികാര, ജനാധിപത്യ, റിപ്പബ്ലിക് ആശയങ്ങൾ, ലക്ഷ്യങ്ങൾ.","ep":3},{"id":"ldc.8.2","t":"പൗരത്വം (Citizenship)","d":"ആർട്ടിക്കിൾ 5 മുതൽ 11 വരെ, പൗരത്വ നിയമം (1955).","ep":3},{"id":"ldc.8.3","t":"മൗലികാവകാശങ്ങൾ (Fundamental Rights)","d":"ആർട്ടിക്കിൾ 12 മുതൽ 35 വരെ (ഭാഗം III), 6 മൗലികാവകാശങ്ങൾ, റിട്ടുകൾ (ആർട്ടിക്കിൾ 32 & 226).","ep":3},{"id":"ldc.8.4","t":"നിർദ്ദേശക തത്വങ്ങൾ (Directive Principles of State Policy - DPSP)","d":"ആർട്ടിക്കിൾ 36 മുതൽ 51 വരെ (ഭാഗം IV), ഗാന്ധിയൻ, സോഷ്യലിസ്റ്റ്, ലിബറൽ തത്വങ്ങൾ, ഏകീകൃത സിവിൽ കോഡ് (ആർട്ടിക്കിൾ 44).","ep":3},{"id":"ldc.8.5","t":"മൗലിക കടമകൾ (Fundamental Duties)","d":"ആർട്ടിക്കിൾ 51A (ഭാഗം IVA), സ്വരൺ സിംഗ് കമ്മിറ്റി, 11 കടമകൾ.","ep":3},{"id":"ldc.8.6","t":"ഗവൺമെന്റിന്റെ ഘടകങ്ങൾ","d":"","ep":8},{"id":"ldc.8.7","t":"പ്രധാന ഭരണഘടനാ ഭേദഗതികൾ (Important Amendments)","d":"","ep":12},{"id":"ldc.8.8","t":"പഞ്ചായത്തീരാജ് സംവിധാനം","d":"ത്രിതല പഞ്ചായത്ത് സംവിധാനം, ഗ്രാമസഭ, അധികാര വികേന്ദ്രീകരണം.","ep":3},{"id":"ldc.8.9","t":"ഭരണഘടനാ സ്ഥാപനങ്ങളും ചുമതലകളും","d":"തിരഞ്ഞെടുപ്പ് കമ്മീഷൻ, യു.പി.എസ്.സി, പി.എസ്.സി, സി.എ.ജി (CAG), അറ്റോർണി ജനറൽ, അഡ്വക്കറ്റ് ജനറൽ, ധനകാര്യ കമ്മീഷൻ.","ep":3},{"id":"ldc.8.10","t":"അധികാര വിഭജന ലിസ്റ്റുകൾ","d":"യൂണിയൻ ലിസ്റ്റ്, സ്റ്റേറ്റ് ലിസ്റ്റ്, കൺകറന്റ് ലിസ്റ്റ്, അവശിഷ്ടാധികാരങ്ങൾ.","ep":3}]},{"id":"ldc.9","name":"കേരളം - ഭരണവും ഭരണസംവിധാനങ്ങളും (Kerala Governance & Administration)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":48,"idx":"v","topics":[{"id":"ldc.9.0","t":"സംസ്ഥാന സിവിൽ സർവ്വീസ്","d":"സെക്രട്ടേറിയറ്റ് ഭരണസംവിധാനം, റവന്യൂ ഭരണം, ജില്ലാ കളക്ടറുടെ അധികാരങ്ങൾ.","ep":6},{"id":"ldc.9.1","t":"ഭരണഘടനാ സ്ഥാപനങ്ങൾ & വിവിധ കമ്മീഷനുകൾ","d":"കേരള പബ്ലിക് സർവീസ് കമ്മീഷൻ, സംസ്ഥാന തിരഞ്ഞെടുപ്പ് കമ്മീഷൻ, സംസ്ഥാന ധനകാര്യ കമ്മീഷൻ, ലോകായുക്ത, സംസ്ഥാന വിവരാവകാശ കമ്മീഷൻ, സംസ്ഥാന മനുഷ്യാവകാശ കമ്മീഷൻ, വനിതാ കമ്മീഷൻ.","ep":6},{"id":"ldc.9.2","t":"സാമൂഹിക സാമ്പത്തിക വാണിജ്യ ആസൂത്രണ വിവരങ്ങൾ","d":"കേരള മോഡൽ വികസനം, സ്റ്റേറ്റ് പ്ലാനിംഗ് ബോർഡ്.","ep":6},{"id":"ldc.9.3","t":"ദുരന്ത നിവാരണ അതോറിറ്റി (SDMA)","d":"ദുരന്ത നിവാരണ നിയമം 2005, സംസ്ഥാന-ജില്ലാ ദുരന്തനിവാരണ അതോറിറ്റികൾ, ദുരന്ത മുന്നറിയിപ്പ് സംവിധാനങ്ങൾ.","ep":5},{"id":"ldc.9.4","t":"തണ്ണീർത്തട സംരക്ഷണം","d":"നെൽവയൽ - തണ്ണീർത്തട സംരക്ഷണ നിയമം (2008).","ep":5},{"id":"ldc.9.5","t":"തൊഴിലും ജോലിയും, ദേശീയ ഗ്രാമീണ തൊഴിൽ പദ്ധതികൾ","d":"മഹാത്മാഗാന്ധി ദേശീയ ഗ്രാമീണ തൊഴിലുറപ്പ് പദ്ധതി (MGNREGS), അയ്യങ്കാളി തൊഴിലുറപ്പ് പദ്ധതി.","ep":5},{"id":"ldc.9.6","t":"ഭൂപരിഷ്കരണങ്ങൾ","d":"കേരള ഭൂപരിഷ്കരണ നിയമം (1963/1969), മിച്ചഭൂമി വിതരണം, കുടികിടപ്പവകാശം.","ep":5},{"id":"ldc.9.7","t":"സ്ത്രീകൾ, കുട്ടികൾ, മുതിർന്ന പൗരന്മാർ എന്നിവരുടെ സംരക്ഷണം","d":"നിയമപരവും ക്ഷേമപരവുമായ വ്യവസ്ഥകൾ, ആശാ വർക്കർമാർ, കുടുംബശ്രീ.","ep":5},{"id":"ldc.9.8","t":"സാമൂഹ്യക്ഷേമം & സാമൂഹ്യ സുരക്ഷിതത്വം","d":"സാമൂഹ്യ സുരക്ഷാ പെൻഷനുകൾ, കാരുണ്യ ആരോഗ്യ സുരക്ഷാ പദ്ധതി (KASP), വിവിധ ക്ഷേമനിധി ബോർഡുകൾ.","ep":5}]},{"id":"ldc.10","name":"ജീവശാസ്ത്രവും പൊതുജനാരോഗ്യവും (Biology & Public Health)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":57,"idx":"vi","topics":[{"id":"ldc.10.0","t":"മനുഷ്യ ശരീരത്തെക്കുറിച്ചുള്ള പൊതു അറിവ്","d":"അവയവ വ്യവസ്ഥകൾ (ദഹനവ്യവസ്ഥ, ശ്വസനവ്യവസ്ഥ, രക്തപര്യയന വ്യവസ്ഥ, നാഡീവ്യവസ്ഥ, വിസർജ്ജനവ്യവസ്ഥ, അന്തഃസ്രാവി വ്യവസ്ഥ).","ep":9},{"id":"ldc.10.1","t":"ജീവകങ്ങളും ധാതുക്കളും (Vitamins & Minerals)","d":"ജീവകങ്ങൾ (A, B-കോംപ്ലക്സ്, C, D, E, K), രാസനാമങ്ങൾ, സ്രോതസ്സുകൾ, അപര്യാപ്തതാ രോഗങ്ങൾ (Deficiency Diseases), ധാതുക്കൾ (ഇരുമ്പ്, കാത്സ്യം, അയഡിൻ) അവയുടെ കുറവുമൂലമുള്ള രോഗങ്ങൾ.","ep":8},{"id":"ldc.10.2","t":"സാംക്രമിക രോഗങ്ങളും രോഗകാരികളും","d":"ബാക്ടീരിയ, വൈറസ്, പ്രോട്ടോസോവ, ഫംഗസ് എന്നിവ മൂലമുണ്ടാകുന്ന രോഗങ്ങൾ (ക്ഷയം, കോളറ, ടൈഫോയ്ഡ്, പോളിയോ, എയ്ഡ്സ്, ഡെങ്കിപ്പനി, മലമ്പനി, കുഷ്ഠം), രോഗപ്പകർച്ചാ മാർഗ്ഗങ്ങൾ.","ep":8},{"id":"ldc.10.3","t":"കേരളത്തിലെ ആരോഗ്യക്ഷേമ പ്രവർത്തനങ്ങൾ","d":"പ്രാഥമിക ആരോഗ്യ കേന്ദ്രങ്ങൾ, ആർദ്രം മിഷൻ, കുടുംബാരോഗ്യ കേന്ദ്രങ്ങൾ, ആരോഗ്യ മേഖലയിലെ കേരള മാതൃക.","ep":8},{"id":"ldc.10.4","t":"ജീവിതശൈലീ രോഗങ്ങൾ (Lifestyle Diseases)","d":"പ്രമേഹം, രക്താതിമർദ്ദം (Hypertension), കൊളസ്ട്രോൾ, ഹൃദ്രോഗങ്ങൾ, അർബുദം (Cancer) - കാരണങ്ങളും പ്രതിരോധ മാർഗ്ഗങ്ങളും.","ep":8},{"id":"ldc.10.5","t":"അടിസ്ഥാന ആരോഗ്യ വിജ്ഞാനം","d":"പ്രാഥമിക ശുശ്രൂഷ (First Aid), പ്രതിരോധ കുത്തിവെയ്പുകൾ (Vaccination Schedule), പോഷകാഹാരം, രക്തഗ്രൂപ്പുകൾ.","ep":8},{"id":"ldc.10.6","t":"പരിസ്ഥിതിയും പരിസ്ഥിതി പ്രശ്നങ്ങളും","d":"ആവാസവ്യവസ്ഥ (Ecosystem), ഭക്ഷ്യശൃംഖല, ജൈവവൈവിധ്യം, സംരക്ഷിത മേഖലകൾ, പ്ലാസ്റ്റിക് മാലിന്യങ്ങൾ, ഇ-വേസ്റ്റ്.","ep":8}]},{"id":"ldc.11","name":"ഭൗതികശാസ്ത്രം (Physics)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":28,"idx":"vii","topics":[{"id":"ldc.11.0","t":"ഭൗതികശാസ്ത്രത്തിന്റെ ശാഖകൾ, ദ്രവ്യം, യൂണിറ്റ് & അളവുകൾ","d":"അടിസ്ഥാന അളവുകളും അവയുടെ SI യൂണിറ്റുകളും, വ്യുത്പന്ന അളവുകൾ, സ്കെയിലാർ - വെക്റ്റർ അളവുകൾ.","ep":2},{"id":"ldc.11.1","t":"ചലനം (Motion)","d":"","ep":6},{"id":"ldc.11.2","t":"പ്രകാശം (Light)","d":"","ep":8},{"id":"ldc.11.3","t":"ശബ്ദം (Sound)","d":"","ep":6},{"id":"ldc.11.4","t":"ബലം & ദ്രാവകങ്ങൾ (Force & Hydrostatics)","d":"","ep":6}]},{"id":"ldc.12","name":"രസതന്ത്രം (Chemistry)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":28,"idx":"viii","topics":[{"id":"ldc.12.0","t":"ആറ്റം & തന്മാത്ര (Atom & Molecule)","d":"","ep":5},{"id":"ldc.12.1","t":"ദ്രവ്യത്തിന്റെ അവസ്ഥകൾ (States of Matter)","d":"ഖരം, ദ്രാവകം, വാതകം, പ്ലാസ്മ, ബോസ്-ഐൻസ്റ്റീൻ കണ്ടൻസേറ്റ്.","ep":3},{"id":"ldc.12.2","t":"രൂപാന്തരത്വം (Allotropy)","d":"കാർബണിന്റെ രൂപാന്തരങ്ങൾ (ഡയമണ്ട്, ഗ്രാഫൈറ്റ്, ഫുള്ളറീൻ, ഗ്രാഫീൻ).","ep":3},{"id":"ldc.12.3","t":"വാതക നിയമങ്ങൾ (Gas Laws)","d":"ബോയിൽ നിയമം, ചാൾസ് നിയമം, അവോഗാഡ്രോ നിയമം, ആദർശ വാതക സമവാക്യം ($PV=nRT$).","ep":3},{"id":"ldc.12.4","t":"അക്വാ റീജിയ (Aqua Regia)","d":"ഘടന (ഗാഢ HCl : ഗാഢ $HNO_3$ = 3:1), ഉപയോഗങ്ങൾ (സ്വർണ്ണം, പ്ലാറ്റിനം ലയിപ്പിക്കൽ).","ep":2},{"id":"ldc.12.5","t":"മൂലകങ്ങളും ആവർത്തനപ്പട്ടികയും (Elements & Periodic Table)","d":"ആധുനിക ആവർത്തനപ്പട്ടിക (മോസ്​ലി), ഗ്രൂപ്പുകൾ, പിരീഡുകൾ, ലോഹങ്ങൾ, അലോഹങ്ങൾ, ഉപലോഹങ്ങൾ, ഉൽകൃഷ്ട വാതകങ്ങൾ.","ep":2},{"id":"ldc.12.6","t":"രാസമാറ്റങ്ങളും രാസപ്രവർത്തനങ്ങളും","d":"ഭൗതിക മാറ്റങ്ങൾ vs രാസ മാറ്റങ്ങൾ, സംയോജന പ്രവർത്തനം, വിഘടന പ്രവർത്തനം, ആദേശ പ്രവർത്തനം, ദ്വിവിഘടന പ്രവർത്തനം, ഓക്സീകരണ-നിരോക്സീകരണ പ്രവർത്തനങ്ങൾ (Redox).","ep":2},{"id":"ldc.12.7","t":"ലായനികൾ, മിശ്രിതങ്ങൾ, സംയുക്തങ്ങൾ","d":"ശുദ്ധ പദാർത്ഥങ്ങൾ, സജാതീയ-വിജാതീയ മിശ്രിതങ്ങൾ, കൊളോയിഡ്, സസ്പെൻഷൻ.","ep":2},{"id":"ldc.12.8","t":"ലോഹങ്ങൾ, അലോഹങ്ങൾ & സങ്കരലോഹങ്ങൾ (Alloys)","d":"പിച്ചള, വെങ്കലം, സ്റ്റെയിൻലെസ് സ്റ്റീൽ, സോൾഡർ, അമാൽഗം.","ep":2},{"id":"ldc.12.9","t":"ആസിഡുകൾ, ബേസുകൾ & pH മൂല്യം","d":"ആസിഡുകളുടെയും ബേസുകളുടെയും സ്വഭാവങ്ങൾ, ലിറ്റ്മസ് പരീക്ഷ, പ്രകൃതിദത്ത ആസിഡുകൾ, pH സ്കെയിൽ (സോറൻസൻ), നിത്യജീവിതത്തിലെ pH.","ep":2},{"id":"ldc.12.10","t":"ആൽക്കലോയിഡുകൾ (Alkaloids)","d":"നിത്യജീവിതത്തിലെ ആൽക്കലോയിഡുകൾ (ക്വിനൈൻ, നിക്കോട്ടിൻ, കഫീൻ, മോർഫിൻ).","ep":2}]},{"id":"ldc.13","name":"കല, കായികം, സാഹിത്യം, സംസ്കാരം (Arts, Sports, Literature, Culture) · കല (Arts)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":8,"idx":"ix.1","topics":[{"id":"ldc.13.0","t":"കേരളത്തിലെ പ്രധാന ദൃശ്യ-ശ്രാവ്യ കലാരൂപങ്ങൾ","d":"കഥകളി (മുദ്രകൾ, വേഷങ്ങൾ, വാദ്യങ്ങൾ), കൂടിയാട്ടം, മോഹിനിയാട്ടം, തുള്ളൽ (ഓട്ടൻ, ശീതങ്കൻ, പറയൻ), തിറ, തെയ്യം, പടയണി, ചവിട്ടുനാടകം, കളമെഴുത്തുപാട്ട്, സോപാന സംഗീതം.","ep":2},{"id":"ldc.13.1","t":"ഉത്ഭവം, വ്യാപനം, പരിശീലനം","d":"കലാരൂപങ്ങളുടെ ചരിത്ര പശ്ചാത്തലം.","ep":2},{"id":"ldc.13.2","t":"പ്രധാന കലാകേന്ദ്രങ്ങളും സ്ഥാപനങ്ങളും","d":"കേരള കലാമണ്ഡലം (ചെറുതുരുത്തി), കേരള ലളിതകലാ അക്കാദമി, കേരള സംഗീത നാടക അക്കാദമി, മാർഗി (തിരുവനന്തപുരം).","ep":2},{"id":"ldc.13.3","t":"പ്രശസ്തരായ വ്യക്തികളും കലാകാരന്മാരും","d":"വള്ളത്തോൾ, കോട്ടയ്ക്കൽ ശിവരാമൻ, കലാമണ്ഡലം ഗോപി, മാണി മാധവ ചാക്യാർ, ഗുരു ചെങ്ങന്നൂർ, കാവാലം നാരായണപ്പണിക്കർ, രാജാ രവിവർമ്മ (ചിത്രകല).","ep":2}]},{"id":"ldc.14","name":"കല, കായികം, സാഹിത്യം, സംസ്കാരം (Arts, Sports, Literature, Culture) · കായികം (Sports)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":12,"idx":"ix.2","topics":[{"id":"ldc.14.0","t":"പ്രശസ്തമായ വിജയങ്ങൾ & കായിക താരങ്ങൾ","d":"കേരളത്തിലെയും ഇന്ത്യയിലെയും ലോകത്തിലെയും പ്രമുഖ കായിക താരങ്ങൾ.","ep":1},{"id":"ldc.14.1","t":"ഒളിമ്പിക്സ് (Olympics)","d":"","ep":3},{"id":"ldc.14.2","t":"വൻകര / മേഖലാ ഗെയിംസുകൾ","d":"","ep":5},{"id":"ldc.14.3","t":"ദേശീയ ഗെയിംസ് (National Games)","d":"വേദികൾ, കേരളത്തിന്റെ പ്രകടനം.","ep":1},{"id":"ldc.14.4","t":"ഗെയിംസ് ഇനങ്ങൾ, മത്സരങ്ങൾ & നിയമങ്ങൾ","d":"കളിക്കളങ്ങളുടെ അളവുകൾ, കളിക്കാരുടെ എണ്ണം, പ്രധാന പദാവലികൾ (Terminology), പ്രധാന ട്രോഫികൾ / കപ്പുകൾ.","ep":1},{"id":"ldc.14.5","t":"ദേശീയ കായിക ഇനങ്ങൾ","d":"ലോകത്തിലെ ഓരോ പ്രമുഖ രാജ്യത്തിന്റെയും ദേശീയ കായിക ഇനങ്ങൾ / പരമ്പരാഗത വിനോദങ്ങൾ.","ep":1}]},{"id":"ldc.15","name":"കല, കായികം, സാഹിത്യം, സംസ്കാരം (Arts, Sports, Literature, Culture) · സാഹിത്യം (Literature)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":21,"idx":"ix.3","topics":[{"id":"ldc.15.0","t":"മലയാളത്തിലെ പ്രധാന സാഹിത്യ പ്രസ്ഥാനങ്ങൾ","d":"പാട്ട് പ്രസ്ഥാനം, മണിപ്രവാളം, ഭക്തി പ്രസ്ഥാനം (എഴുത്തച്ഛൻ, ചെറുശ്ശേരി, കുഞ്ചൻ നമ്പ്യാർ), റൊമാന്റിസിസം (കാൽപ്പനികത), റിയലിസം, ഉത്തരാധുനികത.","ep":3},{"id":"ldc.15.1","t":"ആദ്യ കൃതികൾ & കർത്താക്കൾ","d":"ആദ്യ നോവൽ (കുന്ദലത - അപ്പു നെടുങ്ങാടി), ആദ്യ ലക്ഷണമൊത്ത നോവൽ (ഇന്ദുലേഖ - ഒ. ചന്തുമേനോൻ), ആദ്യ നാടകം, ആദ്യ യാത്രാവിവരണം (വർത്തമാനപുസ്തകം - പാറേമ്മാക്കൽ തോമ്മാക്കത്തനാർ), ആദ്യ മഹാകാവ്യം (രാമചന്ദ്രവിലാസം - അഴകത്ത് പത്മനാഭക്കുറുപ്പ്).","ep":2},{"id":"ldc.15.2","t":"എഴുത്തുകാരും കൃതികളും","d":"ഓരോ പ്രസ്ഥാനത്തിലെയും പ്രധാന കൃതികൾ, കർത്താക്കൾ.","ep":2},{"id":"ldc.15.3","t":"തൂലികാനാമങ്ങളും അപരനാമങ്ങളും","d":"പ്രശസ്ത എഴുത്തുകാരുടെ തൂലികാനാമങ്ങൾ (ഉദാ: സഞ്ജയൻ, ആനന്ദ്, വിലാസിനി, മാലി, തിക്കോടിയൻ, ഉറൂബ്, കോവിലൻ, ഒളപ്പമണ്ണ).","ep":2},{"id":"ldc.15.4","t":"കഥാപാത്രങ്ങളും കൃതികളും","d":"മലയാള സാഹിത്യത്തിലെ പ്രശസ്ത കഥാപാത്രങ്ങൾ (ഉദാ: അപ്പുക്കിളി, മാധവൻ, ഇന്ദുലേഖ, തോട്ടിയുടെ മകൻ ചുടുലമുത്തു, ചന്തു, ബാപ്പുട്ടി).","ep":2},{"id":"ldc.15.5","t":"പ്രശസ്തമായ വരികൾ - കൃതികൾ - എഴുത്തുകാർ","d":"ഉദ്ധരണികൾ (ഉദാ: \"മാറ്റുവിൻ ചട്ടങ്ങളെ\", \"കണ്ണീർപ്പാടം\", \"സ്നേഹമാണഖിലസാരമൂഴിയിൽ\").","ep":2},{"id":"ldc.15.6","t":"മലയാള പത്രപ്രവർത്തനം","d":"ആരംഭം (രാജ്യസമാചാരം - ഹെർമൻ ഗുണ്ടർട്ട്, പശ്ചിമോദയം), പ്രമുഖ പത്രങ്ങൾ, ആദ്യകാല പത്രാധിപന്മാർ, പ്രമുഖ ആനുകാലികങ്ങൾ.","ep":2},{"id":"ldc.15.7","t":"പ്രധാന സാഹിത്യ പുരസ്കാരങ്ങൾ","d":"എഴുത്തച്ഛൻ പുരസ്കാരം, വയലാർ അവാർഡ്, വള്ളത്തോൾ പുരസ്കാരം, ഓടക്കുഴൽ അവാർഡ്, കേന്ദ്ര-കേരള സാഹിത്യ അക്കാദമി അവാർഡുകൾ.","ep":2},{"id":"ldc.15.8","t":"ജ്ഞാനപീഠം നേടിയ മലയാളികൾ","d":"ജി. ശങ്കരക്കുറുപ്പ് (ഓടക്കുഴൽ - 1965), എസ്.കെ. പൊറ്റെക്കാട്ട് (ഒരു ദേശത്തിന്റെ കഥ - 1980), തകഴി ശിവശങ്കരപ്പിള്ള (കയർ - 1984), എം.ടി. വാസുദേവൻ നായർ (1995), ഒ.എൻ.വി. കുറുപ്പ് (2007), അക്കിത്തം അച്യുതൻ നമ്പൂതിരി (2019) എന്നിവരും അനുബന്ധ വസ്തുതകളും.","ep":2},{"id":"ldc.15.9","t":"മലയാള സിനിമ","d":"ഉത്ഭവം (വിഗതകുമാരൻ - ജെ.സി. ഡാനിയേൽ - 1928), ആദ്യ ശബ്ദചിത്രം (ബാലൻ - 1938), ആദ്യ കളർ ചിത്രം (കണ്ടംബെച്ച കോട്ട്), വളർച്ചയും പ്രധാന നാഴികക്കല്ലുകളും (നീലക്കുയിൽ, ചെമ്മീൻ, എലിപ്പത്തായം), പ്രധാന സംഭാവന നൽകിയ സംവിധായകർ/താരങ്ങൾ, മലയാള സിനിമ നേടിയ ദേശീയ അവാർഡുകൾ (സ്വർണ്ണക്കമലം, രജതക്കമലം).","ep":2}]},{"id":"ldc.16","name":"കല, കായികം, സാഹിത്യം, സംസ്കാരം (Arts, Sports, Literature, Culture) · സംസ്കാരം (Culture)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":6,"idx":"ix.4","topics":[{"id":"ldc.16.0","t":"കേരളത്തിലെ പ്രധാന ആഘോഷങ്ങളും ഉത്സവങ്ങളും","d":"ഓണം, വിഷു, തൃശ്ശൂർ പൂരം, ആറ്റുകാൽ പൊങ്കാല, ചെട്ടികുളങ്ങര കുംഭഭരണി, നെന്മാറ വല്ലങ്ങി വേല, മാമാങ്കം, കൊച്ചിൻ കാർണിവൽ.","ep":2},{"id":"ldc.16.1","t":"സാംസ്കാരിക കേന്ദ്രങ്ങളും ആരാധനാലയങ്ങളും","d":"പ്രധാന ക്ഷേത്രങ്ങൾ, പള്ളികൾ, മോസ്കുകൾ, ചരിത്ര സ്മാരകങ്ങൾ.","ep":2},{"id":"ldc.16.2","t":"സാംസ്കാരിക നായകരും അവരുടെ സംഭാവനകളും","d":"കേരളത്തിന്റെ സാമൂഹ്യ, സാംസ്കാരിക മണ്ഡലങ്ങളെ സമ്പന്നമാക്കിയ മഹദ് വ്യക്തികൾ.","ep":2}]},{"id":"ldc.17","name":"കമ്പ്യൂട്ടർ - അടിസ്ഥാന വിവരങ്ങൾ (Computer Fundamentals) · Hardware","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":6,"idx":"x.1","topics":[{"id":"ldc.17.0","t":"Input Devices","d":"Keyboard, Mouse, Scanner, OMR, OCR, MICR, Barcode Reader, Microphone, Web Camera, Light Pen, Touch Screen (Names, functions and specific uses).","ep":2},{"id":"ldc.17.1","t":"Output Devices","d":"Monitor (CRT, LCD, LED, OLED), Printers (Impact - Dot Matrix; Non-Impact - Laser, Inkjet, Thermal), Plotters, Speakers, Projectors (Features and specifications).","ep":2},{"id":"ldc.17.2","t":"Memory Devices","d":"","ep":2}]},{"id":"ldc.18","name":"കമ്പ്യൂട്ടർ - അടിസ്ഥാന വിവരങ്ങൾ (Computer Fundamentals) · Software","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":8,"idx":"x.2","topics":[{"id":"ldc.18.0","t":"Classification","d":"System Software vs Application Software.","ep":1},{"id":"ldc.18.1","t":"Operating System (OS)","d":"Functions of OS (Process management, Memory management, File management), Types and examples (Windows, Linux, macOS, Android, iOS, UNIX, MS-DOS).","ep":1},{"id":"ldc.18.2","t":"Popular Application Software Packages","d":"","ep":5},{"id":"ldc.18.3","t":"Basics of Programming","d":"പ്രോഗ്രാമിംഗിന്റെ അടിസ്ഥാന നിർദ്ദേശങ്ങൾ - Input, Output, Store, Control Transfer (Languages need not be considered).","ep":1}]},{"id":"ldc.19","name":"കമ്പ്യൂട്ടർ - അടിസ്ഥാന വിവരങ്ങൾ (Computer Fundamentals) · Computer Networks","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":4,"idx":"x.3","topics":[{"id":"ldc.19.0","t":"Types of Networks","d":"LAN (Local Area Network), MAN (Metropolitan Area Network), WAN (Wide Area Network), PAN, WLAN (സവിശേഷതകളും പ്രവർത്തന മേഖലകളും).","ep":2},{"id":"ldc.19.1","t":"Network Devices","d":"Transmission Media (Twisted pair, Coaxial, Optical Fiber, Wireless), Switch, Hub, Router, Bridge, Gateway, Repeater, Modem (പ്രവർത്തനങ്ങളും ഉപയോഗങ്ങളും).","ep":2}]},{"id":"ldc.20","name":"കമ്പ്യൂട്ടർ - അടിസ്ഥാന വിവരങ്ങൾ (Computer Fundamentals) · Internet","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":8,"idx":"x.4","topics":[{"id":"ldc.20.0","t":"Internet Services","d":"World Wide Web (WWW), E-mail (Protocols - SMTP, POP3, IMAP), Search Engines (Google, Bing, Yahoo - Examples and purposes).","ep":2},{"id":"ldc.20.1","t":"Social Media","d":"പ്ലാറ്റ്‌ഫോമുകൾ, ഫീച്ചറുകൾ, ആധുനിക ആശയവിനിമയ രീതികൾ.","ep":2},{"id":"ldc.20.2","t":"Web Designing","d":"Web Browsers (Chrome, Firefox, Safari, Edge), HTML അടിസ്ഥാനങ്ങൾ (Tags, structure - Basics only).","ep":2},{"id":"ldc.20.3","t":"E-Governance","d":"ഇ-ഗവേണൻസ് സംരംഭങ്ങൾ (ഡിജിറ്റൽ ഇന്ത്യ, അക്ഷയ കേന്ദ്രങ്ങൾ, ഇ-ഡിസ്ട്രിക്റ്റ്, സ്പാർക്ക്, ഡിജി ലോക്കർ).","ep":2}]},{"id":"ldc.21","name":"കമ്പ്യൂട്ടർ - അടിസ്ഥാന വിവരങ്ങൾ (Computer Fundamentals) · Cyber Crimes & Cyber Laws","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":4,"idx":"x.5","topics":[{"id":"ldc.21.0","t":"Types of Cyber Crimes","d":"Hacking, Phishing, Identity Theft, Cyber Stalking, Ransomware, Trojan Horses, Denial of Service (DoS/DDoS) attack, Spoofing, Spamming (Awareness level).","ep":2},{"id":"ldc.21.1","t":"IT Act & Other Laws","d":"Information Technology Act 2000 & Amendments (2008), സുപ്രധാന വകുപ്പുകൾ (Sec 65, 66, 66A, 67), CERT-In, സൈബർ സുരക്ഷാ ഏജൻസികൾ.","ep":2}]},{"id":"ldc.22","name":"സുപ്രധാന നിയമങ്ങൾ (Important Laws & Acts)","area":"ഭാഗം I: പൊതുവിജ്ഞാനം (General Knowledge)","tag":"50 marks","ep":48,"idx":"xi","topics":[{"id":"ldc.22.0","t":"വിവരാവകാശ നിയമം (Right to Information Act - RTI, 2005)","d":"","ep":10},{"id":"ldc.22.1","t":"ഉപഭോക്തൃ സംരക്ഷണ നിയമം (Consumer Protection Act, 2019 / 1986)","d":"","ep":7},{"id":"ldc.22.2","t":"ദുർബല വിഭാഗങ്ങളുടെ സംരക്ഷണത്തിനായുള്ള നിയമങ്ങൾ (Protection of Vulnerable Sections)","d":"","ep":13},{"id":"ldc.22.3","t":"സ്ത്രീകളുടെ സംരക്ഷണവും സുരക്ഷിതത്വവും (Protection & Safeguarding of Women)","d":"","ep":10},{"id":"ldc.22.4","t":"കുട്ടികളുടെ സംരക്ഷണവും സുരക്ഷിതത്വവും (Protection & Safeguards of Children)","d":"","ep":8}]},{"id":"ldc.23","name":"ഭാഗം II: ആനുകാലിക വിഷയങ്ങൾ (Current Affairs)","area":"ഭാഗം II: ആനുകാലിക വിഷയങ്ങൾ (Current Affairs)","tag":"20 marks","ep":190,"topics":[{"id":"ldc.23.0","t":"ദേശീയ സംഭവങ്ങൾ","d":"പുതിയ പദ്ധതികൾ, നിയമങ്ങൾ, നയങ്ങൾ, ഉച്ചകോടികൾ, തെരഞ്ഞെടുപ്പുകൾ.","ep":19},{"id":"ldc.23.1","t":"കേരളത്തിലെ പ്രധാന സംഭവങ്ങൾ","d":"സംസ്ഥാന സർക്കാരിന്റെ പുതിയ പദ്ധതികൾ, ബജറ്റ് പ്രഖ്യാപനങ്ങൾ, പുരസ്കാരങ്ങൾ, നേട്ടങ്ങൾ.","ep":19},{"id":"ldc.23.2","t":"അന്താരാഷ്ട്ര സംഭവങ്ങൾ","d":"പ്രധാന അന്താരാഷ്ട്ര ഉച്ചകോടികൾ (G20, BRICS, SCO, COP ക്ലൈമറ്റ് സമ്മിറ്റ്), യുദ്ധങ്ങളും സംഘർഷങ്ങളും, കരാറുകൾ.","ep":19},{"id":"ldc.23.3","t":"പുരസ്കാരങ്ങളും ബഹുമതികളും","d":"ഭാരതരത്ന, പത്മ പുരസ്കാരങ്ങൾ, നോബൽ സമ്മാനങ്ങൾ, ഓസ്കാർ, ദേശീയ ചലച്ചിത്ര അവാർഡുകൾ, ദാദാസാഹിബ് ഫാൽക്കെ, പുലിറ്റ്സർ, ബുക്കർ പ്രൈസ്, രമൺ മാഗ്സസെ.","ep":19},{"id":"ldc.23.4","t":"കായിക രംഗം","d":"ഒളിമ്പിക്സ്, ക്രിക്കറ്റ് ലോകകപ്പ്, ഫിഫ ലോകകപ്പ്, ഗ്രാൻഡ് സ്ലാം ടെന്നീസ്, ഏഷ്യൻ ഗെയിംസ്, ദേശീയ ഗെയിംസ് ജേതാക്കൾ, പുതിയ റെക്കോർഡുകൾ.","ep":19},{"id":"ldc.23.5","t":"നിയമനങ്ങൾ & പദവികൾ","d":"രാഷ്ട്രപതി, പ്രധാനമന്ത്രി, സുപ്രീം കോടതി ചീഫ് ജസ്റ്റിസ്, സി.എ.ജി, അറ്റോർണി ജനറൽ, തിരഞ്ഞെടുപ്പ് കമ്മീഷണർമാർ, റിസർവ് ബാങ്ക് ഗവർണർ, യു.എൻ സെക്രട്ടറി ജനറൽ, ലോകനേതാക്കൾ.","ep":19},{"id":"ldc.23.6","t":"ശാസ്ത്ര സാങ്കേതിക രംഗം","d":"ISRO / NASA ദൗത്യങ്ങൾ, പ്രതിരോധ രംഗത്തെ പുതിയ മിസൈലുകൾ, ആർട്ടിഫിഷ്യൽ ഇന്റലിജൻസ്, പുതിയ കണ്ടുപിടുത്തങ്ങൾ.","ep":19},{"id":"ldc.23.7","t":"പ്രധാന പുസ്തകങ്ങളും രചയിതാക്കളും","d":"സമീപകാലത്ത് ചർച്ചയായ പ്രമുഖ പുസ്തകങ്ങൾ.","ep":19},{"id":"ldc.23.8","t":"പ്രധാന ദിനങ്ങൾ & പ്രമേയങ്ങൾ (Important Days & Themes).","d":"","ep":19},{"id":"ldc.23.9","t":"അന്തരിച്ച പ്രമുഖ വ്യക്തികൾ (Obituaries).","d":"","ep":19}]},{"id":"ldc.24","name":"ലഘുഗണിതം (Simple Arithmetic)","area":"ഭാഗം III: ലഘുഗണിതവും മാനസികശേഷിയും","tag":"10 marks","ep":46,"idx":"1","topics":[{"id":"ldc.24.0","t":"സംഖ്യകളും അടിസ്ഥാന ക്രിയകളും (Numbers & Basic Operations)","d":"പൂർണ്ണസംഖ്യകൾ, അഭാജ്യസംഖ്യകൾ, എണ്ണൽ സംഖ്യകൾ, ബോഡ്മാസ് (BODMAS) നിയമം.","ep":3},{"id":"ldc.24.1","t":"ഭിന്നസംഖ്യകളും ദശാംശ സംഖ്യകളും (Fractions & Decimals)","d":"ലഘൂകരണം, സങ്കലനം, വ്യവകലനം, ഗുണനം, ഹരണം.","ep":3},{"id":"ldc.24.2","t":"ശതമാനം (Percentage)","d":"അടിസ്ഥാന കണക്കുകൂട്ടലുകൾ, ശതമാന വർദ്ധനവും കുറവും.","ep":4},{"id":"ldc.24.3","t":"ലാഭവും നഷ്ടവും (Profit & Loss)","d":"വാങ്ങിയ വില, വിറ്റ വില, ലാഭ ശതമാനം, നഷ്ട ശതമാനം, ഡിസ്കൗണ്ട്.","ep":4},{"id":"ldc.24.4","t":"സാധാരണ പലിശയും കൂട്ടുപലിശയും (Simple & Compound Interest)","d":"$I = \\frac{PNR}{100}$, കൂട്ടുപലിശ സമവാക്യങ്ങൾ, വ്യത്യാസം കാണൽ.","ep":4},{"id":"ldc.24.5","t":"അംശബന്ധവും അനുപാതവും (Ratio & Proportion)","d":"വിഹിതം കണ്ടെത്തൽ, അനുപാത കണക്കുകൾ.","ep":4},{"id":"ldc.24.6","t":"സമയവും ദൂരവും (Time & Distance)","d":"വേഗത, ട്രെയിൻ സംബന്ധമായ കണക്കുകൾ, ബോട്ട് & സ്ട്രീം, ആവറേജ് സ്പീഡ്.","ep":4},{"id":"ldc.24.7","t":"സമയവും പ്രവൃത്തിയും (Time & Work)","d":"ജോലിയും ദിവസങ്ങളും, പൈപ്പും ടാങ്കും.","ep":4},{"id":"ldc.24.8","t":"ശരാശരി (Average)","d":"ശരാശരി കാണലും ആകെത്തുക കാണലും.","ep":4},{"id":"ldc.24.9","t":"കൃത്യങ്കങ്ങൾ (Laws of Exponents)","d":"$a^m \\times a^n = a^{m+n}$, $a^m / a^n = a^{m-n}$, $(a^m)^n = a^{mn}$.","ep":4},{"id":"ldc.24.10","t":"മെൻസുറേഷൻ (Mensuration - ചുറ്റളവ്, വിസ്തീർണ്ണം, വ്യാപ്തം)","d":"ത്രികോണം, ചതുരം, സമചതുരം, വൃത്തം, സിലിണ്ടർ, ഗോളം, സ്തൂപിക.","ep":4},{"id":"ldc.24.11","t":"പ്രോഗ്രെഷനുകൾ (Progressions)","d":"സമാന്തര ശ്രേണി (Arithmetic Progression - AP), ഗുണോത്തര ശ്രേണി (Geometric Progression - GP).","ep":4}]},{"id":"ldc.25","name":"മാനസികശേഷിയും നിരീക്ഷണപാടവ പരിശോധനയും (Mental Ability & Reasoning)","area":"ഭാഗം III: ലഘുഗണിതവും മാനസികശേഷിയും","tag":"10 marks","ep":49,"idx":"2","topics":[{"id":"ldc.25.0","t":"ശ്രേണികൾ (Series)","d":"സംഖ്യാ ശ്രേണികൾ (Number Series), അക്ഷര ശ്രേണികൾ (Alphabet Series), ആവർത്തന ശ്രേണികൾ.","ep":3},{"id":"ldc.25.1","t":"ഗണിത ചിഹ്നങ്ങൾ ഉപയോഗിച്ചുള്ള പ്രശ്നങ്ങൾ (Problems on Mathematical Signs)","d":"ചിഹ്നങ്ങൾ പരസ്പരം മാറ്റി ചെയ്യുന്ന കണക്കുകൾ.","ep":3},{"id":"ldc.25.2","t":"സ്ഥാന നിർണ്ണയ പരിശോധന (Ranking & Position)","d":"വരിയിലെ സ്ഥാനങ്ങൾ, മുന്നിൽ നിന്നും പിന്നിൽ നിന്നുമുള്ള സ്ഥാനം കണ്ടെത്തൽ.","ep":3},{"id":"ldc.25.3","t":"സമാന ബന്ധങ്ങൾ (Analogy)","d":"Word Analogy, Alphabet Analogy, Number Analogy.","ep":4},{"id":"ldc.25.4","t":"ഒറ്റയാനെ കണ്ടെത്തുക (Odd Man Out)","d":"വ്യത്യസ്തമായത് കണ്ടെത്തൽ.","ep":4},{"id":"ldc.25.5","t":"സംഖ്യാവലോകന പ്രശ്നങ്ങൾ (Number Puzzles & Grids).","d":"","ep":4},{"id":"ldc.25.6","t":"കോഡിംഗും ഡീകോഡിംഗും (Coding & Decoding)","d":"അക്ഷര ക്രമീകരണങ്ങൾ, സംഖ്യാ കോഡുകൾ.","ep":4},{"id":"ldc.25.7","t":"കുടുംബ ബന്ധങ്ങൾ (Family Relations / Blood Relations)","d":"ബന്ധങ്ങൾ അപഗ്രഥിക്കൽ.","ep":4},{"id":"ldc.25.8","t":"ദിശാബോധം (Sense of Direction)","d":"ദിശകളും ദൂരങ്ങളും നിർണ്ണയിക്കൽ.","ep":4},{"id":"ldc.25.9","t":"ക്ലോക്കിലെ സമയവും കോണളവും (Time & Angles in Clocks)","d":"മിനിറ്റ്-മണിക്കൂർ സൂചികൾക്കിടയിലെ കോണളവ് കണ്ടെത്തൽ.","ep":4},{"id":"ldc.25.10","t":"ക്ലോക്കിലെ സമയവും പ്രതിബിംബവും (Clock Reflections)","d":"കണ്ണാടിയിലെ പ്രതിബിംബ സമയം കാണൽ (11:60 അല്ലെങ്കിൽ 23:60 ഉപയോഗിച്ച്).","ep":4},{"id":"ldc.25.11","t":"കലണ്ടറും തീയതിയും (Date & Calendar)","d":"ദിവസങ്ങൾ, അധിവർഷങ്ങൾ (Leap Years), തീയതിയിലെ ദിവസം കണ്ടെത്തൽ.","ep":4},{"id":"ldc.25.12","t":"ക്ലറിക്കൽ ശേഷി പരിശോധിക്കുന്നതിനുള്ള ചോദ്യങ്ങൾ (Clerical Ability)","d":"വിവരങ്ങൾ ഒത്തുനോക്കൽ (Verification & Error Detection).","ep":4}]},{"id":"ldc.26","name":"English Grammar","area":"ഭാഗം IV: ജനറൽ ഇംഗ്ലീഷ് (General English)","tag":"10 marks","ep":55,"idx":"1","topics":[{"id":"ldc.26.0","t":"Types of Sentences and Interchange of Sentences","d":"Assertive, Interrogative, Imperative, Exclamatory, Affirmative & Negative transformations.","ep":4},{"id":"ldc.26.1","t":"Different Parts of Speech","d":"Noun, Pronoun, Adjective, Verb, Adverb, Preposition, Conjunction, Interjection.","ep":4},{"id":"ldc.26.2","t":"Agreement of Subject and Verb (Concord)","d":"Singular/Plural subjects, rules with *either/or*, *neither/nor*, *as well as*, *along with*, *each/every*.","ep":4},{"id":"ldc.26.3","t":"Articles","d":"Definite Article (*the*) and Indefinite Articles (*a*, *an*), Omission of articles.","ep":4},{"id":"ldc.26.4","t":"Uses of Primary and Modal Auxiliary Verbs","d":"*can*, *could*, *may*, *might*, *must*, *should*, *would*, *ought to*, *need*, *dare*.","ep":4},{"id":"ldc.26.5","t":"Question Tags","d":"Positive statements with negative tags and vice versa, exception rules (*I am -> aren't I*).","ep":3},{"id":"ldc.26.6","t":"Infinitive and Gerunds","d":"To-infinitive, Bare infinitive, -ing forms as nouns.","ep":3},{"id":"ldc.26.7","t":"Tenses","d":"12 Tenses, uses, signals, and structures.","ep":3},{"id":"ldc.26.8","t":"Tenses in Conditional Sentences (If Clauses)","d":"","ep":8},{"id":"ldc.26.9","t":"Prepositions","d":"Prepositions of Time, Place, Direction, and Fixed Prepositions.","ep":3},{"id":"ldc.26.10","t":"The Use of Correlatives","d":"*neither...nor*, *either...or*, *not only...but also*, *no sooner...than*, *hardly...when*.","ep":3},{"id":"ldc.26.11","t":"Direct and Indirect Speech","d":"Reporting statements, questions, commands, and exclamations; pronoun, tense, and adverbial changes.","ep":3},{"id":"ldc.26.12","t":"Active and Passive Voice","d":"Voice conversion across all tenses, modal auxiliaries, and imperative sentences.","ep":3},{"id":"ldc.26.13","t":"Correction of Sentences (Sentence Correction / Spot the Error)","d":"Common grammatical mistakes.","ep":3},{"id":"ldc.26.14","t":"Degree of Comparison","d":"Positive, Comparative, Superlative transformations (*as...as*, *-er than*, *the most...*).","ep":3}]},{"id":"ldc.27","name":"Vocabulary","area":"ഭാഗം IV: ജനറൽ ഇംഗ്ലീഷ് (General English)","tag":"10 marks","ep":40,"idx":"2","topics":[{"id":"ldc.27.0","t":"Singular & Plural, Change of Gender, Collective Nouns","d":"Irregular plurals, gender forms (*actor/actress*, *drone/queen*), collective terms (*a pride of lions*, *a bouquet of flowers*).","ep":3},{"id":"ldc.27.1","t":"Word Formation","d":"Roots, Prefixes, Suffixes (Noun to Adjective, Verb to Noun, etc.).","ep":3},{"id":"ldc.27.2","t":"Compound Words","d":"Formation and classification.","ep":3},{"id":"ldc.27.3","t":"Synonyms & Antonyms","d":"Frequently asked high-frequency vocabulary.","ep":3},{"id":"ldc.27.4","t":"Phrasal Verbs","d":"Essential verbs with *look*, *give*, *break*, *put*, *call*, *bring*, *take*, *run*, etc.","ep":4},{"id":"ldc.27.5","t":"Foreign Words and Phrases","d":"Commonly used Latin/French phrases in English (*ad hoc*, *de facto*, *per se*, *bona fide*, *status quo*, *alma mater*).","ep":4},{"id":"ldc.27.6","t":"One Word Substitutes","d":"Commonly tested terms (*philanthropist*, *optimist*, *polyglot*, *ambidextrous*).","ep":4},{"id":"ldc.27.7","t":"Words Often Confused (Homophones & Confusing Words)","d":"*compliment/complement*, *principal/principle*, *stationary/stationery*, *affect/effect*.","ep":4},{"id":"ldc.27.8","t":"Spelling Test","d":"Correct spelling identification of tricky words (*embarrassment*, *bureaucracy*, *accommodate*, *lieutenant*, *occurrence*).","ep":4},{"id":"ldc.27.9","t":"Idioms and Their Meanings","d":"Popular idioms (*beat around the bush*, *burn the midnight oil*, *once in a blue moon*).","ep":4},{"id":"ldc.27.10","t":"Expansion and Meaning of Common Abbreviations","d":"Important acronyms and standard expansions.","ep":4}]},{"id":"ldc.28","name":"ഭാഗം V: പ്രാദേശിക ഭാഷകൾ - മലയാളം (Malayalam)","area":"ഭാഗം V: പ്രാദേശിക ഭാഷകൾ - മലയാളം (Malayalam)","tag":"10 marks","ep":95,"topics":[{"id":"ldc.28.0","t":"പദശുദ്ധി (Spelling / Word Correctness)","d":"അക്ഷരത്തെറ്റുകൾ ഒഴിവാക്കി ശരിയായ പദം കണ്ടെത്തൽ (ഉദാ: വിദ്വാൻ, മുഹൂർത്തം, ഉജ്ജ്വലം, അനുകരണീയം, സമാന്തര).","ep":8},{"id":"ldc.28.1","t":"വാക്യശുദ്ധി (Sentence Correction)","d":"വ്യാകരണത്തെറ്റുകളില്ലാത്ത ശരിയായ വാക്യം തിരഞ്ഞെടുക്കൽ (ആവർത്തന ദോഷങ്ങൾ, പ്രയോഗപ്പിഴവുകൾ ഒഴിവാക്കൽ).","ep":8},{"id":"ldc.28.2","t":"പരിഭാഷ (Translation)","d":"ലളിതമായ ഇംഗ്ലീഷ് വാക്യങ്ങളുടെയും ശൈലികളുടെയും മലയാള തർജ്ജമ.","ep":8},{"id":"ldc.28.3","t":"ഒറ്റപ്പദം (One Word Substitution)","d":"വിപുലമായ അർത്ഥമുള്ള വാക്യത്തിന് പകരം ഒറ്റപ്പദം (ഉദാ: ഇന്ദ്രിയങ്ങളെ ജയിച്ചവൻ = ജിതേന്ദ്രിയൻ; ചെയ്യാൻ ആഗ്രഹിക്കുന്നത് = ചികീർഷിതം).","ep":8},{"id":"ldc.28.4","t":"പര്യായപദം (Synonyms)","d":"പ്രധാന പദങ്ങളുടെ തുല്യാർത്ഥ പദങ്ങൾ (ഉദാ: സൂര്യൻ = ദിനകരൻ, മിത്രൻ, ഭാസ്കരൻ; ചന്ദ്രൻ = ശശി, തിങ്കൾ, ഇന്ദു; വനം = അടവി, കാനനം, വിപിനം).","ep":7},{"id":"ldc.28.5","t":"വിപരീത പദം (Antonyms)","d":"എതിർപദങ്ങൾ (ഉദാ: അനുഗ്രഹം $\\times$ ശാപം; അഭികാമ്യം $\\times$ അനഭികാമ്യം; തിക്തം $\\times$ മധുരം).","ep":7},{"id":"ldc.28.6","t":"ശൈലികൾ & പഴഞ്ചൊല്ലുകൾ (Idioms & Proverbs)","d":"മലയാളത്തിലെ പ്രശസ്ത ശൈലികൾ (ഉദാ: അട്ടയെപ്പിടിച്ചു മെത്തയിൽ കിടത്തുക, കടന്നൽക്കൂട്ടിൽ കല്ലെറിയുക, അരക്കില്ലം, ഇരട്ടത്താപ്പ്, വെള്ളത്തിൽ വരച്ച വര).","ep":7},{"id":"ldc.28.7","t":"സമാനപദം","d":"സമാന അർത്ഥമുള്ള പദങ്ങളുടെ പ്രയോഗം.","ep":7},{"id":"ldc.28.8","t":"ചേർത്തെഴുതുക (Word Compounding / Sandhi)","d":"പദങ്ങൾ കൂട്ടിച്ചേർക്കുമ്പോഴുണ്ടാകുന്ന മാറ്റങ്ങൾ (ആദേശം, ആഗമം, ലോപം, ദ്വിത്വം).","ep":7},{"id":"ldc.28.9","t":"സ്ത്രീലിംഗം, പുല്ലിംഗം (Gender in Malayalam)","d":"ലിംഗഭേദങ്ങൾ (ഉദാ: കവി $\\rightarrow$ കവയിത്രി; യജമാനൻ $\\rightarrow$ യജമാനത്തി; വിദ്വാൻ $\\rightarrow$ വിദുഷി).","ep":7},{"id":"ldc.28.10","t":"വചനം (Number - Singular & Plural)","d":"ഏകവചനം, ബഹുവചനം (കൾ, മാർ, അന്മാർ, അർ ചേർത്തുള്ള രൂപങ്ങൾ).","ep":7},{"id":"ldc.28.11","t":"പിരിച്ചെഴുതൽ (Splitting Words)","d":"സന്ധിനിയമങ്ങൾ അനുസരിച്ച് പിരിച്ചെഴുതുക (ഉദാ: പൊന്മല = പൊൻ + മല; കണ്ണീർ = കൺ + നീർ; വനജ്യോത്സ്ന = വനം + ജ്യോത്സ്ന).","ep":7},{"id":"ldc.28.12","t":"ഘടക പദം / വാക്യം ചേർത്തെഴുതുക (Combining Clauses / Conjunctions)","d":"രണ്ട് ലഘുവാക്യങ്ങളെ യോജിപ്പിച്ചു ഘടകപദം ഉപയോഗിച്ച് ഒരു വാക്യമാക്കൽ.","ep":7}]},{"id":"ldc.prac","name":"Practice & mocks","area":"Practice","tag":"all marks","ep":200,"topics":[{"id":"ldc.prac.0","t":"Previous-year LDC & LGS papers","d":"Repeated questions are the single highest-yield thing to study.","ep":50},{"id":"ldc.prac.1","t":"Subject-wise question banks","d":"Constitution, Kerala history, general science, maths shortcuts, grammar traps.","ep":50},{"id":"ldc.prac.2","t":"Current affairs revision cycles","d":"Re-read monthly — this decays faster than anything else on the syllabus.","ep":50},{"id":"ldc.prac.3","t":"Full-length timed mocks","d":"OMR-style, strict timing, negative marking applied.","ep":50}]}];
+
+/* Book to start from for each section.
+   b=book, c=chapters, p=local file (works when this page is opened from the Banana folder),
+   u=legally-free online copy, n=extra note. */
+const RES = {"ldc.1": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.2": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.3": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.4": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.5": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.6": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.7": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.8": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.9": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.10": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.11": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.12": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.13": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.14": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.15": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.16": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.17": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.18": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.19": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.20": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.21": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.22": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.23": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.24": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.25": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.26": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.27": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.28": {"b": "SCERT textbooks + topic notes", "c": "Kerala SCERT school texts are the primary source for this section"}, "ldc.prac": {"b": "Kerala PSC previous-year papers", "c": "LDC, LGS and Clerk/Typist mains papers with answer keys", "n": "Past papers are the highest-yield study there is — treat them as the real syllabus."}};
+
+/* ---------------- state ---------------- */
+const DB = "https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app";
+const APP = "ep_ldc_v1";
+const LS = APP+"_state", LS_ID = APP+"_syncid";
+const PRIOR_EP = 45;            // strength of the "1 hour per EP" starting assumption
+
+let state = { done:{}, hours:{}, log:[], epDay:null, updated:0 };
+let syncId = "";
+let filter = "All";
+let firstPaint = true;
+
+const TOPICS = [];
+GROUPS.forEach(g => g.topics.forEach(t => TOPICS.push({...t, gid:g.id, area:g.area, tag:g.tag})));
+const TOTAL_EP = TOPICS.reduce((s,t)=>s+t.ep,0);
+const AREA_COLOR = {Mathematics:"var(--math)","Data Science":"var(--ds)",Physics:"var(--phy)",
+                    Aptitude:"var(--apt)",Practice:"var(--prac)"};
+
+function load(){
+  try{ const r = JSON.parse(localStorage.getItem(LS)||"null"); if(r) state = {done:{},hours:{},log:[],epDay:null,updated:0,...r}; }catch(e){}
+  try{ syncId = localStorage.getItem(LS_ID)||""; }catch(e){}
+}
+function save(){
+  state.updated = Date.now();
+  try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+  if(syncId) schedulePush();
+}
+
+/* ---------------- effort-point maths ---------------- */
+function calc(){
+  let doneEP=0, calEP=0, calH=0, allH=0;
+  TOPICS.forEach(t=>{
+    const h = state.hours[t.id]||0;
+    const d = !!state.done[t.id];
+    if(d) doneEP += t.ep;
+    if(d && h>0){ calEP += t.ep; calH += h; }
+    allH += h;
+  });
+  // shrink the personal rate toward 1.0 h/EP until there's enough evidence
+  const rate = (PRIOR_EP + calH) / (PRIOR_EP + calEP);
+  const conf = calEP / (calEP + PRIOR_EP);
+  const remEP = TOTAL_EP - doneEP;
+  const remH = remEP * rate;
+  // real pace from the last 28 days of logged sessions
+  const cut = Date.now() - 28*864e5;
+  const recentH = (state.log||[]).filter(e=>e.t>=cut).reduce((s,e)=>s+e.h,0);
+  let weekly = recentH/4;
+  if(weekly<=0 && (state.log||[]).length){
+    const first = Math.min(...state.log.map(e=>e.t));
+    const weeks = Math.max(1,(Date.now()-first)/(7*864e5));
+    weekly = allH/weeks;
+  }
+  const eta = weekly>0 ? new Date(Date.now() + (remH/weekly)*7*864e5) : null;
+
+  // planned pace: effort points per day, typed in by you
+  const epDay = state.epDay>0 ? state.epDay : null;
+  const planDays = epDay ? Math.ceil(remEP/epDay) : null;
+  const planDate = planDays ? new Date(Date.now() + planDays*864e5) : null;
+
+  // measured pace: EP actually finished in the last 28 days
+  const doneRecent = TOPICS.filter(t=>state.done[t.id] && state.done[t.id]>=cut)
+                           .reduce((s,t)=>s+t.ep,0);
+  const realEpDay = doneRecent>0 ? doneRecent/28 : 0;
+
+  return {doneEP, remEP, rate, conf, remH, allH, calEP, calH, weekly, eta,
+          epDay, planDays, planDate, realEpDay,
+          pct: TOTAL_EP? doneEP/TOTAL_EP*100 : 0};
+}
+
+/* ---------------- render ---------------- */
+const $ = id => document.getElementById(id);
+const ML = /[\u0D00-\u0D7F]/;                 // Malayalam block
+function mlc(t){ return ML.test(t||"") ? " ml" : ""; }
+function fmtH(h){ return h>=100 ? Math.round(h)+"h" : (Math.round(h*10)/10)+"h"; }
+function fmtDate(d){ return d.toLocaleDateString("en-IN",{month:"short",year:"numeric"}); }
+
+function tween(el, to, suffix, dur){
+  const from = parseFloat(el.dataset.v||"0"); el.dataset.v = to;
+  const t0 = performance.now();
+  (function step(now){
+    const p = Math.min(1,(now-t0)/(dur||700));
+    const e = 1-Math.pow(1-p,3);
+    const v = from+(to-from)*e;
+    el.textContent = (Math.abs(to)>=100? Math.round(v) : Math.round(v*10)/10).toLocaleString()+(suffix||"");
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function renderStats(){
+  const c = calc();
+  const C = 2*Math.PI*52;
+  $("prg").style.strokeDashoffset = C - C*Math.min(1,c.pct/100);
+  $("ringpct").textContent = Math.round(c.pct)+"%";
+  $("minibar").style.width = c.pct+"%";
+  $("minipct").textContent = Math.round(c.pct)+"%";
+
+  tween($("k1"), c.doneEP, "");
+  tween($("k2"), c.allH, "h");
+  $("k3").textContent = c.calEP ? (Math.round(c.rate*100)/100)+" h/EP" : "—";
+  tween($("k4"), c.remH, "h");
+
+  $("heroBig").textContent = c.remEP>0
+    ? c.remEP.toLocaleString()+" effort points to go"
+    : "Every topic ticked off 🎉";
+  $("heroSm").textContent = c.calEP
+    ? "At your measured pace that's about "+fmtH(c.remH)+" of study left."
+    : "Log the hours a topic actually took — everything else re-predicts itself.";
+
+  const eta = $("etaPill");
+  if(c.eta && c.remEP>0 && !c.epDay){
+    eta.style.display = "inline-flex";
+    eta.innerHTML = "~"+Math.round(c.weekly*10)/10+"h/week lately → <b>"+fmtDate(c.eta)+"</b>";
+  } else eta.style.display = "none";
+
+  // --- pace planner ---
+  const po = $("paceOut");
+  if(c.planDate && c.remEP>0){
+    po.style.display = "flex";
+    const mo = c.planDays/30.44;
+    $("paceDate").textContent = c.planDate.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+    $("paceX").textContent = `· ${c.planDays.toLocaleString()} days (${mo<1? "under a month" : mo.toFixed(1)+" months"}) at ${c.epDay} EP/day`;
+  } else if(c.remEP<=0){
+    po.style.display = "flex";
+    $("paceDate").textContent = "Finished 🎉"; $("paceX").textContent = "";
+  } else po.style.display = "none";
+
+  const pr = $("paceReal");
+  if(c.realEpDay>0){
+    const r = Math.round(c.realEpDay*10)/10;
+    let verdict = "";
+    if(c.epDay){
+      const ratio = c.realEpDay/c.epDay;
+      verdict = ratio>=0.95 ? " — you're on or ahead of plan."
+        : ratio>=0.6 ? " — a bit under plan, but moving."
+        : " — well under plan, so the date above is optimistic.";
+    }
+    pr.innerHTML = `Actually measured: <b>${r} EP/day</b> over the last 4 weeks${verdict}`;
+  } else {
+    pr.textContent = state.epDay
+      ? "Nothing ticked off in the last 4 weeks yet — this date is a plan, not a measurement."
+      : "Type a number above to get a finish date. Anything you tick off will be measured against it.";
+  }
+
+  $("calibBar").style.width = Math.round(c.conf*100)+"%";
+  $("calibPill").textContent = Math.round(c.conf*100)+"% tuned";
+  $("calibTxt").textContent = c.calEP
+    ? "you average "+(Math.round(c.rate*100)/100)+" h per effort point"
+    : "starting at 1.0 h per effort point";
+  $("calibNote").textContent = c.calEP
+    ? "Measured from "+c.calEP+" EP of finished topics ("+fmtH(c.calH||0)+" logged). "
+      + (c.rate>1.08 ? "You run slower than the baseline estimate, so remaining times were scaled up."
+        : c.rate<0.92 ? "You run faster than the baseline estimate, so remaining times were scaled down."
+        : "You're tracking close to the baseline estimate.")
+    : "Finish a topic and log the real hours. Every completed topic teaches the tracker your actual pace, and all remaining predictions shift with it.";
+}
+
+function renderFilters(){
+  const areas = ["All", ...[...new Set(GROUPS.map(g=>g.area))]];
+  $("filters").innerHTML = areas.map(a=>{
+    const n = a==="All" ? TOPICS.length : TOPICS.filter(t=>t.area===a).length;
+    return `<div class="chip${a===filter?" on":""}" data-a="${a}">${a}<i>${n}</i></div>`;
+  }).join("");
+}
+
+function renderList(){
+  const c = calc();
+  const gs = GROUPS.filter(g=>filter==="All"||g.area===filter);
+  let lastArea = null;
+  $("list").innerHTML = gs.length ? gs.map((g,i)=>{
+    let head = "";
+    if(g.area !== lastArea && filter === "All"){
+      lastArea = g.area;
+      const areaGroups = gs.filter(x=>x.area===g.area);
+      const aep = areaGroups.reduce((s,x)=>s+x.ep,0);
+      const adone = areaGroups.flatMap(x=>x.topics).filter(t=>state.done[t.id]).length;
+      const atot = areaGroups.flatMap(x=>x.topics).length;
+      head = `<div class="parthead" style="--i:${i}">
+        <span class="bar" style="background:${AREA_COLOR[g.area]||"var(--ac)"}"></span>
+        <h2 class="${mlc(g.area).trim()}">${g.area}</h2>
+        <span class="pn">${adone}/${atot} · ${aep} EP</span>
+      </div>`;
+    }
+    return head + sectionHTML(g,i,c);
+  }).join("") : `<div class="empty">Nothing here yet.</div>`;
+  firstPaint = false;
+}
+
+function sectionHTML(g,i,c){
+  {
+    const done = g.topics.filter(t=>state.done[t.id]).length;
+    const depDone = g.topics.filter(t=>state.done[t.id]).reduce((s,t)=>s+t.ep,0);
+    const pct = g.ep? depDone/g.ep*100 : 0;
+    const col = AREA_COLOR[g.area]||"var(--ac)";
+    const open = openSecs.has(g.id);
+    return `<div class="sec${open?" open":""}" data-g="${g.id}" style="--i:${i}">
+      <div class="sec-h" data-sec="${g.id}">
+        ${g.idx?`<span class="idx">${g.idx}</span>`:`<span class="sec-dot" style="background:${col}"></span>`}
+        <div class="sec-t">
+          <b class="${mlc(g.name).trim()}">${g.name}</b>
+          <div class="sec-meta">
+            <span class="tag">${g.tag}</span>
+            <span class="n">${done}/${g.topics.length} · ${g.ep} EP · ~${fmtH(g.ep*c.rate)}</span>
+          </div>
+        </div>
+        <div class="sec-r">
+          <span class="sec-pct">${Math.round(pct)}%</span>
+          <span class="sbar"><i style="width:${pct}%;background:${col}"></i></span>
+        </div>
+        <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="sec-body"><div>${resHTML(g.id)}${g.topics.map(t=>topicHTML(t,c)).join("")}</div></div>
+    </div>`;
+  }
+}
+
+const IC_PDF = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>`;
+const IC_WEB = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>`;
+
+function resHTML(gid){
+  const r = RES[gid];
+  if(!r) return "";
+  const star = /★/.test(r.n||"");
+  const btns = [];
+  if(r.p) btns.push(`<a class="rb" href="${r.p}" target="_blank" rel="noopener">${IC_PDF}${r.p.endsWith("/")?"Open folder":"Open PDF"}</a>`);
+  if(r.u) btns.push(`<a class="rb free" href="${r.u}" target="_blank" rel="noopener">${IC_WEB}Free online</a>`);
+  return `<div class="res">
+    <div class="res-l">Start from${star?`<span class="res-start">START HERE</span>`:""}</div>
+    <div class="res-b">${r.b}</div>
+    <div class="res-c">${r.c}</div>
+    ${r.n?`<div class="res-n">${r.n.replace("★ ","")}</div>`:""}
+    ${btns.length?`<div class="res-btns">${btns.join("")}</div>`:""}
+  </div>`;
+}
+
+function topicHTML(t,c){
+  const h = state.hours[t.id]||0, d = !!state.done[t.id];
+  const cls = d ? "done" : (h>0 ? "part" : "");
+  const open = openTopics.has(t.id);
+  const pred = fmtH(t.ep*c.rate);
+  return `<div class="tp ${cls}${open?" open":""}" data-t="${t.id}">
+    <div class="tp-h" data-row="${t.id}">
+      <span class="box" data-box="${t.id}">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </span>
+      <div class="tp-t">
+        <div class="n${mlc(t.t)}">${t.t}</div>
+        ${t.d?`<div class="d${mlc(t.d)}">${t.d}</div>`:""}
+      </div>
+      <div class="tp-r">
+        <span class="ep">${t.ep} EP</span>
+        <span class="pred">${h>0? fmtH(h)+" logged" : "~"+pred}</span>
+      </div>
+    </div>
+    <div class="tp-body"><div><div class="logbox">
+      <div class="logrow">
+        <input class="hin" type="number" inputmode="decimal" step="0.5" min="0"
+               value="${h||""}" placeholder="0" data-h="${t.id}">
+        <button class="qb" data-add="${t.id}" data-v="0.5">+½h</button>
+        <button class="qb" data-add="${t.id}" data-v="1">+1h</button>
+        <button class="qb" data-add="${t.id}" data-v="3">+3h</button>
+        <button class="qb go" data-done="${t.id}">${d?"Done ✓":"Mark done"}</button>
+      </div>
+      <div class="loghint">${d
+        ? `Counted in your calibration: <b>${t.ep} EP</b> took <b>${fmtH(h)}</b>.`
+        : `Baseline says <b>${t.ep} EP ≈ ${pred}</b>. Log what it really takes — even in bits — then mark it done.`}
+      </div>
+    </div></div></div>
+  </div>`;
+}
+
+/* ---------------- interaction ---------------- */
+const openSecs = new Set(), openTopics = new Set();
+
+function toast(m){
+  const el = $("toast"); el.textContent = m; el.classList.add("on");
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove("on"), 1900);
+}
+function haptic(){ if(navigator.vibrate) navigator.vibrate(12); }
+
+function refreshTopic(id){
+  const c = calc();
+  const t = TOPICS.find(x=>x.id===id);
+  const el = document.querySelector(`.tp[data-t="${CSS.escape(id)}"]`);
+  if(!el||!t) return;
+  const h = state.hours[id]||0, d = !!state.done[id];
+  el.className = "tp "+(d?"done":(h>0?"part":""))+(openTopics.has(id)?" open":"");
+  el.querySelector(".pred").textContent = h>0? fmtH(h)+" logged" : "~"+fmtH(t.ep*c.rate);
+  const btn = el.querySelector("[data-done]"); if(btn) btn.textContent = d?"Done ✓":"Mark done";
+  const hint = el.querySelector(".loghint");
+  if(hint) hint.innerHTML = d
+    ? `Counted in your calibration: <b>${t.ep} EP</b> took <b>${fmtH(h)}</b>.`
+    : `Baseline says <b>${t.ep} EP ≈ ${fmtH(t.ep*c.rate)}</b>. Log what it really takes — even in bits — then mark it done.`;
+  // section header numbers
+  const g = GROUPS.find(x=>x.id===t.gid);
+  const sec = document.querySelector(`.sec[data-g="${CSS.escape(t.gid)}"]`);
+  if(sec&&g){
+    const dn = g.topics.filter(x=>state.done[x.id]).length;
+    const de = g.topics.filter(x=>state.done[x.id]).reduce((s,x)=>s+x.ep,0);
+    const pct = g.ep? de/g.ep*100:0;
+    sec.querySelector(".sec-meta .n").textContent =
+      `${dn}/${g.topics.length} · ${g.ep} EP · ~${fmtH(g.ep*c.rate)}`;
+    sec.querySelector(".sec-pct").textContent = Math.round(pct)+"%";
+    sec.querySelector(".sbar i").style.width = pct+"%";
+  }
+  renderStats();
+}
+
+function addHours(id, v){
+  const cur = state.hours[id]||0;
+  const nv = Math.max(0, Math.round((cur+v)*10)/10);
+  state.hours[id] = nv;
+  state.log = state.log||[];
+  state.log.push({i:id, h:v, t:Date.now()});
+  if(state.log.length>600) state.log = state.log.slice(-600);
+  const inp = document.querySelector(`[data-h="${CSS.escape(id)}"]`);
+  if(inp) inp.value = nv||"";
+  save(); refreshTopic(id); haptic();
+}
+function setHours(id, nv){
+  const cur = state.hours[id]||0;
+  nv = Math.max(0, Math.round(nv*10)/10);
+  state.hours[id] = nv;
+  const d = nv-cur;
+  if(d!==0){ state.log = state.log||[]; state.log.push({i:id,h:d,t:Date.now()}); }
+  save(); refreshTopic(id);
+}
+function toggleDone(id){
+  if(state.done[id]) delete state.done[id];
+  else{
+    state.done[id] = Date.now();
+    const t = TOPICS.find(x=>x.id===id);
+    if(!(state.hours[id]>0)) toast("Marked done — log the hours to tune predictions");
+    else{
+      const c = calc();
+      toast(`+${t.ep} EP · pace now ${Math.round(c.rate*100)/100} h/EP`);
+    }
+  }
+  save(); refreshTopic(id); haptic();
+}
+
+document.addEventListener("click", e=>{
+  const chip = e.target.closest(".chip");
+  if(chip){ filter = chip.dataset.a; renderFilters(); renderList(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+
+  const box = e.target.closest("[data-box]");
+  if(box){ e.stopPropagation(); toggleDone(box.dataset.box); return; }
+
+  const dn = e.target.closest("[data-done]");
+  if(dn){ toggleDone(dn.dataset.done); return; }
+
+  const add = e.target.closest("[data-add]");
+  if(add){ addHours(add.dataset.add, parseFloat(add.dataset.v)); return; }
+
+  const row = e.target.closest("[data-row]");
+  if(row){
+    const id = row.dataset.row;
+    const el = row.closest(".tp");
+    if(openTopics.has(id)){ openTopics.delete(id); el.classList.remove("open"); }
+    else{ openTopics.add(id); el.classList.add("open"); }
+    return;
+  }
+
+  const sh = e.target.closest("[data-sec]");
+  if(sh){
+    const id = sh.dataset.sec, el = sh.closest(".sec");
+    if(openSecs.has(id)){ openSecs.delete(id); el.classList.remove("open"); }
+    else{ openSecs.add(id); el.classList.add("open"); }
+    return;
+  }
+});
+document.addEventListener("change", e=>{
+  const h = e.target.closest("[data-h]");
+  if(h) setHours(h.dataset.h, parseFloat(h.value)||0);
+});
+
+$("epDay").addEventListener("input", e=>{
+  const v = parseFloat(e.target.value);
+  state.epDay = (v>0) ? v : null;
+  save(); renderStats();
+});
+
+/* ---------------- cloud sync ---------------- */
+let pushT=null;
+function badge(cls){ $("btn-sync").className = "iconbtn"+(cls?" "+cls:""); }
+function schedulePush(){ clearTimeout(pushT); pushT = setTimeout(push, 900); }
+function push(){
+  if(!syncId) return;
+  badge("syncing");
+  fetch(`${DB}/${APP}/${encodeURIComponent(syncId)}.json`,{
+    method:"PUT", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ payload: JSON.stringify(state), updated: state.updated, device: syncId })
+  }).then(r=>{
+    badge(r.ok?"synced":"error");
+    if($("syncSt")) $("syncSt").textContent = r.ok? "Saved to cloud ✓" : "Could not save — kept locally";
+  }).catch(()=>{ badge("error"); if($("syncSt")) $("syncSt").textContent="Offline — kept locally"; });
+}
+function pull(cb){
+  if(!syncId){ cb&&cb(false); return; }
+  badge("syncing");
+  fetch(`${DB}/${APP}/${encodeURIComponent(syncId)}.json`)
+    .then(r=>r.ok?r.json():Promise.reject())
+    .then(rem=>{
+      let rs=null;
+      if(rem && typeof rem==="object"){
+        if(typeof rem.payload==="string"){ try{ rs = JSON.parse(rem.payload); }catch(e){} }
+        else if(rem.done) rs = rem;
+      }
+      if(rs && (rs.updated||0) >= (state.updated||0)){
+        state = {done:{},hours:{},log:[],epDay:null,updated:0,...rs};
+        try{ localStorage.setItem(LS, JSON.stringify(state)); }catch(e){}
+        $("epDay").value = state.epDay>0 ? state.epDay : "";
+        renderStats(); renderList();
+        badge("synced"); cb&&cb(true);
+      }else{ badge("synced"); cb&&cb(false); }
+    }).catch(()=>{ badge("error"); cb&&cb(false); });
+}
+
+$("btn-sync").onclick = ()=>{
+  $("syncInp").value = syncId;
+  $("syncSt").textContent = syncId? `Connected as "${syncId}"` : "";
+  $("scrim").classList.add("on"); $("sheet").classList.add("on");
+};
+function closeSheet(){ $("scrim").classList.remove("on"); $("sheet").classList.remove("on"); }
+$("scrim").onclick = closeSheet;
+$("btnClose").onclick = closeSheet;
+$("btnPush").onclick = ()=>{
+  const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
+  if(!v){ $("syncSt").textContent = "Enter an ID first"; return; }
+  syncId = v; try{ localStorage.setItem(LS_ID, v); }catch(e){}
+  state.updated = Date.now(); push(); toast("Syncing…");
+};
+$("btnPull").onclick = ()=>{
+  const v = $("syncInp").value.trim().replace(/[^A-Za-z0-9_-]/g,"").slice(0,40);
+  if(!v){ $("syncSt").textContent = "Enter an ID first"; return; }
+  syncId = v; try{ localStorage.setItem(LS_ID, v); }catch(e){}
+  $("syncSt").textContent = "Loading…";
+  pull(ok=>{
+    $("syncSt").textContent = ok? "Loaded from cloud ✓" : "Nothing newer in the cloud";
+    if(ok) toast("Loaded from cloud ✓");
+  });
+};
+
+addEventListener("scroll", ()=>{
+  $("topbar").classList.toggle("stuck", scrollY>6);
+}, {passive:true});
+
+/* ---------------- boot ---------------- */
+load();
+if(state.epDay>0) $("epDay").value = state.epDay;
+renderFilters();
+renderStats();
+renderList();
+if(syncId){ badge("synced"); pull(ok=>{ if(ok) toast("Synced from cloud"); }); }
+</script>
+</body>
+</html>
