@@ -79,39 +79,122 @@ const ViewNote = (function () {
   function proofView(c) {
     if (!c.proof) return null;
     const p = c.proof;
+
+    const tryHost = el('div', { class: 'stack', style: { gap: '10px', marginTop: '12px' }, hidden: true });
+    const proofHost = el('div', { class: 'stack', style: { gap: '10px', marginTop: '12px' }, hidden: true });
+
+    let tryBuilt = false;
+    let proofBuilt = false;
+
+    function buildTry() {
+      const kids = [];
+      if (p.idea) {
+        kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+          el('div', { class: 'kicker', text: '💡 Proof Strategy / Hint' }),
+          el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+        ]));
+      }
+      if (p.why) {
+        kids.push(el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
+          el('div', { class: 'kicker', text: 'Core Rationale' }),
+          el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.why })
+        ]));
+      }
+      if (p.rungs && p.rungs.length > 0 && p.rungs[0].why) {
+        kids.push(el('div', { class: 'card flat', style: { padding: '8px 12px', background: 'var(--surface-2)' } }, [
+          el('div', { class: 'small muted' }, [
+            el('b', { text: 'First step clue: ' }),
+            el('span', { html: p.rungs[0].why })
+          ])
+        ]));
+      }
+      kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
+        el('label', { class: 'small muted', text: 'Scratchpad: draft your proof steps or reasoning before checking the solution' }),
+        el('textarea', {
+          class: 'proof-scratchpad',
+          placeholder: 'Write your proof sketch or key steps here...',
+          spellcheck: 'false'
+        })
+      ]));
+      return kids;
+    }
+
+    function buildProof() {
+      const kids = [];
+      if (p.idea) {
+        kids.push(el('div', { class: 'card tint', style: { marginBottom: '6px', padding: '10px 14px' } }, [
+          el('div', { class: 'kicker', text: 'Key Idea' }),
+          el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+        ]));
+      }
+      if (p.rungs && p.rungs.length) {
+        kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
+          p.rungs.map(function (r, idx) {
+            return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
+              el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
+                el('b', { text: 'Step ' + (idx + 1) + ': ' }),
+                el('span', { html: r.why })
+              ]),
+              r.m ? el('div', { html: r.m }) : null
+            ]);
+          })
+        ));
+      }
+      if (p.ends) {
+        kids.push(el('div', { class: 'prose tight', style: { marginTop: '12px', fontStyle: 'italic', borderTop: '1px solid var(--line, rgba(0,0,0,0.1))', paddingTop: '8px' }, html: p.ends }));
+      }
+      return kids;
+    }
+
+    const tryBtn = el('button', {
+      class: 'chip',
+      type: 'button',
+      'aria-expanded': 'false',
+      text: '💡 Try proof (hint)'
+    });
+
+    const showBtn = el('button', {
+      class: 'chip',
+      type: 'button',
+      'aria-expanded': 'false',
+      text: '👁 Show step-by-step proof'
+    });
+
+    tryBtn.addEventListener('click', function () {
+      const open = tryHost.hidden;
+      if (open && !tryBuilt) {
+        tryBuilt = true;
+        DOM.add(tryHost, buildTry());
+        UI.math(tryHost);
+      }
+      tryHost.hidden = !open;
+      tryBtn.setAttribute('aria-expanded', String(open));
+      tryBtn.textContent = open ? 'Hide hint' : '💡 Try proof (hint)';
+    });
+
+    showBtn.addEventListener('click', function () {
+      const open = proofHost.hidden;
+      if (open && !proofBuilt) {
+        proofBuilt = true;
+        DOM.add(proofHost, buildProof());
+        UI.math(proofHost);
+      }
+      proofHost.hidden = !open;
+      showBtn.setAttribute('aria-expanded', String(open));
+      showBtn.textContent = open ? 'Hide proof' : '👁 Show step-by-step proof';
+    });
+
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: 'Proof & Rigorous Argument' }),
         el('span', { class: 'count', text: (p.rungs ? p.rungs.length : 0) + ' steps' })
       ]),
-      el('div', { style: { marginTop: '10px' } }, [
-        UI.reveal('Proof breakdown', function () {
-          const kids = [];
-          if (p.idea) {
-            kids.push(el('div', { class: 'card tint', style: { marginBottom: '12px', padding: '10px 14px' } }, [
-              el('div', { class: 'kicker', text: 'Key Idea' }),
-              el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
-            ]));
-          }
-          if (p.rungs && p.rungs.length) {
-            kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
-              p.rungs.map(function (r, idx) {
-                return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
-                  el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
-                    el('b', { text: 'Step ' + (idx + 1) + ': ' }),
-                    el('span', { html: r.why })
-                  ]),
-                  r.m ? el('div', { html: r.m }) : null
-                ]);
-              })
-            ));
-          }
-          if (p.ends) {
-            kids.push(el('div', { class: 'prose tight', style: { marginTop: '12px', fontStyle: 'italic', borderTop: '1px solid var(--line, rgba(0,0,0,0.1))', paddingTop: '8px' }, html: p.ends }));
-          }
-          return el('div', { class: 'stack' }, kids);
-        }, { openLabel: 'Show step-by-step proof', closeLabel: 'Hide proof' })
-      ])
+      el('div', { class: 'row', style: { gap: '8px', marginTop: '10px', flexWrap: 'wrap' } }, [
+        tryBtn,
+        showBtn
+      ]),
+      tryHost,
+      proofHost
     ]);
   }
 
@@ -171,19 +254,89 @@ const ViewNote = (function () {
     return el('div', { class: 'card' }, [
       el('div', { class: 'kicker', text: 'Written exam questions on this' }),
       el('div', { class: 'stack', style: { gap: '14px', marginTop: '12px' } }, qs.map(function (q) {
-        return el('div', { class: 'stack', style: { gap: '8px' } }, [
-          el('div', { class: 'row' }, [
+        const tryHost = el('div', { class: 'stack', style: { gap: '8px', marginTop: '8px' }, hidden: true });
+        const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
+
+        let tryBuilt = false;
+        let answerBuilt = false;
+
+        function buildTry() {
+          const kids = [];
+          if (q.approach) {
+            kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+              el('div', { class: 'kicker', text: '💡 Strategic Hint / Approach' }),
+              el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
+            ]));
+          }
+          kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
+            el('label', { class: 'small muted', text: 'Scratchpad: outline your proof or solution steps' }),
+            el('textarea', {
+              class: 'proof-scratchpad',
+              placeholder: 'Draft your solution here before viewing the model answer...',
+              spellcheck: 'false'
+            })
+          ]));
+          return kids;
+        }
+
+        function buildAnswer() {
+          return [
+            q.approach ? el('div', { html: q.approach }) : null,
+            q.solution ? el('div', { html: q.solution }) : null,
+            q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
+          ];
+        }
+
+        const tryBtn = el('button', {
+          class: 'chip',
+          type: 'button',
+          'aria-expanded': 'false',
+          text: '💡 Try proof (hint)'
+        });
+
+        const showBtn = el('button', {
+          class: 'chip',
+          type: 'button',
+          'aria-expanded': 'false',
+          text: '👁 Show answer'
+        });
+
+        tryBtn.addEventListener('click', function () {
+          const open = tryHost.hidden;
+          if (open && !tryBuilt) {
+            tryBuilt = true;
+            DOM.add(tryHost, buildTry());
+            UI.math(tryHost);
+          }
+          tryHost.hidden = !open;
+          tryBtn.setAttribute('aria-expanded', String(open));
+          tryBtn.textContent = open ? 'Hide hint' : '💡 Try proof (hint)';
+        });
+
+        showBtn.addEventListener('click', function () {
+          const open = answerHost.hidden;
+          if (open && !answerBuilt) {
+            answerBuilt = true;
+            DOM.add(answerHost, buildAnswer());
+            UI.math(answerHost);
+          }
+          answerHost.hidden = !open;
+          showBtn.setAttribute('aria-expanded', String(open));
+          showBtn.textContent = open ? 'Hide answer' : '👁 Show answer';
+        });
+
+        return el('div', { class: 'card flat', style: { padding: '12px', border: '1px solid var(--rule)' } }, [
+          el('div', { class: 'spread', style: { marginBottom: '8px' } }, [
             el('span', { class: 'badge', text: (q.marks || '?') + ' marks' }),
             q.title ? el('span', { class: 'kicker', text: q.title }) : null
           ]),
           el('div', { class: 'prose tight', html: q.prompt }),
-          UI.reveal('Worked answer', function () {
-            return el('div', { class: 'prose tight' }, [
-              q.approach ? el('div', { html: q.approach }) : null,
-              q.solution ? el('div', { html: q.solution }) : null,
-              q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
-            ]);
-          }, { openLabel: 'I have attempted it — show the answer', closeLabel: 'Hide the answer' })
+          el('div', { class: 'row', style: { gap: '8px', marginTop: '10px', flexWrap: 'wrap' } }, [
+            tryBtn,
+            showBtn
+          ]),
+          tryHost,
+          answerHost
         ]);
       }))
     ]);
@@ -225,14 +378,14 @@ const ViewNote = (function () {
         { text: 'Study', href: 'study' },
         course ? { text: course.title, href: 'study/' + course.id } : null,
         mod ? { text: 'Module ' + mod.n } : null,
-        { text: '§' + c.sec }
+        c.sec ? { text: '§' + c.sec } : { text: 'Prerequisite' }
       ].filter(Boolean)),
 
       el('div', {}, [
         el('div', { class: 'row', style: { marginBottom: '8px' } }, [
           UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id)
         ]),
-        UI.title(c.title, Pool.sectionTitle(c.sec)),
+        UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
 

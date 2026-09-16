@@ -213,9 +213,9 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Both parts reuse facts already established: (i) is the direct contrapositive of "all subsequences of a convergent sequence share its limit"; (ii) reuses that convergence forces the whole sequence to be bounded.`,
-      why:`Both halves reuse facts already established: (i) is the direct contrapositive of $c.3.4.2$; (ii) reuses that convergence forces eventual closeness to a fixed number, which automatically caps the size of the whole sequence, leading terms included.`,
+      why:`Both halves reuse facts already established: (i) is the direct contrapositive of <code>c.3.4.2</code>; (ii) reuses that convergence forces eventual closeness to a fixed number, which automatically caps the size of the whole sequence, leading terms included.`,
       rungs:[
-        { why:`(i) If $X$ converged to some $x$, then by $c.3.4.2$ every subsequence — including $X'$ and $X''$ — would have to converge to that same $x$.`, m:`$$X\\to x \\ \\Rightarrow\\ X'\\to x \\text{ and } X''\\to x$$` },
+        { why:`(i) If $X$ converged to some $x$, then by <code>c.3.4.2</code> every subsequence — including $X'$ and $X''$ — would have to converge to that same $x$.`, m:`$$X\\to x \\ \\Rightarrow\\ X'\\to x \\text{ and } X''\\to x$$` },
         { why:`But we are given two subsequences with DIFFERENT limits — contradiction, so $X$ cannot converge.`, m:`$$\\lim X' \\ne \\lim X'' \\ \\Rightarrow\\ \\text{no such } x \\text{ can exist}$$` },
         { why:`(ii) A convergent sequence eventually sits inside a fixed neighbourhood of its limit; the finitely many terms before that are automatically bounded (any finite set of numbers is bounded).`, m:`$$n\\ge K(1) \\Rightarrow |x_n-x|<1 \\Rightarrow |x_n|<|x|+1$$ $$M := \\max\\{|x_1|,\\ldots,|x_{K-1}|,\\ |x|+1\\}$$` },
         { why:`So convergent $\\Rightarrow$ bounded; taking the contrapositive gives unbounded $\\Rightarrow$ divergent.`, m:`$$\\text{unbounded} \\ \\Rightarrow\\ \\text{not convergent}$$` }
@@ -275,16 +275,16 @@ CONCEPTS.push(
       idea:`Combine two already-proved facts: (1) any sequence has a monotone subsequence (<code>c.3.4.7</code>); (2) a monotone sequence that is also bounded must converge (Monotone Convergence Theorem, §3.3 — ultimately a consequence of the Completeness Property <code>c.2.3.6</code>). Chain them together.`,
       why:`Monotonicity alone doesn't guarantee convergence (an increasing sequence can run off to $+\\infty$); boundedness alone doesn't either (a sequence can wander forever inside a bounded interval without settling, e.g. $((-1)^n)$). It's the COMBINATION that traps a sequence into settling at a single value, and completeness is exactly what gives "no room left to run" real teeth: a bounded increasing sequence converges to its supremum.`,
       rungs:[
-        { why:`Start from what we already proved about the ORDER of any sequence — it always hides a monotone thread inside it.`, m:`$$X=(x_n) \\text{ bounded} \\ \\Rightarrow\\ X \\text{ has a monotone subsequence } X'=(x_{n_k}) \\quad\\text{(by }c.3.4.7\\text{)}$$` },
+        { why:`Start from what we already proved about the ORDER of any sequence — it always hides a monotone thread inside it.`, m:`$$X=(x_n) \\text{ bounded} \\ \\Rightarrow\\ X \\text{ has a monotone subsequence } X'=(x_{n_k}) \\quad\\text{(by Monotone Subsequence Thm, §3.4)}$$` },
         { why:`A subsequence of a bounded sequence is still bounded — you have only removed terms, never added any wilder new ones.`, m:`$$|x_n|\\le M\\ \\forall n \\ \\Rightarrow\\ |x_{n_k}|\\le M\\ \\forall k$$` },
-        { why:`Now $X'$ is BOTH monotone and bounded — exactly the hypothesis of the Monotone Convergence Theorem, whose proof is where completeness actually gets used: a bounded increasing sequence converges to its supremum.`, m:`$$X' \\text{ monotone} + \\text{bounded} \\ \\Rightarrow\\ X' \\text{ converges} \\quad\\text{(Monotone Convergence Thm, §3.3, via } c.2.3.6\\text{)}$$` },
+        { why:`Now $X'$ is BOTH monotone and bounded — exactly the hypothesis of the Monotone Convergence Theorem, whose proof is where completeness actually gets used: a bounded increasing sequence converges to its supremum.`, m:`$$X' \\text{ monotone} + \\text{bounded} \\ \\Rightarrow\\ X' \\text{ converges} \\quad\\text{(Monotone Convergence Thm, §3.3, via Completeness, §2.3)}$$` },
         { why:`That convergent $X'$ IS a subsequence of the original $X$ — exactly what we set out to find.`, m:`$$\\therefore\\ X \\text{ has a convergent subsequence } X'$$` }
       ],
       ends:`Every bounded sequence — no matter how wildly it oscillates — has at least one subsequence that settles down to a genuine limit. This is the single fact Chapter 5 leans on hardest, to guarantee that a continuous function on a closed bounded interval actually attains a maximum and a minimum (rather than merely approaching one).`
     },
     cards:[
       { q:`State the Bolzano–Weierstrass Theorem.`, a:`Every bounded sequence of real numbers has a convergent subsequence.`, kind:'state' },
-      { q:`Which two earlier results does the proof chain together?`, a:`The Monotone Subsequence Theorem ($c.3.4.7$) and the Monotone Convergence Theorem (§3.3, itself resting on completeness $c.2.3.6$).`, kind:'recall' },
+      { q:`Which two earlier results does the proof chain together?`, a:`The Monotone Subsequence Theorem (<code>c.3.4.7</code>) and the Monotone Convergence Theorem (§3.3, itself resting on completeness <code>c.2.3.6</code>).`, kind:'recall' },
       { q:`Find a convergent subsequence of $x_n=(-1)^n+1/n$.`, a:`The even-indexed subsequence $x_{2n}=1+1/(2n)\\to1$ converges (also the odd-indexed one converges to $-1$).`, kind:'apply' },
       { q:`Trap: does Bolzano–Weierstrass mean $((-1)^n)$ converges?`, a:`No — the theorem only guarantees SOME subsequence converges, not the whole sequence; $((-1)^n)$ itself is divergent, but its even and odd subsequences each converge.`, kind:'trap' }
     ]

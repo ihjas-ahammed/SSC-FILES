@@ -20,8 +20,8 @@ const Store = (function () {
   const EMPTY = { v: 1, done: {}, cards: {}, omr: {}, write: {}, prefs: {} };
 
   let mem = null;          /* fallback when localStorage is unavailable */
-  let state = load();
   let volatile = false;
+  let state = load();
 
   function load() {
     try {

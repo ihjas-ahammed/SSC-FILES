@@ -251,8 +251,33 @@ a.card:active,button.card:active{ transform:scale(.985); }
 .btn[disabled]{ opacity:.6; cursor:not-allowed; transform:none; }
 .btn.primary[disabled]{ background:var(--surface-2); border-color:var(--rule);
   color:var(--ink-3); opacity:1; box-shadow:none; }
+.btn.sm{ min-height:36px; padding:0 14px; font-size:.84rem; }
 .btn-row{ display:flex; gap:10px; flex-wrap:wrap; }
 .btn-row>.btn{ flex:1 1 auto; }
+
+/* ── concept reference links ──────────────────────────────────────────────── */
+.concept-ref{
+  display:inline-flex; align-items:center; gap:4px; padding:1px 8px; margin:0 2px;
+  border-radius:var(--r-s, 6px); background:var(--accent-soft); color:var(--accent);
+  font-weight:600; font-size:.88em; text-decoration:none;
+  border:1px solid var(--accent-line); vertical-align:baseline;
+  max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  transition:background var(--dur-s), color var(--dur-s), border-color var(--dur-s), transform var(--dur-s);
+}
+.concept-ref:hover{
+  background:var(--accent); color:var(--accent-ink, #ffffff);
+  border-color:var(--accent); text-decoration:none;
+}
+.concept-ref:active{ transform:scale(.96); }
+
+.proof-scratchpad{
+  width:100%; min-height:85px; padding:10px 12px; margin-top:8px; border-radius:var(--r-s);
+  border:1px solid var(--rule); background:var(--surface); color:var(--ink);
+  font-family:inherit; font-size:.9rem; line-height:1.5; resize:vertical;
+}
+.proof-scratchpad:focus{
+  outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft);
+}
 
 /* ── prose (authored HTML + TeX) ─────────────────────────────────────────── */
 .prose{ font-family:var(--font-prose); font-size:1.03rem; line-height:1.68; color:var(--ink); }
@@ -1157,9 +1182,9 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Both parts reuse facts already established: (i) is the direct contrapositive of "all subsequences of a convergent sequence share its limit"; (ii) reuses that convergence forces the whole sequence to be bounded.`,
-      why:`Both halves reuse facts already established: (i) is the direct contrapositive of $c.3.4.2$; (ii) reuses that convergence forces eventual closeness to a fixed number, which automatically caps the size of the whole sequence, leading terms included.`,
+      why:`Both halves reuse facts already established: (i) is the direct contrapositive of <code>c.3.4.2</code>; (ii) reuses that convergence forces eventual closeness to a fixed number, which automatically caps the size of the whole sequence, leading terms included.`,
       rungs:[
-        { why:`(i) If $X$ converged to some $x$, then by $c.3.4.2$ every subsequence — including $X'$ and $X''$ — would have to converge to that same $x$.`, m:`$$X\\to x \\ \\Rightarrow\\ X'\\to x \\text{ and } X''\\to x$$` },
+        { why:`(i) If $X$ converged to some $x$, then by <code>c.3.4.2</code> every subsequence — including $X'$ and $X''$ — would have to converge to that same $x$.`, m:`$$X\\to x \\ \\Rightarrow\\ X'\\to x \\text{ and } X''\\to x$$` },
         { why:`But we are given two subsequences with DIFFERENT limits — contradiction, so $X$ cannot converge.`, m:`$$\\lim X' \\ne \\lim X'' \\ \\Rightarrow\\ \\text{no such } x \\text{ can exist}$$` },
         { why:`(ii) A convergent sequence eventually sits inside a fixed neighbourhood of its limit; the finitely many terms before that are automatically bounded (any finite set of numbers is bounded).`, m:`$$n\\ge K(1) \\Rightarrow |x_n-x|<1 \\Rightarrow |x_n|<|x|+1$$ $$M := \\max\\{|x_1|,\\ldots,|x_{K-1}|,\\ |x|+1\\}$$` },
         { why:`So convergent $\\Rightarrow$ bounded; taking the contrapositive gives unbounded $\\Rightarrow$ divergent.`, m:`$$\\text{unbounded} \\ \\Rightarrow\\ \\text{not convergent}$$` }
@@ -1219,16 +1244,16 @@ CONCEPTS.push(
       idea:`Combine two already-proved facts: (1) any sequence has a monotone subsequence (<code>c.3.4.7</code>); (2) a monotone sequence that is also bounded must converge (Monotone Convergence Theorem, §3.3 — ultimately a consequence of the Completeness Property <code>c.2.3.6</code>). Chain them together.`,
       why:`Monotonicity alone doesn't guarantee convergence (an increasing sequence can run off to $+\\infty$); boundedness alone doesn't either (a sequence can wander forever inside a bounded interval without settling, e.g. $((-1)^n)$). It's the COMBINATION that traps a sequence into settling at a single value, and completeness is exactly what gives "no room left to run" real teeth: a bounded increasing sequence converges to its supremum.`,
       rungs:[
-        { why:`Start from what we already proved about the ORDER of any sequence — it always hides a monotone thread inside it.`, m:`$$X=(x_n) \\text{ bounded} \\ \\Rightarrow\\ X \\text{ has a monotone subsequence } X'=(x_{n_k}) \\quad\\text{(by }c.3.4.7\\text{)}$$` },
+        { why:`Start from what we already proved about the ORDER of any sequence — it always hides a monotone thread inside it.`, m:`$$X=(x_n) \\text{ bounded} \\ \\Rightarrow\\ X \\text{ has a monotone subsequence } X'=(x_{n_k}) \\quad\\text{(by Monotone Subsequence Thm, §3.4)}$$` },
         { why:`A subsequence of a bounded sequence is still bounded — you have only removed terms, never added any wilder new ones.`, m:`$$|x_n|\\le M\\ \\forall n \\ \\Rightarrow\\ |x_{n_k}|\\le M\\ \\forall k$$` },
-        { why:`Now $X'$ is BOTH monotone and bounded — exactly the hypothesis of the Monotone Convergence Theorem, whose proof is where completeness actually gets used: a bounded increasing sequence converges to its supremum.`, m:`$$X' \\text{ monotone} + \\text{bounded} \\ \\Rightarrow\\ X' \\text{ converges} \\quad\\text{(Monotone Convergence Thm, §3.3, via } c.2.3.6\\text{)}$$` },
+        { why:`Now $X'$ is BOTH monotone and bounded — exactly the hypothesis of the Monotone Convergence Theorem, whose proof is where completeness actually gets used: a bounded increasing sequence converges to its supremum.`, m:`$$X' \\text{ monotone} + \\text{bounded} \\ \\Rightarrow\\ X' \\text{ converges} \\quad\\text{(Monotone Convergence Thm, §3.3, via Completeness, §2.3)}$$` },
         { why:`That convergent $X'$ IS a subsequence of the original $X$ — exactly what we set out to find.`, m:`$$\\therefore\\ X \\text{ has a convergent subsequence } X'$$` }
       ],
       ends:`Every bounded sequence — no matter how wildly it oscillates — has at least one subsequence that settles down to a genuine limit. This is the single fact Chapter 5 leans on hardest, to guarantee that a continuous function on a closed bounded interval actually attains a maximum and a minimum (rather than merely approaching one).`
     },
     cards:[
       { q:`State the Bolzano–Weierstrass Theorem.`, a:`Every bounded sequence of real numbers has a convergent subsequence.`, kind:'state' },
-      { q:`Which two earlier results does the proof chain together?`, a:`The Monotone Subsequence Theorem ($c.3.4.7$) and the Monotone Convergence Theorem (§3.3, itself resting on completeness $c.2.3.6$).`, kind:'recall' },
+      { q:`Which two earlier results does the proof chain together?`, a:`The Monotone Subsequence Theorem (<code>c.3.4.7</code>) and the Monotone Convergence Theorem (§3.3, itself resting on completeness <code>c.2.3.6</code>).`, kind:'recall' },
       { q:`Find a convergent subsequence of $x_n=(-1)^n+1/n$.`, a:`The even-indexed subsequence $x_{2n}=1+1/(2n)\\to1$ converges (also the odd-indexed one converges to $-1$).`, kind:'apply' },
       { q:`Trap: does Bolzano–Weierstrass mean $((-1)^n)$ converges?`, a:`No — the theorem only guarantees SOME subsequence converges, not the whole sequence; $((-1)^n)$ itself is divergent, but its even and odd subsequences each converge.`, kind:'trap' }
     ]
@@ -5304,6 +5329,25 @@ const DOM = (function () {
     });
   }
 
+  /* Turn concept IDs like <code>c.2.3.1</code>, $c.3.4.2$, or raw c.2.3.1 references into
+     clickable links labeled with their section number and concept name. */
+  function linkifyConcepts(s) {
+    if (typeof s !== 'string') return s;
+    if (s.indexOf('<code>') === -1 && s.indexOf('$c.') === -1 && s.indexOf('c.') === -1 && s.indexOf('s.') === -1) return s;
+    const re = /<code>(c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+)<\/code>|\$((?:c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+))\$|(?<=[\s(])(c\.[0-9]+\.[0-9]+[a-z0-9.]*)(?=[\s.,;:)])/g;
+    return s.replace(re, function (match, g1, g2, g3) {
+      const id = g1 || g2 || g3;
+      const c = (typeof Pool !== 'undefined' && Pool.concept) ? Pool.concept(id) : null;
+      if (!c) return match;
+      const cleanTitle = (c.title || id).split(';')[0].trim();
+      const label = c.sec ? ('§' + c.sec + ' ' + cleanTitle) : cleanTitle;
+      const secTitle = (c.sec && typeof Pool.sectionTitle === 'function') ? Pool.sectionTitle(c.sec) : null;
+      const fullDesc = (secTitle ? ('Section ' + c.sec + ': ' + secTitle + ' — ') : '') + (c.title || id);
+      const escTitle = fullDesc.replace(/"/g, '&quot;');
+      return '<a class="concept-ref" href="#/note/' + id + '" title="' + escTitle + '">' + label + '</a>';
+    });
+  }
+
   /* el('div', {class, text, html, on:{click}, ...attrs}, children) */
   function el(tag, attrs, kids) {
     const node = document.createElement(tag);
@@ -5312,7 +5356,7 @@ const DOM = (function () {
       if (v == null || v === false) continue;
       if (k === 'class') node.className = v;
       else if (k === 'text') node.textContent = v;
-      else if (k === 'html') node.innerHTML = sanitizeMathHtml(v);            /* authored content only */
+      else if (k === 'html') node.innerHTML = sanitizeMathHtml(linkifyConcepts(v));            /* authored content only */
       else if (k === 'on') for (const ev in v) node.addEventListener(ev, v[ev]);
       else if (k === 'style' && typeof v === 'object') Object.assign(node.style, v);
       else node.setAttribute(k, v === true ? '' : v);
@@ -5568,8 +5612,8 @@ const Store = (function () {
   const EMPTY = { v: 1, done: {}, cards: {}, omr: {}, write: {}, prefs: {} };
 
   let mem = null;          /* fallback when localStorage is unavailable */
-  let state = load();
   let volatile = false;
+  let state = load();
 
   function load() {
     try {
@@ -7484,39 +7528,122 @@ const ViewNote = (function () {
   function proofView(c) {
     if (!c.proof) return null;
     const p = c.proof;
+
+    const tryHost = el('div', { class: 'stack', style: { gap: '10px', marginTop: '12px' }, hidden: true });
+    const proofHost = el('div', { class: 'stack', style: { gap: '10px', marginTop: '12px' }, hidden: true });
+
+    let tryBuilt = false;
+    let proofBuilt = false;
+
+    function buildTry() {
+      const kids = [];
+      if (p.idea) {
+        kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+          el('div', { class: 'kicker', text: '💡 Proof Strategy / Hint' }),
+          el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+        ]));
+      }
+      if (p.why) {
+        kids.push(el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
+          el('div', { class: 'kicker', text: 'Core Rationale' }),
+          el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.why })
+        ]));
+      }
+      if (p.rungs && p.rungs.length > 0 && p.rungs[0].why) {
+        kids.push(el('div', { class: 'card flat', style: { padding: '8px 12px', background: 'var(--surface-2)' } }, [
+          el('div', { class: 'small muted' }, [
+            el('b', { text: 'First step clue: ' }),
+            el('span', { html: p.rungs[0].why })
+          ])
+        ]));
+      }
+      kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
+        el('label', { class: 'small muted', text: 'Scratchpad: draft your proof steps or reasoning before checking the solution' }),
+        el('textarea', {
+          class: 'proof-scratchpad',
+          placeholder: 'Write your proof sketch or key steps here...',
+          spellcheck: 'false'
+        })
+      ]));
+      return kids;
+    }
+
+    function buildProof() {
+      const kids = [];
+      if (p.idea) {
+        kids.push(el('div', { class: 'card tint', style: { marginBottom: '6px', padding: '10px 14px' } }, [
+          el('div', { class: 'kicker', text: 'Key Idea' }),
+          el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+        ]));
+      }
+      if (p.rungs && p.rungs.length) {
+        kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
+          p.rungs.map(function (r, idx) {
+            return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
+              el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
+                el('b', { text: 'Step ' + (idx + 1) + ': ' }),
+                el('span', { html: r.why })
+              ]),
+              r.m ? el('div', { html: r.m }) : null
+            ]);
+          })
+        ));
+      }
+      if (p.ends) {
+        kids.push(el('div', { class: 'prose tight', style: { marginTop: '12px', fontStyle: 'italic', borderTop: '1px solid var(--line, rgba(0,0,0,0.1))', paddingTop: '8px' }, html: p.ends }));
+      }
+      return kids;
+    }
+
+    const tryBtn = el('button', {
+      class: 'chip',
+      type: 'button',
+      'aria-expanded': 'false',
+      text: '💡 Try proof (hint)'
+    });
+
+    const showBtn = el('button', {
+      class: 'chip',
+      type: 'button',
+      'aria-expanded': 'false',
+      text: '👁 Show step-by-step proof'
+    });
+
+    tryBtn.addEventListener('click', function () {
+      const open = tryHost.hidden;
+      if (open && !tryBuilt) {
+        tryBuilt = true;
+        DOM.add(tryHost, buildTry());
+        UI.math(tryHost);
+      }
+      tryHost.hidden = !open;
+      tryBtn.setAttribute('aria-expanded', String(open));
+      tryBtn.textContent = open ? 'Hide hint' : '💡 Try proof (hint)';
+    });
+
+    showBtn.addEventListener('click', function () {
+      const open = proofHost.hidden;
+      if (open && !proofBuilt) {
+        proofBuilt = true;
+        DOM.add(proofHost, buildProof());
+        UI.math(proofHost);
+      }
+      proofHost.hidden = !open;
+      showBtn.setAttribute('aria-expanded', String(open));
+      showBtn.textContent = open ? 'Hide proof' : '👁 Show step-by-step proof';
+    });
+
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: 'Proof & Rigorous Argument' }),
         el('span', { class: 'count', text: (p.rungs ? p.rungs.length : 0) + ' steps' })
       ]),
-      el('div', { style: { marginTop: '10px' } }, [
-        UI.reveal('Proof breakdown', function () {
-          const kids = [];
-          if (p.idea) {
-            kids.push(el('div', { class: 'card tint', style: { marginBottom: '12px', padding: '10px 14px' } }, [
-              el('div', { class: 'kicker', text: 'Key Idea' }),
-              el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
-            ]));
-          }
-          if (p.rungs && p.rungs.length) {
-            kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
-              p.rungs.map(function (r, idx) {
-                return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
-                  el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
-                    el('b', { text: 'Step ' + (idx + 1) + ': ' }),
-                    el('span', { html: r.why })
-                  ]),
-                  r.m ? el('div', { html: r.m }) : null
-                ]);
-              })
-            ));
-          }
-          if (p.ends) {
-            kids.push(el('div', { class: 'prose tight', style: { marginTop: '12px', fontStyle: 'italic', borderTop: '1px solid var(--line, rgba(0,0,0,0.1))', paddingTop: '8px' }, html: p.ends }));
-          }
-          return el('div', { class: 'stack' }, kids);
-        }, { openLabel: 'Show step-by-step proof', closeLabel: 'Hide proof' })
-      ])
+      el('div', { class: 'row', style: { gap: '8px', marginTop: '10px', flexWrap: 'wrap' } }, [
+        tryBtn,
+        showBtn
+      ]),
+      tryHost,
+      proofHost
     ]);
   }
 
@@ -7576,19 +7703,89 @@ const ViewNote = (function () {
     return el('div', { class: 'card' }, [
       el('div', { class: 'kicker', text: 'Written exam questions on this' }),
       el('div', { class: 'stack', style: { gap: '14px', marginTop: '12px' } }, qs.map(function (q) {
-        return el('div', { class: 'stack', style: { gap: '8px' } }, [
-          el('div', { class: 'row' }, [
+        const tryHost = el('div', { class: 'stack', style: { gap: '8px', marginTop: '8px' }, hidden: true });
+        const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
+
+        let tryBuilt = false;
+        let answerBuilt = false;
+
+        function buildTry() {
+          const kids = [];
+          if (q.approach) {
+            kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+              el('div', { class: 'kicker', text: '💡 Strategic Hint / Approach' }),
+              el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
+            ]));
+          }
+          kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
+            el('label', { class: 'small muted', text: 'Scratchpad: outline your proof or solution steps' }),
+            el('textarea', {
+              class: 'proof-scratchpad',
+              placeholder: 'Draft your solution here before viewing the model answer...',
+              spellcheck: 'false'
+            })
+          ]));
+          return kids;
+        }
+
+        function buildAnswer() {
+          return [
+            q.approach ? el('div', { html: q.approach }) : null,
+            q.solution ? el('div', { html: q.solution }) : null,
+            q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
+          ];
+        }
+
+        const tryBtn = el('button', {
+          class: 'chip',
+          type: 'button',
+          'aria-expanded': 'false',
+          text: '💡 Try proof (hint)'
+        });
+
+        const showBtn = el('button', {
+          class: 'chip',
+          type: 'button',
+          'aria-expanded': 'false',
+          text: '👁 Show answer'
+        });
+
+        tryBtn.addEventListener('click', function () {
+          const open = tryHost.hidden;
+          if (open && !tryBuilt) {
+            tryBuilt = true;
+            DOM.add(tryHost, buildTry());
+            UI.math(tryHost);
+          }
+          tryHost.hidden = !open;
+          tryBtn.setAttribute('aria-expanded', String(open));
+          tryBtn.textContent = open ? 'Hide hint' : '💡 Try proof (hint)';
+        });
+
+        showBtn.addEventListener('click', function () {
+          const open = answerHost.hidden;
+          if (open && !answerBuilt) {
+            answerBuilt = true;
+            DOM.add(answerHost, buildAnswer());
+            UI.math(answerHost);
+          }
+          answerHost.hidden = !open;
+          showBtn.setAttribute('aria-expanded', String(open));
+          showBtn.textContent = open ? 'Hide answer' : '👁 Show answer';
+        });
+
+        return el('div', { class: 'card flat', style: { padding: '12px', border: '1px solid var(--rule)' } }, [
+          el('div', { class: 'spread', style: { marginBottom: '8px' } }, [
             el('span', { class: 'badge', text: (q.marks || '?') + ' marks' }),
             q.title ? el('span', { class: 'kicker', text: q.title }) : null
           ]),
           el('div', { class: 'prose tight', html: q.prompt }),
-          UI.reveal('Worked answer', function () {
-            return el('div', { class: 'prose tight' }, [
-              q.approach ? el('div', { html: q.approach }) : null,
-              q.solution ? el('div', { html: q.solution }) : null,
-              q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
-            ]);
-          }, { openLabel: 'I have attempted it — show the answer', closeLabel: 'Hide the answer' })
+          el('div', { class: 'row', style: { gap: '8px', marginTop: '10px', flexWrap: 'wrap' } }, [
+            tryBtn,
+            showBtn
+          ]),
+          tryHost,
+          answerHost
         ]);
       }))
     ]);
@@ -7630,14 +7827,14 @@ const ViewNote = (function () {
         { text: 'Study', href: 'study' },
         course ? { text: course.title, href: 'study/' + course.id } : null,
         mod ? { text: 'Module ' + mod.n } : null,
-        { text: '§' + c.sec }
+        c.sec ? { text: '§' + c.sec } : { text: 'Prerequisite' }
       ].filter(Boolean)),
 
       el('div', {}, [
         el('div', { class: 'row', style: { marginBottom: '8px' } }, [
           UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id)
         ]),
-        UI.title(c.title, Pool.sectionTitle(c.sec)),
+        UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
 

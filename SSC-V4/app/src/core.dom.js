@@ -22,6 +22,25 @@ const DOM = (function () {
     });
   }
 
+  /* Turn concept IDs like <code>c.2.3.1</code>, $c.3.4.2$, or raw c.2.3.1 references into
+     clickable links labeled with their section number and concept name. */
+  function linkifyConcepts(s) {
+    if (typeof s !== 'string') return s;
+    if (s.indexOf('<code>') === -1 && s.indexOf('$c.') === -1 && s.indexOf('c.') === -1 && s.indexOf('s.') === -1) return s;
+    const re = /<code>(c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+)<\/code>|\$((?:c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+))\$|(?<=[\s(])(c\.[0-9]+\.[0-9]+[a-z0-9.]*)(?=[\s.,;:)])/g;
+    return s.replace(re, function (match, g1, g2, g3) {
+      const id = g1 || g2 || g3;
+      const c = (typeof Pool !== 'undefined' && Pool.concept) ? Pool.concept(id) : null;
+      if (!c) return match;
+      const cleanTitle = (c.title || id).split(';')[0].trim();
+      const label = c.sec ? ('§' + c.sec + ' ' + cleanTitle) : cleanTitle;
+      const secTitle = (c.sec && typeof Pool.sectionTitle === 'function') ? Pool.sectionTitle(c.sec) : null;
+      const fullDesc = (secTitle ? ('Section ' + c.sec + ': ' + secTitle + ' — ') : '') + (c.title || id);
+      const escTitle = fullDesc.replace(/"/g, '&quot;');
+      return '<a class="concept-ref" href="#/note/' + id + '" title="' + escTitle + '">' + label + '</a>';
+    });
+  }
+
   /* el('div', {class, text, html, on:{click}, ...attrs}, children) */
   function el(tag, attrs, kids) {
     const node = document.createElement(tag);
@@ -30,7 +49,7 @@ const DOM = (function () {
       if (v == null || v === false) continue;
       if (k === 'class') node.className = v;
       else if (k === 'text') node.textContent = v;
-      else if (k === 'html') node.innerHTML = sanitizeMathHtml(v);            /* authored content only */
+      else if (k === 'html') node.innerHTML = sanitizeMathHtml(linkifyConcepts(v));            /* authored content only */
       else if (k === 'on') for (const ev in v) node.addEventListener(ev, v[ev]);
       else if (k === 'style' && typeof v === 'object') Object.assign(node.style, v);
       else node.setAttribute(k, v === true ? '' : v);
