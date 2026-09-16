@@ -23,9 +23,9 @@ CONCEPTS.push(
         { why:`Negate the claim: suppose some real number $x$ IS an upper bound for the whole set $\\mathbb{N}$.`, m:`$$n\\le x \\ \\text{ for all } n\\in\\mathbb{N}$$` },
         { why:`Then $\\mathbb{N}$ is a nonempty subset of $\\mathbb{R}$ bounded above, so the Completeness Property applies.`, m:`$$u:=\\sup\\mathbb{N} \\text{ exists in } \\mathbb{R}$$` },
         { why:`$u-1$ is strictly smaller than the LEAST upper bound $u$, so it cannot itself be an upper bound of $\\mathbb{N}$.`, m:`$$u-1<u \\ \\Rightarrow\\ u-1 \\text{ is not an upper bound of } \\mathbb{N}$$` },
-        { why:`"Not an upper bound" means some natural number slips past it.`, m:`$$\\exists\\, m\\in\\mathbb{N}: u-1<m$$` },
-        { why:`But $\\mathbb{N}$ is closed under $+1$ (Inductive Property), so $m+1$ is also a natural number — and it beats $u$.`, m:`$$m+1\\in\\mathbb{N}, \\qquad u<m+1$$` },
-        { why:`This contradicts step 2: $u$ was supposed to be an upper bound of $\\mathbb{N}$, yet $m+1\\in\\mathbb{N}$ exceeds it.`, m:`$$u<m+1,\\ m+1\\in\\mathbb{N} \\ \\Rightarrow\\Leftarrow$$` }
+        { why:`"Not an upper bound" means some natural number slips past it.`, m:`$$\\exists\\, m\\in\\mathbb{N}: u-1 < m$$` },
+        { why:`But $\\mathbb{N}$ is closed under $+1$ (Inductive Property), so $m+1$ is also a natural number — and it beats $u$.`, m:`$$m+1\\in\\mathbb{N}, \\qquad u < m+1$$` },
+        { why:`This contradicts step 2: $u$ was supposed to be an upper bound of $\\mathbb{N}$, yet $m+1\\in\\mathbb{N}$ exceeds it.`, m:`$$u < m+1,\\ m+1\\in\\mathbb{N} \\ \\Rightarrow\\Leftarrow$$` }
       ],
       ends:`The assumption is impossible, so no real number bounds $\\mathbb{N}$ above — equivalently, for every $x\\in\\mathbb{R}$ there is some $n_x\\in\\mathbb{N}$ with $x\\le n_x$. This single fact drives every "choose $n$ large enough" argument later in the course, including $1/n\\to0$ and the density of $\\mathbb{Q}$ in $\\mathbb{R}$.`
     },
@@ -70,7 +70,7 @@ CONCEPTS.push(
   { id:'c.2.4.9', bartle:'2.4.9', sec:'2.4', kind:'corollary', tier:'core',
     title:'Density of the irrationals in ℝ',
     oneLine:'Between any two distinct real numbers, however close, sits an irrational number.',
-    statement:`<p>If $x,y\\in\\mathbb{R}$ with $x<y$, then there exists an irrational number $z$ such that $x<z<y$.</p>`,
+    statement:`<p>If $x,y\\in\\mathbb{R}$ with $x < y$, then there exists an irrational number $z$ such that $x < z< y$.</p>`,
     intuition:`<p>Bartle's Density Theorem (2.4.8) says the RATIONALS are dense in $\\mathbb{R}$: between any two reals sits a rational. This corollary says the irrationals are equally dense — the trick is to use a known irrational number ($\\sqrt2$) as a "yardstick" that converts one density statement into the other by scaling.</p>
       <p><b>Worked micro-example:</b> for $x=0$, $y=0.001$, apply the argument to $x/\\sqrt2=0$ and $y/\\sqrt2\\approx0.000707$ to get a rational $r$ in between (e.g. $r=0.0005$), giving the irrational $z=r\\sqrt2\\approx0.000707\\in(0,0.001)$.</p>`,
     needs:['c.2.4.8','c.2.4.3','s.contradiction'],
@@ -85,12 +85,12 @@ CONCEPTS.push(
         { why:`Rescale the target gap by the known irrational $\\sqrt2$ (Bartle 2.4.7).`, m:`$$\\frac{x}{\\sqrt2} < \\frac{y}{\\sqrt2}$$` },
         { why:`The Density Theorem (rationals dense in $\\mathbb{R}$) supplies a rational strictly between these rescaled endpoints; it can be taken nonzero since the gap contains infinitely many rationals.`, m:`$$\\exists\\, r\\in\\mathbb{Q},\\ r\\ne0:\\quad \\frac{x}{\\sqrt2} < r < \\frac{y}{\\sqrt2}$$` },
         { why:`Multiply back through by $\\sqrt2>0$ (positive, so the inequalities survive) to return to the original scale.`, m:`$$x < r\\sqrt2 < y$$` },
-        { why:`Check $z:=r\\sqrt2$ is genuinely irrational: a nonzero rational times an irrational is always irrational.`, m:`$$z:=r\\sqrt2 \\ \\text{is irrational}, \\qquad x<z<y$$` }
+        { why:`Check $z:=r\\sqrt2$ is genuinely irrational: a nonzero rational times an irrational is always irrational.`, m:`$$z:=r\\sqrt2 \\ \\text{is irrational}, \\qquad x < z< y$$` }
       ],
       ends:`The irrationals are packed into $\\mathbb{R}$ just as densely as the rationals are — between any two reals, both a rational AND an irrational can always be found.`
     },
     cards:[
-      { q:`State the density-of-irrationals corollary.`, a:`If $x<y$ are real numbers, there exists an irrational $z$ with $x<z<y$.`, kind:'state' },
+      { q:`State the density-of-irrationals corollary.`, a:`If $x < y$ are real numbers, there exists an irrational $z$ with $x < z< y$.`, kind:'state' },
       { q:`What known irrational number does the proof scale by, and why?`, a:`$\\sqrt2$ — dividing by it converts "find an irrational between $x,y$" into "find a rational between $x/\\sqrt2,\\,y/\\sqrt2$", which the Density Theorem already solves.`, kind:'recall' },
       { q:`Trap: why must the rational $r$ found be nonzero?`, a:`Because $r\\sqrt2$ is irrational only when $r\\ne0$ — if $r=0$ then $r\\sqrt2=0$ is rational, ruining the construction.`, kind:'trap' }
     ]
@@ -99,9 +99,9 @@ CONCEPTS.push(
   { id:'c.2.5.1', bartle:'2.5.1', sec:'2.5', kind:'theorem', tier:'core',
     title:'Characterization Theorem for intervals',
     oneLine:'A set with at least two points is an interval exactly when it contains every point squeezed between any two of its own points.',
-    statement:`<p>Let $S\\subseteq\\mathbb{R}$ contain at least two points, with the property: if $x,y\\in S$ and $x<y$, then $[x,y]\\subseteq S$. Then $S$ is an interval.</p>`,
+    statement:`<p>Let $S\\subseteq\\mathbb{R}$ contain at least two points, with the property: if $x,y\\in S$ and $x < y$, then $[x,y]\\subseteq S$. Then $S$ is an interval.</p>`,
     intuition:`<p>This is the precise version of the everyday idea "an interval has no gaps": if two points belong to $S$, then EVERY point squeezed between them belongs too. What's surprising is the converse direction actually proved here — this "no gaps" property alone, with no reference to endpoints at all, is enough to force $S$ to be one of the familiar interval shapes.</p>
-      <p><b>Worked micro-example:</b> $S=\\{x\\in\\mathbb{Q}: 0\\le x<1\\}$ (rationals only) satisfies "if $x,y\\in S,\\,x<y$" only vacuously in a misleading sense — actually it FAILS the hypothesis, since e.g. $[0,1/2]\\not\\subseteq S$ (irrationals in between are missing). This is why $S$ is not an interval, matching intuition.</p>`,
+      <p><b>Worked micro-example:</b> $S=\\{x\\in\\mathbb{Q}: 0\\le x<1\\}$ (rationals only) satisfies "if $x,y\\in S,\\,x < y$" only vacuously in a misleading sense — actually it FAILS the hypothesis, since e.g. $[0,1/2]\\not\\subseteq S$ (irrationals in between are missing). This is why $S$ is not an interval, matching intuition.</p>`,
     needs:['c.2.3.1','c.2.3.2','s.interval'],
     traps:[
       `Thinking the defining property needs checking against points OUTSIDE $S$ — it doesn't; it only says that segments BETWEEN two points of $S$ must lie back inside $S$.`,
@@ -112,15 +112,15 @@ CONCEPTS.push(
       why:`Both $a$ and $b$ are LEAST/GREATEST bounds, so anything strictly between them fails to be a bound at all — which forces points of $S$ on both sides of it, and the "no gaps" hypothesis does the rest.`,
       rungs:[
         { why:`Bounded case: name the infimum and supremum; this immediately traps $S$ inside $[a,b]$.`, m:`$$a:=\\inf S,\\ b:=\\sup S \\ \\Rightarrow\\ S\\subseteq[a,b]$$` },
-        { why:`Take any $z$ strictly between $a$ and $b$. Since $a$ is the GREATEST lower bound, anything bigger than it fails to be a lower bound — so some point of $S$ sits below $z$; symmetrically for $b$ and a point above $z$.`, m:`$$a<z<b \\ \\Rightarrow\\ \\exists x\\in S: x<z, \\quad \\exists y\\in S: z<y$$` },
-        { why:`Now $x<z<y$ with $x,y\\in S$ — the hypothesis (property (1)) forces the WHOLE segment $[x,y]$, including $z$, into $S$.`, m:`$$x<z<y,\\ x,y\\in S \\ \\Rightarrow\\ z\\in[x,y]\\subseteq S$$` },
+        { why:`Take any $z$ strictly between $a$ and $b$. Since $a$ is the GREATEST lower bound, anything bigger than it fails to be a lower bound — so some point of $S$ sits below $z$; symmetrically for $b$ and a point above $z$.`, m:`$$a < z<b \\ \\Rightarrow\\ \\exists x\\in S: x < z, \\quad \\exists y\\in S: z < y$$` },
+        { why:`Now $x < z< y$ with $x,y\\in S$ — the hypothesis (property (1)) forces the WHOLE segment $[x,y]$, including $z$, into $S$.`, m:`$$x < z< y,\\ x,y\\in S \\ \\Rightarrow\\ z\\in[x,y]\\subseteq S$$` },
         { why:`$z$ was an arbitrary point of $(a,b)$, so the whole open interval sits inside $S$.`, m:`$$(a,b)\\subseteq S$$` },
         { why:`Combine with $S\\subseteq[a,b]$ from step 1; whether the endpoints $a,b$ themselves belong to $S$ determines which of the four interval types $S$ is.`, m:`$$(a,b)\\subseteq S\\subseteq[a,b] \\ \\Rightarrow\\ S\\in\\{(a,b),\\,[a,b),\\,(a,b],\\,[a,b]\\}$$` }
       ],
       ends:`In the bounded case $S$ is pinned to one of the four familiar shapes. The remaining three cases (bounded only above, only below, or neither) run the identical argument with $\\pm\\infty$ standing in for a missing finite endpoint.`
     },
     cards:[
-      { q:`State the defining "no gaps" property used to characterise intervals.`, a:`If $x,y\\in S$ and $x<y$, then the whole segment $[x,y]$ is contained in $S$.`, kind:'state' },
+      { q:`State the defining "no gaps" property used to characterise intervals.`, a:`If $x,y\\in S$ and $x < y$, then the whole segment $[x,y]$ is contained in $S$.`, kind:'state' },
       { q:`In the bounded case, what two numbers does the proof build the interval endpoints from?`, a:`$a:=\\inf S$ and $b:=\\sup S$.`, kind:'recall' },
       { q:`Trap: does $S=\\mathbb{Q}\\cap[0,1)$ satisfy the "no gaps" property?`, a:`No — e.g. $0,0.5\\in S$ but $[0,0.5]\\not\\subseteq S$ (irrationals in between are missing), so $S$ is correctly NOT classified as an interval.`, kind:'trap' }
     ]
@@ -130,7 +130,7 @@ CONCEPTS.push(
     title:'Nested Intervals Property',
     oneLine:'An infinite chain of closed bounded intervals, each containing the next, always shares at least one common point.',
     statement:`<p>If $I_n=[a_n,b_n]$, $n\\in\\mathbb{N}$, is a nested sequence of closed bounded intervals (meaning $I_1\\supseteq I_2\\supseteq\\cdots\\supseteq I_n\\supseteq I_{n+1}\\supseteq\\cdots$), then there exists a number $\\xi\\in\\mathbb{R}$ such that $\\xi\\in I_n$ for all $n\\in\\mathbb{N}$.</p>`,
-    intuition:`<p>Picture a chain of intervals, each one squeezed inside the last. Because they never grow, and because completeness rules out "gaps" in $\\mathbb{R}$, they can never squeeze a common point out of existence entirely — SOME real number survives in all of them at once. This fails badly for OPEN intervals: $(0,1/n)$ is nested but shares no common point at all, since any candidate point $x>0$ is eventually excluded once $1/n<x$.</p>
+    intuition:`<p>Picture a chain of intervals, each one squeezed inside the last. Because they never grow, and because completeness rules out "gaps" in $\\mathbb{R}$, they can never squeeze a common point out of existence entirely — SOME real number survives in all of them at once. This fails badly for OPEN intervals: $(0,1/n)$ is nested but shares no common point at all, since any candidate point $x>0$ is eventually excluded once $1/n < x$.</p>
       <p><b>Worked micro-example:</b> $I_n=[0,1/n]$. Every $I_n$ contains $0$, and the Archimedean Property (<code>c.2.4.3</code>) shows $0$ is in fact the ONLY common point — but the Nested Intervals Property only guarantees existence of at least one, not uniqueness.</p>`,
     needs:['c.2.3.1','c.2.3.2','c.2.3.6'],
     traps:[
@@ -143,7 +143,7 @@ CONCEPTS.push(
       rungs:[
         { why:`Collect all left endpoints into one set; nestedness ($I_n\\subseteq I_1$) makes $b_1$ an upper bound for the whole set.`, m:`$$\\{a_n : n\\in\\mathbb{N}\\}, \\qquad a_n\\le b_1 \\ \\text{ for all } n$$` },
         { why:`The set of left endpoints is nonempty and bounded above, so Completeness hands us its supremum.`, m:`$$\\xi := \\sup\\{a_n : n\\in\\mathbb{N}\\} \\ \\text{ exists}, \\qquad a_n\\le\\xi\\ \\text{ for all } n$$` },
-        { why:`Fix one index $n$ and show $b_n$ is an upper bound for EVERY $a_k$ — split into two cases by which interval nests inside which.`, m:`$$\\text{if } n\\le k: I_k\\subseteq I_n \\Rightarrow a_k\\le b_k\\le b_n; \\qquad \\text{if } k<n: I_n\\subseteq I_k \\Rightarrow a_k\\le a_n\\le b_n$$` },
+        { why:`Fix one index $n$ and show $b_n$ is an upper bound for EVERY $a_k$ — split into two cases by which interval nests inside which.`, m:`$$\\text{if } n\\le k: I_k\\subseteq I_n \\Rightarrow a_k\\le b_k\\le b_n; \\qquad \\text{if } k < n: I_n\\subseteq I_k \\Rightarrow a_k\\le a_n\\le b_n$$` },
         { why:`Either way $a_k\\le b_n$ for every $k$, so $b_n$ is an upper bound of the whole set of left endpoints — hence at least as big as the LEAST such bound, $\\xi$.`, m:`$$b_n \\text{ upper-bounds } \\{a_k:k\\in\\mathbb{N}\\} \\ \\Rightarrow\\ \\xi\\le b_n$$` },
         { why:`This held for every $n$, so $\\xi$ sits between each interval's own two endpoints.`, m:`$$a_n\\le\\xi\\le b_n \\ \\text{ for all } n\\in\\mathbb{N}$$` },
         { why:`That is exactly membership in every $I_n$ simultaneously.`, m:`$$\\xi\\in I_n=[a_n,b_n] \\ \\text{ for all } n\\in\\mathbb{N}$$` }
@@ -152,7 +152,7 @@ CONCEPTS.push(
     },
     cards:[
       { q:`State the Nested Intervals Property.`, a:`If $I_n=[a_n,b_n]$ is a nested sequence of closed bounded intervals, some $\\xi\\in\\mathbb{R}$ lies in every $I_n$.`, kind:'state' },
-      { q:`Why does the theorem fail for nested OPEN intervals like $(0,1/n)$?`, a:`Because for any candidate $x>0$, the Archimedean Property gives $n$ with $1/n<x$, so $x\\notin(0,1/n)$ — no common point survives; the closedness of each $I_n$ is essential to the proof.`, kind:'trap' },
+      { q:`Why does the theorem fail for nested OPEN intervals like $(0,1/n)$?`, a:`Because for any candidate $x>0$, the Archimedean Property gives $n$ with $1/n < x$, so $x\\notin(0,1/n)$ — no common point survives; the closedness of each $I_n$ is essential to the proof.`, kind:'trap' },
       { q:`How is $\\xi$ constructed in the proof?`, a:`$\\xi:=\\sup\\{a_n:n\\in\\mathbb{N}\\}$ — the supremum of all the left endpoints, which exists by Completeness.`, kind:'recall' }
     ]
   },
@@ -309,7 +309,7 @@ CONCEPTS.push(
       why:`A negative limit means the terms eventually crowd into a neighbourhood of $x$ that lies entirely below $0$ once the margin is chosen exactly equal to $-x$ — squeezing a genuine term below $0$.`,
       rungs:[
         { why:`Suppose for contradiction the limit $x$ is negative; turn the gap into a tolerance.`, m:`$$x<0,\\qquad \\varepsilon:=-x>0$$` },
-        { why:`Convergence traps all sufficiently late terms within $\\varepsilon$ of $x$.`, m:`$$\\exists K:\\ n\\ge K \\Rightarrow x-\\varepsilon<x_n<x+\\varepsilon$$` },
+        { why:`Convergence traps all sufficiently late terms within $\\varepsilon$ of $x$.`, m:`$$\\exists K:\\ n\\ge K \\Rightarrow x-\\varepsilon < x_n < x+\\varepsilon$$` },
         { why:`The right-hand bound, with this particular $\\varepsilon$, collapses to exactly $0$.`, m:`$$x_n < x+\\varepsilon = x+(-x) = 0 \\quad (n\\ge K)$$` },
         { why:`So some term (e.g. $x_K$) is strictly negative — contradicting the hypothesis that $x_n\\ge0$ for all $n$.`, m:`$$x_K<0,\\ \\text{but hypothesis says } x_K\\ge0 \\ \\Rightarrow\\Leftarrow$$` }
       ],
@@ -326,11 +326,11 @@ CONCEPTS.push(
     title:'Convergent sequences inherit their bounds in the limit',
     oneLine:'If every term of a convergent sequence sits between a and b, so does the limit.',
     statement:`<p>If $X=(x_n)$ is a convergent sequence and $a\\le x_n\\le b$ for all $n\\in\\mathbb{N}$, then $a\\le\\lim(x_n)\\le b$.</p>`,
-    intuition:`<p>This is <code>c.3.2.4</code> applied twice, once to shift the lower bound down to $0$ and once to shift the upper bound down to $0$. As with that result, only the WEAK inequalities survive: $a<x_n<b$ for every $n$ only guarantees $a\\le\\lim(x_n)\\le b$, not strict inequalities.</p>
+    intuition:`<p>This is <code>c.3.2.4</code> applied twice, once to shift the lower bound down to $0$ and once to shift the upper bound down to $0$. As with that result, only the WEAK inequalities survive: $a < x_n<b$ for every $n$ only guarantees $a\\le\\lim(x_n)\\le b$, not strict inequalities.</p>
       <p><b>Worked micro-example:</b> $x_n=1-1/n\\in(0,1)$ for all $n\\ge2$, yet $\\lim(x_n)=1$ — the limit sits ON the boundary $b=1$ even though every term is strictly inside.</p>`,
     needs:['c.3.2.4','c.3.1.3'],
     traps:[
-      `Expecting strict bounds $a<x_n<b$ to survive as strict bounds on the limit — false in general; only $a\\le\\lim(x_n)\\le b$ is guaranteed.`,
+      `Expecting strict bounds $a < x_n<b$ to survive as strict bounds on the limit — false in general; only $a\\le\\lim(x_n)\\le b$ is guaranteed.`,
       `Trying to prove this from scratch with a fresh $\\varepsilon$-argument instead of reusing <code>c.3.2.4</code> twice — the shifted-sequence trick is shorter and less error-prone.`
     ],
     proof:{
@@ -691,7 +691,7 @@ CONCEPTS.push(
     title:'Squeeze Theorem examples for functions',
     oneLine:'Squeezing a function between two simple functions with the same limit pins down tricky limits like x^{3/2}→0 and x·sin(1/x)→0 at 0, without ever computing the middle function directly.',
     statement:`<p>Bartle's Examples 4.2.8 apply the (function) Squeeze Theorem — the direct analogue for functions of the sequence Squeeze Theorem <code>c.3.2.7</code> — to evaluate limits that the Algebra of Limits (<code>c.4.2.4</code>) cannot reach directly:</p>
-      <p>(a) $\\lim_{x\\to0}x^{3/2}=0$ for $x>0$: since $x^2\\le x^{3/2}\\le x$ for $0<x\\le1$, and both $x^2,x\\to0$, the middle term is squeezed to $0$.</p>
+      <p>(a) $\\lim_{x\\to0}x^{3/2}=0$ for $x>0$: since $x^2\\le x^{3/2}\\le x$ for $0 < x\\le1$, and both $x^2,x\\to0$, the middle term is squeezed to $0$.</p>
       <p>(f) $\\lim_{x\\to0}\\big(x\\sin(1/x)\\big)=0$: since $-|x|\\le x\\sin(1/x)\\le|x|$ for all $x\\ne0$ (as $|\\sin z|\\le1$ always), and $|x|\\to0$, the limit is $0$.</p>`,
     intuition:`<p>Both examples squeeze a function that is HARD to evaluate directly (its own factor, $\\sin(1/x)$, doesn't even have a limit at $0$ — see <code>c.4.1.10</code>) between two EASY functions with a common, obvious limit. The squeeze never needs to understand the oscillating factor at all — only that it's trapped between $\\pm1$.</p>`,
     needs:['c.3.2.7','c.4.1.8'],
@@ -710,18 +710,18 @@ CONCEPTS.push(
     title:'One-sided (right-hand / left-hand) limits',
     oneLine:'A right-hand limit only looks at points approaching c from above; a left-hand limit only from below.',
     statement:`<p>Let $A\\subseteq\\mathbb{R}$, $f:A\\to\\mathbb{R}$.</p>
-      <p>(i) If $c$ is a cluster point of $A\\cap(c,\\infty)$, then $L$ is the <b>right-hand limit</b> of $f$ at $c$, written $\\lim_{x\\to c^+}f=L$, if for every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0<x-c<\\delta$ implies $|f(x)-L|<\\varepsilon$.</p>
-      <p>(ii) If $c$ is a cluster point of $A\\cap(-\\infty,c)$, then $L$ is the <b>left-hand limit</b> of $f$ at $c$, written $\\lim_{x\\to c^-}f=L$, if for every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0<c-x<\\delta$ implies $|f(x)-L|<\\varepsilon$.</p>`,
-    intuition:`<p>This is the ordinary ε-δ definition of a limit (<code>c.4.1.4</code>) with the neighbourhood of $c$ chopped in half — only $x>c$ counts for the right-hand limit, only $x<c$ for the left-hand one. A function can have BOTH one-sided limits exist while the ordinary (two-sided) limit fails, precisely when the two one-sided limits disagree.</p>
+      <p>(i) If $c$ is a cluster point of $A\\cap(c,\\infty)$, then $L$ is the <b>right-hand limit</b> of $f$ at $c$, written $\\lim_{x\\to c^+}f=L$, if for every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0 < x-c<\\delta$ implies $|f(x)-L|<\\varepsilon$.</p>
+      <p>(ii) If $c$ is a cluster point of $A\\cap(-\\infty,c)$, then $L$ is the <b>left-hand limit</b> of $f$ at $c$, written $\\lim_{x\\to c^-}f=L$, if for every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0 < c-x<\\delta$ implies $|f(x)-L|<\\varepsilon$.</p>`,
+    intuition:`<p>This is the ordinary ε-δ definition of a limit (<code>c.4.1.4</code>) with the neighbourhood of $c$ chopped in half — only $x>c$ counts for the right-hand limit, only $x < c$ for the left-hand one. A function can have BOTH one-sided limits exist while the ordinary (two-sided) limit fails, precisely when the two one-sided limits disagree.</p>
       <p><b>Worked micro-example:</b> $\\operatorname{sgn}(x)$ (the function whose ordinary limit at $0$ was shown not to exist in <code>c.4.1.10</code>) has $\\lim_{x\\to0^+}\\operatorname{sgn}(x)=1$ and $\\lim_{x\\to0^-}\\operatorname{sgn}(x)=-1$ — both one-sided limits exist perfectly well, they simply don't match.</p>`,
     needs:['c.4.1.4','c.4.1.1','c.4.1.10'],
     traps:[
       `Assuming both one-sided limits existing automatically means the (two-sided) limit exists — only true if they also AGREE; $\\operatorname{sgn}(x)$ is the standard counterexample.`,
-      `Forgetting $c$ itself is still excluded ($0<x-c$, not $0\\le x-c$) — a one-sided limit, like an ordinary limit, never depends on $f(c)$.`,
-      `Mixing up which inequality goes with which side — right-hand uses $0<x-c<\\delta$ (i.e. $x>c$), left-hand uses $0<c-x<\\delta$ (i.e. $x<c$).`
+      `Forgetting $c$ itself is still excluded ($0 < x-c$, not $0\\le x-c$) — a one-sided limit, like an ordinary limit, never depends on $f(c)$.`,
+      `Mixing up which inequality goes with which side — right-hand uses $0 < x-c<\\delta$ (i.e. $x>c$), left-hand uses $0 < c-x<\\delta$ (i.e. $x < c$).`
     ],
     cards:[
-      { q:`State the ε-δ definition of the right-hand limit $\\lim_{x\\to c^+}f=L$.`, a:`For every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0<x-c<\\delta \\Rightarrow |f(x)-L|<\\varepsilon$.`, kind:'state' },
+      { q:`State the ε-δ definition of the right-hand limit $\\lim_{x\\to c^+}f=L$.`, a:`For every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0 < x-c<\\delta \\Rightarrow |f(x)-L|<\\varepsilon$.`, kind:'state' },
       { q:`For $\\operatorname{sgn}(x)$, state both one-sided limits at $c=0$.`, a:`$\\lim_{x\\to0^+}\\operatorname{sgn}(x)=1$ and $\\lim_{x\\to0^-}\\operatorname{sgn}(x)=-1$.`, kind:'apply' },
       { q:`Trap: if both one-sided limits of $f$ at $c$ exist, does $\\lim_{x\\to c}f$ automatically exist?`, a:`No — only if the two one-sided limits are EQUAL; $\\operatorname{sgn}(x)$ at $0$ has both existing but disagreeing, so no two-sided limit exists.`, kind:'trap' }
     ]

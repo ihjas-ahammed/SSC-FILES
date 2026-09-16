@@ -10,7 +10,7 @@ CONCEPTS.push(
     needs:[],
     cards:[
       { q:'Rewrite $|x-a|<\\delta$ without absolute value bars.', a:'$a-\\delta < x < a+\\delta$ (an open interval of radius $\\delta$ centred at $a$).', kind:'state' },
-      { q:'Solve $|x-5|<2$ for $x$.', a:'$3<x<7$.', kind:'apply' },
+      { q:'Solve $|x-5|<2$ for $x$.', a:'$3 < x<7$.', kind:'apply' },
       { q:'Why is $|x-a|<\\delta$ called "two-sided" but $x<a+\\delta$ alone is not enough?', a:'Because $|x-a|<\\delta$ also forces $x>a-\\delta$ — it caps $x$ from BOTH sides, not just above.', kind:'trap' }
     ]
   },
@@ -87,12 +87,12 @@ CONCEPTS.push(
   { id:'s.monotone', tier:'school', kind:'definition',
     title:'Increasing and decreasing functions',
     oneLine:'Increasing: bigger input gives a bigger (or equal) output. Decreasing: bigger input gives a smaller output.',
-    intuition:`<p>$f$ is (strictly) <b>increasing</b> on a set if $x_1<x_2 \\Rightarrow f(x_1)<f(x_2)$: moving right along the input always moves you up on the graph. <b>Decreasing</b> is the mirror image: $x_1<x_2 \\Rightarrow f(x_1)>f(x_2)$.</p>
+    intuition:`<p>$f$ is (strictly) <b>increasing</b> on a set if $x_1 < x_2 \\Rightarrow f(x_1) < f(x_2)$: moving right along the input always moves you up on the graph. <b>Decreasing</b> is the mirror image: $x_1 < x_2 \\Rightarrow f(x_1)>f(x_2)$.</p>
       <p><b>Worked micro-example:</b> $f(x)=x^2$. On $(-\\infty,0]$ it is decreasing (as $x$ increases toward $0$, $x^2$ shrinks); on $[0,\\infty)$ it is increasing. The same formula can be monotone on one piece and not on the whole domain.</p>
       <p>"Non-strict" versions (increasing allows equal outputs, i.e. $\\le$) also appear — always check which flavour a statement is using.</p>`,
     needs:['s.function'],
     cards:[
-      { q:'Give the definition of "strictly decreasing" on a set $S$.', a:'For all $x_1,x_2\\in S$: $x_1<x_2 \\Rightarrow f(x_1)>f(x_2)$.', kind:'state' },
+      { q:'Give the definition of "strictly decreasing" on a set $S$.', a:'For all $x_1,x_2\\in S$: $x_1 < x_2 \\Rightarrow f(x_1)>f(x_2)$.', kind:'state' },
       { q:'Is $f(x)=x^3$ increasing on all of $\\mathbb{R}$?', a:'Yes — it is strictly increasing everywhere, even though its slope is $0$ at $x=0$.', kind:'apply' },
       { q:'Trap: does "slope $\\ge0$ everywhere" force strict monotonicity?', a:'No — it only forces non-strict (weak) monotonicity in general; e.g. a function constant on a subinterval has zero slope there yet is still "non-decreasing".', kind:'trap' }
     ]

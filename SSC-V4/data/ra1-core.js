@@ -49,7 +49,7 @@ CONCEPTS.push(
   { id:'c.2.3.4', bartle:'2.3.4', sec:'2.3', kind:'lemma', tier:'core',
     title:'ε-characterisation of the supremum',
     oneLine:'u is the supremum of S exactly when, however close to u you stand from below, some point of S is even closer.',
-    statement:`<p>An upper bound $u$ of a nonempty $S\\subseteq\\mathbb{R}$ is $\\sup S$ if and only if for every $\\varepsilon>0$ there exists $s_\\varepsilon\\in S$ such that $u-\\varepsilon<s_\\varepsilon$.</p>`,
+    statement:`<p>An upper bound $u$ of a nonempty $S\\subseteq\\mathbb{R}$ is $\\sup S$ if and only if for every $\\varepsilon>0$ there exists $s_\\varepsilon\\in S$ such that $u-\\varepsilon < s_\\varepsilon$.</p>`,
     intuition:`<p>This restates "$u$ is the LEAST upper bound" in a form built for $\\varepsilon$-arguments: however small a margin $\\varepsilon$ you allow yourself below the ceiling $u$, the set $S$ still has a point that gets inside that margin — otherwise $u-\\varepsilon$ would itself be a smaller working ceiling, contradicting that $u$ is the least one.</p>
       <p><b>Worked micro-example:</b> $S=(0,1)$, $u=1$. Given any $\\varepsilon>0$, pick $s_\\varepsilon := 1-\\varepsilon/2 \\in S$ (as long as $\\varepsilon<2$, which we may assume). Then $u-\\varepsilon = 1-\\varepsilon < 1-\\varepsilon/2 = s_\\varepsilon$, as required.</p>`,
     needs:['c.2.3.2','s.abs-ineq'],
@@ -70,7 +70,7 @@ CONCEPTS.push(
       ends:`Both directions hold, so the $\\varepsilon$-form and the original least-upper-bound form say exactly the same thing. The $\\varepsilon$-form is the one you will actually reach for inside limit proofs.`
     },
     cards:[
-      { q:`State the ε-characterisation of $\\sup S$.`, a:`$u$ is an upper bound of $S$, and for every $\\varepsilon>0$ there exists $s_\\varepsilon\\in S$ with $u-\\varepsilon<s_\\varepsilon$.`, kind:'state' },
+      { q:`State the ε-characterisation of $\\sup S$.`, a:`$u$ is an upper bound of $S$, and for every $\\varepsilon>0$ there exists $s_\\varepsilon\\in S$ with $u-\\varepsilon < s_\\varepsilon$.`, kind:'state' },
       { q:`For $S=(0,1)$ and $u=1$, exhibit $s_\\varepsilon$ for a given small $\\varepsilon>0$.`, a:`$s_\\varepsilon = 1-\\varepsilon/2$ works, since $1-\\varepsilon<1-\\varepsilon/2<1$.`, kind:'apply' },
       { q:`Trap: does verifying the ε-condition for ONE value of $\\varepsilon$ prove $u=\\sup S$?`, a:`No — it must hold for EVERY $\\varepsilon>0$; a single success proves nothing.`, kind:'trap' }
     ]
@@ -157,7 +157,7 @@ CONCEPTS.push(
   { id:'c.3.4.1', bartle:'3.4.1', sec:'3.4', kind:'definition', tier:'core',
     title:'Subsequence',
     oneLine:'A subsequence picks out infinitely many terms from a sequence, keeping their original left-to-right order.',
-    statement:`<p>Let $X=(x_n)$ be a sequence and let $n_1<n_2<\\cdots<n_k<\\cdots$ be a strictly increasing sequence of natural numbers. Then $X'=(x_{n_k})=(x_{n_1},x_{n_2},\\ldots)$ is a <b>subsequence</b> of $X$.</p>`,
+    statement:`<p>Let $X=(x_n)$ be a sequence and let $n_1 < n_2<\\cdots < n_k<\\cdots$ be a strictly increasing sequence of natural numbers. Then $X'=(x_{n_k})=(x_{n_1},x_{n_2},\\ldots)$ is a <b>subsequence</b> of $X$.</p>`,
     intuition:`<p>You choose infinitely many indices, but they must strictly increase — you can skip ahead as much as you like, but never go backwards and never repeat an index.</p>
       <p><b>Worked micro-example:</b> $X=(1/n)$. Selecting the even indices gives the subsequence $(1/2,1/4,1/6,\\ldots)$. By contrast, a "sequence" built by jumping around out of order, like $(1/2,1/1,1/4,1/3,\\ldots)$, is NOT a subsequence — the index order must strictly increase.</p>`,
     needs:['c.3.1.3'],
@@ -166,7 +166,7 @@ CONCEPTS.push(
       `Confusing a subsequence with the SET of values taken — $((-1)^n)$ has value-set $\\{-1,1\\}$ but infinitely many distinct subsequences (constant $-1$, constant $1$, alternating ones, etc.).`
     ],
     cards:[
-      { q:`What condition must the chosen indices $n_1,n_2,\\ldots$ satisfy to define a subsequence?`, a:`They must be strictly increasing natural numbers: $n_1<n_2<n_3<\\cdots$.`, kind:'state' },
+      { q:`What condition must the chosen indices $n_1,n_2,\\ldots$ satisfy to define a subsequence?`, a:`They must be strictly increasing natural numbers: $n_1 < n_2 < n_3<\\cdots$.`, kind:'state' },
       { q:`Give the subsequence of $X=(1/n)$ using odd indices.`, a:`$(1,\\,1/3,\\,1/5,\\ldots)$.`, kind:'apply' },
       { q:`Trap: is $(x_2,x_1,x_4,x_3,\\ldots)$ a subsequence of $(x_n)$?`, a:`No — the indices $2,1,4,3,\\ldots$ are not strictly increasing.`, kind:'trap' }
     ]

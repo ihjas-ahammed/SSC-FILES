@@ -6,7 +6,7 @@ CONCEPTS.push(
     oneLine: 'Chop $[a,b]$ into non-overlapping pieces and mark one point inside each piece.',
     statement: `A <b>partition</b> of $I:=[a,b]$ is a collection $P=\\{I_1,\\dots,I_n\\}$ of
       non-overlapping closed subintervals whose union is $[a,b]$, written $I_i:=[x_{i-1},x_i]$
-      where $a=x_0<x_1<\\cdots<x_n=b$. Choosing a point $t_i\\in I_i$ for each $i$ gives a
+      where $a=x_0 < x_1<\\cdots < x_n=b$. Choosing a point $t_i\\in I_i$ for each $i$ gives a
       <b>tagged partition</b> $\\dot P=\\{(I_1,t_1),\\dots,(I_n,t_n)\\}$; the $t_i$ are its <b>tags</b>.`,
     intuition: `This is the bookkeeping behind a Riemann sum: you need both the pieces the
       interval is cut into and a chosen "tag" point inside each piece where the function will
@@ -61,7 +61,7 @@ CONCEPTS.push(
     title: 'A Gauge That Forces a Tag at an Endpoint',
     oneLine: 'A gauge can shrink toward a point so hard that only that point can tag its own subinterval.',
     statement: `On $I:=[0,1]$ let $\\delta(0):=\\tfrac12$ and $\\delta(x):=\\tfrac12 x$ for
-      $0<x\\le1$. For $0<t\\le1$, $[t-\\delta(t),t+\\delta(t)]=[\\tfrac12t,\\tfrac32t]$, which
+      $0 < x\\le1$. For $0 < t\\le1$, $[t-\\delta(t),t+\\delta(t)]=[\\tfrac12t,\\tfrac32t]$, which
       never contains $0$. Hence in any $\\delta$-fine partition of $I$, the only subinterval
       touching $0$ must be tagged at $0$ itself.`,
     intuition: `This is why gauges are strictly more powerful than a single number $\\delta$:
@@ -99,7 +99,7 @@ CONCEPTS.push(
     oneLine: 'A monotone function never fails to have one-sided limits — the worst it can do is jump.',
     statement: `Let $I\\subseteq\\mathbb{R}$ be an interval and $f:I\\to\\mathbb{R}$ increasing on
       $I$. If $c\\in I$ is not an endpoint of $I$, then
-      $$\\lim_{x\\to c^-}f(x)=\\sup\\{f(x):x\\in I,\\,x<c\\},\\qquad
+      $$\\lim_{x\\to c^-}f(x)=\\sup\\{f(x):x\\in I,\\,x < c\\},\\qquad
         \\lim_{x\\to c^+}f(x)=\\inf\\{f(x):x\\in I,\\,x>c\\}.$$
       (For $f$ decreasing, the roles of $\\sup$ and $\\inf$ swap.)`,
     intuition: `Monotonicity means the values to the left of $c$ are all bounded above by
@@ -113,26 +113,26 @@ CONCEPTS.push(
        function can still jump at $c$; see 5.6.3.`
     ],
     proof: {
-      idea: `Show that $L:=\\sup\\{f(x):x\\in I,x<c\\}$ literally is the left-hand limit, by
+      idea: `Show that $L:=\\sup\\{f(x):x\\in I,x < c\\}$ literally is the left-hand limit, by
         turning "not an upper bound" into an $\\varepsilon$-$\\delta$ statement.`,
       why: `Monotonicity is exactly what makes a supremum behave like a limit: once you get
         $\\varepsilon$-close in value, you are automatically squeezed for every point further
         right.`,
       rungs: [
-        { why: 'Name the candidate limit: since $f$ is increasing, values left of $c$ are bounded above by $f(c)$, so this set has a supremum.', m: '$$L:=\\sup\\{f(x):x\\in I,\\,x<c\\}$$ (exists, as the set is nonempty and bounded above by $f(c)$)' },
-        { why: 'Given $\\varepsilon>0$, $L-\\varepsilon$ is not an upper bound of the set, so some point just left of $c$ already gets close to $L$.', m: '$\\exists\\,y_\\varepsilon\\in I,\\ y_\\varepsilon<c:\\quad L-\\varepsilon<f(y_\\varepsilon)$' },
-        { why: 'Convert this into an $x$-window using monotonicity: any $y$ between $y_\\varepsilon$ and $c$ has $f(y)$ trapped between $f(y_\\varepsilon)$ and $L$.', m: 'set $\\delta_\\varepsilon:=c-y_\\varepsilon>0$; for $y\\in I$ with $0<c-y<\\delta_\\varepsilon$: $L-\\varepsilon<f(y_\\varepsilon)\\le f(y)\\le L$' },
-        { why: 'Read off convergence directly from that squeeze.', m: '$|f(y)-L|<\\varepsilon$ whenever $y\\in I,\\ 0<c-y<\\delta_\\varepsilon$' },
-        { why: 'This is precisely the definition of the left-hand limit; the right-hand case is symmetric with $\\inf$.', m: '$$\\lim_{x\\to c^-}f(x)=L=\\sup\\{f(x):x\\in I,x<c\\}$$' }
+        { why: 'Name the candidate limit: since $f$ is increasing, values left of $c$ are bounded above by $f(c)$, so this set has a supremum.', m: '$$L:=\\sup\\{f(x):x\\in I,\\,x < c\\}$$ (exists, as the set is nonempty and bounded above by $f(c)$)' },
+        { why: 'Given $\\varepsilon>0$, $L-\\varepsilon$ is not an upper bound of the set, so some point just left of $c$ already gets close to $L$.', m: '$\\exists\\,y_\\varepsilon\\in I,\\ y_\\varepsilon < c:\\quad L-\\varepsilon < f(y_\\varepsilon)$' },
+        { why: 'Convert this into an $x$-window using monotonicity: any $y$ between $y_\\varepsilon$ and $c$ has $f(y)$ trapped between $f(y_\\varepsilon)$ and $L$.', m: 'set $\\delta_\\varepsilon:=c-y_\\varepsilon>0$; for $y\\in I$ with $0 < c-y<\\delta_\\varepsilon$: $L-\\varepsilon < f(y_\\varepsilon)\\le f(y)\\le L$' },
+        { why: 'Read off convergence directly from that squeeze.', m: '$|f(y)-L|<\\varepsilon$ whenever $y\\in I,\\ 0 < c-y<\\delta_\\varepsilon$' },
+        { why: 'This is precisely the definition of the left-hand limit; the right-hand case is symmetric with $\\inf$.', m: '$$\\lim_{x\\to c^-}f(x)=L=\\sup\\{f(x):x\\in I,x < c\\}$$' }
       ],
       ends: `Both one-sided limits exist and are finite at every interior point of $I$, for any
         monotone $f$ — no continuity assumption is needed.`
     },
     cards: [
-      { q: 'For $f$ increasing on $I$ and $c$ interior, what does $\\lim_{x\\to c^-}f(x)$ equal?', a: '$\\sup\\{f(x):x\\in I,\\,x<c\\}$.', kind: 'state' },
+      { q: 'For $f$ increasing on $I$ and $c$ interior, what does $\\lim_{x\\to c^-}f(x)$ equal?', a: '$\\sup\\{f(x):x\\in I,\\,x < c\\}$.', kind: 'state' },
       { q: 'For $f$ increasing on $I$ and $c$ interior, what does $\\lim_{x\\to c^+}f(x)$ equal?', a: '$\\inf\\{f(x):x\\in I,\\,x>c\\}$.', kind: 'state' },
       { q: 'Does Theorem 5.6.1 guarantee $f$ is continuous at $c$?', a: 'No — it only guarantees both one-sided limits exist; they may still disagree, giving a jump.', kind: 'trap' },
-      { q: 'What replaces $\\sup$/$\\inf$ in Theorem 5.6.1 if $f$ is decreasing instead of increasing?', a: 'The roles swap: $\\lim_{x\\to c^-}f=\\inf\\{f(x):x<c\\}$ and $\\lim_{x\\to c^+}f=\\sup\\{f(x):x>c\\}$.', kind: 'recall' }
+      { q: 'What replaces $\\sup$/$\\inf$ in Theorem 5.6.1 if $f$ is decreasing instead of increasing?', a: 'The roles swap: $\\lim_{x\\to c^-}f=\\inf\\{f(x):x < c\\}$ and $\\lim_{x\\to c^+}f=\\sup\\{f(x):x>c\\}$.', kind: 'recall' }
     ]
   },
   {
@@ -143,7 +143,7 @@ CONCEPTS.push(
       $I$, and $c\\in I$ not an endpoint of $I$. The following are equivalent:
       (a) $f$ is continuous at $c$;
       (b) $\\lim_{x\\to c^-}f=f(c)=\\lim_{x\\to c^+}f$;
-      (c) $\\sup\\{f(x):x\\in I,\\,x<c\\}=f(c)=\\inf\\{f(x):x\\in I,\\,x>c\\}$.`,
+      (c) $\\sup\\{f(x):x\\in I,\\,x < c\\}=f(c)=\\inf\\{f(x):x\\in I,\\,x>c\\}$.`,
     intuition: `This combines "continuity means the limit equals the value" (Chapter 4) with
       the explicit $\\sup/\\inf$ formulas of 5.6.1: for a monotone function, continuity at $c$
       reduces to a numeric equality you can check by computing two extrema and comparing them
@@ -160,15 +160,15 @@ CONCEPTS.push(
         limiting statement and becomes an equation between three numbers.`,
       rungs: [
         { why: 'Recall the Chapter 4 fact linking continuity to one-sided limits.', m: '$f$ continuous at $c$ $\\iff$ $\\lim_{x\\to c^-}f=f(c)=\\lim_{x\\to c^+}f$ — this is (a) $\\iff$ (b)' },
-        { why: 'Substitute the explicit values Theorem 5.6.1 gives for those two limits.', m: 'by 5.6.1: $\\lim_{x\\to c^-}f=\\sup\\{f(x):x<c\\}$ and $\\lim_{x\\to c^+}f=\\inf\\{f(x):x>c\\}$' },
-        { why: 'Plugging these in turns (b) into (c) with no extra work.', m: '(b) $\\iff$ $\\sup\\{f(x):x<c\\}=f(c)=\\inf\\{f(x):x>c\\}$ — this is (b) $\\iff$ (c)' }
+        { why: 'Substitute the explicit values Theorem 5.6.1 gives for those two limits.', m: 'by 5.6.1: $\\lim_{x\\to c^-}f=\\sup\\{f(x):x < c\\}$ and $\\lim_{x\\to c^+}f=\\inf\\{f(x):x>c\\}$' },
+        { why: 'Plugging these in turns (b) into (c) with no extra work.', m: '(b) $\\iff$ $\\sup\\{f(x):x < c\\}=f(c)=\\inf\\{f(x):x>c\\}$ — this is (b) $\\iff$ (c)' }
       ],
       ends: `(a), (b), (c) are three phrasings of the same fact; (c) is the version you compute
         with in practice.`
     },
     cards: [
       { q: 'State condition (c) of Corollary 5.6.2 in your own words.', a: 'The supremum of $f$ over points left of $c$, the value $f(c)$, and the infimum of $f$ over points right of $c$ all coincide.', kind: 'state' },
-      { q: 'How would you check continuity of an increasing $f$ at an interior point $c$ using 5.6.2?', a: 'Compute $\\sup\\{f(x):x<c\\}$ and $\\inf\\{f(x):x>c\\}$ and check both equal $f(c)$.', kind: 'apply' },
+      { q: 'How would you check continuity of an increasing $f$ at an interior point $c$ using 5.6.2?', a: 'Compute $\\sup\\{f(x):x < c\\}$ and $\\inf\\{f(x):x>c\\}$ and check both equal $f(c)$.', kind: 'apply' },
       { q: 'Does Corollary 5.6.2 apply at an endpoint of $I$?', a: 'No — it requires $c$ to be an interior (non-endpoint) point of $I$.', kind: 'trap' }
     ]
   },
@@ -178,7 +178,7 @@ CONCEPTS.push(
     oneLine: 'A monotone function is continuous exactly where it does not jump.',
     statement: `For $f$ increasing on interval $I$ and $c\\in I$ not an endpoint, define the
       <b>jump</b> of $f$ at $c$ as
-      $$j_f(c):=\\lim_{x\\to c^+}f-\\lim_{x\\to c^-}f=\\inf\\{f(x):x\\in I,x>c\\}-\\sup\\{f(x):x\\in I,x<c\\}.$$
+      $$j_f(c):=\\lim_{x\\to c^+}f-\\lim_{x\\to c^-}f=\\inf\\{f(x):x\\in I,x>c\\}-\\sup\\{f(x):x\\in I,x < c\\}.$$
       If $a\\in I$ is the left endpoint, $j_f(a):=\\lim_{x\\to a^+}f-f(a)$; if $b\\in I$ is the
       right endpoint, $j_f(b):=f(b)-\\lim_{x\\to b^-}f$. Then, for any $c\\in I$: $f$ is
       continuous at $c$ if and only if $j_f(c)=0$.`,
@@ -198,8 +198,8 @@ CONCEPTS.push(
       why: `"Jump equals zero" is just a repackaging of "the numbers that must be equal for
         continuity really are equal."`,
       rungs: [
-        { why: 'Translate condition (c) of Corollary 5.6.2 into "gap = 0" at an interior point.', m: 'for interior $c$: $j_f(c)=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x<c\\}=0\\iff$ (c) of Cor. 5.6.2 $\\iff f$ continuous at $c$' },
-        { why: 'Note the jump can never be negative for an increasing function, since the right floor cannot undercut the left ceiling.', m: '$j_f(c)\\ge0$ always, because $\\sup\\{f(x):x<c\\}\\le f(c)\\le\\inf\\{f(x):x>c\\}$' },
+        { why: 'Translate condition (c) of Corollary 5.6.2 into "gap = 0" at an interior point.', m: 'for interior $c$: $j_f(c)=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x < c\\}=0\\iff$ (c) of Cor. 5.6.2 $\\iff f$ continuous at $c$' },
+        { why: 'Note the jump can never be negative for an increasing function, since the right floor cannot undercut the left ceiling.', m: '$j_f(c)\\ge0$ always, because $\\sup\\{f(x):x < c\\}\\le f(c)\\le\\inf\\{f(x):x>c\\}$' },
         { why: 'At a left endpoint $a\\in I$ there is only a right-hand limit to compare against $f(a)$.', m: '$j_f(a):=\\lim_{x\\to a^+}f-f(a)=0\\iff f(a)=\\lim_{x\\to a^+}f\\iff f$ continuous at $a$' },
         { why: 'The right-endpoint case is symmetric, using only the left-hand limit.', m: '$j_f(b):=f(b)-\\lim_{x\\to b^-}f=0\\iff f$ continuous at $b$' }
       ],
@@ -207,7 +207,7 @@ CONCEPTS.push(
         function at $c$ is exactly the statement $j_f(c)=0$.`
     },
     cards: [
-      { q: 'Define the jump $j_f(c)$ of an increasing function at an interior point $c$.', a: '$j_f(c)=\\lim_{x\\to c^+}f-\\lim_{x\\to c^-}f=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x<c\\}$.', kind: 'state' },
+      { q: 'Define the jump $j_f(c)$ of an increasing function at an interior point $c$.', a: '$j_f(c)=\\lim_{x\\to c^+}f-\\lim_{x\\to c^-}f=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x < c\\}$.', kind: 'state' },
       { q: 'For $f$ increasing, can $j_f(c)$ ever be negative?', a: 'No — for an increasing function $j_f(c)\\ge0$ everywhere.', kind: 'trap' },
       { q: 'What single condition on the jump characterizes continuity of a monotone $f$ at $c$?', a: '$j_f(c)=0$.', kind: 'state' },
       { q: 'How is the jump defined differently at a left endpoint versus an interior point?', a: 'At a left endpoint $a$, $j_f(a):=\\lim_{x\\to a^+}f-f(a)$, using only the one-sided limit that exists there — not the difference of two one-sided limits.', kind: 'recall' }
@@ -240,7 +240,7 @@ CONCEPTS.push(
         at level $k$ comes for free from monotonicity: jumps cannot overlap or exceed the total
         rise of $f$.`,
       rungs: [
-        { why: 'For any finitely many ordered points, their jumps add up to at most the total rise of $f$ across $I$ — the jumps cannot overlap.', m: 'for $a\\le x_1<x_2<\\cdots<x_n\\le b$: $j_f(x_1)+j_f(x_2)+\\cdots+j_f(x_n)\\le f(b)-f(a)$' },
+        { why: 'For any finitely many ordered points, their jumps add up to at most the total rise of $f$ across $I$ — the jumps cannot overlap.', m: 'for $a\\le x_1 < x_2<\\cdots < x_n\\le b$: $j_f(x_1)+j_f(x_2)+\\cdots+j_f(x_n)\\le f(b)-f(a)$' },
         { why: 'Turn "total jump is bounded" into "few big jumps": if more than $k$ points had jump $\\ge(f(b)-f(a))/k$, their sum alone would exceed the total rise.', m: 'for fixed $k\\in\\mathbb N$, the set $\\{x\\in I: j_f(x)\\ge (f(b)-f(a))/k\\}$ has at most $k$ points' },
         { why: 'Every discontinuity has strictly positive jump (5.6.3), so $D$ is exactly the union of these threshold sets over all $k$.', m: '$D=\\{x\\in I:j_f(x)>0\\}=\\bigcup_{k=1}^{\\infty}\\{x\\in I:j_f(x)\\ge (f(b)-f(a))/k\\}$' },
         { why: 'A countable union of finite sets is countable.', m: '$D$ is a countable union of finite sets $\\implies D$ is countable' }
@@ -250,7 +250,7 @@ CONCEPTS.push(
     },
     cards: [
       { q: 'If $f$ is monotone on an interval $I$, what can you say about its set of discontinuities?', a: 'It is countable (finite or countably infinite), never uncountable.', kind: 'state' },
-      { q: 'What quantity bounds the sum of jumps at any finite set of points $x_1<\\dots<x_n$ in $[a,b]$?', a: '$f(b)-f(a)$, the total rise of $f$ — jumps at distinct points cannot overlap.', kind: 'recall' },
+      { q: 'What quantity bounds the sum of jumps at any finite set of points $x_1<\\dots < x_n$ in $[a,b]$?', a: '$f(b)-f(a)$, the total rise of $f$ — jumps at distinct points cannot overlap.', kind: 'recall' },
       { q: 'A monotone function on $[0,1]$ jumps at every rational point. Does this contradict Theorem 5.6.4?', a: 'No — the rationals are countable, so this is fully consistent with (and a standard example of) the theorem.', kind: 'apply' },
       { q: 'True or false: a monotone function can only have finitely many discontinuities.', a: 'False — it can have countably infinitely many (e.g. one at every rational), just never uncountably many.', kind: 'trap' }
     ]
@@ -286,9 +286,9 @@ CONCEPTS.push(
         of the inverse comes from geometry, not estimation.`,
       rungs: [
         { why: 'Confirm the setup: $J$ is an interval (so it makes sense to ask if $g$ is continuous "at a point of $J$"), and $g$ exists because $f$ is injective.', m: '$J:=f(I)$ is an interval (Thm 5.3.10, since $f$ is continuous on interval $I$); $f$ strictly increasing $\\implies$ injective on $I$ $\\implies$ $g:J\\to\\mathbb R$ with $g(f(x))=x$ exists' },
-        { why: 'Show $g$ inherits the order: a bigger output of $f$ must come from a bigger input.', m: 'for $y_1<y_2$ in $J$, write $y_1=f(x_1),\\,y_2=f(x_2)$; if $x_1\\ge x_2$ then $f(x_1)\\ge f(x_2)$, contradicting $y_1<y_2$ — so $x_1<x_2$, i.e. $g(y_1)<g(y_2)$' },
+        { why: 'Show $g$ inherits the order: a bigger output of $f$ must come from a bigger input.', m: 'for $y_1 < y_2$ in $J$, write $y_1=f(x_1),\\,y_2=f(x_2)$; if $x_1\\ge x_2$ then $f(x_1)\\ge f(x_2)$, contradicting $y_1 < y_2$ — so $x_1 < x_2$, i.e. $g(y_1) < g(y_2)$' },
         { why: 'Suppose for contradiction $g$ is discontinuous at some $c\\in J$; by 5.6.3 this means a nonzero jump.', m: 'suppose $g$ discontinuous at $c\\in J$; by Thm 5.6.3, $\\lim_{y\\to c^-}g<\\lim_{y\\to c^+}g$' },
-        { why: 'Pick a candidate value strictly between those two one-sided limits of $g$.', m: 'choose $x$ with $\\lim_{y\\to c^-}g<x<\\lim_{y\\to c^+}g$ and $x\\ne g(c)$' },
+        { why: 'Pick a candidate value strictly between those two one-sided limits of $g$.', m: 'choose $x$ with $\\lim_{y\\to c^-}g < x<\\lim_{y\\to c^+}g$ and $x\\ne g(c)$' },
         { why: 'Strict monotonicity of $g$ rules out any $y\\in J$ actually attaining this $x$ as $g(y)$.', m: 'no $y\\in J$ has $g(y)=x$, so $x\\notin g(J)=I$' },
         { why: 'But $x$ sits strictly between values that are limits of points of $I$, so $x$ ought to be trapped inside $I$ — contradicting that $I$ is an interval.', m: '$x\\notin I$ contradicts $I$ being an interval, since $x$ lies between elements of $g(J)=I$' }
       ],

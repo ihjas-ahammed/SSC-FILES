@@ -109,14 +109,14 @@ $$|g(x)-g(c)|=\\left|\\frac1x-\\frac1c\\right|=\\frac{|c-x|}{xc}.$$
 <li>By the Boundedness Theorem, $f(I):=\\{f(x):x\\in I\\}$ is a nonempty bounded subset of $\\mathbb{R}$, so $s^*:=\\sup f(I)$ exists.</li>
 <li>For each $n\\in\\mathbb{N}$, since $s^*-1/n$ is not an upper bound of $f(I)$, there exists $x_n\\in I$ with</li>
 </ol>
-$$s^*-\\frac1n<f(x_n)\\le s^*.$$
+$$s^*-\\frac1n < f(x_n)\\le s^*.$$
 <ol start="3">
 <li>$(x_n)$ is a bounded sequence in $I$, so by Bolzano–Weierstrass it has a subsequence $(x_{n_r})\\to x^*$.</li>
 <li>Since $I$ is closed, $x^*\\in I$.</li>
-<li>Since $f$ is continuous at $x^*$, $f(x_{n_r})\\to f(x^*)$. But also $s^*-1/n_r<f(x_{n_r})\\le s^*$ for every $r$, and $1/n_r\\to0$, so by the Squeeze Theorem $f(x_{n_r})\\to s^*$.</li>
+<li>Since $f$ is continuous at $x^*$, $f(x_{n_r})\\to f(x^*)$. But also $s^*-1/n_r < f(x_{n_r})\\le s^*$ for every $r$, and $1/n_r\\to0$, so by the Squeeze Theorem $f(x_{n_r})\\to s^*$.</li>
 <li>By uniqueness of limits, $f(x^*)=s^*=\\sup f(I)$, so $x^*$ is an absolute maximum point of $f$ on $I$.</li>
 </ol>
-<p>The construction of an absolute minimum point $x_*$ with $f(x_*)=\\inf f(I)$ is identical, using $s_*-1/n<f(x_n)\\le s_*$. $\\blacksquare$</p>`,
+<p>The construction of an absolute minimum point $x_*$ with $f(x_*)=\\inf f(I)$ is identical, using $s_*-1/n < f(x_n)\\le s_*$. $\\blacksquare$</p>`,
     trap:`Assuming the maximum exists merely because $f(I)$ is bounded — boundedness only guarantees $\\sup f(I)$ exists as a real number; the entire content of the theorem is that this supremum is actually <i>attained</i> by some point of $I$. Also, skipping the explicit Squeeze Theorem step to conclude $f(x_{n_r})\\to s^*$ is a common shortcut that loses marks — it does not follow merely from $f(x_{n_r})\\to f(x^*)$ alone.` },
 
   { id:'q.ra2.m1.09', course:'ra2', module:'ra2.m1', marks:2,
@@ -134,13 +134,13 @@ $$s^*-\\frac1n<f(x_n)\\le s^*.$$
     source:'exam-pattern',
     prompt:`State and prove the Location of Roots Theorem, and deduce Bolzano's Intermediate Value Theorem.`,
     tests:['c.5.3.5','c.5.3.7'],
-    approach:`<p>First prove the special "sign-change $\\Rightarrow$ root" case (Location of Roots) via the <b>Bisection Method</b>: build nested closed intervals halving in length each step, use the <b>Nested Intervals Property</b> to pin down a candidate point, then pass to the limit using continuity. Deduce the general IVT for $f(a)<k<f(b)$ by applying the root case to $g(x):=f(x)-k$.</p>`,
-    solution:`<p><b>Location of Roots Theorem (5.3.5).</b> Let $I=[a,b]$ and $f:I\\to\\mathbb{R}$ be continuous on $I$. If $f(a)<0<f(b)$ (or $f(a)>0>f(b)$), then there exists $c\\in(a,b)$ with $f(c)=0$.</p>
-<p><b>Proof (bisection).</b> Assume $f(a)<0<f(b)$. Let $I_1:=[a_1,b_1]:=[a,b]$, midpoint $p_1:=\\tfrac12(a_1+b_1)$. If $f(p_1)=0$, take $c:=p_1$, done. Otherwise, keep the half on which the sign change persists: if $f(p_1)>0$ set $I_2:=[a_1,p_1]$; if $f(p_1)<0$ set $I_2:=[p_1,b_1]$. In either case $f(a_2)<0$, $f(b_2)>0$. Repeating, we obtain nested closed intervals $I_k=[a_k,b_k]$ with</p>
+    approach:`<p>First prove the special "sign-change $\\Rightarrow$ root" case (Location of Roots) via the <b>Bisection Method</b>: build nested closed intervals halving in length each step, use the <b>Nested Intervals Property</b> to pin down a candidate point, then pass to the limit using continuity. Deduce the general IVT for $f(a) < k< f(b)$ by applying the root case to $g(x):=f(x)-k$.</p>`,
+    solution:`<p><b>Location of Roots Theorem (5.3.5).</b> Let $I=[a,b]$ and $f:I\\to\\mathbb{R}$ be continuous on $I$. If $f(a)<0 < f(b)$ (or $f(a)>0>f(b)$), then there exists $c\\in(a,b)$ with $f(c)=0$.</p>
+<p><b>Proof (bisection).</b> Assume $f(a)<0 < f(b)$. Let $I_1:=[a_1,b_1]:=[a,b]$, midpoint $p_1:=\\tfrac12(a_1+b_1)$. If $f(p_1)=0$, take $c:=p_1$, done. Otherwise, keep the half on which the sign change persists: if $f(p_1)>0$ set $I_2:=[a_1,p_1]$; if $f(p_1)<0$ set $I_2:=[p_1,b_1]$. In either case $f(a_2)<0$, $f(b_2)>0$. Repeating, we obtain nested closed intervals $I_k=[a_k,b_k]$ with</p>
 $$f(a_k)<0,\\quad f(b_k)>0,\\quad b_k-a_k=\\frac{b-a}{2^{k-1}}\\to0,$$
 <p>(or the process terminates by locating an exact root). By the Nested Intervals Property, there is a point $c$ belonging to every $I_k$; since $b_k-a_k\\to0$, both $a_k\\to c$ and $b_k\\to c$. Since $f$ is continuous at $c$, $f(a_k)\\to f(c)$ and $f(b_k)\\to f(c)$. As $f(a_k)<0$ for all $k$, $f(c)\\le0$; as $f(b_k)>0$ for all $k$, $f(c)\\ge0$. Hence $f(c)=0$. $\\blacksquare$</p>
-<p><b>Bolzano's IVT (5.3.7).</b> Let $I$ be an interval, $f:I\\to\\mathbb{R}$ continuous on $I$. If $a,b\\in I$ and $k\\in\\mathbb{R}$ satisfies $f(a)<k<f(b)$, then there exists $c$ between $a$ and $b$ with $f(c)=k$.</p>
-<p><b>Proof.</b> Suppose $a<b$ (the case $b<a$ is symmetric). Let $g(x):=f(x)-k$; then $g$ is continuous on $[a,b]$ with $g(a)<0<g(b)$. By the Location of Roots Theorem there is $c\\in(a,b)$ with $g(c)=0$, i.e. $f(c)=k$. $\\blacksquare$</p>`,
+<p><b>Bolzano's IVT (5.3.7).</b> Let $I$ be an interval, $f:I\\to\\mathbb{R}$ continuous on $I$. If $a,b\\in I$ and $k\\in\\mathbb{R}$ satisfies $f(a) < k< f(b)$, then there exists $c$ between $a$ and $b$ with $f(c)=k$.</p>
+<p><b>Proof.</b> Suppose $a<b$ (the case $b<a$ is symmetric). Let $g(x):=f(x)-k$; then $g$ is continuous on $[a,b]$ with $g(a)<0 < g(b)$. By the Location of Roots Theorem there is $c\\in(a,b)$ with $g(c)=0$, i.e. $f(c)=k$. $\\blacksquare$</p>`,
     trap:`Presenting the bisection construction without naming the Nested Intervals Property, or without checking $b_k-a_k\\to0$ — this length condition is what forces $a_k$ and $b_k$ to the <i>same</i> limit $c$; skipping it leaves the argument incomplete. For the IVT, a common error is re-deriving bisection from scratch for the value $k$ instead of the one-line reduction $g:=f-k$; also forgetting to handle (or state symmetry for) the case $b<a$.` },
 
   { id:'q.ra2.m1.11', course:'ra2', module:'ra2.m1', marks:5,
@@ -151,7 +151,7 @@ $$f(a_k)<0,\\quad f(b_k)>0,\\quad b_k-a_k=\\frac{b-a}{2^{k-1}}\\to0,$$
     approach:`<p>To prove existence of a root without solving explicitly: verify continuity of $f$ on the interval, evaluate $f$ at the two endpoints, and confirm a sign change; conclude via the Location of Roots Theorem. Do <i>not</i> attempt to find the exact root.</p>`,
     solution:`<p>$f(x)=xe^x-2$ is continuous on $[0,1]$, being a product of the continuous functions $x$ and $e^x$.</p>
 $$f(0)=0\\cdot e^0-2=-2<0,\\qquad f(1)=1\\cdot e^1-2=e-2\\approx0.718>0.$$
-<p>Since $f$ is continuous on $[0,1]$ and $f(0)<0<f(1)$, the Location of Roots Theorem guarantees a point $c\\in(0,1)$ with $f(c)=0$, i.e. a solution of $xe^x=2$ in $(0,1)$.</p>
+<p>Since $f$ is continuous on $[0,1]$ and $f(0)<0 < f(1)$, the Location of Roots Theorem guarantees a point $c\\in(0,1)$ with $f(c)=0$, i.e. a solution of $xe^x=2$ in $(0,1)$.</p>
 <p>(One may narrow $c$ further by bisection: $f(0.5)\\approx-1.176<0$, $f(0.75)\\approx-0.412<0$, $f(0.875)\\approx+0.099>0$, so $c\\in(0.75,0.875)$, and iterating gives $c\\approx0.8516$ to error less than $10^{-2}$.)</p>`,
     trap:`Asserting existence of the root without first stating that $f$ is continuous on the interval — continuity is a hypothesis, not automatic. Also: the theorem gives existence, not uniqueness — do not claim the root is the only one without a separate monotonicity argument.` },
 
@@ -166,7 +166,7 @@ $$p(x)=x^n\\Big(a_n+\\frac{a_{n-1}}{x}+\\cdots+\\frac{a_0}{x^n}\\Big).$$
 <p>As $|x|\\to\\infty$, the bracketed term $\\to a_n>0$, so there exists $R>0$ such that for $|x|\\ge R$ the bracket is $>a_n/2>0$, hence has the same sign as $a_n$ (positive). Since $n$ is odd, $x^n$ has the same sign as $x$.</p>
 <p>At $x=R>0$: $p(R)$ has the sign of $R^n\\cdot(\\text{positive})$, i.e. $p(R)>0$.</p>
 <p>At $x=-R$: $p(-R)$ has the sign of $(-R)^n\\cdot(\\text{positive})$; since $n$ is odd, $(-R)^n=-R^n<0$, so $p(-R)<0$.</p>
-<p>Thus $p(-R)<0<p(R)$. Since $p$ is continuous on $\\mathbb{R}$ (a polynomial), in particular on $[-R,R]$, the Location of Roots Theorem gives $c\\in(-R,R)$ with $p(c)=0$.</p>`,
+<p>Thus $p(-R) < 0 < p(R)$. Since $p$ is continuous on $\\mathbb{R}$ (a polynomial), in particular on $[-R,R]$, the Location of Roots Theorem gives $c\\in(-R,R)$ with $p(c)=0$.</p>`,
     trap:`Not using the oddness of $n$ correctly: for even $n$, $x^n$ has the <i>same</i> sign at $\\pm R$ and the argument breaks down (e.g. $x^2+1$ has no real root) — the proof must explicitly say where "$n$ odd" enters. Also, merely asserting $p(x)\\to\\pm\\infty$ at the two ends without the bracket/sign argument for a genuine $R$ is an incomplete proof.` },
 
   { id:'q.ra2.m1.13', course:'ra2', module:'ra2.m1', marks:2,
@@ -212,7 +212,7 @@ $$g(x_n)-g(u_n)=\\Big(n+\\frac1n\\Big)^2-n^2=2+\\frac{1}{n^2}\\to2.$$
     approach:`<p>A Lipschitz bound $|f(x)-f(u)|\\le K|x-u|$ converts immediately into a uniform-continuity proof: choose $\\delta=\\varepsilon/K$, since $K$ is a single global constant with no point-dependence and no preliminary restriction needed. To apply the theorem, find any global Lipschitz constant.</p>`,
     solution:`<p><b>Definition (5.4.4).</b> $f:A\\to\\mathbb{R}$ is Lipschitz on $A$ if there is $K>0$ with $|f(x)-f(u)|\\le K|x-u|$ for all $x,u\\in A$.</p>
 <p><b>Theorem (5.4.5).</b> If $f$ is Lipschitz on $A$, then $f$ is uniformly continuous on $A$.</p>
-<p><b>Proof.</b> Given $\\varepsilon>0$, let $\\delta:=\\varepsilon/K$. If $x,u\\in A$ and $|x-u|<\\delta$, then $|f(x)-f(u)|\\le K|x-u|<K\\cdot(\\varepsilon/K)=\\varepsilon$. So $f$ is uniformly continuous on $A$. $\\blacksquare$</p>
+<p><b>Proof.</b> Given $\\varepsilon>0$, let $\\delta:=\\varepsilon/K$. If $x,u\\in A$ and $|x-u|<\\delta$, then $|f(x)-f(u)|\\le K|x-u| < K\\cdot(\\varepsilon/K)=\\varepsilon$. So $f$ is uniformly continuous on $A$. $\\blacksquare$</p>
 <p><b>Application.</b> For $x,u\\in[0,b]$: $|x^2-u^2|=|x+u|\\,|x-u|\\le2b\\,|x-u|$ (since $0\\le x,u\\le b$). So $f(x)=x^2$ is Lipschitz on $[0,b]$ with $K=2b$, and by the theorem $f$ is uniformly continuous on $[0,b]$.</p>`,
     trap:`The theorem is a <i>sufficient</i> condition only — never conclude "not Lipschitz $\\Rightarrow$ not uniformly continuous" (this is false, as $\\sqrt x$ on $[0,1]$ shows). Also, the constant $K$ must genuinely bound the difference quotient for <i>all</i> $x,u\\in A$, not one derived only near a single point.` },
 

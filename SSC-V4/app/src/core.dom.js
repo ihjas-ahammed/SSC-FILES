@@ -4,6 +4,24 @@
 
 const DOM = (function () {
 
+  const HTML_TAG_NAMES = 'p|b|i|u|strong|em|code|ul|ol|li|br|hr|table|tr|td|th|tbody|thead|h[1-6]|blockquote|pre|small|sub|sup|div|span|a|button|nav|svg|path|circle';
+  const VALID_HTML_TAG_RE = new RegExp('</?(?:' + HTML_TAG_NAMES + ')(?=[\\s/>])[^>]*>', 'gi');
+
+  /* Protect mathematical inequalities (e.g. $x<y$, $u-\\varepsilon<s_\\varepsilon$, 1/n < x)
+     so the browser HTML parser does not mistake "<" for an opening HTML tag. */
+  function sanitizeMathHtml(s) {
+    if (typeof s !== 'string' || s.indexOf('<') === -1) return s;
+    const tags = [];
+    const masked = s.replace(VALID_HTML_TAG_RE, function (match) {
+      tags.push(match);
+      return '\x00TAG' + (tags.length - 1) + '\x00';
+    });
+    const safe = masked.replace(/</g, '&lt;');
+    return safe.replace(/\x00TAG(\d+)\x00/g, function (_, idx) {
+      return tags[parseInt(idx, 10)];
+    });
+  }
+
   /* el('div', {class, text, html, on:{click}, ...attrs}, children) */
   function el(tag, attrs, kids) {
     const node = document.createElement(tag);
@@ -12,7 +30,7 @@ const DOM = (function () {
       if (v == null || v === false) continue;
       if (k === 'class') node.className = v;
       else if (k === 'text') node.textContent = v;
-      else if (k === 'html') node.innerHTML = v;            /* authored content only */
+      else if (k === 'html') node.innerHTML = sanitizeMathHtml(v);            /* authored content only */
       else if (k === 'on') for (const ev in v) node.addEventListener(ev, v[ev]);
       else if (k === 'style' && typeof v === 'object') Object.assign(node.style, v);
       else node.setAttribute(k, v === true ? '' : v);

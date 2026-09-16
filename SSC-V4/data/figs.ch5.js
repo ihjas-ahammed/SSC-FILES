@@ -62,7 +62,7 @@ FIGS['fig.unif']={
 FIGS['fig.ivt']={
   xr:[0,4], yr:[-2.2,2.6], ratio:.6,
   legend:[{c:'var(--accent)',t:'f continuous on [a,b]'},{c:'var(--good)',t:'a root must exist'}],
-  cap:'$f(a)<0<f(b)$ and $f$ is continuous on the whole of $[a,b]$, so the graph cannot get from '+
+  cap:'$f(a)<0 < f(b)$ and $f$ is continuous on the whole of $[a,b]$, so the graph cannot get from '+
       'below the axis to above it without touching it. Continuity is what forbids a jump; the '+
       '<em>closed</em> interval is what stops the crossing escaping out of the domain.',
   draw(P){
