@@ -77,9 +77,9 @@ CONCEPTS.push(
       idea: `Use $-|a| \\le a \\le |a|$ and $-|b| \\le b \\le |b|$ and add the two inequalities.`,
       why: `Because $-x \\le y \\le x$ is logically equivalent to $|y| \\le x$.`,
       rungs: [
-        { why: 'Write the fundamental bounds for both $a$ and $b$.', m: '$-|a| \\le a \\le |a| \\quad \\text{and} \\quad -|b| \\le b \\le |b|$' },
-        { why: 'Add the two inequalities together.', m: '-(|a| + |b|) \\le a + b \\le (|a| + |b|)' },
-        { why: 'Translate this double inequality back into absolute value notation.', m: '|a + b| \\le |a| + |b|' }
+        { why: 'Write the fundamental bounds for both $a$ and $b$.', m: '$$-|a| \\le a \\le |a| \\quad \\text{and} \\quad -|b| \\le b \\le |b|$$' },
+        { why: 'Add the two inequalities together.', m: '$$-( |a| + |b| ) \\le a + b \\le (|a| + |b|)$$' },
+        { why: 'Translate this double inequality back into absolute value notation.', m: '$$|a + b| \\le |a| + |b|$$' }
       ],
       ends: 'The Triangle Inequality $|a+b| \\le |a|+|b|$ is established.'
     },
@@ -87,6 +87,39 @@ CONCEPTS.push(
       { q: 'State the Triangle Inequality for real numbers.', a: '$|a + b| \\le |a| + |b|$ for all $a, b \\in \\mathbb{R}$.', kind: 'state' },
       { q: 'What is the Reverse Triangle Inequality bound on $|a - b|$?', a: '$|a - b| \\ge ||a| - |b||$.', kind: 'recall' },
       { q: 'Rewrite the inequality $|x - 5| < 2$ as an open interval.', a: '$5 - 2 < x < 5 + 2$, which is $(3, 7)$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.2.1.9', bartle: '2.1.9', sec: '2.1', kind: 'theorem', tier: 'core',
+    title: 'Order Limit Property (Positive Margin Theorem)',
+    oneLine: 'If a nonnegative number is strictly smaller than every positive number, it has no choice but to be exactly 0.',
+    statement: `If $a \\in \\mathbb{R}$ is such that:
+      $$0 \\le a < \\varepsilon \\quad \\text{for every } \\varepsilon > 0$$
+      then $a = 0$.`,
+    intuition: `<p>Think of $\\varepsilon > 0$ as a challenge: no matter how tiny a microscopic gap you demand (e.g. $\\varepsilon = 10^{-100}$)$, a$ is forced to be strictly smaller than it.</p>
+      <p>Could $a$ be positive, say $a = 0.0001$? No, because the examiner could simply pick $\\varepsilon = a/2 = 0.00005$, and then $a < \\varepsilon$ would fail! Since $a$ cannot be positive and cannot be negative ($a \\ge 0$), it must be exactly $0$.</p>
+      <p>This theorem is used repeatedly throughout real analysis to prove that two numbers $x$ and $y$ are equal: just show that $|x - y| < \\varepsilon$ for every $\\varepsilon > 0$.</p>`,
+    needs: ['c.2.1.7'],
+    traps: [
+      `Assuming $a < \\varepsilon$ for just ONE $\\varepsilon$ proves $a = 0$. It must hold for ALL $\\varepsilon > 0$!`,
+      `Forgetting the nonnegativity hypothesis $a \\ge 0$: any negative number like $a = -5$ is strictly less than every $\\varepsilon > 0$, but is not $0$.`
+    ],
+    proof: {
+      idea: `Use proof by contradiction: suppose $a > 0$, then choose $\\varepsilon_0 := a/2 > 0$ to contradict the hypothesis $a < \\varepsilon$.`,
+      why: `Because if $a$ were positive, the midpoint $\\varepsilon_0 = a/2$ would be a valid positive number that is strictly smaller than $a$.`,
+      rungs: [
+        { why: 'Suppose for contradiction that $a > 0$.', m: '$$a > 0$$' },
+        { why: 'Choose a specific positive tolerance strictly smaller than $a$, namely its half.', m: '$$\\varepsilon_0 := \\frac{a}{2} > 0$$' },
+        { why: 'Apply the hypothesis to this specific $\\varepsilon_0$.', m: '$$a < \\varepsilon_0 = \\frac{a}{2} \\implies 2a < a \\implies a < 0$$' },
+        { why: 'This contradicts the assumption that $a > 0$.', m: '$$a < 0 \\text{ contradicts } a > 0 \\implies\\Leftarrow$$' }
+      ],
+      ends: 'Therefore $a = 0$. This fundamental result is the backbone of limit uniqueness and infimum bounds.'
+    },
+    cards: [
+      { q: 'State Theorem 2.1.9 for a real number $a \\in \\mathbb{R}$.', a: 'If $0 \\le a < \\varepsilon$ for every $\\varepsilon > 0$, then $a = 0$.', kind: 'state' },
+      { q: 'How does the proof of Theorem 2.1.9 deduce a contradiction if $a > 0$?', a: 'By setting $\\varepsilon_0 = a/2 > 0$, which yields $a < a/2$, implying $a < 0$, a contradiction.', kind: 'recall' },
+      { q: 'Why is the condition $a \\ge 0$ essential in Theorem 2.1.9?', a: 'Because negative numbers also satisfy $a < \\varepsilon$ for every $\\varepsilon > 0$, yet they are not zero.', kind: 'trap' }
     ]
   },
 

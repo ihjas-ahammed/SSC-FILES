@@ -128,7 +128,8 @@ CONCEPTS.push(
   { id:'c.3.1.4', bartle:'3.1.4', sec:'3.1', kind:'theorem', tier:'core',
     title:'Uniqueness of limits',
     oneLine:'A sequence cannot converge to two different numbers.',
-    statement:`<p>A sequence in $\\mathbb{R}$ can have at most one limit.</p>`,
+    statement:`<p>A sequence in $\\mathbb{R}$ can have at most one limit. That is, if a sequence $X = (x_n)$ of real numbers converges to $x' \\in \\mathbb{R}$ and also converges to $x'' \\in \\mathbb{R}$, then:
+      $$x' = x''$$</p>`,
     intuition:`<p>If $x'$ and $x''$ were both limits, then eventually the terms would be simultaneously trapped close to both — but two fixed numbers can't both be "arbitrarily close" to the same wandering terms unless they are, in fact, the same number. The clean way to see this: compare $x'$ to $x''$ by routing the comparison through a term $x_n$ of the sequence, using the add-and-subtract trick.</p>`,
     needs:['c.3.1.3','s.triangle-ineq'],
     traps:[
@@ -259,7 +260,9 @@ CONCEPTS.push(
   { id:'c.3.4.8', bartle:'3.4.8', sec:'3.4', kind:'theorem', tier:'core',
     title:'The Bolzano–Weierstrass Theorem',
     oneLine:'Every bounded sequence of real numbers has a convergent subsequence.',
-    statement:`<p>A bounded sequence of real numbers has a convergent subsequence.</p>`,
+    statement:`<p>A bounded sequence of real numbers has a convergent subsequence.</p>
+      <p>Explicitly: if $X=(x_n)$ is a sequence in $\\mathbb{R}$ and there exists $M > 0$ such that $|x_n| \\le M$ for all $n \\in \\mathbb{N}$, then there exists a subsequence $X'=(x_{n_k})$ of $X$ and a real number $x^* \\in \\mathbb{R}$ such that:
+      $$\\lim_{k\\to\\infty} x_{n_k} = x^*$$</p>`,
     intuition:`<p>A bounded sequence lives inside some fixed interval $[a,b]$ forever. The Monotone Subsequence Theorem (<code>c.3.4.7</code>) already guarantees SOME monotone subsequence hides inside any sequence at all; that subsequence, being monotone AND trapped inside $[a,b]$, has nowhere left to run off to — it must settle down to a limit. (This "monotone + bounded $\\Rightarrow$ convergent" fact is the Monotone Convergence Theorem of §3.3, and it is itself ultimately a consequence of the Completeness Property <code>c.2.3.6</code>: a bounded increasing sequence converges to its own supremum.)</p>`,
     needs:['c.3.4.7','c.3.3.2'],
     figs:['fig.bw'],

@@ -4,7 +4,11 @@ CONCEPTS.push(
   { id:'c.2.4.3', bartle:'2.4.3', sec:'2.4', kind:'theorem', tier:'core',
     title:'The Archimedean Property',
     oneLine:'No real number is larger than every natural number — the naturals climb without limit.',
-    statement:`<p>If $x\\in\\mathbb{R}$, then there exists $n_x\\in\\mathbb{N}$ such that $x\\le n_x$.</p>`,
+    statement:`<p><b>The Archimedean Property:</b> If $x\\in\\mathbb{R}$, then there exists $n_x\\in\\mathbb{N}$ such that $x\\le n_x$. Equivalently, the subset $\\mathbb{N}$ of natural numbers is not bounded above in $\\mathbb{R}$.</p>
+      <p><b>Fundamental Corollaries (Equivalent Forms):</b></p>
+      <p>• <b>(2.4.4) Infimum of Reciprocals:</b> If $S = \\{1/n : n \\in \\mathbb{N}\\}$, then $\\inf S = 0$.</p>
+      <p>• <b>(2.4.5) Arbitrarily Small Reciprocals:</b> If $t > 0$, there exists $n_t \\in \\mathbb{N}$ such that $0 < \\dfrac{1}{n_t} < t$.</p>
+      <p>• <b>(2.4.6) Squeeze Between Consecutive Integers:</b> If $y > 0$, there exists a unique natural number $n_y \\in \\mathbb{N}$ such that $n_y - 1 \\le y < n_y$.</p>`,
     intuition:`<p>However far out on the real line you point, the natural numbers $1,2,3,\\ldots$ eventually walk past that point. This looks obvious from a picture of the number line, but it cannot be proved from the algebraic and order axioms of $\\mathbb{R}$ alone — it genuinely needs the Completeness Property, together with the fact that $\\mathbb{N}$ is closed under adding $1$ (the Inductive Property).</p>
       <p><b>Worked micro-example:</b> given $x=1{,}000{,}000.5$, simply take $n_x=1{,}000{,}001\\in\\mathbb{N}$; the content of the theorem is that SOME such natural number always exists for every real $x$, not that a specific one is always easy to name.</p>`,
     needs:['c.2.3.2','c.2.3.6','s.contradiction'],
@@ -32,13 +36,44 @@ CONCEPTS.push(
     ]
   },
 
+  { id:'c.2.4.8', bartle:'2.4.8', sec:'2.4', kind:'theorem', tier:'core',
+    title:'The Density Theorem (Rationals in ℝ)',
+    oneLine:'Between any two distinct real numbers, however close, there is a rational number.',
+    statement:`<p>If $x$ and $y$ are real numbers with $x < y$, then there exists a rational number $r \\in \\mathbb{Q}$ such that:
+      $$x < r < y$$
+      Consequently, between any two distinct real numbers there are infinitely many rational numbers; the set $\\mathbb{Q}$ is <b>dense</b> in $\\mathbb{R}$.</p>`,
+    intuition:`<p>No matter how close together two numbers are — even $0.000000001$ apart — the rational fractions are so densely packed on the real line that at least one fraction (and in fact infinitely many) falls right into that gap.</p>
+      <p>The trick: make the denominator $n$ large enough so the step size $1/n$ is strictly narrower than the gap $y - x$ (using Archimedean Corollary 2.4.5). Then the integer multiples $m/n$ march across the line with steps smaller than the gap, so at least one multiple $m/n$ is guaranteed to step right into $(x, y)$!</p>`,
+    needs:['c.2.4.3','c.2.3.6'],
+    traps:[
+      `Confusing density with uncountability: $\\mathbb{Q}$ is dense in $\\mathbb{R}$, yet $\\mathbb{Q}$ is countable while $\\mathbb{R}$ is uncountable!`,
+      `Forgetting that the theorem guarantees INFINITELY many rationals between $x$ and $y$, not just one.`
+    ],
+    proof:{
+      idea:`Choose denominator $n$ so $1/n < y - x$, ensuring $ny - nx > 1$. Then the interval $(nx, ny)$ has length $> 1$, so it must contain an integer $m$. Then $r = m/n$ satisfies $x < r < y$.`,
+      why:`An interval of length greater than $1$ must contain at least one integer. Scaling the gap $(x, y)$ by $n$ expands it to length $> 1$, and Corollary 2.4.6 provides the integer $m$.`,
+      rungs:[
+        { why:`Assume without loss of generality $x > 0$ (if $x \\le 0$, shift by an integer). Since $y - x > 0$, Corollary 2.4.5 supplies a denominator $n$.`, m:`$$y - x > 0 \\implies \\exists\\, n \\in \\mathbb{N}: \\frac{1}{n} < y - x \\iff nx + 1 < ny$$` },
+        { why:`Apply Corollary 2.4.6 to $nx > 0$ to get the integer $m$ just above $nx$.`, m:`$$\\exists\\, m \\in \\mathbb{N}: m - 1 \\le nx < m$$` },
+        { why:`From $m - 1 \\le nx$, we have $m \\le nx + 1$. Combine with $nx + 1 < ny$.`, m:`$$nx < m \\le nx + 1 < ny \\implies nx < m < ny$$` },
+        { why:`Divide through by $n > 0$ to obtain the desired rational $r = m/n$.`, m:`$$x < \\frac{m}{n} < y \\implies r := \\frac{m}{n} \\in \\mathbb{Q} \\text{ with } x < r < y$$` }
+      ],
+      ends:`The rational $r = m/n$ lies strictly between $x$ and $y$. Repeating this process yields infinitely many rationals in $(x, y)$.`
+    },
+    cards:[
+      { q:`State the Density Theorem for rational numbers.`, a:`If $x, y \\in \\mathbb{R}$ with $x < y$, there exists a rational number $r \\in \\mathbb{Q}$ such that $x < r < y$.`, kind:'state' },
+      { q:`How is the denominator $n$ chosen in the proof of the Density Theorem?`, a:`By the Archimedean property such that $1/n < y - x$, so that $ny - nx > 1$.`, kind:'recall' },
+      { q:`Trap: does density of a set imply that it is uncountable?`, a:`No — $\\mathbb{Q}$ is dense in $\\mathbb{R}$ but is countable.`, kind:'trap' }
+    ]
+  },
+
   { id:'c.2.4.9', bartle:'2.4.9', sec:'2.4', kind:'corollary', tier:'core',
     title:'Density of the irrationals in ℝ',
     oneLine:'Between any two distinct real numbers, however close, sits an irrational number.',
     statement:`<p>If $x,y\\in\\mathbb{R}$ with $x<y$, then there exists an irrational number $z$ such that $x<z<y$.</p>`,
     intuition:`<p>Bartle's Density Theorem (2.4.8) says the RATIONALS are dense in $\\mathbb{R}$: between any two reals sits a rational. This corollary says the irrationals are equally dense — the trick is to use a known irrational number ($\\sqrt2$) as a "yardstick" that converts one density statement into the other by scaling.</p>
       <p><b>Worked micro-example:</b> for $x=0$, $y=0.001$, apply the argument to $x/\\sqrt2=0$ and $y/\\sqrt2\\approx0.000707$ to get a rational $r$ in between (e.g. $r=0.0005$), giving the irrational $z=r\\sqrt2\\approx0.000707\\in(0,0.001)$.</p>`,
-    needs:['c.2.4.3','s.contradiction'],
+    needs:['c.2.4.8','c.2.4.3','s.contradiction'],
     traps:[
       `Assuming density of $\\mathbb{Q}$ automatically hands you density of the irrationals for free — it needs an actual argument (dividing by an irrational such as $\\sqrt2$), not just "there are more irrationals so obviously".`,
       `Forgetting to check the constructed $z=r\\sqrt2$ really is irrational — a NONZERO rational times an irrational number is always irrational, which is why $r\\ne0$ must be arranged.`
@@ -122,7 +157,61 @@ CONCEPTS.push(
     ]
   },
 
-  { id:'c.2.5.3', bartle:'2.5.3', sec:'2.5', kind:'example', tier:'core',
+  { id:'c.2.5.3', bartle:'2.5.3', sec:'2.5', kind:'theorem', tier:'core',
+    title:'Nested Intervals Theorem: Uniqueness of Common Point',
+    oneLine:'If nested closed bounded intervals have lengths shrinking to 0, their intersection is exactly one point.',
+    statement:`<p>If $I_n = [a_n, b_n]$, $n \\in \\mathbb{N}$, is a nested sequence of closed, bounded intervals such that the lengths $b_n - a_n$ satisfy:
+      $$\\inf\\{b_n - a_n : n \\in \\mathbb{N}\\} = 0$$
+      then the number $\\xi$ contained in $I_n$ for all $n \\in \\mathbb{N}$ is <b>unique</b>; that is:
+      $$\\bigcap_{n=1}^\\infty I_n = \\{\\xi\\}$$</p>`,
+    intuition:`<p>Theorem 2.5.2 guaranteed that at least ONE point $\\xi$ survives in the intersection of any nested closed bounded intervals. But if the intervals are fat (e.g. $[0, 1 + 1/n]$), their intersection $[0, 1]$ contains infinitely many points.</p>
+      <p>This theorem adds the crucial condition: if the intervals shrink down to zero length, there is no room left for two different points! Any two points would have a positive distance between them, which would eventually exceed the shrinking interval width.</p>`,
+    needs:['c.2.5.2','c.2.1.9'],
+    proof:{
+      idea:`Let $\\xi = \\sup\\{a_n\\}$ and $\\eta = \\inf\\{b_n\\}$. Show $\\xi \\le \\eta$, and that every common point $x$ satisfies $\\xi \\le x \\le \\eta$. Then use $\\inf\\{b_n - a_n\\} = 0$ and Theorem 2.1.9 to force $\\eta - \\xi = 0$.`,
+      why:`Because any common point is an upper bound for all $a_n$ and lower bound for all $b_n$, it must lie in $[\\xi, \\eta]$. When $\\eta = \\xi$, that interval collapses to a single point.`,
+      rungs:[
+        { why:`From the proof of 2.5.2, $\\xi = \\sup\\{a_n\\}$ and $\\eta = \\inf\\{b_n\\}$ satisfy $\\xi \\le \\eta$, and $x \\in \\bigcap I_n \\iff \\xi \\le x \\le \\eta$.`, m:`$$a_n \\le \\xi \\le \\eta \\le b_n \\quad \\text{for all } n \\in \\mathbb{N}$$` },
+        { why:`Subtract the inequalities to bound the gap $\\eta - \\xi$ by the length of $I_n$.`, m:`$$0 \\le \\eta - \\xi \\le b_n - a_n \\quad \\text{for all } n \\in \\mathbb{N}$$` },
+        { why:`Since $\\inf\\{b_n - a_n : n \\in \\mathbb{N}\\} = 0$, for every $\\varepsilon > 0$ there exists $m \\in \\mathbb{N}$ such that $b_m - a_m < \\varepsilon$.`, m:`$$\\forall\\, \\varepsilon > 0, \\; \\exists m \\in \\mathbb{N}: \\; 0 \\le \\eta - \\xi \\le b_m - a_m < \\varepsilon$$` },
+        { why:`By Theorem 2.1.9 (Positive Margin Property), $0 \\le \\eta - \\xi < \\varepsilon$ for all $\\varepsilon > 0$ forces $\\eta - \\xi = 0$.`, m:`$$\\eta - \\xi = 0 \\implies \\xi = \\eta$$` }
+      ],
+      ends:`Since $\\xi \\le x \\le \\eta$ and $\\xi = \\eta$, the only possible common point is $x = \\xi$. The intersection consists of the single point $\\{\\xi\\}$.`
+    },
+    cards:[
+      { q:`State Theorem 2.5.3 on the uniqueness of the point in nested intervals.`, a:`If $I_n = [a_n, b_n]$ is nested closed bounded intervals with $\\inf\\{b_n - a_n : n \\in \\mathbb{N}\\} = 0$, then $\\bigcap_{n=1}^\\infty I_n = \\{\\xi\\}$ is a singleton.`, kind:'state' },
+      { q:`What earlier result does the proof invoke to deduce $\\eta - \\xi = 0$?`, a:`Theorem 2.1.9: if $0 \\le a < \\varepsilon$ for all $\\varepsilon > 0$, then $a = 0$.`, kind:'recall' },
+      { q:`Trap: does $\\bigcap I_n$ contain a unique point for $I_n = [0, 1 + 1/n]$?`, a:`No — lengths shrink to $1$, not $0$; the intersection is $[0, 1]$, which contains infinitely many points.`, kind:'trap' }
+    ]
+  },
+
+  { id:'c.2.5.4', bartle:'2.5.4', sec:'2.5', kind:'theorem', tier:'core',
+    title:'Uncountability of ℝ (Cantor Nested Intervals Proof)',
+    oneLine:'The real numbers are uncountable — any proposed list of reals misses at least one number trapped in nested intervals.',
+    statement:`<p>The set $\\mathbb{R}$ of real numbers is not countable (uncountable); equivalently, the closed unit interval $I = [0, 1]$ is uncountable.</p>`,
+    intuition:`<p>Cantor gave two legendary proofs that $\\mathbb{R}$ is uncountable: his 1874 proof using nested intervals, and his 1891 diagonal argument. Bartle 2.5.4 presents the 1874 Nested Intervals proof.</p>
+      <p>Suppose someone claims to list all numbers in $[0, 1]$ as $x_1, x_2, x_3, \\dots$. We divide $[0, 1]$ into three parts and pick a subinterval $I_1$ that misses $x_1$. Then divide $I_1$ and pick $I_2$ missing $x_2$, and so on. The Nested Intervals Property guarantees a point $\\xi$ sits in ALL $I_n$. But $\\xi$ cannot be $x_1$, cannot be $x_2$, cannot be any $x_k$ on the list! So no list could ever be complete.</p>`,
+    needs:['c.2.5.2','c.1.3.1'],
+    proof:{
+      idea:`Assume $[0, 1]$ is countable: list it as $\\{x_1, x_2, \\dots\\}$. Construct nested closed intervals $I_1 \\supseteq I_2 \\supseteq \\cdots$ such that $x_n \\notin I_n$. By Nested Intervals, $\\xi \\in \\bigcap I_n$ exists, but $\\xi \\ne x_n$ for all $n$, contradicting the enumeration.`,
+      why:`Each step deliberately excludes one listed element while keeping a closed bounded subinterval alive; completeness then manufactures an unlisted point.`,
+      rungs:[
+        { why:`Assume for contradiction that $I = [0, 1]$ is countable; enumerate it completely.`, m:`$$I = \\{x_1, x_2, x_3, \\ldots, x_n, \\ldots\\}$$` },
+        { why:`Divide $[0, 1]$ into three equal subintervals $[0, 1/3], [1/3, 2/3], [2/3, 1]$. At least one subinterval does not contain $x_1$; call it $I_1 = [a_1, b_1]$.`, m:`$$I_1 \\subseteq I, \\quad x_1 \\notin I_1$$` },
+        { why:`Inductively, given $I_k$, divide it into three subintervals. At least one does not contain $x_{k+1}$; call it $I_{k+1}$.`, m:`$$I_{k+1} \\subseteq I_k, \\quad x_{k+1} \\notin I_{k+1}$$` },
+        { why:`This produces a nested sequence of nonempty closed bounded intervals $I_1 \\supseteq I_2 \\supseteq \\cdots$. By Nested Intervals (2.5.2), a common point exists.`, m:`$$\\exists\\, \\xi \\in \\mathbb{R}: \\quad \\xi \\in I_n \\quad \\text{for all } n \\in \\mathbb{N}$$` },
+        { why:`Since $\\xi \\in I_n$ for all $n$, and $x_n \\notin I_n$, $\\xi$ cannot equal $x_n$ for any $n \\in \\mathbb{N}$.`, m:`$$\\xi \\ne x_n \\quad \\text{for all } n \\in \\mathbb{N} \\implies \\xi \\notin \\{x_1, x_2, \\ldots\\} \\implies\\Leftarrow$$` }
+      ],
+      ends:`The assumption that $[0, 1]$ is countable leads to a contradiction. Hence $[0, 1]$ and $\\mathbb{R}$ are uncountable.`
+    },
+    cards:[
+      { q:`State Theorem 2.5.4.`, a:`The set $\\mathbb{R}$ of real numbers is uncountable.`, kind:'state' },
+      { q:`How does the nested intervals proof of uncountability construct each $I_{n}$?`, a:`By trisecting $I_{n-1}$ and choosing a closed subinterval that excludes $x_n$.`, kind:'recall' },
+      { q:`Trap: why does the surviving point $\\xi$ contradict the enumeration?`, a:`Because $\\xi \\in I_n$ for all $n$, but $x_n \\notin I_n$, so $\\xi$ is not equal to any member of the enumerated list.`, kind:'trap' }
+    ]
+  },
+
+  { id:'c.2.5.5', bartle:'2.5.5', sec:'2.5', kind:'example', tier:'core',
     title:'The Cantor Ternary Set',
     oneLine:'Start with $[0, 1]$ and repeatedly delete the open middle third of every remaining interval: what survives is uncountable, nowhere dense, and has total length zero.',
     statement:`<p>Let $F_0 = [0, 1]$. Remove the open middle third $(1/3, 2/3)$ to get $F_1 = [0, 1/3] \\cup [2/3, 1]$. In general, $F_k$ is obtained by removing the open middle third from each of the $2^{k-1}$ intervals in $F_{k-1}$. The <b>Cantor Set</b> is the intersection $\\mathbb{F} = \\bigcap_{n=1}^\\infty F_n$.</p>`,
@@ -167,6 +256,40 @@ CONCEPTS.push(
       { q:`State the theorem: what does convergence imply about boundedness?`, a:`Every convergent sequence of real numbers is bounded.`, kind:'state' },
       { q:`What tolerance $\\varepsilon$ does the standard proof use, and why is that choice not special?`, a:`$\\varepsilon=1$ — any FIXED positive number works; the point is just to get one concrete numerical bound on the tail.`, kind:'recall' },
       { q:`Trap: does boundedness of $(x_n)$ imply it converges?`, a:`No — $((-1)^n)$ is bounded but divergent. Boundedness is necessary, not sufficient, for convergence.`, kind:'trap' }
+    ]
+  },
+
+  { id:'c.3.2.3', bartle:'3.2.3', sec:'3.2', kind:'theorem', tier:'core',
+    title:'Limit Theorems: Algebra of Limits for Sequences',
+    oneLine:'Limits respect sequence addition, subtraction, multiplication, and nonzero division.',
+    statement:`<p>Let $X = (x_n)$ and $Y = (y_n)$ be sequences of real numbers that converge to $x$ and $y$, respectively, and let $c \\in \\mathbb{R}$.</p>
+      <p>(a) The sequences $X + Y$, $X - Y$, $X \\cdot Y$, and $cX$ converge to $x + y$, $x - y$, $xy$, and $cx$, respectively:
+      $$\\lim(x_n + y_n) = x + y, \\quad \\lim(x_n - y_n) = x - y, \\quad \\lim(x_n y_n) = xy, \\quad \\lim(c x_n) = c x$$</p>
+      <p>(b) If $Z = (z_n)$ is a sequence of nonzero real numbers converging to $z \\ne 0$, then the quotient sequence $X/Z = (x_n / z_n)$ converges to $x/z$:
+      $$\\lim\\left(\\frac{x_n}{z_n}\\right) = \\frac{x}{z}$$</p>`,
+    intuition:`<p>This is the fundamental toolkit for computing limits without returning to $\\varepsilon$-$K$ definitions. If you know the limits of the individual components, you can perform standard arithmetic directly on the limits.</p>
+      <p>For addition, split the tolerance: $\\varepsilon/2$ error from $x_n$ and $\\varepsilon/2$ from $y_n$ add to at most $\\varepsilon$. For multiplication, use the identity $x_n y_n - xy = x_n(y_n - y) + y(x_n - x)$ and the fact that a convergent sequence is bounded (Theorem 3.2.2).</p>`,
+    needs:['c.3.1.3','c.3.2.2','s.triangle-ineq'],
+    traps:[
+      `Applying the quotient rule when the denominator limit is $0$: $z = 0$ is strictly forbidden!`,
+      `Assuming $\\lim(x_n + y_n) = x + y$ implies both $(x_n)$ and $(y_n)$ converge separately — false! E.g. $x_n = n$ and $y_n = -n$ diverge, but $x_n + y_n = 0 \\to 0$.`
+    ],
+    proof:{
+      idea:`For sum: triangle inequality $|(x_n+y_n)-(x+y)| \\le |x_n-x| + |y_n-y| < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$. For product: add and subtract $x_n y$, bound $|x_n| \\le M$ via boundedness of convergent sequences. For quotient: bound $|z_n| \\ge |z|/2$ away from 0.`,
+      why:`Triangle inequality splits the combined error into separate errors that each individual convergence can crush below any required fraction of $\\varepsilon$.`,
+      rungs:[
+        { why:`(Sum) Given $\\varepsilon > 0$, choose $K_1, K_2$ for $\\varepsilon/2$ bounds on $x_n$ and $y_n$. For $n \\ge K = \\max\\{K_1, K_2\\}$:`, m:`$$|(x_n + y_n) - (x + y)| \\le |x_n - x| + |y_n - y| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$` },
+        { why:`(Product) Rewrite the error by inserting and subtracting $x_n y$:`, m:`$$|x_n y_n - xy| = |x_n(y_n - y) + y(x_n - x)| \\le |x_n||y_n - y| + |y||x_n - x|$$` },
+        { why:`By Theorem 3.2.2, $(x_n)$ is bounded: $|x_n| \\le M$. Set $M' = \\max\\{M, |y|\\} > 0$. Choose indices so $|y_n - y| < \\varepsilon/(2M')$ and $|x_n - x| < \\varepsilon/(2M')$.`, m:`$$|x_n y_n - xy| \\le M'|y_n - y| + M'|x_n - x| < M'\\frac{\\varepsilon}{2M'} + M'\\frac{\\varepsilon}{2M'} = \\varepsilon$$` },
+        { why:`(Quotient) Since $z \\ne 0$, set $\\alpha = |z|/2 > 0$. Past some $K_1$, $|z_n - z| < \\alpha \\implies |z_n| > |z|/2$. Then:`, m:`$$\\left|\\frac{1}{z_n} - \\frac{1}{z}\\right| = \\frac{|z - z_n|}{|z_n||z|} \\le \\frac{|z_n - z|}{\\frac{1}{2}|z|^2} \\to 0$$` },
+        { why:`Apply the product rule to $x_n \\cdot (1/z_n)$ to finish.`, m:`$$\\lim\\left(\\frac{x_n}{z_n}\\right) = \\lim x_n \\cdot \\lim\\left(\\frac{1}{z_n}\\right) = x \\cdot \\frac{1}{z} = \\frac{x}{z}$$` }
+      ],
+      ends:`All four algebraic operations (sum, difference, product, quotient) commute with taking sequence limits.`
+    },
+    cards:[
+      { q:`State the product rule for sequence limits.`, a:`If $\\lim(x_n) = x$ and $\\lim(y_n) = y$, then $\\lim(x_n y_n) = xy$.`, kind:'state' },
+      { q:`What property of convergent sequences is essential to prove the product rule?`, a:`Theorem 3.2.2: every convergent sequence is bounded ($|x_n| \\le M$).`, kind:'recall' },
+      { q:`Trap: if $(x_n + y_n)$ converges, must $(x_n)$ and $(y_n)$ both converge?`, a:`No — e.g. $x_n = (-1)^n$ and $y_n = -(-1)^n$ both diverge, but $x_n + y_n = 0$ converges.`, kind:'trap' }
     ]
   },
 
@@ -289,6 +412,27 @@ CONCEPTS.push(
     ]
   },
 
+  { id:'c.3.3.1', bartle:'3.3.1', sec:'3.3', kind:'definition', tier:'core',
+    title:'Monotone sequences',
+    oneLine:'A sequence is monotone if its terms move in only one direction — always going up or always going down.',
+    statement:`<p>Let $X = (x_n)$ be a sequence of real numbers.</p>
+      <p>(a) $X$ is <b>increasing</b> (or non-decreasing) if $x_1 \\le x_2 \\le \\cdots \\le x_n \\le x_{n+1} \\le \\cdots$; that is, $x_n \\le x_{n+1}$ for all $n \\in \\mathbb{N}$. If the strict inequality $x_n < x_{n+1}$ holds for all $n$, $X$ is <b>strictly increasing</b>.</p>
+      <p>(b) $X$ is <b>decreasing</b> (or non-increasing) if $x_1 \\ge x_2 \\ge \\cdots \\ge x_n \\ge x_{n+1} \\ge \\cdots$; that is, $x_n \\ge x_{n+1}$ for all $n \\in \\mathbb{N}$. If $x_n > x_{n+1}$ for all $n$, $X$ is <b>strictly decreasing</b>.</p>
+      <p>(c) $X$ is <b>monotone</b> if it is either increasing or decreasing.</p>`,
+    intuition:`<p>A monotone sequence refuses to turn around. Once it starts climbing or descending, every single step keeps going in that same direction — no zigzagging, oscillating, or bouncing back and forth.</p>
+      <p><b>Examples:</b> $(1, 2, 3, \\dots)$ and $(1 - 1/n)$ are increasing. $(1, 1/2, 1/3, \\dots)$ and $(1/2^n)$ are decreasing. By contrast, $((-1)^n)$ is not monotone because it constantly flip-flops between $-1$ and $+1$.</p>`,
+    needs:['c.3.1.3'],
+    traps:[
+      `Confusing "increasing" with "strictly increasing": standard mathematical convention allows equal consecutive terms ($x_n \\le x_{n+1}$) in an increasing sequence.`,
+      `Assuming an alternating sequence like $((-1)^n / n)$ is monotone because its magnitude shrinks — it is NOT monotone because terms alternate signs.`
+    ],
+    cards:[
+      { q:`State the definition of an increasing sequence $(x_n)$.`, a:`$x_n \\le x_{n+1}$ for all $n \\in \\mathbb{N}$.`, kind:'state' },
+      { q:`Is the sequence $x_n = (-1)^n$ monotone?`, a:`No — it alternates between $-1$ and $+1$, so it is neither increasing nor decreasing.`, kind:'apply' },
+      { q:`What does it mean for a sequence to be "monotone"?`, a:`It is either increasing or decreasing.`, kind:'recall' }
+    ]
+  },
+
   { id:'c.3.3.2', bartle:'3.3.2', sec:'3.3', kind:'theorem', tier:'core',
     title:'Monotone Convergence Theorem',
     oneLine:'A monotone sequence converges exactly when it is bounded — and then it converges to its own supremum (increasing) or infimum (decreasing).',
@@ -345,7 +489,9 @@ CONCEPTS.push(
   { id:'c.3.5.5', bartle:'3.5.5', sec:'3.5', kind:'theorem', tier:'core',
     title:'Cauchy Convergence Criterion',
     oneLine:'A sequence of real numbers converges if and only if its own terms eventually huddle arbitrarily close together.',
-    statement:`<p>A sequence of real numbers is convergent if and only if it is a Cauchy sequence.</p>`,
+    statement:`<p>A sequence of real numbers is convergent if and only if it is a Cauchy sequence.</p>
+      <p>That is, a sequence $X = (x_n)$ of real numbers converges to some limit $x \\in \\mathbb{R}$ if and only if for every $\\varepsilon > 0$, there exists a natural number $H(\\varepsilon) \\in \\mathbb{N}$ such that:
+      $$|x_n - x_m| < \\varepsilon \\quad \\text{for all } n, m \\ge H(\\varepsilon)$$</p>`,
     intuition:`<p>This is one of the deepest facts in the course: it lets you PROVE a sequence converges without ever guessing its limit — just show the terms crowd together. It genuinely needs completeness: the identical statement is FALSE over $\\mathbb{Q}$ (e.g. the rational decimal truncations of $\\sqrt2$ are Cauchy in $\\mathbb{Q}$, but have no rational limit).</p>
       <p>The easy direction (convergent $\\Rightarrow$ Cauchy) is a short triangle-inequality argument. The hard direction (Cauchy $\\Rightarrow$ convergent) needs real machinery: Cauchy sequences are automatically bounded, so Bolzano–Weierstrass extracts a convergent subsequence — and then the Cauchy property itself is what drags the WHOLE sequence along to that same limit.</p>`,
     needs:['c.3.5.1','c.3.1.3','c.3.4.8','s.triangle-ineq'],
@@ -372,6 +518,41 @@ CONCEPTS.push(
       { q:`State the Cauchy Convergence Criterion.`, a:`A sequence of real numbers converges if and only if it is a Cauchy sequence.`, kind:'state' },
       { q:`Which two earlier results does the hard direction (Cauchy $\\Rightarrow$ convergent) chain together?`, a:`"Cauchy $\\Rightarrow$ bounded" (a short direct argument) and the Bolzano–Weierstrass Theorem (<code>c.3.4.8</code>), which extracts a convergent subsequence from boundedness.`, kind:'recall' },
       { q:`Trap: does the Cauchy Convergence Criterion hold for sequences of RATIONAL numbers converging within $\\mathbb{Q}$?`, a:`No — e.g. the rational decimal truncations of $\\sqrt2$ form a Cauchy sequence in $\\mathbb{Q}$ with no limit IN $\\mathbb{Q}$; the criterion relies on completeness of $\\mathbb{R}$.`, kind:'trap' }
+    ]
+  },
+
+  { id:'c.3.5.8', bartle:'3.5.8', sec:'3.5', kind:'theorem', tier:'core',
+    title:'Contractive Sequences: Convergence and Error Estimates',
+    oneLine:'If each step shrinks by a factor C < 1, the terms form a Cauchy sequence and converge, with tight explicit error bounds.',
+    statement:`<p><b>Definition (3.5.7):</b> A sequence $X = (x_n)$ of real numbers is <b>contractive</b> if there exists a constant $C \\in (0, 1)$ such that:
+      $$|x_{n+2} - x_{n+1}| \\le C |x_{n+1} - x_n| \\quad \\text{for all } n \\in \\mathbb{N}$$
+      The number $C$ is called the <b>constant</b> of the contractive sequence.</p>
+      <p><b>Theorem (3.5.8):</b> Every contractive sequence is a Cauchy sequence, and therefore is <b>convergent</b>.</p>
+      <p><b>Corollary (3.5.10 - Error Estimates):</b> If $X = (x_n)$ is contractive with constant $C < 1$ converging to $x^*$, then:
+      $$(1) \\quad |x^* - x_n| \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1| \\qquad (2) \\quad |x^* - x_n| \\le \\frac{C}{1 - C} |x_n - x_{n-1}|$$</p>`,
+    intuition:`<p>Think of walking where each stride is guaranteed to be at most half (or at most factor $C < 1$) of the previous stride. The total remaining distance you can ever cover is bounded by a convergent geometric series $\\sum C^k$. Because the tail of a geometric series shrinks to zero, the steps cannot wander off or drift away — they are trapped into forming a Cauchy sequence, which completeness forces to converge!</p>
+      <p>The error estimates are practically indispensable in numerical analysis: you can stop computing as soon as $|x_n - x_{n-1}|$ is small enough to guarantee a desired precision.</p>`,
+    needs:['c.3.5.1','c.3.5.5','s.triangle-ineq'],
+    traps:[
+      `Checking only that $|x_{n+1} - x_n| \\to 0$ does NOT make a sequence contractive! E.g. for $x_n = \\sqrt{n}$, $|x_{n+1} - x_n| = 1/(\\sqrt{n+1}+\\sqrt{n}) \\to 0$, but $(\\sqrt{n})$ diverges. A contractive sequence requires a FIXED ratio $C < 1$.`,
+      `Allowing $C = 1$: if $C = 1$, the sequence is not contractive (e.g. $x_n = n$ satisfies $|x_{n+2}-x_{n+1}| \\le 1 \\cdot |x_{n+1}-x_n|$, but diverges). $C$ must be strictly less than $1$.`
+    ],
+    proof:{
+      idea:`Iterate the contractive inequality $n-1$ times to get $|x_{n+1} - x_n| \\le C^{n-1} |x_2 - x_1|$. For $m > n$, use the triangle inequality to sum the intermediate step sizes and apply the geometric series formula.`,
+      why:`Each consecutive gap shrinks geometrically; the triangle inequality bounds the distance between any two distant terms $x_m$ and $x_n$ by the sum of intervening gaps, which is a convergent geometric progression.`,
+      rungs:[
+        { why:`Apply the contractive condition repeatedly back to the first step.`, m:`$$|x_{n+1} - x_n| \\le C |x_n - x_{n-1}| \\le C^2 |x_{n-1} - x_{n-2}| \\le \\cdots \\le C^{n-1} |x_2 - x_1|$$` },
+        { why:`For $m > n$, expand $|x_m - x_n|$ by adding and subtracting intermediate terms and applying the triangle inequality.`, m:`$$|x_m - x_n| \\le |x_m - x_{m-1}| + |x_{m-1} - x_{m-2}| + \\cdots + |x_{n+1} - x_n|$$` },
+        { why:`Substitute the geometric bounds for each consecutive difference.`, m:`$$|x_m - x_n| \\le (C^{m-2} + C^{m-3} + \\cdots + C^{n-1}) |x_2 - x_1| = C^{n-1} (1 + C + \\cdots + C^{m-n-1}) |x_2 - x_1|$$` },
+        { why:`Sum the finite geometric series: $1 + C + \\cdots + C^{m-n-1} < \\frac{1}{1 - C}$ since $0 < C < 1$.`, m:`$$|x_m - x_n| \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1|$$` },
+        { why:`Since $0 < C < 1$, $\\lim_{n\\to\\infty} C^{n-1} = 0$. Hence $(x_n)$ is a Cauchy sequence, and by Theorem 3.5.5 it converges to some limit $x^*$.`, m:`$$\\lim_{n\\to\\infty} \\frac{C^{n-1}}{1 - C} |x_2 - x_1| = 0 \\implies (x_n) \\text{ is Cauchy} \\implies (x_n) \\to x^*$$` }
+      ],
+      ends:`Every contractive sequence is Cauchy and thus converges. Letting $m \\to \\infty$ in the bound directly yields the a priori error estimate $|x^* - x_n| \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1|$.`
+    },
+    cards:[
+      { q:`State the definition of a contractive sequence.`, a:`A sequence $(x_n)$ such that $|x_{n+2} - x_{n+1}| \\le C |x_{n+1} - x_n|$ for all $n$, for some fixed $C \\in (0, 1)$.`, kind:'state' },
+      { q:`Does $|x_{n+1} - x_n| \\to 0$ imply $(x_n)$ is contractive?`, a:`No — e.g. for $x_n = \\sqrt{n}$, consecutive differences shrink to $0$, but $(x_n)$ diverges and is not contractive.`, kind:'trap' },
+      { q:`What is the a priori error bound for a contractive sequence?`, a:`$|x^* - x_n| \\le \\dfrac{C^{n-1}}{1 - C} |x_2 - x_1|$.`, kind:'recall' }
     ]
   },
 
@@ -470,6 +651,42 @@ CONCEPTS.push(
     ]
   },
 
+  { id:'c.4.2.7', bartle:'4.2.7', sec:'4.2', kind:'theorem', tier:'core',
+    title:'Squeeze Theorem (for functions)',
+    oneLine:'A function sandwiched between two functions converging to the same limit is forced to converge to that same limit.',
+    statement:`<p>Let $A \\subseteq \\mathbb{R}$, let $f, g, h: A \\to \\mathbb{R}$, and let $c \\in \\mathbb{R}$ be a cluster point of $A$.</p>
+      <p>If:
+      $$f(x) \\le g(x) \\le h(x) \\quad \\text{for all } x \\in A, \\; x \\ne c$$
+      and if:
+      $$\\lim_{x\\to c} f(x) = L = \\lim_{x\\to c} h(x)$$
+      then $\\lim_{x\\to c} g(x)$ exists and:
+      $$\\lim_{x\\to c} g(x) = L$$</p>`,
+    intuition:`<p>Just like the sequence Squeeze Theorem (<code>c.3.2.7</code>), the middle function $g(x)$ has nowhere to escape. As $x$ gets close to $c$, the lower ceiling $f(x)$ and upper ceiling $h(x)$ squeeze together to the same number $L$. Since $g(x)$ is permanently trapped between them, it has no choice but to head towards $L$ as well.</p>
+      <p>This is exceptionally useful when $g(x)$ contains a component that oscillates wildly (like $\\sin(1/x)$), but is damped down by a factor that shrinks to zero (like $|x|$).</p>`,
+    needs:['c.4.1.8','c.3.2.7'],
+    traps:[
+      `The two outer limits MUST be equal: if $\\lim f = L_1$ and $\\lim h = L_2$ with $L_1 \\ne L_2$, the Squeeze Theorem gives NO conclusion about $\\lim g$.`,
+      `The inequality $f(x) \\le g(x) \\le h(x)$ must hold for all $x$ in a punctured neighborhood of $c$, not merely at some points.`
+    ],
+    proof:{
+      idea:`Use the Sequential Criterion (<code>c.4.1.8</code>): take any sequence $(x_n)$ in $A \\setminus \\{c\\}$ with $x_n \\to c$. Then $f(x_n) \\le g(x_n) \\le h(x_n)$ and the sequence Squeeze Theorem forces $g(x_n) \\to L$.`,
+      why:`The Sequential Criterion bridges function limits to sequence limits, where the Squeeze Theorem is already proved (<code>c.3.2.7</code>).`,
+      rungs:[
+        { why:`Let $(x_n)$ be an arbitrary sequence in $A \\setminus \\{c\\}$ such that $(x_n) \\to c$.`, m:`$$(x_n) \\text{ in } A, \\quad x_n \\ne c, \\quad \\lim(x_n) = c$$` },
+        { why:`By the Sequential Criterion (4.1.8), since $\\lim_{x\\to c} f = L$ and $\\lim_{x\\to c} h = L$, the image sequences converge.`, m:`$$\\lim(f(x_n)) = L \\quad \\text{and} \\quad \\lim(h(x_n)) = L$$` },
+        { why:`The sandwich inequality holds for every term: $f(x_n) \\le g(x_n) \\le h(x_n)$ for all $n \\in \\mathbb{N}$.`, m:`$$f(x_n) \\le g(x_n) \\le h(x_n) \\quad \\text{for all } n \\in \\mathbb{N}$$` },
+        { why:`Apply the Squeeze Theorem for sequences (Theorem 3.2.7) to $(f(x_n)), (g(x_n)), (h(x_n))$.`, m:`$$\\lim(g(x_n)) = L$$` },
+        { why:`Since this holds for every such sequence $(x_n)$, the Sequential Criterion guarantees that $\\lim_{x\\to c} g(x) = L$.`, m:`$$\\lim_{x\\to c} g(x) = L$$` }
+      ],
+      ends:`The Squeeze Theorem for functions is proved via the Sequential Criterion and the sequence Squeeze Theorem.`
+    },
+    cards:[
+      { q:`State the Squeeze Theorem for functions.`, a:`If $f(x) \\le g(x) \\le h(x)$ near $c$ ($x \\ne c$) and $\\lim_{x\\to c} f(x) = L = \\lim_{x\\to c} h(x)$, then $\\lim_{x\\to c} g(x) = L$.`, kind:'state' },
+      { q:`How is the function Squeeze Theorem proved using earlier results?`, a:`By taking an arbitrary sequence $x_n \\to c$ ($x_n \\ne c$) and applying the sequence Squeeze Theorem via the Sequential Criterion.`, kind:'recall' },
+      { q:`Trap: if $f(x) \\le g(x) \\le h(x)$ and $\\lim f = 0, \\lim h = 1$, does $\\lim g$ exist?`, a:`Not necessarily — the outer limits must match for the Squeeze Theorem to apply.`, kind:'trap' }
+    ]
+  },
+
   { id:'c.4.2.8', bartle:'4.2.8', sec:'4.2', kind:'example', tier:'core',
     title:'Squeeze Theorem examples for functions',
     oneLine:'Squeezing a function between two simple functions with the same limit pins down tricky limits like x^{3/2}→0 and x·sin(1/x)→0 at 0, without ever computing the middle function directly.',
@@ -507,6 +724,38 @@ CONCEPTS.push(
       { q:`State the ε-δ definition of the right-hand limit $\\lim_{x\\to c^+}f=L$.`, a:`For every $\\varepsilon>0$ there is $\\delta>0$ such that $x\\in A$, $0<x-c<\\delta \\Rightarrow |f(x)-L|<\\varepsilon$.`, kind:'state' },
       { q:`For $\\operatorname{sgn}(x)$, state both one-sided limits at $c=0$.`, a:`$\\lim_{x\\to0^+}\\operatorname{sgn}(x)=1$ and $\\lim_{x\\to0^-}\\operatorname{sgn}(x)=-1$.`, kind:'apply' },
       { q:`Trap: if both one-sided limits of $f$ at $c$ exist, does $\\lim_{x\\to c}f$ automatically exist?`, a:`No — only if the two one-sided limits are EQUAL; $\\operatorname{sgn}(x)$ at $0$ has both existing but disagreeing, so no two-sided limit exists.`, kind:'trap' }
+    ]
+  },
+
+  { id:'c.4.3.3', bartle:'4.3.3', sec:'4.3', kind:'theorem', tier:'core',
+    title:'Two-Sided Limit via One-Sided Limits',
+    oneLine:'The ordinary two-sided limit exists and equals L if and only if both the right-hand and left-hand limits exist and are equal to L.',
+    statement:`<p>Let $A \\subseteq \\mathbb{R}$, let $f: A \\to \\mathbb{R}$, and let $c \\in \\mathbb{R}$ be a cluster point of both $A \\cap (c, \\infty)$ and $A \\cap (-\\infty, c)$.</p>
+      <p>Then $\\lim_{x\\to c} f(x) = L$ if and only if:
+      $$\\lim_{x\\to c^+} f(x) = L = \\lim_{x\\to c^-} f(x)$$</p>`,
+    intuition:`<p>Approaching $c$ from all directions simply means approaching either from the right ($x > c$) or from the left ($x < c$). If the full limit exists, restricting to one side cannot change anything — both one-sided limits must equal $L$.</p>
+      <p>Conversely, if both one-sided limits exist and agree on $L$, they give two tolerances $\\delta_1$ (for the right side) and $\\delta_2$ (for the left side). Simply choose $\\delta = \\min\\{\\delta_1, \\delta_2\\}$; then on BOTH sides of $c$ within distance $\\delta$, $f(x)$ is within $\\varepsilon$ of $L$, giving the two-sided limit!</p>`,
+    needs:['c.4.3.1','c.4.1.4'],
+    traps:[
+      `Forgetting BOTH one-sided limits must be EQUAL. Having both exist is not enough: for $\\operatorname{sgn}(x)$ at $c=0$, $\\lim_{x\\to0^+} = +1$ and $\\lim_{x\\to0^-} = -1$, so the two-sided limit does NOT exist.`,
+      `Assuming the theorem applies at endpoints: if $c$ is the left endpoint of an interval $A = [c, b)$, only the right-hand limit makes sense, and it is automatically equal to the limit relative to $A$.`
+    ],
+    proof:{
+      idea:`(⇒) Direct restriction: any $\\delta$ working for all $0 < |x-c| < \\delta$ works automatically for $0 < x-c < \\delta$ and $0 < c-x < \\delta$. (⇐) Take $\\delta = \\min\\{\\delta_1, \\delta_2\\}$ so that points on either side are controlled.`,
+      why:`The punctured neighborhood $0 < |x-c| < \\delta$ is literally the union of the right-hand interval $(c, c+\\delta)$ and the left-hand interval $(c-\\delta, c)$.`,
+      rungs:[
+        { why:`(⇒) Assume $\\lim_{x\\to c} f = L$. Given $\\varepsilon > 0$, there exists $\\delta > 0$ such that $0 < |x-c| < \\delta$ ($x \\in A$) implies $|f(x) - L| < \\varepsilon$.`, m:`$$\\forall\\, \\varepsilon > 0, \\; \\exists\\delta > 0: \\; 0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon$$` },
+        { why:`If $x \\in A$ and $0 < x - c < \\delta$, then $0 < |x - c| < \\delta$, so $|f(x) - L| < \\varepsilon$. Hence $\\lim_{x\\to c^+} f = L$. Similarly for $x < c$, $\\lim_{x\\to c^-} f = L$.`, m:`$$\\lim_{x\\to c^+} f = L \\quad \\text{and} \\quad \\lim_{x\\to c^-} f = L$$` },
+        { why:`(⇐) Assume $\\lim_{x\\to c^+} f = L$ and $\\lim_{x\\to c^-} f = L$. Given $\\varepsilon > 0$, obtain $\\delta_1 > 0$ for the right side and $\\delta_2 > 0$ for the left side.`, m:`$$0 < x - c < \\delta_1 \\implies |f(x) - L| < \\varepsilon, \\qquad 0 < c - x < \\delta_2 \\implies |f(x) - L| < \\varepsilon$$` },
+        { why:`Define $\\delta := \\min\\{\\delta_1, \\delta_2\\} > 0$. If $x \\in A$ satisfies $0 < |x - c| < \\delta$, then either $0 < x - c < \\delta \\le \\delta_1$ or $0 < c - x < \\delta \\le \\delta_2$.`, m:`$$\\delta := \\min\\{\\delta_1, \\delta_2\\} > 0$$` },
+        { why:`In either case, $|f(x) - L| < \\varepsilon$. Thus $\\lim_{x\\to c} f = L$.`, m:`$$0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon \\implies \\lim_{x\\to c} f = L$$` }
+      ],
+      ends:`The two-sided limit exists and equals $L$ if and only if both one-sided limits exist and equal $L$.`
+    },
+    cards:[
+      { q:`State Theorem 4.3.3 relating two-sided and one-sided limits.`, a:`$\\lim_{x\\to c} f(x) = L$ if and only if $\\lim_{x\\to c^+} f(x) = L = \\lim_{x\\to c^-} f(x)$.`, kind:'state' },
+      { q:`In the proof of the (⇐) direction, how is $\\delta$ chosen from $\\delta_1$ and $\\delta_2$?`, a:`$\\delta := \\min\\{\\delta_1, \\delta_2\\}$, so the bound holds whether $x$ is to the right or to the left of $c$.`, kind:'recall' },
+      { q:`Trap: why does $\\lim_{x\\to0} \\operatorname{sgn}(x)$ fail to exist under Theorem 4.3.3?`, a:`Because $\\lim_{x\\to0^+} \\operatorname{sgn}(x) = 1 \\ne -1 = \\lim_{x\\to0^-} \\operatorname{sgn}(x)$; the two one-sided limits are not equal.`, kind:'trap' }
     ]
   }
 

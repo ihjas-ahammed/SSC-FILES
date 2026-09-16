@@ -76,6 +76,45 @@ const ViewNote = (function () {
     ]);
   }
 
+  function proofView(c) {
+    if (!c.proof) return null;
+    const p = c.proof;
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: 'Proof & Rigorous Argument' }),
+        el('span', { class: 'count', text: (p.rungs ? p.rungs.length : 0) + ' steps' })
+      ]),
+      el('div', { style: { marginTop: '10px' } }, [
+        UI.reveal('Proof breakdown', function () {
+          const kids = [];
+          if (p.idea) {
+            kids.push(el('div', { class: 'card tint', style: { marginBottom: '12px', padding: '10px 14px' } }, [
+              el('div', { class: 'kicker', text: 'Key Idea' }),
+              el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+            ]));
+          }
+          if (p.rungs && p.rungs.length) {
+            kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
+              p.rungs.map(function (r, idx) {
+                return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
+                  el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
+                    el('b', { text: 'Step ' + (idx + 1) + ': ' }),
+                    el('span', { html: r.why })
+                  ]),
+                  r.m ? el('div', { html: r.m }) : null
+                ]);
+              })
+            ));
+          }
+          if (p.ends) {
+            kids.push(el('div', { class: 'prose tight', style: { marginTop: '12px', fontStyle: 'italic', borderTop: '1px solid var(--line, rgba(0,0,0,0.1))', paddingTop: '8px' }, html: p.ends }));
+          }
+          return el('div', { class: 'stack' }, kids);
+        }, { openLabel: 'Show step-by-step proof', closeLabel: 'Hide proof' })
+      ])
+    ]);
+  }
+
   function traps(c) {
     if (!c.traps || !c.traps.length) return null;
     return el('div', { class: 'card' }, [
@@ -210,6 +249,8 @@ const ViewNote = (function () {
         el('div', { class: 'kicker', text: 'What it really says' }),
         el('div', { style: { marginTop: '10px' } }, [UI.prose(c.intuition, 'tight')])
       ]) : null,
+
+      proofView(c),
 
       traps(c),
 
