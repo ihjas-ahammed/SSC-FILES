@@ -175,10 +175,13 @@ course   = { id, title, code, sem, blurb, needs?, pending?, pendingNote?,
 concept  = { id, sec, kind, tier, title, oneLine, statement, intuition,
              needs: [conceptId], traps: [html], cards: [ { q, a, kind } ],
              figs: [figureId],            /* optional, see below */
+             proof: { idea, why?, rungs: [ { why, m } ], ends? }, /* for theorems/lemmas */
              provenance }
            /* kind: definition|theorem|corollary|lemma|example|technique|counterexample
               tier: core|extra|ext
               statement/intuition/traps: HTML with $TeX$ and $$TeX$$
+              proof: idea & why provide high-level strategy hints for "💡 Try proof (hint)";
+              rungs provide step-by-step breakdown { why: explanation, m: TeX formula }
               cards with kind 'state' become the statement-recall deck; a concept with
               no 'state' card is unreachable from Recall, so give every theorem one */
 
@@ -196,6 +199,8 @@ question = { id, course, sec, type, marks, neg, negLabel, time,
               twist   = a short changed-version follow-up, revealed on demand */
 
 written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [conceptId] }
+           /* approach provides strategic hints for the "💡 Try proof (hint)" scratchpad;
+              solution contains full worked answer shown on demand */
 ```
 
 ### Rules the app relies on
@@ -223,8 +228,14 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
    Check the evaluated string, not the source.
 7. **HTML in `statement`, `intuition`, `traps`, `solution`, `tested`, `trap` is inserted
    as markup.** It must be authored, trusted content — no scraped HTML, no `<script>`,
-   no inline event handlers.
-8. **Provenance travels with the record** and `review_required: true` stays until a human
+   no inline event handlers. Strict mathematical inequalities (e.g. `$x < y$`, `$u - \varepsilon < s_\varepsilon$`)
+   are safely preserved by `sanitizeMathHtml` in `core.dom.js` and do not break HTML parsing.
+8. **Concept references automatically linkify to section chips.** When authors reference
+   other concepts in prose using `<code>c.X.Y</code>` or `$c.X.Y$`, the runtime (`core.dom.js`)
+   automatically resolves `Pool.concept(id)` and renders a clickable section link
+   (`<a class="concept-ref" href="#/note/c.X.Y">§X.Y Concept Title</a>`) with a full section
+   and concept title tooltip. Use `<code>c.X.Y</code>` or `<code>s.prereq-name</code>` in text.
+9. **Provenance travels with the record** and `review_required: true` stays until a human
    or a stronger verification pass has cleared it.
 
 ### What Level 1 needs from AGY, in order
@@ -244,3 +255,38 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
 Do not put mock content into `data/`, and do not point `live` at `app/mock/`.
 The mock set stays where it is until the validated pool replaces it, then it can be
 deleted in one directory.
+
+---
+
+## Recent changes and implementation log
+
+### September 2026
+
+1. **Try proof (hint) & interactive scratchpad UI**:
+   - Added dual controls to theorem proofs (`proofView` in `app/src/view.note.js`):
+     - `💡 Try proof (hint)`: Reveals strategic guidance (`p.idea`, `p.why`, Step 1 clue `p.rungs[0].why`) alongside an interactive `.proof-scratchpad` textarea so learners can outline their proof before looking at the solution.
+     - `👁 Show step-by-step proof`: Reveals full mathematical rungs and closing remarks.
+   - Added dual controls to written questions (`writtenOn` in `app/src/view.note.js`):
+     - `💡 Try proof (hint)`: Reveals `q.approach` and a scratchpad.
+     - `👁 Show answer`: Reveals full model solution and common traps.
+
+2. **Automated concept linkification (`linkifyConcepts`)**:
+   - Added `linkifyConcepts(s)` in `app/src/core.dom.js` and hooked into `DOM.el` `{ html: v }`.
+   - Replaces concept references (e.g. `<code>c.2.3.1</code>`, `<code>c.3.4.8</code>`, `<code>s.abs-ineq</code>`) with interactive styled chip links (`.concept-ref` in `app/src/ui.css`) bearing the section number and concept title, plus full hover tooltips. Clicking navigates directly to `#/note/<id>`.
+
+3. **Complete Real Analysis I syllabus audit & content expansion**:
+   - Audited Modules II, III, and IV for missing definitions and theorems in `data/ra1-core.js` and `data/ra1-bridge.js`.
+   - Populated complete formal statements, rigorous multi-step proofs, traps, intuitions, and state/recall flashcards for:
+     - Sequences & Limits (§3.1, §3.2): bounded convergent sequences, algebra of limits, nonnegativity preservation, squeeze theorem, root limits.
+     - Monotone sequences & Cauchy criterion (§3.3, §3.4, §3.5): Monotone Convergence Theorem, Subsequences, Monotone Subsequence Theorem, Bolzano–Weierstrass Theorem, Cauchy Convergence Criterion, contractive sequences.
+     - Limits of functions (§4.1, §4.2, §4.3): Cluster points, $\varepsilon$-$\delta$ definitions, Sequential Criterion, Divergence Criteria, function algebra of limits, function squeeze theorem, one-sided limits.
+   - Fixed unclosed LaTeX delimiters and formatting errors across all data entries.
+
+4. **DOM & runtime robustness**:
+   - Added `sanitizeMathHtml` in `app/src/core.dom.js` to prevent raw mathematical `<` inequalities from breaking DOM element markup.
+   - Fixed a temporal dead zone (TDZ) initialization order bug in `app/src/core.store.js` ensuring safe degraded operation in private browsing mode.
+
+5. **Production deployment**:
+   - Built self-contained distribution via `build.py` into `build/index.html`.
+   - Deployed live to Firebase Hosting: `https://ssc-data-science-qm.web.app/math/real-analysis`.
+
