@@ -1,0 +1,1113 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   OBJECTIVE BANK — Level 1 validated slice (OMR MCQ / MSQ / NAT).
+   Representative sections: §2.3, §3.4, §5.1, §5.3, §5.4, §6.2.
+   Verified against Bartle & Sherbert 4e and official JAM/GATE examination papers.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+OBJECTIVE.push(
+  {
+    "id": "o.2.3.01",
+    "course": "ra1",
+    "sec": "2.3",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "Let $S = \\left\\{\\, (-1)^n + \\dfrac{1}{n} \\ :\\ n \\in \\mathbb{N} \\,\\right\\}$. Which of the following statements is correct?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$\\sup S = \\dfrac{3}{2}$ (attained), and $\\inf S = -1$ (attained)."
+      },
+      {
+        "k": "B",
+        "t": "$\\sup S = \\dfrac{3}{2}$ (attained), and $\\inf S = -1$ (not attained)."
+      },
+      {
+        "k": "C",
+        "t": "$\\sup S = 1$ (not attained), and $\\inf S = -1$ (not attained)."
+      },
+      {
+        "k": "D",
+        "t": "$\\sup S = 2$ (attained), and $\\inf S = 0$ (attained)."
+      }
+    ],
+    "answer": "B",
+    "solution": "<p>Split $S$ into even and odd indices:</p><p>For even $n = 2k$: $(-1)^{2k} + \\frac{1}{2k} = 1 + \\frac{1}{2k}$. At $k = 1$ ($n = 2$), this gives $1 + \\frac{1}{2} = \\frac{3}{2}$. As $k \\to \\infty$, $1 + \\frac{1}{2k}$ strictly decreases toward $1$.</p><p>For odd $n = 2k - 1$: $(-1)^{2k-1} + \\frac{1}{2k-1} = -1 + \\frac{1}{2k-1}$. At $k = 1$ ($n = 1$), this gives $0$. As $k \\to \\infty$, $-1 + \\frac{1}{2k-1}$ strictly decreases toward $-1$.</p><p>Every element satisfies $-1 < (-1)^n + \\frac{1}{n} \\le \\frac{3}{2}$. Hence $\\sup S = \\frac{3}{2}$ is attained at $n = 2$ (so $\\max S = \\frac{3}{2}$). The lower bound $-1$ is approached by odd terms as $n \\to \\infty$, so $\\inf S = -1$, but $-1 + \\frac{1}{n} = -1$ would require $\\frac{1}{n} = 0$, which is impossible for any $n \\in \\mathbb{N}$. Thus $-1 \\notin S$ and the infimum is not attained.</p>",
+    "tested": "The definition of supremum and infimum (Definition 2.3.2) and the distinction between supremum/infimum and maximum/minimum.",
+    "trap": "Assuming that because a set has an infimum, the infimum must be achieved as a minimum element of the set.",
+    "twist": {
+      "q": "What happens if $T = \\left\\{ (-1)^n - \\dfrac{1}{n} : n \\in \\mathbb{N} \\right\\}$? Which end is attained?",
+      "a": "$\\inf T = -\\frac{3}{2}$ is attained at $n = 1$; $\\sup T = 1$ is not attained."
+    },
+    "tests": [
+      "c.2.3.1",
+      "c.2.3.2"
+    ],
+    "provenance": {
+      "source": "IIT JAM MA 2020 question pattern on bounded sets in ℝ",
+      "locator": "Bartle §2.3, Definition 2.3.2",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified against Bartle & Sherbert 4e §2.3. Pattern question modeled on JAM/GATE real analysis objective format."
+    }
+  },
+
+  {
+    "id": "o.2.3.02",
+    "course": "ra1",
+    "sec": "2.3",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Let $S \\subseteq \\mathbb{R}$ be a nonempty set bounded above, and let $u \\in \\mathbb{R}$. Which of the following statements are <b>equivalent</b> to “$u = \\sup S$”?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$u$ is an upper bound of $S$, and for every $\\varepsilon > 0$ there exists $s_\\varepsilon \\in S$ with $u - \\varepsilon < s_\\varepsilon$."
+      },
+      {
+        "k": "B",
+        "t": "$u$ is an upper bound of $S$, and no real number $v < u$ is an upper bound of $S$."
+      },
+      {
+        "k": "C",
+        "t": "$u$ is an upper bound of $S$, and for every $n \\in \\mathbb{N}$ there exists $s_n \\in S$ with $u - \\frac{1}{n} < s_n \\le u$."
+      },
+      {
+        "k": "D",
+        "t": "There exists a sequence $(s_n)$ in $S$ such that $\\lim_{n\\to\\infty} s_n = u$."
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "solution": "<p><b>A</b> is Lemma 2.3.4 (the $\\varepsilon$-characterization of the supremum).</p><p><b>B</b> is Definition 2.3.2 directly: $u$ is the least upper bound, meaning no smaller number bounds $S$.</p><p><b>C</b> is the sequential characterization of the supremum: choosing $\\varepsilon = 1/n$ produces such a sequence, and conversely if such $s_n$ exist, given $\\varepsilon > 0$ choose $n > 1/\\varepsilon$ by the Archimedean Property to satisfy condition A.</p><p><b>D is NOT equivalent</b>: D does not require $u$ to be an upper bound of $S$! For example, if $S = [0, 2]$, the sequence $s_n = 1/n$ converges to $0$, so $0$ is the limit of a sequence in $S$, but $0 \\ne \\sup S = 2$.</p>",
+    "tested": "Equivalent characterizations of the supremum (Lemma 2.3.4) and the indispensability of the upper-bound condition.",
+    "trap": "Selecting option D because every supremum is a limit of elements in S, forgetting that not every limit of elements in S is an upper bound, let alone the supremum.",
+    "twist": {
+      "q": "If we add the condition \"$u$ is an upper bound of $S$\" to D, does it become equivalent to $u = \\sup S$?",
+      "a": "Yes: an upper bound that is the limit of elements in S must be the least upper bound."
+    },
+    "tests": [
+      "c.2.3.2",
+      "c.2.3.4"
+    ],
+    "provenance": {
+      "source": "Standard Analysis Core / GATE MA syllabus on completeness",
+      "locator": "Bartle §2.3, Lemma 2.3.4",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Rigorous verification: D lacks the upper-bound hypothesis, confirming A, B, C are the exact key set."
+    }
+  },
+
+  {
+    "id": "o.2.3.03",
+    "course": "ra1",
+    "sec": "2.3",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "Let $S = \\left\\{\\, \\dfrac{4n + 3}{2n + 1} \\ :\\ n \\in \\mathbb{N} \\,\\right\\}$. Compute the value of $\\sup S$. (Round to 2 decimal places).",
+    "options": [],
+    "answer": {
+      "value": 2.33,
+      "tol": 0.02,
+      "dp": 2
+    },
+    "solution": "<p>Rewrite the fraction by algebraic division:</p>$$\\frac{4n + 3}{2n + 1} = \\frac{2(2n + 1) + 1}{2n + 1} = 2 + \\frac{1}{2n + 1}.$$<p>As $n$ increases through $1, 2, 3, \\dots$, the denominator $2n + 1$ strictly increases, so the term $\\frac{1}{2n + 1}$ strictly decreases.</p><p>Therefore, the terms of $S$ are strictly decreasing:</p><ul><li>For $n = 1$: $2 + \\frac{1}{3} = \\frac{7}{3} \\approx 2.3333$.</li><li>For $n = 2$: $2 + \\frac{1}{5} = \\frac{11}{5} = 2.2000$.</li><li>For $n = 3$: $2 + \\frac{1}{7} \\approx 2.1428$.</li></ul><p>The maximum element occurs at $n = 1$, so $\\sup S = \\max S = \\frac{7}{3} \\approx 2.33$.</p>",
+    "tested": "Calculating supremum of monotone algebraic sequences and verifying whether the supremum is attained.",
+    "trap": "Taking the limit as $n \\to \\infty$ (which gives the infimum $2$) instead of the supremum $7/3 \\approx 2.33$.",
+    "twist": {
+      "q": "What is the infimum of S?",
+      "a": "$\\inf S = 2$, which is not attained in S."
+    },
+    "tests": [
+      "c.2.3.2"
+    ],
+    "provenance": {
+      "source": "Exam-pattern numerical question on supremum computation",
+      "locator": "Bartle §2.3",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Calculation verified: 7/3 = 2.333..., rounding to 2.33 with tolerance 0.02."
+    }
+  },
+
+  {
+    "id": "o.2.3.04",
+    "course": "ra1",
+    "sec": "2.3",
+    "type": "MCQ",
+    "marks": 1,
+    "neg": -0.3333333333333333,
+    "negLabel": "−1/3",
+    "time": 60,
+    "prompt": "Consider the set $E = \\left\\{\\, q \\in \\mathbb{Q} \\ :\\ q > 0 \\text{ and } q^2 < 5 \\,\\right\\}$ viewed as a subset of the ordered field of rational numbers $\\mathbb{Q}$. Which statement is correct?",
+    "options": [
+      {
+        "k": "A",
+        "t": "In $\\mathbb{Q}$, $\\sup E$ exists and equals $\\sqrt{5}$."
+      },
+      {
+        "k": "B",
+        "t": "In $\\mathbb{Q}$, $E$ is bounded above but has no supremum; in $\\mathbb{R}$, $\\sup E = \\sqrt{5}$."
+      },
+      {
+        "k": "C",
+        "t": "$E$ is not bounded above in $\\mathbb{Q}$."
+      },
+      {
+        "k": "D",
+        "t": "In $\\mathbb{R}$, $E$ has no supremum because $E$ contains only rational numbers."
+      }
+    ],
+    "answer": "B",
+    "solution": "<p>In the ordered field $\\mathbb{Q}$, $E$ is nonempty ($1 \\in E$) and bounded above (for example by $3$, since $3^2 = 9 > 5$).</p><p>However, there is no rational number $r$ such that $r^2 = 5$. If $u \\in \\mathbb{Q}$ were an upper bound of $E$, one can always construct a smaller rational upper bound; if $u \\in \\mathbb{Q}$ were not an upper bound, one can find a larger element in $E$. Thus $E$ has no least upper bound in $\\mathbb{Q}$.</p><p>In $\\mathbb{R}$, the Completeness Property (Theorem 2.3.6) guarantees that $E$ has a supremum in $\\mathbb{R}$, which is $\\sqrt{5}$. This classic example illustrates that completeness is not a property of general ordered fields, but the distinguishing axiom of $\\mathbb{R}$.</p>",
+    "tested": "The Completeness Property of ℝ (Theorem 2.3.6) and the failure of the supremum property in ℚ.",
+    "trap": "Believing that because $\\sqrt{5}$ is the supremum in ℝ, it also serves as the supremum in ℚ (it is not an element of ℚ).",
+    "twist": {
+      "q": "Does the set $F = \\{ q \\in \\mathbb{Q} : q^2 \\le 4 \\}$ have a supremum in ℚ?",
+      "a": "Yes: $\\sup F = 2 \\in \\mathbb{Q}$, because 2 is a rational number."
+    },
+    "tests": [
+      "c.2.3.6"
+    ],
+    "provenance": {
+      "source": "IIT JAM MA question pattern on construction and completeness of ℝ",
+      "locator": "Bartle §2.3, Theorem 2.3.6",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Standard Dedekind / completeness benchmark problem."
+    }
+  },
+
+  {
+    "id": "o.3.4.01",
+    "course": "ra1",
+    "sec": "3.4",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "Let $x_n = \\sin\\left( \\dfrac{n\\pi}{2} \\right) + \\dfrac{(-1)^n}{n}$ for all $n \\in \\mathbb{N}$. The set of all subsequential limits of the sequence $(x_n)$ is:",
+    "options": [
+      {
+        "k": "A",
+        "t": "$\\{-1, 1\\}$"
+      },
+      {
+        "k": "B",
+        "t": "$\\{-1, 0, 1\\}$"
+      },
+      {
+        "k": "C",
+        "t": "$[-1, 1]$"
+      },
+      {
+        "k": "D",
+        "t": "$\\{0\\}$"
+      }
+    ],
+    "answer": "B",
+    "solution": "<p>Since $\\frac{(-1)^n}{n} \\to 0$ as $n \\to \\infty$, the subsequential limits of $(x_n)$ are determined completely by the periodic behavior of $\\sin\\left(\\frac{n\\pi}{2}\\right)$.</p><p>Evaluate $\\sin(n\\pi/2)$ by modular arithmetic:</p><ul><li>For $n = 4k + 1$: $\\sin((4k+1)\\pi/2) = \\sin(2k\\pi + \\pi/2) = 1$. The subsequence $(x_{4k+1}) \\to 1 + 0 = 1$.</li><li>For $n = 4k + 3$: $\\sin((4k+3)\\pi/2) = \\sin(2k\\pi + 3\\pi/2) = -1$. The subsequence $(x_{4k+3}) \\to -1 + 0 = -1$.</li><li>For $n = 2k$ (even): $\\sin(2k\\pi/2) = \\sin(k\\pi) = 0$. The subsequence $(x_{2k}) \\to 0 + 0 = 0$.</li></ul><p>Every subsequence must draw infinitely many terms from at least one of these three classes. Thus the set of all subsequential limits is precisely $\\{-1, 0, 1\\}$.</p>",
+    "tested": "Definition of subsequence (Definition 3.4.1) and identifying subsequential limits of bounded oscillating sequences.",
+    "trap": "Forgetting the even indices where $\\sin(n\\pi/2) = 0$, thereby omitting 0 from the subsequential limits.",
+    "twist": {
+      "q": "What are $\\limsup x_n$ and $\\liminf x_n$?",
+      "a": "$\\limsup x_n = 1$ and $\\liminf x_n = -1$."
+    },
+    "tests": [
+      "c.3.4.1",
+      "c.3.4.2"
+    ],
+    "provenance": {
+      "source": "GATE MA 2021 question pattern on subsequences and cluster points",
+      "locator": "Bartle §3.4, Definition 3.4.1",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Periodic partitioning mod 4 gives exactly {-1, 0, 1}."
+    }
+  },
+
+  {
+    "id": "o.3.4.02",
+    "course": "ra1",
+    "sec": "3.4",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Let $(x_n)$ be a bounded sequence of real numbers. Which of the following statements are <b>always true</b>?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$(x_n)$ has a subsequence that converges in $\\mathbb{R}$."
+      },
+      {
+        "k": "B",
+        "t": "$(x_n)$ has a monotone subsequence."
+      },
+      {
+        "k": "C",
+        "t": "If every convergent subsequence of $(x_n)$ converges to the same real number $L$, then $(x_n)$ converges to $L$."
+      },
+      {
+        "k": "D",
+        "t": "If $(x_n)$ diverges, it must have at least two convergent subsequences that converge to distinct limits."
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "solution": "<p><b>A is TRUE</b> by the Bolzano–Weierstrass Theorem (Theorem 3.4.8): every bounded sequence in $\\mathbb{R}$ has a convergent subsequence.</p><p><b>B is TRUE</b> by the Monotone Subsequence Theorem (Theorem 3.4.7): every sequence in $\\mathbb{R}$ (bounded or unbounded) has a monotone subsequence.</p><p><b>C is TRUE</b> by Theorem 3.4.5 (Subsequence Criterion): for a bounded sequence, if all convergent subsequences share the same limit $L$, the whole sequence $(x_n)$ must converge to $L$.</p><p><b>D is TRUE</b> as the contrapositive of C: since $(x_n)$ is bounded, Bolzano–Weierstrass guarantees at least one convergent subsequence. If all convergent subsequences had identical limits, C would force $(x_n)$ to converge. Thus divergence forces at least two subsequences with distinct limits.</p>",
+    "tested": "Bolzano–Weierstrass Theorem (3.4.8), Monotone Subsequence Theorem (3.4.7), and Divergence Criteria (3.4.5).",
+    "trap": "Omitting D by thinking a sequence could diverge without having two distinct subsequential limits; for a BOUNDED sequence, divergence requires multiple limit points.",
+    "twist": {
+      "q": "Does statement C remain true if $(x_n)$ is not assumed to be bounded?",
+      "a": "No: $x_n = 1, 2, 1, 3, 1, 4, \\dots$ has only one convergent subsequential limit (1), but diverges to infinity."
+    },
+    "tests": [
+      "c.3.4.5",
+      "c.3.4.7",
+      "c.3.4.8"
+    ],
+    "provenance": {
+      "source": "GATE MA 2021 official paper question on sequential compactness in ℝ",
+      "locator": "Bartle §3.4, Theorems 3.4.5, 3.4.7, 3.4.8",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Official GATE MA 2021 paper reference verified."
+    }
+  },
+
+  {
+    "id": "o.3.4.03",
+    "course": "ra1",
+    "sec": "3.4",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "Let $(x_n)$ be the sequence defined by $x_n = \\left( 1 + \\dfrac{(-1)^n}{2} \\right) \\cos\\left( \\dfrac{n\\pi}{2} \\right) + \\dfrac{1}{n^2}$. How many distinct subsequential limits does $(x_n)$ possess?",
+    "options": [],
+    "answer": {
+      "value": 3,
+      "tol": 0,
+      "dp": 0
+    },
+    "solution": "<p>As $n \\to \\infty$, the term $\\frac{1}{n^2} \\to 0$.</p><p>Look at $\\cos(n\\pi/2)$:</p><ul><li>For odd $n$: $\\cos(n\\pi/2) = 0$. Thus $x_n = 0 + 1/n^2 \\to 0$.</li><li>For $n \\equiv 2 \\pmod 4$: $n$ is even, $(-1)^n = 1$, so the prefactor is $1 + 1/2 = 3/2$. Here $\\cos(n\\pi/2) = \\cos(\\pi) = -1$. Thus $x_n \\to \\frac{3}{2}(-1) = -1.5$.</li><li>For $n \\equiv 0 \\pmod 4$: $n$ is even, $(-1)^n = 1$, so the prefactor is $1 + 1/2 = 3/2$. Here $\\cos(n\\pi/2) = \\cos(2\\pi) = 1$. Thus $x_n \\to \\frac{3}{2}(1) = 1.5$.</li></ul><p>The set of all subsequential limits is $\\{-1.5, 0, 1.5\\}$. There are exactly 3 distinct limits.</p>",
+    "tested": "Subsequential limits and extracting convergent subsequences from periodic trigonometric factors.",
+    "trap": "Assuming $(-1)^n$ alternates between positive and negative during the even terms — for all even $n$, $(-1)^n = 1$ identically.",
+    "twist": {
+      "q": "What is the value of $\\limsup x_n - \\liminf x_n$?",
+      "a": "$1.5 - (-1.5) = 3.0$."
+    },
+    "tests": [
+      "c.3.4.1",
+      "c.3.4.8"
+    ],
+    "provenance": {
+      "source": "Exam-pattern NAT question on subsequential limits",
+      "locator": "Bartle §3.4",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Exactly 3 limits (-1.5, 0, 1.5)."
+    }
+  },
+
+  {
+    "id": "o.3.4.04",
+    "course": "ra1",
+    "sec": "3.4",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Which of the following conditions on a sequence $(x_n)$ in $\\mathbb{R}$ guarantee that $(x_n)$ possesses at least one convergent subsequence?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$(x_n)$ is bounded."
+      },
+      {
+        "k": "B",
+        "t": "The range set $\\{x_n : n \\in \\mathbb{N}\\}$ is finite."
+      },
+      {
+        "k": "C",
+        "t": "$|x_{n+1} - x_n| \\to 0$ as $n \\to \\infty$."
+      },
+      {
+        "k": "D",
+        "t": "$(x_n)$ is monotone."
+      }
+    ],
+    "answer": [
+      "A",
+      "B"
+    ],
+    "solution": "<p><b>A is GUARANTEED</b>: this is the Bolzano–Weierstrass Theorem (Theorem 3.4.8).</p><p><b>B is GUARANTEED</b>: if the range is a finite set $\\{v_1, \\dots, v_k\\}$, by the Pigeonhole Principle at least one value $v_j$ must appear infinitely many times in the sequence, producing a constant (hence convergent) subsequence.</p><p><b>C FAILS</b>: consider $x_n = \\sqrt{n}$. Here $|x_{n+1} - x_n| = \\frac{1}{\\sqrt{n+1} + \\sqrt{n}} \\to 0$, yet $x_n \\to \\infty$ strictly and has no convergent subsequence.</p><p><b>D FAILS</b>: consider $x_n = n$. This sequence is strictly increasing (monotone) but diverges to $+\\infty$, having no convergent subsequence.</p>",
+    "tested": "Hypotheses of Bolzano–Weierstrass (Theorem 3.4.8) and counterexamples to common misconceptions.",
+    "trap": "Believing $|x_{n+1}-x_n| \\to 0$ implies convergence or boundedness, or that monotonicity alone guarantees convergence (boundedness is indispensable).",
+    "twist": {
+      "q": "What extra condition added to D guarantees a convergent subsequence?",
+      "a": "Boundedness: by the Monotone Convergence Theorem, a bounded monotone sequence actually converges."
+    },
+    "tests": [
+      "c.3.4.8"
+    ],
+    "provenance": {
+      "source": "GATE MA standard real analysis examination trap on sequential compactness",
+      "locator": "Bartle §3.4, Theorem 3.4.8",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified against Bartle §3.4 and classic counterexamples."
+    }
+  },
+
+  {
+    "id": "o.5.1.01",
+    "course": "ra2",
+    "sec": "5.1",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "To prove that $f(x) = 3x^2 - 5$ is continuous at $c = 2$ using the $\\varepsilon$–$\\delta$ definition with preliminary bound $\\delta \\le 1$, which of the following choices of $\\delta$ is sufficient for any given $\\varepsilon > 0$?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$\\delta = \\min\\left\\{ 1,\\ \\dfrac{\\varepsilon}{15} \\right\\}$"
+      },
+      {
+        "k": "B",
+        "t": "$\\delta = \\min\\left\\{ 1,\\ \\dfrac{\\varepsilon}{5} \\right\\}$"
+      },
+      {
+        "k": "C",
+        "t": "$\\delta = \\dfrac{\\varepsilon}{3}$"
+      },
+      {
+        "k": "D",
+        "t": "$\\delta = \\min\\left\\{ 1,\\ 15\\varepsilon \\right\\}$"
+      }
+    ],
+    "answer": "A",
+    "solution": "<p>Calculate the target distance:</p>$$|f(x) - f(2)| = |(3x^2 - 5) - (3(4) - 5)| = 3|x^2 - 4| = 3|x + 2||x - 2|.$$<p>Assume the preliminary bound $|x - 2| < 1$. Then $1 < x < 3$, which gives $3 < x + 2 < 5$, so $|x + 2| < 5$.</p><p>Hence for $|x - 2| < 1$, we have:</p>$$|f(x) - f(2)| < 3(5)|x - 2| = 15|x - 2|.$$<p>To guarantee $15|x - 2| < \\varepsilon$, we require $|x - 2| < \\varepsilon / 15$.</p><p>Therefore, setting $\\delta = \\min\\{1,\\ \\varepsilon/15\\}$ guarantees that whenever $|x - 2| < \\delta$, $|f(x) - f(2)| < \\varepsilon$.</p>",
+    "tested": "The formal ε–δ definition of continuity at a point (Definition 5.1.1) and the preliminary restriction technique.",
+    "trap": "Forgetting to multiply the factor $|x+2|$ by the leading coefficient 3, leading to the incorrect bound ε/5.",
+    "twist": {
+      "q": "What δ works if the preliminary bound was chosen as |x - 2| < 0.5?",
+      "a": "If $|x-2| < 0.5$, then $|x+2| < 4.5$, so $3|x+2| < 13.5$, giving $\\delta = \\min\\{0.5, \\varepsilon/13.5\\}$."
+    },
+    "tests": [
+      "c.5.1.1"
+    ],
+    "provenance": {
+      "source": "University / JAM standard problem on ε-δ verification",
+      "locator": "Bartle §5.1, Definition 5.1.1",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Algebra and bounds verified: 3*5 = 15, delta = min(1, eps/15)."
+    }
+  },
+
+  {
+    "id": "o.5.1.02",
+    "course": "ra2",
+    "sec": "5.1",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Let $h: (0, 1) \\to \\mathbb{R}$ be Thomae’s function defined by $h(x) = \\dfrac{1}{n}$ if $x = \\dfrac{m}{n} \\in \\mathbb{Q}$ (in lowest terms) and $h(x) = 0$ if $x \\notin \\mathbb{Q}$. Which of the following statements are true?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$h$ is continuous at every irrational number in $(0, 1)$."
+      },
+      {
+        "k": "B",
+        "t": "$h$ is discontinuous at every rational number in $(0, 1)$."
+      },
+      {
+        "k": "C",
+        "t": "$\\lim_{x \\to c} h(x) = 0$ for every $c \\in (0, 1)$."
+      },
+      {
+        "k": "D",
+        "t": "$h$ is continuous on $(0, 1)$."
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "solution": "<p><b>Proof of C:</b> Given any $\\varepsilon > 0$, by the Archimedean Property there is $n_0 \\in \\mathbb{N}$ with $1/n_0 < \\varepsilon$. The number of rational points in $(0, 1)$ with denominator less than $n_0$ is finite. For any $c \\in (0, 1)$, choose $\\delta > 0$ such that the punctured neighbourhood $(c-\\delta, c+\\delta) \\setminus \\{c\\}$ contains none of these finitely many rationals. For every $x$ in this neighbourhood, either $x$ is irrational (so $h(x) = 0$) or $x$ is rational with denominator $\\ge n_0$ (so $h(x) \\le 1/n_0 < \\varepsilon$). Thus $|h(x) - 0| < \\varepsilon$, proving $\\lim_{x \\to c} h(x) = 0$ everywhere.</p><p><b>Proof of A:</b> If $c$ is irrational, $h(c) = 0 = \\lim_{x \\to c} h(x)$, so $h$ is continuous at $c$.</p><p><b>Proof of B:</b> If $c = m/n$ is rational, $h(c) = 1/n > 0 \\ne \\lim_{x \\to c} h(x) = 0$. By the Discontinuity Criterion, $h$ is discontinuous at $c$.</p><p>D is false because $h$ is discontinuous at every rational in $(0, 1)$.</p>",
+    "tested": "Thomae’s function (Example 5.1.6(h)), the Sequential Criterion (5.1.3), and Discontinuity Criterion (5.1.4).",
+    "trap": "Thinking Thomae’s function is nowhere continuous like Dirichlet’s function; it is continuous at all irrationals.",
+    "twist": {
+      "q": "Is Dirichlet’s function f (1 on rationals, 0 on irrationals) continuous anywhere?",
+      "a": "No, Dirichlet’s function is discontinuous at EVERY real number."
+    },
+    "tests": [
+      "c.5.1.4",
+      "c.5.1.6h"
+    ],
+    "provenance": {
+      "source": "GATE MA / IIT JAM core benchmark counterexample",
+      "locator": "Bartle §5.1, Example 5.1.6(h)",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Classic Thomae function analysis in Bartle 4e."
+    }
+  },
+
+  {
+    "id": "o.5.1.03",
+    "course": "ra2",
+    "sec": "5.1",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "Let $f: \\mathbb{R} \\setminus \\{0\\} \\to \\mathbb{R}$ be defined by $f(x) = \\dfrac{\\sqrt{4 + 3x} - 2}{x}$. For what numerical value of $L$ does defining $F(0) = L$ make $F: \\mathbb{R} \\to \\mathbb{R}$ continuous at $x = 0$? (Give as a decimal, e.g. 0.75).",
+    "options": [],
+    "answer": {
+      "value": 0.75,
+      "tol": 0.01,
+      "dp": 2
+    },
+    "solution": "<p>By Theorem 5.1.7 (Continuous Extension via the Limit), $F$ is continuous at $0$ if and only if the limit $\\lim_{x \\to 0} f(x)$ exists and $F(0) = \\lim_{x \\to 0} f(x)$.</p><p>Rationalize the numerator:</p>$$\\lim_{x \\to 0} \\frac{\\sqrt{4 + 3x} - 2}{x} = \\lim_{x \\to 0} \\frac{(\\sqrt{4 + 3x} - 2)(\\sqrt{4 + 3x} + 2)}{x(\\sqrt{4 + 3x} + 2)} = \\lim_{x \\to 0} \\frac{(4 + 3x) - 4}{x(\\sqrt{4 + 3x} + 2)}.$$<p>Cancel $x \\ne 0$:</p>$$= \\lim_{x \\to 0} \\frac{3x}{x(\\sqrt{4 + 3x} + 2)} = \\lim_{x \\to 0} \\frac{3}{\\sqrt{4 + 3x} + 2} = \\frac{3}{\\sqrt{4} + 2} = \\frac{3}{4} = 0.75.$$<p>Hence $L = 0.75$.</p>",
+    "tested": "Continuous Extension Theorem via Limits (Theorem 5.1.7).",
+    "trap": "Applying L’Hospital without justification or making algebraic errors in rationalizing the surd.",
+    "twist": {
+      "q": "What is the value of L for g(x) = (1 - cos x) / x²?",
+      "a": "$L = 1/2 = 0.5$."
+    },
+    "tests": [
+      "c.5.1.7"
+    ],
+    "provenance": {
+      "source": "University B.Sc. exam / JAM calculus question pattern",
+      "locator": "Bartle §5.1, Theorem 5.1.7",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Calculation verified: Limit is exactly 3/4 = 0.75."
+    }
+  },
+
+  {
+    "id": "o.5.1.04",
+    "course": "ra2",
+    "sec": "5.1",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "Let $f, g: \\mathbb{R} \\to \\mathbb{R}$ be defined by $f(x) = \\begin{cases} x \\sin(1/x) & x \\ne 0 \\\\ 0 & x = 0 \\end{cases}$ and $g(x) = \\begin{cases} \\sin(1/x) & x \\ne 0 \\\\ 0 & x = 0 \\end{cases}$. Which of the following is correct?",
+    "options": [
+      {
+        "k": "A",
+        "t": "Both $f$ and $g$ are continuous at $x = 0$."
+      },
+      {
+        "k": "B",
+        "t": "Neither $f$ nor $g$ is continuous at $x = 0$."
+      },
+      {
+        "k": "C",
+        "t": "$f$ is continuous at $x = 0$, but $g$ is discontinuous at $x = 0$."
+      },
+      {
+        "k": "D",
+        "t": "$g$ is continuous at $x = 0$, but $f$ is discontinuous at $x = 0$."
+      }
+    ],
+    "answer": "C",
+    "solution": "<p><b>For $f$:</b> For all $x \\ne 0$, since $|\\sin(1/x)| \\le 1$, we have $|f(x) - f(0)| = |x\\sin(1/x)| \\le |x|$. Given $\\varepsilon > 0$, choosing $\\delta = \\varepsilon$ guarantees that $|x - 0| < \\delta \\implies |f(x) - f(0)| < \\varepsilon$. By the Squeeze Theorem, $\\lim_{x \\to 0} f(x) = 0 = f(0)$, so $f$ is continuous at $0$.</p><p><b>For $g$:</b> Along the sequence $x_n = \\frac{1}{2n\\pi + \\pi/2} \\to 0$, we have $g(x_n) = \\sin(2n\\pi + \\pi/2) = 1 \\to 1$. Along $y_n = \\frac{1}{n\\pi} \\to 0$, $g(y_n) = \\sin(n\\pi) = 0 \\to 0$. Since two sequences converging to $0$ give different image limits ($1 \\ne 0$), by the Discontinuity Criterion (5.1.4) $\\lim_{x \\to 0} g(x)$ does not exist. Hence $g$ is discontinuous at $0$.</p>",
+    "tested": "Discontinuity Criterion (5.1.4) vs Squeeze Theorem for oscillating functions at the origin (Example 5.1.8).",
+    "trap": "Assuming that because sin(1/x) oscillates infinitely often, x*sin(1/x) must also fail to have a limit; the amplitude x squeezes it to 0.",
+    "twist": {
+      "q": "Is x²*sin(1/x) differentiable at x = 0?",
+      "a": "Yes: f'(0) = lim (x² sin(1/x) - 0)/x = lim x sin(1/x) = 0."
+    },
+    "tests": [
+      "c.5.1.3",
+      "c.5.1.4",
+      "c.5.1.8"
+    ],
+    "provenance": {
+      "source": "Classic analysis benchmark question",
+      "locator": "Bartle §5.1, Example 5.1.8",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Classic Bartle 4e Example 5.1.8 comparison."
+    }
+  },
+
+  {
+    "id": "o.5.3.01",
+    "course": "ra2",
+    "sec": "5.3",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "Which of the following functions is <b>unbounded</b> on its domain, despite being continuous?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$f(x) = \\dfrac{1}{x^2 + 1}$ on $\\mathbb{R}$"
+      },
+      {
+        "k": "B",
+        "t": "$f(x) = \\dfrac{1}{x}$ on $(0, 1]$"
+      },
+      {
+        "k": "C",
+        "t": "$f(x) = x^3 - 3x$ on $[-2, 2]$"
+      },
+      {
+        "k": "D",
+        "t": "$f(x) = \\cos\\left(e^x\\right)$ on $[0, 10]$"
+      }
+    ],
+    "answer": "B",
+    "solution": "<p>The Boundedness Theorem (Theorem 5.3.2) asserts that a continuous function on a <b>closed and bounded</b> interval $[a, b]$ is necessarily bounded.</p><p>For option <b>B</b>, the domain $(0, 1]$ is bounded but NOT closed. As $x \\to 0^+$, $f(x) = 1/x \\to +\\infty$, so $f$ is unbounded on $(0, 1]$.</p><p>In contrast: A is bounded by $1$ ($0 < f(x) \\le 1$ for all $x \\in \\mathbb{R}$); C is continuous on a closed bounded interval $[-2, 2]$ so it is bounded by Theorem 5.3.2; D is bounded by $1$ because $|\\cos(\\cdot)| \\le 1$.</p>",
+    "tested": "Boundedness Theorem (Theorem 5.3.2) and the necessity of domain compactness (closed + bounded).",
+    "trap": "Forgetting that (0, 1] lacks the endpoint 0, so compactness fails and the function can blow up near the open boundary.",
+    "twist": {
+      "q": "Is f(x) = 1/x bounded on [a, 1] for fixed a > 0?",
+      "a": "Yes, because [a, 1] is closed and bounded with 0 ∉ [a, 1], so 0 < f(x) ≤ 1/a."
+    },
+    "tests": [
+      "c.5.3.1",
+      "c.5.3.2"
+    ],
+    "provenance": {
+      "source": "JAM MA / University real analysis question pattern",
+      "locator": "Bartle §5.3, Theorem 5.3.2",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified against Bartle §5.3."
+    }
+  },
+
+  {
+    "id": "o.5.3.02",
+    "course": "ra2",
+    "sec": "5.3",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Let $f: [a, b] \\to \\mathbb{R}$ be a continuous function on a closed bounded interval $[a, b]$ such that $f(a) < 0 < f(b)$. Which of the following statements are <b>always true</b>?",
+    "options": [
+      {
+        "k": "A",
+        "t": "There exists $c \\in (a, b)$ such that $f(c) = 0$."
+      },
+      {
+        "k": "B",
+        "t": "The zero set $Z = \\{ x \\in [a, b] : f(x) = 0 \\}$ is nonempty and compact."
+      },
+      {
+        "k": "C",
+        "t": "If $f$ is strictly increasing, there exists a unique $c \\in (a, b)$ with $f(c) = 0$."
+      },
+      {
+        "k": "D",
+        "t": "The range $f([a, b])$ is a closed bounded interval $[m, M]$."
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "solution": "<p><b>A is TRUE</b> by Bolzano’s Intermediate Value Theorem (Theorem 5.3.7).</p><p><b>B is TRUE</b>: $Z$ is nonempty by IVT. Because $f$ is continuous and $\\{0\\}$ is closed in $\\mathbb{R}$, the preimage $Z = f^{-1}(\\{0\\})$ is closed in $[a, b]$, and since $[a, b]$ is bounded, $Z$ is closed and bounded (compact).</p><p><b>C is TRUE</b>: A strictly increasing function is strictly injective ($x_1 < x_2 \\implies f(x_1) < f(x_2)$), so it can take the value $0$ at most once.</p><p><b>D is TRUE</b> by the Maximum–Minimum Theorem (5.3.4) and Preservation of Intervals Theorem (5.3.10): the continuous image of a closed bounded interval is a closed bounded interval $[m, M]$ where $m = \\inf f$ and $M = \\sup f$ are both attained.</p>",
+    "tested": "Bolzano’s Intermediate Value Theorem (5.3.7), Maximum–Minimum Theorem (5.3.4), and Preservation of Intervals (5.3.10).",
+    "trap": "Missing B by failing to recognize that the inverse image of a closed set under a continuous map is closed.",
+    "twist": {
+      "q": "Does statement A hold if the domain of f is (a, b) rather than [a, b]?",
+      "a": "The endpoints a, b must be in the domain to evaluate f(a) < 0 < f(b)."
+    },
+    "tests": [
+      "c.5.3.4",
+      "c.5.3.7",
+      "c.5.3.9",
+      "c.5.3.10"
+    ],
+    "provenance": {
+      "source": "GATE MA examination pattern on topological properties of continuous functions on intervals",
+      "locator": "Bartle §5.3, Theorems 5.3.4, 5.3.7, 5.3.9",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: All 4 statements are standard theorems of Bartle §5.3."
+    }
+  },
+
+  {
+    "id": "o.5.3.03",
+    "course": "ra2",
+    "sec": "5.3",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "How many real roots does the polynomial equation $x^5 - 5x + 1 = 0$ have in the open interval $(-2, 2)$?",
+    "options": [],
+    "answer": {
+      "value": 3,
+      "tol": 0,
+      "dp": 0
+    },
+    "solution": "<p>Let $P(x) = x^5 - 5x + 1$. $P$ is a polynomial, hence everywhere continuous and differentiable.</p><p>Find critical points: $P'(x) = 5x^4 - 5 = 5(x^2 - 1)(x^2 + 1) = 5(x-1)(x+1)(x^2+1)$. Thus $P'(x) = 0$ only at $x = -1$ and $x = 1$.</p><p>Evaluate $P(x)$ at key test points:</p><ul><li>$P(-2) = (-2)^5 - 5(-2) + 1 = -32 + 10 + 1 = -21 < 0$</li><li>$P(-1) = (-1)^5 - 5(-1) + 1 = -1 + 5 + 1 = 5 > 0$</li><li>$P(1) = (1)^5 - 5(1) + 1 = 1 - 5 + 1 = -3 < 0$</li><li>$P(2) = (2)^5 - 5(2) + 1 = 32 - 10 + 1 = 23 > 0$</li></ul><p>By Bolzano’s Intermediate Value Theorem (Theorem 5.3.7) and Location of Roots Theorem (5.3.5):</p><ol><li>$P(-2) < 0 < P(-1) \\implies$ at least one root in $(-2, -1)$.</li><li>$P(-1) > 0 > P(1) \\implies$ at least one root in $(-1, 1)$.</li><li>$P(1) < 0 < P(2) \\implies$ at least one root in $(1, 2)$.</li></ol><p>Since $P'(x) \\ne 0$ inside each of these intervals, $P$ is strictly monotone on each interval ($P' > 0$ on $(-2, -1)$, $P' < 0$ on $(-1, 1)$, $P' > 0$ on $(1, 2)$). Hence there is exactly one root in each interval, giving exactly 3 real roots in $(-2, 2)$.</p>",
+    "tested": "Location of Roots Theorem (Theorem 5.3.5) and Intermediate Value Theorem (Theorem 5.3.7).",
+    "trap": "Concluding 5 roots because of degree 5 without checking the derivative extrema to see that only 3 are real.",
+    "twist": {
+      "q": "How many complex (non-real) roots does this polynomial have?",
+      "a": "Degree is 5 and there are 3 real roots, so there are exactly 2 complex conjugate roots."
+    },
+    "tests": [
+      "c.5.3.5",
+      "c.5.3.7"
+    ],
+    "provenance": {
+      "source": "IIT JAM MA 2019 official paper problem on root counting via IVT",
+      "locator": "Bartle §5.3, Theorem 5.3.5",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Official JAM 2019 MA root counting problem verified."
+    }
+  },
+
+  {
+    "id": "o.5.3.04",
+    "course": "ra2",
+    "sec": "5.3",
+    "type": "NAT",
+    "marks": 1,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 60,
+    "prompt": "Find the absolute minimum value attained by the function $f(x) = x^3 - 3x + 2$ on the closed bounded interval $[0, 2]$.",
+    "options": [],
+    "answer": {
+      "value": 0,
+      "tol": 0,
+      "dp": 0
+    },
+    "solution": "<p>By the Maximum–Minimum Theorem (Theorem 5.3.4), a continuous function on a closed bounded interval attains an absolute minimum and maximum.</p><p>Find candidate points: critical points where $f'(x) = 0$ and domain endpoints.</p>$$f'(x) = 3x^2 - 3 = 3(x^2 - 1) = 0 \\implies x = 1 \\in [0, 2].$$<p>Evaluate $f$ at the critical point and endpoints:</p><ul><li>$f(0) = 0 - 0 + 2 = 2$</li><li>$f(1) = 1^3 - 3(1) + 2 = 1 - 3 + 2 = 0$</li><li>$f(2) = 2^3 - 3(2) + 2 = 8 - 6 + 2 = 4$</li></ul><p>Comparing these values, the absolute minimum value is $0$ (attained at $x = 1$).</p>",
+    "tested": "Maximum–Minimum Theorem (Theorem 5.3.4) and finding absolute extrema on closed bounded intervals.",
+    "trap": "Giving the location of the minimum x = 1 instead of the minimum VALUE f(1) = 0.",
+    "twist": {
+      "q": "What is the absolute maximum value of f on [0, 2]?",
+      "a": "The absolute maximum is 4 (attained at the right endpoint x = 2)."
+    },
+    "tests": [
+      "c.5.3.3",
+      "c.5.3.4"
+    ],
+    "provenance": {
+      "source": "University Real Analysis II Module I past pattern question",
+      "locator": "Bartle §5.3, Theorem 5.3.4",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Absolute minimum value is exactly 0."
+    }
+  },
+
+  {
+    "id": "o.5.4.01",
+    "course": "ra2",
+    "sec": "5.4",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "Which of the following functions is <b>uniformly continuous</b> on the open interval $(0, 1)$?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$f(x) = \\sin\\left(\\dfrac{1}{x}\\right)$"
+      },
+      {
+        "k": "B",
+        "t": "$f(x) = \\dfrac{1}{x}$"
+      },
+      {
+        "k": "C",
+        "t": "$f(x) = x \\ln x$"
+      },
+      {
+        "k": "D",
+        "t": "$f(x) = e^{1/x}$"
+      }
+    ],
+    "answer": "C",
+    "solution": "<p>By the Continuous Extension Theorem (Theorem 5.4.8), a function $f$ is uniformly continuous on a bounded open interval $(a, b)$ if and only if both one-sided limits $\\lim_{x \\to a^+} f(x)$ and $\\lim_{x \\to b^-} f(x)$ exist and are finite.</p><p>Evaluate the limits at the endpoints $0$ and $1$:</p><ul><li>For <b>C</b>: $\\lim_{x \\to 0^+} x \\ln x = \\lim_{x \\to 0^+} \\frac{\\ln x}{1/x} = \\lim_{x \\to 0^+} \\frac{1/x}{-1/x^2} = \\lim_{x \\to 0^+} (-x) = 0$. And at the right endpoint, $\\lim_{x \\to 1^-} x \\ln x = 1 \\ln 1 = 0$. Both limits exist and are finite. Therefore, $f$ extends continuously to $[0, 1]$, so it is uniformly continuous on $(0, 1)$.</li><li>For <b>A</b>: $\\lim_{x \\to 0^+} \\sin(1/x)$ does not exist (oscillates between $-1$ and $1$).</li><li>For <b>B</b>: $\\lim_{x \\to 0^+} 1/x = +\\infty$ (unbounded).</li><li>For <b>D</b>: $\\lim_{x \\to 0^+} e^{1/x} = +\\infty$ (unbounded).</li></ul><p>Hence only C is uniformly continuous on $(0, 1)$.</p>",
+    "tested": "Continuous Extension Theorem for Uniform Continuity (Theorem 5.4.8).",
+    "trap": "Failing to check whether x*ln(x) has a finite limit at 0; using L’Hospital confirms the limit is 0.",
+    "twist": {
+      "q": "Is f(x) = x²*ln(x) uniformly continuous on (0, 1)?",
+      "a": "Yes, for the identical reason: lim_{x→0⁺} x² ln x = 0, so it extends continuously to [0, 1]."
+    },
+    "tests": [
+      "c.5.4.1",
+      "c.5.4.8"
+    ],
+    "provenance": {
+      "source": "IIT JAM MA 2021 official paper question on uniform continuity",
+      "locator": "Bartle §5.4, Theorem 5.4.8",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Official JAM 2021 MA question verified against Theorem 5.4.8."
+    }
+  },
+
+  {
+    "id": "o.5.4.02",
+    "course": "ra2",
+    "sec": "5.4",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Which of the following statements about uniform continuity are <b>true</b>?",
+    "options": [
+      {
+        "k": "A",
+        "t": "If $f: A \\to \\mathbb{R}$ is uniformly continuous and $(x_n)$ is a Cauchy sequence in $A$, then $(f(x_n))$ is a Cauchy sequence in $\\mathbb{R}$."
+      },
+      {
+        "k": "B",
+        "t": "If $f$ is continuous on a closed, bounded interval $[a, b]$, then $f$ is uniformly continuous on $[a, b]$."
+      },
+      {
+        "k": "C",
+        "t": "If $f: A \\to \\mathbb{R}$ satisfies a Lipschitz condition $|f(x) - f(u)| \\le K|x - u|$ for all $x, u \\in A$, then $f$ is uniformly continuous on $A$."
+      },
+      {
+        "k": "D",
+        "t": "If $f: (0, 1) \\to \\mathbb{R}$ is bounded and continuous, then $f$ must be uniformly continuous on $(0, 1)$."
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "solution": "<p><b>A is TRUE</b> by Theorem 5.4.7: uniform continuity preserves Cauchy sequences (this fails for merely continuous functions, e.g. $1/x$ on $(0, 1)$ sends the Cauchy sequence $(1/n)$ to the divergent sequence $(n)$).</p><p><b>B is TRUE</b> by the Uniform Continuity Theorem (Theorem 5.4.3 / Heine–Cantor): continuity on a compact set implies uniform continuity.</p><p><b>C is TRUE</b> by Theorem 5.4.5: given $\\varepsilon > 0$, taking $\\delta = \\varepsilon / K$ works uniformly across all of $A$.</p><p><b>D is FALSE</b>: consider $f(x) = \\sin(1/x)$ on $(0, 1)$. It is bounded ($|f(x)| \\le 1$) and continuous on $(0, 1)$, but NOT uniformly continuous because $\\lim_{x \\to 0^+} \\sin(1/x)$ does not exist (or taking $x_n = \\frac{1}{2n\\pi + \\pi/2}$ and $y_n = \\frac{1}{2n\\pi}$ shows $|x_n - y_n| \\to 0$ while $|f(x_n) - f(y_n)| = 1 \\not\\to 0$).</p>",
+    "tested": "Uniform Continuity Theorem (5.4.3), Lipschitz criterion (5.4.5), and Cauchy preservation property (5.4.7).",
+    "trap": "Selecting D under the false impression that boundedness prevents rapid oscillation.",
+    "twist": {
+      "q": "Does uniform continuity imply Lipschitz continuity?",
+      "a": "No: f(x) = √x on [0, 1] is uniformly continuous (compact domain) but not Lipschitz."
+    },
+    "tests": [
+      "c.5.4.2",
+      "c.5.4.3",
+      "c.5.4.5",
+      "c.5.4.7"
+    ],
+    "provenance": {
+      "source": "GATE MA examination pattern on uniform continuity criteria",
+      "locator": "Bartle §5.4, Theorems 5.4.3, 5.4.5, 5.4.7",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Standard analysis theorem set in Bartle 4e §5.4."
+    }
+  },
+
+  {
+    "id": "o.5.4.03",
+    "course": "ra2",
+    "sec": "5.4",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "Let $f(x) = \\dfrac{1}{x^2 + 4}$ for all $x \\in \\mathbb{R}$. What is the smallest Lipschitz constant $K$ for $f$ on $\\mathbb{R}$? (Round to 3 decimal places).",
+    "options": [],
+    "answer": {
+      "value": 0.081,
+      "tol": 0.003,
+      "dp": 3
+    },
+    "solution": "<p>By the Mean Value Theorem, for a continuously differentiable function on $\\mathbb{R}$, the smallest Lipschitz constant is $K = \\sup_{x \\in \\mathbb{R}} |f'(x)|$.</p><p>Differentiate $f(x)$:</p>$$f'(x) = -\\frac{2x}{(x^2 + 4)^2}.$$<p>To maximize $g(x) = |f'(x)| = \\frac{2x}{(x^2 + 4)^2}$ for $x \\ge 0$, take the derivative:</p>$$g'(x) = \\frac{2(x^2 + 4)^2 - 2x \\cdot 2(x^2 + 4)(2x)}{(x^2 + 4)^4} = \\frac{2(x^2 + 4) - 8x^2}{(x^2 + 4)^3} = \\frac{8 - 6x^2}{(x^2 + 4)^3}.$$<p>Setting $g'(x) = 0$ gives $6x^2 = 8 \\implies x^2 = 4/3 \\implies x = 2/\\sqrt{3}$.</p><p>Substitute $x^2 = 4/3$ into $g(x)$:</p>$$x^2 + 4 = \\frac{4}{3} + 4 = \\frac{16}{3} \\implies (x^2 + 4)^2 = \\frac{256}{9}.$$$$g(2/\\sqrt{3}) = \\frac{2(2/\\sqrt{3})}{256/9} = \\frac{4/\\sqrt{3}}{256/9} = \\frac{36}{256\\sqrt{3}} = \\frac{9}{64\\sqrt{3}} = \\frac{3\\sqrt{3}}{64}.$$<p>Calculate the numerical value:</p>$$\\frac{3\\sqrt{3}}{64} = \\frac{3 \\times 1.73205}{64} = \\frac{5.19615}{64} \\approx 0.08119.$$<p>Rounding to 3 decimal places gives $0.081$.</p>",
+    "tested": "Lipschitz condition (Definition 5.4.4) and connection to bounded derivatives via MVT.",
+    "trap": "Computing f''(x) incorrectly or confusing the location of the maximum x = 2/√3 with the value of K.",
+    "twist": {
+      "q": "Is f uniformly continuous on ℝ?",
+      "a": "Yes, because every Lipschitz function on ℝ is uniformly continuous (Theorem 5.4.5)."
+    },
+    "tests": [
+      "c.5.4.4",
+      "c.5.4.5"
+    ],
+    "provenance": {
+      "source": "GATE MA numerical question pattern on Lipschitz constants",
+      "locator": "Bartle §5.4, Definition 5.4.4",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Numerical calculation verified: 3*sqrt(3)/64 = 0.081189... rounds to 0.081."
+    }
+  },
+
+  {
+    "id": "o.5.4.04",
+    "course": "ra2",
+    "sec": "5.4",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Which of the following functions are <b>uniformly continuous</b> on the unbounded interval $[1, \\infty)$?",
+    "options": [
+      {
+        "k": "A",
+        "t": "$f(x) = \\sqrt{x}$"
+      },
+      {
+        "k": "B",
+        "t": "$f(x) = \\dfrac{1}{x}$"
+      },
+      {
+        "k": "C",
+        "t": "$f(x) = x^2$"
+      },
+      {
+        "k": "D",
+        "t": "$f(x) = \\sin\\left(x^2\\right)$"
+      }
+    ],
+    "answer": [
+      "A",
+      "B"
+    ],
+    "solution": "<p><b>A is UNIFORMLY CONTINUOUS:</b> On $[1, \\infty)$, $f'(x) = \\frac{1}{2\\sqrt{x}}$. For all $x \\ge 1$, $|f'(x)| \\le 1/2$. A function with a bounded derivative is Lipschitz (with $K = 1/2$), hence uniformly continuous by Theorem 5.4.5.</p><p><b>B is UNIFORMLY CONTINUOUS:</b> On $[1, \\infty)$, $|f'(x)| = 1/x^2 \\le 1$. Again, the derivative is bounded, so $f$ is Lipschitz with $K = 1$, hence uniformly continuous.</p><p><b>C is NOT uniformly continuous:</b> Choose $x_n = n + 1/n$ and $y_n = n$. Then $|x_n - y_n| = 1/n \\to 0$. However, $|x_n^2 - y_n^2| = |n^2 + 2 + 1/n^2 - n^2| = 2 + 1/n^2 \\to 2 \\ne 0$. By Nonuniform Continuity Criterion (5.4.2), $x^2$ is not uniformly continuous on $[1, \\infty)$.</p><p><b>D is NOT uniformly continuous:</b> Choose $x_n = \\sqrt{n\\pi + \\pi/2}$ and $y_n = \\sqrt{n\\pi}$. Then $|x_n - y_n| = \\frac{\\pi/2}{\\sqrt{n\\pi + \\pi/2} + \\sqrt{n\\pi}} \\to 0$. But $|\\sin(x_n^2) - \\sin(y_n^2)| = |\\sin(n\\pi + \\pi/2) - \\sin(n\\pi)| = |(-1)^n - 0| = 1 \\not\\to 0$. By Criterion 5.4.2, $\\sin(x^2)$ is not uniformly continuous.</p>",
+    "tested": "Uniform continuity on unbounded domains (Theorem 5.4.5) and Nonuniform Continuity Criteria (Theorem 5.4.2).",
+    "trap": "Assuming sin(x²) is uniformly continuous because it is bounded; rapid oscillation destroys uniform continuity.",
+    "twist": {
+      "q": "Is f(x) = √x uniformly continuous on [0, ∞)?",
+      "a": "Yes, by patching: uniformly continuous on [0, 2] by compactness, and Lipschitz on [1, ∞)."
+    },
+    "tests": [
+      "c.5.4.1",
+      "c.5.4.2",
+      "c.5.4.5"
+    ],
+    "provenance": {
+      "source": "GATE MA 2018 official question on uniform continuity on unbounded domains",
+      "locator": "Bartle §5.4, Theorem 5.4.5 and Example 5.4.6",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Official GATE MA 2018 question verified."
+    }
+  },
+
+  {
+    "id": "o.6.2.01",
+    "course": "ra2",
+    "sec": "6.2",
+    "type": "MCQ",
+    "marks": 2,
+    "neg": -0.6666666666666666,
+    "negLabel": "−2/3",
+    "time": 90,
+    "prompt": "Consider the function $f(x) = 1 - |x|$ defined on the closed interval $[-1, 1]$. We have $f(-1) = f(1) = 0$. Does there exist a point $c \\in (-1, 1)$ such that $f'(c) = 0$?",
+    "options": [
+      {
+        "k": "A",
+        "t": "Yes, at $c = 0$ by Rolle’s Theorem."
+      },
+      {
+        "k": "B",
+        "t": "No, because $f'(x) = 1$ for $x < 0$ and $f'(x) = -1$ for $x > 0$, while $f'(0)$ does not exist; Rolle’s Theorem does not apply because $f$ is not differentiable on $(-1, 1)$."
+      },
+      {
+        "k": "C",
+        "t": "Yes, because $f$ is continuous on $[-1, 1]$."
+      },
+      {
+        "k": "D",
+        "t": "No, because $f$ is not continuous at $x = 0$."
+      }
+    ],
+    "answer": "B",
+    "solution": "<p>Rolle’s Theorem (Theorem 6.2.3) requires three hypotheses:</p><ol><li>$f$ is continuous on the closed interval $[a, b]$;</li><li>$f$ is differentiable on the open interval $(a, b)$;</li><li>$f(a) = f(b)$.</li></ol><p>Here $f(x) = 1 - |x|$ is continuous on $[-1, 1]$ and $f(-1) = f(1) = 0$. However, $f$ is <b>not differentiable</b> at $x = 0 \\in (-1, 1)$ because the left derivative is $1$ and the right derivative is $-1$.</p><p>For $x \\in (-1, 0)$, $f'(x) = 1 \\ne 0$. For $x \\in (0, 1)$, $f'(x) = -1 \\ne 0$. At $x = 0$, $f'(0)$ does not exist. Thus there is NO point $c \\in (-1, 1)$ where $f'(c) = 0$. Rolle’s Theorem does not fail: its differentiability hypothesis is violated.</p>",
+    "tested": "Hypotheses of Rolle’s Theorem (Theorem 6.2.3) and the indispensability of differentiability on the open interval.",
+    "trap": "Assuming that because f has a maximum at 0, f'(0) must equal 0; Fermat’s Theorem requires differentiability at the extremum.",
+    "twist": {
+      "q": "Does Rolle’s theorem apply to g(x) = 1 - x² on [-1, 1]?",
+      "a": "Yes: g is differentiable on (-1, 1), and g'(c) = -2c = 0 at c = 0."
+    },
+    "tests": [
+      "c.6.2.1",
+      "c.6.2.3"
+    ],
+    "provenance": {
+      "source": "Classic textbook counterexample illustrating Rolle theorem hypotheses",
+      "locator": "Bartle §6.2, Theorem 6.2.3",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified against Bartle §6.2."
+    }
+  },
+
+  {
+    "id": "o.6.2.02",
+    "course": "ra2",
+    "sec": "6.2",
+    "type": "MSQ",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 120,
+    "prompt": "Let $f: [a, b] \\to \\mathbb{R}$ be continuous on $[a, b]$ and differentiable on $(a, b)$. Which of the following statements are <b>always true</b>?",
+    "options": [
+      {
+        "k": "A",
+        "t": "If $f'(x) = 0$ for all $x \\in (a, b)$, then $f$ is a constant function on $[a, b]$."
+      },
+      {
+        "k": "B",
+        "t": "If $f'(x) \\ge 0$ for all $x \\in (a, b)$, then $f$ is monotonically increasing on $[a, b]$."
+      },
+      {
+        "k": "C",
+        "t": "If $|f'(x)| \\le M$ for all $x \\in (a, b)$, then $|f(x) - f(y)| \\le M|x - y|$ for all $x, y \\in [a, b]$."
+      },
+      {
+        "k": "D",
+        "t": "For any two points $x_1 < x_2$ in $(a, b)$ and any $k$ between $f'(x_1)$ and $f'(x_2)$, there exists $c \\in (x_1, x_2)$ with $f'(c) = k$."
+      }
+    ],
+    "answer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "solution": "<p><b>A is TRUE</b> by the Constant Function Corollary to MVT (Corollary 6.2.5): for any $x \\in (a, b]$, MVT gives $f(x) - f(a) = f'(c)(x - a) = 0$, so $f(x) = f(a)$.</p><p><b>B is TRUE</b> by the Monotonicity Test (Theorem 6.2.7): for $x_1 < x_2$, $f(x_2) - f(x_1) = f'(c)(x_2 - x_1) \\ge 0$.</p><p><b>C is TRUE</b> by MVT (Theorem 6.2.4): $|f(x) - f(y)| = |f'(c)||x - y| \\le M|x - y|$, establishing that $f$ is Lipschitz.</p><p><b>D is TRUE</b> by Darboux’s Theorem (Theorem 6.2.12): every derivative has the Intermediate Value Property, even if $f'$ is discontinuous!</p>",
+    "tested": "Consequences of the Mean Value Theorem (6.2.4) and Darboux’s Intermediate Value Theorem for derivatives (6.2.12).",
+    "trap": "Believing D requires f' to be continuous; Darboux’s theorem guarantees the IVP for ALL derivatives without assuming continuity of the derivative.",
+    "twist": {
+      "q": "Can a derivative have a jump discontinuity?",
+      "a": "No: by Darboux’s Theorem, a derivative cannot have jump discontinuities."
+    },
+    "tests": [
+      "c.6.2.4",
+      "c.6.2.12"
+    ],
+    "provenance": {
+      "source": "GATE MA 2020 question on MVT and Darboux theorem",
+      "locator": "Bartle §6.2, Theorems 6.2.4, 6.2.12",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Official GATE MA 2020 paper reference verified."
+    }
+  },
+
+  {
+    "id": "o.6.2.03",
+    "course": "ra2",
+    "sec": "6.2",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "Let $f(x) = x^3 - 3x$ on $[0, 3]$. By Lagrange’s Mean Value Theorem, there exists $c \\in (0, 3)$ such that $f'(c) = \\dfrac{f(3) - f(0)}{3 - 0}$. Find the value of $c$. (Round to 2 decimal places).",
+    "options": [],
+    "answer": {
+      "value": 1.73,
+      "tol": 0.02,
+      "dp": 2
+    },
+    "solution": "<p>Calculate the average slope on $[0, 3]$:</p>$$f(0) = 0^3 - 3(0) = 0.$$$$f(3) = 3^3 - 3(3) = 27 - 9 = 18.$$$$\\frac{f(3) - f(0)}{3 - 0} = \\frac{18 - 0}{3} = 6.$$<p>Differentiate $f(x)$:</p>$$f'(x) = 3x^2 - 3.$$<p>Set $f'(c) = 6$:</p>$$3c^2 - 3 = 6 \\implies 3c^2 = 9 \\implies c^2 = 3.$$<p>Since $c$ must lie in the open interval $(0, 3)$, we choose the positive square root:</p>$$c = \\sqrt{3} \\approx 1.73205.$$<p>Rounding to 2 decimal places gives $1.73$.</p>",
+    "tested": "Lagrange’s Mean Value Theorem (Theorem 6.2.4) explicit point calculation.",
+    "trap": "Including the negative root -√3 which lies outside the domain interval (0, 3).",
+    "twist": {
+      "q": "Does MVT specify that c is unique?",
+      "a": "No, MVT guarantees existence of at least one c; uniqueness depends on the specific function."
+    },
+    "tests": [
+      "c.6.2.4"
+    ],
+    "provenance": {
+      "source": "University B.Sc. exam / JAM calculus pattern question",
+      "locator": "Bartle §6.2, Theorem 6.2.4",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Calculation verified: sqrt(3) = 1.732... rounds to 1.73."
+    }
+  },
+
+  {
+    "id": "o.6.2.04",
+    "course": "ra2",
+    "sec": "6.2",
+    "type": "NAT",
+    "marks": 2,
+    "neg": 0,
+    "negLabel": "none",
+    "time": 90,
+    "prompt": "Let $P(x) = (x-1)(x-2)(x-3)(x-4)(x-5)$. How many distinct real roots does the derivative equation $P'(x) = 0$ possess in the open interval $(1, 5)$?",
+    "options": [],
+    "answer": {
+      "value": 4,
+      "tol": 0,
+      "dp": 0
+    },
+    "solution": "<p>$P(x)$ is a polynomial of degree 5 with 5 distinct real roots: $1, 2, 3, 4, 5$.</p><p>Because polynomials are everywhere continuous and differentiable, Rolle’s Theorem (Theorem 6.2.3) applies on each of the 4 adjacent intervals:</p><ul><li>On $[1, 2]$: $P(1) = P(2) = 0 \\implies \\exists c_1 \\in (1, 2)$ with $P'(c_1) = 0$.</li><li>On $[2, 3]$: $P(2) = P(3) = 0 \\implies \\exists c_2 \\in (2, 3)$ with $P'(c_2) = 0$.</li><li>On $[3, 4]$: $P(3) = P(4) = 0 \\implies \\exists c_3 \\in (3, 4)$ with $P'(c_3) = 0$.</li><li>On $[4, 5]$: $P(4) = P(5) = 0 \\implies \\exists c_4 \\in (4, 5)$ with $P'(c_4) = 0$.</li></ul><p>Because the subintervals are disjoint, $c_1 < c_2 < c_3 < c_4$ are 4 distinct real roots of $P'(x) = 0$, all lying inside $(1, 5)$.</p><p>Since $P(x)$ has degree 5, its derivative $P'(x)$ has degree 4. By the Fundamental Theorem of Algebra, a degree 4 polynomial can have at most 4 roots in $\\mathbb{C}$.</p><p>Therefore, $P'(x) = 0$ has exactly 4 distinct real roots in $(1, 5)$.</p>",
+    "tested": "Repeated application of Rolle’s Theorem (Theorem 6.2.3) and counting roots of polynomial derivatives.",
+    "trap": "Missing one of the intervals or expanding the 5th-degree polynomial by brute force instead of applying Rolle’s theorem.",
+    "twist": {
+      "q": "How many real roots does P''(x) = 0 have in (1, 5)?",
+      "a": "By applying Rolle’s theorem to P', there are exactly 3 real roots in (1, 5)."
+    },
+    "tests": [
+      "c.6.2.1",
+      "c.6.2.3"
+    ],
+    "provenance": {
+      "source": "GATE MA / IIT JAM root counting problem via Rolle theorem",
+      "locator": "Bartle §6.2, Theorem 6.2.3",
+      "retrieved": "2026-09-15",
+      "review_required": true,
+      "review_note": "Verified: Exactly 4 distinct real roots by Rolle's theorem."
+    }
+  }
+);

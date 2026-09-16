@@ -1,0 +1,140 @@
+[
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "essay",
+    "num": 158,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Define Riemann integration using Darboux sums. Prove that a bounded function $f:[a,b] \\to \\mathbb{R}$ is Riemann integrable if and only if for every $\\epsilon > 0$, there exists a partition $P$ of $[a,b]$ such that $U(P, f) - L(P, f) < \\epsilon$.",
+    "concept_tested": "Darboux Definition of Riemann Integral and Integrability Criterion (Complete Essay)",
+    "approach": "Define partitions, subintervals, $M_i, m_i$, Darboux sums $U(P, f), L(P, f)$, upper and lower integrals. State and prove the refinement lemma, then establish $U(P, f) - L(P, f) < \\epsilon$ biconditional.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Part 1: Definitions of Darboux Sums & Integrals",
+        "math": "U(P, f) = \\sum_{i=1}^n M_i \\Delta x_i, \\quad L(P, f) = \\sum_{i=1}^n m_i \\Delta x_i \\quad \\text{where } M_i = \\sup_{I_i} f, \\, m_i = \\inf_{I_i} f",
+        "explanation": "The upper integral is $\\overline{\\int_a^b} f = \\inf_P U(P, f)$ and lower integral is $\\underline{\\int_a^b} f = \\sup_P L(P, f)$. A bounded function is Riemann integrable if $\\underline{\\int_a^b} f = \\overline{\\int_a^b} f = \\int_a^b f$."
+      },
+      {
+        "step": 2,
+        "title": "Part 2: Refinement Property",
+        "math": "P \\subseteq P^* \\implies L(P, f) \\le L(P^*, f) \\le U(P^*, f) \\le U(P, f)",
+        "explanation": "Refining a partition cannot decrease lower sums nor increase upper sums. Furthermore, for any two partitions $P_1, P_2$, $L(P_1, f) \\le U(P_2, f)$ by taking the common refinement $P^* = P_1 \\cup P_2$."
+      },
+      {
+        "step": 3,
+        "title": "Part 3: Forward Direction ($\\implies$)",
+        "math": "\\underline{\\int} f = \\overline{\\int} f = I. \\quad \\forall \\epsilon > 0, \\; \\exists P_1 : L(P_1, f) > I - \\frac{\\epsilon}{2}, \\quad \\exists P_2 : U(P_2, f) < I + \\frac{\\epsilon}{2}",
+        "explanation": "By definition of supremum and infimum."
+      },
+      {
+        "step": 4,
+        "title": "Forward Direction: Common Refinement",
+        "math": "P = P_1 \\cup P_2 \\implies U(P, f) - L(P, f) \\le U(P_2, f) - L(P_1, f) < \\left(I + \\frac{\\epsilon}{2}\\right) - \\left(I - \\frac{\\epsilon}{2}\\right) = \\epsilon",
+        "explanation": "Thus there exists a partition $P$ with $U(P, f) - L(P, f) < \\epsilon$."
+      },
+      {
+        "step": 5,
+        "title": "Part 4: Backward Direction ($\\impliedby$)",
+        "math": "L(P, f) \\le \\underline{\\int_a^b} f \\le \\overline{\\int_a^b} f \\le U(P, f) \\implies 0 \\le \\overline{\\int_a^b} f - \\underline{\\int_a^b} f \\le U(P, f) - L(P, f) < \\epsilon",
+        "explanation": "Since $0 \\le \\overline{\\int} f - \\underline{\\int} f < \\epsilon$ for all $\\epsilon > 0$, the non-negative difference must be 0, so $\\overline{\\int} f = \\underline{\\int} f$, proving $f$ is Riemann integrable."
+      }
+    ],
+    "final_answer": "A bounded function $f$ on $[a, b]$ is Riemann integrable if and only if for every $\\epsilon > 0$, there exists a partition $P$ such that $U(P, f) - L(P, f) < \\epsilon$.",
+    "exam_tip": "In a 10-mark essay, clearly include the definitions, the common refinement lemma $L(P_1) \\le U(P_2)$, and both directions of the biconditional.",
+    "id": "pyq.m4.158"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "essay",
+    "num": 159,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2020",
+    "question": "State and prove the Fundamental Theorem of Calculus (First and Second Parts).",
+    "concept_tested": "Fundamental Theorem of Calculus (First and Second Parts)",
+    "approach": "State and prove FTC-1 ($F'(x) = f(x)$ for continuous $f$) using difference quotient, then prove FTC-2 ($\\int_a^b f = F(b) - F(a)$) using MVT and Darboux squeeze.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "FTC Part 1 Statement",
+        "math": "f \\in \\mathcal{R}[a, b], \\quad F(x) = \\int_a^x f(t) dt \\quad (x \\in [a, b])",
+        "explanation": "Then $F$ is continuous on $[a, b]$. Furthermore, if $f$ is continuous at $c \\in [a, b]$, then $F$ is differentiable at $c$ and $F'(c) = f(c)$."
+      },
+      {
+        "step": 2,
+        "title": "Proof of FTC Part 1",
+        "math": "\\frac{F(c+h) - F(c)}{h} - f(c) = \\frac{1}{h} \\int_c^{c+h} [f(t) - f(c)] dt",
+        "explanation": "Since $f$ is continuous at $c$, for any $\\epsilon > 0$, there exists $\\delta > 0$ such that $|t - c| < \\delta \\implies |f(t) - f(c)| < \\epsilon$. For $0 < |h| < \\delta$:"
+      },
+      {
+        "step": 3,
+        "title": "Bounding Difference Quotient",
+        "math": "\\left|\\frac{F(c+h) - F(c)}{h} - f(c)\\right| \\le \\frac{1}{|h|} \\left|\\int_c^{c+h} |f(t) - f(c)| dt\\right| < \\frac{1}{|h|} \\epsilon |h| = \\epsilon",
+        "explanation": "Taking $h \\to 0$ gives $\\lim_{h \\to 0} \\frac{F(c+h) - F(c)}{h} = f(c)$, hence $F'(c) = f(c)$."
+      },
+      {
+        "step": 4,
+        "title": "FTC Part 2 Statement & Proof",
+        "math": "f \\in \\mathcal{R}[a, b], \\, F'(x) = f(x) \\; \\forall x \\in [a, b] \\implies \\int_a^b f(x) dx = F(b) - F(a)",
+        "explanation": "For any partition $P = \\{x_0, \\dots, x_n\\}$, by the Mean Value Theorem on $[x_{i-1}, x_i]$, $\\exists t_i \\in (x_{i-1}, x_i)$ such that $F(x_i) - F(x_{i-1}) = F'(t_i)\\Delta x_i = f(t_i)\\Delta x_i$."
+      },
+      {
+        "step": 5,
+        "title": "Summation and Darboux Squeeze",
+        "math": "F(b) - F(a) = \\sum_{i=1}^n [F(x_i) - F(x_{i-1})] = \\sum_{i=1}^n f(t_i)\\Delta x_i \\implies L(P, f) \\le F(b) - F(a) \\le U(P, f)",
+        "explanation": "Since $f \\in \\mathcal{R}[a, b]$, taking $\\sup L(P, f) = \\inf U(P, f) = \\int_a^b f$ gives $\\int_a^b f = F(b) - F(a)$."
+      }
+    ],
+    "final_answer": "FTC-1 establishes that differentiation reverses integration ($F'(c) = f(c)$); FTC-2 establishes that integration can be evaluated by an antiderivative ($\\int_a^b f = F(b) - F(a)$).",
+    "exam_tip": "Clearly separate the hypotheses: FTC-1 assumes continuity of $f$ at point $c$; FTC-2 assumes $f$ has an antiderivative $F$ on $[a, b]$ and $f$ is integrable.",
+    "id": "pyq.m4.159"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "essay",
+    "num": 160,
+    "marks": 10,
+    "source": "Calicut University B.Sc. Exam, April 2022",
+    "question": "Prove that if a bounded function $f:[a, b] \\to \\mathbb{R}$ has only a finite number of points of discontinuity, then $f$ is Riemann integrable on $[a, b]$.",
+    "concept_tested": "Riemann Integrability of Functions with Finitely Many Discontinuities / Substitution Theorem",
+    "approach": "State and prove that if a bounded function $f:[a, b] \\to \\mathbb{R}$ is continuous except at a finite number of points, then $f$ is Riemann integrable on $[a, b]$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "f: [a, b] \\to \\mathbb{R} \\text{ bounded with discontinuities at } c_1 < c_2 < \\dots < c_k \\implies f \\in \\mathcal{R}[a, b]",
+        "explanation": "A bounded function on $[a, b]$ having only a finite number of points of discontinuity is Riemann integrable."
+      },
+      {
+        "step": 2,
+        "title": "Single Discontinuity Case ($k = 1$)",
+        "math": "c \\in (a, b), \\quad |f(x)| \\le M \\; \\forall x \\in [a, b]",
+        "explanation": "Let $c$ be the single point of discontinuity. Enclose $c$ in an interval $[c - \\delta, c + \\delta]$ with $\\delta < \\frac{\\epsilon}{8M}$."
+      },
+      {
+        "step": 3,
+        "title": "Integrability on Outer Intervals",
+        "math": "f \\text{ continuous on } [a, c - \\delta] \\text{ and } [c + \\delta, b] \\implies \\exists P_1, P_2 \\text{ s.t. } U(P_1) - L(P_1) < \\frac{\\epsilon}{4}, \\; U(P_2) - L(P_2) < \\frac{\\epsilon}{4}",
+        "explanation": "Continuous functions on closed bounded intervals are Riemann integrable."
+      },
+      {
+        "step": 4,
+        "title": "Combining Partitions",
+        "math": "P = P_1 \\cup P_2 \\implies U(P, f) - L(P, f) < \\frac{\\epsilon}{4} + 2M(2\\delta) + \\frac{\\epsilon}{4} < \\frac{\\epsilon}{2} + 4M\\left(\\frac{\\epsilon}{8M}\\right) = \\epsilon",
+        "explanation": "The oscillation on the middle interval is at most $2M$, contributing $2M(2\\delta) < \\epsilon/2$."
+      },
+      {
+        "step": 5,
+        "title": "General Case by Induction",
+        "math": "\\text{By additivity of integral over } [a, b] = [a, c_1] \\cup [c_1, c_2] \\cup \\dots \\cup [c_k, b], \\quad f \\in \\mathcal{R}[a, b]",
+        "explanation": "Since $f$ is integrable on each subinterval with at most one endpoint discontinuity, it is integrable on $[a, b]$."
+      }
+    ],
+    "final_answer": "Every bounded function with finitely many discontinuities on $[a, b]$ is Riemann integrable.",
+    "exam_tip": "This theorem is a key consequence of Lebesgue's Criterion (a bounded function is Riemann integrable iff its set of discontinuities has measure zero).",
+    "id": "pyq.m4.160"
+  }
+]

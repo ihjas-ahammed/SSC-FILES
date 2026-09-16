@@ -21,6 +21,23 @@ cp "$APPS/MATERIAL_SCIENCE_12.html" "$TMP/public/MATERIAL_SCIENCE_12.html"
 cp "$APPS/MATERIAL_SCIENCE_12_OFFLINE.html" "$TMP/public/MATERIAL_SCIENCE_12_OFFLINE.html"
 cp "$APPS/QM_1.html" "$TMP/public/index.html"
 
+# --- SSC-V4 Real Analysis study system (served at /math/real-analysis) ---
+# Built fresh here so the deployed page can never lag behind the sources.
+V4="$REPO/SSC-V4"
+if [ -f "$V4/build.py" ]; then
+  python3 "$V4/build.py" > /dev/null
+  mkdir -p "$TMP/public/math/real-analysis"
+  cp "$V4/build/index.html" "$TMP/public/math/real-analysis/index.html"
+  if [ -f "$V4/pyq.html" ]; then
+    cp "$V4/pyq.html" "$TMP/public/math/real-analysis/pyq.html"
+  fi
+  if [ -d "$V4/diagrams" ]; then
+    cp -r "$V4/diagrams" "$TMP/public/math/real-analysis/diagrams"
+  fi
+else
+  echo "WARNING: $V4 missing — deploying without the Real Analysis app." >&2
+fi
+
 # --- exam trackers and checklists (repo trackers/) ---
 if compgen -G "$REPO/trackers/*.html" > /dev/null; then
   cp "$REPO"/trackers/*.html "$TMP/public/"
@@ -48,6 +65,9 @@ for f in QM_1 SOLID_STATE_1 LATEX_1 LATEX_12_OFFLINE PYTHON_12 PYTHON_12_OFFLINE
          MATERIAL_SCIENCE_12 MATERIAL_SCIENCE_12_OFFLINE; do
   echo "  → $BASE/$f.html"
 done
+echo ""
+echo "Real Analysis study system:"
+echo "  → $BASE/math/real-analysis"
 echo ""
 echo "Trackers & checklists:"
 for f in "$REPO"/trackers/*.html; do

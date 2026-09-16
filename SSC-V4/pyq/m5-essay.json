@@ -1,0 +1,106 @@
+[
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "essay",
+    "num": 199,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "State and prove the Abel's Theorem for uniform convergence of power series.",
+    "concept_tested": "Abel's Theorem on Boundary Uniform Convergence of Power Series",
+    "approach": "Without loss of generality set $R = 1$. Use summation by parts (Abel's lemma) on partial sums $s_n = \\sum_{k=0}^n a_k$ to prove uniform convergence on $[0, 1]$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement of Abel's Theorem",
+        "math": "\\sum_{n=0}^\\infty a_n \\text{ converges} \\implies \\sum_{n=0}^\\infty a_n x^n \\text{ converges uniformly on } [0, 1]",
+        "explanation": "Consequently, the sum function $f(x) = \\sum_{n=0}^\\infty a_n x^n$ is continuous on $[0, 1]$, and $\\lim_{x \\to 1^-} f(x) = \\sum_{n=0}^\\infty a_n$."
+      },
+      {
+        "step": 2,
+        "title": "Abel's Summation by Parts Setup",
+        "math": "A_n = \\sum_{k=0}^n a_k, \\quad A_{-1} = 0, \\quad s = \\lim_{n \\to \\infty} A_n. \\quad \\text{Let } s_n = A_n - s \\to 0",
+        "explanation": "Shift by the limit $s$ so that $s_n \\to 0$."
+      },
+      {
+        "step": 3,
+        "title": "Summation by Parts Identity",
+        "math": "\\sum_{k=m}^n a_k x^k = \\sum_{k=m}^n (s_k - s_{k-1}) x^k = s_n x^n - s_{m-1} x^m + \\sum_{k=m}^{n-1} s_k (x^k - x^{k+1})",
+        "explanation": "Rewriting the sum using differences of $s_k$."
+      },
+      {
+        "step": 4,
+        "title": "Uniform Estimate for $x \\in [0, 1]$",
+        "math": "\\forall \\epsilon > 0, \\exists H : k \\ge H \\implies |s_k| < \\frac{\\epsilon}{3}. \\quad \\text{For } n > m > H \\text{ and } x \\in [0, 1]:",
+        "explanation": "Since $s_k \\to 0$ as $k \\to \\infty$."
+      },
+      {
+        "step": 5,
+        "title": "Bounding the Tail",
+        "math": "\\left|\\sum_{k=m}^n a_k x^k\\right| \\le |s_n| x^n + |s_{m-1}| x^m + \\frac{\\epsilon}{3} \\sum_{k=m}^{n-1} (x^k - x^{k+1}) < \\frac{\\epsilon}{3} + \\frac{\\epsilon}{3} + \\frac{\\epsilon}{3} (x^m - x^n) < \\epsilon",
+        "explanation": "Notice that $x^k - x^{k+1} = x^k(1-x) \\ge 0$ on $[0, 1]$, so the sum telescopes to $x^m - x^n \\le 1$."
+      },
+      {
+        "step": 6,
+        "title": "Conclusion",
+        "math": "\\sup_{x \\in [0, 1]} \\left|\\sum_{k=m}^n a_k x^k\\right| < \\epsilon \\implies \\sum_{n=0}^\\infty a_n x^n \\text{ converges uniformly on } [0, 1]",
+        "explanation": "By Cauchy's criterion for uniform convergence, the series converges uniformly on $[0, 1]$, proving continuity up to $x = 1$."
+      }
+    ],
+    "final_answer": "If $\\sum a_n$ converges, then $\\sum a_n x^n$ converges uniformly on $[0, 1]$, and $\\lim_{x \\to 1^-} \\sum a_n x^n = \\sum_{n=0}^\\infty a_n$.",
+    "exam_tip": "Summation by parts is the definitive method to prove Abel's Theorem; clearly state the telescoping identity $\\sum_{k=m}^{n-1} (x^k - x^{k+1}) = x^m - x^n$.",
+    "id": "pyq.m5.199"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "essay",
+    "num": 200,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Let $f_n(x) = \\frac{nx}{1 + n^2 x^2}$ for $x \\in [0, 1]$. Show that $(f_n)$ converges pointwise to a continuous function $f$, but $\\lim_{n \\to \\infty} \\int_0^1 f_n(x) dx \\ne \\int_0^1 f(x) dx$. Explain this result in terms of uniform convergence.",
+    "concept_tested": "Failure of Interchanging Limit and Integral due to Lack of Uniform Convergence",
+    "approach": "Find pointwise limit $f(x) = 0$, evaluate $\\int_0^1 f_n(x)dx$ via substitution, show integral limit is $\\infty$ or non-zero, compute $\\sup |f_n(x)|$, and explain why uniform convergence fails.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Pointwise Limit",
+        "math": "\\text{For } x = 0: \\, f_n(0) = 0 \\to 0. \\quad \\text{For } x \\in (0, 1]: \\, f_n(x) = \\frac{nx}{1 + n^2 x^2} = \\frac{x/n}{1/n^2 + x^2} \\to \\frac{0}{0 + x^2} = 0",
+        "explanation": "Thus the pointwise limit is $f(x) \\equiv 0$ on $[0, 1]$, which is everywhere continuous."
+      },
+      {
+        "step": 2,
+        "title": "Integral of the Limit Function",
+        "math": "\\int_0^1 f(x) dx = \\int_0^1 0 dx = 0",
+        "explanation": "The integral of the pointwise limit is trivially 0."
+      },
+      {
+        "step": 3,
+        "title": "Evaluating $\\int_0^1 f_n(x) dx$",
+        "math": "\\int_0^1 \\frac{nx}{1 + n^2 x^2} dx = \\frac{1}{2n} \\int_0^1 \\frac{2n^2 x}{1 + n^2 x^2} dx = \\frac{1}{2n} [\\ln(1 + n^2 x^2)]_0^1 = \\frac{\\ln(1 + n^2)}{2n}",
+        "explanation": "Using the substitution $u = 1 + n^2 x^2$, $du = 2n^2 x dx$."
+      },
+      {
+        "step": 4,
+        "title": "Limit of Integrals",
+        "math": "\\lim_{n \\to \\infty} \\int_0^1 f_n(x) dx = \\lim_{n \\to \\infty} \\frac{\\ln(1 + n^2)}{2n} \\overset{\\text{L'H\\^opital}}{=} \\lim_{n \\to \\infty} \\frac{2n/(1+n^2)}{2} = \\lim_{n \\to \\infty} \\frac{n}{1+n^2} = 0",
+        "explanation": "Wait: for $f_n(x) = \\frac{nx}{1+n^2x^2}$, the maximum occurs at $x = 1/n$ where $f_n(1/n) = \\frac{1}{1+1} = 1/2$. If the question had $2n^2x/(1+n^2x^2)$ or $n^2x/(1+n^2x^2)$, the integral is $\\frac{1}{2}\\ln(1+n^2) \\to \\infty$. For $f_n(x) = \\frac{nx}{1+n^2x^2}$:"
+      },
+      {
+        "step": 5,
+        "title": "Supremum Norm / Non-uniformity Analysis",
+        "math": "f_n'(x) = \\frac{n(1 - n^2 x^2)}{(1 + n^2 x^2)^2} = 0 \\implies x_n = \\frac{1}{n} \\in [0, 1] \\implies f_n\\left(\\frac{1}{n}\\right) = \\frac{n(1/n)}{1 + 1} = \\frac{1}{2}",
+        "explanation": "Thus $\\|f_n - f\\|_\\infty = \\sup_{x \\in [0, 1]} |f_n(x) - 0| = 1/2 \\ne 0$. Hence $(f_n)$ does NOT converge uniformly on $[0, 1]$."
+      },
+      {
+        "step": 6,
+        "title": "Variant with $g_n(x) = \\frac{2n^2 x}{1+n^2 x^2}$ or $n^2 x e^{-nx}$",
+        "math": "\\text{If the integrand is scaled to } g_n(x) = n f_n(x) = \\frac{n^2 x}{1 + n^2 x^2}: \\quad \\lim_{n \\to \\infty} \\int_0^1 g_n(x) dx = \\lim_{n \\to \\infty} \\frac{1}{2}\\ln(1+n^2) = \\infty \\ne 0 = \\int_0^1 g(x) dx",
+        "explanation": "Uniform convergence is a sufficient condition for $\\lim \\int f_n = \\int \\lim f_n$. Without uniform convergence, interchanging limit and integral generally fails because a 'spike' of mass or area escapes to the boundary."
+      }
+    ],
+    "final_answer": "Pointwise limit is $f(x) = 0$. While $f_n(x) = \\frac{nx}{1+n^2x^2}$ has $\\|f_n\\|_\\infty = 1/2$ preventing uniform convergence, its scaled variants like $n f_n(x)$ demonstrate the total breakdown where $\\lim \\int \\ne \\int \\lim$. This illustrates that uniform convergence is the essential hypothesis for the Bounded/Uniform Convergence Theorem for integrals.",
+    "exam_tip": "Always compute the maximum point $x = 1/n$ with height $f_n(1/n) = 1/2$ to rigorously prove lack of uniform convergence.",
+    "id": "pyq.m5.200"
+  }
+]

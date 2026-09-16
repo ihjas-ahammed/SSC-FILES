@@ -1,0 +1,674 @@
+[
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 140,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Prove that if a function $f$ is continuous on $[a, b]$, then it is Riemann integrable on $[a, b]$.",
+    "concept_tested": "Integrability of Continuous Functions",
+    "approach": "Use Heine-Cantor theorem (continuous on compact $[a, b]$ is uniformly continuous) and Riemann's criterion.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Uniform Continuity on Compact Interval",
+        "math": "f \\in C[a, b] \\implies f \\text{ is uniformly continuous on } [a, b]",
+        "explanation": "Since $[a, b]$ is closed and bounded, continuity implies uniform continuity."
+      },
+      {
+        "step": 2,
+        "title": "Choosing Partition Mesh",
+        "math": "\\forall \\epsilon > 0, \\; \\exists \\delta > 0 : |x - y| < \\delta \\implies |f(x) - f(y)| < \\frac{\\epsilon}{b - a}",
+        "explanation": "By uniform continuity."
+      },
+      {
+        "step": 3,
+        "title": "Oscillation on Subintervals",
+        "math": "\\|P\\| < \\delta \\implies M_i - m_i = f(u_i) - f(v_i) < \\frac{\\epsilon}{b - a}",
+        "explanation": "Since $f$ attains its supremum $M_i$ and infimum $m_i$ on $[x_{i-1}, x_i]$ at some points $u_i, v_i$."
+      },
+      {
+        "step": 4,
+        "title": "Darboux Sum Difference",
+        "math": "U(P, f) - L(P, f) = \\sum_{i=1}^n (M_i - m_i)\\Delta x_i < \\frac{\\epsilon}{b-a} \\sum_{i=1}^n \\Delta x_i = \\frac{\\epsilon}{b-a}(b - a) = \\epsilon",
+        "explanation": "By Riemann's Criterion, $f$ is Riemann integrable."
+      }
+    ],
+    "final_answer": "Every continuous function on a closed bounded interval $[a, b]$ is Riemann integrable.",
+    "exam_tip": "Explicitly invoke the Heine-Cantor Theorem: continuity on a compact interval implies uniform continuity.",
+    "id": "pyq.m4.140"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 141,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "State and prove the Integration by Parts formula for Riemann integrals.",
+    "concept_tested": "Integration by Parts Formula",
+    "approach": "Integrate the product rule derivative $(fg)' = f'g + fg'$ using the Fundamental Theorem of Calculus.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "f, g \\in C^1[a, b] \\implies \\int_a^b f(x) g'(x) dx = [f(x)g(x)]_a^b - \\int_a^b f'(x) g(x) dx",
+        "explanation": "Integration by parts formula for Riemann integrals."
+      },
+      {
+        "step": 2,
+        "title": "Product Rule of Differentiation",
+        "math": "(fg)'(x) = f'(x)g(x) + f(x)g'(x) \\quad \\forall x \\in [a, b]",
+        "explanation": "Since $f$ and $g$ are differentiable."
+      },
+      {
+        "step": 3,
+        "title": "Integration and Linearity",
+        "math": "\\int_a^b (fg)'(x) dx = \\int_a^b f'(x)g(x) dx + \\int_a^b f(x)g'(x) dx",
+        "explanation": "Integrating both sides from $a$ to $b$."
+      },
+      {
+        "step": 4,
+        "title": "Application of Fundamental Theorem of Calculus",
+        "math": "\\int_a^b (fg)'(x) dx = [f(x)g(x)]_a^b = f(b)g(b) - f(a)g(a)",
+        "explanation": "Rearranging gives the desired formula."
+      }
+    ],
+    "final_answer": "$\\int_a^b f g' = f(b)g(b) - f(a)g(a) - \\int_a^b f' g$.",
+    "exam_tip": "Make sure to state that both $f'$ and $g'$ must be Riemann integrable on $[a, b]$.",
+    "id": "pyq.m4.141"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 142,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "State and prove the Second Fundamental Theorem of Calculus.",
+    "concept_tested": "Second Fundamental Theorem of Calculus (Evaluation Theorem)",
+    "approach": "Let $F$ be an antiderivative ($F' = f$), use Mean Value Theorem on each subinterval $[x_{i-1}, x_i]$, and squeeze between Darboux sums.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "f \\in \\mathcal{R}[a, b] \\land F'(x) = f(x) \\; \\forall x \\in [a, b] \\implies \\int_a^b f(x) dx = F(b) - F(a)",
+        "explanation": "If $f$ is Riemann integrable and has an antiderivative $F$, then the integral equals the total change in $F$."
+      },
+      {
+        "step": 2,
+        "title": "Telescoping Sum & Mean Value Theorem",
+        "math": "F(b) - F(a) = \\sum_{i=1}^n [F(x_i) - F(x_{i-1})] = \\sum_{i=1}^n F'(t_i)\\Delta x_i = \\sum_{i=1}^n f(t_i)\\Delta x_i",
+        "explanation": "By Lagrange's MVT on each subinterval $[x_{i-1}, x_i]$, there exists $t_i \\in (x_{i-1}, x_i)$ such that $F(x_i) - F(x_{i-1}) = F'(t_i)\\Delta x_i$."
+      },
+      {
+        "step": 3,
+        "title": "Trapping between Darboux Sums",
+        "math": "m_i \\le f(t_i) \\le M_i \\implies L(P, f) \\le F(b) - F(a) \\le U(P, f) \\quad \\forall P",
+        "explanation": "Since $F(b) - F(a)$ is trapped between $L(P, f)$ and $U(P, f)$ for every partition $P$."
+      },
+      {
+        "step": 4,
+        "title": "Conclusion",
+        "math": "\\sup_P L(P, f) \\le F(b) - F(a) \\le \\inf_P U(P, f) \\implies \\int_a^b f(x) dx = F(b) - F(a)",
+        "explanation": "Since $f \\in \\mathcal{R}[a, b]$, the upper and lower integrals coincide and equal $\\int_a^b f$."
+      }
+    ],
+    "final_answer": "$\\int_a^b f(x)dx = F(b) - F(a)$.",
+    "exam_tip": "The telescoping MVT argument is the standard rigorous proof in Bartle & Sherbert Theorem 7.3.1.",
+    "id": "pyq.m4.142"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 143,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "If $f$ is monotonic on $[a, b]$, show that $f$ is Riemann integrable on $[a, b]$.",
+    "concept_tested": "Integrability of Monotone Functions",
+    "approach": "Partition into $n$ equal subintervals; telescoping sum cancels internal terms.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Partition Setup",
+        "math": "\\Delta x_i = \\frac{b - a}{n} \\quad \\forall i = 1, \\dots, n",
+        "explanation": "Choose a uniform partition $P_n$ of $[a, b]$ into $n$ equal parts."
+      },
+      {
+        "step": 2,
+        "title": "Subinterval Extrema for Increasing Function",
+        "math": "m_i = f(x_{i-1}), \\quad M_i = f(x_i) \\implies M_i - m_i = f(x_i) - f(x_{i-1})",
+        "explanation": "Because $f$ is monotonically increasing."
+      },
+      {
+        "step": 3,
+        "title": "Telescoping Darboux Difference",
+        "math": "U(P_n, f) - L(P_n, f) = \\sum_{i=1}^n [f(x_i) - f(x_{i-1})] \\frac{b - a}{n} = \\frac{b - a}{n} [f(b) - f(a)]",
+        "explanation": "The sum telescopes to $f(b) - f(a)$."
+      },
+      {
+        "step": 4,
+        "title": "Riemann Criterion Verification",
+        "math": "\\forall \\epsilon > 0, \\text{ choose } n > \\frac{(b-a)[f(b)-f(a)]}{\\epsilon} \\implies U(P_n, f) - L(P_n, f) < \\epsilon",
+        "explanation": "By the Archimedean Property, such $n$ exists. Hence $f \\in \\mathcal{R}[a, b]$."
+      }
+    ],
+    "final_answer": "Every monotonic function on $[a, b]$ is Riemann integrable.",
+    "exam_tip": "Note that monotonic functions may have countably many discontinuities and are still Riemann integrable!",
+    "id": "pyq.m4.143"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 144,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "State and prove the Riemann Criterion for integrability of a bounded function.",
+    "concept_tested": "Riemann Criterion for Integrability (Full Proof)",
+    "approach": "Prove both directions: $(\\implies)$ integrability implies $U - L < \\epsilon$; $(\\impliedby)$ $U - L < \\epsilon$ implies $\\overline{\\int} = \\underline{\\int}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Direction 1 ($\\implies$): Integrability $\\implies$ Criterion",
+        "math": "\\underline{\\int_a^b} f = \\overline{\\int_a^b} f = I. \\quad \\exists P_1 : L(P_1, f) > I - \\frac{\\epsilon}{2}, \\quad \\exists P_2 : U(P_2, f) < I + \\frac{\\epsilon}{2}",
+        "explanation": "By definitions of supremum and infimum."
+      },
+      {
+        "step": 2,
+        "title": "Common Refinement $P = P_1 \\cup P_2$",
+        "math": "U(P, f) - L(P, f) \\le U(P_2, f) - L(P_1, f) < \\left(I + \\frac{\\epsilon}{2}\\right) - \\left(I - \\frac{\\epsilon}{2}\\right) = \\epsilon",
+        "explanation": "Refinement decreases upper sums and increases lower sums."
+      },
+      {
+        "step": 3,
+        "title": "Direction 2 ($\\impliedby$): Criterion $\\implies$ Integrability",
+        "math": "L(P, f) \\le \\underline{\\int_a^b} f \\le \\overline{\\int_a^b} f \\le U(P, f) \\implies 0 \\le \\overline{\\int_a^b} f - \\underline{\\int_a^b} f \\le U(P, f) - L(P, f) < \\epsilon",
+        "explanation": "Since this holds for every $\\epsilon > 0$, the non-negative quantity $\\overline{\\int} f - \\underline{\\int} f$ must equal 0."
+      }
+    ],
+    "final_answer": "$f \\in \\mathcal{R}[a, b] \\iff \\forall \\epsilon > 0, \\exists P_\\epsilon \\text{ s.t. } U(P_\\epsilon, f) - L(P_\\epsilon, f) < \\epsilon$.",
+    "exam_tip": "The common refinement $P = P_1 \\cup P_2$ is essential in the forward direction.",
+    "id": "pyq.m4.144"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 145,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Prove that every continuous function on $[a, b]$ is Riemann integrable.",
+    "concept_tested": "Integrability of Continuous Functions",
+    "approach": "Use uniform continuity on $[a, b]$: $\\forall \\epsilon > 0, \\exists \\delta > 0: |x-y| < \\delta \\implies |f(x) - f(y)| < \\frac{\\epsilon}{b-a}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Uniform Continuity",
+        "math": "f \\in C[a, b] \\implies f \\text{ is uniformly continuous on } [a, b]",
+        "explanation": "Continuous function on a closed bounded interval is uniformly continuous."
+      },
+      {
+        "step": 2,
+        "title": "Partition with $\\|P\\| < \\delta$",
+        "math": "x, y \\in [x_{i-1}, x_i] \\implies |x - y| \\le \\|P\\| < \\delta \\implies |f(x) - f(y)| < \\frac{\\epsilon}{b - a}",
+        "explanation": "Given $\\epsilon > 0$, choose partition $P$ with $\\|P\\| < \\delta$."
+      },
+      {
+        "step": 3,
+        "title": "Sum Difference",
+        "math": "M_i - m_i = f(u_i) - f(v_i) \\le \\frac{\\epsilon}{b-a} \\implies U(P, f) - L(P, f) = \\sum_{i=1}^n (M_i - m_i)\\Delta x_i < \\epsilon",
+        "explanation": "Since $f$ attains extreme values at $u_i, v_i$."
+      }
+    ],
+    "final_answer": "By Riemann's criterion, $f$ is Riemann integrable on $[a, b]$.",
+    "exam_tip": "Uniform continuity is the key ingredient that lets us choose a single $\\delta$ across the whole interval.",
+    "id": "pyq.m4.145"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 146,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Prove that every monotonic function on $[a, b]$ is Riemann integrable.",
+    "concept_tested": "Riemann Integrability of Monotonic Functions",
+    "approach": "Telescoping sum with uniform partition of $n$ subintervals.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Uniform Partition",
+        "math": "P_n = \\{x_0, x_1, \\dots, x_n\\}, \\quad \\Delta x_i = \\frac{b - a}{n}",
+        "explanation": "Divide $[a, b]$ into $n$ equal segments."
+      },
+      {
+        "step": 2,
+        "title": "Darboux Sum Difference",
+        "math": "U(P_n, f) - L(P_n, f) = \\sum_{i=1}^n (f(x_i) - f(x_{i-1})) \\frac{b-a}{n} = \\frac{b-a}{n}(f(b) - f(a))",
+        "explanation": "Sum telescopes completely."
+      },
+      {
+        "step": 3,
+        "title": "Choosing $n$",
+        "math": "n > \\frac{(b-a)(f(b)-f(a))}{\\epsilon} \\implies U(P_n, f) - L(P_n, f) < \\epsilon",
+        "explanation": "Thus $f$ satisfies Riemann's criterion."
+      }
+    ],
+    "final_answer": "Every monotonic function on $[a, b]$ is Riemann integrable.",
+    "exam_tip": "If $f(a) = f(b)$, $f$ is constant and the result is trivial.",
+    "id": "pyq.m4.146"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 147,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2019",
+    "question": "Let $f(x) = x$ on $[0, 1]$. Using partitions into equal subintervals, find the Riemann integral $\\int_0^1 x dx$.",
+    "concept_tested": "Direct Computation of Riemann Integral via Upper/Lower Sums",
+    "approach": "Use uniform partition of $[0, 1]$ into $n$ parts for $f(x) = x$, compute $U(P_n)$ and $L(P_n)$, and take limit as $n \\to \\infty$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Partition Setup",
+        "math": "P_n = \\left\\{0, \\frac{1}{n}, \\frac{2}{n}, \\dots, \\frac{n}{n} = 1\\right\\}, \\quad \\Delta x_i = \\frac{1}{n}",
+        "explanation": "Subintervals are $[\\frac{i-1}{n}, \\frac{i}{n}]$."
+      },
+      {
+        "step": 2,
+        "title": "Upper Sum $U(P_n, f)$",
+        "math": "M_i = f\\left(\\frac{i}{n}\\right) = \\frac{i}{n} \\implies U(P_n, f) = \\sum_{i=1}^n \\frac{i}{n} \\cdot \\frac{1}{n} = \\frac{1}{n^2} \\frac{n(n+1)}{2} = \\frac{n+1}{2n} = \\frac{1}{2} + \\frac{1}{2n}",
+        "explanation": "Using the formula $\\sum_{i=1}^n i = \\frac{n(n+1)}{2}$."
+      },
+      {
+        "step": 3,
+        "title": "Lower Sum $L(P_n, f)$",
+        "math": "m_i = f\\left(\\frac{i-1}{n}\\right) = \\frac{i-1}{n} \\implies L(P_n, f) = \\sum_{i=1}^n \\frac{i-1}{n} \\cdot \\frac{1}{n} = \\frac{1}{n^2} \\frac{(n-1)n}{2} = \\frac{n-1}{2n} = \\frac{1}{2} - \\frac{1}{2n}",
+        "explanation": "Using $\\sum_{i=1}^n (i-1) = \\frac{(n-1)n}{2}$."
+      },
+      {
+        "step": 4,
+        "title": "Limit as $n \\to \\infty$",
+        "math": "\\lim_{n \\to \\infty} U(P_n, f) = \\lim_{n \\to \\infty} L(P_n, f) = \\frac{1}{2} \\implies \\int_0^1 x dx = \\frac{1}{2}",
+        "explanation": "Both upper and lower sums converge to $1/2$."
+      }
+    ],
+    "final_answer": "$\\int_0^1 x dx = \\frac{1}{2}$.",
+    "exam_tip": "Explicitly state the summation identities used: $\\sum_{i=1}^n i = \\frac{n(n+1)}{2}$.",
+    "id": "pyq.m4.147"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 148,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2020",
+    "question": "Show that Dirichlet's function $f(x) = 1$ if $x \\in \\mathbb{Q}$ and $f(x) = 0$ if $x \\notin \\mathbb{Q}$ is not Riemann integrable on $[0, 1]$.",
+    "concept_tested": "Non-Integrability of Dirichlet's Function",
+    "approach": "Compute upper and lower integrals using density of $\\mathbb{Q}$ and $\\mathbb{R}\\setminus\\mathbb{Q}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Subinterval Sup and Inf",
+        "math": "f(x) = \\begin{cases} 1, & x \\in \\mathbb{Q} \\\\ 0, & x \\notin \\mathbb{Q} \\end{cases} \\implies M_i = \\sup_{I_i} f = 1, \\quad m_i = \\inf_{I_i} f = 0",
+        "explanation": "Every non-empty open subinterval contains both rational and irrational numbers."
+      },
+      {
+        "step": 2,
+        "title": "Darboux Sums for Any Partition $P$",
+        "math": "U(P, f) = \\sum_{i=1}^n 1 \\cdot \\Delta x_i = 1(1 - 0) = 1, \\qquad L(P, f) = \\sum_{i=1}^n 0 \\cdot \\Delta x_i = 0",
+        "explanation": "These hold identically for every partition $P$."
+      },
+      {
+        "step": 3,
+        "title": "Comparison of Integrals",
+        "math": "\\overline{\\int_0^1} f = \\inf_P U(P, f) = 1 \\ne 0 = \\sup_P L(P, f) = \\underline{\\int_0^1} f",
+        "explanation": "Since the upper and lower integrals are not equal, $f$ is not Riemann integrable."
+      }
+    ],
+    "final_answer": "Dirichlet's function is not Riemann integrable on $[0, 1]$ because $\\underline{\\int} f = 0 \\ne 1 = \\overline{\\int} f$.",
+    "exam_tip": "Cite the Density Theorems for $\\mathbb{Q}$ and $\\mathbb{R}\\setminus\\mathbb{Q}$ as the rigorous justification.",
+    "id": "pyq.m4.148"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 149,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Prove that if $f$ and $g$ are Riemann integrable on $[a, b]$, then $f + g$ is Riemann integrable on $[a, b]$ and $\\int_a^b (f+g) = \\int_a^b f + \\int_a^b g$.",
+    "concept_tested": "Linearity of Riemann Integral: Additivity",
+    "approach": "Use tagged Riemann sums or Darboux sums and the inequality $m_i(f) + m_i(g) \\le m_i(f+g) \\le M_i(f+g) \\le M_i(f) + M_i(g)$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Subinterval Bounds",
+        "math": "m_i(f) + m_i(g) \\le m_i(f+g) \\le M_i(f+g) \\le M_i(f) + M_i(g)",
+        "explanation": "By properties of supremum and infimum."
+      },
+      {
+        "step": 2,
+        "title": "Sum Inequalities",
+        "math": "L(P, f) + L(P, g) \\le L(P, f+g) \\le U(P, f+g) \\le U(P, f) + U(P, g)",
+        "explanation": "Multiplying by $\\Delta x_i$ and summing over $i$."
+      },
+      {
+        "step": 3,
+        "title": "Riemann Criterion for $f+g$",
+        "math": "U(P, f+g) - L(P, f+g) \\le [U(P, f) - L(P, f)] + [U(P, g) - L(P, g)] < \\frac{\\epsilon}{2} + \\frac{\\epsilon}{2} = \\epsilon",
+        "explanation": "Choosing common partition where both $f$ and $g$ have Darboux differences $< \\epsilon/2$."
+      },
+      {
+        "step": 4,
+        "title": "Integral Value",
+        "math": "\\int_a^b (f+g) = \\int_a^b f + \\int_a^b g",
+        "explanation": "Since the integral is squeezed between $L(P, f) + L(P, g)$ and $U(P, f) + U(P, g)$."
+      }
+    ],
+    "final_answer": "$f+g \\in \\mathcal{R}[a, b]$ and $\\int_a^b (f+g) = \\int_a^b f + \\int_a^b g$.",
+    "exam_tip": "Note that $U(P, f+g) \\le U(P, f) + U(P, g)$ follows from subadditivity of the supremum.",
+    "id": "pyq.m4.149"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 150,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Show that if $f$ is Riemann integrable on $[a, b]$, then $|f|$ is Riemann integrable and $|\\int_a^b f| \\le \\int_a^b |f|$.",
+    "concept_tested": "Integrability of Absolute Value Function",
+    "approach": "Use reverse triangle inequality $||f(x)| - |f(y)|| \\le |f(x) - f(y)|$ to bound oscillations, then $-|f| \\le f \\le |f|$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Oscillation Bound",
+        "math": "M_i(|f|) - m_i(|f|) = \\sup_{x, y \\in I_i} ||f(x)| - |f(y)|| \\le \\sup_{x, y \\in I_i} |f(x) - f(y)| = M_i(f) - m_i(f)",
+        "explanation": "The oscillation of $|f|$ on any interval never exceeds the oscillation of $f$."
+      },
+      {
+        "step": 2,
+        "title": "Darboux Difference",
+        "math": "U(P, |f|) - L(P, |f|) \\le U(P, f) - L(P, f) < \\epsilon",
+        "explanation": "Hence $|f|$ satisfies the Riemann Criterion and is integrable."
+      },
+      {
+        "step": 3,
+        "title": "Integral Inequality",
+        "math": "-|f(x)| \\le f(x) \\le |f(x)| \\implies -\\int_a^b |f| \\le \\int_a^b f \\le \\int_a^b |f| \\iff \\left|\\int_a^b f\\right| \\le \\int_a^b |f|",
+        "explanation": "By monotonicity of the Riemann integral."
+      }
+    ],
+    "final_answer": "$|f| \\in \\mathcal{R}[a, b]$ and $|\\int_a^b f| \\le \\int_a^b |f|$.",
+    "exam_tip": "Mention that the converse is false: Dirichlet's function modified to take values $\\pm 1$ has $|f|=1$ integrable, but $f$ is not integrable.",
+    "id": "pyq.m4.150"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 151,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Let $f(x) = c$ be a constant function on $[a, b]$. Show that $f$ is Riemann integrable and $\\int_a^b c dx = c(b-a)$.",
+    "concept_tested": "Integral of Constant Function",
+    "approach": "Compute $U(P, c)$ and $L(P, c)$ for an arbitrary partition $P$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Extrema on Subintervals",
+        "math": "f(x) = c \\; \\forall x \\in [a, b] \\implies M_i = c, \\quad m_i = c \\quad \\forall i = 1, \\dots, n",
+        "explanation": "A constant function attains the same value everywhere."
+      },
+      {
+        "step": 2,
+        "title": "Upper and Lower Sums",
+        "math": "U(P, f) = \\sum_{i=1}^n c \\Delta x_i = c \\sum_{i=1}^n \\Delta x_i = c(b - a), \\qquad L(P, f) = \\sum_{i=1}^n c \\Delta x_i = c(b - a)",
+        "explanation": "The sum of the lengths of the subintervals is $\\sum \\Delta x_i = b - a$."
+      },
+      {
+        "step": 3,
+        "title": "Conclusion",
+        "math": "L(P, f) = U(P, f) = c(b - a) \\implies \\underline{\\int_a^b} c dx = \\overline{\\int_a^b} c dx = c(b - a)",
+        "explanation": "Since upper and lower sums are equal to $c(b-a)$ for every partition $P$, $f$ is integrable with integral $c(b-a)$."
+      }
+    ],
+    "final_answer": "$f(x) = c$ is Riemann integrable and $\\int_a^b c dx = c(b-a)$.",
+    "exam_tip": "Notice this works for any constant $c$, whether positive, negative, or zero.",
+    "id": "pyq.m4.151"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 152,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Show that if $P^*$ is a refinement of a partition $P$, then $L(P, f) \\le L(P^*, f)$ and $U(P^*, f) \\le U(P, f)$.",
+    "concept_tested": "Refinement Lemma for Darboux Sums",
+    "approach": "Prove for adding a single partition point $x^*$, then use induction for any refinement $P^* \\supseteq P$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Single Point Refinement",
+        "math": "P^* = P \\cup \\{x^*\\}, \\quad x^* \\in (x_{k-1}, x_k)",
+        "explanation": "The subinterval $[x_{k-1}, x_k]$ is split into $[x_{k-1}, x^*]$ and $[x^*, x_k]$."
+      },
+      {
+        "step": 2,
+        "title": "Lower Sum Comparison",
+        "math": "m_k' = \\inf_{[x_{k-1}, x^*]} f \\ge m_k, \\quad m_k'' = \\inf_{[x^*, x_k]} f \\ge m_k",
+        "explanation": "Since infimum over a subset is greater than or equal to infimum over the whole set."
+      },
+      {
+        "step": 3,
+        "title": "Contribution Difference",
+        "math": "m_k'(x^* - x_{k-1}) + m_k''(x_k - x^*) \\ge m_k(x^* - x_{k-1}) + m_k(x_k - x^*) = m_k(x_k - x_{k-1})",
+        "explanation": "Summing across all intervals gives $L(P^*, f) \\ge L(P, f)$."
+      },
+      {
+        "step": 4,
+        "title": "Upper Sum Comparison",
+        "math": "M_k' \\le M_k, \\, M_k'' \\le M_k \\implies U(P^*, f) \\le U(P, f)",
+        "explanation": "Supremum over a subset is less than or equal to supremum over the whole set."
+      }
+    ],
+    "final_answer": "$L(P, f) \\le L(P^*, f)$ and $U(P^*, f) \\le U(P, f)$ for any refinement $P^* \\supseteq P$.",
+    "exam_tip": "Mention the geometric intuition: refining adds more rectangles, filling gaps for lower sums and cutting corners for upper sums.",
+    "id": "pyq.m4.152"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 153,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Show that every step function on $[a, b]$ is Riemann integrable.",
+    "concept_tested": "Riemann Integrability of Step Functions",
+    "approach": "Use the fact that a step function is constant on open subintervals, which can be modified at finitely many endpoints without affecting integrability.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Step Function Definition",
+        "math": "\\phi(x) = c_i \\quad \\forall x \\in (x_{i-1}, x_i), \\quad i = 1, \\dots, n",
+        "explanation": "Where $P = \\{x_0, x_1, \\dots, x_n\\}$ is the defining partition."
+      },
+      {
+        "step": 2,
+        "title": "Linear Combination of Characteristic Functions",
+        "math": "\\phi(x) = \\sum_{i=1}^n c_i \\mathbf{1}_{(x_{i-1}, x_i)}(x) + \\sum_{i=0}^n \\phi(x_i) \\mathbf{1}_{\\{x_i\\}}(x)",
+        "explanation": "Characteristic functions of open intervals are Riemann integrable, and finite points of jump do not affect integrability."
+      },
+      {
+        "step": 3,
+        "title": "Darboux Criterion / Evaluation",
+        "math": "\\int_a^b \\phi(x) dx = \\sum_{i=1}^n c_i (x_i - x_{i-1})",
+        "explanation": "By additivity over subintervals, each interval contributes $c_i \\Delta x_i$."
+      }
+    ],
+    "final_answer": "Every step function is Riemann integrable with $\\int_a^b \\phi = \\sum_{i=1}^n c_i \\Delta x_i$.",
+    "exam_tip": "Step functions form a dense subspace of $\\mathcal{R}[a, b]$ in the $L^1$ norm.",
+    "id": "pyq.m4.153"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 154,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2020",
+    "question": "Prove that if $f$ is Riemann integrable on $[a, b]$ and $c \\in (a, b)$, then $f$ is integrable on $[a, c]$ and $[c, b]$ and $\\int_a^b f = \\int_a^c f + \\int_c^b f$.",
+    "concept_tested": "Domain Additivity of Riemann Integral: $\\int_a^b = \\int_a^c + \\int_c^b$",
+    "approach": "Include $c$ in partitions of $[a, b]$, splitting $P = P_1 \\cup P_2$ with $P_1$ partitioning $[a, c]$ and $P_2$ partitioning $[c, b]$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Partition Splitting",
+        "math": "P_1 \\text{ partition of } [a, c], \\; P_2 \\text{ partition of } [c, b] \\implies P = P_1 \\cup P_2 \\text{ partition of } [a, b]",
+        "explanation": "The point $c$ serves as the right endpoint of $P_1$ and left endpoint of $P_2$."
+      },
+      {
+        "step": 2,
+        "title": "Darboux Sum Additivity",
+        "math": "U(P, f) = U(P_1, f) + U(P_2, f) \\quad \\text{and} \\quad L(P, f) = L(P_1, f) + L(P_2, f)",
+        "explanation": "The sum splits cleanly across the junction $c$."
+      },
+      {
+        "step": 3,
+        "title": "Integrability Squeeze",
+        "math": "U(P, f) - L(P, f) = [U(P_1, f) - L(P_1, f)] + [U(P_2, f) - L(P_2, f)] < \\epsilon",
+        "explanation": "Since each term is non-negative, $U(P_1, f) - L(P_1, f) < \\epsilon$ and $U(P_2, f) - L(P_2, f) < \\epsilon$."
+      },
+      {
+        "step": 4,
+        "title": "Integral Equality",
+        "math": "\\int_a^b f = \\int_a^c f + \\int_c^b f",
+        "explanation": "Taking infima/suprema proves the identity."
+      }
+    ],
+    "final_answer": "If $f \\in \\mathcal{R}[a, b]$ and $c \\in (a, b)$, then $f$ is integrable on $[a, c]$ and $[c, b]$, and $\\int_a^b f = \\int_a^c f + \\int_c^b f$.",
+    "exam_tip": "Note this identity extends to any ordering of $a, b, c$ using the convention $\\int_b^a f = -\\int_a^b f$.",
+    "id": "pyq.m4.154"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 155,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Show that if $f: [a, b] \\to \\mathbb{R}$ is Riemann integrable, then $f$ is bounded on $[a, b]$.",
+    "concept_tested": "Riemann Integrability Implies Boundedness",
+    "approach": "Proof by contradiction: if $f$ is unbounded, then in any partition at least one subinterval has $f$ unbounded, making Riemann sums diverge.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Assumption for Contradiction",
+        "math": "f \\in \\mathcal{R}[a, b] \\text{ with integral } L, \\quad \\text{suppose } f \\text{ is unbounded on } [a, b]",
+        "explanation": "Assume $f$ is Riemann integrable in the Riemann-sum sense, yet unbounded."
+      },
+      {
+        "step": 2,
+        "title": "Riemann Sum Bound",
+        "math": "\\exists P = \\{x_0, \\dots, x_n\\} : |S(\\dot{P}, f) - L| < 1 \\implies |S(\\dot{P}, f)| < |L| + 1",
+        "explanation": "For any choice of tags $t_i \\in [x_{i-1}, x_i]$."
+      },
+      {
+        "step": 3,
+        "title": "Unbounded Subinterval",
+        "math": "\\exists k \\in \\{1, \\dots, n\\} \\text{ such that } f \\text{ is unbounded on } [x_{k-1}, x_k]",
+        "explanation": "If every subinterval were bounded, the entire interval $[a, b]$ would be bounded."
+      },
+      {
+        "step": 4,
+        "title": "Contradiction via Tag Choice",
+        "math": "S(\\dot{P}, f) = f(t_k)\\Delta x_k + \\sum_{i \\ne k} f(t_i)\\Delta x_i \\implies |f(t_k)|\\Delta x_k \\le |L| + 1 + \\left|\\sum_{i \\ne k} f(t_i)\\Delta x_i\\right|",
+        "explanation": "Since $f$ is unbounded on $[x_{k-1}, x_k]$, we can pick $t_k$ to make $|f(t_k)|$ arbitrarily large, violating the bound."
+      }
+    ],
+    "final_answer": "If $f$ is Riemann integrable on $[a, b]$, then $f$ must be bounded on $[a, b]$.",
+    "exam_tip": "This fundamental result explains why the Riemann integral cannot handle unbounded functions (which require improper integrals).",
+    "id": "pyq.m4.155"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 156,
+    "marks": 5,
+    "source": "CU B.Sc. Exam, Nov 2025",
+    "question": "Evaluate $\\lim_{n \\to \\infty} \\sum_{i=1}^n \\frac{n}{n^2 + i^2}$ by expressing it as a Riemann sum.",
+    "concept_tested": "Evaluation of Limit of a Sum via Riemann Integral",
+    "approach": "Rewrite $\\sum_{i=1}^n \\frac{n}{n^2 + i^2} = \\frac{1}{n} \\sum_{i=1}^n \\frac{1}{1 + (i/n)^2}$, recognize as Riemann sum of $f(x) = \\frac{1}{1+x^2}$ on $[0, 1]$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Algebraic Transformation",
+        "math": "\\sum_{i=1}^n \\frac{n}{n^2 + i^2} = \\sum_{i=1}^n \\frac{n}{n^2\\left(1 + \\frac{i^2}{n^2}\\right)} = \\frac{1}{n} \\sum_{i=1}^n \\frac{1}{1 + \\left(\\frac{i}{n}\\right)^2}",
+        "explanation": "Factor out $n^2$ from the denominator."
+      },
+      {
+        "step": 2,
+        "title": "Identification as Riemann Sum",
+        "math": "f(x) = \\frac{1}{1+x^2}, \\quad x_i = \\frac{i}{n}, \\quad \\Delta x = \\frac{1}{n} \\implies \\lim_{n \\to \\infty} \\frac{1}{n} \\sum_{i=1}^n f\\left(\\frac{i}{n}\\right) = \\int_0^1 \\frac{1}{1+x^2} dx",
+        "explanation": "Since $f(x) = \\frac{1}{1+x^2}$ is continuous on $[0, 1]$, the Riemann sums converge to the definite integral."
+      },
+      {
+        "step": 3,
+        "title": "Evaluate the Integral",
+        "math": "\\int_0^1 \\frac{1}{1+x^2} dx = [\\arctan(x)]_0^1 = \\arctan(1) - \\arctan(0) = \\frac{\\pi}{4} - 0 = \\frac{\\pi}{4}",
+        "explanation": "Standard antiderivative of $\\frac{1}{1+x^2}$ is $\\arctan(x)$."
+      }
+    ],
+    "final_answer": "$\\lim_{n \\to \\infty} \\sum_{i=1}^n \\frac{n}{n^2 + i^2} = \\frac{\\pi}{4}$.",
+    "exam_tip": "Always write down the general formula: $\\lim_{n \\to \\infty} \\frac{1}{n} \\sum_{i=1}^n f(i/n) = \\int_0^1 f(x) dx$.",
+    "id": "pyq.m4.156"
+  },
+  {
+    "module": "m4",
+    "topic": "Topic 4: Riemann Integration & Darboux Sums",
+    "section": "paragraph",
+    "num": 157,
+    "marks": 5,
+    "source": "Calicut University B.Sc. Exam, April 2023",
+    "question": "State and prove the First Mean Value Theorem for Integrals.",
+    "concept_tested": "First Mean Value Theorem for Integrals (Past Paper Model)",
+    "approach": "State and prove that for continuous $f$ on $[a, b]$, $\\exists c \\in [a, b]$ such that $\\int_a^b f(x)dx = f(c)(b-a)$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "f: [a, b] \\to \\mathbb{R} \\text{ is continuous} \\implies \\exists c \\in [a, b] \\text{ such that } \\int_a^b f(x) dx = f(c)(b - a)",
+        "explanation": "The average value of a continuous function on $[a, b]$ is attained at least once."
+      },
+      {
+        "step": 2,
+        "title": "Extreme Value Theorem",
+        "math": "m = \\min_{x \\in [a, b]} f(x), \\quad M = \\max_{x \\in [a, b]} f(x) \\implies m \\le f(x) \\le M \\; (\\forall x \\in [a, b])",
+        "explanation": "Continuous function on compact interval attains its minimum $m$ and maximum $M$."
+      },
+      {
+        "step": 3,
+        "title": "Integrating the Inequalities",
+        "math": "\\int_a^b m dx \\le \\int_a^b f(x) dx \\le \\int_a^b M dx \\implies m(b - a) \\le \\int_a^b f(x) dx \\le M(b - a)",
+        "explanation": "Since $b - a > 0$, divide by $b - a$."
+      },
+      {
+        "step": 4,
+        "title": "Intermediate Value Theorem Application",
+        "math": "m \\le \\frac{1}{b - a} \\int_a^b f(x) dx \\le M \\implies \\exists c \\in [a, b] \\text{ s.t. } f(c) = \\frac{1}{b - a} \\int_a^b f(x) dx",
+        "explanation": "By IVT, $f$ takes on every value between its minimum $m$ and maximum $M$."
+      }
+    ],
+    "final_answer": "$\\int_a^b f(x)dx = f(c)(b-a)$ for some $c \\in [a, b]$.",
+    "exam_tip": "Combining EVT (Extreme Value Theorem) and IVT (Intermediate Value Theorem) is the classic proof.",
+    "id": "pyq.m4.157"
+  }
+]

@@ -1,0 +1,760 @@
+[
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 161,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2024",
+    "question": "Prove that the intersection of any finite collection of open sets in $\\mathbb{R}$ is open.",
+    "concept_tested": "Finite Intersection of Open Sets in $\\mathbb{R}$",
+    "approach": "Let $x \\in \\bigcap_{k=1}^m G_k$, find open intervals $(x-\\epsilon_k, x+\\epsilon_k) \\subseteq G_k$, and take $\\epsilon = \\min \\epsilon_k > 0$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Setup",
+        "math": "G = \\bigcap_{k=1}^m G_k, \\quad x \\in G \\implies x \\in G_k \\quad \\forall k \\in \\{1, 2, \\dots, m\\}",
+        "explanation": "Since $x$ belongs to the intersection, it belongs to each individual open set $G_k$."
+      },
+      {
+        "step": 2,
+        "title": "Openness of Each $G_k$",
+        "math": "\\forall k \\in \\{1, \\dots, m\\}, \\; \\exists \\epsilon_k > 0 \\text{ such that } V_{\\epsilon_k}(x) = (x - \\epsilon_k, x + \\epsilon_k) \\subseteq G_k",
+        "explanation": "By definition of open sets in $\\mathbb{R}$."
+      },
+      {
+        "step": 3,
+        "title": "Taking Minimum Radius",
+        "math": "\\epsilon = \\min\\{\\epsilon_1, \\epsilon_2, \\dots, \\epsilon_m\\} > 0 \\implies V_\\epsilon(x) \\subseteq V_{\\epsilon_k}(x) \\subseteq G_k \\; (\\forall k) \\implies V_\\epsilon(x) \\subseteq \\bigcap_{k=1}^m G_k = G",
+        "explanation": "The minimum of finitely many strictly positive real numbers is strictly positive. Hence $G$ is open."
+      }
+    ],
+    "final_answer": "The intersection of any finite collection of open sets is open because $\\epsilon = \\min_{1 \\le k \\le m} \\epsilon_k > 0$.",
+    "exam_tip": "Emphasize why this fails for infinite intersections: the infimum of infinitely many positive numbers can be 0 (e.g. $\\bigcap_{n=1}^\\infty (-1/n, 1/n) = \\{0\\}$, which is not open).",
+    "id": "pyq.m5.161"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 162,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "State the definition of uniform convergence of a sequence of functions.",
+    "concept_tested": "Definition of Uniform Convergence of Sequence of Functions",
+    "approach": "State the $\\epsilon-K$ definition where $K$ depends solely on $\\epsilon$, not on $x$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Formal Definition",
+        "math": "f_n \\rightrightarrows f \\text{ on } A \\iff \\forall \\epsilon > 0, \\; \\exists K(\\epsilon) \\in \\mathbb{N} \\text{ such that } \\forall n \\ge K, \\; \\forall x \\in A, \\; |f_n(x) - f(x)| < \\epsilon",
+        "explanation": "A sequence of functions $(f_n)$ converges uniformly to $f$ on a set $A$ if the rate of convergence is uniform across all points $x \\in A$."
+      },
+      {
+        "step": 2,
+        "title": "Supremum Norm Equivalent",
+        "math": "\\lim_{n \\to \\infty} \\|f_n - f\\|_A = \\lim_{n \\to \\infty} \\sup_{x \\in A} |f_n(x) - f(x)| = 0",
+        "explanation": "Uniform convergence is equivalent to convergence in the uniform (supremum) norm."
+      }
+    ],
+    "final_answer": "$(f_n)$ converges uniformly to $f$ on $A$ if $\\forall \\epsilon > 0, \\exists K \\in \\mathbb{N}$ such that $|f_n(x) - f(x)| < \\epsilon$ for all $n \\ge K$ and all $x \\in A$.",
+    "exam_tip": "Write the quantifiers in order: '$\\forall \\epsilon > 0, \\exists K \\in \\mathbb{N}, \\forall n \\ge K, \\forall x \\in A$'. Placing $\\forall x$ before $\\exists K$ gives pointwise convergence!",
+    "id": "pyq.m5.162"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 163,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Write the difference between pointwise convergence and uniform convergence.",
+    "concept_tested": "Pointwise vs Uniform Convergence",
+    "approach": "Contrast the quantifier dependencies: $K(\\epsilon, x)$ vs $K(\\epsilon)$, and preservation of continuity.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Quantifier Dependency",
+        "math": "\\text{Pointwise: } K = K(\\epsilon, x); \\qquad \\text{Uniform: } K = K(\\epsilon) \\text{ (independent of } x)",
+        "explanation": "In pointwise convergence, different points $x$ can require different numbers of terms to get within $\\epsilon$. In uniform convergence, a single $K$ works simultaneously for all points in the domain."
+      },
+      {
+        "step": 2,
+        "title": "Property Preservation",
+        "math": "\\text{Uniform convergence preserves continuity and integrates term-by-term; pointwise convergence does not.}",
+        "explanation": "Pointwise limits of continuous functions can be discontinuous (e.g., $x^n$ on $[0, 1]$)."
+      }
+    ],
+    "final_answer": "Pointwise: $K$ depends on both $\\epsilon$ and $x$. Uniform: $K$ depends only on $\\epsilon$, holding simultaneously for all $x \\in A$. Uniform convergence guarantees the limit of continuous functions is continuous.",
+    "exam_tip": "A two-column comparison table is the cleanest way to present this answer in an exam.",
+    "id": "pyq.m5.163"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 164,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "State the Weierstrass M-test for uniform convergence of infinite series of functions.",
+    "concept_tested": "Weierstrass M-Test",
+    "approach": "State hypotheses $|f_n(x)| \\le M_n$ and $\\sum M_n < \\infty$, and the conclusion of uniform and absolute convergence.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "|f_n(x)| \\le M_n \\quad \\forall x \\in A, \\; \\forall n \\in \\mathbb{N}, \\qquad \\sum_{n=1}^\\infty M_n < \\infty",
+        "explanation": "If each function $f_n$ is bounded on $A$ by a constant $M_n$, and the numerical series $\\sum M_n$ converges."
+      },
+      {
+        "step": 2,
+        "title": "Conclusion",
+        "math": "\\sum_{n=1}^\\infty f_n(x) \\text{ converges absolutely and uniformly on } A",
+        "explanation": "The series of functions converges uniformly to a function $S(x)$ on $A$."
+      }
+    ],
+    "final_answer": "If $|f_n(x)| \\le M_n$ for all $x \\in A$ and $\\sum M_n$ converges, then $\\sum f_n$ converges uniformly and absolutely on $A$.",
+    "exam_tip": "Remember that $M_n$ must be constants independent of $x$.",
+    "id": "pyq.m5.164"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 165,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Define the radius of convergence of a power series.",
+    "concept_tested": "Radius of Convergence of Power Series",
+    "approach": "Define $R$ via Cauchy-Hadamard formula $1/R = \\limsup |a_n|^{1/n}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition",
+        "math": "R = \\sup\\{r \\ge 0 : \\sum a_n r^n \\text{ converges}\\} \\in [0, \\infty]",
+        "explanation": "The radius of convergence $R$ is the non-negative number (or $\\infty$) such that $\\sum a_n (x-c)^n$ converges for $|x-c| < R$ and diverges for $|x-c| > R$."
+      },
+      {
+        "step": 2,
+        "title": "Cauchy-Hadamard Formula",
+        "math": "\\frac{1}{R} = \\limsup_{n \\to \\infty} |a_n|^{1/n} \\quad (\\text{or } \\frac{1}{R} = \\lim_{n \\to \\infty} \\left|\\frac{a_{n+1}}{a_n}\\right| \\text{ when it exists})",
+        "explanation": "Standard computational formulas."
+      }
+    ],
+    "final_answer": "The radius of convergence $R$ is defined by $\\frac{1}{R} = \\limsup_{n \\to \\infty} |a_n|^{1/n}$ (with $R=0$ if $\\limsup = \\infty$, and $R=\\infty$ if $\\limsup = 0$).",
+    "exam_tip": "Mention that convergence at the boundary points $|x - c| = R$ must be tested separately.",
+    "id": "pyq.m5.165"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 166,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2023",
+    "question": "Find the radius of convergence of the power series $\\sum_{n=1}^\\infty n! x^n$.",
+    "concept_tested": "Radius of Convergence Calculation",
+    "approach": "Apply Ratio Test to coefficients $a_n = n!$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Ratio of Coefficients",
+        "math": "\\left|\\frac{a_{n+1}}{a_n}\\right| = \\frac{(n+1)!}{n!} = n + 1",
+        "explanation": "Compute consecutive coefficient ratio."
+      },
+      {
+        "step": 2,
+        "title": "Take Limit",
+        "math": "L = \\lim_{n \\to \\infty} \\left|\\frac{a_{n+1}}{a_n}\\right| = \\lim_{n \\to \\infty} (n+1) = +\\infty",
+        "explanation": "The ratio diverges to $+\\infty$."
+      },
+      {
+        "step": 3,
+        "title": "Radius of Convergence",
+        "math": "R = \\frac{1}{L} = \\frac{1}{\\infty} = 0",
+        "explanation": "The series converges only at $x = 0$."
+      }
+    ],
+    "final_answer": "The radius of convergence is $R = 0$.",
+    "exam_tip": "$R = 0$ means the series converges only at the single point $x = 0$.",
+    "id": "pyq.m5.166"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 167,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Define pointwise convergence of a sequence of functions.",
+    "concept_tested": "Pointwise Convergence of Sequence of Functions",
+    "approach": "State the definition that for every fixed $x_0 \\in A$, the real sequence $(f_n(x_0))$ converges to $f(x_0)$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition",
+        "math": "f_n \\to f \\text{ pointwise on } A \\iff \\forall x \\in A, \\; \\lim_{n \\to \\infty} f_n(x) = f(x)",
+        "explanation": "Equivalently: $\\forall x \\in A, \\forall \\epsilon > 0, \\exists K(x, \\epsilon) \\in \\mathbb{N}$ such that $n \\ge K \\implies |f_n(x) - f(x)| < \\epsilon$."
+      }
+    ],
+    "final_answer": "$(f_n)$ converges pointwise to $f$ on $A$ if for each fixed $x \\in A$, $\\lim_{n \\to \\infty} f_n(x) = f(x)$.",
+    "exam_tip": "Stress that $K$ is allowed to vary with $x$.",
+    "id": "pyq.m5.167"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 168,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Write the power series expansion of $e^x$ and find its interval of convergence.",
+    "concept_tested": "Taylor / Power Series for $e^x$",
+    "approach": "Write $\\sum_{n=0}^\\infty \\frac{x^n}{n!}$ and apply Ratio Test to find $R = \\infty$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Power Series Expansion",
+        "math": "e^x = \\sum_{n=0}^\\infty \\frac{x^n}{n!} = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\dots",
+        "explanation": "Maclaurin series for $e^x$."
+      },
+      {
+        "step": 2,
+        "title": "Radius of Convergence",
+        "math": "\\lim_{n \\to \\infty} \\left|\\frac{x^{n+1}/(n+1)!}{x^n/n!}\\right| = \\lim_{n \\to \\infty} \\frac{|x|}{n+1} = 0 < 1 \\quad \\forall x \\in \\mathbb{R}",
+        "explanation": "By the Ratio Test, the series converges for every real number $x$, so $R = \\infty$."
+      }
+    ],
+    "final_answer": "Expansion: $e^x = \\sum_{n=0}^\\infty \\frac{x^n}{n!}$. Interval of convergence: $(-\\infty, \\infty) = \\mathbb{R}$.",
+    "exam_tip": "State both the radius of convergence $R = \\infty$ and the interval of convergence $(-\\infty, \\infty)$.",
+    "id": "pyq.m5.168"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 169,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Determine the limit of sequence $f_n(x) = x^n$ on $[0, 1]$ as $n \\to \\infty$.",
+    "concept_tested": "Pointwise Limit of $f_n(x) = x^n$ on $[0, 1]$",
+    "approach": "Analyze cases $x \\in [0, 1)$ and $x = 1$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Case $0 \\le x < 1$",
+        "math": "|x| < 1 \\implies \\lim_{n \\to \\infty} x^n = 0",
+        "explanation": "Standard geometric sequence limit."
+      },
+      {
+        "step": 2,
+        "title": "Case $x = 1$",
+        "math": "x = 1 \\implies f_n(1) = 1^n = 1 \\implies \\lim_{n \\to \\infty} f_n(1) = 1",
+        "explanation": "Constant sequence of 1s."
+      }
+    ],
+    "final_answer": "$f(x) = \\lim_{n \\to \\infty} x^n = \\begin{cases} 0, & 0 \\le x < 1 \\\\ 1, & x = 1 \\end{cases}$.",
+    "exam_tip": "Note that the limit function is discontinuous at $x = 1$, which proves the convergence is not uniform on $[0, 1]$.",
+    "id": "pyq.m5.169"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 170,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "State Abel's limit theorem for power series.",
+    "concept_tested": "Abel's Limit Theorem for Power Series",
+    "approach": "State that if a power series converges at an endpoint, the sum function is continuous up to that endpoint.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "\\sum_{n=0}^\\infty a_n R^n \\text{ converges} \\implies \\lim_{x \\to R^-} \\sum_{n=0}^\\infty a_n x^n = \\sum_{n=0}^\\infty a_n R^n",
+        "explanation": "If a real power series $\\sum a_n x^n$ with radius of convergence $R$ converges at $x = R$, then the sum function $f(x)$ is continuous from the left at $x = R$."
+      }
+    ],
+    "final_answer": "If $\\sum a_n R^n$ converges, then $f(x) = \\sum a_n x^n$ is continuous on $[0, R]$, so $\\lim_{x \\to R^-} f(x) = \\sum_{n=0}^\\infty a_n R^n$.",
+    "exam_tip": "A classic application of Abel's Theorem is evaluating the alternating harmonic series: $\\ln(2) = 1 - 1/2 + 1/3 - \\dots$.",
+    "id": "pyq.m5.170"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 171,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "State the Taylor series theorem for real functions.",
+    "concept_tested": "Taylor's Theorem with Remainder",
+    "approach": "State Taylor's Theorem with Lagrange form of the remainder.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "f(x) = \\sum_{k=0}^n \\frac{f^{(k)}(x_0)}{k!} (x - x_0)^k + R_n(x)",
+        "explanation": "If $f$ has $n+1$ derivatives on an interval containing $x_0$ and $x$."
+      },
+      {
+        "step": 2,
+        "title": "Lagrange Form of Remainder",
+        "math": "R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!} (x - x_0)^{n+1} \\quad \\text{for some } c \\text{ strictly between } x_0 \\text{ and } x",
+        "explanation": "The error term resembles the next term in the series evaluated at an intermediate point $c$."
+      }
+    ],
+    "final_answer": "$f(x) = P_n(x) + R_n(x)$ where $R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x-x_0)^{n+1}$ for some $c$ between $x_0$ and $x$.",
+    "exam_tip": "Note that for $n = 0$, Taylor's theorem reduces directly to the Mean Value Theorem.",
+    "id": "pyq.m5.171"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 172,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Verify if the function $f(x) = |x|$ is differentiable at $x=0$.",
+    "concept_tested": "Differentiability of Absolute Value Function at Origin",
+    "approach": "Compute left-hand and right-hand limits of the difference quotient at $x = 0$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Difference Quotient at 0",
+        "math": "\\frac{f(0+h) - f(0)}{h} = \\frac{|h| - 0}{h} = \\frac{|h|}{h}",
+        "explanation": "Evaluating the difference quotient."
+      },
+      {
+        "step": 2,
+        "title": "Right-hand Derivative",
+        "math": "f'_+(0) = \\lim_{h \\to 0^+} \\frac{|h|}{h} = \\lim_{h \\to 0^+} \\frac{h}{h} = 1",
+        "explanation": "Since $h > 0 \\implies |h| = h$."
+      },
+      {
+        "step": 3,
+        "title": "Left-hand Derivative",
+        "math": "f'_-(0) = \\lim_{h \\to 0^-} \\frac{|h|}{h} = \\lim_{h \\to 0^-} \\frac{-h}{h} = -1",
+        "explanation": "Since $h < 0 \\implies |h| = -h$."
+      },
+      {
+        "step": 4,
+        "title": "Conclusion",
+        "math": "f'_+(0) = 1 \\ne -1 = f'_-(0) \\implies f'(0) \\text{ does not exist}",
+        "explanation": "The two one-sided derivatives disagree."
+      }
+    ],
+    "final_answer": "$f(x) = |x|$ is NOT differentiable at $x = 0$ because the right derivative is $+1$ while the left derivative is $-1$.",
+    "exam_tip": "Note that $f(x) = |x|$ is continuous everywhere on $\\mathbb{R}$ despite failing to be differentiable at 0.",
+    "id": "pyq.m5.172"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 173,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "Define the interval of convergence of a power series.",
+    "concept_tested": "Interval of Convergence of a Power Series",
+    "approach": "Define interval $I$ centered at $c$ of radius $R$, including any convergent boundary endpoints.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition",
+        "math": "I = \\{x \\in \\mathbb{R} : \\sum_{n=0}^\\infty a_n (x - c)^n \\text{ converges}\\}",
+        "explanation": "The set of all real points $x$ for which the power series converges."
+      },
+      {
+        "step": 2,
+        "title": "Structure",
+        "math": "(c - R, c + R) \\subseteq I \\subseteq [c - R, c + R]",
+        "explanation": "It is always an interval centered at $c$. It can be open, closed, or half-open depending on convergence at endpoints $c \\pm R$."
+      }
+    ],
+    "final_answer": "The interval of convergence is the set of all $x \\in \\mathbb{R}$ where the power series converges. It has one of the four forms: $(c-R, c+R)$, $[c-R, c+R)$, $(c-R, c+R]$, or $[c-R, c+R]$.",
+    "exam_tip": "Emphasize that the interval of convergence always includes the interior $(c-R, c+R)$, but endpoints require independent investigation.",
+    "id": "pyq.m5.173"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 174,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "State the definition of a metric space and give an example of a metric on $\\mathbb{R}^2$.",
+    "concept_tested": "Definition of Metric Space and Example on $\\mathbb{R}^2$",
+    "approach": "State the 4 metric axioms (non-negativity, identity of indiscernibles, symmetry, triangle inequality) and give Euclidean or Taxicab metric on $\\mathbb{R}^2$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Metric Space Definition",
+        "math": "d: X \\times X \\to \\mathbb{R} \\text{ s.t. } (1) \\, d(x,y) \\ge 0, \\; (2) \\, d(x,y)=0 \\iff x=y, \\; (3) \\, d(x,y)=d(y,x), \\; (4) \\, d(x,z) \\le d(x,y)+d(y,z)",
+        "explanation": "A set $X$ equipped with a function $d$ satisfying these four axioms is a metric space $(X, d)$."
+      },
+      {
+        "step": 2,
+        "title": "Example on $\\mathbb{R}^2$",
+        "math": "d_2((x_1, y_1), (x_2, y_2)) = \\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2} \\quad (\\text{Euclidean Metric})",
+        "explanation": "Or the Taxicab (Manhattan) metric: $d_1((x_1, y_1), (x_2, y_2)) = |x_1 - x_2| + |y_1 - y_2|$."
+      }
+    ],
+    "final_answer": "A metric space is a pair $(X, d)$ satisfying non-negativity, identity of indiscernibles, symmetry, and triangle inequality. Example on $\\mathbb{R}^2$: Euclidean metric $d(x, y) = \\sqrt{(x_1-y_1)^2 + (x_2-y_2)^2}$.",
+    "exam_tip": "Writing out all 4 axioms clearly guarantees full credit.",
+    "id": "pyq.m5.174"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 175,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Define open and closed balls in a metric space.",
+    "concept_tested": "Open and Closed Balls in Metric Space",
+    "approach": "Define $B(x_0, r)$ using strict inequality and $\\overline{B}(x_0, r)$ using non-strict inequality.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Open Ball",
+        "math": "B(x_0, r) = B_r(x_0) = \\{x \\in X : d(x, x_0) < r\\}",
+        "explanation": "The set of all points in $X$ whose metric distance from center $x_0$ is strictly less than radius $r > 0$."
+      },
+      {
+        "step": 2,
+        "title": "Closed Ball",
+        "math": "\\overline{B}(x_0, r) = \\overline{B}_r(x_0) = \\{x \\in X : d(x, x_0) \\le r\\}",
+        "explanation": "The set of all points whose distance from $x_0$ is less than or equal to $r$."
+      }
+    ],
+    "final_answer": "Open ball: $B(x_0, r) = \\{x \\in X : d(x, x_0) < r\\}$. Closed ball: $\\overline{B}(x_0, r) = \\{x \\in X : d(x, x_0) \\le r\\}$.",
+    "exam_tip": "Notice that $r$ must be strictly positive ($r > 0$).",
+    "id": "pyq.m5.175"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 176,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Verify whether $d(x, y) = |x-y|$ defines a metric on the set of real numbers $\\mathbb{R}$.",
+    "concept_tested": "Verification of Absolute Value Metric on $\\mathbb{R}$",
+    "approach": "Verify the four metric axioms for $d(x, y) = |x - y|$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Axiom 1: Non-negativity",
+        "math": "d(x, y) = |x - y| \\ge 0 \\quad \\forall x, y \\in \\mathbb{R}",
+        "explanation": "By definition of absolute value."
+      },
+      {
+        "step": 2,
+        "title": "Axiom 2: Identity of Indiscernibles",
+        "math": "d(x, y) = 0 \\iff |x - y| = 0 \\iff x - y = 0 \\iff x = y",
+        "explanation": "The absolute value is zero if and only if the argument is zero."
+      },
+      {
+        "step": 3,
+        "title": "Axiom 3: Symmetry",
+        "math": "d(x, y) = |x - y| = |-(y - x)| = |y - x| = d(y, x)",
+        "explanation": "Since $|-u| = |u|$."
+      },
+      {
+        "step": 4,
+        "title": "Axiom 4: Triangle Inequality",
+        "math": "d(x, z) = |x - z| = |(x - y) + (y - z)| \\le |x - y| + |y - z| = d(x, y) + d(y, z)",
+        "explanation": "By the standard triangle inequality for real numbers."
+      }
+    ],
+    "final_answer": "Yes, $d(x, y) = |x - y|$ satisfies all four axioms and is the standard metric on $\\mathbb{R}$.",
+    "exam_tip": "List and verify each of the 4 axioms in numbered order.",
+    "id": "pyq.m5.176"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 177,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Define a complete metric space. Is the set of rational numbers $\\mathbb{Q}$ complete under the standard metric?",
+    "concept_tested": "Complete Metric Space & Incompleteness of $\\mathbb{Q}$",
+    "approach": "Define complete metric space; give counterexample sequence of rationals converging to an irrational.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition of Complete Metric Space",
+        "math": "(X, d) \\text{ is complete} \\iff \\text{every Cauchy sequence in } X \\text{ converges to a limit in } X",
+        "explanation": "A metric space is complete if there are no 'missing points'."
+      },
+      {
+        "step": 2,
+        "title": "Incompleteness of $\\mathbb{Q}$",
+        "math": "x_1 = 1, \\quad x_{n+1} = \\frac{1}{2}\\left(x_n + \\frac{2}{x_n}\\right) \\implies x_n \\in \\mathbb{Q} \\; \\forall n",
+        "explanation": "The sequence $(x_n)$ is a Cauchy sequence of rational numbers."
+      },
+      {
+        "step": 3,
+        "title": "Limit does not belong to $\\mathbb{Q}$",
+        "math": "\\lim_{n \\to \\infty} x_n = \\sqrt{2} \\notin \\mathbb{Q}",
+        "explanation": "Since $\\sqrt{2} \\notin \\mathbb{Q}$, the Cauchy sequence does not converge within $(\\mathbb{Q}, |\\cdot|)$."
+      }
+    ],
+    "final_answer": "A metric space is complete if every Cauchy sequence in it converges to a point in the space. $\\mathbb{Q}$ is NOT complete because sequences of rationals converging to $\\sqrt{2}$ are Cauchy but have no limit in $\\mathbb{Q}$.",
+    "exam_tip": "State that $\\mathbb{R}$ is the metric completion of $\\mathbb{Q}$.",
+    "id": "pyq.m5.177"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 178,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "State the Heine-Borel Theorem for the real line $\\mathbb{R}$.",
+    "concept_tested": "Heine-Borel Theorem for $\\mathbb{R}$",
+    "approach": "State the characterization of compactness in Euclidean space: closed and bounded.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "K \\subseteq \\mathbb{R} \\text{ is compact} \\iff K \\text{ is closed and bounded}",
+        "explanation": "A subset of $\\mathbb{R}$ has the property that every open cover has a finite subcover if and only if it is closed and bounded."
+      }
+    ],
+    "final_answer": "A subset $K \\subseteq \\mathbb{R}$ (or $\\mathbb{R}^n$) is compact if and only if it is closed and bounded.",
+    "exam_tip": "Heine-Borel fails in general infinite-dimensional metric spaces (where closed and bounded does not imply compact).",
+    "id": "pyq.m5.178"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 179,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "State the Banach Fixed Point Theorem.",
+    "concept_tested": "Banach Fixed Point Theorem (Contraction Mapping Principle)",
+    "approach": "State hypotheses: complete metric space, contraction mapping with $k < 1$; conclude unique fixed point.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Hypotheses",
+        "math": "(X, d) \\text{ complete metric space}, \\quad T: X \\to X \\text{ s.t. } d(T(x), T(y)) \\le k d(x, y) \\quad (0 \\le k < 1)",
+        "explanation": "$T$ is a contraction mapping on a complete metric space."
+      },
+      {
+        "step": 2,
+        "title": "Conclusion",
+        "math": "\\exists! x^* \\in X \\text{ such that } T(x^*) = x^*, \\quad x^* = \\lim_{n \\to \\infty} T^n(x_0) \\; \\forall x_0 \\in X",
+        "explanation": "There exists a unique fixed point $x^*$, and Picard iteration converges to $x^*$ from any starting point."
+      }
+    ],
+    "final_answer": "If $(X, d)$ is a complete metric space and $T: X \\to X$ is a contraction ($d(Tx, Ty) \\le k d(x, y)$ with $k < 1$), then $T$ has a unique fixed point $x^* \\in X$.",
+    "exam_tip": "State both the existence and uniqueness of the fixed point, and that $k$ must be strictly less than 1.",
+    "id": "pyq.m5.179"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 180,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Define the boundary of a subset $A$ in a metric space.",
+    "concept_tested": "Boundary of a Subset in Metric Space",
+    "approach": "Define $\\partial A = \\overline{A} \\cap \\overline{X \\setminus A}$ or via neighborhoods intersecting both $A$ and $A^c$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition via Balls",
+        "math": "x \\in \\partial A \\iff \\forall r > 0, \\; B(x, r) \\cap A \\ne \\emptyset \\quad \\text{and} \\quad B(x, r) \\cap (X \\setminus A) \\ne \\emptyset",
+        "explanation": "A point $x$ is in the boundary of $A$ if every open ball centered at $x$ contains at least one point of $A$ and at least one point not in $A$."
+      },
+      {
+        "step": 2,
+        "title": "Topological Characterization",
+        "math": "\\partial A = \\overline{A} \\setminus A^\\circ = \\overline{A} \\cap \\overline{X \\setminus A}",
+        "explanation": "The boundary equals the closure minus the interior."
+      }
+    ],
+    "final_answer": "The boundary $\\partial A$ is the set of points whose every neighborhood intersects both $A$ and $X \\setminus A$: $\\partial A = \\overline{A} \\cap \\overline{X \\setminus A}$.",
+    "exam_tip": "Example: In $\\mathbb{R}$, $\\partial(0, 1) = \\{0, 1\\}$ and $\\partial \\mathbb{Q} = \\mathbb{R}$.",
+    "id": "pyq.m5.180"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 181,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Define the closure of a set $A$ in a metric space.",
+    "concept_tested": "Closure of a Set in a Metric Space",
+    "approach": "Define $\\overline{A}$ as $A \\cup A'$ (set plus limit points) or intersection of all closed supersets.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition via Limit Points",
+        "math": "\\overline{A} = A \\cup A'",
+        "explanation": "The closure of $A$ is the union of $A$ and the set $A'$ of all its cluster (limit) points."
+      },
+      {
+        "step": 2,
+        "title": "Smallest Closed Superset",
+        "math": "\\overline{A} = \\bigcap \\{F \\subseteq X : F \\text{ is closed and } A \\subseteq F\\}",
+        "explanation": "Equivalently, $\\overline{A}$ is the smallest closed set containing $A$."
+      },
+      {
+        "step": 3,
+        "title": "Metric Formulation",
+        "math": "\\overline{A} = \\{x \\in X : \\forall r > 0, \\, B(x, r) \\cap A \\ne \\emptyset\\}",
+        "explanation": "All points having distance 0 from $A$."
+      }
+    ],
+    "final_answer": "The closure of $A$, denoted $\\overline{A}$, is the union of $A$ with all its limit points ($A \\cup A'$), which is the smallest closed set containing $A$.",
+    "exam_tip": "State that $A$ is closed if and only if $A = \\overline{A}$.",
+    "id": "pyq.m5.181"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 182,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Show that the intersection of two open sets in a metric space is open.",
+    "concept_tested": "Intersection of Two Open Sets is Open",
+    "approach": "Let $x \\in U_1 \\cap U_2$, choose $r = \\min(r_1, r_2) > 0$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Setup",
+        "math": "x \\in U_1 \\cap U_2 \\implies x \\in U_1 \\quad \\text{and} \\quad x \\in U_2",
+        "explanation": "Point belongs to both sets."
+      },
+      {
+        "step": 2,
+        "title": "Open Balls in Each Set",
+        "math": "\\exists r_1 > 0 : B(x, r_1) \\subseteq U_1, \\qquad \\exists r_2 > 0 : B(x, r_2) \\subseteq U_2",
+        "explanation": "Because $U_1$ and $U_2$ are open."
+      },
+      {
+        "step": 3,
+        "title": "Taking Minimum Radius",
+        "math": "r = \\min(r_1, r_2) > 0 \\implies B(x, r) \\subseteq B(x, r_1) \\subseteq U_1 \\land B(x, r) \\subseteq B(x, r_2) \\subseteq U_2",
+        "explanation": "Thus $B(x, r) \\subseteq U_1 \\cap U_2$, showing $U_1 \\cap U_2$ is open."
+      }
+    ],
+    "final_answer": "Since $B(x, \\min(r_1, r_2)) \\subseteq U_1 \\cap U_2$, the intersection is open.",
+    "exam_tip": "By induction, any finite intersection of open sets is open.",
+    "id": "pyq.m5.182"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 183,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2021",
+    "question": "Define dense sets in a metric space and give an example.",
+    "concept_tested": "Dense Sets in Metric Spaces",
+    "approach": "Define $\\overline{A} = X$ or every ball contains points of $A$; give example $\\mathbb{Q}$ in $\\mathbb{R}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition",
+        "math": "A \\subseteq X \\text{ is dense in } (X, d) \\iff \\overline{A} = X",
+        "explanation": "Equivalently, every non-empty open set in $X$ contains at least one point of $A$ (i.e. $\\forall x \\in X, \\forall r > 0, B(x, r) \\cap A \\ne \\emptyset$)."
+      },
+      {
+        "step": 2,
+        "title": "Example",
+        "math": "\\mathbb{Q} \\text{ is dense in } \\mathbb{R}",
+        "explanation": "Between any two real numbers there exists a rational number (Density Theorem), so $\\overline{\\mathbb{Q}} = \\mathbb{R}$."
+      }
+    ],
+    "final_answer": "A subset $A$ is dense in $X$ if $\\overline{A} = X$. Example: $\\mathbb{Q}$ is dense in $\\mathbb{R}$ under the standard metric.",
+    "exam_tip": "Another example: The irrationals $\\mathbb{R} \\setminus \\mathbb{Q}$ are also dense in $\\mathbb{R}$.",
+    "id": "pyq.m5.183"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 184,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2020",
+    "question": "Define a discrete metric space and verify its metric axioms.",
+    "concept_tested": "Discrete Metric Space and Metric Axioms",
+    "approach": "Define $d(x, y) = 0$ if $x=y$ and $1$ if $x \\ne y$; verify the 4 axioms.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition",
+        "math": "d(x, y) = \\begin{cases} 0, & \\text{if } x = y \\\\ 1, & \\text{if } x \\ne y \\end{cases}",
+        "explanation": "The discrete metric on any non-empty set $X$."
+      },
+      {
+        "step": 2,
+        "title": "Verification of Axioms",
+        "math": "(1) \\, d \\ge 0; \\quad (2) \\, d(x,y)=0 \\iff x=y; \\quad (3) \\, d(x,y)=d(y,x) \\text{ (symmetric)}; \\quad (4) \\, d(x,z) \\le d(x,y) + d(y,z)",
+        "explanation": "For triangle inequality: if $x = z$, $0 \\le d(x,y)+d(y,z)$ holds trivially. If $x \\ne z$, then $y$ cannot equal both $x$ and $z$, so at least one of $d(x,y)$ or $d(y,z)$ is 1, giving $1 \\le 1+0=1$ or $1 \\le 1+1=2$."
+      }
+    ],
+    "final_answer": "The discrete metric is $d(x,y) = 0$ if $x=y$ and $1$ if $x \\ne y$. It satisfies all four axioms; in this space every singleton $\\{x\\} = B(x, 1/2)$ is open.",
+    "exam_tip": "Mention that in a discrete metric space, every subset of $X$ is both open and closed.",
+    "id": "pyq.m5.184"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 185,
+    "marks": 2,
+    "source": "CU B.Sc. Exam, Nov 2020",
+    "question": "Define an isolated point of a subset of a metric space.",
+    "concept_tested": "Isolated Point of a Subset of a Metric Space",
+    "approach": "Define isolated point as a point of $A$ which is not a limit point of $A$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Definition",
+        "math": "x_0 \\in A \\text{ is an isolated point of } A \\iff \\exists r > 0 \\text{ such that } B(x_0, r) \\cap A = \\{x_0\\}",
+        "explanation": "An isolated point of $A$ is a point in $A$ around which there is an open ball containing no other points of $A$."
+      }
+    ],
+    "final_answer": "$x_0 \\in A$ is an isolated point if there exists an open ball $B(x_0, r)$ such that $B(x_0, r) \\cap A = \\{x_0\\}$.",
+    "exam_tip": "Example: In $A = [0, 1] \\cup \\{2\\}$, the point $2$ is an isolated point (choose $r = 1/2$).",
+    "id": "pyq.m5.185"
+  },
+  {
+    "module": "m5",
+    "topic": "Topic 5: Sequences & Series of Functions, Uniform Convergence",
+    "section": "short",
+    "num": 186,
+    "marks": 3,
+    "source": "CU FYUGP Exam, April 2026",
+    "question": "State Sequential Criterion for Limits of functions.",
+    "concept_tested": "Sequential Criterion for Limits of Functions",
+    "approach": "State $\\lim_{x \\to c} f(x) = L \\iff \\forall (x_n) \\to c$ ($x_n \\ne c$), $f(x_n) \\to L$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "\\lim_{x \\to c} f(x) = L \\iff \\left( \\forall (x_n) \\subseteq A \\setminus \\{c\\}, \\; \\lim_{n \\to \\infty} x_n = c \\implies \\lim_{n \\to \\infty} f(x_n) = L \\right)",
+        "explanation": "A function $f$ has limit $L$ at $c$ if and only if for every sequence $(x_n)$ converging to $c$ (with $x_n \\ne c$), the image sequence $f(x_n)$ converges to $L$."
+      },
+      {
+        "step": 2,
+        "title": "Divergence Criterion",
+        "math": "f \\text{ has no limit at } c \\iff \\exists (x_n), (y_n) \\to c \\text{ with } \\lim f(x_n) \\ne \\lim f(y_n)",
+        "explanation": "Finding two sequences with different image limits proves the functional limit does not exist."
+      }
+    ],
+    "final_answer": "$\\lim_{x \\to c} f(x) = L$ if and only if for every sequence $(x_n)$ in the domain with $x_n \\ne c$ converging to $c$, $\\lim_{n \\to \\infty} f(x_n) = L$.",
+    "exam_tip": "Crucial requirement: $x_n \\ne c$ for all $n$ must be specified in the definition.",
+    "id": "pyq.m5.186"
+  }
+]

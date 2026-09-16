@@ -1,0 +1,266 @@
+[
+  {
+    "module": "m3",
+    "topic": "Topic 3: Sequences of Real Numbers, Convergence & Cauchy Sequences",
+    "section": "essay",
+    "num": 115,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2024",
+    "question": "State and prove the Monotone Convergence Theorem. Let $s_1 = 1$ and $s_{n+1} = \\frac{1}{2}(s_n + \\frac{a}{s_n})$ for $n \\in \\mathbb{N}$, where $a > 0$. Prove that $(s_n)$ converges to $\\sqrt{a}$.",
+    "concept_tested": "Monotone Convergence Theorem and Heron's Algorithm for $\\sqrt{a}$",
+    "approach": "Prove the general MCT for bounded increasing sequences. Then show $s_n^2 \\ge a$ for $n \\ge 2$, $(s_n)$ is decreasing for $n \\ge 2$ and bounded below, apply MCT, and find $L = \\sqrt{a}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement of Monotone Convergence Theorem",
+        "math": "\\text{A monotone sequence of real numbers is convergent } \\iff \\text{it is bounded.} \\quad \\text{If bounded increasing, } \\lim x_n = \\sup\\{x_n\\}; \\text{ if bounded decreasing, } \\lim x_n = \\inf\\{x_n\\}.",
+        "explanation": "A sequence that is both monotone and bounded always converges to its supremum (if increasing) or infimum (if decreasing)."
+      },
+      {
+        "step": 2,
+        "title": "Proof of Monotone Convergence Theorem",
+        "math": "S = \\{x_n : n \\in \\mathbb{N}\\} \\ne \\emptyset, \\, S \\text{ bounded above} \\implies x = \\sup S \\in \\mathbb{R}. \\quad \\forall \\epsilon > 0, \\; \\exists K \\in \\mathbb{N} \\text{ s.t. } x - \\epsilon < x_K \\le x. \\quad n \\ge K \\implies x - \\epsilon < x_K \\le x_n \\le x < x + \\epsilon \\implies |x_n - x| < \\epsilon",
+        "explanation": "By the Completeness Axiom of $\\mathbb{R}$, $S$ has a supremum $x$. Since $x - \\epsilon$ is not an upper bound, some $x_K > x - \\epsilon$. Since $(x_n)$ is increasing, $x_n \\ge x_K > x - \\epsilon$ for all $n \\ge K$, while $x_n \\le x < x + \\epsilon$. Thus $|x_n - x| < \\epsilon$, proving $\\lim x_n = \\sup S$."
+      },
+      {
+        "step": 3,
+        "title": "Part 2: Boundedness of $(s_n)$ for $n \\ge 2$",
+        "math": "s_{n+1}^2 - a = \\frac{1}{4}\\left(s_n + \\frac{a}{s_n}\\right)^2 - a = \\frac{1}{4}\\left(s_n - \\frac{a}{s_n}\\right)^2 \\ge 0 \\implies s_{n+1} \\ge \\sqrt{a} \\quad (\\forall n \\ge 1)",
+        "explanation": "Completing the square proves $s_n \\ge \\sqrt{a} > 0$ for all $n \\ge 2$, so the sequence is bounded below by $\\sqrt{a}$."
+      },
+      {
+        "step": 4,
+        "title": "Monotonicity of $(s_n)$ for $n \\ge 2$",
+        "math": "s_n - s_{n+1} = s_n - \\frac{1}{2}\\left(s_n + \\frac{a}{s_n}\\right) = \\frac{s_n^2 - a}{2s_n} \\ge 0 \\quad (\\forall n \\ge 2) \\implies s_{n+1} \\le s_n",
+        "explanation": "Since $s_n^2 \\ge a$ and $s_n > 0$ for $n \\ge 2$, the difference is non-negative, proving $(s_n)_{n=2}^\\infty$ is monotonically decreasing."
+      },
+      {
+        "step": 5,
+        "title": "Apply MCT and Solve for Limit",
+        "math": "(s_n)_{n=2}^\\infty \\text{ bounded below and decreasing} \\implies L = \\lim s_n \\text{ exists with } L \\ge \\sqrt{a}. \\quad L = \\frac{1}{2}\\left(L + \\frac{a}{L}\\right) \\implies 2L^2 = L^2 + a \\implies L = \\sqrt{a}",
+        "explanation": "By the Monotone Convergence Theorem, $(s_n)$ converges to a real limit $L \\ge \\sqrt{a} > 0$. Taking limits on both sides of the recurrence equation gives $L = \\sqrt{a}$."
+      }
+    ],
+    "final_answer": "By the Monotone Convergence Theorem, $(s_n)$ converges to $L = \\sqrt{a}$.",
+    "exam_tip": "Notice that $s_1 = 1$ may not be $\\ge \\sqrt{a}$; monotonicity begins at $n = 2$.",
+    "id": "pyq.m3.115"
+  },
+  {
+    "module": "m3",
+    "topic": "Topic 3: Sequences of Real Numbers, Convergence & Cauchy Sequences",
+    "section": "essay",
+    "num": 116,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2024",
+    "question": "Prove that every contractive sequence in $\\mathbb{R}$ is a Cauchy sequence. Let $f_1=1, f_2=1$ and $f_{n+1}=f_n+f_{n-1}$. Define $x_n = \\frac{f_n}{f_{n+1}}$. Prove that $\\lim x_n = \\frac{-1+\\sqrt{5}}{2}$.",
+    "concept_tested": "Contractive Sequences, Cauchy Property, and Fibonacci Ratio Limit",
+    "approach": "Prove contractive implies Cauchy via geometric series bound. Then show $x_{n+1} = 1/(1 + x_n)$ and solve $L = 1/(1+L)$ for golden ratio conjugate.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Part 1: Contractive $\\implies$ Cauchy",
+        "math": "|x_{n+1} - x_n| \\le C |x_n - x_{n-1}| \\le C^{n-1} |x_2 - x_1| \\quad (0 < C < 1)",
+        "explanation": "By repeated application of the contractive definition."
+      },
+      {
+        "step": 2,
+        "title": "Telescoping Sum and Bound for $m > n$",
+        "math": "|x_m - x_n| \\le \\sum_{k=n}^{m-1} |x_{k+1} - x_k| \\le |x_2 - x_1| \\sum_{k=n}^{m-1} C^{k-1} \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1|",
+        "explanation": "Since $0 < C < 1$, $C^{n-1} \\to 0$ as $n \\to \\infty$. For any $\\epsilon > 0$, choosing $H$ large enough makes this bound $< \\epsilon$. Thus $(x_n)$ is Cauchy."
+      },
+      {
+        "step": 3,
+        "title": "Part 2: Fibonacci Ratio Recurrence",
+        "math": "x_n = \\frac{f_n}{f_{n+1}} = \\frac{f_n}{f_n + f_{n-1}} = \\frac{1}{1 + \\frac{f_{n-1}}{f_n}} = \\frac{1}{1 + x_{n-1}}",
+        "explanation": "Express $x_n$ in terms of $x_{n-1}$."
+      },
+      {
+        "step": 4,
+        "title": "Convergence and Evaluation of Limit",
+        "math": "|x_{n+1} - x_n| = \\left|\\frac{1}{1+x_n} - \\frac{1}{1+x_{n-1}}\\right| = \\frac{|x_n - x_{n-1}|}{(1+x_n)(1+x_{n-1})} \\le \\frac{1}{(1+1/2)(1+1/2)} |x_n - x_{n-1}| = \\frac{4}{9}|x_n - x_{n-1}|",
+        "explanation": "Since $1/2 \\le x_n \\le 1$ for all $n \\ge 1$, $C = 4/9 < 1$, so $(x_n)$ is contractive and converges to $L$."
+      },
+      {
+        "step": 5,
+        "title": "Calculate Value of Limit",
+        "math": "L = \\frac{1}{1 + L} \\implies L^2 + L - 1 = 0 \\implies L = \\frac{-1 \\pm \\sqrt{1 + 4}}{2} = \\frac{-1 + \\sqrt{5}}{2}",
+        "explanation": "Since $x_n > 0$, we take the positive root $L = \\frac{\\sqrt{5} - 1}{2} = \\frac{1}{\\phi}$."
+      }
+    ],
+    "final_answer": "Every contractive sequence is Cauchy and hence convergent in $\\mathbb{R}$. The Fibonacci ratio sequence converges to $L = \\frac{-1+\\sqrt{5}}{2}$.",
+    "exam_tip": "Note that $L = (\\sqrt{5}-1)/2 = 1/\\phi \\approx 0.6180339$, the reciprocal of the golden ratio.",
+    "id": "pyq.m3.116"
+  },
+  {
+    "module": "m3",
+    "topic": "Topic 3: Sequences of Real Numbers, Convergence & Cauchy Sequences",
+    "section": "essay",
+    "num": 117,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2025",
+    "question": "State and prove the Nested Intervals Property of real numbers.",
+    "concept_tested": "Nested Intervals Property of $\\mathbb{R}$ (Complete Theory)",
+    "approach": "State the theorem for closed bounded nested intervals, prove non-empty intersection, and prove uniqueness when length converges to 0.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "I_n = [a_n, b_n], \\quad I_{n+1} \\subseteq I_n \\; \\forall n \\in \\mathbb{N} \\implies \\exists \\xi \\in \\mathbb{R} \\text{ s.t. } \\xi \\in I_n \\; \\forall n \\in \\mathbb{N}",
+        "explanation": "Furthermore, if $\\inf\\{b_n - a_n : n \\in \\mathbb{N}\\} = 0$, then the common point $\\xi$ is unique."
+      },
+      {
+        "step": 2,
+        "title": "Monotonicity of Endpoints",
+        "math": "a_1 \\le a_2 \\le \\dots \\le a_n \\le \\dots \\le b_m \\le \\dots \\le b_2 \\le b_1 \\quad (\\forall n, m \\in \\mathbb{N})",
+        "explanation": "Since $I_{n+1} \\subseteq I_n$, $[a_{n+1}, b_{n+1}] \\subseteq [a_n, b_n]$, so $a_n \\le a_{n+1}$ and $b_{n+1} \\le b_n$. Moreover, for any $n, m$, $a_n \\le a_{\\max(n,m)} \\le b_{\\max(n,m)} \\le b_m$."
+      },
+      {
+        "step": 3,
+        "title": "Completeness Axiom Application",
+        "math": "S = \\{a_n : n \\in \\mathbb{N}\\} \\ne \\emptyset, \\, S \\text{ bounded above by } b_1 \\implies \\xi = \\sup S \\in \\mathbb{R} \\text{ exists}",
+        "explanation": "By the Completeness Property of $\\mathbb{R}$."
+      },
+      {
+        "step": 4,
+        "title": "Proof that $\\xi \\in I_n$ for all $n$",
+        "math": "a_n \\le \\xi \\; (\\forall n) \\quad \\text{and} \\quad \\xi \\le b_n \\; (\\forall n) \\implies a_n \\le \\xi \\le b_n \\iff \\xi \\in [a_n, b_n] = I_n",
+        "explanation": "Because $\\xi = \\sup S$, $a_n \\le \\xi$. Because each $b_n$ is an upper bound of $S$, $\\xi \\le b_n$."
+      },
+      {
+        "step": 5,
+        "title": "Uniqueness under $\\lim(b_n - a_n) = 0$",
+        "math": "\\xi_1, \\xi_2 \\in \\bigcap I_n \\implies a_n \\le \\xi_1, \\xi_2 \\le b_n \\implies 0 \\le |\\xi_1 - \\xi_2| \\le b_n - a_n \\to 0 \\implies \\xi_1 = \\xi_2",
+        "explanation": "If the lengths tend to 0, the intersection contains precisely one point."
+      }
+    ],
+    "final_answer": "$\\bigcap_{n=1}^\\infty I_n = \\{\\xi\\}$ when $\\lim(b_n - a_n) = 0$.",
+    "exam_tip": "Give a counterexample to show why closedness is essential: for open intervals $J_n = (0, 1/n)$, $\\bigcap J_n = \\emptyset$.",
+    "id": "pyq.m3.117"
+  },
+  {
+    "module": "m3",
+    "topic": "Topic 3: Sequences of Real Numbers, Convergence & Cauchy Sequences",
+    "section": "essay",
+    "num": 118,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2025",
+    "question": "Let $X = (x_n)$ be a sequence of real numbers that converges to $x$ and suppose that $x_n \\ge 0$ for all $n$. Prove that the sequence $(\\sqrt{x_n})$ of positive square roots converges to $\\sqrt{x}$.",
+    "concept_tested": "Continuity of Square Root / Limit of $(\\sqrt{x_n})$",
+    "approach": "Consider cases $x = 0$ and $x > 0$. For $x > 0$, rationalize numerator using $\\sqrt{x_n} - \\sqrt{x} = \\frac{x_n - x}{\\sqrt{x_n} + \\sqrt{x}}$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Case 1: $x = 0$",
+        "math": "\\lim_{n \\to \\infty} x_n = 0, \\, x_n \\ge 0. \\quad \\forall \\epsilon > 0, \\; \\exists K \\in \\mathbb{N} \\text{ s.t. } n \\ge K \\implies 0 \\le x_n < \\epsilon^2",
+        "explanation": "Since $\\epsilon^2 > 0$."
+      },
+      {
+        "step": 2,
+        "title": "Case 1 Conclusion",
+        "math": "0 \\le x_n < \\epsilon^2 \\implies 0 \\le \\sqrt{x_n} < \\epsilon \\implies |\\sqrt{x_n} - 0| < \\epsilon \\; (\\forall n \\ge K)",
+        "explanation": "Taking square roots preserves order for non-negative numbers, so $\\lim \\sqrt{x_n} = 0 = \\sqrt{0}$."
+      },
+      {
+        "step": 3,
+        "title": "Case 2: $x > 0$ — Rationalizing the Difference",
+        "math": "|\\sqrt{x_n} - \\sqrt{x}| = \\left|\\frac{(\\sqrt{x_n} - \\sqrt{x})(\\sqrt{x_n} + \\sqrt{x})}{\\sqrt{x_n} + \\sqrt{x}}\\right| = \\frac{|x_n - x|}{\\sqrt{x_n} + \\sqrt{x}}",
+        "explanation": "Multiply and divide by conjugate $\\sqrt{x_n} + \\sqrt{x}$."
+      },
+      {
+        "step": 4,
+        "title": "Case 2: Bounding the Denominator",
+        "math": "\\sqrt{x_n} \\ge 0 \\implies \\sqrt{x_n} + \\sqrt{x} \\ge \\sqrt{x} \\implies |\\sqrt{x_n} - \\sqrt{x}| \\le \\frac{|x_n - x|}{\\sqrt{x}}",
+        "explanation": "Since $\\sqrt{x_n} \\ge 0$, the denominator is at least $\\sqrt{x} > 0$."
+      },
+      {
+        "step": 5,
+        "title": "Case 2: Conclusion",
+        "math": "\\forall \\epsilon > 0, \\; \\exists K : n \\ge K \\implies |x_n - x| < \\epsilon\\sqrt{x} \\implies |\\sqrt{x_n} - \\sqrt{x}| < \\frac{\\epsilon\\sqrt{x}}{\\sqrt{x}} = \\epsilon",
+        "explanation": "Thus $\\lim_{n \\to \\infty} \\sqrt{x_n} = \\sqrt{x}$."
+      }
+    ],
+    "final_answer": "In both cases ($x = 0$ and $x > 0$), $\\lim_{n \\to \\infty} \\sqrt{x_n} = \\sqrt{x}$.",
+    "exam_tip": "Do NOT forget to treat $x = 0$ separately, because dividing by $\\sqrt{x}$ is undefined when $x = 0$!",
+    "id": "pyq.m3.118"
+  },
+  {
+    "module": "m3",
+    "topic": "Topic 3: Sequences of Real Numbers, Convergence & Cauchy Sequences",
+    "section": "essay",
+    "num": 119,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2022",
+    "question": "State and prove Cauchy's criterion for uniform convergence of sequences of functions.",
+    "concept_tested": "Cauchy Criterion for Uniform Convergence of Sequences of Functions",
+    "approach": "Prove both directions: $f_n \\rightrightarrows f \\iff \\forall \\epsilon > 0, \\exists H, \\forall n, m \\ge H, \\forall x \\in A, |f_n(x) - f_m(x)| < \\epsilon$.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "(f_n) \\text{ converges uniformly on } A \\iff \\forall \\epsilon > 0, \\; \\exists H \\in \\mathbb{N} \\text{ s.t. } \\forall n, m \\ge H, \\; \\sup_{x \\in A} |f_n(x) - f_m(x)| < \\epsilon",
+        "explanation": "A sequence of functions converges uniformly if and only if it satisfies the uniform Cauchy criterion."
+      },
+      {
+        "step": 2,
+        "title": "Forward Direction ($\\implies$)",
+        "math": "f_n \\rightrightarrows f \\implies \\exists H : n \\ge H \\implies |f_n(x) - f(x)| < \\frac{\\epsilon}{2} \\; (\\forall x \\in A)",
+        "explanation": "For $n, m \\ge H$: $|f_n(x) - f_m(x)| \\le |f_n(x) - f(x)| + |f(x) - f_m(x)| < \\frac{\\epsilon}{2} + \\frac{\\epsilon}{2} = \\epsilon$ for all $x \\in A$."
+      },
+      {
+        "step": 3,
+        "title": "Backward Direction ($\\impliedby$): Pointwise Limit",
+        "math": "\\forall x_0 \\in A, \\; |f_n(x_0) - f_m(x_0)| < \\epsilon \\implies (f_n(x_0)) \\text{ is Cauchy in } \\mathbb{R} \\implies f(x_0) = \\lim_{n \\to \\infty} f_n(x_0) \\text{ exists}",
+        "explanation": "By Cauchy completeness of $\\mathbb{R}$, $(f_n)$ converges pointwise to some limit function $f: A \\to \\mathbb{R}$."
+      },
+      {
+        "step": 4,
+        "title": "Backward Direction: Uniformity of the Limit",
+        "math": "n, m \\ge H \\implies |f_n(x) - f_m(x)| < \\epsilon. \\quad \\text{Take } m \\to \\infty: \\quad |f_n(x) - f(x)| \\le \\epsilon \\quad \\forall n \\ge H, \\; \\forall x \\in A",
+        "explanation": "Passing to the limit as $m \\to \\infty$ with $n \\ge H$ fixed preserves the weak inequality $\\le \\epsilon < 2\\epsilon$, establishing uniform convergence."
+      }
+    ],
+    "final_answer": "$(f_n)$ converges uniformly on $A$ if and only if it satisfies the Cauchy criterion on $A$.",
+    "exam_tip": "The power of this criterion is that it establishes uniform convergence WITHOUT needing to know the limit function $f$ in advance.",
+    "id": "pyq.m3.119"
+  },
+  {
+    "module": "m3",
+    "topic": "Topic 3: Sequences of Real Numbers, Convergence & Cauchy Sequences",
+    "section": "essay",
+    "num": 120,
+    "marks": 10,
+    "source": "CU B.Sc. Exam, Nov 2020",
+    "question": "State and prove the Bolzano-Weierstrass Theorem for sequences of real numbers.",
+    "concept_tested": "Bolzano-Weierstrass Theorem for Sequences",
+    "approach": "State the theorem and prove using the Monotone Subsequence Theorem + Monotone Convergence Theorem, or by bisection of intervals.",
+    "solution_steps": [
+      {
+        "step": 1,
+        "title": "Statement",
+        "math": "\\text{Every bounded sequence of real numbers has a convergent subsequence.}",
+        "explanation": "If $(x_n)$ is bounded, there exists a subsequence $(x_{n_k})$ that converges in $\\mathbb{R}$."
+      },
+      {
+        "step": 2,
+        "title": "Step 1: Existence of Monotonic Subsequence (Peak Points)",
+        "math": "x_m \\text{ is a peak if } x_m \\ge x_n \\; \\forall n \\ge m. \\quad \\text{Case 1: } \\infty \\text{ peaks } \\implies x_{m_1} \\ge x_{m_2} \\ge \\dots \\text{ (decreasing)}. \\quad \\text{Case 2: finitely many peaks } \\implies \\text{chase strictly larger elements (increasing)}.",
+        "explanation": "By the Monotone Subsequence Theorem, every sequence has a monotonic subsequence: either infinitely many peak points exist (producing a decreasing subsequence), or past the last peak every term is exceeded by a later term (producing a strictly increasing subsequence)."
+      },
+      {
+        "step": 3,
+        "title": "Step 2: Subsequence Inherits Boundedness",
+        "math": "(x_n) \\text{ is bounded} \\implies \\exists M > 0 \\text{ s.t. } -M \\le x_n \\le M \\; (\\forall n) \\implies -M \\le x_{n_k} \\le M \\; (\\forall k)",
+        "explanation": "Since $(x_{n_k})$ is a subsequence of $(x_n)$, every term $x_{n_k}$ satisfies the same bounds."
+      },
+      {
+        "step": 4,
+        "title": "Step 3: Application of Monotone Convergence Theorem",
+        "math": "(x_{n_k}) \\text{ is bounded and monotone} \\implies (x_{n_k}) \\text{ converges to a real limit } x^*",
+        "explanation": "If $(x_{n_k})$ is increasing, $x^* = \\sup\\{x_{n_k}\\}$; if decreasing, $x^* = \\inf\\{x_{n_k}\\}$."
+      }
+    ],
+    "final_answer": "Every bounded sequence in $\\mathbb{R}$ contains a convergent subsequence.",
+    "exam_tip": "The two-step proof (Monotone Subsequence Theorem + Monotone Convergence Theorem) is the cleanest and fastest method in Bartle & Sherbert.",
+    "id": "pyq.m3.120"
+  }
+]

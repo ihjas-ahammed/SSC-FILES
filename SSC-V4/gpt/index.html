@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Analysis · Level 1</title>
+  <meta name="description" content="A small retrieval-first Real Analysis study prototype.">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #132238;
+      --muted: #607086;
+      --paper: #f6f8fb;
+      --card: #ffffff;
+      --line: #d9e1eb;
+      --accent: #0d7880;
+      --accent-dark: #07545c;
+      --gold: #e79a25;
+      --bad: #a63d3d;
+      --good: #177047;
+      --shadow: 0 14px 40px rgba(19, 34, 56, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, textarea, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(100% - 28px, 980px); margin: 0 auto; padding: 24px 0 48px; }
+    .hero { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 22px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: clamp(1.8rem, 5vw, 3rem); line-height: 1.05; margin-bottom: 8px; letter-spacing: -.04em; }
+    h2 { font-size: 1.35rem; margin-bottom: 8px; }
+    h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .eyebrow { color: var(--accent); font-size: .75rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    .stats { min-width: 150px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; text-align: right; }
+    .stats strong { display: block; font-size: 1.45rem; }
+    .notice { padding: 12px 14px; border-left: 4px solid var(--gold); background: #fff8e9; border-radius: 10px; margin-bottom: 18px; }
+    .tabs { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 14px; }
+    .tab, .primary, .secondary, .palette button { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; background: var(--card); color: var(--ink); }
+    .tab[aria-selected="true"], .primary { background: var(--accent); color: white; border-color: var(--accent); }
+    .primary:hover, .tab[aria-selected="true"]:hover { background: var(--accent-dark); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: clamp(18px, 4vw, 30px); margin-bottom: 14px; }
+    .kind { display: inline-block; color: var(--accent-dark); background: #dff3f2; border-radius: 99px; padding: 4px 9px; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .prompt { font-size: clamp(1.15rem, 3vw, 1.45rem); margin: 16px 0 20px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; }
+    .answer, .feedback { margin-top: 18px; padding: 16px; border-radius: 12px; background: #eef5f8; border: 1px solid #c8e0e4; }
+    [hidden] { display: none !important; }
+    .choice { display: flex; gap: 10px; align-items: flex-start; padding: 12px; margin: 9px 0; border: 1px solid var(--line); border-radius: 11px; background: #fcfdff; }
+    .choice:has(input:checked) { border-color: var(--accent); background: #edfafa; }
+    .choice input { margin-top: 5px; accent-color: var(--accent); }
+    .feedback.good { color: var(--good); background: #eaf8f0; border-color: #b9e2c9; }
+    .feedback.bad { color: var(--bad); background: #fff0f0; border-color: #efc4c4; }
+    .editor-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .info { width: 34px; height: 34px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: white; font-weight: 800; }
+    .palette { display: flex; flex-wrap: wrap; gap: 7px; padding: 12px; margin: 10px 0; background: #f4f7fa; border-radius: 12px; }
+    .palette button { padding: 7px 10px; font-size: .88rem; }
+    textarea { width: 100%; min-height: 130px; resize: vertical; padding: 14px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #fbfdff; }
+    textarea:focus, button:focus-visible, input:focus-visible { outline: 3px solid rgba(13, 120, 128, .28); outline-offset: 2px; }
+    .preview { min-height: 100px; display: grid; place-items: center; margin-top: 12px; padding: 16px; border: 1px dashed #afc5d0; border-radius: 12px; background: #fff; overflow-x: auto; }
+    .hint { font-size: .88rem; color: var(--muted); }
+    footer { color: var(--muted); font-size: .85rem; text-align: center; padding-top: 18px; }
+    @media (max-width: 560px) { .hero { align-items: start; flex-direction: column; } .stats { text-align: left; } .shell { width: min(100% - 20px, 980px); } }
+    @media (prefers-color-scheme: dark) {
+      :root { color-scheme: dark; --ink: #ecf4fa; --muted: #a9b8c6; --paper: #0e1824; --card: #152333; --line: #2a3c4f; --accent: #61d4d0; --accent-dark: #9bf0e8; --shadow: 0 14px 40px rgba(0, 0, 0, .18); }
+      .notice { background: #302715; } .choice, textarea, .preview, .info, .palette button { background: #101d2b; color: var(--ink); }
+      .kind { color: #082f32; } .palette { background: #10202e; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Level 2 · recall and feedback</div>
+        <h1>Real Analysis Study Desk</h1>
+        <p class="muted">Recall one idea, answer one question, write one theorem.</p>
+      </div>
+      <div class="stats" aria-live="polite"><strong id="progress">0 / 4</strong><span>learning actions complete</span></div>
+    </header>
+
+    <div class="notice"><strong>Level 2 review build.</strong> Write a proof plan before revealing it, then schedule a delayed reattempt. MathJax checks rendering, not mathematical correctness.</div>
+
+    <nav class="tabs" role="tablist" aria-label="Study activities">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="recall" data-tab="recall">Theorem recall</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="quiz" data-tab="quiz">OMR question</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="write" data-tab="write">Write with LaTeX</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="proof" data-tab="proof">Proof plan</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="schedule" data-tab="schedule">Review plan</button>
+    </nav>
+
+    <section id="recall" role="tabpanel">
+      <article class="card">
+        <span class="kind">Theorem statement</span>
+        <h2 id="theorem-title"></h2>
+        <p class="prompt" id="theorem-prompt"></p>
+        <div class="actions">
+          <button class="primary" id="reveal">Reveal answer</button>
+          <button class="secondary" id="complete">Mark first attempt complete</button>
+          <button class="secondary" id="recall-good" hidden>I recalled it</button>
+          <button class="secondary" id="recall-needs" hidden>Needs review</button>
+        </div>
+        <div class="answer" id="theorem-answer" hidden></div>
+        <p class="hint" id="theorem-status" aria-live="polite"></p>
+      </article>
+    </section>
+
+    <section id="proof" role="tabpanel" hidden>
+      <article class="card">
+        <span class="kind">Generate before reveal</span>
+        <h2>Proof plan: convergent sequences are bounded</h2>
+        <p class="prompt">Write the proof strategy and the key inequality before revealing the model answer.</p>
+        <form id="proof-form">
+          <textarea id="proof-input" placeholder="Start with the definition of convergence and choose an epsilon..."></textarea>
+          <div class="actions"><button class="primary" type="submit">Submit my proof plan</button></div>
+        </form>
+        <div class="answer" id="proof-answer" hidden></div>
+        <div class="feedback" id="proof-feedback" hidden aria-live="polite"></div>
+      </article>
+    </section>
+
+    <section id="schedule" role="tabpanel" hidden>
+      <article class="card">
+        <span class="kind">Simple spacing</span>
+        <h2>Your next review</h2>
+        <p id="schedule-status" class="prompt"></p>
+        <p class="hint">A successful delayed recall grows the interval. A miss returns the card to tomorrow.</p>
+        <div class="actions">
+          <button class="primary" id="schedule-good">Recall succeeded</button>
+          <button class="secondary" id="schedule-needs">I need another look</button>
+        </div>
+      </article>
+    </section>
+
+    <section id="quiz" role="tabpanel" hidden>
+      <article class="card">
+        <span class="kind">OMR first</span>
+        <h2 id="question-title"></h2>
+        <p class="prompt" id="question-prompt"></p>
+        <form id="question-form">
+          <div id="choices"></div>
+          <button class="primary" type="submit">Submit answer</button>
+        </form>
+        <div class="feedback" id="question-feedback" hidden aria-live="polite"></div>
+      </article>
+    </section>
+
+    <section id="write" role="tabpanel" hidden>
+      <article class="card">
+        <div class="editor-head">
+          <div><span class="kind">Math fragment only</span><h2>Write a theorem</h2></div>
+          <button class="info" id="latex-info" aria-label="Show LaTeX command palette" aria-expanded="false">i</button>
+        </div>
+        <p class="hint">Type only the math. The rendered form appears below; you decide whether the mathematics is correct.</p>
+        <div class="palette" id="palette" hidden></div>
+        <textarea id="latex-input" spellcheck="false" placeholder="Try: \\forall \\varepsilon > 0, \\exists \\delta > 0"></textarea>
+        <div class="preview" id="math-preview" aria-live="polite">Your MathJax preview will appear here.</div>
+      </article>
+    </section>
+
+    <footer>Progress is stored only in this browser. Review this Level 2 slice before expanding it.</footer>
+  </main>
+
+  <script>
+    const THEOREM = {
+      title: 'Bolzano–Weierstrass theorem',
+      prompt: 'State the theorem for a bounded sequence in $\\mathbb{R}$.',
+      answer: 'Every bounded sequence of real numbers has a convergent subsequence.',
+      proof: 'Let $(x_n)$ converge to $L$. Choose $\\varepsilon=1$. There is $N$ such that $n\\geq N$ implies $|x_n-L|<1$, so the tail lies in $(L-1,L+1)$. The finite set $\\{x_1,\\ldots,x_{N-1}\\}$ is bounded; combining its bound with $|L|+1$ gives a bound for the whole sequence.'
+    };
+    const QUESTIONS = [{
+      title: 'Continuity and sequences',
+      prompt: 'Which statement is always true for a continuous function $f:[a,b]\\to\\mathbb{R}$?',
+      choices: [
+        'It maps every sequence to a monotone sequence.',
+        'If $x_n\\to x$, then $f(x_n)\\to f(x)$.',
+        'It is differentiable at every point.',
+        'It maps every bounded set to a finite set.'
+      ],
+      answer: 1,
+      explanation: 'This is the sequential criterion for continuity: convergence of the input sequence is preserved by $f$. Differentiability is stronger than continuity, so option C is not required.'
+    }];
+    const COMMANDS = [
+      ['\\\\forall ', '∀'], ['\\\\exists ', '∃'], ['\\\\in ', '∈'], ['\\\\to ', '→'],
+      ['\\\\left(', 'left('], ['\\\\right)', 'right)'], ['\\\\frac{}{}', 'frac'],
+      ['\\\\supseteq ', '⊇'], ['\\\\leq ', '≤'], ['\\\\geq ', '≥'], ['\\\\mathbb{R}', 'ℝ'], ['\\\\varepsilon ', 'ε']
+    ];
+    const storageKey = 'gpt-level1-progress';
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const state = { theorem: false, question: false, proof: false, schedule: { interval: 1, next: 0 }, ...saved, schedule: { interval: 1, next: 0, ...(saved.schedule || {}) } };
+    const byId = id => document.getElementById(id);
+
+    function save() { localStorage.setItem(storageKey, JSON.stringify(state)); updateProgress(); }
+    function updateProgress() { byId('progress').textContent = `${Number(state.theorem) + Number(state.question) + Number(state.proof) + Number(state.schedule.interval > 1)} / 4`; }
+    function formatDate(timestamp) {
+      if (!timestamp) return 'Not scheduled yet';
+      return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(timestamp));
+    }
+    function renderSchedule() {
+      const due = state.schedule.next && state.schedule.next <= Date.now();
+      const text = state.schedule.next ? `${due ? 'Due now' : 'Next review'}: ${formatDate(state.schedule.next)} · interval ${state.schedule.interval} day${state.schedule.interval === 1 ? '' : 's'}.` : 'Complete a theorem attempt, then choose how well you recalled it.';
+      byId('schedule-status').textContent = text;
+    }
+    function typeset(element) {
+      if (window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([element]);
+    }
+    function renderTheorem() {
+      byId('theorem-title').textContent = THEOREM.title;
+      byId('theorem-prompt').innerHTML = THEOREM.prompt;
+      byId('theorem-answer').innerHTML = `<strong>Answer:</strong> ${THEOREM.answer}`;
+      byId('theorem-status').textContent = state.theorem ? 'First attempt recorded on this device.' : '';
+      byId('recall-good').hidden = !state.theorem;
+      byId('recall-needs').hidden = !state.theorem;
+      typeset(byId('recall'));
+    }
+    function renderQuestion() {
+      const question = QUESTIONS[0];
+      byId('question-title').textContent = question.title;
+      byId('question-prompt').innerHTML = question.prompt;
+      byId('choices').innerHTML = question.choices.map((choice, index) => `<label class="choice"><input type="radio" name="answer" value="${index}"><span>${String.fromCharCode(65 + index)}. ${choice}</span></label>`).join('');
+      typeset(byId('quiz'));
+    }
+    function renderPalette() {
+      byId('palette').innerHTML = COMMANDS.map(([value, label]) => `<button type="button" data-latex="${value.replaceAll('"', '&quot;')}">${label}</button>`).join('');
+    }
+    document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => {
+      document.querySelectorAll('[data-tab]').forEach(item => item.setAttribute('aria-selected', item === button));
+      document.querySelectorAll('[role="tabpanel"]').forEach(panel => { panel.hidden = panel.id !== button.dataset.tab; });
+      if (button.dataset.tab === 'write') typeset(byId('write'));
+      if (button.dataset.tab === 'schedule') renderSchedule();
+    }));
+    byId('reveal').addEventListener('click', () => {
+      byId('theorem-answer').hidden = false;
+      byId('reveal').disabled = true;
+      typeset(byId('theorem-answer'));
+    });
+    byId('complete').addEventListener('click', () => { state.theorem = true; state.schedule.next = Date.now() + 86400000; save(); renderTheorem(); renderSchedule(); });
+    byId('recall-good').addEventListener('click', () => { state.schedule.interval = Math.min(state.schedule.interval * 2 + 1, 14); state.schedule.next = Date.now() + state.schedule.interval * 86400000; save(); renderSchedule(); });
+    byId('recall-needs').addEventListener('click', () => { state.schedule.interval = 1; state.schedule.next = Date.now() + 86400000; save(); renderSchedule(); });
+    byId('question-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const selected = Number(new FormData(event.currentTarget).get('answer'));
+      const question = QUESTIONS[0];
+      const feedback = byId('question-feedback');
+      if (Number.isNaN(selected)) { feedback.hidden = false; feedback.className = 'feedback bad'; feedback.textContent = 'Choose an option before revealing the answer.'; return; }
+      const correct = selected === question.answer;
+      state.question = true;
+      save();
+      feedback.hidden = false;
+      feedback.className = `feedback ${correct ? 'good' : 'bad'}`;
+      feedback.innerHTML = `<strong>${correct ? 'Correct.' : 'Not quite.'}</strong> The correct answer is ${String.fromCharCode(65 + question.answer)}.<br><br><strong>Worked explanation:</strong> ${question.explanation}`;
+      typeset(feedback);
+    });
+    byId('proof-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const input = byId('proof-input').value.trim();
+      const feedback = byId('proof-feedback');
+      const answer = byId('proof-answer');
+      if (!input) { feedback.hidden = false; feedback.className = 'feedback bad'; feedback.textContent = 'Write at least a proof strategy before revealing the model answer.'; return; }
+      state.proof = true;
+      save();
+      answer.hidden = false;
+      answer.innerHTML = `<strong>Model proof:</strong> ${THEOREM.proof}`;
+      feedback.hidden = false;
+      feedback.className = 'feedback';
+      feedback.innerHTML = '<strong>Compare your plan.</strong> Did you use convergence with a fixed epsilon, bound the tail, and separately bound the finite beginning?';
+      typeset(answer);
+    });
+    byId('schedule-good').addEventListener('click', () => { state.schedule.interval = Math.min(state.schedule.interval * 2 + 1, 14); state.schedule.next = Date.now() + state.schedule.interval * 86400000; save(); renderSchedule(); });
+    byId('schedule-needs').addEventListener('click', () => { state.schedule.interval = 1; state.schedule.next = Date.now() + 86400000; save(); renderSchedule(); });
+    byId('latex-info').addEventListener('click', () => {
+      const palette = byId('palette');
+      palette.hidden = !palette.hidden;
+      byId('latex-info').setAttribute('aria-expanded', String(!palette.hidden));
+    });
+    byId('palette').addEventListener('click', event => {
+      const button = event.target.closest('[data-latex]');
+      if (!button) return;
+      const input = byId('latex-input');
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      input.value = input.value.slice(0, start) + button.dataset.latex + input.value.slice(end);
+      input.focus();
+      input.selectionStart = input.selectionEnd = start + button.dataset.latex.length;
+      input.dispatchEvent(new Event('input'));
+    });
+    let renderTimer;
+    byId('latex-input').addEventListener('input', event => {
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(() => {
+        const preview = byId('math-preview');
+        preview.textContent = event.target.value.trim() ? `\\(${event.target.value}\\)` : 'Your MathJax preview will appear here.';
+        typeset(preview);
+      }, 120);
+    });
+    renderTheorem();
+    renderQuestion();
+    renderPalette();
+    updateProgress();
+    renderSchedule();
+    window.addEventListener('load', () => typeset(document.body));
+  </script>
+</body>
+</html>
