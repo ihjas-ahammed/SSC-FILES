@@ -4,9 +4,9 @@
 STATIONS.push({
   id: 'm2-poly',
   mod: 'Module II', modName: 'Crystals, Defects & Microstructure', modClass: 'm2',
-  title: 'Polymorphism, Solidification & Directional Anisotropy',
-  short: 'Polymorphism & Grains',
-  est: '~18 min',
+  title: 'Polymorphism, Solidification, Anisotropy & Nanocrystalline Solids',
+  short: 'Grains & Nanocrystals',
+  est: '~22 min',
   body: H`
 ${gist('Real engineering solids are <b>polycrystalline aggregates</b> whose directional properties (anisotropy) depend on grain orientation and solidification history.')}
 
@@ -54,6 +54,21 @@ Although individual grains are highly anisotropic, an ordinary piece of polycrys
 
 ${chk('Under what processing condition does a polycrystalline metal become anisotropic on the macroscale?',
   'When a polycrystalline metal undergoes directional deformation (such as cold rolling, wire drawing, or extrusion), the grains are forced into a preferred crystallographic alignment termed a "texture" or "preferred orientation". This texture causes bulk macroscale anisotropy (e.g. anisotropic magnetic permeability in Fe–Si transformer cores).')}
+
+${tp('Nanocrystalline Solids')}
+<p>In conventional polycrystalline materials, grain diameters range from 10 to 100 μm. When the mean grain diameter is refined below <b>100 nm</b> (typically 5 to 50 nm), the material is classified as a <b>nanocrystalline solid</b>:</p>
+<ul>
+  <li><b>Enormous Grain Boundary Volume Fraction:</b> In coarse-grained solids, boundary atoms constitute less than 0.001% of the material. In nanocrystalline solids with $d \approx 5\text{ nm}$ and boundary thickness $\sim 1\text{ nm}$, up to <b>30% to 50% of all atoms</b> reside inside disordered grain boundaries and triple junctions!</li>
+  <li><b>Hall-Petch Strengthening:</b> Yield strength and hardness follow the Hall-Petch equation:
+    $$\sigma_y = \sigma_0 + k_y d^{-1/2}$$
+    Fine grains create high densities of boundary barriers that obstruct dislocation slip, elevating yield strength and hardness by up to 500% over coarse-grained counterparts.</li>
+  <li><b>The Inverse Hall-Petch Effect (Softening):</b> Below a critical grain size of $d_c \approx 10 - 15\text{ nm}$, grains become too small to support dislocation pile-ups (a single dislocation cannot easily nucleate or loop inside the tiny grain). Deformation shifts from dislocation glide to <b>grain boundary sliding and Coble diffusion creep</b>, leading to a breakdown in Hall-Petch where the material actually becomes softer as grain size decreases further!</li>
+  <li><b>Synthesis Techniques:</b> Produced via inert gas condensation (IGC), severe plastic deformation (SPD: ECAP, HPT), high-energy ball milling (mechanical attrition), and electrodeposition.</li>
+  <li><b>Key Applications:</b> Ultra-hard wear-resistant coating films, high-strength structural fasteners, biocompatible implants, and soft magnetic nanocomposites (e.g. Finemet alloys).</li>
+</ul>
+
+${chk('What causes the Inverse Hall-Petch effect in nanocrystalline metals with grain sizes below ~10 nm?',
+  'At grain sizes below 10–15 nm, individual grains are too tiny to accommodate dislocation pile-ups, which are required for conventional dislocation multiplication and work hardening. Instead, deformation switches to grain boundary sliding and Coble diffusion creep across the vast network of boundaries, causing yield strength to decrease with further grain refinement.')}
 `
 });
 
@@ -371,6 +386,20 @@ ${fig('boundaries', 'Interfacial defects: (a) small-angle tilt boundary modeled 
 
 ${chk('Rank the following planar defects in order of increasing interfacial energy: High-angle grain boundary, External surface, Twin boundary, Small-angle tilt boundary.',
   'Order of increasing energy: Twin boundary (lowest, coherent mirror) < Small-angle tilt boundary (isolated dislocations) < High-angle grain boundary (disordered atomic mismatch) < External surface (highest, complete loss of nearest-neighbor bonds on one side).')}
+
+${tp('Bulk or Volume Defects (3D Imperfections)')}
+<p>Volume defects are macroscopic three-dimensional imperfections (much larger than point or linear defects) that form during casting, fabrication, or heat treatment:</p>
+<ul>
+  <li><b>Pores and Porosity:</b> Gas bubbles entrapped during solidification, vacancy condensation during cooling, or incomplete powder compaction during sintering. Pores severely reduce load-bearing cross-sectional area and act as stress concentrators, lowering tensile strength and elastic modulus.</li>
+  <li><b>Microcracks and Cracks:</b> Internal microscopic fractures resulting from thermal gradients during quenching, phase transformation volume mismatches, or cyclic mechanical fatigue. Microcracks induce localized stress amplification at their sharp tips:
+    $$\sigma_m = 2 \sigma_0 \sqrt{\frac{a}{\rho_t}}$$
+    where $a$ is half-length of an internal crack and $\rho_t$ is tip radius of curvature. Because $\rho_t$ can be on the order of atomic dimensions, localized stress $\sigma_m$ drastically exceeds nominal stress $\sigma_0$, causing catastrophic brittle failure.</li>
+  <li><b>Foreign Inclusions:</b> Nonmetallic microscopic particles (e.g. oxides like $\mathrm{Al}_2\mathrm{O}_3$, sulfides like $\mathrm{MnS}$, silicates, or refractory bits) entrapped in the matrix during smelting or pouring. Large angular inclusions act as internal stress risers and primary nucleation sites for fatigue failure.</li>
+  <li><b>Shrinkage Cavities:</b> Macroscopic internal voids formed due to liquid-to-solid volume contraction during casting when mold risers fail to feed molten metal continuously into the solidifying core.</li>
+</ul>
+
+${chk('Why are sharp internal microcracks far more dangerous to structural integrity than rounded spherical gas pores of the same volume?',
+  'Stress concentration factor K_t is inversely proportional to the square root of the defect tip radius of curvature (K_t ≈ 2√(a/ρ_t)). A sharp crack has an atomically small tip radius (ρ_t → 0), concentrating applied stress by factors of 10× to 100× and easily exceeding theoretical cohesive strength. In contrast, a spherical pore has a large, blunt radius (ρ_t = r), producing a mild stress concentration factor of only K_t ≈ 2 to 3.')}
 `
 });
 
@@ -378,11 +407,24 @@ ${chk('Rank the following planar defects in order of increasing interfacial ener
 STATIONS.push({
   id: 'm2-micro',
   mod: 'Module II', modName: 'Crystals, Defects & Microstructure', modClass: 'm2',
-  title: 'Microscopy Techniques & ASTM Grain Size Determination',
-  short: 'Microscopy & Grain Size',
-  est: '~20 min',
+  title: 'Atomic Vibrations, Microscopy & ASTM Grain Size Determination',
+  short: 'Vibrations & Microscopy',
+  est: '~22 min',
   body: H`
-${gist('Microstructural features (0.1–100 μm) govern mechanical properties; grain size is standardized via the <b>ASTM intercept method</b>: $G = -6.6457\\log\\ell - 3.298$.')}
+${gist('Atomic vibrations govern thermal expansion and diffusion; microstructural features (0.1–100 μm) govern mechanical properties via ASTM grain size.')}
+
+${tp('Atomic Vibrations in Solids (Callister 4.8)')}
+<p>Every atom in a solid vibrates rapidly about its lattice equilibrium position at all temperatures above absolute zero ($0\mathrm{~K}$):</p>
+<ul>
+  <li><b>Vibrational Frequency & Phonons:</b> Atoms vibrate at characteristic frequencies of $\nu \sim 10^{13}\mathrm{~s}^{-1}$ ($10\mathrm{~THz}$). These coordinated lattice vibrations can be conceptualized quantum mechanically as vibrational wave packets termed <b>phonons</b>.</li>
+  <li><b>Temperature Dependence & Thermal Expansion:</b> At temperature $T$, the mean vibrational energy per atom is proportional to $k_B T$. Because the interatomic potential energy well is <b>asymmetric (anharmonic)</b>, increasing temperature causes atoms to vibrate with larger amplitudes, shifting the average atomic equilibrium position outward. This manifests macroscopically as <b>thermal expansion</b>.</li>
+  <li><b>Role in Solid-State Diffusion:</b> Vibrations supply the random thermal energy pulses needed for an atom to overcome the activation energy barrier $Q$ and jump into an adjacent vacant site. The atomic jump frequency is given by:
+    $$\Gamma = \nu_0 \exp\left(-\frac{Q}{k_B T}\right)$$</li>
+  <li><b>Lindemann Melting Criterion:</b> As temperature approaches the melting point $T_m$, the root-mean-square vibrational amplitude reaches roughly <b>$10\%$ to $15\%$</b> of the interatomic spacing $r_0$. At this threshold, atomic overlap becomes disruptive, the crystal loses shear rigidity, and melting occurs.</li>
+</ul>
+
+${chk('How do atomic vibrations explain why solids expand when heated rather than vibrating symmetrically about fixed points?',
+  'The interatomic potential energy curve is asymmetric (anharmonic): the repulsive force rises much more steeply at separations r < r_0 than the attractive force falls off at r > r_0. As thermal energy k_B T increases vibrational amplitude, the mid-point of atomic oscillation shifts outward to greater interatomic distances, causing macroscopic thermal expansion.')}
 
 ${tp('Comparison of Microscopy Techniques')}
 ${tbl(

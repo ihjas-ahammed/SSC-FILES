@@ -903,7 +903,7 @@ FIGS.grainsize = {
 /* ── 3D Crystal Models for Module II ── */
 
 /* FCC Interstitial Sites: Octahedral at center & edge centers, Tetrahedral inside (Callister Fig 4.3a) */
-MODELS.fcc_interstitial = opt => {
+MODELS.fcc_interstitial = (opt = {}) => {
   const balls = [], bonds = [], labels = [];
   const T = p => T3(p);
 

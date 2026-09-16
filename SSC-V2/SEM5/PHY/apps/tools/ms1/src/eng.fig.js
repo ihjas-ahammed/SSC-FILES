@@ -72,10 +72,11 @@ function setupFig(cv){
     cv.width=Math.round(cssW*dpr);cv.height=Math.round(cssH*dpr);cv.style.height=cssH+'px';
     cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);rec.W=cssW;rec.H=cssH;render();}
   function render(){if(!rec.W)return;readPalette();const ctx=cv.getContext('2d');
+    ctx.clearRect(0,0,rec.W,rec.H);
     ctx.save();try{F.draw(ctx,rec.W,rec.H,st);}catch(e){if(!warned){console.error('figure',name,e);warned=true;}}ctx.restore();}
   rec.size=size;rec.render=render;
   if(F.chips||F.steps||F.anim){
-    figBar(wrap,F,st,()=>{if(F.resetOnChange){st.t=0;st.memo={};}if(typeof F.ar==='function')size();else render();},(mk)=>{
+    figBar(wrap,F,st,()=>{if(F.resetOnChange!==false){st.t=0;st.memo={};}if(typeof F.ar==='function')size();else render();},(mk)=>{
       if(!F.anim)return;
       const play=mk(st.playing?'❚❚':'▶',st.playing?'Pause':'Play',()=>{st.playing=!st.playing;play.textContent=st.playing?'❚❚':'▶';play.title=st.playing?'Pause':'Play';});
       mk('↺','Restart',()=>{st.t=0;st.memo={};if(!st.playing){st.playing=true;play.textContent='❚❚';}render();});
@@ -169,48 +170,98 @@ function setup3D(cv){
   });
   if(spec.steps)setTimeout(()=>{const s=spec.steps[0];if(st._cap)st._cap.innerHTML='<b>step 1/'+spec.steps.length+'</b>'+(typeof s==='function'?s(st):s);
     const n=wrap.querySelector('.figbar button.step');if(n)n.classList.add('on');},0);
-  /* pointer + touch: smooth 360° orbit with pointer capture */
+  /* pointer + touch: smooth 360° orbit with pointer capture & full touch fallback */
   let drag=false,lx=0,ly=0,pid=null,pinch=0;
   cv.style.touchAction='none';
 
-  cv.addEventListener('pointerdown',e=>{
-    if(e.pointerType==='touch'&&e.isPrimary===false)return;
-    drag=true;pid=e.pointerId;lx=e.clientX;ly=e.clientY;
-    st.auto=false;
-    try{cv.setPointerCapture(e.pointerId);}catch(_){}
-  });
+  function onDragStart(cx, cy) {
+    drag = true;
+    lx = cx;
+    ly = cy;
+    st.auto = false;
+  }
 
-  cv.addEventListener('pointermove',e=>{
-    if(!drag||e.pointerId!==pid)return;
-    e.preventDefault();
-    const dx=e.clientX-lx,dy=e.clientY-ly;
-    st.yaw+=dx*0.011;
-    st.pitch=clamp(st.pitch+dy*0.011,-1.45,1.45);
-    lx=e.clientX;ly=e.clientY;
+  function onDragMove(cx, cy) {
+    if (!drag) return;
+    const dx = cx - lx, dy = cy - ly;
+    st.yaw += dx * 0.011;
+    st.pitch = clamp(st.pitch + dy * 0.011, -1.45, 1.45);
+    lx = cx;
+    ly = cy;
     draw();
+  }
+
+  function onDragEnd() {
+    drag = false;
+    pinch = 0;
+  }
+
+  cv.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch' && e.isPrimary === false) return;
+    pid = e.pointerId;
+    onDragStart(e.clientX, e.clientY);
+    try { cv.setPointerCapture(e.pointerId); } catch (_) {}
   });
 
-  const end=e=>{
-    if(e&&e.pointerId&&e.pointerId!==pid)return;
-    drag=false;
-    if(pid!==null){
-      try{cv.releasePointerCapture(pid);}catch(_){}
-      pid=null;
+  cv.addEventListener('pointermove', e => {
+    if (!drag || (pid !== null && e.pointerId !== pid)) return;
+    onDragMove(e.clientX, e.clientY);
+  });
+
+  const end = e => {
+    if (e && e.pointerId && pid !== null && e.pointerId !== pid) return;
+    if (pid !== null) {
+      try { cv.releasePointerCapture(pid); } catch (_) {}
+      pid = null;
     }
+    onDragEnd();
   };
-  cv.addEventListener('pointerup',end);
-  cv.addEventListener('pointercancel',end);
-  cv.addEventListener('lostpointercapture',end);
+  cv.addEventListener('pointerup', end);
+  cv.addEventListener('pointercancel', end);
+
+  /* Touch fallback (essential for mobile Chrome / WebViews where pointer capture can be lost) */
+  cv.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      pid = null;
+      onDragStart(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2) {
+      drag = false;
+      st.auto = false;
+      pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+  }, { passive: true });
+
+  cv.addEventListener('touchmove', e => {
+    if (e.touches.length === 1 && drag) {
+      if (e.cancelable) e.preventDefault();
+      onDragMove(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2 && pinch) {
+      if (e.cancelable) e.preventDefault();
+      const d2 = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      st.zoom = clamp(st.zoom * (d2 / pinch), 0.5, 2.8);
+      pinch = d2;
+      draw();
+    }
+  }, { passive: false });
+
+  cv.addEventListener('touchend', e => {
+    if (e.touches.length === 0) {
+      onDragEnd();
+    } else if (e.touches.length === 1) {
+      onDragStart(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  cv.addEventListener('touchcancel', () => { onDragEnd(); });
 
   /* the wheel scrolls the page; ctrl/⌘ + wheel (and a trackpad pinch) zooms */
-  cv.addEventListener('wheel',e=>{if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();st.auto=false;
-    st.zoom=clamp(st.zoom*(e.deltaY>0?.92:1.08),.5,2.8);draw();},{passive:false});
-  cv.addEventListener('touchstart',e=>{if(e.touches.length===2){drag=false;st.auto=false;
-    pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:true});
-  cv.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){e.preventDefault();
-    const d2=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-    st.zoom=clamp(st.zoom*(d2/pinch),.5,2.8);pinch=d2;draw();}},{passive:false});
-  cv.addEventListener('touchend',()=>{pinch=0;});
+  cv.addEventListener('wheel', e => {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    st.auto = false;
+    st.zoom = clamp(st.zoom * (e.deltaY > 0 ? 0.92 : 1.08), 0.5, 2.8);
+    draw();
+  }, { passive: false });
+
   live3D.push(rec);if(figIO)figIO.observe(cv);if(figRO)figRO.observe(cv);else window.addEventListener('resize',debounce(size,160));
   size();return rec;
 }

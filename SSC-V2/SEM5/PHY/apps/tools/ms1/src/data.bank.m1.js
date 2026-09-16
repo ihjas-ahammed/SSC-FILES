@@ -4,8 +4,8 @@
              m1-cov, m1-metal, m1-vdw, m1-mixed
    ══════════════════════════════════════════════════════════════════ */
 
-/* ── Section: m1-what ── */
-OMR['m1-what'] = [
+/* ── Section: m1-intro ── */
+OMR['m1-intro'] = [
   {
     q: "How is materials science fundamentally distinguished from materials engineering?",
     o: [
@@ -162,7 +162,7 @@ OMR['m1-what'] = [
   }
 ];
 
-CARDS['m1-what'] = [
+CARDS['m1-intro'] = [
   { f: "Materials science", b: "Investigating the fundamental relationships that exist between the internal structures and properties of materials (answering 'why' materials behave as they do)." },
   { f: "Materials engineering", b: "Designing or manipulating the structure of a material to synthesize a predetermined set of operational properties based on structure-property correlations." },
   { f: "Central paradigm of MSE", b: "The linear four-point framework: Processing $\\longrightarrow$ Structure $\\longrightarrow$ Properties $\\longrightarrow$ Performance (modernly extended to include Reuse/Recyclability)." },
@@ -342,8 +342,8 @@ CARDS['m1-classes'] = [
   { f: "PET gas permeability", b: "Polyethylene terephthalate is slightly permeable to carbon dioxide, causing carbonated beverages in 2-liter plastic bottles to go flat within months." }
 ];
 
-/* ── Section: m1-adv ── */
-OMR['m1-adv'] = [
+/* ── Section: m1-advanced ── */
+OMR['m1-advanced'] = [
   {
     q: "What defines an 'advanced material' in materials science?",
     o: [
@@ -500,7 +500,7 @@ OMR['m1-adv'] = [
   }
 ];
 
-CARDS['m1-adv'] = [
+CARDS['m1-advanced'] = [
   { f: "Advanced materials", b: "High-performance materials utilized in high-tech applications, including semiconductors, biomaterials, smart materials, and nanomaterials." },
   { f: "Semiconductors", b: "Materials with electrical conductivities intermediate between conductors and insulators, extremely sensitive to minute concentrations of impurity dopants." },
   { f: "Biocompatible material", b: "A material suitable for implantation into the living body that does not provoke immune rejection, inflammation, or release toxic substances." },
@@ -849,8 +849,8 @@ CARDS['m1-ionic'] = [
   { f: "Ionic radius shift upon ionization", b: "Metallic cations shrink relative to neutral atoms ($r_{\\mathrm{Na}^+} &lt; r_{\\mathrm{Na}}$); nonmetallic anions expand ($r_{\\mathrm{Cl}^-} > r_{\\mathrm{Cl}}$)." }
 ];
 
-/* ── Section: m1-cov ── */
-OMR['m1-cov'] = [
+/* ── Section: m1-covalent ── */
+OMR['m1-covalent'] = [
   {
     q: "What fundamental mechanism characterizes covalent bonding between adjacent atoms?",
     o: [
@@ -1007,7 +1007,7 @@ OMR['m1-cov'] = [
   }
 ];
 
-CARDS['m1-cov'] = [
+CARDS['m1-covalent'] = [
   { f: "Covalent bond definition", b: "A primary chemical bond characterized by the sharing of valence electrons between adjacent atoms with small electronegativity differences, producing directional bonds." },
   { f: "Directional bonding nature", b: "Covalent bonds exist strictly along the spatial orientation where participating atomic orbitals overlap, fixing rigid interatomic bond angles." },
   { f: "Electron promotion in carbon", b: "An electron from the filled $2s$ orbital is promoted to a vacant $2p$ orbital, producing an excited $1s^2 2s^1 2p^3$ state with 4 unpaired electrons." },
@@ -1018,8 +1018,8 @@ CARDS['m1-cov'] = [
   { f: "Diamond bonding energy & $T_m$", b: "Bonding energy is $713\\mathrm{~kJ/mol}$ and melting point exceeds $3550^{\\circ}\\mathrm{C}$, reflecting the extreme rigidity of the 3D tetrahedral network." }
 ];
 
-/* ── Section: m1-metal ── */
-OMR['m1-metal'] = [
+/* ── Section: m1-metallic ── */
+OMR['m1-metallic'] = [
   {
     q: "What atomic model correctly depicts metallic bonding in solid metals?",
     o: [
@@ -1176,7 +1176,7 @@ OMR['m1-metal'] = [
   }
 ];
 
-CARDS['m1-metal'] = [
+CARDS['m1-metallic'] = [
   { f: "Metallic bond definition", b: "A primary chemical bond found in metals where an array of positive ion cores is held together by a nonlocalized, delocalized 'sea of valence electrons'." },
   { f: "Ion core", b: "The net positively charged assembly of atomic nucleus and nonvalence core electrons remaining after valence electrons enter the delocalized conduction sea." },
   { f: "Nondirectional metallic bonding", b: "The electron sea shields ion cores uniformly in all directions, allowing planes of atoms to slide without electrostatic cleavage (high ductility)." },
@@ -1187,8 +1187,8 @@ CARDS['m1-metal'] = [
   { f: "Table 2.3 Al vs. Ag comparison", b: "Aluminum has $E_0 = 330\\mathrm{~kJ/mol}$ ($T_m = 660^{\\circ}\\mathrm{C}$); silver has $E_0 = 285\\mathrm{~kJ/mol}$ ($T_m = 962^{\\circ}\\mathrm{C}$)." }
 ];
 
-/* ── Section: m1-vdw ── */
-OMR['m1-vdw'] = [
+/* ── Section: m1-secondary ── */
+OMR['m1-secondary'] = [
   {
     q: "What physical mechanism generates secondary (van der Waals) bonds between atoms or molecules?",
     o: [
@@ -1345,7 +1345,7 @@ OMR['m1-vdw'] = [
   }
 ];
 
-CARDS['m1-vdw'] = [
+CARDS['m1-secondary'] = [
   { f: "Secondary bonding definition", b: "Weak physical bonds ($4\\mathrm{~to~}30\\mathrm{~kJ/mol}$) arising from electrostatic coulombic attraction between electric dipoles without electron transfer or sharing." },
   { f: "Fluctuating induced dipole", b: "Temporary dipoles generated in electrically symmetric atoms (Ar, Kr) by fleeting thermal vibrations of electron clouds, inducing dipoles in neighbors." },
   { f: "Polar molecule", b: "A molecule possessing a permanent electric dipole moment due to an asymmetrical spatial distribution of positive and negative electrical charges (e.g., HCl)." },

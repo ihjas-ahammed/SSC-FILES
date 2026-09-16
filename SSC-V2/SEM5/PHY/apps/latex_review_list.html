@@ -1,0 +1,1963 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LaTeX Review Matrix · Modules I &amp; II</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23201D1A'/%3E%3Ctext x='50' y='67' font-family='Georgia,serif' font-size='52' text-anchor='middle' fill='%23F4EFE6'%3ET%3C/text%3E%3Ctext x='73' y='82' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23E0573A'%3EX%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════ Design System & Variables ═══════════════════ */
+:root {
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Source Sans 3', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
+
+  /* Palette - Light Theme */
+  --bg-body: #F5F1EA;
+  --bg-surface: #FCFAF6;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #EFE9DE;
+  --bg-highlight: #FFF8E7;
+
+  --border-light: #E2DACB;
+  --border-strong: #C9BEAC;
+  --border-focus: #1C1A17;
+
+  --text-primary: #1D1A16;
+  --text-secondary: #585247;
+  --text-muted: #8A8173;
+
+  /* Accent Colors */
+  --mod1-accent: #C4391D;      /* Proofreader Brick Red */
+  --mod1-light: #FDEEEB;
+  --mod2-accent: #2252A0;      /* Scholarly Ink Blue */
+  --mod2-light: #EBF1FB;
+
+  /* Scientific Rating Levels */
+  --lvl1-color: #D9383A;
+  --lvl1-bg: #FDF1F1;
+  --lvl2-color: #E67E22;
+  --lvl2-bg: #FEF6EC;
+  --lvl3-color: #D4AC0D;
+  --lvl3-bg: #FEFDE8;
+  --lvl4-color: #27AE60;
+  --lvl4-bg: #EDF9F1;
+  --lvl5-color: #2980B9;
+  --lvl5-bg: #ECF5FB;
+
+  --shadow-sm: 0 1px 3px rgba(35, 25, 15, 0.05);
+  --shadow-md: 0 4px 12px rgba(35, 25, 15, 0.07), 0 1px 3px rgba(35, 25, 15, 0.04);
+  --shadow-lg: 0 12px 30px rgba(35, 25, 15, 0.12), 0 3px 8px rgba(35, 25, 15, 0.06);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 9999px;
+
+  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg-body: #121115;
+  --bg-surface: #18171D;
+  --bg-card: #201F26;
+  --bg-subtle: #292832;
+  --bg-highlight: #2A241C;
+
+  --border-light: #34323E;
+  --border-strong: #4B4757;
+  --border-focus: #ECE8E1;
+
+  --text-primary: #ECE8E1;
+  --text-secondary: #AFA89D;
+  --text-muted: #736E66;
+
+  --mod1-accent: #E86548;
+  --mod1-light: #381D17;
+  --mod2-accent: #5D8DF5;
+  --mod2-light: #16243D;
+
+  --lvl1-color: #F87171;
+  --lvl1-bg: #371717;
+  --lvl2-color: #FB923C;
+  --lvl2-bg: #362215;
+  --lvl3-color: #FACC15;
+  --lvl3-bg: #353014;
+  --lvl4-color: #4ADE80;
+  --lvl4-bg: #143520;
+  --lvl5-color: #60A5FA;
+  --lvl5-bg: #16293D;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
+
+/* ═══════════════════ Base Layout & Typography ═══════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 90px;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ═══════════════════ Top Header ═══════════════════ */
+header.app-header {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-light);
+  padding: 2.5rem 0 1.75rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.course-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-light);
+}
+
+.course-badge .dot {
+  width: 7px;
+  height: 7px;
+  background: var(--mod1-accent);
+  border-radius: 50%;
+}
+
+h1.app-title {
+  font-family: var(--font-serif);
+  font-size: 2.35rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+p.app-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  margin-top: 0.45rem;
+  max-width: 680px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════ Buttons ═══════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition);
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--text-primary);
+  color: var(--bg-body);
+  border-color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background: #33302B;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: #FFFFFF;
+}
+
+.btn-outline {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+.btn-outline:hover {
+  background: var(--bg-subtle);
+  border-color: var(--text-primary);
+}
+
+.btn-icon {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-success {
+  background: #27AE60;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #219653;
+}
+
+/* ═══════════════════ Scientific Learning Insight Card ═══════════════════ */
+.scientific-banner {
+  margin-top: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--mod2-accent);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.science-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+
+.science-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.science-icon {
+  font-size: 1.25rem;
+}
+
+.science-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.science-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--mod2-light);
+  color: var(--mod2-accent);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+.science-content {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border-light);
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.science-pillar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+}
+
+.science-pillar strong {
+  color: var(--text-primary);
+  display: block;
+  font-size: 0.94rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ═══════════════════ Progress Bar & Stats Bar ═══════════════════ */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 0.2rem;
+}
+
+.stat-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.global-progress-wrap {
+  margin-top: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.progress-bar-bg {
+  height: 10px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  display: flex;
+}
+
+.progress-segment {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.seg-mastered { background: var(--lvl5-color); }
+.seg-proficient { background: var(--lvl4-color); }
+.seg-functional { background: var(--lvl3-color); }
+.seg-familiar { background: var(--lvl2-color); }
+.seg-novice { background: var(--lvl1-color); }
+
+/* ═══════════════════ Filter & Search Toolbar ═══════════════════ */
+.toolbar-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-body);
+  padding: 1.15rem 0 0.85rem;
+  border-bottom: 1px solid var(--border-light);
+  backdrop-filter: blur(10px);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.55rem 0.9rem 0.55rem 2.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.filter-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.chip:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.chip.active {
+  background: var(--text-primary);
+  color: var(--bg-body);
+  border-color: var(--text-primary);
+}
+
+.toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ═══════════════════ Module Sections ═══════════════════ */
+.modules-container {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.module-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.module-card.mod-1 {
+  border-top: 5px solid var(--mod1-accent);
+}
+
+.module-card.mod-2 {
+  border-top: 5px solid var(--mod2-accent);
+}
+
+.module-header {
+  padding: 1.35rem 1.65rem;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.module-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.module-tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+.mod-1 .module-tag {
+  background: var(--mod1-light);
+  color: var(--mod1-accent);
+}
+
+.mod-2 .module-tag {
+  background: var(--mod2-light);
+  color: var(--mod2-accent);
+}
+
+.module-hours {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+h2.module-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.module-ref {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.module-status {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.module-score-pill {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.accordion-chevron {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: transform 0.25s ease;
+  color: var(--text-muted);
+}
+
+.module-card.collapsed .accordion-chevron {
+  transform: rotate(-90deg);
+}
+
+.module-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.module-card.collapsed .module-body {
+  display: none;
+}
+
+/* ═══════════════════ Unit Blocks ═══════════════════ */
+.unit-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.unit-header {
+  padding: 1rem 1.35rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.unit-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.unit-num-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-primary);
+}
+
+h3.unit-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.unit-sub-count {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.unit-card-list {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.unit-block.collapsed .unit-card-list {
+  display: none;
+}
+
+.unit-block.collapsed .accordion-chevron {
+  transform: rotate(-90deg);
+}
+
+/* ═══════════════════ Subtopic Cards ═══════════════════ */
+.subtopic-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.35rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  position: relative;
+}
+
+.subtopic-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.subtopic-card.level-1 { border-left: 4px solid var(--lvl1-color); }
+.subtopic-card.level-2 { border-left: 4px solid var(--lvl2-color); }
+.subtopic-card.level-3 { border-left: 4px solid var(--lvl3-color); }
+.subtopic-card.level-4 { border-left: 4px solid var(--lvl4-color); }
+.subtopic-card.level-5 { border-left: 4px solid var(--lvl5-color); }
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+h4.subtopic-title {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.tags-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.concept-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+p.subtopic-summary {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  margin-top: 0.65rem;
+  line-height: 1.5;
+}
+
+/* Code Snippet Reference */
+.syntax-preview {
+  margin-top: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ═══════════════════ Interactive Slider Section ═══════════════════ */
+.slider-section {
+  margin-top: 1.15rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem 1.15rem;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.slider-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.rating-badge {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  transition: var(--transition);
+}
+
+.rating-badge.lvl-1 { background: var(--lvl1-bg); color: var(--lvl1-color); border: 1px solid var(--lvl1-color); }
+.rating-badge.lvl-2 { background: var(--lvl2-bg); color: var(--lvl2-color); border: 1px solid var(--lvl2-color); }
+.rating-badge.lvl-3 { background: var(--lvl3-bg); color: var(--lvl3-color); border: 1px solid var(--lvl3-color); }
+.rating-badge.lvl-4 { background: var(--lvl4-bg); color: var(--lvl4-color); border: 1px solid var(--lvl4-color); }
+.rating-badge.lvl-5 { background: var(--lvl5-bg); color: var(--lvl5-color); border: 1px solid var(--lvl5-color); }
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.range-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-subtle);
+  outline: none;
+  cursor: pointer;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  border: 3px solid var(--bg-card);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+.range-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.15);
+}
+
+.range-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  border: 3px solid var(--bg-card);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  cursor: grab;
+}
+
+.slider-scale-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  padding: 0 2px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.scientific-rubric {
+  margin-top: 0.55rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  min-height: 1.4em;
+}
+
+/* ═══════════════════ Scientific Active Recall Toggle ═══════════════════ */
+.recall-section {
+  margin-top: 0.85rem;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.recall-trigger {
+  padding: 0.6rem 0.9rem;
+  background: var(--bg-surface);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-secondary);
+}
+
+.recall-trigger:hover {
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+}
+
+.recall-box {
+  padding: 0.95rem 1.15rem;
+  display: none;
+  border-top: 1px solid var(--border-light);
+}
+
+.recall-box.open {
+  display: block;
+}
+
+.recall-prompt {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.65rem;
+}
+
+.btn-reveal {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+.recall-answer {
+  display: none;
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--bg-subtle);
+  border-left: 3px solid var(--mod2-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+}
+
+.recall-answer.visible {
+  display: block;
+}
+
+/* User Note */
+.user-note-input {
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.45rem 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.user-note-input:focus {
+  border-color: var(--border-strong);
+}
+
+/* ═══════════════════ Sticky Action Bar ═══════════════════ */
+.floating-bar {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  padding: 0.6rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 500;
+}
+
+.floating-score {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-light);
+  padding-right: 0.85rem;
+}
+
+/* ═══════════════════ Modal System ═══════════════════ */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-backdrop.active {
+  display: flex;
+}
+
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  max-width: 780px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.json-textarea {
+  width: 100%;
+  height: 380px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  white-space: pre;
+  resize: vertical;
+  outline: none;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  background: var(--bg-surface);
+}
+
+/* Toast Notifications */
+.toast-msg {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1C1A17;
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 2000;
+}
+
+[data-theme="dark"] .toast-msg {
+  background: #ECE8E1;
+  color: #121115;
+}
+
+.toast-msg.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive tweaks */
+@media (max-width: 680px) {
+  h1.app-title { font-size: 1.8rem; }
+  .header-top { flex-direction: column; }
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .floating-bar { width: 92%; justify-content: space-between; }
+  .floating-score { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<header class="app-header">
+  <div class="container">
+    <div class="header-top">
+      <div>
+        <div class="course-badge">
+          <span class="dot"></span>
+          MAT5FS112 · SEC · Semester V
+        </div>
+        <h1 class="app-title">Mathematical Type Setting System — LaTeX</h1>
+        <p class="app-subtitle">
+          Modules I &amp; II Active Review Matrix · Topic &amp; Subtopic Understanding Calibration
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-outline" id="theme-toggle" title="Toggle Dark/Light Mode">
+          🌓 <span id="theme-btn-text">Dark</span>
+        </button>
+        <button class="btn btn-outline" id="btn-inspect-json">
+          👁️ Inspect JSON
+        </button>
+        <button class="btn btn-outline" id="btn-import-modal">
+          📥 Import
+        </button>
+        <button class="btn btn-primary" id="btn-copy-json-top">
+          📋 Copy Entire JSON
+        </button>
+      </div>
+    </div>
+
+    <!-- Scientific Study Architecture Banner -->
+    <div class="scientific-banner">
+      <div class="science-header" id="science-toggle">
+        <div class="science-title-wrap">
+          <span class="science-icon">🧠</span>
+          <div class="science-title">Cognitive Science Guide: Why Active Recall Beats Subjective Sliders</div>
+          <span class="science-badge">Metacognitive Calibration</span>
+        </div>
+        <span class="accordion-chevron" id="science-chevron">▾</span>
+      </div>
+
+      <div class="science-content" id="science-body">
+        <div class="science-pillar">
+          <strong>1. Beware the "Fluency Illusion"</strong>
+          When you simply read a topic name (e.g. <code>\multicolumn</code>) and pick a number, your brain mistakes passive recognition for procedural competence. You feel you know it until an exam forces you to write the exact 3-argument syntax from memory.
+        </div>
+        <div class="science-pillar">
+          <strong>2. Use the "Test My Recall" Button First</strong>
+          Before rating each card, click <em>"⚡ Test My Recall"</em>. Attempt to solve the prompt mentally or on scratch paper. If you fail, the true score is 1 or 2, regardless of how familiar the topic looked!
+        </div>
+        <div class="science-pillar">
+          <strong>3. Calibrated Behavioral Rubric</strong>
+          • <strong>1 (Novice):</strong> Blank / never used.<br>
+          • <strong>2 (Familiar):</strong> Recognize it when seen, but cannot write from scratch.<br>
+          • <strong>3 (Functional):</strong> Can write standard syntax with minor reference checks.<br>
+          • <strong>4 (Proficient):</strong> Flawless code from memory under time pressure.<br>
+          • <strong>5 (Mastered):</strong> Deep grasp, can troubleshoot obscure compile errors.
+        </div>
+      </div>
+    </div>
+
+    <!-- Global Progress Summary -->
+    <div class="stats-strip">
+      <div class="stat-box">
+        <div class="stat-label">Total Subtopics</div>
+        <div class="stat-value" id="stat-total">44</div>
+        <div class="stat-desc">Modules I &amp; II syllabus</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Average Score</div>
+        <div class="stat-value" id="stat-avg">1.00 <span style="font-size:0.9rem;color:var(--text-muted)">/ 5.0</span></div>
+        <div class="stat-desc" id="stat-competency-label">Calibrating</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">🔴 Needs Review (1–2)</div>
+        <div class="stat-value" id="stat-low">44</div>
+        <div class="stat-desc">High priority revision</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">🟡 Developing (3)</div>
+        <div class="stat-value" id="stat-mid">0</div>
+        <div class="stat-desc">Functional recall</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">🟢 Mastered (4–5)</div>
+        <div class="stat-value" id="stat-high">0</div>
+        <div class="stat-desc">Exam ready</div>
+      </div>
+    </div>
+
+    <div class="global-progress-wrap">
+      <div class="progress-header">
+        <span>Knowledge Mastery Profile</span>
+        <span id="stat-progress-pct" style="font-family:var(--font-mono)">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-segment seg-mastered" id="bar-5" style="width: 0%"></div>
+        <div class="progress-segment seg-proficient" id="bar-4" style="width: 0%"></div>
+        <div class="progress-segment seg-functional" id="bar-3" style="width: 0%"></div>
+        <div class="progress-segment seg-familiar" id="bar-2" style="width: 0%"></div>
+        <div class="progress-segment seg-novice" id="bar-1" style="width: 100%"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Sticky Filter Toolbar -->
+<div class="toolbar-wrap">
+  <div class="container">
+    <div class="toolbar">
+      <div class="search-box-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Search commands, topics, keywords (e.g. bibtex, table)...">
+      </div>
+
+      <div class="filter-chips">
+        <button class="chip active" data-filter="all">All Topics (<span id="count-all">44</span>)</button>
+        <button class="chip" data-filter="low">🔴 Needs Review (<span id="count-low">44</span>)</button>
+        <button class="chip" data-filter="mid">🟡 Functional (<span id="count-mid">0</span>)</button>
+        <button class="chip" data-filter="high">🟢 Mastered (<span id="count-high">0</span>)</button>
+        <button class="chip" data-filter="mod-1">Module I</button>
+        <button class="chip" data-filter="mod-2">Module II</button>
+      </div>
+
+      <div class="toolbar-controls">
+        <button class="btn btn-outline" id="btn-expand-all" style="padding:0.35rem 0.75rem;font-size:0.8rem">
+          Expand All
+        </button>
+        <button class="btn btn-outline" id="btn-collapse-all" style="padding:0.35rem 0.75rem;font-size:0.8rem">
+          Collapse All
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Modules Tree -->
+<main class="container">
+  <div class="modules-container" id="modules-root">
+    <!-- Generated dynamically via JavaScript -->
+  </div>
+</main>
+
+<!-- Floating Action Bar -->
+<div class="floating-bar">
+  <div class="floating-score">
+    Avg: <strong id="float-avg">1.00</strong>/5.0
+  </div>
+  <button class="btn btn-primary" id="btn-copy-json-float">
+    📋 Copy Entire JSON
+  </button>
+  <button class="btn btn-outline" id="btn-export-file" title="Download .json file">
+    💾 Export File
+  </button>
+</div>
+
+<!-- Inspect / Export JSON Modal -->
+<div class="modal-backdrop" id="modal-inspect">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Complete JSON Review Structure</div>
+      <button class="modal-close" id="modal-inspect-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.75rem">
+        This complete JSON captures your current 1–5 understanding ratings, active recall questions, syntax, and study notes. You can paste this into flashcard apps, custom study scripts, or load it back anytime.
+      </p>
+      <textarea class="json-textarea" id="json-preview-text" readonly></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="btn-modal-copy">📋 Copy to Clipboard</button>
+      <button class="btn btn-primary" id="btn-modal-download">💾 Download .json</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import JSON Modal -->
+<div class="modal-backdrop" id="modal-import">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Import Existing Review JSON</div>
+      <button class="modal-close" id="modal-import-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.75rem">
+        Paste a previously exported JSON structure or key-value rating object below to restore your slider positions and study notes:
+      </p>
+      <textarea class="json-textarea" id="json-import-text" placeholder="Paste your exported JSON here..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="btn-modal-import-cancel">Cancel</button>
+      <button class="btn btn-primary" id="btn-modal-import-apply">Apply &amp; Restore Sliders</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Feedback -->
+<div class="toast-msg" id="toast">Copied to Clipboard!</div>
+
+<script>
+/* ═══════════════════ Embedded Syllabus Dataset ═══════════════════ */
+const RAW_SYLLABUS = [{"id": "mod-1", "title": "Module I: Getting Started with LaTeX", "hours": 8, "marks": "Min 10", "reference": "Text 1: LaTeX Tutorial, A Primer (Tutorials I\u2013V)", "units": [{"id": "u1", "unitNumber": 1, "title": "The Basics (Tutorial I)", "subtopics": [{"id": "m1-u1-1", "title": "Origins, Philosophy & Architecture of TeX and LaTeX", "tags": ["Knuth", "Lamport", "TeX82", "LaTeX2e", "WYSIWYM", "Distributions"], "summary": "Donald Knuth created TeX (1977-82, version converges to \u03c0) for mathematical typesetting. Leslie Lamport built LaTeX (macros for structural markup). WYSIWYM vs WYSIWYG. Distributions: TeX Live, MiKTeX, MacTeX, Overleaf.", "syntax": "% Compile pipeline: \n% document.tex -> pdflatex -> document.pdf (+ .log, .aux)", "recallQ": "Who created TeX and LaTeX? What is the fundamental difference between WYSIWYG (Word) and WYSIWYM (LaTeX)?", "recallA": "TeX was created by Donald E. Knuth (1977); LaTeX was developed as a macro layer by Leslie Lamport (1985). In WYSIWYG, you style text visually while typing; in WYSIWYM ('what you see is what you mean'), you describe structural roles (chapters, sections, theorems) in plain text and let the typesetting engine handle layout algorithms."}, {"id": "m1-u1-2", "title": "Minimal Skeleton Document Structure", "tags": ["\\documentclass", "preamble", "\\begin{document}", "body"], "summary": "Every document starts with \\documentclass{...}, followed by the preamble (global settings/packages), then \\begin{document} ... \\end{document}. Everything after \\end{document} is ignored.", "syntax": "\\documentclass{article}\n% Preamble (packages, macros)\n\\begin{document}\nHello, world!\n\\end{document}", "recallQ": "What are the two major divisions of any LaTeX document source file, and what demarcates the start and end of printable content?", "recallA": "1. Preamble (between \\documentclass and \\begin{document}) for configurations and package loading. 2. Body (enclosed between \\begin{document} and \\end{document}) containing printable text. Code following \\end{document} is discarded by the compiler."}, {"id": "m1-u1-3", "title": "Whitespace, Line Breaks, Paragraphs & Comments", "tags": ["spaces", "blank lines", "\\par", "\\\\", "\\newline", "~", "%"], "summary": "Multiple spaces collapse into one. A single line-break acts as a space. A blank line (or \\par) creates a new paragraph. \\\\ or \\newline breaks a line without starting a paragraph. ~ is a tie (unbreakable space). % begins comments.", "syntax": "First sentence. % This is a comment\n\nNew paragraph begins here.\\\\\nLine broken without paragraph break.\nDr.~Knuth (never breaks across lines)", "recallQ": "How does LaTeX treat multiple spaces and single line breaks? How do you prevent a line break between a title and name like 'Prof. Jones'?", "recallA": "Any consecutive sequence of spaces/tabs and single line-breaks is treated as a single space. To prevent line breaks between words (e.g. 'Prof. Jones'), use the tilde tie character: 'Prof.~Jones'."}, {"id": "m1-u1-4", "title": "Manual Spacing Controls & Paragraph Indentation", "tags": ["\\hspace", "\\vspace", "\\hfill", "\\vfill", "\\noindent", "\\bigskip"], "summary": "Controlling precise horizontal and vertical distances. \\hspace{length}, \\vspace{length}, \\hfill (horizontal stretch), \\vfill (vertical stretch), \\noindent (suppress paragraph indent), \\bigskip, \\medskip, \\smallskip.", "syntax": "\\noindent First unindented line.\\par\n\\vspace{1cm}\nLeft side \\hfill Right side", "recallQ": "How do you push two words to opposite margins on the same line, and how do you prevent the first line of a paragraph from indenting?", "recallA": "Use '\\hfill' between the words ('Left\\hfill Right'). To prevent indentation on a paragraph, place '\\noindent' immediately before the paragraph text."}, {"id": "m1-u1-5", "title": "The Ten Reserved Special Characters & Escapes", "tags": ["#", "$", "%", "^", "&", "_", "{", "}", "~", "\\"], "summary": "Ten characters have special syntactic meanings in TeX: # $ % ^ & _ { } ~ \\. To print them, escape with a backslash (\\#, \\$, \\%, \\&, \\_, \\{, \\}), use \\^{} and \\~{} for accents, and \\textbackslash for a literal backslash.", "syntax": "\\# \\$ \\% \\& \\_ \\{ \\}\n\\^{} \\~{} \\textbackslash{}", "recallQ": "Why doesn't '\\\\' print a backslash? What command must you use to print a literal '\\' character in body text?", "recallA": "'\\\\' is the command for a manual line break. To print a literal backslash in running text, use '\\textbackslash{}' (or '\\texttt{\\char`\\\\}')."}, {"id": "m1-u1-6", "title": "Punctuation, Typographic Quotes, Dashes & Accents", "tags": ["quotes", "hyphen", "en-dash", "em-dash", "\\ldots", "accents"], "summary": "Quotes: `` and '' produce \u201c and \u201d. Dashes: - (hyphen), -- (en-dash for number ranges: pages 10--15), --- (em-dash for parenthetical thoughts). Ellipses: \\ldots. Diacritics: \\'e (\u00e9), \\`e (\u00e8), \\^e (\u00ea), \\\"u (\u00fc), \\c{c} (\u00e7).", "syntax": "``Hello,'' said the doctor --- pages 12--18.\\ldots\nNa\\\"\\i ve caf\\'e and Gar\\c{c}on", "recallQ": "How do you typeset proper opening/closing double quotes, an en-dash for page ranges, and an em-dash in LaTeX?", "recallA": "Opening double quotes: two backticks (``). Closing double quotes: two apostrophes (''). En-dash: two hyphens (--). Em-dash: three hyphens (---)."}, {"id": "m1-u1-7", "title": "Commands, Arguments & Environment Semantics", "tags": ["commands", "mandatory {}", "optional []", "environments", "\\begin", "\\end"], "summary": "Commands start with \\. Mandatory arguments are enclosed in braces {arg}; optional arguments in brackets [opt]. Declarations switch state (e.g. \\bfseries) until the enclosing group ends. Environments delimit scope: \\begin{name} ... \\end{name}.", "syntax": "\\rule[0.5ex]{2cm}{1pt}  % optional and mandatory arguments\n{\\bfseries Bold text inside scope}\n\\begin{center} Centered text \\end{center}", "recallQ": "What is the syntactic difference between a mandatory and an optional argument in LaTeX commands, and what defines an environment?", "recallA": "Mandatory arguments are enclosed in curly braces '{...}' and must be provided; optional arguments use square brackets '[...]' and have default values if omitted. An environment has the form '\\begin{envname} ... \\end{envname}' and encapsulates a local scope."}, {"id": "m1-u1-8", "title": "Font Selection: Family, Shape, Series & Size Hierarchy", "tags": ["family", "shape", "series", "size", "\\textbf", "\\textit", "\\Huge"], "summary": "NFSS font system. Family: \\textrm / \\textsf / \\texttt. Shape: \\textit (italic), \\textsl (slanted), \\textsc (small caps), \\textup (upright). Series: \\textbf (bold), \\textmd (medium). Sizes: \\tiny, \\scriptsize, \\footnotesize, \\small, \\normalsize, \\large, \\Large, \\LARGE, \\huge, \\Huge.", "syntax": "\\textsf{\\textbf{\\textit{Sans Bold Italic}}}\n{\\Large Big text} and {\\Huge Massive text}", "recallQ": "Distinguish between font 'family', 'shape', and 'series'. What is the difference between '\\textbf{hi}' and '{\\bfseries hi}'?", "recallA": "Family = typeface design (Roman, Sans-serif, Typewriter). Shape = angle/form (Italic, Slanted, Small Caps, Upright). Series = weight/width (Bold, Medium). '\\textbf{...}' is a text command taking an argument; '{\\bfseries ...}' is a declaration switch affecting all following tokens within its curly-brace group."}]}, {"id": "u2", "unitNumber": 2, "title": "The Documents (Tutorial II)", "subtopics": [{"id": "m1-u2-1", "title": "Standard Document Classes & Architectural Differences", "tags": ["article", "report", "book", "letter", "\\chapter"], "summary": "article: short papers, no \\chapter command. report: longer technical reports/theses with \\chapter (starts new page, numbered 1, 2, ...). book: two-sided by default, includes \\frontmatter, \\mainmatter, \\backmatter, and \\part/\\chapter.", "syntax": "\\documentclass[11pt,a4paper]{report}\n% 'article' does not support \\chapter", "recallQ": "Which standard LaTeX class does NOT support the '\\chapter' command? How do 'report' and 'book' differ by default in page layout?", "recallA": "'article' does not support '\\chapter' (it starts at '\\section'). 'report' defaults to single-sided printing ('oneside') without distinct frontmatter divisions, whereas 'book' defaults to two-sided printing ('twoside') and supports '\\frontmatter', '\\mainmatter', and '\\backmatter'."}, {"id": "m1-u2-2", "title": "Class Options: Geometry, Columns & Typesetting Modes", "tags": ["10pt/11pt/12pt", "a4paper", "twocolumn", "twoside", "draft", "landscape"], "summary": "Options passed in square brackets to \\documentclass. Font sizes: 10pt (default), 11pt, 12pt. Paper sizes: a4paper, letterpaper. Orientation: landscape. Layout: onecolumn, twocolumn, oneside, twoside. Mode: draft (shows overfull hbox black bars), final.", "syntax": "\\documentclass[12pt,a4paper,twocolumn,draft]{article}", "recallQ": "What visual indication does the 'draft' class option introduce when text extends beyond the right margin margin?", "recallA": "It marks overfull horizontal boxes (lines that spill into the right margin) with a thick black rectangular bar in the right margin so the author can spot spacing defects."}, {"id": "m1-u2-3", "title": "Preamble Configurations & Package Management", "tags": ["preamble", "\\usepackage", "geometry", "amsmath", "graphicx"], "summary": "The preamble is everything before \\begin{document}. Packages extend LaTeX capabilities using \\usepackage[options]{package}. Key packages: geometry (margins), graphicx (images), amsmath (advanced math), hyperref (clickable hyperlinks).", "syntax": "\\usepackage[margin=1in]{geometry}\n\\usepackage{amsmath,amssymb}\n\\usepackage[colorlinks=true]{hyperref}", "recallQ": "Where in the LaTeX source file must '\\usepackage' commands be placed? What happens if you put one inside the document body?", "recallA": "'\\usepackage' commands must strictly be placed in the preamble (between '\\documentclass' and '\\begin{document}'). Placing '\\usepackage' inside the document body triggers a fatal compilation error ('\\usepackage before \\begin{document}')."}, {"id": "m1-u2-4", "title": "Page Styles, Header/Footer Layouts & Page Numbering", "tags": ["\\pagestyle", "\\thispagestyle", "plain", "empty", "headings", "\\pagenumbering"], "summary": "\\pagestyle{style} sets headers/footers for all following pages: plain (centered footer number), empty (blank), headings (running header with section name), myheadings. \\thispagestyle{style} applies to current page only. \\pagenumbering{arabic|roman|Roman|alph|Alph} resets page number to 1.", "syntax": "\\pagestyle{headings}\n\\thispagestyle{empty} % blank on title page\n\\pagenumbering{roman}  % i, ii, iii\n\\pagenumbering{arabic} % 1, 2, 3 (resets counter to 1)", "recallQ": "How do you suppress headers and footers on just the title page while keeping running headers on all subsequent pages? What side-effect does '\\pagenumbering' have on the page counter?", "recallA": "Use '\\pagestyle{headings}' globally and '\\thispagestyle{empty}' specifically on the title page. Whenever '\\pagenumbering{...}' is called, it automatically resets the page counter to 1."}, {"id": "m1-u2-5", "title": "Document Metadata: Title Block, Authorship & Abstract", "tags": ["\\title", "\\author", "\\date", "\\thanks", "\\maketitle", "abstract"], "summary": "\\title{...}, \\author{...}, \\date{...} define metadata in preamble or body. \\thanks{...} creates footnote acknowledgments inside \\author. \\maketitle generates the formatted title block. The abstract environment creates an indented, centered summary.", "syntax": "\\title{Optical Solitons\\thanks{Funded by DST}}\n\\author{A. Sharma \\and B. Patel}\n\\date{\\today}\n\\maketitle\n\\begin{abstract} Summary here... \\end{abstract}", "recallQ": "How do you list multiple authors with separate affiliations in '\\author', and what command actually triggers printing the title block?", "recallA": "Multiple authors are separated by the '\\and' command inside '\\author{Author 1 \\and Author 2}'. The formatted title block is printed only when '\\maketitle' is invoked in the body."}, {"id": "m1-u2-6", "title": "Sectioning Hierarchy, Starred Variants & Appendices", "tags": ["\\part", "\\chapter", "\\section", "\\subsection", "\\paragraph", "\\appendix", "starred *"], "summary": "Hierarchy: \\part (-1) -> \\chapter (0) -> \\section (1) -> \\subsection (2) -> \\subsubsection (3) -> \\paragraph (4) -> \\subparagraph (5). Starred forms (e.g. \\section*{Intro}) omit numbers and TOC entries. \\appendix changes chapter/section numbering to letters (A, B, C).", "syntax": "\\chapter{Introduction}\n\\section{Theoretical Framework}\n\\subsection*{Unnumbered Subsection}\n\\appendix\n\\chapter{Mathematical Proofs} % becomes Appendix A", "recallQ": "Order the sectioning units from highest to lowest hierarchy. What effect does adding an asterisk '*' have on a section command (e.g. '\\section*{...}')?", "recallA": "Hierarchy: \\part -> \\chapter -> \\section -> \\subsection -> \\subsubsection -> \\paragraph -> \\subparagraph. The starred variant '*' suppresses section numbering and omits the section from the Table of Contents."}]}, {"id": "u3", "unitNumber": 3, "title": "Bibliographic Database (Tutorials III & IV)", "subtopics": [{"id": "m1-u3-1", "title": "Manual Bibliography Construction: thebibliography", "tags": ["thebibliography", "\\bibitem", "\\cite", "widest label"], "summary": "Built-in environment for small bibliographies. Syntax: \\begin{thebibliography}{widest_label} ... \\end{thebibliography}. Each entry is \\bibitem[custom_label]{cite_key}. In text, cite via \\cite{key} or \\cite{k1,k2}.", "syntax": "\\cite{knuth84}\n\\begin{thebibliography}{99}\n\\bibitem{knuth84} D.~Knuth, \\emph{The \\TeX book}, 1984.\n\\end{thebibliography}", "recallQ": "What is the role of the argument passed to '\\begin{thebibliography}{99}'? How do you cite multiple references in one bracket?", "recallA": "The argument specifies the widest sample label (e.g. '9' for up to 9 entries, '99' for up to 99) so LaTeX can calculate the indentation margin for citation numbers. Multiple references are cited with comma-separated keys: '\\cite{key1,key2}'."}, {"id": "m1-u3-2", "title": "BibTeX Database Architecture & Entry Types (.bib)", "tags": [".bib", "@article", "@book", "@inproceedings", "required fields", "keys"], "summary": "Separates citation data into external .bib files. Entry syntax: @type{citation_key, field = {value}, ...}. Common types: @article, @book, @inproceedings, @phdthesis, @misc. Required fields vary (e.g. @article requires author, title, journal, year).", "syntax": "@article{einstein1905,\n  author  = {Albert Einstein},\n  title   = {Zur Elektrodynamik bewegter K{\\\"o}rper},\n  journal = {Annalen der Physik},\n  volume  = {17},\n  year    = {1905}\n}", "recallQ": "Name three standard BibTeX entry types. What required fields must every '@article' entry contain?", "recallA": "Standard entry types: @article, @book, @inproceedings (or @phdthesis, @misc). For an @article, the required fields are 'author', 'title', 'journal', and 'year' (volume and pages are optional but standard)."}, {"id": "m1-u3-3", "title": "Integrating BibTeX in LaTeX: Commands & Callouts", "tags": ["\\bibliographystyle", "\\bibliography", "\\cite", ".aux", ".bbl"], "summary": "In the .tex document, specify style with \\bibliographystyle{style} and output location with \\bibliography{bibfile} (without .bib extension). LaTeX writes citations to .aux; BibTeX reads .aux and .bib to produce .bbl.", "syntax": "\\bibliographystyle{plain}\n\\bibliography{my_references} % loads my_references.bib", "recallQ": "Where do '\\bibliographystyle' and '\\bibliography' go, and should the '.bib' file extension be included in the argument?", "recallA": "'\\bibliographystyle{...}' is typically declared in the preamble or right before the bibliography. '\\bibliography{...}' goes exactly where the references should appear. The '.bib' extension MUST be omitted (write '\\bibliography{refs}', not 'refs.bib')."}, {"id": "m1-u3-4", "title": "Standard BibTeX Formatting Styles: plain, unsrt, alpha, abbrv", "tags": ["plain", "unsrt", "alpha", "abbrv", "citation styles"], "summary": "plain: numbered [1], sorted alphabetically by author. unsrt: numbered [1], in order of appearance in text. alpha: alphanumeric labels based on author name and year, e.g. [Knu84]. abbrv: like plain, but abbreviates first names and journal months.", "syntax": "\\bibliographystyle{unsrt} % citations numbered in order of appearance\n\\bibliographystyle{alpha} % [Lam94] style labels", "recallQ": "How do the 'plain' and 'unsrt' BibTeX styles differ in how citations are ordered? Which style generates labels like '[Knu84]'?", "recallA": "'plain' sorts bibliography entries alphabetically by author's last name. 'unsrt' sorts entries in the chronological order in which they were first cited in the text. 'alpha' produces author-year labels like '[Knu84]'."}, {"id": "m1-u3-5", "title": "The 4-Step BibTeX Compilation Pipeline & Auxiliary Files", "tags": ["pdflatex", "bibtex", ".aux", ".bbl", ".blg", "4-pass run"], "summary": "Resolving BibTeX references requires 4 passes: 1. pdflatex (records \\cite keys to .aux). 2. bibtex (reads .aux + .bib, writes formatted .bbl and error log .blg). 3. pdflatex (reads .bbl, inserts text, updates .aux). 4. pdflatex (resolves cross-references to [1]).", "syntax": "# Terminal compilation sequence:\npdflatex document\nbibtex document\npdflatex document\npdflatex document", "recallQ": "Why must you run pdflatex three times and bibtex once when citing via BibTeX? What file holds the BibTeX formatting output?", "recallA": "Pass 1 (pdflatex) writes citation keys to '.aux'. Pass 2 (bibtex) reads '.aux' and '.bib' to create formatted bibliography in '.bbl'. Pass 3 (pdflatex) imports '.bbl' into the document and assigns citation numbers. Pass 4 (pdflatex) resolves in-text references from '?' to the actual numbers. The formatted bibliography is in '.bbl'."}]}, {"id": "u4", "unitNumber": 4, "title": "Table of Contents and Index (Tutorial V)", "subtopics": [{"id": "m1-u4-1", "title": "Automated Table of Contents Generation & Two-Pass Flow", "tags": ["\\tableofcontents", ".toc", "two-pass", "\\addcontentsline", "tocdepth"], "summary": "\\tableofcontents generates the contents list. Requires two compilation runs: pass 1 collects section titles and page numbers into .toc file; pass 2 reads .toc and prints the formatted list. \\setcounter{tocdepth}{n} controls depth.", "syntax": "\\setcounter{tocdepth}{2} % includes down to subsections\n\\tableofcontents\n\\addcontentsline{toc}{section}{Unnumbered Special Section}", "recallQ": "Why doesn't the Table of Contents appear on the very first compilation run of a new LaTeX document? How do you manually add an unnumbered section to the TOC?", "recallA": "On the first run, LaTeX writes section headings and page locations into an auxiliary '.toc' file; only on the second run is '.toc' read back and typeset. An unnumbered section is added using '\\addcontentsline{toc}{section}{Section Title}'."}, {"id": "m1-u4-2", "title": "Lists of Figures & Tables (.lof and .lot)", "tags": ["\\listoffigures", "\\listoftables", ".lof", ".lot"], "summary": "\\listoffigures and \\listoftables work identically to TOC, generating lists from \\caption commands inside figure and table floats into .lof and .lot files.", "syntax": "\\tableofcontents\n\\listoffigures\n\\listoftables", "recallQ": "Which commands produce lists of figures and tables, and what auxiliary file extensions do they produce?", "recallA": "'\\listoffigures' produces the '.lof' auxiliary file; '\\listoftables' produces the '.lot' auxiliary file."}, {"id": "m1-u4-3", "title": "Index System Architecture & Setup (makeidx)", "tags": ["makeidx", "\\makeindex", "\\printindex", ".idx", ".ind"], "summary": "Generating an index requires 3 steps in code: 1. \\usepackage{makeidx} in preamble. 2. \\makeindex in preamble (opens .idx file). 3. \\printindex at the end of the document body where index should appear.", "syntax": "\\documentclass{book}\n\\usepackage{makeidx}\n\\makeindex % in preamble\n\\begin{document}\n... \\index{photon} ...\n\\printindex % at end of book\n\\end{document}", "recallQ": "What package and two specific commands are required to set up and print an index in a LaTeX document?", "recallA": "Package: '\\usepackage{makeidx}'. Preamble command: '\\makeindex' (to initialize raw index recording). Document command: '\\printindex' (placed at the end to typeset the sorted index)."}, {"id": "m1-u4-4", "title": "Indexing Syntax: Sub-entries, Page Ranges & Cross-References", "tags": ["\\index", "!", "|(", "|)", "|see", "|textbf"], "summary": "Basic: \\index{entry}. Sub-entry: \\index{matrix!determinant}. Sub-sub-entry: \\index{matrix!square!symmetric}. Page range: \\index{optics|(} ... \\index{optics|)}. Cross-reference: \\index{em-wave|see{light}}. Formatting: \\index{eigenvalue|textbf}.", "syntax": "\\index{Algorithm!Sorting!Quicksort}\n\\index{Thermodynamics|(} % starts range 14--22\n\\index{Thermodynamics|)} % ends range\n\\index{Light|see{Optics}}\n\\index{Matrix|textbf}    % bold page number", "recallQ": "In LaTeX indexing, what character indicates a sub-entry level, how do you specify a multi-page range, and how do you create a 'see' cross-reference?", "recallA": "Sub-entries use the exclamation mark ('!'), e.g. '\\index{main!sub}'. Page ranges use '|(' and '|)' on the starting and ending pages ('\\index{topic|(}' ... '\\index{topic|)}'). Cross-references use '|see{target}', e.g. '\\index{term|see{synonym}}'."}, {"id": "m1-u4-5", "title": "The MakeIndex Processing Workflow (.idx -> .ind)", "tags": ["makeindex", ".idx", ".ind", "compilation cycle"], "summary": "Compilation cycle for index: 1. pdflatex doc.tex (writes raw \\index entries to doc.idx). 2. makeindex doc.idx (sorts and formats entries alphabetically into doc.ind). 3. pdflatex doc.tex (reads doc.ind at \\printindex and typesets the index).", "syntax": "# Command-line execution:\npdflatex report.tex    # creates report.idx\nmakeindex report.idx   # creates report.ind\npdflatex report.tex    # typesets index", "recallQ": "What intermediate file is produced by the command 'makeindex report.idx', and which LaTeX command reads this file?", "recallA": "The command 'makeindex report.idx' produces the sorted, formatted file 'report.ind'. The '\\printindex' command reads and typesets this '.ind' file on the subsequent LaTeX compilation run."}]}]}, {"id": "mod-2", "title": "Module II: Styling Pages", "hours": 6, "marks": "Min 10", "reference": "Text 1: LaTeX Tutorial, A Primer (Tutorials VI\u2013VII)", "units": [{"id": "u5", "unitNumber": 5, "title": "Displayed Text (Tutorial VI)", "subtopics": [{"id": "m2-u5-1", "title": "Quotation & Poetry Environments: quote, quotation, verse", "tags": ["quote", "quotation", "verse", "poetry", "stanzas"], "summary": "quote: for short quotations, indents left and right margins, no extra paragraph indent. quotation: for multi-paragraph prose, indents margins and indents the first line of each paragraph. verse: for poetry; lines broken with \\\\, stanzas separated by blank lines.", "syntax": "\\begin{quote} Short excerpt here. \\end{quote}\n\\begin{quotation} Long multi-paragraph prose... \\end{quotation}\n\\begin{verse}\nTwo roads diverged in a yellow wood,\\\\\nAnd sorry I could not travel both\n\\end{verse}", "recallQ": "How do 'quote' and 'quotation' environments differ in paragraph indentation? Which environment is specifically designed for poetry?", "recallA": "In 'quote', paragraphs are separated by extra vertical space without first-line paragraph indentation (ideal for short quotes). In 'quotation', paragraphs have first-line indentation without extra vertical space (ideal for multi-paragraph prose). The 'verse' environment is designed for poetry."}, {"id": "m2-u5-2", "title": "Centering & Alignment: Environments vs Declaration Switches", "tags": ["center", "flushleft", "flushright", "\\centering", "\\raggedright", "\\raggedleft"], "summary": "Environments: center, flushleft, flushright add vertical space before and after. Declaration switches: \\centering, \\raggedright, \\raggedleft do not add extra vertical space; used inside groups, table cells, or figure floats.", "syntax": "% Environment (standalone with vertical gaps):\n\\begin{center} Centered text \\end{center}\n% Declaration (inside a group/table/float):\n\\begin{table}[h]\n\\centering\n...\n\\end{table}", "recallQ": "Why is '\\centering' preferred over '\\begin{center}...\\end{center}' inside a 'figure' or 'table' float environment?", "recallA": "The 'center' environment inserts extra unwanted top and bottom vertical whitespace margins, whereas the declaration '\\centering' aligns the float contents horizontally without adding extra vertical margins."}, {"id": "m2-u5-3", "title": "Unordered Bulleted Lists: itemize", "tags": ["itemize", "\\item", "bullets", "nesting depth", "\\labelitemi"], "summary": "\\begin{itemize} ... \\end{itemize}. Items defined with \\item. Nesting allowed up to 4 levels deep. Default markers: Level 1 = \u2022 (bullet), Level 2 = \u2013 (en-dash), Level 3 = * (asterisk), Level 4 = \u00b7 (centered dot).", "syntax": "\\begin{itemize}\n  \\item First level bullet\n  \\begin{itemize}\n    \\item Nested second level\n  \\end{itemize}\n\\end{itemize}", "recallQ": "What is the maximum allowed nesting depth for LaTeX list environments, and what is the default bullet marker for level 1 and level 2 'itemize'?", "recallA": "The maximum nesting depth is 4 levels. In 'itemize', level 1 defaults to a solid bullet ('\u2022' / \\labelitemi) and level 2 defaults to an en-dash ('\u2013' / \\labelitemii)."}, {"id": "m2-u5-4", "title": "Ordered Numbered Lists: enumerate & Counter Hierarchy", "tags": ["enumerate", "\\item", "counters", "enumi", "enumii"], "summary": "\\begin{enumerate} ... \\end{enumerate}. Nesting up to 4 levels. Default counters: Level 1 = 1., 2. (arabic); Level 2 = (a), (b) (alph); Level 3 = i., ii. (roman); Level 4 = A., B. (Alph). Counters are enumi, enumii, enumiii, enumiv.", "syntax": "\\begin{enumerate}\n  \\item Main step\n  \\begin{enumerate}\n    \\item Sub-step (renders as (a))\n  \\end{enumerate}\n\\end{enumerate}", "recallQ": "What are the default label formats for level 1, level 2, and level 3 of an 'enumerate' list in LaTeX?", "recallA": "Level 1: Arabic numeral followed by a period ('1.', '2.'). Level 2: Lowercase letter in parentheses ('(a)', '(b)'). Level 3: Lowercase Roman numeral followed by a period ('i.', 'ii.')."}, {"id": "m2-u5-5", "title": "Descriptive Lists: description", "tags": ["description", "\\item[term]", "glossary", "hanging indent"], "summary": "\\begin{description} ... \\end{description}. Each item takes an optional argument: \\item[Term] Description text. Renders the term in boldface followed by indented explanation text.", "syntax": "\\begin{description}\n  \\item[Compiler] Translates source code to machine code.\n  \\item[Interpreter] Executes instructions directly.\n\\end{description}", "recallQ": "How do you specify the term being defined in a 'description' list, and how is that term formatted visually?", "recallA": "The term is specified inside square brackets immediately following '\\item', as in '\\item[Term]'. LaTeX renders the term in boldface ('\\textbf') at the left margin, with the descriptive text following with a hanging indent."}, {"id": "m2-u5-6", "title": "Customizing List Labels & Redefining Counters", "tags": ["\\renewcommand", "\\labelenumi", "\\theenumi", "\\alph", "\\roman"], "summary": "Labels can be overridden individually via \\item[(Custom)] or globally redefined. To change enumerate labels: \\renewcommand{\\labelenumi}{(\\alph{enumi})} or \\renewcommand{\\theenumi}{\\Roman{enumi}}. Bullet customization: \\renewcommand{\\labelitemi}{$\\triangleright$}.", "syntax": "% Global change to Roman numerals for level 1:\n\\renewcommand{\\labelenumi}{\\textbf{\\roman{enumi}.}}\n% Manual override on single item:\n\\item[Q1.] Question one text", "recallQ": "Write the LaTeX code to globally change level 1 enumerate labels to bold lowercase Roman numerals followed by a dot (e.g. 'i.').", "recallA": "'\\renewcommand{\\labelenumi}{\\textbf{\\roman{enumi}.}}' (or '\\renewcommand{\\labelenumi}{\\roman{enumi}.}' with '\\textbf')."}, {"id": "m2-u5-7", "title": "Displaying Computer Code & Literal Characters: verbatim", "tags": ["verbatim", "verbatim*", "\\verb", "\\verb*", "code"], "summary": "Block verbatim: \\begin{verbatim} ... \\end{verbatim}. Visible spaces: verbatim*. Inline code: \\verb|...| (any matching delimiter char, e.g. \\verb+code+). Visible space inline: \\verb*|...|. Limitation: \\verb cannot be used inside arguments of other commands.", "syntax": "\\begin{verbatim}\n#include <stdio.h>\nint main() { return 0; }\n\\end{verbatim}\nUse \\verb|\\command{arg}| for inline commands.", "recallQ": "How do you typeset inline literal code containing a pipe '|'? Why can't '\\verb' be placed inside a '\\footnote{...}' or '\\section{...}' argument?", "recallA": "Use any other non-whitespace delimiter, for example '\\verb+code|with|pipe+'. '\\verb' cannot be used inside command arguments because LaTeX parses and tokenizes arguments before the verbatim environment has a chance to deactivate special characters."}]}, {"id": "u6", "unitNumber": 6, "title": "Rows and Columns: Tabbing (Tutorial VII.1)", "subtopics": [{"id": "m2-u6-1", "title": "The tabbing Environment Architecture", "tags": ["tabbing", "typewriter tabs", "\\=", "\\>", "\\\\"], "summary": "Simulates manual typewriter tab stops. Unlike tabular, tabbing can span page boundaries, doesn't require column calculations, and is ideal for pseudocode, algorithms, and indented hierarchical lists.", "syntax": "\\begin{tabbing}\nColumn 1 \\= Column 2 \\= Column 3 \\\\\nValue 1  \\> Value 2  \\> Value 3\n\\end{tabbing}", "recallQ": "What is the primary conceptual difference between 'tabbing' and 'tabular'? Can 'tabbing' break across page boundaries?", "recallA": "'tabbing' creates fixed horizontal tab-stops like a typewriter across text lines, and can break across multiple pages. 'tabular' creates a boxed, rigid multi-cell grid that cannot break across pages by default."}, {"id": "m2-u6-2", "title": "Setting and Advancing Tab Stops (\\= and \\>)", "tags": ["\\=", "\\>", "\\\\", "tab stops"], "summary": "\\= sets a tab stop at the current horizontal position. \\> advances the cursor to the next tab stop. \\\\ ends the current line and returns cursor to the left margin.", "syntax": "\\begin{tabbing}\nif (condition) \\= then \\\\\n               \\> statement;\n\\end{tabbing}", "recallQ": "What are the roles of '\\=', '\\>', and '\\\\' in a 'tabbing' environment?", "recallA": "'\\=' defines/sets a tab stop at the cursor's current position; '\\>' advances the cursor horizontally to the next tab stop; '\\\\' ends the line and resets the cursor to the left margin."}, {"id": "m2-u6-3", "title": "Template Line Discarding with \\kill", "tags": ["\\kill", "sample line", "template", "tab definition"], "summary": "Often a sample line is used to establish the widest column widths and tab stops, but shouldn't actually be printed in the output. Placing \\kill at the end of the line discards the text while preserving all tab stops defined by \\=.", "syntax": "\\begin{tabbing}\nWidest Keyword \\= Widest Identifier \\= Return Type \\kill\nint            \\> counter           \\> Integer \\\\\nchar           \\> key               \\> Byte\n\\end{tabbing}", "recallQ": "What is the exact purpose of the '\\kill' command in a 'tabbing' environment?", "recallA": "'\\kill' terminates the current line and discards all text on that line without printing it, while retaining all the tab stops ('\\=') established on that line for the subsequent lines."}, {"id": "m2-u6-4", "title": "Margin Control & Advanced Tabbing Commands (\\+, \\-, \\', \\`)", "tags": ["\\+", "\\-", "\\'", "\\`", "tabbing margins"], "summary": "\\+ shifts left margin one tab stop to the right on all subsequent lines (indents a block). \\- shifts left margin one stop left. \\' right-aligns text to previous tab stop. \\` right-aligns text to the right margin of the tabbing environment.", "syntax": "\\begin{tabbing}\n\\hspace{1cm} \\= \\hspace{1cm} \\= \\kill\nStart block \\+\\\\\nInside indented block \\+\\\\\nDouble indented \\-\\\\\nBack one level \\-\\\\\nBack to start\n\\end{tabbing}", "recallQ": "How do you indent an entire multi-line block by one tab stop in 'tabbing' without typing '\\>' on every line? What does '\\`' do?", "recallA": "Use '\\+' at the end of a line; all subsequent lines will automatically start one tab stop to the right until cancelled by '\\-'. The '\\`' command flushes all following text on the line flush-right against the right margin."}, {"id": "m2-u6-5", "title": "Architectural Tradeoffs: tabbing vs tabular", "tags": ["tabbing vs tabular", "comparison", "use cases"], "summary": "Use tabbing for: multi-page text, programming code/algorithms, indented specifications, varying column alignment. Use tabular for: framed/bordered data tables, wrapped paragraph columns, cross-column headers (\\multicolumn), floating tables.", "syntax": "% tabbing = flexible code/lines\n% tabular = matrix of bordered cells", "recallQ": "Give two concrete scenarios where 'tabbing' is preferred over 'tabular', and two where 'tabular' must be used.", "recallA": "Prefer 'tabbing' for: (1) Pseudocode/algorithms requiring indentations, (2) Listings that span across multiple pages. Prefer 'tabular' for: (1) Grid tables with horizontal/vertical border rules ('\\hline', '|'), (2) Tables requiring multi-column spanning ('\\multicolumn') or wrapped paragraph cells ('p{width}')."}]}, {"id": "u7", "unitNumber": 7, "title": "Tables (Tutorial VII.2)", "subtopics": [{"id": "m2-u7-1", "title": "The tabular Environment Architecture & Cell Delimiters", "tags": ["tabular", "cols", "&", "\\\\", "optional pos [t,b,c]"], "summary": "Basic syntax: \\begin{tabular}[pos]{cols} ... \\end{tabular}. [pos] aligns table baseline (t=top, b=bottom, c=center). Cells separated by ampersand &, rows terminated by double backslash \\\\.", "syntax": "\\begin{tabular}{l c r}\nName & Roll No & Score \\\\\nAlice & 101 & 95 \\\\\nBob & 102 & 88\n\\end{tabular}", "recallQ": "What are the roles of '&' and '\\\\' inside a 'tabular' environment? What does the optional '[t]' argument do?", "recallA": "'&' separates columns within a row; '\\\\' terminates a table row. The optional '[t]' aligns the top baseline of the table with the baseline of surrounding text."}, {"id": "m2-u7-2", "title": "Basic Column Specifiers: l, c, r", "tags": ["l", "c", "r", "alignment"], "summary": "l = left-aligned column; c = centered column; r = right-aligned column. Cell width automatically expands to fit the widest content. None of these allow text to wrap into multiple lines.", "syntax": "\\begin{tabular}{l c r}\nLeft & Center & Right \\\\\n\\end{tabular}", "recallQ": "What happens if a cell in an 'l', 'c', or 'r' column contains a long paragraph of text?", "recallA": "It will NOT wrap; LaTeX formats the entire cell as a single continuous line, causing an overfull hbox that bleeds off the right edge of the page. You must use 'p{width}' to enable wrapping."}, {"id": "m2-u7-3", "title": "Border Rules and Grid Lines: |, ||, \\hline, \\cline", "tags": ["|", "||", "\\hline", "\\cline", "borders"], "summary": "Vertical lines specified in cols argument using | (single) or || (double). \\hline draws full horizontal line across all columns. \\cline{i-j} draws partial horizontal rule from column i to column j.", "syntax": "\\begin{tabular}{|l|c|r|}\\hline\nCol 1 & Col 2 & Col 3 \\\\ \\hline\nA & B & C \\\\ \\cline{1-2}\nD & E & F \\\\ \\hline\n\\end{tabular}", "recallQ": "Write the command to draw a horizontal border spanning only columns 2 through 4 in a table.", "recallA": "'\\cline{2-4}' placed immediately after the row terminating '\\\\'."}, {"id": "m2-u7-4", "title": "Paragraph and Fixed-Width Columns: p{width}", "tags": ["p{width}", "multiline cells", "text wrapping", "justification"], "summary": "p{width} sets a column of fixed horizontal width where text automatically wraps into multiple lines and is fully justified. Top baseline aligned. Requires explicit measurement (e.g. p{4cm}, p{0.3\\textwidth}).", "syntax": "\\begin{tabular}{|l|p{6cm}|}\\hline\nTerm & Definition \\\\ \\hline\nDiffraction & The bending of waves around the corners of an obstacle.\\\\ \\hline\n\\end{tabular}", "recallQ": "How do you create a table column that automatically wraps long descriptions within a 5 cm width?", "recallA": "Use the 'p{5cm}' column specifier in the tabular column declaration, e.g. '\\begin{tabular}{|l|p{5cm}|}'."}, {"id": "m2-u7-5", "title": "Merging & Styling Columns: \\multicolumn", "tags": ["\\multicolumn", "colspan", "cell override", "spanning"], "summary": "Syntax: \\multicolumn{num_cols}{col_spec}{cell_content}. Merges multiple columns into one cell, or overrides alignment and vertical rules for a single cell (num_cols=1).", "syntax": "\\begin{tabular}{|l|r|}\\hline\n\\multicolumn{2}{|c|}{\\textbf{Consolidated Results}} \\\\ \\hline\nPhysics & 94 \\\\ \\hline\n\\end{tabular}", "recallQ": "Write the exact syntax to merge 3 columns into a single centered heading with vertical bars on both sides containing the text 'Results'.", "recallA": "'\\multicolumn{3}{|c|}{Results}'"}, {"id": "m2-u7-6", "title": "Inter-column Customization (@{...}) & Repeated Specifiers (*{n}{...})", "tags": ["@{...}", "tabcolsep", "*{n}{...}", "column repetition"], "summary": "@{text} replaces default intercolumn whitespace (\\tabcolsep) with specified text or nothing (@{} removes margin padding). *{n}{spec} repeats a column specifier n times (e.g. *{4}{|c} is |c|c|c|c).", "syntax": "% Zero margin on outer edges:\n\\begin{tabular}{@{} l *{3}{c} @{}}\nItem & A & B & C \\\\\n\\end{tabular}", "recallQ": "How do you remove the default empty padding at the extreme left and right edges of a table? What does '*{5}{c}' expand to?", "recallA": "Place '@{}' at the very beginning and end of the column specification string, e.g. '@{} l c r @{}'. '*{5}{c}' expands to five consecutive centered columns: 'ccccc'."}, {"id": "m2-u7-7", "title": "Table Spacing Parameters: \\arraystretch & \\tabcolsep", "tags": ["\\arraystretch", "\\tabcolsep", "table padding", "row height"], "summary": "\\renewcommand{\\arraystretch}{factor} scales vertical row spacing (default is 1.0; 1.25 or 1.5 gives roomier tables). \\setlength{\\tabcolsep}{length} sets horizontal half-padding between columns (default 6pt).", "syntax": "{\n\\renewcommand{\\arraystretch}{1.3} % 30% taller rows\n\\setlength{\\tabcolsep}{10pt}       % wider columns\n\\begin{tabular}{|c|c|}\n...\n\\end{tabular}\n}", "recallQ": "How do you increase row height in a table so that text does not collide with '\\hline' rules?", "recallA": "Redefine '\\arraystretch' inside a group enclosing the table: '{\\renewcommand{\\arraystretch}{1.3} \\begin{tabular}...\\end{tabular}}'."}, {"id": "m2-u7-8", "title": "Floating Table Containers: table, Caption & Label Placement", "tags": ["table", "float", "[htbp]", "\\caption", "\\label", "placement"], "summary": "\\begin{table}[placement] ... \\end{table} prevents page breaks inside tables and allows LaTeX to float the table. Specifiers: h (here), t (top), b (bottom), p (float page), ! (override). \\caption{title} creates numbered caption. \\label MUST follow \\caption!", "syntax": "\\begin{table}[htbp]\n\\centering\n\\caption{Sample Experimental Measurements}\n\\label{tab:sample}\n\\begin{tabular}{|c|c|}\\hline\nA & B \\\\ \\hline\n\\end{tabular}\n\\end{table}", "recallQ": "Why must the '\\label{...}' command strictly be placed AFTER (or inside) '\\caption{...}' in a floating table?", "recallA": "'\\caption' is the command that increments the table counter and sets the reference point; if '\\label' is placed before '\\caption', it will reference the enclosing section number instead of the table number!"}]}]}];
+
+/* ═══════════════════ Scientific Rubric Map ═══════════════════ */
+const RUBRICS = {
+  1: { label: "1 · Novice", colorClass: "lvl-1", cardClass: "level-1", desc: "No recall. Cannot write code or explain concept without looking." },
+  2: { label: "2 · Familiar", colorClass: "lvl-2", cardClass: "level-2", desc: "Passive recognition. Can recognize syntax when read, but cannot write from scratch." },
+  3: { label: "3 · Functional", colorClass: "lvl-3", cardClass: "level-3", desc: "Working knowledge. Can write code with minor reference checks; knows main commands." },
+  4: { label: "4 · Proficient", colorClass: "lvl-4", cardClass: "level-4", desc: "Exam-ready. Can code from memory, explain parameters, and handle typical options." },
+  5: { label: "5 · Mastered", colorClass: "lvl-5", cardClass: "level-5", desc: "High mastery. Instant recall, can debug edge cases, explain underlying TeX mechanics." }
+};
+
+/* ═══════════════════ State Management ═══════════════════ */
+const STORAGE_KEY = 'latex_review_matrix_v1';
+let userState = {
+  ratings: {},    // topicId -> int (1-5)
+  notes: {},      // topicId -> string
+  activeFilter: 'all',
+  searchQuery: ''
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.ratings) userState.ratings = parsed.ratings;
+      if (parsed.notes) userState.notes = parsed.notes;
+    }
+  } catch(e) {
+    console.warn("Could not load from localStorage:", e);
+  }
+
+  // Ensure every topic has default 1
+  RAW_SYLLABUS.forEach(mod => {
+    mod.units.forEach(unit => {
+      unit.subtopics.forEach(sub => {
+        if (!userState.ratings[sub.id]) {
+          userState.ratings[sub.id] = 1;
+        }
+      });
+    });
+  });
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      ratings: userState.ratings,
+      notes: userState.notes,
+      updatedAt: new Date().toISOString()
+    }));
+  } catch(e) {
+    console.warn("Could not save to localStorage:", e);
+  }
+}
+
+/* ═══════════════════ Toast Helper ═══════════════════ */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+/* ═══════════════════ Render Engine ═══════════════════ */
+function renderApp() {
+  const root = document.getElementById('modules-root');
+  root.innerHTML = '';
+
+  RAW_SYLLABUS.forEach(mod => {
+    const modEl = document.createElement('section');
+    modEl.className = `module-card ${mod.id}`;
+    modEl.id = `card-${mod.id}`;
+
+    // Calculate module average
+    let modRatings = [];
+    mod.units.forEach(u => u.subtopics.forEach(s => modRatings.push(userState.ratings[s.id] || 1)));
+    const modAvg = (modRatings.reduce((a, b) => a + b, 0) / modRatings.length).toFixed(2);
+
+    modEl.innerHTML = `
+      <div class="module-header" data-toggle="${mod.id}">
+        <div>
+          <div class="module-meta">
+            <span class="module-tag">${mod.id.toUpperCase()}</span>
+            <span class="module-hours">⏱ ${mod.hours} Hours · ${mod.marks} Marks</span>
+          </div>
+          <h2 class="module-title">${mod.title}</h2>
+          <div class="module-ref">${mod.reference}</div>
+        </div>
+        <div class="module-status">
+          <div class="module-score-pill">
+            <span>Avg:</span>
+            <strong id="mod-score-${mod.id}">${modAvg}</strong>/5
+          </div>
+          <span class="accordion-chevron">▾</span>
+        </div>
+      </div>
+      <div class="module-body" id="body-${mod.id}"></div>
+    `;
+
+    const bodyEl = modEl.querySelector(`#body-${mod.id}`);
+
+    mod.units.forEach(unit => {
+      const unitEl = document.createElement('div');
+      unitEl.className = 'unit-block';
+      unitEl.id = `unit-block-${unit.id}`;
+
+      unitEl.innerHTML = `
+        <div class="unit-header" data-toggle-unit="${unit.id}">
+          <div class="unit-header-left">
+            <span class="unit-num-badge">${unit.unitNumber}</span>
+            <h3 class="unit-title">${unit.title}</h3>
+            <span class="unit-sub-count">(${unit.subtopics.length} topics)</span>
+          </div>
+          <span class="accordion-chevron">▾</span>
+        </div>
+        <div class="unit-card-list" id="unit-list-${unit.id}"></div>
+      `;
+
+      const listEl = unitEl.querySelector(`#unit-list-${unit.id}`);
+
+      unit.subtopics.forEach(sub => {
+        const rating = userState.ratings[sub.id] || 1;
+        const rubric = RUBRICS[rating];
+        const userNote = userState.notes[sub.id] || '';
+
+        const card = document.createElement('div');
+        card.className = `subtopic-card ${rubric.cardClass}`;
+        card.id = `sub-card-${sub.id}`;
+        card.dataset.subId = sub.id;
+        card.dataset.moduleId = mod.id;
+        card.dataset.rating = rating;
+
+        const tagsHtml = sub.tags.map(t => `<span class="concept-tag">${escapeHtml(t)}</span>`).join('');
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <h4 class="subtopic-title">${sub.title}</h4>
+              <div class="tags-wrap">${tagsHtml}</div>
+            </div>
+            <span class="rating-badge ${rubric.colorClass}" id="badge-${sub.id}">
+              ${rubric.label}
+            </span>
+          </div>
+
+          <p class="subtopic-summary">${sub.summary}</p>
+
+          <div class="syntax-preview"><code>${escapeHtml(sub.syntax)}</code></div>
+
+          <!-- Slider Area -->
+          <div class="slider-section">
+            <div class="slider-header">
+              <span class="slider-label">Understanding Level (1–5)</span>
+              <span style="font-family:var(--font-mono);font-size:0.85rem;font-weight:700" id="num-display-${sub.id}">
+                ${rating} / 5
+              </span>
+            </div>
+
+            <div class="slider-row">
+              <input type="range" min="1" max="5" step="1" value="${rating}" 
+                class="range-slider" id="slider-${sub.id}" data-id="${sub.id}">
+            </div>
+
+            <div class="slider-scale-ticks">
+              <span>1: Novice</span>
+              <span>2: Familiar</span>
+              <span>3: Functional</span>
+              <span>4: Proficient</span>
+              <span>5: Mastered</span>
+            </div>
+
+            <div class="scientific-rubric" id="rubric-${sub.id}">
+              ${rubric.desc}
+            </div>
+
+            <!-- Active Recall Self-Test Diagnostic Button -->
+            <div class="recall-section">
+              <div class="recall-trigger" data-recall-toggle="${sub.id}">
+                <span>⚡ Test My Recall Before Rating (Self-Check Challenge)</span>
+                <span class="accordion-chevron" style="font-size:0.9rem">▾</span>
+              </div>
+              <div class="recall-box" id="recall-box-${sub.id}">
+                <div class="recall-prompt">❓ ${sub.recallQ}</div>
+                <button class="btn btn-outline btn-reveal" data-reveal-ans="${sub.id}">
+                  👁️ Reveal Answer
+                </button>
+                <div class="recall-answer" id="recall-ans-${sub.id}">
+                  <strong>Key Solution:</strong> ${sub.recallA}
+                </div>
+              </div>
+            </div>
+
+            <!-- Optional Study Note -->
+            <input type="text" class="user-note-input" placeholder="Add optional study note, memory hook, or exam reminder..." 
+              value="${escapeHtml(userNote)}" data-note-id="${sub.id}">
+          </div>
+        `;
+
+        listEl.appendChild(card);
+      });
+
+      bodyEl.appendChild(unitEl);
+    });
+
+    root.appendChild(modEl);
+  });
+
+  attachEventListeners();
+  updateGlobalStats();
+  applyFilters();
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/* ═══════════════════ Event Listeners ═══════════════════ */
+function attachEventListeners() {
+  // Module accordion collapse
+  document.querySelectorAll('[data-toggle]').forEach(hdr => {
+    hdr.onclick = () => {
+      const card = hdr.closest('.module-card');
+      card.classList.toggle('collapsed');
+    };
+  });
+
+  // Unit accordion collapse
+  document.querySelectorAll('[data-toggle-unit]').forEach(hdr => {
+    hdr.onclick = () => {
+      const block = hdr.closest('.unit-block');
+      block.classList.toggle('collapsed');
+    };
+  });
+
+  // Slider change events
+  document.querySelectorAll('.range-slider').forEach(slider => {
+    slider.oninput = (e) => {
+      const id = e.target.dataset.id;
+      const val = parseInt(e.target.value, 10);
+      userState.ratings[id] = val;
+
+      const rubric = RUBRICS[val];
+
+      // Update badge
+      const badge = document.getElementById(`badge-${id}`);
+      badge.textContent = rubric.label;
+      badge.className = `rating-badge ${rubric.colorClass}`;
+
+      // Update text & rubric
+      document.getElementById(`num-display-${id}`).textContent = `${val} / 5`;
+      document.getElementById(`rubric-${id}`).textContent = rubric.desc;
+
+      // Update card left border
+      const card = document.getElementById(`sub-card-${id}`);
+      card.className = `subtopic-card ${rubric.cardClass}`;
+      card.dataset.rating = val;
+
+      saveState();
+      updateGlobalStats();
+    };
+  });
+
+  // Recall box toggle
+  document.querySelectorAll('[data-recall-toggle]').forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.recallToggle;
+      const box = document.getElementById(`recall-box-${id}`);
+      box.classList.toggle('open');
+    };
+  });
+
+  // Reveal Answer button
+  document.querySelectorAll('[data-reveal-ans]').forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.revealAns;
+      const ans = document.getElementById(`recall-ans-${id}`);
+      ans.classList.toggle('visible');
+      btn.textContent = ans.classList.contains('visible') ? '🙈 Hide Answer' : '👁️ Reveal Answer';
+    };
+  });
+
+  // Note change events
+  document.querySelectorAll('[data-note-id]').forEach(input => {
+    input.oninput = (e) => {
+      const id = e.target.dataset.noteId;
+      userState.notes[id] = e.target.value;
+      saveState();
+    };
+  });
+
+  // Scientific info header toggle
+  const sciToggle = document.getElementById('science-toggle');
+  sciToggle.onclick = () => {
+    const body = document.getElementById('science-body');
+    const chev = document.getElementById('science-chevron');
+    if (body.style.display === 'none') {
+      body.style.display = 'grid';
+      chev.style.transform = 'rotate(0deg)';
+    } else {
+      body.style.display = 'none';
+      chev.style.transform = 'rotate(-90deg)';
+    }
+  };
+}
+
+/* ═══════════════════ Global Stats Calculator ═══════════════════ */
+function updateGlobalStats() {
+  const allSubIds = [];
+  RAW_SYLLABUS.forEach(m => m.units.forEach(u => u.subtopics.forEach(s => allSubIds.push(s.id))));
+
+  let total = allSubIds.length;
+  let sum = 0;
+  let counts = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+
+  allSubIds.forEach(id => {
+    const r = userState.ratings[id] || 1;
+    sum += r;
+    counts[r] = (counts[r] || 0) + 1;
+  });
+
+  const avg = (sum / total).toFixed(2);
+  const lowCount = (counts[1] || 0) + (counts[2] || 0);
+  const midCount = (counts[3] || 0);
+  const highCount = (counts[4] || 0) + (counts[5] || 0);
+
+  // Update counters
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-avg').innerHTML = `${avg} <span style="font-size:0.9rem;color:var(--text-muted)">/ 5.0</span>`;
+  document.getElementById('float-avg').textContent = avg;
+  document.getElementById('stat-low').textContent = lowCount;
+  document.getElementById('stat-mid').textContent = midCount;
+  document.getElementById('stat-high').textContent = highCount;
+
+  // Toolbar counts
+  document.getElementById('count-all').textContent = total;
+  document.getElementById('count-low').textContent = lowCount;
+  document.getElementById('count-mid').textContent = midCount;
+  document.getElementById('count-high').textContent = highCount;
+
+  // Competency label
+  let compLabel = "Foundational";
+  if (avg >= 4.5) compLabel = "Exam Ready (Mastery)";
+  else if (avg >= 3.8) compLabel = "Solid Proficiency";
+  else if (avg >= 2.8) compLabel = "Functional Recall";
+  else if (avg >= 2.0) compLabel = "Familiar (Needs Practice)";
+  else compLabel = "Novice (Revision Required)";
+  document.getElementById('stat-competency-label').textContent = compLabel;
+
+  // Progress Bar Segments
+  const p1 = ((counts[1] / total) * 100);
+  const p2 = ((counts[2] / total) * 100);
+  const p3 = ((counts[3] / total) * 100);
+  const p4 = ((counts[4] / total) * 100);
+  const p5 = ((counts[5] / total) * 100);
+
+  document.getElementById('bar-1').style.width = `${p1}%`;
+  document.getElementById('bar-2').style.width = `${p2}%`;
+  document.getElementById('bar-3').style.width = `${p3}%`;
+  document.getElementById('bar-4').style.width = `${p4}%`;
+  document.getElementById('bar-5').style.width = `${p5}%`;
+
+  const masteryPct = Math.round(((highCount * 1.0 + midCount * 0.5) / total) * 100);
+  document.getElementById('stat-progress-pct').textContent = `${masteryPct}% Weighted Readiness`;
+
+  // Update module average badges
+  RAW_SYLLABUS.forEach(m => {
+    let mRatings = [];
+    m.units.forEach(u => u.subtopics.forEach(s => mRatings.push(userState.ratings[s.id] || 1)));
+    const mAvg = (mRatings.reduce((a, b) => a + b, 0) / mRatings.length).toFixed(2);
+    const scoreBadge = document.getElementById(`mod-score-${m.id}`);
+    if (scoreBadge) scoreBadge.textContent = mAvg;
+  });
+}
+
+/* ═══════════════════ Filtering & Search ═══════════════════ */
+function applyFilters() {
+  const query = userState.searchQuery.toLowerCase().trim();
+  const filter = userState.activeFilter;
+
+  document.querySelectorAll('.subtopic-card').forEach(card => {
+    const subId = card.dataset.subId;
+    const modId = card.dataset.moduleId;
+    const rating = parseInt(card.dataset.rating, 10);
+    const text = card.innerText.toLowerCase();
+
+    // Match search
+    const matchesSearch = !query || text.includes(query);
+
+    // Match filter
+    let matchesFilter = true;
+    if (filter === 'low') matchesFilter = (rating <= 2);
+    else if (filter === 'mid') matchesFilter = (rating === 3);
+    else if (filter === 'high') matchesFilter = (rating >= 4);
+    else if (filter === 'mod-1') matchesFilter = (modId === 'mod-1');
+    else if (filter === 'mod-2') matchesFilter = (modId === 'mod-2');
+
+    if (matchesSearch && matchesFilter) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// Search input listener
+document.getElementById('search-input').oninput = (e) => {
+  userState.searchQuery = e.target.value;
+  applyFilters();
+};
+
+// Filter chip listener
+document.querySelectorAll('.filter-chips .chip').forEach(chip => {
+  chip.onclick = () => {
+    document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    userState.activeFilter = chip.dataset.filter;
+    applyFilters();
+  };
+});
+
+// Expand / Collapse All
+document.getElementById('btn-expand-all').onclick = () => {
+  document.querySelectorAll('.module-card').forEach(c => c.classList.remove('collapsed'));
+  document.querySelectorAll('.unit-block').forEach(u => u.classList.remove('collapsed'));
+};
+
+document.getElementById('btn-collapse-all').onclick = () => {
+  document.querySelectorAll('.module-card').forEach(c => c.classList.add('collapsed'));
+  document.querySelectorAll('.unit-block').forEach(u => u.classList.add('collapsed'));
+};
+
+/* ═══════════════════ JSON Export / Payload Builder ═══════════════════ */
+function generateFullJSON() {
+  let totalTopics = 0;
+  let totalScore = 0;
+  let countMap = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+  const structuredModules = RAW_SYLLABUS.map(m => {
+    let modScore = 0;
+    let modCount = 0;
+
+    const units = m.units.map(u => {
+      const subtopics = u.subtopics.map(s => {
+        const rating = userState.ratings[s.id] || 1;
+        const note = userState.notes[s.id] || "";
+        totalTopics++;
+        totalScore += rating;
+        modScore += rating;
+        modCount++;
+        countMap[rating] = (countMap[rating] || 0) + 1;
+
+        return {
+          id: s.id,
+          title: s.title,
+          tags: s.tags,
+          understandingScore: rating,
+          competencyLevel: RUBRICS[rating].label,
+          diagnosticQuestion: s.recallQ,
+          keySolution: s.recallA,
+          coreSyntaxSnippet: s.syntax,
+          personalStudyNotes: note
+        };
+      });
+
+      return {
+        unitId: u.id,
+        unitNumber: u.unitNumber,
+        unitTitle: u.title,
+        subtopicsCount: subtopics.length,
+        subtopics: subtopics
+      };
+    });
+
+    return {
+      moduleId: m.id,
+      moduleTitle: m.title,
+      moduleAverageScore: parseFloat((modScore / modCount).toFixed(2)),
+      syllabusHours: m.hours,
+      externalMarks: m.marks,
+      textReference: m.reference,
+      units: units
+    };
+  });
+
+  const overallAvg = parseFloat((totalScore / totalTopics).toFixed(2));
+
+  return {
+    meta: {
+      courseCode: "MAT5FS112",
+      courseTitle: "Mathematical Type Setting System — LaTeX",
+      exportTimestamp: new Date().toISOString(),
+      generator: "LaTeX Active Review Matrix Engine",
+      totalTopicsEvaluated: totalTopics,
+      overallMeanUnderstanding: overallAvg,
+      distribution: {
+        noviceLevel1: countMap[1] || 0,
+        familiarLevel2: countMap[2] || 0,
+        functionalLevel3: countMap[3] || 0,
+        proficientLevel4: countMap[4] || 0,
+        masteredLevel5: countMap[5] || 0
+      }
+    },
+    // Convenient compact key-value map for quick scripting
+    quickRatingsMap: userState.ratings,
+    quickNotesMap: userState.notes,
+    // Deep hierarchical schema with prompts and answers for spaced repetition
+    modules: structuredModules
+  };
+}
+
+function copyJSONToClipboard() {
+  const payload = generateFullJSON();
+  const jsonText = JSON.stringify(payload, null, 2);
+  navigator.clipboard.writeText(jsonText).then(() => {
+    showToast("✓ Copied Full JSON to Clipboard!");
+  }).catch(err => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = jsonText;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast("✓ Copied Full JSON to Clipboard!");
+  });
+}
+
+function downloadJSONFile() {
+  const payload = generateFullJSON();
+  const jsonText = JSON.stringify(payload, null, 2);
+  const blob = new Blob([jsonText], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `latex_modules_1_2_review_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast("✓ Saved .json File!");
+}
+
+/* ═══════════════════ Modal Actions ═══════════════════ */
+// Inspect Modal
+const modalInspect = document.getElementById('modal-inspect');
+document.getElementById('btn-inspect-json').onclick = () => {
+  const payload = generateFullJSON();
+  document.getElementById('json-preview-text').value = JSON.stringify(payload, null, 2);
+  modalInspect.classList.add('active');
+};
+
+document.getElementById('modal-inspect-close').onclick = () => modalInspect.classList.remove('active');
+document.getElementById('btn-modal-copy').onclick = () => {
+  copyJSONToClipboard();
+};
+document.getElementById('btn-modal-download').onclick = () => downloadJSONFile();
+
+// Import Modal
+const modalImport = document.getElementById('modal-import');
+document.getElementById('btn-import-modal').onclick = () => {
+  document.getElementById('json-import-text').value = '';
+  modalImport.classList.add('active');
+};
+document.getElementById('modal-import-close').onclick = () => modalImport.classList.remove('active');
+document.getElementById('btn-modal-import-cancel').onclick = () => modalImport.classList.remove('active');
+
+document.getElementById('btn-modal-import-apply').onclick = () => {
+  const text = document.getElementById('json-import-text').value.trim();
+  if (!text) return;
+  try {
+    const data = JSON.parse(text);
+    let importedCount = 0;
+
+    // Support quickRatingsMap or direct key-value or deep modules
+    if (data.quickRatingsMap) {
+      Object.entries(data.quickRatingsMap).forEach(([k, v]) => {
+        userState.ratings[k] = parseInt(v, 10);
+        importedCount++;
+      });
+      if (data.quickNotesMap) {
+        userState.notes = Object.assign(userState.notes, data.quickNotesMap);
+      }
+    } else if (data.modules && Array.isArray(data.modules)) {
+      data.modules.forEach(m => {
+        m.units.forEach(u => {
+          u.subtopics.forEach(s => {
+            if (s.id && s.understandingScore) {
+              userState.ratings[s.id] = parseInt(s.understandingScore, 10);
+              if (s.personalStudyNotes) userState.notes[s.id] = s.personalStudyNotes;
+              importedCount++;
+            }
+          });
+        });
+      });
+    } else {
+      // Treat as direct key-value { "m1-u1-1": 4, ... }
+      Object.entries(data).forEach(([k, v]) => {
+        if (typeof v === 'number' || !isNaN(parseInt(v, 10))) {
+          userState.ratings[k] = parseInt(v, 10);
+          importedCount++;
+        }
+      });
+    }
+
+    saveState();
+    renderApp();
+    modalImport.classList.remove('active');
+    showToast(`✓ Successfully imported ${importedCount} topics!`);
+  } catch(e) {
+    alert("Invalid JSON format! Please check the structure and try again.");
+  }
+};
+
+// Copy buttons
+document.getElementById('btn-copy-json-top').onclick = copyJSONToClipboard;
+document.getElementById('btn-copy-json-float').onclick = copyJSONToClipboard;
+document.getElementById('btn-export-file').onclick = downloadJSONFile;
+
+// Theme Toggle
+const themeBtn = document.getElementById('theme-toggle');
+const themeText = document.getElementById('theme-btn-text');
+
+function initTheme() {
+  const saved = localStorage.getItem('latex_theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeText.textContent = 'Light';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    themeText.textContent = 'Dark';
+  }
+}
+
+themeBtn.onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  if (cur === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    themeText.textContent = 'Dark';
+    localStorage.setItem('latex_theme', 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeText.textContent = 'Light';
+    localStorage.setItem('latex_theme', 'dark');
+  }
+};
+
+// Close modals when clicking backdrop
+window.onclick = (e) => {
+  if (e.target === modalInspect) modalInspect.classList.remove('active');
+  if (e.target === modalImport) modalImport.classList.remove('active');
+};
+
+/* ═══════════════════ Bootstrap ═══════════════════ */
+initTheme();
+loadState();
+renderApp();
+
+</script>
+</body>
+</html>

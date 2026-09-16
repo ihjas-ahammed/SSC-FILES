@@ -160,6 +160,28 @@ OMR["m2-poly"] = [
     ],
     "a": 2,
     "why": "For iron, $E_{[100]} = 125.0\\mathrm{~GPa}$, $E_{[110]} = 210.5\\mathrm{~GPa}$, and $E_{[111]} = 272.7\\mathrm{~GPa}$, showing a continuous increase from $[100]$ to $[111]$. Tungsten is constant at $384.6\\mathrm{~GPa}$."
+  },
+  {
+    "q": "What defines a nanocrystalline solid, and what fraction of atoms reside in grain boundaries at grain sizes around 5 nm?",
+    "o": [
+      "Grains smaller than $1\\,\\mu\\mathrm{m}$; less than $0.01\\%$ of atoms in boundaries",
+      "Grains smaller than $100\\mathrm{~nm}$; between $30\\%$ and $50\\%$ of all atoms reside in grain boundaries and triple junctions",
+      "Grains larger than $1\\mathrm{~mm}$; precisely $90\\%$ of atoms in boundaries",
+      "Grains composed exclusively of amorphous glassy clusters with zero boundary atoms"
+    ],
+    "a": 1,
+    "why": "Nanocrystalline solids have mean grain sizes under 100 nm (typically 5 to 50 nm). At grain diameters of ~5 nm, the grain boundary volume fraction becomes massive, with 30% to 50% of all atoms located in disordered interfacial regions and triple junctions."
+  },
+  {
+    "q": "What causes the Inverse Hall-Petch effect (grain softening) in nanocrystalline metals with grain diameters below ~10–15 nm?",
+    "o": [
+      "Dislocations move at supersonic speeds, melting the grain boundaries",
+      "All grain boundaries recrystallize spontaneously into a single giant crystal",
+      "Individual grains become too small to sustain dislocation pile-ups, shifting deformation to grain boundary sliding and Coble diffusion creep",
+      "Vacancies precipitate into large internal macroscopic pores"
+    ],
+    "a": 2,
+    "why": "Below a critical grain size ($d_c \\approx 10-15\\text{ nm}$), grains cannot accommodate the dislocation pile-ups required for conventional work hardening. Deformation shifts from dislocation glide to grain boundary sliding and Coble diffusion creep, causing hardness and yield strength to decrease."
   }
 ];
 
@@ -195,6 +217,14 @@ CARDS["m2-poly"] = [
   {
     "f": "Elastic modulus of tungsten vs copper",
     "b": "Tungsten is completely isotropic ($384.6\\mathrm{~GPa}$ in $[100]$, $[110]$, $[111]$); copper is highly anisotropic ($66.7\\mathrm{~GPa}$ in $[100]$ vs $191.1\\mathrm{~GPa}$ in $[111]$)."
+  },
+  {
+    "f": "Nanocrystalline solid",
+    "b": "A polycrystalline solid with mean grain size below 100 nm (typically 5–50 nm); at ~5 nm, 30%–50% of all atoms reside within grain boundaries."
+  },
+  {
+    "f": "Inverse Hall-Petch effect",
+    "b": "Grain softening below ~10–15 nm because grains cannot support dislocation pile-ups; deformation transitions to grain boundary sliding and Coble creep."
   }
 ];
 
@@ -1544,6 +1574,10 @@ CARDS["m2-inter"] = [
     "b": "External surfaces $>$ High-angle grain boundaries $>$ Small-angle grain boundaries $>$ Twin boundaries $>$ Domain walls."
   },
   {
+    "f": "Volume defects (3D imperfections)",
+    "b": "Macroscopic 3D defects including pores, microcracks, foreign inclusions, and shrinkage cavities that concentrate stress and impair mechanical strength."
+  },
+  {
     "f": "Atomic vibrations in solids",
     "b": "Continuous oscillations around lattice sites ($\\sim 10^{13}\\mathrm{~s}^{-1}$, amplitude $\\sim 10^{-3}\\mathrm{~nm}$); temperature is a direct measure of their average vibrational activity."
   }
@@ -1739,5 +1773,9 @@ CARDS["m2-micro"] = [
   {
     "f": "ASTM grain size number vs grain diameter",
     "b": "A higher ASTM number $G$ corresponds to smaller grain diameter and higher grain density per unit area ($G=1$ is coarse, $G=10$ is very fine)."
+  },
+  {
+    "f": "Lindemann melting criterion",
+    "b": "Melting occurs when root-mean-square atomic vibrational amplitude reaches roughly 10% to 15% of interatomic spacing, causing loss of crystal lattice shear rigidity."
   }
 ];

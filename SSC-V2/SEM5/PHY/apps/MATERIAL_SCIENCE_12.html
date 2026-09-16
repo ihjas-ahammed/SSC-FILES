@@ -72,10 +72,10 @@
   --toph:3.25rem; --navw:0px; --navh:calc(2.75rem + env(safe-area-inset-bottom));
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:4.2rem;overflow-x:hidden;max-width:100vw;width:100%}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:4.2rem;overflow-x:clip;max-width:100%;width:100%}
 body{margin:0;background:var(--void);color:var(--ink);font-family:var(--f-b);
   font-size:clamp(15.5px,.55vw + 13.5px,17.5px);line-height:1.62;-webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;overflow-x:hidden;max-width:100vw;width:100%;position:relative}
+  text-rendering:optimizeLegibility;overflow-x:clip;max-width:100%;width:100%;position:relative}
 ::selection{background:rgba(var(--accent-rgb),.22)}
 a{color:var(--blue)}
 button{font:inherit;color:inherit}
@@ -402,13 +402,13 @@ details.qa>summary .star{align-self:center}
   .iconbtn{width:1.85rem;height:1.85rem;font-size:.85rem;flex-shrink:0}
   .ring{width:28px;height:28px;flex-shrink:0}
   .ring svg{width:28px;height:28px}
-  #nav{left:0;right:0;bottom:0;width:100%;max-width:100vw;height:var(--navh);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid var(--rule);position:fixed;z-index:80;box-sizing:border-box}
-  #nav button{padding:0.25rem 0;gap:0.12rem;min-width:0}
+  #nav{left:0;right:0;bottom:0;width:100%;max-width:100%;height:var(--navh);padding-bottom:env(safe-area-inset-bottom);border-top:1px solid var(--rule);position:fixed;z-index:80;box-sizing:border-box;overflow:hidden}
+  #nav button{padding:0.25rem 0.15rem;gap:0.12rem;min-width:0;flex:1 1 0%;overflow:hidden}
   #nav button i{width:20px;height:20px}
   #nav button i svg{width:18px;height:18px}
-  #nav button span{font-size:0.62rem;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  #nav button span{font-size:0.62rem;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:block}
   #nav button.on::before{top:0;left:32%;right:32%;height:2px;border-radius:0 0 2px 2px}
-  #nav .badge{top:.15rem;left:calc(50% + .35rem);min-width:.95rem;height:.95rem;padding:0 .25rem;font-size:.55rem}
+  #nav .badge{top:.15rem;left:calc(50% + .25rem);min-width:.95rem;height:.95rem;padding:0 .25rem;font-size:.55rem;pointer-events:none}
   body{padding-bottom:var(--navh)}
   #sync, body #sync{bottom:calc(var(--navh) + .65rem)!important;z-index:100!important}
   body.typing{--navh:0px}
@@ -435,12 +435,20 @@ details.qa>summary .star{align-self:center}
 
 /* ══════════════ materials-science additions ══════════════ */
 #app>*{min-width:0}
-mjx-container{font-size:86%!important;max-width:100%;color:inherit}
-mjx-container>svg{max-width:100%!important}
-mjx-container[display="true"]{font-size:86%!important;min-width:0!important;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.15em 0}
+/* ── native math typography (zero-dependency, crisp, instant) ── */
+.m-eq{display:block;margin:.75rem 0;padding:.6rem .85rem;background:var(--paper);border:1px solid var(--rule-soft);
+  border-radius:.6rem;text-align:center;font-family:var(--f-d);font-size:1.14rem;line-height:1.6;overflow-x:auto;max-width:100%}
+.m-in{font-family:var(--f-d);font-size:1.06em;font-style:normal;white-space:nowrap}
+.m-in i, .m-eq i{font-family:var(--f-d);font-style:italic}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;padding:0 .2em;font-size:.92em;line-height:1.15}
+.frac .num{border-bottom:1.2px solid currentColor;padding-bottom:.1em}
+.frac .den{padding-top:.1em}
+.frac-sm{font-size:.84em}
+.rad{border-top:1.2px solid currentColor;padding-top:1px;margin-left:1px}
+.m-vec{font-weight:700;font-style:normal}
 @media (max-width:640px){
-  mjx-container{font-size:82%!important}
-  mjx-container[display="true"]{font-size:82%!important}
+  .m-eq{font-size:1.02rem;padding:.5rem .6rem}
+  .m-in{font-size:1.02em}
 }
 .brand{font-family:var(--f-d);font-weight:600;letter-spacing:-.015em}
 .brand .grain{display:inline-block;width:1.05rem;height:1.05rem;border-radius:.3rem;align-self:center;
@@ -707,33 +715,7 @@ ol.rvtrap li::before{content:counter(tp);position:absolute;left:.75rem;top:.62re
   </div>
 </div>
 
-<script>
-window.MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    tags: 'none',
-    macros: { hbar: '\\hslash', text: ['\\mathrm{#1}', 1] }
-  },
-  svg: { fontCache: 'global', scale: 0.86 },
-  options: {
-    enableMenu: false,
-    enableAssistiveMml: false,
-    menuOptions: { settings: { assistiveMml: false } }
-  },
-  startup: {
-    typeset: false,
-    ready: function() {
-      MathJax.startup.defaultReady();
-      window.__mjReady = true;
-      (window.__mjQueue || []).forEach(function(f) { f(); });
-      window.__mjQueue = [];
-    }
-  }
-};
-</script>
 <script>window.MS_CFG = {"online": true, "onlineURL": "https://ssc-data-science-qm.web.app/MATERIAL_SCIENCE_12.html", "offlineName": "MATERIAL_SCIENCE_12_OFFLINE.html"};</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
 <script>/* ══════════════════════════════════════════════════════════════════
    Materials Science · CU-FYUGP B.Sc. Physics (Hons) · Semester V
    Major Elective — Modules I & II  (Callister, Materials Science and
@@ -753,6 +735,86 @@ const cards=(title,list)=>W('cards',{title,list});          // list: [{f,b}]
 const match=(title,pairs,o)=>W('match',Object.assign({title,pairs},o||{}));
 const fill=(title,text,o)=>W('fill',Object.assign({title,text},o||{}));  // [[answer¦alt]]
 
+/* math typography engine (zero dependencies, fast, native) */
+function cleanMath(s) {
+  if (!s) return '';
+  let m = String(s).trim();
+  m = m.replace(/^\$\$\s*/, '').replace(/\s*\$\$$/, '');
+  m = m.replace(/^\$\s*/, '').replace(/\s*\$$/, '');
+  
+  m = m.replace(/\\(?:mathrm|text)\{([^}]+)\}/g, '$1');
+  m = m.replace(/\\mathbf\{([^}]+)\}/g, '<b class="m-vec">$1</b>');
+  m = m.replace(/\\mathit\{([^}]+)\}/g, '<i>$1</i>');
+  m = m.replace(/\\boldsymbol\{([^}]+)\}/g, '<b>$1</b>');
+
+  m = m.replace(/\^\{\\circ\}\s*(?:\\mathrm\{C\}|C)?/g, '°C');
+  m = m.replace(/\^\{\\circ\}/g, '°');
+  m = m.replace(/\\circ/g, '°');
+
+  for (let i = 0; i < 4; i++) {
+    m = m.replace(/\\(?:d|t)?frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="frac"><span class="num">$1</span><span class="den">$2</span></span>');
+  }
+  m = m.replace(/\\tfrac\s*(\d)\s*(\d)/g, '<span class="frac frac-sm"><span class="num">$1</span><span class="den">$2</span></span>');
+  m = m.replace(/\\tfrac43/g, '<span class="frac frac-sm"><span class="num">4</span><span class="den">3</span></span>');
+  m = m.replace(/\\tfrac23/g, '<span class="frac frac-sm"><span class="num">2</span><span class="den">3</span></span>');
+  m = m.replace(/\\tfrac12/g, '<span class="frac frac-sm"><span class="num">1</span><span class="den">2</span></span>');
+  m = m.replace(/\\tfrac32/g, '<span class="frac frac-sm"><span class="num">3</span><span class="den">2</span></span>');
+
+  m = m.replace(/\\sqrt\[([^\]]+)\]\{([^{}]+)\}/g, '<sup>$1</sup>√<span class="rad">$2</span>');
+  m = m.replace(/\\sqrt\{([^{}]+)\}/g, '√<span class="rad">$1</span>');
+  m = m.replace(/\\sqrt(\d)/g, '√$1');
+
+  m = m.replace(/\\xrightarrow\{([^}]+)\}/g, ' ⎯⎯ $1 ⎯⎯→ ');
+
+  m = m.replace(/\^\{([^{}]+)\}/g, (match, p1) => '<sup>' + p1.replace(/\+/g, '⁺').replace(/\-/g, '⁻') + '</sup>');
+  m = m.replace(/\^([0-9\+\-]+)/g, '<sup>$1</sup>');
+  m = m.replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\^4/g, '⁴').replace(/\^8/g, '⁸');
+
+  m = m.replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>');
+  m = m.replace(/_([a-zA-Z0-9])/g, '<sub>$1</sub>');
+
+  m = m.replace(/\\alpha/g, 'α').replace(/\\beta/g, 'β').replace(/\\gamma/g, 'γ')
+       .replace(/\\delta/g, 'δ').replace(/\\Delta/g, 'Δ').replace(/\\varepsilon/g, 'ε')
+       .replace(/\\epsilon/g, 'ε').replace(/\\theta/g, 'θ').replace(/\\Theta/g, 'Θ')
+       .replace(/\\lambda/g, 'λ').replace(/\\Lambda/g, 'Λ').replace(/\\mu/g, 'μ')
+       .replace(/\\nu/g, 'ν').replace(/\\pi/g, 'π').replace(/\\rho/g, 'ρ')
+       .replace(/\\sigma/g, 'σ').replace(/\\tau/g, 'τ').replace(/\\phi/g, 'φ')
+       .replace(/\\psi/g, 'ψ').replace(/\\omega/g, 'ω').replace(/\\Omega/g, 'Ω')
+       .replace(/\\ell/g, 'ℓ').replace(/\\hbar/g, 'ħ').replace(/\\hslash/g, 'ħ')
+       .replace(/\\AA/g, 'Å');
+
+  m = m.replace(/\\times/g, '×').replace(/\\cdot/g, '·').replace(/\\pm/g, '±').replace(/\\mp/g, '∓')
+       .replace(/\\approx/g, '≈').replace(/\\sim/g, '∼').replace(/\\propto/g, '∝')
+       .replace(/\\le(?:q)?/g, '≤').replace(/\\ge(?:q)?/g, '≥').replace(/\\ll/g, '≪').replace(/\\gg/g, '≫')
+       .replace(/\\neq/g, '≠').replace(/\\perp/g, '⟂').replace(/\\parallel/g, '∥')
+       .replace(/\\partial/g, '∂').replace(/\\infty/g, '∞')
+       .replace(/\\to|\\rightarrow|\\longrightarrow/g, '→')
+       .replace(/\\implies|\\Longrightarrow/g, '⟹')
+       .replace(/\\iff|\\Longleftrightarrow/g, '⟺')
+       .replace(/\\langle/g, '⟨').replace(/\\rangle/g, '⟩')
+       .replace(/\\lt/g, '&lt;').replace(/\\gt/g, '&gt;');
+
+  m = m.replace(/\\left\(/g, '(').replace(/\\right\)/g, ')')
+       .replace(/\\left\[/g, '[').replace(/\\right\]/g, ']')
+       .replace(/\\left\\\{/g, '{').replace(/\\right\\\}/g, '}')
+       .replace(/\\\{/g, '{').replace(/\\\}/g, '}')
+       .replace(/\\%/g, '%');
+
+  m = m.replace(/\\qquad/g, '&emsp;&emsp;').replace(/\\quad/g, '&emsp;')
+       .replace(/\\,/g, '&thinsp;').replace(/\\;/g, '&ensp;').replace(/\\ /g, '&nbsp;')
+       .replace(/~/g, '&nbsp;');
+
+  m = m.replace(/\\([a-zA-Z]+)/g, '$1');
+  return m;
+}
+
+function formatMathHtml(str) {
+  if (!str || typeof str !== 'string') return str;
+  str = str.replace(/\$\$([\s\S]*?)\$\$/g, (match, p1) => `<div class="m-eq">${cleanMath(p1)}</div>`);
+  str = str.replace(/\$([^\$\n\r]+?)\$/g, (match, p1) => `<span class="m-in">${cleanMath(p1)}</span>`);
+  return str;
+}
+
 /* structure */
 const tp=t=>`<div class="topic"><h3>${t}</h3></div>`;
 const gist=t=>`<div class="gist"><span class="k">in one line</span>${t}</div>`;
@@ -763,7 +825,7 @@ const note=(head,h)=>`<div class="note"><div class="nh">${head}</div>${h}</div>`
 const carry=(have,fresh)=>`<div class="carry"><div><div class="ch">you carry over from +2</div><ul>${have.map(x=>`<li>${x}</li>`).join('')}</ul></div>
   <div><div class="ch">new ground here</div><ul>${fresh.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`;
 const defn=(term,text)=>`<div class="defn"><b>${term}</b> — ${text}</div>`;
-const eq=(tex,tag)=>`<div class="eq">$$${tex}${tag?`\\qquad\\mathrm{(${String(tag).replace(/ /g,'~')})}`:''}$$</div>`;
+const eq=(tex,tag)=>`<div class="m-eq">${cleanMath(tex)}${tag?`&emsp;&emsp;<span class="eq-tag">(${cleanMath(tag)})</span>`:''}</div>`;
 const src=t=>`<p class="src">${t}</p>`;
 const tbl=(head,rows,o)=>{o=o||{};const num=o.num||[];
   return `<div class="scroll-x"><table class="ref"><tr>${head.map((h,i)=>`<th${num.includes(i)?' class="num"':''}>${h}</th>`).join('')}</tr>`+
@@ -773,7 +835,7 @@ const grid=(items)=>`<div class="grid2">${items.map(([t,b])=>`<div><b>${t}</b>${
 /* derivation ladder: reveal one rung at a time */
 function lad(title,rungs){
   const body=rungs.map((r,i)=>`<div class="rung${i?' hidden':''}"><span class="peek">tap to reveal ▸</span>
-    ${r.why?`<div class="why">${r.why}</div>`:''}<div class="math">${r.m}</div></div>`).join('');
+    ${r.why?`<div class="why">${formatMathHtml(r.why)}</div>`:''}<div class="m-eq">${cleanMath(r.m)}</div></div>`).join('');
   return `<div class="ladder"><div class="lh">${title}<span class="li">derivation</span></div>${body}
     <div class="lfoot"><button class="btn primary reveal-next">Reveal next step</button><button class="btn reveal-all">Show all</button>
     <span class="mini">Guess the next line before you tap — that guess is what makes it stick.</span></div></div>`;
@@ -1335,9 +1397,9 @@ ${chk('Why does the electrical conductivity of Group IVA elements increase drama
 STATIONS.push({
   id: 'm2-poly',
   mod: 'Module II', modName: 'Crystals, Defects & Microstructure', modClass: 'm2',
-  title: 'Polymorphism, Solidification & Directional Anisotropy',
-  short: 'Polymorphism & Grains',
-  est: '~18 min',
+  title: 'Polymorphism, Solidification, Anisotropy & Nanocrystalline Solids',
+  short: 'Grains & Nanocrystals',
+  est: '~22 min',
   body: H`
 ${gist('Real engineering solids are <b>polycrystalline aggregates</b> whose directional properties (anisotropy) depend on grain orientation and solidification history.')}
 
@@ -1385,6 +1447,21 @@ Although individual grains are highly anisotropic, an ordinary piece of polycrys
 
 ${chk('Under what processing condition does a polycrystalline metal become anisotropic on the macroscale?',
   'When a polycrystalline metal undergoes directional deformation (such as cold rolling, wire drawing, or extrusion), the grains are forced into a preferred crystallographic alignment termed a "texture" or "preferred orientation". This texture causes bulk macroscale anisotropy (e.g. anisotropic magnetic permeability in Fe–Si transformer cores).')}
+
+${tp('Nanocrystalline Solids')}
+<p>In conventional polycrystalline materials, grain diameters range from 10 to 100 μm. When the mean grain diameter is refined below <b>100 nm</b> (typically 5 to 50 nm), the material is classified as a <b>nanocrystalline solid</b>:</p>
+<ul>
+  <li><b>Enormous Grain Boundary Volume Fraction:</b> In coarse-grained solids, boundary atoms constitute less than 0.001% of the material. In nanocrystalline solids with $d \approx 5\text{ nm}$ and boundary thickness $\sim 1\text{ nm}$, up to <b>30% to 50% of all atoms</b> reside inside disordered grain boundaries and triple junctions!</li>
+  <li><b>Hall-Petch Strengthening:</b> Yield strength and hardness follow the Hall-Petch equation:
+    $$\sigma_y = \sigma_0 + k_y d^{-1/2}$$
+    Fine grains create high densities of boundary barriers that obstruct dislocation slip, elevating yield strength and hardness by up to 500% over coarse-grained counterparts.</li>
+  <li><b>The Inverse Hall-Petch Effect (Softening):</b> Below a critical grain size of $d_c \approx 10 - 15\text{ nm}$, grains become too small to support dislocation pile-ups (a single dislocation cannot easily nucleate or loop inside the tiny grain). Deformation shifts from dislocation glide to <b>grain boundary sliding and Coble diffusion creep</b>, leading to a breakdown in Hall-Petch where the material actually becomes softer as grain size decreases further!</li>
+  <li><b>Synthesis Techniques:</b> Produced via inert gas condensation (IGC), severe plastic deformation (SPD: ECAP, HPT), high-energy ball milling (mechanical attrition), and electrodeposition.</li>
+  <li><b>Key Applications:</b> Ultra-hard wear-resistant coating films, high-strength structural fasteners, biocompatible implants, and soft magnetic nanocomposites (e.g. Finemet alloys).</li>
+</ul>
+
+${chk('What causes the Inverse Hall-Petch effect in nanocrystalline metals with grain sizes below ~10 nm?',
+  'At grain sizes below 10–15 nm, individual grains are too tiny to accommodate dislocation pile-ups, which are required for conventional dislocation multiplication and work hardening. Instead, deformation switches to grain boundary sliding and Coble diffusion creep across the vast network of boundaries, causing yield strength to decrease with further grain refinement.')}
 `
 });
 
@@ -1702,6 +1779,20 @@ ${fig('boundaries', 'Interfacial defects: (a) small-angle tilt boundary modeled 
 
 ${chk('Rank the following planar defects in order of increasing interfacial energy: High-angle grain boundary, External surface, Twin boundary, Small-angle tilt boundary.',
   'Order of increasing energy: Twin boundary (lowest, coherent mirror) < Small-angle tilt boundary (isolated dislocations) < High-angle grain boundary (disordered atomic mismatch) < External surface (highest, complete loss of nearest-neighbor bonds on one side).')}
+
+${tp('Bulk or Volume Defects (3D Imperfections)')}
+<p>Volume defects are macroscopic three-dimensional imperfections (much larger than point or linear defects) that form during casting, fabrication, or heat treatment:</p>
+<ul>
+  <li><b>Pores and Porosity:</b> Gas bubbles entrapped during solidification, vacancy condensation during cooling, or incomplete powder compaction during sintering. Pores severely reduce load-bearing cross-sectional area and act as stress concentrators, lowering tensile strength and elastic modulus.</li>
+  <li><b>Microcracks and Cracks:</b> Internal microscopic fractures resulting from thermal gradients during quenching, phase transformation volume mismatches, or cyclic mechanical fatigue. Microcracks induce localized stress amplification at their sharp tips:
+    $$\sigma_m = 2 \sigma_0 \sqrt{\frac{a}{\rho_t}}$$
+    where $a$ is half-length of an internal crack and $\rho_t$ is tip radius of curvature. Because $\rho_t$ can be on the order of atomic dimensions, localized stress $\sigma_m$ drastically exceeds nominal stress $\sigma_0$, causing catastrophic brittle failure.</li>
+  <li><b>Foreign Inclusions:</b> Nonmetallic microscopic particles (e.g. oxides like $\mathrm{Al}_2\mathrm{O}_3$, sulfides like $\mathrm{MnS}$, silicates, or refractory bits) entrapped in the matrix during smelting or pouring. Large angular inclusions act as internal stress risers and primary nucleation sites for fatigue failure.</li>
+  <li><b>Shrinkage Cavities:</b> Macroscopic internal voids formed due to liquid-to-solid volume contraction during casting when mold risers fail to feed molten metal continuously into the solidifying core.</li>
+</ul>
+
+${chk('Why are sharp internal microcracks far more dangerous to structural integrity than rounded spherical gas pores of the same volume?',
+  'Stress concentration factor K_t is inversely proportional to the square root of the defect tip radius of curvature (K_t ≈ 2√(a/ρ_t)). A sharp crack has an atomically small tip radius (ρ_t → 0), concentrating applied stress by factors of 10× to 100× and easily exceeding theoretical cohesive strength. In contrast, a spherical pore has a large, blunt radius (ρ_t = r), producing a mild stress concentration factor of only K_t ≈ 2 to 3.')}
 `
 });
 
@@ -1709,11 +1800,24 @@ ${chk('Rank the following planar defects in order of increasing interfacial ener
 STATIONS.push({
   id: 'm2-micro',
   mod: 'Module II', modName: 'Crystals, Defects & Microstructure', modClass: 'm2',
-  title: 'Microscopy Techniques & ASTM Grain Size Determination',
-  short: 'Microscopy & Grain Size',
-  est: '~20 min',
+  title: 'Atomic Vibrations, Microscopy & ASTM Grain Size Determination',
+  short: 'Vibrations & Microscopy',
+  est: '~22 min',
   body: H`
-${gist('Microstructural features (0.1–100 μm) govern mechanical properties; grain size is standardized via the <b>ASTM intercept method</b>: $G = -6.6457\\log\\ell - 3.298$.')}
+${gist('Atomic vibrations govern thermal expansion and diffusion; microstructural features (0.1–100 μm) govern mechanical properties via ASTM grain size.')}
+
+${tp('Atomic Vibrations in Solids (Callister 4.8)')}
+<p>Every atom in a solid vibrates rapidly about its lattice equilibrium position at all temperatures above absolute zero ($0\mathrm{~K}$):</p>
+<ul>
+  <li><b>Vibrational Frequency & Phonons:</b> Atoms vibrate at characteristic frequencies of $\nu \sim 10^{13}\mathrm{~s}^{-1}$ ($10\mathrm{~THz}$). These coordinated lattice vibrations can be conceptualized quantum mechanically as vibrational wave packets termed <b>phonons</b>.</li>
+  <li><b>Temperature Dependence & Thermal Expansion:</b> At temperature $T$, the mean vibrational energy per atom is proportional to $k_B T$. Because the interatomic potential energy well is <b>asymmetric (anharmonic)</b>, increasing temperature causes atoms to vibrate with larger amplitudes, shifting the average atomic equilibrium position outward. This manifests macroscopically as <b>thermal expansion</b>.</li>
+  <li><b>Role in Solid-State Diffusion:</b> Vibrations supply the random thermal energy pulses needed for an atom to overcome the activation energy barrier $Q$ and jump into an adjacent vacant site. The atomic jump frequency is given by:
+    $$\Gamma = \nu_0 \exp\left(-\frac{Q}{k_B T}\right)$$</li>
+  <li><b>Lindemann Melting Criterion:</b> As temperature approaches the melting point $T_m$, the root-mean-square vibrational amplitude reaches roughly <b>$10\%$ to $15\%$</b> of the interatomic spacing $r_0$. At this threshold, atomic overlap becomes disruptive, the crystal loses shear rigidity, and melting occurs.</li>
+</ul>
+
+${chk('How do atomic vibrations explain why solids expand when heated rather than vibrating symmetrically about fixed points?',
+  'The interatomic potential energy curve is asymmetric (anharmonic): the repulsive force rises much more steeply at separations r < r_0 than the attractive force falls off at r > r_0. As thermal energy k_B T increases vibrational amplitude, the mid-point of atomic oscillation shifts outward to greater interatomic distances, causing macroscopic thermal expansion.')}
 
 ${tp('Comparison of Microscopy Techniques')}
 ${tbl(
@@ -1767,8 +1871,8 @@ ${chk('If Metal A has an ASTM grain size number G = 8 and Metal B has G = 4, whi
              m1-cov, m1-metal, m1-vdw, m1-mixed
    ══════════════════════════════════════════════════════════════════ */
 
-/* ── Section: m1-what ── */
-OMR['m1-what'] = [
+/* ── Section: m1-intro ── */
+OMR['m1-intro'] = [
   {
     q: "How is materials science fundamentally distinguished from materials engineering?",
     o: [
@@ -1925,7 +2029,7 @@ OMR['m1-what'] = [
   }
 ];
 
-CARDS['m1-what'] = [
+CARDS['m1-intro'] = [
   { f: "Materials science", b: "Investigating the fundamental relationships that exist between the internal structures and properties of materials (answering 'why' materials behave as they do)." },
   { f: "Materials engineering", b: "Designing or manipulating the structure of a material to synthesize a predetermined set of operational properties based on structure-property correlations." },
   { f: "Central paradigm of MSE", b: "The linear four-point framework: Processing $\\longrightarrow$ Structure $\\longrightarrow$ Properties $\\longrightarrow$ Performance (modernly extended to include Reuse/Recyclability)." },
@@ -2105,8 +2209,8 @@ CARDS['m1-classes'] = [
   { f: "PET gas permeability", b: "Polyethylene terephthalate is slightly permeable to carbon dioxide, causing carbonated beverages in 2-liter plastic bottles to go flat within months." }
 ];
 
-/* ── Section: m1-adv ── */
-OMR['m1-adv'] = [
+/* ── Section: m1-advanced ── */
+OMR['m1-advanced'] = [
   {
     q: "What defines an 'advanced material' in materials science?",
     o: [
@@ -2263,7 +2367,7 @@ OMR['m1-adv'] = [
   }
 ];
 
-CARDS['m1-adv'] = [
+CARDS['m1-advanced'] = [
   { f: "Advanced materials", b: "High-performance materials utilized in high-tech applications, including semiconductors, biomaterials, smart materials, and nanomaterials." },
   { f: "Semiconductors", b: "Materials with electrical conductivities intermediate between conductors and insulators, extremely sensitive to minute concentrations of impurity dopants." },
   { f: "Biocompatible material", b: "A material suitable for implantation into the living body that does not provoke immune rejection, inflammation, or release toxic substances." },
@@ -2612,8 +2716,8 @@ CARDS['m1-ionic'] = [
   { f: "Ionic radius shift upon ionization", b: "Metallic cations shrink relative to neutral atoms ($r_{\\mathrm{Na}^+} &lt; r_{\\mathrm{Na}}$); nonmetallic anions expand ($r_{\\mathrm{Cl}^-} > r_{\\mathrm{Cl}}$)." }
 ];
 
-/* ── Section: m1-cov ── */
-OMR['m1-cov'] = [
+/* ── Section: m1-covalent ── */
+OMR['m1-covalent'] = [
   {
     q: "What fundamental mechanism characterizes covalent bonding between adjacent atoms?",
     o: [
@@ -2770,7 +2874,7 @@ OMR['m1-cov'] = [
   }
 ];
 
-CARDS['m1-cov'] = [
+CARDS['m1-covalent'] = [
   { f: "Covalent bond definition", b: "A primary chemical bond characterized by the sharing of valence electrons between adjacent atoms with small electronegativity differences, producing directional bonds." },
   { f: "Directional bonding nature", b: "Covalent bonds exist strictly along the spatial orientation where participating atomic orbitals overlap, fixing rigid interatomic bond angles." },
   { f: "Electron promotion in carbon", b: "An electron from the filled $2s$ orbital is promoted to a vacant $2p$ orbital, producing an excited $1s^2 2s^1 2p^3$ state with 4 unpaired electrons." },
@@ -2781,8 +2885,8 @@ CARDS['m1-cov'] = [
   { f: "Diamond bonding energy & $T_m$", b: "Bonding energy is $713\\mathrm{~kJ/mol}$ and melting point exceeds $3550^{\\circ}\\mathrm{C}$, reflecting the extreme rigidity of the 3D tetrahedral network." }
 ];
 
-/* ── Section: m1-metal ── */
-OMR['m1-metal'] = [
+/* ── Section: m1-metallic ── */
+OMR['m1-metallic'] = [
   {
     q: "What atomic model correctly depicts metallic bonding in solid metals?",
     o: [
@@ -2939,7 +3043,7 @@ OMR['m1-metal'] = [
   }
 ];
 
-CARDS['m1-metal'] = [
+CARDS['m1-metallic'] = [
   { f: "Metallic bond definition", b: "A primary chemical bond found in metals where an array of positive ion cores is held together by a nonlocalized, delocalized 'sea of valence electrons'." },
   { f: "Ion core", b: "The net positively charged assembly of atomic nucleus and nonvalence core electrons remaining after valence electrons enter the delocalized conduction sea." },
   { f: "Nondirectional metallic bonding", b: "The electron sea shields ion cores uniformly in all directions, allowing planes of atoms to slide without electrostatic cleavage (high ductility)." },
@@ -2950,8 +3054,8 @@ CARDS['m1-metal'] = [
   { f: "Table 2.3 Al vs. Ag comparison", b: "Aluminum has $E_0 = 330\\mathrm{~kJ/mol}$ ($T_m = 660^{\\circ}\\mathrm{C}$); silver has $E_0 = 285\\mathrm{~kJ/mol}$ ($T_m = 962^{\\circ}\\mathrm{C}$)." }
 ];
 
-/* ── Section: m1-vdw ── */
-OMR['m1-vdw'] = [
+/* ── Section: m1-secondary ── */
+OMR['m1-secondary'] = [
   {
     q: "What physical mechanism generates secondary (van der Waals) bonds between atoms or molecules?",
     o: [
@@ -3108,7 +3212,7 @@ OMR['m1-vdw'] = [
   }
 ];
 
-CARDS['m1-vdw'] = [
+CARDS['m1-secondary'] = [
   { f: "Secondary bonding definition", b: "Weak physical bonds ($4\\mathrm{~to~}30\\mathrm{~kJ/mol}$) arising from electrostatic coulombic attraction between electric dipoles without electron transfer or sharing." },
   { f: "Fluctuating induced dipole", b: "Temporary dipoles generated in electrically symmetric atoms (Ar, Kr) by fleeting thermal vibrations of electron clouds, inducing dipoles in neighbors." },
   { f: "Polar molecule", b: "A molecule possessing a permanent electric dipole moment due to an asymmetrical spatial distribution of positive and negative electrical charges (e.g., HCl)." },
@@ -3451,6 +3555,28 @@ OMR["m2-poly"] = [
     ],
     "a": 2,
     "why": "For iron, $E_{[100]} = 125.0\\mathrm{~GPa}$, $E_{[110]} = 210.5\\mathrm{~GPa}$, and $E_{[111]} = 272.7\\mathrm{~GPa}$, showing a continuous increase from $[100]$ to $[111]$. Tungsten is constant at $384.6\\mathrm{~GPa}$."
+  },
+  {
+    "q": "What defines a nanocrystalline solid, and what fraction of atoms reside in grain boundaries at grain sizes around 5 nm?",
+    "o": [
+      "Grains smaller than $1\\,\\mu\\mathrm{m}$; less than $0.01\\%$ of atoms in boundaries",
+      "Grains smaller than $100\\mathrm{~nm}$; between $30\\%$ and $50\\%$ of all atoms reside in grain boundaries and triple junctions",
+      "Grains larger than $1\\mathrm{~mm}$; precisely $90\\%$ of atoms in boundaries",
+      "Grains composed exclusively of amorphous glassy clusters with zero boundary atoms"
+    ],
+    "a": 1,
+    "why": "Nanocrystalline solids have mean grain sizes under 100 nm (typically 5 to 50 nm). At grain diameters of ~5 nm, the grain boundary volume fraction becomes massive, with 30% to 50% of all atoms located in disordered interfacial regions and triple junctions."
+  },
+  {
+    "q": "What causes the Inverse Hall-Petch effect (grain softening) in nanocrystalline metals with grain diameters below ~10–15 nm?",
+    "o": [
+      "Dislocations move at supersonic speeds, melting the grain boundaries",
+      "All grain boundaries recrystallize spontaneously into a single giant crystal",
+      "Individual grains become too small to sustain dislocation pile-ups, shifting deformation to grain boundary sliding and Coble diffusion creep",
+      "Vacancies precipitate into large internal macroscopic pores"
+    ],
+    "a": 2,
+    "why": "Below a critical grain size ($d_c \\approx 10-15\\text{ nm}$), grains cannot accommodate the dislocation pile-ups required for conventional work hardening. Deformation shifts from dislocation glide to grain boundary sliding and Coble diffusion creep, causing hardness and yield strength to decrease."
   }
 ];
 
@@ -3486,6 +3612,14 @@ CARDS["m2-poly"] = [
   {
     "f": "Elastic modulus of tungsten vs copper",
     "b": "Tungsten is completely isotropic ($384.6\\mathrm{~GPa}$ in $[100]$, $[110]$, $[111]$); copper is highly anisotropic ($66.7\\mathrm{~GPa}$ in $[100]$ vs $191.1\\mathrm{~GPa}$ in $[111]$)."
+  },
+  {
+    "f": "Nanocrystalline solid",
+    "b": "A polycrystalline solid with mean grain size below 100 nm (typically 5–50 nm); at ~5 nm, 30%–50% of all atoms reside within grain boundaries."
+  },
+  {
+    "f": "Inverse Hall-Petch effect",
+    "b": "Grain softening below ~10–15 nm because grains cannot support dislocation pile-ups; deformation transitions to grain boundary sliding and Coble creep."
   }
 ];
 
@@ -4835,6 +4969,10 @@ CARDS["m2-inter"] = [
     "b": "External surfaces $>$ High-angle grain boundaries $>$ Small-angle grain boundaries $>$ Twin boundaries $>$ Domain walls."
   },
   {
+    "f": "Volume defects (3D imperfections)",
+    "b": "Macroscopic 3D defects including pores, microcracks, foreign inclusions, and shrinkage cavities that concentrate stress and impair mechanical strength."
+  },
+  {
     "f": "Atomic vibrations in solids",
     "b": "Continuous oscillations around lattice sites ($\\sim 10^{13}\\mathrm{~s}^{-1}$, amplitude $\\sim 10^{-3}\\mathrm{~nm}$); temperature is a direct measure of their average vibrational activity."
   }
@@ -5030,6 +5168,10 @@ CARDS["m2-micro"] = [
   {
     "f": "ASTM grain size number vs grain diameter",
     "b": "A higher ASTM number $G$ corresponds to smaller grain diameter and higher grain density per unit area ($G=1$ is coarse, $G=10$ is very fine)."
+  },
+  {
+    "f": "Lindemann melting criterion",
+    "b": "Melting occurs when root-mean-square atomic vibrational amplitude reaches roughly 10% to 15% of interatomic spacing, causing loss of crystal lattice shear rigidity."
   }
 ];
 
@@ -5080,9 +5222,12 @@ ${qa('2 m', '5. Define Burgers vector and state its geometric orientation relati
 ${qa('2 m', '6. Why does liquid water expand by approximately 9% upon freezing into ice?',
   `<p>In liquid water, molecules are disordered with an average coordination of $\\sim 4.5$ neighbors. In ice $I_h$, each oxygen molecule is forced into four rigid tetrahedral hydrogen bonds, forming an open hexagonal cage network with coordination of exactly $4.0$. This open cage creates hollow channels, increasing volume by $\\approx 9\\%$ and lowering density to $0.917\\mathrm{~g/cm}^3$.</p>`)}
 
+${qa('2 m', '7. What are nanocrystalline solids and why does the Inverse Hall-Petch effect occur?',
+  `<p><b>Nanocrystalline solids</b> are polycrystalline materials with average grain diameters under 100 nm (typically 5–50 nm), where 30%–50% of all atoms reside in grain boundaries. The <b>Inverse Hall-Petch effect</b> (grain softening below ~10–15 nm) occurs because grains become too small to sustain dislocation pile-ups, shifting deformation to grain boundary sliding and Coble diffusion creep.</p>`)}
+
 ${secband('B', 'Descriptive & Problem Questions · Answer any 4 questions · 5 marks each')}
 
-${qa('5 m', '7. Explain the physical origin of melting point, elastic modulus, and thermal expansion from the potential energy well curve.',
+${qa('5 m', '8. Explain the physical origin of melting point, elastic modulus, and thermal expansion from the potential energy well curve.',
   `<p>From the interatomic potential energy curve $E_N(r) = E_A(r) + E_R(r)$:</p>
    <ol>
      <li><b>Melting Point ($T_m$):</b> Governed by the <b>depth of the energy well ($E_0$)</b>. $E_0$ is the energy required to pull atoms apart to infinity. Deep wells require higher thermal energy ($kT_m$) to disrupt the solid state, leading to higher melting points.</li>
@@ -5092,7 +5237,7 @@ ${qa('5 m', '7. Explain the physical origin of melting point, elastic modulus, a
      <li><b>Thermal Expansion ($\\alpha_l$):</b> Governed by the <b>asymmetry (anharmonicity)</b> of the energy well. Because repulsion rises much steeper than attraction, thermal vibration midpoints shift outward to larger mean separations $\\bar{r}$ as temperature increases. A hypothetical symmetric well would have $\\alpha_l = 0$.</li>
    </ol>`)}
 
-${qa('5 m', '8. Calculate the percent ionic character (%IC) of Ga–As and Ti–O bonds given Pauling electronegativities: X_Ga = 1.6, X_As = 2.0, X_Ti = 1.5, X_O = 3.5.',
+${qa('5 m', '9. Calculate the percent ionic character (%IC) of Ga–As and Ti–O bonds given Pauling electronegativities: X_Ga = 1.6, X_As = 2.0, X_Ti = 1.5, X_O = 3.5.',
   `<p><b>Pauling formula:</b> $\\%\\mathrm{IC} = \\{1 - \\exp[-0.25 (X_A - X_B)^2]\\} \\times 100\\%$</p>
    <p><b>For Ga–As:</b></p>
    $$\\Delta X = |1.6 - 2.0| = 0.40 \\implies (\\Delta X)^2 = 0.16$$
@@ -5103,7 +5248,7 @@ ${qa('5 m', '8. Calculate the percent ionic character (%IC) of Ga–As and Ti–
    $$\\%\\mathrm{IC} = \\{1 - \\exp[-0.25(4.0)]\\} \\times 100\\% = \\{1 - \\exp(-1.0)\\} \\times 100\\% = (1 - 0.3679) \\times 100\\% = 63.2\\%$$
    <p>TiO₂ is <b>$63.2\\%$ ionic</b> and <b>$36.8\\%$ covalent</b> (predominantly ionic ceramic).</p>`)}
 
-${qa('5 m', '9. Contrast optical microscopy, SEM, and TEM with respect to illumination source, resolution limit, and specimen preparation.',
+${qa('5 m', '10. Contrast optical microscopy, SEM, and TEM with respect to illumination source, resolution limit, and specimen preparation.',
   `<div class="scroll-x"><table class="ref">
      <tr><th>Feature</th><th>Optical Microscope (OM)</th><th>Scanning Electron Microscope (SEM)</th><th>Transmission Electron Microscope (TEM)</th></tr>
      <tr><td><b>Source</b></td><td>Visible light beam</td><td>Focused electron beam</td><td>Transmitted electron beam</td></tr>
@@ -5113,9 +5258,18 @@ ${qa('5 m', '9. Contrast optical microscopy, SEM, and TEM with respect to illumi
      <tr><td><b>Features</b></td><td>Grains, phase boundaries</td><td>3D topography, fracture surfaces, depth of field</td><td>Dislocations, stacking faults, atomic columns</td></tr>
    </table></div>`)}
 
+${qa('5 m', '11. Describe bulk or volume defects in solid materials and discuss how they affect mechanical strength.',
+  `<p><b>Volume defects</b> are macroscopic 3-dimensional imperfections in solids:</p>
+   <ul>
+     <li><b>Pores / Porosity:</b> Voids caused by entrapped gas or incomplete sintering. They reduce the load-bearing cross section and act as stress concentration sites.</li>
+     <li><b>Microcracks:</b> Sharp internal fractures created by thermal or mechanical stresses. A crack of half-length $a$ and tip radius $\rho_t$ amplifies local stress by $\sigma_m = 2\sigma_0\sqrt{a/\rho_t}$. Because the crack tip radius is atomically sharp ($\rho_t \to 0$), local stress easily exceeds cohesive bond strength, causing brittle failure.</li>
+     <li><b>Foreign Inclusions:</b> Nonmetallic oxide, sulfide, or silicate particles trapped during processing that serve as stress risers and fatigue crack nucleation sites.</li>
+     <li><b>Shrinkage Cavities:</b> Internal voids formed due to volumetric shrinkage during molten metal solidification.</li>
+   </ul>`)}
+
 ${secband('C', 'Essay Question · Answer 1 question · 10 marks')}
 
-${qa('10 m', '10. Give a comprehensive account of crystal defects. Classify them by dimensionality with diagrams, and explain the thermodynamic origin of vacancies and the role of dislocations in plastic deformation.',
+${qa('10 m', '12. Give a comprehensive account of crystal defects. Classify them by dimensionality with diagrams, and explain the thermodynamic origin of vacancies and the role of dislocations in plastic deformation.',
   `<p><b>1. Classification of Imperfections:</b></p>
    <ul>
      <li><b>0-D (Point defects):</b> Vacancy (missing atom), self-interstitial (crowded extra atom), substitutional solute (replaces host atom), interstitial solute (fits in void).</li>
@@ -5208,6 +5362,7 @@ ${tp('Core Equations to Write Cold')}
   <tr><td><b>Composition Conversion (wt% to at%)</b></td><td>$C'_1 = \\frac{C_1 A_2}{C_1 A_2 + C_2 A_1} \\times 100\\%$</td><td>$C_1 + C_2 = 100\\%$</td></tr>
   <tr><td><b>ASTM Grain Size Intercept</b></td><td>$\\ell = \\frac{L_T}{P \\cdot M}, \\quad G = -6.6457 \\log_{10}(\\ell) - 3.298$</td><td>$\\ell$ in mm; $n_{100\\times} = 2^{G-1}$</td></tr>
   <tr><td><b>Tilt Boundary Misorientation</b></td><td>$\\theta = \\frac{b}{D}$</td><td>$b$ = Burgers vector, $D$ = dislocation spacing</td></tr>
+  <tr><td><b>Hall-Petch Equation</b></td><td>$\\sigma_y = \\sigma_0 + k_y d^{-1/2}$</td><td>$d$ = grain diameter; breaks down below ~10 nm (Inverse Hall-Petch)</td></tr>
 </table></div>
 
 ${tp('Common Pitfalls Where Marks Get Lost')}
@@ -5534,14 +5689,32 @@ const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 function rng(seed){let a=seed>>>0||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
   t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 
-/* ── MathJax: typeset only when it is ready; queue until then ── */
-function mj(node,then){
-  const run=()=>{try{const M=window.MathJax;const p=node?M.typesetPromise([node]):M.typesetPromise();
-      p.then(()=>then&&then()).catch(()=>then&&then());}catch(e){then&&then();}};
-  if(window.__mjReady&&window.MathJax&&window.MathJax.typesetPromise)run();
-  else (window.__mjQueue=window.__mjQueue||[]).push(run);
+/* ── Native Math formatting: formats math in DOM node synchronously ── */
+function formatMathIn(node) {
+  if (!node) return;
+  if (typeof node === 'string') return typeof formatMathHtml === 'function' ? formatMathHtml(node) : node;
+  const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null, false);
+  const toProcess = [];
+  let n;
+  while (n = walker.nextNode()) {
+    if (n.nodeValue && n.nodeValue.indexOf('$') !== -1) toProcess.push(n);
+  }
+  toProcess.forEach(textNode => {
+    const p = textNode.parentNode;
+    if (!p || p.nodeName === 'SCRIPT' || p.nodeName === 'STYLE') return;
+    const formatted = typeof formatMathHtml === 'function' ? formatMathHtml(textNode.nodeValue) : textNode.nodeValue;
+    if (formatted !== textNode.nodeValue) {
+      const span = document.createElement('span');
+      span.innerHTML = formatted;
+      p.replaceChild(span, textNode);
+    }
+  });
 }
-function mjClear(node){try{if(window.__mjReady)window.MathJax.typesetClear([node]);}catch(e){}}
+function mj(node, then){
+  if (node) formatMathIn(node);
+  if (then) then();
+}
+function mjClear(node){}
 
 /* ── palette read from CSS custom properties at draw time (theme-aware) ── */
 let C={};
@@ -5797,10 +5970,11 @@ function setupFig(cv){
     cv.width=Math.round(cssW*dpr);cv.height=Math.round(cssH*dpr);cv.style.height=cssH+'px';
     cv.getContext('2d').setTransform(dpr,0,0,dpr,0,0);rec.W=cssW;rec.H=cssH;render();}
   function render(){if(!rec.W)return;readPalette();const ctx=cv.getContext('2d');
+    ctx.clearRect(0,0,rec.W,rec.H);
     ctx.save();try{F.draw(ctx,rec.W,rec.H,st);}catch(e){if(!warned){console.error('figure',name,e);warned=true;}}ctx.restore();}
   rec.size=size;rec.render=render;
   if(F.chips||F.steps||F.anim){
-    figBar(wrap,F,st,()=>{if(F.resetOnChange){st.t=0;st.memo={};}if(typeof F.ar==='function')size();else render();},(mk)=>{
+    figBar(wrap,F,st,()=>{if(F.resetOnChange!==false){st.t=0;st.memo={};}if(typeof F.ar==='function')size();else render();},(mk)=>{
       if(!F.anim)return;
       const play=mk(st.playing?'❚❚':'▶',st.playing?'Pause':'Play',()=>{st.playing=!st.playing;play.textContent=st.playing?'❚❚':'▶';play.title=st.playing?'Pause':'Play';});
       mk('↺','Restart',()=>{st.t=0;st.memo={};if(!st.playing){st.playing=true;play.textContent='❚❚';}render();});
@@ -5894,48 +6068,98 @@ function setup3D(cv){
   });
   if(spec.steps)setTimeout(()=>{const s=spec.steps[0];if(st._cap)st._cap.innerHTML='<b>step 1/'+spec.steps.length+'</b>'+(typeof s==='function'?s(st):s);
     const n=wrap.querySelector('.figbar button.step');if(n)n.classList.add('on');},0);
-  /* pointer + touch: smooth 360° orbit with pointer capture */
+  /* pointer + touch: smooth 360° orbit with pointer capture & full touch fallback */
   let drag=false,lx=0,ly=0,pid=null,pinch=0;
   cv.style.touchAction='none';
 
-  cv.addEventListener('pointerdown',e=>{
-    if(e.pointerType==='touch'&&e.isPrimary===false)return;
-    drag=true;pid=e.pointerId;lx=e.clientX;ly=e.clientY;
-    st.auto=false;
-    try{cv.setPointerCapture(e.pointerId);}catch(_){}
-  });
+  function onDragStart(cx, cy) {
+    drag = true;
+    lx = cx;
+    ly = cy;
+    st.auto = false;
+  }
 
-  cv.addEventListener('pointermove',e=>{
-    if(!drag||e.pointerId!==pid)return;
-    e.preventDefault();
-    const dx=e.clientX-lx,dy=e.clientY-ly;
-    st.yaw+=dx*0.011;
-    st.pitch=clamp(st.pitch+dy*0.011,-1.45,1.45);
-    lx=e.clientX;ly=e.clientY;
+  function onDragMove(cx, cy) {
+    if (!drag) return;
+    const dx = cx - lx, dy = cy - ly;
+    st.yaw += dx * 0.011;
+    st.pitch = clamp(st.pitch + dy * 0.011, -1.45, 1.45);
+    lx = cx;
+    ly = cy;
     draw();
+  }
+
+  function onDragEnd() {
+    drag = false;
+    pinch = 0;
+  }
+
+  cv.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch' && e.isPrimary === false) return;
+    pid = e.pointerId;
+    onDragStart(e.clientX, e.clientY);
+    try { cv.setPointerCapture(e.pointerId); } catch (_) {}
   });
 
-  const end=e=>{
-    if(e&&e.pointerId&&e.pointerId!==pid)return;
-    drag=false;
-    if(pid!==null){
-      try{cv.releasePointerCapture(pid);}catch(_){}
-      pid=null;
+  cv.addEventListener('pointermove', e => {
+    if (!drag || (pid !== null && e.pointerId !== pid)) return;
+    onDragMove(e.clientX, e.clientY);
+  });
+
+  const end = e => {
+    if (e && e.pointerId && pid !== null && e.pointerId !== pid) return;
+    if (pid !== null) {
+      try { cv.releasePointerCapture(pid); } catch (_) {}
+      pid = null;
     }
+    onDragEnd();
   };
-  cv.addEventListener('pointerup',end);
-  cv.addEventListener('pointercancel',end);
-  cv.addEventListener('lostpointercapture',end);
+  cv.addEventListener('pointerup', end);
+  cv.addEventListener('pointercancel', end);
+
+  /* Touch fallback (essential for mobile Chrome / WebViews where pointer capture can be lost) */
+  cv.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      pid = null;
+      onDragStart(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2) {
+      drag = false;
+      st.auto = false;
+      pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    }
+  }, { passive: true });
+
+  cv.addEventListener('touchmove', e => {
+    if (e.touches.length === 1 && drag) {
+      if (e.cancelable) e.preventDefault();
+      onDragMove(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2 && pinch) {
+      if (e.cancelable) e.preventDefault();
+      const d2 = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      st.zoom = clamp(st.zoom * (d2 / pinch), 0.5, 2.8);
+      pinch = d2;
+      draw();
+    }
+  }, { passive: false });
+
+  cv.addEventListener('touchend', e => {
+    if (e.touches.length === 0) {
+      onDragEnd();
+    } else if (e.touches.length === 1) {
+      onDragStart(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  });
+  cv.addEventListener('touchcancel', () => { onDragEnd(); });
 
   /* the wheel scrolls the page; ctrl/⌘ + wheel (and a trackpad pinch) zooms */
-  cv.addEventListener('wheel',e=>{if(!e.ctrlKey&&!e.metaKey)return;e.preventDefault();st.auto=false;
-    st.zoom=clamp(st.zoom*(e.deltaY>0?.92:1.08),.5,2.8);draw();},{passive:false});
-  cv.addEventListener('touchstart',e=>{if(e.touches.length===2){drag=false;st.auto=false;
-    pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}},{passive:true});
-  cv.addEventListener('touchmove',e=>{if(e.touches.length===2&&pinch){e.preventDefault();
-    const d2=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-    st.zoom=clamp(st.zoom*(d2/pinch),.5,2.8);pinch=d2;draw();}},{passive:false});
-  cv.addEventListener('touchend',()=>{pinch=0;});
+  cv.addEventListener('wheel', e => {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    st.auto = false;
+    st.zoom = clamp(st.zoom * (e.deltaY > 0 ? 0.92 : 1.08), 0.5, 2.8);
+    draw();
+  }, { passive: false });
+
   live3D.push(rec);if(figIO)figIO.observe(cv);if(figRO)figRO.observe(cv);else window.addEventListener('resize',debounce(size,160));
   size();return rec;
 }
@@ -6352,20 +6576,20 @@ MODELS.nacl=()=>{const balls=[],bonds=[],pts=[];
   return {balls,bonds,faces:[],labels:[{p:[.72,.72,-.6],t:'Na⁺',col:'pos',sz:11},{p:[.72,.72,.6],t:'Cl⁻',col:'neg',sz:11}]};};
 V3D.nacl={model:'nacl',ar:.66};
 /* ice Ih: oxygens on a wurtzite-type net (c/a = √(8/3), u = 3/8), each O–O link one hydrogen bond */
-MODELS.ice=opt=>{const a=1,c=a*Math.sqrt(8/3),u=3/8;const A=[a,0,0],B=[-a/2,a*Math.sqrt(3)/2,0],Cc=[0,0,c];
-  const basis=[[0,0,0],[1/3,2/3,.5],[0,0,u],[1/3,2/3,.5+u]];const O=[];
-  for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)for(let k=-1;k<=1;k++)basis.forEach(b=>{const f=[b[0]+i,b[1]+j,b[2]+k];
-    const p=V.add(V.add(V.mul(A,f[0]),V.mul(B,f[1])),V.mul(Cc,f[2]));const q=[p[0],p[2]-c*.55,p[1]];if(Math.hypot(q[0],q[2])<1.55&&Math.abs(q[1])<1.25)O.push(q);});
-  const dOO=u*c,edges=[];for(let i=0;i<O.length;i++)for(let j=i+1;j<O.length;j++)if(Math.abs(V.len(V.sub(O[i],O[j]))-dOO)<.03)edges.push([i,j]);
-  const out=O.map(()=>0),balls=[],bonds=[];O.forEach(p=>balls.push({c:p,r:.13,col:'wall'}));
-  edges.forEach(([i,j])=>{let d=out[i]<2&&(out[j]>=out[i]||out[j]>=2)?i:out[j]<2?j:i;out[d]++;const o=d===i?j:i;
-    const hpos=V.add(O[d],V.mul(V.sub(O[o],O[d]),.36));
-    if(opt.h!==false)balls.push({c:hpos,r:.06,col:'neg'});
-    bonds.push({a:O[d],b:hpos,col:'neg',w:2.6});bonds.push({a:hpos,b:O[o],col:'rule',w:1.2,dash:[3,3]});});
-  return {balls,bonds,faces:[],labels:[{p:[0,1.5,0],t:'open hexagonal channels',col:'ink',sz:11}]};};
-V3D.ice={model:'ice',ar:.72,pitch:.95,yaw:.1,opt:{h:true},chips:[{label:'show hydrogens',set:{h:true},toggle:true}]};
+MODELS.ice = (opt = {}) => { const a = 1, c = a * Math.sqrt(8/3), u = 3/8; const A = [a, 0, 0], B = [-a/2, a * Math.sqrt(3)/2, 0], Cc = [0, 0, c];
+  const basis = [[0, 0, 0], [1/3, 2/3, .5], [0, 0, u], [1/3, 2/3, .5 + u]]; const O = [];
+  for (let i = -2; i <= 2; i++) for (let j = -2; j <= 2; j++) for (let k = -1; k <= 1; k++) basis.forEach(b => { const f = [b[0] + i, b[1] + j, b[2] + k];
+    const p = V.add(V.add(V.mul(A, f[0]), V.mul(B, f[1])), V.mul(Cc, f[2])); const q = [p[0], p[2] - c * .55, p[1]]; if (Math.hypot(q[0], q[2]) < 1.55 && Math.abs(q[1]) < 1.25) O.push(q); });
+  const dOO = u * c, edges = []; for (let i = 0; i < O.length; i++) for (let j = i + 1; j < O.length; j++) if (Math.abs(V.len(V.sub(O[i], O[j])) - dOO) < .03) edges.push([i, j]);
+  const out = O.map(() => 0), balls = [], bonds = []; O.forEach(p => balls.push({ c: p, r: .13, col: 'wall' }));
+  edges.forEach(([i, j]) => { let d = out[i] < 2 && (out[j] >= out[i] || out[j] >= 2) ? i : out[j] < 2 ? j : i; out[d]++; const o = d === i ? j : i;
+    const hpos = V.add(O[d], V.mul(V.sub(O[o], O[d]), .36));
+    if (opt.h !== false) balls.push({ c: hpos, r: .06, col: 'neg' });
+    bonds.push({ a: O[d], b: hpos, col: 'neg', w: 2.6 }); bonds.push({ a: hpos, b: O[o], col: 'rule', w: 1.2, dash: [3, 3] }); });
+  return { balls, bonds, faces: [], labels: [{ p: [0, 1.5, 0], t: 'open hexagonal channels', col: 'ink', sz: 11 }] }; };
+V3D.ice = { model: 'ice', ar: .72, pitch: .95, yaw: .1, opt: { h: true }, chips: [{ label: 'show hydrogens', set: { h: true }, toggle: true }] };
 /* the bonding tetrahedron / material-type tetrahedron (Fig 2.25) */
-MODELS.tetra=opt=>{const v={cov:[0,1.05,0],met:[-.95,-.45,-.45],ion:[.95,-.45,-.45],vdw:[0,-.45,.95]};
+MODELS.tetra = (opt = {}) => { const v = { cov: [0, 1.05, 0], met: [-.95, -.45, -.45], ion: [.95, -.45, -.45], vdw: [0, -.45, .95] };
   const bonds=[],balls=[],labels=[];const E=[['cov','met'],['cov','ion'],['met','ion'],['cov','vdw'],['met','vdw'],['ion','vdw']];
   E.forEach(([p,q])=>bonds.push({a:v[p],b:v[q],col:'rule',w:1.6}));
   const col={cov:'neg',met:'pos',ion:'blue',vdw:'green'};Object.keys(v).forEach(k=>balls.push({c:v[k],r:.07,col:col[k]}));
@@ -7285,7 +7509,7 @@ FIGS.grainsize = {
 /* ── 3D Crystal Models for Module II ── */
 
 /* FCC Interstitial Sites: Octahedral at center & edge centers, Tetrahedral inside (Callister Fig 4.3a) */
-MODELS.fcc_interstitial = opt => {
+MODELS.fcc_interstitial = (opt = {}) => {
   const balls = [], bonds = [], labels = [];
   const T = p => T3(p);
 
@@ -7700,9 +7924,9 @@ const recordQuiz = (key, val) => {
 function widgetOMR(box, d, key) {
   const letters = ['A', 'B', 'C', 'D'], N = d.qs.length, long = N > 12;
   const body = '<div class="omr"><div class="rollrow">Answer sheet <i></i><i></i><i></i><i></i> fill one bubble per question</div>' +
-    d.qs.map((q, i) => '<div class="q" data-q="' + i + '"><span class="qn">' + String(i + 1).padStart(2, '0') + '</span><span class="qt">' + q.q + '</span>' +
-      '<div class="opts">' + q.o.map((o, j) => '<div class="opt" data-j="' + j + '"><span class="bub">' + letters[j] + '</span><span>' + o + '</span></div>').join('') + '</div>' +
-      (q.why ? '<div class="why">' + q.why + '</div>' : '') + '</div>').join('') + '</div>';
+    d.qs.map((q, i) => '<div class="q" data-q="' + i + '"><span class="qn">' + String(i + 1).padStart(2, '0') + '</span><span class="qt">' + (typeof formatMathHtml==='function'?formatMathHtml(q.q):q.q) + '</span>' +
+      '<div class="opts">' + q.o.map((o, j) => '<div class="opt" data-j="' + j + '"><span class="bub">' + letters[j] + '</span><span>' + (typeof formatMathHtml==='function'?formatMathHtml(o):o) + '</span></div>').join('') + '</div>' +
+      (q.why ? '<div class="why">' + (typeof formatMathHtml==='function'?formatMathHtml(q.why):q.why) + '</div>' : '') + '</div>').join('') + '</div>';
 
   const u = shellW(box, 'OMR · ' + N + ' questions', d.title, body,
     '<button class="btn primary" data-a="mark">Submit sheet</button><button class="btn" data-a="reset">Clear</button>' +
@@ -7807,8 +8031,8 @@ function widgetCards(box, d, key) {
     const k = order[i % order.length], card = d.list[k];
     flipped = false;
     c.classList.remove('flip', 'out-r', 'out-l');
-    $('.front', c).innerHTML = face(card.f, 'front · tap to flip') + '<span class="hint">swipe → got it · ← again</span>';
-    $('.back', c).innerHTML = face(card.b, 'back');
+    $('.front', c).innerHTML = face(typeof formatMathHtml==='function'?formatMathHtml(card.f):card.f, 'front · tap to flip') + '<span class="hint">swipe → got it · ← again</span>';
+    $('.back', c).innerHTML = face(typeof formatMathHtml==='function'?formatMathHtml(card.b):card.b, 'back');
     if (anim) {
       c.classList.remove('in');
       void c.offsetWidth;
@@ -8347,7 +8571,7 @@ function renderApp() {
         fullBody += cards(st.title + ' — Flashcards', window.CARDS[sid]);
       }
 
-      tmp.innerHTML = fullBody;
+      tmp.innerHTML = typeof formatMathHtml === 'function' ? formatMathHtml(fullBody) : fullBody;
       let sink = ubodyIn;
 
       [...tmp.childNodes].forEach(n => {
@@ -8701,7 +8925,7 @@ function renderReview() {
   const host = $('#revbody');
   if (!host || !window.REVIEW) return;
   revDone = true;
-  host.innerHTML = window.REVIEW;
+  host.innerHTML = typeof formatMathHtml === 'function' ? formatMathHtml(window.REVIEW) : window.REVIEW;
   wireLaddersIn(host);
   wireChecksIn(host);
   hydrateWidgetsIn(host);

@@ -22,9 +22,9 @@ const recordQuiz = (key, val) => {
 function widgetOMR(box, d, key) {
   const letters = ['A', 'B', 'C', 'D'], N = d.qs.length, long = N > 12;
   const body = '<div class="omr"><div class="rollrow">Answer sheet <i></i><i></i><i></i><i></i> fill one bubble per question</div>' +
-    d.qs.map((q, i) => '<div class="q" data-q="' + i + '"><span class="qn">' + String(i + 1).padStart(2, '0') + '</span><span class="qt">' + q.q + '</span>' +
-      '<div class="opts">' + q.o.map((o, j) => '<div class="opt" data-j="' + j + '"><span class="bub">' + letters[j] + '</span><span>' + o + '</span></div>').join('') + '</div>' +
-      (q.why ? '<div class="why">' + q.why + '</div>' : '') + '</div>').join('') + '</div>';
+    d.qs.map((q, i) => '<div class="q" data-q="' + i + '"><span class="qn">' + String(i + 1).padStart(2, '0') + '</span><span class="qt">' + (typeof formatMathHtml==='function'?formatMathHtml(q.q):q.q) + '</span>' +
+      '<div class="opts">' + q.o.map((o, j) => '<div class="opt" data-j="' + j + '"><span class="bub">' + letters[j] + '</span><span>' + (typeof formatMathHtml==='function'?formatMathHtml(o):o) + '</span></div>').join('') + '</div>' +
+      (q.why ? '<div class="why">' + (typeof formatMathHtml==='function'?formatMathHtml(q.why):q.why) + '</div>' : '') + '</div>').join('') + '</div>';
 
   const u = shellW(box, 'OMR · ' + N + ' questions', d.title, body,
     '<button class="btn primary" data-a="mark">Submit sheet</button><button class="btn" data-a="reset">Clear</button>' +
@@ -129,8 +129,8 @@ function widgetCards(box, d, key) {
     const k = order[i % order.length], card = d.list[k];
     flipped = false;
     c.classList.remove('flip', 'out-r', 'out-l');
-    $('.front', c).innerHTML = face(card.f, 'front · tap to flip') + '<span class="hint">swipe → got it · ← again</span>';
-    $('.back', c).innerHTML = face(card.b, 'back');
+    $('.front', c).innerHTML = face(typeof formatMathHtml==='function'?formatMathHtml(card.f):card.f, 'front · tap to flip') + '<span class="hint">swipe → got it · ← again</span>';
+    $('.back', c).innerHTML = face(typeof formatMathHtml==='function'?formatMathHtml(card.b):card.b, 'back');
     if (anim) {
       c.classList.remove('in');
       void c.offsetWidth;

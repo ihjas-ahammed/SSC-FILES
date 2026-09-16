@@ -44,9 +44,12 @@ ${qa('2 m', '5. Define Burgers vector and state its geometric orientation relati
 ${qa('2 m', '6. Why does liquid water expand by approximately 9% upon freezing into ice?',
   `<p>In liquid water, molecules are disordered with an average coordination of $\\sim 4.5$ neighbors. In ice $I_h$, each oxygen molecule is forced into four rigid tetrahedral hydrogen bonds, forming an open hexagonal cage network with coordination of exactly $4.0$. This open cage creates hollow channels, increasing volume by $\\approx 9\\%$ and lowering density to $0.917\\mathrm{~g/cm}^3$.</p>`)}
 
+${qa('2 m', '7. What are nanocrystalline solids and why does the Inverse Hall-Petch effect occur?',
+  `<p><b>Nanocrystalline solids</b> are polycrystalline materials with average grain diameters under 100 nm (typically 5–50 nm), where 30%–50% of all atoms reside in grain boundaries. The <b>Inverse Hall-Petch effect</b> (grain softening below ~10–15 nm) occurs because grains become too small to sustain dislocation pile-ups, shifting deformation to grain boundary sliding and Coble diffusion creep.</p>`)}
+
 ${secband('B', 'Descriptive & Problem Questions · Answer any 4 questions · 5 marks each')}
 
-${qa('5 m', '7. Explain the physical origin of melting point, elastic modulus, and thermal expansion from the potential energy well curve.',
+${qa('5 m', '8. Explain the physical origin of melting point, elastic modulus, and thermal expansion from the potential energy well curve.',
   `<p>From the interatomic potential energy curve $E_N(r) = E_A(r) + E_R(r)$:</p>
    <ol>
      <li><b>Melting Point ($T_m$):</b> Governed by the <b>depth of the energy well ($E_0$)</b>. $E_0$ is the energy required to pull atoms apart to infinity. Deep wells require higher thermal energy ($kT_m$) to disrupt the solid state, leading to higher melting points.</li>
@@ -56,7 +59,7 @@ ${qa('5 m', '7. Explain the physical origin of melting point, elastic modulus, a
      <li><b>Thermal Expansion ($\\alpha_l$):</b> Governed by the <b>asymmetry (anharmonicity)</b> of the energy well. Because repulsion rises much steeper than attraction, thermal vibration midpoints shift outward to larger mean separations $\\bar{r}$ as temperature increases. A hypothetical symmetric well would have $\\alpha_l = 0$.</li>
    </ol>`)}
 
-${qa('5 m', '8. Calculate the percent ionic character (%IC) of Ga–As and Ti–O bonds given Pauling electronegativities: X_Ga = 1.6, X_As = 2.0, X_Ti = 1.5, X_O = 3.5.',
+${qa('5 m', '9. Calculate the percent ionic character (%IC) of Ga–As and Ti–O bonds given Pauling electronegativities: X_Ga = 1.6, X_As = 2.0, X_Ti = 1.5, X_O = 3.5.',
   `<p><b>Pauling formula:</b> $\\%\\mathrm{IC} = \\{1 - \\exp[-0.25 (X_A - X_B)^2]\\} \\times 100\\%$</p>
    <p><b>For Ga–As:</b></p>
    $$\\Delta X = |1.6 - 2.0| = 0.40 \\implies (\\Delta X)^2 = 0.16$$
@@ -67,7 +70,7 @@ ${qa('5 m', '8. Calculate the percent ionic character (%IC) of Ga–As and Ti–
    $$\\%\\mathrm{IC} = \\{1 - \\exp[-0.25(4.0)]\\} \\times 100\\% = \\{1 - \\exp(-1.0)\\} \\times 100\\% = (1 - 0.3679) \\times 100\\% = 63.2\\%$$
    <p>TiO₂ is <b>$63.2\\%$ ionic</b> and <b>$36.8\\%$ covalent</b> (predominantly ionic ceramic).</p>`)}
 
-${qa('5 m', '9. Contrast optical microscopy, SEM, and TEM with respect to illumination source, resolution limit, and specimen preparation.',
+${qa('5 m', '10. Contrast optical microscopy, SEM, and TEM with respect to illumination source, resolution limit, and specimen preparation.',
   `<div class="scroll-x"><table class="ref">
      <tr><th>Feature</th><th>Optical Microscope (OM)</th><th>Scanning Electron Microscope (SEM)</th><th>Transmission Electron Microscope (TEM)</th></tr>
      <tr><td><b>Source</b></td><td>Visible light beam</td><td>Focused electron beam</td><td>Transmitted electron beam</td></tr>
@@ -77,9 +80,18 @@ ${qa('5 m', '9. Contrast optical microscopy, SEM, and TEM with respect to illumi
      <tr><td><b>Features</b></td><td>Grains, phase boundaries</td><td>3D topography, fracture surfaces, depth of field</td><td>Dislocations, stacking faults, atomic columns</td></tr>
    </table></div>`)}
 
+${qa('5 m', '11. Describe bulk or volume defects in solid materials and discuss how they affect mechanical strength.',
+  `<p><b>Volume defects</b> are macroscopic 3-dimensional imperfections in solids:</p>
+   <ul>
+     <li><b>Pores / Porosity:</b> Voids caused by entrapped gas or incomplete sintering. They reduce the load-bearing cross section and act as stress concentration sites.</li>
+     <li><b>Microcracks:</b> Sharp internal fractures created by thermal or mechanical stresses. A crack of half-length $a$ and tip radius $\rho_t$ amplifies local stress by $\sigma_m = 2\sigma_0\sqrt{a/\rho_t}$. Because the crack tip radius is atomically sharp ($\rho_t \to 0$), local stress easily exceeds cohesive bond strength, causing brittle failure.</li>
+     <li><b>Foreign Inclusions:</b> Nonmetallic oxide, sulfide, or silicate particles trapped during processing that serve as stress risers and fatigue crack nucleation sites.</li>
+     <li><b>Shrinkage Cavities:</b> Internal voids formed due to volumetric shrinkage during molten metal solidification.</li>
+   </ul>`)}
+
 ${secband('C', 'Essay Question · Answer 1 question · 10 marks')}
 
-${qa('10 m', '10. Give a comprehensive account of crystal defects. Classify them by dimensionality with diagrams, and explain the thermodynamic origin of vacancies and the role of dislocations in plastic deformation.',
+${qa('10 m', '12. Give a comprehensive account of crystal defects. Classify them by dimensionality with diagrams, and explain the thermodynamic origin of vacancies and the role of dislocations in plastic deformation.',
   `<p><b>1. Classification of Imperfections:</b></p>
    <ul>
      <li><b>0-D (Point defects):</b> Vacancy (missing atom), self-interstitial (crowded extra atom), substitutional solute (replaces host atom), interstitial solute (fits in void).</li>
@@ -172,6 +184,7 @@ ${tp('Core Equations to Write Cold')}
   <tr><td><b>Composition Conversion (wt% to at%)</b></td><td>$C'_1 = \\frac{C_1 A_2}{C_1 A_2 + C_2 A_1} \\times 100\\%$</td><td>$C_1 + C_2 = 100\\%$</td></tr>
   <tr><td><b>ASTM Grain Size Intercept</b></td><td>$\\ell = \\frac{L_T}{P \\cdot M}, \\quad G = -6.6457 \\log_{10}(\\ell) - 3.298$</td><td>$\\ell$ in mm; $n_{100\\times} = 2^{G-1}$</td></tr>
   <tr><td><b>Tilt Boundary Misorientation</b></td><td>$\\theta = \\frac{b}{D}$</td><td>$b$ = Burgers vector, $D$ = dislocation spacing</td></tr>
+  <tr><td><b>Hall-Petch Equation</b></td><td>$\\sigma_y = \\sigma_0 + k_y d^{-1/2}$</td><td>$d$ = grain diameter; breaks down below ~10 nm (Inverse Hall-Petch)</td></tr>
 </table></div>
 
 ${tp('Common Pitfalls Where Marks Get Lost')}

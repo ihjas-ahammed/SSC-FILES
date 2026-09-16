@@ -17,6 +17,86 @@ const cards=(title,list)=>W('cards',{title,list});          // list: [{f,b}]
 const match=(title,pairs,o)=>W('match',Object.assign({title,pairs},o||{}));
 const fill=(title,text,o)=>W('fill',Object.assign({title,text},o||{}));  // [[answer¦alt]]
 
+/* math typography engine (zero dependencies, fast, native) */
+function cleanMath(s) {
+  if (!s) return '';
+  let m = String(s).trim();
+  m = m.replace(/^\$\$\s*/, '').replace(/\s*\$\$$/, '');
+  m = m.replace(/^\$\s*/, '').replace(/\s*\$$/, '');
+  
+  m = m.replace(/\\(?:mathrm|text)\{([^}]+)\}/g, '$1');
+  m = m.replace(/\\mathbf\{([^}]+)\}/g, '<b class="m-vec">$1</b>');
+  m = m.replace(/\\mathit\{([^}]+)\}/g, '<i>$1</i>');
+  m = m.replace(/\\boldsymbol\{([^}]+)\}/g, '<b>$1</b>');
+
+  m = m.replace(/\^\{\\circ\}\s*(?:\\mathrm\{C\}|C)?/g, '°C');
+  m = m.replace(/\^\{\\circ\}/g, '°');
+  m = m.replace(/\\circ/g, '°');
+
+  for (let i = 0; i < 4; i++) {
+    m = m.replace(/\\(?:d|t)?frac\{([^{}]+)\}\{([^{}]+)\}/g, '<span class="frac"><span class="num">$1</span><span class="den">$2</span></span>');
+  }
+  m = m.replace(/\\tfrac\s*(\d)\s*(\d)/g, '<span class="frac frac-sm"><span class="num">$1</span><span class="den">$2</span></span>');
+  m = m.replace(/\\tfrac43/g, '<span class="frac frac-sm"><span class="num">4</span><span class="den">3</span></span>');
+  m = m.replace(/\\tfrac23/g, '<span class="frac frac-sm"><span class="num">2</span><span class="den">3</span></span>');
+  m = m.replace(/\\tfrac12/g, '<span class="frac frac-sm"><span class="num">1</span><span class="den">2</span></span>');
+  m = m.replace(/\\tfrac32/g, '<span class="frac frac-sm"><span class="num">3</span><span class="den">2</span></span>');
+
+  m = m.replace(/\\sqrt\[([^\]]+)\]\{([^{}]+)\}/g, '<sup>$1</sup>√<span class="rad">$2</span>');
+  m = m.replace(/\\sqrt\{([^{}]+)\}/g, '√<span class="rad">$1</span>');
+  m = m.replace(/\\sqrt(\d)/g, '√$1');
+
+  m = m.replace(/\\xrightarrow\{([^}]+)\}/g, ' ⎯⎯ $1 ⎯⎯→ ');
+
+  m = m.replace(/\^\{([^{}]+)\}/g, (match, p1) => '<sup>' + p1.replace(/\+/g, '⁺').replace(/\-/g, '⁻') + '</sup>');
+  m = m.replace(/\^([0-9\+\-]+)/g, '<sup>$1</sup>');
+  m = m.replace(/\^2/g, '²').replace(/\^3/g, '³').replace(/\^4/g, '⁴').replace(/\^8/g, '⁸');
+
+  m = m.replace(/_\{([^{}]+)\}/g, '<sub>$1</sub>');
+  m = m.replace(/_([a-zA-Z0-9])/g, '<sub>$1</sub>');
+
+  m = m.replace(/\\alpha/g, 'α').replace(/\\beta/g, 'β').replace(/\\gamma/g, 'γ')
+       .replace(/\\delta/g, 'δ').replace(/\\Delta/g, 'Δ').replace(/\\varepsilon/g, 'ε')
+       .replace(/\\epsilon/g, 'ε').replace(/\\theta/g, 'θ').replace(/\\Theta/g, 'Θ')
+       .replace(/\\lambda/g, 'λ').replace(/\\Lambda/g, 'Λ').replace(/\\mu/g, 'μ')
+       .replace(/\\nu/g, 'ν').replace(/\\pi/g, 'π').replace(/\\rho/g, 'ρ')
+       .replace(/\\sigma/g, 'σ').replace(/\\tau/g, 'τ').replace(/\\phi/g, 'φ')
+       .replace(/\\psi/g, 'ψ').replace(/\\omega/g, 'ω').replace(/\\Omega/g, 'Ω')
+       .replace(/\\ell/g, 'ℓ').replace(/\\hbar/g, 'ħ').replace(/\\hslash/g, 'ħ')
+       .replace(/\\AA/g, 'Å');
+
+  m = m.replace(/\\times/g, '×').replace(/\\cdot/g, '·').replace(/\\pm/g, '±').replace(/\\mp/g, '∓')
+       .replace(/\\approx/g, '≈').replace(/\\sim/g, '∼').replace(/\\propto/g, '∝')
+       .replace(/\\le(?:q)?/g, '≤').replace(/\\ge(?:q)?/g, '≥').replace(/\\ll/g, '≪').replace(/\\gg/g, '≫')
+       .replace(/\\neq/g, '≠').replace(/\\perp/g, '⟂').replace(/\\parallel/g, '∥')
+       .replace(/\\partial/g, '∂').replace(/\\infty/g, '∞')
+       .replace(/\\to|\\rightarrow|\\longrightarrow/g, '→')
+       .replace(/\\implies|\\Longrightarrow/g, '⟹')
+       .replace(/\\iff|\\Longleftrightarrow/g, '⟺')
+       .replace(/\\langle/g, '⟨').replace(/\\rangle/g, '⟩')
+       .replace(/\\lt/g, '&lt;').replace(/\\gt/g, '&gt;');
+
+  m = m.replace(/\\left\(/g, '(').replace(/\\right\)/g, ')')
+       .replace(/\\left\[/g, '[').replace(/\\right\]/g, ']')
+       .replace(/\\left\\\{/g, '{').replace(/\\right\\\}/g, '}')
+       .replace(/\\\{/g, '{').replace(/\\\}/g, '}')
+       .replace(/\\%/g, '%');
+
+  m = m.replace(/\\qquad/g, '&emsp;&emsp;').replace(/\\quad/g, '&emsp;')
+       .replace(/\\,/g, '&thinsp;').replace(/\\;/g, '&ensp;').replace(/\\ /g, '&nbsp;')
+       .replace(/~/g, '&nbsp;');
+
+  m = m.replace(/\\([a-zA-Z]+)/g, '$1');
+  return m;
+}
+
+function formatMathHtml(str) {
+  if (!str || typeof str !== 'string') return str;
+  str = str.replace(/\$\$([\s\S]*?)\$\$/g, (match, p1) => `<div class="m-eq">${cleanMath(p1)}</div>`);
+  str = str.replace(/\$([^\$\n\r]+?)\$/g, (match, p1) => `<span class="m-in">${cleanMath(p1)}</span>`);
+  return str;
+}
+
 /* structure */
 const tp=t=>`<div class="topic"><h3>${t}</h3></div>`;
 const gist=t=>`<div class="gist"><span class="k">in one line</span>${t}</div>`;
@@ -27,7 +107,7 @@ const note=(head,h)=>`<div class="note"><div class="nh">${head}</div>${h}</div>`
 const carry=(have,fresh)=>`<div class="carry"><div><div class="ch">you carry over from +2</div><ul>${have.map(x=>`<li>${x}</li>`).join('')}</ul></div>
   <div><div class="ch">new ground here</div><ul>${fresh.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`;
 const defn=(term,text)=>`<div class="defn"><b>${term}</b> — ${text}</div>`;
-const eq=(tex,tag)=>`<div class="eq">$$${tex}${tag?`\\qquad\\mathrm{(${String(tag).replace(/ /g,'~')})}`:''}$$</div>`;
+const eq=(tex,tag)=>`<div class="m-eq">${cleanMath(tex)}${tag?`&emsp;&emsp;<span class="eq-tag">(${cleanMath(tag)})</span>`:''}</div>`;
 const src=t=>`<p class="src">${t}</p>`;
 const tbl=(head,rows,o)=>{o=o||{};const num=o.num||[];
   return `<div class="scroll-x"><table class="ref"><tr>${head.map((h,i)=>`<th${num.includes(i)?' class="num"':''}>${h}</th>`).join('')}</tr>`+
@@ -37,7 +117,7 @@ const grid=(items)=>`<div class="grid2">${items.map(([t,b])=>`<div><b>${t}</b>${
 /* derivation ladder: reveal one rung at a time */
 function lad(title,rungs){
   const body=rungs.map((r,i)=>`<div class="rung${i?' hidden':''}"><span class="peek">tap to reveal ▸</span>
-    ${r.why?`<div class="why">${r.why}</div>`:''}<div class="math">${r.m}</div></div>`).join('');
+    ${r.why?`<div class="why">${formatMathHtml(r.why)}</div>`:''}<div class="m-eq">${cleanMath(r.m)}</div></div>`).join('');
   return `<div class="ladder"><div class="lh">${title}<span class="li">derivation</span></div>${body}
     <div class="lfoot"><button class="btn primary reveal-next">Reveal next step</button><button class="btn reveal-all">Show all</button>
     <span class="mini">Guess the next line before you tap — that guess is what makes it stick.</span></div></div>`;

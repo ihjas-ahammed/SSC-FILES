@@ -147,7 +147,7 @@ function renderApp() {
         fullBody += cards(st.title + ' — Flashcards', window.CARDS[sid]);
       }
 
-      tmp.innerHTML = fullBody;
+      tmp.innerHTML = typeof formatMathHtml === 'function' ? formatMathHtml(fullBody) : fullBody;
       let sink = ubodyIn;
 
       [...tmp.childNodes].forEach(n => {
@@ -501,7 +501,7 @@ function renderReview() {
   const host = $('#revbody');
   if (!host || !window.REVIEW) return;
   revDone = true;
-  host.innerHTML = window.REVIEW;
+  host.innerHTML = typeof formatMathHtml === 'function' ? formatMathHtml(window.REVIEW) : window.REVIEW;
   wireLaddersIn(host);
   wireChecksIn(host);
   hydrateWidgetsIn(host);

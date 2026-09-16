@@ -1,0 +1,738 @@
+[
+  {
+    "id": "mod-1",
+    "title": "Module I: Getting Started with LaTeX",
+    "hours": 8,
+    "marks": "Min 10",
+    "reference": "Text 1: LaTeX Tutorial, A Primer (Tutorials I\u2013V)",
+    "units": [
+      {
+        "id": "u1",
+        "unitNumber": 1,
+        "title": "The Basics (Tutorial I)",
+        "subtopics": [
+          {
+            "id": "m1-u1-1",
+            "title": "Origins, Philosophy & Architecture of TeX and LaTeX",
+            "tags": [
+              "Knuth",
+              "Lamport",
+              "TeX82",
+              "LaTeX2e",
+              "WYSIWYM",
+              "Distributions"
+            ],
+            "summary": "Donald Knuth created TeX (1977-82, version converges to \u03c0) for mathematical typesetting. Leslie Lamport built LaTeX (macros for structural markup). WYSIWYM vs WYSIWYG. Distributions: TeX Live, MiKTeX, MacTeX, Overleaf.",
+            "syntax": "% Compile pipeline: \n% document.tex -> pdflatex -> document.pdf (+ .log, .aux)",
+            "recallQ": "Who created TeX and LaTeX? What is the fundamental difference between WYSIWYG (Word) and WYSIWYM (LaTeX)?",
+            "recallA": "TeX was created by Donald E. Knuth (1977); LaTeX was developed as a macro layer by Leslie Lamport (1985). In WYSIWYG, you style text visually while typing; in WYSIWYM ('what you see is what you mean'), you describe structural roles (chapters, sections, theorems) in plain text and let the typesetting engine handle layout algorithms."
+          },
+          {
+            "id": "m1-u1-2",
+            "title": "Minimal Skeleton Document Structure",
+            "tags": [
+              "\\documentclass",
+              "preamble",
+              "\\begin{document}",
+              "body"
+            ],
+            "summary": "Every document starts with \\documentclass{...}, followed by the preamble (global settings/packages), then \\begin{document} ... \\end{document}. Everything after \\end{document} is ignored.",
+            "syntax": "\\documentclass{article}\n% Preamble (packages, macros)\n\\begin{document}\nHello, world!\n\\end{document}",
+            "recallQ": "What are the two major divisions of any LaTeX document source file, and what demarcates the start and end of printable content?",
+            "recallA": "1. Preamble (between \\documentclass and \\begin{document}) for configurations and package loading. 2. Body (enclosed between \\begin{document} and \\end{document}) containing printable text. Code following \\end{document} is discarded by the compiler."
+          },
+          {
+            "id": "m1-u1-3",
+            "title": "Whitespace, Line Breaks, Paragraphs & Comments",
+            "tags": [
+              "spaces",
+              "blank lines",
+              "\\par",
+              "\\\\",
+              "\\newline",
+              "~",
+              "%"
+            ],
+            "summary": "Multiple spaces collapse into one. A single line-break acts as a space. A blank line (or \\par) creates a new paragraph. \\\\ or \\newline breaks a line without starting a paragraph. ~ is a tie (unbreakable space). % begins comments.",
+            "syntax": "First sentence. % This is a comment\n\nNew paragraph begins here.\\\\\nLine broken without paragraph break.\nDr.~Knuth (never breaks across lines)",
+            "recallQ": "How does LaTeX treat multiple spaces and single line breaks? How do you prevent a line break between a title and name like 'Prof. Jones'?",
+            "recallA": "Any consecutive sequence of spaces/tabs and single line-breaks is treated as a single space. To prevent line breaks between words (e.g. 'Prof. Jones'), use the tilde tie character: 'Prof.~Jones'."
+          },
+          {
+            "id": "m1-u1-4",
+            "title": "Manual Spacing Controls & Paragraph Indentation",
+            "tags": [
+              "\\hspace",
+              "\\vspace",
+              "\\hfill",
+              "\\vfill",
+              "\\noindent",
+              "\\bigskip"
+            ],
+            "summary": "Controlling precise horizontal and vertical distances. \\hspace{length}, \\vspace{length}, \\hfill (horizontal stretch), \\vfill (vertical stretch), \\noindent (suppress paragraph indent), \\bigskip, \\medskip, \\smallskip.",
+            "syntax": "\\noindent First unindented line.\\par\n\\vspace{1cm}\nLeft side \\hfill Right side",
+            "recallQ": "How do you push two words to opposite margins on the same line, and how do you prevent the first line of a paragraph from indenting?",
+            "recallA": "Use '\\hfill' between the words ('Left\\hfill Right'). To prevent indentation on a paragraph, place '\\noindent' immediately before the paragraph text."
+          },
+          {
+            "id": "m1-u1-5",
+            "title": "The Ten Reserved Special Characters & Escapes",
+            "tags": [
+              "#",
+              "$",
+              "%",
+              "^",
+              "&",
+              "_",
+              "{",
+              "}",
+              "~",
+              "\\"
+            ],
+            "summary": "Ten characters have special syntactic meanings in TeX: # $ % ^ & _ { } ~ \\. To print them, escape with a backslash (\\#, \\$, \\%, \\&, \\_, \\{, \\}), use \\^{} and \\~{} for accents, and \\textbackslash for a literal backslash.",
+            "syntax": "\\# \\$ \\% \\& \\_ \\{ \\}\n\\^{} \\~{} \\textbackslash{}",
+            "recallQ": "Why doesn't '\\\\' print a backslash? What command must you use to print a literal '\\' character in body text?",
+            "recallA": "'\\\\' is the command for a manual line break. To print a literal backslash in running text, use '\\textbackslash{}' (or '\\texttt{\\char`\\\\}')."
+          },
+          {
+            "id": "m1-u1-6",
+            "title": "Punctuation, Typographic Quotes, Dashes & Accents",
+            "tags": [
+              "quotes",
+              "hyphen",
+              "en-dash",
+              "em-dash",
+              "\\ldots",
+              "accents"
+            ],
+            "summary": "Quotes: `` and '' produce \u201c and \u201d. Dashes: - (hyphen), -- (en-dash for number ranges: pages 10--15), --- (em-dash for parenthetical thoughts). Ellipses: \\ldots. Diacritics: \\'e (\u00e9), \\`e (\u00e8), \\^e (\u00ea), \\\"u (\u00fc), \\c{c} (\u00e7).",
+            "syntax": "``Hello,'' said the doctor --- pages 12--18.\\ldots\nNa\\\"\\i ve caf\\'e and Gar\\c{c}on",
+            "recallQ": "How do you typeset proper opening/closing double quotes, an en-dash for page ranges, and an em-dash in LaTeX?",
+            "recallA": "Opening double quotes: two backticks (``). Closing double quotes: two apostrophes (''). En-dash: two hyphens (--). Em-dash: three hyphens (---)."
+          },
+          {
+            "id": "m1-u1-7",
+            "title": "Commands, Arguments & Environment Semantics",
+            "tags": [
+              "commands",
+              "mandatory {}",
+              "optional []",
+              "environments",
+              "\\begin",
+              "\\end"
+            ],
+            "summary": "Commands start with \\. Mandatory arguments are enclosed in braces {arg}; optional arguments in brackets [opt]. Declarations switch state (e.g. \\bfseries) until the enclosing group ends. Environments delimit scope: \\begin{name} ... \\end{name}.",
+            "syntax": "\\rule[0.5ex]{2cm}{1pt}  % optional and mandatory arguments\n{\\bfseries Bold text inside scope}\n\\begin{center} Centered text \\end{center}",
+            "recallQ": "What is the syntactic difference between a mandatory and an optional argument in LaTeX commands, and what defines an environment?",
+            "recallA": "Mandatory arguments are enclosed in curly braces '{...}' and must be provided; optional arguments use square brackets '[...]' and have default values if omitted. An environment has the form '\\begin{envname} ... \\end{envname}' and encapsulates a local scope."
+          },
+          {
+            "id": "m1-u1-8",
+            "title": "Font Selection: Family, Shape, Series & Size Hierarchy",
+            "tags": [
+              "family",
+              "shape",
+              "series",
+              "size",
+              "\\textbf",
+              "\\textit",
+              "\\Huge"
+            ],
+            "summary": "NFSS font system. Family: \\textrm / \\textsf / \\texttt. Shape: \\textit (italic), \\textsl (slanted), \\textsc (small caps), \\textup (upright). Series: \\textbf (bold), \\textmd (medium). Sizes: \\tiny, \\scriptsize, \\footnotesize, \\small, \\normalsize, \\large, \\Large, \\LARGE, \\huge, \\Huge.",
+            "syntax": "\\textsf{\\textbf{\\textit{Sans Bold Italic}}}\n{\\Large Big text} and {\\Huge Massive text}",
+            "recallQ": "Distinguish between font 'family', 'shape', and 'series'. What is the difference between '\\textbf{hi}' and '{\\bfseries hi}'?",
+            "recallA": "Family = typeface design (Roman, Sans-serif, Typewriter). Shape = angle/form (Italic, Slanted, Small Caps, Upright). Series = weight/width (Bold, Medium). '\\textbf{...}' is a text command taking an argument; '{\\bfseries ...}' is a declaration switch affecting all following tokens within its curly-brace group."
+          }
+        ]
+      },
+      {
+        "id": "u2",
+        "unitNumber": 2,
+        "title": "The Documents (Tutorial II)",
+        "subtopics": [
+          {
+            "id": "m1-u2-1",
+            "title": "Standard Document Classes & Architectural Differences",
+            "tags": [
+              "article",
+              "report",
+              "book",
+              "letter",
+              "\\chapter"
+            ],
+            "summary": "article: short papers, no \\chapter command. report: longer technical reports/theses with \\chapter (starts new page, numbered 1, 2, ...). book: two-sided by default, includes \\frontmatter, \\mainmatter, \\backmatter, and \\part/\\chapter.",
+            "syntax": "\\documentclass[11pt,a4paper]{report}\n% 'article' does not support \\chapter",
+            "recallQ": "Which standard LaTeX class does NOT support the '\\chapter' command? How do 'report' and 'book' differ by default in page layout?",
+            "recallA": "'article' does not support '\\chapter' (it starts at '\\section'). 'report' defaults to single-sided printing ('oneside') without distinct frontmatter divisions, whereas 'book' defaults to two-sided printing ('twoside') and supports '\\frontmatter', '\\mainmatter', and '\\backmatter'."
+          },
+          {
+            "id": "m1-u2-2",
+            "title": "Class Options: Geometry, Columns & Typesetting Modes",
+            "tags": [
+              "10pt/11pt/12pt",
+              "a4paper",
+              "twocolumn",
+              "twoside",
+              "draft",
+              "landscape"
+            ],
+            "summary": "Options passed in square brackets to \\documentclass. Font sizes: 10pt (default), 11pt, 12pt. Paper sizes: a4paper, letterpaper. Orientation: landscape. Layout: onecolumn, twocolumn, oneside, twoside. Mode: draft (shows overfull hbox black bars), final.",
+            "syntax": "\\documentclass[12pt,a4paper,twocolumn,draft]{article}",
+            "recallQ": "What visual indication does the 'draft' class option introduce when text extends beyond the right margin margin?",
+            "recallA": "It marks overfull horizontal boxes (lines that spill into the right margin) with a thick black rectangular bar in the right margin so the author can spot spacing defects."
+          },
+          {
+            "id": "m1-u2-3",
+            "title": "Preamble Configurations & Package Management",
+            "tags": [
+              "preamble",
+              "\\usepackage",
+              "geometry",
+              "amsmath",
+              "graphicx"
+            ],
+            "summary": "The preamble is everything before \\begin{document}. Packages extend LaTeX capabilities using \\usepackage[options]{package}. Key packages: geometry (margins), graphicx (images), amsmath (advanced math), hyperref (clickable hyperlinks).",
+            "syntax": "\\usepackage[margin=1in]{geometry}\n\\usepackage{amsmath,amssymb}\n\\usepackage[colorlinks=true]{hyperref}",
+            "recallQ": "Where in the LaTeX source file must '\\usepackage' commands be placed? What happens if you put one inside the document body?",
+            "recallA": "'\\usepackage' commands must strictly be placed in the preamble (between '\\documentclass' and '\\begin{document}'). Placing '\\usepackage' inside the document body triggers a fatal compilation error ('\\usepackage before \\begin{document}')."
+          },
+          {
+            "id": "m1-u2-4",
+            "title": "Page Styles, Header/Footer Layouts & Page Numbering",
+            "tags": [
+              "\\pagestyle",
+              "\\thispagestyle",
+              "plain",
+              "empty",
+              "headings",
+              "\\pagenumbering"
+            ],
+            "summary": "\\pagestyle{style} sets headers/footers for all following pages: plain (centered footer number), empty (blank), headings (running header with section name), myheadings. \\thispagestyle{style} applies to current page only. \\pagenumbering{arabic|roman|Roman|alph|Alph} resets page number to 1.",
+            "syntax": "\\pagestyle{headings}\n\\thispagestyle{empty} % blank on title page\n\\pagenumbering{roman}  % i, ii, iii\n\\pagenumbering{arabic} % 1, 2, 3 (resets counter to 1)",
+            "recallQ": "How do you suppress headers and footers on just the title page while keeping running headers on all subsequent pages? What side-effect does '\\pagenumbering' have on the page counter?",
+            "recallA": "Use '\\pagestyle{headings}' globally and '\\thispagestyle{empty}' specifically on the title page. Whenever '\\pagenumbering{...}' is called, it automatically resets the page counter to 1."
+          },
+          {
+            "id": "m1-u2-5",
+            "title": "Document Metadata: Title Block, Authorship & Abstract",
+            "tags": [
+              "\\title",
+              "\\author",
+              "\\date",
+              "\\thanks",
+              "\\maketitle",
+              "abstract"
+            ],
+            "summary": "\\title{...}, \\author{...}, \\date{...} define metadata in preamble or body. \\thanks{...} creates footnote acknowledgments inside \\author. \\maketitle generates the formatted title block. The abstract environment creates an indented, centered summary.",
+            "syntax": "\\title{Optical Solitons\\thanks{Funded by DST}}\n\\author{A. Sharma \\and B. Patel}\n\\date{\\today}\n\\maketitle\n\\begin{abstract} Summary here... \\end{abstract}",
+            "recallQ": "How do you list multiple authors with separate affiliations in '\\author', and what command actually triggers printing the title block?",
+            "recallA": "Multiple authors are separated by the '\\and' command inside '\\author{Author 1 \\and Author 2}'. The formatted title block is printed only when '\\maketitle' is invoked in the body."
+          },
+          {
+            "id": "m1-u2-6",
+            "title": "Sectioning Hierarchy, Starred Variants & Appendices",
+            "tags": [
+              "\\part",
+              "\\chapter",
+              "\\section",
+              "\\subsection",
+              "\\paragraph",
+              "\\appendix",
+              "starred *"
+            ],
+            "summary": "Hierarchy: \\part (-1) -> \\chapter (0) -> \\section (1) -> \\subsection (2) -> \\subsubsection (3) -> \\paragraph (4) -> \\subparagraph (5). Starred forms (e.g. \\section*{Intro}) omit numbers and TOC entries. \\appendix changes chapter/section numbering to letters (A, B, C).",
+            "syntax": "\\chapter{Introduction}\n\\section{Theoretical Framework}\n\\subsection*{Unnumbered Subsection}\n\\appendix\n\\chapter{Mathematical Proofs} % becomes Appendix A",
+            "recallQ": "Order the sectioning units from highest to lowest hierarchy. What effect does adding an asterisk '*' have on a section command (e.g. '\\section*{...}')?",
+            "recallA": "Hierarchy: \\part -> \\chapter -> \\section -> \\subsection -> \\subsubsection -> \\paragraph -> \\subparagraph. The starred variant '*' suppresses section numbering and omits the section from the Table of Contents."
+          }
+        ]
+      },
+      {
+        "id": "u3",
+        "unitNumber": 3,
+        "title": "Bibliographic Database (Tutorials III & IV)",
+        "subtopics": [
+          {
+            "id": "m1-u3-1",
+            "title": "Manual Bibliography Construction: thebibliography",
+            "tags": [
+              "thebibliography",
+              "\\bibitem",
+              "\\cite",
+              "widest label"
+            ],
+            "summary": "Built-in environment for small bibliographies. Syntax: \\begin{thebibliography}{widest_label} ... \\end{thebibliography}. Each entry is \\bibitem[custom_label]{cite_key}. In text, cite via \\cite{key} or \\cite{k1,k2}.",
+            "syntax": "\\cite{knuth84}\n\\begin{thebibliography}{99}\n\\bibitem{knuth84} D.~Knuth, \\emph{The \\TeX book}, 1984.\n\\end{thebibliography}",
+            "recallQ": "What is the role of the argument passed to '\\begin{thebibliography}{99}'? How do you cite multiple references in one bracket?",
+            "recallA": "The argument specifies the widest sample label (e.g. '9' for up to 9 entries, '99' for up to 99) so LaTeX can calculate the indentation margin for citation numbers. Multiple references are cited with comma-separated keys: '\\cite{key1,key2}'."
+          },
+          {
+            "id": "m1-u3-2",
+            "title": "BibTeX Database Architecture & Entry Types (.bib)",
+            "tags": [
+              ".bib",
+              "@article",
+              "@book",
+              "@inproceedings",
+              "required fields",
+              "keys"
+            ],
+            "summary": "Separates citation data into external .bib files. Entry syntax: @type{citation_key, field = {value}, ...}. Common types: @article, @book, @inproceedings, @phdthesis, @misc. Required fields vary (e.g. @article requires author, title, journal, year).",
+            "syntax": "@article{einstein1905,\n  author  = {Albert Einstein},\n  title   = {Zur Elektrodynamik bewegter K{\\\"o}rper},\n  journal = {Annalen der Physik},\n  volume  = {17},\n  year    = {1905}\n}",
+            "recallQ": "Name three standard BibTeX entry types. What required fields must every '@article' entry contain?",
+            "recallA": "Standard entry types: @article, @book, @inproceedings (or @phdthesis, @misc). For an @article, the required fields are 'author', 'title', 'journal', and 'year' (volume and pages are optional but standard)."
+          },
+          {
+            "id": "m1-u3-3",
+            "title": "Integrating BibTeX in LaTeX: Commands & Callouts",
+            "tags": [
+              "\\bibliographystyle",
+              "\\bibliography",
+              "\\cite",
+              ".aux",
+              ".bbl"
+            ],
+            "summary": "In the .tex document, specify style with \\bibliographystyle{style} and output location with \\bibliography{bibfile} (without .bib extension). LaTeX writes citations to .aux; BibTeX reads .aux and .bib to produce .bbl.",
+            "syntax": "\\bibliographystyle{plain}\n\\bibliography{my_references} % loads my_references.bib",
+            "recallQ": "Where do '\\bibliographystyle' and '\\bibliography' go, and should the '.bib' file extension be included in the argument?",
+            "recallA": "'\\bibliographystyle{...}' is typically declared in the preamble or right before the bibliography. '\\bibliography{...}' goes exactly where the references should appear. The '.bib' extension MUST be omitted (write '\\bibliography{refs}', not 'refs.bib')."
+          },
+          {
+            "id": "m1-u3-4",
+            "title": "Standard BibTeX Formatting Styles: plain, unsrt, alpha, abbrv",
+            "tags": [
+              "plain",
+              "unsrt",
+              "alpha",
+              "abbrv",
+              "citation styles"
+            ],
+            "summary": "plain: numbered [1], sorted alphabetically by author. unsrt: numbered [1], in order of appearance in text. alpha: alphanumeric labels based on author name and year, e.g. [Knu84]. abbrv: like plain, but abbreviates first names and journal months.",
+            "syntax": "\\bibliographystyle{unsrt} % citations numbered in order of appearance\n\\bibliographystyle{alpha} % [Lam94] style labels",
+            "recallQ": "How do the 'plain' and 'unsrt' BibTeX styles differ in how citations are ordered? Which style generates labels like '[Knu84]'?",
+            "recallA": "'plain' sorts bibliography entries alphabetically by author's last name. 'unsrt' sorts entries in the chronological order in which they were first cited in the text. 'alpha' produces author-year labels like '[Knu84]'."
+          },
+          {
+            "id": "m1-u3-5",
+            "title": "The 4-Step BibTeX Compilation Pipeline & Auxiliary Files",
+            "tags": [
+              "pdflatex",
+              "bibtex",
+              ".aux",
+              ".bbl",
+              ".blg",
+              "4-pass run"
+            ],
+            "summary": "Resolving BibTeX references requires 4 passes: 1. pdflatex (records \\cite keys to .aux). 2. bibtex (reads .aux + .bib, writes formatted .bbl and error log .blg). 3. pdflatex (reads .bbl, inserts text, updates .aux). 4. pdflatex (resolves cross-references to [1]).",
+            "syntax": "# Terminal compilation sequence:\npdflatex document\nbibtex document\npdflatex document\npdflatex document",
+            "recallQ": "Why must you run pdflatex three times and bibtex once when citing via BibTeX? What file holds the BibTeX formatting output?",
+            "recallA": "Pass 1 (pdflatex) writes citation keys to '.aux'. Pass 2 (bibtex) reads '.aux' and '.bib' to create formatted bibliography in '.bbl'. Pass 3 (pdflatex) imports '.bbl' into the document and assigns citation numbers. Pass 4 (pdflatex) resolves in-text references from '?' to the actual numbers. The formatted bibliography is in '.bbl'."
+          }
+        ]
+      },
+      {
+        "id": "u4",
+        "unitNumber": 4,
+        "title": "Table of Contents and Index (Tutorial V)",
+        "subtopics": [
+          {
+            "id": "m1-u4-1",
+            "title": "Automated Table of Contents Generation & Two-Pass Flow",
+            "tags": [
+              "\\tableofcontents",
+              ".toc",
+              "two-pass",
+              "\\addcontentsline",
+              "tocdepth"
+            ],
+            "summary": "\\tableofcontents generates the contents list. Requires two compilation runs: pass 1 collects section titles and page numbers into .toc file; pass 2 reads .toc and prints the formatted list. \\setcounter{tocdepth}{n} controls depth.",
+            "syntax": "\\setcounter{tocdepth}{2} % includes down to subsections\n\\tableofcontents\n\\addcontentsline{toc}{section}{Unnumbered Special Section}",
+            "recallQ": "Why doesn't the Table of Contents appear on the very first compilation run of a new LaTeX document? How do you manually add an unnumbered section to the TOC?",
+            "recallA": "On the first run, LaTeX writes section headings and page locations into an auxiliary '.toc' file; only on the second run is '.toc' read back and typeset. An unnumbered section is added using '\\addcontentsline{toc}{section}{Section Title}'."
+          },
+          {
+            "id": "m1-u4-2",
+            "title": "Lists of Figures & Tables (.lof and .lot)",
+            "tags": [
+              "\\listoffigures",
+              "\\listoftables",
+              ".lof",
+              ".lot"
+            ],
+            "summary": "\\listoffigures and \\listoftables work identically to TOC, generating lists from \\caption commands inside figure and table floats into .lof and .lot files.",
+            "syntax": "\\tableofcontents\n\\listoffigures\n\\listoftables",
+            "recallQ": "Which commands produce lists of figures and tables, and what auxiliary file extensions do they produce?",
+            "recallA": "'\\listoffigures' produces the '.lof' auxiliary file; '\\listoftables' produces the '.lot' auxiliary file."
+          },
+          {
+            "id": "m1-u4-3",
+            "title": "Index System Architecture & Setup (makeidx)",
+            "tags": [
+              "makeidx",
+              "\\makeindex",
+              "\\printindex",
+              ".idx",
+              ".ind"
+            ],
+            "summary": "Generating an index requires 3 steps in code: 1. \\usepackage{makeidx} in preamble. 2. \\makeindex in preamble (opens .idx file). 3. \\printindex at the end of the document body where index should appear.",
+            "syntax": "\\documentclass{book}\n\\usepackage{makeidx}\n\\makeindex % in preamble\n\\begin{document}\n... \\index{photon} ...\n\\printindex % at end of book\n\\end{document}",
+            "recallQ": "What package and two specific commands are required to set up and print an index in a LaTeX document?",
+            "recallA": "Package: '\\usepackage{makeidx}'. Preamble command: '\\makeindex' (to initialize raw index recording). Document command: '\\printindex' (placed at the end to typeset the sorted index)."
+          },
+          {
+            "id": "m1-u4-4",
+            "title": "Indexing Syntax: Sub-entries, Page Ranges & Cross-References",
+            "tags": [
+              "\\index",
+              "!",
+              "|(",
+              "|)",
+              "|see",
+              "|textbf"
+            ],
+            "summary": "Basic: \\index{entry}. Sub-entry: \\index{matrix!determinant}. Sub-sub-entry: \\index{matrix!square!symmetric}. Page range: \\index{optics|(} ... \\index{optics|)}. Cross-reference: \\index{em-wave|see{light}}. Formatting: \\index{eigenvalue|textbf}.",
+            "syntax": "\\index{Algorithm!Sorting!Quicksort}\n\\index{Thermodynamics|(} % starts range 14--22\n\\index{Thermodynamics|)} % ends range\n\\index{Light|see{Optics}}\n\\index{Matrix|textbf}    % bold page number",
+            "recallQ": "In LaTeX indexing, what character indicates a sub-entry level, how do you specify a multi-page range, and how do you create a 'see' cross-reference?",
+            "recallA": "Sub-entries use the exclamation mark ('!'), e.g. '\\index{main!sub}'. Page ranges use '|(' and '|)' on the starting and ending pages ('\\index{topic|(}' ... '\\index{topic|)}'). Cross-references use '|see{target}', e.g. '\\index{term|see{synonym}}'."
+          },
+          {
+            "id": "m1-u4-5",
+            "title": "The MakeIndex Processing Workflow (.idx -> .ind)",
+            "tags": [
+              "makeindex",
+              ".idx",
+              ".ind",
+              "compilation cycle"
+            ],
+            "summary": "Compilation cycle for index: 1. pdflatex doc.tex (writes raw \\index entries to doc.idx). 2. makeindex doc.idx (sorts and formats entries alphabetically into doc.ind). 3. pdflatex doc.tex (reads doc.ind at \\printindex and typesets the index).",
+            "syntax": "# Command-line execution:\npdflatex report.tex    # creates report.idx\nmakeindex report.idx   # creates report.ind\npdflatex report.tex    # typesets index",
+            "recallQ": "What intermediate file is produced by the command 'makeindex report.idx', and which LaTeX command reads this file?",
+            "recallA": "The command 'makeindex report.idx' produces the sorted, formatted file 'report.ind'. The '\\printindex' command reads and typesets this '.ind' file on the subsequent LaTeX compilation run."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mod-2",
+    "title": "Module II: Styling Pages",
+    "hours": 6,
+    "marks": "Min 10",
+    "reference": "Text 1: LaTeX Tutorial, A Primer (Tutorials VI\u2013VII)",
+    "units": [
+      {
+        "id": "u5",
+        "unitNumber": 5,
+        "title": "Displayed Text (Tutorial VI)",
+        "subtopics": [
+          {
+            "id": "m2-u5-1",
+            "title": "Quotation & Poetry Environments: quote, quotation, verse",
+            "tags": [
+              "quote",
+              "quotation",
+              "verse",
+              "poetry",
+              "stanzas"
+            ],
+            "summary": "quote: for short quotations, indents left and right margins, no extra paragraph indent. quotation: for multi-paragraph prose, indents margins and indents the first line of each paragraph. verse: for poetry; lines broken with \\\\, stanzas separated by blank lines.",
+            "syntax": "\\begin{quote} Short excerpt here. \\end{quote}\n\\begin{quotation} Long multi-paragraph prose... \\end{quotation}\n\\begin{verse}\nTwo roads diverged in a yellow wood,\\\\\nAnd sorry I could not travel both\n\\end{verse}",
+            "recallQ": "How do 'quote' and 'quotation' environments differ in paragraph indentation? Which environment is specifically designed for poetry?",
+            "recallA": "In 'quote', paragraphs are separated by extra vertical space without first-line paragraph indentation (ideal for short quotes). In 'quotation', paragraphs have first-line indentation without extra vertical space (ideal for multi-paragraph prose). The 'verse' environment is designed for poetry."
+          },
+          {
+            "id": "m2-u5-2",
+            "title": "Centering & Alignment: Environments vs Declaration Switches",
+            "tags": [
+              "center",
+              "flushleft",
+              "flushright",
+              "\\centering",
+              "\\raggedright",
+              "\\raggedleft"
+            ],
+            "summary": "Environments: center, flushleft, flushright add vertical space before and after. Declaration switches: \\centering, \\raggedright, \\raggedleft do not add extra vertical space; used inside groups, table cells, or figure floats.",
+            "syntax": "% Environment (standalone with vertical gaps):\n\\begin{center} Centered text \\end{center}\n% Declaration (inside a group/table/float):\n\\begin{table}[h]\n\\centering\n...\n\\end{table}",
+            "recallQ": "Why is '\\centering' preferred over '\\begin{center}...\\end{center}' inside a 'figure' or 'table' float environment?",
+            "recallA": "The 'center' environment inserts extra unwanted top and bottom vertical whitespace margins, whereas the declaration '\\centering' aligns the float contents horizontally without adding extra vertical margins."
+          },
+          {
+            "id": "m2-u5-3",
+            "title": "Unordered Bulleted Lists: itemize",
+            "tags": [
+              "itemize",
+              "\\item",
+              "bullets",
+              "nesting depth",
+              "\\labelitemi"
+            ],
+            "summary": "\\begin{itemize} ... \\end{itemize}. Items defined with \\item. Nesting allowed up to 4 levels deep. Default markers: Level 1 = \u2022 (bullet), Level 2 = \u2013 (en-dash), Level 3 = * (asterisk), Level 4 = \u00b7 (centered dot).",
+            "syntax": "\\begin{itemize}\n  \\item First level bullet\n  \\begin{itemize}\n    \\item Nested second level\n  \\end{itemize}\n\\end{itemize}",
+            "recallQ": "What is the maximum allowed nesting depth for LaTeX list environments, and what is the default bullet marker for level 1 and level 2 'itemize'?",
+            "recallA": "The maximum nesting depth is 4 levels. In 'itemize', level 1 defaults to a solid bullet ('\u2022' / \\labelitemi) and level 2 defaults to an en-dash ('\u2013' / \\labelitemii)."
+          },
+          {
+            "id": "m2-u5-4",
+            "title": "Ordered Numbered Lists: enumerate & Counter Hierarchy",
+            "tags": [
+              "enumerate",
+              "\\item",
+              "counters",
+              "enumi",
+              "enumii"
+            ],
+            "summary": "\\begin{enumerate} ... \\end{enumerate}. Nesting up to 4 levels. Default counters: Level 1 = 1., 2. (arabic); Level 2 = (a), (b) (alph); Level 3 = i., ii. (roman); Level 4 = A., B. (Alph). Counters are enumi, enumii, enumiii, enumiv.",
+            "syntax": "\\begin{enumerate}\n  \\item Main step\n  \\begin{enumerate}\n    \\item Sub-step (renders as (a))\n  \\end{enumerate}\n\\end{enumerate}",
+            "recallQ": "What are the default label formats for level 1, level 2, and level 3 of an 'enumerate' list in LaTeX?",
+            "recallA": "Level 1: Arabic numeral followed by a period ('1.', '2.'). Level 2: Lowercase letter in parentheses ('(a)', '(b)'). Level 3: Lowercase Roman numeral followed by a period ('i.', 'ii.')."
+          },
+          {
+            "id": "m2-u5-5",
+            "title": "Descriptive Lists: description",
+            "tags": [
+              "description",
+              "\\item[term]",
+              "glossary",
+              "hanging indent"
+            ],
+            "summary": "\\begin{description} ... \\end{description}. Each item takes an optional argument: \\item[Term] Description text. Renders the term in boldface followed by indented explanation text.",
+            "syntax": "\\begin{description}\n  \\item[Compiler] Translates source code to machine code.\n  \\item[Interpreter] Executes instructions directly.\n\\end{description}",
+            "recallQ": "How do you specify the term being defined in a 'description' list, and how is that term formatted visually?",
+            "recallA": "The term is specified inside square brackets immediately following '\\item', as in '\\item[Term]'. LaTeX renders the term in boldface ('\\textbf') at the left margin, with the descriptive text following with a hanging indent."
+          },
+          {
+            "id": "m2-u5-6",
+            "title": "Customizing List Labels & Redefining Counters",
+            "tags": [
+              "\\renewcommand",
+              "\\labelenumi",
+              "\\theenumi",
+              "\\alph",
+              "\\roman"
+            ],
+            "summary": "Labels can be overridden individually via \\item[(Custom)] or globally redefined. To change enumerate labels: \\renewcommand{\\labelenumi}{(\\alph{enumi})} or \\renewcommand{\\theenumi}{\\Roman{enumi}}. Bullet customization: \\renewcommand{\\labelitemi}{$\\triangleright$}.",
+            "syntax": "% Global change to Roman numerals for level 1:\n\\renewcommand{\\labelenumi}{\\textbf{\\roman{enumi}.}}\n% Manual override on single item:\n\\item[Q1.] Question one text",
+            "recallQ": "Write the LaTeX code to globally change level 1 enumerate labels to bold lowercase Roman numerals followed by a dot (e.g. 'i.').",
+            "recallA": "'\\renewcommand{\\labelenumi}{\\textbf{\\roman{enumi}.}}' (or '\\renewcommand{\\labelenumi}{\\roman{enumi}.}' with '\\textbf')."
+          },
+          {
+            "id": "m2-u5-7",
+            "title": "Displaying Computer Code & Literal Characters: verbatim",
+            "tags": [
+              "verbatim",
+              "verbatim*",
+              "\\verb",
+              "\\verb*",
+              "code"
+            ],
+            "summary": "Block verbatim: \\begin{verbatim} ... \\end{verbatim}. Visible spaces: verbatim*. Inline code: \\verb|...| (any matching delimiter char, e.g. \\verb+code+). Visible space inline: \\verb*|...|. Limitation: \\verb cannot be used inside arguments of other commands.",
+            "syntax": "\\begin{verbatim}\n#include <stdio.h>\nint main() { return 0; }\n\\end{verbatim}\nUse \\verb|\\command{arg}| for inline commands.",
+            "recallQ": "How do you typeset inline literal code containing a pipe '|'? Why can't '\\verb' be placed inside a '\\footnote{...}' or '\\section{...}' argument?",
+            "recallA": "Use any other non-whitespace delimiter, for example '\\verb+code|with|pipe+'. '\\verb' cannot be used inside command arguments because LaTeX parses and tokenizes arguments before the verbatim environment has a chance to deactivate special characters."
+          }
+        ]
+      },
+      {
+        "id": "u6",
+        "unitNumber": 6,
+        "title": "Rows and Columns: Tabbing (Tutorial VII.1)",
+        "subtopics": [
+          {
+            "id": "m2-u6-1",
+            "title": "The tabbing Environment Architecture",
+            "tags": [
+              "tabbing",
+              "typewriter tabs",
+              "\\=",
+              "\\>",
+              "\\\\"
+            ],
+            "summary": "Simulates manual typewriter tab stops. Unlike tabular, tabbing can span page boundaries, doesn't require column calculations, and is ideal for pseudocode, algorithms, and indented hierarchical lists.",
+            "syntax": "\\begin{tabbing}\nColumn 1 \\= Column 2 \\= Column 3 \\\\\nValue 1  \\> Value 2  \\> Value 3\n\\end{tabbing}",
+            "recallQ": "What is the primary conceptual difference between 'tabbing' and 'tabular'? Can 'tabbing' break across page boundaries?",
+            "recallA": "'tabbing' creates fixed horizontal tab-stops like a typewriter across text lines, and can break across multiple pages. 'tabular' creates a boxed, rigid multi-cell grid that cannot break across pages by default."
+          },
+          {
+            "id": "m2-u6-2",
+            "title": "Setting and Advancing Tab Stops (\\= and \\>)",
+            "tags": [
+              "\\=",
+              "\\>",
+              "\\\\",
+              "tab stops"
+            ],
+            "summary": "\\= sets a tab stop at the current horizontal position. \\> advances the cursor to the next tab stop. \\\\ ends the current line and returns cursor to the left margin.",
+            "syntax": "\\begin{tabbing}\nif (condition) \\= then \\\\\n               \\> statement;\n\\end{tabbing}",
+            "recallQ": "What are the roles of '\\=', '\\>', and '\\\\' in a 'tabbing' environment?",
+            "recallA": "'\\=' defines/sets a tab stop at the cursor's current position; '\\>' advances the cursor horizontally to the next tab stop; '\\\\' ends the line and resets the cursor to the left margin."
+          },
+          {
+            "id": "m2-u6-3",
+            "title": "Template Line Discarding with \\kill",
+            "tags": [
+              "\\kill",
+              "sample line",
+              "template",
+              "tab definition"
+            ],
+            "summary": "Often a sample line is used to establish the widest column widths and tab stops, but shouldn't actually be printed in the output. Placing \\kill at the end of the line discards the text while preserving all tab stops defined by \\=.",
+            "syntax": "\\begin{tabbing}\nWidest Keyword \\= Widest Identifier \\= Return Type \\kill\nint            \\> counter           \\> Integer \\\\\nchar           \\> key               \\> Byte\n\\end{tabbing}",
+            "recallQ": "What is the exact purpose of the '\\kill' command in a 'tabbing' environment?",
+            "recallA": "'\\kill' terminates the current line and discards all text on that line without printing it, while retaining all the tab stops ('\\=') established on that line for the subsequent lines."
+          },
+          {
+            "id": "m2-u6-4",
+            "title": "Margin Control & Advanced Tabbing Commands (\\+, \\-, \\', \\`)",
+            "tags": [
+              "\\+",
+              "\\-",
+              "\\'",
+              "\\`",
+              "tabbing margins"
+            ],
+            "summary": "\\+ shifts left margin one tab stop to the right on all subsequent lines (indents a block). \\- shifts left margin one stop left. \\' right-aligns text to previous tab stop. \\` right-aligns text to the right margin of the tabbing environment.",
+            "syntax": "\\begin{tabbing}\n\\hspace{1cm} \\= \\hspace{1cm} \\= \\kill\nStart block \\+\\\\\nInside indented block \\+\\\\\nDouble indented \\-\\\\\nBack one level \\-\\\\\nBack to start\n\\end{tabbing}",
+            "recallQ": "How do you indent an entire multi-line block by one tab stop in 'tabbing' without typing '\\>' on every line? What does '\\`' do?",
+            "recallA": "Use '\\+' at the end of a line; all subsequent lines will automatically start one tab stop to the right until cancelled by '\\-'. The '\\`' command flushes all following text on the line flush-right against the right margin."
+          },
+          {
+            "id": "m2-u6-5",
+            "title": "Architectural Tradeoffs: tabbing vs tabular",
+            "tags": [
+              "tabbing vs tabular",
+              "comparison",
+              "use cases"
+            ],
+            "summary": "Use tabbing for: multi-page text, programming code/algorithms, indented specifications, varying column alignment. Use tabular for: framed/bordered data tables, wrapped paragraph columns, cross-column headers (\\multicolumn), floating tables.",
+            "syntax": "% tabbing = flexible code/lines\n% tabular = matrix of bordered cells",
+            "recallQ": "Give two concrete scenarios where 'tabbing' is preferred over 'tabular', and two where 'tabular' must be used.",
+            "recallA": "Prefer 'tabbing' for: (1) Pseudocode/algorithms requiring indentations, (2) Listings that span across multiple pages. Prefer 'tabular' for: (1) Grid tables with horizontal/vertical border rules ('\\hline', '|'), (2) Tables requiring multi-column spanning ('\\multicolumn') or wrapped paragraph cells ('p{width}')."
+          }
+        ]
+      },
+      {
+        "id": "u7",
+        "unitNumber": 7,
+        "title": "Tables (Tutorial VII.2)",
+        "subtopics": [
+          {
+            "id": "m2-u7-1",
+            "title": "The tabular Environment Architecture & Cell Delimiters",
+            "tags": [
+              "tabular",
+              "cols",
+              "&",
+              "\\\\",
+              "optional pos [t,b,c]"
+            ],
+            "summary": "Basic syntax: \\begin{tabular}[pos]{cols} ... \\end{tabular}. [pos] aligns table baseline (t=top, b=bottom, c=center). Cells separated by ampersand &, rows terminated by double backslash \\\\.",
+            "syntax": "\\begin{tabular}{l c r}\nName & Roll No & Score \\\\\nAlice & 101 & 95 \\\\\nBob & 102 & 88\n\\end{tabular}",
+            "recallQ": "What are the roles of '&' and '\\\\' inside a 'tabular' environment? What does the optional '[t]' argument do?",
+            "recallA": "'&' separates columns within a row; '\\\\' terminates a table row. The optional '[t]' aligns the top baseline of the table with the baseline of surrounding text."
+          },
+          {
+            "id": "m2-u7-2",
+            "title": "Basic Column Specifiers: l, c, r",
+            "tags": [
+              "l",
+              "c",
+              "r",
+              "alignment"
+            ],
+            "summary": "l = left-aligned column; c = centered column; r = right-aligned column. Cell width automatically expands to fit the widest content. None of these allow text to wrap into multiple lines.",
+            "syntax": "\\begin{tabular}{l c r}\nLeft & Center & Right \\\\\n\\end{tabular}",
+            "recallQ": "What happens if a cell in an 'l', 'c', or 'r' column contains a long paragraph of text?",
+            "recallA": "It will NOT wrap; LaTeX formats the entire cell as a single continuous line, causing an overfull hbox that bleeds off the right edge of the page. You must use 'p{width}' to enable wrapping."
+          },
+          {
+            "id": "m2-u7-3",
+            "title": "Border Rules and Grid Lines: |, ||, \\hline, \\cline",
+            "tags": [
+              "|",
+              "||",
+              "\\hline",
+              "\\cline",
+              "borders"
+            ],
+            "summary": "Vertical lines specified in cols argument using | (single) or || (double). \\hline draws full horizontal line across all columns. \\cline{i-j} draws partial horizontal rule from column i to column j.",
+            "syntax": "\\begin{tabular}{|l|c|r|}\\hline\nCol 1 & Col 2 & Col 3 \\\\ \\hline\nA & B & C \\\\ \\cline{1-2}\nD & E & F \\\\ \\hline\n\\end{tabular}",
+            "recallQ": "Write the command to draw a horizontal border spanning only columns 2 through 4 in a table.",
+            "recallA": "'\\cline{2-4}' placed immediately after the row terminating '\\\\'."
+          },
+          {
+            "id": "m2-u7-4",
+            "title": "Paragraph and Fixed-Width Columns: p{width}",
+            "tags": [
+              "p{width}",
+              "multiline cells",
+              "text wrapping",
+              "justification"
+            ],
+            "summary": "p{width} sets a column of fixed horizontal width where text automatically wraps into multiple lines and is fully justified. Top baseline aligned. Requires explicit measurement (e.g. p{4cm}, p{0.3\\textwidth}).",
+            "syntax": "\\begin{tabular}{|l|p{6cm}|}\\hline\nTerm & Definition \\\\ \\hline\nDiffraction & The bending of waves around the corners of an obstacle.\\\\ \\hline\n\\end{tabular}",
+            "recallQ": "How do you create a table column that automatically wraps long descriptions within a 5 cm width?",
+            "recallA": "Use the 'p{5cm}' column specifier in the tabular column declaration, e.g. '\\begin{tabular}{|l|p{5cm}|}'."
+          },
+          {
+            "id": "m2-u7-5",
+            "title": "Merging & Styling Columns: \\multicolumn",
+            "tags": [
+              "\\multicolumn",
+              "colspan",
+              "cell override",
+              "spanning"
+            ],
+            "summary": "Syntax: \\multicolumn{num_cols}{col_spec}{cell_content}. Merges multiple columns into one cell, or overrides alignment and vertical rules for a single cell (num_cols=1).",
+            "syntax": "\\begin{tabular}{|l|r|}\\hline\n\\multicolumn{2}{|c|}{\\textbf{Consolidated Results}} \\\\ \\hline\nPhysics & 94 \\\\ \\hline\n\\end{tabular}",
+            "recallQ": "Write the exact syntax to merge 3 columns into a single centered heading with vertical bars on both sides containing the text 'Results'.",
+            "recallA": "'\\multicolumn{3}{|c|}{Results}'"
+          },
+          {
+            "id": "m2-u7-6",
+            "title": "Inter-column Customization (@{...}) & Repeated Specifiers (*{n}{...})",
+            "tags": [
+              "@{...}",
+              "tabcolsep",
+              "*{n}{...}",
+              "column repetition"
+            ],
+            "summary": "@{text} replaces default intercolumn whitespace (\\tabcolsep) with specified text or nothing (@{} removes margin padding). *{n}{spec} repeats a column specifier n times (e.g. *{4}{|c} is |c|c|c|c).",
+            "syntax": "% Zero margin on outer edges:\n\\begin{tabular}{@{} l *{3}{c} @{}}\nItem & A & B & C \\\\\n\\end{tabular}",
+            "recallQ": "How do you remove the default empty padding at the extreme left and right edges of a table? What does '*{5}{c}' expand to?",
+            "recallA": "Place '@{}' at the very beginning and end of the column specification string, e.g. '@{} l c r @{}'. '*{5}{c}' expands to five consecutive centered columns: 'ccccc'."
+          },
+          {
+            "id": "m2-u7-7",
+            "title": "Table Spacing Parameters: \\arraystretch & \\tabcolsep",
+            "tags": [
+              "\\arraystretch",
+              "\\tabcolsep",
+              "table padding",
+              "row height"
+            ],
+            "summary": "\\renewcommand{\\arraystretch}{factor} scales vertical row spacing (default is 1.0; 1.25 or 1.5 gives roomier tables). \\setlength{\\tabcolsep}{length} sets horizontal half-padding between columns (default 6pt).",
+            "syntax": "{\n\\renewcommand{\\arraystretch}{1.3} % 30% taller rows\n\\setlength{\\tabcolsep}{10pt}       % wider columns\n\\begin{tabular}{|c|c|}\n...\n\\end{tabular}\n}",
+            "recallQ": "How do you increase row height in a table so that text does not collide with '\\hline' rules?",
+            "recallA": "Redefine '\\arraystretch' inside a group enclosing the table: '{\\renewcommand{\\arraystretch}{1.3} \\begin{tabular}...\\end{tabular}}'."
+          },
+          {
+            "id": "m2-u7-8",
+            "title": "Floating Table Containers: table, Caption & Label Placement",
+            "tags": [
+              "table",
+              "float",
+              "[htbp]",
+              "\\caption",
+              "\\label",
+              "placement"
+            ],
+            "summary": "\\begin{table}[placement] ... \\end{table} prevents page breaks inside tables and allows LaTeX to float the table. Specifiers: h (here), t (top), b (bottom), p (float page), ! (override). \\caption{title} creates numbered caption. \\label MUST follow \\caption!",
+            "syntax": "\\begin{table}[htbp]\n\\centering\n\\caption{Sample Experimental Measurements}\n\\label{tab:sample}\n\\begin{tabular}{|c|c|}\\hline\nA & B \\\\ \\hline\n\\end{tabular}\n\\end{table}",
+            "recallQ": "Why must the '\\label{...}' command strictly be placed AFTER (or inside) '\\caption{...}' in a floating table?",
+            "recallA": "'\\caption' is the command that increments the table counter and sets the reference point; if '\\label' is placed before '\\caption', it will reference the enclosing section number instead of the table number!"
+          }
+        ]
+      }
+    ]
+  }
+]

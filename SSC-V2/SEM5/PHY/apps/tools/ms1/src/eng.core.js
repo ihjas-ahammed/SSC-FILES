@@ -18,14 +18,32 @@ const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 function rng(seed){let a=seed>>>0||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
   t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 
-/* ── MathJax: typeset only when it is ready; queue until then ── */
-function mj(node,then){
-  const run=()=>{try{const M=window.MathJax;const p=node?M.typesetPromise([node]):M.typesetPromise();
-      p.then(()=>then&&then()).catch(()=>then&&then());}catch(e){then&&then();}};
-  if(window.__mjReady&&window.MathJax&&window.MathJax.typesetPromise)run();
-  else (window.__mjQueue=window.__mjQueue||[]).push(run);
+/* ── Native Math formatting: formats math in DOM node synchronously ── */
+function formatMathIn(node) {
+  if (!node) return;
+  if (typeof node === 'string') return typeof formatMathHtml === 'function' ? formatMathHtml(node) : node;
+  const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null, false);
+  const toProcess = [];
+  let n;
+  while (n = walker.nextNode()) {
+    if (n.nodeValue && n.nodeValue.indexOf('$') !== -1) toProcess.push(n);
+  }
+  toProcess.forEach(textNode => {
+    const p = textNode.parentNode;
+    if (!p || p.nodeName === 'SCRIPT' || p.nodeName === 'STYLE') return;
+    const formatted = typeof formatMathHtml === 'function' ? formatMathHtml(textNode.nodeValue) : textNode.nodeValue;
+    if (formatted !== textNode.nodeValue) {
+      const span = document.createElement('span');
+      span.innerHTML = formatted;
+      p.replaceChild(span, textNode);
+    }
+  });
 }
-function mjClear(node){try{if(window.__mjReady)window.MathJax.typesetClear([node]);}catch(e){}}
+function mj(node, then){
+  if (node) formatMathIn(node);
+  if (then) then();
+}
+function mjClear(node){}
 
 /* ── palette read from CSS custom properties at draw time (theme-aware) ── */
 let C={};

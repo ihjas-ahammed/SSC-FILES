@@ -66,14 +66,7 @@ def build(online):
     scripts = []
     scripts.append(f'<script>window.MS_CFG = {json.dumps(cfg)};</script>')
 
-    if online:
-        scripts.append('<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>')
-    else:
-        tex_path = os.path.join(VEN, 'tex-svg.js')
-        if os.path.exists(tex_path):
-            scripts.append('<script>' + js(rd(tex_path)) + '</script>')
-        else:
-            print("Warning: vendor/tex-svg.js not found for offline build!")
+
 
     scripts.append('<script>' + js(bundle_js()) + '</script>')
 
