@@ -372,49 +372,69 @@ mjx-container{ max-width:100%; }
 .crow.done .tt b{ color:var(--ink-2); }
 
 /* ── recall reel ─────────────────────────────────────────────────────────── */
-/* ONE scroller, and only one. A snap container whose cards are themselves
-   scrollable traps the gesture: the inner scroller eats the touch and
-   `overscroll-behavior:contain` then refuses to chain it back out, so a card
-   taller than the screen becomes a dead end. Cards grow instead, the reel
-   scrolls, and snapping is `proximity` — `mandatory` makes everything between
-   two snap points unreachable the moment a card is taller than the viewport. */
+/* ── recall reel ──────────────────────────────────────────────────────────
+   One swipe, one card — the Shorts/Reels rule, and it is `scroll-snap-stop:
+   always` that enforces it. Without it a flick keeps its momentum and sails
+   past two or three snap points before settling, which reads as "it swiped
+   twice". With it the scroller must come to rest on the very next snap point
+   however hard the flick was.
+
+   That rule only holds if every card is EXACTLY one viewport tall. So the card
+   is a fixed-height frame and its content scrolls inside `.inner`, whose
+   overscroll behaviour is left at `auto` on purpose: it scrolls to its own end
+   and then chains out to the reel. (`contain` was tried and is what trapped
+   the gesture on a long card — the inner scroller ate the touch and refused to
+   hand it back.)
+
+   `position:relative` on the reel is load-bearing too: it makes the reel the
+   offsetParent of its cards, so card.offsetTop and reel.scrollTop are in the
+   same coordinate system. And nothing here may carry a `transform`, because
+   the browser snaps to the TRANSFORMED box — a decorative scale() silently
+   moves every snap point. */
 .reel{
-  /* `position:relative` is load-bearing, not decoration: it makes the reel the
-     offsetParent of its cards, so card.offsetTop is in the SAME coordinate
-     system as reel.scrollTop. Without it the cards measure from .wrap, which
-     carries the view-in animation — and every jump lands a few pixels out,
-     by a margin that changes while the view animates in. */
   position:relative;
   height:calc(100dvh - var(--head-h) - var(--tab-h) - env(safe-area-inset-bottom,0px));
   overflow-y:auto; -webkit-overflow-scrolling:touch;
-  scroll-snap-type:y proximity; scroll-behavior:smooth;
+  overscroll-behavior-y:contain;
+  scroll-snap-type:y mandatory; scroll-behavior:smooth;
   scrollbar-width:none;
 }
 .reel::-webkit-scrollbar{ display:none; }
 @media (min-width:880px){ .reel{ height:calc(100dvh - var(--head-h) - var(--tab-h)); } }
+
 .reel-card{
-  min-height:100%; height:auto; scroll-snap-align:start; scroll-snap-stop:normal;
-  display:flex; flex-direction:column; padding:16px 14px 46px; position:relative;
-  /* Opacity only. A `transform: scale()` on the settle effect moved each card's
-     snap point by a few pixels — the browser snaps to the TRANSFORMED box — so
-     every jump landed just past its target and left the card sitting high. */
+  height:100%; flex:0 0 100%;
+  scroll-snap-align:start; scroll-snap-stop:always;
+  display:flex; flex-direction:column; position:relative;
   transition:opacity var(--dur) var(--ease);
   opacity:.45;
 }
 .reel-card.live{ opacity:1; }
-/* auto margins centre the card without clipping tall content the way
+
+/* the card's own scroll region — this is where a long statement goes */
+.reel-card>.inner{
+  flex:1 1 auto; width:100%; max-width:640px; margin:0 auto;
+  display:flex; flex-direction:column; gap:14px;
+  padding:16px 14px 46px;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.reel-card>.inner::-webkit-scrollbar{ display:none; }
+/* centre short content without clipping tall content the way
    justify-content:center would inside a scroller */
-.reel-card>.inner{ width:100%; max-width:640px; margin:auto; display:flex;
-  flex-direction:column; gap:14px; }
-.reel-hint{ position:absolute; left:0; right:0; bottom:14px; text-align:center;
+.reel-card>.inner::before,
+.reel-card>.inner::after{ content:''; margin:auto; }
+
+.reel-hint{ position:absolute; left:0; right:0; bottom:10px; text-align:center;
   font-size:.7rem; color:var(--ink-3); pointer-events:none; }
 .reel-hint span{ display:inline-block; animation:glow 2.6s ease-in-out infinite; }
 .reel-rail{ position:fixed; right:6px; top:calc(var(--head-h) + 18px); z-index:20;
   display:flex; flex-direction:column; gap:5px; align-items:center; }
 .reel-rail i{ width:5px; height:5px; border-radius:50%; background:var(--rule-2);
-  transition:all var(--dur) var(--ease); }
+  transition:background var(--dur) var(--ease), height var(--dur) var(--ease); }
 .reel-rail i.on{ background:var(--accent); height:16px; border-radius:3px; }
 .reel-rail i.got{ background:var(--ok); }
+.reel-rail i.pf{ box-shadow:0 0 0 1.5px var(--accent-line); }
 @media (min-width:880px){ .reel-rail{ right:max(12px,calc(50vw - 380px)); } }
 
 /* ── figures ─────────────────────────────────────────────────────────────── */
@@ -592,6 +612,20 @@ mjx-container{ max-width:100%; }
 /* the inline "tick its groundwork too?" question, and the level 2 mark */
 .ask{ margin-top:12px; animation:rise var(--dur) var(--ease) both; }
 .proof-done{ border-top:1px solid var(--rule); padding-top:12px; }
+
+/* a scratchpad is a full writing workspace, set back a little so it reads as
+   your space rather than more of the note */
+.scratch{ margin-top:6px; padding:12px; border-radius:var(--r-m);
+  border:1px dashed var(--rule-2); background:var(--surface-2); }
+
+/* a concept ticked but with its proof still outstanding, at Level 2 */
+.crow.part .tick{ border-color:var(--warn); color:var(--warn); }
+.crow.part .tt b{ color:var(--ink); }
+
+/* the sign-in gate hides the shell chrome: there is nothing to navigate to */
+body.signed-out nav.tabs{ display:none; }
+body.signed-out{ padding-bottom:0; }
+body.signed-out .top .icon-btn{ display:inline-flex; }
 
 /* ── lists ───────────────────────────────────────────────────────────────── */
 .list{ display:flex; flex-direction:column; border:1px solid var(--rule);

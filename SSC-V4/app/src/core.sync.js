@@ -19,10 +19,18 @@ const Sync = (function () {
 
   const DB = 'https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app';
 
-  /* Mock and validated pools keep separate records: their ids do not mean the
-     same things, and test progress must never land in the real one. */
-  const NS = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live')
-    ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
+  /* Mock and validated pools keep SEPARATE STORES — progress and the sign-in
+     register both. Their ids do not mean the same things, and a name typed
+     into the test build must never appear in, or merge with, the real record.
+     This is the only place that mapping is decided.
+
+        live   ssc4_ra_v1        ssc4_users_v1
+        mock   ssc4_ra_mock_v1   ssc4_users_mock_v1
+
+     AGY owns the live pair; see "Publishing" in HOOK_agy.md. */
+  const LIVE = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live');
+  const NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
+  const USERS = () => LIVE() ? 'ssc4_users_v1' : 'ssc4_users_mock_v1';
 
   let syncing = false;
   let pushT = 0;
@@ -44,10 +52,7 @@ const Sync = (function () {
     return (a && b) ? a + '--' + b : '';
   }
 
-  const identity = () => ({
-    name: Store.pref('syncName', ''),
-    roll: Store.pref('syncRoll', '')
-  });
+  const identity = () => Store.identity();
 
   function key() {
     const id = identity();
@@ -56,6 +61,7 @@ const Sync = (function () {
 
   const on = () => !!key();
   const url = () => DB + '/' + NS() + '/' + encodeURIComponent(key()) + '.json';
+  const userUrl = () => DB + '/' + USERS() + '/' + encodeURIComponent(key()) + '.json';
 
   function announce(ok, msg) {
     last = { at: Date.now(), ok: ok, msg: msg };
@@ -134,19 +140,57 @@ const Sync = (function () {
     pushT = window.setTimeout(() => now({ quiet: true, reload: false }), 1500);
   };
 
+  /* ── signing in ──────────────────────────────────────────────────────────
+     Registers the key in the sign-in store (or touches it if it is already
+     there), then does a normal merge-sync so an existing record arrives before
+     the first screen is drawn. Being offline is NOT a reason to refuse entry:
+     the local record still opens, and the next sync reconciles it. */
+  function hello() {
+    if (!on()) return Promise.resolve({ ok: false, msg: 'Not signed in.' });
+    if (!window.fetch) return now({ quiet: true }).then(r => Object.assign({ returning: null }, r));
+
+    const id = identity();
+    return window.fetch(userUrl(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(function (rec) {
+        const returning = !!(rec && rec.created);
+        return window.fetch(userUrl(), {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: id.name, roll: id.roll,
+            created: (rec && rec.created) || Date.now(),
+            seen: Date.now(),
+            visits: ((rec && rec.visits) || 0) + 1
+          })
+        }).then(() => returning);
+      })
+      .then(function (returning) {
+        return now({ quiet: true }).then(function (r) {
+          return {
+            ok: true, returning: returning,
+            msg: returning
+              ? 'Welcome back — ' + (r.ok ? r.msg.charAt(0).toLowerCase() + r.msg.slice(1) : 'working offline for now')
+              : 'New record created for ' + id.name + '.'
+          };
+        });
+      })
+      .catch(function () {
+        return { ok: false, offline: true,
+          msg: 'Offline — opening the record stored on this device. It will sync when you are back.' };
+      });
+  }
+
   /* ── connecting ──────────────────────────────────────────────────────── */
   function connect(name, roll) {
     const k = keyFor(name, roll);
     if (!k) return Promise.resolve({ ok: false, msg: 'Both a name and a roll number are needed.' });
-    Store.setPref('syncName', String(name).trim());
-    Store.setPref('syncRoll', String(roll).trim());
+    Store.signIn(name, roll);
     return now({ quiet: false });
   }
 
   function disconnect() {
-    Store.setPref('syncName', '');
-    Store.setPref('syncRoll', '');
-    announce(null, 'Disconnected. Progress stays on this device.');
+    Store.signOut();
+    announce(null, 'Signed out. Progress stays on this device.');
   }
 
   /* ── wiring ──────────────────────────────────────────────────────────── */
@@ -161,5 +205,5 @@ const Sync = (function () {
     window.addEventListener('online', function () { now({ quiet: true }); });
   }
 
-  return { start, connect, disconnect, now, status, watch, identity, keyFor, on };
+  return { start, hello, connect, disconnect, now, status, watch, identity, keyFor, on };
 })();

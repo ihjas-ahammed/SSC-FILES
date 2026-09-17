@@ -250,6 +250,12 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
    silently shrinks the denominator rather than showing up as missing. Every theorem,
    lemma and corollary needs `proof: { idea, why?, rungs: [{why, m}], ends? }`.
    Definitions and examples correctly have none.
+
+   It is worse than a missing feature: **the level is per course**, and a course switched
+   to Level 2 counts a note as complete only once its proof is worked through. A theorem
+   with no `proof` block therefore counts as complete the moment it is ticked, and the
+   course's Level 2 progress quietly overstates itself. Supply the proof, or the mark
+   means nothing.
 11. **Ids are now synced, not just stored.** Progress travels between a learner's devices
    keyed on `conceptId`, `conceptId#<card index>` and `question.id`. Renaming an id no
    longer just resets progress on one device — it orphans a record in the cloud that
@@ -316,6 +322,84 @@ and `git diff` on it is the last chance to see what a publish is about to change
    card, or Level 2 and Recall are respectively blind to it.
 5. The deploy prints every URL it published. If a page you expected is missing from
    that list, it has just been deleted from the live site — republish before leaving.
+
+### The databases — AGY owns the official pair
+
+Sign-in and progress are stored in Firebase Realtime Database over plain REST. The test
+build and the real build use **completely separate stores**, decided in one place
+(`NS()` / `USERS()` in `app/src/core.sync.js`) off `DATA_KIND`:
+
+| build | progress | sign-in register |
+| --- | --- | --- |
+| `live` (`/math/real-analysis`) | `ssc4_ra_v1` | `ssc4_users_v1` |
+| `mock` (`/math/real-analysis-test`) | `ssc4_ra_mock_v1` | `ssc4_users_mock_v1` |
+
+Both currently sit on the database the study trackers already use
+(`task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app`), which was fine for
+getting sync working and is **not** where real student records should live.
+
+**AGY's job: stand up the official database for the live build.** What it needs:
+
+1. A Realtime Database in the project that serves the site (`data-science-ef878`), in a
+   region close to the users.
+2. Its URL written into `DB` in `app/src/core.sync.js`. Leave the mock namespaces
+   pointing wherever is convenient — the point is that they are never the same store.
+3. **Security rules.** The current rules are wide open, which is why a plain REST PUT
+   works with no token. That is acceptable for a scratch tracker and is not acceptable
+   for a register of student names. At minimum, rules should stop one key being
+   enumerated from another and cap document size. Write them deliberately rather than
+   inheriting the tracker's.
+4. A written decision about what the pass key means. Name + roll number is a **pass
+   key, not a password** — the login screen says so in as many words. If that is not
+   acceptable for the real deployment, the fix is real auth, not a longer key, and that
+   is a decision to record rather than to quietly work around.
+
+Key format is `slug(name) + '--' + slug(roll)`. The separator is `--` and not `.`
+because an RTDB key may not contain `.`, `$`, `#`, `[`, `]` or `/` — a dotted key is
+rejected with "Invalid token in path".
+
+Do not point the live build at a mock namespace, or the mock build at a live one. A
+single wrong character there mixes test records into real ones, and the merge is
+designed never to lose data — so it would not throw the bad records away either.
+
+### Outstanding: 19 theorems in the live pool have no `proof` block
+
+Measured against the current `data/` pool (117 concepts, 71 theorems/lemmas/corollaries;
+every one of them has a `state` card, and no `needs` or `tests` id is unresolved). These
+nineteen are invisible to Level 2 and, worse, count as complete the moment they are
+ticked — so a course switched to Level 2 currently overstates its own progress by
+exactly this list:
+
+| id | § | course | kind | title |
+| --- | --- | --- | --- | --- |
+| `c.1.2.1` | 1.2 | ra1 | theorem | Principle of Mathematical Induction |
+| `c.1.3.2` | 1.3 | ra1 | theorem | Countability of Rationals and Uncountability of Reals |
+| `c.4.1.9` | 4.1 | ra1 | theorem | Divergence Criteria (for functions) |
+| `c.5.1.2` | 5.1 | ra2 | theorem | Neighbourhood Characterization of Continuity |
+| `c.5.1.4` | 5.1 | ra2 | corollary | Discontinuity Criterion |
+| `c.5.1.7` | 5.1 | ra2 | theorem | Continuous Extension via the Limit |
+| `c.5.2.2` | 5.2 | ra2 | theorem | Algebraic Combinations of Continuous Functions (on a Set) |
+| `c.5.2.4` | 5.2 | ra2 | theorem | \|f\| Is Continuous Whenever f Is |
+| `c.5.2.5` | 5.2 | ra2 | theorem | √f Is Continuous Whenever f Is (and f ≥ 0) |
+| `c.5.2.7` | 5.2 | ra2 | theorem | Composition of Continuous Functions (on a Set) |
+| `c.5.4.11` | 5.4 | ra2 | corollary | Explicit Mesh Size for Step-Function Approximation |
+| `c.5.4.14` | 5.4 | ra2 | theorem | Weierstrass Approximation Theorem |
+| `c.6.1.5` | 6.1 | ra2 | theorem | Carathéodory's Theorem and the Chain Rule |
+| `c.6.2.1` | 6.2 | ra2 | theorem | Interior Extremum Theorem (Fermat's Theorem) |
+| `c.6.2.3` | 6.2 | ra2 | theorem | Rolle's Theorem |
+| `c.6.2.12` | 6.2 | ra2 | theorem | Darboux's Theorem (Intermediate Value Property of Derivatives) |
+| `c.6.3.2` | 6.3 | ra2 | theorem | Cauchy's Mean Value Theorem |
+| `c.6.3.3` | 6.3 | ra2 | theorem | L'Hospital's Rules |
+| `c.6.4.1` | 6.4 | ra2 | theorem | Taylor's Theorem with Lagrange Remainder |
+
+`c.6.2.3` (Rolle) and `c.6.3.2` (Cauchy MVT) are the ones to do first: the Mean Value
+Theorem's own proof already points at Rolle, and L'Hospital and Taylor both lean on
+Cauchy — so a learner working the chain hits three dead ends in a row.
+
+A `theorem` whose proof genuinely is one line ("apply the previous theorem to $-f$")
+still gets a `proof` block saying exactly that. The block is what makes the node
+countable; leaving it out to mean "trivial" is indistinguishable from leaving it out by
+mistake.
 
 ### What Level 2 changed that AGY has to supply
 

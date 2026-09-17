@@ -29,7 +29,7 @@ const ViewNote = (function () {
       ]),
       el('div', { class: 'path', style: { marginTop: '10px' } }, chain.map(function (x, i) {
         const here = x.id === c.id;
-        const done = Store.isDone(x.id);
+        const done = Progress.isDone(x.id);
         const kids = [
           el('span', { class: 'dot', 'aria-hidden': 'true',
             text: here ? '●' : done ? '✓' : String(i + 1) }),
@@ -54,7 +54,7 @@ const ViewNote = (function () {
       el('div', { class: 'kicker', text: 'Used later by' }),
       el('div', { class: 'row', style: { marginTop: '10px' } }, next.map(function (x) {
         return el('a', { class: 'chip', href: Router.href('note/' + x.id) }, [
-          Store.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
+          Progress.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
           el('span', { text: x.title })
         ]);
       }))
@@ -108,14 +108,17 @@ const ViewNote = (function () {
           ])
         ]));
       }
-      kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
-        el('label', { class: 'small muted', text: 'Scratchpad: draft your proof steps or reasoning before checking the solution' }),
-        el('textarea', {
-          class: 'proof-scratchpad',
-          placeholder: 'Write your proof sketch or key steps here...',
-          spellcheck: 'false'
-        })
-      ]));
+      /* The scratchpad is the full writing workspace, not a bare textarea:
+         a proof sketch is prose with maths in it, and it is worth keeping.
+         Filed under 'proof:<id>' so it never collides with the statement
+         draft for the same concept, and it syncs like any other draft. */
+      const pad = el('div', { class: 'scratch' });
+      WriteBox.mount(pad, {
+        draftKey: 'proof:' + c.id, concept: c,
+        label: 'Scratchpad · draft the argument before you look',
+        placeholder: 'The main move is…'
+      });
+      kids.push(pad);
       return kids;
     }
 
@@ -195,7 +198,7 @@ const ViewNote = (function () {
       ]),
       tryHost,
       proofHost,
-      proofDoneRow(c.id, 'proof')
+      proofDoneRow(c.id, 'proof', Progress.courseIdOf(c))
     ]);
   }
 
@@ -205,8 +208,8 @@ const ViewNote = (function () {
      in it was worked through. Like the level 1 tick it is self-reported, but
      it reports a much harder act, and the label says exactly what is being
      claimed so it cannot be ticked absent-mindedly. */
-  function proofDoneRow(id, what) {
-    if (Store.level() !== 2) return null;
+  function proofDoneRow(id, what, courseId) {
+    if (Store.level(courseId) !== 2) return null;
 
     const btn = el('button', { class: 'btn', type: 'button' });
     const note = el('span', { class: 'small muted' });
@@ -302,14 +305,13 @@ const ViewNote = (function () {
               el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
             ]));
           }
-          kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
-            el('label', { class: 'small muted', text: 'Scratchpad: outline your proof or solution steps' }),
-            el('textarea', {
-              class: 'proof-scratchpad',
-              placeholder: 'Draft your solution here before viewing the model answer...',
-              spellcheck: 'false'
-            })
-          ]));
+          const pad = el('div', { class: 'scratch' });
+          WriteBox.mount(pad, {
+            draftKey: 'written:' + q.id, concept: c,
+            label: 'Scratchpad · draft your answer before you look',
+            placeholder: 'Start with what the question is really testing…'
+          });
+          kids.push(pad);
           return kids;
         }
 
@@ -371,7 +373,7 @@ const ViewNote = (function () {
           ]),
           tryHost,
           answerHost,
-          proofDoneRow('w:' + q.id, 'answer')
+          proofDoneRow('w:' + q.id, 'answer', Progress.courseIdOf(c))
         ]);
       }))
     ]);
@@ -402,7 +404,7 @@ const ViewNote = (function () {
       doneBtn.textContent = on ? '✓ Ticked — undo' : 'Tick as completed';
       doneBtn.setAttribute('aria-pressed', String(on));
       DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, Store.isProofDone(c.id), !!c.proof));
+        UI.ladder(on, Store.isProofDone(c.id), !!c.proof, Progress.courseIdOf(c)));
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -462,7 +464,7 @@ const ViewNote = (function () {
       el('div', {}, [
         el('div', { class: 'row', style: { marginBottom: '8px' } }, [
           UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
-          (Store.level() === 2 && Store.isProofDone(c.id))
+          (Store.level(Progress.courseIdOf(c)) === 2 && Store.isProofDone(c.id))
             ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
         ]),
         UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),

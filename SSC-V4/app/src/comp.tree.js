@@ -87,14 +87,27 @@ const Tree = (function () {
     DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
   }
 
+  /* At Level 2 a ticked note whose proof is not worked is genuinely neither
+     done nor untouched, so the tick has three states and one press advances
+     one step: tick → work the proof → clear. That way the control always has
+     somewhere to go and never silently refuses. */
   function conceptRow(c, repaint) {
-    const done = Store.isDone(c.id);
-    const row = el('div', { class: 'crow' + (done ? ' done' : '') }, [
-      tickButton(String(done), (done ? 'Unmark' : 'Mark') + ' "' + c.title + '" completed',
+    const st = Progress.state(c.id);
+    const lvl = Progress.levelOf(c.id);
+    const needsProof = lvl === 2 && Progress.hasProof(c.id);
+
+    const label = st === 'none'
+      ? 'Mark "' + c.title + '" completed'
+      : st === 'part'
+        ? 'Mark the proof of "' + c.title + '" as worked through'
+        : 'Clear "' + c.title + '"';
+
+    const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
+      tickButton(st === 'done' ? 'true' : st === 'part' ? 'mixed' : 'false', label,
         function () {
-          const on = !Store.isDone(c.id);
-          Store.setDone(c.id, on);
-          if (on) offerCascade(c);
+          const was = st;
+          Progress.advance(c.id);
+          if (was === 'none') offerCascade(c);
           repaint();
         }),
       el('a', { href: Router.href('note/' + c.id) }, [
@@ -102,6 +115,8 @@ const Tree = (function () {
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
+        needsProof && st === 'part'
+          ? el('span', { class: 'badge warn', text: 'proof' }) : null,
         DOM.icon('chev', 18, 'chev')
       ])
     ]);
@@ -110,8 +125,8 @@ const Tree = (function () {
 
   function sectionNode(s, repaint) {
     const ids = s.concepts.map(c => c.id);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
 
     const acc = accordion(nid, s.concepts.length
@@ -125,7 +140,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
           function () {
             const all = done === ids.length;
-            Store.setDoneMany(ids, !all);
+            Progress.setMany(ids, !all);
             DOM.announce(all ? 'Section cleared.' : 'Section ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -146,8 +161,8 @@ const Tree = (function () {
   function moduleNode(course, mod, repaint) {
     const secs = Pool.sections(course.id).filter(s => (mod.secs || []).indexOf(s.sec) >= 0);
     const ids = secs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
     if (mod.pending) return pendingNode(mod);
@@ -158,7 +173,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
           function () {
             const all = done === ids.length;
-            Store.setDoneMany(ids, !all);
+            Progress.setMany(ids, !all);
             DOM.announce(all ? 'Module cleared.' : 'Module ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -212,8 +227,8 @@ const Tree = (function () {
   /* A whole course as one collapsed row — the top level of the one-page tree. */
   function courseNode(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'course-' + course.id;
 
     const acc = accordion(nid, [el('div', { class: 'rail' },
@@ -227,7 +242,7 @@ const Tree = (function () {
           : tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of ' + course.title,
               function () {
                 const all = done === ids.length;
-                Store.setDoneMany(ids, !all);
+                Progress.setMany(ids, !all);
                 DOM.announce(all ? 'Course cleared.' : 'Course ticked — ' + ids.length + ' notes.');
                 repaint();
               }),
@@ -284,7 +299,7 @@ const Tree = (function () {
         m['mod-' + mod.id] = 1;
         const sec = Pool.sections(course.id)
           .filter(s => (mod.secs || []).indexOf(s.sec) >= 0)
-          .filter(s => s.concepts.some(c => !Store.isDone(c.id)))[0];
+          .filter(s => s.concepts.some(c => !Progress.isDone(c.id)))[0];
         if (sec) m['sec-' + sec.sec] = 1;
       }
     }

@@ -60,10 +60,18 @@ const Store = (function () {
     }
   }
 
-  const flush = DOM.debounce(function () {
+  function write() {
     try { window.localStorage.setItem(KEY, JSON.stringify(state)); }
     catch (e) { volatile = true; }
-  }, 250);
+  }
+
+  const flush = DOM.debounce(write, 250);
+
+  /* Write immediately, skipping the debounce. Anything the very next page load
+     depends on has to go through here: a debounced write is still pending when
+     `location.reload()` tears the page down, and signing in or out and then
+     reloading would land back where you started. */
+  function flushNow() { write(); }
 
   function save(quiet) {
     state.updated = Date.now();
@@ -148,21 +156,59 @@ const Store = (function () {
     return v;
   }
 
-  /* ── the mastery level the app is currently operating at ─────────────── */
-  /* Level 2 has to be unlocked before it can be selected: either a whole
-     course is finished at Level 1, or the learner turns it on deliberately in
-     settings. Opening the app never promotes anyone. */
-  const unlocked = () => pref('level2', false) === true;
-  function unlock(on) { setPref('level2', !!on); if (!on) setPref('level', 1); return unlocked(); }
-  function level() {
-    const want = pref('level', 1);
-    return (want === 2 && unlocked()) ? 2 : 1;
+  /* ── the mastery level, PER COURSE ───────────────────────────────────────
+     Not one switch for the whole app: a learner can be consolidating proofs in
+     Real Analysis I while still meeting Real Analysis II for the first time,
+     and a single global level would force the harder standard onto the course
+     they have only just opened.
+
+     Level 2 has to be unlocked on that course before it can be selected —
+     by finishing the course at Level 1, or deliberately in its settings.
+     Opening the app never promotes anyone. */
+  const lvlKey = courseId => 'level:' + (courseId || '_');
+  const unlKey = courseId => 'level2:' + (courseId || '_');
+
+  const unlocked = courseId => pref(unlKey(courseId), false) === true;
+
+  function unlock(courseId, on) {
+    setPref(unlKey(courseId), !!on);
+    if (!on) setPref(lvlKey(courseId), 1);
+    return unlocked(courseId);
   }
-  function setLevel(n) {
+
+  function level(courseId) {
+    const want = pref(lvlKey(courseId), 1);
+    return (want === 2 && unlocked(courseId)) ? 2 : 1;
+  }
+
+  function setLevel(courseId, n) {
     const want = n === 2 ? 2 : 1;
-    if (want === 2 && !unlocked()) return level();
-    setPref('level', want);
-    return level();
+    if (want === 2 && !unlocked(courseId)) return level(courseId);
+    setPref(lvlKey(courseId), want);
+    return level(courseId);
+  }
+
+  /* ── who is signed in ────────────────────────────────────────────────────
+     Name and roll number are the credentials AND the sync key. They are a pass
+     key, not a password, and every surface that shows them says so. */
+  const identity = () => ({
+    name: pref('syncName', ''),
+    roll: pref('syncRoll', '')
+  });
+  const signedIn = () => {
+    const id = identity();
+    return !!(String(id.name).trim() && String(id.roll).trim());
+  };
+  function signIn(name, roll) {
+    setPref('syncName', String(name || '').trim());
+    setPref('syncRoll', String(roll || '').trim());
+    flushNow();
+    return signedIn();
+  }
+  function signOut() {
+    setPref('syncName', '');
+    setPref('syncRoll', '');
+    flushNow();
   }
 
   /* ── aggregate stats over a given universe of ids ────────────────────── */
@@ -303,8 +349,9 @@ const Store = (function () {
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
     pref, setPref, level, setLevel, unlocked, unlock,
+    identity, signedIn, signIn, signOut,
     summary, exportJSON, reset, tally,
-    snapshot, adopt, mergeStates, onChange,
+    snapshot, adopt, mergeStates, onChange, flushNow,
     isVolatile: () => volatile
   };
 })();

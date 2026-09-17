@@ -386,49 +386,69 @@ mjx-container{ max-width:100%; }
 .crow.done .tt b{ color:var(--ink-2); }
 
 /* ── recall reel ─────────────────────────────────────────────────────────── */
-/* ONE scroller, and only one. A snap container whose cards are themselves
-   scrollable traps the gesture: the inner scroller eats the touch and
-   `overscroll-behavior:contain` then refuses to chain it back out, so a card
-   taller than the screen becomes a dead end. Cards grow instead, the reel
-   scrolls, and snapping is `proximity` — `mandatory` makes everything between
-   two snap points unreachable the moment a card is taller than the viewport. */
+/* ── recall reel ──────────────────────────────────────────────────────────
+   One swipe, one card — the Shorts/Reels rule, and it is `scroll-snap-stop:
+   always` that enforces it. Without it a flick keeps its momentum and sails
+   past two or three snap points before settling, which reads as "it swiped
+   twice". With it the scroller must come to rest on the very next snap point
+   however hard the flick was.
+
+   That rule only holds if every card is EXACTLY one viewport tall. So the card
+   is a fixed-height frame and its content scrolls inside `.inner`, whose
+   overscroll behaviour is left at `auto` on purpose: it scrolls to its own end
+   and then chains out to the reel. (`contain` was tried and is what trapped
+   the gesture on a long card — the inner scroller ate the touch and refused to
+   hand it back.)
+
+   `position:relative` on the reel is load-bearing too: it makes the reel the
+   offsetParent of its cards, so card.offsetTop and reel.scrollTop are in the
+   same coordinate system. And nothing here may carry a `transform`, because
+   the browser snaps to the TRANSFORMED box — a decorative scale() silently
+   moves every snap point. */
 .reel{
-  /* `position:relative` is load-bearing, not decoration: it makes the reel the
-     offsetParent of its cards, so card.offsetTop is in the SAME coordinate
-     system as reel.scrollTop. Without it the cards measure from .wrap, which
-     carries the view-in animation — and every jump lands a few pixels out,
-     by a margin that changes while the view animates in. */
   position:relative;
   height:calc(100dvh - var(--head-h) - var(--tab-h) - env(safe-area-inset-bottom,0px));
   overflow-y:auto; -webkit-overflow-scrolling:touch;
-  scroll-snap-type:y proximity; scroll-behavior:smooth;
+  overscroll-behavior-y:contain;
+  scroll-snap-type:y mandatory; scroll-behavior:smooth;
   scrollbar-width:none;
 }
 .reel::-webkit-scrollbar{ display:none; }
 @media (min-width:880px){ .reel{ height:calc(100dvh - var(--head-h) - var(--tab-h)); } }
+
 .reel-card{
-  min-height:100%; height:auto; scroll-snap-align:start; scroll-snap-stop:normal;
-  display:flex; flex-direction:column; padding:16px 14px 46px; position:relative;
-  /* Opacity only. A `transform: scale()` on the settle effect moved each card's
-     snap point by a few pixels — the browser snaps to the TRANSFORMED box — so
-     every jump landed just past its target and left the card sitting high. */
+  height:100%; flex:0 0 100%;
+  scroll-snap-align:start; scroll-snap-stop:always;
+  display:flex; flex-direction:column; position:relative;
   transition:opacity var(--dur) var(--ease);
   opacity:.45;
 }
 .reel-card.live{ opacity:1; }
-/* auto margins centre the card without clipping tall content the way
+
+/* the card's own scroll region — this is where a long statement goes */
+.reel-card>.inner{
+  flex:1 1 auto; width:100%; max-width:640px; margin:0 auto;
+  display:flex; flex-direction:column; gap:14px;
+  padding:16px 14px 46px;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.reel-card>.inner::-webkit-scrollbar{ display:none; }
+/* centre short content without clipping tall content the way
    justify-content:center would inside a scroller */
-.reel-card>.inner{ width:100%; max-width:640px; margin:auto; display:flex;
-  flex-direction:column; gap:14px; }
-.reel-hint{ position:absolute; left:0; right:0; bottom:14px; text-align:center;
+.reel-card>.inner::before,
+.reel-card>.inner::after{ content:''; margin:auto; }
+
+.reel-hint{ position:absolute; left:0; right:0; bottom:10px; text-align:center;
   font-size:.7rem; color:var(--ink-3); pointer-events:none; }
 .reel-hint span{ display:inline-block; animation:glow 2.6s ease-in-out infinite; }
 .reel-rail{ position:fixed; right:6px; top:calc(var(--head-h) + 18px); z-index:20;
   display:flex; flex-direction:column; gap:5px; align-items:center; }
 .reel-rail i{ width:5px; height:5px; border-radius:50%; background:var(--rule-2);
-  transition:all var(--dur) var(--ease); }
+  transition:background var(--dur) var(--ease), height var(--dur) var(--ease); }
 .reel-rail i.on{ background:var(--accent); height:16px; border-radius:3px; }
 .reel-rail i.got{ background:var(--ok); }
+.reel-rail i.pf{ box-shadow:0 0 0 1.5px var(--accent-line); }
 @media (min-width:880px){ .reel-rail{ right:max(12px,calc(50vw - 380px)); } }
 
 /* ── figures ─────────────────────────────────────────────────────────────── */
@@ -606,6 +626,20 @@ mjx-container{ max-width:100%; }
 /* the inline "tick its groundwork too?" question, and the level 2 mark */
 .ask{ margin-top:12px; animation:rise var(--dur) var(--ease) both; }
 .proof-done{ border-top:1px solid var(--rule); padding-top:12px; }
+
+/* a scratchpad is a full writing workspace, set back a little so it reads as
+   your space rather than more of the note */
+.scratch{ margin-top:6px; padding:12px; border-radius:var(--r-m);
+  border:1px dashed var(--rule-2); background:var(--surface-2); }
+
+/* a concept ticked but with its proof still outstanding, at Level 2 */
+.crow.part .tick{ border-color:var(--warn); color:var(--warn); }
+.crow.part .tt b{ color:var(--ink); }
+
+/* the sign-in gate hides the shell chrome: there is nothing to navigate to */
+body.signed-out nav.tabs{ display:none; }
+body.signed-out{ padding-bottom:0; }
+body.signed-out .top .icon-btn{ display:inline-flex; }
 
 /* ── lists ───────────────────────────────────────────────────────────────── */
 .list{ display:flex; flex-direction:column; border:1px solid var(--rule);
@@ -2194,10 +2228,18 @@ const Store = (function () {
     }
   }
 
-  const flush = DOM.debounce(function () {
+  function write() {
     try { window.localStorage.setItem(KEY, JSON.stringify(state)); }
     catch (e) { volatile = true; }
-  }, 250);
+  }
+
+  const flush = DOM.debounce(write, 250);
+
+  /* Write immediately, skipping the debounce. Anything the very next page load
+     depends on has to go through here: a debounced write is still pending when
+     `location.reload()` tears the page down, and signing in or out and then
+     reloading would land back where you started. */
+  function flushNow() { write(); }
 
   function save(quiet) {
     state.updated = Date.now();
@@ -2282,21 +2324,59 @@ const Store = (function () {
     return v;
   }
 
-  /* ── the mastery level the app is currently operating at ─────────────── */
-  /* Level 2 has to be unlocked before it can be selected: either a whole
-     course is finished at Level 1, or the learner turns it on deliberately in
-     settings. Opening the app never promotes anyone. */
-  const unlocked = () => pref('level2', false) === true;
-  function unlock(on) { setPref('level2', !!on); if (!on) setPref('level', 1); return unlocked(); }
-  function level() {
-    const want = pref('level', 1);
-    return (want === 2 && unlocked()) ? 2 : 1;
+  /* ── the mastery level, PER COURSE ───────────────────────────────────────
+     Not one switch for the whole app: a learner can be consolidating proofs in
+     Real Analysis I while still meeting Real Analysis II for the first time,
+     and a single global level would force the harder standard onto the course
+     they have only just opened.
+
+     Level 2 has to be unlocked on that course before it can be selected —
+     by finishing the course at Level 1, or deliberately in its settings.
+     Opening the app never promotes anyone. */
+  const lvlKey = courseId => 'level:' + (courseId || '_');
+  const unlKey = courseId => 'level2:' + (courseId || '_');
+
+  const unlocked = courseId => pref(unlKey(courseId), false) === true;
+
+  function unlock(courseId, on) {
+    setPref(unlKey(courseId), !!on);
+    if (!on) setPref(lvlKey(courseId), 1);
+    return unlocked(courseId);
   }
-  function setLevel(n) {
+
+  function level(courseId) {
+    const want = pref(lvlKey(courseId), 1);
+    return (want === 2 && unlocked(courseId)) ? 2 : 1;
+  }
+
+  function setLevel(courseId, n) {
     const want = n === 2 ? 2 : 1;
-    if (want === 2 && !unlocked()) return level();
-    setPref('level', want);
-    return level();
+    if (want === 2 && !unlocked(courseId)) return level(courseId);
+    setPref(lvlKey(courseId), want);
+    return level(courseId);
+  }
+
+  /* ── who is signed in ────────────────────────────────────────────────────
+     Name and roll number are the credentials AND the sync key. They are a pass
+     key, not a password, and every surface that shows them says so. */
+  const identity = () => ({
+    name: pref('syncName', ''),
+    roll: pref('syncRoll', '')
+  });
+  const signedIn = () => {
+    const id = identity();
+    return !!(String(id.name).trim() && String(id.roll).trim());
+  };
+  function signIn(name, roll) {
+    setPref('syncName', String(name || '').trim());
+    setPref('syncRoll', String(roll || '').trim());
+    flushNow();
+    return signedIn();
+  }
+  function signOut() {
+    setPref('syncName', '');
+    setPref('syncRoll', '');
+    flushNow();
   }
 
   /* ── aggregate stats over a given universe of ids ────────────────────── */
@@ -2437,8 +2517,9 @@ const Store = (function () {
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
     pref, setPref, level, setLevel, unlocked, unlock,
+    identity, signedIn, signIn, signOut,
     summary, exportJSON, reset, tally,
-    snapshot, adopt, mergeStates, onChange,
+    snapshot, adopt, mergeStates, onChange, flushNow,
     isVolatile: () => volatile
   };
 })();
@@ -2466,10 +2547,18 @@ const Sync = (function () {
 
   const DB = 'https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app';
 
-  /* Mock and validated pools keep separate records: their ids do not mean the
-     same things, and test progress must never land in the real one. */
-  const NS = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live')
-    ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
+  /* Mock and validated pools keep SEPARATE STORES — progress and the sign-in
+     register both. Their ids do not mean the same things, and a name typed
+     into the test build must never appear in, or merge with, the real record.
+     This is the only place that mapping is decided.
+
+        live   ssc4_ra_v1        ssc4_users_v1
+        mock   ssc4_ra_mock_v1   ssc4_users_mock_v1
+
+     AGY owns the live pair; see "Publishing" in HOOK_agy.md. */
+  const LIVE = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live');
+  const NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
+  const USERS = () => LIVE() ? 'ssc4_users_v1' : 'ssc4_users_mock_v1';
 
   let syncing = false;
   let pushT = 0;
@@ -2491,10 +2580,7 @@ const Sync = (function () {
     return (a && b) ? a + '--' + b : '';
   }
 
-  const identity = () => ({
-    name: Store.pref('syncName', ''),
-    roll: Store.pref('syncRoll', '')
-  });
+  const identity = () => Store.identity();
 
   function key() {
     const id = identity();
@@ -2503,6 +2589,7 @@ const Sync = (function () {
 
   const on = () => !!key();
   const url = () => DB + '/' + NS() + '/' + encodeURIComponent(key()) + '.json';
+  const userUrl = () => DB + '/' + USERS() + '/' + encodeURIComponent(key()) + '.json';
 
   function announce(ok, msg) {
     last = { at: Date.now(), ok: ok, msg: msg };
@@ -2581,19 +2668,57 @@ const Sync = (function () {
     pushT = window.setTimeout(() => now({ quiet: true, reload: false }), 1500);
   };
 
+  /* ── signing in ──────────────────────────────────────────────────────────
+     Registers the key in the sign-in store (or touches it if it is already
+     there), then does a normal merge-sync so an existing record arrives before
+     the first screen is drawn. Being offline is NOT a reason to refuse entry:
+     the local record still opens, and the next sync reconciles it. */
+  function hello() {
+    if (!on()) return Promise.resolve({ ok: false, msg: 'Not signed in.' });
+    if (!window.fetch) return now({ quiet: true }).then(r => Object.assign({ returning: null }, r));
+
+    const id = identity();
+    return window.fetch(userUrl(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(function (rec) {
+        const returning = !!(rec && rec.created);
+        return window.fetch(userUrl(), {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: id.name, roll: id.roll,
+            created: (rec && rec.created) || Date.now(),
+            seen: Date.now(),
+            visits: ((rec && rec.visits) || 0) + 1
+          })
+        }).then(() => returning);
+      })
+      .then(function (returning) {
+        return now({ quiet: true }).then(function (r) {
+          return {
+            ok: true, returning: returning,
+            msg: returning
+              ? 'Welcome back — ' + (r.ok ? r.msg.charAt(0).toLowerCase() + r.msg.slice(1) : 'working offline for now')
+              : 'New record created for ' + id.name + '.'
+          };
+        });
+      })
+      .catch(function () {
+        return { ok: false, offline: true,
+          msg: 'Offline — opening the record stored on this device. It will sync when you are back.' };
+      });
+  }
+
   /* ── connecting ──────────────────────────────────────────────────────── */
   function connect(name, roll) {
     const k = keyFor(name, roll);
     if (!k) return Promise.resolve({ ok: false, msg: 'Both a name and a roll number are needed.' });
-    Store.setPref('syncName', String(name).trim());
-    Store.setPref('syncRoll', String(roll).trim());
+    Store.signIn(name, roll);
     return now({ quiet: false });
   }
 
   function disconnect() {
-    Store.setPref('syncName', '');
-    Store.setPref('syncRoll', '');
-    announce(null, 'Disconnected. Progress stays on this device.');
+    Store.signOut();
+    announce(null, 'Signed out. Progress stays on this device.');
   }
 
   /* ── wiring ──────────────────────────────────────────────────────────── */
@@ -2608,7 +2733,7 @@ const Sync = (function () {
     window.addEventListener('online', function () { now({ quiet: true }); });
   }
 
-  return { start, connect, disconnect, now, status, watch, identity, keyFor, on };
+  return { start, hello, connect, disconnect, now, status, watch, identity, keyFor, on };
 })();
 
 
@@ -2744,6 +2869,182 @@ const Pool = (function () {
     objective: () => objective, objectiveOne, objectiveFor, writtenFor,
     background: () => background, chain, unlocks, neighbours, ids, isMock: () => mock
   };
+})();
+
+
+/* ── src/core.progress.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Level-aware progress.
+
+   `Store` knows two independent facts about a concept — it was ticked, and its
+   proof was worked through — and knows nothing about courses. `Pool` knows
+   which course a concept belongs to and whether it has a proof, and knows
+   nothing about progress. This is the one place the two meet, and every screen
+   that draws a tick, a ring or a meter asks HERE rather than asking Store
+   directly. That is what keeps "done" meaning the same thing everywhere.
+
+   What "done" means depends on the level of that concept's own course:
+
+     level 1   ticked. You have encountered the material.
+     level 2   ticked AND, if it has a proof, that proof worked through.
+
+   So switching a course to Level 2 does not erase anything — it raises the
+   bar, and notes that were complete become incomplete again because the
+   standard moved. That is the intended reading: level 2 IS the progress
+   measure for a course that has been switched to it. Courses still at Level 1
+   are unaffected, which is the whole point of the level being per course.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Progress = (function () {
+
+  const courseIdOf = function (c) {
+    if (!c) return null;
+    const course = Pool.courseOfSec(c.sec);
+    return course ? course.id : null;
+  };
+
+  /* The level a given concept is being held to. Background nodes (`s.*`) sit
+     in no course, so they are always level 1 — they are assumed knowledge, not
+     material to work proofs on. */
+  const levelOf = id => Store.level(courseIdOf(Pool.concept(id)));
+
+  const hasProof = id => {
+    const c = Pool.concept(id);
+    return !!(c && c.proof);
+  };
+
+  /* three states, because at level 2 a ticked note with an unworked proof is
+     genuinely neither done nor untouched */
+  function state(id) {
+    const ticked = Store.isDone(id);
+    if (levelOf(id) < 2) return ticked ? 'done' : 'none';
+    if (!ticked) return 'none';
+    if (!hasProof(id)) return 'done';
+    return Store.isProofDone(id) ? 'done' : 'part';
+  }
+
+  const isDone = id => state(id) === 'done';
+
+  /* ── ticking ─────────────────────────────────────────────────────────────
+     One press advances one step, so the tick always has somewhere to go and
+     never silently refuses. At level 2 that is tick -> work the proof -> clear.
+     Returns the new state so the caller can report it. */
+  function advance(id) {
+    const at = state(id);
+    if (at === 'none') { Store.setDone(id, true); return state(id); }
+    if (at === 'part') { Store.setProofDone(id, true); return state(id); }
+    clear(id);
+    return state(id);
+  }
+
+  function clear(id) {
+    if (hasProof(id) && Store.isProofDone(id)) Store.setProofDone(id, false);
+    Store.setDone(id, false);
+  }
+
+  /* Bulk set, for a section / module / course row. At level 2 "tick all" means
+     the level 2 standard, or the row could never reach a full ring. */
+  function setMany(ids, on) {
+    const list = ids || [];
+    Store.setDoneMany(list, on);
+    list.forEach(function (id) {
+      if (levelOf(id) < 2 || !hasProof(id)) {
+        if (!on && Store.isProofDone(id)) Store.setProofDone(id, false);
+        return;
+      }
+      if (Store.isProofDone(id) !== !!on) Store.setProofDone(id, !!on);
+    });
+  }
+
+  /* ── counting ────────────────────────────────────────────────────────── */
+  function count(ids) {
+    const list = ids || [];
+    let done = 0, part = 0;
+    list.forEach(function (id) {
+      const st = state(id);
+      if (st === 'done') done += 1; else if (st === 'part') part += 1;
+    });
+    return { done: done, part: part, total: list.length };
+  }
+
+  /* what a tick button should render: 'true' | 'mixed' | 'false' */
+  function tickState(ids) {
+    const c = count(ids);
+    if (!c.total) return 'false';
+    if (c.done === c.total) return 'true';
+    return (c.done || c.part) ? 'mixed' : 'false';
+  }
+
+  /* ── the reel queue ──────────────────────────────────────────────────────
+     The reel only ever shows material you have said you have met. Studying a
+     statement you have never read is not recall, it is reading with extra
+     steps — and a reel full of unread theorems is the pile the reel exists to
+     avoid.
+
+     Two kinds of card:
+       statement   every ticked concept that has a 'state' card
+       proof       only for a course switched to Level 2, and only for ticked
+                   concepts that carry a proof
+
+     Order is by how badly each card needs the attempt, then by the reading
+     order of the course — no randomness, so the queue is inspectable and the
+     same twice running:
+
+       0  never attempted
+       1  first attempt was 'missed'
+       2  first attempt was 'partly'
+       3  first attempt was 'got'
+
+     A proof card sits one rank behind its own statement card, so you are never
+     asked to reconstruct a proof in the same breath as first stating it. */
+  const RANK = { missed: 1, partly: 2, got: 3 };
+
+  function rank(cardId) {
+    const rec = Store.card(cardId);
+    if (!rec || !rec.first) return 0;
+    return RANK[rec.first] == null ? 3 : RANK[rec.first];
+  }
+
+  function reel(opts) {
+    const o = opts || {};
+    const out = [];
+
+    Pool.deck().forEach(function (card, i) {
+      if (!Store.isDone(card.cid)) return;
+      out.push({
+        kind: 'state', id: card.id, cid: card.cid, sec: card.sec,
+        title: card.title, conceptKind: card.kind,
+        q: card.q, a: card.a,
+        rank: rank(card.id), order: i
+      });
+    });
+
+    Pool.concepts().forEach(function (c, i) {
+      if (!c.proof || !Store.isDone(c.id)) return;
+      if (Store.level(courseIdOf(c)) < 2) return;
+      const id = c.id + '#proof';
+      out.push({
+        kind: 'proof', id: id, cid: c.id, sec: c.sec,
+        title: c.title, conceptKind: c.kind,
+        proof: c.proof,
+        rank: rank(id), order: i + 0.5
+      });
+    });
+
+    const list = o.onlyNew ? out.filter(x => x.rank === 0) : out;
+    return list.sort(function (a, b) {
+      if (a.rank !== b.rank) return a.rank - b.rank;
+      return a.order - b.order;
+    });
+  }
+
+  /* every id the reel could ever contain, for the "n of m attempted" meter */
+  function reelIds() {
+    return reel().map(x => x.id);
+  }
+
+  return { levelOf, hasProof, state, isDone, advance, clear, setMany,
+    count, tickState, reel, reelIds, courseIdOf };
 })();
 
 
@@ -2933,11 +3234,20 @@ const Latex = (function () {
 
   /* ── insertion ────────────────────────────────────────────────────────── */
 
-  /* Replace [from,to) with `ins`, honouring CARET and any selection. Works on
-     an <input> and on a <textarea> alike. */
-  function splice(field, from, to, ins) {
+  /* Replace [from,to) with `ins`. CARET marks where the caret should land.
+
+     `opts.wrap` decides what happens to the text being replaced, and the two
+     cases are genuinely different:
+
+       wrap: true   the range is the user's SELECTION and CARET means "put it
+                    here", so \sqrt{▮} around a selected x gives \sqrt{x}.
+       wrap: false  the range is a half-typed command being replaced by the
+                    completion, so it must be DISCARDED — keeping it turns
+                    `\eps` + `$\varepsilon▮$` into `$\varepsilon\eps$`. */
+  function splice(field, from, to, ins, opts) {
+    const wrap = !opts || opts.wrap !== false;
     const val = field.value;
-    const selected = val.slice(from, to);
+    const selected = wrap ? val.slice(from, to) : '';
     let text = ins, caretAt;
     const mark = text.indexOf(CARET);
     if (mark >= 0) {
@@ -2959,15 +3269,47 @@ const Latex = (function () {
     splice(field, a, b, ins);
   }
 
-  /* Accept a completion: the partial command being typed is replaced whole. */
-  function accept(field, entry) {
-    const a = field.selectionStart == null ? field.value.length : field.selectionStart;
-    const tok = tokenAt(field.value, a);
-    if (tok) splice(field, tok.from, tok.to, entry.ins);
-    else insert(field, entry.ins);
+  /* Is the caret inside maths? Count the unescaped $ before it: an odd number
+     means an inline span is open. `$$` counts as one delimiter either way, so
+     a display block reads as "open" too, which is the answer we want. */
+  function inMath(value, caret) {
+    const upto = String(value || '').slice(0, caret);
+    let n = 0;
+    for (let i = 0; i < upto.length; i++) {
+      if (upto[i] !== '$') continue;
+      if (i && upto[i - 1] === '\\') continue;      /* an escaped \$ is a literal */
+      if (upto[i + 1] === '$') { i += 1; }
+      n += 1;
+    }
+    return n % 2 === 1;
   }
 
-  return { CATALOG, CARET, usedBy, tokenAt, complete, suggestions, insert, splice, accept };
+  /* Accept a completion: the partial command being typed is replaced whole.
+
+     In a markdown line, a command typed in the middle of a sentence has to be
+     wrapped in $…$ or it renders as literal backslash-text. Doing that at
+     accept time is what lets someone write a paragraph and drop a symbol into
+     it without stopping to think about delimiters. */
+  function accept(field, entry, opts) {
+    const o = opts || {};
+    const a = field.selectionStart == null ? field.value.length : field.selectionStart;
+    const tok = tokenAt(field.value, a);
+    let ins = entry.ins;
+
+    if (o.wrapInMath && !inMath(field.value, tok ? tok.from : a)) {
+      const body = ins.replace(/\s+$/, '');
+      const mark = body.indexOf(CARET);
+      ins = mark >= 0
+        ? '$' + body.slice(0, mark) + CARET + body.slice(mark + 1) + '$'
+        : '$' + body + CARET + '$';
+    }
+
+    /* the half-typed command is replaced, never wrapped */
+    if (tok) splice(field, tok.from, tok.to, ins, { wrap: false });
+    else insert(field, ins);
+  }
+
+  return { CATALOG, CARET, usedBy, tokenAt, inMath, complete, suggestions, insert, splice, accept };
 })();
 
 
@@ -3008,9 +3350,15 @@ const UI = (function () {
     ? el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'extension' : c.tier })
     : null;
 
-  const doneBadge = id => Store.isDone(id)
-    ? el('span', { class: 'badge ok', text: '✓ completed' })
-    : null;
+  /* Level-aware: at Level 2 a ticked note with an unworked proof is not
+     "completed", it is part-way, and saying otherwise would make the badge and
+     the tree disagree. */
+  const doneBadge = function (id) {
+    const st = Progress.state(id);
+    if (st === 'done') return el('span', { class: 'badge ok', text: '✓ completed' });
+    if (st === 'part') return el('span', { class: 'badge warn', text: 'proof outstanding' });
+    return null;
+  };
 
   const meter = (a, b, ok) => el('div', { class: 'meter' + (ok ? ' ok' : '') }, [
     el('i', { style: { width: DOM.pct(a, b) + '%' } })
@@ -3030,13 +3378,13 @@ const UI = (function () {
   /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done.
      Neither is awarded for opening anything, and the caption says which rung
      the learner is standing on rather than implying the whole ladder. */
-  function ladder(done, proofDone, hasProof) {
+  function ladder(done, proofDone, hasProof, courseId) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
     const at = proofDone ? 2 : done ? 1 : 0;
     const caption = at === 2 ? '2 · proof worked through'
       : at === 1 ? '1 · completed'
       : '1 · not yet completed';
-    const right = Store.level() === 2
+    const right = Store.level(courseId) === 2
       ? (hasProof === false ? 'no proof on this note'
         : at === 2 ? 'levels 3–5 need delayed evidence'
         : 'work the proof to reach level 2')
@@ -3053,10 +3401,41 @@ const UI = (function () {
 
   /* The current level as a badge, and the switch that changes it. Level 2 is
      never entered by accident: it has to be unlocked first (Store.unlocked). */
-  const levelBadge = () => el('span', {
-    class: 'badge' + (Store.level() === 2 ? ' accent' : ''),
-    text: 'Level ' + Store.level()
+  const levelBadge = courseId => el('span', {
+    class: 'badge' + (Store.level(courseId) === 2 ? ' accent' : ''),
+    text: 'Level ' + Store.level(courseId)
   });
+
+  /* The level switch for ONE course. Level 2 has to be unlocked on that course
+     before it can be picked, and switching is always a deliberate press. */
+  function levelSwitch(course, after) {
+    const id = course.id;
+    const row = el('div', { class: 'row' }, [1, 2].map(function (n) {
+      const can = n === 1 || Store.unlocked(id);
+      const b = el('button', {
+        class: 'chip', type: 'button', 'aria-pressed': String(Store.level(id) === n),
+        disabled: !can, text: 'Level ' + n
+      });
+      b.addEventListener('click', function () {
+        Store.setLevel(id, n);
+        DOM.announce(course.title + ' set to Level ' + Store.level(id) + '.');
+        if (after) after();
+      });
+      return b;
+    }));
+    if (!Store.unlocked(id)) {
+      row.appendChild(el('button', {
+        class: 'chip', type: 'button', text: 'Unlock Level 2',
+        on: { click: function () {
+          Store.unlock(id, true);
+          Store.setLevel(id, 2);
+          DOM.announce('Level 2 unlocked for ' + course.title + '.');
+          if (after) after();
+        } }
+      }));
+    }
+    return row;
+  }
 
   /* Which of a concept's prerequisites are not ticked yet. One definition,
      because the note view and the syllabus tree both offer the same cascade
@@ -3150,7 +3529,7 @@ const UI = (function () {
 
   return {
     title, crumb, prose, math, kindBadge, tierBadge, doneBadge, meter, stat, empty,
-    ladder, levelBadge, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
+    ladder, levelBadge, levelSwitch, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
   };
 })();
 
@@ -3847,14 +4226,27 @@ const Tree = (function () {
     DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
   }
 
+  /* At Level 2 a ticked note whose proof is not worked is genuinely neither
+     done nor untouched, so the tick has three states and one press advances
+     one step: tick → work the proof → clear. That way the control always has
+     somewhere to go and never silently refuses. */
   function conceptRow(c, repaint) {
-    const done = Store.isDone(c.id);
-    const row = el('div', { class: 'crow' + (done ? ' done' : '') }, [
-      tickButton(String(done), (done ? 'Unmark' : 'Mark') + ' "' + c.title + '" completed',
+    const st = Progress.state(c.id);
+    const lvl = Progress.levelOf(c.id);
+    const needsProof = lvl === 2 && Progress.hasProof(c.id);
+
+    const label = st === 'none'
+      ? 'Mark "' + c.title + '" completed'
+      : st === 'part'
+        ? 'Mark the proof of "' + c.title + '" as worked through'
+        : 'Clear "' + c.title + '"';
+
+    const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
+      tickButton(st === 'done' ? 'true' : st === 'part' ? 'mixed' : 'false', label,
         function () {
-          const on = !Store.isDone(c.id);
-          Store.setDone(c.id, on);
-          if (on) offerCascade(c);
+          const was = st;
+          Progress.advance(c.id);
+          if (was === 'none') offerCascade(c);
           repaint();
         }),
       el('a', { href: Router.href('note/' + c.id) }, [
@@ -3862,6 +4254,8 @@ const Tree = (function () {
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
+        needsProof && st === 'part'
+          ? el('span', { class: 'badge warn', text: 'proof' }) : null,
         DOM.icon('chev', 18, 'chev')
       ])
     ]);
@@ -3870,8 +4264,8 @@ const Tree = (function () {
 
   function sectionNode(s, repaint) {
     const ids = s.concepts.map(c => c.id);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
 
     const acc = accordion(nid, s.concepts.length
@@ -3885,7 +4279,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
           function () {
             const all = done === ids.length;
-            Store.setDoneMany(ids, !all);
+            Progress.setMany(ids, !all);
             DOM.announce(all ? 'Section cleared.' : 'Section ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -3906,8 +4300,8 @@ const Tree = (function () {
   function moduleNode(course, mod, repaint) {
     const secs = Pool.sections(course.id).filter(s => (mod.secs || []).indexOf(s.sec) >= 0);
     const ids = secs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
     if (mod.pending) return pendingNode(mod);
@@ -3918,7 +4312,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
           function () {
             const all = done === ids.length;
-            Store.setDoneMany(ids, !all);
+            Progress.setMany(ids, !all);
             DOM.announce(all ? 'Module cleared.' : 'Module ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -3972,8 +4366,8 @@ const Tree = (function () {
   /* A whole course as one collapsed row — the top level of the one-page tree. */
   function courseNode(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'course-' + course.id;
 
     const acc = accordion(nid, [el('div', { class: 'rail' },
@@ -3987,7 +4381,7 @@ const Tree = (function () {
           : tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of ' + course.title,
               function () {
                 const all = done === ids.length;
-                Store.setDoneMany(ids, !all);
+                Progress.setMany(ids, !all);
                 DOM.announce(all ? 'Course cleared.' : 'Course ticked — ' + ids.length + ' notes.');
                 repaint();
               }),
@@ -4044,7 +4438,7 @@ const Tree = (function () {
         m['mod-' + mod.id] = 1;
         const sec = Pool.sections(course.id)
           .filter(s => (mod.secs || []).indexOf(s.sec) >= 0)
-          .filter(s => s.concepts.some(c => !Store.isDone(c.id)))[0];
+          .filter(s => s.concepts.some(c => !Progress.isDone(c.id)))[0];
         if (sec) m['sec-' + sec.sec] = 1;
       }
     }
@@ -4103,15 +4497,27 @@ const WriteBox = (function () {
     const concept = o.concept || null;
     const uid = 'w' + Math.random().toString(36).slice(2, 8);
 
-    /* A line with no $ in a maths-first box is bare LaTeX, rendered as display
-       maths. One rule, stated in the hint, so nothing about it is a surprise. */
-    const mathFirst = o.mathFirst !== false;
+    /* MARKDOWN IS THE DEFAULT. Every line is prose until you put maths in it,
+       because a workspace you cannot write a sentence in is not a workspace —
+       it is a formula box. Maths goes in as $…$ and $$…$$, the same way it is
+       authored everywhere else in this app, and the Σ key wraps the whole line
+       for when the line really is nothing but maths.
+
+       `mathFirst: true` is the opt-in exception for boxes that exist only to
+       capture one formula; there, a line with no $ is taken as bare LaTeX. */
+    const mathFirst = o.mathFirst === true;
+
+    /* What the draft is filed under. Usually the concept, but a proof
+       scratchpad and a statement attempt are different pieces of work on the
+       same concept, so they need different keys — 'proof:<id>' for the former.
+       Both merge across devices like any other draft. */
+    const draftKey = o.draftKey || (concept ? concept.id : null);
 
     let firstInputFired = false;
     let lines = [''];
     let active = 0;
 
-    const stored = (o.value != null ? o.value : (concept ? Store.draft(concept.id) : '')) || '';
+    const stored = (o.value != null ? o.value : (draftKey ? Store.draft(draftKey) : '')) || '';
     if (stored) { lines = stored.split('\n'); active = lines.length - 1; }
 
     /* ── chrome ────────────────────────────────────────────────────────── */
@@ -4125,8 +4531,9 @@ const WriteBox = (function () {
       class: 'small muted', id: uid + '-hint', style: { margin: '6px 0 0' },
       text: (mathFirst
         ? 'One line at a time. A line with no $ is typeset as display maths; use $…$ to mix maths into words. '
-        : 'One line at a time. Markdown, with maths written as $…$ and $$…$$. ') +
-        'Enter starts the next line, and a backslash brings up the commands.'
+        : 'Write normally — **bold**, # headings, - lists. Maths goes in as $…$, and a backslash '
+          + 'opens it for you. The Σ key turns the whole line into display maths. ') +
+        'Enter starts the next line.'
     });
 
     /* the live input; one line, always the one you are writing */
@@ -4136,7 +4543,7 @@ const WriteBox = (function () {
       'aria-describedby': uid + '-hint',
       placeholder: o.placeholder || (mathFirst
         ? '\\forall \\varepsilon > 0 \\; \\exists \\delta > 0 \\ldots'
-        : 'Write a line — **bold**, a list, or $x^2$…')
+        : 'Write a line — words, **bold**, or maths like $\\varepsilon > 0$…')
     });
 
     const newlineBtn = el('button', { class: 'wkey', type: 'button',
@@ -4251,8 +4658,8 @@ const WriteBox = (function () {
     }, 200);
 
     const persist = DOM.debounce(function () {
-      if (!concept) return;
-      Store.saveDraft(concept.id, value());
+      if (!draftKey) return;
+      Store.saveDraft(draftKey, value());
       saveNote.textContent = value().trim() ? 'Draft saved' : '';
     }, 700);
 
@@ -4268,6 +4675,7 @@ const WriteBox = (function () {
       field.focus();
       const at = caret === 'end' ? field.value.length : (caret || 0);
       try { field.setSelectionRange(at, at); } catch (e) { /* not focusable yet */ }
+      revealInput();
     }
 
     /* ── completions ───────────────────────────────────────────────────── */
@@ -4289,7 +4697,7 @@ const WriteBox = (function () {
           class: 'wsug' + (i === picked && tok ? ' on' : ''),
           type: 'button', role: 'option', 'aria-selected': String(i === picked && !!tok),
           title: '\\' + k.cmd + (k.desc ? ' — ' + k.desc : ''),
-          on: { click: function () { Latex.accept(field, k); refreshStrip(); } }
+          on: { click: function () { take(k); } }
         }, [
           el('span', { class: 's', text: k.show }),
           el('span', { class: 'c', text: '\\' + k.cmd })
@@ -4302,8 +4710,60 @@ const WriteBox = (function () {
       }
     }
 
+    /* Insert a command. In a markdown line it is wrapped in $…$ unless the
+       caret is already inside maths — so a symbol can be dropped into the
+       middle of a sentence without stopping to think about delimiters. */
+    function take(entry) {
+      Latex.accept(field, entry, { wrapInMath: !mathFirst });
+      refreshStrip();
+      revealInput();
+    }
+
+    /* ── keeping the input above the keyboard ────────────────────────────────
+       An on-screen keyboard shrinks the VISUAL viewport but not the layout
+       one, so an input near the bottom ends up behind it and the page looks
+       like it simply refuses to scroll far enough. Correct it by hand: measure
+       how far the input row plus its command strip overflow the visible
+       bottom, and scroll the nearest scrolling ancestor by exactly that — the
+       reel when we are inside it, the window otherwise. */
+    function scroller(node) {
+      let n = node.parentElement;
+      while (n && n !== document.body) {
+        const st = window.getComputedStyle(n);
+        if (/(auto|scroll)/.test(st.overflowY) && n.scrollHeight > n.clientHeight + 4) return n;
+        n = n.parentElement;
+      }
+      return null;
+    }
+
+    function revealInput() {
+      const vv = window.visualViewport;
+      const bottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      const top = vv ? vv.offsetTop : 0;
+      const r = strip.getBoundingClientRect();
+      const inputTop = field.getBoundingClientRect().top;
+
+      let by = 0;
+      const over = r.bottom + 12 - bottom;
+      if (over > 1) by = over;
+      else if (inputTop - 12 < top) by = inputTop - top - 12;
+      if (!by) return;
+
+      const sc = scroller(field);
+      if (sc) sc.scrollTop += by;
+      else window.scrollBy(0, by);
+    }
+
+    const reveal = DOM.debounce(revealInput, 90);
+    field.addEventListener('focus', reveal);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', reveal);
+      window.visualViewport.addEventListener('scroll', reveal);
+    }
+
     /* ── keys ──────────────────────────────────────────────────────────── */
     field.addEventListener('input', function () {
+      reveal();
       liveRender();
       commitField();
       persist();
@@ -4322,8 +4782,7 @@ const WriteBox = (function () {
         const tok = Latex.tokenAt(field.value, caret);
         if (tok) {
           e.preventDefault();
-          Latex.accept(field, matches[picked] || matches[0]);
-          refreshStrip();
+          take(matches[picked] || matches[0]);
           return;
         }
       }
@@ -4422,6 +4881,119 @@ const WriteBox = (function () {
 })();
 
 
+/* ── src/view.login.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Sign in.
+
+   The app does not open until there is a name and a roll number, because
+   those two are the key the record is stored and merged under. A progress
+   record that starts anonymous and is claimed later cannot be merged honestly
+   — you would have to guess which device's history was whose.
+
+   Be straight about what this is: it is a PASS KEY, not a password. Anyone who
+   knows both halves can open this record. It exists so your work follows you
+   between a phone and a laptop without an account to create, and the screen
+   says exactly that rather than dressing it up as security.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Login = (function () {
+
+  const el = DOM.el;
+
+  function mount(host, onDone) {
+    const nameIn = el('input', {
+      class: 'tin', type: 'text', id: 'login-name', autocomplete: 'name',
+      placeholder: 'e.g. Ihjas Ahammed', spellcheck: 'false', enterkeyhint: 'next'
+    });
+    const rollIn = el('input', {
+      class: 'tin', type: 'text', id: 'login-roll', autocomplete: 'off',
+      placeholder: 'e.g. 21-MAT-07', spellcheck: 'false', enterkeyhint: 'go'
+    });
+
+    const known = Store.identity();
+    nameIn.value = known.name || '';
+    rollIn.value = known.roll || '';
+
+    const note = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
+    const go = el('button', { class: 'btn primary', type: 'submit', text: 'Open my study record' });
+
+    const keyLine = el('p', { class: 'small mono', style: { margin: '8px 0 0', color: 'var(--ink-3)' } });
+    function paintKey() {
+      const k = Sync.keyFor(nameIn.value, rollIn.value);
+      keyLine.textContent = k ? 'record: ' + k : '';
+    }
+    nameIn.addEventListener('input', paintKey);
+    rollIn.addEventListener('input', paintKey);
+    paintKey();
+
+    let busy = false;
+    function submit(e) {
+      if (e) e.preventDefault();
+      if (busy) return;
+      const name = nameIn.value.trim(), roll = rollIn.value.trim();
+      if (!name || !roll) {
+        note.textContent = 'Both a name and a roll number are needed — together they are the key.';
+        (name ? rollIn : nameIn).focus();
+        return;
+      }
+      busy = true;
+      go.disabled = true;
+      go.textContent = 'Opening…';
+      note.textContent = 'Looking for an existing record…';
+
+      Store.signIn(name, roll);
+      Sync.hello().then(function (r) {
+        note.textContent = r.msg || '';
+        onDone(r);
+      }, function () {
+        /* offline is not a reason to lock someone out of their own device */
+        note.textContent = '';
+        onDone({ ok: false, offline: true });
+      });
+    }
+
+    const form = el('form', { class: 'stack', style: { gap: '14px' }, on: { submit: submit } }, [
+      el('div', {}, [
+        el('div', { class: 'kicker', text: 'Real Analysis · study system' }),
+        el('h1', { tabindex: '-1', id: 'pagetitle', text: 'Sign in to your record' })
+      ]),
+      el('p', { class: 'lede' }, [
+        'Your name and roll number are the key your progress is stored under. ' +
+        'Enter the same two on any device and the record follows you.'
+      ]),
+      el('div', { class: 'card' }, [
+        el('label', { class: 'kicker', for: 'login-name', text: 'Name' }),
+        el('div', { style: { margin: '6px 0 14px' } }, [nameIn]),
+        el('label', { class: 'kicker', for: 'login-roll', text: 'Roll number' }),
+        el('div', { style: { margin: '6px 0 0' } }, [rollIn]),
+        keyLine
+      ]),
+      el('div', { class: 'btn-row' }, [go]),
+      note,
+      el('div', { class: 'banner' }, [
+        el('span', { 'aria-hidden': 'true', text: 'ⓘ' }),
+        el('span', {}, [
+          el('b', { text: 'This is a pass key, not a password. ' }),
+          'Anyone who knows your name and roll number can open this record. It keeps your ' +
+          'work together across devices; it does not protect it.'
+        ])
+      ]),
+      Pool.isMock() ? el('p', { class: 'small muted', style: { margin: 0 },
+        text: 'Test build: records here are kept in a separate store from the real app, so nothing you do can reach it.' }) : null
+    ]);
+
+    nameIn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); rollIn.focus(); }
+    });
+
+    host.appendChild(el('div', { class: 'wrap view-in' }, [form]));
+    (nameIn.value ? rollIn : nameIn).focus();
+  }
+
+  return { mount };
+})();
+
+
 /* ── src/view.home.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Today — what to do next, and what the app actually knows about you.
@@ -4441,7 +5013,7 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => !Store.isDone(c.id))[0] || null;
+    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0] || null;
   }
   function nextCard() {
     return Pool.deck().filter(c => !(Store.card(c.id) || {}).first)[0] || null;
@@ -4449,19 +5021,11 @@ const ViewHome = (function () {
   function nextQuestion() {
     return Pool.objective().filter(q => !(Store.omr(q.id) || {}).first)[0] || null;
   }
+  /* only from courses actually held to Level 2 — offering proof work on a
+     course still at Level 1 is offering work the learner has not opted into */
   function nextProof() {
-    return Pool.concepts().filter(c => c.proof && !Store.isProofDone(c.id))[0] || null;
-  }
-
-  /* A course finished at Level 1 is the earned route into Level 2. It has to
-     be a real course with real content — a `pending` course, or one with no
-     concepts loaded, must never count as "finished". */
-  function finishedCourse() {
-    return Pool.courses().filter(function (course) {
-      if (course.pending) return false;
-      const ids = Pool.ids.concepts(course.id);
-      return ids.length > 0 && ids.every(Store.isDone);
-    })[0] || null;
+    return Pool.concepts().filter(c =>
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0] || null;
   }
 
   function step(n, label, detail, href, ready) {
@@ -4475,171 +5039,101 @@ const ViewHome = (function () {
     ]);
   }
 
-  function courseRow(course) {
+  /* One course, with its OWN level. The ring counts whatever "done" means for
+     this course, so a course switched to Level 2 shows its proof work and a
+     course still at Level 1 is untouched by that decision. */
+  function courseCard(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
-    const pc = DOM.pct(done, ids.length);
+    const c = Progress.count(ids);
+    const at = Store.level(course.id);
+    const pc = DOM.pct(c.done, c.total);
+
     const ring = el('span', {
-      class: 'ring' + (ids.length && done === ids.length ? ' done' : ''),
-      role: 'img', 'aria-label': done + ' of ' + ids.length + ' ticked'
-    }, [el('i', { text: ids.length ? done + '/' + ids.length : '—' })]);
+      class: 'ring' + (c.total && c.done === c.total ? ' done' : ''),
+      role: 'img', 'aria-label': c.done + ' of ' + c.total + ' complete at level ' + at
+    }, [el('i', { text: c.total ? c.done + '/' + c.total : '—' })]);
     window.requestAnimationFrame(() => ring.style.setProperty('--p', pc));
+
+    if (course.pending) {
+      return el('div', { class: 'card' }, [
+        el('div', { class: 'spread' }, [
+          el('div', { class: 'kicker', text: course.title }),
+          el('span', { class: 'badge warn', text: 'level 3' })
+        ]),
+        el('p', { class: 'small muted', style: { margin: '8px 0 0' },
+          text: course.pendingNote || 'Content arrives at Level 3.' })
+      ]);
+    }
 
     const proofIds = Pool.ids.proofs(course.id);
     const proofsDone = proofIds.filter(Store.isProofDone).length;
 
-    return el('a', { class: 'item', href: Router.href('study/' + course.id) }, [
-      course.pending ? el('span', { class: 'ix', text: '·' }) : ring,
-      el('span', { class: 'tt' }, [
-        el('b', { text: course.title }),
-        el('span', { text: course.pending ? 'content arrives at Level 3'
-          : (Store.level() === 2 && proofIds.length)
-            ? course.blurb + ' · ' + proofsDone + '/' + proofIds.length + ' proofs worked'
-            : course.blurb })
-      ]),
-      course.pending
-        ? el('span', { class: 'badge warn', text: 'level 3' })
-        : el('span', { class: 'go', 'aria-hidden': 'true', text: '›' })
-    ]);
-  }
-
-  /* ── the level switch ─────────────────────────────────────────────────── */
-  function levelCard() {
-    const host = el('div', { class: 'card glass' });
-    const body = el('div', {});
-
-    function paint() {
-      DOM.clear(body);
-      const at = Store.level();
-      const open = Store.unlocked();
-      const earned = finishedCourse();
-
-      const switcher = el('div', { class: 'row', style: { marginTop: '10px' } },
-        [1, 2].map(function (n) {
-          const can = n === 1 || open;
-          const b = el('button', {
-            class: 'chip', type: 'button', 'aria-pressed': String(at === n),
-            disabled: !can, text: 'Level ' + n
-          });
-          b.addEventListener('click', function () {
-            Store.setLevel(n);
-            DOM.announce('Switched to Level ' + Store.level() + '.');
-            Router.reload();
-          });
-          return b;
-        }));
-
-      DOM.add(body, [
-        el('p', { class: 'small muted', style: { margin: '4px 0 0' },
-          text: at === 2
-            ? 'Level 2 adds proof work: mark a proof as worked through and it counts, per proof, towards the second rung.'
-            : 'Level 1 tracks what you have encountered and how your first attempts went. Level 2 adds proof work.' }),
-        switcher
-      ]);
-
-      if (!open) {
-        /* boot.js has already granted the unlock if a course is finished, so
-           reaching here means it has not been earned — the honest offer is to
-           say so and let the learner take it anyway. */
-        DOM.add(body, [
-          el('p', { class: 'small muted', style: { margin: '10px 0 0' },
-            text: 'Level 2 unlocks by itself when a whole course is ticked at Level 1. '
-              + 'You can also turn it on now if you would rather not wait.' }),
-          el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
-            el('button', {
-              class: 'btn', type: 'button', text: 'Turn on Level 2 anyway',
-              on: { click: function () {
-                Store.unlock(true);
-                Store.setLevel(2);
-                DOM.announce('Level 2 unlocked.');
-                Router.reload();
-              } }
-            })
-          ])
-        ]);
-      } else {
-        DOM.add(body, [
-          earned && at === 1 ? el('p', { class: 'small muted', style: { margin: '10px 0 0' },
-            text: 'You finished ' + earned.title + ' at Level 1, so Level 2 is open. '
-              + 'Switching is still yours to make.' }) : null,
-          el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
-            el('button', {
-              class: 'chip', type: 'button', text: 'Lock Level 2 again',
-              on: { click: function () {
-                Store.unlock(false);
-                DOM.announce('Back to Level 1. Nothing you recorded was removed.');
-                Router.reload();
-              } }
-            })
-          ])
-        ]);
-      }
-    }
-
-    DOM.add(host, [
+    return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
-        el('div', { class: 'kicker', text: 'Mastery level' }),
-        UI.levelBadge()
+        el('a', { class: 'kicker', style: { textDecoration: 'none' },
+          href: Router.href('study/' + course.id), text: course.title }),
+        UI.levelBadge(course.id)
       ]),
-      body
+      el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
+        ring,
+        el('span', { class: 'tt' }, [
+          el('b', { text: c.done + ' of ' + c.total + (at === 2 ? ' at level 2' : ' ticked') }),
+          el('span', { text: at === 2
+            ? (c.part ? c.part + ' ticked with the proof still outstanding' : course.blurb)
+            : course.blurb })
+        ])
+      ]),
+      at === 2 && proofIds.length
+        ? el('div', { style: { marginTop: '10px' } }, [
+            el('div', { class: 'spread' }, [
+              el('span', { class: 'count', text: 'proofs worked' }),
+              el('span', { class: 'count', text: proofsDone + '/' + proofIds.length })
+            ]),
+            el('div', { style: { marginTop: '6px' } }, [UI.meter(proofsDone, proofIds.length)])
+          ])
+        : null,
+      el('div', { style: { marginTop: '12px' } }, [UI.levelSwitch(course, repaint)]),
+      el('p', { class: 'small muted', style: { margin: '8px 0 0' },
+        text: at === 2
+          ? 'At Level 2 a note counts as done once its proof is worked through.'
+          : (Store.unlocked(course.id)
+              ? 'Level 2 is unlocked here — switch when you want the proofs to count.'
+              : 'Finish this course at Level 1 and Level 2 unlocks by itself.') })
     ]);
-    paint();
-    return host;
   }
 
   /* ── sync ─────────────────────────────────────────────────────────────── */
+  /* Signed in is the only state this screen can be reached in, so this is an
+     account card, not a connect form. */
   function syncCard() {
-    const id = Sync.identity();
+    const id = Store.identity();
     const host = el('div', { class: 'card tint' });
-
-    const nameIn = el('input', { class: 'tin', type: 'text', id: 'sync-name',
-      placeholder: 'Name', autocomplete: 'name', spellcheck: 'false' });
-    const rollIn = el('input', { class: 'tin', type: 'text', id: 'sync-roll',
-      placeholder: 'Roll number', autocomplete: 'off', spellcheck: 'false' });
-    nameIn.value = id.name;
-    rollIn.value = id.roll;
-
     const state = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
-    const btnRow = el('div', { class: 'btn-row', style: { marginTop: '10px' } });
 
     function paint(last) {
-      const on = Sync.on();
-      DOM.clear(btnRow);
-      DOM.add(btnRow, [
-        el('button', {
-          class: 'btn primary', type: 'button', text: on ? 'Sync now' : 'Connect',
-          on: { click: function () {
-            if (on) Sync.now({}).then(r => paint(r && { ok: r.ok, msg: r.msg }));
-            else Sync.connect(nameIn.value, rollIn.value).then(function (r) {
-              paint(r && { ok: r.ok, msg: r.msg });
-              if (r && r.ok) Router.reload();
-            });
-          } }
-        }),
-        on ? el('button', {
-          class: 'btn', type: 'button', text: 'Disconnect',
-          on: { click: function () { Sync.disconnect(); Router.reload(); } }
-        }) : null
-      ]);
-
       const s = Sync.status();
-      state.textContent = last && last.msg ? last.msg
-        : on ? 'Connected as ' + s.key + '. Progress merges across every device using this name and roll number.'
-        : 'Enter the same name and roll number on another device and progress follows you. '
-          + 'This is a pass key, not a password — anyone who knows both can read this record.';
+      state.textContent = (last && last.msg) ? last.msg
+        : 'Signed in as ' + id.name + ' · ' + id.roll + '. Progress merges across every device '
+          + 'that signs in with these two. It is a pass key, not a password.';
     }
-
-    Sync.watch(function (last) { paint(last); });
+    Sync.watch(paint);
     paint(Sync.status().last);
 
     DOM.add(host, [
       el('div', { class: 'spread' }, [
-        el('div', { class: 'kicker', text: 'Sync across devices' }),
-        el('span', { class: 'badge' + (Sync.on() ? ' ok' : ''),
-          text: Sync.on() ? 'connected' : 'this device only' })
+        el('div', { class: 'kicker', text: 'Your record' }),
+        el('span', { class: 'badge ok', text: Sync.status().key })
       ]),
-      el('div', { class: 'row', style: { marginTop: '10px', gap: '8px' } }, [nameIn, rollIn]),
-      btnRow,
+      el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
+        el('button', { class: 'btn primary', type: 'button', text: 'Sync now',
+          on: { click: function () { Sync.now({}).then(r => paint({ msg: r && r.msg })); } } }),
+        el('button', { class: 'btn', type: 'button', text: 'Sign out',
+          on: { click: function () {
+            if (!window.confirm('Sign out? Progress stays on this device and in the cloud record.')) return;
+            Sync.disconnect();
+            location.reload();
+          } } })
+      ]),
       state
     ]);
     return host;
@@ -4687,16 +5181,20 @@ const ViewHome = (function () {
   }
 
   function render() {
-    const at = Store.level();
-    const s = Store.summary(Pool.ids.concepts(), Pool.ids.cards(),
-      Pool.ids.objective(), Pool.ids.proofs());
+    /* Any course at Level 2 is enough to make the proof surfaces worth
+       showing; the numbers themselves are per course, on the cards below. */
+    const anyL2 = Pool.courses().some(c => Store.level(c.id) === 2);
+    const all = Pool.ids.concepts();
+    const overall = Progress.count(all);
+    const s = Store.summary(all, Pool.ids.cards(), Pool.ids.objective(), Pool.ids.proofs());
     const note = nextUndone(), card = nextCard(), q = nextQuestion(), pf = nextProof();
 
     const root = el('div', { class: 'stack' });
 
     const tiles = [
-      UI.stat(s.notes.done + '/' + s.notes.total, 'Notes ticked', 'ladder level 1',
-        UI.meter(s.notes.done, s.notes.total)),
+      UI.stat(overall.done + '/' + overall.total, 'Notes complete',
+        anyL2 ? 'each at its own level' : 'ladder level 1',
+        UI.meter(overall.done, overall.total)),
       UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—',
         'First-try recall',
         s.cards.tried + ' of ' + s.cards.total + ' tried'),
@@ -4704,9 +5202,12 @@ const ViewHome = (function () {
         'First-try correct',
         s.omr.locked + ' of ' + s.omr.total + ' locked')
     ];
-    if (at === 2) {
-      tiles.push(UI.stat(s.proofs.done + '/' + s.proofs.total, 'Proofs worked', 'ladder level 2',
-        UI.meter(s.proofs.done, s.proofs.total)));
+    if (anyL2) {
+      const l2ids = Pool.courses().filter(c => Store.level(c.id) === 2)
+        .reduce((acc, c) => acc.concat(Pool.ids.proofs(c.id)), []);
+      const pdone = l2ids.filter(Store.isProofDone).length;
+      tiles.push(UI.stat(pdone + '/' + l2ids.length, 'Proofs worked', 'ladder level 2',
+        UI.meter(pdone, l2ids.length)));
     }
 
     const loop = [
@@ -4720,14 +5221,14 @@ const ViewHome = (function () {
         q ? q.type + ' · ' + Pool.sectionTitle(q.sec) : 'Review the worked answers any time',
         q ? 'omr/' + q.id : 'omr', !!q)
     ];
-    if (at === 2) {
+    if (anyL2) {
       loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof has been worked through',
         pf ? Pool.sectionTitle(pf.sec) : 'Levels 3–5 need delayed evidence, which is not built yet',
         pf ? 'note/' + pf.id : 'study', !!pf));
     }
 
     DOM.add(root, [
-      el('div', { class: 'spread' }, [UI.title('Today'), UI.levelBadge()]),
+      UI.title('Today'),
       UI.mockBanner(),
 
       DOM.stagger(el('div', { class: 'stats' }, tiles)),
@@ -4735,7 +5236,7 @@ const ViewHome = (function () {
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'The loop' }),
         el('p', { class: 'small muted', style: { margin: '4px 0 12px' },
-          text: at === 2
+          text: anyL2
             ? 'Read it → state it from memory → answer questions on it → produce the proof yourself. Feedback comes after the attempt, never before.'
             : 'Read it → state it from memory → answer questions on it. Feedback comes after the attempt, never before.' }),
         el('div', { class: 'list' }, loop)
@@ -4746,16 +5247,17 @@ const ViewHome = (function () {
           el('h2', { text: 'Courses' }),
           el('a', { class: 'chip', href: Router.href('study'), text: 'Open the syllabus' })
         ]),
-        el('div', { class: 'list' }, Pool.courses().map(courseRow))
+        el('p', { class: 'small muted', style: { margin: '0 0 10px' },
+          text: 'Each course carries its own level. Raising one does not raise the others.' }),
+        el('div', { class: 'stack', style: { gap: '12px' } },
+          Pool.courses().map(course => courseCard(course, function () { Router.reload(); })))
       ]),
-
-      levelCard(),
 
       el('div', { class: 'card tint' }, [
         el('div', { class: 'kicker', text: 'Mastery ladder' }),
         el('p', { class: 'small muted', style: { margin: '4px 0 10px' },
-          text: at === 2
-            ? 'A tick earns level 1. Working a proof through earns level 2 on that proof. Levels 3–5 need delayed evidence, which is not built yet.'
+          text: anyL2
+            ? 'A tick earns level 1. Working a proof through earns level 2 on that proof, in the courses you have switched. Levels 3–5 need delayed evidence, which is not built yet.'
             : 'A tick earns level 1 and nothing more. Recall levels need evidence, and that evidence is collected from Level 2 onwards.' }),
         UI.ladder(false, false)
       ]),
@@ -4787,7 +5289,7 @@ const ViewStudy = (function () {
 
   function summaryStrip() {
     const ids = Pool.ids.concepts();
-    const done = ids.filter(Store.isDone).length;
+    const done = Progress.count(ids).done;
     const left = ids.length - done;
     return el('div', { class: 'card glass' }, [
       el('div', { class: 'spread' }, [
@@ -4807,7 +5309,7 @@ const ViewStudy = (function () {
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
+    const done = Progress.count(ids).done;
 
     DOM.add(root, [
       UI.crumb([{ text: 'Study', href: 'study' }, { text: course.title }]),
@@ -4892,7 +5394,7 @@ const ViewNote = (function () {
       ]),
       el('div', { class: 'path', style: { marginTop: '10px' } }, chain.map(function (x, i) {
         const here = x.id === c.id;
-        const done = Store.isDone(x.id);
+        const done = Progress.isDone(x.id);
         const kids = [
           el('span', { class: 'dot', 'aria-hidden': 'true',
             text: here ? '●' : done ? '✓' : String(i + 1) }),
@@ -4917,7 +5419,7 @@ const ViewNote = (function () {
       el('div', { class: 'kicker', text: 'Used later by' }),
       el('div', { class: 'row', style: { marginTop: '10px' } }, next.map(function (x) {
         return el('a', { class: 'chip', href: Router.href('note/' + x.id) }, [
-          Store.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
+          Progress.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
           el('span', { text: x.title })
         ]);
       }))
@@ -4971,14 +5473,17 @@ const ViewNote = (function () {
           ])
         ]));
       }
-      kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
-        el('label', { class: 'small muted', text: 'Scratchpad: draft your proof steps or reasoning before checking the solution' }),
-        el('textarea', {
-          class: 'proof-scratchpad',
-          placeholder: 'Write your proof sketch or key steps here...',
-          spellcheck: 'false'
-        })
-      ]));
+      /* The scratchpad is the full writing workspace, not a bare textarea:
+         a proof sketch is prose with maths in it, and it is worth keeping.
+         Filed under 'proof:<id>' so it never collides with the statement
+         draft for the same concept, and it syncs like any other draft. */
+      const pad = el('div', { class: 'scratch' });
+      WriteBox.mount(pad, {
+        draftKey: 'proof:' + c.id, concept: c,
+        label: 'Scratchpad · draft the argument before you look',
+        placeholder: 'The main move is…'
+      });
+      kids.push(pad);
       return kids;
     }
 
@@ -5058,7 +5563,7 @@ const ViewNote = (function () {
       ]),
       tryHost,
       proofHost,
-      proofDoneRow(c.id, 'proof')
+      proofDoneRow(c.id, 'proof', Progress.courseIdOf(c))
     ]);
   }
 
@@ -5068,8 +5573,8 @@ const ViewNote = (function () {
      in it was worked through. Like the level 1 tick it is self-reported, but
      it reports a much harder act, and the label says exactly what is being
      claimed so it cannot be ticked absent-mindedly. */
-  function proofDoneRow(id, what) {
-    if (Store.level() !== 2) return null;
+  function proofDoneRow(id, what, courseId) {
+    if (Store.level(courseId) !== 2) return null;
 
     const btn = el('button', { class: 'btn', type: 'button' });
     const note = el('span', { class: 'small muted' });
@@ -5165,14 +5670,13 @@ const ViewNote = (function () {
               el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
             ]));
           }
-          kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
-            el('label', { class: 'small muted', text: 'Scratchpad: outline your proof or solution steps' }),
-            el('textarea', {
-              class: 'proof-scratchpad',
-              placeholder: 'Draft your solution here before viewing the model answer...',
-              spellcheck: 'false'
-            })
-          ]));
+          const pad = el('div', { class: 'scratch' });
+          WriteBox.mount(pad, {
+            draftKey: 'written:' + q.id, concept: c,
+            label: 'Scratchpad · draft your answer before you look',
+            placeholder: 'Start with what the question is really testing…'
+          });
+          kids.push(pad);
           return kids;
         }
 
@@ -5234,7 +5738,7 @@ const ViewNote = (function () {
           ]),
           tryHost,
           answerHost,
-          proofDoneRow('w:' + q.id, 'answer')
+          proofDoneRow('w:' + q.id, 'answer', Progress.courseIdOf(c))
         ]);
       }))
     ]);
@@ -5265,7 +5769,7 @@ const ViewNote = (function () {
       doneBtn.textContent = on ? '✓ Ticked — undo' : 'Tick as completed';
       doneBtn.setAttribute('aria-pressed', String(on));
       DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, Store.isProofDone(c.id), !!c.proof));
+        UI.ladder(on, Store.isProofDone(c.id), !!c.proof, Progress.courseIdOf(c)));
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -5325,7 +5829,7 @@ const ViewNote = (function () {
       el('div', {}, [
         el('div', { class: 'row', style: { marginBottom: '8px' } }, [
           UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
-          (Store.level() === 2 && Store.isProofDone(c.id))
+          (Store.level(Progress.courseIdOf(c)) === 2 && Store.isProofDone(c.id))
             ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
         ]),
         UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
@@ -5384,15 +5888,25 @@ const ViewNote = (function () {
 
 /* ── src/view.recall.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Statement recall, as a reel.
+   Recall, as a reel.
 
-   One statement per screen, swiped vertically. There is no list to survey and
-   no pile to dread — just the card in front of you, and the rail on the right
-   telling you where you are.
+   One card per screen, swiped vertically, exactly one card per swipe. Getting
+   that last part right is the whole job: a flick carries momentum, and a
+   proximity-snapped scroller happily sails past two or three cards before it
+   settles. `scroll-snap-stop: always` is the rule that forbids it — the
+   scroller must come to rest on the very next snap point no matter how hard
+   the flick was. Every card is therefore exactly one viewport tall, and a card
+   whose content overflows scrolls INSIDE itself and chains out at its ends.
 
-   The rules from HOOK_claude.md are unchanged: the deck is `state` cards only,
-   nothing is revealed before an attempt, and the first grade is the one that
-   counts.
+   What is in the reel is decided by Progress.reel():
+
+     · only material you have ticked — a statement you have never read is not
+       recall practice, it is reading with extra steps;
+     · proof cards only for a course you have switched to Level 2;
+     · ordered by how badly each card needs the attempt, never randomly.
+
+   The rules are unchanged: nothing is revealed before an attempt, and the
+   first grade is the one that counts.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewRecall = (function () {
@@ -5407,47 +5921,129 @@ const ViewRecall = (function () {
   let onlyNew = false;
   let startAt = null;          /* concept id to open on, from ?from= */
 
-  const isNew = c => !(Store.card(c.id) || {}).first;
-  const visible = () => onlyNew ? Pool.deck().filter(isNew) : Pool.deck();
-
-  /* ── intro card: the only place the deck is configured ────────────────── */
+  /* ── intro card: the only place the reel is configured ────────────────── */
   function introCard(deck, rebuild) {
     const chip = (label, on, fn) => el('button', { class: 'chip', type: 'button', text: label,
       'aria-pressed': String(on), on: { click: fn } });
-    const s = Store.summary([], Pool.ids.cards(), []);
+
+    const all = Progress.reel();
+    const tried = all.filter(x => x.rank > 0).length;
+    const proofs = all.filter(x => x.kind === 'proof').length;
+    const ticked = Pool.concepts().filter(c => Store.isDone(c.id)).length;
+    const l2 = Pool.courses().filter(c => Store.level(c.id) === 2).map(c => c.title);
 
     return el('div', { class: 'inner' }, [
       el('div', {}, [
-        el('div', { class: 'kicker', text: 'Reel · swipe up' }),
-        UI.title('Statement recall')
+        el('div', { class: 'kicker', text: 'Reel · one swipe, one card' }),
+        UI.title('Recall')
       ]),
       el('p', { class: 'lede' },
-        ['Theorem statements only — the one thing a flashcard measures honestly. ' +
-         'Each card asks first; nothing is revealed until you have attempted it.']),
-      el('div', { class: 'card glass' }, [
+        ['Only what you have already ticked. Each card asks first; nothing is revealed ' +
+         'until you have attempted it.']),
+
+      all.length ? el('div', { class: 'card glass' }, [
         el('div', { class: 'spread' }, [
           el('span', { class: 'kicker', text: 'First attempts' }),
-          el('span', { class: 'count', text: s.cards.tried + ' of ' + s.cards.total })
+          el('span', { class: 'count', text: tried + ' of ' + all.length })
         ]),
-        el('div', { style: { margin: '10px 0 14px' } },
-          [UI.meter(s.cards.tried, s.cards.total)]),
+        el('div', { style: { margin: '10px 0 14px' } }, [UI.meter(tried, all.length)]),
         el('div', { class: 'row' }, [
-          chip('All statements', !onlyNew, function () { onlyNew = false; rebuild(); }),
+          chip('Everything ticked', !onlyNew, function () { onlyNew = false; rebuild(); }),
           chip('Not yet attempted', onlyNew, function () { onlyNew = true; rebuild(); })
         ])
-      ]),
-      el('p', { class: 'small muted', style: { margin: 0 },
-        text: deck.length + ' ' + DOM.plural(deck.length, 'card') + ' in this reel · ' +
-          'use the arrow keys if you prefer them to swiping.' })
+      ]) : null,
+
+      all.length
+        ? el('p', { class: 'small muted', style: { margin: 0 },
+            text: deck.length + ' ' + DOM.plural(deck.length, 'card') + ' in this reel'
+              + (proofs ? ' · ' + proofs + ' of them ' + DOM.plural(proofs, 'is', 'are')
+                  + ' proof work from ' + l2.join(' and ') : '')
+              + ' · hardest first, then reading order.' })
+        : UI.empty(
+            ticked
+              ? 'Nothing in your ticked material has a statement card yet.'
+              : 'The reel draws only on notes you have ticked as completed, and you have not ticked any yet.',
+            el('a', { class: 'btn primary', href: Router.href('study'), text: 'Open the syllabus' })),
+
+      (!proofs && l2.length === 0 && all.length)
+        ? el('p', { class: 'small muted', style: { margin: 0 },
+            text: 'Switch a course to Level 2 and its proofs join this reel.' })
+        : null
     ]);
   }
 
-  /* ── one statement card ──────────────────────────────────────────────── */
-  function statementCard(card, index, total, goNext, onGraded) {
-    const concept = Pool.concept(card.cid);
-    const rec = Store.card(card.id);
-    const attemptedBefore = !!(rec && rec.first);
+  /* ── shared card chrome ──────────────────────────────────────────────── */
+  function head(item, index, total, badge) {
+    const rec = Store.card(item.id);
+    return el('div', { class: 'stack', style: { gap: '10px' } }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'row' }, [
+          el('span', { class: 'badge accent', text: badge }),
+          el('span', { class: 'pos', text: index + ' / ' + total })
+        ]),
+        el('a', { class: 'small', href: Router.href('note/' + item.cid), text: '§' + item.sec })
+      ]),
+      el('div', { class: 'kicker', text: item.conceptKind + ' · ' + item.title }),
+      (rec && rec.first)
+        ? el('div', { class: 'row' }, [
+            el('span', {
+              class: 'badge ' + (rec.first === 'got' ? 'ok' : rec.first === 'missed' ? 'bad' : 'warn'),
+              text: 'first attempt: ' + rec.first
+            }),
+            el('span', { class: 'small muted', text: 'this pass will not change it' })
+          ])
+        : null
+    ]);
+  }
 
+  function gradeRow(item, goNext, onGraded, preGrade) {
+    const rec = Store.card(item.id);
+    const attemptedBefore = !!(rec && rec.first);
+    const wrap = el('div', {});
+
+    function commit(grade) {
+      const r = Store.gradeCard(item.id, grade);
+      if (onGraded) onGraded(grade);
+      DOM.clear(wrap);
+      DOM.add(wrap, [
+        el('div', { class: 'verdict ' +
+          (grade === 'got' ? 'ok' : grade === 'missed' ? 'bad' : 'warn') }, [
+          el('span', { class: 'g', 'aria-hidden': 'true',
+            text: grade === 'got' ? '✓' : grade === 'missed' ? '✗' : '~' }),
+          el('span', {}, [
+            el('b', { text: r.tries === 1 ? 'First attempt recorded: ' + grade
+              : 'This pass: ' + grade }),
+            el('span', { text: r.tries > 1
+              ? 'First attempt (' + r.first + ') is unchanged.'
+              : 'Completion and recall stay separate numbers.' })
+          ])
+        ]),
+        el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
+          el('button', { class: 'btn primary', type: 'button', text: 'Next ↓',
+            on: { click: goNext } }),
+          el('a', { class: 'btn', href: Router.href('note/' + item.cid), text: 'Open the note' })
+        ])
+      ]);
+      DOM.announce('Recorded ' + grade + '.');
+    }
+
+    DOM.add(wrap, [
+      el('p', { class: 'small muted', style: { margin: '0 0 8px' },
+        text: attemptedBefore
+          ? 'How did this pass go? Your first attempt stays on record.'
+          : 'How did your attempt compare with the answer above?' }),
+      el('div', { class: 'btn-row' }, GRADES.map(g =>
+        el('button', { class: 'btn ' + g.cls, type: 'button', text: g.label,
+          on: { click: function () { commit(g.k); } } })))
+    ]);
+
+    if (preGrade) window.setTimeout(() => commit(preGrade), 0);
+    return wrap;
+  }
+
+  /* ── a statement card ────────────────────────────────────────────────── */
+  function statementCard(item, index, total, goNext, onGraded) {
+    const concept = Pool.concept(item.cid);
     let revealed = false;
     const gateHost = el('div', {});
     const writeHost = el('div', {});
@@ -5470,66 +6066,24 @@ const ViewRecall = (function () {
       answerHost.appendChild(el('div', { class: 'reveal' }, [
         el('div', { class: 'h' }, [el('span', { text: 'Canonical statement' })]),
         el('div', { class: 'b' }, [
-          el('div', { class: 'prose tight', html: card.a }),
+          el('div', { class: 'prose tight', html: item.a }),
           el('div', { class: 'row', style: { marginTop: '12px' } }, [
-            el('a', { class: 'chip', href: Router.href('note/' + card.cid),
+            el('a', { class: 'chip', href: Router.href('note/' + item.cid),
               text: 'Full note · ' + concept.title })
           ])
         ])
       ]));
-      answerHost.appendChild(gradeRow(preGrade));
+      answerHost.appendChild(gradeRow(item, goNext, onGraded, preGrade));
       UI.math(answerHost);
-    }
-
-    function gradeRow(preGrade) {
-      const wrap = el('div', {});
-      DOM.add(wrap, [
-        el('p', { class: 'small muted', style: { margin: '0 0 8px' },
-          text: attemptedBefore
-            ? 'How did this pass go? Your first attempt stays on record.'
-            : 'How did your attempt compare with the statement above?' }),
-        el('div', { class: 'btn-row' }, GRADES.map(g =>
-          el('button', { class: 'btn ' + g.cls, type: 'button', text: g.label,
-            on: { click: function () { commit(g.k); } } })))
-      ]);
-
-      function commit(grade) {
-        const r = Store.gradeCard(card.id, grade);
-        if (onGraded) onGraded(grade);
-        DOM.clear(wrap);
-        DOM.add(wrap, [
-          el('div', { class: 'verdict ' +
-            (grade === 'got' ? 'ok' : grade === 'missed' ? 'bad' : 'warn') }, [
-            el('span', { class: 'g', 'aria-hidden': 'true',
-              text: grade === 'got' ? '✓' : grade === 'missed' ? '✗' : '~' }),
-            el('span', {}, [
-              el('b', { text: r.tries === 1 ? 'First attempt recorded: ' + grade
-                : 'This pass: ' + grade }),
-              el('span', { text: r.tries > 1
-                ? 'First attempt (' + r.first + ') is unchanged.'
-                : 'Completion and recall stay separate numbers.' })
-            ])
-          ]),
-          el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
-            el('button', { class: 'btn primary', type: 'button', text: 'Next statement ↓',
-              on: { click: goNext } }),
-            el('a', { class: 'btn', href: Router.href('note/' + card.cid), text: 'Open the note' })
-          ])
-        ]);
-        DOM.announce('Recorded ' + grade + '.');
-      }
-
-      if (preGrade) window.setTimeout(() => commit(preGrade), 0);
-      return wrap;
     }
 
     gateHost.appendChild(UI.gate({
       hint: 'State it from memory first — write it out, or say it aloud and declare the attempt.',
       actions: [
-        { label: 'Write it in LaTeX', primary: true, onClick: function () {
+        { label: 'Write it out', primary: true, onClick: function () {
             DOM.clear(writeHost);
             const wb = WriteBox.mount(writeHost, {
-              concept: concept, compact: true, label: 'Your statement, in LaTeX',
+              concept: concept, label: 'Your statement',
               onFirstInput: function () { unlock('Attempt registered — you can reveal now.'); }
             });
             wb.focus();
@@ -5539,54 +6093,120 @@ const ViewRecall = (function () {
       ]
     }));
 
-    const inner = el('div', { class: 'inner' }, [
-      el('div', { class: 'spread' }, [
-        el('div', { class: 'row' }, [
-          el('span', { class: 'badge accent', text: 'state' }),
-          el('span', { class: 'pos', text: index + ' / ' + total })
-        ]),
-        el('a', { class: 'small', href: Router.href('note/' + card.cid), text: '§' + card.sec })
-      ]),
-      el('div', { class: 'kicker', text: concept.kind + ' · ' + concept.title }),
-      el('div', { class: 'prose', style: { fontSize: '1.12rem' }, html: card.q }),
-      attemptedBefore
-        ? el('div', { class: 'row' }, [
-            el('span', {
-              class: 'badge ' + (rec.first === 'got' ? 'ok' : rec.first === 'missed' ? 'bad' : 'warn'),
-              text: 'first attempt: ' + rec.first
-            }),
-            el('span', { class: 'small muted', text: 'this pass will not change it' })
-          ])
-        : null,
+    return el('div', { class: 'inner' }, [
+      head(item, index, total, 'statement'),
+      el('div', { class: 'prose', style: { fontSize: '1.12rem' }, html: item.q }),
       gateHost, writeHost, answerHost
     ]);
+  }
 
-    return inner;
+  /* ── a proof card (Level 2 only) ─────────────────────────────────────────
+     The ask is the strategy, not the write-up: if you can say why the proof
+     goes the way it does, the steps follow. So the reveal leads with `idea`
+     and `why`, and the rungs are there to check yourself against. */
+  function proofCard(item, index, total, goNext, onGraded) {
+    const concept = Pool.concept(item.cid);
+    const p = item.proof;
+    let revealed = false;
+    const gateHost = el('div', {});
+    const writeHost = el('div', {});
+    const answerHost = el('div', {});
+
+    function unlock(msg) {
+      DOM.clear(gateHost);
+      gateHost.appendChild(el('div', { class: 'btn-row' }, [
+        el('button', { class: 'btn primary', type: 'button', text: 'Show the argument',
+          on: { click: function () { reveal(); } } })
+      ]));
+      if (msg) DOM.announce(msg);
+    }
+
+    function reveal(preGrade) {
+      if (revealed) return;
+      revealed = true;
+      DOM.clear(gateHost);
+      DOM.clear(answerHost);
+      answerHost.appendChild(el('div', { class: 'reveal' }, [
+        el('div', { class: 'h' }, [el('span', { text: 'The argument' })]),
+        el('div', { class: 'b', style: { display: 'grid', gap: '10px' } }, [
+          p.idea ? el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+            el('div', { class: 'kicker', text: 'Key idea' }),
+            el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+          ]) : null,
+          p.why ? el('div', { class: 'prose tight', html: p.why }) : null,
+          (p.rungs && p.rungs.length)
+            ? el('div', { class: 'stack', style: { gap: '8px' } }, p.rungs.map(function (r, i) {
+                return el('div', { class: 'card flat', style: { padding: '10px 14px' } }, [
+                  el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
+                    el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: r.why })
+                  ]),
+                  r.m ? el('div', { html: r.m }) : null
+                ]);
+              }))
+            : null,
+          p.ends ? el('div', { class: 'prose tight', html: p.ends }) : null,
+          el('div', { class: 'row' }, [
+            el('a', { class: 'chip', href: Router.href('note/' + item.cid),
+              text: 'Full note · ' + concept.title })
+          ])
+        ])
+      ]));
+      answerHost.appendChild(gradeRow(item, goNext, onGraded, preGrade));
+      UI.math(answerHost);
+    }
+
+    gateHost.appendChild(UI.gate({
+      hint: 'Say how the proof goes before you look — the main move, and why it works.',
+      actions: [
+        { label: 'Sketch it', primary: true, onClick: function () {
+            DOM.clear(writeHost);
+            const wb = WriteBox.mount(writeHost, {
+              draftKey: 'proof:' + concept.id, concept: concept,
+              label: 'Your sketch of the argument',
+              placeholder: 'The main move is…',
+              onFirstInput: function () { unlock('Attempt registered — you can reveal now.'); }
+            });
+            wb.focus();
+          } },
+        { label: 'I said it aloud', onClick: function () { unlock('Attempt registered.'); } },
+        { label: "I can't reconstruct it", onClick: function () { reveal('missed'); } }
+      ]
+    }));
+
+    return el('div', { class: 'inner' }, [
+      head(item, index, total, 'proof · level 2'),
+      el('div', { class: 'prose', style: { fontSize: '1.12rem' } }, [
+        el('b', { text: 'Reconstruct the proof of ' }),
+        el('span', { text: concept.title + '.' }),
+        el('p', { class: 'small muted', style: { margin: '8px 0 0' },
+          text: 'The strategy and why it works, not the full write-up.' })
+      ]),
+      gateHost, writeHost, answerHost
+    ]);
   }
 
   /* ── the reel ────────────────────────────────────────────────────────── */
   function render(args, query) {
     if (query && query.from) { startAt = query.from; onlyNew = false; }
 
-    const reel = el('div', { class: 'reel', tabindex: '-1',
-      'aria-label': 'Statement recall reel' });
+    const reel = el('div', { class: 'reel', tabindex: '-1', 'aria-label': 'Recall reel' });
     const rail = el('div', { class: 'reel-rail', 'aria-hidden': 'true' });
     const root = el('div', {}, [
-      el('h1', { id: 'pagetitle', tabindex: '-1', class: 'sr-only', text: 'Statement recall' }),
+      el('h1', { id: 'pagetitle', tabindex: '-1', class: 'sr-only', text: 'Recall' }),
       rail, reel
     ]);
 
     function build() {
-      const deck = visible();
+      const deck = Progress.reel({ onlyNew: onlyNew });
       DOM.clear(reel);
       DOM.clear(rail);
 
       const cards = [];
       const dots = [];
 
-      /* Cards are as tall as their content, so a card's position is its own
-         offsetTop — never index × clientHeight. That arithmetic was the reason
-         "next" landed in the middle of nowhere once a statement grew. */
+      /* Every card is exactly one viewport tall, so a card's position is
+         index × clientHeight and nothing can drift. Overflowing content
+         scrolls inside the card (.inner) and chains out at its ends. */
       const glide = i => {
         const to = cards[i];
         if (!to) return;
@@ -5598,9 +6218,10 @@ const ViewRecall = (function () {
         reel.scrollTo({ top: 0, behavior: 'auto' });
       })]));
 
-      deck.forEach(function (card, i) {
+      deck.forEach(function (item, i) {
+        const make = item.kind === 'proof' ? proofCard : statementCard;
         const section = el('section', { class: 'reel-card' }, [
-          statementCard(card, i + 1, deck.length,
+          make(item, i + 1, deck.length,
             function () { glide(i + 2); },
             function (grade) {
               const dot = dots[i + 1];
@@ -5612,11 +6233,11 @@ const ViewRecall = (function () {
         cards.push(section);
       });
 
-      if (!deck.length) {
+      if (!deck.length && onlyNew) {
         cards.push(el('section', { class: 'reel-card' }, [
           el('div', { class: 'inner' }, [
-            UI.empty('Every statement in this slice has had a first attempt.',
-              el('button', { class: 'btn', type: 'button', text: 'Show all statements',
+            UI.empty('Every card in your ticked material has had a first attempt.',
+              el('button', { class: 'btn', type: 'button', text: 'Show everything again',
                 on: { click: function () { onlyNew = false; build(); } } }))
           ])
         ]));
@@ -5628,29 +6249,27 @@ const ViewRecall = (function () {
         if (i && deck[i - 1]) {
           const r = Store.card(deck[i - 1].id);
           if (r && r.first === 'got') dot.classList.add('got');
+          if (deck[i - 1].kind === 'proof') dot.classList.add('pf');
         }
         dots.push(dot);
         rail.appendChild(dot);
       });
 
-      /* Mark the card in view and keep the rail in step.
-         The test is how much of the REEL this card covers, not how much of the
-         card is visible: a card three screens tall can never reach an
-         intersectionRatio of 0.55, and the old rule left it dimmed forever. */
+      /* Mark the card in view. Cards are one viewport tall, so a simple
+         majority-of-the-viewport test is both correct and cheap. */
       if (window.IntersectionObserver) {
         const io = new window.IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
             const seen = e.intersectionRect ? e.intersectionRect.height : 0;
             const port = (e.rootBounds && e.rootBounds.height) || reel.clientHeight || 1;
-            const own = e.target.offsetHeight || 1;
-            const live = e.isIntersecting && (seen / port > 0.45 || seen / own > 0.6);
+            const live = e.isIntersecting && seen / port > 0.55;
             e.target.classList.toggle('live', live);
             if (live) {
               const i = cards.indexOf(e.target);
               Array.prototype.forEach.call(rail.children, (d, j) => d.classList.toggle('on', j === i));
             }
           });
-        }, { root: reel, threshold: [0, 0.1, 0.25, 0.4, 0.55, 0.75, 0.9, 1] });
+        }, { root: reel, threshold: [0, 0.25, 0.56, 0.9, 1] });
         cards.forEach(c => io.observe(c));
       } else {
         cards.forEach(c => c.classList.add('live'));
@@ -5659,7 +6278,6 @@ const ViewRecall = (function () {
 
       UI.math(reel);
 
-      /* land on the card the note sent us to */
       if (startAt) {
         const at = deck.map(c => c.cid).indexOf(startAt);
         startAt = null;
@@ -5669,37 +6287,20 @@ const ViewRecall = (function () {
       }
     }
 
-    /* Keyboard: Page keys and the arrows move one CARD at a time, except that
-       a card taller than the screen must still be readable — so the arrows
-       scroll within it until its end is in view, and only then jump on. */
+    /* Keyboard moves exactly one card, like the swipe. Content that overflows
+       is reached by scrolling inside the card, which the browser does for us
+       when the focus is in there. */
     reel.addEventListener('keydown', function (e) {
       const keys = { ArrowDown: 1, PageDown: 1, ArrowUp: -1, PageUp: -1 };
       const dir = keys[e.key];
       if (!dir) return;
       if (/^(TEXTAREA|INPUT|SELECT)$/.test((e.target.tagName || '').toUpperCase())) return;
       e.preventDefault();
-
-      const port = reel.clientHeight || 1;
-      const kids = Array.prototype.slice.call(reel.children);
-      const top = reel.scrollTop;
-
-      /* the card the top of the viewport is currently inside */
-      let at = 0;
-      kids.forEach(function (c, i) { if (c.offsetTop <= top + 2) at = i; });
-      const here = kids[at];
-
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        const end = here.offsetTop + here.offsetHeight;
-        const room = dir > 0 ? end - (top + port) : top - here.offsetTop;
-        if (room > 8) {
-          reel.scrollTo({ top: top + dir * Math.round(port * 0.85),
-            behavior: DOM.reduced() ? 'auto' : 'smooth' });
-          return;
-        }
-      }
-
-      const to = kids[Math.max(0, Math.min(kids.length - 1, at + dir))];
-      if (to) reel.scrollTo({ top: to.offsetTop, behavior: DOM.reduced() ? 'auto' : 'smooth' });
+      const h = reel.clientHeight || 1;
+      const last = reel.children.length - 1;
+      const at = Math.round(reel.scrollTop / h);
+      const to = Math.max(0, Math.min(last, at + dir));
+      reel.scrollTo({ top: to * h, behavior: DOM.reduced() ? 'auto' : 'smooth' });
     });
 
     build();
@@ -6350,44 +6951,72 @@ const App = (function () {
     ]), wrap.firstChild);
   }
 
-  /* Finishing a whole course at Level 1 earns the Level 2 switch. Checked in
-     one place, once, on the way in — so "earned" cannot mean something
-     slightly different on each screen. It unlocks the switch; it does NOT
-     move anyone to Level 2, because a promotion nobody asked for is exactly
-     what the mastery rules are there to prevent. */
-  function earnedUnlock() {
-    if (Store.unlocked()) return;
-    const earned = Pool.courses().some(function (course) {
-      if (course.pending) return false;
+  /* Finishing a course at Level 1 earns the Level 2 switch ON THAT COURSE.
+     Checked in one place, once, on the way in — so "earned" cannot mean
+     something slightly different on each screen. It unlocks the switch; it
+     does NOT move anyone to Level 2, because a promotion nobody asked for is
+     exactly what the mastery rules exist to prevent. */
+  function earnedUnlocks() {
+    Pool.courses().forEach(function (course) {
+      if (course.pending || Store.unlocked(course.id)) return;
       const ids = Pool.ids.concepts(course.id);
-      return ids.length > 0 && ids.every(Store.isDone);
+      if (ids.length > 0 && ids.every(Store.isDone)) Store.unlock(course.id, true);
     });
-    if (earned) Store.unlock(true);
+  }
+
+  /* The app proper. Only ever reached with someone signed in. */
+  function run() {
+    earnedUnlocks();
+    document.body.classList.remove('signed-out');
+    buildNav();
+    /* Sync starts after the pool: a merge can change what is on screen, and
+       it reloads the current route when it does. */
+    Sync.start();
+    Router.start(route);
+
+    /* MathJax arrives on its own schedule; typeset whatever is on screen
+       once it is ready, and say so plainly if it never arrives. */
+    Tex.ready().then(function () {
+      Tex.typeset(document.getElementById('main'));
+      mathjaxWarning();
+    });
+  }
+
+  /* The record is keyed on a name and a roll number, so there is no sensible
+     "anonymous" state to start in: progress made before signing in could not
+     be merged with the record it later turns out to belong to. The gate is
+     therefore first, and it is the only screen shown until it is passed. */
+  function gate() {
+    const main = document.getElementById('main');
+    DOM.clear(main);
+    document.body.classList.add('signed-out');
+    Login.mount(main, function () {
+      DOM.clear(main);
+      run();
+    });
+    Tex.ready().then(() => Tex.typeset(main));
   }
 
   function start() {
     Theme.apply();
-    buildNav();
 
     loadData().then(function () {
       Pool.build();
-      earnedUnlock();
-      /* Sync starts after the pool: a merge can change what is on screen, and
-         it reloads the current route when it does. */
-      Sync.start();
-      Router.start(route);
-
-      /* MathJax arrives on its own schedule; typeset whatever is on screen
-         once it is ready, and say so plainly if it never arrives. */
-      Tex.ready().then(function () {
-        Tex.typeset(document.getElementById('main'));
-        mathjaxWarning();
-      });
+      if (Store.signedIn()) run(); else gate();
     }, fatal);
   }
 
   window.addEventListener('error', function (e) {
     document.body.setAttribute('data-error', (e && e.message) || 'error');
+  });
+
+  /* Progress is written through a debounce, so a tab closed or backgrounded
+     within a quarter-second of the last tick would lose it. `pagehide` is the
+     one event that fires reliably on mobile, where tabs are killed rather
+     than closed. */
+  window.addEventListener('pagehide', function () { Store.flushNow(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) Store.flushNow();
   });
 
   return { start: start, route: route };

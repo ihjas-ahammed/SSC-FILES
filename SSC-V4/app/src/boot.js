@@ -145,44 +145,72 @@ const App = (function () {
     ]), wrap.firstChild);
   }
 
-  /* Finishing a whole course at Level 1 earns the Level 2 switch. Checked in
-     one place, once, on the way in — so "earned" cannot mean something
-     slightly different on each screen. It unlocks the switch; it does NOT
-     move anyone to Level 2, because a promotion nobody asked for is exactly
-     what the mastery rules are there to prevent. */
-  function earnedUnlock() {
-    if (Store.unlocked()) return;
-    const earned = Pool.courses().some(function (course) {
-      if (course.pending) return false;
+  /* Finishing a course at Level 1 earns the Level 2 switch ON THAT COURSE.
+     Checked in one place, once, on the way in — so "earned" cannot mean
+     something slightly different on each screen. It unlocks the switch; it
+     does NOT move anyone to Level 2, because a promotion nobody asked for is
+     exactly what the mastery rules exist to prevent. */
+  function earnedUnlocks() {
+    Pool.courses().forEach(function (course) {
+      if (course.pending || Store.unlocked(course.id)) return;
       const ids = Pool.ids.concepts(course.id);
-      return ids.length > 0 && ids.every(Store.isDone);
+      if (ids.length > 0 && ids.every(Store.isDone)) Store.unlock(course.id, true);
     });
-    if (earned) Store.unlock(true);
+  }
+
+  /* The app proper. Only ever reached with someone signed in. */
+  function run() {
+    earnedUnlocks();
+    document.body.classList.remove('signed-out');
+    buildNav();
+    /* Sync starts after the pool: a merge can change what is on screen, and
+       it reloads the current route when it does. */
+    Sync.start();
+    Router.start(route);
+
+    /* MathJax arrives on its own schedule; typeset whatever is on screen
+       once it is ready, and say so plainly if it never arrives. */
+    Tex.ready().then(function () {
+      Tex.typeset(document.getElementById('main'));
+      mathjaxWarning();
+    });
+  }
+
+  /* The record is keyed on a name and a roll number, so there is no sensible
+     "anonymous" state to start in: progress made before signing in could not
+     be merged with the record it later turns out to belong to. The gate is
+     therefore first, and it is the only screen shown until it is passed. */
+  function gate() {
+    const main = document.getElementById('main');
+    DOM.clear(main);
+    document.body.classList.add('signed-out');
+    Login.mount(main, function () {
+      DOM.clear(main);
+      run();
+    });
+    Tex.ready().then(() => Tex.typeset(main));
   }
 
   function start() {
     Theme.apply();
-    buildNav();
 
     loadData().then(function () {
       Pool.build();
-      earnedUnlock();
-      /* Sync starts after the pool: a merge can change what is on screen, and
-         it reloads the current route when it does. */
-      Sync.start();
-      Router.start(route);
-
-      /* MathJax arrives on its own schedule; typeset whatever is on screen
-         once it is ready, and say so plainly if it never arrives. */
-      Tex.ready().then(function () {
-        Tex.typeset(document.getElementById('main'));
-        mathjaxWarning();
-      });
+      if (Store.signedIn()) run(); else gate();
     }, fatal);
   }
 
   window.addEventListener('error', function (e) {
     document.body.setAttribute('data-error', (e && e.message) || 'error');
+  });
+
+  /* Progress is written through a debounce, so a tab closed or backgrounded
+     within a quarter-second of the last tick would lose it. `pagehide` is the
+     one event that fires reliably on mobile, where tabs are killed rather
+     than closed. */
+  window.addEventListener('pagehide', function () { Store.flushNow(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) Store.flushNow();
   });
 
   return { start: start, route: route };

@@ -34,9 +34,15 @@ const UI = (function () {
     ? el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'extension' : c.tier })
     : null;
 
-  const doneBadge = id => Store.isDone(id)
-    ? el('span', { class: 'badge ok', text: '✓ completed' })
-    : null;
+  /* Level-aware: at Level 2 a ticked note with an unworked proof is not
+     "completed", it is part-way, and saying otherwise would make the badge and
+     the tree disagree. */
+  const doneBadge = function (id) {
+    const st = Progress.state(id);
+    if (st === 'done') return el('span', { class: 'badge ok', text: '✓ completed' });
+    if (st === 'part') return el('span', { class: 'badge warn', text: 'proof outstanding' });
+    return null;
+  };
 
   const meter = (a, b, ok) => el('div', { class: 'meter' + (ok ? ' ok' : '') }, [
     el('i', { style: { width: DOM.pct(a, b) + '%' } })
@@ -56,13 +62,13 @@ const UI = (function () {
   /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done.
      Neither is awarded for opening anything, and the caption says which rung
      the learner is standing on rather than implying the whole ladder. */
-  function ladder(done, proofDone, hasProof) {
+  function ladder(done, proofDone, hasProof, courseId) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
     const at = proofDone ? 2 : done ? 1 : 0;
     const caption = at === 2 ? '2 · proof worked through'
       : at === 1 ? '1 · completed'
       : '1 · not yet completed';
-    const right = Store.level() === 2
+    const right = Store.level(courseId) === 2
       ? (hasProof === false ? 'no proof on this note'
         : at === 2 ? 'levels 3–5 need delayed evidence'
         : 'work the proof to reach level 2')
@@ -79,10 +85,41 @@ const UI = (function () {
 
   /* The current level as a badge, and the switch that changes it. Level 2 is
      never entered by accident: it has to be unlocked first (Store.unlocked). */
-  const levelBadge = () => el('span', {
-    class: 'badge' + (Store.level() === 2 ? ' accent' : ''),
-    text: 'Level ' + Store.level()
+  const levelBadge = courseId => el('span', {
+    class: 'badge' + (Store.level(courseId) === 2 ? ' accent' : ''),
+    text: 'Level ' + Store.level(courseId)
   });
+
+  /* The level switch for ONE course. Level 2 has to be unlocked on that course
+     before it can be picked, and switching is always a deliberate press. */
+  function levelSwitch(course, after) {
+    const id = course.id;
+    const row = el('div', { class: 'row' }, [1, 2].map(function (n) {
+      const can = n === 1 || Store.unlocked(id);
+      const b = el('button', {
+        class: 'chip', type: 'button', 'aria-pressed': String(Store.level(id) === n),
+        disabled: !can, text: 'Level ' + n
+      });
+      b.addEventListener('click', function () {
+        Store.setLevel(id, n);
+        DOM.announce(course.title + ' set to Level ' + Store.level(id) + '.');
+        if (after) after();
+      });
+      return b;
+    }));
+    if (!Store.unlocked(id)) {
+      row.appendChild(el('button', {
+        class: 'chip', type: 'button', text: 'Unlock Level 2',
+        on: { click: function () {
+          Store.unlock(id, true);
+          Store.setLevel(id, 2);
+          DOM.announce('Level 2 unlocked for ' + course.title + '.');
+          if (after) after();
+        } }
+      }));
+    }
+    return row;
+  }
 
   /* Which of a concept's prerequisites are not ticked yet. One definition,
      because the note view and the syllabus tree both offer the same cascade
@@ -176,6 +213,6 @@ const UI = (function () {
 
   return {
     title, crumb, prose, math, kindBadge, tierBadge, doneBadge, meter, stat, empty,
-    ladder, levelBadge, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
+    ladder, levelBadge, levelSwitch, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
   };
 })();

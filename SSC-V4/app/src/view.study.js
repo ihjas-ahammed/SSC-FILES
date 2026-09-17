@@ -13,7 +13,7 @@ const ViewStudy = (function () {
 
   function summaryStrip() {
     const ids = Pool.ids.concepts();
-    const done = ids.filter(Store.isDone).length;
+    const done = Progress.count(ids).done;
     const left = ids.length - done;
     return el('div', { class: 'card glass' }, [
       el('div', { class: 'spread' }, [
@@ -33,7 +33,7 @@ const ViewStudy = (function () {
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
+    const done = Progress.count(ids).done;
 
     DOM.add(root, [
       UI.crumb([{ text: 'Study', href: 'study' }, { text: course.title }]),

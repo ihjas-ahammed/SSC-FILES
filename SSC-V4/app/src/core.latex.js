@@ -183,11 +183,20 @@ const Latex = (function () {
 
   /* ── insertion ────────────────────────────────────────────────────────── */
 
-  /* Replace [from,to) with `ins`, honouring CARET and any selection. Works on
-     an <input> and on a <textarea> alike. */
-  function splice(field, from, to, ins) {
+  /* Replace [from,to) with `ins`. CARET marks where the caret should land.
+
+     `opts.wrap` decides what happens to the text being replaced, and the two
+     cases are genuinely different:
+
+       wrap: true   the range is the user's SELECTION and CARET means "put it
+                    here", so \sqrt{▮} around a selected x gives \sqrt{x}.
+       wrap: false  the range is a half-typed command being replaced by the
+                    completion, so it must be DISCARDED — keeping it turns
+                    `\eps` + `$\varepsilon▮$` into `$\varepsilon\eps$`. */
+  function splice(field, from, to, ins, opts) {
+    const wrap = !opts || opts.wrap !== false;
     const val = field.value;
-    const selected = val.slice(from, to);
+    const selected = wrap ? val.slice(from, to) : '';
     let text = ins, caretAt;
     const mark = text.indexOf(CARET);
     if (mark >= 0) {
@@ -209,13 +218,45 @@ const Latex = (function () {
     splice(field, a, b, ins);
   }
 
-  /* Accept a completion: the partial command being typed is replaced whole. */
-  function accept(field, entry) {
-    const a = field.selectionStart == null ? field.value.length : field.selectionStart;
-    const tok = tokenAt(field.value, a);
-    if (tok) splice(field, tok.from, tok.to, entry.ins);
-    else insert(field, entry.ins);
+  /* Is the caret inside maths? Count the unescaped $ before it: an odd number
+     means an inline span is open. `$$` counts as one delimiter either way, so
+     a display block reads as "open" too, which is the answer we want. */
+  function inMath(value, caret) {
+    const upto = String(value || '').slice(0, caret);
+    let n = 0;
+    for (let i = 0; i < upto.length; i++) {
+      if (upto[i] !== '$') continue;
+      if (i && upto[i - 1] === '\\') continue;      /* an escaped \$ is a literal */
+      if (upto[i + 1] === '$') { i += 1; }
+      n += 1;
+    }
+    return n % 2 === 1;
   }
 
-  return { CATALOG, CARET, usedBy, tokenAt, complete, suggestions, insert, splice, accept };
+  /* Accept a completion: the partial command being typed is replaced whole.
+
+     In a markdown line, a command typed in the middle of a sentence has to be
+     wrapped in $…$ or it renders as literal backslash-text. Doing that at
+     accept time is what lets someone write a paragraph and drop a symbol into
+     it without stopping to think about delimiters. */
+  function accept(field, entry, opts) {
+    const o = opts || {};
+    const a = field.selectionStart == null ? field.value.length : field.selectionStart;
+    const tok = tokenAt(field.value, a);
+    let ins = entry.ins;
+
+    if (o.wrapInMath && !inMath(field.value, tok ? tok.from : a)) {
+      const body = ins.replace(/\s+$/, '');
+      const mark = body.indexOf(CARET);
+      ins = mark >= 0
+        ? '$' + body.slice(0, mark) + CARET + body.slice(mark + 1) + '$'
+        : '$' + body + CARET + '$';
+    }
+
+    /* the half-typed command is replaced, never wrapped */
+    if (tok) splice(field, tok.from, tok.to, ins, { wrap: false });
+    else insert(field, ins);
+  }
+
+  return { CATALOG, CARET, usedBy, tokenAt, inMath, complete, suggestions, insert, splice, accept };
 })();

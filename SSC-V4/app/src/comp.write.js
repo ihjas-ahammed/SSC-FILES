@@ -32,15 +32,27 @@ const WriteBox = (function () {
     const concept = o.concept || null;
     const uid = 'w' + Math.random().toString(36).slice(2, 8);
 
-    /* A line with no $ in a maths-first box is bare LaTeX, rendered as display
-       maths. One rule, stated in the hint, so nothing about it is a surprise. */
-    const mathFirst = o.mathFirst !== false;
+    /* MARKDOWN IS THE DEFAULT. Every line is prose until you put maths in it,
+       because a workspace you cannot write a sentence in is not a workspace —
+       it is a formula box. Maths goes in as $…$ and $$…$$, the same way it is
+       authored everywhere else in this app, and the Σ key wraps the whole line
+       for when the line really is nothing but maths.
+
+       `mathFirst: true` is the opt-in exception for boxes that exist only to
+       capture one formula; there, a line with no $ is taken as bare LaTeX. */
+    const mathFirst = o.mathFirst === true;
+
+    /* What the draft is filed under. Usually the concept, but a proof
+       scratchpad and a statement attempt are different pieces of work on the
+       same concept, so they need different keys — 'proof:<id>' for the former.
+       Both merge across devices like any other draft. */
+    const draftKey = o.draftKey || (concept ? concept.id : null);
 
     let firstInputFired = false;
     let lines = [''];
     let active = 0;
 
-    const stored = (o.value != null ? o.value : (concept ? Store.draft(concept.id) : '')) || '';
+    const stored = (o.value != null ? o.value : (draftKey ? Store.draft(draftKey) : '')) || '';
     if (stored) { lines = stored.split('\n'); active = lines.length - 1; }
 
     /* ── chrome ────────────────────────────────────────────────────────── */
@@ -54,8 +66,9 @@ const WriteBox = (function () {
       class: 'small muted', id: uid + '-hint', style: { margin: '6px 0 0' },
       text: (mathFirst
         ? 'One line at a time. A line with no $ is typeset as display maths; use $…$ to mix maths into words. '
-        : 'One line at a time. Markdown, with maths written as $…$ and $$…$$. ') +
-        'Enter starts the next line, and a backslash brings up the commands.'
+        : 'Write normally — **bold**, # headings, - lists. Maths goes in as $…$, and a backslash '
+          + 'opens it for you. The Σ key turns the whole line into display maths. ') +
+        'Enter starts the next line.'
     });
 
     /* the live input; one line, always the one you are writing */
@@ -65,7 +78,7 @@ const WriteBox = (function () {
       'aria-describedby': uid + '-hint',
       placeholder: o.placeholder || (mathFirst
         ? '\\forall \\varepsilon > 0 \\; \\exists \\delta > 0 \\ldots'
-        : 'Write a line — **bold**, a list, or $x^2$…')
+        : 'Write a line — words, **bold**, or maths like $\\varepsilon > 0$…')
     });
 
     const newlineBtn = el('button', { class: 'wkey', type: 'button',
@@ -180,8 +193,8 @@ const WriteBox = (function () {
     }, 200);
 
     const persist = DOM.debounce(function () {
-      if (!concept) return;
-      Store.saveDraft(concept.id, value());
+      if (!draftKey) return;
+      Store.saveDraft(draftKey, value());
       saveNote.textContent = value().trim() ? 'Draft saved' : '';
     }, 700);
 
@@ -197,6 +210,7 @@ const WriteBox = (function () {
       field.focus();
       const at = caret === 'end' ? field.value.length : (caret || 0);
       try { field.setSelectionRange(at, at); } catch (e) { /* not focusable yet */ }
+      revealInput();
     }
 
     /* ── completions ───────────────────────────────────────────────────── */
@@ -218,7 +232,7 @@ const WriteBox = (function () {
           class: 'wsug' + (i === picked && tok ? ' on' : ''),
           type: 'button', role: 'option', 'aria-selected': String(i === picked && !!tok),
           title: '\\' + k.cmd + (k.desc ? ' — ' + k.desc : ''),
-          on: { click: function () { Latex.accept(field, k); refreshStrip(); } }
+          on: { click: function () { take(k); } }
         }, [
           el('span', { class: 's', text: k.show }),
           el('span', { class: 'c', text: '\\' + k.cmd })
@@ -231,8 +245,60 @@ const WriteBox = (function () {
       }
     }
 
+    /* Insert a command. In a markdown line it is wrapped in $…$ unless the
+       caret is already inside maths — so a symbol can be dropped into the
+       middle of a sentence without stopping to think about delimiters. */
+    function take(entry) {
+      Latex.accept(field, entry, { wrapInMath: !mathFirst });
+      refreshStrip();
+      revealInput();
+    }
+
+    /* ── keeping the input above the keyboard ────────────────────────────────
+       An on-screen keyboard shrinks the VISUAL viewport but not the layout
+       one, so an input near the bottom ends up behind it and the page looks
+       like it simply refuses to scroll far enough. Correct it by hand: measure
+       how far the input row plus its command strip overflow the visible
+       bottom, and scroll the nearest scrolling ancestor by exactly that — the
+       reel when we are inside it, the window otherwise. */
+    function scroller(node) {
+      let n = node.parentElement;
+      while (n && n !== document.body) {
+        const st = window.getComputedStyle(n);
+        if (/(auto|scroll)/.test(st.overflowY) && n.scrollHeight > n.clientHeight + 4) return n;
+        n = n.parentElement;
+      }
+      return null;
+    }
+
+    function revealInput() {
+      const vv = window.visualViewport;
+      const bottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      const top = vv ? vv.offsetTop : 0;
+      const r = strip.getBoundingClientRect();
+      const inputTop = field.getBoundingClientRect().top;
+
+      let by = 0;
+      const over = r.bottom + 12 - bottom;
+      if (over > 1) by = over;
+      else if (inputTop - 12 < top) by = inputTop - top - 12;
+      if (!by) return;
+
+      const sc = scroller(field);
+      if (sc) sc.scrollTop += by;
+      else window.scrollBy(0, by);
+    }
+
+    const reveal = DOM.debounce(revealInput, 90);
+    field.addEventListener('focus', reveal);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', reveal);
+      window.visualViewport.addEventListener('scroll', reveal);
+    }
+
     /* ── keys ──────────────────────────────────────────────────────────── */
     field.addEventListener('input', function () {
+      reveal();
       liveRender();
       commitField();
       persist();
@@ -251,8 +317,7 @@ const WriteBox = (function () {
         const tok = Latex.tokenAt(field.value, caret);
         if (tok) {
           e.preventDefault();
-          Latex.accept(field, matches[picked] || matches[0]);
-          refreshStrip();
+          take(matches[picked] || matches[0]);
           return;
         }
       }

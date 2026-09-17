@@ -227,22 +227,51 @@ self-reported.
 Level 2 adds **one** rung to the ladder and one new kind of evidence for it. It is not
 the scheduler, and it is not levels 3–5.
 
-### The level gate
+### The level is PER COURSE
 
-The app opens at Level 1 for everyone and stays there. Level 2 has to be **unlocked**
-before it can be selected, by either route:
+`Store.level(courseId)`, not `Store.level()`. A learner can be consolidating proofs in
+Real Analysis I while meeting Real Analysis II for the first time, and one global switch
+would force the harder standard onto the course they have only just opened. Each course
+carries its own level, its own unlock, and its own progress reading.
 
-- **earned** — a whole non-`pending` course is ticked at Level 1. `boot.js` checks this
-  once on the way in (`earnedUnlock`) so "earned" cannot mean something slightly
-  different on each screen;
-- **taken** — the learner turns it on in the level card on Today.
+Level 2 has to be **unlocked on that course** before it can be selected:
 
-Unlocking is not promotion. Both routes make the Level 2 switch *available*; moving to
-Level 2 is always a deliberate click. Locking it again hides the Level 2 surfaces and
-**keeps every record** — nothing recorded is ever destroyed by a level change.
+- **earned** — that course is fully ticked at Level 1. `boot.js` checks every course once
+  on the way in (`earnedUnlocks`) so "earned" cannot mean something slightly different on
+  each screen;
+- **taken** — the learner unlocks it on the course card on Today.
 
-At Level 1 the Level 2 surfaces do not exist: `proofDoneRow` returns `null`, the Proofs
-tile is absent from Today, and the loop has three steps instead of four.
+Unlocking is not promotion; switching is always a deliberate press. Locking again hides
+that course's Level 2 surfaces and **keeps every record**.
+
+### What "done" means, and why ticks change when you switch
+
+`core.progress.js` is the one place `Store` (which knows about ticks and proofs but not
+courses) meets `Pool` (which knows about courses but not progress). **Every screen that
+draws a tick, a ring or a meter asks `Progress`, never `Store` directly** — that is what
+keeps "done" meaning one thing.
+
+```
+level 1   ticked
+level 2   ticked AND, if it has a proof, that proof worked through
+```
+
+So switching a course to Level 2 makes some completed notes incomplete again. That is
+the intended reading, not a bug: **Level 2 is the progress measure for a course held to
+it.** Courses still at Level 1 are untouched by that decision, which is the whole point
+of the level being per course.
+
+This gives a concept three states, because at Level 2 a ticked note with an unworked
+proof is genuinely neither done nor untouched:
+
+| state | tree tick | meaning |
+| --- | --- | --- |
+| `none` | empty | not ticked |
+| `part` | mixed (–) | ticked, proof outstanding |
+| `done` | ✓ | complete at this course's level |
+
+One press of the tick **advances one step** — tick → work the proof → clear — so the
+control always has somewhere to go and never silently refuses.
 
 ### Proof work is the level 2 evidence
 
@@ -255,6 +284,30 @@ It is self-reported, like the Level 1 tick, and the label says exactly what is b
 claimed — *"Claim this only if you produced the argument yourself, not if you read it"* —
 because a mark that can be earned by scrolling is not evidence of anything.
 
+### The reel
+
+`Progress.reel()` decides what is in it, and the rules are deliberate:
+
+- **only material you have ticked.** Studying a statement you have never read is not
+  recall, it is reading with extra steps, and a reel full of unread theorems is exactly
+  the pile the reel exists to avoid;
+- **proof cards only from a course at Level 2** — a second card per theorem that asks
+  you to reconstruct the argument, graded like any other;
+- **ordered by how badly each card needs the attempt** (never attempted → missed →
+  partly → got), then by reading order. No randomness, so the queue is inspectable and
+  the same twice running.
+
+The scroll behaviour is Shorts/Reels, and one CSS rule carries it: **`scroll-snap-stop:
+always`**. Without it a flick keeps its momentum and sails past two or three snap points
+before settling — which is what "it swipes twice" was. With it the scroller must come to
+rest on the very next snap point however hard the flick.
+
+That rule only holds if **every card is exactly one viewport tall**, so the card is a
+fixed-height frame and its content scrolls inside `.inner`. That inner scroller's
+`overscroll-behavior` is left at `auto` on purpose: it scrolls to its own end and then
+chains out to the reel. `contain` was tried, and is what trapped the gesture on a long
+card.
+
 ### The prerequisite cascade
 
 Ticking a concept offers to tick its untticked prerequisites too. `UI.pendingPrereqs(id)`
@@ -263,13 +316,31 @@ name listed, and the syllabus tree asks with a confirm. It is **offered, never
 automatic**, and the list is always shown — a cascade the learner cannot see is one they
 cannot trust.
 
-### Sync
+### Sign-in, and sync
+
+**The app does not open until there is a name and a roll number** (`view.login.js`,
+gated in `boot.js`). That is not ceremony: the record is keyed on those two, so progress
+made anonymously could never be merged honestly with the record it later turns out to
+belong to.
 
 `core.sync.js`: Firebase RTDB over plain REST, no SDK. The key is `slug(name) + '--' +
 slug(roll)`. The separator is `--` and not `.` because an RTDB key may not contain
 `.`, `$`, `#`, `[`, `]` or `/`.
 
-It is a **pass key, not a password**, and the UI says so rather than implying a login.
+It is a **pass key, not a password**, and the login screen says so in as many words
+rather than implying security it does not provide. If that is not acceptable for the
+real deployment, the answer is real auth, not a longer key.
+
+`Sync.hello()` registers the key in a separate sign-in store, then merges. Being offline
+never blocks entry — the local record opens and reconciles later.
+
+**Test and live use entirely separate stores**, progress and sign-in both, decided in one
+place off `DATA_KIND`. AGY owns standing up the official pair; see "The databases" in
+`HOOK_agy.md`.
+
+Anything the next page load depends on must go through `Store.flushNow()`: the ordinary
+write is debounced 250ms, and `location.reload()` after a sign-in or sign-out would
+otherwise land back where it started.
 
 Every sync **merges before it writes** (`Store.mergeStates`), and the merge rules come
 from what each field means rather than from one "newest wins":
@@ -281,6 +352,28 @@ from what each field means rather than from one "newest wins":
   in the driver tests; break either and a reconnect can silently lose a week.
 
 `Store` state is versioned (`v: 2`) and v1 records upgrade in place.
+
+### The writing workspace
+
+**Markdown is the default.** Every line is prose until you put maths in it, because a
+workspace you cannot write a sentence in is not a workspace, it is a formula box. Maths
+goes in as `$…$` and `$$…$$`, and a command accepted from the completion strip **wraps
+itself in `$…$`** when the caret is in prose — so a symbol can be dropped into the middle
+of a sentence without stopping to think about delimiters. `mathFirst: true` is the
+opt-in exception for a box that exists only to capture one formula.
+
+The same component is the scratchpad behind every *Try proof (hint)* and written-answer
+gate, filed under `proof:<id>` / `written:<id>` so a sketch never collides with the
+statement draft for the same concept — and, unlike the textarea it replaced, it is
+**persisted and synced**.
+
+`Latex.splice` takes a `wrap` flag, and the distinction is load-bearing: wrapping a
+*selection* keeps it (`\sqrt{x}`), replacing a *half-typed command* must discard it, or
+`\eps` + `$\varepsilon▮$` becomes `$\varepsilon\eps$`.
+
+An on-screen keyboard shrinks the visual viewport but not the layout one, so `revealInput`
+measures the overflow against `window.visualViewport` and scrolls the nearest scrolling
+ancestor — the reel when inside it, the window otherwise.
 
 ## Still not built
 
@@ -378,3 +471,24 @@ Keep each level a complete, usable slice.
    drifted. `deploy.sh` publishes `/math/real-analysis-test`; `--live` is AGY's flag.
 14. **`create_level1.md`.** The full recipe for rebuilding this system for any subject
    from a syllabus and reference books, up to Level 1.
+
+### Level 2, second pass
+
+15. **The level moved to per course.** `Store.level(courseId)`, unlocked and switched on
+   each course's own card on Today. The global switch is gone.
+16. **`core.progress.js`** — the one place Store and Pool meet. Every tick, ring and
+   meter now reads "done" from here, so a course at Level 2 counts proof work and a
+   course at Level 1 does not. Concepts gained a third state (`part`), and the tree tick
+   advances one step per press.
+17. **The reel actually behaves like a reel.** `scroll-snap-stop: always` with every card
+   exactly one viewport tall — one swipe, one card, however hard the flick. Verified
+   with raw touch drags in Chrome, not just programmatic scrolls. Its contents now come
+   from `Progress.reel()`: ticked material only, proof cards from Level 2 courses, hardest
+   first.
+18. **The editor writes prose.** Markdown is the default; completions wrap themselves in
+   `$…$` when the caret is in prose. Fixed `Latex.splice` re-inserting the half-typed
+   command it was supposed to replace.
+19. **Scratchpads are the real editor**, persisted under their own keys and synced.
+20. **Sign-in is required** (`view.login.js`), with a separate sign-in store per build.
+21. **`Store.flushNow()`** — the debounced write cost a sign-in that was followed
+   immediately by `location.reload()`.
