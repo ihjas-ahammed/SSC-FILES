@@ -76,7 +76,7 @@ const ViewNote = (function () {
     ]);
   }
 
-  function proofView(c) {
+  function proofView(c, onTick) {
     if (!c.proof) return null;
     const p = c.proof;
 
