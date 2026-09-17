@@ -24,18 +24,18 @@ const SYLLABI = [
  { id:'ra2', title:'Real Analysis II', code:'MAT5CJ301', sem:'V', book:'Bartle & Sherbert 4e',
    blurb:'Continuity, the derivative, the Riemann integral, and limits of function sequences.',
    needs:'ra1',
-   modules:[
-    { id:'ra2.m1', n:'I',  title:'Continuous Functions', marks:15,
-      secs:['5.1','5.2','5.3','5.4','5.5','5.6'] },
-    { id:'ra2.m2', n:'II', title:'Differentiation', marks:15,
-      secs:['6.1','6.2','6.3','6.4'] },
-    { id:'ra2.m3', n:'III',title:'The Riemann Integral', marks:20,
-      secs:['7.1','7.2','7.3','7.4','7.5'] },
-    { id:'ra2.m4', n:'IV', title:'Sequences and Series of Functions', marks:10,
-      secs:['8.1','8.2','8.3','8.4'] },
-    { id:'ra2.m5', n:'+',  title:'Infinite Series', marks:0, ext:true,
-      secs:['9.1','9.2','9.3','9.4'] }
-   ]},
+    modules:[
+     { id:'ra2.m1', n:'I',  title:'Continuous Functions', marks:15,
+       secs:['5.1','5.2','5.3','5.4','5.5','5.6'], extSecs:['5.5'] },
+     { id:'ra2.m2', n:'II', title:'Differentiation', marks:15,
+       secs:['6.1','6.2','6.3','6.4'] },
+     { id:'ra2.m3', n:'III',title:'The Riemann Integral', marks:20,
+       secs:['7.1','7.2','7.3','7.4','7.5'], extSecs:['7.4','7.5'] },
+     { id:'ra2.m4', n:'IV', title:'Sequences and Series of Functions', marks:10,
+       secs:['8.1','8.2','8.3','8.4'], extSecs:['8.3','8.4'] },
+     { id:'ra2.m5', n:'+',  title:'Infinite Series', marks:0, ext:true,
+       secs:['9.1','9.2','9.3','9.4'] }
+    ]},
  {
    id: 'rae', title: 'Real Analysis for Entrance', code: 'GATE / JAM / CUSAT', sem: '—',
    blurb: 'Extension only — the entrance topics RA1 and RA2 do not already cover.',
@@ -83,6 +83,22 @@ const SECTITLE = {
  '9.1':'Absolute Convergence','9.2':'Tests for Absolute Convergence',
  '9.3':'Tests for Nonabsolute Convergence','9.4':'Series of Functions',
  '11.1':'Open and Closed Sets in ℝ','11.2':'Compact Sets'
+};
+
+/* Sections outside the core university exam syllabus (extension / supplementary topics).
+   They are loaded and available for study, but do not count towards the exam progress meter. */
+const EXT_SECS = {
+  '5.5': true,  // Continuity and Gauges (Kurzweil-Henstock)
+  '7.4': true,  // The Darboux Integral
+  '7.5': true,  // Approximate Integration (Trapezoidal & Simpson's)
+  '8.3': true,  // The Exponential and Logarithmic Functions
+  '8.4': true,  // The Trigonometric Functions
+  '9.1': true,  // Infinite Series (Module +)
+  '9.2': true,
+  '9.3': true,
+  '9.4': true,
+  '11.1': true, // Topology of the Line (Module +)
+  '11.2': true
 };
 
 /* Content pool. Data files push into these. */

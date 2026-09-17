@@ -186,7 +186,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.7.4.1', bartle: '7.4.1', sec: '7.4', kind: 'definition', tier: 'core',
+    id: 'c.7.4.1', bartle: '7.4.1', sec: '7.4', kind: 'definition', tier: 'ext',
     title: 'Darboux Upper and Lower Sums',
     oneLine: 'Upper sum uses the ceiling (supremum) on each slice; lower sum uses the floor (infimum).',
     statement: `Let $f: [a, b] \\to \\mathbb{R}$ be bounded, and let $\\mathcal{P} = \\{x_0, x_1, \\ldots, x_n\\}$ be a partition of $[a, b]$.
@@ -210,7 +210,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.7.4.8', bartle: '7.4.8', sec: '7.4', kind: 'theorem', tier: 'core',
+    id: 'c.7.4.8', bartle: '7.4.8', sec: '7.4', kind: 'theorem', tier: 'ext',
     title: 'Darboux Integrability Criterion',
     oneLine: 'f is integrable iff the gap between upper and lower sums can be made smaller than any ε.',
     statement: `A bounded function $f: [a, b] \\to \\mathbb{R}$ is <b>Riemann integrable</b> if and only if for every $\\varepsilon > 0$, there exists a partition $\\mathcal{P}_\\varepsilon$ of $[a, b]$ such that:
@@ -229,7 +229,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.7.5.1', bartle: '7.5.1', sec: '7.5', kind: 'technique', tier: 'core',
+    id: 'c.7.5.1', bartle: '7.5.1', sec: '7.5', kind: 'technique', tier: 'ext',
     title: 'Approximate Integration: Trapezoidal and Simpson’s Rules',
     oneLine: 'Approximate hard integrals using trapezoids or parabolic arches with precise error bounds.',
     statement: `Let $f$ be continuous on $[a, b]$ and partition $[a, b]$ into $n$ equal subintervals of width $h = (b - a)/n$.

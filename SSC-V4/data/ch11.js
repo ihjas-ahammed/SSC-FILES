@@ -6,7 +6,7 @@
 
 CONCEPTS.push(
   {
-    id: 'c.11.1.1', bartle: '11.1.1', sec: '11.1', kind: 'definition', tier: 'core',
+    id: 'c.11.1.1', bartle: '11.1.1', sec: '11.1', kind: 'definition', tier: 'ext',
     title: 'Open Sets and Interior Points in ℝ',
     oneLine: 'A set is open if every point inside it has some breathing room — an entire neighborhood that stays completely inside.',
     statement: `Let $G \\subseteq \\mathbb{R}$.
@@ -28,7 +28,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.11.1.5', bartle: '11.1.5', sec: '11.1', kind: 'definition', tier: 'core',
+    id: 'c.11.1.5', bartle: '11.1.5', sec: '11.1', kind: 'definition', tier: 'ext',
     title: 'Closed Sets and Limit Points',
     oneLine: 'A set is closed if its complement is open, or equivalently, if it catches all points its elements can converge to.',
     statement: `Let $F \\subseteq \\mathbb{R}$.
@@ -51,7 +51,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.11.1.7', bartle: '11.1.7', sec: '11.1', kind: 'theorem', tier: 'core',
+    id: 'c.11.1.7', bartle: '11.1.7', sec: '11.1', kind: 'theorem', tier: 'ext',
     title: 'Open and Closed Sets: Unions and Intersections',
     oneLine: 'Any union of open sets is open; finite intersections of open sets are open. Flip for closed sets.',
     statement: `(a) The union of an <b>arbitrary</b> collection of open sets is open.
@@ -74,7 +74,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.11.2.1', bartle: '11.2.1', sec: '11.2', kind: 'definition', tier: 'core',
+    id: 'c.11.2.1', bartle: '11.2.1', sec: '11.2', kind: 'definition', tier: 'ext',
     title: 'Open Covers and Compactness',
     oneLine: 'A set is compact if however many open blankets you use to cover it, a finite number of blankets would already suffice.',
     statement: `Let $K \\subseteq \\mathbb{R}$.
@@ -97,7 +97,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.11.2.5', bartle: '11.2.5', sec: '11.2', kind: 'theorem', tier: 'core',
+    id: 'c.11.2.5', bartle: '11.2.5', sec: '11.2', kind: 'theorem', tier: 'ext',
     title: 'The Heine–Borel Theorem',
     oneLine: 'In ℝ, compact is exactly identical to closed and bounded.',
     statement: `A subset $K \\subseteq \\mathbb{R}$ is <b>compact</b> if and only if it is both:
@@ -120,7 +120,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.11.2.6', bartle: '11.2.6', sec: '11.2', kind: 'theorem', tier: 'core',
+    id: 'c.11.2.6', bartle: '11.2.6', sec: '11.2', kind: 'theorem', tier: 'ext',
     title: 'Topological Bolzano–Weierstrass Theorem',
     oneLine: 'Every infinite subset inside a compact set has a limit point inside that set.',
     statement: `If $K$ is a compact subset of $\\mathbb{R}$, then every infinite subset $S \\subseteq K$ has at least one <b>cluster point</b> (limit point) that belongs to $K$.`,

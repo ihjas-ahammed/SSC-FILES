@@ -791,18 +791,18 @@ const SYLLABI = [
  { id:'ra2', title:'Real Analysis II', code:'MAT5CJ301', sem:'V', book:'Bartle & Sherbert 4e',
    blurb:'Continuity, the derivative, the Riemann integral, and limits of function sequences.',
    needs:'ra1',
-   modules:[
-    { id:'ra2.m1', n:'I',  title:'Continuous Functions', marks:15,
-      secs:['5.1','5.2','5.3','5.4','5.5','5.6'] },
-    { id:'ra2.m2', n:'II', title:'Differentiation', marks:15,
-      secs:['6.1','6.2','6.3','6.4'] },
-    { id:'ra2.m3', n:'III',title:'The Riemann Integral', marks:20,
-      secs:['7.1','7.2','7.3','7.4','7.5'] },
-    { id:'ra2.m4', n:'IV', title:'Sequences and Series of Functions', marks:10,
-      secs:['8.1','8.2','8.3','8.4'] },
-    { id:'ra2.m5', n:'+',  title:'Infinite Series', marks:0, ext:true,
-      secs:['9.1','9.2','9.3','9.4'] }
-   ]},
+    modules:[
+     { id:'ra2.m1', n:'I',  title:'Continuous Functions', marks:15,
+       secs:['5.1','5.2','5.3','5.4','5.5','5.6'], extSecs:['5.5'] },
+     { id:'ra2.m2', n:'II', title:'Differentiation', marks:15,
+       secs:['6.1','6.2','6.3','6.4'] },
+     { id:'ra2.m3', n:'III',title:'The Riemann Integral', marks:20,
+       secs:['7.1','7.2','7.3','7.4','7.5'], extSecs:['7.4','7.5'] },
+     { id:'ra2.m4', n:'IV', title:'Sequences and Series of Functions', marks:10,
+       secs:['8.1','8.2','8.3','8.4'], extSecs:['8.3','8.4'] },
+     { id:'ra2.m5', n:'+',  title:'Infinite Series', marks:0, ext:true,
+       secs:['9.1','9.2','9.3','9.4'] }
+    ]},
  {
    id: 'rae', title: 'Real Analysis for Entrance', code: 'GATE / JAM / CUSAT', sem: '—',
    blurb: 'Extension only — the entrance topics RA1 and RA2 do not already cover.',
@@ -850,6 +850,22 @@ const SECTITLE = {
  '9.1':'Absolute Convergence','9.2':'Tests for Absolute Convergence',
  '9.3':'Tests for Nonabsolute Convergence','9.4':'Series of Functions',
  '11.1':'Open and Closed Sets in ℝ','11.2':'Compact Sets'
+};
+
+/* Sections outside the core university exam syllabus (extension / supplementary topics).
+   They are loaded and available for study, but do not count towards the exam progress meter. */
+const EXT_SECS = {
+  '5.5': true,  // Continuity and Gauges (Kurzweil-Henstock)
+  '7.4': true,  // The Darboux Integral
+  '7.5': true,  // Approximate Integration (Trapezoidal & Simpson's)
+  '8.3': true,  // The Exponential and Logarithmic Functions
+  '8.4': true,  // The Trigonometric Functions
+  '9.1': true,  // Infinite Series (Module +)
+  '9.2': true,
+  '9.3': true,
+  '9.4': true,
+  '11.1': true, // Topology of the Line (Module +)
+  '11.2': true
 };
 
 /* Content pool. Data files push into these. */
@@ -3899,6 +3915,370 @@ CONCEPTS.push(
 );
 
 
+/* ── ../data/ch5.c.js ── */
+/* Bartle 5.5 Continuity and Gauges · 5.6 Monotone and Inverse Functions */
+CONCEPTS.push(
+  {
+    id: 'c.5.5.1', bartle: '5.5.1', sec: '5.5', kind: 'definition', tier: 'ext',
+    title: 'Tagged Partition of an Interval',
+    oneLine: 'Chop $[a,b]$ into non-overlapping pieces and mark one point inside each piece.',
+    statement: `A <b>partition</b> of $I:=[a,b]$ is a collection $P=\\{I_1,\\dots,I_n\\}$ of
+      non-overlapping closed subintervals whose union is $[a,b]$, written $I_i:=[x_{i-1},x_i]$
+      where $a=x_0 < x_1<\\cdots < x_n=b$. Choosing a point $t_i\\in I_i$ for each $i$ gives a
+      <b>tagged partition</b> $\\dot P=\\{(I_1,t_1),\\dots,(I_n,t_n)\\}$; the $t_i$ are its <b>tags</b>.`,
+    intuition: `This is the bookkeeping behind a Riemann sum: you need both the pieces the
+      interval is cut into and a chosen "tag" point inside each piece where the function will
+      be evaluated. It is set up now because gauges (5.5.2) are about to control, point by
+      point, how fine each piece is allowed to be.`,
+    needs: ['s.interval'],
+    cards: [
+      { q: 'What two pieces of data does a tagged partition of $[a,b]$ carry?', a: 'A collection of non-overlapping closed subintervals covering $[a,b]$, plus one tag point chosen inside each subinterval.', kind: 'state' },
+      { q: 'In a tagged partition, must a tag $t_i$ lie inside its own subinterval $I_i$?', a: 'Yes — $t_i\\in I_i$ by definition.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.5.5.2', bartle: '5.5.2', sec: '5.5', kind: 'definition', tier: 'ext',
+    title: 'Gauge and δ-Fine Partition',
+    oneLine: 'A gauge hands out a personal tolerance at every point; a δ-fine partition respects all of them.',
+    statement: `A <b>gauge</b> on $I$ is a function $\\delta:I\\to(0,\\infty)$. A tagged partition
+      $\\dot P=\\{(I_i,t_i)\\}_{i=1}^n$ of $I$ is $\\delta$<b>-fine</b> if
+      $$t_i\\in I_i\\subseteq[t_i-\\delta(t_i),\\,t_i+\\delta(t_i)]\\quad\\text{for } i=1,\\dots,n.$$`,
+    intuition: `A single positive number $\\delta$ forces every subinterval to be short. A gauge
+      is more flexible: it can demand tiny subintervals near "delicate" points and allow long
+      ones elsewhere, with the allowed size varying from point to point. This is exactly the
+      kind of point-dependent control that continuity naturally produces — an $\\varepsilon$ at
+      $t$ gives its own $\\delta(t)$ — which is why gauges built from continuous functions arise
+      so naturally.`,
+    needs: ['c.5.5.1', 's.abs-ineq', 'c.5.1.2'],
+    traps: [
+      `Do not confuse "a gauge" with "a fixed $\\delta>0$" — a gauge $\\delta(\\cdot)$ is a whole
+       function, and it is allowed to vary wildly (even shrink to $0$) as the point moves.`
+    ],
+    cards: [
+      { q: 'What is a gauge on an interval $I$?', a: 'A function $\\delta:I\\to(0,\\infty)$ assigning a strictly positive tolerance to every point of $I$.', kind: 'state' },
+      { q: 'When is a tagged partition $\\{(I_i,t_i)\\}$ $\\delta$-fine?', a: 'When every $I_i\\subseteq[t_i-\\delta(t_i),t_i+\\delta(t_i)]$, i.e. each piece stays inside the tolerance window of its own tag.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.5.5.3', bartle: '5.5.3', sec: '5.5', kind: 'lemma', tier: 'ext',
+    title: 'Every Point Lies Near Some Tag',
+    oneLine: 'Any point of $I$ is within its subinterval\u2019s tag-tolerance of that tag.',
+    statement: `If $\\dot P=\\{(I_i,t_i)\\}$ is a $\\delta$-fine partition of $I=[a,b]$ and
+      $x\\in I$, then there is a tag $t_i$ with $|x-t_i|\\le\\delta(t_i)$.`,
+    intuition: `$x$ belongs to some subinterval $I_i$ of the partition; $\\delta$-fineness traps
+      all of $I_i$ inside $t_i$'s tolerance window, so it traps $x$ too. This one-line
+      consequence is what every gauge-based proof of a continuity theorem (Boundedness,
+      Max-Min, Location of Roots, Uniform Continuity) actually uses.`,
+    needs: ['c.5.5.2'],
+    cards: [
+      { q: 'Why does every $x\\in I$ land within $\\delta(t_i)$ of some tag $t_i$?', a: '$x$ lies in some subinterval $I_i$ of the $\\delta$-fine partition, and $\\delta$-fineness already forces all of $I_i$ (hence $x$) inside $[t_i-\\delta(t_i),t_i+\\delta(t_i)]$.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.5.5.4', bartle: '5.5.4', sec: '5.5', kind: 'example', tier: 'ext',
+    title: 'A Gauge That Forces a Tag at an Endpoint',
+    oneLine: 'A gauge can shrink toward a point so hard that only that point can tag its own subinterval.',
+    statement: `On $I:=[0,1]$ let $\\delta(0):=\\tfrac12$ and $\\delta(x):=\\tfrac12 x$ for
+      $0 < x\\le1$. For $0 < t\\le1$, $[t-\\delta(t),t+\\delta(t)]=[\\tfrac12t,\\tfrac32t]$, which
+      never contains $0$. Hence in any $\\delta$-fine partition of $I$, the only subinterval
+      touching $0$ must be tagged at $0$ itself.`,
+    intuition: `This is why gauges are strictly more powerful than a single number $\\delta$:
+      by letting $\\delta(t)\\to0$ as $t\\to0$, the definition can force a specific tag choice
+      at a specific point, a kind of control a constant $\\delta$ can never give.`,
+    needs: ['c.5.5.2'],
+    cards: [
+      { q: 'For $\\delta(x)=\\tfrac12x$ on $(0,1]$, what happens to the tolerance window as $t\\to0^+$?', a: 'It shrinks to a single point at the origin, so no subinterval tagged away from $0$ can ever contain $0$ — forcing $0$ to be its own tag.', kind: 'apply' }
+    ]
+  },
+  {
+    id: 'c.5.5.5', bartle: '5.5.5', sec: '5.5', kind: 'theorem', tier: 'ext',
+    title: "Existence of δ-Fine Partitions (Cousin's Lemma)",
+    oneLine: 'No matter how a gauge varies, a partition respecting it everywhere always exists.',
+    statement: `If $\\delta$ is a gauge on $[a,b]$, then $[a,b]$ has a $\\delta$-fine partition.`,
+    intuition: `This existence result — proved from the Supremum Property of $\\mathbb{R}$ — is
+      what makes gauge-controlled partitions usable at all. It underlies the entire generalized
+      Riemann integral, and it also powers slick alternative proofs of the classical §5.3–5.4
+      continuity theorems (Boundedness, Max-Min, Location of Roots, Uniform Continuity), each
+      built from a gauge coming from continuity itself.`,
+    needs: ['c.5.5.2', 'c.2.3.1'],
+    traps: [
+      `Existence is not obvious for a non-constant gauge — it genuinely needs completeness of
+       $\\mathbb{R}$ (via a supremum argument), not just a direct construction.`
+    ],
+    cards: [
+      { q: "What does Cousin's Lemma (5.5.5) guarantee?", a: 'Every gauge $\\delta$ on $[a,b]$ admits at least one $\\delta$-fine tagged partition of $[a,b]$.', kind: 'state' },
+      { q: 'What property of $\\mathbb{R}$ does the existence of $\\delta$-fine partitions rest on?', a: 'The Supremum (Completeness) Property of $\\mathbb{R}$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.5.6.1', bartle: '5.6.1', sec: '5.6', kind: 'theorem', tier: 'extra',
+    title: 'One-Sided Limits of a Monotone Function',
+    oneLine: 'A monotone function never fails to have one-sided limits — the worst it can do is jump.',
+    statement: `Let $I\\subseteq\\mathbb{R}$ be an interval and $f:I\\to\\mathbb{R}$ increasing on
+      $I$. If $c\\in I$ is not an endpoint of $I$, then
+      $$\\lim_{x\\to c^-}f(x)=\\sup\\{f(x):x\\in I,\\,x < c\\},\\qquad
+        \\lim_{x\\to c^+}f(x)=\\inf\\{f(x):x\\in I,\\,x>c\\}.$$
+      (For $f$ decreasing, the roles of $\\sup$ and $\\inf$ swap.)`,
+    intuition: `Monotonicity means the values to the left of $c$ are all bounded above by
+      $f(c)$ and climb steadily toward a "ceiling" as $x\\to c^-$; that ceiling is exactly the
+      left-hand limit. So a monotone function can never oscillate the way a function like
+      $\\sin(1/x)$ does near a point — both one-sided limits always exist as real numbers,
+      whether or not $f$ is continuous at $c$.`,
+    needs: ['c.4.3.1', 'c.2.3.1', 's.monotone'],
+    traps: [
+      `This theorem gives existence of both one-sided limits, not equality of them — a monotone
+       function can still jump at $c$; see 5.6.3.`
+    ],
+    proof: {
+      idea: `Show that $L:=\\sup\\{f(x):x\\in I,x < c\\}$ literally is the left-hand limit, by
+        turning "not an upper bound" into an $\\varepsilon$-$\\delta$ statement.`,
+      why: `Monotonicity is exactly what makes a supremum behave like a limit: once you get
+        $\\varepsilon$-close in value, you are automatically squeezed for every point further
+        right.`,
+      rungs: [
+        { why: 'Name the candidate limit: since $f$ is increasing, values left of $c$ are bounded above by $f(c)$, so this set has a supremum.', m: '$$L:=\\sup\\{f(x):x\\in I,\\,x < c\\}$$ (exists, as the set is nonempty and bounded above by $f(c)$)' },
+        { why: 'Given $\\varepsilon>0$, $L-\\varepsilon$ is not an upper bound of the set, so some point just left of $c$ already gets close to $L$.', m: '$\\exists\\,y_\\varepsilon\\in I,\\ y_\\varepsilon < c:\\quad L-\\varepsilon < f(y_\\varepsilon)$' },
+        { why: 'Convert this into an $x$-window using monotonicity: any $y$ between $y_\\varepsilon$ and $c$ has $f(y)$ trapped between $f(y_\\varepsilon)$ and $L$.', m: 'set $\\delta_\\varepsilon:=c-y_\\varepsilon>0$; for $y\\in I$ with $0 < c-y<\\delta_\\varepsilon$: $L-\\varepsilon < f(y_\\varepsilon)\\le f(y)\\le L$' },
+        { why: 'Read off convergence directly from that squeeze.', m: '$|f(y)-L|<\\varepsilon$ whenever $y\\in I,\\ 0 < c-y<\\delta_\\varepsilon$' },
+        { why: 'This is precisely the definition of the left-hand limit; the right-hand case is symmetric with $\\inf$.', m: '$$\\lim_{x\\to c^-}f(x)=L=\\sup\\{f(x):x\\in I,x < c\\}$$' }
+      ],
+      ends: `Both one-sided limits exist and are finite at every interior point of $I$, for any
+        monotone $f$ — no continuity assumption is needed.`
+    },
+    cards: [
+      { q: 'For $f$ increasing on $I$ and $c$ interior, what does $\\lim_{x\\to c^-}f(x)$ equal?', a: '$\\sup\\{f(x):x\\in I,\\,x < c\\}$.', kind: 'state' },
+      { q: 'For $f$ increasing on $I$ and $c$ interior, what does $\\lim_{x\\to c^+}f(x)$ equal?', a: '$\\inf\\{f(x):x\\in I,\\,x>c\\}$.', kind: 'state' },
+      { q: 'Does Theorem 5.6.1 guarantee $f$ is continuous at $c$?', a: 'No — it only guarantees both one-sided limits exist; they may still disagree, giving a jump.', kind: 'trap' },
+      { q: 'What replaces $\\sup$/$\\inf$ in Theorem 5.6.1 if $f$ is decreasing instead of increasing?', a: 'The roles swap: $\\lim_{x\\to c^-}f=\\inf\\{f(x):x < c\\}$ and $\\lim_{x\\to c^+}f=\\sup\\{f(x):x>c\\}$.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.5.6.2', bartle: '5.6.2', sec: '5.6', kind: 'corollary', tier: 'extra',
+    title: 'Continuity Criteria for an Increasing Function',
+    oneLine: 'An increasing function is continuous exactly where its left ceiling, its value, and its right floor all coincide.',
+    statement: `Let $I\\subseteq\\mathbb{R}$ be an interval, $f:I\\to\\mathbb{R}$ increasing on
+      $I$, and $c\\in I$ not an endpoint of $I$. The following are equivalent:
+      (a) $f$ is continuous at $c$;
+      (b) $\\lim_{x\\to c^-}f=f(c)=\\lim_{x\\to c^+}f$;
+      (c) $\\sup\\{f(x):x\\in I,\\,x < c\\}=f(c)=\\inf\\{f(x):x\\in I,\\,x>c\\}$.`,
+    intuition: `This combines "continuity means the limit equals the value" (Chapter 4) with
+      the explicit $\\sup/\\inf$ formulas of 5.6.1: for a monotone function, continuity at $c$
+      reduces to a numeric equality you can check by computing two extrema and comparing them
+      to $f(c)$.`,
+    needs: ['c.5.6.1', 'c.5.1.2'],
+    traps: [
+      `This form needs $c$ to be an interior point (not an endpoint); the endpoint case is
+       handled separately in 5.6.3.`
+    ],
+    proof: {
+      idea: `Chain the "limit equals value" definition of continuity together with the explicit
+        $\\sup/\\inf$ values Theorem 5.6.1 supplies for the two one-sided limits.`,
+      why: `Once both one-sided limits have explicit formulas, "continuity" stops being a
+        limiting statement and becomes an equation between three numbers.`,
+      rungs: [
+        { why: 'Recall the Chapter 4 fact linking continuity to one-sided limits.', m: '$f$ continuous at $c$ $\\iff$ $\\lim_{x\\to c^-}f=f(c)=\\lim_{x\\to c^+}f$ — this is (a) $\\iff$ (b)' },
+        { why: 'Substitute the explicit values Theorem 5.6.1 gives for those two limits.', m: 'by 5.6.1: $\\lim_{x\\to c^-}f=\\sup\\{f(x):x < c\\}$ and $\\lim_{x\\to c^+}f=\\inf\\{f(x):x>c\\}$' },
+        { why: 'Plugging these in turns (b) into (c) with no extra work.', m: '(b) $\\iff$ $\\sup\\{f(x):x < c\\}=f(c)=\\inf\\{f(x):x>c\\}$ — this is (b) $\\iff$ (c)' }
+      ],
+      ends: `(a), (b), (c) are three phrasings of the same fact; (c) is the version you compute
+        with in practice.`
+    },
+    cards: [
+      { q: 'State condition (c) of Corollary 5.6.2 in your own words.', a: 'The supremum of $f$ over points left of $c$, the value $f(c)$, and the infimum of $f$ over points right of $c$ all coincide.', kind: 'state' },
+      { q: 'How would you check continuity of an increasing $f$ at an interior point $c$ using 5.6.2?', a: 'Compute $\\sup\\{f(x):x < c\\}$ and $\\inf\\{f(x):x>c\\}$ and check both equal $f(c)$.', kind: 'apply' },
+      { q: 'Does Corollary 5.6.2 apply at an endpoint of $I$?', a: 'No — it requires $c$ to be an interior (non-endpoint) point of $I$.', kind: 'trap' }
+    ]
+  },
+  {
+    id: 'c.5.6.3', bartle: '5.6.3', sec: '5.6', kind: 'theorem', tier: 'extra',
+    title: 'Continuity via the Jump',
+    oneLine: 'A monotone function is continuous exactly where it does not jump.',
+    statement: `For $f$ increasing on interval $I$ and $c\\in I$ not an endpoint, define the
+      <b>jump</b> of $f$ at $c$ as
+      $$j_f(c):=\\lim_{x\\to c^+}f-\\lim_{x\\to c^-}f=\\inf\\{f(x):x\\in I,x>c\\}-\\sup\\{f(x):x\\in I,x < c\\}.$$
+      If $a\\in I$ is the left endpoint, $j_f(a):=\\lim_{x\\to a^+}f-f(a)$; if $b\\in I$ is the
+      right endpoint, $j_f(b):=f(b)-\\lim_{x\\to b^-}f$. Then, for any $c\\in I$: $f$ is
+      continuous at $c$ if and only if $j_f(c)=0$.`,
+    intuition: `The jump measures the size of the gap a monotone function leaps over rather
+      than passes through, since monotonicity forbids its values from wobbling past that gap.
+      Continuity is exactly the case where the gap has size zero, whether $c$ sits in the
+      interior or at an endpoint of the domain.`,
+    needs: ['c.5.6.1', 'c.5.6.2'],
+    traps: [
+      `For increasing $f$, $j_f(c)\\ge0$ always (never negative) — it can never happen that the
+       right floor sits below the left ceiling.`,
+      `The endpoint formulas use only the one relevant one-sided limit, not both.`
+    ],
+    proof: {
+      idea: `The interior case is Corollary 5.6.2 restated in jump language; each endpoint case
+        repeats the same one-sided argument with the single relevant limit.`,
+      why: `"Jump equals zero" is just a repackaging of "the numbers that must be equal for
+        continuity really are equal."`,
+      rungs: [
+        { why: 'Translate condition (c) of Corollary 5.6.2 into "gap = 0" at an interior point.', m: 'for interior $c$: $j_f(c)=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x < c\\}=0\\iff$ (c) of Cor. 5.6.2 $\\iff f$ continuous at $c$' },
+        { why: 'Note the jump can never be negative for an increasing function, since the right floor cannot undercut the left ceiling.', m: '$j_f(c)\\ge0$ always, because $\\sup\\{f(x):x < c\\}\\le f(c)\\le\\inf\\{f(x):x>c\\}$' },
+        { why: 'At a left endpoint $a\\in I$ there is only a right-hand limit to compare against $f(a)$.', m: '$j_f(a):=\\lim_{x\\to a^+}f-f(a)=0\\iff f(a)=\\lim_{x\\to a^+}f\\iff f$ continuous at $a$' },
+        { why: 'The right-endpoint case is symmetric, using only the left-hand limit.', m: '$j_f(b):=f(b)-\\lim_{x\\to b^-}f=0\\iff f$ continuous at $b$' }
+      ],
+      ends: `In every case — interior point or either endpoint — continuity of a monotone
+        function at $c$ is exactly the statement $j_f(c)=0$.`
+    },
+    cards: [
+      { q: 'Define the jump $j_f(c)$ of an increasing function at an interior point $c$.', a: '$j_f(c)=\\lim_{x\\to c^+}f-\\lim_{x\\to c^-}f=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x < c\\}$.', kind: 'state' },
+      { q: 'For $f$ increasing, can $j_f(c)$ ever be negative?', a: 'No — for an increasing function $j_f(c)\\ge0$ everywhere.', kind: 'trap' },
+      { q: 'What single condition on the jump characterizes continuity of a monotone $f$ at $c$?', a: '$j_f(c)=0$.', kind: 'state' },
+      { q: 'How is the jump defined differently at a left endpoint versus an interior point?', a: 'At a left endpoint $a$, $j_f(a):=\\lim_{x\\to a^+}f-f(a)$, using only the one-sided limit that exists there — not the difference of two one-sided limits.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.5.6.4', bartle: '5.6.4', sec: '5.6', kind: 'theorem', tier: 'extra',
+    title: 'Monotone Functions Have Countably Many Discontinuities',
+    oneLine: 'A monotone function can jump, but only at countably many points.',
+    statement: `Let $I\\subseteq\\mathbb{R}$ be an interval and $f:I\\to\\mathbb{R}$ monotone on
+      $I$. Then the set $D=\\{x\\in I: f\\text{ is discontinuous at }x\\}$ is countable.`,
+    intuition: `Every jump "eats" a chunk of the total rise $f(b)-f(a)$, and only finitely many
+      jumps can exceed any fixed size $1/k$. Stacking these finite bounds over
+      $k=1,2,3,\\dots$ shows there are at most countably many discontinuities in total — a pure
+      counting argument that says nothing about *where* they are, only that there cannot be
+      "too many."`,
+    needs: ['c.5.6.3'],
+    traps: [
+      `"Only finitely many jumps exceed $1/k$" does not mean $f$ has only finitely many
+       discontinuities overall — summing over every $k$ only gives countably many, and a
+       monotone function genuinely can be discontinuous at, say, every rational point.`,
+      `This says nothing about continuity almost everywhere in a measure sense beyond
+       countability; it is purely a cardinality statement.`
+    ],
+    proof: {
+      idea: `Bound how many jumps can exceed a threshold $1/k$ using the fact that jumps at
+        distinct points reflect disjoint chunks of the function's total rise, then let
+        $k\\to\\infty$.`,
+      why: `Countability is really "countable union of finite sets," and the finite-set bound
+        at level $k$ comes for free from monotonicity: jumps cannot overlap or exceed the total
+        rise of $f$.`,
+      rungs: [
+        { why: 'For any finitely many ordered points, their jumps add up to at most the total rise of $f$ across $I$ — the jumps cannot overlap.', m: 'for $a\\le x_1 < x_2<\\cdots < x_n\\le b$: $j_f(x_1)+j_f(x_2)+\\cdots+j_f(x_n)\\le f(b)-f(a)$' },
+        { why: 'Turn "total jump is bounded" into "few big jumps": if more than $k$ points had jump $\\ge(f(b)-f(a))/k$, their sum alone would exceed the total rise.', m: 'for fixed $k\\in\\mathbb N$, the set $\\{x\\in I: j_f(x)\\ge (f(b)-f(a))/k\\}$ has at most $k$ points' },
+        { why: 'Every discontinuity has strictly positive jump (5.6.3), so $D$ is exactly the union of these threshold sets over all $k$.', m: '$D=\\{x\\in I:j_f(x)>0\\}=\\bigcup_{k=1}^{\\infty}\\{x\\in I:j_f(x)\\ge (f(b)-f(a))/k\\}$' },
+        { why: 'A countable union of finite sets is countable.', m: '$D$ is a countable union of finite sets $\\implies D$ is countable' }
+      ],
+      ends: `Every monotone function on an interval has at most countably many points of
+        discontinuity, however wildly it jumps.`
+    },
+    cards: [
+      { q: 'If $f$ is monotone on an interval $I$, what can you say about its set of discontinuities?', a: 'It is countable (finite or countably infinite), never uncountable.', kind: 'state' },
+      { q: 'What quantity bounds the sum of jumps at any finite set of points $x_1<\\dots < x_n$ in $[a,b]$?', a: '$f(b)-f(a)$, the total rise of $f$ — jumps at distinct points cannot overlap.', kind: 'recall' },
+      { q: 'A monotone function on $[0,1]$ jumps at every rational point. Does this contradict Theorem 5.6.4?', a: 'No — the rationals are countable, so this is fully consistent with (and a standard example of) the theorem.', kind: 'apply' },
+      { q: 'True or false: a monotone function can only have finitely many discontinuities.', a: 'False — it can have countably infinitely many (e.g. one at every rational), just never uncountably many.', kind: 'trap' }
+    ]
+  },
+  {
+    id: 'c.5.6.5', bartle: '5.6.5', sec: '5.6', kind: 'theorem', tier: 'extra',
+    title: 'Continuous Inverse Theorem',
+    oneLine: 'A strictly monotone continuous function on an interval always has a continuous inverse.',
+    statement: `Let $I\\subseteq\\mathbb{R}$ be an interval and $f:I\\to\\mathbb{R}$ strictly
+      monotone and continuous on $I$. Then the inverse function $g$ of $f$, defined on
+      $J:=f(I)$, is strictly monotone (in the same sense as $f$) and continuous on $J$.`,
+    intuition: `Strict monotonicity alone already makes $f$ injective, so the inverse $g$
+      exists as a function and is automatically order-preserving. The real content of this
+      theorem is that $g$'s continuity needs no separate check: continuity plus an interval
+      domain for $f$ forces it. Drop any one hypothesis — interval domain, continuity of $f$,
+      or strictness — and the inverse can fail to be continuous.`,
+    needs: ['c.5.3.10', 'c.5.1.2', 'c.5.6.3', 's.inverse-fn', 's.monotone'],
+    traps: [
+      `The domain of $f$ must be an interval — a strictly monotone continuous function on a
+       non-interval set (e.g. a union of two disjoint intervals) can have a discontinuous
+       inverse.`,
+      `Continuity of $f$ alone, without strict monotonicity, is not enough — $f$ may not even
+       be injective, so no inverse function exists at all.`,
+      `Monotonicity of $g$ is the easy half (pure order-chasing); continuity of $g$ is the
+       substantial half, coming from $I=g(J)$ being an interval.`
+    ],
+    proof: {
+      idea: `Strict monotonicity gives $g$ for free, order-preserving by a direct chase.
+        Continuity of $g$ is proved by contradiction: a jump in $g$ would force a "missing"
+        value out of $I$, contradicting that $I$ is an interval.`,
+      why: `This swaps an $\\varepsilon$-$\\delta$ computation for a purely structural fact —
+        the range of a continuous function on an interval is again an interval — so continuity
+        of the inverse comes from geometry, not estimation.`,
+      rungs: [
+        { why: 'Confirm the setup: $J$ is an interval (so it makes sense to ask if $g$ is continuous "at a point of $J$"), and $g$ exists because $f$ is injective.', m: '$J:=f(I)$ is an interval (Thm 5.3.10, since $f$ is continuous on interval $I$); $f$ strictly increasing $\\implies$ injective on $I$ $\\implies$ $g:J\\to\\mathbb R$ with $g(f(x))=x$ exists' },
+        { why: 'Show $g$ inherits the order: a bigger output of $f$ must come from a bigger input.', m: 'for $y_1 < y_2$ in $J$, write $y_1=f(x_1),\\,y_2=f(x_2)$; if $x_1\\ge x_2$ then $f(x_1)\\ge f(x_2)$, contradicting $y_1 < y_2$ — so $x_1 < x_2$, i.e. $g(y_1) < g(y_2)$' },
+        { why: 'Suppose for contradiction $g$ is discontinuous at some $c\\in J$; by 5.6.3 this means a nonzero jump.', m: 'suppose $g$ discontinuous at $c\\in J$; by Thm 5.6.3, $\\lim_{y\\to c^-}g<\\lim_{y\\to c^+}g$' },
+        { why: 'Pick a candidate value strictly between those two one-sided limits of $g$.', m: 'choose $x$ with $\\lim_{y\\to c^-}g < x<\\lim_{y\\to c^+}g$ and $x\\ne g(c)$' },
+        { why: 'Strict monotonicity of $g$ rules out any $y\\in J$ actually attaining this $x$ as $g(y)$.', m: 'no $y\\in J$ has $g(y)=x$, so $x\\notin g(J)=I$' },
+        { why: 'But $x$ sits strictly between values that are limits of points of $I$, so $x$ ought to be trapped inside $I$ — contradicting that $I$ is an interval.', m: '$x\\notin I$ contradicts $I$ being an interval, since $x$ lies between elements of $g(J)=I$' }
+      ],
+      ends: `The assumption that $g$ is discontinuous is impossible, so $g$ is continuous on
+        all of $J$. (The strictly decreasing case is symmetric.) This is exactly the theorem
+        used to build the $n$th root function: $g(x)=x^{1/n}$ on $[0,\\infty)$ ($n$ even, from
+        $f(x)=x^n$ on $[0,\\infty)$, with $J=[0,\\infty)$ via the Archimedean Property and IVT
+        5.3.7) or on all of $\\mathbb{R}$ ($n$ odd, from $f(x)=x^n$ on $\\mathbb{R}$).`
+    },
+    cards: [
+      { q: 'What three hypotheses does the Continuous Inverse Theorem need on $f:I\\to\\mathbb{R}$?', a: 'That $I$ is an interval, and $f$ is strictly monotone and continuous on $I$.', kind: 'state' },
+      { q: 'Why does the inverse $g$ automatically exist once $f$ is strictly monotone?', a: 'Strict monotonicity makes $f$ injective, and an injective function always has an inverse on its range.', kind: 'recall' },
+      { q: 'Use 5.6.5 to explain why $g(x)=x^{1/n}$ is continuous on $[0,\\infty)$ for $n$ even.', a: '$f(x)=x^n$ is strictly increasing and continuous on the interval $[0,\\infty)$ with range $[0,\\infty)$ (via Archimedean Property + IVT), so by 5.6.5 its inverse $g(x)=x^{1/n}$ is strictly increasing and continuous there.', kind: 'apply' },
+      { q: 'If $f$ is continuous but only weakly monotone (not strict) on an interval, does 5.6.5 apply?', a: 'No — weak monotonicity does not guarantee injectivity, so an inverse function may not even exist.', kind: 'trap' }
+    ]
+  },
+  {
+    id: 'c.5.6.6', bartle: '5.6.6', sec: '5.6', kind: 'definition', tier: 'extra',
+    title: 'Rational Powers',
+    oneLine: 'Rational exponents are defined by first taking the nth root, then raising to the integer power.',
+    statement: `For $m,n\\in\\mathbb N$ and $x\\ge0$, define $x^{m/n}:=(x^{1/n})^m$. For $x>0$,
+      define $x^{-m/n}:=(x^{1/n})^{-m}$. (Here $x^{1/n}$ is the $n$th root function built as the
+      inverse of $t\\mapsto t^n$ via Theorem 5.6.5.)`,
+    intuition: `This simply assembles rational powers out of the $n$th root function already
+      constructed (5.6.5) and ordinary integer powers — nothing new needs to exist. The only
+      loose end, checked in the exercises, is that the definition does not secretly depend on
+      how the exponent $m/n$ is written as a fraction.`,
+    needs: ['c.5.6.5'],
+    traps: [
+      `The definition needs $x\\ge0$ (or $x>0$ for negative rational exponents) — even
+       denominators $n$ require nonnegative $x$ for $x^{1/n}$ to make sense as a real number.`,
+      `Well-definedness (that $r=m/n=p/q$ gives the same value either way) is not automatic —
+       it has to be checked, and Bartle leaves it as an exercise.`
+    ],
+    cards: [
+      { q: 'How is $x^{m/n}$ defined for $m,n\\in\\mathbb N$, $x\\ge0$?', a: '$x^{m/n}:=(x^{1/n})^m$ — take the $n$th root first, then raise to the $m$th power.', kind: 'state' },
+      { q: 'Why is $x\\ge0$ required in the definition of $x^{m/n}$?', a: 'Because $x^{1/n}$ (the $n$th root) is only defined for $x\\ge0$ in general (needed whenever $n$ is even).', kind: 'recall' },
+      { q: 'Is it obvious that $x^{2/4}$ and $x^{1/2}$ give the same value from this definition?', a: 'No — it requires a separate well-definedness check (same rational number, different fraction representations); it is not automatic from the definition alone.', kind: 'trap' }
+    ]
+  },
+  {
+    id: 'c.5.6.7', bartle: '5.6.7', sec: '5.6', kind: 'theorem', tier: 'extra',
+    title: 'Rational Powers Commute with nth Roots',
+    oneLine: 'Taking the nth root then the mth power gives the same result as the mth power then the nth root.',
+    statement: `If $m\\in\\mathbb Z$, $n\\in\\mathbb N$, and $x>0$, then $x^{m/n}=(x^m)^{1/n}$.`,
+    intuition: `Both sides are, by definition, "the positive number whose $n$th power is
+      $x^m$." Proving the identity is just checking that the candidate $y:=x^{m/n}$, raised to
+      the $n$th power using ordinary integer exponent laws, actually equals $x^m$.`,
+    needs: ['c.5.6.6'],
+    proof: {
+      idea: `Name $y:=x^{m/n}$ from the definition, compute $y^n$ using only integer-exponent
+        laws, and recognize the result as exactly the defining property of $(x^m)^{1/n}$.`,
+      why: `Uniqueness of the positive $n$th root turns "$y^n=x^m$ with $y>0$" directly into
+        "$y=(x^m)^{1/n}$" — no further estimation needed.`,
+      rungs: [
+        { why: 'Set up the candidate value from the definition of rational powers (5.6.6).', m: 'let $y:=x^{m/n}=(x^{1/n})^m$' },
+        { why: 'Recall the defining property of the $n$th root: raising it to the $n$th power returns $x$.', m: '$(x^{1/n})^n=x$' },
+        { why: 'Compute $y^n$ using only integer-exponent power laws, reordering the two exponents.', m: '$y^n=\\big((x^{1/n})^m\\big)^n=\\big((x^{1/n})^n\\big)^m=x^m$' },
+        { why: '"$y>0$ and $y^n=x^m$" is precisely what it means to say $y$ is the $n$th root of $x^m$.', m: 'since $y>0$ and $y^n=x^m$, by definition $y=(x^m)^{1/n}$' }
+      ],
+      ends: `$x^{m/n}=(x^m)^{1/n}$ for all $x>0$, $m\\in\\mathbb Z$, $n\\in\\mathbb N$ — integer
+        power and $n$th root commute.`
+    },
+    cards: [
+      { q: 'State Theorem 5.6.7.', a: 'For $m\\in\\mathbb Z$, $n\\in\\mathbb N$, $x>0$: $x^{m/n}=(x^m)^{1/n}$.', kind: 'state' },
+      { q: 'Use 5.6.7 to compute $8^{2/3}$ two ways.', a: '$(8^{1/3})^2=2^2=4$, and equivalently $(8^2)^{1/3}=64^{1/3}=4$ — same answer either order.', kind: 'apply' },
+      { q: 'Does Theorem 5.6.7 apply when $x\\le0$?', a: 'No — it requires $x>0$; even roots of nonpositive numbers are not defined in this framework.', kind: 'trap' }
+    ]
+  }
+);
+
+
 /* ── ../data/ch6.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Real Analysis II · Module 2: Differentiation (Chapter 6)
@@ -4228,6 +4608,777 @@ CONCEPTS.push(
     cards: [
       { q: 'What does Taylor’s Theorem reduce to when $n = 0$?', a: 'Lagrange’s Mean Value Theorem: $f(x) = f(x_0) + f\'(c)(x - x_0)$.', kind: 'recall' },
       { q: 'State the Lagrange form of the remainder $R_n(x)$ in Taylor’s Theorem.', a: '$R_n(x) = \\dfrac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1}$ for some $c$ between $x_0$ and $x$.', kind: 'state' }
+    ]
+  }
+);
+
+
+/* ── ../data/ch7.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Real Analysis II · Module 3: The Riemann Integral (Chapter 7)
+   Sections: 7.1 (Riemann Integral), 7.2 (Integrable Functions),
+             7.3 (Fundamental Theorem), 7.4 (Darboux Integral), 7.5 (Approx)
+   Diagrams: c.7.1.1, c.7.2.9, c.7.3.1, c.7.3.5, c.7.3.8,
+             c.7.3.12, c.7.3.17, c.7.4.1, c.7.4.8
+   ══════════════════════════════════════════════════════════════════════════ */
+
+CONCEPTS.push(
+  {
+    id: 'c.7.1.1', bartle: '7.1.1', sec: '7.1', kind: 'definition', tier: 'core',
+    title: 'Tagged Partitions and the Riemann Sum',
+    oneLine: 'Chop the interval into thin slices, erect a rectangle on each slice at sample tag t_i, and sum their areas.',
+    statement: `Let $I = [a, b]$ be a closed bounded interval.
+      <p>(a) A <b>partition</b> $\\mathcal{P}$ of $I$ is a finite ordered set of points:
+      $$\\mathcal{P} = \\{x_0, x_1, \\ldots, x_n\\} \\quad \\text{with} \\quad a = x_0 < x_1 < \\cdots < x_n = b$$
+      The <b>mesh</b> (norm) of $\\mathcal{P}$ is the length of the widest subinterval:
+      $$\\|\\mathcal{P}\\| = \\max_{1 \\le i \\le n} (x_i - x_{i-1})$$</p>
+      <p>(b) A <b>tagged partition</b> $\\dot{\\mathcal{P}}$ chooses a sample tag $t_i \\in [x_{i-1}, x_i]$ in each slice.</p>
+      <p>(c) The <b>Riemann sum</b> of $f: [a, b] \\to \\mathbb{R}$ corresponding to $\\dot{\\mathcal{P}}$ is:
+      $$S(f; \\dot{\\mathcal{P}}) = \\sum_{i=1}^n f(t_i)(x_i - x_{i-1})$$</p>
+      <p>(d) $f$ is <b>Riemann integrable</b> on $[a, b]$, written $f \\in \\mathcal{R}[a, b]$, with integral $L = \\int_a^b f$, if for every $\\varepsilon > 0$, there exists $\\delta > 0$ such that for <b>every</b> tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$:
+      $$|S(f; \\dot{\\mathcal{P}}) - L| < \\varepsilon$$</p>`,
+    intuition: `<p>In Class 12, integration was introduced as "the area under a curve". But how do you calculate the area of an irregular shape? You slice it into vertical rectangles!</p>
+      <p>Each rectangle has width $\\Delta x_i = (x_i - x_{i-1})$ and height sampled at $t_i$. If the total sum of these rectangle areas converges to the exact same value $L$ no matter how you choose the sample tags $t_i$ as long as the slices are thinner than $\\delta$, that limit is the <b>Riemann Integral</b>!</p>`,
+    needs: ['c.4.1.4', 'c.2.2.1'],
+    traps: [
+      `A Riemann integrable function on $[a, b]$ MUST be bounded! If $f$ is unbounded, you can pick tags $t_i$ where $f(t_i)$ is arbitrarily large, blowing up the sum.`,
+      `The tag $t_i$ can be ANY point inside $[x_{i-1}, x_i]$ (left end, right end, midpoint, or an irrational). The definition requires convergence for ALL choices of tags.`
+    ],
+    cards: [
+      { q: 'What is the mesh (norm) $\\|\\mathcal{P}\\|$ of a partition?', a: 'The length of the largest subinterval: $\\|\\mathcal{P}\\| = \\max_i (x_i - x_{i-1})$.', kind: 'state' },
+      { q: 'What is the formula for the Riemann sum $S(f; \\dot{\\mathcal{P}})$?', a: '$S(f; \\dot{\\mathcal{P}}) = \\sum_{i=1}^n f(t_i)(x_i - x_{i-1})$.', kind: 'state' },
+      { q: 'Can an unbounded function on $[a, b]$ be Riemann integrable?', a: 'No. Every Riemann integrable function must be bounded on $[a, b]$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.1', bartle: '7.2.1', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'Integrability of Continuous and Monotone Functions',
+    oneLine: 'Every continuous function and every monotone function on [a, b] is Riemann integrable.',
+    statement: `(a) If $f: [a, b] \\to \\mathbb{R}$ is <b>continuous</b> on $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.
+      <p>(b) If $f: [a, b] \\to \\mathbb{R}$ is <b>monotone</b> (increasing or decreasing) on $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.</p>`,
+    intuition: `<p>These two big classes cover virtually every function you met in school!</p>
+      <p>• <b>Why continuous functions are integrable:</b> By the Uniform Continuity Theorem (5.4.3), on a closed bounded interval, $f$ cannot fluctuate wildly. In any thin slice, the top and bottom of the function are within $\\varepsilon$ of each other, so the area error shrinks to zero.</p>
+      <p>• <b>Why monotone functions are integrable:</b> Monotone functions might have jumps, but all the rectangles' error gaps telescope and cancel out, bounded by $(f(b) - f(a)) \\|\\mathcal{P}\\| \\to 0$!</p>`,
+    needs: ['c.7.1.1', 'c.5.4.3'],
+    traps: [
+      `A monotone function does NOT have to be continuous to be integrable! It can have countably many jump discontinuities (like a staircase) and still be 100% Riemann integrable.`,
+      `The Dirichlet function $f(x) = 1$ for $x \\in \\mathbb{Q}$ and $0$ for $x \\notin \\mathbb{Q}$ is NOT integrable because every slice contains both rationals and irrationals, so the sum swings between $0$ and $b - a$.`
+    ],
+    cards: [
+      { q: 'Name two major classes of functions that are guaranteed to be Riemann integrable on $[a, b]$.', a: '(1) Continuous functions on $[a, b]$; (2) Monotone functions on $[a, b]$.', kind: 'recall' },
+      { q: 'Is the Dirichlet function Riemann integrable on $[0, 1]$?', a: 'No, because lower sums are always $0$ and upper sums are always $1$; they never meet.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.9', bartle: '7.2.9', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'Additivity of the Integral over Subintervals',
+    oneLine: 'The area from a to b equals the area from a to c plus the area from c to b.',
+    statement: `Let $f: [a, b] \\to \\mathbb{R}$ and let $c \\in (a, b)$.
+      <p>Then $f \\in \\mathcal{R}[a, b]$ if and only if $f \\in \\mathcal{R}[a, c]$ and $f \\in \\mathcal{R}[c, b]$. In this case:
+      $$\\int_a^b f = \\int_a^c f + \\int_c^b f$$</p>`,
+    intuition: `<p>Geometrically, slicing a region into two side-by-side plots at $x = c$ doesn't change the total area. The area from $a$ to $c$ and the area from $c$ to $b$ add up seamlessly to the area from $a$ to $b$.</p>
+      <p>This allows us to integrate piecewise functions by integrating each continuous piece separately and adding the results together!</p>`,
+    needs: ['c.7.1.1'],
+    traps: [
+      `Forgetting that the additivity formula also works when $c$ is outside $[a, b]$, provided we adopt the standard convention $\\int_b^a f = -\\int_a^b f$ and $\\int_a^a f = 0$.`
+    ],
+    cards: [
+      { q: 'State the interval additivity property of the Riemann integral.', a: '$\\int_a^b f = \\int_a^c f + \\int_c^b f$ for any $c$ between $a$ and $b$.', kind: 'state' },
+      { q: 'What is the convention for $\\int_b^a f$ when $a < b$?', a: '$\\int_b^a f = -\\int_a^b f$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.1', bartle: '7.3.1', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Fundamental Theorem of Calculus (Form 1: Differentiation of an Integral)',
+    oneLine: 'Accumulating area under a continuous curve produces an antiderivative whose derivative is the original curve.',
+    statement: `Let $f \\in \\mathcal{R}[a, b]$, and define the area accumulator function $F: [a, b] \\to \\mathbb{R}$ by:
+      $$F(x) = \\int_a^x f(t) \\, dt \\quad \\text{for } x \\in [a, b]$$
+      <p>(a) $F$ is <b>continuous</b> on $[a, b]$ (in fact, it is Lipschitz continuous).</p>
+      <p>(b) If $f$ is <b>continuous at a point $c \\in [a, b]$</b>, then $F$ is <b>differentiable at $c$</b>, and:
+      $$F'(c) = f(c) \\quad \\iff \\quad \\frac{d}{dx} \\left[ \\int_a^x f(t) \\, dt \\right]_{x = c} = f(c)$$</p>`,
+    intuition: `<p>Differentiation and integration are exact inverse operations! When you integrate $f$ to create $F(x)$, you are tracking the accumulated area. If you then ask: "at what rate is this area growing right now at $x = c$?", the answer is simply the height of the curve $f(c)$!</p>
+      <p>Think of water pouring into a tank: the rate at which total water volume increases ($F'(c)$) is exactly the rate at which water is currently flowing from the tap ($f(c)$).</p>`,
+    needs: ['c.7.1.1', 'c.6.1.1', 'c.5.1.1'],
+    traps: [
+      `Thinking $F$ is always differentiable everywhere: $F'(c) = f(c)$ is only guaranteed at points where $f$ is CONTINUOUS! If $f$ has a jump at $c$, $F$ has a sharp corner at $c$ and is not differentiable there.`,
+      `Using Leibniz's rule on $\\frac{d}{dx} \\int_{u(x)}^{v(x)} f(t)\\,dt$: remember to apply the Chain Rule to endpoints: $f(v(x))v'(x) - f(u(x))u'(x)$!`
+    ],
+    proof: {
+      idea: `Compute the difference quotient $\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h}\\int_c^{c+h} f(t)\\,dt$ and use continuity of $f$ at $c$.`,
+      why: `Because $f(t) \\approx f(c)$ on a tiny interval $[c, c+h]$, the integral is approximately $f(c) \\cdot h$, so dividing by $h$ leaves $f(c)$.`,
+      rungs: [
+        { why: 'Write the difference quotient for $F$ at $c$.', m: '\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h}\\int_c^{c+h} f(t)\\,dt' },
+        { why: 'Subtract $f(c) = \\frac{1}{h}\\int_c^{c+h} f(c)\\,dt$ from both sides.', m: '\\frac{F(c+h) - F(c)}{h} - f(c) = \\frac{1}{h}\\int_c^{c+h} (f(t) - f(c))\\,dt' },
+        { why: 'Since $f$ is continuous at $c$, for $|t - c| < \\delta$, $|f(t) - f(c)| < \\varepsilon$.', m: '\\left| \\frac{F(c+h) - F(c)}{h} - f(c) \\right| \\le \\frac{1}{|h|} \\cdot \\varepsilon |h| = \\varepsilon' }
+      ],
+      ends: 'Taking $h \\to 0$ gives $F\'(c) = f(c)$.'
+    },
+    cards: [
+      { q: 'State Form 1 of the Fundamental Theorem of Calculus.', a: 'If $f \\in \\mathcal{R}[a, b]$ and $f$ is continuous at $c$, then $F(x) = \\int_a^x f$ satisfies $F\'(c) = f(c)$.', kind: 'state' },
+      { q: 'What is $\\dfrac{d}{dx} \\int_0^x \\sin(t^2) \\, dt$?', a: '$\\sin(x^2)$, directly by FTC Form 1 since $\\sin(t^2)$ is continuous.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.5', bartle: '7.3.5', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Fundamental Theorem of Calculus (Form 2: Evaluation of Integrals)',
+    oneLine: 'To evaluate an integral, find any antiderivative F and compute F(b) - F(a).',
+    statement: `Let $f \\in \\mathcal{R}[a, b]$. If there exists a differentiable function $F: [a, b] \\to \\mathbb{R}$ such that $F'(x) = f(x)$ for all $x \\in [a, b]$, then:
+      $$\\int_a^b f(x) \\, dx = F(b) - F(a)$$`,
+    intuition: `<p>This is the famous Newton-Leibniz formula that every Class 12 student uses daily: $\\int_a^b f = [F(x)]_a^b = F(b) - F(a)$.</p>
+      <p>Instead of struggling with thousands of tiny Riemann rectangles and taking limits of sums, you simply look for an antiderivative $F$ whose derivative gives $f$, and subtract the endpoint values! It links the accumulation of rate of change back to the net change of the function.</p>`,
+    needs: ['c.7.1.1', 'c.6.2.4'],
+    traps: [
+      `$F'(x) = f(x)$ must hold for ALL points in $[a, b]$. If the antiderivative has a discontinuity or undefined derivative inside $[a, b]$, you cannot blindly apply the formula (e.g. $\\int_{-1}^1 \\frac{1}{x^2}\\,dx \\ne [-1/x]_{-1}^1 = -2$, which is nonsense since $1/x^2 > 0$!).`
+    ],
+    cards: [
+      { q: 'State Form 2 of the Fundamental Theorem of Calculus.', a: 'If $f \\in \\mathcal{R}[a, b]$ and $F\' = f$ on $[a, b]$, then $\\int_a^b f = F(b) - F(a)$.', kind: 'state' },
+      { q: 'Why is $\\int_{-1}^1 \\frac{1}{x} \\, dx = [\\ln|x|]_{-1}^1 = 0$ invalid?', a: 'Because $1/x$ is unbounded at $x = 0$ and not Riemann integrable on $[-1, 1]$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.8', bartle: '7.3.8', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Integration by Substitution (Change of Variables)',
+    oneLine: 'Chain rule in reverse: substitute u = φ(t) and du = φ\'(t) dt with updated limits.',
+    statement: `Let $J = [\\alpha, \\beta]$ and let $\\varphi: J \\to \\mathbb{R}$ have a continuous derivative on $J$. Let $I = \\varphi(J)$, and let $f: I \\to \\mathbb{R}$ be continuous on $I$. Then:
+      $$\\int_\\alpha^\\beta f(\\varphi(t)) \\varphi'(t) \\, dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u) \\, du$$`,
+    intuition: `<p>In Class 12, $u$-substitution is standard practice: set $u = \\varphi(t)$, replace $dt$ with $du / \\varphi'(t)$, and change the limits from $\\alpha, \\beta$ to $\\varphi(\\alpha), \\varphi(\\beta)$.</p>
+      <p>In Real Analysis, this is simply the Chain Rule integrated using FTC Form 2: if $F$ is an antiderivative of $f$, then $(F \\circ \\varphi)'(t) = f(\\varphi(t)) \\varphi'(t)$.</p>`,
+    needs: ['c.7.3.5', 'c.6.1.5'],
+    traps: [
+      `Forgetting to change the integration limits when substituting: the new limits MUST be $\\varphi(\\alpha)$ and $\\varphi(\\beta)$!`,
+      `$\\varphi$ must have a continuous derivative $\\varphi'$ on the entire interval.`
+    ],
+    cards: [
+      { q: 'State the Integration by Substitution formula.', a: '$\\int_\\alpha^\\beta f(\\varphi(t))\\varphi\'(t)\\,dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du$.', kind: 'state' },
+      { q: 'Which differentiation rule corresponds to Integration by Substitution?', a: 'The Chain Rule.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.12', bartle: '7.3.12', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Lebesgue’s Integrability Criterion',
+    oneLine: 'A bounded function is Riemann integrable if and only if its discontinuities form a set of measure zero.',
+    statement: `A bounded function $f: [a, b] \\to \\mathbb{R}$ is <b>Riemann integrable</b> on $[a, b]$ if and only if its set of discontinuities $D$ has <b>measure zero</b>:
+      $$f \\in \\mathcal{R}[a, b] \\iff \\mu(D) = 0$$
+      <p>A set $Z \\subset \\mathbb{R}$ has <b>measure zero</b> if for every $\\varepsilon > 0$, $Z$ can be covered by a countable collection of open intervals whose total length is less than $\\varepsilon$.</p>`,
+    intuition: `<p>This is the ultimate answer to: <i>"Exactly which functions can be Riemann integrated?"</i></p>
+      <p>• Every finite set has measure zero.</p>
+      <p>• Every countable set (like $\\mathbb{Q}$) has measure zero!</p>
+      <p>• Therefore, Thomae's Popcorn function (discontinuous at all rationals, continuous at all irrationals) IS Riemann integrable, because its discontinuities $\\mathbb{Q}$ have measure zero!</p>
+      <p>• But Dirichlet's function is discontinuous everywhere (its discontinuity set is all of $\\mathbb{R}$), which has measure $> 0$, so it fails.</p>`,
+    needs: ['c.7.1.1', 'c.1.3.1'],
+    traps: [
+      `Thinking a function with infinitely many discontinuities cannot be Riemann integrable. False! As long as the discontinuities form a set of measure zero (e.g. countable points), it is integrable.`,
+      `Remember that measure zero sets do not have to be countable: the Cantor set is uncountable, yet it has measure zero!`
+    ],
+    cards: [
+      { q: 'State Lebesgue’s Integrability Criterion.', a: 'A bounded function on $[a, b]$ is Riemann integrable iff its discontinuity set has measure zero.', kind: 'state' },
+      { q: 'Why is Thomae’s function Riemann integrable on $[0, 1]$?', a: 'Because it is discontinuous only at $\\mathbb{Q} \\cap [0, 1]$, which is countable and therefore has measure zero.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.17', bartle: '7.3.17', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Integration by Parts',
+    oneLine: 'Product rule in reverse: ∫ u dv = uv - ∫ v du.',
+    statement: `Let $f, g: [a, b] \\to \\mathbb{R}$ be continuously differentiable on $[a, b]$. Then:
+      $$\\int_a^b f(x) g'(x) \\, dx = [f(b)g(b) - f(a)g(a)] - \\int_a^b f'(x) g(x) \\, dx$$`,
+    intuition: `<p>In Class 12, everyone remembers the ILATE rule for Integration by Parts: $\\int u\\,dv = uv - \\int v\\,du$.</p>
+      <p>In Real Analysis, this is simply the Product Rule $(fg)' = f'g + fg'$ integrated across $[a, b]$ using the Fundamental Theorem of Calculus!</p>`,
+    needs: ['c.7.3.5', 'c.6.1.1'],
+    traps: [
+      `Forgetting the boundary bracket $[f(x)g(x)]_a^b$: you must evaluate $f(b)g(b) - f(a)g(a)$!`,
+      `Both $f$ and $g$ must have integrable derivatives on $[a, b]$.`
+    ],
+    cards: [
+      { q: 'State the Integration by Parts formula for definite integrals.', a: '$\\int_a^b f g\' = [fg]_a^b - \\int_a^b f\' g$.', kind: 'state' },
+      { q: 'Which differentiation rule is the foundation of Integration by Parts?', a: 'The Product Rule: $(fg)\' = f\'g + fg\'.$', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.4.1', bartle: '7.4.1', sec: '7.4', kind: 'definition', tier: 'ext',
+    title: 'Darboux Upper and Lower Sums',
+    oneLine: 'Upper sum uses the ceiling (supremum) on each slice; lower sum uses the floor (infimum).',
+    statement: `Let $f: [a, b] \\to \\mathbb{R}$ be bounded, and let $\\mathcal{P} = \\{x_0, x_1, \\ldots, x_n\\}$ be a partition of $[a, b]$.
+      <p>For each subinterval $I_i = [x_{i-1}, x_i]$, define $M_i = \\sup_{x \\in I_i} f(x)$ and $m_i = \\inf_{x \\in I_i} f(x)$.</p>
+      <p>The <b>Lower Darboux Sum</b> is $L(f, \\mathcal{P}) = \\sum_{i=1}^n m_i (x_i - x_{i-1})$.</p>
+      <p>The <b>Upper Darboux Sum</b> is $U(f, \\mathcal{P}) = \\sum_{i=1}^n M_i (x_i - x_{i-1})$.</p>
+      <p>Always: $L(f, \\mathcal{P}) \\le S(f; \\dot{\\mathcal{P}}) \\le U(f, \\mathcal{P})$ for any choice of tags.</p>`,
+    intuition: `<p>Gaston Darboux made Riemann's theory much cleaner: instead of worrying about arbitrary sample tags $t_i$, he constructed two absolute boundaries:</p>
+      <p>1. <b>Lower sum $L(f, \\mathcal{P})$:</b> Build rectangles using the lowest possible floor $m_i$ in each slice. This is guaranteed to UNDERESTIMATE the true area.</p>
+      <p>2. <b>Upper sum $U(f, \\mathcal{P})$:</b> Build rectangles using the highest possible ceiling $M_i$ in each slice. This is guaranteed to OVERESTIMATE the true area.</p>
+      <p>As you add more partition points (refining the partition), lower sums climb up and upper sums climb down, squeezing the true area in between!</p>`,
+    needs: ['c.2.3.2', 'c.7.1.1'],
+    traps: [
+      `For ANY two partitions $\\mathcal{P}_1$ and $\\mathcal{P}_2$, $L(f, \\mathcal{P}_1) \\le U(f, \\mathcal{P}_2)$. A lower sum can NEVER exceed an upper sum, even if they use completely different partitions!`,
+      `Refining a partition (adding points) always increases or maintains lower sums and decreases or maintains upper sums.`
+    ],
+    cards: [
+      { q: 'Define the Upper Darboux sum $U(f, \\mathcal{P})$.', a: '$U(f, \\mathcal{P}) = \\sum_{i=1}^n M_i (x_i - x_{i-1})$, where $M_i = \\sup_{I_i} f$.', kind: 'state' },
+      { q: 'If partition $\\mathcal{P}^*$ refines $\\mathcal{P}$ by adding more points, how do $L(f, \\mathcal{P})$ and $U(f, \\mathcal{P})$ change?', a: '$L(f, \\mathcal{P}^*) \\ge L(f, \\mathcal{P})$ and $U(f, \\mathcal{P}^*) \\le U(f, \\mathcal{P})$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.4.8', bartle: '7.4.8', sec: '7.4', kind: 'theorem', tier: 'ext',
+    title: 'Darboux Integrability Criterion',
+    oneLine: 'f is integrable iff the gap between upper and lower sums can be made smaller than any ε.',
+    statement: `A bounded function $f: [a, b] \\to \\mathbb{R}$ is <b>Riemann integrable</b> if and only if for every $\\varepsilon > 0$, there exists a partition $\\mathcal{P}_\\varepsilon$ of $[a, b]$ such that:
+      $$U(f, \\mathcal{P}_\\varepsilon) - L(f, \\mathcal{P}_\\varepsilon) < \\varepsilon$$`,
+    intuition: `<p>This is the most practical working definition of integrability used in real analysis proofs. You don't have to guess the integral value $L$ beforehand!</p>
+      <p>All you need to show is that the total "slop" or error between the ceiling rectangles and the floor rectangles can be squished below $\\varepsilon$. When this gap closes, the upper integral $\\overline{\\int} f = \\inf U(f, \\mathcal{P})$ and the lower integral $\\underline{\\int} f = \\sup L(f, \\mathcal{P})$ meet at a single shared number: the integral!</p>`,
+    needs: ['c.7.4.1'],
+    traps: [
+      `Do not forget that both Darboux integrability and Riemann integrability are 100% mathematically equivalent: $f \\in \\mathcal{R}[a, b] \\iff \\overline{\\int} f = \\underline{\\int} f$.`,
+      `For Dirichlet's function on $[0, 1]$, $U(f, \\mathcal{P}) = 1$ and $L(f, \\mathcal{P}) = 0$ for EVERY partition, so $U - L = 1$ can never be less than $\\varepsilon = 0.5$. Hence it fails Darboux's criterion.`
+    ],
+    cards: [
+      { q: 'State the Darboux Integrability Criterion.', a: '$f \\in \\mathcal{R}[a, b]$ iff for every $\\varepsilon > 0$, $\\exists \\mathcal{P}$ such that $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon$.', kind: 'state' },
+      { q: 'What are the upper and lower integrals $\\overline{\\int}_a^b f$ and $\\underline{\\int}_a^b f$?', a: '$\\overline{\\int} f = \\inf_{\\mathcal{P}} U(f, \\mathcal{P})$ and $\\underline{\\int} f = \\sup_{\\mathcal{P}} L(f, \\mathcal{P})$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.5.1', bartle: '7.5.1', sec: '7.5', kind: 'technique', tier: 'ext',
+    title: 'Approximate Integration: Trapezoidal and Simpson’s Rules',
+    oneLine: 'Approximate hard integrals using trapezoids or parabolic arches with precise error bounds.',
+    statement: `Let $f$ be continuous on $[a, b]$ and partition $[a, b]$ into $n$ equal subintervals of width $h = (b - a)/n$.
+      <p>(a) <b>The Trapezoidal Rule $T_n(f)$:</b>
+      $$T_n(f) = \\frac{h}{2} \\left[ f(x_0) + 2f(x_1) + 2f(x_2) + \\cdots + 2f(x_{n-1}) + f(x_n) \\right]$$
+      If $f''$ is continuous on $[a, b]$, the error is bounded by:
+      $$\\left| \\int_a^b f - T_n(f) \\right| \\le \\frac{(b - a) h^2}{12} \\|f''\\|_{[a, b]}$$</p>
+      <p>(b) <b>Simpson’s Rule $S_n(f)$</b> (for even $n$):
+      $$S_n(f) = \\frac{h}{3} \\left[ f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + \\cdots + 4f(x_{n-1}) + f(x_n) \\right]$$
+      If $f^{(4)}$ is continuous on $[a, b]$, the error is bounded by:
+      $$\\left| \\int_a^b f - S_n(f) \\right| \\le \\frac{(b - a) h^4}{180} \\|f^{(4)}\\|_{[a, b]}$$</p>`,
+    intuition: `<p>In real-world applications (and numerical computing), many functions cannot be integrated analytically (e.g. $\\int e^{-x^2} dx$). Numerical quadrature gives guaranteed approximations:</p>
+      <p>• <b>Trapezoidal Rule:</b> Connects consecutive points with straight lines (trapezoids). The error shrinks as $h^2 = 1/n^2$.</p>
+      <p>• <b>Simpson’s Rule:</b> Connects groups of three points with parabolas (quadratic polynomials). Because parabolas cancel symmetric errors, Simpson's rule is exact not only for cubics but has an error that drops as $h^4 = 1/n^4$ — doubling the slices cuts error by $16$ times!</p>`,
+    needs: ['c.7.1.1', 'c.6.4.1'],
+    traps: [
+      `Notice the coefficients in Simpson's Rule: $1, 4, 2, 4, 2, \\dots, 4, 1$. The ends are $1$, odd-indexed inner terms are $4$, and even-indexed inner terms are $2$.`,
+      `Simpson's Rule requires an EVEN number of intervals $n$ (so an odd number of sample points $n+1$).`
+    ],
+    cards: [
+      { q: 'What is the order of accuracy of the Trapezoidal Rule and Simpson’s Rule?', a: 'Trapezoidal Rule error is $O(h^2)$; Simpson’s Rule error is $O(h^4)$.', kind: 'recall' },
+      { q: 'Why is Simpson’s Rule exact for all cubic polynomials $ax^3 + bx^2 + cx + d$ even though it uses parabolas?', a: 'Because the error depends on the 4th derivative $f^{(4)}$, which is identically zero for any polynomial of degree $\\le 3$.', kind: 'apply' }
+    ]
+  }
+);
+
+
+/* ── ../data/ch8.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Real Analysis II · Module 4: Sequences and Series of Functions (Chapter 8)
+   Sections: 8.1 (Pointwise & Uniform Convergence), 8.2 (Interchange of Limits),
+             8.3 (Exponential & Logarithmic), 8.4 (Trigonometric Functions)
+   Diagrams: c.8.1.1, c.8.1.3, c.8.2.2, c.8.2.4
+   ══════════════════════════════════════════════════════════════════════════ */
+
+CONCEPTS.push(
+  {
+    id: 'c.8.1.1', bartle: '8.1.1', sec: '8.1', kind: 'definition', tier: 'core',
+    title: 'Pointwise vs Uniform Convergence',
+    oneLine: 'Pointwise convergence is evaluated point-by-point; uniform convergence hugs the entire curve simultaneously inside an ε-tube.',
+    statement: `Let $(f_n)$ be a sequence of functions defined on $A \\subseteq \\mathbb{R}$, and let $f: A \\to \\mathbb{R}$.
+      <p>(a) $(f_n)$ converges <b>pointwise</b> to $f$ on $A$ if for each $x \\in A$ and each $\\varepsilon > 0$, there exists $K(\\varepsilon, x) \\in \\mathbb{N}$ such that:
+      $$n \\ge K(\\varepsilon, x) \\implies |f_n(x) - f(x)| < \\varepsilon$$</p>
+      <p>(b) $(f_n)$ converges <b>uniformly</b> to $f$ on $A$ if for each $\\varepsilon > 0$, there exists a single $K(\\varepsilon) \\in \\mathbb{N}$ (independent of $x$) such that for <b>all $x \\in A$ simultaneously</b>:
+      $$n \\ge K(\\varepsilon) \\implies |f_n(x) - f(x)| < \\varepsilon$$</p>`,
+    intuition: `<p>This is the most important distinction in all of advanced calculus! Think of training a classroom of students:</p>
+      <p>• <b>Pointwise:</b> Every student eventually understands the topic, but at completely different speeds. Student A needs $5$ days, Student B needs $20$ days, and as you check students closer to the back of the room, they need infinitely many days ($K$ depends on $x$).</p>
+      <p>• <b>Uniform:</b> The entire classroom reaches mastery simultaneously! One deadline $K$ works for all students across the entire set ($K$ depends ONLY on $\\varepsilon$, not on $x$).</p>
+      <p><b>The Classic Indian Exam Counterexample:</b> $f_n(x) = x^n$ on $[0, 1]$. For $x < 1$, $x^n \\to 0$. But at $x = 1$, $1^n \\to 1$. Every single $f_n$ is continuous, but the pointwise limit jumps from $0$ to $1$ at the boundary! Pointwise convergence CANNOT preserve continuity, but uniform convergence GUARANTEES it!</p>`,
+    needs: ['c.3.1.3', 'c.5.1.1'],
+    traps: [
+      `Confusing the order of quantifiers: Pointwise is $\\forall x \\, \\forall \\varepsilon \\, \\exists K$. Uniform is $\\forall \\varepsilon \\, \\exists K \\, \\forall x$. The position of $\\exists K$ changes everything!`,
+      `Assuming pointwise limit of continuous functions is always continuous. The counterexample $x^n$ on $[0, 1]$ is tested in almost every semester exam.`
+    ],
+    cards: [
+      { q: 'What is the crucial difference between pointwise and uniform convergence?', a: 'In pointwise convergence, $K$ can depend on both $\\varepsilon$ and $x$; in uniform convergence, one single $K$ works for all $x \\in A$ simultaneously.', kind: 'state' },
+      { q: 'What is the pointwise limit of $f_n(x) = x^n$ on $[0, 1]$?', a: '$f(x) = 0$ for $x \\in [0, 1)$, and $f(1) = 1$. The limit is discontinuous!', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.1.3', bartle: '8.1.3', sec: '8.1', kind: 'theorem', tier: 'core',
+    title: 'The Uniform Norm (Sup-Norm Criterion)',
+    oneLine: 'Uniform convergence means the maximum vertical gap between fn and f collapses to zero.',
+    statement: `Let $f_n, f: A \\to \\mathbb{R}$ be bounded functions. The <b>uniform norm</b> (sup-norm) on $A$ is:
+      $$\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)|$$
+      <p><b>The Criterion:</b> $(f_n)$ converges uniformly to $f$ on $A$ if and only if:
+      $$\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$$</p>`,
+    intuition: `<p>Geometrically, imagine drawing an "$\\varepsilon$-ribbon" or tube of width $\\pm\\varepsilon$ around the target graph $f(x)$.</p>
+      <p>Uniform convergence means that after step $K$, the entire graph of $f_n(x)$ is sucked completely inside this tube from left to right across the entire domain!</p>
+      <p>To test uniform convergence in exam questions: find the maximum gap using Class 12 calculus (set derivative to zero!), and check if that maximum peak vanishes as $n \\to \\infty$.</p>`,
+    needs: ['c.8.1.1', 'c.2.3.2'],
+    traps: [
+      `If the peak error stays bounded away from $0$ (even if the peak slides to the boundary, like in $x^n$), uniform convergence fails!`,
+      `Make sure to take the supremum over the specified domain: $x/n$ converges uniformly on $[0, 10]$, but NOT on all of $\\mathbb{R}$.`
+    ],
+    cards: [
+      { q: 'Define the uniform norm $\\|g\\|_A$ of a function $g$ on $A$.', a: '$\\|g\\|_A = \\sup_{x \\in A} |g(x)|$.', kind: 'state' },
+      { q: 'How is the sup-norm used to test uniform convergence?', a: '$f_n \\to f$ uniformly on $A$ iff $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.8.2.2', bartle: '8.2.2', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'The Uniform Limit Theorem (Preservation of Continuity)',
+    oneLine: 'The uniform limit of continuous functions is always continuous. No jumps allowed.',
+    statement: `Let $(f_n)$ be a sequence of functions defined on $A \\subseteq \\mathbb{R}$ that converges <b>uniformly</b> on $A$ to a function $f$.
+      <p>If each $f_n$ is <b>continuous at a point $c \\in A$</b>, then the limit function $f$ is also <b>continuous at $c$</b>.</p>
+      <p>In particular, if each $f_n$ is continuous on all of $A$, then $f$ is continuous on all of $A$.</p>`,
+    intuition: `<p>This is the big prize of uniform convergence! The proof is the famous <b>"$\\varepsilon/3$ argument"</b>:</p>
+      $$|f(x) - f(c)| \\le |f(x) - f_n(x)| + |f_n(x) - f_n(c)| + |f_n(c) - f(c)|$$
+      <p>1. The first term is $< \\varepsilon/3$ because $f_n$ is uniformly close to $f$.</p>
+      <p>2. The second term is $< \\varepsilon/3$ because $f_n$ itself is continuous.</p>
+      <p>3. The third term is $< \\varepsilon/3$ because $f_n(c)$ is close to $f(c)$.</p>
+      <p>Adding them gives $|f(x) - f(c)| < \\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon$!</p>`,
+    needs: ['c.8.1.1', 'c.5.1.1', 'c.2.2.1'],
+    traps: [
+      `If the limit function $f$ is discontinuous, the convergence CANNOT be uniform! This is the quickest way to disprove uniform convergence in exams: check if the limit has a jump; if yes, uniform convergence is instantly ruled out!`,
+      `Remember the converse is not true in general without extra conditions (like Dini's Theorem).`
+    ],
+    proof: {
+      idea: `Use the triangle inequality to split $|f(x) - f(c)|$ into three terms of size $\\varepsilon/3$.`,
+      why: `Uniform convergence controls the gap between $f$ and $f_n$ everywhere; continuity of $f_n$ controls the local gap between $f_n(x)$ and $f_n(c)$.`,
+      rungs: [
+        { why: 'Split the total change using the triangle inequality with an intermediate $f_n$.', m: '|f(x) - f(c)| \\le |f(x) - f_n(x)| + |f_n(x) - f_n(c)| + |f_n(c) - f(c)|' },
+        { why: 'Choose $N$ such that for all $n \\ge N$ and all $t \\in A$, $|f_n(t) - f(t)| < \\varepsilon/3$.', m: '|f(x) - f_N(x)| < \\varepsilon/3 \\quad \\text{and} \\quad |f_N(c) - f(c)| < \\varepsilon/3' },
+        { why: 'Since $f_N$ is continuous at $c$, choose $\\delta > 0$ such that $|x - c| < \\delta \\implies |f_N(x) - f_N(c)| < \\varepsilon/3$.', m: '|f_N(x) - f_N(c)| < \\varepsilon/3' },
+        { why: 'Combine all three $\\varepsilon/3$ bounds.', m: '|f(x) - f(c)| < \\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon' }
+      ],
+      ends: 'Therefore, $f$ is continuous at $c$.'
+    },
+    cards: [
+      { q: 'State the Uniform Limit Theorem.', a: 'If $(f_n)$ is a sequence of continuous functions converging uniformly to $f$ on $A$, then $f$ is continuous on $A$.', kind: 'state' },
+      { q: 'If $f_n(x) = x^n$ on $[0, 1]$, why does the Uniform Limit Theorem prove $f_n$ does NOT converge uniformly?', a: 'Because each $f_n$ is continuous, but the limit function is discontinuous at $x = 1$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.2.4', bartle: '8.2.4', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Interchange of Limit and Integral',
+    oneLine: 'Under uniform convergence, the limit of the integrals equals the integral of the limit.',
+    statement: `Let $(f_n)$ be a sequence of functions in $\\mathcal{R}[a, b]$ that converges <b>uniformly</b> on $[a, b]$ to $f$.
+      <p>Then $f \\in \\mathcal{R}[a, b]$, and:
+      $$\\lim_{n\\to\\infty} \\int_a^b f_n(x) \\, dx = \\int_a^b \\left( \\lim_{n\\to\\infty} f_n(x) \\right) dx = \\int_a^b f(x) \\, dx$$</p>`,
+    intuition: `<p>In pure calculus, swapping limits is dangerous: $\\lim \\int \\ne \\int \\lim$ in general! Look at this famous counterexample:</p>
+      <p>Consider a tall narrow spike function $f_n(x)$ on $[0, 1]$ of height $n$ and width $1/n$. At every fixed point $x > 0$, $f_n(x) \\to 0$, so the pointwise limit is $0$, whose integral is $0$. But the area under the spike is $\\int_0^1 f_n = 1$ for every $n$! So $\\lim \\int = 1 \\ne 0 = \\int \\lim$.</p>
+      <p>Uniform convergence prevents these rogue spikes from shooting off to infinity by locking the entire function inside a flat envelope, making the limit swap 100% legal!</p>`,
+    needs: ['c.8.1.1', 'c.7.1.1'],
+    traps: [
+      `Assuming you can always interchange limit and integral without checking uniform convergence. The moving spike counterexample is a classic exam favorite!`,
+      `For differentiation, even uniform convergence of $f_n$ is not enough! You need uniform convergence of the DERIVATIVES $f_n'$ to interchange $\\frac{d}{dx}$ and $\\lim$.`
+    ],
+    cards: [
+      { q: 'Under what condition is $\\lim_{n\\to\\infty} \\int_a^b f_n = \\int_a^b \\lim_{n\\to\\infty} f_n$ guaranteed?', a: 'When $f_n \\in \\mathcal{R}[a, b]$ and $(f_n)$ converges uniformly to $f$ on $[a, b]$.', kind: 'state' },
+      { q: 'Give an example where pointwise limit holds but $\\lim \\int f_n \\ne \\int \\lim f_n$.', a: 'A sequence of spikes $f_n$ on $[0, 1]$ with area $\\int f_n = 1$ but $f_n(x) \\to 0$ pointwise.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.3.1', bartle: '8.3.1', sec: '8.3', kind: 'definition', tier: 'ext',
+    title: 'The Exponential Function via Power Series',
+    oneLine: 'e^x is defined as the infinite series 1 + x + x^2/2! + x^3/3! + ... converging everywhere.',
+    statement: `The <b>exponential function</b> $E: \\mathbb{R} \\to \\mathbb{R}$ is defined for all $x \\in \\mathbb{R}$ by:
+      $$E(x) = e^x = \\sum_{n=0}^\\infty \\frac{x^n}{n!} = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots$$
+      <p>The series converges absolutely and uniformly on any bounded interval $[-A, A]$.</p>
+      <p><b>Key Properties:</b>
+      (1) $E(x + y) = E(x)E(y)$ for all $x, y \\in \\mathbb{R}$.<br>
+      (2) $E'(x) = E(x)$ and $E(0) = 1$.<br>
+      (3) $E(x) > 0$ for all $x \\in \\mathbb{R}$.</p>`,
+    intuition: `<p>In school, you defined $e^x$ by raising $2.718...$ to the power $x$. But what does $e^{\\sqrt{2}}$ mean? You cannot multiply $e$ by itself $\\sqrt{2}$ times!</p>
+      <p>In Real Analysis, we turn this around: we define $e^x$ directly through its power series. Because $n!$ grows faster than any polynomial, this series converges for EVERY real number on Earth! Its derivative is itself ($E'(x) = E(x)$), making it the natural foundation for all differential equations.</p>`,
+    needs: ['c.3.7.1', 'c.6.1.1'],
+    traps: [
+      `$e^x$ is strictly positive everywhere: $e^x > 0$ for all $x \\in \\mathbb{R}$. It never touches $0$ and never turns negative!`,
+      `The natural logarithm $\\ln x$ is defined as the unique inverse function of $E(x)$ for $x > 0$, so $\\ln(e^x) = x$ and $\\frac{d}{dx}\\ln x = \\frac{1}{x}$.`
+    ],
+    cards: [
+      { q: 'State the power series definition of $e^x$.', a: '$e^x = \\sum_{n=0}^\\infty \\dfrac{x^n}{n!} = 1 + x + \\dfrac{x^2}{2!} + \\cdots$', kind: 'state' },
+      { q: 'What is the unique differential equation satisfied by $f(x) = e^x$ with $f(0) = 1$?', a: '$f\'(x) = f(x)$ and $f(0) = 1$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.8.4.1', bartle: '8.4.1', sec: '8.4', kind: 'definition', tier: 'ext',
+    title: 'The Trigonometric Functions Sine and Cosine via Power Series',
+    oneLine: 'sin(x) and cos(x) defined rigorously as alternating power series of odd and even powers.',
+    statement: `For all $x \\in \\mathbb{R}$, the <b>sine</b> and <b>cosine</b> functions are defined by:
+      $$\\sin x = \\sum_{n=0}^\\infty \\frac{(-1)^n x^{2n+1}}{(2n + 1)!} = x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots$$
+      $$\\cos x = \\sum_{n=0}^\\infty \\frac{(-1)^n x^{2n}}{(2n)!} = 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots$$
+      <p>Both series converge absolutely for all $x \\in \\mathbb{R}$.</p>
+      <p><b>Core Identities:</b>
+      (1) $\\frac{d}{dx}(\\sin x) = \\cos x$ and $\\frac{d}{dx}(\\cos x) = -\\sin x$.<br>
+      (2) $\\cos^2 x + \\sin^2 x = 1$ for all $x \\in \\mathbb{R}$.</p>`,
+    intuition: `<p>In high school, $\\sin x$ and $\\cos x$ were defined using right-angled triangles ($\text{opposite} / \text{hypotenuse}$). But triangles only make sense for angles between $0^\\circ$ and $90^\\circ$!</p>
+      <p>In Real Analysis, we define $\\sin x$ and $\\cos x$ purely analytically using power series. No geometry or triangles needed! The Pythagorean identity $\\cos^2 x + \\sin^2 x = 1$ is proven by differentiating: $\\frac{d}{dx}(\\cos^2 x + \\sin^2 x) = 2\\cos(-\\sin) + 2\\sin(\\cos) = 0$, so the sum is constant and equals $1$ at $x = 0$!</p>`,
+    needs: ['c.8.3.1', 'c.6.1.1'],
+    traps: [
+      `$\\sin x$ is an ODD function (contains only odd powers of $x$: $x^1, x^3, x^5$), so $\\sin(-x) = -\\sin x$.`,
+      `$\\cos x$ is an EVEN function (contains only even powers: $x^0, x^2, x^4$), so $\\cos(-x) = \\cos x$.`
+    ],
+    cards: [
+      { q: 'State the power series expansion of $\\sin x$.', a: '$\\sin x = \\sum_{n=0}^\\infty \\dfrac{(-1)^n x^{2n+1}}{(2n+1)!} = x - \\dfrac{x^3}{6} + \\dfrac{x^5}{120} - \\cdots$', kind: 'state' },
+      { q: 'How is $\\cos^2 x + \\sin^2 x = 1$ proven using calculus?', a: 'Differentiate $g(x) = \\cos^2 x + \\sin^2 x$ to get $g\'(x) = 0$; since $g(0) = 1$, $g(x) = 1$ constantly.', kind: 'recall' }
+    ]
+  }
+);
+
+
+/* ── ../data/ch9.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Real Analysis II · Module 5 (Extension): Infinite Series (Chapter 9)
+   Sections: 9.1 (Absolute Convergence), 9.2 (Tests for Absolute Convergence),
+             9.3 (Tests for Nonabsolute Convergence), 9.4 (Series of Functions)
+   Diagrams: c.9.1.5, c.9.2.6, c.9.3.2, c.9.4.6, c.9.4.9
+   ══════════════════════════════════════════════════════════════════════════ */
+
+CONCEPTS.push(
+  {
+    id: 'c.9.1.1', bartle: '9.1.1', sec: '9.1', kind: 'definition', tier: 'ext',
+    title: 'Absolute vs Conditional Convergence',
+    oneLine: 'Absolute convergence means the series converges even if you strip away all minus signs.',
+    statement: `Let $\\sum_{n=1}^\\infty x_n$ be an infinite series.
+      <p>(a) The series <b>converges absolutely</b> if the series of absolute values $\\sum_{n=1}^\\infty |x_n|$ converges.</p>
+      <p>(b) If $\\sum_{n=1}^\\infty x_n$ converges, but $\\sum_{n=1}^\\infty |x_n|$ diverges, the series is said to <b>converge conditionally</b> (non-absolutely).</p>
+      <p><b>Absolute Convergence Theorem:</b> If $\\sum |x_n|$ converges, then $\\sum x_n$ converges. (Absolute convergence implies convergence!)</p>`,
+    intuition: `<p>Think of positive and negative terms as money:</p>
+      <p>• <b>Absolute convergence:</b> Even if all expenses were treated as earnings ($|x_n|$), your total transactions are still finite. The series converges purely on the sheer speed with which the numbers shrink.</p>
+      <p>• <b>Conditional convergence:</b> The numbers shrink too slowly on their own (like $1/n$), but because positive and negative terms cancel each other out ($1 - 1/2 + 1/3 - 1/4 + \\cdots = \\ln 2$), the alternating tug-of-war manages to settle down. This balance is fragile: if you mess with the order of terms, the sum can change!</p>`,
+    needs: ['c.3.7.1', 'c.2.2.1'],
+    traps: [
+      `The Alternating Harmonic Series $\\sum \\frac{(-1)^{n+1}}{n}$ is the textbook example of a CONDITIONALLY convergent series: it converges to $\\ln 2$, but its absolute series $\\sum 1/n$ diverges!`,
+      `Absolute convergence guarantees you can rearrange terms in ANY order without changing the sum. Conditional convergence destroys this property (Riemann Rearrangement Theorem)!`
+    ],
+    cards: [
+      { q: 'What is the definition of a conditionally convergent series?', a: 'A series $\\sum x_n$ that converges, but whose series of absolute values $\\sum |x_n|$ diverges.', kind: 'state' },
+      { q: 'Does convergence of $\\sum |x_n|$ imply convergence of $\\sum x_n$?', a: 'Yes! Absolute convergence always implies convergence.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.9.1.5', bartle: '9.1.5', sec: '9.1', kind: 'theorem', tier: 'ext',
+    title: 'Riemann’s Rearrangement Theorem',
+    oneLine: 'A conditionally convergent series can be rearranged to sum to ANY real number you desire, or even to diverge to ±∞!',
+    statement: `Let $\\sum_{n=1}^\\infty x_n$ be a <b>conditionally convergent</b> series.
+      <p>For any real number $C \\in \\mathbb{R}$, there exists a <b>rearrangement</b> of the terms of the series that converges to exactly $C$.</p>
+      <p>Furthermore, the terms can also be rearranged to diverge to $+\\infty$, to $-\\infty$, or to oscillate between any desired bounds!</p>`,
+    intuition: `<p>In finite arithmetic, $2 + 3 = 3 + 2$. Order doesn't matter (addition is commutative). But for infinite conditionally convergent series, COMMUTATIVITY COMPLETELY BREAKS DOWN!</p>
+      <p>Because the positive terms sum to $+\\infty$ and the negative terms sum to $-\\infty$:</p>
+      <p>1. Want the total to equal $100$? Add positive terms until you just exceed $100$.</p>
+      <p>2. Then add negative terms until you just drop below $100$.</p>
+      <p>3. Repeat forever! Because the individual terms shrink to $0$, your oscillations around $100$ get tighter and tighter, locking the sum onto $100$!</p>
+      <p>If the series converges ABSOLUTELY, this insanity cannot happen: every rearrangement gives the identical sum.</p>`,
+    needs: ['c.9.1.1', 'c.3.7.3'],
+    traps: [
+      `Thinking all infinite series can be rearranged freely. ONLY absolutely convergent series are safe to rearrange! Conditionally convergent series can be manipulated to equal whatever you want.`,
+      `In university exams: "Can $\\sum \\frac{(-1)^{n+1}}{n}$ be rearranged to equal $\\pi$?" YES, by Riemann's Rearrangement Theorem!`
+    ],
+    cards: [
+      { q: 'State Riemann’s Rearrangement Theorem.', a: 'The terms of any conditionally convergent series can be rearranged to sum to any real number $C$, or to diverge to $\\pm\\infty$.', kind: 'state' },
+      { q: 'What happens to the sum of an absolutely convergent series when its terms are rearranged?', a: 'The sum remains completely unchanged for any rearrangement.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.9.2.1', bartle: '9.2.1', sec: '9.2', kind: 'theorem', tier: 'ext',
+    title: 'Comparison and Limit Comparison Tests',
+    oneLine: 'If a positive series is trapped under a convergent series, it converges. If larger than a divergent series, it diverges.',
+    statement: `Let $(x_n)$ and $(y_n)$ be sequences of real numbers with $0 \\le x_n \\le y_n$ for all $n \\ge K$.
+      <p>(a) If $\\sum y_n$ converges, then $\\sum x_n$ <b>converges</b>.</p>
+      <p>(b) If $\\sum x_n$ diverges, then $\\sum y_n$ <b>diverges</b>.</p>
+      <p><b>Limit Comparison Test (LCT):</b> If $x_n > 0$ and $y_n > 0$, and $L = \\lim_{n\\to\\infty} \\frac{x_n}{y_n}$ exists with $0 < L < \\infty$, then:</p>
+      <p>Either both $\\sum x_n$ and $\\sum y_n$ converge, or both diverge together.</p>`,
+    intuition: `<p>In exams, testing series by definition is slow. The comparison tests let you compare your messy series against a clean standard benchmark (like $p$-series $\\sum 1/n^p$ or geometric series $\\sum r^n$).</p>
+      <p>In the Limit Comparison Test, if $\\frac{x_n}{y_n} \\to L > 0$, it means for large $n$, $x_n \\approx L \\cdot y_n$. They grow at the exact same rate! So they share the exact same fate.</p>`,
+    needs: ['c.3.7.1'],
+    traps: [
+      `If $x_n \\le y_n$ and $\\sum x_n$ converges, that tells you NOTHING about $\\sum y_n$! Being larger than a finite number doesn't stop you from being infinite.`,
+      `If the ratio $\\lim \\frac{x_n}{y_n} = 0$ or $\\infty$, the test is inconclusive unless you check the direction carefully.`
+    ],
+    cards: [
+      { q: 'State the Limit Comparison Test for positive series.', a: 'If $x_n, y_n > 0$ and $\\lim \\dfrac{x_n}{y_n} = L \\in (0, \\infty)$, then either both series converge or both diverge.', kind: 'state' },
+      { q: 'Does $\\sum \\dfrac{1}{n^2 + 5}$ converge?', a: 'Yes, by comparison with the convergent $p$-series $\\sum 1/n^2$ since $\\dfrac{1}{n^2+5} < \\dfrac{1}{n^2}$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.9.2.4', bartle: '9.2.4', sec: '9.2', kind: 'theorem', tier: 'ext',
+    title: 'The Ratio and Root Tests (D’Alembert and Cauchy)',
+    oneLine: 'Ratio test compares consecutive terms; Root test takes the n-th root. Both look for an effective growth rate r < 1.',
+    statement: `Let $\\sum x_n$ be a series with non-zero terms.
+      <p>(a) <b>Ratio Test (D’Alembert):</b> Let $r = \\lim_{n\\to\\infty} \\left| \\frac{x_{n+1}}{x_n} \\right|$.
+      <br>• If $r < 1$, the series converges absolutely.
+      <br>• If $r > 1$ (or $+\\infty$), the series diverges.
+      <br>• If $r = 1$, the test is <b>inconclusive</b>.</p>
+      <p>(b) <b>Root Test (Cauchy):</b> Let $\\rho = \\lim_{n\\to\\infty} |x_n|^{1/n}$.
+      <br>• If $\\rho < 1$, the series converges absolutely.
+      <br>• If $\\rho > 1$, the series diverges.
+      <br>• If $\\rho = 1$, the test is <b>inconclusive</b>.</p>`,
+    intuition: `<p>Both tests compare your series to an invisible geometric series $\\sum r^n$:</p>
+      <p>• If consecutive terms shrink by a factor strictly less than $1$ ($r < 1$), the terms decay exponentially, guaranteeing convergence!</p>
+      <p>• <b>When to use Ratio Test:</b> Whenever factorials ($n!$) or powers ($a^n$) appear!</p>
+      <p>• <b>When to use Root Test:</b> Whenever the entire term is raised to power $n$ (like $(n/(2n+1))^n$)!</p>
+      <p>• <b>When both FAIL ($r = 1$):</b> For any polynomial or rational function like $\\sum 1/n$ or $\\sum 1/n^2$. Both give $r = 1$, so you MUST use the Integral or Comparison Test instead!</p>`,
+    needs: ['c.9.1.1', 'c.3.7.1'],
+    traps: [
+      `Never conclude convergence or divergence when $r = 1$! For $\\sum 1/n$, $r = 1$ (diverges); for $\\sum 1/n^2$, $r = 1$ (converges). The test tells you zero information when $r = 1$.`,
+      `The Root Test is strictly stronger than the Ratio Test: whenever the Ratio Test works, the Root Test works and gives the same limit, but the Root Test can work even when the Ratio limit oscillates.`
+    ],
+    cards: [
+      { q: 'When is the Ratio Test inconclusive?', a: 'When $\\lim \\left|\\dfrac{x_{n+1}}{x_n}\\right| = 1$.', kind: 'recall' },
+      { q: 'Test $\\sum_{n=1}^\\infty \\dfrac{2^n}{n!}$ for convergence.', a: 'Ratio test: $\\dfrac{x_{n+1}}{x_n} = \\dfrac{2^{n+1}}{(n+1)!} \\cdot \\dfrac{n!}{2^n} = \\dfrac{2}{n+1} \\to 0 < 1$. Converges absolutely!', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.9.2.6', bartle: '9.2.6', sec: '9.2', kind: 'theorem', tier: 'ext',
+    title: 'The Integral Test and the p-Series',
+    oneLine: 'A positive decreasing series converges if and only if the improper integral under its curve is finite.',
+    statement: `Let $f: [1, \\infty) \\to \\mathbb{R}$ be a continuous, positive, and <b>decreasing</b> function such that $f(n) = x_n$ for all $n \\in \\mathbb{N}$.
+      <p>Then the series $\\sum_{n=1}^\\infty x_n$ converges if and only if the improper integral converges:
+      $$\\sum_{n=1}^\\infty x_n < \\infty \\iff \\int_1^\\infty f(t) \\, dt < \\infty$$</p>
+      <p><b>The $p$-Series Theorem:</b> The series $\\sum_{n=1}^\\infty \\frac{1}{n^p}$ converges if $p > 1$, and diverges if $p \\le 1$.</p>`,
+    intuition: `<p>Draw the graph of $f(t)$. Place rectangles of width $1$ under the curve (lower sum) and over the curve (upper sum):</p>
+      $$\\int_1^{n+1} f(t)\\,dt \\le \\sum_{k=1}^n x_k \\le x_1 + \\int_1^n f(t)\\,dt$$
+      <p>The sum and the improper integral sandwich each other tightly! Therefore, the series and the integral must either stand together or fall together.</p>
+      <p>This immediately solves the benchmark $p$-series: $\\int_1^\\infty \\frac{1}{t^p}\\,dt = \\left[ \\frac{t^{1-p}}{1-p} \\right]_1^\\infty$, which is finite exactly when $p > 1$!</p>`,
+    needs: ['c.7.1.1', 'c.3.7.1'],
+    traps: [
+      `The function $f(t)$ MUST be DECREASING! If $f$ is not decreasing, the rectangle bounds fail.`,
+      `The sum of the series does NOT equal the value of the integral! The test tells you WHETHER it converges, not what it converges to.`
+    ],
+    cards: [
+      { q: 'For what values of $p$ does the $p$-series $\\sum_{n=1}^\\infty \\dfrac{1}{n^p}$ converge?', a: '$p > 1$. (Diverges for $p \\le 1$).', kind: 'state' },
+      { q: 'Use the Integral Test to determine if $\\sum_{n=2}^\\infty \\dfrac{1}{n \\ln n}$ converges.', a: '$\\int_2^\\infty \\dfrac{1}{t \\ln t}\\,dt = [\\ln(\\ln t)]_2^\\infty = \\infty$. Diverges!', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.9.3.2', bartle: '9.3.2', sec: '9.3', kind: 'theorem', tier: 'ext',
+    title: 'The Alternating Series Test (Leibniz’s Rule)',
+    oneLine: 'If positive terms steadily shrink down to zero in an alternating series, convergence is 100% guaranteed.',
+    statement: `Let $(z_n)$ be a sequence of positive numbers that is:
+      <p>(1) <b>Monotone decreasing:</b> $z_{n+1} \\le z_n$ for all $n$, and</p>
+      <p>(2) <b>Tends to zero:</b> $\\lim_{n\\to\\infty} z_n = 0$.</p>
+      <p>Then the alternating series $\\sum_{n=1}^\\infty (-1)^{n+1} z_n = z_1 - z_2 + z_3 - z_4 + \\cdots$ <b>converges</b>.</p>
+      <p><b>Alternating Series Error Bound:</b> The error after $k$ terms is strictly smaller than the very next term:
+      $$|s - s_k| \\le z_{k+1}$$</p>`,
+    intuition: `<p>Picture a frog jumping on a number line:</p>
+      <p>• It jumps right by $z_1$.</p>
+      <p>• Then it jumps left by a smaller distance $z_2$ (landing to the right of $0$).</p>
+      <p>• Then right by an even smaller $z_3$, then left by $z_4$, and so on.</p>
+      <p>The even partial sums $s_2, s_4, s_6, \\ldots$ are increasing; the odd partial sums $s_1, s_3, s_5, \\ldots$ are decreasing. They trap the true sum $s$ in between! Since the jump size $z_n \\to 0$, the trap snaps shut on a single real number.</p>`,
+    needs: ['c.3.3.2', 'c.3.7.1'],
+    traps: [
+      `Both conditions are mandatory! If terms are not decreasing, the series can diverge even if terms go to zero.`,
+      `The error bound $|s - s_k| \\le z_{k+1}$ is amazing for exams: you can approximate the sum to within $0.01$ just by finding when the next term drops below $0.01$!`
+    ],
+    cards: [
+      { q: 'State the two conditions of Leibniz’s Alternating Series Test.', a: '(1) $z_{n+1} \\le z_n$ (terms are monotonically decreasing); (2) $\\lim z_n = 0$.', kind: 'state' },
+      { q: 'What is the maximum error when approximating the sum of an alternating series by its $k$-th partial sum $s_k$?', a: 'At most the magnitude of the next term: $|s - s_k| \\le z_{k+1}$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.9.4.6', bartle: '9.4.6', sec: '9.4', kind: 'theorem', tier: 'ext',
+    title: 'The Weierstrass M-Test for Series of Functions',
+    oneLine: 'If a series of functions is bounded term-by-term by a convergent series of numbers, it converges uniformly.',
+    statement: `Let $(f_n)$ be a sequence of functions defined on $A \\subseteq \\mathbb{R}$.
+      <p>Suppose there exists a sequence of positive numbers $(M_n)$ such that:
+      $$|f_n(x)| \\le M_n \\quad \\text{for all } x \\in A \\text{ and all } n \\in \\mathbb{N}$$
+      If the number series $\\sum_{n=1}^\\infty M_n$ <b>converges</b>, then:</p>
+      <p>The series of functions $\\sum_{n=1}^\\infty f_n(x)$ <b>converges uniformly and absolutely</b> on $A$.</p>`,
+    intuition: `<p>This is the workhorse of university analysis exams for proving uniform convergence of series!</p>
+      <p>Proving uniform convergence directly with $\\varepsilon$ is tedious. The Weierstrass $M$-test lets you eliminate the variable $x$ entirely: just replace $f_n(x)$ with its worst-case maximum ceiling $M_n$. If the sum of those ceilings $\\sum M_n$ converges, the function series $\\sum f_n(x)$ is automatically crushed into uniform convergence!</p>
+      <p><b>Example:</b> $\\sum_{n=1}^\\infty \\frac{\\cos(nx)}{n^2}$. Since $|\\cos(nx)| \\le 1$, we have $|f_n(x)| \\le 1/n^2 = M_n$. Since $\\sum 1/n^2$ converges, the series converges uniformly on all of $\\mathbb{R}$!</p>`,
+    needs: ['c.8.1.1', 'c.9.1.1', 'c.9.2.1'],
+    traps: [
+      `The constants $M_n$ MUST be independent of $x$ (pure numbers, not functions of $x$)!`,
+      `The converse of the $M$-test is FALSE: a series can converge uniformly even if the $M$-test fails (e.g. alternating series where cancellation drives uniform convergence).`
+    ],
+    cards: [
+      { q: 'State the Weierstrass M-Test.', a: 'If $|f_n(x)| \\le M_n$ for all $x \\in A$ and $\\sum M_n < \\infty$, then $\\sum f_n$ converges uniformly and absolutely on $A$.', kind: 'state' },
+      { q: 'Prove that $\\sum_{n=1}^\\infty \\dfrac{\\sin(n^2 x)}{n^3}$ converges uniformly on $\\mathbb{R}$.', a: 'Since $|\\sin(n^2 x)| \\le 1$, $|f_n(x)| \\le 1/n^3$. Since $\\sum 1/n^3$ converges ($p=3>1$), uniform convergence holds by Weierstrass M-test.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.9.4.9', bartle: '9.4.9', sec: '9.4', kind: 'theorem', tier: 'ext',
+    title: 'Radius of Convergence and the Cauchy–Hadamard Theorem',
+    oneLine: 'Every power series has a magic radius R: absolutely convergent inside |x - x_0| < R, divergent outside.',
+    statement: `For any power series $\\sum_{n=0}^\\infty a_n (x - x_0)^n$, define $\\rho = \\limsup_{n\\to\\infty} |a_n|^{1/n}$.
+      <p>The <b>radius of convergence</b> $R$ is given by the <b>Cauchy–Hadamard formula</b>:
+      $$R = \\begin{cases} 1/\\rho & \\text{if } 0 < \\rho < \\infty \\\\ \\infty & \\text{if } \\rho = 0 \\\\ 0 & \\text{if } \\rho = \\infty \\end{cases}$$
+      (Alternatively, using the Ratio Test: $R = \\lim_{n\\to\\infty} \\left| \\frac{a_n}{a_{n+1}} \\right|$ whenever this limit exists).</p>
+      <p>Then:
+      <br>• The series converges absolutely for all $|x - x_0| < R$.
+      <br>• The series diverges for all $|x - x_0| > R$.
+      <br>• The series converges uniformly on any closed subinterval $[x_0 - r, x_0 + r]$ with $r < R$.</p>`,
+    intuition: `<p>Every power series has an "island of safety" of radius $R$ centered at $x_0$:</p>
+      <p>• Inside the open circle $(x_0 - R, x_0 + R)$, the terms decay geometrically, so the series converges smoothly and can be differentiated term-by-term.</p>
+      <p>• Outside the circle, the terms blow up and the series diverges.</p>
+      <p>• Right on the boundary endpoints $x = x_0 \\pm R$, anything can happen! You must test each endpoint individually by plugging in $x_0 + R$ and $x_0 - R$.</p>`,
+    needs: ['c.9.4.6', 'c.9.2.4'],
+    traps: [
+      `At the boundary points $x = x_0 \\pm R$, the theorem gives NO information! One endpoint might converge while the other diverges (e.g. $\\sum x^n/n$ has $R = 1$, converges at $-1$, diverges at $+1$).`,
+      `For the ratio formula: notice it is $a_n / a_{n+1}$ (reciprocal of standard ratio test), because $R = 1/L$.`
+    ],
+    cards: [
+      { q: 'State the Cauchy–Hadamard formula for the radius of convergence $R$.', a: '$R = 1/\\rho$, where $\\rho = \\limsup_{n\\to\\infty} |a_n|^{1/n}$.', kind: 'state' },
+      { q: 'What is the radius of convergence of $\\sum_{n=0}^\\infty \\dfrac{x^n}{n!}$?', a: '$R = \\infty$; the series converges for all real numbers.', kind: 'apply' },
+      { q: 'What happens at the boundary points $|x - x_0| = R$?', a: 'The series may converge or diverge; each endpoint must be tested individually.', kind: 'recall' }
+    ]
+  }
+);
+
+
+/* ── ../data/ch11.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Real Analysis I · Module 5 (Extension): Topology of the Line
+   Sections: 11.1 (Open and Closed Sets in ℝ), 11.2 (Compact Sets)
+   Diagrams: c.11.1.7, c.11.2.5, c.11.2.6
+   ══════════════════════════════════════════════════════════════════════════ */
+
+CONCEPTS.push(
+  {
+    id: 'c.11.1.1', bartle: '11.1.1', sec: '11.1', kind: 'definition', tier: 'ext',
+    title: 'Open Sets and Interior Points in ℝ',
+    oneLine: 'A set is open if every point inside it has some breathing room — an entire neighborhood that stays completely inside.',
+    statement: `Let $G \\subseteq \\mathbb{R}$.
+      <p>(a) A point $x \\in G$ is an <b>interior point</b> of $G$ if there exists an $\\varepsilon > 0$ such that the $\\varepsilon$-neighborhood $V_\\varepsilon(x) \\subseteq G$.</p>
+      <p>(b) The set $G$ is <b>open</b> in $\\mathbb{R}$ if every point in $G$ is an interior point of $G$. In other words, for every $x \\in G$, there exists $\\varepsilon > 0$ such that $(x - \\varepsilon, x + \\varepsilon) \\subseteq G$.</p>`,
+    intuition: `<p>Think of an open set as a territory where nobody lives directly on the border fence. Wherever you stand inside $G$, you can take a step in any direction without falling off the edge of $G$.</p>
+      <p>• Every open interval $(a, b)$ is an open set.</p>
+      <p>• The empty set $\\emptyset$ and the entire real line $\\mathbb{R}$ are both open.</p>
+      <p>• A single point set $\\{x\\}$ is NOT open, because any neighborhood of $x$ spills over into outside points.</p>`,
+    needs: ['c.2.2.7'],
+    traps: [
+      `Thinking sets are like doors: either open or closed. Completely FALSE in topology! Sets can be BOTH open and closed ($\\emptyset$ and $\\mathbb{R}$), or NEITHER open nor closed (like $[0, 1)$).`,
+      `Forgetting that the radius $\\varepsilon$ can depend on the point $x$. As you get closer to the boundary, $\\varepsilon$ gets smaller, but it is always $> 0$.`
+    ],
+    cards: [
+      { q: 'What is the definition of an open set in $\\mathbb{R}$?', a: 'A set $G$ such that for every $x \\in G$, there exists $\\varepsilon > 0$ with $V_\\varepsilon(x) \\subseteq G$.', kind: 'state' },
+      { q: 'Is the half-open interval $[0, 1)$ open in $\\mathbb{R}$?', a: 'No, because $0 \\in [0, 1)$ is not an interior point: any neighborhood $(-\\varepsilon, \\varepsilon)$ contains negative numbers outside the set.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.11.1.5', bartle: '11.1.5', sec: '11.1', kind: 'definition', tier: 'ext',
+    title: 'Closed Sets and Limit Points',
+    oneLine: 'A set is closed if its complement is open, or equivalently, if it catches all points its elements can converge to.',
+    statement: `Let $F \\subseteq \\mathbb{R}$.
+      <p>(a) The set $F$ is <b>closed</b> in $\\mathbb{R}$ if its complement $\\mathbb{R} \\setminus F$ is open in $\\mathbb{R}$.</p>
+      <p>(b) A point $x \\in \\mathbb{R}$ is a <b>cluster point</b> (limit point) of $F$ if every neighborhood $V_\\varepsilon(x)$ contains at least one point of $F$ distinct from $x$.</p>
+      <p>(c) <b>Characterisation Theorem:</b> A set $F \\subseteq \\mathbb{R}$ is closed if and only if $F$ contains all of its cluster points (equivalently: if $(x_n)$ is in $F$ and $x_n \\to x$, then $x \\in F$).</p>`,
+    intuition: `<p>A closed set has a firm perimeter fence that traps its own boundaries:</p>
+      <p>• $[a, b]$ is closed because both boundary endpoints $a$ and $b$ belong to the set.</p>
+      <p>• If elements in $F$ rush towards a destination $x_n \\to x$, that destination $x$ CANNOT escape: it is locked inside $F$.</p>
+      <p>• $(0, 1)$ fails to be closed because the sequence $1/n \\to 0$, but $0$ is missing from $(0, 1)$.</p>`,
+    needs: ['c.11.1.1', 'c.3.1.3'],
+    traps: [
+      `"Not open" does NOT mean "closed"! The interval $[2, 5)$ is neither open nor closed.`,
+      `Thinking a finite set cannot be closed. Any finite set $\\{x_1, \\dots, x_n\\}$ is closed because it contains all its cluster points (it has none!).`
+    ],
+    cards: [
+      { q: 'State the sequential characterisation of a closed set in $\\mathbb{R}$.', a: '$F$ is closed iff for every sequence $(x_n)$ in $F$ with $x_n \\to x$, the limit $x \\in F$.', kind: 'state' },
+      { q: 'Why is $(0, 1)$ not closed in $\\mathbb{R}$?', a: 'Because $x_n = 1/n \\in (0, 1)$ converges to $0$, but $0 \\notin (0, 1)$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.11.1.7', bartle: '11.1.7', sec: '11.1', kind: 'theorem', tier: 'ext',
+    title: 'Open and Closed Sets: Unions and Intersections',
+    oneLine: 'Any union of open sets is open; finite intersections of open sets are open. Flip for closed sets.',
+    statement: `(a) The union of an <b>arbitrary</b> collection of open sets is open.
+      <p>(b) The intersection of a <b>finite</b> collection of open sets is open.</p>
+      <p>(c) The intersection of an <b>arbitrary</b> collection of closed sets is closed.</p>
+      <p>(d) The union of a <b>finite</b> collection of closed sets is closed.</p>`,
+    intuition: `<p>Why does infinite intersection of open sets fail to stay open?</p>
+      <p>Look at this classic Indian university exam counterexample:</p>
+      $$G_n = \\left(-\\frac{1}{n}, \\frac{1}{n}\\right)$$
+      <p>Each $G_n$ is an open interval. But what is their infinite intersection? $\\bigcap_{n=1}^\\infty G_n = \\{0\\}$, which is a single point — CLOSED, not open! The openness got crushed away at infinity.</p>`,
+    needs: ['c.11.1.1', 'c.11.1.5'],
+    traps: [
+      `Assuming infinite intersections of open sets are always open. The counterexample $\\bigcap (-1/n, 1/n) = \\{0\\}$ is tested constantly in GATE and university papers!`,
+      `Assuming infinite unions of closed sets are always closed: $\\bigcup [1/n, 1] = (0, 1]$, which is not closed!`
+    ],
+    cards: [
+      { q: 'Give an example of a countable intersection of open sets that is NOT open.', a: '$\\bigcap_{n=1}^\\infty \\left(-\\frac{1}{n}, \\frac{1}{n}\\right) = \\{0\\}$, which is a closed set (a single point).', kind: 'apply' },
+      { q: 'Is the union of an infinite collection of open sets always open?', a: 'Yes, arbitrary unions of open sets are always open.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.11.2.1', bartle: '11.2.1', sec: '11.2', kind: 'definition', tier: 'ext',
+    title: 'Open Covers and Compactness',
+    oneLine: 'A set is compact if however many open blankets you use to cover it, a finite number of blankets would already suffice.',
+    statement: `Let $K \\subseteq \\mathbb{R}$.
+      <p>(a) An <b>open cover</b> of $K$ is a family $\\mathcal{G} = \\{G_\\alpha\\}$ of open sets in $\\mathbb{R}$ such that:
+      $$K \\subseteq \\bigcup_\\alpha G_\\alpha$$</p>
+      <p>(b) A <b>subcover</b> of $\\mathcal{G}$ is a subfamily $\\mathcal{G}' \\subseteq \\mathcal{G}$ that still covers $K$.</p>
+      <p>(c) A set $K$ is <b>compact</b> if <b>every</b> open cover of $K$ contains a <b>finite subcover</b>.</p>`,
+    intuition: `<p>Compactness is the gold standard in higher mathematics. It generalises the safety of "finite sets" to infinite sets!</p>
+      <p>Imagine you have infinitely many tiny overlapping umbrellas covering a park $K$. If $K$ is compact, you don't need all infinite umbrellas — you can always throw away all but a finite list ($10$, or $50$, or $1000$) of them, and the park is still 100% sheltered.</p>
+      <p>On the real line $\\mathbb{R}$, this happens exactly when the set is <b>closed and bounded</b> (The Heine-Borel Theorem!).</p>`,
+    needs: ['c.11.1.1'],
+    traps: [
+      `Checking only ONE particular open cover: to prove compactness by definition, you must show EVERY conceivable open cover has a finite subcover.`,
+      `Thinking $(0, 1)$ is compact: the open cover $\\{(1/n, 1) : n \\ge 2\\}$ has NO finite subcover because points near $0$ escape any finite collection.`
+    ],
+    cards: [
+      { q: 'Define what it means for a set $K \\subset \\mathbb{R}$ to be compact.', a: 'Every open cover of $K$ has a finite subcover.', kind: 'state' },
+      { q: 'Why is the open interval $(0, 1)$ not compact?', a: 'The open cover $\\mathcal{G} = \\{(1/n, 1) : n \\in \\mathbb{N}, n \\ge 2\\}$ covers $(0, 1)$, but no finite subcover can ever cover points smaller than the minimum $1/n$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.11.2.5', bartle: '11.2.5', sec: '11.2', kind: 'theorem', tier: 'ext',
+    title: 'The Heine–Borel Theorem',
+    oneLine: 'In ℝ, compact is exactly identical to closed and bounded.',
+    statement: `A subset $K \\subseteq \\mathbb{R}$ is <b>compact</b> if and only if it is both:
+      <p>1. <b>Closed</b> in $\\mathbb{R}$, and</p>
+      <p>2. <b>Bounded</b> (there exists $M > 0$ such that $|x| \\le M$ for all $x \\in K$).</p>`,
+    intuition: `<p>This is one of the crown jewels of Real Analysis! Testing the open cover definition directly is often difficult. The Heine-Borel Theorem gives you an easy, two-point checklist for any set in $\\mathbb{R}$:</p>
+      <p>1. <b>Is it closed?</b> (Does it contain all its boundary endpoints?)</p>
+      <p>2. <b>Is it bounded?</b> (Can you box it inside some finite interval $[-M, M]$?)</p>
+      <p>If BOTH are Yes, the set is compact! For example, $[0, 1]$ is compact. But $(0, 1)$ fails because it is not closed, and $[0, \\infty)$ fails because it is not bounded.</p>`,
+    needs: ['c.11.2.1', 'c.11.1.5', 'c.2.3.1'],
+    traps: [
+      `Assuming Heine-Borel holds in every metric space: on general infinite-dimensional spaces, closed and bounded does NOT guarantee compactness! But on $\\mathbb{R}$ (and $\\mathbb{R}^n$), it is an exact if-and-only-if.`,
+      `Forgetting that the Maximum-Minimum Theorem (5.3.4) and Uniform Continuity Theorem (5.4.3) are direct consequences of Heine-Borel compactness on $[a, b]$!`
+    ],
+    cards: [
+      { q: 'State the Heine–Borel Theorem for the real line $\\mathbb{R}$.', a: 'A subset $K \\subseteq \\mathbb{R}$ is compact if and only if it is closed and bounded.', kind: 'state' },
+      { q: 'Is the set of integers $\\mathbb{Z}$ compact in $\\mathbb{R}$?', a: 'No, because $\\mathbb{Z}$ is unbounded (numbers go to $\\pm\\infty$), even though it is closed.', kind: 'apply' },
+      { q: 'Is the closed interval $[a, b]$ compact in $\\mathbb{R}$?', a: 'Yes, because it is both closed (contains its endpoints) and bounded (length is $b - a$).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.11.2.6', bartle: '11.2.6', sec: '11.2', kind: 'theorem', tier: 'ext',
+    title: 'Topological Bolzano–Weierstrass Theorem',
+    oneLine: 'Every infinite subset inside a compact set has a limit point inside that set.',
+    statement: `If $K$ is a compact subset of $\\mathbb{R}$, then every infinite subset $S \\subseteq K$ has at least one <b>cluster point</b> (limit point) that belongs to $K$.`,
+    intuition: `<p>If you pack infinitely many points into a finite, closed box $K$, they have nowhere to run. They must crowd around each other so tightly that at least one accumulation point forms inside the box.</p>
+      <p>This is the topological version of the Bolzano-Weierstrass theorem for sequences (3.4.8): an infinite set inside $[a, b]$ cannot spread out thinly forever; points must condense.</p>`,
+    needs: ['c.11.2.5', 'c.3.4.8'],
+    traps: [
+      `If the set is not bounded, points can march off to infinity without clustering (e.g. $\\mathbb{N} \\subset \\mathbb{R}$ has no cluster points).`,
+      `If the set is not closed, the cluster point can fall outside the set (e.g. $S = \\{1/n : n \\in \\mathbb{N}\\} \\subset (0, 1)$ has cluster point $0 \\notin (0, 1)$).`
+    ],
+    cards: [
+      { q: 'State the Topological Bolzano–Weierstrass Theorem.', a: 'Every infinite subset of a compact set $K \\subseteq \\mathbb{R}$ has a cluster point in $K$.', kind: 'state' },
+      { q: 'Why does the set $S = \\{1, 2, 3, 4, \\ldots\\}$ have no cluster point in $\\mathbb{R}$?', a: 'Because points are spaced distance $\\ge 1$ apart and the set is unbounded.', kind: 'apply' }
     ]
   }
 );
@@ -6586,7 +7737,7 @@ const Pool = (function () {
   const writFor = {};       /* concept id -> [written question] */
   const neededBy = {};      /* concept id -> [concept that lists it in needs] */
   const background = [];    /* nodes with no section in any course */
-  let courses = [], objective = [], written = [], titles = {}, mock = false;
+  let courses = [], objective = [], written = [], titles = {}, extSecs = {}, mock = false;
 
   /* Data files declare top-level `const`s, which are global *lexical* bindings
      rather than window properties — so they are read by name, guarded with
@@ -6596,6 +7747,7 @@ const Pool = (function () {
     objective = (typeof OBJECTIVE !== 'undefined' ? OBJECTIVE : []).slice();
     written = (typeof QUESTIONS !== 'undefined' ? QUESTIONS : []).slice();
     titles = typeof SECTITLE !== 'undefined' ? SECTITLE : {};
+    extSecs = typeof EXT_SECS !== 'undefined' ? EXT_SECS : {};
     const concepts = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
     const kind = typeof DATA_KIND !== 'undefined' ? DATA_KIND : null;
 
@@ -6649,10 +7801,33 @@ const Pool = (function () {
   const writtenFor = cid => writFor[cid] || [];
   const objectiveOne = id => objective.filter(q => q.id === id)[0] || null;
 
+  function isExtSec(sec) {
+    if (!sec) return false;
+    if (extSecs[sec]) return true;
+    const meta = secMeta[sec];
+    if (meta && meta.module) {
+      if (meta.module.ext) return true;
+      if (meta.module.extSecs && meta.module.extSecs.indexOf(sec) >= 0) return true;
+    }
+    return false;
+  }
+
+  function isExt(conceptOrId) {
+    const c = typeof conceptOrId === 'string' ? byId[conceptOrId] : conceptOrId;
+    if (!c) return false;
+    if (c.tier === 'ext') return true;
+    if (c.sec && isExtSec(c.sec)) return true;
+    return false;
+  }
+
   /* concepts of the whole slice, in reading order */
-  function conceptList(courseId) {
+  function conceptList(courseId, opts) {
+    const o = opts || {};
     const out = [];
-    sections(courseId).forEach(s => s.concepts.forEach(c => out.push(c)));
+    sections(courseId).forEach(s => s.concepts.forEach(function (c) {
+      if (!o.includeExt && isExt(c)) return;
+      out.push(c);
+    }));
     return out;
   }
 
@@ -6673,7 +7848,7 @@ const Pool = (function () {
 
   /* previous / next concept in reading order across the whole pool */
   function neighbours(id) {
-    const all = conceptList();
+    const all = conceptList(null, { includeExt: true });
     const i = all.map(c => c.id).indexOf(id);
     if (i < 0) return { prev: null, next: null };
     return { prev: all[i - 1] || null, next: all[i + 1] || null };
@@ -6681,19 +7856,23 @@ const Pool = (function () {
 
   /* ids used for progress denominators */
   const ids = {
-    concepts: courseId => conceptList(courseId).map(c => c.id),
-    cards: () => deck.map(c => c.id),
+    concepts: courseId => conceptList(courseId, { includeExt: false }).map(c => c.id),
+    allConcepts: courseId => conceptList(courseId, { includeExt: true }).map(c => c.id),
+    cards: () => deck.filter(c => !isExt(c.cid)).map(c => c.id),
+    allCards: () => deck.map(c => c.id),
     objective: () => objective.map(q => q.id),
     /* Level 2 counts proof work, so its denominator is the concepts that
        actually carry a proof — not every note. */
-    proofs: courseId => conceptList(courseId).filter(c => c.proof).map(c => c.id)
+    proofs: courseId => conceptList(courseId, { includeExt: false }).filter(c => c.proof).map(c => c.id),
+    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id)
   };
 
   return {
     build, sections, sectionTitle, concept, concepts: conceptList, course,
     courses: () => courses, courseOfSec, moduleOfSec, deck: () => deck,
     objective: () => objective, objectiveOne, objectiveFor, writtenFor,
-    background: () => background, chain, unlocks, neighbours, ids, isMock: () => mock
+    background: () => background, chain, unlocks, neighbours, ids,
+    isExtSec, isExt, isMock: () => mock
   };
 })();
 
@@ -6854,7 +8033,7 @@ const Progress = (function () {
       });
     });
 
-    Pool.concepts().forEach(function (c, i) {
+    Pool.concepts(null, { includeExt: true }).forEach(function (c, i) {
       if (!c.proof || !Store.isDone(c.id)) return;
       if (Store.level(courseIdOf(c)) < 2) return;
       const id = c.id + '#proof';
@@ -7181,9 +8360,15 @@ const UI = (function () {
 
   const kindBadge = c => el('span', { class: 'badge', text: c.kind || 'note' });
 
-  const tierBadge = c => (c.tier && c.tier !== 'core')
-    ? el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'extension' : c.tier })
-    : null;
+  const tierBadge = c => {
+    if (typeof Pool !== 'undefined' && Pool.isExt && Pool.isExt(c)) {
+      return el('span', { class: 'badge warn', text: 'outside syllabus' });
+    }
+    if (c.tier && c.tier !== 'core') {
+      return el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'outside syllabus' : c.tier });
+    }
+    return null;
+  };
 
   /* Level-aware: at Level 2 a ticked note with an unworked proof is not
      "completed", it is part-way, and saying otherwise would make the badge and
@@ -7212,17 +8397,20 @@ const UI = (function () {
 
   /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
      (or achieved automatically on notes that have no proof). */
-  function ladder(done, proofDone, hasProof, courseId) {
+  function ladder(done, proofDone, hasProof, courseId, isExt) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
     const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
     const caption = at === 2
       ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
       : at === 1 ? '1 · completed'
       : '1 · not yet completed';
-    const right = (hasProof === false)
+    let right = (hasProof === false)
       ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
       : (at === 2 ? 'proof worked through (Level 2)'
         : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
+    if (isExt) {
+      right += ' · outside syllabus (not in exam %)';
+    }
     return el('div', {}, [
       el('div', { class: 'ladder' }, names.map((n, i) =>
         el('span', { class: i < at ? 'on' : '', title: n }))),
@@ -8068,12 +9256,14 @@ const Tree = (function () {
     const st = Progress.state(c.id);
     const lvl = Progress.levelOf(c.id);
     const needsProof = lvl === 2 && Progress.hasProof(c.id);
+    const isExt = Pool.isExt(c);
 
     const hasProof = Progress.hasProof(c.id);
+    const extNote = isExt ? ' (outside syllabus)' : '';
     const label = st === 'none'
-      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' : 'Mark "' + c.title + '" completed (Levels 1 & 2)')
+      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' + extNote : 'Mark "' + c.title + '" completed (Levels 1 & 2)' + extNote)
       : st === 'part'
-        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)'
+        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)' + extNote
         : 'Clear "' + c.title + '"';
 
     const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
@@ -8089,6 +9279,7 @@ const Tree = (function () {
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
+        isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
         needsProof && st === 'part'
           ? el('span', { class: 'badge warn', text: 'proof' }) : null,
         DOM.icon('chev', 18, 'chev')
@@ -8102,6 +9293,7 @@ const Tree = (function () {
     const done = Progress.count(ids).done;
     const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
+    const isExt = Pool.isExtSec(s.sec);
 
     const acc = accordion(nid, s.concepts.length
       ? [el('div', { class: 'stack', style: { gap: '6px' } },
@@ -8111,7 +9303,7 @@ const Tree = (function () {
 
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
+        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
           function () {
             const all = done === ids.length;
             Progress.setMany(ids, !all);
@@ -8121,8 +9313,9 @@ const Tree = (function () {
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + s.sec + '  ' + s.title }),
-            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') })
+            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') + (isExt ? ' · outside syllabus (not in exam %)' : '') })
           ]),
+          isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
           ring(done, ids.length),
           DOM.icon('chev', 20, 'chev')
         ])
@@ -8134,17 +9327,26 @@ const Tree = (function () {
 
   function moduleNode(course, mod, repaint) {
     const secs = Pool.sections(course.id).filter(s => (mod.secs || []).indexOf(s.sec) >= 0);
-    const ids = secs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
+    const isExtMod = !!mod.ext;
+    const countSecs = isExtMod ? secs : secs.filter(s => !Pool.isExtSec(s.sec));
+    const ids = countSecs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
     const done = Progress.count(ids).done;
     const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
     if (mod.pending) return pendingNode(mod);
 
+    const extCount = secs.filter(s => Pool.isExtSec(s.sec)).length;
+    const subtitleText = isExtMod
+      ? (secs.length + ' ' + DOM.plural(secs.length, 'section') + ' · outside syllabus')
+      : ((mod.marks ? mod.marks + ' marks · ' : '') +
+         countSecs.length + ' syllabus ' + DOM.plural(countSecs.length, 'section') +
+         (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
+
     const acc = accordion(nid, [el('div', {}, secs.map(s => sectionNode(s, repaint)))]);
     const node = el('div', { class: 'tnode' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
+        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all syllabus notes of module ' + mod.n,
           function () {
             const all = done === ids.length;
             Progress.setMany(ids, !all);
@@ -8154,9 +9356,9 @@ const Tree = (function () {
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: 'Module ' + mod.n + ' · ' + mod.title }),
-            el('span', { text: (mod.marks ? mod.marks + ' marks · ' : '') +
-              secs.length + ' ' + DOM.plural(secs.length, 'section') })
+            el('span', { text: subtitleText })
           ]),
+          isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
           ring(done, ids.length),
           DOM.icon('chev', 20, 'chev')
         ])
@@ -8848,7 +10050,9 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0] || null;
+    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.state(c.id) === 'none')[0]
+      || null;
   }
   function nextCard() {
     return Pool.deck().filter(c => !(Store.card(c.id) || {}).first)[0] || null;
@@ -8860,7 +10064,10 @@ const ViewHome = (function () {
      course still at Level 1 is offering work the learner has not opted into */
   function nextProof() {
     return Pool.concepts().filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0] || null;
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c =>
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+      || null;
   }
 
   function step(n, label, detail, href, ready) {
@@ -9046,8 +10253,8 @@ const ViewHome = (function () {
     }
 
     const loop = [
-      step(1, note ? 'Read: ' + note.title : 'Every note has been read once',
-        note ? Pool.sectionTitle(note.sec) : 'Re-reading is always available',
+      step(1, note ? 'Read: ' + note.title : 'Every syllabus note has been read once',
+        note ? (Pool.sectionTitle(note.sec) + (Pool.isExt(note) ? ' · outside syllabus' : '')) : 'Re-reading is always available',
         note ? 'note/' + note.id : 'study', !!note),
       step(2, card ? 'State it from memory' : 'Every statement has had one attempt',
         card ? card.title : 'Re-attempts are allowed but never recorded',
@@ -9057,8 +10264,8 @@ const ViewHome = (function () {
         q ? 'omr/' + q.id : 'omr', !!q)
     ];
     if (anyL2) {
-      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof has been worked through',
-        pf ? Pool.sectionTitle(pf.sec) : 'Levels 3–5 need delayed evidence, which is not built yet',
+      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every syllabus proof has been worked through',
+        pf ? (Pool.sectionTitle(pf.sec) + (Pool.isExt(pf) ? ' · outside syllabus' : '')) : 'Levels 3–5 need delayed evidence, which is not built yet',
         pf ? 'note/' + pf.id : 'study', !!pf));
     }
 
@@ -9603,6 +10810,8 @@ const ViewNote = (function () {
     const root = el('div', { class: 'stack' });
 
     const hasProof = !!(c && c.proof);
+    const isExt = Pool.isExt(c);
+    const extNote = isExt ? ' (outside syllabus)' : '';
     const badgesHost = el('div', { class: 'row', style: { marginBottom: '8px' } });
     let syncProofTick = null;
 
@@ -9623,11 +10832,11 @@ const ViewNote = (function () {
 
       doneBtn.className = 'btn' + (on ? '' : ' primary');
       doneBtn.textContent = on
-        ? (hasProof ? '✓ Level 1 ticked — undo' : '✓ Completed (Levels 1 & 2) — undo')
-        : (hasProof ? 'Tick Level 1 (Completed)' : 'Tick as completed (Levels 1 & 2)');
+        ? (hasProof ? '✓ Level 1 ticked' + extNote + ' — undo' : '✓ Completed' + (isExt ? extNote : ' (Levels 1 & 2)') + ' — undo')
+        : (hasProof ? 'Tick Level 1 (Completed)' + extNote : 'Tick as completed' + (isExt ? extNote : ' (Levels 1 & 2)'));
       doneBtn.setAttribute('aria-pressed', String(on));
       DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c)));
+        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c), isExt));
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -9701,7 +10910,7 @@ const ViewNote = (function () {
 
       el('div', {}, [
         badgesHost,
-        UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
+        UI.title(c.title, (c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite') + (isExt ? ' · Outside Syllabus' : '')),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
 

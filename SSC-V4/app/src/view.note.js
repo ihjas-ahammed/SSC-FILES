@@ -403,6 +403,8 @@ const ViewNote = (function () {
     const root = el('div', { class: 'stack' });
 
     const hasProof = !!(c && c.proof);
+    const isExt = Pool.isExt(c);
+    const extNote = isExt ? ' (outside syllabus)' : '';
     const badgesHost = el('div', { class: 'row', style: { marginBottom: '8px' } });
     let syncProofTick = null;
 
@@ -423,11 +425,11 @@ const ViewNote = (function () {
 
       doneBtn.className = 'btn' + (on ? '' : ' primary');
       doneBtn.textContent = on
-        ? (hasProof ? '✓ Level 1 ticked — undo' : '✓ Completed (Levels 1 & 2) — undo')
-        : (hasProof ? 'Tick Level 1 (Completed)' : 'Tick as completed (Levels 1 & 2)');
+        ? (hasProof ? '✓ Level 1 ticked' + extNote + ' — undo' : '✓ Completed' + (isExt ? extNote : ' (Levels 1 & 2)') + ' — undo')
+        : (hasProof ? 'Tick Level 1 (Completed)' + extNote : 'Tick as completed' + (isExt ? extNote : ' (Levels 1 & 2)'));
       doneBtn.setAttribute('aria-pressed', String(on));
       DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c)));
+        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c), isExt));
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -501,7 +503,7 @@ const ViewNote = (function () {
 
       el('div', {}, [
         badgesHost,
-        UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
+        UI.title(c.title, (c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite') + (isExt ? ' · Outside Syllabus' : '')),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
 

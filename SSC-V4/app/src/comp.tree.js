@@ -95,12 +95,14 @@ const Tree = (function () {
     const st = Progress.state(c.id);
     const lvl = Progress.levelOf(c.id);
     const needsProof = lvl === 2 && Progress.hasProof(c.id);
+    const isExt = Pool.isExt(c);
 
     const hasProof = Progress.hasProof(c.id);
+    const extNote = isExt ? ' (outside syllabus)' : '';
     const label = st === 'none'
-      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' : 'Mark "' + c.title + '" completed (Levels 1 & 2)')
+      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' + extNote : 'Mark "' + c.title + '" completed (Levels 1 & 2)' + extNote)
       : st === 'part'
-        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)'
+        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)' + extNote
         : 'Clear "' + c.title + '"';
 
     const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
@@ -116,6 +118,7 @@ const Tree = (function () {
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
+        isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
         needsProof && st === 'part'
           ? el('span', { class: 'badge warn', text: 'proof' }) : null,
         DOM.icon('chev', 18, 'chev')
@@ -129,6 +132,7 @@ const Tree = (function () {
     const done = Progress.count(ids).done;
     const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
+    const isExt = Pool.isExtSec(s.sec);
 
     const acc = accordion(nid, s.concepts.length
       ? [el('div', { class: 'stack', style: { gap: '6px' } },
@@ -138,7 +142,7 @@ const Tree = (function () {
 
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
+        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
           function () {
             const all = done === ids.length;
             Progress.setMany(ids, !all);
@@ -148,8 +152,9 @@ const Tree = (function () {
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + s.sec + '  ' + s.title }),
-            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') })
+            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') + (isExt ? ' · outside syllabus (not in exam %)' : '') })
           ]),
+          isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
           ring(done, ids.length),
           DOM.icon('chev', 20, 'chev')
         ])
@@ -161,17 +166,26 @@ const Tree = (function () {
 
   function moduleNode(course, mod, repaint) {
     const secs = Pool.sections(course.id).filter(s => (mod.secs || []).indexOf(s.sec) >= 0);
-    const ids = secs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
+    const isExtMod = !!mod.ext;
+    const countSecs = isExtMod ? secs : secs.filter(s => !Pool.isExtSec(s.sec));
+    const ids = countSecs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
     const done = Progress.count(ids).done;
     const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
     if (mod.pending) return pendingNode(mod);
 
+    const extCount = secs.filter(s => Pool.isExtSec(s.sec)).length;
+    const subtitleText = isExtMod
+      ? (secs.length + ' ' + DOM.plural(secs.length, 'section') + ' · outside syllabus')
+      : ((mod.marks ? mod.marks + ' marks · ' : '') +
+         countSecs.length + ' syllabus ' + DOM.plural(countSecs.length, 'section') +
+         (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
+
     const acc = accordion(nid, [el('div', {}, secs.map(s => sectionNode(s, repaint)))]);
     const node = el('div', { class: 'tnode' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
+        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all syllabus notes of module ' + mod.n,
           function () {
             const all = done === ids.length;
             Progress.setMany(ids, !all);
@@ -181,9 +195,9 @@ const Tree = (function () {
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: 'Module ' + mod.n + ' · ' + mod.title }),
-            el('span', { text: (mod.marks ? mod.marks + ' marks · ' : '') +
-              secs.length + ' ' + DOM.plural(secs.length, 'section') })
+            el('span', { text: subtitleText })
           ]),
+          isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
           ring(done, ids.length),
           DOM.icon('chev', 20, 'chev')
         ])

@@ -16,7 +16,9 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0] || null;
+    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.state(c.id) === 'none')[0]
+      || null;
   }
   function nextCard() {
     return Pool.deck().filter(c => !(Store.card(c.id) || {}).first)[0] || null;
@@ -28,7 +30,10 @@ const ViewHome = (function () {
      course still at Level 1 is offering work the learner has not opted into */
   function nextProof() {
     return Pool.concepts().filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0] || null;
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c =>
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+      || null;
   }
 
   function step(n, label, detail, href, ready) {
@@ -214,8 +219,8 @@ const ViewHome = (function () {
     }
 
     const loop = [
-      step(1, note ? 'Read: ' + note.title : 'Every note has been read once',
-        note ? Pool.sectionTitle(note.sec) : 'Re-reading is always available',
+      step(1, note ? 'Read: ' + note.title : 'Every syllabus note has been read once',
+        note ? (Pool.sectionTitle(note.sec) + (Pool.isExt(note) ? ' · outside syllabus' : '')) : 'Re-reading is always available',
         note ? 'note/' + note.id : 'study', !!note),
       step(2, card ? 'State it from memory' : 'Every statement has had one attempt',
         card ? card.title : 'Re-attempts are allowed but never recorded',
@@ -225,8 +230,8 @@ const ViewHome = (function () {
         q ? 'omr/' + q.id : 'omr', !!q)
     ];
     if (anyL2) {
-      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof has been worked through',
-        pf ? Pool.sectionTitle(pf.sec) : 'Levels 3–5 need delayed evidence, which is not built yet',
+      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every syllabus proof has been worked through',
+        pf ? (Pool.sectionTitle(pf.sec) + (Pool.isExt(pf) ? ' · outside syllabus' : '')) : 'Levels 3–5 need delayed evidence, which is not built yet',
         pf ? 'note/' + pf.id : 'study', !!pf));
     }
 

@@ -45,7 +45,12 @@ const DATA_SOURCES = {
     '../data/ra1-m4.js',
     '../data/ch5.a.js',
     '../data/ch5.b.js',
+    '../data/ch5.c.js',
     '../data/ch6.js',
+    '../data/ch7.js',
+    '../data/ch8.js',
+    '../data/ch9.js',
+    '../data/ch11.js',
     '../data/questions.ra2.m1.js',
     '../data/objective.js'
   ]

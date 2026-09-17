@@ -153,7 +153,7 @@ const Progress = (function () {
       });
     });
 
-    Pool.concepts().forEach(function (c, i) {
+    Pool.concepts(null, { includeExt: true }).forEach(function (c, i) {
       if (!c.proof || !Store.isDone(c.id)) return;
       if (Store.level(courseIdOf(c)) < 2) return;
       const id = c.id + '#proof';

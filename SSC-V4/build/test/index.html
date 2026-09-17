@@ -2760,7 +2760,7 @@ const Pool = (function () {
   const writFor = {};       /* concept id -> [written question] */
   const neededBy = {};      /* concept id -> [concept that lists it in needs] */
   const background = [];    /* nodes with no section in any course */
-  let courses = [], objective = [], written = [], titles = {}, mock = false;
+  let courses = [], objective = [], written = [], titles = {}, extSecs = {}, mock = false;
 
   /* Data files declare top-level `const`s, which are global *lexical* bindings
      rather than window properties — so they are read by name, guarded with
@@ -2770,6 +2770,7 @@ const Pool = (function () {
     objective = (typeof OBJECTIVE !== 'undefined' ? OBJECTIVE : []).slice();
     written = (typeof QUESTIONS !== 'undefined' ? QUESTIONS : []).slice();
     titles = typeof SECTITLE !== 'undefined' ? SECTITLE : {};
+    extSecs = typeof EXT_SECS !== 'undefined' ? EXT_SECS : {};
     const concepts = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
     const kind = typeof DATA_KIND !== 'undefined' ? DATA_KIND : null;
 
@@ -2823,10 +2824,33 @@ const Pool = (function () {
   const writtenFor = cid => writFor[cid] || [];
   const objectiveOne = id => objective.filter(q => q.id === id)[0] || null;
 
+  function isExtSec(sec) {
+    if (!sec) return false;
+    if (extSecs[sec]) return true;
+    const meta = secMeta[sec];
+    if (meta && meta.module) {
+      if (meta.module.ext) return true;
+      if (meta.module.extSecs && meta.module.extSecs.indexOf(sec) >= 0) return true;
+    }
+    return false;
+  }
+
+  function isExt(conceptOrId) {
+    const c = typeof conceptOrId === 'string' ? byId[conceptOrId] : conceptOrId;
+    if (!c) return false;
+    if (c.tier === 'ext') return true;
+    if (c.sec && isExtSec(c.sec)) return true;
+    return false;
+  }
+
   /* concepts of the whole slice, in reading order */
-  function conceptList(courseId) {
+  function conceptList(courseId, opts) {
+    const o = opts || {};
     const out = [];
-    sections(courseId).forEach(s => s.concepts.forEach(c => out.push(c)));
+    sections(courseId).forEach(s => s.concepts.forEach(function (c) {
+      if (!o.includeExt && isExt(c)) return;
+      out.push(c);
+    }));
     return out;
   }
 
@@ -2847,7 +2871,7 @@ const Pool = (function () {
 
   /* previous / next concept in reading order across the whole pool */
   function neighbours(id) {
-    const all = conceptList();
+    const all = conceptList(null, { includeExt: true });
     const i = all.map(c => c.id).indexOf(id);
     if (i < 0) return { prev: null, next: null };
     return { prev: all[i - 1] || null, next: all[i + 1] || null };
@@ -2855,19 +2879,23 @@ const Pool = (function () {
 
   /* ids used for progress denominators */
   const ids = {
-    concepts: courseId => conceptList(courseId).map(c => c.id),
-    cards: () => deck.map(c => c.id),
+    concepts: courseId => conceptList(courseId, { includeExt: false }).map(c => c.id),
+    allConcepts: courseId => conceptList(courseId, { includeExt: true }).map(c => c.id),
+    cards: () => deck.filter(c => !isExt(c.cid)).map(c => c.id),
+    allCards: () => deck.map(c => c.id),
     objective: () => objective.map(q => q.id),
     /* Level 2 counts proof work, so its denominator is the concepts that
        actually carry a proof — not every note. */
-    proofs: courseId => conceptList(courseId).filter(c => c.proof).map(c => c.id)
+    proofs: courseId => conceptList(courseId, { includeExt: false }).filter(c => c.proof).map(c => c.id),
+    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id)
   };
 
   return {
     build, sections, sectionTitle, concept, concepts: conceptList, course,
     courses: () => courses, courseOfSec, moduleOfSec, deck: () => deck,
     objective: () => objective, objectiveOne, objectiveFor, writtenFor,
-    background: () => background, chain, unlocks, neighbours, ids, isMock: () => mock
+    background: () => background, chain, unlocks, neighbours, ids,
+    isExtSec, isExt, isMock: () => mock
   };
 })();
 
@@ -3028,7 +3056,7 @@ const Progress = (function () {
       });
     });
 
-    Pool.concepts().forEach(function (c, i) {
+    Pool.concepts(null, { includeExt: true }).forEach(function (c, i) {
       if (!c.proof || !Store.isDone(c.id)) return;
       if (Store.level(courseIdOf(c)) < 2) return;
       const id = c.id + '#proof';
@@ -3355,9 +3383,15 @@ const UI = (function () {
 
   const kindBadge = c => el('span', { class: 'badge', text: c.kind || 'note' });
 
-  const tierBadge = c => (c.tier && c.tier !== 'core')
-    ? el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'extension' : c.tier })
-    : null;
+  const tierBadge = c => {
+    if (typeof Pool !== 'undefined' && Pool.isExt && Pool.isExt(c)) {
+      return el('span', { class: 'badge warn', text: 'outside syllabus' });
+    }
+    if (c.tier && c.tier !== 'core') {
+      return el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'outside syllabus' : c.tier });
+    }
+    return null;
+  };
 
   /* Level-aware: at Level 2 a ticked note with an unworked proof is not
      "completed", it is part-way, and saying otherwise would make the badge and
@@ -3386,17 +3420,20 @@ const UI = (function () {
 
   /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
      (or achieved automatically on notes that have no proof). */
-  function ladder(done, proofDone, hasProof, courseId) {
+  function ladder(done, proofDone, hasProof, courseId, isExt) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
     const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
     const caption = at === 2
       ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
       : at === 1 ? '1 · completed'
       : '1 · not yet completed';
-    const right = (hasProof === false)
+    let right = (hasProof === false)
       ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
       : (at === 2 ? 'proof worked through (Level 2)'
         : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
+    if (isExt) {
+      right += ' · outside syllabus (not in exam %)';
+    }
     return el('div', {}, [
       el('div', { class: 'ladder' }, names.map((n, i) =>
         el('span', { class: i < at ? 'on' : '', title: n }))),
@@ -4242,12 +4279,14 @@ const Tree = (function () {
     const st = Progress.state(c.id);
     const lvl = Progress.levelOf(c.id);
     const needsProof = lvl === 2 && Progress.hasProof(c.id);
+    const isExt = Pool.isExt(c);
 
     const hasProof = Progress.hasProof(c.id);
+    const extNote = isExt ? ' (outside syllabus)' : '';
     const label = st === 'none'
-      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' : 'Mark "' + c.title + '" completed (Levels 1 & 2)')
+      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' + extNote : 'Mark "' + c.title + '" completed (Levels 1 & 2)' + extNote)
       : st === 'part'
-        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)'
+        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)' + extNote
         : 'Clear "' + c.title + '"';
 
     const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
@@ -4263,6 +4302,7 @@ const Tree = (function () {
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
+        isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
         needsProof && st === 'part'
           ? el('span', { class: 'badge warn', text: 'proof' }) : null,
         DOM.icon('chev', 18, 'chev')
@@ -4276,6 +4316,7 @@ const Tree = (function () {
     const done = Progress.count(ids).done;
     const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
+    const isExt = Pool.isExtSec(s.sec);
 
     const acc = accordion(nid, s.concepts.length
       ? [el('div', { class: 'stack', style: { gap: '6px' } },
@@ -4285,7 +4326,7 @@ const Tree = (function () {
 
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
+        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
           function () {
             const all = done === ids.length;
             Progress.setMany(ids, !all);
@@ -4295,8 +4336,9 @@ const Tree = (function () {
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + s.sec + '  ' + s.title }),
-            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') })
+            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') + (isExt ? ' · outside syllabus (not in exam %)' : '') })
           ]),
+          isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
           ring(done, ids.length),
           DOM.icon('chev', 20, 'chev')
         ])
@@ -4308,17 +4350,26 @@ const Tree = (function () {
 
   function moduleNode(course, mod, repaint) {
     const secs = Pool.sections(course.id).filter(s => (mod.secs || []).indexOf(s.sec) >= 0);
-    const ids = secs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
+    const isExtMod = !!mod.ext;
+    const countSecs = isExtMod ? secs : secs.filter(s => !Pool.isExtSec(s.sec));
+    const ids = countSecs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
     const done = Progress.count(ids).done;
     const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
     if (mod.pending) return pendingNode(mod);
 
+    const extCount = secs.filter(s => Pool.isExtSec(s.sec)).length;
+    const subtitleText = isExtMod
+      ? (secs.length + ' ' + DOM.plural(secs.length, 'section') + ' · outside syllabus')
+      : ((mod.marks ? mod.marks + ' marks · ' : '') +
+         countSecs.length + ' syllabus ' + DOM.plural(countSecs.length, 'section') +
+         (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
+
     const acc = accordion(nid, [el('div', {}, secs.map(s => sectionNode(s, repaint)))]);
     const node = el('div', { class: 'tnode' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
+        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all syllabus notes of module ' + mod.n,
           function () {
             const all = done === ids.length;
             Progress.setMany(ids, !all);
@@ -4328,9 +4379,9 @@ const Tree = (function () {
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: 'Module ' + mod.n + ' · ' + mod.title }),
-            el('span', { text: (mod.marks ? mod.marks + ' marks · ' : '') +
-              secs.length + ' ' + DOM.plural(secs.length, 'section') })
+            el('span', { text: subtitleText })
           ]),
+          isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
           ring(done, ids.length),
           DOM.icon('chev', 20, 'chev')
         ])
@@ -5022,7 +5073,9 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0] || null;
+    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.state(c.id) === 'none')[0]
+      || null;
   }
   function nextCard() {
     return Pool.deck().filter(c => !(Store.card(c.id) || {}).first)[0] || null;
@@ -5034,7 +5087,10 @@ const ViewHome = (function () {
      course still at Level 1 is offering work the learner has not opted into */
   function nextProof() {
     return Pool.concepts().filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0] || null;
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c =>
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+      || null;
   }
 
   function step(n, label, detail, href, ready) {
@@ -5220,8 +5276,8 @@ const ViewHome = (function () {
     }
 
     const loop = [
-      step(1, note ? 'Read: ' + note.title : 'Every note has been read once',
-        note ? Pool.sectionTitle(note.sec) : 'Re-reading is always available',
+      step(1, note ? 'Read: ' + note.title : 'Every syllabus note has been read once',
+        note ? (Pool.sectionTitle(note.sec) + (Pool.isExt(note) ? ' · outside syllabus' : '')) : 'Re-reading is always available',
         note ? 'note/' + note.id : 'study', !!note),
       step(2, card ? 'State it from memory' : 'Every statement has had one attempt',
         card ? card.title : 'Re-attempts are allowed but never recorded',
@@ -5231,8 +5287,8 @@ const ViewHome = (function () {
         q ? 'omr/' + q.id : 'omr', !!q)
     ];
     if (anyL2) {
-      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof has been worked through',
-        pf ? Pool.sectionTitle(pf.sec) : 'Levels 3–5 need delayed evidence, which is not built yet',
+      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every syllabus proof has been worked through',
+        pf ? (Pool.sectionTitle(pf.sec) + (Pool.isExt(pf) ? ' · outside syllabus' : '')) : 'Levels 3–5 need delayed evidence, which is not built yet',
         pf ? 'note/' + pf.id : 'study', !!pf));
     }
 
@@ -5777,6 +5833,8 @@ const ViewNote = (function () {
     const root = el('div', { class: 'stack' });
 
     const hasProof = !!(c && c.proof);
+    const isExt = Pool.isExt(c);
+    const extNote = isExt ? ' (outside syllabus)' : '';
     const badgesHost = el('div', { class: 'row', style: { marginBottom: '8px' } });
     let syncProofTick = null;
 
@@ -5797,11 +5855,11 @@ const ViewNote = (function () {
 
       doneBtn.className = 'btn' + (on ? '' : ' primary');
       doneBtn.textContent = on
-        ? (hasProof ? '✓ Level 1 ticked — undo' : '✓ Completed (Levels 1 & 2) — undo')
-        : (hasProof ? 'Tick Level 1 (Completed)' : 'Tick as completed (Levels 1 & 2)');
+        ? (hasProof ? '✓ Level 1 ticked' + extNote + ' — undo' : '✓ Completed' + (isExt ? extNote : ' (Levels 1 & 2)') + ' — undo')
+        : (hasProof ? 'Tick Level 1 (Completed)' + extNote : 'Tick as completed' + (isExt ? extNote : ' (Levels 1 & 2)'));
       doneBtn.setAttribute('aria-pressed', String(on));
       DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c)));
+        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c), isExt));
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -5875,7 +5933,7 @@ const ViewNote = (function () {
 
       el('div', {}, [
         badgesHost,
-        UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
+        UI.title(c.title, (c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite') + (isExt ? ' · Outside Syllabus' : '')),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
 

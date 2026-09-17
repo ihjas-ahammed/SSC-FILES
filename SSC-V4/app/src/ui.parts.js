@@ -30,9 +30,15 @@ const UI = (function () {
 
   const kindBadge = c => el('span', { class: 'badge', text: c.kind || 'note' });
 
-  const tierBadge = c => (c.tier && c.tier !== 'core')
-    ? el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'extension' : c.tier })
-    : null;
+  const tierBadge = c => {
+    if (typeof Pool !== 'undefined' && Pool.isExt && Pool.isExt(c)) {
+      return el('span', { class: 'badge warn', text: 'outside syllabus' });
+    }
+    if (c.tier && c.tier !== 'core') {
+      return el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'outside syllabus' : c.tier });
+    }
+    return null;
+  };
 
   /* Level-aware: at Level 2 a ticked note with an unworked proof is not
      "completed", it is part-way, and saying otherwise would make the badge and
@@ -61,17 +67,20 @@ const UI = (function () {
 
   /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
      (or achieved automatically on notes that have no proof). */
-  function ladder(done, proofDone, hasProof, courseId) {
+  function ladder(done, proofDone, hasProof, courseId, isExt) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
     const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
     const caption = at === 2
       ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
       : at === 1 ? '1 · completed'
       : '1 · not yet completed';
-    const right = (hasProof === false)
+    let right = (hasProof === false)
       ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
       : (at === 2 ? 'proof worked through (Level 2)'
         : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
+    if (isExt) {
+      right += ' · outside syllabus (not in exam %)';
+    }
     return el('div', {}, [
       el('div', { class: 'ladder' }, names.map((n, i) =>
         el('span', { class: i < at ? 'on' : '', title: n }))),

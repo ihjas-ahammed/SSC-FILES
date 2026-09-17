@@ -20,7 +20,7 @@ const Pool = (function () {
   const writFor = {};       /* concept id -> [written question] */
   const neededBy = {};      /* concept id -> [concept that lists it in needs] */
   const background = [];    /* nodes with no section in any course */
-  let courses = [], objective = [], written = [], titles = {}, mock = false;
+  let courses = [], objective = [], written = [], titles = {}, extSecs = {}, mock = false;
 
   /* Data files declare top-level `const`s, which are global *lexical* bindings
      rather than window properties — so they are read by name, guarded with
@@ -30,6 +30,7 @@ const Pool = (function () {
     objective = (typeof OBJECTIVE !== 'undefined' ? OBJECTIVE : []).slice();
     written = (typeof QUESTIONS !== 'undefined' ? QUESTIONS : []).slice();
     titles = typeof SECTITLE !== 'undefined' ? SECTITLE : {};
+    extSecs = typeof EXT_SECS !== 'undefined' ? EXT_SECS : {};
     const concepts = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
     const kind = typeof DATA_KIND !== 'undefined' ? DATA_KIND : null;
 
@@ -83,10 +84,33 @@ const Pool = (function () {
   const writtenFor = cid => writFor[cid] || [];
   const objectiveOne = id => objective.filter(q => q.id === id)[0] || null;
 
+  function isExtSec(sec) {
+    if (!sec) return false;
+    if (extSecs[sec]) return true;
+    const meta = secMeta[sec];
+    if (meta && meta.module) {
+      if (meta.module.ext) return true;
+      if (meta.module.extSecs && meta.module.extSecs.indexOf(sec) >= 0) return true;
+    }
+    return false;
+  }
+
+  function isExt(conceptOrId) {
+    const c = typeof conceptOrId === 'string' ? byId[conceptOrId] : conceptOrId;
+    if (!c) return false;
+    if (c.tier === 'ext') return true;
+    if (c.sec && isExtSec(c.sec)) return true;
+    return false;
+  }
+
   /* concepts of the whole slice, in reading order */
-  function conceptList(courseId) {
+  function conceptList(courseId, opts) {
+    const o = opts || {};
     const out = [];
-    sections(courseId).forEach(s => s.concepts.forEach(c => out.push(c)));
+    sections(courseId).forEach(s => s.concepts.forEach(function (c) {
+      if (!o.includeExt && isExt(c)) return;
+      out.push(c);
+    }));
     return out;
   }
 
@@ -107,7 +131,7 @@ const Pool = (function () {
 
   /* previous / next concept in reading order across the whole pool */
   function neighbours(id) {
-    const all = conceptList();
+    const all = conceptList(null, { includeExt: true });
     const i = all.map(c => c.id).indexOf(id);
     if (i < 0) return { prev: null, next: null };
     return { prev: all[i - 1] || null, next: all[i + 1] || null };
@@ -115,18 +139,22 @@ const Pool = (function () {
 
   /* ids used for progress denominators */
   const ids = {
-    concepts: courseId => conceptList(courseId).map(c => c.id),
-    cards: () => deck.map(c => c.id),
+    concepts: courseId => conceptList(courseId, { includeExt: false }).map(c => c.id),
+    allConcepts: courseId => conceptList(courseId, { includeExt: true }).map(c => c.id),
+    cards: () => deck.filter(c => !isExt(c.cid)).map(c => c.id),
+    allCards: () => deck.map(c => c.id),
     objective: () => objective.map(q => q.id),
     /* Level 2 counts proof work, so its denominator is the concepts that
        actually carry a proof — not every note. */
-    proofs: courseId => conceptList(courseId).filter(c => c.proof).map(c => c.id)
+    proofs: courseId => conceptList(courseId, { includeExt: false }).filter(c => c.proof).map(c => c.id),
+    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id)
   };
 
   return {
     build, sections, sectionTitle, concept, concepts: conceptList, course,
     courses: () => courses, courseOfSec, moduleOfSec, deck: () => deck,
     objective: () => objective, objectiveOne, objectiveFor, writtenFor,
-    background: () => background, chain, unlocks, neighbours, ids, isMock: () => mock
+    background: () => background, chain, unlocks, neighbours, ids,
+    isExtSec, isExt, isMock: () => mock
   };
 })();

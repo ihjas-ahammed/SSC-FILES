@@ -109,7 +109,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.8.3.1', bartle: '8.3.1', sec: '8.3', kind: 'definition', tier: 'core',
+    id: 'c.8.3.1', bartle: '8.3.1', sec: '8.3', kind: 'definition', tier: 'ext',
     title: 'The Exponential Function via Power Series',
     oneLine: 'e^x is defined as the infinite series 1 + x + x^2/2! + x^3/3! + ... converging everywhere.',
     statement: `The <b>exponential function</b> $E: \\mathbb{R} \\to \\mathbb{R}$ is defined for all $x \\in \\mathbb{R}$ by:
@@ -133,7 +133,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.8.4.1', bartle: '8.4.1', sec: '8.4', kind: 'definition', tier: 'core',
+    id: 'c.8.4.1', bartle: '8.4.1', sec: '8.4', kind: 'definition', tier: 'ext',
     title: 'The Trigonometric Functions Sine and Cosine via Power Series',
     oneLine: 'sin(x) and cos(x) defined rigorously as alternating power series of odd and even powers.',
     statement: `For all $x \\in \\mathbb{R}$, the <b>sine</b> and <b>cosine</b> functions are defined by:

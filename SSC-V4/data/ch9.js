@@ -7,7 +7,7 @@
 
 CONCEPTS.push(
   {
-    id: 'c.9.1.1', bartle: '9.1.1', sec: '9.1', kind: 'definition', tier: 'core',
+    id: 'c.9.1.1', bartle: '9.1.1', sec: '9.1', kind: 'definition', tier: 'ext',
     title: 'Absolute vs Conditional Convergence',
     oneLine: 'Absolute convergence means the series converges even if you strip away all minus signs.',
     statement: `Let $\\sum_{n=1}^\\infty x_n$ be an infinite series.
@@ -29,7 +29,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.1.5', bartle: '9.1.5', sec: '9.1', kind: 'theorem', tier: 'core',
+    id: 'c.9.1.5', bartle: '9.1.5', sec: '9.1', kind: 'theorem', tier: 'ext',
     title: 'Riemann’s Rearrangement Theorem',
     oneLine: 'A conditionally convergent series can be rearranged to sum to ANY real number you desire, or even to diverge to ±∞!',
     statement: `Let $\\sum_{n=1}^\\infty x_n$ be a <b>conditionally convergent</b> series.
@@ -53,7 +53,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.2.1', bartle: '9.2.1', sec: '9.2', kind: 'theorem', tier: 'core',
+    id: 'c.9.2.1', bartle: '9.2.1', sec: '9.2', kind: 'theorem', tier: 'ext',
     title: 'Comparison and Limit Comparison Tests',
     oneLine: 'If a positive series is trapped under a convergent series, it converges. If larger than a divergent series, it diverges.',
     statement: `Let $(x_n)$ and $(y_n)$ be sequences of real numbers with $0 \\le x_n \\le y_n$ for all $n \\ge K$.
@@ -75,7 +75,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.2.4', bartle: '9.2.4', sec: '9.2', kind: 'theorem', tier: 'core',
+    id: 'c.9.2.4', bartle: '9.2.4', sec: '9.2', kind: 'theorem', tier: 'ext',
     title: 'The Ratio and Root Tests (D’Alembert and Cauchy)',
     oneLine: 'Ratio test compares consecutive terms; Root test takes the n-th root. Both look for an effective growth rate r < 1.',
     statement: `Let $\\sum x_n$ be a series with non-zero terms.
@@ -104,7 +104,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.2.6', bartle: '9.2.6', sec: '9.2', kind: 'theorem', tier: 'core',
+    id: 'c.9.2.6', bartle: '9.2.6', sec: '9.2', kind: 'theorem', tier: 'ext',
     title: 'The Integral Test and the p-Series',
     oneLine: 'A positive decreasing series converges if and only if the improper integral under its curve is finite.',
     statement: `Let $f: [1, \\infty) \\to \\mathbb{R}$ be a continuous, positive, and <b>decreasing</b> function such that $f(n) = x_n$ for all $n \\in \\mathbb{N}$.
@@ -127,7 +127,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.3.2', bartle: '9.3.2', sec: '9.3', kind: 'theorem', tier: 'core',
+    id: 'c.9.3.2', bartle: '9.3.2', sec: '9.3', kind: 'theorem', tier: 'ext',
     title: 'The Alternating Series Test (Leibniz’s Rule)',
     oneLine: 'If positive terms steadily shrink down to zero in an alternating series, convergence is 100% guaranteed.',
     statement: `Let $(z_n)$ be a sequence of positive numbers that is:
@@ -153,7 +153,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.4.6', bartle: '9.4.6', sec: '9.4', kind: 'theorem', tier: 'core',
+    id: 'c.9.4.6', bartle: '9.4.6', sec: '9.4', kind: 'theorem', tier: 'ext',
     title: 'The Weierstrass M-Test for Series of Functions',
     oneLine: 'If a series of functions is bounded term-by-term by a convergent series of numbers, it converges uniformly.',
     statement: `Let $(f_n)$ be a sequence of functions defined on $A \\subseteq \\mathbb{R}$.
@@ -176,7 +176,7 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.9.4.9', bartle: '9.4.9', sec: '9.4', kind: 'theorem', tier: 'core',
+    id: 'c.9.4.9', bartle: '9.4.9', sec: '9.4', kind: 'theorem', tier: 'ext',
     title: 'Radius of Convergence and the Cauchy–Hadamard Theorem',
     oneLine: 'Every power series has a magic radius R: absolutely convergent inside |x - x_0| < R, divergent outside.',
     statement: `For any power series $\\sum_{n=0}^\\infty a_n (x - x_0)^n$, define $\\rho = \\limsup_{n\\to\\infty} |a_n|^{1/n}$.
