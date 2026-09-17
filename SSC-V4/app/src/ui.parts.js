@@ -53,17 +53,56 @@ const UI = (function () {
 
   const empty = (msg, extra) => el('div', { class: 'empty' }, [el('p', { text: msg }), extra || null]);
 
-  /* Mastery ladder: Level 1 is all this build can award, and it says so. */
-  function ladder(done) {
+  /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done.
+     Neither is awarded for opening anything, and the caption says which rung
+     the learner is standing on rather than implying the whole ladder. */
+  function ladder(done, proofDone, hasProof) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
+    const at = proofDone ? 2 : done ? 1 : 0;
+    const caption = at === 2 ? '2 · proof worked through'
+      : at === 1 ? '1 · completed'
+      : '1 · not yet completed';
+    const right = Store.level() === 2
+      ? (hasProof === false ? 'no proof on this note'
+        : at === 2 ? 'levels 3–5 need delayed evidence'
+        : 'work the proof to reach level 2')
+      : 'levels 2–5 open at Level 2';
     return el('div', {}, [
       el('div', { class: 'ladder' }, names.map((n, i) =>
-        el('span', { class: i === 0 && done ? 'on' : '', title: n }))),
+        el('span', { class: i < at ? 'on' : '', title: n }))),
       el('div', { class: 'ladder-l' }, [
-        el('span', { text: done ? '1 · completed' : '1 · not yet completed' }),
-        el('span', { text: 'levels 2–5 arrive in Level 2' })
+        el('span', { text: caption }),
+        el('span', { text: right })
       ])
     ]);
+  }
+
+  /* The current level as a badge, and the switch that changes it. Level 2 is
+     never entered by accident: it has to be unlocked first (Store.unlocked). */
+  const levelBadge = () => el('span', {
+    class: 'badge' + (Store.level() === 2 ? ' accent' : ''),
+    text: 'Level ' + Store.level()
+  });
+
+  /* Which of a concept's prerequisites are not ticked yet. One definition,
+     because the note view and the syllabus tree both offer the same cascade
+     and must never disagree about what it would do. */
+  const pendingPrereqs = id =>
+    Pool.chain(id).filter(x => x.id !== id && !Store.isDone(x.id));
+
+  /* An inline question with real buttons, used where window.confirm would
+     lose the detail that makes the question answerable. */
+  function ask(opts) {
+    const host = el('div', { class: 'card tint ask', role: 'group',
+      'aria-label': opts.title });
+    DOM.add(host, [
+      el('div', { class: 'kicker', text: opts.title }),
+      opts.body ? el('div', { class: 'small', style: { margin: '6px 0 10px' } }, [opts.body]) : null,
+      el('div', { class: 'btn-row' }, (opts.actions || []).map(a =>
+        el('button', { class: 'btn' + (a.primary ? ' primary' : ''), type: 'button',
+          text: a.label, on: { click: a.onClick } })))
+    ]);
+    return host;
   }
 
   function mockBanner() {
@@ -137,6 +176,6 @@ const UI = (function () {
 
   return {
     title, crumb, prose, math, kindBadge, tierBadge, doneBadge, meter, stat, empty,
-    ladder, mockBanner, gate, reveal, typeBadge, metaRow, clock
+    ladder, levelBadge, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
   };
 })();

@@ -117,7 +117,10 @@ const Pool = (function () {
   const ids = {
     concepts: courseId => conceptList(courseId).map(c => c.id),
     cards: () => deck.map(c => c.id),
-    objective: () => objective.map(q => q.id)
+    objective: () => objective.map(q => q.id),
+    /* Level 2 counts proof work, so its denominator is the concepts that
+       actually carry a proof — not every note. */
+    proofs: courseId => conceptList(courseId).filter(c => c.proof).map(c => c.id)
   };
 
   return {

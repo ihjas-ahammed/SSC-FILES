@@ -198,8 +198,15 @@ const ViewRecall = (function () {
 
       const cards = [];
       const dots = [];
-      const glide = to => reel.scrollTo({ top: to,
-        behavior: DOM.reduced() ? 'auto' : 'smooth' });
+
+      /* Cards are as tall as their content, so a card's position is its own
+         offsetTop — never index × clientHeight. That arithmetic was the reason
+         "next" landed in the middle of nowhere once a statement grew. */
+      const glide = i => {
+        const to = cards[i];
+        if (!to) return;
+        reel.scrollTo({ top: to.offsetTop, behavior: DOM.reduced() ? 'auto' : 'smooth' });
+      };
 
       cards.push(el('section', { class: 'reel-card' }, [introCard(deck, function () {
         build();
@@ -209,7 +216,7 @@ const ViewRecall = (function () {
       deck.forEach(function (card, i) {
         const section = el('section', { class: 'reel-card' }, [
           statementCard(card, i + 1, deck.length,
-            function () { glide((i + 2) * reel.clientHeight); },
+            function () { glide(i + 2); },
             function (grade) {
               const dot = dots[i + 1];
               if (dot) dot.classList.toggle('got', grade === 'got');
@@ -241,17 +248,24 @@ const ViewRecall = (function () {
         rail.appendChild(dot);
       });
 
-      /* mark the card in view, keep the rail in step */
+      /* Mark the card in view and keep the rail in step.
+         The test is how much of the REEL this card covers, not how much of the
+         card is visible: a card three screens tall can never reach an
+         intersectionRatio of 0.55, and the old rule left it dimmed forever. */
       if (window.IntersectionObserver) {
         const io = new window.IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
-            const i = cards.indexOf(e.target);
-            e.target.classList.toggle('live', e.isIntersecting && e.intersectionRatio > 0.55);
-            if (e.isIntersecting && e.intersectionRatio > 0.55) {
+            const seen = e.intersectionRect ? e.intersectionRect.height : 0;
+            const port = (e.rootBounds && e.rootBounds.height) || reel.clientHeight || 1;
+            const own = e.target.offsetHeight || 1;
+            const live = e.isIntersecting && (seen / port > 0.45 || seen / own > 0.6);
+            e.target.classList.toggle('live', live);
+            if (live) {
+              const i = cards.indexOf(e.target);
               Array.prototype.forEach.call(rail.children, (d, j) => d.classList.toggle('on', j === i));
             }
           });
-        }, { root: reel, threshold: [0.2, 0.56, 0.9] });
+        }, { root: reel, threshold: [0, 0.1, 0.25, 0.4, 0.55, 0.75, 0.9, 1] });
         cards.forEach(c => io.observe(c));
       } else {
         cards.forEach(c => c.classList.add('live'));
@@ -265,23 +279,42 @@ const ViewRecall = (function () {
         const at = deck.map(c => c.cid).indexOf(startAt);
         startAt = null;
         if (at >= 0) window.requestAnimationFrame(function () {
-          cards[at + 1].scrollIntoView({ behavior: 'auto' });
+          reel.scrollTo({ top: cards[at + 1].offsetTop, behavior: 'auto' });
         });
       }
     }
 
-    /* keyboard: arrows and page keys move one card at a time */
+    /* Keyboard: Page keys and the arrows move one CARD at a time, except that
+       a card taller than the screen must still be readable — so the arrows
+       scroll within it until its end is in view, and only then jump on. */
     reel.addEventListener('keydown', function (e) {
       const keys = { ArrowDown: 1, PageDown: 1, ArrowUp: -1, PageUp: -1 };
       const dir = keys[e.key];
       if (!dir) return;
-      if (/^(TEXTAREA|INPUT)$/.test((e.target.tagName || '').toUpperCase())) return;
+      if (/^(TEXTAREA|INPUT|SELECT)$/.test((e.target.tagName || '').toUpperCase())) return;
       e.preventDefault();
-      const h = reel.clientHeight || 1;
-      const last = reel.children.length - 1;
-      const at = Math.round(reel.scrollTop / h);
-      const to = Math.max(0, Math.min(last, at + dir));
-      reel.scrollTo({ top: to * h, behavior: DOM.reduced() ? 'auto' : 'smooth' });
+
+      const port = reel.clientHeight || 1;
+      const kids = Array.prototype.slice.call(reel.children);
+      const top = reel.scrollTop;
+
+      /* the card the top of the viewport is currently inside */
+      let at = 0;
+      kids.forEach(function (c, i) { if (c.offsetTop <= top + 2) at = i; });
+      const here = kids[at];
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        const end = here.offsetTop + here.offsetHeight;
+        const room = dir > 0 ? end - (top + port) : top - here.offsetTop;
+        if (room > 8) {
+          reel.scrollTo({ top: top + dir * Math.round(port * 0.85),
+            behavior: DOM.reduced() ? 'auto' : 'smooth' });
+          return;
+        }
+      }
+
+      const to = kids[Math.max(0, Math.min(kids.length - 1, at + dir))];
+      if (to) reel.scrollTo({ top: to.offsetTop, behavior: DOM.reduced() ? 'auto' : 'smooth' });
     });
 
     build();

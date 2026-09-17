@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
-"""Build SSC-V4 Real Analysis study system into build/index.html.
+"""Build the SSC-V4 Real Analysis study system into one self-contained page.
 
-Inlines styles and scripts so the application is completely self-contained
-for deployment to Firebase Hosting (/math/real-analysis) or static serving.
+    python3 build.py            -> build/index.html       from the `live` pool
+    python3 build.py --mock     -> build/test/index.html   from the `mock` pool
+
+Styles, every app script and the chosen data files are inlined, so the result
+is a single HTML file that can be hosted anywhere or opened from disk. MathJax
+and the fonts stay on their CDNs.
+
+The script order is READ OUT OF app/index.html rather than repeated here. It
+used to be a hand-maintained copy, which meant a newly added module loaded in
+the dev page and was silently missing from the deployed one.
 """
 import os
 import re
@@ -12,82 +20,82 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 APP_DIR = os.path.join(HERE, 'app')
 BUILD_DIR = os.path.join(HERE, 'build')
 
+
 def read_file(path):
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()
 
+
+def data_files(which):
+    """The file list `which` ('live' or 'mock') names in app/sources.js."""
+    src = read_file(os.path.join(APP_DIR, 'sources.js'))
+    m = re.search(which + r':\s*\[(.*?)\]', src, re.DOTALL)
+    if not m:
+        sys.exit('Error: no "%s" list found in app/sources.js' % which)
+    paths = re.findall(r"['\"]([^'\"]+)['\"]", m.group(1))
+    if not paths:
+        sys.exit('Error: the "%s" list in app/sources.js is empty' % which)
+    return paths
+
+
+def app_scripts(html):
+    """Every src/*.js the shell loads, in the order the shell loads it."""
+    names = re.findall(r'<script src="src/([^"]+\.js)"></script>', html)
+    if not names:
+        sys.exit('Error: no src/*.js script tags found in app/index.html')
+    missing = [n for n in names if not os.path.isfile(os.path.join(APP_DIR, 'src', n))]
+    if missing:
+        sys.exit('Error: app/index.html loads missing files: ' + ', '.join(missing))
+    return names
+
+
 def main():
-    os.makedirs(BUILD_DIR, exist_ok=True)
+    mock = '--mock' in sys.argv
+    which = 'mock' if mock else 'live'
+    out_dir = os.path.join(BUILD_DIR, 'test') if mock else BUILD_DIR
+    os.makedirs(out_dir, exist_ok=True)
+
     html = read_file(os.path.join(APP_DIR, 'index.html'))
     css = read_file(os.path.join(APP_DIR, 'src', 'ui.css'))
+    html = re.sub(r'<link rel="stylesheet" href="src/ui\.css">',
+                  lambda m: '<style>\n/* app/src/ui.css */\n%s\n</style>' % css, html)
 
-    # Replace <link rel="stylesheet" href="src/ui.css"> with <style>
-    style_tag = f'<style>\n/* app/src/ui.css */\n{css}\n</style>'
-    html = re.sub(r'<link rel="stylesheet" href="src/ui\.css">', lambda m: style_tag, html)
+    chunks = []
+    for rel in data_files(which):
+        path = os.path.normpath(os.path.join(APP_DIR, rel))
+        chunks.append('/* ── %s ── */\n' % rel + read_file(path))
+    for name in app_scripts(html):
+        chunks.append('/* ── src/%s ── */\n' % name
+                      + read_file(os.path.join(APP_DIR, 'src', name)))
 
-    # Read live data sources from app/sources.js
-    sources_content = read_file(os.path.join(APP_DIR, 'sources.js'))
-    
-    # Extract live file paths
-    m = re.search(r'live:\s*\[(.*?)\]', sources_content, re.DOTALL)
-    if not m:
-        sys.exit("Error: could not find live files in sources.js")
-    raw_list = m.group(1)
-    file_rel_paths = re.findall(r"['\"]([^'\"]+)['\"]", raw_list)
-    
-    # Concatenate data scripts
-    data_scripts = []
-    for rel in file_rel_paths:
-        p = os.path.normpath(os.path.join(APP_DIR, rel))
-        data_scripts.append(f'/* ── {rel} ── */\n' + read_file(p))
-    
-    # Core app scripts in order as listed in app/index.html
-    core_order = [
-        'core.dom.js',
-        'core.tex.js',
-        'core.store.js',
-        'core.pool.js',
-        'core.latex.js',
-        'ui.parts.js',
-        'fig.library.js',
-        'comp.figure.js',
-        'comp.tree.js',
-        'comp.write.js',
-        'view.home.js',
-        'view.study.js',
-        'view.note.js',
-        'view.recall.js',
-        'view.omr.js',
-        'view.write.js',
-        'boot.js'
-    ]
-    
-    app_scripts = []
-    for s in core_order:
-        p = os.path.join(APP_DIR, 'src', s)
-        app_scripts.append(f'/* ── src/{s} ── */\n' + read_file(p))
+    # The seam still has to exist for boot.js, but the data is already inlined,
+    # so it points at one no-op module rather than at any file.
+    seam = ("const DATA_SOURCES = { use: '%s', %s: "
+            "['data:text/javascript;charset=utf-8,//bundled'] };" % (which, which))
 
-    # Construct the single bundled script block
-    bundled_sources = "const DATA_SOURCES = { use: 'live', live: ['data:text/javascript;charset=utf-8,//bundled'] };"
-    
-    combined_js = (
-        bundled_sources + "\n\n" +
-        "\n\n".join(data_scripts) + "\n\n" +
-        "\n\n".join(app_scripts)
-    )
-    
-    safe_js = combined_js.replace('</script', '<\\/script')
-    script_bundle = f'<script>\n{safe_js}\n</script>'
-    
-    # Replace individual script tags from sources.js to boot.js
-    pattern = r'<!-- data seam: which content set to load -->.*?<script src="src/boot\.js"></script>'
-    html = re.sub(pattern, lambda m: script_bundle, html, flags=re.DOTALL)
+    bundle = '<script>\n%s\n</script>' % (
+        (seam + '\n\n' + '\n\n'.join(chunks)).replace('</script', '<\\/script'))
 
-    out_path = os.path.join(BUILD_DIR, 'index.html')
+    html, n = re.subn(
+        r'<!-- data seam: which content set to load -->.*?<script src="src/boot\.js"></script>',
+        lambda m: bundle, html, flags=re.DOTALL)
+    if n != 1:
+        sys.exit('Error: could not find the script block to replace in app/index.html')
+
+    if mock:
+        # A test build must announce itself in the tab as well as on the page,
+        # so a stray bookmark can never be mistaken for the real thing.
+        html = html.replace('<title>Real Analysis · Study System</title>',
+                            '<title>Real Analysis · TEST (mock data)</title>')
+        html = html.replace('<b>Real Analysis</b><span>Level&nbsp;1</span>',
+                            '<b>Real Analysis</b><span>test · mock</span>')
+
+    out_path = os.path.join(out_dir, 'index.html')
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(html)
-    
-    print(f"Built {out_path} ({len(html)} bytes)")
+
+    print('Built %s from the %s pool (%d bytes)' % (out_path, which, len(html)))
+
 
 if __name__ == '__main__':
     main()

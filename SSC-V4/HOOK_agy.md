@@ -136,12 +136,15 @@ or citation. Do not duplicate concepts. Validate every needs/tests reference bef
 handoff to Claude.
 ```
 
-## Runtime data contract (the Level 1 app)
+## Runtime data contract
 
-The Level 1 app is built and running at `app/index.html`. It currently runs on
-placeholder content in `app/mock/` — ten standard theorems and sixteen OMR questions
-written only to exercise the study loop. **AGY owns the replacement.** Nothing in
-`app/src/` needs to change: the app reads data through one seam.
+The app is built, deployed, and **running on the validated pool**: `app/sources.js` has
+`use: 'live'` over the files in `data/`. **AGY owns that pool.** Nothing in `app/src/`
+needs to change when it grows or is corrected — the app reads data through one seam.
+
+`app/mock/` still exists and is not a leftover: it is the fixture behind
+`/math/real-analysis-test`, where app changes are tried out before they can touch the
+real page (see "Publishing" below).
 
 ### The seam
 
@@ -149,11 +152,15 @@ written only to exercise the study loop. **AGY owns the replacement.** Nothing i
 
 ```js
 const DATA_SOURCES = {
-  use: 'mock',                       /* flip to 'live' when the delivery lands */
+  use: 'live',                       /* 'mock' for the test page, 'live' for the real one */
   mock: ['mock/mock.courses.js', 'mock/mock.concepts.js', 'mock/mock.objective.js'],
-  live: []                           /* AGY fills this, paths relative to app/ */
+  live: ['../data/syllabus.js', '../data/school.js', '../data/ra1-core.js', …]
 };
 ```
+
+Adding a delivered file means adding one line to `live`. `build.py` reads that same
+array, so the built page and the dev page always carry the same content set — keep it a
+plain list of quoted paths.
 
 Delivered files are plain `.js` that declare or push into six global names and nothing
 else. No modules, no build step, no framework. Paths must stay inside `SSC-V4`.
@@ -237,6 +244,17 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
    and concept title tooltip. Use `<code>c.X.Y</code>` or `<code>s.prereq-name</code>` in text.
 9. **Provenance travels with the record** and `review_required: true` stays until a human
    or a stronger verification pass has cleared it.
+10. **`proof` is now load-bearing, not decoration.** Level 2 progress is counted per
+   proof, and its denominator is *the concepts that carry a `proof` block*. A theorem
+   delivered without one is invisible to Level 2 — it cannot be worked through, and it
+   silently shrinks the denominator rather than showing up as missing. Every theorem,
+   lemma and corollary needs `proof: { idea, why?, rungs: [{why, m}], ends? }`.
+   Definitions and examples correctly have none.
+11. **Ids are now synced, not just stored.** Progress travels between a learner's devices
+   keyed on `conceptId`, `conceptId#<card index>` and `question.id`. Renaming an id no
+   longer just resets progress on one device — it orphans a record in the cloud that
+   nothing will ever reclaim. Ids were already permanent; they are now permanent with
+   a witness.
 
 ### What Level 1 needs from AGY, in order
 
@@ -253,8 +271,65 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
    them differently and an invented citation is worse than no citation.
 
 Do not put mock content into `data/`, and do not point `live` at `app/mock/`.
-The mock set stays where it is until the validated pool replaces it, then it can be
-deleted in one directory.
+The mock set is no longer a stopgap — it is the permanent test fixture behind
+`/math/real-analysis-test`, so it stays where it is.
+
+---
+
+## Publishing — AGY owns the live page
+
+There are two pages, built from the same code and different pools:
+
+| URL | pool | built by | published by |
+| --- | --- | --- | --- |
+| `/math/real-analysis` | `data/` — validated | `python3 build.py` | **AGY** |
+| `/math/real-analysis-test` | `app/mock/` — placeholders | `python3 build.py --mock` | Claude |
+
+Claude builds and ships the test page whenever the app changes, and does **not** publish
+the live one. That is not a courtesy — a Firebase Hosting deploy replaces the whole
+site, so a careless publish is how unvalidated content reaches the real URL.
+
+### The procedure
+
+```bash
+cd SSC-V2/SEM5/PHY/apps/tools
+./deploy.sh --live          # rebuilds /math/real-analysis from data/, then deploys
+```
+
+Without `--live` the script republishes the committed `SSC-V4/build/index.html` byte for
+byte and only refreshes the test page. So:
+
+- **`./deploy.sh`** — app changes reach the test page; the live page is untouched.
+- **`./deploy.sh --live`** — AGY's command, run after the validation checklist passes.
+
+`build/index.html` is committed on purpose: it is the record of what is actually live,
+and `git diff` on it is the last chance to see what a publish is about to change.
+
+### Before running `--live`
+
+1. The repair and validation checklist above passes.
+2. `python3 build.py` succeeds and `git diff --stat build/index.html` is a change you
+   can account for.
+3. Open the built file and confirm the app badges itself **live**, not mock — the mock
+   banner appearing on the real URL means `DATA_KIND` or `sources.js` is wrong.
+4. Every theorem in the delivered slice has a `proof` block (rule 10) and a `state`
+   card, or Level 2 and Recall are respectively blind to it.
+5. The deploy prints every URL it published. If a page you expected is missing from
+   that list, it has just been deleted from the live site — republish before leaving.
+
+### What Level 2 changed that AGY has to supply
+
+The app now records, per learner and across devices:
+
+- **proof work**, claimed per proof, which is what earns mastery level 2;
+- the same first-attempt measurements as before, merged rather than overwritten.
+
+Nothing about the delivery format changes except rule 10: `proof` blocks move from
+"nice to have" to required on every theorem. `proof.idea` and `proof.why` are shown as
+the *hint* before the learner tries; `proof.rungs` are the step-by-step reveal after.
+An `idea` that merely restates the theorem makes the hint useless, so write it as the
+strategy — "trap the sequence by bisection", "subtract the chord and apply Rolle" —
+before any technical step.
 
 ---
 

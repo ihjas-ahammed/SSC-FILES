@@ -117,25 +117,202 @@ it into the app until the validation rules in `HOOK_agy.md` pass.
 The skeleton contract is in `data_temp/content-skeleton.json`. If a field or concept is
 uncertain, leave it marked for review rather than guessing.
 
-## Current implementation target: Level 1
+`data/`, `pyq/`, and `diagrams/` are AGY's territory. Claude integrates what is there
+and may repair rendering-level faults it finds (unclosed `$`, a lost escape, an `id` that
+does not resolve, HTML that breaks the parser), but does not rewrite mathematics, answer
+keys, or provenance — those go back to AGY as a correction request. The field-by-field
+runtime contract lives in `HOOK_agy.md` → "Runtime data contract"; `data/SCHEMA.md` is
+the authoring schema behind it, keyed to Bartle & Sherbert 4e numbering.
 
-Claude should implement **Level 1 only right now**:
+## Current state — Level 1 is built and live
 
-- theorem-statement flashcards;
-- OMR-style question → user choice → full answer and explanation;
-- MathJax theorem-writing input with the contextual LaTeX command palette;
-- basic note completion and first-attempt result tracking;
-- mobile-first layout and accessible navigation.
+The app is at `app/index.html` and now runs on **validated content, not mock**:
+`app/sources.js` has `use: 'live'`, loading `data/syllabus.js`, `data/school.js`, the
+`ra1-*` set, `ch5.a/ch5.b/ch6`, `questions.ra2.m1.js`, and `data/objective.js`.
+`app/mock/` is retained only as the fallback set and must never be pointed at by `live`.
 
-Level 1 must be usable with a small representative content set. Do not implement the
-full graph scheduler, delayed mastery levels, proof-generation ladder, exam-track
-weighting, question generators, Firebase sync, or the complete entrance course yet.
+`build.py` inlines `app/src/ui.css`, every `app/src/*.js`, and the `live` data files
+listed in `sources.js` into one self-contained `build/index.html`. It parses the `live`
+array out of `sources.js` by regex, so keep that array a plain list of quoted paths.
+The build is deployed to Firebase Hosting at
+`https://ssc-data-science-qm.web.app/math/real-analysis`.
+
+### Engine map
+
+No framework, no bundler, no modules — plain globals, each view returns a real element.
+
+| file | role |
+| --- | --- |
+| `boot.js` | theme, data loading, the earned Level 2 unlock, routing, failure surfaces |
+| `core.dom.js` | element builder, routing primitives, `sanitizeMathHtml`, `linkifyConcepts` |
+| `core.pool.js` | one pass over the data globals; every lookup above this line goes through it |
+| `core.store.js` | progress: completion, proof work, first-try grades, attempts — and the merge |
+| `core.sync.js` | multi-device sync over Firebase RTDB REST; merges before every write |
+| `core.tex.js` | MathJax typesetting and safe rendering of learner fragments |
+| `core.md.js` | line-at-a-time markdown that leaves everything between `$…$` alone |
+| `core.latex.js` | the LaTeX catalogue, ranked per concept, as a completion source |
+| `comp.figure.js` + `fig.library.js` | the figure engine and the hand-drawn inline-SVG figures |
+| `comp.tree.js` | the tick tree — course → module → section → concept, with ring progress |
+| `comp.write.js` | the line-by-line writing workspace: output above input, completions below |
+| `view.home/study/note/recall/omr/write.js` | the five screens plus Today |
+
+### Invariants the engine depends on
+
+1. **Ids are stable forever.** Progress is keyed on them: `conceptId` for completion,
+   `conceptId#<index in cards[]>` for a statement card, `question.id` for a locked
+   attempt. Appending to `cards[]` is safe; reordering silently rewrites recall history.
+2. **The data seam is the only integration point.** `app/src` must never name a data
+   file, a course, or a concept id. Changing the content set is a one-line edit in
+   `app/sources.js`.
+3. **Authored HTML is inserted as markup**, so it must stay trusted — no scraped HTML,
+   no `<script>`, no inline handlers. `sanitizeMathHtml` protects bare `<` inside maths
+   (`$x < y$`) from being parsed as a tag; it is not a sanitizer for untrusted input.
+4. **Concept references linkify automatically.** `<code>c.X.Y</code>` or `$c.X.Y$` in any
+   prose field resolves through `Pool.concept(id)` into a clickable `§X.Y Title` chip.
+   An id that does not resolve renders as a dead chip and reads as a bug.
+5. **Figures are drawn by the app, never supplied as images.** `figs: ['fig.eps-delta']`
+   must name an id in `fig.library.js`. A concept needing a new picture needs a new
+   figure built, not a PNG in `diagrams/`.
+6. **`needs` is navigation, not bookkeeping.** The note view walks the chain three deep
+   and inverts it into "used later by", so a sloppy prerequisite produces a misleading
+   map rather than a missing link.
+7. **Storage degrades, never breaks.** `core.store.js` falls back to memory when
+   `localStorage` is unavailable, so a locked-down or private-mode browser gets a
+   working-but-forgetful session.
+8. **The reel is ONE scroller.** `.reel-card` must never be `overflow-y: auto`: a snap
+   container whose cards are themselves scrollable traps the gesture, and
+   `overscroll-behavior: contain` then refuses to chain it back out. Snap is
+   `proximity`, never `mandatory` — `mandatory` makes everything between two snap points
+   unreachable the moment a card is taller than the viewport.
+9. **`.reel` is `position: relative`, and that is load-bearing.** It makes the reel the
+   `offsetParent` of its cards, so `card.offsetTop` is in the same coordinate system as
+   `reel.scrollTop`. Never navigate the reel by `index × clientHeight`.
+10. **No `transform` on a snap child.** The browser snaps to the *transformed* box, so a
+   decorative `scale()` on the dim state silently moves every snap point. The reel's
+   settle effect is opacity only.
+
+### What Level 1 actually shipped
+
+- theorem-statement flashcards as a vertical reel (`view.recall.js`), `state` cards only,
+  nothing revealed before an attempt, first grade is the one recorded;
+- OMR-first objective questions with per-type scoring — MCQ single key, MSQ exact set
+  (a clean subset is reported as partial and earns nothing), NAT value/tolerance — plus
+  negative marking, timing, the worked answer, the tested idea, the trap, and the twist;
+- the MathJax theorem-writing workspace with the contextual LaTeX palette;
+- the tick tree over the whole syllabus, completion labelled "encountered the material";
+- Today, keeping completion and recall apart rather than merging them into one figure;
+- the figure engine, including the two controllable ε–δ and uniform-continuity figures;
+- proof support ahead of schedule (see below).
+
+### Proof support
+
+`proofView` in `view.note.js` gives every theorem two gated controls:
+
+- **💡 Try proof (hint)** — reveals `proof.idea`, `proof.why`, and the Step 1 clue
+  (`proof.rungs[0].why`) beside a scratchpad textarea;
+- **👁 Show step-by-step proof** — reveals all rungs and `proof.ends`.
+
+Written questions (`writtenOn`) carry the same pair over `approach` and `solution`.
+
+At Level 2 both gain a third control, **"I worked this proof through"**, which is the
+only thing that earns mastery level 2 (see below).
+
+One gap remains, and it is real: the rungs reveal as one block rather than one at a time
+with a prompt at each rung. Until that lands, do not describe the reveal itself as
+satisfying "generation before reveal" — the *mark* is the evidence, and it is
+self-reported.
+
+## Level 2 — what it is, and what it deliberately is not
+
+Level 2 adds **one** rung to the ladder and one new kind of evidence for it. It is not
+the scheduler, and it is not levels 3–5.
+
+### The level gate
+
+The app opens at Level 1 for everyone and stays there. Level 2 has to be **unlocked**
+before it can be selected, by either route:
+
+- **earned** — a whole non-`pending` course is ticked at Level 1. `boot.js` checks this
+  once on the way in (`earnedUnlock`) so "earned" cannot mean something slightly
+  different on each screen;
+- **taken** — the learner turns it on in the level card on Today.
+
+Unlocking is not promotion. Both routes make the Level 2 switch *available*; moving to
+Level 2 is always a deliberate click. Locking it again hides the Level 2 surfaces and
+**keeps every record** — nothing recorded is ever destroyed by a level change.
+
+At Level 1 the Level 2 surfaces do not exist: `proofDoneRow` returns `null`, the Proofs
+tile is absent from Today, and the loop has three steps instead of four.
+
+### Proof work is the level 2 evidence
+
+`Store.setProofDone(id, on)`, keyed on a concept id, or `'w:' + questionId` for a
+written question. The denominator is `Pool.ids.proofs(courseId)` — **the concepts that
+carry a `proof` block**, not every note, because a chapter is not "recognised" because
+one theorem in it was worked through.
+
+It is self-reported, like the Level 1 tick, and the label says exactly what is being
+claimed — *"Claim this only if you produced the argument yourself, not if you read it"* —
+because a mark that can be earned by scrolling is not evidence of anything.
+
+### The prerequisite cascade
+
+Ticking a concept offers to tick its untticked prerequisites too. `UI.pendingPrereqs(id)`
+is the single definition of what that would do; the note view asks inline with every
+name listed, and the syllabus tree asks with a confirm. It is **offered, never
+automatic**, and the list is always shown — a cascade the learner cannot see is one they
+cannot trust.
+
+### Sync
+
+`core.sync.js`: Firebase RTDB over plain REST, no SDK. The key is `slug(name) + '--' +
+slug(roll)`. The separator is `--` and not `.` because an RTDB key may not contain
+`.`, `$`, `#`, `[`, `]` or `/`.
+
+It is a **pass key, not a password**, and the UI says so rather than implying a login.
+
+Every sync **merges before it writes** (`Store.mergeStates`), and the merge rules come
+from what each field means rather than from one "newest wins":
+
+- a **tick is a decision** — the later one survives, with tombstones (`undone`,
+  `unproofs`) so an un-tick on one device is not resurrected by the other;
+- a **first attempt is a measurement** — the *earliest* one survives, on either device;
+- `merge(a,b) == merge(b,a)`, and merging twice changes nothing. Both laws are asserted
+  in the driver tests; break either and a reconnect can silently lose a week.
+
+`Store` state is versioned (`v: 2`) and v1 records upgrade in place.
+
+## Still not built
+
+The scheduler, mastery levels 3–5, the per-rung proof ladder, exam-track weighting,
+question generators, and the entrance course content. Do not build speculative
+infrastructure for them ahead of the review gate.
+
+## Publishing
+
+Two pages, same code, different pools:
+
+| URL | pool | built by | published by |
+| --- | --- | --- | --- |
+| `/math/real-analysis` | `data/` | `python3 build.py` | **AGY** |
+| `/math/real-analysis-test` | `app/mock/` | `python3 build.py --mock` | Claude |
+
+`deploy.sh` refreshes the test page and republishes the **committed**
+`build/index.html` for the live one; `deploy.sh --live` rebuilds the live page from
+`data/` and is AGY's command. Claude ships app changes to the test page and does not
+publish the live one — a Hosting deploy replaces the whole site, so that separation is
+what keeps unvalidated content off the real URL. `build/index.html` is committed on
+purpose: it is the record of what is actually live.
+
+`app/mock/` is therefore permanent. Its theorems carry real `proof` blocks so Level 2
+has something to be claimed against.
 
 ## Review gates
 
-After Level 1 is usable, stop implementation and let the user review it in practice.
-Collect concrete feedback about clarity, friction, rendering, question flow, mobile
-layout, and whether the study session feels useful. Fix Level 1 before starting Level 2.
+Level 1 is usable, loaded with validated RA1 content, and deployed. Level 2 is built and
+running on the test page. Both gates are **open and waiting**: collect concrete feedback
+about clarity, friction, rendering, question flow, mobile layout, and whether the study
+session feels useful, then fix before going further.
 
 The staged plan is:
 
@@ -145,5 +322,59 @@ Level 1 → user review → Level 1 fixes
 → Level 3 exam tracks, generators, entrance content, sync, and polish
 ```
 
-Keep each level a complete, usable slice. Do not build speculative infrastructure until
-the preceding review gate passes.
+Keep each level a complete, usable slice.
+
+---
+
+## Implementation log
+
+### September 2026
+
+1. **Live data cutover.** `app/sources.js` flipped from `use: 'mock'` to `use: 'live'`
+   across twelve `data/` files. `build.py` now reads that same `live` array so the built
+   page and the dev page always carry the same content set.
+2. **Try proof (hint) and the scratchpad.** Dual gated controls added to theorem proofs
+   and to written questions in `view.note.js`, with `.proof-scratchpad` styling in
+   `ui.css`. Hint-first, solution-second; still block-reveal, still unpersisted.
+3. **Automatic concept linkification.** `linkifyConcepts` in `core.dom.js`, hooked into
+   `DOM.el`'s `{ html: v }` path, turns `c.X.Y` / `s.name` references in any authored
+   prose into `.concept-ref` chips carrying the section number, the title, and a
+   tooltip, routing to `#/note/<id>` on click.
+4. **DOM and runtime robustness.** `sanitizeMathHtml` stops a bare `<` in an inequality
+   from truncating an element; a temporal-dead-zone bug in `core.store.js` was fixed so
+   the private-browsing fallback initialises in the right order.
+5. **RA1 content integration.** Modules II–IV audited with AGY: statements, proofs,
+   traps and `state` cards filled in for §3.1–§3.5 and §4.1–§4.3, and unclosed LaTeX
+   delimiters repaired across the data files.
+6. **Deployment.** `build.py` → `build/index.html` → Firebase Hosting at
+   `https://ssc-data-science-qm.web.app/math/real-analysis`.
+
+### Level 2
+
+7. **Level gating.** `Store.level()` / `setLevel()` / `unlocked()` / `unlock()`, default
+   Level 1. Earned at boot by finishing a course, or taken in the level card on Today.
+   Unlock ≠ promotion; locking again keeps every record.
+8. **Proof work.** `Store.setProofDone`, `Pool.ids.proofs()`, the "I worked this proof
+   through" control on every proof and written answer, a Proofs tile and a fourth loop
+   step on Today. Level 2 is counted per proof.
+9. **The prerequisite cascade.** `UI.pendingPrereqs` plus an inline offer in the note
+   view and a confirm in the tree. Offered, never automatic, always itemised.
+   `Store.setDoneMany` makes a bulk tick one write instead of N.
+10. **The writing workspace, rebuilt.** One line at a time, each line's rendering
+   directly above its input; Enter settles the line and opens the next; settled lines
+   reopen on tap and are cached by source text. Markdown with `$…$`/`$$…$$` via
+   `core.md.js`; a delimiter-free line in a maths-first box is bare display LaTeX.
+   The key sheet is gone: commands are completions in a thumb-high strip
+   (`Latex.tokenAt/complete/suggestions/accept`), tap or Tab to accept.
+11. **Sync.** `core.sync.js` — RTDB over REST, name + roll as the pass key, merge before
+   every write, auto-push debounced and auto-pull on focus and on `online`.
+   `Store.mergeStates` is commutative and idempotent.
+12. **The reel actually scrolls.** Removed the nested scroller and `mandatory` snap, made
+   `.reel` the offsetParent, navigated by `offsetTop`, dropped the `scale()` that was
+   shifting snap points, and replaced the IntersectionObserver ratio test with one based
+   on viewport coverage so a card taller than the screen is no longer dimmed forever.
+13. **Build and deploy.** `build.py --mock` → `build/test/index.html`; the script order
+   is now read out of `app/index.html` instead of a hand-kept copy that had already
+   drifted. `deploy.sh` publishes `/math/real-analysis-test`; `--live` is AGY's flag.
+14. **`create_level1.md`.** The full recipe for rebuilding this system for any subject
+   from a syllabus and reference books, up to Level 1.

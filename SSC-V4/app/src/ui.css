@@ -157,7 +157,6 @@ main{ display:block; }
 @keyframes sweepIn{ from{ clip-path:inset(0 100% 0 0) } to{ clip-path:inset(0) } }
 @keyframes drawIn{ from{ stroke-dashoffset:var(--len,600) } to{ stroke-dashoffset:0 } }
 @keyframes glow{ 0%,100%{ opacity:.35 } 50%{ opacity:1 } }
-@keyframes sheetUp{ from{ transform:translateY(102%) } to{ transform:none } }
 
 .view-in{ animation:rise var(--dur) var(--ease) both; }
 .stagger>*{ animation:rise .42s var(--ease) both; animation-delay:calc(var(--i,0)*45ms); }
@@ -373,27 +372,41 @@ mjx-container{ max-width:100%; }
 .crow.done .tt b{ color:var(--ink-2); }
 
 /* ── recall reel ─────────────────────────────────────────────────────────── */
+/* ONE scroller, and only one. A snap container whose cards are themselves
+   scrollable traps the gesture: the inner scroller eats the touch and
+   `overscroll-behavior:contain` then refuses to chain it back out, so a card
+   taller than the screen becomes a dead end. Cards grow instead, the reel
+   scrolls, and snapping is `proximity` — `mandatory` makes everything between
+   two snap points unreachable the moment a card is taller than the viewport. */
 .reel{
+  /* `position:relative` is load-bearing, not decoration: it makes the reel the
+     offsetParent of its cards, so card.offsetTop is in the SAME coordinate
+     system as reel.scrollTop. Without it the cards measure from .wrap, which
+     carries the view-in animation — and every jump lands a few pixels out,
+     by a margin that changes while the view animates in. */
+  position:relative;
   height:calc(100dvh - var(--head-h) - var(--tab-h) - env(safe-area-inset-bottom,0px));
-  overflow-y:auto; overscroll-behavior-y:contain;
-  scroll-snap-type:y mandatory; scroll-behavior:smooth;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  scroll-snap-type:y proximity; scroll-behavior:smooth;
   scrollbar-width:none;
 }
 .reel::-webkit-scrollbar{ display:none; }
 @media (min-width:880px){ .reel{ height:calc(100dvh - var(--head-h) - var(--tab-h)); } }
 .reel-card{
-  min-height:100%; scroll-snap-align:start; scroll-snap-stop:always;
-  display:flex; flex-direction:column; padding:16px 14px 30px; position:relative;
-  overflow-y:auto; overscroll-behavior-y:contain;
-  transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-  opacity:.4; transform:scale(.975);
+  min-height:100%; height:auto; scroll-snap-align:start; scroll-snap-stop:normal;
+  display:flex; flex-direction:column; padding:16px 14px 46px; position:relative;
+  /* Opacity only. A `transform: scale()` on the settle effect moved each card's
+     snap point by a few pixels — the browser snaps to the TRANSFORMED box — so
+     every jump landed just past its target and left the card sitting high. */
+  transition:opacity var(--dur) var(--ease);
+  opacity:.45;
 }
-.reel-card.live{ opacity:1; transform:none; }
+.reel-card.live{ opacity:1; }
 /* auto margins centre the card without clipping tall content the way
    justify-content:center would inside a scroller */
 .reel-card>.inner{ width:100%; max-width:640px; margin:auto; display:flex;
   flex-direction:column; gap:14px; }
-.reel-hint{ position:absolute; left:0; right:0; bottom:8px; text-align:center;
+.reel-hint{ position:absolute; left:0; right:0; bottom:14px; text-align:center;
   font-size:.7rem; color:var(--ink-3); pointer-events:none; }
 .reel-hint span{ display:inline-block; animation:glow 2.6s ease-in-out infinite; }
 .reel-rail{ position:fixed; right:6px; top:calc(var(--head-h) + 18px); z-index:20;
@@ -490,49 +503,95 @@ mjx-container{ max-width:100%; }
   background:var(--surface-2); }
 
 /* ── write workspace ─────────────────────────────────────────────────────── */
-.tex-in{ width:100%; min-height:112px; resize:vertical; padding:12px 13px;
-  font:400 .95rem/1.6 var(--font-mono); color:var(--ink);
-  background:var(--paper); border:1px solid var(--rule-2); border-radius:var(--r-m);
-  transition:border-color var(--dur-s), box-shadow var(--dur-s); }
-.tex-in:focus{ border-color:var(--accent); outline:none;
+/* ── the writing workspace ───────────────────────────────────────────────── */
+/* A document that fills downward: each line's rendering sits directly above
+   it, and the one live input is always at the bottom of the stack. */
+.wbox{ --w-rail:26px; }
+.wdoc{ display:flex; flex-direction:column; gap:2px; }
+.wline{
+  display:flex; gap:8px; align-items:flex-start; padding:4px 6px 4px 0;
+  border-radius:var(--r-s); transition:background var(--dur-s);
+}
+.wline[role=button]{ cursor:text; }
+.wline[role=button]:hover{ background:var(--surface-2); }
+.wline.live{ background:var(--accent-soft); }
+.wnum{
+  flex:0 0 var(--w-rail); text-align:right; padding-top:3px;
+  font:500 .66rem/1.5 var(--font-ui); color:var(--ink-3); font-variant-numeric:tabular-nums;
+  user-select:none;
+}
+.wout{ flex:1 1 auto; min-width:0; overflow-x:auto; overflow-y:hidden; }
+.wout .ph{ color:var(--ink-3); font-size:.8rem; }
+.wout mjx-container{ margin:.15em 0 !important; }
+.wout mjx-container[display=true]{ text-align:left !important; margin:.2em 0 !important; }
+.wout .prose{ font-size:.96rem; }
+.wout .md-p,.wout .md-l,.wout .md-q{ margin:0; }
+.wout .md-h{ margin:.1em 0; }
+.wout .md-l{ padding-left:1.1em; }
+.wout .md-q{ border-left:2px solid var(--accent-line); padding-left:10px; color:var(--ink-2); }
+
+.winput{
+  display:flex; align-items:center; gap:6px; margin:2px 0 0;
+  padding:0 6px 0 calc(var(--w-rail) - 12px);
+}
+.wcaret{ flex:0 0 12px; color:var(--accent); font-weight:600; }
+.wfield{
+  flex:1 1 auto; min-width:0; padding:11px 12px;
+  border:1px solid var(--accent-line); border-radius:var(--r-m);
+  background:var(--surface); color:var(--ink);
+  font:400 .95rem/1.5 var(--font-mono,ui-monospace,SFMono-Regular,Menlo,monospace);
+}
+.wfield:focus{ outline:none; border-color:var(--accent);
   box-shadow:0 0 0 3px var(--accent-soft); }
+.wkey{
+  flex:0 0 auto; width:38px; height:38px; border-radius:var(--r-s);
+  border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2);
+  cursor:pointer; font-size:1rem; display:inline-flex; align-items:center;
+  justify-content:center; transition:transform var(--dur-s) var(--spring);
+}
+.wkey:active{ transform:scale(.9); }
+
+/* Completions, thumb-high: a single scrolling strip immediately under the
+   input rather than a sheet that covers it. */
+.wstrip{
+  display:flex; gap:6px; align-items:center; overflow-x:auto; padding:2px 0 4px;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.wstrip::-webkit-scrollbar{ display:none; }
+.wstrip-l{
+  flex:0 0 auto; font:500 .64rem/1 var(--font-mono,ui-monospace,monospace);
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3);
+  padding-right:4px; border-right:1px solid var(--rule); margin-right:2px;
+}
+.wsug{
+  flex:0 0 auto; display:inline-flex; flex-direction:column; align-items:center;
+  gap:1px; min-width:46px; padding:6px 9px; cursor:pointer;
+  border:1px solid var(--rule); border-radius:var(--r-s); background:var(--surface);
+  transition:transform var(--dur-s) var(--spring), border-color var(--dur-s);
+}
+.wsug:active{ transform:scale(.9); }
+.wsug.on{ border-color:var(--accent); background:var(--accent-soft); }
+.wsug .s{ font-size:1.02rem; line-height:1.1; font-family:var(--font-prose); }
+.wsug .c{ font:400 .58rem/1 var(--font-mono,ui-monospace,monospace); color:var(--ink-3);
+  max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
 .tex-out{ min-height:66px; padding:14px; border-radius:var(--r-m);
-  background:var(--surface-2); border:1px solid var(--rule);
-  font-family:var(--font-prose); overflow-x:auto; }
+  border:1px solid var(--rule); background:var(--surface-2); overflow-x:auto; }
 .tex-out .ph{ color:var(--ink-3); font-size:.9rem; font-family:var(--font-ui); }
 .tex-err{ display:flex; gap:8px; align-items:flex-start; font-size:.8rem; color:var(--warn);
-  background:var(--warn-soft); border:1px solid var(--warn-line); border-radius:var(--r-s);
-  padding:9px 11px; animation:rise .3s var(--ease) both; }
+  margin-top:8px; line-height:1.45; }
 
-/* palette: inline panel on wide screens, bottom sheet on a phone */
-.sheet{ border:1px solid var(--accent-line); border-radius:var(--r-m);
-  background:var(--surface); padding:12px; }
-.sheet .g+.g{ margin-top:12px; }
-.sheet .gl{ font-size:.68rem; text-transform:uppercase; letter-spacing:.08em;
-  color:var(--ink-3); margin-bottom:6px; }
-.keys{ display:flex; flex-wrap:wrap; gap:6px; }
-.key{ display:inline-flex; flex-direction:column; align-items:center; gap:1px;
-  min-width:46px; min-height:44px; padding:5px 9px; cursor:pointer;
-  border:1px solid var(--rule); border-radius:var(--r-s); background:var(--surface-2);
-  transition:transform var(--dur-s) var(--spring), background var(--dur-s),
-    border-color var(--dur-s); }
-.key:hover{ border-color:var(--accent-line); background:var(--accent-soft); }
-.key:active{ transform:scale(.9); }
-.key .s{ font-size:1.02rem; line-height:1.1; font-family:var(--font-prose); }
-.key .c{ font-size:.57rem; color:var(--ink-3); font-family:var(--font-mono); }
-@media (max-width:639px){
-  .sheet.as-sheet{
-    position:fixed; left:0; right:0; bottom:0; z-index:50; max-height:62vh; overflow-y:auto;
-    border-radius:var(--r-l) var(--r-l) 0 0; border:1px solid var(--glass-line);
-    border-bottom:0; padding:14px 14px calc(18px + env(safe-area-inset-bottom,0px));
-    background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
-    box-shadow:var(--shadow-2); animation:sheetUp var(--dur) var(--ease) both;
-  }
-  .sheet-grab{ width:38px; height:4px; border-radius:99px; background:var(--rule-2);
-    margin:0 auto 10px; }
+/* text inputs outside the workspace (the sync pass key) */
+.tin{
+  flex:1 1 140px; min-width:0; padding:10px 12px; border-radius:var(--r-m);
+  border:1px solid var(--rule); background:var(--surface); color:var(--ink);
+  font:400 .92rem/1.4 var(--font-ui);
 }
-.sheet-grab{ display:none; }
-@media (max-width:639px){ .sheet.as-sheet .sheet-grab{ display:block; } }
+.tin:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+
+/* the inline "tick its groundwork too?" question, and the level 2 mark */
+.ask{ margin-top:12px; animation:rise var(--dur) var(--ease) both; }
+.proof-done{ border-top:1px solid var(--rule); padding-top:12px; }
 
 /* ── lists ───────────────────────────────────────────────────────────────── */
 .list{ display:flex; flex-direction:column; border:1px solid var(--rule);

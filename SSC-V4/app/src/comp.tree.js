@@ -71,11 +71,32 @@ const Tree = (function () {
 
   /* ── levels ───────────────────────────────────────────────────────────── */
 
+  /* The same offer the note view makes, in the form a list row can carry:
+     ticking a result usually means its groundwork is already behind you, but
+     "usually" is not "always", so it is asked rather than assumed. */
+  function offerCascade(c) {
+    const pending = UI.pendingPrereqs(c.id);
+    if (!pending.length) return;
+    const names = pending.slice(0, 5).map(x => '· ' + x.title).join('\n') +
+      (pending.length > 5 ? '\n· and ' + (pending.length - 5) + ' more' : '');
+    const ask = pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
+      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'is', 'are') +
+      ' not ticked yet:\n\n' + names + '\n\nTick them as completed too?';
+    if (!window.confirm(ask)) return;
+    const hit = Store.setDoneMany(pending.map(x => x.id), true);
+    DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+  }
+
   function conceptRow(c, repaint) {
     const done = Store.isDone(c.id);
     const row = el('div', { class: 'crow' + (done ? ' done' : '') }, [
       tickButton(String(done), (done ? 'Unmark' : 'Mark') + ' "' + c.title + '" completed',
-        function () { Store.setDone(c.id, !Store.isDone(c.id)); repaint(); }),
+        function () {
+          const on = !Store.isDone(c.id);
+          Store.setDone(c.id, on);
+          if (on) offerCascade(c);
+          repaint();
+        }),
       el('a', { href: Router.href('note/' + c.id) }, [
         el('span', { class: 'tt' }, [
           el('b', { text: c.title }),
@@ -104,7 +125,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
           function () {
             const all = done === ids.length;
-            ids.forEach(id => Store.setDone(id, !all));
+            Store.setDoneMany(ids, !all);
             DOM.announce(all ? 'Section cleared.' : 'Section ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -137,7 +158,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
           function () {
             const all = done === ids.length;
-            ids.forEach(id => Store.setDone(id, !all));
+            Store.setDoneMany(ids, !all);
             DOM.announce(all ? 'Module cleared.' : 'Module ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -206,7 +227,7 @@ const Tree = (function () {
           : tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of ' + course.title,
               function () {
                 const all = done === ids.length;
-                ids.forEach(id => Store.setDone(id, !all));
+                Store.setDoneMany(ids, !all);
                 DOM.announce(all ? 'Course cleared.' : 'Course ticked — ' + ids.length + ' notes.');
                 repaint();
               }),

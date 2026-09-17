@@ -145,12 +145,31 @@ const App = (function () {
     ]), wrap.firstChild);
   }
 
+  /* Finishing a whole course at Level 1 earns the Level 2 switch. Checked in
+     one place, once, on the way in — so "earned" cannot mean something
+     slightly different on each screen. It unlocks the switch; it does NOT
+     move anyone to Level 2, because a promotion nobody asked for is exactly
+     what the mastery rules are there to prevent. */
+  function earnedUnlock() {
+    if (Store.unlocked()) return;
+    const earned = Pool.courses().some(function (course) {
+      if (course.pending) return false;
+      const ids = Pool.ids.concepts(course.id);
+      return ids.length > 0 && ids.every(Store.isDone);
+    });
+    if (earned) Store.unlock(true);
+  }
+
   function start() {
     Theme.apply();
     buildNav();
 
     loadData().then(function () {
       Pool.build();
+      earnedUnlock();
+      /* Sync starts after the pool: a merge can change what is on screen, and
+         it reloads the current route when it does. */
+      Sync.start();
       Router.start(route);
 
       /* MathJax arrives on its own schedule; typeset whatever is on screen

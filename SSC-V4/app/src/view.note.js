@@ -194,7 +194,41 @@ const ViewNote = (function () {
         showBtn
       ]),
       tryHost,
-      proofHost
+      proofHost,
+      proofDoneRow(c.id, 'proof')
+    ]);
+  }
+
+  /* ── Level 2: proof work, marked per task ─────────────────────────────────
+     This is the only thing that earns level 2, and it is earned per proof
+     rather than per note — a chapter is not "recognised" because one theorem
+     in it was worked through. Like the level 1 tick it is self-reported, but
+     it reports a much harder act, and the label says exactly what is being
+     claimed so it cannot be ticked absent-mindedly. */
+  function proofDoneRow(id, what) {
+    if (Store.level() !== 2) return null;
+
+    const btn = el('button', { class: 'btn', type: 'button' });
+    const note = el('span', { class: 'small muted' });
+    function paint() {
+      const on = Store.isProofDone(id);
+      btn.className = 'btn' + (on ? '' : ' primary');
+      btn.textContent = on ? '✓ Proof worked through — undo' : 'I worked this ' + what + ' through';
+      btn.setAttribute('aria-pressed', String(on));
+      note.textContent = on
+        ? 'Level 2 on this ' + what + '.'
+        : 'Claim this only if you produced the argument yourself, not if you read it.';
+    }
+    btn.addEventListener('click', function () {
+      const on = Store.setProofDone(id, !Store.isProofDone(id));
+      paint();
+      DOM.announce(on ? 'Marked as worked through.' : 'Level 2 mark removed.');
+    });
+    paint();
+
+    return el('div', { class: 'proof-done', style: { marginTop: '14px' } }, [
+      el('div', { class: 'btn-row' }, [btn]),
+      el('p', { class: 'small muted', style: { margin: '8px 0 0' } }, [note])
     ]);
   }
 
@@ -336,7 +370,8 @@ const ViewNote = (function () {
             showBtn
           ]),
           tryHost,
-          answerHost
+          answerHost,
+          proofDoneRow('w:' + q.id, 'answer')
         ]);
       }))
     ]);
@@ -359,17 +394,60 @@ const ViewNote = (function () {
     /* completion toggle */
     const doneBtn = el('button', { class: 'btn', type: 'button' });
     const ladderHost = el('div', {});
+    const askHost = el('div', {});
+
     function paintDone() {
       const on = Store.isDone(c.id);
       doneBtn.className = 'btn' + (on ? '' : ' primary');
       doneBtn.textContent = on ? '✓ Ticked — undo' : 'Tick as completed';
       doneBtn.setAttribute('aria-pressed', String(on));
-      DOM.clear(ladderHost).appendChild(UI.ladder(on));
+      DOM.clear(ladderHost).appendChild(
+        UI.ladder(on, Store.isProofDone(c.id), !!c.proof));
     }
+
+    /* Ticking a result you have just read usually means you already have the
+       groundwork under it — but "usually" is not "always", so it is offered as
+       a question rather than done silently. Everything the chain reaches is
+       listed, because a cascade the learner cannot see is a cascade they
+       cannot trust. */
+    function offerCascade() {
+      const pending = UI.pendingPrereqs(c.id);
+      DOM.clear(askHost);
+      if (!pending.length) return;
+
+      const list = el('div', { class: 'row', style: { marginTop: '2px' } },
+        pending.slice(0, 8).map(x => el('span', { class: 'chip', text: x.title })));
+      if (pending.length > 8) {
+        list.appendChild(el('span', { class: 'count',
+          text: '+' + (pending.length - 8) + ' more' }));
+      }
+
+      askHost.appendChild(UI.ask({
+        title: 'Tick its groundwork too?',
+        body: el('div', {}, [
+          el('p', { style: { margin: '0 0 8px' },
+            text: pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
+              ' of this result ' + DOM.plural(pending.length, 'is', 'are') +
+              ' not ticked yet. Tick them as completed as well?' }),
+          list
+        ]),
+        actions: [
+          { label: 'Yes, tick all ' + pending.length, primary: true, onClick: function () {
+              const hit = Store.setDoneMany(pending.map(x => x.id), true);
+              DOM.clear(askHost);
+              DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+              Router.reload();
+            } },
+          { label: 'No, just this one', onClick: function () { DOM.clear(askHost); } }
+        ]
+      }));
+    }
+
     doneBtn.addEventListener('click', function () {
       const on = Store.setDone(c.id, !Store.isDone(c.id));
       paintDone();
       DOM.announce(on ? 'Ticked as completed.' : 'Tick removed.');
+      if (on) offerCascade(); else DOM.clear(askHost);
     });
     paintDone();
 
@@ -383,7 +461,9 @@ const ViewNote = (function () {
 
       el('div', {}, [
         el('div', { class: 'row', style: { marginBottom: '8px' } }, [
-          UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id)
+          UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
+          (Store.level() === 2 && Store.isProofDone(c.id))
+            ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
         ]),
         UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
@@ -420,7 +500,8 @@ const ViewNote = (function () {
           Pool.objectiveFor(c.id).length
             ? el('a', { class: 'btn', href: Router.href('omr?sec=' + c.sec), text: 'Questions' })
             : null
-        ])
+        ]),
+        askHost
       ]),
 
       unlocks(c),

@@ -8,6 +8,8 @@
    Node shape (the app reads exactly these fields):
      id sec kind tier title oneLine statement intuition needs[] traps[] cards[]
      cards: { q, a, kind }  with kind 'state' feeding the recall deck
+     proof: { idea, why, rungs:[{why,m}], ends }  on every theorem, so the
+            Level 2 proof-work mark has something real to be claimed against
    ══════════════════════════════════════════════════════════════════════════ */
 
 CONCEPTS.push(
@@ -65,6 +67,28 @@ CONCEPTS.push(
       `Boundedness above is essential. $\\mathbb{N}$ has no supremum in $\\mathbb{R}$; the property
        says nothing about unbounded sets.`
     ],
+    proof: {
+      idea: `<p>Part (a) is <b>not</b> proved: the Supremum Property is an <i>axiom</i> of
+        $\\mathbb{R}$ — it is what we mean by calling $\\mathbb{R}$ complete. What does need an
+        argument is the dual statement about infima, and the trick is to reflect the set through
+        the origin and let (a) do the work.</p>`,
+      why: `<p>Reflection turns lower bounds into upper bounds and reverses every inequality,
+        so a least upper bound for $-S$ is forced to be a greatest lower bound for $S$. You will
+        use this reflection again and again; it is the cheapest way to halve the work on any
+        sup/inf result.</p>`,
+      rungs: [
+        { why: 'Set up the reflected set and record that it inherits the hypothesis.',
+          m: `$$ -S=\\{-s: s\\in S\\},\\qquad S\\neq\\emptyset \\implies -S\\neq\\emptyset. $$` },
+        { why: 'A lower bound for $S$ becomes an upper bound for $-S$, so $-S$ is bounded above and (a) applies.',
+          m: `$$ t\\le s\\ \\ \\forall s\\in S \\iff -s\\le -t\\ \\ \\forall s\\in S. $$` },
+        { why: 'Apply the axiom to $-S$ and name the supremum it produces.',
+          m: `$$ u=\\sup(-S)\\ \\text{ exists in }\\mathbb{R}. $$` },
+        { why: 'Reflect back. The two supremum conditions on $u$ become exactly the two infimum conditions on $-u$.',
+          m: `$$ -u\\le s\\ \\ \\forall s\\in S,\\qquad t\\le -u\\ \\text{ for every lower bound } t. $$` }
+      ],
+      ends: `<p>Hence $\\inf S=-\\sup(-S)$, which both proves the dual statement and gives a
+        formula worth remembering.</p>`
+    },
     cards: [
       { kind: 'state', q: 'State the Completeness Property of $\\mathbb{R}$.',
         a: 'Every nonempty subset of $\\mathbb{R}$ that is bounded above has a supremum in $\\mathbb{R}$.' },
@@ -90,6 +114,29 @@ CONCEPTS.push(
       `It is not an equivalence. An unbounded sequence can still have a convergent subsequence —
        for instance $1,1,2,1,3,1,4,\\ldots$`
     ],
+    proof: {
+      idea: `<p>Trap the sequence. Halve the interval that contains it, keep whichever half still
+        holds infinitely many terms, and repeat forever. The nested intervals shrink to a single
+        point, and a subsequence can be chosen marching into them.</p>`,
+      why: `<p>Bisection converts "bounded" into "convergent" because the two halves cannot
+        <i>both</i> contain only finitely many terms — there are infinitely many terms to house.
+        That pigeonhole step is the whole engine; completeness (through the Nested Interval
+        Property) supplies the point at the end.</p>`,
+      rungs: [
+        { why: 'Boundedness gives a first interval containing every term.',
+          m: `$$ |x_{n}|\\le M\\ \\ \\forall n \\implies x_{n}\\in I_{1}=[-M,M]. $$` },
+        { why: 'Bisect, and keep a half holding infinitely many terms — at least one always does.',
+          m: `$$ I_{k}\\supseteq I_{k+1},\\qquad \\text{length}(I_{k})=\\frac{2M}{2^{\\,k-1}}. $$` },
+        { why: 'The nested intervals have exactly one common point, because their lengths go to zero.',
+          m: `$$ \\bigcap_{k=1}^{\\infty} I_{k}=\\{x\\}. $$` },
+        { why: 'Choose indices in order, one from each interval — possible precisely because each $I_k$ holds infinitely many terms.',
+          m: `$$ n_{1}<n_{2}<\\cdots,\\qquad x_{n_{k}}\\in I_{k}. $$` },
+        { why: 'Both $x_{n_k}$ and $x$ lie in $I_k$, so their distance is at most its length.',
+          m: `$$ |x_{n_{k}}-x|\\le \\frac{2M}{2^{\\,k-1}}\\longrightarrow 0. $$` }
+      ],
+      ends: `<p>So $x_{n_{k}}\\to x$: every bounded sequence has a convergent subsequence. Note
+        what is <i>not</i> claimed — the sequence itself need not converge.</p>`
+    },
     cards: [
       { kind: 'state', q: 'State the Bolzano–Weierstrass Theorem.',
         a: 'Every bounded sequence of real numbers has a convergent subsequence.' },
@@ -147,6 +194,29 @@ CONCEPTS.push(
       `The implication is not reversible in the other variable: $f(x_{n})\\to f(c)$ does not force
        $x_{n}\\to c$ (take $f$ constant).`
     ],
+    proof: {
+      idea: `<p>Two directions, and they are not equally hard. Forwards is a direct $\\varepsilon$–$\\delta$
+        chase. Backwards is a contrapositive: assume continuity fails, and <i>build</i> the sequence
+        that exposes the failure by taking $\\delta=1/n$.</p>`,
+      why: `<p>Whenever a criterion says "for every sequence", the useful direction is almost always
+        the contrapositive — one badly behaved sequence is far easier to construct than to rule out.
+        The construction $\\delta=1/n$ is the standard way to turn a failed $\\varepsilon$–$\\delta$
+        statement into a sequence.</p>`,
+      rungs: [
+        { why: '(⇒) Assume $f$ continuous at $c$ and take any sequence heading to $c$. Fix $\\varepsilon$ and get the matching $\\delta$.',
+          m: `$$ |x-c|<\\delta \\implies |f(x)-f(c)|<\\varepsilon. $$` },
+        { why: 'Convergence puts the tail of the sequence inside that $\\delta$, so the images sit inside $\\varepsilon$.',
+          m: `$$ \\exists K:\\ n\\ge K \\implies |x_{n}-c|<\\delta \\implies |f(x_{n})-f(c)|<\\varepsilon. $$` },
+        { why: '(⇐) Contrapositive. Suppose $f$ is NOT continuous at $c$: some $\\varepsilon_{0}$ defeats every $\\delta$.',
+          m: `$$ \\exists\\varepsilon_{0}>0\\ \\ \\forall\\delta>0\\ \\ \\exists x:\\ |x-c|<\\delta\\ \\text{ and }\\ |f(x)-f(c)|\\ge\\varepsilon_{0}. $$` },
+        { why: 'Run that with $\\delta=1/n$ to manufacture a sequence.',
+          m: `$$ |x_{n}-c|<\\tfrac1n,\\qquad |f(x_{n})-f(c)|\\ge\\varepsilon_{0}. $$` },
+        { why: 'The squeeze sends $x_n\\to c$, yet the images stay $\\varepsilon_0$ away — a sequence that violates the hypothesis.',
+          m: `$$ x_{n}\\to c\\quad\\text{but}\\quad f(x_{n})\\not\\to f(c). $$` }
+      ],
+      ends: `<p>That contradicts the assumed sequential condition, so $f$ must be continuous at
+        $c$. The same $\\delta=1/n$ construction proves the Divergence Criteria.</p>`
+    },
     cards: [
       { kind: 'state', q: 'State the Sequential Criterion for continuity at $c$.',
         a: '$f$ is continuous at $c$ iff for every sequence $(x_{n})$ in $A$ with $x_{n}\\to c$ we have $f(x_{n})\\to f(c)$.' },
@@ -176,6 +246,31 @@ CONCEPTS.push(
       `Continuity is required on the whole interval, not just at interior points.`,
       `The extreme points $x^{*},x_{*}$ need not be unique and need not be interior.`
     ],
+    proof: {
+      idea: `<p>Two claims in one theorem: $f$ is <b>bounded</b>, and the bound is <b>attained</b>.
+        Prove boundedness by contradiction, then get attainment by pushing a sequence at the
+        supremum and squeezing a convergent subsequence out of it with Bolzano–Weierstrass.</p>`,
+      why: `<p>Closed and bounded is exactly what B–W needs, and continuity is what lets a limit
+        pass through $f$. Remove either hypothesis and the proof collapses at a step you can point
+        to — which is why the standard counterexamples are $1/x$ on $(0,1]$ and $x$ on
+        $[0,\\infty)$.</p>`,
+      rungs: [
+        { why: 'Suppose $f$ were unbounded. Then some point overshoots every $n$.',
+          m: `$$ \\exists x_{n}\\in[a,b]:\\ |f(x_{n})|>n. $$` },
+        { why: 'The sequence lives in $[a,b]$, so B–W extracts a convergent subsequence — and the limit stays in $[a,b]$ because the interval is closed.',
+          m: `$$ x_{n_{k}}\\to x^{*}\\in[a,b]. $$` },
+        { why: 'Continuity makes $f(x_{n_k})$ converge, so it is bounded — contradicting $|f(x_{n_k})|>n_k$. Hence $f$ is bounded.',
+          m: `$$ f(x_{n_{k}})\\to f(x^{*})\\ \\text{ bounded},\\qquad\\text{contradiction.} $$` },
+        { why: 'Now let $s$ be the supremum of the range, and pick points climbing towards it.',
+          m: `$$ s=\\sup\\{f(x):x\\in[a,b]\\},\\qquad s-\\tfrac1n<f(y_{n})\\le s. $$` },
+        { why: 'B–W again on $(y_n)$, then continuity carries the limit inside $f$.',
+          m: `$$ y_{n_{k}}\\to y^{*}\\in[a,b],\\qquad f(y_{n_{k}})\\to f(y^{*}). $$` },
+        { why: 'The squeeze forces those images to $s$, so the supremum is a value of $f$.',
+          m: `$$ f(y^{*})=s=\\max_{[a,b]} f. $$` }
+      ],
+      ends: `<p>Apply the same argument to $-f$ for the minimum. Notice that boundedness had to be
+        established <i>first</i> — without it, $\\sup$ of the range need not exist.</p>`
+    },
     cards: [
       { kind: 'state', q: 'State the Maximum–Minimum Theorem.',
         a: 'If $f$ is continuous on a closed bounded interval $[a,b]$, then $f$ attains an absolute maximum and an absolute minimum at points of $[a,b]$.' },
@@ -205,6 +300,26 @@ CONCEPTS.push(
        $-1$ and $1$ but never $0$.`,
       `“At least one $c$”, not “exactly one”. Counting roots needs a monotonicity argument on top.`
     ],
+    proof: {
+      idea: `<p>Take the case $f(a)<k<f(b)$. Look at the set of points where $f$ is still below
+        $k$, and take its supremum: that is the last moment before the crossing. Then rule out
+        both $f(c)<k$ and $f(c)>k$ using continuity.</p>`,
+      why: `<p>The supremum is the natural candidate because it is the <i>first</i> point that
+        cannot be below $k$ any longer. Continuity is then used twice, once to push each strict
+        inequality into a neighbourhood — which is what makes both alternatives impossible.</p>`,
+      rungs: [
+        { why: 'Collect the points still below $k$; it is nonempty and bounded, so it has a supremum.',
+          m: `$$ S=\\{x\\in[a,b]: f(x)<k\\},\\qquad a\\in S,\\qquad c=\\sup S. $$` },
+        { why: 'Points of $S$ climb to $c$, so continuity forces $f(c)\\le k$.',
+          m: `$$ x_{n}\\in S,\\ x_{n}\\to c \\implies f(c)=\\lim f(x_{n})\\le k. $$` },
+        { why: 'Suppose $f(c)<k$. Continuity keeps $f$ below $k$ on a whole interval to the right of $c$ — so $c$ was not an upper bound of $S$ after all.',
+          m: `$$ \\exists\\delta>0:\\ f(x)<k \\ \\ \\forall x\\in(c,c+\\delta) \\implies c+\\tfrac{\\delta}{2}\\in S. $$` },
+        { why: 'That contradicts $c=\\sup S$, and the case $c=b$ is excluded because $f(b)>k$.',
+          m: `$$ \\text{contradiction} \\implies f(c)\\ge k. $$` }
+      ],
+      ends: `<p>Both inequalities hold, so $f(c)=k$. The case $f(b)<k<f(a)$ follows by applying
+        this to $-f$ and $-k$.</p>`
+    },
     cards: [
       { kind: 'state', q: "State Bolzano's Intermediate Value Theorem.",
         a: 'If $f$ is continuous on $[a,b]$ and $k$ lies strictly between $f(a)$ and $f(b)$, then $f(c)=k$ for some $c\\in(a,b)$.' },
@@ -268,6 +383,28 @@ CONCEPTS.push(
       `The conclusion is about the closed interval you started with; restricting to a subinterval is
        fine, enlarging it is not.`
     ],
+    proof: {
+      idea: `<p>By contradiction. If uniform continuity fails, one $\\varepsilon_{0}$ survives every
+        $\\delta$ — so take $\\delta=1/n$ and harvest <i>two</i> sequences that crowd together while
+        their images stay apart. Bolzano–Weierstrass then pins them to the same point, where
+        ordinary continuity is contradicted.</p>`,
+      why: `<p>Uniform continuity is continuity with the $\\delta$ chosen before the point. Its
+        negation therefore produces a pair of points, not one — and a pair is exactly what B–W can
+        drag to a common limit on a closed bounded interval. Drop closedness and the limit escapes
+        the interval, which is precisely how $1/x$ on $(0,1)$ evades the theorem.</p>`,
+      rungs: [
+        { why: 'Negate uniform continuity: some $\\varepsilon_0$ defeats every $\\delta$, so take $\\delta=1/n$.',
+          m: `$$ |u_{n}-v_{n}|<\\tfrac1n \\quad\\text{but}\\quad |f(u_{n})-f(v_{n})|\\ge\\varepsilon_{0}. $$` },
+        { why: '$(u_n)$ lives in $[a,b]$, so B–W gives a convergent subsequence with limit still inside.',
+          m: `$$ u_{n_{k}}\\to z\\in[a,b]. $$` },
+        { why: 'The partner sequence is dragged to the same limit, because the gap between them vanishes.',
+          m: `$$ |v_{n_{k}}-z|\\le|v_{n_{k}}-u_{n_{k}}|+|u_{n_{k}}-z|\\to 0. $$` },
+        { why: 'Continuity at $z$ sends both image sequences to $f(z)$, so their difference dies.',
+          m: `$$ |f(u_{n_{k}})-f(v_{n_{k}})|\\longrightarrow |f(z)-f(z)|=0. $$` }
+      ],
+      ends: `<p>But that difference was never allowed below $\\varepsilon_{0}$ — a contradiction.
+        So $f$ is uniformly continuous on $[a,b]$.</p>`
+    },
     cards: [
       { kind: 'state', q: 'State the Uniform Continuity Theorem.',
         a: 'If $f$ is continuous on a closed bounded interval $[a,b]$, then $f$ is uniformly continuous on $[a,b]$.' },
@@ -297,6 +434,28 @@ CONCEPTS.push(
        dropped inside: $f(x)=|x|$ on $[-1,1]$ has no point where $f'(c)=0$.`,
       `The point $c$ is neither unique nor computable in general; the theorem asserts existence.`
     ],
+    proof: {
+      idea: `<p>Tilt the picture. Subtract the chord from $f$; what is left has equal values at the
+        endpoints, so Rolle's Theorem applies, and Rolle's conclusion translates straight back into
+        the Mean Value Theorem.</p>`,
+      why: `<p>Rolle is the special case with a horizontal chord, and every proof of the MVT is
+        some version of "rotate until the chord is level". Building the auxiliary function
+        explicitly is worth the two lines — it is the step examiners look for.</p>`,
+      rungs: [
+        { why: 'Subtract the chord through the endpoints from $f$.',
+          m: `$$ \\varphi(x)=f(x)-f(a)-\\frac{f(b)-f(a)}{b-a}\\,(x-a). $$` },
+        { why: '$\\varphi$ inherits continuity on $[a,b]$ and differentiability on $(a,b)$, because the subtracted part is a polynomial.',
+          m: `$$ \\varphi\\in C[a,b],\\qquad \\varphi\\ \\text{differentiable on}\\ (a,b). $$` },
+        { why: 'Check the endpoints: both give zero, which is exactly Rolle\u2019s hypothesis.',
+          m: `$$ \\varphi(a)=0,\\qquad \\varphi(b)=f(b)-f(a)-\\big(f(b)-f(a)\\big)=0. $$` },
+        { why: 'Rolle supplies an interior point where the derivative vanishes.',
+          m: `$$ \\exists c\\in(a,b):\\ \\varphi'(c)=0. $$` },
+        { why: 'Differentiate the definition of $\\varphi$ and set it to zero at $c$.',
+          m: `$$ \\varphi'(x)=f'(x)-\\frac{f(b)-f(a)}{b-a}. $$` }
+      ],
+      ends: `<p>Therefore $f'(c)=\\dfrac{f(b)-f(a)}{b-a}$. Differentiability is required only on the
+        <i>open</i> interval, which is why the theorem still applies to $\\sqrt{x}$ on $[0,1]$.</p>`
+    },
     cards: [
       { kind: 'state', q: "State Lagrange's Mean Value Theorem.",
         a: 'If $f$ is continuous on $[a,b]$ and differentiable on $(a,b)$, then $f(b)-f(a)=f\'(c)(b-a)$ for some $c\\in(a,b)$.' },
