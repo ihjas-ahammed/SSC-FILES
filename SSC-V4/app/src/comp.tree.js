@@ -96,10 +96,11 @@ const Tree = (function () {
     const lvl = Progress.levelOf(c.id);
     const needsProof = lvl === 2 && Progress.hasProof(c.id);
 
+    const hasProof = Progress.hasProof(c.id);
     const label = st === 'none'
-      ? 'Mark "' + c.title + '" completed'
+      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' : 'Mark "' + c.title + '" completed (Levels 1 & 2)')
       : st === 'part'
-        ? 'Mark the proof of "' + c.title + '" as worked through'
+        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)'
         : 'Clear "' + c.title + '"';
 
     const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [

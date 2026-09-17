@@ -372,6 +372,16 @@ CONCEPTS.push(
       `Using a sequence that doesn't actually satisfy $x_n\\ne c$, or doesn't actually converge to $c$ — invalidates the whole argument.`,
       `Showing $f(x_n)$ diverges for one sequence and then worrying you haven't "checked enough" sequences — for DISPROVING a limit, one bad sequence is sufficient; there's no need to check all of them.`
     ],
+    proof: {
+      idea: 'Negate the Sequential Criterion for Function Limits (Theorem 4.1.8).',
+      why: 'By Theorem 4.1.8, $\\lim_{x\\to c} f(x) = L$ holds if and only if every punctured sequence $x_n \\to c$ satisfies $f(x_n) \\to L$.',
+      rungs: [
+        { why: 'State the Sequential Criterion (c.4.1.8): $\\lim_{x\\to c} f(x) = L$ iff for all sequences $(x_n)$ in $A \\setminus \\{c\\}$ with $x_n \\to c$, $f(x_n) \\to L$.', m: '\\lim_{x\\to c} f(x) = L \\iff (\\forall (x_n) \\subseteq A\\setminus\\{c\\},\\, x_n \\to c \\implies f(x_n) \\to L)' },
+        { why: 'Negate the equivalence for part (a): $\\lim_{x\\to c} f(x) \\ne L$ if and only if there is at least one sequence $(x_n)$ with $x_n \\to c$ but $f(x_n) \\not\\to L$.', m: '\\lim_{x\\to c} f(x) \\ne L \\iff \\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } f(x_n) \\not\\to L' },
+        { why: 'For part (b), $f$ has no limit in $\\mathbb{R}$ at all if and only if no candidate $L$ works; either some $(f(x_n))$ diverges entirely, or two sequences produce distinct limits.', m: '\\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } (f(x_n)) \\text{ diverges in } \\mathbb{R}' }
+      ],
+      ends: 'Thus a single bad sequence is necessary and sufficient to disprove the existence of a limit.'
+    },
     cards:[
       { q:`To show $f$ has no limit at $c$, how many sequences suffice, and what must they satisfy?`, a:`One sequence $(x_n)$ in $A\\setminus\\{c\\}$ with $(x_n)\\to c$ but $(f(x_n))$ not converging (or two such sequences converging to different image limits) is enough.`, kind:'state' },
       { q:`Show $\\lim_{x\\to0}\\sin(1/x)$ does not exist, using two sequences.`, a:`$x_n=1/(n\\pi)\\to0$ gives $f(x_n)=0\\to0$; $y_n=1/(\\pi/2+2n\\pi)\\to0$ gives $f(y_n)=1\\to1$. Different image limits from sequences converging to the same point, so no limit exists.`, kind:'apply' },

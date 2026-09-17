@@ -59,20 +59,19 @@ const UI = (function () {
 
   const empty = (msg, extra) => el('div', { class: 'empty' }, [el('p', { text: msg }), extra || null]);
 
-  /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done.
-     Neither is awarded for opening anything, and the caption says which rung
-     the learner is standing on rather than implying the whole ladder. */
+  /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
+     (or achieved automatically on notes that have no proof). */
   function ladder(done, proofDone, hasProof, courseId) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
-    const at = proofDone ? 2 : done ? 1 : 0;
-    const caption = at === 2 ? '2 · proof worked through'
+    const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
+    const caption = at === 2
+      ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
       : at === 1 ? '1 · completed'
       : '1 · not yet completed';
-    const right = Store.level(courseId) === 2
-      ? (hasProof === false ? 'no proof on this note'
-        : at === 2 ? 'levels 3–5 need delayed evidence'
-        : 'work the proof to reach level 2')
-      : 'levels 2–5 open at Level 2';
+    const right = (hasProof === false)
+      ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
+      : (at === 2 ? 'proof worked through (Level 2)'
+        : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
     return el('div', {}, [
       el('div', { class: 'ladder' }, names.map((n, i) =>
         el('span', { class: i < at ? 'on' : '', title: n }))),

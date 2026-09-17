@@ -53,17 +53,22 @@ const Progress = (function () {
   /* ── ticking ─────────────────────────────────────────────────────────────
      One press advances one step, so the tick always has somewhere to go and
      never silently refuses. At level 2 that is tick -> work the proof -> clear.
-     Returns the new state so the caller can report it. */
+     When a concept has no proof, ticking level 1 automatically counts as
+     ticking both levels. */
   function advance(id) {
     const at = state(id);
-    if (at === 'none') { Store.setDone(id, true); return state(id); }
+    if (at === 'none') {
+      Store.setDone(id, true);
+      if (!hasProof(id)) Store.setProofDone(id, true);
+      return state(id);
+    }
     if (at === 'part') { Store.setProofDone(id, true); return state(id); }
     clear(id);
     return state(id);
   }
 
   function clear(id) {
-    if (hasProof(id) && Store.isProofDone(id)) Store.setProofDone(id, false);
+    if (Store.isProofDone(id)) Store.setProofDone(id, false);
     Store.setDone(id, false);
   }
 
@@ -73,7 +78,11 @@ const Progress = (function () {
     const list = ids || [];
     Store.setDoneMany(list, on);
     list.forEach(function (id) {
-      if (levelOf(id) < 2 || !hasProof(id)) {
+      if (!hasProof(id)) {
+        Store.setProofDone(id, !!on);
+        return;
+      }
+      if (levelOf(id) < 2) {
         if (!on && Store.isProofDone(id)) Store.setProofDone(id, false);
         return;
       }

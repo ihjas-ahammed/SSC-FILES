@@ -64,6 +64,18 @@ CONCEPTS.push(
       `Forgetting to verify the base case ($n = 1$). Without the base case, the chain is never pushed!`,
       `Assuming the statement holds for $k+1$ inside the proof — you must assume $k$ holds and *derive* $k+1$.`
     ],
+    proof: {
+      idea: 'Assume the complement $E = \\mathbb{N} \\setminus S$ is non-empty and apply the Well-Ordering Property of $\\mathbb{N}$.',
+      why: 'If counterexamples exist, there must be a smallest one $m > 1$; then $m-1 \\in S$, which forces $m \\in S$, a contradiction.',
+      rungs: [
+        { why: 'Suppose for contradiction that $S \\ne \\mathbb{N}$, and let $E$ be the set of elements not in $S$.', m: 'E = \\mathbb{N} \\setminus S \\ne \\emptyset' },
+        { why: 'By the Well-Ordering Property of $\\mathbb{N}$, every non-empty subset of natural numbers has a least element $m$.', m: 'm = \\min(E) \\in E' },
+        { why: 'Since hypothesis (1) gives $1 \\in S$, $m$ cannot be $1$, so $m > 1$ and $m - 1 \\in \\mathbb{N}$.', m: '1 \\in S \\implies m > 1 \\implies m - 1 \\in \\mathbb{N}' },
+        { why: 'Because $m$ is the least element of $E$, the strictly smaller number $m - 1$ cannot belong to $E$, hence $m - 1 \\in S$.', m: 'm - 1 \\notin E \\implies m - 1 \\in S' },
+        { why: 'By hypothesis (2), since $m - 1 \\in S$, the successor $(m - 1) + 1 = m$ must also belong to $S$, contradicting $m \\in E$.', m: 'm = (m - 1) + 1 \\in S \\quad \\text{contradicts} \\quad m \\in E' }
+      ],
+      ends: 'Therefore $E = \\emptyset$, which proves $S = \\mathbb{N}$.'
+    },
     cards: [
       { q: 'What fundamental property of $\\mathbb{N}$ justifies the Principle of Mathematical Induction?', a: 'The Well-Ordering Property: every non-empty subset of $\\mathbb{N}$ has a smallest element.', kind: 'state' },
       { q: 'What are the two mandatory steps in an induction proof?', a: '(1) Base step: verify for $n=1$. (2) Inductive step: assume true for $n=k$ and prove for $n=k+1$.', kind: 'recall' }
@@ -106,6 +118,19 @@ CONCEPTS.push(
       `Thinking between any two rationals there is no gap so they must be uncountable. Density does NOT mean uncountability! Rationals are dense in $\\mathbb{R}$ but still countable.`,
       `Since $\\mathbb{R}$ is uncountable and $\\mathbb{Q}$ is countable, the irrationals $\\mathbb{R} \\setminus \\mathbb{Q}$ MUST be uncountable (uncountable minus countable is uncountable).`
     ],
+    proof: {
+      idea: 'Enumerate positive rationals $p/q$ via diagonals of a 2D grid, and prove $[0, 1]$ is uncountable using Cantor\\\'s diagonal construction.',
+      why: 'Diagonal traversal visits all pairs $(p, q)$ systematically, while changing diagonal digits creates a real number that differs from every number in any proposed list.',
+      rungs: [
+        { why: 'Arrange positive rationals $p/q$ in an array with row $p$ and column $q$, and traverse finite diagonals $p + q = k$.', m: '1/1,\\, 1/2,\\, 2/1,\\, 3/1,\\, 2/2,\\, 1/3,\\, \\ldots' },
+        { why: 'Omit fractions not in lowest terms. This yields a surjection from $\\mathbb{N}$ to $\\mathbb{Q}^+$, proving $\\mathbb{Q}^+$ is countable.', m: 'f: \\mathbb{N} \\to \\mathbb{Q}^+ \\implies \\mathbb{Q}^+ \\text{ is countable}' },
+        { why: 'Since $\\mathbb{Q} = \\mathbb{Q}^+ \\cup \\{0\\} \\cup (-\\mathbb{Q}^+)$ is a union of three countable sets, $\\mathbb{Q}$ is countable.', m: '\\mathbb{Q} \\text{ is countable}' },
+        { why: 'For $[0, 1]$, assume for contradiction that an enumeration $x_1, x_2, \\ldots$ exists. Write each in decimal expansion: $x_n = 0.d_{n1}d_{n2}d_{n3}\\ldots$', m: 'x_n = 0.d_{n1}d_{n2}d_{n3}\\ldots \\quad (d_{ni} \\in \\{0, \\ldots, 9\\})' },
+        { why: 'Construct $y = 0.y_1 y_2 y_3 \\ldots \\in [0, 1]$ by choosing $y_n = 2$ if $d_{nn} = 1$, and $y_n = 1$ if $d_{nn} \\ne 1$.', m: 'y_n \\ne d_{nn} \\quad \\forall n \\in \\mathbb{N}' },
+        { why: 'Then $y \\ne x_n$ for every $n \\in \\mathbb{N}$ because their decimal expansions differ at the $n$-th digit, contradicting the enumeration.', m: 'y \\in [0, 1] \\setminus \\{x_1, x_2, \\ldots\\}' }
+      ],
+      ends: 'Thus $[0, 1]$ cannot be enumerated, proving $\\mathbb{R}$ is uncountable.'
+    },
     cards: [
       { q: 'Is the set of irrational numbers $\\mathbb{R} \\setminus \\mathbb{Q}$ countable or uncountable?', a: 'Uncountable. If it were countable, $\\mathbb{R} = \\mathbb{Q} \\cup (\\mathbb{R} \\setminus \\mathbb{Q})$ would be a countable union of countable sets, contradicting that $\\mathbb{R}$ is uncountable.', kind: 'apply' },
       { q: 'What famous proof technique shows that $[0, 1]$ cannot be put into a one-to-one correspondence with $\\mathbb{N}$?', a: "Cantor's diagonal argument.", kind: 'recall' },

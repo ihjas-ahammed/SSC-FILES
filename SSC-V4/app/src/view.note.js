@@ -187,7 +187,8 @@ const ViewNote = (function () {
       showBtn.textContent = open ? 'Hide proof' : '👁 Show step-by-step proof';
     });
 
-    return el('div', { class: 'card' }, [
+    const row = proofDoneRow(c.id, 'proof', Progress.courseIdOf(c), onTick);
+    const view = el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: 'Proof & Rigorous Argument' }),
         el('span', { class: 'count', text: (p.rungs ? p.rungs.length : 0) + ' steps' })
@@ -198,41 +199,49 @@ const ViewNote = (function () {
       ]),
       tryHost,
       proofHost,
-      proofDoneRow(c.id, 'proof', Progress.courseIdOf(c))
+      row
     ]);
+    view._paintProofDone = row._paint;
+    return view;
   }
 
   /* ── Level 2: proof work, marked per task ─────────────────────────────────
-     This is the only thing that earns level 2, and it is earned per proof
-     rather than per note — a chapter is not "recognised" because one theorem
-     in it was worked through. Like the level 1 tick it is self-reported, but
-     it reports a much harder act, and the label says exactly what is being
-     claimed so it cannot be ticked absent-mindedly. */
-  function proofDoneRow(id, what, courseId) {
-    if (Store.level(courseId) !== 2) return null;
-
+     This earns level 2, marked per proof (or written answer) below the proof
+     section. When clicked, it ticks Level 2, and automatically ensures Level 1
+     is ticked as well. */
+  function proofDoneRow(id, what, courseId, onTick) {
     const btn = el('button', { class: 'btn', type: 'button' });
-    const note = el('span', { class: 'small muted' });
+    const note = el('p', { class: 'small muted', style: { margin: '8px 0 0' } });
     function paint() {
       const on = Store.isProofDone(id);
       btn.className = 'btn' + (on ? '' : ' primary');
-      btn.textContent = on ? '✓ Proof worked through — undo' : 'I worked this ' + what + ' through';
+      btn.textContent = on
+        ? '✓ Level 2 ticked (' + (what === 'proof' ? 'Proof worked through' : 'Worked through') + ') — undo'
+        : 'Tick Level 2 (I worked this ' + what + ' through)';
       btn.setAttribute('aria-pressed', String(on));
       note.textContent = on
-        ? 'Level 2 on this ' + what + '.'
+        ? 'Level 2 earned on this ' + what + '.'
         : 'Claim this only if you produced the argument yourself, not if you read it.';
     }
     btn.addEventListener('click', function () {
-      const on = Store.setProofDone(id, !Store.isProofDone(id));
+      const next = !Store.isProofDone(id);
+      Store.setProofDone(id, next);
+      if (next && !id.startsWith('w:') && !Store.isDone(id)) {
+        Store.setDone(id, true);
+      }
       paint();
-      DOM.announce(on ? 'Marked as worked through.' : 'Level 2 mark removed.');
+      if (onTick) onTick();
+      DOM.announce(next ? 'Level 2 ticked as worked through.' : 'Level 2 tick removed.');
     });
     paint();
 
-    return el('div', { class: 'proof-done', style: { marginTop: '14px' } }, [
+    const host = el('div', { class: 'proof-done', style: { marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--rule)' } }, [
+      el('div', { class: 'kicker', style: { marginBottom: '8px' }, text: 'Level 2 Tick' }),
       el('div', { class: 'btn-row' }, [btn]),
-      el('p', { class: 'small muted', style: { margin: '8px 0 0' } }, [note])
+      note
     ]);
+    host._paint = paint;
+    return host;
   }
 
   function traps(c) {
@@ -285,7 +294,7 @@ const ViewNote = (function () {
     ]);
   }
 
-  function writtenOn(c) {
+  function writtenOn(c, onTick) {
     const qs = Pool.writtenFor(c.id);
     if (!qs.length) return null;
     return el('div', { class: 'card' }, [
@@ -373,7 +382,7 @@ const ViewNote = (function () {
           ]),
           tryHost,
           answerHost,
-          proofDoneRow('w:' + q.id, 'answer', Progress.courseIdOf(c))
+          proofDoneRow('w:' + q.id, 'answer', Progress.courseIdOf(c), onTick)
         ]);
       }))
     ]);
@@ -393,6 +402,10 @@ const ViewNote = (function () {
     const mod = Pool.moduleOfSec(c.sec);
     const root = el('div', { class: 'stack' });
 
+    const hasProof = !!(c && c.proof);
+    const badgesHost = el('div', { class: 'row', style: { marginBottom: '8px' } });
+    let syncProofTick = null;
+
     /* completion toggle */
     const doneBtn = el('button', { class: 'btn', type: 'button' });
     const ladderHost = el('div', {});
@@ -400,11 +413,21 @@ const ViewNote = (function () {
 
     function paintDone() {
       const on = Store.isDone(c.id);
+      const pDone = Store.isProofDone(c.id);
+
+      DOM.clear(badgesHost);
+      DOM.add(badgesHost, [
+        UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
+        pDone ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
+      ].filter(Boolean));
+
       doneBtn.className = 'btn' + (on ? '' : ' primary');
-      doneBtn.textContent = on ? '✓ Ticked — undo' : 'Tick as completed';
+      doneBtn.textContent = on
+        ? (hasProof ? '✓ Level 1 ticked — undo' : '✓ Completed (Levels 1 & 2) — undo')
+        : (hasProof ? 'Tick Level 1 (Completed)' : 'Tick as completed (Levels 1 & 2)');
       doneBtn.setAttribute('aria-pressed', String(on));
       DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, Store.isProofDone(c.id), !!c.proof, Progress.courseIdOf(c)));
+        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c)));
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -446,12 +469,27 @@ const ViewNote = (function () {
     }
 
     doneBtn.addEventListener('click', function () {
-      const on = Store.setDone(c.id, !Store.isDone(c.id));
+      const was = Store.isDone(c.id);
+      const next = !was;
+      Store.setDone(c.id, next);
+      if (!hasProof) {
+        Store.setProofDone(c.id, next);
+      } else if (!next) {
+        Store.setProofDone(c.id, false);
+      }
       paintDone();
-      DOM.announce(on ? 'Ticked as completed.' : 'Tick removed.');
-      if (on) offerCascade(); else DOM.clear(askHost);
+      if (syncProofTick) syncProofTick();
+      DOM.announce(next
+        ? (hasProof ? 'Level 1 ticked as completed.' : 'Ticked as completed (Levels 1 & 2).')
+        : 'Tick removed.');
+      if (next) offerCascade(); else DOM.clear(askHost);
     });
     paintDone();
+
+    const pView = proofView(c, function () { paintDone(); });
+    if (pView && pView._paintProofDone) {
+      syncProofTick = pView._paintProofDone;
+    }
 
     DOM.add(root, [
       UI.crumb([
@@ -462,11 +500,7 @@ const ViewNote = (function () {
       ].filter(Boolean)),
 
       el('div', {}, [
-        el('div', { class: 'row', style: { marginBottom: '8px' } }, [
-          UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
-          (Store.level(Progress.courseIdOf(c)) === 2 && Store.isProofDone(c.id))
-            ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
-        ]),
+        badgesHost,
         UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
@@ -485,7 +519,7 @@ const ViewNote = (function () {
         el('div', { style: { marginTop: '10px' } }, [UI.prose(c.intuition, 'tight')])
       ]) : null,
 
-      proofView(c),
+      pView,
 
       traps(c),
 
@@ -508,7 +542,7 @@ const ViewNote = (function () {
 
       unlocks(c),
       questionsOn(c),
-      writtenOn(c),
+      writtenOn(c, function () { paintDone(); }),
       selfChecks(c),
       prevNext(c)
     ]);

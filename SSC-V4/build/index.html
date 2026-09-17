@@ -171,7 +171,6 @@ main{ display:block; }
 @keyframes sweepIn{ from{ clip-path:inset(0 100% 0 0) } to{ clip-path:inset(0) } }
 @keyframes drawIn{ from{ stroke-dashoffset:var(--len,600) } to{ stroke-dashoffset:0 } }
 @keyframes glow{ 0%,100%{ opacity:.35 } 50%{ opacity:1 } }
-@keyframes sheetUp{ from{ transform:translateY(102%) } to{ transform:none } }
 
 .view-in{ animation:rise var(--dur) var(--ease) both; }
 .stagger>*{ animation:rise .42s var(--ease) both; animation-delay:calc(var(--i,0)*45ms); }
@@ -387,35 +386,69 @@ mjx-container{ max-width:100%; }
 .crow.done .tt b{ color:var(--ink-2); }
 
 /* ── recall reel ─────────────────────────────────────────────────────────── */
+/* ── recall reel ──────────────────────────────────────────────────────────
+   One swipe, one card — the Shorts/Reels rule, and it is `scroll-snap-stop:
+   always` that enforces it. Without it a flick keeps its momentum and sails
+   past two or three snap points before settling, which reads as "it swiped
+   twice". With it the scroller must come to rest on the very next snap point
+   however hard the flick was.
+
+   That rule only holds if every card is EXACTLY one viewport tall. So the card
+   is a fixed-height frame and its content scrolls inside `.inner`, whose
+   overscroll behaviour is left at `auto` on purpose: it scrolls to its own end
+   and then chains out to the reel. (`contain` was tried and is what trapped
+   the gesture on a long card — the inner scroller ate the touch and refused to
+   hand it back.)
+
+   `position:relative` on the reel is load-bearing too: it makes the reel the
+   offsetParent of its cards, so card.offsetTop and reel.scrollTop are in the
+   same coordinate system. And nothing here may carry a `transform`, because
+   the browser snaps to the TRANSFORMED box — a decorative scale() silently
+   moves every snap point. */
 .reel{
+  position:relative;
   height:calc(100dvh - var(--head-h) - var(--tab-h) - env(safe-area-inset-bottom,0px));
-  overflow-y:auto; overscroll-behavior-y:contain;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
   scroll-snap-type:y mandatory; scroll-behavior:smooth;
   scrollbar-width:none;
 }
 .reel::-webkit-scrollbar{ display:none; }
 @media (min-width:880px){ .reel{ height:calc(100dvh - var(--head-h) - var(--tab-h)); } }
+
 .reel-card{
-  min-height:100%; scroll-snap-align:start; scroll-snap-stop:always;
-  display:flex; flex-direction:column; padding:16px 14px 30px; position:relative;
-  overflow-y:auto; overscroll-behavior-y:contain;
-  transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-  opacity:.4; transform:scale(.975);
+  height:100%; flex:0 0 100%;
+  scroll-snap-align:start; scroll-snap-stop:always;
+  display:flex; flex-direction:column; position:relative;
+  transition:opacity var(--dur) var(--ease);
+  opacity:.45;
 }
-.reel-card.live{ opacity:1; transform:none; }
-/* auto margins centre the card without clipping tall content the way
+.reel-card.live{ opacity:1; }
+
+/* the card's own scroll region — this is where a long statement goes */
+.reel-card>.inner{
+  flex:1 1 auto; width:100%; max-width:640px; margin:0 auto;
+  display:flex; flex-direction:column; gap:14px;
+  padding:16px 14px 46px;
+  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.reel-card>.inner::-webkit-scrollbar{ display:none; }
+/* centre short content without clipping tall content the way
    justify-content:center would inside a scroller */
-.reel-card>.inner{ width:100%; max-width:640px; margin:auto; display:flex;
-  flex-direction:column; gap:14px; }
-.reel-hint{ position:absolute; left:0; right:0; bottom:8px; text-align:center;
+.reel-card>.inner::before,
+.reel-card>.inner::after{ content:''; margin:auto; }
+
+.reel-hint{ position:absolute; left:0; right:0; bottom:10px; text-align:center;
   font-size:.7rem; color:var(--ink-3); pointer-events:none; }
 .reel-hint span{ display:inline-block; animation:glow 2.6s ease-in-out infinite; }
 .reel-rail{ position:fixed; right:6px; top:calc(var(--head-h) + 18px); z-index:20;
   display:flex; flex-direction:column; gap:5px; align-items:center; }
 .reel-rail i{ width:5px; height:5px; border-radius:50%; background:var(--rule-2);
-  transition:all var(--dur) var(--ease); }
+  transition:background var(--dur) var(--ease), height var(--dur) var(--ease); }
 .reel-rail i.on{ background:var(--accent); height:16px; border-radius:3px; }
 .reel-rail i.got{ background:var(--ok); }
+.reel-rail i.pf{ box-shadow:0 0 0 1.5px var(--accent-line); }
 @media (min-width:880px){ .reel-rail{ right:max(12px,calc(50vw - 380px)); } }
 
 /* ── figures ─────────────────────────────────────────────────────────────── */
@@ -504,49 +537,109 @@ mjx-container{ max-width:100%; }
   background:var(--surface-2); }
 
 /* ── write workspace ─────────────────────────────────────────────────────── */
-.tex-in{ width:100%; min-height:112px; resize:vertical; padding:12px 13px;
-  font:400 .95rem/1.6 var(--font-mono); color:var(--ink);
-  background:var(--paper); border:1px solid var(--rule-2); border-radius:var(--r-m);
-  transition:border-color var(--dur-s), box-shadow var(--dur-s); }
-.tex-in:focus{ border-color:var(--accent); outline:none;
+/* ── the writing workspace ───────────────────────────────────────────────── */
+/* A document that fills downward: each line's rendering sits directly above
+   it, and the one live input is always at the bottom of the stack. */
+.wbox{ --w-rail:26px; }
+.wdoc{ display:flex; flex-direction:column; gap:2px; }
+.wline{
+  display:flex; gap:8px; align-items:flex-start; padding:4px 6px 4px 0;
+  border-radius:var(--r-s); transition:background var(--dur-s);
+}
+.wline[role=button]{ cursor:text; }
+.wline[role=button]:hover{ background:var(--surface-2); }
+.wline.live{ background:var(--accent-soft); }
+.wnum{
+  flex:0 0 var(--w-rail); text-align:right; padding-top:3px;
+  font:500 .66rem/1.5 var(--font-ui); color:var(--ink-3); font-variant-numeric:tabular-nums;
+  user-select:none;
+}
+.wout{ flex:1 1 auto; min-width:0; overflow-x:auto; overflow-y:hidden; }
+.wout .ph{ color:var(--ink-3); font-size:.8rem; }
+.wout mjx-container{ margin:.15em 0 !important; }
+.wout mjx-container[display=true]{ text-align:left !important; margin:.2em 0 !important; }
+.wout .prose{ font-size:.96rem; }
+.wout .md-p,.wout .md-l,.wout .md-q{ margin:0; }
+.wout .md-h{ margin:.1em 0; }
+.wout .md-l{ padding-left:1.1em; }
+.wout .md-q{ border-left:2px solid var(--accent-line); padding-left:10px; color:var(--ink-2); }
+
+.winput{
+  display:flex; align-items:center; gap:6px; margin:2px 0 0;
+  padding:0 6px 0 calc(var(--w-rail) - 12px);
+}
+.wcaret{ flex:0 0 12px; color:var(--accent); font-weight:600; }
+.wfield{
+  flex:1 1 auto; min-width:0; padding:11px 12px;
+  border:1px solid var(--accent-line); border-radius:var(--r-m);
+  background:var(--surface); color:var(--ink);
+  font:400 .95rem/1.5 var(--font-mono,ui-monospace,SFMono-Regular,Menlo,monospace);
+}
+.wfield:focus{ outline:none; border-color:var(--accent);
   box-shadow:0 0 0 3px var(--accent-soft); }
+.wkey{
+  flex:0 0 auto; width:38px; height:38px; border-radius:var(--r-s);
+  border:1px solid var(--rule); background:var(--surface-2); color:var(--ink-2);
+  cursor:pointer; font-size:1rem; display:inline-flex; align-items:center;
+  justify-content:center; transition:transform var(--dur-s) var(--spring);
+}
+.wkey:active{ transform:scale(.9); }
+
+/* Completions, thumb-high: a single scrolling strip immediately under the
+   input rather than a sheet that covers it. */
+.wstrip{
+  display:flex; gap:6px; align-items:center; overflow-x:auto; padding:2px 0 4px;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+.wstrip::-webkit-scrollbar{ display:none; }
+.wstrip-l{
+  flex:0 0 auto; font:500 .64rem/1 var(--font-mono,ui-monospace,monospace);
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ink-3);
+  padding-right:4px; border-right:1px solid var(--rule); margin-right:2px;
+}
+.wsug{
+  flex:0 0 auto; display:inline-flex; flex-direction:column; align-items:center;
+  gap:1px; min-width:46px; padding:6px 9px; cursor:pointer;
+  border:1px solid var(--rule); border-radius:var(--r-s); background:var(--surface);
+  transition:transform var(--dur-s) var(--spring), border-color var(--dur-s);
+}
+.wsug:active{ transform:scale(.9); }
+.wsug.on{ border-color:var(--accent); background:var(--accent-soft); }
+.wsug .s{ font-size:1.02rem; line-height:1.1; font-family:var(--font-prose); }
+.wsug .c{ font:400 .58rem/1 var(--font-mono,ui-monospace,monospace); color:var(--ink-3);
+  max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
 .tex-out{ min-height:66px; padding:14px; border-radius:var(--r-m);
-  background:var(--surface-2); border:1px solid var(--rule);
-  font-family:var(--font-prose); overflow-x:auto; }
+  border:1px solid var(--rule); background:var(--surface-2); overflow-x:auto; }
 .tex-out .ph{ color:var(--ink-3); font-size:.9rem; font-family:var(--font-ui); }
 .tex-err{ display:flex; gap:8px; align-items:flex-start; font-size:.8rem; color:var(--warn);
-  background:var(--warn-soft); border:1px solid var(--warn-line); border-radius:var(--r-s);
-  padding:9px 11px; animation:rise .3s var(--ease) both; }
+  margin-top:8px; line-height:1.45; }
 
-/* palette: inline panel on wide screens, bottom sheet on a phone */
-.sheet{ border:1px solid var(--accent-line); border-radius:var(--r-m);
-  background:var(--surface); padding:12px; }
-.sheet .g+.g{ margin-top:12px; }
-.sheet .gl{ font-size:.68rem; text-transform:uppercase; letter-spacing:.08em;
-  color:var(--ink-3); margin-bottom:6px; }
-.keys{ display:flex; flex-wrap:wrap; gap:6px; }
-.key{ display:inline-flex; flex-direction:column; align-items:center; gap:1px;
-  min-width:46px; min-height:44px; padding:5px 9px; cursor:pointer;
-  border:1px solid var(--rule); border-radius:var(--r-s); background:var(--surface-2);
-  transition:transform var(--dur-s) var(--spring), background var(--dur-s),
-    border-color var(--dur-s); }
-.key:hover{ border-color:var(--accent-line); background:var(--accent-soft); }
-.key:active{ transform:scale(.9); }
-.key .s{ font-size:1.02rem; line-height:1.1; font-family:var(--font-prose); }
-.key .c{ font-size:.57rem; color:var(--ink-3); font-family:var(--font-mono); }
-@media (max-width:639px){
-  .sheet.as-sheet{
-    position:fixed; left:0; right:0; bottom:0; z-index:50; max-height:62vh; overflow-y:auto;
-    border-radius:var(--r-l) var(--r-l) 0 0; border:1px solid var(--glass-line);
-    border-bottom:0; padding:14px 14px calc(18px + env(safe-area-inset-bottom,0px));
-    background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
-    box-shadow:var(--shadow-2); animation:sheetUp var(--dur) var(--ease) both;
-  }
-  .sheet-grab{ width:38px; height:4px; border-radius:99px; background:var(--rule-2);
-    margin:0 auto 10px; }
+/* text inputs outside the workspace (the sync pass key) */
+.tin{
+  flex:1 1 140px; min-width:0; padding:10px 12px; border-radius:var(--r-m);
+  border:1px solid var(--rule); background:var(--surface); color:var(--ink);
+  font:400 .92rem/1.4 var(--font-ui);
 }
-.sheet-grab{ display:none; }
-@media (max-width:639px){ .sheet.as-sheet .sheet-grab{ display:block; } }
+.tin:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+
+/* the inline "tick its groundwork too?" question, and the level 2 mark */
+.ask{ margin-top:12px; animation:rise var(--dur) var(--ease) both; }
+.proof-done{ border-top:1px solid var(--rule); padding-top:12px; }
+
+/* a scratchpad is a full writing workspace, set back a little so it reads as
+   your space rather than more of the note */
+.scratch{ margin-top:6px; padding:12px; border-radius:var(--r-m);
+  border:1px dashed var(--rule-2); background:var(--surface-2); }
+
+/* a concept ticked but with its proof still outstanding, at Level 2 */
+.crow.part .tick{ border-color:var(--warn); color:var(--warn); }
+.crow.part .tt b{ color:var(--ink); }
+
+/* the sign-in gate hides the shell chrome: there is nothing to navigate to */
+body.signed-out nav.tabs{ display:none; }
+body.signed-out{ padding-bottom:0; }
+body.signed-out .top .icon-btn{ display:inline-flex; }
 
 /* ── lists ───────────────────────────────────────────────────────────────── */
 .list{ display:flex; flex-direction:column; border:1px solid var(--rule);
@@ -1341,6 +1434,16 @@ CONCEPTS.push(
       `Using a sequence that doesn't actually satisfy $x_n\\ne c$, or doesn't actually converge to $c$ — invalidates the whole argument.`,
       `Showing $f(x_n)$ diverges for one sequence and then worrying you haven't "checked enough" sequences — for DISPROVING a limit, one bad sequence is sufficient; there's no need to check all of them.`
     ],
+    proof: {
+      idea: 'Negate the Sequential Criterion for Function Limits (Theorem 4.1.8).',
+      why: 'By Theorem 4.1.8, $\\lim_{x\\to c} f(x) = L$ holds if and only if every punctured sequence $x_n \\to c$ satisfies $f(x_n) \\to L$.',
+      rungs: [
+        { why: 'State the Sequential Criterion (c.4.1.8): $\\lim_{x\\to c} f(x) = L$ iff for all sequences $(x_n)$ in $A \\setminus \\{c\\}$ with $x_n \\to c$, $f(x_n) \\to L$.', m: '\\lim_{x\\to c} f(x) = L \\iff (\\forall (x_n) \\subseteq A\\setminus\\{c\\},\\, x_n \\to c \\implies f(x_n) \\to L)' },
+        { why: 'Negate the equivalence for part (a): $\\lim_{x\\to c} f(x) \\ne L$ if and only if there is at least one sequence $(x_n)$ with $x_n \\to c$ but $f(x_n) \\not\\to L$.', m: '\\lim_{x\\to c} f(x) \\ne L \\iff \\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } f(x_n) \\not\\to L' },
+        { why: 'For part (b), $f$ has no limit in $\\mathbb{R}$ at all if and only if no candidate $L$ works; either some $(f(x_n))$ diverges entirely, or two sequences produce distinct limits.', m: '\\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } (f(x_n)) \\text{ diverges in } \\mathbb{R}' }
+      ],
+      ends: 'Thus a single bad sequence is necessary and sufficient to disprove the existence of a limit.'
+    },
     cards:[
       { q:`To show $f$ has no limit at $c$, how many sequences suffice, and what must they satisfy?`, a:`One sequence $(x_n)$ in $A\\setminus\\{c\\}$ with $(x_n)\\to c$ but $(f(x_n))$ not converging (or two such sequences converging to different image limits) is enough.`, kind:'state' },
       { q:`Show $\\lim_{x\\to0}\\sin(1/x)$ does not exist, using two sequences.`, a:`$x_n=1/(n\\pi)\\to0$ gives $f(x_n)=0\\to0$; $y_n=1/(\\pi/2+2n\\pi)\\to0$ gives $f(y_n)=1\\to1$. Different image limits from sequences converging to the same point, so no limit exists.`, kind:'apply' },
@@ -2182,6 +2285,18 @@ CONCEPTS.push(
       `Forgetting to verify the base case ($n = 1$). Without the base case, the chain is never pushed!`,
       `Assuming the statement holds for $k+1$ inside the proof — you must assume $k$ holds and *derive* $k+1$.`
     ],
+    proof: {
+      idea: 'Assume the complement $E = \\mathbb{N} \\setminus S$ is non-empty and apply the Well-Ordering Property of $\\mathbb{N}$.',
+      why: 'If counterexamples exist, there must be a smallest one $m > 1$; then $m-1 \\in S$, which forces $m \\in S$, a contradiction.',
+      rungs: [
+        { why: 'Suppose for contradiction that $S \\ne \\mathbb{N}$, and let $E$ be the set of elements not in $S$.', m: 'E = \\mathbb{N} \\setminus S \\ne \\emptyset' },
+        { why: 'By the Well-Ordering Property of $\\mathbb{N}$, every non-empty subset of natural numbers has a least element $m$.', m: 'm = \\min(E) \\in E' },
+        { why: 'Since hypothesis (1) gives $1 \\in S$, $m$ cannot be $1$, so $m > 1$ and $m - 1 \\in \\mathbb{N}$.', m: '1 \\in S \\implies m > 1 \\implies m - 1 \\in \\mathbb{N}' },
+        { why: 'Because $m$ is the least element of $E$, the strictly smaller number $m - 1$ cannot belong to $E$, hence $m - 1 \\in S$.', m: 'm - 1 \\notin E \\implies m - 1 \\in S' },
+        { why: 'By hypothesis (2), since $m - 1 \\in S$, the successor $(m - 1) + 1 = m$ must also belong to $S$, contradicting $m \\in E$.', m: 'm = (m - 1) + 1 \\in S \\quad \\text{contradicts} \\quad m \\in E' }
+      ],
+      ends: 'Therefore $E = \\emptyset$, which proves $S = \\mathbb{N}$.'
+    },
     cards: [
       { q: 'What fundamental property of $\\mathbb{N}$ justifies the Principle of Mathematical Induction?', a: 'The Well-Ordering Property: every non-empty subset of $\\mathbb{N}$ has a smallest element.', kind: 'state' },
       { q: 'What are the two mandatory steps in an induction proof?', a: '(1) Base step: verify for $n=1$. (2) Inductive step: assume true for $n=k$ and prove for $n=k+1$.', kind: 'recall' }
@@ -2224,6 +2339,19 @@ CONCEPTS.push(
       `Thinking between any two rationals there is no gap so they must be uncountable. Density does NOT mean uncountability! Rationals are dense in $\\mathbb{R}$ but still countable.`,
       `Since $\\mathbb{R}$ is uncountable and $\\mathbb{Q}$ is countable, the irrationals $\\mathbb{R} \\setminus \\mathbb{Q}$ MUST be uncountable (uncountable minus countable is uncountable).`
     ],
+    proof: {
+      idea: 'Enumerate positive rationals $p/q$ via diagonals of a 2D grid, and prove $[0, 1]$ is uncountable using Cantor\\\'s diagonal construction.',
+      why: 'Diagonal traversal visits all pairs $(p, q)$ systematically, while changing diagonal digits creates a real number that differs from every number in any proposed list.',
+      rungs: [
+        { why: 'Arrange positive rationals $p/q$ in an array with row $p$ and column $q$, and traverse finite diagonals $p + q = k$.', m: '1/1,\\, 1/2,\\, 2/1,\\, 3/1,\\, 2/2,\\, 1/3,\\, \\ldots' },
+        { why: 'Omit fractions not in lowest terms. This yields a surjection from $\\mathbb{N}$ to $\\mathbb{Q}^+$, proving $\\mathbb{Q}^+$ is countable.', m: 'f: \\mathbb{N} \\to \\mathbb{Q}^+ \\implies \\mathbb{Q}^+ \\text{ is countable}' },
+        { why: 'Since $\\mathbb{Q} = \\mathbb{Q}^+ \\cup \\{0\\} \\cup (-\\mathbb{Q}^+)$ is a union of three countable sets, $\\mathbb{Q}$ is countable.', m: '\\mathbb{Q} \\text{ is countable}' },
+        { why: 'For $[0, 1]$, assume for contradiction that an enumeration $x_1, x_2, \\ldots$ exists. Write each in decimal expansion: $x_n = 0.d_{n1}d_{n2}d_{n3}\\ldots$', m: 'x_n = 0.d_{n1}d_{n2}d_{n3}\\ldots \\quad (d_{ni} \\in \\{0, \\ldots, 9\\})' },
+        { why: 'Construct $y = 0.y_1 y_2 y_3 \\ldots \\in [0, 1]$ by choosing $y_n = 2$ if $d_{nn} = 1$, and $y_n = 1$ if $d_{nn} \\ne 1$.', m: 'y_n \\ne d_{nn} \\quad \\forall n \\in \\mathbb{N}' },
+        { why: 'Then $y \\ne x_n$ for every $n \\in \\mathbb{N}$ because their decimal expansions differ at the $n$-th digit, contradicting the enumeration.', m: 'y \\in [0, 1] \\setminus \\{x_1, x_2, \\ldots\\}' }
+      ],
+      ends: 'Thus $[0, 1]$ cannot be enumerated, proving $\\mathbb{R}$ is uncountable.'
+    },
     cards: [
       { q: 'Is the set of irrational numbers $\\mathbb{R} \\setminus \\mathbb{Q}$ countable or uncountable?', a: 'Uncountable. If it were countable, $\\mathbb{R} = \\mathbb{Q} \\cup (\\mathbb{R} \\setminus \\mathbb{Q})$ would be a countable union of countable sets, contradicting that $\\mathbb{R}$ is uncountable.', kind: 'apply' },
       { q: 'What famous proof technique shows that $[0, 1]$ cannot be put into a one-to-one correspondence with $\\mathbb{N}$?', a: "Cantor's diagonal argument.", kind: 'recall' },
@@ -2692,6 +2820,16 @@ CONCEPTS.push(
     intuition: `This just repackages the $\\varepsilon$-$\\delta$ definition using "balls" instead of absolute-value inequalities: $|x-c|<\\delta$ is the same statement as $x\\in V_\\delta(c)$. It is the same idea one level more geometric, and it is the version that generalizes cleanly to topology (continuous = preimages of open sets are open).`,
     needs: ['c.5.1.1', 's.interval'],
     traps: [`Mixing up which neighbourhood is chosen first: $\\varepsilon$ (around $f(c)$) is given, $\\delta$ (around $c$) is produced in response &mdash; not the other way around.`],
+    proof: {
+      idea: 'Translate directly between absolute value inequalities and open neighbourhood membership.',
+      why: '$|u - v| < r$ is logically identical to $u \\in V_r(v) = (v-r, v+r)$.',
+      rungs: [
+        { why: 'By definition, $x \\in V_\\delta(c) \\iff |x - c| < \\delta$.', m: 'x \\in V_\\delta(c) \\iff c - \\delta < x < c + \\delta \\iff |x - c| < \\delta' },
+        { why: 'Similarly, $f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon$.', m: 'f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon' },
+        { why: 'The condition $x \\in A \\cap V_\\delta(c) \\implies f(x) \\in V_\\varepsilon(f(c))$ is therefore equivalent to the $\\varepsilon$-$\\delta$ definition.', m: 'x \\in A,\\, |x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon' }
+      ],
+      ends: 'Thus the neighbourhood characterization is logically equivalent to continuity at $c$.'
+    },
     cards: [
       { q: 'Restate continuity at $c$ using neighbourhoods instead of absolute values.', a: 'For every $V_\\varepsilon(f(c))$ there is $V_\\delta(c)$ with $f(A\\cap V_\\delta(c))\\subseteq V_\\varepsilon(f(c))$.', kind: 'state' },
       { q: 'What is $V_\\delta(c)$ notation shorthand for?', a: 'The open interval $(c-\\delta, c+\\delta)$, i.e. $\\{x:|x-c|<\\delta\\}$.', kind: 'recall' },
@@ -2735,6 +2873,15 @@ CONCEPTS.push(
     intuition: `This is just the contrapositive restatement of the Sequential Criterion (5.1.3), phrased as the practical tool you actually reach for: to prove discontinuity, exhibit one witness sequence. It parallels the Divergence Criterion 4.1.9(a) for limits.`,
     needs: ['c.5.1.3', 'c.4.1.9'],
     traps: [`"Does not converge to $f(c)$" includes the case where $(f(x_n))$ diverges entirely, not only the case where it converges to some other value.`],
+    proof: {
+      idea: 'Negate the Sequential Criterion for Continuity (Theorem 5.1.3).',
+      why: 'A statement $P \\iff Q$ logically implies its contrapositive negation $(\\neg P) \\iff (\\neg Q)$.',
+      rungs: [
+        { why: 'By Theorem 5.1.3, $f$ is continuous at $c$ iff every sequence $(x_n) \\subseteq A$ with $x_n \\to c$ satisfies $f(x_n) \\to f(c)$.', m: 'f \\text{ is continuous at } c \\iff (\\forall (x_n) \\subseteq A,\\, x_n \\to c \\implies f(x_n) \\to f(c))' },
+        { why: 'Negating both sides: $f$ is discontinuous at $c$ iff the condition fails for at least one sequence.', m: 'f \\text{ is discontinuous at } c \\iff \\exists (x_n) \\subseteq A : x_n \\to c \\text{ and } f(x_n) \\not\\to f(c)' }
+      ],
+      ends: 'This establishes the Discontinuity Criterion.'
+    },
     cards: [
       { q: 'State the Discontinuity Criterion.', a: '$f$ is discontinuous at $c$ iff $\\exists (x_n)\\to c$ in $A$ with $f(x_n)\\not\\to f(c)$.', kind: 'state' },
       { q: 'Name the limit-theory result this criterion is modeled on.', a: 'The Divergence Criterion, Theorem 4.1.9(a).', kind: 'recall' },
@@ -2849,6 +2996,17 @@ CONCEPTS.push(
       `This only rescues "removable" discontinuities (missing-point type). It says nothing about jump or oscillation discontinuities where $c$ IS already in the domain but the limit still fails to equal $f(c)$ or fails to exist.`,
       `Part (b) is often missed: you cannot always patch a function at a bad point; if the limit genuinely does not exist, no single value at $c$ will fix it.`,
     ],
+    proof: {
+      idea: 'Verify the $\\varepsilon$-$\\delta$ definition of continuity directly for $F$ at $c$, and use the definition of continuity to prove the converse.',
+      why: 'Continuity of $F$ at $c$ requires $\\lim_{x \\to c} F(x) = F(c)$, which is satisfied uniquely by setting $F(c) = L$.',
+      rungs: [
+        { why: 'Since $\\lim_{x\\to c} f(x) = L$, for every $\\varepsilon > 0$ there exists $\\delta > 0$ such that $0 < |x - c| < \\delta$ with $x \\in A$ implies $|f(x) - L| < \\varepsilon$.', m: '\\forall \\varepsilon > 0\\, \\exists \\delta > 0 : 0 < |x - c| < \\delta,\\, x \\in A \\implies |f(x) - L| < \\varepsilon' },
+        { why: 'For $F(x)$ defined on $A \\cup \\{c\\}$ with $F(c) = L$: if $x = c$, then $|F(c) - F(c)| = 0 < \\varepsilon$ holds trivially.', m: 'x = c \\implies |F(x) - F(c)| = 0 < \\varepsilon' },
+        { why: 'If $x \\in A$ with $|x - c| < \\delta$, then $|F(x) - F(c)| = |f(x) - L| < \\varepsilon$. Thus $F$ is continuous at $c$.', m: 'x \\in A \\cup \\{c\\},\\, |x - c| < \\delta \\implies |F(x) - F(c)| < \\varepsilon' },
+        { why: 'Conversely, if $G: A \\cup \\{c\\} \\to \\mathbb{R}$ is continuous at $c$, then $\\lim_{x\\to c} g(x) = \\lim_{x\\to c, x\\in A} G(x) = G(c)$ must exist in $\\mathbb{R}$.', m: '\\lim_{x\\to c} g(x) = G(c) \\in \\mathbb{R}' }
+      ],
+      ends: 'Thus a continuous extension exists if and only if $\\lim_{x\\to c} f(x)$ exists, with $F(c) = L$ the unique choice.'
+    },
     cards: [
       { q: 'If $\\lim_{x\\to c}f(x)=L$ but $c\\notin A$, how do you build a continuous extension at $c$?', a: 'Define $F(c):=L$ and $F=f$ elsewhere; then $F$ is continuous at $c$.', kind: 'apply' },
       { q: 'Can every function with no limit at $c$ be patched to be continuous there by some clever choice of value?', a: 'No &mdash; if the limit does not exist, no assigned value makes the extension continuous at $c$.', kind: 'trap' },
@@ -2903,6 +3061,17 @@ CONCEPTS.push(
     traps: [
       `To divide by a function $\\varphi$ that vanishes somewhere on $A$, you must first restrict to $A_1:=\\{x\\in A:\\varphi(x)\\ne0\\}$; the quotient is then continuous on $A_1$, not on all of $A$.`,
     ],
+    proof: {
+      idea: 'Apply Theorem 5.2.1 (algebraic combinations at a point) at every individual point $c \\in A$.',
+      why: 'By Definition 5.1.5, a function is continuous on a set $A$ if and only if it is continuous at each point $c \\in A$.',
+      rungs: [
+        { why: 'Let $c$ be an arbitrary point of $A$.', m: 'c \\in A' },
+        { why: 'Since $f$ and $g$ are continuous on $A$, both are continuous at $c$.', m: 'f, g \\text{ continuous at } c' },
+        { why: 'By Theorem 5.2.1, $f+g, f-g, fg, bf$ (and $f/h$ if $h(x) \\ne 0$ on $A$) are continuous at $c$.', m: '(f+g)(c) = \\lim_{x\\to c}(f+g)(x)' },
+        { why: 'Since $c \\in A$ was arbitrary, the combinations are continuous at every point of $A$.', m: '\\forall c \\in A \\implies \\text{continuous on } A' }
+      ],
+      ends: 'Therefore all listed algebraic combinations are continuous on $A$.'
+    },
     cards: [
       { q: 'If $f,g$ are continuous on $A$, is $fg$ continuous on $A$?', a: 'Yes, by Theorem 5.2.2(a).', kind: 'apply' },
       { q: 'If $\\varphi$ is continuous on $A$ but vanishes at some points of $A$, on what set is $f/\\varphi$ continuous?', a: 'On $A_1=\\{x\\in A:\\varphi(x)\\ne0\\}$, not necessarily on all of $A$.', kind: 'trap' },
@@ -2967,6 +3136,17 @@ CONCEPTS.push(
     intuition: `The absolute value function itself is continuous (it barely moves outputs: $\\big||a|-|b|\\big|\\le|a-b|$), so composing it with a continuous $f$ cannot introduce any new bad behaviour. The tolerance you need for $f$ transfers directly to $|f|$.`,
     needs: ['c.5.1.1', 's.triangle-ineq'],
     traps: [`The converse is false: $|f|$ can be continuous while $f$ itself is wildly discontinuous (e.g. $f=1$ on rationals, $-1$ on irrationals gives $|f|\\equiv1$, continuous, while $f$ is nowhere continuous).`],
+    proof: {
+      idea: 'Apply the reverse triangle inequality $||f(x)| - |f(c)|| \\le |f(x) - f(c)|$.',
+      why: 'Controlling $|f(x) - f(c)|$ by continuity automatically controls the difference in absolute values.',
+      rungs: [
+        { why: 'Recall the reverse triangle inequality for real numbers.', m: '||a| - |b|| \\le |a - b|' },
+        { why: 'Substitute $a = f(x)$ and $b = f(c)$.', m: '||f(x)| - |f(c)|| \\le |f(x) - f(c)|' },
+        { why: 'Since $f$ is continuous at $c$, for any $\\varepsilon > 0$ there is $\\delta > 0$ such that $|x - c| < \\delta$ with $x \\in A$ implies $|f(x) - f(c)| < \\varepsilon$.', m: '|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon' },
+        { why: 'By the reverse triangle inequality, this directly yields $||f(x)| - |f(c)|| < \\varepsilon$.', m: '|x - c| < \\delta \\implies ||f(x)| - |f(c)|| \\le |f(x) - f(c)| < \\varepsilon' }
+      ],
+      ends: 'Thus $|f|$ is continuous at $c$, and hence continuous on all of $A$.'
+    },
     cards: [
       { q: 'If $f$ is continuous at $c$, is $|f|$ necessarily continuous at $c$?', a: 'Yes.', kind: 'state' },
       { q: 'If $|f|$ is continuous at $c$, must $f$ be continuous at $c$?', a: 'No &mdash; e.g. $f=\\pm1$ depending on rationality of $x$ gives $|f|\\equiv1$ continuous while $f$ is nowhere continuous.', kind: 'trap' },
@@ -2980,6 +3160,16 @@ CONCEPTS.push(
     intuition: `Just like $|\\cdot|$, the square-root function is itself continuous on $[0,\\infty)$ (this uses the sequence fact that $x_n\\to x\\ \\Rightarrow\\ \\sqrt{x_n}\\to\\sqrt x$), so composing it with a nonnegative continuous $f$ cannot introduce discontinuity.`,
     needs: ['c.5.1.1', 'c.3.2.10'],
     traps: [`The nonnegativity hypothesis $f(x)\\ge0$ on all of $A$ is essential &mdash; $\\sqrt{f(x)}$ is not even real-valued otherwise.`],
+    proof: {
+      idea: 'Rationalize the difference when $f(c) > 0$, and use $0 \\le f(x) < \\varepsilon^2$ when $f(c) = 0$.',
+      why: 'When $f(c) > 0$, $|\sqrt{f(x)} - \sqrt{f(c)}| = \frac{|f(x) - f(c)|}{\sqrt{f(x)} + \sqrt{f(c)}} \le \frac{|f(x) - f(c)|}{\sqrt{f(c)}}$.',
+      rungs: [
+        { why: 'Case 1: $f(c) = 0$. For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $0 \\le f(x) < \\varepsilon^2$.', m: '|\\sqrt{f(x)} - 0| = \\sqrt{f(x)} < \\varepsilon' },
+        { why: 'Case 2: $f(c) > 0$. Multiply and divide by the conjugate.', m: '|\\sqrt{f(x)} - \\sqrt{f(c)}| = \\frac{|f(x) - f(c)|}{\\sqrt{f(x)} + \\sqrt{f(c)}} \\le \\frac{|f(x) - f(c)|}{\\sqrt{f(c)}}' },
+        { why: 'For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $|f(x) - f(c)| < \\varepsilon\\sqrt{f(c)}$.', m: '|\\sqrt{f(x)} - \\sqrt{f(c)}| < \\frac{\\varepsilon\\sqrt{f(c)}}{\\sqrt{f(c)}} = \\varepsilon' }
+      ],
+      ends: 'In both cases, $\\sqrt{f}$ is continuous at $c$, and hence continuous on $A$.'
+    },
     cards: [
       { q: 'What hypothesis on $f$ is required before asking whether $\\sqrt f$ is continuous?', a: '$f(x)\\ge0$ for all $x\\in A$, so $\\sqrt{f(x)}$ is defined.', kind: 'trap' },
       { q: 'If $f\\ge0$ is continuous on $A$, is $\\sqrt f$ continuous on $A$?', a: 'Yes, by Theorem 5.2.5(b).', kind: 'state' },
@@ -3022,6 +3212,18 @@ CONCEPTS.push(
     intuition: `Immediate from 5.2.6 applied at every point of $A$: this theorem is the workhorse used constantly to certify continuity of complicated expressions (like $\\sin(1/x)$ or $\\cos\\sqrt{1+x^2}$) by decomposing them into a chain of simple, known-continuous pieces.`,
     needs: ['c.5.2.6', 'c.5.1.5'],
     traps: [`This theorem is only useful as a black box if you correctly identify the "inner" and "outer" functions and verify the range condition $f(A)\\subseteq B$ &mdash; skipping that check is a common source of invalid continuity claims.`],
+    proof: {
+      idea: 'Apply Theorem 5.2.6 (composition at a point) at every individual point $c \\in A$.',
+      why: 'Definition 5.1.5 defines continuity on a set as continuity at each individual point of that set.',
+      rungs: [
+        { why: 'Let $c$ be any arbitrary point of $A$.', m: 'c \\in A' },
+        { why: 'Since $f$ is continuous on $A$, $f$ is continuous at $c$.', m: 'f \\text{ is continuous at } c' },
+        { why: 'Because $f(A) \\subseteq B$, the image point $f(c) \\in B$. Since $g$ is continuous on $B$, $g$ is continuous at $f(c)$.', m: 'f(c) \\in B \\implies g \\text{ is continuous at } f(c)' },
+        { why: 'By Theorem 5.2.6, the composite function $g \\circ f$ is continuous at $c$.', m: 'g \\circ f \\text{ is continuous at } c' },
+        { why: 'Since $c \\in A$ was arbitrary, $g \\circ f$ is continuous on all of $A$.', m: '\\forall c \\in A \\implies g \\circ f \\text{ is continuous on } A' }
+      ],
+      ends: 'Thus $g \\circ f$ is continuous on $A$.'
+    },
     cards: [
       { q: 'Why is Theorem 5.2.7 the tool of choice for proving continuity of expressions like $\\cos(\\sqrt{1+x^2})$?', a: 'It lets you certify continuity by decomposing into a chain of simple continuous pieces composed together, rather than a fresh $\\varepsilon$-$\\delta$ argument.', kind: 'recall' },
       { q: 'What condition must you check before applying the composition theorem on sets?', a: '$f(A)\\subseteq B$, so that $g\\circ f$ is defined on all of $A$.', kind: 'apply' },
@@ -3609,6 +3811,16 @@ CONCEPTS.push(
     traps:[
       `The bound on m depends on δ(ε), which itself depends on how "wiggly" f is — there's no universal formula for m purely from ε without knowing f.`
     ],
+    proof: {
+      idea: 'Apply uniform continuity directly to partitions whose subinterval length is smaller than $\\delta(\\varepsilon)$.',
+      why: 'If the step size $h = (b-a)/m < \\delta(\\varepsilon)$, every point in subinterval $I_k$ is within $\\delta(\\varepsilon)$ of the base point $a + (k-1)h$.',
+      rungs: [
+        { why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$, giving $\\delta(\\varepsilon) > 0$ such that $|x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon$.', m: '\\forall x, y \\in [a, b],\\, |x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon' },
+        { why: 'Choose $m \\in \\mathbb{N}$ large enough so the mesh size satisfies $h = (b - a)/m < \\delta(\\varepsilon)$.', m: 'h = \\frac{b - a}{m} < \\delta(\\varepsilon)' },
+        { why: 'Define $s_\\varepsilon(x) = f(a + (k-1)h)$ on $I_k = [a+(k-1)h, a+kh)$. For any $x \\in I_k$, $|x - (a + (k-1)h)| \\le h < \\delta(\\varepsilon)$.', m: '|x - (a + (k-1)h)| < \\delta(\\varepsilon) \\implies |f(x) - s_\\varepsilon(x)| < \\varepsilon' }
+      ],
+      ends: 'Thus $|f(x) - s_\\varepsilon(x)| < \\varepsilon$ holds for all $x \\in [a, b]$.'
+    },
     cards:[
       { q:'What condition must the mesh size h=(b-a)/m satisfy for the corollary to hold?', a:'h < δ(ε), the modulus of uniform continuity for the target ε.', kind:'apply' },
       { q:'State Corollary 5.4.11 on explicit mesh size for step-function approximation.', a:'For continuous $f$ on $[a,b]$ and $\\varepsilon>0$, choosing $m\\in\\mathbb{N}$ with $h=(b-a)/m < \\delta(\\varepsilon)$ ensures $|f(x)-s_\\varepsilon(x)|<\\varepsilon$ for all $x\\in[a,b]$.', kind:'state' }
@@ -3668,6 +3880,17 @@ CONCEPTS.push(
       `The theorem gives existence of SOME polynomial within ε — it does not give a formula or an algorithm for constructing that polynomial, and higher accuracy generally forces higher degree.`,
       `Proof is intentionally omitted here — it is not examinable in this course; only the statement is required.`
     ],
+    proof: {
+      idea: 'Construct approximating polynomials via Bernstein polynomials $B_n(f; x)$ on $[0, 1]$.',
+      why: 'Bernstein polynomials $B_n(f; x) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} x^k (1-x)^{n-k}$ converge uniformly to any continuous function $f$ on $[0, 1]$.',
+      rungs: [
+        { why: 'Use an affine change of variable $t = (x - a)/(b - a)$ to reduce from $[a, b]$ to the unit interval $[0, 1]$.', m: 't = \\frac{x - a}{b - a} \\in [0, 1]' },
+        { why: 'Define the $n$-th Bernstein polynomial for $f$ on $[0, 1]$.', m: 'B_n(f; t) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} t^k (1-t)^{n-k}' },
+        { why: 'Using uniform continuity of $f$, bound terms where $|k/n - t| < \\delta$ by $\\varepsilon/2$.', m: '|k/n - t| < \\delta \\implies |f(k/n) - f(t)| < \\varepsilon/2' },
+        { why: 'Use the variance identity $\\sum_{k=0}^n (k - nt)^2 \\binom{n}{k} t^k (1-t)^{n-k} = nt(1-t) \\le n/4$ to bound terms where $|k/n - t| \\ge \\delta$.', m: '\\sum_{|k/n - t| \\ge \\delta} \\binom{n}{k} t^k (1-t)^{n-k} \\le \\frac{1}{4n\\delta^2}' }
+      ],
+      ends: 'Choosing $n > M/(\\varepsilon \\delta^2)$ ensures $|f(t) - B_n(f; t)| < \\varepsilon$ uniformly on $[0, 1]$.'
+    },
     cards:[
       { q:'State the Weierstrass Approximation Theorem.', a:'For f continuous on [a,b] and ε>0, there exists a polynomial Pε with |f(x)-Pε(x)|<ε for all x∈I.', kind:'state' },
       { q:'Is the proof of the Weierstrass Approximation Theorem examinable in this course?', a:'No — the syllabus marks it optional; only the statement is required.', kind:'recall' }
@@ -3755,6 +3978,18 @@ CONCEPTS.push(
       `Trying to prove the Chain Rule by writing $\\frac{f(g(x)) - f(g(c))}{g(x) - g(c)} \\cdot \\frac{g(x) - g(c)}{x - c}$ without checking if $g(x) - g(c) = 0$. That division is illegal if $g$ is constant or oscillates! Carathéodory is the rigorous fix.`,
       `Remember that $\\varphi(c)$ is not zero — it is the exact derivative $f'(c)$.`
     ],
+    proof: {
+      idea: 'Define $\\varphi(x) = \\frac{f(x) - f(c)}{x - c}$ for $x \\ne c$ and $\\varphi(c) = f\'(c)$. Continuity of $\\varphi$ at $c$ is equivalent to differentiability of $f$ at $c$.',
+      why: 'Writing $f(x) - f(c) = \\varphi(x)(x - c)$ avoids division by zero entirely when substituting $g(x)$ in the Chain Rule.',
+      rungs: [
+        { why: 'Define $\\varphi(x) = (f(x) - f(c))/(x - c)$ for $x \\ne c$, and $\\varphi(c) = f\'(c)$.', m: 'f(x) - f(c) = \\varphi(x)(x - c) \\quad \\forall x \\in I' },
+        { why: 'By definition, differentiability of $f$ at $c$ holds iff $\\lim_{x\\to c} \\varphi(x) = f\'(c) = \\varphi(c)$, which is continuity of $\\varphi$ at $c$.', m: '\\lim_{x\\to c} \\varphi(x) = f\'(c) = \\varphi(c)' },
+        { why: 'For the Chain Rule with $g$ differentiable at $c$, write $g(x) - g(c) = \\psi(x)(x - c)$ with $\\psi$ continuous at $c$ and $\\psi(c) = g\'(c)$.', m: 'g(x) - g(c) = \\psi(x)(x - c)' },
+        { why: 'Substitute $g(x)$ into $f$: $f(g(x)) - f(g(c)) = \\varphi(g(x))(g(x) - g(c)) = \\varphi(g(x))\\psi(x)(x - c)$.', m: '\\frac{(f\\circ g)(x) - (f\\circ g)(c)}{x - c} = \\varphi(g(x))\\psi(x)' },
+        { why: 'Take the limit as $x \\to c$: since $g$ is continuous at $c$, $\\varphi(g(x)) \\to \\varphi(g(c)) = f\'(g(c))$ and $\\psi(x) \\to g\'(c)$.', m: '(f\\circ g)\'(c) = f\'(g(c))g\'(c)' }
+      ],
+      ends: 'Carathéodory\\\'s Theorem is established, rigorously proving the Chain Rule without division by zero.'
+    },
     cards: [
       { q: 'State Carathéodory’s characterisation of differentiability.', a: '$f$ is differentiable at $c$ iff $\\exists$ continuous $\\varphi$ at $c$ such that $f(x) - f(c) = \\varphi(x)(x - c)$, with $\\varphi(c) = f\'(c)$.', kind: 'state' },
       { q: 'What trap in the high school proof of the Chain Rule does Carathéodory’s Theorem fix?', a: 'It avoids dividing by $g(x) - g(c)$, which could be zero even when $x \\ne c$.', kind: 'recall' }
@@ -3777,6 +4012,17 @@ CONCEPTS.push(
       `The point $c$ MUST be an INTERIOR point! If $c$ is an endpoint of $[a, b]$, the derivative does NOT have to be zero (e.g. $f(x) = x$ on $[0, 1]$ has maximum at $1$, but $f'(1) = 1 \\ne 0$).`,
       `The converse is FALSE: $f'(c) = 0$ does NOT guarantee an extremum! For $f(x) = x^3$ at $0$, $f'(0) = 0$, but $0$ is an inflection point, not a max or min.`
     ],
+    proof: {
+      idea: 'Examine the signs of the left-hand and right-hand difference quotients at the interior extremum.',
+      why: 'At an interior maximum, secant slopes from the left are $\\ge 0$ while secant slopes from the right are $\\le 0$; differentiability forces both limits to be equal.',
+      rungs: [
+        { why: 'Assume $f$ has a relative maximum at interior point $c$. Then $f(x) \\le f(c)$ for all $x \\in (c - \\delta, c + \\delta) \\subseteq I$.', m: 'f(x) - f(c) \\le 0 \\quad \\forall x \\in (c - \\delta, c + \\delta)' },
+        { why: 'For $x \\in (c - \\delta, c)$, $x - c < 0$, so the difference quotient is $\\ge 0$.', m: '\\frac{f(x) - f(c)}{x - c} \\ge 0 \\implies f\'(c) = \\lim_{x\\to c^-} \\frac{f(x) - f(c)}{x - c} \\ge 0' },
+        { why: 'For $x \\in (c, c + \\delta)$, $x - c > 0$, so the difference quotient is $\\le 0$.', m: '\\frac{f(x) - f(c)}{x - c} \\le 0 \\implies f\'(c) = \\lim_{x\\to c^+} \\frac{f(x) - f(c)}{x - c} \\le 0' },
+        { why: 'Since $f$ is differentiable at $c$, both one-sided limits are equal to $f\'(c)$, forcing $0 \\le f\'(c) \\le 0$.', m: 'f\'(c) = 0' }
+      ],
+      ends: 'An identical argument with reversed signs applies to a relative minimum, concluding $f\'(c) = 0$.'
+    },
     cards: [
       { q: 'State the Interior Extremum Theorem (Fermat).', a: 'If $f$ has a relative extremum at an interior point $c$ and $f\'(c)$ exists, then $f\'(c) = 0$.', kind: 'state' },
       { q: 'Does $f\'(c) = 0$ imply $c$ is a relative maximum or minimum?', a: 'No. For $f(x) = x^3$, $f\'(0) = 0$, but $x = 0$ is not a relative extremum.', kind: 'apply' }
@@ -3798,6 +4044,17 @@ CONCEPTS.push(
       `All three conditions are strictly required: (1) continuous on $[a, b]$, (2) differentiable on $(a, b)$, (3) $f(a) = f(b)$. If any one fails, the theorem fails!`,
       `Counterexample when differentiability fails: $f(x) = |x|$ on $[-1, 1]$. Here $f(-1) = f(1) = 1$, but $f'(c)$ is never $0$ because the corner at $0$ is not differentiable.`
     ],
+    proof: {
+      idea: 'Apply the Maximum-Minimum Theorem (5.3.4) and Fermat\\\'s Interior Extremum Theorem (6.2.1).',
+      why: 'If $f$ is constant, $f\' = 0$ everywhere; if $f$ is not constant, it attains an absolute maximum or minimum at an interior point $c \\in (a, b)$.',
+      rungs: [
+        { why: 'By the Maximum-Minimum Theorem (5.3.4), $f$ attains an absolute maximum $M$ and minimum $m$ on $[a, b]$.', m: '\\exists x_1, x_2 \\in [a, b] : f(x_1) = m,\\, f(x_2) = M' },
+        { why: 'If $m = M$, then $f$ is constant on $[a, b]$, so $f\'(x) = 0$ for all $x \\in (a, b)$ and any interior point $c$ works.', m: 'm = M \\implies f(x) = f(a) \\implies f\'(c) = 0' },
+        { why: 'If $m < M$, then since $f(a) = f(b)$, at least one of $m$ or $M$ must be attained at an interior point $c \\in (a, b)$.', m: 'c \\in (a, b) \\quad \\text{with } f(c) = M \\text{ (or } m\\text{)}' },
+        { why: 'Since $c$ is an interior extremum and $f$ is differentiable on $(a, b)$, Fermat\\\'s Theorem (6.2.1) ensures $f\'(c) = 0$.', m: 'f\'(c) = 0' }
+      ],
+      ends: 'In all cases, there exists at least one $c \\in (a, b)$ where $f\'(c) = 0$.'
+    },
     cards: [
       { q: 'State the three hypotheses of Rolle’s Theorem.', a: '(1) $f$ continuous on $[a, b]$; (2) $f$ differentiable on $(a, b)$; (3) $f(a) = f(b)$.', kind: 'state' },
       { q: 'What does Rolle’s Theorem conclude?', a: 'There exists at least one $c \\in (a, b)$ such that $f\'(c) = 0$.', kind: 'recall' }
@@ -3849,6 +4106,18 @@ CONCEPTS.push(
       <p>Darboux's Theorem says that <b>EVERY derivative function $f'$ satisfies the intermediate value property, even if $f'$ is NOT continuous!</b></p>
       <p>This means a derivative can NEVER have a jump discontinuity (step jump). If a function jumps from $2$ to $5$ without taking values in between, it CANNOT be the derivative of any function!</p>`,
     needs: ['c.6.2.1', 'c.5.3.4'],
+    proof: {
+      idea: 'Construct an auxiliary function $g(x) = f(x) - kx$ and show its absolute minimum on $[a, b]$ must occur at an interior point.',
+      why: 'Because $g\'(a) < 0$ and $g\'(b) > 0$, the minimum cannot occur at either endpoint, so Fermat\'s Theorem (6.2.1) forces $g\'(c) = 0$.',
+      rungs: [
+        { why: 'Assume without loss of generality $f\'(a) < k < f\'(b)$ and construct an auxiliary function.', m: 'g(x) = f(x) - kx \\quad \\text{for } x \\in [a, b]' },
+        { why: '$g$ is continuous on $[a, b]$ because $f$ is differentiable (hence continuous). By the Maximum-Minimum Theorem (5.3.4), $g$ attains an absolute minimum at some point $c \\in [a, b]$.', m: 'g(c) = \\min_{x \\in [a, b]} g(x)' },
+        { why: 'Evaluate the derivative of $g$ at the endpoints.', m: 'g\'(a) = f\'(a) - k < 0 \\quad \\text{and} \\quad g\'(b) = f\'(b) - k > 0' },
+        { why: 'Since $g\'(a) < 0$, $g(x) < g(a)$ for $x > a$ near $a$, so $c \\ne a$. Similarly, since $g\'(b) > 0$, $g(x) < g(b)$ for $x < b$ near $b$, so $c \\ne b$.', m: 'c \\in (a, b)' },
+        { why: 'Since $c$ is an interior extremum and $g$ is differentiable at $c$, Fermat\'s Theorem (6.2.1) applies.', m: 'g\'(c) = 0 \\iff f\'(c) - k = 0 \\implies f\'(c) = k' }
+      ],
+      ends: 'Thus, every value $k$ strictly between $f\'(a)$ and $f\'(b)$ is attained as $f\'(c)$ for some interior point $c \\in (a, b)$.'
+    },
     traps: [
       `Thinking Darboux requires $f'$ to be continuous. No! It assumes ONLY that $f$ is differentiable; $f'$ can be discontinuous and still obeys Darboux.`,
       `Therefore, the signum function $\\operatorname{sgn}(x)$ can NEVER be a derivative, because it jumps from $-1$ to $+1$ without hitting $0$.`
@@ -3869,6 +4138,18 @@ CONCEPTS.push(
     intuition: `<p>Standard Lagrange MVT compares $f(x)$ against the simple straight line $g(x) = x$. Cauchy's MVT generalises this to compare ANY two functions $f$ and $g$ simultaneously!</p>
       <p>Notice that the denominator $g(b) - g(a) \\ne 0$ by Rolle's theorem (since $g' \\ne 0$). This theorem is the mathematical engine that proves L'Hospital's Rules!</p>`,
     needs: ['c.6.2.4', 'c.6.2.3'],
+    proof: {
+      idea: 'Construct an auxiliary function $h(x) = [f(b) - f(a)]g(x) - [g(b) - g(a)]f(x)$ that satisfies the conditions of Rolle\'s Theorem.',
+      why: 'Because $h(a) = h(b)$, Rolle\'s Theorem guarantees $h\'(c) = 0$, giving the simultaneous proportionality ratio.',
+      rungs: [
+        { why: 'First verify $g(b) - g(a) \\ne 0$. If $g(b) = g(a)$, Rolle\'s theorem would imply $g\'(\\xi) = 0$ for some $\\xi \\in (a, b)$, contradicting $g\' \\ne 0$. Now define the auxiliary function $h$ on $[a, b]$.', m: 'h(x) = [f(b) - f(a)] g(x) - [g(b) - g(a)] f(x)' },
+        { why: '$h$ is continuous on $[a, b]$ and differentiable on $(a, b)$ as a linear combination of $f$ and $g$.', m: 'h\'(x) = [f(b) - f(a)] g\'(x) - [g(b) - g(a)] f\'(x)' },
+        { why: 'Evaluate $h$ at the endpoints $a$ and $b$.', m: 'h(a) = f(b)g(a) - g(b)f(a) = h(b)' },
+        { why: 'Apply Rolle\'s Theorem (6.2.3) to $h$ on $[a, b]$, guaranteeing a point $c \\in (a, b)$ with $h\'(c) = 0$.', m: '[f(b) - f(a)] g\'(c) - [g(b) - g(a)] f\'(c) = 0' },
+        { why: 'Divide by $[g(b) - g(a)] g\'(c)$, valid since both factors are non-zero.', m: '\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f\'(c)}{g\'(c)}' }
+      ],
+      ends: 'This establishes Cauchy\'s generalised Mean Value Theorem.'
+    },
     traps: [
       `You CANNOT prove this by applying Lagrange MVT to $f$ and $g$ separately! That would give $\\frac{f'(c_1)}{g'(c_2)}$ with two DIFFERENT points $c_1 \\ne c_2$. Cauchy's theorem guarantees ONE single point $c$ that works for both simultaneously!`,
       `Remember that $g'(x) \\ne 0$ on the open interval is required to prevent $g(b) = g(a)$.`
@@ -3891,6 +4172,17 @@ CONCEPTS.push(
     intuition: `<p>In Class 12, everyone loves applying L'Hospital's Rule: when faced with $0/0$, differentiate the top and differentiate the bottom. But in Real Analysis, we prove WHY it works using Cauchy's MVT!</p>
       <p>Near the limit point, $\\frac{f(x)}{g(x)} = \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f'(c_x)}{g'(c_x)}$ for some point $c_x$ between $a$ and $x$. As $x \\to a$, $c_x$ is squeezed to $a$, forcing the ratio to $L$.</p>`,
     needs: ['c.6.3.2', 'c.4.1.4'],
+    proof: {
+      idea: 'Extend $f$ and $g$ continuously to the limit point $a$ and apply Cauchy\'s Mean Value Theorem on $[a, x]$.',
+      why: 'Cauchy MVT turns the ratio $\\frac{f(x)}{g(x)}$ into $\\frac{f\'(c_x)}{g\'(c_x)}$ where $a < c_x < x$; squeezing $x \\to a^+$ forces $c_x \\to a^+$.',
+      rungs: [
+        { why: 'For the $0/0$ form at $a^+$, extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Then $f$ and $g$ are continuous on $[a, x]$ for every $x \\in (a, b)$.', m: 'f(a) = \\lim_{t \\to a^+} f(t) = 0, \\quad g(a) = \\lim_{t \\to a^+} g(t) = 0' },
+        { why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on the interval $[a, x]$. There exists $c_x \\in (a, x)$ such that:', m: '\\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}' },
+        { why: 'Substitute $f(a) = 0$ and $g(a) = 0$ into the expression.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{where } a < c_x < x' },
+        { why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$. By the composition of limits:', m: '\\lim_{x \\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x \\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L' }
+      ],
+      ends: 'The indeterminate form $\\infty/\\infty$ reduces similarly via Cauchy MVT on subintervals $[x, y]$, establishing L\'Hospital\'s Rule.'
+    },
     traps: [
       `THE COMMON MISTAKE: Differentiating $\\frac{f}{g}$ using the Quotient Rule $\\frac{f'g - fg'}{g^2}$! In L'Hospital's Rule, you differentiate numerator and denominator SEPARATELY: $\\frac{f'(x)}{g'(x)}$.`,
       `Applying L'Hospital when the limit is NOT indeterminate! If $\\lim f = 3$ and $\\lim g = 2$, the limit is simply $3/2$. Differentiating would give a completely wrong answer.`
@@ -3917,6 +4209,18 @@ CONCEPTS.push(
     intuition: `<p>Taylor's theorem is the ultimate upgrade to the Mean Value Theorem! When $n = 0$, it gives $f(x) = f(x_0) + f'(c)(x - x_0)$, which is exactly Lagrange MVT!</p>
       <p>By including higher derivatives, you bend the approximating polynomial to match the curve's curvature ($f''$), its rate of curvature ($f'''$), etc. The remainder $R_n(x)$ gives you an exact formula for the approximation error.</p>`,
     needs: ['c.6.2.4'],
+    proof: {
+      idea: 'Define the remainder constant $M$ such that $f(x) = P_n(x) + M(x - x_0)^{n+1}$ and apply Rolle\'s Theorem to an auxiliary function $F(t)$.',
+      why: 'Varying the base point $t$ causes the sum in $F\'(t)$ to telescope, isolating the $(n+1)$-th derivative at $c$.',
+      rungs: [
+        { why: 'Fix $x, x_0 \\in I$ with $x \\ne x_0$. Define the constant $M$ such that $f(x) = P_n(x) + M(x - x_0)^{n+1}$.', m: 'M = \\frac{f(x) - P_n(x)}{(x - x_0)^{n+1}}' },
+        { why: 'Define an auxiliary function $F$ on the interval between $x_0$ and $x$ by varying the base point $t$:', m: 'F(t) = f(x) - \\sum_{k=0}^{n} \\frac{f^{(k)}(t)}{k!}(x - t)^k - M(x - t)^{n+1}' },
+        { why: 'Observe that $F(x) = 0$, and by choice of $M$, $F(x_0) = 0$. Since $f^{(n+1)}$ exists, $F$ is differentiable.', m: 'F(x_0) = F(x) = 0' },
+        { why: 'Differentiate $F(t)$ with respect to $t$. By the product rule, the sum telescopes and successive terms cancel pairwise.', m: 'F\'(t) = -\\frac{(x - t)^n}{n!} f^{(n+1)}(t) + (n+1)M(x - t)^n = (x - t)^n \\left[ (n+1)M - \\frac{f^{(n+1)}(t)}{n!} \\right]' },
+        { why: 'Apply Rolle\'s Theorem (6.2.3) to $F$ on $[x_0, x]$. There exists $c$ strictly between $x_0$ and $x$ such that $F\'(c) = 0$. Since $c \\ne x$, $(x - c)^n \\ne 0$.', m: '(n+1)M - \\frac{f^{(n+1)}(c)}{n!} = 0 \\implies M = \\frac{f^{(n+1)}(c)}{(n+1)!}' }
+      ],
+      ends: 'Substituting $M$ yields the Lagrange form of the remainder $R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x - x_0)^{n+1}$.'
+    },
     traps: [
       `Thinking the point $c$ in the remainder is fixed. $c$ depends on both $x$ and $n$, but it is guaranteed to lie strictly between $x_0$ and $x$.`,
       `Forgetting the factorial $(n+1)!$ in the denominator of the remainder term.`
@@ -5589,58 +5893,221 @@ const Tex = (function () {
 })();
 
 
+/* ── src/core.md.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Markdown, line by line, with the maths left alone.
+
+   The writing workspace is a live markdown editor whose maths is written
+   inline as $…$ and $$…$$. So the one thing this renderer must never do is
+   touch what is between the dollars: `\text{a*b*c}` is not italics, and a
+   backslash is not an escape character to markdown here.
+
+   The method is therefore: cut the source into maths and prose segments
+   first, run the inline rules over prose only, then reassemble. Every block
+   is one line — the editor renders each line into its own frame, so there is
+   no multi-line block state to carry.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Markdown = (function () {
+
+  const esc = s => String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  /* Split on $$…$$ first, then $…$, so a display block is never mistaken for
+     two inline ones. Returns [{math:false,t}|{math:true,t}]. */
+  function segments(src) {
+    const out = [];
+    const re = /\$\$([\s\S]+?)\$\$|\$([^$\n]+?)\$/g;
+    let at = 0, m;
+    while ((m = re.exec(src)) !== null) {
+      if (m.index > at) out.push({ math: false, t: src.slice(at, m.index) });
+      out.push({ math: true, t: m[0] });
+      at = m.index + m[0].length;
+    }
+    if (at < src.length) out.push({ math: false, t: src.slice(at) });
+    return out;
+  }
+
+  /* Inline rules, prose only. Code spans are pulled out first so that what is
+     inside them survives verbatim. */
+  function inline(text) {
+    const code = [];
+    let s = String(text).replace(/`([^`]+)`/g, function (_, c) {
+      code.push(c);
+      return '\x00C' + (code.length - 1) + '\x00';
+    });
+
+    s = esc(s)
+      .replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<em>$2</em>')
+      .replace(/(^|[\s(])_([^_\n]+)_/g, '$1<em>$2</em>')
+      .replace(/~~([^~]+)~~/g, '<s>$1</s>')
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" rel="noreferrer">$1</a>');
+
+    return s.replace(/\x00C(\d+)\x00/g, (_, i) => '<code>' + esc(code[+i]) + '</code>');
+  }
+
+  /* prose through the inline rules, maths through untouched */
+  function spans(src) {
+    return segments(src).map(seg => seg.math ? seg.t : inline(seg.t)).join('');
+  }
+
+  /* One source line -> one HTML block. */
+  function line(src) {
+    const raw = String(src == null ? '' : src);
+    const t = raw.trim();
+    if (!t) return '';
+
+    if (/^(---|\*\*\*|___)\s*$/.test(t)) return '<hr>';
+
+    const h = /^(#{1,4})\s+(.*)$/.exec(t);
+    if (h) {
+      const n = Math.min(h[1].length + 1, 5);
+      return '<h' + n + ' class="md-h">' + spans(h[2]) + '</h' + n + '>';
+    }
+
+    const q = /^>\s?(.*)$/.exec(t);
+    if (q) return '<blockquote class="md-q">' + spans(q[1]) + '</blockquote>';
+
+    const ul = /^[-*+]\s+(.*)$/.exec(t);
+    if (ul) return '<ul class="md-l"><li>' + spans(ul[1]) + '</li></ul>';
+
+    const ol = /^(\d+)[.)]\s+(.*)$/.exec(t);
+    if (ol) return '<ol class="md-l" start="' + ol[1] + '"><li>' + spans(ol[2]) + '</li></ol>';
+
+    return '<p class="md-p">' + spans(raw) + '</p>';
+  }
+
+  /* Does this line carry any maths delimiter at all? The editor uses this to
+     decide whether a delimiter-free line in a maths-first box should be
+     treated as bare LaTeX. */
+  const hasMath = src => /\$/.test(String(src || ''));
+
+  /* Whole document, for export and for the read-only preview. */
+  const doc = src => String(src || '').split('\n').map(line).join('\n');
+
+  return { line, doc, hasMath, inline, segments };
+})();
+
+
 /* ── src/core.store.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Progress store — Level 1 scope only.
+   Progress store.
 
-   Two things are tracked, and they are kept apart on purpose (HOOK_claude.md):
+   Three things are tracked, and they are kept apart on purpose:
 
-     completion   you have encountered the material. Level 1 of the mastery
-                  ladder. Never evidence of recall.
+     completion   Level 1. You have encountered the material. Never evidence
+                  of recall.
+     proof work   Level 2. You have worked a proof through yourself. Awarded
+                  per task, never for opening the note.
      first try    the FIRST recorded attempt at a card or a question. Later
                   attempts are allowed but never overwrite the first, because
                   the first attempt is the only honest measurement.
 
-   No scheduler, no recall levels, no sync — those are later levels. Storage is
-   localStorage with an in-memory fallback so a locked-down browser degrades to
-   a working-but-forgetful session instead of a broken one.
+   The shape is built for merging. Two devices can both make progress offline,
+   so every mutation is timestamped and every removal leaves a tombstone —
+   merge(a,b) == merge(b,a), and merging twice changes nothing. core.sync.js
+   depends on that and on nothing else.
+
+   Storage is localStorage with an in-memory fallback so a locked-down browser
+   degrades to a working-but-forgetful session instead of a broken one.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Store = (function () {
 
   const KEY = 'ssc4.level1.v1';
-  const EMPTY = { v: 1, done: {}, cards: {}, omr: {}, write: {}, prefs: {} };
+  const EMPTY = {
+    v: 2,
+    done: {}, undone: {},        /* Level 1 completion + tombstones */
+    proofs: {}, unproofs: {},    /* Level 2 proof work + tombstones */
+    cards: {}, omr: {}, write: {},
+    prefs: {}, prefsAt: {},
+    updated: 0
+  };
 
-  let mem = null;          /* fallback when localStorage is unavailable */
   let volatile = false;
   let state = load();
+  const listeners = [];
+
+  function blank() { return JSON.parse(JSON.stringify(EMPTY)); }
+
+  /* v1 had no tombstones, no proof map and no per-key preference stamps.
+     Everything it did have keeps its meaning, so the upgrade is a fill-in. */
+  function upgrade(raw) {
+    const s = Object.assign(blank(), raw || {});
+    ['done', 'undone', 'proofs', 'unproofs', 'cards', 'omr', 'write', 'prefs', 'prefsAt']
+      .forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
+    s.v = 2;
+    if (!s.updated) s.updated = Date.now();
+    return s;
+  }
 
   function load() {
     try {
       const raw = window.localStorage.getItem(KEY);
-      if (!raw) return Object.assign({}, EMPTY);
-      const parsed = JSON.parse(raw);
-      return Object.assign({}, EMPTY, parsed && parsed.v === 1 ? parsed : {});
+      if (!raw) return blank();
+      return upgrade(JSON.parse(raw));
     } catch (e) {
       volatile = true;
-      return Object.assign({}, EMPTY);
+      return blank();
     }
   }
 
-  const flush = DOM.debounce(function () {
+  function write() {
     try { window.localStorage.setItem(KEY, JSON.stringify(state)); }
-    catch (e) { volatile = true; mem = state; }
-  }, 250);
-
-  function save() { flush(); }
-
-  /* ── completion ──────────────────────────────────────────────────────── */
-  const isDone = id => !!state.done[id];
-  function setDone(id, on) {
-    if (on) state.done[id] = Date.now(); else delete state.done[id];
-    save();
-    return isDone(id);
+    catch (e) { volatile = true; }
   }
+
+  const flush = DOM.debounce(write, 250);
+
+  /* Write immediately, skipping the debounce. Anything the very next page load
+     depends on has to go through here: a debounced write is still pending when
+     `location.reload()` tears the page down, and signing in or out and then
+     reloading would land back where you started. */
+  function flushNow() { write(); }
+
+  function save(quiet) {
+    state.updated = Date.now();
+    flush();
+    if (!quiet) listeners.forEach(function (fn) { try { fn(); } catch (e) { /* a listener must never break a save */ } });
+  }
+
+  /* core.sync.js subscribes here; nothing else needs to. */
+  function onChange(fn) { listeners.push(fn); }
+
+  /* ── a tick with a tombstone, used by completion and by proof work ────── */
+  function flag(on, off, id, want) {
+    const now = Date.now();
+    if (want) { state[on][id] = now; delete state[off][id]; }
+    else { state[off][id] = now; delete state[on][id]; }
+    save();
+    return !!state[on][id];
+  }
+
+  /* ── completion (Level 1) ────────────────────────────────────────────── */
+  const isDone = id => !!state.done[id];
+  const setDone = (id, on) => flag('done', 'undone', id, on);
+
+  /* Tick a whole list in one write — the prerequisite cascade. Returns the
+     ids that actually changed, so the caller can report honestly. */
+  function setDoneMany(ids, on) {
+    const now = Date.now();
+    const hit = [];
+    (ids || []).forEach(function (id) {
+      if (!!state.done[id] === !!on) return;
+      hit.push(id);
+      if (on) { state.done[id] = now; delete state.undone[id]; }
+      else { state.undone[id] = now; delete state.done[id]; }
+    });
+    if (hit.length) save();
+    return hit;
+  }
+
+  /* ── proof work (Level 2) ────────────────────────────────────────────── */
+  /* id is a concept id, or 'w:<questionId>' for a written question. */
+  const isProofDone = id => !!state.proofs[id];
+  const setProofDone = (id, on) => flag('proofs', 'unproofs', id, on);
 
   /* ── statement cards ─────────────────────────────────────────────────── */
   /* grade: 'got' | 'partly' | 'missed' */
@@ -5666,7 +6133,7 @@ const Store = (function () {
     return rec;
   }
 
-  /* ── theorem-writing drafts ──────────────────────────────────────────── */
+  /* ── writing drafts ──────────────────────────────────────────────────── */
   const draft = cid => (state.write[cid] && state.write[cid].tex) || '';
   function saveDraft(cid, tex) {
     if (!tex.trim()) delete state.write[cid];
@@ -5676,10 +6143,70 @@ const Store = (function () {
 
   /* ── preferences ─────────────────────────────────────────────────────── */
   const pref = (k, d) => (k in state.prefs ? state.prefs[k] : d);
-  function setPref(k, v) { state.prefs[k] = v; save(); return v; }
+  function setPref(k, v) {
+    state.prefs[k] = v;
+    state.prefsAt[k] = Date.now();
+    save();
+    return v;
+  }
+
+  /* ── the mastery level, PER COURSE ───────────────────────────────────────
+     Not one switch for the whole app: a learner can be consolidating proofs in
+     Real Analysis I while still meeting Real Analysis II for the first time,
+     and a single global level would force the harder standard onto the course
+     they have only just opened.
+
+     Level 2 has to be unlocked on that course before it can be selected —
+     by finishing the course at Level 1, or deliberately in its settings.
+     Opening the app never promotes anyone. */
+  const lvlKey = courseId => 'level:' + (courseId || '_');
+  const unlKey = courseId => 'level2:' + (courseId || '_');
+
+  const unlocked = courseId => pref(unlKey(courseId), false) === true;
+
+  function unlock(courseId, on) {
+    setPref(unlKey(courseId), !!on);
+    if (!on) setPref(lvlKey(courseId), 1);
+    return unlocked(courseId);
+  }
+
+  function level(courseId) {
+    const want = pref(lvlKey(courseId), 1);
+    return (want === 2 && unlocked(courseId)) ? 2 : 1;
+  }
+
+  function setLevel(courseId, n) {
+    const want = n === 2 ? 2 : 1;
+    if (want === 2 && !unlocked(courseId)) return level(courseId);
+    setPref(lvlKey(courseId), want);
+    return level(courseId);
+  }
+
+  /* ── who is signed in ────────────────────────────────────────────────────
+     Name and roll number are the credentials AND the sync key. They are a pass
+     key, not a password, and every surface that shows them says so. */
+  const identity = () => ({
+    name: pref('syncName', ''),
+    roll: pref('syncRoll', '')
+  });
+  const signedIn = () => {
+    const id = identity();
+    return !!(String(id.name).trim() && String(id.roll).trim());
+  };
+  function signIn(name, roll) {
+    setPref('syncName', String(name || '').trim());
+    setPref('syncRoll', String(roll || '').trim());
+    flushNow();
+    return signedIn();
+  }
+  function signOut() {
+    setPref('syncName', '');
+    setPref('syncRoll', '');
+    flushNow();
+  }
 
   /* ── aggregate stats over a given universe of ids ────────────────────── */
-  function summary(conceptIds, cardIds, omrIds) {
+  function summary(conceptIds, cardIds, omrIds, proofIds) {
     const notes = conceptIds.filter(isDone).length;
     let tried = 0, got = 0, partly = 0;
     cardIds.forEach(function (id) {
@@ -5697,21 +6224,342 @@ const Store = (function () {
       if (r.first.verdict === 'correct') right += 1;
       else if (r.first.verdict === 'partial') part += 1;
     });
+    const pf = proofIds || [];
     return {
       notes: { done: notes, total: conceptIds.length },
       cards: { tried: tried, got: got, partly: partly, total: cardIds.length },
-      omr: { locked: locked, correct: right, partial: part, total: omrIds.length }
+      omr: { locked: locked, correct: right, partial: part, total: omrIds.length },
+      proofs: { done: pf.filter(isProofDone).length, total: pf.length }
     };
   }
 
+  /* ── merging two devices ─────────────────────────────────────────────────
+     Loss-free and order-independent. The rules follow from what each field
+     means rather than from a single "newest wins": a first attempt is a
+     measurement, so the EARLIER one survives; a tick is a decision, so the
+     LATER one survives. */
+  function mergeFlags(a, b, ta, tb) {
+    const on = {}, off = {};
+    [a, b].forEach(src => { for (const k in (src || {})) if (!(on[k] >= src[k])) on[k] = src[k]; });
+    [ta, tb].forEach(src => { for (const k in (src || {})) if (!(off[k] >= src[k])) off[k] = src[k]; });
+    for (const k in off) {
+      if (!on[k]) continue;
+      if (off[k] > on[k]) delete on[k];   /* un-ticked after the tick */
+      else delete off[k];                 /* tombstone spent */
+    }
+    return { on: on, off: off };
+  }
+
+  function mergeAttempts(A, B, firstKey) {
+    const out = {};
+    const ids = {};
+    for (const k in (A || {})) ids[k] = true;
+    for (const k in (B || {})) ids[k] = true;
+    for (const id in ids) {
+      const x = (A || {})[id], y = (B || {})[id];
+      if (!x || !y) { out[id] = JSON.parse(JSON.stringify(x || y)); continue; }
+      const rec = { tries: Math.max(x.tries || 0, y.tries || 0) };
+
+      /* the honest first attempt is the earliest one either device saw */
+      const fx = x.first ? (x.firstAt || (x.first.at || 0)) : Infinity;
+      const fy = y.first ? (y.firstAt || (y.first.at || 0)) : Infinity;
+      const first = fx <= fy ? x : y;
+      if (first.first) {
+        rec.first = first.first;
+        if (first.firstAt) rec.firstAt = first.firstAt;
+      }
+
+      /* the latest pass is the one worth showing */
+      const lx = x.lastAt || (x.last && x.last.at) || 0;
+      const ly = y.lastAt || (y.last && y.last.at) || 0;
+      const last = lx >= ly ? x : y;
+      if (last.last) {
+        rec.last = last.last;
+        if (last.lastAt) rec.lastAt = last.lastAt;
+      }
+      out[id] = rec;
+    }
+    return out;
+  }
+
+  function mergeStates(A, B) {
+    A = upgrade(A); B = upgrade(B);
+    const done = mergeFlags(A.done, B.done, A.undone, B.undone);
+    const proof = mergeFlags(A.proofs, B.proofs, A.unproofs, B.unproofs);
+
+    const write = {};
+    [A.write, B.write].forEach(function (src) {
+      for (const k in (src || {})) {
+        if (!write[k] || (src[k].at || 0) > (write[k].at || 0)) write[k] = src[k];
+      }
+    });
+
+    /* preferences are per-key: the device that set it most recently wins, and
+       a key with no stamp yields to one that has it */
+    const prefs = {}, prefsAt = {};
+    [[A.prefs, A.prefsAt, A.updated], [B.prefs, B.prefsAt, B.updated]].forEach(function (p) {
+      const src = p[0] || {}, at = p[1] || {}, fallback = p[2] || 0;
+      for (const k in src) {
+        const t = at[k] || fallback;
+        if (!(k in prefs) || t >= (prefsAt[k] || 0)) { prefs[k] = src[k]; prefsAt[k] = t; }
+      }
+    });
+
+    return {
+      v: 2,
+      done: done.on, undone: done.off,
+      proofs: proof.on, unproofs: proof.off,
+      cards: mergeAttempts(A.cards, B.cards),
+      omr: mergeAttempts(A.omr, B.omr),
+      write: write, prefs: prefs, prefsAt: prefsAt,
+      updated: Math.max(A.updated || 0, B.updated || 0)
+    };
+  }
+
+  /* Adopt a merged state wholesale. `quiet` keeps the sync listener from
+     firing on the state it has just pulled. */
+  function adopt(next, quiet) {
+    state = upgrade(next);
+    save(quiet);
+    return state;
+  }
+
+  const snapshot = () => JSON.parse(JSON.stringify(state));
   function exportJSON() { return JSON.stringify(state, null, 2); }
-  function reset() { state = Object.assign({}, EMPTY); save(); }
+  function reset() { state = blank(); save(); }
+
+  /* what the summary tiles count, so two callers cannot disagree */
+  function tally() {
+    return {
+      notes: Object.keys(state.done).length,
+      proofs: Object.keys(state.proofs).length,
+      cards: Object.keys(state.cards).filter(k => state.cards[k].first).length,
+      omr: Object.keys(state.omr).filter(k => state.omr[k].first).length
+    };
+  }
 
   return {
-    isDone, setDone, card, gradeCard, omr, lockOmr, draft, saveDraft,
-    pref, setPref, summary, exportJSON, reset,
+    isDone, setDone, setDoneMany,
+    isProofDone, setProofDone,
+    card, gradeCard, omr, lockOmr, draft, saveDraft,
+    pref, setPref, level, setLevel, unlocked, unlock,
+    identity, signedIn, signIn, signOut,
+    summary, exportJSON, reset, tally,
+    snapshot, adopt, mergeStates, onChange, flushNow,
     isVolatile: () => volatile
   };
+})();
+
+
+/* ── src/core.sync.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Multi-device sync.
+
+   Firebase Realtime Database over plain REST — no SDK, no npm, no auth
+   handshake, nothing to load before the app can start. One GET and one PUT.
+
+   The key is the learner's name and roll number. That is a pass key, not a
+   password: anyone who knows both can read and write that record, and the UI
+   says so plainly rather than implying a login. It is the right trade for a
+   personal study record that has to follow one person between a phone and a
+   laptop with no account to create.
+
+   Every sync MERGES before it writes (Store.mergeStates), so two devices that
+   both worked offline lose nothing and the order they reconnect in does not
+   matter. Overwriting instead of merging is how a week of work disappears.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Sync = (function () {
+
+  const DB = 'https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app';
+
+  /* Mock and validated pools keep SEPARATE STORES — progress and the sign-in
+     register both. Their ids do not mean the same things, and a name typed
+     into the test build must never appear in, or merge with, the real record.
+     This is the only place that mapping is decided.
+
+        live   ssc4_ra_v1        ssc4_users_v1
+        mock   ssc4_ra_mock_v1   ssc4_users_mock_v1
+
+     AGY owns the live pair; see "Publishing" in HOOK_agy.md. */
+  const LIVE = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live');
+  const NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
+  const USERS = () => LIVE() ? 'ssc4_users_v1' : 'ssc4_users_mock_v1';
+
+  let syncing = false;
+  let pushT = 0;
+  let last = { at: 0, ok: null, msg: '' };
+  const watchers = [];
+
+  const slug = s => String(s || '').toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+  /* name + roll -> one stable key. Both are required: a roll number alone
+     collides across colleges, a name alone collides across people.
+
+     The separator is '--', not '.': a Realtime Database key may not contain
+     '.', '$', '#', '[', ']' or '/', and a dotted key is rejected outright with
+     "Invalid token in path". slug() collapses runs of separators, so '--' can
+     never be produced by either half and the split stays unambiguous. */
+  function keyFor(name, roll) {
+    const a = slug(name), b = slug(roll);
+    return (a && b) ? a + '--' + b : '';
+  }
+
+  const identity = () => Store.identity();
+
+  function key() {
+    const id = identity();
+    return keyFor(id.name, id.roll);
+  }
+
+  const on = () => !!key();
+  const url = () => DB + '/' + NS() + '/' + encodeURIComponent(key()) + '.json';
+  const userUrl = () => DB + '/' + USERS() + '/' + encodeURIComponent(key()) + '.json';
+
+  function announce(ok, msg) {
+    last = { at: Date.now(), ok: ok, msg: msg };
+    watchers.forEach(function (fn) { try { fn(last); } catch (e) { /* a watcher must never break a sync */ } });
+  }
+
+  const watch = fn => { watchers.push(fn); return last; };
+  const status = () => ({ on: on(), key: key(), syncing: syncing, last: last });
+
+  /* ── the one operation: pull, merge, push ─────────────────────────────── */
+  function now(opts) {
+    const o = opts || {};
+    if (!on()) return Promise.resolve({ ok: false, msg: 'Not connected.' });
+    if (syncing) return Promise.resolve({ ok: false, msg: 'Already syncing.' });
+    if (!window.fetch) return Promise.resolve({ ok: false, msg: 'This browser cannot sync.' });
+
+    syncing = true;
+    announce(null, 'Syncing…');
+    const before = Store.tally();
+
+    return window.fetch(url(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(function (remote) {
+        let rs = null;
+        if (remote && typeof remote === 'object' && typeof remote.payload === 'string') {
+          try { rs = JSON.parse(remote.payload); } catch (e) { rs = null; }
+        }
+        const merged = Store.mergeStates(Store.snapshot(), rs);
+        Store.adopt(merged, true);   /* quiet: do not re-trigger the auto-push */
+
+        const body = JSON.stringify({
+          payload: JSON.stringify(Store.snapshot()),
+          updated: Date.now(),
+          device: Store.pref('syncName', '') + ' · ' + (navigator.platform || 'device')
+        });
+        return window.fetch(url(), {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: body
+        }).then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          const after = Store.tally();
+          const gained = {
+            notes: after.notes - before.notes,
+            proofs: after.proofs - before.proofs,
+            cards: after.cards - before.cards,
+            omr: after.omr - before.omr
+          };
+          const bits = [];
+          if (gained.notes > 0) bits.push(gained.notes + ' ' + DOM.plural(gained.notes, 'note'));
+          if (gained.proofs > 0) bits.push(gained.proofs + ' ' + DOM.plural(gained.proofs, 'proof'));
+          if (gained.cards > 0) bits.push(gained.cards + ' ' + DOM.plural(gained.cards, 'card'));
+          if (gained.omr > 0) bits.push(gained.omr + ' ' + DOM.plural(gained.omr, 'question'));
+          const msg = bits.length
+            ? 'Merged in ' + bits.join(', ') + ' from your other device'
+            : 'Everything already in sync';
+          syncing = false;
+          announce(true, msg);
+          if (bits.length && o.reload !== false && typeof Router !== 'undefined') Router.reload();
+          if (!o.quiet) DOM.announce(msg + '.');
+          return { ok: true, msg: msg, gained: gained };
+        });
+      })
+      .catch(function (err) {
+        syncing = false;
+        const msg = /Failed to fetch|NetworkError/i.test(String(err && err.message))
+          ? 'Offline — your progress is saved here and will sync when you are back.'
+          : 'Sync failed: ' + ((err && err.message) || err);
+        announce(false, msg);
+        if (!o.quiet) DOM.announce(msg);
+        return { ok: false, msg: msg };
+      });
+  }
+
+  const schedule = () => {
+    if (!on()) return;
+    window.clearTimeout(pushT);
+    pushT = window.setTimeout(() => now({ quiet: true, reload: false }), 1500);
+  };
+
+  /* ── signing in ──────────────────────────────────────────────────────────
+     Registers the key in the sign-in store (or touches it if it is already
+     there), then does a normal merge-sync so an existing record arrives before
+     the first screen is drawn. Being offline is NOT a reason to refuse entry:
+     the local record still opens, and the next sync reconciles it. */
+  function hello() {
+    if (!on()) return Promise.resolve({ ok: false, msg: 'Not signed in.' });
+    if (!window.fetch) return now({ quiet: true }).then(r => Object.assign({ returning: null }, r));
+
+    const id = identity();
+    return window.fetch(userUrl(), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(function (rec) {
+        const returning = !!(rec && rec.created);
+        return window.fetch(userUrl(), {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: id.name, roll: id.roll,
+            created: (rec && rec.created) || Date.now(),
+            seen: Date.now(),
+            visits: ((rec && rec.visits) || 0) + 1
+          })
+        }).then(() => returning);
+      })
+      .then(function (returning) {
+        return now({ quiet: true }).then(function (r) {
+          return {
+            ok: true, returning: returning,
+            msg: returning
+              ? 'Welcome back — ' + (r.ok ? r.msg.charAt(0).toLowerCase() + r.msg.slice(1) : 'working offline for now')
+              : 'New record created for ' + id.name + '.'
+          };
+        });
+      })
+      .catch(function () {
+        return { ok: false, offline: true,
+          msg: 'Offline — opening the record stored on this device. It will sync when you are back.' };
+      });
+  }
+
+  /* ── connecting ──────────────────────────────────────────────────────── */
+  function connect(name, roll) {
+    const k = keyFor(name, roll);
+    if (!k) return Promise.resolve({ ok: false, msg: 'Both a name and a roll number are needed.' });
+    Store.signIn(name, roll);
+    return now({ quiet: false });
+  }
+
+  function disconnect() {
+    Store.signOut();
+    announce(null, 'Signed out. Progress stays on this device.');
+  }
+
+  /* ── wiring ──────────────────────────────────────────────────────────── */
+  function start() {
+    Store.onChange(schedule);
+    if (!on()) return;
+    now({ quiet: true });
+    /* coming back to the tab is the moment the other device's work matters */
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) now({ quiet: true });
+    });
+    window.addEventListener('online', function () { now({ quiet: true }); });
+  }
+
+  return { start, hello, connect, disconnect, now, status, watch, identity, keyFor, on };
 })();
 
 
@@ -5835,7 +6683,10 @@ const Pool = (function () {
   const ids = {
     concepts: courseId => conceptList(courseId).map(c => c.id),
     cards: () => deck.map(c => c.id),
-    objective: () => objective.map(q => q.id)
+    objective: () => objective.map(q => q.id),
+    /* Level 2 counts proof work, so its denominator is the concepts that
+       actually carry a proof — not every note. */
+    proofs: courseId => conceptList(courseId).filter(c => c.proof).map(c => c.id)
   };
 
   return {
@@ -5847,81 +6698,295 @@ const Pool = (function () {
 })();
 
 
+/* ── src/core.progress.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Level-aware progress.
+
+   `Store` knows two independent facts about a concept — it was ticked, and its
+   proof was worked through — and knows nothing about courses. `Pool` knows
+   which course a concept belongs to and whether it has a proof, and knows
+   nothing about progress. This is the one place the two meet, and every screen
+   that draws a tick, a ring or a meter asks HERE rather than asking Store
+   directly. That is what keeps "done" meaning the same thing everywhere.
+
+   What "done" means depends on the level of that concept's own course:
+
+     level 1   ticked. You have encountered the material.
+     level 2   ticked AND, if it has a proof, that proof worked through.
+
+   So switching a course to Level 2 does not erase anything — it raises the
+   bar, and notes that were complete become incomplete again because the
+   standard moved. That is the intended reading: level 2 IS the progress
+   measure for a course that has been switched to it. Courses still at Level 1
+   are unaffected, which is the whole point of the level being per course.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Progress = (function () {
+
+  const courseIdOf = function (c) {
+    if (!c) return null;
+    const course = Pool.courseOfSec(c.sec);
+    return course ? course.id : null;
+  };
+
+  /* The level a given concept is being held to. Background nodes (`s.*`) sit
+     in no course, so they are always level 1 — they are assumed knowledge, not
+     material to work proofs on. */
+  const levelOf = id => Store.level(courseIdOf(Pool.concept(id)));
+
+  const hasProof = id => {
+    const c = Pool.concept(id);
+    return !!(c && c.proof);
+  };
+
+  /* three states, because at level 2 a ticked note with an unworked proof is
+     genuinely neither done nor untouched */
+  function state(id) {
+    const ticked = Store.isDone(id);
+    if (levelOf(id) < 2) return ticked ? 'done' : 'none';
+    if (!ticked) return 'none';
+    if (!hasProof(id)) return 'done';
+    return Store.isProofDone(id) ? 'done' : 'part';
+  }
+
+  const isDone = id => state(id) === 'done';
+
+  /* ── ticking ─────────────────────────────────────────────────────────────
+     One press advances one step, so the tick always has somewhere to go and
+     never silently refuses. At level 2 that is tick -> work the proof -> clear.
+     When a concept has no proof, ticking level 1 automatically counts as
+     ticking both levels. */
+  function advance(id) {
+    const at = state(id);
+    if (at === 'none') {
+      Store.setDone(id, true);
+      if (!hasProof(id)) Store.setProofDone(id, true);
+      return state(id);
+    }
+    if (at === 'part') { Store.setProofDone(id, true); return state(id); }
+    clear(id);
+    return state(id);
+  }
+
+  function clear(id) {
+    if (Store.isProofDone(id)) Store.setProofDone(id, false);
+    Store.setDone(id, false);
+  }
+
+  /* Bulk set, for a section / module / course row. At level 2 "tick all" means
+     the level 2 standard, or the row could never reach a full ring. */
+  function setMany(ids, on) {
+    const list = ids || [];
+    Store.setDoneMany(list, on);
+    list.forEach(function (id) {
+      if (!hasProof(id)) {
+        Store.setProofDone(id, !!on);
+        return;
+      }
+      if (levelOf(id) < 2) {
+        if (!on && Store.isProofDone(id)) Store.setProofDone(id, false);
+        return;
+      }
+      if (Store.isProofDone(id) !== !!on) Store.setProofDone(id, !!on);
+    });
+  }
+
+  /* ── counting ────────────────────────────────────────────────────────── */
+  function count(ids) {
+    const list = ids || [];
+    let done = 0, part = 0;
+    list.forEach(function (id) {
+      const st = state(id);
+      if (st === 'done') done += 1; else if (st === 'part') part += 1;
+    });
+    return { done: done, part: part, total: list.length };
+  }
+
+  /* what a tick button should render: 'true' | 'mixed' | 'false' */
+  function tickState(ids) {
+    const c = count(ids);
+    if (!c.total) return 'false';
+    if (c.done === c.total) return 'true';
+    return (c.done || c.part) ? 'mixed' : 'false';
+  }
+
+  /* ── the reel queue ──────────────────────────────────────────────────────
+     The reel only ever shows material you have said you have met. Studying a
+     statement you have never read is not recall, it is reading with extra
+     steps — and a reel full of unread theorems is the pile the reel exists to
+     avoid.
+
+     Two kinds of card:
+       statement   every ticked concept that has a 'state' card
+       proof       only for a course switched to Level 2, and only for ticked
+                   concepts that carry a proof
+
+     Order is by how badly each card needs the attempt, then by the reading
+     order of the course — no randomness, so the queue is inspectable and the
+     same twice running:
+
+       0  never attempted
+       1  first attempt was 'missed'
+       2  first attempt was 'partly'
+       3  first attempt was 'got'
+
+     A proof card sits one rank behind its own statement card, so you are never
+     asked to reconstruct a proof in the same breath as first stating it. */
+  const RANK = { missed: 1, partly: 2, got: 3 };
+
+  function rank(cardId) {
+    const rec = Store.card(cardId);
+    if (!rec || !rec.first) return 0;
+    return RANK[rec.first] == null ? 3 : RANK[rec.first];
+  }
+
+  function reel(opts) {
+    const o = opts || {};
+    const out = [];
+
+    Pool.deck().forEach(function (card, i) {
+      if (!Store.isDone(card.cid)) return;
+      out.push({
+        kind: 'state', id: card.id, cid: card.cid, sec: card.sec,
+        title: card.title, conceptKind: card.kind,
+        q: card.q, a: card.a,
+        rank: rank(card.id), order: i
+      });
+    });
+
+    Pool.concepts().forEach(function (c, i) {
+      if (!c.proof || !Store.isDone(c.id)) return;
+      if (Store.level(courseIdOf(c)) < 2) return;
+      const id = c.id + '#proof';
+      out.push({
+        kind: 'proof', id: id, cid: c.id, sec: c.sec,
+        title: c.title, conceptKind: c.kind,
+        proof: c.proof,
+        rank: rank(id), order: i + 0.5
+      });
+    });
+
+    const list = o.onlyNew ? out.filter(x => x.rank === 0) : out;
+    return list.sort(function (a, b) {
+      if (a.rank !== b.rank) return a.rank - b.rank;
+      return a.order - b.order;
+    });
+  }
+
+  /* every id the reel could ever contain, for the "n of m attempted" meter */
+  function reelIds() {
+    return reel().map(x => x.id);
+  }
+
+  return { levelOf, hasProof, state, isDone, advance, clear, setMany,
+    count, tickState, reel, reelIds, courseIdOf };
+})();
+
+
 /* ── src/core.latex.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   The contextual LaTeX palette.
+   LaTeX commands, offered the way a code editor offers them.
 
-   HOOK_claude.md asks for "a compact palette of the LaTeX commands needed for
-   the current theorem … contextual and small rather than an indiscriminate
-   reference manual." So the palette is built per concept: the commands that
-   actually occur in that statement come first, then a short fixed set you
-   cannot write analysis without. Nothing else is shown by default.
+   The brief asks for "a compact palette of the LaTeX commands needed for the
+   current theorem … contextual and small rather than an indiscriminate
+   reference manual." A sheet of keys at the bottom of the screen satisfied
+   the letter of that and failed the thumb: on a phone it covers the input you
+   are typing into, and finding one symbol among sixty is slower than knowing
+   how to spell it.
 
-   Clicking a key inserts at the caret. CARET marks where the caret should land
-   inside the inserted text, and wraps the selection when there is one.
+   So the catalogue is now a completion source. Type `\va` and the matches
+   appear inline above the keyboard, ranked with the commands this theorem
+   actually uses first. Tap one, or press Tab. When nothing is being typed the
+   same strip shows the contextual commands, so discovery still works by
+   thumb — which is what the palette was really for.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Latex = (function () {
 
   const CARET = String.fromCharCode(1);   /* never appears in typed LaTeX */
 
-  /* show = what the learner sees, ins = what gets typed, cmd = the macro name */
+  /* show = what the learner sees, ins = what gets typed, cmd = the macro name,
+     alt = extra words that should also find it. */
   const CATALOG = [
-    { g: 'Greek', show: 'ε', cmd: 'varepsilon', ins: '\\varepsilon ' },
-    { g: 'Greek', show: 'δ', cmd: 'delta', ins: '\\delta ' },
+    { g: 'Greek', show: 'ε', cmd: 'varepsilon', ins: '\\varepsilon ', desc: 'epsilon' },
+    { g: 'Greek', show: 'δ', cmd: 'delta', ins: '\\delta ', desc: 'delta' },
+    { g: 'Greek', show: 'Δ', cmd: 'Delta', ins: '\\Delta ', desc: 'big delta' },
     { g: 'Greek', show: 'η', cmd: 'eta', ins: '\\eta ' },
     { g: 'Greek', show: 'θ', cmd: 'theta', ins: '\\theta ' },
     { g: 'Greek', show: 'λ', cmd: 'lambda', ins: '\\lambda ' },
     { g: 'Greek', show: 'α', cmd: 'alpha', ins: '\\alpha ' },
     { g: 'Greek', show: 'β', cmd: 'beta', ins: '\\beta ' },
+    { g: 'Greek', show: 'γ', cmd: 'gamma', ins: '\\gamma ' },
+    { g: 'Greek', show: 'μ', cmd: 'mu', ins: '\\mu ' },
+    { g: 'Greek', show: 'σ', cmd: 'sigma', ins: '\\sigma ' },
+    { g: 'Greek', show: 'φ', cmd: 'varphi', ins: '\\varphi ', desc: 'phi' },
+    { g: 'Greek', show: 'π', cmd: 'pi', ins: '\\pi ' },
+    { g: 'Greek', show: 'ω', cmd: 'omega', ins: '\\omega ' },
 
-    { g: 'Logic', show: '∀', cmd: 'forall', ins: '\\forall ' },
-    { g: 'Logic', show: '∃', cmd: 'exists', ins: '\\exists ' },
-    { g: 'Logic', show: '⟹', cmd: 'implies', ins: '\\implies ' },
-    { g: 'Logic', show: '⟺', cmd: 'iff', ins: '\\iff ' },
+    { g: 'Logic', show: '∀', cmd: 'forall', ins: '\\forall ', desc: 'for all' },
+    { g: 'Logic', show: '∃', cmd: 'exists', ins: '\\exists ', desc: 'there exists' },
+    { g: 'Logic', show: '∄', cmd: 'nexists', ins: '\\nexists ', desc: 'no such' },
+    { g: 'Logic', show: '⟹', cmd: 'implies', ins: '\\implies ', desc: 'implies' },
+    { g: 'Logic', show: '⟺', cmd: 'iff', ins: '\\iff ', desc: 'if and only if' },
     { g: 'Logic', show: '⇒', cmd: 'Rightarrow', ins: '\\Rightarrow ' },
-    { g: 'Logic', show: 'text', cmd: 'text', ins: '\\text{' + CARET + '}' },
+    { g: 'Logic', show: '¬', cmd: 'neg', ins: '\\neg ', desc: 'not' },
+    { g: 'Logic', show: '∧', cmd: 'wedge', ins: '\\wedge ', desc: 'and' },
+    { g: 'Logic', show: '∨', cmd: 'vee', ins: '\\vee ', desc: 'or' },
+    { g: 'Logic', show: 'text', cmd: 'text', ins: '\\text{' + CARET + '}', desc: 'words inside maths' },
 
-    { g: 'Sets', show: 'ℝ', cmd: 'mathbb', needle: '\\mathbb{R}', ins: '\\mathbb{R}' },
-    { g: 'Sets', show: 'ℕ', cmd: 'mathbb', needle: '\\mathbb{N}', ins: '\\mathbb{N}' },
-    { g: 'Sets', show: 'ℚ', cmd: 'mathbb', needle: '\\mathbb{Q}', ins: '\\mathbb{Q}' },
-    { g: 'Sets', show: '∈', cmd: 'in', ins: '\\in ' },
-    { g: 'Sets', show: '∉', cmd: 'notin', ins: '\\notin ' },
+    { g: 'Sets', show: 'ℝ', cmd: 'mathbb', needle: '\\mathbb{R}', ins: '\\mathbb{R}', desc: 'the reals', alt: 'R reals' },
+    { g: 'Sets', show: 'ℕ', cmd: 'mathbb', needle: '\\mathbb{N}', ins: '\\mathbb{N}', desc: 'the naturals', alt: 'N naturals' },
+    { g: 'Sets', show: 'ℚ', cmd: 'mathbb', needle: '\\mathbb{Q}', ins: '\\mathbb{Q}', desc: 'the rationals', alt: 'Q rationals' },
+    { g: 'Sets', show: 'ℤ', cmd: 'mathbb', needle: '\\mathbb{Z}', ins: '\\mathbb{Z}', desc: 'the integers', alt: 'Z integers' },
+    { g: 'Sets', show: '∈', cmd: 'in', ins: '\\in ', desc: 'belongs to' },
+    { g: 'Sets', show: '∉', cmd: 'notin', ins: '\\notin ', desc: 'not in' },
     { g: 'Sets', show: '⊆', cmd: 'subseteq', ins: '\\subseteq ' },
-    { g: 'Sets', show: '∪', cmd: 'cup', ins: '\\cup ' },
-    { g: 'Sets', show: '∩', cmd: 'cap', ins: '\\cap ' },
-    { g: 'Sets', show: '∅', cmd: 'emptyset', ins: '\\emptyset ' },
-    { g: 'Sets', show: '{ }', cmd: 'lbrace', ins: '\\{' + CARET + '\\}' },
+    { g: 'Sets', show: '⊂', cmd: 'subset', ins: '\\subset ' },
+    { g: 'Sets', show: '∪', cmd: 'cup', ins: '\\cup ', desc: 'union' },
+    { g: 'Sets', show: '∩', cmd: 'cap', ins: '\\cap ', desc: 'intersection' },
+    { g: 'Sets', show: '⋃', cmd: 'bigcup', ins: '\\bigcup_{' + CARET + '}' },
+    { g: 'Sets', show: '⋂', cmd: 'bigcap', ins: '\\bigcap_{' + CARET + '}' },
+    { g: 'Sets', show: '∅', cmd: 'emptyset', ins: '\\emptyset ', desc: 'empty set' },
+    { g: 'Sets', show: '∖', cmd: 'setminus', ins: '\\setminus ', desc: 'set difference' },
+    { g: 'Sets', show: '{ }', cmd: 'lbrace', ins: '\\{' + CARET + '\\}', desc: 'braces', alt: 'set brace' },
 
-    { g: 'Relations', show: '≤', cmd: 'le', ins: '\\le ' },
-    { g: 'Relations', show: '≥', cmd: 'ge', ins: '\\ge ' },
-    { g: 'Relations', show: '≠', cmd: 'ne', ins: '\\ne ' },
+    { g: 'Relations', show: '≤', cmd: 'le', ins: '\\le ', desc: 'at most' },
+    { g: 'Relations', show: '≥', cmd: 'ge', ins: '\\ge ', desc: 'at least' },
+    { g: 'Relations', show: '≠', cmd: 'ne', ins: '\\ne ', desc: 'not equal' },
     { g: 'Relations', show: '≈', cmd: 'approx', ins: '\\approx ' },
+    { g: 'Relations', show: '≡', cmd: 'equiv', ins: '\\equiv ' },
     { g: 'Relations', show: '↦', cmd: 'mapsto', ins: '\\mapsto ' },
+    { g: 'Relations', show: '≔', cmd: 'coloneqq', ins: ':= ', desc: 'defined as' },
 
-    { g: 'Analysis', show: '→', cmd: 'to', ins: '\\to ' },
-    { g: 'Analysis', show: '∞', cmd: 'infty', ins: '\\infty ' },
-    { g: 'Analysis', show: 'sup', cmd: 'sup', ins: '\\sup ' },
-    { g: 'Analysis', show: 'inf', cmd: 'inf', ins: '\\inf ' },
-    { g: 'Analysis', show: 'lim', cmd: 'lim', ins: '\\lim_{' + CARET + '}' },
-    { g: 'Analysis', show: 'Σ', cmd: 'sum', ins: '\\sum_{n=1}^{\\infty}' },
+    { g: 'Analysis', show: '→', cmd: 'to', ins: '\\to ', desc: 'tends to' },
+    { g: 'Analysis', show: '∞', cmd: 'infty', ins: '\\infty ', desc: 'infinity' },
+    { g: 'Analysis', show: 'sup', cmd: 'sup', ins: '\\sup ', desc: 'supremum' },
+    { g: 'Analysis', show: 'inf', cmd: 'inf', ins: '\\inf ', desc: 'infimum' },
+    { g: 'Analysis', show: 'lim', cmd: 'lim', ins: '\\lim_{' + CARET + '}', desc: 'limit' },
+    { g: 'Analysis', show: 'limsup', cmd: 'limsup', ins: '\\limsup_{' + CARET + '}' },
+    { g: 'Analysis', show: 'Σ', cmd: 'sum', ins: '\\sum_{' + CARET + '}^{}', desc: 'sum' },
+    { g: 'Analysis', show: '∏', cmd: 'prod', ins: '\\prod_{' + CARET + '}^{}', desc: 'product' },
+    { g: 'Analysis', show: '∫', cmd: 'int', ins: '\\int_{' + CARET + '}^{}', desc: 'integral' },
+    { g: 'Analysis', show: '∂', cmd: 'partial', ins: '\\partial ' },
     { g: 'Analysis', show: '⋯', cmd: 'cdots', ins: '\\cdots ' },
     { g: 'Analysis', show: '…', cmd: 'ldots', ins: '\\ldots ' },
-    { g: 'Analysis', show: 'f′', cmd: 'prime', ins: "f'(" + CARET + ')' },
+    { g: 'Analysis', show: 'f′', cmd: 'prime', ins: "f'(" + CARET + ')', desc: 'derivative' },
 
-    { g: 'Structure', show: 'a⁄b', cmd: 'frac', ins: '\\frac{' + CARET + '}{}' },
-    { g: 'Structure', show: '√', cmd: 'sqrt', ins: '\\sqrt{' + CARET + '}' },
-    { g: 'Structure', show: 'xⁿ', cmd: 'sup-script', ins: '^{' + CARET + '}' },
-    { g: 'Structure', show: 'xₙ', cmd: 'sub-script', ins: '_{' + CARET + '}' },
-    { g: 'Structure', show: '|x|', cmd: 'abs', ins: '|' + CARET + '|' },
-    { g: 'Structure', show: '( )', cmd: 'left', ins: '\\left(' + CARET + '\\right)' },
+    { g: 'Structure', show: 'a⁄b', cmd: 'frac', ins: '\\frac{' + CARET + '}{}', desc: 'fraction' },
+    { g: 'Structure', show: '√', cmd: 'sqrt', ins: '\\sqrt{' + CARET + '}', desc: 'square root' },
+    { g: 'Structure', show: 'xⁿ', cmd: 'sup-script', ins: '^{' + CARET + '}', desc: 'superscript', alt: 'power exponent' },
+    { g: 'Structure', show: 'xₙ', cmd: 'sub-script', ins: '_{' + CARET + '}', desc: 'subscript', alt: 'index' },
+    { g: 'Structure', show: '|x|', cmd: 'abs', ins: '|' + CARET + '|', desc: 'absolute value', alt: 'modulus' },
+    { g: 'Structure', show: '‖x‖', cmd: 'norm', ins: '\\|' + CARET + '\\|', desc: 'norm' },
+    { g: 'Structure', show: '( )', cmd: 'left', ins: '\\left(' + CARET + '\\right)', desc: 'sized brackets' },
     { g: 'Structure', show: '[ ]', cmd: 'bracket', ins: '[' + CARET + ']' },
-    { g: 'Structure', show: 'quad', cmd: 'quad', ins: '\\quad ' }
+    { g: 'Structure', show: 'quad', cmd: 'quad', ins: '\\quad ', desc: 'wide space' },
+    { g: 'Structure', show: 'cases', cmd: 'cases', ins: '\\begin{cases}' + CARET + '\\end{cases}', desc: 'case split' }
   ];
 
-  /* what stays on the palette even when the statement does not use it */
+  /* what stays offered even when the statement does not use it */
   const CORE = ['varepsilon', 'delta', 'forall', 'exists', 'in', 'le', 'to',
-    'frac', 'abs', 'sub-script', 'mathbb'];
+    'frac', 'abs', 'sub-script', 'sup-script', 'mathbb', 'lim', 'text'];
 
   function macrosIn(tex) {
     const src = String(tex || '');
@@ -5933,60 +6998,153 @@ const Latex = (function () {
     return found;
   }
 
-  /* Palette groups for one concept: contextual first, essentials after. */
-  function paletteFor(concept) {
+  /* Which catalogue entries this concept's own statement uses. These rank
+     first everywhere — it is the whole of "contextual". */
+  function usedBy(concept) {
     const src = String((concept && concept.statement) || '');
     const used = macrosIn(src);
     const taken = {};
-    const contextual = CATALOG.filter(function (k) {
-      /* a `needle` pins the match to one spelling (ℝ vs ℕ vs ℚ) */
+    return CATALOG.filter(function (k) {
       const hit = k.needle ? src.indexOf(k.needle) >= 0 : !!used[k.cmd];
       if (!hit || taken[k.ins]) return false;
       taken[k.ins] = true;
       return true;
     });
-
-    const groups = [];
-    if (contextual.length) groups.push({
-      label: 'In this statement',
-      note: 'Exactly the commands this theorem uses.',
-      keys: contextual
-    });
-
-    /* with context available, keep the rest down to the essentials */
-    const remainder = CATALOG.filter(k => !taken[k.ins] &&
-      (!contextual.length || CORE.indexOf(k.cmd) >= 0));
-
-    ['Greek', 'Logic', 'Sets', 'Relations', 'Analysis', 'Structure'].forEach(function (name) {
-      const keys = remainder.filter(k => k.g === name);
-      if (keys.length) {
-        groups.push({ label: contextual.length ? name + ' · essentials' : name, keys: keys });
-      }
-    });
-    return groups;
   }
 
-  /* Insert `ins` into a textarea at the caret, honouring CARET and selection. */
-  function insert(textarea, ins) {
-    const val = textarea.value;
-    const a = textarea.selectionStart == null ? val.length : textarea.selectionStart;
-    const b = textarea.selectionEnd == null ? a : textarea.selectionEnd;
-    const selected = val.slice(a, b);
+  /* ── completion ───────────────────────────────────────────────────────── */
+
+  /* The token being typed: a backslash and the letters after it, ending at
+     the caret. Returns null when the caret is not inside one. */
+  function tokenAt(value, caret) {
+    const upto = String(value || '').slice(0, caret);
+    const m = /\\([a-zA-Z]*)$/.exec(upto);
+    if (!m) return null;
+    return { text: m[0], word: m[1], from: caret - m[0].length, to: caret };
+  }
+
+  const score = (k, word, ctx) => {
+    const w = word.toLowerCase();
+    const cmd = k.cmd.toLowerCase();
+    const hay = (cmd + ' ' + (k.desc || '') + ' ' + (k.alt || '')).toLowerCase();
+    let s = -1;
+    if (!w) s = 40;
+    else if (cmd === w) s = 100;
+    else if (cmd.indexOf(w) === 0) s = 80 - cmd.length;
+    else if (hay.indexOf(w) >= 0) s = 40 - cmd.length;
+    if (s < 0) return s;
+    if (ctx[k.ins]) s += 25;                      /* this theorem uses it */
+    if (CORE.indexOf(k.cmd) >= 0) s += 6;
+    return s;
+  };
+
+  /* Ranked completions for a partial command. `word` may be '' — that is the
+     bare-backslash case, and it should still offer something useful. */
+  function complete(word, concept, limit) {
+    const ctx = {};
+    usedBy(concept).forEach(k => { ctx[k.ins] = true; });
+    const seen = {};
+    return CATALOG
+      .map(k => ({ k: k, s: score(k, String(word || ''), ctx) }))
+      .filter(function (r) {
+        if (r.s < 0 || seen[r.k.ins]) return false;
+        seen[r.k.ins] = true;
+        return true;
+      })
+      .sort((a, b) => b.s - a.s)
+      .slice(0, limit || 12)
+      .map(r => r.k);
+  }
+
+  /* The idle strip: what to offer when nothing is being typed. Contextual
+     first, then the essentials, because a learner who does not know the
+     spelling cannot start a completion at all. */
+  function suggestions(concept, limit) {
+    const ctx = usedBy(concept);
+    const taken = {};
+    ctx.forEach(k => { taken[k.ins] = true; });
+    const core = CATALOG.filter(k => !taken[k.ins] && CORE.indexOf(k.cmd) >= 0);
+    return ctx.concat(core).slice(0, limit || 14);
+  }
+
+  /* ── insertion ────────────────────────────────────────────────────────── */
+
+  /* Replace [from,to) with `ins`. CARET marks where the caret should land.
+
+     `opts.wrap` decides what happens to the text being replaced, and the two
+     cases are genuinely different:
+
+       wrap: true   the range is the user's SELECTION and CARET means "put it
+                    here", so \sqrt{▮} around a selected x gives \sqrt{x}.
+       wrap: false  the range is a half-typed command being replaced by the
+                    completion, so it must be DISCARDED — keeping it turns
+                    `\eps` + `$\varepsilon▮$` into `$\varepsilon\eps$`. */
+  function splice(field, from, to, ins, opts) {
+    const wrap = !opts || opts.wrap !== false;
+    const val = field.value;
+    const selected = wrap ? val.slice(from, to) : '';
     let text = ins, caretAt;
     const mark = text.indexOf(CARET);
     if (mark >= 0) {
       text = text.slice(0, mark) + selected + text.slice(mark + 1);
-      caretAt = a + mark + selected.length;
+      caretAt = from + mark + selected.length;
     } else {
-      caretAt = a + text.length;
+      caretAt = from + text.length;
     }
-    textarea.value = val.slice(0, a) + text + val.slice(b);
-    textarea.focus();
-    textarea.setSelectionRange(caretAt, caretAt);
-    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    field.value = val.slice(0, from) + text + val.slice(to);
+    field.focus();
+    try { field.setSelectionRange(caretAt, caretAt); } catch (e) { /* detached field */ }
+    field.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
-  return { paletteFor, insert, CARET };
+  /* Insert at the caret, replacing the selection. */
+  function insert(field, ins) {
+    const a = field.selectionStart == null ? field.value.length : field.selectionStart;
+    const b = field.selectionEnd == null ? a : field.selectionEnd;
+    splice(field, a, b, ins);
+  }
+
+  /* Is the caret inside maths? Count the unescaped $ before it: an odd number
+     means an inline span is open. `$$` counts as one delimiter either way, so
+     a display block reads as "open" too, which is the answer we want. */
+  function inMath(value, caret) {
+    const upto = String(value || '').slice(0, caret);
+    let n = 0;
+    for (let i = 0; i < upto.length; i++) {
+      if (upto[i] !== '$') continue;
+      if (i && upto[i - 1] === '\\') continue;      /* an escaped \$ is a literal */
+      if (upto[i + 1] === '$') { i += 1; }
+      n += 1;
+    }
+    return n % 2 === 1;
+  }
+
+  /* Accept a completion: the partial command being typed is replaced whole.
+
+     In a markdown line, a command typed in the middle of a sentence has to be
+     wrapped in $…$ or it renders as literal backslash-text. Doing that at
+     accept time is what lets someone write a paragraph and drop a symbol into
+     it without stopping to think about delimiters. */
+  function accept(field, entry, opts) {
+    const o = opts || {};
+    const a = field.selectionStart == null ? field.value.length : field.selectionStart;
+    const tok = tokenAt(field.value, a);
+    let ins = entry.ins;
+
+    if (o.wrapInMath && !inMath(field.value, tok ? tok.from : a)) {
+      const body = ins.replace(/\s+$/, '');
+      const mark = body.indexOf(CARET);
+      ins = mark >= 0
+        ? '$' + body.slice(0, mark) + CARET + body.slice(mark + 1) + '$'
+        : '$' + body + CARET + '$';
+    }
+
+    /* the half-typed command is replaced, never wrapped */
+    if (tok) splice(field, tok.from, tok.to, ins, { wrap: false });
+    else insert(field, ins);
+  }
+
+  return { CATALOG, CARET, usedBy, tokenAt, inMath, complete, suggestions, insert, splice, accept };
 })();
 
 
@@ -6027,9 +7185,15 @@ const UI = (function () {
     ? el('span', { class: 'badge warn', text: c.tier === 'ext' ? 'extension' : c.tier })
     : null;
 
-  const doneBadge = id => Store.isDone(id)
-    ? el('span', { class: 'badge ok', text: '✓ completed' })
-    : null;
+  /* Level-aware: at Level 2 a ticked note with an unworked proof is not
+     "completed", it is part-way, and saying otherwise would make the badge and
+     the tree disagree. */
+  const doneBadge = function (id) {
+    const st = Progress.state(id);
+    if (st === 'done') return el('span', { class: 'badge ok', text: '✓ completed' });
+    if (st === 'part') return el('span', { class: 'badge warn', text: 'proof outstanding' });
+    return null;
+  };
 
   const meter = (a, b, ok) => el('div', { class: 'meter' + (ok ? ' ok' : '') }, [
     el('i', { style: { width: DOM.pct(a, b) + '%' } })
@@ -6046,17 +7210,86 @@ const UI = (function () {
 
   const empty = (msg, extra) => el('div', { class: 'empty' }, [el('p', { text: msg }), extra || null]);
 
-  /* Mastery ladder: Level 1 is all this build can award, and it says so. */
-  function ladder(done) {
+  /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
+     (or achieved automatically on notes that have no proof). */
+  function ladder(done, proofDone, hasProof, courseId) {
     const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
+    const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
+    const caption = at === 2
+      ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
+      : at === 1 ? '1 · completed'
+      : '1 · not yet completed';
+    const right = (hasProof === false)
+      ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
+      : (at === 2 ? 'proof worked through (Level 2)'
+        : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
     return el('div', {}, [
       el('div', { class: 'ladder' }, names.map((n, i) =>
-        el('span', { class: i === 0 && done ? 'on' : '', title: n }))),
+        el('span', { class: i < at ? 'on' : '', title: n }))),
       el('div', { class: 'ladder-l' }, [
-        el('span', { text: done ? '1 · completed' : '1 · not yet completed' }),
-        el('span', { text: 'levels 2–5 arrive in Level 2' })
+        el('span', { text: caption }),
+        el('span', { text: right })
       ])
     ]);
+  }
+
+  /* The current level as a badge, and the switch that changes it. Level 2 is
+     never entered by accident: it has to be unlocked first (Store.unlocked). */
+  const levelBadge = courseId => el('span', {
+    class: 'badge' + (Store.level(courseId) === 2 ? ' accent' : ''),
+    text: 'Level ' + Store.level(courseId)
+  });
+
+  /* The level switch for ONE course. Level 2 has to be unlocked on that course
+     before it can be picked, and switching is always a deliberate press. */
+  function levelSwitch(course, after) {
+    const id = course.id;
+    const row = el('div', { class: 'row' }, [1, 2].map(function (n) {
+      const can = n === 1 || Store.unlocked(id);
+      const b = el('button', {
+        class: 'chip', type: 'button', 'aria-pressed': String(Store.level(id) === n),
+        disabled: !can, text: 'Level ' + n
+      });
+      b.addEventListener('click', function () {
+        Store.setLevel(id, n);
+        DOM.announce(course.title + ' set to Level ' + Store.level(id) + '.');
+        if (after) after();
+      });
+      return b;
+    }));
+    if (!Store.unlocked(id)) {
+      row.appendChild(el('button', {
+        class: 'chip', type: 'button', text: 'Unlock Level 2',
+        on: { click: function () {
+          Store.unlock(id, true);
+          Store.setLevel(id, 2);
+          DOM.announce('Level 2 unlocked for ' + course.title + '.');
+          if (after) after();
+        } }
+      }));
+    }
+    return row;
+  }
+
+  /* Which of a concept's prerequisites are not ticked yet. One definition,
+     because the note view and the syllabus tree both offer the same cascade
+     and must never disagree about what it would do. */
+  const pendingPrereqs = id =>
+    Pool.chain(id).filter(x => x.id !== id && !Store.isDone(x.id));
+
+  /* An inline question with real buttons, used where window.confirm would
+     lose the detail that makes the question answerable. */
+  function ask(opts) {
+    const host = el('div', { class: 'card tint ask', role: 'group',
+      'aria-label': opts.title });
+    DOM.add(host, [
+      el('div', { class: 'kicker', text: opts.title }),
+      opts.body ? el('div', { class: 'small', style: { margin: '6px 0 10px' } }, [opts.body]) : null,
+      el('div', { class: 'btn-row' }, (opts.actions || []).map(a =>
+        el('button', { class: 'btn' + (a.primary ? ' primary' : ''), type: 'button',
+          text: a.label, on: { click: a.onClick } })))
+    ]);
+    return host;
   }
 
   function mockBanner() {
@@ -6130,7 +7363,7 @@ const UI = (function () {
 
   return {
     title, crumb, prose, math, kindBadge, tierBadge, doneBadge, meter, stat, empty,
-    ladder, mockBanner, gate, reveal, typeBadge, metaRow, clock
+    ladder, levelBadge, levelSwitch, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
   };
 })();
 
@@ -6811,16 +8044,53 @@ const Tree = (function () {
 
   /* ── levels ───────────────────────────────────────────────────────────── */
 
+  /* The same offer the note view makes, in the form a list row can carry:
+     ticking a result usually means its groundwork is already behind you, but
+     "usually" is not "always", so it is asked rather than assumed. */
+  function offerCascade(c) {
+    const pending = UI.pendingPrereqs(c.id);
+    if (!pending.length) return;
+    const names = pending.slice(0, 5).map(x => '· ' + x.title).join('\n') +
+      (pending.length > 5 ? '\n· and ' + (pending.length - 5) + ' more' : '');
+    const ask = pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
+      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'is', 'are') +
+      ' not ticked yet:\n\n' + names + '\n\nTick them as completed too?';
+    if (!window.confirm(ask)) return;
+    const hit = Store.setDoneMany(pending.map(x => x.id), true);
+    DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+  }
+
+  /* At Level 2 a ticked note whose proof is not worked is genuinely neither
+     done nor untouched, so the tick has three states and one press advances
+     one step: tick → work the proof → clear. That way the control always has
+     somewhere to go and never silently refuses. */
   function conceptRow(c, repaint) {
-    const done = Store.isDone(c.id);
-    const row = el('div', { class: 'crow' + (done ? ' done' : '') }, [
-      tickButton(String(done), (done ? 'Unmark' : 'Mark') + ' "' + c.title + '" completed',
-        function () { Store.setDone(c.id, !Store.isDone(c.id)); repaint(); }),
+    const st = Progress.state(c.id);
+    const lvl = Progress.levelOf(c.id);
+    const needsProof = lvl === 2 && Progress.hasProof(c.id);
+
+    const hasProof = Progress.hasProof(c.id);
+    const label = st === 'none'
+      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' : 'Mark "' + c.title + '" completed (Levels 1 & 2)')
+      : st === 'part'
+        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)'
+        : 'Clear "' + c.title + '"';
+
+    const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
+      tickButton(st === 'done' ? 'true' : st === 'part' ? 'mixed' : 'false', label,
+        function () {
+          const was = st;
+          Progress.advance(c.id);
+          if (was === 'none') offerCascade(c);
+          repaint();
+        }),
       el('a', { href: Router.href('note/' + c.id) }, [
         el('span', { class: 'tt' }, [
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
+        needsProof && st === 'part'
+          ? el('span', { class: 'badge warn', text: 'proof' }) : null,
         DOM.icon('chev', 18, 'chev')
       ])
     ]);
@@ -6829,8 +8099,8 @@ const Tree = (function () {
 
   function sectionNode(s, repaint) {
     const ids = s.concepts.map(c => c.id);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
 
     const acc = accordion(nid, s.concepts.length
@@ -6844,7 +8114,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec,
           function () {
             const all = done === ids.length;
-            ids.forEach(id => Store.setDone(id, !all));
+            Progress.setMany(ids, !all);
             DOM.announce(all ? 'Section cleared.' : 'Section ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -6865,8 +8135,8 @@ const Tree = (function () {
   function moduleNode(course, mod, repaint) {
     const secs = Pool.sections(course.id).filter(s => (mod.secs || []).indexOf(s.sec) >= 0);
     const ids = secs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
     if (mod.pending) return pendingNode(mod);
@@ -6877,7 +8147,7 @@ const Tree = (function () {
         tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of module ' + mod.n,
           function () {
             const all = done === ids.length;
-            ids.forEach(id => Store.setDone(id, !all));
+            Progress.setMany(ids, !all);
             DOM.announce(all ? 'Module cleared.' : 'Module ticked — ' + ids.length + ' notes.');
             repaint();
           }),
@@ -6931,8 +8201,8 @@ const Tree = (function () {
   /* A whole course as one collapsed row — the top level of the one-page tree. */
   function courseNode(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
-    const state = !ids.length ? 'false' : done === ids.length ? 'true' : done ? 'mixed' : 'false';
+    const done = Progress.count(ids).done;
+    const state = Progress.tickState(ids);
     const nid = 'course-' + course.id;
 
     const acc = accordion(nid, [el('div', { class: 'rail' },
@@ -6946,7 +8216,7 @@ const Tree = (function () {
           : tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of ' + course.title,
               function () {
                 const all = done === ids.length;
-                ids.forEach(id => Store.setDone(id, !all));
+                Progress.setMany(ids, !all);
                 DOM.announce(all ? 'Course cleared.' : 'Course ticked — ' + ids.length + ' notes.');
                 repaint();
               }),
@@ -7003,7 +8273,7 @@ const Tree = (function () {
         m['mod-' + mod.id] = 1;
         const sec = Pool.sections(course.id)
           .filter(s => (mod.secs || []).indexOf(s.sec) >= 0)
-          .filter(s => s.concepts.some(c => !Store.isDone(c.id)))[0];
+          .filter(s => s.concepts.some(c => !Progress.isDone(c.id)))[0];
         if (sec) m['sec-' + sec.sec] = 1;
       }
     }
@@ -7029,16 +8299,28 @@ const Tree = (function () {
 
 /* ── src/comp.write.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Theorem-writing workspace (reusable component).
+   The writing workspace — a live markdown editor, one line at a time.
 
-   HOOK_claude.md: a focused input with the MathJax rendering immediately
-   below; the learner types only the maths fragment in LaTeX — no HTML, no
-   document markup; an information button opens a compact contextual palette
-   whose keys insert at the caret; malformed LaTeX is handled safely.
+   The old workspace was a textarea with the rendering underneath and a sheet
+   of LaTeX keys at the bottom. Two things were wrong with it on a phone: the
+   key sheet covered the input it was meant to serve, and the rendering sat so
+   far below a growing block of source that you stopped looking at it.
 
-   Deliberately NOT a checker: the tool verifies that the fragment renders, and
-   says so out loud. The learner stays the authority on whether the statement
-   is mathematically right.
+   So the shape is inverted. You write ONE line at a time, and that line's
+   rendering sits directly ABOVE the input — where your eyes already are.
+   Press Enter and the line settles into the document above; a fresh input
+   appears beneath it, with its own output right above it again. The page
+   fills downward with rendered mathematics and the caret is always at the
+   bottom of it. Tap any settled line to reopen it.
+
+   Commands are offered as completions rather than as a palette (core.latex.js):
+   type a backslash and the matches appear in a strip immediately under the
+   input, thumb-high. When nothing is being typed the strip shows the commands
+   this theorem actually uses, so discovery still works without knowing how to
+   spell anything.
+
+   Still deliberately NOT a checker: it verifies that what you wrote renders,
+   and says so out loud. Whether the mathematics is right stays your call.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const WriteBox = (function () {
@@ -7049,146 +8331,498 @@ const WriteBox = (function () {
     const o = opts || {};
     const concept = o.concept || null;
     const uid = 'w' + Math.random().toString(36).slice(2, 8);
-    let lastGood = '';
+
+    /* MARKDOWN IS THE DEFAULT. Every line is prose until you put maths in it,
+       because a workspace you cannot write a sentence in is not a workspace —
+       it is a formula box. Maths goes in as $…$ and $$…$$, the same way it is
+       authored everywhere else in this app, and the Σ key wraps the whole line
+       for when the line really is nothing but maths.
+
+       `mathFirst: true` is the opt-in exception for boxes that exist only to
+       capture one formula; there, a line with no $ is taken as bare LaTeX. */
+    const mathFirst = o.mathFirst === true;
+
+    /* What the draft is filed under. Usually the concept, but a proof
+       scratchpad and a statement attempt are different pieces of work on the
+       same concept, so they need different keys — 'proof:<id>' for the former.
+       Both merge across devices like any other draft. */
+    const draftKey = o.draftKey || (concept ? concept.id : null);
+
     let firstInputFired = false;
+    let lines = [''];
+    let active = 0;
 
-    /* ── input ─────────────────────────────────────────────────────────── */
-    const area = el('textarea', {
-      class: 'tex-in', id: uid, rows: o.compact ? 4 : 6, spellcheck: 'false',
-      autocapitalize: 'off', autocomplete: 'off',
-      'aria-describedby': uid + '-hint',
-      placeholder: o.placeholder ||
-        'e.g.   \\forall \\varepsilon > 0 \\; \\exists \\delta > 0 \\ldots'
-    });
-    if (concept) area.value = Store.draft(concept.id);
+    const stored = (o.value != null ? o.value : (draftKey ? Store.draft(draftKey) : '')) || '';
+    if (stored) { lines = stored.split('\n'); active = lines.length - 1; }
 
-    const paletteBtn = el('button', {
-      class: 'icon-btn', type: 'button', 'aria-expanded': 'false',
-      'aria-controls': uid + '-pal',
-      title: 'LaTeX commands for this theorem'
-    }, [DOM.icon('info', 16), el('span', { text: 'LaTeX help' })]);
-
-    const head = el('div', { class: 'spread' }, [
-      el('label', { class: 'kicker', for: uid, text: o.label || 'Write the statement in LaTeX' }),
-      paletteBtn
-    ]);
-
-    const hint = el('p', {
-      class: 'small muted', id: uid + '-hint', style: { margin: '6px 0 0' },
-      text: 'LaTeX fragment only — no \\documentclass, no HTML, no $ delimiters. It is typeset as display maths.'
-    });
-
-    /* ── contextual palette ────────────────────────────────────────────── */
-    const palette = el('div', { class: 'sheet', id: uid + '-pal', hidden: true });
-    Latex.paletteFor(concept).forEach(function (group) {
-      const keys = el('div', { class: 'keys' }, group.keys.map(function (k) {
-        return el('button', {
-          class: 'key', type: 'button', title: k.ins.replace(Latex.CARET, ''),
-          on: { click: function () { Latex.insert(area, k.ins); } }
-        }, [
-          el('span', { class: 's', text: k.show }),
-          el('span', { class: 'c', text: (k.ins.trim().replace(Latex.CARET, '') || k.cmd).slice(0, 9) })
-        ]);
-      }));
-      palette.appendChild(el('div', { class: 'g' }, [
-        el('div', { class: 'gl', text: group.label + (group.note ? ' — ' + group.note : '') }),
-        keys
-      ]));
-    });
-    palette.appendChild(el('p', {
-      class: 'small muted', style: { margin: '10px 0 0' },
-      text: 'A key inserts at the caret and wraps any selected text.'
-    }));
-
-    paletteBtn.addEventListener('click', function () {
-      const open = palette.hidden;
-      palette.hidden = !open;
-      paletteBtn.setAttribute('aria-expanded', String(open));
-      if (open) { palette.querySelector('.key') && palette.querySelector('.key').focus(); }
-      else area.focus();
-    });
-    palette.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        palette.hidden = true;
-        paletteBtn.setAttribute('aria-expanded', 'false');
-        area.focus();
-      }
-    });
-
-    /* ── render + errors ───────────────────────────────────────────────── */
-    const out = el('div', { class: 'tex-out', 'aria-live': 'off' });
+    /* ── chrome ────────────────────────────────────────────────────────── */
+    const doc = el('div', { class: 'wdoc', id: uid + '-doc' });
+    const strip = el('div', { class: 'wstrip', role: 'listbox',
+      'aria-label': 'LaTeX command completions' });
     const errBox = el('div', { hidden: true });
     const saveNote = el('span', { class: 'small muted', text: '' });
 
-    function showError(msg) {
+    const hint = el('p', {
+      class: 'small muted', id: uid + '-hint', style: { margin: '6px 0 0' },
+      text: (mathFirst
+        ? 'One line at a time. A line with no $ is typeset as display maths; use $…$ to mix maths into words. '
+        : 'Write normally — **bold**, # headings, - lists. Maths goes in as $…$, and a backslash '
+          + 'opens it for you. The Σ key turns the whole line into display maths. ') +
+        'Enter starts the next line.'
+    });
+
+    /* the live input; one line, always the one you are writing */
+    const field = el('input', {
+      class: 'wfield', type: 'text', id: uid, spellcheck: 'false',
+      autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off',
+      'aria-describedby': uid + '-hint',
+      placeholder: o.placeholder || (mathFirst
+        ? '\\forall \\varepsilon > 0 \\; \\exists \\delta > 0 \\ldots'
+        : 'Write a line — words, **bold**, or maths like $\\varepsilon > 0$…')
+    });
+
+    const newlineBtn = el('button', { class: 'wkey', type: 'button',
+      title: 'Start the next line (Enter)', 'aria-label': 'Start the next line' },
+      [el('span', { text: '↵' })]);
+
+    const mathBtn = el('button', { class: 'wkey', type: 'button',
+      title: 'Wrap this line in display maths', 'aria-label': 'Wrap this line in display maths' },
+      [el('span', { text: 'Σ' })]);
+
+    /* ── rendering one line ────────────────────────────────────────────── */
+
+    /* Returns a promise resolving {ok, error, hint} so the active line can
+       report, and settled lines can stay quiet. */
+    function paint(target, src) {
+      const text = String(src == null ? '' : src);
+
+      if (!text.trim()) {
+        DOM.clear(target);
+        target.appendChild(el('div', { class: 'ph',
+          text: target.dataset.live ? 'This line renders here as you type.' : ' ' }));
+        return Promise.resolve({ ok: true, empty: true });
+      }
+
+      if (mathFirst && !Markdown.hasMath(text)) {
+        return Tex.renderFragment(target, text, { display: true });
+      }
+
+      DOM.clear(target);
+      target.appendChild(el('div', { class: 'prose tight', html: Markdown.line(text) }));
+      return Tex.typeset(target).then(function () {
+        const bad = target.querySelector('mjx-merror, [data-mjx-error]');
+        if (!bad) return { ok: true };
+        return { ok: false,
+          error: bad.getAttribute('data-mjx-error') || bad.textContent || 'MathJax could not parse the maths on this line.' };
+      });
+    }
+
+    function showProblem(res) {
+      if (!res || res.ok === true && !res.hint) { errBox.hidden = true; DOM.clear(errBox); return; }
+      if (res.ok && res.hint) {
+        DOM.clear(errBox);
+        errBox.appendChild(el('div', { class: 'tex-err' }, [
+          el('span', { 'aria-hidden': 'true', text: 'ⓘ' }), el('span', { text: res.hint })
+        ]));
+        errBox.hidden = false;
+        return;
+      }
+      if (res.ok) { errBox.hidden = true; DOM.clear(errBox); return; }
       DOM.clear(errBox);
       errBox.appendChild(el('div', { class: 'tex-err' }, [
         el('span', { 'aria-hidden': 'true', text: '⚠' }),
         el('span', {}, [
-          el('b', { text: 'Not valid LaTeX yet. ' }),
-          el('span', { text: msg }),
-          lastGood ? el('span', { text: ' The last version that rendered is shown above.' }) : null
+          el('b', { text: 'This line does not render yet. ' }),
+          el('span', { text: res.error || 'Check for an unmatched { or }.' })
         ])
       ]));
       errBox.hidden = false;
     }
 
-    /* it rendered, but something in it is not a real command */
-    function showHint(msg) {
-      DOM.clear(errBox);
-      errBox.appendChild(el('div', { class: 'tex-err' }, [
-        el('span', { 'aria-hidden': 'true', text: 'ⓘ' }),
-        el('span', { text: msg })
-      ]));
-      errBox.hidden = false;
+    /* ── the document ──────────────────────────────────────────────────── */
+
+    let liveOut = null;          /* the output frame above the active input */
+
+    /* Settled lines are re-rendered on every rebuild, and MathJax is the most
+       expensive thing in the app. Their output only depends on their source,
+       so keep the markup by source text and reuse it. */
+    const cache = {};
+
+    function build() {
+      DOM.clear(doc);
+      liveOut = null;
+
+      lines.forEach(function (text, i) {
+        const out = el('div', { class: 'wout' });
+        const row = el('div', { class: 'wline' + (i === active ? ' live' : '') }, [
+          el('span', { class: 'wnum', 'aria-hidden': 'true', text: String(i + 1) }),
+          out
+        ]);
+
+        if (i === active) {
+          out.dataset.live = '1';
+          liveOut = out;
+          doc.appendChild(row);
+          doc.appendChild(el('div', { class: 'winput' }, [
+            el('span', { class: 'wcaret', 'aria-hidden': 'true', text: '›' }),
+            field, mathBtn, newlineBtn
+          ]));
+          field.value = text;
+          paint(out, text).then(showProblem);
+        } else {
+          /* a settled line reopens on tap — that is the only way back */
+          row.setAttribute('tabindex', '0');
+          row.setAttribute('role', 'button');
+          row.setAttribute('aria-label', 'Edit line ' + (i + 1));
+          const open = function (e) {
+            if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            focusLine(i, 'end');
+          };
+          row.addEventListener('click', open);
+          row.addEventListener('keydown', open);
+          doc.appendChild(row);
+          if (cache[text] != null) out.innerHTML = cache[text];
+          else paint(out, text).then(function () { cache[text] = out.innerHTML; });
+        }
+      });
     }
 
-    const render = DOM.debounce(function () {
-      const tex = area.value;
-      Tex.renderFragment(out, tex, { placeholder: 'Start typing — the rendered statement appears here.' })
-        .then(function (r) {
-          if (!r.ok) { showError(r.error || 'MathJax could not parse the fragment.'); return; }
-          lastGood = tex;
-          if (r.hint) showHint(r.hint);
-          else { errBox.hidden = true; DOM.clear(errBox); }
-        });
-    }, 260);
+    const liveRender = DOM.debounce(function () {
+      if (liveOut) paint(liveOut, field.value).then(showProblem);
+    }, 200);
 
     const persist = DOM.debounce(function () {
-      if (!concept) return;
-      Store.saveDraft(concept.id, area.value);
-      saveNote.textContent = area.value.trim() ? 'Draft saved' : '';
+      if (!draftKey) return;
+      Store.saveDraft(draftKey, value());
+      saveNote.textContent = value().trim() ? 'Draft saved' : '';
     }, 700);
 
-    area.addEventListener('input', function () {
-      render();
+    function commitField() { lines[active] = field.value; }
+
+    function focusLine(i, caret) {
+      commitField();
+      active = Math.max(0, Math.min(lines.length - 1, i));
+      build();
+      refreshStrip();
+      /* synchronously: a requestAnimationFrame here leaves the user-gesture
+         context, and iOS then refuses to bring the keyboard back up */
+      field.focus();
+      const at = caret === 'end' ? field.value.length : (caret || 0);
+      try { field.setSelectionRange(at, at); } catch (e) { /* not focusable yet */ }
+      revealInput();
+    }
+
+    /* ── completions ───────────────────────────────────────────────────── */
+    let matches = [];
+    let picked = 0;
+
+    function refreshStrip() {
+      const caret = field.selectionStart == null ? field.value.length : field.selectionStart;
+      const tok = Latex.tokenAt(field.value, caret);
+      matches = tok ? Latex.complete(tok.word, concept, 12) : Latex.suggestions(concept, 14);
+      picked = 0;
+
+      DOM.clear(strip);
+      strip.appendChild(el('span', { class: 'wstrip-l', 'aria-hidden': 'true',
+        text: tok ? (tok.text || '\\') : 'commands' }));
+
+      matches.forEach(function (k, i) {
+        strip.appendChild(el('button', {
+          class: 'wsug' + (i === picked && tok ? ' on' : ''),
+          type: 'button', role: 'option', 'aria-selected': String(i === picked && !!tok),
+          title: '\\' + k.cmd + (k.desc ? ' — ' + k.desc : ''),
+          on: { click: function () { take(k); } }
+        }, [
+          el('span', { class: 's', text: k.show }),
+          el('span', { class: 'c', text: '\\' + k.cmd })
+        ]));
+      });
+
+      if (!matches.length) {
+        strip.appendChild(el('span', { class: 'small muted',
+          text: 'no command matches that spelling' }));
+      }
+    }
+
+    /* Insert a command. In a markdown line it is wrapped in $…$ unless the
+       caret is already inside maths — so a symbol can be dropped into the
+       middle of a sentence without stopping to think about delimiters. */
+    function take(entry) {
+      Latex.accept(field, entry, { wrapInMath: !mathFirst });
+      refreshStrip();
+      revealInput();
+    }
+
+    /* ── keeping the input above the keyboard ────────────────────────────────
+       An on-screen keyboard shrinks the VISUAL viewport but not the layout
+       one, so an input near the bottom ends up behind it and the page looks
+       like it simply refuses to scroll far enough. Correct it by hand: measure
+       how far the input row plus its command strip overflow the visible
+       bottom, and scroll the nearest scrolling ancestor by exactly that — the
+       reel when we are inside it, the window otherwise. */
+    function scroller(node) {
+      let n = node.parentElement;
+      while (n && n !== document.body) {
+        const st = window.getComputedStyle(n);
+        if (/(auto|scroll)/.test(st.overflowY) && n.scrollHeight > n.clientHeight + 4) return n;
+        n = n.parentElement;
+      }
+      return null;
+    }
+
+    function revealInput() {
+      const vv = window.visualViewport;
+      const bottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+      const top = vv ? vv.offsetTop : 0;
+      const r = strip.getBoundingClientRect();
+      const inputTop = field.getBoundingClientRect().top;
+
+      let by = 0;
+      const over = r.bottom + 12 - bottom;
+      if (over > 1) by = over;
+      else if (inputTop - 12 < top) by = inputTop - top - 12;
+      if (!by) return;
+
+      const sc = scroller(field);
+      if (sc) sc.scrollTop += by;
+      else window.scrollBy(0, by);
+    }
+
+    const reveal = DOM.debounce(revealInput, 90);
+    field.addEventListener('focus', reveal);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', reveal);
+      window.visualViewport.addEventListener('scroll', reveal);
+    }
+
+    /* ── keys ──────────────────────────────────────────────────────────── */
+    field.addEventListener('input', function () {
+      reveal();
+      liveRender();
+      commitField();
       persist();
-      if (!firstInputFired && area.value.trim()) {
+      refreshStrip();
+      if (!firstInputFired && field.value.trim()) {
         firstInputFired = true;
         if (o.onFirstInput) o.onFirstInput();
       }
     });
 
+    field.addEventListener('keydown', function (e) {
+      const caret = field.selectionStart == null ? 0 : field.selectionStart;
+      const len = field.value.length;
+
+      if (e.key === 'Tab' && matches.length) {
+        const tok = Latex.tokenAt(field.value, caret);
+        if (tok) {
+          e.preventDefault();
+          take(matches[picked] || matches[0]);
+          return;
+        }
+      }
+
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        newLine();
+        return;
+      }
+
+      if (e.key === 'Backspace' && caret === 0 && field.selectionEnd === 0 && active > 0) {
+        e.preventDefault();
+        commitField();
+        const carry = lines[active];
+        const prevLen = lines[active - 1].length;
+        lines[active - 1] += carry;
+        lines.splice(active, 1);
+        focusLine(active - 1, prevLen);
+        persist();
+        return;
+      }
+
+      if (e.key === 'ArrowUp' && caret === 0 && active > 0) {
+        e.preventDefault();
+        focusLine(active - 1, 'end');
+        return;
+      }
+
+      if (e.key === 'ArrowDown' && caret === len && active < lines.length - 1) {
+        e.preventDefault();
+        focusLine(active + 1, 'end');
+      }
+    });
+
+    field.addEventListener('click', refreshStrip);
+    field.addEventListener('keyup', function (e) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') refreshStrip();
+    });
+
+    function newLine() {
+      commitField();
+      /* Enter on the last line when it is empty means "done", not "another
+         blank line" — otherwise the document grows a tail of empties. */
+      if (active === lines.length - 1 && !lines[active].trim() && lines.length > 1) {
+        field.blur();
+        return;
+      }
+      lines.splice(active + 1, 0, '');
+      focusLine(active + 1, 0);
+      persist();
+    }
+
+    newlineBtn.addEventListener('click', newLine);
+
+    mathBtn.addEventListener('click', function () {
+      const t = field.value.trim();
+      const wrapped = /^\$\$[\s\S]*\$\$$/.test(t);
+      field.value = wrapped ? t.replace(/^\$\$\s*|\s*\$\$$/g, '') : '$$ ' + t + ' $$';
+      commitField();
+      field.dispatchEvent(new Event('input', { bubbles: true }));
+      field.focus();
+    });
+
     /* ── assemble ──────────────────────────────────────────────────────── */
-    const box = el('div', { class: 'stack', style: { gap: '10px' } }, [
-      head, area, hint, palette,
-      el('div', { class: 'spread' }, [el('span', { class: 'kicker', text: 'Renders as' }), saveNote]),
-      out, errBox,
+    const value = () => lines.join('\n');
+
+    const box = el('div', { class: 'stack wbox', style: { gap: '10px' } }, [
+      el('div', { class: 'spread' }, [
+        el('label', { class: 'kicker', for: uid,
+          text: o.label || 'Write it — one line at a time' }),
+        saveNote
+      ]),
+      doc,
+      strip,
+      errBox,
+      hint,
       el('p', {
         class: 'small muted', style: { margin: 0 },
-        text: 'This checks only that your LaTeX renders — not whether the mathematics is correct. That judgement stays yours.'
+        text: 'This checks only that what you wrote renders — not whether the mathematics is correct. That judgement stays yours.'
       })
     ]);
     host.appendChild(box);
 
-    render();
+    build();
+    refreshStrip();
 
     return {
-      value: () => area.value,
-      focus: () => area.focus(),
-      hasContent: () => !!area.value.trim(),
+      value: value,
+      focus: () => field.focus(),
+      hasContent: () => !!value().trim(),
       node: box
     };
+  }
+
+  return { mount };
+})();
+
+
+/* ── src/view.login.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Sign in.
+
+   The app does not open until there is a name and a roll number, because
+   those two are the key the record is stored and merged under. A progress
+   record that starts anonymous and is claimed later cannot be merged honestly
+   — you would have to guess which device's history was whose.
+
+   Be straight about what this is: it is a PASS KEY, not a password. Anyone who
+   knows both halves can open this record. It exists so your work follows you
+   between a phone and a laptop without an account to create, and the screen
+   says exactly that rather than dressing it up as security.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Login = (function () {
+
+  const el = DOM.el;
+
+  function mount(host, onDone) {
+    const nameIn = el('input', {
+      class: 'tin', type: 'text', id: 'login-name', autocomplete: 'name',
+      placeholder: 'e.g. Ihjas Ahammed', spellcheck: 'false', enterkeyhint: 'next'
+    });
+    const rollIn = el('input', {
+      class: 'tin', type: 'text', id: 'login-roll', autocomplete: 'off',
+      placeholder: 'e.g. 21-MAT-07', spellcheck: 'false', enterkeyhint: 'go'
+    });
+
+    const known = Store.identity();
+    nameIn.value = known.name || '';
+    rollIn.value = known.roll || '';
+
+    const note = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
+    const go = el('button', { class: 'btn primary', type: 'submit', text: 'Open my study record' });
+
+    const keyLine = el('p', { class: 'small mono', style: { margin: '8px 0 0', color: 'var(--ink-3)' } });
+    function paintKey() {
+      const k = Sync.keyFor(nameIn.value, rollIn.value);
+      keyLine.textContent = k ? 'record: ' + k : '';
+    }
+    nameIn.addEventListener('input', paintKey);
+    rollIn.addEventListener('input', paintKey);
+    paintKey();
+
+    let busy = false;
+    function submit(e) {
+      if (e) e.preventDefault();
+      if (busy) return;
+      const name = nameIn.value.trim(), roll = rollIn.value.trim();
+      if (!name || !roll) {
+        note.textContent = 'Both a name and a roll number are needed — together they are the key.';
+        (name ? rollIn : nameIn).focus();
+        return;
+      }
+      busy = true;
+      go.disabled = true;
+      go.textContent = 'Opening…';
+      note.textContent = 'Looking for an existing record…';
+
+      Store.signIn(name, roll);
+      Sync.hello().then(function (r) {
+        note.textContent = r.msg || '';
+        onDone(r);
+      }, function () {
+        /* offline is not a reason to lock someone out of their own device */
+        note.textContent = '';
+        onDone({ ok: false, offline: true });
+      });
+    }
+
+    const form = el('form', { class: 'stack', style: { gap: '14px' }, on: { submit: submit } }, [
+      el('div', {}, [
+        el('div', { class: 'kicker', text: 'Real Analysis · study system' }),
+        el('h1', { tabindex: '-1', id: 'pagetitle', text: 'Sign in to your record' })
+      ]),
+      el('p', { class: 'lede' }, [
+        'Your name and roll number are the key your progress is stored under. ' +
+        'Enter the same two on any device and the record follows you.'
+      ]),
+      el('div', { class: 'card' }, [
+        el('label', { class: 'kicker', for: 'login-name', text: 'Name' }),
+        el('div', { style: { margin: '6px 0 14px' } }, [nameIn]),
+        el('label', { class: 'kicker', for: 'login-roll', text: 'Roll number' }),
+        el('div', { style: { margin: '6px 0 0' } }, [rollIn]),
+        keyLine
+      ]),
+      el('div', { class: 'btn-row' }, [go]),
+      note,
+      el('div', { class: 'banner' }, [
+        el('span', { 'aria-hidden': 'true', text: 'ⓘ' }),
+        el('span', {}, [
+          el('b', { text: 'This is a pass key, not a password. ' }),
+          'Anyone who knows your name and roll number can open this record. It keeps your ' +
+          'work together across devices; it does not protect it.'
+        ])
+      ]),
+      Pool.isMock() ? el('p', { class: 'small muted', style: { margin: 0 },
+        text: 'Test build: records here are kept in a separate store from the real app, so nothing you do can reach it.' }) : null
+    ]);
+
+    nameIn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); rollIn.focus(); }
+    });
+
+    host.appendChild(el('div', { class: 'wrap view-in' }, [form]));
+    (nameIn.value ? rollIn : nameIn).focus();
   }
 
   return { mount };
@@ -7199,9 +8833,14 @@ const WriteBox = (function () {
 /* ══════════════════════════════════════════════════════════════════════════
    Today — what to do next, and what the app actually knows about you.
 
-   The three tiles keep completion and recall apart on purpose: finishing a
-   note is Level 1 "completed" and says nothing about recall, so the numbers
+   The tiles keep completion, proof work and recall apart on purpose: finishing
+   a note is Level 1 "completed" and says nothing about recall, so the numbers
    are never merged into one flattering percentage.
+
+   This screen also owns the level switch. The app opens at Level 1 for
+   everyone and stays there until Level 2 is unlocked — by finishing a whole
+   course at Level 1, or deliberately, here in settings. Nothing promotes a
+   learner silently.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewHome = (function () {
@@ -7209,13 +8848,19 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => !Store.isDone(c.id))[0] || null;
+    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0] || null;
   }
   function nextCard() {
     return Pool.deck().filter(c => !(Store.card(c.id) || {}).first)[0] || null;
   }
   function nextQuestion() {
     return Pool.objective().filter(q => !(Store.omr(q.id) || {}).first)[0] || null;
+  }
+  /* only from courses actually held to Level 2 — offering proof work on a
+     course still at Level 1 is offering work the learner has not opted into */
+  function nextProof() {
+    return Pool.concepts().filter(c =>
+      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0] || null;
   }
 
   function step(n, label, detail, href, ready) {
@@ -7229,34 +8874,110 @@ const ViewHome = (function () {
     ]);
   }
 
-  function courseRow(course) {
+  /* One course, with its OWN level. The ring counts whatever "done" means for
+     this course, so a course switched to Level 2 shows its proof work and a
+     course still at Level 1 is untouched by that decision. */
+  function courseCard(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
-    const pc = DOM.pct(done, ids.length);
+    const c = Progress.count(ids);
+    const at = Store.level(course.id);
+    const pc = DOM.pct(c.done, c.total);
+
     const ring = el('span', {
-      class: 'ring' + (ids.length && done === ids.length ? ' done' : ''),
-      role: 'img', 'aria-label': done + ' of ' + ids.length + ' ticked'
-    }, [el('i', { text: ids.length ? done + '/' + ids.length : '—' })]);
+      class: 'ring' + (c.total && c.done === c.total ? ' done' : ''),
+      role: 'img', 'aria-label': c.done + ' of ' + c.total + ' complete at level ' + at
+    }, [el('i', { text: c.total ? c.done + '/' + c.total : '—' })]);
     window.requestAnimationFrame(() => ring.style.setProperty('--p', pc));
 
-    return el('a', { class: 'item', href: Router.href('study/' + course.id) }, [
-      course.pending ? el('span', { class: 'ix', text: '·' }) : ring,
-      el('span', { class: 'tt' }, [
-        el('b', { text: course.title }),
-        el('span', { text: course.pending ? 'content arrives at Level 3' : course.blurb })
+    if (course.pending) {
+      return el('div', { class: 'card' }, [
+        el('div', { class: 'spread' }, [
+          el('div', { class: 'kicker', text: course.title }),
+          el('span', { class: 'badge warn', text: 'level 3' })
+        ]),
+        el('p', { class: 'small muted', style: { margin: '8px 0 0' },
+          text: course.pendingNote || 'Content arrives at Level 3.' })
+      ]);
+    }
+
+    const proofIds = Pool.ids.proofs(course.id);
+    const proofsDone = proofIds.filter(Store.isProofDone).length;
+
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'spread' }, [
+        el('a', { class: 'kicker', style: { textDecoration: 'none' },
+          href: Router.href('study/' + course.id), text: course.title }),
+        UI.levelBadge(course.id)
       ]),
-      course.pending
-        ? el('span', { class: 'badge warn', text: 'level 3' })
-        : el('span', { class: 'go', 'aria-hidden': 'true', text: '›' })
+      el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
+        ring,
+        el('span', { class: 'tt' }, [
+          el('b', { text: c.done + ' of ' + c.total + (at === 2 ? ' at level 2' : ' ticked') }),
+          el('span', { text: at === 2
+            ? (c.part ? c.part + ' ticked with the proof still outstanding' : course.blurb)
+            : course.blurb })
+        ])
+      ]),
+      at === 2 && proofIds.length
+        ? el('div', { style: { marginTop: '10px' } }, [
+            el('div', { class: 'spread' }, [
+              el('span', { class: 'count', text: 'proofs worked' }),
+              el('span', { class: 'count', text: proofsDone + '/' + proofIds.length })
+            ]),
+            el('div', { style: { marginTop: '6px' } }, [UI.meter(proofsDone, proofIds.length)])
+          ])
+        : null,
+      el('div', { style: { marginTop: '12px' } }, [UI.levelSwitch(course, repaint)]),
+      el('p', { class: 'small muted', style: { margin: '8px 0 0' },
+        text: at === 2
+          ? 'At Level 2 a note counts as done once its proof is worked through.'
+          : (Store.unlocked(course.id)
+              ? 'Level 2 is unlocked here — switch when you want the proofs to count.'
+              : 'Finish this course at Level 1 and Level 2 unlocks by itself.') })
     ]);
   }
 
+  /* ── sync ─────────────────────────────────────────────────────────────── */
+  /* Signed in is the only state this screen can be reached in, so this is an
+     account card, not a connect form. */
+  function syncCard() {
+    const id = Store.identity();
+    const host = el('div', { class: 'card tint' });
+    const state = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
+
+    function paint(last) {
+      const s = Sync.status();
+      state.textContent = (last && last.msg) ? last.msg
+        : 'Signed in as ' + id.name + ' · ' + id.roll + '. Progress merges across every device '
+          + 'that signs in with these two. It is a pass key, not a password.';
+    }
+    Sync.watch(paint);
+    paint(Sync.status().last);
+
+    DOM.add(host, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: 'Your record' }),
+        el('span', { class: 'badge ok', text: Sync.status().key })
+      ]),
+      el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
+        el('button', { class: 'btn primary', type: 'button', text: 'Sync now',
+          on: { click: function () { Sync.now({}).then(r => paint({ msg: r && r.msg })); } } }),
+        el('button', { class: 'btn', type: 'button', text: 'Sign out',
+          on: { click: function () {
+            if (!window.confirm('Sign out? Progress stays on this device and in the cloud record.')) return;
+            Sync.disconnect();
+            location.reload();
+          } } })
+      ]),
+      state
+    ]);
+    return host;
+  }
+
+  /* ── device settings ──────────────────────────────────────────────────── */
   function settings() {
     const themeBtn = el('button', { class: 'chip', type: 'button' });
-    function paint() {
-      const t = Store.pref('theme', 'auto');
-      themeBtn.textContent = 'Theme: ' + t;
-    }
+    function paint() { themeBtn.textContent = 'Theme: ' + Store.pref('theme', 'auto'); }
     themeBtn.addEventListener('click', function () {
       const order = ['auto', 'light', 'dark'];
       const next = order[(order.indexOf(Store.pref('theme', 'auto')) + 1) % 3];
@@ -7289,47 +9010,71 @@ const ViewHome = (function () {
       el('div', { class: 'row', style: { marginTop: '10px' } }, [themeBtn, exportBtn, resetBtn]),
       el('p', { class: 'small muted', style: { margin: '10px 0 0' },
         text: Store.isVolatile()
-          ? 'Storage is blocked in this browser, so progress lasts only for this session.'
-          : 'Progress is stored in this browser only. No account, no sync — that comes later.' })
+          ? 'Storage is blocked in this browser, so progress lasts only for this session. Connect sync above to keep it.'
+          : 'Progress is stored in this browser. Connect sync above to carry it to another device.' })
     ]);
   }
 
   function render() {
-    const s = Store.summary(Pool.ids.concepts(), Pool.ids.cards(), Pool.ids.objective());
-    const note = nextUndone(), card = nextCard(), q = nextQuestion();
+    /* Any course at Level 2 is enough to make the proof surfaces worth
+       showing; the numbers themselves are per course, on the cards below. */
+    const anyL2 = Pool.courses().some(c => Store.level(c.id) === 2);
+    const all = Pool.ids.concepts();
+    const overall = Progress.count(all);
+    const s = Store.summary(all, Pool.ids.cards(), Pool.ids.objective(), Pool.ids.proofs());
+    const note = nextUndone(), card = nextCard(), q = nextQuestion(), pf = nextProof();
 
     const root = el('div', { class: 'stack' });
+
+    const tiles = [
+      UI.stat(overall.done + '/' + overall.total, 'Notes complete',
+        anyL2 ? 'each at its own level' : 'ladder level 1',
+        UI.meter(overall.done, overall.total)),
+      UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—',
+        'First-try recall',
+        s.cards.tried + ' of ' + s.cards.total + ' tried'),
+      UI.stat(s.omr.locked ? DOM.pct(s.omr.correct, s.omr.locked) + '%' : '—',
+        'First-try correct',
+        s.omr.locked + ' of ' + s.omr.total + ' locked')
+    ];
+    if (anyL2) {
+      const l2ids = Pool.courses().filter(c => Store.level(c.id) === 2)
+        .reduce((acc, c) => acc.concat(Pool.ids.proofs(c.id)), []);
+      const pdone = l2ids.filter(Store.isProofDone).length;
+      tiles.push(UI.stat(pdone + '/' + l2ids.length, 'Proofs worked', 'ladder level 2',
+        UI.meter(pdone, l2ids.length)));
+    }
+
+    const loop = [
+      step(1, note ? 'Read: ' + note.title : 'Every note has been read once',
+        note ? Pool.sectionTitle(note.sec) : 'Re-reading is always available',
+        note ? 'note/' + note.id : 'study', !!note),
+      step(2, card ? 'State it from memory' : 'Every statement has had one attempt',
+        card ? card.title : 'Re-attempts are allowed but never recorded',
+        'recall', !!card),
+      step(3, q ? 'Answer the next question' : 'Every question has been locked once',
+        q ? q.type + ' · ' + Pool.sectionTitle(q.sec) : 'Review the worked answers any time',
+        q ? 'omr/' + q.id : 'omr', !!q)
+    ];
+    if (anyL2) {
+      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof has been worked through',
+        pf ? Pool.sectionTitle(pf.sec) : 'Levels 3–5 need delayed evidence, which is not built yet',
+        pf ? 'note/' + pf.id : 'study', !!pf));
+    }
 
     DOM.add(root, [
       UI.title('Today'),
       UI.mockBanner(),
 
-      DOM.stagger(el('div', { class: 'stats' }, [
-        UI.stat(s.notes.done + '/' + s.notes.total, 'Notes ticked', 'ladder level 1',
-          UI.meter(s.notes.done, s.notes.total)),
-        UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—',
-          'First-try recall',
-          s.cards.tried + ' of ' + s.cards.total + ' tried'),
-        UI.stat(s.omr.locked ? DOM.pct(s.omr.correct, s.omr.locked) + '%' : '—',
-          'First-try correct',
-          s.omr.locked + ' of ' + s.omr.total + ' locked')
-      ])),
+      DOM.stagger(el('div', { class: 'stats' }, tiles)),
 
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'The loop' }),
         el('p', { class: 'small muted', style: { margin: '4px 0 12px' },
-          text: 'Read it → state it from memory → answer questions on it. Feedback comes after the attempt, never before.' }),
-        el('div', { class: 'list' }, [
-          step(1, note ? 'Read: ' + note.title : 'Every note has been read once',
-            note ? Pool.sectionTitle(note.sec) : 'Re-reading is always available',
-            note ? 'note/' + note.id : 'study', !!note),
-          step(2, card ? 'State it from memory' : 'Every statement has had one attempt',
-            card ? card.title : 'Re-attempts are allowed but never recorded',
-            'recall', !!card),
-          step(3, q ? 'Answer the next question' : 'Every question has been locked once',
-            q ? q.type + ' · ' + Pool.sectionTitle(q.sec) : 'Review the worked answers any time',
-            q ? 'omr/' + q.id : 'omr', !!q)
-        ])
+          text: anyL2
+            ? 'Read it → state it from memory → answer questions on it → produce the proof yourself. Feedback comes after the attempt, never before.'
+            : 'Read it → state it from memory → answer questions on it. Feedback comes after the attempt, never before.' }),
+        el('div', { class: 'list' }, loop)
       ]),
 
       el('div', {}, [
@@ -7337,16 +9082,22 @@ const ViewHome = (function () {
           el('h2', { text: 'Courses' }),
           el('a', { class: 'chip', href: Router.href('study'), text: 'Open the syllabus' })
         ]),
-        el('div', { class: 'list' }, Pool.courses().map(courseRow))
+        el('p', { class: 'small muted', style: { margin: '0 0 10px' },
+          text: 'Each course carries its own level. Raising one does not raise the others.' }),
+        el('div', { class: 'stack', style: { gap: '12px' } },
+          Pool.courses().map(course => courseCard(course, function () { Router.reload(); })))
       ]),
 
       el('div', { class: 'card tint' }, [
         el('div', { class: 'kicker', text: 'Mastery ladder' }),
         el('p', { class: 'small muted', style: { margin: '4px 0 10px' },
-          text: 'A tick earns level 1 and nothing more. Recall levels need evidence, and that evidence is collected from Level 2 onwards.' }),
-        UI.ladder(false)
+          text: anyL2
+            ? 'A tick earns level 1. Working a proof through earns level 2 on that proof, in the courses you have switched. Levels 3–5 need delayed evidence, which is not built yet.'
+            : 'A tick earns level 1 and nothing more. Recall levels need evidence, and that evidence is collected from Level 2 onwards.' }),
+        UI.ladder(false, false)
       ]),
 
+      syncCard(),
       settings()
     ]);
 
@@ -7373,7 +9124,7 @@ const ViewStudy = (function () {
 
   function summaryStrip() {
     const ids = Pool.ids.concepts();
-    const done = ids.filter(Store.isDone).length;
+    const done = Progress.count(ids).done;
     const left = ids.length - done;
     return el('div', { class: 'card glass' }, [
       el('div', { class: 'spread' }, [
@@ -7393,7 +9144,7 @@ const ViewStudy = (function () {
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
     const ids = Pool.ids.concepts(course.id);
-    const done = ids.filter(Store.isDone).length;
+    const done = Progress.count(ids).done;
 
     DOM.add(root, [
       UI.crumb([{ text: 'Study', href: 'study' }, { text: course.title }]),
@@ -7478,7 +9229,7 @@ const ViewNote = (function () {
       ]),
       el('div', { class: 'path', style: { marginTop: '10px' } }, chain.map(function (x, i) {
         const here = x.id === c.id;
-        const done = Store.isDone(x.id);
+        const done = Progress.isDone(x.id);
         const kids = [
           el('span', { class: 'dot', 'aria-hidden': 'true',
             text: here ? '●' : done ? '✓' : String(i + 1) }),
@@ -7503,7 +9254,7 @@ const ViewNote = (function () {
       el('div', { class: 'kicker', text: 'Used later by' }),
       el('div', { class: 'row', style: { marginTop: '10px' } }, next.map(function (x) {
         return el('a', { class: 'chip', href: Router.href('note/' + x.id) }, [
-          Store.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
+          Progress.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
           el('span', { text: x.title })
         ]);
       }))
@@ -7557,14 +9308,17 @@ const ViewNote = (function () {
           ])
         ]));
       }
-      kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
-        el('label', { class: 'small muted', text: 'Scratchpad: draft your proof steps or reasoning before checking the solution' }),
-        el('textarea', {
-          class: 'proof-scratchpad',
-          placeholder: 'Write your proof sketch or key steps here...',
-          spellcheck: 'false'
-        })
-      ]));
+      /* The scratchpad is the full writing workspace, not a bare textarea:
+         a proof sketch is prose with maths in it, and it is worth keeping.
+         Filed under 'proof:<id>' so it never collides with the statement
+         draft for the same concept, and it syncs like any other draft. */
+      const pad = el('div', { class: 'scratch' });
+      WriteBox.mount(pad, {
+        draftKey: 'proof:' + c.id, concept: c,
+        label: 'Scratchpad · draft the argument before you look',
+        placeholder: 'The main move is…'
+      });
+      kids.push(pad);
       return kids;
     }
 
@@ -7633,7 +9387,8 @@ const ViewNote = (function () {
       showBtn.textContent = open ? 'Hide proof' : '👁 Show step-by-step proof';
     });
 
-    return el('div', { class: 'card' }, [
+    const row = proofDoneRow(c.id, 'proof', Progress.courseIdOf(c), onTick);
+    const view = el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: 'Proof & Rigorous Argument' }),
         el('span', { class: 'count', text: (p.rungs ? p.rungs.length : 0) + ' steps' })
@@ -7643,8 +9398,50 @@ const ViewNote = (function () {
         showBtn
       ]),
       tryHost,
-      proofHost
+      proofHost,
+      row
     ]);
+    view._paintProofDone = row._paint;
+    return view;
+  }
+
+  /* ── Level 2: proof work, marked per task ─────────────────────────────────
+     This earns level 2, marked per proof (or written answer) below the proof
+     section. When clicked, it ticks Level 2, and automatically ensures Level 1
+     is ticked as well. */
+  function proofDoneRow(id, what, courseId, onTick) {
+    const btn = el('button', { class: 'btn', type: 'button' });
+    const note = el('p', { class: 'small muted', style: { margin: '8px 0 0' } });
+    function paint() {
+      const on = Store.isProofDone(id);
+      btn.className = 'btn' + (on ? '' : ' primary');
+      btn.textContent = on
+        ? '✓ Level 2 ticked (' + (what === 'proof' ? 'Proof worked through' : 'Worked through') + ') — undo'
+        : 'Tick Level 2 (I worked this ' + what + ' through)';
+      btn.setAttribute('aria-pressed', String(on));
+      note.textContent = on
+        ? 'Level 2 earned on this ' + what + '.'
+        : 'Claim this only if you produced the argument yourself, not if you read it.';
+    }
+    btn.addEventListener('click', function () {
+      const next = !Store.isProofDone(id);
+      Store.setProofDone(id, next);
+      if (next && !id.startsWith('w:') && !Store.isDone(id)) {
+        Store.setDone(id, true);
+      }
+      paint();
+      if (onTick) onTick();
+      DOM.announce(next ? 'Level 2 ticked as worked through.' : 'Level 2 tick removed.');
+    });
+    paint();
+
+    const host = el('div', { class: 'proof-done', style: { marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--rule)' } }, [
+      el('div', { class: 'kicker', style: { marginBottom: '8px' }, text: 'Level 2 Tick' }),
+      el('div', { class: 'btn-row' }, [btn]),
+      note
+    ]);
+    host._paint = paint;
+    return host;
   }
 
   function traps(c) {
@@ -7697,7 +9494,7 @@ const ViewNote = (function () {
     ]);
   }
 
-  function writtenOn(c) {
+  function writtenOn(c, onTick) {
     const qs = Pool.writtenFor(c.id);
     if (!qs.length) return null;
     return el('div', { class: 'card' }, [
@@ -7717,14 +9514,13 @@ const ViewNote = (function () {
               el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
             ]));
           }
-          kids.push(el('div', { class: 'stack', style: { gap: '4px' } }, [
-            el('label', { class: 'small muted', text: 'Scratchpad: outline your proof or solution steps' }),
-            el('textarea', {
-              class: 'proof-scratchpad',
-              placeholder: 'Draft your solution here before viewing the model answer...',
-              spellcheck: 'false'
-            })
-          ]));
+          const pad = el('div', { class: 'scratch' });
+          WriteBox.mount(pad, {
+            draftKey: 'written:' + q.id, concept: c,
+            label: 'Scratchpad · draft your answer before you look',
+            placeholder: 'Start with what the question is really testing…'
+          });
+          kids.push(pad);
           return kids;
         }
 
@@ -7785,7 +9581,8 @@ const ViewNote = (function () {
             showBtn
           ]),
           tryHost,
-          answerHost
+          answerHost,
+          proofDoneRow('w:' + q.id, 'answer', Progress.courseIdOf(c), onTick)
         ]);
       }))
     ]);
@@ -7805,22 +9602,94 @@ const ViewNote = (function () {
     const mod = Pool.moduleOfSec(c.sec);
     const root = el('div', { class: 'stack' });
 
+    const hasProof = !!(c && c.proof);
+    const badgesHost = el('div', { class: 'row', style: { marginBottom: '8px' } });
+    let syncProofTick = null;
+
     /* completion toggle */
     const doneBtn = el('button', { class: 'btn', type: 'button' });
     const ladderHost = el('div', {});
+    const askHost = el('div', {});
+
     function paintDone() {
       const on = Store.isDone(c.id);
+      const pDone = Store.isProofDone(c.id);
+
+      DOM.clear(badgesHost);
+      DOM.add(badgesHost, [
+        UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
+        pDone ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
+      ].filter(Boolean));
+
       doneBtn.className = 'btn' + (on ? '' : ' primary');
-      doneBtn.textContent = on ? '✓ Ticked — undo' : 'Tick as completed';
+      doneBtn.textContent = on
+        ? (hasProof ? '✓ Level 1 ticked — undo' : '✓ Completed (Levels 1 & 2) — undo')
+        : (hasProof ? 'Tick Level 1 (Completed)' : 'Tick as completed (Levels 1 & 2)');
       doneBtn.setAttribute('aria-pressed', String(on));
-      DOM.clear(ladderHost).appendChild(UI.ladder(on));
+      DOM.clear(ladderHost).appendChild(
+        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c)));
     }
+
+    /* Ticking a result you have just read usually means you already have the
+       groundwork under it — but "usually" is not "always", so it is offered as
+       a question rather than done silently. Everything the chain reaches is
+       listed, because a cascade the learner cannot see is a cascade they
+       cannot trust. */
+    function offerCascade() {
+      const pending = UI.pendingPrereqs(c.id);
+      DOM.clear(askHost);
+      if (!pending.length) return;
+
+      const list = el('div', { class: 'row', style: { marginTop: '2px' } },
+        pending.slice(0, 8).map(x => el('span', { class: 'chip', text: x.title })));
+      if (pending.length > 8) {
+        list.appendChild(el('span', { class: 'count',
+          text: '+' + (pending.length - 8) + ' more' }));
+      }
+
+      askHost.appendChild(UI.ask({
+        title: 'Tick its groundwork too?',
+        body: el('div', {}, [
+          el('p', { style: { margin: '0 0 8px' },
+            text: pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
+              ' of this result ' + DOM.plural(pending.length, 'is', 'are') +
+              ' not ticked yet. Tick them as completed as well?' }),
+          list
+        ]),
+        actions: [
+          { label: 'Yes, tick all ' + pending.length, primary: true, onClick: function () {
+              const hit = Store.setDoneMany(pending.map(x => x.id), true);
+              DOM.clear(askHost);
+              DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+              Router.reload();
+            } },
+          { label: 'No, just this one', onClick: function () { DOM.clear(askHost); } }
+        ]
+      }));
+    }
+
     doneBtn.addEventListener('click', function () {
-      const on = Store.setDone(c.id, !Store.isDone(c.id));
+      const was = Store.isDone(c.id);
+      const next = !was;
+      Store.setDone(c.id, next);
+      if (!hasProof) {
+        Store.setProofDone(c.id, next);
+      } else if (!next) {
+        Store.setProofDone(c.id, false);
+      }
       paintDone();
-      DOM.announce(on ? 'Ticked as completed.' : 'Tick removed.');
+      if (syncProofTick) syncProofTick();
+      DOM.announce(next
+        ? (hasProof ? 'Level 1 ticked as completed.' : 'Ticked as completed (Levels 1 & 2).')
+        : 'Tick removed.');
+      if (next) offerCascade(); else DOM.clear(askHost);
     });
     paintDone();
+
+    const pView = proofView(c, function () { paintDone(); });
+    if (pView && pView._paintProofDone) {
+      syncProofTick = pView._paintProofDone;
+    }
 
     DOM.add(root, [
       UI.crumb([
@@ -7831,9 +9700,7 @@ const ViewNote = (function () {
       ].filter(Boolean)),
 
       el('div', {}, [
-        el('div', { class: 'row', style: { marginBottom: '8px' } }, [
-          UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id)
-        ]),
+        badgesHost,
         UI.title(c.title, c.sec ? Pool.sectionTitle(c.sec) : 'Prerequisite'),
         el('p', { class: 'lede', style: { marginTop: '8px' }, text: c.oneLine })
       ]),
@@ -7852,7 +9719,7 @@ const ViewNote = (function () {
         el('div', { style: { marginTop: '10px' } }, [UI.prose(c.intuition, 'tight')])
       ]) : null,
 
-      proofView(c),
+      pView,
 
       traps(c),
 
@@ -7869,12 +9736,13 @@ const ViewNote = (function () {
           Pool.objectiveFor(c.id).length
             ? el('a', { class: 'btn', href: Router.href('omr?sec=' + c.sec), text: 'Questions' })
             : null
-        ])
+        ]),
+        askHost
       ]),
 
       unlocks(c),
       questionsOn(c),
-      writtenOn(c),
+      writtenOn(c, function () { paintDone(); }),
       selfChecks(c),
       prevNext(c)
     ]);
@@ -7889,15 +9757,25 @@ const ViewNote = (function () {
 
 /* ── src/view.recall.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Statement recall, as a reel.
+   Recall, as a reel.
 
-   One statement per screen, swiped vertically. There is no list to survey and
-   no pile to dread — just the card in front of you, and the rail on the right
-   telling you where you are.
+   One card per screen, swiped vertically, exactly one card per swipe. Getting
+   that last part right is the whole job: a flick carries momentum, and a
+   proximity-snapped scroller happily sails past two or three cards before it
+   settles. `scroll-snap-stop: always` is the rule that forbids it — the
+   scroller must come to rest on the very next snap point no matter how hard
+   the flick was. Every card is therefore exactly one viewport tall, and a card
+   whose content overflows scrolls INSIDE itself and chains out at its ends.
 
-   The rules from HOOK_claude.md are unchanged: the deck is `state` cards only,
-   nothing is revealed before an attempt, and the first grade is the one that
-   counts.
+   What is in the reel is decided by Progress.reel():
+
+     · only material you have ticked — a statement you have never read is not
+       recall practice, it is reading with extra steps;
+     · proof cards only for a course you have switched to Level 2;
+     · ordered by how badly each card needs the attempt, never randomly.
+
+   The rules are unchanged: nothing is revealed before an attempt, and the
+   first grade is the one that counts.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewRecall = (function () {
@@ -7912,47 +9790,129 @@ const ViewRecall = (function () {
   let onlyNew = false;
   let startAt = null;          /* concept id to open on, from ?from= */
 
-  const isNew = c => !(Store.card(c.id) || {}).first;
-  const visible = () => onlyNew ? Pool.deck().filter(isNew) : Pool.deck();
-
-  /* ── intro card: the only place the deck is configured ────────────────── */
+  /* ── intro card: the only place the reel is configured ────────────────── */
   function introCard(deck, rebuild) {
     const chip = (label, on, fn) => el('button', { class: 'chip', type: 'button', text: label,
       'aria-pressed': String(on), on: { click: fn } });
-    const s = Store.summary([], Pool.ids.cards(), []);
+
+    const all = Progress.reel();
+    const tried = all.filter(x => x.rank > 0).length;
+    const proofs = all.filter(x => x.kind === 'proof').length;
+    const ticked = Pool.concepts().filter(c => Store.isDone(c.id)).length;
+    const l2 = Pool.courses().filter(c => Store.level(c.id) === 2).map(c => c.title);
 
     return el('div', { class: 'inner' }, [
       el('div', {}, [
-        el('div', { class: 'kicker', text: 'Reel · swipe up' }),
-        UI.title('Statement recall')
+        el('div', { class: 'kicker', text: 'Reel · one swipe, one card' }),
+        UI.title('Recall')
       ]),
       el('p', { class: 'lede' },
-        ['Theorem statements only — the one thing a flashcard measures honestly. ' +
-         'Each card asks first; nothing is revealed until you have attempted it.']),
-      el('div', { class: 'card glass' }, [
+        ['Only what you have already ticked. Each card asks first; nothing is revealed ' +
+         'until you have attempted it.']),
+
+      all.length ? el('div', { class: 'card glass' }, [
         el('div', { class: 'spread' }, [
           el('span', { class: 'kicker', text: 'First attempts' }),
-          el('span', { class: 'count', text: s.cards.tried + ' of ' + s.cards.total })
+          el('span', { class: 'count', text: tried + ' of ' + all.length })
         ]),
-        el('div', { style: { margin: '10px 0 14px' } },
-          [UI.meter(s.cards.tried, s.cards.total)]),
+        el('div', { style: { margin: '10px 0 14px' } }, [UI.meter(tried, all.length)]),
         el('div', { class: 'row' }, [
-          chip('All statements', !onlyNew, function () { onlyNew = false; rebuild(); }),
+          chip('Everything ticked', !onlyNew, function () { onlyNew = false; rebuild(); }),
           chip('Not yet attempted', onlyNew, function () { onlyNew = true; rebuild(); })
         ])
-      ]),
-      el('p', { class: 'small muted', style: { margin: 0 },
-        text: deck.length + ' ' + DOM.plural(deck.length, 'card') + ' in this reel · ' +
-          'use the arrow keys if you prefer them to swiping.' })
+      ]) : null,
+
+      all.length
+        ? el('p', { class: 'small muted', style: { margin: 0 },
+            text: deck.length + ' ' + DOM.plural(deck.length, 'card') + ' in this reel'
+              + (proofs ? ' · ' + proofs + ' of them ' + DOM.plural(proofs, 'is', 'are')
+                  + ' proof work from ' + l2.join(' and ') : '')
+              + ' · hardest first, then reading order.' })
+        : UI.empty(
+            ticked
+              ? 'Nothing in your ticked material has a statement card yet.'
+              : 'The reel draws only on notes you have ticked as completed, and you have not ticked any yet.',
+            el('a', { class: 'btn primary', href: Router.href('study'), text: 'Open the syllabus' })),
+
+      (!proofs && l2.length === 0 && all.length)
+        ? el('p', { class: 'small muted', style: { margin: 0 },
+            text: 'Switch a course to Level 2 and its proofs join this reel.' })
+        : null
     ]);
   }
 
-  /* ── one statement card ──────────────────────────────────────────────── */
-  function statementCard(card, index, total, goNext, onGraded) {
-    const concept = Pool.concept(card.cid);
-    const rec = Store.card(card.id);
-    const attemptedBefore = !!(rec && rec.first);
+  /* ── shared card chrome ──────────────────────────────────────────────── */
+  function head(item, index, total, badge) {
+    const rec = Store.card(item.id);
+    return el('div', { class: 'stack', style: { gap: '10px' } }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'row' }, [
+          el('span', { class: 'badge accent', text: badge }),
+          el('span', { class: 'pos', text: index + ' / ' + total })
+        ]),
+        el('a', { class: 'small', href: Router.href('note/' + item.cid), text: '§' + item.sec })
+      ]),
+      el('div', { class: 'kicker', text: item.conceptKind + ' · ' + item.title }),
+      (rec && rec.first)
+        ? el('div', { class: 'row' }, [
+            el('span', {
+              class: 'badge ' + (rec.first === 'got' ? 'ok' : rec.first === 'missed' ? 'bad' : 'warn'),
+              text: 'first attempt: ' + rec.first
+            }),
+            el('span', { class: 'small muted', text: 'this pass will not change it' })
+          ])
+        : null
+    ]);
+  }
 
+  function gradeRow(item, goNext, onGraded, preGrade) {
+    const rec = Store.card(item.id);
+    const attemptedBefore = !!(rec && rec.first);
+    const wrap = el('div', {});
+
+    function commit(grade) {
+      const r = Store.gradeCard(item.id, grade);
+      if (onGraded) onGraded(grade);
+      DOM.clear(wrap);
+      DOM.add(wrap, [
+        el('div', { class: 'verdict ' +
+          (grade === 'got' ? 'ok' : grade === 'missed' ? 'bad' : 'warn') }, [
+          el('span', { class: 'g', 'aria-hidden': 'true',
+            text: grade === 'got' ? '✓' : grade === 'missed' ? '✗' : '~' }),
+          el('span', {}, [
+            el('b', { text: r.tries === 1 ? 'First attempt recorded: ' + grade
+              : 'This pass: ' + grade }),
+            el('span', { text: r.tries > 1
+              ? 'First attempt (' + r.first + ') is unchanged.'
+              : 'Completion and recall stay separate numbers.' })
+          ])
+        ]),
+        el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
+          el('button', { class: 'btn primary', type: 'button', text: 'Next ↓',
+            on: { click: goNext } }),
+          el('a', { class: 'btn', href: Router.href('note/' + item.cid), text: 'Open the note' })
+        ])
+      ]);
+      DOM.announce('Recorded ' + grade + '.');
+    }
+
+    DOM.add(wrap, [
+      el('p', { class: 'small muted', style: { margin: '0 0 8px' },
+        text: attemptedBefore
+          ? 'How did this pass go? Your first attempt stays on record.'
+          : 'How did your attempt compare with the answer above?' }),
+      el('div', { class: 'btn-row' }, GRADES.map(g =>
+        el('button', { class: 'btn ' + g.cls, type: 'button', text: g.label,
+          on: { click: function () { commit(g.k); } } })))
+    ]);
+
+    if (preGrade) window.setTimeout(() => commit(preGrade), 0);
+    return wrap;
+  }
+
+  /* ── a statement card ────────────────────────────────────────────────── */
+  function statementCard(item, index, total, goNext, onGraded) {
+    const concept = Pool.concept(item.cid);
     let revealed = false;
     const gateHost = el('div', {});
     const writeHost = el('div', {});
@@ -7975,66 +9935,24 @@ const ViewRecall = (function () {
       answerHost.appendChild(el('div', { class: 'reveal' }, [
         el('div', { class: 'h' }, [el('span', { text: 'Canonical statement' })]),
         el('div', { class: 'b' }, [
-          el('div', { class: 'prose tight', html: card.a }),
+          el('div', { class: 'prose tight', html: item.a }),
           el('div', { class: 'row', style: { marginTop: '12px' } }, [
-            el('a', { class: 'chip', href: Router.href('note/' + card.cid),
+            el('a', { class: 'chip', href: Router.href('note/' + item.cid),
               text: 'Full note · ' + concept.title })
           ])
         ])
       ]));
-      answerHost.appendChild(gradeRow(preGrade));
+      answerHost.appendChild(gradeRow(item, goNext, onGraded, preGrade));
       UI.math(answerHost);
-    }
-
-    function gradeRow(preGrade) {
-      const wrap = el('div', {});
-      DOM.add(wrap, [
-        el('p', { class: 'small muted', style: { margin: '0 0 8px' },
-          text: attemptedBefore
-            ? 'How did this pass go? Your first attempt stays on record.'
-            : 'How did your attempt compare with the statement above?' }),
-        el('div', { class: 'btn-row' }, GRADES.map(g =>
-          el('button', { class: 'btn ' + g.cls, type: 'button', text: g.label,
-            on: { click: function () { commit(g.k); } } })))
-      ]);
-
-      function commit(grade) {
-        const r = Store.gradeCard(card.id, grade);
-        if (onGraded) onGraded(grade);
-        DOM.clear(wrap);
-        DOM.add(wrap, [
-          el('div', { class: 'verdict ' +
-            (grade === 'got' ? 'ok' : grade === 'missed' ? 'bad' : 'warn') }, [
-            el('span', { class: 'g', 'aria-hidden': 'true',
-              text: grade === 'got' ? '✓' : grade === 'missed' ? '✗' : '~' }),
-            el('span', {}, [
-              el('b', { text: r.tries === 1 ? 'First attempt recorded: ' + grade
-                : 'This pass: ' + grade }),
-              el('span', { text: r.tries > 1
-                ? 'First attempt (' + r.first + ') is unchanged.'
-                : 'Completion and recall stay separate numbers.' })
-            ])
-          ]),
-          el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
-            el('button', { class: 'btn primary', type: 'button', text: 'Next statement ↓',
-              on: { click: goNext } }),
-            el('a', { class: 'btn', href: Router.href('note/' + card.cid), text: 'Open the note' })
-          ])
-        ]);
-        DOM.announce('Recorded ' + grade + '.');
-      }
-
-      if (preGrade) window.setTimeout(() => commit(preGrade), 0);
-      return wrap;
     }
 
     gateHost.appendChild(UI.gate({
       hint: 'State it from memory first — write it out, or say it aloud and declare the attempt.',
       actions: [
-        { label: 'Write it in LaTeX', primary: true, onClick: function () {
+        { label: 'Write it out', primary: true, onClick: function () {
             DOM.clear(writeHost);
             const wb = WriteBox.mount(writeHost, {
-              concept: concept, compact: true, label: 'Your statement, in LaTeX',
+              concept: concept, label: 'Your statement',
               onFirstInput: function () { unlock('Attempt registered — you can reveal now.'); }
             });
             wb.focus();
@@ -8044,62 +9962,136 @@ const ViewRecall = (function () {
       ]
     }));
 
-    const inner = el('div', { class: 'inner' }, [
-      el('div', { class: 'spread' }, [
-        el('div', { class: 'row' }, [
-          el('span', { class: 'badge accent', text: 'state' }),
-          el('span', { class: 'pos', text: index + ' / ' + total })
-        ]),
-        el('a', { class: 'small', href: Router.href('note/' + card.cid), text: '§' + card.sec })
-      ]),
-      el('div', { class: 'kicker', text: concept.kind + ' · ' + concept.title }),
-      el('div', { class: 'prose', style: { fontSize: '1.12rem' }, html: card.q }),
-      attemptedBefore
-        ? el('div', { class: 'row' }, [
-            el('span', {
-              class: 'badge ' + (rec.first === 'got' ? 'ok' : rec.first === 'missed' ? 'bad' : 'warn'),
-              text: 'first attempt: ' + rec.first
-            }),
-            el('span', { class: 'small muted', text: 'this pass will not change it' })
-          ])
-        : null,
+    return el('div', { class: 'inner' }, [
+      head(item, index, total, 'statement'),
+      el('div', { class: 'prose', style: { fontSize: '1.12rem' }, html: item.q }),
       gateHost, writeHost, answerHost
     ]);
+  }
 
-    return inner;
+  /* ── a proof card (Level 2 only) ─────────────────────────────────────────
+     The ask is the strategy, not the write-up: if you can say why the proof
+     goes the way it does, the steps follow. So the reveal leads with `idea`
+     and `why`, and the rungs are there to check yourself against. */
+  function proofCard(item, index, total, goNext, onGraded) {
+    const concept = Pool.concept(item.cid);
+    const p = item.proof;
+    let revealed = false;
+    const gateHost = el('div', {});
+    const writeHost = el('div', {});
+    const answerHost = el('div', {});
+
+    function unlock(msg) {
+      DOM.clear(gateHost);
+      gateHost.appendChild(el('div', { class: 'btn-row' }, [
+        el('button', { class: 'btn primary', type: 'button', text: 'Show the argument',
+          on: { click: function () { reveal(); } } })
+      ]));
+      if (msg) DOM.announce(msg);
+    }
+
+    function reveal(preGrade) {
+      if (revealed) return;
+      revealed = true;
+      DOM.clear(gateHost);
+      DOM.clear(answerHost);
+      answerHost.appendChild(el('div', { class: 'reveal' }, [
+        el('div', { class: 'h' }, [el('span', { text: 'The argument' })]),
+        el('div', { class: 'b', style: { display: 'grid', gap: '10px' } }, [
+          p.idea ? el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+            el('div', { class: 'kicker', text: 'Key idea' }),
+            el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
+          ]) : null,
+          p.why ? el('div', { class: 'prose tight', html: p.why }) : null,
+          (p.rungs && p.rungs.length)
+            ? el('div', { class: 'stack', style: { gap: '8px' } }, p.rungs.map(function (r, i) {
+                return el('div', { class: 'card flat', style: { padding: '10px 14px' } }, [
+                  el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
+                    el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: r.why })
+                  ]),
+                  r.m ? el('div', { html: r.m }) : null
+                ]);
+              }))
+            : null,
+          p.ends ? el('div', { class: 'prose tight', html: p.ends }) : null,
+          el('div', { class: 'row' }, [
+            el('a', { class: 'chip', href: Router.href('note/' + item.cid),
+              text: 'Full note · ' + concept.title })
+          ])
+        ])
+      ]));
+      answerHost.appendChild(gradeRow(item, goNext, onGraded, preGrade));
+      UI.math(answerHost);
+    }
+
+    gateHost.appendChild(UI.gate({
+      hint: 'Say how the proof goes before you look — the main move, and why it works.',
+      actions: [
+        { label: 'Sketch it', primary: true, onClick: function () {
+            DOM.clear(writeHost);
+            const wb = WriteBox.mount(writeHost, {
+              draftKey: 'proof:' + concept.id, concept: concept,
+              label: 'Your sketch of the argument',
+              placeholder: 'The main move is…',
+              onFirstInput: function () { unlock('Attempt registered — you can reveal now.'); }
+            });
+            wb.focus();
+          } },
+        { label: 'I said it aloud', onClick: function () { unlock('Attempt registered.'); } },
+        { label: "I can't reconstruct it", onClick: function () { reveal('missed'); } }
+      ]
+    }));
+
+    return el('div', { class: 'inner' }, [
+      head(item, index, total, 'proof · level 2'),
+      el('div', { class: 'prose', style: { fontSize: '1.12rem' } }, [
+        el('b', { text: 'Reconstruct the proof of ' }),
+        el('span', { text: concept.title + '.' }),
+        el('p', { class: 'small muted', style: { margin: '8px 0 0' },
+          text: 'The strategy and why it works, not the full write-up.' })
+      ]),
+      gateHost, writeHost, answerHost
+    ]);
   }
 
   /* ── the reel ────────────────────────────────────────────────────────── */
   function render(args, query) {
     if (query && query.from) { startAt = query.from; onlyNew = false; }
 
-    const reel = el('div', { class: 'reel', tabindex: '-1',
-      'aria-label': 'Statement recall reel' });
+    const reel = el('div', { class: 'reel', tabindex: '-1', 'aria-label': 'Recall reel' });
     const rail = el('div', { class: 'reel-rail', 'aria-hidden': 'true' });
     const root = el('div', {}, [
-      el('h1', { id: 'pagetitle', tabindex: '-1', class: 'sr-only', text: 'Statement recall' }),
+      el('h1', { id: 'pagetitle', tabindex: '-1', class: 'sr-only', text: 'Recall' }),
       rail, reel
     ]);
 
     function build() {
-      const deck = visible();
+      const deck = Progress.reel({ onlyNew: onlyNew });
       DOM.clear(reel);
       DOM.clear(rail);
 
       const cards = [];
       const dots = [];
-      const glide = to => reel.scrollTo({ top: to,
-        behavior: DOM.reduced() ? 'auto' : 'smooth' });
+
+      /* Every card is exactly one viewport tall, so a card's position is
+         index × clientHeight and nothing can drift. Overflowing content
+         scrolls inside the card (.inner) and chains out at its ends. */
+      const glide = i => {
+        const to = cards[i];
+        if (!to) return;
+        reel.scrollTo({ top: to.offsetTop, behavior: DOM.reduced() ? 'auto' : 'smooth' });
+      };
 
       cards.push(el('section', { class: 'reel-card' }, [introCard(deck, function () {
         build();
         reel.scrollTo({ top: 0, behavior: 'auto' });
       })]));
 
-      deck.forEach(function (card, i) {
+      deck.forEach(function (item, i) {
+        const make = item.kind === 'proof' ? proofCard : statementCard;
         const section = el('section', { class: 'reel-card' }, [
-          statementCard(card, i + 1, deck.length,
-            function () { glide((i + 2) * reel.clientHeight); },
+          make(item, i + 1, deck.length,
+            function () { glide(i + 2); },
             function (grade) {
               const dot = dots[i + 1];
               if (dot) dot.classList.toggle('got', grade === 'got');
@@ -8110,11 +10102,11 @@ const ViewRecall = (function () {
         cards.push(section);
       });
 
-      if (!deck.length) {
+      if (!deck.length && onlyNew) {
         cards.push(el('section', { class: 'reel-card' }, [
           el('div', { class: 'inner' }, [
-            UI.empty('Every statement in this slice has had a first attempt.',
-              el('button', { class: 'btn', type: 'button', text: 'Show all statements',
+            UI.empty('Every card in your ticked material has had a first attempt.',
+              el('button', { class: 'btn', type: 'button', text: 'Show everything again',
                 on: { click: function () { onlyNew = false; build(); } } }))
           ])
         ]));
@@ -8126,22 +10118,27 @@ const ViewRecall = (function () {
         if (i && deck[i - 1]) {
           const r = Store.card(deck[i - 1].id);
           if (r && r.first === 'got') dot.classList.add('got');
+          if (deck[i - 1].kind === 'proof') dot.classList.add('pf');
         }
         dots.push(dot);
         rail.appendChild(dot);
       });
 
-      /* mark the card in view, keep the rail in step */
+      /* Mark the card in view. Cards are one viewport tall, so a simple
+         majority-of-the-viewport test is both correct and cheap. */
       if (window.IntersectionObserver) {
         const io = new window.IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
-            const i = cards.indexOf(e.target);
-            e.target.classList.toggle('live', e.isIntersecting && e.intersectionRatio > 0.55);
-            if (e.isIntersecting && e.intersectionRatio > 0.55) {
+            const seen = e.intersectionRect ? e.intersectionRect.height : 0;
+            const port = (e.rootBounds && e.rootBounds.height) || reel.clientHeight || 1;
+            const live = e.isIntersecting && seen / port > 0.55;
+            e.target.classList.toggle('live', live);
+            if (live) {
+              const i = cards.indexOf(e.target);
               Array.prototype.forEach.call(rail.children, (d, j) => d.classList.toggle('on', j === i));
             }
           });
-        }, { root: reel, threshold: [0.2, 0.56, 0.9] });
+        }, { root: reel, threshold: [0, 0.25, 0.56, 0.9, 1] });
         cards.forEach(c => io.observe(c));
       } else {
         cards.forEach(c => c.classList.add('live'));
@@ -8150,22 +10147,23 @@ const ViewRecall = (function () {
 
       UI.math(reel);
 
-      /* land on the card the note sent us to */
       if (startAt) {
         const at = deck.map(c => c.cid).indexOf(startAt);
         startAt = null;
         if (at >= 0) window.requestAnimationFrame(function () {
-          cards[at + 1].scrollIntoView({ behavior: 'auto' });
+          reel.scrollTo({ top: cards[at + 1].offsetTop, behavior: 'auto' });
         });
       }
     }
 
-    /* keyboard: arrows and page keys move one card at a time */
+    /* Keyboard moves exactly one card, like the swipe. Content that overflows
+       is reached by scrolling inside the card, which the browser does for us
+       when the focus is in there. */
     reel.addEventListener('keydown', function (e) {
       const keys = { ArrowDown: 1, PageDown: 1, ArrowUp: -1, PageUp: -1 };
       const dir = keys[e.key];
       if (!dir) return;
-      if (/^(TEXTAREA|INPUT)$/.test((e.target.tagName || '').toUpperCase())) return;
+      if (/^(TEXTAREA|INPUT|SELECT)$/.test((e.target.tagName || '').toUpperCase())) return;
       e.preventDefault();
       const h = reel.clientHeight || 1;
       const last = reel.children.length - 1;
@@ -8822,25 +10820,72 @@ const App = (function () {
     ]), wrap.firstChild);
   }
 
+  /* Finishing a course at Level 1 earns the Level 2 switch ON THAT COURSE.
+     Checked in one place, once, on the way in — so "earned" cannot mean
+     something slightly different on each screen. It unlocks the switch; it
+     does NOT move anyone to Level 2, because a promotion nobody asked for is
+     exactly what the mastery rules exist to prevent. */
+  function earnedUnlocks() {
+    Pool.courses().forEach(function (course) {
+      if (course.pending || Store.unlocked(course.id)) return;
+      const ids = Pool.ids.concepts(course.id);
+      if (ids.length > 0 && ids.every(Store.isDone)) Store.unlock(course.id, true);
+    });
+  }
+
+  /* The app proper. Only ever reached with someone signed in. */
+  function run() {
+    earnedUnlocks();
+    document.body.classList.remove('signed-out');
+    buildNav();
+    /* Sync starts after the pool: a merge can change what is on screen, and
+       it reloads the current route when it does. */
+    Sync.start();
+    Router.start(route);
+
+    /* MathJax arrives on its own schedule; typeset whatever is on screen
+       once it is ready, and say so plainly if it never arrives. */
+    Tex.ready().then(function () {
+      Tex.typeset(document.getElementById('main'));
+      mathjaxWarning();
+    });
+  }
+
+  /* The record is keyed on a name and a roll number, so there is no sensible
+     "anonymous" state to start in: progress made before signing in could not
+     be merged with the record it later turns out to belong to. The gate is
+     therefore first, and it is the only screen shown until it is passed. */
+  function gate() {
+    const main = document.getElementById('main');
+    DOM.clear(main);
+    document.body.classList.add('signed-out');
+    Login.mount(main, function () {
+      DOM.clear(main);
+      run();
+    });
+    Tex.ready().then(() => Tex.typeset(main));
+  }
+
   function start() {
     Theme.apply();
-    buildNav();
 
     loadData().then(function () {
       Pool.build();
-      Router.start(route);
-
-      /* MathJax arrives on its own schedule; typeset whatever is on screen
-         once it is ready, and say so plainly if it never arrives. */
-      Tex.ready().then(function () {
-        Tex.typeset(document.getElementById('main'));
-        mathjaxWarning();
-      });
+      if (Store.signedIn()) run(); else gate();
     }, fatal);
   }
 
   window.addEventListener('error', function (e) {
     document.body.setAttribute('data-error', (e && e.message) || 'error');
+  });
+
+  /* Progress is written through a debounce, so a tab closed or backgrounded
+     within a quarter-second of the last tick would lose it. `pagehide` is the
+     one event that fires reliably on mobile, where tabs are killed rather
+     than closed. */
+  window.addEventListener('pagehide', function () { Store.flushNow(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) Store.flushNow();
   });
 
   return { start: start, route: route };

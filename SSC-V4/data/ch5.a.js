@@ -26,6 +26,16 @@ CONCEPTS.push(
     intuition: `This just repackages the $\\varepsilon$-$\\delta$ definition using "balls" instead of absolute-value inequalities: $|x-c|<\\delta$ is the same statement as $x\\in V_\\delta(c)$. It is the same idea one level more geometric, and it is the version that generalizes cleanly to topology (continuous = preimages of open sets are open).`,
     needs: ['c.5.1.1', 's.interval'],
     traps: [`Mixing up which neighbourhood is chosen first: $\\varepsilon$ (around $f(c)$) is given, $\\delta$ (around $c$) is produced in response &mdash; not the other way around.`],
+    proof: {
+      idea: 'Translate directly between absolute value inequalities and open neighbourhood membership.',
+      why: '$|u - v| < r$ is logically identical to $u \\in V_r(v) = (v-r, v+r)$.',
+      rungs: [
+        { why: 'By definition, $x \\in V_\\delta(c) \\iff |x - c| < \\delta$.', m: 'x \\in V_\\delta(c) \\iff c - \\delta < x < c + \\delta \\iff |x - c| < \\delta' },
+        { why: 'Similarly, $f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon$.', m: 'f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon' },
+        { why: 'The condition $x \\in A \\cap V_\\delta(c) \\implies f(x) \\in V_\\varepsilon(f(c))$ is therefore equivalent to the $\\varepsilon$-$\\delta$ definition.', m: 'x \\in A,\\, |x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon' }
+      ],
+      ends: 'Thus the neighbourhood characterization is logically equivalent to continuity at $c$.'
+    },
     cards: [
       { q: 'Restate continuity at $c$ using neighbourhoods instead of absolute values.', a: 'For every $V_\\varepsilon(f(c))$ there is $V_\\delta(c)$ with $f(A\\cap V_\\delta(c))\\subseteq V_\\varepsilon(f(c))$.', kind: 'state' },
       { q: 'What is $V_\\delta(c)$ notation shorthand for?', a: 'The open interval $(c-\\delta, c+\\delta)$, i.e. $\\{x:|x-c|<\\delta\\}$.', kind: 'recall' },
@@ -69,6 +79,15 @@ CONCEPTS.push(
     intuition: `This is just the contrapositive restatement of the Sequential Criterion (5.1.3), phrased as the practical tool you actually reach for: to prove discontinuity, exhibit one witness sequence. It parallels the Divergence Criterion 4.1.9(a) for limits.`,
     needs: ['c.5.1.3', 'c.4.1.9'],
     traps: [`"Does not converge to $f(c)$" includes the case where $(f(x_n))$ diverges entirely, not only the case where it converges to some other value.`],
+    proof: {
+      idea: 'Negate the Sequential Criterion for Continuity (Theorem 5.1.3).',
+      why: 'A statement $P \\iff Q$ logically implies its contrapositive negation $(\\neg P) \\iff (\\neg Q)$.',
+      rungs: [
+        { why: 'By Theorem 5.1.3, $f$ is continuous at $c$ iff every sequence $(x_n) \\subseteq A$ with $x_n \\to c$ satisfies $f(x_n) \\to f(c)$.', m: 'f \\text{ is continuous at } c \\iff (\\forall (x_n) \\subseteq A,\\, x_n \\to c \\implies f(x_n) \\to f(c))' },
+        { why: 'Negating both sides: $f$ is discontinuous at $c$ iff the condition fails for at least one sequence.', m: 'f \\text{ is discontinuous at } c \\iff \\exists (x_n) \\subseteq A : x_n \\to c \\text{ and } f(x_n) \\not\\to f(c)' }
+      ],
+      ends: 'This establishes the Discontinuity Criterion.'
+    },
     cards: [
       { q: 'State the Discontinuity Criterion.', a: '$f$ is discontinuous at $c$ iff $\\exists (x_n)\\to c$ in $A$ with $f(x_n)\\not\\to f(c)$.', kind: 'state' },
       { q: 'Name the limit-theory result this criterion is modeled on.', a: 'The Divergence Criterion, Theorem 4.1.9(a).', kind: 'recall' },
@@ -183,6 +202,17 @@ CONCEPTS.push(
       `This only rescues "removable" discontinuities (missing-point type). It says nothing about jump or oscillation discontinuities where $c$ IS already in the domain but the limit still fails to equal $f(c)$ or fails to exist.`,
       `Part (b) is often missed: you cannot always patch a function at a bad point; if the limit genuinely does not exist, no single value at $c$ will fix it.`,
     ],
+    proof: {
+      idea: 'Verify the $\\varepsilon$-$\\delta$ definition of continuity directly for $F$ at $c$, and use the definition of continuity to prove the converse.',
+      why: 'Continuity of $F$ at $c$ requires $\\lim_{x \\to c} F(x) = F(c)$, which is satisfied uniquely by setting $F(c) = L$.',
+      rungs: [
+        { why: 'Since $\\lim_{x\\to c} f(x) = L$, for every $\\varepsilon > 0$ there exists $\\delta > 0$ such that $0 < |x - c| < \\delta$ with $x \\in A$ implies $|f(x) - L| < \\varepsilon$.', m: '\\forall \\varepsilon > 0\\, \\exists \\delta > 0 : 0 < |x - c| < \\delta,\\, x \\in A \\implies |f(x) - L| < \\varepsilon' },
+        { why: 'For $F(x)$ defined on $A \\cup \\{c\\}$ with $F(c) = L$: if $x = c$, then $|F(c) - F(c)| = 0 < \\varepsilon$ holds trivially.', m: 'x = c \\implies |F(x) - F(c)| = 0 < \\varepsilon' },
+        { why: 'If $x \\in A$ with $|x - c| < \\delta$, then $|F(x) - F(c)| = |f(x) - L| < \\varepsilon$. Thus $F$ is continuous at $c$.', m: 'x \\in A \\cup \\{c\\},\\, |x - c| < \\delta \\implies |F(x) - F(c)| < \\varepsilon' },
+        { why: 'Conversely, if $G: A \\cup \\{c\\} \\to \\mathbb{R}$ is continuous at $c$, then $\\lim_{x\\to c} g(x) = \\lim_{x\\to c, x\\in A} G(x) = G(c)$ must exist in $\\mathbb{R}$.', m: '\\lim_{x\\to c} g(x) = G(c) \\in \\mathbb{R}' }
+      ],
+      ends: 'Thus a continuous extension exists if and only if $\\lim_{x\\to c} f(x)$ exists, with $F(c) = L$ the unique choice.'
+    },
     cards: [
       { q: 'If $\\lim_{x\\to c}f(x)=L$ but $c\\notin A$, how do you build a continuous extension at $c$?', a: 'Define $F(c):=L$ and $F=f$ elsewhere; then $F$ is continuous at $c$.', kind: 'apply' },
       { q: 'Can every function with no limit at $c$ be patched to be continuous there by some clever choice of value?', a: 'No &mdash; if the limit does not exist, no assigned value makes the extension continuous at $c$.', kind: 'trap' },
@@ -237,6 +267,17 @@ CONCEPTS.push(
     traps: [
       `To divide by a function $\\varphi$ that vanishes somewhere on $A$, you must first restrict to $A_1:=\\{x\\in A:\\varphi(x)\\ne0\\}$; the quotient is then continuous on $A_1$, not on all of $A$.`,
     ],
+    proof: {
+      idea: 'Apply Theorem 5.2.1 (algebraic combinations at a point) at every individual point $c \\in A$.',
+      why: 'By Definition 5.1.5, a function is continuous on a set $A$ if and only if it is continuous at each point $c \\in A$.',
+      rungs: [
+        { why: 'Let $c$ be an arbitrary point of $A$.', m: 'c \\in A' },
+        { why: 'Since $f$ and $g$ are continuous on $A$, both are continuous at $c$.', m: 'f, g \\text{ continuous at } c' },
+        { why: 'By Theorem 5.2.1, $f+g, f-g, fg, bf$ (and $f/h$ if $h(x) \\ne 0$ on $A$) are continuous at $c$.', m: '(f+g)(c) = \\lim_{x\\to c}(f+g)(x)' },
+        { why: 'Since $c \\in A$ was arbitrary, the combinations are continuous at every point of $A$.', m: '\\forall c \\in A \\implies \\text{continuous on } A' }
+      ],
+      ends: 'Therefore all listed algebraic combinations are continuous on $A$.'
+    },
     cards: [
       { q: 'If $f,g$ are continuous on $A$, is $fg$ continuous on $A$?', a: 'Yes, by Theorem 5.2.2(a).', kind: 'apply' },
       { q: 'If $\\varphi$ is continuous on $A$ but vanishes at some points of $A$, on what set is $f/\\varphi$ continuous?', a: 'On $A_1=\\{x\\in A:\\varphi(x)\\ne0\\}$, not necessarily on all of $A$.', kind: 'trap' },
@@ -301,6 +342,17 @@ CONCEPTS.push(
     intuition: `The absolute value function itself is continuous (it barely moves outputs: $\\big||a|-|b|\\big|\\le|a-b|$), so composing it with a continuous $f$ cannot introduce any new bad behaviour. The tolerance you need for $f$ transfers directly to $|f|$.`,
     needs: ['c.5.1.1', 's.triangle-ineq'],
     traps: [`The converse is false: $|f|$ can be continuous while $f$ itself is wildly discontinuous (e.g. $f=1$ on rationals, $-1$ on irrationals gives $|f|\\equiv1$, continuous, while $f$ is nowhere continuous).`],
+    proof: {
+      idea: 'Apply the reverse triangle inequality $||f(x)| - |f(c)|| \\le |f(x) - f(c)|$.',
+      why: 'Controlling $|f(x) - f(c)|$ by continuity automatically controls the difference in absolute values.',
+      rungs: [
+        { why: 'Recall the reverse triangle inequality for real numbers.', m: '||a| - |b|| \\le |a - b|' },
+        { why: 'Substitute $a = f(x)$ and $b = f(c)$.', m: '||f(x)| - |f(c)|| \\le |f(x) - f(c)|' },
+        { why: 'Since $f$ is continuous at $c$, for any $\\varepsilon > 0$ there is $\\delta > 0$ such that $|x - c| < \\delta$ with $x \\in A$ implies $|f(x) - f(c)| < \\varepsilon$.', m: '|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon' },
+        { why: 'By the reverse triangle inequality, this directly yields $||f(x)| - |f(c)|| < \\varepsilon$.', m: '|x - c| < \\delta \\implies ||f(x)| - |f(c)|| \\le |f(x) - f(c)| < \\varepsilon' }
+      ],
+      ends: 'Thus $|f|$ is continuous at $c$, and hence continuous on all of $A$.'
+    },
     cards: [
       { q: 'If $f$ is continuous at $c$, is $|f|$ necessarily continuous at $c$?', a: 'Yes.', kind: 'state' },
       { q: 'If $|f|$ is continuous at $c$, must $f$ be continuous at $c$?', a: 'No &mdash; e.g. $f=\\pm1$ depending on rationality of $x$ gives $|f|\\equiv1$ continuous while $f$ is nowhere continuous.', kind: 'trap' },
@@ -314,6 +366,16 @@ CONCEPTS.push(
     intuition: `Just like $|\\cdot|$, the square-root function is itself continuous on $[0,\\infty)$ (this uses the sequence fact that $x_n\\to x\\ \\Rightarrow\\ \\sqrt{x_n}\\to\\sqrt x$), so composing it with a nonnegative continuous $f$ cannot introduce discontinuity.`,
     needs: ['c.5.1.1', 'c.3.2.10'],
     traps: [`The nonnegativity hypothesis $f(x)\\ge0$ on all of $A$ is essential &mdash; $\\sqrt{f(x)}$ is not even real-valued otherwise.`],
+    proof: {
+      idea: 'Rationalize the difference when $f(c) > 0$, and use $0 \\le f(x) < \\varepsilon^2$ when $f(c) = 0$.',
+      why: 'When $f(c) > 0$, $|\sqrt{f(x)} - \sqrt{f(c)}| = \frac{|f(x) - f(c)|}{\sqrt{f(x)} + \sqrt{f(c)}} \le \frac{|f(x) - f(c)|}{\sqrt{f(c)}}$.',
+      rungs: [
+        { why: 'Case 1: $f(c) = 0$. For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $0 \\le f(x) < \\varepsilon^2$.', m: '|\\sqrt{f(x)} - 0| = \\sqrt{f(x)} < \\varepsilon' },
+        { why: 'Case 2: $f(c) > 0$. Multiply and divide by the conjugate.', m: '|\\sqrt{f(x)} - \\sqrt{f(c)}| = \\frac{|f(x) - f(c)|}{\\sqrt{f(x)} + \\sqrt{f(c)}} \\le \\frac{|f(x) - f(c)|}{\\sqrt{f(c)}}' },
+        { why: 'For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $|f(x) - f(c)| < \\varepsilon\\sqrt{f(c)}$.', m: '|\\sqrt{f(x)} - \\sqrt{f(c)}| < \\frac{\\varepsilon\\sqrt{f(c)}}{\\sqrt{f(c)}} = \\varepsilon' }
+      ],
+      ends: 'In both cases, $\\sqrt{f}$ is continuous at $c$, and hence continuous on $A$.'
+    },
     cards: [
       { q: 'What hypothesis on $f$ is required before asking whether $\\sqrt f$ is continuous?', a: '$f(x)\\ge0$ for all $x\\in A$, so $\\sqrt{f(x)}$ is defined.', kind: 'trap' },
       { q: 'If $f\\ge0$ is continuous on $A$, is $\\sqrt f$ continuous on $A$?', a: 'Yes, by Theorem 5.2.5(b).', kind: 'state' },
@@ -356,6 +418,18 @@ CONCEPTS.push(
     intuition: `Immediate from 5.2.6 applied at every point of $A$: this theorem is the workhorse used constantly to certify continuity of complicated expressions (like $\\sin(1/x)$ or $\\cos\\sqrt{1+x^2}$) by decomposing them into a chain of simple, known-continuous pieces.`,
     needs: ['c.5.2.6', 'c.5.1.5'],
     traps: [`This theorem is only useful as a black box if you correctly identify the "inner" and "outer" functions and verify the range condition $f(A)\\subseteq B$ &mdash; skipping that check is a common source of invalid continuity claims.`],
+    proof: {
+      idea: 'Apply Theorem 5.2.6 (composition at a point) at every individual point $c \\in A$.',
+      why: 'Definition 5.1.5 defines continuity on a set as continuity at each individual point of that set.',
+      rungs: [
+        { why: 'Let $c$ be any arbitrary point of $A$.', m: 'c \\in A' },
+        { why: 'Since $f$ is continuous on $A$, $f$ is continuous at $c$.', m: 'f \\text{ is continuous at } c' },
+        { why: 'Because $f(A) \\subseteq B$, the image point $f(c) \\in B$. Since $g$ is continuous on $B$, $g$ is continuous at $f(c)$.', m: 'f(c) \\in B \\implies g \\text{ is continuous at } f(c)' },
+        { why: 'By Theorem 5.2.6, the composite function $g \\circ f$ is continuous at $c$.', m: 'g \\circ f \\text{ is continuous at } c' },
+        { why: 'Since $c \\in A$ was arbitrary, $g \\circ f$ is continuous on all of $A$.', m: '\\forall c \\in A \\implies g \\circ f \\text{ is continuous on } A' }
+      ],
+      ends: 'Thus $g \\circ f$ is continuous on $A$.'
+    },
     cards: [
       { q: 'Why is Theorem 5.2.7 the tool of choice for proving continuity of expressions like $\\cos(\\sqrt{1+x^2})$?', a: 'It lets you certify continuity by decomposing into a chain of simple continuous pieces composed together, rather than a fresh $\\varepsilon$-$\\delta$ argument.', kind: 'recall' },
       { q: 'What condition must you check before applying the composition theorem on sets?', a: '$f(A)\\subseteq B$, so that $g\\circ f$ is defined on all of $A$.', kind: 'apply' },

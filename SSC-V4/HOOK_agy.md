@@ -367,34 +367,32 @@ designed never to lose data — so it would not throw the bad records away eithe
 Measured against the current `data/` pool (117 concepts, 71 theorems/lemmas/corollaries;
 every one of them has a `state` card, and no `needs` or `tests` id is unresolved). These
 nineteen are invisible to Level 2 and, worse, count as complete the moment they are
-ticked — so a course switched to Level 2 currently overstates its own progress by
-exactly this list:
+ticked — all 19 theorems have now been completed with full rigorous proof blocks
+(`idea`, `why`, `rungs`, `ends`):
 
-| id | § | course | kind | title |
-| --- | --- | --- | --- | --- |
-| `c.1.2.1` | 1.2 | ra1 | theorem | Principle of Mathematical Induction |
-| `c.1.3.2` | 1.3 | ra1 | theorem | Countability of Rationals and Uncountability of Reals |
-| `c.4.1.9` | 4.1 | ra1 | theorem | Divergence Criteria (for functions) |
-| `c.5.1.2` | 5.1 | ra2 | theorem | Neighbourhood Characterization of Continuity |
-| `c.5.1.4` | 5.1 | ra2 | corollary | Discontinuity Criterion |
-| `c.5.1.7` | 5.1 | ra2 | theorem | Continuous Extension via the Limit |
-| `c.5.2.2` | 5.2 | ra2 | theorem | Algebraic Combinations of Continuous Functions (on a Set) |
-| `c.5.2.4` | 5.2 | ra2 | theorem | \|f\| Is Continuous Whenever f Is |
-| `c.5.2.5` | 5.2 | ra2 | theorem | √f Is Continuous Whenever f Is (and f ≥ 0) |
-| `c.5.2.7` | 5.2 | ra2 | theorem | Composition of Continuous Functions (on a Set) |
-| `c.5.4.11` | 5.4 | ra2 | corollary | Explicit Mesh Size for Step-Function Approximation |
-| `c.5.4.14` | 5.4 | ra2 | theorem | Weierstrass Approximation Theorem |
-| `c.6.1.5` | 6.1 | ra2 | theorem | Carathéodory's Theorem and the Chain Rule |
-| `c.6.2.1` | 6.2 | ra2 | theorem | Interior Extremum Theorem (Fermat's Theorem) |
-| `c.6.2.3` | 6.2 | ra2 | theorem | Rolle's Theorem |
-| `c.6.2.12` | 6.2 | ra2 | theorem | Darboux's Theorem (Intermediate Value Property of Derivatives) |
-| `c.6.3.2` | 6.3 | ra2 | theorem | Cauchy's Mean Value Theorem |
-| `c.6.3.3` | 6.3 | ra2 | theorem | L'Hospital's Rules |
-| `c.6.4.1` | 6.4 | ra2 | theorem | Taylor's Theorem with Lagrange Remainder |
+| id | § | course | kind | title | Status |
+| --- | --- | --- | --- | --- | --- |
+| `c.1.2.1` | 1.2 | ra1 | theorem | Principle of Mathematical Induction | ✓ Proof supplied |
+| `c.1.3.2` | 1.3 | ra1 | theorem | Countability of Rationals and Uncountability of Reals | ✓ Proof supplied |
+| `c.4.1.9` | 4.1 | ra1 | theorem | Divergence Criteria (for functions) | ✓ Proof supplied |
+| `c.5.1.2` | 5.1 | ra2 | theorem | Neighbourhood Characterization of Continuity | ✓ Proof supplied |
+| `c.5.1.4` | 5.1 | ra2 | corollary | Discontinuity Criterion | ✓ Proof supplied |
+| `c.5.1.7` | 5.1 | ra2 | theorem | Continuous Extension via the Limit | ✓ Proof supplied |
+| `c.5.2.2` | 5.2 | ra2 | theorem | Algebraic Combinations of Continuous Functions (on a Set) | ✓ Proof supplied |
+| `c.5.2.4` | 5.2 | ra2 | theorem | \|f\| Is Continuous Whenever f Is | ✓ Proof supplied |
+| `c.5.2.5` | 5.2 | ra2 | theorem | √f Is Continuous Whenever f Is (and f ≥ 0) | ✓ Proof supplied |
+| `c.5.2.7` | 5.2 | ra2 | theorem | Composition of Continuous Functions (on a Set) | ✓ Proof supplied |
+| `c.5.4.11` | 5.4 | ra2 | corollary | Explicit Mesh Size for Step-Function Approximation | ✓ Proof supplied |
+| `c.5.4.14` | 5.4 | ra2 | theorem | Weierstrass Approximation Theorem | ✓ Proof supplied |
+| `c.6.1.5` | 6.1 | ra2 | theorem | Carathéodory's Theorem and the Chain Rule | ✓ Proof supplied |
+| `c.6.2.1` | 6.2 | ra2 | theorem | Interior Extremum Theorem (Fermat's Theorem) | ✓ Proof supplied |
+| `c.6.2.3` | 6.2 | ra2 | theorem | Rolle's Theorem | ✓ Proof supplied |
+| `c.6.2.12` | 6.2 | ra2 | theorem | Darboux's Theorem (Intermediate Value Property of Derivatives) | ✓ Proof supplied |
+| `c.6.3.2` | 6.3 | ra2 | theorem | Cauchy's Mean Value Theorem | ✓ Proof supplied |
+| `c.6.3.3` | 6.3 | ra2 | theorem | L'Hospital's Rules | ✓ Proof supplied |
+| `c.6.4.1` | 6.4 | ra2 | theorem | Taylor's Theorem with Lagrange Remainder | ✓ Proof supplied |
 
-`c.6.2.3` (Rolle) and `c.6.3.2` (Cauchy MVT) are the ones to do first: the Mean Value
-Theorem's own proof already points at Rolle, and L'Hospital and Taylor both lean on
-Cauchy — so a learner working the chain hits three dead ends in a row.
+`c.6.2.3` (Rolle) and `c.6.3.2` (Cauchy MVT) connect the Mean Value chain to L'Hospital and Taylor with no missing links.
 
 A `theorem` whose proof genuinely is one line ("apply the previous theorem to $-f$")
 still gets a `proof` block saying exactly that. The block is what makes the node
@@ -449,3 +447,9 @@ before any technical step.
    - Built self-contained distribution via `build.py` into `build/index.html`.
    - Deployed live to Firebase Hosting: `https://ssc-data-science-qm.web.app/math/real-analysis`.
 
+6. **Separated Level 1 & Level 2 Completion Ticks & 19 Rigorous Proof Blocks**:
+   - Supplied complete, multi-step formal proofs for all 19 theorems missing proofs (`c.1.2.1`, `c.1.3.2`, `c.4.1.9`, `c.5.1.2`, `c.5.1.4`, `c.5.1.7`, `c.5.2.2`, `c.5.2.4`, `c.5.2.5`, `c.5.2.7`, `c.5.4.11`, `c.5.4.14`, `c.6.1.5`, `c.6.2.1`, `c.6.2.3`, `c.6.2.12`, `c.6.3.2`, `c.6.3.3`, `c.6.4.1`).
+   - Implemented separate ticks for Level 1 and Level 2:
+     - When a note has no proof (e.g. definitions, examples), the main completion button marks both Level 1 and Level 2 simultaneously (`hasProof === false && done`), and the ladder shows Level 2 achieved ('counts for levels 1 & 2').
+     - When a note has a proof, the top button toggles Level 1 completion ('Tick Level 1 (Completed)'). A dedicated Level 2 button is rendered below the proof section ('Tick Level 2 (I worked this proof through)').
+     - Ticking Level 2 automatically ensures Level 1 is marked completed as well. Unticking Level 1 unticks Level 2. Top badges live-sync with interaction.

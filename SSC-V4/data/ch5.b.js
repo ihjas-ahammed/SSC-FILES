@@ -550,6 +550,16 @@ CONCEPTS.push(
     traps:[
       `The bound on m depends on δ(ε), which itself depends on how "wiggly" f is — there's no universal formula for m purely from ε without knowing f.`
     ],
+    proof: {
+      idea: 'Apply uniform continuity directly to partitions whose subinterval length is smaller than $\\delta(\\varepsilon)$.',
+      why: 'If the step size $h = (b-a)/m < \\delta(\\varepsilon)$, every point in subinterval $I_k$ is within $\\delta(\\varepsilon)$ of the base point $a + (k-1)h$.',
+      rungs: [
+        { why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$, giving $\\delta(\\varepsilon) > 0$ such that $|x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon$.', m: '\\forall x, y \\in [a, b],\\, |x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon' },
+        { why: 'Choose $m \\in \\mathbb{N}$ large enough so the mesh size satisfies $h = (b - a)/m < \\delta(\\varepsilon)$.', m: 'h = \\frac{b - a}{m} < \\delta(\\varepsilon)' },
+        { why: 'Define $s_\\varepsilon(x) = f(a + (k-1)h)$ on $I_k = [a+(k-1)h, a+kh)$. For any $x \\in I_k$, $|x - (a + (k-1)h)| \\le h < \\delta(\\varepsilon)$.', m: '|x - (a + (k-1)h)| < \\delta(\\varepsilon) \\implies |f(x) - s_\\varepsilon(x)| < \\varepsilon' }
+      ],
+      ends: 'Thus $|f(x) - s_\\varepsilon(x)| < \\varepsilon$ holds for all $x \\in [a, b]$.'
+    },
     cards:[
       { q:'What condition must the mesh size h=(b-a)/m satisfy for the corollary to hold?', a:'h < δ(ε), the modulus of uniform continuity for the target ε.', kind:'apply' },
       { q:'State Corollary 5.4.11 on explicit mesh size for step-function approximation.', a:'For continuous $f$ on $[a,b]$ and $\\varepsilon>0$, choosing $m\\in\\mathbb{N}$ with $h=(b-a)/m < \\delta(\\varepsilon)$ ensures $|f(x)-s_\\varepsilon(x)|<\\varepsilon$ for all $x\\in[a,b]$.', kind:'state' }
@@ -609,6 +619,17 @@ CONCEPTS.push(
       `The theorem gives existence of SOME polynomial within ε — it does not give a formula or an algorithm for constructing that polynomial, and higher accuracy generally forces higher degree.`,
       `Proof is intentionally omitted here — it is not examinable in this course; only the statement is required.`
     ],
+    proof: {
+      idea: 'Construct approximating polynomials via Bernstein polynomials $B_n(f; x)$ on $[0, 1]$.',
+      why: 'Bernstein polynomials $B_n(f; x) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} x^k (1-x)^{n-k}$ converge uniformly to any continuous function $f$ on $[0, 1]$.',
+      rungs: [
+        { why: 'Use an affine change of variable $t = (x - a)/(b - a)$ to reduce from $[a, b]$ to the unit interval $[0, 1]$.', m: 't = \\frac{x - a}{b - a} \\in [0, 1]' },
+        { why: 'Define the $n$-th Bernstein polynomial for $f$ on $[0, 1]$.', m: 'B_n(f; t) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} t^k (1-t)^{n-k}' },
+        { why: 'Using uniform continuity of $f$, bound terms where $|k/n - t| < \\delta$ by $\\varepsilon/2$.', m: '|k/n - t| < \\delta \\implies |f(k/n) - f(t)| < \\varepsilon/2' },
+        { why: 'Use the variance identity $\\sum_{k=0}^n (k - nt)^2 \\binom{n}{k} t^k (1-t)^{n-k} = nt(1-t) \\le n/4$ to bound terms where $|k/n - t| \\ge \\delta$.', m: '\\sum_{|k/n - t| \\ge \\delta} \\binom{n}{k} t^k (1-t)^{n-k} \\le \\frac{1}{4n\\delta^2}' }
+      ],
+      ends: 'Choosing $n > M/(\\varepsilon \\delta^2)$ ensures $|f(t) - B_n(f; t)| < \\varepsilon$ uniformly on $[0, 1]$.'
+    },
     cards:[
       { q:'State the Weierstrass Approximation Theorem.', a:'For f continuous on [a,b] and ε>0, there exists a polynomial Pε with |f(x)-Pε(x)|<ε for all x∈I.', kind:'state' },
       { q:'Is the proof of the Weierstrass Approximation Theorem examinable in this course?', a:'No — the syllabus marks it optional; only the statement is required.', kind:'recall' }
