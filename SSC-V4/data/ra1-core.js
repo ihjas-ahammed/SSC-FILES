@@ -154,6 +154,45 @@ CONCEPTS.push(
     ]
   },
 
+  {
+    id: 'c.3.1.10', bartle: '3.1.10', sec: '3.1', kind: 'theorem', tier: 'core',
+    title: 'Standard Sequence Limits',
+    oneLine: 'Five foundational limits: 1/n → 0, 1/n² → 0, bⁿ → 0 (|b|<1), c^(1/n) → 1 (c>0), and n^(1/n) → 1.',
+    statement: `The following limits hold for sequences in $\\mathbb{R}$:
+      <p>(a) $\\lim_{n\\to\\infty} \\left(\\dfrac{1}{n}\\right) = 0$.</p>
+      <p>(b) $\\lim_{n\\to\\infty} \\left(\\dfrac{1}{n^2}\\right) = 0$.</p>
+      <p>(c) If $0 < b < 1$, then $\\lim_{n\\to\\infty} (b^n) = 0$.</p>
+      <p>(d) If $c > 0$, then $\\lim_{n\\to\\infty} (c^{1/n}) = 1$.</p>
+      <p>(e) $\\lim_{n\\to\\infty} (n^{1/n}) = 1$.</p>`,
+    intuition: `<p>These five limits are the bedrock of real analysis and calculus computations:</p>
+      <p>• $1/n \\to 0$ is the direct translation of the Archimedean Property into the language of limits.</p>
+      <p>• For $b^n \\to 0$ ($0 < b < 1$), we write $b = \\frac{1}{1 + a}$ with $a > 0$. Bernoulli's Inequality gives $(1 + a)^n \\ge 1 + na > na$, which traps $b^n < \\frac{1}{na} \\to 0$. Linear growth in the denominator crushes the fraction to zero!</p>
+      <p>• For $n^{1/n} \\to 1$: even though $n$ explodes to infinity, the $n$-th root extracts almost all the magnitude, pulling the sequence all the way down to $1$. Using the Binomial Theorem, $(1 + d_n)^n \\ge \\frac{n(n-1)}{2} d_n^2$, so $d_n \\le \\sqrt{2/n} \\to 0$.</p>`,
+    needs: ['c.3.1.3', 'c.2.4.3', 'c.2.1.13'],
+    traps: [
+      `Writing $0^0$ or $\\infty^0$ is an indeterminate form: $n^{1/n} \\to 1$, but other expressions of the type $\\infty^0$ may converge to other values or diverge.`,
+      `Assuming $b^n \\to 0$ holds when $b = 1$ ($1^n \\to 1$) or $b > 1$ ($b^n \\to +\\infty$). The strict condition $0 < b < 1$ (or $|b| < 1$) is required.`
+    ],
+    proof: {
+      idea: `Use the Archimedean property for (a), Bernoulli's Inequality for (c), and the Binomial Theorem for (e).`,
+      why: `Algebraic inequalities convert power growth into linear or quadratic bounds, allowing elementary ε-K verification.`,
+      rungs: [
+        { why: 'Proof of (a): Given $\\varepsilon > 0$, apply the Archimedean Property (2.4.3) to find $K \\in \\mathbb{N}$ with $K > 1/\\varepsilon$.', m: '$$n \\ge K > \\frac{1}{\\varepsilon} \\implies \\left|\\frac{1}{n} - 0\\right| = \\frac{1}{n} \\le \\frac{1}{K} < \\varepsilon \\implies \\lim\\left(\\frac{1}{n}\\right) = 0$$' },
+        { why: 'Proof of (c): Since $0 < b < 1$, write $b = \\frac{1}{1 + a}$ where $a = \\frac{1}{b} - 1 > 0$. Apply Bernoulli\'s Inequality (2.1.13).', m: '$$(1 + a)^n \\ge 1 + na > na \\implies 0 < b^n = \\frac{1}{(1 + a)^n} < \\frac{1}{na}$$' },
+        { why: 'Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ with $K > \\frac{1}{a \\varepsilon}$.', m: '$$n \\ge K \\implies |b^n - 0| < \\frac{1}{na} \\le \\frac{1}{Ka} < \\varepsilon \\implies \\lim(b^n) = 0$$' },
+        { why: 'Proof of (e): Let $x_n := n^{1/n} - 1$. Since $n \\ge 1$, $x_n \\ge 0$. Expand $n = (1 + x_n)^n$ via the Binomial Theorem for $n \\ge 2$.', m: '$$n = (1 + x_n)^n = 1 + n x_n + \\frac{n(n - 1)}{2} x_n^2 + \\cdots \\ge 1 + \\frac{n(n - 1)}{2} x_n^2$$' },
+        { why: 'Isolate $x_n^2$: subtract 1 and divide by $\\frac{n(n - 1)}{2} > 0$.', m: '$$n - 1 \\ge \\frac{n(n - 1)}{2} x_n^2 \\implies x_n^2 \\le \\frac{2}{n} \\implies 0 \\le x_n \\le \\sqrt{\\frac{2}{n}}$$' },
+        { why: 'Given $\\varepsilon > 0$, choose $K > 2/\\varepsilon^2$. Then $n \\ge K \\implies |n^{1/n} - 1| = x_n \\le \\sqrt{2/n} < \\varepsilon$.', m: '$$\\lim_{n\\to\\infty} (n^{1/n}) = 1$$' }
+      ],
+      ends: 'The limits $\\lim(1/n) = 0$, $\\lim(b^n) = 0$ for $0 < b < 1$, and $\\lim(n^{1/n}) = 1$ are rigorously established.'
+    },
+    cards: [
+      { q: 'State the limits of $(b^n)$ for $0 < b < 1$ and $(n^{1/n})$ as $n \\to \\infty$.', a: '$\\lim(b^n) = 0$ and $\\lim(n^{1/n}) = 1$.', kind: 'state' },
+      { q: "How is Bernoulli's Inequality used to prove $\\lim(b^n) = 0$?", a: 'Writing $b = 1/(1+a)$ with $a > 0$ yields $b^n \\le 1/(1+na) < 1/(na)$, which tends to 0 by the Archimedean property.', kind: 'recall' },
+      { q: 'Why does the proof of $\\lim(n^{1/n}) = 1$ keep the quadratic term in the binomial expansion rather than just the linear term?', a: 'Because the linear term gives $n \\ge 1 + nx_n \\implies x_n \\le (n-1)/n < 1$, which is too weak to force $x_n \\to 0$; the quadratic term gives $x_n \\le \\sqrt{2/n} \\to 0$.', kind: 'trap' }
+    ]
+  },
+
   { id:'c.3.4.1', bartle:'3.4.1', sec:'3.4', kind:'definition', tier:'core',
     title:'Subsequence',
     oneLine:'A subsequence picks out infinitely many terms from a sequence, keeping their original left-to-right order.',
@@ -287,6 +326,69 @@ CONCEPTS.push(
       { q:`Which two earlier results does the proof chain together?`, a:`The Monotone Subsequence Theorem (<code>c.3.4.7</code>) and the Monotone Convergence Theorem (§3.3, itself resting on completeness <code>c.2.3.6</code>).`, kind:'recall' },
       { q:`Find a convergent subsequence of $x_n=(-1)^n+1/n$.`, a:`The even-indexed subsequence $x_{2n}=1+1/(2n)\\to1$ converges (also the odd-indexed one converges to $-1$).`, kind:'apply' },
       { q:`Trap: does Bolzano–Weierstrass mean $((-1)^n)$ converges?`, a:`No — the theorem only guarantees SOME subsequence converges, not the whole sequence; $((-1)^n)$ itself is divergent, but its even and odd subsequences each converge.`, kind:'trap' }
+    ]
+  },
+
+  {
+    id: 'c.3.4.10', bartle: '3.4.10', sec: '3.4', kind: 'definition', tier: 'core',
+    title: 'Limit Superior and Limit Inferior',
+    oneLine: 'For any bounded sequence, limsup is the limit of tail suprema and liminf is the limit of tail infima.',
+    statement: `Let $X = (x_n)$ be a bounded sequence of real numbers. For each $m \\in \\mathbb{N}$, define the tail bounds:
+      $$v_m = \\sup\\{x_n : n \\ge m\\}, \\qquad u_m = \\inf\\{x_n : n \\ge m\\}$$
+      The sequence $(v_m)$ is decreasing and bounded below; the sequence $(u_m)$ is increasing and bounded above.
+      <p>(a) The <b>limit superior</b> (or upper limit) of $(x_n)$ is:
+      $$\\limsup(x_n) = \\lim_{m\\to\\infty} v_m = \\inf_{m\\ge 1} \\left(\\sup_{n\\ge m} x_n\\right)$$</p>
+      <p>(b) The <b>limit inferior</b> (or lower limit) of $(x_n)$ is:
+      $$\\liminf(x_n) = \\lim_{m\\to\\infty} u_m = \\sup_{m\\ge 1} \\left(\\inf_{n\\ge m} x_n\\right)$$</p>`,
+    intuition: `<p>Ordinary limits don't always exist: an oscillating sequence like $x_n = (-1)^n$ has no limit. But $\\limsup$ and $\\liminf$ <b>ALWAYS exist</b> for every bounded sequence!</p>
+      <p>Think of $v_m$ as looking at the sequence from index $m$ onwards and finding the highest ceiling. As you look further ahead (larger $m$), you are considering fewer terms, so the ceiling $v_m$ can only decrease or stay the same. By the Monotone Convergence Theorem, $(v_m)$ must settle down to a limit: that is $\\limsup(x_n)$.</p>
+      <p>Similarly, the floor $u_m$ rises as $m$ increases, settling down to $\\liminf(x_n)$. They capture the ultimate upper and lower bounds of oscillation.</p>`,
+    needs: ['c.3.3.2', 'c.2.3.2', 'c.3.1.3'],
+    traps: [
+      `Confusing $\\sup(x_n)$ with $\\limsup(x_n)$: the supremum is the peak of ALL terms (including early outliers), while $\\limsup$ is the eventual peak ignoring any finite number of initial terms.`,
+      `Assuming $\\limsup$ and $\\liminf$ can only be defined if the sequence converges. Their greatest strength is that they exist even when the sequence diverges!`
+    ],
+    cards: [
+      { q: 'State the definition of $\\limsup(x_n)$ for a bounded sequence.', a: '$\\limsup(x_n) = \\lim_{m\\to\\infty} (\\sup\\{x_n : n \\ge m\\}) = \\inf_{m\\ge 1} (\\sup_{n\\ge m} x_n)$.', kind: 'state' },
+      { q: 'Why is the sequence of tail suprema $v_m = \\sup\\{x_n : n \\ge m\\}$ guaranteed to converge?', a: 'Because $(v_m)$ is decreasing and bounded below, so the Monotone Convergence Theorem guarantees its convergence.', kind: 'recall' },
+      { q: 'Compute $\\limsup(x_n)$ and $\\liminf(x_n)$ for $x_n = (-1)^n + 1/n$.', a: '$\\limsup(x_n) = 1$ and $\\liminf(x_n) = -1$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.3.4.11', bartle: '3.4.11', sec: '3.4', kind: 'theorem', tier: 'core',
+    title: 'Convergence Criterion via limsup and liminf',
+    oneLine: 'A bounded sequence converges if and only if limsup equals liminf, in which case both equal the limit.',
+    statement: `Let $X = (x_n)$ be a bounded sequence of real numbers.
+      <p>Then $(x_n)$ converges if and only if:
+      $$\\limsup(x_n) = \\liminf(x_n)$$</p>
+      <p>In this case, the ordinary limit exists and satisfies:
+      $$\\lim_{n\\to\\infty} x_n = \\limsup_{n\\to\\infty} x_n = \\liminf_{n\\to\\infty} x_n$$</p>`,
+    intuition: `<p>$\\limsup$ is the ceiling and $\\liminf$ is the floor of the sequence's long-term behavior. If the ceiling and the floor collapse into the exact same value $L$, the sequence has zero room to oscillate — it is squashed into convergence at $L$!</p>
+      <p>Conversely, if a sequence converges to $L$, both its tail suprema and tail infima must squeeze in toward $L$. This gives a powerful test: to show a bounded sequence diverges, simply show $\\limsup(x_n) \\ne \\liminf(x_n)$.</p>`,
+    needs: ['c.3.4.10', 'c.3.2.4', 'c.3.1.3'],
+    traps: [
+      `Forgetting that the sequence must be bounded: unbounded sequences can have $\\limsup$ or $\\liminf$ equal to $\\pm\\infty$.`,
+      `Thinking that because $\\limsup$ exists, the sequence must converge. It converges ONLY when $\\limsup = \\liminf$.`
+    ],
+    proof: {
+      idea: `Observe that $u_m \\le x_m \\le v_m$ for all $m$. If $\\lim u_m = \\lim v_m = L$, the Squeeze Theorem forces $\\lim x_m = L$. The converse follows directly from the ε-definition of limits.`,
+      why: `Every term $x_m$ is bounded below by the infimum of its tail $u_m$ and above by the supremum of its tail $v_m$.`,
+      rungs: [
+        { why: 'Notice that for every $m \\in \\mathbb{N}$, $x_m \\in \\{x_n : n \\ge m\\}$, which directly gives the fundamental sandwich inequality.', m: '$$u_m = \\inf\\{x_n : n \\ge m\\} \\le x_m \\le \\sup\\{x_n : n \\ge m\\} = v_m \\quad \\text{for all } m \\in \\mathbb{N}$$' },
+        { why: '(⇐) Suppose $\\limsup(x_n) = \\liminf(x_n) = L$. By definition of limit superior and inferior, $\\lim(u_m) = L$ and $\\lim(v_m) = L$.', m: '$$\\lim_{m\\to\\infty} u_m = L \\quad \\text{and} \\quad \\lim_{m\\to\\infty} v_m = L$$' },
+        { why: 'Apply the Squeeze Theorem (3.2.4) to the inequality $u_m \\le x_m \\le v_m$.', m: '$$u_m \\le x_m \\le v_m \\implies \\lim_{m\\to\\infty} x_m = L$$' },
+        { why: '(⇒) Conversely, suppose $\\lim(x_n) = x$. Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ such that $x - \\varepsilon < x_n < x + \\varepsilon$ for all $n \\ge K$.', m: '$$n \\ge K \\implies x - \\varepsilon < x_n < x + \\varepsilon$$' },
+        { why: 'Then for any $m \\ge K$, $x + \\varepsilon$ is an upper bound and $x - \\varepsilon$ is a lower bound for the tail $\\{x_n : n \\ge m\\}$.', m: '$$x - \\varepsilon \\le u_m \\le v_m \\le x + \\varepsilon \\quad \\text{for all } m \\ge K$$' },
+        { why: 'Take the limit as $m \\to \\infty$ to conclude that both $\\liminf$ and $\\limsup$ lie in $[x - \\varepsilon, x + \\varepsilon]$.', m: '$$x - \\varepsilon \\le \\liminf(x_n) \\le \\limsup(x_n) \\le x + \\varepsilon$$' },
+        { why: 'Since $\\varepsilon > 0$ was arbitrary, this forces equality.', m: '$$\\limsup(x_n) = \\liminf(x_n) = x = \\lim(x_n)$$' }
+      ],
+      ends: 'A bounded sequence converges if and only if its limit superior equals its limit inferior, and both equal the sequence limit.'
+    },
+    cards: [
+      { q: 'State Theorem 3.4.11 (Convergence via limsup and liminf).', a: 'A bounded sequence $(x_n)$ converges if and only if $\\limsup(x_n) = \\liminf(x_n) = \\lim(x_n)$.', kind: 'state' },
+      { q: 'How does the Squeeze Theorem prove the sufficiency of $\\limsup = \\liminf$?', a: 'Because $u_m \\le x_m \\le v_m$, if both $(u_m)$ and $(v_m)$ converge to $L$, $(x_m)$ is squeezed to $L$.', kind: 'recall' },
+      { q: 'If $(x_n)$ is bounded and $\\limsup(x_n) = 3$ while $\\liminf(x_n) = -1$, does $(x_n)$ converge?', a: 'No, because $\\limsup(x_n) \\ne \\liminf(x_n)$.', kind: 'apply' }
     ]
   },
 

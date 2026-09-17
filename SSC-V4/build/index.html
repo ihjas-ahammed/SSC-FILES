@@ -1232,6 +1232,45 @@ CONCEPTS.push(
     ]
   },
 
+  {
+    id: 'c.3.1.10', bartle: '3.1.10', sec: '3.1', kind: 'theorem', tier: 'core',
+    title: 'Standard Sequence Limits',
+    oneLine: 'Five foundational limits: 1/n → 0, 1/n² → 0, bⁿ → 0 (|b|<1), c^(1/n) → 1 (c>0), and n^(1/n) → 1.',
+    statement: `The following limits hold for sequences in $\\mathbb{R}$:
+      <p>(a) $\\lim_{n\\to\\infty} \\left(\\dfrac{1}{n}\\right) = 0$.</p>
+      <p>(b) $\\lim_{n\\to\\infty} \\left(\\dfrac{1}{n^2}\\right) = 0$.</p>
+      <p>(c) If $0 < b < 1$, then $\\lim_{n\\to\\infty} (b^n) = 0$.</p>
+      <p>(d) If $c > 0$, then $\\lim_{n\\to\\infty} (c^{1/n}) = 1$.</p>
+      <p>(e) $\\lim_{n\\to\\infty} (n^{1/n}) = 1$.</p>`,
+    intuition: `<p>These five limits are the bedrock of real analysis and calculus computations:</p>
+      <p>• $1/n \\to 0$ is the direct translation of the Archimedean Property into the language of limits.</p>
+      <p>• For $b^n \\to 0$ ($0 < b < 1$), we write $b = \\frac{1}{1 + a}$ with $a > 0$. Bernoulli's Inequality gives $(1 + a)^n \\ge 1 + na > na$, which traps $b^n < \\frac{1}{na} \\to 0$. Linear growth in the denominator crushes the fraction to zero!</p>
+      <p>• For $n^{1/n} \\to 1$: even though $n$ explodes to infinity, the $n$-th root extracts almost all the magnitude, pulling the sequence all the way down to $1$. Using the Binomial Theorem, $(1 + d_n)^n \\ge \\frac{n(n-1)}{2} d_n^2$, so $d_n \\le \\sqrt{2/n} \\to 0$.</p>`,
+    needs: ['c.3.1.3', 'c.2.4.3', 'c.2.1.13'],
+    traps: [
+      `Writing $0^0$ or $\\infty^0$ is an indeterminate form: $n^{1/n} \\to 1$, but other expressions of the type $\\infty^0$ may converge to other values or diverge.`,
+      `Assuming $b^n \\to 0$ holds when $b = 1$ ($1^n \\to 1$) or $b > 1$ ($b^n \\to +\\infty$). The strict condition $0 < b < 1$ (or $|b| < 1$) is required.`
+    ],
+    proof: {
+      idea: `Use the Archimedean property for (a), Bernoulli's Inequality for (c), and the Binomial Theorem for (e).`,
+      why: `Algebraic inequalities convert power growth into linear or quadratic bounds, allowing elementary ε-K verification.`,
+      rungs: [
+        { why: 'Proof of (a): Given $\\varepsilon > 0$, apply the Archimedean Property (2.4.3) to find $K \\in \\mathbb{N}$ with $K > 1/\\varepsilon$.', m: '$$n \\ge K > \\frac{1}{\\varepsilon} \\implies \\left|\\frac{1}{n} - 0\\right| = \\frac{1}{n} \\le \\frac{1}{K} < \\varepsilon \\implies \\lim\\left(\\frac{1}{n}\\right) = 0$$' },
+        { why: 'Proof of (c): Since $0 < b < 1$, write $b = \\frac{1}{1 + a}$ where $a = \\frac{1}{b} - 1 > 0$. Apply Bernoulli\'s Inequality (2.1.13).', m: '$$(1 + a)^n \\ge 1 + na > na \\implies 0 < b^n = \\frac{1}{(1 + a)^n} < \\frac{1}{na}$$' },
+        { why: 'Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ with $K > \\frac{1}{a \\varepsilon}$.', m: '$$n \\ge K \\implies |b^n - 0| < \\frac{1}{na} \\le \\frac{1}{Ka} < \\varepsilon \\implies \\lim(b^n) = 0$$' },
+        { why: 'Proof of (e): Let $x_n := n^{1/n} - 1$. Since $n \\ge 1$, $x_n \\ge 0$. Expand $n = (1 + x_n)^n$ via the Binomial Theorem for $n \\ge 2$.', m: '$$n = (1 + x_n)^n = 1 + n x_n + \\frac{n(n - 1)}{2} x_n^2 + \\cdots \\ge 1 + \\frac{n(n - 1)}{2} x_n^2$$' },
+        { why: 'Isolate $x_n^2$: subtract 1 and divide by $\\frac{n(n - 1)}{2} > 0$.', m: '$$n - 1 \\ge \\frac{n(n - 1)}{2} x_n^2 \\implies x_n^2 \\le \\frac{2}{n} \\implies 0 \\le x_n \\le \\sqrt{\\frac{2}{n}}$$' },
+        { why: 'Given $\\varepsilon > 0$, choose $K > 2/\\varepsilon^2$. Then $n \\ge K \\implies |n^{1/n} - 1| = x_n \\le \\sqrt{2/n} < \\varepsilon$.', m: '$$\\lim_{n\\to\\infty} (n^{1/n}) = 1$$' }
+      ],
+      ends: 'The limits $\\lim(1/n) = 0$, $\\lim(b^n) = 0$ for $0 < b < 1$, and $\\lim(n^{1/n}) = 1$ are rigorously established.'
+    },
+    cards: [
+      { q: 'State the limits of $(b^n)$ for $0 < b < 1$ and $(n^{1/n})$ as $n \\to \\infty$.', a: '$\\lim(b^n) = 0$ and $\\lim(n^{1/n}) = 1$.', kind: 'state' },
+      { q: "How is Bernoulli's Inequality used to prove $\\lim(b^n) = 0$?", a: 'Writing $b = 1/(1+a)$ with $a > 0$ yields $b^n \\le 1/(1+na) < 1/(na)$, which tends to 0 by the Archimedean property.', kind: 'recall' },
+      { q: 'Why does the proof of $\\lim(n^{1/n}) = 1$ keep the quadratic term in the binomial expansion rather than just the linear term?', a: 'Because the linear term gives $n \\ge 1 + nx_n \\implies x_n \\le (n-1)/n < 1$, which is too weak to force $x_n \\to 0$; the quadratic term gives $x_n \\le \\sqrt{2/n} \\to 0$.', kind: 'trap' }
+    ]
+  },
+
   { id:'c.3.4.1', bartle:'3.4.1', sec:'3.4', kind:'definition', tier:'core',
     title:'Subsequence',
     oneLine:'A subsequence picks out infinitely many terms from a sequence, keeping their original left-to-right order.',
@@ -1365,6 +1404,69 @@ CONCEPTS.push(
       { q:`Which two earlier results does the proof chain together?`, a:`The Monotone Subsequence Theorem (<code>c.3.4.7</code>) and the Monotone Convergence Theorem (§3.3, itself resting on completeness <code>c.2.3.6</code>).`, kind:'recall' },
       { q:`Find a convergent subsequence of $x_n=(-1)^n+1/n$.`, a:`The even-indexed subsequence $x_{2n}=1+1/(2n)\\to1$ converges (also the odd-indexed one converges to $-1$).`, kind:'apply' },
       { q:`Trap: does Bolzano–Weierstrass mean $((-1)^n)$ converges?`, a:`No — the theorem only guarantees SOME subsequence converges, not the whole sequence; $((-1)^n)$ itself is divergent, but its even and odd subsequences each converge.`, kind:'trap' }
+    ]
+  },
+
+  {
+    id: 'c.3.4.10', bartle: '3.4.10', sec: '3.4', kind: 'definition', tier: 'core',
+    title: 'Limit Superior and Limit Inferior',
+    oneLine: 'For any bounded sequence, limsup is the limit of tail suprema and liminf is the limit of tail infima.',
+    statement: `Let $X = (x_n)$ be a bounded sequence of real numbers. For each $m \\in \\mathbb{N}$, define the tail bounds:
+      $$v_m = \\sup\\{x_n : n \\ge m\\}, \\qquad u_m = \\inf\\{x_n : n \\ge m\\}$$
+      The sequence $(v_m)$ is decreasing and bounded below; the sequence $(u_m)$ is increasing and bounded above.
+      <p>(a) The <b>limit superior</b> (or upper limit) of $(x_n)$ is:
+      $$\\limsup(x_n) = \\lim_{m\\to\\infty} v_m = \\inf_{m\\ge 1} \\left(\\sup_{n\\ge m} x_n\\right)$$</p>
+      <p>(b) The <b>limit inferior</b> (or lower limit) of $(x_n)$ is:
+      $$\\liminf(x_n) = \\lim_{m\\to\\infty} u_m = \\sup_{m\\ge 1} \\left(\\inf_{n\\ge m} x_n\\right)$$</p>`,
+    intuition: `<p>Ordinary limits don't always exist: an oscillating sequence like $x_n = (-1)^n$ has no limit. But $\\limsup$ and $\\liminf$ <b>ALWAYS exist</b> for every bounded sequence!</p>
+      <p>Think of $v_m$ as looking at the sequence from index $m$ onwards and finding the highest ceiling. As you look further ahead (larger $m$), you are considering fewer terms, so the ceiling $v_m$ can only decrease or stay the same. By the Monotone Convergence Theorem, $(v_m)$ must settle down to a limit: that is $\\limsup(x_n)$.</p>
+      <p>Similarly, the floor $u_m$ rises as $m$ increases, settling down to $\\liminf(x_n)$. They capture the ultimate upper and lower bounds of oscillation.</p>`,
+    needs: ['c.3.3.2', 'c.2.3.2', 'c.3.1.3'],
+    traps: [
+      `Confusing $\\sup(x_n)$ with $\\limsup(x_n)$: the supremum is the peak of ALL terms (including early outliers), while $\\limsup$ is the eventual peak ignoring any finite number of initial terms.`,
+      `Assuming $\\limsup$ and $\\liminf$ can only be defined if the sequence converges. Their greatest strength is that they exist even when the sequence diverges!`
+    ],
+    cards: [
+      { q: 'State the definition of $\\limsup(x_n)$ for a bounded sequence.', a: '$\\limsup(x_n) = \\lim_{m\\to\\infty} (\\sup\\{x_n : n \\ge m\\}) = \\inf_{m\\ge 1} (\\sup_{n\\ge m} x_n)$.', kind: 'state' },
+      { q: 'Why is the sequence of tail suprema $v_m = \\sup\\{x_n : n \\ge m\\}$ guaranteed to converge?', a: 'Because $(v_m)$ is decreasing and bounded below, so the Monotone Convergence Theorem guarantees its convergence.', kind: 'recall' },
+      { q: 'Compute $\\limsup(x_n)$ and $\\liminf(x_n)$ for $x_n = (-1)^n + 1/n$.', a: '$\\limsup(x_n) = 1$ and $\\liminf(x_n) = -1$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.3.4.11', bartle: '3.4.11', sec: '3.4', kind: 'theorem', tier: 'core',
+    title: 'Convergence Criterion via limsup and liminf',
+    oneLine: 'A bounded sequence converges if and only if limsup equals liminf, in which case both equal the limit.',
+    statement: `Let $X = (x_n)$ be a bounded sequence of real numbers.
+      <p>Then $(x_n)$ converges if and only if:
+      $$\\limsup(x_n) = \\liminf(x_n)$$</p>
+      <p>In this case, the ordinary limit exists and satisfies:
+      $$\\lim_{n\\to\\infty} x_n = \\limsup_{n\\to\\infty} x_n = \\liminf_{n\\to\\infty} x_n$$</p>`,
+    intuition: `<p>$\\limsup$ is the ceiling and $\\liminf$ is the floor of the sequence's long-term behavior. If the ceiling and the floor collapse into the exact same value $L$, the sequence has zero room to oscillate — it is squashed into convergence at $L$!</p>
+      <p>Conversely, if a sequence converges to $L$, both its tail suprema and tail infima must squeeze in toward $L$. This gives a powerful test: to show a bounded sequence diverges, simply show $\\limsup(x_n) \\ne \\liminf(x_n)$.</p>`,
+    needs: ['c.3.4.10', 'c.3.2.4', 'c.3.1.3'],
+    traps: [
+      `Forgetting that the sequence must be bounded: unbounded sequences can have $\\limsup$ or $\\liminf$ equal to $\\pm\\infty$.`,
+      `Thinking that because $\\limsup$ exists, the sequence must converge. It converges ONLY when $\\limsup = \\liminf$.`
+    ],
+    proof: {
+      idea: `Observe that $u_m \\le x_m \\le v_m$ for all $m$. If $\\lim u_m = \\lim v_m = L$, the Squeeze Theorem forces $\\lim x_m = L$. The converse follows directly from the ε-definition of limits.`,
+      why: `Every term $x_m$ is bounded below by the infimum of its tail $u_m$ and above by the supremum of its tail $v_m$.`,
+      rungs: [
+        { why: 'Notice that for every $m \\in \\mathbb{N}$, $x_m \\in \\{x_n : n \\ge m\\}$, which directly gives the fundamental sandwich inequality.', m: '$$u_m = \\inf\\{x_n : n \\ge m\\} \\le x_m \\le \\sup\\{x_n : n \\ge m\\} = v_m \\quad \\text{for all } m \\in \\mathbb{N}$$' },
+        { why: '(⇐) Suppose $\\limsup(x_n) = \\liminf(x_n) = L$. By definition of limit superior and inferior, $\\lim(u_m) = L$ and $\\lim(v_m) = L$.', m: '$$\\lim_{m\\to\\infty} u_m = L \\quad \\text{and} \\quad \\lim_{m\\to\\infty} v_m = L$$' },
+        { why: 'Apply the Squeeze Theorem (3.2.4) to the inequality $u_m \\le x_m \\le v_m$.', m: '$$u_m \\le x_m \\le v_m \\implies \\lim_{m\\to\\infty} x_m = L$$' },
+        { why: '(⇒) Conversely, suppose $\\lim(x_n) = x$. Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ such that $x - \\varepsilon < x_n < x + \\varepsilon$ for all $n \\ge K$.', m: '$$n \\ge K \\implies x - \\varepsilon < x_n < x + \\varepsilon$$' },
+        { why: 'Then for any $m \\ge K$, $x + \\varepsilon$ is an upper bound and $x - \\varepsilon$ is a lower bound for the tail $\\{x_n : n \\ge m\\}$.', m: '$$x - \\varepsilon \\le u_m \\le v_m \\le x + \\varepsilon \\quad \\text{for all } m \\ge K$$' },
+        { why: 'Take the limit as $m \\to \\infty$ to conclude that both $\\liminf$ and $\\limsup$ lie in $[x - \\varepsilon, x + \\varepsilon]$.', m: '$$x - \\varepsilon \\le \\liminf(x_n) \\le \\limsup(x_n) \\le x + \\varepsilon$$' },
+        { why: 'Since $\\varepsilon > 0$ was arbitrary, this forces equality.', m: '$$\\limsup(x_n) = \\liminf(x_n) = x = \\lim(x_n)$$' }
+      ],
+      ends: 'A bounded sequence converges if and only if its limit superior equals its limit inferior, and both equal the sequence limit.'
+    },
+    cards: [
+      { q: 'State Theorem 3.4.11 (Convergence via limsup and liminf).', a: 'A bounded sequence $(x_n)$ converges if and only if $\\limsup(x_n) = \\liminf(x_n) = \\lim(x_n)$.', kind: 'state' },
+      { q: 'How does the Squeeze Theorem prove the sufficiency of $\\limsup = \\liminf$?', a: 'Because $u_m \\le x_m \\le v_m$, if both $(u_m)$ and $(v_m)$ converge to $L$, $(x_m)$ is squeezed to $L$.', kind: 'recall' },
+      { q: 'If $(x_n)$ is bounded and $\\limsup(x_n) = 3$ while $\\liminf(x_n) = -1$, does $(x_n)$ converge?', a: 'No, because $\\limsup(x_n) \\ne \\liminf(x_n)$.', kind: 'apply' }
     ]
   },
 
@@ -1940,6 +2042,47 @@ CONCEPTS.push(
     ]
   },
 
+  {
+    id: 'c.3.3.6', bartle: '3.3.6', sec: '3.3', kind: 'theorem', tier: 'core',
+    title: 'The Number e via the Monotone Convergence Theorem',
+    oneLine: 'e_n = (1 + 1/n)^n is strictly increasing and bounded above by 3, converging to Euler’s constant e ≈ 2.71828.',
+    statement: `Let the sequence $(e_n)$ be defined by:
+      $$e_n = \\left(1 + \\frac{1}{n}\\right)^n \\quad \\text{for } n \\in \\mathbb{N}$$
+      The sequence $(e_n)$ is strictly increasing and bounded above by $3$:
+      $$2 = e_1 < e_2 < \\cdots < e_n < e_{n+1} < \\cdots < 3$$
+      By the Monotone Convergence Theorem, $(e_n)$ converges to a real limit, denoted by the fundamental constant $e$:
+      $$e = \\lim_{n\\to\\infty} \\left(1 + \\frac{1}{n}\\right)^n \\in (2, 3)$$`,
+    intuition: `<p>In high school compound interest, if 100% interest is compounded once a year, you get $(1 + 1)^1 = 2$. Compounded semiannually, $(1 + 1/2)^2 = 2.25$. Compounded monthly, $(1 + 1/12)^{12} \\approx 2.61$. Compounded daily, $\\approx 2.7145$.</p>
+      <p>Does your money grow to infinity if you compound every microsecond? No! It is strictly capped. This theorem uses the <b>Binomial Theorem</b> to show two critical facts:
+      1. Every step increases the total sum ($e_n < e_{n+1}$).
+      2. The total sum is strictly smaller than the geometric series $1 + 1 + 1/2 + 1/4 + \\cdots = 3$.</p>
+      <p>Because the sequence is monotone increasing and bounded above, the <b>Monotone Convergence Theorem</b> guarantees it must hit a definite limit: Euler's number $e \\approx 2.71828$.</p>`,
+    needs: ['c.3.3.2', 'c.1.2.1', 'c.2.1.1'],
+    traps: [
+      `Assuming $\\lim(1 + 1/n)^n = 1^\\infty = 1$. The expression $1^\\infty$ is an indeterminate form; the base approaches $1$ while the exponent explodes to $\\infty$, balancing at $e \\approx 2.71828$.`,
+      `Thinking that because $e_n < 3$, the limit must be $3$. The ceiling $3$ is merely an upper bound; the exact limit is the supremum of the sequence, $e \\approx 2.71828 < 3$.`
+    ],
+    proof: {
+      idea: `Expand $e_n$ by the Binomial Theorem. Comparing terms shows $e_n < e_{n+1}$, and bounding each term by $1/2^{k-1}$ sums to $< 3$. Apply the Monotone Convergence Theorem.`,
+      why: `The Binomial expansion reveals that every individual factor $(1 - k/n)$ increases with $n$ and each coefficient $1/k!$ is bounded by $1/2^{k-1}$.`,
+      rungs: [
+        { why: 'Expand $e_n = (1 + 1/n)^n$ using the Binomial Theorem.', m: '$$e_n = 1 + n\\left(\\frac{1}{n}\\right) + \\frac{n(n-1)}{2!}\\left(\\frac{1}{n^2}\\right) + \\cdots + \\frac{n(n-1)\\cdots 1}{n!}\\left(\\frac{1}{n^n}\\right)$$' },
+        { why: 'Simplify each binomial coefficient by dividing powers of $n$ into each linear factor.', m: '$$e_n = 1 + 1 + \\frac{1}{2!}\\left(1 - \\frac{1}{n}\\right) + \\frac{1}{3!}\\left(1 - \\frac{1}{n}\\right)\\left(1 - \\frac{2}{n}\\right) + \\cdots + \\frac{1}{n!}\\left(1 - \\frac{1}{n}\\right)\\cdots\\left(1 - \\frac{n-1}{n}\\right)$$' },
+        { why: 'Compare $e_n$ with $e_{n+1}$: the expansion of $e_{n+1}$ has one extra positive term, and each factor $(1 - k/(n+1)) > (1 - k/n)$ is strictly larger. Thus $e_n < e_{n+1}$.', m: '$$e_n < e_{n+1} \\quad \\text{for all } n \\in \\mathbb{N} \\implies (e_n) \\text{ is strictly increasing}$$' },
+        { why: 'To find an upper bound, observe that $(1 - k/n) < 1$ for all $k \\ge 1$. Replace every parenthesized factor by $1$.', m: '$$e_n < 1 + 1 + \\frac{1}{2!} + \\frac{1}{3!} + \\cdots + \\frac{1}{n!}$$' },
+        { why: 'Since $k! = 1 \\cdot 2 \\cdot 3 \\cdots k \\ge 2^{k-1}$ for $k \\ge 2$, we have $\\frac{1}{k!} \\le \\frac{1}{2^{k-1}}$.', m: '$$e_n < 1 + 1 + \\frac{1}{2} + \\frac{1}{2^2} + \\cdots + \\frac{1}{2^{n-1}}$$' },
+        { why: 'Sum the geometric series: $1 + \\frac{1}{2} + \\cdots + \\frac{1}{2^{n-1}} = \\frac{1 - (1/2)^n}{1 - 1/2} < 2$.', m: '$$e_n < 1 + 2 = 3 \\quad \\text{for all } n \\in \\mathbb{N}$$' },
+        { why: 'Since $(e_n)$ is increasing and bounded above by $3$, the Monotone Convergence Theorem (3.3.2) proves that the limit exists.', m: '$$e := \\lim_{n\\to\\infty} e_n = \\sup\\{e_n : n \\in \\mathbb{N}\\} \\in (2, 3)$$' }
+      ],
+      ends: 'The sequence $(1 + 1/n)^n$ converges to a unique real limit $e \\in (2, 3)$. This establishes the rigorous existence and convergence of Euler’s number.'
+    },
+    cards: [
+      { q: 'State the definition of the number $e$ as a sequence limit.', a: '$e = \\lim_{n\\to\\infty} (1 + 1/n)^n$, which lies in $(2, 3)$.', kind: 'state' },
+      { q: 'Why is the sequence $e_n = (1 + 1/n)^n$ strictly increasing?', a: 'In its binomial expansion, each factor $(1 - k/n)$ grows strictly larger as $n$ increases, and an extra positive term is added.', kind: 'recall' },
+      { q: 'How is $e_n$ proved to be bounded above by 3?', a: 'By replacing $1/k! \\le 1/2^{k-1}$, bounding $e_n < 1 + \\sum_{k=0}^{n-1} (1/2)^k < 1 + 2 = 3$.', kind: 'apply' }
+    ]
+  },
+
   { id:'c.3.5.1', bartle:'3.5.1', sec:'3.5', kind:'definition', tier:'core',
     title:'Cauchy sequence',
     oneLine:'A sequence is Cauchy if its own terms eventually get arbitrarily close to EACH OTHER, not just to some fixed target.',
@@ -2229,9 +2372,83 @@ CONCEPTS.push(
       { q:`In the proof of the (⇐) direction, how is $\\delta$ chosen from $\\delta_1$ and $\\delta_2$?`, a:`$\\delta := \\min\\{\\delta_1, \\delta_2\\}$, so the bound holds whether $x$ is to the right or to the left of $c$.`, kind:'recall' },
       { q:`Trap: why does $\\lim_{x\\to0} \\operatorname{sgn}(x)$ fail to exist under Theorem 4.3.3?`, a:`Because $\\lim_{x\\to0^+} \\operatorname{sgn}(x) = 1 \\ne -1 = \\lim_{x\\to0^-} \\operatorname{sgn}(x)$; the two one-sided limits are not equal.`, kind:'trap' }
     ]
+  },
+
+  {
+    id: 'c.4.3.5', bartle: '4.3.5', sec: '4.3', kind: 'definition', tier: 'core',
+    title: 'Infinite Limits of Functions',
+    oneLine: 'f(x) → +∞ as x → c means f(x) blows past every positive ceiling α on a small punctured neighborhood of c.',
+    statement: `Let $A \\subseteq \\mathbb{R}$, $f: A \\to \\mathbb{R}$, and let $c \\in \\mathbb{R}$ be a cluster point of $A$.
+      <p>(a) We say that $\\lim_{x\\to c} f(x) = +\\infty$ if for every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that for all $x \\in A$:
+      $$0 < |x - c| < \\delta \\implies f(x) > \\alpha$$</p>
+      <p>(b) We say that $\\lim_{x\\to c} f(x) = -\\infty$ if for every $\\beta \\in \\mathbb{R}$, there exists $\\delta > 0$ such that for all $x \\in A$:
+      $$0 < |x - c| < \\delta \\implies f(x) < \\beta$$</p>
+      <p><b>Sequential Criterion:</b> $\\lim_{x\\to c} f(x) = +\\infty$ if and only if for every sequence $(x_n)$ in $A \\setminus \\{c\\}$ converging to $c$, $\\lim(f(x_n)) = +\\infty$.</p>`,
+    intuition: `<p>Vertical asymptotes in calculus! Consider $f(x) = 1/x^2$ as $x \\to 0$. As $x$ approaches $0$ from either side, $f(x)$ explodes upwards without bound.</p>
+      <p>In rigorous analysis, to claim $\\lim_{x\\to c} f(x) = +\\infty$, you challenge someone with a gigantic ceiling $\\alpha$ (e.g. $\\alpha = 10^{12}$). If they can always find a small enough protective radius $\\delta$ (e.g. $\\delta = 10^{-6}$) such that inside $0 < |x - c| < \\delta$ the function $f(x)$ stands taller than that ceiling, the infinite limit holds.</p>`,
+    needs: ['c.4.1.4', 'c.3.6.1'],
+    traps: [
+      `Writing $\\lim f(x) = \\infty$ does NOT mean the limit exists in $\\mathbb{R}$! Infinity is not a real number; it is a descriptive notation for unbounded divergence.`,
+      `Does $\\lim_{x\\to 0} (1/x) = +\\infty$? NO! From the right it approaches $+\\infty$, but from the left it approaches $-\\infty$. Since the signs clash, the two-sided limit does not exist.`
+    ],
+    proof: {
+      idea: `Verify that $\\lim_{x\\to 0} \\frac{1}{x^2} = +\\infty$ directly from the $\\alpha$-$\\delta$ definition.`,
+      why: `Solving $1/x^2 > \\alpha$ gives $|x| < 1/\\sqrt{\\alpha}$ for any positive ceiling $\\alpha$.`,
+      rungs: [
+        { why: 'Let $\\alpha > 0$ be an arbitrary positive real number (if $\\alpha \\le 0$, any $\\delta > 0$ works since $1/x^2 > 0 \\ge \\alpha$).', m: '$$\\alpha > 0 \\quad \\text{is given}$$' },
+        { why: 'Choose $\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$.', m: '$$\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$$' },
+        { why: 'Assume $x$ satisfies $0 < |x - 0| < \\delta$.', m: '$$0 < |x| < \\frac{1}{\\sqrt{\\alpha}}$$' },
+        { why: 'Square both sides (both are positive, so the inequality preserves order).', m: '$$x^2 < \\frac{1}{\\alpha}$$' },
+        { why: 'Take the reciprocal of both sides, which reverses the inequality.', m: '$$f(x) = \\frac{1}{x^2} > \\alpha$$' }
+      ],
+      ends: 'For every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that $0 < |x| < \\delta \\implies 1/x^2 > \\alpha$. Hence $\\lim_{x\\to 0} (1/x^2) = +\\infty$.'
+    },
+    cards: [
+      { q: 'State the formal definition of $\\lim_{x\\to c} f(x) = +\\infty$.', a: 'For every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that $0 < |x - c| < \\delta \\implies f(x) > \\alpha$.', kind: 'state' },
+      { q: 'Why does $\\lim_{x\\to 0} (1/x)$ NOT equal $+\\infty$?', a: 'Because for $x < 0$, $1/x < 0$, so $f(x)$ is negative and fails to be greater than positive $\\alpha$.', kind: 'trap' },
+      { q: 'What is the sequential criterion for $\\lim_{x\\to c} f(x) = +\\infty$?', a: 'For every sequence $(x_n)$ in the domain with $x_n \\ne c$ and $x_n \\to c$, we have $f(x_n) \\to +\\infty$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.4.3.8', bartle: '4.3.8', sec: '4.3', kind: 'definition', tier: 'core',
+    title: 'Limits at Infinity',
+    oneLine: 'f(x) → L as x → +∞ means f(x) stays within ε of L whenever x is pushed beyond a horizon K.',
+    statement: `Let $A \\subseteq \\mathbb{R}$ be unbounded above, and let $f: A \\to \\mathbb{R}$.
+      <p>(a) We say that $\\lim_{x\\to+\\infty} f(x) = L \\in \\mathbb{R}$ if for every $\\varepsilon > 0$, there exists a real number $K > 0$ such that for all $x \\in A$:
+      $$x > K \\implies |f(x) - L| < \\varepsilon$$</p>
+      <p>(b) We say that $\\lim_{x\\to+\\infty} f(x) = +\\infty$ if for every $\\alpha \\in \\mathbb{R}$, there exists $K > 0$ such that for all $x \\in A$:
+      $$x > K \\implies f(x) > \\alpha$$</p>
+      <p>Analogous definitions hold for $x \\to -\\infty$ where $x < -K$.</p>`,
+    intuition: `<p>Horizontal asymptotes! When you graph $f(x) = \\frac{1}{x}$, as you walk infinitely far to the right ($x \\to +\\infty$), the curve flattens right onto the horizontal line $y = 0$.</p>
+      <p>The parameter $K$ is your "horizon". Given any microscopic error band $\\pm\\varepsilon$ around $L$, if you walk far enough past horizon $K = 1/\\varepsilon$, the entire tail of the graph stays trapped inside that horizontal strip.</p>
+      <p>This is the continuous analogue of sequence limits: if you replace the real input $x$ with integer $n$, the condition $x > K$ becomes $n \\ge K$, which is identical to the sequence convergence definition (3.1.3)!</p>`,
+    needs: ['c.4.1.4', 'c.3.1.3'],
+    traps: [
+      `Confusing limits at infinity $\\lim_{x\\to\\infty} f(x) = L$ (horizontal asymptote) with infinite limits $\\lim_{x\\to c} f(x) = \\infty$ (vertical asymptote).`,
+      `Forgetting that the domain $A$ must be unbounded above for $\\lim_{x\\to+\\infty}$ to make sense.`
+    ],
+    proof: {
+      idea: `Prove that $\\lim_{x\\to+\\infty} \\frac{1}{x} = 0$ using the $\\varepsilon$-$K$ definition.`,
+      why: `For any positive tolerance $\\varepsilon > 0$, setting the horizon $K = 1/\\varepsilon$ guarantees that $1/x < \\varepsilon$ for all $x > K$.`,
+      rungs: [
+        { why: 'Let $\\varepsilon > 0$ be given.', m: '$$\\varepsilon > 0 \\quad \\text{is given}$$' },
+        { why: 'Choose the horizon $K := \\frac{1}{\\varepsilon} > 0$.', m: '$$K := \\frac{1}{\\varepsilon} > 0$$' },
+        { why: 'Assume $x \\in (0, \\infty)$ satisfies $x > K$.', m: '$$x > K = \\frac{1}{\\varepsilon} > 0$$' },
+        { why: 'Take reciprocals, noting that both sides are positive.', m: '$$0 < \\frac{1}{x} < \\frac{1}{K} = \\varepsilon$$' },
+        { why: 'Translate this into the absolute value distance to 0.', m: '$$\\left|\\frac{1}{x} - 0\\right| = \\frac{1}{x} < \\varepsilon \\quad \\text{for all } x > K$$' }
+      ],
+      ends: 'For every $\\varepsilon > 0$, there exists $K > 0$ such that $x > K \\implies |1/x - 0| < \\varepsilon$. Thus $\\lim_{x\\to+\\infty} (1/x) = 0$.'
+    },
+    cards: [
+      { q: 'State the formal definition of $\\lim_{x\\to+\\infty} f(x) = L$.', a: 'For every $\\varepsilon > 0$, there exists $K > 0$ such that $x > K \\implies |f(x) - L| < \\varepsilon$.', kind: 'state' },
+      { q: 'How does $\\lim_{x\\to+\\infty} f(x) = L$ relate to sequence limits?', a: 'Sequences are functions on $\\mathbb{N}$; the limit of a sequence is literally a limit at infinity as $n \\to \\infty$.', kind: 'recall' },
+      { q: 'For $f(x) = 1/x$ and $\\varepsilon = 0.005$, find a suitable horizon $K$.', a: '$K = 1/0.005 = 200$, since $x > 200 \\implies 1/x < 0.005$.', kind: 'apply' }
+    ]
   }
 
 );
+
 
 
 /* ── ../data/ra1-m1.js ── */
@@ -2320,6 +2537,71 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.1.2.2', bartle: '1.2.2', sec: '1.2', kind: 'theorem', tier: 'core',
+    title: 'The Well-Ordering Property of ℕ',
+    oneLine: 'Every non-empty subset of natural numbers contains a unique smallest element.',
+    statement: `<b>Well-Ordering Property of $\\mathbb{N}$ (Axiom):</b> If $S$ is a non-empty subset of $\\mathbb{N}$, then there exists an element $m \\in S$ such that:
+      $$m \\le s \\quad \\text{for all } s \\in S$$
+      This unique element $m$ is called the <b>least element</b> (or minimum) of $S$.`,
+    intuition: `<p>On a staircase of positive integers $1, 2, 3, \\dots$, you cannot walk downward forever! If you select ANY bunch of steps (a subset $S$), there has to be a lowest step among them.</p>
+      <p>This property distinguishes $\\mathbb{N}$ from $\\mathbb{Z}$, $\\mathbb{Q}$, and $\\mathbb{R}$. For instance, the positive rationals $\\mathbb{Q}^+$ have NO smallest element (half of any positive rational is even smaller!).</p>`,
+    needs: ['s.quantifier'],
+    traps: [
+      `The set $S$ MUST be non-empty ($S \\ne \\emptyset$) and must consist of natural numbers.`,
+      `Does NOT hold for $\\mathbb{Z}$ (integers go down to $-\\infty$) or open intervals like $(0, 1) \\subset \\mathbb{R}$ (infimum is $0$, but $0 \\notin (0, 1)$).`
+    ],
+    proof: {
+      idea: 'Show that the Well-Ordering Property is logically equivalent to the Principle of Mathematical Induction.',
+      why: 'If a set without a least element existed, induction on its complement would prove the set is empty.',
+      rungs: [
+        { why: 'Let $S \\subseteq \\mathbb{N}$ be a subset that has no least element. We will prove $S = \\emptyset$.', m: 'S \\subseteq \\mathbb{N} \\text{ has no least element}' },
+        { why: 'Define $T = \\mathbb{N} \\setminus S$. We show $T = \\mathbb{N}$ using induction. First, $1 \\in T$, because if $1 \\in S$, $1$ would be the least element of $S$ (since $1 \\le s$ for all $s \\in \\mathbb{N}$).', m: '1 \\in T' },
+        { why: 'Assume $\{1, 2, \\ldots, k\} \\subseteq T$. Then no number $\\le k$ belongs to $S$.', m: 's \\in S \\implies s > k' },
+        { why: 'If $k + 1 \\in S$, then $k + 1$ would be smaller than all other elements of $S$, making it the least element of $S$, a contradiction. Thus $k + 1 \\in T$.', m: 'k + 1 \\in T' },
+        { why: 'By induction, $T = \\mathbb{N}$, which forces $S = \\emptyset$.', m: 'T = \\mathbb{N} \\implies S = \\emptyset' }
+      ],
+      ends: 'Therefore, every non-empty subset of $\\mathbb{N}$ must have a least element.'
+    },
+    cards: [
+      { q: 'State the Well-Ordering Property of $\\mathbb{N}$.', a: 'Every non-empty subset of $\\mathbb{N}$ has a least element.', kind: 'state' },
+      { q: 'Does the Well-Ordering Property hold for the set of positive rational numbers $\\mathbb{Q}^+$?', a: 'No, $\\mathbb{Q}^+$ has no smallest element (for any $q > 0$, $q/2 > 0$ is smaller).', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.1.2.3', bartle: '1.2.3', sec: '1.2', kind: 'theorem', tier: 'core',
+    title: 'Principle of Strong Induction',
+    oneLine: 'Assume the statement holds for ALL predecessors 1, 2, ..., k to prove it for k + 1.',
+    statement: `Let $S$ be a subset of $\\mathbb{N}$ such that:
+      <p>(1) $1 \\in S$.</p>
+      <p>(2) For every $k \\in \\mathbb{N}$, if $\\{1, 2, \\ldots, k\\} \\subseteq S$, then $k + 1 \\in S$.</p>
+      <p>Then $S = \\mathbb{N}$.</p>`,
+    intuition: `<p>Standard induction assumes only that the single immediately preceding step $k$ holds. <b>Strong induction gives you a much stronger assumption:</b> you get to assume that EVERY step from $1$ up to $k$ holds!</p>
+      <p>Think of prime factorization: every number $n > 1$ is either prime or factors into $a \\cdot b$ with $a, b < n$. You need the induction hypothesis to hold for both $a$ and $b$, not just $n-1$. Strong induction is tailor-made for such proofs.</p>`,
+    needs: ['c.1.2.1'],
+    traps: [
+      `Even though it is called "strong" induction, it is mathematically 100% equivalent in power to standard induction! It doesn't prove anything standard induction cannot prove; it is just more convenient.`,
+      `Don't forget the base case ($1 \\in S$) still needs to be established.`
+    ],
+    proof: {
+      idea: 'Define an auxiliary property $T_k = \\{1, 2, \\ldots, k\\} \\subseteq S$ and apply standard induction to $T_k$.',
+      why: 'Proving $T_k$ holds for all $k$ by standard induction directly establishes that $k \\in S$ for all $k$.',
+      rungs: [
+        { why: 'Define $T = \\{k \\in \\mathbb{N} : \\{1, 2, \\ldots, k\\} \\subseteq S\\}$.', m: 'k \\in T \\iff \\{1, \\ldots, k\\} \\subseteq S' },
+        { why: 'Base step: Since $1 \\in S$ by hypothesis (1), $\\{1\\} \\subseteq S$, so $1 \\in T$.', m: '1 \\in T' },
+        { why: 'Inductive step: Assume $k \\in T$. Then $\\{1, \\ldots, k\\} \\subseteq S$.', m: '\\{1, \\ldots, k\\} \\subseteq S' },
+        { why: 'By hypothesis (2), this implies $k + 1 \\in S$. Combining $\\{1, \\ldots, k\\} \\subseteq S$ and $k + 1 \\in S$ gives $\\{1, \\ldots, k+1\\} \\subseteq S$.', m: '\\{1, \\ldots, k+1\\} \\subseteq S \\implies k + 1 \\in T' },
+        { why: 'By standard induction (1.2.1), $T = \\mathbb{N}$. Since $k \\in T \\implies k \\in S$, we have $S = \\mathbb{N}$.', m: 'T = \\mathbb{N} \\implies S = \\mathbb{N}' }
+      ],
+      ends: 'Strong induction is proved equivalent to standard mathematical induction.'
+    },
+    cards: [
+      { q: 'State the inductive hypothesis in Strong Induction.', a: 'Assume the statement holds for all integers from $1$ up to $k$: $\\{1, 2, \\ldots, k\\} \\subseteq S$.', kind: 'state' },
+      { q: 'Is Strong Induction logically stronger than standard induction?', a: 'No, they are logically equivalent; any proof using strong induction can be rephrased using standard induction.', kind: 'recall' }
+    ]
+  },
+
+  {
     id: 'c.1.3.1', bartle: '1.3.1', sec: '1.3', kind: 'definition', tier: 'core',
     title: 'Finite, Countably Infinite, and Uncountable Sets',
     oneLine: 'Countable means you can line up the elements in a 1st, 2nd, 3rd sequence without missing any.',
@@ -2372,6 +2654,75 @@ CONCEPTS.push(
       { q: 'Is the set of irrational numbers $\\mathbb{R} \\setminus \\mathbb{Q}$ countable or uncountable?', a: 'Uncountable. If it were countable, $\\mathbb{R} = \\mathbb{Q} \\cup (\\mathbb{R} \\setminus \\mathbb{Q})$ would be a countable union of countable sets, contradicting that $\\mathbb{R}$ is uncountable.', kind: 'apply' },
       { q: 'What famous proof technique shows that $[0, 1]$ cannot be put into a one-to-one correspondence with $\\mathbb{N}$?', a: "Cantor's diagonal argument.", kind: 'recall' },
       { q: 'State the countability of the sets $\\mathbb{Q}$ and $\\mathbb{R}$.', a: 'The set of rational numbers $\\mathbb{Q}$ is countable, whereas the set of real numbers $\\mathbb{R}$ is uncountable.', kind: 'state' }
+    ]
+  },
+
+  {
+    id: 'c.1.3.3', bartle: '1.3.8', sec: '1.3', kind: 'theorem', tier: 'core',
+    title: 'Properties of Countable Sets: Subsets and Unions',
+    oneLine: 'Any subset of a countable set is countable; a countable union of countable sets is countable.',
+    statement: `(a) Any subset of a countable set is <b>countable</b>.
+      <p>(b) If $A_n$ is a countable set for each $n \\in \\mathbb{N}$, then the union:
+      $$A = \\bigcup_{n=1}^\\infty A_n$$
+      is <b>countable</b>. (A countable union of countable sets is countable).</p>`,
+    intuition: `<p>Think of countable sets as manageable lists:</p>
+      <p>• If you take a subset of a list, you can just cross out the unwanted items. The remaining items form an even shorter list (still countable!).</p>
+      <p>• If you have countably many lists, write list 1 on row 1, list 2 on row 2, list 3 on row 3... Then snake through the 2D grid diagonally (1st item of list 1, 1st of list 2, 2nd of list 1, etc.). Every single item in every list gets assigned a finite position!</p>`,
+    needs: ['c.1.3.1'],
+    traps: [
+      `An UNCOUNTABLE union of countable sets can easily be uncountable! For example, $\\mathbb{R} = \\bigcup_{x \\in \\mathbb{R}} \\{x\\}$ is a union of singletons (each countable), but the total union is uncountable because the index set $\\mathbb{R}$ is uncountable.`,
+      `Remember that subsets of infinite sets can be finite or countably infinite.`
+    ],
+    proof: {
+      idea: 'For subsets, filter the original enumeration. For countable unions, arrange elements into an infinite array and list them along finite diagonals.',
+      why: 'Each diagonal contains only finitely many elements, so numbering them systematically yields an enumeration of the whole union.',
+      rungs: [
+        { why: 'Let $S$ be countable and $E \\subseteq S$. If $E$ is finite, it is countable. If $E$ is infinite, let $S = \\{s_1, s_2, \\ldots\\}$. Define $n_1$ as the smallest index with $s_{n_1} \\in E$.', m: 'n_1 = \\min\\{k \\in \\mathbb{N} : s_k \\in E\\}' },
+        { why: 'Inductively define $n_k = \\min\\{j > n_{k-1} : s_j \\in E\\}$. Then $k \\mapsto s_{n_k}$ is a bijection from $\\mathbb{N}$ to $E$, proving $E$ is countably infinite.', m: 'f(k) = s_{n_k} \\implies E \\text{ is countable}' },
+        { why: 'For the union $A = \\bigcup_{n=1}^\\infty A_n$, list each set: $A_n = \\{a_{n1}, a_{n2}, a_{n3}, \\ldots\\}$. Arrange into a 2D array.', m: 'A_1 = \\{a_{11}, a_{12}, \\dots\\}, \\, A_2 = \\{a_{21}, a_{22}, \\dots\\}, \\dots' },
+        { why: 'Traverse the diagonals $D_k = \\{a_{ij} : i + j = k\\}$ for $k = 2, 3, 4, \\ldots$. Each diagonal $D_k$ has at most $k - 1$ elements (finite).', m: 'a_{11},\\, a_{21},\\, a_{12},\\, a_{31},\\, a_{22},\\, a_{13},\\, \\ldots' },
+        { why: 'Skipping duplicate elements defines a surjection from $\\mathbb{N}$ onto $A$, proving $A$ is countable.', m: 'g: \\mathbb{N} \\twoheadrightarrow A \\implies A \\text{ is countable}' }
+      ],
+      ends: 'Subsets of countable sets and countable unions of countable sets are countable.'
+    },
+    cards: [
+      { q: 'Is every subset of a countable set countable?', a: 'Yes, every subset of a countable set is either finite or countably infinite (hence countable).', kind: 'state' },
+      { q: 'If $A_1, A_2, A_3, \\dots$ are each countable sets, is $\\bigcup_{n=1}^\\infty A_n$ countable?', a: 'Yes, a countable union of countable sets is always countable.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.1.3.4', bartle: '1.3.12', sec: '1.3', kind: 'theorem', tier: 'core',
+    title: 'Cantor’s Theorem on Power Sets',
+    oneLine: 'A set is strictly smaller than the set of its subsets: there is no surjection from A to P(A).',
+    statement: `For any set $A$, there is <b>no surjective function</b> from $A$ onto its power set $\\mathcal{P}(A)$.
+      <p>Consequently, the cardinality of $\\mathcal{P}(A)$ is strictly greater than the cardinality of $A$:
+      $$|A| < |\\mathcal{P}(A)|$$</p>`,
+    intuition: `<p>This is Cantor's mind-bending discovery that <b>infinity has different sizes, and there is no largest infinity!</b></p>
+      <p>• Start with $\\mathbb{N}$ (countable infinity).</p>
+      <p>• Its power set $\\mathcal{P}(\\mathbb{N})$ has strictly bigger infinity ($2^{\\aleph_0}$, the continuum of reals!).</p>
+      <p>• The power set of that, $\\mathcal{P}(\\mathcal{P}(\\mathbb{N}))$, is even bigger!</p>
+      <p>The proof is the Barber Paradox: define $D = \\{x \\in A : x \\notin f(x)\\}$. Could any element $d \\in A$ have $f(d) = D$? If $d \\in D$, then by definition $d \\notin f(d) = D$. If $d \\notin D$, then $d \\in f(d) = D$. Contradiction!</p>`,
+    needs: ['c.1.1.1'],
+    traps: [
+      `The diagonal set $D = \\{x \\in A : x \\notin f(x)\\}$ is a subset of $A$, so $D \\in \\mathcal{P}(A)$. It is completely legitimate!`,
+      `Cantor’s Theorem applies to ANY set, whether finite or infinite. For a finite set of $n$ elements, $|\\mathcal{P}(A)| = 2^n > n$.`
+    ],
+    proof: {
+      idea: 'Assume for contradiction that a surjection $f: A \\to \\mathcal{P}(A)$ exists, and construct the diagonal set $D = \\{x \\in A : x \\notin f(x)\\}$.',
+      why: 'If $f(d) = D$, asking whether $d \\in D$ leads to $d \\in D \\iff d \\notin D$, an impossible contradiction.',
+      rungs: [
+        { why: 'Suppose for contradiction that $f: A \\to \\mathcal{P}(A)$ is surjective.', m: 'f: A \\twoheadrightarrow \\mathcal{P}(A)' },
+        { why: 'Define the diagonal subset $D = \\{x \\in A : x \\notin f(x)\\}$. Since $D \\subseteq A$, $D \\in \\mathcal{P}(A)$.', m: 'D := \\{x \\in A : x \\notin f(x)\\} \\in \\mathcal{P}(A)' },
+        { why: 'Since $f$ is surjective, there must exist some element $d \\in A$ such that $f(d) = D$.', m: '\\exists d \\in A : f(d) = D' },
+        { why: 'Now ask: does $d$ belong to $D$? By definition of $D$, $d \\in D \\iff d \\notin f(d)$.', m: 'd \\in D \\iff d \\notin f(d)' },
+        { why: 'Substitute $f(d) = D$ into the equivalence: $d \\in D \\iff d \\notin D$, an outright logical contradiction.', m: 'd \\in D \\iff d \\notin D \\implies\\Leftarrow' }
+      ],
+      ends: 'Therefore, no surjection from $A$ onto $\\mathcal{P}(A)$ can exist, proving $|A| < |\\mathcal{P}(A)|$.'
+    },
+    cards: [
+      { q: 'State Cantor’s Theorem on power sets.', a: 'For any set $A$, there is no surjection from $A$ onto $\\mathcal{P}(A)$, meaning $|A| < |\\mathcal{P}(A)|$.', kind: 'state' },
+      { q: 'How is the diagonal set $D$ defined in the proof of Cantor’s Theorem?', a: '$D = \\{x \\in A : x \\notin f(x)\\}$.', kind: 'recall' }
     ]
   }
 );
@@ -2520,6 +2871,111 @@ CONCEPTS.push(
     cards: [
       { q: 'What is the geometric meaning of $V_\\varepsilon(c)$?', a: 'The open symmetric interval $(c - \\varepsilon, c + \\varepsilon)$ centered at $c$ with radius $\\varepsilon$.', kind: 'state' },
       { q: 'If $x \\in V_{\\varepsilon/2}(c)$ and $y \\in V_{\\varepsilon/2}(c)$, what is the maximum possible distance between $x$ and $y$?', a: 'Strictly less than $\\varepsilon$, because $|x - y| \\le |x - c| + |c - y| < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.2.1.4', bartle: '2.1.4', sec: '2.1', kind: 'theorem', tier: 'core',
+    title: 'Irrationality of √2',
+    oneLine: 'There is no rational number whose square is 2 — the rationals have holes.',
+    statement: `There does not exist a rational number $r \\in \\mathbb{Q}$ such that:
+      $$r^2 = 2$$
+      Consequently, $\\sqrt{2}$ is an <b>irrational number</b> ($\\,\\sqrt{2} \\notin \\mathbb{Q}$).`,
+    intuition: `<p>This is one of the oldest and most celebrated proofs in mathematics, discovered by the ancient Pythagoreans. In Class 10, we learned that $\\sqrt{2}$ is irrational, but in Real Analysis, this theorem plays a foundational role: it shows that the rational field $\\mathbb{Q}$ has serious gaps!</p>
+      <p>If you construct a right triangle with legs of length $1$, the hypotenuse has length $\\sqrt{2}$. Even though this length physically exists in Euclidean geometry, it cannot be measured by any ratio of integers $p/q$.</p>`,
+    needs: ['c.2.1.1', 's.contradiction'],
+    traps: [
+      `Assuming every real number is rational. The set $\\mathbb{R} \\setminus \\mathbb{Q}$ of irrationals is not only non-empty, but actually uncountable!`,
+      `Forgetting the coprimality condition $\\gcd(p, q) = 1$: the entire contradiction rests on the fact that $p/q$ can be written in lowest terms, yet both $p$ and $q$ are forced to be even.`
+    ],
+    proof: {
+      idea: `Assume $r = p/q$ in lowest terms satisfies $r^2 = 2$. Deduce that both $p$ and $q$ must be even, contradicting coprimality.`,
+      why: `The square of an odd integer is always odd, so if $p^2$ is even, $p$ itself must be even.`,
+      rungs: [
+        { why: 'Suppose for contradiction that there exists a rational number $r = p/q$ with $r^2 = 2$. By cancelling common factors, choose positive integers $p, q \\in \\mathbb{N}$ with $\\gcd(p, q) = 1$.', m: '$$\\left(\\frac{p}{q}\\right)^2 = 2, \\quad \\gcd(p, q) = 1$$' },
+        { why: 'Square both sides and clear the denominator.', m: '$$p^2 = 2q^2$$' },
+        { why: 'Since $p^2 = 2q^2$, $p^2$ is an even integer. Because the square of an odd number $(2m+1)^2 = 4m^2 + 4m + 1 = 2(2m^2+2m)+1$ is always odd, $p$ itself must be even.', m: '$$p^2 \\text{ is even} \\implies p = 2k \\quad \\text{for some } k \\in \\mathbb{N}$$' },
+        { why: 'Substitute $p = 2k$ back into the equation $p^2 = 2q^2$.', m: '$$(2k)^2 = 4k^2 = 2q^2 \\implies q^2 = 2k^2$$' },
+        { why: 'By the same parity argument, $q^2$ is even, which implies $q$ must also be even.', m: '$$q^2 \\text{ is even} \\implies q \\text{ is even}$$' },
+        { why: 'Since both $p$ and $q$ are even, $2$ divides both $p$ and $q$, directly contradicting $\\gcd(p, q) = 1$.', m: '$$2 \\mid p \\ \\text{and} \\ 2 \\mid q \\implies \\gcd(p, q) \\ge 2 \\implies\\Leftarrow$$' }
+      ],
+      ends: 'Therefore, the assumption that $r \\in \\mathbb{Q}$ is false. There is no rational number whose square is 2.'
+    },
+    cards: [
+      { q: 'State Theorem 2.1.4 (Irrationality of $\\sqrt{2}$).', a: 'There does not exist a rational number $r \\in \\mathbb{Q}$ such that $r^2 = 2$.', kind: 'state' },
+      { q: 'Why must $p$ be even if $p^2$ is even?', a: 'Because the square of any odd integer $(2m+1)^2 = 2(2m^2+2m)+1$ is odd; only an even integer can have an even square.', kind: 'recall' },
+      { q: 'What fundamental contradiction concludes the proof of the irrationality of $\\sqrt{2}$?', a: 'Both $p$ and $q$ are shown to be divisible by 2, contradicting that $\\gcd(p, q) = 1$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.2.1.13', bartle: '2.1.13', sec: '2.1', kind: 'theorem', tier: 'core',
+    title: "Bernoulli's Inequality",
+    oneLine: 'Compounding at positive interest always beats simple interest: (1 + x)^n ≥ 1 + nx for x > -1.',
+    statement: `If $x \\in \\mathbb{R}$ with $x > -1$, then for all $n \\in \\mathbb{N}$:
+      $$(1 + x)^n \\ge 1 + nx$$
+      Equality holds if and only if $n = 1$ or $x = 0$.`,
+    intuition: `<p>In financial mathematics, if you invest 1 rupee at rate $x$, simple interest after $n$ years yields $1 + nx$, while compound interest yields $(1 + x)^n$. Bernoulli's Inequality states that compound interest is always greater than or equal to simple interest!</p>
+      <p>In Real Analysis, Bernoulli's Inequality is an indispensable weapon for calculating limits. Whenever you need to show that a power $c^n$ blows up to infinity or that $c^{1/n}$ approaches $1$, Bernoulli gives the simplest linear bound to tame the exponential growth.</p>`,
+    needs: ['c.2.1.7', 'c.1.2.1'],
+    traps: [
+      `Forgetting the essential condition $x > -1$. If $x = -2$ and $n = 2$, $(1 - 2)^2 = 1$, while $1 + 2(-2) = -3$, which holds, but for $n = 3$, $(1 - 2)^3 = -1 < 1 + 3(-2) = -5$ fails! The condition $1 + x > 0$ is needed so multiplying preserves the inequality.`,
+      `Thinking it only holds for $x > 0$. It holds for ALL $x > -1$, including negative fractions like $x = -0.5$.`
+    ],
+    proof: {
+      idea: `Use Mathematical Induction on $n$. Multiplying by $1 + x > 0$ preserves the inequality, and dropping the positive quadratic term $k x^2 \\ge 0$ completes the step.`,
+      why: `Because $x > -1$ guarantees $1 + x > 0$, enabling valid multiplication without reversing inequality signs.`,
+      rungs: [
+        { why: 'Base step ($n = 1$): Evaluate both sides for $n = 1$.', m: '$$(1 + x)^1 = 1 + x = 1 + 1 \\cdot x$$ holds with equality.' },
+        { why: 'Inductive hypothesis: Assume the inequality holds for some $k \\in \\mathbb{N}$.', m: '$$(1 + x)^k \\ge 1 + kx$$' },
+        { why: 'Multiply both sides by $(1 + x)$. Since $x > -1$, we have $1 + x > 0$, so the inequality direction is strictly preserved.', m: '$$(1 + x)^{k+1} = (1 + x)^k(1 + x) \\ge (1 + kx)(1 + x)$$' },
+        { why: 'Expand the algebraic product on the right-hand side.', m: '$$(1 + kx)(1 + x) = 1 + kx + x + kx^2 = 1 + (k + 1)x + kx^2$$' },
+        { why: 'Since $k \\ge 1$ and $x^2 \\ge 0$, the quadratic term $kx^2 \\ge 0$. Dropping it gives a smaller or equal quantity.', m: '$$kx^2 \\ge 0 \\implies 1 + (k + 1)x + kx^2 \\ge 1 + (k + 1)x$$' },
+        { why: 'Chain the inequalities together to conclude the inductive step.', m: '$$(1 + x)^{k+1} \\ge 1 + (k + 1)x$$' }
+      ],
+      ends: 'By the Principle of Mathematical Induction, $(1 + x)^n \\ge 1 + nx$ for all $n \\in \\mathbb{N}$ and all $x > -1$.'
+    },
+    cards: [
+      { q: "State Bernoulli's Inequality.", a: 'If $x > -1$, then $(1 + x)^n \\ge 1 + nx$ for all $n \\in \\mathbb{N}$.', kind: 'state' },
+      { q: "Why is the condition $x > -1$ required in Bernoulli's Inequality?", a: 'To ensure $1 + x > 0$, so that multiplying the inductive inequality by $(1 + x)$ preserves the inequality sign.', kind: 'recall' },
+      { q: 'What term is dropped to finish the inductive step $(1 + kx)(1 + x) \\ge 1 + (k+1)x$?', a: 'The non-negative term $kx^2 \\ge 0$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.2.4.7', bartle: '2.4.7', sec: '2.4', kind: 'theorem', tier: 'core',
+    title: 'Existence of √2 in ℝ',
+    oneLine: 'Completeness fills the hole: there exists a unique positive real number x such that x² = 2.',
+    statement: `There exists a positive real number $x \\in \\mathbb{R}$ such that:
+      $$x^2 = 2$$
+      This unique positive number is denoted by $\\sqrt{2}$.`,
+    intuition: `<p>Earlier we proved Theorem 2.1.4: there is NO rational number whose square is $2$. If we lived only in $\\mathbb{Q}$, $\\sqrt{2}$ would be a ghost — a missing hole on the line.</p>
+      <p>This theorem demonstrates the true triumph of the <b>Completeness Property of $\\mathbb{R}$</b>. By collecting all positive numbers whose squares are less than $2$ into a set $S$, completeness guarantees that $S$ has a supremum $x = \\sup S$. We then prove that $x^2$ cannot be less than $2$ (or we could step slightly to the right) and cannot be greater than $2$ (or we could step slightly to the left). Thus, $x^2$ is exactly $2$!</p>`,
+    needs: ['c.2.3.6', 'c.2.4.3', 'c.2.1.4'],
+    traps: [
+      `Assuming this can be proved from Field Axioms alone. It CANNOT! $\\mathbb{Q}$ satisfies all Field and Order axioms, but $\\sqrt{2} \\notin \\mathbb{Q}$. Completeness is essential.`,
+      `Thinking the square root algorithm in school arithmetic is a proof. Calculating digits like $1.414...$ merely defines a sequence of rational approximations; the Completeness Property is what proves the limit actually exists as a real number!`
+    ],
+    proof: {
+      idea: `Let $S = \\{s \\in \\mathbb{R} : s > 0, s^2 < 2\\}$. Since $S$ is non-empty and bounded above by $2$, $x := \\sup S$ exists. Rule out $x^2 < 2$ and $x^2 > 2$ using the Archimedean Property.`,
+      why: `Trichotomy ensures exactly one of $x^2 < 2$, $x^2 > 2$, or $x^2 = 2$ must hold. Contradicting the first two establishes $x^2 = 2$.`,
+      rungs: [
+        { why: 'Define $S := \\{s \\in \\mathbb{R} : s > 0, s^2 < 2\\}$. Check that $S$ is non-empty and bounded above.', m: '$$1 \\in S \\implies S \\ne \\emptyset; \\quad s > 2 \\implies s^2 > 4 > 2 \\implies s \\notin S \\implies 2 \\text{ is an upper bound}$$' },
+        { why: 'By the Completeness Property of $\\mathbb{R}$, $S$ has a supremum $x \\in \\mathbb{R}$. Note $x \\ge 1 > 0$.', m: '$$x := \\sup S \\in \\mathbb{R}, \\quad x \\ge 1$$' },
+        { why: 'Suppose for contradiction that $x^2 < 2$. Then $2 - x^2 > 0$. For any $n \\in \\mathbb{N}$, estimate $(x + 1/n)^2$.', m: '$$\\left(x + \\frac{1}{n}\\right)^2 = x^2 + \\frac{2x}{n} + \\frac{1}{n^2} \\le x^2 + \\frac{2x + 1}{n}$$' },
+        { why: 'By the Archimedean Property, choose $n \\in \\mathbb{N}$ large enough so that $\\frac{1}{n} < \\frac{2 - x^2}{2x + 1}$.', m: '$$\\frac{2x + 1}{n} < 2 - x^2 \\implies \\left(x + \\frac{1}{n}\\right)^2 < x^2 + (2 - x^2) = 2$$' },
+        { why: 'This means $x + 1/n \\in S$. But $x + 1/n > x = \\sup S$, contradicting that $x$ is an upper bound for $S$. Thus $x^2 < 2$ is false.', m: '$$x + \\frac{1}{n} \\in S \\text{ and } x + \\frac{1}{n} > x = \\sup S \\implies\\Leftarrow$$' },
+        { why: 'Next suppose for contradiction that $x^2 > 2$. Then $x^2 - 2 > 0$. Estimate $(x - 1/m)^2$.', m: '$$\\left(x - \\frac{1}{m}\\right)^2 = x^2 - \\frac{2x}{m} + \\frac{1}{m^2} > x^2 - \\frac{2x}{m}$$' },
+        { why: 'By the Archimedean Property, choose $m \\in \\mathbb{N}$ such that $\\frac{1}{m} < \\frac{x^2 - 2}{2x}$.', m: '$$\\frac{2x}{m} < x^2 - 2 \\implies \\left(x - \\frac{1}{m}\\right)^2 > x^2 - (x^2 - 2) = 2$$' },
+        { why: 'If $s \\in S$, then $s^2 < 2 < (x - 1/m)^2$, so $s < x - 1/m$. Thus $x - 1/m$ is an upper bound for $S$, contradicting that $x$ is the LEAST upper bound.', m: '$$x - \\frac{1}{m} < x \\text{ is an upper bound of } S \\implies\\Leftarrow$$' },
+        { why: 'By the Trichotomy Property, since $x^2 < 2$ and $x^2 > 2$ are both impossible, we must have $x^2 = 2$.', m: '$$x^2 = 2$$' }
+      ],
+      ends: 'There exists a unique positive real number $x = \\sup S$ such that $x^2 = 2$. This establishes the rigorous existence of $\\sqrt{2} \\in \\mathbb{R}$.'
+    },
+    cards: [
+      { q: 'State Theorem 2.4.7 (Existence of $\\sqrt{2}$ in $\\mathbb{R}$).', a: 'There exists a positive real number $x \\in \\mathbb{R}$ such that $x^2 = 2$.', kind: 'state' },
+      { q: 'How is $\\sqrt{2}$ constructed in the proof of Theorem 2.4.7?', a: 'As the supremum of the set $S = \\{s \\in \\mathbb{R} : s > 0, s^2 < 2\\}$ via the Completeness Property.', kind: 'recall' },
+      { q: 'Why does the proof require the Archimedean Property?', a: 'To choose an integer $n$ large enough that $(x + 1/n)^2 < 2$ (if $x^2 < 2$) or $(x - 1/m)^2 > 2$ (if $x^2 > 2$).', kind: 'apply' }
     ]
   }
 );
@@ -4344,13 +4800,86 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.6.1.3', bartle: '6.1.3', sec: '6.1', kind: 'theorem', tier: 'core',
+    title: 'Algebraic Properties of Derivatives: Sum, Product, and Quotient Rules',
+    oneLine: 'Derivatives are linear, obey the product rule (fg)\' = f\'g + fg\', and quotient rule (f/g)\' = (f\'g - fg\')/g^2.',
+    statement: `Let $I \\subseteq \\mathbb{R}$ be an interval, $c \\in I$, and let $f, g: I \\to \\mathbb{R}$ be differentiable at $c$. Then:
+      <p>(a) If $\\alpha \\in \\mathbb{R}$, the function $\\alpha f$ is differentiable at $c$, and $(\\alpha f)'(c) = \\alpha f'(c)$.</p>
+      <p>(b) The function $f + g$ is differentiable at $c$, and $(f + g)'(c) = f'(c) + g'(c)$.</p>
+      <p>(c) <b>Product Rule:</b> The function $fg$ is differentiable at $c$, and:
+      $$(fg)'(c) = f'(c)g(c) + f(c)g'(c)$$</p>
+      <p>(d) <b>Quotient Rule:</b> If $g(c) \\ne 0$, the function $f/g$ is differentiable at $c$, and:
+      $$\\left(\\frac{f}{g}\\right)'(c) = \\frac{f'(c)g(c) - f(c)g'(c)}{(g(c))^2}$$</p>`,
+    intuition: `<p>In Class 12, we memorized the UV rule $(uv)' = u'v + uv'$ and the quotient rule. In Real Analysis, we see the clever trick behind them: <b>add and subtract an intermediate cross-term</b>!</p>
+      <p>For $f(x)g(x) - f(c)g(c)$, inserting $-f(c)g(x) + f(c)g(x)$ splits the difference into two terms: one isolating the change in $f$, and the other isolating the change in $g$. Since $g$ is continuous at $c$ (Theorem 6.1.2), $g(x) \\to g(c)$, giving the exact product formula cleanly!</p>`,
+    needs: ['c.6.1.1', 'c.6.1.2', 'c.4.2.4'],
+    traps: [
+      `$(fg)'(c) \\ne f'(c)g'(c)$! Derivatives do NOT distribute across products.`,
+      `For the Quotient Rule, $g(c)$ must be non-zero; since $g$ is continuous at $c$, $g(x) \\ne 0$ in a small neighborhood, making $f/g$ well-defined.`
+    ],
+    proof: {
+      idea: 'Insert the cross-term $f(c)g(x)$ into the difference quotient of $fg$, and use the continuity of $g$ at $c$.',
+      why: 'Adding and subtracting the cross-term isolates $(f(x)-f(c))/(x-c)$ and $(g(x)-g(c))/(x-c)$ as separate factors.',
+      rungs: [
+        { why: 'Write the difference quotient for $p = fg$ at $c$.', m: '\\frac{p(x) - p(c)}{x - c} = \\frac{f(x)g(x) - f(c)g(c)}{x - c}' },
+        { why: 'Add and subtract $f(c)g(x)$ in the numerator.', m: '\\frac{f(x)g(x) - f(c)g(x) + f(c)g(x) - f(c)g(c)}{x - c} = \\frac{f(x) - f(c)}{x - c} g(x) + f(c) \\frac{g(x) - g(c)}{x - c}' },
+        { why: 'Since $g$ is differentiable at $c$, Theorem 6.1.2 gives $\\lim_{x\\to c} g(x) = g(c)$.', m: '\\lim_{x\\to c} g(x) = g(c)' },
+        { why: 'Apply the limit laws for sums and products.', m: 'p\'(c) = \\lim_{x\\to c}\\left(\\frac{f(x) - f(c)}{x - c}\\right) \\lim_{x\\to c} g(x) + f(c) \\lim_{x\\to c}\\left(\\frac{g(x) - g(c)}{x - c}\\right) = f\'(c)g(c) + f(c)g\'(c)' },
+        { why: 'For $q = f/g$, write $(f(x)/g(x) - f(c)/g(c))/(x - c) = \\frac{1}{g(x)g(c)} [\\frac{f(x)-f(c)}{x-c}g(c) - f(c)\\frac{g(x)-g(c)}{x-c}]$.', m: 'q\'(c) = \\frac{f\'(c)g(c) - f(c)g\'(c)}{(g(c))^2}' }
+      ],
+      ends: 'Both the Product and Quotient Rules are established rigorously.'
+    },
+    cards: [
+      { q: 'State the Product Rule for derivatives.', a: '$(fg)\'(c) = f\'(c)g(c) + f(c)g\'(c)$.', kind: 'state' },
+      { q: 'State the Quotient Rule for derivatives.', a: '$\\left(\\dfrac{f}{g}\\right)\'(c) = \\dfrac{f\'(c)g(c) - f(c)g\'(c)}{(g(c))^2}$, provided $g(c) \\ne 0$.', kind: 'state' },
+      { q: 'What property of $g$ ensures $\\lim_{x\\to c} g(x) = g(c)$ in the proof of the Product Rule?', a: 'Differentiability of $g$ at $c$ implies continuity of $g$ at $c$ (Theorem 6.1.2).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.1.4', bartle: '6.1.4', sec: '6.1', kind: 'theorem', tier: 'core',
+    title: 'Derivative of Monomials and Polynomials',
+    oneLine: 'The derivative of x^n is n x^{n-1} for all integers n, proven by induction and the quotient rule.',
+    statement: `Let $n \\in \\mathbb{Z}$ and let $f_n(x) = x^n$ (with domain $\\mathbb{R}$ if $n \\ge 0$, and $\\mathbb{R} \\setminus \\{0\\}$ if $n < 0$).
+      <p>(a) For all $n \\in \\mathbb{N}$, $f_n'(x) = n x^{n-1}$ for all $x \\in \\mathbb{R}$.</p>
+      <p>(b) For $n = 0$, $f_0(x) = 1$ is constant and $f_0'(x) = 0$.</p>
+      <p>(c) For negative integers $m = -n$ ($n \\in \\mathbb{N}$), $f_m'(x) = m x^{m-1}$ for all $x \\ne 0$.</p>
+      <p>(d) Any polynomial $P(x) = \\sum_{k=0}^n a_k x^k$ is differentiable on $\\mathbb{R}$ with $P'(x) = \\sum_{k=1}^n k a_k x^{k-1}$.</p>`,
+    intuition: `<p>The power rule $\\frac{d}{dx} x^n = n x^{n-1}$ is the first calculus formula we ever learned. In Real Analysis, we establish it by mathematical induction:</p>
+      <p>• Base case: $x^1$ has derivative $1 = 1 \\cdot x^0$.</p>
+      <p>• Step: $x^{k+1} = x \\cdot x^k$. By the Product Rule, $(x^{k+1})' = 1 \\cdot x^k + x \\cdot (k x^{k-1}) = (k+1) x^k$. Dominoes fall for all positive integers!</p>
+      <p>• Negative integers follow instantly by writing $x^{-n} = 1/x^n$ and applying the Quotient Rule.</p>`,
+    needs: ['c.6.1.3', 'c.1.2.1'],
+    traps: [
+      `For negative exponents like $x^{-1}$, the derivative $-x^{-2}$ is NOT defined at $x = 0$!`,
+      `The power rule for irrational powers $x^\\alpha$ requires the exponential and logarithm functions ($x^\\alpha = e^{\\alpha \\ln x}$) and is proved later.`
+    ],
+    proof: {
+      idea: 'Base step $n=1$ directly from difference quotient; apply induction using the Product Rule, then extend to negative integers via the Quotient Rule.',
+      why: 'Every positive power factors as $x \\cdot x^k$, matching the inductive step of the Product Rule.',
+      rungs: [
+        { why: 'Verify base step $n=1$: $(x)\' = \\lim_{h\\to 0} \\frac{(x+h) - x}{h} = 1 = 1 \\cdot x^0$.', m: '\\frac{d}{dx}(x) = 1 \\cdot x^0' },
+        { why: 'Inductive hypothesis: assume $(x^k)\' = k x^{k-1}$ for $k \\in \\mathbb{N}$.', m: '(x^k)\' = k x^{k-1}' },
+        { why: 'Write $x^{k+1} = x \\cdot x^k$ and apply the Product Rule (6.1.3).', m: '(x^{k+1})\' = (x)\' x^k + x (x^k)\' = 1 \\cdot x^k + x \\cdot (k x^{k-1}) = (k+1) x^k' },
+        { why: 'By the Principle of Induction (1.2.1), $(x^n)\' = n x^{n-1}$ for all $n \\in \\mathbb{N}$.', m: '\\forall n \\in \\mathbb{N}, \\quad (x^n)\' = n x^{n-1}' },
+        { why: 'For $m = -n$ with $n \\in \\mathbb{N}$ and $x \\ne 0$, apply Quotient Rule to $1/x^n$.', m: '(x^{-n})\' = \\frac{0 \\cdot x^n - 1 \\cdot (n x^{n-1})}{(x^n)^2} = -n x^{-n-1} = m x^{m-1}' }
+      ],
+      ends: 'The power rule holds for all integers $n \\in \\mathbb{Z}$. Linearity extends it to all polynomials.'
+    },
+    cards: [
+      { q: 'State the power rule for the derivative of $x^n$ where $n \\in \\mathbb{Z}$.', a: '$\\dfrac{d}{dx} x^n = n x^{n-1}$ (for $x \\ne 0$ if $n \\le 0$).', kind: 'state' },
+      { q: 'How is $(x^{k+1})\' = (k+1)x^k$ derived in the inductive step of the power rule?', a: 'Write $x^{k+1} = x \\cdot x^k$ and apply the Product Rule: $(x)\' x^k + x (x^k)\' = x^k + kx^k = (k+1)x^k$.', kind: 'recall' }
+    ]
+  },
+
+  {
     id: 'c.6.1.5', bartle: '6.1.5', sec: '6.1', kind: 'theorem', tier: 'core',
     title: 'Carathéodory’s Theorem and the Chain Rule',
     oneLine: 'A clean formulation of derivatives that makes proving the Chain Rule effortless by avoiding division by zero.',
     statement: `Let $f: I \\to \\mathbb{R}$ and $c \\in I$. Then $f$ is differentiable at $c$ if and only if there exists a function $\\varphi: I \\to \\mathbb{R}$ that is <b>continuous at $c$</b> and satisfies:
       $$f(x) - f(c) = \\varphi(x)(x - c) \\quad \\text{for all } x \\in I$$
       In this case, $\\varphi(c) = f'(c)$.
-      <p><b>The Chain Rule:</b> If $g$ is differentiable at $c$ and $f$ is differentiable at $g(c)$, then $(f \\circ g)'(c) = f'(g(c)) \\cdot g'(c)$.</p>`,
+      <p><b>The Chain Rule:</b> If $g: I \\to \\mathbb{R}$ is differentiable at $c$ and $f: J \\to \\mathbb{R}$ is differentiable at $g(c)$ (where $g(I) \\subseteq J$), then $(f \\circ g)'(c) = f'(g(c)) \\cdot g'(c)$.</p>`,
     intuition: `<p>Why did Carathéodory invent this? In high school, when trying to prove the Chain Rule $\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}$, you run into a huge headache: what if $u(x) - u(c) = 0$ for points nearby? You would be dividing by zero!</p>
       <p>Carathéodory cleans this up: instead of dividing by $(x - c)$, he writes $f(x) - f(c) = \\varphi(x)(x - c)$ with a continuous slope function $\\varphi$. No division by zero ever occurs! The Chain Rule then follows in two lines of algebra.</p>`,
     needs: ['c.6.1.1', 'c.5.1.1'],
@@ -4373,6 +4902,39 @@ CONCEPTS.push(
     cards: [
       { q: 'State Carathéodory’s characterisation of differentiability.', a: '$f$ is differentiable at $c$ iff $\\exists$ continuous $\\varphi$ at $c$ such that $f(x) - f(c) = \\varphi(x)(x - c)$, with $\\varphi(c) = f\'(c)$.', kind: 'state' },
       { q: 'What trap in the high school proof of the Chain Rule does Carathéodory’s Theorem fix?', a: 'It avoids dividing by $g(x) - g(c)$, which could be zero even when $x \\ne c$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.1.7', bartle: '6.1.8', sec: '6.1', kind: 'theorem', tier: 'core',
+    title: 'Derivative of Inverse Functions',
+    oneLine: 'The derivative of the inverse is the reciprocal of the derivative: (f^{-1})\'(y) = 1 / f\'(x).',
+    statement: `Let $I$ be an interval and let $f: I \\to \\mathbb{R}$ be strictly monotone and continuous on $I$.
+      <p>Let $J = f(I)$ and let $g: J \\to \\mathbb{R}$ be the strictly monotone, continuous inverse function of $f$.</p>
+      <p>If $f$ is differentiable at $c \\in I$ and $f'(c) \\ne 0$, then $g$ is differentiable at $d = f(c)$ and:
+      $$g'(d) = \\frac{1}{f'(c)} = \\frac{1}{f'(g(d))}$$</p>`,
+    intuition: `<p>Geometrically, the graph of the inverse function $g = f^{-1}$ is obtained by reflecting the graph of $f$ across the diagonal line $y = x$.</p>
+      <p>A tangent line with slope $m = \\Delta y / \\Delta x$ reflects into a tangent line with slope $1/m = \\Delta x / \\Delta y$! The slope inverts! As long as the tangent line is not horizontal ($f'(c) \\ne 0$), the reflected tangent line is not vertical, giving a finite derivative $g'(d) = 1/f'(c)$.</p>`,
+    needs: ['c.6.1.5', 'c.5.6.5'],
+    traps: [
+      `The condition $f'(c) \\ne 0$ is strictly required! If $f'(c) = 0$, the inverse function has a vertical tangent line at $d = f(c)$ and is NOT differentiable (e.g. $f(x) = x^3$ has $f'(0) = 0$, and its inverse $g(y) = y^{1/3}$ has infinite slope at $y = 0$).`,
+      `Remember that the derivative on the right side is evaluated at $c = g(d)$, NOT at $d$!`
+    ],
+    proof: {
+      idea: 'Apply Carathéodory’s Theorem to $f$ at $c$, invert the relation, and deduce that the inverted slope function is continuous at $d$.',
+      why: 'Carathéodory avoids assuming differentiability of $g$ in advance and provides the derivative directly from continuity.',
+      rungs: [
+        { why: 'By Carathéodory (6.1.5), $\\exists \\varphi$ continuous at $c$ with $f(x) - f(c) = \\varphi(x)(x - c)$ and $\\varphi(c) = f\'(c) \\ne 0$.', m: 'f(x) - f(c) = \\varphi(x)(x - c), \\quad \\varphi(c) = f\'(c) \\ne 0' },
+        { why: 'Since $\\varphi(c) \\ne 0$ and $\\varphi$ is continuous at $c$, $\\varphi(x) \\ne 0$ on a neighborhood $V$ of $c$.', m: '\\exists V = (c - \\delta, c + \\delta) : \\varphi(x) \\ne 0 \\quad \\forall x \\in V' },
+        { why: 'For $y \\in f(V)$, let $x = g(y)$ and $d = f(c)$. Substitute into Carathéodory\'s relation.', m: 'y - d = f(g(y)) - f(c) = \\varphi(g(y)) [g(y) - g(d)]' },
+        { why: 'Divide by $\\varphi(g(y))$: $g(y) - g(d) = \\frac{1}{\\varphi(g(y))} (y - d)$.', m: 'g(y) - g(d) = \\psi(y)(y - d) \\quad \\text{where } \\psi(y) = \\frac{1}{\\varphi(g(y))}' },
+        { why: 'By Theorem 5.6.5, $g$ is continuous at $d$, so $\\lim_{y\\to d} g(y) = c$. Therefore $\\psi$ is continuous at $d$ with $\\psi(d) = 1/\\varphi(c) = 1/f\'(c)$.', m: 'g\'(d) = \\psi(d) = \\frac{1}{f\'(c)}' }
+      ],
+      ends: 'By Carathéodory’s Theorem, $g$ is differentiable at $d$ with derivative $1/f\'(c)$.'
+    },
+    cards: [
+      { q: 'State the formula for the derivative of an inverse function $g = f^{-1}$ at $d = f(c)$.', a: '$g\'(d) = \\dfrac{1}{f\'(c)} = \\dfrac{1}{f\'(g(d))}$, provided $f\'(c) \\ne 0$.', kind: 'state' },
+      { q: 'Why is $g(y) = y^{1/3}$ not differentiable at $y = 0$?', a: 'Because it is the inverse of $f(x) = x^3$, which has $f\'(0) = 0$; reciprocal of zero is undefined (vertical tangent).', kind: 'apply' }
     ]
   },
 
@@ -4406,6 +4968,38 @@ CONCEPTS.push(
     cards: [
       { q: 'State the Interior Extremum Theorem (Fermat).', a: 'If $f$ has a relative extremum at an interior point $c$ and $f\'(c)$ exists, then $f\'(c) = 0$.', kind: 'state' },
       { q: 'Does $f\'(c) = 0$ imply $c$ is a relative maximum or minimum?', a: 'No. For $f(x) = x^3$, $f\'(0) = 0$, but $x = 0$ is not a relative extremum.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.2', bartle: '6.2.2', sec: '6.2', kind: 'corollary', tier: 'core',
+    title: 'Critical Points and Location of Extrema',
+    oneLine: 'Interior extrema can only occur where the derivative vanishes or fails to exist.',
+    statement: `Let $f: I \\to \\mathbb{R}$ be continuous on an interval $I$, and suppose $f$ has a relative extremum at an interior point $c \\in I$.
+      <p>Then either:
+      <br>(1) $f'(c) = 0$, or
+      <br>(2) $f'(c)$ does not exist.</p>
+      <p>Points satisfying (1) or (2) are called <b>critical points</b> of $f$ in $I$.</p>`,
+    intuition: `<p>This is the theoretical justification for the optimization algorithm we all use: to find peaks and valleys of $f$, you never need to check all infinitely many points!</p>
+      <p>You only need to hunt for points where $f'(c) = 0$ (smooth hilltops) or points where the derivative blows up or fails (sharp spikes like $|x|$ at $0$). Every single relative extremum is trapped in this tiny list of candidates.</p>`,
+    needs: ['c.6.2.1'],
+    traps: [
+      `A point where $f'(c)$ does not exist can definitely be a maximum or minimum! For $f(x) = |x|$ at $0$, the minimum is at $0$ even though $f'(0)$ does not exist.`,
+      `Endpoints of closed intervals must be checked separately; Fermat’s condition applies only to interior points.`
+    ],
+    proof: {
+      idea: 'Direct consequence of Fermat’s Interior Extremum Theorem (6.2.1): if the derivative exists, it must vanish.',
+      why: 'By trichotomy, either $f\'(c)$ does not exist, or it exists and Fermat\'s theorem forces it to be zero.',
+      rungs: [
+        { why: 'Let $c$ be an interior point where $f$ attains a relative extremum.', m: 'c \\in \\operatorname{int}(I) \\quad \\text{is a relative extremum}' },
+        { why: 'Case 1: If $f$ is not differentiable at $c$, then $c$ satisfies condition (2).', m: 'f\'(c) \\text{ does not exist}' },
+        { why: 'Case 2: If $f$ is differentiable at $c$, apply Fermat’s Interior Extremum Theorem (6.2.1).', m: 'f\'(c) = 0' }
+      ],
+      ends: 'Therefore, every interior extremum is either a zero of the derivative or a point where the derivative fails to exist.'
+    },
+    cards: [
+      { q: 'What is a critical point of a function $f$ on an open interval?', a: 'A point $c$ where $f\'(c) = 0$ or where $f\'(c)$ does not exist.', kind: 'state' },
+      { q: 'Can an interior extremum occur at a point where $f$ is not differentiable?', a: 'Yes. $f(x) = |x|$ has an interior minimum at $x = 0$ where $f\'(0)$ does not exist.', kind: 'apply' }
     ]
   },
 
@@ -4476,6 +5070,135 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.6.2.5', bartle: '6.2.5', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'Zero Derivative Characterization and Constant Difference',
+    oneLine: 'f is constant if and only if f\' = 0; two functions differ by a constant if and only if they share identical derivatives.',
+    statement: `Let $f$ be continuous on $[a, b]$ and differentiable on $(a, b)$.
+      <p>(a) If $f'(x) = 0$ for all $x \\in (a, b)$, then $f$ is <b>constant</b> on $[a, b]$.</p>
+      <p>(b) (Corollary 6.2.6) If $f'(x) = g'(x)$ for all $x \\in (a, b)$, then there exists a constant $C$ such that:
+      $$f(x) = g(x) + C \\quad \\text{for all } x \\in [a, b]$$</p>`,
+    intuition: `<p>In Class 12, we learned that $\\frac{d}{dx}(\\text{constant}) = 0$. But how do you prove the reverse: that ZERO slope forces the function to be flat everywhere?</p>
+      <p>Lagrange’s MVT provides the proof! Pick ANY two points $x_1 < x_2$. The change is $f(x_2) - f(x_1) = f'(c)(x_2 - x_1)$. Since $f'(c) = 0$, the change is identically $0$! The function cannot budge an inch.</p>`,
+    needs: ['c.6.2.4'],
+    traps: [
+      `The interval MUST be connected! If the domain is disjoint like $(0, 1) \\cup (2, 3)$, $f'$ can be $0$ everywhere while $f$ takes different values on the two pieces ($f(x) = 1$ on the first, $f(x) = 5$ on the second).`,
+      `Remember $f$ must be continuous at the endpoints to conclude constancy on the closed interval $[a, b]$.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange’s MVT to $f$ on $[a, x]$ for every $x \\in (a, b]$.',
+      why: 'Because $f\'(c) = 0$ at all points, $f(x) - f(a) = f\'(c)(x - a) = 0$, forcing $f(x) = f(a)$.',
+      rungs: [
+        { why: 'Let $x \\in (a, b]$. Apply MVT (6.2.4) to $f$ on the subinterval $[a, x]$.', m: '\\exists c \\in (a, x) : f(x) - f(a) = f\'(c)(x - a)' },
+        { why: 'By hypothesis, $f\'(c) = 0$ since $c \\in (a, b)$.', m: 'f(x) - f(a) = 0 \\cdot (x - a) = 0' },
+        { why: 'Conclude $f(x) = f(a)$ for all $x \\in [a, b]$.', m: 'f(x) = f(a) = \\text{constant} \\quad \\forall x \\in [a, b]' },
+        { why: 'For (b), define $h(x) = f(x) - g(x)$. Then $h\'(x) = f\'(x) - g\'(x) = 0$.', m: 'h\'(x) = 0 \\implies h(x) = C \\implies f(x) = g(x) + C' }
+      ],
+      ends: 'Both the Zero Derivative Theorem and the Constant Difference Corollary are established.'
+    },
+    cards: [
+      { q: 'If $f\'(x) = 0$ on an interval $I$, what is the conclusion about $f$?', a: '$f$ is constant on $I$.', kind: 'state' },
+      { q: 'Why does $f\'(x) = 0$ fail to imply $f$ is constant on $D = (0, 1) \\cup (2, 3)$?', a: 'Because $D$ is not an interval; $f$ can take different constant values on disconnected components.', kind: 'trap' },
+      { q: 'If $f\'(x) = g\'(x)$ on $[a, b]$, what is the relationship between $f$ and $g$?', a: '$f(x) = g(x) + C$ for some real constant $C$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.7', bartle: '6.2.7', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'Monotonicity Criteria for Differentiable Functions',
+    oneLine: 'Nonnegative derivative means increasing, positive derivative means strictly increasing.',
+    statement: `Let $f$ be continuous on $[a, b]$ and differentiable on $(a, b)$.
+      <p>(a) $f$ is <b>increasing</b> on $[a, b]$ if and only if $f'(x) \\ge 0$ for all $x \\in (a, b)$.</p>
+      <p>(b) $f$ is <b>decreasing</b> on $[a, b]$ if and only if $f'(x) \\le 0$ for all $x \\in (a, b)$.</p>
+      <p>(c) If $f'(x) > 0$ for all $x \\in (a, b)$, then $f$ is <b>strictly increasing</b> on $[a, b]$.</p>
+      <p>(d) If $f'(x) < 0$ for all $x \\in (a, b)$, then $f$ is <b>strictly decreasing</b> on $[a, b]$.</p>`,
+    intuition: `<p>In Class 12 calculus, you used $f'(x) > 0$ to test if a curve is increasing. In Real Analysis, MVT turns this from a visual intuition into a rigorous proof:</p>
+      <p>For any two points $x_1 < x_2$, the change is $f(x_2) - f(x_1) = f'(c)(x_2 - x_1)$. Because $x_2 - x_1 > 0$, the sign of $f(x_2) - f(x_1)$ is IDENTICAL to the sign of $f'(c)$!</p>`,
+    needs: ['c.6.2.4'],
+    traps: [
+      `The converse of (c) is FALSE! A function can be strictly increasing even if its derivative touches zero at some points (e.g. $f(x) = x^3$ is strictly increasing on $\\mathbb{R}$, but $f'(0) = 0$).`,
+      `Strictly increasing does NOT require $f'(x) > 0$ at every single point — isolated zeros of $f'$ do not destroy strict monotonicity.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange’s MVT on arbitrary pairs $x_1 < x_2$ inside $[a, b]$.',
+      why: 'MVT reduces the difference $f(x_2) - f(x_1)$ directly to $f\'(c)(x_2 - x_1)$.',
+      rungs: [
+        { why: 'Let $x_1, x_2 \\in [a, b]$ with $x_1 < x_2$. Apply MVT (6.2.4) to $f$ on $[x_1, x_2]$.', m: '\\exists c \\in (x_1, x_2) : f(x_2) - f(x_1) = f\'(c)(x_2 - x_1)' },
+        { why: 'Since $x_2 - x_1 > 0$, if $f\'(c) \\ge 0$, then $f(x_2) - f(x_1) \\ge 0$, so $f(x_1) \\le f(x_2)$.', m: 'f\' \\ge 0 \\implies f(x_1) \\le f(x_2)' },
+        { why: 'If $f\'(c) > 0$, then $f(x_2) - f(x_1) > 0$, so $f(x_1) < f(x_2)$ (strictly increasing).', m: 'f\' > 0 \\implies f(x_1) < f(x_2)' },
+        { why: 'Conversely, if $f$ is increasing, for any $x \\ne c$, $(f(x) - f(c))/(x - c) \\ge 0$.', m: 'f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} \\ge 0' }
+      ],
+      ends: 'The Monotonicity Criteria are completely proved in both directions.'
+    },
+    cards: [
+      { q: 'State the condition for a differentiable function $f$ to be increasing on $[a, b]$.', a: '$f\'(x) \\ge 0$ for all $x \\in (a, b)$.', kind: 'state' },
+      { q: 'If $f$ is strictly increasing on $\\mathbb{R}$, must $f\'(x) > 0$ everywhere?', a: 'No. $f(x) = x^3$ is strictly increasing, yet $f\'(0) = 0$.', kind: 'trap' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.8', bartle: '6.2.8', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'First Derivative Test for Relative Extrema',
+    oneLine: 'Slope switching from positive to negative signals a peak; negative to positive signals a valley.',
+    statement: `Let $f$ be continuous on an interval $I$, and let $c \\in I$ be an interior point. Suppose $f$ is differentiable on $(c - \\delta, c + \\delta) \\setminus \\{c\\}$ for some $\\delta > 0$.
+      <p>(a) If $f'(x) \\ge 0$ for all $x \\in (c - \\delta, c)$ and $f'(x) \\le 0$ for all $x \\in (c, c + \\delta)$, then $f$ has a <b>relative maximum</b> at $c$.</p>
+      <p>(b) If $f'(x) \\le 0$ for all $x \\in (c - \\delta, c)$ and $f'(x) \\ge 0$ for all $x \\in (c, c + \\delta)$, then $f$ has a <b>relative minimum</b> at $c$.</p>`,
+    intuition: `<p>Think of climbing a hill: on the way up, the slope is positive ($f' > 0$). Once you crest the peak and start heading down, the slope turns negative ($f' < 0$).</p>
+      <p>By the Monotonicity Criteria, $f$ is increasing to the left of $c$ and decreasing to the right of $c$. Therefore, $f(c)$ is higher than all nearby values — a relative maximum!</p>
+      <p>Notice $f$ does NOT even need to be differentiable at $c$ itself (e.g. $f(x) = -|x|$ at $0$).</p>`,
+    needs: ['c.6.2.7'],
+    traps: [
+      `If $f'(x)$ keeps the same sign on both sides of $c$ (e.g. $f(x) = x^3$, where $f'(x) > 0$ for $x < 0$ and $x > 0$), $c$ is NOT an extremum!`,
+      `Remember $f$ MUST be continuous at $c$; a jump discontinuity at $c$ breaks the test.`
+    ],
+    proof: {
+      idea: 'Apply MVT on $[x, c]$ for $x < c$ and on $[c, x]$ for $x > c$.',
+      why: 'The signs of the derivative on each side guarantee $f(x) \\le f(c)$ for all nearby $x$.',
+      rungs: [
+        { why: 'Let $x \\in (c - \\delta, c)$. Apply MVT (6.2.4) on $[x, c]$: $f(c) - f(x) = f\'(z_1)(c - x)$ for some $z_1 \\in (x, c)$.', m: 'f(c) - f(x) = f\'(z_1)(c - x)' },
+        { why: 'Since $f\'(z_1) \\ge 0$ and $c - x > 0$, $f(c) - f(x) \\ge 0 \\implies f(x) \\le f(c)$.', m: 'f(x) \\le f(c) \\quad \\forall x \\in (c - \\delta, c)' },
+        { why: 'Let $x \\in (c, c + \\delta)$. Apply MVT on $[c, x]$: $f(x) - f(c) = f\'(z_2)(x - c)$ for some $z_2 \\in (c, x)$.', m: 'f(x) - f(c) = f\'(z_2)(x - c)' },
+        { why: 'Since $f\'(z_2) \\le 0$ and $x - c > 0$, $f(x) - f(c) \\le 0 \\implies f(x) \\le f(c)$.', m: 'f(x) \\le f(c) \\quad \\forall x \\in (c, c + \\delta)' }
+      ],
+      ends: 'Therefore $f(x) \\le f(c)$ for all $x \\in (c - \\delta, c + \\delta)$, proving $c$ is a relative maximum.'
+    },
+    cards: [
+      { q: 'State the First Derivative Test for a relative maximum.', a: 'If $f$ is continuous at $c$, $f\'(x) \\ge 0$ for $x < c$, and $f\'(x) \\le 0$ for $x > c$ nearby, then $c$ is a relative maximum.', kind: 'state' },
+      { q: 'Does the First Derivative Test require $f$ to be differentiable at the critical point $c$ itself?', a: 'No, $f$ only needs to be continuous at $c$ and differentiable in punctured neighborhoods around $c$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.9', bartle: '6.2.9', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'Mean Value Inequality: Bounded Derivatives Imply Lipschitz Continuity',
+    oneLine: 'If |f\'(x)| <= M everywhere, then |f(x) - f(y)| <= M|x - y|; bounded derivative implies Lipschitz continuity.',
+    statement: `Let $f$ be differentiable on an interval $I$. If there exists a constant $M > 0$ such that $|f'(x)| \\le M$ for all $x \\in I$, then:
+      $$|f(x) - f(y)| \\le M |x - y| \\quad \\text{for all } x, y \\in I$$
+      Consequently, $f$ is <b>Lipschitz continuous</b> on $I$, which implies that $f$ is <b>uniformly continuous</b> on $I$.`,
+    intuition: `<p>Think of $M$ as a universal speed limit. If your car can never exceed $M$ km/h ($|f'(x)| \\le M$), then the physical distance between your positions at any two times $x$ and $y$ can never exceed $M \\cdot |x - y|$.</p>
+      <p>This is one of the easiest ways to prove uniform continuity in university exams: just differentiate $f(x)$! If $|f'(x)|$ is bounded by a constant, $f$ is immediately Lipschitz, which guarantees uniform continuity with zero $\\varepsilon$-$\\delta$ pain.</p>`,
+    needs: ['c.6.2.4', 'c.5.4.5'],
+    traps: [
+      `The interval $I$ must be convex/connected (an actual interval) so that the line segment between $x$ and $y$ stays inside the domain.`,
+      `$f(x) = \\sqrt{x}$ on $[0, 1]$ is uniformly continuous, but its derivative $1/(2\\sqrt{x})$ is UNBOUNDED near $0$. Bounded derivative is sufficient for uniform continuity, but not necessary!`
+    ],
+    proof: {
+      idea: 'Apply Lagrange MVT between $x$ and $y$ and take absolute values.',
+      why: 'MVT equates the secant slope $|(f(x)-f(y))/(x-y)|$ to $|f\'(c)| \\le M$.',
+      rungs: [
+        { why: 'Let $x, y \\in I$ with $x \\ne y$. Apply MVT (6.2.4) to $f$ on the interval between $x$ and $y$.', m: '\\exists c \\text{ between } x \\text{ and } y : f(x) - f(y) = f\'(c)(x - y)' },
+        { why: 'Take the absolute value of both sides.', m: '|f(x) - f(y)| = |f\'(c)| |x - y|' },
+        { why: 'Apply the hypothesis $|f\'(c)| \\le M$.', m: '|f(x) - f(y)| \\le M |x - y|' },
+        { why: 'By Theorem 5.4.5, any function satisfying $|f(x)-f(y)| \\le M|x-y|$ is Lipschitz, hence uniformly continuous.', m: 'f \\text{ is Lipschitz continuous on } I' }
+      ],
+      ends: 'The Mean Value Inequality is proved: a bounded derivative guarantees Lipschitz continuity.'
+    },
+    cards: [
+      { q: 'State the Mean Value Inequality for a function with bounded derivative.', a: 'If $|f\'(x)| \\le M$ on $I$, then $|f(x) - f(y)| \\le M |x - y|$ for all $x, y \\in I$.', kind: 'state' },
+      { q: 'Is $f(x) = \\sin x$ Lipschitz continuous on $\\mathbb{R}$?', a: 'Yes, because $|f\'(x)| = |\\cos x| \\le 1$ for all $x \\in \\mathbb{R}$, so $|\\sin x - \\sin y| \\le |x - y|$.', kind: 'apply' }
+    ]
+  },
+
+  {
     id: 'c.6.2.12', bartle: '6.2.12', sec: '6.2', kind: 'theorem', tier: 'core',
     title: 'Darboux’s Theorem (Intermediate Value Property of Derivatives)',
     oneLine: 'Derivatives do not need to be continuous, but they can NEVER skip an intermediate value.',
@@ -4542,36 +5265,67 @@ CONCEPTS.push(
 
   {
     id: 'c.6.3.3', bartle: '6.3.3', sec: '6.3', kind: 'theorem', tier: 'core',
-    title: 'L’Hospital’s Rules',
-    oneLine: 'When both numerator and denominator vanish (0/0) or blow up (∞/∞), the ratio of their derivatives tells the true story.',
+    title: 'L’Hospital’s Rule (0/0 Indeterminate Form)',
+    oneLine: 'When both numerator and denominator vanish to 0, the limit of their ratio equals the limit of the ratio of their derivatives.',
     statement: `Let $-\\infty \\le a < b \\le +\\infty$, and let $f, g$ be differentiable on $(a, b)$ such that $g'(x) \\ne 0$ for all $x \\in (a, b)$.
-      <p>Suppose that <b>either</b> $\\lim_{x\\to a^+} f(x) = 0$ and $\\lim_{x\\to a^+} g(x) = 0$ (Form $0/0$),<br>
-      <b>or</b> $\\lim_{x\\to a^+} g(x) = \\pm\\infty$ (Form $\\infty/\\infty$).</p>
-      <p>If $\\lim_{x\\to a^+} \\frac{f'(x)}{g'(x)} = L \\in \\mathbb{R} \\cup \\{\\pm\\infty\\}$, then:
+      <p>Suppose that:
+      $$\\lim_{x\\to a^+} f(x) = 0 \\quad \\text{and} \\quad \\lim_{x\\to a^+} g(x) = 0$$
+      If $\\lim_{x\\to a^+} \\frac{f'(x)}{g'(x)} = L \\in \\mathbb{R} \\cup \\{\\pm\\infty\\}$, then:
       $$\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = L$$</p>`,
     intuition: `<p>In Class 12, everyone loves applying L'Hospital's Rule: when faced with $0/0$, differentiate the top and differentiate the bottom. But in Real Analysis, we prove WHY it works using Cauchy's MVT!</p>
-      <p>Near the limit point, $\\frac{f(x)}{g(x)} = \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f'(c_x)}{g'(c_x)}$ for some point $c_x$ between $a$ and $x$. As $x \\to a$, $c_x$ is squeezed to $a$, forcing the ratio to $L$.</p>`,
+      <p>By defining $f(a) = 0$ and $g(a) = 0$, the ratio $\\frac{f(x)}{g(x)} = \\frac{f(x) - f(a)}{g(x) - g(a)}$ is transformed by Cauchy MVT into $\\frac{f'(c_x)}{g'(c_x)}$ for some $c_x \\in (a, x)$. As $x \\to a^+$, $c_x \\to a^+$, locking the ratio onto $L$!</p>`,
     needs: ['c.6.3.2', 'c.4.1.4'],
     proof: {
-      idea: 'Extend $f$ and $g$ continuously to the limit point $a$ and apply Cauchy\'s Mean Value Theorem on $[a, x]$.',
-      why: 'Cauchy MVT turns the ratio $\\frac{f(x)}{g(x)}$ into $\\frac{f\'(c_x)}{g\'(c_x)}$ where $a < c_x < x$; squeezing $x \\to a^+$ forces $c_x \\to a^+$.',
+      idea: 'Extend $f$ and $g$ continuously to $a$ by setting $f(a) = 0, g(a) = 0$, and apply Cauchy\'s MVT on $[a, x]$.',
+      why: 'Cauchy MVT translates $(f(x)-0)/(g(x)-0)$ into $f\'(c_x)/g\'(c_x)$ with $a < c_x < x$; squeezing $x \\to a^+$ forces $c_x \\to a^+$.',
       rungs: [
-        { why: 'For the $0/0$ form at $a^+$, extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Then $f$ and $g$ are continuous on $[a, x]$ for every $x \\in (a, b)$.', m: 'f(a) = \\lim_{t \\to a^+} f(t) = 0, \\quad g(a) = \\lim_{t \\to a^+} g(t) = 0' },
-        { why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on the interval $[a, x]$. There exists $c_x \\in (a, x)$ such that:', m: '\\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}' },
-        { why: 'Substitute $f(a) = 0$ and $g(a) = 0$ into the expression.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{where } a < c_x < x' },
-        { why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$. By the composition of limits:', m: '\\lim_{x \\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x \\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L' }
+        { why: 'Extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Both are continuous on $[a, x]$ for $x \\in (a, b)$.', m: 'f(a) := 0, \\quad g(a) := 0' },
+        { why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on $[a, x]$.', m: '\\exists c_x \\in (a, x) : \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}' },
+        { why: 'Substitute $f(a) = 0$ and $g(a) = 0$.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{with } a < c_x < x' },
+        { why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$.', m: '\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x\\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L' }
       ],
-      ends: 'The indeterminate form $\\infty/\\infty$ reduces similarly via Cauchy MVT on subintervals $[x, y]$, establishing L\'Hospital\'s Rule.'
+      ends: 'The $0/0$ form of L’Hospital’s Rule is rigorously established.'
     },
     traps: [
-      `THE COMMON MISTAKE: Differentiating $\\frac{f}{g}$ using the Quotient Rule $\\frac{f'g - fg'}{g^2}$! In L'Hospital's Rule, you differentiate numerator and denominator SEPARATELY: $\\frac{f'(x)}{g'(x)}$.`,
-      `Applying L'Hospital when the limit is NOT indeterminate! If $\\lim f = 3$ and $\\lim g = 2$, the limit is simply $3/2$. Differentiating would give a completely wrong answer.`
+      `Differentiating $\\frac{f}{g}$ using the Quotient Rule instead of differentiating numerator and denominator separately!`,
+      `Applying L'Hospital when the limit is NOT indeterminate ($0/0$ or $\\infty/\\infty$).`
     ],
     cards: [
-      { q: 'What two indeterminate forms are directly handled by L’Hospital’s Rule?', a: '$0/0$ and $\\infty/\\infty$.', kind: 'recall' },
-      { q: 'What theorem is used to prove L’Hospital’s Rule rigorously?', a: 'Cauchy’s Mean Value Theorem.', kind: 'recall' },
-      { q: 'What is $\\lim_{x\\to 0} \\dfrac{\\sin x}{x}$ by L’Hospital’s Rule?', a: '$\\lim_{x\\to 0} \\dfrac{\\cos x}{1} = \\dfrac{1}{1} = 1$.', kind: 'apply' },
-      { q: 'State L’Hospital’s Rule for the indeterminate form $0/0$.', a: 'If $\\lim_{x\\to a^+} f(x) = 0$, $\\lim_{x\\to a^+} g(x) = 0$, $g\'(x) \\ne 0$, and $\\lim_{x\\to a^+} \\dfrac{f\'(x)}{g\'(x)} = L$, then $\\lim_{x\\to a^+} \\dfrac{f(x)}{g(x)} = L$.', kind: 'state' }
+      { q: 'State L’Hospital’s Rule for the indeterminate form $0/0$.', a: 'If $\\lim f = 0$, $\\lim g = 0$, $g\' \\ne 0$, and $\\lim f\'/g\' = L$, then $\\lim f/g = L$.', kind: 'state' },
+      { q: 'What fundamental theorem is the engine behind L’Hospital’s Rule?', a: 'Cauchy’s Mean Value Theorem.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.3.4', bartle: '6.3.5', sec: '6.3', kind: 'theorem', tier: 'core',
+    title: 'L’Hospital’s Rule (∞/∞ Indeterminate Form)',
+    oneLine: 'When the denominator diverges to infinity, the limit of the ratio equals the limit of the ratio of derivatives.',
+    statement: `Let $-\\infty \\le a < b \\le +\\infty$, and let $f, g$ be differentiable on $(a, b)$ with $g'(x) \\ne 0$ for all $x \\in (a, b)$.
+      <p>Suppose that:
+      $$\\lim_{x\\to a^+} g(x) = \\pm\\infty$$
+      If $\\lim_{x\\to a^+} \\frac{f'(x)}{g'(x)} = L \\in \\mathbb{R}$, then:
+      $$\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = L$$</p>`,
+    intuition: `<p>The $\\infty/\\infty$ form is even more powerful than $0/0$: you don't even need $f(x) \\to \\infty$! As long as the denominator $g(x)$ explodes to $\\pm\\infty$, the derivative ratio determines the limit.</p>
+      <p>The proof fixes an intermediate point $y$ and applies Cauchy MVT on $[x, y]$. As $x \\to a^+$, the $g(y)/g(x)$ term is crushed to zero because $g(x) \\to \\infty$, isolating the derivative slope $f'/g'$!</p>`,
+    needs: ['c.6.3.2', 'c.4.3.3'],
+    traps: [
+      `Assuming $f(x)$ must also tend to $\\infty$. The theorem holds whenever $\\lim g(x) = \\pm\\infty$, regardless of whether $f$ converges or diverges!`,
+      `If the derivative ratio oscillates without settling (e.g. $(x + \\sin x)/x$ as $x \\to \\infty$), L'Hospital is inconclusive, but the original limit may still exist.`
+    ],
+    proof: {
+      idea: 'Apply Cauchy MVT on $[x, y]$ for a fixed $y$, then send $x \\to a^+$ to let the $g(x) \\to \\infty$ term dominate.',
+      why: 'Because $g(x) \\to \\infty$, dividing by $g(x)$ eliminates the endpoint evaluation at $y$.',
+      rungs: [
+        { why: 'Given $\\varepsilon > 0$, choose $y \\in (a, b)$ such that $|f\'(c)/g\'(c) - L| < \\varepsilon/2$ for all $c \\in (a, y)$.', m: 'a < x < y \\implies \\exists c \\in (x, y) : \\left| \\frac{f\'(c)}{g\'(c)} - L \\right| < \\frac{\\varepsilon}{2}' },
+        { why: 'Apply Cauchy MVT (6.3.2) on $[x, y]$.', m: '\\frac{f(x) - f(y)}{g(x) - g(y)} = \\frac{f\'(c)}{g\'(c)}' },
+        { why: 'Multiply by $\\frac{g(x) - g(y)}{g(x)}$ and rewrite $\\frac{f(x)}{g(x)}$.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c)}{g\'(c)} \\left(1 - \\frac{g(y)}{g(x)}\\right) + \\frac{f(y)}{g(x)}' },
+        { why: 'Since $y$ is fixed and $g(x) \\to \\infty$ as $x \\to a^+$, the terms $g(y)/g(x) \\to 0$ and $f(y)/g(x) \\to 0$.', m: '\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c\\to a^+} \\frac{f\'(c)}{g\'(c)} = L' }
+      ],
+      ends: 'The $\\infty/\\infty$ form of L’Hospital’s Rule is established.'
+    },
+    cards: [
+      { q: 'State L’Hospital’s Rule for the indeterminate form $\\infty/\\infty$.', a: 'If $\\lim g(x) = \\pm\\infty$, $g\' \\ne 0$, and $\\lim f\'/g\' = L$, then $\\lim f/g = L$.', kind: 'state' },
+      { q: 'Compute $\\lim_{x\\to\\infty} \\dfrac{\\ln x}{x}$ using L’Hospital’s Rule.', a: 'Form $\\infty/\\infty$: $\\lim_{x\\to\\infty} \\dfrac{1/x}{1} = 0$.', kind: 'apply' }
     ]
   },
 
@@ -4608,6 +5362,44 @@ CONCEPTS.push(
     cards: [
       { q: 'What does Taylor’s Theorem reduce to when $n = 0$?', a: 'Lagrange’s Mean Value Theorem: $f(x) = f(x_0) + f\'(c)(x - x_0)$.', kind: 'recall' },
       { q: 'State the Lagrange form of the remainder $R_n(x)$ in Taylor’s Theorem.', a: '$R_n(x) = \\dfrac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1}$ for some $c$ between $x_0$ and $x$.', kind: 'state' }
+    ]
+  },
+
+  {
+    id: 'c.6.4.2', bartle: '6.4.2', sec: '6.4', kind: 'theorem', tier: 'core',
+    title: 'Taylor Remainder Estimates and Maclaurin Expansions',
+    oneLine: 'If the (n+1)-th derivative is bounded, the remainder vanishes as n -> infinity, generating exact power series for e^x, sin x, cos x.',
+    statement: `Let $f$ have derivatives of all orders on an interval $I$ containing $x_0$.
+      <p>If there exists $M > 0$ such that $|f^{(n+1)}(t)| \\le M$ for all $t$ between $x_0$ and $x$, then:
+      $$|R_n(x)| \\le \\frac{M}{(n + 1)!} |x - x_0|^{n+1}$$</p>
+      <p>Since $\\lim_{n\\to\\infty} \\frac{|x - x_0|^{n+1}}{(n + 1)!} = 0$, the Taylor series converges to $f(x)$:
+      $$f(x) = \\sum_{k=0}^\\infty \\frac{f^{(k)}(x_0)}{k!}(x - x_0)^k$$</p>
+      <p><b>Standard Maclaurin Expansions ($x_0 = 0$):</b>
+      <br>• $e^x = \\sum_{k=0}^\\infty \\frac{x^k}{k!} = 1 + x + \\frac{x^2}{2!} + \\cdots$ (for all $x \\in \\mathbb{R}$)
+      <br>• $\\sin x = \\sum_{k=0}^\\infty \\frac{(-1)^k x^{2k+1}}{(2k + 1)!} = x - \\frac{x^3}{6} + \\cdots$ (for all $x \\in \\mathbb{R}$)
+      <br>• $\\cos x = \\sum_{k=0}^\\infty \\frac{(-1)^k x^{2k}}{(2k)!} = 1 - \\frac{x^2}{2} + \\cdots$ (for all $x \\in \\mathbb{R}$)</p>`,
+    intuition: `<p>How does your scientific calculator know $\\sin(0.3)$ to $10$ decimal places in a microsecond? It doesn't draw triangles — it computes the polynomial $P_n(x)$!</p>
+      <p>Because the derivatives of $\\sin x$ and $\\cos x$ are bounded by $M = 1$ everywhere, the error $|R_n(x)| \\le \\frac{|x|^{n+1}}{(n+1)!}$ collapses to zero with blinding speed. Taking just 4 terms of the Taylor polynomial gives accuracy to 8 decimal places!</p>`,
+    needs: ['c.6.4.1', 'c.3.2.10'],
+    traps: [
+      `A function can have derivatives of all orders, yet its Taylor series fails to converge to $f(x)$! The classic monster is Cauchy's function $f(x) = e^{-1/x^2}$ ($f(0)=0$): all derivatives at $0$ are $0$, so its Taylor series is $0 + 0 + \\cdots = 0 \\ne f(x)$!`,
+      `Always check that the remainder $R_n(x) \\to 0$ to guarantee that the series converges to the original function.`
+    ],
+    proof: {
+      idea: 'Bound the Lagrange remainder using $|f^{(n+1)}(c)| \\le M$ and apply the sequence limit property $\\lim \\frac{a^n}{n!} = 0$.',
+      why: 'Factorials grow faster than any geometric power $a^n$, crushing the remainder to 0 for all real $x$.',
+      rungs: [
+        { why: 'From Taylor’s Theorem (6.4.1), write the Lagrange remainder on $[x_0, x]$.', m: 'R_n(x) = \\frac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1} \\quad \\text{for some } c \\text{ between } x_0, x' },
+        { why: 'Take absolute values and substitute the upper bound $|f^{(n+1)}(c)| \\le M$.', m: '|R_n(x)| \\le \\frac{M}{(n + 1)!} |x - x_0|^{n+1}' },
+        { why: 'By the Ratio Test for sequences (Theorem 3.2.11), for any fixed real number $A = |x - x_0|$, $\\lim_{n\\to\\infty} \\frac{A^{n+1}}{(n+1)!} = 0$.', m: '\\lim_{n\\to\\infty} \\frac{|x - x_0|^{n+1}}{(n + 1)!} = 0' },
+        { why: 'Apply the Squeeze Theorem for sequences (3.2.7) to conclude $\\lim_{n\\to\\infty} R_n(x) = 0$.', m: '\\lim_{n\\to\\infty} R_n(x) = 0 \\implies f(x) = \\lim_{n\\to\\infty} P_n(x)' }
+      ],
+      ends: 'The Taylor series converges to $f(x)$ whenever derivatives are uniformly bounded on the interval.'
+    },
+    cards: [
+      { q: 'What is the upper bound on the Taylor remainder $|R_n(x)|$ when $|f^{(n+1)}(t)| \\le M$?', a: '$|R_n(x)| \\le \\dfrac{M}{(n + 1)!} |x - x_0|^{n+1}$.', kind: 'state' },
+      { q: 'Why do the Maclaurin series for $\\sin x$ and $\\cos x$ converge for ALL real numbers?', a: 'Because all derivatives of $\\sin x$ and $\\cos x$ are bounded by $M = 1$, and $\\lim_{n\\to\\infty} \\dfrac{|x|^{n+1}}{(n+1)!} = 0$ for every $x \\in \\mathbb{R}$.', kind: 'recall' },
+      { q: 'Give an example of an infinitely differentiable function whose Maclaurin series does not represent the function away from 0.', a: 'Cauchy’s function $f(x) = e^{-1/x^2}$ for $x \\ne 0$, $f(0) = 0$, whose derivatives at $0$ are all $0$.', kind: 'apply' }
     ]
   }
 );
@@ -4652,22 +5444,288 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.7.2.1', bartle: '7.2.1', sec: '7.2', kind: 'theorem', tier: 'core',
-    title: 'Integrability of Continuous and Monotone Functions',
-    oneLine: 'Every continuous function and every monotone function on [a, b] is Riemann integrable.',
-    statement: `(a) If $f: [a, b] \\to \\mathbb{R}$ is <b>continuous</b> on $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.
-      <p>(b) If $f: [a, b] \\to \\mathbb{R}$ is <b>monotone</b> (increasing or decreasing) on $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.</p>`,
-    intuition: `<p>These two big classes cover virtually every function you met in school!</p>
-      <p>• <b>Why continuous functions are integrable:</b> By the Uniform Continuity Theorem (5.4.3), on a closed bounded interval, $f$ cannot fluctuate wildly. In any thin slice, the top and bottom of the function are within $\\varepsilon$ of each other, so the area error shrinks to zero.</p>
-      <p>• <b>Why monotone functions are integrable:</b> Monotone functions might have jumps, but all the rectangles' error gaps telescope and cancel out, bounded by $(f(b) - f(a)) \\|\\mathcal{P}\\| \\to 0$!</p>`,
-    needs: ['c.7.1.1', 'c.5.4.3'],
+    id: 'c.7.1.2', bartle: '7.1.2', sec: '7.1', kind: 'theorem', tier: 'core',
+    title: 'Uniqueness of the Riemann Integral',
+    oneLine: 'If a function is Riemann integrable, its integral value is uniquely determined.',
+    statement: `If $f \\in \\mathcal{R}[a, b]$, then the value of the integral $\\int_a^b f$ is <b>uniquely determined</b>.`,
+    intuition: `<p>Could a function have two different integral values, say $L_1 = 5$ and $L_2 = 6$? No!</p>
+      <p>If two different limits existed, for sufficiently fine partitions, the Riemann sum $S(f; \\dot{\\mathcal{P}})$ would have to be within $\\varepsilon$ of $L_1$ and simultaneously within $\\varepsilon$ of $L_2$. By the Triangle Inequality, $|L_1 - L_2| \\le |L_1 - S| + |S - L_2| < 2\\varepsilon$. Since $\\varepsilon$ is arbitrary, $L_1 = L_2$.</p>`,
+    needs: ['c.7.1.1', 'c.2.1.9'],
     traps: [
-      `A monotone function does NOT have to be continuous to be integrable! It can have countably many jump discontinuities (like a staircase) and still be 100% Riemann integrable.`,
-      `The Dirichlet function $f(x) = 1$ for $x \\in \\mathbb{Q}$ and $0$ for $x \\notin \\mathbb{Q}$ is NOT integrable because every slice contains both rationals and irrationals, so the sum swings between $0$ and $b - a$.`
+      `Do not forget that this relies on Theorem 2.1.9 (if $0 \\le |L_1 - L_2| < \\varepsilon$ for all $\\varepsilon > 0$, then $L_1 = L_2$).`
     ],
+    proof: {
+      idea: 'Assume two limits $L_1$ and $L_2$ exist, pick a tagged partition finer than both $\\delta_1$ and $\\delta_2$, and apply the Triangle Inequality.',
+      why: 'Both $|S - L_1| < \\varepsilon/2$ and $|S - L_2| < \\varepsilon/2$ hold for the same partition, trapping $|L_1 - L_2| < \\varepsilon$.',
+      rungs: [
+        { why: 'Suppose $L_1$ and $L_2$ both satisfy the definition of the integral for $f$. Given $\\varepsilon > 0$, choose $\\delta_1, \\delta_2 > 0$ for $\\varepsilon/2$.', m: '\\|\\dot{\\mathcal{P}}\\| < \\delta_1 \\implies |S(f; \\dot{\\mathcal{P}}) - L_1| < \\frac{\\varepsilon}{2}, \\quad \\|\\dot{\\mathcal{P}}\\| < \\delta_2 \\implies |S(f; \\dot{\\mathcal{P}}) - L_2| < \\frac{\\varepsilon}{2}' },
+        { why: 'Set $\\delta = \\min\\{\\delta_1, \\delta_2\\} > 0$ and choose any tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$.', m: '\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - L_1| < \\frac{\\varepsilon}{2} \\quad \\text{and} \\quad |S(f; \\dot{\\mathcal{P}}) - L_2| < \\frac{\\varepsilon}{2}' },
+        { why: 'Apply the Triangle Inequality to $|L_1 - L_2|$.', m: '|L_1 - L_2| = |(L_1 - S(f; \\dot{\\mathcal{P}})) + (S(f; \\dot{\\mathcal{P}}) - L_2)| \\le |S(f; \\dot{\\mathcal{P}}) - L_1| + |S(f; \\dot{\\mathcal{P}}) - L_2|' },
+        { why: 'Sum the tolerances: $\\varepsilon/2 + \\varepsilon/2 = \\varepsilon$.', m: '|L_1 - L_2| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
+        { why: 'Since $\\varepsilon > 0$ is arbitrary, by Theorem 2.1.9, $|L_1 - L_2| = 0$.', m: 'L_1 = L_2' }
+      ],
+      ends: 'Therefore, the Riemann integral of $f$ is unique.'
+    },
     cards: [
-      { q: 'Name two major classes of functions that are guaranteed to be Riemann integrable on $[a, b]$.', a: '(1) Continuous functions on $[a, b]$; (2) Monotone functions on $[a, b]$.', kind: 'recall' },
-      { q: 'Is the Dirichlet function Riemann integrable on $[0, 1]$?', a: 'No, because lower sums are always $0$ and upper sums are always $1$; they never meet.', kind: 'apply' }
+      { q: 'State the Uniqueness Theorem for the Riemann integral.', a: 'If $f \\in \\mathcal{R}[a, b]$, the value of $\\int_a^b f$ is uniquely determined.', kind: 'state' },
+      { q: 'How does the proof of uniqueness bound $|L_1 - L_2|$?', a: 'By adding and subtracting $S(f; \\dot{\\mathcal{P}})$ and applying the Triangle Inequality: $|L_1 - L_2| < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.1.4', bartle: '7.1.4', sec: '7.1', kind: 'example', tier: 'core',
+    title: 'Non-integrability of the Dirichlet Function',
+    oneLine: 'The Dirichlet function swings violently between 0 and 1 in every subinterval, failing to integrate.',
+    statement: `The <b>Dirichlet function</b> $f: [0, 1] \\to \\mathbb{R}$, defined by:
+      $$f(x) = \\begin{cases} 1 & \\text{if } x \\in \\mathbb{Q} \\\\ 0 & \\text{if } x \\notin \\mathbb{Q} \\end{cases}$$
+      is <b>not Riemann integrable</b> on $[0, 1]$ ($f \\notin \\mathcal{R}[0, 1]$).`,
+    intuition: `<p>In every interval, no matter how tiny ($[x_{i-1}, x_i]$ of width $10^{-100}$), the Density of Rationals (2.4.8) and Density of Irrationals (2.4.9) guarantee there are both rationals and irrationals inside!</p>
+      <p>• If you choose all rational tags $t_i$, every $f(t_i) = 1$, so the Riemann sum is $\\sum 1 \\cdot \\Delta x_i = 1$.</p>
+      <p>• If you choose all irrational tags $t_i$, every $f(t_i) = 0$, so the Riemann sum is $0$.</p>
+      <p>Because the sum swings between $0$ and $1$ for arbitrarily fine partitions, it can never settle onto any single limit $L$.</p>`,
+    needs: ['c.7.1.1', 'c.2.4.8', 'c.2.4.9'],
+    traps: [
+      `Dirichlet’s function is bounded ($0 \\le f(x) \\le 1$), yet it is not integrable! Boundedness is necessary, but NOT sufficient for integrability.`,
+      `Do not confuse Dirichlet's function with Thomae's popcorn function: Thomae's function IS Riemann integrable (its integral is $0$), because its discontinuities form a set of measure zero.`
+    ],
+    proof: {
+      idea: 'Show that for any $\\delta > 0$, tagged partitions with rational tags give sum 1, while tagged partitions with irrational tags give sum 0.',
+      why: 'No number $L$ can satisfy $|1 - L| < 1/2$ and $|0 - L| < 1/2$ simultaneously.',
+      rungs: [
+        { why: 'Suppose for contradiction that $f \\in \\mathcal{R}[0, 1]$ with integral $L$. Set $\\varepsilon_0 = 1/2$.', m: '\\exists \\delta > 0 : \\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - L| < \\frac{1}{2}' },
+        { why: 'Let $\\mathcal{P}$ be any partition of $[0, 1]$ with $\\|\\mathcal{P}\\| < \\delta$. By density of $\\mathbb{Q}$ (2.4.8), choose rational tags $t_i \\in \\mathbb{Q} \\cap [x_{i-1}, x_i]$ for all $i$.', m: 'S(f; \\dot{\\mathcal{P}}_{\\text{rat}}) = \\sum_{i=1}^n 1 \\cdot (x_i - x_{i-1}) = 1' },
+        { why: 'By density of irrationals (2.4.9), choose irrational tags $s_i \\notin \\mathbb{Q} \\cap [x_{i-1}, x_i]$ for all $i$.', m: 'S(f; \\dot{\\mathcal{P}}_{\\text{irrat}}) = \\sum_{i=1}^n 0 \\cdot (x_i - x_{i-1}) = 0' },
+        { why: 'Both tagged partitions have norm $< \\delta$, so both sums must be within $1/2$ of $L$.', m: '|1 - L| < \\frac{1}{2} \\quad \\text{and} \\quad |0 - L| < \\frac{1}{2}' },
+        { why: 'Apply the Triangle Inequality: $1 = |1 - 0| \\le |1 - L| + |L - 0| < 1/2 + 1/2 = 1$, yielding $1 < 1$.', m: '1 < 1 \\implies\\Leftarrow' }
+      ],
+      ends: 'Contradiction! Therefore, the Dirichlet function is not Riemann integrable on $[0, 1]$.'
+    },
+    cards: [
+      { q: 'Why is Dirichlet’s function not Riemann integrable on $[0, 1]$?', a: 'Because rational tags yield Riemann sum $1$ while irrational tags yield sum $0$ for arbitrarily fine partitions; the limit does not exist.', kind: 'state' },
+      { q: 'Is boundedness of a function on $[a, b]$ sufficient to guarantee Riemann integrability?', a: 'No. Dirichlet’s function is bounded between $0$ and $1$, but is not Riemann integrable.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.1.5', bartle: '7.1.5', sec: '7.1', kind: 'theorem', tier: 'core',
+    title: 'Linearity and Monotonicity of the Riemann Integral',
+    oneLine: 'Integration is linear: integral of af + bg is a int f + b int g; if f <= g, then int f <= int g.',
+    statement: `Let $f, g \\in \\mathcal{R}[a, b]$ and let $\\alpha, \\beta \\in \\mathbb{R}$. Then:
+      <p>(a) <b>Linearity:</b> $(\\alpha f + \\beta g) \\in \\mathcal{R}[a, b]$, and:
+      $$\\int_a^b (\\alpha f + \\beta g) = \\alpha \\int_a^b f + \\beta \\int_a^b g$$</p>
+      <p>(b) <b>Positivity:</b> If $f(x) \\ge 0$ for all $x \\in [a, b]$, then $\\int_a^b f \\ge 0$.</p>
+      <p>(c) <b>Monotonicity:</b> If $f(x) \\le g(x)$ for all $x \\in [a, b]$, then $\\int_a^b f \\le \\int_a^b g$.</p>`,
+    intuition: `<p>In Class 12 calculus, we split integrals without thinking: $\\int (2x + 3\\sin x) = 2\\int x + 3\\int \\sin x$. In Real Analysis, this linearity comes directly from the algebraic properties of Riemann sums:</p>
+      $$S(\\alpha f + \\beta g; \\dot{\\mathcal{P}}) = \\alpha S(f; \\dot{\\mathcal{P}}) + \\beta S(g; \\dot{\\mathcal{P}})$$
+      <p>Because each Riemann sum is a linear combination of heights, taking limits preserves linearity perfectly! Likewise, if every rectangle of $f$ is shorter than the corresponding rectangle of $g$, the total sum is smaller.</p>`,
+    needs: ['c.7.1.1', 'c.7.1.2'],
+    traps: [
+      `$\\int (fg) \\ne (\\int f)(\\int g)$! Integration does NOT distribute across products!`,
+      `Strict inequality $f(x) < g(x)$ does NOT imply $\\int f < \\int g$ in general unless $f, g$ are continuous or differ significantly (though on intervals with $f < g$ continuous, $\\int f < \\int g$ holds).`
+    ],
+    proof: {
+      idea: 'Write the Riemann sum for $\\alpha f + \\beta g$, decompose it linearly, and use the triangle inequality against $\\alpha \\int f + \\beta \\int g$.',
+      why: 'Riemann sums are finite sums, which are strictly linear.',
+      rungs: [
+        { why: 'For any tagged partition $\\dot{\\mathcal{P}}$, write the Riemann sum of $\\alpha f + \\beta g$.', m: 'S(\\alpha f + \\beta g; \\dot{\\mathcal{P}}) = \\sum_{i=1}^n [\\alpha f(t_i) + \\beta g(t_i)](x_i - x_{i-1}) = \\alpha S(f; \\dot{\\mathcal{P}}) + \\beta S(g; \\dot{\\mathcal{P}})' },
+        { why: 'Let $L_1 = \\int_a^b f$ and $L_2 = \\int_a^b g$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that for $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(f) - L_1| < \\frac{\\varepsilon}{2(|\\alpha| + 1)}$ and $|S(g) - L_2| < \\frac{\\varepsilon}{2(|\\beta| + 1)}$.', m: '|S(f) - L_1| < \\frac{\\varepsilon}{2(|\\alpha|+1)}, \\quad |S(g) - L_2| < \\frac{\\varepsilon}{2(|\\beta|+1)}' },
+        { why: 'Combine the terms using the Triangle Inequality.', m: '|S(\\alpha f + \\beta g) - (\\alpha L_1 + \\beta L_2)| \\le |\\alpha| |S(f) - L_1| + |\\beta| |S(g) - L_2| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
+        { why: 'For monotonicity: if $f \\le g$, every term $f(t_i)(x_i - x_{i-1}) \\le g(t_i)(x_i - x_{i-1})$, so $S(f) \\le S(g)$. Taking limits preserves inequalities.', m: 'S(f; \\dot{\\mathcal{P}}) \\le S(g; \\dot{\\mathcal{P}}) \\implies \\int_a^b f \\le \\int_a^b g' }
+      ],
+      ends: 'Linearity and monotonicity of the Riemann integral are established.'
+    },
+    cards: [
+      { q: 'State the linearity property of the Riemann integral.', a: '$\\int_a^b (\\alpha f + \\beta g) = \\alpha \\int_a^b f + \\beta \\int_a^b g$ for all $\\alpha, \\beta \\in \\mathbb{R}$ and $f, g \\in \\mathcal{R}[a, b]$.', kind: 'state' },
+      { q: 'If $f(x) \\ge 0$ on $[a, b]$, what does monotonicity imply about $\\int_a^b f$?', a: '$\\int_a^b f \\ge 0$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.1.6', bartle: '7.1.6', sec: '7.1', kind: 'theorem', tier: 'core',
+    title: 'Boundedness of Riemann Integrable Functions',
+    oneLine: 'If a function is Riemann integrable on [a, b], it must be bounded on [a, b].',
+    statement: `If $f: [a, b] \\to \\mathbb{R}$ is <b>Riemann integrable</b> on $[a, b]$, then $f$ is <b>bounded</b> on $[a, b]$.`,
+    intuition: `<p>Why can't you Riemann integrate an unbounded function like $f(x) = 1/x$ on $(0, 1]$?</p>
+      <p>Because in the Riemann sum $S(f; \\dot{\\mathcal{P}}) = \\sum f(t_i) \\Delta x_i$, you are free to pick the tag $t_i$ ANYWHERE in the slice. If $f$ is unbounded on some slice, you can choose $t_k$ where $f(t_k) = 10^{50}$, blowing the Riemann sum to infinity!</p>
+      <p>The definition of integrability demands that ALL Riemann sums land within $\\varepsilon$ of $L$. A single unbounded slice shatters that requirement instantly.</p>`,
+    needs: ['c.7.1.1', 'c.2.2.1'],
+    traps: [
+      `Do not confuse Riemann integrability with IMPROPER integrals: $\\int_0^1 \\frac{1}{\\sqrt{x}} dx = 2$ exists as an improper limit of integrals, but $1/\\sqrt{x}$ is NOT Riemann integrable on $[0, 1]$ in the proper sense!`,
+      `Boundedness is a NECESSARY condition, not sufficient (e.g. Dirichlet function is bounded but not integrable).`
+    ],
+    proof: {
+      idea: 'Assume $f$ is unbounded. Pick $\\delta > 0$ for $\\varepsilon = 1$. In any partition of norm $< \\delta$, some subinterval has unbounded $f$; choose a tag $t_k$ so large that $|S(f)| > |L| + 1$, yielding a contradiction.',
+      why: 'If $f$ is unbounded on a subinterval $I_k$, the term $f(t_k)\\Delta x_k$ can be made larger than all other terms combined.',
+      rungs: [
+        { why: 'Suppose $f \\in \\mathcal{R}[a, b]$ with integral $L$. Choose $\\delta > 0$ such that for every tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(f; \\dot{\\mathcal{P}}) - L| < 1$.', m: '|S(f; \\dot{\\mathcal{P}})| < |L| + 1' },
+        { why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ be an untagged partition with $\\|\\mathcal{P}\\| < \\delta$. If $f$ were bounded on every subinterval $I_i = [x_{i-1}, x_i]$, $f$ would be bounded on $[a, b]$. Thus $f$ is unbounded on at least one subinterval $I_k$.', m: '\\exists k \\in \\{1, \\ldots, n\\} : \\sup_{x \\in I_k} |f(x)| = \\infty' },
+        { why: 'Fix arbitrary tags $t_i$ for all other subintervals $i \\ne k$. Let $S^* = \\sum_{i \\ne k} f(t_i)(x_i - x_{i-1})$.', m: 'S(f; \\dot{\\mathcal{P}}) = S^* + f(t_k)(x_k - x_{k-1})' },
+        { why: 'Since $f$ is unbounded on $I_k$, choose $t_k \\in I_k$ such that $|f(t_k)| > \\frac{|L| + 1 + |S^*|}{x_k - x_{k-1}}$.', m: '|f(t_k)|(x_k - x_{k-1}) > |L| + 1 + |S^*|' },
+        { why: 'By the reverse triangle inequality, $|S(f; \\dot{\\mathcal{P}})| \\ge |f(t_k)|(x_k - x_{k-1}) - |S^*| > |L| + 1$, contradicting the bound from step 1.', m: '|S(f; \\dot{\\mathcal{P}})| > |L| + 1 \\implies\\Leftarrow' }
+      ],
+      ends: 'Contradiction! Therefore, every Riemann integrable function must be bounded.'
+    },
+    cards: [
+      { q: 'Is every Riemann integrable function on $[a, b]$ necessarily bounded?', a: 'Yes. If $f$ were unbounded, tags could be chosen to make Riemann sums arbitrarily large, contradicting convergence.', kind: 'state' },
+      { q: 'Is $f(x) = 1/x$ for $x \\in (0, 1]$ with $f(0) = 0$ Riemann integrable on $[0, 1]$?', a: 'No, because $f$ is unbounded on $[0, 1]$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.1', bartle: '7.2.1', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'The Cauchy Criterion for Riemann Integrability',
+    oneLine: 'f is integrable iff two arbitrary tagged partitions of small mesh produce Riemann sums arbitrarily close together.',
+    statement: `A function $f: [a, b] \\to \\mathbb{R}$ is <b>Riemann integrable</b> ($f \\in \\mathcal{R}[a, b]$) if and only if:
+      <p>For every $\\varepsilon > 0$, there exists $\\eta_\\varepsilon > 0$ such that for any two tagged partitions $\\dot{\\mathcal{P}}$ and $\\dot{\\mathcal{Q}}$ of $[a, b]$ with $\\|\\dot{\\mathcal{P}}\\| < \\eta_\\varepsilon$ and $\\|\\dot{\\mathcal{Q}}\\| < \\eta_\\varepsilon$:
+      $$\\left| S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}}) \\right| < \\varepsilon$$</p>`,
+    intuition: `<p>Just like the Cauchy Criterion for sequences (3.5.5) freed us from having to guess the limit $x$, the Cauchy Criterion for integrals frees us from having to guess the value of $\\int_a^b f$!</p>
+      <p>To prove $f$ is integrable, you don't need to know the answer. You only need to prove that any two independent Riemann approximations agree with each other to within $\\varepsilon$ once the slices are fine enough.</p>`,
+    needs: ['c.7.1.1', 'c.3.5.5'],
+    traps: [
+      `The partitions $\\dot{\\mathcal{P}}$ and $\\dot{\\mathcal{Q}}$ can have completely DIFFERENT partition points and completely DIFFERENT tags! They only need to satisfy mesh $< \\eta_\\varepsilon$.`,
+      `This is the primary theoretical engine used to prove the Squeeze Theorem (7.2.3) and the Additivity Theorem (7.2.9).`
+    ],
+    proof: {
+      idea: '(=>) If integral $L$ exists, use triangle inequality with $L$ in the middle. (<=) Construct a sequence of partitions with mesh -> 0; their Riemann sums form a Cauchy sequence of real numbers, which converges to $L$.',
+      why: 'Completeness of $\\mathbb{R}$ (Theorem 3.5.5) guarantees that a Cauchy sequence of Riemann sums has a real limit $L$.',
+      rungs: [
+        { why: '(=>) Assume $f \\in \\mathcal{R}[a, b]$ with integral $L$. Choose $\\delta > 0$ for $\\varepsilon/2$. For $\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\delta$, both $|S(f; \\dot{\\mathcal{P}}) - L| < \\varepsilon/2$ and $|S(f; \\dot{\\mathcal{Q}}) - L| < \\varepsilon/2$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| \\le |S(f; \\dot{\\mathcal{P}}) - L| + |L - S(f; \\dot{\\mathcal{Q}})| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
+        { why: '(<=) Assume the Cauchy condition. For each $n \\in \\mathbb{N}$, choose $\\delta_n > 0$ corresponding to $\\varepsilon = 1/n$, with $\\delta_{n+1} \\le \\delta_n$.', m: '\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\delta_n \\implies |S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\frac{1}{n}' },
+        { why: 'Choose a sequence of tagged partitions $\\dot{\\mathcal{P}}_n$ with $\\|\\dot{\\mathcal{P}}_n\\| < \\delta_n$. For $m > n$, both norms are $< \\delta_n$.', m: '|S(f; \\dot{\\mathcal{P}}_n) - S(f; \\dot{\\mathcal{P}}_m)| < \\frac{1}{n} \\quad \\forall m > n' },
+        { why: 'Thus $(S(f; \\dot{\\mathcal{P}}_n))$ is a Cauchy sequence of real numbers. By completeness of $\\mathbb{R}$ (3.5.5), it converges to some limit $L \\in \\mathbb{R}$.', m: 'L = \\lim_{n\\to\\infty} S(f; \\dot{\\mathcal{P}}_n)' },
+        { why: 'For any tagged partition $\\dot{\\mathcal{Q}}$ with $\\|\\dot{\\mathcal{Q}}\\| < \\delta_K$ (where $1/K < \\varepsilon/2$), $|S(f; \\dot{\\mathcal{Q}}) - L| \\le |S(f; \\dot{\\mathcal{Q}}) - S(f; \\dot{\\mathcal{P}}_K)| + |S(f; \\dot{\\mathcal{P}}_K) - L| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{Q}}) - L| < \\varepsilon' }
+      ],
+      ends: 'Hence $f \\in \\mathcal{R}[a, b]$ with integral $L$, proving the Cauchy Criterion.'
+    },
+    cards: [
+      { q: 'State the Cauchy Criterion for Riemann integrability.', a: '$f \\in \\mathcal{R}[a, b]$ iff $\\forall \\varepsilon > 0$, $\\exists \\eta > 0$ such that $\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\eta \\implies |S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\varepsilon$.', kind: 'state' },
+      { q: 'What is the main theoretical benefit of the Cauchy Criterion for integrability?', a: 'It allows proving integrability without needing to know or guess the value of the integral beforehand.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.3', bartle: '7.2.3', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'The Squeeze Theorem for Riemann Integrability',
+    oneLine: 'If f is bracketed between two integrable functions whose integrals are within ε, then f is integrable.',
+    statement: `Let $f: [a, b] \\to \\mathbb{R}$. Then $f \\in \\mathcal{R}[a, b]$ if and only if:
+      <p>For every $\\varepsilon > 0$, there exist functions $\\alpha_\\varepsilon, \\omega_\\varepsilon \\in \\mathcal{R}[a, b]$ such that:
+      $$\\alpha_\\varepsilon(x) \\le f(x) \\le \\omega_\\varepsilon(x) \\quad \\text{for all } x \\in [a, b]$$
+      and:
+      $$\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) < \\varepsilon$$</p>`,
+    intuition: `<p>This is the workhorse of integration theory! Proving integrability directly from definition is painful because tags are arbitrary.</p>
+      <p>The Squeeze Theorem says: trap $f$ between a "floor" $\\alpha_\\varepsilon$ and a "ceiling" $\\omega_\\varepsilon$ (like step functions). If the area between the ceiling and floor can be made smaller than $\\varepsilon$, then $f$ is dragged into integrability automatically!</p>`,
+    needs: ['c.7.2.1', 'c.7.1.5'],
+    traps: [
+      `Both bounding functions $\\alpha_\\varepsilon$ and $\\omega_\\varepsilon$ MUST themselves be Riemann integrable!`,
+      `The condition is if and only if: if $f$ is integrable, you can trivially choose $\\alpha_\\varepsilon = \\omega_\\varepsilon = f$.`
+    ],
+    proof: {
+      idea: '(=>) Trivial: take $\\alpha_\\varepsilon = \\omega_\\varepsilon = f$. (<=) Use the Cauchy Criterion (7.2.1) by bounding the gap between two Riemann sums of $f$ by the integrals of $\\omega_\\varepsilon$ and $\\alpha_\\varepsilon$.',
+      why: 'Riemann sums of $f$ are trapped between Riemann sums of $\\alpha_\\varepsilon$ and $\\omega_\\varepsilon$.',
+      rungs: [
+        { why: '(=>) If $f \\in \\mathcal{R}[a, b]$, choose $\\alpha_\\varepsilon = \\omega_\\varepsilon = f$. Then $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) = 0 < \\varepsilon$.', m: '\\alpha_\\varepsilon = \\omega_\\varepsilon = f' },
+        { why: '(<=) Let $\\varepsilon > 0$. Since $\\alpha_\\varepsilon, \\omega_\\varepsilon \\in \\mathcal{R}[a, b]$, choose $\\delta > 0$ such that for $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(\\alpha_\\varepsilon; \\dot{\\mathcal{P}}) - \\int \\alpha_\\varepsilon| < \\varepsilon$ and $|S(\\omega_\\varepsilon; \\dot{\\mathcal{P}}) - \\int \\omega_\\varepsilon| < \\varepsilon$.', m: '\\int_a^b \\alpha_\\varepsilon - \\varepsilon < S(\\alpha_\\varepsilon; \\dot{\\mathcal{P}}) \\le S(f; \\dot{\\mathcal{P}}) \\le S(\\omega_\\varepsilon; \\dot{\\mathcal{P}}) < \\int_a^b \\omega_\\varepsilon + \\varepsilon' },
+        { why: 'For any two tagged partitions $\\dot{\\mathcal{P}}, \\dot{\\mathcal{Q}}$ with norm $< \\delta$, both $S(f; \\dot{\\mathcal{P}})$ and $S(f; \\dot{\\mathcal{Q}})$ lie in $(\\int \\alpha_\\varepsilon - \\varepsilon, \\int \\omega_\\varepsilon + \\varepsilon)$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\int_a^b \\omega_\\varepsilon - \\int_a^b \\alpha_\\varepsilon + 2\\varepsilon' },
+        { why: 'Substitute the hypothesis $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\varepsilon + 2\\varepsilon = 3\\varepsilon' },
+        { why: 'By the Cauchy Criterion (7.2.1), $f \\in \\mathcal{R}[a, b]$.', m: 'f \\in \\mathcal{R}[a, b]' }
+      ],
+      ends: 'The Squeeze Theorem for Riemann integrability is established.'
+    },
+    cards: [
+      { q: 'State the Squeeze Theorem for Riemann Integrability.', a: '$f \\in \\mathcal{R}[a, b]$ iff $\\forall \\varepsilon > 0$, $\\exists \\alpha_\\varepsilon, \\omega_\\varepsilon \\in \\mathcal{R}[a, b]$ with $\\alpha_\\varepsilon \\le f \\le \\omega_\\varepsilon$ and $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) < \\varepsilon$.', kind: 'state' },
+      { q: 'Which criterion is used to prove the Squeeze Theorem?', a: 'The Cauchy Criterion for Riemann Integrability (7.2.1).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.5', bartle: '7.2.5', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'Integrability of Step Functions',
+    oneLine: 'Step functions are piecewise constant and are always Riemann integrable; their integral is the sum of subinterval areas.',
+    statement: `If $\\varphi: [a, b] \\to \\mathbb{R}$ is a <b>step function</b>, then $\\varphi \\in \\mathcal{R}[a, b]$.
+      <p>If $\\varphi(x) = c_i$ on subintervals $J_i = (x_{i-1}, x_i)$ for a partition $a = x_0 < x_1 < \\cdots < x_n = b$, then:
+      $$\\int_a^b \\varphi = \\sum_{i=1}^n c_i (x_i - x_{i-1})$$</p>`,
+    intuition: `<p>A step function looks like a staircase: flat horizontal treads with jump drops at the edges. Since each step is just a flat constant rectangle, its exact area is simply $\\text{height} \\times \\text{width} = c_i (x_i - x_{i-1})$.</p>
+      <p>Because any step function is a finite linear combination of indicator functions of intervals, linearity of the integral guarantees integrability.</p>`,
+    needs: ['c.7.1.5'],
+    traps: [
+      `A step function only assumes a FINITE number of distinct values, each on a subinterval. An infinite staircase (like $[1/x]$ near $0$) is NOT a step function on $[0, 1]$.`,
+      `Values at the boundary points $x_i$ do not affect the value of the integral (by Theorem 7.1.3).`
+    ],
+    proof: {
+      idea: 'Express $\\varphi$ as a linear combination of elementary step functions (indicators of intervals), and apply linearity of the integral.',
+      why: 'The indicator of an interval $[c, d]$ has integral $d - c$; finite sums of integrable functions are integrable.',
+      rungs: [
+        { why: 'Let $J$ be any subinterval of $[a, b]$ with endpoints $c < d$. Let $\\varphi_J$ be the indicator function: $\\varphi_J(x) = 1$ on $J$ and $0$ elsewhere.', m: '\\varphi_J(x) = \\begin{cases} 1 & x \\in J \\\\ 0 & x \\notin J \\end{cases}' },
+        { why: 'For any tagged partition $\\dot{\\mathcal{P}}$ with mesh $\\|\\dot{\\mathcal{P}}\\| < \\delta$, Riemann sums $S(\\varphi_J; \\dot{\\mathcal{P}})$ differ from $d - c$ by at most $2\\|\\dot{\\mathcal{P}}\\| < 2\\delta$.', m: '|S(\\varphi_J; \\dot{\\mathcal{P}}) - (d - c)| \\le 2\\delta < \\varepsilon \\implies \\int_a^b \\varphi_J = d - c' },
+        { why: 'Every step function $\\varphi$ is a finite linear combination of elementary step functions: $\\varphi = \\sum_{j=1}^m k_j \\varphi_{J_j}$.', m: '\\varphi = \\sum_{j=1}^m k_j \\varphi_{J_j}' },
+        { why: 'Apply Linearity of the Integral (Theorem 7.1.5) to the finite sum.', m: '\\int_a^b \\varphi = \\sum_{j=1}^m k_j \\int_a^b \\varphi_{J_j} = \\sum_{j=1}^m k_j (d_j - c_j)' }
+      ],
+      ends: 'Step functions are Riemann integrable and their integrals equal the sum of step rectangular areas.'
+    },
+    cards: [
+      { q: 'Is every step function on $[a, b]$ Riemann integrable?', a: 'Yes, every step function on $[a, b]$ is Riemann integrable.', kind: 'state' },
+      { q: 'How is the integral of a step function calculated?', a: 'As the sum of the areas of the individual constant steps: $\\sum c_i (x_i - x_{i-1})$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.7', bartle: '7.2.7', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'Integrability of Continuous Functions',
+    oneLine: 'Every continuous function on a closed bounded interval is Riemann integrable.',
+    statement: `If $f: [a, b] \\to \\mathbb{R}$ is <b>continuous</b> on $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.`,
+    intuition: `<p>This is the cornerstone theorem of elementary calculus! Why is EVERY continuous function integrable?</p>
+      <p>By the Uniform Continuity Theorem (5.4.3), on a closed bounded interval $[a, b]$, $f$ cannot have wild local spikes. If you slice the interval finely enough (mesh $< \\delta$), the gap between the maximum and minimum values in every single slice is less than $\\varepsilon / (b - a)$.</p>
+      <p>Building floor and ceiling step functions from these min/max values sandwiches $f$ tightly, satisfying the Squeeze Theorem!</p>`,
+    needs: ['c.5.4.3', 'c.5.3.4', 'c.7.2.3'],
+    traps: [
+      `Continuity on an OPEN interval $(a, b)$ does NOT guarantee integrability (e.g. $1/x$ on $(0, 1)$ is continuous but unbounded and not integrable). The interval MUST be closed and bounded $[a, b]$.`
+    ],
+    proof: {
+      idea: 'Use Uniform Continuity (5.4.3) to make $M_i - m_i < \\varepsilon/(b - a)$ on every subinterval, then apply the Squeeze Theorem with min/max step functions.',
+      why: 'Uniform continuity ensures that one single $\\delta$ controls oscillation across all slices simultaneously.',
+      rungs: [
+        { why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that $|u - v| < \\delta \\implies |f(u) - f(v)| < \\frac{\\varepsilon}{b - a}$.', m: '|u - v| < \\delta \\implies |f(u) - f(v)| < \\frac{\\varepsilon}{b - a}' },
+        { why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ be a partition with mesh $\\|\\mathcal{P}\\| < \\delta$. By the Maximum-Minimum Theorem (5.3.4), $f$ attains a min $f(u_i)$ and max $f(v_i)$ on each $I_i$.', m: 'm_i = f(u_i), \\quad M_i = f(v_i) \\quad \\text{with } u_i, v_i \\in I_i' },
+        { why: 'Since $|u_i - v_i| \\le \\|\\mathcal{P}\\| < \\delta$, the oscillation satisfies $M_i - m_i < \\frac{\\varepsilon}{b - a}$ for all $i$.', m: 'M_i - m_i < \\frac{\\varepsilon}{b - a} \\quad \\forall i = 1, \\ldots, n' },
+        { why: 'Define step functions $\\alpha_\\varepsilon(x) = m_i$ and $\\omega_\\varepsilon(x) = M_i$ on each $(x_{i-1}, x_i)$. Then $\\alpha_\\varepsilon \\le f \\le \\omega_\\varepsilon$.', m: '\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) = \\sum_{i=1}^n (M_i - m_i)(x_i - x_{i-1}) < \\frac{\\varepsilon}{b - a} \\sum_{i=1}^n (x_i - x_{i-1}) = \\varepsilon' },
+        { why: 'By the Squeeze Theorem (7.2.3), $f$ is Riemann integrable.', m: 'f \\in \\mathcal{R}[a, b]' }
+      ],
+      ends: 'Every continuous function on $[a, b]$ is Riemann integrable.'
+    },
+    cards: [
+      { q: 'State the theorem on the integrability of continuous functions.', a: 'If $f$ is continuous on a closed bounded interval $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.', kind: 'state' },
+      { q: 'Which theorem on continuity is the crucial engine in proving continuous functions are Riemann integrable?', a: 'The Uniform Continuity Theorem (5.4.3).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.2.8', bartle: '7.2.8', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'Integrability of Monotone Functions',
+    oneLine: 'Every monotone function on [a, b] is Riemann integrable, even with countably many jump discontinuities.',
+    statement: `If $f: [a, b] \\to \\mathbb{R}$ is <b>monotone</b> (increasing or decreasing) on $[a, b]$, then $f \\in \\mathcal{R}[a, b]$.`,
+    intuition: `<p>Monotone functions do not have to be continuous! They can have infinitely many jump discontinuities (like a staircase of infinitely many steps).</p>
+      <p>Yet they are ALWAYS Riemann integrable! Why? Because on each subinterval, the minimum is at the left end and maximum is at the right end. When you sum $(M_i - m_i) \\Delta x$, the terms <b>telescope</b>: the total height difference is just $f(b) - f(a)$!</p>
+      <p>Multiplying by mesh $(b - a)/n$ crushes the gap to zero as $n \\to \\infty$.</p>`,
+    needs: ['c.7.2.3'],
+    traps: [
+      `A monotone function can be discontinuous at countably many points! Monotonicity does NOT require continuity to guarantee integrability.`,
+      `If $f(b) = f(a)$, $f$ is constant, so its integrability is trivial.`
+    ],
+    proof: {
+      idea: 'Partition $[a, b]$ into $n$ equal subintervals; telescoping sums bound the difference between upper and lower step functions by $\\frac{b-a}{n}(f(b) - f(a))$.',
+      why: 'For an increasing function on $[x_{i-1}, x_i]$, $m_i = f(x_{i-1})$ and $M_i = f(x_i)$, causing all intermediate terms to cancel in the sum.',
+      rungs: [
+        { why: 'Assume $f$ is increasing on $[a, b]$. Divide $[a, b]$ into $n$ equal subintervals of length $h = (b - a)/n$.', m: 'x_i - x_{i-1} = \\frac{b - a}{n} \\quad \\forall i = 1, \\ldots, n' },
+        { why: 'On $I_i = [x_{i-1}, x_i]$, the infimum is $f(x_{i-1})$ and supremum is $f(x_i)$. Define step functions $\\alpha_n(x) = f(x_{i-1})$ and $\\omega_n(x) = f(x_i)$.', m: '\\alpha_n(x) \\le f(x) \\le \\omega_n(x)' },
+        { why: 'Integrate $\\omega_n - \\alpha_n$: factor out the common width $(b - a)/n$.', m: '\\int_a^b (\\omega_n - \\alpha_n) = \\frac{b - a}{n} \\sum_{i=1}^n [f(x_i) - f(x_{i-1})]' },
+        { why: 'The sum telescopes completely: all intermediate terms cancel!', m: '\\sum_{i=1}^n [f(x_i) - f(x_{i-1})] = f(x_n) - f(x_0) = f(b) - f(a)' },
+        { why: 'Given $\\varepsilon > 0$, choose $n > \\frac{(b - a)(f(b) - f(a))}{\\varepsilon}$. Then $\\int_a^b (\\omega_n - \\alpha_n) < \\varepsilon$, and the Squeeze Theorem (7.2.3) applies.', m: '\\int_a^b (\\omega_n - \\alpha_n) = \\frac{(b - a)(f(b) - f(a))}{n} < \\varepsilon' }
+      ],
+      ends: 'Every monotone function on $[a, b]$ is Riemann integrable.'
+    },
+    cards: [
+      { q: 'Can a function with infinitely many jump discontinuities be Riemann integrable?', a: 'Yes. Any monotone function (even with countably many discontinuities) is Riemann integrable.', kind: 'apply' },
+      { q: 'What algebraic mechanism makes the Squeeze Theorem error shrink for monotone functions?', a: 'The telescoping sum $\\sum_{i=1}^n (f(x_i) - f(x_{i-1})) = f(b) - f(a)$.', kind: 'recall' }
     ]
   },
 
@@ -4680,10 +5738,21 @@ CONCEPTS.push(
       $$\\int_a^b f = \\int_a^c f + \\int_c^b f$$</p>`,
     intuition: `<p>Geometrically, slicing a region into two side-by-side plots at $x = c$ doesn't change the total area. The area from $a$ to $c$ and the area from $c$ to $b$ add up seamlessly to the area from $a$ to $b$.</p>
       <p>This allows us to integrate piecewise functions by integrating each continuous piece separately and adding the results together!</p>`,
-    needs: ['c.7.1.1'],
+    needs: ['c.7.1.1', 'c.7.2.1'],
     traps: [
       `Forgetting that the additivity formula also works when $c$ is outside $[a, b]$, provided we adopt the standard convention $\\int_b^a f = -\\int_a^b f$ and $\\int_a^a f = 0$.`
     ],
+    proof: {
+      idea: 'If $c$ is a partition point, the Riemann sum splits exactly $S(f; \\dot{\\mathcal{P}}) = S_1 + S_2$. If $c$ falls inside a subinterval, the discrepancy is bounded by $2M \\|\\dot{\\mathcal{P}}\\| \\to 0$.',
+      why: 'Riemann sums over the union differ from the sum of Riemann sums over the pieces by at most the tag contribution of the single slice containing $c$.',
+      rungs: [
+        { why: 'Let $L_1 = \\int_a^c f$ and $L_2 = \\int_c^b f$. Let $M$ be a bound for $|f|$ on $[a, b]$. Given $\\varepsilon > 0$, choose $\\delta > 0$ with $\\delta < \\frac{\\varepsilon}{6M}$ such that subinterval sums are within $\\varepsilon/3$ of $L_1, L_2$.', m: '\\|\\dot{\\mathcal{P}}_1\\| < \\delta \\implies |S(f_1) - L_1| < \\frac{\\varepsilon}{3}, \\quad \\|\\dot{\\mathcal{P}}_2\\| < \\delta \\implies |S(f_2) - L_2| < \\frac{\\varepsilon}{3}' },
+        { why: 'Let $\\dot{\\mathcal{P}}$ be a tagged partition of $[a, b]$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$. If $c$ is a partition point, $\\dot{\\mathcal{P}}$ splits into $\\dot{\\mathcal{P}}_1$ and $\\dot{\\mathcal{P}}_2$, and $S(f; \\dot{\\mathcal{P}}) = S(f_1; \\dot{\\mathcal{P}}_1) + S(f_2; \\dot{\\mathcal{P}}_2)$.', m: '|S(f; \\dot{\\mathcal{P}}) - (L_1 + L_2)| \\le |S(f_1) - L_1| + |S(f_2) - L_2| < \\frac{2\\varepsilon}{3} < \\varepsilon' },
+        { why: 'If $c$ is inside a subinterval $(x_{k-1}, x_k)$, insert $c$ with tag $c$ into both $[x_{k-1}, c]$ and $[c, x_k]$ to form partitions $\\dot{\\mathcal{Q}}_1, \\dot{\\mathcal{Q}}_2$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f_1; \\dot{\\mathcal{Q}}_1) - S(f_2; \\dot{\\mathcal{Q}}_2)| = |f(t_k) - f(c)|(x_k - x_{k-1}) \\le 2M \\|\\dot{\\mathcal{P}}\\| < \\frac{\\varepsilon}{3}' },
+        { why: 'Combine the triangle inequality terms: $\\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - (L_1 + L_2)| < \\varepsilon' }
+      ],
+      ends: 'Therefore $f \\in \\mathcal{R}[a, b]$ and $\\int_a^b f = \\int_a^c f + \\int_c^b f$.'
+    },
     cards: [
       { q: 'State the interval additivity property of the Riemann integral.', a: '$\\int_a^b f = \\int_a^c f + \\int_c^b f$ for any $c$ between $a$ and $b$.', kind: 'state' },
       { q: 'What is the convention for $\\int_b^a f$ when $a < b$?', a: '$\\int_b^a f = -\\int_a^b f$.', kind: 'recall' }
@@ -4691,52 +5760,131 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.7.3.1', bartle: '7.3.1', sec: '7.3', kind: 'theorem', tier: 'core',
-    title: 'Fundamental Theorem of Calculus (Form 1: Differentiation of an Integral)',
-    oneLine: 'Accumulating area under a continuous curve produces an antiderivative whose derivative is the original curve.',
-    statement: `Let $f \\in \\mathcal{R}[a, b]$, and define the area accumulator function $F: [a, b] \\to \\mathbb{R}$ by:
-      $$F(x) = \\int_a^x f(t) \\, dt \\quad \\text{for } x \\in [a, b]$$
-      <p>(a) $F$ is <b>continuous</b> on $[a, b]$ (in fact, it is Lipschitz continuous).</p>
-      <p>(b) If $f$ is <b>continuous at a point $c \\in [a, b]$</b>, then $F$ is <b>differentiable at $c$</b>, and:
-      $$F'(c) = f(c) \\quad \\iff \\quad \\frac{d}{dx} \\left[ \\int_a^x f(t) \\, dt \\right]_{x = c} = f(c)$$</p>`,
-    intuition: `<p>Differentiation and integration are exact inverse operations! When you integrate $f$ to create $F(x)$, you are tracking the accumulated area. If you then ask: "at what rate is this area growing right now at $x = c$?", the answer is simply the height of the curve $f(c)$!</p>
-      <p>Think of water pouring into a tank: the rate at which total water volume increases ($F'(c)$) is exactly the rate at which water is currently flowing from the tap ($f(c)$).</p>`,
-    needs: ['c.7.1.1', 'c.6.1.1', 'c.5.1.1'],
+    id: 'c.7.2.10', bartle: '7.2.10', sec: '7.2', kind: 'theorem', tier: 'core',
+    title: 'Integrability of Absolute Value and Triangle Inequality for Integrals',
+    oneLine: 'If f is integrable, then |f| is integrable and |∫ f| <= ∫ |f|.',
+    statement: `If $f \\in \\mathcal{R}[a, b]$, then the absolute value function $|f|$ belongs to $\\mathcal{R}[a, b]$, and:
+      $$\\left| \\int_a^b f(x) \\, dx \\right| \\le \\int_a^b |f(x)| \\, dx$$`,
+    intuition: `<p>This is the continuous version of the Triangle Inequality $|a + b| \\le |a| + |b|$!</p>
+      <p>When you integrate $f$, positive and negative regions cancel out (like waves destructive interference), reducing the total net area. But when you integrate $|f|$, all areas are made strictly positive, so the total area can only stay the same or grow larger!</p>`,
+    needs: ['c.7.1.1', 'c.7.2.3', 'c.2.2.1'],
     traps: [
-      `Thinking $F$ is always differentiable everywhere: $F'(c) = f(c)$ is only guaranteed at points where $f$ is CONTINUOUS! If $f$ has a jump at $c$, $F$ has a sharp corner at $c$ and is not differentiable there.`,
-      `Using Leibniz's rule on $\\frac{d}{dx} \\int_{u(x)}^{v(x)} f(t)\\,dt$: remember to apply the Chain Rule to endpoints: $f(v(x))v'(x) - f(u(x))u'(x)$!`
+      `The converse is FALSE! Just because $|f|$ is integrable does NOT mean $f$ is integrable!`,
+      `Classic Counterexample: $f(x) = 1$ for $x \\in \\mathbb{Q}$ and $-1$ for $x \\notin \\mathbb{Q}$. Then $|f(x)| = 1$ constantly (which is integrable with integral $b - a$), but $f$ is Dirichlet-like and NOT integrable!`
     ],
     proof: {
-      idea: `Compute the difference quotient $\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h}\\int_c^{c+h} f(t)\\,dt$ and use continuity of $f$ at $c$.`,
-      why: `Because $f(t) \\approx f(c)$ on a tiny interval $[c, c+h]$, the integral is approximately $f(c) \\cdot h$, so dividing by $h$ leaves $f(c)$.`,
+      idea: 'Use the reverse triangle inequality ||f(u)| - |f(v)|| <= |f(u) - f(v)| to bound the oscillation of |f| by that of f, then apply the Squeeze Theorem.',
+      why: 'Taking absolute values can only decrease or preserve distances, never increase them.',
       rungs: [
-        { why: 'Write the difference quotient for $F$ at $c$.', m: '\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h}\\int_c^{c+h} f(t)\\,dt' },
-        { why: 'Subtract $f(c) = \\frac{1}{h}\\int_c^{c+h} f(c)\\,dt$ from both sides.', m: '\\frac{F(c+h) - F(c)}{h} - f(c) = \\frac{1}{h}\\int_c^{c+h} (f(t) - f(c))\\,dt' },
-        { why: 'Since $f$ is continuous at $c$, for $|t - c| < \\delta$, $|f(t) - f(c)| < \\varepsilon$.', m: '\\left| \\frac{F(c+h) - F(c)}{h} - f(c) \\right| \\le \\frac{1}{|h|} \\cdot \\varepsilon |h| = \\varepsilon' }
+        { why: 'By the reverse triangle inequality (2.2.1), for any $u, v \\in [a, b]$, $||f(u)| - |f(v)|| \\le |f(u) - f(v)|$.', m: '||f(u)| - |f(v)|| \\le |f(u) - f(v)|' },
+        { why: 'Taking supremum over subinterval $I_i$, the oscillation of $|f|$ is bounded by the oscillation of $f$:', m: 'M_i(|f|) - m_i(|f|) \\le M_i(f) - m_i(f)' },
+        { why: 'Multiply by subinterval widths: $U(|f|, \\mathcal{P}) - L(|f|, \\mathcal{P}) \\le U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon$. By the Squeeze Theorem (7.2.3), $|f| \\in \\mathcal{R}[a, b]$.', m: '|f| \\in \\mathcal{R}[a, b]' },
+        { why: 'Since $-|f(x)| \\le f(x) \\le |f(x)|$, apply Monotonicity of Integrals (Theorem 7.1.5).', m: '-\\int_a^b |f| \\le \\int_a^b f \\le \\int_a^b |f|' },
+        { why: 'Translate this double inequality into absolute value notation.', m: '\\left| \\int_a^b f \\right| \\le \\int_a^b |f|' }
       ],
-      ends: 'Taking $h \\to 0$ gives $F\'(c) = f(c)$.'
+      ends: 'Therefore $|f| \\in \\mathcal{R}[a, b]$ and $|\\int_a^b f| \\le \\int_a^b |f|$.'
     },
     cards: [
-      { q: 'State Form 1 of the Fundamental Theorem of Calculus.', a: 'If $f \\in \\mathcal{R}[a, b]$ and $f$ is continuous at $c$, then $F(x) = \\int_a^x f$ satisfies $F\'(c) = f(c)$.', kind: 'state' },
-      { q: 'What is $\\dfrac{d}{dx} \\int_0^x \\sin(t^2) \\, dt$?', a: '$\\sin(x^2)$, directly by FTC Form 1 since $\\sin(t^2)$ is continuous.', kind: 'apply' }
+      { q: 'State the Triangle Inequality for integrals.', a: '$\\left|\\int_a^b f\\right| \\le \\int_a^b |f|$.', kind: 'state' },
+      { q: 'Does $|f| \\in \\mathcal{R}[a, b]$ imply $f \\in \\mathcal{R}[a, b]$?', a: 'No! If $f(x) = 1$ on rationals and $-1$ on irrationals, $|f| = 1$ is integrable, but $f$ is not.', kind: 'trap' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.1', bartle: '7.3.1', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Fundamental Theorem of Calculus (First Form: Evaluation of Integrals)',
+    oneLine: 'If f has an antiderivative F on [a, b], the integral of f is simply F(b) - F(a).',
+    statement: `Suppose there is a finite set $E \\subset [a, b]$ and functions $f, F: [a, b] \\to \\mathbb{R}$ such that:
+      <p>(a) $F$ is <b>continuous</b> on $[a, b]$,</p>
+      <p>(b) $F'(x) = f(x)$ for all $x \\in [a, b] \\setminus E$,</p>
+      <p>(c) $f \\in \\mathcal{R}[a, b]$.</p>
+      <p>Then:
+      $$\\int_a^b f(x) \\, dx = F(b) - F(a)$$</p>`,
+    intuition: `<p>This is the famous Newton-Leibniz formula that every Class 12 student uses daily: $\\int_a^b f = [F(x)]_a^b = F(b) - F(a)$.</p>
+      <p>Instead of struggling with thousands of tiny Riemann rectangles and taking limits of sums, you simply look for an antiderivative $F$ whose derivative gives $f$, and subtract the endpoint values! It links the accumulation of rate of change back to the net change of the function.</p>`,
+    needs: ['c.7.1.1', 'c.6.2.4'],
+    traps: [
+      `$F'(x) = f(x)$ must hold for ALL points except at most a finite set. If $F$ is discontinuous inside $[a, b]$, you cannot blindly apply the formula (e.g. $\\int_{-1}^1 \\frac{1}{x^2}\\,dx \\ne [-1/x]_{-1}^1 = -2$, which is nonsense!).`,
+      `$f$ must be Riemann integrable on $[a, b]$.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange MVT on each subinterval $[x_{i-1}, x_i]$ to write $F(x_i) - F(x_{i-1}) = F\'(u_i)(x_i - x_{i-1}) = f(u_i)(x_i - x_{i-1})$, turning $F(b) - F(a)$ into a Riemann sum.',
+      why: 'Telescoping sum of $F$ differences equals an exact Riemann sum of $f$ for suitable tags $u_i$.',
+      rungs: [
+        { why: 'Assume $E = \\emptyset$. Let $\\varepsilon > 0$. Since $f \\in \\mathcal{R}[a, b]$, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - \\int_a^b f| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - \\int_a^b f| < \\varepsilon' },
+        { why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ have mesh $< \\delta$. By Lagrange MVT (6.2.4), on each $[x_{i-1}, x_i]$, there exists $u_i \\in (x_{i-1}, x_i)$ with $F(x_i) - F(x_{i-1}) = F\'(u_i)(x_i - x_{i-1})$.', m: 'F(x_i) - F(x_{i-1}) = f(u_i)(x_i - x_{i-1})' },
+        { why: 'Sum over all subintervals: the left side telescopes to $F(b) - F(a)$.', m: 'F(b) - F(a) = \\sum_{i=1}^n [F(x_i) - F(x_{i-1})] = \\sum_{i=1}^n f(u_i)(x_i - x_{i-1})' },
+        { why: 'Notice that $\\sum f(u_i)(x_i - x_{i-1})$ is precisely the Riemann sum $S(f; \\dot{\\mathcal{P}}_u)$ with tags $u_i$.', m: 'F(b) - F(a) = S(f; \\dot{\\mathcal{P}}_u)' },
+        { why: 'Since $\\|\\dot{\\mathcal{P}}_u\\| < \\delta$, substitute into the integrability bound: $|F(b) - F(a) - \\int_a^b f| < \\varepsilon$. Since $\\varepsilon > 0$ is arbitrary, equality holds.', m: '\\int_a^b f = F(b) - F(a)' }
+      ],
+      ends: 'The First Form of the Fundamental Theorem of Calculus is proved.'
+    },
+    cards: [
+      { q: 'State the Fundamental Theorem of Calculus (First Form).', a: 'If $F$ is continuous on $[a, b]$, $F\'(x) = f(x)$ except on a finite set, and $f \\in \\mathcal{R}[a, b]$, then $\\int_a^b f = F(b) - F(a)$.', kind: 'state' },
+      { q: 'Why does $\\int_{-1}^1 \\dfrac{1}{x} dx = [\\ln|x|]_{-1}^1 = 0$ fail?', a: 'Because $1/x$ is unbounded at $0$ and not Riemann integrable on $[-1, 1]$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.4', bartle: '7.3.4', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'First Mean Value Theorem for Integrals',
+    oneLine: 'The average height of a continuous curve is attained at some point c in [a, b]: int_a^b f = f(c)(b - a).',
+    statement: `If $f: [a, b] \\to \\mathbb{R}$ is <b>continuous</b> on $[a, b]$, then there exists at least one point $c \\in [a, b]$ such that:
+      $$\\int_a^b f(x) \\, dx = f(c)(b - a) \\quad \\iff \\quad f(c) = \\frac{1}{b - a} \\int_a^b f(x) \\, dx$$`,
+    intuition: `<p>Think of the area under the curve $\\int_a^b f$ as melted wax in a rectangular box of width $b - a$. If the wax levels out flat, its height is the <b>average value</b> $\\frac{1}{b - a}\\int_a^b f$.</p>
+      <p>Because $f$ is continuous, by Bolzano's Intermediate Value Theorem, the curve cannot jump across this average height without passing through it! So the curve must intersect its average height at some point $c$.</p>`,
+    needs: ['c.7.2.7', 'c.5.3.7', 'c.5.3.4'],
+    traps: [
+      `Continuity of $f$ is ESSENTIAL! If $f$ is a step function jumping from $0$ to $2$, the average height is $1$, but $f(x)$ may never equal $1$ anywhere.`,
+      `Do not confuse this with Lagrange MVT for derivatives: this is MVT for INTEGRALS.`
+    ],
+    proof: {
+      idea: 'Trap the integral between $m(b - a)$ and $M(b - a)$ using min/max, then apply Bolzano’s Intermediate Value Theorem (5.3.7).',
+      why: 'Continuous functions on $[a, b]$ achieve all intermediate values between their minimum $m$ and maximum $M$.',
+      rungs: [
+        { why: 'By the Maximum-Minimum Theorem (5.3.4), $f$ attains an absolute minimum $m$ and maximum $M$ on $[a, b]$.', m: 'm \\le f(x) \\le M \\quad \\forall x \\in [a, b]' },
+        { why: 'Apply Monotonicity of Integrals (Theorem 7.1.5).', m: 'm(b - a) \\le \\int_a^b f(x)\\,dx \\le M(b - a)' },
+        { why: 'Divide by $(b - a) > 0$.', m: 'm \\le \\frac{1}{b - a} \\int_a^b f(x)\\,dx \\le M' },
+        { why: 'The number $k = \\frac{1}{b - a} \\int_a^b f$ lies in $[m, M]$. By Bolzano’s Intermediate Value Theorem (5.3.7), $f$ attains $k$ at some $c \\in [a, b]$.', m: '\\exists c \\in [a, b] : f(c) = \\frac{1}{b - a} \\int_a^b f(x)\\,dx' }
+      ],
+      ends: 'Therefore $\\int_a^b f = f(c)(b - a)$ for some $c \\in [a, b]$.'
+    },
+    cards: [
+      { q: 'State the First Mean Value Theorem for Integrals.', a: 'If $f$ is continuous on $[a, b]$, $\\exists c \\in [a, b]$ such that $\\int_a^b f = f(c)(b - a)$.', kind: 'state' },
+      { q: 'What two theorems are combined in the proof of the First MVT for Integrals?', a: 'The Maximum-Minimum Theorem (5.3.4) and Bolzano’s Intermediate Value Theorem (5.3.7).', kind: 'recall' }
     ]
   },
 
   {
     id: 'c.7.3.5', bartle: '7.3.5', sec: '7.3', kind: 'theorem', tier: 'core',
-    title: 'Fundamental Theorem of Calculus (Form 2: Evaluation of Integrals)',
-    oneLine: 'To evaluate an integral, find any antiderivative F and compute F(b) - F(a).',
-    statement: `Let $f \\in \\mathcal{R}[a, b]$. If there exists a differentiable function $F: [a, b] \\to \\mathbb{R}$ such that $F'(x) = f(x)$ for all $x \\in [a, b]$, then:
-      $$\\int_a^b f(x) \\, dx = F(b) - F(a)$$`,
-    intuition: `<p>This is the famous Newton-Leibniz formula that every Class 12 student uses daily: $\\int_a^b f = [F(x)]_a^b = F(b) - F(a)$.</p>
-      <p>Instead of struggling with thousands of tiny Riemann rectangles and taking limits of sums, you simply look for an antiderivative $F$ whose derivative gives $f$, and subtract the endpoint values! It links the accumulation of rate of change back to the net change of the function.</p>`,
-    needs: ['c.7.1.1', 'c.6.2.4'],
+    title: 'Fundamental Theorem of Calculus (Second Form: Differentiation of an Integral)',
+    oneLine: 'The derivative of an accumulation function F(x) = int_a^x f at a continuity point is f(x).',
+    statement: `Let $f \\in \\mathcal{R}[a, b]$, and define the area accumulator function $F: [a, b] \\to \\mathbb{R}$ by:
+      $$F(x) = \\int_a^x f(t) \\, dt \\quad \\text{for } x \\in [a, b]$$
+      <p>(a) $F$ is continuous on $[a, b]$ (in fact, Lipschitz continuous).</p>
+      <p>(b) If $f$ is <b>continuous at a point $c \\in [a, b]$</b>, then $F$ is <b>differentiable at $c$</b>, and:
+      $$F'(c) = f(c) \\quad \\iff \\quad \\frac{d}{dx} \\left[ \\int_a^x f(t) \\, dt \\right]_{x = c} = f(c)$$</p>`,
+    intuition: `<p>Differentiation and integration are exact inverse operations! When you integrate $f$ to create $F(x)$, you are tracking accumulated area.</p>
+      <p>If you ask: "at what rate is this area growing right now at $x = c$?", the answer is simply the height of the curve $f(c)$! Water pouring into a tank: the rate at which total water volume increases ($F'(c)$) is exactly the rate at which water is currently flowing from the tap ($f(c)$).</p>`,
+    needs: ['c.7.1.1', 'c.6.1.1', 'c.5.1.1'],
     traps: [
-      `$F'(x) = f(x)$ must hold for ALL points in $[a, b]$. If the antiderivative has a discontinuity or undefined derivative inside $[a, b]$, you cannot blindly apply the formula (e.g. $\\int_{-1}^1 \\frac{1}{x^2}\\,dx \\ne [-1/x]_{-1}^1 = -2$, which is nonsense since $1/x^2 > 0$!).`
+      `Thinking $F$ is differentiable everywhere: $F'(c) = f(c)$ is only guaranteed where $f$ is CONTINUOUS! If $f$ has a jump at $c$, $F$ has a corner and is not differentiable there.`,
+      `Leibniz’s Rule: $\\frac{d}{dx} \\int_{u(x)}^{v(x)} f(t)\\,dt = f(v(x))v'(x) - f(u(x))u'(x)$. Don't forget the Chain Rule on endpoints!`
     ],
+    proof: {
+      idea: 'Compute the difference quotient $(F(c+h) - F(c))/h = \\frac{1}{h}\\int_c^{c+h} f(t)\\,dt$ and use continuity of $f$ at $c$.',
+      why: 'Because $f(t) \\approx f(c)$ on a tiny interval $[c, c+h]$, the integral is approximately $f(c)h$, so dividing by $h$ leaves $f(c)$.',
+      rungs: [
+        { why: 'Write the difference quotient for $F$ at $c$ for $h \\ne 0$. By additivity (7.2.9), $F(c+h) - F(c) = \\int_c^{c+h} f(t)\\,dt$.', m: '\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h} \\int_c^{c+h} f(t)\\,dt' },
+        { why: 'Since $\\frac{1}{h}\\int_c^{c+h} f(c)\\,dt = f(c) \\cdot \\frac{h}{h} = f(c)$, subtract $f(c)$ inside the integral.', m: '\\frac{F(c+h) - F(c)}{h} - f(c) = \\frac{1}{h} \\int_c^{c+h} [f(t) - f(c)]\\,dt' },
+        { why: 'Since $f$ is continuous at $c$, given $\\varepsilon > 0$, $\\exists \\delta > 0$ such that $|t - c| < \\delta \\implies |f(t) - f(c)| < \\varepsilon$.', m: '|t - c| < \\delta \\implies |f(t) - f(c)| < \\varepsilon' },
+        { why: 'For $0 < |h| < \\delta$, apply the integral triangle inequality (7.2.10).', m: '\\left| \\frac{F(c+h) - F(c)}{h} - f(c) \\right| \\le \\frac{1}{|h|} \\int_c^{c+h} |f(t) - f(c)|\\,dt < \\frac{1}{|h|} \\cdot \\varepsilon |h| = \\varepsilon' }
+      ],
+      ends: 'Taking $h \\to 0$ yields $F\'(c) = f(c)$.'
+    },
     cards: [
-      { q: 'State Form 2 of the Fundamental Theorem of Calculus.', a: 'If $f \\in \\mathcal{R}[a, b]$ and $F\' = f$ on $[a, b]$, then $\\int_a^b f = F(b) - F(a)$.', kind: 'state' },
-      { q: 'Why is $\\int_{-1}^1 \\frac{1}{x} \\, dx = [\\ln|x|]_{-1}^1 = 0$ invalid?', a: 'Because $1/x$ is unbounded at $x = 0$ and not Riemann integrable on $[-1, 1]$.', kind: 'apply' }
+      { q: 'State the Fundamental Theorem of Calculus (Second Form).', a: 'If $f \\in \\mathcal{R}[a, b]$ and $f$ is continuous at $c$, then $F(x) = \\int_a^x f$ is differentiable at $c$ with $F\'(c) = f(c)$.', kind: 'state' },
+      { q: 'Compute $\\dfrac{d}{dx} \\int_1^x \\sqrt{1 + t^4} \\, dt$.', a: '$\\sqrt{1 + x^4}$, by FTC Form 2 since $\\sqrt{1 + t^4}$ is continuous.', kind: 'apply' }
     ]
   },
 
@@ -4744,18 +5892,31 @@ CONCEPTS.push(
     id: 'c.7.3.8', bartle: '7.3.8', sec: '7.3', kind: 'theorem', tier: 'core',
     title: 'Integration by Substitution (Change of Variables)',
     oneLine: 'Chain rule in reverse: substitute u = φ(t) and du = φ\'(t) dt with updated limits.',
-    statement: `Let $J = [\\alpha, \\beta]$ and let $\\varphi: J \\to \\mathbb{R}$ have a continuous derivative on $J$. Let $I = \\varphi(J)$, and let $f: I \\to \\mathbb{R}$ be continuous on $I$. Then:
-      $$\\int_\\alpha^\\beta f(\\varphi(t)) \\varphi'(t) \\, dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u) \\, du$$`,
-    intuition: `<p>In Class 12, $u$-substitution is standard practice: set $u = \\varphi(t)$, replace $dt$ with $du / \\varphi'(t)$, and change the limits from $\\alpha, \\beta$ to $\\varphi(\\alpha), \\varphi(\\beta)$.</p>
-      <p>In Real Analysis, this is simply the Chain Rule integrated using FTC Form 2: if $F$ is an antiderivative of $f$, then $(F \\circ \\varphi)'(t) = f(\\varphi(t)) \\varphi'(t)$.</p>`,
-    needs: ['c.7.3.5', 'c.6.1.5'],
+    statement: `Let $J = [\\alpha, \\beta]$ and let $\\varphi: J \\to \\mathbb{R}$ have a continuous derivative $\\varphi'$ on $J$.
+      <p>Let $I = \\varphi(J)$, and let $f: I \\to \\mathbb{R}$ be continuous on $I$. Then:
+      $$\\int_\\alpha^\\beta f(\\varphi(t)) \\varphi'(t) \\, dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u) \\, du$$</p>`,
+    intuition: `<p>In Class 12, $u$-substitution is second nature: set $u = \\varphi(t)$, replace $dt$ with $du / \\varphi'(t)$, and change the limits from $\\alpha, \\beta$ to $\\varphi(\\alpha), \\varphi(\\beta)$.</p>
+      <p>In Real Analysis, this is simply the Chain Rule integrated using FTC: if $F$ is an antiderivative of $f$, then the composite function $H(t) = F(\\varphi(t))$ has derivative $H'(t) = f(\\varphi(t))\\varphi'(t)$ by the Chain Rule!</p>`,
+    needs: ['c.7.3.1', 'c.6.1.5'],
     traps: [
       `Forgetting to change the integration limits when substituting: the new limits MUST be $\\varphi(\\alpha)$ and $\\varphi(\\beta)$!`,
       `$\\varphi$ must have a continuous derivative $\\varphi'$ on the entire interval.`
     ],
+    proof: {
+      idea: 'Let $F(u) = \\int_{\\varphi(\\alpha)}^u f(x)\\,dx$. Define $H(t) = F(\\varphi(t))$ and differentiate using the Chain Rule.',
+      why: 'Chain rule $(F \\circ \\varphi)\' = (F\' \\circ \\varphi) \\cdot \\varphi\' = (f \\circ \\varphi) \\cdot \\varphi\'$, so integrating $H\'$ by FTC evaluates both sides.',
+      rungs: [
+        { why: 'Define $F(u) = \\int_{\\varphi(\\alpha)}^u f(x)\\,dx$ for $u \\in I$. Since $f$ is continuous, by FTC Form 2 (7.3.5), $F\'(u) = f(u)$.', m: 'F\'(u) = f(u) \\quad \\forall u \\in I' },
+        { why: 'Define the composite function $H(t) = F(\\varphi(t))$ on $J = [\\alpha, \\beta]$.', m: 'H(t) = (F \\circ \\varphi)(t)' },
+        { why: 'By the Chain Rule (6.1.5), $H$ is differentiable on $J$ with $H\'(t) = F\'(\\varphi(t))\\varphi\'(t) = f(\\varphi(t))\\varphi\'(t)$.', m: 'H\'(t) = f(\\varphi(t)) \\varphi\'(t)' },
+        { why: 'Since $H\'$ is continuous, apply FTC Form 1 (7.3.1) to $H$ on $[\\alpha, \\beta]$.', m: '\\int_\\alpha^\\beta f(\\varphi(t)) \\varphi\'(t) \\, dt = H(\\beta) - H(\\alpha)' },
+        { why: 'Evaluate $H(\\beta) - H(\\alpha) = F(\\varphi(\\beta)) - F(\\varphi(\\alpha)) = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du - 0$.', m: '\\int_\\alpha^\\beta f(\\varphi(t))\\varphi\'(t)\\,dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du' }
+      ],
+      ends: 'The Change of Variables formula is established.'
+    },
     cards: [
       { q: 'State the Integration by Substitution formula.', a: '$\\int_\\alpha^\\beta f(\\varphi(t))\\varphi\'(t)\\,dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du$.', kind: 'state' },
-      { q: 'Which differentiation rule corresponds to Integration by Substitution?', a: 'The Chain Rule.', kind: 'recall' }
+      { q: 'Which differentiation theorem underlies Integration by Substitution?', a: 'The Chain Rule.', kind: 'recall' }
     ]
   },
 
@@ -4765,17 +5926,30 @@ CONCEPTS.push(
     oneLine: 'A bounded function is Riemann integrable if and only if its discontinuities form a set of measure zero.',
     statement: `A bounded function $f: [a, b] \\to \\mathbb{R}$ is <b>Riemann integrable</b> on $[a, b]$ if and only if its set of discontinuities $D$ has <b>measure zero</b>:
       $$f \\in \\mathcal{R}[a, b] \\iff \\mu(D) = 0$$
-      <p>A set $Z \\subset \\mathbb{R}$ has <b>measure zero</b> if for every $\\varepsilon > 0$, $Z$ can be covered by a countable collection of open intervals whose total length is less than $\\varepsilon$.</p>`,
-    intuition: `<p>This is the ultimate answer to: <i>"Exactly which functions can be Riemann integrated?"</i></p>
+      <p>A set $Z \\subset \\mathbb{R}$ has <b>measure zero</b> if for every $\\varepsilon > 0$, $Z$ can be covered by a countable collection of open intervals $\\{I_k\\}_{k=1}^\\infty$ whose total length is less than $\\varepsilon$:
+      $$\\sum_{k=1}^\\infty |I_k| < \\varepsilon$$</p>`,
+    intuition: `<p>This is the ultimate answer in real analysis to: <i>"Exactly which functions can be Riemann integrated?"</i></p>
       <p>• Every finite set has measure zero.</p>
       <p>• Every countable set (like $\\mathbb{Q}$) has measure zero!</p>
       <p>• Therefore, Thomae's Popcorn function (discontinuous at all rationals, continuous at all irrationals) IS Riemann integrable, because its discontinuities $\\mathbb{Q}$ have measure zero!</p>
-      <p>• But Dirichlet's function is discontinuous everywhere (its discontinuity set is all of $\\mathbb{R}$), which has measure $> 0$, so it fails.</p>`,
+      <p>• But Dirichlet's function is discontinuous everywhere (discontinuity set is all of $[0, 1]$, measure $1 > 0$), so it fails.</p>`,
     needs: ['c.7.1.1', 'c.1.3.1'],
     traps: [
       `Thinking a function with infinitely many discontinuities cannot be Riemann integrable. False! As long as the discontinuities form a set of measure zero (e.g. countable points), it is integrable.`,
       `Remember that measure zero sets do not have to be countable: the Cantor set is uncountable, yet it has measure zero!`
     ],
+    proof: {
+      idea: 'For $\\varepsilon > 0$, cover the discontinuities with open intervals of total length $< \\varepsilon$, and use uniform continuity on the compact remainder to squeeze upper and lower sums.',
+      why: 'Oscillation is large only on a set of small total width, so its contribution to $U(f) - L(f)$ is negligible.',
+      rungs: [
+        { why: 'Let $D_\\alpha = \\{x \\in [a, b] : \\omega_f(x) \\ge \\alpha\\}$ be the points where oscillation of $f$ is at least $\\alpha > 0$. $D = \\bigcup_{k=1}^\\infty D_{1/k}$.', m: 'D = \\bigcup_{k=1}^\\infty D_{1/k}' },
+        { why: 'If $\\mu(D) = 0$, then each $D_\\alpha$ has measure zero and is compact, so it can be covered by finitely many open intervals of total length $< \\varepsilon/(4M)$.', m: '\\sum |J_k| < \\frac{\\varepsilon}{4M}' },
+        { why: 'Outside this cover, $f$ has oscillation $< \\varepsilon/(2(b - a))$ on the compact remainder, which can be covered by subintervals where $M_i - m_i < \\varepsilon/(2(b - a))$.', m: '\\sum_{\\text{good}} (M_i - m_i) \\Delta x_i < \\frac{\\varepsilon}{2(b - a)}(b - a) = \\frac{\\varepsilon}{2}' },
+        { why: 'On the bad subintervals covering $D_\\alpha$, $M_i - m_i \\le 2M$, so their sum is bounded by $2M \\sum |J_k| < 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}$.', m: '\\sum_{\\text{bad}} (M_i - m_i) \\Delta x_i < \\frac{\\varepsilon}{2}' },
+        { why: 'Total gap $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$. By Darboux Criterion (7.4.8), $f \\in \\mathcal{R}[a, b]$.', m: 'U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon \\implies f \\in \\mathcal{R}[a, b]' }
+      ],
+      ends: 'Lebesgue’s Integrability Criterion is established.'
+    },
     cards: [
       { q: 'State Lebesgue’s Integrability Criterion.', a: 'A bounded function on $[a, b]$ is Riemann integrable iff its discontinuity set has measure zero.', kind: 'state' },
       { q: 'Why is Thomae’s function Riemann integrable on $[0, 1]$?', a: 'Because it is discontinuous only at $\\mathbb{Q} \\cap [0, 1]$, which is countable and therefore has measure zero.', kind: 'apply' }
@@ -4790,14 +5964,60 @@ CONCEPTS.push(
       $$\\int_a^b f(x) g'(x) \\, dx = [f(b)g(b) - f(a)g(a)] - \\int_a^b f'(x) g(x) \\, dx$$`,
     intuition: `<p>In Class 12, everyone remembers the ILATE rule for Integration by Parts: $\\int u\\,dv = uv - \\int v\\,du$.</p>
       <p>In Real Analysis, this is simply the Product Rule $(fg)' = f'g + fg'$ integrated across $[a, b]$ using the Fundamental Theorem of Calculus!</p>`,
-    needs: ['c.7.3.5', 'c.6.1.1'],
+    needs: ['c.7.3.1', 'c.6.1.3'],
     traps: [
       `Forgetting the boundary bracket $[f(x)g(x)]_a^b$: you must evaluate $f(b)g(b) - f(a)g(a)$!`,
       `Both $f$ and $g$ must have integrable derivatives on $[a, b]$.`
     ],
+    proof: {
+      idea: 'Integrate the Product Rule $(fg)\' = f\'g + fg\'$ over $[a, b]$ and apply FTC Form 1.',
+      why: 'FTC turns $\\int (fg)\'$ into $f(b)g(b) - f(a)g(a)$, leaving the two product terms.',
+      rungs: [
+        { why: 'By the Product Rule (6.1.3), $(fg)\'(x) = f\'(x)g(x) + f(x)g\'(x)$ for all $x \\in [a, b]$.', m: '(fg)\'(x) = f\'(x)g(x) + f(x)g\'(x)' },
+        { why: 'Since $f, g, f\', g\'$ are continuous, the products $f\'g$ and $fg\'$ are Riemann integrable on $[a, b]$.', m: '(fg)\' \\in \\mathcal{R}[a, b]' },
+        { why: 'Integrate both sides over $[a, b]$ using Linearity of Integrals (7.1.5).', m: '\\int_a^b (fg)\'(x)\\,dx = \\int_a^b f\'(x)g(x)\\,dx + \\int_a^b f(x)g\'(x)\\,dx' },
+        { why: 'Apply FTC Form 1 (7.3.1) to the left side: $\\int_a^b (fg)\' = f(b)g(b) - f(a)g(a)$.', m: 'f(b)g(b) - f(a)g(a) = \\int_a^b f\'(x)g(x)\\,dx + \\int_a^b f(x)g\'(x)\\,dx' },
+        { why: 'Rearrange to isolate $\\int_a^b f(x)g\'(x)\\,dx$.', m: '\\int_a^b f(x)g\'(x)\\,dx = [f(b)g(b) - f(a)g(a)] - \\int_a^b f\'(x)g(x)\\,dx' }
+      ],
+      ends: 'The Integration by Parts formula is rigorously proved.'
+    },
     cards: [
       { q: 'State the Integration by Parts formula for definite integrals.', a: '$\\int_a^b f g\' = [fg]_a^b - \\int_a^b f\' g$.', kind: 'state' },
       { q: 'Which differentiation rule is the foundation of Integration by Parts?', a: 'The Product Rule: $(fg)\' = f\'g + fg\'.$', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.7.3.18', bartle: '7.3.18', sec: '7.3', kind: 'theorem', tier: 'core',
+    title: 'Taylor’s Theorem with Integral Remainder',
+    oneLine: 'Taylor remainder expressed directly as an integral: R_n(x) = (1/n!) int_{x_0}^x (x - t)^n f^{(n+1)}(t) dt.',
+    statement: `Let $f, f', \\ldots, f^{(n+1)}$ be continuous on an interval $I$ containing $x_0$.
+      <p>Then for any $x \\in I$:
+      $$f(x) = \\sum_{k=0}^n \\frac{f^{(k)}(x_0)}{k!}(x - x_0)^k + R_n(x)$$
+      where the remainder is given by the <b>integral formula</b>:
+      $$R_n(x) = \\frac{1}{n!} \\int_{x_0}^x (x - t)^n f^{(n+1)}(t) \\, dt$$</p>`,
+    intuition: `<p>In Chapter 6, Lagrange remainder $R_n = \\frac{f^{(n+1)}(c)}{(n+1)!}(x - x_0)^{n+1}$ gave an unknown intermediate point $c$.</p>
+      <p>The Integral Remainder is much superior: it is an EXACT, explicit integral! You can bound it, differentiate it, or integrate it directly without worrying about where $c$ hides.</p>
+      <p>The proof is pure mathematical poetry: just apply <b>Integration by Parts repeatedly</b> starting from FTC $f(x) - f(x_0) = \\int_{x_0}^x f'(t) dt$!</p>`,
+    needs: ['c.7.3.17', 'c.7.3.5', 'c.6.4.1'],
+    traps: [
+      `Notice the variable inside the integral is $t$, while $x$ is treated as a constant parameter! The factor is $(x - t)^n$, NOT $(t - x_0)^n$.`
+    ],
+    proof: {
+      idea: 'Start with $f(x) - f(x_0) = \\int_{x_0}^x f\'(t)\\,dt$ and integrate by parts repeatedly with $u = f^{(k)}(t)$ and $dv = -(x - t)^{k-1} dt$.',
+      why: 'Each integration by parts produces the next Taylor term $\\frac{f^{(k)}(x_0)}{k!}(x - x_0)^k$ from the boundary evaluation.',
+      rungs: [
+        { why: 'By FTC Form 2 (7.3.5), write $f(x) - f(x_0) = \\int_{x_0}^x f\'(t)\\,dt$.', m: 'f(x) = f(x_0) + \\int_{x_0}^x f\'(t)\\,dt' },
+        { why: 'Apply Integration by Parts (7.3.17) with $u = f\'(t)$ and $v = -(x - t)$. Note $v\' = 1$.', m: '\\int_{x_0}^x f\'(t)\\,dt = [-f\'(t)(x - t)]_{x_0}^x - \\int_{x_0}^x f\'\'(t)(-(x - t))\\,dt = f\'(x_0)(x - x_0) + \\int_{x_0}^x (x - t)f\'\'(t)\\,dt' },
+        { why: 'This proves the formula for $n = 1$: $f(x) = f(x_0) + f\'(x_0)(x - x_0) + \\int_{x_0}^x (x - t)f\'\'(t)\\,dt$.', m: 'f(x) = P_1(x) + R_1(x)' },
+        { why: 'Integrate by parts again with $u = f\'\'(t)$ and $v = -\\frac{(x - t)^2}{2}$. The boundary term produces $\\frac{f\'\'(x_0)}{2!}(x - x_0)^2$.', m: '\\int_{x_0}^x (x - t)f\'\'(t)\\,dt = \\left[ -\\frac{(x - t)^2}{2} f\'\'(t) \\right]_{x_0}^x + \\int_{x_0}^x \\frac{(x - t)^2}{2} f\'\'\'(t)\\,dt = \\frac{f\'\'(x_0)}{2!}(x - x_0)^2 + R_2(x)' },
+        { why: 'By induction on $n$, continuing $n$ times produces the full polynomial $P_n(x)$ and integral remainder.', m: 'R_n(x) = \\frac{1}{n!} \\int_{x_0}^x (x - t)^n f^{(n+1)}(t) \\, dt' }
+      ],
+      ends: 'Taylor’s Theorem with Integral Remainder is proved.'
+    },
+    cards: [
+      { q: 'State the formula for the integral remainder in Taylor’s Theorem.', a: '$R_n(x) = \\dfrac{1}{n!} \\int_{x_0}^x (x - t)^n f^{(n+1)}(t) \\, dt$.', kind: 'state' },
+      { q: 'What technique is used to prove Taylor’s Theorem with Integral Remainder?', a: 'Repeated Integration by Parts.', kind: 'recall' }
     ]
   },
 
@@ -4838,6 +6058,17 @@ CONCEPTS.push(
       `Do not forget that both Darboux integrability and Riemann integrability are 100% mathematically equivalent: $f \\in \\mathcal{R}[a, b] \\iff \\overline{\\int} f = \\underline{\\int} f$.`,
       `For Dirichlet's function on $[0, 1]$, $U(f, \\mathcal{P}) = 1$ and $L(f, \\mathcal{P}) = 0$ for EVERY partition, so $U - L = 1$ can never be less than $\\varepsilon = 0.5$. Hence it fails Darboux's criterion.`
     ],
+    proof: {
+      idea: 'Show that upper and lower Darboux sums can be approximated arbitrarily closely by Riemann sums using tags near the infima and suprema.',
+      why: 'Because $m_i = \\inf f$ and $M_i = \\sup f$, tags can be picked so that $S(f)$ is within $\\varepsilon$ of $L(f)$ and $U(f)$.',
+      rungs: [
+        { why: '(=>) Let $f \\in \\mathcal{R}[a, b]$ with integral $I$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that for any tagged partition with mesh $< \\delta$, $|S(f) - I| < \\varepsilon/4$.', m: 'I - \\frac{\\varepsilon}{4} < S(f; \\dot{\\mathcal{P}}) < I + \\frac{\\varepsilon}{4}' },
+        { why: 'For any fixed partition $\\mathcal{P}$ of mesh $< \\delta$, choose tags $t_i$ such that $f(t_i) > M_i - \\frac{\\varepsilon}{4(b-a)}$ and $s_i$ such that $f(s_i) < m_i + \\frac{\\varepsilon}{4(b-a)}$.', m: 'U(f, \\mathcal{P}) - \\frac{\\varepsilon}{4} < S(f; \\dot{\\mathcal{P}}_t) \\quad \\text{and} \\quad S(f; \\dot{\\mathcal{P}}_s) < L(f, \\mathcal{P}) + \\frac{\\varepsilon}{4}' },
+        { why: 'Subtract the inequalities: $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < S(f; \\dot{\\mathcal{P}}_t) - S(f; \\dot{\\mathcal{P}}_s) + \\varepsilon/2 < \\varepsilon/4 + \\varepsilon/4 + \\varepsilon/2 = \\varepsilon$.', m: 'U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon' },
+        { why: '(<=) Conversely, if $U(f, \\mathcal{P}_\\varepsilon) - L(f, \\mathcal{P}_\\varepsilon) < \\varepsilon$, then since $\\underline{\\int} f \\ge L(f, \\mathcal{P})$ and $\\overline{\\int} f \\le U(f, \\mathcal{P})$, $0 \\le \\overline{\\int} f - \\underline{\\int} f < \\varepsilon$.', m: '\\overline{\\int}_a^b f = \\underline{\\int}_a^b f = \\int_a^b f' }
+      ],
+      ends: 'Darboux integrability is completely equivalent to Riemann integrability.'
+    },
     cards: [
       { q: 'State the Darboux Integrability Criterion.', a: '$f \\in \\mathcal{R}[a, b]$ iff for every $\\varepsilon > 0$, $\\exists \\mathcal{P}$ such that $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon$.', kind: 'state' },
       { q: 'What are the upper and lower integrals $\\overline{\\int}_a^b f$ and $\\underline{\\int}_a^b f$?', a: '$\\overline{\\int} f = \\inf_{\\mathcal{P}} U(f, \\mathcal{P})$ and $\\underline{\\int} f = \\sup_{\\mathcal{P}} L(f, \\mathcal{P})$.', kind: 'recall' }
@@ -4907,12 +6138,12 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.8.1.3', bartle: '8.1.3', sec: '8.1', kind: 'theorem', tier: 'core',
+    id: 'c.8.1.3', bartle: '8.1.8', sec: '8.1', kind: 'theorem', tier: 'core',
     title: 'The Uniform Norm (Sup-Norm Criterion)',
     oneLine: 'Uniform convergence means the maximum vertical gap between fn and f collapses to zero.',
     statement: `Let $f_n, f: A \\to \\mathbb{R}$ be bounded functions. The <b>uniform norm</b> (sup-norm) on $A$ is:
       $$\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)|$$
-      <p><b>The Criterion:</b> $(f_n)$ converges uniformly to $f$ on $A$ if and only if:
+      <p><b>The Criterion:</b> $(f_n)$ converges <b>uniformly</b> to $f$ on $A$ if and only if:
       $$\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$$</p>`,
     intuition: `<p>Geometrically, imagine drawing an "$\\varepsilon$-ribbon" or tube of width $\\pm\\varepsilon$ around the target graph $f(x)$.</p>
       <p>Uniform convergence means that after step $K$, the entire graph of $f_n(x)$ is sucked completely inside this tube from left to right across the entire domain!</p>
@@ -4922,9 +6153,85 @@ CONCEPTS.push(
       `If the peak error stays bounded away from $0$ (even if the peak slides to the boundary, like in $x^n$), uniform convergence fails!`,
       `Make sure to take the supremum over the specified domain: $x/n$ converges uniformly on $[0, 10]$, but NOT on all of $\\mathbb{R}$.`
     ],
+    proof: {
+      idea: '(=>) If $|f_n(x) - f(x)| \\le \\varepsilon$ for all $x$, then the supremum is $\\le \\varepsilon$. (<=) If the supremum is $\\le \\varepsilon$, then every individual point is bounded by $\\varepsilon$.',
+      why: 'By definition, $M \\le \\varepsilon$ is equivalent to saying $y \\le \\varepsilon$ for every element $y$ of the set.',
+      rungs: [
+        { why: '(=>) Assume $(f_n)$ converges uniformly to $f$ on $A$. Given $\\varepsilon > 0$, choose $K(\\varepsilon)$ such that for all $n \\ge K(\\varepsilon)$ and all $x \\in A$, $|f_n(x) - f(x)| \\le \\varepsilon$.', m: 'n \\ge K(\\varepsilon) \\implies |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall x \\in A' },
+        { why: 'By definition of the supremum as least upper bound, taking supremum over $x \\in A$ preserves the inequality.', m: '\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall n \\ge K(\\varepsilon)' },
+        { why: 'Since $\\varepsilon > 0$ is arbitrary, $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.', m: '\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0' },
+        { why: '(<=) Conversely, assume $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$. Given $\\varepsilon > 0$, choose $H(\\varepsilon)$ such that $\\|f_n - f\\|_A < \\varepsilon$ for all $n \\ge H(\\varepsilon)$.', m: '\\|f_n - f\\|_A < \\varepsilon \\quad \\forall n \\ge H(\\varepsilon)' },
+        { why: 'For any $x \\in A$, $|f_n(x) - f(x)| \\le \\|f_n - f\\|_A < \\varepsilon$, which proves uniform convergence.', m: '|f_n(x) - f(x)| < \\varepsilon \\quad \\forall x \\in A, \\, n \\ge H(\\varepsilon)' }
+      ],
+      ends: 'Uniform convergence on $A$ is completely equivalent to $\\|f_n - f\\|_A \\to 0$.'
+    },
     cards: [
       { q: 'Define the uniform norm $\\|g\\|_A$ of a function $g$ on $A$.', a: '$\\|g\\|_A = \\sup_{x \\in A} |g(x)|$.', kind: 'state' },
       { q: 'How is the sup-norm used to test uniform convergence?', a: '$f_n \\to f$ uniformly on $A$ iff $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.8.1.5', bartle: '8.1.5', sec: '8.1', kind: 'lemma', tier: 'core',
+    title: 'Sequential Criterion for Non-Uniform Convergence',
+    oneLine: 'Convergence is not uniform iff a sequence of sample points x_k always manages to escape the ε_0 boundary.',
+    statement: `A sequence of functions $(f_n)$ on $A \\subseteq \\mathbb{R}$ <b>fails to converge uniformly</b> to $f$ on $A$ if and only if:
+      <p>There exists some $\\varepsilon_0 > 0$, a subsequence $(f_{n_k})$ of $(f_n)$, and a sequence of points $(x_k)$ in $A$ such that:
+      $$\\left| f_{n_k}(x_k) - f(x_k) \\right| \\ge \\varepsilon_0 \\quad \\text{for all } k \\in \\mathbb{N}$$</p>`,
+    intuition: `<p>This is the ultimate tool for DISPROVING uniform convergence in exams!</p>
+      <p>Suppose someone claims $f_n(x) = x^n$ converges uniformly on $[0, 1)$. How do you refute them? Pick $x_k = (1/2)^{1/k} \\in [0, 1)$! Then $f_k(x_k) = ((1/2)^{1/k})^k = 1/2$.</p>
+      <p>Even though $k \\to \\infty$, at the sliding test point $x_k$, the error NEVER drops below $\\varepsilon_0 = 1/2$! You caught them cheating: uniform convergence fails.</p>`,
+    needs: ['c.8.1.1', 'c.3.4.1'],
+    traps: [
+      `The points $x_k$ do NOT need to be fixed! In fact, $x_k$ almost always moves towards a boundary (e.g. $x_k \\to 1$) as $k \\to \\infty$.`,
+      `Remember that pointwise convergence already holds at every fixed point; it is the moving point $x_k$ that detects the failure of uniformity.`
+    ],
+    proof: {
+      idea: 'Negate the logical definition of uniform convergence: $\\exists \\varepsilon_0 > 0$ such that for every $K$, there exist $n \\ge K$ and $x \\in A$ with $|f_n(x) - f(x)| \\ge \\varepsilon_0$.',
+      why: 'Setting $K = 1, 2, 3, \\dots$ generates the desired subsequence $(f_{n_k})$ and witness points $(x_k)$.',
+      rungs: [
+        { why: 'Write the definition of uniform convergence: $\\forall \\varepsilon > 0, \\, \\exists K \\in \\mathbb{N}, \\, \\forall n \\ge K, \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon$.', m: '\\forall \\varepsilon > 0 \\, \\exists K \\in \\mathbb{N} \\, \\forall n \\ge K \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon' },
+        { why: 'Negate this statement by flipping quantifiers.', m: '\\exists \\varepsilon_0 > 0 \\, \\forall K \\in \\mathbb{N} \\, \\exists n \\ge K, \\, \\exists x \\in A : |f_n(x) - f(x)| \\ge \\varepsilon_0' },
+        { why: 'For $K = 1$, choose $n_1 \\ge 1$ and $x_1 \\in A$ such that $|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0$.', m: '|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0' },
+        { why: 'Inductively, for $K_m = n_{m-1} + 1$, choose $n_m > n_{m-1}$ and $x_m \\in A$ with $|f_{n_m}(x_m) - f(x_m)| \\ge \\varepsilon_0$.', m: 'n_1 < n_2 < \\cdots < n_k < \\cdots \\quad \\text{and} \\quad |f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0' }
+      ],
+      ends: 'The sequence of witness points $(x_k)$ proves that convergence cannot be uniform.'
+    },
+    cards: [
+      { q: 'State the Sequential Criterion for non-uniform convergence.', a: '$(f_n)$ does not converge uniformly to $f$ on $A$ iff $\\exists \\varepsilon_0 > 0$, subsequence $(f_{n_k})$, and points $(x_k) \\in A$ with $|f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0$.', kind: 'state' },
+      { q: 'Use witness points to prove $f_n(x) = x^n$ does not converge uniformly on $[0, 1)$.', a: 'Choose $x_k = (1/2)^{1/k} \\in [0, 1)$; then $f_k(x_k) = 1/2 \\ne 0$, so $|f_k(x_k) - 0| = 1/2 = \\varepsilon_0$ for all $k$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.1.10', bartle: '8.1.10', sec: '8.1', kind: 'theorem', tier: 'core',
+    title: 'Cauchy Criterion for Uniform Convergence',
+    oneLine: 'A sequence of functions converges uniformly iff the uniform distance between fm and fn can be made arbitrarily small.',
+    statement: `Let $(f_n)$ be a sequence of bounded functions on $A \\subseteq \\mathbb{R}$.
+      <p>Then $(f_n)$ <b>converges uniformly</b> on $A$ to a bounded function $f$ if and only if:</p>
+      <p>For every $\\varepsilon > 0$, there exists $H(\\varepsilon) \\in \\mathbb{N}$ such that for all $m, n \\ge H(\\varepsilon)$:
+      $$\\|f_m - f_n\\|_A = \\sup_{x \\in A} |f_m(x) - f_n(x)| \\le \\varepsilon$$</p>`,
+    intuition: `<p>Just as with real numbers (Theorem 3.5.5), this criterion lets you prove uniform convergence without knowing the limit function $f$ in advance!</p>
+      <p>If the functions $f_n$ get uniformly close to each other, completeness of $\\mathbb{R}$ forces them to converge pointwise to some function $f$, and the uniform closeness between $f_m$ and $f_n$ is inherited by the limit $f$.</p>`,
+    needs: ['c.8.1.3', 'c.3.5.5'],
+    traps: [
+      `The bound $\\|f_m - f_n\\|_A \\le \\varepsilon$ must hold for ALL points $x \\in A$ simultaneously! Pointwise Cauchy at each $x$ is not enough for uniform convergence.`
+    ],
+    proof: {
+      idea: '(=>) Triangle inequality $|f_m(x) - f_n(x)| <= |f_m(x) - f(x)| + |f(x) - f_n(x)| < 2\\varepsilon$. (<=) Pointwise Cauchy gives limit $f(x)$; taking $n -> \\infty$ in $|f_m(x) - f_n(x)| <= \\varepsilon$ preserves the bound uniformly.',
+      why: 'Completeness of $\\mathbb{R}$ supplies the pointwise limit, and uniform bounds pass to limits.',
+      rungs: [
+        { why: '(=>) If $f_n \\to f$ uniformly on $A$, choose $K(\\varepsilon/2)$ such that $n \\ge K \\implies |f_n(x) - f(x)| \\le \\varepsilon/2$ for all $x$.', m: 'm, n \\ge K(\\varepsilon/2) \\implies |f_m(x) - f_n(x)| \\le |f_m(x) - f(x)| + |f_n(x) - f(x)| \\le \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
+        { why: 'Taking supremum over $x \\in A$ gives $\\|f_m - f_n\\|_A \\le \\varepsilon$.', m: '\\|f_m - f_n\\|_A \\le \\varepsilon \\quad \\forall m, n \\ge K(\\varepsilon/2)' },
+        { why: '(<=) Assume the Cauchy condition. For each fixed $x \\in A$, $(f_n(x))$ is a Cauchy sequence in $\\mathbb{R}$.', m: '|f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall m, n \\ge H(\\varepsilon)' },
+        { why: 'By completeness of $\\mathbb{R}$ (Theorem 3.5.5), $(f_n(x))$ converges in $\\mathbb{R}$. Define $f(x) = \\lim_{n\\to\\infty} f_n(x)$.', m: 'f(x) := \\lim_{n\\to\\infty} f_n(x) \\quad \\forall x \\in A' },
+        { why: 'Keep $m \\ge H(\\varepsilon)$ fixed and send $n \\to \\infty$ in $|f_m(x) - f_n(x)| \\le \\varepsilon$. By Theorem 3.2.6, limits preserve weak inequalities.', m: '|f_m(x) - f(x)| = \\lim_{n\\to\\infty} |f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall x \\in A, \\, m \\ge H(\\varepsilon)' }
+      ],
+      ends: 'Therefore $\\|f_m - f\\|_A \\le \\varepsilon$ for all $m \\ge H(\\varepsilon)$, proving uniform convergence.'
+    },
+    cards: [
+      { q: 'State the Cauchy Criterion for Uniform Convergence.', a: '$(f_n)$ converges uniformly on $A$ iff $\\forall \\varepsilon > 0$, $\\exists H$ such that $m, n \\ge H \\implies \\|f_m - f_n\\|_A \\le \\varepsilon$.', kind: 'state' },
+      { q: 'How is the limit function $f(x)$ constructed in the proof of the Cauchy Criterion?', a: 'For each fixed $x$, $(f_n(x))$ is a Cauchy sequence of real numbers; by completeness of $\\mathbb{R}$, its pointwise limit defines $f(x)$.', kind: 'recall' }
     ]
   },
 
@@ -4964,6 +6271,43 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.8.2.3', bartle: '8.2.3', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Interchange of Limit and Derivative',
+    oneLine: 'If derivatives f_n\' converge uniformly and f_n(x_0) converges at one point, then (lim f_n)\' = lim f_n\'.',
+    statement: `Let $J \\subseteq \\mathbb{R}$ be a bounded interval, and let $(f_n)$ be a sequence of differentiable functions on $J$.
+      <p>Suppose that:
+      <br>(1) There exists a point $x_0 \\in J$ such that the number sequence $(f_n(x_0))$ converges.
+      <br>(2) The sequence of derivatives $(f_n')$ converges <b>uniformly</b> on $J$ to a function $g$.</p>
+      <p>Then:
+      <br>(a) $(f_n)$ converges uniformly on $J$ to a differentiable function $f$.
+      <br>(b) $f'(x) = g(x) = \\lim_{n\\to\\infty} f_n'(x)$ for all $x \\in J$.
+      $$\\frac{d}{dx} \\left[ \\lim_{n\\to\\infty} f_n(x) \\right] = \\lim_{n\\to\\infty} f_n'(x)$$</p>`,
+    intuition: `<p>Swapping derivatives is the most dangerous operation in calculus! You can have $f_n \\to 0$ uniformly, while its derivatives explode to infinity (e.g. $f_n(x) = \\frac{\\sin(nx)}{n} \\to 0$, but $f_n'(x) = \\cos(nx)$ oscillates wildly without converging!).</p>
+      <p>To safely swap limit and derivative, uniform convergence of $f_n$ is NOT ENOUGH: you need <b>uniform convergence of the derivatives $f_n'$</b>!</p>`,
+    needs: ['c.8.1.10', 'c.6.2.4', 'c.8.2.2'],
+    traps: [
+      `Assuming uniform convergence of $f_n$ guarantees differentiability of the limit. Weierstrass constructed a uniform limit of smooth polynomials that is differentiable NOWHERE!`,
+      `The critical condition is that $(f_n')$ must converge UNIFORMLY, not just pointwise.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange MVT to $f_m - f_n$ on $[x_0, x]$ to prove $(f_n)$ is uniformly Cauchy, then apply MVT to difference quotients to show $f\'(c) = g(c)$.',
+      why: 'MVT transfers uniform convergence of $(f_n\')$ into control over $|(f_m(x)-f_n(x)) - (f_m(c)-f_n(c))|/(x - c)$.',
+      rungs: [
+        { why: 'For any $x \\in J$, apply MVT (6.2.4) to $f_m - f_n$ on the interval between $x_0$ and $x$.', m: 'f_m(x) - f_n(x) = f_m(x_0) - f_n(x_0) + (x - x_0)[f_m\'(y) - f_n\'(y)] \\quad \\text{for some } y' },
+        { why: 'Since $(f_n(x_0))$ converges and $(f_n\')$ is uniformly Cauchy, $(f_n)$ is uniformly Cauchy on $J$, so $f_n \\to f$ uniformly on $J$.', m: '\\|f_m - f_n\\|_J \\le |f_m(x_0) - f_n(x_0)| + (b - a)\\|f_m\' - f_n\'\\|_J < \\varepsilon' },
+        { why: 'For fixed $c \\in J$ and $x \\ne c$, apply MVT to $(f_m - f_n)$ on $[c, x]$: $\\frac{f_m(x)-f_m(c)}{x-c} - \\frac{f_n(x)-f_n(c)}{x-c} = f_m\'(z) - f_n\'(z)$.', m: '\\left| \\frac{f_m(x) - f_m(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\|f_m\' - f_n\'\\|_J < \\varepsilon' },
+        { why: 'Take $m \\to \\infty$: $|\\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c}| \\le \\varepsilon$.', m: '\\left| \\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\varepsilon' },
+        { why: 'Combine with $|f_n\'(c) - g(c)| < \\varepsilon$ and differentiability of $f_n$ at $c$ to conclude $|\\frac{f(x)-f(c)}{x-c} - g(c)| < 3\\varepsilon$.', m: 'f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} = g(c)' }
+      ],
+      ends: 'The derivative of the limit equals the uniform limit of the derivatives: $(\\lim f_n)\' = \\lim f_n\'.'
+    },
+    cards: [
+      { q: 'What key condition guarantees that $(\\lim f_n)\' = \\lim f_n\'$?', a: 'The sequence of derivatives $(f_n\')$ must converge UNIFORMLY (and $f_n(x_0)$ converges at one point).', kind: 'state' },
+      { q: 'Give an example where $f_n \\to 0$ uniformly, but $\\lim f_n\' \\ne (\\lim f_n)\'$.', a: '$f_n(x) = \\dfrac{\\sin(nx)}{n} \\to 0$ uniformly on $\\mathbb{R}$, but $f_n\'(x) = \\cos(nx)$ does not converge at all.', kind: 'apply' }
+    ]
+  },
+
+  {
     id: 'c.8.2.4', bartle: '8.2.4', sec: '8.2', kind: 'theorem', tier: 'core',
     title: 'Interchange of Limit and Integral',
     oneLine: 'Under uniform convergence, the limit of the integrals equals the integral of the limit.',
@@ -4973,14 +6317,95 @@ CONCEPTS.push(
     intuition: `<p>In pure calculus, swapping limits is dangerous: $\\lim \\int \\ne \\int \\lim$ in general! Look at this famous counterexample:</p>
       <p>Consider a tall narrow spike function $f_n(x)$ on $[0, 1]$ of height $n$ and width $1/n$. At every fixed point $x > 0$, $f_n(x) \\to 0$, so the pointwise limit is $0$, whose integral is $0$. But the area under the spike is $\\int_0^1 f_n = 1$ for every $n$! So $\\lim \\int = 1 \\ne 0 = \\int \\lim$.</p>
       <p>Uniform convergence prevents these rogue spikes from shooting off to infinity by locking the entire function inside a flat envelope, making the limit swap 100% legal!</p>`,
-    needs: ['c.8.1.1', 'c.7.1.1'],
+    needs: ['c.8.1.1', 'c.7.1.1', 'c.8.1.10'],
     traps: [
       `Assuming you can always interchange limit and integral without checking uniform convergence. The moving spike counterexample is a classic exam favorite!`,
       `For differentiation, even uniform convergence of $f_n$ is not enough! You need uniform convergence of the DERIVATIVES $f_n'$ to interchange $\\frac{d}{dx}$ and $\\lim$.`
     ],
+    proof: {
+      idea: 'Show that $\\int_a^b f_n$ forms a Cauchy sequence of real numbers using $|\\int f_m - \\int f_n| <= \\|f_m - f_n\\|(b - a)$, then show $f \\in \\mathcal{R}[a, b]$ with that limit.',
+      why: 'Uniform convergence controls the gap $|f_n(x) - f(x)| < \\varepsilon$ simultaneously for all $x$, so the integral of the difference is bounded by $\\varepsilon(b - a)$.',
+      rungs: [
+        { why: 'Given $\\varepsilon > 0$, by Cauchy Criterion (8.1.10), $\\exists H(\\varepsilon)$ such that for $m > n \\ge H$, $-\\varepsilon \\le f_m(x) - f_n(x) \\le \\varepsilon$ for all $x \\in [a, b]$.', m: '-\\varepsilon(b - a) \\le \\int_a^b f_m - \\int_a^b f_n \\le \\varepsilon(b - a)' },
+        { why: 'Thus $(\\int_a^b f_n)$ is a Cauchy sequence in $\\mathbb{R}$, hence converges to some limit $A = \\lim_{n\\to\\infty} \\int_a^b f_n$.', m: 'A = \\lim_{n\\to\\infty} \\int_a^b f_n' },
+        { why: 'Since $f_n \\to f$ uniformly, choose $K$ such that for $m \\ge K$, $|f_m(x) - f(x)| < \\varepsilon$ for all $x \\in [a, b]$. For any tagged partition $\\dot{\\mathcal{P}}$, $|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)' },
+        { why: 'Pick $m$ so large that $|\\int_a^b f_m - A| < \\varepsilon$. Since $f_m$ is integrable, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f_m; \\dot{\\mathcal{P}}) - \\int_a^b f_m| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - A| \\le |S(f) - S(f_m)| + |S(f_m) - \\int f_m| + |\\int f_m - A| < \\varepsilon(b - a) + 2\\varepsilon' },
+        { why: 'Since $\\varepsilon > 0$ is arbitrary, $f \\in \\mathcal{R}[a, b]$ and $\\int_a^b f = A = \\lim_{n\\to\\infty} \\int_a^b f_n$.', m: '\\int_a^b f = \\lim_{n\\to\\infty} \\int_a^b f_n' }
+      ],
+      ends: 'Interchange of limit and Riemann integral is established.'
+    },
     cards: [
       { q: 'Under what condition is $\\lim_{n\\to\\infty} \\int_a^b f_n = \\int_a^b \\lim_{n\\to\\infty} f_n$ guaranteed?', a: 'When $f_n \\in \\mathcal{R}[a, b]$ and $(f_n)$ converges uniformly to $f$ on $[a, b]$.', kind: 'state' },
       { q: 'Give an example where pointwise limit holds but $\\lim \\int f_n \\ne \\int \\lim f_n$.', a: 'A sequence of spikes $f_n$ on $[0, 1]$ with area $\\int f_n = 1$ but $f_n(x) \\to 0$ pointwise.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.2.5', bartle: '8.2.5', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Bounded Convergence Theorem for Riemann Integrals',
+    oneLine: 'If a sequence of integrable functions is uniformly bounded and converges pointwise to an integrable limit, integrals converge.',
+    statement: `Let $(f_n)$ be a sequence in $\\mathcal{R}[a, b]$ that converges <b>pointwise</b> on $[a, b]$ to an integrable function $f \\in \\mathcal{R}[a, b]$.
+      <p>Suppose there exists $M > 0$ such that:
+      $$|f_n(x)| \\le M \\quad \\text{for all } x \\in [a, b] \\text{ and all } n \\in \\mathbb{N}$$
+      Then:
+      $$\\lim_{n\\to\\infty} \\int_a^b f_n(x) \\, dx = \\int_a^b f(x) \\, dx$$</p>`,
+    intuition: `<p>Notice how amazing this theorem is: it does NOT require uniform convergence!</p>
+      <p>Why did the runaway spike counterexample fail earlier? Because the height of the spike shot off to infinity ($h = n$). The Bounded Convergence Theorem puts a hard ceiling $M$ on the whole family: if no spike can ever poke higher than $M$, then pointwise convergence alone is enough to guarantee that the areas converge!</p>`,
+    needs: ['c.8.2.4', 'c.7.1.5'],
+    traps: [
+      `The limit function $f$ must be assumed to be Riemann integrable (unlike in Lebesgue integration theory where integrability is automatic).`,
+      `The uniform bound $M$ must NOT depend on $n$ or $x$.`
+    ],
+    proof: {
+      idea: 'Divide $[a, b]$ into a set where $f_n \\to f$ except on a set of small measure, and use $|f_n - f| \\le 2M$ to bound the remaining contribution.',
+      why: 'Uniform boundedness prevents escapes to infinity, allowing Egorov-like truncation.',
+      rungs: [
+        { why: 'Let $g_n = |f_n - f|$. Then $g_n(x) \\to 0$ pointwise on $[a, b]$, and $|g_n(x)| \\le 2M$ for all $x, n$.', m: '0 \\le g_n(x) \\le 2M, \\quad \\lim_{n\\to\\infty} g_n(x) = 0' },
+        { why: 'Given $\\varepsilon > 0$, by Arzelà\'s theorem, the set of points where $g_n(x) \\ge \\frac{\\varepsilon}{2(b-a)}$ can be enclosed in subintervals of total length $< \\frac{\\varepsilon}{4M}$.', m: '\\int_{\\text{bad}} g_n \\le 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}' },
+        { why: 'On the remaining good set, $g_n(x) < \\frac{\\varepsilon}{2(b-a)}$, so its integral is bounded by $\\frac{\\varepsilon}{2(b-a)}(b - a) = \\frac{\\varepsilon}{2}$.', m: '\\int_{\\text{good}} g_n < \\frac{\\varepsilon}{2}' },
+        { why: 'Combine both parts: $\\int_a^b |f_n - f| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$.', m: '\\left| \\int_a^b f_n - \\int_a^b f \\right| \\le \\int_a^b |f_n - f| < \\varepsilon' }
+      ],
+      ends: 'Therefore $\\lim_{n\\to\\infty} \\int_a^b f_n = \\int_a^b f$.'
+    },
+    cards: [
+      { q: 'State the Bounded Convergence Theorem for Riemann integrals.', a: 'If $f_n, f \\in \\mathcal{R}[a, b]$, $f_n \\to f$ pointwise, and $|f_n(x)| \\le M$ for all $n, x$, then $\\lim \\int_a^b f_n = \\int_a^b f$.', kind: 'state' },
+      { q: 'How does the Bounded Convergence Theorem differ from Theorem 8.2.4?', a: 'It replaces the stringent hypothesis of uniform convergence with uniform boundedness ($|f_n| \\le M$).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.8.2.6', bartle: '8.2.6', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Dini’s Theorem on Monotone Sequences of Functions',
+    oneLine: 'A monotone sequence of continuous functions on a compact interval converging to a continuous limit MUST converge uniformly.',
+    statement: `Let $I = [a, b]$ be a closed bounded interval, and let $(f_n)$ be a <b>monotone</b> sequence of <b>continuous</b> functions on $I$ that converges pointwise to a <b>continuous</b> function $f$ on $I$.
+      <p>Then the convergence of $(f_n)$ to $f$ is <b>uniform</b> on $I$.</p>`,
+    intuition: `<p>Normally, pointwise convergence does NOT imply uniform convergence. But Italian mathematician Ulisse Dini discovered the magic combination that forces uniformity:</p>
+      <p>1. <b>Monotonicity:</b> The graphs move in only one direction (e.g. marching down, $f_{n+1} \\le f_n$). No oscillations!</p>
+      <p>2. <b>Continuity of everything:</b> Both the approximating functions $f_n$ AND the limit function $f$ are continuous.</p>
+      <p>3. <b>Compact domain:</b> The interval $[a, b]$ is closed and bounded.</p>
+      <p>When these three align, it is physically impossible for a sharp non-uniform peak to hide: the entire curve is dragged into uniform convergence!</p>`,
+    needs: ['c.8.2.2', 'c.5.3.4'],
+    traps: [
+      `ALL THREE conditions are mandatory!`,
+      `• If the domain is open like $(0, 1)$, Dini fails ($f_n(x) = x^n$ on $(0, 1)$).`,
+      `• If the limit $f$ is discontinuous, Dini fails ($x^n$ on $[0, 1]$).`,
+      `• If the sequence is not monotone, Dini fails (moving spike functions).`
+    ],
+    proof: {
+      idea: 'Let $g_n = f_n - f \\ge 0$ decrease to 0. If convergence were not uniform, $\\sup g_n \\ge \\varepsilon_0$; continuity on compact $[a, b]$ yields a maximum point $x_n$, whose convergent subsequence produces a contradiction.',
+      why: 'Bolzano-Weierstrass extracts a cluster point where $g_n$ cannot drop to 0, contradicting pointwise convergence.',
+      rungs: [
+        { why: 'Assume without loss of generality that $(f_n)$ is decreasing. Let $g_n = f_n - f$. Then each $g_n$ is continuous on $[a, b]$, $g_{n+1}(x) \\le g_n(x)$, and $g_n(x) \\to 0$ for each $x$.', m: 'g_n \\ge g_{n+1} \\ge 0, \\quad g_n(x) \\to 0 \\quad \\forall x \\in [a, b]' },
+        { why: 'Suppose for contradiction that $g_n$ does not converge uniformly to $0$. Then $\\exists \\varepsilon_0 > 0$ such that $\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0$ for all $n$.', m: '\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0 \\quad \\forall n \\in \\mathbb{N}' },
+        { why: 'Since $g_n$ is continuous on compact $[a, b]$, by Maximum-Minimum Theorem (5.3.4), $g_n$ attains its maximum at some $x_n \\in [a, b]$: $g_n(x_n) \\ge \\varepsilon_0$.', m: 'g_n(x_n) = \\sup_{x \\in [a, b]} g_n(x) \\ge \\varepsilon_0' },
+        { why: 'By Bolzano-Weierstrass (3.4.8), $(x_n)$ has a subsequence $(x_{n_k})$ converging to some $x^* \\in [a, b]$. For any fixed $m$, when $n_k \\ge m$, monotonicity gives $g_m(x_{n_k}) \\ge g_{n_k}(x_{n_k}) \\ge \\varepsilon_0$.', m: 'g_m(x_{n_k}) \\ge \\varepsilon_0 \\quad \\forall n_k \\ge m' },
+        { why: 'Take $k \\to \\infty$: by continuity of $g_m$, $g_m(x^*) = \\lim_{k\\to\\infty} g_m(x_{n_k}) \\ge \\varepsilon_0$. But this holds for ALL $m$, contradicting $g_m(x^*) \\to 0$!', m: 'g_m(x^*) \\ge \\varepsilon_0 \\quad \\forall m \\implies \\lim_{m\\to\\infty} g_m(x^*) \\ge \\varepsilon_0 > 0 \\implies\\Leftarrow' }
+      ],
+      ends: 'Contradiction! Therefore, $(g_n)$ converges uniformly to $0$, proving Dini’s Theorem.'
+    },
+    cards: [
+      { q: 'State Dini’s Theorem.', a: 'If $(f_n)$ is a monotone sequence of continuous functions on $[a, b]$ converging pointwise to a continuous limit $f$, then the convergence is uniform.', kind: 'state' },
+      { q: 'Why does Dini’s Theorem fail for $f_n(x) = x^n$ on $[0, 1]$?', a: 'Because the pointwise limit function $f$ is discontinuous at $x = 1$.', kind: 'apply' }
     ]
   },
 

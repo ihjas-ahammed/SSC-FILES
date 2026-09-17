@@ -83,6 +83,71 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.1.2.2', bartle: '1.2.2', sec: '1.2', kind: 'theorem', tier: 'core',
+    title: 'The Well-Ordering Property of ℕ',
+    oneLine: 'Every non-empty subset of natural numbers contains a unique smallest element.',
+    statement: `<b>Well-Ordering Property of $\\mathbb{N}$ (Axiom):</b> If $S$ is a non-empty subset of $\\mathbb{N}$, then there exists an element $m \\in S$ such that:
+      $$m \\le s \\quad \\text{for all } s \\in S$$
+      This unique element $m$ is called the <b>least element</b> (or minimum) of $S$.`,
+    intuition: `<p>On a staircase of positive integers $1, 2, 3, \\dots$, you cannot walk downward forever! If you select ANY bunch of steps (a subset $S$), there has to be a lowest step among them.</p>
+      <p>This property distinguishes $\\mathbb{N}$ from $\\mathbb{Z}$, $\\mathbb{Q}$, and $\\mathbb{R}$. For instance, the positive rationals $\\mathbb{Q}^+$ have NO smallest element (half of any positive rational is even smaller!).</p>`,
+    needs: ['s.quantifier'],
+    traps: [
+      `The set $S$ MUST be non-empty ($S \\ne \\emptyset$) and must consist of natural numbers.`,
+      `Does NOT hold for $\\mathbb{Z}$ (integers go down to $-\\infty$) or open intervals like $(0, 1) \\subset \\mathbb{R}$ (infimum is $0$, but $0 \\notin (0, 1)$).`
+    ],
+    proof: {
+      idea: 'Show that the Well-Ordering Property is logically equivalent to the Principle of Mathematical Induction.',
+      why: 'If a set without a least element existed, induction on its complement would prove the set is empty.',
+      rungs: [
+        { why: 'Let $S \\subseteq \\mathbb{N}$ be a subset that has no least element. We will prove $S = \\emptyset$.', m: 'S \\subseteq \\mathbb{N} \\text{ has no least element}' },
+        { why: 'Define $T = \\mathbb{N} \\setminus S$. We show $T = \\mathbb{N}$ using induction. First, $1 \\in T$, because if $1 \\in S$, $1$ would be the least element of $S$ (since $1 \\le s$ for all $s \\in \\mathbb{N}$).', m: '1 \\in T' },
+        { why: 'Assume $\{1, 2, \\ldots, k\} \\subseteq T$. Then no number $\\le k$ belongs to $S$.', m: 's \\in S \\implies s > k' },
+        { why: 'If $k + 1 \\in S$, then $k + 1$ would be smaller than all other elements of $S$, making it the least element of $S$, a contradiction. Thus $k + 1 \\in T$.', m: 'k + 1 \\in T' },
+        { why: 'By induction, $T = \\mathbb{N}$, which forces $S = \\emptyset$.', m: 'T = \\mathbb{N} \\implies S = \\emptyset' }
+      ],
+      ends: 'Therefore, every non-empty subset of $\\mathbb{N}$ must have a least element.'
+    },
+    cards: [
+      { q: 'State the Well-Ordering Property of $\\mathbb{N}$.', a: 'Every non-empty subset of $\\mathbb{N}$ has a least element.', kind: 'state' },
+      { q: 'Does the Well-Ordering Property hold for the set of positive rational numbers $\\mathbb{Q}^+$?', a: 'No, $\\mathbb{Q}^+$ has no smallest element (for any $q > 0$, $q/2 > 0$ is smaller).', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.1.2.3', bartle: '1.2.3', sec: '1.2', kind: 'theorem', tier: 'core',
+    title: 'Principle of Strong Induction',
+    oneLine: 'Assume the statement holds for ALL predecessors 1, 2, ..., k to prove it for k + 1.',
+    statement: `Let $S$ be a subset of $\\mathbb{N}$ such that:
+      <p>(1) $1 \\in S$.</p>
+      <p>(2) For every $k \\in \\mathbb{N}$, if $\\{1, 2, \\ldots, k\\} \\subseteq S$, then $k + 1 \\in S$.</p>
+      <p>Then $S = \\mathbb{N}$.</p>`,
+    intuition: `<p>Standard induction assumes only that the single immediately preceding step $k$ holds. <b>Strong induction gives you a much stronger assumption:</b> you get to assume that EVERY step from $1$ up to $k$ holds!</p>
+      <p>Think of prime factorization: every number $n > 1$ is either prime or factors into $a \\cdot b$ with $a, b < n$. You need the induction hypothesis to hold for both $a$ and $b$, not just $n-1$. Strong induction is tailor-made for such proofs.</p>`,
+    needs: ['c.1.2.1'],
+    traps: [
+      `Even though it is called "strong" induction, it is mathematically 100% equivalent in power to standard induction! It doesn't prove anything standard induction cannot prove; it is just more convenient.`,
+      `Don't forget the base case ($1 \\in S$) still needs to be established.`
+    ],
+    proof: {
+      idea: 'Define an auxiliary property $T_k = \\{1, 2, \\ldots, k\\} \\subseteq S$ and apply standard induction to $T_k$.',
+      why: 'Proving $T_k$ holds for all $k$ by standard induction directly establishes that $k \\in S$ for all $k$.',
+      rungs: [
+        { why: 'Define $T = \\{k \\in \\mathbb{N} : \\{1, 2, \\ldots, k\\} \\subseteq S\\}$.', m: 'k \\in T \\iff \\{1, \\ldots, k\\} \\subseteq S' },
+        { why: 'Base step: Since $1 \\in S$ by hypothesis (1), $\\{1\\} \\subseteq S$, so $1 \\in T$.', m: '1 \\in T' },
+        { why: 'Inductive step: Assume $k \\in T$. Then $\\{1, \\ldots, k\\} \\subseteq S$.', m: '\\{1, \\ldots, k\\} \\subseteq S' },
+        { why: 'By hypothesis (2), this implies $k + 1 \\in S$. Combining $\\{1, \\ldots, k\\} \\subseteq S$ and $k + 1 \\in S$ gives $\\{1, \\ldots, k+1\\} \\subseteq S$.', m: '\\{1, \\ldots, k+1\\} \\subseteq S \\implies k + 1 \\in T' },
+        { why: 'By standard induction (1.2.1), $T = \\mathbb{N}$. Since $k \\in T \\implies k \\in S$, we have $S = \\mathbb{N}$.', m: 'T = \\mathbb{N} \\implies S = \\mathbb{N}' }
+      ],
+      ends: 'Strong induction is proved equivalent to standard mathematical induction.'
+    },
+    cards: [
+      { q: 'State the inductive hypothesis in Strong Induction.', a: 'Assume the statement holds for all integers from $1$ up to $k$: $\\{1, 2, \\ldots, k\\} \\subseteq S$.', kind: 'state' },
+      { q: 'Is Strong Induction logically stronger than standard induction?', a: 'No, they are logically equivalent; any proof using strong induction can be rephrased using standard induction.', kind: 'recall' }
+    ]
+  },
+
+  {
     id: 'c.1.3.1', bartle: '1.3.1', sec: '1.3', kind: 'definition', tier: 'core',
     title: 'Finite, Countably Infinite, and Uncountable Sets',
     oneLine: 'Countable means you can line up the elements in a 1st, 2nd, 3rd sequence without missing any.',
@@ -135,6 +200,75 @@ CONCEPTS.push(
       { q: 'Is the set of irrational numbers $\\mathbb{R} \\setminus \\mathbb{Q}$ countable or uncountable?', a: 'Uncountable. If it were countable, $\\mathbb{R} = \\mathbb{Q} \\cup (\\mathbb{R} \\setminus \\mathbb{Q})$ would be a countable union of countable sets, contradicting that $\\mathbb{R}$ is uncountable.', kind: 'apply' },
       { q: 'What famous proof technique shows that $[0, 1]$ cannot be put into a one-to-one correspondence with $\\mathbb{N}$?', a: "Cantor's diagonal argument.", kind: 'recall' },
       { q: 'State the countability of the sets $\\mathbb{Q}$ and $\\mathbb{R}$.', a: 'The set of rational numbers $\\mathbb{Q}$ is countable, whereas the set of real numbers $\\mathbb{R}$ is uncountable.', kind: 'state' }
+    ]
+  },
+
+  {
+    id: 'c.1.3.3', bartle: '1.3.8', sec: '1.3', kind: 'theorem', tier: 'core',
+    title: 'Properties of Countable Sets: Subsets and Unions',
+    oneLine: 'Any subset of a countable set is countable; a countable union of countable sets is countable.',
+    statement: `(a) Any subset of a countable set is <b>countable</b>.
+      <p>(b) If $A_n$ is a countable set for each $n \\in \\mathbb{N}$, then the union:
+      $$A = \\bigcup_{n=1}^\\infty A_n$$
+      is <b>countable</b>. (A countable union of countable sets is countable).</p>`,
+    intuition: `<p>Think of countable sets as manageable lists:</p>
+      <p>• If you take a subset of a list, you can just cross out the unwanted items. The remaining items form an even shorter list (still countable!).</p>
+      <p>• If you have countably many lists, write list 1 on row 1, list 2 on row 2, list 3 on row 3... Then snake through the 2D grid diagonally (1st item of list 1, 1st of list 2, 2nd of list 1, etc.). Every single item in every list gets assigned a finite position!</p>`,
+    needs: ['c.1.3.1'],
+    traps: [
+      `An UNCOUNTABLE union of countable sets can easily be uncountable! For example, $\\mathbb{R} = \\bigcup_{x \\in \\mathbb{R}} \\{x\\}$ is a union of singletons (each countable), but the total union is uncountable because the index set $\\mathbb{R}$ is uncountable.`,
+      `Remember that subsets of infinite sets can be finite or countably infinite.`
+    ],
+    proof: {
+      idea: 'For subsets, filter the original enumeration. For countable unions, arrange elements into an infinite array and list them along finite diagonals.',
+      why: 'Each diagonal contains only finitely many elements, so numbering them systematically yields an enumeration of the whole union.',
+      rungs: [
+        { why: 'Let $S$ be countable and $E \\subseteq S$. If $E$ is finite, it is countable. If $E$ is infinite, let $S = \\{s_1, s_2, \\ldots\\}$. Define $n_1$ as the smallest index with $s_{n_1} \\in E$.', m: 'n_1 = \\min\\{k \\in \\mathbb{N} : s_k \\in E\\}' },
+        { why: 'Inductively define $n_k = \\min\\{j > n_{k-1} : s_j \\in E\\}$. Then $k \\mapsto s_{n_k}$ is a bijection from $\\mathbb{N}$ to $E$, proving $E$ is countably infinite.', m: 'f(k) = s_{n_k} \\implies E \\text{ is countable}' },
+        { why: 'For the union $A = \\bigcup_{n=1}^\\infty A_n$, list each set: $A_n = \\{a_{n1}, a_{n2}, a_{n3}, \\ldots\\}$. Arrange into a 2D array.', m: 'A_1 = \\{a_{11}, a_{12}, \\dots\\}, \\, A_2 = \\{a_{21}, a_{22}, \\dots\\}, \\dots' },
+        { why: 'Traverse the diagonals $D_k = \\{a_{ij} : i + j = k\\}$ for $k = 2, 3, 4, \\ldots$. Each diagonal $D_k$ has at most $k - 1$ elements (finite).', m: 'a_{11},\\, a_{21},\\, a_{12},\\, a_{31},\\, a_{22},\\, a_{13},\\, \\ldots' },
+        { why: 'Skipping duplicate elements defines a surjection from $\\mathbb{N}$ onto $A$, proving $A$ is countable.', m: 'g: \\mathbb{N} \\twoheadrightarrow A \\implies A \\text{ is countable}' }
+      ],
+      ends: 'Subsets of countable sets and countable unions of countable sets are countable.'
+    },
+    cards: [
+      { q: 'Is every subset of a countable set countable?', a: 'Yes, every subset of a countable set is either finite or countably infinite (hence countable).', kind: 'state' },
+      { q: 'If $A_1, A_2, A_3, \\dots$ are each countable sets, is $\\bigcup_{n=1}^\\infty A_n$ countable?', a: 'Yes, a countable union of countable sets is always countable.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.1.3.4', bartle: '1.3.12', sec: '1.3', kind: 'theorem', tier: 'core',
+    title: 'Cantor’s Theorem on Power Sets',
+    oneLine: 'A set is strictly smaller than the set of its subsets: there is no surjection from A to P(A).',
+    statement: `For any set $A$, there is <b>no surjective function</b> from $A$ onto its power set $\\mathcal{P}(A)$.
+      <p>Consequently, the cardinality of $\\mathcal{P}(A)$ is strictly greater than the cardinality of $A$:
+      $$|A| < |\\mathcal{P}(A)|$$</p>`,
+    intuition: `<p>This is Cantor's mind-bending discovery that <b>infinity has different sizes, and there is no largest infinity!</b></p>
+      <p>• Start with $\\mathbb{N}$ (countable infinity).</p>
+      <p>• Its power set $\\mathcal{P}(\\mathbb{N})$ has strictly bigger infinity ($2^{\\aleph_0}$, the continuum of reals!).</p>
+      <p>• The power set of that, $\\mathcal{P}(\\mathcal{P}(\\mathbb{N}))$, is even bigger!</p>
+      <p>The proof is the Barber Paradox: define $D = \\{x \\in A : x \\notin f(x)\\}$. Could any element $d \\in A$ have $f(d) = D$? If $d \\in D$, then by definition $d \\notin f(d) = D$. If $d \\notin D$, then $d \\in f(d) = D$. Contradiction!</p>`,
+    needs: ['c.1.1.1'],
+    traps: [
+      `The diagonal set $D = \\{x \\in A : x \\notin f(x)\\}$ is a subset of $A$, so $D \\in \\mathcal{P}(A)$. It is completely legitimate!`,
+      `Cantor’s Theorem applies to ANY set, whether finite or infinite. For a finite set of $n$ elements, $|\\mathcal{P}(A)| = 2^n > n$.`
+    ],
+    proof: {
+      idea: 'Assume for contradiction that a surjection $f: A \\to \\mathcal{P}(A)$ exists, and construct the diagonal set $D = \\{x \\in A : x \\notin f(x)\\}$.',
+      why: 'If $f(d) = D$, asking whether $d \\in D$ leads to $d \\in D \\iff d \\notin D$, an impossible contradiction.',
+      rungs: [
+        { why: 'Suppose for contradiction that $f: A \\to \\mathcal{P}(A)$ is surjective.', m: 'f: A \\twoheadrightarrow \\mathcal{P}(A)' },
+        { why: 'Define the diagonal subset $D = \\{x \\in A : x \\notin f(x)\\}$. Since $D \\subseteq A$, $D \\in \\mathcal{P}(A)$.', m: 'D := \\{x \\in A : x \\notin f(x)\\} \\in \\mathcal{P}(A)' },
+        { why: 'Since $f$ is surjective, there must exist some element $d \\in A$ such that $f(d) = D$.', m: '\\exists d \\in A : f(d) = D' },
+        { why: 'Now ask: does $d$ belong to $D$? By definition of $D$, $d \\in D \\iff d \\notin f(d)$.', m: 'd \\in D \\iff d \\notin f(d)' },
+        { why: 'Substitute $f(d) = D$ into the equivalence: $d \\in D \\iff d \\notin D$, an outright logical contradiction.', m: 'd \\in D \\iff d \\notin D \\implies\\Leftarrow' }
+      ],
+      ends: 'Therefore, no surjection from $A$ onto $\\mathcal{P}(A)$ can exist, proving $|A| < |\\mathcal{P}(A)|$.'
+    },
+    cards: [
+      { q: 'State Cantor’s Theorem on power sets.', a: 'For any set $A$, there is no surjection from $A$ onto $\\mathcal{P}(A)$, meaning $|A| < |\\mathcal{P}(A)|$.', kind: 'state' },
+      { q: 'How is the diagonal set $D$ defined in the proof of Cantor’s Theorem?', a: '$D = \\{x \\in A : x \\notin f(x)\\}$.', kind: 'recall' }
     ]
   }
 );

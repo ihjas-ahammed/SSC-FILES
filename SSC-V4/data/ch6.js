@@ -62,13 +62,86 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.6.1.3', bartle: '6.1.3', sec: '6.1', kind: 'theorem', tier: 'core',
+    title: 'Algebraic Properties of Derivatives: Sum, Product, and Quotient Rules',
+    oneLine: 'Derivatives are linear, obey the product rule (fg)\' = f\'g + fg\', and quotient rule (f/g)\' = (f\'g - fg\')/g^2.',
+    statement: `Let $I \\subseteq \\mathbb{R}$ be an interval, $c \\in I$, and let $f, g: I \\to \\mathbb{R}$ be differentiable at $c$. Then:
+      <p>(a) If $\\alpha \\in \\mathbb{R}$, the function $\\alpha f$ is differentiable at $c$, and $(\\alpha f)'(c) = \\alpha f'(c)$.</p>
+      <p>(b) The function $f + g$ is differentiable at $c$, and $(f + g)'(c) = f'(c) + g'(c)$.</p>
+      <p>(c) <b>Product Rule:</b> The function $fg$ is differentiable at $c$, and:
+      $$(fg)'(c) = f'(c)g(c) + f(c)g'(c)$$</p>
+      <p>(d) <b>Quotient Rule:</b> If $g(c) \\ne 0$, the function $f/g$ is differentiable at $c$, and:
+      $$\\left(\\frac{f}{g}\\right)'(c) = \\frac{f'(c)g(c) - f(c)g'(c)}{(g(c))^2}$$</p>`,
+    intuition: `<p>In Class 12, we memorized the UV rule $(uv)' = u'v + uv'$ and the quotient rule. In Real Analysis, we see the clever trick behind them: <b>add and subtract an intermediate cross-term</b>!</p>
+      <p>For $f(x)g(x) - f(c)g(c)$, inserting $-f(c)g(x) + f(c)g(x)$ splits the difference into two terms: one isolating the change in $f$, and the other isolating the change in $g$. Since $g$ is continuous at $c$ (Theorem 6.1.2), $g(x) \\to g(c)$, giving the exact product formula cleanly!</p>`,
+    needs: ['c.6.1.1', 'c.6.1.2', 'c.4.2.4'],
+    traps: [
+      `$(fg)'(c) \\ne f'(c)g'(c)$! Derivatives do NOT distribute across products.`,
+      `For the Quotient Rule, $g(c)$ must be non-zero; since $g$ is continuous at $c$, $g(x) \\ne 0$ in a small neighborhood, making $f/g$ well-defined.`
+    ],
+    proof: {
+      idea: 'Insert the cross-term $f(c)g(x)$ into the difference quotient of $fg$, and use the continuity of $g$ at $c$.',
+      why: 'Adding and subtracting the cross-term isolates $(f(x)-f(c))/(x-c)$ and $(g(x)-g(c))/(x-c)$ as separate factors.',
+      rungs: [
+        { why: 'Write the difference quotient for $p = fg$ at $c$.', m: '\\frac{p(x) - p(c)}{x - c} = \\frac{f(x)g(x) - f(c)g(c)}{x - c}' },
+        { why: 'Add and subtract $f(c)g(x)$ in the numerator.', m: '\\frac{f(x)g(x) - f(c)g(x) + f(c)g(x) - f(c)g(c)}{x - c} = \\frac{f(x) - f(c)}{x - c} g(x) + f(c) \\frac{g(x) - g(c)}{x - c}' },
+        { why: 'Since $g$ is differentiable at $c$, Theorem 6.1.2 gives $\\lim_{x\\to c} g(x) = g(c)$.', m: '\\lim_{x\\to c} g(x) = g(c)' },
+        { why: 'Apply the limit laws for sums and products.', m: 'p\'(c) = \\lim_{x\\to c}\\left(\\frac{f(x) - f(c)}{x - c}\\right) \\lim_{x\\to c} g(x) + f(c) \\lim_{x\\to c}\\left(\\frac{g(x) - g(c)}{x - c}\\right) = f\'(c)g(c) + f(c)g\'(c)' },
+        { why: 'For $q = f/g$, write $(f(x)/g(x) - f(c)/g(c))/(x - c) = \\frac{1}{g(x)g(c)} [\\frac{f(x)-f(c)}{x-c}g(c) - f(c)\\frac{g(x)-g(c)}{x-c}]$.', m: 'q\'(c) = \\frac{f\'(c)g(c) - f(c)g\'(c)}{(g(c))^2}' }
+      ],
+      ends: 'Both the Product and Quotient Rules are established rigorously.'
+    },
+    cards: [
+      { q: 'State the Product Rule for derivatives.', a: '$(fg)\'(c) = f\'(c)g(c) + f(c)g\'(c)$.', kind: 'state' },
+      { q: 'State the Quotient Rule for derivatives.', a: '$\\left(\\dfrac{f}{g}\\right)\'(c) = \\dfrac{f\'(c)g(c) - f(c)g\'(c)}{(g(c))^2}$, provided $g(c) \\ne 0$.', kind: 'state' },
+      { q: 'What property of $g$ ensures $\\lim_{x\\to c} g(x) = g(c)$ in the proof of the Product Rule?', a: 'Differentiability of $g$ at $c$ implies continuity of $g$ at $c$ (Theorem 6.1.2).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.1.4', bartle: '6.1.4', sec: '6.1', kind: 'theorem', tier: 'core',
+    title: 'Derivative of Monomials and Polynomials',
+    oneLine: 'The derivative of x^n is n x^{n-1} for all integers n, proven by induction and the quotient rule.',
+    statement: `Let $n \\in \\mathbb{Z}$ and let $f_n(x) = x^n$ (with domain $\\mathbb{R}$ if $n \\ge 0$, and $\\mathbb{R} \\setminus \\{0\\}$ if $n < 0$).
+      <p>(a) For all $n \\in \\mathbb{N}$, $f_n'(x) = n x^{n-1}$ for all $x \\in \\mathbb{R}$.</p>
+      <p>(b) For $n = 0$, $f_0(x) = 1$ is constant and $f_0'(x) = 0$.</p>
+      <p>(c) For negative integers $m = -n$ ($n \\in \\mathbb{N}$), $f_m'(x) = m x^{m-1}$ for all $x \\ne 0$.</p>
+      <p>(d) Any polynomial $P(x) = \\sum_{k=0}^n a_k x^k$ is differentiable on $\\mathbb{R}$ with $P'(x) = \\sum_{k=1}^n k a_k x^{k-1}$.</p>`,
+    intuition: `<p>The power rule $\\frac{d}{dx} x^n = n x^{n-1}$ is the first calculus formula we ever learned. In Real Analysis, we establish it by mathematical induction:</p>
+      <p>• Base case: $x^1$ has derivative $1 = 1 \\cdot x^0$.</p>
+      <p>• Step: $x^{k+1} = x \\cdot x^k$. By the Product Rule, $(x^{k+1})' = 1 \\cdot x^k + x \\cdot (k x^{k-1}) = (k+1) x^k$. Dominoes fall for all positive integers!</p>
+      <p>• Negative integers follow instantly by writing $x^{-n} = 1/x^n$ and applying the Quotient Rule.</p>`,
+    needs: ['c.6.1.3', 'c.1.2.1'],
+    traps: [
+      `For negative exponents like $x^{-1}$, the derivative $-x^{-2}$ is NOT defined at $x = 0$!`,
+      `The power rule for irrational powers $x^\\alpha$ requires the exponential and logarithm functions ($x^\\alpha = e^{\\alpha \\ln x}$) and is proved later.`
+    ],
+    proof: {
+      idea: 'Base step $n=1$ directly from difference quotient; apply induction using the Product Rule, then extend to negative integers via the Quotient Rule.',
+      why: 'Every positive power factors as $x \\cdot x^k$, matching the inductive step of the Product Rule.',
+      rungs: [
+        { why: 'Verify base step $n=1$: $(x)\' = \\lim_{h\\to 0} \\frac{(x+h) - x}{h} = 1 = 1 \\cdot x^0$.', m: '\\frac{d}{dx}(x) = 1 \\cdot x^0' },
+        { why: 'Inductive hypothesis: assume $(x^k)\' = k x^{k-1}$ for $k \\in \\mathbb{N}$.', m: '(x^k)\' = k x^{k-1}' },
+        { why: 'Write $x^{k+1} = x \\cdot x^k$ and apply the Product Rule (6.1.3).', m: '(x^{k+1})\' = (x)\' x^k + x (x^k)\' = 1 \\cdot x^k + x \\cdot (k x^{k-1}) = (k+1) x^k' },
+        { why: 'By the Principle of Induction (1.2.1), $(x^n)\' = n x^{n-1}$ for all $n \\in \\mathbb{N}$.', m: '\\forall n \\in \\mathbb{N}, \\quad (x^n)\' = n x^{n-1}' },
+        { why: 'For $m = -n$ with $n \\in \\mathbb{N}$ and $x \\ne 0$, apply Quotient Rule to $1/x^n$.', m: '(x^{-n})\' = \\frac{0 \\cdot x^n - 1 \\cdot (n x^{n-1})}{(x^n)^2} = -n x^{-n-1} = m x^{m-1}' }
+      ],
+      ends: 'The power rule holds for all integers $n \\in \\mathbb{Z}$. Linearity extends it to all polynomials.'
+    },
+    cards: [
+      { q: 'State the power rule for the derivative of $x^n$ where $n \\in \\mathbb{Z}$.', a: '$\\dfrac{d}{dx} x^n = n x^{n-1}$ (for $x \\ne 0$ if $n \\le 0$).', kind: 'state' },
+      { q: 'How is $(x^{k+1})\' = (k+1)x^k$ derived in the inductive step of the power rule?', a: 'Write $x^{k+1} = x \\cdot x^k$ and apply the Product Rule: $(x)\' x^k + x (x^k)\' = x^k + kx^k = (k+1)x^k$.', kind: 'recall' }
+    ]
+  },
+
+  {
     id: 'c.6.1.5', bartle: '6.1.5', sec: '6.1', kind: 'theorem', tier: 'core',
     title: 'Carathéodory’s Theorem and the Chain Rule',
     oneLine: 'A clean formulation of derivatives that makes proving the Chain Rule effortless by avoiding division by zero.',
     statement: `Let $f: I \\to \\mathbb{R}$ and $c \\in I$. Then $f$ is differentiable at $c$ if and only if there exists a function $\\varphi: I \\to \\mathbb{R}$ that is <b>continuous at $c$</b> and satisfies:
       $$f(x) - f(c) = \\varphi(x)(x - c) \\quad \\text{for all } x \\in I$$
       In this case, $\\varphi(c) = f'(c)$.
-      <p><b>The Chain Rule:</b> If $g$ is differentiable at $c$ and $f$ is differentiable at $g(c)$, then $(f \\circ g)'(c) = f'(g(c)) \\cdot g'(c)$.</p>`,
+      <p><b>The Chain Rule:</b> If $g: I \\to \\mathbb{R}$ is differentiable at $c$ and $f: J \\to \\mathbb{R}$ is differentiable at $g(c)$ (where $g(I) \\subseteq J$), then $(f \\circ g)'(c) = f'(g(c)) \\cdot g'(c)$.</p>`,
     intuition: `<p>Why did Carathéodory invent this? In high school, when trying to prove the Chain Rule $\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}$, you run into a huge headache: what if $u(x) - u(c) = 0$ for points nearby? You would be dividing by zero!</p>
       <p>Carathéodory cleans this up: instead of dividing by $(x - c)$, he writes $f(x) - f(c) = \\varphi(x)(x - c)$ with a continuous slope function $\\varphi$. No division by zero ever occurs! The Chain Rule then follows in two lines of algebra.</p>`,
     needs: ['c.6.1.1', 'c.5.1.1'],
@@ -91,6 +164,39 @@ CONCEPTS.push(
     cards: [
       { q: 'State Carathéodory’s characterisation of differentiability.', a: '$f$ is differentiable at $c$ iff $\\exists$ continuous $\\varphi$ at $c$ such that $f(x) - f(c) = \\varphi(x)(x - c)$, with $\\varphi(c) = f\'(c)$.', kind: 'state' },
       { q: 'What trap in the high school proof of the Chain Rule does Carathéodory’s Theorem fix?', a: 'It avoids dividing by $g(x) - g(c)$, which could be zero even when $x \\ne c$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.1.7', bartle: '6.1.8', sec: '6.1', kind: 'theorem', tier: 'core',
+    title: 'Derivative of Inverse Functions',
+    oneLine: 'The derivative of the inverse is the reciprocal of the derivative: (f^{-1})\'(y) = 1 / f\'(x).',
+    statement: `Let $I$ be an interval and let $f: I \\to \\mathbb{R}$ be strictly monotone and continuous on $I$.
+      <p>Let $J = f(I)$ and let $g: J \\to \\mathbb{R}$ be the strictly monotone, continuous inverse function of $f$.</p>
+      <p>If $f$ is differentiable at $c \\in I$ and $f'(c) \\ne 0$, then $g$ is differentiable at $d = f(c)$ and:
+      $$g'(d) = \\frac{1}{f'(c)} = \\frac{1}{f'(g(d))}$$</p>`,
+    intuition: `<p>Geometrically, the graph of the inverse function $g = f^{-1}$ is obtained by reflecting the graph of $f$ across the diagonal line $y = x$.</p>
+      <p>A tangent line with slope $m = \\Delta y / \\Delta x$ reflects into a tangent line with slope $1/m = \\Delta x / \\Delta y$! The slope inverts! As long as the tangent line is not horizontal ($f'(c) \\ne 0$), the reflected tangent line is not vertical, giving a finite derivative $g'(d) = 1/f'(c)$.</p>`,
+    needs: ['c.6.1.5', 'c.5.6.5'],
+    traps: [
+      `The condition $f'(c) \\ne 0$ is strictly required! If $f'(c) = 0$, the inverse function has a vertical tangent line at $d = f(c)$ and is NOT differentiable (e.g. $f(x) = x^3$ has $f'(0) = 0$, and its inverse $g(y) = y^{1/3}$ has infinite slope at $y = 0$).`,
+      `Remember that the derivative on the right side is evaluated at $c = g(d)$, NOT at $d$!`
+    ],
+    proof: {
+      idea: 'Apply Carathéodory’s Theorem to $f$ at $c$, invert the relation, and deduce that the inverted slope function is continuous at $d$.',
+      why: 'Carathéodory avoids assuming differentiability of $g$ in advance and provides the derivative directly from continuity.',
+      rungs: [
+        { why: 'By Carathéodory (6.1.5), $\\exists \\varphi$ continuous at $c$ with $f(x) - f(c) = \\varphi(x)(x - c)$ and $\\varphi(c) = f\'(c) \\ne 0$.', m: 'f(x) - f(c) = \\varphi(x)(x - c), \\quad \\varphi(c) = f\'(c) \\ne 0' },
+        { why: 'Since $\\varphi(c) \\ne 0$ and $\\varphi$ is continuous at $c$, $\\varphi(x) \\ne 0$ on a neighborhood $V$ of $c$.', m: '\\exists V = (c - \\delta, c + \\delta) : \\varphi(x) \\ne 0 \\quad \\forall x \\in V' },
+        { why: 'For $y \\in f(V)$, let $x = g(y)$ and $d = f(c)$. Substitute into Carathéodory\'s relation.', m: 'y - d = f(g(y)) - f(c) = \\varphi(g(y)) [g(y) - g(d)]' },
+        { why: 'Divide by $\\varphi(g(y))$: $g(y) - g(d) = \\frac{1}{\\varphi(g(y))} (y - d)$.', m: 'g(y) - g(d) = \\psi(y)(y - d) \\quad \\text{where } \\psi(y) = \\frac{1}{\\varphi(g(y))}' },
+        { why: 'By Theorem 5.6.5, $g$ is continuous at $d$, so $\\lim_{y\\to d} g(y) = c$. Therefore $\\psi$ is continuous at $d$ with $\\psi(d) = 1/\\varphi(c) = 1/f\'(c)$.', m: 'g\'(d) = \\psi(d) = \\frac{1}{f\'(c)}' }
+      ],
+      ends: 'By Carathéodory’s Theorem, $g$ is differentiable at $d$ with derivative $1/f\'(c)$.'
+    },
+    cards: [
+      { q: 'State the formula for the derivative of an inverse function $g = f^{-1}$ at $d = f(c)$.', a: '$g\'(d) = \\dfrac{1}{f\'(c)} = \\dfrac{1}{f\'(g(d))}$, provided $f\'(c) \\ne 0$.', kind: 'state' },
+      { q: 'Why is $g(y) = y^{1/3}$ not differentiable at $y = 0$?', a: 'Because it is the inverse of $f(x) = x^3$, which has $f\'(0) = 0$; reciprocal of zero is undefined (vertical tangent).', kind: 'apply' }
     ]
   },
 
@@ -124,6 +230,38 @@ CONCEPTS.push(
     cards: [
       { q: 'State the Interior Extremum Theorem (Fermat).', a: 'If $f$ has a relative extremum at an interior point $c$ and $f\'(c)$ exists, then $f\'(c) = 0$.', kind: 'state' },
       { q: 'Does $f\'(c) = 0$ imply $c$ is a relative maximum or minimum?', a: 'No. For $f(x) = x^3$, $f\'(0) = 0$, but $x = 0$ is not a relative extremum.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.2', bartle: '6.2.2', sec: '6.2', kind: 'corollary', tier: 'core',
+    title: 'Critical Points and Location of Extrema',
+    oneLine: 'Interior extrema can only occur where the derivative vanishes or fails to exist.',
+    statement: `Let $f: I \\to \\mathbb{R}$ be continuous on an interval $I$, and suppose $f$ has a relative extremum at an interior point $c \\in I$.
+      <p>Then either:
+      <br>(1) $f'(c) = 0$, or
+      <br>(2) $f'(c)$ does not exist.</p>
+      <p>Points satisfying (1) or (2) are called <b>critical points</b> of $f$ in $I$.</p>`,
+    intuition: `<p>This is the theoretical justification for the optimization algorithm we all use: to find peaks and valleys of $f$, you never need to check all infinitely many points!</p>
+      <p>You only need to hunt for points where $f'(c) = 0$ (smooth hilltops) or points where the derivative blows up or fails (sharp spikes like $|x|$ at $0$). Every single relative extremum is trapped in this tiny list of candidates.</p>`,
+    needs: ['c.6.2.1'],
+    traps: [
+      `A point where $f'(c)$ does not exist can definitely be a maximum or minimum! For $f(x) = |x|$ at $0$, the minimum is at $0$ even though $f'(0)$ does not exist.`,
+      `Endpoints of closed intervals must be checked separately; Fermat’s condition applies only to interior points.`
+    ],
+    proof: {
+      idea: 'Direct consequence of Fermat’s Interior Extremum Theorem (6.2.1): if the derivative exists, it must vanish.',
+      why: 'By trichotomy, either $f\'(c)$ does not exist, or it exists and Fermat\'s theorem forces it to be zero.',
+      rungs: [
+        { why: 'Let $c$ be an interior point where $f$ attains a relative extremum.', m: 'c \\in \\operatorname{int}(I) \\quad \\text{is a relative extremum}' },
+        { why: 'Case 1: If $f$ is not differentiable at $c$, then $c$ satisfies condition (2).', m: 'f\'(c) \\text{ does not exist}' },
+        { why: 'Case 2: If $f$ is differentiable at $c$, apply Fermat’s Interior Extremum Theorem (6.2.1).', m: 'f\'(c) = 0' }
+      ],
+      ends: 'Therefore, every interior extremum is either a zero of the derivative or a point where the derivative fails to exist.'
+    },
+    cards: [
+      { q: 'What is a critical point of a function $f$ on an open interval?', a: 'A point $c$ where $f\'(c) = 0$ or where $f\'(c)$ does not exist.', kind: 'state' },
+      { q: 'Can an interior extremum occur at a point where $f$ is not differentiable?', a: 'Yes. $f(x) = |x|$ has an interior minimum at $x = 0$ where $f\'(0)$ does not exist.', kind: 'apply' }
     ]
   },
 
@@ -194,6 +332,135 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.6.2.5', bartle: '6.2.5', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'Zero Derivative Characterization and Constant Difference',
+    oneLine: 'f is constant if and only if f\' = 0; two functions differ by a constant if and only if they share identical derivatives.',
+    statement: `Let $f$ be continuous on $[a, b]$ and differentiable on $(a, b)$.
+      <p>(a) If $f'(x) = 0$ for all $x \\in (a, b)$, then $f$ is <b>constant</b> on $[a, b]$.</p>
+      <p>(b) (Corollary 6.2.6) If $f'(x) = g'(x)$ for all $x \\in (a, b)$, then there exists a constant $C$ such that:
+      $$f(x) = g(x) + C \\quad \\text{for all } x \\in [a, b]$$</p>`,
+    intuition: `<p>In Class 12, we learned that $\\frac{d}{dx}(\\text{constant}) = 0$. But how do you prove the reverse: that ZERO slope forces the function to be flat everywhere?</p>
+      <p>Lagrange’s MVT provides the proof! Pick ANY two points $x_1 < x_2$. The change is $f(x_2) - f(x_1) = f'(c)(x_2 - x_1)$. Since $f'(c) = 0$, the change is identically $0$! The function cannot budge an inch.</p>`,
+    needs: ['c.6.2.4'],
+    traps: [
+      `The interval MUST be connected! If the domain is disjoint like $(0, 1) \\cup (2, 3)$, $f'$ can be $0$ everywhere while $f$ takes different values on the two pieces ($f(x) = 1$ on the first, $f(x) = 5$ on the second).`,
+      `Remember $f$ must be continuous at the endpoints to conclude constancy on the closed interval $[a, b]$.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange’s MVT to $f$ on $[a, x]$ for every $x \\in (a, b]$.',
+      why: 'Because $f\'(c) = 0$ at all points, $f(x) - f(a) = f\'(c)(x - a) = 0$, forcing $f(x) = f(a)$.',
+      rungs: [
+        { why: 'Let $x \\in (a, b]$. Apply MVT (6.2.4) to $f$ on the subinterval $[a, x]$.', m: '\\exists c \\in (a, x) : f(x) - f(a) = f\'(c)(x - a)' },
+        { why: 'By hypothesis, $f\'(c) = 0$ since $c \\in (a, b)$.', m: 'f(x) - f(a) = 0 \\cdot (x - a) = 0' },
+        { why: 'Conclude $f(x) = f(a)$ for all $x \\in [a, b]$.', m: 'f(x) = f(a) = \\text{constant} \\quad \\forall x \\in [a, b]' },
+        { why: 'For (b), define $h(x) = f(x) - g(x)$. Then $h\'(x) = f\'(x) - g\'(x) = 0$.', m: 'h\'(x) = 0 \\implies h(x) = C \\implies f(x) = g(x) + C' }
+      ],
+      ends: 'Both the Zero Derivative Theorem and the Constant Difference Corollary are established.'
+    },
+    cards: [
+      { q: 'If $f\'(x) = 0$ on an interval $I$, what is the conclusion about $f$?', a: '$f$ is constant on $I$.', kind: 'state' },
+      { q: 'Why does $f\'(x) = 0$ fail to imply $f$ is constant on $D = (0, 1) \\cup (2, 3)$?', a: 'Because $D$ is not an interval; $f$ can take different constant values on disconnected components.', kind: 'trap' },
+      { q: 'If $f\'(x) = g\'(x)$ on $[a, b]$, what is the relationship between $f$ and $g$?', a: '$f(x) = g(x) + C$ for some real constant $C$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.7', bartle: '6.2.7', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'Monotonicity Criteria for Differentiable Functions',
+    oneLine: 'Nonnegative derivative means increasing, positive derivative means strictly increasing.',
+    statement: `Let $f$ be continuous on $[a, b]$ and differentiable on $(a, b)$.
+      <p>(a) $f$ is <b>increasing</b> on $[a, b]$ if and only if $f'(x) \\ge 0$ for all $x \\in (a, b)$.</p>
+      <p>(b) $f$ is <b>decreasing</b> on $[a, b]$ if and only if $f'(x) \\le 0$ for all $x \\in (a, b)$.</p>
+      <p>(c) If $f'(x) > 0$ for all $x \\in (a, b)$, then $f$ is <b>strictly increasing</b> on $[a, b]$.</p>
+      <p>(d) If $f'(x) < 0$ for all $x \\in (a, b)$, then $f$ is <b>strictly decreasing</b> on $[a, b]$.</p>`,
+    intuition: `<p>In Class 12 calculus, you used $f'(x) > 0$ to test if a curve is increasing. In Real Analysis, MVT turns this from a visual intuition into a rigorous proof:</p>
+      <p>For any two points $x_1 < x_2$, the change is $f(x_2) - f(x_1) = f'(c)(x_2 - x_1)$. Because $x_2 - x_1 > 0$, the sign of $f(x_2) - f(x_1)$ is IDENTICAL to the sign of $f'(c)$!</p>`,
+    needs: ['c.6.2.4'],
+    traps: [
+      `The converse of (c) is FALSE! A function can be strictly increasing even if its derivative touches zero at some points (e.g. $f(x) = x^3$ is strictly increasing on $\\mathbb{R}$, but $f'(0) = 0$).`,
+      `Strictly increasing does NOT require $f'(x) > 0$ at every single point — isolated zeros of $f'$ do not destroy strict monotonicity.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange’s MVT on arbitrary pairs $x_1 < x_2$ inside $[a, b]$.',
+      why: 'MVT reduces the difference $f(x_2) - f(x_1)$ directly to $f\'(c)(x_2 - x_1)$.',
+      rungs: [
+        { why: 'Let $x_1, x_2 \\in [a, b]$ with $x_1 < x_2$. Apply MVT (6.2.4) to $f$ on $[x_1, x_2]$.', m: '\\exists c \\in (x_1, x_2) : f(x_2) - f(x_1) = f\'(c)(x_2 - x_1)' },
+        { why: 'Since $x_2 - x_1 > 0$, if $f\'(c) \\ge 0$, then $f(x_2) - f(x_1) \\ge 0$, so $f(x_1) \\le f(x_2)$.', m: 'f\' \\ge 0 \\implies f(x_1) \\le f(x_2)' },
+        { why: 'If $f\'(c) > 0$, then $f(x_2) - f(x_1) > 0$, so $f(x_1) < f(x_2)$ (strictly increasing).', m: 'f\' > 0 \\implies f(x_1) < f(x_2)' },
+        { why: 'Conversely, if $f$ is increasing, for any $x \\ne c$, $(f(x) - f(c))/(x - c) \\ge 0$.', m: 'f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} \\ge 0' }
+      ],
+      ends: 'The Monotonicity Criteria are completely proved in both directions.'
+    },
+    cards: [
+      { q: 'State the condition for a differentiable function $f$ to be increasing on $[a, b]$.', a: '$f\'(x) \\ge 0$ for all $x \\in (a, b)$.', kind: 'state' },
+      { q: 'If $f$ is strictly increasing on $\\mathbb{R}$, must $f\'(x) > 0$ everywhere?', a: 'No. $f(x) = x^3$ is strictly increasing, yet $f\'(0) = 0$.', kind: 'trap' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.8', bartle: '6.2.8', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'First Derivative Test for Relative Extrema',
+    oneLine: 'Slope switching from positive to negative signals a peak; negative to positive signals a valley.',
+    statement: `Let $f$ be continuous on an interval $I$, and let $c \\in I$ be an interior point. Suppose $f$ is differentiable on $(c - \\delta, c + \\delta) \\setminus \\{c\\}$ for some $\\delta > 0$.
+      <p>(a) If $f'(x) \\ge 0$ for all $x \\in (c - \\delta, c)$ and $f'(x) \\le 0$ for all $x \\in (c, c + \\delta)$, then $f$ has a <b>relative maximum</b> at $c$.</p>
+      <p>(b) If $f'(x) \\le 0$ for all $x \\in (c - \\delta, c)$ and $f'(x) \\ge 0$ for all $x \\in (c, c + \\delta)$, then $f$ has a <b>relative minimum</b> at $c$.</p>`,
+    intuition: `<p>Think of climbing a hill: on the way up, the slope is positive ($f' > 0$). Once you crest the peak and start heading down, the slope turns negative ($f' < 0$).</p>
+      <p>By the Monotonicity Criteria, $f$ is increasing to the left of $c$ and decreasing to the right of $c$. Therefore, $f(c)$ is higher than all nearby values — a relative maximum!</p>
+      <p>Notice $f$ does NOT even need to be differentiable at $c$ itself (e.g. $f(x) = -|x|$ at $0$).</p>`,
+    needs: ['c.6.2.7'],
+    traps: [
+      `If $f'(x)$ keeps the same sign on both sides of $c$ (e.g. $f(x) = x^3$, where $f'(x) > 0$ for $x < 0$ and $x > 0$), $c$ is NOT an extremum!`,
+      `Remember $f$ MUST be continuous at $c$; a jump discontinuity at $c$ breaks the test.`
+    ],
+    proof: {
+      idea: 'Apply MVT on $[x, c]$ for $x < c$ and on $[c, x]$ for $x > c$.',
+      why: 'The signs of the derivative on each side guarantee $f(x) \\le f(c)$ for all nearby $x$.',
+      rungs: [
+        { why: 'Let $x \\in (c - \\delta, c)$. Apply MVT (6.2.4) on $[x, c]$: $f(c) - f(x) = f\'(z_1)(c - x)$ for some $z_1 \\in (x, c)$.', m: 'f(c) - f(x) = f\'(z_1)(c - x)' },
+        { why: 'Since $f\'(z_1) \\ge 0$ and $c - x > 0$, $f(c) - f(x) \\ge 0 \\implies f(x) \\le f(c)$.', m: 'f(x) \\le f(c) \\quad \\forall x \\in (c - \\delta, c)' },
+        { why: 'Let $x \\in (c, c + \\delta)$. Apply MVT on $[c, x]$: $f(x) - f(c) = f\'(z_2)(x - c)$ for some $z_2 \\in (c, x)$.', m: 'f(x) - f(c) = f\'(z_2)(x - c)' },
+        { why: 'Since $f\'(z_2) \\le 0$ and $x - c > 0$, $f(x) - f(c) \\le 0 \\implies f(x) \\le f(c)$.', m: 'f(x) \\le f(c) \\quad \\forall x \\in (c, c + \\delta)' }
+      ],
+      ends: 'Therefore $f(x) \\le f(c)$ for all $x \\in (c - \\delta, c + \\delta)$, proving $c$ is a relative maximum.'
+    },
+    cards: [
+      { q: 'State the First Derivative Test for a relative maximum.', a: 'If $f$ is continuous at $c$, $f\'(x) \\ge 0$ for $x < c$, and $f\'(x) \\le 0$ for $x > c$ nearby, then $c$ is a relative maximum.', kind: 'state' },
+      { q: 'Does the First Derivative Test require $f$ to be differentiable at the critical point $c$ itself?', a: 'No, $f$ only needs to be continuous at $c$ and differentiable in punctured neighborhoods around $c$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.2.9', bartle: '6.2.9', sec: '6.2', kind: 'theorem', tier: 'core',
+    title: 'Mean Value Inequality: Bounded Derivatives Imply Lipschitz Continuity',
+    oneLine: 'If |f\'(x)| <= M everywhere, then |f(x) - f(y)| <= M|x - y|; bounded derivative implies Lipschitz continuity.',
+    statement: `Let $f$ be differentiable on an interval $I$. If there exists a constant $M > 0$ such that $|f'(x)| \\le M$ for all $x \\in I$, then:
+      $$|f(x) - f(y)| \\le M |x - y| \\quad \\text{for all } x, y \\in I$$
+      Consequently, $f$ is <b>Lipschitz continuous</b> on $I$, which implies that $f$ is <b>uniformly continuous</b> on $I$.`,
+    intuition: `<p>Think of $M$ as a universal speed limit. If your car can never exceed $M$ km/h ($|f'(x)| \\le M$), then the physical distance between your positions at any two times $x$ and $y$ can never exceed $M \\cdot |x - y|$.</p>
+      <p>This is one of the easiest ways to prove uniform continuity in university exams: just differentiate $f(x)$! If $|f'(x)|$ is bounded by a constant, $f$ is immediately Lipschitz, which guarantees uniform continuity with zero $\\varepsilon$-$\\delta$ pain.</p>`,
+    needs: ['c.6.2.4', 'c.5.4.5'],
+    traps: [
+      `The interval $I$ must be convex/connected (an actual interval) so that the line segment between $x$ and $y$ stays inside the domain.`,
+      `$f(x) = \\sqrt{x}$ on $[0, 1]$ is uniformly continuous, but its derivative $1/(2\\sqrt{x})$ is UNBOUNDED near $0$. Bounded derivative is sufficient for uniform continuity, but not necessary!`
+    ],
+    proof: {
+      idea: 'Apply Lagrange MVT between $x$ and $y$ and take absolute values.',
+      why: 'MVT equates the secant slope $|(f(x)-f(y))/(x-y)|$ to $|f\'(c)| \\le M$.',
+      rungs: [
+        { why: 'Let $x, y \\in I$ with $x \\ne y$. Apply MVT (6.2.4) to $f$ on the interval between $x$ and $y$.', m: '\\exists c \\text{ between } x \\text{ and } y : f(x) - f(y) = f\'(c)(x - y)' },
+        { why: 'Take the absolute value of both sides.', m: '|f(x) - f(y)| = |f\'(c)| |x - y|' },
+        { why: 'Apply the hypothesis $|f\'(c)| \\le M$.', m: '|f(x) - f(y)| \\le M |x - y|' },
+        { why: 'By Theorem 5.4.5, any function satisfying $|f(x)-f(y)| \\le M|x-y|$ is Lipschitz, hence uniformly continuous.', m: 'f \\text{ is Lipschitz continuous on } I' }
+      ],
+      ends: 'The Mean Value Inequality is proved: a bounded derivative guarantees Lipschitz continuity.'
+    },
+    cards: [
+      { q: 'State the Mean Value Inequality for a function with bounded derivative.', a: 'If $|f\'(x)| \\le M$ on $I$, then $|f(x) - f(y)| \\le M |x - y|$ for all $x, y \\in I$.', kind: 'state' },
+      { q: 'Is $f(x) = \\sin x$ Lipschitz continuous on $\\mathbb{R}$?', a: 'Yes, because $|f\'(x)| = |\\cos x| \\le 1$ for all $x \\in \\mathbb{R}$, so $|\\sin x - \\sin y| \\le |x - y|$.', kind: 'apply' }
+    ]
+  },
+
+  {
     id: 'c.6.2.12', bartle: '6.2.12', sec: '6.2', kind: 'theorem', tier: 'core',
     title: 'Darboux’s Theorem (Intermediate Value Property of Derivatives)',
     oneLine: 'Derivatives do not need to be continuous, but they can NEVER skip an intermediate value.',
@@ -260,36 +527,67 @@ CONCEPTS.push(
 
   {
     id: 'c.6.3.3', bartle: '6.3.3', sec: '6.3', kind: 'theorem', tier: 'core',
-    title: 'L’Hospital’s Rules',
-    oneLine: 'When both numerator and denominator vanish (0/0) or blow up (∞/∞), the ratio of their derivatives tells the true story.',
+    title: 'L’Hospital’s Rule (0/0 Indeterminate Form)',
+    oneLine: 'When both numerator and denominator vanish to 0, the limit of their ratio equals the limit of the ratio of their derivatives.',
     statement: `Let $-\\infty \\le a < b \\le +\\infty$, and let $f, g$ be differentiable on $(a, b)$ such that $g'(x) \\ne 0$ for all $x \\in (a, b)$.
-      <p>Suppose that <b>either</b> $\\lim_{x\\to a^+} f(x) = 0$ and $\\lim_{x\\to a^+} g(x) = 0$ (Form $0/0$),<br>
-      <b>or</b> $\\lim_{x\\to a^+} g(x) = \\pm\\infty$ (Form $\\infty/\\infty$).</p>
-      <p>If $\\lim_{x\\to a^+} \\frac{f'(x)}{g'(x)} = L \\in \\mathbb{R} \\cup \\{\\pm\\infty\\}$, then:
+      <p>Suppose that:
+      $$\\lim_{x\\to a^+} f(x) = 0 \\quad \\text{and} \\quad \\lim_{x\\to a^+} g(x) = 0$$
+      If $\\lim_{x\\to a^+} \\frac{f'(x)}{g'(x)} = L \\in \\mathbb{R} \\cup \\{\\pm\\infty\\}$, then:
       $$\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = L$$</p>`,
     intuition: `<p>In Class 12, everyone loves applying L'Hospital's Rule: when faced with $0/0$, differentiate the top and differentiate the bottom. But in Real Analysis, we prove WHY it works using Cauchy's MVT!</p>
-      <p>Near the limit point, $\\frac{f(x)}{g(x)} = \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f'(c_x)}{g'(c_x)}$ for some point $c_x$ between $a$ and $x$. As $x \\to a$, $c_x$ is squeezed to $a$, forcing the ratio to $L$.</p>`,
+      <p>By defining $f(a) = 0$ and $g(a) = 0$, the ratio $\\frac{f(x)}{g(x)} = \\frac{f(x) - f(a)}{g(x) - g(a)}$ is transformed by Cauchy MVT into $\\frac{f'(c_x)}{g'(c_x)}$ for some $c_x \\in (a, x)$. As $x \\to a^+$, $c_x \\to a^+$, locking the ratio onto $L$!</p>`,
     needs: ['c.6.3.2', 'c.4.1.4'],
     proof: {
-      idea: 'Extend $f$ and $g$ continuously to the limit point $a$ and apply Cauchy\'s Mean Value Theorem on $[a, x]$.',
-      why: 'Cauchy MVT turns the ratio $\\frac{f(x)}{g(x)}$ into $\\frac{f\'(c_x)}{g\'(c_x)}$ where $a < c_x < x$; squeezing $x \\to a^+$ forces $c_x \\to a^+$.',
+      idea: 'Extend $f$ and $g$ continuously to $a$ by setting $f(a) = 0, g(a) = 0$, and apply Cauchy\'s MVT on $[a, x]$.',
+      why: 'Cauchy MVT translates $(f(x)-0)/(g(x)-0)$ into $f\'(c_x)/g\'(c_x)$ with $a < c_x < x$; squeezing $x \\to a^+$ forces $c_x \\to a^+$.',
       rungs: [
-        { why: 'For the $0/0$ form at $a^+$, extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Then $f$ and $g$ are continuous on $[a, x]$ for every $x \\in (a, b)$.', m: 'f(a) = \\lim_{t \\to a^+} f(t) = 0, \\quad g(a) = \\lim_{t \\to a^+} g(t) = 0' },
-        { why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on the interval $[a, x]$. There exists $c_x \\in (a, x)$ such that:', m: '\\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}' },
-        { why: 'Substitute $f(a) = 0$ and $g(a) = 0$ into the expression.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{where } a < c_x < x' },
-        { why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$. By the composition of limits:', m: '\\lim_{x \\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x \\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L' }
+        { why: 'Extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Both are continuous on $[a, x]$ for $x \\in (a, b)$.', m: 'f(a) := 0, \\quad g(a) := 0' },
+        { why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on $[a, x]$.', m: '\\exists c_x \\in (a, x) : \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}' },
+        { why: 'Substitute $f(a) = 0$ and $g(a) = 0$.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{with } a < c_x < x' },
+        { why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$.', m: '\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x\\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L' }
       ],
-      ends: 'The indeterminate form $\\infty/\\infty$ reduces similarly via Cauchy MVT on subintervals $[x, y]$, establishing L\'Hospital\'s Rule.'
+      ends: 'The $0/0$ form of L’Hospital’s Rule is rigorously established.'
     },
     traps: [
-      `THE COMMON MISTAKE: Differentiating $\\frac{f}{g}$ using the Quotient Rule $\\frac{f'g - fg'}{g^2}$! In L'Hospital's Rule, you differentiate numerator and denominator SEPARATELY: $\\frac{f'(x)}{g'(x)}$.`,
-      `Applying L'Hospital when the limit is NOT indeterminate! If $\\lim f = 3$ and $\\lim g = 2$, the limit is simply $3/2$. Differentiating would give a completely wrong answer.`
+      `Differentiating $\\frac{f}{g}$ using the Quotient Rule instead of differentiating numerator and denominator separately!`,
+      `Applying L'Hospital when the limit is NOT indeterminate ($0/0$ or $\\infty/\\infty$).`
     ],
     cards: [
-      { q: 'What two indeterminate forms are directly handled by L’Hospital’s Rule?', a: '$0/0$ and $\\infty/\\infty$.', kind: 'recall' },
-      { q: 'What theorem is used to prove L’Hospital’s Rule rigorously?', a: 'Cauchy’s Mean Value Theorem.', kind: 'recall' },
-      { q: 'What is $\\lim_{x\\to 0} \\dfrac{\\sin x}{x}$ by L’Hospital’s Rule?', a: '$\\lim_{x\\to 0} \\dfrac{\\cos x}{1} = \\dfrac{1}{1} = 1$.', kind: 'apply' },
-      { q: 'State L’Hospital’s Rule for the indeterminate form $0/0$.', a: 'If $\\lim_{x\\to a^+} f(x) = 0$, $\\lim_{x\\to a^+} g(x) = 0$, $g\'(x) \\ne 0$, and $\\lim_{x\\to a^+} \\dfrac{f\'(x)}{g\'(x)} = L$, then $\\lim_{x\\to a^+} \\dfrac{f(x)}{g(x)} = L$.', kind: 'state' }
+      { q: 'State L’Hospital’s Rule for the indeterminate form $0/0$.', a: 'If $\\lim f = 0$, $\\lim g = 0$, $g\' \\ne 0$, and $\\lim f\'/g\' = L$, then $\\lim f/g = L$.', kind: 'state' },
+      { q: 'What fundamental theorem is the engine behind L’Hospital’s Rule?', a: 'Cauchy’s Mean Value Theorem.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.6.3.4', bartle: '6.3.5', sec: '6.3', kind: 'theorem', tier: 'core',
+    title: 'L’Hospital’s Rule (∞/∞ Indeterminate Form)',
+    oneLine: 'When the denominator diverges to infinity, the limit of the ratio equals the limit of the ratio of derivatives.',
+    statement: `Let $-\\infty \\le a < b \\le +\\infty$, and let $f, g$ be differentiable on $(a, b)$ with $g'(x) \\ne 0$ for all $x \\in (a, b)$.
+      <p>Suppose that:
+      $$\\lim_{x\\to a^+} g(x) = \\pm\\infty$$
+      If $\\lim_{x\\to a^+} \\frac{f'(x)}{g'(x)} = L \\in \\mathbb{R}$, then:
+      $$\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = L$$</p>`,
+    intuition: `<p>The $\\infty/\\infty$ form is even more powerful than $0/0$: you don't even need $f(x) \\to \\infty$! As long as the denominator $g(x)$ explodes to $\\pm\\infty$, the derivative ratio determines the limit.</p>
+      <p>The proof fixes an intermediate point $y$ and applies Cauchy MVT on $[x, y]$. As $x \\to a^+$, the $g(y)/g(x)$ term is crushed to zero because $g(x) \\to \\infty$, isolating the derivative slope $f'/g'$!</p>`,
+    needs: ['c.6.3.2', 'c.4.3.3'],
+    traps: [
+      `Assuming $f(x)$ must also tend to $\\infty$. The theorem holds whenever $\\lim g(x) = \\pm\\infty$, regardless of whether $f$ converges or diverges!`,
+      `If the derivative ratio oscillates without settling (e.g. $(x + \\sin x)/x$ as $x \\to \\infty$), L'Hospital is inconclusive, but the original limit may still exist.`
+    ],
+    proof: {
+      idea: 'Apply Cauchy MVT on $[x, y]$ for a fixed $y$, then send $x \\to a^+$ to let the $g(x) \\to \\infty$ term dominate.',
+      why: 'Because $g(x) \\to \\infty$, dividing by $g(x)$ eliminates the endpoint evaluation at $y$.',
+      rungs: [
+        { why: 'Given $\\varepsilon > 0$, choose $y \\in (a, b)$ such that $|f\'(c)/g\'(c) - L| < \\varepsilon/2$ for all $c \\in (a, y)$.', m: 'a < x < y \\implies \\exists c \\in (x, y) : \\left| \\frac{f\'(c)}{g\'(c)} - L \\right| < \\frac{\\varepsilon}{2}' },
+        { why: 'Apply Cauchy MVT (6.3.2) on $[x, y]$.', m: '\\frac{f(x) - f(y)}{g(x) - g(y)} = \\frac{f\'(c)}{g\'(c)}' },
+        { why: 'Multiply by $\\frac{g(x) - g(y)}{g(x)}$ and rewrite $\\frac{f(x)}{g(x)}$.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c)}{g\'(c)} \\left(1 - \\frac{g(y)}{g(x)}\\right) + \\frac{f(y)}{g(x)}' },
+        { why: 'Since $y$ is fixed and $g(x) \\to \\infty$ as $x \\to a^+$, the terms $g(y)/g(x) \\to 0$ and $f(y)/g(x) \\to 0$.', m: '\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c\\to a^+} \\frac{f\'(c)}{g\'(c)} = L' }
+      ],
+      ends: 'The $\\infty/\\infty$ form of L’Hospital’s Rule is established.'
+    },
+    cards: [
+      { q: 'State L’Hospital’s Rule for the indeterminate form $\\infty/\\infty$.', a: 'If $\\lim g(x) = \\pm\\infty$, $g\' \\ne 0$, and $\\lim f\'/g\' = L$, then $\\lim f/g = L$.', kind: 'state' },
+      { q: 'Compute $\\lim_{x\\to\\infty} \\dfrac{\\ln x}{x}$ using L’Hospital’s Rule.', a: 'Form $\\infty/\\infty$: $\\lim_{x\\to\\infty} \\dfrac{1/x}{1} = 0$.', kind: 'apply' }
     ]
   },
 
@@ -326,6 +624,44 @@ CONCEPTS.push(
     cards: [
       { q: 'What does Taylor’s Theorem reduce to when $n = 0$?', a: 'Lagrange’s Mean Value Theorem: $f(x) = f(x_0) + f\'(c)(x - x_0)$.', kind: 'recall' },
       { q: 'State the Lagrange form of the remainder $R_n(x)$ in Taylor’s Theorem.', a: '$R_n(x) = \\dfrac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1}$ for some $c$ between $x_0$ and $x$.', kind: 'state' }
+    ]
+  },
+
+  {
+    id: 'c.6.4.2', bartle: '6.4.2', sec: '6.4', kind: 'theorem', tier: 'core',
+    title: 'Taylor Remainder Estimates and Maclaurin Expansions',
+    oneLine: 'If the (n+1)-th derivative is bounded, the remainder vanishes as n -> infinity, generating exact power series for e^x, sin x, cos x.',
+    statement: `Let $f$ have derivatives of all orders on an interval $I$ containing $x_0$.
+      <p>If there exists $M > 0$ such that $|f^{(n+1)}(t)| \\le M$ for all $t$ between $x_0$ and $x$, then:
+      $$|R_n(x)| \\le \\frac{M}{(n + 1)!} |x - x_0|^{n+1}$$</p>
+      <p>Since $\\lim_{n\\to\\infty} \\frac{|x - x_0|^{n+1}}{(n + 1)!} = 0$, the Taylor series converges to $f(x)$:
+      $$f(x) = \\sum_{k=0}^\\infty \\frac{f^{(k)}(x_0)}{k!}(x - x_0)^k$$</p>
+      <p><b>Standard Maclaurin Expansions ($x_0 = 0$):</b>
+      <br>• $e^x = \\sum_{k=0}^\\infty \\frac{x^k}{k!} = 1 + x + \\frac{x^2}{2!} + \\cdots$ (for all $x \\in \\mathbb{R}$)
+      <br>• $\\sin x = \\sum_{k=0}^\\infty \\frac{(-1)^k x^{2k+1}}{(2k + 1)!} = x - \\frac{x^3}{6} + \\cdots$ (for all $x \\in \\mathbb{R}$)
+      <br>• $\\cos x = \\sum_{k=0}^\\infty \\frac{(-1)^k x^{2k}}{(2k)!} = 1 - \\frac{x^2}{2} + \\cdots$ (for all $x \\in \\mathbb{R}$)</p>`,
+    intuition: `<p>How does your scientific calculator know $\\sin(0.3)$ to $10$ decimal places in a microsecond? It doesn't draw triangles — it computes the polynomial $P_n(x)$!</p>
+      <p>Because the derivatives of $\\sin x$ and $\\cos x$ are bounded by $M = 1$ everywhere, the error $|R_n(x)| \\le \\frac{|x|^{n+1}}{(n+1)!}$ collapses to zero with blinding speed. Taking just 4 terms of the Taylor polynomial gives accuracy to 8 decimal places!</p>`,
+    needs: ['c.6.4.1', 'c.3.2.10'],
+    traps: [
+      `A function can have derivatives of all orders, yet its Taylor series fails to converge to $f(x)$! The classic monster is Cauchy's function $f(x) = e^{-1/x^2}$ ($f(0)=0$): all derivatives at $0$ are $0$, so its Taylor series is $0 + 0 + \\cdots = 0 \\ne f(x)$!`,
+      `Always check that the remainder $R_n(x) \\to 0$ to guarantee that the series converges to the original function.`
+    ],
+    proof: {
+      idea: 'Bound the Lagrange remainder using $|f^{(n+1)}(c)| \\le M$ and apply the sequence limit property $\\lim \\frac{a^n}{n!} = 0$.',
+      why: 'Factorials grow faster than any geometric power $a^n$, crushing the remainder to 0 for all real $x$.',
+      rungs: [
+        { why: 'From Taylor’s Theorem (6.4.1), write the Lagrange remainder on $[x_0, x]$.', m: 'R_n(x) = \\frac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1} \\quad \\text{for some } c \\text{ between } x_0, x' },
+        { why: 'Take absolute values and substitute the upper bound $|f^{(n+1)}(c)| \\le M$.', m: '|R_n(x)| \\le \\frac{M}{(n + 1)!} |x - x_0|^{n+1}' },
+        { why: 'By the Ratio Test for sequences (Theorem 3.2.11), for any fixed real number $A = |x - x_0|$, $\\lim_{n\\to\\infty} \\frac{A^{n+1}}{(n+1)!} = 0$.', m: '\\lim_{n\\to\\infty} \\frac{|x - x_0|^{n+1}}{(n + 1)!} = 0' },
+        { why: 'Apply the Squeeze Theorem for sequences (3.2.7) to conclude $\\lim_{n\\to\\infty} R_n(x) = 0$.', m: '\\lim_{n\\to\\infty} R_n(x) = 0 \\implies f(x) = \\lim_{n\\to\\infty} P_n(x)' }
+      ],
+      ends: 'The Taylor series converges to $f(x)$ whenever derivatives are uniformly bounded on the interval.'
+    },
+    cards: [
+      { q: 'What is the upper bound on the Taylor remainder $|R_n(x)|$ when $|f^{(n+1)}(t)| \\le M$?', a: '$|R_n(x)| \\le \\dfrac{M}{(n + 1)!} |x - x_0|^{n+1}$.', kind: 'state' },
+      { q: 'Why do the Maclaurin series for $\\sin x$ and $\\cos x$ converge for ALL real numbers?', a: 'Because all derivatives of $\\sin x$ and $\\cos x$ are bounded by $M = 1$, and $\\lim_{n\\to\\infty} \\dfrac{|x|^{n+1}}{(n+1)!} = 0$ for every $x \\in \\mathbb{R}$.', kind: 'recall' },
+      { q: 'Give an example of an infinitely differentiable function whose Maclaurin series does not represent the function away from 0.', a: 'Cauchy’s function $f(x) = e^{-1/x^2}$ for $x \\ne 0$, $f(0) = 0$, whose derivatives at $0$ are all $0$.', kind: 'apply' }
     ]
   }
 );

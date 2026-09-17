@@ -31,12 +31,12 @@ CONCEPTS.push(
   },
 
   {
-    id: 'c.8.1.3', bartle: '8.1.3', sec: '8.1', kind: 'theorem', tier: 'core',
+    id: 'c.8.1.3', bartle: '8.1.8', sec: '8.1', kind: 'theorem', tier: 'core',
     title: 'The Uniform Norm (Sup-Norm Criterion)',
     oneLine: 'Uniform convergence means the maximum vertical gap between fn and f collapses to zero.',
     statement: `Let $f_n, f: A \\to \\mathbb{R}$ be bounded functions. The <b>uniform norm</b> (sup-norm) on $A$ is:
       $$\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)|$$
-      <p><b>The Criterion:</b> $(f_n)$ converges uniformly to $f$ on $A$ if and only if:
+      <p><b>The Criterion:</b> $(f_n)$ converges <b>uniformly</b> to $f$ on $A$ if and only if:
       $$\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$$</p>`,
     intuition: `<p>Geometrically, imagine drawing an "$\\varepsilon$-ribbon" or tube of width $\\pm\\varepsilon$ around the target graph $f(x)$.</p>
       <p>Uniform convergence means that after step $K$, the entire graph of $f_n(x)$ is sucked completely inside this tube from left to right across the entire domain!</p>
@@ -46,9 +46,85 @@ CONCEPTS.push(
       `If the peak error stays bounded away from $0$ (even if the peak slides to the boundary, like in $x^n$), uniform convergence fails!`,
       `Make sure to take the supremum over the specified domain: $x/n$ converges uniformly on $[0, 10]$, but NOT on all of $\\mathbb{R}$.`
     ],
+    proof: {
+      idea: '(=>) If $|f_n(x) - f(x)| \\le \\varepsilon$ for all $x$, then the supremum is $\\le \\varepsilon$. (<=) If the supremum is $\\le \\varepsilon$, then every individual point is bounded by $\\varepsilon$.',
+      why: 'By definition, $M \\le \\varepsilon$ is equivalent to saying $y \\le \\varepsilon$ for every element $y$ of the set.',
+      rungs: [
+        { why: '(=>) Assume $(f_n)$ converges uniformly to $f$ on $A$. Given $\\varepsilon > 0$, choose $K(\\varepsilon)$ such that for all $n \\ge K(\\varepsilon)$ and all $x \\in A$, $|f_n(x) - f(x)| \\le \\varepsilon$.', m: 'n \\ge K(\\varepsilon) \\implies |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall x \\in A' },
+        { why: 'By definition of the supremum as least upper bound, taking supremum over $x \\in A$ preserves the inequality.', m: '\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall n \\ge K(\\varepsilon)' },
+        { why: 'Since $\\varepsilon > 0$ is arbitrary, $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.', m: '\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0' },
+        { why: '(<=) Conversely, assume $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$. Given $\\varepsilon > 0$, choose $H(\\varepsilon)$ such that $\\|f_n - f\\|_A < \\varepsilon$ for all $n \\ge H(\\varepsilon)$.', m: '\\|f_n - f\\|_A < \\varepsilon \\quad \\forall n \\ge H(\\varepsilon)' },
+        { why: 'For any $x \\in A$, $|f_n(x) - f(x)| \\le \\|f_n - f\\|_A < \\varepsilon$, which proves uniform convergence.', m: '|f_n(x) - f(x)| < \\varepsilon \\quad \\forall x \\in A, \\, n \\ge H(\\varepsilon)' }
+      ],
+      ends: 'Uniform convergence on $A$ is completely equivalent to $\\|f_n - f\\|_A \\to 0$.'
+    },
     cards: [
       { q: 'Define the uniform norm $\\|g\\|_A$ of a function $g$ on $A$.', a: '$\\|g\\|_A = \\sup_{x \\in A} |g(x)|$.', kind: 'state' },
       { q: 'How is the sup-norm used to test uniform convergence?', a: '$f_n \\to f$ uniformly on $A$ iff $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.8.1.5', bartle: '8.1.5', sec: '8.1', kind: 'lemma', tier: 'core',
+    title: 'Sequential Criterion for Non-Uniform Convergence',
+    oneLine: 'Convergence is not uniform iff a sequence of sample points x_k always manages to escape the ε_0 boundary.',
+    statement: `A sequence of functions $(f_n)$ on $A \\subseteq \\mathbb{R}$ <b>fails to converge uniformly</b> to $f$ on $A$ if and only if:
+      <p>There exists some $\\varepsilon_0 > 0$, a subsequence $(f_{n_k})$ of $(f_n)$, and a sequence of points $(x_k)$ in $A$ such that:
+      $$\\left| f_{n_k}(x_k) - f(x_k) \\right| \\ge \\varepsilon_0 \\quad \\text{for all } k \\in \\mathbb{N}$$</p>`,
+    intuition: `<p>This is the ultimate tool for DISPROVING uniform convergence in exams!</p>
+      <p>Suppose someone claims $f_n(x) = x^n$ converges uniformly on $[0, 1)$. How do you refute them? Pick $x_k = (1/2)^{1/k} \\in [0, 1)$! Then $f_k(x_k) = ((1/2)^{1/k})^k = 1/2$.</p>
+      <p>Even though $k \\to \\infty$, at the sliding test point $x_k$, the error NEVER drops below $\\varepsilon_0 = 1/2$! You caught them cheating: uniform convergence fails.</p>`,
+    needs: ['c.8.1.1', 'c.3.4.1'],
+    traps: [
+      `The points $x_k$ do NOT need to be fixed! In fact, $x_k$ almost always moves towards a boundary (e.g. $x_k \\to 1$) as $k \\to \\infty$.`,
+      `Remember that pointwise convergence already holds at every fixed point; it is the moving point $x_k$ that detects the failure of uniformity.`
+    ],
+    proof: {
+      idea: 'Negate the logical definition of uniform convergence: $\\exists \\varepsilon_0 > 0$ such that for every $K$, there exist $n \\ge K$ and $x \\in A$ with $|f_n(x) - f(x)| \\ge \\varepsilon_0$.',
+      why: 'Setting $K = 1, 2, 3, \\dots$ generates the desired subsequence $(f_{n_k})$ and witness points $(x_k)$.',
+      rungs: [
+        { why: 'Write the definition of uniform convergence: $\\forall \\varepsilon > 0, \\, \\exists K \\in \\mathbb{N}, \\, \\forall n \\ge K, \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon$.', m: '\\forall \\varepsilon > 0 \\, \\exists K \\in \\mathbb{N} \\, \\forall n \\ge K \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon' },
+        { why: 'Negate this statement by flipping quantifiers.', m: '\\exists \\varepsilon_0 > 0 \\, \\forall K \\in \\mathbb{N} \\, \\exists n \\ge K, \\, \\exists x \\in A : |f_n(x) - f(x)| \\ge \\varepsilon_0' },
+        { why: 'For $K = 1$, choose $n_1 \\ge 1$ and $x_1 \\in A$ such that $|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0$.', m: '|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0' },
+        { why: 'Inductively, for $K_m = n_{m-1} + 1$, choose $n_m > n_{m-1}$ and $x_m \\in A$ with $|f_{n_m}(x_m) - f(x_m)| \\ge \\varepsilon_0$.', m: 'n_1 < n_2 < \\cdots < n_k < \\cdots \\quad \\text{and} \\quad |f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0' }
+      ],
+      ends: 'The sequence of witness points $(x_k)$ proves that convergence cannot be uniform.'
+    },
+    cards: [
+      { q: 'State the Sequential Criterion for non-uniform convergence.', a: '$(f_n)$ does not converge uniformly to $f$ on $A$ iff $\\exists \\varepsilon_0 > 0$, subsequence $(f_{n_k})$, and points $(x_k) \\in A$ with $|f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0$.', kind: 'state' },
+      { q: 'Use witness points to prove $f_n(x) = x^n$ does not converge uniformly on $[0, 1)$.', a: 'Choose $x_k = (1/2)^{1/k} \\in [0, 1)$; then $f_k(x_k) = 1/2 \\ne 0$, so $|f_k(x_k) - 0| = 1/2 = \\varepsilon_0$ for all $k$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.1.10', bartle: '8.1.10', sec: '8.1', kind: 'theorem', tier: 'core',
+    title: 'Cauchy Criterion for Uniform Convergence',
+    oneLine: 'A sequence of functions converges uniformly iff the uniform distance between fm and fn can be made arbitrarily small.',
+    statement: `Let $(f_n)$ be a sequence of bounded functions on $A \\subseteq \\mathbb{R}$.
+      <p>Then $(f_n)$ <b>converges uniformly</b> on $A$ to a bounded function $f$ if and only if:</p>
+      <p>For every $\\varepsilon > 0$, there exists $H(\\varepsilon) \\in \\mathbb{N}$ such that for all $m, n \\ge H(\\varepsilon)$:
+      $$\\|f_m - f_n\\|_A = \\sup_{x \\in A} |f_m(x) - f_n(x)| \\le \\varepsilon$$</p>`,
+    intuition: `<p>Just as with real numbers (Theorem 3.5.5), this criterion lets you prove uniform convergence without knowing the limit function $f$ in advance!</p>
+      <p>If the functions $f_n$ get uniformly close to each other, completeness of $\\mathbb{R}$ forces them to converge pointwise to some function $f$, and the uniform closeness between $f_m$ and $f_n$ is inherited by the limit $f$.</p>`,
+    needs: ['c.8.1.3', 'c.3.5.5'],
+    traps: [
+      `The bound $\\|f_m - f_n\\|_A \\le \\varepsilon$ must hold for ALL points $x \\in A$ simultaneously! Pointwise Cauchy at each $x$ is not enough for uniform convergence.`
+    ],
+    proof: {
+      idea: '(=>) Triangle inequality $|f_m(x) - f_n(x)| <= |f_m(x) - f(x)| + |f(x) - f_n(x)| < 2\\varepsilon$. (<=) Pointwise Cauchy gives limit $f(x)$; taking $n -> \\infty$ in $|f_m(x) - f_n(x)| <= \\varepsilon$ preserves the bound uniformly.',
+      why: 'Completeness of $\\mathbb{R}$ supplies the pointwise limit, and uniform bounds pass to limits.',
+      rungs: [
+        { why: '(=>) If $f_n \\to f$ uniformly on $A$, choose $K(\\varepsilon/2)$ such that $n \\ge K \\implies |f_n(x) - f(x)| \\le \\varepsilon/2$ for all $x$.', m: 'm, n \\ge K(\\varepsilon/2) \\implies |f_m(x) - f_n(x)| \\le |f_m(x) - f(x)| + |f_n(x) - f(x)| \\le \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
+        { why: 'Taking supremum over $x \\in A$ gives $\\|f_m - f_n\\|_A \\le \\varepsilon$.', m: '\\|f_m - f_n\\|_A \\le \\varepsilon \\quad \\forall m, n \\ge K(\\varepsilon/2)' },
+        { why: '(<=) Assume the Cauchy condition. For each fixed $x \\in A$, $(f_n(x))$ is a Cauchy sequence in $\\mathbb{R}$.', m: '|f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall m, n \\ge H(\\varepsilon)' },
+        { why: 'By completeness of $\\mathbb{R}$ (Theorem 3.5.5), $(f_n(x))$ converges in $\\mathbb{R}$. Define $f(x) = \\lim_{n\\to\\infty} f_n(x)$.', m: 'f(x) := \\lim_{n\\to\\infty} f_n(x) \\quad \\forall x \\in A' },
+        { why: 'Keep $m \\ge H(\\varepsilon)$ fixed and send $n \\to \\infty$ in $|f_m(x) - f_n(x)| \\le \\varepsilon$. By Theorem 3.2.6, limits preserve weak inequalities.', m: '|f_m(x) - f(x)| = \\lim_{n\\to\\infty} |f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall x \\in A, \\, m \\ge H(\\varepsilon)' }
+      ],
+      ends: 'Therefore $\\|f_m - f\\|_A \\le \\varepsilon$ for all $m \\ge H(\\varepsilon)$, proving uniform convergence.'
+    },
+    cards: [
+      { q: 'State the Cauchy Criterion for Uniform Convergence.', a: '$(f_n)$ converges uniformly on $A$ iff $\\forall \\varepsilon > 0$, $\\exists H$ such that $m, n \\ge H \\implies \\|f_m - f_n\\|_A \\le \\varepsilon$.', kind: 'state' },
+      { q: 'How is the limit function $f(x)$ constructed in the proof of the Cauchy Criterion?', a: 'For each fixed $x$, $(f_n(x))$ is a Cauchy sequence of real numbers; by completeness of $\\mathbb{R}$, its pointwise limit defines $f(x)$.', kind: 'recall' }
     ]
   },
 
@@ -88,6 +164,43 @@ CONCEPTS.push(
   },
 
   {
+    id: 'c.8.2.3', bartle: '8.2.3', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Interchange of Limit and Derivative',
+    oneLine: 'If derivatives f_n\' converge uniformly and f_n(x_0) converges at one point, then (lim f_n)\' = lim f_n\'.',
+    statement: `Let $J \\subseteq \\mathbb{R}$ be a bounded interval, and let $(f_n)$ be a sequence of differentiable functions on $J$.
+      <p>Suppose that:
+      <br>(1) There exists a point $x_0 \\in J$ such that the number sequence $(f_n(x_0))$ converges.
+      <br>(2) The sequence of derivatives $(f_n')$ converges <b>uniformly</b> on $J$ to a function $g$.</p>
+      <p>Then:
+      <br>(a) $(f_n)$ converges uniformly on $J$ to a differentiable function $f$.
+      <br>(b) $f'(x) = g(x) = \\lim_{n\\to\\infty} f_n'(x)$ for all $x \\in J$.
+      $$\\frac{d}{dx} \\left[ \\lim_{n\\to\\infty} f_n(x) \\right] = \\lim_{n\\to\\infty} f_n'(x)$$</p>`,
+    intuition: `<p>Swapping derivatives is the most dangerous operation in calculus! You can have $f_n \\to 0$ uniformly, while its derivatives explode to infinity (e.g. $f_n(x) = \\frac{\\sin(nx)}{n} \\to 0$, but $f_n'(x) = \\cos(nx)$ oscillates wildly without converging!).</p>
+      <p>To safely swap limit and derivative, uniform convergence of $f_n$ is NOT ENOUGH: you need <b>uniform convergence of the derivatives $f_n'$</b>!</p>`,
+    needs: ['c.8.1.10', 'c.6.2.4', 'c.8.2.2'],
+    traps: [
+      `Assuming uniform convergence of $f_n$ guarantees differentiability of the limit. Weierstrass constructed a uniform limit of smooth polynomials that is differentiable NOWHERE!`,
+      `The critical condition is that $(f_n')$ must converge UNIFORMLY, not just pointwise.`
+    ],
+    proof: {
+      idea: 'Apply Lagrange MVT to $f_m - f_n$ on $[x_0, x]$ to prove $(f_n)$ is uniformly Cauchy, then apply MVT to difference quotients to show $f\'(c) = g(c)$.',
+      why: 'MVT transfers uniform convergence of $(f_n\')$ into control over $|(f_m(x)-f_n(x)) - (f_m(c)-f_n(c))|/(x - c)$.',
+      rungs: [
+        { why: 'For any $x \\in J$, apply MVT (6.2.4) to $f_m - f_n$ on the interval between $x_0$ and $x$.', m: 'f_m(x) - f_n(x) = f_m(x_0) - f_n(x_0) + (x - x_0)[f_m\'(y) - f_n\'(y)] \\quad \\text{for some } y' },
+        { why: 'Since $(f_n(x_0))$ converges and $(f_n\')$ is uniformly Cauchy, $(f_n)$ is uniformly Cauchy on $J$, so $f_n \\to f$ uniformly on $J$.', m: '\\|f_m - f_n\\|_J \\le |f_m(x_0) - f_n(x_0)| + (b - a)\\|f_m\' - f_n\'\\|_J < \\varepsilon' },
+        { why: 'For fixed $c \\in J$ and $x \\ne c$, apply MVT to $(f_m - f_n)$ on $[c, x]$: $\\frac{f_m(x)-f_m(c)}{x-c} - \\frac{f_n(x)-f_n(c)}{x-c} = f_m\'(z) - f_n\'(z)$.', m: '\\left| \\frac{f_m(x) - f_m(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\|f_m\' - f_n\'\\|_J < \\varepsilon' },
+        { why: 'Take $m \\to \\infty$: $|\\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c}| \\le \\varepsilon$.', m: '\\left| \\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\varepsilon' },
+        { why: 'Combine with $|f_n\'(c) - g(c)| < \\varepsilon$ and differentiability of $f_n$ at $c$ to conclude $|\\frac{f(x)-f(c)}{x-c} - g(c)| < 3\\varepsilon$.', m: 'f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} = g(c)' }
+      ],
+      ends: 'The derivative of the limit equals the uniform limit of the derivatives: $(\\lim f_n)\' = \\lim f_n\'.'
+    },
+    cards: [
+      { q: 'What key condition guarantees that $(\\lim f_n)\' = \\lim f_n\'$?', a: 'The sequence of derivatives $(f_n\')$ must converge UNIFORMLY (and $f_n(x_0)$ converges at one point).', kind: 'state' },
+      { q: 'Give an example where $f_n \\to 0$ uniformly, but $\\lim f_n\' \\ne (\\lim f_n)\'$.', a: '$f_n(x) = \\dfrac{\\sin(nx)}{n} \\to 0$ uniformly on $\\mathbb{R}$, but $f_n\'(x) = \\cos(nx)$ does not converge at all.', kind: 'apply' }
+    ]
+  },
+
+  {
     id: 'c.8.2.4', bartle: '8.2.4', sec: '8.2', kind: 'theorem', tier: 'core',
     title: 'Interchange of Limit and Integral',
     oneLine: 'Under uniform convergence, the limit of the integrals equals the integral of the limit.',
@@ -97,14 +210,95 @@ CONCEPTS.push(
     intuition: `<p>In pure calculus, swapping limits is dangerous: $\\lim \\int \\ne \\int \\lim$ in general! Look at this famous counterexample:</p>
       <p>Consider a tall narrow spike function $f_n(x)$ on $[0, 1]$ of height $n$ and width $1/n$. At every fixed point $x > 0$, $f_n(x) \\to 0$, so the pointwise limit is $0$, whose integral is $0$. But the area under the spike is $\\int_0^1 f_n = 1$ for every $n$! So $\\lim \\int = 1 \\ne 0 = \\int \\lim$.</p>
       <p>Uniform convergence prevents these rogue spikes from shooting off to infinity by locking the entire function inside a flat envelope, making the limit swap 100% legal!</p>`,
-    needs: ['c.8.1.1', 'c.7.1.1'],
+    needs: ['c.8.1.1', 'c.7.1.1', 'c.8.1.10'],
     traps: [
       `Assuming you can always interchange limit and integral without checking uniform convergence. The moving spike counterexample is a classic exam favorite!`,
       `For differentiation, even uniform convergence of $f_n$ is not enough! You need uniform convergence of the DERIVATIVES $f_n'$ to interchange $\\frac{d}{dx}$ and $\\lim$.`
     ],
+    proof: {
+      idea: 'Show that $\\int_a^b f_n$ forms a Cauchy sequence of real numbers using $|\\int f_m - \\int f_n| <= \\|f_m - f_n\\|(b - a)$, then show $f \\in \\mathcal{R}[a, b]$ with that limit.',
+      why: 'Uniform convergence controls the gap $|f_n(x) - f(x)| < \\varepsilon$ simultaneously for all $x$, so the integral of the difference is bounded by $\\varepsilon(b - a)$.',
+      rungs: [
+        { why: 'Given $\\varepsilon > 0$, by Cauchy Criterion (8.1.10), $\\exists H(\\varepsilon)$ such that for $m > n \\ge H$, $-\\varepsilon \\le f_m(x) - f_n(x) \\le \\varepsilon$ for all $x \\in [a, b]$.', m: '-\\varepsilon(b - a) \\le \\int_a^b f_m - \\int_a^b f_n \\le \\varepsilon(b - a)' },
+        { why: 'Thus $(\\int_a^b f_n)$ is a Cauchy sequence in $\\mathbb{R}$, hence converges to some limit $A = \\lim_{n\\to\\infty} \\int_a^b f_n$.', m: 'A = \\lim_{n\\to\\infty} \\int_a^b f_n' },
+        { why: 'Since $f_n \\to f$ uniformly, choose $K$ such that for $m \\ge K$, $|f_m(x) - f(x)| < \\varepsilon$ for all $x \\in [a, b]$. For any tagged partition $\\dot{\\mathcal{P}}$, $|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)' },
+        { why: 'Pick $m$ so large that $|\\int_a^b f_m - A| < \\varepsilon$. Since $f_m$ is integrable, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f_m; \\dot{\\mathcal{P}}) - \\int_a^b f_m| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - A| \\le |S(f) - S(f_m)| + |S(f_m) - \\int f_m| + |\\int f_m - A| < \\varepsilon(b - a) + 2\\varepsilon' },
+        { why: 'Since $\\varepsilon > 0$ is arbitrary, $f \\in \\mathcal{R}[a, b]$ and $\\int_a^b f = A = \\lim_{n\\to\\infty} \\int_a^b f_n$.', m: '\\int_a^b f = \\lim_{n\\to\\infty} \\int_a^b f_n' }
+      ],
+      ends: 'Interchange of limit and Riemann integral is established.'
+    },
     cards: [
       { q: 'Under what condition is $\\lim_{n\\to\\infty} \\int_a^b f_n = \\int_a^b \\lim_{n\\to\\infty} f_n$ guaranteed?', a: 'When $f_n \\in \\mathcal{R}[a, b]$ and $(f_n)$ converges uniformly to $f$ on $[a, b]$.', kind: 'state' },
       { q: 'Give an example where pointwise limit holds but $\\lim \\int f_n \\ne \\int \\lim f_n$.', a: 'A sequence of spikes $f_n$ on $[0, 1]$ with area $\\int f_n = 1$ but $f_n(x) \\to 0$ pointwise.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.8.2.5', bartle: '8.2.5', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Bounded Convergence Theorem for Riemann Integrals',
+    oneLine: 'If a sequence of integrable functions is uniformly bounded and converges pointwise to an integrable limit, integrals converge.',
+    statement: `Let $(f_n)$ be a sequence in $\\mathcal{R}[a, b]$ that converges <b>pointwise</b> on $[a, b]$ to an integrable function $f \\in \\mathcal{R}[a, b]$.
+      <p>Suppose there exists $M > 0$ such that:
+      $$|f_n(x)| \\le M \\quad \\text{for all } x \\in [a, b] \\text{ and all } n \\in \\mathbb{N}$$
+      Then:
+      $$\\lim_{n\\to\\infty} \\int_a^b f_n(x) \\, dx = \\int_a^b f(x) \\, dx$$</p>`,
+    intuition: `<p>Notice how amazing this theorem is: it does NOT require uniform convergence!</p>
+      <p>Why did the runaway spike counterexample fail earlier? Because the height of the spike shot off to infinity ($h = n$). The Bounded Convergence Theorem puts a hard ceiling $M$ on the whole family: if no spike can ever poke higher than $M$, then pointwise convergence alone is enough to guarantee that the areas converge!</p>`,
+    needs: ['c.8.2.4', 'c.7.1.5'],
+    traps: [
+      `The limit function $f$ must be assumed to be Riemann integrable (unlike in Lebesgue integration theory where integrability is automatic).`,
+      `The uniform bound $M$ must NOT depend on $n$ or $x$.`
+    ],
+    proof: {
+      idea: 'Divide $[a, b]$ into a set where $f_n \\to f$ except on a set of small measure, and use $|f_n - f| \\le 2M$ to bound the remaining contribution.',
+      why: 'Uniform boundedness prevents escapes to infinity, allowing Egorov-like truncation.',
+      rungs: [
+        { why: 'Let $g_n = |f_n - f|$. Then $g_n(x) \\to 0$ pointwise on $[a, b]$, and $|g_n(x)| \\le 2M$ for all $x, n$.', m: '0 \\le g_n(x) \\le 2M, \\quad \\lim_{n\\to\\infty} g_n(x) = 0' },
+        { why: 'Given $\\varepsilon > 0$, by Arzelà\'s theorem, the set of points where $g_n(x) \\ge \\frac{\\varepsilon}{2(b-a)}$ can be enclosed in subintervals of total length $< \\frac{\\varepsilon}{4M}$.', m: '\\int_{\\text{bad}} g_n \\le 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}' },
+        { why: 'On the remaining good set, $g_n(x) < \\frac{\\varepsilon}{2(b-a)}$, so its integral is bounded by $\\frac{\\varepsilon}{2(b-a)}(b - a) = \\frac{\\varepsilon}{2}$.', m: '\\int_{\\text{good}} g_n < \\frac{\\varepsilon}{2}' },
+        { why: 'Combine both parts: $\\int_a^b |f_n - f| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$.', m: '\\left| \\int_a^b f_n - \\int_a^b f \\right| \\le \\int_a^b |f_n - f| < \\varepsilon' }
+      ],
+      ends: 'Therefore $\\lim_{n\\to\\infty} \\int_a^b f_n = \\int_a^b f$.'
+    },
+    cards: [
+      { q: 'State the Bounded Convergence Theorem for Riemann integrals.', a: 'If $f_n, f \\in \\mathcal{R}[a, b]$, $f_n \\to f$ pointwise, and $|f_n(x)| \\le M$ for all $n, x$, then $\\lim \\int_a^b f_n = \\int_a^b f$.', kind: 'state' },
+      { q: 'How does the Bounded Convergence Theorem differ from Theorem 8.2.4?', a: 'It replaces the stringent hypothesis of uniform convergence with uniform boundedness ($|f_n| \\le M$).', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.8.2.6', bartle: '8.2.6', sec: '8.2', kind: 'theorem', tier: 'core',
+    title: 'Dini’s Theorem on Monotone Sequences of Functions',
+    oneLine: 'A monotone sequence of continuous functions on a compact interval converging to a continuous limit MUST converge uniformly.',
+    statement: `Let $I = [a, b]$ be a closed bounded interval, and let $(f_n)$ be a <b>monotone</b> sequence of <b>continuous</b> functions on $I$ that converges pointwise to a <b>continuous</b> function $f$ on $I$.
+      <p>Then the convergence of $(f_n)$ to $f$ is <b>uniform</b> on $I$.</p>`,
+    intuition: `<p>Normally, pointwise convergence does NOT imply uniform convergence. But Italian mathematician Ulisse Dini discovered the magic combination that forces uniformity:</p>
+      <p>1. <b>Monotonicity:</b> The graphs move in only one direction (e.g. marching down, $f_{n+1} \\le f_n$). No oscillations!</p>
+      <p>2. <b>Continuity of everything:</b> Both the approximating functions $f_n$ AND the limit function $f$ are continuous.</p>
+      <p>3. <b>Compact domain:</b> The interval $[a, b]$ is closed and bounded.</p>
+      <p>When these three align, it is physically impossible for a sharp non-uniform peak to hide: the entire curve is dragged into uniform convergence!</p>`,
+    needs: ['c.8.2.2', 'c.5.3.4'],
+    traps: [
+      `ALL THREE conditions are mandatory!`,
+      `• If the domain is open like $(0, 1)$, Dini fails ($f_n(x) = x^n$ on $(0, 1)$).`,
+      `• If the limit $f$ is discontinuous, Dini fails ($x^n$ on $[0, 1]$).`,
+      `• If the sequence is not monotone, Dini fails (moving spike functions).`
+    ],
+    proof: {
+      idea: 'Let $g_n = f_n - f \\ge 0$ decrease to 0. If convergence were not uniform, $\\sup g_n \\ge \\varepsilon_0$; continuity on compact $[a, b]$ yields a maximum point $x_n$, whose convergent subsequence produces a contradiction.',
+      why: 'Bolzano-Weierstrass extracts a cluster point where $g_n$ cannot drop to 0, contradicting pointwise convergence.',
+      rungs: [
+        { why: 'Assume without loss of generality that $(f_n)$ is decreasing. Let $g_n = f_n - f$. Then each $g_n$ is continuous on $[a, b]$, $g_{n+1}(x) \\le g_n(x)$, and $g_n(x) \\to 0$ for each $x$.', m: 'g_n \\ge g_{n+1} \\ge 0, \\quad g_n(x) \\to 0 \\quad \\forall x \\in [a, b]' },
+        { why: 'Suppose for contradiction that $g_n$ does not converge uniformly to $0$. Then $\\exists \\varepsilon_0 > 0$ such that $\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0$ for all $n$.', m: '\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0 \\quad \\forall n \\in \\mathbb{N}' },
+        { why: 'Since $g_n$ is continuous on compact $[a, b]$, by Maximum-Minimum Theorem (5.3.4), $g_n$ attains its maximum at some $x_n \\in [a, b]$: $g_n(x_n) \\ge \\varepsilon_0$.', m: 'g_n(x_n) = \\sup_{x \\in [a, b]} g_n(x) \\ge \\varepsilon_0' },
+        { why: 'By Bolzano-Weierstrass (3.4.8), $(x_n)$ has a subsequence $(x_{n_k})$ converging to some $x^* \\in [a, b]$. For any fixed $m$, when $n_k \\ge m$, monotonicity gives $g_m(x_{n_k}) \\ge g_{n_k}(x_{n_k}) \\ge \\varepsilon_0$.', m: 'g_m(x_{n_k}) \\ge \\varepsilon_0 \\quad \\forall n_k \\ge m' },
+        { why: 'Take $k \\to \\infty$: by continuity of $g_m$, $g_m(x^*) = \\lim_{k\\to\\infty} g_m(x_{n_k}) \\ge \\varepsilon_0$. But this holds for ALL $m$, contradicting $g_m(x^*) \\to 0$!', m: 'g_m(x^*) \\ge \\varepsilon_0 \\quad \\forall m \\implies \\lim_{m\\to\\infty} g_m(x^*) \\ge \\varepsilon_0 > 0 \\implies\\Leftarrow' }
+      ],
+      ends: 'Contradiction! Therefore, $(g_n)$ converges uniformly to $0$, proving Dini’s Theorem.'
+    },
+    cards: [
+      { q: 'State Dini’s Theorem.', a: 'If $(f_n)$ is a monotone sequence of continuous functions on $[a, b]$ converging pointwise to a continuous limit $f$, then the convergence is uniform.', kind: 'state' },
+      { q: 'Why does Dini’s Theorem fail for $f_n(x) = x^n$ on $[0, 1]$?', a: 'Because the pointwise limit function $f$ is discontinuous at $x = 1$.', kind: 'apply' }
     ]
   },
 

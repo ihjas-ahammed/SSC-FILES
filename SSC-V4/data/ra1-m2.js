@@ -141,5 +141,110 @@ CONCEPTS.push(
       { q: 'What is the geometric meaning of $V_\\varepsilon(c)$?', a: 'The open symmetric interval $(c - \\varepsilon, c + \\varepsilon)$ centered at $c$ with radius $\\varepsilon$.', kind: 'state' },
       { q: 'If $x \\in V_{\\varepsilon/2}(c)$ and $y \\in V_{\\varepsilon/2}(c)$, what is the maximum possible distance between $x$ and $y$?', a: 'Strictly less than $\\varepsilon$, because $|x - y| \\le |x - c| + |c - y| < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$.', kind: 'apply' }
     ]
+  },
+
+  {
+    id: 'c.2.1.4', bartle: '2.1.4', sec: '2.1', kind: 'theorem', tier: 'core',
+    title: 'Irrationality of √2',
+    oneLine: 'There is no rational number whose square is 2 — the rationals have holes.',
+    statement: `There does not exist a rational number $r \\in \\mathbb{Q}$ such that:
+      $$r^2 = 2$$
+      Consequently, $\\sqrt{2}$ is an <b>irrational number</b> ($\\,\\sqrt{2} \\notin \\mathbb{Q}$).`,
+    intuition: `<p>This is one of the oldest and most celebrated proofs in mathematics, discovered by the ancient Pythagoreans. In Class 10, we learned that $\\sqrt{2}$ is irrational, but in Real Analysis, this theorem plays a foundational role: it shows that the rational field $\\mathbb{Q}$ has serious gaps!</p>
+      <p>If you construct a right triangle with legs of length $1$, the hypotenuse has length $\\sqrt{2}$. Even though this length physically exists in Euclidean geometry, it cannot be measured by any ratio of integers $p/q$.</p>`,
+    needs: ['c.2.1.1', 's.contradiction'],
+    traps: [
+      `Assuming every real number is rational. The set $\\mathbb{R} \\setminus \\mathbb{Q}$ of irrationals is not only non-empty, but actually uncountable!`,
+      `Forgetting the coprimality condition $\\gcd(p, q) = 1$: the entire contradiction rests on the fact that $p/q$ can be written in lowest terms, yet both $p$ and $q$ are forced to be even.`
+    ],
+    proof: {
+      idea: `Assume $r = p/q$ in lowest terms satisfies $r^2 = 2$. Deduce that both $p$ and $q$ must be even, contradicting coprimality.`,
+      why: `The square of an odd integer is always odd, so if $p^2$ is even, $p$ itself must be even.`,
+      rungs: [
+        { why: 'Suppose for contradiction that there exists a rational number $r = p/q$ with $r^2 = 2$. By cancelling common factors, choose positive integers $p, q \\in \\mathbb{N}$ with $\\gcd(p, q) = 1$.', m: '$$\\left(\\frac{p}{q}\\right)^2 = 2, \\quad \\gcd(p, q) = 1$$' },
+        { why: 'Square both sides and clear the denominator.', m: '$$p^2 = 2q^2$$' },
+        { why: 'Since $p^2 = 2q^2$, $p^2$ is an even integer. Because the square of an odd number $(2m+1)^2 = 4m^2 + 4m + 1 = 2(2m^2+2m)+1$ is always odd, $p$ itself must be even.', m: '$$p^2 \\text{ is even} \\implies p = 2k \\quad \\text{for some } k \\in \\mathbb{N}$$' },
+        { why: 'Substitute $p = 2k$ back into the equation $p^2 = 2q^2$.', m: '$$(2k)^2 = 4k^2 = 2q^2 \\implies q^2 = 2k^2$$' },
+        { why: 'By the same parity argument, $q^2$ is even, which implies $q$ must also be even.', m: '$$q^2 \\text{ is even} \\implies q \\text{ is even}$$' },
+        { why: 'Since both $p$ and $q$ are even, $2$ divides both $p$ and $q$, directly contradicting $\\gcd(p, q) = 1$.', m: '$$2 \\mid p \\ \\text{and} \\ 2 \\mid q \\implies \\gcd(p, q) \\ge 2 \\implies\\Leftarrow$$' }
+      ],
+      ends: 'Therefore, the assumption that $r \\in \\mathbb{Q}$ is false. There is no rational number whose square is 2.'
+    },
+    cards: [
+      { q: 'State Theorem 2.1.4 (Irrationality of $\\sqrt{2}$).', a: 'There does not exist a rational number $r \\in \\mathbb{Q}$ such that $r^2 = 2$.', kind: 'state' },
+      { q: 'Why must $p$ be even if $p^2$ is even?', a: 'Because the square of any odd integer $(2m+1)^2 = 2(2m^2+2m)+1$ is odd; only an even integer can have an even square.', kind: 'recall' },
+      { q: 'What fundamental contradiction concludes the proof of the irrationality of $\\sqrt{2}$?', a: 'Both $p$ and $q$ are shown to be divisible by 2, contradicting that $\\gcd(p, q) = 1$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.2.1.13', bartle: '2.1.13', sec: '2.1', kind: 'theorem', tier: 'core',
+    title: "Bernoulli's Inequality",
+    oneLine: 'Compounding at positive interest always beats simple interest: (1 + x)^n ≥ 1 + nx for x > -1.',
+    statement: `If $x \\in \\mathbb{R}$ with $x > -1$, then for all $n \\in \\mathbb{N}$:
+      $$(1 + x)^n \\ge 1 + nx$$
+      Equality holds if and only if $n = 1$ or $x = 0$.`,
+    intuition: `<p>In financial mathematics, if you invest 1 rupee at rate $x$, simple interest after $n$ years yields $1 + nx$, while compound interest yields $(1 + x)^n$. Bernoulli's Inequality states that compound interest is always greater than or equal to simple interest!</p>
+      <p>In Real Analysis, Bernoulli's Inequality is an indispensable weapon for calculating limits. Whenever you need to show that a power $c^n$ blows up to infinity or that $c^{1/n}$ approaches $1$, Bernoulli gives the simplest linear bound to tame the exponential growth.</p>`,
+    needs: ['c.2.1.7', 'c.1.2.1'],
+    traps: [
+      `Forgetting the essential condition $x > -1$. If $x = -2$ and $n = 2$, $(1 - 2)^2 = 1$, while $1 + 2(-2) = -3$, which holds, but for $n = 3$, $(1 - 2)^3 = -1 < 1 + 3(-2) = -5$ fails! The condition $1 + x > 0$ is needed so multiplying preserves the inequality.`,
+      `Thinking it only holds for $x > 0$. It holds for ALL $x > -1$, including negative fractions like $x = -0.5$.`
+    ],
+    proof: {
+      idea: `Use Mathematical Induction on $n$. Multiplying by $1 + x > 0$ preserves the inequality, and dropping the positive quadratic term $k x^2 \\ge 0$ completes the step.`,
+      why: `Because $x > -1$ guarantees $1 + x > 0$, enabling valid multiplication without reversing inequality signs.`,
+      rungs: [
+        { why: 'Base step ($n = 1$): Evaluate both sides for $n = 1$.', m: '$$(1 + x)^1 = 1 + x = 1 + 1 \\cdot x$$ holds with equality.' },
+        { why: 'Inductive hypothesis: Assume the inequality holds for some $k \\in \\mathbb{N}$.', m: '$$(1 + x)^k \\ge 1 + kx$$' },
+        { why: 'Multiply both sides by $(1 + x)$. Since $x > -1$, we have $1 + x > 0$, so the inequality direction is strictly preserved.', m: '$$(1 + x)^{k+1} = (1 + x)^k(1 + x) \\ge (1 + kx)(1 + x)$$' },
+        { why: 'Expand the algebraic product on the right-hand side.', m: '$$(1 + kx)(1 + x) = 1 + kx + x + kx^2 = 1 + (k + 1)x + kx^2$$' },
+        { why: 'Since $k \\ge 1$ and $x^2 \\ge 0$, the quadratic term $kx^2 \\ge 0$. Dropping it gives a smaller or equal quantity.', m: '$$kx^2 \\ge 0 \\implies 1 + (k + 1)x + kx^2 \\ge 1 + (k + 1)x$$' },
+        { why: 'Chain the inequalities together to conclude the inductive step.', m: '$$(1 + x)^{k+1} \\ge 1 + (k + 1)x$$' }
+      ],
+      ends: 'By the Principle of Mathematical Induction, $(1 + x)^n \\ge 1 + nx$ for all $n \\in \\mathbb{N}$ and all $x > -1$.'
+    },
+    cards: [
+      { q: "State Bernoulli's Inequality.", a: 'If $x > -1$, then $(1 + x)^n \\ge 1 + nx$ for all $n \\in \\mathbb{N}$.', kind: 'state' },
+      { q: "Why is the condition $x > -1$ required in Bernoulli's Inequality?", a: 'To ensure $1 + x > 0$, so that multiplying the inductive inequality by $(1 + x)$ preserves the inequality sign.', kind: 'recall' },
+      { q: 'What term is dropped to finish the inductive step $(1 + kx)(1 + x) \\ge 1 + (k+1)x$?', a: 'The non-negative term $kx^2 \\ge 0$.', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.2.4.7', bartle: '2.4.7', sec: '2.4', kind: 'theorem', tier: 'core',
+    title: 'Existence of √2 in ℝ',
+    oneLine: 'Completeness fills the hole: there exists a unique positive real number x such that x² = 2.',
+    statement: `There exists a positive real number $x \\in \\mathbb{R}$ such that:
+      $$x^2 = 2$$
+      This unique positive number is denoted by $\\sqrt{2}$.`,
+    intuition: `<p>Earlier we proved Theorem 2.1.4: there is NO rational number whose square is $2$. If we lived only in $\\mathbb{Q}$, $\\sqrt{2}$ would be a ghost — a missing hole on the line.</p>
+      <p>This theorem demonstrates the true triumph of the <b>Completeness Property of $\\mathbb{R}$</b>. By collecting all positive numbers whose squares are less than $2$ into a set $S$, completeness guarantees that $S$ has a supremum $x = \\sup S$. We then prove that $x^2$ cannot be less than $2$ (or we could step slightly to the right) and cannot be greater than $2$ (or we could step slightly to the left). Thus, $x^2$ is exactly $2$!</p>`,
+    needs: ['c.2.3.6', 'c.2.4.3', 'c.2.1.4'],
+    traps: [
+      `Assuming this can be proved from Field Axioms alone. It CANNOT! $\\mathbb{Q}$ satisfies all Field and Order axioms, but $\\sqrt{2} \\notin \\mathbb{Q}$. Completeness is essential.`,
+      `Thinking the square root algorithm in school arithmetic is a proof. Calculating digits like $1.414...$ merely defines a sequence of rational approximations; the Completeness Property is what proves the limit actually exists as a real number!`
+    ],
+    proof: {
+      idea: `Let $S = \\{s \\in \\mathbb{R} : s > 0, s^2 < 2\\}$. Since $S$ is non-empty and bounded above by $2$, $x := \\sup S$ exists. Rule out $x^2 < 2$ and $x^2 > 2$ using the Archimedean Property.`,
+      why: `Trichotomy ensures exactly one of $x^2 < 2$, $x^2 > 2$, or $x^2 = 2$ must hold. Contradicting the first two establishes $x^2 = 2$.`,
+      rungs: [
+        { why: 'Define $S := \\{s \\in \\mathbb{R} : s > 0, s^2 < 2\\}$. Check that $S$ is non-empty and bounded above.', m: '$$1 \\in S \\implies S \\ne \\emptyset; \\quad s > 2 \\implies s^2 > 4 > 2 \\implies s \\notin S \\implies 2 \\text{ is an upper bound}$$' },
+        { why: 'By the Completeness Property of $\\mathbb{R}$, $S$ has a supremum $x \\in \\mathbb{R}$. Note $x \\ge 1 > 0$.', m: '$$x := \\sup S \\in \\mathbb{R}, \\quad x \\ge 1$$' },
+        { why: 'Suppose for contradiction that $x^2 < 2$. Then $2 - x^2 > 0$. For any $n \\in \\mathbb{N}$, estimate $(x + 1/n)^2$.', m: '$$\\left(x + \\frac{1}{n}\\right)^2 = x^2 + \\frac{2x}{n} + \\frac{1}{n^2} \\le x^2 + \\frac{2x + 1}{n}$$' },
+        { why: 'By the Archimedean Property, choose $n \\in \\mathbb{N}$ large enough so that $\\frac{1}{n} < \\frac{2 - x^2}{2x + 1}$.', m: '$$\\frac{2x + 1}{n} < 2 - x^2 \\implies \\left(x + \\frac{1}{n}\\right)^2 < x^2 + (2 - x^2) = 2$$' },
+        { why: 'This means $x + 1/n \\in S$. But $x + 1/n > x = \\sup S$, contradicting that $x$ is an upper bound for $S$. Thus $x^2 < 2$ is false.', m: '$$x + \\frac{1}{n} \\in S \\text{ and } x + \\frac{1}{n} > x = \\sup S \\implies\\Leftarrow$$' },
+        { why: 'Next suppose for contradiction that $x^2 > 2$. Then $x^2 - 2 > 0$. Estimate $(x - 1/m)^2$.', m: '$$\\left(x - \\frac{1}{m}\\right)^2 = x^2 - \\frac{2x}{m} + \\frac{1}{m^2} > x^2 - \\frac{2x}{m}$$' },
+        { why: 'By the Archimedean Property, choose $m \\in \\mathbb{N}$ such that $\\frac{1}{m} < \\frac{x^2 - 2}{2x}$.', m: '$$\\frac{2x}{m} < x^2 - 2 \\implies \\left(x - \\frac{1}{m}\\right)^2 > x^2 - (x^2 - 2) = 2$$' },
+        { why: 'If $s \\in S$, then $s^2 < 2 < (x - 1/m)^2$, so $s < x - 1/m$. Thus $x - 1/m$ is an upper bound for $S$, contradicting that $x$ is the LEAST upper bound.', m: '$$x - \\frac{1}{m} < x \\text{ is an upper bound of } S \\implies\\Leftarrow$$' },
+        { why: 'By the Trichotomy Property, since $x^2 < 2$ and $x^2 > 2$ are both impossible, we must have $x^2 = 2$.', m: '$$x^2 = 2$$' }
+      ],
+      ends: 'There exists a unique positive real number $x = \\sup S$ such that $x^2 = 2$. This establishes the rigorous existence of $\\sqrt{2} \\in \\mathbb{R}$.'
+    },
+    cards: [
+      { q: 'State Theorem 2.4.7 (Existence of $\\sqrt{2}$ in $\\mathbb{R}$).', a: 'There exists a positive real number $x \\in \\mathbb{R}$ such that $x^2 = 2$.', kind: 'state' },
+      { q: 'How is $\\sqrt{2}$ constructed in the proof of Theorem 2.4.7?', a: 'As the supremum of the set $S = \\{s \\in \\mathbb{R} : s > 0, s^2 < 2\\}$ via the Completeness Property.', kind: 'recall' },
+      { q: 'Why does the proof require the Archimedean Property?', a: 'To choose an integer $n$ large enough that $(x + 1/n)^2 < 2$ (if $x^2 < 2$) or $(x - 1/m)^2 > 2$ (if $x^2 > 2$).', kind: 'apply' }
+    ]
   }
 );

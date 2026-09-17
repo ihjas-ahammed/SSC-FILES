@@ -468,6 +468,47 @@ CONCEPTS.push(
     ]
   },
 
+  {
+    id: 'c.3.3.6', bartle: '3.3.6', sec: '3.3', kind: 'theorem', tier: 'core',
+    title: 'The Number e via the Monotone Convergence Theorem',
+    oneLine: 'e_n = (1 + 1/n)^n is strictly increasing and bounded above by 3, converging to Euler’s constant e ≈ 2.71828.',
+    statement: `Let the sequence $(e_n)$ be defined by:
+      $$e_n = \\left(1 + \\frac{1}{n}\\right)^n \\quad \\text{for } n \\in \\mathbb{N}$$
+      The sequence $(e_n)$ is strictly increasing and bounded above by $3$:
+      $$2 = e_1 < e_2 < \\cdots < e_n < e_{n+1} < \\cdots < 3$$
+      By the Monotone Convergence Theorem, $(e_n)$ converges to a real limit, denoted by the fundamental constant $e$:
+      $$e = \\lim_{n\\to\\infty} \\left(1 + \\frac{1}{n}\\right)^n \\in (2, 3)$$`,
+    intuition: `<p>In high school compound interest, if 100% interest is compounded once a year, you get $(1 + 1)^1 = 2$. Compounded semiannually, $(1 + 1/2)^2 = 2.25$. Compounded monthly, $(1 + 1/12)^{12} \\approx 2.61$. Compounded daily, $\\approx 2.7145$.</p>
+      <p>Does your money grow to infinity if you compound every microsecond? No! It is strictly capped. This theorem uses the <b>Binomial Theorem</b> to show two critical facts:
+      1. Every step increases the total sum ($e_n < e_{n+1}$).
+      2. The total sum is strictly smaller than the geometric series $1 + 1 + 1/2 + 1/4 + \\cdots = 3$.</p>
+      <p>Because the sequence is monotone increasing and bounded above, the <b>Monotone Convergence Theorem</b> guarantees it must hit a definite limit: Euler's number $e \\approx 2.71828$.</p>`,
+    needs: ['c.3.3.2', 'c.1.2.1', 'c.2.1.1'],
+    traps: [
+      `Assuming $\\lim(1 + 1/n)^n = 1^\\infty = 1$. The expression $1^\\infty$ is an indeterminate form; the base approaches $1$ while the exponent explodes to $\\infty$, balancing at $e \\approx 2.71828$.`,
+      `Thinking that because $e_n < 3$, the limit must be $3$. The ceiling $3$ is merely an upper bound; the exact limit is the supremum of the sequence, $e \\approx 2.71828 < 3$.`
+    ],
+    proof: {
+      idea: `Expand $e_n$ by the Binomial Theorem. Comparing terms shows $e_n < e_{n+1}$, and bounding each term by $1/2^{k-1}$ sums to $< 3$. Apply the Monotone Convergence Theorem.`,
+      why: `The Binomial expansion reveals that every individual factor $(1 - k/n)$ increases with $n$ and each coefficient $1/k!$ is bounded by $1/2^{k-1}$.`,
+      rungs: [
+        { why: 'Expand $e_n = (1 + 1/n)^n$ using the Binomial Theorem.', m: '$$e_n = 1 + n\\left(\\frac{1}{n}\\right) + \\frac{n(n-1)}{2!}\\left(\\frac{1}{n^2}\\right) + \\cdots + \\frac{n(n-1)\\cdots 1}{n!}\\left(\\frac{1}{n^n}\\right)$$' },
+        { why: 'Simplify each binomial coefficient by dividing powers of $n$ into each linear factor.', m: '$$e_n = 1 + 1 + \\frac{1}{2!}\\left(1 - \\frac{1}{n}\\right) + \\frac{1}{3!}\\left(1 - \\frac{1}{n}\\right)\\left(1 - \\frac{2}{n}\\right) + \\cdots + \\frac{1}{n!}\\left(1 - \\frac{1}{n}\\right)\\cdots\\left(1 - \\frac{n-1}{n}\\right)$$' },
+        { why: 'Compare $e_n$ with $e_{n+1}$: the expansion of $e_{n+1}$ has one extra positive term, and each factor $(1 - k/(n+1)) > (1 - k/n)$ is strictly larger. Thus $e_n < e_{n+1}$.', m: '$$e_n < e_{n+1} \\quad \\text{for all } n \\in \\mathbb{N} \\implies (e_n) \\text{ is strictly increasing}$$' },
+        { why: 'To find an upper bound, observe that $(1 - k/n) < 1$ for all $k \\ge 1$. Replace every parenthesized factor by $1$.', m: '$$e_n < 1 + 1 + \\frac{1}{2!} + \\frac{1}{3!} + \\cdots + \\frac{1}{n!}$$' },
+        { why: 'Since $k! = 1 \\cdot 2 \\cdot 3 \\cdots k \\ge 2^{k-1}$ for $k \\ge 2$, we have $\\frac{1}{k!} \\le \\frac{1}{2^{k-1}}$.', m: '$$e_n < 1 + 1 + \\frac{1}{2} + \\frac{1}{2^2} + \\cdots + \\frac{1}{2^{n-1}}$$' },
+        { why: 'Sum the geometric series: $1 + \\frac{1}{2} + \\cdots + \\frac{1}{2^{n-1}} = \\frac{1 - (1/2)^n}{1 - 1/2} < 2$.', m: '$$e_n < 1 + 2 = 3 \\quad \\text{for all } n \\in \\mathbb{N}$$' },
+        { why: 'Since $(e_n)$ is increasing and bounded above by $3$, the Monotone Convergence Theorem (3.3.2) proves that the limit exists.', m: '$$e := \\lim_{n\\to\\infty} e_n = \\sup\\{e_n : n \\in \\mathbb{N}\\} \\in (2, 3)$$' }
+      ],
+      ends: 'The sequence $(1 + 1/n)^n$ converges to a unique real limit $e \\in (2, 3)$. This establishes the rigorous existence and convergence of Euler’s number.'
+    },
+    cards: [
+      { q: 'State the definition of the number $e$ as a sequence limit.', a: '$e = \\lim_{n\\to\\infty} (1 + 1/n)^n$, which lies in $(2, 3)$.', kind: 'state' },
+      { q: 'Why is the sequence $e_n = (1 + 1/n)^n$ strictly increasing?', a: 'In its binomial expansion, each factor $(1 - k/n)$ grows strictly larger as $n$ increases, and an extra positive term is added.', kind: 'recall' },
+      { q: 'How is $e_n$ proved to be bounded above by 3?', a: 'By replacing $1/k! \\le 1/2^{k-1}$, bounding $e_n < 1 + \\sum_{k=0}^{n-1} (1/2)^k < 1 + 2 = 3$.', kind: 'apply' }
+    ]
+  },
+
   { id:'c.3.5.1', bartle:'3.5.1', sec:'3.5', kind:'definition', tier:'core',
     title:'Cauchy sequence',
     oneLine:'A sequence is Cauchy if its own terms eventually get arbitrarily close to EACH OTHER, not just to some fixed target.',
@@ -757,6 +798,80 @@ CONCEPTS.push(
       { q:`In the proof of the (⇐) direction, how is $\\delta$ chosen from $\\delta_1$ and $\\delta_2$?`, a:`$\\delta := \\min\\{\\delta_1, \\delta_2\\}$, so the bound holds whether $x$ is to the right or to the left of $c$.`, kind:'recall' },
       { q:`Trap: why does $\\lim_{x\\to0} \\operatorname{sgn}(x)$ fail to exist under Theorem 4.3.3?`, a:`Because $\\lim_{x\\to0^+} \\operatorname{sgn}(x) = 1 \\ne -1 = \\lim_{x\\to0^-} \\operatorname{sgn}(x)$; the two one-sided limits are not equal.`, kind:'trap' }
     ]
+  },
+
+  {
+    id: 'c.4.3.5', bartle: '4.3.5', sec: '4.3', kind: 'definition', tier: 'core',
+    title: 'Infinite Limits of Functions',
+    oneLine: 'f(x) → +∞ as x → c means f(x) blows past every positive ceiling α on a small punctured neighborhood of c.',
+    statement: `Let $A \\subseteq \\mathbb{R}$, $f: A \\to \\mathbb{R}$, and let $c \\in \\mathbb{R}$ be a cluster point of $A$.
+      <p>(a) We say that $\\lim_{x\\to c} f(x) = +\\infty$ if for every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that for all $x \\in A$:
+      $$0 < |x - c| < \\delta \\implies f(x) > \\alpha$$</p>
+      <p>(b) We say that $\\lim_{x\\to c} f(x) = -\\infty$ if for every $\\beta \\in \\mathbb{R}$, there exists $\\delta > 0$ such that for all $x \\in A$:
+      $$0 < |x - c| < \\delta \\implies f(x) < \\beta$$</p>
+      <p><b>Sequential Criterion:</b> $\\lim_{x\\to c} f(x) = +\\infty$ if and only if for every sequence $(x_n)$ in $A \\setminus \\{c\\}$ converging to $c$, $\\lim(f(x_n)) = +\\infty$.</p>`,
+    intuition: `<p>Vertical asymptotes in calculus! Consider $f(x) = 1/x^2$ as $x \\to 0$. As $x$ approaches $0$ from either side, $f(x)$ explodes upwards without bound.</p>
+      <p>In rigorous analysis, to claim $\\lim_{x\\to c} f(x) = +\\infty$, you challenge someone with a gigantic ceiling $\\alpha$ (e.g. $\\alpha = 10^{12}$). If they can always find a small enough protective radius $\\delta$ (e.g. $\\delta = 10^{-6}$) such that inside $0 < |x - c| < \\delta$ the function $f(x)$ stands taller than that ceiling, the infinite limit holds.</p>`,
+    needs: ['c.4.1.4', 'c.3.6.1'],
+    traps: [
+      `Writing $\\lim f(x) = \\infty$ does NOT mean the limit exists in $\\mathbb{R}$! Infinity is not a real number; it is a descriptive notation for unbounded divergence.`,
+      `Does $\\lim_{x\\to 0} (1/x) = +\\infty$? NO! From the right it approaches $+\\infty$, but from the left it approaches $-\\infty$. Since the signs clash, the two-sided limit does not exist.`
+    ],
+    proof: {
+      idea: `Verify that $\\lim_{x\\to 0} \\frac{1}{x^2} = +\\infty$ directly from the $\\alpha$-$\\delta$ definition.`,
+      why: `Solving $1/x^2 > \\alpha$ gives $|x| < 1/\\sqrt{\\alpha}$ for any positive ceiling $\\alpha$.`,
+      rungs: [
+        { why: 'Let $\\alpha > 0$ be an arbitrary positive real number (if $\\alpha \\le 0$, any $\\delta > 0$ works since $1/x^2 > 0 \\ge \\alpha$).', m: '$$\\alpha > 0 \\quad \\text{is given}$$' },
+        { why: 'Choose $\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$.', m: '$$\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$$' },
+        { why: 'Assume $x$ satisfies $0 < |x - 0| < \\delta$.', m: '$$0 < |x| < \\frac{1}{\\sqrt{\\alpha}}$$' },
+        { why: 'Square both sides (both are positive, so the inequality preserves order).', m: '$$x^2 < \\frac{1}{\\alpha}$$' },
+        { why: 'Take the reciprocal of both sides, which reverses the inequality.', m: '$$f(x) = \\frac{1}{x^2} > \\alpha$$' }
+      ],
+      ends: 'For every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that $0 < |x| < \\delta \\implies 1/x^2 > \\alpha$. Hence $\\lim_{x\\to 0} (1/x^2) = +\\infty$.'
+    },
+    cards: [
+      { q: 'State the formal definition of $\\lim_{x\\to c} f(x) = +\\infty$.', a: 'For every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that $0 < |x - c| < \\delta \\implies f(x) > \\alpha$.', kind: 'state' },
+      { q: 'Why does $\\lim_{x\\to 0} (1/x)$ NOT equal $+\\infty$?', a: 'Because for $x < 0$, $1/x < 0$, so $f(x)$ is negative and fails to be greater than positive $\\alpha$.', kind: 'trap' },
+      { q: 'What is the sequential criterion for $\\lim_{x\\to c} f(x) = +\\infty$?', a: 'For every sequence $(x_n)$ in the domain with $x_n \\ne c$ and $x_n \\to c$, we have $f(x_n) \\to +\\infty$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.4.3.8', bartle: '4.3.8', sec: '4.3', kind: 'definition', tier: 'core',
+    title: 'Limits at Infinity',
+    oneLine: 'f(x) → L as x → +∞ means f(x) stays within ε of L whenever x is pushed beyond a horizon K.',
+    statement: `Let $A \\subseteq \\mathbb{R}$ be unbounded above, and let $f: A \\to \\mathbb{R}$.
+      <p>(a) We say that $\\lim_{x\\to+\\infty} f(x) = L \\in \\mathbb{R}$ if for every $\\varepsilon > 0$, there exists a real number $K > 0$ such that for all $x \\in A$:
+      $$x > K \\implies |f(x) - L| < \\varepsilon$$</p>
+      <p>(b) We say that $\\lim_{x\\to+\\infty} f(x) = +\\infty$ if for every $\\alpha \\in \\mathbb{R}$, there exists $K > 0$ such that for all $x \\in A$:
+      $$x > K \\implies f(x) > \\alpha$$</p>
+      <p>Analogous definitions hold for $x \\to -\\infty$ where $x < -K$.</p>`,
+    intuition: `<p>Horizontal asymptotes! When you graph $f(x) = \\frac{1}{x}$, as you walk infinitely far to the right ($x \\to +\\infty$), the curve flattens right onto the horizontal line $y = 0$.</p>
+      <p>The parameter $K$ is your "horizon". Given any microscopic error band $\\pm\\varepsilon$ around $L$, if you walk far enough past horizon $K = 1/\\varepsilon$, the entire tail of the graph stays trapped inside that horizontal strip.</p>
+      <p>This is the continuous analogue of sequence limits: if you replace the real input $x$ with integer $n$, the condition $x > K$ becomes $n \\ge K$, which is identical to the sequence convergence definition (3.1.3)!</p>`,
+    needs: ['c.4.1.4', 'c.3.1.3'],
+    traps: [
+      `Confusing limits at infinity $\\lim_{x\\to\\infty} f(x) = L$ (horizontal asymptote) with infinite limits $\\lim_{x\\to c} f(x) = \\infty$ (vertical asymptote).`,
+      `Forgetting that the domain $A$ must be unbounded above for $\\lim_{x\\to+\\infty}$ to make sense.`
+    ],
+    proof: {
+      idea: `Prove that $\\lim_{x\\to+\\infty} \\frac{1}{x} = 0$ using the $\\varepsilon$-$K$ definition.`,
+      why: `For any positive tolerance $\\varepsilon > 0$, setting the horizon $K = 1/\\varepsilon$ guarantees that $1/x < \\varepsilon$ for all $x > K$.`,
+      rungs: [
+        { why: 'Let $\\varepsilon > 0$ be given.', m: '$$\\varepsilon > 0 \\quad \\text{is given}$$' },
+        { why: 'Choose the horizon $K := \\frac{1}{\\varepsilon} > 0$.', m: '$$K := \\frac{1}{\\varepsilon} > 0$$' },
+        { why: 'Assume $x \\in (0, \\infty)$ satisfies $x > K$.', m: '$$x > K = \\frac{1}{\\varepsilon} > 0$$' },
+        { why: 'Take reciprocals, noting that both sides are positive.', m: '$$0 < \\frac{1}{x} < \\frac{1}{K} = \\varepsilon$$' },
+        { why: 'Translate this into the absolute value distance to 0.', m: '$$\\left|\\frac{1}{x} - 0\\right| = \\frac{1}{x} < \\varepsilon \\quad \\text{for all } x > K$$' }
+      ],
+      ends: 'For every $\\varepsilon > 0$, there exists $K > 0$ such that $x > K \\implies |1/x - 0| < \\varepsilon$. Thus $\\lim_{x\\to+\\infty} (1/x) = 0$.'
+    },
+    cards: [
+      { q: 'State the formal definition of $\\lim_{x\\to+\\infty} f(x) = L$.', a: 'For every $\\varepsilon > 0$, there exists $K > 0$ such that $x > K \\implies |f(x) - L| < \\varepsilon$.', kind: 'state' },
+      { q: 'How does $\\lim_{x\\to+\\infty} f(x) = L$ relate to sequence limits?', a: 'Sequences are functions on $\\mathbb{N}$; the limit of a sequence is literally a limit at infinity as $n \\to \\infty$.', kind: 'recall' },
+      { q: 'For $f(x) = 1/x$ and $\\varepsilon = 0.005$, find a suitable horizon $K$.', a: '$K = 1/0.005 = 200$, since $x > 200 \\implies 1/x < 0.005$.', kind: 'apply' }
+    ]
   }
 
 );
+
