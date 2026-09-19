@@ -41,6 +41,24 @@ const DOM = (function () {
     });
   }
 
+  /* Convert markdown bold (**text**) and italics (*text*) to HTML <b> and <i> tags,
+     leaving math spans ($...$ and $$...$$) and HTML tags intact. */
+  function formatMarkdown(s) {
+    if (typeof s !== 'string' || (s.indexOf('**') === -1 && s.indexOf('*') === -1)) return s;
+    const tokens = [];
+    const masked = s.replace(/\$\$[\s\S]+?\$\$|\$[^$]+?\$|<\/?[a-zA-Z][^>]*>/g, function (m) {
+      tokens.push(m);
+      return '\x00M' + (tokens.length - 1) + '\x00';
+    });
+    let res = masked
+      .replace(/\*\*\*([^*]+?)\*\*\*/g, '<b><i>$1</i></b>')
+      .replace(/\*\*([^*]+?)\*\*/g, '<b>$1</b>')
+      .replace(/(^|[\s(])\*([^*\n]+?)\*(?=[\s.,;:)!?]|$)/g, '$1<i>$2</i>');
+    return res.replace(/\x00M(\d+)\x00/g, function (_, idx) {
+      return tokens[parseInt(idx, 10)];
+    });
+  }
+
   /* el('div', {class, text, html, on:{click}, ...attrs}, children) */
   function el(tag, attrs, kids) {
     const node = document.createElement(tag);
@@ -49,7 +67,7 @@ const DOM = (function () {
       if (v == null || v === false) continue;
       if (k === 'class') node.className = v;
       else if (k === 'text') node.textContent = v;
-      else if (k === 'html') node.innerHTML = sanitizeMathHtml(linkifyConcepts(v));            /* authored content only */
+      else if (k === 'html') node.innerHTML = sanitizeMathHtml(linkifyConcepts(formatMarkdown(v)));            /* authored content only */
       else if (k === 'on') for (const ev in v) node.addEventListener(ev, v[ev]);
       else if (k === 'style' && typeof v === 'object') Object.assign(node.style, v);
       else node.setAttribute(k, v === true ? '' : v);

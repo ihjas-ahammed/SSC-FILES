@@ -13,7 +13,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Evaluating Set Operations",
   "source": "Bartle & Sherbert 4e §1.1 Ex 1",
-  "prompt": "Let $A := \\{k : k \\in \\mathbb{N}, k \\le 20\\}$, $B := \\{3k - 1 : k \\in \\mathbb{N}\\}$, and $C := \\{2k + 1 : k \\in \\mathbb{N}\\}$.\n\n**Find:**\n(a) $A \\cap B \\cap C$\n(b) $(A \\cap B) \\setminus C$\n(c) $(A \\cap C) \\setminus B$\n\n*Grab some paper and try writing out the first few elements of each set!*",
+  "prompt": "Let $A := \\{k : k \\in \\mathbb{N}, k \\le 20\\}$, $B := \\{3k - 1 : k \\in \\mathbb{N}\\}$, and $C := \\{2k + 1 : k \\in \\mathbb{N}\\}$.\n\n<b>Find:</b>\n(a) $A \\cap B \\cap C$\n(b) $(A \\cap B) \\setminus C$\n(c) $(A \\cap C) \\setminus B$\n\n<i>Grab some paper and try writing out the first few elements of each set!</i>",
   "tests": [
     "c.1.1.1",
     "c.1.1.2"
@@ -104,7 +104,7 @@ QUESTIONS.push(
     "c.1.1.2"
   ],
   "approach": "<p>Apply definitions and theorems of Section 1.1 systematically.</p>",
-  "solution": "<p>Part (a) translates the definition directly. </p><p>$(A \\cup B)$ contains everything in both sets.</p><p>To get elements in either A or B *but not both*, we must remove the elements that are in both. The elements in both are precisely $A \\cap B$.</p><p>Removing $A \\cap B$ from $A \\cup B$ gives exactly $(A \\cup B) \\setminus (A \\cap B)$. Goal reached!</p>",
+  "solution": "<p>Part (a) translates the definition directly. </p><p>$(A \\cup B)$ contains everything in both sets.</p><p>To get elements in either A or B <i>but not both</i>, we must remove the elements that are in both. The elements in both are precisely $A \\cap B$.</p><p>Removing $A \\cap B$ from $A \\cup B$ gives exactly $(A \\cup B) \\setminus (A \\cap B)$. Goal reached!</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 1.1."
 },
 {
@@ -121,7 +121,7 @@ QUESTIONS.push(
     "c.1.1.2"
   ],
   "approach": "<p>Apply definitions and theorems of Section 1.1 systematically.</p>",
-  "solution": "<p>First, let</p><p>(a) $A_1 \\cap A_2 = \\{6k : k \\in \\mathbb{N}\\} = A_5$.</p><p>Every number $\\ge 2$ is in at least one set (since $m = m \\times 1$). So $\\cup A_n = \\mathbb{N} \\setminus \\{1\\}$.</p><p>Finally, the intersection $\\cap A_n$. Is there any number that is a multiple of *every* integer $n+1$? No. Thus $\\cap A_n = \\emptyset$.</p>",
+  "solution": "<p>First, let</p><p>(a) $A_1 \\cap A_2 = \\{6k : k \\in \\mathbb{N}\\} = A_5$.</p><p>Every number $\\ge 2$ is in at least one set (since $m = m \\times 1$). So $\\cup A_n = \\mathbb{N} \\setminus \\{1\\}$.</p><p>Finally, the intersection $\\cap A_n$. Is there any number that is a multiple of <i>every</i> integer $n+1$? No. Thus $\\cap A_n = \\emptyset$.</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 1.1."
 },
 {
@@ -421,7 +421,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Fraction Sums",
   "source": "Bartle & Sherbert 4e §1.2 Ex 1",
-  "prompt": "**Problem:** Prove that for all $n \\in \\mathbb{N}$:\n$$\\frac{1}{1\\cdot 2} + \\frac{1}{2\\cdot 3} + \\dots + \\frac{1}{n(n+1)} = \\frac{n}{n+1}$$",
+  "prompt": "<b>Problem:</b> Prove that for all $n \\in \\mathbb{N}$:\n$$\\frac{1}{1\\cdot 2} + \\frac{1}{2\\cdot 3} + \\dots + \\frac{1}{n(n+1)} = \\frac{n}{n+1}$$",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -439,7 +439,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Sum of Cubes",
   "source": "Bartle & Sherbert 4e §1.2 Ex 2",
-  "prompt": "**Problem:** Prove that for all $n \\in \\mathbb{N}$:\n$$1^3 + 2^3 + \\dots + n^3 = \\left[\\frac{1}{2}n(n+1)\\right]^2$$",
+  "prompt": "<b>Problem:</b> Prove that for all $n \\in \\mathbb{N}$:\n$$1^3 + 2^3 + \\dots + n^3 = \\left[\\frac{1}{2}n(n+1)\\right]^2$$",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -457,7 +457,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Arithmetic Sequence Sum",
   "source": "Bartle & Sherbert 4e §1.2 Ex 3",
-  "prompt": "**Problem:** Prove that $3 + 11 + \\dots + (8n-5) = 4n^2 - n$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $3 + 11 + \\dots + (8n-5) = 4n^2 - n$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -475,7 +475,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Odd Squares Sum",
   "source": "Bartle & Sherbert 4e §1.2 Ex 4",
-  "prompt": "**Problem:** Prove that $1^2 + 3^2 + \\dots + (2n-1)^2 = (4n^3 - n)/3$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $1^2 + 3^2 + \\dots + (2n-1)^2 = (4n^3 - n)/3$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -493,7 +493,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Alternating Squares",
   "source": "Bartle & Sherbert 4e §1.2 Ex 5",
-  "prompt": "**Problem:** Prove that $1^2 - 2^2 + 3^2 + \\dots + (-1)^{n+1}n^2 = (-1)^{n+1}n(n+1)/2$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $1^2 - 2^2 + 3^2 + \\dots + (-1)^{n+1}n^2 = (-1)^{n+1}n(n+1)/2$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -511,7 +511,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Divisibility by 6",
   "source": "Bartle & Sherbert 4e §1.2 Ex 6",
-  "prompt": "**Problem:** Prove that $n^3 + 5n$ is divisible by $6$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $n^3 + 5n$ is divisible by $6$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -529,7 +529,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Divisibility by 8",
   "source": "Bartle & Sherbert 4e §1.2 Ex 7",
-  "prompt": "**Problem:** Prove that $5^{2n} - 1$ is divisible by $8$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $5^{2n} - 1$ is divisible by $8$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -547,7 +547,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Divisibility by 16",
   "source": "Bartle & Sherbert 4e §1.2 Ex 8",
-  "prompt": "**Problem:** Prove that $5^n - 4n - 1$ is divisible by $16$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $5^n - 4n - 1$ is divisible by $16$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -565,7 +565,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Divisibility by 9",
   "source": "Bartle & Sherbert 4e §1.2 Ex 9",
-  "prompt": "**Problem:** Prove that $n^3 + (n+1)^3 + (n+2)^3$ is divisible by $9$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $n^3 + (n+1)^3 + (n+2)^3$ is divisible by $9$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -583,7 +583,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Conjecture and Prove",
   "source": "Bartle & Sherbert 4e §1.2 Ex 10",
-  "prompt": "**Problem:** Conjecture a formula for the sum:\n$$\\frac{1}{1\\cdot 3} + \\frac{1}{3\\cdot 5} + \\dots + \\frac{1}{(2n-1)(2n+1)}$$\nand prove your conjecture by Mathematical Induction.",
+  "prompt": "<b>Problem:</b> Conjecture a formula for the sum:\n$$\\frac{1}{1\\cdot 3} + \\frac{1}{3\\cdot 5} + \\dots + \\frac{1}{(2n-1)(2n+1)}$$\nand prove your conjecture by Mathematical Induction.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -601,7 +601,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Sum of Odd Numbers",
   "source": "Bartle & Sherbert 4e §1.2 Ex 11",
-  "prompt": "**Problem:** Conjecture a formula for the sum of the first $n$ odd natural numbers $1 + 3 + \\dots + (2n-1)$, and prove your formula by using Mathematical Induction.",
+  "prompt": "<b>Problem:</b> Conjecture a formula for the sum of the first $n$ odd natural numbers $1 + 3 + \\dots + (2n-1)$, and prove your formula by using Mathematical Induction.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -619,7 +619,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Proving Modified Induction",
   "source": "Bartle & Sherbert 4e §1.2 Ex 12",
-  "prompt": "**Problem:** Prove the Principle of Mathematical Induction 1.2.3 (second version). \nAssume $P(n_0)$ is true, and $P(k) \\implies P(k+1)$ for $k \\ge n_0$. Prove $P(n)$ is true for all $n \\ge n_0$.",
+  "prompt": "<b>Problem:</b> Prove the Principle of Mathematical Induction 1.2.3 (second version). \nAssume $P(n_0)$ is true, and $P(k) \\implies P(k+1)$ for $k \\ge n_0$. Prove $P(n)$ is true for all $n \\ge n_0$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -637,7 +637,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Linear vs Exponential",
   "source": "Bartle & Sherbert 4e §1.2 Ex 13",
-  "prompt": "**Problem:** Prove that $n < 2^n$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $n < 2^n$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -655,7 +655,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Factorials dominate",
   "source": "Bartle & Sherbert 4e §1.2 Ex 14",
-  "prompt": "**Problem:** Prove that $2^n < n!$ for all $n \\ge 4, n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $2^n < n!$ for all $n \\ge 4, n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -673,7 +673,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Shifted Exponentials",
   "source": "Bartle & Sherbert 4e §1.2 Ex 15",
-  "prompt": "**Problem:** Prove that $2n - 3 \\le 2^{n-2}$ for all $n \\ge 5, n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Prove that $2n - 3 \\le 2^{n-2}$ for all $n \\ge 5, n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -691,7 +691,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Finding the Threshold",
   "source": "Bartle & Sherbert 4e §1.2 Ex 16",
-  "prompt": "**Problem:** Find all natural numbers $n$ such that $n^2 < 2^n$. Prove your assertion.",
+  "prompt": "<b>Problem:</b> Find all natural numbers $n$ such that $n^2 < 2^n$. Prove your assertion.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -709,7 +709,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Maximum Divisor",
   "source": "Bartle & Sherbert 4e §1.2 Ex 17",
-  "prompt": "**Problem:** Find the largest natural number $m$ such that $n^3 - n$ is divisible by $m$ for all $n \\in \\mathbb{N}$. Prove your assertion.",
+  "prompt": "<b>Problem:</b> Find the largest natural number $m$ such that $n^3 - n$ is divisible by $m$ for all $n \\in \\mathbb{N}$. Prove your assertion.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -727,7 +727,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Sum of Inverse Roots",
   "source": "Bartle & Sherbert 4e §1.2 Ex 18",
-  "prompt": "**Problem:** Prove that $\\frac{1}{\\sqrt{1}} + \\frac{1}{\\sqrt{2}} + \\dots + \\frac{1}{\\sqrt{n}} > \\sqrt{n}$ for all $n \\in \\mathbb{N}, n \\ge 2$.",
+  "prompt": "<b>Problem:</b> Prove that $\\frac{1}{\\sqrt{1}} + \\frac{1}{\\sqrt{2}} + \\dots + \\frac{1}{\\sqrt{n}} > \\sqrt{n}$ for all $n \\in \\mathbb{N}, n \\ge 2$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -745,7 +745,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Cauchy",
   "source": "Bartle & Sherbert 4e §1.2 Ex 19",
-  "prompt": "**Problem:** Let $S$ be a subset of $\\mathbb{N}$ such that:\n(a) $2^k \\in S$ for all $k \\in \\mathbb{N}$.\n(b) If $k \\in S$ and $k \\ge 2$, then $k-1 \\in S$.\nProve that $S = \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Let $S$ be a subset of $\\mathbb{N}$ such that:\n(a) $2^k \\in S$ for all $k \\in \\mathbb{N}$.\n(b) If $k \\in S$ and $k \\ge 2$, then $k-1 \\in S$.\nProve that $S = \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -763,7 +763,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Strong Induction on Sequences",
   "source": "Bartle & Sherbert 4e §1.2 Ex 20",
-  "prompt": "**Problem:** Let the numbers $x_n$ be defined as $x_1 := 1, x_2 := 2$, and $x_{n+2} := \\frac{1}{2}(x_{n+1} + x_n)$.\nUse Strong Induction to show that $1 \\le x_n \\le 2$ for all $n \\in \\mathbb{N}$.",
+  "prompt": "<b>Problem:</b> Let the numbers $x_n$ be defined as $x_1 := 1, x_2 := 2$, and $x_{n+2} := \\frac{1}{2}(x_{n+1} + x_n)$.\nUse Strong Induction to show that $1 \\le x_n \\le 2$ for all $n \\in \\mathbb{N}$.",
   "tests": [
     "c.1.2.1",
     "c.1.2.2",
@@ -781,7 +781,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Finite Equivalences",
   "source": "Bartle & Sherbert 4e §1.3 Ex 1",
-  "prompt": "**Problem:** Prove that a nonempty set $T_1$ is finite if and only if there is a bijection from $T_1$ onto a finite set $T_2$.",
+  "prompt": "<b>Problem:</b> Prove that a nonempty set $T_1$ is finite if and only if there is a bijection from $T_1$ onto a finite set $T_2$.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -799,7 +799,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Finite Subtractions",
   "source": "Bartle & Sherbert 4e §1.3 Ex 2",
-  "prompt": "**Problem:** Prove Theorem 1.3.4(c): If $C$ is an infinite set and $B$ is a finite set, then $C \\setminus B$ is an infinite set.",
+  "prompt": "<b>Problem:</b> Prove Theorem 1.3.4(c): If $C$ is an infinite set and $B$ is a finite set, then $C \\setminus B$ is an infinite set.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -824,7 +824,7 @@ QUESTIONS.push(
     "c.1.3.4"
   ],
   "approach": "<p>Apply definitions and theorems of Section 1.3 systematically.</p>",
-  "solution": "<p>An injection means every element in $S$ must map to a *different* element in $T$.</p><p>There are 3 choices for $f(1)$.</p><p>For $f(2)$, it cannot be whatever we picked for $f(1)$. So there are 2 choices left.</p><p>Total injections = $3 \\times 2 = 6$.</p><p>A surjection means every element in $S$ must be </p><p>First, count ALL possible functions from $T$ to $S$. For each of the 3 elements in $T$, there are 2 choices in $S$. Total = $2^3 = 8$.</p><p>There are 2 non-surjective functions.</p><p>Total surjections = $8 - 2 = 6$.</p>",
+  "solution": "<p>An injection means every element in $S$ must map to a <i>different</i> element in $T$.</p><p>There are 3 choices for $f(1)$.</p><p>For $f(2)$, it cannot be whatever we picked for $f(1)$. So there are 2 choices left.</p><p>Total injections = $3 \\times 2 = 6$.</p><p>A surjection means every element in $S$ must be </p><p>First, count ALL possible functions from $T$ to $S$. For each of the 3 elements in $T$, there are 2 choices in $S$. Total = $2^3 = 8$.</p><p>There are 2 non-surjective functions.</p><p>Total surjections = $8 - 2 = 6$.</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 1.3."
 },
 {
@@ -835,7 +835,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Bijection to Odds",
   "source": "Bartle & Sherbert 4e §1.3 Ex 4",
-  "prompt": "**Problem:** Exhibit a bijection between $\\mathbb{N}$ and the set of all odd integers greater than 13.",
+  "prompt": "<b>Problem:</b> Exhibit a bijection between $\\mathbb{N}$ and the set of all odd integers greater than 13.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -853,7 +853,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Bijection N to Z",
   "source": "Bartle & Sherbert 4e §1.3 Ex 5",
-  "prompt": "**Problem:** Give an explicit definition of the bijection $f$ from $\\mathbb{N}$ onto $\\mathbb{Z}$ described in Example 1.3.7(b).",
+  "prompt": "<b>Problem:</b> Give an explicit definition of the bijection $f$ from $\\mathbb{N}$ onto $\\mathbb{Z}$ described in Example 1.3.7(b).",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -871,7 +871,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Proper Subsets of N",
   "source": "Bartle & Sherbert 4e §1.3 Ex 6",
-  "prompt": "**Problem:** Exhibit a bijection between $\\mathbb{N}$ and a *proper subset* of itself.",
+  "prompt": "<b>Problem:</b> Exhibit a bijection between $\\mathbb{N}$ and a <i>proper subset</i> of itself.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -889,7 +889,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Denumerable Equivalence",
   "source": "Bartle & Sherbert 4e §1.3 Ex 7",
-  "prompt": "**Problem:** Prove that a set $T_1$ is denumerable if and only if there is a bijection from $T_1$ onto a denumerable set $T_2$.",
+  "prompt": "<b>Problem:</b> Prove that a set $T_1$ is denumerable if and only if there is a bijection from $T_1$ onto a denumerable set $T_2$.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -907,7 +907,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Infinite Union of Finite Sets",
   "source": "Bartle & Sherbert 4e §1.3 Ex 8",
-  "prompt": "**Problem:** Give an example of a countable collection of finite sets whose union is not finite.",
+  "prompt": "<b>Problem:</b> Give an example of a countable collection of finite sets whose union is not finite.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -925,7 +925,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Union of Denumerable Sets",
   "source": "Bartle & Sherbert 4e §1.3 Ex 9",
-  "prompt": "**Problem:** Prove in detail that if $S$ and $T$ are denumerable, then $S \\cup T$ is denumerable.",
+  "prompt": "<b>Problem:</b> Prove in detail that if $S$ and $T$ are denumerable, then $S \\cup T$ is denumerable.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -943,7 +943,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Diagonal Counting Formula",
   "source": "Bartle & Sherbert 4e §1.3 Ex 10",
-  "prompt": "**Problem:** The counting function for $\\mathbb{N} \\times \\mathbb{N}$ is $h(m,n) = \\frac{1}{2}(m+n-2)(m+n-1) + m$.\n\n(a) If $(m,n)$ is the 6th point down the 9th diagonal, calculate its number.\n(b) Given that $h(m,3) = 19$, find $m$.",
+  "prompt": "<b>Problem:</b> The counting function for $\\mathbb{N} \\times \\mathbb{N}$ is $h(m,n) = \\frac{1}{2}(m+n-2)(m+n-1) + m$.\n\n(a) If $(m,n)$ is the 6th point down the 9th diagonal, calculate its number.\n(b) Given that $h(m,3) = 19$, find $m$.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -961,7 +961,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Power Set Sizes",
   "source": "Bartle & Sherbert 4e §1.3 Ex 11",
-  "prompt": "**Problem:** Determine the number of elements in $\\mathcal{P}(S)$, the collection of all subsets of $S$, for:\n(a) $S = \\{1, 2\\}$\n(b) $S = \\{1, 2, 3\\}$\n(c) $S = \\{1, 2, 3, 4\\}$",
+  "prompt": "<b>Problem:</b> Determine the number of elements in $\\mathcal{P}(S)$, the collection of all subsets of $S$, for:\n(a) $S = \\{1, 2\\}$\n(b) $S = \\{1, 2, 3\\}$\n(c) $S = \\{1, 2, 3, 4\\}$",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -979,7 +979,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Power Set Induction",
   "source": "Bartle & Sherbert 4e §1.3 Ex 12",
-  "prompt": "**Problem:** Use Mathematical Induction to prove that if the set $S$ has $n$ elements, then $\\mathcal{P}(S)$ has $2^n$ elements.",
+  "prompt": "<b>Problem:</b> Use Mathematical Induction to prove that if the set $S$ has $n$ elements, then $\\mathcal{P}(S)$ has $2^n$ elements.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -997,7 +997,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Finite Subsets of N",
   "source": "Bartle & Sherbert 4e §1.3 Ex 13",
-  "prompt": "**Problem:** Prove that the collection $\\mathcal{F}(\\mathbb{N})$ of all *finite* subsets of $\\mathbb{N}$ is countable.",
+  "prompt": "<b>Problem:</b> Prove that the collection $\\mathcal{F}(\\mathbb{N})$ of all <i>finite</i> subsets of $\\mathbb{N}$ is countable.",
   "tests": [
     "c.1.3.1",
     "c.1.3.2",
@@ -1167,7 +1167,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "A Subfield of R",
   "source": "Bartle & Sherbert 4e §2.1 Ex 9",
-  "prompt": "Let $K := \\{s + t\\sqrt{2} : s, t \\in \\mathbb{Q}\\}$. Show that $K$ satisfies the following:\n(a) If $x_1, x_2 \\in K$, then $x_1 + x_2 \\in K$ and $x_1x_2 \\in K$.\n(b) If $x \\neq 0$ and $x \\in K$, then $1/x \\in K$.\n\n*(Thus the set K is a subfield of $\\mathbb{R}$).*",
+  "prompt": "Let $K := \\{s + t\\sqrt{2} : s, t \\in \\mathbb{Q}\\}$. Show that $K$ satisfies the following:\n(a) If $x_1, x_2 \\in K$, then $x_1 + x_2 \\in K$ and $x_1x_2 \\in K$.\n(b) If $x \\neq 0$ and $x \\in K$, then $1/x \\in K$.\n\n<i>(Thus the set K is a subfield of $\\mathbb{R}$).</i>",
   "tests": [
     "c.2.1.1",
     "c.2.1.4",
@@ -1262,7 +1262,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Bounding Squares",
   "source": "Bartle & Sherbert 4e §2.1 Ex 14",
-  "prompt": "If $0 \\le a < b$, show that $a^2 \\le ab < b^2$. \n\nShow by example that it does *not* follow that $a^2 < ab < b^2$.",
+  "prompt": "If $0 \\le a < b$, show that $a^2 \\le ab < b^2$. \n\nShow by example that it does <i>not</i> follow that $a^2 < ab < b^2$.",
   "tests": [
     "c.2.1.1",
     "c.2.1.4",
@@ -1753,7 +1753,7 @@ QUESTIONS.push(
     "c.2.2.7"
   ],
   "approach": "<p>Apply definitions and theorems of Section 2.2 systematically.</p>",
-  "solution": "<p>These are the filled-in versions of the shapes from Exercise 14.</p><p>(a) Shaded regions are the upper and lower quadrants bounded by $y = \\pm x$.</p><p>(b) $|x| + |y| \\le 1$ represents the *interior* of the diamond shape.</p><p>(c) $|xy| \\le 2$ represents the cross-shaped region situated *between* the hyperbola branches, containing the origin.</p><p>(d) $|x| - |y| \\ge 2 \\implies |x| \\ge |y| + 2$. These are the regions strictly to the left of $x = -2$ and right of $x = 2$, bounded by the rays from Ex 14d.</p>",
+  "solution": "<p>These are the filled-in versions of the shapes from Exercise 14.</p><p>(a) Shaded regions are the upper and lower quadrants bounded by $y = \\pm x$.</p><p>(b) $|x| + |y| \\le 1$ represents the <i>interior</i> of the diamond shape.</p><p>(c) $|xy| \\le 2$ represents the cross-shaped region situated <i>between</i> the hyperbola branches, containing the origin.</p><p>(d) $|x| - |y| \\ge 2 \\implies |x| \\ge |y| + 2$. These are the regions strictly to the left of $x = -2$ and right of $x = 2$, bounded by the rays from Ex 14d.</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 2.2."
 },
 {
@@ -1839,7 +1839,7 @@ QUESTIONS.push(
     "c.2.3.6"
   ],
   "approach": "<p>Apply definitions and theorems of Section 2.3 systematically.</p>",
-  "solution": "<p>By definition, every element $x \\in S_1$ satisfies $x \\ge 0$. Therefore, $0$ is a lower bound for $S_1$.</p><p>Suppose $u$ is an upper bound. Then $x \\le u$ for all $x \\ge 0$. But $u+1 > 0$, so $u+1 \\in S_1$. Thus $u+1 \\le u \\implies 1 \\le 0$, a contradiction. So $S_1$ has no upper bounds.</p><p>We know $0$ is a lower bound. To show $\\inf S_1 = 0$, we must show it is the *greatest* lower bound.</p><p>Let $w > 0$. Since $w \\in S_1$ and $w/2 < w$, the element $w/2 \\in S_1$ is strictly smaller than $w$. Thus $w$ cannot be a lower bound. \nTherefore, $0$ is the greatest lower bound. $\\inf S_1 = 0$. Goal reached!</p>",
+  "solution": "<p>By definition, every element $x \\in S_1$ satisfies $x \\ge 0$. Therefore, $0$ is a lower bound for $S_1$.</p><p>Suppose $u$ is an upper bound. Then $x \\le u$ for all $x \\ge 0$. But $u+1 > 0$, so $u+1 \\in S_1$. Thus $u+1 \\le u \\implies 1 \\le 0$, a contradiction. So $S_1$ has no upper bounds.</p><p>We know $0$ is a lower bound. To show $\\inf S_1 = 0$, we must show it is the <i>greatest</i> lower bound.</p><p>Let $w > 0$. Since $w \\in S_1$ and $w/2 < w$, the element $w/2 \\in S_1$ is strictly smaller than $w$. Thus $w$ cannot be a lower bound. \nTherefore, $0$ is the greatest lower bound. $\\inf S_1 = 0$. Goal reached!</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 2.3."
 },
 {
@@ -1868,7 +1868,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Sequence of Reciprocals",
   "source": "Bartle & Sherbert 4e §2.3 Ex 3",
-  "prompt": "Let $S_3 = \\{1/n : n \\in \\mathbb{N}\\}$. \n\nShow that $\\sup S_3 = 1$ and $\\inf S_3 \\ge 0$. \n*(It will follow from the Archimedean Property that $\\inf S_3 = 0$.)*",
+  "prompt": "Let $S_3 = \\{1/n : n \\in \\mathbb{N}\\}$. \n\nShow that $\\sup S_3 = 1$ and $\\inf S_3 \\ge 0$. \n<i>(It will follow from the Archimedean Property that $\\inf S_3 = 0$.)</i>",
   "tests": [
     "c.2.3.1",
     "c.2.3.4",
@@ -1940,7 +1940,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Exercise 6 & 7: Properties of Sup/Inf",
   "source": "Bartle & Sherbert 4e §2.3 Ex 7",
-  "prompt": "**Exercise 6:** Let $S$ be a nonempty subset of $\\mathbb{R}$ bounded below. Prove that $\\inf S = -\\sup\\{-s : s \\in S\\}$.\n\n**Exercise 7:** If a set $S \\subseteq \\mathbb{R}$ contains one of its upper bounds, show that this upper bound is the supremum of $S$.",
+  "prompt": "<b>Exercise 6:</b> Let $S$ be a nonempty subset of $\\mathbb{R}$ bounded below. Prove that $\\inf S = -\\sup\\{-s : s \\in S\\}$.\n\n<b>Exercise 7:</b> If a set $S \\subseteq \\mathbb{R}$ contains one of its upper bounds, show that this upper bound is the supremum of $S$.",
   "tests": [
     "c.2.3.1",
     "c.2.3.4",
@@ -1983,7 +1983,7 @@ QUESTIONS.push(
     "c.2.3.6"
   ],
   "approach": "<p>Apply definitions and theorems of Section 2.3 systematically.</p>",
-  "solution": "<p>Assume $u = \\sup S$. This means $u$ is the *least* upper bound.</p><p>Since $1/n > 0$, $u - 1/n < u$.</p><p>Because $u$ is the least upper bound, any number strictly less than $u$ cannot be an upper bound. Thus $u - 1/n$ is not an upper bound of $S$.</p><p>Now consider $u + 1/n$. Since $1/n > 0$, we have $u < u + 1/n$.</p><p>Since $u$ is an upper bound of $S$, $s \\le u$ for all $s \\in S$. Thus $s \\le u < u + 1/n$. This makes $u + 1/n$ an upper bound of $S$. Goal reached!</p>",
+  "solution": "<p>Assume $u = \\sup S$. This means $u$ is the <i>least</i> upper bound.</p><p>Since $1/n > 0$, $u - 1/n < u$.</p><p>Because $u$ is the least upper bound, any number strictly less than $u$ cannot be an upper bound. Thus $u - 1/n$ is not an upper bound of $S$.</p><p>Now consider $u + 1/n$. Since $1/n > 0$, we have $u < u + 1/n$.</p><p>Since $u$ is an upper bound of $S$, $s \\le u$ for all $s \\in S$. Thus $s \\le u < u + 1/n$. This makes $u + 1/n$ an upper bound of $S$. Goal reached!</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 2.3."
 },
 {
@@ -2001,7 +2001,7 @@ QUESTIONS.push(
     "c.2.3.6"
   ],
   "approach": "<p>Apply definitions and theorems of Section 2.3 systematically.</p>",
-  "solution": "<p>Let $u_A = \\sup A$ and $u_B = \\sup B$. Let $u = \\sup\\{u_A, u_B\\}$ (which is just the maximum of the two).</p><p>Yes, $u$ is an upper bound for $A \\cup B$.</p><p>To show $u$ is the *least* upper bound, let $v$ be any upper bound of $A \\cup B$.</p><p>Since $A \\subseteq A \\cup B$, $v$ must be an upper bound for $A$. Thus $v \\ge u_A$.</p><p>Similarly, since $B \\subseteq A \\cup B$, $v$ must be an upper bound for $B$. Thus $v \\ge u_B$.</p><p>Since $v$ is greater than or equal to both $u_A$ and $u_B$, it must be $\\ge$ their maximum. Thus $v \\ge u$. Therefore, $u = \\sup(A \\cup B)$. Goal reached!</p>",
+  "solution": "<p>Let $u_A = \\sup A$ and $u_B = \\sup B$. Let $u = \\sup\\{u_A, u_B\\}$ (which is just the maximum of the two).</p><p>Yes, $u$ is an upper bound for $A \\cup B$.</p><p>To show $u$ is the <i>least</i> upper bound, let $v$ be any upper bound of $A \\cup B$.</p><p>Since $A \\subseteq A \\cup B$, $v$ must be an upper bound for $A$. Thus $v \\ge u_A$.</p><p>Similarly, since $B \\subseteq A \\cup B$, $v$ must be an upper bound for $B$. Thus $v \\ge u_B$.</p><p>Since $v$ is greater than or equal to both $u_A$ and $u_B$, it must be $\\ge$ their maximum. Thus $v \\ge u$. Therefore, $u = \\sup(A \\cup B)$. Goal reached!</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 2.3."
 },
 {
@@ -2019,7 +2019,7 @@ QUESTIONS.push(
     "c.2.3.6"
   ],
   "approach": "<p>Apply definitions and theorems of Section 2.3 systematically.</p>",
-  "solution": "<p>Let $u = \\sup S$. Then for all $s \\in S$, $s \\le u$.</p><p>For all $x \\in S_0$, $x \\le u$. Thus $u$ is an upper bound for $S_0$.</p><p>Because $u$ is an upper bound for $S_0$, the *least* upper bound of $S_0$ must be $\\le u$. Thus $\\sup S_0 \\le \\sup S$.</p><p>By the exact same subset logic on the lower bounds, if $w = \\inf S$, then $w \\le x$ for all $x \\in S_0$, making $w$ a lower bound for $S_0$.</p><p>Thus, the *greatest* lower bound of $S_0$ must be $\\ge w$. So $\\inf S \\le \\inf S_0$.</p><p>Finally, since $S_0$ is nonempty, there is at least one element $x \\in S_0$, so $\\inf S_0 \\le x \\le \\sup S_0$. Stringing them together gives the result! Goal reached.</p>",
+  "solution": "<p>Let $u = \\sup S$. Then for all $s \\in S$, $s \\le u$.</p><p>For all $x \\in S_0$, $x \\le u$. Thus $u$ is an upper bound for $S_0$.</p><p>Because $u$ is an upper bound for $S_0$, the <i>least</i> upper bound of $S_0$ must be $\\le u$. Thus $\\sup S_0 \\le \\sup S$.</p><p>By the exact same subset logic on the lower bounds, if $w = \\inf S$, then $w \\le x$ for all $x \\in S_0$, making $w$ a lower bound for $S_0$.</p><p>Thus, the <i>greatest</i> lower bound of $S_0$ must be $\\ge w$. So $\\inf S \\le \\inf S_0$.</p><p>Finally, since $S_0$ is nonempty, there is at least one element $x \\in S_0$, so $\\inf S_0 \\le x \\le \\sup S_0$. Stringing them together gives the result! Goal reached.</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 2.3."
 },
 {
@@ -2037,7 +2037,7 @@ QUESTIONS.push(
     "c.2.3.6"
   ],
   "approach": "<p>Apply definitions and theorems of Section 2.3 systematically.</p>",
-  "solution": "<p>Let $T = S \\cup \\{u\\}$. The elements of $T$ are either from $S$ or are exactly $u$.</p><p>Let $m = \\sup\\{s^*, u\\} = \\max(s^*, u)$. Clearly, $t \\le m$ for all $t \\in T$, so $m$ is an upper bound of $T$.</p><p>Is it the *least* upper bound? Let $v$ be any upper bound of $T$.</p><p>Since $s^* \\in S \\subseteq T$, $s^*$ must be $\\le v$.</p><p>Since $u \\in T$, $u$ must be $\\le v$.</p><p>Since $v$ is $\\ge s^*$ and $\\ge u$, it must be $\\ge$ their maximum, $m$. Therefore $m$ is the least upper bound! Goal reached.</p>",
+  "solution": "<p>Let $T = S \\cup \\{u\\}$. The elements of $T$ are either from $S$ or are exactly $u$.</p><p>Let $m = \\sup\\{s^*, u\\} = \\max(s^*, u)$. Clearly, $t \\le m$ for all $t \\in T$, so $m$ is an upper bound of $T$.</p><p>Is it the <i>least</i> upper bound? Let $v$ be any upper bound of $T$.</p><p>Since $s^* \\in S \\subseteq T$, $s^*$ must be $\\le v$.</p><p>Since $u \\in T$, $u$ must be $\\le v$.</p><p>Since $v$ is $\\ge s^*$ and $\\ge u$, it must be $\\ge$ their maximum, $m$. Therefore $m$ is the least upper bound! Goal reached.</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 2.3."
 },
 {
@@ -2048,7 +2048,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Finite Sets Contain Supremum",
   "source": "Bartle & Sherbert 4e §2.3 Ex 13",
-  "prompt": "Show that a nonempty finite set $S \\subseteq \\mathbb{R}$ contains its supremum.\n\n*[Hint: Use Mathematical Induction and the preceding exercise.]*",
+  "prompt": "Show that a nonempty finite set $S \\subseteq \\mathbb{R}$ contains its supremum.\n\n<i>[Hint: Use Mathematical Induction and the preceding exercise.]</i>",
   "tests": [
     "c.2.3.1",
     "c.2.3.4",
@@ -2160,7 +2160,7 @@ QUESTIONS.push(
   "marks": 5,
   "title": "Sup of Squares",
   "source": "Bartle & Sherbert 4e §2.4 Ex 5",
-  "prompt": "Let $S$ be a bounded set of *nonnegative* real numbers. Let $T := \\{x^2 : x \\in S\\}$. Prove that if $u = \\sup S$, then $u^2 = \\sup T$.",
+  "prompt": "Let $S$ be a bounded set of <i>nonnegative</i> real numbers. Let $T := \\{x^2 : x \\in S\\}$. Prove that if $u = \\sup S$, then $u^2 = \\sup T$.",
   "tests": [
     "c.2.4.3",
     "c.2.4.7",
@@ -4106,7 +4106,7 @@ QUESTIONS.push(
     "c.4.1.9"
   ],
   "approach": "<p>Apply definitions and theorems of Section 4.1 systematically.</p>",
-  "solution": "<p>Let $(x_n)$ be any sequence converging to 2 with $x_n \\neq 2$.</p><p>The sequence in the denominator converges to -1.</p><p>Since the denominator limit is non-zero, the quotient limit is $1 / (-1) = -1$.</p><p>Because this holds for *every* sequence converging to 2, the function limit is -1.</p><p>Let $(x_n)$ be any sequence converging to 1.</p><p>The numerator sequence converges to 1.</p><p>The denominator sequence $(1 + x_n)$ converges to $1 + 1 = 2$.</p><p>Since $2 \\neq 0$, the quotient rule for sequences applies. The limit is $1 / 2$. Goal reached!</p>",
+  "solution": "<p>Let $(x_n)$ be any sequence converging to 2 with $x_n \\neq 2$.</p><p>The sequence in the denominator converges to -1.</p><p>Since the denominator limit is non-zero, the quotient limit is $1 / (-1) = -1$.</p><p>Because this holds for <i>every</i> sequence converging to 2, the function limit is -1.</p><p>Let $(x_n)$ be any sequence converging to 1.</p><p>The numerator sequence converges to 1.</p><p>The denominator sequence $(1 + x_n)$ converges to $1 + 1 = 2$.</p><p>Since $2 \\neq 0$, the quotient rule for sequences applies. The limit is $1 / 2$. Goal reached!</p>",
   "trap": "Watch out for quantifier order and domain boundary conditions in Section 4.1."
 },
 {
