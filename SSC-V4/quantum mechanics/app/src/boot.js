@@ -288,6 +288,72 @@ const App = (function () {
     });
   }
 
+  /* ── Add to Homescreen Prompt (Prompt once per device on launch) ────────── */
+  const A2HS = (function () {
+    const PROMPT_KEY = 'ssc4.qm.a2hs_prompted';
+    let deferredPrompt = null;
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredPrompt = e;
+      });
+    }
+
+    function show() {
+      try {
+        if (localStorage.getItem(PROMPT_KEY)) return;
+        const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone;
+        if (isStandalone) return;
+
+        localStorage.setItem(PROMPT_KEY, '1');
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const toast = DOM.el('div', { class: 'a2hs-toast' }, [
+          DOM.el('div', { class: 'a2hs-icon' }, [DOM.mi('install_mobile')]),
+          DOM.el('div', { class: 'a2hs-body' }, [
+            DOM.el('b', { text: 'Add to Home Screen' }),
+            DOM.el('span', {
+              text: isIOS
+                ? 'Tap Share then "Add to Home Screen" for instant offline access.'
+                : 'Install for offline access, full-screen study, and fast launch.'
+            })
+          ]),
+          DOM.el('div', { class: 'a2hs-actions' }, [
+            deferredPrompt ? DOM.el('button', {
+              class: 'btn primary a2hs-btn',
+              text: 'Install',
+              on: {
+                click: function () {
+                  if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt = null;
+                  }
+                  toast.remove();
+                }
+              }
+            }) : null,
+            DOM.el('button', {
+              class: 'icon-btn a2hs-close',
+              'aria-label': 'Dismiss',
+              on: { click: function () { toast.remove(); } }
+            }, [DOM.mi('close')])
+          ])
+        ]);
+
+        document.body.appendChild(toast);
+      } catch (err) {
+        /* ignore storage or DOM errors */
+      }
+    }
+
+    function init() {
+      setTimeout(show, 1500);
+    }
+
+    return { init };
+  })();
+
   /* The record is keyed on a name and a roll number, so there is no sensible
      "anonymous" state to start in: progress made before signing in could not
      be merged with the record it later turns out to belong to. The gate is
@@ -310,6 +376,7 @@ const App = (function () {
     loadData().then(function () {
       Pool.build();
       if (Store.signedIn()) run(); else gate();
+      A2HS.init();
     }, fatal);
   }
 
