@@ -76,7 +76,7 @@ const KNOWN = new Set(('alpha beta gamma delta epsilon varepsilon zeta eta theta
   + 'Re Im deg det dim gcd hom ker arg bmod pmod '
   + 'aleph not Longrightarrow Longleftarrow Longleftrightarrow longmapsto '
   + 'overbrace underbrace substack smash raise lower rule '
-  + 'hbar boxed '
+  + 'hbar boxed dagger doteq '
   + 'lim_ liminf_ limsup_ ').trim().split(/\s+/));
 
 const errors = [];

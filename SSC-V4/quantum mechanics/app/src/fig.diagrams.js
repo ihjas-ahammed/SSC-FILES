@@ -36,7 +36,14 @@ const DIAGRAM_MAP = {
   'c.2.5.1': ['c.2.5.1_potential_step_above'],
   'c.2.5.3': ['c.2.5.3_potential_step_evanescent'],
   'c.2.6.2': ['c.2.6.2_barrier_tunneling'],
-  'c.2.6.4': ['c.2.6.4_transmission_resonance']
+  'c.2.6.4': ['c.2.6.4_transmission_resonance'],
+  'c.3.1.2': ['c.3.1.2_dirac_bra_ket_projection'],
+  'c.3.3.1': ['c.3.3.1_commutator_geometry'],
+  'c.3.4.1': ['c.3.4.1_generalized_uncertainty'],
+  'c.3.5.2': ['c.3.5.2_unitary_transformation_rotation'],
+  'c.3.6.1': ['c.3.6.1_eigenvalue_diagonalization'],
+  'c.3.6.3': ['c.3.6.3_compatible_observables_simultaneous_eigenstates'],
+  'c.3.7.2': ['c.3.7.2_position_momentum_representation']
 };
 
 /* The lecture sheets: whole-topic posters rather than one-result figures.

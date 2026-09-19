@@ -399,5 +399,209 @@ $$T \\approx \\frac{16 E(V_0 - E)}{V_0^2} e^{-2\\kappa a} \\propto e^{-2\\kappa 
 The transmission coefficient decays exponentially as $e^{-2\\kappa a}$ because transmission is proportional to the squared amplitude of the transmitted wave.</p>`,
     tested: 'Barrier tunneling transmission coefficient exponential scaling.',
     trap: 'Choosing Option A (e^{-κa}), which confuses wave amplitude decay with probability/flux transmission decay (squared modulus).'
+  },
+  {
+    id: 'p.jam.ph.2024.03',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2024,
+    paper: 'PH',
+    qno: 32,
+    marks: 2,
+    neg: -0.66,
+    sec: '3.3',
+    tests: ['c.3.3.1', 'c.3.3.3'],
+    title: 'Commutator of Symmetrized Virial Operator with Position',
+    type: 'MCQ',
+    prompt: `<p>Consider the symmetrized operator $\\hat{D} = \\frac{1}{2}(\\hat{x}\\hat{p} + \\hat{p}\\hat{x})$. What is the commutator $[\\hat{D}, \\hat{x}]$?</p>`,
+    options: [
+      { k: 'A', t: '$-i\\hbar \\hat{x}$' },
+      { k: 'B', t: '$+i\\hbar \\hat{x}$' },
+      { k: 'C', t: '$0$' },
+      { k: 'D', t: '$-i\\hbar \\hat{p}$' }
+    ],
+    answer: 'A',
+    solution: `<p>First rewrite $\\hat{D}$ using $[\\hat{x}, \\hat{p}] = i\\hbar \\implies \\hat{p}\\hat{x} = \\hat{x}\\hat{p} - i\\hbar$:
+$$\\hat{D} = \\frac{1}{2}(\\hat{x}\\hat{p} + \\hat{x}\\hat{p} - i\\hbar) = \\hat{x}\\hat{p} - \\frac{i\\hbar}{2}$$
+Now compute the commutator $[\\hat{D}, \\hat{x}]$:
+$$[\\hat{D}, \\hat{x}] = \\left[ \\hat{x}\\hat{p} - \\frac{i\\hbar}{2}, \\; \\hat{x} \\right] = [\\hat{x}\\hat{p}, \\hat{x}]$$
+Using the Leibniz rule $[\\hat{A}\\hat{B}, \\hat{C}] = \\hat{A}[\\hat{B}, \\hat{C}] + [\\hat{A}, \\hat{C}]\\hat{B}$:
+$$[\\hat{x}\\hat{p}, \\hat{x}] = \\hat{x}[\\hat{p}, \\hat{x}] + [\\hat{x}, \\hat{x}]\\hat{p}$$
+Since $[\\hat{p}, \\hat{x}] = -i\\hbar$ and $[\\hat{x}, \\hat{x}] = 0$:
+$$[\\hat{D}, \\hat{x}] = \\hat{x}(-i\\hbar) + 0 = -i\\hbar \\hat{x}$$
+Therefore:
+$$[\\hat{D}, \\hat{x}] = -i\\hbar \\hat{x}$$</p>`,
+    tested: 'Commutator algebra with symmetrized operators and canonical relations.',
+    trap: 'Sign error: confusing [p, x] = -iħ with [x, p] = +iħ, leading to Option B.'
+  },
+  {
+    id: 'p.jam.ph.2023.03',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2023,
+    paper: 'PH',
+    qno: 25,
+    marks: 2,
+    neg: -0.66,
+    sec: '3.6',
+    tests: ['c.3.6.1', 'c.3.6.2'],
+    title: 'Measurement Probabilities in a 3-Level Quantum System',
+    type: 'MCQ',
+    prompt: `<p>In the orthonormal basis $\{|1\\rangle, |2\\rangle, |3\\rangle\}$, the Hamiltonian and an observable $\\hat{A}$ are given by:
+$$H = \\hbar\\omega \\begin{pmatrix} 1 & 0 & 0 \\\\ 0 & 2 & 0 \\\\ 0 & 0 & 2 \\end{pmatrix}, \\qquad A = \\lambda \\begin{pmatrix} 0 & 1 & 0 \\\\ 1 & 0 & 0 \\\\ 0 & 0 & 2 \\end{pmatrix}$$
+If the system is initially prepared in the normalized state $|\psi\\rangle$ with the highest eigenvalue of $\\hat{A}$, what is the probability that a measurement of energy yields $E = 2\\hbar\\omega$?</p>`,
+    options: [
+      { k: 'A', t: '$0$' },
+      { k: 'B', t: '$1/2$' },
+      { k: 'C', t: '$1$' },
+      { k: 'D', t: '$1/4$' }
+    ],
+    answer: 'C',
+    solution: `<p><b>Step 1: Find Eigenvalues and Eigenstates of $\\hat{A}$:</b><br>
+The matrix $A$ is block-diagonal:
+$$\\det(A - a I) = \\det \\begin{pmatrix} -a & \\lambda & 0 \\\\ \\lambda & -a & 0 \\\\ 0 & 0 & 2\\lambda - a \\end{pmatrix} = (2\\lambda - a)(a^2 - \\lambda^2) = -(a - 2\\lambda)(a - \\lambda)(a + \\lambda) = 0$$
+The eigenvalues are $a = 2\\lambda, +\\lambda, -\\lambda$.<br>
+The highest eigenvalue is $a_{\\text{max}} = 2\\lambda$.<br>
+The normalized eigenvector corresponding to $a = 2\\lambda$ is simply:
+$$|\\psi\\rangle = |3\\rangle = \\begin{pmatrix} 0 \\\\ 0 \\\\ 1 \\end{pmatrix}$$</p>
+
+<p><b>Step 2: Measurement of Energy:</b><br>
+The energy eigenstates are the standard basis vectors:
+$$H |1\\rangle = 1\\hbar\\omega |1\\rangle, \\qquad H |2\\rangle = 2\\hbar\\omega |2\\rangle, \\qquad H |3\\rangle = 2\\hbar\\omega |3\\rangle$$
+Notice that both $|2\\rangle$ and $|3\\rangle$ have energy $E = 2\\hbar\\omega$.<br>
+The state of the system is $|\psi\\rangle = |3\\rangle$.<br>
+Therefore, the energy measurement must yield $E = 2\\hbar\\omega$ with probability:
+$$P(E = 2\\hbar\\omega) = |\\langle 2|\\psi\\rangle|^2 + |\\langle 3|\\psi\\rangle|^2 = 0^2 + |\\langle 3|3\\rangle|^2 = 1$$
+Hence, the outcome $E = 2\\hbar\\omega$ is obtained with $100\\%$ certainty ($P = 1$).</p>`,
+    tested: 'Matrix mechanics, block-diagonal observables, and measurement probabilities.',
+    trap: 'Overlooking that |3⟩ is degenerate with |2⟩ in energy, or solving the 2x2 sub-block instead of finding the global maximum eigenvalue.'
+  },
+  {
+    id: 'p.jam.ph.2022.03',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2022,
+    paper: 'PH',
+    qno: 12,
+    marks: 1,
+    neg: -0.33,
+    sec: '3.2',
+    tests: ['c.3.2.1', 'c.3.2.2'],
+    title: 'Hermiticity Condition for Generalized Momentum Operators',
+    type: 'MCQ',
+    prompt: `<p>For what condition on the complex constant $\\alpha$ is the linear operator $\\hat{K} = -i\\hbar \\frac{d}{dx} + \\alpha$ Hermitian on the space of square-integrable functions vanishing at $\\pm\\infty$?</p>`,
+    options: [
+      { k: 'A', t: '$\\alpha$ must be purely real.' },
+      { k: 'B', t: '$\\alpha$ must be purely imaginary.' },
+      { k: 'C', t: '$\\alpha$ must have modulus $|\\alpha| = 1$.' },
+      { k: 'D', t: '$\\hat{K}$ is never Hermitian for any value of $\\alpha$.' }
+    ],
+    answer: 'A',
+    solution: `<p>Compute the Hermitian adjoint of $\\hat{K}$:
+$$\\hat{K}^\\dagger = \\left( -i\\hbar \\frac{d}{dx} + \\alpha \\hat{I} \\right)^\\dagger = \\left( -i\\hbar \\frac{d}{dx} \\right)^\\dagger + (\\alpha \\hat{I})^\\dagger$$
+Since $\\hat{p} = -i\\hbar \\frac{d}{dx}$ is Hermitian on $L^2(\\mathbb{R})$:
+$$\\left( -i\\hbar \\frac{d}{dx} \\right)^\\dagger = -i\\hbar \\frac{d}{dx}$$
+For the scalar term:
+$$(\\alpha \\hat{I})^\\dagger = \\alpha^* \\hat{I}$$
+Thus:
+$$\\hat{K}^\\dagger = -i\\hbar \\frac{d}{dx} + \\alpha^* \\hat{I}$$
+For $\\hat{K}$ to be Hermitian ($\\hat{K}^\\dagger = \\hat{K}$):
+$$-i\\hbar \\frac{d}{dx} + \\alpha^* = -i\\hbar \\frac{d}{dx} + \\alpha \\implies \\alpha^* = \\alpha$$
+This requires $\\alpha$ to be <b>purely real</b>.</p>`,
+    tested: 'Hermitian adjoint of differential and constant multiplier operators.',
+    trap: 'Confusing the Hermiticity of the momentum term (which requires the factor of i) with the constant term (which must be real).'
+  },
+  {
+    id: 'p.jam.ph.2021.03',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2021,
+    paper: 'PH',
+    qno: 28,
+    marks: 2,
+    neg: 0,
+    sec: '3.4',
+    tests: ['c.3.4.1'],
+    title: 'Robertson Uncertainty Bound for Angular Momentum Components',
+    type: 'NAT',
+    prompt: `<p>A quantum particle is prepared in an eigenstate of $\\hat{L}_z$ with magnetic quantum number $m = 2$, so $\\hat{L}_z |\\psi\\rangle = 2\\hbar |\\psi\\rangle$. Using the Robertson uncertainty relation, find the minimum value of the uncertainty product $\\Delta L_x \\Delta L_y$ in units of $\\hbar^2$.</p>`,
+    answer: '1',
+    solution: `<p>The angular momentum components satisfy the commutation relation:
+$$[\\hat{L}_x, \\hat{L}_y] = i\\hbar \\hat{L}_z$$
+By the Robertson uncertainty relation:
+$$\\Delta L_x \\, \\Delta L_y \\ge \\frac{1}{2} |\\langle [\\hat{L}_x, \\hat{L}_y] \\rangle| = \\frac{1}{2} |\\langle i\\hbar \\hat{L}_z \\rangle| = \\frac{\\hbar}{2} |\\langle \\hat{L}_z \\rangle|$$
+Given that $|\\psi\\rangle$ is an eigenstate with $\\hat{L}_z|\\psi\\rangle = 2\\hbar|\\psi\\rangle$:
+$$\\langle \\hat{L}_z \\rangle = 2\\hbar$$
+Substituting this in:
+$$\\Delta L_x \\, \\Delta L_y \\ge \\frac{\\hbar}{2} |2\\hbar| = \\hbar^2$$
+Therefore, the minimum value of $\\Delta L_x \\Delta L_y$ is $1 \\, \\hbar^2$.<br>
+The numerical answer is 1.</p>`,
+    tested: 'Robertson uncertainty relation applied to orbital angular momentum.',
+    trap: 'Forgetting the 1/2 factor in the Robertson inequality, which would incorrectly yield 2.'
+  },
+  {
+    id: 'p.jam.ph.2020.03',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2020,
+    paper: 'PH',
+    qno: 19,
+    marks: 2,
+    neg: -0.66,
+    sec: '3.5',
+    tests: ['c.3.5.1', 'c.3.5.2'],
+    title: 'Transformed Expectation Value Under Spatial Translation',
+    type: 'MCQ',
+    prompt: `<p>A particle is in a state $|\\psi\\rangle$ with expectation value $\\langle \\hat{x} \\rangle = x_0$. Let $|\\psi'\\rangle = \\hat{T}(a)|\\psi\\rangle$ where $\\hat{T}(a) = \\exp(-i a \\hat{p} / \\hbar)$ is the spatial translation operator. What is the expectation value $\\langle \\hat{x} \\rangle'$ in the translated state $|\\psi'\\rangle$?</p>`,
+    options: [
+      { k: 'A', t: '$x_0 - a$' },
+      { k: 'B', t: '$x_0 + a$' },
+      { k: 'C', t: '$x_0$' },
+      { k: 'D', t: '$a - x_0$' }
+    ],
+    answer: 'B',
+    solution: `<p>The expectation value in the translated state $|\\psi'\\rangle$ is:
+$$\\langle \\hat{x} \\rangle' = \\langle \\psi' | \\hat{x} | \\psi' \\rangle = \\langle \\psi | \\hat{T}^\\dagger(a) \\hat{x} \\hat{T}(a) | \\psi \\rangle$$
+Using the BCH relation or the translation identity:
+$$\\hat{T}^\\dagger(a) \\hat{x} \\hat{T}(a) = e^{ia\\hat{p}/\\hbar} \\hat{x} e^{-ia\\hat{p}/\\hbar} = \\hat{x} + \\left[ \\frac{ia}{\\hbar}\\hat{p}, \\hat{x} \\right] = \\hat{x} + \\frac{ia}{\\hbar}(-i\\hbar) = \\hat{x} + a\\hat{I}$$
+Substituting back into the expectation value:
+$$\\langle \\hat{x} \\rangle' = \\langle \\psi | (\\hat{x} + a\\hat{I}) | \\psi \\rangle = \\langle \\psi | \\hat{x} | \\psi \\rangle + a \\langle \\psi | \\psi \\rangle = x_0 + a$$
+<b>Physical Intuition:</b> $\\hat{T}(a)$ translates the wave packet to the right by distance $a$ (since $\\psi'(x) = \\psi(x - a)$), shifting the centroid from $x_0$ to $x_0 + a$.</p>`,
+    tested: 'Action of translation operator on position observable and expectation values.',
+    trap: 'Choosing x_0 - a because ψ\'(x) = ψ(x - a); wave function shifted right has centroid at x_0 + a.'
+  },
+  {
+    id: 'p.jam.ph.2019.03',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2019,
+    paper: 'PH',
+    qno: 34,
+    marks: 2,
+    neg: -0.66,
+    sec: '3.7',
+    tests: ['c.3.7.2'],
+    title: 'Momentum Space Wave Function for a Delta Function Bound State',
+    type: 'MCQ',
+    prompt: `<p>The normalized ground state of a particle in an attractive delta-function potential $V(x) = -\\alpha \\delta(x)$ is $\\psi(x) = \\sqrt{\\kappa} e^{-\\kappa |x|}$, where $\\kappa = m\\alpha/\\hbar^2$. What is its momentum-space wave function $\\phi(p)$?</p>`,
+    options: [
+      { k: 'A', t: '$\\phi(p) = \\sqrt{\\dfrac{2}{\\pi}} \\dfrac{\\hbar^{3/2} \\kappa^{3/2}}{p^2 + \\hbar^2 \\kappa^2}$' },
+      { k: 'B', t: '$\\phi(p) = \\sqrt{\\dfrac{2}{\\pi}} \\dfrac{\\hbar \\kappa}{p + \\hbar \\kappa}$' },
+      { k: 'C', t: '$\\phi(p) = \\dfrac{1}{\\sqrt{2\\pi\\hbar}} e^{-p^2 / 2\\hbar^2 \\kappa^2}$' },
+      { k: 'D', t: '$\\phi(p) = \\dfrac{\\kappa}{p^2 - \\hbar^2 \\kappa^2}$' }
+    ],
+    answer: 'A',
+    solution: `<p>The momentum wave function is given by the Fourier transform:
+$$\\phi(p) = \\frac{1}{\\sqrt{2\\pi\\hbar}} \\int_{-\\infty}^\\infty e^{-ipx/\\hbar} \\psi(x) \\, dx = \\frac{\\sqrt{\\kappa}}{\\sqrt{2\\pi\\hbar}} \\int_{-\\infty}^\\infty e^{-ipx/\\hbar} e^{-\\kappa |x|} \\, dx$$
+Because $e^{-\\kappa |x|}$ is an even function of $x$, the $\\sin(px/\\hbar)$ term vanishes:
+$$\\phi(p) = \\frac{\\sqrt{\\kappa}}{\\sqrt{2\\pi\\hbar}} \\cdot 2 \\int_0^\\infty e^{-\\kappa x} \\cos(px/\\hbar) \\, dx$$
+Using the standard Laplace integral $\\int_0^\\infty e^{-\\kappa x} \\cos(kx) dx = \\frac{\\kappa}{\\kappa^2 + k^2}$ with $k = p/\\hbar$:
+$$\\int_0^\\infty e^{-\\kappa x} \\cos(px/\\hbar) \\, dx = \\frac{\\kappa}{\\kappa^2 + (p/\\hbar)^2} = \\frac{\\hbar^2 \\kappa}{p^2 + \\hbar^2 \\kappa^2}$$
+Multiplying by the prefactors:
+$$\\phi(p) = \\frac{2\\sqrt{\\kappa}}{\\sqrt{2\\pi\\hbar}} \\frac{\\hbar^2 \\kappa}{p^2 + \\hbar^2 \\kappa^2} = \\sqrt{\\frac{2}{\\pi\\hbar}} \\frac{\\hbar^2 \\kappa^{3/2}}{p^2 + \\hbar^2 \\kappa^2} = \\sqrt{\\frac{2}{\\pi}} \\frac{\\hbar^{3/2} \\kappa^{3/2}}{p^2 + \\hbar^2 \\kappa^2}$$
+This gives a Lorentzian probability distribution in momentum space!</p>`,
+    tested: 'Fourier transform to momentum space for discontinuous derivative wave functions.',
+    trap: 'Selecting Option C by assuming the momentum wave function must always be a Gaussian.'
   }
 );
+

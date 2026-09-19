@@ -228,49 +228,40 @@ const NoteBody = (function () {
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
           p.rungs.map(function (r, idx) {
+            const whyText = r.why || r.label || '';
             const rungItems = [
               el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
                 el('b', { text: 'Step ' + (idx + 1) + ': ' }),
-                el('span', { html: r.why })
+                el('span', { html: whyText })
               ])
             ];
 
-            const rawContent = (r.meaning || r.m || '').trim();
-            if (rawContent) {
-              const isExplanation = !!r.meaning ||
-                /^what this (really )?means/i.test(rawContent) ||
-                /^meaning:/i.test(rawContent) ||
-                (!rawContent.startsWith('$$') && !/^\s*\\[a-zA-Z]+/.test(rawContent) && rawContent.split(/\s+/).length > 6 && !rawContent.includes('\\begin'));
-
-              if (isExplanation) {
-                const text = rawContent.replace(/^(what this (really )?means:?|meaning:?)\s*/i, '');
-                rungItems.push(el('div', {
-                  class: 'rung-meaning',
-                  style: {
-                    marginTop: '8px', padding: '8px 12px',
-                    background: 'var(--surface-2, rgba(0,0,0,0.03))',
-                    borderRadius: '6px', borderLeft: '2px solid var(--accent, #4f46e5)',
-                    fontSize: '0.88rem', lineHeight: '1.45'
-                  }
-                }, [
-                  el('div', {
-                    class: 'kicker',
-                    style: { fontSize: '0.68rem', color: 'var(--accent, #4f46e5)', marginBottom: '3px', fontWeight: '600' },
-                    text: 'What this really means'
-                  }),
-                  el('div', { class: 'prose tight', html: text })
-                ]));
-              } else {
-                let mathHtml = rawContent;
-                if (!mathHtml.includes('$')) mathHtml = '$$' + mathHtml + '$$';
-                rungItems.push(el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
-              }
+            const mathText = (r.m || r.math || '').trim();
+            if (mathText) {
+              let mathHtml = mathText;
+              if (!mathHtml.includes('$')) mathHtml = '$$' + mathHtml + '$$';
+              rungItems.push(el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
             }
 
-            if (r.meaning && r.m && r.m.trim() !== r.meaning.trim()) {
-              let mathHtml = r.m.trim();
-              if (!mathHtml.includes('$')) mathHtml = '$$' + mathHtml + '$$';
-              rungItems.splice(1, 0, el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
+            const meaningText = (r.meaning || r.note || '').trim();
+            if (meaningText) {
+              const text = meaningText.replace(/^(what this (really )?means:?|meaning:?)\s*/i, '');
+              rungItems.push(el('div', {
+                class: 'rung-meaning',
+                style: {
+                  marginTop: '8px', padding: '8px 12px',
+                  background: 'var(--surface-2, rgba(0,0,0,0.03))',
+                  borderRadius: '6px', borderLeft: '2px solid var(--accent, #4f46e5)',
+                  fontSize: '0.88rem', lineHeight: '1.45'
+                }
+              }, [
+                el('div', {
+                  class: 'kicker',
+                  style: { fontSize: '0.68rem', color: 'var(--accent, #4f46e5)', marginBottom: '3px', fontWeight: '600' },
+                  text: 'What this really means'
+                }),
+                el('div', { class: 'prose tight', html: text })
+              ]));
             }
 
             return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, rungItems);

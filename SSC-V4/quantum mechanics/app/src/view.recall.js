@@ -233,12 +233,21 @@ const ViewRecall = (function () {
           p.why ? el('div', { class: 'prose tight', html: p.why }) : null,
           (p.rungs && p.rungs.length)
             ? el('div', { class: 'stack', style: { gap: '8px' } }, p.rungs.map(function (r, i) {
-                return el('div', { class: 'card flat', style: { padding: '10px 14px' } }, [
+                const whyText = r.why || r.label || '';
+                const mathText = (r.m || r.math || '').trim();
+                const noteText = (r.meaning || r.note || '').trim();
+                const items = [
                   el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
-                    el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: r.why })
-                  ]),
-                  r.m ? el('div', { html: r.m }) : null
-                ]);
+                    el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: whyText })
+                  ])
+                ];
+                if (mathText) {
+                  items.push(el('div', { html: mathText.includes('$') ? mathText : '$$' + mathText + '$$' }));
+                }
+                if (noteText) {
+                  items.push(el('div', { class: 'small muted', style: { marginTop: '4px', fontStyle: 'italic' }, html: noteText }));
+                }
+                return el('div', { class: 'card flat', style: { padding: '10px 14px' } }, items);
               }))
             : null,
           p.ends ? el('div', { class: 'prose tight', html: p.ends }) : null,
