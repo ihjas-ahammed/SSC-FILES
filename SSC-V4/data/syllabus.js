@@ -18,7 +18,7 @@ const SYLLABI = [
       secs:['3.1','3.2','3.3'] },
     { id:'ra1.m4', n:'IV', title:'Sequences and Limits (continued)', marks:10,
       secs:['3.4','3.5','3.6','3.7','4.1','4.2','4.3'] },
-    { id:'ra1.m5', n:'+',  title:'Topology of the Line & Metric Spaces', marks:0, ext:true,
+    { id:'ra1.m5', n:'Ext', title:'Topology of the Line & Metric Spaces', marks:0, ext:true,
       secs:['11.1','11.2','11.3','11.4'] }
    ]},
  { id:'ra2', title:'Real Analysis II', code:'MAT5CJ301', sem:'V', book:'Bartle & Sherbert 4e',
@@ -33,9 +33,9 @@ const SYLLABI = [
        secs:['7.1','7.2','7.3','7.4','7.5'], extSecs:['7.4','7.5'] },
      { id:'ra2.m4', n:'IV', title:'Sequences and Series of Functions', marks:10,
        secs:['8.1','8.2','8.3','8.4'], extSecs:['8.3','8.4'] },
-     { id:'ra2.m5', n:'+',  title:'Infinite Series', marks:0, ext:true,
+     { id:'ra2.m5', n:'Ext', title:'Infinite Series', marks:0, ext:true,
        secs:['9.1','9.2','9.3','9.4'] },
-     { id:'ra2.m6', n:'+',  title:'The Generalized Riemann Integral', marks:0, ext:true,
+     { id:'ra2.m6', n:'Ext', title:'The Generalized Riemann Integral', marks:0, ext:true,
        secs:['10.1','10.2','10.3','10.4'] }
     ]},
   {
@@ -101,15 +101,15 @@ const EXT_SECS = {
   '7.5': true,  // Approximate Integration (Trapezoidal & Simpson's)
   '8.3': true,  // The Exponential and Logarithmic Functions
   '8.4': true,  // The Trigonometric Functions
-  '9.1': true,  // Infinite Series (Module +)
+  '9.1': true,  // Infinite Series (Extension)
   '9.2': true,
   '9.3': true,
   '9.4': true,
-  '10.1': true, // The Generalized Riemann Integral (Module +)
+  '10.1': true, // The Generalized Riemann Integral (Extension)
   '10.2': true,
   '10.3': true,
   '10.4': true,
-  '11.1': true, // Topology of the Line & Metric Spaces (Module +)
+  '11.1': true, // Topology of the Line & Metric Spaces (Extension)
   '11.2': true,
   '11.3': true,
   '11.4': true

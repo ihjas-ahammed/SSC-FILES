@@ -468,10 +468,39 @@ mjx-container{ max-width:100%; }
 }
 .tnode.sub .tlabel{ padding-top:11px; padding-bottom:11px; }
 .tlabel .tt{ flex:1 1 auto; min-width:0; }
-.tlabel .tt b{ display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-weight:500; font-size:.97rem; letter-spacing:-.005em; }
-.tlabel .tt b .badge{ font-size:.62rem; padding:2px 7px; vertical-align:middle; line-height:1.2; }
-.tlabel .tt span{ display:block; font-size:.75rem; color:var(--ink-3); margin-top:1px; }
+.tlabel .tt b{
+  display:block;
+  font-weight:500;
+  font-size:.97rem;
+  letter-spacing:-.005em;
+  line-height:1.35;
+  color:var(--ink);
+}
+.tlabel .tt b span:not(.badge){
+  display:inline;
+  font-size:inherit;
+  color:inherit;
+  font-weight:inherit;
+}
+.tlabel .tt b .badge{
+  display:inline-flex;
+  vertical-align:middle;
+  margin-left:6px;
+  margin-top:-2px;
+  font-size:.62rem;
+  padding:2px 7px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+.tlabel .tt>span{
+  display:block;
+  font-size:.75rem;
+  color:var(--ink-3);
+  margin-top:2px;
+  line-height:1.35;
+}
 .tnode.sub .tlabel .tt b{ font-size:.92rem; }
+.tlabel .count{ white-space:nowrap; flex:0 0 auto; }
 .chev{ flex:0 0 auto; width:20px; height:20px; color:var(--ink-3);
   transition:transform var(--dur) var(--spring); }
 .tlabel[aria-expanded=true] .chev{ transform:rotate(90deg); color:var(--accent); }
@@ -1070,7 +1099,7 @@ const SYLLABI = [
       secs:['3.1','3.2','3.3'] },
     { id:'ra1.m4', n:'IV', title:'Sequences and Limits (continued)', marks:10,
       secs:['3.4','3.5','3.6','3.7','4.1','4.2','4.3'] },
-    { id:'ra1.m5', n:'+',  title:'Topology of the Line & Metric Spaces', marks:0, ext:true,
+    { id:'ra1.m5', n:'Ext', title:'Topology of the Line & Metric Spaces', marks:0, ext:true,
       secs:['11.1','11.2','11.3','11.4'] }
    ]},
  { id:'ra2', title:'Real Analysis II', code:'MAT5CJ301', sem:'V', book:'Bartle & Sherbert 4e',
@@ -1085,9 +1114,9 @@ const SYLLABI = [
        secs:['7.1','7.2','7.3','7.4','7.5'], extSecs:['7.4','7.5'] },
      { id:'ra2.m4', n:'IV', title:'Sequences and Series of Functions', marks:10,
        secs:['8.1','8.2','8.3','8.4'], extSecs:['8.3','8.4'] },
-     { id:'ra2.m5', n:'+',  title:'Infinite Series', marks:0, ext:true,
+     { id:'ra2.m5', n:'Ext', title:'Infinite Series', marks:0, ext:true,
        secs:['9.1','9.2','9.3','9.4'] },
-     { id:'ra2.m6', n:'+',  title:'The Generalized Riemann Integral', marks:0, ext:true,
+     { id:'ra2.m6', n:'Ext', title:'The Generalized Riemann Integral', marks:0, ext:true,
        secs:['10.1','10.2','10.3','10.4'] }
     ]},
   {
@@ -1153,15 +1182,15 @@ const EXT_SECS = {
   '7.5': true,  // Approximate Integration (Trapezoidal & Simpson's)
   '8.3': true,  // The Exponential and Logarithmic Functions
   '8.4': true,  // The Trigonometric Functions
-  '9.1': true,  // Infinite Series (Module +)
+  '9.1': true,  // Infinite Series (Extension)
   '9.2': true,
   '9.3': true,
   '9.4': true,
-  '10.1': true, // The Generalized Riemann Integral (Module +)
+  '10.1': true, // The Generalized Riemann Integral (Extension)
   '10.2': true,
   '10.3': true,
   '10.4': true,
-  '11.1': true, // Topology of the Line & Metric Spaces (Module +)
+  '11.1': true, // Topology of the Line & Metric Spaces (Extension)
   '11.2': true,
   '11.3': true,
   '11.4': true
@@ -32794,6 +32823,11 @@ const Tree = (function () {
          countSecs.length + ' syllabus ' + DOM.plural(countSecs.length, 'section') +
          (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
 
+    const modPrefix = isExtMod || mod.n === '+' || mod.n === 'Ext'
+      ? 'Extension'
+      : (mod.n && mod.n.indexOf('E') === 0 ? 'Topic ' + mod.n : 'Module ' + mod.n);
+    const modHeading = modPrefix + ' · ' + mod.title;
+
     const acc = accordion(nid, open, open
       ? [el('div', {}, secs.map(s => sectionNode(s, ctx)))] : [], ctx);
 
@@ -32802,21 +32836,21 @@ const Tree = (function () {
         tickButton(function () {
           const cnt = Progress.count(ids);
           return { state: Progress.tickState(ids), lv: cnt.min,
-            label: 'Advance every syllabus note of module ' + mod.n };
+            label: 'Advance every syllabus note of ' + (isExtMod ? mod.title : 'module ' + mod.n) };
         }, function () {
           const to = Progress.advanceMany(ids);
-          DOM.announce(to ? 'Module at level ' + to + '.' : 'Module cleared.');
+          DOM.announce(to ? (isExtMod ? mod.title : 'Module ' + mod.n) + ' at level ' + to + '.' : 'Cleared.');
           refresh();
         }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
-              el('span', { text: 'Module ' + mod.n + ' · ' + mod.title }),
+              el('span', { text: modHeading }),
               isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null
             ]),
             el('span', { text: subtitleText })
           ]),
-          ring(() => Progress.count(ids), 'Module ' + mod.n),
+          ring(() => Progress.count(ids), isExtMod ? mod.title : 'Module ' + mod.n),
           DOM.icon('chev', 20, 'chev')
         ], function (on) {
           setSlot('mod', mod.id, on);
@@ -32844,13 +32878,14 @@ const Tree = (function () {
         el('div', { class: 'row' }, builds)
       ]) : null
     ])], ctx);
+    const modHeading = (mod.n && mod.n.indexOf('E') === 0 ? 'Topic ' + mod.n : mod.n) + ' · ' + mod.title;
     return el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
         staticTick('hourglass_empty'),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
-              el('span', { text: mod.n + ' · ' + mod.title }),
+              el('span', { text: modHeading }),
               el('span', { class: 'badge warn', text: 'pending' })
             ]),
             el('span', { text: 'not delivered yet' })

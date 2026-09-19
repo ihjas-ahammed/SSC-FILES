@@ -468,10 +468,39 @@ mjx-container{ max-width:100%; }
 }
 .tnode.sub .tlabel{ padding-top:11px; padding-bottom:11px; }
 .tlabel .tt{ flex:1 1 auto; min-width:0; }
-.tlabel .tt b{ display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-weight:500; font-size:.97rem; letter-spacing:-.005em; }
-.tlabel .tt b .badge{ font-size:.62rem; padding:2px 7px; vertical-align:middle; line-height:1.2; }
-.tlabel .tt span{ display:block; font-size:.75rem; color:var(--ink-3); margin-top:1px; }
+.tlabel .tt b{
+  display:block;
+  font-weight:500;
+  font-size:.97rem;
+  letter-spacing:-.005em;
+  line-height:1.35;
+  color:var(--ink);
+}
+.tlabel .tt b span:not(.badge){
+  display:inline;
+  font-size:inherit;
+  color:inherit;
+  font-weight:inherit;
+}
+.tlabel .tt b .badge{
+  display:inline-flex;
+  vertical-align:middle;
+  margin-left:6px;
+  margin-top:-2px;
+  font-size:.62rem;
+  padding:2px 7px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+.tlabel .tt>span{
+  display:block;
+  font-size:.75rem;
+  color:var(--ink-3);
+  margin-top:2px;
+  line-height:1.35;
+}
 .tnode.sub .tlabel .tt b{ font-size:.92rem; }
+.tlabel .count{ white-space:nowrap; flex:0 0 auto; }
 .chev{ flex:0 0 auto; width:20px; height:20px; color:var(--ink-3);
   transition:transform var(--dur) var(--spring); }
 .tlabel[aria-expanded=true] .chev{ transform:rotate(90deg); color:var(--accent); }
@@ -5966,6 +5995,11 @@ const Tree = (function () {
          countSecs.length + ' syllabus ' + DOM.plural(countSecs.length, 'section') +
          (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
 
+    const modPrefix = isExtMod || mod.n === '+' || mod.n === 'Ext'
+      ? 'Extension'
+      : (mod.n && mod.n.indexOf('E') === 0 ? 'Topic ' + mod.n : 'Module ' + mod.n);
+    const modHeading = modPrefix + ' · ' + mod.title;
+
     const acc = accordion(nid, open, open
       ? [el('div', {}, secs.map(s => sectionNode(s, ctx)))] : [], ctx);
 
@@ -5974,21 +6008,21 @@ const Tree = (function () {
         tickButton(function () {
           const cnt = Progress.count(ids);
           return { state: Progress.tickState(ids), lv: cnt.min,
-            label: 'Advance every syllabus note of module ' + mod.n };
+            label: 'Advance every syllabus note of ' + (isExtMod ? mod.title : 'module ' + mod.n) };
         }, function () {
           const to = Progress.advanceMany(ids);
-          DOM.announce(to ? 'Module at level ' + to + '.' : 'Module cleared.');
+          DOM.announce(to ? (isExtMod ? mod.title : 'Module ' + mod.n) + ' at level ' + to + '.' : 'Cleared.');
           refresh();
         }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
-              el('span', { text: 'Module ' + mod.n + ' · ' + mod.title }),
+              el('span', { text: modHeading }),
               isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null
             ]),
             el('span', { text: subtitleText })
           ]),
-          ring(() => Progress.count(ids), 'Module ' + mod.n),
+          ring(() => Progress.count(ids), isExtMod ? mod.title : 'Module ' + mod.n),
           DOM.icon('chev', 20, 'chev')
         ], function (on) {
           setSlot('mod', mod.id, on);
@@ -6016,13 +6050,14 @@ const Tree = (function () {
         el('div', { class: 'row' }, builds)
       ]) : null
     ])], ctx);
+    const modHeading = (mod.n && mod.n.indexOf('E') === 0 ? 'Topic ' + mod.n : mod.n) + ' · ' + mod.title;
     return el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
         staticTick('hourglass_empty'),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
-              el('span', { text: mod.n + ' · ' + mod.title }),
+              el('span', { text: modHeading }),
               el('span', { class: 'badge warn', text: 'pending' })
             ]),
             el('span', { text: 'not delivered yet' })

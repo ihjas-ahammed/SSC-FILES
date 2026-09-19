@@ -291,6 +291,11 @@ const Tree = (function () {
          countSecs.length + ' syllabus ' + DOM.plural(countSecs.length, 'section') +
          (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
 
+    const modPrefix = isExtMod || mod.n === '+' || mod.n === 'Ext'
+      ? 'Extension'
+      : (mod.n && mod.n.indexOf('E') === 0 ? 'Topic ' + mod.n : 'Module ' + mod.n);
+    const modHeading = modPrefix + ' · ' + mod.title;
+
     const acc = accordion(nid, open, open
       ? [el('div', {}, secs.map(s => sectionNode(s, ctx)))] : [], ctx);
 
@@ -299,21 +304,21 @@ const Tree = (function () {
         tickButton(function () {
           const cnt = Progress.count(ids);
           return { state: Progress.tickState(ids), lv: cnt.min,
-            label: 'Advance every syllabus note of module ' + mod.n };
+            label: 'Advance every syllabus note of ' + (isExtMod ? mod.title : 'module ' + mod.n) };
         }, function () {
           const to = Progress.advanceMany(ids);
-          DOM.announce(to ? 'Module at level ' + to + '.' : 'Module cleared.');
+          DOM.announce(to ? (isExtMod ? mod.title : 'Module ' + mod.n) + ' at level ' + to + '.' : 'Cleared.');
           refresh();
         }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
-              el('span', { text: 'Module ' + mod.n + ' · ' + mod.title }),
+              el('span', { text: modHeading }),
               isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null
             ]),
             el('span', { text: subtitleText })
           ]),
-          ring(() => Progress.count(ids), 'Module ' + mod.n),
+          ring(() => Progress.count(ids), isExtMod ? mod.title : 'Module ' + mod.n),
           DOM.icon('chev', 20, 'chev')
         ], function (on) {
           setSlot('mod', mod.id, on);
@@ -341,13 +346,14 @@ const Tree = (function () {
         el('div', { class: 'row' }, builds)
       ]) : null
     ])], ctx);
+    const modHeading = (mod.n && mod.n.indexOf('E') === 0 ? 'Topic ' + mod.n : mod.n) + ' · ' + mod.title;
     return el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
         staticTick('hourglass_empty'),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
-              el('span', { text: mod.n + ' · ' + mod.title }),
+              el('span', { text: modHeading }),
               el('span', { class: 'badge warn', text: 'pending' })
             ]),
             el('span', { text: 'not delivered yet' })
