@@ -540,7 +540,7 @@ CONCEPTS.push(
     traps: [`The nonnegativity hypothesis $f(x)\\ge0$ on all of $A$ is essential &mdash; $\\sqrt{f(x)}$ is not even real-valued otherwise.`],
     proof: {
       idea: 'Rationalize the difference when $f(c) > 0$, and use $0 \\le f(x) < \\varepsilon^2$ when $f(c) = 0$.',
-      why: 'When $f(c) > 0$, $|\sqrt{f(x)} - \sqrt{f(c)}| = \frac{|f(x) - f(c)|}{\sqrt{f(x)} + \sqrt{f(c)}} \le \frac{|f(x) - f(c)|}{\sqrt{f(c)}}$.',
+      why: `When $f(c) > 0$, $|\\sqrt{f(x)} - \\sqrt{f(c)}| = \\frac{|f(x) - f(c)|}{\\sqrt{f(x)} + \\sqrt{f(c)}} \\le \\frac{|f(x) - f(c)|}{\\sqrt{f(c)}}$.`,
       rungs: [
         {
           why: 'Case 1: $f(c) = 0$. For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $0 \\le f(x) < \\varepsilon^2$.',

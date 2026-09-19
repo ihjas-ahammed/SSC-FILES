@@ -129,6 +129,21 @@ function check(where, s) {
 
     if (/\\\\\s*$/.test(tex)) errors.push([where, 'trailing \\\\ row break with nothing after it', tex]);
 
+    const dblCmd = tex.match(/\\\\([a-zA-Z]+)/);
+    if (dblCmd) errors.push([where, 'double backslash before command \\\\' + dblCmd[1], tex]);
+
+    if (/\\?[\r\n]+(otin|eq)\b/.test(tex)) errors.push([where, 'newline-corrupted LaTeX command (e.g. \\notin or \\neq)', tex]);
+
+    const bareCmds = ['setminus', 'smallsetminus', 'subseteq', 'supseteq', 'subsetneq', 'notin', 'emptyset', 'mathbb'];
+    bareCmds.forEach(function (bc) {
+      const bre = new RegExp('(?<!\\\\)\\b' + bc + '\\b');
+      if (bre.test(tex)) {
+        if (!new RegExp('\\\\text\\{[^}]*' + bc).test(tex)) {
+          errors.push([where, 'missing backslash on \\' + bc, tex]);
+        }
+      }
+    });
+
     (tex.match(/\\([a-zA-Z]+)/g) || []).forEach(function (cmd) {
       const name = cmd.slice(1);
       if (KNOWN.has(name)) return;
@@ -136,6 +151,9 @@ function check(where, s) {
       warns.push([where, 'unknown command \\' + name, tex]);
     });
   });
+
+  if (s.indexOf('\x0c') >= 0) errors.push([where, 'accidental form feed (\\f unescaped in JS string)', s]);
+  if (s.indexOf('\x08') >= 0) errors.push([where, 'accidental backspace (\\b unescaped in JS string)', s]);
 }
 
 function walk(node, where) {
