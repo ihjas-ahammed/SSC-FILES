@@ -113,14 +113,20 @@ const Tree = (function () {
     return host;
   }
 
-  function accordion(nid, open, kids) {
+  let ctxOpenAccs = new Set();
+  let isInitialPaint = true;
+
+  function accordion(nid, open, kids, ctx) {
     const inner = el('div', { class: 'acc-in' }, [el('div', { class: 'acc-pad' }, kids)]);
     const acc = el('div', { class: 'acc', id: 'acc-' + nid }, [inner]);
     if (open) {
-      /* Opened on the next frame so the 0fr → 1fr transition actually runs;
-         set straight away it would simply appear. */
-      if (DOM.reduced()) acc.classList.add('open');
-      else window.requestAnimationFrame(() => acc.classList.add('open'));
+      const wasOpen = ctx && ctx.wasOpen ? ctx.wasOpen('acc-' + nid) : ctxOpenAccs.has('acc-' + nid);
+      const isInit = ctx && typeof ctx.isInitial === 'boolean' ? ctx.isInitial : isInitialPaint;
+      if (wasOpen || isInit || DOM.reduced()) {
+        acc.classList.add('open');
+      } else {
+        window.requestAnimationFrame(() => acc.classList.add('open'));
+      }
     }
     return acc;
   }
@@ -191,11 +197,11 @@ const Tree = (function () {
       onComplete: function (next) {
         if (next) revealPath(next.id);
         else setSlot('concept', c.id, false);
-        ctx.repaint({ scroll: true });
+        ctx.repaint({ scroll: !!next, isNote: !!next });
       }
     }) : null;
 
-    const acc = accordion(nid, open, body ? [body] : []);
+    const acc = accordion(nid, open, body ? [body] : [], ctx);
 
     const label = toggler(nid, open, [
       el('span', { class: 'tt' }, [
@@ -209,7 +215,7 @@ const Tree = (function () {
       DOM.icon('chev', 18, 'chev')
     ], function (on) {
       setSlot('concept', c.id, on);
-      ctx.repaint({ scroll: on });
+      ctx.repaint({ scroll: on, isNote: true });
     });
 
     DOM.add(row, [tick, label]);
@@ -231,7 +237,7 @@ const Tree = (function () {
         ? [el('div', { class: 'stack', style: { gap: '6px' } }, s.concepts.map(c => conceptRow(c, ctx)))]
         : [el('p', { class: 'small muted', style: { margin: '4px 2px' },
             text: 'No concepts loaded for this section yet.' })])
-      : []);
+      : [], ctx);
 
     const node = el('div', { class: 'tnode sub sec' + (open ? ' open' : '') }, [
       el('div', { class: 'trow' }, [
@@ -258,7 +264,7 @@ const Tree = (function () {
           DOM.icon('chev', 20, 'chev')
         ], function (on) {
           setSlot('sec', s.sec, on);
-          ctx.repaint({ scroll: on });
+          ctx.repaint({ scroll: false });
         })
       ]),
       acc
@@ -286,7 +292,7 @@ const Tree = (function () {
          (extCount ? ' (+' + extCount + ' outside syllabus)' : ''));
 
     const acc = accordion(nid, open, open
-      ? [el('div', {}, secs.map(s => sectionNode(s, ctx)))] : []);
+      ? [el('div', {}, secs.map(s => sectionNode(s, ctx)))] : [], ctx);
 
     const node = el('div', { class: 'tnode' + (open ? ' open' : '') }, [
       el('div', { class: 'trow' }, [
@@ -311,7 +317,7 @@ const Tree = (function () {
           DOM.icon('chev', 20, 'chev')
         ], function (on) {
           setSlot('mod', mod.id, on);
-          ctx.repaint({ scroll: on });
+          ctx.repaint({ scroll: false });
         })
       ]),
       acc
@@ -334,7 +340,7 @@ const Tree = (function () {
         el('div', { class: 'kicker', style: { marginBottom: '6px' }, text: 'Will build on' }),
         el('div', { class: 'row' }, builds)
       ]) : null
-    ])]);
+    ])], ctx);
     return el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
         staticTick('hourglass_empty'),
@@ -347,7 +353,7 @@ const Tree = (function () {
             el('span', { text: 'not delivered yet' })
           ]),
           DOM.icon('chev', 20, 'chev')
-        ], function (on) { setSlot('mod', mod.id, on); ctx.repaint({ scroll: on }); })
+        ], function (on) { setSlot('mod', mod.id, on); ctx.repaint({ scroll: false }); })
       ]),
       acc
     ]);
@@ -462,7 +468,7 @@ const Tree = (function () {
           el('div', { class: 'kicker', text: grp.label }),
           el('div', { class: 'stack', style: { gap: '6px' } }, grp.list.map(questionCard))
         ]);
-      }))] : []);
+      }))] : [], ctx);
 
     const count = el('span', { class: 'count' });
     registerMark(function () {
@@ -496,7 +502,7 @@ const Tree = (function () {
           ]),
           count,
           DOM.icon('chev', 20, 'chev')
-        ], function (on) { setSlot('pyq', course.id, on); ctx.repaint({ scroll: on }); })
+        ], function (on) { setSlot('pyq', course.id, on); ctx.repaint({ scroll: false }); })
       ]),
       acc
     ]);
@@ -512,7 +518,7 @@ const Tree = (function () {
 
     const acc = accordion(nid, open, open ? [el('div', { class: 'rail' },
       (course.modules || []).map(mod => moduleNode(course, mod, ctx))
-        .concat(course.pending ? [] : [pyqNode(course, ctx)]))] : []);
+        .concat(course.pending ? [] : [pyqNode(course, ctx)]))] : [], ctx);
 
     const node = el('div', { class: 'tnode' + (open ? ' open' : '') }, [
       el('div', { class: 'trow' }, [
@@ -539,7 +545,7 @@ const Tree = (function () {
           DOM.icon('chev', 20, 'chev')
         ], function (on) {
           setSlot('course', course.id, on);
-          ctx.repaint({ scroll: on });
+          ctx.repaint({ scroll: false });
         })
       ]),
       acc
@@ -550,13 +556,36 @@ const Tree = (function () {
 
   /* ── mounting ─────────────────────────────────────────────────────────── */
   function painter(host, build) {
+    let isInitial = true;
+
     function repaint(opts) {
       const o = opts || {};
       const keepY = window.scrollY;
+
+      const currentlyOpenAccs = new Set();
+      host.querySelectorAll('.acc.open').forEach(function (node) {
+        if (node.id) currentlyOpenAccs.add(node.id);
+      });
+      ctxOpenAccs = currentlyOpenAccs;
+
+      const prevH = host.offsetHeight;
+      if (prevH > 0) host.style.minHeight = prevH + 'px';
+
       marks = [];
-      const ctx = { repaint: repaint, target: null };
+      const ctx = {
+        repaint: repaint,
+        target: null,
+        isInitial: isInitial,
+        wasOpen: function (accId) { return currentlyOpenAccs.has(accId); }
+      };
+
       DOM.clear(host);
       host.appendChild(el('div', { class: 'tree' }, build(ctx)));
+
+      window.requestAnimationFrame(function () {
+        host.style.minHeight = '';
+      });
+
       const openCid = path().concept;
       document.body.classList.toggle('note-open', !!openCid);
       const openC = openCid ? Pool.concept(openCid) : null;
@@ -564,9 +593,19 @@ const Tree = (function () {
         Shell.setSubtitle(openC ? openC.title : '');
       }
       lastTarget = ctx.target;
-      if (o.scroll && ctx.target) scrollTo(ctx.target);
-      else if (o.restore !== false) window.scrollTo(0, keepY);
+
+      if (o.scroll && o.isNote && ctx.target) {
+        scrollToNote(ctx.target);
+      } else if (o.scroll && ctx.target) {
+        scrollTo(ctx.target);
+      } else if (o.restore !== false) {
+        window.scrollTo(0, keepY);
+      }
+
+      isInitial = false;
+      isInitialPaint = false;
     }
+
     /* The first paint leaves the scroll alone — the Study view decides where
        to land, via scrollToOpen(). */
     repaint({ restore: false });
@@ -574,6 +613,20 @@ const Tree = (function () {
   }
 
   let lastTarget = null;
+
+  function scrollToNote(node) {
+    if (!node) return;
+    const scrollTarget = function () {
+      const head = parseInt(getComputedStyle(document.documentElement)
+        .getPropertyValue('--head-h'), 10) || 54;
+      const rect = node.getBoundingClientRect();
+      const targetY = Math.max(0, rect.top + window.scrollY - head - 8);
+      window.scrollTo({ top: targetY, behavior: DOM.reduced() ? 'auto' : 'smooth' });
+    };
+    window.requestAnimationFrame(scrollTarget);
+    setTimeout(scrollTarget, 100);
+    setTimeout(scrollTarget, 240);
+  }
 
   function scrollTo(node) {
     if (!node) return;
@@ -588,7 +641,10 @@ const Tree = (function () {
   /* Called by the Study view once it is on screen: return to whatever was
      last left open. */
   function scrollToOpen() {
-    if (lastTarget) scrollTo(lastTarget);
+    if (lastTarget) {
+      if (path().concept) scrollToNote(lastTarget);
+      else scrollTo(lastTarget);
+    }
   }
 
   function mountAll(host, courses) {

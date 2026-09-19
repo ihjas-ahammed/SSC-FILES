@@ -66,6 +66,7 @@ const NoteBody = (function () {
     host._head = head;
     host._open = openBody;
     host._close = closeBody;
+    host._isOpen = function () { return !body.hidden; };
     return host;
   }
 
@@ -454,97 +455,123 @@ const NoteBody = (function () {
   }
 
   /* ── the section's exercises, worked here ────────────────────────────── */
-  function writtenOn(c, onTick) {
+  function writtenOn(c, onTick, isOpen) {
     const qs = Pool.writtenFor(c.id);
     if (!qs.length) return null;
 
-    return el('div', { class: 'stack', style: { gap: '8px' } }, [
-      el('div', { class: 'kicker', text: 'Exercises on this' }),
-      el('p', { class: 'small muted', style: { margin: 0 },
-        text: 'Every exercise in this section has to be worked through before the section '
-          + 'turns green. Work it on paper or in the scratchpad, then mark it complete.' }),
-      el('div', { class: 'stack', style: { gap: '8px' } }, qs.map(function (q) {
-        const mark = el('span', { class: 'ix' });
-        function paintMark() {
-          DOM.clear(mark);
-          const on = Progress.taskDone(q);
-          mark.className = 'ix' + (on ? ' ok' : '');
-          mark.appendChild(DOM.mi(on ? 'check' : 'radio_button_unchecked', 'xs'));
-        }
-        paintMark();
+    const countSpan = el('span', { class: 'count' });
+    const mark = el('span', { class: 'ix' });
 
-        return expander({
-          cls: 'exp-q',
-          open: true,
-          mark: mark,
-          title: q.title || ('Exercise ' + q.id),
-          sub: (q.marks || '?') + ' ' + DOM.plural(q.marks || 0, 'mark'),
-          build: function () {
-            const tryHost = el('div', { class: 'stack', style: { gap: '8px', marginTop: '8px' }, hidden: true });
-            const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
-            let tryBuilt = false, answerBuilt = false;
+    function updateHeader() {
+      const done = qs.filter(q => Progress.taskDone(q)).length;
+      const allDone = done === qs.length;
+      DOM.clear(mark);
+      mark.className = 'ix' + (allDone ? ' ok' : '');
+      mark.appendChild(DOM.mi(allDone ? 'check' : 'radio_button_unchecked', 'xs'));
+      countSpan.textContent = done + ' / ' + qs.length;
+    }
+    updateHeader();
 
-            function buildTry() {
-              const kids = [];
-              if (q.approach) {
-                kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
-                  el('div', { class: 'kicker' }, [DOM.mi('lightbulb', 'xs'), el('span', { text: ' Approach' })]),
-                  el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
-                ]));
+    const exp = expander({
+      cls: 'exp-exercises',
+      open: !!isOpen,
+      mark: mark,
+      title: 'Exercises on this',
+      sub: qs.length + ' ' + DOM.plural(qs.length, 'exercise') + ' · completing them is level 3',
+      badge: countSpan,
+      build: function () {
+        return [
+          el('p', { class: 'small muted', style: { margin: '0 0 10px' },
+            text: 'Every exercise in this section has to be worked through before the section '
+              + 'turns green. Work it on paper or in the scratchpad, then mark it complete.' }),
+          el('div', { class: 'stack', style: { gap: '8px' } }, qs.map(function (q) {
+            const qMark = el('span', { class: 'ix' });
+            function paintQMark() {
+              DOM.clear(qMark);
+              const on = Progress.taskDone(q);
+              qMark.className = 'ix' + (on ? ' ok' : '');
+              qMark.appendChild(DOM.mi(on ? 'check' : 'radio_button_unchecked', 'xs'));
+            }
+            paintQMark();
+
+            return expander({
+              cls: 'exp-q',
+              open: true,
+              mark: qMark,
+              title: q.title || ('Exercise ' + q.id),
+              sub: (q.marks || '?') + ' ' + DOM.plural(q.marks || 0, 'mark'),
+              build: function () {
+                const tryHost = el('div', { class: 'stack', style: { gap: '8px', marginTop: '8px' }, hidden: true });
+                const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
+                let tryBuilt = false, answerBuilt = false;
+
+                function buildTry() {
+                  const kids = [];
+                  if (q.approach) {
+                    kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
+                      el('div', { class: 'kicker' }, [DOM.mi('lightbulb', 'xs'), el('span', { text: ' Approach' })]),
+                      el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
+                    ]));
+                  }
+                  const pad = el('div', { class: 'scratch' });
+                  WriteBox.mount(pad, {
+                    draftKey: 'written:' + q.id, concept: c,
+                    label: 'Scratchpad · draft your answer before you look',
+                    placeholder: 'Start with what the question is really testing…'
+                  });
+                  kids.push(pad);
+                  return kids;
+                }
+
+                function buildAnswer() {
+                  return [
+                    q.approach ? el('div', { html: q.approach }) : null,
+                    q.solution ? el('div', { html: q.solution }) : null,
+                    q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
+                  ];
+                }
+
+                const tryBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
+                  [DOM.mi('lightbulb', 'sm'), el('span', { class: 'lb', text: 'Try it (hint)' })]);
+                const showBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
+                  [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: 'Show answer' })]);
+
+                tryBtn.addEventListener('click', function () {
+                  const open = tryHost.hidden;
+                  if (open && !tryBuilt) { tryBuilt = true; DOM.add(tryHost, buildTry()); UI.math(tryHost); }
+                  tryHost.hidden = !open;
+                  tryBtn.setAttribute('aria-expanded', String(open));
+                  tryBtn.querySelector('.lb').textContent = open ? 'Hide hint' : 'Try it (hint)';
+                });
+
+                showBtn.addEventListener('click', function () {
+                  const open = answerHost.hidden;
+                  if (open && !answerBuilt) { answerBuilt = true; DOM.add(answerHost, buildAnswer()); UI.math(answerHost); }
+                  answerHost.hidden = !open;
+                  showBtn.setAttribute('aria-expanded', String(open));
+                  showBtn.querySelector('.lb').textContent = open ? 'Hide answer' : 'Show answer';
+                });
+
+                return [
+                  el('div', { class: 'prose tight', html: q.prompt }),
+                  el('div', { class: 'row', style: { gap: '8px', marginTop: '10px', flexWrap: 'wrap' } },
+                    [tryBtn, showBtn]),
+                  tryHost, answerHost,
+                  taskRow('w:' + q.id, { noun: 'exercise', onTick: function () {
+                    paintQMark();
+                    updateHeader();
+                    if (onTick) onTick();
+                  } })
+                ];
               }
-              const pad = el('div', { class: 'scratch' });
-              WriteBox.mount(pad, {
-                draftKey: 'written:' + q.id, concept: c,
-                label: 'Scratchpad · draft your answer before you look',
-                placeholder: 'Start with what the question is really testing…'
-              });
-              kids.push(pad);
-              return kids;
-            }
-
-            function buildAnswer() {
-              return [
-                q.approach ? el('div', { html: q.approach }) : null,
-                q.solution ? el('div', { html: q.solution }) : null,
-                q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
-              ];
-            }
-
-            const tryBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
-              [DOM.mi('lightbulb', 'sm'), el('span', { class: 'lb', text: 'Try it (hint)' })]);
-            const showBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
-              [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: 'Show answer' })]);
-
-            tryBtn.addEventListener('click', function () {
-              const open = tryHost.hidden;
-              if (open && !tryBuilt) { tryBuilt = true; DOM.add(tryHost, buildTry()); UI.math(tryHost); }
-              tryHost.hidden = !open;
-              tryBtn.setAttribute('aria-expanded', String(open));
-              tryBtn.querySelector('.lb').textContent = open ? 'Hide hint' : 'Try it (hint)';
             });
+          }))
+        ];
+      }
+    });
 
-            showBtn.addEventListener('click', function () {
-              const open = answerHost.hidden;
-              if (open && !answerBuilt) { answerBuilt = true; DOM.add(answerHost, buildAnswer()); UI.math(answerHost); }
-              answerHost.hidden = !open;
-              showBtn.setAttribute('aria-expanded', String(open));
-              showBtn.querySelector('.lb').textContent = open ? 'Hide answer' : 'Show answer';
-            });
-
-            return [
-              el('div', { class: 'prose tight', html: q.prompt }),
-              el('div', { class: 'row', style: { gap: '8px', marginTop: '10px', flexWrap: 'wrap' } },
-                [tryBtn, showBtn]),
-              tryHost, answerHost,
-              taskRow('w:' + q.id, { noun: 'exercise', onTick: function () {
-                paintMark();
-                if (onTick) onTick();
-              } })
-            ];
-          }
-        });
-      }))
-    ]);
+    exp._updateHeader = updateHeader;
+    return exp;
   }
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -567,9 +594,20 @@ const NoteBody = (function () {
     const doneBtn = el('button', { class: 'btn', type: 'button' });
     let syncProofTick = null;
 
+    const isL2Complete = Progress.level(c.id) >= 2;
+    const wView = writtenOn(c, function () { paintDone(); }, isL2Complete);
+
     function paintDone() {
       Progress.dropCache();
       const on = Store.isDone(c.id);
+      const isL2 = Progress.level(c.id) >= 2;
+
+      if (wView) {
+        if (wView._updateHeader) wView._updateHeader();
+        if (isL2 && wView._open && !wView._isOpen()) {
+          wView._open();
+        }
+      }
 
       DOM.clear(badgesHost);
       DOM.add(badgesHost, [UI.kindBadge(c), UI.tierBadge(c), UI.levelBadge(c.id)].filter(Boolean));
@@ -674,7 +712,7 @@ const NoteBody = (function () {
       prereqPath(c),
       pView,
       traps(c),
-      writtenOn(c, function () { paintDone(); }),
+      wView,
       questionsOn(c),
       writeWorkspace(c),
       selfChecks(c),
