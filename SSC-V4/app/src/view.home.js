@@ -5,10 +5,11 @@
    a note is Level 1 "completed" and says nothing about recall, so the numbers
    are never merged into one flattering percentage.
 
-   This screen also owns the level switch. The app opens at Level 1 for
-   everyone and stays there until Level 2 is unlocked — by finishing a whole
-   course at Level 1, or deliberately, here in settings. Nothing promotes a
-   learner silently.
+   There is no level switch any more. A course does not get *set* to level 2;
+   it arrives there when every note in it has had its proof worked, and at
+   level 3 when every section's exercises are done. The card shows the colour
+   the course has actually earned — red, amber, green — and what is owed for
+   the next one.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewHome = (function () {
@@ -16,8 +17,8 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0]
-      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.state(c.id) === 'none')[0]
+    return Pool.concepts().filter(c => Progress.level(c.id) === 0)[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.level(c.id) === 0)[0]
       || null;
   }
   function nextCard() {
@@ -26,19 +27,27 @@ const ViewHome = (function () {
   function nextQuestion() {
     return Pool.objective().filter(q => !(Store.omr(q.id) || {}).first)[0] || null;
   }
-  /* only from courses actually held to Level 2 — offering proof work on a
-     course still at Level 1 is offering work the learner has not opted into */
+  /* the next proof owed on something already read — offering proof work on a
+     note nobody has opened is offering work out of order */
   function nextProof() {
-    return Pool.concepts().filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
-      || Pool.concepts(null, { includeExt: true }).filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+    return Pool.concepts().filter(c => Progress.level(c.id) === 1)[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.level(c.id) === 1)[0]
       || null;
+  }
+
+  /* the next section exercise owed, for level 3 */
+  function nextExercise() {
+    const qs = Pool.written();
+    for (let i = 0; i < qs.length; i++) {
+      if (!Progress.taskDone(qs[i])) return qs[i];
+    }
+    return null;
   }
 
   function step(n, label, detail, href, ready) {
     return el('a', { class: 'item', href: Router.href(href) }, [
-      el('span', { class: 'ix' + (ready ? '' : ' ok'), text: ready ? String(n) : '✓' }),
+      ready ? el('span', { class: 'ix', text: String(n) })
+            : el('span', { class: 'ix ok' }, [DOM.mi('check', 'xs')]),
       el('span', { class: 'tt' }, [
         el('b', { text: label }),
         el('span', { text: detail })
@@ -47,66 +56,60 @@ const ViewHome = (function () {
     ]);
   }
 
-  /* One course, with its OWN level. The ring counts whatever "done" means for
-     this course, so a course switched to Level 2 shows its proof work and a
-     course still at Level 1 is untouched by that decision. */
-  function courseCard(course, repaint) {
-    const ids = Pool.ids.concepts(course.id);
-    const c = Progress.count(ids);
-    const at = Store.level(course.id);
-    const pc = DOM.pct(c.done, c.total);
+  /* One course, and the level it has EARNED. The ring is coloured by the
+     weakest note in it, because a course is not at level 2 while something in
+     it is still unread — and the bar underneath shows how the three levels are
+     spread, which a single percentage cannot. */
+  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done'];
 
-    const ring = el('span', {
-      class: 'ring' + (c.total && c.done === c.total ? ' done' : ''),
-      role: 'img', 'aria-label': c.done + ' of ' + c.total + ' complete at level ' + at
-    }, [el('i', { text: c.total ? c.done + '/' + c.total : '—' })]);
-    window.requestAnimationFrame(() => ring.style.setProperty('--p', pc));
-
+  function courseCard(course) {
     if (course.pending) {
       return el('div', { class: 'card' }, [
         el('div', { class: 'spread' }, [
           el('div', { class: 'kicker', text: course.title }),
-          el('span', { class: 'badge warn', text: 'level 3' })
+          el('span', { class: 'badge warn', text: 'pending' })
         ]),
         el('p', { class: 'small muted', style: { margin: '8px 0 0' },
-          text: course.pendingNote || 'Content arrives at Level 3.' })
+          text: course.pendingNote || 'Content has not been delivered yet.' })
       ]);
     }
 
-    const proofIds = Pool.ids.proofs(course.id);
-    const proofsDone = proofIds.filter(Store.isProofDone).length;
+    const ids = Pool.ids.concepts(course.id);
+    const c = Progress.count(ids);
+    const top = Progress.ceilingOf(ids);
+    const tasks = Pool.ids.written(course.id);
+    const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
+
+    const owed = c.min === 0 ? (c.total - c.l1) + ' still to read for a red tick'
+      : c.min === 1 ? (c.total - c.l2) + ' proofs still owed for an amber tick'
+      : c.min === 2 ? (top < 3
+          ? 'green needs the section exercises, which are not delivered yet'
+          : (c.total - c.l3) + ' notes still short of their section exercises')
+      : 'every level earned';
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('a', { class: 'kicker', style: { textDecoration: 'none' },
           href: Router.href('study/' + course.id), text: course.title }),
-        UI.levelBadge(course.id)
+        el('span', { class: 'badge' + (c.min ? ' lv' + c.min : ''),
+          text: c.min ? 'level ' + c.min + ' · ' + LEVEL_WORD[c.min] : 'not started' })
       ]),
       el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
-        ring,
+        UI.levelRing(c, course.title),
         el('span', { class: 'tt' }, [
-          el('b', { text: c.done + ' of ' + c.total + (at === 2 ? ' at level 2' : ' ticked') }),
-          el('span', { text: at === 2
-            ? (c.part ? c.part + ' ticked with the proof still outstanding' : course.blurb)
-            : course.blurb })
+          el('b', { text: c.l1 + ' read · ' + c.l2 + ' proofs · ' + c.l3 + ' green, of ' + c.total }),
+          el('span', { text: course.blurb })
         ])
       ]),
-      at === 2 && proofIds.length
-        ? el('div', { style: { marginTop: '10px' } }, [
-            el('div', { class: 'spread' }, [
-              el('span', { class: 'count', text: 'proofs worked' }),
-              el('span', { class: 'count', text: proofsDone + '/' + proofIds.length })
-            ]),
-            el('div', { style: { marginTop: '6px' } }, [UI.meter(proofsDone, proofIds.length)])
-          ])
-        : null,
-      el('div', { style: { marginTop: '12px' } }, [UI.levelSwitch(course, repaint)]),
-      el('p', { class: 'small muted', style: { margin: '8px 0 0' },
-        text: at === 2
-          ? 'At Level 2 a note counts as done once its proof is worked through.'
-          : (Store.unlocked(course.id)
-              ? 'Level 2 is unlocked here — switch when you want the proofs to count.'
-              : 'Finish this course at Level 1 and Level 2 unlocks by itself.') })
+      el('div', { style: { marginTop: '12px' } }, [UI.levelBar(c)]),
+      tasks.length ? el('div', { style: { marginTop: '12px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: 'section exercises worked' }),
+          el('span', { class: 'count', text: tasksDone + '/' + tasks.length })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.meter(tasksDone, tasks.length, 3)])
+      ]) : null,
+      el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: owed })
     ]);
   }
 
@@ -189,34 +192,29 @@ const ViewHome = (function () {
   }
 
   function render() {
-    /* Any course at Level 2 is enough to make the proof surfaces worth
-       showing; the numbers themselves are per course, on the cards below. */
-    const anyL2 = Pool.courses().some(c => Store.level(c.id) === 2);
     const all = Pool.ids.concepts();
     const overall = Progress.count(all);
     const s = Store.summary(all, Pool.ids.cards(), Pool.ids.objective(), Pool.ids.proofs());
-    const note = nextUndone(), card = nextCard(), q = nextQuestion(), pf = nextProof();
+    const note = nextUndone(), card = nextCard(), q = nextQuestion();
+    const pf = nextProof(), ex = nextExercise();
+    const exTarget = ex ? (Pool.concept((ex.tests || [])[0]) || null) : null;
 
     const root = el('div', { class: 'stack' });
 
     const tiles = [
-      UI.stat(overall.done + '/' + overall.total, 'Notes complete',
-        anyL2 ? 'each at its own level' : 'ladder level 1',
-        UI.meter(overall.done, overall.total)),
+      UI.stat(overall.l1 + '/' + overall.total, 'Read', 'level 1',
+        UI.levelBar(overall, { key: false })),
       UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—',
         'First-try recall',
         s.cards.tried + ' of ' + s.cards.total + ' tried'),
       UI.stat(s.omr.locked ? DOM.pct(s.omr.correct, s.omr.locked) + '%' : '—',
         'First-try correct',
-        s.omr.locked + ' of ' + s.omr.total + ' locked')
+        s.omr.locked + ' of ' + s.omr.total + ' locked'),
+      UI.stat(overall.l2 + '/' + overall.total, 'Proofs worked', 'level 2',
+        UI.meter(overall.l2, overall.total, 2)),
+      UI.stat(overall.l3 + '/' + overall.total, 'Sections green', 'level 3',
+        UI.meter(overall.l3, overall.total, 3))
     ];
-    if (anyL2) {
-      const l2ids = Pool.courses().filter(c => Store.level(c.id) === 2)
-        .reduce((acc, c) => acc.concat(Pool.ids.proofs(c.id)), []);
-      const pdone = l2ids.filter(Store.isProofDone).length;
-      tiles.push(UI.stat(pdone + '/' + l2ids.length, 'Proofs worked', 'ladder level 2',
-        UI.meter(pdone, l2ids.length)));
-    }
 
     const loop = [
       step(1, note ? 'Read: ' + note.title : 'Every syllabus note has been read once',
@@ -227,13 +225,16 @@ const ViewHome = (function () {
         'recall', !!card),
       step(3, q ? 'Answer the next question' : 'Every question has been locked once',
         q ? q.type + ' · ' + Pool.sectionTitle(q.sec) : 'Review the worked answers any time',
-        q ? 'omr/' + q.id : 'omr', !!q)
+        q ? 'omr/' + q.id : 'omr', !!q),
+      step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof you have read is worked through',
+        pf ? (Pool.sectionTitle(pf.sec) + ' · earns level 2') : 'Level 2 is clear',
+        pf ? 'note/' + pf.id : 'study', !!pf),
+      step(5, ex ? 'Work the exercise: ' + (ex.title || ex.id)
+              : 'Every delivered exercise is worked through',
+        ex ? ((exTarget ? Pool.sectionTitle(exTarget.sec) + ' · ' : '') + 'earns level 3')
+           : 'Level 3 is clear for everything delivered',
+        ex && exTarget ? 'note/' + exTarget.id : 'study', !!ex)
     ];
-    if (anyL2) {
-      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every syllabus proof has been worked through',
-        pf ? (Pool.sectionTitle(pf.sec) + (Pool.isExt(pf) ? ' · outside syllabus' : '')) : 'Levels 3–5 need delayed evidence, which is not built yet',
-        pf ? 'note/' + pf.id : 'study', !!pf));
-    }
 
     DOM.add(root, [
       UI.title('Today'),
@@ -244,9 +245,9 @@ const ViewHome = (function () {
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'The loop' }),
         el('p', { class: 'small muted', style: { margin: '4px 0 12px' },
-          text: anyL2
-            ? 'Read it → state it from memory → answer questions on it → produce the proof yourself. Feedback comes after the attempt, never before.'
-            : 'Read it → state it from memory → answer questions on it. Feedback comes after the attempt, never before.' }),
+          text: 'Read it, state it from memory, answer questions on it, produce the proof '
+            + 'yourself, then work the section\'s exercises. Feedback comes after the attempt, '
+            + 'never before.' }),
         el('div', { class: 'list' }, loop)
       ]),
 
@@ -256,18 +257,33 @@ const ViewHome = (function () {
           el('a', { class: 'chip', href: Router.href('study'), text: 'Open the syllabus' })
         ]),
         el('p', { class: 'small muted', style: { margin: '0 0 10px' },
-          text: 'Each course carries its own level. Raising one does not raise the others.' }),
+          text: 'A course carries the colour of its weakest note. Nothing here is switched on '
+            + 'or off — the level is whatever the work says it is.' }),
         el('div', { class: 'stack', style: { gap: '12px' } },
-          Pool.courses().map(course => courseCard(course, function () { Router.reload(); })))
+          Pool.courses().map(course => courseCard(course)))
       ]),
 
       el('div', { class: 'card tint' }, [
-        el('div', { class: 'kicker', text: 'Mastery ladder' }),
-        el('p', { class: 'small muted', style: { margin: '4px 0 10px' },
-          text: anyL2
-            ? 'A tick earns level 1. Working a proof through earns level 2 on that proof, in the courses you have switched. Levels 3–5 need delayed evidence, which is not built yet.'
-            : 'A tick earns level 1 and nothing more. Recall levels need evidence, and that evidence is collected from Level 2 onwards.' }),
-        UI.ladder(false, false)
+        el('div', { class: 'kicker', text: 'What the three colours mean' }),
+        el('div', { class: 'stack', style: { gap: '8px', marginTop: '10px' } }, [
+          el('div', { class: 'row' }, [
+            el('span', { class: 'badge lv1', text: 'level 1' }),
+            el('span', { class: 'small muted', text: 'you have read it' })
+          ]),
+          el('div', { class: 'row' }, [
+            el('span', { class: 'badge lv2', text: 'level 2' }),
+            el('span', { class: 'small muted',
+              text: 'you produced its proof yourself (definitions and examples arrive here with the tick)' })
+          ]),
+          el('div', { class: 'row' }, [
+            el('span', { class: 'badge lv3', text: 'level 3' }),
+            el('span', { class: 'small muted',
+              text: 'every Bartle exercise in its section is worked through' })
+          ])
+        ]),
+        el('p', { class: 'small muted', style: { margin: '12px 0 0' },
+          text: 'A module or a course takes the colour of the weakest thing inside it, so all '
+            + 'red before red, all amber before amber, all green before green.' })
       ]),
 
       syncCard(),

@@ -18,6 +18,7 @@ const Pool = (function () {
   const deck = [];          /* statement cards, in course order */
   const objFor = {};        /* concept id -> [objective question] */
   const writFor = {};       /* concept id -> [written question] */
+  const writSec = {};       /* section id  -> [written question] */
   const neededBy = {};      /* concept id -> [concept that lists it in needs] */
   const background = [];    /* nodes with no section in any course */
   let courses = [], objective = [], written = [], titles = {}, extSecs = {}, mock = false;
@@ -60,6 +61,22 @@ const Pool = (function () {
 
     objective.forEach(q => (q.tests || []).forEach(t => (objFor[t] || (objFor[t] = [])).push(q)));
     written.forEach(q => (q.tests || []).forEach(t => (writFor[t] || (writFor[t] = [])).push(q)));
+
+    /* Level 3 is a section-wide bar, so the exercises are indexed by section
+       as well as by concept. A question reaches a section either by naming it
+       (`sec`) or by testing a concept that lives in it — an exercise filed
+       against two sections counts in both, and is listed once in each. */
+    written.forEach(function (q) {
+      const secs = {};
+      if (q.sec) secs[q.sec] = true;
+      (q.tests || []).forEach(function (t) {
+        const c = byId[t];
+        if (c && c.sec) secs[c.sec] = true;
+      });
+      Object.keys(secs).forEach(function (sec) {
+        (writSec[sec] || (writSec[sec] = [])).push(q);
+      });
+    });
   }
 
   /* every in-course section, in display order */
@@ -82,6 +99,7 @@ const Pool = (function () {
   const moduleOfSec = sec => (secMeta[sec] && secMeta[sec].module) || null;
   const objectiveFor = cid => objFor[cid] || [];
   const writtenFor = cid => writFor[cid] || [];
+  const writtenForSec = sec => writSec[sec] || [];
   const objectiveOne = id => objective.filter(q => q.id === id)[0] || null;
 
   function isExtSec(sec) {
@@ -147,13 +165,25 @@ const Pool = (function () {
     /* Level 2 counts proof work, so its denominator is the concepts that
        actually carry a proof — not every note. */
     proofs: courseId => conceptList(courseId, { includeExt: false }).filter(c => c.proof).map(c => c.id),
-    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id)
+    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id),
+    /* Level 3's denominator: every exercise reachable from a course's own
+       sections, de-duplicated, because one exercise may span two sections. */
+    written: function (courseId) {
+      const seen = {}, out = [];
+      sections(courseId).forEach(s => writtenForSec(s.sec).forEach(function (q) {
+        if (seen[q.id]) return;
+        seen[q.id] = true;
+        out.push(q.id);
+      }));
+      return out;
+    }
   };
 
   return {
     build, sections, sectionTitle, concept, concepts: conceptList, course,
     courses: () => courses, courseOfSec, moduleOfSec, deck: () => deck,
-    objective: () => objective, objectiveOne, objectiveFor, writtenFor,
+    objective: () => objective, objectiveOne, objectiveFor, writtenFor, writtenForSec,
+    written: () => written,
     background: () => background, chain, unlocks, neighbours, ids,
     isExtSec, isExt, isMock: () => mock
   };

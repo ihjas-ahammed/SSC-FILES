@@ -10,6 +10,10 @@
      cards: { q, a, kind }  with kind 'state' feeding the recall deck
      proof: { idea, why, rungs:[{why,m}], ends }  on every theorem, so the
             Level 2 proof-work mark has something real to be claimed against
+     img: ['<diagram basename>']  the rendered diagrams in `diagrams/`. The
+            mock ids are `m.*` and the diagrams are filed under `c.*`, so these
+            nodes name them explicitly; validated `c.*` concepts are matched by
+            id automatically through app/src/fig.diagrams.js
    ══════════════════════════════════════════════════════════════════════════ */
 
 CONCEPTS.push(
@@ -46,7 +50,7 @@ CONCEPTS.push(
         a: 'No. A maximum is a supremum that happens to lie in $S$; $(0,1)$ has $\\sup=1$ and no maximum.' }
     ] },
 
-  { id: 'm.2.3.6', sec: '2.3', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.2.3.6', img: ['c.2.3.6_completeness_supremum_property'], sec: '2.3', kind: 'theorem', tier: 'core', mock: true,
     title: 'The Completeness (Supremum) Property of ℝ',
     oneLine: 'Every nonempty set of reals with a ceiling has a least ceiling — inside ℝ.',
     statement: `<p>Every nonempty subset of $\\mathbb{R}$ that is bounded above has a supremum
@@ -98,7 +102,7 @@ CONCEPTS.push(
         a: 'No — only a supremum, which need not be attained. $(0,1)$ has $\\sup=1\\notin(0,1)$.' }
     ] },
 
-  { id: 'm.3.4.8', sec: '3.4', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.3.4.8', img: ['c.3.4.8_bolzano_weierstrass_theorem'], sec: '3.4', kind: 'theorem', tier: 'core', mock: true,
     title: 'The Bolzano–Weierstrass Theorem',
     oneLine: 'A bounded sequence always hides a convergent subsequence inside it.',
     statement: `<p>Every bounded sequence of real numbers has a convergent subsequence.</p>`,
@@ -146,7 +150,7 @@ CONCEPTS.push(
         a: 'No. Convergence needs <i>every</i> subsequence to share one limit.' }
     ] },
 
-  { id: 'm.5.1.1', sec: '5.1', kind: 'definition', tier: 'core', mock: true,
+  { id: 'm.5.1.1', img: ['c.5.1.1_continuity_at_a_point'], sec: '5.1', kind: 'definition', tier: 'core', mock: true,
     title: 'Continuity at a Point',
     oneLine: 'You can force f(x) as close to f(c) as demanded by keeping x close enough to c.',
     statement: `<p>Let $A\\subseteq\\mathbb{R}$, let $f:A\\to\\mathbb{R}$, and let $c\\in A$. Then $f$
@@ -176,7 +180,7 @@ CONCEPTS.push(
         a: 'On both. Only uniform continuity requires a single $\\delta$ that works at every point of the set.' }
     ] },
 
-  { id: 'm.5.1.3', sec: '5.1', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.1.3', img: ['c.5.1.3_sequential_criterion_for_continuity'], sec: '5.1', kind: 'theorem', tier: 'core', mock: true,
     title: 'Sequential Criterion for Continuity',
     oneLine: 'Continuity = every sequence heading to c has images heading to f(c).',
     statement: `<p>Let $A\\subseteq\\mathbb{R}$, $f:A\\to\\mathbb{R}$ and $c\\in A$. Then $f$ is
@@ -226,7 +230,7 @@ CONCEPTS.push(
         a: 'The constant sequence $x_{n}=c$ always satisfies it, so it holds for every function at every point.' }
     ] },
 
-  { id: 'm.5.3.4', sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.3.4', img: ['c.5.3.4_maximum_minimum_theorem', 'c.5.3.4_failure_extremum_open_interval'], sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
     title: 'Maximum–Minimum Theorem',
     oneLine: 'On a closed bounded interval, a continuous function actually attains its extremes.',
     statement: `<p>Let $I=[a,b]$ be a closed bounded interval and let $f:I\\to\\mathbb{R}$ be
@@ -280,7 +284,7 @@ CONCEPTS.push(
         a: 'No. $(0,1]$ is not closed, so the theorem does not apply; $f$ has minimum $1$ at $x=1$ and no maximum.' }
     ] },
 
-  { id: 'm.5.3.7', sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.3.7', img: ['c.5.3.7_bolzano_intermediate_value_theorem'], sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
     title: "Bolzano's Intermediate Value Theorem",
     oneLine: 'A continuous function on an interval skips no value between two of its values.',
     statement: `<p>Let $I=[a,b]$ and let $f:I\\to\\mathbb{R}$ be continuous on $I$. If $k\\in\\mathbb{R}$
@@ -329,7 +333,7 @@ CONCEPTS.push(
         a: 'No — only that at least one exists. Uniqueness needs strict monotonicity, e.g. $f\'>0$ on the interval.' }
     ] },
 
-  { id: 'm.5.4.1', sec: '5.4', kind: 'definition', tier: 'core', mock: true,
+  { id: 'm.5.4.1', img: ['c.5.4.1_uniform_continuity', 'c.5.4.2_nonuniform_continuity_criterion'], sec: '5.4', kind: 'definition', tier: 'core', mock: true,
     title: 'Uniform Continuity',
     oneLine: 'One δ must work everywhere on the set, not a fresh δ at each point.',
     statement: `<p>Let $A\\subseteq\\mathbb{R}$ and $f:A\\to\\mathbb{R}$. Then $f$ is <b>uniformly
@@ -363,7 +367,7 @@ CONCEPTS.push(
         a: 'The single $\\delta$ must serve all pairs of points; in pointwise continuity $\\delta$ may depend on the point.' }
     ] },
 
-  { id: 'm.5.4.3', sec: '5.4', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.4.3', img: ['c.5.4.3_uniform_continuity_theorem_heine_cantor'], sec: '5.4', kind: 'theorem', tier: 'core', mock: true,
     title: 'Uniform Continuity Theorem',
     oneLine: 'Continuity on a closed bounded interval is automatically uniform.',
     statement: `<p>Let $I=[a,b]$ be a closed bounded interval and let $f:I\\to\\mathbb{R}$ be
@@ -414,7 +418,7 @@ CONCEPTS.push(
         a: 'No — $1/x$ is the counterexample. The interval must be closed and bounded.' }
     ] },
 
-  { id: 'm.6.2.4', sec: '6.2', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.6.2.4', img: ['c.6.2.4_lagrange_mean_value_theorem'], sec: '6.2', kind: 'theorem', tier: 'core', mock: true,
     title: "Lagrange's Mean Value Theorem",
     oneLine: 'Somewhere inside, the tangent is parallel to the chord.',
     statement: `<p>Let $f$ be continuous on $[a,b]$ and differentiable on $(a,b)$. Then there exists

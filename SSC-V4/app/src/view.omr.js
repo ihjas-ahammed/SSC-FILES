@@ -76,8 +76,9 @@ const ViewOmr = (function () {
         const rec = Store.omr(q.id);
         const v = rec && rec.first && rec.first.verdict;
         return el('a', { class: 'item', href: Router.href('omr/' + q.id) }, [
-          el('span', { class: 'ix' + (v === 'correct' ? ' ok' : v ? ' bad' : ''),
-            text: v === 'correct' ? '✓' : v === 'wrong' ? '✗' : v === 'partial' ? '~' : String(i + 1) }),
+          el('span', { class: 'ix' + (v === 'correct' ? ' ok' : v ? ' bad' : '') },
+            [v ? DOM.mi(v === 'correct' ? 'check' : v === 'wrong' ? 'close' : 'remove', 'xs')
+               : el('span', { text: String(i + 1) })]),
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + q.sec + '  ' + Pool.sectionTitle(q.sec) }),
             el('span', { text: q.type + ' · ' + q.marks + ' ' + DOM.plural(q.marks, 'mark') +
@@ -276,11 +277,11 @@ const ViewOmr = (function () {
       const wrap = el('div', { class: 'stack' });
       const marks = awarded(q, verdict);
       const cls = verdict === 'correct' ? 'ok' : verdict === 'partial' ? 'warn' : 'bad';
-      const glyph = verdict === 'correct' ? '✓' : verdict === 'partial' ? '~' : '✗';
+      const glyph = verdict === 'correct' ? 'check_circle' : verdict === 'partial' ? 'remove_circle' : 'cancel';
 
       DOM.add(wrap, [
         el('div', { class: 'verdict ' + cls }, [
-          el('span', { class: 'g', 'aria-hidden': 'true', text: glyph }),
+          el('span', { class: 'g', 'aria-hidden': 'true' }, [DOM.mi(glyph)]),
           el('span', {}, [
             el('b', { text: verdict === 'correct' ? 'Correct' : verdict === 'partial'
               ? 'Partially correct — this paper awards nothing for a partial set' : 'Not correct' }),

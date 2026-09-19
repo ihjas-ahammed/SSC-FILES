@@ -23,6 +23,11 @@
    The full field-by-field contract is in HOOK_agy.md → "Runtime data contract".
    ══════════════════════════════════════════════════════════════════════════ */
 
+/* Where the rendered diagrams in `diagrams/` sit, relative to the PAGE.
+   The dev page is `app/index.html`, one level in; the built page is deployed
+   beside the folder, and build.py overrides this in the bundle seam. */
+const DIAGRAM_BASE = '../diagrams/';
+
 const DATA_SOURCES = {
 
   use: 'live',
@@ -30,7 +35,8 @@ const DATA_SOURCES = {
   mock: [
     'mock/mock.courses.js',
     'mock/mock.concepts.js',
-    'mock/mock.objective.js'
+    'mock/mock.objective.js',
+    'mock/mock.written.js'
   ],
 
   /* Filled in by the data handoff. Example of the expected shape:
@@ -50,8 +56,16 @@ const DATA_SOURCES = {
     '../data/ch7.js',
     '../data/ch8.js',
     '../data/ch9.js',
+    '../data/ch10.js',
     '../data/ch11.js',
+    '../data/rae.js',
+    '../data/questions.ra1.js',
     '../data/questions.ra2.m1.js',
+    '../data/questions.ra2.m2.js',
+    '../data/questions.ra2.m3.js',
+    '../data/questions.ra2.m4.js',
+    '../data/questions.rae.js',
+    '../data/questions.misc.js',
     '../data/objective.js'
   ]
 };

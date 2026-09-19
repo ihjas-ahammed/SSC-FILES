@@ -75,15 +75,26 @@ const DOM = (function () {
     window.setTimeout(() => { live.textContent = msg; }, 30);
   }
 
+  /* ── icons ───────────────────────────────────────────────────────────────
+     Material Symbols, as a ligature font. Emoji used to stand in for icons
+     here (💡, 👁, ⚠, ✓) and they were the wrong tool twice over: every
+     platform draws them differently, and they ignore the theme — a yellow
+     bulb on a dark card is not a design, it is a default. A ligature glyph
+     inherits colour and size from its parent like any other text.
+
+     `mi('bolt')` renders the icon named `bolt`. `mi('bolt', 'fill')` renders
+     its filled variant. Names come from fonts.google.com/icons. */
+  function mi(name, cls) {
+    return el('span', {
+      class: 'mi' + (cls ? ' ' + cls : ''), 'aria-hidden': 'true', translate: 'no', text: name
+    });
+  }
+
+  /* A handful of shapes are still hand-drawn SVG, because they are figures
+     rather than icons: the tree chevron animates its own rotation and has to
+     line up with a text baseline at three different sizes. */
   const ICONS = {
-    today: 'M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-16v5h6V4h-6Z',
-    study: 'M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Zm0 15A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 0 4 20.5Z',
-    recall: 'M7 4h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 16h10M9 9h6M9 12.5h4',
-    omr: 'M5 4h14v16H5zM8.5 8.5h.01M8.5 12h.01M8.5 15.5h.01M12 8.5h4M12 12h4M12 15.5h4',
-    write: 'M4 20h4l10-10a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5 4 20Zm9.5-13 3.5 3.5',
-    info: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5.1h.01M12 11.4v5.2',
-    chev: 'M9 5l7 7-7 7',
-    theme: 'M12 3v18a9 9 0 0 0 0-18Zm0 0a9 9 0 0 0 0 18'
+    chev: 'M9 5l7 7-7 7'
   };
   function icon(name, size, cls) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -146,12 +157,17 @@ const DOM = (function () {
     return node;
   }
 
-  return { el, add, clear, announce, icon, debounce, plural, pct, reduced, stagger, svg };
+  return { el, add, clear, announce, icon, mi, debounce, plural, pct, reduced, stagger, svg };
 })();
 
 /* ── hash router ─────────────────────────────────────────────────────────── */
 const Router = (function () {
   let handler = null;
+  /* How many route changes this visit has made. `history.back()` is only worth
+     offering while there is somewhere of ours to go back TO — otherwise the
+     browser walks out of the app entirely, which is not what a back button
+     inside a toolbar is understood to mean. */
+  let depth = 0;
 
   function current() {
     const raw = (location.hash || '').replace(/^#\/?/, '');
@@ -164,13 +180,28 @@ const Router = (function () {
 
   function start(fn) {
     handler = fn;
-    window.addEventListener('hashchange', () => handler(current()));
+    window.addEventListener('hashchange', function () {
+      depth += 1;
+      handler(current());
+      listeners.forEach(function (f) { try { f(current()); } catch (e) { /* never break a route */ } });
+    });
     handler(current());
   }
+
+  const listeners = [];
+  const onRoute = fn => listeners.push(fn);
+
+  /* One step back through OUR history, or home when there is none. */
+  function back() {
+    if (depth > 0) { depth -= 2; window.history.back(); return true; }
+    if (current().name !== 'home') { go('home'); return true; }
+    return false;
+  }
+  const canBack = () => depth > 0 || current().name !== 'home';
 
   const go = hash => { location.hash = hash.charAt(0) === '#' ? hash : '#/' + hash.replace(/^\//, ''); };
   const href = hash => '#/' + String(hash).replace(/^\//, '');
   const reload = () => handler && handler(current());
 
-  return { current, start, go, href, reload };
+  return { current, start, go, href, reload, back, canBack, onRoute };
 })();

@@ -50,11 +50,31 @@ CONCEPTS.push(
       idea: '(=>) If $|f_n(x) - f(x)| \\le \\varepsilon$ for all $x$, then the supremum is $\\le \\varepsilon$. (<=) If the supremum is $\\le \\varepsilon$, then every individual point is bounded by $\\varepsilon$.',
       why: 'By definition, $M \\le \\varepsilon$ is equivalent to saying $y \\le \\varepsilon$ for every element $y$ of the set.',
       rungs: [
-        { why: '(=>) Assume $(f_n)$ converges uniformly to $f$ on $A$. Given $\\varepsilon > 0$, choose $K(\\varepsilon)$ such that for all $n \\ge K(\\varepsilon)$ and all $x \\in A$, $|f_n(x) - f(x)| \\le \\varepsilon$.', m: 'n \\ge K(\\varepsilon) \\implies |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall x \\in A' },
-        { why: 'By definition of the supremum as least upper bound, taking supremum over $x \\in A$ preserves the inequality.', m: '\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall n \\ge K(\\varepsilon)' },
-        { why: 'Since $\\varepsilon > 0$ is arbitrary, $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.', m: '\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0' },
-        { why: '(<=) Conversely, assume $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$. Given $\\varepsilon > 0$, choose $H(\\varepsilon)$ such that $\\|f_n - f\\|_A < \\varepsilon$ for all $n \\ge H(\\varepsilon)$.', m: '\\|f_n - f\\|_A < \\varepsilon \\quad \\forall n \\ge H(\\varepsilon)' },
-        { why: 'For any $x \\in A$, $|f_n(x) - f(x)| \\le \\|f_n - f\\|_A < \\varepsilon$, which proves uniform convergence.', m: '|f_n(x) - f(x)| < \\varepsilon \\quad \\forall x \\in A, \\, n \\ge H(\\varepsilon)' }
+        {
+          why: '(=>) Assume $(f_n)$ converges uniformly to $f$ on $A$. Given $\\varepsilon > 0$, choose $K(\\varepsilon)$ such that for all $n \\ge K(\\varepsilon)$ and all $x \\in A$, $|f_n(x) - f(x)| \\le \\varepsilon$.',
+          m: '$$n \\ge K(\\varepsilon) \\implies |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall x \\in A$$',
+          meaning: 'What this really means: Uniform convergence guarantees that past a certain stage, every single point on the graph simultaneously lies within epsilon of the target curve.'
+        },
+        {
+          why: 'By definition of the supremum as least upper bound, taking supremum over $x \\in A$ preserves the inequality.',
+          m: '$$\\|f_n - f\\|_A = \\sup_{x \\in A} |f_n(x) - f(x)| \\le \\varepsilon \\quad \\forall n \\ge K(\\varepsilon)$$',
+          meaning: 'What this really means: If every individual point is within epsilon, then even the single worst-case point on the entire domain cannot exceed epsilon.'
+        },
+        {
+          why: 'Since $\\varepsilon > 0$ is arbitrary, $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$.',
+          m: '$$\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$$',
+          meaning: 'What this really means: The maximum peak error across the entire domain shrinks to zero like a regular sequence of real numbers.'
+        },
+        {
+          why: '(<=) Conversely, assume $\\lim_{n\\to\\infty} \\|f_n - f\\|_A = 0$. Given $\\varepsilon > 0$, choose $H(\\varepsilon)$ such that $\\|f_n - f\\|_A < \\varepsilon$ for all $n \\ge H(\\varepsilon)$.',
+          m: '$$\\|f_n - f\\|_A < \\varepsilon \\quad \\forall n \\ge H(\\varepsilon)$$',
+          meaning: 'What this really means: Assume the worst-case peak error across the domain shrinks to zero.'
+        },
+        {
+          why: 'For any $x \\in A$, $|f_n(x) - f(x)| \\le \\|f_n - f\\|_A < \\varepsilon$, which proves uniform convergence.',
+          m: '$$|f_n(x) - f(x)| < \\varepsilon \\quad \\forall x \\in A, \\, n \\ge H(\\varepsilon)$$',
+          meaning: 'What this really means: Since every point is bounded by the peak error, holding the peak below epsilon traps all points simultaneously, proving uniform convergence.'
+        }
       ],
       ends: 'Uniform convergence on $A$ is completely equivalent to $\\|f_n - f\\|_A \\to 0$.'
     },
@@ -83,10 +103,26 @@ CONCEPTS.push(
       idea: 'Negate the logical definition of uniform convergence: $\\exists \\varepsilon_0 > 0$ such that for every $K$, there exist $n \\ge K$ and $x \\in A$ with $|f_n(x) - f(x)| \\ge \\varepsilon_0$.',
       why: 'Setting $K = 1, 2, 3, \\dots$ generates the desired subsequence $(f_{n_k})$ and witness points $(x_k)$.',
       rungs: [
-        { why: 'Write the definition of uniform convergence: $\\forall \\varepsilon > 0, \\, \\exists K \\in \\mathbb{N}, \\, \\forall n \\ge K, \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon$.', m: '\\forall \\varepsilon > 0 \\, \\exists K \\in \\mathbb{N} \\, \\forall n \\ge K \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon' },
-        { why: 'Negate this statement by flipping quantifiers.', m: '\\exists \\varepsilon_0 > 0 \\, \\forall K \\in \\mathbb{N} \\, \\exists n \\ge K, \\, \\exists x \\in A : |f_n(x) - f(x)| \\ge \\varepsilon_0' },
-        { why: 'For $K = 1$, choose $n_1 \\ge 1$ and $x_1 \\in A$ such that $|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0$.', m: '|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0' },
-        { why: 'Inductively, for $K_m = n_{m-1} + 1$, choose $n_m > n_{m-1}$ and $x_m \\in A$ with $|f_{n_m}(x_m) - f(x_m)| \\ge \\varepsilon_0$.', m: 'n_1 < n_2 < \\cdots < n_k < \\cdots \\quad \\text{and} \\quad |f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0' }
+        {
+          why: 'Write the definition of uniform convergence: $\\forall \\varepsilon > 0, \\, \\exists K \\in \\mathbb{N}, \\, \\forall n \\ge K, \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon$.',
+          m: '$$\\forall \\varepsilon > 0 \\, \\exists K \\in \\mathbb{N} \\, \\forall n \\ge K \\, \\forall x \\in A : |f_n(x) - f(x)| < \\varepsilon$$',
+          meaning: 'What this really means: For convergence to be uniform, one single cutoff index must force every single point on the domain within epsilon of the limit.'
+        },
+        {
+          why: 'Negate this statement by flipping quantifiers.',
+          m: '$$\\exists \\varepsilon_0 > 0 \\, \\forall K \\in \\mathbb{N} \\, \\exists n \\ge K, \\, \\exists x \\in A : |f_n(x) - f(x)| \\ge \\varepsilon_0$$',
+          meaning: 'What this really means: Non-uniformity means there is a fixed error barrier such that no matter how far down the sequence you look, some runaway point still fails.'
+        },
+        {
+          why: 'For $K = 1$, choose $n_1 \\ge 1$ and $x_1 \\in A$ such that $|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0$.',
+          m: '$$|f_{n_1}(x_1) - f(x_1)| \\ge \\varepsilon_0$$',
+          meaning: 'What this really means: Pick the very first function index and rogue location where the error fails the barrier.'
+        },
+        {
+          why: 'Inductively, for $K_m = n_{m-1} + 1$, choose $n_m > n_{m-1}$ and $x_m \\in A$ with $|f_{n_m}(x_m) - f(x_m)| \\ge \\varepsilon_0$.',
+          m: '$$n_1 < n_2 < \\cdots < n_k < \\cdots \\quad \\text{and} \\quad |f_{n_k}(x_k) - f(x_k)| \\ge \\varepsilon_0$$',
+          meaning: 'What this really means: March endlessly down the sequence, picking a moving runaway point for each step to construct a concrete trail of failure.'
+        }
       ],
       ends: 'The sequence of witness points $(x_k)$ proves that convergence cannot be uniform.'
     },
@@ -114,11 +150,31 @@ CONCEPTS.push(
       idea: '(=>) Triangle inequality $|f_m(x) - f_n(x)| <= |f_m(x) - f(x)| + |f(x) - f_n(x)| < 2\\varepsilon$. (<=) Pointwise Cauchy gives limit $f(x)$; taking $n -> \\infty$ in $|f_m(x) - f_n(x)| <= \\varepsilon$ preserves the bound uniformly.',
       why: 'Completeness of $\\mathbb{R}$ supplies the pointwise limit, and uniform bounds pass to limits.',
       rungs: [
-        { why: '(=>) If $f_n \\to f$ uniformly on $A$, choose $K(\\varepsilon/2)$ such that $n \\ge K \\implies |f_n(x) - f(x)| \\le \\varepsilon/2$ for all $x$.', m: 'm, n \\ge K(\\varepsilon/2) \\implies |f_m(x) - f_n(x)| \\le |f_m(x) - f(x)| + |f_n(x) - f(x)| \\le \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
-        { why: 'Taking supremum over $x \\in A$ gives $\\|f_m - f_n\\|_A \\le \\varepsilon$.', m: '\\|f_m - f_n\\|_A \\le \\varepsilon \\quad \\forall m, n \\ge K(\\varepsilon/2)' },
-        { why: '(<=) Assume the Cauchy condition. For each fixed $x \\in A$, $(f_n(x))$ is a Cauchy sequence in $\\mathbb{R}$.', m: '|f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall m, n \\ge H(\\varepsilon)' },
-        { why: 'By completeness of $\\mathbb{R}$ (Theorem 3.5.5), $(f_n(x))$ converges in $\\mathbb{R}$. Define $f(x) = \\lim_{n\\to\\infty} f_n(x)$.', m: 'f(x) := \\lim_{n\\to\\infty} f_n(x) \\quad \\forall x \\in A' },
-        { why: 'Keep $m \\ge H(\\varepsilon)$ fixed and send $n \\to \\infty$ in $|f_m(x) - f_n(x)| \\le \\varepsilon$. By Theorem 3.2.6, limits preserve weak inequalities.', m: '|f_m(x) - f(x)| = \\lim_{n\\to\\infty} |f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall x \\in A, \\, m \\ge H(\\varepsilon)' }
+        {
+          why: '(=>) If $f_n \\to f$ uniformly on $A$, choose $K(\\varepsilon/2)$ such that $n \\ge K \\implies |f_n(x) - f(x)| \\le \\varepsilon/2$ for all $x$.',
+          m: '$$m, n \\ge K(\\varepsilon/2) \\implies |f_m(x) - f_n(x)| \\le |f_m(x) - f(x)| + |f_n(x) - f(x)| \\le \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$',
+          meaning: 'What this really means: If the sequence uniformly clusters around a limit curve, any two late function graphs must stay within epsilon of each other.'
+        },
+        {
+          why: 'Taking supremum over $x \\in A$ gives $\\|f_m - f_n\\|_A \\le \\varepsilon$.',
+          m: '$$\\|f_m - f_n\\|_A \\le \\varepsilon \\quad \\forall m, n \\ge K(\\varepsilon/2)$$',
+          meaning: 'What this really means: The maximum separation between any two late curves across the whole domain is bounded by epsilon.'
+        },
+        {
+          why: '(<=) Assume the Cauchy condition. For each fixed $x \\in A$, $(f_n(x))$ is a Cauchy sequence in $\\mathbb{R}$.',
+          m: '$$|f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall m, n \\ge H(\\varepsilon)$$',
+          meaning: 'What this really means: At each individual point, the output numbers form a standard Cauchy sequence of real numbers.'
+        },
+        {
+          why: 'By completeness of $\\mathbb{R}$ (Theorem 3.5.5), $(f_n(x))$ converges in $\\mathbb{R}$. Define $f(x) = \\lim_{n\\to\\infty} f_n(x)$.',
+          m: '$$f(x) := \\lim_{n\\to\\infty} f_n(x) \\quad \\forall x \\in A$$',
+          meaning: 'What this really means: Completeness of the real numbers guarantees that each point\'s sequence of values converges to an unambiguous destination.'
+        },
+        {
+          why: 'Keep $m \\ge H(\\varepsilon)$ fixed and send $n \\to \\infty$ in $|f_m(x) - f_n(x)| \\le \\varepsilon$. By Theorem 3.2.6, limits preserve weak inequalities.',
+          m: '$$|f_m(x) - f(x)| = \\lim_{n\\to\\infty} |f_m(x) - f_n(x)| \\le \\varepsilon \\quad \\forall x \\in A, \\, m \\ge H(\\varepsilon)$$',
+          meaning: 'What this really means: Passing to the limit preserves the uniform tolerance, proving that the sequence converges uniformly to this constructed limit function.'
+        }
       ],
       ends: 'Therefore $\\|f_m - f\\|_A \\le \\varepsilon$ for all $m \\ge H(\\varepsilon)$, proving uniform convergence.'
     },
@@ -150,10 +206,26 @@ CONCEPTS.push(
       idea: `Use the triangle inequality to split $|f(x) - f(c)|$ into three terms of size $\\varepsilon/3$.`,
       why: `Uniform convergence controls the gap between $f$ and $f_n$ everywhere; continuity of $f_n$ controls the local gap between $f_n(x)$ and $f_n(c)$.`,
       rungs: [
-        { why: 'Split the total change using the triangle inequality with an intermediate $f_n$.', m: '|f(x) - f(c)| \\le |f(x) - f_n(x)| + |f_n(x) - f_n(c)| + |f_n(c) - f(c)|' },
-        { why: 'Choose $N$ such that for all $n \\ge N$ and all $t \\in A$, $|f_n(t) - f(t)| < \\varepsilon/3$.', m: '|f(x) - f_N(x)| < \\varepsilon/3 \\quad \\text{and} \\quad |f_N(c) - f(c)| < \\varepsilon/3' },
-        { why: 'Since $f_N$ is continuous at $c$, choose $\\delta > 0$ such that $|x - c| < \\delta \\implies |f_N(x) - f_N(c)| < \\varepsilon/3$.', m: '|f_N(x) - f_N(c)| < \\varepsilon/3' },
-        { why: 'Combine all three $\\varepsilon/3$ bounds.', m: '|f(x) - f(c)| < \\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon' }
+        {
+          why: 'Split the total change using the triangle inequality with an intermediate $f_n$.',
+          m: '$$|f(x) - f(c)| \\le |f(x) - f_n(x)| + |f_n(x) - f_n(c)| + |f_n(c) - f(c)|$$',
+          meaning: 'What this really means: Route the change in the limit function through an intermediate continuous member of the sequence using three short hops.'
+        },
+        {
+          why: 'Choose $N$ such that for all $n \\ge N$ and all $t \\in A$, $|f_n(t) - f(t)| < \\varepsilon/3$.',
+          m: '$$|f(x) - f_N(x)| < \\varepsilon/3 \\quad \\text{and} \\quad |f_N(c) - f(c)| < \\varepsilon/3$$',
+          meaning: 'What this really means: Use uniform convergence to pick a curve so close to the limit that jumping between them at both ends costs under a third of epsilon.'
+        },
+        {
+          why: 'Since $f_N$ is continuous at $c$, choose $\\delta > 0$ such that $|x - c| < \\delta \\implies |f_N(x) - f_N(c)| < \\varepsilon/3$.',
+          m: '$$|f_N(x) - f_N(c)| < \\varepsilon/3$$',
+          meaning: 'What this really means: Because that intermediate curve is continuous, taking a sufficiently small step along it costs under a third of epsilon.'
+        },
+        {
+          why: 'Combine all three $\\varepsilon/3$ bounds.',
+          m: '$$|f(x) - f(c)| < \\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon$$',
+          meaning: 'What this really means: Adding the three hops keeps the total vertical change under epsilon, proving that the limit function is strictly continuous.'
+        }
       ],
       ends: 'Therefore, $f$ is continuous at $c$.'
     },
@@ -186,13 +258,33 @@ CONCEPTS.push(
       idea: 'Apply Lagrange MVT to $f_m - f_n$ on $[x_0, x]$ to prove $(f_n)$ is uniformly Cauchy, then apply MVT to difference quotients to show $f\'(c) = g(c)$.',
       why: 'MVT transfers uniform convergence of $(f_n\')$ into control over $|(f_m(x)-f_n(x)) - (f_m(c)-f_n(c))|/(x - c)$.',
       rungs: [
-        { why: 'For any $x \\in J$, apply MVT (6.2.4) to $f_m - f_n$ on the interval between $x_0$ and $x$.', m: 'f_m(x) - f_n(x) = f_m(x_0) - f_n(x_0) + (x - x_0)[f_m\'(y) - f_n\'(y)] \\quad \\text{for some } y' },
-        { why: 'Since $(f_n(x_0))$ converges and $(f_n\')$ is uniformly Cauchy, $(f_n)$ is uniformly Cauchy on $J$, so $f_n \\to f$ uniformly on $J$.', m: '\\|f_m - f_n\\|_J \\le |f_m(x_0) - f_n(x_0)| + (b - a)\\|f_m\' - f_n\'\\|_J < \\varepsilon' },
-        { why: 'For fixed $c \\in J$ and $x \\ne c$, apply MVT to $(f_m - f_n)$ on $[c, x]$: $\\frac{f_m(x)-f_m(c)}{x-c} - \\frac{f_n(x)-f_n(c)}{x-c} = f_m\'(z) - f_n\'(z)$.', m: '\\left| \\frac{f_m(x) - f_m(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\|f_m\' - f_n\'\\|_J < \\varepsilon' },
-        { why: 'Take $m \\to \\infty$: $|\\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c}| \\le \\varepsilon$.', m: '\\left| \\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\varepsilon' },
-        { why: 'Combine with $|f_n\'(c) - g(c)| < \\varepsilon$ and differentiability of $f_n$ at $c$ to conclude $|\\frac{f(x)-f(c)}{x-c} - g(c)| < 3\\varepsilon$.', m: 'f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} = g(c)' }
+        {
+          why: 'For any $x \\in J$, apply MVT (6.2.4) to $f_m - f_n$ on the interval between $x_0$ and $x$.',
+          m: '$$f_m(x) - f_n(x) = f_m(x_0) - f_n(x_0) + (x - x_0)[f_m\'(y) - f_n\'(y)] \\quad \\text{for some } y$$',
+          meaning: 'What this really means: The Mean Value Theorem expresses the difference between two functions as their baseline difference plus their slope difference.'
+        },
+        {
+          why: 'Since $(f_n(x_0))$ converges and $(f_n\')$ is uniformly Cauchy, $(f_n)$ is uniformly Cauchy on $J$, so $f_n \\to f$ uniformly on $J$.',
+          m: '$$\\|f_m - f_n\\|_J \\le |f_m(x_0) - f_n(x_0)| + (b - a)\\|f_m\' - f_n\'\\|_J < \\varepsilon$$',
+          meaning: 'What this really means: Because the slopes cluster uniformly and one point converges, the functions themselves are forced to converge uniformly.'
+        },
+        {
+          why: 'For fixed $c \\in J$ and $x \\ne c$, apply MVT to $(f_m - f_n)$ on $[c, x]$: $\\frac{f_m(x)-f_m(c)}{x-c} - \\frac{f_n(x)-f_n(c)}{x-c} = f_m\'(z) - f_n\'(z)$.',
+          m: '$$\\left| \\frac{f_m(x) - f_m(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\|f_m\' - f_n\'\\|_J < \\varepsilon$$',
+          meaning: 'What this really means: Secant slopes of the functions cluster uniformly because the derivatives controlling them cluster uniformly.'
+        },
+        {
+          why: 'Take $m \\to \\infty$: $|\\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c}| \\le \\varepsilon$.',
+          m: '$$\\left| \\frac{f(x) - f(c)}{x - c} - \\frac{f_n(x) - f_n(c)}{x - c} \\right| \\le \\varepsilon$$',
+          meaning: 'What this really means: Sending $m$ to infinity shows the secant slope of the limit function stays within epsilon of the secant slope of $f_n$.'
+        },
+        {
+          why: 'Combine with $|f_n\'(c) - g(c)| < \\varepsilon$ and differentiability of $f_n$ at $c$ to conclude $|\\frac{f(x)-f(c)}{x-c} - g(c)| < 3\\varepsilon$.',
+          m: '$$f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} = g(c)$$',
+          meaning: 'What this really means: The limit function\'s derivative exists and matches the uniform limit of the derivatives: $(\lim f_n)\' = \lim (f_n\')$.'
+        }
       ],
-      ends: 'The derivative of the limit equals the uniform limit of the derivatives: $(\\lim f_n)\' = \\lim f_n\'.'
+      ends: 'The derivative of the limit equals the uniform limit of the derivatives: $(\\lim f_n)\' = \\lim f_n\'$.'
     },
     cards: [
       { q: 'What key condition guarantees that $(\\lim f_n)\' = \\lim f_n\'$?', a: 'The sequence of derivatives $(f_n\')$ must converge UNIFORMLY (and $f_n(x_0)$ converges at one point).', kind: 'state' },
@@ -219,11 +311,31 @@ CONCEPTS.push(
       idea: 'Show that $\\int_a^b f_n$ forms a Cauchy sequence of real numbers using $|\\int f_m - \\int f_n| <= \\|f_m - f_n\\|(b - a)$, then show $f \\in \\mathcal{R}[a, b]$ with that limit.',
       why: 'Uniform convergence controls the gap $|f_n(x) - f(x)| < \\varepsilon$ simultaneously for all $x$, so the integral of the difference is bounded by $\\varepsilon(b - a)$.',
       rungs: [
-        { why: 'Given $\\varepsilon > 0$, by Cauchy Criterion (8.1.10), $\\exists H(\\varepsilon)$ such that for $m > n \\ge H$, $-\\varepsilon \\le f_m(x) - f_n(x) \\le \\varepsilon$ for all $x \\in [a, b]$.', m: '-\\varepsilon(b - a) \\le \\int_a^b f_m - \\int_a^b f_n \\le \\varepsilon(b - a)' },
-        { why: 'Thus $(\\int_a^b f_n)$ is a Cauchy sequence in $\\mathbb{R}$, hence converges to some limit $A = \\lim_{n\\to\\infty} \\int_a^b f_n$.', m: 'A = \\lim_{n\\to\\infty} \\int_a^b f_n' },
-        { why: 'Since $f_n \\to f$ uniformly, choose $K$ such that for $m \\ge K$, $|f_m(x) - f(x)| < \\varepsilon$ for all $x \\in [a, b]$. For any tagged partition $\\dot{\\mathcal{P}}$, $|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)' },
-        { why: 'Pick $m$ so large that $|\\int_a^b f_m - A| < \\varepsilon$. Since $f_m$ is integrable, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f_m; \\dot{\\mathcal{P}}) - \\int_a^b f_m| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - A| \\le |S(f) - S(f_m)| + |S(f_m) - \\int f_m| + |\\int f_m - A| < \\varepsilon(b - a) + 2\\varepsilon' },
-        { why: 'Since $\\varepsilon > 0$ is arbitrary, $f \\in \\mathcal{R}[a, b]$ and $\\int_a^b f = A = \\lim_{n\\to\\infty} \\int_a^b f_n$.', m: '\\int_a^b f = \\lim_{n\\to\\infty} \\int_a^b f_n' }
+        {
+          why: 'Given $\\varepsilon > 0$, by Cauchy Criterion (8.1.10), $\\exists H(\\varepsilon)$ such that for $m > n \\ge H$, $-\\varepsilon \\le f_m(x) - f_n(x) \\le \\varepsilon$ for all $x \\in [a, b]$.',
+          m: '$$-\\varepsilon(b - a) \\le \\int_a^b f_m - \\int_a^b f_n \\le \\varepsilon(b - a)$$',
+          meaning: 'What this really means: When functions stay uniformly within epsilon of each other, the difference between their total areas cannot exceed epsilon times the interval length.'
+        },
+        {
+          why: 'Thus $(\\int_a^b f_n)$ is a Cauchy sequence in $\\mathbb{R}$, hence converges to some limit $A = \\lim_{n\\to\\infty} \\int_a^b f_n$.',
+          m: '$$A = \\lim_{n\\to\\infty} \\int_a^b f_n$$',
+          meaning: 'What this really means: The sequence of real area numbers forms a Cauchy sequence, so completeness guarantees it converges to a definite limit $A$.'
+        },
+        {
+          why: 'Since $f_n \\to f$ uniformly, choose $K$ such that for $m \\ge K$, $|f_m(x) - f(x)| < \\varepsilon$ for all $x \\in [a, b]$. For any tagged partition $\\dot{\\mathcal{P}}$, $|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - S(f_m; \\dot{\\mathcal{P}})| \\le \\varepsilon(b - a)$$',
+          meaning: 'What this really means: Any Riemann sum of the limit function is tightly bound to the Riemann sum of a late sequence member.'
+        },
+        {
+          why: 'Pick $m$ so large that $|\\int_a^b f_m - A| < \\varepsilon$. Since $f_m$ is integrable, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f_m; \\dot{\\mathcal{P}}) - \\int_a^b f_m| < \\varepsilon$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - A| \\le |S(f) - S(f_m)| + |S(f_m) - \\int f_m| + |\\int f_m - A| < \\varepsilon(b - a) + 2\\varepsilon$$',
+          meaning: 'What this really means: Route the Riemann sum of $f$ to the target area $A$ through $f_m$, keeping the total discrepancy arbitrarily small.'
+        },
+        {
+          why: 'Since $\\varepsilon > 0$ is arbitrary, $f \\in \\mathcal{R}[a, b]$ and $\\int_a^b f = A = \\lim_{n\\to\\infty} \\int_a^b f_n$.',
+          m: '$$\\int_a^b f = \\lim_{n\\to\\infty} \\int_a^b f_n$$',
+          meaning: 'What this really means: The limit function is fully integrable, and the integral of the limit equals the limit of the integrals.'
+        }
       ],
       ends: 'Interchange of limit and Riemann integral is established.'
     },
@@ -253,10 +365,26 @@ CONCEPTS.push(
       idea: 'Divide $[a, b]$ into a set where $f_n \\to f$ except on a set of small measure, and use $|f_n - f| \\le 2M$ to bound the remaining contribution.',
       why: 'Uniform boundedness prevents escapes to infinity, allowing Egorov-like truncation.',
       rungs: [
-        { why: 'Let $g_n = |f_n - f|$. Then $g_n(x) \\to 0$ pointwise on $[a, b]$, and $|g_n(x)| \\le 2M$ for all $x, n$.', m: '0 \\le g_n(x) \\le 2M, \\quad \\lim_{n\\to\\infty} g_n(x) = 0' },
-        { why: 'Given $\\varepsilon > 0$, by Arzelà\'s theorem, the set of points where $g_n(x) \\ge \\frac{\\varepsilon}{2(b-a)}$ can be enclosed in subintervals of total length $< \\frac{\\varepsilon}{4M}$.', m: '\\int_{\\text{bad}} g_n \\le 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}' },
-        { why: 'On the remaining good set, $g_n(x) < \\frac{\\varepsilon}{2(b-a)}$, so its integral is bounded by $\\frac{\\varepsilon}{2(b-a)}(b - a) = \\frac{\\varepsilon}{2}$.', m: '\\int_{\\text{good}} g_n < \\frac{\\varepsilon}{2}' },
-        { why: 'Combine both parts: $\\int_a^b |f_n - f| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$.', m: '\\left| \\int_a^b f_n - \\int_a^b f \\right| \\le \\int_a^b |f_n - f| < \\varepsilon' }
+        {
+          why: 'Let $g_n = |f_n - f|$. Then $g_n(x) \\to 0$ pointwise on $[a, b]$, and $|g_n(x)| \\le 2M$ for all $x, n$.',
+          m: '$$0 \\le g_n(x) \\le 2M, \\quad \\lim_{n\\to\\infty} g_n(x) = 0$$',
+          meaning: 'What this really means: Look at the absolute gap function, which shrinks to zero at every point while staying capped beneath a universal ceiling $2M$.'
+        },
+        {
+          why: 'Given $\\varepsilon > 0$, by Arzelà\'s theorem, the set of points where $g_n(x) \\ge \\frac{\\varepsilon}{2(b-a)}$ can be enclosed in subintervals of total length $< \\frac{\\varepsilon}{4M}$.',
+          m: '$$\\int_{\\text{bad}} g_n \\le 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: The troublesome spots where the gap remains noticeable can be trapped in a tiny total footprint whose area contribution is at most half-epsilon.'
+        },
+        {
+          why: 'On the remaining good set, $g_n(x) < \\frac{\\varepsilon}{2(b-a)}$, so its integral is bounded by $\\frac{\\varepsilon}{2(b-a)}(b - a) = \\frac{\\varepsilon}{2}$.',
+          m: '$$\\int_{\\text{good}} g_n < \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: Across the rest of the domain, the gap is tiny everywhere, so its area contribution is also at most half-epsilon.'
+        },
+        {
+          why: 'Combine both parts: $\\int_a^b |f_n - f| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$.',
+          m: '$$\\left| \\int_a^b f_n - \\int_a^b f \\right| \\le \\int_a^b |f_n - f| < \\varepsilon$$',
+          meaning: 'What this really means: Combining the well-behaved region and the tiny troubled footprint keeps the total area error below epsilon, validating limit-integral swap under bounded pointwise convergence.'
+        }
       ],
       ends: 'Therefore $\\lim_{n\\to\\infty} \\int_a^b f_n = \\int_a^b f$.'
     },
@@ -288,11 +416,31 @@ CONCEPTS.push(
       idea: 'Let $g_n = f_n - f \\ge 0$ decrease to 0. If convergence were not uniform, $\\sup g_n \\ge \\varepsilon_0$; continuity on compact $[a, b]$ yields a maximum point $x_n$, whose convergent subsequence produces a contradiction.',
       why: 'Bolzano-Weierstrass extracts a cluster point where $g_n$ cannot drop to 0, contradicting pointwise convergence.',
       rungs: [
-        { why: 'Assume without loss of generality that $(f_n)$ is decreasing. Let $g_n = f_n - f$. Then each $g_n$ is continuous on $[a, b]$, $g_{n+1}(x) \\le g_n(x)$, and $g_n(x) \\to 0$ for each $x$.', m: 'g_n \\ge g_{n+1} \\ge 0, \\quad g_n(x) \\to 0 \\quad \\forall x \\in [a, b]' },
-        { why: 'Suppose for contradiction that $g_n$ does not converge uniformly to $0$. Then $\\exists \\varepsilon_0 > 0$ such that $\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0$ for all $n$.', m: '\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0 \\quad \\forall n \\in \\mathbb{N}' },
-        { why: 'Since $g_n$ is continuous on compact $[a, b]$, by Maximum-Minimum Theorem (5.3.4), $g_n$ attains its maximum at some $x_n \\in [a, b]$: $g_n(x_n) \\ge \\varepsilon_0$.', m: 'g_n(x_n) = \\sup_{x \\in [a, b]} g_n(x) \\ge \\varepsilon_0' },
-        { why: 'By Bolzano-Weierstrass (3.4.8), $(x_n)$ has a subsequence $(x_{n_k})$ converging to some $x^* \\in [a, b]$. For any fixed $m$, when $n_k \\ge m$, monotonicity gives $g_m(x_{n_k}) \\ge g_{n_k}(x_{n_k}) \\ge \\varepsilon_0$.', m: 'g_m(x_{n_k}) \\ge \\varepsilon_0 \\quad \\forall n_k \\ge m' },
-        { why: 'Take $k \\to \\infty$: by continuity of $g_m$, $g_m(x^*) = \\lim_{k\\to\\infty} g_m(x_{n_k}) \\ge \\varepsilon_0$. But this holds for ALL $m$, contradicting $g_m(x^*) \\to 0$!', m: 'g_m(x^*) \\ge \\varepsilon_0 \\quad \\forall m \\implies \\lim_{m\\to\\infty} g_m(x^*) \\ge \\varepsilon_0 > 0 \\implies\\Leftarrow' }
+        {
+          why: 'Assume without loss of generality that $(f_n)$ is decreasing. Let $g_n = f_n - f$. Then each $g_n$ is continuous on $[a, b]$, $g_{n+1}(x) \\le g_n(x)$, and $g_n(x) \\to 0$ for each $x$.',
+          m: '$$g_n \\ge g_{n+1} \\ge 0, \\quad g_n(x) \\to 0 \\quad \\forall x \\in [a, b]$$',
+          meaning: 'What this really means: Subtract the continuous limit to get a sequence of continuous non-negative functions that march downward to zero at every point.'
+        },
+        {
+          why: 'Suppose for contradiction that $g_n$ does not converge uniformly to $0$. Then $\\exists \\varepsilon_0 > 0$ such that $\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0$ for all $n$.',
+          m: '$$\\|g_n\\|_{[a, b]} \\ge \\varepsilon_0 \\quad \\forall n \\in \\mathbb{N}$$',
+          meaning: 'What this really means: Assume for contradiction that uniform convergence fails, meaning every curve in the sequence maintains a peak at or above a fixed height.'
+        },
+        {
+          why: 'Since $g_n$ is continuous on compact $[a, b]$, by Maximum-Minimum Theorem (5.3.4), $g_n$ attains its maximum at some $x_n \\in [a, b]$: $g_n(x_n) \\ge \\varepsilon_0$.',
+          m: '$$g_n(x_n) = \\sup_{x \\in [a, b]} g_n(x) \\ge \\varepsilon_0$$',
+          meaning: 'What this really means: On a compact interval, each continuous curve actually attains its peak at a specific point $x_n$.'
+        },
+        {
+          why: 'By Bolzano-Weierstrass (3.4.8), $(x_n)$ has a subsequence $(x_{n_k})$ converging to some $x^* \\in [a, b]$. For any fixed $m$, when $n_k \\ge m$, monotonicity gives $g_m(x_{n_k}) \\ge g_{n_k}(x_{n_k}) \\ge \\varepsilon_0$.',
+          m: '$$g_m(x_{n_k}) \\ge \\varepsilon_0 \\quad \\forall n_k \\ge m$$',
+          meaning: 'What this really means: The sequence of peak locations clusters around a limit point $x^*$, and monotonicity ensures an earlier function was at least as tall there.'
+        },
+        {
+          why: 'Take $k \\to \\infty$: by continuity of $g_m$, $g_m(x^*) = \\lim_{k\\to\\infty} g_m(x_{n_k}) \\ge \\varepsilon_0$. But this holds for ALL $m$, contradicting $g_m(x^*) \\to 0$!',
+          m: '$$g_m(x^*) \\ge \\varepsilon_0 \\quad \\forall m \\implies \\lim_{m\\to\\infty} g_m(x^*) \\ge \\varepsilon_0 > 0 \\implies\\Leftarrow$$',
+          meaning: 'What this really means: Passing to the limit forces that single cluster point to stay stubbornly above the threshold for all functions, contradicting pointwise convergence to zero.'
+        }
       ],
       ends: 'Contradiction! Therefore, $(g_n)$ converges uniformly to $0$, proving Dini’s Theorem.'
     },
@@ -320,6 +468,33 @@ CONCEPTS.push(
       `$e^x$ is strictly positive everywhere: $e^x > 0$ for all $x \\in \\mathbb{R}$. It never touches $0$ and never turns negative!`,
       `The natural logarithm $\\ln x$ is defined as the unique inverse function of $E(x)$ for $x > 0$, so $\\ln(e^x) = x$ and $\\frac{d}{dx}\\ln x = \\frac{1}{x}$.`
     ],
+    proof: {
+      idea: 'Differentiate the power series term-by-term on any bounded interval $[-A, A]$. The derivative series $\\sum_{n=1}^\\infty \\frac{n x^{n-1}}{n!} = \\sum_{n=1}^\\infty \\frac{x^{n-1}}{(n-1)!}$ is an exact re-indexing of the original series.',
+      why: 'Term-by-term differentiation of power series (Theorem 8.2.3) inside radius of convergence.',
+      rungs: [
+        {
+          why: 'Write the exponential function as its defining power series:',
+          m: '$$E(x) = \\sum_{n=0}^\\infty \\frac{x^n}{n!} = 1 + x + \\frac{x^2}{2!} + \\frac{x^3}{3!} + \\cdots$$',
+          meaning: 'What this really means: The function is given by a power series centered at 0 with coefficients 1/n!.'
+        },
+        {
+          why: 'Using the Ratio Test, the radius of convergence is infinite because $\\lim \\frac{n!}{(n+1)!} = \\lim \\frac{1}{n+1} = 0$, so $R = \\infty$.',
+          m: '$$R = \\lim_{n\\to\\infty} \\left| \\frac{a_n}{a_{n+1}} \\right| = \\lim_{n\\to\\infty} (n+1) = \\infty$$',
+          meaning: 'What this really means: The factorial denominator crushes growth so fast that the series converges everywhere on the real line.'
+        },
+        {
+          why: 'By Theorem 8.2.3, power series can be differentiated term-by-term inside their radius of convergence:',
+          m: '$$E\'(x) = \\sum_{n=1}^\\infty \\frac{d}{dx}\\left(\\frac{x^n}{n!}\\right) = \\sum_{n=1}^\\infty \\frac{n x^{n-1}}{n!} = \\sum_{n=1}^\\infty \\frac{x^{n-1}}{(n-1)!}$$',
+          meaning: 'What this really means: Taking the derivative shifts each power down by one and cancels the leading factor with the factorial.'
+        },
+        {
+          why: 'Re-index the sum by setting $k = n - 1$. As $n$ runs from $1$ to $\\infty$, $k$ runs from $0$ to $\\infty$:',
+          m: '$$E\'(x) = \\sum_{k=0}^\\infty \\frac{x^k}{k!} = E(x)$$',
+          meaning: 'What this really means: Shifting the index restores the exact identical formula, proving the function is its own derivative.'
+        }
+      ],
+      ends: 'Therefore $E\'(x) = E(x)$ for all $x \\in \\mathbb{R}$, with $E(0) = 1$.'
+    },
     cards: [
       { q: 'State the power series definition of $e^x$.', a: '$e^x = \\sum_{n=0}^\\infty \\dfrac{x^n}{n!} = 1 + x + \\dfrac{x^2}{2!} + \\cdots$', kind: 'state' },
       { q: 'What is the unique differential equation satisfied by $f(x) = e^x$ with $f(0) = 1$?', a: '$f\'(x) = f(x)$ and $f(0) = 1$.', kind: 'recall' }
@@ -344,6 +519,33 @@ CONCEPTS.push(
       `$\\sin x$ is an ODD function (contains only odd powers of $x$: $x^1, x^3, x^5$), so $\\sin(-x) = -\\sin x$.`,
       `$\\cos x$ is an EVEN function (contains only even powers: $x^0, x^2, x^4$), so $\\cos(-x) = \\cos x$.`
     ],
+    proof: {
+      idea: 'Differentiate $\\sin x$ and $\\cos x$ term-by-term to show $(\\sin x)\' = \\cos x$ and $(\\cos x)\' = -\\sin x$. Then define $g(x) = \\cos^2 x + \\sin^2 x$ and compute $g\'(x) = 2\\cos x(-\\sin x) + 2\\sin x(\\cos x) = 0$. Since $g\' = 0$, $g$ is constant, and $g(0) = 1$.',
+      why: 'Power series differentiation combined with the Zero Derivative Theorem (6.2.5).',
+      rungs: [
+        {
+          why: 'Differentiate the power series for $\\sin x$ term-by-term:',
+          m: '$$\\frac{d}{dx}(\\sin x) = \\sum_{n=0}^\\infty \\frac{(-1)^n (2n+1) x^{2n}}{(2n+1)!} = \\sum_{n=0}^\\infty \\frac{(-1)^n x^{2n}}{(2n)!} = \\cos x$$',
+          meaning: 'What this really means: Differentiating the odd power series cancels (2n+1) and leaves the exact even power series for cosine.'
+        },
+        {
+          why: 'Differentiate the power series for $\\cos x$ term-by-term:',
+          m: '$$\\frac{d}{dx}(\\cos x) = \\sum_{n=1}^\\infty \\frac{(-1)^n (2n) x^{2n-1}}{(2n)!} = -\\sum_{k=0}^\\infty \\frac{(-1)^k x^{2k+1}}{(2k+1)!} = -\\sin x$$',
+          meaning: 'What this really means: Differentiating the even power series shifts the index and introduces a minus sign, yielding negative sine.'
+        },
+        {
+          why: 'Define $g(x) = \\cos^2 x + \\sin^2 x$. Differentiating using the chain and product rules:',
+          m: '$$g\'(x) = 2(\\cos x)(-\\sin x) + 2(\\sin x)(\\cos x) = -2\\sin x \\cos x + 2\\sin x \\cos x = 0$$',
+          meaning: 'What this really means: The rate of change of the sum of squares is precisely zero everywhere on the line.'
+        },
+        {
+          why: 'Since $g\'(x) = 0$ for all $x \\in \\mathbb{R}$, by the Constant Function Theorem (6.2.5), $g(x)$ is constant. Evaluating at $x = 0$ gives $g(0) = 1^2 + 0^2 = 1$.',
+          m: '$$g(x) = g(0) = \\cos^2(0) + \\sin^2(0) = 1 + 0 = 1 \\quad \\forall x \\in \\mathbb{R}$$',
+          meaning: 'What this really means: The Pythagorean identity is an inescapable consequence of the power series definitions and calculus.'
+        }
+      ],
+      ends: 'Therefore $\\cos^2 x + \\sin^2 x = 1$ for all $x \\in \\mathbb{R}$.'
+    },
     cards: [
       { q: 'State the power series expansion of $\\sin x$.', a: '$\\sin x = \\sum_{n=0}^\\infty \\dfrac{(-1)^n x^{2n+1}}{(2n+1)!} = x - \\dfrac{x^3}{6} + \\dfrac{x^5}{120} - \\cdots$', kind: 'state' },
       { q: 'How is $\\cos^2 x + \\sin^2 x = 1$ proven using calculus?', a: 'Differentiate $g(x) = \\cos^2 x + \\sin^2 x$ to get $g\'(x) = 0$; since $g(0) = 1$, $g(x) = 1$ constantly.', kind: 'recall' }

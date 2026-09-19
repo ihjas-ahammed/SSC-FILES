@@ -22,6 +22,33 @@ CONCEPTS.push(
       `The Alternating Harmonic Series $\\sum \\frac{(-1)^{n+1}}{n}$ is the textbook example of a CONDITIONALLY convergent series: it converges to $\\ln 2$, but its absolute series $\\sum 1/n$ diverges!`,
       `Absolute convergence guarantees you can rearrange terms in ANY order without changing the sum. Conditional convergence destroys this property (Riemann Rearrangement Theorem)!`
     ],
+    proof: {
+      idea: 'By the triangle inequality, $|s_m - s_n| = |\\sum_{k=n+1}^m x_k| \\le \\sum_{k=n+1}^m |x_k|$. If $\\sum |x_k|$ converges, its partial sums form a Cauchy sequence, so partial sums of $\\sum x_k$ are also Cauchy and hence converge.',
+      why: 'The Cauchy Criterion for Series (3.7.2) transforms convergence into a tail bound.',
+      rungs: [
+        {
+          why: 'Let $\\varepsilon > 0$. Since $\\sum |x_n|$ converges, the Cauchy Criterion for series implies there exists $K \\in \\mathbb{N}$ such that for all $m > n \\ge K$:',
+          m: '$$\\sum_{k=n+1}^m |x_k| < \\varepsilon$$',
+          meaning: 'What this really means: The tail of the absolute series can be made as tiny as we wish past index K.'
+        },
+        {
+          why: 'By the generalized Triangle Inequality for absolute values:',
+          m: '$$\\left| \\sum_{k=n+1}^m x_k \\right| \\le \\sum_{k=n+1}^m |x_k|$$',
+          meaning: 'What this really means: The magnitude of a sum of numbers is always bounded above by the sum of their individual magnitudes.'
+        },
+        {
+          why: 'Combining the two inequalities for any $m > n \\ge K$:',
+          m: '$$|s_m - s_n| = \\left| \\sum_{k=n+1}^m x_k \\right| \\le \\sum_{k=n+1}^m |x_k| < \\varepsilon$$',
+          meaning: 'What this really means: Any two partial sums far out in the series differ by less than epsilon.'
+        },
+        {
+          why: 'This proves the sequence of partial sums $(s_n)$ is a Cauchy sequence in $\\mathbb{R}$.',
+          m: '$$(s_n) \\text{ is Cauchy in } \\mathbb{R} \\implies \\lim_{n \\to \\infty} s_n \\text{ exists}$$',
+          meaning: 'What this really means: By the completeness of the real numbers, every Cauchy sequence converges to a finite real limit.'
+        }
+      ],
+      ends: 'Therefore $\\sum x_n$ converges. Absolute convergence implies convergence.'
+    },
     cards: [
       { q: 'What is the definition of a conditionally convergent series?', a: 'A series $\\sum x_n$ that converges, but whose series of absolute values $\\sum |x_n|$ diverges.', kind: 'state' },
       { q: 'Does convergence of $\\sum |x_n|$ imply convergence of $\\sum x_n$?', a: 'Yes! Absolute convergence always implies convergence.', kind: 'recall' }
@@ -68,6 +95,38 @@ CONCEPTS.push(
       `If $x_n \\le y_n$ and $\\sum x_n$ converges, that tells you NOTHING about $\\sum y_n$! Being larger than a finite number doesn't stop you from being infinite.`,
       `If the ratio $\\lim \\frac{x_n}{y_n} = 0$ or $\\infty$, the test is inconclusive unless you check the direction carefully.`
     ],
+    proof: {
+      idea: 'Since $\\lim (x_n / y_n) = L > 0$, choosing $\\varepsilon = L/2$ traps the ratio in $(L/2, 3L/2)$. Hence $(L/2) y_n < x_n < (3L/2) y_n$. Ordinary comparison with $(3L/2) y_n$ and $(L/2) y_n$ proves both converge or both diverge.',
+      why: 'Definition of sequence limit applied to the ratio isolates bounding constants.',
+      rungs: [
+        {
+          why: 'Let $\\varepsilon = \\frac{L}{2} > 0$. Since $\\lim_{n \\to \\infty} \\frac{x_n}{y_n} = L$, there exists $K \\in \\mathbb{N}$ such that for all $n \\ge K$:',
+          m: '$$\\left| \\frac{x_n}{y_n} - L \\right| < \\frac{L}{2}$$',
+          meaning: 'What this really means: Past index K, the ratio x_n / y_n never strays by more than L/2 away from L.'
+        },
+        {
+          why: 'Unwrapping the absolute value inequality gives bounds on both sides:',
+          m: '$$-\\frac{L}{2} < \\frac{x_n}{y_n} - L < \\frac{L}{2} \\implies \\frac{L}{2} < \\frac{x_n}{y_n} < \\frac{3L}{2}$$',
+          meaning: 'What this really means: The ratio is strictly trapped between two positive constants.'
+        },
+        {
+          why: 'Multiply through by $y_n > 0$ for all $n \\ge K$:',
+          m: '$$\\left(\\frac{L}{2}\\right) y_n < x_n < \\left(\\frac{3L}{2}\\right) y_n$$',
+          meaning: 'What this really means: Each term x_n is strictly sandwiched by constant multiples of y_n.'
+        },
+        {
+          why: 'By the Direct Comparison Test: if $\\sum y_n$ converges, then $\\sum (3L/2) y_n$ converges, which forces $\\sum x_n$ to converge.',
+          m: '$$\\sum y_n < \\infty \\implies \\sum x_n \\le \\frac{3L}{2} \\sum y_n < \\infty$$',
+          meaning: 'What this really means: If y_n converges, its upper multiple caps x_n, forcing x_n to converge.'
+        },
+        {
+          why: 'Conversely, if $\\sum y_n$ diverges, then $\\sum (L/2) y_n = \\infty$, forcing $\\sum x_n = \\infty$.',
+          m: '$$\\sum y_n = \\infty \\implies \\sum x_n \\ge \\frac{L}{2} \\sum y_n = \\infty$$',
+          meaning: 'What this really means: If y_n diverges, its lower multiple pushes x_n to infinity as well.'
+        }
+      ],
+      ends: 'Thus $\\sum x_n$ and $\\sum y_n$ either both converge or both diverge together.'
+    },
     cards: [
       { q: 'State the Limit Comparison Test for positive series.', a: 'If $x_n, y_n > 0$ and $\\lim \\dfrac{x_n}{y_n} = L \\in (0, \\infty)$, then either both series converge or both diverge.', kind: 'state' },
       { q: 'Does $\\sum \\dfrac{1}{n^2 + 5}$ converge?', a: 'Yes, by comparison with the convergent $p$-series $\\sum 1/n^2$ since $\\dfrac{1}{n^2+5} < \\dfrac{1}{n^2}$.', kind: 'apply' }
@@ -97,6 +156,38 @@ CONCEPTS.push(
       `Never conclude convergence or divergence when $r = 1$! For $\\sum 1/n$, $r = 1$ (diverges); for $\\sum 1/n^2$, $r = 1$ (converges). The test tells you zero information when $r = 1$.`,
       `The Root Test is strictly stronger than the Ratio Test: whenever the Ratio Test works, the Root Test works and gives the same limit, but the Root Test can work even when the Ratio limit oscillates.`
     ],
+    proof: {
+      idea: 'If $r = \\lim |x_{n+1}/x_n| < 1$, choose $c$ with $r < c < 1$. For large $n$, $|x_{n+1}| \\le c |x_n|$. By induction, $|x_n| \\le |x_K| c^{n-K}$. Direct comparison with the convergent geometric series $\\sum c^n$ yields absolute convergence.',
+      why: 'Upper bounding by a strictly decaying geometric series with common ratio $c < 1$.',
+      rungs: [
+        {
+          why: 'Assume $r = \\lim_{n\\to\\infty} \\left| \\frac{x_{n+1}}{x_n} \\right| < 1$. Choose a constant $c$ strictly between $r$ and $1$, so $r < c < 1$.',
+          m: '$$r < c < 1, \\quad \\varepsilon = c - r > 0$$',
+          meaning: 'What this really means: We insert a fixed geometric target c between the limit ratio r and the danger boundary 1.'
+        },
+        {
+          why: 'By definition of limit, there exists $K \\in \\mathbb{N}$ such that for all $n \\ge K$:',
+          m: '$$\\left| \\frac{x_{n+1}}{x_n} \\right| < c \\implies |x_{n+1}| < c |x_n|$$',
+          meaning: 'What this really means: Past index K, every subsequent term is smaller than the previous by at least the fraction c.'
+        },
+        {
+          why: 'Applying this inequality repeatedly by induction for all $n \\ge K$:',
+          m: '$$|x_n| \\le |x_K| c^{n - K} = \\left( \\frac{|x_K|}{c^K} \\right) c^n$$',
+          meaning: 'What this really means: Cascading the step-down ratio traps each term under a constant times c^n.'
+        },
+        {
+          why: 'Since $0 < c < 1$, the geometric series $\\sum_{n=K}^\\infty c^n$ converges to $\\frac{c^K}{1 - c} < \\infty$.',
+          m: '$$\\sum_{n=K}^\\infty c^n = \\frac{c^K}{1 - c} < \\infty$$',
+          meaning: 'What this really means: Standard geometric series with ratio less than 1 always sum to a finite number.'
+        },
+        {
+          why: 'By the Direct Comparison Test, the series $\\sum_{n=K}^\\infty |x_n|$ converges, so $\\sum_{n=1}^\\infty x_n$ converges absolutely.',
+          m: '$$\\sum_{n=1}^\\infty |x_n| \\le \\sum_{n=1}^{K-1} |x_n| + \\frac{|x_K|}{c^K} \\sum_{n=K}^\\infty c^n < \\infty$$',
+          meaning: 'What this really means: Finite starting terms plus a finite geometric tail equals total absolute convergence.'
+        }
+      ],
+      ends: 'Therefore $\\sum x_n$ converges absolutely whenever $r < 1$.'
+    },
     cards: [
       { q: 'When is the Ratio Test inconclusive?', a: 'When $\\lim \\left|\\dfrac{x_{n+1}}{x_n}\\right| = 1$.', kind: 'recall' },
       { q: 'Test $\\sum_{n=1}^\\infty \\dfrac{2^n}{n!}$ for convergence.', a: 'Ratio test: $\\dfrac{x_{n+1}}{x_n} = \\dfrac{2^{n+1}}{(n+1)!} \\cdot \\dfrac{n!}{2^n} = \\dfrac{2}{n+1} \\to 0 < 1$. Converges absolutely!', kind: 'apply' }
@@ -120,6 +211,38 @@ CONCEPTS.push(
       `The function $f(t)$ MUST be DECREASING! If $f$ is not decreasing, the rectangle bounds fail.`,
       `The sum of the series does NOT equal the value of the integral! The test tells you WHETHER it converges, not what it converges to.`
     ],
+    proof: {
+      idea: 'Because $f$ is decreasing on $[k, k+1]$, $f(k+1) \\le f(t) \\le f(k)$. Integrating over $[k, k+1]$ gives $x_{k+1} \\le \\int_k^{k+1} f(t)dt \\le x_k$. Summing from $k=1$ to $n$ traps the partial sums between integrals.',
+      why: 'Decreasing monotonicity sandwiches the integral between inscribed and circumscribed rectangles.',
+      rungs: [
+        {
+          why: 'Since $f$ is decreasing on $[k, k+1]$ and $f(k) = x_k$, we have for all $t \\in [k, k+1]$:',
+          m: '$$x_{k+1} = f(k+1) \\le f(t) \\le f(k) = x_k$$',
+          meaning: 'What this really means: Because the function steadily drops, its values on the unit step are trapped between its endpoints.'
+        },
+        {
+          why: 'Integrate the inequality over the interval $[k, k+1]$ of length $1$:',
+          m: '$$x_{k+1} \\le \\int_k^{k+1} f(t) \\, dt \\le x_k$$',
+          meaning: 'What this really means: The exact area under the curve is sandwiched between the lower right box and upper left box.'
+        },
+        {
+          why: 'Summing from $k=1$ to $n$, the integrals concatenate into $\\int_1^{n+1} f(t) \\, dt$:',
+          m: '$$\\sum_{k=1}^n x_{k+1} = s_{n+1} - x_1 \\le \\int_1^{n+1} f(t) \\, dt \\le \\sum_{k=1}^n x_k = s_n$$',
+          meaning: 'What this really means: Stacking the unit strips from 1 to n adds up to the continuous integral over [1, n+1].'
+        },
+        {
+          why: 'Rearranging the two sides gives the fundamental sandwich inequality for all $n$:',
+          m: '$$\\int_1^{n+1} f(t) \\, dt \\le s_n \\le x_1 + \\int_1^n f(t) \\, dt$$',
+          meaning: 'What this really means: The partial sum is bounded below and above by the improper integral.'
+        },
+        {
+          why: 'Since $x_n > 0$ and $f(t) > 0$, $(s_n)$ and $\\int_1^n f$ are both monotone increasing, so $(s_n)$ is bounded if and only if the improper integral is bounded.',
+          m: '$$\\lim_{n\\to\\infty} s_n < \\infty \\iff \\lim_{n\\to\\infty} \\int_1^n f(t) \\, dt < \\infty$$',
+          meaning: 'What this really means: Both sequences grow monotonically, so either both hit a finite ceiling or both fly off to infinity.'
+        }
+      ],
+      ends: 'Therefore $\\sum x_n$ converges if and only if $\\int_1^\\infty f(t)\\,dt < \\infty$.'
+    },
     cards: [
       { q: 'For what values of $p$ does the $p$-series $\\sum_{n=1}^\\infty \\dfrac{1}{n^p}$ converge?', a: '$p > 1$. (Diverges for $p \\le 1$).', kind: 'state' },
       { q: 'Use the Integral Test to determine if $\\sum_{n=2}^\\infty \\dfrac{1}{n \\ln n}$ converges.', a: '$\\int_2^\\infty \\dfrac{1}{t \\ln t}\\,dt = [\\ln(\\ln t)]_2^\\infty = \\infty$. Diverges!', kind: 'apply' }
@@ -146,6 +269,38 @@ CONCEPTS.push(
       `Both conditions are mandatory! If terms are not decreasing, the series can diverge even if terms go to zero.`,
       `The error bound $|s - s_k| \\le z_{k+1}$ is amazing for exams: you can approximate the sum to within $0.01$ just by finding when the next term drops below $0.01$!`
     ],
+    proof: {
+      idea: 'Even partial sums $s_{2n}$ are increasing and bounded above by $s_1$; odd partial sums $s_{2n+1}$ are decreasing and bounded below by $s_2$. Both converge to limits $s_{even}$ and $s_{odd}$. Since $s_{2n+1} - s_{2n} = z_{2n+1} \\to 0$, the limits coincide.',
+      why: 'Monotone Convergence Theorem applied separately to even and odd subsequences.',
+      rungs: [
+        {
+          why: 'Consider the even partial sums $s_{2n} = (z_1 - z_2) + (z_3 - z_4) + \\dots + (z_{2n-1} - z_{2n})$. Since $z_k \\ge z_{k+1}$, each parenthesized pair is non-negative:',
+          m: '$$s_{2n+2} - s_{2n} = z_{2n+1} - z_{2n+2} \\ge 0 \\implies (s_{2n}) \\text{ is monotone increasing}$$',
+          meaning: 'What this really means: Every new step of two jumps adds a positive net balance, so the even points march steadily rightward.'
+        },
+        {
+          why: 'Rewrite $s_{2n} = z_1 - (z_2 - z_3) - \\dots - (z_{2n-2} - z_{2n-1}) - z_{2n}$. Since all subtracted terms are non-negative, $s_{2n} \\le z_1$ for all $n$.',
+          m: '$$s_{2n} \\le z_1 \\quad \\forall n \\in \\mathbb{N}$$',
+          meaning: 'What this really means: The even sums can never exceed the very first term z_1, giving a hard upper ceiling.'
+        },
+        {
+          why: 'By the Monotone Convergence Theorem (3.3.2), the bounded increasing sequence $(s_{2n})$ converges to a limit $s \\in \\mathbb{R}$:',
+          m: '$$\\lim_{n \\to \\infty} s_{2n} = s$$',
+          meaning: 'What this really means: An increasing sequence blocked by an upper ceiling is guaranteed to hit a finite limit.'
+        },
+        {
+          why: 'The odd partial sums satisfy $s_{2n+1} = s_{2n} + z_{2n+1}$. Taking the limit as $n \\to \\infty$, since $\\lim z_n = 0$:',
+          m: '$$\\lim_{n \\to \\infty} s_{2n+1} = \\lim_{n \\to \\infty} s_{2n} + \\lim_{n \\to \\infty} z_{2n+1} = s + 0 = s$$',
+          meaning: 'What this really means: The gap between odd and even steps vanishes, pulling the odd sums to the exact same limit.'
+        },
+        {
+          why: 'Since both even and odd subsequences converge to $s$, the full sequence $(s_n)$ converges to $s$, with $s_{2n} \\le s \\le s_{2n+1}$, yielding $|s - s_k| \\le z_{k+1}$.',
+          m: '$$\\lim_{n \\to \\infty} s_n = s, \\quad |s - s_k| \\le z_{k+1}$$',
+          meaning: 'What this really means: The true sum is trapped between consecutive terms, bounding the error by the size of the next jump.'
+        }
+      ],
+      ends: 'Therefore the alternating series converges, and its error after $k$ terms is at most $z_{k+1}$.'
+    },
     cards: [
       { q: 'State the two conditions of Leibniz’s Alternating Series Test.', a: '(1) $z_{n+1} \\le z_n$ (terms are monotonically decreasing); (2) $\\lim z_n = 0$.', kind: 'state' },
       { q: 'What is the maximum error when approximating the sum of an alternating series by its $k$-th partial sum $s_k$?', a: 'At most the magnitude of the next term: $|s - s_k| \\le z_{k+1}$.', kind: 'recall' }
@@ -169,6 +324,33 @@ CONCEPTS.push(
       `The constants $M_n$ MUST be independent of $x$ (pure numbers, not functions of $x$)!`,
       `The converse of the $M$-test is FALSE: a series can converge uniformly even if the $M$-test fails (e.g. alternating series where cancellation drives uniform convergence).`
     ],
+    proof: {
+      idea: 'For any $x \\in A$, $|\\sum_{k=n+1}^m f_k(x)| \\le \\sum_{k=n+1}^m |f_k(x)| \\le \\sum_{k=n+1}^m M_k$. By Cauchy criterion for series of numbers, the tail $\\sum_{k=n+1}^m M_k < \\varepsilon$ independent of $x$. Hence $(s_n(x))$ is uniformly Cauchy, proving uniform convergence.',
+      why: 'Cauchy Criterion for Uniform Convergence (8.1.10) applied to partial sums.',
+      rungs: [
+        {
+          why: 'Let $\\varepsilon > 0$. Since $\\sum_{n=1}^\\infty M_n$ converges, the Cauchy Criterion for number series guarantees there exists $K \\in \\mathbb{N}$ such that for all $m > n \\ge K$:',
+          m: '$$\\sum_{k=n+1}^m M_k < \\varepsilon$$',
+          meaning: 'What this really means: The tail of the bounding positive number series can be made smaller than epsilon.'
+        },
+        {
+          why: 'Let $s_n(x) = \\sum_{k=1}^n f_k(x)$ be the $n$-th partial sum. For any $x \\in A$ and $m > n \\ge K$, apply triangle inequality and the hypothesis $|f_k(x)| \\le M_k$:',
+          m: '$$|s_m(x) - s_n(x)| = \\left| \\sum_{k=n+1}^m f_k(x) \\right| \\le \\sum_{k=n+1}^m |f_k(x)| \\le \\sum_{k=n+1}^m M_k$$',
+          meaning: 'What this really means: The difference between two partial sums at any point x is capped by the sum of the constant bounds M_k.'
+        },
+        {
+          why: 'Combining the bounds gives for all $x \\in A$ and all $m > n \\ge K$:',
+          m: '$$|s_m(x) - s_n(x)| < \\varepsilon \\quad \\forall x \\in A$$',
+          meaning: 'What this really means: The index K works universally for every single point x across the entire domain A.'
+        },
+        {
+          why: 'By the Cauchy Criterion for Uniform Convergence (Theorem 8.1.10), the sequence of partial sums $(s_n)$ converges uniformly on $A$.',
+          m: '$$s_n \\rightrightarrows s \\text{ on } A$$',
+          meaning: 'What this really means: The function series satisfies the uniform Cauchy test, guaranteeing uniform convergence.'
+        }
+      ],
+      ends: 'Therefore $\\sum_{n=1}^\\infty f_n(x)$ converges uniformly and absolutely on $A$.'
+    },
     cards: [
       { q: 'State the Weierstrass M-Test.', a: 'If $|f_n(x)| \\le M_n$ for all $x \\in A$ and $\\sum M_n < \\infty$, then $\\sum f_n$ converges uniformly and absolutely on $A$.', kind: 'state' },
       { q: 'Prove that $\\sum_{n=1}^\\infty \\dfrac{\\sin(n^2 x)}{n^3}$ converges uniformly on $\\mathbb{R}$.', a: 'Since $|\\sin(n^2 x)| \\le 1$, $|f_n(x)| \\le 1/n^3$. Since $\\sum 1/n^3$ converges ($p=3>1$), uniform convergence holds by Weierstrass M-test.', kind: 'apply' }
@@ -196,6 +378,33 @@ CONCEPTS.push(
       `At the boundary points $x = x_0 \\pm R$, the theorem gives NO information! One endpoint might converge while the other diverges (e.g. $\\sum x^n/n$ has $R = 1$, converges at $-1$, diverges at $+1$).`,
       `For the ratio formula: notice it is $a_n / a_{n+1}$ (reciprocal of standard ratio test), because $R = 1/L$.`
     ],
+    proof: {
+      idea: 'Apply the Root Test to the positive number series $\\sum |a_n| |x - x_0|^n$. The $n$-th root limit is $|x - x_0| \\limsup |a_n|^{1/n} = |x - x_0| \\rho$. If $|x - x_0| < 1/\\rho$, this limit is $< 1$, so the series converges absolutely. If $|x - x_0| > 1/\\rho$, the terms do not tend to zero, so it diverges.',
+      why: 'Cauchy Root Test (9.2.4) applied to power terms.',
+      rungs: [
+        {
+          why: 'Fix $x \\in \\mathbb{R}$, and consider the series of absolute terms $\\sum_{n=0}^\\infty |a_n| |x - x_0|^n$. Apply Cauchy’s Root Test by examining:',
+          m: '$$\\limsup_{n\\to\\infty} \\left( |a_n| |x - x_0|^n \\right)^{1/n} = |x - x_0| \\limsup_{n\\to\\infty} |a_n|^{1/n} = |x - x_0| \\rho$$',
+          meaning: 'What this really means: Factoring out the distance |x - x_0| leaves exactly the limsup factor rho from the coefficients.'
+        },
+        {
+          why: 'Case 1 ($|x - x_0| < 1/\\rho$): Then $|x - x_0| \\rho < 1$. By the Cauchy Root Test (9.2.4(b)), the series converges absolutely.',
+          m: '$$|x - x_0| < R = \\frac{1}{\\rho} \\implies |x - x_0| \\rho < 1 \\implies \\sum a_n(x - x_0)^n \\text{ converges absolutely}$$',
+          meaning: 'What this really means: When inside the radius R, the effective ratio is strictly less than 1, forcing absolute convergence.'
+        },
+        {
+          why: 'Case 2 ($|x - x_0| > 1/\\rho$): Then $|x - x_0| \\rho > 1$. There exists a subsequence where $|a_n|^{1/n} |x - x_0| > 1$, so $|a_n(x - x_0)^n| > 1$ infinitely often.',
+          m: '$$a_n(x - x_0)^n \\not\\to 0 \\implies \\sum a_n(x - x_0)^n \\text{ diverges}$$',
+          meaning: 'What this really means: When outside the radius R, the terms cannot even decay to 0, completely blowing up.'
+        },
+        {
+          why: 'Case 3 (Uniform convergence on compact subintervals): For any $r < R$, let $M_n = |a_n| r^n$. Since $\\sum M_n$ converges, Weierstrass M-Test gives uniform convergence on $[x_0 - r, x_0 + r]$.',
+          m: '$$|x - x_0| \\le r < R \\implies |a_n(x - x_0)^n| \\le |a_n| r^n \\implies \\sum a_n(x - x_0)^n \\text{ converges uniformly}$$',
+          meaning: 'What this really means: Any sub-interval safely inside the radius is bounded by a convergent geometric ceiling.'
+        }
+      ],
+      ends: 'Therefore $R = 1/\\rho$ is the exact radius of convergence.'
+    },
     cards: [
       { q: 'State the Cauchy–Hadamard formula for the radius of convergence $R$.', a: '$R = 1/\\rho$, where $\\rho = \\limsup_{n\\to\\infty} |a_n|^{1/n}$.', kind: 'state' },
       { q: 'What is the radius of convergence of $\\sum_{n=0}^\\infty \\dfrac{x^n}{n!}$?', a: '$R = \\infty$; the series converges for all real numbers.', kind: 'apply' },

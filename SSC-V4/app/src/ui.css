@@ -33,6 +33,15 @@
   --shadow:0 1px 2px rgba(25,22,20,.05),0 10px 30px -14px rgba(25,22,20,.18);
   --shadow-2:0 2px 6px rgba(25,22,20,.06),0 24px 48px -20px rgba(25,22,20,.28);
 
+  /* The three levels, as one traffic light. They are aliases rather than new
+     hexes so a theme only has to get bad/warn/ok right once, and level colour
+     can never drift away from the verdict colour it has to sit beside. */
+  --lv0:var(--surface-3);
+  --lv1:var(--bad);  --lv1-soft:var(--bad-soft);  --lv1-line:var(--bad-line);
+  --lv2:var(--warn); --lv2-soft:var(--warn-soft); --lv2-line:var(--warn-line);
+  --lv3:var(--ok);   --lv3-soft:var(--ok-soft);   --lv3-line:var(--ok-line);
+
+  --rail-w:236px;
   --ease:cubic-bezier(.32,.72,0,1);
   --spring:cubic-bezier(.34,1.44,.5,1);
   --dur:.34s; --dur-s:.18s;
@@ -111,42 +120,118 @@ h1[tabindex="-1"]:focus,main:focus{ outline:none; }
 .icon-btn:active{ transform:scale(.93); }
 .icon-btn svg{ width:17px; height:17px; flex:0 0 auto; }
 
+/* ── icons ───────────────────────────────────────────────────────────────
+   Material Symbols as a ligature font: `<span class="mi">arrow_back</span>`.
+   The stylesheet is requested with `display=block`, so the glyph never flashes
+   as the literal word "arrow_back" before the font arrives. */
+.mi{
+  font-family:'Material Symbols Outlined'; font-weight:normal; font-style:normal;
+  font-size:20px; line-height:1; letter-spacing:normal; text-transform:none;
+  display:inline-block; white-space:nowrap; word-wrap:normal; direction:ltr;
+  -webkit-font-feature-settings:'liga'; font-feature-settings:'liga';
+  -webkit-font-smoothing:antialiased; flex:0 0 auto; user-select:none;
+  font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+.mi.fill{ font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24; }
+.mi.sm{ font-size:17px; }
+.mi.lg{ font-size:24px; }
+.mi.xs{ font-size:14px; }
+
+/* ── navigation ──────────────────────────────────────────────────────────
+   ONE element, two layouts. On a phone it is the bottom tab bar. From 900px
+   it becomes a left rail carrying its own brand, back button and shell
+   controls — and the top header is removed entirely, so the window's whole
+   height belongs to what you are reading. */
 nav.tabs{
   position:fixed; left:0; right:0; bottom:0; z-index:40;
-  display:grid; grid-template-columns:repeat(5,1fr);
   background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   border-top:1px solid var(--glass-line);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-nav.tabs a{
+.rail-top,.rail-foot{ display:none; }
+.rail-nav{ display:grid; grid-template-columns:repeat(5,1fr); }
+.rail-nav a{
   position:relative; display:flex; flex-direction:column; align-items:center;
   justify-content:center; gap:3px; height:var(--tab-h); text-decoration:none;
   color:var(--ink-3); font-size:.66rem; letter-spacing:.02em; font-weight:500;
-  transition:color var(--dur-s);
+  transition:color var(--dur-s), background var(--dur-s);
 }
-nav.tabs a svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.7;
-  stroke-linecap:round; stroke-linejoin:round;
-  transition:transform var(--dur) var(--spring), stroke-width var(--dur-s); }
-nav.tabs a:active svg{ transform:scale(.88); }
-nav.tabs a[aria-current=page]{ color:var(--accent); }
-nav.tabs a[aria-current=page] svg{ stroke-width:2.2; transform:translateY(-1px) scale(1.06); }
-nav.tabs a[aria-current=page]::before{
+.rail-nav a .mi{ font-size:22px; transition:transform var(--dur) var(--spring); }
+.rail-nav a:active .mi{ transform:scale(.88); }
+.rail-nav a[aria-current=page]{ color:var(--accent); }
+.rail-nav a[aria-current=page] .mi{ font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24; }
+.rail-nav a[aria-current=page]::before{
   content:''; position:absolute; top:0; left:50%; width:26px; height:3px;
   transform:translateX(-50%); border-radius:0 0 4px 4px; background:var(--accent);
 }
+
+.rail-brand{ display:flex; flex-direction:column; min-width:0; text-decoration:none;
+  color:inherit; line-height:1.2; }
+.rail-brand b{ font-size:.95rem; font-weight:600; letter-spacing:-.01em; }
+.rail-brand span{ font-size:.6rem; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-3); }
+.rail-btn{
+  display:flex; align-items:center; gap:12px; height:40px; padding:0 11px; width:100%;
+  border:0; background:none; border-radius:10px; cursor:pointer; color:var(--ink-2);
+  font:500 .84rem/1 var(--font-ui); text-align:left;
+  transition:background var(--dur-s), color var(--dur-s);
+}
+.rail-btn:hover{ background:var(--surface-2); color:var(--ink); }
+.rail-btn:active{ transform:scale(.97); }
+.rail-btn[disabled]{ opacity:.35; cursor:not-allowed; }
+.icon-btn[disabled]{ opacity:.35; cursor:not-allowed; }
 
 main{ display:block; }
 .wrap{ width:100%; max-width:730px; margin:0 auto; padding:18px 14px 30px; }
 .wrap.bleed{ padding:0; max-width:none; }
 
-@media (min-width:880px){
-  :root{ --tab-h:48px; }
-  body{ padding-bottom:0; }
-  nav.tabs{ position:sticky; top:var(--head-h); bottom:auto; border-top:0;
-    border-bottom:1px solid var(--glass-line); }
-  nav.tabs a{ flex-direction:row; gap:9px; font-size:.84rem; }
-  nav.tabs a[aria-current=page]::before{ top:auto; bottom:0; width:38px; border-radius:4px 4px 0 0; }
-  .wrap{ padding:28px 20px 64px; }
+@media (min-width:900px){
+  /* No top bar and no tab strip: both bands of vertical chrome are gone and
+     the reel, the tree and the note each get the full window. */
+  :root{ --head-h:0px; --tab-h:0px; }
+  header.top{ display:none; }
+  body{ padding-bottom:0; padding-left:var(--rail-w); }
+
+  nav.tabs{
+    top:0; bottom:0; right:auto; width:var(--rail-w);
+    display:flex; flex-direction:column; gap:6px;
+    border-top:0; border-right:1px solid var(--glass-line);
+    padding:14px 10px calc(14px + env(safe-area-inset-bottom,0px));
+  }
+  .rail-top{ display:flex; align-items:center; gap:6px; padding:2px 2px 10px;
+    border-bottom:1px solid var(--rule); }
+  .rail-top .rail-btn{ width:auto; flex:0 0 auto; padding:0 8px; }
+  .rail-top .rail-btn .lb{ display:none; }
+  .rail-nav{ display:flex; flex-direction:column; gap:2px; }
+  .rail-foot{ display:flex; flex-direction:column; gap:2px; margin-top:auto;
+    padding-top:8px; border-top:1px solid var(--rule); }
+
+  .rail-nav a{
+    height:42px; flex-direction:row; justify-content:flex-start; gap:12px;
+    padding:0 11px; border-radius:10px; font-size:.88rem; font-weight:500;
+  }
+  .rail-nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .rail-nav a[aria-current=page]{ background:var(--accent-soft); }
+  .rail-nav a[aria-current=page]::before{
+    top:50%; left:0; width:3px; height:20px; transform:translateY(-50%);
+    border-radius:0 3px 3px 0;
+  }
+
+  .wrap{ padding:30px 36px 72px; max-width:880px; }
+
+  /* Full screen narrows the rail to its glyphs — the point of the button is
+     the reading column, so the chrome gives ground first. */
+  body.is-full{ padding-left:62px; }
+  body.is-full nav.tabs{ width:62px; padding-left:7px; padding-right:7px; align-items:stretch; }
+  body.is-full .rail-brand{ display:none; }
+  body.is-full .rail-nav a,body.is-full .rail-btn{ justify-content:center; gap:0; padding:0; }
+  body.is-full .rail-nav a .lb,body.is-full .rail-btn .lb{ display:none; }
+  body.is-full .rail-top{ justify-content:center; }
+  body.is-full .wrap{ max-width:940px; }
+}
+
+@media (min-width:1500px){
+  .wrap{ max-width:960px; }
 }
 
 /* ── motion ──────────────────────────────────────────────────────────────── */
@@ -172,6 +257,11 @@ main{ display:block; }
 .stack{ display:flex; flex-direction:column; gap:var(--sp); }
 .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .spread{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+/* the two-line label: a title over a caption. Defined once here so a .tt used
+   outside a list row still stacks instead of running the caption on. */
+.tt{ min-width:0; }
+.tt>b{ display:block; font-weight:500; }
+.tt>span{ display:block; font-size:.78rem; color:var(--ink-3); }
 
 /* ── surfaces ────────────────────────────────────────────────────────────── */
 .card{
@@ -273,7 +363,7 @@ mjx-container{ max-width:100%; }
 .prose.tight{ font-size:.97rem; line-height:1.62; }
 
 /* ── stats, meters, rings ────────────────────────────────────────────────── */
-.stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr)); gap:10px; }
 .stat{ background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-m);
   padding:12px; }
 .stat .n{ font-size:1.55rem; font-weight:600; letter-spacing:-.025em; line-height:1.1; }
@@ -285,21 +375,54 @@ mjx-container{ max-width:100%; }
   background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 55%,var(--ok)));
   transition:width .6s var(--ease); animation:sweepIn .7s var(--ease) both; }
 .meter.ok>i{ background:var(--ok); }
+.meter.lv1>i{ background:var(--lv1); }
+.meter.lv2>i{ background:var(--lv2); }
+.meter.lv3>i{ background:var(--lv3); }
 
 .ring{ position:relative; width:38px; height:38px; flex:0 0 auto; border-radius:50%;
+  --ring-c:var(--accent);
   display:grid; place-items:center; transition:--p .7s var(--ease);
-  background:conic-gradient(var(--accent) calc(var(--p)*1%), var(--surface-3) 0); }
-.ring.done{ background:conic-gradient(var(--ok) calc(var(--p)*1%), var(--surface-3) 0); }
+  background:conic-gradient(var(--ring-c) calc(var(--p)*1%), var(--surface-3) 0); }
+/* the ring is coloured by the level the WHOLE group has reached, and filled by
+   how much of it has reached the next one */
+.ring[data-lv="1"]{ --ring-c:var(--lv1); }
+.ring[data-lv="2"]{ --ring-c:var(--lv2); }
+.ring[data-lv="3"]{ --ring-c:var(--lv3); }
 .ring>i{ width:30px; height:30px; border-radius:50%; background:var(--surface);
   display:grid; place-items:center; font-style:normal; font-size:.62rem;
   font-family:var(--font-mono); color:var(--ink-2); }
-.ring.done>i{ color:var(--ok); }
+.ring[data-lv="1"]>i,.ring[data-lv="2"]>i,.ring[data-lv="3"]>i{ color:var(--ring-c); }
+
+/* ── the three-level bar ────────────────────────────────────────────────────
+   One track, three layers, widest first: red is "reached level 1", amber sits
+   on top of it for level 2, green on top of that for level 3. Because each
+   fraction contains the next, the layers read left to right as green | amber |
+   red | untouched without any arithmetic. */
+.lvbar{ position:relative; height:7px; border-radius:999px; background:var(--surface-3);
+  overflow:hidden; }
+.lvbar>i{ position:absolute; left:0; top:0; bottom:0; border-radius:999px;
+  transition:width .6s var(--ease); animation:sweepIn .7s var(--ease) both; }
+.lvbar>i.a{ background:var(--lv1); }
+.lvbar>i.b{ background:var(--lv2); }
+.lvbar>i.c{ background:var(--lv3); }
+.lvkey{ display:flex; gap:12px; flex-wrap:wrap; font-size:.64rem; color:var(--ink-3);
+  margin-top:6px; }
+.lvkey>span{ display:inline-flex; align-items:center; gap:5px; }
+.lvkey em{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+.lvkey .k1 em{ background:var(--lv1); } .lvkey .k2 em{ background:var(--lv2); }
+.lvkey .k3 em{ background:var(--lv3); }
+.badge.lv1{ background:var(--lv1-soft); color:var(--lv1); border-color:var(--lv1-line); }
+.badge.lv2{ background:var(--lv2-soft); color:var(--lv2); border-color:var(--lv2-line); }
+.badge.lv3{ background:var(--lv3-soft); color:var(--lv3); border-color:var(--lv3-line); }
 
 /* ── mastery ladder ─────────────────────────────────────────────────────── */
 .ladder{ display:flex; gap:6px; }
 .ladder>span{ flex:1 1 0; height:6px; border-radius:999px; background:var(--surface-3);
   transition:background var(--dur); }
-.ladder>span.on{ background:var(--ok); animation:sweepIn .5s var(--ease) both; }
+.ladder>span.on{ animation:sweepIn .5s var(--ease) both; }
+.ladder>span.on.l1{ background:var(--lv1); }
+.ladder>span.on.l2{ background:var(--lv2); }
+.ladder>span.on.l3{ background:var(--lv3); }
 .ladder-l{ display:flex; justify-content:space-between; font-size:.66rem; color:var(--ink-3);
   margin-top:6px; }
 
@@ -336,7 +459,9 @@ mjx-container{ max-width:100%; }
 }
 .tick:hover>i{ border-color:var(--accent); }
 .tick:active>i{ transform:scale(.86); }
-.tick[aria-checked=true]>i{ background:var(--ok); border-color:var(--ok); color:#fff; }
+.tick[aria-checked=true]>i{ background:var(--lv1); border-color:var(--lv1); color:#fff; }
+.tick[data-lv="2"]>i{ background:var(--lv2); border-color:var(--lv2); color:#fff; }
+.tick[data-lv="3"]>i{ background:var(--lv3); border-color:var(--lv3); color:#fff; }
 .tick[aria-checked=mixed]>i{ background:var(--accent-soft); border-color:var(--accent);
   color:var(--accent); }
 .tick[aria-checked=true]>i,.tick[aria-checked=mixed]>i{ animation:pop .26s var(--spring) both; }
@@ -368,8 +493,10 @@ mjx-container{ max-width:100%; }
 .crow .tt b{ display:block; font-weight:500; font-size:.92rem; }
 .crow .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.crow.done{ border-color:var(--ok-line); }
-.crow.done .tt b{ color:var(--ink-2); }
+.crow[data-lv="1"]{ border-color:var(--lv1-line); }
+.crow[data-lv="2"]{ border-color:var(--lv2-line); }
+.crow[data-lv="3"]{ border-color:var(--lv3-line); }
+.crow[data-lv="3"] .tt b{ color:var(--ink-2); }
 
 /* ── recall reel ─────────────────────────────────────────────────────────── */
 /* ── recall reel ──────────────────────────────────────────────────────────
@@ -441,6 +568,9 @@ mjx-container{ max-width:100%; }
 .fig{ border:1px solid var(--rule); border-radius:var(--r-m); background:var(--surface-2);
   overflow:hidden; }
 .fig svg{ display:block; width:100%; height:auto; }
+.fig-imgwrap{ background:var(--surface); padding:8px; }
+.fig-img{ display:block; width:100%; height:auto; border-radius:var(--r-s);
+  animation:pop .4s var(--ease) both; }
 .fig-h{ display:flex; align-items:center; justify-content:space-between; gap:10px;
   padding:10px 13px; border-bottom:1px solid var(--rule); background:var(--surface); }
 .fig-cap{ padding:10px 13px; font-size:.79rem; color:var(--ink-2); line-height:1.5;
@@ -618,13 +748,17 @@ mjx-container{ max-width:100%; }
 .scratch{ margin-top:6px; padding:12px; border-radius:var(--r-m);
   border:1px dashed var(--rule-2); background:var(--surface-2); }
 
-/* a concept ticked but with its proof still outstanding, at Level 2 */
-.crow.part .tick{ border-color:var(--warn); color:var(--warn); }
-.crow.part .tt b{ color:var(--ink); }
+/* the level chip that rides on a concept row */
+.lvtag{ flex:0 0 auto; font:600 .58rem/1 var(--font-mono); letter-spacing:.06em;
+  text-transform:uppercase; padding:3px 6px; border-radius:5px; border:1px solid transparent; }
+.lvtag[data-lv="1"]{ background:var(--lv1-soft); color:var(--lv1); border-color:var(--lv1-line); }
+.lvtag[data-lv="2"]{ background:var(--lv2-soft); color:var(--lv2); border-color:var(--lv2-line); }
+.lvtag[data-lv="3"]{ background:var(--lv3-soft); color:var(--lv3); border-color:var(--lv3-line); }
 
 /* the sign-in gate hides the shell chrome: there is nothing to navigate to */
 body.signed-out nav.tabs{ display:none; }
-body.signed-out{ padding-bottom:0; }
+body.signed-out{ padding-bottom:0; padding-left:0; }
+body.signed-out header.top{ display:flex; }
 body.signed-out .top .icon-btn{ display:inline-flex; }
 
 /* ── lists ───────────────────────────────────────────────────────────────── */
@@ -657,7 +791,10 @@ body.signed-out .top .icon-btn{ display:inline-flex; }
 .pstep .dot{ flex:0 0 auto; width:28px; height:28px; border-radius:50%; display:grid;
   place-items:center; font-size:.72rem; border:2px solid var(--rule-2);
   background:var(--surface); color:var(--ink-3); }
-.pstep.done .dot{ border-color:var(--ok); background:var(--ok-soft); color:var(--ok); }
+.pstep.done .dot{ border-color:var(--lv3); background:var(--lv3-soft); color:var(--lv3); }
+.pstep[data-lv="1"] .dot{ border-color:var(--lv1); background:var(--lv1-soft); color:var(--lv1); }
+.pstep[data-lv="2"] .dot{ border-color:var(--lv2); background:var(--lv2-soft); color:var(--lv2); }
+.pstep[data-lv="3"] .dot{ border-color:var(--lv3); background:var(--lv3-soft); color:var(--lv3); }
 .pstep.here .dot{ border-color:var(--accent); background:var(--accent); color:var(--accent-ink); }
 .pstep .tt b{ display:block; font-size:.92rem; font-weight:500; }
 .pstep .tt span{ display:block; font-size:.72rem; color:var(--ink-3); }

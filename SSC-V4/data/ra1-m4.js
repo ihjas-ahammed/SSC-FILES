@@ -47,10 +47,26 @@ CONCEPTS.push(
       idea: `(a) For any $M > 0$, unboundedness gives a term $x_K > M$. Since $(x_n)$ is increasing, all subsequent terms $x_n \\ge x_K > M$.`,
       why: `Unbounded above means no real number caps the sequence; monotonicity guarantees that once a milestone $M$ is crossed, the sequence never falls back below it.`,
       rungs: [
-        { why: 'Let $(x_n)$ be an increasing sequence that is not bounded above, and let $M > 0$ be arbitrary.', m: '$$M > 0 \\quad \\text{is given}$$' },
-        { why: 'Since $(x_n)$ is not bounded above, $M$ cannot be an upper bound for the set of terms.', m: '$$\\exists K \\in \\mathbb{N} \\quad \\text{such that} \\quad x_K > M$$' },
-        { why: 'Since $(x_n)$ is increasing, every subsequent term is at least as large as $x_K$.', m: '$$n \\ge K \\implies x_n \\ge x_K > M$$' },
-        { why: 'This matches the exact definition of divergence to $+\\infty$.', m: '$$\\forall M > 0, \\; \\exists K \\in \\mathbb{N}: \\; n \\ge K \\implies x_n > M \\implies \\lim(x_n) = +\\infty$$' }
+        {
+          why: 'Let $(x_n)$ be an increasing sequence that is not bounded above, and let $M > 0$ be arbitrary.',
+          m: '$$M > 0 \\quad \\text{is given}$$',
+          meaning: 'What this really means: Someone challenges us with an impossibly high altitude marker $M$, daring our sequence to stay trapped below it.'
+        },
+        {
+          why: 'Since $(x_n)$ is not bounded above, $M$ cannot be an upper bound for the set of terms.',
+          m: '$$\\exists K \\in \\mathbb{N} \\quad \\text{such that} \\quad x_K > M$$',
+          meaning: 'What this really means: Because the sequence has no ceiling anywhere, no barrier can stop it: eventually, at some step $K$, the sequence hops strictly above $M$.'
+        },
+        {
+          why: 'Since $(x_n)$ is increasing, every subsequent term is at least as large as $x_K$.',
+          m: '$$n \\ge K \\implies x_n \\ge x_K > M$$',
+          meaning: 'What this really means: And because the sequence only moves upward, it possesses a one-way ratchet: once it crosses $M$, every single step after it remains above $M$ forever.'
+        },
+        {
+          why: 'This matches the exact definition of divergence to $+\\infty$.',
+          m: '$$\\forall M > 0, \\; \\exists K \\in \\mathbb{N}: \\; n \\ge K \\implies x_n > M \\implies \\lim(x_n) = +\\infty$$',
+          meaning: 'What this really means: Since it clears any challenge altitude and never falls back down, the sequence marches off to positive infinity.'
+        }
       ],
       ends: 'Part (b) for decreasing sequences follows symmetrically by considering $(-x_n)$.'
     },
@@ -81,9 +97,21 @@ CONCEPTS.push(
       idea: `(a) For any $M > 0$, choose $K$ such that $x_n > M$ for $n \\ge K$. Since $y_n \\ge x_n$, $y_n > M$ as well.`,
       why: `Because $y_n$ dominates $x_n$, any milestone cleared by $x_n$ is automatically cleared by $y_n$.`,
       rungs: [
-        { why: 'Given $M > 0$, since $\\lim(x_n) = +\\infty$, there is an index $K$ past which $x_n > M$.', m: '$$\\exists K \\in \\mathbb{N}: \\; n \\ge K \\implies x_n > M$$' },
-        { why: 'Use the comparison hypothesis $y_n \\ge x_n$ for all $n$.', m: '$$n \\ge K \\implies y_n \\ge x_n > M$$' },
-        { why: 'Since $M > 0$ was arbitrary, this establishes proper divergence of $(y_n)$.', m: '$$\\forall M > 0, \\; \\exists K: \\; n \\ge K \\implies y_n > M \\implies \\lim(y_n) = +\\infty$$' }
+        {
+          why: 'Given $M > 0$, since $\\lim(x_n) = +\\infty$, there is an index $K$ past which $x_n > M$.',
+          m: '$$\\exists K \\in \\mathbb{N}: \\; n \\ge K \\implies x_n > M$$',
+          meaning: 'What this really means: The smaller sequence already blows up to infinity, meaning it eventually climbs above any height barrier $M$ and stays there.'
+        },
+        {
+          why: 'Use the comparison hypothesis $y_n \\ge x_n$ for all $n$.',
+          m: '$$n \\ge K \\implies y_n \\ge x_n > M$$',
+          meaning: 'What this really means: The second sequence is positioned strictly on top of the first sequence, like a climber on top of an escalating elevator—if the elevator clears the roof, the person on top must clear it too.'
+        },
+        {
+          why: 'Since $M > 0$ was arbitrary, this establishes proper divergence of $(y_n)$.',
+          m: '$$\\forall M > 0, \\; \\exists K: \\; n \\ge K \\implies y_n > M \\implies \\lim(y_n) = +\\infty$$',
+          meaning: 'What this really means: Because the upper sequence is forced above every conceivable altitude, it too must blow up to positive infinity.'
+        }
       ],
       ends: 'Part (b) is symmetric: $x_n \\le y_n < M$ for $n \\ge K$ when $y_n \\to -\\infty$.'
     },
@@ -162,9 +190,21 @@ CONCEPTS.push(
       idea: `Express the individual term as the difference between consecutive partial sums: $x_n = s_n - s_{n-1}$.`,
       why: `Because both $s_n \\to s$ and $s_{n-1} \\to s$ as $n \\to \\infty$, their difference must head to $0$.`,
       rungs: [
-        { why: 'Write the term $x_n$ using partial sums for $n \\ge 2$.', m: '$$x_n = s_n - s_{n-1}$$' },
-        { why: 'Take the limit of both sides as $n \\to \\infty$.', m: '$$\\lim_{n\\to\\infty} x_n = \\lim_{n\\to\\infty} (s_n - s_{n-1})$$' },
-        { why: 'Since $\\sum x_n = s$, both $s_n \\to s$ and $s_{n-1} \\to s$.', m: '$$\\lim_{n\\to\\infty} x_n = s - s = 0$$' }
+        {
+          why: 'Write the term $x_n$ using partial sums for $n \\ge 2$.',
+          m: '$$x_n = s_n - s_{n-1}$$',
+          meaning: 'What this really means: An individual brick added to a running wall is simply the total height of the wall now minus its height one step earlier.'
+        },
+        {
+          why: 'Take the limit of both sides as $n \\to \\infty$.',
+          m: '$$\\lim_{n\\to\\infty} x_n = \\lim_{n\\to\\infty} (s_n - s_{n-1})$$',
+          meaning: 'What this really means: As we head to infinity, tracking how large the individual bricks are is the same as watching the change in consecutive cumulative wall heights.'
+        },
+        {
+          why: 'Since $\\sum x_n = s$, both $s_n \\to s$ and $s_{n-1} \\to s$.',
+          m: '$$\\lim_{n\\to\\infty} x_n = s - s = 0$$',
+          meaning: 'What this really means: If the total sum settles down to a finite final number $s$, both $s_n$ and $s_{n-1}$ are leveling off toward that exact same total. Their difference evaporates to zero: the incoming bricks must shrink to dust.'
+        }
       ],
       ends: 'Therefore, any convergent series must have $x_n \\to 0$.'
     },
@@ -192,10 +232,26 @@ CONCEPTS.push(
       idea: `Apply the Cauchy Convergence Criterion (Theorem 3.5.5) directly to the sequence of partial sums $(s_k)$.`,
       why: `By Definition 3.7.1, $\\sum x_n$ converges if and only if $(s_k)$ converges in $\\mathbb{R}$.`,
       rungs: [
-        { why: 'By definition, $\\sum x_n$ converges if and only if the sequence of partial sums $(s_k)$ converges.', m: '$$\\sum_{n=1}^\\infty x_n \\text{ converges} \\iff (s_k) \\text{ converges}$$' },
-        { why: 'By the Cauchy Convergence Criterion (3.5.5), $(s_k)$ converges if and only if $(s_k)$ is a Cauchy sequence.', m: '$$(s_k) \\text{ converges} \\iff \\forall\\, \\varepsilon > 0, \\; \\exists M \\in \\mathbb{N}: \\; m > n \\ge M \\implies |s_m - s_n| < \\varepsilon$$' },
-        { why: 'Compute the difference between partial sums $s_m$ and $s_n$ for $m > n$.', m: '$$s_m - s_n = \\sum_{k=1}^m x_k - \\sum_{k=1}^n x_k = x_{n+1} + x_{n+2} + \\cdots + x_m$$' },
-        { why: 'Substitute this expression into the Cauchy condition.', m: '$$|s_m - s_n| = |x_{n+1} + x_{n+2} + \\cdots + x_m| < \\varepsilon \\quad \\text{for all } m > n \\ge M$$' }
+        {
+          why: 'By definition, $\\sum x_n$ converges if and only if the sequence of partial sums $(s_k)$ converges.',
+          m: '$$\\sum_{n=1}^\\infty x_n \\text{ converges} \\iff (s_k) \\text{ converges}$$',
+          meaning: 'What this really means: An infinite series is by definition just the motion of its running scoreboard (partial sums); the series settles down if and only if the scoreboard settles down.'
+        },
+        {
+          why: 'By the Cauchy Convergence Criterion (3.5.5), $(s_k)$ converges if and only if $(s_k)$ is a Cauchy sequence.',
+          m: '$$(s_k) \\text{ converges} \\iff \\forall\\, \\varepsilon > 0, \\; \\exists M \\in \\mathbb{N}: \\; m > n \\ge M \\implies |s_m - s_n| < \\varepsilon$$',
+          meaning: 'What this really means: In the real numbers, a sequence settles to a limit if and only if late terms cluster arbitrarily close to each other without needing to know the limit in advance.'
+        },
+        {
+          why: 'Compute the difference between partial sums $s_m$ and $s_n$ for $m > n$.',
+          m: '$$s_m - s_n = \\sum_{k=1}^m x_k - \\sum_{k=1}^n x_k = x_{n+1} + x_{n+2} + \\cdots + x_m$$',
+          meaning: 'What this really means: Subtracting the scoreboard at step $n$ from step $m$ cancels all early terms, isolating the exact chunk of terms added between $n$ and $m$.'
+        },
+        {
+          why: 'Substitute this expression into the Cauchy condition.',
+          m: '$$|s_m - s_n| = |x_{n+1} + x_{n+2} + \\cdots + x_m| < \\varepsilon \\quad \\text{for all } m > n \\ge M$$',
+          meaning: 'What this really means: For an infinite series to converge, any tail chunk of terms—no matter how many terms you bunch together—must become impossibly microscopic once you go far out.'
+        }
       ],
       ends: 'Therefore, the series converges if and only if the Cauchy Criterion for series is satisfied.'
     },
@@ -227,10 +283,26 @@ CONCEPTS.push(
       idea: `Notice that $x_n \\ge 0$ makes $(s_k)$ an increasing sequence. Apply the Monotone Convergence Theorem (3.3.2) directly.`,
       why: `Monotone sequences are uniquely simple: boundedness guarantees convergence to the supremum, while unboundedness forces proper divergence to $+\\infty$.`,
       rungs: [
-        { why: 'Since each $x_n \\ge 0$, compute $s_{k+1} - s_k$.', m: '$$s_{k+1} - s_k = x_{k+1} \\ge 0 \\implies s_{k+1} \\ge s_k \\quad \\text{for all } k \\in \\mathbb{N}$$' },
-        { why: 'Therefore, the sequence of partial sums $S = (s_k)$ is a monotone increasing sequence of real numbers.', m: '$$s_1 \\le s_2 \\le s_3 \\le \\cdots \\le s_k \\le s_{k+1} \\le \\cdots$$' },
-        { why: 'By the Monotone Convergence Theorem (3.3.2), an increasing sequence converges if and only if it is bounded above.', m: '$$(s_k) \\text{ converges} \\iff (s_k) \\text{ is bounded above}$$' },
-        { why: 'When bounded, its limit is its supremum; when unbounded, by Theorem 3.6.3 it diverges to $+\\infty$.', m: '$$\\lim_{k\\to\\infty} s_k = \\sup\\{s_k : k \\in \\mathbb{N}\\} \\quad (\\text{if bounded}), \\qquad \\lim_{k\\to\\infty} s_k = +\\infty \\quad (\\text{if unbounded})$$' }
+        {
+          why: 'Since each $x_n \\ge 0$, compute $s_{k+1} - s_k$.',
+          m: '$$s_{k+1} - s_k = x_{k+1} \\ge 0 \\implies s_{k+1} \\ge s_k \\quad \\text{for all } k \\in \\mathbb{N}$$',
+          meaning: 'What this really means: Because every added term is non-negative, the running total can never go backward; with every step, the scoreboard either grows or stays flat.'
+        },
+        {
+          why: 'Therefore, the sequence of partial sums $S = (s_k)$ is a monotone increasing sequence of real numbers.',
+          m: '$$s_1 \\le s_2 \\le s_3 \\le \\cdots \\le s_k \\le s_{k+1} \\le \\cdots$$',
+          meaning: 'What this really means: The running sum is locked into a strictly one-directional, forward-only journey.'
+        },
+        {
+          why: 'By the Monotone Convergence Theorem (3.3.2), an increasing sequence converges if and only if it is bounded above.',
+          m: '$$(s_k) \\text{ converges} \\iff (s_k) \\text{ is bounded above}$$',
+          meaning: 'What this really means: An elevator that can only move upward will either hit a ceiling and stop, or burst through every level to infinity. A ceiling is the only thing needed to guarantee it converges.'
+        },
+        {
+          why: 'When bounded, its limit is its supremum; when unbounded, by Theorem 3.6.3 it diverges to $+\\infty$.',
+          m: '$$\\lim_{k\\to\\infty} s_k = \\sup\\{s_k : k \\in \\mathbb{N}\\} \\quad (\\text{if bounded}), \\qquad \\lim_{k\\to\\infty} s_k = +\\infty \\quad (\\text{if unbounded})$$',
+          meaning: 'What this really means: If there is a ceiling, the sum climbs smoothly up to the lowest ceiling; without a ceiling, it is guaranteed to blast off to positive infinity.'
+        }
       ],
       ends: 'For nonnegative series, convergence is entirely synonymous with boundedness of partial sums.'
     },
@@ -262,11 +334,31 @@ CONCEPTS.push(
       idea: `Show the subsequence of partial sums $s_{2^k} \\ge 1 + \\frac{k}{2}$. Since $1 + k/2 \\to \\infty$, the partial sums are unbounded above.`,
       why: `By Theorem 3.7.5, a nonnegative series with unbounded partial sums must diverge to $+\\infty$.`,
       rungs: [
-        { why: 'Write out the partial sum at powers of 2: $s_{2^k}$.', m: '$$s_{2^k} = 1 + \\frac{1}{2} + \\left(\\frac{1}{3} + \\frac{1}{4}\\right) + \\cdots + \\left(\\frac{1}{2^{k-1}+1} + \\cdots + \\frac{1}{2^k}\\right)$$' },
-        { why: 'In each bracket $\\left(\\frac{1}{2^{j-1}+1} + \\cdots + \\frac{1}{2^j}\\right)$, there are $2^{j-1}$ terms, and the smallest term is $\\frac{1}{2^j}$.', m: '$$\\sum_{i=2^{j-1}+1}^{2^j} \\frac{1}{i} > 2^{j-1} \\cdot \\frac{1}{2^j} = \\frac{1}{2}$$' },
-        { why: 'Summing all $k$ such blocks gives a lower bound growing linearly with $k$.', m: '$$s_{2^k} > 1 + \\underbrace{\\frac{1}{2} + \\frac{1}{2} + \\cdots + \\frac{1}{2}}_{k \\text{ times}} = 1 + \\frac{k}{2}$$' },
-        { why: 'Since $\\lim_{k\\to\\infty} (1 + k/2) = +\\infty$, the subsequence $(s_{2^k})$ is unbounded above.', m: '$$\\lim_{k\\to\\infty} s_{2^k} = +\\infty \\implies (s_k) \\text{ is unbounded above}$$' },
-        { why: 'By Theorem 3.7.5, since $1/n > 0$ and $(s_k)$ is unbounded, the series diverges to $+\\infty$.', m: '$$\\sum_{n=1}^\\infty \\frac{1}{n} = +\\infty$$' }
+        {
+          why: 'Write out the partial sum at powers of 2: $s_{2^k}$.',
+          m: '$$s_{2^k} = 1 + \\frac{1}{2} + \\left(\\frac{1}{3} + \\frac{1}{4}\\right) + \\cdots + \\left(\\frac{1}{2^{k-1}+1} + \\cdots + \\frac{1}{2^k}\\right)$$',
+          meaning: 'What this really means: We inspect the harmonic sum at checkpoint powers of two ($2, 4, 8, 16, \\dots$) and group the terms into doubling clusters.'
+        },
+        {
+          why: 'In each bracket $\\left(\\frac{1}{2^{j-1}+1} + \\cdots + \\frac{1}{2^j}\\right)$, there are $2^{j-1}$ terms, and the smallest term is $\\frac{1}{2^j}$.',
+          m: '$$\\sum_{i=2^{j-1}+1}^{2^j} \\frac{1}{i} > 2^{j-1} \\cdot \\frac{1}{2^j} = \\frac{1}{2}$$',
+          meaning: 'What this really means: In each cluster, replace every fraction with the smallest fraction in that block. Even with that pessimistic replacement, the cluster adds up to at least $1/2$!'
+        },
+        {
+          why: 'Summing all $k$ such blocks gives a lower bound growing linearly with $k$.',
+          m: '$$s_{2^k} > 1 + \\underbrace{\\frac{1}{2} + \\frac{1}{2} + \\cdots + \\frac{1}{2}}_{k \\text{ times}} = 1 + \\frac{k}{2}$$',
+          meaning: 'What this really means: Each new doubling of terms injects at least another solid $1/2$ into the total sum, giving us an endless stream of halves ($1 + 1/2 + 1/2 + 1/2 + \\dots$).'
+        },
+        {
+          why: 'Since $\\lim_{k\\to\\infty} (1 + k/2) = +\\infty$, the subsequence $(s_{2^k})$ is unbounded above.',
+          m: '$$\\lim_{k\\to\\infty} s_{2^k} = +\\infty \\implies (s_k) \\text{ is unbounded above}$$',
+          meaning: 'What this really means: Adding $1/2$ endlessly grows past any ceiling you pick, proving the running totals can never be hemmed in by any finite boundary.'
+        },
+        {
+          why: 'By Theorem 3.7.5, since $1/n > 0$ and $(s_k)$ is unbounded, the series diverges to $+\\infty$.',
+          m: '$$\\sum_{n=1}^\\infty \\frac{1}{n} = +\\infty$$',
+          meaning: 'What this really means: Because all harmonic terms are positive and their partial sums have no ceiling, the harmonic series inescapably diverges to positive infinity.'
+        }
       ],
       ends: 'The harmonic series diverges to $+\\infty$. It serves as the standard comparison threshold for series divergence.'
     },

@@ -7,8 +7,13 @@
    content keeps the full width — the only indentation is a thin rail, so a
    deep tree never squeezes the text.
 
-   Ticking a parent ticks everything under it; untick does the reverse. Parents
-   show a mixed state when some of their children are done.
+   Ticking a parent advances everything under it; a parent shows a mixed state
+   when only some of its children are there yet.
+
+   Colour is the whole vocabulary now. A row is RED once everything under it
+   has been read, AMBER once every proof under it has been worked, GREEN once
+   every section exercise under it is done. There is no level switch to press:
+   the ring simply reports the level the weakest thing under it has reached.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Tree = (function () {
@@ -29,22 +34,14 @@ const Tree = (function () {
 
   /* ── pieces ───────────────────────────────────────────────────────────── */
 
-  function ring(done, total) {
-    const pc = DOM.pct(done, total);
-    const node = el('span', {
-      class: 'ring' + (total && done === total ? ' done' : ''),
-      role: 'img', 'aria-label': done + ' of ' + total + ' completed'
-    }, [el('i', { text: total ? done + '/' + total : '—' })]);
-    /* set after mount so the conic gradient animates from 0 */
-    window.requestAnimationFrame(() => node.style.setProperty('--p', pc));
-    return node;
-  }
+  const ring = (c, label) => UI.levelRing(c, label);
 
-  function tickButton(state, label, onPress) {
+  function tickButton(state, lv, label, onPress) {
     const btn = el('button', {
       class: 'tick', type: 'button', role: 'checkbox',
-      'aria-checked': state, 'aria-label': label
-    }, [el('i', { 'aria-hidden': 'true', text: state === 'mixed' ? '–' : '✓' })]);
+      'aria-checked': state, 'data-lv': String(lv || 0), 'aria-label': label
+    }, [el('i', { 'aria-hidden': 'true' },
+      [DOM.mi(state === 'mixed' ? 'remove' : lv >= 3 ? 'workspace_premium' : 'check', 'xs')])]);
     btn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); onPress(); });
     return btn;
   }
@@ -75,16 +72,18 @@ const Tree = (function () {
      ticking a result usually means its groundwork is already behind you, but
      "usually" is not "always", so it is asked rather than assumed. */
   function offerCascade(c) {
-    const pending = UI.pendingPrereqs(c.id);
+    const pending = Progress.pendingPrereqs(c.id);
     if (!pending.length) return;
+    const target = Progress.prereqTarget(c.id);
     const names = pending.slice(0, 5).map(x => '· ' + x.title).join('\n') +
       (pending.length > 5 ? '\n· and ' + (pending.length - 5) + ' more' : '');
     const ask = pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
-      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'is', 'are') +
-      ' not ticked yet:\n\n' + names + '\n\nTick them as completed too?';
+      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'has', 'have') +
+      ' not reached level ' + target + ' yet:\n\n' + names +
+      '\n\nBring them up to level ' + target + ' too?';
     if (!window.confirm(ask)) return;
-    const hit = Store.setDoneMany(pending.map(x => x.id), true);
-    DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+    const n = Progress.raisePrereqs(c.id);
+    DOM.announce('Raised ' + n + ' ' + DOM.plural(n, 'prerequisite') + ' to level ' + target + '.');
   }
 
   /* At Level 2 a ticked note whose proof is not worked is genuinely neither
@@ -92,35 +91,32 @@ const Tree = (function () {
      one step: tick → work the proof → clear. That way the control always has
      somewhere to go and never silently refuses. */
   function conceptRow(c, repaint) {
-    const st = Progress.state(c.id);
-    const lvl = Progress.levelOf(c.id);
-    const needsProof = lvl === 2 && Progress.hasProof(c.id);
-    const isExt = Pool.isExt(c);
-
+    const lv = Progress.level(c.id);
     const hasProof = Progress.hasProof(c.id);
+    const isExt = Pool.isExt(c);
     const extNote = isExt ? ' (outside syllabus)' : '';
-    const label = st === 'none'
-      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' + extNote : 'Mark "' + c.title + '" completed (Levels 1 & 2)' + extNote)
-      : st === 'part'
-        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)' + extNote
+
+    const label = lv === 0
+      ? 'Mark "' + c.title + '" as read (level 1)' + extNote
+      : lv === 1
+        ? 'Mark the proof of "' + c.title + '" as worked through (level 2)' + extNote
         : 'Clear "' + c.title + '"';
 
-    const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
-      tickButton(st === 'done' ? 'true' : st === 'part' ? 'mixed' : 'false', label,
-        function () {
-          const was = st;
-          Progress.advance(c.id);
-          if (was === 'none') offerCascade(c);
-          repaint();
-        }),
+    const row = el('div', { class: 'crow', 'data-lv': String(lv) }, [
+      tickButton(lv >= 1 ? 'true' : 'false', lv, label, function () {
+        const was = lv;
+        Progress.advance(c.id);
+        if (was === 0) offerCascade(c);
+        repaint();
+      }),
       el('a', { href: Router.href('note/' + c.id) }, [
         el('span', { class: 'tt' }, [
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
         isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
-        needsProof && st === 'part'
-          ? el('span', { class: 'badge warn', text: 'proof' }) : null,
+        lv === 1 && hasProof ? el('span', { class: 'lvtag', 'data-lv': '1', text: 'proof owed' }) : null,
+        lv >= 2 ? el('span', { class: 'lvtag', 'data-lv': String(lv), text: 'L' + lv }) : null,
         DOM.icon('chev', 18, 'chev')
       ])
     ]);
@@ -129,10 +125,11 @@ const Tree = (function () {
 
   function sectionNode(s, repaint) {
     const ids = s.concepts.map(c => c.id);
-    const done = Progress.count(ids).done;
+    const cnt = Progress.count(ids);
     const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
     const isExt = Pool.isExtSec(s.sec);
+    const tasks = Progress.secTaskState(s.sec);
 
     const acc = accordion(nid, s.concepts.length
       ? [el('div', { class: 'stack', style: { gap: '6px' } },
@@ -142,20 +139,21 @@ const Tree = (function () {
 
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
+        tickButton(state, cnt.min, 'Advance all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
           function () {
-            const all = done === ids.length;
-            Progress.setMany(ids, !all);
-            DOM.announce(all ? 'Section cleared.' : 'Section ticked — ' + ids.length + ' notes.');
+            const to = Progress.advanceMany(ids);
+            DOM.announce(to ? 'Section at level ' + to + '.' : 'Section cleared.');
             repaint();
           }),
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + s.sec + '  ' + s.title }),
-            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') + (isExt ? ' · outside syllabus (not in exam %)' : '') })
+            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') +
+              (tasks.total ? ' · ' + tasks.done + '/' + tasks.total + ' exercises' : ' · no exercises yet') +
+              (isExt ? ' · outside syllabus (not in exam %)' : '') })
           ]),
           isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
-          ring(done, ids.length),
+          ring(cnt, '§' + s.sec),
           DOM.icon('chev', 20, 'chev')
         ])
       ]),
@@ -169,7 +167,7 @@ const Tree = (function () {
     const isExtMod = !!mod.ext;
     const countSecs = isExtMod ? secs : secs.filter(s => !Pool.isExtSec(s.sec));
     const ids = countSecs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
-    const done = Progress.count(ids).done;
+    const cnt = Progress.count(ids);
     const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
@@ -185,11 +183,10 @@ const Tree = (function () {
     const acc = accordion(nid, [el('div', {}, secs.map(s => sectionNode(s, repaint)))]);
     const node = el('div', { class: 'tnode' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all syllabus notes of module ' + mod.n,
+        tickButton(state, cnt.min, 'Advance every syllabus note of module ' + mod.n,
           function () {
-            const all = done === ids.length;
-            Progress.setMany(ids, !all);
-            DOM.announce(all ? 'Module cleared.' : 'Module ticked — ' + ids.length + ' notes.');
+            const to = Progress.advanceMany(ids);
+            DOM.announce(to ? 'Module at level ' + to + '.' : 'Module cleared.');
             repaint();
           }),
         toggler(acc, nid, [
@@ -198,7 +195,7 @@ const Tree = (function () {
             el('span', { text: subtitleText })
           ]),
           isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
-          ring(done, ids.length),
+          ring(cnt, 'Module ' + mod.n),
           DOM.icon('chev', 20, 'chev')
         ])
       ]),
@@ -224,11 +221,11 @@ const Tree = (function () {
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
         el('span', { class: 'tick', 'aria-hidden': 'true' },
-          [el('i', { style: { borderStyle: 'dashed', color: 'transparent' }, text: '✓' })]),
+          [el('i', { style: { borderStyle: 'dashed' } }, [DOM.mi('hourglass_empty', 'xs')])]),
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: mod.n + ' · ' + mod.title }),
-            el('span', { text: 'content arrives at Level 3' })
+            el('span', { text: 'not delivered yet' })
           ]),
           el('span', { class: 'badge warn', text: 'pending' }),
           DOM.icon('chev', 20, 'chev')
@@ -242,7 +239,7 @@ const Tree = (function () {
   /* A whole course as one collapsed row — the top level of the one-page tree. */
   function courseNode(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = Progress.count(ids).done;
+    const cnt = Progress.count(ids);
     const state = Progress.tickState(ids);
     const nid = 'course-' + course.id;
 
@@ -253,12 +250,11 @@ const Tree = (function () {
       el('div', { class: 'trow' }, [
         course.pending
           ? el('span', { class: 'tick', 'aria-hidden': 'true' },
-              [el('i', { style: { borderStyle: 'dashed', color: 'transparent' }, text: '✓' })])
-          : tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of ' + course.title,
+              [el('i', { style: { borderStyle: 'dashed' } }, [DOM.mi('hourglass_empty', 'xs')])])
+          : tickButton(state, cnt.min, 'Advance every note of ' + course.title,
               function () {
-                const all = done === ids.length;
-                Progress.setMany(ids, !all);
-                DOM.announce(all ? 'Course cleared.' : 'Course ticked — ' + ids.length + ' notes.');
+                const to = Progress.advanceMany(ids);
+                DOM.announce(to ? course.title + ' at level ' + to + '.' : 'Course cleared.');
                 repaint();
               }),
         toggler(acc, nid, [
@@ -267,8 +263,8 @@ const Tree = (function () {
             el('span', { text: course.pending ? course.blurb : course.code + ' · ' + course.blurb })
           ]),
           course.pending
-            ? el('span', { class: 'badge warn', text: 'level 3' })
-            : ring(done, ids.length),
+            ? el('span', { class: 'badge warn', text: 'pending' })
+            : ring(cnt, course.title),
           DOM.icon('chev', 20, 'chev')
         ])
       ]),
@@ -314,7 +310,7 @@ const Tree = (function () {
         m['mod-' + mod.id] = 1;
         const sec = Pool.sections(course.id)
           .filter(s => (mod.secs || []).indexOf(s.sec) >= 0)
-          .filter(s => s.concepts.some(c => !Progress.isDone(c.id)))[0];
+          .filter(s => s.concepts.some(c => Progress.level(c.id) < 1))[0];
         if (sec) m['sec-' + sec.sec] = 1;
       }
     }

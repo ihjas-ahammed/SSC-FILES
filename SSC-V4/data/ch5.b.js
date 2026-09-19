@@ -36,14 +36,42 @@ CONCEPTS.push(
     proof:{
       idea:`If $f$ were unbounded, you could pick points where $|f|$ blows past every threshold $n$. Bolzano–Weierstrass squeezes a convergent subsequence of those points out of the bounded interval $I$; closedness keeps the limit inside $I$; continuity there forces the function values to converge too — but they were built to blow up. Contradiction.`,
       why:`This is the standard "sequence hunts down the failure, compactness tames the sequence, continuity delivers the contradiction" pattern that recurs through this whole section.`,
-      rungs:[
-        { why:'Proof by contradiction: assume the theorem is false.', m:`Suppose $f$ is <b>not</b> bounded on $I$.` },
-        { why:'Unpack what "unbounded" means: for every threshold $n$, some point of $I$ makes $|f|$ exceed it.', m:`For each $n\\in\\mathbb{N}$ there is $x_n\\in I$ with $|f(x_n)|>n$.` },
-        { why:'These witness points live in a bounded interval, which is exactly what Bolzano–Weierstrass needs.', m:`$X:=(x_n)$ is a bounded sequence, since $I=[a,b]$ is bounded.` },
-        { why:'Extract a convergent subsequence — the key compactness tool.', m:`By the Bolzano–Weierstrass Theorem (3.4.8), there is a subsequence $X'=(x_{n_r})$ with $x_{n_r}\\to x$.` },
-        { why:'The limit cannot escape $I$, because $I$ is closed and every term of the subsequence sits inside $I$.', m:`Since $I$ is closed and $x_{n_r}\\in I$ for all $r$, Theorem 3.2.6 gives $x\\in I$.` },
-        { why:'Now continuity of $f$ at this point converts convergence of inputs into convergence of outputs.', m:`$f$ is continuous at $x\\in I$, so $f(x_{n_r})\\to f(x)$.` },
-        { why:'Convergent sequences must be bounded — but our sequence was built to be unbounded.', m:`By Theorem 3.2.2, $(f(x_{n_r}))$ convergent $\\Rightarrow$ bounded. Yet $|f(x_{n_r})|>n_r\\ge r$ for every $r$, so $(f(x_{n_r}))$ is unbounded.` }
+      rungs: [
+        {
+          why: 'Proof by contradiction: assume the theorem is false.',
+          m: 'Suppose $f$ is <b>not</b> bounded on $I$.',
+          meaning: 'What this really means: We set up a trap by assuming the function can shoot up to infinity somewhere on this short, bounded stretch of track.'
+        },
+        {
+          why: 'Unpack what "unbounded" means: for every threshold $n$, some point of $I$ makes $|f|$ exceed it.',
+          m: 'For each $n\\in\\mathbb{N}$ there is $x_n\\in I$ with $|f(x_n)|>n$.',
+          meaning: 'What this really means: If the function has no ceiling, we can find a witness point that breaks height 1, another that breaks height 2, another breaking height 3, climbing endlessly.'
+        },
+        {
+          why: 'These witness points live in a bounded interval, which is exactly what Bolzano–Weierstrass needs.',
+          m: '$X:=(x_n)$ is a bounded sequence, since $I=[a,b]$ is bounded.',
+          meaning: 'What this really means: Even though the output values are exploding into outer space, the input witness points themselves are trapped inside a fenced-in garden $[a, b]$.'
+        },
+        {
+          why: 'Extract a convergent subsequence — the key compactness tool.',
+          m: 'By the Bolzano–Weierstrass Theorem (3.4.8), there is a subsequence $X\'=(x_{n_r})$ with $x_{n_r}\\to x$.',
+          meaning: 'What this really means: Because infinitely many witness points are crammed into a finite space, they must pile up against at least one focal point.'
+        },
+        {
+          why: 'The limit cannot escape $I$, because $I$ is closed and every term of the subsequence sits inside $I$.',
+          m: 'Since $I$ is closed and $x_{n_r}\\in I$ for all $r$, Theorem 3.2.6 gives $x\\in I$.',
+          meaning: 'What this really means: The boundary fence is solid and closed, so this focal gathering point cannot spill outside; it sits squarely inside our domain.'
+        },
+        {
+          why: 'Now continuity of $f$ at this point converts convergence of inputs into convergence of outputs.',
+          m: '$f$ is continuous at $x\\in I$, so $f(x_{n_r})\\to f(x)$.',
+          meaning: 'What this really means: Because the function is continuous, stepping toward this focal point forces the corresponding outputs to settle down toward one specific, finite real value.'
+        },
+        {
+          why: 'Convergent sequences must be bounded — but our sequence was built to be unbounded.',
+          m: 'By Theorem 3.2.2, $(f(x_{n_r}))$ convergent $\\Rightarrow$ bounded. Yet $|f(x_{n_r})|>n_r\\ge r$ for every $r$, so $(f(x_{n_r}))$ is unbounded.',
+          meaning: 'What this really means: Contradiction! A sequence cannot simultaneously settle down near a calm finite number and blast off beyond every conceivable integer ceiling.'
+        }
       ],
       ends:`These two facts about $(f(x_{n_r}))$ — bounded and unbounded — contradict each other. So the assumption fails: $f$ must be bounded on $I$.`
     },
@@ -90,14 +118,42 @@ CONCEPTS.push(
     proof:{
       idea:`We already know $f(I)$ is bounded, so $s^{*}:=\\sup f(I)$ exists. Build a sequence of points $x_n$ whose values creep up to within $1/n$ of $s^{*}$. Bolzano–Weierstrass gives a convergent subsequence inside $I$; continuity there, plus the Squeeze Theorem, forces the limiting value to equal exactly $s^{*}$ — so the supremum IS a value of $f$, attained at that limit point.`,
       why:`This is the Boundedness Theorem's proof pattern reused, but aimed at a target value ($s^{*}$) instead of a contradiction.`,
-      rungs:[
-        { why:'Reduce to showing the supremum of the range is actually reached.', m:`By 5.3.2, $f(I)$ is bounded and nonempty, so by the Completeness Property (2.3.6), $s^{*}:=\\sup f(I)$ exists.` },
-        { why:'Since $s^*-1/n$ is not an upper bound of $f(I)$, some point of $I$ must beat it.', m:`For each $n\\in\\mathbb{N}$ there is $x_n\\in I$ with $s^{*}-\\dfrac{1}{n}<f(x_n)\\le s^{*}$.` },
-        { why:'These points sit inside the bounded interval $I$ — extract a convergent subsequence.', m:`$(x_n)$ is bounded, so by Bolzano–Weierstrass (3.4.8) there is $(x_{n_r})\\to x^{*}$.` },
-        { why:'The limit point cannot leak outside the closed interval.', m:`$I$ closed and $x_{n_r}\\in I$ $\\Rightarrow$ $x^{*}\\in I$ (Theorem 3.2.6).` },
-        { why:'Continuity at $x^{*}$ converts convergence of inputs into convergence of outputs.', m:`$f$ continuous at $x^{*}$ $\\Rightarrow$ $f(x_{n_r})\\to f(x^{*})$.` },
-        { why:'Squeeze the near-maximal values between $s^*-1/n_r$ and $s^*$ to pin their limit exactly at $s^*$.', m:`$s^{*}-\\dfrac{1}{n_r}<f(x_{n_r})\\le s^{*}$ for all $r$, so by the Squeeze Theorem (3.2.7), $f(x_{n_r})\\to s^{*}$.` },
-        { why:'A sequence can only have one limit — compare the two limits just found.', m:`$f(x^{*})=\\lim f(x_{n_r})=s^{*}=\\sup f(I)$.` }
+      rungs: [
+        {
+          why: 'Reduce to showing the supremum of the range is actually reached.',
+          m: 'By 5.3.2, $f(I)$ is bounded and nonempty, so by the Completeness Property (2.3.6), $s^{*}:=\\sup f(I)$ exists.',
+          meaning: 'What this really means: The outputs never shoot to infinity, so there is a definite, sharp ceiling hovering above the entire landscape.'
+        },
+        {
+          why: 'Since $s^*-1/n$ is not an upper bound of $f(I)$, some point of $I$ must beat it.',
+          m: 'For each $n\\in\\mathbb{N}$ there is $x_n\\in I$ with $s^{*}-\\dfrac{1}{n}<f(x_n)\\le s^{*}$.',
+          meaning: 'What this really means: Lowering the ceiling by even a whisker lets us spot an actual output poking up into the gap, giving us a sequence of points getting closer and closer to the very top.'
+        },
+        {
+          why: 'These points sit inside the bounded interval $I$ — extract a convergent subsequence.',
+          m: '$(x_n)$ is bounded, so by Bolzano–Weierstrass (3.4.8) there is $(x_{n_r})\\to x^{*}$.',
+          meaning: 'What this really means: All these peak-seeking climbers are trapped in a finite territory, so a cluster of them must zero in on one specific location on the ground.'
+        },
+        {
+          why: 'The limit point cannot leak outside the closed interval.',
+          m: '$I$ closed and $x_{n_r}\\in I$ $\\Rightarrow$ $x^{*}\\in I$ (Theorem 3.2.6).',
+          meaning: 'What this really means: Because the territory has solid closed borders, this summit candidate location actually belongs to our domain.'
+        },
+        {
+          why: 'Continuity at $x^{*}$ converts convergence of inputs into convergence of outputs.',
+          m: '$f$ continuous at $x^{*}$ $\\Rightarrow$ $f(x_{n_r})\\to f(x^{*})$.',
+          meaning: 'What this really means: Walking into this summit location smoothly carries our height directly to the height of the function at that exact spot.'
+        },
+        {
+          why: 'Squeeze the near-maximal values between $s^*-1/n_r$ and $s^*$ to pin their limit exactly at $s^*$.',
+          m: '$s^{*}-\\dfrac{1}{n_r}<f(x_{n_r})\\le s^{*}$ for all $r$, so by the Squeeze Theorem (3.2.7), $f(x_{n_r})\\to s^{*}$.',
+          meaning: 'What this really means: Trapped between the absolute ceiling and an upward-moving floor, the climbers\' heights are forced to converge precisely to the ceiling value itself.'
+        },
+        {
+          why: 'A sequence can only have one limit — compare the two limits just found.',
+          m: '$f(x^{*})=\\lim f(x_{n_r})=s^{*}=\\sup f(I)$.',
+          meaning: 'What this really means: The theoretical ceiling is not just an unreachable mirage; the function actually touches and attains that exact maximum height right at the point $x^*$.'
+        }
       ],
       ends:`So $x^{*}\\in I$ is an absolute maximum point for $f$ on $I$. The minimum case is symmetric: apply the same argument to $s_{*}:=\\inf f(I)$ (or apply this result to $-f$).`
     },
@@ -125,15 +181,47 @@ CONCEPTS.push(
     proof:{
       idea:`Bisect $[a,b]$ over and over, at each step keeping whichever half still has a sign change. This builds a nested sequence of shrinking closed intervals; the Nested Intervals Property hands you a common point $c$; continuity then squeezes $f(c)$ between $\\le 0$ and $\\ge 0$, forcing $f(c)=0$.`,
       why:`This is literally the Bisection Method — the proof doubles as a root-finding algorithm.`,
-      rungs:[
-        { why:'Set up the halving process on the whole interval (the case $f(a)>0>f(b)$ is symmetric).', m:`Assume $f(a)<0<f(b)$. Let $I_1:=[a_1,b_1]=[a,b]$, and let $p_1$ be its midpoint.` },
-        { why:'If the midpoint is already a root, stop; otherwise, keep whichever half still shows the sign change.', m:`If $f(p_1)=0$, take $c:=p_1$, done. Otherwise choose $I_2\\subset I_1$ to be the half with $f(a_2)<0<f(b_2)$ (left half if $f(p_1)>0$, right half if $f(p_1)<0$).` },
-        { why:'Repeat forever if no midpoint is ever exactly zero, generating an infinite nest of intervals.', m:`Inductively build nested closed intervals $I_1\\supset I_2\\supset\\cdots$ with $f(a_n)<0$ and $f(b_n)>0$ for every $n$.` },
-        { why:'Track how fast the intervals shrink — this is what will force a single common point.', m:`$\\text{length}(I_n)=b_n-a_n=\\dfrac{b-a}{2^{n-1}}\\to 0$.` },
-        { why:'Nested closed bounded intervals always share a point — this is where completeness of $\\mathbb{R}$ enters.', m:`By the Nested Intervals Property (2.5.2), there is $c$ with $c\\in I_n$ for every $n$.` },
-        { why:'Shrinking length pins both endpoint sequences to that same point $c$.', m:`$a_n\\le c\\le b_n$ for all $n$ and $b_n-a_n\\to 0$, so $\\lim(a_n)=c=\\lim(b_n)$.` },
-        { why:'Continuity lets us carry the sign inequalities to the limit.', m:`$f$ continuous at $c$ $\\Rightarrow$ $f(a_n)\\to f(c)$ and $f(b_n)\\to f(c)$.` },
-        { why:'Nonstrict inequalities survive taking limits — squeeze $f(c)$ from both sides.', m:`$f(a_n)<0$ for all $n$ $\\Rightarrow$ $f(c)\\le 0$; $\\ f(b_n)>0$ for all $n$ $\\Rightarrow$ $f(c)\\ge 0$. Hence $f(c)=0$.` }
+      rungs: [
+        {
+          why: 'Set up the halving process on the whole interval (the case $f(a)>0>f(b)$ is symmetric).',
+          m: 'Assume $f(a)<0<f(b)$. Let $I_1:=[a_1,b_1]=[a,b]$, and let $p_1$ be its midpoint.',
+          meaning: 'What this really means: The curve starts in deep water below sea level and ends up on high ground, so we test the elevation at the exact halfway point of the bridge.'
+        },
+        {
+          why: 'If the midpoint is already a root, stop; otherwise, keep whichever half still shows the sign change.',
+          m: 'If $f(p_1)=0$, take $c:=p_1$, done. Otherwise choose $I_2\\subset I_1$ to be the half with $f(a_2)<0<f(b_2)$ (left half if $f(p_1)>0$, right half if $f(p_1)<0$).',
+          meaning: 'What this really means: If our midpoint hits sea level exactly, we win; otherwise, we discard the boring half and keep the half where one end is underwater and the other end is dry land.'
+        },
+        {
+          why: 'Repeat forever if no midpoint is ever exactly zero, generating an infinite nest of intervals.',
+          m: 'Inductively build nested closed intervals $I_1\\supset I_2\\supset\\cdots$ with $f(a_n)<0$ and $f(b_n)>0$ for every $n$.',
+          meaning: 'What this really means: By repeatedly bisecting, we trap the coastline inside a succession of smaller and smaller cages, each still straddling sea level.'
+        },
+        {
+          why: 'Track how fast the intervals shrink — this is what will force a single common point.',
+          m: '$\\text{length}(I_n)=b_n-a_n=\\dfrac{b-a}{2^{n-1}}\\to 0$.',
+          meaning: 'What this really means: Halving the cage width at every step causes the search area to collapse rapidly to zero width.'
+        },
+        {
+          why: 'Nested closed bounded intervals always share a point — this is where completeness of $\\mathbb{R}$ enters.',
+          m: 'By the Nested Intervals Property (2.5.2), there is $c$ with $c\\in I_n$ for every $n$.',
+          meaning: 'What this really means: Because the real number line has no gaps or holes, an infinitely shrinking stack of closed boxes must clamp down on at least one pinpoint address.'
+        },
+        {
+          why: 'Shrinking length pins both endpoint sequences to that same point $c$.',
+          m: '$a_n\\le c\\le b_n$ for all $n$ and $b_n-a_n\\to 0$, so $\\lim(a_n)=c=\\lim(b_n)$.',
+          meaning: 'What this really means: The left banks and right banks squeeze toward each other until both sides crush in on the very same point $c$.'
+        },
+        {
+          why: 'Continuity lets us carry the sign inequalities to the limit.',
+          m: '$f$ continuous at $c$ $\\Rightarrow$ $f(a_n)\\to f(c)$ and $f(b_n)\\to f(c)$.',
+          meaning: 'What this really means: Because the curve has no jumps, approaching $c$ from either side forces the elevations to converge to the elevation right at $c$.'
+        },
+        {
+          why: 'Nonstrict inequalities survive taking limits — squeeze $f(c)$ from both sides.',
+          m: '$f(a_n)<0$ for all $n$ $\\Rightarrow$ $f(c)\\le 0$; $\\ f(b_n)>0$ for all $n$ $\\Rightarrow$ $f(c)\\ge 0$. Hence $f(c)=0$.',
+          meaning: 'What this really means: Approaching from underwater forces the limit to be $\\le 0$, while approaching from above ground forces the limit to be $\\ge 0$, leaving $0$ as the only possible elevation.'
+        }
       ],
       ends:`So $c\\in(a,b)$ is a root of $f$. (If the process ever terminates at some midpoint $p_n$ with $f(p_n)=0$, that $p_n$ is already the desired root.)`
     },
@@ -179,12 +267,32 @@ CONCEPTS.push(
     proof:{
       idea:`Shift by $k$ so that "hits $k$" becomes "hits $0$", then invoke the Location of Roots Theorem directly.`,
       why:`Subtracting a constant does not affect continuity, so all the machinery of 5.3.5 carries over untouched.`,
-      rungs:[
-        { why:'Reduce "hits k" to "has a root" via a shift; handle a<b first (b<a is symmetric).', m:`Assume $a<b$ and $f(a)<k<f(b)$. Define $g(x):=f(x)-k$.` },
-        { why:'Translate the hypothesis on $f$ into a sign change of $g$.', m:`$g(a)=f(a)-k<0$ and $g(b)=f(b)-k>0$.` },
-        { why:'$g$ is still continuous, since it differs from $f$ only by a constant.', m:`$g$ is continuous on $I$ (difference of continuous $f$ and constant $k$).` },
-        { why:'Now the Location of Roots Theorem applies directly to $g$.', m:`By Theorem 5.3.5, there exists $c\\in(a,b)$ with $g(c)=0$.` },
-        { why:'Unwind the substitution to recover the statement about $f$.', m:`$g(c)=0 \\iff f(c)-k=0 \\iff f(c)=k$.` }
+      rungs: [
+        {
+          why: 'Reduce "hits k" to "has a root" via a shift; handle a<b first (b<a is symmetric).',
+          m: 'Assume $a<b$ and $f(a)<k<f(b)$. Define $g(x):=f(x)-k$.',
+          meaning: 'What this really means: To find where a curve crosses height $k$, we simply lower our coordinate axes by $k$ so the target becomes crossing sea level ($0$).'
+        },
+        {
+          why: 'Translate the hypothesis on $f$ into a sign change of $g$.',
+          m: '$g(a)=f(a)-k<0$ and $g(b)=f(b)-k>0$.',
+          meaning: 'What this really means: In our shifted world, the curve starts below zero and ends above zero, creating a classic sign change.'
+        },
+        {
+          why: '$g$ is still continuous, since it differs from $f$ only by a constant.',
+          m: '$g$ is continuous on $I$ (difference of continuous $f$ and constant $k$).',
+          meaning: 'What this really means: Shifting a connected unbroken graph downward does not tear or puncture it; it remains completely continuous.'
+        },
+        {
+          why: 'Now the Location of Roots Theorem applies directly to $g$.',
+          m: 'By Theorem 5.3.5, there exists $c\\in(a,b)$ with $g(c)=0$.',
+          meaning: 'What this really means: Our root-finding machinery kicks in immediately, guaranteeing that the shifted curve must slice through the zero line somewhere.'
+        },
+        {
+          why: 'Unwind the substitution to recover the statement about $f$.',
+          m: '$g(c)=0 \\iff f(c)-k=0 \\iff f(c)=k$.',
+          meaning: 'What this really means: Shifting back up, the point where the new curve hit zero is precisely where the original curve hit our target value $k$.'
+        }
       ],
       ends:`So $f(c)=k$ for some $c$ between $a$ and $b$. If instead $b<a$, apply the same argument to $h(x):=k-f(x)$, which satisfies $h(b)<0<h(a)$, to get $c\\in(b,a)$ with $f(c)=k$.`
     },
@@ -208,10 +316,23 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Realize inf and sup as actual function values via Max–Min, then bridge between those two points with IVT.`,
-      rungs:[
-        { why:'Need actual points attaining inf and sup, not just abstract bounds.', m:`By the Maximum–Minimum Theorem (5.3.4), there exist $c_{*},c^{*}\\in I$ with $f(c_{*})=\\inf f(I)$ and $f(c^{*})=\\sup f(I)$.` },
-        { why:'Now $k$ sits between two actual, attained function values.', m:`$f(c_{*})\\le k\\le f(c^{*})$.` },
-        { why:'Apply the Intermediate Value Theorem between these two specific points (in whichever order they occur).', m:`By Bolzano\'s IVT (5.3.7) applied between $c_{*}$ and $c^{*}$, there exists $c\\in I$ between them with $f(c)=k$.` }
+      why:`Extreme Value Theorem guarantees the supremum and infimum are actually attained, turning abstract bounds into concrete endpoints for Bolzano IVT.`,
+      rungs: [
+        {
+          why: 'Need actual points attaining inf and sup, not just abstract bounds.',
+          m: 'By the Maximum–Minimum Theorem (5.3.4), there exist $c_{*},c^{*}\\in I$ with $f(c_{*})=\\inf f(I)$ and $f(c^{*})=\\sup f(I)$.',
+          meaning: 'What this really means: On a closed bounded interval, the lowest valley and the highest peak are actual physical locations you can stand on.'
+        },
+        {
+          why: 'Now $k$ sits between two actual, attained function values.',
+          m: '$f(c_{*})\\le k\\le f(c^{*})$.',
+          meaning: 'What this really means: Any target value between the floor and the ceiling sits neatly between the elevations of those two physical locations.'
+        },
+        {
+          why: 'Apply the Intermediate Value Theorem between these two specific points (in whichever order they occur).',
+          m: 'By Bolzano\'s IVT (5.3.7) applied between $c_{*}$ and $c^{*}$, there exists $c\\in I$ between them with $f(c)=k$.',
+          meaning: 'What this really means: Hiking from the lowest valley to the highest peak without lifting your feet forces you to pass through every intermediate altitude along the way.'
+        }
       ],
       ends:`So c∈I satisfies f(c)=k, for any k between inf f(I) and sup f(I).`
     },
@@ -233,11 +354,28 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Show both inclusions: $f(I)\\subseteq[m,M]$ is the easy direction (definition of sup/inf plus attainment); $[m,M]\\subseteq f(I)$ is the previous corollary.`,
-      rungs:[
-        { why:'Name the two extreme values of the range.', m:`Let $m:=\\inf f(I)$, $M:=\\sup f(I)$.` },
-        { why:'Max–Min guarantees these extremes are actually elements of f(I), which immediately traps the whole range between them.', m:`By 5.3.4, $m,M\\in f(I)$, and by definition of inf/sup, $f(I)\\subseteq[m,M]$.` },
-        { why:'Need the reverse inclusion — every value strictly between m and M (and m, M themselves) is hit by some point of I.', m:`For any $k\\in[m,M]$, Corollary 5.3.8 gives $c\\in I$ with $f(c)=k$, so $k\\in f(I)$; hence $[m,M]\\subseteq f(I)$.` },
-        { why:'Combine both inclusions.', m:`$f(I)\\subseteq[m,M]$ and $[m,M]\\subseteq f(I)$ $\\Rightarrow$ $f(I)=[m,M]$.` }
+      why:`Extreme values provide the minimal enclosing closed interval, while IVT ensures every intermediate value is hit, preventing any holes or tears in the image.`,
+      rungs: [
+        {
+          why: 'Name the two extreme values of the range.',
+          m: 'Let $m:=\\inf f(I)$, $M:=\\sup f(I)$.',
+          meaning: 'What this really means: We measure the absolute lowest floor and highest ceiling of all the outputs produced across the interval.'
+        },
+        {
+          why: 'Max–Min guarantees these extremes are actually elements of f(I), which immediately traps the whole range between them.',
+          m: 'By 5.3.4, $m,M\\in f(I)$, and by definition of inf/sup, $f(I)\\subseteq[m,M]$.',
+          meaning: 'What this really means: Both extremes are actually touched by the function, meaning every single output is boxed between this minimum and maximum.'
+        },
+        {
+          why: 'Need the reverse inclusion — every value strictly between m and M (and m, M themselves) is hit by some point of I.',
+          m: 'For any $k\\in[m,M]$, Corollary 5.3.8 gives $c\\in I$ with $f(c)=k$, so $k\\in f(I)$; hence $[m,M]\\subseteq f(I)$.',
+          meaning: 'What this really means: By the intermediate value property, no height between the floor and ceiling is skipped; every intermediate altitude is filled in completely.'
+        },
+        {
+          why: 'Combine both inclusions.',
+          m: '$f(I)\\subseteq[m,M]$ and $[m,M]\\subseteq f(I)$ $\\Rightarrow$ $f(I)=[m,M]$.',
+          meaning: 'What this really means: Trapped between the extremes with no holes or gaps, the collection of outputs is itself a solid, closed, bounded interval.'
+        }
       ],
       ends:`f(I) is exactly the closed bounded interval [m,M].`
     },
@@ -262,12 +400,32 @@ CONCEPTS.push(
     proof:{
       idea:`Use the abstract characterization of an interval — contains every point strictly between any two of its points — and verify it for $f(I)$ using Bolzano's IVT.`,
       why:`This sidesteps having to know the shape of $f(I)$ in advance; it only checks the one defining property of "being an interval".`,
-      rungs:[
-        { why:'Recall the tool for proving a set is an interval without knowing its shape.', m:`By the Characterization Theorem (2.5.1), $S\\subseteq\\mathbb{R}$ is an interval $\\iff$ whenever $\\alpha,\\beta\\in S$ with $\\alpha<\\gamma<\\beta$, then $\\gamma\\in S$.` },
-        { why:'Take two arbitrary values already known to be in f(I).', m:`Let $\\alpha,\\beta\\in f(I)$ with $\\alpha<\\beta$; write $\\alpha=f(a)$, $\\beta=f(b)$ for some $a,b\\in I$.` },
-        { why:'Pick an arbitrary target value strictly between them.', m:`Let $k\\in(\\alpha,\\beta)$.` },
-        { why:'This is exactly the setup Bolzano\'s IVT needs.', m:`By Bolzano\'s IVT (5.3.7) applied to $f$ on $I$ between $a$ and $b$, there exists $c\\in I$ with $f(c)=k$.` },
-        { why:'That c places k inside f(I), which is exactly the property we needed to check.', m:`$k=f(c)\\in f(I)$. Since $k$ was arbitrary in $(\\alpha,\\beta)$, $[\\alpha,\\beta]\\subseteq f(I)$.` }
+      rungs: [
+        {
+          why: 'Recall the tool for proving a set is an interval without knowing its shape.',
+          m: 'By the Characterization Theorem (2.5.1), $S\\subseteq\\mathbb{R}$ is an interval $\\iff$ whenever $\\alpha,\\beta\\in S$ with $\\alpha<\\gamma<\\beta$, then $\\gamma\\in S$.',
+          meaning: 'What this really means: Being an interval simply means having no missing gaps: whenever two points belong to the set, the entire stretch connecting them belongs too.'
+        },
+        {
+          why: 'Take two arbitrary values already known to be in f(I).',
+          m: 'Let $\\alpha,\\beta\\in f(I)$ with $\\alpha<\\beta$; write $\\alpha=f(a)$, $\\beta=f(b)$ for some $a,b\\in I$.',
+          meaning: 'What this really means: Choose two arbitrary output points on our curve, which originated from two input points in the domain.'
+        },
+        {
+          why: 'Pick an arbitrary target value strictly between them.',
+          m: 'Let $k\\in(\\alpha,\\beta)$.',
+          meaning: 'What this really means: Test any arbitrary intermediate altitude lying strictly between those two output points.'
+        },
+        {
+          why: 'This is exactly the setup Bolzano\'s IVT needs.',
+          m: 'By Bolzano\'s IVT (5.3.7) applied to $f$ on $I$ between $a$ and $b$, there exists $c\\in I$ with $f(c)=k$.',
+          meaning: 'What this really means: Because the domain is an unbroken interval and the function is continuous, drawing the curve between $a$ and $b$ must cross the intermediate altitude.'
+        },
+        {
+          why: 'That c places k inside f(I), which is exactly the property we needed to check.',
+          m: '$k=f(c)\\in f(I)$. Since $k$ was arbitrary in $(\\alpha,\\beta)$, $[\\alpha,\\beta]\\subseteq f(I)$.',
+          meaning: 'What this really means: Since every in-between altitude is covered without a single tear, the entire image set is guaranteed to be an unbroken interval.'
+        }
       ],
       ends:`f(I) satisfies the characterizing property of 2.5.1, so f(I) is an interval.`
     },
@@ -318,12 +476,33 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`(i)⟺(ii) is the definition negated term by term. (ii)⟺(iii) just re-indexes "for every δ" as "for δ=1/n".`,
-      rungs:[
-        { why:'Negate the ε–δ definition of uniform continuity directly, flipping each quantifier in turn.', m:`$\\lnot[\\forall\\varepsilon>0\\ \\exists\\delta>0\\ \\forall x,u\\in A(|x-u|<\\delta\\Rightarrow|f(x)-f(u)|<\\varepsilon)]$ becomes $\\exists\\varepsilon_0>0\\ \\forall\\delta>0\\ \\exists x,u\\in A(|x-u|<\\delta \\wedge |f(x)-f(u)|\\ge\\varepsilon_0)$ — this is exactly (ii).` },
-        { why:'So (i) and (ii) are the same statement, just one written as "not uniformly continuous" and the other spelled out.', m:`(i) $\\iff$ (ii) by pure logical negation.` },
-        { why:'To pass from (ii) to (iii), turn "for every δ" into "for δ = 1/n, one n at a time".', m:`Apply (ii) with $\\delta=1/n$ for each $n\\in\\mathbb{N}$ to get $x_n,u_n\\in A$ with $|x_n-u_n|<1/n$ and $|f(x_n)-f(u_n)|\\ge\\varepsilon_0$.` },
-        { why:'These witnesses automatically satisfy the sequence condition, since 1/n squeezes to 0.', m:`$0\\le|x_n-u_n|<1/n\\to 0$, so by the Squeeze Theorem $\\lim(x_n-u_n)=0$, while $|f(x_n)-f(u_n)|\\ge\\varepsilon_0$ for every $n$ — this is (iii).` },
-        { why:'For the converse (iii)⇒(ii), turn the sequence witnesses back into a "works for every δ" statement.', m:`Given $\\delta>0$: since $x_n-u_n\\to 0$, there is $N$ with $|x_N-u_N|<\\delta$; take $x_\\delta:=x_N,\\ u_\\delta:=u_N$, which still satisfies $|f(x_\\delta)-f(u_\\delta)|\\ge\\varepsilon_0$.` }
+      why:`Negating universal quantification on $\\delta$ with the sequence choice $\\delta = 1/n$ gives a concrete pair of sequences whose gap vanishes while output separation persists.`,
+      rungs: [
+        {
+          why: 'Negate the ε–δ definition of uniform continuity directly, flipping each quantifier in turn.',
+          m: '$\\lnot[\\forall\\varepsilon>0\\ \\exists\\delta>0\\ \\forall x,u\\in A(|x-u|<\\delta\\Rightarrow|f(x)-f(u)|<\\varepsilon)]$ becomes $\\exists\\varepsilon_0>0\\ \\forall\\delta>0\\ \\exists x,u\\in A(|x-u|<\\delta \\wedge |f(x)-f(u)|\\ge\\varepsilon_0)$ — this is exactly (ii).',
+          meaning: 'What this really means: Failing uniform continuity means there is a permanent error gap that can never be cured by any universal distance tolerance anywhere on the map.'
+        },
+        {
+          why: 'So (i) and (ii) are the same statement, just one written as "not uniformly continuous" and the other spelled out.',
+          m: '(i) $\\iff$ (ii) by pure logical negation.',
+          meaning: 'What this really means: Saying a property fails is logically identical to asserting that its exact negation takes place.'
+        },
+        {
+          why: 'To pass from (ii) to (iii), turn "for every δ" into "for δ = 1/n, one n at a time".',
+          m: 'Apply (ii) with $\\delta=1/n$ for each $n\\in\\mathbb{N}$ to get $x_n,u_n\\in A$ with $|x_n-u_n|<1/n$ and $|f(x_n)-f(u_n)|\\ge\\varepsilon_0$.',
+          meaning: 'What this really means: At each round $n$, tighten your testing clamp to width $1/n$ and pluck out a pair of twin points that are that close together but whose outputs are torn apart.'
+        },
+        {
+          why: 'These witnesses automatically satisfy the sequence condition, since 1/n squeezes to 0.',
+          m: '$0\\le|x_n-u_n|<1/n\\to 0$, so by the Squeeze Theorem $\\lim(x_n-u_n)=0$, while $|f(x_n)-f(u_n)|\\ge\\varepsilon_0$ for every $n$ — this is (iii).',
+          meaning: 'What this really means: These input pairs merge toward each other until their separation vanishes, yet their corresponding outputs stubbornly maintain a wide chasm.'
+        },
+        {
+          why: 'For the converse (iii)⇒(ii), turn the sequence witnesses back into a "works for every δ" statement.',
+          m: 'Given $\\delta>0$: since $x_n-u_n\\to 0$, there is $N$ with $|x_N-u_N|<\\delta$; take $x_\\delta:=x_N,\\ u_\\delta:=u_N$, which still satisfies $|f(x_\\delta)-f(u_\\delta)|\\ge\\varepsilon_0$.',
+          meaning: 'What this really means: Any challenger offering a candidate tolerance window $\\delta$ can be defeated by fast-forwarding down the sequence until the inputs are closer than $\\delta$.'
+        }
       ],
       ends:`(i), (ii), (iii) are logically equivalent. (iii) is the most useful in practice: to show f is NOT uniformly continuous, just exhibit two explicit sequences with inputs merging but outputs staying apart.`
     },
@@ -352,14 +531,42 @@ CONCEPTS.push(
     proof:{
       idea:`Assume $f$ fails to be uniformly continuous on the closed bounded interval $I$. The sequence criterion (5.4.2) hands you two sequences whose inputs get arbitrarily close while outputs stay $\\varepsilon_0$ apart. Bolzano–Weierstrass extracts a convergent subsequence; since inputs merge, the companion sequence converges to the same limit; continuity there then forces both image subsequences to the same value — contradicting the fixed gap.`,
       why:`Exactly the same "sequence hunts the failure, compactness tames it, continuity delivers the contradiction" pattern as the Boundedness Theorem, now aimed at uniform continuity instead of boundedness.`,
-      rungs:[
-        { why:'Proof by contradiction: assume the theorem fails.', m:`Suppose $f$ is not uniformly continuous on $I$.` },
-        { why:'Unpack that failure with the sequence form of the Nonuniform Continuity Criterion.', m:`By 5.4.2(iii), there exist $\\varepsilon_0>0$ and sequences $(x_n),(u_n)$ in $I$ with $|x_n-u_n|<1/n$ and $|f(x_n)-f(u_n)|\\ge\\varepsilon_0$ for all $n$.` },
-        { why:'I is bounded, so extract a convergent subsequence — the usual compactness tool.', m:`$(x_n)$ bounded $\\Rightarrow$ by Bolzano–Weierstrass (3.4.8), a subsequence $(x_{n_k})\\to z$.` },
-        { why:'I is closed, so the limit stays inside I.', m:`$I$ closed $\\Rightarrow$ $z\\in I$ (Theorem 3.2.6).` },
-        { why:'Since the inputs were merging, the companion subsequence is dragged to the same limit.', m:`$|u_{n_k}-z|\\le|u_{n_k}-x_{n_k}|+|x_{n_k}-z|\\to 0$, so $u_{n_k}\\to z$ as well.` },
-        { why:'Continuity at z pulls BOTH image subsequences toward f(z), closing the gap.', m:`$f$ continuous at $z$ $\\Rightarrow$ $f(x_{n_k})\\to f(z)$ and $f(u_{n_k})\\to f(z)$, so $f(x_{n_k})-f(u_{n_k})\\to 0$.` },
-        { why:'But this directly contradicts the fixed ε₀ gap we started with.', m:`Yet $|f(x_{n_k})-f(u_{n_k})|\\ge\\varepsilon_0>0$ for every $k$ — impossible if the left side $\\to 0$.` }
+      rungs: [
+        {
+          why: 'Proof by contradiction: assume the theorem fails.',
+          m: 'Suppose $f$ is not uniformly continuous on $I$.',
+          meaning: 'What this really means: We assume the curve behaves erratically by tearing nearby points apart with no single safety window that works everywhere.'
+        },
+        {
+          why: 'Unpack that failure with the sequence form of the Nonuniform Continuity Criterion.',
+          m: 'By 5.4.2(iii), there exist $\\varepsilon_0>0$ and sequences $(x_n),(u_n)$ in $I$ with $|x_n-u_n|<1/n$ and $|f(x_n)-f(u_n)|\\ge\\varepsilon_0$ for all $n$.',
+          meaning: 'What this really means: Failure generates two marching lines of inputs that get infinitely close together while their output values remain obstinately separated by at least $\\varepsilon_0$.'
+        },
+        {
+          why: 'I is bounded, so extract a convergent subsequence — the usual compactness tool.',
+          m: '$(x_n)$ bounded $\\Rightarrow$ by Bolzano–Weierstrass (3.4.8), a subsequence $(x_{n_k})\\to z$.',
+          meaning: 'What this really means: Because the domain is trapped in a finite box, the first sequence must contain a sub-process that settles down to a specific landing spot $z$.'
+        },
+        {
+          why: 'I is closed, so the limit stays inside I.',
+          m: '$I$ closed $\\Rightarrow$ $z\\in I$ (Theorem 3.2.6).',
+          meaning: 'What this really means: The borders are closed, so this landing spot $z$ cannot leak out into forbidden territory; it is an authentic point of our domain.'
+        },
+        {
+          why: 'Since the inputs were merging, the companion subsequence is dragged to the same limit.',
+          m: '$|u_{n_k}-z|\\le|u_{n_k}-x_{n_k}|+|x_{n_k}-z|\\to 0$, so $u_{n_k}\\to z$ as well.',
+          meaning: 'What this really means: Because the twin sequences were holding hands with distance collapsing to zero, the second sequence is dragged into the exact same spot $z$.'
+        },
+        {
+          why: 'Continuity at z pulls BOTH image subsequences toward f(z), closing the gap.',
+          m: '$f$ continuous at $z$ $\\Rightarrow$ $f(x_{n_k})\\to f(z)$ and $f(u_{n_k})\\to f(z)$, so $f(x_{n_k})-f(u_{n_k})\\to 0$.',
+          meaning: 'What this really means: Ordinary continuity at this single point $z$ forces both output sequences to home in on the same value $f(z)$, causing the output gap between them to evaporate.'
+        },
+        {
+          why: 'But this directly contradicts the fixed ε₀ gap we started with.',
+          m: 'Yet $|f(x_{n_k})-f(u_{n_k})|\\ge\\varepsilon_0>0$ for every $k$ — impossible if the left side $\\to 0$.',
+          meaning: 'What this really means: The trap snaps shut: a gap cannot stay permanently wider than $\\varepsilon_0$ while simultaneously shrinking all the way down to zero.'
+        }
       ],
       ends:`Contradiction — so f must be uniformly continuous on the closed bounded interval I.`
     },
@@ -401,10 +608,23 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Try the simplest possible formula for δ in terms of ε and K, and check it works.`,
-      rungs:[
-        { why:'Aim to produce one δ, depending only on ε, that works everywhere at once — try the natural formula suggested by the Lipschitz inequality.', m:`Given $\\varepsilon>0$, set $\\delta:=\\varepsilon/K$.` },
-        { why:'Start from the hypothesis that x,u are δ-close.', m:`Suppose $x,u\\in A$ with $|x-u|<\\delta=\\varepsilon/K$.` },
-        { why:'Plug directly into the Lipschitz bound.', m:`$|f(x)-f(u)|\\le K|x-u|<K\\cdot\\dfrac{\\varepsilon}{K}=\\varepsilon$.` }
+      why:`The global Lipschitz bound $|f(x)-f(u)| \\le K|x-u|$ decouples $\\delta = \\varepsilon/K$ from the base point, yielding a single modulus for all points simultaneously.`,
+      rungs: [
+        {
+          why: 'Aim to produce one δ, depending only on ε, that works everywhere at once — try the natural formula suggested by the Lipschitz inequality.',
+          m: 'Given $\\varepsilon>0$, set $\\delta:=\\varepsilon/K$.',
+          meaning: 'What this really means: Since the curve\'s slope never exceeds $K$, shrinking the input window by a factor of $K$ completely tames the output error everywhere at once.'
+        },
+        {
+          why: 'Start from the hypothesis that x,u are δ-close.',
+          m: 'Suppose $x,u\\in A$ with $|x-u|<\\delta=\\varepsilon/K$.',
+          meaning: 'What this really means: We pick any two points on the domain whose separation is strictly smaller than this scaled window.'
+        },
+        {
+          why: 'Plug directly into the Lipschitz bound.',
+          m: '$|f(x)-f(u)|\\le K|x-u|<K\\cdot\\dfrac{\\varepsilon}{K}=\\varepsilon$.',
+          meaning: 'What this really means: The speed limit factor $K$ cancels out cleanly, guaranteeing that output distance stays strictly below our required tolerance.'
+        }
       ],
       ends:`The same δ=ε/K works for every pair x,u in A — it depends only on ε, never on the points themselves — so f is uniformly continuous on A.`
     },
@@ -448,11 +668,28 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Chase the definitions: uniform continuity gives one δ controlling closeness of outputs from closeness of inputs; Cauchy-ness of the input sequence eventually delivers inputs that close, δ-close.`,
-      rungs:[
-        { why:'Set up the goal: show outputs eventually get and stay ε-close.', m:`Let $(x_n)$ be Cauchy in $A$; fix $\\varepsilon>0$.` },
-        { why:'Uniform continuity supplies one δ, valid everywhere on A, controlling output-closeness from input-closeness.', m:`By uniform continuity, choose $\\delta>0$ such that $x,u\\in A,\\ |x-u|<\\delta \\Rightarrow |f(x)-f(u)|<\\varepsilon$.` },
-        { why:'Cauchy-ness of (xₙ) lets us force inputs within that δ of each other for large indices.', m:`Since $(x_n)$ is Cauchy, there is $H(\\delta)$ such that $|x_n-x_m|<\\delta$ for all $n,m>H(\\delta)$.` },
-        { why:'Chain the two facts: past that index, inputs are δ-close, so outputs are ε-close.', m:`For $n,m>H(\\delta)$: $|x_n-x_m|<\\delta \\Rightarrow |f(x_n)-f(x_m)|<\\varepsilon$.` }
+      why:`Global $\\delta(\\varepsilon)$ controls outputs uniformly across the entire domain, allowing input Cauchy clustering past index $H(\\delta)$ to force output Cauchy clustering within $\\varepsilon$.`,
+      rungs: [
+        {
+          why: 'Set up the goal: show outputs eventually get and stay ε-close.',
+          m: 'Let $(x_n)$ be Cauchy in $A$; fix $\\varepsilon>0$.',
+          meaning: 'What this really means: We feed the machine an input sequence whose terms are clustering tightly together like raindrops coalescing in a puddle.'
+        },
+        {
+          why: 'Uniform continuity supplies one δ, valid everywhere on A, controlling output-closeness from input-closeness.',
+          m: 'By uniform continuity, choose $\\delta>0$ such that $x,u\\in A,\\ |x-u|<\\delta \\Rightarrow |f(x)-f(u)|<\\varepsilon$.',
+          meaning: 'What this really means: Uniform continuity provides a universal translation key: if any two inputs are closer than $\\delta$, their outputs are guaranteed to be within $\\varepsilon$.'
+        },
+        {
+          why: 'Cauchy-ness of (xₙ) lets us force inputs within that δ of each other for large indices.',
+          m: 'Since $(x_n)$ is Cauchy, there is $H(\\delta)$ such that $|x_n-x_m|<\\delta$ for all $n,m>H(\\delta)$.',
+          meaning: 'What this really means: Because the input terms are gathering closer together, past some point in the sequence every pair of terms is closer than this $\\delta$ threshold.'
+        },
+        {
+          why: 'Chain the two facts: past that index, inputs are δ-close, so outputs are ε-close.',
+          m: 'For $n,m>H(\\delta)$: $|x_n-x_m|<\\delta \\Rightarrow |f(x_n)-f(x_m)|<\\varepsilon$.',
+          meaning: 'What this really means: Applying the translation key shows that the outputs past that point are also trapped within $\\varepsilon$ of each other, proving the outputs form a Cauchy cluster too.'
+        }
       ],
       ends:`This is exactly the Cauchy condition for (f(xₙ)), so (f(xₙ)) is Cauchy.`
     },
@@ -477,15 +714,48 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`(⇐) is immediate from the Uniform Continuity Theorem. (⇒) is the real content: uniform continuity forces Cauchy sequences approaching an endpoint to have Cauchy (hence convergent) images, and forces every such approaching sequence to give the SAME limit — which is exactly the sequential criterion for a genuine limit to exist at that endpoint.`,
-      rungs:[
-        { why:'Dispose of the easy direction first.', m:`($\\Leftarrow$) If $f$ extends to a function continuous on $[a,b]$, then by the Uniform Continuity Theorem (5.4.3), $f$ is uniformly continuous on the closed bounded $[a,b]$, hence uniformly continuous on the subset $(a,b)$.` },
-        { why:'Now the real content: show the limit at a exists at all. Start with one approaching sequence.', m:`($\\Rightarrow$) Suppose $f$ is uniformly continuous on $(a,b)$. Fix any sequence $(x_n)$ in $(a,b)$ with $x_n\\to a$.` },
-        { why:'Convergent sequences are Cauchy, and uniform continuity preserves Cauchy-ness of the images.', m:`$(x_n)$ convergent $\\Rightarrow$ Cauchy, so by Theorem 5.4.7, $(f(x_n))$ is Cauchy, hence convergent by the Cauchy Convergence Criterion (3.5.5); call its limit $L$.` },
-        { why:'Need the SAME L for every approaching sequence, or "the limit at a" is not even well-defined.', m:`Let $(u_n)$ be any other sequence in $(a,b)$ with $u_n\\to a$.` },
-        { why:'Compare the two sequences by looking at their difference, which shrinks to 0.', m:`$\\lim(u_n-x_n)=a-a=0$.` },
-        { why:'Uniform continuity converts "inputs merging" into "outputs merging", applied here to the difference sequence.', m:`Since $u_n-x_n\\to 0$, uniform continuity gives $\\lim\\big(f(u_n)-f(x_n)\\big)=0$ (eventually $|u_n-x_n|<\\delta \\Rightarrow |f(u_n)-f(x_n)|<\\varepsilon$).` },
-        { why:'Combine to show the second sequence gives the same limit L.', m:`$\\lim f(u_n)=\\lim\\big[f(u_n)-f(x_n)\\big]+\\lim f(x_n)=0+L=L$.` },
-        { why:'Same limit for every approaching sequence is exactly the sequential criterion for a limit to exist.', m:`By the Sequential Criterion for limits (4.1.8), $\\lim_{x\\to a^+}f(x)=L$ exists. Define $f(a):=L$; the same argument gives a limit at $b$, define $f(b)$ likewise.` }
+      why:`Uniform continuity preserves Cauchy sequences approaching the boundary, forcing unique one-sided limits that cleanly plug the open endpoints.`,
+      rungs: [
+        {
+          why: 'Dispose of the easy direction first.',
+          m: '($\\Leftarrow$) If $f$ extends to a function continuous on $[a,b]$, then by the Uniform Continuity Theorem (5.4.3), $f$ is uniformly continuous on the closed bounded $[a,b]$, hence uniformly continuous on the subset $(a,b)$.',
+          meaning: 'What this really means: If a curve is continuous on the entire closed interval including the endpoints, the Uniform Continuity Theorem instantly ensures it was uniformly tame on the inside all along.'
+        },
+        {
+          why: 'Now the real content: show the limit at a exists at all. Start with one approaching sequence.',
+          m: '($\\Rightarrow$) Suppose $f$ is uniformly continuous on $(a,b)$. Fix any sequence $(x_n)$ in $(a,b)$ with $x_n\\to a$.',
+          meaning: 'What this really means: To build the missing endpoint, we test an approach sequence marching from inside the interval toward the boundary $a$.'
+        },
+        {
+          why: 'Convergent sequences are Cauchy, and uniform continuity preserves Cauchy-ness of the images.',
+          m: '$(x_n)$ convergent $\\Rightarrow$ Cauchy, so by Theorem 5.4.7, $(f(x_n))$ is Cauchy, hence convergent by the Cauchy Convergence Criterion (3.5.5); call its limit $L$.',
+          meaning: 'What this really means: Because uniform continuity preserves clustering, the outputs cannot oscillate wildly near the edge; they are forced to stabilize at a definite arrival height $L$.'
+        },
+        {
+          why: 'Need the SAME L for every approaching sequence, or "the limit at a" is not even well-defined.',
+          m: 'Let $(u_n)$ be any other sequence in $(a,b)$ with $u_n\\to a$.',
+          meaning: 'What this really means: To ensure our plug is uniquely determined, we must verify that a completely different approach path heading to $a$ doesn\'t try to land at a different height.'
+        },
+        {
+          why: 'Compare the two sequences by looking at their difference, which shrinks to 0.',
+          m: '$\\lim(u_n-x_n)=a-a=0$.',
+          meaning: 'What this really means: Both paths are aiming for the exact same target $a$, so the horizontal distance between them shrivels to zero.'
+        },
+        {
+          why: 'Uniform continuity converts "inputs merging" into "outputs merging", applied here to the difference sequence.',
+          m: 'Since $u_n-x_n\\to 0$, uniform continuity gives $\\lim\\big(f(u_n)-f(x_n)\\big)=0$ (eventually $|u_n-x_n|<\\delta \\Rightarrow |f(u_n)-f(x_n)|<\\varepsilon$).',
+          meaning: 'What this really means: Because the function is uniformly continuous across the whole stretch, inputs merging together forces their outputs to merge together without tearing.'
+        },
+        {
+          why: 'Combine to show the second sequence gives the same limit L.',
+          m: '$\\lim f(u_n)=\\lim\\big[f(u_n)-f(x_n)\\big]+\\lim f(x_n)=0+L=L$.',
+          meaning: 'What this really means: Since the output gap vanishes, the second path arrives at the exact same arrival height $L$ as the first path.'
+        },
+        {
+          why: 'Same limit for every approaching sequence is exactly the sequential criterion for a limit to exist.',
+          m: 'By the Sequential Criterion for limits (4.1.8), $\\lim_{x\\to a^+}f(x)=L$ exists. Define $f(a):=L$; the same argument gives a limit at $b$, define $f(b)$ likewise.',
+          meaning: 'What this really means: Every possible approach path reaches the same destination height $L$, giving us the perfect, seamless plug to cap off the boundary point.'
+        }
       ],
       ends:`Defining f(a) and f(b) to be these limits makes f continuous at both endpoints (by the Sequential Criterion for Continuity, 5.1.3), hence continuous on all of [a,b]. Combined with (⇐), this is the full biconditional.`
     },
@@ -526,11 +796,28 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Uniform continuity gives one mesh size δ that works across the whole interval; make the partition finer than δ, and replace f by its value at one anchor point per piece.`,
-      rungs:[
-        { why:'Uniform continuity is exactly what lets us use one mesh size across the whole interval.', m:`By the Uniform Continuity Theorem (5.4.3), given $\\varepsilon>0$ there is $\\delta(\\varepsilon)>0$ with $x,y\\in I,\\ |x-y|<\\delta(\\varepsilon)\\Rightarrow|f(x)-f(y)|<\\varepsilon$.` },
-        { why:'Chop [a,b] into pieces smaller than δ, so f barely moves within each piece.', m:`Choose $m\\in\\mathbb{N}$ with $h:=(b-a)/m<\\delta(\\varepsilon)$; partition $I$ into $m$ subintervals $I_1,\\ldots,I_m$ of length $h$.` },
-        { why:'On each tiny piece, replace f by one constant — its value at the right endpoint, which is within h<δ of every point of that piece.', m:`Define $s_\\varepsilon(x):=f(a+kh)$ for $x\\in I_k$, $k=1,\\ldots,m$.` },
-        { why:'Check the error directly using the uniform continuity guarantee.', m:`For $x\\in I_k$: $|x-(a+kh)|\\le h<\\delta(\\varepsilon) \\Rightarrow |f(x)-s_\\varepsilon(x)|=|f(x)-f(a+kh)|<\\varepsilon$.` }
+      why:`Uniform continuity provides a uniform partition mesh $h < \\delta(\\varepsilon)$ where the function fluctuates by less than $\\varepsilon$ on each subinterval.`,
+      rungs: [
+        {
+          why: 'Uniform continuity is exactly what lets us use one mesh size across the whole interval.',
+          m: 'By the Uniform Continuity Theorem (5.4.3), given $\\varepsilon>0$ there is $\\delta(\\varepsilon)>0$ with $x,y\\in I,\\ |x-y|<\\delta(\\varepsilon)\\Rightarrow|f(x)-f(y)|<\\varepsilon$.',
+          meaning: 'What this really means: Uniform continuity guarantees that if we never take steps wider than $\\delta$, the function\'s elevation will never shift by more than $\\varepsilon$.'
+        },
+        {
+          why: 'Chop [a,b] into pieces smaller than δ, so f barely moves within each piece.',
+          m: 'Choose $m\\in\\mathbb{N}$ with $h:=(b-a)/m<\\delta(\\varepsilon)$; partition $I$ into $m$ subintervals $I_1,\\ldots,I_m$ of length $h$.',
+          meaning: 'What this really means: We slice the whole interval into equal mini-blocks whose individual widths are strictly smaller than that safe step size $\\delta$.'
+        },
+        {
+          why: 'On each tiny piece, replace f by one constant — its value at the right endpoint, which is within h<δ of every point of that piece.',
+          m: 'Define $s_\\varepsilon(x):=f(a+kh)$ for $x\\in I_k$, $k=1,\\ldots,m$.',
+          meaning: 'What this really means: Across each mini-block, we freeze the graph into a flat horizontal stair tread matching the height of its right edge.'
+        },
+        {
+          why: 'Check the error directly using the uniform continuity guarantee.',
+          m: 'For $x\\in I_k$: $|x-(a+kh)|\\le h<\\delta(\\varepsilon) \\Rightarrow |f(x)-s_\\varepsilon(x)|=|f(x)-f(a+kh)|<\\varepsilon$.',
+          meaning: 'What this really means: Because every point in a mini-block is less than $\\delta$ away from that right edge, the true curve never drifts more than $\\varepsilon$ away from the flat staircase.'
+        }
       ],
       ends:`So sε is a step function on I with |f(x)-sε(x)|<ε for every x∈I.`
     },
@@ -554,9 +841,21 @@ CONCEPTS.push(
       idea: 'Apply uniform continuity directly to partitions whose subinterval length is smaller than $\\delta(\\varepsilon)$.',
       why: 'If the step size $h = (b-a)/m < \\delta(\\varepsilon)$, every point in subinterval $I_k$ is within $\\delta(\\varepsilon)$ of the base point $a + (k-1)h$.',
       rungs: [
-        { why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$, giving $\\delta(\\varepsilon) > 0$ such that $|x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon$.', m: '\\forall x, y \\in [a, b],\\, |x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon' },
-        { why: 'Choose $m \\in \\mathbb{N}$ large enough so the mesh size satisfies $h = (b - a)/m < \\delta(\\varepsilon)$.', m: 'h = \\frac{b - a}{m} < \\delta(\\varepsilon)' },
-        { why: 'Define $s_\\varepsilon(x) = f(a + (k-1)h)$ on $I_k = [a+(k-1)h, a+kh)$. For any $x \\in I_k$, $|x - (a + (k-1)h)| \\le h < \\delta(\\varepsilon)$.', m: '|x - (a + (k-1)h)| < \\delta(\\varepsilon) \\implies |f(x) - s_\\varepsilon(x)| < \\varepsilon' }
+        {
+          why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$, giving $\\delta(\\varepsilon) > 0$ such that $|x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon$.',
+          m: '$$\\forall x, y \\in [a, b],\\, |x - y| < \\delta(\\varepsilon) \\implies |f(x) - f(y)| < \\varepsilon$$',
+          meaning: 'What this really means: A continuous function on a closed interval has a single, universal distance threshold that controls output fluctuations everywhere.'
+        },
+        {
+          why: 'Choose $m \\in \\mathbb{N}$ large enough so the mesh size satisfies $h = (b - a)/m < \\delta(\\varepsilon)$.',
+          m: '$$h = \\frac{b - a}{m} < \\delta(\\varepsilon)$$',
+          meaning: 'What this really means: Dividing the total length into enough equal slices forces every single slice to be narrower than our distance threshold.'
+        },
+        {
+          why: 'Define $s_\\varepsilon(x) = f(a + (k-1)h)$ on $I_k = [a+(k-1)h, a+kh)$. For any $x \\in I_k$, $|x - (a + (k-1)h)| \\le h < \\delta(\\varepsilon)$.',
+          m: '$$|x - (a + (k-1)h)| < \\delta(\\varepsilon) \\implies |f(x) - s_\\varepsilon(x)| < \\varepsilon$$',
+          meaning: 'What this really means: Locking the staircase value to the left edge of each slice guarantees that the flat step never strays more than $\\varepsilon$ from the real curve.'
+        }
       ],
       ends: 'Thus $|f(x) - s_\\varepsilon(x)| < \\varepsilon$ holds for all $x \\in [a, b]$.'
     },
@@ -593,11 +892,28 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Reuse the mesh from the step-function proof, but replace each flat piece by the line segment joining f's actual values at the two ends of that piece.`,
-      rungs:[
-        { why:'Same starting point as the step-function proof: uniform continuity supplies one mesh size for the whole interval.', m:`By uniform continuity (5.4.3), choose $\\delta(\\varepsilon)>0$ with $x,y\\in I,\\ |x-y|<\\delta(\\varepsilon)\\Rightarrow|f(x)-f(y)|<\\varepsilon$.` },
-        { why:'Chop I into pieces narrower than δ.', m:`Choose $m$ with $h=(b-a)/m<\\delta(\\varepsilon)$; subintervals $I_1,\\ldots,I_m$.` },
-        { why:'Instead of a flat constant, connect the actual endpoint VALUES of f with a straight line — still simple, but now continuous.', m:`On $I_k$, let $g_\\varepsilon$ be the linear function through $(a+(k-1)h,\\ f(a+(k-1)h))$ and $(a+kh,\\ f(a+kh))$.` },
-        { why:'Since f barely moves across a piece narrower than δ, and gε shares f\'s exact values at both ends, gε cannot stray far from f in between.', m:`For $x\\in I_k$: $f(x)$ is within $\\varepsilon$ of both endpoint values (by uniform continuity), and $g_\\varepsilon(x)$ lies between those same two endpoint values, so $|f(x)-g_\\varepsilon(x)|<\\varepsilon$.` }
+      why:`Connecting function values at uniform mesh points guarantees linear interpolation stays within the envelope established by uniform continuity.`,
+      rungs: [
+        {
+          why: 'Same starting point as the step-function proof: uniform continuity supplies one mesh size for the whole interval.',
+          m: 'By uniform continuity (5.4.3), choose $\\delta(\\varepsilon)>0$ with $x,y\\in I,\\ |x-y|<\\delta(\\varepsilon)\\Rightarrow|f(x)-f(y)|<\\varepsilon$.',
+          meaning: 'What this really means: We grab the same uniform distance threshold that ensures the function never fluctuates by more than $\\varepsilon$ over any short span.'
+        },
+        {
+          why: 'Chop I into pieces narrower than δ.',
+          m: 'Choose $m$ with $h=(b-a)/m<\\delta(\\varepsilon)$; subintervals $I_1,\\ldots,I_m$.',
+          meaning: 'What this really means: We subdivide the interval into slices narrow enough that the true function hardly wobbles inside any single slice.'
+        },
+        {
+          why: 'Instead of a flat constant, connect the actual endpoint VALUES of f with a straight line — still simple, but now continuous.',
+          m: 'On $I_k$, let $g_\\varepsilon$ be the linear function through $(a+(k-1)h,\\ f(a+(k-1)h))$ and $(a+kh,\\ f(a+kh))$.',
+          meaning: 'What this really means: Instead of building disjoint flat steps, we stretch straight string segments directly between consecutive data points, creating an unbroken polygonal chain.'
+        },
+        {
+          why: 'Since f barely moves across a piece narrower than δ, and gε shares f\'s exact values at both ends, gε cannot stray far from f in between.',
+          m: 'For $x\\in I_k$: $f(x)$ is within $\\varepsilon$ of both endpoint values (by uniform continuity), and $g_\\varepsilon(x)$ lies between those same two endpoint values, so $|f(x)-g_\\varepsilon(x)|<\\varepsilon$.',
+          meaning: 'What this really means: Both the original curve and the straight chord are trapped between the two anchor points at the ends, so neither can stray more than $\\varepsilon$ from the other.'
+        }
       ],
       ends:`gε is continuous, piecewise linear on I, and |f(x)-gε(x)|<ε for every x∈I.`
     },
@@ -623,10 +939,26 @@ CONCEPTS.push(
       idea: 'Construct approximating polynomials via Bernstein polynomials $B_n(f; x)$ on $[0, 1]$.',
       why: 'Bernstein polynomials $B_n(f; x) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} x^k (1-x)^{n-k}$ converge uniformly to any continuous function $f$ on $[0, 1]$.',
       rungs: [
-        { why: 'Use an affine change of variable $t = (x - a)/(b - a)$ to reduce from $[a, b]$ to the unit interval $[0, 1]$.', m: 't = \\frac{x - a}{b - a} \\in [0, 1]' },
-        { why: 'Define the $n$-th Bernstein polynomial for $f$ on $[0, 1]$.', m: 'B_n(f; t) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} t^k (1-t)^{n-k}' },
-        { why: 'Using uniform continuity of $f$, bound terms where $|k/n - t| < \\delta$ by $\\varepsilon/2$.', m: '|k/n - t| < \\delta \\implies |f(k/n) - f(t)| < \\varepsilon/2' },
-        { why: 'Use the variance identity $\\sum_{k=0}^n (k - nt)^2 \\binom{n}{k} t^k (1-t)^{n-k} = nt(1-t) \\le n/4$ to bound terms where $|k/n - t| \\ge \\delta$.', m: '\\sum_{|k/n - t| \\ge \\delta} \\binom{n}{k} t^k (1-t)^{n-k} \\le \\frac{1}{4n\\delta^2}' }
+        {
+          why: 'Use an affine change of variable $t = (x - a)/(b - a)$ to reduce from $[a, b]$ to the unit interval $[0, 1]$.',
+          m: '$$t = \\frac{x - a}{b - a} \\in [0, 1]$$',
+          meaning: 'What this really means: Rescaling and shifting the interval simplifies our coordinate frame to the standardized runway $[0, 1]$ without distorting the math.'
+        },
+        {
+          why: 'Define the $n$-th Bernstein polynomial for $f$ on $[0, 1]$.',
+          m: '$$B_n(f; t) = \\sum_{k=0}^n f(k/n) \\binom{n}{k} t^k (1-t)^{n-k}$$',
+          meaning: 'What this really means: We construct an approximating polynomial by taking a weighted average of sample values, where the weights are classic coin-flip binomial probabilities.'
+        },
+        {
+          why: 'Using uniform continuity of $f$, bound terms where $|k/n - t| < \\delta$ by $\\varepsilon/2$.',
+          m: '$$|k/n - t| < \\delta \\implies |f(k/n) - f(t)| < \\varepsilon/2$$',
+          meaning: 'What this really means: For coin-flip samples near the expected position $t$, the function values stay within $\\varepsilon/2$ of the target value by uniform continuity.'
+        },
+        {
+          why: 'Use the variance identity $\\sum_{k=0}^n (k - nt)^2 \\binom{n}{k} t^k (1-t)^{n-k} = nt(1-t) \\le n/4$ to bound terms where $|k/n - t| \\ge \\delta$.',
+          m: '$$\\sum_{|k/n - t| \\ge \\delta} \\binom{n}{k} t^k (1-t)^{n-k} \\le \\frac{1}{4n\\delta^2}$$',
+          meaning: 'What this really means: The law of large numbers guarantees that wild outlier samples that stray far from $t$ have negligibly small total probability, keeping the overall error under control.'
+        }
       ],
       ends: 'Choosing $n > M/(\\varepsilon \\delta^2)$ ensures $|f(t) - B_n(f; t)| < \\varepsilon$ uniformly on $[0, 1]$.'
     },

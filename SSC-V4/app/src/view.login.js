@@ -87,7 +87,7 @@ const Login = (function () {
       el('div', { class: 'btn-row' }, [go]),
       note,
       el('div', { class: 'banner' }, [
-        el('span', { 'aria-hidden': 'true', text: 'ⓘ' }),
+        DOM.mi('info'),
         el('span', {}, [
           el('b', { text: 'This is a pass key, not a password. ' }),
           'Anyone who knows your name and roll number can open this record. It keeps your ' +

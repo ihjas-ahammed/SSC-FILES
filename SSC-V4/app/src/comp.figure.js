@@ -1,13 +1,23 @@
 /* ══════════════════════════════════════════════════════════════════════════
    Figure engine.
 
-   Figures are hand-drawn inline SVG, built from the mathematics rather than
-   pasted in as images: they inherit the theme's colours, scale to any width,
-   animate on entry, and a few of them take a control so the learner can move
-   the parameter that matters (ε, or the window position).
+   Two kinds of figure now, and they are complementary rather than rivals:
 
-   This file is the plumbing — coordinate mapping, the frame, the controls.
-   The figures themselves live in fig.library.js.
+     drawn      hand-built inline SVG (fig.library.js). Inherits the theme,
+                scales to any width, animates, and a few take a control so the
+                learner can move the parameter that matters (ε, or the window).
+     rendered   the light/dark PNG pairs in `diagrams/`, indexed by concept in
+                fig.diagrams.js. There are dozens of them and the app used to
+                show none — a result with a picture sitting in the repository
+                and nothing on screen is the worst of both.
+
+   A concept shows its drawn figures first, then its rendered ones. Nothing is
+   duplicated: where a drawn figure already exists for a result, the rendered
+   one is still offered below it, because they show different things (the drawn
+   figure is interactive, the rendered one is the finished diagram).
+
+   This file is the plumbing — coordinate mapping, the frame, the controls, and
+   the theme swap on a rendered diagram.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Fig = (function () {
@@ -143,6 +153,58 @@ const Fig = (function () {
     return host;
   }
 
+  /* ── rendered diagrams ────────────────────────────────────────────────── */
+  const base = () => (typeof DIAGRAM_BASE !== 'undefined' ? DIAGRAM_BASE : 'diagrams/');
+
+  const prettyTitle = b => b
+    .replace(/^c\.[0-9.]+[a-z]?_/, '')
+    .replace(/_/g, ' ')
+    .replace(/^./, ch => ch.toUpperCase());
+
+  function renderedFrame(basename, caption) {
+    const light = base() + 'light/' + basename + '.png';
+    const dark = base() + 'dark/' + basename + '.png';
+
+    const img = el('img', {
+      src: light, alt: caption || prettyTitle(basename),
+      loading: 'lazy', decoding: 'async', class: 'fig-img'
+    });
+
+    /* One <img> whose src follows the theme. A <picture> with a
+       prefers-color-scheme <source> was the obvious answer and is the wrong
+       one: it can only see the OS setting, and this app has three theme
+       settings of its own. So the swap watches the same `data-theme` attribute
+       every other themed thing here reads. */
+    function paint() {
+      const wantDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = wantDark ? dark : light;
+      if (img.getAttribute('src') !== next) img.setAttribute('src', next);
+    }
+    paint();
+    if (window.MutationObserver) {
+      const mo = new MutationObserver(paint);
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+
+    return el('figure', { class: 'fig fig-rendered', style: { margin: 0 } }, [
+      el('div', { class: 'fig-h' }, [
+        el('span', { class: 'kicker', text: prettyTitle(basename) }),
+        el('span', { class: 'badge', text: 'diagram' })
+      ]),
+      el('div', { class: 'fig-imgwrap' }, [img])
+    ]);
+  }
+
+  /* Which rendered diagrams belong to this concept. A concept may name them
+     itself with `img: [...]`; otherwise the generated index answers by id. */
+  function imagesFor(concept) {
+    if (!concept) return [];
+    if (concept.img && concept.img.length) {
+      return Array.isArray(concept.img) ? concept.img : [concept.img];
+    }
+    return (typeof DIAGRAM_MAP !== 'undefined' && DIAGRAM_MAP[concept.id]) || [];
+  }
+
   /* Mount every figure attached to a concept. Data may carry `figs: [id]`;
      the app's own map is the fallback while the pool is mock. */
   function forConcept(concept) {
@@ -155,10 +217,12 @@ const Fig = (function () {
 
   function mount(concept) {
     const figs = forConcept(concept);
-    if (!figs.length) return null;
+    const imgs = imagesFor(concept);
+    if (!figs.length && !imgs.length) return null;
     return el('div', { class: 'stack', style: { gap: '12px' } },
-      figs.map(f => frame(f.def)));
+      figs.map(f => frame(f.def)).concat(imgs.map(b => renderedFrame(b))));
   }
 
-  return { plot: plot, frame: frame, mount: mount, forConcept: forConcept, svg: s };
+  return { plot: plot, frame: frame, mount: mount, forConcept: forConcept,
+    imagesFor: imagesFor, renderedFrame: renderedFrame, svg: s };
 })();

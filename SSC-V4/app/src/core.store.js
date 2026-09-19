@@ -26,7 +26,7 @@ const Store = (function () {
   const EMPTY = {
     v: 2,
     done: {}, undone: {},        /* Level 1 completion + tombstones */
-    proofs: {}, unproofs: {},    /* Level 2 proof work + tombstones */
+    proofs: {}, unproofs: {},    /* proof + exercise work (L2/L3) + tombstones */
     cards: {}, omr: {}, write: {},
     prefs: {}, prefsAt: {},
     updated: 0
@@ -110,8 +110,12 @@ const Store = (function () {
     return hit;
   }
 
-  /* ── proof work (Level 2) ────────────────────────────────────────────── */
-  /* id is a concept id, or 'w:<questionId>' for a written question. */
+  /* ── task work (Levels 2 and 3) ──────────────────────────────────────────
+     One flag map for "I produced this myself", under two kinds of key:
+       '<conceptId>'      a proof worked through          — earns level 2
+       'w:<questionId>'   a written exercise worked out   — earns level 3
+     They share a map because they are the same kind of claim and merge the
+     same way; core.progress.js is what gives each key its meaning. */
   const isProofDone = id => !!state.proofs[id];
   const setProofDone = (id, on) => flag('proofs', 'unproofs', id, on);
 
@@ -156,37 +160,13 @@ const Store = (function () {
     return v;
   }
 
-  /* ── the mastery level, PER COURSE ───────────────────────────────────────
-     Not one switch for the whole app: a learner can be consolidating proofs in
-     Real Analysis I while still meeting Real Analysis II for the first time,
-     and a single global level would force the harder standard onto the course
-     they have only just opened.
-
-     Level 2 has to be unlocked on that course before it can be selected —
-     by finishing the course at Level 1, or deliberately in its settings.
-     Opening the app never promotes anyone. */
-  const lvlKey = courseId => 'level:' + (courseId || '_');
-  const unlKey = courseId => 'level2:' + (courseId || '_');
-
-  const unlocked = courseId => pref(unlKey(courseId), false) === true;
-
-  function unlock(courseId, on) {
-    setPref(unlKey(courseId), !!on);
-    if (!on) setPref(lvlKey(courseId), 1);
-    return unlocked(courseId);
-  }
-
-  function level(courseId) {
-    const want = pref(lvlKey(courseId), 1);
-    return (want === 2 && unlocked(courseId)) ? 2 : 1;
-  }
-
-  function setLevel(courseId, n) {
-    const want = n === 2 ? 2 : 1;
-    if (want === 2 && !unlocked(courseId)) return level(courseId);
-    setPref(lvlKey(courseId), want);
-    return level(courseId);
-  }
+  /* ── the mastery level is no longer stored ────────────────────────
+     It used to be a per-course switch with an unlock, and pressing it moved
+     the goalposts under work that was already finished. The level is now
+     DERIVED from what has actually been done — see core.progress.js — so there
+     is nothing here to set. The old 'level:<course>' and 'level2:<course>'
+     preferences are left where they are: they are inert, and deleting them
+     would only make two devices argue about a key neither of them reads. */
 
   /* ── who is signed in ────────────────────────────────────────────────────
      Name and roll number are the credentials AND the sync key. They are a pass
@@ -348,7 +328,7 @@ const Store = (function () {
     isDone, setDone, setDoneMany,
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
-    pref, setPref, level, setLevel, unlocked, unlock,
+    pref, setPref,
     identity, signedIn, signIn, signOut,
     summary, exportJSON, reset, tally,
     snapshot, adopt, mergeStates, onChange, flushNow,

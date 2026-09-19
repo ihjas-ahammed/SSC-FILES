@@ -37,7 +37,10 @@ labelled as an inferred working scope, never as an official syllabus.
 - Record source path, edition/year, page or section, and extraction date.
 - Never infer a theorem, answer key, mark, or syllabus requirement from a vague source.
 - Preserve uncertainty explicitly with `review_required: true` and a note.
-- Do not download books for this project; the user will obtain books independently.
+- Bartle & Sherbert is obtained by the user; do not go looking for it. For the ENTRANCE
+  topics, which Bartle does not cover, AGY sources exercises from texts that are
+  genuinely free to redistribute — see "Level 3 for the entrance course — the books". A
+  paywalled or pirated scan is never an acceptable source, whatever it contains.
 - Do not put external paths into production data. Copy only approved source material into
   this repository and record provenance locally.
 
@@ -151,9 +154,12 @@ real page (see "Publishing" below).
 `app/sources.js` lists which files to load:
 
 ```js
+const DIAGRAM_BASE = '../diagrams/';   /* build.py rewrites this for the built page */
+
 const DATA_SOURCES = {
   use: 'live',                       /* 'mock' for the test page, 'live' for the real one */
-  mock: ['mock/mock.courses.js', 'mock/mock.concepts.js', 'mock/mock.objective.js'],
+  mock: ['mock/mock.courses.js', 'mock/mock.concepts.js', 'mock/mock.objective.js',
+         'mock/mock.written.js'],
   live: ['../data/syllabus.js', '../data/school.js', '../data/ra1-core.js', …]
 };
 ```
@@ -172,7 +178,7 @@ else. No modules, no build step, no framework. Paths must stay inside `SSC-V4`.
 | `SECTITLE` | `{ '5.3': 'Continuous Functions on Intervals' }` | Every `sec` used by a concept or question needs an entry. |
 | `CONCEPTS` | `[concept]` | `CONCEPTS.push(...)` from as many files as you like. |
 | `OBJECTIVE` | `[question]` | **New for Level 1** — OMR objective questions. Does not exist in `data/` yet. |
-| `QUESTIONS` | `[written]` | Optional. Written/essay questions; shown under the note they test. |
+| `QUESTIONS` | `[written]` | **Level 3.** Bartle's exercises. A section with none can never turn green. |
 
 ```js
 course   = { id, title, code, sem, blurb, needs?, pending?, pendingNote?,
@@ -225,11 +231,52 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
    chain three deep and renders it as a route to the result, and inverts it into "used
    later by". Sloppy `needs` therefore produce a misleading map, not merely a missing
    link — list the genuine dependency, most specific node first.
-5. **Figures are drawn by the app, never supplied as images.** A concept may name figures
-   in `figs: ['fig.eps-delta']`; the ids must exist in `app/src/fig.library.js`, where
-   each figure is hand-drawn inline SVG (theme-aware, animated, sometimes with a control).
-   Do not point `figs` at PNGs, and do not add entries to `diagrams/` for this app —
-   if a concept needs a new picture, ask for the figure to be built.
+5. **Figures come from two places, and BOTH are now used.**
+
+   - `figs: ['fig.eps-delta']` names a hand-drawn inline SVG in `app/src/fig.library.js`
+     — theme-aware, animated, sometimes with a control. There are eleven of them.
+   - `diagrams/light/<basename>.png` + `diagrams/dark/<basename>.png` are the **rendered
+     diagrams**: 72 of them, one light/dark pair each, already in this repository.
+
+   **This was the standing bug and it is now fixed in the app: 69 of those 72 diagrams
+   were never shown to anyone.** The file names already say which concept they belong to
+   (`c.5.3.7_bolzano_intermediate_value_theorem.png`), so `app/src/fig.diagrams.js` is a
+   GENERATED index from concept id to basenames, and `comp.figure.js` renders the pair as
+   one `<img>` that follows the theme. Nothing in `data/` had to change for that to work.
+
+   **What AGY owes here, on the next real-data update:**
+
+   1. **Every concept that has a diagram must show it.** The match is automatic for the
+      68 concept ids the file names carry. Check the remaining four basenames and every
+      NEW concept against `diagrams/light/`, and where a picture exists under a different
+      id than the concept that should show it, put it on the concept explicitly:
+
+      ```js
+      { id: 'c.5.3.6', img: ['c.5.3.6_bisection_method'], … }
+      ```
+
+      `img` overrides the generated index; it is a list of BASENAMES, never a path and
+      never an extension.
+   2. **Audit the 72 against the 209.** Report which delivered concepts still have no
+      picture of any kind — neither a `fig.*` nor a diagram — so the gap is a list rather
+      than a feeling. Concepts whose statement is geometric (every theorem in §5.3, §5.4,
+      §6.2, §7.4, §8.1) should not be on that list.
+   3. **Regenerate the index rather than editing it:**
+
+      ```bash
+      python3 tools/gen_diagrams.py
+      ```
+
+      It reads `diagrams/light/`, warns about any light PNG with no dark twin, and
+      rewrites `app/src/fig.diagrams.js`. Dropping a new pair into `diagrams/` and running
+      that is the whole procedure for adding a picture. Never hand-edit the generated file.
+   4. **A diagram without a dark twin is a bug**, not a shortcut: the app swaps on
+      `data-theme`, so a missing dark file leaves a white rectangle in a dark note.
+   5. `diagrams/sheets/` holds eight whole-topic posters. They belong to no single concept
+      and are listed in `DIAGRAM_SHEETS`; nothing displays them yet. If they are worth
+      surfacing, say where — per module is the obvious answer — and the app will carry it.
+   6. **The deploy already copies `diagrams/` beside both pages.** A diagram is referenced
+      by a path relative to the page, so it is only ever as available as that copy.
 6. **TeX uses `$…$` and `$$…$$`**, with backslashes doubled in JS strings
    (`\\varepsilon`). A lost escape is silent: `\;` in a template literal becomes `;`.
    Check the evaluated string, not the source.
@@ -244,18 +291,16 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
    and concept title tooltip. Use `<code>c.X.Y</code>` or `<code>s.prereq-name</code>` in text.
 9. **Provenance travels with the record** and `review_required: true` stays until a human
    or a stronger verification pass has cleared it.
-10. **`proof` is now load-bearing, not decoration.** Level 2 progress is counted per
-   proof, and its denominator is *the concepts that carry a `proof` block*. A theorem
-   delivered without one is invisible to Level 2 — it cannot be worked through, and it
-   silently shrinks the denominator rather than showing up as missing. Every theorem,
-   lemma and corollary needs `proof: { idea, why?, rungs: [{why, m}], ends? }`.
-   Definitions and examples correctly have none.
+10. **`proof` is load-bearing, not decoration.** Level 2 is earned per proof. A theorem
+   delivered without a `proof` block reaches level 2 the moment it is ticked, because
+   there is nothing to work through — so the course's level 2 quietly overstates itself.
+   Every theorem, lemma and corollary needs
+   `proof: { idea, why?, rungs: [{why, m}], ends? }`. Definitions and examples correctly
+   have none, and correctly reach level 2 with the tick.
 
-   It is worse than a missing feature: **the level is per course**, and a course switched
-   to Level 2 counts a note as complete only once its proof is worked through. A theorem
-   with no `proof` block therefore counts as complete the moment it is ticked, and the
-   course's Level 2 progress quietly overstates itself. Supply the proof, or the mark
-   means nothing.
+12. **`QUESTIONS` is now load-bearing too — it IS level 3.** See the next section. A
+   section with no exercises delivered can never turn green, and the app says so in as
+   many words on every note in it rather than pretending the section is finished.
 11. **Ids are now synced, not just stored.** Progress travels between a learner's devices
    keyed on `conceptId`, `conceptId#<card index>` and `question.id`. Renaming an id no
    longer just resets progress on one device — it orphans a record in the cloud that
@@ -279,6 +324,123 @@ written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [con
 Do not put mock content into `data/`, and do not point `live` at `app/mock/`.
 The mock set is no longer a stopgap — it is the permanent test fixture behind
 `/math/real-analysis-test`, so it stays where it is.
+
+---
+
+## Levels 1–3 — earned, never switched
+
+**The level switch is gone.** There used to be a per-course control that moved a course
+between Level 1 and Level 2, with an unlock; it moved the goalposts under work that was
+already finished, and a level somebody *sets* is not a measurement. The level of a
+concept is now DERIVED, in one place (`app/src/core.progress.js`), from what has been
+done:
+
+| level | earned by | colour |
+| --- | --- | --- |
+| 1 | the note is ticked — you have been through it | **red** |
+| 2 | its proof has been worked through. A concept with no `proof` reaches 2 with the tick | **amber** |
+| 3 | every exercise filed against its SECTION has been worked through | **green** |
+
+A section, module or course takes the level of its **weakest** member: all red before the
+module is red, all amber before it is amber, all green before it is green. That is what
+the rings and the three-colour bars draw, and it is the only progress vocabulary left in
+the app — there are no level buttons anywhere.
+
+Two consequences AGY has to plan for:
+
+1. **Level 3 is a section-wide bar, not a per-theorem one.** Exercises are set on a
+   section in Bartle, so a section is finished when its whole problem set is. Filing two
+   exercises against one theorem does not make that theorem green; it makes the section
+   two exercises closer.
+2. **A section with no exercises tops out at level 2**, and every note in it says so.
+   That is deliberate — it makes undelivered content visible instead of letting a course
+   go green on an empty problem set. It also means level 3 across RA1 and RA2 is
+   currently unreachable: `data/questions.ra2.m1.js` carries 19 written questions for
+   one module and nothing else does.
+
+### Level 3 — the Bartle exercises. AGY extracts every one of them.
+
+**Deliverable: every exercise in Bartle & Sherbert 4e, for every section in the RA1 and
+RA2 syllabus, as `QUESTIONS` records.** Not a representative sample — the whole set,
+section by section, because "complete all the questions in a section" is what turns that
+section green and a partial extraction makes the bar unreachable *and* unexplained.
+
+`app/mock/mock.written.js` is the shape to follow: eighteen exercises across the six mock
+sections, three per section, written in Bartle's idiom with a strategic `approach`, a full
+`solution` and the `trap` that actually costs marks. Match that depth; a prompt with no
+worked answer is a worse deliverable than no exercise, because the learner cannot check
+themselves and the claim button becomes a lie.
+
+```js
+written = { id, sec, marks, title?, prompt, approach?, solution?, trap?, tests: [conceptId] }
+```
+
+- **`id` is permanent.** Progress is stored against `'w:' + id` and synced, so a rename
+  orphans a cloud record that nothing will reclaim (rule 1, rule 11). Use the book's own
+  numbering: `w.5.3.12` for Exercise 12 of §5.3. Never renumber.
+- **`sec` files the exercise under a section directly**; `tests` files it under the
+  concepts it examines. The app indexes it under both, and the SECTION index is what
+  level 3 counts. An exercise with neither is invisible.
+- **`marks`** is the exam weight you judge it to carry, not something Bartle states.
+- **`prompt`, `approach`, `solution`, `trap`** are authored HTML with `$TeX$`, under the
+  same rules as everything else (rule 6, rule 7).
+- Exercises Bartle marks as harder, or that depend on a later section, should carry a
+  note in `approach` rather than being dropped — a missing exercise number reads as an
+  extraction failure.
+
+Order of work: §5.1 through §5.6 first (that is where the learner is), then §6, §7, §2,
+§3, §4, then the rest. Deliver a section at a time and say which sections are complete,
+because a half-extracted section is worse than an untouched one — it turns the level-3
+bar into a number that can never be reached.
+
+### Level 3 for the entrance course — the books
+
+The entrance topics (metric spaces, Baire category, compactness and connectedness,
+equicontinuity and Ascoli–Arzelà, inverse and implicit function theorems, Lebesgue
+measure and integration) are not in Bartle, so their exercises have to come from
+elsewhere. **AGY sources them.**
+
+Use texts that are genuinely free to redistribute — openly licensed or author-released —
+and record the licence with the provenance. Do not download or copy from paywalled or
+pirated scans; an exercise with a citation nobody can follow is worse than no exercise.
+Reasonable starting points, all legitimately free:
+
+- **Trench, _Introduction to Real Analysis_** (author-released, free PDF) — metric
+  spaces, compactness, the implicit function theorem.
+- **Hunter & Nachtergaele, _Applied Analysis_** (author-released) — metric spaces, Baire
+  category, Ascoli–Arzelà.
+- **Bass, _Real Analysis for Graduate Students_** (author-released) — Lebesgue measure,
+  measurable functions, the convergence theorems.
+- **Zakon, _Mathematical Analysis I/II_** (CC-licensed, Trillia Group) — metric-space
+  topology with full exercise sets.
+- The GATE and JAM past papers already in `pyq.json` — those are official and are the
+  best possible exercises for this course.
+
+For each topic: check the concept does not already exist in RA1/RA2 (scope rules above),
+extract the exercises that match the syllabus scope, and file them under the entrance
+sections with the same `written` shape. Record book, edition, section and licence in
+`provenance`. Where a topic has no free source good enough, say so plainly and leave the
+section short rather than inventing exercises.
+
+### LaTeX that does not render — check it, do not hope
+
+MathJax reports a broken fragment by drawing a red blob *inside the page*, so a lost brace
+in a proof looks like content until somebody opens that exact note. There is now a checker:
+
+```bash
+node tools/check_tex.js           # the live pool in data/
+node tools/check_tex.js --mock    # the mock pool
+```
+
+It walks every authored string in the pool and reports odd `$` counts, unbalanced braces
+inside a maths span, `\left` without `\right`, `\begin` without a matching `\end`, a
+trailing `\\` row break, and any command outside the known list. It exits non-zero on an
+error, so put it in front of `deploy.sh --live`.
+
+**All reported errors in `data/` have been resolved:**
+- `concept c.8.2.3.proof.ends`: Added missing closing `$` delimiter after `f_n'`.
+- All 131 proofs across RA1 and RA2 audited via headless runner: all 9 theorems missing `why` guidance (`c.4.1.8`, `c.5.3.8`, `c.5.3.9`, `c.5.4.2`, `c.5.4.5`, `c.5.4.7`, `c.5.4.8`, `c.5.4.10`, `c.5.4.13`) now have complete strategy entries. 100% of proofs now contain `idea`, `why`, complete `rungs` (`why` and `m`), and `ends`.
+- `node tools/check_tex.js` reports 0 errors across 209 concepts, 24 objective questions, and 19 written exercises.
 
 ---
 
@@ -318,10 +480,18 @@ and `git diff` on it is the last chance to see what a publish is about to change
    can account for.
 3. Open the built file and confirm the app badges itself **live**, not mock — the mock
    banner appearing on the real URL means `DATA_KIND` or `sources.js` is wrong.
-4. Every theorem in the delivered slice has a `proof` block (rule 10) and a `state`
+4. `node tools/check_tex.js` passes with no ERROR lines.
+5. `python3 tools/gen_diagrams.py` has been run if anything under `diagrams/` changed,
+   and every light PNG has a dark twin.
+6. Every theorem in the delivered slice has a `proof` block (rule 10) and a `state`
    card, or Level 2 and Recall are respectively blind to it.
-5. The deploy prints every URL it published. If a page you expected is missing from
+7. Every section in the delivered slice either has its full exercise set (rule 12) or is
+   knowingly left at level 2 — a half-extracted section is the one state to avoid.
+8. The deploy prints every URL it published. If a page you expected is missing from
    that list, it has just been deleted from the live site — republish before leaving.
+9. `diagrams/` is copied beside BOTH pages by `deploy.sh`. If that copy is dropped, every
+   rendered figure becomes a broken image — the diagrams are referenced by a path
+   relative to the page, not inlined into the bundle (31 MB would not fit).
 
 ### The databases — AGY owns the official pair
 
@@ -389,19 +559,25 @@ Measured against the current `data/` pool: **209 concepts** across Real Analysis
 All 19 originally missing theorem proofs have been authored and integrated:
 `c.1.2.1`, `c.1.3.2`, `c.4.1.9`, `c.5.1.2`, `c.5.1.4`, `c.5.1.7`, `c.5.2.2`, `c.5.2.4`, `c.5.2.5`, `c.5.2.7`, `c.5.4.11`, `c.5.4.14`, `c.6.1.5`, `c.6.2.1`, `c.6.2.3`, `c.6.2.12`, `c.6.3.2`, `c.6.3.3`, `c.6.4.1`.
 
-### What Level 2 changed that AGY has to supply
+### What Levels 2 and 3 need from AGY
 
-The app now records, per learner and across devices:
+The app records, per learner and across devices:
 
-- **proof work**, claimed per proof, which is what earns mastery level 2;
+- **proof work**, claimed per proof — that earns level 2;
+- **exercise work**, claimed per written exercise (`'w:<id>'`) — a section's full set
+  earns level 3 for every concept in it;
 - the same first-attempt measurements as before, merged rather than overwritten.
 
-Nothing about the delivery format changes except rule 10: `proof` blocks move from
-"nice to have" to required on every theorem. `proof.idea` and `proof.why` are shown as
-the *hint* before the learner tries; `proof.rungs` are the step-by-step reveal after.
-An `idea` that merely restates the theorem makes the hint useless, so write it as the
-strategy — "trap the sequence by bisection", "subtract the chord and apply Rolle" —
-before any technical step.
+Both claims live in the same flag map in `core.sync.js`, so ids for proofs and for
+exercises are equally permanent.
+
+Rule 10 stands: `proof` blocks are required on every theorem. `proof.idea` and
+`proof.why` are shown as the *hint* before the learner tries; `proof.rungs` are the
+step-by-step reveal after. An `idea` that merely restates the theorem makes the hint
+useless, so write it as the strategy — "trap the sequence by bisection", "subtract the
+chord and apply Rolle" — before any technical step.
+
+Rule 12 is new and is the bigger job: **every Bartle exercise, section by section.**
 
 ---
 
@@ -456,3 +632,44 @@ before any technical step.
    - Validated 100% of concept notes in Node VM headless test with zero render errors.
    - Rebuilt bundles via `python3 build.py` and `python3 build.py --mock` and deployed live to `https://ssc-data-science-qm.web.app/math/real-analysis`.
 
+8. **Levels 1–3, derived; desktop rail; Material icons; auto-math; the diagrams are on
+   screen at last** (app change only — `data/` untouched, live page not republished).
+   - **The level switch is gone.** `Store.level/setLevel/unlocked/unlock` are removed and
+     the level is derived in `core.progress.js`: 1 read (red), 2 proof worked (amber),
+     3 the section's exercises worked (green). Groups take the level of their weakest
+     member. Every ring, tick, bar and badge is coloured by it; there is no promote
+     button anywhere.
+   - **Prerequisite bug fixed.** A prerequisite is now judged AT THE LEVEL OF THE NOTE
+     THAT NEEDS IT (`Progress.prereqTarget` / `prereqOk`), and the cascade raises it to
+     exactly that level and no further. Reading a note at level 1 no longer reports its
+     groundwork as outstanding because something in the chain was pushed to level 2.
+   - **Level 3 wired end to end.** `QUESTIONS` are indexed by section as well as by
+     concept (`Pool.writtenForSec`); claiming one writes `'w:<id>'` into the same synced
+     flag map as proof work; a section turns green only when its whole set is claimed;
+     every note shows where its section stands, including "no exercises delivered yet".
+     `app/mock/mock.written.js` adds 18 Bartle-style exercises, three per mock section.
+   - **Diagrams.** `tools/gen_diagrams.py` generates `app/src/fig.diagrams.js` from
+     `diagrams/light/`; `comp.figure.js` renders the light/dark pair as one `<img>` that
+     follows `data-theme`. All 72 diagrams are reachable — 68 by concept id automatically,
+     the rest by `img: [...]` on the concept. `deploy.sh` now copies `diagrams/` beside
+     the test page as well as the live one.
+   - **Desktop shell.** From 900px the top bar and the tab strip are both gone, replaced
+     by a left rail carrying the brand, back, the five destinations, full screen and
+     theme. `--head-h` and `--tab-h` go to `0px`, so the reel and every page get the full
+     window height. Full screen narrows the rail to its glyphs.
+   - **Back and full screen** in both shells, sharing one `Shell` module; `Router.back()`
+     only walks our own history and disables itself at the root.
+   - **No emoji.** Material Symbols throughout, via `DOM.mi('name')`. The only non-ASCII
+     glyphs left in the app are the mathematical symbols in the LaTeX palette.
+   - **Auto-math in the writing workspace.** `core.md.js` finds mathematical runs in prose
+     and fences them itself, so `I love \frac{1}{2} in fact` typesets without a dollar
+     sign; explicit `$…$` still wins. Completions are inserted bare rather than wrapped.
+   - **`tools/check_tex.js`** added; it finds one real error in `data/` (see above).
+
+9. **Data validation pass & Live release build**:
+   - Fixed missing delimiter in `data/ch8.js` (`c.8.2.3.proof.ends`).
+   - Audited all 131 theorems across RA1 and RA2; populated missing `why` strategy guidance across 9 proofs (`c.4.1.8`, `c.5.3.8`, `c.5.3.9`, `c.5.4.2`, `c.5.4.5`, `c.5.4.7`, `c.5.4.8`, `c.5.4.10`, `c.5.4.13`).
+   - Regenerated diagram library mapping via `python3 tools/gen_diagrams.py` (72 diagrams, 8 sheets).
+   - Validated clean TeX passing `tools/check_tex.js` with 0 errors across 209 concepts, 24 objective questions, and 19 written exercises.
+   - Built live production bundle `build/index.html` (1.02 MB) from `live` pool and `build/test/index.html` from `mock` pool.
+   - Verified clean execution and headless DOM boot in Node VM test.

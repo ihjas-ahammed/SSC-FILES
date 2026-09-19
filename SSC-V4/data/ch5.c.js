@@ -119,11 +119,31 @@ CONCEPTS.push(
         $\\varepsilon$-close in value, you are automatically squeezed for every point further
         right.`,
       rungs: [
-        { why: 'Name the candidate limit: since $f$ is increasing, values left of $c$ are bounded above by $f(c)$, so this set has a supremum.', m: '$$L:=\\sup\\{f(x):x\\in I,\\,x < c\\}$$ (exists, as the set is nonempty and bounded above by $f(c)$)' },
-        { why: 'Given $\\varepsilon>0$, $L-\\varepsilon$ is not an upper bound of the set, so some point just left of $c$ already gets close to $L$.', m: '$\\exists\\,y_\\varepsilon\\in I,\\ y_\\varepsilon < c:\\quad L-\\varepsilon < f(y_\\varepsilon)$' },
-        { why: 'Convert this into an $x$-window using monotonicity: any $y$ between $y_\\varepsilon$ and $c$ has $f(y)$ trapped between $f(y_\\varepsilon)$ and $L$.', m: 'set $\\delta_\\varepsilon:=c-y_\\varepsilon>0$; for $y\\in I$ with $0 < c-y<\\delta_\\varepsilon$: $L-\\varepsilon < f(y_\\varepsilon)\\le f(y)\\le L$' },
-        { why: 'Read off convergence directly from that squeeze.', m: '$|f(y)-L|<\\varepsilon$ whenever $y\\in I,\\ 0 < c-y<\\delta_\\varepsilon$' },
-        { why: 'This is precisely the definition of the left-hand limit; the right-hand case is symmetric with $\\inf$.', m: '$$\\lim_{x\\to c^-}f(x)=L=\\sup\\{f(x):x\\in I,x < c\\}$$' }
+        {
+          why: 'Name the candidate limit: since $f$ is increasing, values left of $c$ are bounded above by $f(c)$, so this set has a supremum.',
+          m: '$$L:=\\sup\\{f(x):x\\in I,\\,x < c\\}$$ (exists, as the set is nonempty and bounded above by $f(c)$)',
+          meaning: 'What this really means: As an increasing function climbs toward $c$ from the left, its values hit an impenetrable ceiling at $f(c)$, guaranteeing an absolute highest limit of approach exists.'
+        },
+        {
+          why: 'Given $\\varepsilon>0$, $L-\\varepsilon$ is not an upper bound of the set, so some point just left of $c$ already gets close to $L$.',
+          m: '$\\exists\\,y_\\varepsilon\\in I,\\ y_\\varepsilon < c:\\quad L-\\varepsilon < f(y_\\varepsilon)$',
+          meaning: 'What this really means: Because $L$ is the least upper bound, dropping our sightline by $\\varepsilon$ lets us find a stepping stone $y_\\varepsilon$ whose elevation already breaches that lower threshold.'
+        },
+        {
+          why: 'Convert this into an $x$-window using monotonicity: any $y$ between $y_\\varepsilon$ and $c$ has $f(y)$ trapped between $f(y_\\varepsilon)$ and $L$.',
+          m: 'set $\\delta_\\varepsilon:=c-y_\\varepsilon>0$; for $y\\in I$ with $0 < c-y<\\delta_\\varepsilon$: $L-\\varepsilon < f(y_\\varepsilon)\\le f(y)\\le L$',
+          meaning: 'What this really means: Because the function cannot dip downward, any step taken between our chosen stepping stone and $c$ stays trapped between that high value and the ceiling $L$.'
+        },
+        {
+          why: 'Read off convergence directly from that squeeze.',
+          m: '$|f(y)-L|<\\varepsilon$ whenever $y\\in I,\\ 0 < c-y<\\delta_\\varepsilon$',
+          meaning: 'What this really means: Being pinned in that narrow band means the function value is permanently locked within distance $\\varepsilon$ of the ceiling $L$.'
+        },
+        {
+          why: 'This is precisely the definition of the left-hand limit; the right-hand case is symmetric with $\\inf$.',
+          m: '$$\\lim_{x\\to c^-}f(x)=L=\\sup\\{f(x):x\\in I,x < c\\}$$',
+          meaning: 'What this really means: Squeezing the outputs into the ceiling establishes that the one-sided limit coming in from the left exists and hits the supremum on the nose.'
+        }
       ],
       ends: `Both one-sided limits exist and are finite at every interior point of $I$, for any
         monotone $f$ — no continuity assumption is needed.`
@@ -159,9 +179,21 @@ CONCEPTS.push(
       why: `Once both one-sided limits have explicit formulas, "continuity" stops being a
         limiting statement and becomes an equation between three numbers.`,
       rungs: [
-        { why: 'Recall the Chapter 4 fact linking continuity to one-sided limits.', m: '$f$ continuous at $c$ $\\iff$ $\\lim_{x\\to c^-}f=f(c)=\\lim_{x\\to c^+}f$ — this is (a) $\\iff$ (b)' },
-        { why: 'Substitute the explicit values Theorem 5.6.1 gives for those two limits.', m: 'by 5.6.1: $\\lim_{x\\to c^-}f=\\sup\\{f(x):x < c\\}$ and $\\lim_{x\\to c^+}f=\\inf\\{f(x):x>c\\}$' },
-        { why: 'Plugging these in turns (b) into (c) with no extra work.', m: '(b) $\\iff$ $\\sup\\{f(x):x < c\\}=f(c)=\\inf\\{f(x):x>c\\}$ — this is (b) $\\iff$ (c)' }
+        {
+          why: 'Recall the Chapter 4 fact linking continuity to one-sided limits.',
+          m: '$f$ continuous at $c$ $\\iff$ $\\lim_{x\\to c^-}f=f(c)=\\lim_{x\\to c^+}f$ — this is (a) $\\iff$ (b)',
+          meaning: 'What this really means: Smoothness across a point requires the approach path from the left and the approach path from the right to collide at the exact same elevation $f(c)$.'
+        },
+        {
+          why: 'Substitute the explicit values Theorem 5.6.1 gives for those two limits.',
+          m: 'by 5.6.1: $\\lim_{x\\to c^-}f=\\sup\\{f(x):x < c\\}$ and $\\lim_{x\\to c^+}f=\\inf\\{f(x):x>c\\}$',
+          meaning: 'What this really means: For an increasing function, the left-hand limit is simply the ceiling of everything behind it, and the right-hand limit is the floor of everything ahead of it.'
+        },
+        {
+          why: 'Plugging these in turns (b) into (c) with no extra work.',
+          m: '(b) $\\iff$ $\\sup\\{f(x):x < c\\}=f(c)=\\inf\\{f(x):x>c\\}$ — this is (b) $\\iff$ (c)',
+          meaning: 'What this really means: Continuity boils down to zero vertical gap: the ceiling of past values and the floor of future values squeeze the current point with no empty jump between them.'
+        }
       ],
       ends: `(a), (b), (c) are three phrasings of the same fact; (c) is the version you compute
         with in practice.`
@@ -198,10 +230,26 @@ CONCEPTS.push(
       why: `"Jump equals zero" is just a repackaging of "the numbers that must be equal for
         continuity really are equal."`,
       rungs: [
-        { why: 'Translate condition (c) of Corollary 5.6.2 into "gap = 0" at an interior point.', m: 'for interior $c$: $j_f(c)=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x < c\\}=0\\iff$ (c) of Cor. 5.6.2 $\\iff f$ continuous at $c$' },
-        { why: 'Note the jump can never be negative for an increasing function, since the right floor cannot undercut the left ceiling.', m: '$j_f(c)\\ge0$ always, because $\\sup\\{f(x):x < c\\}\\le f(c)\\le\\inf\\{f(x):x>c\\}$' },
-        { why: 'At a left endpoint $a\\in I$ there is only a right-hand limit to compare against $f(a)$.', m: '$j_f(a):=\\lim_{x\\to a^+}f-f(a)=0\\iff f(a)=\\lim_{x\\to a^+}f\\iff f$ continuous at $a$' },
-        { why: 'The right-endpoint case is symmetric, using only the left-hand limit.', m: '$j_f(b):=f(b)-\\lim_{x\\to b^-}f=0\\iff f$ continuous at $b$' }
+        {
+          why: 'Translate condition (c) of Corollary 5.6.2 into "gap = 0" at an interior point.',
+          m: 'for interior $c$: $j_f(c)=\\inf\\{f(x):x>c\\}-\\sup\\{f(x):x < c\\}=0\\iff$ (c) of Cor. 5.6.2 $\\iff f$ continuous at $c$',
+          meaning: 'What this really means: The vertical step or jump at an interior point is the difference between where the right side starts and where the left side ends; zero jump means unbroken continuity.'
+        },
+        {
+          why: 'Note the jump can never be negative for an increasing function, since the right floor cannot undercut the left ceiling.',
+          m: '$j_f(c)\\ge0$ always, because $\\sup\\{f(x):x < c\\}\\le f(c)\\le\\inf\\{f(x):x>c\\}$',
+          meaning: 'What this really means: Because the function never moves downhill, incoming values from the left can never be higher than departing values on the right, so jumps are always non-negative.'
+        },
+        {
+          why: 'At a left endpoint $a\\in I$ there is only a right-hand limit to compare against $f(a)$.',
+          m: '$j_f(a):=\\lim_{x\\to a^+}f-f(a)=0\\iff f(a)=\\lim_{x\\to a^+}f\\iff f$ continuous at $a$',
+          meaning: 'What this really means: At the very start of the domain, there is no left side to compare against, so continuity simply requires the rightward path to start right where the point sits.'
+        },
+        {
+          why: 'The right-endpoint case is symmetric, using only the left-hand limit.',
+          m: '$j_f(b):=f(b)-\\lim_{x\\to b^-}f=0\\iff f$ continuous at $b$',
+          meaning: 'What this really means: At the very end of the line, continuity simply requires the incoming path from the left to arrive cleanly at the boundary post without a sudden pop.'
+        }
       ],
       ends: `In every case — interior point or either endpoint — continuity of a monotone
         function at $c$ is exactly the statement $j_f(c)=0$.`
@@ -240,10 +288,26 @@ CONCEPTS.push(
         at level $k$ comes for free from monotonicity: jumps cannot overlap or exceed the total
         rise of $f$.`,
       rungs: [
-        { why: 'For any finitely many ordered points, their jumps add up to at most the total rise of $f$ across $I$ — the jumps cannot overlap.', m: 'for $a\\le x_1 < x_2<\\cdots < x_n\\le b$: $j_f(x_1)+j_f(x_2)+\\cdots+j_f(x_n)\\le f(b)-f(a)$' },
-        { why: 'Turn "total jump is bounded" into "few big jumps": if more than $k$ points had jump $\\ge(f(b)-f(a))/k$, their sum alone would exceed the total rise.', m: 'for fixed $k\\in\\mathbb N$, the set $\\{x\\in I: j_f(x)\\ge (f(b)-f(a))/k\\}$ has at most $k$ points' },
-        { why: 'Every discontinuity has strictly positive jump (5.6.3), so $D$ is exactly the union of these threshold sets over all $k$.', m: '$D=\\{x\\in I:j_f(x)>0\\}=\\bigcup_{k=1}^{\\infty}\\{x\\in I:j_f(x)\\ge (f(b)-f(a))/k\\}$' },
-        { why: 'A countable union of finite sets is countable.', m: '$D$ is a countable union of finite sets $\\implies D$ is countable' }
+        {
+          why: 'For any finitely many ordered points, their jumps add up to at most the total rise of $f$ across $I$ — the jumps cannot overlap.',
+          m: 'for $a\\le x_1 < x_2<\\cdots < x_n\\le b$: $j_f(x_1)+j_f(x_2)+\\cdots+j_f(x_n)\\le f(b)-f(a)$',
+          meaning: 'What this really means: Every vertical jump occupies its own exclusive slice of vertical elevation; because they never overlap, the sum of all jumps cannot exceed the total rise from start to finish.'
+        },
+        {
+          why: 'Turn "total jump is bounded" into "few big jumps": if more than $k$ points had jump $\\ge(f(b)-f(a))/k$, their sum alone would exceed the total rise.',
+          m: 'for fixed $k\\in\\mathbb N$, the set $\\{x\\in I: j_f(x)\\ge (f(b)-f(a))/k\\}$ has at most $k$ points',
+          meaning: 'What this really means: If you have a budget of 100 dollars, you can buy at most 10 items costing 10 dollars or more; similarly, a function with fixed total rise can contain only finitely many large jumps.'
+        },
+        {
+          why: 'Every discontinuity has strictly positive jump (5.6.3), so $D$ is exactly the union of these threshold sets over all $k$.',
+          m: '$D=\\{x\\in I:j_f(x)>0\\}=\\bigcup_{k=1}^{\\infty}\\{x\\in I:j_f(x)\\ge (f(b)-f(a))/k\\}$',
+          meaning: 'What this really means: Any real rip or discontinuity has a positive size, so sorting jumps into tiers by size catches every single jump across countable levels.'
+        },
+        {
+          why: 'A countable union of finite sets is countable.',
+          m: '$D$ is a countable union of finite sets $\\implies D$ is countable',
+          meaning: 'What this really means: Combining countably many finite buckets of points produces a collection that can still be counted in a numbered queue, proving discontinuities are countable.'
+        }
       ],
       ends: `Every monotone function on an interval has at most countably many points of
         discontinuity, however wildly it jumps.`
@@ -285,12 +349,36 @@ CONCEPTS.push(
         the range of a continuous function on an interval is again an interval — so continuity
         of the inverse comes from geometry, not estimation.`,
       rungs: [
-        { why: 'Confirm the setup: $J$ is an interval (so it makes sense to ask if $g$ is continuous "at a point of $J$"), and $g$ exists because $f$ is injective.', m: '$J:=f(I)$ is an interval (Thm 5.3.10, since $f$ is continuous on interval $I$); $f$ strictly increasing $\\implies$ injective on $I$ $\\implies$ $g:J\\to\\mathbb R$ with $g(f(x))=x$ exists' },
-        { why: 'Show $g$ inherits the order: a bigger output of $f$ must come from a bigger input.', m: 'for $y_1 < y_2$ in $J$, write $y_1=f(x_1),\\,y_2=f(x_2)$; if $x_1\\ge x_2$ then $f(x_1)\\ge f(x_2)$, contradicting $y_1 < y_2$ — so $x_1 < x_2$, i.e. $g(y_1) < g(y_2)$' },
-        { why: 'Suppose for contradiction $g$ is discontinuous at some $c\\in J$; by 5.6.3 this means a nonzero jump.', m: 'suppose $g$ discontinuous at $c\\in J$; by Thm 5.6.3, $\\lim_{y\\to c^-}g<\\lim_{y\\to c^+}g$' },
-        { why: 'Pick a candidate value strictly between those two one-sided limits of $g$.', m: 'choose $x$ with $\\lim_{y\\to c^-}g < x<\\lim_{y\\to c^+}g$ and $x\\ne g(c)$' },
-        { why: 'Strict monotonicity of $g$ rules out any $y\\in J$ actually attaining this $x$ as $g(y)$.', m: 'no $y\\in J$ has $g(y)=x$, so $x\\notin g(J)=I$' },
-        { why: 'But $x$ sits strictly between values that are limits of points of $I$, so $x$ ought to be trapped inside $I$ — contradicting that $I$ is an interval.', m: '$x\\notin I$ contradicts $I$ being an interval, since $x$ lies between elements of $g(J)=I$' }
+        {
+          why: 'Confirm the setup: $J$ is an interval (so it makes sense to ask if $g$ is continuous "at a point of $J$"), and $g$ exists because $f$ is injective.',
+          m: '$J:=f(I)$ is an interval (Thm 5.3.10, since $f$ is continuous on interval $I$); $f$ strictly increasing $\\implies$ injective on $I$ $\\implies$ $g:J\\to\\mathbb R$ with $g(f(x))=x$ exists',
+          meaning: 'What this really means: The original continuous increasing function maps an unbroken track to an unbroken output track with no duplicate outputs, guaranteeing an exact reverse mapping exists.'
+        },
+        {
+          why: 'Show $g$ inherits the order: a bigger output of $f$ must come from a bigger input.',
+          m: 'for $y_1 < y_2$ in $J$, write $y_1=f(x_1),\\,y_2=f(x_2)$; if $x_1\\ge x_2$ then $f(x_1)\\ge f(x_2)$, contradicting $y_1 < y_2$ — so $x_1 < x_2$, i.e. $g(y_1) < g(y_2)$',
+          meaning: 'What this really means: Because the original machine always moves uphill, running the film in reverse also moves strictly uphill, preserving order.'
+        },
+        {
+          why: 'Suppose for contradiction $g$ is discontinuous at some $c\\in J$; by 5.6.3 this means a nonzero jump.',
+          m: 'suppose $g$ discontinuous at $c\\in J$; by Thm 5.6.3, $\\lim_{y\\to c^-}g<\\lim_{y\\to c^+}g$',
+          meaning: 'What this really means: If the reverse machine suffered a tear, its monotonic nature means it would have to make a sudden upward leap, skipping over a gap of numbers.'
+        },
+        {
+          why: 'Pick a candidate value strictly between those two one-sided limits of $g$.',
+          m: 'choose $x$ with $\\lim_{y\\to c^-}g < x<\\lim_{y\\to c^+}g$ and $x\\ne g(c)$',
+          meaning: 'What this really means: We pick a witness value sitting right inside that skipped vertical gap.'
+        },
+        {
+          why: 'Strict monotonicity of $g$ rules out any $y\\in J$ actually attaining this $x$ as $g(y)$.',
+          m: 'no $y\\in J$ has $g(y)=x$, so $x\\notin g(J)=I$',
+          meaning: 'What this really means: Because the reverse function leaped right over this gap, no output from $J$ can ever produce $x$, meaning $x$ is completely missing from the original domain $I$.'
+        },
+        {
+          why: 'But $x$ sits strictly between values that are limits of points of $I$, so $x$ ought to be trapped inside $I$ — contradicting that $I$ is an interval.',
+          m: '$x\\notin I$ contradicts $I$ being an interval, since $x$ lies between elements of $g(J)=I$',
+          meaning: 'What this really means: Missing a point that sits squarely between points of an unbroken interval is impossible; this contradiction proves the reverse machine has no gaps and is continuous.'
+        }
       ],
       ends: `The assumption that $g$ is discontinuous is impossible, so $g$ is continuous on
         all of $J$. (The strictly decreasing case is symmetric.) This is exactly the theorem
@@ -344,10 +432,26 @@ CONCEPTS.push(
       why: `Uniqueness of the positive $n$th root turns "$y^n=x^m$ with $y>0$" directly into
         "$y=(x^m)^{1/n}$" — no further estimation needed.`,
       rungs: [
-        { why: 'Set up the candidate value from the definition of rational powers (5.6.6).', m: 'let $y:=x^{m/n}=(x^{1/n})^m$' },
-        { why: 'Recall the defining property of the $n$th root: raising it to the $n$th power returns $x$.', m: '$(x^{1/n})^n=x$' },
-        { why: 'Compute $y^n$ using only integer-exponent power laws, reordering the two exponents.', m: '$y^n=\\big((x^{1/n})^m\\big)^n=\\big((x^{1/n})^n\\big)^m=x^m$' },
-        { why: '"$y>0$ and $y^n=x^m$" is precisely what it means to say $y$ is the $n$th root of $x^m$.', m: 'since $y>0$ and $y^n=x^m$, by definition $y=(x^m)^{1/n}$' }
+        {
+          why: 'Set up the candidate value from the definition of rational powers (5.6.6).',
+          m: 'let $y:=x^{m/n}=(x^{1/n})^m$',
+          meaning: 'What this really means: We label our candidate number by taking the $n$-th root first, then raising the result to the power $m$.'
+        },
+        {
+          why: 'Recall the defining property of the $n$th root: raising it to the $n$th power returns $x$.',
+          m: '$(x^{1/n})^n=x$',
+          meaning: 'What this really means: Taking an $n$-th root and raising it to the $n$-th power are exact mirror inverses that undo each other completely.'
+        },
+        {
+          why: 'Compute $y^n$ using only integer-exponent power laws, reordering the two exponents.',
+          m: '$y^n=\\big((x^{1/n})^m\\big)^n=\\big((x^{1/n})^n\\big)^m=x^m$',
+          meaning: 'What this really means: For whole-number powers, the order of multiplication doesn\'t matter, so we can swap the exponents inside and out without changing the result.'
+        },
+        {
+          why: '"$y>0$ and $y^n=x^m$" is precisely what it means to say $y$ is the $n$th root of $x^m$.',
+          m: 'since $y>0$ and $y^n=x^m$, by definition $y=(x^m)^{1/n}$',
+          meaning: 'What this really means: Because raising $y$ to the power $n$ yields $x^m$, by definition $y$ is the true $n$-th root of $x^m$, proving the two calculation orders give the exact same answer.'
+        }
       ],
       ends: `$x^{m/n}=(x^m)^{1/n}$ for all $x>0$, $m\\in\\mathbb Z$, $n\\in\\mathbb N$ — integer
         power and $n$th root commute.`

@@ -21,16 +21,89 @@ const Theme = (function () {
   return { apply };
 })();
 
+/* ── shell chrome ─────────────────────────────────────────────────────────
+   The controls that belong to the frame rather than to any view: back, full
+   screen, theme. Each exists twice — once in the mobile header, once in the
+   desktop rail — so they repaint from one place and can never disagree about
+   what is on. */
+const Shell = (function () {
+
+  const isFull = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+  function toggleFull() {
+    const root = document.documentElement;
+    if (isFull()) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
+      return;
+    }
+    const req = root.requestFullscreen || root.webkitRequestFullscreen;
+    if (req) {
+      const r = req.call(root);
+      if (r && r.catch) r.catch(function () { DOM.announce('This browser refused full screen.'); });
+    } else {
+      DOM.announce('This browser has no full-screen mode.');
+    }
+  }
+
+  function cycleTheme() {
+    const order = ['auto', 'light', 'dark'];
+    const next = order[(order.indexOf(Store.pref('theme', 'auto')) + 1) % 3];
+    Store.setPref('theme', next);
+    Theme.apply();
+    DOM.announce('Theme set to ' + next + '.');
+    paint();
+  }
+
+  const each = (sel, fn) => Array.prototype.forEach.call(document.querySelectorAll(sel), fn);
+  function setGlyph(btn, name, label) {
+    const g = btn.querySelector('.mi');
+    if (g) g.textContent = name;
+    const l = btn.querySelector('.lb');
+    if (l) l.textContent = label;
+  }
+
+  function paint() {
+    const full = isFull();
+    const theme = Store.pref('theme', 'auto');
+    document.body.classList.toggle('is-full', full);
+    each('[data-chrome=full]', function (b) {
+      b.setAttribute('aria-pressed', String(full));
+      b.setAttribute('aria-label', full ? 'Leave full screen' : 'Full screen');
+      setGlyph(b, full ? 'fullscreen_exit' : 'fullscreen', full ? 'Exit full screen' : 'Full screen');
+    });
+    each('[data-chrome=theme]', function (b) {
+      b.setAttribute('aria-label', 'Theme: ' + theme + ' — change it');
+      setGlyph(b, theme === 'dark' ? 'dark_mode' : theme === 'light' ? 'light_mode' : 'contrast',
+        'Theme: ' + theme);
+    });
+    each('[data-chrome=back]', function (b) { b.disabled = !Router.canBack(); });
+  }
+
+  function wire() {
+    const byId = id => document.getElementById(id);
+    const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn');
+    if (back) { back.setAttribute('data-chrome', 'back'); back.addEventListener('click', () => Router.back()); }
+    if (full) { full.setAttribute('data-chrome', 'full'); full.addEventListener('click', toggleFull); }
+    if (theme) { theme.setAttribute('data-chrome', 'theme'); theme.addEventListener('click', cycleTheme); }
+    document.addEventListener('fullscreenchange', paint);
+    document.addEventListener('webkitfullscreenchange', paint);
+    paint();
+  }
+
+  return { isFull, toggleFull, cycleTheme, paint, wire };
+})();
+
 const App = (function () {
 
   const el = DOM.el;
 
   const TABS = [
     { name: 'home', label: 'Today', icon: 'today', also: [] },
-    { name: 'study', label: 'Study', icon: 'study', also: ['note'] },
-    { name: 'recall', label: 'Recall', icon: 'recall', also: [] },
-    { name: 'omr', label: 'Questions', icon: 'omr', also: [] },
-    { name: 'write', label: 'Write', icon: 'write', also: [] }
+    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note'] },
+    { name: 'recall', label: 'Recall', icon: 'style', also: [] },
+    { name: 'omr', label: 'Questions', icon: 'ballot', also: [] },
+    { name: 'write', label: 'Write', icon: 'draw', also: [] }
   ];
 
   const VIEWS = {
@@ -38,14 +111,50 @@ const App = (function () {
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewWrite
   };
 
+  /* ONE nav element, laid out two ways.
+
+     On a phone it is the bottom tab bar it has always been. On a desktop the
+     same element becomes a left rail — because the horizontal strip was
+     costing a band of vertical space on every screen, and vertical space is
+     the whole of reading. The rail carries its own brand, back button and
+     shell controls, so at that width the top header can go away entirely and
+     the page gets the full height of the window.
+
+     `.rail-top` and `.rail-foot` are simply not displayed on a phone, where
+     the header already carries them. */
+  function railBtn(chrome, glyph, label, onClick) {
+    const b = el('button', { class: 'rail-btn', type: 'button', 'data-chrome': chrome,
+      'aria-label': label }, [DOM.mi(glyph), el('span', { class: 'lb', text: label })]);
+    b.addEventListener('click', onClick);
+    return b;
+  }
+
   function buildNav() {
     const nav = document.getElementById('tabs');
     DOM.clear(nav);
+
+    nav.appendChild(el('div', { class: 'rail-top' }, [
+      railBtn('back', 'arrow_back', 'Back', function () { Router.back(); }),
+      el('a', { class: 'rail-brand', href: Router.href('home') }, [
+        el('b', { text: 'Real Analysis' }),
+        el('span', { text: 'Levels 1–3' })
+      ])
+    ]));
+
+    const list = el('div', { class: 'rail-nav' });
     TABS.forEach(function (t) {
-      nav.appendChild(el('a', { href: Router.href(t.name), id: 'tab-' + t.name }, [
-        DOM.icon(t.icon), el('span', { text: t.label })
+      list.appendChild(el('a', { href: Router.href(t.name), id: 'tab-' + t.name }, [
+        DOM.mi(t.icon), el('span', { class: 'lb', text: t.label })
       ]));
     });
+    nav.appendChild(list);
+
+    nav.appendChild(el('div', { class: 'rail-foot' }, [
+      railBtn('full', 'fullscreen', 'Full screen', Shell.toggleFull),
+      railBtn('theme', 'contrast', 'Theme', Shell.cycleTheme)
+    ]));
+
+    Shell.paint();
   }
 
   function markNav(routeName) {
@@ -63,7 +172,7 @@ const App = (function () {
     return el('div', { class: 'stack' }, [
       el('h1', { tabindex: '-1', id: 'pagetitle', text: 'Something broke' }),
       el('div', { class: 'banner' }, [
-        el('span', { 'aria-hidden': 'true', text: '⚠' }),
+        DOM.mi('warning'),
         el('span', {}, [
           el('b', { text: 'This view failed to render. ' }),
           el('span', { class: 'mono', text: (err && err.message) || String(err) })
@@ -83,6 +192,7 @@ const App = (function () {
     const wrap = el('div', { class: (view.wrapClass || 'wrap') + ' view-in' }, [node]);
     main.appendChild(wrap);
     markNav(r.name);
+    Shell.paint();
     const h = main.querySelector('#pagetitle');
     if (h) h.focus({ preventScroll: true });
     window.scrollTo(0, 0);
@@ -121,7 +231,7 @@ const App = (function () {
     main.appendChild(el('div', { class: 'wrap stack' }, [
       el('h1', { text: 'Content did not load' }),
       el('div', { class: 'banner' }, [
-        el('span', { 'aria-hidden': 'true', text: '⚠' }),
+        DOM.mi('warning'),
         el('span', {}, [
           el('b', { text: 'The data files could not be read. ' }),
           el('span', { class: 'mono', text: (err && err.message) || String(err) })
@@ -137,7 +247,7 @@ const App = (function () {
     const wrap = main.querySelector('.wrap');
     if (!wrap) return;
     wrap.insertBefore(el('div', { class: 'banner' }, [
-      el('span', { 'aria-hidden': 'true', text: '⚠' }),
+      DOM.mi('warning'),
       el('span', {}, [
         el('b', { text: 'MathJax did not load. ' }),
         'Formulas will show as LaTeX source. The app needs the network once to fetch it.'
@@ -145,22 +255,8 @@ const App = (function () {
     ]), wrap.firstChild);
   }
 
-  /* Finishing a course at Level 1 earns the Level 2 switch ON THAT COURSE.
-     Checked in one place, once, on the way in — so "earned" cannot mean
-     something slightly different on each screen. It unlocks the switch; it
-     does NOT move anyone to Level 2, because a promotion nobody asked for is
-     exactly what the mastery rules exist to prevent. */
-  function earnedUnlocks() {
-    Pool.courses().forEach(function (course) {
-      if (course.pending || Store.unlocked(course.id)) return;
-      const ids = Pool.ids.concepts(course.id);
-      if (ids.length > 0 && ids.every(Store.isDone)) Store.unlock(course.id, true);
-    });
-  }
-
   /* The app proper. Only ever reached with someone signed in. */
   function run() {
-    earnedUnlocks();
     document.body.classList.remove('signed-out');
     buildNav();
     /* Sync starts after the pool: a merge can change what is on screen, and
@@ -193,6 +289,7 @@ const App = (function () {
 
   function start() {
     Theme.apply();
+    Shell.wire();
 
     loadData().then(function () {
       Pool.build();

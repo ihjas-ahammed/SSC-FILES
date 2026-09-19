@@ -11,21 +11,22 @@ const ViewStudy = (function () {
 
   const el = DOM.el;
 
+  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done'];
+
   function summaryStrip() {
     const ids = Pool.ids.concepts();
-    const done = Progress.count(ids).done;
-    const left = ids.length - done;
+    const c = Progress.count(ids);
     return el('div', { class: 'card glass' }, [
       el('div', { class: 'spread' }, [
         el('div', {}, [
-          el('div', { class: 'kicker', text: 'Ticked off' }),
+          el('div', { class: 'kicker', text: 'Where the syllabus stands' }),
           el('div', { style: { fontSize: '1.3rem', fontWeight: 600, marginTop: '2px' },
-            text: done + ' of ' + ids.length + ' notes' })
+            text: c.l1 + ' of ' + c.total + ' read' })
         ]),
-        el('span', { class: 'count',
-          text: left ? left + ' to go' : 'slice complete' })
+        el('span', { class: 'badge' + (c.min ? ' lv' + c.min : ''),
+          text: c.min ? 'level ' + c.min + ' · ' + LEVEL_WORD[c.min] : 'not started' })
       ]),
-      el('div', { style: { marginTop: '10px' } }, [UI.meter(done, ids.length)])
+      el('div', { style: { marginTop: '10px' } }, [UI.levelBar(c)])
     ]);
   }
 
@@ -33,7 +34,7 @@ const ViewStudy = (function () {
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
     const ids = Pool.ids.concepts(course.id);
-    const done = Progress.count(ids).done;
+    const c = Progress.count(ids);
 
     DOM.add(root, [
       UI.crumb([{ text: 'Study', href: 'study' }, { text: course.title }]),
@@ -41,15 +42,15 @@ const ViewStudy = (function () {
       el('p', { class: 'lede', text: course.blurb }),
       course.pending
         ? el('div', { class: 'banner' }, [
-            el('span', { 'aria-hidden': 'true', text: '⚠' }),
+            DOM.mi('hourglass_empty'),
             el('span', {}, [el('b', { text: 'Not built yet. ' }), course.pendingNote])
           ])
         : el('div', { class: 'card tint' }, [
             el('div', { class: 'spread' }, [
-              el('span', { class: 'kicker', text: 'Notes ticked' }),
-              el('span', { class: 'count', text: done + ' / ' + ids.length })
+              el('span', { class: 'kicker', text: 'Levels reached' }),
+              el('span', { class: 'count', text: c.l1 + ' / ' + c.l2 + ' / ' + c.l3 + ' of ' + c.total })
             ]),
-            el('div', { style: { marginTop: '8px' } }, [UI.meter(done, ids.length)])
+            el('div', { style: { marginTop: '8px' } }, [UI.levelBar(c)])
           ]),
       host
     ]);
@@ -69,13 +70,14 @@ const ViewStudy = (function () {
     Tree.seedOpen(Pool.courses().filter(c => !c.pending)[0]);
 
     DOM.add(root, [
-      UI.title('Syllabus', 'Open a level, tick what is done'),
+      UI.title('Syllabus', 'Open a module, advance what is done'),
       UI.mockBanner(),
       summaryStrip(),
       host,
       el('p', { class: 'small muted', style: { margin: 0 },
-        text: 'A tick means "I have been through this" — level 1 of the ladder, nothing more. ' +
-          'Ticking a module or a section ticks everything inside it.' })
+        text: 'One press advances a row one level: read it (red), then work its proof (amber). '
+          + 'Green is not a press — it arrives when every exercise in that section is worked '
+          + 'through. A parent row takes the colour of the weakest thing inside it.' })
     ]);
 
     Tree.mountAll(host, Pool.courses());

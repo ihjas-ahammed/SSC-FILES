@@ -32,11 +32,14 @@ const WriteBox = (function () {
     const concept = o.concept || null;
     const uid = 'w' + Math.random().toString(36).slice(2, 8);
 
-    /* MARKDOWN IS THE DEFAULT. Every line is prose until you put maths in it,
-       because a workspace you cannot write a sentence in is not a workspace —
-       it is a formula box. Maths goes in as $…$ and $$…$$, the same way it is
-       authored everywhere else in this app, and the Σ key wraps the whole line
-       for when the line really is nothing but maths.
+    /* MARKDOWN IS THE DEFAULT, AND SO IS MATHS. Every line is prose until you
+       put maths in it, because a workspace you cannot write a sentence in is
+       not a workspace — it is a formula box.
+
+       Maths no longer needs fencing: write `I love \\frac{1}{2} in fact` and
+       core.md.js finds the expression, typesets it, and leaves the sentence
+       alone. Explicit $…$ and $$…$$ still work and still win, and the Σ key
+       wraps the whole line for when the line really is nothing but maths.
 
        `mathFirst: true` is the opt-in exception for boxes that exist only to
        capture one formula; there, a line with no $ is taken as bare LaTeX. */
@@ -66,8 +69,9 @@ const WriteBox = (function () {
       class: 'small muted', id: uid + '-hint', style: { margin: '6px 0 0' },
       text: (mathFirst
         ? 'One line at a time. A line with no $ is typeset as display maths; use $…$ to mix maths into words. '
-        : 'Write normally — **bold**, # headings, - lists. Maths goes in as $…$, and a backslash '
-          + 'opens it for you. The Σ key turns the whole line into display maths. ') +
+        : 'Write normally — **bold**, # headings, - lists. Maths needs no dollar signs: '
+          + 'type \\frac{1}{2} mid-sentence and it is typeset where it stands. A backslash '
+          + 'opens the command list; the Σ key sets the whole line as display maths. ') +
         'Enter starts the next line.'
     });
 
@@ -78,16 +82,16 @@ const WriteBox = (function () {
       'aria-describedby': uid + '-hint',
       placeholder: o.placeholder || (mathFirst
         ? '\\forall \\varepsilon > 0 \\; \\exists \\delta > 0 \\ldots'
-        : 'Write a line — words, **bold**, or maths like $\\varepsilon > 0$…')
+        : 'Write a line — words, **bold**, or maths like \\varepsilon > 0 …')
     });
 
     const newlineBtn = el('button', { class: 'wkey', type: 'button',
       title: 'Start the next line (Enter)', 'aria-label': 'Start the next line' },
-      [el('span', { text: '↵' })]);
+      [DOM.mi('keyboard_return', 'sm')]);
 
     const mathBtn = el('button', { class: 'wkey', type: 'button',
       title: 'Wrap this line in display maths', 'aria-label': 'Wrap this line in display maths' },
-      [el('span', { text: 'Σ' })]);
+      [DOM.mi('functions', 'sm')]);
 
     /* ── rendering one line ────────────────────────────────────────────── */
 
@@ -122,7 +126,7 @@ const WriteBox = (function () {
       if (res.ok && res.hint) {
         DOM.clear(errBox);
         errBox.appendChild(el('div', { class: 'tex-err' }, [
-          el('span', { 'aria-hidden': 'true', text: 'ⓘ' }), el('span', { text: res.hint })
+          DOM.mi('info', 'sm'), el('span', { text: res.hint })
         ]));
         errBox.hidden = false;
         return;
@@ -130,7 +134,7 @@ const WriteBox = (function () {
       if (res.ok) { errBox.hidden = true; DOM.clear(errBox); return; }
       DOM.clear(errBox);
       errBox.appendChild(el('div', { class: 'tex-err' }, [
-        el('span', { 'aria-hidden': 'true', text: '⚠' }),
+        DOM.mi('report', 'sm'),
         el('span', {}, [
           el('b', { text: 'This line does not render yet. ' }),
           el('span', { text: res.error || 'Check for an unmatched { or }.' })
@@ -245,11 +249,11 @@ const WriteBox = (function () {
       }
     }
 
-    /* Insert a command. In a markdown line it is wrapped in $…$ unless the
-       caret is already inside maths — so a symbol can be dropped into the
-       middle of a sentence without stopping to think about delimiters. */
+    /* Insert a command bare. It used to be wrapped in $…$ on the way in; that
+       is now auto-math's job, and doing it here as well would fence half a
+       sentence the learner is still writing. */
     function take(entry) {
-      Latex.accept(field, entry, { wrapInMath: !mathFirst });
+      Latex.accept(field, entry, { wrapInMath: false });
       refreshStrip();
       revealInput();
     }
@@ -272,6 +276,7 @@ const WriteBox = (function () {
     }
 
     function revealInput() {
+      if (document.activeElement !== field) return;
       const vv = window.visualViewport;
       const bottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
       const top = vv ? vv.offsetTop : 0;

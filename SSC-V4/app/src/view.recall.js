@@ -13,7 +13,7 @@
 
      · only material you have ticked — a statement you have never read is not
        recall practice, it is reading with extra steps;
-     · proof cards only for a course you have switched to Level 2;
+     · proof cards for every ticked concept that carries a proof;
      · ordered by how badly each card needs the attempt, never randomly.
 
    The rules are unchanged: nothing is revealed before an attempt, and the
@@ -41,7 +41,6 @@ const ViewRecall = (function () {
     const tried = all.filter(x => x.rank > 0).length;
     const proofs = all.filter(x => x.kind === 'proof').length;
     const ticked = Pool.concepts().filter(c => Store.isDone(c.id)).length;
-    const l2 = Pool.courses().filter(c => Store.level(c.id) === 2).map(c => c.title);
 
     return el('div', { class: 'inner' }, [
       el('div', {}, [
@@ -68,7 +67,7 @@ const ViewRecall = (function () {
         ? el('p', { class: 'small muted', style: { margin: 0 },
             text: deck.length + ' ' + DOM.plural(deck.length, 'card') + ' in this reel'
               + (proofs ? ' · ' + proofs + ' of them ' + DOM.plural(proofs, 'is', 'are')
-                  + ' proof work from ' + l2.join(' and ') : '')
+                  + ' proof work' : '')
               + ' · hardest first, then reading order.' })
         : UI.empty(
             ticked
@@ -76,9 +75,9 @@ const ViewRecall = (function () {
               : 'The reel draws only on notes you have ticked as completed, and you have not ticked any yet.',
             el('a', { class: 'btn primary', href: Router.href('study'), text: 'Open the syllabus' })),
 
-      (!proofs && l2.length === 0 && all.length)
+      (!proofs && all.length)
         ? el('p', { class: 'small muted', style: { margin: 0 },
-            text: 'Switch a course to Level 2 and its proofs join this reel.' })
+            text: 'Tick a theorem and its proof joins this reel as a second card.' })
         : null
     ]);
   }
@@ -119,8 +118,8 @@ const ViewRecall = (function () {
       DOM.add(wrap, [
         el('div', { class: 'verdict ' +
           (grade === 'got' ? 'ok' : grade === 'missed' ? 'bad' : 'warn') }, [
-          el('span', { class: 'g', 'aria-hidden': 'true',
-            text: grade === 'got' ? '✓' : grade === 'missed' ? '✗' : '~' }),
+          el('span', { class: 'g', 'aria-hidden': 'true' },
+            [DOM.mi(grade === 'got' ? 'check_circle' : grade === 'missed' ? 'cancel' : 'remove_circle')]),
           el('span', {}, [
             el('b', { text: r.tries === 1 ? 'First attempt recorded: ' + grade
               : 'This pass: ' + grade }),
@@ -130,7 +129,7 @@ const ViewRecall = (function () {
           ])
         ]),
         el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
-          el('button', { class: 'btn primary', type: 'button', text: 'Next ↓',
+          el('button', { class: 'btn primary', type: 'button', text: 'Next card',
             on: { click: goNext } }),
           el('a', { class: 'btn', href: Router.href('note/' + item.cid), text: 'Open the note' })
         ])
@@ -340,7 +339,7 @@ const ViewRecall = (function () {
             })
         ]);
         section.appendChild(el('div', { class: 'reel-hint' },
-          [el('span', { text: i + 1 < deck.length ? '↑ swipe for the next' : '↑ end of the reel' })]));
+          [el('span', { text: i + 1 < deck.length ? 'swipe up for the next' : 'end of the reel' })]));
         cards.push(section);
       });
 

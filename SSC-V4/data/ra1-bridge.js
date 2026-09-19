@@ -20,12 +20,36 @@ CONCEPTS.push(
       idea:`Suppose, for contradiction, that some real number $x$ IS an upper bound for the whole of $\\mathbb{N}$. Then $\\mathbb{N}$ is a bounded-above set, so Completeness hands us its supremum $u$ — and $u-1$, being smaller than the least upper bound, must fail to be an upper bound, forcing a natural number past $u$ itself.`,
       why:`The proof is a single application of the Completeness Property to the specific set $\\mathbb{N}$: a number just below the supremum must be beaten by some element of the set, and here that margin is fixed at exactly $1$ so the Inductive Property can finish the job.`,
       rungs:[
-        { why:`Negate the claim: suppose some real number $x$ IS an upper bound for the whole set $\\mathbb{N}$.`, m:`$$n\\le x \\ \\text{ for all } n\\in\\mathbb{N}$$` },
-        { why:`Then $\\mathbb{N}$ is a nonempty subset of $\\mathbb{R}$ bounded above, so the Completeness Property applies.`, m:`$$u:=\\sup\\mathbb{N} \\text{ exists in } \\mathbb{R}$$` },
-        { why:`$u-1$ is strictly smaller than the LEAST upper bound $u$, so it cannot itself be an upper bound of $\\mathbb{N}$.`, m:`$$u-1<u \\ \\Rightarrow\\ u-1 \\text{ is not an upper bound of } \\mathbb{N}$$` },
-        { why:`"Not an upper bound" means some natural number slips past it.`, m:`$$\\exists\\, m\\in\\mathbb{N}: u-1 < m$$` },
-        { why:`But $\\mathbb{N}$ is closed under $+1$ (Inductive Property), so $m+1$ is also a natural number — and it beats $u$.`, m:`$$m+1\\in\\mathbb{N}, \\qquad u < m+1$$` },
-        { why:`This contradicts step 2: $u$ was supposed to be an upper bound of $\\mathbb{N}$, yet $m+1\\in\\mathbb{N}$ exceeds it.`, m:`$$u < m+1,\\ m+1\\in\\mathbb{N} \\ \\Rightarrow\\Leftarrow$$` }
+        {
+          why: `Negate the claim: suppose some real number $x$ IS an upper bound for the whole set $\\mathbb{N}$.`,
+          m: `$$n\\le x \\ \\text{ for all } n\\in\\mathbb{N}$$`,
+          meaning: 'What this really means: To see why counting can never be trapped, we imagine the opposite: suppose there exists a giant brick wall $x$ on the number line that no counting number $1, 2, 3, \\ldots$ can ever climb over.'
+        },
+        {
+          why: `Then $\\mathbb{N}$ is a nonempty subset of $\\mathbb{R}$ bounded above, so the Completeness Property applies.`,
+          m: `$$u:=\\sup\\mathbb{N} \\text{ exists in } \\mathbb{R}$$`,
+          meaning: 'What this really means: If natural numbers really were blocked by a ceiling, the completeness of the real numbers guarantees there must be an exact, tightest possible ceiling $u$ right above them.'
+        },
+        {
+          why: `$u-1$ is strictly smaller than the LEAST upper bound $u$, so it cannot itself be an upper bound of $\\mathbb{N}$.`,
+          m: `$$u-1<u \\ \\Rightarrow\\ u-1 \\text{ is not an upper bound of } \\mathbb{N}$$`,
+          meaning: 'What this really means: If you step just one full stride backwards from this tightest ceiling to $u-1$, you drop below the ceiling, landing right back inside the territory where counting numbers live.'
+        },
+        {
+          why: `"Not an upper bound" means some natural number slips past it.`,
+          m: `$$\\exists\\, m\\in\\mathbb{N}: u-1 < m$$`,
+          meaning: 'What this really means: Because $u-1$ is below the ceiling, at least one real-life counting number $m$ has already marched past $u-1$.'
+        },
+        {
+          why: `But $\\mathbb{N}$ is closed under $+1$ (Inductive Property), so $m+1$ is also a natural number — and it beats $u$.`,
+          m: `$$m+1\\in\\mathbb{N}, \\qquad u < m+1$$`,
+          meaning: 'What this really means: But counting never stops! Since $m$ exists, taking one more step to $m+1$ is still a valid counting number, and it catapults right over the supposed maximum ceiling $u$.'
+        },
+        {
+          why: `This contradicts step 2: $u$ was supposed to be an upper bound of $\\mathbb{N}$, yet $m+1\\in\\mathbb{N}$ exceeds it.`,
+          m: `$$u < m+1,\\ m+1\\in\\mathbb{N} \\ \\Rightarrow\\Leftarrow$$`,
+          meaning: 'What this really means: The ceiling failed to hold back the very numbers it claimed to cap. The assumption was impossible—no real number can ever bottle up the natural numbers.'
+        }
       ],
       ends:`The assumption is impossible, so no real number bounds $\\mathbb{N}$ above — equivalently, for every $x\\in\\mathbb{R}$ there is some $n_x\\in\\mathbb{N}$ with $x\\le n_x$. This single fact drives every "choose $n$ large enough" argument later in the course, including $1/n\\to0$ and the density of $\\mathbb{Q}$ in $\\mathbb{R}$.`
     },
@@ -53,10 +77,26 @@ CONCEPTS.push(
       idea:`Choose denominator $n$ so $1/n < y - x$, ensuring $ny - nx > 1$. Then the interval $(nx, ny)$ has length $> 1$, so it must contain an integer $m$. Then $r = m/n$ satisfies $x < r < y$.`,
       why:`An interval of length greater than $1$ must contain at least one integer. Scaling the gap $(x, y)$ by $n$ expands it to length $> 1$, and Corollary 2.4.6 provides the integer $m$.`,
       rungs:[
-        { why:`Assume without loss of generality $x > 0$ (if $x \\le 0$, shift by an integer). Since $y - x > 0$, Corollary 2.4.5 supplies a denominator $n$.`, m:`$$y - x > 0 \\implies \\exists\\, n \\in \\mathbb{N}: \\frac{1}{n} < y - x \\iff nx + 1 < ny$$` },
-        { why:`Apply Corollary 2.4.6 to $nx > 0$ to get the integer $m$ just above $nx$.`, m:`$$\\exists\\, m \\in \\mathbb{N}: m - 1 \\le nx < m$$` },
-        { why:`From $m - 1 \\le nx$, we have $m \\le nx + 1$. Combine with $nx + 1 < ny$.`, m:`$$nx < m \\le nx + 1 < ny \\implies nx < m < ny$$` },
-        { why:`Divide through by $n > 0$ to obtain the desired rational $r = m/n$.`, m:`$$x < \\frac{m}{n} < y \\implies r := \\frac{m}{n} \\in \\mathbb{Q} \\text{ with } x < r < y$$` }
+        {
+          why: `Assume without loss of generality $x > 0$ (if $x \\le 0$, shift by an integer). Since $y - x > 0$, Corollary 2.4.5 supplies a denominator $n$.`,
+          m: `$$y - x > 0 \\implies \\exists\\, n \\in \\mathbb{N}: \\frac{1}{n} < y - x \\iff nx + 1 < ny$$`,
+          meaning: 'What this really means: We choose a ruler with tick marks spaced by tiny steps $1/n$, where each step is strictly narrower than the gap between $x$ and $y$.'
+        },
+        {
+          why: `Apply Corollary 2.4.6 to $nx > 0$ to get the integer $m$ just above $nx$.`,
+          m: `$$\\exists\\, m \\in \\mathbb{N}: m - 1 \\le nx < m$$`,
+          meaning: 'What this really means: If we magnify the picture by multiplying by $n$, the left endpoint $nx$ sits just behind some integer $m$.'
+        },
+        {
+          why: `From $m - 1 \\le nx$, we have $m \\le nx + 1$. Combine with $nx + 1 < ny$.`,
+          m: `$$nx < m \\le nx + 1 < ny \\implies nx < m < ny$$`,
+          meaning: 'What this really means: Because the gap is wider than $1$ on this magnified scale, the next integer step $m$ lands safely inside the gap without jumping over it.'
+        },
+        {
+          why: `Divide through by $n > 0$ to obtain the desired rational $r = m/n$.`,
+          m: `$$x < \\frac{m}{n} < y \\implies r := \\frac{m}{n} \\in \\mathbb{Q} \\text{ with } x < r < y$$`,
+          meaning: 'What this really means: Shrinking the picture back down turns the integer $m$ into the fraction $m/n$, perfectly parked between $x$ and $y$.'
+        }
       ],
       ends:`The rational $r = m/n$ lies strictly between $x$ and $y$. Repeating this process yields infinitely many rationals in $(x, y)$.`
     },
@@ -82,10 +122,26 @@ CONCEPTS.push(
       idea:`Divide the whole problem by the known irrational $\\sqrt2$, apply the (already established) Density Theorem to find a rational in the rescaled gap, then multiply back through by $\\sqrt2$.`,
       why:`Scaling by $\\sqrt2$ turns "find an irrational between $x$ and $y$" into "find a rational between $x/\\sqrt2$ and $y/\\sqrt2$" — a problem the Density Theorem already solves, and multiplying a nonzero rational by $\\sqrt2$ always lands back on an irrational.`,
       rungs:[
-        { why:`Rescale the target gap by the known irrational $\\sqrt2$ (Bartle 2.4.7).`, m:`$$\\frac{x}{\\sqrt2} < \\frac{y}{\\sqrt2}$$` },
-        { why:`The Density Theorem (rationals dense in $\\mathbb{R}$) supplies a rational strictly between these rescaled endpoints; it can be taken nonzero since the gap contains infinitely many rationals.`, m:`$$\\exists\\, r\\in\\mathbb{Q},\\ r\\ne0:\\quad \\frac{x}{\\sqrt2} < r < \\frac{y}{\\sqrt2}$$` },
-        { why:`Multiply back through by $\\sqrt2>0$ (positive, so the inequalities survive) to return to the original scale.`, m:`$$x < r\\sqrt2 < y$$` },
-        { why:`Check $z:=r\\sqrt2$ is genuinely irrational: a nonzero rational times an irrational is always irrational.`, m:`$$z:=r\\sqrt2 \\ \\text{is irrational}, \\qquad x < z< y$$` }
+        {
+          why: `Rescale the target gap by the known irrational $\\sqrt2$ (Bartle 2.4.7).`,
+          m: `$$\\frac{x}{\\sqrt2} < \\frac{y}{\\sqrt2}$$`,
+          meaning: 'What this really means: We distort the entire target gap by dividing it by the known irrational $\\sqrt{2}$, translating our search into a new gap on a shifted scale.'
+        },
+        {
+          why: `The Density Theorem (rationals dense in $\\mathbb{R}$) supplies a rational strictly between these rescaled endpoints; it can be taken nonzero since the gap contains infinitely many rationals.`,
+          m: `$$\\exists\\, r\\in\\mathbb{Q},\\ r\\ne0:\\quad \\frac{x}{\\sqrt2} < r < \\frac{y}{\\sqrt2}$$`,
+          meaning: 'What this really means: Because rational fractions are dense everywhere, we can easily grab a nonzero fraction $r$ sitting right inside this newly shifted gap.'
+        },
+        {
+          why: `Multiply back through by $\\sqrt2>0$ (positive, so the inequalities survive) to return to the original scale.`,
+          m: `$$x < r\\sqrt2 < y$$`,
+          meaning: 'What this really means: We undo the distortion by multiplying back by $\\sqrt{2}$, which drops the number $r\\sqrt{2}$ squarely back into our original target gap.'
+        },
+        {
+          why: `Check $z:=r\\sqrt2$ is genuinely irrational: a nonzero rational times an irrational is always irrational.`,
+          m: `$$z:=r\\sqrt2 \\ \\text{is irrational}, \\qquad x < z< y$$`,
+          meaning: 'What this really means: Multiplying a clean nonzero fraction by $\\sqrt{2}$ guarantees an irrational result, giving us the exact irrational stepping stone we needed.'
+        }
       ],
       ends:`The irrationals are packed into $\\mathbb{R}$ just as densely as the rationals are — between any two reals, both a rational AND an irrational can always be found.`
     },
@@ -111,11 +167,31 @@ CONCEPTS.push(
       idea:`Handle the bounded case: set $a:=\\inf S$, $b:=\\sup S$; show every point strictly between $a$ and $b$ must already lie in $S$, then pin down which of the four interval shapes $S$ actually is depending on whether the endpoints belong.`,
       why:`Both $a$ and $b$ are LEAST/GREATEST bounds, so anything strictly between them fails to be a bound at all — which forces points of $S$ on both sides of it, and the "no gaps" hypothesis does the rest.`,
       rungs:[
-        { why:`Bounded case: name the infimum and supremum; this immediately traps $S$ inside $[a,b]$.`, m:`$$a:=\\inf S,\\ b:=\\sup S \\ \\Rightarrow\\ S\\subseteq[a,b]$$` },
-        { why:`Take any $z$ strictly between $a$ and $b$. Since $a$ is the GREATEST lower bound, anything bigger than it fails to be a lower bound — so some point of $S$ sits below $z$; symmetrically for $b$ and a point above $z$.`, m:`$$a < z<b \\ \\Rightarrow\\ \\exists x\\in S: x < z, \\quad \\exists y\\in S: z < y$$` },
-        { why:`Now $x < z< y$ with $x,y\\in S$ — the hypothesis (property (1)) forces the WHOLE segment $[x,y]$, including $z$, into $S$.`, m:`$$x < z< y,\\ x,y\\in S \\ \\Rightarrow\\ z\\in[x,y]\\subseteq S$$` },
-        { why:`$z$ was an arbitrary point of $(a,b)$, so the whole open interval sits inside $S$.`, m:`$$(a,b)\\subseteq S$$` },
-        { why:`Combine with $S\\subseteq[a,b]$ from step 1; whether the endpoints $a,b$ themselves belong to $S$ determines which of the four interval types $S$ is.`, m:`$$(a,b)\\subseteq S\\subseteq[a,b] \\ \\Rightarrow\\ S\\in\\{(a,b),\\,[a,b),\\,(a,b],\\,[a,b]\\}$$` }
+        {
+          why: `Bounded case: name the infimum and supremum; this immediately traps $S$ inside $[a,b]$.`,
+          m: `$$a:=\\inf S,\\ b:=\\sup S \\ \\Rightarrow\\ S\\subseteq[a,b]$$`,
+          meaning: 'What this really means: We locate the absolute lowest floor $a$ and highest ceiling $b$ of the set, so all members of $S$ are trapped between them.'
+        },
+        {
+          why: `Take any $z$ strictly between $a$ and $b$. Since $a$ is the GREATEST lower bound, anything bigger than it fails to be a lower bound — so some point of $S$ sits below $z$; symmetrically for $b$ and a point above $z$.`,
+          m: `$$a < z<b \\ \\Rightarrow\\ \\exists x\\in S: x < z, \\quad \\exists y\\in S: z < y$$`,
+          meaning: 'What this really means: Any point $z$ inside the floor and ceiling is not alone: there is guaranteed to be an element of $S$ to its left and another element of $S$ to its right.'
+        },
+        {
+          why: `Now $x < z< y$ with $x,y\\in S$ — the hypothesis (property (1)) forces the WHOLE segment $[x,y]$, including $z$, into $S$.`,
+          m: `$$x < z< y,\\ x,y\\in S \\ \\Rightarrow\\ z\\in[x,y]\\subseteq S$$`,
+          meaning: 'What this really means: Because $S$ has no internal gaps, the entire solid bridge between the left point and right point belongs to $S$, automatically swallowing $z$.'
+        },
+        {
+          why: `$z$ was an arbitrary point of $(a,b)$, so the whole open interval sits inside $S$.`,
+          m: `$$(a,b)\\subseteq S$$`,
+          meaning: 'What this really means: Because this works for every single interior point, every scrap of space between $a$ and $b$ is solidly packed into $S$.'
+        },
+        {
+          why: `Combine with $S\\subseteq[a,b]$ from step 1; whether the endpoints $a,b$ themselves belong to $S$ determines which of the four interval types $S$ is.`,
+          m: `$$(a,b)\\subseteq S\\subseteq[a,b] \\ \\Rightarrow\\ S\\in\\{(a,b),\\,[a,b),\\,(a,b],\\,[a,b]\\}$$`,
+          meaning: 'What this really means: The entire body of the interval is present; the only open question is whether the two outer boundary posts are included or left out.'
+        }
       ],
       ends:`In the bounded case $S$ is pinned to one of the four familiar shapes. The remaining three cases (bounded only above, only below, or neither) run the identical argument with $\\pm\\infty$ standing in for a missing finite endpoint.`
     },
@@ -141,12 +217,36 @@ CONCEPTS.push(
       idea:`Collect all the LEFT endpoints $a_n$ into one set and let $\\xi$ be its supremum (which exists by Completeness). Then show $\\xi$ never exceeds any RIGHT endpoint $b_n$ either — so $\\xi$ lands inside every single interval at once.`,
       why:`Nestedness is exactly what lets any one interval's right endpoint act as an upper bound for ALL the left endpoints, early or late — that fact, combined with Completeness supplying a genuine least upper bound, is what manufactures the common point.`,
       rungs:[
-        { why:`Collect all left endpoints into one set; nestedness ($I_n\\subseteq I_1$) makes $b_1$ an upper bound for the whole set.`, m:`$$\\{a_n : n\\in\\mathbb{N}\\}, \\qquad a_n\\le b_1 \\ \\text{ for all } n$$` },
-        { why:`The set of left endpoints is nonempty and bounded above, so Completeness hands us its supremum.`, m:`$$\\xi := \\sup\\{a_n : n\\in\\mathbb{N}\\} \\ \\text{ exists}, \\qquad a_n\\le\\xi\\ \\text{ for all } n$$` },
-        { why:`Fix one index $n$ and show $b_n$ is an upper bound for EVERY $a_k$ — split into two cases by which interval nests inside which.`, m:`$$\\text{if } n\\le k: I_k\\subseteq I_n \\Rightarrow a_k\\le b_k\\le b_n; \\qquad \\text{if } k < n: I_n\\subseteq I_k \\Rightarrow a_k\\le a_n\\le b_n$$` },
-        { why:`Either way $a_k\\le b_n$ for every $k$, so $b_n$ is an upper bound of the whole set of left endpoints — hence at least as big as the LEAST such bound, $\\xi$.`, m:`$$b_n \\text{ upper-bounds } \\{a_k:k\\in\\mathbb{N}\\} \\ \\Rightarrow\\ \\xi\\le b_n$$` },
-        { why:`This held for every $n$, so $\\xi$ sits between each interval's own two endpoints.`, m:`$$a_n\\le\\xi\\le b_n \\ \\text{ for all } n\\in\\mathbb{N}$$` },
-        { why:`That is exactly membership in every $I_n$ simultaneously.`, m:`$$\\xi\\in I_n=[a_n,b_n] \\ \\text{ for all } n\\in\\mathbb{N}$$` }
+        {
+          why: `Collect all left endpoints into one set; nestedness ($I_n\\subseteq I_1$) makes $b_1$ an upper bound for the whole set.`,
+          m: `$$\\{a_n : n\\in\\mathbb{N}\\}, \\qquad a_n\\le b_1 \\ \\text{ for all } n$$`,
+          meaning: 'What this really means: We gather all the left endpoints together; because every nested box sits inside the very first box, the right wall of the first box caps them all.'
+        },
+        {
+          why: `The set of left endpoints is nonempty and bounded above, so Completeness hands us its supremum.`,
+          m: `$$\\xi := \\sup\\{a_n : n\\in\\mathbb{N}\\} \\ \\text{ exists}, \\qquad a_n\\le\\xi\\ \\text{ for all } n$$`,
+          meaning: 'What this really means: As the left walls push forward without escaping the ceiling, completeness guarantees they converge on an ultimate rightmost frontier point $\\xi$.'
+        },
+        {
+          why: `Fix one index $n$ and show $b_n$ is an upper bound for EVERY $a_k$ — split into two cases by which interval nests inside which.`,
+          m: `$$\\text{if } n\\le k: I_k\\subseteq I_n \\Rightarrow a_k\\le b_k\\le b_n; \\qquad \\text{if } k < n: I_n\\subseteq I_k \\Rightarrow a_k\\le a_n\\le b_n$$`,
+          meaning: 'What this really means: Russian nesting dolls never cross walls: no left wall from any box can ever stick out past the right wall of any other box.'
+        },
+        {
+          why: `Either way $a_k\\le b_n$ for every $k$, so $b_n$ is an upper bound of the whole set of left endpoints — hence at least as big as the LEAST such bound, $\\xi$.`,
+          m: `$$b_n \\text{ upper-bounds } \\{a_k:k\\in\\mathbb{N}\\} \\ \\Rightarrow\\ \\xi\\le b_n$$`,
+          meaning: 'What this really means: Since right wall $b_n$ stays to the right of all left walls, it must also stay to the right of their ultimate frontier point $\\xi$.'
+        },
+        {
+          why: `This held for every $n$, so $\\xi$ sits between each interval's own two endpoints.`,
+          m: `$$a_n\\le\\xi\\le b_n \\ \\text{ for all } n\\in\\mathbb{N}$$`,
+          meaning: 'What this really means: The special point $\\xi$ is permanently pinned between the left wall and right wall of every single box in the entire infinite chain.'
+        },
+        {
+          why: `That is exactly membership in every $I_n$ simultaneously.`,
+          m: `$$\\xi\\in I_n=[a_n,b_n] \\ \\text{ for all } n\\in\\mathbb{N}$$`,
+          meaning: 'What this really means: This point $\\xi$ survives inside all the infinitely nested boxes at once—their shared intersection is never empty.'
+        }
       ],
       ends:`Completeness manufactures a genuine common point $\\xi$ for the whole nested chain, all at once. This is the tool behind Cantor's proof that $\\mathbb{R}$ is uncountable, and behind constructing real numbers as binary/decimal expansions via repeated bisection.`
     },
@@ -171,10 +271,26 @@ CONCEPTS.push(
       idea:`Let $\\xi = \\sup\\{a_n\\}$ and $\\eta = \\inf\\{b_n\\}$. Show $\\xi \\le \\eta$, and that every common point $x$ satisfies $\\xi \\le x \\le \\eta$. Then use $\\inf\\{b_n - a_n\\} = 0$ and Theorem 2.1.9 to force $\\eta - \\xi = 0$.`,
       why:`Because any common point is an upper bound for all $a_n$ and lower bound for all $b_n$, it must lie in $[\\xi, \\eta]$. When $\\eta = \\xi$, that interval collapses to a single point.`,
       rungs:[
-        { why:`From the proof of 2.5.2, $\\xi = \\sup\\{a_n\\}$ and $\\eta = \\inf\\{b_n\\}$ satisfy $\\xi \\le \\eta$, and $x \\in \\bigcap I_n \\iff \\xi \\le x \\le \\eta$.`, m:`$$a_n \\le \\xi \\le \\eta \\le b_n \\quad \\text{for all } n \\in \\mathbb{N}$$` },
-        { why:`Subtract the inequalities to bound the gap $\\eta - \\xi$ by the length of $I_n$.`, m:`$$0 \\le \\eta - \\xi \\le b_n - a_n \\quad \\text{for all } n \\in \\mathbb{N}$$` },
-        { why:`Since $\\inf\\{b_n - a_n : n \\in \\mathbb{N}\\} = 0$, for every $\\varepsilon > 0$ there exists $m \\in \\mathbb{N}$ such that $b_m - a_m < \\varepsilon$.`, m:`$$\\forall\\, \\varepsilon > 0, \\; \\exists m \\in \\mathbb{N}: \\; 0 \\le \\eta - \\xi \\le b_m - a_m < \\varepsilon$$` },
-        { why:`By Theorem 2.1.9 (Positive Margin Property), $0 \\le \\eta - \\xi < \\varepsilon$ for all $\\varepsilon > 0$ forces $\\eta - \\xi = 0$.`, m:`$$\\eta - \\xi = 0 \\implies \\xi = \\eta$$` }
+        {
+          why: `From the proof of 2.5.2, $\\xi = \\sup\\{a_n\\}$ and $\\eta = \\inf\\{b_n\\}$ satisfy $\\xi \\le \\eta$, and $x \\in \\bigcap I_n \\iff \\xi \\le x \\le \\eta$.`,
+          m: `$$a_n \\le \\xi \\le \\eta \\le b_n \\quad \\text{for all } n \\in \\mathbb{N}$$`,
+          meaning: 'What this really means: Any point surviving in all boxes is trapped between the frontier of all left walls $\\xi$ and the frontier of all right walls $\\eta$.'
+        },
+        {
+          why: `Subtract the inequalities to bound the gap $\\eta - \\xi$ by the length of $I_n$.`,
+          m: `$$0 \\le \\eta - \\xi \\le b_n - a_n \\quad \\text{for all } n \\in \\mathbb{N}$$`,
+          meaning: 'What this really means: The distance between these two frontiers cannot be any wider than the width of the containing box.'
+        },
+        {
+          why: `Since $\\inf\\{b_n - a_n : n \\in \\mathbb{N}\\} = 0$, for every $\\varepsilon > 0$ there exists $m \\in \\mathbb{N}$ such that $b_m - a_m < \\varepsilon$.`,
+          m: `$$\\forall\\, \\varepsilon > 0, \\; \\exists m \\in \\mathbb{N}: \\; 0 \\le \\eta - \\xi \\le b_m - a_m < \\varepsilon$$`,
+          meaning: 'What this really means: Because the boxes shrink down to zero size, the gap between $\\xi$ and $\\eta$ can be made smaller than any positive margin you can name.'
+        },
+        {
+          why: `By Theorem 2.1.9 (Positive Margin Property), $0 \\le \\eta - \\xi < \\varepsilon$ for all $\\varepsilon > 0$ forces $\\eta - \\xi = 0$.`,
+          m: `$$\\eta - \\xi = 0 \\implies \\xi = \\eta$$`,
+          meaning: 'What this really means: Two fixed points separated by less than any positive distance must be the exact same point; the collapsing walls isolate a single unique number.'
+        }
       ],
       ends:`Since $\\xi \\le x \\le \\eta$ and $\\xi = \\eta$, the only possible common point is $x = \\xi$. The intersection consists of the single point $\\{\\xi\\}$.`
     },
@@ -196,11 +312,31 @@ CONCEPTS.push(
       idea:`Assume $[0, 1]$ is countable: list it as $\\{x_1, x_2, \\dots\\}$. Construct nested closed intervals $I_1 \\supseteq I_2 \\supseteq \\cdots$ such that $x_n \\notin I_n$. By Nested Intervals, $\\xi \\in \\bigcap I_n$ exists, but $\\xi \\ne x_n$ for all $n$, contradicting the enumeration.`,
       why:`Each step deliberately excludes one listed element while keeping a closed bounded subinterval alive; completeness then manufactures an unlisted point.`,
       rungs:[
-        { why:`Assume for contradiction that $I = [0, 1]$ is countable; enumerate it completely.`, m:`$$I = \\{x_1, x_2, x_3, \\ldots, x_n, \\ldots\\}$$` },
-        { why:`Divide $[0, 1]$ into three equal subintervals $[0, 1/3], [1/3, 2/3], [2/3, 1]$. At least one subinterval does not contain $x_1$; call it $I_1 = [a_1, b_1]$.`, m:`$$I_1 \\subseteq I, \\quad x_1 \\notin I_1$$` },
-        { why:`Inductively, given $I_k$, divide it into three subintervals. At least one does not contain $x_{k+1}$; call it $I_{k+1}$.`, m:`$$I_{k+1} \\subseteq I_k, \\quad x_{k+1} \\notin I_{k+1}$$` },
-        { why:`This produces a nested sequence of nonempty closed bounded intervals $I_1 \\supseteq I_2 \\supseteq \\cdots$. By Nested Intervals (2.5.2), a common point exists.`, m:`$$\\exists\\, \\xi \\in \\mathbb{R}: \\quad \\xi \\in I_n \\quad \\text{for all } n \\in \\mathbb{N}$$` },
-        { why:`Since $\\xi \\in I_n$ for all $n$, and $x_n \\notin I_n$, $\\xi$ cannot equal $x_n$ for any $n \\in \\mathbb{N}$.`, m:`$$\\xi \\ne x_n \\quad \\text{for all } n \\in \\mathbb{N} \\implies \\xi \\notin \\{x_1, x_2, \\ldots\\} \\implies\\Leftarrow$$` }
+        {
+          why: `Assume for contradiction that $I = [0, 1]$ is countable; enumerate it completely.`,
+          m: `$$I = \\{x_1, x_2, x_3, \\ldots, x_n, \\ldots\\}$$`,
+          meaning: 'What this really means: We test what happens if someone claims to possess a complete, numbered roll call containing every single real number between $0$ and $1$.'
+        },
+        {
+          why: `Divide $[0, 1]$ into three equal subintervals $[0, 1/3], [1/3, 2/3], [2/3, 1]$. At least one subinterval does not contain $x_1$; call it $I_1 = [a_1, b_1]$.`,
+          m: `$$I_1 \\subseteq I, \\quad x_1 \\notin I_1$$`,
+          meaning: 'What this really means: We chop the interval into three thirds; since person $x_1$ can only be in one place, we pick a closed third that completely shuts out $x_1$.'
+        },
+        {
+          why: `Inductively, given $I_k$, divide it into three subintervals. At least one does not contain $x_{k+1}$; call it $I_{k+1}$.`,
+          m: `$$I_{k+1} \\subseteq I_k, \\quad x_{k+1} \\notin I_{k+1}$$`,
+          meaning: 'What this really means: Step by step, we zoom into smaller nested rooms, each deliberately constructed to lock out the next person on the list.'
+        },
+        {
+          why: `This produces a nested sequence of nonempty closed bounded intervals $I_1 \\supseteq I_2 \\supseteq \\cdots$. By Nested Intervals (2.5.2), a common point exists.`,
+          m: `$$\\exists\\, \\xi \\in \\mathbb{R}: \\quad \\xi \\in I_n \\quad \\text{for all } n \\in \\mathbb{N}$$`,
+          meaning: 'What this really means: The Nested Intervals Property guarantees that there is at least one survivor point $\\xi$ sitting at the very center of all these nested rooms.'
+        },
+        {
+          why: `Since $\\xi \\in I_n$ for all $n$, and $x_n \\notin I_n$, $\\xi$ cannot equal $x_n$ for any $n \\in \\mathbb{N}$.`,
+          m: `$$\\xi \\ne x_n \\quad \\text{for all } n \\in \\mathbb{N} \\implies \\xi \\notin \\{x_1, x_2, \\ldots\\} \\implies\\Leftarrow$$`,
+          meaning: 'What this really means: This survivor $\\xi$ was locked out of person $n$\'s room for every $n$, so $\\xi$ is not on the list at all! The master list was incomplete, proving real numbers can never be counted.'
+        }
       ],
       ends:`The assumption that $[0, 1]$ is countable leads to a contradiction. Hence $[0, 1]$ and $\\mathbb{R}$ are uncountable.`
     },
@@ -245,10 +381,26 @@ CONCEPTS.push(
       idea:`Use $\\varepsilon=1$ to trap the tail within $1$ of the limit $x$, bound $|x_n|$ there via the triangle inequality, then take the max over that bound and the finitely many earlier terms.`,
       why:`Any single fixed tolerance is enough to pin the tail down to a genuine numerical bound; the only extra step is remembering the finitely many terms before that tail also need covering, which a simple maximum handles.`,
       rungs:[
-        { why:`Apply the definition of convergence with the specific tolerance $\\varepsilon=1$.`, m:`$$\\exists K:\\ n\\ge K \\Rightarrow |x_n-x|<1$$` },
-        { why:`Triangle inequality turns "close to $x$" into an explicit numerical bound on $|x_n|$ itself, for the tail.`, m:`$$|x_n| = |x_n-x+x| \\le |x_n-x|+|x| < 1+|x| \\quad (n\\ge K)$$` },
-        { why:`The finitely many terms before index $K$ form a finite set, automatically bounded — take the largest of them, together with the tail bound.`, m:`$$M := \\max\\{|x_1|,\\ldots,|x_{K-1}|,\\ 1+|x|\\}$$` },
-        { why:`Every term, early or late, is now controlled by the same single number $M$.`, m:`$$|x_n|\\le M \\ \\text{ for all } n\\in\\mathbb{N}$$` }
+        {
+          why: `Apply the definition of convergence with the specific tolerance $\\varepsilon=1$.`,
+          m: `$$\\exists K:\\ n\\ge K \\Rightarrow |x_n-x|<1$$`,
+          meaning: 'What this really means: We draw a simple safety bubble of radius $1$ around the limit destination $x$; eventually, the infinite tail steps inside and stays there.'
+        },
+        {
+          why: `Triangle inequality turns "close to $x$" into an explicit numerical bound on $|x_n|$ itself, for the tail.`,
+          m: `$$|x_n| = |x_n-x+x| \\le |x_n-x|+|x| < 1+|x| \\quad (n\\ge K)$$`,
+          meaning: 'What this really means: Since all late terms stay within $1$ unit of $x$, none can stray farther from zero than the distance to $x$ plus $1$.'
+        },
+        {
+          why: `The finitely many terms before index $K$ form a finite set, automatically bounded — take the largest of them, together with the tail bound.`,
+          m: `$$M := \\max\\{|x_1|,\\ldots,|x_{K-1}|,\\ 1+|x|\\}$$`,
+          meaning: 'What this really means: Before entering the safety bubble, only a finite number of early terms can wander wild; we simply look through them all and find the single largest value.'
+        },
+        {
+          why: `Every term, early or late, is now controlled by the same single number $M$.`,
+          m: `$$|x_n|\\le M \\ \\text{ for all } n\\in\\mathbb{N}$$`,
+          meaning: 'What this really means: With the early wild terms and the late settled tail both accounted for, the entire infinite sequence is securely caged inside $[-M, M]$.'
+        }
       ],
       ends:`Convergence forces boundedness. The useful CONTRAPOSITIVE — an unbounded sequence cannot converge — is often the more practical direction in applications (see <code>c.3.4.5</code>).`
     },
@@ -278,11 +430,31 @@ CONCEPTS.push(
       idea:`For sum: triangle inequality $|(x_n+y_n)-(x+y)| \\le |x_n-x| + |y_n-y| < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$. For product: add and subtract $x_n y$, bound $|x_n| \\le M$ via boundedness of convergent sequences. For quotient: bound $|z_n| \\ge |z|/2$ away from 0.`,
       why:`Triangle inequality splits the combined error into separate errors that each individual convergence can crush below any required fraction of $\\varepsilon$.`,
       rungs:[
-        { why:`(Sum) Given $\\varepsilon > 0$, choose $K_1, K_2$ for $\\varepsilon/2$ bounds on $x_n$ and $y_n$. For $n \\ge K = \\max\\{K_1, K_2\\}$:`, m:`$$|(x_n + y_n) - (x + y)| \\le |x_n - x| + |y_n - y| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$` },
-        { why:`(Product) Rewrite the error by inserting and subtracting $x_n y$:`, m:`$$|x_n y_n - xy| = |x_n(y_n - y) + y(x_n - x)| \\le |x_n||y_n - y| + |y||x_n - x|$$` },
-        { why:`By Theorem 3.2.2, $(x_n)$ is bounded: $|x_n| \\le M$. Set $M' = \\max\\{M, |y|\\} > 0$. Choose indices so $|y_n - y| < \\varepsilon/(2M')$ and $|x_n - x| < \\varepsilon/(2M')$.`, m:`$$|x_n y_n - xy| \\le M'|y_n - y| + M'|x_n - x| < M'\\frac{\\varepsilon}{2M'} + M'\\frac{\\varepsilon}{2M'} = \\varepsilon$$` },
-        { why:`(Quotient) Since $z \\ne 0$, set $\\alpha = |z|/2 > 0$. Past some $K_1$, $|z_n - z| < \\alpha \\implies |z_n| > |z|/2$. Then:`, m:`$$\\left|\\frac{1}{z_n} - \\frac{1}{z}\\right| = \\frac{|z - z_n|}{|z_n||z|} \\le \\frac{|z_n - z|}{\\frac{1}{2}|z|^2} \\to 0$$` },
-        { why:`Apply the product rule to $x_n \\cdot (1/z_n)$ to finish.`, m:`$$\\lim\\left(\\frac{x_n}{z_n}\\right) = \\lim x_n \\cdot \\lim\\left(\\frac{1}{z_n}\\right) = x \\cdot \\frac{1}{z} = \\frac{x}{z}$$` }
+        {
+          why: `(Sum) Given $\\varepsilon > 0$, choose $K_1, K_2$ for $\\varepsilon/2$ bounds on $x_n$ and $y_n$. For $n \\ge K = \\max\\{K_1, K_2\\}$:`,
+          m: `$$|(x_n + y_n) - (x + y)| \\le |x_n - x| + |y_n - y| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$`,
+          meaning: 'What this really means: To keep the combined error below $\\varepsilon$, we split the allowed error in half, requiring each sequence to stay within $\\varepsilon/2$ of its own limit.'
+        },
+        {
+          why: `(Product) Rewrite the error by inserting and subtracting $x_n y$:`,
+          m: `$$|x_n y_n - xy| = |x_n(y_n - y) + y(x_n - x)| \\le |x_n||y_n - y| + |y||x_n - x|$$`,
+          meaning: 'What this really means: We express product error as a combination of $y_n$\'s error and $x_n$\'s error, each multiplied by the size of the accompanying term.'
+        },
+        {
+          why: `By Theorem 3.2.2, $(x_n)$ is bounded: $|x_n| \\le M$. Set $M' = \\max\\{M, |y|\\} > 0$. Choose indices so $|y_n - y| < \\varepsilon/(2M')$ and $|x_n - x| < \\varepsilon/(2M')$.`,
+          m: `$$|x_n y_n - xy| \\le M'|y_n - y| + M'|x_n - x| < M'\\frac{\\varepsilon}{2M'} + M'\\frac{\\varepsilon}{2M'} = \\varepsilon$$`,
+          meaning: 'What this really means: Because convergent sequences never blow up to infinity, their multipliers stay safely capped, allowing us to crush the product error below $\\varepsilon$.'
+        },
+        {
+          why: `(Quotient) Since $z \\ne 0$, set $\\alpha = |z|/2 > 0$. Past some $K_1$, $|z_n - z| < \\alpha \\implies |z_n| > |z|/2$. Then:`,
+          m: `$$\\left|\\frac{1}{z_n} - \\frac{1}{z}\\right| = \\frac{|z - z_n|}{|z_n||z|} \\le \\frac{|z_n - z|}{\\frac{1}{2}|z|^2} \\to 0$$`,
+          meaning: 'What this really means: We ensure the denominator $z_n$ never ventures dangerously close to zero, so taking reciprocals cannot trigger an explosion to infinity.'
+        },
+        {
+          why: `Apply the product rule to $x_n \\cdot (1/z_n)$ to finish.`,
+          m: `$$\\lim\\left(\\frac{x_n}{z_n}\\right) = \\lim x_n \\cdot \\lim\\left(\\frac{1}{z_n}\\right) = x \\cdot \\frac{1}{z} = \\frac{x}{z}$$`,
+          meaning: 'What this really means: Since division is just multiplying by a reciprocal, the quotient limit is handed to us directly by the product rule.'
+        }
       ],
       ends:`All four algebraic operations (sum, difference, product, quotient) commute with taking sequence limits.`
     },
@@ -308,10 +480,26 @@ CONCEPTS.push(
       idea:`Suppose for contradiction the limit $x$ is negative. Turn the gap $-x$ into a tolerance $\\varepsilon$, and show some actual term of the sequence must then be negative — contradicting the hypothesis.`,
       why:`A negative limit means the terms eventually crowd into a neighbourhood of $x$ that lies entirely below $0$ once the margin is chosen exactly equal to $-x$ — squeezing a genuine term below $0$.`,
       rungs:[
-        { why:`Suppose for contradiction the limit $x$ is negative; turn the gap into a tolerance.`, m:`$$x<0,\\qquad \\varepsilon:=-x>0$$` },
-        { why:`Convergence traps all sufficiently late terms within $\\varepsilon$ of $x$.`, m:`$$\\exists K:\\ n\\ge K \\Rightarrow x-\\varepsilon < x_n < x+\\varepsilon$$` },
-        { why:`The right-hand bound, with this particular $\\varepsilon$, collapses to exactly $0$.`, m:`$$x_n < x+\\varepsilon = x+(-x) = 0 \\quad (n\\ge K)$$` },
-        { why:`So some term (e.g. $x_K$) is strictly negative — contradicting the hypothesis that $x_n\\ge0$ for all $n$.`, m:`$$x_K<0,\\ \\text{but hypothesis says } x_K\\ge0 \\ \\Rightarrow\\Leftarrow$$` }
+        {
+          why: `Suppose for contradiction the limit $x$ is negative; turn the gap into a tolerance.`,
+          m: `$$x<0,\\qquad \\varepsilon:=-x>0$$`,
+          meaning: 'What this really means: We test the absurd scenario where a stream of nonnegative numbers allegedly converges to a strictly negative target $x$, measuring the gap from $x$ up to zero.'
+        },
+        {
+          why: `Convergence traps all sufficiently late terms within $\\varepsilon$ of $x$.`,
+          m: `$$\\exists K:\\ n\\ge K \\Rightarrow x-\\varepsilon < x_n < x+\\varepsilon$$`,
+          meaning: 'What this really means: By definition of convergence, the numbers must eventually bunch tightly inside a small personal bubble around this negative target.'
+        },
+        {
+          why: `The right-hand bound, with this particular $\\varepsilon$, collapses to exactly $0$.`,
+          m: `$$x_n < x+\\varepsilon = x+(-x) = 0 \\quad (n\\ge K)$$`,
+          meaning: 'What this really means: But this bubble lies entirely in negative territory—even its highest ceiling fails to reach zero.'
+        },
+        {
+          why: `So some term (e.g. $x_K$) is strictly negative — contradicting the hypothesis that $x_n\\ge0$ for all $n$.`,
+          m: `$$x_K<0,\\ \\text{but hypothesis says } x_K\\ge0 \\ \\Rightarrow\\Leftarrow$$`,
+          meaning: 'What this really means: That forces sequence terms to be negative, flatly contradicting that every term was nonnegative from the start.'
+        }
       ],
       ends:`A negative limit is impossible, so $\\lim(x_n)\\ge0$. This is the base case the comparison theorems (<code>c.3.2.6</code>, and Bartle's order-preservation result) build on.`
     },
@@ -337,10 +525,26 @@ CONCEPTS.push(
       idea:`Apply the nonnegativity-passes-to-the-limit theorem (<code>c.3.2.4</code>) twice: once to $x_n-a\\ge0$, once to $b-x_n\\ge0$.`,
       why:`Both halves of the inequality $a\\le x_n\\le b$ are individually just "a shifted sequence is nonnegative" statements, and that exact situation is what <code>c.3.2.4</code> already handles — no new argument is needed.`,
       rungs:[
-        { why:`Shift so the lower bound becomes a nonnegativity statement.`, m:`$$y_n:=x_n-a\\ge0 \\ \\text{for all } n$$` },
-        { why:`Apply the nonnegativity-passes-to-the-limit result (<code>c.3.2.4</code>) to $(y_n)$.`, m:`$$\\lim(y_n) = \\lim(x_n)-a \\ge 0 \\ \\Rightarrow\\ a\\le\\lim(x_n)$$` },
-        { why:`Symmetrically, shift so the upper bound becomes a nonnegativity statement.`, m:`$$z_n:=b-x_n\\ge0 \\ \\text{for all } n$$` },
-        { why:`Apply <code>c.3.2.4</code> again, to $(z_n)$.`, m:`$$\\lim(z_n)=b-\\lim(x_n)\\ge0 \\ \\Rightarrow\\ \\lim(x_n)\\le b$$` }
+        {
+          why: `Shift so the lower bound becomes a nonnegativity statement.`,
+          m: `$$y_n:=x_n-a\\ge0 \\ \\text{for all } n$$`,
+          meaning: 'What this really means: We measure every term relative to the lower bound $a$, converting the question into a stream of nonnegative clearances above the floor.'
+        },
+        {
+          why: `Apply the nonnegativity-passes-to-the-limit result (<code>c.3.2.4</code>) to $(y_n)$.`,
+          m: `$$\\lim(y_n) = \\lim(x_n)-a \\ge 0 \\ \\Rightarrow\\ a\\le\\lim(x_n)$$`,
+          meaning: 'What this really means: Since clearances above $a$ are always nonnegative, their final limit must be nonnegative too, keeping the limit at or above $a$.'
+        },
+        {
+          why: `Symmetrically, shift so the upper bound becomes a nonnegativity statement.`,
+          m: `$$z_n:=b-x_n\\ge0 \\ \\text{for all } n$$`,
+          meaning: 'What this really means: We do the exact same check from the ceiling, measuring the remaining headroom down to $x_n$ as a nonnegative quantity.'
+        },
+        {
+          why: `Apply <code>c.3.2.4</code> again, to $(z_n)$.`,
+          m: `$$\\lim(z_n)=b-\\lim(x_n)\\ge0 \\ \\Rightarrow\\ \\lim(x_n)\\le b$$`,
+          meaning: 'What this really means: Nonnegative headroom means the limit cannot puncture the ceiling $b$, locking the limit inside the original fences $[a, b]$.'
+        }
       ],
       ends:`Combining both halves gives $a\\le\\lim(x_n)\\le b$ — a convergent sequence can never escape an interval it always lived inside.`
     },
@@ -366,11 +570,31 @@ CONCEPTS.push(
       idea:`Subtract the common limit $w$ from all three sequences, so the squeeze inequality becomes an inequality about how far each is from $0$; the same index $K$ that works for both outer sequences then automatically works for the middle one.`,
       why:`Once you re-centre everything at the shared limit $w$, "squeezed between two things both near $0$" literally forces the middle term near $0$ too — the argument is almost purely order-theoretic.`,
       rungs:[
-        { why:`Name the common limit of the two outer sequences.`, m:`$$w:=\\lim(x_n)=\\lim(z_n)$$` },
-        { why:`Given $\\varepsilon>0$, both outer convergences supply an index past which they are within $\\varepsilon$ of $w$ — take the larger of the two indices.`, m:`$$\\exists K:\\ n\\ge K \\Rightarrow |x_n-w|<\\varepsilon \\ \\text{ and } \\ |z_n-w|<\\varepsilon$$` },
-        { why:`Shift the squeeze hypothesis $x_n\\le y_n\\le z_n$ by subtracting $w$ from every term.`, m:`$$x_n-w \\le y_n-w \\le z_n-w \\quad \\text{for all } n$$` },
-        { why:`For $n\\ge K$ the outer two shifted terms are trapped in $(-\\varepsilon,\\varepsilon)$, so the middle one is squeezed into the same interval.`, m:`$$-\\varepsilon < x_n-w \\le y_n-w \\le z_n-w < \\varepsilon \\quad (n\\ge K)$$` },
-        { why:`That is exactly $|y_n-w|<\\varepsilon$ for all $n\\ge K$, with the same $K$ working for every $\\varepsilon$.`, m:`$$|y_n-w|<\\varepsilon \\ \\text{ for } n\\ge K$$` }
+        {
+          why: `Name the common limit of the two outer sequences.`,
+          m: `$$w:=\\lim(x_n)=\\lim(z_n)$$`,
+          meaning: 'What this really means: Both the lower and upper guard sequences are heading toward the exact same destination $w$.'
+        },
+        {
+          why: `Given $\\varepsilon>0$, both outer convergences supply an index past which they are within $\\varepsilon$ of $w$ — take the larger of the two indices.`,
+          m: `$$\\exists K:\\ n\\ge K \\Rightarrow |x_n-w|<\\varepsilon \\ \\text{ and } \\ |z_n-w|<\\varepsilon$$`,
+          meaning: 'What this really means: After a certain point, both guards are guaranteed to enter a narrow corridor of width $\\varepsilon$ around the target $w$.'
+        },
+        {
+          why: `Shift the squeeze hypothesis $x_n\\le y_n\\le z_n$ by subtracting $w$ from every term.`,
+          m: `$$x_n-w \\le y_n-w \\le z_n-w \\quad \\text{for all } n$$`,
+          meaning: 'What this really means: We center our view on the destination $w$ to observe the relative distances of all three sequences.'
+        },
+        {
+          why: `For $n\\ge K$ the outer two shifted terms are trapped in $(-\\varepsilon,\\varepsilon)$, so the middle one is squeezed into the same interval.`,
+          m: `$$-\\varepsilon < x_n-w \\le y_n-w \\le z_n-w < \\varepsilon \\quad (n\\ge K)$$`,
+          meaning: 'What this really means: Because the middle sequence is trapped between the two guards, it is physically compressed into that same corridor with nowhere to run.'
+        },
+        {
+          why: `That is exactly $|y_n-w|<\\varepsilon$ for all $n\\ge K$, with the same $K$ working for every $\\varepsilon$.`,
+          m: `$$|y_n-w|<\\varepsilon \\ \\text{ for } n\\ge K$$`,
+          meaning: 'What this really means: The middle sequence is forced to converge to the exact same target $w$.'
+        }
       ],
       ends:`Since $\\varepsilon$ was arbitrary, $\\lim(y_n)=w$ — the squeezed sequence converges to the shared outer limit, without ever needing a direct handle on $y_n$ itself. This is the workhorse behind evaluating limits like $\\lim(\\sin n/n)$ or $\\lim(n^{-1}\\sin n)$.`
     },
@@ -396,12 +620,36 @@ CONCEPTS.push(
       idea:`Split into two cases. If $x=0$: bound $\\sqrt{x_n}$ directly once $x_n<\\varepsilon^2$. If $x>0$: rationalise $\\sqrt{x_n}-\\sqrt{x}$ by multiplying by its conjugate, turning it into a controlled multiple of $|x_n-x|$.`,
       why:`The algebraic identity $a-b=\\dfrac{a^2-b^2}{a+b}$ converts a hard-to-control difference of square roots into an easy-to-control difference of the ORIGINAL numbers, divided by something bounded away from $0$ — but only once $x>0$ guarantees that denominator is safely positive.`,
       rungs:[
-        { why:`By <code>c.3.2.4</code>, the limit itself is nonnegative, so $\\sqrt{x}$ makes sense to begin with.`, m:`$$x=\\lim(x_n)\\ge0$$` },
-        { why:`Case $x=0$: given $\\varepsilon>0$, convergence traps $x_n$ below $\\varepsilon^2$ eventually.`, m:`$$\\exists K:\\ n\\ge K \\Rightarrow 0\\le x_n<\\varepsilon^2$$` },
-        { why:`Taking square roots (an increasing operation on nonnegatives) gives exactly the $\\varepsilon$-bound needed.`, m:`$$0\\le\\sqrt{x_n}<\\varepsilon \\quad (n\\ge K) \\ \\Rightarrow\\ \\sqrt{x_n}\\to0=\\sqrt{x}$$` },
-        { why:`Case $x>0$: multiply and divide by the conjugate to turn a difference of square roots into a controlled multiple of $|x_n-x|$.`, m:`$$\\sqrt{x_n}-\\sqrt{x} = \\frac{(\\sqrt{x_n}-\\sqrt{x})(\\sqrt{x_n}+\\sqrt{x})}{\\sqrt{x_n}+\\sqrt{x}} = \\frac{x_n-x}{\\sqrt{x_n}+\\sqrt{x}}$$` },
-        { why:`The denominator is bounded below by $\\sqrt{x}>0$ (dropping the nonnegative $\\sqrt{x_n}$ only shrinks the denominator, making the fraction bigger), which is what makes the division safe.`, m:`$$\\sqrt{x_n}+\\sqrt{x}\\ge\\sqrt{x}>0 \\ \\Rightarrow\\ \\left|\\sqrt{x_n}-\\sqrt{x}\\right| \\le \\frac{1}{\\sqrt{x}}|x_n-x|$$` },
-        { why:`The right-hand side shrinks to $0$ because $x_n\\to x$, and a constant multiple of something shrinking to $0$ still shrinks to $0$.`, m:`$$|x_n-x|\\to0 \\ \\Rightarrow\\ \\left|\\sqrt{x_n}-\\sqrt{x}\\right|\\to0$$` }
+        {
+          why: `By <code>c.3.2.4</code>, the limit itself is nonnegative, so $\\sqrt{x}$ makes sense to begin with.`,
+          m: `$$x=\\lim(x_n)\\ge0$$`,
+          meaning: 'What this really means: Because nonnegativity survives into the limit, the destination $x$ cannot be negative, ensuring $\\sqrt{x}$ is a valid real number.'
+        },
+        {
+          why: `Case $x=0$: given $\\varepsilon>0$, convergence traps $x_n$ below $\\varepsilon^2$ eventually.`,
+          m: `$$\\exists K:\\ n\\ge K \\Rightarrow 0\\le x_n<\\varepsilon^2$$`,
+          meaning: 'What this really means: When heading to zero, asking $\\sqrt{x_n}$ to stay within $\\varepsilon$ is the same as asking $x_n$ to stay within $\\varepsilon^2$, which standard convergence easily delivers.'
+        },
+        {
+          why: `Taking square roots (an increasing operation on nonnegatives) gives exactly the $\\varepsilon$-bound needed.`,
+          m: `$$0\\le\\sqrt{x_n}<\\varepsilon \\quad (n\\ge K) \\ \\Rightarrow\\ \\sqrt{x_n}\\to0=\\sqrt{x}$$`,
+          meaning: 'What this really means: Taking square roots immediately verifies that $\\sqrt{x_n}$ is within $\\varepsilon$ of zero, proving convergence for the zero case.'
+        },
+        {
+          why: `Case $x>0$: multiply and divide by the conjugate to turn a difference of square roots into a controlled multiple of $|x_n-x|$.`,
+          m: `$$\\sqrt{x_n}-\\sqrt{x} = \\frac{(\\sqrt{x_n}-\\sqrt{x})(\\sqrt{x_n}+\\sqrt{x})}{\\sqrt{x_n}+\\sqrt{x}} = \\frac{x_n-x}{\\sqrt{x_n}+\\sqrt{x}}$$`,
+          meaning: 'What this really means: When the limit is positive, the difference-of-squares trick turns a tricky difference of square roots into the familiar difference $|x_n - x|$.'
+        },
+        {
+          why: `The denominator is bounded below by $\\sqrt{x}>0$ (dropping the nonnegative $\\sqrt{x_n}$ only shrinks the denominator, making the fraction bigger), which is what makes the division safe.`,
+          m: `$$\\sqrt{x_n}+\\sqrt{x}\\ge\\sqrt{x}>0 \\ \\Rightarrow\\ \\left|\\sqrt{x_n}-\\sqrt{x}\\right| \\le \\frac{1}{\\sqrt{x}}|x_n-x|$$`,
+          meaning: 'What this really means: The denominator never drops below $\\sqrt{x}$, which acts as a safety shield preventing the fraction from ever blowing up.'
+        },
+        {
+          why: `The right-hand side shrinks to $0$ because $x_n\\to x$, and a constant multiple of something shrinking to $0$ still shrinks to $0$.`,
+          m: `$$|x_n-x|\\to0 \\ \\Rightarrow\\ \\left|\\sqrt{x_n}-\\sqrt{x}\\right|\\to0$$`,
+          meaning: 'What this really means: As $x_n$ approaches $x$, the gap vanishes, dragging the difference between their square roots down to zero as well.'
+        }
       ],
       ends:`In both cases $\\sqrt{x_n}\\to\\sqrt{x}$. This is a first instance of a pattern Chapter 5 generalises massively: continuous functions can be "pushed through" a limit.`
     },
@@ -451,13 +699,41 @@ CONCEPTS.push(
       idea:`(⇒) Already known: convergent $\\Rightarrow$ bounded. (⇐) The real content: a bounded increasing sequence converges to $\\sup\\{x_n\\}$ — use the ε-characterisation idea to find a term inside the margin, then monotonicity carries every later term along with it. The decreasing case is free, by flipping signs, exactly like the infimum half of Completeness.`,
       why:`Monotonicity turns "eventually within $\\varepsilon$ of the candidate limit" into "PERMANENTLY within $\\varepsilon$ from some point on" — because once a term beats $x^\\ast-\\varepsilon$, every later term (being at least as large) beats it too, and none can ever exceed $x^\\ast$ itself since that is an upper bound.`,
       rungs:[
-        { why:`(⇒) If $X$ converges it is automatically bounded — already established.`, m:`$$X \\text{ convergent} \\ \\Rightarrow\\ X \\text{ bounded} \\quad (\\text{by } c.3.2.2)$$` },
-        { why:`(⇐) Now suppose $X=(x_n)$ is bounded AND increasing; Completeness hands us a candidate limit — the supremum of the whole set of terms.`, m:`$$x^\\ast := \\sup\\{x_n : n\\in\\mathbb{N}\\} \\ \\text{ exists, by } c.2.3.6$$` },
-        { why:`Given $\\varepsilon>0$, $x^\\ast-\\varepsilon$ is too small to be an upper bound (it is strictly below the LEAST upper bound), so some particular term beats it.`, m:`$$\\exists K:\\ x^\\ast-\\varepsilon < x_K$$` },
-        { why:`Monotonicity (increasing) means every later term is at least as large as $x_K$, so it inherits the same lower bound.`, m:`$$n\\ge K \\ \\Rightarrow\\ x_K\\le x_n$$` },
-        { why:`Combine with $x_n\\le x^\\ast$ (since $x^\\ast$ is an upper bound of every term) to trap $x_n$ in a shrinking band around $x^\\ast$.`, m:`$$x^\\ast-\\varepsilon < x_K \\le x_n \\le x^\\ast < x^\\ast+\\varepsilon \\quad (n\\ge K)$$` },
-        { why:`That is exactly $|x_n-x^\\ast|<\\varepsilon$ for all $n\\ge K$.`, m:`$$|x_n-x^\\ast|<\\varepsilon \\ (n\\ge K) \\ \\Rightarrow\\ \\lim(x_n)=x^\\ast$$` },
-        { why:`Decreasing case is free: negate the sequence to flip it into an increasing one, apply the increasing case, then flip signs back — exactly the trick used for the infimum half of Completeness (<code>c.2.3.6</code>).`, m:`$$Y \\text{ decreasing, bounded} \\ \\Rightarrow\\ -Y \\text{ increasing, bounded} \\ \\Rightarrow\\ \\lim(Y) = -\\lim(-Y) = \\inf\\{y_n:n\\in\\mathbb{N}\\}$$` }
+        {
+          why: `(⇒) If $X$ converges it is automatically bounded — already established.`,
+          m: `$$X \\text{ convergent} \\ \\Rightarrow\\ X \\text{ bounded} \\quad (\\text{by } c.3.2.2)$$`,
+          meaning: 'What this really means: Any journey that settles at a finite destination must stay within a bounded territory.'
+        },
+        {
+          why: `(⇐) Now suppose $X=(x_n)$ is bounded AND increasing; Completeness hands us a candidate limit — the supremum of the whole set of terms.`,
+          m: `$$x^\\ast := \\sup\\{x_n : n\\in\\mathbb{N}\\} \\ \\text{ exists, by } c.2.3.6$$`,
+          meaning: 'What this really means: If a sequence marches steadily upward against a ceiling, completeness guarantees there is an exact, absolute lowest ceiling $x^*$.'
+        },
+        {
+          why: `Given $\\varepsilon>0$, $x^\\ast-\\varepsilon$ is too small to be an upper bound (it is strictly below the LEAST upper bound), so some particular term beats it.`,
+          m: `$$\\exists K:\\ x^\\ast-\\varepsilon < x_K$$`,
+          meaning: 'What this really means: If you step back slightly from the ceiling by any margin $\\varepsilon$, at least one scout term $x_K$ has already marched past that line.'
+        },
+        {
+          why: `Monotonicity (increasing) means every later term is at least as large as $x_K$, so it inherits the same lower bound.`,
+          m: `$$n\\ge K \\ \\Rightarrow\\ x_K\\le x_n$$`,
+          meaning: 'What this really means: Because the sequence never backtracks, all subsequent terms are permanently locked in ahead of that scout term.'
+        },
+        {
+          why: `Combine with $x_n\\le x^\\ast$ (since $x^\\ast$ is an upper bound of every term) to trap $x_n$ in a shrinking band around $x^\\ast$.`,
+          m: `$$x^\\ast-\\varepsilon < x_K \\le x_n \\le x^\\ast < x^\\ast+\\varepsilon \\quad (n\\ge K)$$`,
+          meaning: 'What this really means: All late terms are trapped between the scout\'s mark and the ceiling itself, compressed into a narrow band of width $\\varepsilon$.'
+        },
+        {
+          why: `That is exactly $|x_n-x^\\ast|<\\varepsilon$ for all $n\\ge K$.`,
+          m: `$$|x_n-x^\\ast|<\\varepsilon \\ (n\\ge K) \\ \\Rightarrow\\ \\lim(x_n)=x^\\ast$$`,
+          meaning: 'What this really means: Because this squeeze holds for any tolerance $\\varepsilon$, the sequence undeniably converges to the ceiling $x^*$.'
+        },
+        {
+          why: `Decreasing case is free: negate the sequence to flip it into an increasing one, apply the increasing case, then flip signs back — exactly the trick used for the infimum half of Completeness (<code>c.2.3.6</code>).`,
+          m: `$$Y \\text{ decreasing, bounded} \\ \\Rightarrow\\ -Y \\text{ increasing, bounded} \\ \\Rightarrow\\ \\lim(Y) = -\\lim(-Y) = \\inf\\{y_n:n\\in\\mathbb{N}\\}$$`,
+          meaning: 'What this really means: Stepping downward against a floor is simply stepping upward on a flipped mirror world, giving us the decreasing case for free.'
+        }
       ],
       ends:`Monotone plus bounded is, all by itself, enough to guarantee convergence — no candidate limit needs to be guessed in advance, since Completeness supplies one automatically. This is the engine inside the Bolzano–Weierstrass Theorem (<code>c.3.4.8</code>) and behind proving many recursively-defined sequences converge.`
     },
@@ -492,13 +768,41 @@ CONCEPTS.push(
       idea: `Expand $e_n$ by the Binomial Theorem. Comparing terms shows $e_n < e_{n+1}$, and bounding each term by $1/2^{k-1}$ sums to $< 3$. Apply the Monotone Convergence Theorem.`,
       why: `The Binomial expansion reveals that every individual factor $(1 - k/n)$ increases with $n$ and each coefficient $1/k!$ is bounded by $1/2^{k-1}$.`,
       rungs: [
-        { why: 'Expand $e_n = (1 + 1/n)^n$ using the Binomial Theorem.', m: '$$e_n = 1 + n\\left(\\frac{1}{n}\\right) + \\frac{n(n-1)}{2!}\\left(\\frac{1}{n^2}\\right) + \\cdots + \\frac{n(n-1)\\cdots 1}{n!}\\left(\\frac{1}{n^n}\\right)$$' },
-        { why: 'Simplify each binomial coefficient by dividing powers of $n$ into each linear factor.', m: '$$e_n = 1 + 1 + \\frac{1}{2!}\\left(1 - \\frac{1}{n}\\right) + \\frac{1}{3!}\\left(1 - \\frac{1}{n}\\right)\\left(1 - \\frac{2}{n}\\right) + \\cdots + \\frac{1}{n!}\\left(1 - \\frac{1}{n}\\right)\\cdots\\left(1 - \\frac{n-1}{n}\\right)$$' },
-        { why: 'Compare $e_n$ with $e_{n+1}$: the expansion of $e_{n+1}$ has one extra positive term, and each factor $(1 - k/(n+1)) > (1 - k/n)$ is strictly larger. Thus $e_n < e_{n+1}$.', m: '$$e_n < e_{n+1} \\quad \\text{for all } n \\in \\mathbb{N} \\implies (e_n) \\text{ is strictly increasing}$$' },
-        { why: 'To find an upper bound, observe that $(1 - k/n) < 1$ for all $k \\ge 1$. Replace every parenthesized factor by $1$.', m: '$$e_n < 1 + 1 + \\frac{1}{2!} + \\frac{1}{3!} + \\cdots + \\frac{1}{n!}$$' },
-        { why: 'Since $k! = 1 \\cdot 2 \\cdot 3 \\cdots k \\ge 2^{k-1}$ for $k \\ge 2$, we have $\\frac{1}{k!} \\le \\frac{1}{2^{k-1}}$.', m: '$$e_n < 1 + 1 + \\frac{1}{2} + \\frac{1}{2^2} + \\cdots + \\frac{1}{2^{n-1}}$$' },
-        { why: 'Sum the geometric series: $1 + \\frac{1}{2} + \\cdots + \\frac{1}{2^{n-1}} = \\frac{1 - (1/2)^n}{1 - 1/2} < 2$.', m: '$$e_n < 1 + 2 = 3 \\quad \\text{for all } n \\in \\mathbb{N}$$' },
-        { why: 'Since $(e_n)$ is increasing and bounded above by $3$, the Monotone Convergence Theorem (3.3.2) proves that the limit exists.', m: '$$e := \\lim_{n\\to\\infty} e_n = \\sup\\{e_n : n \\in \\mathbb{N}\\} \\in (2, 3)$$' }
+        {
+          why: 'Expand $e_n = (1 + 1/n)^n$ using the Binomial Theorem.',
+          m: '$$e_n = 1 + n\\left(\\frac{1}{n}\\right) + \\frac{n(n-1)}{2!}\\left(\\frac{1}{n^2}\\right) + \\cdots + \\frac{n(n-1)\\cdots 1}{n!}\\left(\\frac{1}{n^n}\\right)$$',
+          meaning: 'What this really means: We break open the compounding growth formula using the binomial expansion to inspect every piece of interest earned.'
+        },
+        {
+          why: 'Simplify each binomial coefficient by dividing powers of $n$ into each linear factor.',
+          m: '$$e_n = 1 + 1 + \\frac{1}{2!}\\left(1 - \\frac{1}{n}\\right) + \\frac{1}{3!}\\left(1 - \\frac{1}{n}\\right)\\left(1 - \\frac{2}{n}\\right) + \\cdots + \\frac{1}{n!}\\left(1 - \\frac{1}{n}\\right)\\cdots\\left(1 - \\frac{n-1}{n}\\right)$$',
+          meaning: 'What this really means: Writing each term cleanly reveals that larger compounding frequency $n$ reduces the shrinkage factors, making every piece bigger.'
+        },
+        {
+          why: 'Compare $e_n$ with $e_{n+1}$: the expansion of $e_{n+1}$ has one extra positive term, and each factor $(1 - k/(n+1)) > (1 - k/n)$ is strictly larger. Thus $e_n < e_{n+1}$.',
+          m: '$$e_n < e_{n+1} \\quad \\text{for all } n \\in \\mathbb{N} \\implies (e_n) \\text{ is strictly increasing}$$',
+          meaning: 'What this really means: Compounding more often increases the size of every existing piece and adds a brand-new positive piece, so the total always grows.'
+        },
+        {
+          why: 'To find an upper bound, observe that $(1 - k/n) < 1$ for all $k \\ge 1$. Replace every parenthesized factor by $1$.',
+          m: '$$e_n < 1 + 1 + \\frac{1}{2!} + \\frac{1}{3!} + \\cdots + \\frac{1}{n!}$$',
+          meaning: 'What this really means: If we generously drop all the shrinkage factors and round them up to $1$, we obtain an easy-to-analyze upper ceiling.'
+        },
+        {
+          why: 'Since $k! = 1 \\cdot 2 \\cdot 3 \\cdots k \\ge 2^{k-1}$ for $k \\ge 2$, we have $\\frac{1}{k!} \\le \\frac{1}{2^{k-1}}$.',
+          m: '$$e_n < 1 + 1 + \\frac{1}{2} + \\frac{1}{2^2} + \\cdots + \\frac{1}{2^{n-1}}$$',
+          meaning: 'What this really means: Factorials grow faster than powers of $2$, so their reciprocals shrink faster than powers of $1/2$.'
+        },
+        {
+          why: 'Sum the geometric series: $1 + \\frac{1}{2} + \\cdots + \\frac{1}{2^{n-1}} = \\frac{1 - (1/2)^n}{1 - 1/2} < 2$.',
+          m: '$$e_n < 1 + 2 = 3 \\quad \\text{for all } n \\in \\mathbb{N}$$',
+          meaning: 'What this really means: Summing those powers of $1/2$ never even reaches $2$, so the entire compounding sequence is capped strictly below $3$.'
+        },
+        {
+          why: 'Since $(e_n)$ is increasing and bounded above by $3$, the Monotone Convergence Theorem (3.3.2) proves that the limit exists.',
+          m: '$$e := \\lim_{n\\to\\infty} e_n = \\sup\\{e_n : n \\in \\mathbb{N}\\} \\in (2, 3)$$',
+          meaning: 'What this really means: Because compounding climbs steadily without ever breaching $3$, it is mathematically guaranteed to lock onto a precise limit: Euler\'s number $e$.'
+        }
       ],
       ends: 'The sequence $(1 + 1/n)^n$ converges to a unique real limit $e \\in (2, 3)$. This establishes the rigorous existence and convergence of Euler’s number.'
     },
@@ -545,13 +849,41 @@ CONCEPTS.push(
       idea:`(⇒) Direct: split $\\varepsilon$ in half and route the comparison between $x_n$ and $x_m$ through the shared limit $x$ (same add-and-subtract trick as Uniqueness of Limits). (⇐) The real content: show Cauchy $\\Rightarrow$ bounded, apply Bolzano–Weierstrass to extract a convergent subsequence with limit $x^\\ast$, then show the WHOLE sequence — not just the subsequence — converges to $x^\\ast$, again via the triangle inequality.`,
       why:`The Cauchy property alone only compares terms to EACH OTHER; the missing ingredient to reach an actual limit is completeness, smuggled in here through Bolzano–Weierstrass, which is itself built on completeness via the Monotone Convergence Theorem (<code>c.3.3.2</code>).`,
       rungs:[
-        { why:`(⇒) Suppose $X$ converges to $x$; split an arbitrary tolerance in half, one half for each of two indices being compared.`, m:`$$\\text{given }\\varepsilon>0,\\ \\exists K:\\ n\\ge K \\Rightarrow |x_n-x|<\\varepsilon/2$$` },
-        { why:`For any two indices $n,m$ past $K$, route the comparison between $x_n$ and $x_m$ through the shared point $x$.`, m:`$$n,m\\ge K \\ \\Rightarrow\\ |x_n-x_m|\\le|x_n-x|+|x-x_m|<\\varepsilon/2+\\varepsilon/2=\\varepsilon$$` },
-        { why:`(⇐) Now suppose $X$ is Cauchy. First show it is bounded: fix $\\varepsilon=1$; the tail is trapped within $1$ of a single reference term $x_H$, and finitely many earlier terms are trivially bounded.`, m:`$$\\exists H:\\ n\\ge H \\Rightarrow |x_n-x_H|<1 \\ \\Rightarrow\\ |x_n|\\le|x_H|+1 \\ (n\\ge H)$$` },
-        { why:`So $X$ is bounded — Bolzano–Weierstrass now supplies a convergent SUBsequence, with some limit $x^\\ast$.`, m:`$$X \\text{ bounded} \\ \\Rightarrow\\ \\exists (x_{n_k}) \\text{ subsequence}, \\ (x_{n_k})\\to x^\\ast \\quad (\\text{by } c.3.4.8)$$` },
-        { why:`Given $\\varepsilon>0$, use the Cauchy property (with margin $\\varepsilon/2$) to trap ALL sufficiently late terms close to each other.`, m:`$$\\exists H(\\varepsilon/2):\\ n,m\\ge H(\\varepsilon/2) \\Rightarrow |x_n-x_m|<\\varepsilon/2$$` },
-        { why:`Pick one subsequence index $K$ that is both past $H(\\varepsilon/2)$ and close enough to $x^\\ast$ (possible since the subsequence itself converges to $x^\\ast$).`, m:`$$\\exists K\\ge H(\\varepsilon/2),\\ K\\in\\{n_1,n_2,\\ldots\\}: \\ |x_K-x^\\ast|<\\varepsilon/2$$` },
-        { why:`Route ANY term $x_n$ (with $n\\ge H(\\varepsilon/2)$) through this anchor $x_K$ via the triangle inequality.`, m:`$$n\\ge H(\\varepsilon/2) \\ \\Rightarrow\\ |x_n-x^\\ast| \\le |x_n-x_K|+|x_K-x^\\ast| < \\varepsilon/2+\\varepsilon/2=\\varepsilon$$` }
+        {
+          why: `(⇒) Suppose $X$ converges to $x$; split an arbitrary tolerance in half, one half for each of two indices being compared.`,
+          m: `$$\\text{given }\\varepsilon>0,\\ \\exists K:\\ n\\ge K \\Rightarrow |x_n-x|<\\varepsilon/2$$`,
+          meaning: 'What this really means: If terms converge to a target $x$, late terms must huddle within $\\varepsilon/2$ of that target.'
+        },
+        {
+          why: `For any two indices $n,m$ past $K$, route the comparison between $x_n$ and $x_m$ through the shared point $x$.`,
+          m: `$$n,m\\ge K \\ \\Rightarrow\\ |x_n-x_m|\\le|x_n-x|+|x-x_m|<\\varepsilon/2+\\varepsilon/2=\\varepsilon$$`,
+          meaning: 'What this really means: Two runners who are both within half a mile of the finish line cannot be more than a mile apart from each other.'
+        },
+        {
+          why: `(⇐) Now suppose $X$ is Cauchy. First show it is bounded: fix $\\varepsilon=1$; the tail is trapped within $1$ of a single reference term $x_H$, and finitely many earlier terms are trivially bounded.`,
+          m: `$$\\exists H:\\ n\\ge H \\Rightarrow |x_n-x_H|<1 \\ \\Rightarrow\\ |x_n|\\le|x_H|+1 \\ (n\\ge H)$$`,
+          meaning: 'What this really means: If terms bunch together, they cannot drift off to infinity; anchoring them to one late term cages the entire sequence.'
+        },
+        {
+          why: `So $X$ is bounded — Bolzano–Weierstrass now supplies a convergent SUBsequence, with some limit $x^\\ast$.`,
+          m: `$$X \\text{ bounded} \\ \\Rightarrow\\ \\exists (x_{n_k}) \\text{ subsequence}, \\ (x_{n_k})\\to x^\\ast \\quad (\\text{by } c.3.4.8)$$`,
+          meaning: 'What this really means: Because the sequence is bounded, a sub-stream of terms is guaranteed to zoom in on an accumulation point $x^*$.'
+        },
+        {
+          why: `Given $\\varepsilon>0$, use the Cauchy property (with margin $\\varepsilon/2$) to trap ALL sufficiently late terms close to each other.`,
+          m: `$$\\exists H(\\varepsilon/2):\\ n,m\\ge H(\\varepsilon/2) \\Rightarrow |x_n-x_m|<\\varepsilon/2$$`,
+          meaning: 'What this really means: The Cauchy property guarantees that all late terms in the sequence are tightly grouped together like a flock of birds.'
+        },
+        {
+          why: `Pick one subsequence index $K$ that is both past $H(\\varepsilon/2)$ and close enough to $x^\\ast$ (possible since the subsequence itself converges to $x^\\ast$).`,
+          m: `$$\\exists K\\ge H(\\varepsilon/2),\\ K\\in\\{n_1,n_2,\\ldots\\}: \\ |x_K-x^\\ast|<\\varepsilon/2$$`,
+          meaning: 'What this really means: We grab one member of the flock that is already within $\\varepsilon/2$ of the target destination $x^*$.'
+        },
+        {
+          why: `Route ANY term $x_n$ (with $n\\ge H(\\varepsilon/2)$) through this anchor $x_K$ via the triangle inequality.`,
+          m: `$$n\\ge H(\\varepsilon/2) \\ \\Rightarrow\\ |x_n-x^\\ast| \\le |x_n-x_K|+|x_K-x^\\ast| < \\varepsilon/2+\\varepsilon/2=\\varepsilon$$`,
+          meaning: 'What this really means: Because the whole flock stays close to that anchor, and the anchor is close to $x^*$, the entire flock is dragged into $x^*$, proving full convergence.'
+        }
       ],
       ends:`Since $\\varepsilon$ was arbitrary, the WHOLE sequence (not just the subsequence) converges to $x^\\ast$. Combined with the easy direction, "convergent" and "Cauchy" are exactly the same property for sequences of real numbers — an equivalence that is itself a form of completeness, and fails over $\\mathbb{Q}$.`
     },
@@ -582,11 +914,31 @@ CONCEPTS.push(
       idea:`Iterate the contractive inequality $n-1$ times to get $|x_{n+1} - x_n| \\le C^{n-1} |x_2 - x_1|$. For $m > n$, use the triangle inequality to sum the intermediate step sizes and apply the geometric series formula.`,
       why:`Each consecutive gap shrinks geometrically; the triangle inequality bounds the distance between any two distant terms $x_m$ and $x_n$ by the sum of intervening gaps, which is a convergent geometric progression.`,
       rungs:[
-        { why:`Apply the contractive condition repeatedly back to the first step.`, m:`$$|x_{n+1} - x_n| \\le C |x_n - x_{n-1}| \\le C^2 |x_{n-1} - x_{n-2}| \\le \\cdots \\le C^{n-1} |x_2 - x_1|$$` },
-        { why:`For $m > n$, expand $|x_m - x_n|$ by adding and subtracting intermediate terms and applying the triangle inequality.`, m:`$$|x_m - x_n| \\le |x_m - x_{m-1}| + |x_{m-1} - x_{m-2}| + \\cdots + |x_{n+1} - x_n|$$` },
-        { why:`Substitute the geometric bounds for each consecutive difference.`, m:`$$|x_m - x_n| \\le (C^{m-2} + C^{m-3} + \\cdots + C^{n-1}) |x_2 - x_1| = C^{n-1} (1 + C + \\cdots + C^{m-n-1}) |x_2 - x_1|$$` },
-        { why:`Sum the finite geometric series: $1 + C + \\cdots + C^{m-n-1} < \\frac{1}{1 - C}$ since $0 < C < 1$.`, m:`$$|x_m - x_n| \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1|$$` },
-        { why:`Since $0 < C < 1$, $\\lim_{n\\to\\infty} C^{n-1} = 0$. Hence $(x_n)$ is a Cauchy sequence, and by Theorem 3.5.5 it converges to some limit $x^*$.`, m:`$$\\lim_{n\\to\\infty} \\frac{C^{n-1}}{1 - C} |x_2 - x_1| = 0 \\implies (x_n) \\text{ is Cauchy} \\implies (x_n) \\to x^*$$` }
+        {
+          why: `Apply the contractive condition repeatedly back to the first step.`,
+          m: `$$|x_{n+1} - x_n| \\le C |x_n - x_{n-1}| \\le C^2 |x_{n-1} - x_{n-2}| \\le \\cdots \\le C^{n-1} |x_2 - x_1|$$`,
+          meaning: 'What this really means: Each step shrinks by a factor of $C < 1$, so step sizes decrease exponentially fast compared to the initial step.'
+        },
+        {
+          why: `For $m > n$, expand $|x_m - x_n|$ by adding and subtracting intermediate terms and applying the triangle inequality.`,
+          m: `$$|x_m - x_n| \\le |x_m - x_{m-1}| + |x_{m-1} - x_{m-2}| + \\cdots + |x_{n+1} - x_n|$$`,
+          meaning: 'What this really means: The total distance between term $n$ and any future term $m$ is bounded by the sum of each intermediate hop.'
+        },
+        {
+          why: `Substitute the geometric bounds for each consecutive difference.`,
+          m: `$$|x_m - x_n| \\le (C^{m-2} + C^{m-3} + \\cdots + C^{n-1}) |x_2 - x_1| = C^{n-1} (1 + C + \\cdots + C^{m-n-1}) |x_2 - x_1|$$`,
+          meaning: 'What this really means: We replace each hop with its geometric bound, factoring out the shrinkage factor $C^{n-1}$ from the starting gap.'
+        },
+        {
+          why: `Sum the finite geometric series: $1 + C + \\cdots + C^{m-n-1} < \\frac{1}{1 - C}$ since $0 < C < 1$.`,
+          m: `$$|x_m - x_n| \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1|$$`,
+          meaning: 'What this really means: Even if you walk infinitely many hops into the future, the sum of shrinking steps is safely capped by a convergent geometric series.'
+        },
+        {
+          why: `Since $0 < C < 1$, $\\lim_{n\\to\\infty} C^{n-1} = 0$. Hence $(x_n)$ is a Cauchy sequence, and by Theorem 3.5.5 it converges to some limit $x^*$.`,
+          m: `$$\\lim_{n\\to\\infty} \\frac{C^{n-1}}{1 - C} |x_2 - x_1| = 0 \\implies (x_n) \\text{ is Cauchy} \\implies (x_n) \\to x^*$$`,
+          meaning: 'What this really means: Because $C^{n-1}$ shrinks to zero, late terms are pinned so closely together that the sequence is Cauchy, guaranteeing it converges.'
+        }
       ],
       ends:`Every contractive sequence is Cauchy and thus converges. Letting $m \\to \\infty$ in the bound directly yields the a priori error estimate $|x^* - x_n| \\le \\frac{C^{n-1}}{1 - C} |x_2 - x_1|$.`
     },
@@ -656,11 +1008,31 @@ CONCEPTS.push(
       idea:`Reduce to the already-known algebra of limits for SEQUENCES via the Sequential Criterion (<code>c.4.1.8</code>): feed in an arbitrary sequence $x_n\\to c$, note $f(x_n)\\to L$ and $g(x_n)\\to M$ are already guaranteed, apply the known sequence-arithmetic facts, then translate back.`,
       why:`The Sequential Criterion is precisely a bridge that lets EVERY fact already proved about sequences (uniqueness, algebra of limits, order properties) be imported into the theory of function limits without re-deriving anything from scratch.`,
       rungs:[
-        { why:`Take ANY sequence $(x_n)$ in $A\\setminus\\{c\\}$ with $x_n\\to c$; by the Sequential Criterion, both image sequences converge to the function limits.`, m:`$$\\lim_{x\\to c}f=L,\\ \\lim_{x\\to c}g=M \\ \\Rightarrow\\ (f(x_n))\\to L,\\ (g(x_n))\\to M \\quad (\\text{by } c.4.1.8)$$` },
-        { why:`This is now purely a statement about SEQUENCES — apply the already-known algebra of limits for convergent sequences termwise.`, m:`$$\\big(f(x_n)+g(x_n)\\big)\\to L+M, \\quad \\big(f(x_n)g(x_n)\\big)\\to LM$$` },
-        { why:`But $\\big((f+g)(x_n)\\big)=\\big(f(x_n)+g(x_n)\\big)$ by the very DEFINITION of the sum of two functions.`, m:`$$\\big((f+g)(x_n)\\big) \\to L+M$$` },
-        { why:`This held for an ARBITRARY sequence $(x_n)\\to c$ in $A\\setminus\\{c\\}$ — exactly the hypothesis of the Sequential Criterion, applied in the other direction.`, m:`$$\\forall (x_n)\\to c,\\ x_n\\ne c:\\ \\big((f+g)(x_n)\\big)\\to L+M$$` },
-        { why:`So the Sequential Criterion (<code>c.4.1.8</code>) hands back a genuine function limit; the product, difference, scalar-multiple, and (when $H\\ne0$) quotient rules follow the identical pattern.`, m:`$$\\lim_{x\\to c}(f+g)=L+M \\quad(\\text{similarly for } f-g,\\ fg,\\ bf,\\ f/h)$$` }
+        {
+          why: `Take ANY sequence $(x_n)$ in $A\\setminus\\{c\\}$ with $x_n\\to c$; by the Sequential Criterion, both image sequences converge to the function limits.`,
+          m: `$$\\lim_{x\\to c}f=L,\\ \\lim_{x\\to c}g=M \\ \\Rightarrow\\ (f(x_n))\\to L,\\ (g(x_n))\\to M \\quad (\\text{by } c.4.1.8)$$`,
+          meaning: 'What this really means: We test the functions along any stream of stepping stones approaching $c$; their outputs are guaranteed to march toward $L$ and $M$.'
+        },
+        {
+          why: `This is now purely a statement about SEQUENCES — apply the already-known algebra of limits for convergent sequences termwise.`,
+          m: `$$\\big(f(x_n)+g(x_n)\\big)\\to L+M, \\quad \\big(f(x_n)g(x_n)\\big)\\to LM$$`,
+          meaning: 'What this really means: Now that we are dealing with standard sequences, all the arithmetic rules we already proved for sequences click right into place.'
+        },
+        {
+          why: `But $\\big((f+g)(x_n)\\big)=\\big(f(x_n)+g(x_n)\\big)$ by the very DEFINITION of the sum of two functions.`,
+          m: `$$\\big((f+g)(x_n)\\big) \\to L+M$$`,
+          meaning: 'What this really means: Evaluating the combined function $(f+g)$ at each stepping stone is by definition just adding the two outputs together.'
+        },
+        {
+          why: `This held for an ARBITRARY sequence $(x_n)\\to c$ in $A\\setminus\\{c\\}$ — exactly the hypothesis of the Sequential Criterion, applied in the other direction.`,
+          m: `$$\\forall (x_n)\\to c,\\ x_n\\ne c:\\ \\big((f+g)(x_n)\\big)\\to L+M$$`,
+          meaning: 'What this really means: Because this works for every possible path of stepping stones approaching $c$, no path can ever miss the target $L+M$.'
+        },
+        {
+          why: `So the Sequential Criterion (<code>c.4.1.8</code>) hands back a genuine function limit; the product, difference, scalar-multiple, and (when $H\\ne0$) quotient rules follow the identical pattern.`,
+          m: `$$\\lim_{x\\to c}(f+g)=L+M \\quad(\\text{similarly for } f-g,\\ fg,\\ bf,\\ f/h)$$`,
+          meaning: 'What this really means: The sequential bridge converts our sequence result into an airtight proof for the function limit itself.'
+        }
       ],
       ends:`Every algebra-of-limits fact already proved for sequences transfers automatically to functions, for free, via the Sequential Criterion — no new ε-δ argument is ever needed for sums, differences, products, or (nonzero) quotients.`
     },
@@ -713,11 +1085,31 @@ CONCEPTS.push(
       idea:`Use the Sequential Criterion (<code>c.4.1.8</code>): take any sequence $(x_n)$ in $A \\setminus \\{c\\}$ with $x_n \\to c$. Then $f(x_n) \\le g(x_n) \\le h(x_n)$ and the sequence Squeeze Theorem forces $g(x_n) \\to L$.`,
       why:`The Sequential Criterion bridges function limits to sequence limits, where the Squeeze Theorem is already proved (<code>c.3.2.7</code>).`,
       rungs:[
-        { why:`Let $(x_n)$ be an arbitrary sequence in $A \\setminus \\{c\\}$ such that $(x_n) \\to c$.`, m:`$$(x_n) \\text{ in } A, \\quad x_n \\ne c, \\quad \\lim(x_n) = c$$` },
-        { why:`By the Sequential Criterion (4.1.8), since $\\lim_{x\\to c} f = L$ and $\\lim_{x\\to c} h = L$, the image sequences converge.`, m:`$$\\lim(f(x_n)) = L \\quad \\text{and} \\quad \\lim(h(x_n)) = L$$` },
-        { why:`The sandwich inequality holds for every term: $f(x_n) \\le g(x_n) \\le h(x_n)$ for all $n \\in \\mathbb{N}$.`, m:`$$f(x_n) \\le g(x_n) \\le h(x_n) \\quad \\text{for all } n \\in \\mathbb{N}$$` },
-        { why:`Apply the Squeeze Theorem for sequences (Theorem 3.2.7) to $(f(x_n)), (g(x_n)), (h(x_n))$.`, m:`$$\\lim(g(x_n)) = L$$` },
-        { why:`Since this holds for every such sequence $(x_n)$, the Sequential Criterion guarantees that $\\lim_{x\\to c} g(x) = L$.`, m:`$$\\lim_{x\\to c} g(x) = L$$` }
+        {
+          why: `Let $(x_n)$ be an arbitrary sequence in $A \\setminus \\{c\\}$ such that $(x_n) \\to c$.`,
+          m: `$$(x_n) \\text{ in } A, \\quad x_n \\ne c, \\quad \\lim(x_n) = c$$`,
+          meaning: 'What this really means: We pick any path of stepping stones heading toward $c$ without ever landing on $c$.'
+        },
+        {
+          why: `By the Sequential Criterion (4.1.8), since $\\lim_{x\\to c} f = L$ and $\\lim_{x\\to c} h = L$, the image sequences converge.`,
+          m: `$$\\lim(f(x_n)) = L \\quad \\text{and} \\quad \\lim(h(x_n)) = L$$`,
+          meaning: 'What this really means: Along this path, the lower guard function and upper guard function both approach the exact same value $L$.'
+        },
+        {
+          why: `The sandwich inequality holds for every term: $f(x_n) \\le g(x_n) \\le h(x_n)$ for all $n \\in \\mathbb{N}$.`,
+          m: `$$f(x_n) \\le g(x_n) \\le h(x_n) \\quad \\text{for all } n \\in \\mathbb{N}$$`,
+          meaning: 'What this really means: At every step of the journey, the values of $g$ remain trapped between the two guards.'
+        },
+        {
+          why: `Apply the Squeeze Theorem for sequences (Theorem 3.2.7) to $(f(x_n)), (g(x_n)), (h(x_n))$.`,
+          m: `$$\\lim(g(x_n)) = L$$`,
+          meaning: 'What this really means: The already-proven sequence Squeeze Theorem crushes the middle values into the shared target $L$.'
+        },
+        {
+          why: `Since this holds for every such sequence $(x_n)$, the Sequential Criterion guarantees that $\\lim_{x\\to c} g(x) = L$.`,
+          m: `$$\\lim_{x\\to c} g(x) = L$$`,
+          meaning: 'What this really means: Because every sequence path yields $L$, the function $g(x)$ itself is forced to converge to $L$.'
+        }
       ],
       ends:`The Squeeze Theorem for functions is proved via the Sequential Criterion and the sequence Squeeze Theorem.`
     },
@@ -785,11 +1177,31 @@ CONCEPTS.push(
       idea:`(⇒) Direct restriction: any $\\delta$ working for all $0 < |x-c| < \\delta$ works automatically for $0 < x-c < \\delta$ and $0 < c-x < \\delta$. (⇐) Take $\\delta = \\min\\{\\delta_1, \\delta_2\\}$ so that points on either side are controlled.`,
       why:`The punctured neighborhood $0 < |x-c| < \\delta$ is literally the union of the right-hand interval $(c, c+\\delta)$ and the left-hand interval $(c-\\delta, c)$.`,
       rungs:[
-        { why:`(⇒) Assume $\\lim_{x\\to c} f = L$. Given $\\varepsilon > 0$, there exists $\\delta > 0$ such that $0 < |x-c| < \\delta$ ($x \\in A$) implies $|f(x) - L| < \\varepsilon$.`, m:`$$\\forall\\, \\varepsilon > 0, \\; \\exists\\delta > 0: \\; 0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon$$` },
-        { why:`If $x \\in A$ and $0 < x - c < \\delta$, then $0 < |x - c| < \\delta$, so $|f(x) - L| < \\varepsilon$. Hence $\\lim_{x\\to c^+} f = L$. Similarly for $x < c$, $\\lim_{x\\to c^-} f = L$.`, m:`$$\\lim_{x\\to c^+} f = L \\quad \\text{and} \\quad \\lim_{x\\to c^-} f = L$$` },
-        { why:`(⇐) Assume $\\lim_{x\\to c^+} f = L$ and $\\lim_{x\\to c^-} f = L$. Given $\\varepsilon > 0$, obtain $\\delta_1 > 0$ for the right side and $\\delta_2 > 0$ for the left side.`, m:`$$0 < x - c < \\delta_1 \\implies |f(x) - L| < \\varepsilon, \\qquad 0 < c - x < \\delta_2 \\implies |f(x) - L| < \\varepsilon$$` },
-        { why:`Define $\\delta := \\min\\{\\delta_1, \\delta_2\\} > 0$. If $x \\in A$ satisfies $0 < |x - c| < \\delta$, then either $0 < x - c < \\delta \\le \\delta_1$ or $0 < c - x < \\delta \\le \\delta_2$.`, m:`$$\\delta := \\min\\{\\delta_1, \\delta_2\\} > 0$$` },
-        { why:`In either case, $|f(x) - L| < \\varepsilon$. Thus $\\lim_{x\\to c} f = L$.`, m:`$$0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon \\implies \\lim_{x\\to c} f = L$$` }
+        {
+          why: `(⇒) Assume $\\lim_{x\\to c} f = L$. Given $\\varepsilon > 0$, there exists $\\delta > 0$ such that $0 < |x-c| < \\delta$ ($x \\in A$) implies $|f(x) - L| < \\varepsilon$.`,
+          m: `$$\\forall\\, \\varepsilon > 0, \\; \\exists\\delta > 0: \\; 0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon$$`,
+          meaning: 'What this really means: If the two-sided limit exists, there is a circular safety zone around $c$ where outputs stay within $\\varepsilon$ of $L$ on both sides.'
+        },
+        {
+          why: `If $x \\in A$ and $0 < x - c < \\delta$, then $0 < |x - c| < \\delta$, so $|f(x) - L| < \\varepsilon$. Hence $\\lim_{x\\to c^+} f = L$. Similarly for $x < c$, $\\lim_{x\\to c^-} f = L$.`,
+          m: `$$\\lim_{x\\to c^+} f = L \\quad \\text{and} \\quad \\lim_{x\\to c^-} f = L$$`,
+          meaning: 'What this really means: Since the safety zone covers all nearby points, it automatically covers points approaching strictly from the right and strictly from the left.'
+        },
+        {
+          why: `(⇐) Assume $\\lim_{x\\to c^+} f = L$ and $\\lim_{x\\to c^-} f = L$. Given $\\varepsilon > 0$, obtain $\\delta_1 > 0$ for the right side and $\\delta_2 > 0$ for the left side.`,
+          m: `$$0 < x - c < \\delta_1 \\implies |f(x) - L| < \\varepsilon, \\qquad 0 < c - x < \\delta_2 \\implies |f(x) - L| < \\varepsilon$$`,
+          meaning: 'What this really means: Approaching from the right offers a safety distance $\\delta_1$, while approaching from the left offers a safety distance $\\delta_2$.'
+        },
+        {
+          why: `Define $\\delta := \\min\\{\\delta_1, \\delta_2\\} > 0$. If $x \\in A$ satisfies $0 < |x - c| < \\delta$, then either $0 < x - c < \\delta \\le \\delta_1$ or $0 < c - x < \\delta \\le \\delta_2$.`,
+          m: `$$\\delta := \\min\\{\\delta_1, \\delta_2\\} > 0$$`,
+          meaning: 'What this really means: We choose the smaller of the two distances, so anyone within $\\delta$ of $c$ is protected no matter which side they come from.'
+        },
+        {
+          why: `In either case, $|f(x) - L| < \\varepsilon$. Thus $\\lim_{x\\to c} f = L$.`,
+          m: `$$0 < |x - c| < \\delta \\implies |f(x) - L| < \\varepsilon \\implies \\lim_{x\\to c} f = L$$`,
+          meaning: 'What this really means: Because both sides merge smoothly at $L$ under the unified buffer $\\delta$, the full two-sided limit is established.'
+        }
       ],
       ends:`The two-sided limit exists and equals $L$ if and only if both one-sided limits exist and equal $L$.`
     },
@@ -821,11 +1233,31 @@ CONCEPTS.push(
       idea: `Verify that $\\lim_{x\\to 0} \\frac{1}{x^2} = +\\infty$ directly from the $\\alpha$-$\\delta$ definition.`,
       why: `Solving $1/x^2 > \\alpha$ gives $|x| < 1/\\sqrt{\\alpha}$ for any positive ceiling $\\alpha$.`,
       rungs: [
-        { why: 'Let $\\alpha > 0$ be an arbitrary positive real number (if $\\alpha \\le 0$, any $\\delta > 0$ works since $1/x^2 > 0 \\ge \\alpha$).', m: '$$\\alpha > 0 \\quad \\text{is given}$$' },
-        { why: 'Choose $\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$.', m: '$$\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$$' },
-        { why: 'Assume $x$ satisfies $0 < |x - 0| < \\delta$.', m: '$$0 < |x| < \\frac{1}{\\sqrt{\\alpha}}$$' },
-        { why: 'Square both sides (both are positive, so the inequality preserves order).', m: '$$x^2 < \\frac{1}{\\alpha}$$' },
-        { why: 'Take the reciprocal of both sides, which reverses the inequality.', m: '$$f(x) = \\frac{1}{x^2} > \\alpha$$' }
+        {
+          why: 'Let $\\alpha > 0$ be an arbitrary positive real number (if $\\alpha \\le 0$, any $\\delta > 0$ works since $1/x^2 > 0 \\ge \\alpha$).',
+          m: '$$\\alpha > 0 \\quad \\text{is given}$$',
+          meaning: 'What this really means: Someone challenges us with a towering ceiling $\\alpha$ and dares us to prove that the function shoots above it.'
+        },
+        {
+          why: 'Choose $\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$.',
+          m: '$$\\delta := \\frac{1}{\\sqrt{\\alpha}} > 0$$',
+          meaning: 'What this really means: We calculate how close to zero we must stand so that squaring and inverting will surpass that ceiling.'
+        },
+        {
+          why: 'Assume $x$ satisfies $0 < |x - 0| < \\delta$.',
+          m: '$$0 < |x| < \\frac{1}{\\sqrt{\\alpha}}$$',
+          meaning: 'What this really means: We step inside this designated safety window around zero.'
+        },
+        {
+          why: 'Square both sides (both are positive, so the inequality preserves order).',
+          m: '$$x^2 < \\frac{1}{\\alpha}$$',
+          meaning: 'What this really means: Because $x$ is so tiny, squaring it compresses it into an even tinier fraction, strictly below $1/\\alpha$.'
+        },
+        {
+          why: 'Take the reciprocal of both sides, which reverses the inequality.',
+          m: '$$f(x) = \\frac{1}{x^2} > \\alpha$$',
+          meaning: 'What this really means: Dividing $1$ by this microscopic fraction launches the result skyward, soaring past the target ceiling $\\alpha$.'
+        }
       ],
       ends: 'For every $\\alpha \\in \\mathbb{R}$, there exists $\\delta > 0$ such that $0 < |x| < \\delta \\implies 1/x^2 > \\alpha$. Hence $\\lim_{x\\to 0} (1/x^2) = +\\infty$.'
     },
@@ -858,11 +1290,31 @@ CONCEPTS.push(
       idea: `Prove that $\\lim_{x\\to+\\infty} \\frac{1}{x} = 0$ using the $\\varepsilon$-$K$ definition.`,
       why: `For any positive tolerance $\\varepsilon > 0$, setting the horizon $K = 1/\\varepsilon$ guarantees that $1/x < \\varepsilon$ for all $x > K$.`,
       rungs: [
-        { why: 'Let $\\varepsilon > 0$ be given.', m: '$$\\varepsilon > 0 \\quad \\text{is given}$$' },
-        { why: 'Choose the horizon $K := \\frac{1}{\\varepsilon} > 0$.', m: '$$K := \\frac{1}{\\varepsilon} > 0$$' },
-        { why: 'Assume $x \\in (0, \\infty)$ satisfies $x > K$.', m: '$$x > K = \\frac{1}{\\varepsilon} > 0$$' },
-        { why: 'Take reciprocals, noting that both sides are positive.', m: '$$0 < \\frac{1}{x} < \\frac{1}{K} = \\varepsilon$$' },
-        { why: 'Translate this into the absolute value distance to 0.', m: '$$\\left|\\frac{1}{x} - 0\\right| = \\frac{1}{x} < \\varepsilon \\quad \\text{for all } x > K$$' }
+        {
+          why: 'Let $\\varepsilon > 0$ be given.',
+          m: '$$\\varepsilon > 0 \\quad \\text{is given}$$',
+          meaning: 'What this really means: Someone specifies a tiny error band $\\varepsilon$ around zero and asks how far right we must travel before $1/x$ enters that band.'
+        },
+        {
+          why: 'Choose the horizon $K := \\frac{1}{\\varepsilon} > 0$.',
+          m: '$$K := \\frac{1}{\\varepsilon} > 0$$',
+          meaning: 'What this really means: We set our horizon marker $K$ at $1/\\varepsilon$; stepping past this point ensures the reciprocal drops below $\\varepsilon$.'
+        },
+        {
+          why: 'Assume $x \\in (0, \\infty)$ satisfies $x > K$.',
+          m: '$$x > K = \\frac{1}{\\varepsilon} > 0$$',
+          meaning: 'What this really means: We travel beyond this horizon marker into the distant positive territory.'
+        },
+        {
+          why: 'Take reciprocals, noting that both sides are positive.',
+          m: '$$0 < \\frac{1}{x} < \\frac{1}{K} = \\varepsilon$$',
+          meaning: 'What this really means: Inverting larger numbers yields smaller fractions, pushing $1/x$ safely underneath $\\varepsilon$.'
+        },
+        {
+          why: 'Translate this into the absolute value distance to 0.',
+          m: '$$\\left|\\frac{1}{x} - 0\\right| = \\frac{1}{x} < \\varepsilon \\quad \\text{for all } x > K$$',
+          meaning: 'What this really means: The distance between $1/x$ and zero is strictly within the required tolerance $\\varepsilon$, proving that $1/x$ vanishes at infinity.'
+        }
       ],
       ends: 'For every $\\varepsilon > 0$, there exists $K > 0$ such that $x > K \\implies |1/x - 0| < \\varepsilon$. Thus $\\lim_{x\\to+\\infty} (1/x) = 0$.'
     },

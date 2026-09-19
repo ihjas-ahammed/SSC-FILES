@@ -50,11 +50,31 @@ CONCEPTS.push(
       idea: 'Assume two limits $L_1$ and $L_2$ exist, pick a tagged partition finer than both $\\delta_1$ and $\\delta_2$, and apply the Triangle Inequality.',
       why: 'Both $|S - L_1| < \\varepsilon/2$ and $|S - L_2| < \\varepsilon/2$ hold for the same partition, trapping $|L_1 - L_2| < \\varepsilon$.',
       rungs: [
-        { why: 'Suppose $L_1$ and $L_2$ both satisfy the definition of the integral for $f$. Given $\\varepsilon > 0$, choose $\\delta_1, \\delta_2 > 0$ for $\\varepsilon/2$.', m: '\\|\\dot{\\mathcal{P}}\\| < \\delta_1 \\implies |S(f; \\dot{\\mathcal{P}}) - L_1| < \\frac{\\varepsilon}{2}, \\quad \\|\\dot{\\mathcal{P}}\\| < \\delta_2 \\implies |S(f; \\dot{\\mathcal{P}}) - L_2| < \\frac{\\varepsilon}{2}' },
-        { why: 'Set $\\delta = \\min\\{\\delta_1, \\delta_2\\} > 0$ and choose any tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$.', m: '\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - L_1| < \\frac{\\varepsilon}{2} \\quad \\text{and} \\quad |S(f; \\dot{\\mathcal{P}}) - L_2| < \\frac{\\varepsilon}{2}' },
-        { why: 'Apply the Triangle Inequality to $|L_1 - L_2|$.', m: '|L_1 - L_2| = |(L_1 - S(f; \\dot{\\mathcal{P}})) + (S(f; \\dot{\\mathcal{P}}) - L_2)| \\le |S(f; \\dot{\\mathcal{P}}) - L_1| + |S(f; \\dot{\\mathcal{P}}) - L_2|' },
-        { why: 'Sum the tolerances: $\\varepsilon/2 + \\varepsilon/2 = \\varepsilon$.', m: '|L_1 - L_2| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
-        { why: 'Since $\\varepsilon > 0$ is arbitrary, by Theorem 2.1.9, $|L_1 - L_2| = 0$.', m: 'L_1 = L_2' }
+        {
+          why: 'Suppose $L_1$ and $L_2$ both satisfy the definition of the integral for $f$. Given $\\varepsilon > 0$, choose $\\delta_1, \\delta_2 > 0$ for $\\varepsilon/2$.',
+          m: '$$\\|\\dot{\\mathcal{P}}\\| < \\delta_1 \\implies |S(f; \\dot{\\mathcal{P}}) - L_1| < \\frac{\\varepsilon}{2}, \\quad \\|\\dot{\\mathcal{P}}\\| < \\delta_2 \\implies |S(f; \\dot{\\mathcal{P}}) - L_2| < \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: Assume two different numbers claim to be the true area, and set an error budget of half-epsilon for each candidate.'
+        },
+        {
+          why: 'Set $\\delta = \\min\\{\\delta_1, \\delta_2\\} > 0$ and choose any tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$.',
+          m: '$$\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - L_1| < \\frac{\\varepsilon}{2} \\quad \\text{and} \\quad |S(f; \\dot{\\mathcal{P}}) - L_2| < \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: Slice the interval finely enough that a single Riemann sum must satisfy both candidate limits simultaneously.'
+        },
+        {
+          why: 'Apply the Triangle Inequality to $|L_1 - L_2|$.',
+          m: '$$|L_1 - L_2| = |(L_1 - S(f; \\dot{\\mathcal{P}})) + (S(f; \\dot{\\mathcal{P}}) - L_2)| \\le |S(f; \\dot{\\mathcal{P}}) - L_1| + |S(f; \\dot{\\mathcal{P}}) - L_2|$$',
+          meaning: 'What this really means: Route the gap between the two rival limits through that one shared Riemann sum using the triangle inequality.'
+        },
+        {
+          why: 'Sum the tolerances: $\\varepsilon/2 + \\varepsilon/2 = \\varepsilon$.',
+          m: '$$|L_1 - L_2| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$',
+          meaning: 'What this really means: Combining the two half-tolerances proves the distance between the two candidates is strictly less than epsilon.'
+        },
+        {
+          why: 'Since $\\varepsilon > 0$ is arbitrary, by Theorem 2.1.9, $|L_1 - L_2| = 0$.',
+          m: '$$L_1 = L_2$$',
+          meaning: 'What this really means: Two fixed constants separated by less than any positive margin must be the exact same number, guaranteeing the integral is unique.'
+        }
       ],
       ends: 'Therefore, the Riemann integral of $f$ is unique.'
     },
@@ -84,11 +104,31 @@ CONCEPTS.push(
       idea: 'Show that for any $\\delta > 0$, tagged partitions with rational tags give sum 1, while tagged partitions with irrational tags give sum 0.',
       why: 'No number $L$ can satisfy $|1 - L| < 1/2$ and $|0 - L| < 1/2$ simultaneously.',
       rungs: [
-        { why: 'Suppose for contradiction that $f \\in \\mathcal{R}[0, 1]$ with integral $L$. Set $\\varepsilon_0 = 1/2$.', m: '\\exists \\delta > 0 : \\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - L| < \\frac{1}{2}' },
-        { why: 'Let $\\mathcal{P}$ be any partition of $[0, 1]$ with $\\|\\mathcal{P}\\| < \\delta$. By density of $\\mathbb{Q}$ (2.4.8), choose rational tags $t_i \\in \\mathbb{Q} \\cap [x_{i-1}, x_i]$ for all $i$.', m: 'S(f; \\dot{\\mathcal{P}}_{\\text{rat}}) = \\sum_{i=1}^n 1 \\cdot (x_i - x_{i-1}) = 1' },
-        { why: 'By density of irrationals (2.4.9), choose irrational tags $s_i \\notin \\mathbb{Q} \\cap [x_{i-1}, x_i]$ for all $i$.', m: 'S(f; \\dot{\\mathcal{P}}_{\\text{irrat}}) = \\sum_{i=1}^n 0 \\cdot (x_i - x_{i-1}) = 0' },
-        { why: 'Both tagged partitions have norm $< \\delta$, so both sums must be within $1/2$ of $L$.', m: '|1 - L| < \\frac{1}{2} \\quad \\text{and} \\quad |0 - L| < \\frac{1}{2}' },
-        { why: 'Apply the Triangle Inequality: $1 = |1 - 0| \\le |1 - L| + |L - 0| < 1/2 + 1/2 = 1$, yielding $1 < 1$.', m: '1 < 1 \\implies\\Leftarrow' }
+        {
+          why: 'Suppose for contradiction that $f \\in \\mathcal{R}[0, 1]$ with integral $L$. Set $\\varepsilon_0 = 1/2$.',
+          m: '$$\\exists \\delta > 0 : \\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - L| < \\frac{1}{2}$$',
+          meaning: 'What this really means: Assume for contradiction that an overall area exists, so every fine enough approximation must land within a half-unit of that area.'
+        },
+        {
+          why: 'Let $\\mathcal{P}$ be any partition of $[0, 1]$ with $\\|\\mathcal{P}\\| < \\delta$. By density of $\\mathbb{Q}$ (2.4.8), choose rational tags $t_i \\in \\mathbb{Q} \\cap [x_{i-1}, x_i]$ for all $i$.',
+          m: '$$S(f; \\dot{\\mathcal{P}}_{\\text{rat}}) = \\sum_{i=1}^n 1 \\cdot (x_i - x_{i-1}) = 1$$',
+          meaning: 'What this really means: By choosing only rational sample points in every slice where the function equals 1, the total Riemann sum is forced to be 1.'
+        },
+        {
+          why: 'By density of irrationals (2.4.9), choose irrational tags $s_i \\notin \\mathbb{Q} \\cap [x_{i-1}, x_i]$ for all $i$.',
+          m: '$$S(f; \\dot{\\mathcal{P}}_{\\text{irrat}}) = \\sum_{i=1}^n 0 \\cdot (x_i - x_{i-1}) = 0$$',
+          meaning: 'What this really means: On that very same partition, choosing only irrational sample points where the function equals 0 forces the Riemann sum to be 0.'
+        },
+        {
+          why: 'Both tagged partitions have norm $< \\delta$, so both sums must be within $1/2$ of $L$.',
+          m: '$$|1 - L| < \\frac{1}{2} \\quad \\text{and} \\quad |0 - L| < \\frac{1}{2}$$',
+          meaning: 'What this really means: The putative limit would have to sit simultaneously within a half-unit radius of both 1 and 0.'
+        },
+        {
+          why: 'Apply the Triangle Inequality: $1 = |1 - 0| \\le |1 - L| + |L - 0| < 1/2 + 1/2 = 1$, yielding $1 < 1$.',
+          m: '$$1 < 1 \\implies\\Leftarrow$$',
+          meaning: 'What this really means: The distance between 0 and 1 is 1, which cannot be strictly less than 1, proving the function is too violently discontinuous to be integrable.'
+        }
       ],
       ends: 'Contradiction! Therefore, the Dirichlet function is not Riemann integrable on $[0, 1]$.'
     },
@@ -119,10 +159,26 @@ CONCEPTS.push(
       idea: 'Write the Riemann sum for $\\alpha f + \\beta g$, decompose it linearly, and use the triangle inequality against $\\alpha \\int f + \\beta \\int g$.',
       why: 'Riemann sums are finite sums, which are strictly linear.',
       rungs: [
-        { why: 'For any tagged partition $\\dot{\\mathcal{P}}$, write the Riemann sum of $\\alpha f + \\beta g$.', m: 'S(\\alpha f + \\beta g; \\dot{\\mathcal{P}}) = \\sum_{i=1}^n [\\alpha f(t_i) + \\beta g(t_i)](x_i - x_{i-1}) = \\alpha S(f; \\dot{\\mathcal{P}}) + \\beta S(g; \\dot{\\mathcal{P}})' },
-        { why: 'Let $L_1 = \\int_a^b f$ and $L_2 = \\int_a^b g$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that for $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(f) - L_1| < \\frac{\\varepsilon}{2(|\\alpha| + 1)}$ and $|S(g) - L_2| < \\frac{\\varepsilon}{2(|\\beta| + 1)}$.', m: '|S(f) - L_1| < \\frac{\\varepsilon}{2(|\\alpha|+1)}, \\quad |S(g) - L_2| < \\frac{\\varepsilon}{2(|\\beta|+1)}' },
-        { why: 'Combine the terms using the Triangle Inequality.', m: '|S(\\alpha f + \\beta g) - (\\alpha L_1 + \\beta L_2)| \\le |\\alpha| |S(f) - L_1| + |\\beta| |S(g) - L_2| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
-        { why: 'For monotonicity: if $f \\le g$, every term $f(t_i)(x_i - x_{i-1}) \\le g(t_i)(x_i - x_{i-1})$, so $S(f) \\le S(g)$. Taking limits preserves inequalities.', m: 'S(f; \\dot{\\mathcal{P}}) \\le S(g; \\dot{\\mathcal{P}}) \\implies \\int_a^b f \\le \\int_a^b g' }
+        {
+          why: 'For any tagged partition $\\dot{\\mathcal{P}}$, write the Riemann sum of $\\alpha f + \\beta g$.',
+          m: '$$S(\\alpha f + \\beta g; \\dot{\\mathcal{P}}) = \\sum_{i=1}^n [\\alpha f(t_i) + \\beta g(t_i)](x_i - x_{i-1}) = \\alpha S(f; \\dot{\\mathcal{P}}) + \\beta S(g; \\dot{\\mathcal{P}})$$',
+          meaning: 'What this really means: Finite sums naturally distribute over addition and scalar multiples, splitting the composite Riemann sum into individual sums.'
+        },
+        {
+          why: 'Let $L_1 = \\int_a^b f$ and $L_2 = \\int_a^b g$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that for $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(f) - L_1| < \\frac{\\varepsilon}{2(|\\alpha| + 1)}$ and $|S(g) - L_2| < \\frac{\\varepsilon}{2(|\\beta| + 1)}$.',
+          m: '$$|S(f) - L_1| < \\frac{\\varepsilon}{2(|\\alpha|+1)}, \\quad |S(g) - L_2| < \\frac{\\varepsilon}{2(|\\beta|+1)}$$',
+          meaning: 'What this really means: Choose a fine partition that controls the individual errors for both integrals, scaled down by their respective coefficients.'
+        },
+        {
+          why: 'Combine the terms using the Triangle Inequality.',
+          m: '$$|S(\\alpha f + \\beta g) - (\\alpha L_1 + \\beta L_2)| \\le |\\alpha| |S(f) - L_1| + |\\beta| |S(g) - L_2| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$',
+          meaning: 'What this really means: The scaled error bounds add up to less than epsilon, proving that the integral of the combination is the combination of the integrals.'
+        },
+        {
+          why: 'For monotonicity: if $f \\le g$, every term $f(t_i)(x_i - x_{i-1}) \\le g(t_i)(x_i - x_{i-1})$, so $S(f) \\le S(g)$. Taking limits preserves inequalities.',
+          m: '$$S(f; \\dot{\\mathcal{P}}) \\le S(g; \\dot{\\mathcal{P}}) \\implies \\int_a^b f \\le \\int_a^b g$$',
+          meaning: 'What this really means: A taller curve produces taller approximating rectangles in every slice, so its total accumulated area can never be smaller.'
+        }
       ],
       ends: 'Linearity and monotonicity of the Riemann integral are established.'
     },
@@ -149,11 +205,31 @@ CONCEPTS.push(
       idea: 'Assume $f$ is unbounded. Pick $\\delta > 0$ for $\\varepsilon = 1$. In any partition of norm $< \\delta$, some subinterval has unbounded $f$; choose a tag $t_k$ so large that $|S(f)| > |L| + 1$, yielding a contradiction.',
       why: 'If $f$ is unbounded on a subinterval $I_k$, the term $f(t_k)\\Delta x_k$ can be made larger than all other terms combined.',
       rungs: [
-        { why: 'Suppose $f \\in \\mathcal{R}[a, b]$ with integral $L$. Choose $\\delta > 0$ such that for every tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(f; \\dot{\\mathcal{P}}) - L| < 1$.', m: '|S(f; \\dot{\\mathcal{P}})| < |L| + 1' },
-        { why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ be an untagged partition with $\\|\\mathcal{P}\\| < \\delta$. If $f$ were bounded on every subinterval $I_i = [x_{i-1}, x_i]$, $f$ would be bounded on $[a, b]$. Thus $f$ is unbounded on at least one subinterval $I_k$.', m: '\\exists k \\in \\{1, \\ldots, n\\} : \\sup_{x \\in I_k} |f(x)| = \\infty' },
-        { why: 'Fix arbitrary tags $t_i$ for all other subintervals $i \\ne k$. Let $S^* = \\sum_{i \\ne k} f(t_i)(x_i - x_{i-1})$.', m: 'S(f; \\dot{\\mathcal{P}}) = S^* + f(t_k)(x_k - x_{k-1})' },
-        { why: 'Since $f$ is unbounded on $I_k$, choose $t_k \\in I_k$ such that $|f(t_k)| > \\frac{|L| + 1 + |S^*|}{x_k - x_{k-1}}$.', m: '|f(t_k)|(x_k - x_{k-1}) > |L| + 1 + |S^*|' },
-        { why: 'By the reverse triangle inequality, $|S(f; \\dot{\\mathcal{P}})| \\ge |f(t_k)|(x_k - x_{k-1}) - |S^*| > |L| + 1$, contradicting the bound from step 1.', m: '|S(f; \\dot{\\mathcal{P}})| > |L| + 1 \\implies\\Leftarrow' }
+        {
+          why: 'Suppose $f \\in \\mathcal{R}[a, b]$ with integral $L$. Choose $\\delta > 0$ such that for every tagged partition $\\dot{\\mathcal{P}}$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(f; \\dot{\\mathcal{P}}) - L| < 1$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}})| < |L| + 1$$',
+          meaning: 'What this really means: If an integral exists, every sufficiently fine Riemann sum is trapped within a fixed ceiling.'
+        },
+        {
+          why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ be an untagged partition with $\\|\\mathcal{P}\\| < \\delta$. If $f$ were bounded on every subinterval $I_i = [x_{i-1}, x_i]$, $f$ would be bounded on $[a, b]$. Thus $f$ is unbounded on at least one subinterval $I_k$.',
+          m: '$$\\exists k \\in \\{1, \\ldots, n\\} : \\sup_{x \\in I_k} |f(x)| = \\infty$$',
+          meaning: 'What this really means: If the function were unbounded overall, the infinite blow-up must be housed inside at least one specific subinterval.'
+        },
+        {
+          why: 'Fix arbitrary tags $t_i$ for all other subintervals $i \\ne k$. Let $S^* = \\sum_{i \\ne k} f(t_i)(x_i - x_{i-1})$.',
+          m: '$$S(f; \\dot{\\mathcal{P}}) = S^* + f(t_k)(x_k - x_{k-1})$$',
+          meaning: 'What this really means: Freeze the contributions of all innocent subintervals into a constant base, leaving only the rogue subinterval free to vary.'
+        },
+        {
+          why: 'Since $f$ is unbounded on $I_k$, choose $t_k \\in I_k$ such that $|f(t_k)| > \\frac{|L| + 1 + |S^*|}{x_k - x_{k-1}}$.',
+          m: '$$|f(t_k)|(x_k - x_{k-1}) > |L| + 1 + |S^*|$$',
+          meaning: 'What this really means: Pick a single tag inside the rogue subinterval where the function value spikes high enough to overpower the sum of all other slices combined.'
+        },
+        {
+          why: 'By the reverse triangle inequality, $|S(f; \\dot{\\mathcal{P}})| \\ge |f(t_k)|(x_k - x_{k-1}) - |S^*| > |L| + 1$, contradicting the bound from step 1.',
+          m: '$$|S(f; \\dot{\\mathcal{P}})| > |L| + 1 \\implies\\Leftarrow$$',
+          meaning: 'What this really means: This single towering rectangle blows the entire Riemann sum past the permissible ceiling, proving integrable functions must be bounded.'
+        }
       ],
       ends: 'Contradiction! Therefore, every Riemann integrable function must be bounded.'
     },
@@ -181,11 +257,31 @@ CONCEPTS.push(
       idea: '(=>) If integral $L$ exists, use triangle inequality with $L$ in the middle. (<=) Construct a sequence of partitions with mesh -> 0; their Riemann sums form a Cauchy sequence of real numbers, which converges to $L$.',
       why: 'Completeness of $\\mathbb{R}$ (Theorem 3.5.5) guarantees that a Cauchy sequence of Riemann sums has a real limit $L$.',
       rungs: [
-        { why: '(=>) Assume $f \\in \\mathcal{R}[a, b]$ with integral $L$. Choose $\\delta > 0$ for $\\varepsilon/2$. For $\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\delta$, both $|S(f; \\dot{\\mathcal{P}}) - L| < \\varepsilon/2$ and $|S(f; \\dot{\\mathcal{Q}}) - L| < \\varepsilon/2$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| \\le |S(f; \\dot{\\mathcal{P}}) - L| + |L - S(f; \\dot{\\mathcal{Q}})| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon' },
-        { why: '(<=) Assume the Cauchy condition. For each $n \\in \\mathbb{N}$, choose $\\delta_n > 0$ corresponding to $\\varepsilon = 1/n$, with $\\delta_{n+1} \\le \\delta_n$.', m: '\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\delta_n \\implies |S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\frac{1}{n}' },
-        { why: 'Choose a sequence of tagged partitions $\\dot{\\mathcal{P}}_n$ with $\\|\\dot{\\mathcal{P}}_n\\| < \\delta_n$. For $m > n$, both norms are $< \\delta_n$.', m: '|S(f; \\dot{\\mathcal{P}}_n) - S(f; \\dot{\\mathcal{P}}_m)| < \\frac{1}{n} \\quad \\forall m > n' },
-        { why: 'Thus $(S(f; \\dot{\\mathcal{P}}_n))$ is a Cauchy sequence of real numbers. By completeness of $\\mathbb{R}$ (3.5.5), it converges to some limit $L \\in \\mathbb{R}$.', m: 'L = \\lim_{n\\to\\infty} S(f; \\dot{\\mathcal{P}}_n)' },
-        { why: 'For any tagged partition $\\dot{\\mathcal{Q}}$ with $\\|\\dot{\\mathcal{Q}}\\| < \\delta_K$ (where $1/K < \\varepsilon/2$), $|S(f; \\dot{\\mathcal{Q}}) - L| \\le |S(f; \\dot{\\mathcal{Q}}) - S(f; \\dot{\\mathcal{P}}_K)| + |S(f; \\dot{\\mathcal{P}}_K) - L| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{Q}}) - L| < \\varepsilon' }
+        {
+          why: '(=>) Assume $f \\in \\mathcal{R}[a, b]$ with integral $L$. Choose $\\delta > 0$ for $\\varepsilon/2$. For $\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\delta$, both $|S(f; \\dot{\\mathcal{P}}) - L| < \\varepsilon/2$ and $|S(f; \\dot{\\mathcal{Q}}) - L| < \\varepsilon/2$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| \\le |S(f; \\dot{\\mathcal{P}}) - L| + |L - S(f; \\dot{\\mathcal{Q}})| < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$',
+          meaning: 'What this really means: If all fine approximations approach a common target, any two of them must stay within epsilon of each other.'
+        },
+        {
+          why: '(<=) Assume the Cauchy condition. For each $n \\in \\mathbb{N}$, choose $\\delta_n > 0$ corresponding to $\\varepsilon = 1/n$, with $\\delta_{n+1} \\le \\delta_n$.',
+          m: '$$\\|\\dot{\\mathcal{P}}\\|, \\|\\dot{\\mathcal{Q}}\\| < \\delta_n \\implies |S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\frac{1}{n}$$',
+          meaning: 'What this really means: Assume any two fine Riemann sums stay arbitrarily close, and create an increasingly strict series of mesh limits.'
+        },
+        {
+          why: 'Choose a sequence of tagged partitions $\\dot{\\mathcal{P}}_n$ with $\\|\\dot{\\mathcal{P}}_n\\| < \\delta_n$. For $m > n$, both norms are $< \\delta_n$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}_n) - S(f; \\dot{\\mathcal{P}}_m)| < \\frac{1}{n} \\quad \\forall m > n$$',
+          meaning: 'What this really means: Construct a sequence of Riemann sums that cluster progressively tighter together.'
+        },
+        {
+          why: 'Thus $(S(f; \\dot{\\mathcal{P}}_n))$ is a Cauchy sequence of real numbers. By completeness of $\\mathbb{R}$ (3.5.5), it converges to some limit $L \\in \\mathbb{R}$.',
+          m: '$$L = \\lim_{n\\to\\infty} S(f; \\dot{\\mathcal{P}}_n)$$',
+          meaning: 'What this really means: Because the real numbers have no holes, any sequence of numbers clustering together is guaranteed to converge to an actual limit.'
+        },
+        {
+          why: 'For any tagged partition $\\dot{\\mathcal{Q}}$ with $\\|\\dot{\\mathcal{Q}}\\| < \\delta_K$ (where $1/K < \\varepsilon/2$), $|S(f; \\dot{\\mathcal{Q}}) - L| \\le |S(f; \\dot{\\mathcal{Q}}) - S(f; \\dot{\\mathcal{P}}_K)| + |S(f; \\dot{\\mathcal{P}}_K) - L| < \\varepsilon$.',
+          m: '$$|S(f; \\dot{\\mathcal{Q}}) - L| < \\varepsilon$$',
+          meaning: 'What this really means: Any other fine partition is trapped near the sequence limit, proving the function converges unconditionally to this integral value.'
+        }
       ],
       ends: 'Hence $f \\in \\mathcal{R}[a, b]$ with integral $L$, proving the Cauchy Criterion.'
     },
@@ -215,11 +311,31 @@ CONCEPTS.push(
       idea: '(=>) Trivial: take $\\alpha_\\varepsilon = \\omega_\\varepsilon = f$. (<=) Use the Cauchy Criterion (7.2.1) by bounding the gap between two Riemann sums of $f$ by the integrals of $\\omega_\\varepsilon$ and $\\alpha_\\varepsilon$.',
       why: 'Riemann sums of $f$ are trapped between Riemann sums of $\\alpha_\\varepsilon$ and $\\omega_\\varepsilon$.',
       rungs: [
-        { why: '(=>) If $f \\in \\mathcal{R}[a, b]$, choose $\\alpha_\\varepsilon = \\omega_\\varepsilon = f$. Then $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) = 0 < \\varepsilon$.', m: '\\alpha_\\varepsilon = \\omega_\\varepsilon = f' },
-        { why: '(<=) Let $\\varepsilon > 0$. Since $\\alpha_\\varepsilon, \\omega_\\varepsilon \\in \\mathcal{R}[a, b]$, choose $\\delta > 0$ such that for $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(\\alpha_\\varepsilon; \\dot{\\mathcal{P}}) - \\int \\alpha_\\varepsilon| < \\varepsilon$ and $|S(\\omega_\\varepsilon; \\dot{\\mathcal{P}}) - \\int \\omega_\\varepsilon| < \\varepsilon$.', m: '\\int_a^b \\alpha_\\varepsilon - \\varepsilon < S(\\alpha_\\varepsilon; \\dot{\\mathcal{P}}) \\le S(f; \\dot{\\mathcal{P}}) \\le S(\\omega_\\varepsilon; \\dot{\\mathcal{P}}) < \\int_a^b \\omega_\\varepsilon + \\varepsilon' },
-        { why: 'For any two tagged partitions $\\dot{\\mathcal{P}}, \\dot{\\mathcal{Q}}$ with norm $< \\delta$, both $S(f; \\dot{\\mathcal{P}})$ and $S(f; \\dot{\\mathcal{Q}})$ lie in $(\\int \\alpha_\\varepsilon - \\varepsilon, \\int \\omega_\\varepsilon + \\varepsilon)$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\int_a^b \\omega_\\varepsilon - \\int_a^b \\alpha_\\varepsilon + 2\\varepsilon' },
-        { why: 'Substitute the hypothesis $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\varepsilon + 2\\varepsilon = 3\\varepsilon' },
-        { why: 'By the Cauchy Criterion (7.2.1), $f \\in \\mathcal{R}[a, b]$.', m: 'f \\in \\mathcal{R}[a, b]' }
+        {
+          why: '(=>) If $f \\in \\mathcal{R}[a, b]$, choose $\\alpha_\\varepsilon = \\omega_\\varepsilon = f$. Then $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) = 0 < \\varepsilon$.',
+          m: '$$\\alpha_\\varepsilon = \\omega_\\varepsilon = f$$',
+          meaning: 'What this really means: An already integrable function brackets itself perfectly with zero gap between the upper and lower bounds.'
+        },
+        {
+          why: '(<=) Let $\\varepsilon > 0$. Since $\\alpha_\\varepsilon, \\omega_\\varepsilon \\in \\mathcal{R}[a, b]$, choose $\\delta > 0$ such that for $\\|\\dot{\\mathcal{P}}\\| < \\delta$, $|S(\\alpha_\\varepsilon; \\dot{\\mathcal{P}}) - \\int \\alpha_\\varepsilon| < \\varepsilon$ and $|S(\\omega_\\varepsilon; \\dot{\\mathcal{P}}) - \\int \\omega_\\varepsilon| < \\varepsilon$.',
+          m: '$$\\int_a^b \\alpha_\\varepsilon - \\varepsilon < S(\\alpha_\\varepsilon; \\dot{\\mathcal{P}}) \\le S(f; \\dot{\\mathcal{P}}) \\le S(\\omega_\\varepsilon; \\dot{\\mathcal{P}}) < \\int_a^b \\omega_\\varepsilon + \\varepsilon$$',
+          meaning: 'What this really means: Trap the unknown function\'s Riemann sum between the reliable Riemann sums of its lower and upper guardrail functions.'
+        },
+        {
+          why: 'For any two tagged partitions $\\dot{\\mathcal{P}}, \\dot{\\mathcal{Q}}$ with norm $< \\delta$, both $S(f; \\dot{\\mathcal{P}})$ and $S(f; \\dot{\\mathcal{Q}})$ lie in $(\\int \\alpha_\\varepsilon - \\varepsilon, \\int \\omega_\\varepsilon + \\varepsilon)$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\int_a^b \\omega_\\varepsilon - \\int_a^b \\alpha_\\varepsilon + 2\\varepsilon$$',
+          meaning: 'What this really means: Any two arbitrary approximations of the function are squeezed into the narrow corridor between the two guardrails.'
+        },
+        {
+          why: 'Substitute the hypothesis $\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) < \\varepsilon$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - S(f; \\dot{\\mathcal{Q}})| < \\varepsilon + 2\\varepsilon = 3\\varepsilon$$',
+          meaning: 'What this really means: Because the area gap between the guardrails is tiny, the gap between any two Riemann sums is throttled down to three epsilon.'
+        },
+        {
+          why: 'By the Cauchy Criterion (7.2.1), $f \\in \\mathcal{R}[a, b]$.',
+          m: '$$f \\in \\mathcal{R}[a, b]$$',
+          meaning: 'What this really means: Squeezing the sums into an arbitrarily tight band satisfies the Cauchy criterion, proving the function is fully integrable.'
+        }
       ],
       ends: 'The Squeeze Theorem for Riemann integrability is established.'
     },
@@ -247,10 +363,26 @@ CONCEPTS.push(
       idea: 'Express $\\varphi$ as a linear combination of elementary step functions (indicators of intervals), and apply linearity of the integral.',
       why: 'The indicator of an interval $[c, d]$ has integral $d - c$; finite sums of integrable functions are integrable.',
       rungs: [
-        { why: 'Let $J$ be any subinterval of $[a, b]$ with endpoints $c < d$. Let $\\varphi_J$ be the indicator function: $\\varphi_J(x) = 1$ on $J$ and $0$ elsewhere.', m: '\\varphi_J(x) = \\begin{cases} 1 & x \\in J \\\\ 0 & x \\notin J \\end{cases}' },
-        { why: 'For any tagged partition $\\dot{\\mathcal{P}}$ with mesh $\\|\\dot{\\mathcal{P}}\\| < \\delta$, Riemann sums $S(\\varphi_J; \\dot{\\mathcal{P}})$ differ from $d - c$ by at most $2\\|\\dot{\\mathcal{P}}\\| < 2\\delta$.', m: '|S(\\varphi_J; \\dot{\\mathcal{P}}) - (d - c)| \\le 2\\delta < \\varepsilon \\implies \\int_a^b \\varphi_J = d - c' },
-        { why: 'Every step function $\\varphi$ is a finite linear combination of elementary step functions: $\\varphi = \\sum_{j=1}^m k_j \\varphi_{J_j}$.', m: '\\varphi = \\sum_{j=1}^m k_j \\varphi_{J_j}' },
-        { why: 'Apply Linearity of the Integral (Theorem 7.1.5) to the finite sum.', m: '\\int_a^b \\varphi = \\sum_{j=1}^m k_j \\int_a^b \\varphi_{J_j} = \\sum_{j=1}^m k_j (d_j - c_j)' }
+        {
+          why: 'Let $J$ be any subinterval of $[a, b]$ with endpoints $c < d$. Let $\\varphi_J$ be the indicator function: $\\varphi_J(x) = 1$ on $J$ and $0$ elsewhere.',
+          m: '$$\\varphi_J(x) = \\begin{cases} 1 & x \\in J \\\\ 0 & x \\notin J \\end{cases}$$',
+          meaning: 'What this really means: Start with a single rectangular block that is 1 over an interval and 0 everywhere else.'
+        },
+        {
+          why: 'For any tagged partition $\\dot{\\mathcal{P}}$ with mesh $\\|\\dot{\\mathcal{P}}\\| < \\delta$, Riemann sums $S(\\varphi_J; \\dot{\\mathcal{P}})$ differ from $d - c$ by at most $2\\|\\dot{\\mathcal{P}}\\| < 2\\delta$.',
+          m: '$$|S(\\varphi_J; \\dot{\\mathcal{P}}) - (d - c)| \\le 2\\delta < \\varepsilon \\implies \\int_a^b \\varphi_J = d - c$$',
+          meaning: 'What this really means: Any error in capturing the block only happens at its two boundary cuts, which shrink to zero as the partition gets finer.'
+        },
+        {
+          why: 'Every step function $\\varphi$ is a finite linear combination of elementary step functions: $\\varphi = \\sum_{j=1}^m k_j \\varphi_{J_j}$.',
+          m: '$$\\varphi = \\sum_{j=1}^m k_j \\varphi_{J_j}$$',
+          meaning: 'What this really means: Any staircase function is just a finite set of these simple rectangular blocks stacked or placed side-by-side.'
+        },
+        {
+          why: 'Apply Linearity of the Integral (Theorem 7.1.5) to the finite sum.',
+          m: '$$\\int_a^b \\varphi = \\sum_{j=1}^m k_j \\int_a^b \\varphi_{J_j} = \\sum_{j=1}^m k_j (d_j - c_j)$$',
+          meaning: 'What this really means: Integrating the staircase is simply adding up the basic width-times-height areas of each flat step.'
+        }
       ],
       ends: 'Step functions are Riemann integrable and their integrals equal the sum of step rectangular areas.'
     },
@@ -276,11 +408,31 @@ CONCEPTS.push(
       idea: 'Use Uniform Continuity (5.4.3) to make $M_i - m_i < \\varepsilon/(b - a)$ on every subinterval, then apply the Squeeze Theorem with min/max step functions.',
       why: 'Uniform continuity ensures that one single $\\delta$ controls oscillation across all slices simultaneously.',
       rungs: [
-        { why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that $|u - v| < \\delta \\implies |f(u) - f(v)| < \\frac{\\varepsilon}{b - a}$.', m: '|u - v| < \\delta \\implies |f(u) - f(v)| < \\frac{\\varepsilon}{b - a}' },
-        { why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ be a partition with mesh $\\|\\mathcal{P}\\| < \\delta$. By the Maximum-Minimum Theorem (5.3.4), $f$ attains a min $f(u_i)$ and max $f(v_i)$ on each $I_i$.', m: 'm_i = f(u_i), \\quad M_i = f(v_i) \\quad \\text{with } u_i, v_i \\in I_i' },
-        { why: 'Since $|u_i - v_i| \\le \\|\\mathcal{P}\\| < \\delta$, the oscillation satisfies $M_i - m_i < \\frac{\\varepsilon}{b - a}$ for all $i$.', m: 'M_i - m_i < \\frac{\\varepsilon}{b - a} \\quad \\forall i = 1, \\ldots, n' },
-        { why: 'Define step functions $\\alpha_\\varepsilon(x) = m_i$ and $\\omega_\\varepsilon(x) = M_i$ on each $(x_{i-1}, x_i)$. Then $\\alpha_\\varepsilon \\le f \\le \\omega_\\varepsilon$.', m: '\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) = \\sum_{i=1}^n (M_i - m_i)(x_i - x_{i-1}) < \\frac{\\varepsilon}{b - a} \\sum_{i=1}^n (x_i - x_{i-1}) = \\varepsilon' },
-        { why: 'By the Squeeze Theorem (7.2.3), $f$ is Riemann integrable.', m: 'f \\in \\mathcal{R}[a, b]' }
+        {
+          why: 'By Theorem 5.4.3, $f$ is uniformly continuous on $[a, b]$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that $|u - v| < \\delta \\implies |f(u) - f(v)| < \\frac{\\varepsilon}{b - a}$.',
+          m: '$$|u - v| < \\delta \\implies |f(u) - f(v)| < \\frac{\\varepsilon}{b - a}$$',
+          meaning: 'What this really means: On a closed interval, continuity is uniform, meaning points close together cannot fluctuate in height by more than a tiny budget.'
+        },
+        {
+          why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ be a partition with mesh $\\|\\mathcal{P}\\| < \\delta$. By the Maximum-Minimum Theorem (5.3.4), $f$ attains a min $f(u_i)$ and max $f(v_i)$ on each $I_i$.',
+          m: '$$m_i = f(u_i), \\quad M_i = f(v_i) \\quad \\text{with } u_i, v_i \\in I_i$$',
+          meaning: 'What this really means: Inside each narrow slice, the curve reaches an absolute top ceiling and an absolute bottom floor.'
+        },
+        {
+          why: 'Since $|u_i - v_i| \\le \\|\\mathcal{P}\\| < \\delta$, the oscillation satisfies $M_i - m_i < \\frac{\\varepsilon}{b - a}$ for all $i$.',
+          m: '$$M_i - m_i < \\frac{\\varepsilon}{b - a} \\quad \\forall i = 1, \\ldots, n$$',
+          meaning: 'What this really means: Because the slice is narrower than delta, the vertical gap between the ceiling and floor is smaller than the target margin.'
+        },
+        {
+          why: 'Define step functions $\\alpha_\\varepsilon(x) = m_i$ and $\\omega_\\varepsilon(x) = M_i$ on each $(x_{i-1}, x_i)$. Then $\\alpha_\\varepsilon \\le f \\le \\omega_\\varepsilon$.',
+          m: '$$\\int_a^b (\\omega_\\varepsilon - \\alpha_\\varepsilon) = \\sum_{i=1}^n (M_i - m_i)(x_i - x_{i-1}) < \\frac{\\varepsilon}{b - a} \\sum_{i=1}^n (x_i - x_{i-1}) = \\varepsilon$$',
+          meaning: 'What this really means: Sandwiched between lower and upper staircase functions, the total area gap across all slices collapses to less than epsilon.'
+        },
+        {
+          why: 'By the Squeeze Theorem (7.2.3), $f$ is Riemann integrable.',
+          m: '$$f \\in \\mathcal{R}[a, b]$$',
+          meaning: 'What this really means: Because the staircase trap closes as tight as desired, every continuous function is proven to be Riemann integrable.'
+        }
       ],
       ends: 'Every continuous function on $[a, b]$ is Riemann integrable.'
     },
@@ -307,11 +459,31 @@ CONCEPTS.push(
       idea: 'Partition $[a, b]$ into $n$ equal subintervals; telescoping sums bound the difference between upper and lower step functions by $\\frac{b-a}{n}(f(b) - f(a))$.',
       why: 'For an increasing function on $[x_{i-1}, x_i]$, $m_i = f(x_{i-1})$ and $M_i = f(x_i)$, causing all intermediate terms to cancel in the sum.',
       rungs: [
-        { why: 'Assume $f$ is increasing on $[a, b]$. Divide $[a, b]$ into $n$ equal subintervals of length $h = (b - a)/n$.', m: 'x_i - x_{i-1} = \\frac{b - a}{n} \\quad \\forall i = 1, \\ldots, n' },
-        { why: 'On $I_i = [x_{i-1}, x_i]$, the infimum is $f(x_{i-1})$ and supremum is $f(x_i)$. Define step functions $\\alpha_n(x) = f(x_{i-1})$ and $\\omega_n(x) = f(x_i)$.', m: '\\alpha_n(x) \\le f(x) \\le \\omega_n(x)' },
-        { why: 'Integrate $\\omega_n - \\alpha_n$: factor out the common width $(b - a)/n$.', m: '\\int_a^b (\\omega_n - \\alpha_n) = \\frac{b - a}{n} \\sum_{i=1}^n [f(x_i) - f(x_{i-1})]' },
-        { why: 'The sum telescopes completely: all intermediate terms cancel!', m: '\\sum_{i=1}^n [f(x_i) - f(x_{i-1})] = f(x_n) - f(x_0) = f(b) - f(a)' },
-        { why: 'Given $\\varepsilon > 0$, choose $n > \\frac{(b - a)(f(b) - f(a))}{\\varepsilon}$. Then $\\int_a^b (\\omega_n - \\alpha_n) < \\varepsilon$, and the Squeeze Theorem (7.2.3) applies.', m: '\\int_a^b (\\omega_n - \\alpha_n) = \\frac{(b - a)(f(b) - f(a))}{n} < \\varepsilon' }
+        {
+          why: 'Assume $f$ is increasing on $[a, b]$. Divide $[a, b]$ into $n$ equal subintervals of length $h = (b - a)/n$.',
+          m: '$$x_i - x_{i-1} = \\frac{b - a}{n} \\quad \\forall i = 1, \\ldots, n$$',
+          meaning: 'What this really means: Slice the domain evenly into $n$ identical strips of equal width.'
+        },
+        {
+          why: 'On $I_i = [x_{i-1}, x_i]$, the infimum is $f(x_{i-1})$ and supremum is $f(x_i)$. Define step functions $\\alpha_n(x) = f(x_{i-1})$ and $\\omega_n(x) = f(x_i)$.',
+          m: '$$\\alpha_n(x) \\le f(x) \\le \\omega_n(x)$$',
+          meaning: 'What this really means: For an increasing function, the left edge is always the bottom floor and the right edge is always the top ceiling.'
+        },
+        {
+          why: 'Integrate $\\omega_n - \\alpha_n$: factor out the common width $(b - a)/n$.',
+          m: '$$\\int_a^b (\\omega_n - \\alpha_n) = \\frac{b - a}{n} \\sum_{i=1}^n [f(x_i) - f(x_{i-1})]$$',
+          meaning: 'What this really means: The total uncertainty area is the uniform strip width multiplied by the sum of all the vertical step heights.'
+        },
+        {
+          why: 'The sum telescopes completely: all intermediate terms cancel!',
+          m: '$$\\sum_{i=1}^n [f(x_i) - f(x_{i-1})] = f(x_n) - f(x_0) = f(b) - f(a)$$',
+          meaning: 'What this really means: All intermediate elevations cancel out completely, collapsing the sum of step heights into simply the total climb from start to finish.'
+        },
+        {
+          why: 'Given $\\varepsilon > 0$, choose $n > \\frac{(b - a)(f(b) - f(a))}{\\varepsilon}$. Then $\\int_a^b (\\omega_n - \\alpha_n) < \\varepsilon$, and the Squeeze Theorem (7.2.3) applies.',
+          m: '$$\\int_a^b (\\omega_n - \\alpha_n) = \\frac{(b - a)(f(b) - f(a))}{n} < \\varepsilon$$',
+          meaning: 'What this really means: Making $n$ large shrinks the uncertainty to zero, proving monotone functions are always integrable regardless of how many jumps they have.'
+        }
       ],
       ends: 'Every monotone function on $[a, b]$ is Riemann integrable.'
     },
@@ -338,10 +510,26 @@ CONCEPTS.push(
       idea: 'If $c$ is a partition point, the Riemann sum splits exactly $S(f; \\dot{\\mathcal{P}}) = S_1 + S_2$. If $c$ falls inside a subinterval, the discrepancy is bounded by $2M \\|\\dot{\\mathcal{P}}\\| \\to 0$.',
       why: 'Riemann sums over the union differ from the sum of Riemann sums over the pieces by at most the tag contribution of the single slice containing $c$.',
       rungs: [
-        { why: 'Let $L_1 = \\int_a^c f$ and $L_2 = \\int_c^b f$. Let $M$ be a bound for $|f|$ on $[a, b]$. Given $\\varepsilon > 0$, choose $\\delta > 0$ with $\\delta < \\frac{\\varepsilon}{6M}$ such that subinterval sums are within $\\varepsilon/3$ of $L_1, L_2$.', m: '\\|\\dot{\\mathcal{P}}_1\\| < \\delta \\implies |S(f_1) - L_1| < \\frac{\\varepsilon}{3}, \\quad \\|\\dot{\\mathcal{P}}_2\\| < \\delta \\implies |S(f_2) - L_2| < \\frac{\\varepsilon}{3}' },
-        { why: 'Let $\\dot{\\mathcal{P}}$ be a tagged partition of $[a, b]$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$. If $c$ is a partition point, $\\dot{\\mathcal{P}}$ splits into $\\dot{\\mathcal{P}}_1$ and $\\dot{\\mathcal{P}}_2$, and $S(f; \\dot{\\mathcal{P}}) = S(f_1; \\dot{\\mathcal{P}}_1) + S(f_2; \\dot{\\mathcal{P}}_2)$.', m: '|S(f; \\dot{\\mathcal{P}}) - (L_1 + L_2)| \\le |S(f_1) - L_1| + |S(f_2) - L_2| < \\frac{2\\varepsilon}{3} < \\varepsilon' },
-        { why: 'If $c$ is inside a subinterval $(x_{k-1}, x_k)$, insert $c$ with tag $c$ into both $[x_{k-1}, c]$ and $[c, x_k]$ to form partitions $\\dot{\\mathcal{Q}}_1, \\dot{\\mathcal{Q}}_2$.', m: '|S(f; \\dot{\\mathcal{P}}) - S(f_1; \\dot{\\mathcal{Q}}_1) - S(f_2; \\dot{\\mathcal{Q}}_2)| = |f(t_k) - f(c)|(x_k - x_{k-1}) \\le 2M \\|\\dot{\\mathcal{P}}\\| < \\frac{\\varepsilon}{3}' },
-        { why: 'Combine the triangle inequality terms: $\\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - (L_1 + L_2)| < \\varepsilon' }
+        {
+          why: 'Let $L_1 = \\int_a^c f$ and $L_2 = \\int_c^b f$. Let $M$ be a bound for $|f|$ on $[a, b]$. Given $\\varepsilon > 0$, choose $\\delta > 0$ with $\\delta < \\frac{\\varepsilon}{6M}$ such that subinterval sums are within $\\varepsilon/3$ of $L_1, L_2$.',
+          m: '$$\\|\\dot{\\mathcal{P}}_1\\| < \\delta \\implies |S(f_1) - L_1| < \\frac{\\varepsilon}{3}, \\quad \\|\\dot{\\mathcal{P}}_2\\| < \\delta \\implies |S(f_2) - L_2| < \\frac{\\varepsilon}{3}$$',
+          meaning: 'What this really means: Budget a one-third epsilon tolerance for the left region, the right region, and any straddling boundary slice.'
+        },
+        {
+          why: 'Let $\\dot{\\mathcal{P}}$ be a tagged partition of $[a, b]$ with $\\|\\dot{\\mathcal{P}}\\| < \\delta$. If $c$ is a partition point, $\\dot{\\mathcal{P}}$ splits into $\\dot{\\mathcal{P}}_1$ and $\\dot{\\mathcal{P}}_2$, and $S(f; \\dot{\\mathcal{P}}) = S(f_1; \\dot{\\mathcal{P}}_1) + S(f_2; \\dot{\\mathcal{P}}_2)$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - (L_1 + L_2)| \\le |S(f_1) - L_1| + |S(f_2) - L_2| < \\frac{2\\varepsilon}{3} < \\varepsilon$$',
+          meaning: 'What this really means: If the split point $c$ lands cleanly on a partition line, the two sub-sums add up to the total sum effortlessly.'
+        },
+        {
+          why: 'If $c$ is inside a subinterval $(x_{k-1}, x_k)$, insert $c$ with tag $c$ into both $[x_{k-1}, c]$ and $[c, x_k]$ to form partitions $\\dot{\\mathcal{Q}}_1, \\dot{\\mathcal{Q}}_2$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - S(f_1; \\dot{\\mathcal{Q}}_1) - S(f_2; \\dot{\\mathcal{Q}}_2)| = |f(t_k) - f(c)|(x_k - x_{k-1}) \\le 2M \\|\\dot{\\mathcal{P}}\\| < \\frac{\\varepsilon}{3}$$',
+          meaning: 'What this really means: If $c$ falls inside a slice, snapping it to the boundary creates an error that is strictly bounded by the slice width times the function bound.'
+        },
+        {
+          why: 'Combine the triangle inequality terms: $\\varepsilon/3 + \\varepsilon/3 + \\varepsilon/3 = \\varepsilon$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - (L_1 + L_2)| < \\varepsilon$$',
+          meaning: 'What this really means: Adding the three fractional errors keeps the total within epsilon, proving the total area is the exact sum of the two sub-areas.'
+        }
       ],
       ends: 'Therefore $f \\in \\mathcal{R}[a, b]$ and $\\int_a^b f = \\int_a^c f + \\int_c^b f$.'
     },
@@ -368,11 +556,31 @@ CONCEPTS.push(
       idea: 'Use the reverse triangle inequality ||f(u)| - |f(v)|| <= |f(u) - f(v)| to bound the oscillation of |f| by that of f, then apply the Squeeze Theorem.',
       why: 'Taking absolute values can only decrease or preserve distances, never increase them.',
       rungs: [
-        { why: 'By the reverse triangle inequality (2.2.1), for any $u, v \\in [a, b]$, $||f(u)| - |f(v)|| \\le |f(u) - f(v)|$.', m: '||f(u)| - |f(v)|| \\le |f(u) - f(v)|' },
-        { why: 'Taking supremum over subinterval $I_i$, the oscillation of $|f|$ is bounded by the oscillation of $f$:', m: 'M_i(|f|) - m_i(|f|) \\le M_i(f) - m_i(f)' },
-        { why: 'Multiply by subinterval widths: $U(|f|, \\mathcal{P}) - L(|f|, \\mathcal{P}) \\le U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon$. By the Squeeze Theorem (7.2.3), $|f| \\in \\mathcal{R}[a, b]$.', m: '|f| \\in \\mathcal{R}[a, b]' },
-        { why: 'Since $-|f(x)| \\le f(x) \\le |f(x)|$, apply Monotonicity of Integrals (Theorem 7.1.5).', m: '-\\int_a^b |f| \\le \\int_a^b f \\le \\int_a^b |f|' },
-        { why: 'Translate this double inequality into absolute value notation.', m: '\\left| \\int_a^b f \\right| \\le \\int_a^b |f|' }
+        {
+          why: 'By the reverse triangle inequality (2.2.1), for any $u, v \\in [a, b]$, $||f(u)| - |f(v)|| \\le |f(u) - f(v)|$.',
+          m: '$$||f(u)| - |f(v)|| \\le |f(u) - f(v)|$$',
+          meaning: 'What this really means: Folding negative values upward with absolute values can only pull points closer together, never push them further apart.'
+        },
+        {
+          why: 'Taking supremum over subinterval $I_i$, the oscillation of $|f|$ is bounded by the oscillation of $f$:',
+          m: '$$M_i(|f|) - m_i(|f|) \\le M_i(f) - m_i(f)$$',
+          meaning: 'What this really means: The height difference between the peak and valley of $|f|$ in any slice is at most that of the original function $f$.'
+        },
+        {
+          why: 'Multiply by subinterval widths: $U(|f|, \\mathcal{P}) - L(|f|, \\mathcal{P}) \\le U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon$. By the Squeeze Theorem (7.2.3), $|f| \\in \\mathcal{R}[a, b]$.',
+          m: '$$|f| \\in \\mathcal{R}[a, b]$$',
+          meaning: 'What this really means: Because $|f|$ fluctuates less than $f$ on every slice, its total uncertainty gap is even smaller, guaranteeing that $|f|$ is integrable.'
+        },
+        {
+          why: 'Since $-|f(x)| \\le f(x) \\le |f(x)|$, apply Monotonicity of Integrals (Theorem 7.1.5).',
+          m: '$$-\\int_a^b |f| \\le \\int_a^b f \\le \\int_a^b |f|$$',
+          meaning: 'What this really means: Bounding the original curve between its inverted absolute value and its positive absolute value carries directly over to their integrals.'
+        },
+        {
+          why: 'Translate this double inequality into absolute value notation.',
+          m: '$$\\left| \\int_a^b f \\right| \\le \\int_a^b |f|$$',
+          meaning: 'What this really means: Net signed area (where peaks and valleys cancel out) can never exceed total gross area (where every region counts as positive).'
+        }
       ],
       ends: 'Therefore $|f| \\in \\mathcal{R}[a, b]$ and $|\\int_a^b f| \\le \\int_a^b |f|$.'
     },
@@ -403,11 +611,31 @@ CONCEPTS.push(
       idea: 'Apply Lagrange MVT on each subinterval $[x_{i-1}, x_i]$ to write $F(x_i) - F(x_{i-1}) = F\'(u_i)(x_i - x_{i-1}) = f(u_i)(x_i - x_{i-1})$, turning $F(b) - F(a)$ into a Riemann sum.',
       why: 'Telescoping sum of $F$ differences equals an exact Riemann sum of $f$ for suitable tags $u_i$.',
       rungs: [
-        { why: 'Assume $E = \\emptyset$. Let $\\varepsilon > 0$. Since $f \\in \\mathcal{R}[a, b]$, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - \\int_a^b f| < \\varepsilon$.', m: '|S(f; \\dot{\\mathcal{P}}) - \\int_a^b f| < \\varepsilon' },
-        { why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ have mesh $< \\delta$. By Lagrange MVT (6.2.4), on each $[x_{i-1}, x_i]$, there exists $u_i \\in (x_{i-1}, x_i)$ with $F(x_i) - F(x_{i-1}) = F\'(u_i)(x_i - x_{i-1})$.', m: 'F(x_i) - F(x_{i-1}) = f(u_i)(x_i - x_{i-1})' },
-        { why: 'Sum over all subintervals: the left side telescopes to $F(b) - F(a)$.', m: 'F(b) - F(a) = \\sum_{i=1}^n [F(x_i) - F(x_{i-1})] = \\sum_{i=1}^n f(u_i)(x_i - x_{i-1})' },
-        { why: 'Notice that $\\sum f(u_i)(x_i - x_{i-1})$ is precisely the Riemann sum $S(f; \\dot{\\mathcal{P}}_u)$ with tags $u_i$.', m: 'F(b) - F(a) = S(f; \\dot{\\mathcal{P}}_u)' },
-        { why: 'Since $\\|\\dot{\\mathcal{P}}_u\\| < \\delta$, substitute into the integrability bound: $|F(b) - F(a) - \\int_a^b f| < \\varepsilon$. Since $\\varepsilon > 0$ is arbitrary, equality holds.', m: '\\int_a^b f = F(b) - F(a)' }
+        {
+          why: 'Assume $E = \\emptyset$. Let $\\varepsilon > 0$. Since $f \\in \\mathcal{R}[a, b]$, choose $\\delta > 0$ such that $\\|\\dot{\\mathcal{P}}\\| < \\delta \\implies |S(f; \\dot{\\mathcal{P}}) - \\int_a^b f| < \\varepsilon$.',
+          m: '$$|S(f; \\dot{\\mathcal{P}}) - \\int_a^b f| < \\varepsilon$$',
+          meaning: 'What this really means: Because $f$ is integrable, every fine enough Riemann sum is trapped arbitrarily close to the true integral.'
+        },
+        {
+          why: 'Let $\\mathcal{P} = \\{x_0, \\ldots, x_n\\}$ have mesh $< \\delta$. By Lagrange MVT (6.2.4), on each $[x_{i-1}, x_i]$, there exists $u_i \\in (x_{i-1}, x_i)$ with $F(x_i) - F(x_{i-1}) = F\'(u_i)(x_i - x_{i-1})$.',
+          m: '$$F(x_i) - F(x_{i-1}) = f(u_i)(x_i - x_{i-1})$$',
+          meaning: 'What this really means: The Mean Value Theorem finds a magic tag in every slice where the slice\'s rectangle exactly equals the antiderivative change.'
+        },
+        {
+          why: 'Sum over all subintervals: the left side telescopes to $F(b) - F(a)$.',
+          m: '$$F(b) - F(a) = \\sum_{i=1}^n [F(x_i) - F(x_{i-1})] = \\sum_{i=1}^n f(u_i)(x_i - x_{i-1})$$',
+          meaning: 'What this really means: Adding up these increments causes all intermediate partition values to cancel out, leaving just the net change $F(b) - F(a)$.'
+        },
+        {
+          why: 'Notice that $\\sum f(u_i)(x_i - x_{i-1})$ is precisely the Riemann sum $S(f; \\dot{\\mathcal{P}}_u)$ with tags $u_i$.',
+          m: '$$F(b) - F(a) = S(f; \\dot{\\mathcal{P}}_u)$$',
+          meaning: 'What this really means: The net change of the antiderivative is identical to an actual, valid Riemann sum formed with those magic tags.'
+        },
+        {
+          why: 'Since $\\|\\dot{\\mathcal{P}}_u\\| < \\delta$, substitute into the integrability bound: $|F(b) - F(a) - \\int_a^b f| < \\varepsilon$. Since $\\varepsilon > 0$ is arbitrary, equality holds.',
+          m: '$$\\int_a^b f = F(b) - F(a)$$',
+          meaning: 'What this really means: Because this equality holds within every tolerance epsilon, the total accumulated area must be exactly $F(b) - F(a)$.'
+        }
       ],
       ends: 'The First Form of the Fundamental Theorem of Calculus is proved.'
     },
@@ -434,10 +662,26 @@ CONCEPTS.push(
       idea: 'Trap the integral between $m(b - a)$ and $M(b - a)$ using min/max, then apply Bolzano’s Intermediate Value Theorem (5.3.7).',
       why: 'Continuous functions on $[a, b]$ achieve all intermediate values between their minimum $m$ and maximum $M$.',
       rungs: [
-        { why: 'By the Maximum-Minimum Theorem (5.3.4), $f$ attains an absolute minimum $m$ and maximum $M$ on $[a, b]$.', m: 'm \\le f(x) \\le M \\quad \\forall x \\in [a, b]' },
-        { why: 'Apply Monotonicity of Integrals (Theorem 7.1.5).', m: 'm(b - a) \\le \\int_a^b f(x)\\,dx \\le M(b - a)' },
-        { why: 'Divide by $(b - a) > 0$.', m: 'm \\le \\frac{1}{b - a} \\int_a^b f(x)\\,dx \\le M' },
-        { why: 'The number $k = \\frac{1}{b - a} \\int_a^b f$ lies in $[m, M]$. By Bolzano’s Intermediate Value Theorem (5.3.7), $f$ attains $k$ at some $c \\in [a, b]$.', m: '\\exists c \\in [a, b] : f(c) = \\frac{1}{b - a} \\int_a^b f(x)\\,dx' }
+        {
+          why: 'By the Maximum-Minimum Theorem (5.3.4), $f$ attains an absolute minimum $m$ and maximum $M$ on $[a, b]$.',
+          m: '$$m \\le f(x) \\le M \\quad \\forall x \\in [a, b]$$',
+          meaning: 'What this really means: A continuous function on a closed interval stays bounded between its absolute lowest floor and highest ceiling.'
+        },
+        {
+          why: 'Apply Monotonicity of Integrals (Theorem 7.1.5).',
+          m: '$$m(b - a) \\le \\int_a^b f(x)\\,dx \\le M(b - a)$$',
+          meaning: 'What this really means: The true area under the curve is trapped between the minimum bounding box and the maximum bounding box.'
+        },
+        {
+          why: 'Divide by $(b - a) > 0$.',
+          m: '$$m \\le \\frac{1}{b - a} \\int_a^b f(x)\\,dx \\le M$$',
+          meaning: 'What this really means: The average height of the curve lies comfortably between its lowest and highest values.'
+        },
+        {
+          why: 'The number $k = \\frac{1}{b - a} \\int_a^b f$ lies in $[m, M]$. By Bolzano’s Intermediate Value Theorem (5.3.7), $f$ attains $k$ at some $c \\in [a, b]$.',
+          m: '$$\\exists c \\in [a, b] : f(c) = \\frac{1}{b - a} \\int_a^b f(x)\\,dx$$',
+          meaning: 'What this really means: A continuous curve cannot skip any intermediate heights, so it must hit its exact average height at some point.'
+        }
       ],
       ends: 'Therefore $\\int_a^b f = f(c)(b - a)$ for some $c \\in [a, b]$.'
     },
@@ -467,10 +711,26 @@ CONCEPTS.push(
       idea: 'Compute the difference quotient $(F(c+h) - F(c))/h = \\frac{1}{h}\\int_c^{c+h} f(t)\\,dt$ and use continuity of $f$ at $c$.',
       why: 'Because $f(t) \\approx f(c)$ on a tiny interval $[c, c+h]$, the integral is approximately $f(c)h$, so dividing by $h$ leaves $f(c)$.',
       rungs: [
-        { why: 'Write the difference quotient for $F$ at $c$ for $h \\ne 0$. By additivity (7.2.9), $F(c+h) - F(c) = \\int_c^{c+h} f(t)\\,dt$.', m: '\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h} \\int_c^{c+h} f(t)\\,dt' },
-        { why: 'Since $\\frac{1}{h}\\int_c^{c+h} f(c)\\,dt = f(c) \\cdot \\frac{h}{h} = f(c)$, subtract $f(c)$ inside the integral.', m: '\\frac{F(c+h) - F(c)}{h} - f(c) = \\frac{1}{h} \\int_c^{c+h} [f(t) - f(c)]\\,dt' },
-        { why: 'Since $f$ is continuous at $c$, given $\\varepsilon > 0$, $\\exists \\delta > 0$ such that $|t - c| < \\delta \\implies |f(t) - f(c)| < \\varepsilon$.', m: '|t - c| < \\delta \\implies |f(t) - f(c)| < \\varepsilon' },
-        { why: 'For $0 < |h| < \\delta$, apply the integral triangle inequality (7.2.10).', m: '\\left| \\frac{F(c+h) - F(c)}{h} - f(c) \\right| \\le \\frac{1}{|h|} \\int_c^{c+h} |f(t) - f(c)|\\,dt < \\frac{1}{|h|} \\cdot \\varepsilon |h| = \\varepsilon' }
+        {
+          why: 'Write the difference quotient for $F$ at $c$ for $h \\ne 0$. By additivity (7.2.9), $F(c+h) - F(c) = \\int_c^{c+h} f(t)\\,dt$.',
+          m: '$$\\frac{F(c+h) - F(c)}{h} = \\frac{1}{h} \\int_c^{c+h} f(t)\\,dt$$',
+          meaning: 'What this really means: The average rate of accumulation over a step of width $h$ is simply the average height of the function across that step.'
+        },
+        {
+          why: 'Since $\\frac{1}{h}\\int_c^{c+h} f(c)\\,dt = f(c) \\cdot \\frac{h}{h} = f(c)$, subtract $f(c)$ inside the integral.',
+          m: '$$\\frac{F(c+h) - F(c)}{h} - f(c) = \\frac{1}{h} \\int_c^{c+h} [f(t) - f(c)]\\,dt$$',
+          meaning: 'What this really means: Comparing the average step height to the instantaneous height $f(c)$ amounts to averaging the height differences across the window.'
+        },
+        {
+          why: 'Since $f$ is continuous at $c$, given $\\varepsilon > 0$, $\\exists \\delta > 0$ such that $|t - c| < \\delta \\implies |f(t) - f(c)| < \\varepsilon$.',
+          m: '$$|t - c| < \\delta \\implies |f(t) - f(c)| < \\varepsilon$$',
+          meaning: 'What this really means: Because the function is continuous at $c$, shrinking the window traps all values within epsilon of $f(c)$.'
+        },
+        {
+          why: 'For $0 < |h| < \\delta$, apply the integral triangle inequality (7.2.10).',
+          m: '$$\\left| \\frac{F(c+h) - F(c)}{h} - f(c) \\right| \\le \\frac{1}{|h|} \\int_c^{c+h} |f(t) - f(c)|\\,dt < \\frac{1}{|h|} \\cdot \\varepsilon |h| = \\varepsilon$$',
+          meaning: 'What this really means: The average fluctuation across the tiny window shrinks to zero, proving the derivative of the area accumulation is the height itself.'
+        }
       ],
       ends: 'Taking $h \\to 0$ yields $F\'(c) = f(c)$.'
     },
@@ -498,11 +758,31 @@ CONCEPTS.push(
       idea: 'Let $F(u) = \\int_{\\varphi(\\alpha)}^u f(x)\\,dx$. Define $H(t) = F(\\varphi(t))$ and differentiate using the Chain Rule.',
       why: 'Chain rule $(F \\circ \\varphi)\' = (F\' \\circ \\varphi) \\cdot \\varphi\' = (f \\circ \\varphi) \\cdot \\varphi\'$, so integrating $H\'$ by FTC evaluates both sides.',
       rungs: [
-        { why: 'Define $F(u) = \\int_{\\varphi(\\alpha)}^u f(x)\\,dx$ for $u \\in I$. Since $f$ is continuous, by FTC Form 2 (7.3.5), $F\'(u) = f(u)$.', m: 'F\'(u) = f(u) \\quad \\forall u \\in I' },
-        { why: 'Define the composite function $H(t) = F(\\varphi(t))$ on $J = [\\alpha, \\beta]$.', m: 'H(t) = (F \\circ \\varphi)(t)' },
-        { why: 'By the Chain Rule (6.1.5), $H$ is differentiable on $J$ with $H\'(t) = F\'(\\varphi(t))\\varphi\'(t) = f(\\varphi(t))\\varphi\'(t)$.', m: 'H\'(t) = f(\\varphi(t)) \\varphi\'(t)' },
-        { why: 'Since $H\'$ is continuous, apply FTC Form 1 (7.3.1) to $H$ on $[\\alpha, \\beta]$.', m: '\\int_\\alpha^\\beta f(\\varphi(t)) \\varphi\'(t) \\, dt = H(\\beta) - H(\\alpha)' },
-        { why: 'Evaluate $H(\\beta) - H(\\alpha) = F(\\varphi(\\beta)) - F(\\varphi(\\alpha)) = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du - 0$.', m: '\\int_\\alpha^\\beta f(\\varphi(t))\\varphi\'(t)\\,dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du' }
+        {
+          why: 'Define $F(u) = \\int_{\\varphi(\\alpha)}^u f(x)\\,dx$ for $u \\in I$. Since $f$ is continuous, by FTC Form 2 (7.3.5), $F\'(u) = f(u)$.',
+          m: '$$F\'(u) = f(u) \\quad \\forall u \\in I$$',
+          meaning: 'What this really means: Set up the antiderivative of $f$ using an accumulation function, whose derivative is $f$ by the Fundamental Theorem.'
+        },
+        {
+          why: 'Define the composite function $H(t) = F(\\varphi(t))$ on $J = [\\alpha, \\beta]$.',
+          m: '$$H(t) = (F \\circ \\varphi)(t)$$',
+          meaning: 'What this really means: Re-parametrize the area accumulation according to the new time or variable scale $t$.'
+        },
+        {
+          why: 'By the Chain Rule (6.1.5), $H$ is differentiable on $J$ with $H\'(t) = F\'(\\varphi(t))\\varphi\'(t) = f(\\varphi(t))\\varphi\'(t)$.',
+          m: '$$H\'(t) = f(\\varphi(t)) \\varphi\'(t)$$',
+          meaning: 'What this really means: The chain rule shows the new rate of accumulation is the original curve height multiplied by the speed of the coordinate stretching.'
+        },
+        {
+          why: 'Since $H\'$ is continuous, apply FTC Form 1 (7.3.1) to $H$ on $[\\alpha, \\beta]$.',
+          m: '$$\\int_\\alpha^\\beta f(\\varphi(t)) \\varphi\'(t) \\, dt = H(\\beta) - H(\\alpha)$$',
+          meaning: 'What this really means: Integrating this transformed rate over the new interval gives the net change in $H$.'
+        },
+        {
+          why: 'Evaluate $H(\\beta) - H(\\alpha) = F(\\varphi(\\beta)) - F(\\varphi(\\alpha)) = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du - 0$.',
+          m: '$$\\int_\\alpha^\\beta f(\\varphi(t))\\varphi\'(t)\\,dt = \\int_{\\varphi(\\alpha)}^{\\varphi(\\beta)} f(u)\\,du$$',
+          meaning: 'What this really means: Evaluating the net change connects the transformed integral directly to the original area between transformed limits.'
+        }
       ],
       ends: 'The Change of Variables formula is established.'
     },
@@ -534,11 +814,31 @@ CONCEPTS.push(
       idea: 'For $\\varepsilon > 0$, cover the discontinuities with open intervals of total length $< \\varepsilon$, and use uniform continuity on the compact remainder to squeeze upper and lower sums.',
       why: 'Oscillation is large only on a set of small total width, so its contribution to $U(f) - L(f)$ is negligible.',
       rungs: [
-        { why: 'Let $D_\\alpha = \\{x \\in [a, b] : \\omega_f(x) \\ge \\alpha\\}$ be the points where oscillation of $f$ is at least $\\alpha > 0$. $D = \\bigcup_{k=1}^\\infty D_{1/k}$.', m: 'D = \\bigcup_{k=1}^\\infty D_{1/k}' },
-        { why: 'If $\\mu(D) = 0$, then each $D_\\alpha$ has measure zero and is compact, so it can be covered by finitely many open intervals of total length $< \\varepsilon/(4M)$.', m: '\\sum |J_k| < \\frac{\\varepsilon}{4M}' },
-        { why: 'Outside this cover, $f$ has oscillation $< \\varepsilon/(2(b - a))$ on the compact remainder, which can be covered by subintervals where $M_i - m_i < \\varepsilon/(2(b - a))$.', m: '\\sum_{\\text{good}} (M_i - m_i) \\Delta x_i < \\frac{\\varepsilon}{2(b - a)}(b - a) = \\frac{\\varepsilon}{2}' },
-        { why: 'On the bad subintervals covering $D_\\alpha$, $M_i - m_i \\le 2M$, so their sum is bounded by $2M \\sum |J_k| < 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}$.', m: '\\sum_{\\text{bad}} (M_i - m_i) \\Delta x_i < \\frac{\\varepsilon}{2}' },
-        { why: 'Total gap $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$. By Darboux Criterion (7.4.8), $f \\in \\mathcal{R}[a, b]$.', m: 'U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon \\implies f \\in \\mathcal{R}[a, b]' }
+        {
+          why: 'Let $D_\\alpha = \\{x \\in [a, b] : \\omega_f(x) \\ge \\alpha\\}$ be the points where oscillation of $f$ is at least $\\alpha > 0$. $D = \\bigcup_{k=1}^\\infty D_{1/k}$.',
+          m: '$$D = \\bigcup_{k=1}^\\infty D_{1/k}$$',
+          meaning: 'What this really means: Classify all discontinuity jump points according to the minimum size of their jump.'
+        },
+        {
+          why: 'If $\\mu(D) = 0$, then each $D_\\alpha$ has measure zero and is compact, so it can be covered by finitely many open intervals of total length $< \\varepsilon/(4M)$.',
+          m: '$$\\sum |J_k| < \\frac{\\varepsilon}{4M}$$',
+          meaning: 'What this really means: Because the set of jumps is negligible, all large jumps can be fenced off inside tiny enclosures of negligible total width.'
+        },
+        {
+          why: 'Outside this cover, $f$ has oscillation $< \\varepsilon/(2(b - a))$ on the compact remainder, which can be covered by subintervals where $M_i - m_i < \\varepsilon/(2(b - a))$.',
+          m: '$$\\sum_{\\text{good}} (M_i - m_i) \\Delta x_i < \\frac{\\varepsilon}{2(b - a)}(b - a) = \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: On the vast peaceful remainder where the function behaves, the total approximation gap stays under half-epsilon.'
+        },
+        {
+          why: 'On the bad subintervals covering $D_\\alpha$, $M_i - m_i \\le 2M$, so their sum is bounded by $2M \\sum |J_k| < 2M \\cdot \\frac{\\varepsilon}{4M} = \\frac{\\varepsilon}{2}$.',
+          m: '$$\\sum_{\\text{bad}} (M_i - m_i) \\Delta x_i < \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: Even though the function jumps wild inside the fenced enclosures, their total width is so tiny that their area error stays under half-epsilon.'
+        },
+        {
+          why: 'Total gap $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$. By Darboux Criterion (7.4.8), $f \\in \\mathcal{R}[a, b]$.',
+          m: '$$U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon \\implies f \\in \\mathcal{R}[a, b]$$',
+          meaning: 'What this really means: Combining the peaceful regions and tiny fenced enclosures keeps the total area error below epsilon, proving Riemann integrability.'
+        }
       ],
       ends: 'Lebesgue’s Integrability Criterion is established.'
     },
@@ -565,11 +865,31 @@ CONCEPTS.push(
       idea: 'Integrate the Product Rule $(fg)\' = f\'g + fg\'$ over $[a, b]$ and apply FTC Form 1.',
       why: 'FTC turns $\\int (fg)\'$ into $f(b)g(b) - f(a)g(a)$, leaving the two product terms.',
       rungs: [
-        { why: 'By the Product Rule (6.1.3), $(fg)\'(x) = f\'(x)g(x) + f(x)g\'(x)$ for all $x \\in [a, b]$.', m: '(fg)\'(x) = f\'(x)g(x) + f(x)g\'(x)' },
-        { why: 'Since $f, g, f\', g\'$ are continuous, the products $f\'g$ and $fg\'$ are Riemann integrable on $[a, b]$.', m: '(fg)\' \\in \\mathcal{R}[a, b]' },
-        { why: 'Integrate both sides over $[a, b]$ using Linearity of Integrals (7.1.5).', m: '\\int_a^b (fg)\'(x)\\,dx = \\int_a^b f\'(x)g(x)\\,dx + \\int_a^b f(x)g\'(x)\\,dx' },
-        { why: 'Apply FTC Form 1 (7.3.1) to the left side: $\\int_a^b (fg)\' = f(b)g(b) - f(a)g(a)$.', m: 'f(b)g(b) - f(a)g(a) = \\int_a^b f\'(x)g(x)\\,dx + \\int_a^b f(x)g\'(x)\\,dx' },
-        { why: 'Rearrange to isolate $\\int_a^b f(x)g\'(x)\\,dx$.', m: '\\int_a^b f(x)g\'(x)\\,dx = [f(b)g(b) - f(a)g(a)] - \\int_a^b f\'(x)g(x)\\,dx' }
+        {
+          why: 'By the Product Rule (6.1.3), $(fg)\'(x) = f\'(x)g(x) + f(x)g\'(x)$ for all $x \\in [a, b]$.',
+          m: '$$(fg)\'(x) = f\'(x)g(x) + f(x)g\'(x)$$',
+          meaning: 'What this really means: Recall that the derivative of a product splits into two terms, each differentiating one factor at a time.'
+        },
+        {
+          why: 'Since $f, g, f\', g\'$ are continuous, the products $f\'g$ and $fg\'$ are Riemann integrable on $[a, b]$.',
+          m: '$$(fg)\' \\in \\mathcal{R}[a, b]$$',
+          meaning: 'What this really means: Smoothness ensures that all product terms are continuous and can be integrated without issue.'
+        },
+        {
+          why: 'Integrate both sides over $[a, b]$ using Linearity of Integrals (7.1.5).',
+          m: '$$\\int_a^b (fg)\'(x)\\,dx = \\int_a^b f\'(x)g(x)\\,dx + \\int_a^b f(x)g\'(x)\\,dx$$',
+          meaning: 'What this really means: Integrating the entire equation preserves the sum on both sides.'
+        },
+        {
+          why: 'Apply FTC Form 1 (7.3.1) to the left side: $\\int_a^b (fg)\' = f(b)g(b) - f(a)g(a)$.',
+          m: '$$f(b)g(b) - f(a)g(a) = \\int_a^b f\'(x)g(x)\\,dx + \\int_a^b f(x)g\'(x)\\,dx$$',
+          meaning: 'What this really means: The Fundamental Theorem evaluates the integral of the total derivative directly from its boundary values.'
+        },
+        {
+          why: 'Rearrange to isolate $\\int_a^b f(x)g\'(x)\\,dx$.',
+          m: '$$\\int_a^b f(x)g\'(x)\\,dx = [f(b)g(b) - f(a)g(a)] - \\int_a^b f\'(x)g(x)\\,dx$$',
+          meaning: 'What this really means: Shifting one term to the other side lets you trade an intractable integral for a boundary term minus a friendlier integral.'
+        }
       ],
       ends: 'The Integration by Parts formula is rigorously proved.'
     },
@@ -599,11 +919,31 @@ CONCEPTS.push(
       idea: 'Start with $f(x) - f(x_0) = \\int_{x_0}^x f\'(t)\\,dt$ and integrate by parts repeatedly with $u = f^{(k)}(t)$ and $dv = -(x - t)^{k-1} dt$.',
       why: 'Each integration by parts produces the next Taylor term $\\frac{f^{(k)}(x_0)}{k!}(x - x_0)^k$ from the boundary evaluation.',
       rungs: [
-        { why: 'By FTC Form 2 (7.3.5), write $f(x) - f(x_0) = \\int_{x_0}^x f\'(t)\\,dt$.', m: 'f(x) = f(x_0) + \\int_{x_0}^x f\'(t)\\,dt' },
-        { why: 'Apply Integration by Parts (7.3.17) with $u = f\'(t)$ and $v = -(x - t)$. Note $v\' = 1$.', m: '\\int_{x_0}^x f\'(t)\\,dt = [-f\'(t)(x - t)]_{x_0}^x - \\int_{x_0}^x f\'\'(t)(-(x - t))\\,dt = f\'(x_0)(x - x_0) + \\int_{x_0}^x (x - t)f\'\'(t)\\,dt' },
-        { why: 'This proves the formula for $n = 1$: $f(x) = f(x_0) + f\'(x_0)(x - x_0) + \\int_{x_0}^x (x - t)f\'\'(t)\\,dt$.', m: 'f(x) = P_1(x) + R_1(x)' },
-        { why: 'Integrate by parts again with $u = f\'\'(t)$ and $v = -\\frac{(x - t)^2}{2}$. The boundary term produces $\\frac{f\'\'(x_0)}{2!}(x - x_0)^2$.', m: '\\int_{x_0}^x (x - t)f\'\'(t)\\,dt = \\left[ -\\frac{(x - t)^2}{2} f\'\'(t) \\right]_{x_0}^x + \\int_{x_0}^x \\frac{(x - t)^2}{2} f\'\'\'(t)\\,dt = \\frac{f\'\'(x_0)}{2!}(x - x_0)^2 + R_2(x)' },
-        { why: 'By induction on $n$, continuing $n$ times produces the full polynomial $P_n(x)$ and integral remainder.', m: 'R_n(x) = \\frac{1}{n!} \\int_{x_0}^x (x - t)^n f^{(n+1)}(t) \\, dt' }
+        {
+          why: 'By FTC Form 2 (7.3.5), write $f(x) - f(x_0) = \\int_{x_0}^x f\'(t)\\,dt$.',
+          m: '$$f(x) = f(x_0) + \\int_{x_0}^x f\'(t)\\,dt$$',
+          meaning: 'What this really means: Start with the baseline truth that a function\'s current value is its starting value plus the integral of its velocity.'
+        },
+        {
+          why: 'Apply Integration by Parts (7.3.17) with $u = f\'(t)$ and $v = -(x - t)$. Note $v\' = 1$.',
+          m: '$$\\int_{x_0}^x f\'(t)\\,dt = [-f\'(t)(x - t)]_{x_0}^x - \\int_{x_0}^x f\'\'(t)(-(x - t))\\,dt = f\'(x_0)(x - x_0) + \\int_{x_0}^x (x - t)f\'\'(t)\\,dt$$',
+          meaning: 'What this really means: Integrating by parts with a clever linear factor extracts the first tangent term and produces a second-order remainder.'
+        },
+        {
+          why: 'This proves the formula for $n = 1$: $f(x) = f(x_0) + f\'(x_0)(x - x_0) + \\int_{x_0}^x (x - t)f\'\'(t)\\,dt$.',
+          m: '$$f(x) = P_1(x) + R_1(x)$$',
+          meaning: 'What this really means: The function is now cleanly split into its degree-one tangent line plus an exact weighted integral error.'
+        },
+        {
+          why: 'Integrate by parts again with $u = f\'\'(t)$ and $v = -\\frac{(x - t)^2}{2}$. The boundary term produces $\\frac{f\'\'(x_0)}{2!}(x - x_0)^2$.',
+          m: '$$\\int_{x_0}^x (x - t)f\'\'(t)\\,dt = \\left[ -\\frac{(x - t)^2}{2} f\'\'(t) \\right]_{x_0}^x + \\int_{x_0}^x \\frac{(x - t)^2}{2} f\'\'\'(t)\\,dt = \\frac{f\'\'(x_0)}{2!}(x - x_0)^2 + R_2(x)$$',
+          meaning: 'What this really means: Repeating integration by parts pulls out the quadratic curvature term and pushes the remainder to the third derivative.'
+        },
+        {
+          why: 'By induction on $n$, continuing $n$ times produces the full polynomial $P_n(x)$ and integral remainder.',
+          m: '$$R_n(x) = \\frac{1}{n!} \\int_{x_0}^x (x - t)^n f^{(n+1)}(t) \\, dt$$',
+          meaning: 'What this really means: Continuing the process $n$ times generates the complete Taylor polynomial with an exact integral formula for the remaining error.'
+        }
       ],
       ends: 'Taylor’s Theorem with Integral Remainder is proved.'
     },
@@ -654,10 +994,26 @@ CONCEPTS.push(
       idea: 'Show that upper and lower Darboux sums can be approximated arbitrarily closely by Riemann sums using tags near the infima and suprema.',
       why: 'Because $m_i = \\inf f$ and $M_i = \\sup f$, tags can be picked so that $S(f)$ is within $\\varepsilon$ of $L(f)$ and $U(f)$.',
       rungs: [
-        { why: '(=>) Let $f \\in \\mathcal{R}[a, b]$ with integral $I$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that for any tagged partition with mesh $< \\delta$, $|S(f) - I| < \\varepsilon/4$.', m: 'I - \\frac{\\varepsilon}{4} < S(f; \\dot{\\mathcal{P}}) < I + \\frac{\\varepsilon}{4}' },
-        { why: 'For any fixed partition $\\mathcal{P}$ of mesh $< \\delta$, choose tags $t_i$ such that $f(t_i) > M_i - \\frac{\\varepsilon}{4(b-a)}$ and $s_i$ such that $f(s_i) < m_i + \\frac{\\varepsilon}{4(b-a)}$.', m: 'U(f, \\mathcal{P}) - \\frac{\\varepsilon}{4} < S(f; \\dot{\\mathcal{P}}_t) \\quad \\text{and} \\quad S(f; \\dot{\\mathcal{P}}_s) < L(f, \\mathcal{P}) + \\frac{\\varepsilon}{4}' },
-        { why: 'Subtract the inequalities: $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < S(f; \\dot{\\mathcal{P}}_t) - S(f; \\dot{\\mathcal{P}}_s) + \\varepsilon/2 < \\varepsilon/4 + \\varepsilon/4 + \\varepsilon/2 = \\varepsilon$.', m: 'U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon' },
-        { why: '(<=) Conversely, if $U(f, \\mathcal{P}_\\varepsilon) - L(f, \\mathcal{P}_\\varepsilon) < \\varepsilon$, then since $\\underline{\\int} f \\ge L(f, \\mathcal{P})$ and $\\overline{\\int} f \\le U(f, \\mathcal{P})$, $0 \\le \\overline{\\int} f - \\underline{\\int} f < \\varepsilon$.', m: '\\overline{\\int}_a^b f = \\underline{\\int}_a^b f = \\int_a^b f' }
+        {
+          why: '(=>) Let $f \\in \\mathcal{R}[a, b]$ with integral $I$. Given $\\varepsilon > 0$, choose $\\delta > 0$ such that for any tagged partition with mesh $< \\delta$, $|S(f) - I| < \\varepsilon/4$.',
+          m: '$$I - \\frac{\\varepsilon}{4} < S(f; \\dot{\\mathcal{P}}) < I + \\frac{\\varepsilon}{4}$$',
+          meaning: 'What this really means: Assume the Riemann integral exists, trapping every fine tagged sum within a tight quarter-epsilon neighborhood of the true area.'
+        },
+        {
+          why: 'For any fixed partition $\\mathcal{P}$ of mesh $< \\delta$, choose tags $t_i$ such that $f(t_i) > M_i - \\frac{\\varepsilon}{4(b-a)}$ and $s_i$ such that $f(s_i) < m_i + \\frac{\\varepsilon}{4(b-a)}$.',
+          m: '$$U(f, \\mathcal{P}) - \\frac{\\varepsilon}{4} < S(f; \\dot{\\mathcal{P}}_t) \\quad \\text{and} \\quad S(f; \\dot{\\mathcal{P}}_s) < L(f, \\mathcal{P}) + \\frac{\\varepsilon}{4}$$',
+          meaning: 'What this really means: Pick sample tags so high that the Riemann sum pushes close to the Upper Darboux sum, and others so low they push close to the Lower Darboux sum.'
+        },
+        {
+          why: 'Subtract the inequalities: $U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < S(f; \\dot{\\mathcal{P}}_t) - S(f; \\dot{\\mathcal{P}}_s) + \\varepsilon/2 < \\varepsilon/4 + \\varepsilon/4 + \\varepsilon/2 = \\varepsilon$.',
+          m: '$$U(f, \\mathcal{P}) - L(f, \\mathcal{P}) < \\varepsilon$$',
+          meaning: 'What this really means: Because both tagged sums are trapped near the same integral, the gap between the upper and lower Darboux bounds is forced below epsilon.'
+        },
+        {
+          why: '(<=) Conversely, if $U(f, \\mathcal{P}_\\varepsilon) - L(f, \\mathcal{P}_\\varepsilon) < \\varepsilon$, then since $\\underline{\\int} f \\ge L(f, \\mathcal{P})$ and $\\overline{\\int} f \\le U(f, \\mathcal{P})$, $0 \\le \\overline{\\int} f - \\underline{\\int} f < \\varepsilon$.',
+          m: '$$\\overline{\\int}_a^b f = \\underline{\\int}_a^b f = \\int_a^b f$$',
+          meaning: 'What this really means: Squeezing the upper and lower Darboux sums together forces the upper and lower integrals to coincide, matching the Riemann integral.'
+        }
       ],
       ends: 'Darboux integrability is completely equivalent to Riemann integrability.'
     },

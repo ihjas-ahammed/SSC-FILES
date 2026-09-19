@@ -61,11 +61,31 @@ CONCEPTS.push(
       idea:`Prove both directions. (⇐) is a direct translation using $\\varepsilon:=u-v$. (⇒) argues that if $u=\\sup S$, then $u-\\varepsilon$ is too small to be an upper bound, so something in $S$ must beat it.`,
       why:`The whole point is that "least upper bound" (condition (2), phrased with an arbitrary competing bound $v$) and "for every $\\varepsilon$, some point of $S$ beats $u-\\varepsilon$" are just two ways of saying the same thing — one compares against other bounds, the other measures a margin directly.`,
       rungs:[
-        { why:`(⇐) Assume $u$ is an upper bound satisfying the $\\varepsilon$-condition. Take any $v<u$ and turn the gap into an $\\varepsilon$.`, m:`$$\\varepsilon := u-v > 0$$` },
-        { why:`Apply the hypothesis with this specific $\\varepsilon$ to get a point of $S$ beating $v$.`, m:`$$\\exists\\, s_\\varepsilon\\in S:\\ u-\\varepsilon < s_\\varepsilon \\iff v < s_\\varepsilon$$` },
-        { why:`So no $v<u$ can be an upper bound of $S$ — exactly condition (2) of the supremum definition.`, m:`$$v<u \\Rightarrow v \\text{ is not an upper bound} \\Rightarrow u=\\sup S$$` },
-        { why:`(⇒) Conversely, suppose $u=\\sup S$ and let $\\varepsilon>0$ be given. Since $u$ is the LEAST upper bound, anything strictly below it fails to be one.`, m:`$$u-\\varepsilon < u \\Rightarrow u-\\varepsilon \\text{ is not an upper bound of } S$$` },
-        { why:`"Not an upper bound" means, by definition, some element of $S$ slips past it.`, m:`$$\\exists\\, s_\\varepsilon\\in S:\\ u-\\varepsilon < s_\\varepsilon$$` }
+        {
+          why:`(⇐) Assume $u$ is an upper bound satisfying the $\\varepsilon$-condition. Take any $v<u$ and turn the gap into an $\\varepsilon$.`,
+          m:`$$\\varepsilon := u-v > 0$$`,
+          meaning:`What this really means: If someone proposes a competitor $v$ strictly below $u$, the space between them is a genuine positive gap $\\varepsilon$.`
+        },
+        {
+          why:`Apply the hypothesis with this specific $\\varepsilon$ to get a point of $S$ beating $v$.`,
+          m:`$$\\exists\\, s_\\varepsilon\\in S:\\ u-\\varepsilon < s_\\varepsilon \\iff v < s_\\varepsilon$$`,
+          meaning:`What this really means: By dipping slightly below $u$ by that exact gap, the condition guarantees a set member pops up inside the gap, standing strictly taller than $v$.`
+        },
+        {
+          why:`So no $v<u$ can be an upper bound of $S$ — exactly condition (2) of the supremum definition.`,
+          m:`$$v<u \\Rightarrow v \\text{ is not an upper bound} \\Rightarrow u=\\sup S$$`,
+          meaning:`What this really means: Because an element of the set pokes above $v$, $v$ fails to be a ceiling. Since every number below $u$ fails to be a ceiling, $u$ is crowned the lowest possible ceiling.`
+        },
+        {
+          why:`(⇒) Conversely, suppose $u=\\sup S$ and let $\\varepsilon>0$ be given. Since $u$ is the LEAST upper bound, anything strictly below it fails to be one.`,
+          m:`$$u-\\varepsilon < u \\Rightarrow u-\\varepsilon \\text{ is not an upper bound of } S$$`,
+          meaning:`What this really means: In the opposite direction, shaving off any positive amount $\\varepsilon$ from the least upper bound drops you below the ceiling threshold.`
+        },
+        {
+          why:`"Not an upper bound" means, by definition, some element of $S$ slips past it.`,
+          m:`$$\\exists\\, s_\\varepsilon\\in S:\\ u-\\varepsilon < s_\\varepsilon$$`,
+          meaning:`What this really means: If $u - \\varepsilon$ were higher than every set member, it would be a ceiling, which contradicts $u$ being the lowest ceiling. Thus, some element must stick its head above $u - \\varepsilon$.`
+        }
       ],
       ends:`Both directions hold, so the $\\varepsilon$-form and the original least-upper-bound form say exactly the same thing. The $\\varepsilon$-form is the one you will actually reach for inside limit proofs.`
     },
@@ -92,10 +112,26 @@ CONCEPTS.push(
       idea:`The supremum version is taken as the axiom. The infimum version is then FREE: turn a "bounded below" question into a "bounded above" question by flipping every sign.`,
       why:`Negating a set turns lower bounds into upper bounds and vice versa, so completeness-for-suprema automatically delivers completeness-for-infima once you translate through $S':=\\{-s:s\\in S\\}$.`,
       rungs:[
-        { why:`Start from a nonempty $S$ bounded below by $w$; build the sign-flipped set.`, m:`$$S' := \\{-s : s\\in S\\}$$` },
-        { why:`"$w$ is a lower bound of $S$" becomes, after flipping signs, "$-w$ is an upper bound of $S'$".`, m:`$$s\\ge w\\ \\forall s\\in S \\iff -s\\le -w\\ \\forall s\\in S \\ \\Rightarrow\\ S' \\text{ bounded above by } -w$$` },
-        { why:`Now apply the Completeness Property (the axiom) to the bounded-above set $S'$.`, m:`$$u := \\sup S' \\text{ exists, by the axiom}$$` },
-        { why:`Claim $-u = \\inf S$; check both defining conditions by flipping signs back.`, m:`$$-u \\le s\\ \\forall s\\in S \\quad(\\text{lower bound}),\\qquad t\\le s\\ \\forall s\\in S \\Rightarrow t\\le -u \\quad(\\text{greatest such})$$` }
+        {
+          why:`Start from a nonempty $S$ bounded below by $w$; build the sign-flipped set.`,
+          m:`$$S' := \\{-s : s\\in S\\}$$`,
+          meaning:`What this really means: We mirror the entire set across zero on the number line, turning all its depths into heights.`
+        },
+        {
+          why:`"$w$ is a lower bound of $S$" becomes, after flipping signs, "$-w$ is an upper bound of $S'$".`,
+          m:`$$s\\ge w\\ \\forall s\\in S \\iff -s\\le -w\\ \\forall s\\in S \\ \\Rightarrow\\ S' \\text{ bounded above by } -w$$`,
+          meaning:`What this really means: Multiplying by $-1$ flips inequalities: what used to be a floor under $S$ now becomes a ceiling over the flipped set $S'$.`
+        },
+        {
+          why:`Now apply the Completeness Property (the axiom) to the bounded-above set $S'$.`,
+          m:`$$u := \\sup S' \\text{ exists, by the axiom}$$`,
+          meaning:`What this really means: Because $S'$ has elements and a ceiling, the completeness axiom immediately grants it an exact least upper bound $u$.`
+        },
+        {
+          why:`Claim $-u = \\inf S$; check both defining conditions by flipping signs back.`,
+          m:`$$-u \\le s\\ \\forall s\\in S \\quad(\\text{lower bound}),\\qquad t\\le s\\ \\forall s\\in S \\Rightarrow t\\le -u \\quad(\\text{greatest such})$$`,
+          meaning:`What this really means: Flipping back across zero turns the highest point of the mirrored world into the deepest, greatest lower bound of our original set, giving infima for free.`
+        }
       ],
       ends:`So the infimum property is not a second, independent assumption — it is a consequence of the supremum property. $\\mathbb{R}$ is complete for both suprema and infima.`
     },
@@ -140,10 +176,26 @@ CONCEPTS.push(
       idea:`Suppose both $x'$ and $x''$ were limits. Show $|x'-x''|$ is smaller than every positive number — which forces it to be exactly $0$.`,
       why:`Both $x'$ and $x''$ satisfy the convergence definition, so eventually the terms are simultaneously close to both; the only way to compare $x'$ to $x''$ directly is by routing the comparison through a shared term $x_n$ — exactly what the triangle inequality's add-and-subtract trick does.`,
       rungs:[
-        { why:`Suppose, for contradiction, both $x'$ and $x''$ are limits of $(x_n)$.`, m:`$$\\lim(x_n)=x' \\text{ and } \\lim(x_n)=x''$$` },
-        { why:`Split an arbitrary tolerance in half — one half for each limit — so the two errors will add up to exactly $\\varepsilon$ at the end.`, m:`$$\\text{given }\\varepsilon>0,\\ \\exists K': n\\ge K' \\Rightarrow |x_n-x'|<\\varepsilon/2$$ $$\\exists K'': n\\ge K'' \\Rightarrow |x_n-x''|<\\varepsilon/2$$` },
-        { why:`Take $n$ large enough to satisfy both conditions simultaneously.`, m:`$$K := \\max\\{K',K''\\},\\qquad n\\ge K$$` },
-        { why:`Insert and subtract $x_n$ (add-and-subtract trick), then apply the triangle inequality.`, m:`$$|x'-x''| = |x'-x_n+x_n-x''| \\le |x'-x_n|+|x_n-x''| < \\varepsilon/2+\\varepsilon/2 = \\varepsilon$$` }
+        {
+          why:`Suppose, for contradiction, both $x'$ and $x''$ are limits of $(x_n)$.`,
+          m:`$$\\lim(x_n)=x' \\text{ and } \\lim(x_n)=x''$$`,
+          meaning:`What this really means: We imagine a scenario where a single sequence somehow manages to converge simultaneously to two different destinations.`
+        },
+        {
+          why:`Split an arbitrary tolerance in half — one half for each limit — so the two errors will add up to exactly $\\varepsilon$ at the end.`,
+          m:`$$\\text{given }\\varepsilon>0,\\ \\exists K': n\\ge K' \\Rightarrow |x_n-x'|<\\varepsilon/2$$ $$\\exists K'': n\\ge K'' \\Rightarrow |x_n-x''|<\\varepsilon/2$$`,
+          meaning:`What this really means: We give each candidate limit half of our error budget $\\varepsilon/2$, so their combined distances won't exceed our total tolerance $\\varepsilon$.`
+        },
+        {
+          why:`Take $n$ large enough to satisfy both conditions simultaneously.`,
+          m:`$$K := \\max\\{K',K''\\},\\qquad n\\ge K$$`,
+          meaning:`What this really means: We wait until the sequence passes the later of the two cutoff points, ensuring both closeness guarantees are active at the exact same moment.`
+        },
+        {
+          why:`Insert and subtract $x_n$ (add-and-subtract trick), then apply the triangle inequality.`,
+          m:`$$|x'-x''| = |x'-x_n+x_n-x''| \\le |x'-x_n|+|x_n-x''| < \\varepsilon/2+\\varepsilon/2 = \\varepsilon$$`,
+          meaning:`What this really means: We measure the gap between the two limits by taking a detour through the shared sequence term $x_n$. Because this gap is smaller than every positive number, the two limits must be the identical point.`
+        }
       ],
       ends:`Since $\\varepsilon>0$ was arbitrary, $|x'-x''|<\\varepsilon$ for every $\\varepsilon>0$, which forces $x'-x''=0$, i.e. $x'=x''$. A sequence cannot converge to two different numbers.`
     },
@@ -177,12 +229,36 @@ CONCEPTS.push(
       idea: `Use the Archimedean property for (a), Bernoulli's Inequality for (c), and the Binomial Theorem for (e).`,
       why: `Algebraic inequalities convert power growth into linear or quadratic bounds, allowing elementary ε-K verification.`,
       rungs: [
-        { why: 'Proof of (a): Given $\\varepsilon > 0$, apply the Archimedean Property (2.4.3) to find $K \\in \\mathbb{N}$ with $K > 1/\\varepsilon$.', m: '$$n \\ge K > \\frac{1}{\\varepsilon} \\implies \\left|\\frac{1}{n} - 0\\right| = \\frac{1}{n} \\le \\frac{1}{K} < \\varepsilon \\implies \\lim\\left(\\frac{1}{n}\\right) = 0$$' },
-        { why: 'Proof of (c): Since $0 < b < 1$, write $b = \\frac{1}{1 + a}$ where $a = \\frac{1}{b} - 1 > 0$. Apply Bernoulli\'s Inequality (2.1.13).', m: '$$(1 + a)^n \\ge 1 + na > na \\implies 0 < b^n = \\frac{1}{(1 + a)^n} < \\frac{1}{na}$$' },
-        { why: 'Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ with $K > \\frac{1}{a \\varepsilon}$.', m: '$$n \\ge K \\implies |b^n - 0| < \\frac{1}{na} \\le \\frac{1}{Ka} < \\varepsilon \\implies \\lim(b^n) = 0$$' },
-        { why: 'Proof of (e): Let $x_n := n^{1/n} - 1$. Since $n \\ge 1$, $x_n \\ge 0$. Expand $n = (1 + x_n)^n$ via the Binomial Theorem for $n \\ge 2$.', m: '$$n = (1 + x_n)^n = 1 + n x_n + \\frac{n(n - 1)}{2} x_n^2 + \\cdots \\ge 1 + \\frac{n(n - 1)}{2} x_n^2$$' },
-        { why: 'Isolate $x_n^2$: subtract 1 and divide by $\\frac{n(n - 1)}{2} > 0$.', m: '$$n - 1 \\ge \\frac{n(n - 1)}{2} x_n^2 \\implies x_n^2 \\le \\frac{2}{n} \\implies 0 \\le x_n \\le \\sqrt{\\frac{2}{n}}$$' },
-        { why: 'Given $\\varepsilon > 0$, choose $K > 2/\\varepsilon^2$. Then $n \\ge K \\implies |n^{1/n} - 1| = x_n \\le \\sqrt{2/n} < \\varepsilon$.', m: '$$\\lim_{n\\to\\infty} (n^{1/n}) = 1$$' }
+        {
+          why: 'Proof of (a): Given $\\varepsilon > 0$, apply the Archimedean Property (2.4.3) to find $K \\in \\mathbb{N}$ with $K > 1/\\varepsilon$.',
+          m: '$$n \\ge K > \\frac{1}{\\varepsilon} \\implies \\left|\\frac{1}{n} - 0\\right| = \\frac{1}{n} \\le \\frac{1}{K} < \\varepsilon \\implies \\lim\\left(\\frac{1}{n}\\right) = 0$$',
+          meaning: 'What this really means: To shrink $1/n$ below any tiny target $\\varepsilon$, pick an integer past $1/\\varepsilon$. As $n$ grows larger, the fractions are squashed closer to $0$ than any target.'
+        },
+        {
+          why: 'Proof of (c): Since $0 < b < 1$, write $b = \\frac{1}{1 + a}$ where $a = \\frac{1}{b} - 1 > 0$. Apply Bernoulli\'s Inequality (2.1.13).',
+          m: '$$(1 + a)^n \\ge 1 + na > na \\implies 0 < b^n = \\frac{1}{(1 + a)^n} < \\frac{1}{na}$$',
+          meaning: 'What this really means: We express a fraction less than $1$ as $1/(1+a)$. Using Bernoulli, the denominator grows at least linearly ($na$), which forces the whole fraction below $1/(na)$.'
+        },
+        {
+          why: 'Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ with $K > \\frac{1}{a \\varepsilon}$.',
+          m: '$$n \\ge K \\implies |b^n - 0| < \\frac{1}{na} \\le \\frac{1}{Ka} < \\varepsilon \\implies \\lim(b^n) = 0$$',
+          meaning: 'What this really means: Because $b^n$ is trapped under $1/(na)$, picking $n$ large enough drives this simple linear fraction below $\\varepsilon$, proving powers of $b$ decay to $0$.'
+        },
+        {
+          why: 'Proof of (e): Let $x_n := n^{1/n} - 1$. Since $n \\ge 1$, $x_n \\ge 0$. Expand $n = (1 + x_n)^n$ via the Binomial Theorem for $n \\ge 2$.',
+          m: '$$n = (1 + x_n)^n = 1 + n x_n + \\frac{n(n - 1)}{2} x_n^2 + \\cdots \\ge 1 + \\frac{n(n - 1)}{2} x_n^2$$',
+          meaning: 'What this really means: We measure how much $n^{1/n}$ exceeds $1$ by writing it as $1 + x_n$. Expanding $(1+x_n)^n$ via the Binomial Theorem keeps the quadratic term while dropping the rest.'
+        },
+        {
+          why: 'Isolate $x_n^2$: subtract 1 and divide by $\\frac{n(n - 1)}{2} > 0$.',
+          m: '$$n - 1 \\ge \\frac{n(n - 1)}{2} x_n^2 \\implies x_n^2 \\le \\frac{2}{n} \\implies 0 \\le x_n \\le \\sqrt{\\frac{2}{n}}$$',
+          meaning: 'What this really means: Rearranging the inequality traps the surplus $x_n$ beneath $\\sqrt{2/n}$, showing the excess above $1$ is controlled by a simple shrinking root.'
+        },
+        {
+          why: 'Given $\\varepsilon > 0$, choose $K > 2/\\varepsilon^2$. Then $n \\ge K \\implies |n^{1/n} - 1| = x_n \\le \\sqrt{2/n} < \\varepsilon$.',
+          m: '$$\\lim_{n\\to\\infty} (n^{1/n}) = 1$$',
+          meaning: 'What this really means: For huge $n$, $\\sqrt{2/n}$ drops below any tolerance $\\varepsilon$, extinguishing the surplus and pulling $n^{1/n}$ all the way down to $1$.'
+        }
       ],
       ends: 'The limits $\\lim(1/n) = 0$, $\\lim(b^n) = 0$ for $0 < b < 1$, and $\\lim(n^{1/n}) = 1$ are rigorously established.'
     },
@@ -225,9 +301,21 @@ CONCEPTS.push(
       idea:`Show the same $K(\\varepsilon)$ from the original sequence's convergence still works for the relabelled subsequence, using that the $k$-th chosen index $n_k$ is never smaller than $k$.`,
       why:`A subsequence only removes terms and relabels the rest — it can't introduce any term that wasn't already trapped near $x$ once $n$ was large enough; the one thing to verify is that the relabelled indices keep pace with (or outrun) their new labels.`,
       rungs:[
-        { why:`Start from what convergence of $X$ already gives us.`, m:`$$\\text{given }\\varepsilon>0,\\ \\exists K(\\varepsilon): n\\ge K(\\varepsilon) \\Rightarrow |x_n-x|<\\varepsilon$$` },
-        { why:`Key fact about any strictly increasing sequence of indices: by induction, the $k$-th chosen index is never smaller than $k$ itself.`, m:`$$n_k \\ge k \\quad \\text{for all } k\\in\\mathbb{N}$$` },
-        { why:`So once $k$ reaches $K(\\varepsilon)$, the corresponding original index $n_k$ has already reached $K(\\varepsilon)$ too, and the original bound applies.`, m:`$$k\\ge K(\\varepsilon) \\Rightarrow n_k\\ge k\\ge K(\\varepsilon) \\Rightarrow |x_{n_k}-x|<\\varepsilon$$` }
+        {
+          why:`Start from what convergence of $X$ already gives us.`,
+          m:`$$\\text{given }\\varepsilon>0,\\ \\exists K(\\varepsilon): n\\ge K(\\varepsilon) \\Rightarrow |x_n-x|<\\varepsilon$$`,
+          meaning:`What this really means: Because the parent sequence converges, all terms past milestone index $K$ are permanently trapped inside the safe target zone around $x$.`
+        },
+        {
+          why:`Key fact about any strictly increasing sequence of indices: by induction, the $k$-th chosen index is never smaller than $k$ itself.`,
+          m:`$$n_k \\ge k \\quad \\text{for all } k\\in\\mathbb{N}$$`,
+          meaning:`What this really means: When skipping through a sequence, your pointer $n_k$ always advances at least as fast as your step counter $k$ ($n_1 \\ge 1, n_2 \\ge 2, \\dots$); you can never fall behind.`
+        },
+        {
+          why:`So once $k$ reaches $K(\\varepsilon)$, the corresponding original index $n_k$ has already reached $K(\\varepsilon)$ too, and the original bound applies.`,
+          m:`$$k\\ge K(\\varepsilon) \\Rightarrow n_k\\ge k\\ge K(\\varepsilon) \\Rightarrow |x_{n_k}-x|<\\varepsilon$$`,
+          meaning:`What this really means: By the time your sub-list counter hits $K$, your actual position in the parent sequence is already at or past $K$, so every plucked term is already safely inside the target zone.`
+        }
       ],
       ends:`The subsequence satisfies the same ε-K definition, with the same $\\varepsilon$ and $K$ — so it converges to $x$ as well.`
     },
@@ -254,10 +342,26 @@ CONCEPTS.push(
       idea:`Both parts reuse facts already established: (i) is the direct contrapositive of "all subsequences of a convergent sequence share its limit"; (ii) reuses that convergence forces the whole sequence to be bounded.`,
       why:`Both halves reuse facts already established: (i) is the direct contrapositive of <code>c.3.4.2</code>; (ii) reuses that convergence forces eventual closeness to a fixed number, which automatically caps the size of the whole sequence, leading terms included.`,
       rungs:[
-        { why:`(i) If $X$ converged to some $x$, then by <code>c.3.4.2</code> every subsequence — including $X'$ and $X''$ — would have to converge to that same $x$.`, m:`$$X\\to x \\ \\Rightarrow\\ X'\\to x \\text{ and } X''\\to x$$` },
-        { why:`But we are given two subsequences with DIFFERENT limits — contradiction, so $X$ cannot converge.`, m:`$$\\lim X' \\ne \\lim X'' \\ \\Rightarrow\\ \\text{no such } x \\text{ can exist}$$` },
-        { why:`(ii) A convergent sequence eventually sits inside a fixed neighbourhood of its limit; the finitely many terms before that are automatically bounded (any finite set of numbers is bounded).`, m:`$$n\\ge K(1) \\Rightarrow |x_n-x|<1 \\Rightarrow |x_n|<|x|+1$$ $$M := \\max\\{|x_1|,\\ldots,|x_{K-1}|,\\ |x|+1\\}$$` },
-        { why:`So convergent $\\Rightarrow$ bounded; taking the contrapositive gives unbounded $\\Rightarrow$ divergent.`, m:`$$\\text{unbounded} \\ \\Rightarrow\\ \\text{not convergent}$$` }
+        {
+          why:`(i) If $X$ converged to some $x$, then by <code>c.3.4.2</code> every subsequence — including $X'$ and $X''$ — would have to converge to that same $x$.`,
+          m:`$$X\\to x \\ \\Rightarrow\\ X'\\to x \\text{ and } X''\\to x$$`,
+          meaning:`What this really means: If a sequence truly possessed a limit, every sub-stream sampled from it would be forced to march toward that exact same destination.`
+        },
+        {
+          why:`But we are given two subsequences with DIFFERENT limits — contradiction, so $X$ cannot converge.`,
+          m:`$$\\lim X' \\ne \\lim X'' \\ \\Rightarrow\\ \\text{no such } x \\text{ can exist}$$`,
+          meaning:`What this really means: Catching two sub-streams heading toward two conflicting targets proves the sequence has no unified destination, destroying any possibility of convergence.`
+        },
+        {
+          why:`(ii) A convergent sequence eventually sits inside a fixed neighbourhood of its limit; the finitely many terms before that are automatically bounded (any finite set of numbers is bounded).`,
+          m:`$$n\\ge K(1) \\Rightarrow |x_n-x|<1 \\Rightarrow |x_n|<|x|+1$$ $$M := \\max\\{|x_1|,\\ldots,|x_{K-1}|,\\ |x|+1\\}$$`,
+          meaning:`What this really means: Convergence cages all tail terms inside a radius of $1$ around $x$, while the finitely many early terms have a finite maximum, putting a rigid box around the entire sequence.`
+        },
+        {
+          why:`So convergent $\\Rightarrow$ bounded; taking the contrapositive gives unbounded $\\Rightarrow$ divergent.`,
+          m:`$$\\text{unbounded} \\ \\Rightarrow\\ \\text{not convergent}$$`,
+          meaning:`What this really means: Since every convergent sequence must fit inside a finite box, any sequence that escapes all boxes (unbounded) cannot possibly converge.`
+        }
       ],
       ends:`Either mismatched subsequential limits or plain unboundedness is, alone, enough to certify divergence — without ever having to negate the ε-K definition directly.`
     },
@@ -282,10 +386,26 @@ CONCEPTS.push(
       idea:`Split into two cases by whether the sequence has infinitely many "peaks" (terms never later exceeded) or only finitely many; each case hands you a monotone subsequence directly.`,
       why:`This argument is purely combinatorial — no $\\varepsilon$'s needed — it is entirely about the ORDER structure of the sequence's terms.`,
       rungs:[
-        { why:`Define what makes a term unbeatable from that point onward.`, m:`$$x_m \\text{ is a peak if } x_m \\ge x_n \\text{ for all } n\\ge m$$` },
-        { why:`Case 1 — infinitely many peaks exist. List them in increasing order of index; being a peak means each one is $\\ge$ every later term, in particular the next peak.`, m:`$$x_{m_1}\\ge x_{m_2}\\ge x_{m_3}\\ge\\cdots \\quad\\text{(a decreasing subsequence)}$$` },
-        { why:`Case 2 — only finitely many peaks exist. Start just past the last peak, where nothing is a peak any longer.`, m:`$$s_1 := (\\text{index after the last peak})$$` },
-        { why:`"Not a peak" means, by definition, some strictly later term beats it. Chase that bigger term, then repeat the chase from there, forever.`, m:`$$x_{s_1}\\text{ not a peak} \\Rightarrow \\exists\\, s_2>s_1: x_{s_2}>x_{s_1} \\Rightarrow \\exists\\, s_3>s_2: x_{s_3}>x_{s_2} \\Rightarrow \\cdots$$` }
+        {
+          why:`Define what makes a term unbeatable from that point onward.`,
+          m:`$$x_m \\text{ is a peak if } x_m \\ge x_n \\text{ for all } n\\ge m$$`,
+          meaning:`What this really means: A term is a "peak" if it looks forward into the infinite future and sees nothing taller than itself—it is the reigning local champion from that moment on.`
+        },
+        {
+          why:`Case 1 — infinitely many peaks exist. List them in increasing order of index; being a peak means each one is $\\ge$ every later term, in particular the next peak.`,
+          m:`$$x_{m_1}\\ge x_{m_2}\\ge x_{m_3}\\ge\\cdots \\quad\\text{(a decreasing subsequence)}$$`,
+          meaning:`What this really means: If there is an endless supply of peaks, hopping from peak to peak naturally creates a sequence that never climbs higher—giving a decreasing subsequence for free!`
+        },
+        {
+          why:`Case 2 — only finitely many peaks exist. Start just past the last peak, where nothing is a peak any longer.`,
+          m:`$$s_1 := (\\text{index after the last peak})$$`,
+          meaning:`What this really means: If peak champions run out, walk past the very last peak. From here on, every single term is guaranteed to be beaten by something later.`
+        },
+        {
+          why:`"Not a peak" means, by definition, some strictly later term beats it. Chase that bigger term, then repeat the chase from there, forever.`,
+          m:`$$x_{s_1}\\text{ not a peak} \\Rightarrow \\exists\\, s_2>s_1: x_{s_2}>x_{s_1} \\Rightarrow \\exists\\, s_3>s_2: x_{s_3}>x_{s_2} \\Rightarrow \\cdots$$`,
+          meaning:`What this really means: Because nobody can hold the crown anymore, whatever term you stand on is beaten by a taller term ahead. Chasing strictly taller terms forever builds an increasing subsequence!`
+        }
       ],
       ends:`Exactly one of the two cases must occur, and each produces a monotone subsequence. So every sequence, however chaotic, hides an increasing or decreasing thread inside it — the fact the Bolzano–Weierstrass Theorem builds on directly.`
     },
@@ -314,10 +434,26 @@ CONCEPTS.push(
       idea:`Combine two already-proved facts: (1) any sequence has a monotone subsequence (<code>c.3.4.7</code>); (2) a monotone sequence that is also bounded must converge (Monotone Convergence Theorem, §3.3 — ultimately a consequence of the Completeness Property <code>c.2.3.6</code>). Chain them together.`,
       why:`Monotonicity alone doesn't guarantee convergence (an increasing sequence can run off to $+\\infty$); boundedness alone doesn't either (a sequence can wander forever inside a bounded interval without settling, e.g. $((-1)^n)$). It's the COMBINATION that traps a sequence into settling at a single value, and completeness is exactly what gives "no room left to run" real teeth: a bounded increasing sequence converges to its supremum.`,
       rungs:[
-        { why:`Start from what we already proved about the ORDER of any sequence — it always hides a monotone thread inside it.`, m:`$$X=(x_n) \\text{ bounded} \\ \\Rightarrow\\ X \\text{ has a monotone subsequence } X'=(x_{n_k}) \\quad\\text{(by Monotone Subsequence Thm, §3.4)}$$` },
-        { why:`A subsequence of a bounded sequence is still bounded — you have only removed terms, never added any wilder new ones.`, m:`$$|x_n|\\le M\\ \\forall n \\ \\Rightarrow\\ |x_{n_k}|\\le M\\ \\forall k$$` },
-        { why:`Now $X'$ is BOTH monotone and bounded — exactly the hypothesis of the Monotone Convergence Theorem, whose proof is where completeness actually gets used: a bounded increasing sequence converges to its supremum.`, m:`$$X' \\text{ monotone} + \\text{bounded} \\ \\Rightarrow\\ X' \\text{ converges} \\quad\\text{(Monotone Convergence Thm, §3.3, via Completeness, §2.3)}$$` },
-        { why:`That convergent $X'$ IS a subsequence of the original $X$ — exactly what we set out to find.`, m:`$$\\therefore\\ X \\text{ has a convergent subsequence } X'$$` }
+        {
+          why:`Start from what we already proved about the ORDER of any sequence — it always hides a monotone thread inside it.`,
+          m:`$$X=(x_n) \\text{ bounded} \\ \\Rightarrow\\ X \\text{ has a monotone subsequence } X'=(x_{n_k}) \\quad\\text{(by Monotone Subsequence Thm, §3.4)}$$`,
+          meaning:`What this really means: We don't care how wildly the sequence oscillates; by the Monotone Subsequence Theorem, an organized sub-stream that moves in only one direction always hides inside it.`
+        },
+        {
+          why:`A subsequence of a bounded sequence is still bounded — you have only removed terms, never added any wilder new ones.`,
+          m:`$$|x_n|\\le M\\ \\forall n \\ \\Rightarrow\\ |x_{n_k}|\\le M\\ \\forall k$$`,
+          meaning:`What this really means: Filtering down to a sub-stream cannot introduce new spikes: since the full sequence was trapped between floors and ceilings, the sub-stream remains trapped too.`
+        },
+        {
+          why:`Now $X'$ is BOTH monotone and bounded — exactly the hypothesis of the Monotone Convergence Theorem, whose proof is where completeness actually gets used: a bounded increasing sequence converges to its supremum.`,
+          m:`$$X' \\text{ monotone} + \\text{bounded} \\ \\Rightarrow\\ X' \\text{ converges} \\quad\\text{(Monotone Convergence Thm, §3.3, via Completeness, §2.3)}$$`,
+          meaning:`What this really means: Our sub-stream is one-directional and fenced in. Because real numbers have no holes (Completeness), a fenced one-way path is forced to settle at a limit.`
+        },
+        {
+          why:`That convergent $X'$ IS a subsequence of the original $X$ — exactly what we set out to find.`,
+          m:`$$\\therefore\\ X \\text{ has a convergent subsequence } X'$$`,
+          meaning:`What this really means: Mission accomplished: out of any bounded chaos, we have extracted a disciplined sub-stream that smoothly locks onto a definite destination.`
+        }
       ],
       ends:`Every bounded sequence — no matter how wildly it oscillates — has at least one subsequence that settles down to a genuine limit. This is the single fact Chapter 5 leans on hardest, to guarantee that a continuous function on a closed bounded interval actually attains a maximum and a minimum (rather than merely approaching one).`
     },
@@ -375,13 +511,41 @@ CONCEPTS.push(
       idea: `Observe that $u_m \\le x_m \\le v_m$ for all $m$. If $\\lim u_m = \\lim v_m = L$, the Squeeze Theorem forces $\\lim x_m = L$. The converse follows directly from the ε-definition of limits.`,
       why: `Every term $x_m$ is bounded below by the infimum of its tail $u_m$ and above by the supremum of its tail $v_m$.`,
       rungs: [
-        { why: 'Notice that for every $m \\in \\mathbb{N}$, $x_m \\in \\{x_n : n \\ge m\\}$, which directly gives the fundamental sandwich inequality.', m: '$$u_m = \\inf\\{x_n : n \\ge m\\} \\le x_m \\le \\sup\\{x_n : n \\ge m\\} = v_m \\quad \\text{for all } m \\in \\mathbb{N}$$' },
-        { why: '(⇐) Suppose $\\limsup(x_n) = \\liminf(x_n) = L$. By definition of limit superior and inferior, $\\lim(u_m) = L$ and $\\lim(v_m) = L$.', m: '$$\\lim_{m\\to\\infty} u_m = L \\quad \\text{and} \\quad \\lim_{m\\to\\infty} v_m = L$$' },
-        { why: 'Apply the Squeeze Theorem (3.2.4) to the inequality $u_m \\le x_m \\le v_m$.', m: '$$u_m \\le x_m \\le v_m \\implies \\lim_{m\\to\\infty} x_m = L$$' },
-        { why: '(⇒) Conversely, suppose $\\lim(x_n) = x$. Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ such that $x - \\varepsilon < x_n < x + \\varepsilon$ for all $n \\ge K$.', m: '$$n \\ge K \\implies x - \\varepsilon < x_n < x + \\varepsilon$$' },
-        { why: 'Then for any $m \\ge K$, $x + \\varepsilon$ is an upper bound and $x - \\varepsilon$ is a lower bound for the tail $\\{x_n : n \\ge m\\}$.', m: '$$x - \\varepsilon \\le u_m \\le v_m \\le x + \\varepsilon \\quad \\text{for all } m \\ge K$$' },
-        { why: 'Take the limit as $m \\to \\infty$ to conclude that both $\\liminf$ and $\\limsup$ lie in $[x - \\varepsilon, x + \\varepsilon]$.', m: '$$x - \\varepsilon \\le \\liminf(x_n) \\le \\limsup(x_n) \\le x + \\varepsilon$$' },
-        { why: 'Since $\\varepsilon > 0$ was arbitrary, this forces equality.', m: '$$\\limsup(x_n) = \\liminf(x_n) = x = \\lim(x_n)$$' }
+        {
+          why: 'Notice that for every $m \\in \\mathbb{N}$, $x_m \\in \\{x_n : n \\ge m\\}$, which directly gives the fundamental sandwich inequality.',
+          m: '$$u_m = \\inf\\{x_n : n \\ge m\\} \\le x_m \\le \\sup\\{x_n : n \\ge m\\} = v_m \\quad \\text{for all } m \\in \\mathbb{N}$$',
+          meaning: 'What this really means: Looking forward from term $m$, $x_m$ is naturally sandwiched between the absolute floor ($u_m$) and absolute ceiling ($v_m$) of all future terms.'
+        },
+        {
+          why: '(⇐) Suppose $\\limsup(x_n) = \\liminf(x_n) = L$. By definition of limit superior and inferior, $\\lim(u_m) = L$ and $\\lim(v_m) = L$.',
+          m: '$$\\lim_{m\\to\\infty} u_m = L \\quad \\text{and} \\quad \\lim_{m\\to\\infty} v_m = L$$',
+          meaning: 'What this really means: If the upper horizons and lower horizons converge to the exact same value $L$, the floor and ceiling are closing in on each other.'
+        },
+        {
+          why: 'Apply the Squeeze Theorem (3.2.4) to the inequality $u_m \\le x_m \\le v_m$.',
+          m: '$$u_m \\le x_m \\le v_m \\implies \\lim_{m\\to\\infty} x_m = L$$',
+          meaning: 'What this really means: Trapped between a rising floor and a descending ceiling that meet at $L$, the terms in the middle have no wiggle room and are squeezed into $L$.'
+        },
+        {
+          why: '(⇒) Conversely, suppose $\\lim(x_n) = x$. Given $\\varepsilon > 0$, choose $K \\in \\mathbb{N}$ such that $x - \\varepsilon < x_n < x + \\varepsilon$ for all $n \\ge K$.',
+          m: '$$n \\ge K \\implies x - \\varepsilon < x_n < x + \\varepsilon$$',
+          meaning: 'What this really means: If the sequence already converges to $x$, all future terms past some checkpoint $K$ are permanently confined within a narrow band around $x$.'
+        },
+        {
+          why: 'Then for any $m \\ge K$, $x + \\varepsilon$ is an upper bound and $x - \\varepsilon$ is a lower bound for the tail $\\{x_n : n \\ge m\\}$.',
+          m: '$$x - \\varepsilon \\le u_m \\le v_m \\le x + \\varepsilon \\quad \\text{for all } m \\ge K$$',
+          meaning: 'What this really means: Because all tail terms sit inside this band, the lowest floor and highest ceiling of the tail are also captured entirely inside this narrow band.'
+        },
+        {
+          why: 'Take the limit as $m \\to \\infty$ to conclude that both $\\liminf$ and $\\limsup$ lie in $[x - \\varepsilon, x + \\varepsilon]$.',
+          m: '$$x - \\varepsilon \\le \\liminf(x_n) \\le \\limsup(x_n) \\le x + \\varepsilon$$',
+          meaning: 'What this really means: As $m$ rolls forward, both extreme horizons are locked within distance $\\varepsilon$ of the limit $x$.'
+        },
+        {
+          why: 'Since $\\varepsilon > 0$ was arbitrary, this forces equality.',
+          m: '$$\\limsup(x_n) = \\liminf(x_n) = x = \\lim(x_n)$$',
+          meaning: 'What this really means: Because this clamping holds for arbitrarily microscopic $\\varepsilon$, the floor and ceiling horizons must coincide identically with $x$.'
+        }
       ],
       ends: 'A bounded sequence converges if and only if its limit superior equals its limit inferior, and both equal the sequence limit.'
     },
@@ -444,13 +608,38 @@ CONCEPTS.push(
     ],
     proof:{
       idea:`Two directions. (⇒) is direct substitution: feed the $\\delta$ from the function-limit definition into the $K$ that comes from the sequence's own convergence to $c$. (⇐) is the harder direction, proved by contrapositive: assume the function limit FAILS, build one explicit bad sequence using shrinking $1/n$-neighbourhoods, and show it breaks the hypothesis.`,
+      why:`Matching $\\delta$ and $K(\\delta)$ bridges continuous geometry to discrete sequential indices, while contrapositive with $\\delta=1/n$ constructs a counterexample sequence.`,
       rungs:[
-        { why:`(⇒) Assume $\\lim_{x\\to c}f=L$; take ANY sequence $(x_n)$ in $A\\setminus\\{c\\}$ with $(x_n)\\to c$. We must show $(f(x_n))\\to L$. Start from the $\\varepsilon$-$\\delta$ promise.`, m:`$$\\text{given }\\varepsilon>0,\\ \\exists\\delta>0: x\\in A,\\ 0<|x-c|<\\delta \\Rightarrow |f(x)-L|<\\varepsilon$$` },
-        { why:`Now use $(x_n)\\to c$: feed THIS $\\delta$ into the sequence\'s own convergence to $c$ to get an index $K$ that traps $x_n$ within $\\delta$ of $c$.`, m:`$$(x_n)\\to c \\ \\Rightarrow\\ \\exists K(\\delta): n\\ge K(\\delta) \\Rightarrow |x_n-c|<\\delta$$` },
-        { why:`Combine: past $K$, $x_n$ is within $\\delta$ of $c$ (and $\\ne c$ by hypothesis), so the $\\delta$-promise from step 1 fires and controls $f(x_n)$.`, m:`$$n\\ge K(\\delta) \\ \\Rightarrow\\ 0<|x_n-c|<\\delta \\ \\Rightarrow\\ |f(x_n)-L|<\\varepsilon$$` },
-        { why:`(⇐) Prove the CONTRAPOSITIVE instead: assume $f$ does NOT have limit $L$ at $c$, and construct one specific bad sequence. Negating "$\\forall\\varepsilon\\,\\exists\\delta\\ldots$" means one bad $\\varepsilon_0$ defeats every $\\delta$.`, m:`$$\\exists\\,\\varepsilon_0>0:\\ \\forall\\delta>0,\\ \\exists x_\\delta\\in A,\\ 0<|x_\\delta-c|<\\delta,\\ |f(x_\\delta)-L|\\ge\\varepsilon_0$$` },
-        { why:`Apply this with $\\delta=1/n$ for each $n\\in\\mathbb{N}$ — one bad point per shrinking neighbourhood — to manufacture a whole sequence.`, m:`$$\\forall n\\in\\mathbb{N},\\ \\exists x_n\\in A,\\ 0<|x_n-c|<1/n,\\ |f(x_n)-L|\\ge\\varepsilon_0$$` },
-        { why:`Check this sequence really does converge to $c$ (the $1/n$ bound forces it, by squeeze), while its image sequence provably never gets close to $L$.`, m:`$$(x_n)\\to c, \\quad\\text{but } (f(x_n))\\not\\to L \\quad(\\text{since } |f(x_n)-L|\\ge\\varepsilon_0 \\text{ always})$$` }
+        {
+          why:`(⇒) Assume $\\lim_{x\\to c}f=L$; take ANY sequence $(x_n)$ in $A\\setminus\\{c\\}$ with $(x_n)\\to c$. We must show $(f(x_n))\\to L$. Start from the $\\varepsilon$-$\\delta$ promise.`,
+          m:`$$\\text{given }\\varepsilon>0,\\ \\exists\\delta>0: x\\in A,\\ 0<|x-c|<\\delta \\Rightarrow |f(x)-L|<\\varepsilon$$`,
+          meaning:`What this really means: The function limit provides a security guarantee: whenever an input lands within radius $\\delta$ of $c$, its output is guaranteed to land within $\\varepsilon$ of $L$.`
+        },
+        {
+          why:`Now use $(x_n)\\to c$: feed THIS $\\delta$ into the sequence\'s own convergence to $c$ to get an index $K$ that traps $x_n$ within $\\delta$ of $c$.`,
+          m:`$$(x_n)\\to c \\ \\Rightarrow\\ \\exists K(\\delta): n\\ge K(\\delta) \\Rightarrow |x_n-c|<\\delta$$`,
+          meaning:`What this really means: Because our stepping stones $(x_n)$ approach $c$, past step $K$ they all step inside that exact required radius $\\delta$.`
+        },
+        {
+          why:`Combine: past $K$, $x_n$ is within $\\delta$ of $c$ (and $\\ne c$ by hypothesis), so the $\\delta$-promise from step 1 fires and controls $f(x_n)$.`,
+          m:`$$n\\ge K(\\delta) \\ \\Rightarrow\\ 0<|x_n-c|<\\delta \\ \\Rightarrow\\ |f(x_n)-L|<\\varepsilon$$`,
+          meaning:`What this really means: The two pieces click together: because the stepping stones land inside the $\\delta$-zone, the function's guarantee activates and drives the outputs within $\\varepsilon$ of $L$.`
+        },
+        {
+          why:`(⇐) Prove the CONTRAPOSITIVE instead: assume $f$ does NOT have limit $L$ at $c$, and construct one specific bad sequence. Negating "$\\forall\\varepsilon\\,\\exists\\delta\\ldots$" means one bad $\\varepsilon_0$ defeats every $\\delta$.`,
+          m:`$$\\exists\\,\\varepsilon_0>0:\\ \\forall\\delta>0,\\ \\exists x_\\delta\\in A,\\ 0<|x_\\delta-c|<\\delta,\\ |f(x_\\delta)-L|\\ge\\varepsilon_0$$`,
+          meaning:`What this really means: If the limit fails, there is a fixed error barrier $\\varepsilon_0$ such that no matter how narrow a window $\\delta$ you build around $c$, at least one rogue point inside misses the target.`
+        },
+        {
+          why:`Apply this with $\\delta=1/n$ for each $n\\in\\mathbb{N}$ — one bad point per shrinking neighbourhood — to manufacture a whole sequence.`,
+          m:`$$\\forall n\\in\\mathbb{N},\\ \\exists x_n\\in A,\\ 0<|x_n-c|<1/n,\\ |f(x_n)-L|\\ge\\varepsilon_0$$`,
+          meaning:`What this really means: We set shrinking radii $1, 1/2, 1/3, \\dots$ and harvest one rogue point from each circle, manufacturing a custom-made sequence of troublemakers.`
+        },
+        {
+          why:`Check this sequence really does converge to $c$ (the $1/n$ bound forces it, by squeeze), while its image sequence provably never gets close to $L$.`,
+          m:`$$(x_n)\\to c, \\quad\\text{but } (f(x_n))\\not\\to L \\quad(\\text{since } |f(x_n)-L|\\ge\\varepsilon_0 \\text{ always})$$`,
+          meaning:`What this really means: The rogue sequence marches directly into $c$, yet its function values stubbornly refuse to approach $L$, proving that failure of the function limit always spawns a failing sequence.`
+        }
       ],
       ends:`We've shown: no function limit $\\Rightarrow$ some bad sequence exists (the contrapositive of (⇐)). Combined with the direct (⇒) direction, the $\\varepsilon$-$\\delta$ limit and "every valid sequence has the right image limit" are exactly equivalent statements.`
     },
@@ -478,9 +667,21 @@ CONCEPTS.push(
       idea: 'Negate the Sequential Criterion for Function Limits (Theorem 4.1.8).',
       why: 'By Theorem 4.1.8, $\\lim_{x\\to c} f(x) = L$ holds if and only if every punctured sequence $x_n \\to c$ satisfies $f(x_n) \\to L$.',
       rungs: [
-        { why: 'State the Sequential Criterion (c.4.1.8): $\\lim_{x\\to c} f(x) = L$ iff for all sequences $(x_n)$ in $A \\setminus \\{c\\}$ with $x_n \\to c$, $f(x_n) \\to L$.', m: '\\lim_{x\\to c} f(x) = L \\iff (\\forall (x_n) \\subseteq A\\setminus\\{c\\},\\, x_n \\to c \\implies f(x_n) \\to L)' },
-        { why: 'Negate the equivalence for part (a): $\\lim_{x\\to c} f(x) \\ne L$ if and only if there is at least one sequence $(x_n)$ with $x_n \\to c$ but $f(x_n) \\not\\to L$.', m: '\\lim_{x\\to c} f(x) \\ne L \\iff \\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } f(x_n) \\not\\to L' },
-        { why: 'For part (b), $f$ has no limit in $\\mathbb{R}$ at all if and only if no candidate $L$ works; either some $(f(x_n))$ diverges entirely, or two sequences produce distinct limits.', m: '\\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } (f(x_n)) \\text{ diverges in } \\mathbb{R}' }
+        {
+          why: 'State the Sequential Criterion (c.4.1.8): $\\lim_{x\\to c} f(x) = L$ iff for all sequences $(x_n)$ in $A \\setminus \\{c\\}$ with $x_n \\to c$, $f(x_n) \\to L$.',
+          m: '$$\\lim_{x\\to c} f(x) = L \\iff (\\forall (x_n) \\subseteq A\\setminus\\{c\\},\\, x_n \\to c \\implies f(x_n) \\to L)$$',
+          meaning: 'What this really means: For a function limit to exist, every possible sequence of stepping stones approaching $c$ must force the function values to approach the exact same target $L$.'
+        },
+        {
+          why: 'Negate the equivalence for part (a): $\\lim_{x\\to c} f(x) \\ne L$ if and only if there is at least one sequence $(x_n)$ with $x_n \\to c$ but $f(x_n) \\not\\to L$.',
+          m: '$$\\lim_{x\\to c} f(x) \\ne L \\iff \\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } f(x_n) \\not\\to L$$',
+          meaning: 'What this really means: To disprove that $L$ is the limit, you don\'t have to test infinitely many sequences—you only need to find a single rogue path heading to $c$ whose values miss $L$.'
+        },
+        {
+          why: 'For part (b), $f$ has no limit in $\\mathbb{R}$ at all if and only if no candidate $L$ works; either some $(f(x_n))$ diverges entirely, or two sequences produce distinct limits.',
+          m: '$$\\exists (x_n) \\subseteq A\\setminus\\{c\\}: x_n \\to c \\text{ and } (f(x_n)) \\text{ diverges in } \\mathbb{R}$$',
+          meaning: 'What this really means: To prove a function has no limit whatsoever, produce two separate sequences heading to $c$ that end up at two completely different destinations, or one sequence whose values shoot off to infinity or oscillate wildly.'
+        }
       ],
       ends: 'Thus a single bad sequence is necessary and sufficient to disprove the existence of a limit.'
     },

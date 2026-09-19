@@ -135,5 +135,164 @@ CONCEPTS.push(
       { q: 'State the Topological Bolzano–Weierstrass Theorem.', a: 'Every infinite subset of a compact set $K \\subseteq \\mathbb{R}$ has a cluster point in $K$.', kind: 'state' },
       { q: 'Why does the set $S = \\{1, 2, 3, 4, \\ldots\\}$ have no cluster point in $\\mathbb{R}$?', a: 'Because points are spaced distance $\\ge 1$ apart and the set is unbounded.', kind: 'apply' }
     ]
+  },
+
+  {
+    id: 'c.11.3.1', bartle: '11.3.1', sec: '11.3', kind: 'theorem', tier: 'ext',
+    title: 'Global Continuity via Open Sets',
+    oneLine: 'A function is continuous if and only if the inverse image of every open set is open.',
+    statement: `Let $f: \\mathbb{R} \\to \\mathbb{R}$.
+      <p>Then $f$ is <b>continuous on $\\mathbb{R}$</b> if and only if for every open set $G \\subseteq \\mathbb{R}$, the preimage:
+      $$f^{-1}(G) = \\{x \\in \\mathbb{R} : f(x) \\in G\\}$$
+      is an <b>open set</b> in $\\mathbb{R}$.</p>`,
+    intuition: `<p>This is the modern topological definition of continuity! In elementary calculus, you learned the $\\varepsilon$-$\\delta$ definition at a single point.</p>
+      <p>Topology eliminates $\\varepsilon$, $\\delta$, and points entirely: <i>"Continuous means pulling open sets back into open sets."</i></p>
+      <p>Notice the direction: it is the <b>INVERSE IMAGE</b> $f^{-1}(G)$ that is open, NOT the forward image $f(G)$! (Forward images of open sets can fail to be open: for $f(x) = x^2$, the open interval $(-1, 1)$ gets mapped to $[0, 1)$, which is NOT open!)</p>`,
+    needs: ['c.11.1.1', 'c.5.1.1'],
+    traps: [
+      `Forward image $f(G)$ of an open set is NOT necessarily open (e.g. $f(x) = x^2$ maps $(-1, 1)$ to $[0, 1)$). It is ONLY the preimage $f^{-1}(G)$ that is guaranteed to be open!`,
+      `The same holds for closed sets: $f$ is continuous iff $f^{-1}(F)$ is closed for every closed set $F$.`
+    ],
+    proof: {
+      idea: '(=>) Let G be open, c in f^(-1)(G). Then f(c) in G; choose epsilon neighborhood in G, and continuity gives delta neighborhood around c that maps into G. (<=) Given epsilon, the epsilon-ball around f(c) is open, so its preimage is open, yielding the required delta.',
+      why: 'Preimage definition aligns open balls with epsilon-delta neighborhoods.',
+      rungs: [
+        {
+          why: '(=>) Assume $f$ is continuous on $\\mathbb{R}$. Let $G \\subseteq \\mathbb{R}$ be an open set. We show $f^{-1}(G)$ is open. Let $c \\in f^{-1}(G)$.',
+          m: '$$c \\in f^{-1}(G) \\implies f(c) \\in G$$',
+          meaning: 'What this really means: Pick an arbitrary point in the preimage; its output lands safely inside the target open set.'
+        },
+        {
+          why: 'Since $G$ is open and $f(c) \\in G$, there exists $\\varepsilon > 0$ such that $V_\\varepsilon(f(c)) = (f(c) - \\varepsilon, f(c) + \\varepsilon) \\subseteq G$.',
+          m: '$$V_\\varepsilon(f(c)) \\subseteq G$$',
+          meaning: 'What this really means: Openness gives breathing room around the output point.'
+        },
+        {
+          why: 'Since $f$ is continuous at $c$, for this $\\varepsilon > 0$ there exists $\\delta > 0$ such that $|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon$.',
+          m: '$$f(V_\\delta(c)) \\subseteq V_\\varepsilon(f(c)) \\subseteq G$$',
+          meaning: 'What this really means: Continuity guarantees a small window around the input gets squeezed inside that breathing room.'
+        },
+        {
+          why: 'This implies $V_\\delta(c) \\subseteq f^{-1}(G)$. Thus $c$ is an interior point of $f^{-1}(G)$, proving $f^{-1}(G)$ is open.',
+          m: '$$V_\\delta(c) \\subseteq f^{-1}(G) \\implies f^{-1}(G) \\text{ is open}$$',
+          meaning: 'What this really means: Every point in the preimage has an entire protective ball around it, so the preimage is open.'
+        },
+        {
+          why: '(<=) Conversely, assume preimages of open sets are open. Let $c \\in \\mathbb{R}$ and $\\varepsilon > 0$. The ball $V_\\varepsilon(f(c))$ is open.',
+          m: '$$U = f^{-1}(V_\\varepsilon(f(c))) \\text{ is open and contains } c$$',
+          meaning: 'What this really means: The target epsilon ball is open, so its backward pull must be an open set containing the source point.'
+        },
+        {
+          why: 'Since $U$ is open and $c \\in U$, there exists $\\delta > 0$ such that $V_\\delta(c) \\subseteq U$. This means $|x - c| < \\delta \\implies f(x) \\in V_\\varepsilon(f(c))$, proving continuity at $c$.',
+          m: '$$V_\\delta(c) \\subseteq f^{-1}(V_\\varepsilon(f(c))) \\implies |x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon$$',
+          meaning: 'What this really means: The open preimage supplies the exact delta needed to satisfy the epsilon-delta test.'
+        }
+      ],
+      ends: 'Therefore $f$ is continuous on $\\mathbb{R}$ if and only if preimages of open sets are open.'
+    },
+    cards: [
+      { q: 'State the topological definition of continuity.', a: '$f$ is continuous iff $f^{-1}(G)$ is open for every open set $G$.', kind: 'state' },
+      { q: 'Why is $f(G)$ not necessarily open when $f$ is continuous and $G$ is open?', a: 'Because continuous functions can have local extrema that map open intervals to half-open intervals (e.g. $x^2$ maps $(-1, 1)$ to $[0, 1)$).', kind: 'apply' }
+    ]
+  },
+
+  {
+    id: 'c.11.3.2', bartle: '11.3.3', sec: '11.3', kind: 'theorem', tier: 'ext',
+    title: 'Preservation of Compactness under Continuous Maps',
+    oneLine: 'The continuous image of a compact set is ALWAYS compact: compactness transfers across continuous functions.',
+    statement: `Let $K \\subseteq \\mathbb{R}$ be a compact set, and let $f: K \\to \\mathbb{R}$ be continuous on $K$.
+      <p>Then the image set $f(K) = \\{f(x) : x \\in K\\}$ is a <b>compact set</b> in $\\mathbb{R}$.</p>`,
+    intuition: `<p>Take an open cover $\\{G_\\alpha\\}$ of the image $f(K)$. Pull each umbrella backwards using $f^{-1}(G_\\alpha)$. By the continuity theorem, those preimages form an open cover of the original set $K$!</p>
+      <p>Because $K$ is compact, you only need finitely many umbrellas to cover $K$. Push those lucky umbrellas forward again: they cover $f(K)$! Done in 3 lines.</p>
+      <p>This master theorem immediately proves:
+      <br>1. <b>The Boundedness Theorem:</b> $f(K)$ is compact $\\implies$ bounded!
+      <br>2. <b>The Maximum-Minimum Theorem:</b> $f(K)$ is compact $\\implies$ closed and bounded $\\implies$ attains its inf and sup!</p>`,
+    needs: ['c.11.2.1', 'c.11.3.1'],
+    traps: [
+      `Continuous images preserve compactness and connectedness, but do NOT preserve openness (open sets can become closed or half-open) or boundedness alone.`
+    ],
+    proof: {
+      idea: 'Pull any open cover {G_alpha} of f(K) back to {f^(-1)(G_alpha)}, which covers K; extract a finite subcover of K by compactness, then push forward.',
+      why: 'Preimage of open cover is an open cover of the domain.',
+      rungs: [
+        {
+          why: 'Let $\\mathcal{G} = \\{G_\\alpha\\}_{\\alpha \\in A}$ be an arbitrary open cover of $f(K)$.',
+          m: '$$f(K) \\subseteq \\bigcup_{\\alpha \\in A} G_\\alpha$$',
+          meaning: 'What this really means: Start with any collection of open sets covering the image.'
+        },
+        {
+          why: 'For each $\\alpha$, since $G_\\alpha$ is open and $f$ is continuous, the preimage $f^{-1}(G_\\alpha)$ is open in $K$.',
+          m: '$$K \\subseteq f^{-1}(f(K)) \\subseteq f^{-1}\\left(\\bigcup_{\\alpha \\in A} G_\\alpha\\right) = \\bigcup_{\\alpha \\in A} f^{-1}(G_\\alpha)$$',
+          meaning: 'What this really means: Pull the umbrellas backwards to cover the original domain set.'
+        },
+        {
+          why: 'Since $K$ is compact, the open cover $\\{f^{-1}(G_\\alpha)\\}$ has a finite subcover: there exist indices $\\alpha_1, \\dots, \\alpha_m$ such that $K \\subseteq \\bigcup_{j=1}^m f^{-1}(G_{\\alpha_j})$.',
+          m: '$$K \\subseteq \\bigcup_{j=1}^m f^{-1}(G_{\\alpha_j})$$',
+          meaning: 'What this really means: Compactness of the domain lets us discard all but a finite handful of umbrellas.'
+        },
+        {
+          why: 'Apply $f$ to both sides: $f(K) \\subseteq f\\left(\\bigcup_{j=1}^m f^{-1}(G_{\\alpha_j})\\right) = \\bigcup_{j=1}^m f(f^{-1}(G_{\\alpha_j})) \\subseteq \\bigcup_{j=1}^m G_{\\alpha_j}$.',
+          m: '$$f(K) \\subseteq \\bigcup_{j=1}^m G_{\\alpha_j}$$',
+          meaning: 'What this really means: Pushing that finite selection forward completely covers the image set.'
+        }
+      ],
+      ends: 'Since $\\{G_{\\alpha_1}, \\dots, G_{\\alpha_m}\\}$ is a finite subcover of $f(K)$, $f(K)$ is compact.'
+    },
+    cards: [
+      { q: 'State the Preservation of Compactness Theorem.', a: 'If $K$ is compact and $f$ is continuous, then $f(K)$ is compact.', kind: 'state' },
+      { q: 'How does the Extreme Value Theorem follow from this theorem?', a: 'Since $f(K)$ is compact in $\\mathbb{R}$, by Heine-Borel it is closed and bounded; hence it contains its supremum and infimum.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.11.4.1', bartle: '11.4.1', sec: '11.4', kind: 'definition', tier: 'ext',
+    title: 'Metric Spaces: Definitions and Axioms',
+    oneLine: 'A metric space replaces the distance |x - y| with an abstract distance function d(x, y) satisfying three simple axioms.',
+    statement: `A <b>metric space</b> $(M, d)$ consists of a non-empty set $M$ and a function $d: M \\times M \\to \\mathbb{R}$ (called a <b>metric</b> or distance) satisfying for all $x, y, z \\in M$:
+      <p>(1) <b>Positivity:</b> $d(x, y) \\ge 0$, and $d(x, y) = 0 \\iff x = y$.</p>
+      <p>(2) <b>Symmetry:</b> $d(x, y) = d(y, x)$.</p>
+      <p>(3) <b>Triangle Inequality:</b> $d(x, z) \\le d(x, y) + d(y, z)$.</p>
+      <p>The <b>open ball</b> of radius $r > 0$ centered at $x_0$ is $B(x_0, r) = \\{x \\in M : d(x, x_0) < r\\}$.</p>`,
+    intuition: `<p>Everything you learned in Real Analysis on the real line $\\mathbb{R}$ used distance $|x - y|$.</p>
+      <p>A metric space frees analysis from numbers! You can measure distance between:
+      <br>• Vectors in $\\mathbb{R}^n$: Euclidean metric $\\sqrt{\\sum (x_i - y_i)^2}$.
+      <br>• Continuous functions in $C[a, b]$: Uniform metric $d_\\infty(f, g) = \\sup |f(x) - g(x)|$.
+      <br>• Sequences in $\\ell^2$: $d(x, y) = \\sqrt{\\sum (x_k - y_k)^2}$.</p>
+      <p>All limit laws, continuity, and Cauchy criteria immediately generalize!</p>`,
+    needs: ['c.2.2.1'],
+    traps: [
+      `A metric space has NO ordering ($x < y$ is meaningless for functions or vectors!), and NO addition or multiplication (unless it is also a normed vector space). Only distance exists!`
+    ],
+    cards: [
+      { q: 'State the three axioms of a metric space.', a: '(1) Positivity: $d(x,y) \\ge 0$ with equality iff $x=y$; (2) Symmetry: $d(x,y) = d(y,x)$; (3) Triangle Inequality: $d(x,z) \\le d(x,y) + d(y,z)$.', kind: 'state' },
+      { q: 'Define the open ball $B(x_0, r)$ in a metric space $(M, d)$.', a: '$B(x_0, r) = \\{x \\in M : d(x, x_0) < r\\}$.', kind: 'recall' }
+    ]
+  },
+
+  {
+    id: 'c.11.4.2', bartle: '11.4.3', sec: '11.4', kind: 'definition', tier: 'ext',
+    title: 'Completeness and Cauchy Sequences in Metric Spaces',
+    oneLine: 'A metric space is complete if every sequence whose terms cluster together is guaranteed to converge to a limit inside the space.',
+    statement: `Let $(M, d)$ be a metric space.
+      <p>(a) A sequence $(x_n)$ in $M$ is a <b>Cauchy sequence</b> if for every $\\varepsilon > 0$, there exists $K \\in \\mathbb{N}$ such that:
+      $$m, n \\ge K \\implies d(x_m, x_n) < \\varepsilon$$</p>
+      <p>(b) The metric space $(M, d)$ is said to be <b>complete</b> if every Cauchy sequence in $M$ converges to an element in $M$.</p>
+      <p><b>Examples:</b>
+      <br>• $(\\mathbb{R}, |\\cdot|)$ and $(\\mathbb{R}^n, d_2)$ are <b>complete</b>.
+      <br>• $(C[a, b], d_\\infty)$ is <b>complete</b> (uniform limit of continuous functions is continuous!).
+      <br>• $(\\mathbb{Q}, |\\cdot|)$ is <b>incomplete</b> (sequences of rationals like $(1 + 1/n)^n$ converge to $e \\notin \\mathbb{Q}$).</p>`,
+    intuition: `<p>A metric space is "complete" if it has no missing points or holes.</p>
+      <p>$\\mathbb{Q}$ has infinitely many holes (all the irrationals like $\\sqrt{2}$ and $\\pi$ are missing). $\\mathbb{R}$ filled in all those holes using Dedekind cuts and the Completeness Property.</p>
+      <p>In higher analysis, completeness is what powers the <b>Banach Fixed-Point Theorem</b> (which proves solutions to differential and integral equations exist!).</p>`,
+    needs: ['c.11.4.1', 'c.3.5.1', 'c.2.3.6'],
+    traps: [
+      `In every metric space, convergent sequences are ALWAYS Cauchy; but Cauchy sequences converge ONLY IF the space is complete!`,
+      `$(0, 1)$ with standard metric is INCOMPLETE (the Cauchy sequence $1/n$ tries to converge to $0$, which is missing).`
+    ],
+    cards: [
+      { q: 'Define a complete metric space.', a: 'A metric space in which every Cauchy sequence converges to a point in the space.', kind: 'state' },
+      { q: 'Why is $(\\mathbb{Q}, |\\cdot|)$ not a complete metric space?', a: 'Because a Cauchy sequence of rational numbers can converge to an irrational limit (e.g. approximations to $\\sqrt{2}$), which does not belong to $\\mathbb{Q}$.', kind: 'apply' }
+    ]
   }
 );
+

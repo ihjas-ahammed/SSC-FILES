@@ -70,7 +70,11 @@ def main():
 
     # The seam still has to exist for boot.js, but the data is already inlined,
     # so it points at one no-op module rather than at any file.
-    seam = ("const DATA_SOURCES = { use: '%s', %s: "
+    # The built page is deployed as <dir>/index.html with `diagrams/` beside
+    # it, one level shallower than the dev page — so the seam re-points the
+    # diagram base as well as the (now inert) data list.
+    seam = ("const DIAGRAM_BASE = 'diagrams/';\n"
+            "const DATA_SOURCES = { use: '%s', %s: "
             "['data:text/javascript;charset=utf-8,//bundled'] };" % (which, which))
 
     bundle = '<script>\n%s\n</script>' % (

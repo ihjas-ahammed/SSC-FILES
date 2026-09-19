@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block">
 <style>
 /* app/src/ui.css */
 /* ══════════════════════════════════════════════════════════════════════════
@@ -47,6 +48,15 @@
   --shadow:0 1px 2px rgba(25,22,20,.05),0 10px 30px -14px rgba(25,22,20,.18);
   --shadow-2:0 2px 6px rgba(25,22,20,.06),0 24px 48px -20px rgba(25,22,20,.28);
 
+  /* The three levels, as one traffic light. They are aliases rather than new
+     hexes so a theme only has to get bad/warn/ok right once, and level colour
+     can never drift away from the verdict colour it has to sit beside. */
+  --lv0:var(--surface-3);
+  --lv1:var(--bad);  --lv1-soft:var(--bad-soft);  --lv1-line:var(--bad-line);
+  --lv2:var(--warn); --lv2-soft:var(--warn-soft); --lv2-line:var(--warn-line);
+  --lv3:var(--ok);   --lv3-soft:var(--ok-soft);   --lv3-line:var(--ok-line);
+
+  --rail-w:236px;
   --ease:cubic-bezier(.32,.72,0,1);
   --spring:cubic-bezier(.34,1.44,.5,1);
   --dur:.34s; --dur-s:.18s;
@@ -125,42 +135,118 @@ h1[tabindex="-1"]:focus,main:focus{ outline:none; }
 .icon-btn:active{ transform:scale(.93); }
 .icon-btn svg{ width:17px; height:17px; flex:0 0 auto; }
 
+/* ── icons ───────────────────────────────────────────────────────────────
+   Material Symbols as a ligature font: `<span class="mi">arrow_back</span>`.
+   The stylesheet is requested with `display=block`, so the glyph never flashes
+   as the literal word "arrow_back" before the font arrives. */
+.mi{
+  font-family:'Material Symbols Outlined'; font-weight:normal; font-style:normal;
+  font-size:20px; line-height:1; letter-spacing:normal; text-transform:none;
+  display:inline-block; white-space:nowrap; word-wrap:normal; direction:ltr;
+  -webkit-font-feature-settings:'liga'; font-feature-settings:'liga';
+  -webkit-font-smoothing:antialiased; flex:0 0 auto; user-select:none;
+  font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+}
+.mi.fill{ font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24; }
+.mi.sm{ font-size:17px; }
+.mi.lg{ font-size:24px; }
+.mi.xs{ font-size:14px; }
+
+/* ── navigation ──────────────────────────────────────────────────────────
+   ONE element, two layouts. On a phone it is the bottom tab bar. From 900px
+   it becomes a left rail carrying its own brand, back button and shell
+   controls — and the top header is removed entirely, so the window's whole
+   height belongs to what you are reading. */
 nav.tabs{
   position:fixed; left:0; right:0; bottom:0; z-index:40;
-  display:grid; grid-template-columns:repeat(5,1fr);
   background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   border-top:1px solid var(--glass-line);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-nav.tabs a{
+.rail-top,.rail-foot{ display:none; }
+.rail-nav{ display:grid; grid-template-columns:repeat(5,1fr); }
+.rail-nav a{
   position:relative; display:flex; flex-direction:column; align-items:center;
   justify-content:center; gap:3px; height:var(--tab-h); text-decoration:none;
   color:var(--ink-3); font-size:.66rem; letter-spacing:.02em; font-weight:500;
-  transition:color var(--dur-s);
+  transition:color var(--dur-s), background var(--dur-s);
 }
-nav.tabs a svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.7;
-  stroke-linecap:round; stroke-linejoin:round;
-  transition:transform var(--dur) var(--spring), stroke-width var(--dur-s); }
-nav.tabs a:active svg{ transform:scale(.88); }
-nav.tabs a[aria-current=page]{ color:var(--accent); }
-nav.tabs a[aria-current=page] svg{ stroke-width:2.2; transform:translateY(-1px) scale(1.06); }
-nav.tabs a[aria-current=page]::before{
+.rail-nav a .mi{ font-size:22px; transition:transform var(--dur) var(--spring); }
+.rail-nav a:active .mi{ transform:scale(.88); }
+.rail-nav a[aria-current=page]{ color:var(--accent); }
+.rail-nav a[aria-current=page] .mi{ font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24; }
+.rail-nav a[aria-current=page]::before{
   content:''; position:absolute; top:0; left:50%; width:26px; height:3px;
   transform:translateX(-50%); border-radius:0 0 4px 4px; background:var(--accent);
 }
+
+.rail-brand{ display:flex; flex-direction:column; min-width:0; text-decoration:none;
+  color:inherit; line-height:1.2; }
+.rail-brand b{ font-size:.95rem; font-weight:600; letter-spacing:-.01em; }
+.rail-brand span{ font-size:.6rem; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-3); }
+.rail-btn{
+  display:flex; align-items:center; gap:12px; height:40px; padding:0 11px; width:100%;
+  border:0; background:none; border-radius:10px; cursor:pointer; color:var(--ink-2);
+  font:500 .84rem/1 var(--font-ui); text-align:left;
+  transition:background var(--dur-s), color var(--dur-s);
+}
+.rail-btn:hover{ background:var(--surface-2); color:var(--ink); }
+.rail-btn:active{ transform:scale(.97); }
+.rail-btn[disabled]{ opacity:.35; cursor:not-allowed; }
+.icon-btn[disabled]{ opacity:.35; cursor:not-allowed; }
 
 main{ display:block; }
 .wrap{ width:100%; max-width:730px; margin:0 auto; padding:18px 14px 30px; }
 .wrap.bleed{ padding:0; max-width:none; }
 
-@media (min-width:880px){
-  :root{ --tab-h:48px; }
-  body{ padding-bottom:0; }
-  nav.tabs{ position:sticky; top:var(--head-h); bottom:auto; border-top:0;
-    border-bottom:1px solid var(--glass-line); }
-  nav.tabs a{ flex-direction:row; gap:9px; font-size:.84rem; }
-  nav.tabs a[aria-current=page]::before{ top:auto; bottom:0; width:38px; border-radius:4px 4px 0 0; }
-  .wrap{ padding:28px 20px 64px; }
+@media (min-width:900px){
+  /* No top bar and no tab strip: both bands of vertical chrome are gone and
+     the reel, the tree and the note each get the full window. */
+  :root{ --head-h:0px; --tab-h:0px; }
+  header.top{ display:none; }
+  body{ padding-bottom:0; padding-left:var(--rail-w); }
+
+  nav.tabs{
+    top:0; bottom:0; right:auto; width:var(--rail-w);
+    display:flex; flex-direction:column; gap:6px;
+    border-top:0; border-right:1px solid var(--glass-line);
+    padding:14px 10px calc(14px + env(safe-area-inset-bottom,0px));
+  }
+  .rail-top{ display:flex; align-items:center; gap:6px; padding:2px 2px 10px;
+    border-bottom:1px solid var(--rule); }
+  .rail-top .rail-btn{ width:auto; flex:0 0 auto; padding:0 8px; }
+  .rail-top .rail-btn .lb{ display:none; }
+  .rail-nav{ display:flex; flex-direction:column; gap:2px; }
+  .rail-foot{ display:flex; flex-direction:column; gap:2px; margin-top:auto;
+    padding-top:8px; border-top:1px solid var(--rule); }
+
+  .rail-nav a{
+    height:42px; flex-direction:row; justify-content:flex-start; gap:12px;
+    padding:0 11px; border-radius:10px; font-size:.88rem; font-weight:500;
+  }
+  .rail-nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .rail-nav a[aria-current=page]{ background:var(--accent-soft); }
+  .rail-nav a[aria-current=page]::before{
+    top:50%; left:0; width:3px; height:20px; transform:translateY(-50%);
+    border-radius:0 3px 3px 0;
+  }
+
+  .wrap{ padding:30px 36px 72px; max-width:880px; }
+
+  /* Full screen narrows the rail to its glyphs — the point of the button is
+     the reading column, so the chrome gives ground first. */
+  body.is-full{ padding-left:62px; }
+  body.is-full nav.tabs{ width:62px; padding-left:7px; padding-right:7px; align-items:stretch; }
+  body.is-full .rail-brand{ display:none; }
+  body.is-full .rail-nav a,body.is-full .rail-btn{ justify-content:center; gap:0; padding:0; }
+  body.is-full .rail-nav a .lb,body.is-full .rail-btn .lb{ display:none; }
+  body.is-full .rail-top{ justify-content:center; }
+  body.is-full .wrap{ max-width:940px; }
+}
+
+@media (min-width:1500px){
+  .wrap{ max-width:960px; }
 }
 
 /* ── motion ──────────────────────────────────────────────────────────────── */
@@ -186,6 +272,11 @@ main{ display:block; }
 .stack{ display:flex; flex-direction:column; gap:var(--sp); }
 .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .spread{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+/* the two-line label: a title over a caption. Defined once here so a .tt used
+   outside a list row still stacks instead of running the caption on. */
+.tt{ min-width:0; }
+.tt>b{ display:block; font-weight:500; }
+.tt>span{ display:block; font-size:.78rem; color:var(--ink-3); }
 
 /* ── surfaces ────────────────────────────────────────────────────────────── */
 .card{
@@ -287,7 +378,7 @@ mjx-container{ max-width:100%; }
 .prose.tight{ font-size:.97rem; line-height:1.62; }
 
 /* ── stats, meters, rings ────────────────────────────────────────────────── */
-.stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr)); gap:10px; }
 .stat{ background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-m);
   padding:12px; }
 .stat .n{ font-size:1.55rem; font-weight:600; letter-spacing:-.025em; line-height:1.1; }
@@ -299,21 +390,54 @@ mjx-container{ max-width:100%; }
   background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 55%,var(--ok)));
   transition:width .6s var(--ease); animation:sweepIn .7s var(--ease) both; }
 .meter.ok>i{ background:var(--ok); }
+.meter.lv1>i{ background:var(--lv1); }
+.meter.lv2>i{ background:var(--lv2); }
+.meter.lv3>i{ background:var(--lv3); }
 
 .ring{ position:relative; width:38px; height:38px; flex:0 0 auto; border-radius:50%;
+  --ring-c:var(--accent);
   display:grid; place-items:center; transition:--p .7s var(--ease);
-  background:conic-gradient(var(--accent) calc(var(--p)*1%), var(--surface-3) 0); }
-.ring.done{ background:conic-gradient(var(--ok) calc(var(--p)*1%), var(--surface-3) 0); }
+  background:conic-gradient(var(--ring-c) calc(var(--p)*1%), var(--surface-3) 0); }
+/* the ring is coloured by the level the WHOLE group has reached, and filled by
+   how much of it has reached the next one */
+.ring[data-lv="1"]{ --ring-c:var(--lv1); }
+.ring[data-lv="2"]{ --ring-c:var(--lv2); }
+.ring[data-lv="3"]{ --ring-c:var(--lv3); }
 .ring>i{ width:30px; height:30px; border-radius:50%; background:var(--surface);
   display:grid; place-items:center; font-style:normal; font-size:.62rem;
   font-family:var(--font-mono); color:var(--ink-2); }
-.ring.done>i{ color:var(--ok); }
+.ring[data-lv="1"]>i,.ring[data-lv="2"]>i,.ring[data-lv="3"]>i{ color:var(--ring-c); }
+
+/* ── the three-level bar ────────────────────────────────────────────────────
+   One track, three layers, widest first: red is "reached level 1", amber sits
+   on top of it for level 2, green on top of that for level 3. Because each
+   fraction contains the next, the layers read left to right as green | amber |
+   red | untouched without any arithmetic. */
+.lvbar{ position:relative; height:7px; border-radius:999px; background:var(--surface-3);
+  overflow:hidden; }
+.lvbar>i{ position:absolute; left:0; top:0; bottom:0; border-radius:999px;
+  transition:width .6s var(--ease); animation:sweepIn .7s var(--ease) both; }
+.lvbar>i.a{ background:var(--lv1); }
+.lvbar>i.b{ background:var(--lv2); }
+.lvbar>i.c{ background:var(--lv3); }
+.lvkey{ display:flex; gap:12px; flex-wrap:wrap; font-size:.64rem; color:var(--ink-3);
+  margin-top:6px; }
+.lvkey>span{ display:inline-flex; align-items:center; gap:5px; }
+.lvkey em{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+.lvkey .k1 em{ background:var(--lv1); } .lvkey .k2 em{ background:var(--lv2); }
+.lvkey .k3 em{ background:var(--lv3); }
+.badge.lv1{ background:var(--lv1-soft); color:var(--lv1); border-color:var(--lv1-line); }
+.badge.lv2{ background:var(--lv2-soft); color:var(--lv2); border-color:var(--lv2-line); }
+.badge.lv3{ background:var(--lv3-soft); color:var(--lv3); border-color:var(--lv3-line); }
 
 /* ── mastery ladder ─────────────────────────────────────────────────────── */
 .ladder{ display:flex; gap:6px; }
 .ladder>span{ flex:1 1 0; height:6px; border-radius:999px; background:var(--surface-3);
   transition:background var(--dur); }
-.ladder>span.on{ background:var(--ok); animation:sweepIn .5s var(--ease) both; }
+.ladder>span.on{ animation:sweepIn .5s var(--ease) both; }
+.ladder>span.on.l1{ background:var(--lv1); }
+.ladder>span.on.l2{ background:var(--lv2); }
+.ladder>span.on.l3{ background:var(--lv3); }
 .ladder-l{ display:flex; justify-content:space-between; font-size:.66rem; color:var(--ink-3);
   margin-top:6px; }
 
@@ -350,7 +474,9 @@ mjx-container{ max-width:100%; }
 }
 .tick:hover>i{ border-color:var(--accent); }
 .tick:active>i{ transform:scale(.86); }
-.tick[aria-checked=true]>i{ background:var(--ok); border-color:var(--ok); color:#fff; }
+.tick[aria-checked=true]>i{ background:var(--lv1); border-color:var(--lv1); color:#fff; }
+.tick[data-lv="2"]>i{ background:var(--lv2); border-color:var(--lv2); color:#fff; }
+.tick[data-lv="3"]>i{ background:var(--lv3); border-color:var(--lv3); color:#fff; }
 .tick[aria-checked=mixed]>i{ background:var(--accent-soft); border-color:var(--accent);
   color:var(--accent); }
 .tick[aria-checked=true]>i,.tick[aria-checked=mixed]>i{ animation:pop .26s var(--spring) both; }
@@ -382,8 +508,10 @@ mjx-container{ max-width:100%; }
 .crow .tt b{ display:block; font-weight:500; font-size:.92rem; }
 .crow .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.crow.done{ border-color:var(--ok-line); }
-.crow.done .tt b{ color:var(--ink-2); }
+.crow[data-lv="1"]{ border-color:var(--lv1-line); }
+.crow[data-lv="2"]{ border-color:var(--lv2-line); }
+.crow[data-lv="3"]{ border-color:var(--lv3-line); }
+.crow[data-lv="3"] .tt b{ color:var(--ink-2); }
 
 /* ── recall reel ─────────────────────────────────────────────────────────── */
 /* ── recall reel ──────────────────────────────────────────────────────────
@@ -455,6 +583,9 @@ mjx-container{ max-width:100%; }
 .fig{ border:1px solid var(--rule); border-radius:var(--r-m); background:var(--surface-2);
   overflow:hidden; }
 .fig svg{ display:block; width:100%; height:auto; }
+.fig-imgwrap{ background:var(--surface); padding:8px; }
+.fig-img{ display:block; width:100%; height:auto; border-radius:var(--r-s);
+  animation:pop .4s var(--ease) both; }
 .fig-h{ display:flex; align-items:center; justify-content:space-between; gap:10px;
   padding:10px 13px; border-bottom:1px solid var(--rule); background:var(--surface); }
 .fig-cap{ padding:10px 13px; font-size:.79rem; color:var(--ink-2); line-height:1.5;
@@ -632,13 +763,17 @@ mjx-container{ max-width:100%; }
 .scratch{ margin-top:6px; padding:12px; border-radius:var(--r-m);
   border:1px dashed var(--rule-2); background:var(--surface-2); }
 
-/* a concept ticked but with its proof still outstanding, at Level 2 */
-.crow.part .tick{ border-color:var(--warn); color:var(--warn); }
-.crow.part .tt b{ color:var(--ink); }
+/* the level chip that rides on a concept row */
+.lvtag{ flex:0 0 auto; font:600 .58rem/1 var(--font-mono); letter-spacing:.06em;
+  text-transform:uppercase; padding:3px 6px; border-radius:5px; border:1px solid transparent; }
+.lvtag[data-lv="1"]{ background:var(--lv1-soft); color:var(--lv1); border-color:var(--lv1-line); }
+.lvtag[data-lv="2"]{ background:var(--lv2-soft); color:var(--lv2); border-color:var(--lv2-line); }
+.lvtag[data-lv="3"]{ background:var(--lv3-soft); color:var(--lv3); border-color:var(--lv3-line); }
 
 /* the sign-in gate hides the shell chrome: there is nothing to navigate to */
 body.signed-out nav.tabs{ display:none; }
-body.signed-out{ padding-bottom:0; }
+body.signed-out{ padding-bottom:0; padding-left:0; }
+body.signed-out header.top{ display:flex; }
 body.signed-out .top .icon-btn{ display:inline-flex; }
 
 /* ── lists ───────────────────────────────────────────────────────────────── */
@@ -671,7 +806,10 @@ body.signed-out .top .icon-btn{ display:inline-flex; }
 .pstep .dot{ flex:0 0 auto; width:28px; height:28px; border-radius:50%; display:grid;
   place-items:center; font-size:.72rem; border:2px solid var(--rule-2);
   background:var(--surface); color:var(--ink-3); }
-.pstep.done .dot{ border-color:var(--ok); background:var(--ok-soft); color:var(--ok); }
+.pstep.done .dot{ border-color:var(--lv3); background:var(--lv3-soft); color:var(--lv3); }
+.pstep[data-lv="1"] .dot{ border-color:var(--lv1); background:var(--lv1-soft); color:var(--lv1); }
+.pstep[data-lv="2"] .dot{ border-color:var(--lv2); background:var(--lv2-soft); color:var(--lv2); }
+.pstep[data-lv="3"] .dot{ border-color:var(--lv3); background:var(--lv3-soft); color:var(--lv3); }
 .pstep.here .dot{ border-color:var(--accent); background:var(--accent); color:var(--accent-ink); }
 .pstep .tt b{ display:block; font-size:.92rem; font-weight:500; }
 .pstep .tt span{ display:block; font-size:.72rem; color:var(--ink-3); }
@@ -744,14 +882,18 @@ body.signed-out .top .icon-btn{ display:inline-flex; }
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="top">
+  <button class="icon-btn back-btn" type="button" id="back-btn" aria-label="Back">
+    <span class="mi" aria-hidden="true" translate="no">arrow_back</span>
+  </button>
   <a class="brand" href="#/home" style="text-decoration:none;color:inherit">
-    <b>Real Analysis</b><span>test · mock</span>
+    <b>Real Analysis</b><span>Levels&nbsp;1–3</span>
   </a>
   <span class="grow"></span>
+  <button class="icon-btn" type="button" id="full-btn" aria-label="Full screen" aria-pressed="false">
+    <span class="mi" aria-hidden="true" translate="no">fullscreen</span>
+  </button>
   <button class="icon-btn" type="button" id="theme-btn" aria-label="Change theme">
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
-         stroke-width="1.7" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18Z" fill="currentColor"
-         stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+    <span class="mi" aria-hidden="true" translate="no">contrast</span>
   </button>
 </header>
 
@@ -762,6 +904,7 @@ body.signed-out .top .icon-btn{ display:inline-flex; }
 <div id="live" class="sr-only" role="status" aria-live="polite"></div>
 
 <script>
+const DIAGRAM_BASE = 'diagrams/';
 const DATA_SOURCES = { use: 'mock', mock: ['data:text/javascript;charset=utf-8,//bundled'] };
 
 /* ── mock/mock.courses.js ── */
@@ -859,6 +1002,10 @@ const SECTITLE = {
      cards: { q, a, kind }  with kind 'state' feeding the recall deck
      proof: { idea, why, rungs:[{why,m}], ends }  on every theorem, so the
             Level 2 proof-work mark has something real to be claimed against
+     img: ['<diagram basename>']  the rendered diagrams in `diagrams/`. The
+            mock ids are `m.*` and the diagrams are filed under `c.*`, so these
+            nodes name them explicitly; validated `c.*` concepts are matched by
+            id automatically through app/src/fig.diagrams.js
    ══════════════════════════════════════════════════════════════════════════ */
 
 CONCEPTS.push(
@@ -895,7 +1042,7 @@ CONCEPTS.push(
         a: 'No. A maximum is a supremum that happens to lie in $S$; $(0,1)$ has $\\sup=1$ and no maximum.' }
     ] },
 
-  { id: 'm.2.3.6', sec: '2.3', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.2.3.6', img: ['c.2.3.6_completeness_supremum_property'], sec: '2.3', kind: 'theorem', tier: 'core', mock: true,
     title: 'The Completeness (Supremum) Property of ℝ',
     oneLine: 'Every nonempty set of reals with a ceiling has a least ceiling — inside ℝ.',
     statement: `<p>Every nonempty subset of $\\mathbb{R}$ that is bounded above has a supremum
@@ -947,7 +1094,7 @@ CONCEPTS.push(
         a: 'No — only a supremum, which need not be attained. $(0,1)$ has $\\sup=1\\notin(0,1)$.' }
     ] },
 
-  { id: 'm.3.4.8', sec: '3.4', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.3.4.8', img: ['c.3.4.8_bolzano_weierstrass_theorem'], sec: '3.4', kind: 'theorem', tier: 'core', mock: true,
     title: 'The Bolzano–Weierstrass Theorem',
     oneLine: 'A bounded sequence always hides a convergent subsequence inside it.',
     statement: `<p>Every bounded sequence of real numbers has a convergent subsequence.</p>`,
@@ -995,7 +1142,7 @@ CONCEPTS.push(
         a: 'No. Convergence needs <i>every</i> subsequence to share one limit.' }
     ] },
 
-  { id: 'm.5.1.1', sec: '5.1', kind: 'definition', tier: 'core', mock: true,
+  { id: 'm.5.1.1', img: ['c.5.1.1_continuity_at_a_point'], sec: '5.1', kind: 'definition', tier: 'core', mock: true,
     title: 'Continuity at a Point',
     oneLine: 'You can force f(x) as close to f(c) as demanded by keeping x close enough to c.',
     statement: `<p>Let $A\\subseteq\\mathbb{R}$, let $f:A\\to\\mathbb{R}$, and let $c\\in A$. Then $f$
@@ -1025,7 +1172,7 @@ CONCEPTS.push(
         a: 'On both. Only uniform continuity requires a single $\\delta$ that works at every point of the set.' }
     ] },
 
-  { id: 'm.5.1.3', sec: '5.1', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.1.3', img: ['c.5.1.3_sequential_criterion_for_continuity'], sec: '5.1', kind: 'theorem', tier: 'core', mock: true,
     title: 'Sequential Criterion for Continuity',
     oneLine: 'Continuity = every sequence heading to c has images heading to f(c).',
     statement: `<p>Let $A\\subseteq\\mathbb{R}$, $f:A\\to\\mathbb{R}$ and $c\\in A$. Then $f$ is
@@ -1075,7 +1222,7 @@ CONCEPTS.push(
         a: 'The constant sequence $x_{n}=c$ always satisfies it, so it holds for every function at every point.' }
     ] },
 
-  { id: 'm.5.3.4', sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.3.4', img: ['c.5.3.4_maximum_minimum_theorem', 'c.5.3.4_failure_extremum_open_interval'], sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
     title: 'Maximum–Minimum Theorem',
     oneLine: 'On a closed bounded interval, a continuous function actually attains its extremes.',
     statement: `<p>Let $I=[a,b]$ be a closed bounded interval and let $f:I\\to\\mathbb{R}$ be
@@ -1129,7 +1276,7 @@ CONCEPTS.push(
         a: 'No. $(0,1]$ is not closed, so the theorem does not apply; $f$ has minimum $1$ at $x=1$ and no maximum.' }
     ] },
 
-  { id: 'm.5.3.7', sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.3.7', img: ['c.5.3.7_bolzano_intermediate_value_theorem'], sec: '5.3', kind: 'theorem', tier: 'core', mock: true,
     title: "Bolzano's Intermediate Value Theorem",
     oneLine: 'A continuous function on an interval skips no value between two of its values.',
     statement: `<p>Let $I=[a,b]$ and let $f:I\\to\\mathbb{R}$ be continuous on $I$. If $k\\in\\mathbb{R}$
@@ -1178,7 +1325,7 @@ CONCEPTS.push(
         a: 'No — only that at least one exists. Uniqueness needs strict monotonicity, e.g. $f\'>0$ on the interval.' }
     ] },
 
-  { id: 'm.5.4.1', sec: '5.4', kind: 'definition', tier: 'core', mock: true,
+  { id: 'm.5.4.1', img: ['c.5.4.1_uniform_continuity', 'c.5.4.2_nonuniform_continuity_criterion'], sec: '5.4', kind: 'definition', tier: 'core', mock: true,
     title: 'Uniform Continuity',
     oneLine: 'One δ must work everywhere on the set, not a fresh δ at each point.',
     statement: `<p>Let $A\\subseteq\\mathbb{R}$ and $f:A\\to\\mathbb{R}$. Then $f$ is <b>uniformly
@@ -1212,7 +1359,7 @@ CONCEPTS.push(
         a: 'The single $\\delta$ must serve all pairs of points; in pointwise continuity $\\delta$ may depend on the point.' }
     ] },
 
-  { id: 'm.5.4.3', sec: '5.4', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.5.4.3', img: ['c.5.4.3_uniform_continuity_theorem_heine_cantor'], sec: '5.4', kind: 'theorem', tier: 'core', mock: true,
     title: 'Uniform Continuity Theorem',
     oneLine: 'Continuity on a closed bounded interval is automatically uniform.',
     statement: `<p>Let $I=[a,b]$ be a closed bounded interval and let $f:I\\to\\mathbb{R}$ be
@@ -1263,7 +1410,7 @@ CONCEPTS.push(
         a: 'No — $1/x$ is the counterexample. The interval must be closed and bounded.' }
     ] },
 
-  { id: 'm.6.2.4', sec: '6.2', kind: 'theorem', tier: 'core', mock: true,
+  { id: 'm.6.2.4', img: ['c.6.2.4_lagrange_mean_value_theorem'], sec: '6.2', kind: 'theorem', tier: 'core', mock: true,
     title: "Lagrange's Mean Value Theorem",
     oneLine: 'Somewhere inside, the tangent is parallel to the chord.',
     statement: `<p>Let $f$ be continuous on $[a,b]$ and differentiable on $(a,b)$. Then there exists
@@ -1782,6 +1929,363 @@ OBJECTIVE.push(
 );
 
 
+/* ── mock/mock.written.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   MOCK Level 3 exercises — placeholder, not production content.
+
+   Level 3 is the exercise set: a section is only finished when every exercise
+   filed against it has been worked through. These eighteen are written in the
+   shape of Bartle & Sherbert's end-of-section exercises so the Level 3 loop
+   can be exercised before the real extraction lands — three per mock section,
+   which is what makes a section reachable at all. They are standard textbook
+   problems, stated correctly, but they are NOT the real bank: AGY extracts
+   every exercise from Bartle section by section (HOOK_agy.md → "Level 3").
+
+   Record shape (the app reads exactly these fields):
+     { id, sec, marks, title, prompt, approach, solution, trap, tests: [id] }
+
+   `sec` files the exercise under a section directly; `tests` files it under
+   the concepts it examines, and the app indexes it under BOTH. Progress is
+   stored against 'w:<id>', so ids are permanent — see HOOK_agy.md rule 1.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+QUESTIONS.push(
+
+  /* ── §2.3 · completeness, suprema and infima ────────────────────────────── */
+  { id: 'w.2.3.1', sec: '2.3', marks: 4, mock: true,
+    title: 'Exercise 2.3.1 — locate the bounds',
+    prompt: `<p>Let $S=\\left\\{\\,1-\\dfrac{(-1)^{n}}{n}\\ :\\ n\\in\\mathbb{N}\\,\\right\\}$.
+      Find $\\sup S$ and $\\inf S$, and say whether each is attained.</p>`,
+    approach: `<p>Split on the parity of $n$ rather than trying to handle the set at once.
+      For even $n$ the terms are $1-\\frac1n$; for odd $n$ they are $1+\\frac1n$. Each family is
+      monotone, so each has an obvious extreme member — and the extremes of the two families are
+      the extremes of the union.</p>`,
+    solution: `<p>For even $n$, $x_n=1-\\frac1n$, which increases from $x_2=\\tfrac12$ towards $1$.
+      For odd $n$, $x_n=1+\\frac1n$, which decreases from $x_1=2$ towards $1$.</p>
+      <p>Every element is therefore at least $\\tfrac12$ and at most $2$, so $\\tfrac12$ is a lower
+      bound and $2$ an upper bound. Both are elements of $S$ (take $n=2$ and $n=1$), so they are
+      the infimum and the supremum and both are attained:</p>
+      $$\\inf S=\\tfrac12=\\min S,\\qquad \\sup S=2=\\max S.$$`,
+    trap: `The two subsequences both converge to $1$, and it is tempting to answer $1$ for one of
+      the bounds. $1$ is neither: it is the only cluster point, and a cluster point has nothing to
+      do with a bound.`,
+    tests: ['m.2.3.2'] },
+
+  { id: 'w.2.3.2', sec: '2.3', marks: 6, mock: true,
+    title: 'Exercise 2.3.2 — the supremum of a union',
+    prompt: `<p>Let $A$ and $B$ be nonempty subsets of $\\mathbb{R}$ that are bounded above.
+      Prove that $A\\cup B$ is bounded above and that
+      $$\\sup(A\\cup B)=\\max\\{\\sup A,\\ \\sup B\\}.$$</p>`,
+    approach: `<p>Write $u=\\sup A$, $v=\\sup B$ and $w=\\max\\{u,v\\}$. Two inequalities are owed:
+      $w$ is an upper bound of $A\\cup B$, and no smaller number is. Get the second one from the
+      fact that $w$ equals one of $u,v$, and that one is a LEAST upper bound of its own set.</p>`,
+    solution: `<p>Put $u=\\sup A$, $v=\\sup B$, $w=\\max\\{u,v\\}$.</p>
+      <p><b>$w$ is an upper bound.</b> Let $x\\in A\\cup B$. If $x\\in A$ then $x\\le u\\le w$; if
+      $x\\in B$ then $x\\le v\\le w$. So $A\\cup B$ is bounded above by $w$ and, being nonempty,
+      has a supremum.</p>
+      <p><b>$w$ is the least one.</b> Say $w=u$ (the other case is identical with $B$). If $z$ is
+      any upper bound of $A\\cup B$ then $z$ is in particular an upper bound of $A$, and since
+      $u=\\sup A$ is the least upper bound of $A$ we get $u\\le z$, i.e. $w\\le z$.</p>
+      <p>Hence $w$ is an upper bound no larger than every other upper bound, which is exactly
+      $\\sup(A\\cup B)=w$.</p>`,
+    trap: `Writing $\\sup(A\\cup B)=\\sup A+\\sup B$, or trying to prove it for the INTERSECTION by
+      the same argument. For $A\\cap B$ no equality holds at all — the intersection can be empty.`,
+    tests: ['m.2.3.2', 'm.2.3.6'] },
+
+  { id: 'w.2.3.3', sec: '2.3', marks: 5, mock: true,
+    title: 'Exercise 2.3.3 — translating a set',
+    prompt: `<p>Let $S\\subseteq\\mathbb{R}$ be nonempty and bounded above, let $a\\in\\mathbb{R}$,
+      and set $a+S=\\{\\,a+s : s\\in S\\,\\}$. Prove that $\\sup(a+S)=a+\\sup S$.</p>`,
+    approach: `<p>The $\\varepsilon$-characterisation is the efficient route: $u=\\sup S$ exactly
+      when $u$ is an upper bound and, for every $\\varepsilon>0$, some $s\\in S$ exceeds
+      $u-\\varepsilon$. Translation moves both halves of that by $a$ and changes nothing else.</p>`,
+    solution: `<p>Let $u=\\sup S$.</p>
+      <p><b>Upper bound.</b> Every element of $a+S$ is $a+s$ with $s\\le u$, so $a+s\\le a+u$.</p>
+      <p><b>Least.</b> Let $\\varepsilon>0$. Since $u=\\sup S$ there is $s_\\varepsilon\\in S$ with
+      $u-\\varepsilon < s_\\varepsilon$, hence
+      $$(a+u)-\\varepsilon < a+s_\\varepsilon\\in a+S.$$
+      So no number below $a+u$ is an upper bound of $a+S$.</p>
+      <p>Both halves of the characterisation hold, so $\\sup(a+S)=a+u=a+\\sup S$.</p>`,
+    trap: `The same proof for $aS=\\{as\\}$ is FALSE when $a<0$: multiplying by a negative number
+      reverses the order, and $\\sup(aS)=a\\inf S$ there. Translation is order-preserving; scaling
+      is not.`,
+    tests: ['m.2.3.2', 'm.2.3.6'] },
+
+  /* ── §3.4 · subsequences and Bolzano–Weierstrass ────────────────────────── */
+  { id: 'w.3.4.1', sec: '3.4', marks: 4, mock: true,
+    title: 'Exercise 3.4.1 — divergence by two subsequences',
+    prompt: `<p>Show that the sequence $x_n=(-1)^{n}$ is divergent, by exhibiting two
+      subsequences with different limits.</p>`,
+    approach: `<p>A convergent sequence has every subsequence converging to the same limit. So
+      one pair of subsequences with different limits settles it — no $\\varepsilon$ argument is
+      needed.</p>`,
+    solution: `<p>The even-indexed subsequence is $x_{2k}=1$ for all $k$, so $x_{2k}\\to 1$. The
+      odd-indexed subsequence is $x_{2k-1}=-1$ for all $k$, so $x_{2k-1}\\to -1$.</p>
+      <p>If $(x_n)$ converged to some $L$, every subsequence would converge to $L$, giving
+      $L=1$ and $L=-1$ at once. Hence $(x_n)$ diverges.</p>`,
+    trap: `"The terms do not settle down" is not a proof. The divergence criterion needs two named
+      subsequences with two named limits.`,
+    tests: ['m.3.4.8'] },
+
+  { id: 'w.3.4.2', sec: '3.4', marks: 7, mock: true,
+    title: 'Exercise 3.4.2 — one limit for every subsequence',
+    prompt: `<p>Let $(x_n)$ be a bounded sequence and suppose every convergent subsequence of
+      $(x_n)$ converges to the same number $L$. Prove that $x_n\\to L$.</p>`,
+    approach: `<p>Argue by contradiction and let Bolzano–Weierstrass do the work. If $x_n\\not\\to
+      L$ then some $\\varepsilon_0>0$ is escaped infinitely often; those escaping terms form a
+      bounded sequence, so they have a convergent subsequence — whose limit cannot be $L$.</p>`,
+    solution: `<p>Suppose $x_n\\not\\to L$. Then there is $\\varepsilon_0>0$ such that for every
+      $K\\in\\mathbb{N}$ there is $n\\ge K$ with $|x_n-L|\\ge\\varepsilon_0$. Choosing
+      $K=1,2,3,\\ldots$ in turn gives indices $n_1<n_2<\\cdots$ with
+      $$|x_{n_k}-L|\\ge\\varepsilon_0 \\quad\\text{for all } k.$$</p>
+      <p>$(x_{n_k})$ is a subsequence of a bounded sequence, hence bounded, so by
+      Bolzano–Weierstrass it has a convergent subsequence $(x_{n_{k_j}})$, say with limit $M$.
+      That is also a subsequence of $(x_n)$, so by hypothesis $M=L$.</p>
+      <p>But $|x_{n_{k_j}}-L|\\ge\\varepsilon_0$ for every $j$, and letting $j\\to\\infty$ gives
+      $|M-L|\\ge\\varepsilon_0>0$ — a contradiction. Hence $x_n\\to L$.</p>`,
+    trap: `Boundedness is doing real work here and must be used: without it the statement fails
+      for $x_n = n$ when $n$ is odd and $x_n = 0$ when $n$ is even, whose only convergent
+      subsequences tend to $0$.`,
+    tests: ['m.3.4.8'] },
+
+  { id: 'w.3.4.3', sec: '3.4', marks: 3, mock: true,
+    title: 'Exercise 3.4.3 — a convergent subsequence of $(\\sin n)$',
+    prompt: `<p>Show that the sequence $x_n=\\sin n$ has a convergent subsequence, without
+      computing any limit.</p>`,
+    approach: `<p>This is Bolzano–Weierstrass applied literally. The only thing to check is the
+      hypothesis.</p>`,
+    solution: `<p>For every $n\\in\\mathbb{N}$, $|\\sin n|\\le 1$, so $(x_n)$ is bounded.</p>
+      <p>By the Bolzano–Weierstrass Theorem every bounded sequence of real numbers has a
+      convergent subsequence, so $(\\sin n)$ has one.</p>`,
+    trap: `Trying to identify the limit. Bolzano–Weierstrass is an existence theorem and names
+      nothing; the limit here depends on how the integers distribute modulo $2\\pi$.`,
+    tests: ['m.3.4.8'] },
+
+  /* ── §5.1 · continuous functions ────────────────────────────────────────── */
+  { id: 'w.5.1.1', sec: '5.1', marks: 6, mock: true,
+    title: 'Exercise 5.1.1 — $x^{2}$ from the definition',
+    prompt: `<p>Use the $\\varepsilon$-$\\delta$ definition to prove that $f(x)=x^{2}$ is
+      continuous at every $c\\in\\mathbb{R}$.</p>`,
+    approach: `<p>Factor $x^{2}-c^{2}=(x-c)(x+c)$ and control the second factor by agreeing in
+      advance that $|x-c|<1$. That turns an unbounded factor into a constant, and the constant is
+      what goes into $\\delta$.</p>`,
+    solution: `<p>Fix $c$ and let $\\varepsilon>0$. For $|x-c|<1$ we have $|x|<|c|+1$, hence
+      $$|x+c|\\le|x|+|c| < 2|c|+1.$$</p>
+      <p>Put $\\delta=\\min\\left\\{1,\\ \\dfrac{\\varepsilon}{2|c|+1}\\right\\}>0$. If
+      $|x-c|<\\delta$ then both constraints hold and
+      $$|x^{2}-c^{2}| = |x-c|\\,|x+c| < \\delta\\,(2|c|+1) \\le \\varepsilon.$$</p>
+      <p>Since $\\varepsilon>0$ was arbitrary, $f$ is continuous at $c$; and $c$ was arbitrary.</p>`,
+    trap: `Taking $\\delta=\\varepsilon/|x+c|$. $\\delta$ may depend on $\\varepsilon$ and on $c$,
+      never on $x$ — $x$ is the variable the inequality is about.`,
+    tests: ['m.5.1.1'] },
+
+  { id: 'w.5.1.2', sec: '5.1', marks: 6, mock: true,
+    title: 'Exercise 5.1.2 — Dirichlet, by the sequential criterion',
+    prompt: `<p>Let $f(x)=1$ for $x\\in\\mathbb{Q}$ and $f(x)=0$ for $x\\notin\\mathbb{Q}$. Prove
+      that $f$ is continuous at no point of $\\mathbb{R}$.</p>`,
+    approach: `<p>Density gives two sequences at every point — one rational, one irrational —
+      both converging to it. The sequential criterion then compares two images that cannot
+      agree.</p>`,
+    solution: `<p>Let $c\\in\\mathbb{R}$.</p>
+      <p>By the density of $\\mathbb{Q}$ there is a sequence $(r_n)$ of rationals with
+      $r_n\\to c$; by the density of the irrationals there is a sequence $(s_n)$ of irrationals
+      with $s_n\\to c$.</p>
+      <p>Then $f(r_n)=1\\to 1$ and $f(s_n)=0\\to 0$. If $f$ were continuous at $c$, the sequential
+      criterion would force $f(r_n)\\to f(c)$ and $f(s_n)\\to f(c)$, giving $f(c)=1$ and
+      $f(c)=0$.</p>
+      <p>That is impossible, so $f$ is discontinuous at $c$ — and $c$ was arbitrary.</p>`,
+    trap: `Only producing the rational sequence. One sequence whose images converge proves
+      nothing; the criterion is broken by a DISAGREEING pair.`,
+    tests: ['m.5.1.3'] },
+
+  { id: 'w.5.1.3', sec: '5.1', marks: 5, mock: true,
+    title: 'Exercise 5.1.3 — sign is preserved locally',
+    prompt: `<p>Suppose $f$ is continuous at $c$ and $f(c)>0$. Prove there is $\\delta>0$ such
+      that $f(x)>0$ for every $x$ in the domain with $|x-c|<\\delta$.</p>`,
+    approach: `<p>The whole exercise is the choice of $\\varepsilon$. Pick it so that the
+      $\\varepsilon$-neighbourhood of $f(c)$ sits strictly inside the positive numbers —
+      $\\varepsilon=\\tfrac12 f(c)$ does it.</p>`,
+    solution: `<p>Let $\\varepsilon=\\tfrac12 f(c)>0$. By continuity at $c$ there is $\\delta>0$
+      such that $|x-c|<\\delta$ (and $x$ in the domain) implies
+      $$|f(x)-f(c)|<\\tfrac12 f(c).$$</p>
+      <p>The left-hand inequality of that absolute value gives
+      $$f(x) > f(c)-\\tfrac12 f(c) = \\tfrac12 f(c) > 0.$$</p>
+      <p>So $f$ is strictly positive on that whole neighbourhood, and in fact bounded below
+      there by $\\tfrac12 f(c)$.</p>`,
+    trap: `Choosing $\\varepsilon=f(c)$ gives only $f(x)>0$ with no margin, and the strict
+      inequality is then lost at the endpoint of the estimate. Half the value is the standard
+      choice for a reason.`,
+    tests: ['m.5.1.1', 'm.5.1.3'] },
+
+  /* ── §5.3 · continuous functions on intervals ───────────────────────────── */
+  { id: 'w.5.3.1', sec: '5.3', marks: 4, mock: true,
+    title: 'Exercise 5.3.1 — where boundedness fails',
+    prompt: `<p>Show that $f(x)=1/x$ is continuous and unbounded on $(0,1]$. Which hypothesis of
+      the Boundedness Theorem fails?</p>`,
+    approach: `<p>Continuity on the interval is the algebra of continuous functions. Unboundedness
+      needs one explicit sequence. Then read the theorem's hypotheses and say which word is
+      missing.</p>`,
+    solution: `<p>On $(0,1]$ the denominator never vanishes, so $f$ is continuous there as a
+      quotient of continuous functions.</p>
+      <p>Take $x_n=1/n$ for $n\\ge 1$. Then $x_n\\in(0,1]$ and $f(x_n)=n$, so $f$ takes values
+      above every bound and is unbounded.</p>
+      <p>The Boundedness Theorem requires a CLOSED BOUNDED interval $[a,b]$. Here the interval is
+      bounded but not closed: the endpoint $0$ is missing, and it is exactly the point the
+      function blows up at.</p>`,
+    trap: `Saying "the function is not continuous at $0$". $0$ is not in the domain, so there is
+      nothing to be continuous or discontinuous at — the failure is in the interval, not in $f$.`,
+    tests: ['m.5.3.4'] },
+
+  { id: 'w.5.3.2', sec: '5.3', marks: 6, mock: true,
+    title: 'Exercise 5.3.2 — every odd-degree polynomial has a root',
+    prompt: `<p>Let $p(x)=a_{2k+1}x^{2k+1}+\\cdots+a_1x+a_0$ with $a_{2k+1}\\ne 0$. Prove that $p$
+      has at least one real root.</p>`,
+    approach: `<p>The leading term decides the sign far out in both directions, and it decides it
+      differently because the degree is odd. Find one point where $p$ is negative and one where it
+      is positive, then apply Bolzano's theorem on the interval between them.</p>`,
+    solution: `<p>Assume $a_{2k+1}>0$ (otherwise apply the argument to $-p$, which has the same
+      roots). Writing
+      $$p(x)=x^{2k+1}\\left(a_{2k+1}+\\frac{a_{2k}}{x}+\\cdots+\\frac{a_0}{x^{2k+1}}\\right),$$
+      the bracket tends to $a_{2k+1}>0$ as $|x|\\to\\infty$, so for all large $|x|$ it is positive.
+      Since $x^{2k+1}$ is positive for large positive $x$ and negative for large negative $x$,
+      there are $b>0$ with $p(b)>0$ and $a<0$ with $p(a)<0$.</p>
+      <p>$p$ is a polynomial, hence continuous on $[a,b]$, and $p(a)<0<p(b)$. By Bolzano's
+      Location of Roots Theorem there is $c\\in(a,b)$ with $p(c)=0$.</p>`,
+    trap: `The argument uses oddness twice over, and it is worth saying where: an even-degree
+      polynomial has the same sign at both ends, and $x^{2}+1$ shows the conclusion then fails.`,
+    tests: ['m.5.3.7'] },
+
+  { id: 'w.5.3.3', sec: '5.3', marks: 5, mock: true,
+    title: 'Exercise 5.3.3 — a continuous self-map has a fixed point',
+    prompt: `<p>Let $f:[0,1]\\to[0,1]$ be continuous. Prove that there is $c\\in[0,1]$ with
+      $f(c)=c$.</p>`,
+    approach: `<p>A fixed point of $f$ is a zero of $g(x)=f(x)-x$. Check the sign of $g$ at the
+      two endpoints and the intermediate value theorem finishes it.</p>`,
+    solution: `<p>Define $g(x)=f(x)-x$ on $[0,1]$; it is continuous as a difference of continuous
+      functions.</p>
+      <p>Since $f(0)\\in[0,1]$ we have $g(0)=f(0)-0\\ge 0$. Since $f(1)\\in[0,1]$ we have
+      $g(1)=f(1)-1\\le 0$.</p>
+      <p>If $g(0)=0$ then $c=0$ works; if $g(1)=0$ then $c=1$ works. Otherwise $g(0)>0>g(1)$ and
+      Bolzano's theorem gives $c\\in(0,1)$ with $g(c)=0$, i.e. $f(c)=c$.</p>`,
+    trap: `Forgetting the two boundary cases. $g(0)\\ge 0$ and $g(1)\\le 0$ are not strict, and the
+      Location of Roots Theorem needs strict opposite signs — so the equalities have to be
+      disposed of first.`,
+    tests: ['m.5.3.7'] },
+
+  /* ── §5.4 · uniform continuity ──────────────────────────────────────────── */
+  { id: 'w.5.4.1', sec: '5.4', marks: 5, mock: true,
+    title: 'Exercise 5.4.1 — $1/x$ is not uniformly continuous on $(0,1)$',
+    prompt: `<p>Show that $f(x)=1/x$ is not uniformly continuous on $(0,1)$.</p>`,
+    approach: `<p>Use the Nonuniform Continuity Criterion: produce $\\varepsilon_0>0$ and two
+      sequences $(x_n),(u_n)$ in the set with $x_n-u_n\\to 0$ but $|f(x_n)-f(u_n)|\\ge
+      \\varepsilon_0$.</p>`,
+    solution: `<p>Take $x_n=\\dfrac{1}{n}$ and $u_n=\\dfrac{1}{n+1}$ for $n\\ge 1$; both lie in
+      $(0,1)$ and
+      $$x_n-u_n=\\frac{1}{n}-\\frac{1}{n+1}=\\frac{1}{n(n+1)}\\to 0.$$</p>
+      <p>But $f(x_n)-f(u_n)=n-(n+1)=-1$, so $|f(x_n)-f(u_n)|=1$ for every $n$.</p>
+      <p>With $\\varepsilon_0=1$ the Nonuniform Continuity Criterion applies: $f$ is not uniformly
+      continuous on $(0,1)$, even though it is continuous at every point of it.</p>`,
+    trap: `Concluding that $f$ is discontinuous somewhere. It is continuous at every point of
+      $(0,1)$; what fails is that one $\\delta$ cannot serve the whole set at once.`,
+    tests: ['m.5.4.1'] },
+
+  { id: 'w.5.4.2', sec: '5.4', marks: 6, mock: true,
+    title: 'Exercise 5.4.2 — $x^{2}$ on a bounded interval and on $\\mathbb{R}$',
+    prompt: `<p>Show that $f(x)=x^{2}$ is uniformly continuous on $[0,b]$ for every $b>0$, but not
+      uniformly continuous on $\\mathbb{R}$.</p>`,
+    approach: `<p>On $[0,b]$ the factor $|x+u|$ is bounded by $2b$, which makes $\\delta$
+      independent of the point — or quote the Uniform Continuity Theorem. On $\\mathbb{R}$ that
+      bound is exactly what is lost, so hunt for two sequences drifting apart in value while
+      closing in position.</p>`,
+    solution: `<p><b>On $[0,b]$.</b> For $x,u\\in[0,b]$,
+      $$|x^{2}-u^{2}|=|x-u|\\,|x+u|\\le 2b\\,|x-u|.$$
+      Given $\\varepsilon>0$ take $\\delta=\\varepsilon/(2b)$, which depends on $\\varepsilon$ and
+      $b$ only. (Equivalently: $[0,b]$ is a closed bounded interval and $f$ is continuous on it,
+      so the Uniform Continuity Theorem applies.)</p>
+      <p><b>On $\\mathbb{R}$.</b> Take $x_n=n+\\dfrac1n$ and $u_n=n$. Then $x_n-u_n=\\dfrac1n\\to
+      0$, while
+      $$x_n^{2}-u_n^{2}=\\left(n+\\tfrac1n\\right)^{2}-n^{2}=2+\\tfrac{1}{n^{2}}\\ge 2.$$
+      With $\\varepsilon_0=2$ the Nonuniform Continuity Criterion applies.</p>`,
+    trap: `"Continuous on $\\mathbb{R}$, and $\\mathbb{R}$ is closed, so the Uniform Continuity
+      Theorem applies." The theorem needs closed AND BOUNDED; $\\mathbb{R}$ is not bounded.`,
+    tests: ['m.5.4.1', 'm.5.4.3'] },
+
+  { id: 'w.5.4.3', sec: '5.4', marks: 6, mock: true,
+    title: 'Exercise 5.4.3 — Cauchy sequences are preserved',
+    prompt: `<p>Let $f$ be uniformly continuous on $A\\subseteq\\mathbb{R}$ and let $(x_n)$ be a
+      Cauchy sequence in $A$. Prove that $(f(x_n))$ is a Cauchy sequence.</p>`,
+    approach: `<p>Uniform continuity hands you one $\\delta$ for the whole set; the Cauchy property
+      hands you an index past which all terms are within $\\delta$ of each other. Line the two up in
+      that order — $\\varepsilon$, then $\\delta$, then $K$.</p>`,
+    solution: `<p>Let $\\varepsilon>0$. By uniform continuity there is $\\delta>0$ such that
+      $$u,v\\in A,\\ |u-v|<\\delta \\ \\Longrightarrow\\ |f(u)-f(v)|<\\varepsilon.$$</p>
+      <p>Since $(x_n)$ is Cauchy there is $K\\in\\mathbb{N}$ such that $|x_n-x_m|<\\delta$ for all
+      $n,m\\ge K$.</p>
+      <p>For such $n,m$ both terms lie in $A$ and are within $\\delta$, so
+      $|f(x_n)-f(x_m)|<\\varepsilon$. As $\\varepsilon>0$ was arbitrary, $(f(x_n))$ is Cauchy.</p>`,
+    trap: `Mere continuity is not enough, and the same $f(x)=1/x$ on $(0,1)$ shows it: $x_n=1/n$ is
+      Cauchy there while $f(x_n)=n$ is not. The one $\\delta$ that serves all of $A$ is the whole
+      content of the proof.`,
+    tests: ['m.5.4.1', 'm.5.4.3'] },
+
+  /* ── §6.2 · the Mean Value Theorem ──────────────────────────────────────── */
+  { id: 'w.6.2.1', sec: '6.2', marks: 4, mock: true,
+    title: 'Exercise 6.2.1 — sine is a contraction',
+    prompt: `<p>Use the Mean Value Theorem to prove that
+      $$|\\sin x-\\sin y|\\le|x-y|\\qquad\\text{for all }x,y\\in\\mathbb{R}.$$</p>`,
+    approach: `<p>Apply the MVT to $\\sin$ on the interval between $x$ and $y$, then bound the
+      derivative that appears. The bound $|\\cos c|\\le 1$ is the entire estimate.</p>`,
+    solution: `<p>If $x=y$ both sides are $0$. Otherwise assume $y<x$ (relabel if needed).</p>
+      <p>$\\sin$ is continuous on $[y,x]$ and differentiable on $(y,x)$, so by the Mean Value
+      Theorem there is $c\\in(y,x)$ with
+      $$\\sin x-\\sin y=(\\cos c)(x-y).$$</p>
+      <p>Taking absolute values and using $|\\cos c|\\le 1$,
+      $$|\\sin x-\\sin y|=|\\cos c|\\,|x-y|\\le |x-y|.$$</p>`,
+    trap: `The MVT gives one $c$ that you do not get to choose, so nothing may be assumed about
+      it beyond where it lies. Every estimate has to hold for EVERY admissible $c$.`,
+    tests: ['m.6.2.4'] },
+
+  { id: 'w.6.2.2', sec: '6.2', marks: 5, mock: true,
+    title: 'Exercise 6.2.2 — a vanishing derivative',
+    prompt: `<p>Let $f$ be differentiable on an interval $I$ with $f'(x)=0$ for every $x\\in I$.
+      Prove that $f$ is constant on $I$.</p>`,
+    approach: `<p>"Constant" means any two points have the same value, so take two and apply the
+      MVT on the interval between them.</p>`,
+    solution: `<p>Let $a,b\\in I$ with $a<b$. Since $I$ is an interval, $[a,b]\\subseteq I$, so $f$
+      is continuous on $[a,b]$ and differentiable on $(a,b)$.</p>
+      <p>By the Mean Value Theorem there is $c\\in(a,b)$ with
+      $$f(b)-f(a)=f'(c)(b-a)=0\\cdot(b-a)=0,$$
+      so $f(b)=f(a)$.</p>
+      <p>Since $a,b$ were arbitrary, $f$ takes one value throughout $I$.</p>`,
+    trap: `The hypothesis that $I$ is an INTERVAL is load-bearing. On the domain
+      $(0,1)\\cup(2,3)$ a function can have zero derivative everywhere and still take two
+      different values.`,
+    tests: ['m.6.2.4'] },
+
+  { id: 'w.6.2.3', sec: '6.2', marks: 6, mock: true,
+    title: 'Exercise 6.2.3 — bracketing the logarithm',
+    prompt: `<p>Prove that for every $x>0$,
+      $$\\frac{x}{1+x} < \\ln(1+x) < x.$$</p>`,
+    approach: `<p>Apply the MVT to $\\ln$ on $[1,1+x]$. The derivative is $1/t$, which is
+      decreasing — so bounding $c$ between the endpoints bounds $1/c$ between the two reciprocals,
+      and those are exactly the two sides asked for.</p>`,
+    solution: `<p>Fix $x>0$ and let $g(t)=\\ln t$ on $[1,1+x]$. It is continuous there and
+      differentiable on $(1,1+x)$ with $g'(t)=1/t$, so the Mean Value Theorem gives
+      $c\\in(1,1+x)$ with
+      $$\\ln(1+x)-\\ln 1=\\frac{1}{c}\\,\\big((1+x)-1\\big)=\\frac{x}{c},$$
+      that is $\\ln(1+x)=x/c$.</p>
+      <p>Since $1<c<1+x$ and $t\\mapsto 1/t$ is strictly decreasing on $(0,\\infty)$,
+      $$\\frac{1}{1+x} < \\frac{1}{c} < 1.$$</p>
+      <p>Multiplying through by $x>0$ preserves the strict inequalities and gives
+      $$\\frac{x}{1+x} < \\ln(1+x) < x.$$</p>`,
+    trap: `Multiplying an inequality by $x$ is only safe because $x>0$ was assumed. At $x=0$ every
+      part is $0$ and the inequalities are equalities, which is why the statement is restricted to
+      $x>0$.`,
+    tests: ['m.6.2.4'] }
+
+);
+
+
 /* ── src/core.dom.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    DOM + routing primitives. No framework: every view returns a real element.
@@ -1860,15 +2364,26 @@ const DOM = (function () {
     window.setTimeout(() => { live.textContent = msg; }, 30);
   }
 
+  /* ── icons ───────────────────────────────────────────────────────────────
+     Material Symbols, as a ligature font. Emoji used to stand in for icons
+     here (💡, 👁, ⚠, ✓) and they were the wrong tool twice over: every
+     platform draws them differently, and they ignore the theme — a yellow
+     bulb on a dark card is not a design, it is a default. A ligature glyph
+     inherits colour and size from its parent like any other text.
+
+     `mi('bolt')` renders the icon named `bolt`. `mi('bolt', 'fill')` renders
+     its filled variant. Names come from fonts.google.com/icons. */
+  function mi(name, cls) {
+    return el('span', {
+      class: 'mi' + (cls ? ' ' + cls : ''), 'aria-hidden': 'true', translate: 'no', text: name
+    });
+  }
+
+  /* A handful of shapes are still hand-drawn SVG, because they are figures
+     rather than icons: the tree chevron animates its own rotation and has to
+     line up with a text baseline at three different sizes. */
   const ICONS = {
-    today: 'M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-16v5h6V4h-6Z',
-    study: 'M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Zm0 15A2.5 2.5 0 0 1 6.5 18H19v3H6.5A2.5 2.5 0 0 0 4 20.5Z',
-    recall: 'M7 4h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm2 16h10M9 9h6M9 12.5h4',
-    omr: 'M5 4h14v16H5zM8.5 8.5h.01M8.5 12h.01M8.5 15.5h.01M12 8.5h4M12 12h4M12 15.5h4',
-    write: 'M4 20h4l10-10a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5 4 20Zm9.5-13 3.5 3.5',
-    info: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm0 5.1h.01M12 11.4v5.2',
-    chev: 'M9 5l7 7-7 7',
-    theme: 'M12 3v18a9 9 0 0 0 0-18Zm0 0a9 9 0 0 0 0 18'
+    chev: 'M9 5l7 7-7 7'
   };
   function icon(name, size, cls) {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -1931,12 +2446,17 @@ const DOM = (function () {
     return node;
   }
 
-  return { el, add, clear, announce, icon, debounce, plural, pct, reduced, stagger, svg };
+  return { el, add, clear, announce, icon, mi, debounce, plural, pct, reduced, stagger, svg };
 })();
 
 /* ── hash router ─────────────────────────────────────────────────────────── */
 const Router = (function () {
   let handler = null;
+  /* How many route changes this visit has made. `history.back()` is only worth
+     offering while there is somewhere of ours to go back TO — otherwise the
+     browser walks out of the app entirely, which is not what a back button
+     inside a toolbar is understood to mean. */
+  let depth = 0;
 
   function current() {
     const raw = (location.hash || '').replace(/^#\/?/, '');
@@ -1949,15 +2469,30 @@ const Router = (function () {
 
   function start(fn) {
     handler = fn;
-    window.addEventListener('hashchange', () => handler(current()));
+    window.addEventListener('hashchange', function () {
+      depth += 1;
+      handler(current());
+      listeners.forEach(function (f) { try { f(current()); } catch (e) { /* never break a route */ } });
+    });
     handler(current());
   }
+
+  const listeners = [];
+  const onRoute = fn => listeners.push(fn);
+
+  /* One step back through OUR history, or home when there is none. */
+  function back() {
+    if (depth > 0) { depth -= 2; window.history.back(); return true; }
+    if (current().name !== 'home') { go('home'); return true; }
+    return false;
+  }
+  const canBack = () => depth > 0 || current().name !== 'home';
 
   const go = hash => { location.hash = hash.charAt(0) === '#' ? hash : '#/' + hash.replace(/^\//, ''); };
   const href = hash => '#/' + String(hash).replace(/^\//, '');
   const reload = () => handler && handler(current());
 
-  return { current, start, go, href, reload };
+  return { current, start, go, href, reload, back, canBack, onRoute };
 })();
 
 
@@ -2080,6 +2615,19 @@ const Tex = (function () {
    first, run the inline rules over prose only, then reassemble. Every block
    is one line — the editor renders each line into its own frame, so there is
    no multi-line block state to carry.
+
+   AUTO-MATH. Dollar signs are bookkeeping, and bookkeeping is what stops a
+   sentence being written at speed. So a LaTeX command met in the middle of
+   prose no longer has to be fenced: "I love \\frac{1}{2} in fact" typesets the
+   fraction and leaves the words alone. `autoMath` finds each run that is
+   unambiguously mathematics — it has to CONTAIN a backslash command, a
+   superscript or a subscript, never merely look numeric — grows it over the
+   operands and operators around it, and stops at the first real word. The run
+   is stashed behind a placeholder before the markdown rules run, so `_` inside
+   a subscript is never mistaken for italics and `<` is never escaped.
+
+   Explicit `$…$` still works and still wins: segments() takes those out first,
+   so anything already fenced is left exactly as written.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Markdown = (function () {
@@ -2122,9 +2670,218 @@ const Markdown = (function () {
     return s.replace(/\x00C(\d+)\x00/g, (_, i) => '<code>' + esc(code[+i]) + '</code>');
   }
 
+  /* ── auto-math ───────────────────────────────────────────────────────────
+     Scan a PROSE segment (everything already fenced in $…$ has been taken out)
+     and wrap each mathematical run in \\( … \\).
+
+     What starts a run: a backslash command, or a token carrying ^ or _.
+     What continues one: single-letter variables, numbers, operators, balanced
+     braces and the spaces between them.
+     What ends one: a word of two or more letters that is not a command, a
+     sentence-ending punctuation mark, or the end of the line.
+
+     The two-letter rule is the whole safety margin. "in fact" ends the run;
+     "x + 1" does not. A lone word like "a" or "I" can be swallowed into a run
+     that is already open, which is the right call inside `f(a) = b` and a
+     harmless one elsewhere — it renders as italic a, which is what someone
+     writing mathematics meant anyway. */
+
+  /* `*` is deliberately absent: it is markdown emphasis far more often than it
+     is multiplication, and LaTeX writes a product as \\cdot or \\times anyway. */
+  const OPS = '+-/=<>()[]|,;:!\'~^_&.';
+  const isOp = ch => OPS.indexOf(ch) >= 0;
+  const isSpace = ch => ch === ' ' || ch === '\t';
+  const isAlnum = ch => /[0-9A-Za-z]/.test(ch);
+
+  /* a balanced {...} starting at i, or -1 */
+  function brace(src, i) {
+    if (src[i] !== '{') return -1;
+    let depth = 0;
+    for (let j = i; j < src.length; j++) {
+      if (src[j] === '\\') { j += 1; continue; }
+      if (src[j] === '{') depth += 1;
+      else if (src[j] === '}') { depth -= 1; if (!depth) return j + 1; }
+    }
+    return -1;
+  }
+
+  /* one math token at i: returns the index after it, or -1 */
+  function token(src, i) {
+    const ch = src[i];
+    if (ch === '\\') {
+      const m = /^\\([a-zA-Z]+|[{}$%&#_|,;: ])/.exec(src.slice(i));
+      return m ? i + m[0].length : -1;
+    }
+    if (ch === '{') return brace(src, i);
+    if (ch === '^' || ch === '_') {
+      const after = i + 1;
+      const b = brace(src, after);
+      if (b > 0) return b;
+      if (after < src.length && isAlnum(src[after])) return after + 1;
+      return -1;
+    }
+    if (/[0-9]/.test(ch)) {
+      let j = i;
+      while (j < src.length && /[0-9.]/.test(src[j])) j += 1;
+      return j;
+    }
+    if (/[A-Za-z]/.test(ch)) {
+      /* a single letter is a variable; two or more is a word, and a word ends
+         the run — unless it is the argument of a command, which the brace
+         branch has already eaten */
+      return /[A-Za-z]/.test(src[i + 1] || '') ? -1 : i + 1;
+    }
+    if (isOp(ch)) return i + 1;
+    return -1;
+  }
+
+  const STRONG = /\\[a-zA-Z]|[\^_]/;   /* what makes a run unmistakably maths */
+  const TRAIL = /[.,;:!?\s]+$/;
+
+  /* Is this ^ or _ a script, or is it punctuation in a word?
+     `x_n` and `x^{2}` are scripts. `snake_case` is not: its base letter is part
+     of a word. `_italic_` is not: it has no base at all. That one test is what
+     lets markdown emphasis and auto-math share a line. */
+  function isScript(s, i) {
+    const prev = s[i - 1];
+    if (prev == null) return false;
+    if (/[A-Za-z]/.test(prev)) { if (/[A-Za-z]/.test(s[i - 2] || '')) return false; }
+    else if (!/[0-9})\]]/.test(prev)) return false;
+    const nx = s[i + 1];
+    if (nx === '{') return brace(s, i + 1) > 0;
+    if (!/[0-9A-Za-z]/.test(nx || '')) return false;
+    return !/[0-9A-Za-z]/.test(s[i + 2] || '');
+  }
+
+  /* `*` is absent from both operator sets on purpose: it is markdown emphasis
+     far more often than multiplication, and LaTeX writes a product as \cdot
+     or \times anyway. */
+  const BACK_OPS = '+-/=<>|&([{~^_';
+
+  /* The math token that ENDS at k, as a start index, or -1. Used to grow a run
+     leftwards so that `f(x) = \sqrt{x}` is one expression rather than three
+     words and a fraction. */
+  function tokenBack(s, k, floor) {
+    if (k <= floor) return -1;
+    const ch = s[k - 1];
+    if (ch === '\x00') return -1;
+    if (ch === '}' || ch === ')' || ch === ']') {
+      const open = ch === '}' ? '{' : ch === ')' ? '(' : '[';
+      let depth = 0;
+      for (let j = k - 1; j >= floor; j--) {
+        if (s[j] === ch) depth += 1;
+        else if (s[j] === open) { depth -= 1; if (!depth) return j; }
+      }
+      return -1;
+    }
+    if (/[0-9]/.test(ch)) {
+      let j = k;
+      while (j - 1 > floor && /[0-9.]/.test(s[j - 2]) && /[0-9]/.test(s[j - 1])) j -= 1;
+      while (j - 1 >= floor && /[0-9]/.test(s[j - 1])) j -= 1;
+      return j;
+    }
+    if (/[A-Za-z]/.test(ch)) {
+      if (/[A-Za-z]/.test(s[k - 2] || '')) return -1;   /* part of a word */
+      return k - 1;
+    }
+    if (BACK_OPS.indexOf(ch) >= 0) return k - 1;
+    return -1;
+  }
+
+  function extendLeft(s, from, floor) {
+    let a = from;
+    for (;;) {
+      let k = a;
+      while (k > floor && isSpace(s[k - 1])) k -= 1;
+      if (k <= floor) break;
+      const t = tokenBack(s, k, floor);
+      if (t < 0) break;
+      a = t;
+    }
+    return a;
+  }
+
+  function extendRight(s, from) {
+    let j = from;
+    for (;;) {
+      let k = j;
+      while (k < s.length && isSpace(s[k])) k += 1;
+      if (k >= s.length) break;
+      const next = token(s, k);
+      if (next < 0) break;
+      j = next;
+    }
+    return j;
+  }
+
+  /* Find every mathematical run in a prose segment and fence it in \( … \).
+     Runs are collected as ranges first and merged, so two anchors in the same
+     expression (`\lim_{n\to\infty} x_n`) produce ONE fence rather than two
+     that overlap. */
+  function autoMath(src) {
+    const s = String(src);
+    if (!STRONG.test(s)) return { text: s, stash: [] };
+
+    /* regions that are verbatim and must never be fenced */
+    const skip = [];
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] !== '`') continue;
+      const close = s.indexOf('`', i + 1);
+      const end = close < 0 ? s.length : close + 1;
+      skip.push([i, end]);
+      i = end - 1;
+    }
+    const inSkip = i => skip.some(r => i >= r[0] && i < r[1]);
+    const floorFor = i => {
+      let f = -1;
+      skip.forEach(function (r) { if (r[1] <= i && r[1] - 1 > f) f = r[1] - 1; });
+      return f;
+    };
+
+    const runs = [];
+    for (let i = 0; i < s.length; i++) {
+      if (inSkip(i)) continue;
+      const isCmd = s[i] === '\\' && /[a-zA-Z]/.test(s[i + 1] || '');
+      const isScr = (s[i] === '^' || s[i] === '_') && isScript(s, i);
+      if (!isCmd && !isScr) continue;
+      if (runs.length && i < runs[runs.length - 1][1]) continue;   /* already inside one */
+
+      const floor = Math.max(floorFor(i), runs.length ? runs[runs.length - 1][1] - 1 : -1);
+      const a = extendLeft(s, i, floor);
+      const b = extendRight(s, isCmd ? (token(s, i) < 0 ? i + 1 : token(s, i)) : i + 1);
+      if (runs.length && a <= runs[runs.length - 1][1]) runs[runs.length - 1][1] = Math.max(b, runs[runs.length - 1][1]);
+      else runs.push([a, b]);
+      i = b - 1;
+    }
+
+    if (!runs.length) return { text: s, stash: [] };
+
+    const stash = [];
+    let out = '', at = 0;
+    runs.forEach(function (r) {
+      out += s.slice(at, r[0]);
+      let run = s.slice(r[0], r[1]);
+      const trail = TRAIL.exec(run);
+      let tail = '';
+      if (trail && trail.index > 0) { tail = trail[0]; run = run.slice(0, trail.index); }
+      if (!run.trim()) { out += s.slice(r[0], r[1]); at = r[1]; return; }
+      stash.push('\\(' + run + '\\)');
+      out += '\x00M' + (stash.length - 1) + '\x00' + tail;
+      at = r[1];
+    });
+    out += s.slice(at);
+    return { text: out, stash: stash };
+  }
+
   /* prose through the inline rules, maths through untouched */
   function spans(src) {
-    return segments(src).map(seg => seg.math ? seg.t : inline(seg.t)).join('');
+    return segments(src).map(function (seg) {
+      if (seg.math) return seg.t;
+      const auto = autoMath(seg.t);
+      const html = inline(auto.text);
+      if (!auto.stash.length) return html;
+      return html.replace(/\x00M(\d+)\x00/g, (_, n) => auto.stash[+n]);
+    }).join('');
   }
 
   /* One source line -> one HTML block. */
@@ -2153,15 +2910,16 @@ const Markdown = (function () {
     return '<p class="md-p">' + spans(raw) + '</p>';
   }
 
-  /* Does this line carry any maths delimiter at all? The editor uses this to
-     decide whether a delimiter-free line in a maths-first box should be
-     treated as bare LaTeX. */
+  /* Does this line carry an explicit maths delimiter? A maths-first box uses
+     this to decide whether a delimiter-free line is bare LaTeX. It stays
+     dollar-only on purpose: auto-math is for MIXED lines, and a maths-first box
+     wants the whole line set as display maths, not one fenced run inside it. */
   const hasMath = src => /\$/.test(String(src || ''));
 
   /* Whole document, for export and for the read-only preview. */
   const doc = src => String(src || '').split('\n').map(line).join('\n');
 
-  return { line, doc, hasMath, inline, segments };
+  return { line, doc, hasMath, inline, segments, autoMath };
 })();
 
 
@@ -2194,7 +2952,7 @@ const Store = (function () {
   const EMPTY = {
     v: 2,
     done: {}, undone: {},        /* Level 1 completion + tombstones */
-    proofs: {}, unproofs: {},    /* Level 2 proof work + tombstones */
+    proofs: {}, unproofs: {},    /* proof + exercise work (L2/L3) + tombstones */
     cards: {}, omr: {}, write: {},
     prefs: {}, prefsAt: {},
     updated: 0
@@ -2278,8 +3036,12 @@ const Store = (function () {
     return hit;
   }
 
-  /* ── proof work (Level 2) ────────────────────────────────────────────── */
-  /* id is a concept id, or 'w:<questionId>' for a written question. */
+  /* ── task work (Levels 2 and 3) ──────────────────────────────────────────
+     One flag map for "I produced this myself", under two kinds of key:
+       '<conceptId>'      a proof worked through          — earns level 2
+       'w:<questionId>'   a written exercise worked out   — earns level 3
+     They share a map because they are the same kind of claim and merge the
+     same way; core.progress.js is what gives each key its meaning. */
   const isProofDone = id => !!state.proofs[id];
   const setProofDone = (id, on) => flag('proofs', 'unproofs', id, on);
 
@@ -2324,37 +3086,13 @@ const Store = (function () {
     return v;
   }
 
-  /* ── the mastery level, PER COURSE ───────────────────────────────────────
-     Not one switch for the whole app: a learner can be consolidating proofs in
-     Real Analysis I while still meeting Real Analysis II for the first time,
-     and a single global level would force the harder standard onto the course
-     they have only just opened.
-
-     Level 2 has to be unlocked on that course before it can be selected —
-     by finishing the course at Level 1, or deliberately in its settings.
-     Opening the app never promotes anyone. */
-  const lvlKey = courseId => 'level:' + (courseId || '_');
-  const unlKey = courseId => 'level2:' + (courseId || '_');
-
-  const unlocked = courseId => pref(unlKey(courseId), false) === true;
-
-  function unlock(courseId, on) {
-    setPref(unlKey(courseId), !!on);
-    if (!on) setPref(lvlKey(courseId), 1);
-    return unlocked(courseId);
-  }
-
-  function level(courseId) {
-    const want = pref(lvlKey(courseId), 1);
-    return (want === 2 && unlocked(courseId)) ? 2 : 1;
-  }
-
-  function setLevel(courseId, n) {
-    const want = n === 2 ? 2 : 1;
-    if (want === 2 && !unlocked(courseId)) return level(courseId);
-    setPref(lvlKey(courseId), want);
-    return level(courseId);
-  }
+  /* ── the mastery level is no longer stored ────────────────────────
+     It used to be a per-course switch with an unlock, and pressing it moved
+     the goalposts under work that was already finished. The level is now
+     DERIVED from what has actually been done — see core.progress.js — so there
+     is nothing here to set. The old 'level:<course>' and 'level2:<course>'
+     preferences are left where they are: they are inert, and deleting them
+     would only make two devices argue about a key neither of them reads. */
 
   /* ── who is signed in ────────────────────────────────────────────────────
      Name and roll number are the credentials AND the sync key. They are a pass
@@ -2516,7 +3254,7 @@ const Store = (function () {
     isDone, setDone, setDoneMany,
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
-    pref, setPref, level, setLevel, unlocked, unlock,
+    pref, setPref,
     identity, signedIn, signIn, signOut,
     summary, exportJSON, reset, tally,
     snapshot, adopt, mergeStates, onChange, flushNow,
@@ -2758,6 +3496,7 @@ const Pool = (function () {
   const deck = [];          /* statement cards, in course order */
   const objFor = {};        /* concept id -> [objective question] */
   const writFor = {};       /* concept id -> [written question] */
+  const writSec = {};       /* section id  -> [written question] */
   const neededBy = {};      /* concept id -> [concept that lists it in needs] */
   const background = [];    /* nodes with no section in any course */
   let courses = [], objective = [], written = [], titles = {}, extSecs = {}, mock = false;
@@ -2800,6 +3539,22 @@ const Pool = (function () {
 
     objective.forEach(q => (q.tests || []).forEach(t => (objFor[t] || (objFor[t] = [])).push(q)));
     written.forEach(q => (q.tests || []).forEach(t => (writFor[t] || (writFor[t] = [])).push(q)));
+
+    /* Level 3 is a section-wide bar, so the exercises are indexed by section
+       as well as by concept. A question reaches a section either by naming it
+       (`sec`) or by testing a concept that lives in it — an exercise filed
+       against two sections counts in both, and is listed once in each. */
+    written.forEach(function (q) {
+      const secs = {};
+      if (q.sec) secs[q.sec] = true;
+      (q.tests || []).forEach(function (t) {
+        const c = byId[t];
+        if (c && c.sec) secs[c.sec] = true;
+      });
+      Object.keys(secs).forEach(function (sec) {
+        (writSec[sec] || (writSec[sec] = [])).push(q);
+      });
+    });
   }
 
   /* every in-course section, in display order */
@@ -2822,6 +3577,7 @@ const Pool = (function () {
   const moduleOfSec = sec => (secMeta[sec] && secMeta[sec].module) || null;
   const objectiveFor = cid => objFor[cid] || [];
   const writtenFor = cid => writFor[cid] || [];
+  const writtenForSec = sec => writSec[sec] || [];
   const objectiveOne = id => objective.filter(q => q.id === id)[0] || null;
 
   function isExtSec(sec) {
@@ -2887,13 +3643,25 @@ const Pool = (function () {
     /* Level 2 counts proof work, so its denominator is the concepts that
        actually carry a proof — not every note. */
     proofs: courseId => conceptList(courseId, { includeExt: false }).filter(c => c.proof).map(c => c.id),
-    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id)
+    allProofs: courseId => conceptList(courseId, { includeExt: true }).filter(c => c.proof).map(c => c.id),
+    /* Level 3's denominator: every exercise reachable from a course's own
+       sections, de-duplicated, because one exercise may span two sections. */
+    written: function (courseId) {
+      const seen = {}, out = [];
+      sections(courseId).forEach(s => writtenForSec(s.sec).forEach(function (q) {
+        if (seen[q.id]) return;
+        seen[q.id] = true;
+        out.push(q.id);
+      }));
+      return out;
+    }
   };
 
   return {
     build, sections, sectionTitle, concept, concepts: conceptList, course,
     courses: () => courses, courseOfSec, moduleOfSec, deck: () => deck,
-    objective: () => objective, objectiveOne, objectiveFor, writtenFor,
+    objective: () => objective, objectiveOne, objectiveFor, writtenFor, writtenForSec,
+    written: () => written,
     background: () => background, chain, unlocks, neighbours, ids,
     isExtSec, isExt, isMock: () => mock
   };
@@ -2902,25 +3670,31 @@ const Pool = (function () {
 
 /* ── src/core.progress.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Level-aware progress.
+   Three levels, earned — never switched.
 
-   `Store` knows two independent facts about a concept — it was ticked, and its
-   proof was worked through — and knows nothing about courses. `Pool` knows
-   which course a concept belongs to and whether it has a proof, and knows
-   nothing about progress. This is the one place the two meet, and every screen
-   that draws a tick, a ring or a meter asks HERE rather than asking Store
-   directly. That is what keeps "done" meaning the same thing everywhere.
+   There is no level control any more. A learner does not *choose* to be at
+   level 2; they get there by working the proof. The level of a concept is
+   therefore derived, in one place, from what has actually been done:
 
-   What "done" means depends on the level of that concept's own course:
+     level 1   ticked. You have been through the material.               RED
+     level 2   its proof worked through. Concepts with no proof (defini-  AMBER
+               tions, examples) reach level 2 with the tick, because
+               there is no proof to work.
+     level 3   every Bartle exercise filed against this concept's        GREEN
+               SECTION worked through. Level 3 is a section-wide bar on
+               purpose: exercises are set on a section, not on one
+               theorem, so a section is only finished when its whole
+               problem set is.
 
-     level 1   ticked. You have encountered the material.
-     level 2   ticked AND, if it has a proof, that proof worked through.
+   A group (section, module, course) is at the level its *weakest* member has
+   reached — all red before the group is red, all amber before the group is
+   amber. That is what the coloured rings and bars draw.
 
-   So switching a course to Level 2 does not erase anything — it raises the
-   bar, and notes that were complete become incomplete again because the
-   standard moved. That is the intended reading: level 2 IS the progress
-   measure for a course that has been switched to it. Courses still at Level 1
-   are unaffected, which is the whole point of the level being per course.
+   `Store` knows two independent facts and nothing about courses: a concept was
+   ticked, and a task was worked through (a proof, keyed on the concept id, or
+   a written question, keyed 'w:<questionId>'). `Pool` knows structure and no
+   progress. This is the one place the two meet, so "done" cannot mean two
+   different things on two screens.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Progress = (function () {
@@ -2931,97 +3705,183 @@ const Progress = (function () {
     return course ? course.id : null;
   };
 
-  /* The level a given concept is being held to. Background nodes (`s.*`) sit
-     in no course, so they are always level 1 — they are assumed knowledge, not
-     material to work proofs on. */
-  const levelOf = id => Store.level(courseIdOf(Pool.concept(id)));
-
   const hasProof = id => {
     const c = Pool.concept(id);
     return !!(c && c.proof);
   };
 
-  /* three states, because at level 2 a ticked note with an unworked proof is
-     genuinely neither done nor untouched */
-  function state(id) {
-    const ticked = Store.isDone(id);
-    if (levelOf(id) < 2) return ticked ? 'done' : 'none';
-    if (!ticked) return 'none';
-    if (!hasProof(id)) return 'done';
-    return Store.isProofDone(id) ? 'done' : 'part';
+  /* ── level 3 tasks ───────────────────────────────────────────────────────
+     The written/Bartle exercises attached to a section. They are stored in the
+     same flag map as proof work, under a 'w:' key, so they merge across
+     devices exactly like every other tick. */
+  const taskKey = q => 'w:' + q.id;
+  const taskDone = q => Store.isProofDone(taskKey(q));
+
+  /* secTaskState is asked once per concept per repaint, so it is memoised and
+     the cache is dropped whenever anything is written. */
+  let secCache = {};
+  if (Store.onChange) Store.onChange(function () { secCache = {}; });
+  const dropCache = () => { secCache = {}; };
+
+  function secTasks(sec) {
+    const qs = (sec && Pool.writtenForSec) ? Pool.writtenForSec(sec) : [];
+    const done = qs.filter(taskDone).length;
+    return { total: qs.length, done: done, ready: qs.length > 0 && done === qs.length, list: qs };
   }
 
-  const isDone = id => state(id) === 'done';
+  function secTaskState(sec) {
+    if (!sec) return { total: 0, done: 0, ready: false, list: [] };
+    if (!secCache[sec]) secCache[sec] = secTasks(sec);
+    return secCache[sec];
+  }
+
+  /* The highest level a concept can currently reach. A section with no
+     exercises delivered yet tops out at 2 — and says so, rather than quietly
+     colouring itself green. */
+  function ceiling(id) {
+    const c = Pool.concept(id);
+    return (c && secTaskState(c.sec).total) ? 3 : 2;
+  }
+
+  /* ── the level of one concept ────────────────────────────────────────── */
+  function level(id) {
+    if (!Store.isDone(id)) return 0;
+    if (hasProof(id) && !Store.isProofDone(id)) return 1;
+    const c = Pool.concept(id);
+    if (c && secTaskState(c.sec).ready) return 3;
+    return 2;
+  }
+
+  /* kept for the few places that only care whether a note has been met */
+  const isDone = id => level(id) >= 1;
 
   /* ── ticking ─────────────────────────────────────────────────────────────
-     One press advances one step, so the tick always has somewhere to go and
-     never silently refuses. At level 2 that is tick -> work the proof -> clear.
-     When a concept has no proof, ticking level 1 automatically counts as
-     ticking both levels. */
+     One press advances one step, so the tick always has somewhere to go.
+     Level 3 is deliberately NOT reachable from here: it is earned by working
+     the section's exercises, not by pressing a box. */
   function advance(id) {
-    const at = state(id);
-    if (at === 'none') {
+    const at = level(id);
+    if (at === 0) {
       Store.setDone(id, true);
       if (!hasProof(id)) Store.setProofDone(id, true);
-      return state(id);
+    } else if (at === 1) {
+      Store.setProofDone(id, true);
+    } else {
+      clear(id);
     }
-    if (at === 'part') { Store.setProofDone(id, true); return state(id); }
-    clear(id);
-    return state(id);
+    dropCache();
+    return level(id);
   }
 
   function clear(id) {
     if (Store.isProofDone(id)) Store.setProofDone(id, false);
     Store.setDone(id, false);
+    dropCache();
   }
 
-  /* Bulk set, for a section / module / course row. At level 2 "tick all" means
-     the level 2 standard, or the row could never reach a full ring. */
-  function setMany(ids, on) {
+  /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
+     section or a module runs through here, and so does the prerequisite
+     cascade — which is why it takes a level rather than a boolean: a
+     prerequisite is raised to the level of the note that needs it, never
+     past it. */
+  function setTo(ids, n) {
     const list = ids || [];
-    Store.setDoneMany(list, on);
+    const want = Math.max(0, Math.min(2, n));
+    Store.setDoneMany(list, want >= 1);
     list.forEach(function (id) {
-      if (!hasProof(id)) {
-        Store.setProofDone(id, !!on);
-        return;
-      }
-      if (levelOf(id) < 2) {
-        if (!on && Store.isProofDone(id)) Store.setProofDone(id, false);
-        return;
-      }
-      if (Store.isProofDone(id) !== !!on) Store.setProofDone(id, !!on);
+      const proof = hasProof(id);
+      const on = want >= 2 || (want >= 1 && !proof);
+      if (Store.isProofDone(id) !== on) Store.setProofDone(id, on);
     });
+    dropCache();
   }
 
-  /* ── counting ────────────────────────────────────────────────────────── */
+  /* one press on a section / module / course row */
+  function advanceMany(ids) {
+    const c = count(ids);
+    if (!c.total) return 0;
+    if (c.min === 0) setTo(ids, 1);
+    else if (c.min === 1) setTo(ids, 2);
+    else setTo(ids, 0);
+    return count(ids).min;
+  }
+
+  /* ── counting ─────────────────────────────────────────────────────────────
+     l1/l2/l3 are cumulative — "how many have reached at least this level" —
+     because that is what the three-colour bar draws, and `min` is the level
+     the whole group has reached. */
   function count(ids) {
     const list = ids || [];
-    let done = 0, part = 0;
+    let l1 = 0, l2 = 0, l3 = 0, min = 3;
     list.forEach(function (id) {
-      const st = state(id);
-      if (st === 'done') done += 1; else if (st === 'part') part += 1;
+      const v = level(id);
+      if (v >= 1) l1 += 1;
+      if (v >= 2) l2 += 1;
+      if (v >= 3) l3 += 1;
+      if (v < min) min = v;
     });
-    return { done: done, part: part, total: list.length };
+    if (!list.length) min = 0;
+    return { total: list.length, l1: l1, l2: l2, l3: l3, min: min, done: l1 };
+  }
+
+  /* the ceiling of a whole group: 3 only where every section in it has
+     exercises to work */
+  function ceilingOf(ids) {
+    const list = ids || [];
+    if (!list.length) return 2;
+    return list.every(id => ceiling(id) >= 3) ? 3 : 2;
   }
 
   /* what a tick button should render: 'true' | 'mixed' | 'false' */
   function tickState(ids) {
     const c = count(ids);
     if (!c.total) return 'false';
-    if (c.done === c.total) return 'true';
-    return (c.done || c.part) ? 'mixed' : 'false';
+    if (c.min >= 1) return 'true';
+    return c.l1 ? 'mixed' : 'false';
+  }
+
+  /* ── prerequisites, judged at the level you are working at ───────────────
+     The bug this fixes: a note you have only read (level 1) used to report its
+     prerequisites as incomplete because THEY had been pushed to level 2 — the
+     bar moved under a note nobody had asked to raise. A prerequisite is
+     satisfied when it has reached the level of the note that needs it, and
+     nothing more is asked of it. Where a prerequisite cannot reach that level
+     (its own section has no exercises yet) the bar drops to what it can
+     actually reach. */
+  function prereqTarget(id) {
+    return Math.max(1, Math.min(2, level(id)));
+  }
+
+  function prereqOk(prereqId, target) {
+    return level(prereqId) >= Math.min(target, ceiling(prereqId));
+  }
+
+  /* Prerequisites of `id` that have not reached `id`'s own level. */
+  function pendingPrereqs(id) {
+    const target = prereqTarget(id);
+    return Pool.chain(id).filter(x => x.id !== id && !prereqOk(x.id, target));
+  }
+
+  /* Raise them to exactly that level — "even if they are greater, tick them at
+     minimum the same level" — so a cascade never promotes work nobody did. */
+  function raisePrereqs(id) {
+    const target = prereqTarget(id);
+    const pending = pendingPrereqs(id);
+    pending.forEach(function (x) {
+      if (level(x.id) < target) setTo([x.id], target);
+    });
+    dropCache();
+    return pending.length;
   }
 
   /* ── the reel queue ──────────────────────────────────────────────────────
      The reel only ever shows material you have said you have met. Studying a
      statement you have never read is not recall, it is reading with extra
-     steps — and a reel full of unread theorems is the pile the reel exists to
-     avoid.
+     steps.
 
      Two kinds of card:
        statement   every ticked concept that has a 'state' card
-       proof       only for a course switched to Level 2, and only for ticked
-                   concepts that carry a proof
+       proof       every ticked concept that carries a proof
 
      Order is by how badly each card needs the attempt, then by the reading
      order of the course — no randomness, so the queue is inspectable and the
@@ -3058,7 +3918,6 @@ const Progress = (function () {
 
     Pool.concepts(null, { includeExt: true }).forEach(function (c, i) {
       if (!c.proof || !Store.isDone(c.id)) return;
-      if (Store.level(courseIdOf(c)) < 2) return;
       const id = c.id + '#proof';
       out.push({
         kind: 'proof', id: id, cid: c.id, sec: c.sec,
@@ -3080,8 +3939,14 @@ const Progress = (function () {
     return reel().map(x => x.id);
   }
 
-  return { levelOf, hasProof, state, isDone, advance, clear, setMany,
-    count, tickState, reel, reelIds, courseIdOf };
+  return {
+    level, ceiling, ceilingOf, isDone, hasProof, courseIdOf,
+    advance, advanceMany, clear, setTo,
+    count, tickState,
+    secTaskState, taskKey, taskDone,
+    prereqTarget, prereqOk, pendingPrereqs, raisePrereqs,
+    reel, reelIds, dropCache
+  };
 })();
 
 
@@ -3393,19 +4258,60 @@ const UI = (function () {
     return null;
   };
 
-  /* Level-aware: at Level 2 a ticked note with an unworked proof is not
-     "completed", it is part-way, and saying otherwise would make the badge and
-     the tree disagree. */
-  const doneBadge = function (id) {
-    const st = Progress.state(id);
-    if (st === 'done') return el('span', { class: 'badge ok', text: '✓ completed' });
-    if (st === 'part') return el('span', { class: 'badge warn', text: 'proof outstanding' });
-    return null;
+  /* The level a concept has reached, as a badge. One vocabulary everywhere:
+     1 read, 2 proof worked, 3 exercises done — and the colour says which. */
+  const LEVEL_NAME = ['not started', 'read', 'proof worked', 'exercises done'];
+  const levelBadge = function (id) {
+    const n = Progress.level(id);
+    if (!n) return null;
+    return el('span', { class: 'badge lv' + n }, [
+      DOM.mi(n >= 3 ? 'workspace_premium' : n >= 2 ? 'function' : 'check', 'xs'),
+      el('span', { text: 'level ' + n + ' · ' + LEVEL_NAME[n] })
+    ]);
   };
 
-  const meter = (a, b, ok) => el('div', { class: 'meter' + (ok ? ' ok' : '') }, [
-    el('i', { style: { width: DOM.pct(a, b) + '%' } })
-  ]);
+  /* `lv` is a level (1, 2, 3) to colour the fill with, or `true` for the plain
+     "finished" green. Left out, the meter is accent-coloured and says nothing
+     about levels — which is right for recall and first-attempt numbers. */
+  const meter = (a, b, lv) => el('div', {
+    class: 'meter' + (lv === true ? ' ok' : lv ? ' lv' + lv : '')
+  }, [el('i', { style: { width: DOM.pct(a, b) + '%' } })]);
+
+  /* ── the three-level bar ─────────────────────────────────────────────────
+     `c` is a Progress.count(): l1/l2/l3 are cumulative, so the widths nest and
+     the bar reads green | amber | red | untouched with no arithmetic. */
+  function levelBar(c, opts) {
+    const o = opts || {};
+    const bar = el('div', { class: 'lvbar', role: 'img',
+      'aria-label': c.l1 + ' read, ' + c.l2 + ' with the proof worked, ' + c.l3 +
+        ' with the exercises done, of ' + c.total });
+    DOM.add(bar, [
+      el('i', { class: 'a', style: { width: DOM.pct(c.l1, c.total) + '%' } }),
+      el('i', { class: 'b', style: { width: DOM.pct(c.l2, c.total) + '%' } }),
+      el('i', { class: 'c', style: { width: DOM.pct(c.l3, c.total) + '%' } })
+    ]);
+    if (o.key === false) return bar;
+    return el('div', {}, [bar, el('div', { class: 'lvkey' }, [
+      el('span', { class: 'k1' }, [el('em', {}), el('span', { text: 'read ' + c.l1 + '/' + c.total })]),
+      el('span', { class: 'k2' }, [el('em', {}), el('span', { text: 'proofs ' + c.l2 + '/' + c.total })]),
+      el('span', { class: 'k3' }, [el('em', {}), el('span', { text: 'exercises ' + c.l3 + '/' + c.total })])
+    ])]);
+  }
+
+  /* The ring every tree row and course card draws: coloured by the level the
+     WHOLE group has reached, filled by how far it has got towards the next. */
+  function levelRing(c, label) {
+    const at = c.min;
+    const reached = at >= 3 ? c.l3 : at >= 2 ? c.l3 : at >= 1 ? c.l2 : c.l1;
+    const pc = at >= 3 ? 100 : DOM.pct(reached, c.total);
+    const node = el('span', {
+      class: 'ring', 'data-lv': String(at), role: 'img',
+      'aria-label': (label || '') + ' level ' + at + ', ' + reached + ' of ' + c.total +
+        ' at the next level'
+    }, [el('i', { text: c.total ? (at >= 3 ? c.total + '/' + c.total : reached + '/' + c.total) : '—' })]);
+    window.requestAnimationFrame(() => node.style.setProperty('--p', pc));
+    return node;
+  }
 
   function stat(n, label, sub, bar) {
     return el('div', { class: 'stat' }, [
@@ -3418,75 +4324,46 @@ const UI = (function () {
 
   const empty = (msg, extra) => el('div', { class: 'empty' }, [el('p', { text: msg }), extra || null]);
 
-  /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
-     (or achieved automatically on notes that have no proof). */
-  function ladder(done, proofDone, hasProof, courseId, isExt) {
-    const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
-    const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
-    const caption = at === 2
-      ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
-      : at === 1 ? '1 · completed'
-      : '1 · not yet completed';
-    let right = (hasProof === false)
-      ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
-      : (at === 2 ? 'proof worked through (Level 2)'
-        : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
-    if (isExt) {
-      right += ' · outside syllabus (not in exam %)';
-    }
+  /* Mastery ladder, for ONE concept. Nothing here is chosen — each rung is
+     earned by a different act, and the caption says which act is still owed. */
+  function ladder(id) {
+    const at = Progress.level(id);
+    const top = Progress.ceiling(id);
+    const hasProof = Progress.hasProof(id);
+    const c = Pool.concept(id);
+    const tasks = c ? Progress.secTaskState(c.sec) : { total: 0, done: 0 };
+
+    const caption = at === 3 ? '3 · section exercises done'
+      : at === 2 ? '2 · proof worked through'
+      : at === 1 ? '1 · read'
+      : 'not started';
+
+    const owed = at === 0 ? 'tick it once you have been through it'
+      : at === 1 ? 'work the proof to reach level 2'
+      : at === 2 ? (top < 3
+          ? 'level 3 needs this section\'s exercises, which are not delivered yet'
+          : 'level 3: ' + tasks.done + ' of ' + tasks.total + ' section exercises done')
+      : 'nothing owed';
+
+    const seg = n => el('span', {
+      class: (n <= at ? 'on l' + n : ''),
+      title: n === 1 ? 'Read' : n === 2 ? (hasProof ? 'Proof worked through' : 'No proof to work')
+        : 'Section exercises worked'
+    });
+
     return el('div', {}, [
-      el('div', { class: 'ladder' }, names.map((n, i) =>
-        el('span', { class: i < at ? 'on' : '', title: n }))),
+      el('div', { class: 'ladder' }, [seg(1), seg(2), seg(3)]),
       el('div', { class: 'ladder-l' }, [
         el('span', { text: caption }),
-        el('span', { text: right })
+        el('span', { text: owed })
       ])
     ]);
   }
 
-  /* The current level as a badge, and the switch that changes it. Level 2 is
-     never entered by accident: it has to be unlocked first (Store.unlocked). */
-  const levelBadge = courseId => el('span', {
-    class: 'badge' + (Store.level(courseId) === 2 ? ' accent' : ''),
-    text: 'Level ' + Store.level(courseId)
-  });
-
-  /* The level switch for ONE course. Level 2 has to be unlocked on that course
-     before it can be picked, and switching is always a deliberate press. */
-  function levelSwitch(course, after) {
-    const id = course.id;
-    const row = el('div', { class: 'row' }, [1, 2].map(function (n) {
-      const can = n === 1 || Store.unlocked(id);
-      const b = el('button', {
-        class: 'chip', type: 'button', 'aria-pressed': String(Store.level(id) === n),
-        disabled: !can, text: 'Level ' + n
-      });
-      b.addEventListener('click', function () {
-        Store.setLevel(id, n);
-        DOM.announce(course.title + ' set to Level ' + Store.level(id) + '.');
-        if (after) after();
-      });
-      return b;
-    }));
-    if (!Store.unlocked(id)) {
-      row.appendChild(el('button', {
-        class: 'chip', type: 'button', text: 'Unlock Level 2',
-        on: { click: function () {
-          Store.unlock(id, true);
-          Store.setLevel(id, 2);
-          DOM.announce('Level 2 unlocked for ' + course.title + '.');
-          if (after) after();
-        } }
-      }));
-    }
-    return row;
-  }
-
-  /* Which of a concept's prerequisites are not ticked yet. One definition,
-     because the note view and the syllabus tree both offer the same cascade
-     and must never disagree about what it would do. */
-  const pendingPrereqs = id =>
-    Pool.chain(id).filter(x => x.id !== id && !Store.isDone(x.id));
+  /* Which of a concept's prerequisites have not reached the level this note is
+     held to. One definition, because the note view and the syllabus tree both
+     offer the same cascade and must never disagree about what it would do. */
+  const pendingPrereqs = id => Progress.pendingPrereqs(id);
 
   /* An inline question with real buttons, used where window.confirm would
      lose the detail that makes the question answerable. */
@@ -3506,7 +4383,7 @@ const UI = (function () {
   function mockBanner() {
     if (!Pool.isMock()) return null;
     return el('div', { class: 'banner' }, [
-      el('span', { 'aria-hidden': 'true', text: '⚠' }),
+      DOM.mi('science'),
       el('span', {}, [
         el('b', { text: 'Mock content. ' }),
         'These ten theorems and sixteen questions are placeholders written to test the study loop — ' +
@@ -3573,10 +4450,118 @@ const UI = (function () {
   };
 
   return {
-    title, crumb, prose, math, kindBadge, tierBadge, doneBadge, meter, stat, empty,
-    ladder, levelBadge, levelSwitch, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
+    title, crumb, prose, math, kindBadge, tierBadge, meter, stat, empty,
+    ladder, levelBadge, levelBar, levelRing, ask, pendingPrereqs, mockBanner, gate, reveal,
+    typeBadge, metaRow, clock
   };
 })();
+
+
+/* ── src/fig.diagrams.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   The rendered diagram library.  GENERATED — do not hand-edit.
+
+   `diagrams/` holds a light and a dark PNG for dozens of results, drawn offline
+   and named after the concept they belong to. The app used to draw eleven
+   figures of its own and ignore all of them, so a learner opening Heine–Borel
+   got no picture even though one was sitting in the repository.
+
+   This file is the index: concept id -> the diagram basenames filed under it.
+   The way to add a picture is to drop the light/dark pair into `diagrams/` and
+   run `python3 tools/gen_diagrams.py` — never to hand-edit a path into a
+   concept.
+
+   A concept may still override the index with `img: ['<basename>', …]`, which
+   is how a node points at a diagram filed under a different id — the mock pool
+   does exactly that, because its ids are `m.*` and the pictures are `c.*`.
+
+   comp.figure.js swaps between the pair on `data-theme`, so changing the theme
+   changes the diagram with no reload.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const DIAGRAM_MAP = {
+  'c.11.1.7': ['c.11.1.7_open_vs_closed_sets'],
+  'c.11.2.5': ['c.11.2.5_heine_borel_theorem'],
+  'c.11.2.6': ['c.11.2.6_topological_bolzano_weierstrass'],
+  'c.2.3.6': ['c.2.3.6_completeness_supremum_property'],
+  'c.2.4.3': ['c.2.4.3_archimedean_property'],
+  'c.2.4.9': ['c.2.4.9_density_rationals_irrationals'],
+  'c.2.5.1': ['c.2.5.1_characterization_of_intervals'],
+  'c.2.5.2': ['c.2.5.2_nested_intervals_property'],
+  'c.2.5.3': ['c.2.5.3_cantor_ternary_set'],
+  'c.3.2.7': ['c.3.2.7_squeeze_theorem_sequences'],
+  'c.3.3.2': ['c.3.3.2_monotone_convergence_theorem'],
+  'c.3.4.8': ['c.3.4.8_bolzano_weierstrass_theorem'],
+  'c.3.5.5': ['c.3.5.5_cauchy_convergence_criterion'],
+  'c.4.1.4': ['c.4.1.4_epsilon_delta_limit_definition'],
+  'c.4.1.8': ['c.4.1.8_sequential_criterion_for_limits'],
+  'c.5.1.1': ['c.5.1.1_continuity_at_a_point'],
+  'c.5.1.3': ['c.5.1.3_sequential_criterion_for_continuity'],
+  'c.5.1.6g': ['c.5.1.6g_dirichlet_function'],
+  'c.5.1.6h': ['c.5.1.6h_thomae_popcorn_function'],
+  'c.5.1.7': ['c.5.1.7_continuous_extension_removable_discontinuity'],
+  'c.5.1.8': ['c.5.1.8_oscillatory_discontinuity_sin_1_over_x', 'c.5.1.8_squeezed_oscillation_x_sin_1_over_x'],
+  'c.5.3.10': ['c.5.3.10_connectedness_interval_mapping', 'c.5.3.10_preservation_of_intervals_theorem'],
+  'c.5.3.2': ['c.5.3.2_boundedness_theorem', 'c.5.3.2_failure_boundedness_open_interval'],
+  'c.5.3.4': ['c.5.3.4_failure_extremum_open_interval', 'c.5.3.4_maximum_minimum_theorem'],
+  'c.5.3.5': ['c.5.3.5_location_of_roots_theorem'],
+  'c.5.3.6': ['c.5.3.6_bisection_method'],
+  'c.5.3.7': ['c.5.3.7_bolzano_intermediate_value_theorem'],
+  'c.5.3.9': ['c.5.3.9_continuous_image_of_compact_interval'],
+  'c.5.4.10': ['c.5.4.10_step_function_approximation'],
+  'c.5.4.13': ['c.5.4.13_piecewise_linear_approximation'],
+  'c.5.4.14': ['c.5.4.14_weierstrass_approximation_theorem'],
+  'c.5.4.1': ['c.5.4.1_uniform_continuity'],
+  'c.5.4.2': ['c.5.4.2_nonuniform_continuity_criterion'],
+  'c.5.4.3': ['c.5.4.3_uniform_continuity_theorem_heine_cantor'],
+  'c.5.4.5': ['c.5.4.5_lipschitz_condition'],
+  'c.5.4.7': ['c.5.4.7_preservation_of_cauchy_sequences'],
+  'c.5.4.8': ['c.5.4.8_continuous_extension_theorem'],
+  'c.5.5.5': ['c.5.5.5_cousin_lemma_gauge_partition'],
+  'c.5.6.3': ['c.5.6.3_monotone_jump_discontinuities'],
+  'c.5.6.4': ['c.5.6.4_countability_of_discontinuities'],
+  'c.5.6.5': ['c.5.6.5_continuous_inverse_theorem'],
+  'c.6.1.1': ['c.6.1.1_derivative_as_tangent_limit'],
+  'c.6.1.5': ['c.6.1.5_caratheodory_theorem'],
+  'c.6.2.12': ['c.6.2.12_darboux_theorem_derivatives'],
+  'c.6.2.1': ['c.6.2.1_interior_extremum_fermat_theorem'],
+  'c.6.2.3': ['c.6.2.3_rolle_theorem'],
+  'c.6.2.4': ['c.6.2.4_lagrange_mean_value_theorem'],
+  'c.6.3.2': ['c.6.3.2_cauchy_mean_value_theorem'],
+  'c.6.3.3': ['c.6.3.3_lhopital_rule'],
+  'c.6.4.1': ['c.6.4.1_taylor_theorem'],
+  'c.7.1.1': ['c.7.1.1_riemann_sum_tagged_partition'],
+  'c.7.2.9': ['c.7.2.9_additivity_of_integral'],
+  'c.7.3.12': ['c.7.3.12_lebesgue_integrability_criterion'],
+  'c.7.3.17': ['c.7.3.17_integration_by_parts'],
+  'c.7.3.1': ['c.7.3.1_fundamental_theorem_of_calculus_form_1'],
+  'c.7.3.5': ['c.7.3.5_fundamental_theorem_of_calculus_form_2'],
+  'c.7.3.8': ['c.7.3.8_integration_by_substitution'],
+  'c.7.4.1': ['c.7.4.1_darboux_upper_and_lower_sums'],
+  'c.7.4.8': ['c.7.4.8_darboux_integrability_criterion'],
+  'c.8.1.1': ['c.8.1.1_pointwise_vs_uniform_convergence'],
+  'c.8.1.3': ['c.8.1.3_uniform_convergence_envelope'],
+  'c.8.2.2': ['c.8.2.2_uniform_limit_continuity_theorem'],
+  'c.8.2.4': ['c.8.2.4_non_interchange_limit_integral'],
+  'c.9.1.5': ['c.9.1.5_riemann_rearrangement_theorem'],
+  'c.9.2.6': ['c.9.2.6_integral_test_for_series'],
+  'c.9.3.2': ['c.9.3.2_alternating_series_test_leibniz'],
+  'c.9.4.6': ['c.9.4.6_weierstrass_m_test'],
+  'c.9.4.9': ['c.9.4.9_radius_of_convergence_cauchy_hadamard']
+};
+
+/* The lecture sheets: whole-topic posters rather than one-result figures.
+   They belong to no single concept and are offered as a set. */
+const DIAGRAM_SHEETS = [
+  'sheet_01_reals_and_sequences',
+  'sheet_02_limits_and_continuity_foundations',
+  'sheet_03_continuity_on_intervals',
+  'sheet_04_uniform_continuity_and_approximations',
+  'sheet_05_differentiation_and_mean_value',
+  'sheet_06_riemann_and_darboux_integral',
+  'sheet_07_sequences_and_series_of_functions',
+  'sheet_08_topology_monotone_gauges'
+];
 
 
 /* ── src/fig.library.js ── */
@@ -4018,13 +5003,23 @@ const FIGMAP = {
 /* ══════════════════════════════════════════════════════════════════════════
    Figure engine.
 
-   Figures are hand-drawn inline SVG, built from the mathematics rather than
-   pasted in as images: they inherit the theme's colours, scale to any width,
-   animate on entry, and a few of them take a control so the learner can move
-   the parameter that matters (ε, or the window position).
+   Two kinds of figure now, and they are complementary rather than rivals:
 
-   This file is the plumbing — coordinate mapping, the frame, the controls.
-   The figures themselves live in fig.library.js.
+     drawn      hand-built inline SVG (fig.library.js). Inherits the theme,
+                scales to any width, animates, and a few take a control so the
+                learner can move the parameter that matters (ε, or the window).
+     rendered   the light/dark PNG pairs in `diagrams/`, indexed by concept in
+                fig.diagrams.js. There are dozens of them and the app used to
+                show none — a result with a picture sitting in the repository
+                and nothing on screen is the worst of both.
+
+   A concept shows its drawn figures first, then its rendered ones. Nothing is
+   duplicated: where a drawn figure already exists for a result, the rendered
+   one is still offered below it, because they show different things (the drawn
+   figure is interactive, the rendered one is the finished diagram).
+
+   This file is the plumbing — coordinate mapping, the frame, the controls, and
+   the theme swap on a rendered diagram.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Fig = (function () {
@@ -4160,6 +5155,58 @@ const Fig = (function () {
     return host;
   }
 
+  /* ── rendered diagrams ────────────────────────────────────────────────── */
+  const base = () => (typeof DIAGRAM_BASE !== 'undefined' ? DIAGRAM_BASE : 'diagrams/');
+
+  const prettyTitle = b => b
+    .replace(/^c\.[0-9.]+[a-z]?_/, '')
+    .replace(/_/g, ' ')
+    .replace(/^./, ch => ch.toUpperCase());
+
+  function renderedFrame(basename, caption) {
+    const light = base() + 'light/' + basename + '.png';
+    const dark = base() + 'dark/' + basename + '.png';
+
+    const img = el('img', {
+      src: light, alt: caption || prettyTitle(basename),
+      loading: 'lazy', decoding: 'async', class: 'fig-img'
+    });
+
+    /* One <img> whose src follows the theme. A <picture> with a
+       prefers-color-scheme <source> was the obvious answer and is the wrong
+       one: it can only see the OS setting, and this app has three theme
+       settings of its own. So the swap watches the same `data-theme` attribute
+       every other themed thing here reads. */
+    function paint() {
+      const wantDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const next = wantDark ? dark : light;
+      if (img.getAttribute('src') !== next) img.setAttribute('src', next);
+    }
+    paint();
+    if (window.MutationObserver) {
+      const mo = new MutationObserver(paint);
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+
+    return el('figure', { class: 'fig fig-rendered', style: { margin: 0 } }, [
+      el('div', { class: 'fig-h' }, [
+        el('span', { class: 'kicker', text: prettyTitle(basename) }),
+        el('span', { class: 'badge', text: 'diagram' })
+      ]),
+      el('div', { class: 'fig-imgwrap' }, [img])
+    ]);
+  }
+
+  /* Which rendered diagrams belong to this concept. A concept may name them
+     itself with `img: [...]`; otherwise the generated index answers by id. */
+  function imagesFor(concept) {
+    if (!concept) return [];
+    if (concept.img && concept.img.length) {
+      return Array.isArray(concept.img) ? concept.img : [concept.img];
+    }
+    return (typeof DIAGRAM_MAP !== 'undefined' && DIAGRAM_MAP[concept.id]) || [];
+  }
+
   /* Mount every figure attached to a concept. Data may carry `figs: [id]`;
      the app's own map is the fallback while the pool is mock. */
   function forConcept(concept) {
@@ -4172,12 +5219,14 @@ const Fig = (function () {
 
   function mount(concept) {
     const figs = forConcept(concept);
-    if (!figs.length) return null;
+    const imgs = imagesFor(concept);
+    if (!figs.length && !imgs.length) return null;
     return el('div', { class: 'stack', style: { gap: '12px' } },
-      figs.map(f => frame(f.def)));
+      figs.map(f => frame(f.def)).concat(imgs.map(b => renderedFrame(b))));
   }
 
-  return { plot: plot, frame: frame, mount: mount, forConcept: forConcept, svg: s };
+  return { plot: plot, frame: frame, mount: mount, forConcept: forConcept,
+    imagesFor: imagesFor, renderedFrame: renderedFrame, svg: s };
 })();
 
 
@@ -4191,8 +5240,13 @@ const Fig = (function () {
    content keeps the full width — the only indentation is a thin rail, so a
    deep tree never squeezes the text.
 
-   Ticking a parent ticks everything under it; untick does the reverse. Parents
-   show a mixed state when some of their children are done.
+   Ticking a parent advances everything under it; a parent shows a mixed state
+   when only some of its children are there yet.
+
+   Colour is the whole vocabulary now. A row is RED once everything under it
+   has been read, AMBER once every proof under it has been worked, GREEN once
+   every section exercise under it is done. There is no level switch to press:
+   the ring simply reports the level the weakest thing under it has reached.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Tree = (function () {
@@ -4213,22 +5267,14 @@ const Tree = (function () {
 
   /* ── pieces ───────────────────────────────────────────────────────────── */
 
-  function ring(done, total) {
-    const pc = DOM.pct(done, total);
-    const node = el('span', {
-      class: 'ring' + (total && done === total ? ' done' : ''),
-      role: 'img', 'aria-label': done + ' of ' + total + ' completed'
-    }, [el('i', { text: total ? done + '/' + total : '—' })]);
-    /* set after mount so the conic gradient animates from 0 */
-    window.requestAnimationFrame(() => node.style.setProperty('--p', pc));
-    return node;
-  }
+  const ring = (c, label) => UI.levelRing(c, label);
 
-  function tickButton(state, label, onPress) {
+  function tickButton(state, lv, label, onPress) {
     const btn = el('button', {
       class: 'tick', type: 'button', role: 'checkbox',
-      'aria-checked': state, 'aria-label': label
-    }, [el('i', { 'aria-hidden': 'true', text: state === 'mixed' ? '–' : '✓' })]);
+      'aria-checked': state, 'data-lv': String(lv || 0), 'aria-label': label
+    }, [el('i', { 'aria-hidden': 'true' },
+      [DOM.mi(state === 'mixed' ? 'remove' : lv >= 3 ? 'workspace_premium' : 'check', 'xs')])]);
     btn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); onPress(); });
     return btn;
   }
@@ -4259,16 +5305,18 @@ const Tree = (function () {
      ticking a result usually means its groundwork is already behind you, but
      "usually" is not "always", so it is asked rather than assumed. */
   function offerCascade(c) {
-    const pending = UI.pendingPrereqs(c.id);
+    const pending = Progress.pendingPrereqs(c.id);
     if (!pending.length) return;
+    const target = Progress.prereqTarget(c.id);
     const names = pending.slice(0, 5).map(x => '· ' + x.title).join('\n') +
       (pending.length > 5 ? '\n· and ' + (pending.length - 5) + ' more' : '');
     const ask = pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
-      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'is', 'are') +
-      ' not ticked yet:\n\n' + names + '\n\nTick them as completed too?';
+      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'has', 'have') +
+      ' not reached level ' + target + ' yet:\n\n' + names +
+      '\n\nBring them up to level ' + target + ' too?';
     if (!window.confirm(ask)) return;
-    const hit = Store.setDoneMany(pending.map(x => x.id), true);
-    DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+    const n = Progress.raisePrereqs(c.id);
+    DOM.announce('Raised ' + n + ' ' + DOM.plural(n, 'prerequisite') + ' to level ' + target + '.');
   }
 
   /* At Level 2 a ticked note whose proof is not worked is genuinely neither
@@ -4276,35 +5324,32 @@ const Tree = (function () {
      one step: tick → work the proof → clear. That way the control always has
      somewhere to go and never silently refuses. */
   function conceptRow(c, repaint) {
-    const st = Progress.state(c.id);
-    const lvl = Progress.levelOf(c.id);
-    const needsProof = lvl === 2 && Progress.hasProof(c.id);
-    const isExt = Pool.isExt(c);
-
+    const lv = Progress.level(c.id);
     const hasProof = Progress.hasProof(c.id);
+    const isExt = Pool.isExt(c);
     const extNote = isExt ? ' (outside syllabus)' : '';
-    const label = st === 'none'
-      ? (hasProof ? 'Mark "' + c.title + '" Level 1 completed' + extNote : 'Mark "' + c.title + '" completed (Levels 1 & 2)' + extNote)
-      : st === 'part'
-        ? 'Mark the proof of "' + c.title + '" as worked through (Level 2)' + extNote
+
+    const label = lv === 0
+      ? 'Mark "' + c.title + '" as read (level 1)' + extNote
+      : lv === 1
+        ? 'Mark the proof of "' + c.title + '" as worked through (level 2)' + extNote
         : 'Clear "' + c.title + '"';
 
-    const row = el('div', { class: 'crow' + (st === 'done' ? ' done' : st === 'part' ? ' part' : '') }, [
-      tickButton(st === 'done' ? 'true' : st === 'part' ? 'mixed' : 'false', label,
-        function () {
-          const was = st;
-          Progress.advance(c.id);
-          if (was === 'none') offerCascade(c);
-          repaint();
-        }),
+    const row = el('div', { class: 'crow', 'data-lv': String(lv) }, [
+      tickButton(lv >= 1 ? 'true' : 'false', lv, label, function () {
+        const was = lv;
+        Progress.advance(c.id);
+        if (was === 0) offerCascade(c);
+        repaint();
+      }),
       el('a', { href: Router.href('note/' + c.id) }, [
         el('span', { class: 'tt' }, [
           el('b', { text: c.title }),
           el('span', { text: c.kind + ' · ' + c.oneLine })
         ]),
         isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
-        needsProof && st === 'part'
-          ? el('span', { class: 'badge warn', text: 'proof' }) : null,
+        lv === 1 && hasProof ? el('span', { class: 'lvtag', 'data-lv': '1', text: 'proof owed' }) : null,
+        lv >= 2 ? el('span', { class: 'lvtag', 'data-lv': String(lv), text: 'L' + lv }) : null,
         DOM.icon('chev', 18, 'chev')
       ])
     ]);
@@ -4313,10 +5358,11 @@ const Tree = (function () {
 
   function sectionNode(s, repaint) {
     const ids = s.concepts.map(c => c.id);
-    const done = Progress.count(ids).done;
+    const cnt = Progress.count(ids);
     const state = Progress.tickState(ids);
     const nid = 'sec-' + s.sec;
     const isExt = Pool.isExtSec(s.sec);
+    const tasks = Progress.secTaskState(s.sec);
 
     const acc = accordion(nid, s.concepts.length
       ? [el('div', { class: 'stack', style: { gap: '6px' } },
@@ -4326,20 +5372,21 @@ const Tree = (function () {
 
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
+        tickButton(state, cnt.min, 'Advance all of §' + s.sec + (isExt ? ' (outside syllabus)' : ''),
           function () {
-            const all = done === ids.length;
-            Progress.setMany(ids, !all);
-            DOM.announce(all ? 'Section cleared.' : 'Section ticked — ' + ids.length + ' notes.');
+            const to = Progress.advanceMany(ids);
+            DOM.announce(to ? 'Section at level ' + to + '.' : 'Section cleared.');
             repaint();
           }),
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + s.sec + '  ' + s.title }),
-            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') + (isExt ? ' · outside syllabus (not in exam %)' : '') })
+            el('span', { text: s.concepts.length + ' ' + DOM.plural(s.concepts.length, 'concept') +
+              (tasks.total ? ' · ' + tasks.done + '/' + tasks.total + ' exercises' : ' · no exercises yet') +
+              (isExt ? ' · outside syllabus (not in exam %)' : '') })
           ]),
           isExt ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
-          ring(done, ids.length),
+          ring(cnt, '§' + s.sec),
           DOM.icon('chev', 20, 'chev')
         ])
       ]),
@@ -4353,7 +5400,7 @@ const Tree = (function () {
     const isExtMod = !!mod.ext;
     const countSecs = isExtMod ? secs : secs.filter(s => !Pool.isExtSec(s.sec));
     const ids = countSecs.reduce((acc, s) => acc.concat(s.concepts.map(c => c.id)), []);
-    const done = Progress.count(ids).done;
+    const cnt = Progress.count(ids);
     const state = Progress.tickState(ids);
     const nid = 'mod-' + mod.id;
 
@@ -4369,11 +5416,10 @@ const Tree = (function () {
     const acc = accordion(nid, [el('div', {}, secs.map(s => sectionNode(s, repaint)))]);
     const node = el('div', { class: 'tnode' }, [
       el('div', { class: 'trow' }, [
-        tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all syllabus notes of module ' + mod.n,
+        tickButton(state, cnt.min, 'Advance every syllabus note of module ' + mod.n,
           function () {
-            const all = done === ids.length;
-            Progress.setMany(ids, !all);
-            DOM.announce(all ? 'Module cleared.' : 'Module ticked — ' + ids.length + ' notes.');
+            const to = Progress.advanceMany(ids);
+            DOM.announce(to ? 'Module at level ' + to + '.' : 'Module cleared.');
             repaint();
           }),
         toggler(acc, nid, [
@@ -4382,7 +5428,7 @@ const Tree = (function () {
             el('span', { text: subtitleText })
           ]),
           isExtMod ? el('span', { class: 'badge warn', text: 'outside syllabus' }) : null,
-          ring(done, ids.length),
+          ring(cnt, 'Module ' + mod.n),
           DOM.icon('chev', 20, 'chev')
         ])
       ]),
@@ -4408,11 +5454,11 @@ const Tree = (function () {
     const node = el('div', { class: 'tnode sub sec' }, [
       el('div', { class: 'trow' }, [
         el('span', { class: 'tick', 'aria-hidden': 'true' },
-          [el('i', { style: { borderStyle: 'dashed', color: 'transparent' }, text: '✓' })]),
+          [el('i', { style: { borderStyle: 'dashed' } }, [DOM.mi('hourglass_empty', 'xs')])]),
         toggler(acc, nid, [
           el('span', { class: 'tt' }, [
             el('b', { text: mod.n + ' · ' + mod.title }),
-            el('span', { text: 'content arrives at Level 3' })
+            el('span', { text: 'not delivered yet' })
           ]),
           el('span', { class: 'badge warn', text: 'pending' }),
           DOM.icon('chev', 20, 'chev')
@@ -4426,7 +5472,7 @@ const Tree = (function () {
   /* A whole course as one collapsed row — the top level of the one-page tree. */
   function courseNode(course, repaint) {
     const ids = Pool.ids.concepts(course.id);
-    const done = Progress.count(ids).done;
+    const cnt = Progress.count(ids);
     const state = Progress.tickState(ids);
     const nid = 'course-' + course.id;
 
@@ -4437,12 +5483,11 @@ const Tree = (function () {
       el('div', { class: 'trow' }, [
         course.pending
           ? el('span', { class: 'tick', 'aria-hidden': 'true' },
-              [el('i', { style: { borderStyle: 'dashed', color: 'transparent' }, text: '✓' })])
-          : tickButton(state, (done === ids.length ? 'Unmark' : 'Mark') + ' all of ' + course.title,
+              [el('i', { style: { borderStyle: 'dashed' } }, [DOM.mi('hourglass_empty', 'xs')])])
+          : tickButton(state, cnt.min, 'Advance every note of ' + course.title,
               function () {
-                const all = done === ids.length;
-                Progress.setMany(ids, !all);
-                DOM.announce(all ? 'Course cleared.' : 'Course ticked — ' + ids.length + ' notes.');
+                const to = Progress.advanceMany(ids);
+                DOM.announce(to ? course.title + ' at level ' + to + '.' : 'Course cleared.');
                 repaint();
               }),
         toggler(acc, nid, [
@@ -4451,8 +5496,8 @@ const Tree = (function () {
             el('span', { text: course.pending ? course.blurb : course.code + ' · ' + course.blurb })
           ]),
           course.pending
-            ? el('span', { class: 'badge warn', text: 'level 3' })
-            : ring(done, ids.length),
+            ? el('span', { class: 'badge warn', text: 'pending' })
+            : ring(cnt, course.title),
           DOM.icon('chev', 20, 'chev')
         ])
       ]),
@@ -4498,7 +5543,7 @@ const Tree = (function () {
         m['mod-' + mod.id] = 1;
         const sec = Pool.sections(course.id)
           .filter(s => (mod.secs || []).indexOf(s.sec) >= 0)
-          .filter(s => s.concepts.some(c => !Progress.isDone(c.id)))[0];
+          .filter(s => s.concepts.some(c => Progress.level(c.id) < 1))[0];
         if (sec) m['sec-' + sec.sec] = 1;
       }
     }
@@ -4557,11 +5602,14 @@ const WriteBox = (function () {
     const concept = o.concept || null;
     const uid = 'w' + Math.random().toString(36).slice(2, 8);
 
-    /* MARKDOWN IS THE DEFAULT. Every line is prose until you put maths in it,
-       because a workspace you cannot write a sentence in is not a workspace —
-       it is a formula box. Maths goes in as $…$ and $$…$$, the same way it is
-       authored everywhere else in this app, and the Σ key wraps the whole line
-       for when the line really is nothing but maths.
+    /* MARKDOWN IS THE DEFAULT, AND SO IS MATHS. Every line is prose until you
+       put maths in it, because a workspace you cannot write a sentence in is
+       not a workspace — it is a formula box.
+
+       Maths no longer needs fencing: write `I love \\frac{1}{2} in fact` and
+       core.md.js finds the expression, typesets it, and leaves the sentence
+       alone. Explicit $…$ and $$…$$ still work and still win, and the Σ key
+       wraps the whole line for when the line really is nothing but maths.
 
        `mathFirst: true` is the opt-in exception for boxes that exist only to
        capture one formula; there, a line with no $ is taken as bare LaTeX. */
@@ -4591,8 +5639,9 @@ const WriteBox = (function () {
       class: 'small muted', id: uid + '-hint', style: { margin: '6px 0 0' },
       text: (mathFirst
         ? 'One line at a time. A line with no $ is typeset as display maths; use $…$ to mix maths into words. '
-        : 'Write normally — **bold**, # headings, - lists. Maths goes in as $…$, and a backslash '
-          + 'opens it for you. The Σ key turns the whole line into display maths. ') +
+        : 'Write normally — **bold**, # headings, - lists. Maths needs no dollar signs: '
+          + 'type \\frac{1}{2} mid-sentence and it is typeset where it stands. A backslash '
+          + 'opens the command list; the Σ key sets the whole line as display maths. ') +
         'Enter starts the next line.'
     });
 
@@ -4603,16 +5652,16 @@ const WriteBox = (function () {
       'aria-describedby': uid + '-hint',
       placeholder: o.placeholder || (mathFirst
         ? '\\forall \\varepsilon > 0 \\; \\exists \\delta > 0 \\ldots'
-        : 'Write a line — words, **bold**, or maths like $\\varepsilon > 0$…')
+        : 'Write a line — words, **bold**, or maths like \\varepsilon > 0 …')
     });
 
     const newlineBtn = el('button', { class: 'wkey', type: 'button',
       title: 'Start the next line (Enter)', 'aria-label': 'Start the next line' },
-      [el('span', { text: '↵' })]);
+      [DOM.mi('keyboard_return', 'sm')]);
 
     const mathBtn = el('button', { class: 'wkey', type: 'button',
       title: 'Wrap this line in display maths', 'aria-label': 'Wrap this line in display maths' },
-      [el('span', { text: 'Σ' })]);
+      [DOM.mi('functions', 'sm')]);
 
     /* ── rendering one line ────────────────────────────────────────────── */
 
@@ -4647,7 +5696,7 @@ const WriteBox = (function () {
       if (res.ok && res.hint) {
         DOM.clear(errBox);
         errBox.appendChild(el('div', { class: 'tex-err' }, [
-          el('span', { 'aria-hidden': 'true', text: 'ⓘ' }), el('span', { text: res.hint })
+          DOM.mi('info', 'sm'), el('span', { text: res.hint })
         ]));
         errBox.hidden = false;
         return;
@@ -4655,7 +5704,7 @@ const WriteBox = (function () {
       if (res.ok) { errBox.hidden = true; DOM.clear(errBox); return; }
       DOM.clear(errBox);
       errBox.appendChild(el('div', { class: 'tex-err' }, [
-        el('span', { 'aria-hidden': 'true', text: '⚠' }),
+        DOM.mi('report', 'sm'),
         el('span', {}, [
           el('b', { text: 'This line does not render yet. ' }),
           el('span', { text: res.error || 'Check for an unmatched { or }.' })
@@ -4770,11 +5819,11 @@ const WriteBox = (function () {
       }
     }
 
-    /* Insert a command. In a markdown line it is wrapped in $…$ unless the
-       caret is already inside maths — so a symbol can be dropped into the
-       middle of a sentence without stopping to think about delimiters. */
+    /* Insert a command bare. It used to be wrapped in $…$ on the way in; that
+       is now auto-math's job, and doing it here as well would fence half a
+       sentence the learner is still writing. */
     function take(entry) {
-      Latex.accept(field, entry, { wrapInMath: !mathFirst });
+      Latex.accept(field, entry, { wrapInMath: false });
       refreshStrip();
       revealInput();
     }
@@ -4797,6 +5846,7 @@ const WriteBox = (function () {
     }
 
     function revealInput() {
+      if (document.activeElement !== field) return;
       const vv = window.visualViewport;
       const bottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
       const top = vv ? vv.offsetTop : 0;
@@ -5031,7 +6081,7 @@ const Login = (function () {
       el('div', { class: 'btn-row' }, [go]),
       note,
       el('div', { class: 'banner' }, [
-        el('span', { 'aria-hidden': 'true', text: 'ⓘ' }),
+        DOM.mi('info'),
         el('span', {}, [
           el('b', { text: 'This is a pass key, not a password. ' }),
           'Anyone who knows your name and roll number can open this record. It keeps your ' +
@@ -5062,10 +6112,11 @@ const Login = (function () {
    a note is Level 1 "completed" and says nothing about recall, so the numbers
    are never merged into one flattering percentage.
 
-   This screen also owns the level switch. The app opens at Level 1 for
-   everyone and stays there until Level 2 is unlocked — by finishing a whole
-   course at Level 1, or deliberately, here in settings. Nothing promotes a
-   learner silently.
+   There is no level switch any more. A course does not get *set* to level 2;
+   it arrives there when every note in it has had its proof worked, and at
+   level 3 when every section's exercises are done. The card shows the colour
+   the course has actually earned — red, amber, green — and what is owed for
+   the next one.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewHome = (function () {
@@ -5073,8 +6124,8 @@ const ViewHome = (function () {
   const el = DOM.el;
 
   function nextUndone() {
-    return Pool.concepts().filter(c => Progress.state(c.id) === 'none')[0]
-      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.state(c.id) === 'none')[0]
+    return Pool.concepts().filter(c => Progress.level(c.id) === 0)[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.level(c.id) === 0)[0]
       || null;
   }
   function nextCard() {
@@ -5083,19 +6134,27 @@ const ViewHome = (function () {
   function nextQuestion() {
     return Pool.objective().filter(q => !(Store.omr(q.id) || {}).first)[0] || null;
   }
-  /* only from courses actually held to Level 2 — offering proof work on a
-     course still at Level 1 is offering work the learner has not opted into */
+  /* the next proof owed on something already read — offering proof work on a
+     note nobody has opened is offering work out of order */
   function nextProof() {
-    return Pool.concepts().filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
-      || Pool.concepts(null, { includeExt: true }).filter(c =>
-      c.proof && Store.level(Progress.courseIdOf(c)) === 2 && !Store.isProofDone(c.id))[0]
+    return Pool.concepts().filter(c => Progress.level(c.id) === 1)[0]
+      || Pool.concepts(null, { includeExt: true }).filter(c => Progress.level(c.id) === 1)[0]
       || null;
+  }
+
+  /* the next section exercise owed, for level 3 */
+  function nextExercise() {
+    const qs = Pool.written();
+    for (let i = 0; i < qs.length; i++) {
+      if (!Progress.taskDone(qs[i])) return qs[i];
+    }
+    return null;
   }
 
   function step(n, label, detail, href, ready) {
     return el('a', { class: 'item', href: Router.href(href) }, [
-      el('span', { class: 'ix' + (ready ? '' : ' ok'), text: ready ? String(n) : '✓' }),
+      ready ? el('span', { class: 'ix', text: String(n) })
+            : el('span', { class: 'ix ok' }, [DOM.mi('check', 'xs')]),
       el('span', { class: 'tt' }, [
         el('b', { text: label }),
         el('span', { text: detail })
@@ -5104,66 +6163,60 @@ const ViewHome = (function () {
     ]);
   }
 
-  /* One course, with its OWN level. The ring counts whatever "done" means for
-     this course, so a course switched to Level 2 shows its proof work and a
-     course still at Level 1 is untouched by that decision. */
-  function courseCard(course, repaint) {
-    const ids = Pool.ids.concepts(course.id);
-    const c = Progress.count(ids);
-    const at = Store.level(course.id);
-    const pc = DOM.pct(c.done, c.total);
+  /* One course, and the level it has EARNED. The ring is coloured by the
+     weakest note in it, because a course is not at level 2 while something in
+     it is still unread — and the bar underneath shows how the three levels are
+     spread, which a single percentage cannot. */
+  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done'];
 
-    const ring = el('span', {
-      class: 'ring' + (c.total && c.done === c.total ? ' done' : ''),
-      role: 'img', 'aria-label': c.done + ' of ' + c.total + ' complete at level ' + at
-    }, [el('i', { text: c.total ? c.done + '/' + c.total : '—' })]);
-    window.requestAnimationFrame(() => ring.style.setProperty('--p', pc));
-
+  function courseCard(course) {
     if (course.pending) {
       return el('div', { class: 'card' }, [
         el('div', { class: 'spread' }, [
           el('div', { class: 'kicker', text: course.title }),
-          el('span', { class: 'badge warn', text: 'level 3' })
+          el('span', { class: 'badge warn', text: 'pending' })
         ]),
         el('p', { class: 'small muted', style: { margin: '8px 0 0' },
-          text: course.pendingNote || 'Content arrives at Level 3.' })
+          text: course.pendingNote || 'Content has not been delivered yet.' })
       ]);
     }
 
-    const proofIds = Pool.ids.proofs(course.id);
-    const proofsDone = proofIds.filter(Store.isProofDone).length;
+    const ids = Pool.ids.concepts(course.id);
+    const c = Progress.count(ids);
+    const top = Progress.ceilingOf(ids);
+    const tasks = Pool.ids.written(course.id);
+    const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
+
+    const owed = c.min === 0 ? (c.total - c.l1) + ' still to read for a red tick'
+      : c.min === 1 ? (c.total - c.l2) + ' proofs still owed for an amber tick'
+      : c.min === 2 ? (top < 3
+          ? 'green needs the section exercises, which are not delivered yet'
+          : (c.total - c.l3) + ' notes still short of their section exercises')
+      : 'every level earned';
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('a', { class: 'kicker', style: { textDecoration: 'none' },
           href: Router.href('study/' + course.id), text: course.title }),
-        UI.levelBadge(course.id)
+        el('span', { class: 'badge' + (c.min ? ' lv' + c.min : ''),
+          text: c.min ? 'level ' + c.min + ' · ' + LEVEL_WORD[c.min] : 'not started' })
       ]),
       el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
-        ring,
+        UI.levelRing(c, course.title),
         el('span', { class: 'tt' }, [
-          el('b', { text: c.done + ' of ' + c.total + (at === 2 ? ' at level 2' : ' ticked') }),
-          el('span', { text: at === 2
-            ? (c.part ? c.part + ' ticked with the proof still outstanding' : course.blurb)
-            : course.blurb })
+          el('b', { text: c.l1 + ' read · ' + c.l2 + ' proofs · ' + c.l3 + ' green, of ' + c.total }),
+          el('span', { text: course.blurb })
         ])
       ]),
-      at === 2 && proofIds.length
-        ? el('div', { style: { marginTop: '10px' } }, [
-            el('div', { class: 'spread' }, [
-              el('span', { class: 'count', text: 'proofs worked' }),
-              el('span', { class: 'count', text: proofsDone + '/' + proofIds.length })
-            ]),
-            el('div', { style: { marginTop: '6px' } }, [UI.meter(proofsDone, proofIds.length)])
-          ])
-        : null,
-      el('div', { style: { marginTop: '12px' } }, [UI.levelSwitch(course, repaint)]),
-      el('p', { class: 'small muted', style: { margin: '8px 0 0' },
-        text: at === 2
-          ? 'At Level 2 a note counts as done once its proof is worked through.'
-          : (Store.unlocked(course.id)
-              ? 'Level 2 is unlocked here — switch when you want the proofs to count.'
-              : 'Finish this course at Level 1 and Level 2 unlocks by itself.') })
+      el('div', { style: { marginTop: '12px' } }, [UI.levelBar(c)]),
+      tasks.length ? el('div', { style: { marginTop: '12px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: 'section exercises worked' }),
+          el('span', { class: 'count', text: tasksDone + '/' + tasks.length })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.meter(tasksDone, tasks.length, 3)])
+      ]) : null,
+      el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: owed })
     ]);
   }
 
@@ -5246,34 +6299,29 @@ const ViewHome = (function () {
   }
 
   function render() {
-    /* Any course at Level 2 is enough to make the proof surfaces worth
-       showing; the numbers themselves are per course, on the cards below. */
-    const anyL2 = Pool.courses().some(c => Store.level(c.id) === 2);
     const all = Pool.ids.concepts();
     const overall = Progress.count(all);
     const s = Store.summary(all, Pool.ids.cards(), Pool.ids.objective(), Pool.ids.proofs());
-    const note = nextUndone(), card = nextCard(), q = nextQuestion(), pf = nextProof();
+    const note = nextUndone(), card = nextCard(), q = nextQuestion();
+    const pf = nextProof(), ex = nextExercise();
+    const exTarget = ex ? (Pool.concept((ex.tests || [])[0]) || null) : null;
 
     const root = el('div', { class: 'stack' });
 
     const tiles = [
-      UI.stat(overall.done + '/' + overall.total, 'Notes complete',
-        anyL2 ? 'each at its own level' : 'ladder level 1',
-        UI.meter(overall.done, overall.total)),
+      UI.stat(overall.l1 + '/' + overall.total, 'Read', 'level 1',
+        UI.levelBar(overall, { key: false })),
       UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—',
         'First-try recall',
         s.cards.tried + ' of ' + s.cards.total + ' tried'),
       UI.stat(s.omr.locked ? DOM.pct(s.omr.correct, s.omr.locked) + '%' : '—',
         'First-try correct',
-        s.omr.locked + ' of ' + s.omr.total + ' locked')
+        s.omr.locked + ' of ' + s.omr.total + ' locked'),
+      UI.stat(overall.l2 + '/' + overall.total, 'Proofs worked', 'level 2',
+        UI.meter(overall.l2, overall.total, 2)),
+      UI.stat(overall.l3 + '/' + overall.total, 'Sections green', 'level 3',
+        UI.meter(overall.l3, overall.total, 3))
     ];
-    if (anyL2) {
-      const l2ids = Pool.courses().filter(c => Store.level(c.id) === 2)
-        .reduce((acc, c) => acc.concat(Pool.ids.proofs(c.id)), []);
-      const pdone = l2ids.filter(Store.isProofDone).length;
-      tiles.push(UI.stat(pdone + '/' + l2ids.length, 'Proofs worked', 'ladder level 2',
-        UI.meter(pdone, l2ids.length)));
-    }
 
     const loop = [
       step(1, note ? 'Read: ' + note.title : 'Every syllabus note has been read once',
@@ -5284,13 +6332,16 @@ const ViewHome = (function () {
         'recall', !!card),
       step(3, q ? 'Answer the next question' : 'Every question has been locked once',
         q ? q.type + ' · ' + Pool.sectionTitle(q.sec) : 'Review the worked answers any time',
-        q ? 'omr/' + q.id : 'omr', !!q)
+        q ? 'omr/' + q.id : 'omr', !!q),
+      step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof you have read is worked through',
+        pf ? (Pool.sectionTitle(pf.sec) + ' · earns level 2') : 'Level 2 is clear',
+        pf ? 'note/' + pf.id : 'study', !!pf),
+      step(5, ex ? 'Work the exercise: ' + (ex.title || ex.id)
+              : 'Every delivered exercise is worked through',
+        ex ? ((exTarget ? Pool.sectionTitle(exTarget.sec) + ' · ' : '') + 'earns level 3')
+           : 'Level 3 is clear for everything delivered',
+        ex && exTarget ? 'note/' + exTarget.id : 'study', !!ex)
     ];
-    if (anyL2) {
-      loop.push(step(4, pf ? 'Work the proof: ' + pf.title : 'Every syllabus proof has been worked through',
-        pf ? (Pool.sectionTitle(pf.sec) + (Pool.isExt(pf) ? ' · outside syllabus' : '')) : 'Levels 3–5 need delayed evidence, which is not built yet',
-        pf ? 'note/' + pf.id : 'study', !!pf));
-    }
 
     DOM.add(root, [
       UI.title('Today'),
@@ -5301,9 +6352,9 @@ const ViewHome = (function () {
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'The loop' }),
         el('p', { class: 'small muted', style: { margin: '4px 0 12px' },
-          text: anyL2
-            ? 'Read it → state it from memory → answer questions on it → produce the proof yourself. Feedback comes after the attempt, never before.'
-            : 'Read it → state it from memory → answer questions on it. Feedback comes after the attempt, never before.' }),
+          text: 'Read it, state it from memory, answer questions on it, produce the proof '
+            + 'yourself, then work the section\'s exercises. Feedback comes after the attempt, '
+            + 'never before.' }),
         el('div', { class: 'list' }, loop)
       ]),
 
@@ -5313,18 +6364,33 @@ const ViewHome = (function () {
           el('a', { class: 'chip', href: Router.href('study'), text: 'Open the syllabus' })
         ]),
         el('p', { class: 'small muted', style: { margin: '0 0 10px' },
-          text: 'Each course carries its own level. Raising one does not raise the others.' }),
+          text: 'A course carries the colour of its weakest note. Nothing here is switched on '
+            + 'or off — the level is whatever the work says it is.' }),
         el('div', { class: 'stack', style: { gap: '12px' } },
-          Pool.courses().map(course => courseCard(course, function () { Router.reload(); })))
+          Pool.courses().map(course => courseCard(course)))
       ]),
 
       el('div', { class: 'card tint' }, [
-        el('div', { class: 'kicker', text: 'Mastery ladder' }),
-        el('p', { class: 'small muted', style: { margin: '4px 0 10px' },
-          text: anyL2
-            ? 'A tick earns level 1. Working a proof through earns level 2 on that proof, in the courses you have switched. Levels 3–5 need delayed evidence, which is not built yet.'
-            : 'A tick earns level 1 and nothing more. Recall levels need evidence, and that evidence is collected from Level 2 onwards.' }),
-        UI.ladder(false, false)
+        el('div', { class: 'kicker', text: 'What the three colours mean' }),
+        el('div', { class: 'stack', style: { gap: '8px', marginTop: '10px' } }, [
+          el('div', { class: 'row' }, [
+            el('span', { class: 'badge lv1', text: 'level 1' }),
+            el('span', { class: 'small muted', text: 'you have read it' })
+          ]),
+          el('div', { class: 'row' }, [
+            el('span', { class: 'badge lv2', text: 'level 2' }),
+            el('span', { class: 'small muted',
+              text: 'you produced its proof yourself (definitions and examples arrive here with the tick)' })
+          ]),
+          el('div', { class: 'row' }, [
+            el('span', { class: 'badge lv3', text: 'level 3' }),
+            el('span', { class: 'small muted',
+              text: 'every Bartle exercise in its section is worked through' })
+          ])
+        ]),
+        el('p', { class: 'small muted', style: { margin: '12px 0 0' },
+          text: 'A module or a course takes the colour of the weakest thing inside it, so all '
+            + 'red before red, all amber before amber, all green before green.' })
       ]),
 
       syncCard(),
@@ -5352,21 +6418,22 @@ const ViewStudy = (function () {
 
   const el = DOM.el;
 
+  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done'];
+
   function summaryStrip() {
     const ids = Pool.ids.concepts();
-    const done = Progress.count(ids).done;
-    const left = ids.length - done;
+    const c = Progress.count(ids);
     return el('div', { class: 'card glass' }, [
       el('div', { class: 'spread' }, [
         el('div', {}, [
-          el('div', { class: 'kicker', text: 'Ticked off' }),
+          el('div', { class: 'kicker', text: 'Where the syllabus stands' }),
           el('div', { style: { fontSize: '1.3rem', fontWeight: 600, marginTop: '2px' },
-            text: done + ' of ' + ids.length + ' notes' })
+            text: c.l1 + ' of ' + c.total + ' read' })
         ]),
-        el('span', { class: 'count',
-          text: left ? left + ' to go' : 'slice complete' })
+        el('span', { class: 'badge' + (c.min ? ' lv' + c.min : ''),
+          text: c.min ? 'level ' + c.min + ' · ' + LEVEL_WORD[c.min] : 'not started' })
       ]),
-      el('div', { style: { marginTop: '10px' } }, [UI.meter(done, ids.length)])
+      el('div', { style: { marginTop: '10px' } }, [UI.levelBar(c)])
     ]);
   }
 
@@ -5374,7 +6441,7 @@ const ViewStudy = (function () {
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
     const ids = Pool.ids.concepts(course.id);
-    const done = Progress.count(ids).done;
+    const c = Progress.count(ids);
 
     DOM.add(root, [
       UI.crumb([{ text: 'Study', href: 'study' }, { text: course.title }]),
@@ -5382,15 +6449,15 @@ const ViewStudy = (function () {
       el('p', { class: 'lede', text: course.blurb }),
       course.pending
         ? el('div', { class: 'banner' }, [
-            el('span', { 'aria-hidden': 'true', text: '⚠' }),
+            DOM.mi('hourglass_empty'),
             el('span', {}, [el('b', { text: 'Not built yet. ' }), course.pendingNote])
           ])
         : el('div', { class: 'card tint' }, [
             el('div', { class: 'spread' }, [
-              el('span', { class: 'kicker', text: 'Notes ticked' }),
-              el('span', { class: 'count', text: done + ' / ' + ids.length })
+              el('span', { class: 'kicker', text: 'Levels reached' }),
+              el('span', { class: 'count', text: c.l1 + ' / ' + c.l2 + ' / ' + c.l3 + ' of ' + c.total })
             ]),
-            el('div', { style: { marginTop: '8px' } }, [UI.meter(done, ids.length)])
+            el('div', { style: { marginTop: '8px' } }, [UI.levelBar(c)])
           ]),
       host
     ]);
@@ -5410,13 +6477,14 @@ const ViewStudy = (function () {
     Tree.seedOpen(Pool.courses().filter(c => !c.pending)[0]);
 
     DOM.add(root, [
-      UI.title('Syllabus', 'Open a level, tick what is done'),
+      UI.title('Syllabus', 'Open a module, advance what is done'),
       UI.mockBanner(),
       summaryStrip(),
       host,
       el('p', { class: 'small muted', style: { margin: 0 },
-        text: 'A tick means "I have been through this" — level 1 of the ladder, nothing more. ' +
-          'Ticking a module or a section ticks everything inside it.' })
+        text: 'One press advances a row one level: read it (red), then work its proof (amber). '
+          + 'Green is not a press — it arrives when every exercise in that section is worked '
+          + 'through. A parent row takes the colour of the weakest thing inside it.' })
     ]);
 
     Tree.mountAll(host, Pool.courses());
@@ -5437,7 +6505,9 @@ const ViewStudy = (function () {
    concept should be more than one tap away.
 
    Completion is a deliberate act with a deliberate label — "encountered the
-   material", level 1 — so it can never read as evidence of recall.
+   material", level 1 — so it can never read as evidence of recall. Level 2 is
+   claimed under the proof, level 3 under the section's exercises, and each is
+   a different act rather than a different setting.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewNote = (function () {
@@ -5445,32 +6515,40 @@ const ViewNote = (function () {
   const el = DOM.el;
 
   /* ── the prerequisite chain, walked and rendered as a path ────────────── */
+  /* The chain is judged AT THE LEVEL OF THIS NOTE, not at the highest level
+     anything in it happens to have reached. Reading a result you have only
+     read is level-1 work, and demanding level-2 groundwork for it was the bug
+     that made every prerequisite look outstanding the moment one of them was
+     pushed further. */
   function prereqPath(c) {
     const chain = Pool.chain(c.id, 3);
     if (chain.length < 2) return null;
-    const missing = chain.filter(x => x.id !== c.id && !Store.isDone(x.id)).length;
+    const target = Progress.prereqTarget(c.id);
+    const missing = chain.filter(x => x.id !== c.id && !Progress.prereqOk(x.id, target)).length;
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: 'Route to this result' }),
         missing
-          ? el('span', { class: 'badge warn', text: missing + ' not ticked' })
-          : el('span', { class: 'badge ok', text: 'groundwork done' })
+          ? el('span', { class: 'badge warn', text: missing + ' below level ' + target })
+          : el('span', { class: 'badge ok', text: 'groundwork at level ' + target })
       ]),
       el('div', { class: 'path', style: { marginTop: '10px' } }, chain.map(function (x, i) {
         const here = x.id === c.id;
-        const done = Progress.isDone(x.id);
+        const lv = Progress.level(x.id);
+        const ok = Progress.prereqOk(x.id, target);
         const kids = [
-          el('span', { class: 'dot', 'aria-hidden': 'true',
-            text: here ? '●' : done ? '✓' : String(i + 1) }),
+          el('span', { class: 'dot', 'aria-hidden': 'true' },
+            [ok && !here ? DOM.mi('check', 'xs') : el('span', { text: here ? '•' : String(i + 1) })]),
           el('span', { class: 'tt' }, [
             el('b', { text: x.title }),
-            el('span', { text: here ? 'you are here' : '§' + x.sec + ' · ' + x.kind })
+            el('span', { text: here ? 'you are here'
+              : '§' + x.sec + ' · ' + x.kind + ' · level ' + lv })
           ])
         ];
         return here
           ? el('div', { class: 'pstep here' }, kids)
-          : el('a', { class: 'pstep' + (done ? ' done' : ''),
+          : el('a', { class: 'pstep' + (ok ? ' done' : ''), 'data-lv': String(lv),
               href: Router.href('note/' + x.id) }, kids);
       }))
     ]);
@@ -5484,7 +6562,7 @@ const ViewNote = (function () {
       el('div', { class: 'kicker', text: 'Used later by' }),
       el('div', { class: 'row', style: { marginTop: '10px' } }, next.map(function (x) {
         return el('a', { class: 'chip', href: Router.href('note/' + x.id) }, [
-          Progress.isDone(x.id) ? el('span', { 'aria-hidden': 'true', text: '✓' }) : null,
+          Progress.level(x.id) >= 1 ? DOM.mi('check', 'xs') : null,
           el('span', { text: x.title })
         ]);
       }))
@@ -5496,11 +6574,11 @@ const ViewNote = (function () {
     if (!n.prev && !n.next) return null;
     return el('div', { class: 'nav-pair' }, [
       n.prev ? el('a', { href: Router.href('note/' + n.prev.id) }, [
-        el('span', { class: 'k', text: '‹ previous' }),
+        el('span', { class: 'k', text: 'previous' }),
         el('span', { class: 'v', text: n.prev.title })
       ]) : el('span', {}),
       n.next ? el('a', { class: 'next', href: Router.href('note/' + n.next.id) }, [
-        el('span', { class: 'k', text: 'next ›' }),
+        el('span', { class: 'k', text: 'next' }),
         el('span', { class: 'v', text: n.next.title })
       ]) : el('span', {})
     ]);
@@ -5520,7 +6598,7 @@ const ViewNote = (function () {
       const kids = [];
       if (p.idea) {
         kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
-          el('div', { class: 'kicker', text: '💡 Proof Strategy / Hint' }),
+          el('div', { class: 'kicker' }, [DOM.mi('lightbulb', 'xs'), el('span', { text: ' Proof strategy' })]),
           el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: p.idea })
         ]));
       }
@@ -5563,13 +6641,59 @@ const ViewNote = (function () {
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
           p.rungs.map(function (r, idx) {
-            return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, [
+            const rungItems = [
               el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
                 el('b', { text: 'Step ' + (idx + 1) + ': ' }),
                 el('span', { html: r.why })
-              ]),
-              r.m ? el('div', { html: r.m }) : null
-            ]);
+              ])
+            ];
+
+            const rawContent = (r.meaning || r.m || '').trim();
+            if (rawContent) {
+              const isExplanation = !!r.meaning ||
+                /^what this (really )?means/i.test(rawContent) ||
+                /^meaning:/i.test(rawContent) ||
+                (!rawContent.startsWith('$$') && !/^\s*\\[a-zA-Z]+/.test(rawContent) && rawContent.split(/\s+/).length > 6 && !rawContent.includes('\\begin'));
+
+              if (isExplanation) {
+                const text = rawContent.replace(/^(what this (really )?means:?|meaning:?)\s*/i, '');
+                rungItems.push(el('div', {
+                  class: 'rung-meaning',
+                  style: {
+                    marginTop: '8px',
+                    padding: '8px 12px',
+                    background: 'var(--surface-2, rgba(0,0,0,0.03))',
+                    borderRadius: '6px',
+                    borderLeft: '2px solid var(--accent, #4f46e5)',
+                    fontSize: '0.88rem',
+                    lineHeight: '1.45'
+                  }
+                }, [
+                  el('div', {
+                    class: 'kicker',
+                    style: { fontSize: '0.68rem', color: 'var(--accent, #4f46e5)', marginBottom: '3px', fontWeight: '600' },
+                    text: 'What this really means'
+                  }),
+                  el('div', { class: 'prose tight', html: text })
+                ]));
+              } else {
+                let mathHtml = rawContent;
+                if (!mathHtml.includes('$')) {
+                  mathHtml = '$$' + mathHtml + '$$';
+                }
+                rungItems.push(el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
+              }
+            }
+
+            if (r.meaning && r.m && r.m.trim() !== r.meaning.trim()) {
+              let mathHtml = r.m.trim();
+              if (!mathHtml.includes('$')) {
+                mathHtml = '$$' + mathHtml + '$$';
+              }
+              rungItems.splice(1, 0, el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
+            }
+
+            return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, rungItems);
           })
         ));
       }
@@ -5579,19 +6703,11 @@ const ViewNote = (function () {
       return kids;
     }
 
-    const tryBtn = el('button', {
-      class: 'chip',
-      type: 'button',
-      'aria-expanded': 'false',
-      text: '💡 Try proof (hint)'
-    });
+    const tryBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
+      [DOM.mi('lightbulb', 'sm'), el('span', { class: 'lb', text: 'Try proof (hint)' })]);
 
-    const showBtn = el('button', {
-      class: 'chip',
-      type: 'button',
-      'aria-expanded': 'false',
-      text: '👁 Show step-by-step proof'
-    });
+    const showBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
+      [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: 'Show step-by-step proof' })]);
 
     tryBtn.addEventListener('click', function () {
       const open = tryHost.hidden;
@@ -5602,7 +6718,7 @@ const ViewNote = (function () {
       }
       tryHost.hidden = !open;
       tryBtn.setAttribute('aria-expanded', String(open));
-      tryBtn.textContent = open ? 'Hide hint' : '💡 Try proof (hint)';
+      tryBtn.querySelector('.lb').textContent = open ? 'Hide hint' : 'Try proof (hint)';
     });
 
     showBtn.addEventListener('click', function () {
@@ -5614,10 +6730,10 @@ const ViewNote = (function () {
       }
       proofHost.hidden = !open;
       showBtn.setAttribute('aria-expanded', String(open));
-      showBtn.textContent = open ? 'Hide proof' : '👁 Show step-by-step proof';
+      showBtn.querySelector('.lb').textContent = open ? 'Hide proof' : 'Show step-by-step proof';
     });
 
-    const row = proofDoneRow(c.id, 'proof', Progress.courseIdOf(c), onTick);
+    const row = taskRow(c.id, { level: 2, noun: 'proof', onTick: onTick });
     const view = el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: 'Proof & Rigorous Argument' }),
@@ -5635,43 +6751,90 @@ const ViewNote = (function () {
     return view;
   }
 
-  /* ── Level 2: proof work, marked per task ─────────────────────────────────
-     This earns level 2, marked per proof (or written answer) below the proof
-     section. When clicked, it ticks Level 2, and automatically ensures Level 1
-     is ticked as well. */
-  function proofDoneRow(id, what, courseId, onTick) {
+  /* ── the claim that earns a level ────────────────────────────────────────
+     Level 2 is claimed under a proof; level 3 under a written exercise. It is
+     one control because it is one kind of claim — "I produced this myself" —
+     and it is deliberately not a checkbox you can tick on the way past. */
+  function taskRow(id, opts) {
+    const o = opts || {};
+    const lv = o.level || 2;
+    const noun = o.noun || 'proof';
     const btn = el('button', { class: 'btn', type: 'button' });
     const note = el('p', { class: 'small muted', style: { margin: '8px 0 0' } });
+
     function paint() {
       const on = Store.isProofDone(id);
       btn.className = 'btn' + (on ? '' : ' primary');
-      btn.textContent = on
-        ? '✓ Level 2 ticked (' + (what === 'proof' ? 'Proof worked through' : 'Worked through') + ') — undo'
-        : 'Tick Level 2 (I worked this ' + what + ' through)';
+      DOM.clear(btn);
+      DOM.add(btn, [
+        DOM.mi(on ? 'task_alt' : 'radio_button_unchecked', 'sm'),
+        el('span', { text: on
+          ? 'Level ' + lv + ' claimed — undo'
+          : 'Tick level ' + lv + ' (I worked this ' + noun + ' through)' })
+      ]);
       btn.setAttribute('aria-pressed', String(on));
       note.textContent = on
-        ? 'Level 2 earned on this ' + what + '.'
+        ? 'Level ' + lv + ' earned on this ' + noun + '.'
         : 'Claim this only if you produced the argument yourself, not if you read it.';
     }
+
     btn.addEventListener('click', function () {
       const next = !Store.isProofDone(id);
       Store.setProofDone(id, next);
-      if (next && !id.startsWith('w:') && !Store.isDone(id)) {
-        Store.setDone(id, true);
-      }
+      /* A proof cannot be worked through on a note you have not read, so
+         claiming level 2 carries level 1 with it. An exercise key ('w:') is a
+         section-wide claim and owns no single concept, so it carries nothing. */
+      if (next && id.indexOf('w:') !== 0 && !Store.isDone(id)) Store.setDone(id, true);
+      Progress.dropCache();
       paint();
-      if (onTick) onTick();
-      DOM.announce(next ? 'Level 2 ticked as worked through.' : 'Level 2 tick removed.');
+      if (o.onTick) o.onTick();
+      DOM.announce(next ? 'Level ' + lv + ' claimed.' : 'Level ' + lv + ' claim removed.');
     });
     paint();
 
-    const host = el('div', { class: 'proof-done', style: { marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--rule)' } }, [
-      el('div', { class: 'kicker', style: { marginBottom: '8px' }, text: 'Level 2 Tick' }),
+    const host = el('div', { class: 'proof-done', style: { marginTop: '16px' } }, [
+      el('div', { class: 'kicker', style: { marginBottom: '8px' }, text: 'Level ' + lv }),
       el('div', { class: 'btn-row' }, [btn]),
       note
     ]);
     host._paint = paint;
     return host;
+  }
+
+  /* Level 3 is a SECTION bar, so the note has to say where the section stands
+     — otherwise a learner works the two exercises filed under this theorem,
+     sees no green, and reads it as a bug. */
+  function sectionTasks(c) {
+    if (!c.sec) return null;
+    const t = Progress.secTaskState(c.sec);
+    if (!t.total) {
+      return el('div', { class: 'card tint' }, [
+        el('div', { class: 'kicker', text: 'Level 3 · §' + c.sec }),
+        el('p', { class: 'small muted', style: { margin: '6px 0 0' },
+          text: 'No Bartle exercises have been delivered for this section yet, so level 3 '
+            + 'is not reachable here. This note tops out at level 2 until they arrive.' })
+      ]);
+    }
+    const others = t.list.filter(q => (q.tests || []).indexOf(c.id) < 0);
+    return el('div', { class: 'card tint' }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: 'Level 3 · §' + c.sec + ' exercises' }),
+        el('span', { class: 'count', text: t.done + ' / ' + t.total })
+      ]),
+      el('div', { style: { marginTop: '10px' } }, [UI.meter(t.done, t.total, 3)]),
+      el('p', { class: 'small muted', style: { margin: '10px 0 0' },
+        text: t.ready
+          ? 'Every exercise in this section is worked through — the section is at level 3.'
+          : 'The whole section has to be worked through before anything in it turns green.' }),
+      others.length ? el('div', { class: 'row', style: { marginTop: '10px' } },
+        others.slice(0, 6).map(function (q) {
+          const c2 = Pool.concept((q.tests || [])[0]);
+          return el('a', { class: 'chip', href: Router.href('note/' + (c2 ? c2.id : c.id)) }, [
+            DOM.mi(Progress.taskDone(q) ? 'check' : 'radio_button_unchecked', 'xs'),
+            el('span', { text: q.title || ('Exercise ' + q.id) })
+          ]);
+        })) : null
+    ]);
   }
 
   function traps(c) {
@@ -5712,8 +6875,8 @@ const ViewNote = (function () {
         const rec = Store.omr(q.id);
         const v = rec && rec.first && rec.first.verdict;
         return el('a', { class: 'item', href: Router.href('omr/' + q.id) }, [
-          el('span', { class: 'ix' + (v === 'correct' ? ' ok' : v ? ' bad' : ''),
-            text: v === 'correct' ? '✓' : v ? '✗' : '·' }),
+          el('span', { class: 'ix' + (v === 'correct' ? ' ok' : v ? ' bad' : '') },
+            [DOM.mi(v === 'correct' ? 'check' : v ? 'close' : 'radio_button_unchecked', 'xs')]),
           el('span', { class: 'tt' }, [
             el('b', { text: q.type + ' · ' + q.marks + ' ' + DOM.plural(q.marks, 'mark') }),
             el('span', { text: v ? 'first attempt: ' + v : 'not attempted' })
@@ -5728,7 +6891,10 @@ const ViewNote = (function () {
     const qs = Pool.writtenFor(c.id);
     if (!qs.length) return null;
     return el('div', { class: 'card' }, [
-      el('div', { class: 'kicker', text: 'Written exam questions on this' }),
+      el('div', { class: 'kicker', text: 'Level 3 · Bartle exercises on this' }),
+      el('p', { class: 'small muted', style: { margin: '4px 0 0' },
+        text: 'Every exercise in this section has to be worked through before the section '
+          + 'turns green. Work it on paper or in the scratchpad, then claim it.' }),
       el('div', { class: 'stack', style: { gap: '14px', marginTop: '12px' } }, qs.map(function (q) {
         const tryHost = el('div', { class: 'stack', style: { gap: '8px', marginTop: '8px' }, hidden: true });
         const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
@@ -5740,7 +6906,7 @@ const ViewNote = (function () {
           const kids = [];
           if (q.approach) {
             kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
-              el('div', { class: 'kicker', text: '💡 Strategic Hint / Approach' }),
+              el('div', { class: 'kicker' }, [DOM.mi('lightbulb', 'xs'), el('span', { text: ' Approach' })]),
               el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
             ]));
           }
@@ -5762,19 +6928,11 @@ const ViewNote = (function () {
           ];
         }
 
-        const tryBtn = el('button', {
-          class: 'chip',
-          type: 'button',
-          'aria-expanded': 'false',
-          text: '💡 Try proof (hint)'
-        });
+        const tryBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
+          [DOM.mi('lightbulb', 'sm'), el('span', { class: 'lb', text: 'Try it (hint)' })]);
 
-        const showBtn = el('button', {
-          class: 'chip',
-          type: 'button',
-          'aria-expanded': 'false',
-          text: '👁 Show answer'
-        });
+        const showBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
+          [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: 'Show answer' })]);
 
         tryBtn.addEventListener('click', function () {
           const open = tryHost.hidden;
@@ -5785,7 +6943,7 @@ const ViewNote = (function () {
           }
           tryHost.hidden = !open;
           tryBtn.setAttribute('aria-expanded', String(open));
-          tryBtn.textContent = open ? 'Hide hint' : '💡 Try proof (hint)';
+          tryBtn.querySelector('.lb').textContent = open ? 'Hide hint' : 'Try it (hint)';
         });
 
         showBtn.addEventListener('click', function () {
@@ -5797,7 +6955,7 @@ const ViewNote = (function () {
           }
           answerHost.hidden = !open;
           showBtn.setAttribute('aria-expanded', String(open));
-          showBtn.textContent = open ? 'Hide answer' : '👁 Show answer';
+          showBtn.querySelector('.lb').textContent = open ? 'Hide answer' : 'Show answer';
         });
 
         return el('div', { class: 'card flat', style: { padding: '12px', border: '1px solid var(--rule)' } }, [
@@ -5812,7 +6970,7 @@ const ViewNote = (function () {
           ]),
           tryHost,
           answerHost,
-          proofDoneRow('w:' + q.id, 'answer', Progress.courseIdOf(c), onTick)
+          taskRow('w:' + q.id, { level: 3, noun: 'exercise', onTick: onTick })
         ]);
       }))
     ]);
@@ -5844,22 +7002,27 @@ const ViewNote = (function () {
     const askHost = el('div', {});
 
     function paintDone() {
+      Progress.dropCache();
       const on = Store.isDone(c.id);
-      const pDone = Store.isProofDone(c.id);
+      const lv = Progress.level(c.id);
 
       DOM.clear(badgesHost);
       DOM.add(badgesHost, [
-        UI.kindBadge(c), UI.tierBadge(c), UI.doneBadge(c.id),
-        pDone ? el('span', { class: 'badge accent', text: '✓ proof worked' }) : null
+        UI.kindBadge(c), UI.tierBadge(c), UI.levelBadge(c.id)
       ].filter(Boolean));
 
       doneBtn.className = 'btn' + (on ? '' : ' primary');
-      doneBtn.textContent = on
-        ? (hasProof ? '✓ Level 1 ticked' + extNote + ' — undo' : '✓ Completed' + (isExt ? extNote : ' (Levels 1 & 2)') + ' — undo')
-        : (hasProof ? 'Tick Level 1 (Completed)' + extNote : 'Tick as completed' + (isExt ? extNote : ' (Levels 1 & 2)'));
+      DOM.clear(doneBtn);
+      DOM.add(doneBtn, [
+        DOM.mi(on ? 'task_alt' : 'radio_button_unchecked', 'sm'),
+        el('span', { text: on
+          ? 'Level 1 ticked' + extNote + ' — undo'
+          : (hasProof ? 'Tick level 1 (I have read this)' + extNote
+                      : 'Tick level 1' + (isExt ? extNote : ' — counts for level 2 too')) })
+      ]);
       doneBtn.setAttribute('aria-pressed', String(on));
-      DOM.clear(ladderHost).appendChild(
-        UI.ladder(on, pDone, hasProof, Progress.courseIdOf(c), isExt));
+      DOM.clear(ladderHost).appendChild(UI.ladder(c.id));
+      void lv;
     }
 
     /* Ticking a result you have just read usually means you already have the
@@ -5868,7 +7031,8 @@ const ViewNote = (function () {
        listed, because a cascade the learner cannot see is a cascade they
        cannot trust. */
     function offerCascade() {
-      const pending = UI.pendingPrereqs(c.id);
+      const pending = Progress.pendingPrereqs(c.id);
+      const target = Progress.prereqTarget(c.id);
       DOM.clear(askHost);
       if (!pending.length) return;
 
@@ -5880,19 +7044,20 @@ const ViewNote = (function () {
       }
 
       askHost.appendChild(UI.ask({
-        title: 'Tick its groundwork too?',
+        title: 'Bring its groundwork up to level ' + target + '?',
         body: el('div', {}, [
           el('p', { style: { margin: '0 0 8px' },
             text: pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
-              ' of this result ' + DOM.plural(pending.length, 'is', 'are') +
-              ' not ticked yet. Tick them as completed as well?' }),
+              ' of this result ' + DOM.plural(pending.length, 'has', 'have') +
+              ' not reached level ' + target + '. Raise them to level ' + target +
+              ' — and no further?' }),
           list
         ]),
         actions: [
-          { label: 'Yes, tick all ' + pending.length, primary: true, onClick: function () {
-              const hit = Store.setDoneMany(pending.map(x => x.id), true);
+          { label: 'Yes, raise all ' + pending.length, primary: true, onClick: function () {
+              const n = Progress.raisePrereqs(c.id);
               DOM.clear(askHost);
-              DOM.announce('Ticked ' + hit.length + ' ' + DOM.plural(hit.length, 'prerequisite') + '.');
+              DOM.announce('Raised ' + n + ' ' + DOM.plural(n, 'prerequisite') + ' to level ' + target + '.');
               Router.reload();
             } },
           { label: 'No, just this one', onClick: function () { DOM.clear(askHost); } }
@@ -5909,10 +7074,11 @@ const ViewNote = (function () {
       } else if (!next) {
         Store.setProofDone(c.id, false);
       }
+      Progress.dropCache();
       paintDone();
       if (syncProofTick) syncProofTick();
       DOM.announce(next
-        ? (hasProof ? 'Level 1 ticked as completed.' : 'Ticked as completed (Levels 1 & 2).')
+        ? (hasProof ? 'Level 1 ticked.' : 'Ticked — levels 1 and 2.')
         : 'Tick removed.');
       if (next) offerCascade(); else DOM.clear(askHost);
     });
@@ -5954,6 +7120,8 @@ const ViewNote = (function () {
       pView,
 
       traps(c),
+
+      sectionTasks(c),
 
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'This note' }),
@@ -6003,7 +7171,7 @@ const ViewNote = (function () {
 
      · only material you have ticked — a statement you have never read is not
        recall practice, it is reading with extra steps;
-     · proof cards only for a course you have switched to Level 2;
+     · proof cards for every ticked concept that carries a proof;
      · ordered by how badly each card needs the attempt, never randomly.
 
    The rules are unchanged: nothing is revealed before an attempt, and the
@@ -6031,7 +7199,6 @@ const ViewRecall = (function () {
     const tried = all.filter(x => x.rank > 0).length;
     const proofs = all.filter(x => x.kind === 'proof').length;
     const ticked = Pool.concepts().filter(c => Store.isDone(c.id)).length;
-    const l2 = Pool.courses().filter(c => Store.level(c.id) === 2).map(c => c.title);
 
     return el('div', { class: 'inner' }, [
       el('div', {}, [
@@ -6058,7 +7225,7 @@ const ViewRecall = (function () {
         ? el('p', { class: 'small muted', style: { margin: 0 },
             text: deck.length + ' ' + DOM.plural(deck.length, 'card') + ' in this reel'
               + (proofs ? ' · ' + proofs + ' of them ' + DOM.plural(proofs, 'is', 'are')
-                  + ' proof work from ' + l2.join(' and ') : '')
+                  + ' proof work' : '')
               + ' · hardest first, then reading order.' })
         : UI.empty(
             ticked
@@ -6066,9 +7233,9 @@ const ViewRecall = (function () {
               : 'The reel draws only on notes you have ticked as completed, and you have not ticked any yet.',
             el('a', { class: 'btn primary', href: Router.href('study'), text: 'Open the syllabus' })),
 
-      (!proofs && l2.length === 0 && all.length)
+      (!proofs && all.length)
         ? el('p', { class: 'small muted', style: { margin: 0 },
-            text: 'Switch a course to Level 2 and its proofs join this reel.' })
+            text: 'Tick a theorem and its proof joins this reel as a second card.' })
         : null
     ]);
   }
@@ -6109,8 +7276,8 @@ const ViewRecall = (function () {
       DOM.add(wrap, [
         el('div', { class: 'verdict ' +
           (grade === 'got' ? 'ok' : grade === 'missed' ? 'bad' : 'warn') }, [
-          el('span', { class: 'g', 'aria-hidden': 'true',
-            text: grade === 'got' ? '✓' : grade === 'missed' ? '✗' : '~' }),
+          el('span', { class: 'g', 'aria-hidden': 'true' },
+            [DOM.mi(grade === 'got' ? 'check_circle' : grade === 'missed' ? 'cancel' : 'remove_circle')]),
           el('span', {}, [
             el('b', { text: r.tries === 1 ? 'First attempt recorded: ' + grade
               : 'This pass: ' + grade }),
@@ -6120,7 +7287,7 @@ const ViewRecall = (function () {
           ])
         ]),
         el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
-          el('button', { class: 'btn primary', type: 'button', text: 'Next ↓',
+          el('button', { class: 'btn primary', type: 'button', text: 'Next card',
             on: { click: goNext } }),
           el('a', { class: 'btn', href: Router.href('note/' + item.cid), text: 'Open the note' })
         ])
@@ -6330,7 +7497,7 @@ const ViewRecall = (function () {
             })
         ]);
         section.appendChild(el('div', { class: 'reel-hint' },
-          [el('span', { text: i + 1 < deck.length ? '↑ swipe for the next' : '↑ end of the reel' })]));
+          [el('span', { text: i + 1 < deck.length ? 'swipe up for the next' : 'end of the reel' })]));
         cards.push(section);
       });
 
@@ -6491,8 +7658,9 @@ const ViewOmr = (function () {
         const rec = Store.omr(q.id);
         const v = rec && rec.first && rec.first.verdict;
         return el('a', { class: 'item', href: Router.href('omr/' + q.id) }, [
-          el('span', { class: 'ix' + (v === 'correct' ? ' ok' : v ? ' bad' : ''),
-            text: v === 'correct' ? '✓' : v === 'wrong' ? '✗' : v === 'partial' ? '~' : String(i + 1) }),
+          el('span', { class: 'ix' + (v === 'correct' ? ' ok' : v ? ' bad' : '') },
+            [v ? DOM.mi(v === 'correct' ? 'check' : v === 'wrong' ? 'close' : 'remove', 'xs')
+               : el('span', { text: String(i + 1) })]),
           el('span', { class: 'tt' }, [
             el('b', { text: '§' + q.sec + '  ' + Pool.sectionTitle(q.sec) }),
             el('span', { text: q.type + ' · ' + q.marks + ' ' + DOM.plural(q.marks, 'mark') +
@@ -6691,11 +7859,11 @@ const ViewOmr = (function () {
       const wrap = el('div', { class: 'stack' });
       const marks = awarded(q, verdict);
       const cls = verdict === 'correct' ? 'ok' : verdict === 'partial' ? 'warn' : 'bad';
-      const glyph = verdict === 'correct' ? '✓' : verdict === 'partial' ? '~' : '✗';
+      const glyph = verdict === 'correct' ? 'check_circle' : verdict === 'partial' ? 'remove_circle' : 'cancel';
 
       DOM.add(wrap, [
         el('div', { class: 'verdict ' + cls }, [
-          el('span', { class: 'g', 'aria-hidden': 'true', text: glyph }),
+          el('span', { class: 'g', 'aria-hidden': 'true' }, [DOM.mi(glyph)]),
           el('span', {}, [
             el('b', { text: verdict === 'correct' ? 'Correct' : verdict === 'partial'
               ? 'Partially correct — this paper awards nothing for a partial set' : 'Not correct' }),
@@ -6827,7 +7995,8 @@ const ViewWrite = (function () {
       el('div', { class: 'list' }, targets.map(function (c) {
         const has = !!Store.draft(c.id);
         return el('a', { class: 'item', href: Router.href('write/' + c.id) }, [
-          el('span', { class: 'ix' + (has ? ' ok' : ''), text: has ? '✎' : '·' }),
+          el('span', { class: 'ix' + (has ? ' ok' : '') },
+            [DOM.mi(has ? 'edit_note' : 'radio_button_unchecked', 'xs')]),
           el('span', { class: 'tt' }, [
             el('b', { text: c.title }),
             el('span', { text: '§' + c.sec + ' · ' + c.kind + (has ? ' · draft saved' : '') })
@@ -6879,7 +8048,7 @@ const ViewWrite = (function () {
     DOM.add(root, [
       UI.crumb([{ text: 'Write', href: 'write' }, { text: '§' + c.sec }]),
       el('div', {}, [
-        el('div', { class: 'row', style: { marginBottom: '8px' } }, [UI.kindBadge(c), UI.doneBadge(c.id)]),
+        el('div', { class: 'row', style: { marginBottom: '8px' } }, [UI.kindBadge(c), UI.levelBadge(c.id)]),
         UI.title(c.title, 'Write the statement of')
       ]),
       el('p', { class: 'lede', text: c.oneLine }),
@@ -6928,16 +8097,89 @@ const Theme = (function () {
   return { apply };
 })();
 
+/* ── shell chrome ─────────────────────────────────────────────────────────
+   The controls that belong to the frame rather than to any view: back, full
+   screen, theme. Each exists twice — once in the mobile header, once in the
+   desktop rail — so they repaint from one place and can never disagree about
+   what is on. */
+const Shell = (function () {
+
+  const isFull = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+  function toggleFull() {
+    const root = document.documentElement;
+    if (isFull()) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
+      return;
+    }
+    const req = root.requestFullscreen || root.webkitRequestFullscreen;
+    if (req) {
+      const r = req.call(root);
+      if (r && r.catch) r.catch(function () { DOM.announce('This browser refused full screen.'); });
+    } else {
+      DOM.announce('This browser has no full-screen mode.');
+    }
+  }
+
+  function cycleTheme() {
+    const order = ['auto', 'light', 'dark'];
+    const next = order[(order.indexOf(Store.pref('theme', 'auto')) + 1) % 3];
+    Store.setPref('theme', next);
+    Theme.apply();
+    DOM.announce('Theme set to ' + next + '.');
+    paint();
+  }
+
+  const each = (sel, fn) => Array.prototype.forEach.call(document.querySelectorAll(sel), fn);
+  function setGlyph(btn, name, label) {
+    const g = btn.querySelector('.mi');
+    if (g) g.textContent = name;
+    const l = btn.querySelector('.lb');
+    if (l) l.textContent = label;
+  }
+
+  function paint() {
+    const full = isFull();
+    const theme = Store.pref('theme', 'auto');
+    document.body.classList.toggle('is-full', full);
+    each('[data-chrome=full]', function (b) {
+      b.setAttribute('aria-pressed', String(full));
+      b.setAttribute('aria-label', full ? 'Leave full screen' : 'Full screen');
+      setGlyph(b, full ? 'fullscreen_exit' : 'fullscreen', full ? 'Exit full screen' : 'Full screen');
+    });
+    each('[data-chrome=theme]', function (b) {
+      b.setAttribute('aria-label', 'Theme: ' + theme + ' — change it');
+      setGlyph(b, theme === 'dark' ? 'dark_mode' : theme === 'light' ? 'light_mode' : 'contrast',
+        'Theme: ' + theme);
+    });
+    each('[data-chrome=back]', function (b) { b.disabled = !Router.canBack(); });
+  }
+
+  function wire() {
+    const byId = id => document.getElementById(id);
+    const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn');
+    if (back) { back.setAttribute('data-chrome', 'back'); back.addEventListener('click', () => Router.back()); }
+    if (full) { full.setAttribute('data-chrome', 'full'); full.addEventListener('click', toggleFull); }
+    if (theme) { theme.setAttribute('data-chrome', 'theme'); theme.addEventListener('click', cycleTheme); }
+    document.addEventListener('fullscreenchange', paint);
+    document.addEventListener('webkitfullscreenchange', paint);
+    paint();
+  }
+
+  return { isFull, toggleFull, cycleTheme, paint, wire };
+})();
+
 const App = (function () {
 
   const el = DOM.el;
 
   const TABS = [
     { name: 'home', label: 'Today', icon: 'today', also: [] },
-    { name: 'study', label: 'Study', icon: 'study', also: ['note'] },
-    { name: 'recall', label: 'Recall', icon: 'recall', also: [] },
-    { name: 'omr', label: 'Questions', icon: 'omr', also: [] },
-    { name: 'write', label: 'Write', icon: 'write', also: [] }
+    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note'] },
+    { name: 'recall', label: 'Recall', icon: 'style', also: [] },
+    { name: 'omr', label: 'Questions', icon: 'ballot', also: [] },
+    { name: 'write', label: 'Write', icon: 'draw', also: [] }
   ];
 
   const VIEWS = {
@@ -6945,14 +8187,50 @@ const App = (function () {
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewWrite
   };
 
+  /* ONE nav element, laid out two ways.
+
+     On a phone it is the bottom tab bar it has always been. On a desktop the
+     same element becomes a left rail — because the horizontal strip was
+     costing a band of vertical space on every screen, and vertical space is
+     the whole of reading. The rail carries its own brand, back button and
+     shell controls, so at that width the top header can go away entirely and
+     the page gets the full height of the window.
+
+     `.rail-top` and `.rail-foot` are simply not displayed on a phone, where
+     the header already carries them. */
+  function railBtn(chrome, glyph, label, onClick) {
+    const b = el('button', { class: 'rail-btn', type: 'button', 'data-chrome': chrome,
+      'aria-label': label }, [DOM.mi(glyph), el('span', { class: 'lb', text: label })]);
+    b.addEventListener('click', onClick);
+    return b;
+  }
+
   function buildNav() {
     const nav = document.getElementById('tabs');
     DOM.clear(nav);
+
+    nav.appendChild(el('div', { class: 'rail-top' }, [
+      railBtn('back', 'arrow_back', 'Back', function () { Router.back(); }),
+      el('a', { class: 'rail-brand', href: Router.href('home') }, [
+        el('b', { text: 'Real Analysis' }),
+        el('span', { text: 'Levels 1–3' })
+      ])
+    ]));
+
+    const list = el('div', { class: 'rail-nav' });
     TABS.forEach(function (t) {
-      nav.appendChild(el('a', { href: Router.href(t.name), id: 'tab-' + t.name }, [
-        DOM.icon(t.icon), el('span', { text: t.label })
+      list.appendChild(el('a', { href: Router.href(t.name), id: 'tab-' + t.name }, [
+        DOM.mi(t.icon), el('span', { class: 'lb', text: t.label })
       ]));
     });
+    nav.appendChild(list);
+
+    nav.appendChild(el('div', { class: 'rail-foot' }, [
+      railBtn('full', 'fullscreen', 'Full screen', Shell.toggleFull),
+      railBtn('theme', 'contrast', 'Theme', Shell.cycleTheme)
+    ]));
+
+    Shell.paint();
   }
 
   function markNav(routeName) {
@@ -6970,7 +8248,7 @@ const App = (function () {
     return el('div', { class: 'stack' }, [
       el('h1', { tabindex: '-1', id: 'pagetitle', text: 'Something broke' }),
       el('div', { class: 'banner' }, [
-        el('span', { 'aria-hidden': 'true', text: '⚠' }),
+        DOM.mi('warning'),
         el('span', {}, [
           el('b', { text: 'This view failed to render. ' }),
           el('span', { class: 'mono', text: (err && err.message) || String(err) })
@@ -6990,6 +8268,7 @@ const App = (function () {
     const wrap = el('div', { class: (view.wrapClass || 'wrap') + ' view-in' }, [node]);
     main.appendChild(wrap);
     markNav(r.name);
+    Shell.paint();
     const h = main.querySelector('#pagetitle');
     if (h) h.focus({ preventScroll: true });
     window.scrollTo(0, 0);
@@ -7028,7 +8307,7 @@ const App = (function () {
     main.appendChild(el('div', { class: 'wrap stack' }, [
       el('h1', { text: 'Content did not load' }),
       el('div', { class: 'banner' }, [
-        el('span', { 'aria-hidden': 'true', text: '⚠' }),
+        DOM.mi('warning'),
         el('span', {}, [
           el('b', { text: 'The data files could not be read. ' }),
           el('span', { class: 'mono', text: (err && err.message) || String(err) })
@@ -7044,7 +8323,7 @@ const App = (function () {
     const wrap = main.querySelector('.wrap');
     if (!wrap) return;
     wrap.insertBefore(el('div', { class: 'banner' }, [
-      el('span', { 'aria-hidden': 'true', text: '⚠' }),
+      DOM.mi('warning'),
       el('span', {}, [
         el('b', { text: 'MathJax did not load. ' }),
         'Formulas will show as LaTeX source. The app needs the network once to fetch it.'
@@ -7052,22 +8331,8 @@ const App = (function () {
     ]), wrap.firstChild);
   }
 
-  /* Finishing a course at Level 1 earns the Level 2 switch ON THAT COURSE.
-     Checked in one place, once, on the way in — so "earned" cannot mean
-     something slightly different on each screen. It unlocks the switch; it
-     does NOT move anyone to Level 2, because a promotion nobody asked for is
-     exactly what the mastery rules exist to prevent. */
-  function earnedUnlocks() {
-    Pool.courses().forEach(function (course) {
-      if (course.pending || Store.unlocked(course.id)) return;
-      const ids = Pool.ids.concepts(course.id);
-      if (ids.length > 0 && ids.every(Store.isDone)) Store.unlock(course.id, true);
-    });
-  }
-
   /* The app proper. Only ever reached with someone signed in. */
   function run() {
-    earnedUnlocks();
     document.body.classList.remove('signed-out');
     buildNav();
     /* Sync starts after the pool: a merge can change what is on screen, and
@@ -7100,6 +8365,7 @@ const App = (function () {
 
   function start() {
     Theme.apply();
+    Shell.wire();
 
     loadData().then(function () {
       Pool.build();
@@ -7130,15 +8396,5 @@ if (document.readyState === 'loading') {
 }
 
 </script>
-<script>
-  document.getElementById('theme-btn').addEventListener('click', function () {
-    var order = ['auto', 'light', 'dark'];
-    var next = order[(order.indexOf(Store.pref('theme', 'auto')) + 1) % 3];
-    Store.setPref('theme', next);
-    Theme.apply();
-    DOM.announce('Theme set to ' + next + '.');
-  });
-</script>
-
 </body>
 </html>

@@ -20,7 +20,8 @@ const ViewWrite = (function () {
       el('div', { class: 'list' }, targets.map(function (c) {
         const has = !!Store.draft(c.id);
         return el('a', { class: 'item', href: Router.href('write/' + c.id) }, [
-          el('span', { class: 'ix' + (has ? ' ok' : ''), text: has ? '✎' : '·' }),
+          el('span', { class: 'ix' + (has ? ' ok' : '') },
+            [DOM.mi(has ? 'edit_note' : 'radio_button_unchecked', 'xs')]),
           el('span', { class: 'tt' }, [
             el('b', { text: c.title }),
             el('span', { text: '§' + c.sec + ' · ' + c.kind + (has ? ' · draft saved' : '') })
@@ -72,7 +73,7 @@ const ViewWrite = (function () {
     DOM.add(root, [
       UI.crumb([{ text: 'Write', href: 'write' }, { text: '§' + c.sec }]),
       el('div', {}, [
-        el('div', { class: 'row', style: { marginBottom: '8px' } }, [UI.kindBadge(c), UI.doneBadge(c.id)]),
+        el('div', { class: 'row', style: { marginBottom: '8px' } }, [UI.kindBadge(c), UI.levelBadge(c.id)]),
         UI.title(c.title, 'Write the statement of')
       ]),
       el('p', { class: 'lede', text: c.oneLine }),

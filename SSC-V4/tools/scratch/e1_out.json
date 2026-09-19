@@ -1,0 +1,236 @@
+[
+  {
+    "id": "c.e1.1",
+    "sec": "E1",
+    "kind": "definition",
+    "tier": "core",
+    "title": "Metric Space Definition and Standard Metrics",
+    "oneLine": "A metric space is a set equipped with a distance function satisfying positivity, symmetry, and triangle inequality.",
+    "statement": "A <b>metric space</b> is a pair $(X, d)$ where $X$ is a non-empty set and $d: X \\times X \\to \\mathbb{R}$ is a function (called a <b>metric</b> or distance) satisfying for all $x, y, z \\in X$:\n      <p>(1) <b>Positivity:</b> $d(x, y) \\ge 0$, and $d(x, y) = 0 \\iff x = y$.</p>\n      <p>(2) <b>Symmetry:</b> $d(x, y) = d(y, x)$.</p>\n      <p>(3) <b>Triangle Inequality:</b> $d(x, z) \\le d(x, y) + d(y, z)$.</p>\n      <p>Standard examples include Euclidean metric $d_2(x, y) = \\sqrt{\\sum_{i=1}^n (x_i - y_i)^2}$, taxicab $d_1(x, y) = \\sum |x_i - y_i|$, Chebyshev $d_\\infty(x, y) = \\max |x_i - y_i|$ on $\\mathbb{R}^n$, the discrete metric ($d(x, y) = 1$ if $x \\ne y$), and the uniform metric $d_\\infty(f, g) = \\sup_{t \\in [a, b]} |f(t) - g(t)|$ on $C[a, b]$.</p>",
+    "intuition": "<p>In Real Analysis I, distance was always the 1D absolute value difference $|x - y|$. Metric spaces liberate analysis from the real line, letting us measure distances between vectors in $\\mathbb{R}^n$, continuous functions, sequences, or matrices!</p>\n      <p>The three rules ensure that distance behaves like physical distance: it is never negative, distance zero means same location, direction does not alter distance, and a detour cannot be shorter than the straight line.</p>",
+    "needs": [
+      "c.2.2.1"
+    ],
+    "traps": [
+      "Forgetting that $d(x, y) = 0 \\implies x = y$. Functions that satisfy everything except this are only *pseudometrics*.",
+      "The discrete metric makes EVERY subset both open and closed! Never assume metric spaces share all topological quirks of $\\mathbb{R}$."
+    ],
+    "cards": [
+      {
+        "q": "State the three axioms that define a metric $d$ on a set $X$.",
+        "a": "(1) $d(x, y) \\ge 0$ with equality iff $x = y$; (2) $d(x, y) = d(y, x)$; (3) $d(x, z) \\le d(x, y) + d(y, z)$.",
+        "kind": "state"
+      },
+      {
+        "q": "What is the discrete metric on a set $X$?",
+        "a": "$d(x, y) = 0$ if $x = y$, and $d(x, y) = 1$ if $x \\ne y$.",
+        "kind": "recall"
+      }
+    ]
+  },
+  {
+    "id": "c.e1.2",
+    "sec": "E1",
+    "kind": "definition",
+    "tier": "core",
+    "title": "Open Balls and Open Sets in Metric Spaces",
+    "oneLine": "An open ball is the interior of a sphere; open sets are arbitrary unions of open balls.",
+    "statement": "Let $(X, d)$ be a metric space.\n      <p>(a) The <b>open ball</b> of radius $r > 0$ centered at $x_0 \\in X$ is:\n      $$B(x_0, r) = \\{x \\in X : d(x, x_0) < r\\}$$</p>\n      <p>(b) A subset $U \\subseteq X$ is <b>open</b> if for every $x \\in U$, there exists $r > 0$ such that $B(x, r) \\subseteq U$.</p>\n      <p>(c) The empty set $\\emptyset$ and whole space $X$ are open; arbitrary unions of open sets are open; finite intersections of open sets are open.</p>",
+    "intuition": "<p>Open sets are sets with 'wiggle room': wherever you stand inside an open set, you can take a small step in ANY direction without falling out of the set.</p>\n      <p>In $\\mathbb{R}$, an open ball is just an open interval $(x_0 - r, x_0 + r)$. In $\\mathbb{R}^2$, it is a circular disk without its boundary circle.</p>",
+    "needs": [
+      "c.e1.1",
+      "c.2.2.2"
+    ],
+    "traps": [
+      "Infinite intersections of open sets need NOT be open! For example, $\\bigcap_{n=1}^\\infty (-1/n, 1/n) = \\{0\\}$, which is closed, not open.",
+      "An open ball in the discrete metric with radius $r \\le 1$ is just a single point $\\{x_0\\}$, so every singleton is open!"
+    ],
+    "cards": [
+      {
+        "q": "Define an open ball $B(x_0, r)$ in a metric space $(X, d)$.",
+        "a": "$B(x_0, r) = \\{x \\in X : d(x, x_0) < r\\}$.",
+        "kind": "state"
+      },
+      {
+        "q": "Is an arbitrary intersection of open sets guaranteed to be open?",
+        "a": "No, only finite intersections are guaranteed to be open (e.g. $\\bigcap_{n=1}^\\infty (-1/n, 1/n) = \\{0\\}$).",
+        "kind": "recall"
+      }
+    ]
+  },
+  {
+    "id": "c.e1.3",
+    "sec": "E1",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Closed Sets, Limit Points, and Closure",
+    "oneLine": "A set is closed iff it contains all its limit points; its closure is the set plus its boundary points.",
+    "statement": "Let $(X, d)$ be a metric space and $E \\subseteq X$.\n      <p>(a) A point $x \\in X$ is a <b>limit point</b> (cluster point) of $E$ if every open ball $B(x, r)$ contains a point $y \\in E$ with $y \\ne x$. The set of limit points is denoted $E'$.</p>\n      <p>(b) $E$ is <b>closed</b> if its complement $X \\setminus E$ is open. Equivalently, $E$ is closed if and only if $E' \\subseteq E$ (it contains all its limit points).</p>\n      <p>(c) The <b>closure</b> of $E$ is $\\overline{E} = E \\cup E'$. It is the smallest closed set containing $E$.</p>",
+    "intuition": "<p>Think of limit points as points that can be snuck up on from inside $E$. A set is closed if no outsider can sneak in through a back door\u2014every boundary point already belongs to the set.</p>",
+    "needs": [
+      "c.e1.2"
+    ],
+    "traps": [
+      "Sets are NOT like doors: a set can be BOTH open and closed (clopen), such as $\\emptyset$ and $X$, or NEITHER open nor closed (like $[0, 1)$).",
+      "An isolated point of $E$ is in $E$ but is NOT a limit point of $E$."
+    ],
+    "proof": {
+      "idea": "Show $X \\setminus E$ is open iff $E$ contains every limit point.",
+      "why": "If an outsider $x \\notin E$ were a limit point, every ball around $x$ would hit $E$, preventing $X \\setminus E$ from containing any ball around $x$.",
+      "rungs": [
+        {
+          "why": "(=>) Suppose $E$ is closed, so $U = X \\setminus E$ is open. Let $x \\in E'$.",
+          "m": "$$x \\in E' \\implies \\forall r > 0, \\; (B(x, r) \\setminus \\{x\\}) \\cap E \\ne \\emptyset$$",
+          "meaning": "What this really means: A limit point has points of $E$ crowding arbitrarily close to it from all sides."
+        },
+        {
+          "why": "If $x \\notin E$, then $x \\in U$. Since $U$ is open, there is $r > 0$ with $B(x, r) \\subseteq U = X \\setminus E$.",
+          "m": "$$B(x, r) \\cap E = \\emptyset$$",
+          "meaning": "What this really means: If $x$ were outside the closed set, it would have an open safety bubble that never touches $E$."
+        },
+        {
+          "why": "This directly contradicts that $x$ is a limit point of $E$. Therefore, $x \\in E$, proving $E' \\subseteq E$.",
+          "m": "$$x \\in E' \\implies x \\in E \\implies E' \\subseteq E$$",
+          "meaning": "What this really means: The safety bubble and the limit point condition cannot coexist; hence every limit point must already belong to $E$."
+        },
+        {
+          "why": "(<=) Conversely, assume $E' \\subseteq E$. Let $x \\in X \\setminus E$.",
+          "m": "$$x \\notin E \\implies x \\notin E'$$",
+          "meaning": "What this really means: Since all limit points are inside $E$, any outsider is disqualified from being a limit point."
+        },
+        {
+          "why": "Since $x$ is not a limit point, there exists $r > 0$ such that $B(x, r) \\cap E = \\emptyset$, meaning $B(x, r) \\subseteq X \\setminus E$. Thus $X \\setminus E$ is open.",
+          "m": "$$B(x, r) \\subseteq X \\setminus E \\implies X \\setminus E \\text{ is open} \\implies E \\text{ is closed}$$",
+          "meaning": "What this really means: Every outsider has its own personal bubble staying clear of $E$, proving the complement is open and $E$ is closed."
+        }
+      ],
+      "ends": "A subset of a metric space is closed if and only if it contains all its limit points."
+    },
+    "cards": [
+      {
+        "q": "What is the relationship between closed sets and limit points in a metric space?",
+        "a": "A set is closed if and only if it contains all of its limit points ($E' \\subseteq E$).",
+        "kind": "state"
+      },
+      {
+        "q": "Define the closure $\\overline{E}$ of a set $E$.",
+        "a": "$\\overline{E} = E \\cup E'$, which is the intersection of all closed sets containing $E$.",
+        "kind": "recall"
+      }
+    ]
+  },
+  {
+    "id": "c.e1.4",
+    "sec": "E1",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Convergence of Sequences in Metric Spaces",
+    "oneLine": "A sequence converges to x iff the real distance d(x_n, x) shrinks to 0.",
+    "statement": "Let $(X, d)$ be a metric space.\n      <p>(a) A sequence $(x_n)$ in $X$ <b>converges</b> to $x \\in X$ (written $x_n \\to x$ or $\\lim x_n = x$) if:\n      $$\\forall \\varepsilon > 0, \\; \\exists K \\in \\mathbb{N} : n \\ge K \\implies d(x_n, x) < \\varepsilon$$</p>\n      <p>(b) <b>Uniqueness:</b> Limits in a metric space are always unique.</p>\n      <p>(c) <b>Sequential Characterization of Closed Sets:</b> A set $E \\subseteq X$ is closed if and only if for every sequence $(x_n)$ in $E$ with $x_n \\to x \\in X$, the limit $x$ belongs to $E$.</p>",
+    "intuition": "<p>Convergence in an abstract metric space simply reduces to real sequence convergence: $(x_n) \\to x$ in $X$ means the real numbers $d(x_n, x) \\to 0$ in $\\mathbb{R}$.</p>\n      <p>A closed set is a 'trap': if your points walk around inside $E$ and converge to a target, that target must remain inside $E$.</p>",
+    "needs": [
+      "c.e1.1",
+      "c.3.1.4"
+    ],
+    "traps": [
+      "In the discrete metric, a sequence converges if and only if it is EVENTUALLY CONSTANT ($x_n = x$ for all large $n$).",
+      "Confusing convergence in $C[a, b]$ under $d_\\infty$ (which is uniform convergence) with pointwise convergence."
+    ],
+    "proof": {
+      "idea": "Use the triangle inequality to prove uniqueness, and use open balls to connect sequential limits to closed sets.",
+      "why": "If $x_n \\to x$ and $x_n \\to y$, then $d(x, y) \\le d(x, x_n) + d(x_n, y) < \\varepsilon/2 + \\varepsilon/2 = \\varepsilon$ for all $\\varepsilon > 0$, forcing $d(x, y) = 0$.",
+      "rungs": [
+        {
+          "why": "For uniqueness, suppose $x_n \\to x$ and $x_n \\to y$. Given $\\varepsilon > 0$, choose $K_1, K_2$ so $d(x_n, x) < \\varepsilon/2$ and $d(x_n, y) < \\varepsilon/2$.",
+          "m": "$$n \\ge \\max(K_1, K_2) \\implies d(x_n, x) < \\frac{\\varepsilon}{2}, \\; d(x_n, y) < \\frac{\\varepsilon}{2}$$",
+          "meaning": "What this really means: Once $n$ is large enough, the sequence is within $\\varepsilon/2$ of both candidate limits simultaneously."
+        },
+        {
+          "why": "Apply the Triangle Inequality to $d(x, y)$.",
+          "m": "$$d(x, y) \\le d(x, x_n) + d(x_n, y) < \\frac{\\varepsilon}{2} + \\frac{\\varepsilon}{2} = \\varepsilon$$",
+          "meaning": "What this really means: The distance between the two targets cannot exceed the sum of their distances to the intermediate term."
+        },
+        {
+          "why": "Since $d(x, y) < \\varepsilon$ for EVERY $\\varepsilon > 0$, by Theorem 2.1.9 we must have $d(x, y) = 0$, so $x = y$.",
+          "m": "$$\\forall \\varepsilon > 0, \\; 0 \\le d(x, y) < \\varepsilon \\implies d(x, y) = 0 \\implies x = y$$",
+          "meaning": "What this really means: Two points separated by a distance smaller than any positive number must be the exact same point."
+        }
+      ],
+      "ends": "Limits in any metric space are unique, and closed sets are precisely those closed under sequential limits."
+    },
+    "cards": [
+      {
+        "q": "What does $x_n \\to x$ mean in a metric space $(X, d)$?",
+        "a": "For every $\\varepsilon > 0$, there exists $K \\in \\mathbb{N}$ such that $d(x_n, x) < \\varepsilon$ for all $n \\ge K$.",
+        "kind": "state"
+      },
+      {
+        "q": "Characterize closed sets in terms of sequences.",
+        "a": "$E$ is closed iff whenever $(x_n) \\subseteq E$ converges to $x$, the limit $x \\in E$.",
+        "kind": "recall"
+      }
+    ]
+  },
+  {
+    "id": "c.e1.5",
+    "sec": "E1",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Continuity of Mappings Between Metric Spaces",
+    "oneLine": "A mapping is continuous iff the inverse image of every open set is open.",
+    "statement": "Let $(X, d_X)$ and $(Y, d_Y)$ be metric spaces, and $f: X \\to Y$.\n      <p>(a) $f$ is <b>continuous at $c \\in X$</b> if for every $\\varepsilon > 0$, there exists $\\delta > 0$ such that:\n      $$d_X(x, c) < \\delta \\implies d_Y(f(x), f(c)) < \\varepsilon$$</p>\n      <p>(b) <b>Global Topological Criterion:</b> $f$ is continuous on $X$ if and only if for every open set $V \\subseteq Y$, the pre-image $f^{-1}(V)$ is open in $X$.</p>\n      <p>(c) Equivalently, $f$ is continuous iff $f^{-1}(F)$ is closed in $X$ for every closed $F \\subseteq Y$.</p>",
+    "intuition": "<p>The topological definition $f^{-1}(\\text{open}) = \\text{open}$ is the crown jewel of modern analysis: it eliminates $\\varepsilon$ and $\\delta$ completely!</p>\n      <p>Continuous maps preserve proximity: pulling back a neighborhood of an image point gives a neighborhood of the original point.</p>",
+    "needs": [
+      "c.e1.2",
+      "c.5.1.2"
+    ],
+    "traps": [
+      "The FORWARD image of an open set $f(U)$ does NOT have to be open! (e.g. constant function $f(x) = 0$ sends open interval $(-1, 1)$ to singleton $\\{0\\}$, which is closed).",
+      "Continuity requires pulling BACK open sets, never pushing forward."
+    ],
+    "proof": {
+      "idea": "Show the $\\varepsilon$-$\\delta$ ball definition translates directly to pre-images of open sets.",
+      "why": "A point $c \\in f^{-1}(V)$ means $f(c) \\in V$. Since $V$ is open, it contains an $\\varepsilon$-ball; continuity pulls this back to a $\\delta$-ball around $c$ inside $f^{-1}(V)$.",
+      "rungs": [
+        {
+          "why": "(=>) Assume $f$ is continuous and $V \\subseteq Y$ is open. Take any $c \\in f^{-1}(V)$.",
+          "m": "$$c \\in f^{-1}(V) \\implies f(c) \\in V$$",
+          "meaning": "What this really means: Picking a point in the pre-image means its output lands safely inside $V$."
+        },
+        {
+          "why": "Since $V$ is open, choose $\\varepsilon > 0$ such that $B_Y(f(c), \\varepsilon) \\subseteq V$.",
+          "m": "$$\\exists \\varepsilon > 0 : B_Y(f(c), \\varepsilon) \\subseteq V$$",
+          "meaning": "What this really means: Inside the open target set $V$, the output point has an open buffer zone."
+        },
+        {
+          "why": "By continuity of $f$ at $c$, choose $\\delta > 0$ such that $d_X(x, c) < \\delta \\implies d_Y(f(x), f(c)) < \\varepsilon$.",
+          "m": "$$f(B_X(c, \\delta)) \\subseteq B_Y(f(c), \\varepsilon) \\subseteq V$$",
+          "meaning": "What this really means: Continuity guarantees a tiny input bubble whose entire image stays inside that target buffer zone."
+        },
+        {
+          "why": "Taking pre-images gives $B_X(c, \\delta) \\subseteq f^{-1}(V)$, proving $f^{-1}(V)$ is open in $X$.",
+          "m": "$$B_X(c, \\delta) \\subseteq f^{-1}(V) \\implies f^{-1}(V) \\text{ is open}$$",
+          "meaning": "What this really means: Since every point in the pre-image has its own open input bubble inside the pre-image, the pre-image is open!"
+        },
+        {
+          "why": "(<=) Conversely, if pre-images of open sets are open, for any $c$ and $\\varepsilon > 0$, the open ball $V = B_Y(f(c), \\varepsilon)$ is open, so its pre-image is open, yielding a $\\delta$-ball around $c$.",
+          "m": "$$f^{-1}(B_Y(f(c), \\varepsilon)) \\text{ is open} \\implies \\exists \\delta > 0 : B_X(c, \\delta) \\subseteq f^{-1}(B_Y(f(c), \\varepsilon))$$",
+          "meaning": "What this really means: The open pre-image immediately supplies the required $\\delta$-radius for any given $\\varepsilon$."
+        }
+      ],
+      "ends": "A function between metric spaces is continuous if and only if pre-images of open sets are open."
+    },
+    "cards": [
+      {
+        "q": "State the global topological characterization of continuity.",
+        "a": "A map $f: X \\to Y$ is continuous iff $f^{-1}(V)$ is open in $X$ for every open set $V \\subseteq Y$.",
+        "kind": "state"
+      },
+      {
+        "q": "Does a continuous function always map open sets to open sets?",
+        "a": "No, forward images of open sets need not be open; only inverse images of open sets are guaranteed open.",
+        "kind": "recall"
+      }
+    ]
+  }
+]

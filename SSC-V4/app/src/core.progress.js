@@ -1,23 +1,29 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   Level-aware progress.
+   Three levels, earned — never switched.
 
-   `Store` knows two independent facts about a concept — it was ticked, and its
-   proof was worked through — and knows nothing about courses. `Pool` knows
-   which course a concept belongs to and whether it has a proof, and knows
-   nothing about progress. This is the one place the two meet, and every screen
-   that draws a tick, a ring or a meter asks HERE rather than asking Store
-   directly. That is what keeps "done" meaning the same thing everywhere.
+   There is no level control any more. A learner does not *choose* to be at
+   level 2; they get there by working the proof. The level of a concept is
+   therefore derived, in one place, from what has actually been done:
 
-   What "done" means depends on the level of that concept's own course:
+     level 1   ticked. You have been through the material.               RED
+     level 2   its proof worked through. Concepts with no proof (defini-  AMBER
+               tions, examples) reach level 2 with the tick, because
+               there is no proof to work.
+     level 3   every Bartle exercise filed against this concept's        GREEN
+               SECTION worked through. Level 3 is a section-wide bar on
+               purpose: exercises are set on a section, not on one
+               theorem, so a section is only finished when its whole
+               problem set is.
 
-     level 1   ticked. You have encountered the material.
-     level 2   ticked AND, if it has a proof, that proof worked through.
+   A group (section, module, course) is at the level its *weakest* member has
+   reached — all red before the group is red, all amber before the group is
+   amber. That is what the coloured rings and bars draw.
 
-   So switching a course to Level 2 does not erase anything — it raises the
-   bar, and notes that were complete become incomplete again because the
-   standard moved. That is the intended reading: level 2 IS the progress
-   measure for a course that has been switched to it. Courses still at Level 1
-   are unaffected, which is the whole point of the level being per course.
+   `Store` knows two independent facts and nothing about courses: a concept was
+   ticked, and a task was worked through (a proof, keyed on the concept id, or
+   a written question, keyed 'w:<questionId>'). `Pool` knows structure and no
+   progress. This is the one place the two meet, so "done" cannot mean two
+   different things on two screens.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Progress = (function () {
@@ -28,97 +34,183 @@ const Progress = (function () {
     return course ? course.id : null;
   };
 
-  /* The level a given concept is being held to. Background nodes (`s.*`) sit
-     in no course, so they are always level 1 — they are assumed knowledge, not
-     material to work proofs on. */
-  const levelOf = id => Store.level(courseIdOf(Pool.concept(id)));
-
   const hasProof = id => {
     const c = Pool.concept(id);
     return !!(c && c.proof);
   };
 
-  /* three states, because at level 2 a ticked note with an unworked proof is
-     genuinely neither done nor untouched */
-  function state(id) {
-    const ticked = Store.isDone(id);
-    if (levelOf(id) < 2) return ticked ? 'done' : 'none';
-    if (!ticked) return 'none';
-    if (!hasProof(id)) return 'done';
-    return Store.isProofDone(id) ? 'done' : 'part';
+  /* ── level 3 tasks ───────────────────────────────────────────────────────
+     The written/Bartle exercises attached to a section. They are stored in the
+     same flag map as proof work, under a 'w:' key, so they merge across
+     devices exactly like every other tick. */
+  const taskKey = q => 'w:' + q.id;
+  const taskDone = q => Store.isProofDone(taskKey(q));
+
+  /* secTaskState is asked once per concept per repaint, so it is memoised and
+     the cache is dropped whenever anything is written. */
+  let secCache = {};
+  if (Store.onChange) Store.onChange(function () { secCache = {}; });
+  const dropCache = () => { secCache = {}; };
+
+  function secTasks(sec) {
+    const qs = (sec && Pool.writtenForSec) ? Pool.writtenForSec(sec) : [];
+    const done = qs.filter(taskDone).length;
+    return { total: qs.length, done: done, ready: qs.length > 0 && done === qs.length, list: qs };
   }
 
-  const isDone = id => state(id) === 'done';
+  function secTaskState(sec) {
+    if (!sec) return { total: 0, done: 0, ready: false, list: [] };
+    if (!secCache[sec]) secCache[sec] = secTasks(sec);
+    return secCache[sec];
+  }
+
+  /* The highest level a concept can currently reach. A section with no
+     exercises delivered yet tops out at 2 — and says so, rather than quietly
+     colouring itself green. */
+  function ceiling(id) {
+    const c = Pool.concept(id);
+    return (c && secTaskState(c.sec).total) ? 3 : 2;
+  }
+
+  /* ── the level of one concept ────────────────────────────────────────── */
+  function level(id) {
+    if (!Store.isDone(id)) return 0;
+    if (hasProof(id) && !Store.isProofDone(id)) return 1;
+    const c = Pool.concept(id);
+    if (c && secTaskState(c.sec).ready) return 3;
+    return 2;
+  }
+
+  /* kept for the few places that only care whether a note has been met */
+  const isDone = id => level(id) >= 1;
 
   /* ── ticking ─────────────────────────────────────────────────────────────
-     One press advances one step, so the tick always has somewhere to go and
-     never silently refuses. At level 2 that is tick -> work the proof -> clear.
-     When a concept has no proof, ticking level 1 automatically counts as
-     ticking both levels. */
+     One press advances one step, so the tick always has somewhere to go.
+     Level 3 is deliberately NOT reachable from here: it is earned by working
+     the section's exercises, not by pressing a box. */
   function advance(id) {
-    const at = state(id);
-    if (at === 'none') {
+    const at = level(id);
+    if (at === 0) {
       Store.setDone(id, true);
       if (!hasProof(id)) Store.setProofDone(id, true);
-      return state(id);
+    } else if (at === 1) {
+      Store.setProofDone(id, true);
+    } else {
+      clear(id);
     }
-    if (at === 'part') { Store.setProofDone(id, true); return state(id); }
-    clear(id);
-    return state(id);
+    dropCache();
+    return level(id);
   }
 
   function clear(id) {
     if (Store.isProofDone(id)) Store.setProofDone(id, false);
     Store.setDone(id, false);
+    dropCache();
   }
 
-  /* Bulk set, for a section / module / course row. At level 2 "tick all" means
-     the level 2 standard, or the row could never reach a full ring. */
-  function setMany(ids, on) {
+  /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
+     section or a module runs through here, and so does the prerequisite
+     cascade — which is why it takes a level rather than a boolean: a
+     prerequisite is raised to the level of the note that needs it, never
+     past it. */
+  function setTo(ids, n) {
     const list = ids || [];
-    Store.setDoneMany(list, on);
+    const want = Math.max(0, Math.min(2, n));
+    Store.setDoneMany(list, want >= 1);
     list.forEach(function (id) {
-      if (!hasProof(id)) {
-        Store.setProofDone(id, !!on);
-        return;
-      }
-      if (levelOf(id) < 2) {
-        if (!on && Store.isProofDone(id)) Store.setProofDone(id, false);
-        return;
-      }
-      if (Store.isProofDone(id) !== !!on) Store.setProofDone(id, !!on);
+      const proof = hasProof(id);
+      const on = want >= 2 || (want >= 1 && !proof);
+      if (Store.isProofDone(id) !== on) Store.setProofDone(id, on);
     });
+    dropCache();
   }
 
-  /* ── counting ────────────────────────────────────────────────────────── */
+  /* one press on a section / module / course row */
+  function advanceMany(ids) {
+    const c = count(ids);
+    if (!c.total) return 0;
+    if (c.min === 0) setTo(ids, 1);
+    else if (c.min === 1) setTo(ids, 2);
+    else setTo(ids, 0);
+    return count(ids).min;
+  }
+
+  /* ── counting ─────────────────────────────────────────────────────────────
+     l1/l2/l3 are cumulative — "how many have reached at least this level" —
+     because that is what the three-colour bar draws, and `min` is the level
+     the whole group has reached. */
   function count(ids) {
     const list = ids || [];
-    let done = 0, part = 0;
+    let l1 = 0, l2 = 0, l3 = 0, min = 3;
     list.forEach(function (id) {
-      const st = state(id);
-      if (st === 'done') done += 1; else if (st === 'part') part += 1;
+      const v = level(id);
+      if (v >= 1) l1 += 1;
+      if (v >= 2) l2 += 1;
+      if (v >= 3) l3 += 1;
+      if (v < min) min = v;
     });
-    return { done: done, part: part, total: list.length };
+    if (!list.length) min = 0;
+    return { total: list.length, l1: l1, l2: l2, l3: l3, min: min, done: l1 };
+  }
+
+  /* the ceiling of a whole group: 3 only where every section in it has
+     exercises to work */
+  function ceilingOf(ids) {
+    const list = ids || [];
+    if (!list.length) return 2;
+    return list.every(id => ceiling(id) >= 3) ? 3 : 2;
   }
 
   /* what a tick button should render: 'true' | 'mixed' | 'false' */
   function tickState(ids) {
     const c = count(ids);
     if (!c.total) return 'false';
-    if (c.done === c.total) return 'true';
-    return (c.done || c.part) ? 'mixed' : 'false';
+    if (c.min >= 1) return 'true';
+    return c.l1 ? 'mixed' : 'false';
+  }
+
+  /* ── prerequisites, judged at the level you are working at ───────────────
+     The bug this fixes: a note you have only read (level 1) used to report its
+     prerequisites as incomplete because THEY had been pushed to level 2 — the
+     bar moved under a note nobody had asked to raise. A prerequisite is
+     satisfied when it has reached the level of the note that needs it, and
+     nothing more is asked of it. Where a prerequisite cannot reach that level
+     (its own section has no exercises yet) the bar drops to what it can
+     actually reach. */
+  function prereqTarget(id) {
+    return Math.max(1, Math.min(2, level(id)));
+  }
+
+  function prereqOk(prereqId, target) {
+    return level(prereqId) >= Math.min(target, ceiling(prereqId));
+  }
+
+  /* Prerequisites of `id` that have not reached `id`'s own level. */
+  function pendingPrereqs(id) {
+    const target = prereqTarget(id);
+    return Pool.chain(id).filter(x => x.id !== id && !prereqOk(x.id, target));
+  }
+
+  /* Raise them to exactly that level — "even if they are greater, tick them at
+     minimum the same level" — so a cascade never promotes work nobody did. */
+  function raisePrereqs(id) {
+    const target = prereqTarget(id);
+    const pending = pendingPrereqs(id);
+    pending.forEach(function (x) {
+      if (level(x.id) < target) setTo([x.id], target);
+    });
+    dropCache();
+    return pending.length;
   }
 
   /* ── the reel queue ──────────────────────────────────────────────────────
      The reel only ever shows material you have said you have met. Studying a
      statement you have never read is not recall, it is reading with extra
-     steps — and a reel full of unread theorems is the pile the reel exists to
-     avoid.
+     steps.
 
      Two kinds of card:
        statement   every ticked concept that has a 'state' card
-       proof       only for a course switched to Level 2, and only for ticked
-                   concepts that carry a proof
+       proof       every ticked concept that carries a proof
 
      Order is by how badly each card needs the attempt, then by the reading
      order of the course — no randomness, so the queue is inspectable and the
@@ -155,7 +247,6 @@ const Progress = (function () {
 
     Pool.concepts(null, { includeExt: true }).forEach(function (c, i) {
       if (!c.proof || !Store.isDone(c.id)) return;
-      if (Store.level(courseIdOf(c)) < 2) return;
       const id = c.id + '#proof';
       out.push({
         kind: 'proof', id: id, cid: c.id, sec: c.sec,
@@ -177,6 +268,12 @@ const Progress = (function () {
     return reel().map(x => x.id);
   }
 
-  return { levelOf, hasProof, state, isDone, advance, clear, setMany,
-    count, tickState, reel, reelIds, courseIdOf };
+  return {
+    level, ceiling, ceilingOf, isDone, hasProof, courseIdOf,
+    advance, advanceMany, clear, setTo,
+    count, tickState,
+    secTaskState, taskKey, taskDone,
+    prereqTarget, prereqOk, pendingPrereqs, raisePrereqs,
+    reel, reelIds, dropCache
+  };
 })();

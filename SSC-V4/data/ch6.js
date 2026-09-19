@@ -47,10 +47,26 @@ CONCEPTS.push(
       idea: `Multiply and divide by $(x - c)$ and take the limit using the product rule for limits.`,
       why: `Because $f'(c)$ is a finite number, multiplying it by $(x - c) \\to 0$ forces $f(x) - f(c) \\to 0$.`,
       rungs: [
-        { why: 'For $x \\ne c$, factor the change in $f$.', m: 'f(x) - f(c) = \\left( \\frac{f(x) - f(c)}{x - c} \\right)(x - c)' },
-        { why: 'Take the limit as $x \\to c$ of both sides.', m: '\\lim_{x\\to c}(f(x) - f(c)) = \\lim_{x\\to c}\\left(\\frac{f(x) - f(c)}{x - c}\\right) \\cdot \\lim_{x\\to c}(x - c)' },
-        { why: 'Evaluate the limits: the difference quotient is $f\'(c)$, and $(x - c) \\to 0$.', m: '\\lim_{x\\to c}(f(x) - f(c)) = f\'(c) \\cdot 0 = 0' },
-        { why: 'Conclude that the limit of $f(x)$ equals $f(c)$.', m: '\\lim_{x\\to c} f(x) = f(c)' }
+        {
+          why: 'For $x \\ne c$, factor the change in $f$.',
+          m: '$$f(x) - f(c) = \\left( \\frac{f(x) - f(c)}{x - c} \\right)(x - c)$$',
+          meaning: 'What this really means: Express the total vertical jump between the two points as their average slope multiplied by the horizontal step.'
+        },
+        {
+          why: 'Take the limit as $x \\to c$ of both sides.',
+          m: '$$\\lim_{x\\to c}(f(x) - f(c)) = \\lim_{x\\to c}\\left(\\frac{f(x) - f(c)}{x - c}\\right) \\cdot \\lim_{x\\to c}(x - c)$$',
+          meaning: 'What this really means: As the two points merge together, the overall gap splits cleanly into the limiting slope times the vanishing step size.'
+        },
+        {
+          why: 'Evaluate the limits: the difference quotient is $f\'(c)$, and $(x - c) \\to 0$.',
+          m: '$$\\lim_{x\\to c}(f(x) - f(c)) = f\'(c) \\cdot 0 = 0$$',
+          meaning: 'What this really means: Multiplying a finite, well-behaved slope by a step size that shrinks to zero completely crushes the vertical gap to zero.'
+        },
+        {
+          why: 'Conclude that the limit of $f(x)$ equals $f(c)$.',
+          m: '$$\\lim_{x\\to c} f(x) = f(c)$$',
+          meaning: 'What this really means: Because the gap vanishes entirely, the curve cannot tear or jump, guaranteeing that the function is continuous.'
+        }
       ],
       ends: 'Therefore, $f$ is continuous at $c$.'
     },
@@ -83,11 +99,31 @@ CONCEPTS.push(
       idea: 'Insert the cross-term $f(c)g(x)$ into the difference quotient of $fg$, and use the continuity of $g$ at $c$.',
       why: 'Adding and subtracting the cross-term isolates $(f(x)-f(c))/(x-c)$ and $(g(x)-g(c))/(x-c)$ as separate factors.',
       rungs: [
-        { why: 'Write the difference quotient for $p = fg$ at $c$.', m: '\\frac{p(x) - p(c)}{x - c} = \\frac{f(x)g(x) - f(c)g(c)}{x - c}' },
-        { why: 'Add and subtract $f(c)g(x)$ in the numerator.', m: '\\frac{f(x)g(x) - f(c)g(x) + f(c)g(x) - f(c)g(c)}{x - c} = \\frac{f(x) - f(c)}{x - c} g(x) + f(c) \\frac{g(x) - g(c)}{x - c}' },
-        { why: 'Since $g$ is differentiable at $c$, Theorem 6.1.2 gives $\\lim_{x\\to c} g(x) = g(c)$.', m: '\\lim_{x\\to c} g(x) = g(c)' },
-        { why: 'Apply the limit laws for sums and products.', m: 'p\'(c) = \\lim_{x\\to c}\\left(\\frac{f(x) - f(c)}{x - c}\\right) \\lim_{x\\to c} g(x) + f(c) \\lim_{x\\to c}\\left(\\frac{g(x) - g(c)}{x - c}\\right) = f\'(c)g(c) + f(c)g\'(c)' },
-        { why: 'For $q = f/g$, write $(f(x)/g(x) - f(c)/g(c))/(x - c) = \\frac{1}{g(x)g(c)} [\\frac{f(x)-f(c)}{x-c}g(c) - f(c)\\frac{g(x)-g(c)}{x-c}]$.', m: 'q\'(c) = \\frac{f\'(c)g(c) - f(c)g\'(c)}{(g(c))^2}' }
+        {
+          why: 'Write the difference quotient for $p = fg$ at $c$.',
+          m: '$$\\frac{p(x) - p(c)}{x - c} = \\frac{f(x)g(x) - f(c)g(c)}{x - c}$$',
+          meaning: 'What this really means: Set up the overall rate of change for the product of two functions over a small step.'
+        },
+        {
+          why: 'Add and subtract $f(c)g(x)$ in the numerator.',
+          m: '$$\\frac{f(x)g(x) - f(c)g(x) + f(c)g(x) - f(c)g(c)}{x - c} = \\frac{f(x) - f(c)}{x - c} g(x) + f(c) \\frac{g(x) - g(c)}{x - c}$$',
+          meaning: 'What this really means: Insert a shared corner state to split the total area expansion of a rectangle into horizontal and vertical edge expansions.'
+        },
+        {
+          why: 'Since $g$ is differentiable at $c$, Theorem 6.1.2 gives $\\lim_{x\\to c} g(x) = g(c)$.',
+          m: '$$\\lim_{x\\to c} g(x) = g(c)$$',
+          meaning: 'What this really means: Because the second function is smooth, it cannot abruptly jump, so its value smoothly settles to its starting height.'
+        },
+        {
+          why: 'Apply the limit laws for sums and products.',
+          m: '$$p\'(c) = \\lim_{x\\to c}\\left(\\frac{f(x) - f(c)}{x - c}\\right) \\lim_{x\\to c} g(x) + f(c) \\lim_{x\\to c}\\left(\\frac{g(x) - g(c)}{x - c}\\right) = f\'(c)g(c) + f(c)g\'(c)$$',
+          meaning: 'What this really means: Each individual rate of change pairs naturally with the other function\'s frozen value, yielding the familiar product rule.'
+        },
+        {
+          why: 'For $q = f/g$, write $(f(x)/g(x) - f(c)/g(c))/(x - c) = \\frac{1}{g(x)g(c)} [\\frac{f(x)-f(c)}{x-c}g(c) - f(c)\\frac{g(x)-g(c)}{x-c}]$.',
+          m: '$$q\'(c) = \\frac{f\'(c)g(c) - f(c)g\'(c)}{(g(c))^2}$$',
+          meaning: 'What this really means: Finding a common denominator turns a ratio of changing rates into a cross-difference divided by the squared base.'
+        }
       ],
       ends: 'Both the Product and Quotient Rules are established rigorously.'
     },
@@ -120,11 +156,31 @@ CONCEPTS.push(
       idea: 'Base step $n=1$ directly from difference quotient; apply induction using the Product Rule, then extend to negative integers via the Quotient Rule.',
       why: 'Every positive power factors as $x \\cdot x^k$, matching the inductive step of the Product Rule.',
       rungs: [
-        { why: 'Verify base step $n=1$: $(x)\' = \\lim_{h\\to 0} \\frac{(x+h) - x}{h} = 1 = 1 \\cdot x^0$.', m: '\\frac{d}{dx}(x) = 1 \\cdot x^0' },
-        { why: 'Inductive hypothesis: assume $(x^k)\' = k x^{k-1}$ for $k \\in \\mathbb{N}$.', m: '(x^k)\' = k x^{k-1}' },
-        { why: 'Write $x^{k+1} = x \\cdot x^k$ and apply the Product Rule (6.1.3).', m: '(x^{k+1})\' = (x)\' x^k + x (x^k)\' = 1 \\cdot x^k + x \\cdot (k x^{k-1}) = (k+1) x^k' },
-        { why: 'By the Principle of Induction (1.2.1), $(x^n)\' = n x^{n-1}$ for all $n \\in \\mathbb{N}$.', m: '\\forall n \\in \\mathbb{N}, \\quad (x^n)\' = n x^{n-1}' },
-        { why: 'For $m = -n$ with $n \\in \\mathbb{N}$ and $x \\ne 0$, apply Quotient Rule to $1/x^n$.', m: '(x^{-n})\' = \\frac{0 \\cdot x^n - 1 \\cdot (n x^{n-1})}{(x^n)^2} = -n x^{-n-1} = m x^{m-1}' }
+        {
+          why: 'Verify base step $n=1$: $(x)\' = \\lim_{h\\to 0} \\frac{(x+h) - x}{h} = 1 = 1 \\cdot x^0$.',
+          m: '$$\\frac{d}{dx}(x) = 1 \\cdot x^0$$',
+          meaning: 'What this really means: The straight line with unit slope changes at an exact one-to-one rate with its input.'
+        },
+        {
+          why: 'Inductive hypothesis: assume $(x^k)\' = k x^{k-1}$ for $k \\in \\mathbb{N}$.',
+          m: '$$(x^k)\' = k x^{k-1}$$',
+          meaning: 'What this really means: Assume the power rule holds true for a power of degree $k$ as our induction platform.'
+        },
+        {
+          why: 'Write $x^{k+1} = x \\cdot x^k$ and apply the Product Rule (6.1.3).',
+          m: '$$(x^{k+1})\' = (x)\' x^k + x (x^k)\' = 1 \\cdot x^k + x \\cdot (k x^{k-1}) = (k+1) x^k$$',
+          meaning: 'What this really means: Splitting the next power into an extra factor of $x$ lets the product rule cleanly combine $1$ copy of $x^k$ with $k$ copies of $x^k$.'
+        },
+        {
+          why: 'By the Principle of Induction (1.2.1), $(x^n)\' = n x^{n-1}$ for all $n \\in \\mathbb{N}$.',
+          m: '$$\\forall n \\in \\mathbb{N}, \\quad (x^n)\' = n x^{n-1}$$',
+          meaning: 'What this really means: The induction dominoes collapse in order, locking the power formula in place for every positive whole number.'
+        },
+        {
+          why: 'For $m = -n$ with $n \\in \\mathbb{N}$ and $x \\ne 0$, apply Quotient Rule to $1/x^n$.',
+          m: '$$(x^{-n})\' = \\frac{0 \\cdot x^n - 1 \\cdot (n x^{n-1})}{(x^n)^2} = -n x^{-n-1} = m x^{m-1}$$',
+          meaning: 'What this really means: Inverting the function flips the sign of the rate and subtracts one from the power, extending the rule seamlessly to negative integers.'
+        }
       ],
       ends: 'The power rule holds for all integers $n \\in \\mathbb{Z}$. Linearity extends it to all polynomials.'
     },
@@ -153,11 +209,31 @@ CONCEPTS.push(
       idea: 'Define $\\varphi(x) = \\frac{f(x) - f(c)}{x - c}$ for $x \\ne c$ and $\\varphi(c) = f\'(c)$. Continuity of $\\varphi$ at $c$ is equivalent to differentiability of $f$ at $c$.',
       why: 'Writing $f(x) - f(c) = \\varphi(x)(x - c)$ avoids division by zero entirely when substituting $g(x)$ in the Chain Rule.',
       rungs: [
-        { why: 'Define $\\varphi(x) = (f(x) - f(c))/(x - c)$ for $x \\ne c$, and $\\varphi(c) = f\'(c)$.', m: 'f(x) - f(c) = \\varphi(x)(x - c) \\quad \\forall x \\in I' },
-        { why: 'By definition, differentiability of $f$ at $c$ holds iff $\\lim_{x\\to c} \\varphi(x) = f\'(c) = \\varphi(c)$, which is continuity of $\\varphi$ at $c$.', m: '\\lim_{x\\to c} \\varphi(x) = f\'(c) = \\varphi(c)' },
-        { why: 'For the Chain Rule with $g$ differentiable at $c$, write $g(x) - g(c) = \\psi(x)(x - c)$ with $\\psi$ continuous at $c$ and $\\psi(c) = g\'(c)$.', m: 'g(x) - g(c) = \\psi(x)(x - c)' },
-        { why: 'Substitute $g(x)$ into $f$: $f(g(x)) - f(g(c)) = \\varphi(g(x))(g(x) - g(c)) = \\varphi(g(x))\\psi(x)(x - c)$.', m: '\\frac{(f\\circ g)(x) - (f\\circ g)(c)}{x - c} = \\varphi(g(x))\\psi(x)' },
-        { why: 'Take the limit as $x \\to c$: since $g$ is continuous at $c$, $\\varphi(g(x)) \\to \\varphi(g(c)) = f\'(g(c))$ and $\\psi(x) \\to g\'(c)$.', m: '(f\\circ g)\'(c) = f\'(g(c))g\'(c)' }
+        {
+          why: 'Define $\\varphi(x) = (f(x) - f(c))/(x - c)$ for $x \\ne c$, and $\\varphi(c) = f\'(c)$.',
+          m: '$$f(x) - f(c) = \\varphi(x)(x - c) \\quad \\forall x \\in I$$',
+          meaning: 'What this really means: Replace messy division by an auxiliary continuous slope factor that stays well-behaved even at the reference point.'
+        },
+        {
+          why: 'By definition, differentiability of $f$ at $c$ holds iff $\\lim_{x\\to c} \\varphi(x) = f\'(c) = \\varphi(c)$, which is continuity of $\\varphi$ at $c$.',
+          m: '$$\\lim_{x\\to c} \\varphi(x) = f\'(c) = \\varphi(c)$$',
+          meaning: 'What this really means: Having a well-defined derivative is completely equivalent to this slope helper function connecting continuously without gaps.'
+        },
+        {
+          why: 'For the Chain Rule with $g$ differentiable at $c$, write $g(x) - g(c) = \\psi(x)(x - c)$ with $\\psi$ continuous at $c$ and $\\psi(c) = g\'(c)$.',
+          m: '$$g(x) - g(c) = \\psi(x)(x - c)$$',
+          meaning: 'What this really means: Apply the exact same smooth-slope factorization to the inner function.'
+        },
+        {
+          why: 'Substitute $g(x)$ into $f$: $f(g(x)) - f(g(c)) = \\varphi(g(x))(g(x) - g(c)) = \\varphi(g(x))\\psi(x)(x - c)$.',
+          m: '$$\\frac{(f\\circ g)(x) - (f\\circ g)(c)}{x - c} = \\varphi(g(x))\\psi(x)$$',
+          meaning: 'What this really means: Nesting one function inside the other simply multiplies their two smooth slope factors together without any risk of dividing by zero.'
+        },
+        {
+          why: 'Take the limit as $x \\to c$: since $g$ is continuous at $c$, $\\varphi(g(x)) \\to \\varphi(g(c)) = f\'(g(c))$ and $\\psi(x) \\to g\'(c)$.',
+          m: '$$(f\\circ g)\'(c) = f\'(g(c))g\'(c)$$',
+          meaning: 'What this really means: Taking the limit directly multiplies the outer rate of change by the inner rate of change, proving the chain rule cleanly.'
+        }
       ],
       ends: 'Carathéodory\\\'s Theorem is established, rigorously proving the Chain Rule without division by zero.'
     },
@@ -186,11 +262,31 @@ CONCEPTS.push(
       idea: 'Apply Carathéodory’s Theorem to $f$ at $c$, invert the relation, and deduce that the inverted slope function is continuous at $d$.',
       why: 'Carathéodory avoids assuming differentiability of $g$ in advance and provides the derivative directly from continuity.',
       rungs: [
-        { why: 'By Carathéodory (6.1.5), $\\exists \\varphi$ continuous at $c$ with $f(x) - f(c) = \\varphi(x)(x - c)$ and $\\varphi(c) = f\'(c) \\ne 0$.', m: 'f(x) - f(c) = \\varphi(x)(x - c), \\quad \\varphi(c) = f\'(c) \\ne 0' },
-        { why: 'Since $\\varphi(c) \\ne 0$ and $\\varphi$ is continuous at $c$, $\\varphi(x) \\ne 0$ on a neighborhood $V$ of $c$.', m: '\\exists V = (c - \\delta, c + \\delta) : \\varphi(x) \\ne 0 \\quad \\forall x \\in V' },
-        { why: 'For $y \\in f(V)$, let $x = g(y)$ and $d = f(c)$. Substitute into Carathéodory\'s relation.', m: 'y - d = f(g(y)) - f(c) = \\varphi(g(y)) [g(y) - g(d)]' },
-        { why: 'Divide by $\\varphi(g(y))$: $g(y) - g(d) = \\frac{1}{\\varphi(g(y))} (y - d)$.', m: 'g(y) - g(d) = \\psi(y)(y - d) \\quad \\text{where } \\psi(y) = \\frac{1}{\\varphi(g(y))}' },
-        { why: 'By Theorem 5.6.5, $g$ is continuous at $d$, so $\\lim_{y\\to d} g(y) = c$. Therefore $\\psi$ is continuous at $d$ with $\\psi(d) = 1/\\varphi(c) = 1/f\'(c)$.', m: 'g\'(d) = \\psi(d) = \\frac{1}{f\'(c)}' }
+        {
+          why: 'By Carathéodory (6.1.5), $\\exists \\varphi$ continuous at $c$ with $f(x) - f(c) = \\varphi(x)(x - c)$ and $\\varphi(c) = f\'(c) \\ne 0$.',
+          m: '$$f(x) - f(c) = \\varphi(x)(x - c), \\quad \\varphi(c) = f\'(c) \\ne 0$$',
+          meaning: 'What this really means: Represent the original function with its continuous slope factor, which is guaranteed not to vanish at the target point.'
+        },
+        {
+          why: 'Since $\\varphi(c) \\ne 0$ and $\\varphi$ is continuous at $c$, $\\varphi(x) \\ne 0$ on a neighborhood $V$ of $c$.',
+          m: '$$\\exists V = (c - \\delta, c + \\delta) : \\varphi(x) \\ne 0 \\quad \\forall x \\in V$$',
+          meaning: 'What this really means: Continuity preserves the non-zero sign nearby, creating a safe zone where dividing by the slope will never cause a zero error.'
+        },
+        {
+          why: 'For $y \\in f(V)$, let $x = g(y)$ and $d = f(c)$. Substitute into Carathéodory\'s relation.',
+          m: '$$y - d = f(g(y)) - f(c) = \\varphi(g(y)) [g(y) - g(d)]$$',
+          meaning: 'What this really means: Translate the relationship into output coordinates through the inverse function.'
+        },
+        {
+          why: 'Divide by $\\varphi(g(y))$: $g(y) - g(d) = \\frac{1}{\\varphi(g(y))} (y - d)$.',
+          m: '$$g(y) - g(d) = \\psi(y)(y - d) \\quad \\text{where } \\psi(y) = \\frac{1}{\\varphi(g(y))}$$',
+          meaning: 'What this really means: Turning the equation around isolates the step in the inverse function, revealing its slope to be the reciprocal of the original slope.'
+        },
+        {
+          why: 'By Theorem 5.6.5, $g$ is continuous at $d$, so $\\lim_{y\\to d} g(y) = c$. Therefore $\\psi$ is continuous at $d$ with $\\psi(d) = 1/\\varphi(c) = 1/f\'(c)$.',
+          m: '$$g\'(d) = \\psi(d) = \\frac{1}{f\'(c)}$$',
+          meaning: 'What this really means: Because the inverse function is continuous, its limiting slope is simply the reciprocal of the original curve\'s slope at that point.'
+        }
       ],
       ends: 'By Carathéodory’s Theorem, $g$ is differentiable at $d$ with derivative $1/f\'(c)$.'
     },
@@ -220,10 +316,26 @@ CONCEPTS.push(
       idea: 'Examine the signs of the left-hand and right-hand difference quotients at the interior extremum.',
       why: 'At an interior maximum, secant slopes from the left are $\\ge 0$ while secant slopes from the right are $\\le 0$; differentiability forces both limits to be equal.',
       rungs: [
-        { why: 'Assume $f$ has a relative maximum at interior point $c$. Then $f(x) \\le f(c)$ for all $x \\in (c - \\delta, c + \\delta) \\subseteq I$.', m: 'f(x) - f(c) \\le 0 \\quad \\forall x \\in (c - \\delta, c + \\delta)' },
-        { why: 'For $x \\in (c - \\delta, c)$, $x - c < 0$, so the difference quotient is $\\ge 0$.', m: '\\frac{f(x) - f(c)}{x - c} \\ge 0 \\implies f\'(c) = \\lim_{x\\to c^-} \\frac{f(x) - f(c)}{x - c} \\ge 0' },
-        { why: 'For $x \\in (c, c + \\delta)$, $x - c > 0$, so the difference quotient is $\\le 0$.', m: '\\frac{f(x) - f(c)}{x - c} \\le 0 \\implies f\'(c) = \\lim_{x\\to c^+} \\frac{f(x) - f(c)}{x - c} \\le 0' },
-        { why: 'Since $f$ is differentiable at $c$, both one-sided limits are equal to $f\'(c)$, forcing $0 \\le f\'(c) \\le 0$.', m: 'f\'(c) = 0' }
+        {
+          why: 'Assume $f$ has a relative maximum at interior point $c$. Then $f(x) \\le f(c)$ for all $x \\in (c - \\delta, c + \\delta) \\subseteq I$.',
+          m: '$$f(x) - f(c) \\le 0 \\quad \\forall x \\in (c - \\delta, c + \\delta)$$',
+          meaning: 'What this really means: At the highest point of a hill, any step in either direction takes you down or keeps you level.'
+        },
+        {
+          why: 'For $x \\in (c - \\delta, c)$, $x - c < 0$, so the difference quotient is $\\ge 0$.',
+          m: '$$\\frac{f(x) - f(c)}{x - c} \\ge 0 \\implies f\'(c) = \\lim_{x\\to c^-} \\frac{f(x) - f(c)}{x - c} \\ge 0$$',
+          meaning: 'What this really means: Approaching the summit from the left means you were climbing uphill, so the left-hand slope cannot be negative.'
+        },
+        {
+          why: 'For $x \\in (c, c + \\delta)$, $x - c > 0$, so the difference quotient is $\\le 0$.',
+          m: '$$\\frac{f(x) - f(c)}{x - c} \\le 0 \\implies f\'(c) = \\lim_{x\\to c^+} \\frac{f(x) - f(c)}{x - c} \\le 0$$',
+          meaning: 'What this really means: Moving forward past the summit means you are heading downhill, so the right-hand slope cannot be positive.'
+        },
+        {
+          why: 'Since $f$ is differentiable at $c$, both one-sided limits are equal to $f\'(c)$, forcing $0 \\le f\'(c) \\le 0$.',
+          m: '$$f\'(c) = 0$$',
+          meaning: 'What this really means: The only number that is simultaneously at least zero and at most zero is zero, meaning the tangent line at the peak is perfectly flat.'
+        }
       ],
       ends: 'An identical argument with reversed signs applies to a relative minimum, concluding $f\'(c) = 0$.'
     },
@@ -253,9 +365,21 @@ CONCEPTS.push(
       idea: 'Direct consequence of Fermat’s Interior Extremum Theorem (6.2.1): if the derivative exists, it must vanish.',
       why: 'By trichotomy, either $f\'(c)$ does not exist, or it exists and Fermat\'s theorem forces it to be zero.',
       rungs: [
-        { why: 'Let $c$ be an interior point where $f$ attains a relative extremum.', m: 'c \\in \\operatorname{int}(I) \\quad \\text{is a relative extremum}' },
-        { why: 'Case 1: If $f$ is not differentiable at $c$, then $c$ satisfies condition (2).', m: 'f\'(c) \\text{ does not exist}' },
-        { why: 'Case 2: If $f$ is differentiable at $c$, apply Fermat’s Interior Extremum Theorem (6.2.1).', m: 'f\'(c) = 0' }
+        {
+          why: 'Let $c$ be an interior point where $f$ attains a relative extremum.',
+          m: '$$c \\in \\operatorname{int}(I) \\quad \\text{is a relative extremum}$$',
+          meaning: 'What this really means: Start with any peak or trough that sits safely inside the boundaries of the interval.'
+        },
+        {
+          why: 'Case 1: If $f$ is not differentiable at $c$, then $c$ satisfies condition (2).',
+          m: '$$f\'(c) \\text{ does not exist}$$',
+          meaning: 'What this really means: If the graph forms a sharp corner or kink where no unique tangent line exists, it is instantly cataloged as a critical candidate.'
+        },
+        {
+          why: 'Case 2: If $f$ is differentiable at $c$, apply Fermat’s Interior Extremum Theorem (6.2.1).',
+          m: '$$f\'(c) = 0$$',
+          meaning: 'What this really means: If the graph is smooth at the extremum, Fermat forces its tangent line to level off completely, narrowing the search to zero-slope points.'
+        }
       ],
       ends: 'Therefore, every interior extremum is either a zero of the derivative or a point where the derivative fails to exist.'
     },
@@ -284,10 +408,26 @@ CONCEPTS.push(
       idea: 'Apply the Maximum-Minimum Theorem (5.3.4) and Fermat\\\'s Interior Extremum Theorem (6.2.1).',
       why: 'If $f$ is constant, $f\' = 0$ everywhere; if $f$ is not constant, it attains an absolute maximum or minimum at an interior point $c \\in (a, b)$.',
       rungs: [
-        { why: 'By the Maximum-Minimum Theorem (5.3.4), $f$ attains an absolute maximum $M$ and minimum $m$ on $[a, b]$.', m: '\\exists x_1, x_2 \\in [a, b] : f(x_1) = m,\\, f(x_2) = M' },
-        { why: 'If $m = M$, then $f$ is constant on $[a, b]$, so $f\'(x) = 0$ for all $x \\in (a, b)$ and any interior point $c$ works.', m: 'm = M \\implies f(x) = f(a) \\implies f\'(c) = 0' },
-        { why: 'If $m < M$, then since $f(a) = f(b)$, at least one of $m$ or $M$ must be attained at an interior point $c \\in (a, b)$.', m: 'c \\in (a, b) \\quad \\text{with } f(c) = M \\text{ (or } m\\text{)}' },
-        { why: 'Since $c$ is an interior extremum and $f$ is differentiable on $(a, b)$, Fermat\\\'s Theorem (6.2.1) ensures $f\'(c) = 0$.', m: 'f\'(c) = 0' }
+        {
+          why: 'By the Maximum-Minimum Theorem (5.3.4), $f$ attains an absolute maximum $M$ and minimum $m$ on $[a, b]$.',
+          m: '$$\\exists x_1, x_2 \\in [a, b] : f(x_1) = m,\\, f(x_2) = M$$',
+          meaning: 'What this really means: Any continuous journey on a closed interval must achieve an absolute highest altitude and an absolute lowest altitude.'
+        },
+        {
+          why: 'If $m = M$, then $f$ is constant on $[a, b]$, so $f\'(x) = 0$ for all $x \\in (a, b)$ and any interior point $c$ works.',
+          m: '$$m = M \\implies f(x) = f(a) \\implies f\'(c) = 0$$',
+          meaning: 'What this really means: If the highest and lowest altitudes are identical, the path was completely flat the whole way, so the slope was zero everywhere.'
+        },
+        {
+          why: 'If $m < M$, then since $f(a) = f(b)$, at least one of $m$ or $M$ must be attained at an interior point $c \\in (a, b)$.',
+          m: '$$c \\in (a, b) \\quad \\text{with } f(c) = M \\text{ (or } m\\text{)}$$',
+          meaning: 'What this really means: Because the endpoints start and end at the same level, any climb or dip must turn around somewhere in the middle.'
+        },
+        {
+          why: 'Since $c$ is an interior extremum and $f$ is differentiable on $(a, b)$, Fermat\\\'s Theorem (6.2.1) ensures $f\'(c) = 0$.',
+          m: '$$f\'(c) = 0$$',
+          meaning: 'What this really means: At that internal turnaround peak or valley, the curve is momentarily horizontal, matching the level slope of the endpoints.'
+        }
       ],
       ends: 'In all cases, there exists at least one $c \\in (a, b)$ where $f\'(c) = 0$.'
     },
@@ -317,10 +457,26 @@ CONCEPTS.push(
       idea: `Subtract the secant line from $f(x)$ to construct an auxiliary function $h(x)$ that satisfies Rolle's Theorem.`,
       why: `Because $h(a) = 0$ and $h(b) = 0$, Rolle's Theorem applied to $h$ immediately gives $h'(c) = 0$.`,
       rungs: [
-        { why: 'Define the auxiliary function measuring vertical distance to the chord.', m: 'h(x) = f(x) - f(a) - \\frac{f(b) - f(a)}{b - a}(x - a)' },
-        { why: 'Evaluate $h$ at the endpoints $a$ and $b$.', m: 'h(a) = 0 \\quad \\text{and} \\quad h(b) = 0' },
-        { why: 'Apply Rolle’s Theorem to $h$ on $[a, b]$ to find $c \\in (a, b)$.', m: 'h\'(c) = 0' },
-        { why: 'Differentiate $h(x)$ and set equal to $0$.', m: 'f\'(c) - \\frac{f(b) - f(a)}{b - a} = 0 \\implies f\'(c) = \\frac{f(b) - f(a)}{b - a}' }
+        {
+          why: 'Define the auxiliary function measuring vertical distance to the chord.',
+          m: '$$h(x) = f(x) - f(a) - \\frac{f(b) - f(a)}{b - a}(x - a)$$',
+          meaning: 'What this really means: Tilt the coordinate frame by measuring how far the curve deviates above or below the straight chord connecting its ends.'
+        },
+        {
+          why: 'Evaluate $h$ at the endpoints $a$ and $b$.',
+          m: '$$h(a) = 0 \\quad \\text{and} \\quad h(b) = 0$$',
+          meaning: 'What this really means: At both endpoints, the curve and its connecting chord meet, meaning the tilted error drops to zero at both ends.'
+        },
+        {
+          why: 'Apply Rolle’s Theorem to $h$ on $[a, b]$ to find $c \\in (a, b)$.',
+          m: '$$h\'(c) = 0$$',
+          meaning: 'What this really means: By Rolle\'s theorem, this tilted loop must reach a maximum deviation where its relative tilt is flat.'
+        },
+        {
+          why: 'Differentiate $h(x)$ and set equal to $0$.',
+          m: '$$f\'(c) - \\frac{f(b) - f(a)}{b - a} = 0 \\implies f\'(c) = \\frac{f(b) - f(a)}{b - a}$$',
+          meaning: 'What this really means: A flat relative deviation means the curve\'s instantaneous tangent is perfectly parallel to the secant chord.'
+        }
       ],
       ends: 'Therefore, $f(b) - f(a) = f\'(c)(b - a)$ is established.'
     },
@@ -350,10 +506,26 @@ CONCEPTS.push(
       idea: 'Apply Lagrange’s MVT to $f$ on $[a, x]$ for every $x \\in (a, b]$.',
       why: 'Because $f\'(c) = 0$ at all points, $f(x) - f(a) = f\'(c)(x - a) = 0$, forcing $f(x) = f(a)$.',
       rungs: [
-        { why: 'Let $x \\in (a, b]$. Apply MVT (6.2.4) to $f$ on the subinterval $[a, x]$.', m: '\\exists c \\in (a, x) : f(x) - f(a) = f\'(c)(x - a)' },
-        { why: 'By hypothesis, $f\'(c) = 0$ since $c \\in (a, b)$.', m: 'f(x) - f(a) = 0 \\cdot (x - a) = 0' },
-        { why: 'Conclude $f(x) = f(a)$ for all $x \\in [a, b]$.', m: 'f(x) = f(a) = \\text{constant} \\quad \\forall x \\in [a, b]' },
-        { why: 'For (b), define $h(x) = f(x) - g(x)$. Then $h\'(x) = f\'(x) - g\'(x) = 0$.', m: 'h\'(x) = 0 \\implies h(x) = C \\implies f(x) = g(x) + C' }
+        {
+          why: 'Let $x \\in (a, b]$. Apply MVT (6.2.4) to $f$ on the subinterval $[a, x]$.',
+          m: '$$\\exists c \\in (a, x) : f(x) - f(a) = f\'(c)(x - a)$$',
+          meaning: 'What this really means: Connect the starting point to any chosen destination using the Mean Value Theorem.'
+        },
+        {
+          why: 'By hypothesis, $f\'(c) = 0$ since $c \\in (a, b)$.',
+          m: '$$f(x) - f(a) = 0 \\cdot (x - a) = 0$$',
+          meaning: 'What this really means: Because the slope is zero everywhere along the journey, no altitude can ever be gained or lost.'
+        },
+        {
+          why: 'Conclude $f(x) = f(a)$ for all $x \\in [a, b]$.',
+          m: '$$f(x) = f(a) = \\text{constant} \\quad \\forall x \\in [a, b]$$',
+          meaning: 'What this really means: Having zero speed at every instant forces the position to remain permanently frozen at its initial value.'
+        },
+        {
+          why: 'For (b), define $h(x) = f(x) - g(x)$. Then $h\'(x) = f\'(x) - g\'(x) = 0$.',
+          m: '$$h\'(x) = 0 \\implies h(x) = C \\implies f(x) = g(x) + C$$',
+          meaning: 'What this really means: If two curves always climb at identical speeds, their gap never changes, so they are exact vertical copies of each other.'
+        }
       ],
       ends: 'Both the Zero Derivative Theorem and the Constant Difference Corollary are established.'
     },
@@ -384,10 +556,26 @@ CONCEPTS.push(
       idea: 'Apply Lagrange’s MVT on arbitrary pairs $x_1 < x_2$ inside $[a, b]$.',
       why: 'MVT reduces the difference $f(x_2) - f(x_1)$ directly to $f\'(c)(x_2 - x_1)$.',
       rungs: [
-        { why: 'Let $x_1, x_2 \\in [a, b]$ with $x_1 < x_2$. Apply MVT (6.2.4) to $f$ on $[x_1, x_2]$.', m: '\\exists c \\in (x_1, x_2) : f(x_2) - f(x_1) = f\'(c)(x_2 - x_1)' },
-        { why: 'Since $x_2 - x_1 > 0$, if $f\'(c) \\ge 0$, then $f(x_2) - f(x_1) \\ge 0$, so $f(x_1) \\le f(x_2)$.', m: 'f\' \\ge 0 \\implies f(x_1) \\le f(x_2)' },
-        { why: 'If $f\'(c) > 0$, then $f(x_2) - f(x_1) > 0$, so $f(x_1) < f(x_2)$ (strictly increasing).', m: 'f\' > 0 \\implies f(x_1) < f(x_2)' },
-        { why: 'Conversely, if $f$ is increasing, for any $x \\ne c$, $(f(x) - f(c))/(x - c) \\ge 0$.', m: 'f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} \\ge 0' }
+        {
+          why: 'Let $x_1, x_2 \\in [a, b]$ with $x_1 < x_2$. Apply MVT (6.2.4) to $f$ on $[x_1, x_2]$.',
+          m: '$$\\exists c \\in (x_1, x_2) : f(x_2) - f(x_1) = f\'(c)(x_2 - x_1)$$',
+          meaning: 'What this really means: Express the net change between any two points as the instantaneous slope at an intermediate spot multiplied by the distance traveled.'
+        },
+        {
+          why: 'Since $x_2 - x_1 > 0$, if $f\'(c) \\ge 0$, then $f(x_2) - f(x_1) \\ge 0$, so $f(x_1) \\le f(x_2)$.',
+          m: '$$f\' \\ge 0 \\implies f(x_1) \\le f(x_2)$$',
+          meaning: 'What this really means: A non-negative slope ensures the curve never rolls backward or loses height as you move to the right.'
+        },
+        {
+          why: 'If $f\'(c) > 0$, then $f(x_2) - f(x_1) > 0$, so $f(x_1) < f(x_2)$ (strictly increasing).',
+          m: '$$f\' > 0 \\implies f(x_1) < f(x_2)$$',
+          meaning: 'What this really means: A strictly positive slope guarantees the curve is actively climbing uphill at all times.'
+        },
+        {
+          why: 'Conversely, if $f$ is increasing, for any $x \\ne c$, $(f(x) - f(c))/(x - c) \\ge 0$.',
+          m: '$$f\'(c) = \\lim_{x\\to c} \\frac{f(x) - f(c)}{x - c} \\ge 0$$',
+          meaning: 'What this really means: Since secant slopes between points on an uphill climb are always non-negative, their limit can never dip below zero.'
+        }
       ],
       ends: 'The Monotonicity Criteria are completely proved in both directions.'
     },
@@ -416,10 +604,26 @@ CONCEPTS.push(
       idea: 'Apply MVT on $[x, c]$ for $x < c$ and on $[c, x]$ for $x > c$.',
       why: 'The signs of the derivative on each side guarantee $f(x) \\le f(c)$ for all nearby $x$.',
       rungs: [
-        { why: 'Let $x \\in (c - \\delta, c)$. Apply MVT (6.2.4) on $[x, c]$: $f(c) - f(x) = f\'(z_1)(c - x)$ for some $z_1 \\in (x, c)$.', m: 'f(c) - f(x) = f\'(z_1)(c - x)' },
-        { why: 'Since $f\'(z_1) \\ge 0$ and $c - x > 0$, $f(c) - f(x) \\ge 0 \\implies f(x) \\le f(c)$.', m: 'f(x) \\le f(c) \\quad \\forall x \\in (c - \\delta, c)' },
-        { why: 'Let $x \\in (c, c + \\delta)$. Apply MVT on $[c, x]$: $f(x) - f(c) = f\'(z_2)(x - c)$ for some $z_2 \\in (c, x)$.', m: 'f(x) - f(c) = f\'(z_2)(x - c)' },
-        { why: 'Since $f\'(z_2) \\le 0$ and $x - c > 0$, $f(x) - f(c) \\le 0 \\implies f(x) \\le f(c)$.', m: 'f(x) \\le f(c) \\quad \\forall x \\in (c, c + \\delta)' }
+        {
+          why: 'Let $x \\in (c - \\delta, c)$. Apply MVT (6.2.4) on $[x, c]$: $f(c) - f(x) = f\'(z_1)(c - x)$ for some $z_1 \\in (x, c)$.',
+          m: '$$f(c) - f(x) = f\'(z_1)(c - x)$$',
+          meaning: 'What this really means: Measure the climb leading up to the candidate peak using the Mean Value Theorem.'
+        },
+        {
+          why: 'Since $f\'(z_1) \\ge 0$ and $c - x > 0$, $f(c) - f(x) \\ge 0 \\implies f(x) \\le f(c)$.',
+          m: '$$f(x) \\le f(c) \\quad \\forall x \\in (c - \\delta, c)$$',
+          meaning: 'What this really means: Because the slope was positive leading up to the summit, every point just before it was lower than the summit.'
+        },
+        {
+          why: 'Let $x \\in (c, c + \\delta)$. Apply MVT on $[c, x]$: $f(x) - f(c) = f\'(z_2)(x - c)$ for some $z_2 \\in (c, x)$.',
+          m: '$$f(x) - f(c) = f\'(z_2)(x - c)$$',
+          meaning: 'What this really means: Measure the descent immediately following the candidate peak.'
+        },
+        {
+          why: 'Since $f\'(z_2) \\le 0$ and $x - c > 0$, $f(x) - f(c) \\le 0 \\implies f(x) \\le f(c)$.',
+          m: '$$f(x) \\le f(c) \\quad \\forall x \\in (c, c + \\delta)$$',
+          meaning: 'What this really means: Because the slope turns downward right after the summit, every point past it is also lower, crowning that point as a true peak.'
+        }
       ],
       ends: 'Therefore $f(x) \\le f(c)$ for all $x \\in (c - \\delta, c + \\delta)$, proving $c$ is a relative maximum.'
     },
@@ -447,10 +651,26 @@ CONCEPTS.push(
       idea: 'Apply Lagrange MVT between $x$ and $y$ and take absolute values.',
       why: 'MVT equates the secant slope $|(f(x)-f(y))/(x-y)|$ to $|f\'(c)| \\le M$.',
       rungs: [
-        { why: 'Let $x, y \\in I$ with $x \\ne y$. Apply MVT (6.2.4) to $f$ on the interval between $x$ and $y$.', m: '\\exists c \\text{ between } x \\text{ and } y : f(x) - f(y) = f\'(c)(x - y)' },
-        { why: 'Take the absolute value of both sides.', m: '|f(x) - f(y)| = |f\'(c)| |x - y|' },
-        { why: 'Apply the hypothesis $|f\'(c)| \\le M$.', m: '|f(x) - f(y)| \\le M |x - y|' },
-        { why: 'By Theorem 5.4.5, any function satisfying $|f(x)-f(y)| \\le M|x-y|$ is Lipschitz, hence uniformly continuous.', m: 'f \\text{ is Lipschitz continuous on } I' }
+        {
+          why: 'Let $x, y \\in I$ with $x \\ne y$. Apply MVT (6.2.4) to $f$ on the interval between $x$ and $y$.',
+          m: '$$\\exists c \\text{ between } x \\text{ and } y : f(x) - f(y) = f\'(c)(x - y)$$',
+          meaning: 'What this really means: The Mean Value Theorem equates the overall vertical shift between any two points to the speed at an intermediate point times the distance.'
+        },
+        {
+          why: 'Take the absolute value of both sides.',
+          m: '$$|f(x) - f(y)| = |f\'(c)| |x - y|$$',
+          meaning: 'What this really means: The magnitude of the output jump is precisely the magnitude of the slope times the input separation.'
+        },
+        {
+          why: 'Apply the hypothesis $|f\'(c)| \\le M$.',
+          m: '$$|f(x) - f(y)| \\le M |x - y|$$',
+          meaning: 'What this really means: A universal speed limit $M$ caps the maximum vertical change by at most $M$ times the horizontal step.'
+        },
+        {
+          why: 'By Theorem 5.4.5, any function satisfying $|f(x)-f(y)| \\le M|x-y|$ is Lipschitz, hence uniformly continuous.',
+          m: '$$f \\text{ is Lipschitz continuous on } I$$',
+          meaning: 'What this really means: Capping the steepness everywhere prevents the function from ever tearing or stretching too wildly, ensuring uniform continuity.'
+        }
       ],
       ends: 'The Mean Value Inequality is proved: a bounded derivative guarantees Lipschitz continuity.'
     },
@@ -475,11 +695,31 @@ CONCEPTS.push(
       idea: 'Construct an auxiliary function $g(x) = f(x) - kx$ and show its absolute minimum on $[a, b]$ must occur at an interior point.',
       why: 'Because $g\'(a) < 0$ and $g\'(b) > 0$, the minimum cannot occur at either endpoint, so Fermat\'s Theorem (6.2.1) forces $g\'(c) = 0$.',
       rungs: [
-        { why: 'Assume without loss of generality $f\'(a) < k < f\'(b)$ and construct an auxiliary function.', m: 'g(x) = f(x) - kx \\quad \\text{for } x \\in [a, b]' },
-        { why: '$g$ is continuous on $[a, b]$ because $f$ is differentiable (hence continuous). By the Maximum-Minimum Theorem (5.3.4), $g$ attains an absolute minimum at some point $c \\in [a, b]$.', m: 'g(c) = \\min_{x \\in [a, b]} g(x)' },
-        { why: 'Evaluate the derivative of $g$ at the endpoints.', m: 'g\'(a) = f\'(a) - k < 0 \\quad \\text{and} \\quad g\'(b) = f\'(b) - k > 0' },
-        { why: 'Since $g\'(a) < 0$, $g(x) < g(a)$ for $x > a$ near $a$, so $c \\ne a$. Similarly, since $g\'(b) > 0$, $g(x) < g(b)$ for $x < b$ near $b$, so $c \\ne b$.', m: 'c \\in (a, b)' },
-        { why: 'Since $c$ is an interior extremum and $g$ is differentiable at $c$, Fermat\'s Theorem (6.2.1) applies.', m: 'g\'(c) = 0 \\iff f\'(c) - k = 0 \\implies f\'(c) = k' }
+        {
+          why: 'Assume without loss of generality $f\'(a) < k < f\'(b)$ and construct an auxiliary function.',
+          m: '$$g(x) = f(x) - kx \\quad \\text{for } x \\in [a, b]$$',
+          meaning: 'What this really means: Tilt the function downward by $k$ so that searching for slope $k$ becomes searching for a flat horizontal slope in the helper curve.'
+        },
+        {
+          why: '$g$ is continuous on $[a, b]$ because $f$ is differentiable (hence continuous). By the Maximum-Minimum Theorem (5.3.4), $g$ attains an absolute minimum at some point $c \\in [a, b]$.',
+          m: '$$g(c) = \\min_{x \\in [a, b]} g(x)$$',
+          meaning: 'What this really means: The continuous helper curve must reach an absolute bottom valley somewhere on the closed interval.'
+        },
+        {
+          why: 'Evaluate the derivative of $g$ at the endpoints.',
+          m: '$$g\'(a) = f\'(a) - k < 0 \\quad \\text{and} \\quad g\'(b) = f\'(b) - k > 0$$',
+          meaning: 'What this really means: The curve slopes downward moving into the interval from the left, and climbs upward entering from the right.'
+        },
+        {
+          why: 'Since $g\'(a) < 0$, $g(x) < g(a)$ for $x > a$ near $a$, so $c \\ne a$. Similarly, since $g\'(b) > 0$, $g(x) < g(b)$ for $x < b$ near $b$, so $c \\ne b$.',
+          m: '$$c \\in (a, b)$$',
+          meaning: 'What this really means: The valley cannot sit at either border, so it is trapped strictly inside the open interior.'
+        },
+        {
+          why: 'Since $c$ is an interior extremum and $g$ is differentiable at $c$, Fermat\'s Theorem (6.2.1) applies.',
+          m: '$$g\'(c) = 0 \\iff f\'(c) - k = 0 \\implies f\'(c) = k$$',
+          meaning: 'What this really means: At the bottom of this internal valley, the tilted slope is zero, meaning the original function hits the target slope $k$ exactly.'
+        }
       ],
       ends: 'Thus, every value $k$ strictly between $f\'(a)$ and $f\'(b)$ is attained as $f\'(c)$ for some interior point $c \\in (a, b)$.'
     },
@@ -507,11 +747,31 @@ CONCEPTS.push(
       idea: 'Construct an auxiliary function $h(x) = [f(b) - f(a)]g(x) - [g(b) - g(a)]f(x)$ that satisfies the conditions of Rolle\'s Theorem.',
       why: 'Because $h(a) = h(b)$, Rolle\'s Theorem guarantees $h\'(c) = 0$, giving the simultaneous proportionality ratio.',
       rungs: [
-        { why: 'First verify $g(b) - g(a) \\ne 0$. If $g(b) = g(a)$, Rolle\'s theorem would imply $g\'(\\xi) = 0$ for some $\\xi \\in (a, b)$, contradicting $g\' \\ne 0$. Now define the auxiliary function $h$ on $[a, b]$.', m: 'h(x) = [f(b) - f(a)] g(x) - [g(b) - g(a)] f(x)' },
-        { why: '$h$ is continuous on $[a, b]$ and differentiable on $(a, b)$ as a linear combination of $f$ and $g$.', m: 'h\'(x) = [f(b) - f(a)] g\'(x) - [g(b) - g(a)] f\'(x)' },
-        { why: 'Evaluate $h$ at the endpoints $a$ and $b$.', m: 'h(a) = f(b)g(a) - g(b)f(a) = h(b)' },
-        { why: 'Apply Rolle\'s Theorem (6.2.3) to $h$ on $[a, b]$, guaranteeing a point $c \\in (a, b)$ with $h\'(c) = 0$.', m: '[f(b) - f(a)] g\'(c) - [g(b) - g(a)] f\'(c) = 0' },
-        { why: 'Divide by $[g(b) - g(a)] g\'(c)$, valid since both factors are non-zero.', m: '\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f\'(c)}{g\'(c)}' }
+        {
+          why: 'First verify $g(b) - g(a) \\ne 0$. If $g(b) = g(a)$, Rolle\'s theorem would imply $g\'(\\xi) = 0$ for some $\\xi \\in (a, b)$, contradicting $g\' \\ne 0$. Now define the auxiliary function $h$ on $[a, b]$.',
+          m: '$$h(x) = [f(b) - f(a)] g(x) - [g(b) - g(a)] f(x)$$',
+          meaning: 'What this really means: Cross-multiply the total displacements of both functions to construct a single helper curve that compares their simultaneous motions.'
+        },
+        {
+          why: '$h$ is continuous on $[a, b]$ and differentiable on $(a, b)$ as a linear combination of $f$ and $g$.',
+          m: '$$h\'(x) = [f(b) - f(a)] g\'(x) - [g(b) - g(a)] f\'(x)$$',
+          meaning: 'What this really means: The rate of change of the helper function directly tracks the cross-product of the instantaneous velocities.'
+        },
+        {
+          why: 'Evaluate $h$ at the endpoints $a$ and $b$.',
+          m: '$$h(a) = f(b)g(a) - g(b)f(a) = h(b)$$',
+          meaning: 'What this really means: The helper curve begins and ends at the exact same height, setting up the exact condition needed for Rolle\'s theorem.'
+        },
+        {
+          why: 'Apply Rolle\'s Theorem (6.2.3) to $h$ on $[a, b]$, guaranteeing a point $c \\in (a, b)$ with $h\'(c) = 0$.',
+          m: '$$[f(b) - f(a)] g\'(c) - [g(b) - g(a)] f\'(c) = 0$$',
+          meaning: 'What this really means: Somewhere during the interval, the cross-product balance of instantaneous speeds halts at a momentary equilibrium.'
+        },
+        {
+          why: 'Divide by $[g(b) - g(a)] g\'(c)$, valid since both factors are non-zero.',
+          m: '$$\\frac{f(b) - f(a)}{g(b) - g(a)} = \\frac{f\'(c)}{g\'(c)}$$',
+          meaning: 'What this really means: The ratio of total distances covered by the two functions equals the ratio of their instantaneous speeds at some shared moment.'
+        }
       ],
       ends: 'This establishes Cauchy\'s generalised Mean Value Theorem.'
     },
@@ -541,10 +801,26 @@ CONCEPTS.push(
       idea: 'Extend $f$ and $g$ continuously to $a$ by setting $f(a) = 0, g(a) = 0$, and apply Cauchy\'s MVT on $[a, x]$.',
       why: 'Cauchy MVT translates $(f(x)-0)/(g(x)-0)$ into $f\'(c_x)/g\'(c_x)$ with $a < c_x < x$; squeezing $x \\to a^+$ forces $c_x \\to a^+$.',
       rungs: [
-        { why: 'Extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Both are continuous on $[a, x]$ for $x \\in (a, b)$.', m: 'f(a) := 0, \\quad g(a) := 0' },
-        { why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on $[a, x]$.', m: '\\exists c_x \\in (a, x) : \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}' },
-        { why: 'Substitute $f(a) = 0$ and $g(a) = 0$.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{with } a < c_x < x' },
-        { why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$.', m: '\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x\\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L' }
+        {
+          why: 'Extend $f$ and $g$ to $[a, b)$ by defining $f(a) = 0$ and $g(a) = 0$. Both are continuous on $[a, x]$ for $x \\in (a, b)$.',
+          m: '$$f(a) := 0, \\quad g(a) := 0$$',
+          meaning: 'What this really means: Plug the pinhole leak at the starting boundary so both curves start continuously from zero.'
+        },
+        {
+          why: 'Apply Cauchy\'s Mean Value Theorem (6.3.2) to $f$ and $g$ on $[a, x]$.',
+          m: '$$\\exists c_x \\in (a, x) : \\frac{f(x) - f(a)}{g(x) - g(a)} = \\frac{f\'(c_x)}{g\'(c_x)}$$',
+          meaning: 'What this really means: Cauchy\'s theorem matches the ratio of outputs from the starting point to the ratio of their derivatives at an intermediate point.'
+        },
+        {
+          why: 'Substitute $f(a) = 0$ and $g(a) = 0$.',
+          m: '$$\\frac{f(x)}{g(x)} = \\frac{f\'(c_x)}{g\'(c_x)} \\quad \\text{with } a < c_x < x$$',
+          meaning: 'What this really means: Because both functions started at zero, the ratio of their current values is identical to the ratio of their slopes at some prior instant.'
+        },
+        {
+          why: 'As $x \\to a^+$, the squeeze $a < c_x < x$ forces $c_x \\to a^+$.',
+          m: '$$\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c_x\\to a^+} \\frac{f\'(c_x)}{g\'(c_x)} = L$$',
+          meaning: 'What this really means: As the window shrinks toward the origin, the intermediate point is squeezed along with it, forcing the function ratio to match the slope ratio.'
+        }
       ],
       ends: 'The $0/0$ form of L’Hospital’s Rule is rigorously established.'
     },
@@ -578,10 +854,26 @@ CONCEPTS.push(
       idea: 'Apply Cauchy MVT on $[x, y]$ for a fixed $y$, then send $x \\to a^+$ to let the $g(x) \\to \\infty$ term dominate.',
       why: 'Because $g(x) \\to \\infty$, dividing by $g(x)$ eliminates the endpoint evaluation at $y$.',
       rungs: [
-        { why: 'Given $\\varepsilon > 0$, choose $y \\in (a, b)$ such that $|f\'(c)/g\'(c) - L| < \\varepsilon/2$ for all $c \\in (a, y)$.', m: 'a < x < y \\implies \\exists c \\in (x, y) : \\left| \\frac{f\'(c)}{g\'(c)} - L \\right| < \\frac{\\varepsilon}{2}' },
-        { why: 'Apply Cauchy MVT (6.3.2) on $[x, y]$.', m: '\\frac{f(x) - f(y)}{g(x) - g(y)} = \\frac{f\'(c)}{g\'(c)}' },
-        { why: 'Multiply by $\\frac{g(x) - g(y)}{g(x)}$ and rewrite $\\frac{f(x)}{g(x)}$.', m: '\\frac{f(x)}{g(x)} = \\frac{f\'(c)}{g\'(c)} \\left(1 - \\frac{g(y)}{g(x)}\\right) + \\frac{f(y)}{g(x)}' },
-        { why: 'Since $y$ is fixed and $g(x) \\to \\infty$ as $x \\to a^+$, the terms $g(y)/g(x) \\to 0$ and $f(y)/g(x) \\to 0$.', m: '\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c\\to a^+} \\frac{f\'(c)}{g\'(c)} = L' }
+        {
+          why: 'Given $\\varepsilon > 0$, choose $y \\in (a, b)$ such that $|f\'(c)/g\'(c) - L| < \\varepsilon/2$ for all $c \\in (a, y)$.',
+          m: '$$a < x < y \\implies \\exists c \\in (x, y) : \\left| \\frac{f\'(c)}{g\'(c)} - L \\right| < \\frac{\\varepsilon}{2}$$',
+          meaning: 'What this really means: Anchor a reference point $y$ close to the boundary where the ratio of derivatives has already stabilized near its limit.'
+        },
+        {
+          why: 'Apply Cauchy MVT (6.3.2) on $[x, y]$.',
+          m: '$$\\frac{f(x) - f(y)}{g(x) - g(y)} = \\frac{f\'(c)}{g\'(c)}$$',
+          meaning: 'What this really means: Express the ratio of changes between the wandering point $x$ and the anchor $y$ as the slope ratio at a point trapped between them.'
+        },
+        {
+          why: 'Multiply by $\\frac{g(x) - g(y)}{g(x)}$ and rewrite $\\frac{f(x)}{g(x)}$.',
+          m: '$$\\frac{f(x)}{g(x)} = \\frac{f\'(c)}{g\'(c)} \\left(1 - \\frac{g(y)}{g(x)}\\right) + \\frac{f(y)}{g(x)}$$',
+          meaning: 'What this really means: Factor out the dominant exploding terms to show that the anchor values become negligible corrections as $g(x)$ grows huge.'
+        },
+        {
+          why: 'Since $y$ is fixed and $g(x) \\to \\infty$ as $x \\to a^+$, the terms $g(y)/g(x) \\to 0$ and $f(y)/g(x) \\to 0$.',
+          m: '$$\\lim_{x\\to a^+} \\frac{f(x)}{g(x)} = \\lim_{c\\to a^+} \\frac{f\'(c)}{g\'(c)} = L$$',
+          meaning: 'What this really means: As the denominator blows up to infinity, the fixed anchor noise completely washes away, locking the overall ratio onto the derivative ratio.'
+        }
       ],
       ends: 'The $\\infty/\\infty$ form of L’Hospital’s Rule is established.'
     },
@@ -609,11 +901,31 @@ CONCEPTS.push(
       idea: 'Define the remainder constant $M$ such that $f(x) = P_n(x) + M(x - x_0)^{n+1}$ and apply Rolle\'s Theorem to an auxiliary function $F(t)$.',
       why: 'Varying the base point $t$ causes the sum in $F\'(t)$ to telescope, isolating the $(n+1)$-th derivative at $c$.',
       rungs: [
-        { why: 'Fix $x, x_0 \\in I$ with $x \\ne x_0$. Define the constant $M$ such that $f(x) = P_n(x) + M(x - x_0)^{n+1}$.', m: 'M = \\frac{f(x) - P_n(x)}{(x - x_0)^{n+1}}' },
-        { why: 'Define an auxiliary function $F$ on the interval between $x_0$ and $x$ by varying the base point $t$:', m: 'F(t) = f(x) - \\sum_{k=0}^{n} \\frac{f^{(k)}(t)}{k!}(x - t)^k - M(x - t)^{n+1}' },
-        { why: 'Observe that $F(x) = 0$, and by choice of $M$, $F(x_0) = 0$. Since $f^{(n+1)}$ exists, $F$ is differentiable.', m: 'F(x_0) = F(x) = 0' },
-        { why: 'Differentiate $F(t)$ with respect to $t$. By the product rule, the sum telescopes and successive terms cancel pairwise.', m: 'F\'(t) = -\\frac{(x - t)^n}{n!} f^{(n+1)}(t) + (n+1)M(x - t)^n = (x - t)^n \\left[ (n+1)M - \\frac{f^{(n+1)}(t)}{n!} \\right]' },
-        { why: 'Apply Rolle\'s Theorem (6.2.3) to $F$ on $[x_0, x]$. There exists $c$ strictly between $x_0$ and $x$ such that $F\'(c) = 0$. Since $c \\ne x$, $(x - c)^n \\ne 0$.', m: '(n+1)M - \\frac{f^{(n+1)}(c)}{n!} = 0 \\implies M = \\frac{f^{(n+1)}(c)}{(n+1)!}' }
+        {
+          why: 'Fix $x, x_0 \\in I$ with $x \\ne x_0$. Define the constant $M$ such that $f(x) = P_n(x) + M(x - x_0)^{n+1}$.',
+          m: '$$M = \\frac{f(x) - P_n(x)}{(x - x_0)^{n+1}}$$',
+          meaning: 'What this really means: Package the unknown error between the true curve and its polynomial approximation into a single coefficient of the next power.'
+        },
+        {
+          why: 'Define an auxiliary function $F$ on the interval between $x_0$ and $x$ by varying the base point $t$:',
+          m: '$$F(t) = f(x) - \\sum_{k=0}^{n} \\frac{f^{(k)}(t)}{k!}(x - t)^k - M(x - t)^{n+1}$$',
+          meaning: 'What this really means: Build an error tracker that slides the expansion center from the base point all the way to the target point.'
+        },
+        {
+          why: 'Observe that $F(x) = 0$, and by choice of $M$, $F(x_0) = 0$. Since $f^{(n+1)}$ exists, $F$ is differentiable.',
+          m: '$$F(x_0) = F(x) = 0$$',
+          meaning: 'What this really means: The sliding error function vanishes at both ends of the interval, perfectly setting up Rolle\'s theorem.'
+        },
+        {
+          why: 'Differentiate $F(t)$ with respect to $t$. By the product rule, the sum telescopes and successive terms cancel pairwise.',
+          m: '$$F\'(t) = -\\frac{(x - t)^n}{n!} f^{(n+1)}(t) + (n+1)M(x - t)^n = (x - t)^n \\left[ (n+1)M - \\frac{f^{(n+1)}(t)}{n!} \\right]$$',
+          meaning: 'What this really means: Differentiating causes every intermediate derivative to cancel out in a cascading telescope, leaving only the very top derivative and the error term.'
+        },
+        {
+          why: 'Apply Rolle\'s Theorem (6.2.3) to $F$ on $[x_0, x]$. There exists $c$ strictly between $x_0$ and $x$ such that $F\'(c) = 0$. Since $c \\ne x$, $(x - c)^n \\ne 0$.',
+          m: '$$(n+1)M - \\frac{f^{(n+1)}(c)}{n!} = 0 \\implies M = \\frac{f^{(n+1)}(c)}{(n+1)!}$$',
+          meaning: 'What this really means: Rolle\'s theorem locates a point where the balance zeroes out, proving the error coefficient is precisely the next derivative divided by $(n+1)!$.'
+        }
       ],
       ends: 'Substituting $M$ yields the Lagrange form of the remainder $R_n(x) = \\frac{f^{(n+1)}(c)}{(n+1)!}(x - x_0)^{n+1}$.'
     },
@@ -651,10 +963,26 @@ CONCEPTS.push(
       idea: 'Bound the Lagrange remainder using $|f^{(n+1)}(c)| \\le M$ and apply the sequence limit property $\\lim \\frac{a^n}{n!} = 0$.',
       why: 'Factorials grow faster than any geometric power $a^n$, crushing the remainder to 0 for all real $x$.',
       rungs: [
-        { why: 'From Taylor’s Theorem (6.4.1), write the Lagrange remainder on $[x_0, x]$.', m: 'R_n(x) = \\frac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1} \\quad \\text{for some } c \\text{ between } x_0, x' },
-        { why: 'Take absolute values and substitute the upper bound $|f^{(n+1)}(c)| \\le M$.', m: '|R_n(x)| \\le \\frac{M}{(n + 1)!} |x - x_0|^{n+1}' },
-        { why: 'By the Ratio Test for sequences (Theorem 3.2.11), for any fixed real number $A = |x - x_0|$, $\\lim_{n\\to\\infty} \\frac{A^{n+1}}{(n+1)!} = 0$.', m: '\\lim_{n\\to\\infty} \\frac{|x - x_0|^{n+1}}{(n + 1)!} = 0' },
-        { why: 'Apply the Squeeze Theorem for sequences (3.2.7) to conclude $\\lim_{n\\to\\infty} R_n(x) = 0$.', m: '\\lim_{n\\to\\infty} R_n(x) = 0 \\implies f(x) = \\lim_{n\\to\\infty} P_n(x)' }
+        {
+          why: 'From Taylor’s Theorem (6.4.1), write the Lagrange remainder on $[x_0, x]$.',
+          m: '$$R_n(x) = \\frac{f^{(n+1)}(c)}{(n + 1)!}(x - x_0)^{n+1} \\quad \\text{for some } c \\text{ between } x_0, x$$',
+          meaning: 'What this really means: Express the gap between the true function and its polynomial as an exact formula driven by the next derivative at an unknown intermediate point.'
+        },
+        {
+          why: 'Take absolute values and substitute the upper bound $|f^{(n+1)}(c)| \\le M$.',
+          m: '$$|R_n(x)| \\le \\frac{M}{(n + 1)!} |x - x_0|^{n+1}$$',
+          meaning: 'What this really means: Replace the unknown intermediate derivative with its worst-case maximum ceiling to get a solid upper bound on the error.'
+        },
+        {
+          why: 'By the Ratio Test for sequences (Theorem 3.2.11), for any fixed real number $A = |x - x_0|$, $\\lim_{n\\to\\infty} \\frac{A^{n+1}}{(n+1)!} = 0$.',
+          m: '$$\\lim_{n\\to\\infty} \\frac{|x - x_0|^{n+1}}{(n + 1)!} = 0$$',
+          meaning: 'What this really means: Factorial growth in the denominator eventually crushes any fixed power in the numerator down to nothing.'
+        },
+        {
+          why: 'Apply the Squeeze Theorem for sequences (3.2.7) to conclude $\\lim_{n\\to\\infty} R_n(x) = 0$.',
+          m: '$$\\lim_{n\\to\\infty} R_n(x) = 0 \\implies f(x) = \\lim_{n\\to\\infty} P_n(x)$$',
+          meaning: 'What this really means: Because the remainder is squeezed to zero, adding more polynomial terms converges to the exact value of the original function.'
+        }
       ],
       ends: 'The Taylor series converges to $f(x)$ whenever derivatives are uniformly bounded on the interval.'
     },

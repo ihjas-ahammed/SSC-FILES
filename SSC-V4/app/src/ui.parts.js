@@ -40,19 +40,60 @@ const UI = (function () {
     return null;
   };
 
-  /* Level-aware: at Level 2 a ticked note with an unworked proof is not
-     "completed", it is part-way, and saying otherwise would make the badge and
-     the tree disagree. */
-  const doneBadge = function (id) {
-    const st = Progress.state(id);
-    if (st === 'done') return el('span', { class: 'badge ok', text: '✓ completed' });
-    if (st === 'part') return el('span', { class: 'badge warn', text: 'proof outstanding' });
-    return null;
+  /* The level a concept has reached, as a badge. One vocabulary everywhere:
+     1 read, 2 proof worked, 3 exercises done — and the colour says which. */
+  const LEVEL_NAME = ['not started', 'read', 'proof worked', 'exercises done'];
+  const levelBadge = function (id) {
+    const n = Progress.level(id);
+    if (!n) return null;
+    return el('span', { class: 'badge lv' + n }, [
+      DOM.mi(n >= 3 ? 'workspace_premium' : n >= 2 ? 'function' : 'check', 'xs'),
+      el('span', { text: 'level ' + n + ' · ' + LEVEL_NAME[n] })
+    ]);
   };
 
-  const meter = (a, b, ok) => el('div', { class: 'meter' + (ok ? ' ok' : '') }, [
-    el('i', { style: { width: DOM.pct(a, b) + '%' } })
-  ]);
+  /* `lv` is a level (1, 2, 3) to colour the fill with, or `true` for the plain
+     "finished" green. Left out, the meter is accent-coloured and says nothing
+     about levels — which is right for recall and first-attempt numbers. */
+  const meter = (a, b, lv) => el('div', {
+    class: 'meter' + (lv === true ? ' ok' : lv ? ' lv' + lv : '')
+  }, [el('i', { style: { width: DOM.pct(a, b) + '%' } })]);
+
+  /* ── the three-level bar ─────────────────────────────────────────────────
+     `c` is a Progress.count(): l1/l2/l3 are cumulative, so the widths nest and
+     the bar reads green | amber | red | untouched with no arithmetic. */
+  function levelBar(c, opts) {
+    const o = opts || {};
+    const bar = el('div', { class: 'lvbar', role: 'img',
+      'aria-label': c.l1 + ' read, ' + c.l2 + ' with the proof worked, ' + c.l3 +
+        ' with the exercises done, of ' + c.total });
+    DOM.add(bar, [
+      el('i', { class: 'a', style: { width: DOM.pct(c.l1, c.total) + '%' } }),
+      el('i', { class: 'b', style: { width: DOM.pct(c.l2, c.total) + '%' } }),
+      el('i', { class: 'c', style: { width: DOM.pct(c.l3, c.total) + '%' } })
+    ]);
+    if (o.key === false) return bar;
+    return el('div', {}, [bar, el('div', { class: 'lvkey' }, [
+      el('span', { class: 'k1' }, [el('em', {}), el('span', { text: 'read ' + c.l1 + '/' + c.total })]),
+      el('span', { class: 'k2' }, [el('em', {}), el('span', { text: 'proofs ' + c.l2 + '/' + c.total })]),
+      el('span', { class: 'k3' }, [el('em', {}), el('span', { text: 'exercises ' + c.l3 + '/' + c.total })])
+    ])]);
+  }
+
+  /* The ring every tree row and course card draws: coloured by the level the
+     WHOLE group has reached, filled by how far it has got towards the next. */
+  function levelRing(c, label) {
+    const at = c.min;
+    const reached = at >= 3 ? c.l3 : at >= 2 ? c.l3 : at >= 1 ? c.l2 : c.l1;
+    const pc = at >= 3 ? 100 : DOM.pct(reached, c.total);
+    const node = el('span', {
+      class: 'ring', 'data-lv': String(at), role: 'img',
+      'aria-label': (label || '') + ' level ' + at + ', ' + reached + ' of ' + c.total +
+        ' at the next level'
+    }, [el('i', { text: c.total ? (at >= 3 ? c.total + '/' + c.total : reached + '/' + c.total) : '—' })]);
+    window.requestAnimationFrame(() => node.style.setProperty('--p', pc));
+    return node;
+  }
 
   function stat(n, label, sub, bar) {
     return el('div', { class: 'stat' }, [
@@ -65,75 +106,46 @@ const UI = (function () {
 
   const empty = (msg, extra) => el('div', { class: 'empty' }, [el('p', { text: msg }), extra || null]);
 
-  /* Mastery ladder. Level 1 is a tick; level 2 is proof work actually done
-     (or achieved automatically on notes that have no proof). */
-  function ladder(done, proofDone, hasProof, courseId, isExt) {
-    const names = ['Completed', 'Recognised', 'Recalled', 'Applied', 'Transferred'];
-    const at = (hasProof === false && done) ? 2 : proofDone ? 2 : done ? 1 : 0;
-    const caption = at === 2
-      ? (hasProof === false ? '2 · completed (no proof needed)' : '2 · proof worked through')
-      : at === 1 ? '1 · completed'
-      : '1 · not yet completed';
-    let right = (hasProof === false)
-      ? (done ? 'counts for levels 1 & 2' : 'tick to complete levels 1 & 2')
-      : (at === 2 ? 'proof worked through (Level 2)'
-        : (Store.level(courseId) === 2 ? 'work the proof to reach level 2' : 'work the proof for level 2'));
-    if (isExt) {
-      right += ' · outside syllabus (not in exam %)';
-    }
+  /* Mastery ladder, for ONE concept. Nothing here is chosen — each rung is
+     earned by a different act, and the caption says which act is still owed. */
+  function ladder(id) {
+    const at = Progress.level(id);
+    const top = Progress.ceiling(id);
+    const hasProof = Progress.hasProof(id);
+    const c = Pool.concept(id);
+    const tasks = c ? Progress.secTaskState(c.sec) : { total: 0, done: 0 };
+
+    const caption = at === 3 ? '3 · section exercises done'
+      : at === 2 ? '2 · proof worked through'
+      : at === 1 ? '1 · read'
+      : 'not started';
+
+    const owed = at === 0 ? 'tick it once you have been through it'
+      : at === 1 ? 'work the proof to reach level 2'
+      : at === 2 ? (top < 3
+          ? 'level 3 needs this section\'s exercises, which are not delivered yet'
+          : 'level 3: ' + tasks.done + ' of ' + tasks.total + ' section exercises done')
+      : 'nothing owed';
+
+    const seg = n => el('span', {
+      class: (n <= at ? 'on l' + n : ''),
+      title: n === 1 ? 'Read' : n === 2 ? (hasProof ? 'Proof worked through' : 'No proof to work')
+        : 'Section exercises worked'
+    });
+
     return el('div', {}, [
-      el('div', { class: 'ladder' }, names.map((n, i) =>
-        el('span', { class: i < at ? 'on' : '', title: n }))),
+      el('div', { class: 'ladder' }, [seg(1), seg(2), seg(3)]),
       el('div', { class: 'ladder-l' }, [
         el('span', { text: caption }),
-        el('span', { text: right })
+        el('span', { text: owed })
       ])
     ]);
   }
 
-  /* The current level as a badge, and the switch that changes it. Level 2 is
-     never entered by accident: it has to be unlocked first (Store.unlocked). */
-  const levelBadge = courseId => el('span', {
-    class: 'badge' + (Store.level(courseId) === 2 ? ' accent' : ''),
-    text: 'Level ' + Store.level(courseId)
-  });
-
-  /* The level switch for ONE course. Level 2 has to be unlocked on that course
-     before it can be picked, and switching is always a deliberate press. */
-  function levelSwitch(course, after) {
-    const id = course.id;
-    const row = el('div', { class: 'row' }, [1, 2].map(function (n) {
-      const can = n === 1 || Store.unlocked(id);
-      const b = el('button', {
-        class: 'chip', type: 'button', 'aria-pressed': String(Store.level(id) === n),
-        disabled: !can, text: 'Level ' + n
-      });
-      b.addEventListener('click', function () {
-        Store.setLevel(id, n);
-        DOM.announce(course.title + ' set to Level ' + Store.level(id) + '.');
-        if (after) after();
-      });
-      return b;
-    }));
-    if (!Store.unlocked(id)) {
-      row.appendChild(el('button', {
-        class: 'chip', type: 'button', text: 'Unlock Level 2',
-        on: { click: function () {
-          Store.unlock(id, true);
-          Store.setLevel(id, 2);
-          DOM.announce('Level 2 unlocked for ' + course.title + '.');
-          if (after) after();
-        } }
-      }));
-    }
-    return row;
-  }
-
-  /* Which of a concept's prerequisites are not ticked yet. One definition,
-     because the note view and the syllabus tree both offer the same cascade
-     and must never disagree about what it would do. */
-  const pendingPrereqs = id =>
-    Pool.chain(id).filter(x => x.id !== id && !Store.isDone(x.id));
+  /* Which of a concept's prerequisites have not reached the level this note is
+     held to. One definition, because the note view and the syllabus tree both
+     offer the same cascade and must never disagree about what it would do. */
+  const pendingPrereqs = id => Progress.pendingPrereqs(id);
 
   /* An inline question with real buttons, used where window.confirm would
      lose the detail that makes the question answerable. */
@@ -153,7 +165,7 @@ const UI = (function () {
   function mockBanner() {
     if (!Pool.isMock()) return null;
     return el('div', { class: 'banner' }, [
-      el('span', { 'aria-hidden': 'true', text: '⚠' }),
+      DOM.mi('science'),
       el('span', {}, [
         el('b', { text: 'Mock content. ' }),
         'These ten theorems and sixteen questions are placeholders written to test the study loop — ' +
@@ -220,7 +232,8 @@ const UI = (function () {
   };
 
   return {
-    title, crumb, prose, math, kindBadge, tierBadge, doneBadge, meter, stat, empty,
-    ladder, levelBadge, levelSwitch, ask, pendingPrereqs, mockBanner, gate, reveal, typeBadge, metaRow, clock
+    title, crumb, prose, math, kindBadge, tierBadge, meter, stat, empty,
+    ladder, levelBadge, levelBar, levelRing, ask, pendingPrereqs, mockBanner, gate, reveal,
+    typeBadge, metaRow, clock
   };
 })();

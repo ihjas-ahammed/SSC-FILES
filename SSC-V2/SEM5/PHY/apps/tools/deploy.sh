@@ -58,6 +58,12 @@ if [ -f "$V4/build.py" ]; then
   python3 "$V4/build.py" --mock > /dev/null
   mkdir -p "$TMP/public/math/real-analysis-test"
   cp "$V4/build/test/index.html" "$TMP/public/math/real-analysis-test/index.html"
+  # The app now shows the rendered diagrams from diagrams/, referenced by a
+  # path relative to the page — so the test page needs its own copy, or every
+  # figure on it is a broken image while the live page looks fine.
+  if [ -d "$V4/diagrams" ]; then
+    cp -r "$V4/diagrams" "$TMP/public/math/real-analysis-test/diagrams"
+  fi
 else
   echo "WARNING: $V4 missing — deploying without the Real Analysis app." >&2
 fi

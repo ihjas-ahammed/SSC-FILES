@@ -30,9 +30,21 @@ CONCEPTS.push(
       idea: 'Translate directly between absolute value inequalities and open neighbourhood membership.',
       why: '$|u - v| < r$ is logically identical to $u \\in V_r(v) = (v-r, v+r)$.',
       rungs: [
-        { why: 'By definition, $x \\in V_\\delta(c) \\iff |x - c| < \\delta$.', m: 'x \\in V_\\delta(c) \\iff c - \\delta < x < c + \\delta \\iff |x - c| < \\delta' },
-        { why: 'Similarly, $f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon$.', m: 'f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon' },
-        { why: 'The condition $x \\in A \\cap V_\\delta(c) \\implies f(x) \\in V_\\varepsilon(f(c))$ is therefore equivalent to the $\\varepsilon$-$\\delta$ definition.', m: 'x \\in A,\\, |x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon' }
+        {
+          why: 'By definition, $x \\in V_\\delta(c) \\iff |x - c| < \\delta$.',
+          m: '$$x \\in V_\\delta(c) \\iff c - \\delta < x < c + \\delta \\iff |x - c| < \\delta$$',
+          meaning: 'What this really means: Being inside a symmetric interval around a point is just saying your physical distance from that point is smaller than the interval\'s radius.'
+        },
+        {
+          why: 'Similarly, $f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon$.',
+          m: '$$f(x) \\in V_\\varepsilon(f(c)) \\iff |f(x) - f(c)| < \\varepsilon$$',
+          meaning: 'What this really means: Landing inside the target window on the vertical axis simply means the function output misses the bullseye by less than the error tolerance.'
+        },
+        {
+          why: 'The condition $x \\in A \\cap V_\\delta(c) \\implies f(x) \\in V_\\varepsilon(f(c))$ is therefore equivalent to the $\\varepsilon$-$\\delta$ definition.',
+          m: '$$x \\in A,\\, |x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon$$',
+          meaning: 'What this really means: Continuity is just an aiming guarantee: if you trap the input inside a small enough protective bubble, the output is guaranteed to land inside the required target bubble.'
+        }
       ],
       ends: 'Thus the neighbourhood characterization is logically equivalent to continuity at $c$.'
     },
@@ -56,12 +68,36 @@ CONCEPTS.push(
       idea: `($\\Rightarrow$) turn $\\varepsilon$-$\\delta$ into "eventually inside $\\delta$" language for sequences. ($\\Leftarrow$) prove the contrapositive: if continuity fails, build a bad sequence by picking $x_n$ within $1/n$ of $c$ that still violates the $\\varepsilon$ bound.`,
       why: `A sequence $x_n\\to c$ is exactly a way of generating points that are "eventually within any $\\delta$" of $c$, so it is the natural bridge between the topological ($\\delta$) and sequential worlds.`,
       rungs: [
-        { why: 'Assume continuity at $c$ and take any sequence $x_n\\to c$ in $A$; fix $\\varepsilon>0$.', m: '$\\exists\\delta>0:\\ x\\in A,\\ |x-c|<\\delta \\Rightarrow |f(x)-f(c)|<\\varepsilon$' },
-        { why: 'Because $x_n\\to c$, eventually all terms land inside that $\\delta$-window.', m: '$\\exists K:\\ n\\ge K \\Rightarrow |x_n-c|<\\delta$' },
-        { why: 'Feed those terms into the continuity bound.', m: '$n\\ge K \\Rightarrow |f(x_n)-f(c)|<\\varepsilon \\Rightarrow f(x_n)\\to f(c)$' },
-        { why: 'For the converse, suppose continuity fails at $c$: negate the $\\varepsilon$-$\\delta$ statement.', m: '$\\exists\\varepsilon_0>0\\ \\forall\\delta>0\\ \\exists x\\in A: |x-c|<\\delta,\\ |f(x)-f(c)|\\ge\\varepsilon_0$' },
-        { why: 'Apply this with $\\delta=1/n$ to manufacture a specific sequence.', m: '\\text{pick } x_n\\in A,\\ |x_n-c|<1/n,\\ |f(x_n)-f(c)|\\ge\\varepsilon_0' },
-        { why: 'This sequence converges to $c$ but its images cannot converge to $f(c)$ &mdash; contradicting the hypothesis, so continuity must hold.', m: 'x_n\\to c \\text{ but } f(x_n)\\not\\to f(c)' },
+        {
+          why: 'Assume continuity at $c$ and take any sequence $x_n\\to c$ in $A$; fix $\\varepsilon>0$.',
+          m: '$\\exists\\delta>0:\\ x\\in A,\\ |x-c|<\\delta \\Rightarrow |f(x)-f(c)|<\\varepsilon$',
+          meaning: 'What this really means: We set up our safety zone: knowing the function is continuous gives us a distance boundary that guarantees safe outputs whenever inputs stay close enough.'
+        },
+        {
+          why: 'Because $x_n\\to c$, eventually all terms land inside that $\\delta$-window.',
+          m: '$\\exists K:\\ n\\ge K \\Rightarrow |x_n-c|<\\delta$',
+          meaning: 'What this really means: A marching sequence that heads toward a destination must eventually step inside and stay permanently trapped inside any bubble surrounding that destination.'
+        },
+        {
+          why: 'Feed those terms into the continuity bound.',
+          m: '$n\\ge K \\Rightarrow |f(x_n)-f(c)|<\\varepsilon \\Rightarrow f(x_n)\\to f(c)$',
+          meaning: 'What this really means: Because all late footsteps are inside the safe zone, their processed image outputs are automatically trapped inside the target zone, proving the outputs march right into the target.'
+        },
+        {
+          why: 'For the converse, suppose continuity fails at $c$: negate the $\\varepsilon$-$\\delta$ statement.',
+          m: '$\\exists\\varepsilon_0>0\\ \\forall\\delta>0\\ \\exists x\\in A: |x-c|<\\delta,\\ |f(x)-f(c)|\\ge\\varepsilon_0$',
+          meaning: 'What this really means: If continuity breaks down, there is a fixed barrier distance such that no matter how tightly you squeeze an input window, some rogue point inside still gets thrown far outside the target.'
+        },
+        {
+          why: 'Apply this with $\\delta=1/n$ to manufacture a specific sequence.',
+          m: '$$\\text{pick } x_n\\in A,\\ |x_n-c|<1/n,\\ |f(x_n)-f(c)|\\ge\\varepsilon_0$$',
+          meaning: 'What this really means: Shrink the search window tighter and tighter at each step (width $1/n$) and pluck out a rogue point each time, manufacturing an entire trail of troublemakers.'
+        },
+        {
+          why: 'This sequence converges to $c$ but its images cannot converge to $f(c)$ &mdash; contradicting the hypothesis, so continuity must hold.',
+          m: '$$x_n\\to c \\text{ but } f(x_n)\\not\\to f(c)$$',
+          meaning: 'What this really means: These chosen inputs sneak right up to the destination, but their outputs stubbornly refuse to arrive there, exposing a fatal contradiction if all sequences were supposed to work.'
+        }
       ],
       ends: `Both directions established: the $\\varepsilon$-$\\delta$ definition and the sequential condition are logically equivalent.`,
     },
@@ -83,8 +119,16 @@ CONCEPTS.push(
       idea: 'Negate the Sequential Criterion for Continuity (Theorem 5.1.3).',
       why: 'A statement $P \\iff Q$ logically implies its contrapositive negation $(\\neg P) \\iff (\\neg Q)$.',
       rungs: [
-        { why: 'By Theorem 5.1.3, $f$ is continuous at $c$ iff every sequence $(x_n) \\subseteq A$ with $x_n \\to c$ satisfies $f(x_n) \\to f(c)$.', m: 'f \\text{ is continuous at } c \\iff (\\forall (x_n) \\subseteq A,\\, x_n \\to c \\implies f(x_n) \\to f(c))' },
-        { why: 'Negating both sides: $f$ is discontinuous at $c$ iff the condition fails for at least one sequence.', m: 'f \\text{ is discontinuous at } c \\iff \\exists (x_n) \\subseteq A : x_n \\to c \\text{ and } f(x_n) \\not\\to f(c)' }
+        {
+          why: 'By Theorem 5.1.3, $f$ is continuous at $c$ iff every sequence $(x_n) \\subseteq A$ with $x_n \\to c$ satisfies $f(x_n) \\to f(c)$.',
+          m: '$$f \\text{ is continuous at } c \\iff (\\forall (x_n) \\subseteq A,\\, x_n \\to c \\implies f(x_n) \\to f(c))$$',
+          meaning: 'What this really means: Universal continuity demands absolute perfection: every single conveyor belt of inputs heading toward the center must carry its outputs to the correct destination.'
+        },
+        {
+          why: 'Negating both sides: $f$ is discontinuous at $c$ iff the condition fails for at least one sequence.',
+          m: '$$f \\text{ is discontinuous at } c \\iff \\exists (x_n) \\subseteq A : x_n \\to c \\text{ and } f(x_n) \\not\\to f(c)$$',
+          meaning: 'What this really means: To shatter continuity, you don\'t need to inspect every sequence; finding just one single defective conveyor belt that drops its outputs off-target is enough to prove the function broken.'
+        }
       ],
       ends: 'This establishes the Discontinuity Criterion.'
     },
@@ -147,12 +191,36 @@ CONCEPTS.push(
       idea: `Use the Discontinuity Criterion: at every point $c$, build a sequence of the "opposite type" to $c$ (irrational sequence if $c$ is rational, rational sequence if $c$ is irrational) that converges to $c$ but whose images miss $f(c)$.`,
       why: `Density of both $\\mathbb{Q}$ and its complement means such approximating sequences always exist, by the Density Theorem's corollary.`,
       rungs: [
-        { why: 'Case 1: let $c$ be rational, so $f(c)=1$.', m: 'c\\in\\mathbb{Q},\\ f(c)=1' },
-        { why: 'Density lets us pick irrationals converging to $c$.', m: '\\exists (x_n)\\subset\\mathbb{R}\\setminus\\mathbb{Q}:\\ x_n\\to c' },
-        { why: 'Their images are all $0$, which cannot converge to $f(c)=1$.', m: 'f(x_n)=0\\ \\forall n \\Rightarrow \\lim f(x_n)=0\\ne f(c)' },
-        { why: 'Case 2: let $b$ be irrational, so $f(b)=0$.', m: 'b\\notin\\mathbb{Q},\\ f(b)=0' },
-        { why: 'Density lets us pick rationals converging to $b$.', m: '\\exists (y_n)\\subset\\mathbb{Q}:\\ y_n\\to b' },
-        { why: 'Their images are all $1$, which cannot converge to $f(b)=0$.', m: 'f(y_n)=1\\ \\forall n \\Rightarrow \\lim f(y_n)=1\\ne f(b)' },
+        {
+          why: 'Case 1: let $c$ be rational, so $f(c)=1$.',
+          m: '$$c\\in\\mathbb{Q},\\ f(c)=1$$',
+          meaning: 'What this really means: We inspect a point on the upper floor of the function where the rule assigns a value of $1$.'
+        },
+        {
+          why: 'Density lets us pick irrationals converging to $c$.',
+          m: '$$\\exists (x_n)\\subset\\mathbb{R}\\setminus\\mathbb{Q}:\\ x_n\\to c$$',
+          meaning: 'What this really means: Because irrational numbers are densely packed everywhere, we can construct a trail of stepping stones sneaking up to our point without ever stepping on a rational.'
+        },
+        {
+          why: 'Their images are all $0$, which cannot converge to $f(c)=1$.',
+          m: '$$f(x_n)=0\\ \\forall n \\Rightarrow \\lim f(x_n)=0\\ne f(c)$$',
+          meaning: 'What this really means: Every single stepping stone along this approach lives on the ground floor at $0$, so the outputs flatline at $0$ and completely miss the required rooftop value of $1$.'
+        },
+        {
+          why: 'Case 2: let $b$ be irrational, so $f(b)=0$.',
+          m: '$$b\\notin\\mathbb{Q},\\ f(b)=0$$',
+          meaning: 'What this really means: Now we flip the perspective and inspect a point sitting on the ground floor at $0$.'
+        },
+        {
+          why: 'Density lets us pick rationals converging to $b$.',
+          m: '$$\\exists (y_n)\\subset\\mathbb{Q}:\\ y_n\\to b$$',
+          meaning: 'What this really means: Rational numbers are also densely packed everywhere, allowing us to build an approach path composed entirely of fractions.'
+        },
+        {
+          why: 'Their images are all $1$, which cannot converge to $f(b)=0$.',
+          m: '$$f(y_n)=1\\ \\forall n \\Rightarrow \\lim f(y_n)=1\\ne f(b)$$',
+          meaning: 'What this really means: Every fraction on this path jumps up to $1$, so the outputs stay frozen at $1$ and fail to land on the ground floor value of $0$.'
+        }
       ],
       ends: `Every real number, rational or irrational, is a point of discontinuity of $f$ &mdash; so $f$ is continuous nowhere on $\\mathbb{R}$.`,
     },
@@ -177,11 +245,31 @@ CONCEPTS.push(
       idea: `Discontinuity at rationals: approach along irrationals where $h\\equiv 0 \\ne h(a)$. Continuity at irrationals: for a given $\\varepsilon$, only finitely many "big" rational values $1/n\\ge\\varepsilon$ can even be nearby, so shrink $\\delta$ to dodge all of them.`,
       why: `Denominators only take positive integer values, so "$h(x)\\ge\\varepsilon$" forces $n\\le 1/\\varepsilon$ &mdash; finitely many candidate denominators, hence finitely many nearby troublesome rationals to avoid.`,
       rungs: [
-        { why: 'At a rational $a=m/n\\in A$, pick a sequence of irrationals converging to $a$.', m: '(x_k)\\subset\\mathbb{R}\\setminus\\mathbb{Q},\\ x_k\\to a' },
-        { why: 'Their images are all $0$, but $h(a)=1/n>0$, so continuity fails.', m: 'h(x_k)=0\\ \\forall k \\Rightarrow \\lim h(x_k)=0\\ne h(a)' },
-        { why: 'At an irrational $b$, fix $\\varepsilon>0$ and use the Archimedean Property to bound denominators worth worrying about.', m: '\\exists n_0\\in\\mathbb{N}:\\ 1/n_0<\\varepsilon' },
-        { why: 'Only finitely many rationals in $(b-1,b+1)$ have denominator $<n_0$, so choose $\\delta$ small enough to miss all of them.', m: '\\exists \\delta>0:\\ (b-\\delta,b+\\delta)\\text{ contains no rational with denominator}<n_0' },
-        { why: 'Any $x$ in that window is either irrational (image $0$) or rational with denominator $\\ge n_0$ (image $\\le 1/n_0$) — either way the image is small.', m: '|x-b|<\\delta,\\ x\\in A \\Rightarrow |h(x)-h(b)|=h(x)\\le 1/n_0<\\varepsilon' },
+        {
+          why: 'At a rational $a=m/n\\in A$, pick a sequence of irrationals converging to $a$.',
+          m: '$$(x_k)\\subset\\mathbb{R}\\setminus\\mathbb{Q},\\ x_k\\to a$$',
+          meaning: 'What this really means: At any fraction, the function spikes upward to a positive height, but we can creep up to it entirely through zero-height irrational points.'
+        },
+        {
+          why: 'Their images are all $0$, but $h(a)=1/n>0$, so continuity fails.',
+          m: '$$h(x_k)=0\\ \\forall k \\Rightarrow \\lim h(x_k)=0\\ne h(a)$$',
+          meaning: 'What this really means: The approach outputs stay flat at zero, while the destination sits high on a spike, causing an unavoidable tear at every rational point.'
+        },
+        {
+          why: 'At an irrational $b$, fix $\\varepsilon>0$ and use the Archimedean Property to bound denominators worth worrying about.',
+          m: '$$\\exists n_0\\in\\mathbb{N}:\\ 1/n_0<\\varepsilon$$',
+          meaning: 'What this really means: Tiny outputs are harmless; only fractions with small denominators produce spikes tall enough to puncture our tolerance ceiling.'
+        },
+        {
+          why: 'Only finitely many rationals in $(b-1,b+1)$ have denominator $<n_0$, so choose $\\delta$ small enough to miss all of them.',
+          m: '$$\\exists \\delta>0:\\ (b-\\delta,b+\\delta)\\text{ contains no rational with denominator}<n_0$$',
+          meaning: 'What this really means: Because tall spikes are rare and isolated, we can clear a small moat around our irrational point that dodges every single tall spike in existence.'
+        },
+        {
+          why: 'Any $x$ in that window is either irrational (image $0$) or rational with denominator $\\ge n_0$ (image $\\le 1/n_0$) — either way the image is small.',
+          m: '$$|x-b|<\\delta,\\ x\\in A \\Rightarrow |h(x)-h(b)|=h(x)\\le 1/n_0<\\varepsilon$$',
+          meaning: 'What this really means: Inside this cleared moat, every point is either completely flat (zero) or a microscopic bump below our tolerance, proving the surface feels totally smooth at the irrational point.'
+        }
       ],
       ends: `$h$ is discontinuous at every rational of $A$ and continuous at every irrational of $A$.`,
     },
@@ -206,10 +294,26 @@ CONCEPTS.push(
       idea: 'Verify the $\\varepsilon$-$\\delta$ definition of continuity directly for $F$ at $c$, and use the definition of continuity to prove the converse.',
       why: 'Continuity of $F$ at $c$ requires $\\lim_{x \\to c} F(x) = F(c)$, which is satisfied uniquely by setting $F(c) = L$.',
       rungs: [
-        { why: 'Since $\\lim_{x\\to c} f(x) = L$, for every $\\varepsilon > 0$ there exists $\\delta > 0$ such that $0 < |x - c| < \\delta$ with $x \\in A$ implies $|f(x) - L| < \\varepsilon$.', m: '\\forall \\varepsilon > 0\\, \\exists \\delta > 0 : 0 < |x - c| < \\delta,\\, x \\in A \\implies |f(x) - L| < \\varepsilon' },
-        { why: 'For $F(x)$ defined on $A \\cup \\{c\\}$ with $F(c) = L$: if $x = c$, then $|F(c) - F(c)| = 0 < \\varepsilon$ holds trivially.', m: 'x = c \\implies |F(x) - F(c)| = 0 < \\varepsilon' },
-        { why: 'If $x \\in A$ with $|x - c| < \\delta$, then $|F(x) - F(c)| = |f(x) - L| < \\varepsilon$. Thus $F$ is continuous at $c$.', m: 'x \\in A \\cup \\{c\\},\\, |x - c| < \\delta \\implies |F(x) - F(c)| < \\varepsilon' },
-        { why: 'Conversely, if $G: A \\cup \\{c\\} \\to \\mathbb{R}$ is continuous at $c$, then $\\lim_{x\\to c} g(x) = \\lim_{x\\to c, x\\in A} G(x) = G(c)$ must exist in $\\mathbb{R}$.', m: '\\lim_{x\\to c} g(x) = G(c) \\in \\mathbb{R}' }
+        {
+          why: 'Since $\\lim_{x\\to c} f(x) = L$, for every $\\varepsilon > 0$ there exists $\\delta > 0$ such that $0 < |x - c| < \\delta$ with $x \\in A$ implies $|f(x) - L| < \\varepsilon$.',
+          m: '$$\\forall \\varepsilon > 0\\, \\exists \\delta > 0 : 0 < |x - c| < \\delta,\\, x \\in A \\implies |f(x) - L| < \\varepsilon$$',
+          meaning: 'What this really means: The original function was already steering all nearby points directly toward the value $L$, leaving behind only an empty puncture at $c$.'
+        },
+        {
+          why: 'For $F(x)$ defined on $A \\cup \\{c\\}$ with $F(c) = L$: if $x = c$, then $|F(c) - F(c)| = 0 < \\varepsilon$ holds trivially.',
+          m: '$$x = c \\implies |F(x) - F(c)| = 0 < \\varepsilon$$',
+          meaning: 'What this really means: We plug the missing puncture with exactly the value $L$, so right at the center point itself, the error from the target is identically zero.'
+        },
+        {
+          why: 'If $x \\in A$ with $|x - c| < \\delta$, then $|F(x) - F(c)| = |f(x) - L| < \\varepsilon$. Thus $F$ is continuous at $c$.',
+          m: '$$x \\in A \\cup \\{c\\},\\, |x - c| < \\delta \\implies |F(x) - F(c)| < \\varepsilon$$',
+          meaning: 'What this really means: Whether you stand right on the patched center point or slightly to the side, all values are now safely trapped within the error tolerance, seamlessly healing the hole.'
+        },
+        {
+          why: 'Conversely, if $G: A \\cup \\{c\\} \\to \\mathbb{R}$ is continuous at $c$, then $\\lim_{x\\to c} g(x) = \\lim_{x\\to c, x\\in A} G(x) = G(c)$ must exist in $\\mathbb{R}$.',
+          m: '$$\\lim_{x\\to c} g(x) = G(c) \\in \\mathbb{R}$$',
+          meaning: 'What this really means: Any continuous patch job is uniquely forced by the incoming flow: the only plug value that can avoid ripping the fabric is the limit itself.'
+        }
       ],
       ends: 'Thus a continuous extension exists if and only if $\\lim_{x\\to c} f(x)$ exists, with $F(c) = L$ the unique choice.'
     },
@@ -244,11 +348,31 @@ CONCEPTS.push(
       idea: `Reduce to the corresponding limit theorem: rewrite each combination's value at $c$ as a limit and invoke Theorem 4.2.4.`,
       why: `$f,g$ continuous at $c$ means precisely $f(c)=\\lim_{x\\to c}f$ and $g(c)=\\lim_{x\\to c}g$, so limit-algebra transfers automatically.`,
       rungs: [
-        { why: 'If $c$ is not a cluster point of $A$, continuity is automatic, so assume $c$ is a cluster point.', m: 'c \\text{ a cluster point of } A' },
-        { why: 'Translate continuity of $f,g$ at $c$ into limit statements.', m: 'f(c)=\\lim_{x\\to c}f,\\quad g(c)=\\lim_{x\\to c}g' },
-        { why: 'Apply the algebra-of-limits theorem to combine them.', m: '(f+g)(c)=f(c)+g(c)=\\lim_{x\\to c}(f+g)' },
-        { why: 'This says exactly that $f+g$ is continuous at $c$; the same substitution pattern handles $-,\\ \\cdot,\\ b\\cdot$.', m: '\\text{similarly for } f-g,\\ fg,\\ bf' },
-        { why: 'For the quotient, use $h(c)\\ne0$ (since $h(x)\\ne0$ on $A$ and $c\\in A$) and the quotient limit rule.', m: '\\left(\\frac{f}{h}\\right)(c)=\\frac{f(c)}{h(c)}=\\lim_{x\\to c}\\frac{f}{h}' },
+        {
+          why: 'If $c$ is not a cluster point of $A$, continuity is automatic, so assume $c$ is a cluster point.',
+          m: '$$c \\text{ a cluster point of } A$$',
+          meaning: 'What this really means: Isolated points have no close neighbors to test continuity against, so the only case that requires real work is when points can approach $c$ from within the domain.'
+        },
+        {
+          why: 'Translate continuity of $f,g$ at $c$ into limit statements.',
+          m: '$$f(c)=\\lim_{x\\to c}f,\\quad g(c)=\\lim_{x\\to c}g$$',
+          meaning: 'What this really means: Continuity means the actual values at the destination match the predicted trajectory limits from both functions.'
+        },
+        {
+          why: 'Apply the algebra-of-limits theorem to combine them.',
+          m: '$$(f+g)(c)=f(c)+g(c)=\\lim_{x\\to c}(f+g)$$',
+          meaning: 'What this really means: The sum of two incoming trajectories simply equals the trajectory of their sum, smoothly combining their arrival values.'
+        },
+        {
+          why: 'This says exactly that $f+g$ is continuous at $c$; the same substitution pattern handles $-,\\ \\cdot,\\ b\\cdot$.',
+          m: '$$\\text{similarly for } f-g,\\ fg,\\ bf$$',
+          meaning: 'What this really means: The exact same limit-combination rules pass right through differences, products, and scaling without snagging or jumping.'
+        },
+        {
+          why: 'For the quotient, use $h(c)\\ne0$ (since $h(x)\\ne0$ on $A$ and $c\\in A$) and the quotient limit rule.',
+          m: '$$\\left(\\frac{f}{h}\\right)(c)=\\frac{f(c)}{h(c)}=\\lim_{x\\to c}\\frac{f}{h}$$',
+          meaning: 'What this really means: As long as the denominator never hits zero, dividing one smooth curve by another preserves a well-behaved, non-exploding trajectory.'
+        }
       ],
       ends: `Each algebraic combination's value at $c$ equals its limit at $c$, which is exactly continuity at $c$.`,
     },
@@ -271,10 +395,26 @@ CONCEPTS.push(
       idea: 'Apply Theorem 5.2.1 (algebraic combinations at a point) at every individual point $c \\in A$.',
       why: 'By Definition 5.1.5, a function is continuous on a set $A$ if and only if it is continuous at each point $c \\in A$.',
       rungs: [
-        { why: 'Let $c$ be an arbitrary point of $A$.', m: 'c \\in A' },
-        { why: 'Since $f$ and $g$ are continuous on $A$, both are continuous at $c$.', m: 'f, g \\text{ continuous at } c' },
-        { why: 'By Theorem 5.2.1, $f+g, f-g, fg, bf$ (and $f/h$ if $h(x) \\ne 0$ on $A$) are continuous at $c$.', m: '(f+g)(c) = \\lim_{x\\to c}(f+g)(x)' },
-        { why: 'Since $c \\in A$ was arbitrary, the combinations are continuous at every point of $A$.', m: '\\forall c \\in A \\implies \\text{continuous on } A' }
+        {
+          why: 'Let $c$ be an arbitrary point of $A$.',
+          m: '$$c \\in A$$',
+          meaning: 'What this really means: We drop a pin at a completely random, unspecified location across the entire territory.'
+        },
+        {
+          why: 'Since $f$ and $g$ are continuous on $A$, both are continuous at $c$.',
+          m: '$$f, g \\text{ continuous at } c$$',
+          meaning: 'What this really means: Because both machines behave reliably everywhere, they are guaranteed to behave reliably right at this specific pinned spot.'
+        },
+        {
+          why: 'By Theorem 5.2.1, $f+g, f-g, fg, bf$ (and $f/h$ if $h(x) \\ne 0$ on $A$) are continuous at $c$.',
+          m: '$$(f+g)(c) = \\lim_{x\\to c}(f+g)(x)$$',
+          meaning: 'What this really means: Our point-by-point rules from Theorem 5.2.1 kick in, showing the combined machine runs smoothly at this pinned location.'
+        },
+        {
+          why: 'Since $c \\in A$ was arbitrary, the combinations are continuous at every point of $A$.',
+          m: '$$\\forall c \\in A \\implies \\text{continuous on } A$$',
+          meaning: 'What this really means: Because no special properties of the pin\'s position were ever used, the smoothness guarantee automatically blankets the entire territory.'
+        }
       ],
       ends: 'Therefore all listed algebraic combinations are continuous on $A$.'
     },
@@ -309,10 +449,26 @@ CONCEPTS.push(
       idea: `Bound the difference $|\\sin x-\\sin c|$ by $|x-c|$ directly, using a product-to-sum identity plus $|\\sin|\\le1$; then $\\delta=\\varepsilon$ works.`,
       why: `Once the difference is dominated by $|x-c|$ itself, the $\\varepsilon$-$\\delta$ proof becomes trivial &mdash; no clever choice of $\\delta$ is needed beyond $\\delta=\\varepsilon$.`,
       rungs: [
-        { why: 'Rewrite the difference using the sum-to-product identity for sine.', m: '\\sin x-\\sin c=2\\sin\\!\\big[\\tfrac12(x-c)\\big]\\cos\\!\\big[\\tfrac12(x+c)\\big]' },
-        { why: 'Bound each factor: $|\\sin z|\\le|z|$ and $|\\cos z|\\le1$.', m: '|\\sin x-\\sin c|\\le 2\\cdot\\tfrac12|x-c|\\cdot 1=|x-c|' },
-        { why: 'Given $\\varepsilon>0$, take $\\delta:=\\varepsilon$ &mdash; the bound directly controls the output.', m: '|x-c|<\\delta=\\varepsilon \\Rightarrow |\\sin x-\\sin c|<\\varepsilon' },
-        { why: 'The cosine case is identical, using the cosine sum-to-product identity instead.', m: '\\cos x-\\cos c=-2\\sin[\\tfrac12(x+c)]\\sin[\\tfrac12(x-c)] \\Rightarrow |\\cos x-\\cos c|\\le|x-c|' },
+        {
+          why: 'Rewrite the difference using the sum-to-product identity for sine.',
+          m: '$$\\sin x-\\sin c=2\\sin\\!\\big[\\tfrac12(x-c)\\big]\\cos\\!\\big[\\tfrac12(x+c)\\big]$$',
+          meaning: 'What this really means: We decompose the vertical gap between two sine outputs into a product of oscillation and a chord factor governed purely by the separation of inputs.'
+        },
+        {
+          why: 'Bound each factor: $|\\sin z|\\le|z|$ and $|\\cos z|\\le1$.',
+          m: '$$|\\sin x-\\sin c|\\le 2\\cdot\\tfrac12|x-c|\\cdot 1=|x-c|$$',
+          meaning: 'What this really means: A sine curve can never climb steeper than a 45-degree angle, so the vertical gap between two outputs can never exceed the horizontal distance between inputs.'
+        },
+        {
+          why: 'Given $\\varepsilon>0$, take $\\delta:=\\varepsilon$ &mdash; the bound directly controls the output.',
+          m: '$$|x-c|<\\delta=\\varepsilon \\Rightarrow |\\sin x-\\sin c|<\\varepsilon$$',
+          meaning: 'What this really means: Output error is directly trapped by input distance 1-to-1: setting your input window size to match the desired error tolerance guarantees success without any scaling.'
+        },
+        {
+          why: 'The cosine case is identical, using the cosine sum-to-product identity instead.',
+          m: '$$\\cos x-\\cos c=-2\\sin[\\tfrac12(x+c)]\\sin[\\tfrac12(x-c)] \\Rightarrow |\\cos x-\\cos c|\\le|x-c|$$',
+          meaning: 'What this really means: Cosine is merely a phase-shifted twin of sine, so the exact same 1-to-1 distance clamp keeps cosine outputs locked smoothly to its inputs.'
+        }
       ],
       ends: `Both $\\sin$ and $\\cos$ satisfy a Lipschitz-type bound with constant $1$, hence are continuous at every $c\\in\\mathbb{R}$.`,
     },
@@ -346,10 +502,26 @@ CONCEPTS.push(
       idea: 'Apply the reverse triangle inequality $||f(x)| - |f(c)|| \\le |f(x) - f(c)|$.',
       why: 'Controlling $|f(x) - f(c)|$ by continuity automatically controls the difference in absolute values.',
       rungs: [
-        { why: 'Recall the reverse triangle inequality for real numbers.', m: '||a| - |b|| \\le |a - b|' },
-        { why: 'Substitute $a = f(x)$ and $b = f(c)$.', m: '||f(x)| - |f(c)|| \\le |f(x) - f(c)|' },
-        { why: 'Since $f$ is continuous at $c$, for any $\\varepsilon > 0$ there is $\\delta > 0$ such that $|x - c| < \\delta$ with $x \\in A$ implies $|f(x) - f(c)| < \\varepsilon$.', m: '|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon' },
-        { why: 'By the reverse triangle inequality, this directly yields $||f(x)| - |f(c)|| < \\varepsilon$.', m: '|x - c| < \\delta \\implies ||f(x)| - |f(c)|| \\le |f(x) - f(c)| < \\varepsilon' }
+        {
+          why: 'Recall the reverse triangle inequality for real numbers.',
+          m: '$$||a| - |b|| \\le |a - b|$$',
+          meaning: 'What this really means: Folding negative numbers onto positive numbers can bring two points closer together, but it can never push them further apart.'
+        },
+        {
+          why: 'Substitute $a = f(x)$ and $b = f(c)$.',
+          m: '$$||f(x)| - |f(c)|| \\le |f(x) - f(c)|$$',
+          meaning: 'What this really means: Taking the absolute value of function outputs can only compress or preserve output gaps, never stretch them.'
+        },
+        {
+          why: 'Since $f$ is continuous at $c$, for any $\\varepsilon > 0$ there is $\\delta > 0$ such that $|x - c| < \\delta$ with $x \\in A$ implies $|f(x) - f(c)| < \\varepsilon$.',
+          m: '$$|x - c| < \\delta \\implies |f(x) - f(c)| < \\varepsilon$$',
+          meaning: 'What this really means: The original function already keeps its output fluctuations smaller than our chosen tolerance inside a small enough input window.'
+        },
+        {
+          why: 'By the reverse triangle inequality, this directly yields $||f(x)| - |f(c)|| < \\varepsilon$.',
+          m: '$$|x - c| < \\delta \\implies ||f(x)| - |f(c)|| \\le |f(x) - f(c)| < \\varepsilon$$',
+          meaning: 'What this really means: Because the absolute value operation cannot widen the output gap, the new gap slips easily under the very same tolerance ceiling.'
+        }
       ],
       ends: 'Thus $|f|$ is continuous at $c$, and hence continuous on all of $A$.'
     },
@@ -370,9 +542,21 @@ CONCEPTS.push(
       idea: 'Rationalize the difference when $f(c) > 0$, and use $0 \\le f(x) < \\varepsilon^2$ when $f(c) = 0$.',
       why: 'When $f(c) > 0$, $|\sqrt{f(x)} - \sqrt{f(c)}| = \frac{|f(x) - f(c)|}{\sqrt{f(x)} + \sqrt{f(c)}} \le \frac{|f(x) - f(c)|}{\sqrt{f(c)}}$.',
       rungs: [
-        { why: 'Case 1: $f(c) = 0$. For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $0 \\le f(x) < \\varepsilon^2$.', m: '|\\sqrt{f(x)} - 0| = \\sqrt{f(x)} < \\varepsilon' },
-        { why: 'Case 2: $f(c) > 0$. Multiply and divide by the conjugate.', m: '|\\sqrt{f(x)} - \\sqrt{f(c)}| = \\frac{|f(x) - f(c)|}{\\sqrt{f(x)} + \\sqrt{f(c)}} \\le \\frac{|f(x) - f(c)|}{\\sqrt{f(c)}}' },
-        { why: 'For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $|f(x) - f(c)| < \\varepsilon\\sqrt{f(c)}$.', m: '|\\sqrt{f(x)} - \\sqrt{f(c)}| < \\frac{\\varepsilon\\sqrt{f(c)}}{\\sqrt{f(c)}} = \\varepsilon' }
+        {
+          why: 'Case 1: $f(c) = 0$. For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $0 \\le f(x) < \\varepsilon^2$.',
+          m: '$$|\\sqrt{f(x)} - 0| = \\sqrt{f(x)} < \\varepsilon$$',
+          meaning: 'What this really means: Near a ground-floor zero, keeping the original function below $\\varepsilon^2$ automatically keeps its square root below $\\varepsilon$.'
+        },
+        {
+          why: 'Case 2: $f(c) > 0$. Multiply and divide by the conjugate.',
+          m: '$$|\\sqrt{f(x)} - \\sqrt{f(c)}| = \\frac{|f(x) - f(c)|}{\\sqrt{f(x)} + \\sqrt{f(c)}} \\le \\frac{|f(x) - f(c)|}{\\sqrt{f(c)}}$$',
+          meaning: 'What this really means: Conjugate multiplication translates the root gap into an ordinary gap divided by a strictly positive safety buffer $\\sqrt{f(c)}$.'
+        },
+        {
+          why: 'For any $\\varepsilon > 0$, choose $\\delta > 0$ so $|x - c| < \\delta$ implies $|f(x) - f(c)| < \\varepsilon\\sqrt{f(c)}$.',
+          m: '$$|\\sqrt{f(x)} - \\sqrt{f(c)}| < \\frac{\\varepsilon\\sqrt{f(c)}}{\\sqrt{f(c)}} = \\varepsilon$$',
+          meaning: 'What this really means: We tighten our original function tolerance by the fixed factor $\\sqrt{f(c)}$, cancelling out the denominator and keeping the square roots locked inside $\\varepsilon$.'
+        }
       ],
       ends: 'In both cases, $\\sqrt{f}$ is continuous at $c$, and hence continuous on $A$.'
     },
@@ -396,11 +580,31 @@ CONCEPTS.push(
       idea: `Chase neighbourhoods backward through both functions: given a target neighbourhood $W$ of $g(b)$, pull it back through $g$ to a neighbourhood $V$ of $b=f(c)$, then pull $V$ back through $f$ to a neighbourhood $U$ of $c$.`,
       why: `Neighbourhood-continuity (5.1.2) composes cleanly because "preimage of a neighbourhood contains a neighbourhood" is exactly the kind of statement that chains.`,
       rungs: [
-        { why: 'Start from an arbitrary tolerance around the final output $g(b)$.', m: 'W = V_\\varepsilon(g(b))' },
-        { why: 'Continuity of $g$ at $b$ gives a neighbourhood of $b$ that lands inside $W$.', m: '\\exists V=V_\\delta(b):\\ y\\in B\\cap V \\Rightarrow g(y)\\in W' },
-        { why: 'Continuity of $f$ at $c$ gives a neighbourhood of $c$ that lands inside $V$.', m: '\\exists U=V_\\gamma(c):\\ x\\in A\\cap U \\Rightarrow f(x)\\in V' },
-        { why: 'Use $f(A)\\subseteq B$ to know $f(x)$ actually lies in $B\\cap V$, so $g$ may be applied to it.', m: 'x\\in A\\cap U \\Rightarrow f(x)\\in B\\cap V \\Rightarrow g(f(x))\\in W' },
-        { why: 'This exhibits, for every tolerance $W$ around $g(b)$, a neighbourhood $U$ of $c$ that works.', m: '(g\\circ f)(A\\cap U)\\subseteq W' },
+        {
+          why: 'Start from an arbitrary tolerance around the final output $g(b)$.',
+          m: '$$W = V_\\varepsilon(g(b))$$',
+          meaning: 'What this really means: Someone gives us an ultimate target window around the final output of the two-stage process.'
+        },
+        {
+          why: 'Continuity of $g$ at $b$ gives a neighbourhood of $b$ that lands inside $W$.',
+          m: '$$\\exists V=V_\\delta(b):\\ y\\in B\\cap V \\Rightarrow g(y)\\in W$$',
+          meaning: 'What this really means: The second machine\'s continuity tells us what intermediate window size we must hit at the middle station to guarantee landing inside the final target.'
+        },
+        {
+          why: 'Continuity of $f$ at $c$ gives a neighbourhood of $c$ that lands inside $V$.',
+          m: '$$\\exists U=V_\\gamma(c):\\ x\\in A\\cap U \\Rightarrow f(x)\\in V$$',
+          meaning: 'What this really means: Now the first machine treats that required intermediate window as its own target, producing an initial input window around $c$ that will land inside it.'
+        },
+        {
+          why: 'Use $f(A)\\subseteq B$ to know $f(x)$ actually lies in $B\\cap V$, so $g$ may be applied to it.',
+          m: '$$x\\in A\\cap U \\Rightarrow f(x)\\in B\\cap V \\Rightarrow g(f(x))\\in W$$',
+          meaning: 'What this really means: The handover works without a hitch: intermediate outputs feed seamlessly into the second stage without falling off the conveyor belt.'
+        },
+        {
+          why: 'This exhibits, for every tolerance $W$ around $g(b)$, a neighbourhood $U$ of $c$ that works.',
+          m: '$$(g\\circ f)(A\\cap U)\\subseteq W$$',
+          meaning: 'What this really means: Chain reaction: keeping the starting input in the first window forces the entire two-step process to land securely inside the final target window.'
+        }
       ],
       ends: `Since $W$ was an arbitrary neighbourhood of $g(b)$, this establishes $g\\circ f$ is continuous at $c$.`,
     },
@@ -422,11 +626,31 @@ CONCEPTS.push(
       idea: 'Apply Theorem 5.2.6 (composition at a point) at every individual point $c \\in A$.',
       why: 'Definition 5.1.5 defines continuity on a set as continuity at each individual point of that set.',
       rungs: [
-        { why: 'Let $c$ be any arbitrary point of $A$.', m: 'c \\in A' },
-        { why: 'Since $f$ is continuous on $A$, $f$ is continuous at $c$.', m: 'f \\text{ is continuous at } c' },
-        { why: 'Because $f(A) \\subseteq B$, the image point $f(c) \\in B$. Since $g$ is continuous on $B$, $g$ is continuous at $f(c)$.', m: 'f(c) \\in B \\implies g \\text{ is continuous at } f(c)' },
-        { why: 'By Theorem 5.2.6, the composite function $g \\circ f$ is continuous at $c$.', m: 'g \\circ f \\text{ is continuous at } c' },
-        { why: 'Since $c \\in A$ was arbitrary, $g \\circ f$ is continuous on all of $A$.', m: '\\forall c \\in A \\implies g \\circ f \\text{ is continuous on } A' }
+        {
+          why: 'Let $c$ be any arbitrary point of $A$.',
+          m: '$$c \\in A$$',
+          meaning: 'What this really means: Pick an arbitrary starting point anywhere across the domain of the first function.'
+        },
+        {
+          why: 'Since $f$ is continuous on $A$, $f$ is continuous at $c$.',
+          m: '$$f \\text{ is continuous at } c$$',
+          meaning: 'What this really means: The first stage is guaranteed to run smoothly right at this selected starting point.'
+        },
+        {
+          why: 'Because $f(A) \\subseteq B$, the image point $f(c) \\in B$. Since $g$ is continuous on $B$, $g$ is continuous at $f(c)$.',
+          m: '$$f(c) \\in B \\implies g \\text{ is continuous at } f(c)$$',
+          meaning: 'What this really means: The middle value lands safely in the domain of the second stage, where the second machine is also guaranteed to run smoothly.'
+        },
+        {
+          why: 'By Theorem 5.2.6, the composite function $g \\circ f$ is continuous at $c$.',
+          m: '$$g \\circ f \\text{ is continuous at } c$$',
+          meaning: 'What this really means: Because both individual stages are continuous at their respective stations, Theorem 5.2.6 guarantees the chained sequence is continuous at $c$.'
+        },
+        {
+          why: 'Since $c \\in A$ was arbitrary, $g \\circ f$ is continuous on all of $A$.',
+          m: '$$\\forall c \\in A \\implies g \\circ f \\text{ is continuous on } A$$',
+          meaning: 'What this really means: Because the argument worked for an entirely arbitrary starting point, the unbroken smoothness holds universally everywhere on $A$.'
+        }
       ],
       ends: 'Thus $g \\circ f$ is continuous on $A$.'
     },
