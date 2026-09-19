@@ -602,6 +602,197 @@ $$\\phi(p) = \\frac{2\\sqrt{\\kappa}}{\\sqrt{2\\pi\\hbar}} \\frac{\\hbar^2 \\kap
 This gives a Lorentzian probability distribution in momentum space!</p>`,
     tested: 'Fourier transform to momentum space for discontinuous derivative wave functions.',
     trap: 'Selecting Option C by assuming the momentum wave function must always be a Gaussian.'
+  },
+  {
+    id: 'p.jam.ph.2024.04',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2024,
+    paper: 'PH',
+    qno: 36,
+    marks: 2,
+    neg: -0.66,
+    sec: '4.1',
+    tests: ['c.4.1.6', 'c.4.1.7'],
+    title: 'Expectation Value of Position Squared in an Oscillator Superposition',
+    type: 'MCQ',
+    prompt: `<p>A 1D quantum harmonic oscillator of mass $m$ and frequency $\omega$ is prepared in the superposition state:
+$$|\\psi\\rangle = \\frac{1}{\\sqrt{2}}|0\\rangle + \\frac{1}{\\sqrt{2}}|2\\rangle$$
+What is the expectation value $\\langle \\hat{x}^2 \\rangle$ in this state?</p>`,
+    options: [
+      { k: 'A', t: '$\\dfrac{\\hbar}{2m\\omega}(3 + \\sqrt{2})$' },
+      { k: 'B', t: '$\\dfrac{3\\hbar}{2m\\omega}$' },
+      { k: 'C', t: '$\\dfrac{\\hbar}{2m\\omega}(3 + 2\\sqrt{2})$' },
+      { k: 'D', t: '$\\dfrac{\\hbar}{m\\omega}$' }
+    ],
+    answer: 'A',
+    solution: `<p>Express $\\hat{x}^2$ in terms of ladder operators:
+$$\\hat{x}^2 = \\frac{\\hbar}{2m\\omega} (\\hat{a} + \\hat{a}^\\dagger)^2 = \\frac{\\hbar}{2m\\omega} (\\hat{a}^2 + \\hat{a}\\hat{a}^\\dagger + \\hat{a}^\\dagger \\hat{a} + (\\hat{a}^\\dagger)^2)$$
+Evaluate the matrix elements in the state $|\\psi\\rangle = \\frac{1}{\\sqrt{2}}(|0\\rangle + |2\\rangle)$:
+$$\\langle \\psi|\\hat{x}^2|\\psi\\rangle = \\frac{\\hbar}{2m\\omega} \\cdot \\frac{1}{2} (\\langle 0| + \\langle 2|) (\\hat{a}^2 + 2\\hat{N} + 1 + (\\hat{a}^\\dagger)^2) (|0\\rangle + |2\\rangle)$$
+1. Diagonal terms:
+$$\\langle 0|2\\hat{N} + 1|0\\rangle = 1, \\qquad \\langle 2|2\\hat{N} + 1|2\\rangle = 2(2) + 1 = 5$$
+Sum of diagonal terms: $1 + 5 = 6$.<br>
+2. Off-diagonal terms:
+$$\\langle 0|\\hat{a}^2|2\\rangle = \\sqrt{2}\\langle 0|0\\rangle = \\sqrt{2}$$
+$$\\langle 2|(\\hat{a}^\\dagger)^2|0\\rangle = \\sqrt{2}\\langle 2|2\\rangle = \\sqrt{2}$$
+Sum of off-diagonal cross terms: $\\sqrt{2} + \\sqrt{2} = 2\\sqrt{2}$.<br>
+Combining both:
+$$\\langle \\hat{x}^2 \\rangle = \\frac{\\hbar}{2m\\omega} \\cdot \\frac{1}{2} (6 + 2\\sqrt{2}) = \\frac{\\hbar}{2m\\omega} (3 + \\sqrt{2})$$</p>`,
+    tested: 'Expectation value of x² in harmonic oscillator superpositions with cross-terms.',
+    trap: 'Forgetting the off-diagonal cross-terms ⟨0|a²|2⟩, which would incorrectly yield Option B (3ħ/2mω).'
+  },
+  {
+    id: 'p.jam.ph.2023.04',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2023,
+    paper: 'PH',
+    qno: 18,
+    marks: 2,
+    neg: 0,
+    sec: '4.4',
+    tests: ['c.4.4.2', 'c.4.4.3'],
+    title: 'Degeneracy of Second Excited State in 3D Isotropic Oscillator',
+    type: 'NAT',
+    prompt: `<p>A particle of mass $m$ is confined in a three-dimensional isotropic harmonic oscillator potential $V(r) = \\frac{1}{2}m\\omega^2 r^2$. What is the degree of degeneracy of the second excited state ($N = 2$)?</p>`,
+    answer: '6',
+    solution: `<p>The energy eigenvalues of a 3D isotropic harmonic oscillator are:
+$$E_N = \\left(N + \\frac{3}{2}\\right)\\hbar\\omega, \\qquad N = n_x + n_y + n_z$$
+The ground state is $N = 0$ ($E_0 = \\frac{3}{2}\\hbar\\omega$).<br>
+The first excited state is $N = 1$ ($E_1 = \\frac{5}{2}\\hbar\\omega$).<br>
+The <b>second excited state</b> is $N = 2$ ($E_2 = \\frac{7}{2}\\hbar\\omega$).<br>
+The degeneracy is given by:
+$$g_N = \\frac{(N + 1)(N + 2)}{2}$$
+For $N = 2$:
+$$g_2 = \\frac{(2 + 1)(2 + 2)}{2} = \\frac{3 \\times 4}{2} = 6$$
+The 6 degenerate states are:
+- $(2, 0, 0), (0, 2, 0), (0, 0, 2)$ (3 states)
+- $(1, 1, 0), (1, 0, 1), (0, 1, 1)$ (3 states)</p>`,
+    tested: 'Degeneracy calculation for 3D isotropic harmonic oscillator.',
+    trap: 'Using the first excited state N=1 (degeneracy 3) instead of second excited state N=2.'
+  },
+  {
+    id: 'p.jam.ph.2022.04',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2022,
+    paper: 'PH',
+    qno: 24,
+    marks: 2,
+    neg: -0.66,
+    sec: '4.3',
+    tests: ['c.4.3.2'],
+    title: 'Degeneracy of Cubic Box Energy Level at 14 E₁',
+    type: 'MCQ',
+    prompt: `<p>A particle is trapped in a 3D cubic potential box of side length $L$. The energy levels are $E = (n_x^2 + n_y^2 + n_z^2)E_1$ where $E_1 = \\frac{\\pi^2 \\hbar^2}{2mL^2}$. What is the degree of degeneracy of the energy level $E = 14 E_1$?</p>`,
+    options: [
+      { k: 'A', t: '3' },
+      { k: 'B', t: '4' },
+      { k: 'C', t: '6' },
+      { k: 'D', t: '8' }
+    ],
+    answer: 'C',
+    solution: `<p>Solve $n_x^2 + n_y^2 + n_z^2 = 14$ for positive integers $n_x, n_y, n_z \\ge 1$:<br>
+The only combination of three squares summing to 14 is:
+$$9 + 4 + 1 = 3^2 + 2^2 + 1^2 = 14$$
+Because the three integers $(3, 2, 1)$ are all distinct, the number of distinct permutations is:
+$$3! = 3 \\times 2 \\times 1 = 6$$
+The 6 degenerate eigenstates are:
+$$(3, 2, 1), \\quad (3, 1, 2), \\quad (2, 3, 1), \\quad (2, 1, 3), \\quad (1, 3, 2), \\quad (1, 2, 3)$$
+Therefore, the level is <b>6-fold degenerate ($g = 6$)</b>.</p>`,
+    tested: 'Degeneracy counting for three distinct quantum numbers in a 3D cubic box.',
+    trap: 'Assuming permutations of two equal numbers (which gives 3 instead of 6).'
+  },
+  {
+    id: 'p.jam.ph.2021.04',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2021,
+    paper: 'PH',
+    qno: 15,
+    marks: 1,
+    neg: -0.33,
+    sec: '4.4',
+    tests: ['c.4.4.2', 'c.4.1.3'],
+    title: 'Ratio of 3D to 1D Harmonic Oscillator Zero-Point Energy',
+    type: 'MCQ',
+    prompt: `<p>What is the ratio of the ground-state zero-point energy of a three-dimensional isotropic harmonic oscillator to that of a one-dimensional harmonic oscillator of the same frequency $\\omega$?</p>`,
+    options: [
+      { k: 'A', t: '1' },
+      { k: 'B', t: '2' },
+      { k: 'C', t: '3' },
+      { k: 'D', t: '3/2' }
+    ],
+    answer: 'C',
+    solution: `<p>The ground-state zero-point energy of a 1D harmonic oscillator is:
+$$E_{0, \\text{1D}} = \\frac{1}{2}\\hbar\\omega$$
+The ground-state zero-point energy of a 3D isotropic harmonic oscillator is:
+$$E_{0, \\text{3D}} = \\left(0 + \\frac{3}{2}\\right)\\hbar\\omega = \\frac{3}{2}\\hbar\\omega$$
+The ratio is:
+$$\\frac{E_{0, \\text{3D}}}{E_{0, \\text{1D}}} = \\frac{\\frac{3}{2}\\hbar\\omega}{\\frac{1}{2}\\hbar\\omega} = 3$$
+Each independent spatial degree of freedom contributes $\\frac{1}{2}\\hbar\\omega$ to the ground state.</p>`,
+    tested: 'Zero-point energy scaling with dimensionality in harmonic oscillators.',
+    trap: 'Selecting Option D (3/2), confusing the energy value 3/2 ħω with the ratio 3.'
+  },
+  {
+    id: 'p.jam.ph.2020.04',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2020,
+    paper: 'PH',
+    qno: 22,
+    marks: 2,
+    neg: -0.66,
+    sec: '4.1',
+    tests: ['c.4.1.6'],
+    title: 'Matrix Element of Position Between Adjacent Oscillator States',
+    type: 'MCQ',
+    prompt: `<p>For a 1D harmonic oscillator of mass $m$ and frequency $\\omega$, what is the transition matrix element $\\langle 1 | \\hat{x} | 2 \\rangle$?</p>`,
+    options: [
+      { k: 'A', t: '$\\sqrt{\\dfrac{\\hbar}{m\\omega}}$' },
+      { k: 'B', t: '$\\sqrt{\\dfrac{\\hbar}{2m\\omega}}$' },
+      { k: 'C', t: '$\\sqrt{\\dfrac{2\\hbar}{m\\omega}}$' },
+      { k: 'D', t: '$0$' }
+    ],
+    answer: 'A',
+    solution: `<p>The position operator is:
+$$\\hat{x} = \\sqrt{\\frac{\\hbar}{2m\\omega}}(\\hat{a} + \\hat{a}^\\dagger)$$
+Acting on the state $|2\\rangle$:
+$$\\hat{a}|2\\rangle = \\sqrt{2}|1\\rangle, \\qquad \\hat{a}^\\dagger|2\\rangle = \\sqrt{3}|3\\rangle$$
+Taking the inner product with $\\langle 1|$:
+$$\\langle 1|\\hat{x}|2\\rangle = \\sqrt{\\frac{\\hbar}{2m\\omega}} (\\langle 1|\\sqrt{2}|1\\rangle + \\langle 1|\\sqrt{3}|3\\rangle) = \\sqrt{\\frac{\\hbar}{2m\\omega}} (\\sqrt{2} + 0) = \\sqrt{\\frac{\\hbar}{2m\\omega}} \\sqrt{2} = \\sqrt{\\frac{\\hbar}{m\\omega}}$$
+Therefore, $\\langle 1|\\hat{x}|2\\rangle = \\sqrt{\\frac{\\hbar}{m\\omega}}$.</p>`,
+    tested: 'Matrix elements of position operator in the Fock state basis.',
+    trap: 'Forgetting the √2 factor from the lowering operator action a|2⟩ = √2 |1⟩.'
+  },
+  {
+    id: 'p.jam.ph.2019.04',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2019,
+    paper: 'PH',
+    qno: 11,
+    marks: 1,
+    neg: -0.33,
+    sec: '4.4',
+    tests: ['c.4.4.1'],
+    title: 'Ground State Energy of a 3D Anisotropic Oscillator',
+    type: 'MCQ',
+    prompt: `<p>A particle of mass $m$ moves in a 3D anisotropic potential with angular frequencies $\\omega_x = \\omega, \\omega_y = 2\\omega, \\omega_z = 3\\omega$. What is the ground-state energy of the particle?</p>`,
+    options: [
+      { k: 'A', t: '$\\dfrac{3}{2}\\hbar\\omega$' },
+      { k: 'B', t: '$3\\hbar\\omega$' },
+      { k: 'C', t: '$6\\hbar\\omega$' },
+      { k: 'D', t: '$\\dfrac{7}{2}\\hbar\\omega$' }
+    ],
+    answer: 'B',
+    solution: `<p>The ground-state energy of an anisotropic oscillator is the sum of the zero-point energies of the three orthogonal modes:
+$$E_{0,0,0} = \\frac{1}{2}\\hbar\\omega_x + \\frac{1}{2}\\hbar\\omega_y + \\frac{1}{2}\\hbar\\omega_z = \\frac{1}{2}\\hbar(\\omega + 2\\omega + 3\\omega) = \\frac{1}{2}\\hbar(6\\omega) = 3\\hbar\\omega$$
+Therefore, the ground state energy is $3\\hbar\\omega$.</p>`,
+    tested: 'Ground state energy of 3D anisotropic harmonic oscillator.',
+    trap: 'Using the geometric mean or failing to sum all three zero-point energies.'
   }
 );
+
 

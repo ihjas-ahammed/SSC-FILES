@@ -43,7 +43,13 @@ const DIAGRAM_MAP = {
   'c.3.5.2': ['c.3.5.2_unitary_transformation_rotation'],
   'c.3.6.1': ['c.3.6.1_eigenvalue_diagonalization'],
   'c.3.6.3': ['c.3.6.3_compatible_observables_simultaneous_eigenstates'],
-  'c.3.7.2': ['c.3.7.2_position_momentum_representation']
+  'c.3.7.2': ['c.3.7.2_position_momentum_representation'],
+  'c.4.1.1': ['c.4.1.1_sho_potential_energy_levels'],
+  'c.4.1.2': ['c.4.1.2_ladder_operators_action'],
+  'c.4.1.3': ['c.4.1.3_sho_wavefunctions_probabilities'],
+  'c.4.2.1': ['c.4.2.1_separation_of_variables_3d'],
+  'c.4.3.1': ['c.4.3.1_3d_cubic_box_degeneracy'],
+  'c.4.4.1': ['c.4.4.1_3d_isotropic_oscillator_degeneracy']
 };
 
 /* The lecture sheets: whole-topic posters rather than one-result figures.
