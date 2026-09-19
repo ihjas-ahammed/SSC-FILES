@@ -119,14 +119,20 @@ const Store = (function () {
   const isProofDone = id => !!state.proofs[id];
   const setProofDone = (id, on) => flag('proofs', 'unproofs', id, on);
 
-  /* ── statement cards ─────────────────────────────────────────────────── */
-  /* grade: 'got' | 'partly' | 'missed' */
+  /* ── recall cards ────────────────────────────────────────────────────── */
+  /* grade: 'got' | 'partly' | 'missed'
+
+     `box` is the Leitner box the reel schedules from: it rises when you state
+     a card, steps back when you half-state it and resets when you miss it.
+     The interval each box buys is core.progress.js's business — this only has
+     to store the number and, critically, MERGE it (see mergeAttempts). */
   const card = id => state.cards[id] || null;
   function gradeCard(id, grade) {
     const rec = state.cards[id] || (state.cards[id] = { tries: 0 });
     rec.tries += 1;
     rec.last = grade;
     rec.lastAt = Date.now();
+    rec.box = Progress.nextBox(rec.box, grade);
     if (!rec.first) { rec.first = grade; rec.firstAt = rec.lastAt; }  /* first attempt is final */
     save();
     return rec;
@@ -263,6 +269,10 @@ const Store = (function () {
         rec.last = last.last;
         if (last.lastAt) rec.lastAt = last.lastAt;
       }
+      /* The schedule travels with the latest pass. Rebuilding the record field
+         by field is what drops anything not named here, so a new field has to
+         be added in BOTH places or every sync quietly resets it. */
+      if (last.box != null) rec.box = last.box;
       out[id] = rec;
     }
     return out;

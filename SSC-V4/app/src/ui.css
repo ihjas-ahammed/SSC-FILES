@@ -40,6 +40,9 @@
   --lv1:var(--bad);  --lv1-soft:var(--bad-soft);  --lv1-line:var(--bad-line);
   --lv2:var(--warn); --lv2-soft:var(--warn-soft); --lv2-line:var(--warn-line);
   --lv3:var(--ok);   --lv3-soft:var(--ok-soft);   --lv3-line:var(--ok-line);
+  /* Level 4 is a COURSE rung — its past papers are done — so it is deliberately
+     off the traffic light: nothing below a course can ever wear it. */
+  --lv4:#6d4aff; --lv4-soft:#efeaff; --lv4-line:#c6b6ff;
 
   --rail-w:236px;
   --ease:cubic-bezier(.32,.72,0,1);
@@ -56,6 +59,7 @@
   --ok:#5ec79c; --ok-soft:#122a21; --ok-line:#26533e;
   --bad:#ff9087; --bad-soft:#2c1715; --bad-line:#5d2926;
   --warn:#e2b567; --warn-soft:#292013; --warn-line:#51401e;
+  --lv4:#b6a2ff; --lv4-soft:#211b3c; --lv4-line:#453a78;
 
   --glass:rgba(25,28,34,.68); --glass-2:rgba(25,28,34,.5);
   --glass-line:rgba(255,255,255,.07); --blur:saturate(150%) blur(20px);
@@ -104,9 +108,12 @@ h1[tabindex="-1"]:focus,main:focus{ outline:none; }
   background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   border-bottom:1px solid var(--glass-line);
 }
-.brand{ display:flex; align-items:baseline; gap:8px; min-width:0; }
-.brand b{ font-weight:600; font-size:.98rem; white-space:nowrap; }
-.brand span{ color:var(--ink-3); font-size:.7rem; letter-spacing:.09em; text-transform:uppercase; }
+.brand{ display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
+.brand-titles{ display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+.brand-titles b{ font-weight:600; font-size:.95rem; white-space:nowrap; line-height:1.2; }
+.brand-sub{ font-size:.70rem; color:var(--ink-3); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; line-height:1.2; margin-top:1px; }
+.brand-sub:empty{ display:none; }
+.brand span.mock-tag{ color:var(--ink-3); font-size:.7rem; letter-spacing:.09em; text-transform:uppercase; }
 .top .grow{ flex:1 1 auto; }
 .icon-btn{
   display:inline-flex; align-items:center; justify-content:center; gap:6px;
@@ -149,7 +156,7 @@ nav.tabs{
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 .rail-top,.rail-foot{ display:none; }
-.rail-nav{ display:grid; grid-template-columns:repeat(5,1fr); }
+.rail-nav{ display:grid; grid-auto-flow:column; grid-auto-columns:1fr; }
 .rail-nav a{
   position:relative; display:flex; flex-direction:column; align-items:center;
   justify-content:center; gap:3px; height:var(--tab-h); text-decoration:none;
@@ -170,6 +177,10 @@ nav.tabs{
 .rail-brand b{ font-size:.95rem; font-weight:600; letter-spacing:-.01em; }
 .rail-brand span{ font-size:.6rem; letter-spacing:.11em; text-transform:uppercase;
   color:var(--ink-3); }
+.rail-brand .brand-sub{ font-size:.70rem; color:var(--ink-3); text-transform:none;
+  letter-spacing:normal; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  max-width:140px; margin-top:2px; }
+.rail-brand .brand-sub:empty{ display:none; }
 .rail-btn{
   display:flex; align-items:center; gap:12px; height:40px; padding:0 11px; width:100%;
   border:0; background:none; border-radius:10px; cursor:pointer; color:var(--ink-2);
@@ -429,16 +440,21 @@ mjx-container{ max-width:100%; }
 /* ── the tick tree ───────────────────────────────────────────────────────── */
 .tree{ display:flex; flex-direction:column; gap:10px; }
 .tnode{ border:1px solid var(--rule); border-radius:var(--r-m); background:var(--surface);
-  box-shadow:var(--shadow); overflow:hidden; }
-.tnode.sub{ border-radius:var(--r-s); box-shadow:none; background:var(--surface-2); }
+  box-shadow:var(--shadow); overflow:hidden;
+  transition:border-radius .42s var(--ease), border-color .42s var(--ease),
+    margin .42s var(--ease), padding .42s var(--ease), box-shadow .42s var(--ease); }
+.tnode.sub{ border-radius:var(--r-s); box-shadow:none; background:var(--surface-2);
+  transition:border-radius .42s var(--ease), border-color .42s var(--ease),
+    margin .42s var(--ease), padding .42s var(--ease), background .42s var(--ease); }
 .trow{ display:flex; align-items:stretch; gap:0; }
 .tlabel{
-  flex:1 1 auto; min-width:0; display:flex; align-items:center; gap:11px;
+  flex:1 1 auto; min-width:0; display:flex; align-items:center; gap:8px;
   padding:13px 14px 13px 4px; background:none; border:0; cursor:pointer; text-align:left;
 }
 .tnode.sub .tlabel{ padding-top:11px; padding-bottom:11px; }
 .tlabel .tt{ flex:1 1 auto; min-width:0; }
-.tlabel .tt b{ display:block; font-weight:500; font-size:.97rem; letter-spacing:-.005em; }
+.tlabel .tt b{ display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-weight:500; font-size:.97rem; letter-spacing:-.005em; }
+.tlabel .tt b .badge{ font-size:.62rem; padding:2px 7px; vertical-align:middle; line-height:1.2; }
 .tlabel .tt span{ display:block; font-size:.75rem; color:var(--ink-3); margin-top:1px; }
 .tnode.sub .tlabel .tt b{ font-size:.92rem; }
 .chev{ flex:0 0 auto; width:20px; height:20px; color:var(--ink-3);
@@ -470,7 +486,8 @@ mjx-container{ max-width:100%; }
 .acc{ display:grid; grid-template-rows:0fr; transition:grid-template-rows var(--dur) var(--ease); }
 .acc.open{ grid-template-rows:1fr; }
 .acc>.acc-in{ overflow:hidden; }
-.acc-pad{ padding:0 8px 10px; display:flex; flex-direction:column; gap:8px; }
+.acc-pad{ padding:0 8px 10px; display:flex; flex-direction:column; gap:8px;
+  transition:padding .42s var(--ease); }
 .tnode.sub .acc-pad{ padding:0 6px 8px; }
 .tnode.sec .acc-pad{ padding:0 0 8px; gap:6px; }
 /* One faint rail at the course level and none below it: every deeper level
@@ -552,17 +569,9 @@ mjx-container{ max-width:100%; }
 .reel-card>.inner::before,
 .reel-card>.inner::after{ content:''; margin:auto; }
 
-.reel-hint{ position:absolute; left:0; right:0; bottom:10px; text-align:center;
-  font-size:.7rem; color:var(--ink-3); pointer-events:none; }
-.reel-hint span{ display:inline-block; animation:glow 2.6s ease-in-out infinite; }
-.reel-rail{ position:fixed; right:6px; top:calc(var(--head-h) + 18px); z-index:20;
-  display:flex; flex-direction:column; gap:5px; align-items:center; }
-.reel-rail i{ width:5px; height:5px; border-radius:50%; background:var(--rule-2);
-  transition:background var(--dur) var(--ease), height var(--dur) var(--ease); }
-.reel-rail i.on{ background:var(--accent); height:16px; border-radius:3px; }
-.reel-rail i.got{ background:var(--ok); }
-.reel-rail i.pf{ box-shadow:0 0 0 1.5px var(--accent-line); }
-@media (min-width:880px){ .reel-rail{ right:max(12px,calc(50vw - 380px)); } }
+/* There is no position rail and no end-of-reel hint. Both told you how much
+   was left, and a reel that tells you how much is left is a list with extra
+   animation — the next card is supposed to be a surprise. */
 
 /* ── figures ─────────────────────────────────────────────────────────────── */
 .fig{ border:1px solid var(--rule); border-radius:var(--r-m); background:var(--surface-2);
@@ -838,3 +847,126 @@ body.signed-out .top .icon-btn{ display:inline-flex; }
 @keyframes riseY{ from{ transform:translateY(var(--dy,14px)); opacity:0 } to{ transform:none; opacity:1 } }
 .fig .slide-x{ animation:slideX 1.5s var(--ease) both; }
 .fig .rise-y{ animation:riseY .6s var(--spring) both; }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LEVEL 4
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── the fourth rung, on the surfaces that can show it ──────────────────── */
+.meter.lv4>i{ background:var(--lv4); }
+.badge.lv4{ background:var(--lv4-soft); color:var(--lv4); border-color:var(--lv4-line); }
+.lvtag[data-lv="4"]{ background:var(--lv4-soft); color:var(--lv4); border-color:var(--lv4-line); }
+.tick[data-lv="4"]>i{ background:var(--lv4); border-color:var(--lv4); color:#fff; }
+.ring[data-lv="4"]{ --ring-c:var(--lv4); }
+.ring[data-lv="4"]>i{ color:var(--ring-c); }
+.ringhost{ display:inline-flex; align-items:center; flex:0 0 auto; }
+.lvtags{ display:inline-flex; align-items:center; gap:6px; flex:0 0 auto; }
+
+/* ── the note, opened inside its row ─────────────────────────────────────
+   A closed concept is a line. An open one becomes the panel the line was the
+   title of — which is why the row keeps its position and simply grows a body,
+   rather than the page being replaced by another page. */
+.cnode{ border-radius:var(--r-s);
+  transition:border-radius .42s var(--ease), border-color .42s var(--ease),
+    margin .42s var(--ease), padding .42s var(--ease), box-shadow .42s var(--ease); }
+.cnode.open{
+  background:var(--surface); border:1px solid var(--accent-line);
+  border-radius:var(--r-m); box-shadow:var(--shadow-2); overflow:hidden;
+}
+.cnode.open>.crow{ border:0; border-radius:0; border-bottom:1px solid var(--rule);
+  background:var(--accent-soft); }
+.cnode.open>.crow .tt b{ font-size:1rem; }
+.cnode>.acc>.acc-in>.acc-pad{ padding:0; }
+.cnode.open>.acc>.acc-in>.acc-pad{ padding:16px 16px 20px; transition:padding .42s var(--ease); }
+.crow .tlabel{ padding:10px 12px 10px 2px; }
+.crow .tlabel .tt b{ font-weight:500; font-size:.92rem; }
+.crow .tlabel .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* The note's own chrome is flat on purpose. Every block used to be a card, and
+   a card inside a card inside an accordion is three borders between the reader
+   and one sentence of mathematics. Direct children of the note body are
+   separated by a hairline and nothing else; cards NESTED inside a proof or a
+   question keep their edges, because there they mean something. */
+.notebody{ gap:0; }
+.notebody>.card,.notebody>.stack>.card{
+  border:0; box-shadow:none; background:transparent; padding:18px 0 0; }
+.notebody>*+*{ border-top:1px solid var(--rule); padding-top:18px; margin-top:0; }
+.notebody>.card.tint,.notebody>.card.glass{ background:transparent;
+  backdrop-filter:none; -webkit-backdrop-filter:none; }
+.notebody>.stack{ gap:10px; }
+.notebody .lede{ font-size:1rem; }
+.note-foot{ padding-top:18px; }
+.note-foot .btn{ min-height:48px; }
+
+/* ── a lazy expander: proof, exercise, question, self-check ────────────── */
+.exp{ border:1px solid var(--rule); border-radius:var(--r-s); background:var(--surface);
+  overflow:hidden; }
+.exp-h{ width:100%; display:flex; align-items:center; gap:10px; padding:11px 12px;
+  background:none; border:0; cursor:pointer; text-align:left; color:inherit;
+  font:inherit; transition:background var(--dur-s); }
+.exp-h:hover{ background:var(--surface-2); }
+.exp-h[aria-expanded=true]{ background:var(--surface-2); }
+.exp-h[aria-expanded=true] .chev{ transform:rotate(90deg); color:var(--accent); }
+.exp-h .tt{ flex:1 1 auto; min-width:0; }
+.exp-h .tt b{ display:block; font-weight:500; font-size:.92rem; }
+.exp-h .tt span{ display:block; font-size:.72rem; color:var(--ink-3); }
+.exp-h .ix{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; display:grid;
+  place-items:center; border:1px solid var(--rule-2); color:var(--ink-3); }
+.exp-h .ix.ok{ background:var(--ok-soft); color:var(--ok); border-color:var(--ok-line); }
+.exp-h .ix.bad{ background:var(--bad-soft); color:var(--bad); border-color:var(--bad-line); }
+.exp-b{ padding:12px; border-top:1px solid var(--rule); }
+.exp-proof{ border-color:var(--accent-line); }
+.exp-proof>.exp-h{ background:var(--accent-soft); }
+.qcard{ gap:10px; }
+
+/* ── width follows the note ──────────────────────────────────────────────
+   Reading a proof at the width of a list of one-line rows wastes half the
+   screen, so the column opens out when a note does — and it TRANSITIONS, so
+   the page reads as one thing widening rather than a different layout. */
+.wrap{ transition:max-width .42s var(--ease), padding .42s var(--ease); }
+body.note-open .wrap{ max-width:1180px; }
+@media (max-width:879px){
+  body.note-open .wrap{ padding-left:4px; padding-right:4px; }
+}
+@media (min-width:880px){
+  body.note-open .wrap{ padding-left:26px; padding-right:26px; }
+}
+body.note-open .rail{ border-left-color:transparent; padding-left:0; }
+
+/* Set margin between dropdown lines to zero with smooth transition */
+body.note-open .acc-pad{ padding-left:0; padding-right:0; }
+body.note-open .tnode.sub .acc-pad{ padding-left:0; padding-right:0; }
+body.note-open .tnode.sec .acc-pad{ padding-left:0; padding-right:0; }
+
+body.note-open .tnode.sub{
+  background:transparent;
+  border-left-color:transparent;
+  border-right-color:transparent;
+  border-radius:0;
+  margin-left:0;
+  margin-right:0;
+}
+body.note-open .tnode.sec{
+  margin-left:0;
+  margin-right:0;
+}
+body.note-open .cnode.open{
+  border-left-color:transparent;
+  border-right-color:transparent;
+  border-radius:0;
+  margin-left:0;
+  margin-right:0;
+  box-shadow:none;
+}
+body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
+  padding-left:8px;
+  padding-right:8px;
+}
+@media (min-width:600px){
+  body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
+    padding-left:14px;
+    padding-right:14px;
+  }
+}

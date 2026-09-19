@@ -119,6 +119,9 @@ const EXT_SECS = {
 const CONCEPTS = [];
 const OBJECTIVE = [];
 const QUESTIONS = [];
+/* Level 4: IIT JAM past-paper questions, filed per COURSE rather than per
+   section — a JAM question is set on the subject, not on Bartle §5.3. */
+const PYQ = [];
 const FIGS = {};
 
 /* ══════════════════════════════════════════════════════════════════════════

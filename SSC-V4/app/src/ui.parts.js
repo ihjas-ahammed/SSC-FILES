@@ -42,7 +42,7 @@ const UI = (function () {
 
   /* The level a concept has reached, as a badge. One vocabulary everywhere:
      1 read, 2 proof worked, 3 exercises done — and the colour says which. */
-  const LEVEL_NAME = ['not started', 'read', 'proof worked', 'exercises done'];
+  const LEVEL_NAME = ['not started', 'read', 'proof worked', 'exercises done', 'all complete'];
   const levelBadge = function (id) {
     const n = Progress.level(id);
     if (!n) return null;
@@ -110,7 +110,6 @@ const UI = (function () {
      earned by a different act, and the caption says which act is still owed. */
   function ladder(id) {
     const at = Progress.level(id);
-    const top = Progress.ceiling(id);
     const hasProof = Progress.hasProof(id);
     const c = Pool.concept(id);
     const tasks = c ? Progress.secTaskState(c.sec) : { total: 0, done: 0 };
@@ -120,11 +119,12 @@ const UI = (function () {
       : at === 1 ? '1 · read'
       : 'not started';
 
-    const owed = at === 0 ? 'tick it once you have been through it'
-      : at === 1 ? 'work the proof to reach level 2'
-      : at === 2 ? (top < 3
-          ? 'level 3 needs this section\'s exercises, which are not delivered yet'
-          : 'level 3: ' + tasks.done + ' of ' + tasks.total + ' section exercises done')
+    /* A stage that does not exist is not a stage you are owed: a note with no
+       proof is level 2 the moment it is read, and a section with no exercises
+       cannot hold anything back from green. */
+    const owed = at === 0 ? 'mark it read once you have been through it'
+      : at === 1 ? 'complete the proof to reach level 2'
+      : at === 2 ? ('level 3: ' + tasks.done + ' of ' + tasks.total + ' section exercises done')
       : 'nothing owed';
 
     const seg = n => el('span', {
@@ -226,6 +226,19 @@ const UI = (function () {
     return row;
   }
 
+  /* "2 minutes ago", for the sync line. Short, because it is a reassurance and
+     not a measurement. */
+  function ago(at) {
+    const s = Math.max(0, Math.round((Date.now() - at) / 1000));
+    if (s < 45) return 'just now';
+    const m = Math.round(s / 60);
+    if (m < 60) return m + ' ' + DOM.plural(m, 'minute') + ' ago';
+    const h = Math.round(m / 60);
+    if (h < 24) return h + ' ' + DOM.plural(h, 'hour') + ' ago';
+    const d = Math.round(h / 24);
+    return d + ' ' + DOM.plural(d, 'day') + ' ago';
+  }
+
   const clock = ms => {
     const s = Math.max(0, Math.round(ms / 1000));
     return String(Math.floor(s / 60)) + ':' + String(s % 60).padStart(2, '0');
@@ -234,6 +247,6 @@ const UI = (function () {
   return {
     title, crumb, prose, math, kindBadge, tierBadge, meter, stat, empty,
     ladder, levelBadge, levelBar, levelRing, ask, pendingPrereqs, mockBanner, gate, reveal,
-    typeBadge, metaRow, clock
+    typeBadge, metaRow, clock, ago
   };
 })();

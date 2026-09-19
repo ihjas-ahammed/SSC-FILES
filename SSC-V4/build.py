@@ -91,8 +91,8 @@ def main():
         # so a stray bookmark can never be mistaken for the real thing.
         html = html.replace('<title>Real Analysis · Study System</title>',
                             '<title>Real Analysis · TEST (mock data)</title>')
-        html = html.replace('<b>Real Analysis</b><span>Level&nbsp;1</span>',
-                            '<b>Real Analysis</b><span>test · mock</span>')
+        html = html.replace('<b>Real Analysis</b>',
+                            '<b>Real Analysis</b><span>test · mock</span>', 1)
 
     out_path = os.path.join(out_dir, 'index.html')
     with open(out_path, 'w', encoding='utf-8') as f:

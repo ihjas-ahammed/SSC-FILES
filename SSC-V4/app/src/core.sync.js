@@ -194,6 +194,12 @@ const Sync = (function () {
   }
 
   /* ── wiring ──────────────────────────────────────────────────────────── */
+  /* Sync is automatic and has no button. Three things wake it: a change you
+     made (pushed through `schedule`), coming back to the tab or the network,
+     and a slow heartbeat while the tab is open — the last one is what makes a
+     phone left on a desk pick up the laptop's work without being asked. */
+  const PULL_EVERY = 60e3;
+
   function start() {
     Store.onChange(schedule);
     if (!on()) return;
@@ -203,6 +209,10 @@ const Sync = (function () {
       if (!document.hidden) now({ quiet: true });
     });
     window.addEventListener('online', function () { now({ quiet: true }); });
+    window.setInterval(function () {
+      if (document.hidden || !navigator.onLine) return;
+      now({ quiet: true });
+    }, PULL_EVERY);
   }
 
   return { start, hello, connect, disconnect, now, status, watch, identity, keyFor, on };

@@ -80,6 +80,13 @@ const Shell = (function () {
     each('[data-chrome=back]', function (b) { b.disabled = !Router.canBack(); });
   }
 
+  function setSubtitle(text) {
+    const topSub = document.getElementById('top-sub');
+    const railSub = document.getElementById('rail-sub');
+    if (topSub) topSub.textContent = text || '';
+    if (railSub) railSub.textContent = text || '';
+  }
+
   function wire() {
     const byId = id => document.getElementById(id);
     const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn');
@@ -91,19 +98,22 @@ const Shell = (function () {
     paint();
   }
 
-  return { isFull, toggleFull, cycleTheme, paint, wire };
+  return { isFull, toggleFull, cycleTheme, paint, wire, setSubtitle };
 })();
 
 const App = (function () {
 
   const el = DOM.el;
 
+  /* Three tabs, not five. Questions and Write lost their tabs when the note
+     learned to hold them: answering a question about a theorem belongs under
+     that theorem, not behind a tab that makes you find it again. Both routes
+     still resolve — see view.omr.js and view.write.js — they are simply not
+     places you navigate TO any more. */
   const TABS = [
     { name: 'home', label: 'Today', icon: 'today', also: [] },
-    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note'] },
-    { name: 'recall', label: 'Recall', icon: 'style', also: [] },
-    { name: 'omr', label: 'Questions', icon: 'ballot', also: [] },
-    { name: 'write', label: 'Write', icon: 'draw', also: [] }
+    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note', 'omr', 'write'] },
+    { name: 'recall', label: 'Recall', icon: 'style', also: [] }
   ];
 
   const VIEWS = {
@@ -136,8 +146,10 @@ const App = (function () {
     nav.appendChild(el('div', { class: 'rail-top' }, [
       railBtn('back', 'arrow_back', 'Back', function () { Router.back(); }),
       el('a', { class: 'rail-brand', href: Router.href('home') }, [
-        el('b', { text: 'Real Analysis' }),
-        el('span', { text: 'Levels 1–3' })
+        el('span', { class: 'brand-titles' }, [
+          el('b', { text: 'Real Analysis' }),
+          el('span', { class: 'brand-sub', id: 'rail-sub' })
+        ])
       ])
     ]));
 
@@ -193,9 +205,13 @@ const App = (function () {
     main.appendChild(wrap);
     markNav(r.name);
     Shell.paint();
+    if (r.name !== 'study' && r.name !== 'note') Shell.setSubtitle('');
     const h = main.querySelector('#pagetitle');
     if (h) h.focus({ preventScroll: true });
-    window.scrollTo(0, 0);
+    /* Most views start at the top. Study does not: it restores the row you
+       were last reading, and jumping to the top first would undo that. */
+    if (view.keepScroll) { if (view.afterPaint) view.afterPaint(); }
+    else window.scrollTo(0, 0);
   }
 
   /* Views are painted synchronously and animate in with CSS (.view-in).

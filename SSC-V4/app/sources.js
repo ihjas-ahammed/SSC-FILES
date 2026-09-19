@@ -18,6 +18,9 @@
                                      answer, solution, tested, trap, twist,
                                      tests[]
      QUESTIONS   [ written ]       — optional written/essay questions
+     PYQ         [ past paper ]    — optional; Level 4. The QUESTIONS shape
+                                     plus course, exam, year, paper, qno. Filed
+                                     on a COURSE, never on a section.
 
    Paths are relative to app/index.html and must stay inside SSC-V4.
    The full field-by-field contract is in HOOK_agy.md → "Runtime data contract".
@@ -36,7 +39,8 @@ const DATA_SOURCES = {
     'mock/mock.courses.js',
     'mock/mock.concepts.js',
     'mock/mock.objective.js',
-    'mock/mock.written.js'
+    'mock/mock.written.js',
+    'mock/mock.pyq.js'
   ],
 
   /* Filled in by the data handoff. Example of the expected shape:
@@ -66,6 +70,13 @@ const DATA_SOURCES = {
     '../data/questions.ra2.m4.js',
     '../data/questions.rae.js',
     '../data/questions.misc.js',
-    '../data/objective.js'
+    '../data/objective.js',
+    '../data/pyq.ra1.js',
+    '../data/pyq.ra2.js'
+    /* A file listed but missing is a FATAL boot error, so a line goes in with
+       its file and never before it — and keep paths out of the comments in
+       this array: build.py and tools/check_tex.js both read it by pulling
+       every quoted string out of the brackets, so a path mentioned in a
+       comment is a path they will try to open. */
   ]
 };

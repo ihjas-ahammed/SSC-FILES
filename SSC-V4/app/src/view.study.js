@@ -1,17 +1,19 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   Study — the whole syllabus as one page of dropdowns you tick your way
+   Study — the whole syllabus as one page of dropdowns you read your way
    through. Nothing is more than one line tall until you open it, so the size
-   of the course never lands on you all at once.
+   of the course never lands on you all at once; and since Level 4 the note
+   itself opens here rather than on a page of its own, so studying a section
+   never costs you your place.
 
-   `#/study`             all three courses, collapsed
-   `#/study/<courseId>`  one course, for deep links out of a note
+   `#/study`             all three courses, collapsed to the last open path
+   `#/study/<courseId>`  one course, for deep links
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewStudy = (function () {
 
   const el = DOM.el;
 
-  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done'];
+  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done', 'all complete'];
 
   function summaryStrip() {
     const ids = Pool.ids.concepts();
@@ -35,6 +37,7 @@ const ViewStudy = (function () {
     const host = el('div', {});
     const ids = Pool.ids.concepts(course.id);
     const c = Progress.count(ids);
+    const pyq = Progress.pyqState(course.id);
 
     DOM.add(root, [
       UI.crumb([{ text: 'Study', href: 'study' }, { text: course.title }]),
@@ -50,7 +53,13 @@ const ViewStudy = (function () {
               el('span', { class: 'kicker', text: 'Levels reached' }),
               el('span', { class: 'count', text: c.l1 + ' / ' + c.l2 + ' / ' + c.l3 + ' of ' + c.total })
             ]),
-            el('div', { style: { marginTop: '8px' } }, [UI.levelBar(c)])
+            el('div', { style: { marginTop: '8px' } }, [UI.levelBar(c)]),
+            pyq.total ? el('div', { class: 'spread', style: { marginTop: '12px' } }, [
+              el('span', { class: 'count', text: 'past papers · level 4' }),
+              el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
+            ]) : null,
+            pyq.total ? el('div', { style: { marginTop: '6px' } },
+              [UI.meter(pyq.done, pyq.total, 4)]) : null
           ]),
       host
     ]);
@@ -70,19 +79,25 @@ const ViewStudy = (function () {
     Tree.seedOpen(Pool.courses().filter(c => !c.pending)[0]);
 
     DOM.add(root, [
-      UI.title('Syllabus', 'Open a module, advance what is done'),
+      UI.title('Syllabus', 'Open a module, read what is inside it'),
       UI.mockBanner(),
       summaryStrip(),
       host,
       el('p', { class: 'small muted', style: { margin: 0 },
-        text: 'One press advances a row one level: read it (red), then work its proof (amber). '
-          + 'Green is not a press — it arrives when every exercise in that section is worked '
-          + 'through. A parent row takes the colour of the weakest thing inside it.' })
+        text: 'One press on a row advances it: read it (red), then work its proof (amber). '
+          + 'Green arrives when every exercise in that section is worked through — and a row '
+          + 'with no proof, or a section with no exercises, is not held back by a stage that '
+          + 'does not exist. A parent row takes the colour of the weakest thing inside it; a '
+          + 'course reaches level 4 when its past papers are done.' })
     ]);
 
     Tree.mountAll(host, Pool.courses());
     return root;
   }
 
-  return { render };
+  /* `keepScroll` tells the shell not to jump to the top: this view restores
+     the position of whatever was left open instead. */
+  function afterPaint() { Tree.scrollToOpen(); }
+
+  return { render, afterPaint, keepScroll: true };
 })();

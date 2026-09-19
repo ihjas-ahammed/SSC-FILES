@@ -1,29 +1,36 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   Three levels, earned — never switched.
+   Levels, earned — never switched.
 
-   There is no level control any more. A learner does not *choose* to be at
-   level 2; they get there by working the proof. The level of a concept is
-   therefore derived, in one place, from what has actually been done:
+   There is no level control. A learner does not *choose* to be at level 2;
+   they get there by working the proof. The level of a concept is derived, in
+   one place, from what has actually been done:
 
-     level 1   ticked. You have been through the material.               RED
-     level 2   its proof worked through. Concepts with no proof (defini-  AMBER
-               tions, examples) reach level 2 with the tick, because
-               there is no proof to work.
-     level 3   every Bartle exercise filed against this concept's        GREEN
-               SECTION worked through. Level 3 is a section-wide bar on
-               purpose: exercises are set on a section, not on one
-               theorem, so a section is only finished when its whole
-               problem set is.
+     level 1   read. You have been through the material.                RED
+     level 2   its proof worked through. A note with NO proof reaches    AMBER
+               level 2 with the tick, because there is no proof to work.
+     level 3   every exercise filed against this concept's SECTION       GREEN
+               worked through. A section with NO exercises reaches
+               level 3 with level 2, because there is nothing to work.
+
+   Nothing is ever held back by a stage that does not exist: a definition with
+   no proof, in a section with no exercises, is green the moment it is read.
+   That is the whole of rule 12 — a missing stage promotes, it does not cap.
 
    A group (section, module, course) is at the level its *weakest* member has
    reached — all red before the group is red, all amber before the group is
    amber. That is what the coloured rings and bars draw.
 
-   `Store` knows two independent facts and nothing about courses: a concept was
-   ticked, and a task was worked through (a proof, keyed on the concept id, or
-   a written question, keyed 'w:<questionId>'). `Pool` knows structure and no
-   progress. This is the one place the two meet, so "done" cannot mean two
-   different things on two screens.
+   LEVEL 4 IS A COURSE RUNG AND ONLY A COURSE RUNG. Concepts, sections and
+   modules top out at 3. A course reaches 4 — "all complete" — when every note
+   in it is green AND every JAM past-paper question filed against it has been
+   worked through. See `courseLevel`.
+
+   `Store` knows four independent facts and nothing about courses: a concept
+   was read, and a task was worked through (a proof, keyed on the concept id;
+   an exercise, keyed 'w:<questionId>'; a past-paper question, keyed
+   'p:<questionId>'). `Pool` knows structure and no progress. This is the one
+   place the two meet, so "done" cannot mean two different things on two
+   screens.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Progress = (function () {
@@ -46,6 +53,11 @@ const Progress = (function () {
   const taskKey = q => 'w:' + q.id;
   const taskDone = q => Store.isProofDone(taskKey(q));
 
+  /* ── level 4 tasks ───────────────────────────────────────────────────────
+     The JAM past-paper questions attached to a COURSE, under a 'p:' key. */
+  const pyqKey = q => 'p:' + q.id;
+  const pyqDone = q => Store.isProofDone(pyqKey(q));
+
   /* secTaskState is asked once per concept per repaint, so it is memoised and
      the cache is dropped whenever anything is written. */
   let secCache = {};
@@ -55,34 +67,47 @@ const Progress = (function () {
   function secTasks(sec) {
     const qs = (sec && Pool.writtenForSec) ? Pool.writtenForSec(sec) : [];
     const done = qs.filter(taskDone).length;
-    return { total: qs.length, done: done, ready: qs.length > 0 && done === qs.length, list: qs };
+    /* `ready` is true for an EMPTY set too: nothing owed is nothing owed. */
+    return { total: qs.length, done: done, ready: done === qs.length, list: qs };
   }
 
   function secTaskState(sec) {
-    if (!sec) return { total: 0, done: 0, ready: false, list: [] };
+    if (!sec) return { total: 0, done: 0, ready: true, list: [] };
     if (!secCache[sec]) secCache[sec] = secTasks(sec);
     return secCache[sec];
   }
 
-  /* The highest level a concept can currently reach. A section with no
-     exercises delivered yet tops out at 2 — and says so, rather than quietly
-     colouring itself green. */
-  function ceiling(id) {
-    const c = Pool.concept(id);
-    return (c && secTaskState(c.sec).total) ? 3 : 2;
-  }
+  /* Every concept can now reach 3. The ceiling is kept as a function because
+     three call sites ask it, but it no longer has anything to refuse. */
+  const ceiling = () => 3;
+  const ceilingOf = () => 3;
 
   /* ── the level of one concept ────────────────────────────────────────── */
   function level(id) {
     if (!Store.isDone(id)) return 0;
     if (hasProof(id) && !Store.isProofDone(id)) return 1;
     const c = Pool.concept(id);
-    if (c && secTaskState(c.sec).ready) return 3;
-    return 2;
+    if (c && !secTaskState(c.sec).ready) return 2;
+    return 3;
   }
 
   /* kept for the few places that only care whether a note has been met */
   const isDone = id => level(id) >= 1;
+
+  /* ── the level of a whole course, 0–4 ────────────────────────────────────
+     4 is reached only here, and only by a course: every note green, and every
+     past-paper question under the course worked through. */
+  function pyqState(courseId) {
+    const qs = Pool.pyq(courseId);
+    const done = qs.filter(pyqDone).length;
+    return { total: qs.length, done: done, ready: qs.length > 0 && done === qs.length, list: qs };
+  }
+
+  function courseLevel(courseId) {
+    const c = count(Pool.ids.concepts(courseId));
+    if (c.min < 3) return c.min;
+    return pyqState(courseId).ready ? 4 : 3;
+  }
 
   /* ── ticking ─────────────────────────────────────────────────────────────
      One press advances one step, so the tick always has somewhere to go.
@@ -102,6 +127,15 @@ const Progress = (function () {
     return level(id);
   }
 
+  /* Mark a note read without ever pulling it back down — what the Complete
+     button at the foot of an open note presses. */
+  function complete(id) {
+    if (!Store.isDone(id)) Store.setDone(id, true);
+    if (!hasProof(id) && !Store.isProofDone(id)) Store.setProofDone(id, true);
+    dropCache();
+    return level(id);
+  }
+
   function clear(id) {
     if (Store.isProofDone(id)) Store.setProofDone(id, false);
     Store.setDone(id, false);
@@ -110,9 +144,7 @@ const Progress = (function () {
 
   /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
      section or a module runs through here, and so does the prerequisite
-     cascade — which is why it takes a level rather than a boolean: a
-     prerequisite is raised to the level of the note that needs it, never
-     past it. */
+     cascade — which is why it takes a level rather than a boolean. */
   function setTo(ids, n) {
     const list = ids || [];
     const want = Math.max(0, Math.min(2, n));
@@ -153,14 +185,6 @@ const Progress = (function () {
     return { total: list.length, l1: l1, l2: l2, l3: l3, min: min, done: l1 };
   }
 
-  /* the ceiling of a whole group: 3 only where every section in it has
-     exercises to work */
-  function ceilingOf(ids) {
-    const list = ids || [];
-    if (!list.length) return 2;
-    return list.every(id => ceiling(id) >= 3) ? 3 : 2;
-  }
-
   /* what a tick button should render: 'true' | 'mixed' | 'false' */
   function tickState(ids) {
     const c = count(ids);
@@ -169,70 +193,71 @@ const Progress = (function () {
     return c.l1 ? 'mixed' : 'false';
   }
 
-  /* ── prerequisites, judged at the level you are working at ───────────────
-     The bug this fixes: a note you have only read (level 1) used to report its
-     prerequisites as incomplete because THEY had been pushed to level 2 — the
-     bar moved under a note nobody had asked to raise. A prerequisite is
-     satisfied when it has reached the level of the note that needs it, and
-     nothing more is asked of it. Where a prerequisite cannot reach that level
-     (its own section has no exercises yet) the bar drops to what it can
-     actually reach. */
-  function prereqTarget(id) {
-    return Math.max(1, Math.min(2, level(id)));
-  }
+  /* ── prerequisites ───────────────────────────────────────────────────────
+     A prerequisite is satisfied once it has been READ. Nothing more is asked:
+     holding a note hostage to the proof work of everything under it made the
+     groundwork look permanently outstanding, and that is not what a
+     prerequisite is for. */
+  const prereqTarget = () => 1;
+  const prereqOk = prereqId => level(prereqId) >= 1;
 
-  function prereqOk(prereqId, target) {
-    return level(prereqId) >= Math.min(target, ceiling(prereqId));
-  }
-
-  /* Prerequisites of `id` that have not reached `id`'s own level. */
+  /* Prerequisites of `id` that have not been read. */
   function pendingPrereqs(id) {
-    const target = prereqTarget(id);
-    return Pool.chain(id).filter(x => x.id !== id && !prereqOk(x.id, target));
+    return Pool.chain(id).filter(x => x.id !== id && !prereqOk(x.id));
   }
 
-  /* Raise them to exactly that level — "even if they are greater, tick them at
-     minimum the same level" — so a cascade never promotes work nobody did. */
+  /* Raise them to level 1 — and no further, so a cascade never promotes work
+     nobody did. */
   function raisePrereqs(id) {
-    const target = prereqTarget(id);
     const pending = pendingPrereqs(id);
     pending.forEach(function (x) {
-      if (level(x.id) < target) setTo([x.id], target);
+      if (level(x.id) < 1) setTo([x.id], 1);
     });
     dropCache();
     return pending.length;
   }
 
-  /* ── the reel queue ──────────────────────────────────────────────────────
+  /* ── the reel queue: spaced practice ─────────────────────────────────────
      The reel only ever shows material you have said you have met. Studying a
      statement you have never read is not recall, it is reading with extra
      steps.
 
-     Two kinds of card:
-       statement   every ticked concept that has a 'state' card
-       proof       every ticked concept that carries a proof
+     Four kinds of card, and each arrives by a different act — so ticking
+     topics, proofs AND questions all feed the reel:
 
-     Order is by how badly each card needs the attempt, then by the reading
-     order of the course — no randomness, so the queue is inspectable and the
-     same twice running:
+       statement   a ticked concept's 'state' card
+       proof       a ticked concept that carries a proof
+       question    an objective question whose tested concept has been read
+       exercise    a written exercise you have marked complete
 
-       0  never attempted
-       1  first attempt was 'missed'
-       2  first attempt was 'partly'
-       3  first attempt was 'got'
+     Order is spaced practice, not a fixed ranking. Each card sits in a
+     Leitner box that rises when you state it, holds when you half-state it
+     and resets when you miss it; the box picks how long the card is put away
+     for. Everything due (and everything never attempted) comes first, in
+     RANDOM order — so no two passes are the same — and everything not yet due
+     follows, soonest first. A card you know well is therefore a long way back
+     without ever being dropped.
 
-     A proof card sits one rank behind its own statement card, so you are never
-     asked to reconstruct a proof in the same breath as first stating it. */
-  const RANK = { missed: 1, partly: 2, got: 3 };
+     Nothing repeats within a pass: the queue is a list, and the reel walks it
+     once. */
+  const HOUR = 3600e3, DAY = 24 * HOUR;
+  const INTERVAL = [10 * 60e3, HOUR, DAY, 3 * DAY, 7 * DAY, 21 * DAY];
 
-  function rank(cardId) {
+  function dueAt(cardId) {
     const rec = Store.card(cardId);
-    if (!rec || !rec.first) return 0;
-    return RANK[rec.first] == null ? 3 : RANK[rec.first];
+    if (!rec || !rec.lastAt) return 0;              /* never attempted — due now */
+    const b = Math.max(0, Math.min(rec.box || 0, INTERVAL.length - 1));
+    return rec.lastAt + INTERVAL[b];
   }
 
-  function reel(opts) {
-    const o = opts || {};
+  /* what one grade does to the box — mirrored in Store.gradeCard */
+  function nextBox(box, grade) {
+    if (grade === 'got') return Math.min((box || 0) + 1, INTERVAL.length - 1);
+    if (grade === 'partly') return Math.max(0, (box || 0) - 1);
+    return 0;
+  }
+
+  function pool() {
     const out = [];
 
     Pool.deck().forEach(function (card, i) {
@@ -240,40 +265,80 @@ const Progress = (function () {
       out.push({
         kind: 'state', id: card.id, cid: card.cid, sec: card.sec,
         title: card.title, conceptKind: card.kind,
-        q: card.q, a: card.a,
-        rank: rank(card.id), order: i
+        q: card.q, a: card.a, order: i
       });
     });
 
     Pool.concepts(null, { includeExt: true }).forEach(function (c, i) {
       if (!c.proof || !Store.isDone(c.id)) return;
-      const id = c.id + '#proof';
       out.push({
-        kind: 'proof', id: id, cid: c.id, sec: c.sec,
-        title: c.title, conceptKind: c.kind,
-        proof: c.proof,
-        rank: rank(id), order: i + 0.5
+        kind: 'proof', id: c.id + '#proof', cid: c.id, sec: c.sec,
+        title: c.title, conceptKind: c.kind, proof: c.proof, order: i + 0.5
       });
     });
 
-    const list = o.onlyNew ? out.filter(x => x.rank === 0) : out;
-    return list.sort(function (a, b) {
-      if (a.rank !== b.rank) return a.rank - b.rank;
-      return a.order - b.order;
+    /* an objective question joins once anything it examines has been read */
+    Pool.objective().forEach(function (q, i) {
+      const tested = (q.tests || []).filter(id => Pool.concept(id));
+      if (!tested.length || !tested.some(id => Store.isDone(id))) return;
+      const c = Pool.concept(tested[0]);
+      out.push({
+        kind: 'question', id: 'q:' + q.id, cid: c.id, sec: q.sec || c.sec,
+        title: c.title, conceptKind: q.type, question: q, order: 1000 + i
+      });
     });
+
+    /* an exercise joins once you have marked it worked through */
+    Pool.written().forEach(function (q, i) {
+      if (!taskDone(q)) return;
+      const c = Pool.concept((q.tests || [])[0]);
+      out.push({
+        kind: 'exercise', id: 'x:' + q.id, cid: c ? c.id : null, sec: q.sec || (c && c.sec),
+        title: q.title || (c ? c.title : q.id), conceptKind: 'exercise',
+        question: q, order: 2000 + i
+      });
+    });
+
+    return out;
+  }
+
+  function shuffle(list) {
+    for (let i = list.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = list[i]; list[i] = list[j]; list[j] = t;
+    }
+    return list;
+  }
+
+  function reel(opts) {
+    const o = opts || {};
+    const now = Date.now();
+    let all = pool();
+    if (o.onlyNew) all = all.filter(x => !(Store.card(x.id) || {}).first);
+    if (o.exclude) all = all.filter(x => !o.exclude[x.id]);
+
+    const due = [], later = [];
+    all.forEach(function (x) {
+      x.due = dueAt(x.id);
+      (x.due <= now ? due : later).push(x);
+    });
+    shuffle(due);
+    later.sort((a, b) => a.due - b.due);
+    return due.concat(later);
   }
 
   /* every id the reel could ever contain, for the "n of m attempted" meter */
   function reelIds() {
-    return reel().map(x => x.id);
+    return pool().map(x => x.id);
   }
 
   return {
-    level, ceiling, ceilingOf, isDone, hasProof, courseIdOf,
-    advance, advanceMany, clear, setTo,
+    level, courseLevel, ceiling, ceilingOf, isDone, hasProof, courseIdOf,
+    advance, advanceMany, complete, clear, setTo,
     count, tickState,
     secTaskState, taskKey, taskDone,
+    pyqKey, pyqDone, pyqState,
     prereqTarget, prereqOk, pendingPrereqs, raisePrereqs,
-    reel, reelIds, dropCache
+    reel, reelIds, nextBox, dueAt, dropCache
   };
 })();

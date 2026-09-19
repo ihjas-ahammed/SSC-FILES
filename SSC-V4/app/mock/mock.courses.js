@@ -19,6 +19,10 @@ const DATA_KIND = 'mock';   /* the app badges itself while this says 'mock' */
 const CONCEPTS = [];
 const OBJECTIVE = [];
 const QUESTIONS = [];
+/* Level 4: past-paper questions, filed per COURSE. Declared here because the
+   first data file of a pool owns the empty arrays — exactly as CONCEPTS and
+   QUESTIONS are. The live pool declares it in data/syllabus.js. */
+const PYQ = [];
 
 const SYLLABI = [
   {

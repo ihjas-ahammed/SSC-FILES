@@ -60,7 +60,7 @@ const ViewHome = (function () {
      weakest note in it, because a course is not at level 2 while something in
      it is still unread — and the bar underneath shows how the three levels are
      spread, which a single percentage cannot. */
-  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done'];
+  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done', 'all complete'];
 
   function courseCard(course) {
     if (course.pending) {
@@ -76,23 +76,26 @@ const ViewHome = (function () {
 
     const ids = Pool.ids.concepts(course.id);
     const c = Progress.count(ids);
-    const top = Progress.ceilingOf(ids);
     const tasks = Pool.ids.written(course.id);
     const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
+    const pyq = Progress.pyqState(course.id);
+    const lv = Progress.courseLevel(course.id);
 
     const owed = c.min === 0 ? (c.total - c.l1) + ' still to read for a red tick'
       : c.min === 1 ? (c.total - c.l2) + ' proofs still owed for an amber tick'
-      : c.min === 2 ? (top < 3
-          ? 'green needs the section exercises, which are not delivered yet'
-          : (c.total - c.l3) + ' notes still short of their section exercises')
-      : 'every level earned';
+      : c.min === 2 ? (c.total - c.l3) + ' notes still short of their section exercises'
+      : lv < 4 ? (pyq.total
+          ? (pyq.total - pyq.done) + ' past-paper ' + DOM.plural(pyq.total - pyq.done, 'question')
+            + ' between this and level 4'
+          : 'level 4 needs the JAM past papers, which are not delivered yet')
+      : 'every level earned, past papers included';
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
         el('a', { class: 'kicker', style: { textDecoration: 'none' },
           href: Router.href('study/' + course.id), text: course.title }),
-        el('span', { class: 'badge' + (c.min ? ' lv' + c.min : ''),
-          text: c.min ? 'level ' + c.min + ' · ' + LEVEL_WORD[c.min] : 'not started' })
+        el('span', { class: 'badge' + (lv ? ' lv' + lv : ''),
+          text: lv ? 'level ' + lv + ' · ' + LEVEL_WORD[lv] : 'not started' })
       ]),
       el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
         UI.levelRing(c, course.title),
@@ -109,35 +112,49 @@ const ViewHome = (function () {
         ]),
         el('div', { style: { marginTop: '6px' } }, [UI.meter(tasksDone, tasks.length, 3)])
       ]) : null,
+      pyq.total ? el('div', { style: { marginTop: '12px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: 'JAM past papers · level 4' }),
+          el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.meter(pyq.done, pyq.total, 4)])
+      ]) : null,
       el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: owed })
     ]);
   }
 
   /* ── sync ─────────────────────────────────────────────────────────────── */
-  /* Signed in is the only state this screen can be reached in, so this is an
-     account card, not a connect form. */
+  /* There is no Sync now button any more, because there was never anything to
+     decide: every change pushes itself, coming back to the tab pulls, and a
+     timer pulls while you are reading. A button for a thing that already
+     happens is a button that makes you wonder whether it happened. What is
+     left is the record you are signed into, what the last sync did, and the
+     way out. */
   function syncCard() {
     const id = Store.identity();
     const host = el('div', { class: 'card tint' });
     const state = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
+    const dot = el('span', { class: 'badge ok', text: Sync.status().key });
 
     function paint(last) {
       const s = Sync.status();
-      state.textContent = (last && last.msg) ? last.msg
+      const when = s.last && s.last.at
+        ? ' · last checked ' + UI.ago(s.last.at)
+        : '';
+      state.textContent = (last && last.msg)
+        ? last.msg + when
         : 'Signed in as ' + id.name + ' · ' + id.roll + '. Progress merges across every device '
-          + 'that signs in with these two. It is a pass key, not a password.';
+          + 'that signs in with these two, on its own' + when + '. It is a pass key, not a password.';
     }
     Sync.watch(paint);
     paint(Sync.status().last);
 
     DOM.add(host, [
       el('div', { class: 'spread' }, [
-        el('div', { class: 'kicker', text: 'Your record' }),
-        el('span', { class: 'badge ok', text: Sync.status().key })
+        el('div', { class: 'kicker', text: 'Your record · syncing automatically' }),
+        dot
       ]),
       el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
-        el('button', { class: 'btn primary', type: 'button', text: 'Sync now',
-          on: { click: function () { Sync.now({}).then(r => paint({ msg: r && r.msg })); } } }),
         el('button', { class: 'btn', type: 'button', text: 'Sign out',
           on: { click: function () {
             if (!window.confirm('Sign out? Progress stays on this device and in the cloud record.')) return;
@@ -150,47 +167,6 @@ const ViewHome = (function () {
     return host;
   }
 
-  /* ── device settings ──────────────────────────────────────────────────── */
-  function settings() {
-    const themeBtn = el('button', { class: 'chip', type: 'button' });
-    function paint() { themeBtn.textContent = 'Theme: ' + Store.pref('theme', 'auto'); }
-    themeBtn.addEventListener('click', function () {
-      const order = ['auto', 'light', 'dark'];
-      const next = order[(order.indexOf(Store.pref('theme', 'auto')) + 1) % 3];
-      Store.setPref('theme', next);
-      Theme.apply();
-      paint();
-    });
-    paint();
-
-    const exportBtn = el('button', { class: 'chip', type: 'button', text: 'Copy progress JSON' });
-    exportBtn.addEventListener('click', function () {
-      const text = Store.exportJSON();
-      const done = () => DOM.announce('Progress JSON copied to the clipboard.');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, () => window.prompt('Copy your progress:', text));
-      } else window.prompt('Copy your progress:', text);
-    });
-
-    const resetBtn = el('button', { class: 'chip', type: 'button', text: 'Reset progress' });
-    resetBtn.addEventListener('click', function () {
-      if (window.confirm('Clear all ticks, attempts and drafts on this device?')) {
-        Store.reset();
-        Router.reload();
-        DOM.announce('Progress cleared.');
-      }
-    });
-
-    return el('div', { class: 'card tint' }, [
-      el('div', { class: 'kicker', text: 'This device' }),
-      el('div', { class: 'row', style: { marginTop: '10px' } }, [themeBtn, exportBtn, resetBtn]),
-      el('p', { class: 'small muted', style: { margin: '10px 0 0' },
-        text: Store.isVolatile()
-          ? 'Storage is blocked in this browser, so progress lasts only for this session. Connect sync above to keep it.'
-          : 'Progress is stored in this browser. Connect sync above to carry it to another device.' })
-    ]);
-  }
-
   function render() {
     const all = Pool.ids.concepts();
     const overall = Progress.count(all);
@@ -198,6 +174,7 @@ const ViewHome = (function () {
     const note = nextUndone(), card = nextCard(), q = nextQuestion();
     const pf = nextProof(), ex = nextExercise();
     const exTarget = ex ? (Pool.concept((ex.tests || [])[0]) || null) : null;
+    const qTarget = q ? (Pool.concept((q.tests || [])[0]) || null) : null;
 
     const root = el('div', { class: 'stack' });
 
@@ -223,9 +200,11 @@ const ViewHome = (function () {
       step(2, card ? 'State it from memory' : 'Every statement has had one attempt',
         card ? card.title : 'Re-attempts are allowed but never recorded',
         'recall', !!card),
+      /* Questions live inside the note that teaches them now, so the step goes
+         to that note rather than to a page of questions. */
       step(3, q ? 'Answer the next question' : 'Every question has been locked once',
         q ? q.type + ' · ' + Pool.sectionTitle(q.sec) : 'Review the worked answers any time',
-        q ? 'omr/' + q.id : 'omr', !!q),
+        q ? (qTarget ? 'note/' + qTarget.id : 'omr/' + q.id) : 'study', !!q),
       step(4, pf ? 'Work the proof: ' + pf.title : 'Every proof you have read is worked through',
         pf ? (Pool.sectionTitle(pf.sec) + ' · earns level 2') : 'Level 2 is clear',
         pf ? 'note/' + pf.id : 'study', !!pf),
@@ -286,8 +265,7 @@ const ViewHome = (function () {
             + 'red before red, all amber before amber, all green before green.' })
       ]),
 
-      syncCard(),
-      settings()
+      syncCard()
     ]);
 
     return root;

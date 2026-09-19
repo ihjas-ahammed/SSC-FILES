@@ -4,7 +4,8 @@
    The app never reads the data globals directly; everything goes through here,
    so swapping mock data for the validated pool changes nothing above this line.
 
-   Reads:  SYLLABI, SECTITLE, CONCEPTS, OBJECTIVE, QUESTIONS (optional)
+   Reads:  SYLLABI, SECTITLE, CONCEPTS, OBJECTIVE, QUESTIONS (optional),
+           PYQ (optional — past-paper questions, filed per COURSE)
    Builds: concept index, section -> concepts, course/module for a section,
            the statement-card deck, and the inverted `tests` edge
            (concept -> questions that examine it).
@@ -21,7 +22,9 @@ const Pool = (function () {
   const writSec = {};       /* section id  -> [written question] */
   const neededBy = {};      /* concept id -> [concept that lists it in needs] */
   const background = [];    /* nodes with no section in any course */
-  let courses = [], objective = [], written = [], titles = {}, extSecs = {}, mock = false;
+  const pyqBy = {};         /* course id   -> [past-paper question] */
+  let courses = [], objective = [], written = [], pyq = [];
+  let titles = {}, extSecs = {}, mock = false;
 
   /* Data files declare top-level `const`s, which are global *lexical* bindings
      rather than window properties — so they are read by name, guarded with
@@ -30,6 +33,7 @@ const Pool = (function () {
     courses = (typeof SYLLABI !== 'undefined' ? SYLLABI : []).slice();
     objective = (typeof OBJECTIVE !== 'undefined' ? OBJECTIVE : []).slice();
     written = (typeof QUESTIONS !== 'undefined' ? QUESTIONS : []).slice();
+    pyq = (typeof PYQ !== 'undefined' ? PYQ : []).slice();
     titles = typeof SECTITLE !== 'undefined' ? SECTITLE : {};
     extSecs = typeof EXT_SECS !== 'undefined' ? EXT_SECS : {};
     const concepts = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
@@ -58,6 +62,21 @@ const Pool = (function () {
         deck.push({ id: c.id + '#' + i, cid: c.id, q: card.q, a: card.a, sec: c.sec,
           title: c.title, kind: c.kind });
       })));
+
+    /* Past papers are filed on a COURSE, not on a section: a JAM question is
+       set on the subject, not on Bartle §2.3. `course` is the only routing
+       field the app needs; `sec` and `tests` are optional colour. */
+    pyq.forEach(function (q) {
+      const id = q.course || (q.sec && courseOfSec(q.sec) && courseOfSec(q.sec).id);
+      if (!id) return;
+      (pyqBy[id] || (pyqBy[id] = [])).push(q);
+    });
+    Object.keys(pyqBy).forEach(function (id) {
+      pyqBy[id].sort(function (a, b) {
+        if ((b.year || 0) !== (a.year || 0)) return (b.year || 0) - (a.year || 0);
+        return (a.qno || 0) - (b.qno || 0);
+      });
+    });
 
     objective.forEach(q => (q.tests || []).forEach(t => (objFor[t] || (objFor[t] = [])).push(q)));
     written.forEach(q => (q.tests || []).forEach(t => (writFor[t] || (writFor[t] = [])).push(q)));
@@ -101,6 +120,10 @@ const Pool = (function () {
   const writtenFor = cid => writFor[cid] || [];
   const writtenForSec = sec => writSec[sec] || [];
   const objectiveOne = id => objective.filter(q => q.id === id)[0] || null;
+
+  /* Past papers for one course, newest paper first; every one of them when no
+     course is named. */
+  const pyqFor = courseId => courseId ? (pyqBy[courseId] || []).slice() : pyq.slice();
 
   function isExtSec(sec) {
     if (!sec) return false;
@@ -162,6 +185,8 @@ const Pool = (function () {
     cards: () => deck.filter(c => !isExt(c.cid)).map(c => c.id),
     allCards: () => deck.map(c => c.id),
     objective: () => objective.map(q => q.id),
+    /* Level 4's denominator: the past papers filed against a course. */
+    pyq: courseId => pyqFor(courseId).map(q => q.id),
     /* Level 2 counts proof work, so its denominator is the concepts that
        actually carry a proof — not every note. */
     proofs: courseId => conceptList(courseId, { includeExt: false }).filter(c => c.proof).map(c => c.id),
@@ -183,7 +208,7 @@ const Pool = (function () {
     build, sections, sectionTitle, concept, concepts: conceptList, course,
     courses: () => courses, courseOfSec, moduleOfSec, deck: () => deck,
     objective: () => objective, objectiveOne, objectiveFor, writtenFor, writtenForSec,
-    written: () => written,
+    written: () => written, pyq: pyqFor,
     background: () => background, chain, unlocks, neighbours, ids,
     isExtSec, isExt, isMock: () => mock
   };

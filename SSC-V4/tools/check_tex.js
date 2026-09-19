@@ -46,7 +46,8 @@ dataFiles().forEach(function (rel) {
 });
 vm.runInContext('globalThis.__P={C:typeof CONCEPTS!=="undefined"?CONCEPTS:[],'
   + 'O:typeof OBJECTIVE!=="undefined"?OBJECTIVE:[],'
-  + 'Q:typeof QUESTIONS!=="undefined"?QUESTIONS:[]};', ctx);
+  + 'Q:typeof QUESTIONS!=="undefined"?QUESTIONS:[],'
+  + 'P:typeof PYQ!=="undefined"?PYQ:[]};', ctx);
 const pool = ctx.__P;
 
 /* every command the pool is allowed to use without comment */
@@ -56,6 +57,7 @@ const KNOWN = new Set(('alpha beta gamma delta epsilon varepsilon zeta eta theta
   + 'frac dfrac tfrac sqrt sum prod int iint oint lim limsup liminf sup inf max min '
   + 'log ln exp sin cos tan cot sec csc arcsin arccos arctan sinh cosh tanh '
   + 'to mapsto rightarrow Rightarrow leftarrow Leftarrow leftrightarrow Leftrightarrow '
+  + 'xrightarrow bigl bigr '
   + 'implies impliedby iff uparrow downarrow nearrow longrightarrow hookrightarrow twoheadrightarrow rightharpoonup rightrightarrows '
   + 'le leq ge geq ne neq approx equiv sim simeq cong propto ll gg prec succ '
   + 'in notin ni subset subseteq supset supseteq subsetneq cup cap bigcup bigcap setminus '
@@ -148,11 +150,12 @@ function walk(node, where) {
 pool.C.forEach(c => walk(c, 'concept ' + c.id));
 pool.O.forEach(q => walk(q, 'objective ' + q.id));
 pool.Q.forEach(q => walk(q, 'written ' + q.id));
+pool.P.forEach(q => walk(q, 'past paper ' + q.id));
 
 const clip = s => (s.length > 120 ? s.slice(0, 120) + '…' : s).replace(/\s+/g, ' ');
 
-console.log('Checked %d concepts, %d objective, %d written  (%s pool)',
-  pool.C.length, pool.O.length, pool.Q.length, which);
+console.log('Checked %d concepts, %d objective, %d written, %d past papers  (%s pool)',
+  pool.C.length, pool.O.length, pool.Q.length, pool.P.length, which);
 
 if (errors.length) {
   console.log('\n%d ERROR%s', errors.length, errors.length === 1 ? '' : 'S');

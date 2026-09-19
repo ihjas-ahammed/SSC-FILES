@@ -159,7 +159,7 @@ const DIAGRAM_BASE = '../diagrams/';   /* build.py rewrites this for the built p
 const DATA_SOURCES = {
   use: 'live',                       /* 'mock' for the test page, 'live' for the real one */
   mock: ['mock/mock.courses.js', 'mock/mock.concepts.js', 'mock/mock.objective.js',
-         'mock/mock.written.js'],
+         'mock/mock.written.js', 'mock/mock.pyq.js'],
   live: ['../data/syllabus.js', '../data/school.js', '../data/ra1-core.js', …]
 };
 ```
@@ -168,7 +168,7 @@ Adding a delivered file means adding one line to `live`. `build.py` reads that s
 array, so the built page and the dev page always carry the same content set — keep it a
 plain list of quoted paths.
 
-Delivered files are plain `.js` that declare or push into six global names and nothing
+Delivered files are plain `.js` that declare or push into seven global names and nothing
 else. No modules, no build step, no framework. Paths must stay inside `SSC-V4`.
 
 | name | shape | notes |
@@ -178,7 +178,8 @@ else. No modules, no build step, no framework. Paths must stay inside `SSC-V4`.
 | `SECTITLE` | `{ '5.3': 'Continuous Functions on Intervals' }` | Every `sec` used by a concept or question needs an entry. |
 | `CONCEPTS` | `[concept]` | `CONCEPTS.push(...)` from as many files as you like. |
 | `OBJECTIVE` | `[question]` | **New for Level 1** — OMR objective questions. Does not exist in `data/` yet. |
-| `QUESTIONS` | `[written]` | **Level 3.** Bartle's exercises. A section with none can never turn green. |
+| `QUESTIONS` | `[written]` | **Level 3.** Bartle's exercises. A section with none is not held back — it reaches green with level 2. |
+| `PYQ` | `[past paper]` | **Level 4 — active.** JAM past-paper questions, filed per COURSE. Delivered in `data/pyq.ra1.js` and `data/pyq.ra2.js`. |
 
 ```js
 course   = { id, title, code, sem, blurb, needs?, pending?, pendingNote?,
@@ -214,6 +215,17 @@ question = { id, course, sec, type, marks, neg, negLabel, time,
 written  = { id, marks, title?, prompt, approach?, solution?, trap?, tests: [conceptId] }
            /* approach provides strategic hints for the "💡 Try proof (hint)" scratchpad;
               solution contains full worked answer shown on demand */
+
+pastpaper = { id, course, exam, year, paper, qno, marks,
+              sec?, tests?, title?, prompt, approach?, solution?, trap?, tested?,
+              type?, options?, answer?, neg? }
+           /* The `written` shape plus the four fields that make a paper a paper.
+              `course` ('ra1' | 'ra2') is the ONLY routing field the app needs — a JAM
+              question is set on the subject, not on Bartle §5.3, so it hangs off the
+              course and never off a note. `sec` and `tests` are optional colour.
+              An entry carrying type + options + answer is answered on an OMR sheet
+              exactly like an OBJECTIVE question; one without is worked on paper and
+              claimed. Progress is stored against 'p:' + id. */
 ```
 
 ### Rules the app relies on
@@ -327,7 +339,7 @@ The mock set is no longer a stopgap — it is the permanent test fixture behind
 
 ---
 
-## Levels 1–3 — earned, never switched
+## Levels 1–4 — earned, never switched
 
 **The level switch is gone.** There used to be a per-course control that moved a course
 between Level 1 and Level 2, with an unlock; it moved the goalposts under work that was
@@ -335,28 +347,38 @@ already finished, and a level somebody *sets* is not a measurement. The level of
 concept is now DERIVED, in one place (`app/src/core.progress.js`), from what has been
 done:
 
-| level | earned by | colour |
-| --- | --- | --- |
-| 1 | the note is ticked — you have been through it | **red** |
-| 2 | its proof has been worked through. A concept with no `proof` reaches 2 with the tick | **amber** |
-| 3 | every exercise filed against its SECTION has been worked through | **green** |
+| level | earned by | colour | who can wear it |
+| --- | --- | --- | --- |
+| 1 | the note is marked read | **red** | concept, section, module, course |
+| 2 | its proof has been completed. A concept with no `proof` reaches 2 with the tick | **amber** | concept, section, module, course |
+| 3 | every exercise filed against its SECTION has been completed. A section with no exercises reaches 3 with level 2 | **green** | concept, section, module, course |
+| 4 | every JAM past-paper question filed against the COURSE has been completed | **violet** | **course only** |
 
 A section, module or course takes the level of its **weakest** member: all red before the
 module is red, all amber before it is amber, all green before it is green. That is what
 the rings and the three-colour bars draw, and it is the only progress vocabulary left in
 the app — there are no level buttons anywhere.
 
-Two consequences AGY has to plan for:
+Four consequences AGY has to plan for:
 
 1. **Level 3 is a section-wide bar, not a per-theorem one.** Exercises are set on a
    section in Bartle, so a section is finished when its whole problem set is. Filing two
    exercises against one theorem does not make that theorem green; it makes the section
    two exercises closer.
-2. **A section with no exercises tops out at level 2**, and every note in it says so.
-   That is deliberate — it makes undelivered content visible instead of letting a course
-   go green on an empty problem set. It also means level 3 across RA1 and RA2 is
-   currently unreachable: `data/questions.ra2.m1.js` carries 19 written questions for
-   one module and nothing else does.
+2. **A missing stage promotes — it no longer caps.** This CHANGED at Level 4. A section
+   with no exercises used to top out at level 2 and say so on every note in it; it now
+   reaches level 3 with level 2, because holding a learner at amber for content that has
+   not been written is punishing them for our backlog. A definition with no proof, in a
+   section with no exercises, is green the moment it is read. The visibility of
+   undelivered content now comes from the meters and from this document, not from a
+   stuck colour.
+3. **Level 4 belongs to the course and to nothing smaller.** No concept, section or
+   module can reach 4 — `Progress.courseLevel()` is the only function that returns it,
+   and it returns it only when the course is green AND its past papers are complete.
+4. **A course with no `PYQ` delivered can never reach level 4.** That one IS still a cap,
+   because level 4 is defined as "the past papers are done" and an empty set of papers is
+   not evidence of anything. The Today card says so in words rather than leaving a bar
+   that cannot move.
 
 ### Level 3 — the Bartle exercises. AGY extracts every one of them.
 
@@ -421,6 +443,165 @@ extract the exercises that match the syllabus scope, and file them under the ent
 sections with the same `written` shape. Record book, edition, section and licence in
 `provenance`. Where a topic has no free source good enough, say so plainly and leave the
 section short rather than inventing exercises.
+
+### Level 4 — the JAM past papers. Claude built the first pass; AGY owns it from here.
+
+**`data/pyq.ra1.js` and `data/pyq.ra2.js` now exist**, carrying every JAM Mathematics
+(MA) question that belongs to Real Analysis I or Real Analysis II, as `PYQ` records.
+
+This is the one place the usual boundary was crossed, at the user's explicit instruction
+("do the agy part urself"). What that means for AGY:
+
+- **The content is Claude's first pass, not validated content.** It was extracted from
+  the papers and solved from scratch. Official answer keys exist for only two of the
+  years, so most `answer` fields are worked answers that have not been checked against
+  anything. **Treat this file the way you would treat a draft from anyone else: verify
+  before you trust it**, and correct it in place rather than re-deriving it.
+- **The ids are already live.** Progress is stored against `'p:' + id` and synced, so a
+  correction must keep the id. Fix the maths, never the id.
+- **Extending it is normal AGY work.** Adding the missing years, adding an official key
+  when one is published, improving a `solution` — all of that is content work and the
+  file is yours now.
+
+#### What is in the files today
+
+**226 questions, twelve years.** Eight papers are downloaded and untouched — those are
+the next job, and they are described below.
+
+| | |
+| --- | --- |
+| extracted | 2015 (20), 2016 (15), 2017 (23), 2018 (16), 2019 (19), 2020 (19), 2021 (19), 2022 (16), 2023 (19), 2024 (20), 2025 (21), 2026 (19) |
+| `ra1` / `ra2` | 67 / 159 |
+| types | 118 MCQ, 37 MSQ, 71 NAT |
+| **still to do** | **2012, 2011** (text-layer, straightforward) and **2014, 2013, 2010, 2009, 2008, 2007** (image scans, must be read page by page) |
+
+How far each has been checked:
+
+- **57 of the 226 are verified against an official answer key** and every one matches:
+  2016 (15/15), 2017 (23/23), 2026 (19/19). Those three are the only years with a
+  published key — and note that **2016's key is the last page of its own question
+  paper**, which is easy to miss.
+- The other 169 are worked answers with no key behind them. They were solved from
+  scratch, a sample was re-derived independently, and all 226 render without a single
+  MathJax error — but "renders and looks right" is not "checked".
+- Four answers the extraction flagged as least certain, worth a second pair of eyes:
+  `p.jam.2015.23` (a monotonicity claim supported numerically rather than proved),
+  `p.jam.2015.20` (a Bolzano–Weierstrass classification with no key to check),
+  `p.jam.2024.38` ("exactly one zero between consecutive zeros" leans on Bessel
+  zero-interlacing, which is more than Rolle gives), and `p.jam.2021.55` (whose unusual
+  answer of 0 limit points was re-checked against the page image and is correct).
+- One question was **deliberately left out**: JAM 2016 Q5, whose own official key is
+  mathematically wrong — `f` strictly increasing on `[a,b]` with `f(a)<a` and `f(b)>b`
+  does not give a *unique* fixed point (`f(x)=x+0.1\sin(2\pi x)` on `[-0.1,1.1]` has
+  three). It was better to omit it than to teach the key's answer.
+- JAM 2016 Q30 is in, marked in its own `trap` as having been given Marks To All.
+
+#### Finishing the remaining eight
+
+The two text-layer papers first — 2012 and 2011 — then the scans. Two things bit
+hard during the first pass and will bite again:
+
+1. **The extracted text of these PDFs is not trustworthy.** Font subsetting makes
+   `pdftotext` drop or mis-map maths symbols; the 2026, 2016 and 2015 papers were all
+   badly corrupted, silently. Use the text to find candidate questions, then read the
+   actual page as an image and transcribe from that. One real example: 2021 Q21's option
+   (D) extracts as `1+2t` and is printed as `1+t/2`.
+2. **2012 and earlier are a different exam.** 300 marks, a question-cum-answer booklet,
+   long subjective questions, and sections numbered separately rather than 1–60. For a
+   subjective question, omit `type`, `options` and `answer` and give a full worked
+   `solution` — the app renders it with a scratchpad and a *Show answer*. Where a paper
+   numbers its sections separately, map them onto one continuous ordinal so `qno` stays
+   unique within the year, and say what the printed number was in `provenance`; 2015 in
+   `data/pyq.ra1.js` shows the pattern.
+
+The extraction brief the first pass ran from — what counts as RA1 vs RA2, what to drop,
+every field rule, and the checks that caught real problems — is kept at
+`sources/exams/jam/EXTRACTION.md`. Reuse it rather than reconstructing it.
+
+The original division of labour, which still holds for anything new:
+
+- **Claude has downloaded the raw papers.** They are in `sources/exams/jam/` as
+  `jam-<year>-ma.pdf`, with `sources/exams/jam/index.md` listing year → source → page
+  count → whether the file has a text layer. `sources/` is not AGY territory and AGY does
+  not have to go looking for PDFs. What is there, as of 2026-09-19:
+
+  - **twenty papers, 2007 through 2026.** 2012–2026 from the official IIT Bombay archive;
+    2007–2011 from a faculty mirror at IIT Hyderabad (genuine scans, unofficial host —
+    say so in `provenance` for any question taken from those years).
+  - **2005 and 2006 do not exist online** in any form worth citing. No organising
+    institute publishes anything before 2012. Do not fill the gap from a coaching site's
+    re-typed copy.
+  - **Two answer keys only**, 2017 and 2026. Every other year's key is unpublished, so
+    the `answer` on an objective question from those years is AGY's own worked answer and
+    has to be right.
+  - **Seven papers are image scans with no text layer** — 2007, 2008, 2009, 2010, 2013,
+    2014, 2017. They have to be read, not parsed.
+  - **`MA2017.pdf` on every official archive is the answer key, not the paper.** The real
+    2017 paper is saved here as `jam-2017-ma.pdf` and the official file under its true
+    name, `jam-2017-ma-key.pdf`. index.md has the details.
+- **AGY turns them into content.** Reading the PDF, deciding which questions are real
+  analysis at all, routing each to `ra1` or `ra2`, and writing the `solution` and `trap`
+  is content work, and content work is AGY's. Claude does not author `data/` — the one
+  exception is the pass described above, which was asked for directly.
+
+```js
+PYQ.push({
+  id: 'p.jam.2019.14', course: 'ra1', exam: 'JAM', year: 2019, paper: 'MA', qno: 14,
+  marks: 2, sec: '2.3', tests: ['c.2.3.6'],
+  type: 'MCQ', neg: -0.5,
+  title: 'Supremum of a bounded set',
+  prompt: '…', options: [{ k: 'A', t: '…' }], answer: 'B',
+  solution: '…', tested: '…', trap: '…'
+});
+```
+
+- **`id` is permanent**, and progress is stored against `'p:' + id` and synced — a rename
+  orphans a cloud record (rule 1, rule 11). Use `p.jam.<year>.<qno>`, zero-padded to two
+  digits, and never renumber. Two papers in one year (there are none yet, but there may
+  be) get `p.jam.<year>b.<qno>`.
+- **`course` is required and is the whole routing.** `'ra1'` for anything the RA1
+  syllabus covers, `'ra2'` for RA2. A question that genuinely spans both goes to the
+  later course — the learner meets it there. A question whose real analysis content is
+  outside both syllabi does not belong in `PYQ` at all; leave it out rather than filing
+  it under a course it does not test.
+- **`sec` and `tests` are optional but worth having.** They do not affect level 4 — they
+  put the question in the learner's mental map, and `tests` is what makes the picture of
+  a concept appear under the worked answer.
+- **Objective and subjective are both fine.** A question with `type` + `options` +
+  `answer` is answered on the real OMR sheet with the real scoring rules (MCQ / MSQ /
+  NAT, `neg` for negative marking). A question without them is worked on paper, with a
+  scratchpad and a *Show answer*, then claimed. JAM Section A is objective, Section B is
+  MSQ, Section C is NAT; Part B/C of the older papers is subjective. Carry the paper's
+  own marking into `marks` and `neg` rather than estimating.
+- **`solution` is not optional.** The same rule as exercises: a prompt with no worked
+  answer is a worse deliverable than no question, because the claim button becomes a lie.
+- **Do not invent citations.** `exam`, `year`, `paper` and `qno` are a claim about a real
+  document. If a question is a pattern question written in JAM's idiom rather than one
+  taken from a paper, it belongs in `OBJECTIVE` or `QUESTIONS` — not in `PYQ`.
+
+Once the files exist, add them to the `live` list in `app/sources.js`:
+
+```js
+live: [ …, '../data/pyq.ra1.js', '../data/pyq.ra2.js' ]
+```
+
+and declare the array once, in `data/syllabus.js`, beside the others:
+
+```js
+const QUESTIONS = [];
+const PYQ = [];
+```
+
+A file listed in `live` that does not exist is a **fatal boot error** — the app shows
+"Content did not load" and nothing else — so the line goes in with the file, never
+before it. `app/mock/mock.pyq.js` is the shape to follow; it is placeholder content and
+must never be copied into `data/`.
+
+Order of work: the most recent ten years first — 2017 through 2026, which are also the
+years whose format matches the current paper (Section A/B/C, MCQ/MSQ/NAT). A learner
+sitting JAM next spring is served far better by 2017–2026 complete than by 2007–2026
+half-done. The 2007–2011 papers are a different exam in shape (300 marks, subjective
+Part B) and are worth having, but last.
 
 ### LaTeX that does not render — check it, do not hope
 
@@ -559,17 +740,20 @@ Measured against the current `data/` pool: **209 concepts** across Real Analysis
 All 19 originally missing theorem proofs have been authored and integrated:
 `c.1.2.1`, `c.1.3.2`, `c.4.1.9`, `c.5.1.2`, `c.5.1.4`, `c.5.1.7`, `c.5.2.2`, `c.5.2.4`, `c.5.2.5`, `c.5.2.7`, `c.5.4.11`, `c.5.4.14`, `c.6.1.5`, `c.6.2.1`, `c.6.2.3`, `c.6.2.12`, `c.6.3.2`, `c.6.3.3`, `c.6.4.1`.
 
-### What Levels 2 and 3 need from AGY
+### What Levels 2, 3 and 4 need from AGY
 
 The app records, per learner and across devices:
 
-- **proof work**, claimed per proof — that earns level 2;
+- **proof work**, claimed per proof (`'<conceptId>'`) — that earns level 2;
 - **exercise work**, claimed per written exercise (`'w:<id>'`) — a section's full set
   earns level 3 for every concept in it;
+- **past-paper work**, claimed per JAM question (`'p:<id>'`) — a course's full set earns
+  level 4 for that course;
 - the same first-attempt measurements as before, merged rather than overwritten.
 
-Both claims live in the same flag map in `core.sync.js`, so ids for proofs and for
-exercises are equally permanent.
+All three claims live in the same flag map in `core.sync.js`, so ids for proofs, for
+exercises and for past papers are equally permanent. The `w:` and `p:` prefixes are what
+give a key its meaning; a bare key is a concept.
 
 Rule 10 stands: `proof` blocks are required on every theorem. `proof.idea` and
 `proof.why` are shown as the *hint* before the learner tries; `proof.rungs` are the
@@ -577,11 +761,46 @@ step-by-step reveal after. An `idea` that merely restates the theorem makes the 
 useless, so write it as the strategy — "trap the sequence by bisection", "subtract the
 chord and apply Rolle" — before any technical step.
 
-Rule 12 is new and is the bigger job: **every Bartle exercise, section by section.**
+Rule 12 is the bigger job: **every Bartle exercise, section by section.** Rule 13 is the
+new one: **every JAM MA question that is real analysis, as `PYQ`** — the papers are
+already downloaded, in `sources/exams/jam/`.
 
 ---
 
 ## Recent changes and implementation log
+
+### September 2026 — Level 4
+
+**One page, one scroll.** The note is no longer a page. Opening a concept in the Study
+tree unfolds the whole note in place (`app/src/comp.note.js`), and its proof, its
+exercises, its objective questions and the LaTeX writing workspace unfold inside that.
+Exactly one thing is open at each depth, the open path is remembered, and reopening
+Study scrolls back to it. `#/note/<id>` still resolves — it now opens that path in Study
+rather than rendering a page — so every `needs` chip, every prerequisite step and every
+`<code>c.2.3.1</code>` reference AGY writes keeps working untouched.
+
+**What this means for content:** nothing changes in the data contract for levels 1–3.
+But an open note is now one long scroll with no page break, so `oneLine`, `statement`,
+`intuition` and `traps` are read one after another rather than as separate screens.
+Statements that repeat the `oneLine` verbatim now read as a stutter where they used to
+read as a heading.
+
+**The tabs are three:** Today, Study, Recall. Questions and Write lost their tabs and
+happen inside the note. Their routes still resolve.
+
+**The reel is spaced practice.** No position rail, no counters, no end — it appends as
+you scroll. Cards are scheduled by a Leitner box stored on each card record and merged
+across devices, and objective questions and completed exercises now join statements and
+proofs as card kinds. A concept with no `'state'` card is still unreachable from Recall,
+so keep giving every theorem one.
+
+**Level 4 is new and is a course rung.** See "Levels 1–4" and "Level 4 — the JAM past
+papers" above. The deliverable is `data/pyq.ra1.js` and `data/pyq.ra2.js`; the raw
+papers are in `sources/exams/jam/`.
+
+**A missing stage now promotes instead of capping.** A section with no exercises reaches
+level 3; a note with no proof reaches level 2 on the tick, as before. Prerequisites are
+judged at level 1 and the cascade raises them to level 1 and no further.
 
 ### September 2026
 
