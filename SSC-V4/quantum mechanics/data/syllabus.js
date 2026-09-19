@@ -17,7 +17,7 @@ const SYLLABI = [
       },
       {
         id: 'qm1.m2', n: 'II', title: 'Time-Independent Schrödinger Equation', marks: 20,
-        secs: ['2.1', '2.2', '2.3', '2.4', '2.5']
+        secs: ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6']
       },
       {
         id: 'qm1.m3', n: 'III', title: 'Mathematical Tools of Quantum Mechanics', marks: 25,
@@ -103,8 +103,9 @@ const SECTITLE = {
   '2.1': 'Stationary States',
   '2.2': 'The Infinite Square Well',
   '2.3': 'The Free Particle',
-  '2.4': 'The Potential Step',
-  '2.5': 'The Potential Barrier & Tunneling',
+  '2.4': 'Conservation of Probability & Probability Current',
+  '2.5': 'The Potential Step',
+  '2.6': 'The Potential Barrier & Tunneling',
 
   '3.1': 'Hilbert Space & Dirac Notation',
   '3.2': 'Hermitian Operators & Observables',

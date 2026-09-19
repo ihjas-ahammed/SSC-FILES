@@ -62,7 +62,7 @@ const KNOWN = new Set(('alpha beta gamma delta epsilon varepsilon zeta eta theta
   + 'le leq ge geq ne neq approx equiv sim simeq cong propto ll gg prec succ '
   + 'in notin ni subset subseteq supset supseteq subsetneq cup cap bigcup bigcap setminus '
   + 'emptyset varnothing forall exists nexists neg lnot land lor wedge vee '
-  + 'infty partial nabla cdot cdots ldots vdots ddots dots times div pm mp ast star circ ell '
+  + 'infty partial nabla cdot cdots ldots vdots ddots dots times div pm mp ast star circ ell AA '
   + 'mathbb mathbf mathrm mathcal mathscr mathfrak mathit mathsf mathtt boldsymbol '
   + 'text textbf textit textrm operatorname displaystyle limits nolimits '
   + 'left right big Big bigg Bigg langle rangle lceil rceil lfloor rfloor lvert rvert '

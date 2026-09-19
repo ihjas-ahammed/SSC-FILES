@@ -24,13 +24,13 @@ const Sync = (function () {
      into the test build must never appear in, or merge with, the real record.
      This is the only place that mapping is decided.
 
-        live   ssc4_ra_v1        ssc4_users_v1
-        mock   ssc4_ra_mock_v1   ssc4_users_mock_v1
+        live   ssc4_qm_v1        ssc4_qm_users_v1
+        mock   ssc4_qm_mock_v1   ssc4_qm_users_mock_v1
 
      AGY owns the live pair; see "Publishing" in HOOK_agy.md. */
   const LIVE = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live');
-  const NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
-  const USERS = () => LIVE() ? 'ssc4_users_v1' : 'ssc4_users_mock_v1';
+  const NS = () => LIVE() ? 'ssc4_qm_v1' : 'ssc4_qm_mock_v1';
+  const USERS = () => LIVE() ? 'ssc4_qm_users_v1' : 'ssc4_qm_users_mock_v1';
 
   let syncing = false;
   let pushT = 0;

@@ -27,7 +27,16 @@ const DIAGRAM_MAP = {
   'c.1.4.2': ['c.1.4.2_preservation_of_normalization'],
   'c.1.5.1': ['c.1.5.1_exponential_wave_function'],
   'c.1.5.4': ['c.1.5.4_probability_current_continuity'],
-  'c.1.6.1': ['c.1.6.1_heisenberg_uncertainty_principle']
+  'c.1.6.1': ['c.1.6.1_heisenberg_uncertainty_principle'],
+  'c.2.1.1': ['c.2.1.1_stationary_state_phase'],
+  'c.2.2.2': ['c.2.2.2_infinite_square_well_wavefunctions'],
+  'c.2.2.4': ['c.2.2.4_symmetric_well_parity'],
+  'c.2.3.2': ['c.2.3.2_wave_packet_dispersion'],
+  'c.2.4.2': ['c.2.4.2_probability_current_flux'],
+  'c.2.5.1': ['c.2.5.1_potential_step_above'],
+  'c.2.5.3': ['c.2.5.3_potential_step_evanescent'],
+  'c.2.6.2': ['c.2.6.2_barrier_tunneling'],
+  'c.2.6.4': ['c.2.6.4_transmission_resonance']
 };
 
 /* The lecture sheets: whole-topic posters rather than one-result figures.

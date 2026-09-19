@@ -22,7 +22,7 @@
 
 const Store = (function () {
 
-  const KEY = 'ssc4.level1.v1';
+  const KEY = 'ssc4.qm.v1';
   const EMPTY = {
     v: 2,
     done: {}, undone: {},        /* Level 1 completion + tombstones */

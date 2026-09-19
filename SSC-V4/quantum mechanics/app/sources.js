@@ -50,6 +50,9 @@ const DATA_SOURCES = {
     '../data/qm1-m1.js',
     '../data/questions.qm1.m1.js',
     '../data/objective.qm1.m1.js',
+    '../data/qm1-m2.js',
+    '../data/questions.qm1.m2.js',
+    '../data/objective.qm1.m2.js',
     '../data/pyq.qm1.js'
   ]
 };

@@ -250,5 +250,154 @@ Substitute the given values (noting that $\\hbar / \\Delta v = 10^{-37}$):
 $$\\Delta x_{\\text{min}} = \\frac{1.0546 \\times 10^{-34}}{2 \\times (9.109 \\times 10^{-31}) \\times (1.0546 \\times 10^3)} = \\frac{1}{2 \\times 9.109 \\times 10^{-28} \\times 10^{31}} = \\frac{1}{18.218 \\times 10^3} \\approx 5.49 \\times 10^{-8}\\text{ m}$$</p>`,
     tested: 'Quantitative calculation using the Heisenberg uncertainty principle.',
     trap: 'Omitting the factor of 2 in the denominator (using ħ instead of ħ/2), which yields 1.09 × 10^{-7} m (Option B).'
+  },
+  {
+    id: 'p.jam.ph.2023.02',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2023,
+    paper: 'PH',
+    qno: 12,
+    marks: 1,
+    neg: -0.33,
+    sec: '2.2',
+    tests: ['c.2.2.2'],
+    title: 'Ratio of Infinite Square Well Excited State to Ground State Energy',
+    type: 'MCQ',
+    prompt: `<p>A particle of mass $m$ is confined to a 1D infinite potential well of width $L$ ($0 \\le x \\le L$). What is the ratio of the energy of the second excited state to the ground state energy?</p>`,
+    options: [
+      { k: 'A', t: '2' },
+      { k: 'B', t: '4' },
+      { k: 'C', t: '8' },
+      { k: 'D', t: '9' }
+    ],
+    answer: 'D',
+    solution: `<p>The energy eigenvalues of a 1D infinite square well are given by:
+$$E_n = \\frac{n^2 \\pi^2 \\hbar^2}{2m L^2} = n^2 E_1$$
+The states are labeled as:
+<ul>
+  <li>Ground state: $n = 1 \\implies E_1$</li>
+  <li>First excited state: $n = 2 \\implies E_2 = 4 E_1$</li>
+  <li>Second excited state: $n = 3 \\implies E_3 = 9 E_1$</li>
+</ul>
+Therefore, the ratio of the energy of the second excited state to the ground state is:
+$$\\frac{E_3}{E_1} = \\frac{9 E_1}{E_1} = 9$$</p>`,
+    tested: 'Infinite square well energy level labeling and n² quantization.',
+    trap: 'Selecting 4 (Option B) by mistaking the first excited state (n=2) for the second excited state (n=3).'
+  },
+  {
+    id: 'p.jam.ph.2022.02',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2022,
+    paper: 'PH',
+    qno: 15,
+    marks: 2,
+    neg: -0.66,
+    sec: '2.2',
+    tests: ['c.2.2.2'],
+    title: 'Probability in the Middle Half of an Infinite Potential Well',
+    type: 'MCQ',
+    prompt: `<p>A particle in the ground state of an infinite potential well of width $L$ ($0 \\le x \\le L$) has wave function $\\psi_1(x) = \\sqrt{\\frac{2}{L}} \\sin\\left(\\frac{\\pi x}{L}\\right)$. What is the probability of finding the particle in the middle half of the well ($L/4 \\le x \\le 3L/4$)?</p>`,
+    options: [
+      { k: 'A', t: '$\\dfrac{1}{2}$' },
+      { k: 'B', t: '$\\dfrac{1}{2} + \\dfrac{1}{\\pi}$' },
+      { k: 'C', t: '$\\dfrac{1}{2} - \\dfrac{1}{\\pi}$' },
+      { k: 'D', t: '$\\dfrac{1}{\\pi}$' }
+    ],
+    answer: 'B',
+    solution: `<p>The probability is the integral of the probability density $|\\psi_1(x)|^2$ over the given interval:
+$$P = \\int_{L/4}^{3L/4} |\\psi_1(x)|^2 dx = \\frac{2}{L} \\int_{L/4}^{3L/4} \\sin^2\\left(\\frac{\\pi x}{L}\\right) dx$$
+Using the identity $\\sin^2\\theta = \\frac{1 - \\cos(2\\theta)}{2}$:
+$$P = \\frac{1}{L} \\int_{L/4}^{3L/4} \\left[ 1 - \\cos\\left(\\frac{2\\pi x}{L}\\right) \\right] dx = \\frac{1}{L} \\left[ x - \\frac{L}{2\\pi}\\sin\\left(\\frac{2\\pi x}{L}\\right) \\right]_{L/4}^{3L/4}$$
+Evaluating the limits:
+$$P = \\frac{1}{L} \\left[ \\left(\\frac{3L}{4} - \\frac{L}{4}\\right) - \\frac{L}{2\\pi}\\left( \\sin\\frac{3\\pi}{2} - \\sin\\frac{\\pi}{2} \\right) \\right] = \\frac{1}{2} - \\frac{1}{2\\pi}(-1 - 1) = \\frac{1}{2} + \\frac{1}{\\pi} \\approx 0.8183$$</p>`,
+    tested: 'Probability density integration in stationary bound states.',
+    trap: 'Selecting 1/2 by assuming classical uniform distribution.'
+  },
+  {
+    id: 'p.jam.ph.2021.02',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2021,
+    paper: 'PH',
+    qno: 36,
+    marks: 2,
+    neg: 0,
+    sec: '2.5',
+    tests: ['c.2.5.2'],
+    title: 'Reflection Coefficient at a Step Potential for E = 4/3 V₀',
+    type: 'NAT',
+    prompt: `<p>Particles of energy $E = \\frac{4}{3} V_0$ are incident from the left on a step potential $V(x) = 0$ for $x < 0$ and $V(x) = V_0$ for $x > 0$. What is the reflection coefficient $R$ at the step? (Round to three decimal places).</p>`,
+    answer: '0.111',
+    solution: `<p>The wave numbers in the two regions are:
+$$k_1 = \\frac{\\sqrt{2mE}}{\\hbar} = \\frac{\\sqrt{2m(4V_0/3)}}{\\hbar} = \\frac{\\sqrt{2mV_0}}{\\hbar} \\frac{2}{\\sqrt{3}}$$
+$$k_2 = \\frac{\\sqrt{2m(E - V_0)}}{\\hbar} = \\frac{\\sqrt{2m(V_0/3)}}{\\hbar} = \\frac{\\sqrt{2mV_0}}{\\hbar} \\frac{1}{\\sqrt{3}}$$
+The ratio of wave numbers is:
+$$\\frac{k_2}{k_1} = \\frac{1/\\sqrt{3}}{2/\\sqrt{3}} = \\frac{1}{2}$$
+The reflection coefficient $R$ is:
+$$R = \\left( \\frac{k_1 - k_2}{k_1 + k_2} \\right)^2 = \\left( \\frac{1 - k_2/k_1}{1 + k_2/k_1} \\right)^2 = \\left( \\frac{1 - 1/2}{1 + 1/2} \\right)^2 = \\left( \\frac{1/2}{3/2} \\right)^2 = \\left(\\frac{1}{3}\\right)^2 = \\frac{1}{9} \\approx 0.111$$</p>`,
+    tested: 'Step potential reflection coefficient with E > V_0.',
+    trap: 'Calculating transmission coefficient T = 8/9 instead of reflection coefficient R.'
+  },
+  {
+    id: 'p.jam.ph.2020.02',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2020,
+    paper: 'PH',
+    qno: 22,
+    marks: 1,
+    neg: -0.33,
+    sec: '2.5',
+    tests: ['c.2.5.4'],
+    title: 'Total Reflection at a Potential Step for E < V₀',
+    type: 'MCQ',
+    prompt: `<p>A stream of particles of mass $m$ and energy $E$ encounters a potential step of height $V_0$. If $E < V_0$, what is the reflection coefficient $R$?</p>`,
+    options: [
+      { k: 'A', t: '$R = 0$' },
+      { k: 'B', t: '$R = 1$' },
+      { k: 'C', t: '$R = \\dfrac{E}{V_0}$' },
+      { k: 'D', t: '$R = 1 - \\dfrac{E}{V_0}$' }
+    ],
+    answer: 'B',
+    solution: `<p>For $E < V_0$, the wave number in Region II is purely imaginary: $k_2 = i\\kappa$, where $\\kappa = \\frac{\\sqrt{2m(V_0 - E)}}{\\hbar}$.<br>
+The reflection amplitude is:
+$$\\frac{B}{A} = \\frac{k_1 - i\\kappa}{k_1 + i\\kappa}$$
+The reflection coefficient is:
+$$R = \\left| \\frac{B}{A} \\right|^2 = \\frac{k_1^2 + \\kappa^2}{k_1^2 + \\kappa^2} = 1$$
+Because the wave in Region II is evanescent (a decaying real exponential carrying zero probability current), all incident probability flux is totally reflected: $R = 1$.</p>`,
+    tested: 'Total reflection and evanescent waves at a potential step for E < V_0.',
+    trap: 'Assuming R < 1 because particles penetrate into Region II; penetration without transmission produces total reflection.'
+  },
+  {
+    id: 'p.jam.ph.2018.02',
+    course: 'qm1',
+    exam: 'JAM',
+    year: 2018,
+    paper: 'PH',
+    qno: 16,
+    marks: 2,
+    neg: -0.66,
+    sec: '2.6',
+    tests: ['c.2.6.2'],
+    title: 'Wide Barrier Quantum Tunneling Scaling Law',
+    type: 'MCQ',
+    prompt: `<p>For a particle of energy $E$ tunneling through a rectangular potential barrier of height $V_0 > E$ and width $a$, how does the transmission coefficient $T$ scale when the barrier is wide ($\\kappa a \\gg 1$)?</p>`,
+    options: [
+      { k: 'A', t: '$T \\propto e^{-\\kappa a}$, where $\\kappa = \\dfrac{\\sqrt{2m(V_0 - E)}}{\\hbar}$' },
+      { k: 'B', t: '$T \\propto e^{-2\\kappa a}$, where $\\kappa = \\dfrac{\\sqrt{2m(V_0 - E)}}{\\hbar}$' },
+      { k: 'C', t: '$T \\propto \\dfrac{1}{a^2}$' },
+      { k: 'D', t: '$T \\propto e^{+\\kappa a}$' }
+    ],
+    answer: 'B',
+    solution: `<p>The exact transmission coefficient for a rectangular barrier with $E < V_0$ is:
+$$T = \\left[ 1 + \\frac{V_0^2 \\sinh^2(\\kappa a)}{4E(V_0 - E)} \\right]^{-1}$$
+In the wide barrier limit $\\kappa a \\gg 1$, $\\sinh(\\kappa a) \\approx \\frac{1}{2} e^{\\kappa a}$, so $\\sinh^2(\\kappa a) \\approx \\frac{1}{4} e^{2\\kappa a}$.<br>
+Taking the reciprocal:
+$$T \\approx \\frac{16 E(V_0 - E)}{V_0^2} e^{-2\\kappa a} \\propto e^{-2\\kappa a}$$
+The transmission coefficient decays exponentially as $e^{-2\\kappa a}$ because transmission is proportional to the squared amplitude of the transmitted wave.</p>`,
+    tested: 'Barrier tunneling transmission coefficient exponential scaling.',
+    trap: 'Choosing Option A (e^{-κa}), which confuses wave amplitude decay with probability/flux transmission decay (squared modulus).'
   }
 );
