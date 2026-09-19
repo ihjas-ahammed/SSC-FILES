@@ -19,11 +19,11 @@ const Login = (function () {
   function mount(host, onDone) {
     const nameIn = el('input', {
       class: 'tin', type: 'text', id: 'login-name', autocomplete: 'name',
-      placeholder: 'e.g. Ihjas Ahammed', spellcheck: 'false', enterkeyhint: 'next'
+      placeholder: 'e.g. Student Name', spellcheck: 'false', enterkeyhint: 'next'
     });
     const rollIn = el('input', {
       class: 'tin', type: 'text', id: 'login-roll', autocomplete: 'off',
-      placeholder: 'e.g. 21-MAT-07', spellcheck: 'false', enterkeyhint: 'go'
+      placeholder: 'e.g. Roll Number', spellcheck: 'false', enterkeyhint: 'go'
     });
 
     const known = Store.identity();

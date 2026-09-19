@@ -1,68 +1,43 @@
-# Real Analysis App · Master Image Guide & Visual Prompt Suite
+# Minimal Visual Guide & Image Prompt · Real Analysis
 
-Production-grade image generation prompts, composition layouts, and psychological copy triggers to create a high-impact single-image visual guide for the **Real Analysis Study System**.
+A minimal, 3-device infographic prompt and screenshot layout explaining how to use the app: navigation dropdowns, reel-like active recall, and the 4-level mastery system.
 
 ---
 
-## 1. AI Image Generation Prompts
+## 1. Minimal Image Generation Prompt (FLUX / Midjourney v6 / Ideogram)
 
-### Option A: Midjourney v6 / FLUX.1 Pro (Cinematic Isometric Math Showcase)
 ```text
-A commercial high-end graphic design poster for an elite Real Analysis mathematics mobile study platform. In the center, three flagship bezel-less smartphones (iPhone 15 Pro titanium frame) float at elegant isometric angles over a deep midnight matte background (#0e1117) with ethereal mathematical glow in warm gold (#f6ad55) and deep sapphire (#3182ce).
+A minimal, clean product how-to-use visual guide for a mobile study app, portrait 9:16 layout, deep matte slate-black background (#0e1117). Three modern bezel-less smartphones arranged cleanly side-by-side:
 
-The screens exhibit the live real-analysis web app:
-- Center screen: A dark-mode theorem reader featuring pristine LaTeX formulas for compactness, Heine-Borel theorem, epsilon-delta limits, field axioms of R, and an amber 'WHAT IT REALLY SAYS' callout box.
-- Left screen: A minimalist mastery dashboard displaying 'The Loop' (Read -> Recall -> Quiz -> Proof), level indicators (Level 1 Read, Level 2 Proofs Worked, Level 3 Sections Green), and clean progress meters.
-- Right screen: An interactive multiple-choice analysis diagnostic question card with radio buttons, countdown clock badge, and step-by-step counterexample solution breakdown.
+- Left Phone [Screen 1: Dropdown Navigation]: Shows a dark-mode hierarchical accordion tree for real analysis. Single branch expanded: Course > Module > Section > Concept note. Minimal indicator lines showing collapsible dropdown interaction.
+- Center Phone [Screen 2: Mastery Levels]: Shows the mathematics study dashboard with 4 distinct colored mastery rings and level badges: Level 1 Read (Coral Red), Level 2 Worked (Amber Gold), Level 3 Section Green (Emerald Green), Level 4 Course Mastered (Electric Violet).
+- Right Phone [Screen 3: Reel-like Recall]: Shows full-screen vertical flashcard screen, swipe-up gesture indicator, hidden theorem proof card, and three bottom rating buttons: [Missed], [Partly], [Got].
 
-Floating in the 3D space surrounding the phones are elegant, subtly glowing mathematical symbols (real numbers blackboard bold R, epsilon ε, delta δ, infinity ∞, integral symbols ∫, supremum/infimum sup/inf) with optical glass refraction and shallow depth of field. Top typography reads 'REAL ANALYSIS' in commanding modern editorial typography, subtitled 'Rigorous Proofs. Intuitive Insights. Zero Friction.'
+Above each phone is a crisp, minimal numbered label:
+"01 / Dropdown Tree"
+"02 / 4 Mastery Levels"
+"03 / Reel-Style Recall"
 
-Award-winning Behance layout, hyper-clean Apple keynote presentation style, 8k resolution, photorealistic studio lighting, crisp UI typography --ar 16:9 --style raw --v 6.0
-```
-
-### Option B: Vertical Social / Story Poster (9:16 Aspect Ratio)
-```text
-A vertical 9:16 viral educational infographic poster showcasing a modern Real Analysis web app. Set against an aesthetic dark charcoal background with soft ambient geometric lighting.
-
-Two modern smartphones float in dynamic vertical alignment:
-- Upper phone displays a gorgeous mathematical proof breakdown with crisp KaTeX fonts and highlighted common trap warnings.
-- Lower phone displays an interactive active-recall flashcard showing theorem statements and instant mastery verification buttons.
-
-Clean, high-contrast infographic callout badges with glowing neon accents:
-- 'Master Epsilon-Delta Proofs Visually'
-- 'Common Traps & Counterexamples Explained'
-- 'Active Recall & Timed Exam Quizzes'
-- '100% Offline-First · Zero Ads · Free Forever'
-
-Bottom bar features an eye-catching call to action with a scannable QR code and direct URL: 'math/real-analysis'. Clean UI editorial style, Pinterest and Dribbble trending, ultra-sharp detail, 8k --ar 9:16 --v 6.0
+Crisp typographic annotations with ultra-thin hairline callouts, clean Swiss graphic design, generous negative space, studio lighting, hyper-sharp UI screens, 8k resolution, minimalist editorial aesthetic --ar 9:16 --style raw
 ```
 
 ---
 
-## 2. Screenshot Placement & Compositing Blueprint
+## 2. Screenshot Mapping
 
-Replace the device mockup screen placeholders with the captured screenshots in `screenshots/`:
+Use the real mobile screenshots in `publish/screenshots/`:
 
-| Placement | File Path | Psychological Impact |
+| Device / Step | Screenshot File | Feature Explained |
 | :--- | :--- | :--- |
-| **Hero Center** | `screenshots/03_ra_mobile_concept_heine_borel.png` | **Mathematical Elegance**: Demonstrates clear LaTeX typesetting of Real axioms and Heine-Borel compactness. |
-| **Left Anchor** | `screenshots/01_ra_mobile_dashboard_dark.png` | **Endowed Progress**: Shows the 3-level mastery loop, encouraging consistent daily study habits. |
-| **Right Anchor** | `screenshots/05_ra_mobile_interactive_quiz.png` | **Diagnostic Testing**: Engages competitive exam aspirants (IIT JAM, GATE, CSIR-NET). |
-| **Callout Insert** | `screenshots/04_ra_mobile_traps_and_intuition.png` | **Math Anxiety Relief**: Shows the "Traps and What It Really Says" section that helps students avoid exam pitfalls. |
-| **Daylight Variant**| `screenshots/07_ra_mobile_dashboard_light.png` | **Paper Reading Aesthetic**: Demonstrates the crisp light theme for long reading sessions. |
+| **01 / Navigation** | `screenshots/02_ra_mobile_curriculum_study_tree.png` | **Accordion Dropdown**: Tap Course → Module → Section → Concept. Exactly one item opens at each depth to keep screens clutter-free. Unfolds study notes in place. |
+| **02 / Levels** | `screenshots/01_ra_mobile_dashboard_dark.png` | **4-Level Mastery System**: Red (L1 Read) → Amber (L2 Proofs Worked) → Green (L3 Section Green) → Violet (L4 Course Mastered). |
+| **03 / Recall** | `screenshots/06_ra_mobile_active_recall_flashcards.png` | **Reel-like Spaced Recall**: Full-viewport card feed. Swipe vertically like a reel. Answer hidden until attempt. Tap [Missed], [Partly], [Got] for Leitner scheduling. |
 
 ---
 
-## 3. High-Conversion Visual Copy & Annotations
+## 3. Minimal Overlay Copy
 
-### Headline (The Hook)
-> **"From Epsilon-Delta Confusion to Proof Mastery. The complete interactive Real Analysis curriculum in your pocket."**
-
-### Feature Badges
-- `⚡ 100% Offline-First (Save to Home Screen as PWA)`
-- `📐 Covers Sequences, Series, Metric Spaces, Riemann Integration & Multivariable Analysis`
-- `🎯 IIT JAM, CSIR-NET & University Honours Complete`
-- `🔒 Instant Pass-Key Access · No Account Creation Required`
-
-### Direct Link
-`https://ssc-data-science-qm.web.app/math/real-analysis`
+- **01 Navigation Dropdowns**: "Tap to unfold. Course → Module → Section. Single-open depth keeps mobile clean."
+- **02 The 4 Levels**: "L1 Red (Read) → L2 Amber (Proofs worked) → L3 Green (Section cleared) → L4 Violet (Course solved)."
+- **03 Reel-like Recall**: "Swipe vertically like Reels. Zero distractions. Self-rate to lock long-term memory."
+- **Direct Access**: `https://ssc-data-science-qm.web.app/math/real-analysis`

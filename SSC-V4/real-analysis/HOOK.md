@@ -27,4 +27,4 @@ The project instructions are split by responsibility:
   - Markdown formatting (`**bold**`, `*italic*`) is automatically converted to `<b>` and `<i>` in `DOM.el` (`app/src/core.dom.js`) while strictly shielding LaTeX math spans.
 - **Publishing & Deployment**:
   - Built into single-file bundles via `python3 build.py` (`build/index.html`) and `python3 build.py --mock` (`build/test/index.html`).
-  - Published via `/home/ihjas/Documents/GitHub/SSC-FILES/SSC-V2/SEM5/PHY/apps/tools/deploy.sh --live` to Firebase Hosting at `https://ssc-data-science-qm.web.app/math/real-analysis`.
+  - Published via `SSC-V2/SEM5/PHY/apps/tools/deploy.sh --live` to Firebase Hosting at `https://ssc-data-science-qm.web.app/math/real-analysis`.
