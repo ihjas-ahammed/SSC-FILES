@@ -9,7 +9,7 @@
    is stored against 'p:<id>', so the ids are permanent — see HOOK_agy.md rule 1
    and "Level 4 — the JAM past papers".
 
-   Source papers: SSC-V4/sources/exams/jam/, with sources/exams/jam/index.md
+   Source papers: real-analysis/sources/exams/jam/, with sources/exams/jam/index.md
    recording where each year came from. 2012–2026 are the official IIT
    archive; 2007–2011 are scans from a faculty mirror at IIT Hyderabad.
 

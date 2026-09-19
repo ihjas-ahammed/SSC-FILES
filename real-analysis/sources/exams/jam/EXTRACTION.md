@@ -10,7 +10,7 @@ learner has no way to know it is wrong.
 
 ## Your input
 
-- The paper: `SSC-V4/sources/exams/jam/jam-<YEAR>-ma.pdf`
+- The paper: `real-analysis/sources/exams/jam/jam-<YEAR>-ma.pdf`
 - Plain text already extracted (for text-layer papers): `<work>/jamtxt/<YEAR>.txt`
   Some papers are **image scans with no text layer** — for those, read the PDF directly
   with the Read tool using the `pages` parameter (max 20 pages per call).
@@ -172,7 +172,7 @@ named by id. Do not hide uncertainty; it is more useful than a clean-looking rep
 Rebuild it whenever `data/` grows:
 
 ```js
-// node this from SSC-V4/
+// node this from real-analysis/
 const fs=require('fs'), path=require('path'), vm=require('vm');
 const APP='app';
 const src=fs.readFileSync(APP+'/sources.js','utf8');

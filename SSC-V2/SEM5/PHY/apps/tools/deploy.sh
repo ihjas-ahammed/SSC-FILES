@@ -28,8 +28,11 @@ cp "$APPS/QM_1.html" "$TMP/public/index.html"
 # The live page is only REBUILT when --live is passed. Without it the deploy
 # republishes the committed build/index.html byte for byte, so shipping an app
 # change to the test page can never quietly push unvalidated content to the
-# live one. AGY runs `deploy.sh --live` once the data has been validated.
-V4="$REPO/SSC-V4"
+if [ -d "$REPO/real-analysis" ]; then
+  V4="$REPO/real-analysis"
+else
+  V4="$REPO/SSC-V4"
+fi
 REBUILD_LIVE=0
 for arg in "$@"; do [ "$arg" = "--live" ] && REBUILD_LIVE=1; done
 

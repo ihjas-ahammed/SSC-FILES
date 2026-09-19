@@ -22,7 +22,7 @@
                                      plus course, exam, year, paper, qno. Filed
                                      on a COURSE, never on a section.
 
-   Paths are relative to app/index.html and must stay inside SSC-V4.
+   Paths are relative to app/index.html and must stay inside real-analysis.
    The full field-by-field contract is in HOOK_agy.md → "Runtime data contract".
    ══════════════════════════════════════════════════════════════════════════ */
 

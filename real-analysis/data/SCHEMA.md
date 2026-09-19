@@ -1,4 +1,4 @@
-# SSC-V4 content schema
+# Real Analysis content schema
 
 Every node keys to **Bartle & Sherbert 4e** numbering. Never to module numbers.
 A syllabus is a separate mapping file. This is what lets RA1 / RA2 / GATE / JAM be four

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the SSC-V4 Real Analysis study system into one self-contained page.
+"""Build the Real Analysis study system into one self-contained page.
 
     python3 build.py            -> build/index.html       from the `live` pool
     python3 build.py --mock     -> build/test/index.html   from the `mock` pool

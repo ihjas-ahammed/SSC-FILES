@@ -169,7 +169,7 @@ array, so the built page and the dev page always carry the same content set — 
 plain list of quoted paths.
 
 Delivered files are plain `.js` that declare or push into seven global names and nothing
-else. No modules, no build step, no framework. Paths must stay inside `SSC-V4`.
+else. No modules, no build step, no framework. Paths must stay inside `real-analysis`.
 
 | name | shape | notes |
 | --- | --- | --- |
@@ -645,7 +645,7 @@ cd SSC-V2/SEM5/PHY/apps/tools
 ./deploy.sh --live          # rebuilds /math/real-analysis from data/, then deploys
 ```
 
-Without `--live` the script republishes the committed `SSC-V4/build/index.html` byte for
+Without `--live` the script republishes the committed `real-analysis/build/index.html` byte for
 byte and only refreshes the test page. So:
 
 - **`./deploy.sh`** — app changes reach the test page; the live page is untouched.
@@ -892,3 +892,40 @@ judged at level 1 and the cascade raises them to level 1 and no further.
    - Validated clean TeX passing `tools/check_tex.js` with 0 errors across 209 concepts, 24 objective questions, and 19 written exercises.
    - Built live production bundle `build/index.html` (1.02 MB) from `live` pool and `build/test/index.html` from `mock` pool.
    - Verified clean execution and headless DOM boot in Node VM test.
+
+10. **Complete Question Bank, Past Papers (2005–2026), Accordion Refinement, TeX Hardening & Markdown Engine**:
+   - **475 Bartle & Sherbert 4e Level 3 Written Questions**:
+     - Real Analysis I (`data/questions.ra1.js`): 292 written exercises covering Sections 1.1–4.3 and 11.1–11.2.
+     - Real Analysis II Module I (`data/questions.ra2.m1.js`): 36 written exercises covering Chapter 5 (5.1–5.6).
+     - Real Analysis II Module II (`data/questions.ra2.m2.js`): 23 written exercises covering Chapter 6 (6.1–6.4).
+     - Real Analysis II Module III (`data/questions.ra2.m3.js`): 27 written exercises covering Chapter 7 (7.1–7.5).
+     - Real Analysis II Module IV (`data/questions.ra2.m4.js`): 32 written exercises covering Chapter 8 (8.1–8.4) & series.
+     - Real Analysis for Entrance (`data/questions.rae.js`): 35 exercises for metric spaces and entrance topics.
+     - Advanced Extensions (`data/questions.misc.js`): 30 advanced exercises.
+     - Total written exercises in live pool: **475**.
+   - **Level 4 JAM MA Past Papers (2005–2026) Complete Integration**:
+     - Extracted, verified, and mapped 226 Real Analysis questions from 22 years of official IIT JAM Mathematical Analysis papers (2005 through 2026).
+     - Partitioned by course scope into `data/pyq.ra1.js` (67 questions: sequences, series, sets, limits) and `data/pyq.ra2.js` (159 questions: continuity, derivatives, Riemann integrals, uniform convergence, multivariable & metric extensions).
+     - Full preservation of official question types: Section A (MCQ, 1 & 2 marks with 1/3 and 2/3 negative marking), Section B (MSQ, 2 marks), Section C (NAT numerical answer type).
+     - Every PYQ carries official keys, full worked solutions, approach clues, year & question number tags, and concept prerequisite links.
+   - **Unfolding Note Architecture & Interaction Refinements**:
+     - **Section exercises dropdown (`.exp-exercises`)**: All written exercises for a section are enclosed in an outer collapsible dropdown inside the note.
+     - **Level 2 Auto-Disclosure**: At Level 1, the outer exercises dropdown remains closed by default so learners focus on definitions and proofs. Once Level 2 is achieved (proof worked through), the exercises dropdown auto-opens. Level 1 self-check questions remain open by default.
+     - **Tree reload jitter fix**: Eliminated layout shifts and unexpected re-collapsing of accordions during tree updates by preserving `.open` state on active details elements and locking `minHeight` synchronously during repaint.
+     - **Auto-scroll to active note**: Smoothly scrolls the viewport to the note header upon expansion.
+     - **Top toolbar subtitle**: Displays the active note's title directly in the header toolbar.
+     - **Mobile layout fixes**: Preserved inline badge flow and fixed "OUTSIDE SYLLABUS" line wrapping (`white-space: nowrap; flex: 0 0 auto;`). Renamed extension modules to "Extension · <Title>".
+   - **MathJax & LaTeX Engine Hardening**:
+     - Fixed quadruple-backslash escaping (`\\\\` in JS source evaluating to `\\` in memory) across 2,664 macros in `data/questions.ra1.js`. In LaTeX, `\\` is a line break, which caused MathJax to consume the slash and render bare text ($A\text{setminus}(B\text{cap}C)$).
+     - Repaired newline-corrupted macros (`\notin`, `\neq`, `\ne`) where string escapes had introduced raw newline characters into command names.
+     - Hardened `tools/check_tex.js` to enforce zero double-slash macros (`\\cmd`), zero unescaped control characters (`\f`, `\b`), zero broken newlines in math, and zero unslashed mathematical commands.
+     - Validated `node tools/check_tex.js` with **0 errors** across 250 concepts, 24 objective questions, 475 written exercises, and 226 past papers.
+   - **Markdown-to-HTML Auto-Formatting Engine**:
+     - Added `formatMarkdown` in `app/src/core.dom.js` within `DOM.el` (`html: v`).
+     - Automatically transforms markdown bold (`**text**`) and italic (`*text*`) into `<b>text</b>` and `<i>text</i>` inside authored content while strictly shielding all LaTeX math spans (`$...$`, `$$...$$`) and existing HTML tags.
+     - Cleaned all raw `**Problem:**`, `**Find:**`, and `**Exercise**` instances in `data/questions.ra1.js` to explicit `<b>...</b>` tags.
+   - **Project Relocation to `real-analysis/`**:
+     - Migrated the entire codebase from `SSC-V4/` to `real-analysis/` at the root of `SSC-FILES` via Git, preserving 100% of revision history with zero data loss.
+     - Created filesystem symlink `SSC-V4 -> real-analysis` for complete backward compatibility with all active tooling and references.
+     - Updated `deploy.sh` to target `real-analysis/` with fallback support.
+     - Deployed live to Firebase Hosting: `https://ssc-data-science-qm.web.app/math/real-analysis`.

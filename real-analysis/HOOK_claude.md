@@ -492,3 +492,27 @@ Keep each level a complete, usable slice.
 20. **Sign-in is required** (`view.login.js`), with a separate sign-in store per build.
 21. **`Store.flushNow()`** — the debounced write cost a sign-in that was followed
    immediately by `location.reload()`.
+
+### Levels 3 & 4 Architecture, Unfolding Note UX, and Robustness
+
+22. **Levels 3 & 4 Mastery Engine (`core.progress.js`)**:
+   - Derived levels: Level 1 (read/understood), Level 2 (proof worked), Level 3 (section written exercises worked, `'w:<id>'`), and Level 4 (course past-paper set completed, `'p:<id>'`).
+   - Group and section progress dynamically reflects mastery rungs; full multi-device sync via `core.sync.js`.
+23. **Single-Page In-Place Note Unfolding (`comp.note.js`)**:
+   - The note is an unfolding accordion inside the Study tree; opening a concept expands its theory, proof, cards, and exercises directly in place without full page reloads.
+24. **Collapsible Section Exercises Dropdown (`.exp-exercises`)**:
+   - All written exercises for a section are enclosed in an outer collapsible container.
+   - **Level 2 Auto-Disclosure**: At Level 1, exercises remain closed by default so learners focus on concepts and proofs. Once Level 2 is achieved (proof worked through), the exercises dropdown auto-opens. Self-check questions and proof cards auto-expand upon opening the note.
+25. **Tree Repaint & Scroll Stability**:
+   - Fixed accordion reload glitch by preserving `.open` state on active details elements across tree repaints.
+   - Synchronous `minHeight` locking prevents layout shift and jumpy scrolling.
+   - Added smooth auto-scroll to the note header on open.
+   - Active note title displayed as subtitle in the top toolbar.
+26. **Mobile Layout Optimization**:
+   - Fixed tag line overflow and title squishing on mobile screens (`white-space: nowrap; flex: 0 0 auto;`).
+   - Standardized extension module naming to `"Extension · <Title>"`.
+27. **Prose Markdown Engine (`core.dom.js`)**:
+   - `formatMarkdown` in `DOM.el` (`html: v`) auto-converts markdown bold (`**text**`) and italics (`*text*`) into `<b>` and `<i>` while shielding math spans (`$...$`, `$$...$$`).
+28. **Project Relocation to `real-analysis/`**:
+   - Codebase lives in `real-analysis/` at the root of `SSC-FILES` (with symlink `SSC-V4 -> real-analysis` for backward compatibility).
+
