@@ -88,6 +88,33 @@ const SYLLABI = [
         why: 'Wave reflection, transmission coefficients, and tunneling through classical turning points.'
       }
     ]
+  },
+  {
+    id: 'qm_ext', title: 'Advanced Quantum Mechanics (Supplementary)', code: 'BOOK EXTENSIONS', sem: '—',
+    blurb: 'Complete chapters from Griffiths 3e & Zettili 2e outside the university examination syllabus — identical particles, symmetries, time-dependent perturbation theory & Fermi\'s Golden Rule, quantum foundations & Bell\'s theorem, and relativistic quantum mechanics.',
+    ext: true,
+    modules: [
+      {
+        id: 'qm_ext.m1', n: 'Ext 1', title: 'Identical Particles & Permutation Symmetry', ext: true,
+        secs: ['X1.1', 'X1.2']
+      },
+      {
+        id: 'qm_ext.m2', n: 'Ext 2', title: 'Symmetries & Conservation Laws', ext: true,
+        secs: ['X2.1', 'X2.2']
+      },
+      {
+        id: 'qm_ext.m3', n: 'Ext 3', title: 'Time-Dependent Perturbation Theory & Dynamics', ext: true,
+        secs: ['X3.1', 'X3.2']
+      },
+      {
+        id: 'qm_ext.m4', n: 'Ext 4', title: 'Quantum Foundations & Information', ext: true,
+        secs: ['X4.1', 'X4.2']
+      },
+      {
+        id: 'qm_ext.m5', n: 'Ext 5', title: 'Relativistic Quantum Mechanics', ext: true,
+        secs: ['X5.1', 'X5.2']
+      }
+    ]
   }
 ];
 
@@ -121,15 +148,15 @@ const SECTITLE = {
   '4.4': 'The 3D Harmonic Oscillator',
 
   '5.1': 'Schrödinger Equation in Spherical Coordinates',
-  '5.2': 'The Radial Equation & Spherical Harmonics',
-  '5.3': 'Infinite Spherical Well',
+  '5.2': 'The Angular Equation & Spherical Harmonics',
+  '5.3': 'The Radial Equation & Infinite Spherical Well',
   '5.4': 'The Hydrogen Atom',
 
-  '6.1': 'Orbital Angular Momentum',
-  '6.2': 'Matrix Representation of Angular Momentum',
-  '6.3': 'Spin 1/2 & Pauli Matrices',
-  '6.4': 'Addition of Angular Momenta',
-  '6.5': 'Clebsch–Gordan Coefficients',
+  '6.1': 'Orbital Angular Momentum & General Formalism',
+  '6.2': 'Matrix & Geometrical Representation of Angular Momentum',
+  '6.3': 'Eigenfunctions of Angular Momentum ($L_z$ & $L^2$)',
+  '6.4': 'Spin 1/2 & Pauli Matrices',
+  '6.5': 'Addition of Angular Momenta & Clebsch–Gordan Coefficients',
 
   '7.1': 'Time-Independent Perturbation Theory',
   '7.2': 'Degenerate Perturbation Theory',
@@ -146,8 +173,31 @@ const SECTITLE = {
   'E3': 'Operators, Commutators & Expectation Values',
   'E4': 'Schrödinger Equation in 1D, 2D, 3D Boxes',
   'E5': '1D Quantum Harmonic Oscillator',
-  'E6': 'Step Potential, Barrier & Quantum Tunneling'
+  'E6': 'Step Potential, Barrier & Quantum Tunneling',
+
+  'X1.1': 'Identical Particles & Permutation Symmetry',
+  'X1.2': 'Two-Electron Systems, Exchange Force & Helium',
+  'X2.1': 'Continuous Symmetries & Noether\'s Theorem',
+  'X2.2': 'Discrete Symmetries: Parity & Time Reversal',
+  'X3.1': 'Time-Dependent Perturbation Theory & Rabi Oscillations',
+  'X3.2': 'Fermi\'s Golden Rule & Adiabatic Approximation',
+  'X4.1': 'The EPR Paradox & Bell\'s Theorem',
+  'X4.2': 'Quantum Entanglement & The Density Matrix',
+  'X5.1': 'The Klein-Gordon Equation for Spin-0 Bosons',
+  'X5.2': 'The Dirac Equation for Spin-1/2 Fermions'
 };
 
-/* Sections outside the core exam syllabus */
-const EXT_SECS = {};
+/* Sections outside the core exam syllabus (supplementary topics).
+   They are loaded and available for study, but do not count towards the exam progress meter. */
+const EXT_SECS = {
+  'X1.1': true,
+  'X1.2': true,
+  'X2.1': true,
+  'X2.2': true,
+  'X3.1': true,
+  'X3.2': true,
+  'X4.1': true,
+  'X4.2': true,
+  'X5.1': true,
+  'X5.2': true
+};

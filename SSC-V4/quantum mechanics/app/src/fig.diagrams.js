@@ -49,7 +49,29 @@ const DIAGRAM_MAP = {
   'c.4.1.3': ['c.4.1.3_sho_wavefunctions_probabilities'],
   'c.4.2.1': ['c.4.2.1_separation_of_variables_3d'],
   'c.4.3.1': ['c.4.3.1_3d_cubic_box_degeneracy'],
-  'c.4.4.1': ['c.4.4.1_3d_isotropic_oscillator_degeneracy']
+  'c.4.4.1': ['c.4.4.1_3d_isotropic_oscillator_degeneracy'],
+  'c.5.1.1': ['c.5.1.1_spherical_coordinates_system'],
+  'c.5.2.1': ['c.5.2.1_spherical_harmonics_shapes'],
+  'c.5.3.1': ['c.5.3.1_effective_potential_centrifugal_barrier'],
+  'c.5.3.3': ['c.5.3.3_spherical_bessel_functions'],
+  'c.5.4.1': ['c.5.4.1_hydrogen_energy_levels_transitions'],
+  'c.5.4.3': ['c.5.4.3_hydrogen_radial_probability_densities'],
+  'c.6.1.1': ['c.6.1.1_orbital_angular_momentum_commutators'],
+  'c.6.2.1': ['c.6.2.1_angular_momentum_vector_cones'],
+  'c.6.3.1': ['c.6.3.1_angular_momentum_ladder_spectrum'],
+  'c.6.4.1': ['c.6.4.1_stern_gerlach_spin_splitting'],
+  'c.6.4.3': ['c.6.4.3_bloch_sphere_spin_half'],
+  'c.6.5.1': ['c.6.5.1_addition_of_angular_momenta_cg'],
+  'c.7.1.1': ['c.7.1.1_perturbation_level_repulsion'],
+  'c.7.2.1': ['c.7.2.1_degenerate_perturbation_splitting'],
+  'c.7.2.3': ['c.7.2.3_zeeman_splitting_regimes'],
+  'c.7.3.1': ['c.7.3.1_variational_principle_bound'],
+  'c.7.4.1': ['c.7.4.1_wkb_turning_points_connection'],
+  'c.7.4.3': ['c.7.4.3_wkb_quantization_condition'],
+  'c.8.1.1': ['c.8.1.1_classical_scattering_cross_section'],
+  'c.8.2.1': ['c.8.2.1_quantum_scattering_wavefunction'],
+  'c.8.3.1': ['c.8.3.1_partial_wave_phase_shifts'],
+  'c.8.4.1': ['c.8.4.1_born_approximation_fourier']
 };
 
 /* The lecture sheets: whole-topic posters rather than one-result figures.

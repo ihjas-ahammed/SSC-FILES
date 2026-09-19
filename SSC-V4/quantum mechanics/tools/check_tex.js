@@ -73,10 +73,10 @@ const KNOWN = new Set(('alpha beta gamma delta epsilon varepsilon zeta eta theta
   + 'colon mid parallel perp angle triangle square blacksquare qed '
   + 'therefore because ldotp cdotp nonumber label ref notag '
   + 'color textcolor mathopen mathclose mathrel mathbin mathop smallsetminus '
-  + 'Re Im deg det dim gcd hom ker arg bmod pmod '
+  + 'Re Im deg det dim gcd hom ker arg bmod pmod Tr '
   + 'aleph not Longrightarrow Longleftarrow Longleftrightarrow longmapsto '
   + 'overbrace underbrace substack smash raise lower rule '
-  + 'hbar boxed dagger doteq otimes '
+  + 'hbar boxed dagger doteq otimes oplus checkmark Box '
   + 'lim_ liminf_ limsup_ ').trim().split(/\s+/));
 
 const errors = [];

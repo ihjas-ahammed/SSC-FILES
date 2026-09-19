@@ -59,6 +59,21 @@ const DATA_SOURCES = {
     '../data/qm1-m4.js',
     '../data/questions.qm1.m4.js',
     '../data/objective.qm1.m4.js',
-    '../data/pyq.qm1.js'
+    '../data/pyq.qm1.js',
+    '../data/qm2-m1.js',
+    '../data/questions.qm2.m1.js',
+    '../data/objective.qm2.m1.js',
+    '../data/qm2-m2.js',
+    '../data/questions.qm2.m2.js',
+    '../data/objective.qm2.m2.js',
+    '../data/qm2-m3.js',
+    '../data/questions.qm2.m3.js',
+    '../data/objective.qm2.m3.js',
+    '../data/qm2-m4.js',
+    '../data/questions.qm2.m4.js',
+    '../data/objective.qm2.m4.js',
+    '../data/pyq.qm2.js',
+    '../data/qme.js',
+    '../data/qm-ext.js'
   ]
 };
