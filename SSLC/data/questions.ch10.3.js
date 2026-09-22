@@ -401,5 +401,145 @@ WRITTEN.push(
     ],
     answer_en: '(a) 90; (b) 1/15; (c) 14/15',
     answer_ml: '(a) 90; (b) 1/15; (c) 14/15'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.3.2 Geometric Probability — Regular Hexagon & Equilateral Triangle
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.3.5',
+    concept: 'm10.3.2.geometric-probability',
+    sec: '10.3.2',
+    type: 'exercise',
+    marks: 4,
+    time: 240,
+    prompt_en: 'A regular hexagon is drawn, and an equilateral triangle is formed by joining alternate vertices of the hexagon. A dot is put inside the hexagon at random.\\n(a) Into how many identical equilateral triangles can a regular hexagon be divided from its centre?\\n(b) How many of these small triangles make up the large triangle formed by joining alternate vertices?\\n(c) What is the probability that the dot falls inside the triangle?\\n(d) If a circle is inscribed in a square of side $2r$, what is the probability that a random dot falls inside the circle?',
+    prompt_ml: 'ഒരു സമഷഡ്ഭുജത്തിന്റെ ഒന്നിടവിട്ട മൂലകൾ യോജിപ്പിച്ച് ഒരു സമഭുജ ത്രികോണം വരച്ചിരിക്കുന്നു. ഷഡ്ഭുജത്തിനുള്ളിൽ കണ്ണടച്ച് ഒരു കുത്തിടുന്നു.\\n(a) കേന്ദ്രത്തിൽ നിന്ന് വരച്ച് ഒരു സമഷഡ്ഭുജത്തെ എത്ര തുല്യ സമഭുജ ത്രികോണങ്ങളായി വിഭജിക്കാം?\\n(b) ഒന്നിടവിട്ട മൂലകൾ ചേർത്ത സമഭുജ ത്രികോണത്തിന്റെ പരപ്പളവ് ഇതിൽ എത്ര ചെറിയ ത്രികോണങ്ങൾക്ക് തുല്യമാണ്?\\n(c) കുത്ത് ത്രികോണത്തിനുള്ളിലാകാനുള്ള സാധ്യത എത്ര?\\n(d) $2r$ വശമുള്ള സമചതുരത്തിൽ അന്തർവൃത്തം വരച്ചാൽ കുത്ത് വൃത്തത്തിനുള്ളിലാകാനുള്ള സാധ്യത എത്ര?',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>Connecting the centre of a regular hexagon to all 6 vertices divides it into 6 congruent equilateral triangles of equal area $T$. So, $\\text{Area of hexagon} = 6T$.</li>
+  <li>The triangle formed by joining alternate vertices has area equal to exactly half the hexagon, which is $3T$ (the three corner triangles outside it each have area $T$).</li>
+  <li>Probability that the dot lands inside the triangle $= \\frac{\\text{Area of triangle}}{\\text{Area of hexagon}} = \\frac{3T}{6T} = \\frac{1}{2} = 50\\%$.</li>
+  <li>For the inscribed circle in a square: $\\text{Area of circle} = \\pi r^2$, $\\text{Area of square} = (2r)^2 = 4r^2$. Probability $= \\frac{\\pi r^2}{4r^2} = \\frac{\\pi}{4} \\approx 78.5\\%$.</li>
+</ol>
+<p><b>Final Answer:</b> (a) 6 triangles; (b) 3 triangles; (c) 1/2; (d) π/4</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Hexagon division count: 1 mark</li>
+  <li>Triangle area ratio identification: 1 mark</li>
+  <li>Probability calculation: 1 mark</li>
+  <li>Circle-in-square probability: 1 mark</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>സമഷഡ്ഭുജത്തിന്റെ കേന്ദ്രത്തിൽ നിന്ന് മൂലകളിലേക്ക് വരച്ചാൽ തുല്യ പരപ്പളവുള്ള ($T$) 6 സമഭുജ ത്രികോണങ്ങൾ ലഭിക്കുന്നു. ആകെ പരപ്പളവ് $= 6T$.</li>
+  <li>ഒന്നിടവിട്ട മൂലകൾ യോജിപ്പിച്ചുണ്ടാക്കുന്ന ത്രികോണത്തിന്റെ പരപ്പളവ് ഈ 6 തുല്യ ത്രികോണങ്ങളിൽ 3 എണ്ണത്തിന് തുല്യമാണ് ($3T$).</li>
+  <li>കുത്ത് ത്രികോണത്തിനുള്ളിലാകാനുള്ള സാധ്യത $= \\frac{3T}{6T} = \\frac{1}{2} = 50\\%$.</li>
+  <li>സമചതുരത്തിലെ അന്തർവൃത്തത്തിന്റെ സാധ്യത $= \\frac{\\pi r^2}{(2r)^2} = \\frac{\\pi}{4} \\approx 78.5\\%$.</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) 6 ത്രികോണങ്ങൾ; (b) 3 ത്രികോണങ്ങൾ; (c) 1/2; (d) π/4</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>ഷഡ്ഭുജ വിഭജന എണ്ണം: 1 മാർക്ക്</li>
+  <li>ത്രികോണ പരപ്പളവിന്റെ അനുപാതം: 1 മാർക്ക്</li>
+  <li>ത്രികോണ സാധ്യത കണക്കാക്കൽ: 1 മാർക്ക്</li>
+  <li>വൃത്ത സാധ്യത കാണൽ: 1 മാർക്ക്</li>
+</ul>`,
+    steps_en: [
+      'Connecting the centre of a regular hexagon to all 6 vertices divides it into 6 congruent equilateral triangles of equal area $T$. Area of hexagon $= 6T$.',
+      'The triangle formed by joining alternate vertices has area equal to $3T$.',
+      'Probability of landing in the triangle $= \\frac{3T}{6T} = \\frac{1}{2} = 50\\%$.',
+      'For inscribed circle: $\\text{Area of circle} = \\pi r^2$, $\\text{Area of square} = 4r^2$. Probability $= \\frac{\\pi}{4}$.'
+    ],
+    steps_ml: [
+      'സമഷഡ്ഭുജത്തിന്റെ കേന്ദ്രത്തിൽ നിന്ന് 6 തുല്യ സമഭുജ ത്രികോണങ്ങൾ ലഭിക്കുന്നു. ആകെ പരപ്പളവ് $= 6T$.',
+      'ഒന്നിടവിട്ട മൂലകൾ ചേർത്ത ത്രികോണത്തിന്റെ പരപ്പളവ് $= 3T$.',
+      'ത്രികോണത്തിനുള്ളിലാകാനുള്ള സാധ്യത $= \\frac{3T}{6T} = \\frac{1}{2} = 50\\%$.',
+      'സമചതുരത്തിലെ അന്തർവൃത്ത സാധ്യത $= \\frac{\\pi r^2}{4r^2} = \\frac{\\pi}{4}$.'
+    ],
+    rubric_en: [
+      'Hexagon division count: 1 mark',
+      'Triangle area ratio identification: 1 mark',
+      'Probability calculation: 1 mark',
+      'Circle-in-square probability: 1 mark'
+    ],
+    rubric_ml: [
+      'ഷഡ്ഭുജ വിഭജന എണ്ണം: 1 മാർക്ക്',
+      'ത്രികോണ പരപ്പളവിന്റെ അനുപാതം: 1 മാർക്ക്',
+      'ത്രികോണ സാധ്യത കണക്കാക്കൽ: 1 മാർക്ക്',
+      'വൃത്ത സാധ്യത കാണൽ: 1 മാർക്ക്'
+    ],
+    answer_en: '(a) 6 triangles; (b) 3 triangles; (c) 1/2; (d) π/4',
+    answer_ml: '(a) 6 ത്രികോണങ്ങൾ; (b) 3 ത്രികോണങ്ങൾ; (c) 1/2; (d) π/4'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.3.4 Classroom Selection & Compound Events
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.3.6',
+    concept: 'm10.3.4.complementary-events-and-applications',
+    sec: '10.3.4',
+    type: 'exercise',
+    marks: 4,
+    time: 240,
+    prompt_en: 'There are 30 boys and 20 girls in Class 10A, and 15 boys and 25 girls in Class 10B. One student is chosen at random from each class.\\n(a) What is the total number of possible pairs of students?\\n(b) What is the probability that both chosen students are girls?\\n(c) What is the probability that both chosen students are boys?\\n(d) What is the probability that at least one of them is a boy?',
+    prompt_ml: 'ക്ലാസ് 10A-യിൽ 30 ആൺകുട്ടികളും 20 പെൺകുട്ടികളും, ക്ലാസ് 10B-യിൽ 15 ആൺകുട്ടികളും 25 പെൺകുട്ടികളുമുണ്ട്. ഓരോ ക്ലാസിൽ നിന്നും ഓരോ കുട്ടിയെ തിരഞ്ഞെടുക്കുന്നു.\\n(a) സാധ്യമായ ആകെ ജോഡികൾ എത്ര?\\n(b) രണ്ടും പെൺകുട്ടികളാകാനുള്ള സാധ്യത എത്ര?\\n(c) രണ്ടും ആൺകുട്ടികളാകാനുള്ള സാധ്യത എത്ര?\\n(d) ചുരുങ്ങിയത് ഒരാളെങ്കിലും ആൺകുട്ടിയാകാനുള്ള സാധ്യത എത്ര?',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>Total students in Class 10A $= 30 + 20 = 50$. Total students in Class 10B $= 15 + 25 = 40$. Total pairs $= 50 \\times 40 = 2000$.</li>
+  <li>Both girls pairs $= 20 \\times 25 = 500$. Probability $P(\\text{both girls}) = \\frac{500}{2000} = \\frac{1}{4}$.</li>
+  <li>Both boys pairs $= 30 \\times 15 = 450$. Probability $P(\\text{both boys}) = \\frac{450}{2000} = \\frac{9}{40}$.</li>
+  <li>Probability of at least one boy $= 1 - P(\\text{both girls}) = 1 - \\frac{1}{4} = \\frac{3}{4}$.</li>
+</ol>
+<p><b>Final Answer:</b> (a) 2000 pairs; (b) 1/4; (c) 9/40; (d) 3/4</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Total pairs calculation: 1 mark</li>
+  <li>Both girls probability: 1 mark</li>
+  <li>Both boys probability: 1 mark</li>
+  <li>At least one boy using complement rule: 1 mark</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>ക്ലാസ് 10A-യിലെ ആകെ കുട്ടികൾ $= 30 + 20 = 50$. ക്ലാസ് 10B-യിലെ ആകെ കുട്ടികൾ $= 15 + 25 = 40$. ആകെ ജോഡികൾ $= 50 \\times 40 = 2000$.</li>
+  <li>രണ്ടും പെൺകുട്ടികളാകുന്ന ജോഡികൾ $= 20 \\times 25 = 500$. സാധ്യത $P(\\text{രണ്ടും പെൺകുട്ടികൾ}) = \\frac{500}{2000} = \\frac{1}{4}$.</li>
+  <li>രണ്ടും ആൺകുട്ടികളാകുന്ന ജോഡികൾ $= 30 \\times 15 = 450$. സാധ്യത $P(\\text{രണ്ടും ആൺകുട്ടികൾ}) = \\frac{450}{2000} = \\frac{9}{40}$.</li>
+  <li>ചുരുങ്ങിയത് ഒരാൺകുട്ടിയാകാനുള്ള സാധ്യത $= 1 - P(\\text{രണ്ടും പെൺകുട്ടികൾ}) = 1 - \\frac{1}{4} = \\frac{3}{4}$.</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) 2000 ജോഡികൾ; (b) 1/4; (c) 9/40; (d) 3/4</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>ആകെ ജോഡികൾ കാണൽ: 1 മാർക്ക്</li>
+  <li>രണ്ടും പെൺകുട്ടികളുടെ സാധ്യത: 1 മാർക്ക്</li>
+  <li>രണ്ടും ആൺകുട്ടികളുടെ സാധ്യത: 1 മാർക്ക്</li>
+  <li>പൂരക നിയമത്തിലൂടെ ചുരുങ്ങിയത് ഒരാൺകുട്ടിയുടെ സാധ്യത: 1 മാർക്ക്</li>
+</ul>`,
+    steps_en: [
+      'Total pairs $= 50 \\times 40 = 2000$.',
+      'Both girls pairs $= 20 \\times 25 = 500$. Probability $= \\frac{500}{2000} = \\frac{1}{4}$.',
+      'Both boys pairs $= 30 \\times 15 = 450$. Probability $= \\frac{450}{2000} = \\frac{9}{40}$.',
+      'At least one boy probability $= 1 - P(\\text{both girls}) = 1 - \\frac{1}{4} = \\frac{3}{4}$.'
+    ],
+    steps_ml: [
+      'ആകെ ജോഡികൾ $= 50 \\times 40 = 2000$.',
+      'രണ്ടും പെൺകുട്ടികൾ $= 20 \\times 25 = 500$. സാധ്യത $= \\frac{500}{2000} = \\frac{1}{4}$.',
+      'രണ്ടും ആൺകുട്ടികൾ $= 30 \\times 15 = 450$. സാധ്യത $= \\frac{450}{2000} = \\frac{9}{40}$.',
+      'ചുരുങ്ങിയത് ഒരാൺകുട്ടി $= 1 - \\frac{1}{4} = \\frac{3}{4}$.'
+    ],
+    rubric_en: [
+      'Total pairs calculation: 1 mark',
+      'Both girls probability: 1 mark',
+      'Both boys probability: 1 mark',
+      'At least one boy using complement rule: 1 mark'
+    ],
+    rubric_ml: [
+      'ആകെ ജോഡികൾ കാണൽ: 1 മാർക്ക്',
+      'രണ്ടും പെൺകുട്ടികളുടെ സാധ്യത: 1 മാർക്ക്',
+      'രണ്ടും ആൺകുട്ടികളുടെ സാധ്യത: 1 മാർക്ക്',
+      'പൂരക നിയമത്തിലൂടെ ചുരുങ്ങിയത് ഒരാൺകുട്ടിയുടെ സാധ്യത: 1 മാർക്ക്'
+    ],
+    answer_en: '(a) 2000 pairs; (b) 1/4; (c) 9/40; (d) 3/4',
+    answer_ml: '(a) 2000 ജോഡികൾ; (b) 1/4; (c) 9/40; (d) 3/4'
   }
 );

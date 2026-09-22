@@ -5651,16 +5651,27 @@ const FIGMAP = {
   'm9.13.4.assumed-mean-method': ['fig.stat-mean-balance'],
 
   // Class 10 Chapter 1: Arithmetic Sequences (സമാന്തരശ്രേണികൾ)
+  'm10.1.1.number-patterns-and-sequences': ['fig.arithmetic-sequence'],
   'm10.1.1.number-sequences-and-common-difference': ['fig.arithmetic-sequence'],
+  'm10.1.2.arithmetic-sequence-definition': ['fig.arithmetic-sequence'],
   'm10.1.2.algebraic-form-of-arithmetic-sequence': ['fig.arithmetic-sequence'],
+  'm10.1.3.algebraic-form-and-remainders': ['fig.arithmetic-sequence'],
   'm10.1.3.position-difference-and-term-relations': ['fig.arithmetic-sequence'],
+  'm10.1.4.position-difference-and-term-difference': ['fig.arithmetic-sequence'],
   'm10.1.4.sum-of-terms-of-arithmetic-sequence': ['fig.arithmetic-sequence'],
+  'm10.1.5.term-relations-and-averages': ['fig.arithmetic-sequence'],
+  'm10.1.6.sum-of-arithmetic-sequence': ['fig.arithmetic-sequence'],
 
   // Class 10 Chapter 2: Circles (വൃത്തങ്ങൾ)
+  'm10.2.1.angle-in-semicircle': ['fig.circle-theorems', 'fig.pythagoras'],
   'm10.2.1.inscribed-angle-and-central-angle': ['fig.circle-theorems', 'fig.circle-sector'],
+  'm10.2.2.inscribed-angle-and-central-angle': ['fig.circle-theorems', 'fig.circle-sector'],
   'm10.2.2.angles-in-same-segment': ['fig.circle-theorems'],
+  'm10.2.3.angles-in-same-segment': ['fig.circle-theorems'],
   'm10.2.3.cyclic-quadrilaterals': ['fig.circle-theorems'],
+  'm10.2.4.cyclic-quadrilaterals': ['fig.circle-theorems'],
   'm10.2.4.chords-and-intersecting-segments': ['fig.circle-theorems', 'fig.pythagoras'],
+  'm10.2.5.intersecting-chords-and-tangents': ['fig.circle-theorems', 'fig.pythagoras'],
 
   // Class 10 Chapter 3: Mathematics of Chance (സാധ്യതകളുടെ ഗണിതം)
   'm10.3.1.probability-as-measure-of-chance': ['fig.fractions', 'fig.ratio-tape'],

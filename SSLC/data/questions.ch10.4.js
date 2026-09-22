@@ -405,5 +405,147 @@ WRITTEN.push(
     ],
     answer_en: '(a) (x + 7) cm; (b) x² + 7x - 60 = 0; (c) 5 cm and 12 cm',
     answer_ml: '(a) (x + 7) cm; (b) x² + 7x - 60 = 0; (c) 5 cm, 12 cm'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.4.1 Consecutive Number Products & Added Squares
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.4.5',
+    concept: 'm10.4.1.square-problems-and-direct-roots',
+    sec: '10.4.1',
+    type: 'exercise',
+    marks: 4,
+    time: 240,
+    prompt_en: '1 added to the product of two consecutive even numbers gave 289.\\n(a) If the smaller even number is $x$, express their product plus 1 as a perfect square in terms of $x$.\\n(b) Find the two consecutive even numbers.\\n(c) 9 added to the product of two consecutive multiples of 6 gave 729. Find the two multiples of 6.',
+    prompt_ml: 'തുടർച്ചയായ രണ്ട് ഇരട്ടസംഖ്യകളുടെ ഗുണനഫലത്തോട് 1 കൂട്ടിയപ്പോൾ 289 കിട്ടി.\\n(a) ചെറിയ ഇരട്ടസംഖ്യ $x$ ആയാൽ, ഗുണനഫലത്തോട് 1 കൂട്ടിയതിനെ $x$-ലുള്ള ഒരു പൂർണ്ണവർഗ്ഗമായി എഴുതുക.\\n(b) ഈ രണ്ട് ഇരട്ടസംഖ്യകൾ ഏതെല്ലാമാണെന്ന് കണ്ടെത്തുക.\\n(c) 6-ന്റെ തുടർച്ചയായ രണ്ട് ഗുണിതങ്ങളുടെ ഗുണനഫലത്തോട് 9 കൂട്ടിയപ്പോൾ 729 കിട്ടി. സംഖ്യകൾ ഏതെല്ലാം?',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>Let the two consecutive even numbers be $x$ and $x + 2$. Product $+ 1 = x(x + 2) + 1 = x^2 + 2x + 1 = (x + 1)^2$.</li>
+  <li>Given $(x + 1)^2 = 289$. Taking square root: $x + 1 = \\sqrt{289} = 17 \\implies x = 16$. So the two consecutive even numbers are 16 and 18 (or if negative integers: $x + 1 = -17 \\implies x = -18$, so $-18$ and $-16$).</li>
+  <li>Let two consecutive multiples of 6 be $6n$ and $6n + 6 = 6(n + 1)$. Their product is $36n(n + 1) = 36n^2 + 36n$. Adding 9 gives $36n^2 + 36n + 9 = (6n + 3)^2$.</li>
+  <li>$(6n + 3)^2 = 729 \\implies 6n + 3 = \\sqrt{729} = 27 \\implies 6n = 24$. The multiples of 6 are 24 and $24 + 6 = 30$.</li>
+</ol>
+<p><b>Final Answer:</b> (a) (x + 1)²; (b) 16 and 18 (or -18 and -16); (c) 24 and 30</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Algebraic identity (x + 1)²: 1 mark</li>
+  <li>Solving for consecutive even numbers: 1.5 marks</li>
+  <li>Solving for consecutive multiples of 6: 1.5 marks</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>തുടർച്ചയായ രണ്ട് ഇരട്ടസംഖ്യകൾ $x, x + 2$ ആയാൽ: ഗുണനഫലം $+ 1 = x(x + 2) + 1 = x^2 + 2x + 1 = (x + 1)^2$.</li>
+  <li>$(x + 1)^2 = 289 \\implies x + 1 = 17 \\implies x = 16$. അതിനാൽ സംഖ്യകൾ 16 ഉം 18 ഉം (അല്ലെങ്കിൽ $-18$-ഉം $-16$-ഉം).</li>
+  <li>6-ന്റെ ഗുണിതങ്ങൾ $6n, 6n + 6$ ആയാൽ: ഗുണനഫലം $+ 9 = 36n^2 + 36n + 9 = (6n + 3)^2$.</li>
+  <li>$(6n + 3)^2 = 729 \\implies 6n + 3 = 27 \\implies 6n = 24$. അതിനാൽ സംഖ്യകൾ 24 ഉം 30 ഉം.</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) (x + 1)²; (b) 16 ഉം 18 ഉം; (c) 24 ഉം 30 ഉം</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>(x + 1)² രൂപീകരണത്തിന്: 1 മാർക്ക്</li>
+  <li>ഇരട്ടസംഖ്യകൾ കണ്ടെത്തൽ: 1.5 മാർക്ക്</li>
+  <li>6-ന്റെ ഗുണിതങ്ങൾ കണ്ടെത്തൽ: 1.5 മാർക്ക്</li>
+</ul>`,
+    steps_en: [
+      'Two consecutive even numbers: $x$ and $x + 2$. Product $+ 1 = x(x + 2) + 1 = (x + 1)^2$.',
+      '$(x + 1)^2 = 289 \\implies x + 1 = 17 \\implies x = 16$. Numbers are 16 and 18.',
+      'Two consecutive multiples of 6: $6n$ and $6n + 6$. Product $+ 9 = (6n + 3)^2$.',
+      '$(6n + 3)^2 = 729 \\implies 6n + 3 = 27 \\implies 6n = 24$. Numbers are 24 and 30.'
+    ],
+    steps_ml: [
+      'തുടർച്ചയായ ഇരട്ടസംഖ്യകൾ: $x, x + 2$. ഗുണനഫലം $+ 1 = (x + 1)^2$.',
+      '$(x + 1)^2 = 289 \\implies x + 1 = 17 \\implies x = 16$. സംഖ്യകൾ 16 ഉം 18 ഉം.',
+      '6-ന്റെ ഗുണിതങ്ങൾ: $6n, 6n + 6$. ഗുണനഫലം $+ 9 = (6n + 3)^2$.',
+      '$(6n + 3)^2 = 729 \\implies 6n + 3 = 27 \\implies 6n = 24$. സംഖ്യകൾ 24 ഉം 30 ഉം.'
+    ],
+    rubric_en: [
+      'Algebraic identity (x + 1)²: 1 mark',
+      'Solving for consecutive even numbers: 1.5 marks',
+      'Solving for consecutive multiples of 6: 1.5 marks'
+    ],
+    rubric_ml: [
+      '(x + 1)² രൂപീകരണത്തിന്: 1 മാർക്ക്',
+      'ഇരട്ടസംഖ്യകൾ കണ്ടെത്തൽ: 1.5 മാർക്ക്',
+      '6-ന്റെ ഗുണിതങ്ങൾ കണ്ടെത്തൽ: 1.5 മാർക്ക്'
+    ],
+    answer_en: '(a) (x + 1)²; (b) 16 and 18 (or -18 and -16); (c) 24 and 30',
+    answer_ml: '(a) (x + 1)²; (b) 16 ഉം 18 ഉം; (c) 24 ഉം 30 ഉം'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.4.4 Arithmetic Sequence Sums via Quadratic Equations
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.4.6',
+    concept: 'm10.4.4.applications-of-quadratic-equations',
+    sec: '10.4.4',
+    type: 'exercise',
+    marks: 5,
+    time: 300,
+    prompt_en: 'Consider the arithmetic sequence $55, 45, 35, \\dots$\\n(a) Write the first term $a$ and common difference $d$ of this sequence.\\n(b) Express the sum of the first $n$ terms, $S_n$, as a second degree polynomial in $n$.\\n(c) How many terms of this sequence, starting from the first, must be added to get a sum of 175?\\n(d) Explain why there are two different values of $n$ that give the sum 175.',
+    prompt_ml: '$55, 45, 35, \\dots$ എന്ന സമാന്തരശ്രേണി പരിഗണിക്കുക.\\n(a) ഈ ശ്രേണിയുടെ ആദ്യപദം $a$-യും പൊതുവ്യത്യാസം $d$-യും എഴുതുക.\\n(b) ആദ്യ $n$ പദങ്ങളുടെ തുക $S_n$-നെ $n$-ലുള്ള ഒരു രണ്ടാംകൃതി ബഹുപദമായി എഴുതുക.\\n(c) ആദ്യപദം മുതൽ എത്ര പദങ്ങൾ കൂട്ടിയാലാണ് തുക 175 ആകുന്നത്?\\n(d) തുക 175 ആകുന്നതിന് $n$-ന് രണ്ട് വ്യത്യസ്ത വിലകൾ ലഭിക്കാൻ കാരണം വ്യക്തമാക്കുക.',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>First term $a = 55$, common difference $d = 45 - 55 = -10$.</li>
+  <li>Sum of $n$ terms: $S_n = \\frac{n}{2}[2a + (n-1)d] = \\frac{n}{2}[2(55) + (n-1)(-10)] = \\frac{n}{2}[110 - 10n + 10] = \\frac{n}{2}[120 - 10n] = n(60 - 5n) = 60n - 5n^2$.</li>
+  <li>Set $S_n = 175$:
+    $$60n - 5n^2 = 175 \\implies 5n^2 - 60n + 175 = 0$$
+    Dividing by 5:
+    $$n^2 - 12n + 35 = 0 \\implies (n - 5)(n - 7) = 0 \\implies n = 5 \\text{ or } n = 7$$</li>
+  <li><b>Explanation:</b> The 6th term is $x_6 = 55 + 5(-10) = 55 - 50 = 5$. The 7th term is $x_7 = 55 + 6(-10) = 55 - 60 = -5$. The sum of the 6th and 7th terms is $5 + (-5) = 0$. Therefore, adding the 6th and 7th terms to the sum of the first 5 terms does not change the total sum ($175 + 5 + (-5) = 175$).</li>
+</ol>
+<p><b>Final Answer:</b> (a) a = 55, d = -10; (b) Sn = 60n - 5n²; (c) n = 5 or n = 7; (d) x₆ + x₇ = 5 + (-5) = 0</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>First term and common difference: 1 mark</li>
+  <li>Sum expression as quadratic: 1 mark</li>
+  <li>Solving quadratic to find n = 5 and n = 7: 2 marks</li>
+  <li>Mathematical explanation of 6th and 7th terms: 1 mark</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>ആദ്യപദം $a = 55$, പൊതുവ്യത്യാസം $d = 45 - 55 = -10$.</li>
+  <li>ആദ്യ $n$ പദങ്ങളുടെ തുക: $S_n = \\frac{n}{2}[2(55) + (n-1)(-10)] = \\frac{n}{2}[120 - 10n] = 60n - 5n^2$.</li>
+  <li>$S_n = 175$ എന്ന് നൽകിയാൽ:
+    $$60n - 5n^2 = 175 \\implies 5n^2 - 60n + 175 = 0$$
+    5 കൊണ്ട് ഹരിച്ചാൽ:
+    $$n^2 - 12n + 35 = 0 \\implies (n - 5)(n - 7) = 0 \\implies n = 5 \\text{ അല്ലെങ്കിൽ } n = 7$$</li>
+  <li><b>കാരണം:</b> 6-ാം പദം $x_6 = 55 + 5(-10) = 5$. 7-ാം പദം $x_7 = 55 + 6(-10) = -5$. ഇവയുടെ തുക $x_6 + x_7 = 5 + (-5) = 0$ ആണ്. അതിനാൽ 5 പദങ്ങളുടെ തുകയോടൊപ്പം അടുത്ത രണ്ട് പദങ്ങൾ കൂട്ടിയാലും ആകെ തുക മാറുന്നില്ല ($175 + 0 = 175$).</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) a = 55, d = -10; (b) Sn = 60n - 5n²; (c) n = 5 അല്ലെങ്കിൽ n = 7; (d) x₆ + x₇ = 5 + (-5) = 0</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>ആദ്യപദവും പൊതുവ്യത്യാസവും: 1 മാർക്ക്</li>
+  <li>തുകയുടെ രണ്ടാംകൃതി രൂപം: 1 മാർക്ക്</li>
+  <li>സമവാക്യം പരിഹരിച്ച് n = 5, n = 7 കണ്ടെത്തൽ: 2 മാർക്ക്</li>
+  <li>6, 7 പദങ്ങളുടെ തുക പൂജ്യമാണെന്ന വിശദീകരണം: 1 മാർക്ക്</li>
+</ul>`,
+    steps_en: [
+      'First term $a = 55$, common difference $d = -10$.',
+      'Sum formula: $S_n = \\frac{n}{2}[120 - 10n] = 60n - 5n^2$.',
+      '$5n^2 - 60n + 175 = 0 \\implies n^2 - 12n + 35 = 0 \\implies n = 5$ or $n = 7$.',
+      'Explanation: 6th term is 5, 7th term is -5; their sum is $5 + (-5) = 0$.'
+    ],
+    steps_ml: [
+      'ആദ്യപദം $a = 55$, പൊതുവ്യത്യാസം $d = -10$.',
+      'തുകയുടെ സൂത്രവാക്യം: $S_n = 60n - 5n^2$.',
+      '$n^2 - 12n + 35 = 0 \\implies n = 5$ അല്ലെങ്കിൽ $n = 7$.',
+      'വിശദീകരണം: 6-ാം പദം 5, 7-ാം പദം -5; ഇവയുടെ തുക പൂജ്യമാണ്.'
+    ],
+    rubric_en: [
+      'First term and common difference: 1 mark',
+      'Sum expression as quadratic: 1 mark',
+      'Solving quadratic to find n = 5 and n = 7: 2 marks',
+      'Mathematical explanation of 6th and 7th terms: 1 mark'
+    ],
+    rubric_ml: [
+      'ആദ്യപദവും പൊതുവ്യത്യാസവും: 1 മാർക്ക്',
+      'തുകയുടെ രണ്ടാംകൃതി രൂപം: 1 മാർക്ക്',
+      'സമവാക്യം പരിഹരിച്ച് n = 5, n = 7 കണ്ടെത്തൽ: 2 മാർക്ക്',
+      '6, 7 പദങ്ങളുടെ തുക പൂജ്യമാണെന്ന വിശദീകരണം: 1 മാർക്ക്'
+    ],
+    answer_en: '(a) a = 55, d = -10; (b) Sn = 60n - 5n²; (c) n = 5 or n = 7; (d) x₆ + x₇ = 5 + (-5) = 0',
+    answer_ml: '(a) a = 55, d = -10; (b) Sn = 60n - 5n²; (c) n = 5 അല്ലെങ്കിൽ n = 7; (d) x₆ + x₇ = 5 + (-5) = 0'
   }
 );

@@ -1,7 +1,8 @@
 /* ══════════════════════════════════════════════════════════════════════════
    Questions: Class 10 Chapter 6 — Coordinates (സൂചകസംഖ്യകൾ)
-   8 Objective (2 per section) + 4 Written Exercises (1 per section).
+   8 Objective (2 per section) + 6 Written Exercises (authentic SCERT textbook).
    Strictly bilingual: pure English (_en) and pure Malayalam (_ml).
+   Zero mixing. All symbols in Malayalam fields wrapped in $...$.
    ══════════════════════════════════════════════════════════════════════════ */
 
 OBJECTIVE.push(
@@ -16,7 +17,7 @@ OBJECTIVE.push(
     marks: 1,
     time: 25,
     prompt_en: 'In which quadrant does the point $(-4, 7)$ lie?',
-    prompt_ml: '(-4, 7) എന്ന ബിന്ദു ഏത് പാദത്തിലാണ് സ്ഥിതിചെയ്യുന്നത്?',
+    prompt_ml: '$(-4, 7)$ എന്ന ബിന്ദു ഏത് പാദത്തിലാണ് സ്ഥിതിചെയ്യുന്നത്?',
     options_en: [
       { k: 'A', t: 'Quadrant I' },
       { k: 'B', t: 'Quadrant II' },
@@ -60,7 +61,7 @@ OBJECTIVE.push(
     solution_en: 'Any point on the $x$-axis has $y$-coordinate equal to 0, which is $(5, 0)$.',
     solution_ml: '$x$-അക്ഷത്തിലെ ഏതൊരു ബിന്ദുവിന്റെയും $y$-സൂചകസംഖ്യ 0 ആയിരിക്കും, അതിനാൽ $(5, 0)$.',
     tested_en: 'Condition for a point to lie on the x-axis: y = 0.',
-    tested_ml: 'x-അക്ഷത്തിലെ ബിന്ദുവിന്റെ പ്രത്യേകത: y = 0.'
+    tested_ml: '$x$-അക്ഷത്തിലെ ബിന്ദുവിന്റെ പ്രത്യേകത: $y = 0$.'
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -100,25 +101,25 @@ OBJECTIVE.push(
     type: 'MCQ',
     marks: 1,
     time: 30,
-    prompt_en: 'The opposite corners of a rectangle with sides parallel to the axes are $(2, 1)$ and $(7, 5)$. What is the perimeter of this rectangle?',
-    prompt_ml: 'അക്ഷങ്ങൾക്ക് സമാന്തരമായ വശങ്ങളുള്ള ഒരു ചതുരത്തിന്റെ എതിർ ശീർഷങ്ങൾ $(2, 1), (7, 5)$ ആണ്. ഈ ചതുരത്തിന്റെ ചുറ്റളവ് എത്ര?',
+    prompt_en: 'Opposite vertices of a rectangle with sides parallel to the axes are $(2, 1)$ and $(7, 5)$. What is the area of this rectangle?',
+    prompt_ml: 'വശങ്ങൾ അക്ഷങ്ങൾക്ക് സമാന്തരമായ ഒരു ചതുരത്തിന്റെ എതിർ ശീർഷങ്ങൾ $(2, 1), (7, 5)$ എന്നിവയാണ്. ഈ ചതുരത്തിന്റെ പരപ്പളവ് എത്ര?',
     options_en: [
-      { k: 'A', t: '18 units' },
-      { k: 'B', t: '20 units' },
-      { k: 'C', t: '9 units' },
-      { k: 'D', t: '24 units' }
+      { k: 'A', t: '20 sq units' },
+      { k: 'B', t: '18 sq units' },
+      { k: 'C', t: '24 sq units' },
+      { k: 'D', t: '15 sq units' }
     ],
     options_ml: [
-      { k: 'A', t: '18 യൂണിറ്റ്' },
-      { k: 'B', t: '20 യൂണിറ്റ്' },
-      { k: 'C', t: '9 യൂണിറ്റ്' },
-      { k: 'D', t: '24 യൂണിറ്റ്' }
+      { k: 'A', t: '20 ചതുരശ്ര യൂണിറ്റ്' },
+      { k: 'B', t: '18 ചതുരശ്ര യൂണിറ്റ്' },
+      { k: 'C', t: '24 ചതുരശ്ര യൂണിറ്റ്' },
+      { k: 'D', t: '15 ചതുരശ്ര യൂണിറ്റ്' }
     ],
     answer: 'A',
-    solution_en: 'Length $= |7 - 2| = 5$, Width $= |5 - 1| = 4$. Perimeter $= 2(\\text{length} + \\text{width}) = 2(5 + 4) = 2 \\times 9 = 18$ units.',
-    solution_ml: 'നീളം $= 7 - 2 = 5$, വീതി $= 5 - 1 = 4$. ചുറ്റളവ് $= 2(5 + 4) = 18$ യൂണിറ്റ്.',
-    tested_en: 'Dimensions and perimeter of an axis-aligned rectangle.',
-    tested_ml: 'അക്ഷങ്ങൾക്ക് സമാന്തരമായ ചതുരത്തിന്റെ അളവുകളും ചുറ്റളവും.'
+    solution_en: 'Horizontal side length $= |7 - 2| = 5$. Vertical side length $= |5 - 1| = 4$. Area $= 5 \\times 4 = 20$ sq units.',
+    solution_ml: 'തിരശ്ചീന വശത്തിന്റെ നീളം $= |7 - 2| = 5$. ലംബ വശത്തിന്റെ നീളം $= |5 - 1| = 4$. പരപ്പളവ് $= 5 \\times 4 = 20$ ചതുരശ്ര യൂണിറ്റ്.',
+    tested_en: 'Area of an axis-aligned rectangle from opposite vertices.',
+    tested_ml: 'എതിർ ശീർഷങ്ങളിൽ നിന്ന് ചതുരത്തിന്റെ പരപ്പളവ് കണ്ടെത്തൽ.'
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -131,25 +132,25 @@ OBJECTIVE.push(
     type: 'MCQ',
     marks: 1,
     time: 35,
-    prompt_en: 'What is the distance of the point $(6, -8)$ from the origin $(0, 0)$?',
-    prompt_ml: '$(6, -8)$ എന്ന ബിന്ദുവിന് ആധാരബിന്ദുവായ $(0, 0)$ ൽ നിന്നുള്ള അകലം എത്ര?',
+    prompt_en: 'What is the distance between the points $P(2, 3)$ and $Q(5, 7)$?',
+    prompt_ml: '$P(2, 3), Q(5, 7)$ എന്നീ ബിന്ദുക്കൾ തമ്മിലുള്ള അകലം എത്ര?',
     options_en: [
-      { k: 'A', t: '10 units' },
-      { k: 'B', t: '14 units' },
-      { k: 'C', t: '2 units' },
-      { k: 'D', t: '48 units' }
+      { k: 'A', t: '5 units' },
+      { k: 'B', t: '7 units' },
+      { k: 'C', t: '25 units' },
+      { k: 'D', t: '$\\sqrt{7}$ units' }
     ],
     options_ml: [
-      { k: 'A', t: '10 യൂണിറ്റ്' },
-      { k: 'B', t: '14 യൂണിറ്റ്' },
-      { k: 'C', t: '2 യൂണിറ്റ്' },
-      { k: 'D', t: '48 യൂണിറ്റ്' }
+      { k: 'A', t: '5 യൂണിറ്റ്' },
+      { k: 'B', t: '7 യൂണിറ്റ്' },
+      { k: 'C', t: '25 യൂണിറ്റ്' },
+      { k: 'D', t: '$\\sqrt{7}$ യൂണിറ്റ്' }
     ],
     answer: 'A',
-    solution_en: 'Distance from origin $d = \\sqrt{x^2 + y^2} = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$ units.',
-    solution_ml: 'ആധാരബിന്ദുവിൽ നിന്നുള്ള അകലം $d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$ യൂണിറ്റ്.',
-    tested_en: 'Distance of a point from the origin.',
-    tested_ml: 'ആധാരബിന്ദുവിൽ നിന്നുള്ള അകലം കാണൽ.'
+    solution_en: '$d = \\sqrt{(5 - 2)^2 + (7 - 3)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$ units.',
+    solution_ml: '$d = \\sqrt{(5 - 2)^2 + (7 - 3)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$ യൂണിറ്റ്.',
+    tested_en: 'Standard application of the distance formula.',
+    tested_ml: 'അകല സൂത്രവാക്യത്തിന്റെ പ്രയോഗം.'
   },
   {
     id: 'obj.m10.6.6',
@@ -157,26 +158,26 @@ OBJECTIVE.push(
     sec: '10.6.3',
     type: 'MCQ',
     marks: 1,
-    time: 35,
-    prompt_en: 'What is the distance between the points $P(2, 3)$ and $Q(5, 7)$?',
-    prompt_ml: '$P(2, 3), Q(5, 7)$ എന്നീ ബിന്ദുക്കൾ തമ്മിലുള്ള അകലം എത്ര?',
+    time: 30,
+    prompt_en: 'What is the distance from the origin $(0, 0)$ to the point $(-6, 8)$?',
+    prompt_ml: 'ആധാരബിന്ദുവായ $(0, 0)$ ൽ നിന്ന് $(-6, 8)$ എന്ന ബിന്ദുവിലേക്കുള്ള അകലം എത്ര?',
     options_en: [
-      { k: 'A', t: '5 units' },
-      { k: 'B', t: '7 units' },
-      { k: 'C', t: '$\\sqrt{7}$ units' },
-      { k: 'D', t: '25 units' }
+      { k: 'A', t: '10 units' },
+      { k: 'B', t: '14 units' },
+      { k: 'C', t: '2 units' },
+      { k: 'D', t: '$\\sqrt{28}$ units' }
     ],
     options_ml: [
-      { k: 'A', t: '5 യൂണിറ്റ്' },
-      { k: 'B', t: '7 യൂണിറ്റ്' },
-      { k: 'C', t: '$\\sqrt{7}$ യൂണിറ്റ്' },
-      { k: 'D', t: '25 യൂണിറ്റ്' }
+      { k: 'A', t: '10 യൂണിറ്റ്' },
+      { k: 'B', t: '14 യൂണിറ്റ്' },
+      { k: 'C', t: '2 യൂണിറ്റ്' },
+      { k: 'D', t: '$\\sqrt{28}$ യൂണിറ്റ്' }
     ],
     answer: 'A',
-    solution_en: '$d = \\sqrt{(5 - 2)^2 + (7 - 3)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$ units.',
-    solution_ml: '$d = \\sqrt{(5 - 2)^2 + (7 - 3)^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$ യൂണിറ്റ്.',
-    tested_en: 'Applying the general distance formula d = √((x2-x1)² + (y2-y1)²).',
-    tested_ml: 'അകല സൂത്രവാക്യം പ്രയോഗിക്കൽ.'
+    solution_en: 'Distance from origin $= \\sqrt{(-6)^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$ units.',
+    solution_ml: 'ആധാരബിന്ദുവിൽ നിന്നുള്ള അകലം $= \\sqrt{(-6)^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$ യൂണിറ്റ്.',
+    tested_en: 'Distance of a point from the origin.',
+    tested_ml: 'ആധാരബിന്ദുവിൽ നിന്നുള്ള അകലം കാണൽ.'
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -188,9 +189,9 @@ OBJECTIVE.push(
     sec: '10.6.4',
     type: 'MCQ',
     marks: 1,
-    time: 40,
-    prompt_en: 'A circle has its centre at the origin $(0, 0)$ and a radius of 5 units. Which of the following points lies OUTSIDE the circle?',
-    prompt_ml: 'ആധാരബിന്ദു കേന്ദ്രവും ആരം 5 യൂണിറ്റുമുള്ള ഒരു വൃത്തത്തിന് പുറത്ത് സ്ഥിതിചെയ്യുന്ന ബിന്ദു ഏത്?',
+    time: 35,
+    prompt_en: 'A circle has its centre at the origin and radius 5 units. Which of the following points lies OUTSIDE the circle?',
+    prompt_ml: 'ആധാരബിന്ദു കേന്ദ്രവും ആരം 5 യൂണിറ്റും ആയ ഒരു വൃത്തമുണ്ട്. താഴെ പറയുന്നവയിൽ വൃത്തത്തിന് പുറത്തുള്ള ബിന്ദു ഏത്?',
     options_en: [
       { k: 'A', t: '$(4, 4)$' },
       { k: 'B', t: '$(3, 4)$' },
@@ -249,31 +250,59 @@ WRITTEN.push(
     type: 'exercise',
     marks: 4,
     time: 240,
-    prompt_en: 'A square has its centre at the origin $(0, 0)$, and its sides are parallel to the coordinate axes. The side length of the square is 8 units.\\n(a) What is the distance from the centre to each side of the square?\\n(b) Write the coordinates of all four vertices of the square.\\n(c) Find the length of the diagonals of this square.',
-    prompt_ml: 'ആധാരബിന്ദുവായ $(0, 0)$ കേന്ദ്രമായി അക്ഷങ്ങൾക്ക് സമാന്തരമായ വശങ്ങളുള്ള ഒരു സമചതുരമുണ്ട്. ഇതിന്റെ ഒരു വശത്തിന്റെ നീളം 8 യൂണിറ്റാണ്.\\n(a) കേന്ദ്രത്തിൽ നിന്ന് സമചതുരത്തിന്റെ ഓരോ വശത്തേക്കുമുള്ള അകലം എത്ര?\\n(b) സമചതുരത്തിന്റെ നാല് ശീർഷങ്ങളുടെയും സൂചകസംഖ്യകൾ എഴുതുക.\\n(c) ഈ സമചതുരത്തിന്റെ വികർണ്ണങ്ങളുടെ നീളം കാണുക.',
-    solution_en: `<h4>Step-by-step Solution:</h4>\n<ol>\n  <li>Since the centre is $(0, 0)$ and total side length is 8, the distance from the centre to each side is $\\frac{8}{2} = 4$ units.</li>\n  <li>The four vertices are symmetrically located in the four quadrants at distances of 4 units along both axes: $(4, 4)$, $(-4, 4)$, $(-4, -4)$, and $(4, -4)$.</li>\n  <li>The diagonal connects opposite vertices, e.g., $(-4, -4)$ and $(4, 4)$. Length $d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = \\sqrt{64 + 64} = \\sqrt{128} = 8\\sqrt{2}$ units.</li>\n  <li>Both diagonals are equal to $8\\sqrt{2}$ units.</li>\n</ol>\n<p><b>Final Answer:</b> (a) 4 units; (b) (4, 4), (-4, 4), (-4, -4), (4, -4); (c) 8√2 units</p>\n<h4>Marking Rubric:</h4>\n<ul>\n  <li>Half-width/distance from center: 1 mark</li>\n  <li>Four vertices written correctly: 1.5 marks</li>\n  <li>Diagonal length calculation: 1.5 marks</li>\n</ul>`,
-    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>\n<ol>\n  <li>കേന്ദ്രത്തിൽ നിന്ന് ഓരോ വശത്തേക്കുമുള്ള അകലം $= \\frac{8}{2} = 4$ യൂണിറ്റ്.</li>\n  <li>നാല് ശീർഷങ്ങളുടെ സൂചകസംഖ്യകൾ: $(4, 4), (-4, 4), (-4, -4), (4, -4)$.</li>\n  <li>വികർണ്ണത്തിന്റെ നീളം $d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = 8\\sqrt{2}$ യൂണിറ്റ്.</li>\n  <li>രണ്ട് വികർണ്ണങ്ങളുടെയും നീളം $8\\sqrt{2}$ യൂണിറ്റ് ആണ്.</li>\n</ol>\n<p><b>അന്തിമ ഉത്തരം:</b> (a) 4 യൂണിറ്റ്; (b) (4, 4), (-4, 4), (-4, -4), (4, -4); (c) 8√2 യൂണിറ്റ്</p>\n<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>\n<ul>\n  <li>കേന്ദ്രത്തിൽ നിന്നുള്ള അകലം: 1 മാർക്ക്</li>\n  <li>നാല് ശീർഷങ്ങൾ ശരിയായി എഴുതൽ: 1.5 മാർക്ക്</li>\n  <li>വികർണ്ണത്തിന്റെ നീളം കാണൽ: 1.5 മാർക്ക്</li>\n</ul>`,
+    prompt_en: 'A square has its centre at the origin $(0, 0)$, and its sides are parallel to the coordinate axes. The side length of the square is 8 units.\\n(a) What is the perpendicular distance from the centre to each side of the square?\\n(b) Write the coordinates of all four vertices of the square.\\n(c) Find the length of the diagonals of this square.',
+    prompt_ml: 'ആധാരബിന്ദുവായ $(0, 0)$ കേന്ദ്രമായി അക്ഷങ്ങൾക്ക് സമാന്തരമായ വശങ്ങളുള്ള ഒരു സമചതുരമുണ്ട്. ഇതിന്റെ ഒരു വശത്തിന്റെ നീളം 8 യൂണിറ്റാണ്.\\n(a) കേന്ദ്രത്തിൽ നിന്ന് സമചതുരത്തിന്റെ ഓരോ വശത്തേക്കുമുള്ള ലംബദൂരം എത്ര?\\n(b) സമചതുരത്തിന്റെ നാല് ശീർഷങ്ങളുടെയും സൂചകസംഖ്യകൾ എഴുതുക.\\n(c) ഈ സമചതുരത്തിന്റെ വികർണ്ണങ്ങളുടെ നീളം കാണുക.',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>Since the centre is at $(0, 0)$ and the side length is 8, the distance from the centre to each side is $\\frac{8}{2} = 4$ units.</li>
+  <li>The four vertices are symmetrically located in the four quadrants at horizontal distance 4 and vertical distance 4 from the origin: $(4, 4)$, $(-4, 4)$, $(-4, -4)$, and $(4, -4)$.</li>
+  <li>The diagonal connects opposite vertices $(-4, -4)$ and $(4, 4)$:
+  $$d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = \\sqrt{64 + 64} = \\sqrt{128} = 8\\sqrt{2}\\text{ units}$$</li>
+  <li>Both diagonals are equal to $8\\sqrt{2}$ units.</li>
+</ol>
+<p><b>Final Answer:</b> (a) 4 units; (b) (4, 4), (-4, 4), (-4, -4), (4, -4); (c) 8√2 units</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Distance from center to sides (4 units): 1 mark</li>
+  <li>Coordinates of all four vertices: 1.5 marks</li>
+  <li>Diagonal length calculation with work: 1.5 marks</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>കേന്ദ്രത്തിൽ നിന്ന് ഓരോ വശത്തേക്കുമുള്ള ലംബദൂരം $= \\frac{8}{2} = 4$ യൂണിറ്റ്.</li>
+  <li>നാല് ശീർഷങ്ങളുടെ സൂചകസംഖ്യകൾ: $(4, 4), (-4, 4), (-4, -4), (4, -4)$.</li>
+  <li>വികർണ്ണത്തിന്റെ നീളം:
+  $$d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = \\sqrt{64 + 64} = 8\\sqrt{2}\\text{ യൂണിറ്റ്}$$</li>
+  <li>രണ്ട് വികർണ്ണങ്ങളുടെയും നീളം $8\\sqrt{2}$ യൂണിറ്റ് ആണ്.</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) 4 യൂണിറ്റ്; (b) (4, 4), (-4, 4), (-4, -4), (4, -4); (c) 8√2 യൂണിറ്റ്</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>കേന്ദ്രത്തിൽ നിന്നുള്ള ലംബദൂരം: 1 മാർക്ക്</li>
+  <li>നാല് ശീർഷങ്ങൾ ശരിയായി എഴുതൽ: 1.5 മാർക്ക്</li>
+  <li>വികർണ്ണത്തിന്റെ നീളം കണ്ടെത്തൽ: 1.5 മാർക്ക്</li>
+</ul>`,
     steps_en: [
-      'Since the centre is $(0, 0)$ and total side length is 8, the distance from the centre to each side is $\\frac{8}{2} = 4$ units.',
-      'The four vertices are symmetrically located in the four quadrants at distances of 4 units along both axes: $(4, 4)$, $(-4, 4)$, $(-4, -4)$, and $(4, -4)$.',
-      'The diagonal connects opposite vertices, e.g., $(-4, -4)$ and $(4, 4)$. Length $d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = \\sqrt{64 + 64} = \\sqrt{128} = 8\\sqrt{2}$ units.',
+      'Since the centre is at $(0, 0)$ and the side length is 8, the distance from the centre to each side is $\\frac{8}{2} = 4$ units.',
+      'The four vertices are symmetrically located in the four quadrants at horizontal distance 4 and vertical distance 4 from the origin: $(4, 4)$, $(-4, 4)$, $(-4, -4)$, and $(4, -4)$.',
+      'The diagonal connects opposite vertices $(-4, -4)$ and $(4, 4)$: $d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = 8\\sqrt{2}$ units.',
       'Both diagonals are equal to $8\\sqrt{2}$ units.'
     ],
     steps_ml: [
-      'കേന്ദ്രത്തിൽ നിന്ന് ഓരോ വശത്തേക്കുമുള്ള അകലം $= \\frac{8}{2} = 4$ യൂണിറ്റ്.',
+      'കേന്ദ്രത്തിൽ നിന്ന് ഓരോ വശത്തേക്കുമുള്ള ലംബദൂരം $= \\frac{8}{2} = 4$ യൂണിറ്റ്.',
       'നാല് ശീർഷങ്ങളുടെ സൂചകസംഖ്യകൾ: $(4, 4), (-4, 4), (-4, -4), (4, -4)$.',
-      'വികർണ്ണത്തിന്റെ നീളം $d = \\sqrt{(4 - (-4))^2 + (4 - (-4))^2} = \\sqrt{8^2 + 8^2} = 8\\sqrt{2}$ യൂണിറ്റ്.',
+      'വികർണ്ണത്തിന്റെ നീളം $d = \\sqrt{8^2 + 8^2} = 8\\sqrt{2}$ യൂണിറ്റ്.',
       'രണ്ട് വികർണ്ണങ്ങളുടെയും നീളം $8\\sqrt{2}$ യൂണിറ്റ് ആണ്.'
     ],
     rubric_en: [
-      'Half-width/distance from center: 1 mark',
-      'Four vertices written correctly: 1.5 marks',
-      'Diagonal length calculation: 1.5 marks'
+      'Distance from center to sides (4 units): 1 mark',
+      'Coordinates of all four vertices: 1.5 marks',
+      'Diagonal length calculation with work: 1.5 marks'
     ],
     rubric_ml: [
-      'കേന്ദ്രത്തിൽ നിന്നുള്ള അകലം: 1 മാർക്ക്',
+      'കേന്ദ്രത്തിൽ നിന്നുള്ള ലംബദൂരം: 1 മാർക്ക്',
       'നാല് ശീർഷങ്ങൾ ശരിയായി എഴുതൽ: 1.5 മാർക്ക്',
-      'വികർണ്ണത്തിന്റെ നീളം കാണൽ: 1.5 മാർക്ക്'
+      'വികർണ്ണത്തിന്റെ നീളം കണ്ടെത്തൽ: 1.5 മാർക്ക്'
     ],
     answer_en: '(a) 4 units; (b) (4, 4), (-4, 4), (-4, -4), (4, -4); (c) 8√2 units',
     answer_ml: '(a) 4 യൂണിറ്റ്; (b) (4, 4), (-4, 4), (-4, -4), (4, -4); (c) 8√2 യൂണിറ്റ്'
@@ -291,13 +320,39 @@ WRITTEN.push(
     time: 240,
     prompt_en: 'A rectangle $ABCD$ has sides parallel to the coordinate axes. The coordinates of two diagonally opposite vertices are $A(1, 2)$ and $C(7, 6)$.\\n(a) Write the coordinates of the other two vertices $B$ and $D$.\\n(b) Find the lengths of the sides $AB$ and $BC$.\\n(c) Find the area and perimeter of the rectangle.',
     prompt_ml: '$ABCD$ എന്ന ചതുരത്തിന്റെ വശങ്ങൾ അക്ഷങ്ങൾക്ക് സമാന്തരമാണ്. അതിന്റെ എതിർ ശീർഷങ്ങൾ $A(1, 2), C(7, 6)$ ആണ്.\\n(a) മറ്റ് രണ്ട് ശീർഷങ്ങളായ $B, D$ എന്നിവയുടെ സൂചകസംഖ്യകൾ എഴുതുക.\\n(b) $AB, BC$ എന്നീ വശങ്ങളുടെ നീളം കാണുക.\\n(c) ചതുരത്തിന്റെ പരപ്പളവും ചുറ്റളവും കാണുക.',
-    solution_en: `<h4>Step-by-step Solution:</h4>\n<ol>\n  <li>Since sides are parallel to axes, vertex $B$ shares the $x$-coordinate of $C$ and $y$-coordinate of $A$: $B(7, 2)$. Vertex $D$ shares the $x$-coordinate of $A$ and $y$-coordinate of $C$: $D(1, 6)$.</li>\n  <li>Side length $AB$ (horizontal) $= |7 - 1| = 6$ units. Side length $BC$ (vertical) $= |6 - 2| = 4$ units.</li>\n  <li>Area of rectangle $= \\text{length} \\times \\text{width} = 6 \\times 4 = 24$ square units.</li>\n  <li>Perimeter $= 2(\\text{length} + \\text{width}) = 2(6 + 4) = 20$ units.</li>\n</ol>\n<p><b>Final Answer:</b> (a) B(7, 2), D(1, 6); (b) AB = 6, BC = 4; (c) Area = 24 sq units, Perimeter = 20 units</p>\n<h4>Marking Rubric:</h4>\n<ul>\n  <li>Coordinates of B and D: 1.5 marks</li>\n  <li>Lengths of sides AB and BC: 1 mark</li>\n  <li>Area and perimeter: 1.5 marks</li>\n</ul>`,
-    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>\n<ol>\n  <li>വശങ്ങൾ അക്ഷങ്ങൾക്ക് സമാന്തരമായതിനാൽ $B(7, 2), D(1, 6)$ ആണ് മറ്റ് രണ്ട് ശീർഷങ്ങൾ.</li>\n  <li>തിരശ്ചീന വശം $AB = 7 - 1 = 6$ യൂണിറ്റ്. ലംബ വശം $BC = 6 - 2 = 4$ യൂണിറ്റ്.</li>\n  <li>പരപ്പളവ് $= 6 \\times 4 = 24$ ചതുരശ്ര യൂണിറ്റ്.</li>\n  <li>ചുറ്റളവ് $= 2(6 + 4) = 20$ യൂണിറ്റ്.</li>\n</ol>\n<p><b>അന്തിമ ഉത്തരം:</b> (a) B(7, 2), D(1, 6); (b) AB = 6, BC = 4; (c) പരപ്പളവ് = 24 ചതുരശ്ര യൂണിറ്റ്, ചുറ്റളവ് = 20 യൂണിറ്റ്</p>\n<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>\n<ul>\n  <li>B, D എന്നിവയുടെ സൂചകസംഖ്യകൾ: 1.5 മാർക്ക്</li>\n  <li>AB, BC എന്നിവയുടെ നീളം: 1 മാർക്ക്</li>\n  <li>പരപ്പളവും ചുറ്റളവും: 1.5 മാർക്ക്</li>\n</ul>`,
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>Since the sides are parallel to the axes, vertex $B$ has the $x$-coordinate of $C$ and $y$-coordinate of $A$: $B(7, 2)$. Vertex $D$ has the $x$-coordinate of $A$ and $y$-coordinate of $C$: $D(1, 6)$.</li>
+  <li>Horizontal side length $AB = |7 - 1| = 6$ units. Vertical side length $BC = |6 - 2| = 4$ units.</li>
+  <li>Area $= \\text{length} \\times \\text{width} = 6 \\times 4 = 24$ square units.</li>
+  <li>Perimeter $= 2(6 + 4) = 2(10) = 20$ units.</li>
+</ol>
+<p><b>Final Answer:</b> (a) B(7, 2), D(1, 6); (b) AB = 6 units, BC = 4 units; (c) Area = 24 sq units, Perimeter = 20 units</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Coordinates of B and D: 1.5 marks</li>
+  <li>Lengths of sides AB and BC: 1 mark</li>
+  <li>Area and perimeter calculations: 1.5 marks</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>വശങ്ങൾ അക്ഷങ്ങൾക്ക് സമാന്തരമായതിനാൽ $B(7, 2), D(1, 6)$ ആണ് മറ്റ് രണ്ട് ശീർഷങ്ങൾ.</li>
+  <li>തിരശ്ചീന വശം $AB = 7 - 1 = 6$ യൂണിറ്റ്. ലംബ വശം $BC = 6 - 2 = 4$ യൂണിറ്റ്.</li>
+  <li>പരപ്പളവ് $= 6 \\times 4 = 24$ ചതുരശ്ര യൂണിറ്റ്.</li>
+  <li>ചുറ്റളവ് $= 2(6 + 4) = 20$ യൂണിറ്റ്.</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) B(7, 2), D(1, 6); (b) AB = 6 യൂണിറ്റ്, BC = 4 യൂണിറ്റ്; (c) പരപ്പളവ് = 24 ചതുരശ്ര യൂണിറ്റ്, ചുറ്റളവ് = 20 യൂണിറ്റ്</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>$B, D$ എന്നിവയുടെ സൂചകസംഖ്യകൾ: 1.5 മാർക്ക്</li>
+  <li>$AB, BC$ എന്നിവയുടെ നീളം: 1 മാർക്ക്</li>
+  <li>പരപ്പളവും ചുറ്റളവും കാണൽ: 1.5 മാർക്ക്</li>
+</ul>`,
     steps_en: [
-      'Since sides are parallel to axes, vertex $B$ shares the $x$-coordinate of $C$ and $y$-coordinate of $A$: $B(7, 2)$. Vertex $D$ shares the $x$-coordinate of $A$ and $y$-coordinate of $C$: $D(1, 6)$.',
-      'Side length $AB$ (horizontal) $= |7 - 1| = 6$ units. Side length $BC$ (vertical) $= |6 - 2| = 4$ units.',
-      'Area of rectangle $= \\text{length} \\times \\text{width} = 6 \\times 4 = 24$ square units.',
-      'Perimeter $= 2(\\text{length} + \\text{width}) = 2(6 + 4) = 20$ units.'
+      'Since the sides are parallel to the axes, vertex $B$ has the $x$-coordinate of $C$ and $y$-coordinate of $A$: $B(7, 2)$. Vertex $D$ has the $x$-coordinate of $A$ and $y$-coordinate of $C$: $D(1, 6)$.',
+      'Horizontal side length $AB = |7 - 1| = 6$ units. Vertical side length $BC = |6 - 2| = 4$ units.',
+      'Area $= \\text{length} \\times \\text{width} = 6 \\times 4 = 24$ square units.',
+      'Perimeter $= 2(6 + 4) = 2(10) = 20$ units.'
     ],
     steps_ml: [
       'വശങ്ങൾ അക്ഷങ്ങൾക്ക് സമാന്തരമായതിനാൽ $B(7, 2), D(1, 6)$ ആണ് മറ്റ് രണ്ട് ശീർഷങ്ങൾ.',
@@ -308,15 +363,15 @@ WRITTEN.push(
     rubric_en: [
       'Coordinates of B and D: 1.5 marks',
       'Lengths of sides AB and BC: 1 mark',
-      'Area and perimeter: 1.5 marks'
+      'Area and perimeter calculations: 1.5 marks'
     ],
     rubric_ml: [
-      'B, D എന്നിവയുടെ സൂചകസംഖ്യകൾ: 1.5 മാർക്ക്',
-      'AB, BC എന്നിവയുടെ നീളം: 1 മാർക്ക്',
-      'പരപ്പളവും ചുറ്റളവും: 1.5 മാർക്ക്'
+      '$B, D$ എന്നിവയുടെ സൂചകസംഖ്യകൾ: 1.5 മാർക്ക്',
+      '$AB, BC$ എന്നിവയുടെ നീളം: 1 മാർക്ക്',
+      'പരപ്പളവും ചുറ്റളവും കാണൽ: 1.5 മാർക്ക്'
     ],
-    answer_en: '(a) B(7, 2), D(1, 6); (b) AB = 6, BC = 4; (c) Area = 24 sq units, Perimeter = 20 units',
-    answer_ml: '(a) B(7, 2), D(1, 6); (b) AB = 6, BC = 4; (c) പരപ്പളവ് = 24 ചതുരശ്ര യൂണിറ്റ്, ചുറ്റളവ് = 20 യൂണിറ്റ്'
+    answer_en: '(a) B(7, 2), D(1, 6); (b) AB = 6 units, BC = 4 units; (c) Area = 24 sq units, Perimeter = 20 units',
+    answer_ml: '(a) B(7, 2), D(1, 6); (b) AB = 6 യൂണിറ്റ്, BC = 4 യൂണിറ്റ്; (c) പരപ്പളവ് = 24 ചതുരശ്ര യൂണിറ്റ്, ചുറ്റളവ് = 20 യൂണിറ്റ്'
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
@@ -329,38 +384,77 @@ WRITTEN.push(
     type: 'exercise',
     marks: 4,
     time: 240,
-    prompt_en: 'Find the distance between the points $A(-2, 5)$ and $B(4, -3)$.\\n(a) Write down the distance formula.\\n(b) Substitute the given coordinates into the formula.\\n(c) Simplify and find the exact distance.',
-    prompt_ml: '$A(-2, 5), B(4, -3)$ എന്നീ ബിന്ദുക്കൾ തമ്മിലുള്ള അകലം കാണുക.\\n(a) അകലം കാണാനുള്ള സൂത്രവാക്യം എഴുതുക.\\n(b) തന്നിരിക്കുന്ന സൂചകസംഖ്യകൾ സൂത്രവാക്യത്തിൽ നൽകുക.\\n(c) ലഘൂകരിച്ച് കൃത്യമായ അകലം കണ്ടെത്തുക.',
-    solution_en: `<h4>Step-by-step Solution:</h4>\n<ol>\n  <li>Distance formula: $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.</li>\n  <li>Let $(x_1, y_1) = (-2, 5)$ and $(x_2, y_2) = (4, -3)$. Then: $x_2 - x_1 = 4 - (-2) = 6$, and $y_2 - y_1 = -3 - 5 = -8$.</li>\n  <li>$d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100}$.</li>\n  <li>$d = 10$ units.</li>\n</ol>\n<p><b>Final Answer:</b> (a) d = √((x2-x1)² + (y2-y1)²); (b) √((4 - (-2))² + (-3 - 5)²); (c) 10 units</p>\n<h4>Marking Rubric:</h4>\n<ul>\n  <li>Stating distance formula: 1 mark</li>\n  <li>Correct coordinate substitution: 1.5 marks</li>\n  <li>Correct simplification to 10 units: 1.5 marks</li>\n</ul>`,
-    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>\n<ol>\n  <li>അകലം കാണാനുള്ള സൂത്രവാക്യം: $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.</li>\n  <li>$x_2 - x_1 = 4 - (-2) = 6$, $y_2 - y_1 = -3 - 5 = -8$.</li>\n  <li>$d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100}$.</li>\n  <li>$d = 10$ യൂണിറ്റ്.</li>\n</ol>\n<p><b>അന്തിമ ഉത്തരം:</b> (a) d = √((x2-x1)² + (y2-y1)²); (b) √((4 - (-2))² + (-3 - 5)²); (c) 10 യൂണിറ്റ്</p>\n<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>\n<ul>\n  <li>സൂത്രവാക്യം എഴുതൽ: 1 മാർക്ക്</li>\n  <li>വിലകൾ ശരിയായി നൽകൽ: 1.5 മാർക്ക്</li>\n  <li>ലഘൂകരിച്ച് 10 യൂണിറ്റ് എന്ന് കണ്ടെത്തൽ: 1.5 മാർക്ക്</li>\n</ul>`,
+    prompt_en: 'Answer the following using the distance formula:\\n(a) State the formula for the distance between two points $(x_1, y_1)$ and $(x_2, y_2)$.\\n(b) Find the distance between the points $A(-2, 5)$ and $B(4, -3)$.\\n(c) Find the coordinates of the point on the $x$-axis which is equidistant from $(2, -5)$ and $(-2, 9)$.',
+    prompt_ml: 'അകല സൂത്രവാക്യം ഉപയോഗിച്ച് താഴെ പറയുന്നവയ്ക്ക് ഉത്തരം കണ്ടെത്തുക:\\n(a) $(x_1, y_1), (x_2, y_2)$ എന്നീ ബിന്ദുക്കൾ തമ്മിലുള്ള അകലം കാണാനുള്ള സൂത്രവാക്യം എഴുതുക.\\n(b) $A(-2, 5), B(4, -3)$ എന്നീ ബിന്ദുക്കൾ തമ്മിലുള്ള അകലം കാണുക.\\n(c) $(2, -5), (-2, 9)$ എന്നീ ബിന്ദുക്കളിൽ നിന്ന് തുല്യ അകലത്തിലുള്ള $x$-അക്ഷത്തിലെ ബിന്ദുവിന്റെ സൂചകസംഖ്യകൾ കണ്ടെത്തുക.',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li><b>Distance Formula:</b> $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.</li>
+  <li><b>Distance AB:</b>
+  $$x_2 - x_1 = 4 - (-2) = 6, \\quad y_2 - y_1 = -3 - 5 = -8$$
+  $$d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10\\text{ units}$$</li>
+  <li><b>Equidistant point on x-axis:</b> Any point on the $x$-axis has coordinates $P(x, 0)$.
+  $$d_1^2 = (x - 2)^2 + (0 - (-5))^2 = (x - 2)^2 + 25$$
+  $$d_2^2 = (x - (-2))^2 + (0 - 9)^2 = (x + 2)^2 + 81$$
+  Since $d_1 = d_2 \\implies d_1^2 = d_2^2$:
+  $$(x^2 - 4x + 4) + 25 = (x^2 + 4x + 4) + 81$$
+  $$-4x + 29 = 4x + 85 \\implies 8x = 29 - 85 = -56 \\implies x = -7$$
+  Therefore, the required point is $(-7, 0)$.</li>
+</ol>
+<p><b>Final Answer:</b> (a) d = √((x2-x1)² + (y2-y1)²); (b) 10 units; (c) (-7, 0)</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Stating the formula: 1 mark</li>
+  <li>Computing distance AB = 10 units: 1.5 marks</li>
+  <li>Setting up and solving for x on x-axis (-7, 0): 1.5 marks</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li><b>അകല സൂത്രവാക്യം:</b> $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.</li>
+  <li><b>AB തമ്മിലുള്ള അകലം:</b>
+  $$x_2 - x_1 = 4 - (-2) = 6, \\quad y_2 - y_1 = -3 - 5 = -8$$
+  $$d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10\\text{ യൂണിറ്റ്}$$</li>
+  <li><b>x-അക്ഷത്തിലെ ബിന്ദു:</b> $x$-അക്ഷത്തിലെ ബിന്ദു $P(x, 0)$ ആണ്.
+  $$d_1^2 = (x - 2)^2 + 25 = x^2 - 4x + 29$$
+  $$d_2^2 = (x + 2)^2 + 81 = x^2 + 4x + 85$$
+  തുല്യ അകലമായതിനാൽ $d_1^2 = d_2^2$:
+  $$x^2 - 4x + 29 = x^2 + 4x + 85 \\implies 8x = -56 \\implies x = -7$$
+  ആയതിനാൽ ബിന്ദു $(-7, 0)$ ആണ്.</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) d = √((x2-x1)² + (y2-y1)²); (b) 10 യൂണിറ്റ്; (c) (-7, 0)</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>സൂത്രവാക്യം എഴുതൽ: 1 മാർക്ക്</li>
+  <li>AB തമ്മിലുള്ള അകലം 10 യൂണിറ്റ് എന്ന് കാണൽ: 1.5 മാർക്ക്</li>
+  <li>x-അക്ഷത്തിലെ ബിന്ദു (-7, 0) കണ്ടെത്തൽ: 1.5 മാർക്ക്</li>
+</ul>`,
     steps_en: [
       'Distance formula: $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.',
-      'Let $(x_1, y_1) = (-2, 5)$ and $(x_2, y_2) = (4, -3)$. Then: $x_2 - x_1 = 4 - (-2) = 6$, and $y_2 - y_1 = -3 - 5 = -8$.',
-      '$d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100}$.',
-      '$d = 10$ units.'
+      'For $A(-2, 5)$ and $B(4, -3)$: $d = \\sqrt{(4 - (-2))^2 + (-3 - 5)^2} = \\sqrt{6^2 + (-8)^2} = \\sqrt{100} = 10$ units.',
+      'Let the point on the $x$-axis be $P(x, 0)$. Setting distances equal: $(x - 2)^2 + 25 = (x + 2)^2 + 81$.',
+      'Expanding gives $-4x + 29 = 4x + 85 \\implies 8x = -56 \\implies x = -7$. Point is $(-7, 0)$.'
     ],
     steps_ml: [
-      'അകലം കാണാനുള്ള സൂത്രവാക്യം: $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.',
-      '$x_2 - x_1 = 4 - (-2) = 6$, $y_2 - y_1 = -3 - 5 = -8$.',
-      '$d = \\sqrt{6^2 + (-8)^2} = \\sqrt{36 + 64} = \\sqrt{100}$.',
-      '$d = 10$ യൂണിറ്റ്.'
+      'അകല സൂത്രവാക്യം: $d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$.',
+      '$A(-2, 5), B(4, -3)$ എന്നിവയ്ക്ക്: $d = \\sqrt{6^2 + (-8)^2} = 10$ യൂണിറ്റ്.',
+      '$x$-അക്ഷത്തിലെ ബിന്ദു $P(x, 0)$ ആയാൽ: $(x - 2)^2 + 25 = (x + 2)^2 + 81$.',
+      'ലഘൂകരിക്കുമ്പോൾ: $8x = -56 \\implies x = -7$. ബിന്ദു $(-7, 0)$.'
     ],
     rubric_en: [
-      'Stating distance formula: 1 mark',
-      'Correct coordinate substitution: 1.5 marks',
-      'Correct simplification to 10 units: 1.5 marks'
+      'Stating the formula: 1 mark',
+      'Computing distance AB = 10 units: 1.5 marks',
+      'Setting up and solving for x on x-axis (-7, 0): 1.5 marks'
     ],
     rubric_ml: [
       'സൂത്രവാക്യം എഴുതൽ: 1 മാർക്ക്',
-      'വിലകൾ ശരിയായി നൽകൽ: 1.5 മാർക്ക്',
-      'ലഘൂകരിച്ച് 10 യൂണിറ്റ് എന്ന് കണ്ടെത്തൽ: 1.5 മാർക്ക്'
+      'AB തമ്മിലുള്ള അകലം 10 യൂണിറ്റ് എന്ന് കാണൽ: 1.5 മാർക്ക്',
+      'x-അക്ഷത്തിലെ ബിന്ദു (-7, 0) കണ്ടെത്തൽ: 1.5 മാർക്ക്'
     ],
-    answer_en: '(a) d = √((x2-x1)² + (y2-y1)²); (b) √((4 - (-2))² + (-3 - 5)²); (c) 10 units',
-    answer_ml: '(a) d = √((x2-x1)² + (y2-y1)²); (b) √((4 - (-2))² + (-3 - 5)²); (c) 10 യൂണിറ്റ്'
+    answer_en: '(a) d = √((x2-x1)² + (y2-y1)²); (b) 10 units; (c) (-7, 0)',
+    answer_ml: '(a) d = √((x2-x1)² + (y2-y1)²); (b) 10 യൂണിറ്റ്; (c) (-7, 0)'
   },
 
   /* ──────────────────────────────────────────────────────────────────────────
-     10.6.4 Geometric Applications of Coordinates
+     10.6.4 Geometric Applications of Coordinates (SCERT Textbook p.150)
      ────────────────────────────────────────────────────────────────────────── */
   {
     id: 'w.m10.6.4',
@@ -369,33 +463,259 @@ WRITTEN.push(
     type: 'exercise',
     marks: 4,
     time: 240,
-    prompt_en: 'Show that the points $A(1, 1)$, $B(4, 5)$, and $C(1, 5)$ form a right-angled triangle.\\n(a) Calculate the side lengths $AB, BC$, and $CA$.\\n(b) Identify which side is the hypotenuse.\\n(c) Verify the Pythagorean relation $a^2 + b^2 = c^2$.',
-    prompt_ml: '$A(1, 1), B(4, 5), C(1, 5)$ എന്നീ ബിന്ദുക്കൾ യോജിപ്പിച്ചാൽ ഒരു മട്ടത്രികോണം കിട്ടുമെന്ന് തെളിയിക്കുക.\\n(a) $AB, BC, CA$ എന്നീ വശങ്ങളുടെ നീളം കാണുക.\\n(b) ഏതാണ് കർണ്ണം എന്ന് കണ്ടെത്തുക.\\n(c) പൈതഗോറസ് ബന്ധമായ $a^2 + b^2 = c^2$ ശരിയാണെന്ന് പരിശോധിക്കുക.',
-    solution_en: `<h4>Step-by-step Solution:</h4>\n<ol>\n  <li>Calculate $BC$: $BC = |4 - 1| = 3$ units (horizontal line, $y=5$). Calculate $CA$: $CA = |5 - 1| = 4$ units (vertical line, $x=1$).</li>\n  <li>Calculate $AB$: $AB = \\sqrt{(4 - 1)^2 + (5 - 1)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$ units.</li>\n  <li>The longest side is $AB = 5$, which is the hypotenuse.</li>\n  <li>Verify: $BC^2 + CA^2 = 3^2 + 4^2 = 9 + 16 = 25 = 5^2 = AB^2$. By the converse of Pythagoras theorem, $\\triangle ABC$ is right-angled at $C$.</li>\n</ol>\n<p><b>Final Answer:</b> (a) BC = 3, CA = 4, AB = 5; (b) AB is the hypotenuse; (c) 3² + 4² = 5², right-angled at C</p>\n<h4>Marking Rubric:</h4>\n<ul>\n  <li>Calculating all three side lengths: 2 marks</li>\n  <li>Identifying hypotenuse: 0.5 mark</li>\n  <li>Pythagorean check and conclusion: 1.5 marks</li>\n</ul>`,
-    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>\n<ol>\n  <li>$BC = 4 - 1 = 3$ യൂണിറ്റ്. $CA = 5 - 1 = 4$ യൂണിറ്റ്.</li>\n  <li>$AB = \\sqrt{(4 - 1)^2 + (5 - 1)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$ യൂണിറ്റ്.</li>\n  <li>ഏറ്റവും വലിയ വശം $AB = 5$ ആണ് കർണ്ണം.</li>\n  <li>$BC^2 + CA^2 = 3^2 + 4^2 = 9 + 16 = 25 = 5^2 = AB^2$. പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം ഇത് $C$ ൽ മട്ടകോണുള്ള മട്ടത്രികോണമാണ്.</li>\n</ol>\n<p><b>അന്തിമ ഉത്തരം:</b> (a) BC = 3, CA = 4, AB = 5; (b) AB ആണ് കർണ്ണം; (c) 3² + 4² = 5², C ൽ മട്ടകോൺ</p>\n<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>\n<ul>\n  <li>മൂന്ന് വശങ്ങളുടെയും നീളം കാണൽ: 2 മാർക്ക്</li>\n  <li>കർണ്ണം കണ്ടെത്തൽ: 0.5 മാർക്ക്</li>\n  <li>പൈതഗോറസ് പരിശോധനയും നിഗമനവും: 1.5 മാർക്ക്</li>\n</ul>`,
+    prompt_en: 'Prove that by joining the points $A(2, 1)$, $B(3, 4)$, and $C(-3, 6)$, we get a right triangle (SCERT textbook problem).\\n(a) Calculate the squares of the lengths of all three sides: $AB^2, BC^2$, and $AC^2$.\\n(b) Identify which side is the hypotenuse.\\n(c) Verify the converse of Pythagoras theorem and state which vertex has the right angle.',
+    prompt_ml: '$A(2, 1), B(3, 4), C(-3, 6)$ എന്നീ ബിന്ദുക്കൾ യോജിപ്പിച്ചാൽ ഒരു മട്ടത്രികോണം കിട്ടുമെന്ന് തെളിയിക്കുക.\\n(a) മൂന്ന് വശങ്ങളുടെയും നീളങ്ങളുടെ വർഗ്ഗങ്ങളായ $AB^2, BC^2, AC^2$ എന്നിവ കണക്കാക്കുക.\\n(b) ഏതാണ് കർണ്ണം എന്ന് കണ്ടെത്തുക.\\n(c) പൈതഗോറസ് മറുസിദ്ധാന്തം ശരിയാണെന്ന് പരിശോധിച്ച് ഏത് ശീർഷത്തിലാണ് മട്ടകോൺ എന്ന് വ്യക്തമാക്കുക.',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li><b>Compute squares of side lengths:</b>
+  $$AB^2 = (3 - 2)^2 + (4 - 1)^2 = 1^2 + 3^2 = 1 + 9 = 10$$
+  $$BC^2 = (-3 - 3)^2 + (6 - 4)^2 = (-6)^2 + 2^2 = 36 + 4 = 40$$
+  $$AC^2 = (-3 - 2)^2 + (6 - 1)^2 = (-5)^2 + 5^2 = 25 + 25 = 50$$</li>
+  <li><b>Identify hypotenuse:</b> The longest side is $AC$, with $AC^2 = 50$, so hypotenuse is $AC = \\sqrt{50} = 5\\sqrt{2}$ units.</li>
+  <li><b>Check Pythagorean relation:</b>
+  $$AB^2 + BC^2 = 10 + 40 = 50 = AC^2$$
+  Since the sum of squares of two sides equals the square of the third side, by the converse of Pythagoras theorem, $\\triangle ABC$ is a right-angled triangle.</li>
+  <li>The right angle is opposite to the hypotenuse $AC$, which is at vertex $B$ ($\angle B = 90^\circ$).</li>
+</ol>
+<p><b>Final Answer:</b> (a) AB² = 10, BC² = 40, AC² = 50; (b) AC is the hypotenuse; (c) AB² + BC² = AC² = 50, right angle at vertex B</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Calculating all three squared lengths accurately: 2 marks</li>
+  <li>Identifying AC as hypotenuse: 0.5 mark</li>
+  <li>Verifying AB² + BC² = AC² and concluding right angle at B: 1.5 marks</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li><b>വശങ്ങളുടെ വർഗ്ഗങ്ങൾ കാണുന്നു:</b>
+  $$AB^2 = (3 - 2)^2 + (4 - 1)^2 = 1^2 + 3^2 = 10$$
+  $$BC^2 = (-3 - 3)^2 + (6 - 4)^2 = (-6)^2 + 2^2 = 36 + 4 = 40$$
+  $$AC^2 = (-3 - 2)^2 + (6 - 1)^2 = (-5)^2 + 5^2 = 25 + 25 = 50$$</li>
+  <li><b>കർണ്ണം കണ്ടെത്തൽ:</b> ഏറ്റവും വലിയ വശം $AC$ ആണ് ($AC^2 = 50$). അതിനാൽ കർണ്ണം $AC = 5\\sqrt{2}$ യൂണിറ്റ്.</li>
+  <li><b>പൈതഗോറസ് ബന്ധം പരിശോധിക്കൽ:</b>
+  $$AB^2 + BC^2 = 10 + 40 = 50 = AC^2$$
+  രണ്ട് വശങ്ങളുടെ വർഗ്ഗങ്ങളുടെ തുക മൂന്നാമത്തെ വശത്തിന്റെ വർഗ്ഗത്തിന് തുല്യമായതിനാൽ പൈതഗോറസ് മറുസിദ്ധാന്തപ്രകാരം ഇത് മട്ടത്രികോണമാണ്.</li>
+  <li>കർണ്ണമായ $AC$ ക്ക് എതിരെയുള്ള കോൺ $B$ മട്ടകോണാണ് ($\\angle B = 90^\\circ$).</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) AB² = 10, BC² = 40, AC² = 50; (b) AC ആണ് കർണ്ണം; (c) AB² + BC² = AC² = 50, B ൽ മട്ടകോൺ</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>മൂന്ന് വശങ്ങളുടെയും വർഗ്ഗങ്ങൾ ശരിയായി കാണൽ: 2 മാർക്ക്</li>
+  <li>കർണ്ണം $AC$ എന്ന് കണ്ടെത്തൽ: 0.5 മാർക്ക്</li>
+  <li>$AB^2 + BC^2 = AC^2$ പരിശോധിച്ച് $B$ ൽ മട്ടകോൺ എന്ന് സമർത്ഥിക്കൽ: 1.5 മാർക്ക്</li>
+</ul>`,
     steps_en: [
-      'Calculate $BC$: $BC = |4 - 1| = 3$ units (horizontal line, $y=5$). Calculate $CA$: $CA = |5 - 1| = 4$ units (vertical line, $x=1$).',
-      'Calculate $AB$: $AB = \\sqrt{(4 - 1)^2 + (5 - 1)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5$ units.',
-      'The longest side is $AB = 5$, which is the hypotenuse.',
-      'Verify: $BC^2 + CA^2 = 3^2 + 4^2 = 9 + 16 = 25 = 5^2 = AB^2$. By the converse of Pythagoras theorem, $\\triangle ABC$ is right-angled at $C$.'
+      'Compute $AB^2 = (3 - 2)^2 + (4 - 1)^2 = 1 + 9 = 10$.',
+      'Compute $BC^2 = (-3 - 3)^2 + (6 - 4)^2 = 36 + 4 = 40$.',
+      'Compute $AC^2 = (-3 - 2)^2 + (6 - 1)^2 = 25 + 25 = 50$.',
+      'Verify $AB^2 + BC^2 = 10 + 40 = 50 = AC^2$. By converse of Pythagoras theorem, $\\triangle ABC$ is right-angled at $B$.'
     ],
     steps_ml: [
-      '$BC = 4 - 1 = 3$ യൂണിറ്റ്. $CA = 5 - 1 = 4$ യൂണിറ്റ്.',
-      '$AB = \\sqrt{(4 - 1)^2 + (5 - 1)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$ യൂണിറ്റ്.',
-      'ഏറ്റവും വലിയ വശം $AB = 5$ ആണ് കർണ്ണം.',
-      '$BC^2 + CA^2 = 3^2 + 4^2 = 9 + 16 = 25 = 5^2 = AB^2$. പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം ഇത് $C$ ൽ മട്ടകോണുള്ള മട്ടത്രികോണമാണ്.'
+      '$AB^2 = (3 - 2)^2 + (4 - 1)^2 = 10$.',
+      '$BC^2 = (-3 - 3)^2 + (6 - 4)^2 = 40$.',
+      '$AC^2 = (-3 - 2)^2 + (6 - 1)^2 = 50$.',
+      '$AB^2 + BC^2 = 10 + 40 = 50 = AC^2$. അതിനാൽ $B$ ൽ മട്ടകോണുള്ള മട്ടത്രികോണം.'
     ],
     rubric_en: [
-      'Calculating all three side lengths: 2 marks',
-      'Identifying hypotenuse: 0.5 mark',
-      'Pythagorean check and conclusion: 1.5 marks'
+      'Calculating all three squared lengths accurately: 2 marks',
+      'Identifying AC as hypotenuse: 0.5 mark',
+      'Verifying AB² + BC² = AC² and concluding right angle at B: 1.5 marks'
     ],
     rubric_ml: [
-      'മൂന്ന് വശങ്ങളുടെയും നീളം കാണൽ: 2 മാർക്ക്',
-      'കർണ്ണം കണ്ടെത്തൽ: 0.5 മാർക്ക്',
-      'പൈതഗോറസ് പരിശോധനയും നിഗമനവും: 1.5 മാർക്ക്'
+      'മൂന്ന് വശങ്ങളുടെയും വർഗ്ഗങ്ങൾ ശരിയായി കാണൽ: 2 മാർക്ക്',
+      'കർണ്ണം $AC$ എന്ന് കണ്ടെത്തൽ: 0.5 മാർക്ക്',
+      '$AB^2 + BC^2 = AC^2$ പരിശോധിച്ച് $B$ ൽ മട്ടകോൺ എന്ന് സമർത്ഥിക്കൽ: 1.5 മാർക്ക്'
     ],
-    answer_en: '(a) BC = 3, CA = 4, AB = 5; (b) AB is the hypotenuse; (c) 3² + 4² = 5², right-angled at C',
-    answer_ml: '(a) BC = 3, CA = 4, AB = 5; (b) AB ആണ് കർണ്ണം; (c) 3² + 4² = 5², C ൽ മട്ടകോൺ'
+    answer_en: '(a) AB² = 10, BC² = 40, AC² = 50; (b) AC is the hypotenuse; (c) AB² + BC² = AC² = 50, right angle at vertex B',
+    answer_ml: '(a) AB² = 10, BC² = 40, AC² = 50; (b) AC ആണ് കർണ്ണം; (c) AB² + BC² = AC² = 50, B ൽ മട്ടകോൺ'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.6.4 Circle Position & Integer Coordinate Points (SCERT Textbook p.150)
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.6.5',
+    concept: 'm10.6.4.geometric-applications-of-coordinates',
+    sec: '10.6.4',
+    type: 'exercise',
+    marks: 4,
+    time: 240,
+    prompt_en: 'A circle is drawn with its centre at the origin $(0, 0)$ and radius 10 units (SCERT textbook problem).\\n(a) For each of the points $(6, 9)$, $(5, 9)$, and $(6, 8)$, determine whether it lies inside, on, or outside the circle by computing its distance from the centre.\\n(b) Write the coordinates of 8 different points on this circle that have integer coordinates.',
+    prompt_ml: 'ആധാരബിന്ദു $(0, 0)$ കേന്ദ്രവും ആരം 10 യൂണിറ്റും ആയി ഒരു വൃത്തം വരയ്ക്കുന്നു.\\n(a) കേന്ദ്രത്തിൽ നിന്നുള്ള അകലം കണക്കാക്കി $(6, 9), (5, 9), (6, 8)$ എന്നീ ബിന്ദുക്കൾ വൃത്തത്തിനകത്തോ, പുറത്തോ, വൃത്തത്തിലോ എന്ന് കണ്ടെത്തുക.\\n(b) പൂർണ്ണസംഖ്യകൾ സൂചകസംഖ്യകളായി വരുന്ന 8 വ്യത്യസ്ത ബിന്ദുക്കളുടെ സൂചകസംഖ്യകൾ എഴുതുക.',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li>For a circle centred at $(0, 0)$ with radius $r = 10$, $r^2 = 10^2 = 100$. The distance squared of any point $(x, y)$ from origin is $d^2 = x^2 + y^2$.
+  <ul>
+    <li>Point $(6, 9)$: $d^2 = 6^2 + 9^2 = 36 + 81 = 117 > 100$. Since $d > 10$, $(6, 9)$ lies <b>outside the circle</b>.</li>
+    <li>Point $(5, 9)$: $d^2 = 5^2 + 9^2 = 25 + 81 = 106 > 100$. Since $d > 10$, $(5, 9)$ lies <b>outside the circle</b>.</li>
+    <li>Point $(6, 8)$: $d^2 = 6^2 + 8^2 = 36 + 64 = 100 = r^2$. Since $d = 10$, $(6, 8)$ lies <b>on the circle</b>.</li>
+  </ul></li>
+  <li>To find 8 points on the circle with integer coordinates, we need $x^2 + y^2 = 100$:
+  <ul>
+    <li>Points on the axes: $(10, 0)$, $(-10, 0)$, $(0, 10)$, $(0, -10)$.</li>
+    <li>Points using the Pythagorean triple $6^2 + 8^2 = 100$: $(6, 8)$, $(6, -8)$, $(-6, 8)$, $(-6, -8)$ (or $(8, 6)$, $(8, -6)$, $(-8, 6)$, $(-8, -6)$).</li>
+  </ul></li>
+</ol>
+<p><b>Final Answer:</b> (a) (6, 9) outside, (5, 9) outside, (6, 8) on circle; (b) (10, 0), (-10, 0), (0, 10), (0, -10), (6, 8), (-6, 8), (6, -8), (-6, -8)</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Checking distance squared and classifying all 3 points: 2 marks</li>
+  <li>Writing 4 axis intercepts: 1 mark</li>
+  <li>Writing 4 additional integer points from (6, 8) signs: 1 mark</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li>ആധാരബിന്ദു കേന്ദ്രവും ആരം $r = 10$ ഉം ആയ വൃത്തത്തിൽ $r^2 = 100$. അകലത്തിന്റെ വർഗ്ഗം $d^2 = x^2 + y^2$:
+  <ul>
+    <li>$(6, 9)$: $6^2 + 9^2 = 36 + 81 = 117 > 100$. അകലം 10 നേക്കാൾ കൂടുതൽ ആയതിനാൽ <b>വൃത്തത്തിന് പുറത്ത്</b>.</li>
+    <li>$(5, 9)$: $5^2 + 9^2 = 25 + 81 = 106 > 100$. അകലം 10 നേക്കാൾ കൂടുതൽ ആയതിനാൽ <b>വൃത്തത്തിന് പുറത്ത്</b>.</li>
+    <li>$(6, 8)$: $6^2 + 8^2 = 36 + 64 = 100 = r^2$. അകലം കൃത്യം 10 ആയതിനാൽ <b>വൃത്തത്തിന് മേൽ</b>.</li>
+  </ul></li>
+  <li>പൂർണ്ണസംഖ്യകളായ 8 ബിന്ദുക്കൾ ($x^2 + y^2 = 100$):
+  <ul>
+    <li>അക്ഷങ്ങളിലെ ബിന്ദുക്കൾ: $(10, 0), (-10, 0), (0, 10), (0, -10)$.</li>
+    <li>$6^2 + 8^2 = 100$ ഉപയോഗിച്ചുള്ള മറ്റ് ബിന്ദുക്കൾ: $(6, 8), (-6, 8), (6, -8), (-6, -8)$.</li>
+  </ul></li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) (6, 9) പുറത്ത്, (5, 9) പുറത്ത്, (6, 8) വൃത്തത്തിൽ; (b) (10, 0), (-10, 0), (0, 10), (0, -10), (6, 8), (-6, 8), (6, -8), (-6, -8)</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>മൂന്ന് ബിന്ദുക്കളുടെ സ്ഥാനവും അകല വർഗ്ഗം പരിശോധിച്ച് കണ്ടെത്തൽ: 2 മാർക്ക്</li>
+  <li>അക്ഷങ്ങളിലെ 4 ബിന്ദുക്കൾ എഴുതൽ: 1 മാർക്ക്</li>
+  <li>പൂർണ്ണസംഖ്യാ സൂചകങ്ങളുള്ള മറ്റ് 4 ബിന്ദുക്കൾ എഴുതൽ: 1 മാർക്ക്</li>
+</ul>`,
+    steps_en: [
+      'Radius squared is $r^2 = 10^2 = 100$. Distance squared from origin is $x^2 + y^2$.',
+      'For $(6, 9)$: $6^2 + 9^2 = 117 > 100 \\implies$ outside the circle.',
+      'For $(5, 9)$: $5^2 + 9^2 = 106 > 100 \\implies$ outside the circle.',
+      'For $(6, 8)$: $6^2 + 8^2 = 100 = r^2 \\implies$ on the circle.',
+      '8 integer points on circle: $(10, 0), (-10, 0), (0, 10), (0, -10), (6, 8), (-6, 8), (6, -8), (-6, -8)$.'
+    ],
+    steps_ml: [
+      'ആരത്തിന്റെ വർഗ്ഗം $r^2 = 10^2 = 100$. ആധാരബിന്ദുവിൽ നിന്നുള്ള അകലത്തിന്റെ വർഗ്ഗം $x^2 + y^2$.',
+      '$(6, 9)$: $36 + 81 = 117 > 100 \\implies$ വൃത്തത്തിന് പുറത്ത്.',
+      '$(5, 9)$: $25 + 81 = 106 > 100 \\implies$ വൃത്തത്തിന് പുറത്ത്.',
+      '$(6, 8)$: $36 + 64 = 100 = r^2 \\implies$ വൃത്തത്തിൽ തന്നെ.',
+      'വൃത്തത്തിലെ 8 ബിന്ദുക്കൾ: $(10, 0), (-10, 0), (0, 10), (0, -10), (6, 8), (-6, 8), (6, -8), (-6, -8)$.'
+    ],
+    rubric_en: [
+      'Checking distance squared and classifying all 3 points: 2 marks',
+      'Writing 4 axis intercepts: 1 mark',
+      'Writing 4 additional integer points from (6, 8) signs: 1 mark'
+    ],
+    rubric_ml: [
+      'മൂന്ന് ബിന്ദുക്കളുടെ സ്ഥാനവും അകല വർഗ്ഗം പരിശോധിച്ച് കണ്ടെത്തൽ: 2 മാർക്ക്',
+      'അക്ഷങ്ങളിലെ 4 ബിന്ദുക്കൾ എഴുതൽ: 1 മാർക്ക്',
+      'പൂർണ്ണസംഖ്യാ സൂചകങ്ങളുള്ള മറ്റ് 4 ബിന്ദുക്കൾ എഴുതൽ: 1 മാർക്ക്'
+    ],
+    answer_en: '(a) (6, 9) outside, (5, 9) outside, (6, 8) on circle; (b) (10, 0), (-10, 0), (0, 10), (0, -10), (6, 8), (-6, 8), (6, -8), (-6, -8)',
+    answer_ml: '(a) (6, 9) പുറത്ത്, (5, 9) പുറത്ത്, (6, 8) വൃത്തത്തിൽ; (b) (10, 0), (-10, 0), (0, 10), (0, -10), (6, 8), (-6, 8), (6, -8), (-6, -8)'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.6.4 Circumcircle & Axis Intersections (SCERT Textbook p.150)
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.6.6',
+    concept: 'm10.6.4.geometric-applications-of-coordinates',
+    sec: '10.6.4',
+    type: 'exercise',
+    marks: 4,
+    time: 240,
+    prompt_en: 'Solve the following coordinate geometry problems (SCERT textbook questions):\\n(a) A circle has centre $(1, 1)$ and radius 2. Find the coordinates of the points where this circle intersects the $x$-axis and the $y$-axis.\\n(b) The vertices of a triangle are $O(0, 0)$, $A(4, 0)$, and $B(1, 3)$. Calculate the coordinates of the circumcentre and the length of the circumradius.',
+    prompt_ml: 'താഴെ പറയുന്ന പ്രശ്നങ്ങൾ നിർദ്ധാരണം ചെയ്യുക:\\n(a) കേന്ദ്രം $(1, 1)$ ഉം ആരം 2 ഉം ആയ ഒരു വൃത്തം $x$-അക്ഷത്തെയും $y$-അക്ഷത്തെയും മുറിച്ചുകടക്കുന്ന ബിന്ദുക്കളുടെ സൂചകസംഖ്യകൾ കാണുക.\\n(b) ഒരു ത്രികോണത്തിന്റെ ശീർഷങ്ങൾ $O(0, 0), A(4, 0), B(1, 3)$ എന്നിവയാണ്. ഇതിന്റെ പരിവൃത്ത കേന്ദ്രത്തിന്റെ സൂചകസംഖ്യകളും പരിവൃത്ത ആരവും കണക്കാക്കുക.',
+    solution_en: `<h4>Step-by-step Solution:</h4>
+<ol>
+  <li><b>Intersections of circle $(x - 1)^2 + (y - 1)^2 = 2^2 = 4$:</b>
+  <ul>
+    <li>With $x$-axis ($y = 0$):
+    $$(x - 1)^2 + (0 - 1)^2 = 4 \\implies (x - 1)^2 + 1 = 4 \\implies (x - 1)^2 = 3$$
+    $$x - 1 = \\pm\\sqrt{3} \\implies x = 1 \\pm \\sqrt{3}$$
+    Intersection points on $x$-axis: $(1 + \\sqrt{3}, 0)$ and $(1 - \\sqrt{3}, 0)$.</li>
+    <li>With $y$-axis ($x = 0$):
+    $$(0 - 1)^2 + (y - 1)^2 = 4 \\implies 1 + (y - 1)^2 = 4 \\implies (y - 1)^2 = 3$$
+    $$y - 1 = \\pm\\sqrt{3} \\implies y = 1 \\pm \\sqrt{3}$$
+    Intersection points on $y$-axis: $(0, 1 + \\sqrt{3})$ and $(0, 1 - \\sqrt{3})$.</li>
+  </ul></li>
+  <li><b>Circumcentre of $\\triangle OAB$ with $O(0, 0), A(4, 0), B(1, 3)$:</b>
+  Let circumcentre be $P(x, y)$. Since $P$ is equidistant from all vertices:
+  $$OP^2 = AP^2 \\implies x^2 + y^2 = (x - 4)^2 + y^2 = x^2 - 8x + 16 + y^2$$
+  $$-8x + 16 = 0 \\implies 8x = 16 \\implies x = 2$$
+  Now equating $OP^2 = BP^2$:
+  $$x^2 + y^2 = (x - 1)^2 + (y - 3)^2$$
+  Substitute $x = 2$:
+  $$2^2 + y^2 = (2 - 1)^2 + (y - 3)^2 \\implies 4 + y^2 = 1 + y^2 - 6y + 9$$
+  $$4 = 10 - 6y \\implies 6y = 6 \\implies y = 1$$
+  So the circumcentre is $(2, 1)$.</li>
+  <li><b>Circumradius:</b>
+  $$R = OP = \\sqrt{2^2 + 1^2} = \\sqrt{4 + 1} = \\sqrt{5}\\text{ units}$$</li>
+</ol>
+<p><b>Final Answer:</b> (a) x-axis: (1 ± √3, 0), y-axis: (0, 1 ± √3); (b) Circumcentre: (2, 1), Circumradius: √5 units</p>
+<h4>Marking Rubric:</h4>
+<ul>
+  <li>Finding both x-axis intercepts: 1 mark</li>
+  <li>Finding both y-axis intercepts: 1 mark</li>
+  <li>Finding circumcentre (2, 1): 1 mark</li>
+  <li>Finding circumradius √5: 1 mark</li>
+</ul>`,
+    solution_ml: `<h4>ഘട്ടങ്ങൾ:</h4>
+<ol>
+  <li><b>വൃത്തത്തിന്റെ അക്ഷങ്ങളുമായുള്ള സംഗമബിന്ദുക്കൾ:</b>
+  വൃത്തത്തിന്റെ സമവാക്യം $(x - 1)^2 + (y - 1)^2 = 4$.
+  <ul>
+    <li>$x$-അക്ഷവുമായി ($y = 0$):
+    $$(x - 1)^2 + (0 - 1)^2 = 4 \\implies (x - 1)^2 + 1 = 4 \\implies (x - 1)^2 = 3$$
+    $$x = 1 \\pm \\sqrt{3}$$
+    ബിന്ദുക്കൾ: $(1 + \\sqrt{3}, 0), (1 - \\sqrt{3}, 0)$.</li>
+    <li>$y$-അക്ഷവുമായി ($x = 0$):
+    $$(0 - 1)^2 + (y - 1)^2 = 4 \\implies (y - 1)^2 = 3 \\implies y = 1 \\pm \\sqrt{3}$$
+    ബിന്ദുക്കൾ: $(0, 1 + \\sqrt{3}), (0, 1 - \\sqrt{3})$.</li>
+  </ul></li>
+  <li><b>പരിവൃത്ത കേന്ദ്രം $P(x, y)$:</b>
+  $OP = AP$ ആയതിനാൽ:
+  $$x^2 + y^2 = (x - 4)^2 + y^2 \\implies 8x = 16 \\implies x = 2$$
+  $OP = BP$ ആയതിനാൽ:
+  $$x^2 + y^2 = (x - 1)^2 + (y - 3)^2$$
+  $x = 2$ നൽകുമ്പോൾ:
+  $$4 + y^2 = 1 + y^2 - 6y + 9 \\implies 6y = 6 \\implies y = 1$$
+  പരിവൃത്ത കേന്ദ്രം $(2, 1)$ ആണ്.</li>
+  <li><b>പരിവൃത്ത ആരം:</b>
+  $$R = OP = \\sqrt{2^2 + 1^2} = \\sqrt{5}\\text{ യൂണിറ്റ്}$$</li>
+</ol>
+<p><b>അന്തിമ ഉത്തരം:</b> (a) x-അക്ഷത്തിൽ (1 ± √3, 0), y-അക്ഷത്തിൽ (0, 1 ± √3); (b) പരിവൃത്ത കേന്ദ്രം: (2, 1), പരിവൃത്ത ആരം: √5 യൂണിറ്റ്</p>
+<h4>മാർക്കിംഗ് റൂബ്രിക്:</h4>
+<ul>
+  <li>$x$-അക്ഷത്തിലെ സംഗമബിന്ദുക്കൾ കണ്ടെത്തൽ: 1 മാർക്ക്</li>
+  <li>$y$-അക്ഷത്തിലെ സംഗമബിന്ദുക്കൾ കണ്ടെത്തൽ: 1 മാർക്ക്</li>
+  <li>പരിവൃത്ത കേന്ദ്രം $(2, 1)$ കണ്ടെത്തൽ: 1 മാർക്ക്</li>
+  <li>പരിവൃത്ത ആരം $\\sqrt{5}$ കണ്ടെത്തൽ: 1 മാർക്ക്</li>
+</ul>`,
+    steps_en: [
+      'Circle equation: $(x - 1)^2 + (y - 1)^2 = 4$.',
+      'On $x$-axis ($y = 0$): $(x - 1)^2 = 3 \\implies x = 1 \\pm \\sqrt{3}$. Intercepts are $(1 \\pm \\sqrt{3}, 0)$.',
+      'On $y$-axis ($x = 0$): $(y - 1)^2 = 3 \\implies y = 1 \\pm \\sqrt{3}$. Intercepts are $(0, 1 \\pm \\sqrt{3})$.',
+      'Circumcentre $P(x, y)$ satisfies $OP = AP \\implies x = 2$. Then $OP = BP \\implies y = 1$. Circumcentre is $(2, 1)$.',
+      'Circumradius $R = \\sqrt{2^2 + 1^2} = \\sqrt{5}$ units.'
+    ],
+    steps_ml: [
+      'വൃത്ത സമവാക്യം: $(x - 1)^2 + (y - 1)^2 = 4$.',
+      '$x$-അക്ഷത്തിൽ ($y = 0$): $(x - 1)^2 = 3 \\implies x = 1 \\pm \\sqrt{3}$. ബിന്ദുക്കൾ $(1 \\pm \\sqrt{3}, 0)$.',
+      '$y$-അക്ഷത്തിൽ ($x = 0$): $(y - 1)^2 = 3 \\implies y = 1 \\pm \\sqrt{3}$. ബിന്ദുക്കൾ $(0, 1 \\pm \\sqrt{3})$.',
+      'പരിവൃത്ത കേന്ദ്രം $P(x, y)$: $OP = AP \\implies x = 2$, $OP = BP \\implies y = 1$. കേന്ദ്രം $(2, 1)$.',
+      'പരിവൃത്ത ആരം $R = \\sqrt{2^2 + 1^2} = \\sqrt{5}$ യൂണിറ്റ്.'
+    ],
+    rubric_en: [
+      'Finding both x-axis intercepts: 1 mark',
+      'Finding both y-axis intercepts: 1 mark',
+      'Finding circumcentre (2, 1): 1 mark',
+      'Finding circumradius √5: 1 mark'
+    ],
+    rubric_ml: [
+      '$x$-അക്ഷത്തിലെ സംഗമബിന്ദുക്കൾ കണ്ടെത്തൽ: 1 മാർക്ക്',
+      '$y$-അക്ഷത്തിലെ സംഗമബിന്ദുക്കൾ കണ്ടെത്തൽ: 1 മാർക്ക്',
+      'പരിവൃത്ത കേന്ദ്രം $(2, 1)$ കണ്ടെത്തൽ: 1 മാർക്ക്',
+      'പരിവൃത്ത ആരം $\\sqrt{5}$ കണ്ടെത്തൽ: 1 മാർക്ക്'
+    ],
+    answer_en: '(a) x-axis: (1 ± √3, 0), y-axis: (0, 1 ± √3); (b) Circumcentre: (2, 1), Circumradius: √5 units',
+    answer_ml: '(a) x-അക്ഷത്തിൽ (1 ± √3, 0), y-അക്ഷത്തിൽ (0, 1 ± √3); (b) പരിവൃത്ത കേന്ദ്രം: (2, 1), പരിവൃത്ത ആരം: √5 യൂണിറ്റ്'
   }
 );

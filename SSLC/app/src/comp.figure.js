@@ -57,7 +57,7 @@ const Fig = (function () {
     });
 
     return {
-      svg: svg, X: X, Y: Y, curve: curve, box: o,
+      svg: svg, X: X, Y: Y, tx: X, ty: Y, curve: curve, box: o,
       add(...kids) { kids.forEach(k => k && svg.appendChild(k)); return this; },
       /* axes with optional tick labels */
       axes(opts2) {
@@ -153,7 +153,11 @@ const Fig = (function () {
       }
     };
 
-    def.build(api, opts || {});
+    try {
+      def.build(api, opts || {});
+    } catch (err) {
+      console.error('Figure build error:', err);
+    }
     return host;
   }
 

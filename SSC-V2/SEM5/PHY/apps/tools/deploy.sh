@@ -9,6 +9,17 @@ set -e
 APPS="$(cd "$(dirname "$0")/.." && pwd)"
 REPO="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 TMP="$(mktemp -d)"; mkdir -p "$TMP/public"
+trap 'rm -rf "$TMP"' EXIT
+
+# Stage a page that is committed but missing from the working tree.
+#   stage_from_git <repo-relative path> <destination file>
+# The bytes go from git straight into the deploy directory, so a project whose
+# build/ has been cleaned locally still ships exactly what was committed — and
+# nothing has to be written back into that project's folder to publish it.
+stage_from_git() {
+  mkdir -p "$(dirname "$2")"
+  git -C "$REPO" show "HEAD:$1" > "$2" 2>/dev/null && [ -s "$2" ]
+}
 
 # --- SEM5 physics study apps ---
 cp "$APPS/QM_1.html" "$TMP/public/QM_1.html"
@@ -45,13 +56,16 @@ if [ -f "$V4/build.py" ]; then
   else
     echo "Live page: republishing the committed build (pass --live to rebuild it)."
   fi
-  if [ ! -f "$V4/build/index.html" ]; then
-    echo "ERROR: $V4/build/index.html is missing and --live was not passed." >&2
+  mkdir -p "$TMP/public/math/real-analysis"
+  if [ -f "$V4/build/index.html" ]; then
+    cp "$V4/build/index.html" "$TMP/public/math/real-analysis/index.html"
+  elif stage_from_git "${V4#$REPO/}/build/index.html" "$TMP/public/math/real-analysis/index.html"; then
+    echo "Real Analysis: build/ is not in the working tree — shipping the committed page."
+  else
+    echo "ERROR: $V4/build/index.html is missing from the working tree AND from git." >&2
     echo "       Deploying now would delete /math/real-analysis. Aborting." >&2
     exit 1
   fi
-  mkdir -p "$TMP/public/math/real-analysis"
-  cp "$V4/build/index.html" "$TMP/public/math/real-analysis/index.html"
   if [ -f "$V4/pyq.html" ]; then
     cp "$V4/pyq.html" "$TMP/public/math/real-analysis/pyq.html"
   fi
@@ -114,6 +128,70 @@ else
   echo "WARNING: QM missing — deploying without the Quantum Mechanics app." >&2
 fi
 
+# --- SSLC bilingual study app (Kerala SCERT, Class 8-10) ---
+#   /pre/<subject>-test   one page per subject, built from app/mock/
+#   /pre/<subject>        the same page on the validated data/ pool, published
+#                         only once build/<subject>/index.html has been committed
+#
+# Subject ids inside the app are phy/che/bio/mat; the URL uses the full word.
+if [ -d "$REPO/SSLC/app" ] && [ -f "$REPO/SSLC/build.py" ]; then
+  SSLC="$REPO/SSLC"
+  for pair in "phy physics" "che chemistry" "bio biology" "mat maths"; do
+    set -- $pair; SID="$1"; SNAME="$2"
+
+    # the mock page is always rebuilt: it exists to show the current code
+    python3 "$SSLC/build.py" --mock --subject "$SID" > /dev/null
+    mkdir -p "$TMP/public/pre/$SNAME-test"
+    cp "$SSLC/build/test/$SID/index.html" "$TMP/public/pre/$SNAME-test/index.html"
+    if [ -d "$SSLC/diagrams" ]; then
+      cp -rL "$SSLC/diagrams" "$TMP/public/pre/$SNAME-test/diagrams"
+    fi
+
+    # the live page follows the same rule as the other apps: rebuilt only with
+    # --live, and never silently dropped if the committed build is missing
+    if [ "$REBUILD_LIVE" = "1" ] && [ -d "$SSLC/data" ]; then
+      echo "Rebuilding the LIVE SSLC $SNAME page from data/ ..."
+      python3 "$SSLC/build.py" --subject "$SID" > /dev/null
+    fi
+    if [ -f "$SSLC/build/$SID/index.html" ]; then
+      mkdir -p "$TMP/public/pre/$SNAME"
+      cp "$SSLC/build/$SID/index.html" "$TMP/public/pre/$SNAME/index.html"
+      if [ -d "$SSLC/diagrams" ]; then
+        cp -rL "$SSLC/diagrams" "$TMP/public/pre/$SNAME/diagrams"
+      fi
+    fi
+  done
+
+  # Math Base (Class 8 Mathematics & Foundations)
+  mkdir -p "$TMP/public/pre/math-base-test" "$TMP/public/pre/math-test"
+  if [ -f "$SSLC/build/test/index.html" ]; then
+    cp "$SSLC/build/test/index.html" "$TMP/public/pre/math-base-test/index.html"
+    cp "$SSLC/build/test/index.html" "$TMP/public/pre/math-test/index.html"
+  fi
+  if [ -d "$SSLC/diagrams" ]; then
+    cp -rL "$SSLC/diagrams" "$TMP/public/pre/math-base-test/diagrams"
+    cp -rL "$SSLC/diagrams" "$TMP/public/pre/math-test/diagrams"
+  fi
+
+  if [ "$REBUILD_LIVE" = "1" ] && [ -d "$SSLC/data" ]; then
+    echo "Rebuilding the LIVE Math Base page from data/ ..."
+    python3 "$SSLC/build.py" > /dev/null
+  fi
+  if [ -f "$SSLC/build/index.html" ]; then
+    mkdir -p "$TMP/public/pre/math-base" "$TMP/public/pre/math" "$TMP/public/math"
+    cp "$SSLC/build/index.html" "$TMP/public/pre/math-base/index.html"
+    cp "$SSLC/build/index.html" "$TMP/public/pre/math/index.html"
+    cp "$SSLC/build/index.html" "$TMP/public/math/index.html"
+    if [ -d "$SSLC/diagrams" ]; then
+      cp -rL "$SSLC/diagrams" "$TMP/public/pre/math-base/diagrams"
+      cp -rL "$SSLC/diagrams" "$TMP/public/pre/math/diagrams"
+      cp -rL "$SSLC/diagrams" "$TMP/public/math/diagrams"
+    fi
+  fi
+else
+  echo "WARNING: $REPO/SSLC missing — deploying without the SSLC apps." >&2
+fi
+
 # --- exam trackers and checklists (repo trackers/) ---
 if compgen -G "$REPO/trackers/*.html" > /dev/null; then
   cp "$REPO"/trackers/*.html "$TMP/public/"
@@ -126,7 +204,12 @@ fi
 cat > "$TMP/firebase.json" <<'JSON'
 { "hosting": { "site": "ssc-data-science-qm", "public": "public",
   "ignore": ["firebase.json", "**/.*"],
-  "headers": [{ "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }] } }
+  "headers": [
+    { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/pre/**", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/math/**", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "/phy/**", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+  ] } }
 JSON
 echo '{ "projects": { "default": "data-science-ef878" } }' > "$TMP/.firebaserc"
 
@@ -149,6 +232,15 @@ echo ""
 echo "Quantum Mechanics study system:"
 echo "  → $BASE/phy/quantum-mechanics       (validated data)"
 echo "  → $BASE/phy/quantum-mechanics-test  (mock data — safe to break)"
+echo ""
+echo "SSLC study apps (Kerala SCERT, EN + മലയാളം):"
+for pair in physics chemistry biology maths; do
+  echo "  → $BASE/pre/$pair-test   (mock data — safe to break)"
+done
+echo "  → $BASE/pre/math             (Class 8 Mathematics & Foundation - Live)"
+echo "  → $BASE/math                 (Class 8 Mathematics & Foundation - Live)"
+echo "  → $BASE/pre/math-base        (Class 8 Mathematics & Foundation)"
+echo "  → $BASE/pre/math-base-test   (mock data — safe to break)"
 echo ""
 echo "Trackers & checklists:"
 for f in "$REPO"/trackers/*.html; do

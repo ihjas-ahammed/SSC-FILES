@@ -259,7 +259,7 @@ const SYLLABI = [
         title_en: 'Chapter 1: Arithmetic Sequences',
         title_ml: 'അദ്ധ്യായം 1: സമാന്തരശ്രേണികൾ',
         marks: 20,
-        secs: ['10.1.1', '10.1.2', '10.1.3', '10.1.4']
+        secs: ['10.1.1', '10.1.2', '10.1.3', '10.1.4', '10.1.5', '10.1.6']
       },
       {
         id: 'm10.m2',
@@ -267,7 +267,7 @@ const SYLLABI = [
         title_en: 'Chapter 2: Circles',
         title_ml: 'അദ്ധ്യായം 2: വൃത്തങ്ങൾ',
         marks: 20,
-        secs: ['10.2.1', '10.2.2', '10.2.3', '10.2.4']
+        secs: ['10.2.1', '10.2.2', '10.2.3', '10.2.4', '10.2.5']
       },
       {
         id: 'm10.m3',
@@ -557,16 +557,19 @@ const SECTITLE = {
   '9.13.4': { en: 'Assumed Mean Method', ml: 'സങ്കല്പിത ശരാശരി രീതി' },
 
   /* Class 10 Chapter 1: Arithmetic Sequences */
-  '10.1.1': { en: 'Number Sequences & Common Difference', ml: 'സംഖ്യാശ്രേണികളും പൊതുവ്യത്യാസവും' },
-  '10.1.2': { en: 'Algebraic Form of an Arithmetic Sequence', ml: 'സമാന്തരശ്രേണിയുടെ ബീജഗണിതം' },
-  '10.1.3': { en: 'Position Difference and Term Relations', ml: 'പദ വ്യത്യാസവും സ്ഥാന വ്യത്യാസവും' },
-  '10.1.4': { en: 'Sum of Terms of an Arithmetic Sequence', ml: 'സമാന്തരശ്രേണികളുടെ തുക' },
+  '10.1.1': { en: 'Number Patterns & Sequences', ml: 'സംഖ്യാക്രമങ്ങളും ശ്രേണികളും' },
+  '10.1.2': { en: 'Arithmetic Sequences & Common Difference', ml: 'സമാന്തരശ്രേണികളും പൊതുവ്യത്യാസവും' },
+  '10.1.3': { en: 'Position and Term: Algebraic Form', ml: 'സ്ഥാനവും പദവും — ബീജഗണിതരൂപം' },
+  '10.1.4': { en: 'Changes in Position and Terms', ml: 'സ്ഥാനമാറ്റവും പദമാറ്റവും' },
+  '10.1.5': { en: 'Term Relations, Symmetric Averages & Middle Terms', ml: 'പദബന്ധങ്ങളും മധ്യപദങ്ങളും' },
+  '10.1.6': { en: 'Sum of Terms of an Arithmetic Sequence', ml: 'സമാന്തരശ്രേണികളുടെ തുക' },
 
   /* Class 10 Chapter 2: Circles */
-  '10.2.1': { en: 'Inscribed Angle & Central Angle', ml: 'വൃത്തത്തിലെ കോണും കേന്ദ്രകോണും' },
-  '10.2.2': { en: 'Angles in Same Segment & Alternate Segment', ml: 'ഒരേ വൃത്തഖണ്ഡത്തിലെ കോണുകൾ' },
-  '10.2.3': { en: 'Cyclic Quadrilaterals', ml: 'ചക്രിയ ചതുർഭുജങ്ങൾ' },
-  '10.2.4': { en: 'Chords & Intersecting Segments', ml: 'ഞാണുകളുടെ ഗുണനഫലം' },
+  '10.2.1': { en: 'Angle in a Semicircle (Thales Theorem)', ml: 'അർദ്ധവൃത്തത്തിലെ കോൺ' },
+  '10.2.2': { en: 'Central Angle & Inscribed Angle Theorem', ml: 'കേന്ദ്രകോണും വൃത്തത്തിലെ കോണും' },
+  '10.2.3': { en: 'Angles in Same Segment & Alternate Segment', ml: 'ഒരേ വൃത്തഖണ്ഡത്തിലെ കോണുകൾ' },
+  '10.2.4': { en: 'Cyclic Quadrilaterals & Supplementary Angles', ml: 'ചക്രിയ ചതുർഭുജങ്ങൾ' },
+  '10.2.5': { en: 'Intersecting Chords & Tangent-Secant Theorem', ml: 'ഞാണുകളുടെ ഗുണനഫലവും തൊടുവരയും' },
 
   /* Class 10 Chapter 3: Mathematics of Chance */
   '10.3.1': { en: 'Probability as a Measure of Chance', ml: 'സാധ്യത ഒരു സംഖ്യയായി' },
