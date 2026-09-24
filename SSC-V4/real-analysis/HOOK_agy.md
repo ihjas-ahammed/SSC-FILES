@@ -340,15 +340,79 @@ The mock set is no longer a stopgap — it is the permanent test fixture behind
 ---
 
 
-### Optional: steering the real-line widget
+### The real-line widget — AGY's audit and `line` authoring task
 
-The app draws a schematic real line under any statement or proof step whose TeX states
-an unambiguous order (see `flow-library/HOOK.md` → "Shared widgets"). Nothing needs
-authoring. Two optional fields steer it when the automatic reading is wrong or unhelpful:
+The app draws a number line under statements and proof steps whose TeX states an order.
+It uses **only** the three types of the design sheet
+(`flow-library/design/realline-reference.html`):
 
-- `line: false` on a concept (whole note) or on one rung suppresses it there.
-- `line: 'a-\\delta < x < a+\\delta'` on a concept or rung replaces the TeX it reads, for a
-  step whose formula hides the order (write plain TeX, no `$`).
+| Type | Reads | Draws |
+| --- | --- | --- |
+| 1 | `v > a`, `v \ge a`, `v \in (a,\infty)` | blue ray to the right from a, v marked on it |
+| 2 | `v < a`, `v \le a`, `v \in (-\infty,a]` | green ray to the left, v marked on it |
+| 3 | `a < v < b`, `v \in [a,b)`, `\|v-c\|<r`, `0<\|v-c\|<r`, `w \le s \le u` | amber segment between the ends, v (or s) marked inside, a neighbourhood's centre as a tick, a punctured centre as a hole |
+
+Hollow end means strict, filled means included. A non-negative quantity (`|…|`, `\|…\|`,
+`d(…)`) bounded above is drawn as `[0, R]`, never as a ray to −∞. A chain with an unbounded
+end (`n_1 < n_2 < \cdots`) is not drawn. Most places need nothing: the widget reads the TeX
+already there. The task is to fix the places where that reading is missing or unhelpful,
+using **one optional field and nothing else**.
+
+**The field.** On a concept (its statement) or on one rung:
+
+- `line: 'a-\\delta < x < a+\\delta'`: the TeX the widget reads **instead of** that
+  statement or rung. Plain TeX, no `$`, same symbols as the text. A list is allowed:
+  `line: ['|x_n| \\le M', 'n \\ge K']` (at most 3 lines are drawn).
+- `line: false`: draw nothing here (on a concept it silences the statement **and** the
+  proof).
+
+**Rules for a good `line`:**
+
+1. It states only what that step says or has already established. Never invent a bound
+   to make a picture.
+2. It names the quantity the step is about, so that quantity gets the marked dot: prefer
+   `|x_n - x| < \varepsilon` over `\varepsilon > 0`, and `x_K \le x_n \le x^*` over
+   `n \ge K`.
+3. It uses the forms the reader understands: `lo < v < hi`, `lo \le v \le hi`,
+   `|v - c| < r`, `0 < |v - c| < r`, `v \in [a,b]`, `v \ge a`, `v < a`, chains
+   `a \le v \le w \le b`. Keep each term short (under 25 characters). No quantifiers, no
+   `\text{}`, no set braces.
+4. `line: false` where a picture misleads, e.g. an index chain (`n_1 < n_2`), a pure
+   positivity fact repeated from the statement, or an inequality between functions rather
+   than numbers.
+5. Touch nothing but `line`. Mathematics, answers and provenance stay as they are.
+
+**Procedure (cheap, one data file at a time):**
+
+```
+node tools/realline_report.js --missing                    # has an inequality, draws nothing
+node tools/realline_report.js --drawn --id c.5.1.3         # what one concept draws now
+node tools/realline_report.js --missing --json > /tmp/rl.jsonl   # machine list to work from
+```
+
+1. Take the `--missing` list for one data file's concepts. For each place, either add a
+   `line` (rules 1 to 3) or `line: false` (rule 4).
+2. Skim `--drawn` for the same concepts and fix any track that reads wrong (a marked
+   quantity that is not the one the step is about, or a set that is not what the step
+   says) with a `line`.
+3. Re-run `--id` for every concept touched: each place prints `Type N <set> · <marks>`
+   and must say what the step means. Then `node tools/check_tex.js` must still report 0
+   errors.
+4. Preview on real data without touching the public page:
+   `python3 build.py --beta`, or deploy (without `--live`) and open
+   `/math/real-analysis-bete`.
+5. **Do not** rebuild or commit `build/index.html`. Claude or the owner publishes live.
+
+**Paste-ready prompt for AGY:**
+
+> In `real-analysis/`, audit the real-line widget following HOOK_agy.md → "The real-line
+> widget". Work through `data/*.js` one file at a time. For every place that
+> `node tools/realline_report.js --missing` lists, add a `line` field (or `line: false`)
+> following the five rules. Then check `--drawn` for the same concepts and correct any
+> misleading track with `line`. Edit only `line` fields. After each file, run
+> `node tools/check_tex.js` (must be 0 errors) and `node tools/realline_report.js --id`
+> for the concepts you touched. Report the before/after summary line of
+> `realline_report.js`. Do not build or publish the live page.
 
 ## Levels 1–4 — earned, never switched
 

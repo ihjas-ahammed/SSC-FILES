@@ -1092,6 +1092,10 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
   background:var(--c); border:2.4px solid var(--c); z-index:1; }
 .rl-end.open{ background:var(--surface); }
 .rl-pt{ top:12.8px; width:9px; height:9px; margin:-5.3px 0 0 -4.5px; border-radius:50%; background:var(--rl-ink); }
+/* the quantity the inequality is about: the dot you should look at */
+.rl-pt.var{ width:11px; height:11px; margin:-6.3px 0 0 -5.5px; background:var(--rl-ink);
+  box-shadow:0 0 0 2.5px var(--surface); z-index:2; }
+.rl-lab.var{ font-weight:700; }
 .rl-pt.inner{ width:1.4px; height:10px; margin:-5.8px 0 0 -.7px; border-radius:0; background:var(--rl-axis); }
 .rl-lab{ top:22px; transform:translateX(-50%); white-space:nowrap; font-size:.92rem; color:var(--rl-ink); line-height:1.1; }
 .rl-lab.low{ top:40px; }
@@ -1099,11 +1103,6 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .rl-lab.last{ transform:translateX(calc(-100% + 12px)); }
 .rl-lab.new{ color:var(--accent); font-weight:700; }
 .rl-lab mjx-container{ margin:0 !important; }
-.rl-op{ top:12.8px; transform:translate(-50%, -52%); padding:0 4px; background:var(--surface);
-  font:500 .86rem/1 var(--font-prose); color:var(--rl-ink); }
-.rung-meaning .rl-op{ background:var(--surface-2); }
-.rl-cap{ margin-top:4px; font-size:.9rem; color:var(--rl-ink); overflow-x:auto; overflow-y:hidden; }
-.rl-cap mjx-container{ margin:0 !important; }
 
 </style>
 <style>
@@ -6008,16 +6007,18 @@ const Fig = (function () {
 
    Inequalities are statements about ORDER, not about values, so the widget
    is schematic: it reads the order relations already written in the TeX of a
-   statement or a proof step and lays the terms out left to right. Nothing has
-   to be authored:
+   statement or a proof step and draws them in the three types of the design
+   sheet (flow-library/design/realline-reference.html) — Type 1 x > a,
+   Type 2 x < a, Type 3 a < x < b — with the quantity itself marked inside
+   its set. Nothing has to be authored:
 
-     a < b \le c                    three points, the relations on the axis
-     |x - a| < \varepsilon          a band from a−ε to a+ε around a, with x
-                                    roaming inside it
-     x \in (a, b]   /  x \in (0,\infty)   a band (or a ray) with x inside
+     |x_n| \le M                    Type 3 [−M, M], centre 0, x_n marked
+     |x - a| < \varepsilon          Type 3 (a−ε, a+ε), centre a, x marked
+     0 < |x - c| < \delta           the same with c cut out (a hole)
+     x \in (a, b]  /  n \ge K       Type 3 / Type 1 with the variable marked
+     w \le s \le u                  Type 3 [w, u] with s marked
      u = \sup S                     one point, labelled with both names
      u - \varepsilon                implies u − ε < u, so u appears beside it
-     e_1 < e_2 < \cdots < 3         ellipses kept as points of their own
 
    A line is drawn only when the order it shows is TOTAL on the terms it
    shows: a picture that puts two incomparable terms in some order would be
@@ -6144,6 +6145,21 @@ const RealLine = (function () {
      unreadable (c − (|x − c|)): ε, δ/2, ε_0, M, r, δ(ε), \frac{ε}{3}, 1/n, … */
   const RADIUS = /^(\\(varepsilon|epsilon|delta|eta|gamma|rho)(_\{?[a-zA-Z0-9]+\}?)?(\(\\?[a-zA-Z]+(_\{?[a-zA-Z0-9]+\}?)?\))?|[a-zA-Z](_\{?[a-zA-Z0-9]+\}?)?|\d+(\.\d+)?)(\/\d+|\/[a-zA-Z])?$|^\\frac\{[^{}|]+\}\{[^{}|]+\}$/;
 
+  /* does x have a + or − at top level (so it needs brackets after a sign)? */
+  function topSign(x) {
+    let d = 0;
+    for (let i = 0; i < x.length; i++) {
+      const ch = x[i];
+      if (ch === '{' || ch === '(' || ch === '[') d++;
+      else if (ch === '}' || ch === ')' || ch === ']') d--;
+      else if (d === 0 && i > 0 && (ch === '+' || ch === '-')) return true;
+    }
+    return false;
+  }
+
+  const radiusOK = R => RADIUS.test(key(R))
+    || (/^\\[dt]?frac/.test(R) && balanced(R) && !/[|<>=]/.test(R) && key(R).length <= 26);
+
   function interval(t) {
     const m = /^([(\[])(.+)([)\]])$/.exec(t.trim());
     if (!m) return null;
@@ -6199,8 +6215,8 @@ const RealLine = (function () {
       const inner = /^\|(.+)\|$/.exec(c.terms[1].trim());
       const m = inner && /^(.+?)\s*-\s*([^-+]+)$/.exec(inner[1].trim());
       const Rr = c.terms[2].trim();
-      if (m && usable(m[1]) && usable(m[2]) && key(m[2]).length <= 14 && RADIUS.test(key(Rr))) {
-        const ctr = m[2].trim(), wrapR = /[+-]/.test(Rr) ? '(' + Rr + ')' : Rr;
+      if (m && usable(m[1]) && usable(m[2]) && key(m[2]).length <= 14 && radiusOK(Rr)) {
+        const ctr = m[2].trim(), wrapR = topSign(Rr) ? '(' + Rr + ')' : Rr;
         const lo = point(F, ctr + '-' + wrapR), mid = point(F, ctr), hi = point(F, ctr + '+' + wrapR);
         if (lo && mid && hi) {
           F.order.push({ a: lo, b: mid, strict: true }, { a: mid, b: hi, strict: true });
@@ -6228,15 +6244,15 @@ const RealLine = (function () {
         })();
         const v = off ? off.v : inner, ctr = off ? off.c : '0';
         const R = c.terms[1].trim().replace(/[.,;]+$/, '');
-        if (usable(v) && usable(ctr) && key(ctr).length <= 14 && RADIUS.test(key(R))) {
-          const wrap = x => /[+-]/.test(x.replace(/^-/, '')) ? '(' + x + ')' : x;
+        if (usable(v) && usable(ctr) && key(ctr).length <= 14 && radiusOK(R)) {
+          const wrap = x => topSign(x) ? '(' + x + ')' : x;
           const lo = point(F, (ctr === '0' ? '' : ctr) + '-' + wrap(R));
           const mid = point(F, ctr);
           const hi = point(F, (ctr === '0' ? '' : ctr + '+') + wrap(R));
           if (lo && mid && hi) {
             F.order.push({ a: lo, b: mid, strict: true }, { a: mid, b: hi, strict: true });
             const closed = c.ops[0] === 'le';
-            F.ranges.push({ v: v.trim(), vk: key(v), lo: lo, hi: hi, loOpen: !closed, hiOpen: !closed });
+            F.ranges.push({ v: v.trim(), vk: key(v), lo: lo, hi: hi, loOpen: !closed, hiOpen: !closed, center: mid });
           }
           return;
         }
@@ -6353,7 +6369,7 @@ const RealLine = (function () {
       pts.forEach(k => { inLine[k] = true; });
       const seenR = {};
       const rs = ranges.filter(r => (!r.lo || inLine[find(r.lo)]) && (!r.hi || inLine[find(r.hi)]))
-        .map(r => Object.assign({}, r, { lo: r.lo && find(r.lo), hi: r.hi && find(r.hi), vk: find(r.vk), punct: r.punct && find(r.punct) }))
+        .map(r => Object.assign({}, r, { lo: r.lo && find(r.lo), hi: r.hi && find(r.hi), vk: find(r.vk), punct: r.punct && find(r.punct), center: r.center && find(r.center) }))
         .filter(r => { const k = r.vk + '|' + r.lo + '|' + r.hi; if (seenR[k]) return false; seenR[k] = true; return true; });
       if (pts.length > MAX_POINTS) return;
       if (pts.length < 3 && !(rs.length && pts.length >= 1)) return;
@@ -6373,48 +6389,89 @@ const RealLine = (function () {
     return lines.slice(0, MAX_LINES);
   }
 
+  /* ── the sheet's three types ─────────────────────────────────────────────
+     Everything drawn is one of the types on the reference sheet
+     (flow-library/design/realline-reference.html) — nothing else:
+
+       Type 1  x > a      a ray to the right   (blue)
+       Type 2  x < a      a ray to the left    (green)
+       Type 3  a < x < b  a segment            (amber)
+
+     A track is { type, lo, hi, loOpen, hiOpen, pts:[{ k, label, role }] },
+     pts left to right. Roles: 'end' (an endpoint of the set), 'var' (the
+     quantity the inequality is about — x_n in |x_n| ≤ M), 'inner' (another
+     term the order places inside), 'center' (the centre of a neighbourhood,
+     a tick), 'hole' (the excluded centre of 0 < |x − c| < δ).
+
+     An order chain w ≤ s ≤ u is Type 3 from its first term to its last with
+     the terms between marked; a chain with no bounded end (n_1 < n_2 < ⋯) is
+     not drawn. A quantity that cannot be negative (|…|, ‖…‖, d(…)) bounded
+     above is [0, R] — never a ray running off to −∞. */
+  const NONNEG = /^(\|.*\||\\\|.*\\\||d\(.*\))$/;
+  const isEll = k => /^⋯#/.test(k);
+
+  function tracksOf(line) {
+    const lab = k => line.labels[line.pts.indexOf(k)];
+    const out = [];
+    if (!line.ranges.length) {
+      const n = line.pts.length;
+      if (n < 3 || isEll(line.pts[0]) || isEll(line.pts[n - 1])) return out;
+      out.push({ type: 3, lo: line.pts[0], hi: line.pts[n - 1],
+        loOpen: line.gaps[0] === 2, hiOpen: line.gaps[n - 2] === 2,
+        pts: line.pts.map((k, i) => ({ k: k, label: line.labels[i], role: i === 0 || i === n - 1 ? 'end' : 'inner' })) });
+      return out;
+    }
+    line.ranges.forEach(function (r) {
+      if (!r.lo && !r.hi) return;
+      let lo = r.lo, hi = r.hi, loOpen = r.loOpen, hiOpen = r.hiOpen;
+      const pts = line.pts.map(k => ({ k: k, label: lab(k),
+        role: k === lo || k === hi ? 'end' : k === r.punct ? 'hole' : k === r.center ? 'center' : 'inner' }));
+      if (!lo && NONNEG.test(key(r.v))) {                       /* |…| ≤ R  →  [0, R] */
+        lo = '0'; loOpen = false;
+        if (!pts.some(p => p.k === '0')) pts.unshift({ k: '0', label: '0', role: 'end' });
+        else pts.forEach(p => { if (p.k === '0') p.role = 'end'; });
+      }
+      const type = lo && hi ? 3 : lo ? 1 : 2;
+      if (!pts.some(p => p.k === r.vk)) {
+        /* the quantity itself, placed inside its set: beside the centre of a
+           neighbourhood, mid-way along a segment, inside the ray */
+        const iLo = pts.findIndex(p => p.k === lo), iHi = pts.findIndex(p => p.k === hi);
+        const iC = pts.findIndex(p => p.role === 'center' || p.role === 'hole');
+        let at = type === 1 ? iLo + 1 : type === 2 ? iHi : iC >= 0 ? iC + 1 : iLo + 1 + Math.floor((iHi - iLo - 1) / 2);
+        if (type === 3 && iC < 0 && iHi - iLo === 1) at = iLo + 1;
+        pts.splice(Math.max(0, at), 0, { k: r.vk, label: r.v, role: 'var' });
+      } else {
+        pts.forEach(p => { if (p.k === r.vk) p.role = 'var'; });
+      }
+      out.push({ type: type, lo: lo, hi: hi, loOpen: loOpen, hiOpen: hiOpen, pts: pts });
+    });
+    return out;
+  }
+
+  /* one line of text per track — what tools/realline_report.js prints */
+  function describe(t) {
+    const L = k => (t.pts.find(p => p.k === k) || {}).label;
+    const set = t.type === 1 ? (t.loOpen ? '(' : '[') + L(t.lo) + ', ∞)'
+      : t.type === 2 ? '(−∞, ' + L(t.hi) + (t.hiOpen ? ')' : ']')
+      : (t.loOpen ? '(' : '[') + L(t.lo) + ', ' + L(t.hi) + (t.hiOpen ? ')' : ']');
+    const marks = t.pts.filter(p => p.role !== 'end').map(p => p.label + (p.role === 'var' ? '' : ' (' + p.role + ')'));
+    return 'Type ' + t.type + ' ' + set + (marks.length ? '  ·  ' + marks.join(', ') : '');
+  }
+
   /* ── drawing ────────────────────────────────────────────────────────── */
 
   const plain = t => t.replace(/\\(varepsilon|epsilon)/g, 'ε').replace(/\\delta/g, 'δ').replace(/\\eta/g, 'η')
     .replace(/\\cdots|\\ldots|\\dots/g, '…').replace(/\\sup/g, 'sup').replace(/\\inf/g, 'inf')
     .replace(/\\[a-zA-Z]+/g, '').replace(/[{}]/g, '').replace(/\s+/g, ' ').trim();
 
-  /* The sheet's design (flow-library/design/realline-reference.html): a grey
-     axis with arrowheads and ℝ at its right end; a solution set as a thick
-     stroke ON the axis — blue for x > a, green for x < a, amber for
-     a < x < b, black for all of ℝ; hollow endpoints when strict, filled when
-     included; labels under the points; and the set written out beneath. A
-     pure order chain (no solution set) is its points and the relations
-     between them. One solution set per line, as on the sheet. */
-  const SIMPLE = /^([a-zA-Z]|\\(varepsilon|epsilon|delta|eta|xi|zeta|alpha|beta|gamma|lambda|mu|theta|tau))(_\{?[a-zA-Z0-9\\]+\}?|_[a-zA-Z0-9])?(')?(\^\{?(\*|\\ast)\}?)?$/;
-
-  function caption(line, r) {
-    if (!r) return line.labels.reduce((s, l, i) => i ? s + (line.gaps[i - 1] === 2 ? ' < ' : ' \\le ') + l : l, '');
-    const L = k => line.labels[line.pts.indexOf(k)];
-    const lo = r.lo && L(r.lo), hi = r.hi && L(r.hi);
-    const iv = (r.lo ? (r.loOpen ? '(' : '[') + lo : '(-\\infty') + ',' + (r.hi ? hi + (r.hiOpen ? ')' : ']') : '\\infty)');
-    if (r.punct) { const c = L(r.punct); return r.v + '\\in(' + lo + ',' + c + ')\\cup(' + c + ',' + hi + ')'; }
-    if (!r.lo && !r.hi) return r.v + '\\in\\mathbb{R}=(-\\infty,\\infty)';
-    if (!SIMPLE.test(key(r.v))) return r.v + '\\in' + iv;
-    const cond = (r.lo ? lo + (r.loOpen ? '<' : '\\le') : '') + r.v
-      + (r.hi ? (r.hiOpen ? '<' : '\\le') + hi : '');
-    const one = r.lo && !r.hi ? r.v + (r.loOpen ? '>' : '\\ge') + lo
-      : !r.lo && r.hi ? r.v + (r.hiOpen ? '<' : '\\le') + hi : cond;
-    const full = '\\{' + r.v + '\\in\\mathbb{R} : ' + one + '\\}=' + iv;
-    /* the sheet's set-builder form while it fits a phone line, else the short form */
-    return plain(full).length <= 24 ? full : r.v + '\\in' + iv;
-  }
-
-  function track(line, r, fresh) {
-    const n = line.pts.length;
-    const kind = !r ? 'chain' : r.lo && r.hi ? 'seg' : r.lo ? 'ray-r' : r.hi ? 'ray-l' : 'all';
-    /* where the points go: evenly, leaving the open side of a ray free */
-    const span = kind === 'ray-r' ? [n === 1 ? 32 : 12, 66] : kind === 'ray-l' ? [34, n === 1 ? 68 : 88]
-      : kind === 'seg' ? [n === 2 ? 26 : 14, n === 2 ? 74 : 86] : [10, 86];
+  function track(t, fresh) {
+    const n = t.pts.length;
+    const kind = t.type === 1 ? 'ray-r' : t.type === 2 ? 'ray-l' : 'seg';
+    /* evenly spaced, the open side of a ray left free */
+    const span = t.type === 1 ? [n === 1 ? 32 : 14, 70] : t.type === 2 ? [30, n === 1 ? 68 : 86]
+      : [n === 2 ? 22 : 12, n === 2 ? 78 : 88];
     const x = i => n === 1 ? span[0] : span[0] + i * (span[1] - span[0]) / (n - 1);
-    const pos = {};
-    line.pts.forEach((k, i) => { pos[k] = x(i); });
-    const stagger = n >= 5 || (n >= 3 && line.labels.some(l => plain(l).length > 9));
+    const stagger = n >= 5 || (n >= 3 && t.pts.some(p => plain(p.label).length > 9));
 
     const box = el('div', { class: 'rl-track ' + kind, style: { height: (stagger ? 62 : 44) + 'px' } });
     const put = (cls, style, attrs) => {
@@ -6426,47 +6483,38 @@ const RealLine = (function () {
     put('rl-axis', {});
     put('rl-R', {}, { text: 'ℝ' });
 
-    if (r) {
-      const a = r.lo ? pos[r.lo] : 1.2, b = r.hi ? pos[r.hi] : 98.8;
-      put('rl-set' + (r.lo ? '' : ' to-l') + (r.hi ? '' : ' to-r'), { left: a + '%', width: (b - a) + '%' });
-    }
-    line.pts.forEach(function (k, i) {
-      const isNew = fresh && fresh[k];
-      const isEnd = r && (k === r.lo || k === r.hi);
-      const open = isEnd && (k === r.lo ? r.loOpen : r.hiOpen);
-      if (isEnd) put('rl-end' + (open ? ' open' : ''), { left: pos[k] + '%' });
-      else if (r && k === r.punct) put('rl-end open', { left: pos[k] + '%' });
-      else put('rl-pt' + (r ? ' inner' : ''), { left: pos[k] + '%' });
-      const end = i === 0 && kind !== 'ray-l' ? ' first' : i === n - 1 && kind !== 'ray-r' ? ' last' : '';
-      put('rl-lab' + end + (isNew ? ' new' : '') + (stagger && i % 2 ? ' low' : ''),
-        { left: pos[k] + '%' }, { html: '$' + line.labels[i] + '$' });
-    });
-    if (!r) line.gaps.forEach(function (g, i) {
-      put('rl-op', { left: ((x(i) + x(i + 1)) / 2) + '%' }, { text: g === 2 ? '<' : '≤' });
+    const pos = {};
+    t.pts.forEach((p, i) => { pos[p.k] = x(i); });
+    const a = t.lo ? pos[t.lo] : 1.2, b = t.hi ? pos[t.hi] : 98.8;
+    put('rl-set' + (t.lo ? '' : ' to-l') + (t.hi ? '' : ' to-r'), { left: a + '%', width: (b - a) + '%' });
+
+    t.pts.forEach(function (p, i) {
+      const at = { left: pos[p.k] + '%' };
+      if (p.role === 'end') put('rl-end' + ((p.k === t.lo ? t.loOpen : t.hiOpen) ? ' open' : ''), at);
+      else if (p.role === 'hole') put('rl-end open', at);
+      else if (p.role === 'center') put('rl-pt inner', at);
+      else put('rl-pt' + (p.role === 'var' ? ' var' : ''), at);
+      const edge = i === 0 && t.type !== 2 ? ' first' : i === n - 1 && t.type !== 1 ? ' last' : '';
+      put('rl-lab' + edge + (p.role === 'var' ? ' var' : '') + (fresh && fresh[p.k] ? ' new' : '')
+        + (stagger && i % 2 ? ' low' : ''), at, { html: '$' + p.label + '$' });
     });
 
-    const said = r ? plain(caption(line, r)) : plain(caption(line, null));
-    return el('div', { class: 'rl', role: 'img', 'aria-label': 'On the real line: ' + said }, [
-      box,
-      el('div', { class: 'rl-cap', html: '$' + caption(line, r) + '$' })
-    ]);
-  }
-
-  function draw(line, fresh) {
-    if (!line.ranges.length) return [track(line, null, fresh)];
-    return line.ranges.map(r => track(line, r, fresh));
+    return el('div', { class: 'rl', role: 'img', 'aria-label': 'On the real line: ' + plain(describe(t)) }, [box]);
   }
 
   /* ── what the views call ────────────────────────────────────────────── */
 
+  const tracksOfAll = lines => [].concat.apply([], lines.map(tracksOf)).slice(0, 3);
+
   function render(lines, fresh) {
-    if (!lines.length) return null;
-    const tracks = [].concat.apply([], lines.map(l => draw(l, fresh))).slice(0, 3);
-    return el('div', { class: 'rl-group' }, tracks);
+    const tracks = tracksOfAll(lines);
+    return tracks.length ? el('div', { class: 'rl-group' }, tracks.map(t => track(t, fresh))) : null;
   }
 
+  /* `line` in the data: false, one TeX string, or several */
   const source = (obj, fallback) => (obj && obj.line === false) ? null
-    : (obj && typeof obj.line === 'string') ? '$' + obj.line + '$' : fallback;
+    : (obj && typeof obj.line === 'string') ? '$' + obj.line + '$'
+    : (obj && Array.isArray(obj.line)) ? obj.line.map(l => '$' + l + '$').join(' ') : fallback;
 
   /* The statement's own line(s). */
   function statement(c) {
@@ -6474,9 +6522,9 @@ const RealLine = (function () {
     return render(planStatement(c), null);
   }
 
-  /* Type 1 / Type 2 lines from one-sided facts, for a text that states no
-     richer order. A bound other than 0 first: `n \ge K` says more than
-     `\varepsilon > 0`, which nearly every step repeats. */
+  /* Rays from one-sided facts, for a text that states no richer order. A
+     bound other than 0 first: `n \ge K` says more than `\varepsilon > 0`,
+     which nearly every step repeats. */
   function rayLines(F, rays) {
     const seen = {};
     return rays.filter(r => { const k = r.vk + '|' + r.bk + '|' + r.dir; if (seen[k]) return false; seen[k] = true; return true; })
@@ -6511,11 +6559,12 @@ const RealLine = (function () {
       read(ctx, text);
       let lines = solve(ctx, ctx.mentioned.slice(before.m), ctx.ranges.slice(before.r));
       if (!lines.length) { const own = read(Facts(), text); lines = solve(own, own.mentioned, own.ranges); }
-      if (!lines.length) lines = rayLines(ctx, ctx.rays.slice(before.y));
-      if (!lines.length) return null;
+      if (!tracksOfAll(lines).length) lines = rayLines(ctx, ctx.rays.slice(before.y));
+      if (!tracksOfAll(lines).length) return null;
       const fresh = {};
-      lines.forEach(l => l.pts.forEach(k => { if (!shown[k]) fresh[k] = true; }));
-      lines.forEach(l => l.pts.forEach(k => { shown[k] = true; }));
+      const keys = [].concat.apply([], tracksOfAll(lines).map(t => t.pts.map(p => p.k)));
+      keys.forEach(k => { if (!shown[k]) fresh[k] = true; });
+      keys.forEach(k => { shown[k] = true; });
       return { lines: lines, fresh: fresh };
     });
   }
@@ -6525,7 +6574,7 @@ const RealLine = (function () {
     if (!text) return [];
     const F = read(Facts(), text);
     const lines = solve(F, F.mentioned, F.ranges);
-    return lines.length ? lines : rayLines(F, F.rays);
+    return tracksOfAll(lines).length ? lines : rayLines(F, F.rays);
   }
 
   /* One node (or null) per rung. */
@@ -6536,7 +6585,7 @@ const RealLine = (function () {
   }
 
   return { statement: statement, proof: proof, enabled: enabled,
-    planStatement: planStatement, planProof: planProof };
+    planStatement: planStatement, planProof: planProof, tracksOf: tracksOfAll, describe: describe };
 })();
 
 

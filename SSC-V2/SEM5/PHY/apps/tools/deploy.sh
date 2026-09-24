@@ -80,6 +80,16 @@ if [ -f "$V4/build.py" ]; then
   if [ -d "$V4/diagrams" ]; then
     cp -r "$V4/diagrams" "$TMP/public/math/real-analysis-test/diagrams"
   fi
+
+  # /math/real-analysis-bete: the REAL content on the CURRENT code, so a code
+  # change can be tried on validated data before it goes public. Always fresh,
+  # never committed, and it never touches build/index.html (the public page).
+  python3 "$V4/build.py" --beta > /dev/null
+  mkdir -p "$TMP/public/math/real-analysis-bete"
+  cp "$V4/build/beta/index.html" "$TMP/public/math/real-analysis-bete/index.html"
+  if [ -d "$V4/diagrams" ]; then
+    cp -r "$V4/diagrams" "$TMP/public/math/real-analysis-bete/diagrams"
+  fi
 else
   echo "WARNING: $V4 missing — deploying without the Real Analysis app." >&2
 fi
@@ -228,6 +238,7 @@ echo ""
 echo "Real Analysis study system:"
 echo "  → $BASE/math/real-analysis        (validated data)"
 echo "  → $BASE/math/real-analysis-test   (mock data — safe to break)"
+echo "  → $BASE/math/real-analysis-bete   (real data on the newest code — preview)"
 echo ""
 echo "Quantum Mechanics study system:"
 echo "  → $BASE/phy/quantum-mechanics       (validated data)"

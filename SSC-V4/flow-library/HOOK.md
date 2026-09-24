@@ -55,16 +55,14 @@ controls, and adds a home hero. Use it as the example of a fully distinct app.
 
 - **Real line** (`app/src/comp.realline.js`, `PROJECT.realLine: true`, on for Real
   Analysis). It reads the order relations already written in a statement's or proof
-  step's TeX (`a<b\le c`, `|x-a|<\varepsilon`, `x\in(a,b]`, `u=\sup S`) and draws them
-  on a schematic number line: points in order, the relation between neighbours on the
-  axis, bands for neighbourhoods and intervals, the free variable moving inside its
-  band. In a proof each step is solved against everything established so far, and points
-  that appear for the first time are highlighted. It draws **only** when the order is
-  total on the terms shown, so it never implies an order the maths doesn't state.
-  Content can steer it with no code change: `line: false` on a concept or rung suppresses
-  it there, and `line: 'a-\\delta < x < a+\\delta'` replaces the TeX it reads.
-  Check the effect of a data change with the parser directly: `RealLine.planStatement(c)`
-  and `RealLine.planProof(c)` need no DOM.
+  step's TeX and draws them in the three types of `design/realline-reference.html`:
+  Type 1 `x > a` (blue ray), Type 2 `x < a` (green ray), Type 3 `a < x < b` (amber
+  segment). The quantity the inequality is about is marked inside its set. In a proof each
+  step is solved against everything established so far, and new points are highlighted.
+  It draws **only** when the order is total on the terms shown. Content steers it with a
+  `line` field (`false`, a TeX string, or a list). `tools/realline_report.js <project>`
+  prints what every statement and step draws, with no browser. The authoring task and
+  rules live in `real-analysis/HOOK_agy.md` → "The real-line widget".
 
 ## Adding a new project
 
@@ -100,5 +98,6 @@ pool, the shims, `data/`, `diagrams/light|dark/` and a `HOOK.md`. Then:
 ## Publishing (unchanged)
 
 `SSC-V2/SEM5/PHY/apps/tools/deploy.sh` **without** `--live` rebuilds only the `-test`
-pages from current code and republishes the committed live pages byte for byte. Use it
+pages (mock data) and `/math/real-analysis-bete` (real data, `build.py --beta`) from
+current code, and republishes the committed live pages byte for byte. Use it
 to try a shared-code change safely. `--live` rebuilds the public pages from `data/`.

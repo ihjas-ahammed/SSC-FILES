@@ -3,6 +3,11 @@
 
     python3 flow-library/build.py <project-dir>          -> <project>/build/index.html
     python3 flow-library/build.py <project-dir> --mock   -> <project>/build/test/index.html
+    python3 flow-library/build.py <project-dir> --beta   -> <project>/build/beta/index.html
+
+--beta is the validated `live` pool on the CURRENT code, for trying a code
+change on the real content without touching the public build/index.html. It
+badges itself BETA in the tab and the header, and is never committed.
 
 Every project also has a two-line build.py of its own that calls this one, so
 `python3 real-analysis/build.py --mock` keeps working exactly as before.
@@ -59,11 +64,11 @@ def chunk(label, path):
     return '/* ── %s ── */\n' % label + read_file(path)
 
 
-def build(project_dir, mock):
+def build(project_dir, mock, beta=False):
     project_dir = os.path.realpath(project_dir)
     app_dir = os.path.join(project_dir, 'app')
     which = 'mock' if mock else 'live'
-    out_dir = os.path.join(project_dir, 'build', 'test' if mock else '')
+    out_dir = os.path.join(project_dir, 'build', 'test' if mock else 'beta' if beta else '')
     os.makedirs(out_dir, exist_ok=True)
 
     html = read_file(os.path.join(app_dir, 'index.html'))
@@ -106,6 +111,14 @@ def build(project_dir, mock):
     html = (html[:last.start()] + '\x00' + html[last.end():])
     html = SCRIPT_RE.sub('', html).replace('\x00', bundle)
 
+    if beta:
+        m = re.search(r'<title>(.*?) · Study System</title>', html)
+        if not m:
+            fail('app/index.html needs a "<Name> · Study System" <title>')
+        name = m.group(1)
+        html = html.replace(m.group(0), '<title>%s · BETA (real data, new code)</title>' % name)
+        html = html.replace('<b>%s</b>' % name, '<b>%s</b><span>beta · real data</span>' % name, 1)
+
     if mock:
         # A test build must announce itself in the tab as well as on the page,
         # so a stray bookmark can never be mistaken for the real thing.
@@ -126,7 +139,9 @@ def main(argv):
     args = [a for a in argv if not a.startswith('--')]
     if len(args) != 1:
         sys.exit(__doc__)
-    build(args[0], '--mock' in argv)
+    if '--mock' in argv and '--beta' in argv:
+        sys.exit('Error: --mock and --beta are different builds; pick one')
+    build(args[0], '--mock' in argv, '--beta' in argv)
 
 
 if __name__ == '__main__':
