@@ -13,6 +13,8 @@
                users, usersMock,                 live must never share one
                db },                  optional — Firebase RTDB URL override
        themeColor: { light, dark },   optional — browser chrome colour
+       realLine: true,                optional — draw the real-line widget
+                                        (comp.realline.js) under inequalities
        hooks: {                       optional — each is called if present
          home(ctx)   -> Node|null     a hero placed above the home dashboard
          theme(dark)                  after light/dark is applied

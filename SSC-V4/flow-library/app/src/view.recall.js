@@ -165,6 +165,7 @@ const ViewRecall = (function () {
         el('div', { class: 'h' }, [el('span', { text: 'Canonical statement' })]),
         el('div', { class: 'b' }, [
           el('div', { class: 'prose tight', html: item.a }),
+          RealLine.statement(concept),
           el('div', { class: 'row', style: { marginTop: '12px' } }, [
             el('a', { class: 'chip', href: Router.href('note/' + item.cid),
               text: 'Full note · ' + concept.title })
@@ -232,9 +233,9 @@ const ViewRecall = (function () {
           ]) : null,
           p.why ? el('div', { class: 'prose tight', html: p.why }) : null,
           (p.rungs && p.rungs.length)
-            ? el('div', { class: 'stack', style: { gap: '8px' } }, p.rungs.map(function (r, i) {
-                return UI.rung(r, i, { compact: true });
-              }))
+            ? el('div', { class: 'stack', style: { gap: '8px' } }, (function (lines) {
+                return p.rungs.map(function (r, i) { return UI.rung(r, i, { compact: true, line: lines[i] }); });
+              })(RealLine.proof(concept)))
             : null,
           p.ends ? el('div', { class: 'prose tight', html: p.ends }) : null,
           el('div', { class: 'row' }, [

@@ -51,6 +51,21 @@ Reference points: **Real Analysis** is the house style, so its `theme.css` is em
 purpose. **Quantum Mechanics** replaces fonts, palette, geometry, background, labels and
 controls, and adds a home hero. Use it as the example of a fully distinct app.
 
+## Shared widgets a project can switch on
+
+- **Real line** (`app/src/comp.realline.js`, `PROJECT.realLine: true`, on for Real
+  Analysis). It reads the order relations already written in a statement's or proof
+  step's TeX (`a<b\le c`, `|x-a|<\varepsilon`, `x\in(a,b]`, `u=\sup S`) and draws them
+  on a schematic number line: points in order, the relation between neighbours on the
+  axis, bands for neighbourhoods and intervals, the free variable moving inside its
+  band. In a proof each step is solved against everything established so far, and points
+  that appear for the first time are highlighted. It draws **only** when the order is
+  total on the terms shown, so it never implies an order the maths doesn't state.
+  Content can steer it with no code change: `line: false` on a concept or rung suppresses
+  it there, and `line: 'a-\\delta < x < a+\\delta'` replaces the TeX it reads.
+  Check the effect of a data change with the parser directly: `RealLine.planStatement(c)`
+  and `RealLine.planProof(c)` need no DOM.
+
 ## Adding a new project
 
 ```

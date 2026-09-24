@@ -227,7 +227,9 @@ const NoteBody = (function () {
       }
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
-          p.rungs.map(function (r, idx) { return UI.rung(r, idx); })
+          (function (lines) {
+            return p.rungs.map(function (r, idx) { return UI.rung(r, idx, { line: lines[idx] }); });
+          })(RealLine.proof(c))
         ));
       }
       if (p.ends) {
@@ -652,7 +654,8 @@ const NoteBody = (function () {
 
       el('div', { class: 'card' }, [
         el('div', { class: 'kicker', text: 'Statement' }),
-        el('div', { style: { marginTop: '10px' } }, [UI.prose(c.statement)])
+        el('div', { style: { marginTop: '10px' } }, [UI.prose(c.statement)]),
+        RealLine.statement(c)
       ]),
 
       Fig.mount(c),

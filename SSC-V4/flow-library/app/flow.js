@@ -28,6 +28,7 @@ const FLOW_MODULES = [
   'ui.parts.js',
   'fig.library.js',
   'comp.figure.js',
+  'comp.realline.js',
   'comp.tree.js',
   'comp.question.js',
   'comp.note.js',

@@ -266,7 +266,8 @@ const UI = (function () {
     };
   }
 
-  /* `compact` is the recall reel's version: the explanation as a quiet
+  /* `line` is an optional RealLine node drawn under the maths.
+     `compact` is the recall reel's version: the explanation as a quiet
      line under the maths rather than its own labelled block. */
   function rung(r, i, opts) {
     const o = opts || {};
@@ -276,6 +277,7 @@ const UI = (function () {
         el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: p.why })
       ]),
       p.math ? el('div', { class: 'rung-math', html: p.math }) : null,
+      o.line || null,
       p.meaning ? (o.compact
         ? el('div', { class: 'rung-note small muted', html: p.meaning })
         : el('div', { class: 'rung-meaning' }, [

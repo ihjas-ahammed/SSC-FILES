@@ -339,6 +339,17 @@ The mock set is no longer a stopgap — it is the permanent test fixture behind
 
 ---
 
+
+### Optional: steering the real-line widget
+
+The app draws a schematic real line under any statement or proof step whose TeX states
+an unambiguous order (see `flow-library/HOOK.md` → "Shared widgets"). Nothing needs
+authoring. Two optional fields steer it when the automatic reading is wrong or unhelpful:
+
+- `line: false` on a concept (whole note) or on one rung suppresses it there.
+- `line: 'a-\\delta < x < a+\\delta'` on a concept or rung replaces the TeX it reads, for a
+  step whose formula hides the order (write plain TeX, no `$`).
+
 ## Levels 1–4 — earned, never switched
 
 **The level switch is gone.** There used to be a per-course control that moved a course

@@ -16,5 +16,7 @@ const PROJECT = {
     mock: 'ssc4_ra_mock_v1',  usersMock: 'ssc4_users_mock_v1'
   },
   themeColor: { light: '#faf8f4', dark: '#101216' },
+  /* every inequality in a statement or proof step drawn on the real line */
+  realLine: true,
   hooks: {}
 };

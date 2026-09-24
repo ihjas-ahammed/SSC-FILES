@@ -1041,3 +1041,54 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 
 /* ── project hero (PROJECT.hero, optional) ─────────────────────────────── */
 .hero{ position:relative; overflow:hidden; }
+
+/* ── the real line (comp.realline.js) ──────────────────────────────────────
+   A schematic number line under an inequality: points in order, the relation
+   between neighbours written on the axis, bands for |x − a| < ε and
+   x ∈ (a, b), and the free variable roaming inside its band. Everything is
+   positioned in % so it stays crisp at any width; colours are tokens, so a
+   project theme restyles it for free. */
+.rl-set{ display:flex; flex-direction:column; gap:4px; margin-top:10px; }
+.rl{ padding:4px 2px 2px; }
+.rl-track{ position:relative; width:100%; }
+.rl-track>*{ position:absolute; }
+.rl-axis{ left:0; right:0; height:0; border-top:1.5px solid var(--ink-3); }
+.rl-axis::before,.rl-axis::after{ content:''; position:absolute; top:-5px; width:8px; height:8px;
+  border-top:1.5px solid var(--ink-3); border-right:1.5px solid var(--ink-3); }
+.rl-axis::after{ right:0; transform:rotate(45deg); }
+.rl-axis::before{ left:0; transform:rotate(-135deg); }
+.rl-tick{ width:9px; height:9px; margin:-5px 0 0 -4.5px; border-radius:50%;
+  background:var(--surface); border:2px solid var(--ink-2); }
+.rl-tick.new{ border-color:var(--accent); background:var(--accent);
+  box-shadow:0 0 0 4px var(--accent-soft); }
+.rl-lab{ transform:translateX(-50%); white-space:nowrap; font-size:.8rem; color:var(--ink-2);
+  line-height:1.1; }
+.rl-lab.low{ margin-top:18px; }
+.rl-lab.first{ transform:translateX(-14px); }
+.rl-lab.last{ transform:translateX(calc(-100% + 14px)); }
+.rl-lab.new{ color:var(--accent); font-weight:600; }
+.rl-lab mjx-container{ margin:0 !important; }
+/* the relation sits ON the axis, cut out of it: a —<— b */
+.rl-op{ transform:translate(-50%, -50%); padding:0 4px; background:var(--surface);
+  font:600 .78rem/1 var(--font-mono); color:var(--ink-2); }
+.card.tint .rl-op,.rung-meaning .rl-op{ background:var(--surface-2); }
+.rl-band{ height:6px; margin-top:-3px; border-radius:3px;
+  background:color-mix(in srgb, var(--accent) 22%, transparent);
+  border:1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.rl-band.ray-r{ border-right:0; border-radius:3px 0 0 3px;
+  -webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);
+          mask-image:linear-gradient(90deg,#000 80%,transparent); }
+.rl-band.ray-l{ border-left:0; border-radius:0 3px 3px 0;
+  -webkit-mask-image:linear-gradient(270deg,#000 80%,transparent);
+          mask-image:linear-gradient(270deg,#000 80%,transparent); }
+.rl-cap{ width:10px; height:10px; margin:-5px 0 0 -5px; border-radius:50%;
+  background:var(--accent); border:2px solid var(--accent); }
+.rl-cap.open{ background:var(--surface); }
+.rl-roam{ transform:translate(-50%, calc(-100% + 4px)); display:flex; flex-direction:column-reverse;
+  align-items:center; animation:rl-roam 3.2s var(--ease) infinite alternate; }
+.rl-roam .rl-dot{ width:8px; height:8px; border-radius:50%; background:var(--ok);
+  box-shadow:0 0 0 3px var(--ok-soft); }
+.rl-roam .rl-var{ font-size:.74rem; color:var(--ok); margin-bottom:1px; white-space:nowrap; }
+@keyframes rl-roam{ from{ left:var(--a); } to{ left:var(--b); } }
+@media (prefers-reduced-motion: reduce){ .rl-roam{ animation:none; } }
+.rung.compact .rl-set,.reveal .rl-set{ margin-top:8px; }
