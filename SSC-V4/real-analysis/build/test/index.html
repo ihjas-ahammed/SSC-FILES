@@ -563,8 +563,10 @@ mjx-container{ max-width:100%; }
   padding:10px 12px 10px 2px; text-decoration:none; color:inherit; }
 .crow .tt{ flex:1 1 auto; min-width:0; }
 .crow>a:hover{ background:var(--surface-2); }
-.crow .tt b{ display:block; font-weight:500; font-size:.92rem; }
-.crow .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
+.crow .tt b{ display:block; font-weight:500; font-size:.92rem; overflow-wrap:anywhere; }
+/* the title wraps; only the caption under it is cut to one line (`>span`, so
+   the title's own inner span never inherits the caption's nowrap) */
+.crow .tt>span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .crow[data-lv="1"]{ border-color:var(--lv1-line); }
 .crow[data-lv="2"]{ border-color:var(--lv2-line); }
@@ -949,7 +951,7 @@ body.signed-out .top .back-btn{ display:none !important; }
 .cnode.open>.acc>.acc-in>.acc-pad{ padding:16px 16px 20px; transition:padding .42s var(--ease); }
 .crow .tlabel{ padding:10px 12px 10px 2px; }
 .crow .tlabel .tt b{ font-weight:500; font-size:.92rem; }
-.crow .tlabel .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
+.crow .tlabel .tt>span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* The note's own chrome is flat on purpose. Every block used to be a card, and
@@ -2913,21 +2915,62 @@ const DOM = (function () {
 
   /* Turn concept IDs like <code>c.2.3.1</code>, $c.3.4.2$, or raw c.2.3.1 references into
      clickable links labeled with their section number and concept name. */
+  /* Concept references in authored prose become clickable §-chips. A reference
+     INSIDE a maths span must not: an <a> in the middle of `$$ … $$` splits the
+     formula and MathJax shows it as raw source. There the id is written into
+     the formula as \text{§4.1 Title}, and the chip goes right after the span so
+     the reference stays one tap away. */
+  const ID = 'c\\.[0-9]+[a-z0-9.]*|s\\.[a-z0-9-]+';
+  const TEXT_REF = new RegExp('<code>(' + ID + ')</code>|(?<=[\\s(])(c\\.[0-9]+\\.[0-9]+[a-z0-9.]*)(?=[\\s.,;:)])', 'g');
+  const MATH_REF = new RegExp('<code>(' + ID + ')</code>|(?<=[\\s({])(c\\.[0-9]+\\.[0-9]+[a-z0-9.]*)(?=[\\s.,;:)}]|$)', 'g');
+  const MATH_SPAN = /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$]+?\$/g;
+  const LONE_ID = new RegExp('^\\$(' + ID + ')\\$$');
+
+  function refOf(id) {
+    const c = (typeof Pool !== 'undefined' && Pool.concept) ? Pool.concept(id) : null;
+    if (!c) return null;
+    const cleanTitle = (c.title || id).split(';')[0].trim();
+    const secTitle = (c.sec && typeof Pool.sectionTitle === 'function') ? Pool.sectionTitle(c.sec) : null;
+    return {
+      id: id,
+      label: c.sec ? ('§' + c.sec + ' ' + cleanTitle) : cleanTitle,
+      desc: (secTitle ? ('Section ' + c.sec + ': ' + secTitle + ' — ') : '') + (c.title || id)
+    };
+  }
+  const chip = r => '<a class="concept-ref" href="#/note/' + r.id + '" title="'
+    + r.desc.replace(/"/g, '&quot;') + '">' + r.label + '</a>';
+  const texText = t => t.replace(/[\\{}$&#%_^~]/g, ch => '\\' + ({ '\\': 'backslash ', '~': 'textasciitilde ', '^': 'textasciicircum ' }[ch] || ch));
+
+  function linkifyText(s) {
+    return s.replace(TEXT_REF, function (match, g1, g2) {
+      const r = refOf(g1 || g2);
+      return r ? chip(r) : match;
+    });
+  }
+
+  function linkifyMath(span) {
+    const lone = LONE_ID.exec(span);
+    if (lone) { const r = refOf(lone[1]); return r ? chip(r) : span; }
+    const found = [];
+    const tex = span.replace(MATH_REF, function (match, g1, g2) {
+      const r = refOf(g1 || g2);
+      if (!r) return match;
+      if (!found.some(f => f.id === r.id)) found.push(r);
+      return '\\text{' + texText(r.label) + '}';
+    });
+    return found.length ? tex + ' ' + found.map(chip).join(' ') : span;
+  }
+
   function linkifyConcepts(s) {
     if (typeof s !== 'string') return s;
-    if (s.indexOf('<code>') === -1 && s.indexOf('$c.') === -1 && s.indexOf('c.') === -1 && s.indexOf('s.') === -1) return s;
-    const re = /<code>(c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+)<\/code>|\$((?:c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+))\$|(?<=[\s(])(c\.[0-9]+\.[0-9]+[a-z0-9.]*)(?=[\s.,;:)])/g;
-    return s.replace(re, function (match, g1, g2, g3) {
-      const id = g1 || g2 || g3;
-      const c = (typeof Pool !== 'undefined' && Pool.concept) ? Pool.concept(id) : null;
-      if (!c) return match;
-      const cleanTitle = (c.title || id).split(';')[0].trim();
-      const label = c.sec ? ('§' + c.sec + ' ' + cleanTitle) : cleanTitle;
-      const secTitle = (c.sec && typeof Pool.sectionTitle === 'function') ? Pool.sectionTitle(c.sec) : null;
-      const fullDesc = (secTitle ? ('Section ' + c.sec + ': ' + secTitle + ' — ') : '') + (c.title || id);
-      const escTitle = fullDesc.replace(/"/g, '&quot;');
-      return '<a class="concept-ref" href="#/note/' + id + '" title="' + escTitle + '">' + label + '</a>';
-    });
+    if (s.indexOf('c.') === -1 && s.indexOf('s.') === -1) return s;
+    let out = '', last = 0, m;
+    MATH_SPAN.lastIndex = 0;
+    while ((m = MATH_SPAN.exec(s))) {
+      out += linkifyText(s.slice(last, m.index)) + linkifyMath(m[0]);
+      last = m.index + m[0].length;
+    }
+    return out + linkifyText(s.slice(last));
   }
 
   /* Convert markdown bold (**text**) and italics (*text*) to HTML <b> and <i> tags,
