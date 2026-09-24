@@ -18,10 +18,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block">
+<!-- shared design system, then this project's look on top of it -->
 <style>
-/* app/src/ui.css */
+/* ── ../../flow-library/app/src/ui.css ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Real Analysis study system — design system.
+   flow-library — the shared design system.
+
+   Every project inherits this file. A project changes how it LOOKS by
+   overriding the tokens below (and anything else) in its own
+   app/project/theme.css, which loads after this one.
 
    Mobile-first, two themes, one content column. Depth comes from layered
    glass over a soft aurora, not from heavy borders. Motion is short, springy
@@ -558,8 +563,10 @@ mjx-container{ max-width:100%; }
   padding:10px 12px 10px 2px; text-decoration:none; color:inherit; }
 .crow .tt{ flex:1 1 auto; min-width:0; }
 .crow>a:hover{ background:var(--surface-2); }
-.crow .tt b{ display:block; font-weight:500; font-size:.92rem; }
-.crow .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
+.crow .tt b{ display:block; font-weight:500; font-size:.92rem; overflow-wrap:anywhere; }
+/* the title wraps; only the caption under it is cut to one line (`>span`, so
+   the title's own inner span never inherits the caption's nowrap) */
+.crow .tt>span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .crow[data-lv="1"]{ border-color:var(--lv1-line); }
 .crow[data-lv="2"]{ border-color:var(--lv2-line); }
@@ -944,7 +951,7 @@ body.signed-out .top .back-btn{ display:none !important; }
 .cnode.open>.acc>.acc-in>.acc-pad{ padding:16px 16px 20px; transition:padding .42s var(--ease); }
 .crow .tlabel{ padding:10px 12px 10px 2px; }
 .crow .tlabel .tt b{ font-weight:500; font-size:.92rem; }
-.crow .tlabel .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
+.crow .tlabel .tt>span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
 /* The note's own chrome is flat on purpose. Every block used to be a card, and
@@ -1041,6 +1048,37 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
   }
 }
 
+/* ── a proof step (UI.rung) ─────────────────────────────────────────────────
+   Classes rather than inline styles, so a project theme can restyle a step. */
+.rung{ padding:10px 14px; }
+.rung:not(.compact){ border-left:3px solid var(--accent); }
+.rung-why{ margin-bottom:6px; }
+.rung-math{ margin-top:6px; overflow-x:auto; }
+.rung-note{ margin-top:4px; font-style:italic; }
+.rung-meaning{
+  margin-top:8px; padding:8px 12px; background:var(--surface-2);
+  border-radius:6px; border-left:2px solid var(--accent);
+  font-size:.88rem; line-height:1.45;
+}
+.rung-meaning > .kicker{ font-size:.68rem; color:var(--accent); margin-bottom:3px; font-weight:600; }
+
+/* ── project hero (PROJECT.hero, optional) ─────────────────────────────── */
+.hero{ position:relative; overflow:hidden; }
+
+</style>
+<style>
+/* ── project/theme.css ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Real Analysis — theme.
+
+   Real Analysis IS the house style: paper and ink, Lora prose over Outfit UI,
+   a soft aurora behind layered glass. flow-library/app/src/ui.css already
+   draws exactly that, so this file stays empty on purpose.
+
+   It is still loaded, after ui.css, so the place for a Real-Analysis-only
+   visual change is obvious: here, never in the shared stylesheet.
+   ══════════════════════════════════════════════════════════════════════════ */
+
 </style>
 
 <script>
@@ -1093,6 +1131,11 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 
 <div id="live" class="sr-only" role="status" aria-live="polite"></div>
 
+<!-- data seam: which content set to load -->
+
+<!-- this project: identity, diagram index, extras -->
+
+<!-- the shared app: flow-library loads its modules in order, boot last -->
 <script>
 const DIAGRAM_BASE = 'diagrams/';
 const DATA_SOURCES = { use: 'live', live: ['data:text/javascript;charset=utf-8,//bundled'] };
@@ -29481,7 +29524,199 @@ PYQ.push(
 );
 
 
-/* ── src/core.dom.js ── */
+/* ── project/project.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Real Analysis — what makes this app itself. Read by the shared code in
+   flow-library through core.project.js; the field contract is documented
+   there. Everything the two study systems share lives in flow-library.
+
+   The storage and sync names predate the split and must never change: they
+   are where every learner's existing record already lives.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const PROJECT = {
+  id: 'real-analysis',
+  name: 'Real Analysis',
+  storageKey: 'ssc4.level1.v1',
+  sync: {
+    live: 'ssc4_ra_v1',       users: 'ssc4_users_v1',
+    mock: 'ssc4_ra_mock_v1',  usersMock: 'ssc4_users_mock_v1'
+  },
+  themeColor: { light: '#faf8f4', dark: '#101216' },
+  hooks: {}
+};
+
+
+/* ── project/fig.diagrams.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   The rendered diagram library.  GENERATED — do not hand-edit.
+
+   `diagrams/` holds a light and a dark PNG for dozens of results, drawn offline
+   and named after the concept they belong to. The app used to draw eleven
+   figures of its own and ignore all of them, so a learner opening Heine–Borel
+   got no picture even though one was sitting in the repository.
+
+   This file is the index: concept id -> the diagram basenames filed under it.
+   The way to add a picture is to drop the light/dark pair into `diagrams/` and
+   run `python3 tools/gen_diagrams.py` — never to hand-edit a path into a
+   concept.
+
+   A concept may still override the index with `img: ['<basename>', …]`, which
+   is how a node points at a diagram filed under a different id — the mock pool
+   does exactly that, because its ids are `m.*` and the pictures are `c.*`.
+
+   comp.figure.js swaps between the pair on `data-theme`, so changing the theme
+   changes the diagram with no reload.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const DIAGRAM_MAP = {
+  'c.11.1.7': ['c.11.1.7_open_vs_closed_sets'],
+  'c.11.2.5': ['c.11.2.5_heine_borel_theorem'],
+  'c.11.2.6': ['c.11.2.6_topological_bolzano_weierstrass'],
+  'c.2.3.6': ['c.2.3.6_completeness_supremum_property'],
+  'c.2.4.3': ['c.2.4.3_archimedean_property'],
+  'c.2.4.9': ['c.2.4.9_density_rationals_irrationals'],
+  'c.2.5.1': ['c.2.5.1_characterization_of_intervals'],
+  'c.2.5.2': ['c.2.5.2_nested_intervals_property'],
+  'c.2.5.3': ['c.2.5.3_cantor_ternary_set'],
+  'c.3.2.7': ['c.3.2.7_squeeze_theorem_sequences'],
+  'c.3.3.2': ['c.3.3.2_monotone_convergence_theorem'],
+  'c.3.4.8': ['c.3.4.8_bolzano_weierstrass_theorem'],
+  'c.3.5.5': ['c.3.5.5_cauchy_convergence_criterion'],
+  'c.4.1.4': ['c.4.1.4_epsilon_delta_limit_definition'],
+  'c.4.1.8': ['c.4.1.8_sequential_criterion_for_limits'],
+  'c.5.1.1': ['c.5.1.1_continuity_at_a_point'],
+  'c.5.1.3': ['c.5.1.3_sequential_criterion_for_continuity'],
+  'c.5.1.6g': ['c.5.1.6g_dirichlet_function'],
+  'c.5.1.6h': ['c.5.1.6h_thomae_popcorn_function'],
+  'c.5.1.7': ['c.5.1.7_continuous_extension_removable_discontinuity'],
+  'c.5.1.8': ['c.5.1.8_oscillatory_discontinuity_sin_1_over_x', 'c.5.1.8_squeezed_oscillation_x_sin_1_over_x'],
+  'c.5.3.10': ['c.5.3.10_connectedness_interval_mapping', 'c.5.3.10_preservation_of_intervals_theorem'],
+  'c.5.3.2': ['c.5.3.2_boundedness_theorem', 'c.5.3.2_failure_boundedness_open_interval'],
+  'c.5.3.4': ['c.5.3.4_failure_extremum_open_interval', 'c.5.3.4_maximum_minimum_theorem'],
+  'c.5.3.5': ['c.5.3.5_location_of_roots_theorem'],
+  'c.5.3.6': ['c.5.3.6_bisection_method'],
+  'c.5.3.7': ['c.5.3.7_bolzano_intermediate_value_theorem'],
+  'c.5.3.9': ['c.5.3.9_continuous_image_of_compact_interval'],
+  'c.5.4.10': ['c.5.4.10_step_function_approximation'],
+  'c.5.4.13': ['c.5.4.13_piecewise_linear_approximation'],
+  'c.5.4.14': ['c.5.4.14_weierstrass_approximation_theorem'],
+  'c.5.4.1': ['c.5.4.1_uniform_continuity'],
+  'c.5.4.2': ['c.5.4.2_nonuniform_continuity_criterion'],
+  'c.5.4.3': ['c.5.4.3_uniform_continuity_theorem_heine_cantor'],
+  'c.5.4.5': ['c.5.4.5_lipschitz_condition'],
+  'c.5.4.7': ['c.5.4.7_preservation_of_cauchy_sequences'],
+  'c.5.4.8': ['c.5.4.8_continuous_extension_theorem'],
+  'c.5.5.5': ['c.5.5.5_cousin_lemma_gauge_partition'],
+  'c.5.6.3': ['c.5.6.3_monotone_jump_discontinuities'],
+  'c.5.6.4': ['c.5.6.4_countability_of_discontinuities'],
+  'c.5.6.5': ['c.5.6.5_continuous_inverse_theorem'],
+  'c.6.1.1': ['c.6.1.1_derivative_as_tangent_limit'],
+  'c.6.1.5': ['c.6.1.5_caratheodory_theorem'],
+  'c.6.2.12': ['c.6.2.12_darboux_theorem_derivatives'],
+  'c.6.2.1': ['c.6.2.1_interior_extremum_fermat_theorem'],
+  'c.6.2.3': ['c.6.2.3_rolle_theorem'],
+  'c.6.2.4': ['c.6.2.4_lagrange_mean_value_theorem'],
+  'c.6.3.2': ['c.6.3.2_cauchy_mean_value_theorem'],
+  'c.6.3.3': ['c.6.3.3_lhopital_rule'],
+  'c.6.4.1': ['c.6.4.1_taylor_theorem'],
+  'c.7.1.1': ['c.7.1.1_riemann_sum_tagged_partition'],
+  'c.7.2.9': ['c.7.2.9_additivity_of_integral'],
+  'c.7.3.12': ['c.7.3.12_lebesgue_integrability_criterion'],
+  'c.7.3.17': ['c.7.3.17_integration_by_parts'],
+  'c.7.3.1': ['c.7.3.1_fundamental_theorem_of_calculus_form_1'],
+  'c.7.3.5': ['c.7.3.5_fundamental_theorem_of_calculus_form_2'],
+  'c.7.3.8': ['c.7.3.8_integration_by_substitution'],
+  'c.7.4.1': ['c.7.4.1_darboux_upper_and_lower_sums'],
+  'c.7.4.8': ['c.7.4.8_darboux_integrability_criterion'],
+  'c.8.1.1': ['c.8.1.1_pointwise_vs_uniform_convergence'],
+  'c.8.1.3': ['c.8.1.3_uniform_convergence_envelope'],
+  'c.8.2.2': ['c.8.2.2_uniform_limit_continuity_theorem'],
+  'c.8.2.4': ['c.8.2.4_non_interchange_limit_integral'],
+  'c.9.1.5': ['c.9.1.5_riemann_rearrangement_theorem'],
+  'c.9.2.6': ['c.9.2.6_integral_test_for_series'],
+  'c.9.3.2': ['c.9.3.2_alternating_series_test_leibniz'],
+  'c.9.4.6': ['c.9.4.6_weierstrass_m_test'],
+  'c.9.4.9': ['c.9.4.9_radius_of_convergence_cauchy_hadamard']
+};
+
+/* The lecture sheets: whole-topic posters rather than one-result figures.
+   They belong to no single concept and are offered as a set. */
+const DIAGRAM_SHEETS = [
+  'sheet_01_reals_and_sequences',
+  'sheet_02_limits_and_continuity_foundations',
+  'sheet_03_continuity_on_intervals',
+  'sheet_04_uniform_continuity_and_approximations',
+  'sheet_05_differentiation_and_mean_value',
+  'sheet_06_riemann_and_darboux_integral',
+  'sheet_07_sequences_and_series_of_functions',
+  'sheet_08_topology_monotone_gauges'
+];
+
+
+/* ── flow-library/app/src/core.project.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   The project seam: the one place flow-library learns WHICH app it is.
+
+   Everything in flow-library is shared by every study system. What makes an
+   app itself — its name, where its progress is stored, what it looks like,
+   any extra behaviour — is declared by the project in app/project/project.js
+   as a single `PROJECT` object, loaded before this file:
+
+     PROJECT = {
+       id, name,                      required — name is shown in the chrome
+       storageKey,                    required — localStorage key for progress
+       sync: { live, mock,            required — Firebase namespaces; mock and
+               users, usersMock,                 live must never share one
+               db },                  optional — Firebase RTDB URL override
+       themeColor: { light, dark },   optional — browser chrome colour
+       hooks: {                       optional — each is called if present
+         home(ctx)   -> Node|null     a hero placed above the home dashboard
+         theme(dark)                  after light/dark is applied
+         ready()                      once, after the signed-in app is up
+       }
+     }
+
+   A missing required field is a fatal error rather than a silent default:
+   two projects falling back to the same storage key would overwrite each
+   other's progress in the same browser.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Project = (function () {
+
+  if (typeof PROJECT === 'undefined') {
+    throw new Error('app/project/project.js did not define PROJECT');
+  }
+
+  const REQUIRED = ['id', 'name', 'storageKey', 'sync.live', 'sync.mock', 'sync.users', 'sync.usersMock'];
+  const get = (o, path) => path.split('.').reduce((v, k) => (v == null ? v : v[k]), o);
+  const missing = REQUIRED.filter(k => !get(PROJECT, k));
+  if (missing.length) {
+    throw new Error('PROJECT is missing ' + missing.join(', ') + ' (app/project/project.js)');
+  }
+
+  PROJECT.themeColor = Object.assign({ light: '#faf8f4', dark: '#101216' }, PROJECT.themeColor);
+  PROJECT.hooks = PROJECT.hooks || {};
+  document.documentElement.setAttribute('data-project', PROJECT.id);
+
+  /* A broken hook must not take the app down with it: the hooks are
+     decoration and extras, the study loop underneath is shared and tested. */
+  function hook(name) {
+    const fn = PROJECT.hooks[name];
+    if (typeof fn !== 'function') return null;
+    try {
+      return fn.apply(PROJECT, Array.prototype.slice.call(arguments, 1));
+    } catch (err) {
+      console.error('PROJECT.hooks.' + name + ' failed:', err);
+      return null;
+    }
+  }
+
+  return { hook: hook };
+})();
+
+
+/* ── flow-library/app/src/core.dom.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    DOM + routing primitives. No framework: every view returns a real element.
    ══════════════════════════════════════════════════════════════════════════ */
@@ -29508,21 +29743,62 @@ const DOM = (function () {
 
   /* Turn concept IDs like <code>c.2.3.1</code>, $c.3.4.2$, or raw c.2.3.1 references into
      clickable links labeled with their section number and concept name. */
+  /* Concept references in authored prose become clickable §-chips. A reference
+     INSIDE a maths span must not: an <a> in the middle of `$$ … $$` splits the
+     formula and MathJax shows it as raw source. There the id is written into
+     the formula as \text{§4.1 Title}, and the chip goes right after the span so
+     the reference stays one tap away. */
+  const ID = 'c\\.[0-9]+[a-z0-9.]*|s\\.[a-z0-9-]+';
+  const TEXT_REF = new RegExp('<code>(' + ID + ')</code>|(?<=[\\s(])(c\\.[0-9]+\\.[0-9]+[a-z0-9.]*)(?=[\\s.,;:)])', 'g');
+  const MATH_REF = new RegExp('<code>(' + ID + ')</code>|(?<=[\\s({])(c\\.[0-9]+\\.[0-9]+[a-z0-9.]*)(?=[\\s.,;:)}]|$)', 'g');
+  const MATH_SPAN = /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$]+?\$/g;
+  const LONE_ID = new RegExp('^\\$(' + ID + ')\\$$');
+
+  function refOf(id) {
+    const c = (typeof Pool !== 'undefined' && Pool.concept) ? Pool.concept(id) : null;
+    if (!c) return null;
+    const cleanTitle = (c.title || id).split(';')[0].trim();
+    const secTitle = (c.sec && typeof Pool.sectionTitle === 'function') ? Pool.sectionTitle(c.sec) : null;
+    return {
+      id: id,
+      label: c.sec ? ('§' + c.sec + ' ' + cleanTitle) : cleanTitle,
+      desc: (secTitle ? ('Section ' + c.sec + ': ' + secTitle + ' — ') : '') + (c.title || id)
+    };
+  }
+  const chip = r => '<a class="concept-ref" href="#/note/' + r.id + '" title="'
+    + r.desc.replace(/"/g, '&quot;') + '">' + r.label + '</a>';
+  const texText = t => t.replace(/[\\{}$&#%_^~]/g, ch => '\\' + ({ '\\': 'backslash ', '~': 'textasciitilde ', '^': 'textasciicircum ' }[ch] || ch));
+
+  function linkifyText(s) {
+    return s.replace(TEXT_REF, function (match, g1, g2) {
+      const r = refOf(g1 || g2);
+      return r ? chip(r) : match;
+    });
+  }
+
+  function linkifyMath(span) {
+    const lone = LONE_ID.exec(span);
+    if (lone) { const r = refOf(lone[1]); return r ? chip(r) : span; }
+    const found = [];
+    const tex = span.replace(MATH_REF, function (match, g1, g2) {
+      const r = refOf(g1 || g2);
+      if (!r) return match;
+      if (!found.some(f => f.id === r.id)) found.push(r);
+      return '\\text{' + texText(r.label) + '}';
+    });
+    return found.length ? tex + ' ' + found.map(chip).join(' ') : span;
+  }
+
   function linkifyConcepts(s) {
     if (typeof s !== 'string') return s;
-    if (s.indexOf('<code>') === -1 && s.indexOf('$c.') === -1 && s.indexOf('c.') === -1 && s.indexOf('s.') === -1) return s;
-    const re = /<code>(c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+)<\/code>|\$((?:c\.[0-9]+[a-z0-9.]*|s\.[a-z0-9-]+))\$|(?<=[\s(])(c\.[0-9]+\.[0-9]+[a-z0-9.]*)(?=[\s.,;:)])/g;
-    return s.replace(re, function (match, g1, g2, g3) {
-      const id = g1 || g2 || g3;
-      const c = (typeof Pool !== 'undefined' && Pool.concept) ? Pool.concept(id) : null;
-      if (!c) return match;
-      const cleanTitle = (c.title || id).split(';')[0].trim();
-      const label = c.sec ? ('§' + c.sec + ' ' + cleanTitle) : cleanTitle;
-      const secTitle = (c.sec && typeof Pool.sectionTitle === 'function') ? Pool.sectionTitle(c.sec) : null;
-      const fullDesc = (secTitle ? ('Section ' + c.sec + ': ' + secTitle + ' — ') : '') + (c.title || id);
-      const escTitle = fullDesc.replace(/"/g, '&quot;');
-      return '<a class="concept-ref" href="#/note/' + id + '" title="' + escTitle + '">' + label + '</a>';
-    });
+    if (s.indexOf('c.') === -1 && s.indexOf('s.') === -1) return s;
+    let out = '', last = 0, m;
+    MATH_SPAN.lastIndex = 0;
+    while ((m = MATH_SPAN.exec(s))) {
+      out += linkifyText(s.slice(last, m.index)) + linkifyMath(m[0]);
+      last = m.index + m[0].length;
+    }
+    return out + linkifyText(s.slice(last));
   }
 
   /* Convert markdown bold (**text**) and italics (*text*) to HTML <b> and <i> tags,
@@ -29709,7 +29985,7 @@ const Router = (function () {
 })();
 
 
-/* ── src/core.tex.js ── */
+/* ── flow-library/app/src/core.tex.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    MathJax plumbing.
 
@@ -29815,7 +30091,7 @@ const Tex = (function () {
 })();
 
 
-/* ── src/core.md.js ── */
+/* ── flow-library/app/src/core.md.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Markdown, line by line, with the maths left alone.
 
@@ -30136,7 +30412,7 @@ const Markdown = (function () {
 })();
 
 
-/* ── src/core.store.js ── */
+/* ── flow-library/app/src/core.store.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Progress store.
 
@@ -30161,7 +30437,7 @@ const Markdown = (function () {
 
 const Store = (function () {
 
-  const KEY = 'ssc4.level1.v1';
+  const KEY = PROJECT.storageKey;
   const EMPTY = {
     v: 2,
     done: {}, undone: {},        /* Level 1 completion + tombstones */
@@ -30486,7 +30762,7 @@ const Store = (function () {
 })();
 
 
-/* ── src/core.sync.js ── */
+/* ── flow-library/app/src/core.sync.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Multi-device sync.
 
@@ -30506,20 +30782,23 @@ const Store = (function () {
 
 const Sync = (function () {
 
-  const DB = 'https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app';
+  /* A project may bring its own database (PROJECT.sync.db); the shared one is the default. */
+  const DB = PROJECT.sync.db || 'https://task-dominion-default-rtdb.asia-southeast1.firebasedatabase.app';
 
   /* Mock and validated pools keep SEPARATE STORES — progress and the sign-in
      register both. Their ids do not mean the same things, and a name typed
      into the test build must never appear in, or merge with, the real record.
      This is the only place that mapping is decided.
 
-        live   ssc4_ra_v1        ssc4_users_v1
-        mock   ssc4_ra_mock_v1   ssc4_users_mock_v1
+        live   PROJECT.sync.live   PROJECT.sync.users
+        mock   PROJECT.sync.mock   PROJECT.sync.usersMock
+
+     The names themselves are per project, in app/project/project.js.
 
      AGY owns the live pair; see "Publishing" in HOOK_agy.md. */
   const LIVE = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live');
-  const NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
-  const USERS = () => LIVE() ? 'ssc4_users_v1' : 'ssc4_users_mock_v1';
+  const NS = () => LIVE() ? PROJECT.sync.live : PROJECT.sync.mock;
+  const USERS = () => LIVE() ? PROJECT.sync.users : PROJECT.sync.usersMock;
 
   let syncing = false;
   let pushT = 0;
@@ -30708,7 +30987,7 @@ const Sync = (function () {
 })();
 
 
-/* ── src/core.pool.js ── */
+/* ── flow-library/app/src/core.pool.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Content pool — one pass over the loaded data, then pure lookups.
 
@@ -30926,7 +31205,7 @@ const Pool = (function () {
 })();
 
 
-/* ── src/core.progress.js ── */
+/* ── flow-library/app/src/core.progress.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Levels, earned — never switched.
 
@@ -31273,7 +31552,7 @@ const Progress = (function () {
 })();
 
 
-/* ── src/core.latex.js ── */
+/* ── flow-library/app/src/core.latex.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    LaTeX commands, offered the way a code editor offers them.
 
@@ -31538,7 +31817,7 @@ const Latex = (function () {
 })();
 
 
-/* ── src/ui.parts.js ── */
+/* ── flow-library/app/src/ui.parts.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Shared view parts. Small builders every view reuses, so the views stay
    about study logic rather than markup.
@@ -31780,6 +32059,52 @@ const UI = (function () {
     return d + ' ' + DOM.plural(d, 'day') + ' ago';
   }
 
+  /* ── one proof step ───────────────────────────────────────────────────
+     Pools name the three parts of a rung differently — `why`/`m`/`meaning`
+     in one, `label`/`math`/`note` in another — so the fields are read once,
+     here, and every view that shows a proof gets the same step.
+
+     A pool that files prose under the maths field (no explanation given, and
+     the text reads like a sentence rather than a formula) has it shown as the
+     explanation instead of forced into display maths. */
+  const MEANS_PREFIX = /^(what this (really )?means:?|meaning:?)\s*/i;
+
+  function rungParts(r) {
+    const why = r.why || r.label || '';
+    let math = String(r.m || r.math || '').trim();
+    let meaning = String(r.meaning || r.note || '').trim();
+    if (!meaning && math && (MEANS_PREFIX.test(math) ||
+        (!math.startsWith('$$') && !/^\s*\\[a-zA-Z]+/.test(math) &&
+         math.split(/\s+/).length > 6 && !math.includes('\\begin')))) {
+      meaning = math; math = '';
+    }
+    if (math && math === meaning) math = '';
+    return {
+      why: why,
+      math: math && !math.includes('$') ? '$$' + math + '$$' : math,
+      meaning: meaning.replace(MEANS_PREFIX, '')
+    };
+  }
+
+  /* `compact` is the recall reel's version: the explanation as a quiet
+     line under the maths rather than its own labelled block. */
+  function rung(r, i, opts) {
+    const o = opts || {};
+    const p = rungParts(r);
+    return el('div', { class: 'card flat rung' + (o.compact ? ' compact' : '') }, [
+      el('div', { class: 'rung-why small muted' }, [
+        el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: p.why })
+      ]),
+      p.math ? el('div', { class: 'rung-math', html: p.math }) : null,
+      p.meaning ? (o.compact
+        ? el('div', { class: 'rung-note small muted', html: p.meaning })
+        : el('div', { class: 'rung-meaning' }, [
+            el('div', { class: 'kicker', text: 'What this really means' }),
+            el('div', { class: 'prose tight', html: p.meaning })
+          ])) : null
+    ]);
+  }
+
   const clock = ms => {
     const s = Math.max(0, Math.round(ms / 1000));
     return String(Math.floor(s / 60)) + ':' + String(s % 60).padStart(2, '0');
@@ -31788,119 +32113,12 @@ const UI = (function () {
   return {
     title, crumb, prose, math, kindBadge, tierBadge, meter, stat, empty,
     ladder, levelBadge, levelBar, levelRing, ask, pendingPrereqs, mockBanner, gate, reveal,
-    typeBadge, metaRow, clock, ago
+    typeBadge, metaRow, clock, ago, rung, rungParts
   };
 })();
 
 
-/* ── src/fig.diagrams.js ── */
-/* ══════════════════════════════════════════════════════════════════════════
-   The rendered diagram library.  GENERATED — do not hand-edit.
-
-   `diagrams/` holds a light and a dark PNG for dozens of results, drawn offline
-   and named after the concept they belong to. The app used to draw eleven
-   figures of its own and ignore all of them, so a learner opening Heine–Borel
-   got no picture even though one was sitting in the repository.
-
-   This file is the index: concept id -> the diagram basenames filed under it.
-   The way to add a picture is to drop the light/dark pair into `diagrams/` and
-   run `python3 tools/gen_diagrams.py` — never to hand-edit a path into a
-   concept.
-
-   A concept may still override the index with `img: ['<basename>', …]`, which
-   is how a node points at a diagram filed under a different id — the mock pool
-   does exactly that, because its ids are `m.*` and the pictures are `c.*`.
-
-   comp.figure.js swaps between the pair on `data-theme`, so changing the theme
-   changes the diagram with no reload.
-   ══════════════════════════════════════════════════════════════════════════ */
-
-const DIAGRAM_MAP = {
-  'c.11.1.7': ['c.11.1.7_open_vs_closed_sets'],
-  'c.11.2.5': ['c.11.2.5_heine_borel_theorem'],
-  'c.11.2.6': ['c.11.2.6_topological_bolzano_weierstrass'],
-  'c.2.3.6': ['c.2.3.6_completeness_supremum_property'],
-  'c.2.4.3': ['c.2.4.3_archimedean_property'],
-  'c.2.4.9': ['c.2.4.9_density_rationals_irrationals'],
-  'c.2.5.1': ['c.2.5.1_characterization_of_intervals'],
-  'c.2.5.2': ['c.2.5.2_nested_intervals_property'],
-  'c.2.5.3': ['c.2.5.3_cantor_ternary_set'],
-  'c.3.2.7': ['c.3.2.7_squeeze_theorem_sequences'],
-  'c.3.3.2': ['c.3.3.2_monotone_convergence_theorem'],
-  'c.3.4.8': ['c.3.4.8_bolzano_weierstrass_theorem'],
-  'c.3.5.5': ['c.3.5.5_cauchy_convergence_criterion'],
-  'c.4.1.4': ['c.4.1.4_epsilon_delta_limit_definition'],
-  'c.4.1.8': ['c.4.1.8_sequential_criterion_for_limits'],
-  'c.5.1.1': ['c.5.1.1_continuity_at_a_point'],
-  'c.5.1.3': ['c.5.1.3_sequential_criterion_for_continuity'],
-  'c.5.1.6g': ['c.5.1.6g_dirichlet_function'],
-  'c.5.1.6h': ['c.5.1.6h_thomae_popcorn_function'],
-  'c.5.1.7': ['c.5.1.7_continuous_extension_removable_discontinuity'],
-  'c.5.1.8': ['c.5.1.8_oscillatory_discontinuity_sin_1_over_x', 'c.5.1.8_squeezed_oscillation_x_sin_1_over_x'],
-  'c.5.3.10': ['c.5.3.10_connectedness_interval_mapping', 'c.5.3.10_preservation_of_intervals_theorem'],
-  'c.5.3.2': ['c.5.3.2_boundedness_theorem', 'c.5.3.2_failure_boundedness_open_interval'],
-  'c.5.3.4': ['c.5.3.4_failure_extremum_open_interval', 'c.5.3.4_maximum_minimum_theorem'],
-  'c.5.3.5': ['c.5.3.5_location_of_roots_theorem'],
-  'c.5.3.6': ['c.5.3.6_bisection_method'],
-  'c.5.3.7': ['c.5.3.7_bolzano_intermediate_value_theorem'],
-  'c.5.3.9': ['c.5.3.9_continuous_image_of_compact_interval'],
-  'c.5.4.10': ['c.5.4.10_step_function_approximation'],
-  'c.5.4.13': ['c.5.4.13_piecewise_linear_approximation'],
-  'c.5.4.14': ['c.5.4.14_weierstrass_approximation_theorem'],
-  'c.5.4.1': ['c.5.4.1_uniform_continuity'],
-  'c.5.4.2': ['c.5.4.2_nonuniform_continuity_criterion'],
-  'c.5.4.3': ['c.5.4.3_uniform_continuity_theorem_heine_cantor'],
-  'c.5.4.5': ['c.5.4.5_lipschitz_condition'],
-  'c.5.4.7': ['c.5.4.7_preservation_of_cauchy_sequences'],
-  'c.5.4.8': ['c.5.4.8_continuous_extension_theorem'],
-  'c.5.5.5': ['c.5.5.5_cousin_lemma_gauge_partition'],
-  'c.5.6.3': ['c.5.6.3_monotone_jump_discontinuities'],
-  'c.5.6.4': ['c.5.6.4_countability_of_discontinuities'],
-  'c.5.6.5': ['c.5.6.5_continuous_inverse_theorem'],
-  'c.6.1.1': ['c.6.1.1_derivative_as_tangent_limit'],
-  'c.6.1.5': ['c.6.1.5_caratheodory_theorem'],
-  'c.6.2.12': ['c.6.2.12_darboux_theorem_derivatives'],
-  'c.6.2.1': ['c.6.2.1_interior_extremum_fermat_theorem'],
-  'c.6.2.3': ['c.6.2.3_rolle_theorem'],
-  'c.6.2.4': ['c.6.2.4_lagrange_mean_value_theorem'],
-  'c.6.3.2': ['c.6.3.2_cauchy_mean_value_theorem'],
-  'c.6.3.3': ['c.6.3.3_lhopital_rule'],
-  'c.6.4.1': ['c.6.4.1_taylor_theorem'],
-  'c.7.1.1': ['c.7.1.1_riemann_sum_tagged_partition'],
-  'c.7.2.9': ['c.7.2.9_additivity_of_integral'],
-  'c.7.3.12': ['c.7.3.12_lebesgue_integrability_criterion'],
-  'c.7.3.17': ['c.7.3.17_integration_by_parts'],
-  'c.7.3.1': ['c.7.3.1_fundamental_theorem_of_calculus_form_1'],
-  'c.7.3.5': ['c.7.3.5_fundamental_theorem_of_calculus_form_2'],
-  'c.7.3.8': ['c.7.3.8_integration_by_substitution'],
-  'c.7.4.1': ['c.7.4.1_darboux_upper_and_lower_sums'],
-  'c.7.4.8': ['c.7.4.8_darboux_integrability_criterion'],
-  'c.8.1.1': ['c.8.1.1_pointwise_vs_uniform_convergence'],
-  'c.8.1.3': ['c.8.1.3_uniform_convergence_envelope'],
-  'c.8.2.2': ['c.8.2.2_uniform_limit_continuity_theorem'],
-  'c.8.2.4': ['c.8.2.4_non_interchange_limit_integral'],
-  'c.9.1.5': ['c.9.1.5_riemann_rearrangement_theorem'],
-  'c.9.2.6': ['c.9.2.6_integral_test_for_series'],
-  'c.9.3.2': ['c.9.3.2_alternating_series_test_leibniz'],
-  'c.9.4.6': ['c.9.4.6_weierstrass_m_test'],
-  'c.9.4.9': ['c.9.4.9_radius_of_convergence_cauchy_hadamard']
-};
-
-/* The lecture sheets: whole-topic posters rather than one-result figures.
-   They belong to no single concept and are offered as a set. */
-const DIAGRAM_SHEETS = [
-  'sheet_01_reals_and_sequences',
-  'sheet_02_limits_and_continuity_foundations',
-  'sheet_03_continuity_on_intervals',
-  'sheet_04_uniform_continuity_and_approximations',
-  'sheet_05_differentiation_and_mean_value',
-  'sheet_06_riemann_and_darboux_integral',
-  'sheet_07_sequences_and_series_of_functions',
-  'sheet_08_topology_monotone_gauges'
-];
-
-
-/* ── src/fig.library.js ── */
+/* ── flow-library/app/src/fig.library.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    The figures.
 
@@ -32335,7 +32553,7 @@ const FIGMAP = {
 };
 
 
-/* ── src/comp.figure.js ── */
+/* ── flow-library/app/src/comp.figure.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Figure engine.
 
@@ -32566,7 +32784,7 @@ const Fig = (function () {
 })();
 
 
-/* ── src/comp.tree.js ── */
+/* ── flow-library/app/src/comp.tree.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    The syllabus tree — and, since Level 4, the reader as well.
 
@@ -33270,7 +33488,7 @@ const Tree = (function () {
 })();
 
 
-/* ── src/comp.question.js ── */
+/* ── flow-library/app/src/comp.question.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    One objective question, as a component.
 
@@ -33572,7 +33790,7 @@ const QuestionCard = (function () {
 })();
 
 
-/* ── src/comp.note.js ── */
+/* ── flow-library/app/src/comp.note.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    One concept note, as a component that opens INSIDE the syllabus.
 
@@ -33802,54 +34020,7 @@ const NoteBody = (function () {
       }
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
-          p.rungs.map(function (r, idx) {
-            const rungItems = [
-              el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
-                el('b', { text: 'Step ' + (idx + 1) + ': ' }),
-                el('span', { html: r.why })
-              ])
-            ];
-
-            const rawContent = (r.meaning || r.m || '').trim();
-            if (rawContent) {
-              const isExplanation = !!r.meaning ||
-                /^what this (really )?means/i.test(rawContent) ||
-                /^meaning:/i.test(rawContent) ||
-                (!rawContent.startsWith('$$') && !/^\s*\\[a-zA-Z]+/.test(rawContent) && rawContent.split(/\s+/).length > 6 && !rawContent.includes('\\begin'));
-
-              if (isExplanation) {
-                const text = rawContent.replace(/^(what this (really )?means:?|meaning:?)\s*/i, '');
-                rungItems.push(el('div', {
-                  class: 'rung-meaning',
-                  style: {
-                    marginTop: '8px', padding: '8px 12px',
-                    background: 'var(--surface-2, rgba(0,0,0,0.03))',
-                    borderRadius: '6px', borderLeft: '2px solid var(--accent, #4f46e5)',
-                    fontSize: '0.88rem', lineHeight: '1.45'
-                  }
-                }, [
-                  el('div', {
-                    class: 'kicker',
-                    style: { fontSize: '0.68rem', color: 'var(--accent, #4f46e5)', marginBottom: '3px', fontWeight: '600' },
-                    text: 'What this really means'
-                  }),
-                  el('div', { class: 'prose tight', html: text })
-                ]));
-              } else {
-                let mathHtml = rawContent;
-                if (!mathHtml.includes('$')) mathHtml = '$$' + mathHtml + '$$';
-                rungItems.push(el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
-              }
-            }
-
-            if (r.meaning && r.m && r.m.trim() !== r.meaning.trim()) {
-              let mathHtml = r.m.trim();
-              if (!mathHtml.includes('$')) mathHtml = '$$' + mathHtml + '$$';
-              rungItems.splice(1, 0, el('div', { style: { marginTop: '6px', overflowX: 'auto' }, html: mathHtml }));
-            }
-
-            return el('div', { class: 'card flat', style: { padding: '10px 14px', borderLeft: '3px solid var(--accent, #4f46e5)' } }, rungItems);
-          })
+          p.rungs.map(function (r, idx) { return UI.rung(r, idx); })
         ));
       }
       if (p.ends) {
@@ -34313,7 +34484,7 @@ const NoteBody = (function () {
 })();
 
 
-/* ── src/comp.write.js ── */
+/* ── flow-library/app/src/comp.write.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    The writing workspace — a live markdown editor, one line at a time.
 
@@ -34737,7 +34908,7 @@ const WriteBox = (function () {
 })();
 
 
-/* ── src/view.login.js ── */
+/* ── flow-library/app/src/view.login.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Sign in.
 
@@ -34810,7 +34981,7 @@ const Login = (function () {
 
     const form = el('form', { class: 'stack', style: { gap: '14px' }, on: { submit: submit } }, [
       el('div', {}, [
-        el('div', { class: 'kicker', text: 'Real Analysis · study system' }),
+        el('div', { class: 'kicker', text: PROJECT.name + ' · study system' }),
         el('h1', { tabindex: '-1', id: 'pagetitle', text: 'Sign in to your record' })
       ]),
       el('p', { class: 'lede' }, [
@@ -34850,7 +35021,7 @@ const Login = (function () {
 })();
 
 
-/* ── src/view.home.js ── */
+/* ── flow-library/app/src/view.home.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Today — what to do next, and what the app actually knows about you.
 
@@ -35069,6 +35240,7 @@ const ViewHome = (function () {
     ];
 
     DOM.add(root, [
+      Project.hook('home', { overall: overall, stats: s }),
       UI.title('Today'),
       UI.mockBanner(),
 
@@ -35128,7 +35300,7 @@ const ViewHome = (function () {
 })();
 
 
-/* ── src/view.study.js ── */
+/* ── flow-library/app/src/view.study.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Study — the whole syllabus as one page of dropdowns you read your way
    through. Nothing is more than one line tall until you open it, so the size
@@ -35234,7 +35406,7 @@ const ViewStudy = (function () {
 })();
 
 
-/* ── src/view.note.js ── */
+/* ── flow-library/app/src/view.note.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    `#/note/<id>` — kept, and no longer a page.
 
@@ -35270,7 +35442,7 @@ const ViewNote = (function () {
 })();
 
 
-/* ── src/view.recall.js ── */
+/* ── flow-library/app/src/view.recall.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Recall, as a reel.
 
@@ -35506,12 +35678,7 @@ const ViewRecall = (function () {
           p.why ? el('div', { class: 'prose tight', html: p.why }) : null,
           (p.rungs && p.rungs.length)
             ? el('div', { class: 'stack', style: { gap: '8px' } }, p.rungs.map(function (r, i) {
-                return el('div', { class: 'card flat', style: { padding: '10px 14px' } }, [
-                  el('div', { class: 'small muted', style: { marginBottom: '6px' } }, [
-                    el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: r.why })
-                  ]),
-                  r.m ? el('div', { html: r.m }) : null
-                ]);
+                return UI.rung(r, i, { compact: true });
               }))
             : null,
           p.ends ? el('div', { class: 'prose tight', html: p.ends }) : null,
@@ -35782,7 +35949,7 @@ const ViewRecall = (function () {
 })();
 
 
-/* ── src/view.omr.js ── */
+/* ── flow-library/app/src/view.omr.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Objective questions, OMR first.
 
@@ -35905,7 +36072,7 @@ const ViewOmr = (function () {
 })();
 
 
-/* ── src/view.write.js ── */
+/* ── flow-library/app/src/view.write.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Theorem writing.
 
@@ -36006,7 +36173,7 @@ const ViewWrite = (function () {
 })();
 
 
-/* ── src/boot.js ── */
+/* ── flow-library/app/src/boot.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Boot: theme, data loading, navigation, routing, failure surfaces.
    ══════════════════════════════════════════════════════════════════════════ */
@@ -36019,7 +36186,8 @@ const Theme = (function () {
     const dark = pref === 'dark' || (pref === 'auto' && media && media.matches);
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', dark ? '#101216' : '#faf8f4');
+    if (meta) meta.setAttribute('content', dark ? PROJECT.themeColor.dark : PROJECT.themeColor.light);
+    Project.hook('theme', dark);
   }
 
   if (media && media.addEventListener) {
@@ -36156,7 +36324,7 @@ const App = (function () {
       railBtn('back', 'arrow_back', 'Back', function () { Router.back(); }),
       el('a', { class: 'rail-brand', href: Router.href('home') }, [
         el('span', { class: 'brand-titles' }, [
-          el('b', { text: 'Real Analysis' }),
+          el('b', { text: PROJECT.name }),
           el('span', { class: 'brand-sub', id: 'rail-sub' })
         ])
       ])
@@ -36281,6 +36449,8 @@ const App = (function () {
   }
 
   /* The app proper. Only ever reached with someone signed in. */
+  let readied = false;
+
   function run() {
     document.body.classList.remove('signed-out');
     buildNav();
@@ -36295,6 +36465,7 @@ const App = (function () {
       Tex.typeset(document.getElementById('main'));
       mathjaxWarning();
     });
+    if (!readied) { readied = true; Project.hook('ready'); }
   }
 
   /* The record is keyed on a name and a roll number, so there is no sensible
