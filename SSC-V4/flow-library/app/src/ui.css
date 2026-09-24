@@ -1043,52 +1043,41 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .hero{ position:relative; overflow:hidden; }
 
 /* ── the real line (comp.realline.js) ──────────────────────────────────────
-   A schematic number line under an inequality: points in order, the relation
-   between neighbours written on the axis, bands for |x − a| < ε and
-   x ∈ (a, b), and the free variable roaming inside its band. Everything is
-   positioned in % so it stays crisp at any width; colours are tokens, so a
-   project theme restyles it for free. */
-.rl-set{ display:flex; flex-direction:column; gap:4px; margin-top:10px; }
-.rl{ padding:4px 2px 2px; }
-.rl-track{ position:relative; width:100%; }
+   The design of flow-library/design/realline-reference.html: grey axis with
+   arrowheads and ℝ at the right, the solution set as a thick stroke on the
+   axis (Type 1 blue, Type 2 green, Type 3 amber, all of ℝ black), hollow or
+   filled endpoints, labels below, the set written out underneath. Positions
+   are %, so it is crisp at any width; colours are tokens a theme can move. */
+:root{ --rl-axis:#7a7a7a; --rl-gt:#3a86d9; --rl-lt:#1d8f3c; --rl-btw:#e1a52a; --rl-all:#1b1b1b; --rl-ink:#1b1b1b; }
+:root[data-theme=dark]{ --rl-axis:#8b919c; --rl-gt:#6aa9f0; --rl-lt:#4cc27a; --rl-btw:#f1b84a; --rl-all:#e9e9e9; --rl-ink:#e6e3de; }
+.rl-group{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+.rl{ padding:2px 0 0; text-align:center; }
+.rl-track{ position:relative; width:100%; --c:var(--rl-axis); }
+.rl-track.ray-r{ --c:var(--rl-gt); } .rl-track.ray-l{ --c:var(--rl-lt); }
+.rl-track.seg{ --c:var(--rl-btw); } .rl-track.all{ --c:var(--rl-all); }
 .rl-track>*{ position:absolute; }
-.rl-axis{ left:0; right:0; height:0; border-top:1.5px solid var(--ink-3); }
-.rl-axis::before,.rl-axis::after{ content:''; position:absolute; top:-5px; width:8px; height:8px;
-  border-top:1.5px solid var(--ink-3); border-right:1.5px solid var(--ink-3); }
-.rl-axis::after{ right:0; transform:rotate(45deg); }
-.rl-axis::before{ left:0; transform:rotate(-135deg); }
-.rl-tick{ width:9px; height:9px; margin:-5px 0 0 -4.5px; border-radius:50%;
-  background:var(--surface); border:2px solid var(--ink-2); }
-.rl-tick.new{ border-color:var(--accent); background:var(--accent);
-  box-shadow:0 0 0 4px var(--accent-soft); }
-.rl-lab{ transform:translateX(-50%); white-space:nowrap; font-size:.8rem; color:var(--ink-2);
-  line-height:1.1; }
-.rl-lab.low{ margin-top:18px; }
-.rl-lab.first{ transform:translateX(-14px); }
-.rl-lab.last{ transform:translateX(calc(-100% + 14px)); }
-.rl-lab.new{ color:var(--accent); font-weight:600; }
+.rl-axis{ left:10px; right:10px; top:12px; border-top:1.6px solid var(--rl-axis); }
+.rl-axis::before,.rl-axis::after{ content:''; position:absolute; top:-5.6px; border:5px solid transparent; }
+.rl-axis::before{ left:-8px; border-right:9px solid var(--rl-axis); border-left:0; }
+.rl-axis::after{ right:-8px; border-left:9px solid var(--rl-axis); border-right:0; }
+.rl-R{ right:2px; top:20px; font:400 .88rem/1 var(--font-prose); color:var(--rl-ink); }
+.rl-set{ top:10.4px; height:4.2px; background:var(--c); border-radius:2px; }
+.rl-set.to-r::after,.rl-set.to-l::before{ content:''; position:absolute; top:-4.4px; border:6.5px solid transparent; }
+.rl-set.to-r::after{ right:-9px; border-left:11px solid var(--c); border-right:0; }
+.rl-set.to-l::before{ left:-9px; border-right:11px solid var(--c); border-left:0; }
+.rl-end{ top:12.8px; width:13px; height:13px; margin:-7.3px 0 0 -6.5px; border-radius:50%;
+  background:var(--c); border:2.4px solid var(--c); z-index:1; }
+.rl-end.open{ background:var(--surface); }
+.rl-pt{ top:12.8px; width:9px; height:9px; margin:-5.3px 0 0 -4.5px; border-radius:50%; background:var(--rl-ink); }
+.rl-pt.inner{ width:1.4px; height:10px; margin:-5.8px 0 0 -.7px; border-radius:0; background:var(--rl-axis); }
+.rl-lab{ top:22px; transform:translateX(-50%); white-space:nowrap; font-size:.92rem; color:var(--rl-ink); line-height:1.1; }
+.rl-lab.low{ top:40px; }
+.rl-lab.first{ transform:translateX(-12px); }
+.rl-lab.last{ transform:translateX(calc(-100% + 12px)); }
+.rl-lab.new{ color:var(--accent); font-weight:700; }
 .rl-lab mjx-container{ margin:0 !important; }
-/* the relation sits ON the axis, cut out of it: a —<— b */
-.rl-op{ transform:translate(-50%, -50%); padding:0 4px; background:var(--surface);
-  font:600 .78rem/1 var(--font-mono); color:var(--ink-2); }
-.card.tint .rl-op,.rung-meaning .rl-op{ background:var(--surface-2); }
-.rl-band{ height:6px; margin-top:-3px; border-radius:3px;
-  background:color-mix(in srgb, var(--accent) 22%, transparent);
-  border:1px solid color-mix(in srgb, var(--accent) 45%, transparent); }
-.rl-band.ray-r{ border-right:0; border-radius:3px 0 0 3px;
-  -webkit-mask-image:linear-gradient(90deg,#000 80%,transparent);
-          mask-image:linear-gradient(90deg,#000 80%,transparent); }
-.rl-band.ray-l{ border-left:0; border-radius:0 3px 3px 0;
-  -webkit-mask-image:linear-gradient(270deg,#000 80%,transparent);
-          mask-image:linear-gradient(270deg,#000 80%,transparent); }
-.rl-cap{ width:10px; height:10px; margin:-5px 0 0 -5px; border-radius:50%;
-  background:var(--accent); border:2px solid var(--accent); }
-.rl-cap.open{ background:var(--surface); }
-.rl-roam{ transform:translate(-50%, calc(-100% + 4px)); display:flex; flex-direction:column-reverse;
-  align-items:center; animation:rl-roam 3.2s var(--ease) infinite alternate; }
-.rl-roam .rl-dot{ width:8px; height:8px; border-radius:50%; background:var(--ok);
-  box-shadow:0 0 0 3px var(--ok-soft); }
-.rl-roam .rl-var{ font-size:.74rem; color:var(--ok); margin-bottom:1px; white-space:nowrap; }
-@keyframes rl-roam{ from{ left:var(--a); } to{ left:var(--b); } }
-@media (prefers-reduced-motion: reduce){ .rl-roam{ animation:none; } }
-.rung.compact .rl-set,.reveal .rl-set{ margin-top:8px; }
+.rl-op{ top:12.8px; transform:translate(-50%, -52%); padding:0 4px; background:var(--surface);
+  font:500 .86rem/1 var(--font-prose); color:var(--rl-ink); }
+.rung-meaning .rl-op{ background:var(--surface-2); }
+.rl-cap{ margin-top:4px; font-size:.9rem; color:var(--rl-ink); overflow-x:auto; overflow-y:hidden; }
+.rl-cap mjx-container{ margin:0 !important; }

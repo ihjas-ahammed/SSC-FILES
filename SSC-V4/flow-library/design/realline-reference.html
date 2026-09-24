@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inequalities on the real line · reference</title>
+<!-- The design reference for the real-line widget (flow-library/app/src/comp.realline.js).
+     Every number line below is drawn by the same geometry the widget uses. -->
+<script>
+  window.MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
+    chtml: { displayAlign: 'center' }, options: { enableMenu: false } };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  :root{
+    --blue:#3a86d9;  --blue-head:#e4f0fb;  --blue-line:#bcd8f2;  --blue-bg:#fbfdff;
+    --green:#1d8f3c; --green-head:#e5f3e6; --green-line:#c2e0c5; --green-bg:#fbfdfb;
+    --amber:#e1a52a; --amber-head:#fdf1d7; --amber-line:#f0d9a4; --amber-bg:#fffdf8;
+    --grey-head:#efefef; --grey-line:#d8d8d8;
+    --axis:#7a7a7a; --ink:#1b1b1b; --ink-2:#333;
+    --serif:'Latin Modern Roman','Computer Modern Serif','CMU Serif','STIX Two Text','Cambria',Georgia,serif;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; padding:14px; background:#fff; color:var(--ink); font:15px/1.4 var(--serif); }
+  .sheet{ max-width:1540px; margin:0 auto; display:grid; gap:12px; }
+  .types{ display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; align-items:stretch; }
+  .card{ border:1px solid var(--line); border-radius:12px; background:var(--bg); overflow:hidden;
+    display:flex; flex-direction:column; }
+  .card.t1{ --line:var(--blue-line);  --bg:var(--blue-bg);  --head:var(--blue-head); }
+  .card.t2{ --line:var(--green-line); --bg:var(--green-bg); --head:var(--green-head); }
+  .card.t3{ --line:var(--amber-line); --bg:var(--amber-bg); --head:var(--amber-head); }
+  .card.sum{ --line:var(--grey-line); --bg:#fff; --head:var(--grey-head); }
+  .card > h2{ margin:0; padding:10px 28px; background:var(--head); border-bottom:1px solid var(--line);
+    font:600 1.62rem/1.25 var(--serif); letter-spacing:-.005em; }
+  .card.t3 > h2{ font-size:1.42rem; white-space:nowrap; }
+  .card.sum > h2{ font-size:1.38rem; padding:8px 28px; }
+  .rows{ display:flex; flex-direction:column; flex:1; }
+  .row{ flex:1; padding:12px 26px 14px; border-top:1px solid var(--line); text-align:center; }
+  .row:first-child{ border-top:0; }
+  .lead{ text-align:left; margin:0 0 8px; font-size:.98rem; }
+  .desc{ margin:2px 0 6px; font-size:.98rem; }
+  .f{ font-size:1.55rem; margin:6px 0 2px; }
+  .cap{ font-size:1.2rem; margin-top:2px; }
+  svg.nl{ display:block; width:100%; height:auto; overflow:visible; }
+  svg.nl text{ font-family:var(--serif); fill:var(--ink); }
+  .summary{ display:grid; grid-template-columns:repeat(5, 1fr); }
+  .summary .row{ border-top:0; border-left:1px solid var(--grey-line); padding:12px 20px; }
+  .summary .row:first-child{ border-left:0; }
+  .summary .f{ font-size:1.1rem; margin:0; }
+  .summary .desc{ font-size:.9rem; }
+  .summary .cap{ font-size:1.05rem; }
+  @media (max-width:1000px){ .types{ grid-template-columns:1fr; } .summary{ grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="types">
+
+    <section class="card t1">
+      <h2>Type 1: $x&gt;a$ (Strictly greater)</h2>
+      <div class="rows">
+        <div class="row">
+          <p class="lead">All real numbers greater than $a$ ($a$ is not included).</p>
+          <div class="f">$x&gt;a$</div>
+          <div data-line='{"kind":"ray-r","a":"a","open":true,"color":"blue"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : x&gt;a\}=(a,\infty)$</div>
+        </div>
+        <div class="row">
+          <div class="f">$x\ge a$</div>
+          <p class="desc">All real numbers greater than or equal to $a$ ($a$ is included).</p>
+          <div data-line='{"kind":"ray-r","a":"a","open":false,"color":"blue"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : x\ge a\}=[a,\infty)$</div>
+        </div>
+        <div class="row">
+          <div class="f">$x&gt;-\infty$</div>
+          <p class="desc">All real numbers (no lower restriction).</p>
+          <div data-line='{"kind":"all","color":"blue"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : x&gt;-\infty\}=\mathbb{R}=(-\infty,\infty)$</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card t2">
+      <h2>Type 2: $x&lt;a$ (Strictly less)</h2>
+      <div class="rows">
+        <div class="row">
+          <p class="lead">All real numbers less than $a$ ($a$ is not included).</p>
+          <div class="f">$x&lt;a$</div>
+          <div data-line='{"kind":"ray-l","a":"a","open":true,"color":"green"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : x&lt;a\}=(-\infty,a)$</div>
+        </div>
+        <div class="row">
+          <div class="f">$x\le a$</div>
+          <p class="desc">All real numbers less than or equal to $a$ ($a$ is included).</p>
+          <div data-line='{"kind":"ray-l","a":"a","open":false,"color":"green"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : x\le a\}=(-\infty,a]$</div>
+        </div>
+        <div class="row">
+          <div class="f">$x&lt;\infty$</div>
+          <p class="desc">All real numbers (no upper restriction).</p>
+          <div data-line='{"kind":"all","color":"green"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : x&lt;\infty\}=\mathbb{R}=(-\infty,\infty)$</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card t3">
+      <h2>Type 3: $\;a&lt;x&lt;b$ (Between two numbers)</h2>
+      <div class="rows">
+        <div class="row">
+          <p class="lead">All real numbers strictly between $a$ and $b$ (neither included).</p>
+          <div class="f">$a&lt;x&lt;b$</div>
+          <div data-line='{"kind":"seg","a":"a","b":"b","openA":true,"openB":true,"color":"amber"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : a&lt;x&lt;b\}=(a,b)$</div>
+        </div>
+        <div class="row">
+          <div class="f">$a\le x\le b$</div>
+          <p class="desc">All real numbers between $a$ and $b$ including both endpoints.</p>
+          <div data-line='{"kind":"seg","a":"a","b":"b","openA":false,"openB":false,"color":"amber"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : a\le x\le b\}=[a,b]$</div>
+        </div>
+        <div class="row">
+          <div class="f">$a\le x&lt;b$</div>
+          <p class="desc">Includes $a$ but not $b$.</p>
+          <div data-line='{"kind":"seg","a":"a","b":"b","openA":false,"openB":true,"color":"amber"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : a\le x&lt;b\}=[a,b)$</div>
+        </div>
+        <div class="row">
+          <div class="f">$a&lt;x\le b$</div>
+          <p class="desc">Excludes $a$ but includes $b$.</p>
+          <div data-line='{"kind":"seg","a":"a","b":"b","openA":true,"openB":false,"color":"amber"}'></div>
+          <div class="cap">$\{x\in\mathbb{R} : a&lt;x\le b\}=(a,b]$</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="card sum">
+    <h2>Endpoint and Infinity summary</h2>
+    <div class="summary">
+      <div class="row"><div class="f">$x\le-\infty$</div><p class="desc">No solution.</p>
+        <div data-line='{"kind":"none","small":true}'></div><div class="cap">$\emptyset$</div></div>
+      <div class="row"><div class="f">$x\ge\infty$</div><p class="desc">No solution.</p>
+        <div data-line='{"kind":"none","small":true}'></div><div class="cap">$\emptyset$</div></div>
+      <div class="row"><div class="f">$-\infty&lt;x&lt;\infty$</div><p class="desc">All real numbers.</p>
+        <div data-line='{"kind":"all","color":"black","small":true,"noR":true}'></div><div class="cap">$\mathbb{R}=(-\infty,\infty)$</div></div>
+      <div class="row"><div class="f">$x&lt;-\infty$</div><p class="desc">No solution.</p>
+        <div data-line='{"kind":"none","small":true}'></div><div class="cap">$\emptyset$</div></div>
+      <div class="row"><div class="f">$x&gt;\infty$</div><p class="desc">No solution.</p>
+        <div data-line='{"kind":"none","small":true}'></div><div class="cap">$\emptyset$</div></div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* One number line, as the sheet draws it: a grey axis with arrowheads, the
+   solution set as a thick coloured stroke ON the axis, open (hollow) or
+   closed (filled) endpoints, labels under the endpoints, and ℝ at the right. */
+const COLORS = { blue: '#3a86d9', green: '#1d8f3c', amber: '#e1a52a', black: '#1b1b1b' };
+function numberLine(o) {
+  const W = 460, H = o.small ? 44 : 58, Y = 20, L = 8, R = W - 8, AX = '#7a7a7a';
+  const c = COLORS[o.color] || AX;
+  const A = o.kind === 'seg' ? 150 : 185, B = 330;
+  const head = (x, dir, col, s) => `<path d="M${x} ${Y} l${-dir * s} ${-s * 0.55} v${s * 1.1} z" fill="${col}"/>`;
+  let g = `<line x1="${L + 6}" y1="${Y}" x2="${R - 6}" y2="${Y}" stroke="${AX}" stroke-width="1.6"/>`
+        + head(L, -1, AX, 9) + head(R, 1, AX, 9);
+  const dot = (x, open) => `<circle cx="${x}" cy="${Y}" r="7" fill="${open ? '#fff' : c}" stroke="${c}" stroke-width="2.4"/>`;
+  const lab = (x, t) => `<text x="${x}" y="${Y + 32}" font-size="21" font-style="italic" text-anchor="middle">${t}</text>`;
+  if (o.kind === 'ray-r') g += `<line x1="${A}" y1="${Y}" x2="${R - 14}" y2="${Y}" stroke="${c}" stroke-width="4.2"/>` + head(R - 4, 1, c, 11) + dot(A, o.open) + lab(A, o.a);
+  if (o.kind === 'ray-l') g += `<line x1="${L + 14}" y1="${Y}" x2="${A}" y2="${Y}" stroke="${c}" stroke-width="4.2"/>` + head(L + 4, -1, c, 11) + dot(A, o.open) + lab(A, o.a);
+  if (o.kind === 'seg') g += `<line x1="${A}" y1="${Y}" x2="${B}" y2="${Y}" stroke="${c}" stroke-width="4.2"/>` + dot(A, o.openA) + dot(B, o.openB) + lab(A, o.a) + lab(B, o.b);
+  if (o.kind === 'all') g += `<line x1="${L + 14}" y1="${Y}" x2="${R - 14}" y2="${Y}" stroke="${c}" stroke-width="${o.color === 'black' ? 3.4 : 4.2}"/>` + head(L + 4, -1, c, 11) + head(R - 4, 1, c, 11)
+    + (o.color === 'black' ? '' : `<line x1="${W / 2}" y1="${Y - 5}" x2="${W / 2}" y2="${Y + 5}" stroke="${AX}" stroke-width="1.2"/>`);
+  if (o.kind === 'none') g += `<line x1="${W / 2}" y1="${Y - 5}" x2="${W / 2}" y2="${Y + 5}" stroke="${AX}" stroke-width="1.2"/>`;
+  if (!o.noR) g += `<text x="${R - 2}" y="${Y + 30}" font-size="19" text-anchor="end">ℝ</text>`;
+  return `<svg class="nl" viewBox="0 0 ${W} ${H}" role="img" aria-label="number line">${g}</svg>`;
+}
+document.querySelectorAll('[data-line]').forEach(n => { n.innerHTML = numberLine(JSON.parse(n.dataset.line)); });
+</script>
+</body>
+</html>
