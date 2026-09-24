@@ -142,7 +142,7 @@ handoff to Claude.
 ## Runtime data contract
 
 The app is built, deployed, and **running on the validated pool**: `app/sources.js` has
-`use: 'live'` over the files in `data/`. **AGY owns that pool.** Nothing in `app/src/`
+`use: 'live'` over the files in `data/`. **AGY owns that pool.** Nothing in `flow-library/`
 needs to change when it grows or is corrected — the app reads data through one seam.
 
 `app/mock/` still exists and is not a leftover: it is the fixture behind
@@ -245,14 +245,14 @@ pastpaper = { id, course, exam, year, paper, qno, marks,
    link — list the genuine dependency, most specific node first.
 5. **Figures come from two places, and BOTH are now used.**
 
-   - `figs: ['fig.eps-delta']` names a hand-drawn inline SVG in `app/src/fig.library.js`
+   - `figs: ['fig.eps-delta']` names a hand-drawn inline SVG in `flow-library/app/src/fig.library.js`
      — theme-aware, animated, sometimes with a control. There are eleven of them.
    - `diagrams/light/<basename>.png` + `diagrams/dark/<basename>.png` are the **rendered
      diagrams**: 72 of them, one light/dark pair each, already in this repository.
 
    **This was the standing bug and it is now fixed in the app: 69 of those 72 diagrams
    were never shown to anyone.** The file names already say which concept they belong to
-   (`c.5.3.7_bolzano_intermediate_value_theorem.png`), so `app/src/fig.diagrams.js` is a
+   (`c.5.3.7_bolzano_intermediate_value_theorem.png`), so `app/project/fig.diagrams.js` is a
    GENERATED index from concept id to basenames, and `comp.figure.js` renders the pair as
    one `<img>` that follows the theme. Nothing in `data/` had to change for that to work.
 
@@ -280,7 +280,7 @@ pastpaper = { id, course, exam, year, paper, qno, marks,
       ```
 
       It reads `diagrams/light/`, warns about any light PNG with no dark twin, and
-      rewrites `app/src/fig.diagrams.js`. Dropping a new pair into `diagrams/` and running
+      rewrites `app/project/fig.diagrams.js`. Dropping a new pair into `diagrams/` and running
       that is the whole procedure for adding a picture. Never hand-edit the generated file.
    4. **A diagram without a dark twin is a bug**, not a shortcut: the app swaps on
       `data-theme`, so a missing dark file leaves a white rectangle in a dark note.
@@ -344,7 +344,7 @@ The mock set is no longer a stopgap — it is the permanent test fixture behind
 **The level switch is gone.** There used to be a per-course control that moved a course
 between Level 1 and Level 2, with an unlock; it moved the goalposts under work that was
 already finished, and a level somebody *sets* is not a measurement. The level of a
-concept is now DERIVED, in one place (`app/src/core.progress.js`), from what has been
+concept is now DERIVED, in one place (`flow-library/app/src/core.progress.js`), from what has been
 done:
 
 | level | earned by | colour | who can wear it |
@@ -678,7 +678,8 @@ and `git diff` on it is the last chance to see what a publish is about to change
 
 Sign-in and progress are stored in Firebase Realtime Database over plain REST. The test
 build and the real build use **completely separate stores**, decided in one place
-(`NS()` / `USERS()` in `app/src/core.sync.js`) off `DATA_KIND`:
+(`NS()` / `USERS()` in `flow-library/app/src/core.sync.js`) off `DATA_KIND`, using the
+names each project declares in `app/project/project.js` → `PROJECT.sync`:
 
 | build | progress | sign-in register |
 | --- | --- | --- |
@@ -693,7 +694,8 @@ getting sync working and is **not** where real student records should live.
 
 1. A Realtime Database in the project that serves the site (`data-science-ef878`), in a
    region close to the users.
-2. Its URL written into `DB` in `app/src/core.sync.js`. Leave the mock namespaces
+2. Its URL written into `PROJECT.sync.db` in `app/project/project.js` (the shared default
+   in `flow-library/app/src/core.sync.js` stays for every other project). Leave the mock namespaces
    pointing wherever is convenient — the point is that they are never the same store.
 3. **Security rules.** The current rules are wide open, which is why a plain REST PUT
    works with no token. That is acceptable for a scratch tracker and is not acceptable
@@ -772,7 +774,7 @@ already downloaded, in `sources/exams/jam/`.
 ### September 2026 — Level 4
 
 **One page, one scroll.** The note is no longer a page. Opening a concept in the Study
-tree unfolds the whole note in place (`app/src/comp.note.js`), and its proof, its
+tree unfolds the whole note in place (`flow-library/app/src/comp.note.js`), and its proof, its
 exercises, its objective questions and the LaTeX writing workspace unfold inside that.
 Exactly one thing is open at each depth, the open path is remembered, and reopening
 Study scrolls back to it. `#/note/<id>` still resolves — it now opens that path in Study
@@ -805,16 +807,16 @@ judged at level 1 and the cascade raises them to level 1 and no further.
 ### September 2026
 
 1. **Try proof (hint) & interactive scratchpad UI**:
-   - Added dual controls to theorem proofs (`proofView` in `app/src/view.note.js`):
+   - Added dual controls to theorem proofs (`proofView` in `flow-library/app/src/view.note.js`):
      - `💡 Try proof (hint)`: Reveals strategic guidance (`p.idea`, `p.why`, Step 1 clue `p.rungs[0].why`) alongside an interactive `.proof-scratchpad` textarea so learners can outline their proof before looking at the solution.
      - `👁 Show step-by-step proof`: Reveals full mathematical rungs and closing remarks.
-   - Added dual controls to written questions (`writtenOn` in `app/src/view.note.js`):
+   - Added dual controls to written questions (`writtenOn` in `flow-library/app/src/view.note.js`):
      - `💡 Try proof (hint)`: Reveals `q.approach` and a scratchpad.
      - `👁 Show answer`: Reveals full model solution and common traps.
 
 2. **Automated concept linkification (`linkifyConcepts`)**:
-   - Added `linkifyConcepts(s)` in `app/src/core.dom.js` and hooked into `DOM.el` `{ html: v }`.
-   - Replaces concept references (e.g. `<code>c.2.3.1</code>`, `<code>c.3.4.8</code>`, `<code>s.abs-ineq</code>`) with interactive styled chip links (`.concept-ref` in `app/src/ui.css`) bearing the section number and concept title, plus full hover tooltips. Clicking navigates directly to `#/note/<id>`.
+   - Added `linkifyConcepts(s)` in `flow-library/app/src/core.dom.js` and hooked into `DOM.el` `{ html: v }`.
+   - Replaces concept references (e.g. `<code>c.2.3.1</code>`, `<code>c.3.4.8</code>`, `<code>s.abs-ineq</code>`) with interactive styled chip links (`.concept-ref` in `flow-library/app/src/ui.css`) bearing the section number and concept title, plus full hover tooltips. Clicking navigates directly to `#/note/<id>`.
 
 3. **Complete Real Analysis I syllabus audit & content expansion**:
    - Audited Modules II, III, and IV for missing definitions and theorems in `data/ra1-core.js` and `data/ra1-bridge.js`.
@@ -825,8 +827,8 @@ judged at level 1 and the cascade raises them to level 1 and no further.
    - Fixed unclosed LaTeX delimiters and formatting errors across all data entries.
 
 4. **DOM & runtime robustness**:
-   - Added `sanitizeMathHtml` in `app/src/core.dom.js` to prevent raw mathematical `<` inequalities from breaking DOM element markup.
-   - Fixed a temporal dead zone (TDZ) initialization order bug in `app/src/core.store.js` ensuring safe degraded operation in private browsing mode.
+   - Added `sanitizeMathHtml` in `flow-library/app/src/core.dom.js` to prevent raw mathematical `<` inequalities from breaking DOM element markup.
+   - Fixed a temporal dead zone (TDZ) initialization order bug in `flow-library/app/src/core.store.js` ensuring safe degraded operation in private browsing mode.
 
 5. **Production deployment**:
    - Built self-contained distribution via `build.py` into `build/index.html`.
@@ -867,7 +869,7 @@ judged at level 1 and the cascade raises them to level 1 and no further.
      flag map as proof work; a section turns green only when its whole set is claimed;
      every note shows where its section stands, including "no exercises delivered yet".
      `app/mock/mock.written.js` adds 18 Bartle-style exercises, three per mock section.
-   - **Diagrams.** `tools/gen_diagrams.py` generates `app/src/fig.diagrams.js` from
+   - **Diagrams.** `tools/gen_diagrams.py` generates `app/project/fig.diagrams.js` from
      `diagrams/light/`; `comp.figure.js` renders the light/dark pair as one `<img>` that
      follows `data-theme`. All 72 diagrams are reachable — 68 by concept id automatically,
      the rest by `img: [...]` on the concept. `deploy.sh` now copies `diagrams/` beside
@@ -921,7 +923,7 @@ judged at level 1 and the cascade raises them to level 1 and no further.
      - Hardened `tools/check_tex.js` to enforce zero double-slash macros (`\\cmd`), zero unescaped control characters (`\f`, `\b`), zero broken newlines in math, and zero unslashed mathematical commands.
      - Validated `node tools/check_tex.js` with **0 errors** across 250 concepts, 24 objective questions, 475 written exercises, and 226 past papers.
    - **Markdown-to-HTML Auto-Formatting Engine**:
-     - Added `formatMarkdown` in `app/src/core.dom.js` within `DOM.el` (`html: v`).
+     - Added `formatMarkdown` in `flow-library/app/src/core.dom.js` within `DOM.el` (`html: v`).
      - Automatically transforms markdown bold (`**text**`) and italic (`*text*`) into `<b>text</b>` and `<i>text</i>` inside authored content while strictly shielding all LaTeX math spans (`$...$`, `$$...$$`) and existing HTML tags.
      - Cleaned all raw `**Problem:**`, `**Find:**`, and `**Exercise**` instances in `data/questions.ra1.js` to explicit `<b>...</b>` tags.
    - **Project Relocation to `real-analysis/`**:

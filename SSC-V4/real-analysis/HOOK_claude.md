@@ -131,13 +131,18 @@ The app is at `app/index.html` and now runs on **validated content, not mock**:
 `ra1-*` set, `ch5.a/ch5.b/ch6`, `questions.ra2.m1.js`, and `data/objective.js`.
 `app/mock/` is retained only as the fallback set and must never be pointed at by `live`.
 
-`build.py` inlines `app/src/ui.css`, every `app/src/*.js`, and the `live` data files
-listed in `sources.js` into one self-contained `build/index.html`. It parses the `live`
+`build.py` (a shim onto `flow-library/build.py`) inlines the shared
+`flow-library/app/src/ui.css` and this project's `app/project/theme.css`, every
+`app/project/*.js`, every shared module listed in `flow-library/app/flow.js`, and the
+`live` data files listed in `sources.js` into one self-contained `build/index.html`. It parses the `live`
 array out of `sources.js` by regex, so keep that array a plain list of quoted paths.
 The build is deployed to Firebase Hosting at
 `https://ssc-data-science-qm.web.app/math/real-analysis`.
 
 ### Engine map
+
+The engine lives in `flow-library/app/src/` and is shared with every project; see
+`flow-library/HOOK.md` for the shared-vs-unique rule.
 
 No framework, no bundler, no modules — plain globals, each view returns a real element.
 
@@ -161,7 +166,7 @@ No framework, no bundler, no modules — plain globals, each view returns a real
 1. **Ids are stable forever.** Progress is keyed on them: `conceptId` for completion,
    `conceptId#<index in cards[]>` for a statement card, `question.id` for a locked
    attempt. Appending to `cards[]` is safe; reordering silently rewrites recall history.
-2. **The data seam is the only integration point.** `app/src` must never name a data
+2. **The data seam is the only integration point.** `flow-library/` must never name a data
    file, a course, or a concept id. Changing the content set is a one-line edit in
    `app/sources.js`.
 3. **Authored HTML is inserted as markup**, so it must stay trusted — no scraped HTML,

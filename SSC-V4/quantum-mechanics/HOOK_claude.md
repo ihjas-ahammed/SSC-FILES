@@ -36,7 +36,7 @@ attempt → feedback → correction → delayed reattempt → transfer
 3. **Diagrams & Visuals**:
    - Offline rendered PNG diagrams in `diagrams/light/` and `diagrams/dark/`.
    - Theme swaps dynamically between light and dark modes via `comp.figure.js`.
-   - Indexed automatically into `app/src/fig.diagrams.js` via `python3 tools/gen_diagrams.py`.
+   - Indexed automatically into `app/project/fig.diagrams.js` via `python3 tools/gen_diagrams.py`.
 
 4. **TeX and Formatting**:
    - MathJax handles `$inline$` and `$$display$$`.

@@ -37,7 +37,7 @@ visible without pretending to measure them.
 
 ## The content is mock
 
-`app/mock/` holds ten standard theorems and sixteen OMR questions written only to
+`flow-library/app/mock/` (shared by every project) holds ten standard theorems and sixteen OMR questions written only to
 exercise the loop. The mathematics is standard and stated correctly, but it is **not
 validated content and not from any past paper** — the app badges every screen while that
 is true. AGY owns the replacement; the contract is in
@@ -45,29 +45,25 @@ is true. AGY owns the replacement; the contract is in
 are not read by this app.
 
 Switching to real content is one edit in `app/sources.js`: set `use: 'live'` and list the
-delivered files. Nothing in `app/src/` changes.
+delivered files. Nothing in `flow-library/` changes.
 
 ## Layout
 
+The engine is shared across study systems in `../../flow-library/` (see its `HOOK.md`).
+This app folder holds only what is unique to Real Analysis:
+
 ```
 app/
-  index.html        shell, MathJax config, script order
-  sources.js        THE DATA SEAM — mock vs live
-  src/
-    ui.css          design tokens, glass/aurora, components, motion, light/dark
-    core.dom.js     element builder, hash router, live-region announcements
-    core.tex.js     MathJax queue; safe rendering of learner LaTeX
-    core.store.js   localStorage: completion, first attempts, drafts, prefs
-    core.pool.js    indexes the loaded data; inverts question → concept
-    core.latex.js   command catalogue + the contextual palette
-    ui.parts.js     shared view parts (badges, meters, gates, reveals)
-    comp.tree.js    the expandable tick tree
-    comp.figure.js  figure engine: coordinate mapping, frame, controls
-    fig.library.js  the ten figures
-    comp.write.js   the theorem-writing workspace component
-    view.*.js       one file per surface
-    boot.js         theme, data loading, routing, failure surfaces
-  mock/             placeholder content (delete once real data lands)
+  index.html          page head, MathJax config, script list
+  sources.js          THE DATA SEAM: mock vs live
+  project/
+    project.js        PROJECT: name, storage + sync keys, hooks
+    theme.css         this app's look over the shared ui.css (empty = house style)
+    fig.diagrams.js   generated diagram index
+../../flow-library/app/
+  flow.js             loader + the one list of module order
+  src/                ui.css, core.*, comp.*, fig.library.js, view.*, boot.js
+  mock/               shared placeholder content for -test builds
 ```
 
 ## Reviewing it

@@ -3,7 +3,7 @@
 
    This is the only file that has to change when the validated content pool
    replaces the mock one: flip `use` to 'live' and list the delivered files.
-   Nothing in app/src knows or cares which set is loaded.
+   Nothing in flow-library knows or cares which set is loaded.
 
    A source file may only declare or push into the six contract names:
 
@@ -22,7 +22,8 @@
                                      plus course, exam, year, paper, qno. Filed
                                      on a COURSE, never on a section.
 
-   Paths are relative to app/index.html and must stay inside real-analysis.
+   Paths are relative to app/index.html and must stay inside this project (or
+   point at the shared mock pool in flow-library/app/mock).
    The full field-by-field contract is in HOOK_agy.md → "Runtime data contract".
    ══════════════════════════════════════════════════════════════════════════ */
 
@@ -36,11 +37,11 @@ const DATA_SOURCES = {
   use: 'live',
 
   mock: [
-    'mock/mock.courses.js',
-    'mock/mock.concepts.js',
-    'mock/mock.objective.js',
-    'mock/mock.written.js',
-    'mock/mock.pyq.js'
+    '../../flow-library/app/mock/mock.courses.js',
+    '../../flow-library/app/mock/mock.concepts.js',
+    '../../flow-library/app/mock/mock.objective.js',
+    '../../flow-library/app/mock/mock.written.js',
+    '../../flow-library/app/mock/mock.pyq.js'
   ],
 
   /* Filled in by the data handoff. Example of the expected shape:

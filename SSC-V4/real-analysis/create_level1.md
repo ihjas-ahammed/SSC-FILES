@@ -336,7 +336,7 @@ const DATA_SOURCES = {
 };
 ```
 
-**Nothing in `app/src` may name a data file, a course, or a concept id.** Swapping the
+**Nothing in `flow-library/` may name a data file, a course, or a concept id.** Swapping the
 content set is a one-line edit. This is the rule that lets the same engine serve a
 different subject without being touched.
 
@@ -569,7 +569,7 @@ Ship only when all of these hold.
 
 **Engine**
 
-- [ ] `app/src` names no data file, course, or concept id.
+- [ ] `flow-library/` names no data file, course, or concept id.
 - [ ] Every view renders on a 360px-wide screen with no horizontal scroll.
 - [ ] The reel scrolls through a card three viewports tall, on a real phone.
 - [ ] Nothing is revealed before an attempt, anywhere.
