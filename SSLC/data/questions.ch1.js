@@ -289,7 +289,9 @@ QUESTIONS.push(
       $$53^2 = 50^2 + 2(50)(3) + 3^2 = 2500 + 300 + 9 = 2809$$
       <p><b>(v) $88^2$:</b></p>
       $$88 = 80 + 8$$
-      $$88^2 = 80^2 + 2(80)(8) + 8^2 = 6400 + 1280 + 64 = 7744$$`
+      $$88^2 = 80^2 + 2(80)(8) + 8^2 = 6400 + 1280 + 64 = 7744$$`,
+    tested_en: 'Squaring two-digit numbers using algebraic expansion.',
+    tested_ml: 'ബീജഗണിത വിപുലീകരണമുപയോഗിച്ച് രണ്ടക്ക സംഖ്യകളുടെ വർഗ്ഗം കാണൽ.'
   },
 
   {
@@ -312,7 +314,9 @@ QUESTIONS.push(
       <p><b>(ii) $8.7^2$:</b> $(8 + 0.7)^2 = 64 + 11.2 + 0.49 = 75.69$</p>
       <p><b>(iii) $10.1^2$:</b> $(10 + 0.1)^2 = 100 + 2.0 + 0.01 = 102.01$</p>
       <p><b>(iv) $12.5^2$:</b> $12 \\times 13 + 0.25 = 156.25$</p>
-      <p><b>(v) $15.7^2$:</b> $(15 + 0.7)^2 = 225 + 21 + 0.49 = 246.49$</p>`
+      <p><b>(v) $15.7^2$:</b> $(15 + 0.7)^2 = 225 + 21 + 0.49 = 246.49$</p>`,
+    tested_en: 'Computing squares of decimal numbers using expansion rules.',
+    tested_ml: 'വിപുലീകരണ നിയമങ്ങളുപയോഗിച്ച് ദശാംശ സംഖ്യകളുടെ വർഗ്ഗം കാണൽ.'
   },
 
   {
@@ -333,13 +337,18 @@ QUESTIONS.push(
     solution_ml: `<p><b>രീതി:</b> $(n + 0.5)^2 = n(n+1) + 0.25$</p>
       <p><b>(i) $4.5^2$:</b> $4 \\times 5 + 0.25 = 20.25$</p>
       <p><b>(ii) $6.5^2$:</b> $6 \\times 7 + 0.25 = 42.25$</p>
-      <p><b>(iii) $9.5^2$:</b> $9 \\times 10 + 0.25 = 90.25$</p>`
+      <p><b>(iii) $9.5^2$:</b> $9 \\times 10 + 0.25 = 90.25$</p>`,
+    tested_en: 'Computing squares of numbers ending in half using the shortcut.',
+    tested_ml: 'അരയിൽ അവസാനിക്കുന്ന സംഖ്യകളുടെ വർഗ്ഗം എളുപ്പവഴിയിലൂടെ കാണൽ.'
   },
 
   {
     id: 'w.m8.1.1',
     sec: '8.1.1',
     concept: 'm8.1.1.perfect-squares',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Identifying Perfect Squares and Ending Digits',
     title_ml: 'പൂർണ്ണവർഗ്ഗങ്ങളും അവസാന അക്കങ്ങളും കണ്ടെത്തൽ',
     prompt_en: `<p>Consider the numbers: $1057, 23453, 7928, 222222, 1089, 441$.</p>
@@ -363,13 +372,18 @@ QUESTIONS.push(
         <li>$0$ മുതൽ $9$ വരെയുള്ള സംഖ്യകളുടെ വർഗ്ഗങ്ങൾ അവസാനിക്കുന്നത് $0, 1, 4, 5, 6, 9$ എന്നിവയിൽ മാത്രമാണ്. അതിനാൽ $2, 3, 7, 8$ എന്നിവയിൽ അവസാനിക്കുന്നവ ഒരിക്കലും വർഗ്ഗമാകില്ല.</li>
         <li>$1057$ ($7$-ൽ അവസാനിക്കുന്നു), $23453$ ($3$-ൽ അവസാനിക്കുന്നു), $7928$ ($8$-ൽ അവസാനിക്കുന്നു), $222222$ ($2$-ൽ അവസാനിക്കുന്നു) എന്നിവ പൂർണ്ണവർഗ്ഗങ്ങളല്ല.</li>
         <li>$1089 = 33^2$, $441 = 21^2$. ഇവ രണ്ടും പൂർണ്ണവർഗ്ഗങ്ങളാണ്.</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Properties of ending digits of perfect squares.',
+    tested_ml: 'പൂർണ്ണവർഗ്ഗങ്ങളുടെ അവസാന അക്കങ്ങളുടെ സവിശേഷതകൾ.'
   },
 
   {
     id: 'w.m8.1.2',
     sec: '8.1.2',
     concept: 'm8.1.2.geo-squares',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Geometric Representation of Area and Square Numbers',
     title_ml: 'വിസ്തീർണ്ണവും വർഗ്ഗസംഖ്യകളും ജ്യാമിതീയമായി കണ്ടെത്തൽ',
     prompt_en: `<p>A large square has side length $12\\text{ cm}$.</p>
@@ -393,13 +407,18 @@ QUESTIONS.push(
         <li>വിസ്തീർണ്ണം $= 12^2 = \\mathbf{144\\text{ cm}^2}$.</li>
         <li>വിസ്തീർണ്ണങ്ങളുടെ തുക $= 10^2 + 2(10 \\times 2) + 2^2 = 100 + 40 + 4 = \\mathbf{144\\text{ cm}^2}$.</li>
         <li>ഇത് തുകയുടെ വർഗ്ഗം എന്ന സമവാക്യത്തെ പ്രതിനിധീകരിക്കുന്നു: $(a + b)^2 = a^2 + 2ab + b^2$ ($a = 10, b = 2$).</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Geometric interpretation of algebraic square expansion.',
+    tested_ml: 'വർഗ്ഗ വിപുലീകരണത്തിന്റെ ജ്യാമിതീയ രൂപം.'
   },
 
   {
     id: 'w.m8.1.6',
     sec: '8.1.6',
     concept: 'm8.1.6.square-roots',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Finding Square Roots by Prime Factorisation',
     title_ml: 'അഭാജ്യഘടകക്രിയ വഴി വർഗ്ഗമൂലം കാണൽ',
     prompt_en: `<p>Find the square roots of the following numbers using prime factorisation:</p>
@@ -423,6 +442,8 @@ QUESTIONS.push(
           $\\sqrt{576} = 2^3 \\times 3 = 8 \\times 3 = \\mathbf{24}$.</li>
         <li>$1764 = 2^2 \\times 3^2 \\times 7^2$.<br>
           $\\sqrt{1764} = 2 \\times 3 \\times 7 = \\mathbf{42}$.</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Finding square roots by prime factorisation method.',
+    tested_ml: 'അഭാജ്യഘടകക്രിയ ഉപയോഗിച്ച് വർഗ്ഗമൂലം കാണൽ.'
   }
 );

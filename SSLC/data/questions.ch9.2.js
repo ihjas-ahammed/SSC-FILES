@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.2.1',
     sec: '9.2.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.2.1.fractions-and-terminating-decimals',
+    tested_en: 'Conditions for terminating decimals and denominator factorization',
+    tested_ml: 'അവസാനിക്കുന്ന ദശാംശങ്ങളുടെ നിബന്ധനയും ഛേദത്തിന്റെ അഭാജ്യഘടകവൽക്കരണവും',
     title_en: 'Determining Terminating Decimal Form Without Actual Division',
     title_ml: 'ഹരിക്കാതെ തന്നെ അവസാനിക്കുന്ന ദശാംശരൂപം നിർണ്ണയിക്കൽ',
     prompt_en: '<p>Without actual long division, determine whether the fraction $\\frac{13}{80}$ can be expressed as a terminating decimal. If so, convert it into decimal form by transforming the denominator into a power of 10, and state the number of decimal digits.</p>',
@@ -281,7 +286,12 @@ $$\\text{ഉത്തരം: ഇത് } \\mathbf{4} \\text{ ദശാംശസ�
   {
     id: 'w.m9.2.2',
     sec: '9.2.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.2.2.repeating-decimals',
+    tested_en: 'Long division process, remainder cycle, and repeating decimals',
+    tested_ml: 'ഹരണക്രിയ, ശിഷ്ടചക്രം, ആവർത്തന ദശാംശ രൂപങ്ങൾ',
     title_en: 'Long Division and Cycle Analysis of 1/7',
     title_ml: '1/7-ന്റെ ഹരണക്രിയയും ആവർത്തന ചക്ര വിശകലനവും',
     prompt_en: '<p>Perform the long division of 1 by 7. List the sequence of remainders that appear at each successive step. Prove that the division must cycle, and express $\\frac{1}{7}$ and $\\frac{2}{7}$ in repeating decimal notation.</p>',
@@ -323,7 +333,12 @@ $$\\frac{2}{7} = \\mathbf{0.\\overline{285714}}$$`
   {
     id: 'w.m9.2.3',
     sec: '9.2.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.2.3.converting-repeating-decimals',
+    tested_en: 'Algebraic method for converting mixed repeating decimals to fractions',
+    tested_ml: 'മിശ്ര ആവർത്തന ദശാംശങ്ങളെ ഭിന്നസംഖ്യകളാക്കാനുള്ള ബീജഗണിത രീതി',
     title_en: 'Algebraic Conversion of Mixed Repeating Decimal 0.12333...',
     title_ml: '0.12333... എന്ന മിശ്ര ആവർത്തന ദശാംശത്തെ ഭിന്നസംഖ്യയാക്കൽ',
     prompt_en: '<p>Convert the mixed repeating decimal $x = 0.12\\bar{3} = 0.12333\\dots$ into a rational fraction $\\frac{p}{q}$ in lowest terms using the algebraic elimination method. Verify your answer by dividing.</p>',
@@ -367,7 +382,12 @@ $$\\text{പരിശോധന: } 37 \\div 300 = 0.12333\\dots$$`
   {
     id: 'w.m9.2.4',
     sec: '9.2.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.2.4.non-repeating-decimals-and-approximations',
+    tested_en: 'Properties of non-repeating non-terminating decimals and rational bounds',
+    tested_ml: 'ആവർത്തിക്കാത്തതും അവസാനിക്കാത്തതുമായ ദശാംശങ്ങളുടെ സവിശേഷതകളും ഭിന്നക പരിധികളും',
     title_en: 'Distinguishing Rational and Irrational Decimals with Bounding',
     title_ml: 'ഭിന്നക, അഭിന്നക ദശാംശങ്ങളെ വേർതിരിക്കലും പരിധികളും',
     prompt_en: '<p>Explain why $0.101001000100001\\dots$ is an irrational number. Then, find two rational numbers in decimal form that strictly bound this number from below and above to within an error of less than $0.001$.</p>',
@@ -398,5 +418,76 @@ $$\\text{താഴത്തെ പരിധി: } 0.101 = \\frac{101}{1000}$$
 $$\\text{മുകളിലെ പരിധി: } 0.102 = \\frac{102}{1000}$$
 $$0.101 < 0.1010010001\\dots < 0.102$$
 $$\\text{ഇവ രണ്ടും ഭിന്നക സംഖ്യകളാണ്; ഇവ തമ്മിലുള്ള വ്യത്യാസം } 0.001 \\text{ ആണ്.}$$`
+  },
+
+  {
+    id: 'w.m9.2.5',
+    sec: '9.2.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.2.3.converting-repeating-decimals',
+    tested_en: 'Conversion of pure repeating decimals to fractions and arithmetic summation',
+    tested_ml: 'ശുദ്ധ ആവർത്തന ദശാംശങ്ങളെ ഭിന്നസംഖ്യകളാക്കലും തുക കാണലും',
+    title_en: 'Conversion of Pure Periodic Decimals and Summation',
+    title_ml: 'ശുദ്ധ ആവർത്തന ദശാംശങ്ങളെ ഭിന്നസംഖ്യയാക്കലും തുക കാണലും',
+    prompt_en: '<p>(a) Convert the repeating decimals $0.\\bar{7} = 0.777\\dots$ and $0.\\overline{27} = 0.272727\\dots$ into fractions in lowest terms.<br>(b) Using fractional addition, evaluate $0.\\bar{7} + 0.\\overline{27}$ and express the sum as both an irreducible fraction and a repeating decimal.</p>',
+    prompt_ml: '<p>(a) $0.\\bar{7} = 0.777\\dots$, $0.\\overline{27} = 0.272727\\dots$ എന്നീ ആവർത്തന ദശാംശങ്ങളെ ഏറ്റവും ലഘുവായ ഭിന്നസംഖ്യാ രൂപത്തിലാക്കുക.<br>(b) ഭിന്നസംഖ്യാ സങ്കലനം ഉപയോഗിച്ച് $0.\\bar{7} + 0.\\overline{27}$ കണ്ടുപിടിക്കുകയും തുക ലഘുഭിന്നകമായും ആവർത്തന ദശാംശമായും എഴുതുകയും ചെയ്യുക.</p>',
+    solution_en: `$$\\text{(a) Converting repeating decimals to fractions:}$$
+$$\\text{Let } x = 0.777\\dots$$
+$$10x = 7.777\\dots \\implies 10x - x = 7 \\implies 9x = 7 \\implies x = \\mathbf{\\frac{7}{9}}.$$
+
+$$\\text{Let } y = 0.272727\\dots$$
+$$100y = 27.272727\\dots \\implies 100y - y = 27 \\implies 99y = 27 \\implies y = \\frac{27}{99} = \\mathbf{\\frac{3}{11}}.$$
+
+$$\\text{(b) Sum of the decimals:}$$
+$$x + y = \\frac{7}{9} + \\frac{3}{11} = \\frac{77 + 27}{99} = \\mathbf{\\frac{104}{99}}.$$
+$$\\text{Expressing as repeating decimal: } \\frac{104}{99} = 1\\frac{5}{99} = \\mathbf{1.\\overline{05}}.$$`,
+    solution_ml: `$$\\text{(a) ആവർത്തന ദശാംശങ്ങളെ ഭിന്നസംഖ്യയാക്കൽ:}$$
+$$x = 0.777\\dots \\text{ എന്നിരിക്കട്ടെ.}$$
+$$10x = 7.777\\dots \\implies 10x - x = 7 \\implies 9x = 7 \\implies x = \\mathbf{\\frac{7}{9}}.$$
+
+$$y = 0.272727\\dots \\text{ എന്നിരിക്കട്ടെ.}$$
+$$100y = 27.272727\\dots \\implies 100y - y = 27 \\implies 99y = 27 \\implies y = \\frac{27}{99} = \\mathbf{\\frac{3}{11}}.$$
+
+$$\\text{(b) തുക കാണൽ:}$$
+$$x + y = \\frac{7}{9} + \\frac{3}{11} = \\frac{77 + 27}{99} = \\mathbf{\\frac{104}{99}}.$$
+$$\\text{ആവർത്തന ദശാംശരൂപം: } \\frac{104}{99} = 1\\frac{5}{99} = \\mathbf{1.\\overline{05}}.$$`
+  },
+
+  {
+    id: 'w.m9.2.6',
+    sec: '9.2.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.2.1.fractions-and-terminating-decimals',
+    tested_en: 'Conditions for terminating decimals in unit fractions and denominator power expansion',
+    tested_ml: 'ഏകക ഭിന്നസംഖ്യകളിലെ അവസാനിക്കുന്ന ദശാംശങ്ങളുടെ നിബന്ധനയും കൃതിയാക്കലും',
+    title_en: 'Conditions for Terminating Decimals in Unit Fractions',
+    title_ml: 'ഏകക ഭിന്നസംഖ്യകളിലെ അവസാനിക്കുന്ന ദശാംശങ്ങളുടെ നിബന്ധന',
+    prompt_en: '<p>(a) Consider unit fractions of the form $\\frac{1}{n}$ where $n$ is an integer from $2$ to $10$. List all values of $n$ for which $\\frac{1}{n}$ gives a terminating decimal.<br>(b) State the general condition that the prime factors of $n$ must satisfy for $\\frac{1}{n}$ to be a terminating decimal.<br>(c) Express $\\frac{1}{64}$ as a terminating decimal without direct long division.</p>',
+    prompt_ml: '<p>(a) $n$ എന്നത് $2$ മുതൽ $10$ വരെയുള്ള പൂർണ്ണസംഖ്യകളായ $\\frac{1}{n}$ എന്ന രൂപത്തിലുള്ള ഏകക ഭിന്നസംഖ്യകൾ പരിഗണിക്കുക. $\\frac{1}{n}$ അവസാനിക്കുന്ന ദശാംശമാകുന്ന $n$-ന്റെ എല്ലാ വിലകളും പട്ടികപ്പെടുത്തുക.<br>(b) $\\frac{1}{n}$ അവസാനിക്കുന്ന ദശാംശമാകാൻ $n$-ന്റെ അഭാജ്യഘടകങ്ങൾ പാലിക്കേണ്ട പൊതുവായ നിബന്ധന എന്താണ്?<br>(c) നേരിട്ടുള്ള ഹരണക്രിയ കൂടാതെ $\\frac{1}{64}$-നെ അവസാനിക്കുന്ന ദശാംശരൂപത്തിൽ എഴുതുക.</p>',
+    solution_en: `$$\\text{(a) Examining } n \\in \\{2, 3, 4, 5, 6, 7, 8, 9, 10\\}:$$
+$$\\frac{1}{2} = 0.5, \\quad \\frac{1}{4} = 0.25, \\quad \\frac{1}{5} = 0.2, \\quad \\frac{1}{8} = 0.125, \\quad \\frac{1}{10} = 0.1.$$
+$$\\text{Values of } n \\text{ giving terminating decimals: } \\mathbf{\\{2, 4, 5, 8, 10\\}}.$$
+
+$$\\text{(b) General Condition:}$$
+$$\\text{The fraction } \\frac{1}{n} \\text{ terminates if and only if the prime factorization of } n \\text{ contains only } 2 \\text{ and/or } 5$$
+$$(n = 2^a \\cdot 5^b \\text{ where } a, b \\ge 0).$$
+
+$$\\text{(c) Terminating decimal for } \\frac{1}{64}:$$
+$$64 = 2^6.$$
+$$\\frac{1}{64} = \\frac{1 \\times 5^6}{2^6 \\times 5^6} = \\frac{15625}{10^6} = \\mathbf{0.015625}.$$`,
+    solution_ml: `$$\\text{(a) } n \\in \\{2, 3, 4, 5, 6, 7, 8, 9, 10\\} \\text{ പരിശോധിക്കുമ്പോൾ:}$$
+$$\\frac{1}{2} = 0.5, \\quad \\frac{1}{4} = 0.25, \\quad \\frac{1}{5} = 0.2, \\quad \\frac{1}{8} = 0.125, \\quad \\frac{1}{10} = 0.1.$$
+$$n\\text{-ന്റെ വിലകൾ: } \\mathbf{\\{2, 4, 5, 8, 10\\}}.$$
+
+$$\\text{(b) പൊതുവായ നിബന്ധന:}$$
+$$n\\text{-ന്റെ അഭാജ്യഘടകങ്ങളിൽ } 2, 5 \\text{ എന്നിവ മാത്രമേ ഉണ്ടാകാൻ പാടുള്ളൂ } (n = 2^a \\cdot 5^b, \\text{ ഇവിടെ } a, b \\ge 0).$$
+
+$$\\text{(c) } \\frac{1}{64}\\text{-ന്റെ ദശാംശരൂപം:}$$
+$$64 = 2^6.$$
+$$\\frac{1}{64} = \\frac{1 \\times 5^6}{2^6 \\times 5^6} = \\frac{15625}{10^6} = \\mathbf{0.015625}.$$`
   }
 );

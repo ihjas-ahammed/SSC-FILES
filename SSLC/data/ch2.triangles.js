@@ -87,11 +87,13 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'Why are triangular shapes used in roof trusses and bridges?', a: 'Because a triangle is rigid; its angles cannot change without changing its side lengths.', kind: 'state' },
-      { q: 'Can the angles of a quadrilateral change without changing its side lengths?', a: 'Yes, four-sided frames can tilt and change angles freely.', kind: 'apply' }
+      { q: 'Can the angles of a quadrilateral change without changing its side lengths?', a: 'Yes, four-sided frames can tilt and change angles freely.', kind: 'apply' },
+      { q: 'Is a four-sided polygon (quadrilateral) rigid like a triangle?', a: 'No, only triangles are rigid; quadrilaterals can flex unless braced with a diagonal.', kind: 'trap' }
     ],
     cards_ml: [
       { q: 'മേൽക്കൂരകളിലും പാലങ്ങളിലും ത്രികോണ രൂപങ്ങൾ ഉപയോഗിക്കുന്നത് എന്തുകൊണ്ട്?', a: 'ത്രികോണം ദൃഢമാണ്; വശങ്ങളുടെ നീളം മാറ്റാതെ അതിന്റെ കോണുകൾ മാറ്റാൻ കഴിയില്ല.', kind: 'state' },
-      { q: 'വശങ്ങളുടെ നീളം മാറ്റാതെ ചതുർഭുജത്തിന്റെ കോണുകൾ മാറ്റാൻ കഴിയുമോ?', a: 'കഴിയും, ചതുർഭുജങ്ങൾ വശങ്ങളുടെ നീളം മാറ്റാതെ തന്നെ ചരിഞ്ഞ് രൂപം മാറാം.', kind: 'apply' }
+      { q: 'വശങ്ങളുടെ നീളം മാറ്റാതെ ചതുർഭുജത്തിന്റെ കോണുകൾ മാറ്റാൻ കഴിയുമോ?', a: 'കഴിയും, ചതുർഭുജങ്ങൾ വശങ്ങളുടെ നീളം മാറ്റാതെ തന്നെ ചരിഞ്ഞ് രൂപം മാറാം.', kind: 'apply' },
+      { q: 'ത്രികോണത്തെപ്പോലെ നാല് വശങ്ങളുള്ള ചതുർഭുജവും ദൃഢമാണോ?', a: 'അല്ല, ത്രികോണങ്ങൾ മാത്രമേ ദൃഢമായിരിക്കൂ; വികർണ്ണം വരച്ച് ഉറപ്പിച്ചില്ലെങ്കിൽ ചതുർഭുജങ്ങൾക്ക് ആകൃതി മാറ്റാൻ കഴിയും.', kind: 'trap' }
     ]
   },
 
@@ -134,11 +136,13 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'State the ASA equality rule.', a: 'If one side and the two angles at its ends are equal to one side and the two angles at its ends of another triangle, all corresponding sides and angles are equal.', kind: 'state' },
-      { q: 'If two angles of a triangle are 50° and 60°, what is the third angle?', a: '70°, because 180° - (50° + 60°) = 70°.', kind: 'apply' }
+      { q: 'If two angles of a triangle are 50° and 60°, what is the third angle?', a: '70°, because 180° - (50° + 60°) = 70°.', kind: 'apply' },
+      { q: 'If two angles and any non-corresponding side are equal, are the triangles congruent?', a: 'No, the side must correspond between the equal angles or have matching angle placement.', kind: 'trap' }
     ],
     cards_ml: [
       { q: 'ASA തുല്യതാ നിയമം പ്രസ്താവിക്കുക.', a: 'ഒരു ത്രികോണത്തിലെ ഒരു വശവും രണ്ടറ്റത്തെ കോണുകളും മറ്റൊരു ത്രികോണത്തിലെ ഒരു വശത്തിനും രണ്ടറ്റത്തെ കോണുകൾക്കും തുല്യമാണെങ്കിൽ ആ ത്രികോണങ്ങൾ തുല്യമാണ്.', kind: 'state' },
-      { q: 'ഒരു ത്രികോണത്തിലെ രണ്ട് കോണുകൾ 50°-യും 60°-യും ആയാൽ മൂന്നാമത്തെ കോൺ എത്ര?', a: '70°, കാരണം 180° - (50° + 60°) = 70°.', kind: 'apply' }
+      { q: 'ഒരു ത്രികോണത്തിലെ രണ്ട് കോണുകൾ 50°-യും 60°-യും ആയാൽ മൂന്നാമത്തെ കോൺ എത്ര?', a: '70°, കാരണം 180° - (50° + 60°) = 70°.', kind: 'apply' },
+      { q: 'രണ്ട് കോണുകളും തുല്യ കോണുകൾക്ക് അനുയോജ്യമല്ലാത്ത ഒരു വശവും തുല്യമായാൽ ത്രികോണങ്ങൾ തുല്യമാകുമോ?', a: 'ഇല്ല, വശങ്ങൾ തുല്യ കോണുകൾക്ക് എതിരെയുള്ളതോ അനുയോജ്യമായതോ ആയിരിക്കണം.', kind: 'trap' }
     ]
   },
 
@@ -175,11 +179,13 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'State the SAS congruence theorem.', a: 'If two sides and the included angle of one triangle are equal to two sides and the included angle of another, the triangles are equal.', kind: 'state' },
-      { q: 'Does two sides and any angle being equal guarantee equal triangles?', a: 'No, the angle must be strictly between the two equal sides.', kind: 'trap' }
+      { q: 'Does two sides and any angle being equal guarantee equal triangles?', a: 'No, the angle must be strictly between the two equal sides.', kind: 'trap' },
+      { q: 'In SAS congruence, what is the required position of the angle?', a: 'It must be the included angle directly between the two known equal sides.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'SAS തുല്യതാ സിദ്ധാന്തം പ്രസ്താവിക്കുക.', a: 'ഒരു ത്രികോണത്തിലെ രണ്ട് വശങ്ങളും അവയ്ക്കിടയിലെ കോണും മറ്റൊരു ത്രികോണത്തിലെ രണ്ട് വശങ്ങൾക്കും അവയ്ക്കിടയിലെ കോണിനും തുല്യമാണെങ്കിൽ ആ ത്രികോണങ്ങൾ തുല്യമാണ്.', kind: 'state' },
-      { q: 'രണ്ട് വശങ്ങളും മറ്റേതെങ്കിലും ഒരു കോണും തുല്യമായാൽ ത്രികോണങ്ങൾ തുല്യമാകുമോ?', a: 'ഇല്ല, കോൺ ആ രണ്ട് വശങ്ങൾക്കിടയിൽ തന്നെ ആയിരിക്കണം.', kind: 'trap' }
+      { q: 'രണ്ട് വശങ്ങളും മറ്റേതെങ്കിലും ഒരു കോണും തുല്യമായാൽ ത്രികോണങ്ങൾ തുല്യമാകുമോ?', a: 'ഇല്ല, കോൺ ആ രണ്ട് വശങ്ങൾക്കിടയിൽ തന്നെ ആയിരിക്കണം.', kind: 'trap' },
+      { q: 'SAS തുല്യതയിൽ തുല്യമായ കോണിന്റെ സ്ഥാനം എവിടെയായിരിക്കണം?', a: 'അത് രണ്ട് തുല്യവശങ്ങൾക്കും കൃത്യം ഇടയിലുള്ള കോൺ (ഉൾക്കൊള്ളുന്ന കോൺ) ആയിരിക്കണം.', kind: 'apply' }
     ]
   },
 
@@ -242,11 +248,13 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'In an isosceles triangle, if the vertex angle is 50°, what are the base angles?', a: '65° each ((180° - 50°) / 2 = 65°).', kind: 'apply' },
-      { q: 'What is special about the line from the apex to the midpoint of the base in an isosceles triangle?', a: 'It is perpendicular to the base and bisects the vertex angle.', kind: 'state' }
+      { q: 'What is special about the line from the apex to the midpoint of the base in an isosceles triangle?', a: 'It is perpendicular to the base and bisects the vertex angle.', kind: 'state' },
+      { q: 'In an isosceles triangle with AB = AC, which two angles are strictly equal?', a: '$\\angle B$ and $\\angle C$ (the angles opposite to sides AC and AB).', kind: 'recall' }
     ],
     cards_ml: [
       { q: 'ഒരു സമപാർശ്വ ത്രികോണത്തിലെ മുകളിലെ കോൺ 50° ആയാൽ പാദത്തിലെ കോണുകൾ എത്ര വീതമാണ്?', a: '65° വീതം ((180° - 50°) / 2 = 65°).', kind: 'apply' },
-      { q: 'സമപാർശ്വ ത്രികോണത്തിൽ തുല്യവശങ്ങൾക്കിടയിലെ മൂലയിൽ നിന്ന് പാദത്തിന്റെ മധ്യബിന്ദുവിലേക്ക് വരയ്ക്കുന്ന വരയുടെ പ്രത്യേകത എന്താണ്?', a: 'അത് പാദത്തിന് ലംബമായിരിക്കും, മുകളിലെ കോണിനെ സമഭാഗം ചെയ്യുകയും ചെയ്യും.', kind: 'state' }
+      { q: 'സമപാർശ്വ ത്രികോണത്തിൽ തുല്യവശങ്ങൾക്കിടയിലെ മൂലയിൽ നിന്ന് പാദത്തിന്റെ മധ്യബിന്ദുവിലേക്ക് വരയ്ക്കുന്ന വരയുടെ പ്രത്യേകത എന്താണ്?', a: 'അത് പാദത്തിന് ലംബമായിരിക്കും, മുകളിലെ കോണിനെ സമഭാഗം ചെയ്യുകയും ചെയ്യും.', kind: 'state' },
+      { q: 'AB = AC ആയ സമപാർശ്വ ത്രികോണത്തിൽ തുല്യമാകുന്ന രണ്ട് കോണുകൾ ഏവ?', a: '$\\angle B$-യും $\\angle C$-യും ($AC, AB$ എന്നീ വശങ്ങൾക്ക് എതിരെയുള്ള കോണുകൾ).', kind: 'recall' }
     ]
   },
 
@@ -289,11 +297,13 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'What is the measure of each angle in an equilateral triangle?', a: '60° (180° / 3 = 60°).', kind: 'state' },
-      { q: 'If a triangle has three equal angles, what kind of triangle is it?', a: 'An equilateral triangle.', kind: 'apply' }
+      { q: 'If a triangle has three equal angles, what kind of triangle is it?', a: 'An equilateral triangle.', kind: 'apply' },
+      { q: 'Do equilateral triangles of different sizes have different angles?', a: 'No, every equilateral triangle has angles measuring exactly 60°, regardless of size.', kind: 'trap' }
     ],
     cards_ml: [
       { q: 'ഒരു സമഭുജ ത്രികോണത്തിലെ ഓരോ കോണിന്റെയും അളവ് എത്രയാണ്?', a: '60° (180° / 3 = 60°).', kind: 'state' },
-      { q: 'മൂന്ന് കോണുകളും തുല്യമായ ഒരു ത്രികോണം ഏത് തരത്തിലുള്ളതാണ്?', a: 'സമഭുജ ത്രികോണം.', kind: 'apply' }
+      { q: 'മൂന്ന് കോണുകളും തുല്യമായ ഒരു ത്രികോണം ഏത് തരത്തിലുള്ളതാണ്?', a: 'സമഭുജ ത്രികോണം.', kind: 'apply' },
+      { q: 'വ്യത്യസ്ത വലിപ്പമുള്ള സമഭുജ ത്രികോണങ്ങളിലെ കോണുകൾ വ്യത്യസ്തമായിരിക്കുമോ?', a: 'അല്ല, വശങ്ങളുടെ നീളം എത്രയായാലും എല്ലാ സമഭുജ ത്രികോണങ്ങളിലെയും ഓരോ കോണും കൃത്യം 60° ആയിരിക്കും.', kind: 'trap' }
     ]
   },
 
@@ -336,11 +346,13 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'How does a diagonal divide a parallelogram?', a: 'Into two equal (congruent) triangles.', kind: 'state' },
-      { q: 'In a parallelogram, why are opposite sides equal?', a: 'Because the diagonal divides it into two equal triangles, making corresponding sides equal.', kind: 'apply' }
+      { q: 'In a parallelogram, why are opposite sides equal?', a: 'Because the diagonal divides it into two equal triangles, making corresponding sides equal.', kind: 'apply' },
+      { q: 'Are the diagonals of every parallelogram equal in length?', a: 'No, diagonals are only equal in special parallelograms like rectangles and squares.', kind: 'trap' }
     ],
     cards_ml: [
       { q: 'ഒരു വികർണ്ണം സാമാന്തരികത്തെ എങ്ങനെ വിഭജിക്കുന്നു?', a: 'രണ്ട് തുല്യ ത്രികോണങ്ങളായി.', kind: 'state' },
-      { q: 'സാമാന്തരികത്തിൽ എതിർവശങ്ങൾ തുല്യമാകുന്നത് എന്തുകൊണ്ട്?', a: 'വികർണ്ണം സാമാന്തരികത്തെ രണ്ട് തുല്യത്രികോണങ്ങളായി വിഭജിക്കുന്നതിനാൽ അവയുടെ അനുയോജ്യ വശങ്ങൾ തുല്യമാകുന്നു.', kind: 'apply' }
+      { q: 'സാമാന്തരികത്തിൽ എതിർവശങ്ങൾ തുല്യമാകുന്നത് എന്തുകൊണ്ട്?', a: 'വികർണ്ണം സാമാന്തരികത്തെ രണ്ട് തുല്യത്രികോണങ്ങളായി വിഭജിക്കുന്നതിനാൽ അവയുടെ അനുയോജ്യ വശങ്ങൾ തുല്യമാകുന്നു.', kind: 'apply' },
+      { q: 'എല്ലാ സാമാന്തരികങ്ങളുടെയും വികർണ്ണങ്ങളുടെ നീളം തുല്യമായിരിക്കുമോ?', a: 'അല്ല, ചതുരം, സമചതുരം തുടങ്ങിയ പ്രത്യേക സാമാന്തരികങ്ങളിൽ മാത്രമേ വികർണ്ണങ്ങൾ തുല്യമാകൂ.', kind: 'trap' }
     ]
   }
 );

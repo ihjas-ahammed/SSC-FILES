@@ -246,6 +246,9 @@ WRITTEN.push(
     id: 'w.m8.10.1',
     sec: '8.10.1',
     concept: 'm8.10.1.data-and-tally',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Constructing a Discrete Frequency Table with Tally Marks',
     title_ml: 'എണ്ണൽ അടയാളങ്ങൾ ഉപയോഗിച്ച് ആവൃത്തിപ്പട്ടിക തയ്യാറാക്കൽ',
     prompt_en: `<p>The blood groups of 25 students of Class 8 are recorded as follows:</p>
@@ -293,13 +296,18 @@ $$\\begin{array}{|c|c|c|}
 \\end{array}$$
 
 $$\\text{(b) ഏറ്റവും കൂടുതൽ കുട്ടികൾക്കുള്ള ഗ്രൂപ്പ്: } \\mathbf{O} \\text{ (ആവൃത്തി 9)}$$
-$$\\text{(c) ഏറ്റവും കുറവ് കുട്ടികൾക്കുള്ള ഗ്രൂപ്പ്: } \\mathbf{AB} \\text{ (ആവൃത്തി 2)}$$`
+$$\\text{(c) ഏറ്റവും കുറവ് കുട്ടികൾക്കുള്ള ഗ്രൂപ്പ്: } \\mathbf{AB} \\text{ (ആവൃത്തി 2)}$$`,
+    tested_en: 'Discrete frequency distribution with tally marks and identifying extreme frequencies.',
+    tested_ml: 'എണ്ണൽ അടയാളങ്ങൾ ഉപയോഗിച്ചുള്ള ആവൃത്തിപ്പട്ടികയും കൂടുതൽ/കുറവ് ആവൃത്തി കണ്ടെത്തലും.'
   },
 
   {
     id: 'w.m8.10.2',
     sec: '8.10.2',
     concept: 'm8.10.2.grouped-frequency-table',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Preparing a Grouped Frequency Table with Class Intervals',
     title_ml: 'വിഭാഗങ്ങളാക്കിയ ആവൃത്തിപ്പട്ടിക തയ്യാറാക്കൽ',
     prompt_en: `<p>The weights (in kg) of 20 students of Class 8 are as follows:</p>
@@ -349,13 +357,18 @@ $$\\begin{array}{|c|c|c|}
 \\end{array}$$
 
 $$\\text{(b) ക്ലാസ് വിസ്തൃതി} = 35 - 30 = \\mathbf{5\\text{ kg}}$$
-$$\\text{(c) } 40\\text{ kg}\\text{-ഓ അതിൽ കൂടുതലോ ഭാരമുള്ള കുട്ടികൾ} = 5 + 5 + 3 = \\mathbf{13\\text{ കുട്ടികൾ}}$$`
+$$\\text{(c) } 40\\text{ kg}\\text{-ഓ അതിൽ കൂടുതലോ ഭാരമുള്ള കുട്ടികൾ} = 5 + 5 + 3 = \\mathbf{13\\text{ കുട്ടികൾ}}$$`,
+    tested_en: 'Grouped frequency distribution, class width, and cumulative interval counts.',
+    tested_ml: 'വിഭാഗങ്ങളാക്കിയ ആവൃത്തിപ്പട്ടിക, ക്ലാസ് വിസ്തൃതി, സഞ്ചയിത എണ്ണം.'
   },
 
   {
     id: 'w.m8.10.3',
     sec: '8.10.3',
     concept: 'm8.10.3.histogram',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Data Dimensions for Drawing a Histogram',
     title_ml: 'ആവൃത്തിച്ചതുരം വരയ്ക്കാനുള്ള അളവുകൾ ക്രമീകരിക്കൽ',
     prompt_en: `<p>The daily rainfall (in mm) in a village during a monsoon month is summarized below:</p>
@@ -419,13 +432,18 @@ $$\\begin{array}{|c|c|c|}
 \\hline
 \\end{array}$$
 
-$$\\text{(c) ആകെ ദിവസങ്ങൾ} = 3 + 8 + 12 + 5 + 2 = \\mathbf{30\\text{ ദിവസങ്ങൾ}}$$`
+$$\\text{(c) ആകെ ദിവസങ്ങൾ} = 3 + 8 + 12 + 5 + 2 = \\mathbf{30\\text{ ദിവസങ്ങൾ}}$$`,
+    tested_en: 'Axis scaling, rectangle dimensions, and total count for histogram plotting.',
+    tested_ml: 'ആവൃത്തിച്ചതുരത്തിന്റെ അക്ഷങ്ങളിലെ തോത്, ചതുരങ്ങളുടെ അളവുകൾ, ആകെ എണ്ണം.'
   },
 
   {
     id: 'w.m8.10.4',
     sec: '8.10.4',
     concept: 'm8.10.4.data-interpretation',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Analysis and Interpretation of a Student Score Histogram',
     title_ml: 'സ്കോറുകളുടെ ആവൃത്തിച്ചതുരം അപഗ്രഥിക്കൽ',
     prompt_en: `<p>A test of 50 marks was conducted for 40 students. The score distribution is given below:</p>
@@ -471,6 +489,128 @@ $$\\text{കുട്ടികൾ} = 14 + 10 + 3 = \\mathbf{27\\text{ പേർ}
 
 $$\\text{(c) 30-ൽ കൂടുതൽ മാർക്ക് നേടിയവരുടെ ശതമാനം:}$$
 $$\\text{കുട്ടികളുടെ എണ്ണം} = 10 + 3 = 13$$
-$$\\text{ശതമാനം} = \\frac{13}{40} \\times 100\\% = \\mathbf{32.5\\%}$$`
+$$\\text{ശതമാനം} = \\frac{13}{40} \\times 100\\% = \\mathbf{32.5\\%}$$`,
+    tested_en: 'Histogram analysis, modal class identification, threshold filtering, and percentage scoring.',
+    tested_ml: 'ആവൃത്തിച്ചതുര അപഗ്രഥനം, മോഡൽ വിഭാഗം, നിശ്ചിത പരിധിയിലെ ശതമാനം.'
+  },
+
+  {
+    id: 'w.m8.10.5',
+    sec: '8.10.2',
+    concept: 'm8.10.2.grouped-frequency-table',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Measures of Central Tendency and Mean Transformation',
+    title_ml: 'ശരാശരി, മധ്യമം, മോഡ് എന്നിവ കണ്ടെത്തലും മാറ്റങ്ങളും',
+    prompt_en: `<ol type="a">
+        <li>The marks scored by $10$ students in a mathematics test out of $25$ are: $14, 18, 22, 18, 15, 20, 18, 24, 16, 25$. Find:
+          <ol type="i">
+            <li>The mean score</li>
+            <li>The median score</li>
+            <li>The mode of the scores</li>
+          </ol></li>
+        <li>If the teacher decides to award a grace of $2$ marks to every student, what will be the new mean score? Explain without recalculating from scratch.</li>
+      </ol>`,
+    prompt_ml: `<ol type="a">
+        <li>$25$-ൽ നടത്തിയ ഗണിത പരീക്ഷയിൽ $10$ കുട്ടികൾ നേടിയ മാർക്കുകൾ താഴെ നൽകുന്നു: $14, 18, 22, 18, 15, 20, 18, 24, 16, 25$. താഴെ പറയുന്നവ കണ്ടെത്തുക:
+          <ol type="i">
+            <li>ശരാശരി (മാധ്യം)</li>
+            <li>മധ്യമം</li>
+            <li>മോഡ്</li>
+          </ol></li>
+        <li>ഓരോ കുട്ടിക്കും $2$ മാർക്ക് വീതം ഗ്രേസ് മാർക്കായി കൂട്ടിയാൽ പുതിയ ശരാശരി എത്രയായിരിക്കും? മുഴുവൻ കണക്കുകൂട്ടലുകൾ വീണ്ടും ചെയ്യാതെ കാരണം വ്യക്തമാക്കുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Calculation:
+          <ol type="i">
+            <li>$$\\text{Sum} = 14 + 18 + 22 + 18 + 15 + 20 + 18 + 24 + 16 + 25 = 190$$
+              $$\\text{Mean} = \\frac{190}{10} = \\mathbf{19}$$</li>
+            <li>Arranging data in ascending order: $14, 15, 16, 18, 18, 18, 20, 22, 24, 25$.<br>
+              Number of observations $n = 10$ (even). The middle two values are 5th and 6th terms: $18$ and $18$.<br>
+              $$\\text{Median} = \\frac{18 + 18}{2} = \\mathbf{18}$$</li>
+            <li>Value $18$ occurs 3 times (highest frequency).<br>
+              $$\\text{Mode} = \\mathbf{18}$$</li>
+          </ol></li>
+        <li>When each observation is increased by a constant $k$, the mean increases by the same constant $k$.<br>
+          $$\\text{New Mean} = 19 + 2 = \\mathbf{21}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>കണക്കുകൂട്ടലുകൾ:
+          <ol type="i">
+            <li>$$\\text{തുക} = 14 + 18 + 22 + 18 + 15 + 20 + 18 + 24 + 16 + 25 = 190$$
+              $$\\text{മാധ്യം (ശരാശരി)} = \\frac{190}{10} = \\mathbf{19}$$</li>
+            <li>സംഖ്യകളെ ക്രമമായി എഴുതിയാൽ: $14, 15, 16, 18, 18, 18, 20, 22, 24, 25$.<br>
+              ആകെ വിവരങ്ങൾ $n = 10$ (ഇരട്ട സംഖ്യ). നടുവിലെ സംഖ്യകൾ 5-ാമത്തെയും 6-ാമത്തെയും പദങ്ങളാണ് ($18, 18$).<br>
+              $$\\text{മധ്യമം} = \\frac{18 + 18}{2} = \\mathbf{18}$$</li>
+            <li>$18$ എന്ന സംഖ്യയാണ് ഏറ്റവും കൂടുതൽ തവണ (3 തവണ) ആവർത്തിച്ചത്.<br>
+              $$\\text{മോഡ്} = \\mathbf{18}$$</li>
+          </ol></li>
+        <li>എല്ലാ വിവരങ്ങളോടും ഒരു നിശ്ചിത സംഖ്യ കൂട്ടിയാൽ ശരാശരിയിലും അതേ സംഖ്യയുടെ വർദ്ധനവുണ്ടാകും.<br>
+          $$\\text{പുതിയ ശരാശരി} = 19 + 2 = \\mathbf{21}$$</li>
+      </ol>`,
+    tested_en: 'Mean, median, mode calculations and linear shift property of arithmetic mean.',
+    tested_ml: 'മാധ്യം, മധ്യമം, മോഡ് എന്നിവ കാണലും ശരാശരിയിലെ വ്യതിയാന സവിശേഷതയും.'
+  },
+
+  {
+    id: 'w.m8.10.6',
+    sec: '8.10.4',
+    concept: 'm8.10.4.data-interpretation',
+    type: 'written',
+    marks: 4,
+    time: 210,
+    title_en: 'Wage Distribution Analysis from Grouped Intervals',
+    title_ml: 'വേതന ആവൃത്തിപ്പട്ടിക അപഗ്രഥിക്കൽ',
+    prompt_en: `<p>The weekly wages (in ₹) of $50$ factory workers are given below:</p>
+      $$\\begin{array}{|c|c|c|c|c|c|}
+      \\hline
+      \\text{Wages (₹)} & 2000 - 2500 & 2500 - 3000 & 3000 - 3500 & 3500 - 4000 & 4000 - 4500 \\\\
+      \\hline
+      \\text{Workers} & 8 & 14 & 16 & 7 & 5 \\\\
+      \\hline
+      \\end{array}$$
+      <ol type="a">
+        <li>State the modal class and its lower boundary.</li>
+        <li>How many workers earn less than ₹$3000$ per week?</li>
+        <li>How many workers earn ₹$3500$ or more per week?</li>
+        <li>What percentage of workers earn between ₹$2500$ and ₹$3500$?</li>
+      </ol>`,
+    prompt_ml: `<p>ഒരു ഫാക്ടറിയിലെ $50$ തൊഴിലാളികളുടെ പ്രതിവാര വേതനം (₹-ൽ) താഴെ നൽകുന്നു:</p>
+      $$\\begin{array}{|c|c|c|c|c|c|}
+      \\hline
+      \\text{വേതനം (₹)} & 2000 - 2500 & 2500 - 3000 & 3000 - 3500 & 3500 - 4000 & 4000 - 4500 \\\\
+      \\hline
+      \\text{തൊഴിലാളികൾ} & 8 & 14 & 16 & 7 & 5 \\\\
+      \\hline
+      \\end{array}$$
+      <ol type="a">
+        <li>മോഡൽ വിഭാഗവും അതിന്റെ കീഴ്പരിധിയും എഴുതുക.</li>
+        <li>ആഴ്ചയിൽ ₹$3000$-ൽ താഴെ വേതനം ലഭിക്കുന്ന എത്ര തൊഴിലാളികളുണ്ട്?</li>
+        <li>ആഴ്ചയിൽ ₹$3500$-ഓ അതിൽ കൂടുതലോ വേതനം ലഭിക്കുന്നവർ എത്ര?</li>
+        <li>₹$2500$-നും ₹$3500$-നും ഇടയിൽ വേതനം ലഭിക്കുന്ന തൊഴിലാളികളുടെ ശതമാനം എത്ര?</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>The highest frequency is $16$, corresponding to interval $3000 - 3500$.<br>
+          $$\\text{Modal Class} = \\mathbf{3000 - 3500}, \\quad \\text{Lower Boundary} = \\mathbf{₹2000}$$</li>
+        <li>Workers earning less than ₹$3000$ fall in intervals $2000 - 2500$ and $2500 - 3000$:<br>
+          $$\\text{Workers} = 8 + 14 = \\mathbf{22\\text{ workers}}$$</li>
+        <li>Workers earning ₹$3500$ or more fall in intervals $3500 - 4000$ and $4000 - 4500$:<br>
+          $$\\text{Workers} = 7 + 5 = \\mathbf{12\\text{ workers}}$$</li>
+        <li>Workers earning between ₹$2500$ and ₹$3500$: $14 + 16 = 30$.<br>
+          $$\\text{Percentage} = \\frac{30}{50} \\times 100\\% = \\mathbf{60\\%}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>ഏറ്റവും വലിയ ആവൃത്തി $16$ ആണ്, അതിനാൽ മോഡൽ വിഭാഗം $3000 - 3500$ ആണ്.<br>
+          $$\\text{മോഡൽ വിഭാഗം} = \\mathbf{3000 - 3500}, \\quad \\text{കീഴ്പരിധി} = \\mathbf{₹3000}$$</li>
+        <li>₹$3000$-ൽ താഴെ വേതനമുള്ളവർ ($2000 - 2500$, $2500 - 3000$ വിഭാഗങ്ങൾ):<br>
+          $$\\text{തൊഴിലാളികൾ} = 8 + 14 = \\mathbf{22\\text{ പേർ}}$$</li>
+        <li>₹$3500$-ഓ അതിൽ കൂടുതലോ വേതനമുള്ളവർ ($3500 - 4000$, $4000 - 4500$ വിഭാഗങ്ങൾ):<br>
+          $$\\text{തൊഴിലാളികൾ} = 7 + 5 = \\mathbf{12\\text{ പേർ}}$$</li>
+        <li>₹$2500$-നും ₹$3500$-നും ഇടയിൽ വേതനമുള്ളവർ: $14 + 16 = 30$.<br>
+          $$\\text{ശതമാനം} = \\frac{30}{50} \\times 100\\% = \\mathbf{60\\%}$$</li>
+      </ol>`,
+    tested_en: 'Continuous frequency interpretation, wage distribution analysis, and subtotal percentages.',
+    tested_ml: 'തുടർച്ചയായ ആവൃത്തിപ്പട്ടികയുടെ അപഗ്രഥനം, വേതന പരിധികളും ശതമാനവും.'
   }
 );

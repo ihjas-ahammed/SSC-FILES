@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.7.1',
     sec: '9.7.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.7.1.concept-of-similarity-and-aa',
+    tested_en: 'Indirect height calculation using shadow lengths and AA similarity',
+    tested_ml: 'നിഴലളവുകളും AA സദൃശതയും ഉപയോഗിച്ച് ഉയരം കണക്കാക്കൽ',
     title_en: 'Indirect Height Measurement Using Shadows and AA Similarity',
     title_ml: 'നിഴലളവുകളും AA സദൃശതയും ഉപയോഗിച്ച് ഉയരം കണ്ടെത്തൽ',
     prompt_en: '<p>A vertical flagpole casts a shadow of length $12\\text{ m}$ on level ground at the same moment when a vertical meter rule of height $1.5\\text{ m}$ casts a shadow of length $2\\text{ m}$. Prove that the two triangles formed by the objects and their shadows are similar, and calculate the exact height of the flagpole.</p>',
@@ -285,7 +290,12 @@ $$h = 1.5 \\times 6 = \\mathbf{9\\text{ മീറ്റർ}}$$`
   {
     id: 'w.m9.7.2',
     sec: '9.7.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.7.2.sas-and-sss-similarity',
+    tested_en: 'Trapezium diagonal intersection similarity and side ratios',
+    tested_ml: 'ലംബക വികർണ്ണ വിഭജനത്തിലെ സദൃശതയും വശങ്ങളുടെ ആനുപാതികതയും',
     title_en: 'SAS Similarity in a Trapezium and Ratio of Bases',
     title_ml: 'ലംബകത്തിലെ SAS സദൃശതയും പാദങ്ങളുടെ അംശബന്ധവും',
     prompt_en: '<p>In trapezium $ABCD$, side $AB$ is parallel to $CD$ ($AB \\parallel CD$), and the diagonals $AC$ and $BD$ intersect at point $O$. Prove that $\\triangle OAB \\sim \\triangle OCD$, and deduce that $\\frac{OA}{OC} = \\frac{OB}{OD} = \\frac{AB}{CD}$.</p>',
@@ -324,7 +334,12 @@ $$\\mathbf{\\frac{OA}{OC} = \\frac{OB}{OD} = \\frac{AB}{CD}}$$`
   {
     id: 'w.m9.7.3',
     sec: '9.7.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.7.3.right-triangle-altitude-similarity',
+    tested_en: 'Right triangle altitude similarity, geometric mean, and Pythagoras derivation',
+    tested_ml: 'മട്ടത്രികോണ ലംബ സദൃശത, ജ്യാമിതീയ ശരാശരി, പൈതഗോറസ് തത്വ തെളിവ്',
     title_en: 'Proof of the Altitude to Hypotenuse Geometric Mean Theorem',
     title_ml: 'കർണ്ണത്തിലേക്കുള്ള ലംബത്തിന്റെ ജ്യാമിതീയ ശരാശരി സിദ്ധാന്ത തെളിവ്',
     prompt_en: '<p>In right-angled triangle $\\triangle ABC$, $\\angle C = 90^\\circ$ and $CD$ is the altitude drawn perpendicular to hypotenuse $AB$. Prove that $\\triangle ACD \\sim \\triangle CBD$, and deduce the geometric mean relation $CD^2 = AD \\times DB$. Also derive the Pythagorean theorem from these similarities.</p>',
@@ -366,7 +381,12 @@ $$\\text{ഇവ കൂട്ടുമ്പോൾ: } AC^2 + BC^2 = AB(AD + BD) =
   {
     id: 'w.m9.7.4',
     sec: '9.7.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.7.4.perimeter-and-area-ratios',
+    tested_en: 'Ratio of areas of similar triangles and trapezium area calculation',
+    tested_ml: 'സദൃശ ത്രികോണങ്ങളുടെ പരപ്പളവുകളുടെ അംശബന്ധവും ലംബക പരപ്പളവും',
     title_en: 'Area Ratio and Trapezium Area Partitioning in Similar Triangles',
     title_ml: 'സദൃശ ത്രികോണങ്ങളിലെ പരപ്പളവ് അനുപാതവും ലംബക പരപ്പളവും',
     prompt_en: '<p>In $\\triangle ABC$, a line $DE$ is drawn parallel to base $BC$ ($DE \\parallel BC$) with $D$ on $AB$ and $E$ on $AC$, such that $AD : DB = 2 : 3$. If the area of $\\triangle ABC$ is $100\\text{ sq cm}$, calculate the area of $\\triangle ADE$ and the area of trapezium $BDEC$.</p>',
@@ -398,5 +418,66 @@ $$\\text{പരപ്പളവ്}(\\triangle ADE) = \\frac{4}{25} \\times 100 =
 
 $$\\text{ഘട്ടം 4: ലംബകം } BDEC\\text{-ന്റെ പരപ്പളവ്}$$
 $$\\text{പരപ്പളവ്}(BDEC) = 100 - 16 = \\mathbf{84\\text{ ച.സെ.മീ}}$$`
+  },
+
+  {
+    id: 'w.m9.7.5',
+    sec: '9.7.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.7.3.right-triangle-altitude-similarity',
+    tested_en: 'Right-triangle altitude geometric mean and side length computations',
+    tested_ml: 'മട്ടത്രികോണ ലംബത്തിന്റെ ജ്യാമിതീയ ശരാശരിയും വശങ്ങളുടെ നീളവും കണക്കാക്കൽ',
+    title_en: 'Perpendicular from Right Angle and Side Length Computations',
+    title_ml: 'മട്ടകോണിൽ നിന്നുള്ള ലംബവും വശങ്ങളുടെ നീളവും കണക്കാക്കൽ',
+    prompt_en: '<p>In right-angled triangle $\\triangle ABC$, $\\angle B = 90^\\circ$. An altitude $BD$ is drawn perpendicular to hypotenuse $AC$. If $AD = 4\\text{ cm}$ and $DC = 9\\text{ cm}$:<br>(a) Find the length of altitude $BD$.<br>(b) Calculate the lengths of sides $AB$ and $BC$.</p>',
+    prompt_ml: '<p>മട്ടത്രികോണം $\\triangle ABC$-ൽ $\\angle B = 90^\\circ$ ആണ്. കർണ്ണം $AC$-യിലേക്ക് $BD$ എന്ന ലംബം വരച്ചിരിക്കുന്നു. $AD = 4\\text{ cm}$, $DC = 9\\text{ cm}$ ആണെങ്കിൽ:<br>(a) ലംബം $BD$-യുടെ നീളം കണ്ടെത്തുക.<br>(b) $AB, BC$ എന്നീ വശങ്ങളുടെ നീളങ്ങൾ കണക്കാക്കുക.</p>',
+    solution_en: `$$\\text{(a) Using the geometric mean theorem for the altitude:}$$
+$$BD^2 = AD \\times DC = 4 \\times 9 = 36 \\implies BD = \\sqrt{36} = \\mathbf{6\\text{ cm}}.$$
+
+$$\\text{(b) Hypotenuse } AC = AD + DC = 4 + 9 = 13\\text{ cm}.$$
+$$\\text{Using the geometric mean relations for sides:}$$
+$$AB^2 = AC \\times AD = 13 \\times 4 = 52 \\implies AB = \\sqrt{52} = \\mathbf{2\\sqrt{13}\\text{ cm}}.$$
+$$BC^2 = AC \\times DC = 13 \\times 9 = 117 \\implies BC = \\sqrt{117} = \\mathbf{3\\sqrt{13}\\text{ cm}}.$$`,
+    solution_ml: `$$\\text{(a) ലംബത്തിന്റെ ജ്യാമിതീയ ശരാശരി സമവാക്യം:}$$
+$$BD^2 = AD \\times DC = 4 \\times 9 = 36 \\implies BD = \\mathbf{6\\text{ cm}}.$$
+
+$$\\text{(b) കർണ്ണം } AC = 4 + 9 = 13\\text{ cm}.$$
+$$AB^2 = AC \\times AD = 13 \\times 4 = 52 \\implies AB = \\mathbf{2\\sqrt{13}\\text{ cm}}.$$
+$$BC^2 = AC \\times DC = 13 \\times 9 = 117 \\implies BC = \\mathbf{3\\sqrt{13}\\text{ cm}}.$$`
+  },
+
+  {
+    id: 'w.m9.7.6',
+    sec: '9.7.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.7.4.perimeter-and-area-ratios',
+    tested_en: 'Perimeter, side length, and area ratios of similar triangles',
+    tested_ml: 'സദൃശ ത്രികോണങ്ങളുടെ ചുറ്റളവ്, വശം, പരപ്പളവ് എന്നിവയുടെ അനുപാതങ്ങൾ',
+    title_en: 'Perimeter and Area Relations of Similar Triangles',
+    title_ml: 'സദൃശ ത്രികോണങ്ങളിലെ ചുറ്റളവും പരപ്പളവും തമ്മിലുള്ള ബന്ധം',
+    prompt_en: '<p>Two similar triangles $\\triangle ABC$ and $\\triangle DEF$ have perimeters $36\\text{ cm}$ and $48\\text{ cm}$ respectively.<br>(a) Find the ratio of their corresponding sides.<br>(b) If the area of $\\triangle ABC$ is $81\\text{ sq cm}$, calculate the area of $\\triangle DEF$.<br>(c) If side $AB = 9\\text{ cm}$, find the length of corresponding side $DE$.</p>',
+    prompt_ml: '<p>രണ്ട് സദൃശ ത്രികോണങ്ങളായ $\\triangle ABC, \\triangle DEF$ എന്നിവയുടെ ചുറ്റളവുകൾ യഥാക്രമം $36\\text{ cm}$, $48\\text{ cm}$ ആണ്.<br>(a) അവയുടെ അനുരൂപ വശങ്ങളുടെ അംശബന്ധം കണ്ടെത്തുക.<br>(b) $\\triangle ABC$-യുടെ പരപ്പളവ് $81\\text{ ച.സെ.മീ}$ ആണെങ്കിൽ $\\triangle DEF$-ന്റെ പരപ്പളവ് കണക്കാക്കുക.<br>(c) വശം $AB = 9\\text{ cm}$ ആണെങ്കിൽ അനുരൂപ വശമായ $DE$-യുടെ നീളം കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{(a) Ratio of corresponding sides equals the ratio of perimeters:}$$
+$$\\frac{AB}{DE} = \\frac{\\text{Perimeter}(\\triangle ABC)}{\\text{Perimeter}(\\triangle DEF)} = \\frac{36}{48} = \\mathbf{\\frac{3}{4}} \\quad (3 : 4).$$
+
+$$\\text{(b) Ratio of areas is the square of the side ratio:}$$
+$$\\frac{\\text{Area}(\\triangle ABC)}{\\text{Area}(\\triangle DEF)} = \\left(\\frac{3}{4}\\right)^2 = \\frac{9}{16}$$
+$$\\frac{81}{\\text{Area}(\\triangle DEF)} = \\frac{9}{16} \\implies \\text{Area}(\\triangle DEF) = \\frac{81 \\times 16}{9} = \\mathbf{144\\text{ sq cm}}.$$
+
+$$\\text{(c) Length of side } DE:$$
+$$\\frac{9}{DE} = \\frac{3}{4} \\implies DE = \\frac{9 \\times 4}{3} = \\mathbf{12\\text{ cm}}.$$`,
+    solution_ml: `$$\\text{(a) അനുരൂപ വശങ്ങളുടെ അംശബന്ധം ചുറ്റളവുകളുടെ അംശബന്ധത്തിന് തുല്യമാണ്:}$$
+$$\\frac{AB}{DE} = \\frac{36}{48} = \\mathbf{\\frac{3}{4}} \\quad (3 : 4).$$
+
+$$\\text{(b) പരപ്പളവുകളുടെ അംശബന്ധം വശങ്ങളുടെ അംശബന്ധത്തിന്റെ വർഗ്ഗത്തിന് തുല്യമാണ്:}$$
+$$\\frac{\\text{പരപ്പളവ്}(\\triangle ABC)}{\\text{പരപ്പളവ്}(\\triangle DEF)} = \\left(\\frac{3}{4}\\right)^2 = \\frac{9}{16}$$
+$$\\frac{81}{\\text{പരപ്പളവ്}(\\triangle DEF)} = \\frac{9}{16} \\implies \\text{പരപ്പളവ്}(\\triangle DEF) = \\frac{81 \\times 16}{9} = \\mathbf{144\\text{ ച.സെ.മീ}}.$$
+
+$$\\text{(c) } DE\\text{-ന്റെ നീളം:}$$
+$$\\frac{9}{DE} = \\frac{3}{4} \\implies DE = \\frac{9 \\times 4}{3} = \\mathbf{12\\text{ cm}}.$$`
   }
 );

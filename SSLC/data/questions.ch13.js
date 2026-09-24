@@ -246,6 +246,9 @@ WRITTEN.push(
     id: 'w.m8.13.1',
     sec: '8.13.1',
     concept: 'm8.13.1.prism-concept',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Analyzing Geometric Elements of Prisms',
     title_ml: 'സ്തംഭങ്ങളുടെ ഘടകങ്ങൾ വിശകലനം ചെയ്യൽ',
     prompt_en: '<p>A prism has an octagonal base (an 8-sided polygon). Find: (a) the number of faces, (b) the number of vertices, and (c) the number of edges. Verify Euler’s formula $F + V - E = 2$ for this prism.</p>',
@@ -277,13 +280,18 @@ $$E = 3n = 3 \\times 8 = \\mathbf{24} \\quad \\text{(താഴെ 8 } + \\text{ 
 
 $$\\text{യൂളറുടെ സൂത്രവാക്യ പരിശോധന:}$$
 $$F + V - E = 10 + 16 - 24 = 26 - 24 = \\mathbf{2}.$$
-$$\\text{യൂളറുടെ സമവാക്യം ശരിയാണെന്ന് തെളിഞ്ഞു.}$$`
+$$\\text{യൂളറുടെ സമവാക്യം ശരിയാണെന്ന് തെളിഞ്ഞു.}$$`,
+    tested_en: 'Faces, vertices, edges, and Euler formula verification for n-gonal prisms.',
+    tested_ml: 'സ്തംഭങ്ങളിലെ മുഖങ്ങൾ, ശീർഷങ്ങൾ, അരികുകൾ, യൂളറുടെ സൂത്രവാക്യം.'
   },
 
   {
     id: 'w.m8.13.2',
     sec: '8.13.2',
     concept: 'm8.13.2.lateral-surface-area',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Finding Lateral Surface Area and Cost of Painting',
     title_ml: 'പാർശ്വതല പരപ്പളവും പെയിന്റിംഗ് ചെലവും കാണൽ',
     prompt_en: '<p>A hall pillar is in the form of a regular hexagonal prism. Each edge of the base hexagon is $0.5\\text{ m}$, and the height of the pillar is $4\\text{ m}$. Find the lateral surface area of the pillar. What is the cost of painting its lateral surface at ₹50 per square metre?</p>',
@@ -309,13 +317,18 @@ $$\\text{പാർശ്വതല പരപ്പളവ്} = P \\times h = 3 \\
 
 $$\\text{ഘട്ടം 3: പെയിന്റിംഗ് ചെലവ്:}$$
 $$\\text{നിരക്ക്} = ₹50\\text{ / ച.മീ}.$$
-$$\\text{ആകെ ചെലവ്} = 12 \\times 50 = \\mathbf{₹600}.$$`
+$$\\text{ആകെ ചെലവ്} = 12 \\times 50 = \\mathbf{₹600}.$$`,
+    tested_en: 'Perimeter, lateral surface area, and unitary painting expenditure of regular hexagonal prism.',
+    tested_ml: 'ക്രമഷഡ്ഭുജ സ്തംഭത്തിന്റെ ചുറ്റളവ്, പാർശ്വതല പരപ്പളവ്, പെയിന്റിംഗ് ചിലവ്.'
   },
 
   {
     id: 'w.m8.13.3',
     sec: '8.13.3',
     concept: 'm8.13.3.total-surface-area',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Total Surface Area of an Equilateral Triangular Prism',
     title_ml: 'സമഭുജ ത്രികോണസ്തംഭത്തിന്റെ ഉപരിതല പരപ്പളവ്',
     prompt_en: '<p>The base of a prism is an equilateral triangle of side $6\\text{ cm}$, and its height is $10\\text{ cm}$. Find: (a) the area of one triangular base, (b) the lateral surface area, and (c) the total surface area of the prism. (Take $\\sqrt{3} \\approx 1.73$).</p>',
@@ -341,13 +354,18 @@ $$P = 3 \\times 6 = 18\\text{ cm}.$$
 $$\\text{പാർശ്വതല പരപ്പളവ്} = P \\times h = 18 \\times 10 = \\mathbf{180\\text{ cm}^2}.$$
 
 $$\\text{(c) ആകെ ഉപരിതല പരപ്പളവ്:}$$
-$$\\text{ഉപരിതല പരപ്പളവ്} = \\text{LSA} + 2 A_b = 180 + 2(15.57) = 180 + 31.14 = \\mathbf{211.14\\text{ cm}^2}.$$`
+$$\\text{ഉപരിതല പരപ്പളവ്} = \\text{LSA} + 2 A_b = 180 + 2(15.57) = 180 + 31.14 = \\mathbf{211.14\\text{ cm}^2}.$$`,
+    tested_en: 'Equilateral triangular prism surface area calculations including top and bottom bases.',
+    tested_ml: 'സമഭുജ ത്രികോണസ്തംഭത്തിന്റെ പാദപരപ്പളവ്, പാർശ്വതലം, ആകെ ഉപരിതല പരപ്പളവ്.'
   },
 
   {
     id: 'w.m8.13.4',
     sec: '8.13.4',
     concept: 'm8.13.4.prism-volume',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Volume and Water Capacity of a Trapezoidal Prism Trough',
     title_ml: 'ലംബകസ്തംഭാകൃതിയിലുള്ള തൊട്ടിയുടെ വ്യാപ്തവും ശേഷിയും',
     prompt_en: '<p>A water trough has the shape of a prism with a trapezium as its vertical cross-section. The parallel sides of the trapezium are $80\\text{ cm}$ and $60\\text{ cm}$, and the vertical distance between them is $40\\text{ cm}$. The length (height) of the trough is $1.5\\text{ m}$. Find: (a) the base area of the trough, (b) its volume in cubic centimetres, and (c) its capacity in litres.</p>',
@@ -375,6 +393,90 @@ $$\\text{വ്യാപ്തം} = A_b \\times h = 2800 \\times 150 = \\mathbf
 
 $$\\text{(c) കൊള്ളളവ് (ലിറ്ററിൽ):}$$
 $$1\\text{ ലിറ്റർ} = 1000\\text{ cm}^3 \\text{ ആയതിനാൽ:}$$
-$$\\text{കൊള്ളളവ്} = \\frac{4{,}20{,}000}{1000} = \\mathbf{420\\text{ ലിറ്റർ}}.$$`
+$$\\text{കൊള്ളളവ്} = \\frac{4{,}20{,}000}{1000} = \\mathbf{420\\text{ ലിറ്റർ}}.$$`,
+    tested_en: 'Trapezoidal cross-section prism volume and conversion to liquid capacity.',
+    tested_ml: 'ലംബകസ്തംഭ വ്യാപ്തവും ലിറ്ററിലുള്ള കൊള്ളളവ് മാറ്റവും.'
+  },
+
+  {
+    id: 'w.m8.13.5',
+    sec: '8.13.3',
+    concept: 'm8.13.3.total-surface-area',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Right Triangular Prism Surface Area Calculations',
+    title_ml: 'മട്ടത്രികോണ സ്തംഭത്തിന്റെ പരപ്പളവ്',
+    prompt_en: `<p>The base of a prism is a right-angled triangle with perpendicular sides of lengths $9\\text{ cm}$ and $12\\text{ cm}$. The height of the prism is $20\\text{ cm}$.</p>
+      <ol type="a">
+        <li>Find the hypotenuse of the base triangle and its perimeter.</li>
+        <li>Calculate the lateral surface area of the prism.</li>
+        <li>Calculate the total surface area of the prism.</li>
+      </ol>`,
+    prompt_ml: `<p>ലംബവശങ്ങൾ $9\\text{ cm}$, $12\\text{ cm}$ ആയ മട്ടത്രികോണം പാദമായുള്ള ഒരു സ്തംഭത്തിന്റെ ഉയരം $20\\text{ cm}$ ആണ്.</p>
+      <ol type="a">
+        <li>പാദത്രികോണത്തിന്റെ കർണ്ണവും ചുറ്റളവും കണ്ടെത്തുക.</li>
+        <li>സ്തംഭത്തിന്റെ പാർശ്വതല പരപ്പളവ് കണക്കാക്കുക.</li>
+        <li>സ്തംഭത്തിന്റെ ആകെ ഉപരിതല പരപ്പളവ് കാണുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>By the Pythagorean theorem:
+          $$\\text{Hypotenuse} = \\sqrt{9^2 + 12^2} = \\sqrt{81 + 144} = \\sqrt{225} = \\mathbf{15\\text{ cm}}$$
+          $$\\text{Base perimeter } P = 9 + 12 + 15 = \\mathbf{36\\text{ cm}}$$</li>
+        <li>$$\\text{Lateral Surface Area} = P \\times h = 36 \\times 20 = \\mathbf{720\\text{ cm}^2}$$</li>
+        <li>Base area of right triangle:
+          $$A_b = \\frac{1}{2} \\times 9 \\times 12 = 54\\text{ cm}^2$$
+          $$\\text{Total Surface Area} = \\text{LSA} + 2 A_b = 720 + 2(54) = 720 + 108 = \\mathbf{828\\text{ cm}^2}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം:
+          $$\\text{കർണ്ണം} = \\sqrt{9^2 + 12^2} = \\sqrt{81 + 144} = \\sqrt{225} = \\mathbf{15\\text{ cm}}$$
+          $$\\text{പാദച്ചുറ്റളവ് } P = 9 + 12 + 15 = \\mathbf{36\\text{ cm}}$$</li>
+        <li>$$\\text{പാർശ്വതല പരപ്പളവ്} = P \\times h = 36 \\times 20 = \\mathbf{720\\text{ cm}^2}$$</li>
+        <li>മട്ടത്രികോണത്തിന്റെ പരപ്പളവ്:
+          $$A_b = \\frac{1}{2} \\times 9 \\times 12 = 54\\text{ cm}^2$$
+          $$\\text{ആകെ ഉപരിതല പരപ്പളവ്} = \\text{LSA} + 2 A_b = 720 + 2(54) = 720 + 108 = \\mathbf{828\\text{ cm}^2}$$</li>
+      </ol>`,
+    tested_en: 'Right triangular prism hypotenuse, lateral area, and total surface area.',
+    tested_ml: 'മട്ടത്രികോണ സ്തംഭത്തിലെ കർണ്ണം, പാർശ്വതല പരപ്പളവ്, ആകെ പരപ്പളവ്.'
+  },
+
+  {
+    id: 'w.m8.13.6',
+    sec: '8.13.4',
+    concept: 'm8.13.4.prism-volume',
+    type: 'written',
+    marks: 4,
+    time: 210,
+    title_en: 'Volume and Weight of Solid Metal Prism Block',
+    title_ml: 'ലോഹസ്തംഭത്തിന്റെ വ്യാപ്തവും ഭാരവും',
+    prompt_en: `<p>A solid metal block has the shape of a prism whose base is a rhombus with diagonals $16\\text{ cm}$ and $12\\text{ cm}$. The height of the prism block is $25\\text{ cm}$.</p>
+      <ol type="a">
+        <li>Find the base area of the block.</li>
+        <li>Calculate the volume of the block.</li>
+        <li>If $1\\text{ cm}^3$ of this metal weighs $7.5\\text{ grams}$, find the total weight of the metal block in kilograms.</li>
+      </ol>`,
+    prompt_ml: `<p>ഒരു ഖര ലോഹക്കട്ടിയുടെ ആകൃതി റോംബസ് പാദമായുള്ള സ്തംഭമാണ്. ഇതിന്റെ വികർണ്ണങ്ങൾ $16\\text{ cm}$, $12\\text{ cm}$ വീതവും സ്തംഭത്തിന്റെ ഉയരം $25\\text{ cm}$-ഉം ആണ്.</p>
+      <ol type="a">
+        <li>ലോഹക്കട്ടിയുടെ പാദപരപ്പളവ് കാണുക.</li>
+        <li>ലോഹക്കട്ടിയുടെ വ്യാപ്തം കണക്കാക്കുക.</li>
+        <li>ഒരു ഘന സെന്റിമീറ്റർ ($1\\text{ cm}^3$) ലോഹത്തിന് $7.5\\text{ ഗ്രാം}$ ഭാരമുണ്ടെങ്കിൽ ഈ ലോഹക്കട്ടിയുടെ ആകെ ഭാരം കിലോഗ്രാമിൽ എത്ര?</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Area of rhombus base:
+          $$A_b = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 16 \\times 12 = \\mathbf{96\\text{ cm}^2}$$</li>
+        <li>$$\\text{Volume} = A_b \\times h = 96 \\times 25 = \\mathbf{2400\\text{ cm}^3}$$</li>
+        <li>$$\\text{Total weight in grams} = 2400 \\times 7.5 = 18{,}000\\text{ g}$$
+          $$\\text{Weight in kilograms} = \\frac{18{,}000}{1000} = \\mathbf{18\\text{ kg}}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>റോംബസ് പാദത്തിന്റെ പരപ്പളവ്:
+          $$A_b = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 16 \\times 12 = \\mathbf{96\\text{ cm}^2}$$</li>
+        <li>$$\\text{വ്യാപ്തം} = A_b \\times h = 96 \\times 25 = \\mathbf{2400\\text{ cm}^3}$$</li>
+        <li>$$\\text{ആകെ ഭാരം (ഗ്രാമിൽ)} = 2400 \\times 7.5 = 18{,}000\\text{ g}$$
+          $$\\text{കിലോഗ്രാമിൽ} = \\frac{18{,}000}{1000} = \\mathbf{18\\text{ kg}}$$</li>
+      </ol>`,
+    tested_en: 'Rhombus base prism volume, density calculation, and weight in kilograms.',
+    tested_ml: 'റോംബസ് സ്തംഭ വ്യാപ്തവും സാന്ദ്രത ഉപയോഗിച്ചുള്ള ഭാര നിർണ്ണയവും.'
   }
 );

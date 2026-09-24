@@ -237,6 +237,9 @@ QUESTIONS.push(
     id: 'w.m8.6.0',
     sec: '8.6.1',
     concept: 'm8.6.1.quad-uniqueness',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Minimum Measurements to Fix a Quadrilateral',
     title_ml: 'ചതുർഭുജം നിർണ്ണയിക്കാൻ ആവശ്യമായ കുറഞ്ഞ അളവുകൾ',
     prompt_en: `<p>A student has 4 strips of wood of lengths $4\\text{ cm}, 5\\text{ cm}, 6\\text{ cm},$ and $7\\text{ cm}$.</p>
@@ -272,13 +275,18 @@ QUESTIONS.push(
             <li>രണ്ട് അടുത്തടുത്ത വശങ്ങളും മൂന്ന് കോണുകളും</li>
             <li>മൂന്ന് വശങ്ങളും അവയ്ക്കിടയിലെ രണ്ട് കോണുകളും</li>
           </ul></li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Minimum independent measurements and non-rigidity of quadrilateral.',
+    tested_ml: 'ചതുർഭുജ നിർണ്ണയത്തിലെ സ്വതന്ത്ര അളവുകളും ചട്ടക്കൂടിന്റെ ദൃഢതയില്ലായ്മയും.'
   },
 
   {
     id: 'w.m8.6.1',
     sec: '8.6.2',
     concept: 'm8.6.2.four-sides-one-diagonal',
+    type: 'written',
+    marks: 4,
+    time: 200,
     title_en: 'Constructing Quadrilateral with Four Sides and One Diagonal',
     title_ml: 'നാല് വശങ്ങളും ഒരു വികർണ്ണവും നൽകിയുള്ള നിർമ്മിതി',
     prompt_en: `<p>Construct a quadrilateral $ABCD$ in which $AB = 4.5\\text{ cm}$, $BC = 5.5\\text{ cm}$, $CD = 4\\text{ cm}$, $DA = 6\\text{ cm}$, and diagonal $AC = 7\\text{ cm}$.</p>
@@ -330,13 +338,18 @@ QUESTIONS.push(
             <li>$C$ കേന്ദ്രമാക്കി $4\\text{ cm}$ ആരത്തിൽ ചാപം വരച്ച് $D$ കണ്ടെത്തുക.</li>
             <li>$AD, CD$ എന്നിവ യോജിപ്പിക്കുക. $ABCD$ എന്ന ചതുർഭുജം പൂർത്തിയായി.</li>
           </ol></li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Construction of quadrilateral with four sides and one diagonal.',
+    tested_ml: 'നാല് വശങ്ങളും ഒരു വികർണ്ണവും നൽകിയുള്ള ചതുർഭുജ നിർമ്മിതി.'
   },
 
   {
     id: 'w.m8.6.2',
     sec: '8.6.3',
     concept: 'm8.6.3.sides-and-angles',
+    type: 'written',
+    marks: 4,
+    time: 200,
     title_en: 'Quadrilateral with Two Adjacent Sides and Three Angles',
     title_ml: 'രണ്ട് അടുത്തടുത്ത വശങ്ങളും മൂന്ന് കോണുകളും നൽകിയുള്ള നിർമ്മിതി',
     prompt_en: `<p>Construct a quadrilateral $MIST$ where $MI = 3.5\\text{ cm}$, $IS = 6.5\\text{ cm}$, $\\angle M = 75^\\circ$, $\\angle I = 105^\\circ$, and $\\angle S = 120^\\circ$.</p>
@@ -378,13 +391,18 @@ QUESTIONS.push(
             <li>$M$-ൽ നിന്നും $S$-ൽ നിന്നുമുള്ള കിരണങ്ങൾ പരസ്പരം കൂട്ടിമുട്ടുന്ന ബിന്ദുവാണ് $T$.</li>
             <li>ഇതോടെ $MIST$ എന്ന ചതുർഭുജം പൂർത്തിയാകുന്നു (ഇവിടെ $\\angle T = 60^\\circ$ ആയിരിക്കും).</li>
           </ol></li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Construction of quadrilateral with two adjacent sides and three angles.',
+    tested_ml: 'രണ്ട് അടുത്തടുത്ത വശങ്ങളും മൂന്ന് കോണുകളും നൽകിയുള്ള ചതുർഭുജ നിർമ്മിതി.'
   },
 
   {
     id: 'w.m8.6.3',
     sec: '8.6.3',
     concept: 'm8.6.3.sides-and-angles',
+    type: 'written',
+    marks: 4,
+    time: 200,
     title_en: 'Quadrilateral with Three Sides and Two Included Angles',
     title_ml: 'മൂന്ന് വശങ്ങളും അവയ്ക്കിടയിലെ രണ്ട് കോണുകളും നൽകിയുള്ള നിർമ്മിതി',
     prompt_en: `<p>Construct a quadrilateral $ABCD$ given that $AB = 4\\text{ cm}$, $BC = 5\\text{ cm}$, $CD = 4.5\\text{ cm}$, $\\angle B = 60^\\circ$, and $\\angle C = 90^\\circ$.</p>
@@ -424,13 +442,18 @@ QUESTIONS.push(
             <li>$A$-യും $D$-യും തമ്മിൽ വരച്ച് യോജിപ്പിക്കുക.</li>
             <li>$ABCD$ എന്ന ചതുർഭുജം പൂർത്തിയായി.</li>
           </ol></li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Construction of quadrilateral with three sides and two included angles.',
+    tested_ml: 'മൂന്ന് വശങ്ങളും അവയ്ക്കിടയിലെ രണ്ട് കോണുകളും നൽകിയുള്ള ചതുർഭുജ നിർമ്മിതി.'
   },
 
   {
     id: 'w.m8.6.4',
     sec: '8.6.4',
     concept: 'm8.6.4.special-quadrilaterals',
+    type: 'written',
+    marks: 4,
+    time: 200,
     title_en: 'Construction of a Rhombus from Its Diagonals',
     title_ml: 'വികർണ്ണങ്ങൾ നൽകിയുള്ള റോംബസ് നിർമ്മിതി',
     prompt_en: `<p>Construct a rhombus $ABCD$ whose diagonals are $AC = 6\\text{ cm}$ and $BD = 8\\text{ cm}$.</p>
@@ -476,6 +499,81 @@ QUESTIONS.push(
           $\\triangle AOB$ ഒരു മട്ടത്രികോണമാണ്. ഇതിന്റെ ലംബവശങ്ങൾ $OA = 3\\text{ cm}, OB = 4\\text{ cm}$ ആണ്. പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം:
           $$\\text{വശം } AB = \\sqrt{OA^2 + OB^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = \\mathbf{5\\text{ cm}}$$
           റോംബസിന്റെ നാല് വശങ്ങളും $\\mathbf{5\\text{ cm}}$ വീതമാണ്.</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Construction of rhombus from diagonals using perpendicular bisector.',
+    tested_ml: 'വികർണ്ണങ്ങളുടെ ലംബസമഭാജി ഉപയോഗിച്ചുള്ള റോംബസ് നിർമ്മിതി.'
+  },
+
+  {
+    id: 'w.m8.6.5',
+    sec: '8.6.4',
+    concept: 'm8.6.4.special-quadrilaterals',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Construction of a Parallelogram and Diagonal Properties',
+    title_ml: 'സാമാന്തരിക നിർമ്മിതിയും വികർണ്ണ സവിശേഷതകളും',
+    prompt_en: `<p>Construct a parallelogram $ABCD$ with adjacent sides $AB = 6\\text{ cm}$, $BC = 4\\text{ cm}$, and included angle $\\angle B = 70^\\circ$.</p>
+      <ol type="a">
+        <li>Find the values of $\\angle A$, $\\angle C$, and $\\angle D$.</li>
+        <li>Describe the step-by-step construction of the parallelogram using a ruler and compass.</li>
+        <li>If diagonal $AC$ is drawn, prove that $\\triangle ABC \\cong \\triangle CDA$.</li>
+      </ol>`,
+    prompt_ml: `<p>$AB = 6\\text{ cm}$, $BC = 4\\text{ cm}$, ഉൾപ്പെട്ട കോൺ $\\angle B = 70^\\circ$ അളവുകളുള്ള $ABCD$ എന്ന സാമാന്തരികം നിർമ്മിക്കുക.</p>
+      <ol type="a">
+        <li>$\\angle A, \\angle C, \\angle D$ എന്നിവയുടെ അളവുകൾ കണ്ടെത്തുക.</li>
+        <li>സ്കെയിലും കോമ്പസും ഉപയോഗിച്ച് സാമാന്തരികം നിർമ്മിക്കുന്ന ഘട്ടങ്ങൾ എഴുതുക.</li>
+        <li>വികർണ്ണം $AC$ വരച്ചാൽ $\\triangle ABC \\cong \\triangle CDA$ ആണെന്ന് തെളിയിക്കുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li><b>Angles of parallelogram:</b>
+          <ul>
+            <li>Opposite angles are equal: $\\angle D = \\angle B = \\mathbf{70^\\circ}$.</li>
+            <li>Consecutive angles are supplementary: $\\angle A = 180^\\circ - 70^\\circ = \\mathbf{110^\\circ}$, and $\\angle C = \\angle A = \\mathbf{110^\\circ}$.</li>
+          </ul></li>
+        <li><b>Steps of Construction:</b>
+          <ol>
+            <li>Draw base segment $AB = 6\\text{ cm}$.</li>
+            <li>At $B$, draw a ray making an angle of $70^\\circ$ with $AB$.</li>
+            <li>With $B$ as center and radius $4\\text{ cm}$, draw an arc along this ray to mark vertex $C$.</li>
+            <li>With $C$ as center and radius $6\\text{ cm}$ (opposite side $CD = AB$), draw an arc.</li>
+            <li>With $A$ as center and radius $4\\text{ cm}$ (opposite side $AD = BC$), draw another arc cutting the previous arc at vertex $D$.</li>
+            <li>Join $CD$ and $AD$. The required parallelogram $ABCD$ is complete.</li>
+          </ol></li>
+        <li><b>Congruence Proof:</b>
+          <ul>
+            <li>In $\\triangle ABC$ and $\\triangle CDA$:
+              $$AB = CD \\quad (\\text{opposite sides of parallelogram})$$
+              $$BC = DA \\quad (\\text{opposite sides of parallelogram})$$
+              $$AC = CA \\quad (\\text{common side})$$</li>
+            <li>By SSS congruence criterion, $\\mathbf{\\triangle ABC \\cong \\triangle CDA}$.</li>
+          </ul></li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li><b>സാമാന്തരികത്തിലെ കോണുകൾ:</b>
+          <ul>
+            <li>എതിർകോണുകൾ തുല്യമാണ്: $\\angle D = \\angle B = \\mathbf{70^\\circ}$.</li>
+            <li>അടുത്തടുത്ത കോണുകളുടെ തുക $180^\\circ$ ആണ്: $\\angle A = 180^\\circ - 70^\\circ = \\mathbf{110^\\circ}$, $\\angle C = \\angle A = \\mathbf{110^\\circ}$.</li>
+          </ul></li>
+        <li><b>നിർമ്മാണ ഘട്ടങ്ങൾ:</b>
+          <ol>
+            <li>$AB = 6\\text{ cm}$ പാദരേഖ വരയ്ക്കുക.</li>
+            <li>$B$-ൽ $AB$-യുമായി $70^\\circ$ കോണളവിൽ കിരണം വരയ്ക്കുക.</li>
+            <li>$B$ കേന്ദ്രമാക്കി $4\\text{ cm}$ ആരത്തിൽ ഈ കിരണത്തിൽ ചാപം വരച്ച് $C$ അടയാളപ്പെടുത്തുക.</li>
+            <li>$C$ കേന്ദ്രമാക്കി $6\\text{ cm}$ ആരത്തിൽ ($CD = AB$) ഒരു ചാപം വരയ്ക്കുക.</li>
+            <li>$A$ കേന്ദ്രമാക്കി $4\\text{ cm}$ ആരത്തിൽ ($AD = BC$) മറ്റൊരു ചാപം വരച്ച് $D$ കണ്ടെത്തുക.</li>
+            <li>$CD, AD$ എന്നിവ യോജിപ്പിക്കുക. $ABCD$ എന്ന സാമാന്തരികം പൂർത്തിയായി.</li>
+          </ol></li>
+        <li><b>സർവ്വസമതാ തെളിവ്:</b>
+          <ul>
+            <li>$\\triangle ABC$, $\\triangle CDA$ എന്നിവയിൽ:
+              $$AB = CD \\quad (\\text{സാമാന്തരികത്തിന്റെ എതിർവശങ്ങൾ})$$
+              $$BC = DA \\quad (\\text{സാമാന്തരികത്തിന്റെ എതിർവശങ്ങൾ})$$
+              $$AC = CA \\quad (\\text{പൊതുവായ വശം})$$</li>
+            <li>$SSS$ സർവ്വസമതാ തത്വപ്രകാരം, $\\mathbf{\\triangle ABC \\cong \\triangle CDA}$.</li>
+          </ul></li>
+      </ol>`,
+    tested_en: 'Construction of parallelogram from two sides and included angle, and diagonal congruency.',
+    tested_ml: 'വശങ്ങളും ഉൾപ്പെട്ട കോണും നൽകിയുള്ള സാമാന്തരിക നിർമ്മിതിയും വികർണ്ണ സർവ്വസമതയും.'
   }
 );

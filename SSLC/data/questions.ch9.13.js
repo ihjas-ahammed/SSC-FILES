@@ -249,6 +249,8 @@ WRITTEN.push(
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Arithmetic Mean and Balance of Excess and Deficit Deviations',
+    title_ml: 'സമാന്തര ശരാശരിയും വ്യതിയാനങ്ങളുടെ സന്തുലനവും',
     prompt_en: '<p>The daily pocket money (in rupees) of $8$ students is: $32, 45, 28, 50, 42, 38, 48, 37$.</p><p>(i) Calculate the arithmetic mean daily pocket money.</p><p>(ii) Calculate the deviation of each student’s money from the mean.</p><p>(iii) Show that the sum of the positive deviations (total excess) exactly equals the sum of the absolute negative deviations (total deficit).</p>',
     prompt_ml: '<p>$8$ കുട്ടികളുടെ ദിവസേനയുള്ള പോക്കറ്റ് മണി (രൂപയിൽ): $32, 45, 28, 50, 42, 38, 48, 37$.</p><p>(i) ദിവസേനയുള്ള പോക്കറ്റ് മണിയുടെ സമാന്തര ശരാശരി കാണുക.</p><p>(ii) ഓരോ കുട്ടിയുടെയും തുക ശരാശരിയിൽ നിന്ന് എത്ര വ്യതിചലിച്ചിരിക്കുന്നു എന്ന് കണക്കാക്കുക.</p><p>(iii) ശരാശരിയേക്കാൾ കൂടുതലുള്ള തുകകളുടെ ആകെത്തുകയും കുറവുള്ള തുകകളുടെ ആകെത്തുകയും തുല്യമാണെന്ന് തെളിയിക്കുക.</p>',
     solution_en: `<h4>Step 1: Compute Arithmetic Mean</h4>
@@ -295,6 +297,8 @@ $$\\text{ആകെ കുറവ്} = 8 + 12 + 2 + 3 = \\mathbf{25}$$
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Mean Daily Wage from Discrete Frequency Distribution',
+    title_ml: 'ദിവസക്കൂലിയുടെ ആവൃത്തി പട്ടികയിൽ നിന്നുള്ള ശരാശരി കണക്കാക്കൽ',
     prompt_en: '<p>The table below shows the distribution of daily wages of workers in a workshop:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>Daily Wage (₹)</th><td>400</td><td>450</td><td>500</td><td>550</td><td>600</td></tr><tr><th>Number of Workers</th><td>5</td><td>8</td><td>12</td><td>10</td><td>5</td></tr></table><p>(i) Find the total number of workers ($N$).</p><p>(ii) Calculate the total wage payout ($\\sum fx$).</p><p>(iii) Calculate the mean daily wage of the workers.</p>',
     prompt_ml: '<p>ഒരു വർക്ക്‌ഷോപ്പിലെ തൊഴിലാളികളുടെ ദിവസക്കൂലി വിവരങ്ങൾ താഴെ നൽകുന്നു:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>ദിവസക്കൂലി (₹)</th><td>400</td><td>450</td><td>500</td><td>550</td><td>600</td></tr><tr><th>തൊഴിലാളികളുടെ എണ്ണം</th><td>5</td><td>8</td><td>12</td><td>10</td><td>5</td></tr></table><p>(i) ആകെ തൊഴിലാളികളുടെ എണ്ണം ($N$) കാണുക.</p><p>(ii) ദിവസേന നൽകുന്ന ആകെ കൂലി ($\\sum fx$) കണക്കാക്കുക.</p><p>(iii) ഒരു തൊഴിലാളിയുടെ ശരാശരി ദിവസക്കൂലി കണ്ടെത്തുക.</p>',
     solution_en: `<h4>Step 1: Compute Total Frequency ($N$)</h4>
@@ -338,6 +342,8 @@ $$\\bar{x} = \\frac{20100}{40} = \\mathbf{502.50\\text{ രൂപ}}$$`,
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Mean Weight for Grouped Frequency Distribution Using Class Marks',
+    title_ml: 'വർഗ്ഗീകരിച്ച ആവൃത്തി പട്ടികയിലെ മധ്യവിലയും ശരാശരി ഭാരവും',
     prompt_en: '<p>The weights (in kg) of $50$ students are grouped as follows:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>Weight (kg)</th><td>30 - 40</td><td>40 - 50</td><td>50 - 60</td><td>60 - 70</td><td>70 - 80</td></tr><tr><th>Number of Students</th><td>8</td><td>14</td><td>16</td><td>8</td><td>4</td></tr></table><p>(i) Write the class mark $x_i$ for each class interval.</p><p>(ii) Compute the sum $\\sum f_i x_i$ and the mean weight of the students.</p>',
     prompt_ml: '<p>$50$ കുട്ടികളുടെ ശരീരഭാരം (കിലോഗ്രാമിൽ) താഴെ നൽകിയിരിക്കുന്നു:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>ഭാരം (kg)</th><td>30 - 40</td><td>40 - 50</td><td>50 - 60</td><td>60 - 70</td><td>70 - 80</td></tr><tr><th>കുട്ടികളുടെ എണ്ണം</th><td>8</td><td>14</td><td>16</td><td>8</td><td>4</td></tr></table><p>(i) ഓരോ ക്ലാസിന്റെയും മധ്യവില (ക്ലാസ് മാർക്ക് $x_i$) എഴുതുക.</p><p>(ii) $\\sum f_i x_i$ കണക്കാക്കി കുട്ടികളുടെ ശരാശരി ഭാരം കണ്ടെത്തുക.</p>',
     solution_en: `<h4>Step 1: Determine Class Marks ($x_i$)</h4>
@@ -384,6 +390,8 @@ $$\\bar{x} = \\frac{2610}{50} = \\mathbf{52.2\\text{ kg}}$$`,
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Mean Age Determination Using the Assumed Mean Method',
+    title_ml: 'സങ്കല്പിത ശരാശരി രീതി ഉപയോഗിച്ച് ശരാശരി പ്രായം കണക്കാക്കൽ',
     prompt_en: '<p>The ages of $40$ employees in an office are classified as follows:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>Age Group</th><td>20 - 30</td><td>30 - 40</td><td>40 - 50</td><td>50 - 60</td><td>60 - 70</td></tr><tr><th>Number of Employees</th><td>6</td><td>12</td><td>14</td><td>6</td><td>2</td></tr></table><p>Using the <b>Assumed Mean Method</b> with assumed mean $A = 45$, calculate the mean age of the employees. Show all steps clearly.</p>',
     prompt_ml: '<p>ഒരു ഓഫീസിലെ $40$ ജീവനക്കാരുടെ പ്രായം താഴെ നൽകിയിരിക്കുന്നു:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>പ്രായ വിഭാഗം</th><td>20 - 30</td><td>30 - 40</td><td>40 - 50</td><td>50 - 60</td><td>60 - 70</td></tr><tr><th>ജീവനക്കാരുടെ എണ്ണം</th><td>6</td><td>12</td><td>14</td><td>6</td><td>2</td></tr></table><p>$A = 45$ എന്ന് സങ്കല്പിത ശരാശരിയായി എടുത്ത് <b>സങ്കല്പിത ശരാശരി രീതി</b> ഉപയോഗിച്ച് ജീവനക്കാരുടെ ശരാശരി പ്രായം കാണുക.</p>',
     solution_en: `<h4>Step 1: Class Marks ($x_i$) and Deviations ($d_i = x_i - 45$)</h4>
@@ -415,5 +423,108 @@ $$N = 40$$
 $$\\bar{x} = A + \\frac{\\sum f_i d_i}{N} = 45 + \\frac{-140}{40} = 45 - 3.5 = \\mathbf{41.5\\text{ വയസ്സ്}}$$`,
     tested_en: 'Application of assumed mean method for grouped distributions.',
     tested_ml: 'സങ്കല്പിത ശരാശരി രീതി ഉപയോഗിച്ചുള്ള ശരാശരി നിർണ്ണയം.'
+  },
+
+  {
+    id: 'w.m9.13.5',
+    concept: 'm9.13.2.mean-of-frequency-distributions',
+    sec: '9.13.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    title_en: 'Finding Missing Frequency from Discrete Distribution Mean',
+    title_ml: 'സമാന്തര ശരാശരി നൽകിയിരിക്കുമ്പോൾ അജ്ഞാത ആവൃത്തി കണ്ടെത്തൽ',
+    tested_en: 'Algebraic equation solving for missing frequency using mean quotient.',
+    tested_ml: 'ശരാശരി സമവാക്യം ഉപയോഗിച്ച് അജ്ഞാത ആവൃത്തി നിർണ്ണയിക്കൽ.',
+    prompt_en: '<p>The arithmetic mean of the following discrete frequency distribution of marks is $28$:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>Marks ($x$)</th><td>10</td><td>20</td><td>30</td><td>40</td><td>50</td></tr><tr><th>Number of Students ($f$)</th><td>4</td><td>8</td><td>$p$</td><td>5</td><td>3</td></tr></table><p>(i) Write the total number of students ($N$) as an algebraic expression in terms of $p$.</p><p>(ii) Calculate the sum of products $\\sum fx$ in terms of $p$.</p><p>(iii) Using the mean formula $\\bar{x} = \\frac{\\sum fx}{N} = 28$, solve for the unknown frequency $p$.</p>',
+    prompt_ml: '<p>മാർക്കുകളുടെ ആവൃത്തി വിവരങ്ങൾ നൽകിയിരിക്കുന്ന താഴെ പറയുന്ന പട്ടികയുടെ സമാന്തര ശരാശരി $28$ ആണ്:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>മാർക്ക് ($x$)</th><td>10</td><td>20</td><td>30</td><td>40</td><td>50</td></tr><tr><th>കുട്ടികളുടെ എണ്ണം ($f$)</th><td>4</td><td>8</td><td>$p$</td><td>5</td><td>3</td></tr></table><p>(i) ആകെ കുട്ടികളുടെ എണ്ണത്തെ ($N$) $p$ ഉൾപ്പെടുന്ന ഒരു ബീജഗണിത വാക്യമായി എഴുതുക.</p><p>(ii) ഗുണനഫലങ്ങളുടെ ആകെത്തുകയായ $\\sum fx$ എന്നത് $p$ ഉൾപ്പെടുത്തി കണ്ടെത്തുക.</p><p>(iii) $\\bar{x} = \\frac{\\sum fx}{N} = 28$ എന്ന ശരാശരി സമവാക്യം ഉപയോഗിച്ച് അജ്ഞാത ആവൃത്തിയായ $p$-യുടെ വില കാണുക.</p>',
+    solution_en: `<h4>Step 1: Total Frequency in Terms of $p$</h4>
+$$N = \\sum f = 4 + 8 + p + 5 + 3 = \\mathbf{20 + p}$$
+
+<h4>Step 2: Total Sum $\\sum fx$ in Terms of $p$</h4>
+<ul>
+  <li>$10 \\times 4 = 40$</li>
+  <li>$20 \\times 8 = 160$</li>
+  <li>$30 \\times p = 30p$</li>
+  <li>$40 \\times 5 = 200$</li>
+  <li>$50 \\times 3 = 150$</li>
+</ul>
+$$\\sum fx = 40 + 160 + 30p + 200 + 150 = \\mathbf{550 + 30p}$$
+
+<h4>Step 3: Solve for $p$ Using Mean Formula</h4>
+$$\\bar{x} = \\frac{\\sum fx}{N} = 28$$
+$$\\frac{550 + 30p}{20 + p} = 28$$
+$$550 + 30p = 28(20 + p)$$
+$$550 + 30p = 560 + 28p$$
+$$30p - 28p = 560 - 550$$
+$$2p = 10 \\implies p = \\mathbf{5}$$
+<p>The missing frequency is <b>$p = 5$</b>.</p>`,
+    solution_ml: `<h4>ഘട്ടം 1: ആകെ ആവൃത്തി ($N$)</h4>
+$$N = 4 + 8 + p + 5 + 3 = \\mathbf{20 + p}$$
+
+<h4>ഘട്ടം 2: ഗുണനഫലങ്ങളുടെ ആകെത്തുക ($\\sum fx$)</h4>
+<ul>
+  <li>$10 \\times 4 = 40$</li>
+  <li>$20 \\times 8 = 160$</li>
+  <li>$30 \\times p = 30p$</li>
+  <li>$40 \\times 5 = 200$</li>
+  <li>$50 \\times 3 = 150$</li>
+</ul>
+$$\\sum fx = 40 + 160 + 30p + 200 + 150 = \\mathbf{550 + 30p}$$
+
+<h4>ഘട്ടം 3: സമവാക്യം പരിഹരിച്ച് $p$ കാണൽ</h4>
+$$\\frac{550 + 30p}{20 + p} = 28$$
+$$550 + 30p = 28(20 + p)$$
+$$550 + 30p = 560 + 28p$$
+$$30p - 28p = 560 - 550$$
+$$2p = 10 \\implies p = \\mathbf{5}$$
+<p>അജ്ഞാത ആവൃത്തി <b>$p = 5$</b> ആണ്.</p>`
+  },
+
+  {
+    id: 'w.m9.13.6',
+    concept: 'm9.13.4.assumed-mean-method',
+    sec: '9.13.4',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Assumed Mean Method for Grouped Daily Income Distribution',
+    title_ml: 'വർഗ്ഗീകരിച്ച ദിവസ വരുമാന പട്ടികയിൽ സങ്കല്പിത ശരാശരി രീതി',
+    tested_en: 'Class mark calculation, deviation table construction, and assumed mean formula.',
+    tested_ml: 'ക്ലാസ് മാർക്ക്, വ്യതിയാന പട്ടിക, സങ്കല്പിത ശരാശരി സമവാക്യം എന്നിവയുടെ പ്രയോഗം.',
+    prompt_en: '<p>The table below shows the distribution of daily earnings of $50$ retail shops:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>Daily Earnings (₹)</th><td>1000 - 1200</td><td>1200 - 1400</td><td>1400 - 1600</td><td>1600 - 1800</td><td>1800 - 2000</td></tr><tr><th>Number of Shops</th><td>12</td><td>14</td><td>8</td><td>10</td><td>6</td></tr></table><p>(i) Find the class mark $x_i$ for each of the $5$ class intervals.</p><p>(ii) Taking the assumed mean $A = 1500$, calculate the deviations $d_i = x_i - 1500$ and the products $f_i d_i$.</p><p>(iii) Calculate the mean daily earnings of the shops using the formula $\\bar{x} = A + \\frac{\\sum f_i d_i}{N}$.</p>',
+    prompt_ml: '<p>$50$ വ്യാപാര സ്ഥാപനങ്ങളുടെ ദിവസേനയുള്ള വരുമാന വിവരങ്ങൾ താഴെ നൽകിയിരിക്കുന്നു:</p><table border="1" cellpadding="5" style="border-collapse:collapse;"><tr><th>ദിവസ വരുമാനം (₹)</th><td>1000 - 1200</td><td>1200 - 1400</td><td>1400 - 1600</td><td>1600 - 1800</td><td>1800 - 2000</td></tr><tr><th>കടകളുടെ എണ്ണം</th><td>12</td><td>14</td><td>8</td><td>10</td><td>6</td></tr></table><p>(i) $5$ ക്ലാസ് ഇടവേളകളുടെയും മധ്യവില (ക്ലാസ് മാർക്ക് $x_i$) കണ്ടെത്തുക.</p><p>(ii) $A = 1500$ എന്നത് സങ്കല്പിത ശരാശരിയായി എടുത്ത്, വ്യതിയാനങ്ങൾ $d_i = x_i - 1500$, ഗുണനഫലങ്ങൾ $f_i d_i$ എന്നിവ കണക്കാക്കുക.</p><p>(iii) $\\bar{x} = A + \\frac{\\sum f_i d_i}{N}$ എന്ന സമവാക്യം ഉപയോഗിച്ച് കടകളുടെ ശരാശരി ദിവസ വരുമാനം കണ്ടെത്തുക.</p>',
+    solution_en: `<h4>Step 1: Class Marks and Deviations Table ($A = 1500$)</h4>
+<table border="1" cellpadding="5" style="border-collapse:collapse;">
+  <tr><th>Class</th><th>$f_i$</th><th>Class Mark $x_i$</th><th>$d_i = x_i - 1500$</th><th>$f_i d_i$</th></tr>
+  <tr><td>1000 - 1200</td><td>12</td><td>1100</td><td>$-400$</td><td>$-4800$</td></tr>
+  <tr><td>1200 - 1400</td><td>14</td><td>1300</td><td>$-200$</td><td>$-2800$</td></tr>
+  <tr><td>1400 - 1600</td><td>8</td><td>1500</td><td>$0$</td><td>$0$</td></tr>
+  <tr><td>1600 - 1800</td><td>10</td><td>1700</td><td>$+200$</td><td>$+2000$</td></tr>
+  <tr><td>1800 - 2000</td><td>6</td><td>1900</td><td>$+400$</td><td>$+2400$</td></tr>
+  <tr><th>Total</th><th>$N = 50$</th><td>-</td><td>-</td><th>$\\sum f_i d_i = -3200$</th></tr>
+</table>
+
+<h4>Step 2: Calculate $\\sum f_i d_i$</h4>
+$$\\sum f_i d_i = (-4800) + (-2800) + 0 + 2000 + 2400 = -7600 + 4400 = \\mathbf{-3200}$$
+
+<h4>Step 3: Compute Arithmetic Mean</h4>
+$$\\bar{x} = A + \\frac{\\sum f_i d_i}{N} = 1500 + \\frac{-3200}{50} = 1500 - 64 = \\mathbf{1436\\text{ rupees}}$$`,
+    solution_ml: `<h4>ഘട്ടം 1: മധ്യവിലകളും വ്യതിയാനങ്ങളും ($A = 1500$)</h4>
+<table border="1" cellpadding="5" style="border-collapse:collapse;">
+  <tr><th>ക്ലാസ്</th><th>$f_i$</th><th>മധ്യവില $x_i$</th><th>$d_i = x_i - 1500$</th><th>$f_i d_i$</th></tr>
+  <tr><td>1000 - 1200</td><td>12</td><td>1100</td><td>$-400$</td><td>$-4800$</td></tr>
+  <tr><td>1200 - 1400</td><td>14</td><td>1300</td><td>$-200$</td><td>$-2800$</td></tr>
+  <tr><td>1400 - 1600</td><td>8</td><td>1500</td><td>$0$</td><td>$0$</td></tr>
+  <tr><td>1600 - 1800</td><td>10</td><td>1700</td><td>$+200$</td><td>$+2000$</td></tr>
+  <tr><td>1800 - 2000</td><td>6</td><td>1900</td><td>$+400$</td><td>$+2400$</td></tr>
+  <tr><th>ആകെ</th><th>$N = 50$</th><td>-</td><td>-</td><th>$\\sum f_i d_i = -3200$</th></tr>
+</table>
+
+<h4>ഘട്ടം 2: ഗുണനഫലങ്ങളുടെ തുക</h4>
+$$\\sum f_i d_i = -4800 - 2800 + 0 + 2000 + 2400 = \\mathbf{-3200}$$
+
+<h4>ഘട്ടം 3: സമാന്തര ശരാശരി കാണൽ</h4>
+$$\\bar{x} = A + \\frac{\\sum f_i d_i}{N} = 1500 + \\frac{-3200}{50} = 1500 - 64 = \\mathbf{1436\\text{ രൂപ}}$$`
   }
 );

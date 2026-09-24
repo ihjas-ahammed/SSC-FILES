@@ -246,6 +246,9 @@ WRITTEN.push(
     id: 'w.m8.12.1',
     sec: '8.12.1',
     concept: 'm8.12.1.parallel-lines-transversal',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Calculating Transversal Angles in Parallel Lines',
     title_ml: 'സമാന്തരവരകളിലെ കോണുകൾ കണക്കാക്കൽ',
     prompt_en: '<p>Two parallel lines $AB$ and $CD$ are intersected by a transversal $EF$ at points $P$ and $Q$ respectively. If $\\angle APQ = 115^\\circ$, calculate the measures of $\\angle PQD$, $\\angle PQC$, and $\\angle BPQ$, providing the geometric reasons for each.</p>',
@@ -275,13 +278,18 @@ $$\\angle APQ + \\angle PQC = 180^\\circ \\implies \\angle PQC = 180^\\circ - 11
 
 $$\\text{3. } \\angle BPQ \\text{ കോണിന്റെ അളവ്:}$$
 $$\\angle APQ, \\angle BPQ \\text{ എന്നിവ രേഖീയജോടിയാണ്.}$$
-$$\\angle BPQ = 180^\\circ - 115^\\circ = \\mathbf{65^\\circ}.$$`
+$$\\angle BPQ = 180^\\circ - 115^\\circ = \\mathbf{65^\\circ}.$$`,
+    tested_en: 'Transversal angles including alternate interior, co-interior, and linear pairs.',
+    tested_ml: 'ഏകാന്തരകോണുകൾ, ആന്തരകോണുകൾ, രേഖീയജോഡി എന്നിവയുടെ അളവ് കണക്കാക്കൽ.'
   },
 
   {
     id: 'w.m8.12.2',
     sec: '8.12.2',
     concept: 'm8.12.2.equidistant-parallel-lines',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Proof and Application of Equidistant Parallel Lines',
     title_ml: 'തുല്യ അകലത്തിലുള്ള സമാന്തരവരകളുടെ പ്രയോഗം',
     prompt_en: '<p>Three parallel lines cut a transversal $T_1$ at points $A, B, C$ such that $AB = BC = 5\\text{ cm}$. Another line $T_2$ intersects the three parallel lines at $D, E, F$. If the total length $DF = 13\\text{ cm}$, find the lengths of $DE$ and $EF$. Explain why this holds true.</p>',
@@ -305,13 +313,18 @@ $$DF = DE + EF = 2 \\times DE = 13\\text{ cm}.$$
 $$DE = \\frac{13}{2} = \\mathbf{6.5\\text{ cm}}.$$
 $$EF = \\mathbf{6.5\\text{ cm}}.$$
 
-$$\\text{തീരുമാനം: ഈ സമാന്തരവരകളെ മുറിച്ചുകടക്കുന്ന രണ്ടാമത്തെ വരയിലെ തുണ്ടുകൾ } DE = EF = 6.5\\text{ cm} \\text{ വീതമായിരിക്കും.}$$`
+$$\\text{തീരുമാനം: ഈ സമാന്തരവരകളെ മുറിച്ചുകടക്കുന്ന രണ്ടാമത്തെ വരയിലെ തുണ്ടുകൾ } DE = EF = 6.5\\text{ cm} \\text{ വീതമായിരിക്കും.}$$`,
+    tested_en: 'Equidistant parallel lines theorem and equal intercepts on transversals.',
+    tested_ml: 'തുല്യ അകലത്തിലുള്ള സമാന്തരവരകളും തുല്യ തുണ്ടുകളും.'
   },
 
   {
     id: 'w.m8.12.3',
     sec: '8.12.3',
     concept: 'm8.12.3.dividing-line-segments',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Dividing a 9 cm Line Segment in the Ratio 2 : 3',
     title_ml: '9 cm നീളമുള്ള വരയെ 2 : 3 എന്ന അംശബന്ധത്തിൽ വിഭജിക്കൽ',
     prompt_en: '<p>A line segment $AB$ of length $9\\text{ cm}$ is to be divided in the ratio $2 : 3$. Describe the geometric construction steps using parallel lines, and calculate the exact lengths of the two resulting segments $AP$ and $PB$.</p>',
@@ -341,13 +354,18 @@ $$\\text{2. ഗണിതക്രിയ:}$$
 $$\\text{ആകെ ഭാഗങ്ങൾ} = 2 + 3 = 5.$$
 $$AP = \\frac{2}{5} \\times 9\\text{ cm} = \\frac{18}{5} = \\mathbf{3.6\\text{ cm}}.$$
 $$PB = \\frac{3}{5} \\times 9\\text{ cm} = \\frac{27}{5} = \\mathbf{5.4\\text{ cm}}.$$
-$$\\text{പരിശോധന: } 3.6 + 5.4 = 9\\text{ cm}, \\quad \\frac{3.6}{5.4} = \\frac{2}{3}.$$`
+$$\\text{പരിശോധന: } 3.6 + 5.4 = 9\\text{ cm}, \\quad \\frac{3.6}{5.4} = \\frac{2}{3}.$$`,
+    tested_en: 'Geometric division of line segment in given ratio using parallel projections.',
+    tested_ml: 'വരയെ തന്നിരിക്കുന്ന അംശബന്ധത്തിൽ ഭാഗിക്കുന്ന ജ്യാമിതീയ നിർമ്മിതി.'
   },
 
   {
     id: 'w.m8.12.4',
     sec: '8.12.4',
     concept: 'm8.12.4.three-parallel-lines-theorem',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Finding Unknown Lengths Using Thales Theorem',
     title_ml: 'ഥേൽസ് സിദ്ധാന്തം ഉപയോഗിച്ച് അജ്ഞാതനീളം കാണൽ',
     prompt_en: '<p>In $\\triangle PQR$, $ST$ is drawn parallel to base $QR$, cutting $PQ$ at $S$ and $PR$ at $T$. It is given that $PS = 3\\text{ cm}$, $SQ = 5\\text{ cm}$, and the total length $PR = 16\\text{ cm}$. Find the lengths of $PT$ and $TR$.</p>',
@@ -379,6 +397,102 @@ $$3k + 5k = 16 \\implies 8k = 16 \\implies k = 2.$$
 $$\\text{നീളങ്ങൾ:}$$
 $$PT = 3 \\times 2 = \\mathbf{6\\text{ cm}}$$
 $$TR = 5 \\times 2 = \\mathbf{10\\text{ cm}}$$
-$$\\text{പരിശോധന: } \\frac{PT}{TR} = \\frac{6}{10} = \\frac{3}{5}, \\quad PT + TR = 6 + 10 = 16\\text{ cm}.$$`
+$$\\text{പരിശോധന: } \\frac{PT}{TR} = \\frac{6}{10} = \\frac{3}{5}, \\quad PT + TR = 6 + 10 = 16\\text{ cm}.$$`,
+    tested_en: 'Thales theorem / triangle proportionality for parallel lines inside triangles.',
+    tested_ml: 'ത്രികോണങ്ങളിലെ ഥേൽസ് സിദ്ധാന്തവും അജ്ഞാത വശങ്ങളുടെ നീളവും.'
+  },
+
+  {
+    id: 'w.m8.12.5',
+    sec: '8.12.2',
+    concept: 'm8.12.2.equidistant-parallel-lines',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Midpoint Theorem of Triangles via Parallel Lines',
+    title_ml: 'ത്രികോണങ്ങളിലെ മധ്യബിന്ദു സിദ്ധാന്തം',
+    prompt_en: `<p>In $\\triangle ABC$, $D$ is the midpoint of side $AB$. A line drawn through $D$ parallel to base $BC$ intersects side $AC$ at $E$.</p>
+      <ol type="a">
+        <li>Prove that $E$ is the midpoint of side $AC$.</li>
+        <li>If $BC = 14\\text{ cm}$ and $AC = 10\\text{ cm}$, calculate the lengths of segment $DE$ and segment $AE$.</li>
+      </ol>`,
+    prompt_ml: `<p>$\\triangle ABC$-യിൽ $AB$ എന്ന വശത്തിന്റെ മധ്യബിന്ദുവാണ് $D$. $D$-യിലൂടെ $BC$-ക്ക് സമാന്തരമായി വരച്ച വര $AC$-യെ $E$-ൽ ഖണ്ഡിക്കുന്നു.</p>
+      <ol type="a">
+        <li>$E$ എന്നത് $AC$-യുടെ മധ്യബിന്ദുവാണെന്ന് തെളിയിക്കുക.</li>
+        <li>$BC = 14\\text{ cm}$, $AC = 10\\text{ cm}$ ആയാൽ $DE$, $AE$ എന്നിവയുടെ നീളങ്ങൾ കണ്ടെത്തുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li><b>Proof:</b><br>
+          Draw a line through vertex $A$ parallel to $BC$. Now we have three parallel lines: the line through $A$, the line $DE$, and the line $BC$.<br>
+          On transversal $AB$, the intercepts are $AD$ and $DB$. Since $D$ is the midpoint, $AD = DB$.<br>
+          By the equidistant parallel lines theorem, if three parallel lines intercept equal segments on one transversal, they intercept equal segments on any other transversal.<br>
+          Therefore, on transversal $AC$, the intercepts are equal: $AE = EC$.<br>
+          Hence, $\\mathbf{E\\text{ is the midpoint of } AC}$.</li>
+        <li><b>Lengths:</b><br>
+          Since $E$ is the midpoint of $AC$:
+          $$AE = \\frac{1}{2} \\times AC = \\frac{1}{2} \\times 10 = \\mathbf{5\\text{ cm}}$$
+          By the midpoint theorem, the segment connecting the midpoints of two sides of a triangle is half the length of the third side:
+          $$DE = \\frac{1}{2} \\times BC = \\frac{1}{2} \\times 14 = \\mathbf{7\\text{ cm}}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li><b>തെളിവ്:</b><br>
+          $A$-യിലൂടെ $BC$-ക്ക് സമാന്തരമായി ഒരു വര സങ്കൽപ്പിക്കുക. ഇപ്പോൾ $A$-യിലൂടെയുള്ള വര, $DE, BC$ എന്നീ മൂന്ന് സമാന്തരവരകൾ ലഭിക്കുന്നു.<br>
+          $AB$ എന്ന ചേദകരേഖയിലെ തുണ്ടുകൾ $AD, DB$ എന്നിവയാണ്. $D$ മധ്യബിന്ദുവായതിനാൽ $AD = DB$ ആണ്.<br>
+          തുല്യ അകലത്തിലുള്ള സമാന്തരവരകളുടെ സിദ്ധാന്തപ്രകാരം, ഒരു ചേദകരേഖയിലെ തുണ്ടുകൾ തുല്യമായാൽ മറ്റേതൊരു ചേദകരേഖയിലെയും തുണ്ടുകൾ തുല്യമായിരിക്കും.<br>
+          അതിനാൽ $AC$ എന്ന രേഖയിലെ തുണ്ടുകൾ തുല്യമാണ്: $AE = EC$.<br>
+          അതുകൊണ്ട് $\\mathbf{E \\text{ എന്നത് } AC\\text{-യുടെ മധ്യബിന്ദുവാണ്}}$.</li>
+        <li><b>നീളങ്ങൾ:</b><br>
+          $E$ മധ്യബിന്ദുവായതിനാൽ:
+          $$AE = \\frac{1}{2} \\times AC = \\frac{1}{2} \\times 10 = \\mathbf{5\\text{ cm}}$$
+          മധ്യബിന്ദു സിദ്ധാന്തപ്രകാരം, രണ്ട് വശങ്ങളുടെ മധ്യബിന്ദുക്കൾ യോജിപ്പിക്കുന്ന വര മൂന്നാം വശത്തിന്റെ പകുതിയാണ്:
+          $$DE = \\frac{1}{2} \\times BC = \\frac{1}{2} \\times 14 = \\mathbf{7\\text{ cm}}$$</li>
+      </ol>`,
+    tested_en: 'Converse of midpoint theorem via parallel lines and segment lengths.',
+    tested_ml: 'സമാന്തരവരകൾ വഴിയുള്ള മധ്യബിന്ദു സിദ്ധാന്ത തെളിവും നീളങ്ങളും.'
+  },
+
+  {
+    id: 'w.m8.12.6',
+    sec: '8.12.4',
+    concept: 'm8.12.4.three-parallel-lines-theorem',
+    type: 'written',
+    marks: 4,
+    time: 210,
+    title_en: 'Three Parallel Lines Intercept Ratio on Two Transversals',
+    title_ml: 'സമാന്തരവരകളിലെ തുണ്ടുകളുടെ അനുപാതം',
+    prompt_en: `<p>Three parallel lines $l, m, n$ are intersected by two transversals $p$ and $q$. Transversal $p$ is intersected at points $A, B, C$ with $AB = 4\\text{ cm}$ and $BC = 6\\text{ cm}$. Transversal $q$ is intersected at points $D, E, F$.</p>
+      <ol type="a">
+        <li>State the theorem relating the intercepts on transversals $p$ and $q$.</li>
+        <li>If total length $DF = 15\\text{ cm}$, find the lengths of $DE$ and $EF$.</li>
+        <li>If $DE$ were given as $8\\text{ cm}$, what would be the length of $EF$?</li>
+      </ol>`,
+    prompt_ml: `<p>$l, m, n$ എന്നീ മൂന്ന് സമാന്തരവരകളെ $p, q$ എന്നീ രണ്ട് ചേദകരേഖകൾ ഖണ്ഡിക്കുന്നു. $p$ എന്ന വരയിലെ തുണ്ടുകൾ $AB = 4\\text{ cm}$, $BC = 6\\text{ cm}$ ആണ്. $q$ എന്ന വരയെ ഈ സമാന്തരവരകൾ $D, E, F$ ബിന്ദുക്കളിൽ ഖണ്ഡിക്കുന്നു.</p>
+      <ol type="a">
+        <li>രണ്ട് ചേദകരേഖകളിലെ തുണ്ടുകൾ തമ്മിലുള്ള ബന്ധം വ്യക്തമാക്കുന്ന സിദ്ധാന്തം പ്രസ്താവിക്കുക.</li>
+        <li>ആകെ നീളം $DF = 15\\text{ cm}$ ആണെങ്കിൽ $DE, EF$ എന്നിവയുടെ നീളങ്ങൾ കണ്ടെത്തുക.</li>
+        <li>$DE = 8\\text{ cm}$ ആണെങ്കിൽ $EF$-ന്റെ നീളം എത്രയായിരിക്കും?</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li><b>Theorem:</b> Three or more parallel lines intercept proportional segments on any two transversal lines:
+          $$\\frac{AB}{BC} = \\frac{DE}{EF}$$</li>
+        <li>Ratio of segments $= AB : BC = 4 : 6 = 2 : 3$. Total parts $= 2 + 3 = 5$.<br>
+          Given $DF = 15\\text{ cm}$:<br>
+          $$DE = \\frac{2}{5} \\times 15 = \\mathbf{6\\text{ cm}}$$
+          $$EF = \\frac{3}{5} \\times 15 = \\mathbf{9\\text{ cm}}$$</li>
+        <li>If $DE = 8\\text{ cm}$:<br>
+          $$\\frac{4}{6} = \\frac{8}{EF} \\implies \\frac{2}{3} = \\frac{8}{EF} \\implies EF = \\frac{3 \\times 8}{2} = \\mathbf{12\\text{ cm}}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li><b>സിദ്ധാന്തം:</b> മൂന്നോ അതിലധികമോ സമാന്തരവരകൾ ഏതൊരു ചേദകരേഖയെയും തുല്യ അനുപാതത്തിൽ ഭാഗിക്കുന്നു:
+          $$\\frac{AB}{BC} = \\frac{DE}{EF}$$</li>
+        <li>തുണ്ടുകളുടെ അനുപാതം $= 4 : 6 = 2 : 3$. ആകെ ഭാഗം $= 2 + 3 = 5$.<br>
+          ആകെ നീളം $DF = 15\\text{ cm}$ ആയാൽ:<br>
+          $$DE = \\frac{2}{5} \\times 15 = \\mathbf{6\\text{ cm}}$$
+          $$EF = \\frac{3}{5} \\times 15 = \\mathbf{9\\text{ cm}}$$</li>
+        <li>$DE = 8\\text{ cm}$ ആയാൽ:<br>
+          $$\\frac{2}{3} = \\frac{8}{EF} \\implies EF = \\frac{3 \\times 8}{2} = \\mathbf{12\\text{ cm}}$$</li>
+      </ol>`,
+    tested_en: 'Three parallel lines proportionality theorem across multiple transversals.',
+    tested_ml: 'മൂന്ന് സമാന്തരവരകളുടെ അനുപാത സിദ്ധാന്തവും ചേദകരേഖകളിലെ തുണ്ടുകളും.'
   }
 );

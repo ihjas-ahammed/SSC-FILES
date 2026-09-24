@@ -39,7 +39,9 @@ for (const relPath of liveFiles) {
 const pool = vm.runInContext('({ CONCEPTS, OBJECTIVE, QUESTIONS, WRITTEN, PYQ, SYLLABI, SECTITLE })', ctx);
 const CONCEPTS = pool.CONCEPTS;
 const OBJECTIVE = pool.OBJECTIVE;
-const WRITTEN = (pool.WRITTEN && pool.WRITTEN.length ? pool.WRITTEN : pool.QUESTIONS) || [];
+const WRITTEN = (pool.QUESTIONS || []).concat(
+  (pool.WRITTEN && pool.WRITTEN !== pool.QUESTIONS) ? pool.WRITTEN : []
+);
 const PYQ = pool.PYQ;
 const SYLLABI = pool.SYLLABI;
 const SECTITLE = pool.SECTITLE;

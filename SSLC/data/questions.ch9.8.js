@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.8.1',
     sec: '9.8.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.8.1.algebraic-expressions-and-polynomials',
+    tested_en: 'Mathematical justification of polynomial identification based on exponent criteria',
+    tested_ml: 'ഘാതങ്ങളുടെ അടിസ്ഥാനത്തിൽ ബഹുപദങ്ങൾ തിരിച്ചറിയലും കാരണസഹിതമുള്ള വിശദീകരണവും',
     title_en: 'Polynomial Identification and Rigorous Justification',
     title_ml: 'ബഹുപദങ്ങൾ തിരിച്ചറിയലും കാരണസഹിതം സാധൂകരണവും',
     prompt_en: '<p>Examine each of the following algebraic expressions. State with clear mathematical justification whether each expression is a polynomial or not:</p><ol><li>$p(x) = 4x^3 - 5x^2 + \\frac{\\sqrt{3}}{2}x - 9$</li><li>$q(x) = 2x^2 + \\frac{5}{x} - 3$</li><li>$r(x) = 3\\sqrt{x} + 7x - 1$</li><li>$s(x) = x^4 - \\frac{2}{3}x^2 + 11$</li></ol>',
@@ -284,7 +289,12 @@ $$x\\text{-ന്റെ ഘാതങ്ങൾ } 4, 2, 0 \\text{ അഖണ്ഡ�
   {
     id: 'w.m9.8.2',
     sec: '9.8.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.8.2.degree-and-classification',
+    tested_en: 'Standard form, degree, leading coefficient, and classification of polynomials',
+    tested_ml: 'ബഹുപദത്തിന്റെ സാധാരണ രൂപം, കൃതി, മുൻനിര ഗുണകം, തരംതിരിവ്',
     title_en: 'Degree Determination and Polynomial Classification',
     title_ml: 'കൃതി നിർണ്ണയവും ബഹുപദങ്ങളുടെ തരംതിരിവും',
     prompt_en: '<p>For each of the following polynomials, determine: (i) its standard form in descending powers of $x$, (ii) its degree, (iii) leading coefficient, and (iv) classify it as constant, linear, quadratic, or cubic:</p><ol><li>$f(x) = 7 - 4x^2 + 3x$</li><li>$g(x) = (2x - 1)(x + 5)$</li><li>$h(x) = 19$</li><li>$k(x) = 4x^3 - 2x + 7x^2 - 8$</li></ol>',
@@ -320,7 +330,12 @@ $$\\text{കൃതി: } \\mathbf{3}, \\quad \\text{മുൻനിര ഗുണ
   {
     id: 'w.m9.8.3',
     sec: '9.8.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.8.3.values-and-zeroes-of-polynomials',
+    tested_en: 'Evaluating values and verifying zeroes of quadratic polynomials',
+    tested_ml: 'രണ്ടാംകൃതി ബഹുപദങ്ങളുടെ വില കണക്കാക്കലും പൂജ്യങ്ങൾ കണ്ടെത്തലും',
     title_en: 'Evaluating Polynomial Values and Determining Zeroes',
     title_ml: 'ബഹുപദത്തിന്റെ വില കാണലും പൂജ്യങ്ങൾ നിർണ്ണയിക്കലും',
     prompt_en: '<p>Given the polynomial $p(x) = 2x^2 - 7x + 3$:</p><ol><li>Calculate $p(0)$, $p(1)$, $p(2)$, and $p(3)$.</li><li>Identify which of the values $x = 1, 2, 3$ is a zero of $p(x)$.</li><li>Verify that $x = \\frac{1}{2}$ is also a zero of $p(x)$.</li></ol>',
@@ -355,7 +370,12 @@ $$\\text{അതിനാൽ } \\mathbf{x = \\frac{1}{2}} \\text{ എന്നത
   {
     id: 'w.m9.8.4',
     sec: '9.8.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.8.4.polynomial-operations-and-geometric-modeling',
+    tested_en: 'Algebraic modeling of physical volume and polynomial expansion',
+    tested_ml: 'ഭൗതിക വ്യാപ്തത്തിന്റെ ബീജഗണിത മോഡലിംഗും ബഹുപദ വികാസവും',
     title_en: 'Cardboard Box Volume Modeling and Polynomial Formulation',
     title_ml: 'പെട്ടിയുടെ വ്യാപ്ത മോഡലിംഗും ബഹുപദ രൂപീകരണവും',
     prompt_en: '<p>From each of the four corners of a square piece of tin of side $12\\text{ cm}$, equal squares of side $x\\text{ cm}$ are cut out, and the flaps are turned up to form an open rectangular box. (i) Write the polynomial expressions for the base length and the height of the box. (ii) Formulate the polynomial $V(x)$ representing the volume of the box in standard expanded form. (iii) State the degree of $V(x)$ and calculate the volume when $x = 2\\text{ cm}$.</p>',
@@ -390,5 +410,92 @@ $$\\text{ഘട്ടം 3: കൃതിയും } x = 2 \\text{ ആകുമ�
 $$V(x)\\text{-ന്റെ കൃതി: } \\mathbf{3} \\quad (\\text{മൂന്നാംകൃതി ബഹുപദം})$$
 $$x = 2\\text{ cm ആകുമ്പോൾ:}$$
 $$V(2) = (12 - 4) \\times (12 - 4) \\times 2 = 8 \\times 8 \\times 2 = \\mathbf{128\\text{ cm}^3}$$`
+  },
+
+  {
+    id: 'w.m9.8.5',
+    sec: '9.8.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.8.3.values-and-zeroes-of-polynomials',
+    tested_en: 'Determining coefficients from polynomial zeroes and finding remaining root',
+    tested_ml: 'പൂജ്യങ്ങൾ നൽകി ബഹുപദ ഗുണകങ്ങളും ശേഷിക്കുന്ന പൂജ്യവും കണ്ടെത്തൽ',
+    title_en: 'Finding Unknown Coefficients using Zeroes of Polynomial',
+    title_ml: 'ബഹുപദത്തിന്റെ പൂജ്യം നൽകി അജ്ഞാത ഗുണകം കണ്ടെത്തൽ',
+    prompt_en: '<p>If $x = 2$ and $x = -3$ are zeroes of the polynomial $p(x) = x^3 + a x^2 + b x - 6$, determine the numerical values of $a$ and $b$. Then find the third zero of $p(x)$.</p>',
+    prompt_ml: '<p>$x = 2$, $x = -3$ എന്നിവ $p(x) = x^3 + a x^2 + b x - 6$ എന്ന ബഹുപദത്തിന്റെ പൂജ്യങ്ങളാണെങ്കിൽ $a, b$ എന്നിവയുടെ സംഖ്യാവിലകൾ കണ്ടെത്തുക. തുടർന്ന് $p(x)$-ന്റെ മൂന്നാമത്തെ പൂജ്യം ഏതെന്ന് കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{Step 1: Using the zero } x = 2$$
+$$p(2) = 2^3 + a(2^2) + b(2) - 6 = 0$$
+$$8 + 4a + 2b - 6 = 0 \\implies 4a + 2b = -2 \\implies 2a + b = -1 \\quad \\text{--- (1)}$$
+
+$$\\text{Step 2: Using the zero } x = -3$$
+$$p(-3) = (-3)^3 + a(-3)^2 + b(-3) - 6 = 0$$
+$$-27 + 9a - 3b - 6 = 0 \\implies 9a - 3b = 33 \\implies 3a - b = 11 \\quad \\text{--- (2)}$$
+
+$$\\text{Step 3: Solving for } a \\text{ and } b$$
+$$\\text{Add (1) and (2): } (2a + b) + (3a - b) = -1 + 11 \\implies 5a = 10 \\implies \\mathbf{a = 2}$$
+$$\\text{From (1): } 2(2) + b = -1 \\implies 4 + b = -1 \\implies \\mathbf{b = -5}$$
+
+$$\\text{Step 4: Finding the Third Zero}$$
+$$p(x) = x^3 + 2x^2 - 5x - 6$$
+$$\\text{The product of roots for } x^3 + 2x^2 - 5x - 6 \\text{ is } -(-6) = 6.$$
+$$\\text{Let the third zero be } c: 2 \\times (-3) \\times c = 6 \\implies -6c = 6 \\implies \\mathbf{c = -1}.$$
+$$\\text{The third zero is } \\mathbf{x = -1}.$$`,
+    solution_ml: `$$\\text{ഘട്ടം 1: } x = 2 \\text{ നൽകുന്നു}$$
+$$p(2) = 8 + 4a + 2b - 6 = 0 \\implies 4a + 2b = -2 \\implies 2a + b = -1 \\quad \\text{--- (1)}$$
+
+$$\\text{ഘട്ടം 2: } x = -3 \\text{ നൽകുന്നു}$$
+$$p(-3) = -27 + 9a - 3b - 6 = 0 \\implies 9a - 3b = 33 \\implies 3a - b = 11 \\quad \\text{--- (2)}$$
+
+$$\\text{ഘട്ടം 3: } a, b \\text{ എന്നിവ കണ്ടെത്തുന്നു}$$
+$$\\text{സമവാക്യം (1)-ഉം (2)-ഉം കൂട്ടുന്നു:}$$
+$$5a = 10 \\implies \\mathbf{a = 2}$$
+$$2(2) + b = -1 \\implies 4 + b = -1 \\implies \\mathbf{b = -5}$$
+
+$$\\text{ഘട്ടം 4: മൂന്നാമത്തെ പൂജ്യം കാണൽ}$$
+$$p(x) = x^3 + 2x^2 - 5x - 6$$
+$$\\text{പൂജ്യങ്ങളുടെ ഗുണനഫലം } 6 \\text{ ആയതിനാൽ:}$$
+$$2 \\times (-3) \\times c = 6 \\implies -6c = 6 \\implies \\mathbf{c = -1}.$$
+$$\\text{മൂന്നാമത്തെ പൂജ്യം: } \\mathbf{x = -1}.$$`
+  },
+
+  {
+    id: 'w.m9.8.6',
+    sec: '9.8.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.8.4.polynomial-operations-and-geometric-modeling',
+    tested_en: 'Polynomial multiplication and geometric area subtraction',
+    tested_ml: 'ബഹുപദ ഗുണനവും ജ്യാമിതീയ പരപ്പളവ് കുറയ്ക്കലും',
+    title_en: 'Polynomial Multiplication, Simplification, and Area Formulation',
+    title_ml: 'ബഹുപദ ഗുണനവും ലഘൂകരണവും പരപ്പളവ് രൂപീകരണവും',
+    prompt_en: '<p>A rectangular swimming pool has length $(3x + 4)\\text{ m}$ and breadth $(2x - 1)\\text{ m}$. A tiled pathway of uniform width $1\\text{ m}$ surrounds the pool on all sides.<br>(a) Express the area of the swimming pool as a polynomial $P(x)$ in standard form.<br>(b) Express the total area including the pathway as a polynomial $T(x)$.<br>(c) Find the polynomial $A(x)$ representing the area of the pathway alone, and evaluate it when $x = 5\\text{ m}$.</p>',
+    prompt_ml: '<p>ഒരു ദീർഘചതുരാകൃതിയിലുള്ള നീന്തൽക്കുളത്തിന്റെ നീളം $(3x + 4)\\text{ മീറ്റർ}$, വീതി $(2x - 1)\\text{ മീറ്റർ}$ ആണ്. കുളത്തിന് ചുറ്റും $1\\text{ മീറ്റർ}$ വീതിയിൽ നടപ്പാത നിർമ്മിച്ചിരിക്കുന്നു.<br>(a) നീന്തൽക്കുളത്തിന്റെ പരപ്പളവ് $P(x)$ എന്ന ബഹുപദമായി എഴുതുക.<br>(b) നടപ്പാത ഉൾപ്പെടെയുള്ള ആകെ പരപ്പളവ് $T(x)$ എന്ന ബഹുപദമായി എഴുതുക.<br>(c) നടപ്പാതയുടെ മാത്രം പരപ്പളവ് $A(x)$ എന്ന ബഹുപദമായി കണ്ടെത്തുകയും, $x = 5\\text{ മീറ്റർ}$ ആകുമ്പോൾ നടപ്പാതയുടെ പരപ്പളവ് കണക്കാക്കുകയും ചെയ്യുക.</p>',
+    solution_en: `$$\\text{(a) Pool Area } P(x):$$
+$$P(x) = (3x + 4)(2x - 1) = 6x^2 - 3x + 8x - 4 = \\mathbf{6x^2 + 5x - 4}.$$
+
+$$\\text{(b) Outer dimensions including 1 m pathway on all sides:}$$
+$$\\text{Outer length } = (3x + 4) + 2(1) = 3x + 6$$
+$$\\text{Outer breadth } = (2x - 1) + 2(1) = 2x + 1$$
+$$T(x) = (3x + 6)(2x + 1) = 6x^2 + 3x + 12x + 6 = \\mathbf{6x^2 + 15x + 6}.$$
+
+$$\\text{(c) Pathway Area } A(x):$$
+$$A(x) = T(x) - P(x) = (6x^2 + 15x + 6) - (6x^2 + 5x - 4) = \\mathbf{10x + 10}.$$
+$$\\text{When } x = 5\\text{ m:}$$
+$$A(5) = 10(5) + 10 = 50 + 10 = \\mathbf{60\\text{ sq m}}.$$`,
+    solution_ml: `$$\\text{(a) കുളത്തിന്റെ പരപ്പളവ് } P(x):$$
+$$P(x) = (3x + 4)(2x - 1) = \\mathbf{6x^2 + 5x - 4}.$$
+
+$$\\text{(b) നടപ്പാത ഉൾപ്പെടെയുള്ള പുറം അളവുകൾ:}$$
+$$\\text{പുറം നീളം } = 3x + 4 + 2 = 3x + 6$$
+$$\\text{പുറം വീതി } = 2x - 1 + 2 = 2x + 1$$
+$$T(x) = (3x + 6)(2x + 1) = \\mathbf{6x^2 + 15x + 6}.$$
+
+$$\\text{(c) നടപ്പാതയുടെ പരപ്പളവ് } A(x):$$
+$$A(x) = T(x) - P(x) = (6x^2 + 15x + 6) - (6x^2 + 5x - 4) = \\mathbf{10x + 10}.$$
+$$x = 5\\text{ മീറ്റർ ആകുമ്പോൾ:}$$
+$$A(5) = 10(5) + 10 = \\mathbf{60\\text{ ചതുരശ്ര മീറ്റർ}}.$$`
   }
 );

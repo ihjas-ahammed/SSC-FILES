@@ -246,6 +246,9 @@ WRITTEN.push(
     id: 'w.m9.1.1',
     sec: '9.1.1',
     concept: 'm9.1.1.triangles-same-base-parallels',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Geometric Proof of Equal Area for Triangles Between Parallels',
     title_ml: 'സമാന്തരവരകൾക്കിടയിലെ ത്രികോണങ്ങളുടെ പരപ്പളവ് തുല്യമാണെന്ന് തെളിയിക്കൽ',
     prompt_en: '<p>Prove that two triangles having the same base and lying between the same parallel lines have equal area. If the common base is $8\\text{ cm}$ and the perpendicular distance between the parallel lines is $4.5\\text{ cm}$, calculate the numerical area of the triangles.</p>',
@@ -275,13 +278,18 @@ $$\\implies \\mathbf{\\text{Area}(\\triangle ABC) = \\text{Area}(\\triangle ABD)
 
 $$\\text{2. അളവ് കണക്കാക്കൽ:}$$
 $$b = 8\\text{ cm}, \\quad h = 4.5\\text{ cm}$$
-$$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 8 \\times 4.5 = 4 \\times 4.5 = \\mathbf{18\\text{ cm}^2}.$$`
+$$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 8 \\times 4.5 = 4 \\times 4.5 = \\mathbf{18\\text{ cm}^2}.$$`,
+    tested_en: 'Equal area theorem for triangles on same base between same parallels.',
+    tested_ml: 'ഒരേ പാദവും ഒരേ സമാന്തരവരകൾക്കിടയിലുമുള്ള ത്രികോണങ്ങളുടെ പരപ്പളവ് തുല്യതാ സിദ്ധാന്തം.'
   },
 
   {
     id: 'w.m9.1.2',
     sec: '9.1.2',
     concept: 'm9.1.2.triangles-same-height-base-split',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Area Division of a Triangle by Interior Point on a Median',
     title_ml: 'ത്രികോണത്തിലെ മധ്യരേഖയിലെ ബിന്ദു വഴിയുള്ള പരപ്പളവ് വിഭജനം',
     prompt_en: '<p>In $\\triangle ABC$, $AD$ is a median to side $BC$. $P$ is a point on $AD$ such that $AP : PD = 2 : 1$. If the total area of $\\triangle ABC$ is $72\\text{ cm}^2$, find: (a) the area of $\\triangle ABD$, (b) the area of $\\triangle PBD$, and (c) the area of $\\triangle PBC$.</p>',
@@ -313,13 +321,18 @@ $$\\text{Area}(\\triangle PBD) = \\frac{1}{3} \\times 36 = \\mathbf{12\\text{ cm
 
 $$\\text{(c) } \\triangle PBC\\text{-ന്റെ പരപ്പളവ്:}$$
 $$\\triangle ADC\\text{-ലും ഇതുപോലെ } \\text{Area}(\\triangle PCD) = 12\\text{ cm}^2 \\text{ ലഭിക്കുന്നു.}$$
-$$\\text{Area}(\\triangle PBC) = 12 + 12 = \\mathbf{24\\text{ cm}^2}.$$`
+$$\\text{Area}(\\triangle PBC) = 12 + 12 = \\mathbf{24\\text{ cm}^2}.$$`,
+    tested_en: 'Median area bisection and internal point ratio partitioning of triangle area.',
+    tested_ml: 'മധ്യരേഖ പരപ്പളവിനെ പകുതിയാക്കുന്നതും ബിന്ദുവിന്റെ അംശബന്ധ വിഭജനവും.'
   },
 
   {
     id: 'w.m9.1.3',
     sec: '9.1.3',
     concept: 'm9.1.3.transforming-quadrilaterals',
+    type: 'written',
+    marks: 4,
+    time: 200,
     title_en: 'Construction and Justification for Converting a Quadrilateral into a Triangle',
     title_ml: 'ചതുർഭുജത്തെ ത്രികോണമാക്കുന്നതിന്റെ നിർമ്മിതിയും സാധൂകരണവും',
     prompt_en: '<p>Explain in detail the step-by-step geometric construction to convert a given quadrilateral $ABCD$ into a triangle of equal area having side $AB$ along its base. State clearly why the area of the constructed triangle equals the area of the quadrilateral.</p>',
@@ -357,13 +370,18 @@ $$\\text{ചതുർഭുജം } ABCD\\text{-യുടെ പരപ്പള�
 $$\\text{Area}(ABCD) = \\text{Area}(\\triangle ABC) + \\text{Area}(\\triangle ACD)$$
 $$= \\text{Area}(\\triangle ABC) + \\text{Area}(\\triangle ACE)$$
 $$= \\mathbf{\\text{Area}(\\triangle EBC)}.$$
-$$\\text{അങ്ങനെ പരപ്പളവ് ഒട്ടും മാറാതെ ത്രികോണമായി മാറുന്നു.}$$`
+$$\\text{അങ്ങനെ പരപ്പളവ് ഒട്ടും മാറാതെ ത്രികോണമായി മാറുന്നു.}$$`,
+    tested_en: 'Geometric construction and proof for transforming quadrilateral into equal-area triangle.',
+    tested_ml: 'ചതുർഭുജത്തെ തുല്യ പരപ്പളവുള്ള ത്രികോണമാക്കുന്ന നിർമ്മിതിയും തെളിവും.'
   },
 
   {
     id: 'w.m9.1.4',
     sec: '9.1.4',
     concept: 'm9.1.4.trapezium-and-land-division',
+    type: 'written',
+    marks: 4,
+    time: 200,
     title_en: 'Boundary Straightening Application of Trapezium Diagonals',
     title_ml: 'ലംബക തത്വമുപയോഗിച്ച് ഭൂമിയുടെ അതിർത്തി നേരെയാക്കൽ',
     prompt_en: '<p>Two farmers, Joy and Rahim, have adjacent plots of land separated by a crooked two-segment boundary $APB$ between boundary markers $A$ and $B$. Show geometrically how to replace the boundary $APB$ with a single straight boundary $AQ$ from post $A$ to the opposite boundary line such that neither farmer gains or loses any land.</p>',
@@ -400,6 +418,110 @@ $$\\implies \\text{Area}(\\triangle APB) = \\text{Area}(\\triangle AQB).$$
 $$AQ \\text{ എന്ന വര } PB\\text{-നെ } K\\text{-ൽ മുറിക്കുന്നുവെന്നിരിക്കട്ടെ:}$$
 $$\\text{പൊതുവായ } \\triangle AKB \\text{ കുറയ്ക്കുമ്പോൾ:}$$
 $$\\mathbf{\\text{Area}(\\triangle APK) = \\text{Area}(\\triangle BKQ)}.$$
-$$\\text{അതായത്, ഒരാൾ വിട്ടുകൊടുക്കുന്ന ഭൂമിയുടെ പരപ്പളവ് മറ്റേയാൾക്ക് നൽകുന്ന ഭൂമിയുടെ പരപ്പളവിന് തുല്യമാണ്. ഇരുവരുടെയും ഭൂമിയുടെ പരപ്പളവ് പൂർണ്ണമായും സംരക്ഷിക്കപ്പെടുന്നു.}$$`
+$$\\text{അതായത്, ഒരാൾ വിട്ടുകൊടുക്കുന്ന ഭൂമിയുടെ പരപ്പളവ് മറ്റേയാൾക്ക് നൽകുന്ന ഭൂമിയുടെ പരപ്പളവിന് തുല്യമാണ്. ഇരുവരുടെയും ഭൂമിയുടെ പരപ്പളവ് പൂർണ്ണമായും സംരക്ഷിക്കപ്പെടുന്നു.}$$`,
+    tested_en: 'Application of parallel shear lines to straighten land boundaries without area change.',
+    tested_ml: 'പരപ്പളവ് മാറ്റാതെ സമാന്തരവരകൾ ഉപയോഗിച്ച് അതിർത്തി നേരെയാക്കൽ.'
+  },
+
+  {
+    id: 'w.m9.1.5',
+    sec: '9.1.2',
+    concept: 'm9.1.2.triangles-same-height-base-split',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Area Ratio from Base Partition and Median Midpoint',
+    title_ml: 'പാദ വിഭജനവും പരപ്പളവ് അംശബന്ധവും',
+    prompt_en: `<p>In $\\triangle ABC$, point $D$ lies on base $BC$ such that $BD : DC = 3 : 2$. Point $E$ is the midpoint of segment $AD$.</p>
+      <ol type="a">
+        <li>If the total area of $\\triangle ABC$ is $60\\text{ cm}^2$, calculate the areas of $\\triangle ABD$ and $\\triangle ADC$.</li>
+        <li>Find the area of $\\triangle EBD$ and $\\triangle EBC$.</li>
+        <li>What fraction of the total area of $\\triangle ABC$ is the area of $\\triangle ABE$?</li>
+      </ol>`,
+    prompt_ml: `<p>$\\triangle ABC$-ൽ $D$ എന്ന ബിന്ദു പാദമായ $BC$-യെ $BD : DC = 3 : 2$ എന്ന അംശബന്ധത്തിൽ വിഭജിക്കുന്നു. $AD$ എന്ന വരയുടെ മധ്യബിന്ദുവാണ് $E$.</p>
+      <ol type="a">
+        <li>$\\triangle ABC$-യുടെ ആകെ പരപ്പളവ് $60\\text{ cm}^2$ ആണെങ്കിൽ $\\triangle ABD$, $\\triangle ADC$ എന്നിവയുടെ പരപ്പളവ് കാണുക.</li>
+        <li>$\\triangle EBD$, $\\triangle EBC$ എന്നിവയുടെ പരപ്പളവ് കണ്ടെത്തുക.</li>
+        <li>$\\triangle ABE$-യുടെ പരപ്പളവ് $\\triangle ABC$-യുടെ ആകെ പരപ്പളവിന്റെ എത്ര ഭാഗമാണ്?</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Triangles $\\triangle ABD$ and $\\triangle ADC$ share the same altitude from vertex $A$.<br>
+          Ratio of areas $= BD : DC = 3 : 2$. Total parts $= 3 + 2 = 5$.<br>
+          $$\\text{Area}(\\triangle ABD) = \\frac{3}{5} \\times 60 = \\mathbf{36\\text{ cm}^2}$$
+          $$\\text{Area}(\\triangle ADC) = \\frac{2}{5} \\times 60 = \\mathbf{24\\text{ cm}^2}$$</li>
+        <li>$E$ is the midpoint of $AD$ ($AE = ED$).<br>
+          In $\\triangle ABD$, median $BE$ divides its area equally into two halves:<br>
+          $$\\text{Area}(\\triangle EBD) = \\frac{1}{2} \\times \\text{Area}(\\triangle ABD) = \\frac{1}{2} \\times 36 = \\mathbf{18\\text{ cm}^2}$$
+          Similarly, in $\\triangle ADC$, median $CE$ bisects its area:<br>
+          $$\\text{Area}(\\triangle ECD) = \\frac{1}{2} \\times \\text{Area}(\\triangle ADC) = \\frac{1}{2} \\times 24 = 12\\text{ cm}^2$$
+          $$\\text{Area}(\\triangle EBC) = \\text{Area}(\\triangle EBD) + \\text{Area}(\\triangle ECD) = 18 + 12 = \\mathbf{30\\text{ cm}^2}$$</li>
+        <li>$$\\text{Area}(\\triangle ABE) = \\frac{1}{2} \\times \\text{Area}(\\triangle ABD) = 18\\text{ cm}^2$$
+          $$\\text{Fraction} = \\frac{18}{60} = \\mathbf{\\frac{3}{10}}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>$\\triangle ABD$, $\\triangle ADC$ എന്നിവയ്ക്ക് $A$-യിൽ നിന്നുള്ള ലംബ ഉയരം തുല്യമാണ്.<br>
+          പരപ്പളവുകളുടെ അംശബന്ധം $= 3 : 2$. ആകെ ഭാഗം $= 3 + 2 = 5$.<br>
+          $$\\text{Area}(\\triangle ABD) = \\frac{3}{5} \\times 60 = \\mathbf{36\\text{ cm}^2}$$
+          $$\\text{Area}(\\triangle ADC) = \\frac{2}{5} \\times 60 = \\mathbf{24\\text{ cm}^2}$$</li>
+        <li>$E$ എന്നത് $AD$-യുടെ മധ്യബിന്ദുവാണ് ($AE = ED$).<br>
+          $\\triangle ABD$-യിൽ മധ്യരേഖയായ $BE$ പരപ്പളവിനെ തുല്യമായി പകുക്കുന്നു:<br>
+          $$\\text{Area}(\\triangle EBD) = \\frac{36}{2} = \\mathbf{18\\text{ cm}^2}$$
+          ഇതുപോലെ $\\triangle ADC$-യിൽ:<br>
+          $$\\text{Area}(\\triangle ECD) = \\frac{24}{2} = 12\\text{ cm}^2$$
+          $$\\text{Area}(\\triangle EBC) = 18 + 12 = \\mathbf{30\\text{ cm}^2}$$</li>
+        <li>$$\\text{Area}(\\triangle ABE) = \\frac{36}{2} = 18\\text{ cm}^2$$
+          $$\\text{ഭാഗം} = \\frac{18}{60} = \\mathbf{\\frac{3}{10}}$$</li>
+      </ol>`,
+    tested_en: 'Multi-stage area division by base ratio and median midpoint.',
+    tested_ml: 'പാദ അംശബന്ധവും മധ്യബിന്ദുവും വഴിയുള്ള ഘട്ടങ്ങളായുള്ള പരപ്പളവ് വിഭജനം.'
+  },
+
+  {
+    id: 'w.m9.1.6',
+    sec: '9.1.4',
+    concept: 'm9.1.4.trapezium-and-land-division',
+    type: 'written',
+    marks: 4,
+    time: 210,
+    title_en: 'Trapezium Diagonal Intersection and Area Ratio',
+    title_ml: 'ലംബകത്തിലെ വികർണ്ണങ്ങളും പരപ്പളവുകളുടെ ഗുണനഫലവും',
+    prompt_en: `<p>In trapezium $ABCD$, parallel sides are $AB$ and $CD$. The diagonals $AC$ and $BD$ intersect at point $O$.</p>
+      <ol type="a">
+        <li>Prove that the two triangles along the non-parallel sides have equal area: $\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC)$.</li>
+        <li>If $\\text{Area}(\\triangle COD) = 9\\text{ cm}^2$ and $\\text{Area}(\\triangle AOB) = 25\\text{ cm}^2$, find the area of $\\triangle AOD$ and $\\triangle BOC$ using the theorem $[\text{Area}(\\triangle AOD)]^2 = \\text{Area}(\\triangle AOB) \\times \\text{Area}(\\triangle COD)$.</li>
+        <li>Calculate the total area of trapezium $ABCD$.</li>
+      </ol>`,
+    prompt_ml: `<p>ലംബകം $ABCD$-യിൽ സമാന്തരവശങ്ങൾ $AB, CD$ എന്നിവയാണ്. വികർണ്ണങ്ങൾ $AC, BD$ എന്നിവ $O$-ൽ ഖണ്ഡിക്കുന്നു.</p>
+      <ol type="a">
+        <li>പാർശ്വത്രികോണങ്ങളായ $\\triangle AOD, \\triangle BOC$ എന്നിവയുടെ പരപ്പളവുകൾ തുല്യമാണെന്ന് തെളിയിക്കുക.</li>
+        <li>$\\text{Area}(\\triangle COD) = 9\\text{ cm}^2$, $\\text{Area}(\\triangle AOB) = 25\\text{ cm}^2$ ആയാൽ, $[\\text{Area}(\\triangle AOD)]^2 = \\text{Area}(\\triangle AOB) \\times \\text{Area}(\\triangle COD)$ എന്ന തത്വമുപയോഗിച്ച് $\\triangle AOD, \\triangle BOC$ എന്നിവയുടെ പരപ്പളവ് കാണുക.</li>
+        <li>ലംബകം $ABCD$-യുടെ ആകെ പരപ്പളവ് കണക്കാക്കുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li><b>Proof:</b><br>
+          Triangles $\\triangle ADC$ and $\\triangle BDC$ share the common base $CD$ and lie between the same parallel lines $AB \\parallel CD$.<br>
+          $$\\text{Area}(\\triangle ADC) = \\text{Area}(\\triangle BDC)$$
+          Subtracting the common area of $\\triangle COD$ from both sides:<br>
+          $$\\text{Area}(\\triangle ADC) - \\text{Area}(\\triangle COD) = \\text{Area}(\\triangle BDC) - \\text{Area}(\\triangle COD)$$
+          $$\\mathbf{\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC)}$$</li>
+        <li>Let $\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC) = x$.<br>
+          $$x^2 = \\text{Area}(\\triangle AOB) \\times \\text{Area}(\\triangle COD) = 25 \\times 9 = 225$$
+          $$x = \\sqrt{225} = \\mathbf{15\\text{ cm}^2}$$
+          $$\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC) = \\mathbf{15\\text{ cm}^2}$$</li>
+        <li>$$\\text{Total Area}(ABCD) = 25 + 9 + 15 + 15 = \\mathbf{64\\text{ cm}^2}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li><b>തെളിവ്:</b><br>
+          $\\triangle ADC, \\triangle BDC$ എന്നീ ത്രികോണങ്ങൾക്ക് $CD$ എന്ന ഒരേ പാദമാണുള്ളത്. ഇവ $AB \\parallel CD$ എന്ന ഒരേ സമാന്തരവരകൾക്കിടയിലാണ്.<br>
+          $$\\text{Area}(\\triangle ADC) = \\text{Area}(\\triangle BDC)$$
+          ഇരുവശങ്ങളിൽ നിന്നും പൊതുവായ $\\triangle COD$-യുടെ പരപ്പളവ് കുറച്ചാൽ:<br>
+          $$\\mathbf{\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC)}$$</li>
+        <li>$\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC) = x$ എന്നിരിക്കട്ടെ.<br>
+          $$x^2 = 25 \\times 9 = 225 \\implies x = \\sqrt{225} = \\mathbf{15\\text{ cm}^2}$$
+          $$\\text{Area}(\\triangle AOD) = \\text{Area}(\\triangle BOC) = \\mathbf{15\\text{ cm}^2}$$</li>
+        <li>$$\\text{ആകെ പരപ്പളവ്} = 25 + 9 + 15 + 15 = \\mathbf{64\\text{ cm}^2}$$</li>
+      </ol>`,
+    tested_en: 'Trapezium diagonal properties, side-triangle equality, and geometric mean product.',
+    tested_ml: 'ലംബകത്തിലെ പാർശ്വത്രികോണങ്ങളുടെ തുല്യതയും വികർണ്ണ പരപ്പളവ് ഗുണനഫലവും.'
   }
 );

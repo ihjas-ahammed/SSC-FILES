@@ -237,6 +237,8 @@ QUESTIONS.push(
     id: 'w.m8.5.1',
     sec: '8.5.1',
     concept: 'm8.5.1.interest-on-interest',
+    marks: 4,
+    time: 180,
     title_en: 'Comparing Simple Interest and Compound Interest',
     title_ml: 'ലളിതപലിശയും കൂട്ടുപലിശയും താരതമ്യം ചെയ്യൽ',
     prompt_en: `<p>An amount of ₹15,000 is deposited for 2 years at 10% per annum.</p>
@@ -270,13 +272,17 @@ QUESTIONS.push(
         <li>വ്യത്യാസം:
           $$\\text{വ്യത്യാസം} = 3150 - 3000 = \\mathbf{₹150}$$
           (ഒന്നാം വർഷത്തെ പലിശയായ ₹1,500-ന്റെ 10% പലിശയാണ് ഈ ₹150).</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Comparison between simple and compound interest over two years.',
+    tested_ml: 'രണ്ട് വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും തമ്മിലുള്ള താരതമ്യം.'
   },
 
   {
     id: 'w.m8.5.2',
     sec: '8.5.2',
     concept: 'm8.5.2.compound-interest-formula',
+    marks: 4,
+    time: 180,
     title_en: 'Calculating Total Amount and Compound Interest',
     title_ml: 'തുകയും കൂട്ടുപലിശയും കാണൽ',
     prompt_en: `<p>Manu deposited ₹25,000 in a bank which pays 8% interest compounded annually.</p>
@@ -302,13 +308,17 @@ QUESTIONS.push(
           $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{₹29,160}$$</li>
         <li>കൂട്ടുപലിശ:
           $$CI = A - P = 29160 - 25000 = \\mathbf{₹4,160}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Calculating maturity amount and compound interest using annual compounding formula.',
+    tested_ml: 'വാർഷിക കൂട്ടുപലിശ സൂത്രവാക്യം ഉപയോഗിച്ച് തുകയും പലിശയും കാണൽ.'
   },
 
   {
     id: 'w.m8.5.3',
     sec: '8.5.3',
     concept: 'm8.5.3.changing-compounding-periods',
+    marks: 4,
+    time: 180,
     title_en: 'Deposit with Half-Yearly Compounding',
     title_ml: 'അർദ്ധവാർഷിക കൂട്ടുപലിശ കണക്കാക്കൽ',
     prompt_en: `<p>A sum of ₹20,000 is deposited for $1\\frac{1}{2}$ years at 10% per annum compounded half-yearly.</p>
@@ -340,13 +350,17 @@ QUESTIONS.push(
         <li>ആകെ തുകയും പലിശയും:
           $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{₹23,152.50}$$
           $$CI = A - P = 23152.50 - 20000 = \\mathbf{₹3,152.50}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Computing half-yearly compounding rate, terms, and final amount.',
+    tested_ml: 'അർദ്ധവാർഷിക കൂട്ടുപലിശയിൽ പലിശനിരക്കും തുകയും കണക്കാക്കൽ.'
   },
 
   {
     id: 'w.m8.5.4',
     sec: '8.5.4',
     concept: 'm8.5.4.growth-and-depreciation',
+    marks: 4,
+    time: 180,
     title_en: 'Vehicle Depreciation & Population Growth',
     title_ml: 'വാഹനത്തിന്റെ മൂല്യത്തകർച്ചയും ജനസംഖ്യാ വർദ്ധനവും',
     prompt_en: `<ol type="a">
@@ -372,6 +386,98 @@ QUESTIONS.push(
         <li>ജനസംഖ്യാ വർദ്ധനവ്:
           $$P_2 = P_0\\left(1 + \\frac{r}{100}\\right)^2 = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2$$
           $$P_2 = 8000 \\times \\frac{441}{400} = 20 \\times 441 = \\mathbf{8,820\\text{ പേർ}}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Applications of compounding to price depreciation and population expansion.',
+    tested_ml: 'മൂല്യത്തകർച്ചയിലും ജനസംഖ്യാ വർദ്ധനവിലും കൂട്ടുപലിശ തത്വത്തിന്റെ പ്രയോഗം.'
+  },
+
+  {
+    id: 'w.m8.5.5',
+    sec: '8.5.3',
+    concept: 'm8.5.3.changing-compounding-periods',
+    marks: 4,
+    time: 180,
+    title_en: 'Quarterly Compounding and Fixed Deposits',
+    title_ml: 'പാദവാർഷിക കൂട്ടുപലിശ കണക്കാക്കൽ',
+    prompt_en: `<p>Rani deposited ₹16,000 in a financial firm which pays interest at 12% per annum compounded quarterly for 9 months.</p>
+      <ol type="a">
+        <li>What is the quarterly rate of interest?</li>
+        <li>How many compounding periods are there in 9 months?</li>
+        <li>Find the amount she will receive on maturity and the total compound interest earned.</li>
+      </ol>`,
+    prompt_ml: `<p>റാണി ഒരു ധനകാര്യ സ്ഥാപനത്തിൽ ₹16,000 രൂപ 12% വാർഷിക നിരക്കിൽ 9 മാസത്തേക്ക് പാദവാർഷിക കൂട്ടുപലിശ പ്രകാരം നിക്ഷേപിച്ചു.</p>
+      <ol type="a">
+        <li>ഒരു പാദവർഷത്തെ (3 മാസത്തെ) പലിശനിരക്ക് എത്ര?</li>
+        <li>9 മാസത്തിൽ ആകെ എത്ര തവണകളുണ്ട്?</li>
+        <li>കാലാവധിയിൽ റാണിക്ക് ലഭിക്കുന്ന ആകെ തുകയും കൂട്ടുപലിശയും കണ്ടെത്തുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Quarterly rate:
+          $$\\frac{r}{4} = \\frac{12\\%}{4} = \\mathbf{3\\%}$$</li>
+        <li>Number of periods:
+          $$\\frac{9\\text{ months}}{3\\text{ months}} = \\mathbf{3\\text{ quarters}}$$</li>
+        <li>Maturity amount:
+          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{₹17,483.63}$$
+          Compound Interest:
+          $$CI = 17483.63 - 16000 = \\mathbf{₹1,483.63}$$
+        </li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>പാദവർഷ നിരക്ക്:
+          $$\\frac{r}{4} = \\frac{12\\%}{4} = \\mathbf{3\\%}$$</li>
+        <li>തവണകളുടെ എണ്ണം:
+          $$\\frac{9\\text{ മാസം}}{3\\text{ മാസം}} = \\mathbf{3\\text{ പാദങ്ങൾ}}$$</li>
+        <li>ലഭിക്കുന്ന തുക:
+          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{₹17,483.63}$$
+          കൂട്ടുപലിശ:
+          $$CI = 17483.63 - 16000 = \\mathbf{₹1,483.63}$$
+        </li>
+      </ol>`,
+    tested_en: 'Calculating compound interest for quarterly compounding period.',
+    tested_ml: 'പാദവാർഷിക കൂട്ടുപലിശ കണക്കാക്കൽ.'
+  },
+
+  {
+    id: 'w.m8.5.6',
+    sec: '8.5.4',
+    concept: 'm8.5.4.growth-and-depreciation',
+    marks: 4,
+    time: 180,
+    title_en: 'Bacterial Colony Growth and Compound Appreciation',
+    title_ml: 'ബാക്ടീരിയകളുടെ വളർച്ചയും നിരക്കും',
+    prompt_en: `<p>In a laboratory experiment, the count of bacteria in a culture was initially $10,000$. It was observed to increase at the rate of $10\%$ per hour.</p>
+      <ol type="a">
+        <li>Find the bacteria count after 2 hours.</li>
+        <li>Find the bacteria count after 3 hours.</li>
+        <li>By what percentage has the colony increased after 2 hours compared to the initial count?</li>
+      </ol>`,
+    prompt_ml: `<p>ഒരു ലബോറട്ടറി പരീക്ഷണത്തിൽ തുടക്കത്തിൽ ബാക്ടീരിയകളുടെ എണ്ണം $10,000$ ആയിരുന്നു. ഇത് പ്രതിമണിക്കൂറിൽ $10\%$ നിരക്കിൽ വർദ്ധിക്കുന്നതായി കണ്ടു.</p>
+      <ol type="a">
+        <li>2 മണിക്കൂറിനു ശേഷം ബാക്ടീരിയകളുടെ എണ്ണം കണ്ടെത്തുക.</li>
+        <li>3 മണിക്കൂറിനു ശേഷമുള്ള ബാക്ടീരിയകളുടെ എണ്ണം കണ്ടെത്തുക.</li>
+        <li>2 മണിക്കൂറിനു ശേഷം ആകെ ഉണ്ടായ വർദ്ധനവ് എത്ര ശതമാനമാണ്?</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Bacteria count after 2 hours:
+          $$N_2 = 10000\\left(1 + \\frac{10}{100}\\right)^2 = 10000 \\times (1.1)^2 = 10000 \\times 1.21 = \\mathbf{12,100}$$</li>
+        <li>Bacteria count after 3 hours:
+          $$N_3 = 10000\\left(1 + \\frac{10}{100}\\right)^3 = 10000 \\times 1.331 = \\mathbf{13,310}$$</li>
+        <li>Net percentage increase after 2 hours:
+          $$\\text{Increase} = 12100 - 10000 = 2100$$
+          $$\\text{Percentage} = \\frac{2100}{10000} \\times 100\\% = \\mathbf{21\\%}$$
+          (Note that it is $21\\%$, not $20\\%$, because of compounding growth).</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>2 മണിക്കൂറിനു ശേഷം ബാക്ടീരിയകളുടെ എണ്ണം:
+          $$N_2 = 10000\\left(1 + \\frac{10}{100}\\right)^2 = 10000 \\times (1.1)^2 = 10000 \\times 1.21 = \\mathbf{12,100}$$</li>
+        <li>3 മണിക്കൂറിനു ശേഷം ബാക്ടീരിയകളുടെ എണ്ണം:
+          $$N_3 = 10000\\left(1 + \\frac{10}{100}\\right)^3 = 10000 \\times 1.331 = \\mathbf{13,310}$$</li>
+        <li>2 മണിക്കൂറിനു ശേഷമുള്ള ശതമാന വർദ്ധനവ്:
+          $$\\text{വർദ്ധനവ്} = 12100 - 10000 = 2100$$
+          $$\\text{ശതമാനം} = \\frac{2100}{10000} \\times 100\\% = \\mathbf{21\\%}$$
+          (കൂട്ടുപലിശ തത്വപ്രകാരം വർദ്ധനവ് $20\\%$-ന് പകരം $21\\%$ ആകുന്നു).</li>
+      </ol>`,
+    tested_en: 'Application of compound growth formula to biological exponential growth.',
+    tested_ml: 'കൂട്ടുപലിശ തത്വം ഉപയോഗിച്ച് ബാക്ടീരിയ വളർച്ചാ നിരക്ക് കണക്കാക്കൽ.'
   }
 );

@@ -244,6 +244,7 @@ QUESTIONS.push(
     concept: 'm8.3.1.square-of-sum',
     tests: ['m8.3.1.square-of-sum'],
     marks: 4,
+    time: 180,
     title_en: 'Properties of Squares of Odd Numbers',
     title_ml: 'ഒറ്റസംഖ്യകളുടെ വർഗ്ഗങ്ങളുടെ സവിശേഷതകൾ',
     prompt_en: `<p>Any odd number can be written algebraically in the form $2n + 1$, where $n$ is a whole number ($0, 1, 2, \\dots$).</p>
@@ -296,6 +297,8 @@ QUESTIONS.push(
           ഇത് 8-ന്റെ ഗുണിതത്തേക്കാൾ 1 കൂടുതലാണ്. അതിനാൽ ഏത് ഒറ്റസംഖ്യയുടെയും വർഗ്ഗത്തെ 8 കൊണ്ട് ഹരിച്ചാൽ <b>ശിഷ്ടം 1 ലഭിക്കുന്നു</b>.
         </li>
       </ol>`,
+    tested_en: 'Algebraic proof that squares of odd numbers leave remainder 1 on division by 8.',
+    tested_ml: 'ഒറ്റസംഖ്യകളുടെ വർഗ്ഗത്തെ 8 കൊണ്ട് ഹരിച്ചാൽ ശിഷ്ടം 1 ആകുമെന്ന ബീജഗണിത തെളിവ്.',
     trap_en: 'Make sure to explain why n(n+1) is even in part (d) to show divisibility by 8.',
     trap_ml: '8 കൊണ്ടുള്ള ഹരണത്തിൽ n(n+1) എന്നത് ഇരട്ടസംഖ്യയാണെന്ന കാര്യം വ്യക്തമാക്കാൻ മറക്കരുത്.'
   },
@@ -306,6 +309,7 @@ QUESTIONS.push(
     concept: 'm8.3.2.square-of-diff',
     tests: ['m8.3.2.square-of-diff'],
     marks: 4,
+    time: 180,
     title_en: 'Mental Squaring and Algebraic Patterns using (x - y)²',
     title_ml: '(x - y)² ഉപയോഗിച്ചുള്ള മാനസിക ഗണനവും ബീജഗണിത രീതികളും',
     prompt_en: `<ol type="a">
@@ -376,6 +380,8 @@ QUESTIONS.push(
           $$\\mathbf{x^2 - 2x = (x - 1)^2 - 1}.$$
         </li>
       </ol>`,
+    tested_en: 'Mental squaring and algebraic generalization of (x - 1)^2 - 1 = x^2 - 2x.',
+    tested_ml: 'മാനസിക വർഗ്ഗീകരണവും (x - 1)^2 - 1 = x^2 - 2x എന്ന ബീജഗണിത പൊതുനിയമവും.',
     trap_en: 'Be careful with decimals: (0.3)² is 0.09, not 0.9.',
     trap_ml: 'ദശാംശങ്ങളിൽ ശ്രദ്ധിക്കുക: (0.3)² എന്നത് 0.09 ആണ്, 0.9 അല്ല.'
   },
@@ -386,6 +392,7 @@ QUESTIONS.push(
     concept: 'm8.3.3.sum-diff-relations',
     tests: ['m8.3.3.sum-diff-relations'],
     marks: 4,
+    time: 200,
     title_en: 'Writing Multiples of 8 as Difference of Two Squares',
     title_ml: '8-ന്റെ ഗുണിതങ്ങളെ രണ്ട് വർഗ്ഗങ്ങളുടെ വ്യത്യാസമായി രണ്ട് രീതിയിൽ എഴുതൽ',
     prompt_en: `<p>Some numbers can be written as the difference of two perfect squares in two different ways:</p>
@@ -458,6 +465,8 @@ QUESTIONS.push(
           $$78 \\times 22 = 50^2 - 28^2 = 2500 - 784 = \\mathbf{1716}.$$
         </li>
       </ol>`,
+    tested_en: 'Expressing multiples of 8 as differences of two squares in multiple ways.',
+    tested_ml: '8-ന്റെ ഗുണിതങ്ങളെ രണ്ട് രീതികളിൽ വർഗ്ഗവ്യത്യാസമായി എഴുതൽ.',
     trap_en: 'Make sure the two factors are either both even or both odd so that their half-sum and half-difference are whole numbers.',
     trap_ml: 'തുകയുടെയും വ്യത്യാസത്തിന്റെയും പകുതി പൂർണ്ണസംഖ്യകളാകാൻ രണ്ട് ഘടകങ്ങളും ഇരട്ടസംഖ്യകളോ അല്ലെങ്കിൽ രണ്ട് ഘടകങ്ങളും ഒറ്റസംഖ്യകളോ ആയിരിക്കണം.'
   },
@@ -468,6 +477,7 @@ QUESTIONS.push(
     concept: 'm8.3.4.diff-of-squares',
     tests: ['m8.3.4.diff-of-squares'],
     marks: 4,
+    time: 180,
     title_en: 'Difference of Two Squares & Geometric Comparison',
     title_ml: 'വർഗ്ഗങ്ങളുടെ വ്യത്യാസവും ജ്യാമിതീയ താരതമ്യവും',
     prompt_en: `<ol type="a">
@@ -546,6 +556,8 @@ QUESTIONS.push(
           </ol>
         </li>
       </ol>`,
+    tested_en: 'Geometric comparison of areas of square and rectangle with equal perimeters.',
+    tested_ml: 'തുല്യ ചുറ്റളവുള്ള സമചതുരത്തിന്റെയും ചതുരത്തിന്റെയും പരപ്പളവുകളുടെ താരതമ്യം.',
     trap_en: 'Remember that shapes with the same perimeter do not necessarily have the same area: the square maximizes area.',
     trap_ml: 'തുല്യ ചുറ്റളവുള്ള രൂപങ്ങൾക്ക് ഒരേ പരപ്പളവായിരിക്കില്ല; സമചതുരത്തിനാണ് എപ്പോഴും കൂടുതൽ പരപ്പളവ് ലഭിക്കുക.'
   },
@@ -556,6 +568,7 @@ QUESTIONS.push(
     concept: 'm8.3.5.product-of-binomials',
     tests: ['m8.3.5.product-of-binomials'],
     marks: 4,
+    time: 200,
     title_en: 'Calendar Number Grid Algebraic Puzzles',
     title_ml: 'കലണ്ടറിലെ സംഖ്യാകട്ടകളിലെ ബീജഗണിത സമസ്യകൾ',
     prompt_en: `<p>In any calendar month, consider a square block of $9$ dates ($3 \\times 3$ grid):</p>
@@ -616,7 +629,72 @@ QUESTIONS.push(
           കോണോടുകോൺ ഗുണനഫലങ്ങളുടെ വ്യത്യാസം എപ്പോഴും കൃത്യം <b>28</b> ആയിരിക്കും!
         </li>
       </ol>`,
+    tested_en: 'Algebraic identities applied to calendar number matrices.',
+    tested_ml: 'കലണ്ടറിലെ സംഖ്യാകട്ടകളിൽ ബീജഗണിത സമവാക്യങ്ങൾ പ്രയോഗിക്കൽ.',
     trap_en: 'Be careful with signs when subtracting: -(-49) becomes +49, so -1 + 49 = 48.',
     trap_ml: 'കുറയ്ക്കുമ്പോൾ ചിഹ്നങ്ങളിൽ തെറ്റുപറ്റരുത്: -(-49) എന്നത് +49 ആയി മാറി -1 + 49 = 48 ലഭിക്കുന്നു.'
+  },
+
+  {
+    id: 'w.m8.3.6',
+    sec: '8.3.3',
+    concept: 'm8.3.3.sum-diff-relations',
+    tests: ['m8.3.3.sum-diff-relations'],
+    marks: 4,
+    time: 180,
+    title_en: 'Four Times Product Identity and Rapid Squaring',
+    title_ml: 'നാലിരട്ടി ഗുണനഫല സമവാക്യവും വേഗത്തിലുള്ള വർഗ്ഗീകരണവും',
+    prompt_en: `<p>Consider the identity relating the square of sum and square of difference:</p>
+      $$(x + y)^2 - (x - y)^2 = 4xy$$
+      <ol type="a">
+        <li>Prove this identity by expanding both $(x + y)^2$ and $(x - y)^2$.</li>
+        <li>Use this identity to mentally calculate $105^2 - 95^2$.</li>
+        <li>If the sum of two numbers is $20$ and their difference is $4$, find their product without calculating the numbers individually.</li>
+      </ol>`,
+    prompt_ml: `<p>തുകയുടെ വർഗ്ഗവും വ്യത്യാസത്തിന്റെ വർഗ്ഗവും തമ്മിലുള്ള സമവാക്യം പരിഗണിക്കുക:</p>
+      $$(x + y)^2 - (x - y)^2 = 4xy$$
+      <ol type="a">
+        <li>$(x + y)^2$-ഉം $(x - y)^2$-ഉം വികസിപ്പിച്ചെഴുതി ഈ സമവാക്യം തെളിയിക്കുക.</li>
+        <li>ഈ സമവാക്യം ഉപയോഗിച്ച് $105^2 - 95^2$ മനസ്സിൽ കണക്കാക്കുക.</li>
+        <li>രണ്ട് സംഖ്യകളുടെ തുക $20$-ഉം വ്യത്യാസം $4$-ഉം ആയാൽ, സംഖ്യകൾ വെവ്വേറെ കാണാതെ തന്നെ ഈ സമവാക്യം ഉപയോഗിച്ച് അവയുടെ ഗുണനഫലം കാണുക.</li>
+      </ol>`,
+    approach_en: 'Expand $(x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 4xy$. For (b), note $x = 100, y = 5$. For (c), $20^2 - 4^2 = 4xy$.',
+    approach_ml: '$(x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 4xy$ എന്ന് തെളിയിക്കുക. (b)-ൽ $x = 100, y = 5$ ആയി എടുക്കുക. (c)-ൽ $20^2 - 4^2 = 4xy$ ഉപയോഗിക്കുക.',
+    solution_en: `<ol type="a">
+        <li>Expanding both squares:
+          $$(x + y)^2 = x^2 + 2xy + y^2$$
+          $$(x - y)^2 = x^2 - 2xy + y^2$$
+          Subtracting the two expressions:
+          $$(x + y)^2 - (x - y)^2 = (x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 2xy - (-2xy) = \\mathbf{4xy}.$$
+        </li>
+        <li>Let $x = 100$ and $y = 5$. Then $x + y = 105$ and $x - y = 95$.
+          $$105^2 - 95^2 = (x + y)^2 - (x - y)^2 = 4xy = 4(100)(5) = \\mathbf{2000}.$$
+        </li>
+        <li>Given $x + y = 20$ and $x - y = 4$:
+          $$4xy = (x + y)^2 - (x - y)^2 = 20^2 - 4^2 = 400 - 16 = 384$$
+          $$xy = \\frac{384}{4} = \\mathbf{96}.$$
+          The product of the two numbers is strictly <b>96</b>.
+        </li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>രണ്ട് വർഗ്ഗങ്ങളും വികസിപ്പിച്ചെഴുതിയാൽ:
+          $$(x + y)^2 = x^2 + 2xy + y^2$$
+          $$(x - y)^2 = x^2 - 2xy + y^2$$
+          ഇവ പരസ്പരം കുറച്ചാൽ:
+          $$(x + y)^2 - (x - y)^2 = (x^2 + 2xy + y^2) - (x^2 - 2xy + y^2) = 2xy - (-2xy) = \\mathbf{4xy}.$$
+        </li>
+        <li>$x = 100, y = 5$ എന്ന് എടുത്താൽ $x + y = 105, x - y = 95$ ആകുന്നു.
+          $$105^2 - 95^2 = 4xy = 4(100)(5) = \\mathbf{2000}.$$
+        </li>
+        <li>$x + y = 20, x - y = 4$ എന്ന് നൽകിയിരിക്കുന്നു:
+          $$4xy = (x + y)^2 - (x - y)^2 = 20^2 - 4^2 = 400 - 16 = 384$$
+          $$xy = \\frac{384}{4} = \\mathbf{96}.$$
+          സംഖ്യകളുടെ ഗുണനഫലം കൃത്യം <b>96</b> ആണ്.
+        </li>
+      </ol>`,
+    tested_en: 'Applying the identity (x + y)^2 - (x - y)^2 = 4xy to numerical computation.',
+    tested_ml: '(x + y)^2 - (x - y)^2 = 4xy എന്ന സമവാക്യം ഉപയോഗിച്ച് സംഖ്യാഫലങ്ങൾ കണക്കാക്കൽ.',
+    trap_en: 'Do not confuse (x+y)^2 - (x-y)^2 = 4xy with (x+y)^2 + (x-y)^2 = 2(x^2 + y^2).',
+    trap_ml: '(x+y)^2 - (x-y)^2 = 4xy എന്നതും (x+y)^2 + (x-y)^2 = 2(x^2 + y^2) എന്നതും തമ്മിൽ മാറിപ്പോകരുത്.'
   }
 );

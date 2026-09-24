@@ -249,6 +249,8 @@ WRITTEN.push(
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Real Number Continuum and Bounding Irrationals',
+    title_ml: 'വാസ്തവിക സംഖ്യാ രേഖയും അഭിന്നകങ്ങളുടെ പരിധികളും',
     prompt_en: '<p>(i) Explain why every point on the real number line corresponds to a unique real number, distinguishing between rational and irrational numbers.</p><p>(ii) Locate the approximate positions of $\\sqrt{2}$, $-\\sqrt{5}$, and $\\frac{7}{4}$ with respect to consecutive integers on the number line.</p>',
     prompt_ml: '<p>(i) ഭിന്നകസംഖ്യകളും അഭിന്നകസംഖ്യകളും തമ്മിലുള്ള വ്യത്യാസം വ്യക്തമാക്കി, സംഖ്യാരേഖയിലെ ഓരോ ബിന്ദുവും ഒരു രേഖീയസംഖ്യയെ എങ്ങനെ പ്രതിനിധീകരിക്കുന്നു എന്ന് വിശദീകരിക്കുക.</p><p>(ii) $\\sqrt{2}$, $-\\sqrt{5}$, $\\frac{7}{4}$ എന്നീ സംഖ്യകൾ സംഖ്യാരേഖയിൽ ഏതേത് അടുത്തടുത്ത പൂർണ്ണസംഖ്യകൾക്കിടയിലാണ് സ്ഥിതിചെയ്യുന്നതെന്ന് കണ്ടെത്തുക.</p>',
     solution_en: `<h4>Step 1: Rational vs Irrational Real Numbers</h4>
@@ -297,6 +299,8 @@ WRITTEN.push(
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Absolute Value Distances and Collinearity on Number Line',
+    title_ml: 'കേവലവില ദൂരങ്ങളും സംഖ്യാരേഖയിലെ ബിന്ദുക്കളുടെ സ്ഥാനവും',
     prompt_en: '<p>Points $A, B, C$ on the real number line have coordinates $-8, -2,$ and $5$ respectively.</p><p>(i) Calculate the distances $AB, BC,$ and $AC$ using absolute values.</p><p>(ii) Verify whether $AB + BC = AC$ and state what this implies about the relative positions of the three points.</p>',
     prompt_ml: '<p>സംഖ്യാരേഖയിലെ $A, B, C$ എന്നീ ബിന്ദുക്കളുടെ സൂചകസംഖ്യകൾ യഥാക്രമം $-8, -2, 5$ എന്നിവയാണ്.</p><p>(i) കേവലവില ഉപയോഗിച്ച് $AB, BC, AC$ എന്നീ അകലങ്ങൾ കണക്കാക്കുക.</p><p>(ii) $AB + BC = AC$ ആണോ എന്ന് പരിശോധിച്ച്, ഈ മൂന്ന് ബിന്ദുക്കളുടെ സ്ഥാനത്തെക്കുറിച്ച് എന്ത് നിഗമനത്തിലെത്താം എന്ന് വ്യക്തമാക്കുക.</p>',
     solution_en: `<h4>Step 1: Compute Distances Using Absolute Values</h4>
@@ -332,6 +336,8 @@ $$AC = 13$$
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Geometric Interpretation and Solution of Modulus Equations',
+    title_ml: 'കേവലവില സമവാക്യങ്ങളുടെ ജ്യാമിതീയ വ്യാഖ്യാനവും പരിഹാരവും',
     prompt_en: '<p>Solve the following equations for all possible real values of $x$ and interpret each geometrically on the number line:</p><p>(i) $|x - 4| = 9$</p><p>(ii) $|2x + 6| = 10$</p>',
     prompt_ml: '<p>താഴെ നൽകിയിരിക്കുന്ന സമവാക്യങ്ങൾ നിർദ്ധാരണം ചെയ്ത് $x$-ന്റെ വിലകൾ കാണുക. ഓരോന്നിന്റെയും ജ്യാമിതീയ അർത്ഥം വ്യക്തമാക്കുക:</p><p>(i) $|x - 4| = 9$</p><p>(ii) $|2x + 6| = 10$</p>',
     solution_en: `<h4>Part (i): Solve $|x - 4| = 9$</h4>
@@ -370,6 +376,8 @@ $$x = -3 - 5 = \\mathbf{-8}$$
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Midpoint Formula and Absolute Value Interval Inequalities',
+    title_ml: 'മധ്യബിന്ദു സൂത്രവാക്യവും കേവലവില അസമതകളും',
     prompt_en: '<p>(i) Find the midpoint of the points $-5$ and $11$ on the number line, and find the distance from each point to this midpoint.</p><p>(ii) Express the condition that a number $x$ lies within $6$ units of the point $-1$ as an absolute value inequality, and determine all integer values of $x$ satisfying this condition.</p>',
     prompt_ml: '<p>(i) സംഖ്യാരേഖയിൽ $-5, 11$ എന്നീ ബിന്ദുക്കളുടെ മധ്യബിന്ദു കണ്ടെത്തുക. ഓരോ ബിന്ദുവിൽ നിന്നും മധ്യബിന്ദുവിലേക്കുള്ള അകലം കണക്കാക്കുക.</p><p>(ii) $x$ എന്ന സംഖ്യ $-1$-ൽ നിന്ന് പരമാവധി $6$ യൂണിറ്റ് അകലത്തിലാണ് സ്ഥിതിചെയ്യുന്നത് എന്ന നിബന്ധനയെ ഒരു കേവലവില അസമതയായി എഴുതുക. ഈ നിബന്ധന തൃപ്തിപ്പെടുത്തുന്ന പൂർണ്ണസംഖ്യകൾ ഏതെല്ലാമാണെന്ന് കണ്ടെത്തുക.</p>',
     solution_en: `<h4>Part (i): Midpoint of $-5$ and $11$</h4>
@@ -406,5 +414,77 @@ $$-7 \\le x \\le 5$$
 $$\\mathbf{\\{-7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5\\}}$$`,
     tested_en: 'Midpoint determination, interval inequalities and discrete integer counting.',
     tested_ml: 'മധ്യബിന്ദു, പരിധി അസമതകൾ, അനുയോജ്യമായ പൂർണ്ണസംഖ്യകൾ കണ്ടെത്തൽ.'
+  },
+
+  {
+    id: 'w.m9.10.5',
+    concept: 'm9.10.3.absolute-value-equations',
+    sec: '9.10.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    tested_en: 'Solving absolute value equations with double modular cases and geometric interpretation',
+    tested_ml: 'ഇരട്ട കേവലവില സമവാക്യങ്ങളുടെ നിർദ്ധാരണവും ജ്യാമിതീയ വ്യാഖ്യാനവും',
+    title_en: 'Double Absolute Value Equation and Equidistant Point',
+    title_ml: 'ഇരട്ട കേവലവില സമവാക്യവും തുല്യദൂര ബിന്ദുവും',
+    prompt_en: '<p>(a) Solve the equation $|x - 3| = |x + 5|$ algebraically.<br>(b) Interpret the geometric meaning of this equation on the number line in terms of distances from two fixed points.<br>(c) Verify that the solution is the midpoint of the segment joining $-5$ and $3$.</p>',
+    prompt_ml: '<p>(a) $|x - 3| = |x + 5|$ എന്ന സമവാക്യം ബീജഗണിത രീതിയിൽ നിർദ്ധാരണം ചെയ്യുക.<br>(b) രണ്ട് നിർദ്ദിഷ്ട ബിന്ദുക്കളിൽ നിന്നുള്ള അകലം എന്ന നിലയിൽ ഈ സമവാക്യത്തിന്റെ ജ്യാമിതീയ അർത്ഥം വിശദീകരിക്കുക.<br>(c) ലഭിച്ച പരിഹാരം $-5, 3$ എന്നീ ബിന്ദുക്കളുടെ മധ്യബിന്ദുവാണെന്ന് സമർത്ഥിക്കുക.</p>',
+    solution_en: `$$\\text{(a) Algebraic Solution:}$$
+$$|x - 3| = |x + 5| \\implies (x - 3) = (x + 5) \\quad \\text{or} \\quad (x - 3) = -(x + 5)$$
+$$\\text{Case 1: } x - 3 = x + 5 \\implies -3 = 5 \\quad (\\text{impossible, no solution})$$
+$$\\text{Case 2: } x - 3 = -x - 5 \\implies 2x = -5 + 3 \\implies 2x = -2 \\implies \\mathbf{x = -1}.$$
+
+$$\\text{(b) Geometric Meaning:}$$
+$$|x - 3| \\text{ represents the distance of } x \\text{ from } 3.$$
+$$|x + 5| = |x - (-5)| \\text{ represents the distance of } x \\text{ from } -5.$$
+$$\\text{The equation states that } x \\text{ is strictly equidistant from } -5 \\text{ and } 3.$$
+
+$$\\text{(c) Midpoint Verification:}$$
+$$\\text{Midpoint of } -5 \\text{ and } 3 = \\frac{-5 + 3}{2} = \\frac{-2}{2} = \\mathbf{-1}.$$
+$$\\text{Distance from } -5 \\text{ is } |-1 - (-5)| = 4, \\text{ and from } 3 \\text{ is } |-1 - 3| = 4. \\quad (\\text{Verified!})$$`,
+    solution_ml: `$$\\text{(a) ബീജഗണിത നിർദ്ധാരണം:}$$
+$$|x - 3| = |x + 5| \\implies x - 3 = -(x + 5)$$
+$$x - 3 = -x - 5 \\implies 2x = -2 \\implies \\mathbf{x = -1}.$$
+
+$$\\text{(b) ജ്യാമിതീയ അർത്ഥം:}$$
+$$|x - 3| \\text{ എന്നത് } 3\\text{-ൽ നിന്നുള്ള അകലവും, } |x + 5| \\text{ എന്നത് } -5\\text{-ൽ നിന്നുള്ള അകലവുമാണ്.}$$
+$$x \\text{ എന്നത് } -5, 3 \\text{ എന്നീ ബിന്ദുക്കളിൽ നിന്ന് തുല്യ അകലത്തിലുള്ള ബിന്ദുവാണ്.}$$
+
+$$\\text{(c) മധ്യബിന്ദു പരിശോധന:}$$
+$$\\text{മധ്യബിന്ദു } = \\frac{-5 + 3}{2} = \\frac{-2}{2} = \\mathbf{-1}.$$
+$$\\text{രണ്ട് ബിന്ദുക്കളിൽ നിന്നുമുള്ള അകലം } 4 \\text{ യൂണിറ്റ് വീതമാണ്.}$$`
+  },
+
+  {
+    id: 'w.m9.10.6',
+    concept: 'm9.10.4.midpoint-and-intervals',
+    sec: '9.10.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    tested_en: 'Interval representation in modulus form and midpoint distance formulation',
+    tested_ml: 'ഇടവേളകളെ കേവലവില രൂപത്തിൽ പ്രസ്താവിക്കലും മധ്യബിന്ദു ദൂര നിർണ്ണയവും',
+    title_en: 'Expressing Intervals in Absolute Value Form and Applications',
+    title_ml: 'ഇടവേളകളെ കേവലവില രൂപത്തിൽ പ്രസ്താവിക്കലും പ്രയോഗങ്ങളും',
+    prompt_en: '<p>(a) The numbers on a thermometer scale between $18^\\circ\\text{C}$ and $26^\\circ\\text{C}$ represent comfortable room temperatures. Express this temperature range as an absolute value inequality of the form $|T - c| \\le d$.<br>(b) Write down the interval $[-3, 7]$ on the number line in the form $|x - a| \\le b$, clearly stating the center $a$ and the half-width $b$.</p>',
+    prompt_ml: '<p>(a) ഒരു തെർമോമീറ്ററിൽ $18^\\circ\\text{C}$-നും $26^\\circ\\text{C}$-നും ഇടയിലുള്ള താപനിലയാണ് സുഖപ്രദമായ ഊഷ്മാവ്. ഈ പരിധിയെ $|T - c| \\le d$ എന്ന രൂപത്തിലുള്ള കേവലവില അസമതയായി എഴുതുക.<br>(b) സംഖ്യാരേഖയിലെ $[-3, 7]$ എന്ന ഇടവേളയെ മധ്യബിന്ദു $a$-യും അർദ്ധവീതി $b$-യും വ്യക്തമാക്കി $|x - a| \\le b$ എന്ന രൂപത്തിൽ എഴുതുക.</p>',
+    solution_en: `$$\\text{(a) Temperature Range } 18 \\le T \\le 26:$$
+$$\\text{Center } c = \\frac{18 + 26}{2} = \\frac{44}{2} = 22^\\circ\\text{C}$$
+$$\\text{Half-width } d = \\frac{26 - 18}{2} = \\frac{8}{2} = 4^\\circ\\text{C}$$
+$$\\text{Inequality form: } \\mathbf{|T - 22| \\le 4}.$$
+
+$$\\text{(b) Interval } [-3, 7]:$$
+$$\\text{Center } a = \\frac{-3 + 7}{2} = \\frac{4}{2} = \\mathbf{2}$$
+$$\\text{Half-width } b = \\frac{7 - (-3)}{2} = \\frac{10}{2} = \\mathbf{5}$$
+$$\\text{Absolute value form: } \\mathbf{|x - 2| \\le 5}.$$`,
+    solution_ml: `$$\\text{(a) } 18 \\le T \\le 26 \\text{ എന്ന പരിധിയിൽ:}$$
+$$\\text{മധ്യബിന്ദു } c = \\frac{18 + 26}{2} = 22^\\circ\\text{C}$$
+$$\\text{അർദ്ധവീതി } d = \\frac{26 - 18}{2} = 4^\\circ\\text{C}$$
+$$\\text{കേവലവില അസമത: } \\mathbf{|T - 22| \\le 4}.$$
+
+$$\\text{(b) } [-3, 7] \\text{ എന്ന ഇടവേളയിൽ:}$$
+$$\\text{മധ്യബിന്ദു } a = \\frac{-3 + 7}{2} = \\mathbf{2}$$
+$$\\text{അർദ്ധവീതി } b = \\frac{7 - (-3)}{2} = \\mathbf{5}$$
+$$\\text{കേവലവില രൂപം: } \\mathbf{|x - 2| \\le 5}.$$`
   }
 );

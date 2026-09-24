@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.6.1',
     sec: '9.6.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.6.1.equal-division-of-segments',
+    tested_en: 'Straightedge and compass division of line segment into equal parts',
+    tested_ml: 'വരയെ തുല്യഭാഗങ്ങളാക്കാനുള്ള ജ്യാമിതീയ നിർമ്മിതിയും സമാന്തരവര സിദ്ധാന്തവും',
     title_en: 'Geometric Construction: Dividing a Line Segment into 5 Equal Parts',
     title_ml: 'ജ്യാമിതീയ നിർമ്മിതി: ഒരു വരയെ 5 തുല്യഭാഗങ്ങളാക്കൽ',
     prompt_en: '<p>Describe the step-by-step geometric construction to divide a line segment $AB$ of length $9\\text{ cm}$ into $5$ equal parts using only a straightedge and compasses. Provide the geometric justification using the theorem of parallel lines.</p>',
@@ -286,7 +291,12 @@ $$AP_1 = P_1 P_2 = P_2 P_3 = P_3 P_4 = P_4 B = \\frac{9}{5} = \\mathbf{1.8\\text
   {
     id: 'w.m9.6.2',
     sec: '9.6.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.6.2.proportional-intercepts-theorem',
+    tested_en: 'Proportional division of transversals by parallel lines',
+    tested_ml: 'സമാന്തരവരകൾ രേഖകളെ അനുപാതത്തിൽ വിഭജിക്കുന്ന തത്വം',
     title_en: 'Proportional Intercepts Calculation on Multiple Transversals',
     title_ml: 'സമാന്തരവരകളിലെ അനുപാത വിഭജന കണക്കുകൂട്ടൽ',
     prompt_en: '<p>Three parallel lines $L_1, L_2, L_3$ intersect two transversals at points $A, B, C$ and $D, E, F$ respectively. Given that $AB = 6\\text{ cm}$, $BC = 9\\text{ cm}$, and the total length of the second transversal segment $DF = 25\\text{ cm}$, calculate the individual lengths of $DE$ and $EF$.</p>',
@@ -323,7 +333,12 @@ $$\\text{പരിശോധന: } 10 + 15 = 25\\text{ cm, } \\frac{10}{15} = \\f
   {
     id: 'w.m9.6.3',
     sec: '9.6.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.6.3.midpoint-theorem-in-triangles',
+    tested_en: 'Midpoint theorem proof and area ratio of midpoint triangle',
+    tested_ml: 'മധ്യബിന്ദു സിദ്ധാന്തത്തിന്റെ തെളിവും മധ്യത്രികോണത്തിന്റെ പരപ്പളവും',
     title_en: 'Proof of Midpoint Theorem and Area Ratio of Midpoint Triangle',
     title_ml: 'മധ്യബിന്ദു സിദ്ധാന്തത്തിന്റെ തെളിവും മധ്യത്രികോണ പരപ്പളവും',
     prompt_en: '<p>Prove that the line segment joining the midpoints of two sides of a triangle is parallel to the third side and equal to half its length. Furthermore, prove that connecting the midpoints of all three sides divides the triangle into four congruent triangles each having one-fourth of the parent area.</p>',
@@ -368,7 +383,12 @@ $$\\mathbf{\\text{പരപ്പളവ്}(\\triangle DEF) = \\frac{1}{4} \\tex
   {
     id: 'w.m9.6.4',
     sec: '9.6.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.6.4.medians-and-centroid',
+    tested_en: 'Centroid 2:1 division ratio proof and equal area division of medians',
+    tested_ml: 'മധ്യകേന്ദ്രത്തിന്റെ 2:1 വിഭജനാനുപാതവും തുല്യ പരപ്പളവ് വിഭജനവും',
     title_en: 'Centroid Division Ratio and Equal Area Division by Medians',
     title_ml: 'മധ്യകേന്ദ്രത്തിന്റെ വിഭജനാനുപാതവും തുല്യ പരപ്പളവ് സിദ്ധാന്തവും',
     prompt_en: '<p>Prove that the centroid $G$ of $\\triangle ABC$ divides each median in the ratio $2 : 1$. Furthermore, prove that the three medians divide the triangle into six smaller triangles of strictly equal area.</p>',
@@ -409,5 +429,78 @@ $$AD \\text{ വലിയ ത്രികോണത്തിന്റെ മധ�
 $$2c + a = 2b + a \\implies b = c$$
 $$\\text{അതുപോലെ } BE \\text{ മധ്യമം ഉപയോഗിക്കുമ്പോൾ } a = c \\text{ ലഭിക്കുന്നു.}$$
 $$\\text{അതിനാൽ } a = b = c. \\text{ ആറ് ത്രികോണങ്ങളുടെയും പരപ്പളവുകൾ തുല്യമാണ്: } \\mathbf{\\frac{1}{6}\\text{പരപ്പളവ്}(\\triangle ABC)}.$$`
+  },
+
+  {
+    id: 'w.m9.6.5',
+    sec: '9.6.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.6.2.proportional-intercepts-theorem',
+    tested_en: 'Proportional intercepts on non-parallel sides of trapezium',
+    tested_ml: 'ലംബകത്തിലെ സമാന്തരമല്ലാത്ത വശങ്ങളിലെ അനുപാത വിഭജനം',
+    title_en: 'Trapezium Non-Parallel Sides Proportional Intercepts',
+    title_ml: 'ലംബകത്തിലെ സമാന്തരമല്ലാത്ത വശങ്ങളിലെ അനുപാത വിഭജനം',
+    prompt_en: '<p>In trapezium $ABCD$, side $AB$ is parallel to side $DC$. A line parallel to $AB$ passes through points $P$ on side $AD$ and $Q$ on side $BC$. If $AP = 6\\text{ cm}$, $PD = 9\\text{ cm}$, and $BC = 20\\text{ cm}$, calculate the lengths of segments $BQ$ and $QC$.</p>',
+    prompt_ml: '<p>ലംബകം $ABCD$-ൽ വശം $AB$, വശം $DC$-ക്ക് സമാന്തരമാണ്. $AB$-ക്ക് സമാന്തരമായി വരച്ച വര $AD$-യെ $P$-ലും $BC$-യെ $Q$-ലും ഖണ്ഡിക്കുന്നു. $AP = 6\\text{ cm}$, $PD = 9\\text{ cm}$, $BC = 20\\text{ cm}$ ആയാൽ $BQ, QC$ എന്നീ ഭാഗങ്ങളുടെ നീളങ്ങൾ കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{Since } AB \\parallel PQ \\parallel DC, \\text{ by the Proportional Intercepts Theorem:}$$
+$$\\frac{BQ}{QC} = \\frac{AP}{PD} = \\frac{6}{9} = \\frac{2}{3}$$
+
+$$\\text{Let } BQ = 2k \\text{ and } QC = 3k.$$
+$$BC = BQ + QC = 2k + 3k = 5k = 20\\text{ cm} \\implies k = 4\\text{ cm}.$$
+
+$$\\text{Calculating individual lengths:}$$
+$$BQ = 2k = 2(4) = \\mathbf{8\\text{ cm}}$$
+$$QC = 3k = 3(4) = \\mathbf{12\\text{ cm}}$$`,
+    solution_ml: `$$AB \\parallel PQ \\parallel DC \\text{ ആയതിനാൽ അനുപാത സിദ്ധാന്തപ്രകാരം:}$$
+$$\\frac{BQ}{QC} = \\frac{AP}{PD} = \\frac{6}{9} = \\frac{2}{3}$$
+
+$$BQ = 2k, \\quad QC = 3k \\text{ എന്നിരിക്കട്ടെ.}$$
+$$BC = 5k = 20\\text{ cm} \\implies k = 4\\text{ cm}.$$
+
+$$\\text{ഓരോ ഭാഗത്തിന്റെയും നീളം:}$$
+$$BQ = 2 \\times 4 = \\mathbf{8\\text{ cm}}$$
+$$QC = 3 \\times 4 = \\mathbf{12\\text{ cm}}$$`
+  },
+
+  {
+    id: 'w.m9.6.6',
+    sec: '9.6.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.6.3.midpoint-theorem-in-triangles',
+    tested_en: 'Varignon theorem on quadrilateral midpoint polygon',
+    tested_ml: 'ചതുർഭുജ വശങ്ങളുടെ മധ്യബിന്ദുക്കൾ യോജിപ്പിച്ചുള്ള സമാന്തരിക രൂപീകരണം',
+    title_en: 'Varignon Theorem: Quadrilateral Formed by Joining Midpoints',
+    title_ml: 'വാരിഞ്ഞൺ സിദ്ധാന്തം: ചതുർഭുജത്തിന്റെ മധ്യബിന്ദുക്കൾ യോജിപ്പിച്ചുള്ള രൂപം',
+    prompt_en: '<p>Prove that the figure formed by joining the midpoints of the adjacent sides of any quadrilateral taken in order is strictly a parallelogram. Furthermore, if the diagonals of the original quadrilateral are perpendicular, prove that this parallelogram is a rectangle.</p>',
+    prompt_ml: '<p>ഏതൊരു ചതുർഭുജത്തിന്റെയും വശങ്ങളുടെ മധ്യബിന്ദുക്കൾ ക്രമമായി യോജിപ്പിച്ചുണ്ടാക്കുന്ന രൂപം ഒരു സമാന്തരികമാണെന്ന് തെളിയിക്കുക. കൂടാതെ യഥാർത്ഥ ചതുർഭുജത്തിന്റെ വികർണ്ണങ്ങൾ ലംബമാണെങ്കിൽ, ഈ സമാന്തരികം ഒരു ദീർഘചതുരമായിരിക്കുമെന്ന് തെളിയിക്കുക.</p>',
+    solution_en: `$$\\text{Let } ABCD \\text{ be a quadrilateral, and } P, Q, R, S \\text{ be midpoints of } AB, BC, CD, DA.$$
+$$\\text{Join diagonal } AC.$$
+
+$$\\text{In } \\triangle ABC: P, Q \\text{ are midpoints } \\implies PQ \\parallel AC \\text{ and } PQ = \\frac{1}{2}AC.$$
+$$\\text{In } \\triangle ADC: S, R \\text{ are midpoints } \\implies SR \\parallel AC \\text{ and } SR = \\frac{1}{2}AC.$$
+$$\\implies PQ \\parallel SR \\text{ and } PQ = SR.$$
+
+$$\\text{Since a pair of opposite sides is equal and parallel, } PQRS \\text{ is a parallelogram.}$$
+
+$$\\text{Special case: Perpendicular diagonals } (AC \\perp BD)$$
+$$\\text{Since } PQ \\parallel AC \\text{ and } QR \\parallel BD, \\text{ the angle between adjacent sides } PQ \\text{ and } QR$$
+$$\\text{equals the angle between the diagonals: } 90^\\circ.$$
+$$\\text{A parallelogram with one right angle is strictly a } \\mathbf{\\text{rectangle}}.$$`,
+    solution_ml: `$$ABCD \\text{ എന്ന ചതുർഭുജത്തിൽ } AB, BC, CD, DA \\text{ എന്നിവയുടെ മധ്യബിന്ദുക്കളാണ് } P, Q, R, S.$$
+$$AC \\text{ എന്ന വികർണ്ണം വരയ്ക്കുന്നു.}$$
+
+$$\\triangle ABC\\text{-ൽ: } PQ \\parallel AC, \\quad PQ = \\frac{1}{2}AC.$$
+$$\\triangle ADC\\text{-ൽ: } SR \\parallel AC, \\quad SR = \\frac{1}{2}AC.$$
+$$\\implies PQ \\parallel SR, \\quad PQ = SR.$$
+
+$$\\text{ഒരു ജോടി എതിർവശങ്ങൾ തുല്യവും സമാന്തരവുമാകയാൽ } PQRS \\text{ ഒരു സമാന്തരികമാണ്.}$$
+
+$$\\text{പ്രത്യേക സന്ദർഭം: വികർണ്ണങ്ങൾ ലംബമായാൽ } (AC \\perp BD)$$
+$$PQ \\parallel AC, \\quad QR \\parallel BD \\text{ ആയതിനാൽ } PQ, QR \\text{ എന്നിവ തമ്മിലുള്ള കോൺ } 90^\\circ \\text{ ആകുന്നു.}$$
+$$\\text{ഒരു കോൺ } 90^\\circ \\text{ ആയ സമാന്തരികം } \\mathbf{\\text{ദീർഘചതുരമാണ്}}.$$`
   }
 );

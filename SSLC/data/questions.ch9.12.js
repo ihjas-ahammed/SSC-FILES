@@ -249,6 +249,8 @@ WRITTEN.push(
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Direct Proportion and Mass-Length Constant of Proportionality',
+    title_ml: 'നേർ അനുപാതവും ഭാര-നീള സ്ഥിരസംഖ്യയും',
     prompt_en: '<p>A metal wire of length $12\\text{ metres}$ has a mass of $420\\text{ grams}$.</p><p>(i) Verify that mass is directly proportional to length for a wire of uniform thickness, and calculate the constant of proportionality $k$ (mass per unit length).</p><p>(ii) What is the mass of $25\\text{ metres}$ of this wire?</p><p>(iii) What length of this wire will have a mass of $1.05\\text{ kg}$?</p>',
     prompt_ml: '<p>$12\\text{ മീറ്റർ}$ നീളമുള്ള ഒരു കമ്പിയുടെ ഭാരം $420\\text{ ഗ്രാം}$ ആണ്.</p><p>(i) ഒരേ കനമുള്ള കമ്പിക്ക് ഭാരവും നീളവും തമ്മിൽ നേർ അനുപാതത്തിലാണെന്ന് സമർത്ഥിച്ച് അനുപാത സ്ഥിരസംഖ്യ $k$ (ഒരു മീറ്ററിന്റെ ഭാരം) കണ്ടെത്തുക.</p><p>(ii) $25\\text{ മീറ്റർ}$ നീളമുള്ള കമ്പിയുടെ ഭാരം എത്രയായിരിക്കും?</p><p>(iii) $1.05\\text{ കിലോഗ്രാം}$ ഭാരമുള്ള കമ്പിയുടെ നീളം എത്രയായിരിക്കും?</p>',
     solution_en: `<h4>Part (i): Constant of Proportionality</h4>
@@ -282,6 +284,8 @@ $$l = \\frac{1050}{35} = \\mathbf{30\\text{ മീറ്റർ}}$$`,
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Geometric Scaling of Triangular Park and Area Ratio',
+    title_ml: 'ത്രികോണ പാർക്കിന്റെ വികാസ നിരക്കും പരപ്പളവ് അനുപാതവും',
     prompt_en: '<p>A triangular park has sides $30\\text{ m}, 40\\text{ m},$ and $50\\text{ m}$. A municipal model of this park is built so that its perimeter is $24\\text{ metres}$.</p><p>(i) Verify that the original park is a right-angled triangle and calculate its area.</p><p>(ii) Find the scale factor $k$ of the model, and calculate the side lengths of the model.</p><p>(iii) Calculate the area of the model park using the area scaling property.</p>',
     prompt_ml: '<p>ഒരു ത്രികോണാകൃതിയിലുള്ള പാർക്കിന്റെ വശങ്ങൾ $30\\text{ m}, 40\\text{ m}, 50\\text{ m}$ ആണ്. ഈ പാർക്കിന്റെ ഒരു മാതൃക നിർമ്മിച്ചപ്പോൾ അതിന്റെ ചുറ്റളവ് $24\\text{ മീറ്റർ}$ ആയി.</p><p>(i) യഥാർത്ഥ പാർക്ക് ഒരു മട്ടത്രികോണമാണെന്ന് സമർത്ഥിച്ച് അതിന്റെ പരപ്പളവ് കാണുക.</p><p>(ii) മാതൃകയുടെ അനുപാത നിരക്ക് $k$ കണ്ടെത്തി, മാതൃകയുടെ വശങ്ങളുടെ നീളങ്ങൾ കണ്ടെത്തുക.</p><p>(iii) പരപ്പളവ് അനുപാത നിയമം ഉപയോഗിച്ച് മാതൃകാ പാർക്കിന്റെ പരപ്പളവ് കണക്കാക്കുക.</p>',
     solution_en: `<h4>Step 1: Check Right Triangle and Area of Original Park</h4>
@@ -321,6 +325,8 @@ $$A' = k^2 \\times A = \\left(\\frac{1}{5}\\right)^2 \\times 600 = \\frac{600}{2
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Properties of Direct Proportion Graph and Origin Criteria',
+    title_ml: 'നേർ അനുപാത ഗ്രാഫിന്റെ സവിശേഷതകളും മൂലബിന്ദു നിയമവും',
     prompt_en: '<p>(i) Two quantities $x$ and $y$ are related by the equation $y = 3.5x$. State three geometric properties of the graph of this equation.</p><p>(ii) Determine the coordinates of the point on this line whose $y$-coordinate is $28$.</p><p>(iii) Explain why the relationship $y = 3.5x + 4$ is NOT a directly proportional relationship.</p>',
     prompt_ml: '<p>(i) $x, y$ എന്നീ രണ്ട് അളവുകൾ $y = 3.5x$ എന്ന സമവാക്യത്താൽ ബന്ധപ്പെട്ടിരിക്കുന്നു. ഈ സമവാക്യത്തിന്റെ ഗ്രാഫിന്റെ മൂന്ന് ജ്യാമിതീയ സവിശേഷതകൾ എഴുതുക.</p><p>(ii) ഈ വരയിൽ $y$-സൂചകസംഖ്യ $28$ ആയ ബിന്ദുവിന്റെ നിർദ്ദേശാങ്കങ്ങൾ കണ്ടെത്തുക.</p><p>(iii) $y = 3.5x + 4$ എന്ന സമവാക്യം നേർ അനുപാതത്തെ പ്രതിനിധീകരിക്കുന്നില്ല എന്ന് വിശദീകരിക്കുക.</p>',
     solution_en: `<h4>Part (i): Geometric Properties of the Graph</h4>
@@ -362,6 +368,8 @@ $$28 = 3.5x \\implies x = \\frac{28}{3.5} = 8$$
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Inverse Proportion in Worker-Days and Labor Allocation',
+    title_ml: 'തൊഴിലാളി ദിനങ്ങളിലെ വ്യസ്താനുപാതവും ജോലി വിഭജനവും',
     prompt_en: '<p>A construction project can be completed by $18$ workers in $25$ days.</p><p>(i) Show that the number of workers $w$ and the number of days $d$ are inversely proportional, and find the constant of variation (total worker-days).</p><p>(ii) If the project must be finished in $15$ days, how many total workers are required?</p><p>(iii) If only $10$ workers turn up for the job, how many days will the project take?</p>',
     prompt_ml: '<p>ഒരു നിർമ്മാണ ജോലി പൂർത്തിയാക്കാൻ $18$ തൊഴിലാളികൾക്ക് $25$ ദിവസം വേണം.</p><p>(i) തൊഴിലാളികളുടെ എണ്ണം $w$-ഉം ദിവസങ്ങളുടെ എണ്ണം $d$-യും വ്യസ്താനുപാതത്തിലാണെന്ന് സമർത്ഥിച്ച് ആകെ തൊഴിൽദിനങ്ങൾ (അനുപാത സ്ഥിരസംഖ്യ) കണ്ടെത്തുക.</p><p>(ii) ഈ ജോലി $15$ ദിവസം കൊണ്ട് തീർക്കണമെങ്കിൽ ആകെ എത്ര തൊഴിലാളികൾ വേണം?</p><p>(iii) $10$ തൊഴിലാളികൾ മാത്രമാണ് എത്തുന്നതെങ്കിൽ ജോലി തീരാൻ എത്ര ദിവസങ്ങൾ വേണ്ടിവരും?</p>',
     solution_en: `<h4>Part (i): Inverse Proportion and Total Worker-Days</h4>
@@ -387,5 +395,96 @@ $$w = \\frac{450}{15} = \\mathbf{30\\text{ തൊഴിലാളികൾ}}$$
 $$d = \\frac{450}{10} = \\mathbf{45\\text{ ദിവസങ്ങൾ}}$$`,
     tested_en: 'Inverse proportion modeling and reciprocal calculations.',
     tested_ml: 'വ്യസ്താനുപാത സമവാക്യവും പ്രായോഗിക പ്രശ്ന നിർദ്ധാരണവും.'
+  },
+
+  {
+    id: 'w.m9.12.5',
+    concept: 'm9.12.2.geometric-proportion',
+    sec: '9.12.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    title_en: 'Geometric Scaling of Rectangular Frame and Area Proportionality',
+    title_ml: 'ചതുര ഫ്രെയിമിന്റെ ജ്യാമിതീയ വികാസവും പരപ്പളവ് അനുപാതവും',
+    tested_en: 'Linear scaling factor, side enlargement, and quadratic area ratio.',
+    tested_ml: 'രേഖീയ അളവുകളുടെ വികാസ നിരക്കും പരപ്പളവ് വർഗ്ഗാനുപാതവും.',
+    prompt_en: '<p>A rectangular picture frame measures $12\\text{ cm}$ in length and $8\\text{ cm}$ in breadth. It is enlarged proportionally such that the length of the new frame is $30\\text{ cm}$.</p><p>(i) Find the scale factor of enlargement $k$.</p><p>(ii) Calculate the breadth and the perimeter of the enlarged frame.</p><p>(iii) Calculate the ratio of the area of the new frame to the area of the original frame, and find the area of the new frame.</p>',
+    prompt_ml: '<p>ഒരു ചതുര ഫോട്ടോ ഫ്രെയിമിന്റെ നീളം $12\\text{ cm}$-ഉം വീതി $8\\text{ cm}$-ഉം ആണ്. ഇതിനെ ആനുപാതികമായി വലുതാക്കിയപ്പോൾ പുതിയ ഫ്രെയിമിന്റെ നീളം $30\\text{ cm}$ ആയി.</p><p>(i) വികാസ നിരക്ക് (സ്കെയിൽ ഘടകം $k$) എത്രയെന്ന് കാണുക.</p><p>(ii) പുതിയ ഫ്രെയിമിന്റെ വീതിയും ചുറ്റളവും കണക്കാക്കുക.</p><p>(iii) പുതിയ ഫ്രെയിമിന്റെ പരപ്പളവും ആദ്യ ഫ്രെയിമിന്റെ പരപ്പളവും തമ്മിലുള്ള അംശബന്ധം എത്രയെന്ന് കണ്ടെത്തി, പുതിയ ഫ്രെയിമിന്റെ പരപ്പളവ് കണക്കാക്കുക.</p>',
+    solution_en: `<h4>Step 1: Calculate Scale Factor ($k$)</h4>
+<p>The length scales from $12\\text{ cm}$ to $30\\text{ cm}$:</p>
+$$k = \\frac{\\text{New Length}}{\\text{Original Length}} = \\frac{30}{12} = \\mathbf{2.5}$$
+
+<h4>Step 2: Breadth and Perimeter of Enlarged Frame</h4>
+<p>New breadth $b'$:</p>
+$$b' = k \\times b = 2.5 \\times 8 = \\mathbf{20\\text{ cm}}$$
+<p>Original perimeter $P = 2(12 + 8) = 2(20) = 40\\text{ cm}$.</p>
+<p>New perimeter $P'$:</p>
+$$P' = 2(30 + 20) = 2(50) = \\mathbf{100\\text{ cm}}$$
+<p>(Verification: $P' = k \\times P = 2.5 \\times 40 = 100\\text{ cm}$).</p>
+
+<h4>Step 3: Area Ratio and New Area</h4>
+<p>Area of original frame $A = 12 \\times 8 = 96\\text{ sq cm}$.</p>
+<p>By the area scaling property:</p>
+$$\\frac{A'}{A} = k^2 = (2.5)^2 = \\mathbf{6.25}$$
+$$\\text{New Area } A' = 6.25 \\times 96 = \\mathbf{600\\text{ sq cm}}$$
+<p>(Verification: $30 \\times 20 = 600\\text{ sq cm}$).</p>`,
+    solution_ml: `<h4>ഘട്ടം 1: വികാസ നിരക്ക് ($k$) കാണൽ</h4>
+<p>നീളം $12\\text{ cm}$-ൽ നിന്ന് $30\\text{ cm}$ ആയി മാറുന്നു:</p>
+$$k = \\frac{30}{12} = \\mathbf{2.5}$$
+
+<h4>ഘട്ടം 2: പുതിയ ഫ്രെയിമിന്റെ വീതിയും ചുറ്റളവും</h4>
+<p>പുതിയ വീതി $b'$:</p>
+$$b' = 2.5 \\times 8 = \\mathbf{20\\text{ cm}}$$
+<p>പുതിയ ചുറ്റളവ് $P'$:</p>
+$$P' = 2(30 + 20) = 2 \\times 50 = \\mathbf{100\\text{ cm}}$$
+
+<h4>ഘട്ടം 3: പരപ്പളവ് അംശബന്ധവും പുതിയ പരപ്പളവും</h4>
+<p>ആദ്യ ഫ്രെയിമിന്റെ പരപ്പളവ് $A = 12 \\times 8 = 96\\text{ ചതുരശ്ര സെ.മീ}$.</p>
+<p>പരപ്പളവുകൾ തമ്മിലുള്ള അംശബന്ധം:</p>
+$$\\frac{A'}{A} = k^2 = (2.5)^2 = \\mathbf{6.25}$$
+$$\\text{പുതിയ പരപ്പളവ് } A' = 6.25 \\times 96 = \\mathbf{600\\text{ ചതുരശ്ര സെ.മീ}}$$`
+  },
+
+  {
+    id: 'w.m9.12.6',
+    concept: 'm9.12.4.inverse-proportion',
+    sec: '9.12.4',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Inverse Proportion in Pump Capacity and Reservoir Filling Time',
+    title_ml: 'പമ്പുകളുടെ എണ്ണവും ടാങ്ക് നിറയ്ക്കാനെടുക്കുന്ന സമയവും തമ്മിലുള്ള വ്യസ്താനുപാതം',
+    tested_en: 'Inverse proportion product invariance, pump-hours modeling, and reciprocal solving.',
+    tested_ml: 'വ്യസ്താനുപാത സ്ഥിരതയും പമ്പുകളുടെ പ്രവർത്തന സമയ നിർണ്ണയവും.',
+    prompt_en: '<p>A large water reservoir can be filled completely by $6$ identical pumps working together in $10\\text{ hours}$.</p><p>(i) Explain why the number of pumps and the filling time are inversely proportional, and find the constant of variation (total pump-hours required).</p><p>(ii) If only $4$ pumps are operational, how many hours will it take to fill the reservoir?</p><p>(iii) If the reservoir must be filled in $4\\text{ hours}$, how many total pumps are required, and how many additional pumps must be installed?</p>',
+    prompt_ml: '<p>ഒരു വലിയ ജലാശയം ഒരേ ശേഷിയുള്ള $6$ പമ്പുകൾ ഒരുമിച്ച് പ്രവർത്തിച്ചാൽ $10\\text{ മണിക്കൂർ}$ കൊണ്ട് നിറയ്ക്കാം.</p><p>(i) പമ്പുകളുടെ എണ്ണവും സമയം എടുക്കുന്നതും തമ്മിൽ വ്യസ്താനുപാതത്തിലാണെന്ന് സമർത്ഥിച്ച് അനുപാത സ്ഥിരസംഖ്യ (ആകെ പമ്പ്-മണിക്കൂറുകൾ) കണ്ടെത്തുക.</p><p>(ii) $4$ പമ്പുകൾ മാത്രമാണ് പ്രവർത്തിക്കുന്നതെങ്കിൽ ജലാശയം നിറയാൻ എത്ര മണിക്കൂർ വേണ്ടിവരും?</p><p>(iii) ജലാശയം $4\\text{ മണിക്കൂർ}$ കൊണ്ട് നിറയ്ക്കണമെങ്കിൽ ആകെ എത്ര പമ്പുകൾ വേണം? ഇതിനായി എത്ര പുതിയ പമ്പുകൾ അധികമായി സ്ഥാപിക്കണം?</p>',
+    solution_en: `<h4>Part (i): Inverse Proportionality and Constant of Variation</h4>
+<p>Each pump delivers water at an identical constant rate. Doubling the number of pumps halves the time required. Thus, the product of the number of pumps ($n$) and the time ($t$) remains invariant:</p>
+$$k = n \\times t = 6 \\times 10 = \\mathbf{60\\text{ pump-hours}}$$
+<p>Since $n \\times t = 60$, the quantities vary inversely ($t = \\frac{60}{n}$).</p>
+
+<h4>Part (ii): Time Taken by 4 Pumps</h4>
+<p>When $n = 4$:</p>
+$$t = \\frac{k}{n} = \\frac{60}{4} = \\mathbf{15\\text{ hours}}$$
+
+<h4>Part (iii): Pumps Needed to Fill in 4 Hours</h4>
+<p>When $t = 4\\text{ hours}$:</p>
+$$n = \\frac{k}{t} = \\frac{60}{4} = \\mathbf{15\\text{ pumps}}$$
+<p>Additional pumps required:</p>
+$$\\text{Additional pumps} = 15 - 6 = \\mathbf{9\\text{ pumps}}$$`,
+    solution_ml: `<h4>ഭാഗം (i): വ്യസ്താനുപാതവും അനുപാത സ്ഥിരസംഖ്യയും</h4>
+<p>എല്ലാ പമ്പുകൾക്കും ഒരേ പമ്പിംഗ് ശേഷിയായതിനാൽ പമ്പുകളുടെ എണ്ണം ഇരട്ടിയാക്കുമ്പോൾ സമയം പകുതിയായി കുറയുന്നു. അതിനാൽ പമ്പുകളുടെ എണ്ണം ($n$), സമയം ($t$) എന്നിവയുടെ ഗുണനഫലം സ്ഥിരമാണ്:</p>
+$$k = n \\times t = 6 \\times 10 = \\mathbf{60\\text{ പമ്പ്-മണിക്കൂറുകൾ}}$$
+<p>$n \\times t = 60$ ആയതിനാൽ ഇവ വ്യസ്താനുപാതത്തിലാണ് ($t = \\frac{60}{n}$).</p>
+
+<h4>ഭാഗം (ii): 4 പമ്പുകൾ എടുക്കുന്ന സമയം</h4>
+<p>$n = 4$ ആകുമ്പോൾ:</p>
+$$t = \\frac{60}{4} = \\mathbf{15\\text{ മണിക്കൂർ}}$$
+
+<h4>ഭാഗം (iii): 4 മണിക്കൂർ കൊണ്ട് നിറയ്ക്കാൻ വേണ്ട പമ്പുകൾ</h4>
+<p>$t = 4\\text{ മണിക്കൂർ}$ ആകുമ്പോൾ:</p>
+$$n = \\frac{60}{4} = \\mathbf{15\\text{ പമ്പുകൾ}}$$
+<p>അധികമായി വേണ്ട പമ്പുകൾ:</p>
+$$\\text{അധിക പമ്പുകൾ} = 15 - 6 = \\mathbf{9\\text{ പമ്പുകൾ}}$$`
   }
 );

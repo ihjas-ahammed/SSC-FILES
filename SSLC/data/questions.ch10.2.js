@@ -599,5 +599,60 @@ WRITTEN.push(
       </ol>`,
     tested_en: 'Internal and external chord product theorems, tangent-secant calculations, and mean proportional square construction.',
     tested_ml: 'ഞാണുകളുടെ ആന്തര-ബാഹ്യ ഗുണനഫല സിദ്ധാന്തം, തൊടുവര-ഛേദക പ്രയോഗം, സമചതുര നിർമ്മിതി.'
+  },
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     10.2.6 Chord Distance from Center & Parallel Chords (SCERT Textbook)
+     ────────────────────────────────────────────────────────────────────────── */
+  {
+    id: 'w.m10.2.6',
+    concept: 'm10.2.5.intersecting-chords-and-tangents',
+    sec: '10.2.5',
+    type: 'written',
+    marks: 4,
+    time: 210,
+    title_en: 'Chords and Distance from the Center',
+    title_ml: 'ഞാണുകളും കേന്ദ്രത്തിൽ നിന്നുള്ള അകലവും',
+    prompt_en: `<p>(i) A chord of length $16\\text{ cm}$ is at a distance of $6\\text{ cm}$ from the center of a circle. Find the radius of the circle.</p>
+      <p>(ii) In the same circle, find the distance of a chord of length $12\\text{ cm}$ from the center.</p>
+      <p>(iii) Two parallel chords of lengths $12\\text{ cm}$ and $16\\text{ cm}$ are drawn in a circle of radius $10\\text{ cm}$ on opposite sides of the center. Find the distance between the two chords.</p>
+      <p>(iv) What would be the distance between these two parallel chords if they were drawn on the same side of the center?</p>`,
+    prompt_ml: `<p>(i) ഒരു വൃത്തത്തിൽ $16\\text{ cm}$ നീളമുള്ള ഒരു ഞാൺ കേന്ദ്രത്തിൽ നിന്നും $6\\text{ cm}$ അകലെയാണ്. വൃത്തത്തിന്റെ ആരം കാണുക.</p>
+      <p>(ii) ഇതേ വൃത്തത്തിൽ $12\\text{ cm}$ നീളമുള്ള മറ്റൊരു ഞാണിന്റെ കേന്ദ്രത്തിൽ നിന്നുള്ള അകലം എത്ര?</p>
+      <p>(iii) $10\\text{ cm}$ ആരമുള്ള ഒരു വൃത്തത്തിൽ കേന്ദ്രത്തിന്റെ ഇരുവശങ്ങളിലുമായി $12\\text{ cm}$, $16\\text{ cm}$ നീളമുള്ള രണ്ട് സമാന്തര ഞാണുകൾ വരച്ചിരിക്കുന്നു. ഈ ഞാണുകൾ തമ്മിലുള്ള അകലം കാണുക.</p>
+      <p>(iv) ഈ രണ്ട് സമാന്തര ഞാണുകൾ കേന്ദ്രത്തിന്റെ ഒരേ വശത്താണെങ്കിൽ അവ തമ്മിലുള്ള അകലം എത്രയായിരിക്കും?</p>`,
+    solution_en: `<h4>Part (i): Radius from Chord and Perpendicular Distance</h4>
+      <p>The perpendicular from the center bisects the chord. Half-chord $= \\frac{16}{2} = 8\\text{ cm}$.</p>
+      <p>By the Pythagorean theorem:</p>
+      $$r = \\sqrt{d^2 + (\\text{half-chord})^2} = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = \\mathbf{10\\text{ cm}}$$
+      <h4>Part (ii): Distance of $12\\text{ cm}$ Chord from Center</h4>
+      <p>Half-chord $= \\frac{12}{2} = 6\\text{ cm}$. Radius $r = 10\\text{ cm}$.</p>
+      $$d = \\sqrt{r^2 - (\\text{half-chord})^2} = \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = \\mathbf{8\\text{ cm}}$$
+      <h4>Part (iii): Distance Between Chords on Opposite Sides</h4>
+      <p>Let $d_1$ and $d_2$ be distances from center to the two chords:</p>
+      <p>For $16\\text{ cm}$ chord: $d_1 = \\sqrt{10^2 - 8^2} = 6\\text{ cm}$.</p>
+      <p>For $12\\text{ cm}$ chord: $d_2 = \\sqrt{10^2 - 6^2} = 8\\text{ cm}$.</p>
+      <p>Since they are on opposite sides of the center:</p>
+      $$\\text{Distance} = d_1 + d_2 = 6 + 8 = \\mathbf{14\\text{ cm}}$$
+      <h4>Part (iv): Distance Between Chords on the Same Side</h4>
+      <p>Since they are on the same side of the center:</p>
+      $$\\text{Distance} = d_2 - d_1 = 8 - 6 = \\mathbf{2\\text{ cm}}$$`,
+    solution_ml: `<h4>ഭാഗം (i): ആരവും ലംബദൂരവും</h4>
+      <p>കേന്ദ്രത്തിൽ നിന്നുള്ള ലംബം ഞാണിനെ സമഭാഗം ചെയ്യുന്നു. ഞാണിന്റെ പകുതി $= \\frac{16}{2} = 8\\text{ cm}$.</p>
+      <p>പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം:</p>
+      $$r = \\sqrt{d^2 + (\\text{ഞാണിന്റെ പകുതി})^2} = \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = \\mathbf{10\\text{ cm}}$$
+      <h4>ഭാഗം (ii): $12\\text{ cm}$ ഞാണിന്റെ കേന്ദ്രത്തിൽ നിന്നുള്ള അകലം</h4>
+      <p>ഞാണിന്റെ പകുതി $= \\frac{12}{2} = 6\\text{ cm}$. ആരം $r = 10\\text{ cm}$.</p>
+      $$d = \\sqrt{r^2 - 6^2} = \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = \\mathbf{8\\text{ cm}}$$
+      <h4>ഭാഗം (iii): കേന്ദ്രത്തിന്റെ ഇരുവശങ്ങളിലുള്ള ഞാണുകൾ തമ്മിലുള്ള അകലം</h4>
+      <p>$16\\text{ cm}$ ഞാണിലേക്കുള്ള അകലം $d_1 = \\sqrt{10^2 - 8^2} = 6\\text{ cm}$.</p>
+      <p>$12\\text{ cm}$ ഞാണിലേക്കുള്ള അകലം $d_2 = \\sqrt{10^2 - 6^2} = 8\\text{ cm}$.</p>
+      <p>ഇവ കേന്ദ്രത്തിന്റെ ഇരുവശങ്ങളിലായതിനാൽ:</p>
+      $$\\text{അകലം} = d_1 + d_2 = 6 + 8 = \\mathbf{14\\text{ cm}}$$
+      <h4>ഭാഗം (iv): കേന്ദ്രത്തിന്റെ ഒരേ വശത്തുള്ള ഞാണുകൾ തമ്മിലുള്ള അകലം</h4>
+      <p>ഞാണുകൾ കേന്ദ്രത്തിന്റെ ഒരേ വശത്തായതിനാൽ:</p>
+      $$\\text{അകലം} = d_2 - d_1 = 8 - 6 = \\mathbf{2\\text{ cm}}$$`,
+    tested_en: 'Perpendicular from center to chord, Pythagorean relationship with radius, and parallel chord spacing.',
+    tested_ml: 'കേന്ദ്രത്തിൽ നിന്ന് ഞാണിലേക്കുള്ള ലംബവും ആരവും തമ്മിലുള്ള ബന്ധം, സമാന്തര ഞാണുകൾ തമ്മിലുള്ള അകലം.'
   }
 );

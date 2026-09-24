@@ -246,6 +246,9 @@ WRITTEN.push(
     id: 'w.m8.8.1',
     sec: '8.8.1',
     concept: 'm8.8.1.general-quad-area',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Quadrilateral Diagonal and Offsets Calculation',
     title_ml: 'വികർണ്ണവും ലംബങ്ങളും ഉപയോഗിച്ച് പരപ്പളവ് കണ്ടെത്തൽ',
     prompt_en: '<p>In quadrilateral $ABCD$, diagonal $AC = 18\\text{ cm}$. The perpendiculars from vertices $B$ and $D$ to diagonal $AC$ measure $7\\text{ cm}$ and $5\\text{ cm}$ respectively. Find the area of the quadrilateral.</p>',
@@ -257,13 +260,18 @@ $$\\text{Area} = 9 \\times 12 = \\mathbf{108\\text{ cm}^2}$$`,
     solution_ml: `$$\\text{നൽകിയിരിക്കുന്നത്: } d = AC = 18\\text{ cm}, \\quad h_1 = 7\\text{ cm}, \\quad h_2 = 5\\text{ cm}$$
 $$\\text{ചതുർഭുജം } ABCD\\text{-യുടെ പരപ്പളവ്} = \\frac{1}{2} \\times d \\times (h_1 + h_2)$$
 $$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 18 \\times (7 + 5)$$
-$$\\text{പരപ്പളവ്} = 9 \\times 12 = \\mathbf{108\\text{ cm}^2}$$`
+$$\\text{പരപ്പളവ്} = 9 \\times 12 = \\mathbf{108\\text{ cm}^2}$$`,
+    tested_en: 'General quadrilateral area using diagonal and two perpendicular offsets.',
+    tested_ml: 'വികർണ്ണവും രണ്ട് ലംബങ്ങളും ഉപയോഗിച്ചുള്ള ചതുർഭുജ പരപ്പളവ് സൂത്രവാക്യം.'
   },
 
   {
     id: 'w.m8.8.2',
     sec: '8.8.2',
     concept: 'm8.8.2.rhombus-area',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Rhombus Area and Ground Leveling Cost',
     title_ml: 'റോംബസ് പരപ്പളവും നിരപ്പാക്കാനുള്ള ചിലവും',
     prompt_en: '<p>A plot of land is in the shape of a rhombus whose diagonals measure $24\\text{ metres}$ and $10\\text{ metres}$. Find its area. If the cost of leveling the ground is ₹$25$ per square metre, find the total cost of leveling.</p>',
@@ -279,13 +287,18 @@ $$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times d_1 \\times d_2 = \\fr
 
 $$\\text{ഘട്ടം 2: നിരപ്പാക്കാനുള്ള ആകെ തുക കണക്കാക്കുക}$$
 $$\\text{നിരക്ക്} = ₹25\\text{ / m}^2$$
-$$\\text{ആകെ ചിലവ്} = 120 \\times 25 = \\mathbf{₹3000}$$`
+$$\\text{ആകെ ചിലവ്} = 120 \\times 25 = \\mathbf{₹3000}$$`,
+    tested_en: 'Rhombus area from diagonals and practical unitary leveling cost.',
+    tested_ml: 'വികർണ്ണങ്ങളിൽ നിന്ന് റോംബസ് പരപ്പളവും നിരപ്പാക്കൽ ചിലവും കാണൽ.'
   },
 
   {
     id: 'w.m8.8.3',
     sec: '8.8.3',
     concept: 'm8.8.3.parallelogram-area',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Parallelogram Area and Alternate Height Calculation',
     title_ml: 'സാമാന്തരികത്തിന്റെ പരപ്പളവും അടുത്ത ഉയരവും കാണൽ',
     prompt_en: '<p>In a parallelogram, one side is $16\\text{ cm}$ and the perpendicular distance to this side from the opposite side is $7.5\\text{ cm}$. Another side is $12\\text{ cm}$. Find: (a) the area of the parallelogram, and (b) the perpendicular distance between the other pair of parallel sides.</p>',
@@ -305,13 +318,18 @@ $$\\text{പരപ്പളവ്} = b_1 \\times h_1 = 16 \\times 7.5 = \\mathbf
 $$\\text{(b) അടുത്ത ജോടി സമാന്തര വശങ്ങൾ തമ്മിലുള്ള ലംബദൂരം } (h_2):$$
 $$\\text{പാദം } b_2 = 12\\text{ cm}$$
 $$\\text{പരപ്പളവ്} = b_2 \\times h_2 \\implies 120 = 12 \\times h_2$$
-$$h_2 = \\frac{120}{12} = \\mathbf{10\\text{ cm}}$$`
+$$h_2 = \\frac{120}{12} = \\mathbf{10\\text{ cm}}$$`,
+    tested_en: 'Parallelogram area and calculating alternate perpendicular height.',
+    tested_ml: 'സാമാന്തരിക പരപ്പളവും അടുത്ത ലംബ ഉയരവും കണ്ടെത്തൽ.'
   },
 
   {
     id: 'w.m8.8.4',
     sec: '8.8.4',
     concept: 'm8.8.4.trapezium-area',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Cross-Section Area of a Canal as Trapezium',
     title_ml: 'കനാലിന്റെ ഛേദപരപ്പളവ് ലംബക സൂത്രവാക്യം വഴി കാണൽ',
     prompt_en: '<p>The cross-section of a canal is a trapezium. The width at the top is $10\\text{ metres}$, the width at the bottom is $6\\text{ metres}$, and the depth of the canal is $2.5\\text{ metres}$. Find the area of the cross-section.</p>',
@@ -323,6 +341,86 @@ $$\\text{Area} = \\frac{1}{2} \\times 2.5 \\times 16 = 2.5 \\times 8 = \\mathbf{
     solution_ml: `$$\\text{നൽകിയിരിക്കുന്നത്: സമാന്തര വശങ്ങൾ } a = 10\\text{ m}, \\; b = 6\\text{ m}, \\quad \\text{ഉയരം (ആഴം) } h = 2.5\\text{ m}$$
 $$\\text{ഛേദത്തിന്റെ പരപ്പളവ്} = \\frac{1}{2} \\times h \\times (a + b)$$
 $$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 2.5 \\times (10 + 6)$$
-$$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 2.5 \\times 16 = 2.5 \\times 8 = \\mathbf{20\\text{ m}^2}$$`
+$$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 2.5 \\times 16 = 2.5 \\times 8 = \\mathbf{20\\text{ m}^2}$$`,
+    tested_en: 'Trapezium cross-section area using parallel sides and perpendicular depth.',
+    tested_ml: 'സമാന്തര വശങ്ങളും ആഴവും ഉപയോഗിച്ച് ലംബക പരപ്പളവ് കാണൽ.'
+  },
+
+  {
+    id: 'w.m8.8.5',
+    sec: '8.8.2',
+    concept: 'm8.8.2.rhombus-area',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Rhombus Perimeter and Area from Pythagorean Relationship',
+    title_ml: 'റോംബസിന്റെ ചുറ്റളവും പരപ്പളവും',
+    prompt_en: `<ol type="a">
+        <li>The perimeter of a rhombus is $52\\text{ cm}$ and one of its diagonals is $10\\text{ cm}$. Find the length of the second diagonal.</li>
+        <li>Calculate the area of this rhombus.</li>
+      </ol>`,
+    prompt_ml: `<ol type="a">
+        <li>ഒരു റോംബസിന്റെ ചുറ്റളവ് $52\\text{ cm}$-ഉം ഒരു വികർണ്ണത്തിന്റെ നീളം $10\\text{ cm}$-ഉം ആണ്. രണ്ടാമത്തെ വികർണ്ണത്തിന്റെ നീളം കാണുക.</li>
+        <li>ഈ റോംബസിന്റെ പരപ്പളവ് കണക്കാക്കുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>All four sides of a rhombus are equal.<br>
+          $$\\text{Side } s = \\frac{52}{4} = 13\\text{ cm}$$
+          The diagonals bisect each other perpendicularly at right angles.<br>
+          Half of first diagonal $= \\frac{10}{2} = 5\\text{ cm}$.<br>
+          Let half of the second diagonal be $x$. By the Pythagorean theorem:
+          $$x^2 + 5^2 = 13^2 \\implies x^2 + 25 = 169 \\implies x^2 = 144 \\implies x = 12\\text{ cm}$$
+          $$\\text{Second diagonal } d_2 = 2 \\times 12 = \\mathbf{24\\text{ cm}}$$</li>
+        <li>$$\\text{Area} = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 10 \\times 24 = \\mathbf{120\\text{ cm}^2}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>റോംബസിന്റെ നാല് വശങ്ങളും തുല്യമാണ്.<br>
+          $$\\text{ഒരു വശം } s = \\frac{52}{4} = 13\\text{ cm}$$
+          റോംബസിന്റെ വികർണ്ണങ്ങൾ പരസ്പരം ലംബമായി സമഭാഗം ചെയ്യുന്നു.<br>
+          ഒന്നാം വികർണ്ണത്തിന്റെ പകുതി $= \\frac{10}{2} = 5\\text{ cm}$.<br>
+          രണ്ടാം വികർണ്ണത്തിന്റെ പകുതി $x$ എന്നിരിക്കട്ടെ. പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം:
+          $$x^2 + 5^2 = 13^2 \\implies x^2 + 25 = 169 \\implies x^2 = 144 \\implies x = 12\\text{ cm}$$
+          $$\\text{രണ്ടാം വികർണ്ണം } d_2 = 2 \\times 12 = \\mathbf{24\\text{ cm}}$$</li>
+        <li>$$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 10 \\times 24 = \\mathbf{120\\text{ cm}^2}$$</li>
+      </ol>`,
+    tested_en: 'Rhombus diagonal relationship via Pythagorean theorem and area.',
+    tested_ml: 'റോംബസിന്റെ വികർണ്ണങ്ങളും വശവും തമ്മിലുള്ള പൈതഗോറസ് ബന്ധവും പരപ്പളവും.'
+  },
+
+  {
+    id: 'w.m8.8.6',
+    sec: '8.8.4',
+    concept: 'm8.8.4.trapezium-area',
+    type: 'written',
+    marks: 4,
+    time: 210,
+    title_en: 'Isosceles Trapezium Height and Total Area',
+    title_ml: 'സമദ്വിബാഹു ലംബകത്തിന്റെ ലംബ ഉയരവും പരപ്പളവും',
+    prompt_en: `<ol type="a">
+        <li>The parallel sides of an isosceles trapezium are $25\\text{ cm}$ and $13\\text{ cm}$, and each of its non-parallel sides is $10\\text{ cm}$. Find the perpendicular height between the parallel sides.</li>
+        <li>Calculate the total area of the trapezium.</li>
+      </ol>`,
+    prompt_ml: `<ol type="a">
+        <li>ഒരു സമദ്വിബാഹു ലംബകത്തിന്റെ സമാന്തര വശങ്ങൾ $25\\text{ cm}$, $13\\text{ cm}$ വീതവും സമാന്തരമല്ലാത്ത വശങ്ങൾ $10\\text{ cm}$ വീതവുമാണ്. സമാന്തര വശങ്ങൾ തമ്മിലുള്ള ലംബ ഉയരം കണ്ടെത്തുക.</li>
+        <li>ലംബകത്തിന്റെ ആകെ പരപ്പളവ് കണക്കാക്കുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Draw perpendiculars from the ends of the smaller parallel side ($13\\text{ cm}$) to the larger parallel side ($25\\text{ cm}$).<br>
+          Difference between parallel sides $= 25 - 13 = 12\\text{ cm}$.<br>
+          Since it is an isosceles trapezium, the perpendiculars cut off equal segments of length $\\frac{12}{2} = 6\\text{ cm}$ at each end.<br>
+          By the Pythagorean theorem in the right triangle with hypotenuse $10\\text{ cm}$ and base $6\\text{ cm}$:
+          $$h = \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = \\mathbf{8\\text{ cm}}$$</li>
+        <li>$$\\text{Area} = \\frac{1}{2} \\times h \\times (a + b) = \\frac{1}{2} \\times 8 \\times (25 + 13) = 4 \\times 38 = \\mathbf{152\\text{ cm}^2}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>ചെറിയ സമാന്തര വശത്തിന്റെ ($13\\text{ cm}$) അറ്റങ്ങളിൽ നിന്നും വലിയ വശത്തിലേക്ക് ($25\\text{ cm}$) ലംബങ്ങൾ വരയ്ക്കുന്നു.<br>
+          സമാന്തര വശങ്ങളുടെ വ്യത്യാസം $= 25 - 13 = 12\\text{ cm}$.<br>
+          സമദ്വിബാഹു ലംബകമായതിനാൽ ഇരുവശങ്ങളിലും ഉണ്ടാകുന്ന കഷണങ്ങളുടെ നീളം $\\frac{12}{2} = 6\\text{ cm}$ വീതമായിരിക്കും.<br>
+          കർണ്ണം $10\\text{ cm}$-ഉം ഒരു വശം $6\\text{ cm}$-ഉം ആയ മട്ടത്രികോണത്തിൽ പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം:
+          $$h = \\sqrt{10^2 - 6^2} = \\sqrt{100 - 36} = \\sqrt{64} = \\mathbf{8\\text{ cm}}$$</li>
+        <li>$$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times h \\times (a + b) = \\frac{1}{2} \\times 8 \\times (25 + 13) = 4 \\times 38 = \\mathbf{152\\text{ cm}^2}$$</li>
+      </ol>`,
+    tested_en: 'Isosceles trapezium height derivation via right triangles and area computation.',
+    tested_ml: 'സമദ്വിബാഹു ലംബകത്തിന്റെ ലംബ ഉയരം കണ്ടെത്തലും പരപ്പളവ് കണക്കാക്കലും.'
   }
 );

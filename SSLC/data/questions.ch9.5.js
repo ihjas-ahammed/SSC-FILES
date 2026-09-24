@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.5.1',
     sec: '9.5.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.5.1.chords-and-perpendicular-bisector',
+    tested_en: 'Pythagorean distances from centre to parallel chords on opposite sides',
+    tested_ml: 'കേന്ദ്രത്തിൽ നിന്ന് ഇരുവശങ്ങളിലുമുള്ള സമാന്തര ഞാണുകളിലേക്കുള്ള അകലവും പൈതഗോറസ് തത്വവും',
     title_en: 'Distance Between Two Parallel Chords on Opposite Sides of Centre',
     title_ml: 'കേന്ദ്രത്തിന് ഇരുവശങ്ങളിലുമുള്ള രണ്ട് സമാന്തര ഞാണുകൾ തമ്മിലുള്ള അകലം',
     prompt_en: '<p>In a circle of radius $10\\text{ cm}$, two parallel chords $AB$ and $CD$ have lengths $16\\text{ cm}$ and $12\\text{ cm}$ respectively, and lie on opposite sides of the centre $O$. Calculate the distance between these two parallel chords.</p>',
@@ -281,7 +286,12 @@ $$MN = OM + ON = 6 + 8 = \\mathbf{14\\text{ cm}}$$`
   {
     id: 'w.m9.5.2',
     sec: '9.5.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.5.2.chords-and-angles-at-centre',
+    tested_en: 'Proof of equal chord central angle theorem using SSS congruence',
+    tested_ml: 'SSS സർവ്വസമതാ തത്വം ഉപയോഗിച്ച് തുല്യ ഞാണുകൾ കേന്ദ്രത്തിലുണ്ടാക്കുന്ന കോണുകളുടെ തുല്യത തെളിയിക്കൽ',
     title_en: 'Proof that Equal Chords Subtend Equal Angles at the Centre',
     title_ml: 'തുല്യ ഞാണുകൾ കേന്ദ്രത്തിൽ തുല്യകോണുകൾ ഉണ്ടാക്കുന്നു എന്നതിന്റെ തെളിവ്',
     prompt_en: '<p>Prove geometrically that chords of equal length in a circle subtend equal angles at the centre. State the congruence criterion applied in your deduction.</p>',
@@ -331,7 +341,12 @@ $$\\mathbf{\\angle AOB = \\angle COD}$$`
   {
     id: 'w.m9.5.3',
     sec: '9.5.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.5.3.angle-in-a-semicircle',
+    tested_en: 'Proof that angle in a semicircle is a right angle using isosceles triangles',
+    tested_ml: 'സമപാർശ്വ ത്രികോണങ്ങൾ ഉപയോഗിച്ച് അർദ്ധവൃത്തത്തിലെ കോൺ മട്ടകോണാണെന്ന് തെളിയിക്കൽ',
     title_en: 'Proof that the Angle Inscribed in a Semicircle is 90°',
     title_ml: 'അർദ്ധവൃത്തത്തിലെ കോൺ മട്ടകോണാണെന്നതിന്റെ തെളിവ്',
     prompt_en: '<p>Prove that the angle subtended by a diameter at any point on the circumference of a circle is strictly a right angle ($90^\\circ$). Provide step-by-step reasoning using isosceles triangle angle properties.</p>',
@@ -388,7 +403,12 @@ $$\\mathbf{\\angle APB = 90^\\circ} \\quad (\\text{മട്ടകോൺ})$$`
   {
     id: 'w.m9.5.4',
     sec: '9.5.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.5.4.angle-subtended-by-an-arc',
+    tested_en: 'Inscribed angles in alternate segments and supplementary opposite angles',
+    tested_ml: 'വിവിധ വൃത്തഖണ്ഡങ്ങളിലെ കോണുകളും വൃത്തീയ ചതുർഭുജങ്ങളിലെ എതിർകോണുകളുടെ അനുപൂരകതയും',
     title_en: 'Inscribed Angles in Opposite Segments and Cyclic Quadrilateral Theorem',
     title_ml: 'എതിർ വൃത്തഖണ്ഡങ്ങളിലെ കോണുകളും വൃത്തീയ ചതുർഭുജ സിദ്ധാന്തവും',
     prompt_en: '<p>In a circle with centre $O$, chord $AB$ subtends a central angle $\\angle AOB = 140^\\circ$. Points $P$ and $Q$ lie on the major and minor arcs respectively. Find $\\angle APB$ and $\\angle AQB$, and demonstrate that the opposite angles of quadrilateral $APBQ$ are supplementary.</p>',
@@ -412,7 +432,7 @@ $$\\text{ചാപം കേന്ദ്രത്തിലുണ്ടാക്�
 $$\\angle APB = \\frac{1}{2} \\angle AOB = \\frac{1}{2} \\times 140^\\circ = \\mathbf{70^\\circ}$$
 
 $$\\text{ഘട്ടം 2: ബൃഹത് കേന്ദ്രകോണും ചെറിയ വൃത്തഖണ്ഡത്തിലെ കോണും } (\\angle AQB)$$
-$$\\text{വലിയ ചാപം കേന്ദ്രത്തിലുണ്ടാക്കുന്ന കോൺ (Reflex angle):}$$
+$$\\text{വലിയ ചാപം കേന്ദ്രത്തിലുണ്ടാക്കുന്ന കോൺ:}$$
 $$\\text{Reflex } \\angle AOB = 360^\\circ - 140^\\circ = 220^\\circ$$
 $$\\angle AQB = \\frac{1}{2} \\times 220^\\circ = \\mathbf{110^\\circ}$$
 
@@ -420,5 +440,67 @@ $$\\text{ഘട്ടം 3: എതിർകോണുകളുടെ തുക �
 $$APBQ \\text{ എന്ന വൃത്തീയ ചതുർഭുജത്തിലെ എതിർകോണുകൾ } \\angle APB, \\angle AQB \\text{ എന്നിവയാണ്:}$$
 $$\\angle APB + \\angle AQB = 70^\\circ + 110^\\circ = \\mathbf{180^\\circ}$$
 $$\\text{ഇത് വൃത്തീയ ചതുർഭുജത്തിലെ എതിർകോണുകൾ അനുപൂരകങ്ങളാണ് എന്ന സിദ്ധാന്തം ശരിവെക്കുന്നു.}$$`
+  },
+
+  {
+    id: 'w.m9.5.5',
+    sec: '9.5.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.5.1.chords-and-perpendicular-bisector',
+    tested_en: 'Perpendicular from centre to chord bisector property and radius calculation',
+    tested_ml: 'കേന്ദ്രത്തിൽ നിന്നുള്ള ലംബം ഞാണിനെ സമഭാഗം ചെയ്യുന്ന തത്വവും ആരവും കണക്കാക്കൽ',
+    title_en: 'Perpendicular from Centre to Chord and Chord Bisector Property',
+    title_ml: 'കേന്ദ്രത്തിൽ നിന്ന് ഞാണിലേക്കുള്ള ലംബവും ഞാൺ സമഭാജിയും',
+    prompt_en: '<p>A chord of length $24\\text{ cm}$ is at a distance of $5\\text{ cm}$ from the centre of a circle.<br>(a) Find the radius of the circle.<br>(b) Find the length of another chord in the same circle which is at a distance of $12\\text{ cm}$ from the centre.</p>',
+    prompt_ml: '<p>വൃത്തകേന്ദ്രത്തിൽ നിന്ന് $5\\text{ cm}$ അകലെയുള്ള ഒരു ഞാണിന്റെ നീളം $24\\text{ cm}$ ആണ്.<br>(a) വൃത്തത്തിന്റെ ആരം കണ്ടെത്തുക.<br>(b) ഇതേ വൃത്തത്തിൽ കേന്ദ്രത്തിൽ നിന്ന് $12\\text{ cm}$ അകലെയുള്ള മറ്റൊരു ഞാണിന്റെ നീളം കണക്കാക്കുക.</p>',
+    solution_en: `$$\\text{(a) Radius } r:$$
+$$\\text{Half-length of first chord } = \\frac{24}{2} = 12\\text{ cm}.$$
+$$\\text{Distance from centre } d_1 = 5\\text{ cm}.$$
+$$r = \\sqrt{12^2 + 5^2} = \\sqrt{144 + 25} = \\sqrt{169} = \\mathbf{13\\text{ cm}}.$$
+
+$$\\text{(b) Length of second chord at distance } d_2 = 12\\text{ cm}:$$
+$$\\text{Half-length } = \\sqrt{r^2 - d_2^2} = \\sqrt{13^2 - 12^2} = \\sqrt{169 - 144} = \\sqrt{25} = 5\\text{ cm}.$$
+$$\\text{Total length of chord } = 2 \\times 5 = \\mathbf{10\\text{ cm}}.$$`,
+    solution_ml: `$$\\text{(a) വൃത്തത്തിന്റെ ആരം } r:$$
+$$\\text{ആദ്യ ഞാണിന്റെ പകുതി നീളം } = \\frac{24}{2} = 12\\text{ cm}.$$
+$$\\text{കേന്ദ്രത്തിൽ നിന്നുള്ള അകലം } = 5\\text{ cm}.$$
+$$r = \\sqrt{12^2 + 5^2} = \\sqrt{144 + 25} = \\sqrt{169} = \\mathbf{13\\text{ cm}}.$$
+
+$$\\text{(b) കേന്ദ്രത്തിൽ നിന്ന് } 12\\text{ cm} \\text{ അകലെയുള്ള ഞാണിന്റെ നീളം:}$$
+$$\\text{ഞാണിന്റെ പകുതി } = \\sqrt{13^2 - 12^2} = \\sqrt{169 - 144} = \\sqrt{25} = 5\\text{ cm}.$$
+$$\\text{ആകെ ഞാണിന്റെ നീളം } = 2 \\times 5 = \\mathbf{10\\text{ cm}}.$$`
+  },
+
+  {
+    id: 'w.m9.5.6',
+    sec: '9.5.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.5.4.angle-subtended-by-an-arc',
+    tested_en: 'Angles in the same segment and triangle angle relationships',
+    tested_ml: 'ഒരേ വൃത്തഖണ്ഡത്തിലെ കോണുകളുടെ സമത്വവും ത്രികോണ കോൺ ബന്ധങ്ങളും',
+    title_en: 'Angles in the Same Segment and Intersecting Chords',
+    title_ml: 'ഒരേ വൃത്തഖണ്ഡത്തിലെ കോണുകളും ഖണ്ഡിക്കുന്ന ഞാണുകളും',
+    prompt_en: '<p>In a circle, $A, B, C, D$ are four points on the circumference. Chords $AC$ and $BD$ intersect at point $E$ such that $\\angle BEC = 130^\\circ$ and $\\angle ECD = 20^\\circ$.<br>(a) Find $\\angle EDC$.<br>(b) Using the property of angles in the same segment, determine $\\angle BAC$.</p>',
+    prompt_ml: '<p>ഒരു വൃത്തത്തിലെ നാല് ബിന്ദുക്കളാണ് $A, B, C, D$. $AC, BD$ എന്നീ ഞാണുകൾ $E$ എന്ന ബിന്ദുവിൽ ഖണ്ഡിക്കുന്നു. $\\angle BEC = 130^\\circ$, $\\angle ECD = 20^\\circ$ ആണ്.<br>(a) $\\angle EDC$ കണ്ടെത്തുക.<br>(b) ഒരേ വൃത്തഖണ്ഡത്തിലെ കോണുകളുടെ സമത്വം ഉപയോഗിച്ച് $\\angle BAC$ നിർണ്ണയിക്കുക.</p>',
+    solution_en: `$$\\text{(a) In } \\triangle CDE:$$
+$$\\angle DEC + \\angle BEC = 180^\\circ \\quad (\\text{linear pair}) \\implies \\angle DEC = 180^\\circ - 130^\\circ = 50^\\circ.$$
+$$\\text{Sum of angles in } \\triangle CDE:$$
+$$\\angle EDC = 180^\\circ - (\\angle DEC + \\angle ECD) = 180^\\circ - (50^\\circ + 20^\\circ) = 180^\\circ - 70^\\circ = \\mathbf{110^\\circ}.$$
+
+$$\\text{(b) Angles in the same segment:}$$
+$$\\text{Angles subtended by arc } BC \\text{ at points } A \\text{ and } D \\text{ on the circumference are equal:}$$
+$$\\angle BAC = \\angle BDC = \\angle EDC = \\mathbf{110^\\circ}.$$`,
+    solution_ml: `$$\\text{(a) } \\triangle CDE\\text{-ൽ:}$$
+$$\\angle DEC + \\angle BEC = 180^\\circ \\implies \\angle DEC = 180^\\circ - 130^\\circ = 50^\\circ.$$
+$$\\triangle CDE\\text{-ലെ കോണുകളുടെ തുക } 180^\\circ \\text{ ആയതിനാൽ:}$$
+$$\\angle EDC = 180^\\circ - (50^\\circ + 20^\\circ) = 180^\\circ - 70^\\circ = \\mathbf{110^\\circ}.$$
+
+$$\\text{(b) ഒരേ വൃത്തഖണ്ഡത്തിലെ കോണുകൾ:}$$
+$$BC \\text{ എന്ന ചാപം വൃത്തത്തിലുണ്ടാക്കുന്ന കോണുകൾ തുല്യമായതിനാൽ:}$$
+$$\\angle BAC = \\angle BDC = \\angle EDC = \\mathbf{110^\\circ}.$$`
   }
 );

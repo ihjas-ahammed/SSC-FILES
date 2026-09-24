@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.3.1',
     sec: '9.3.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.3.1.formulating-pairs-of-equations',
+    tested_en: 'Translating word scenarios to linear systems and solving for unit costs',
+    tested_ml: 'വാചക രൂപത്തിലുള്ള ചോദ്യങ്ങളിൽ നിന്ന് സമവാക്യജോടികൾ രൂപീകരിച്ച് വില കണ്ടെത്തൽ',
     title_en: 'Formulating and Solving Classroom Notebook and Pen Purchase Problem',
     title_ml: 'നോട്ടുപുസ്തകങ്ങളുടെയും പേനകളുടെയും വില കണ്ടെത്തൽ',
     prompt_en: '<p>Four pens and six notebooks cost ₹120. Three pens and five notebooks cost ₹95. Formulate a pair of linear equations representing this situation, and find the cost of one pen and one notebook.</p>',
@@ -296,7 +301,12 @@ $$\\text{ഉത്തരം: ഒരു പേനയുടെ വില ₹15, �
   {
     id: 'w.m9.3.2',
     sec: '9.3.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.3.2.elimination-method',
+    tested_en: 'Simultaneous elimination technique and verification',
+    tested_ml: 'നിഷ്കാസന രീതിയിലുള്ള സമവാക്യ പരിഹാരവും പരിശോധനയും',
     title_en: 'Elimination Method for Simultaneous System',
     title_ml: 'നിഷ്കാസന രീതിയിലുള്ള സമവാക്യ പരിഹാരം',
     prompt_en: '<p>Solve the following pair of linear equations by the method of elimination: $$5x + 3y = 35$$ $$2x + 4y = 28$$ Show all intermediate algebraic steps and verify your final solution.</p>',
@@ -339,7 +349,12 @@ $$\\text{ഉത്തരം: } \\mathbf{x = 4, \\, y = 5}.$$`
   {
     id: 'w.m9.3.3',
     sec: '9.3.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.3.3.substitution-method',
+    tested_en: 'Substitution method and solution checking',
+    tested_ml: 'പ്രതിസ്ഥാപന രീതിയും സമവാക്യ പരിഹാരവും',
     title_en: 'Substitution Method with Fractional Coefficients',
     title_ml: 'പ്രതിസ്ഥാപന രീതിയിലുള്ള കണക്ക്',
     prompt_en: '<p>Solve the following system using the substitution method: $$x - 3y = 1$$ $$2x + 5y = 24$$ Verify the solution by checking both equations.</p>',
@@ -387,7 +402,12 @@ $$\\text{ഉത്തരം: } \\mathbf{x = 7, \\, y = 2}.$$`
   {
     id: 'w.m9.3.4',
     sec: '9.3.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.3.4.applied-word-problems-pairs',
+    tested_en: 'Two-digit number place-value modeling and system resolution',
+    tested_ml: 'രണ്ടക്ക സംഖ്യകളുടെ സ്ഥാനവിലയും സമവാക്യ നിർമ്മാണവും',
     title_en: 'Two-Digit Number Reversal and Age Relations',
     title_ml: 'രണ്ടക്ക സംഖ്യയും അക്കങ്ങൾ തിരിച്ചിടലും',
     prompt_en: '<p>The sum of the digits of a two-digit number is 11. If 27 is added to the number, the digits are reversed. Formulate equations in two variables and determine the original number.</p>',
@@ -433,5 +453,93 @@ $$x + 7 = 11 \\implies x = \\mathbf{4}$$
 
 $$\\text{യഥാർത്ഥ സംഖ്യ} = 10(4) + 7 = \\mathbf{47}.$$
 $$\\text{പരിശോധന: } 4 + 7 = 11, \\quad 47 + 27 = 74.$$`
+  },
+
+  {
+    id: 'w.m9.3.5',
+    sec: '9.3.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.3.4.applied-word-problems-pairs',
+    tested_en: 'Perimeter and area variations with linear equations',
+    tested_ml: 'ചുറ്റളവും പരപ്പളവുമായും ബന്ധപ്പെട്ട രേഖീയ സമവാക്യങ്ങൾ',
+    title_en: 'Perimeter and Dimensions of Rectangular Plot',
+    title_ml: 'ദീർഘചതുരാകൃതിയിലുള്ള സ്ഥലത്തിന്റെ ചുറ്റളവും അളവുകളും',
+    prompt_en: '<p>The perimeter of a rectangular plot is $80\\text{ m}$. If the length is decreased by $2\\text{ m}$ and the breadth is increased by $2\\text{ m}$, the area increases by $16\\text{ sq m}$.<br>(a) Write a pair of equations in length ($x$) and breadth ($y$).<br>(b) Find the original length and breadth of the plot.</p>',
+    prompt_ml: '<p>ഒരു ദീർഘചതുരാകൃതിയിലുള്ള സ്ഥലത്തിന്റെ ചുറ്റളവ് $80\\text{ മീറ്റർ}$ ആണ്. നീളം $2\\text{ മീറ്റർ}$ കുറയ്ക്കുകയും വീതി $2\\text{ മീറ്റർ}$ കൂട്ടുകയും ചെയ്താൽ പരപ്പളവ് $16\\text{ ചതുരശ്ര മീറ്റർ}$ വർദ്ധിക്കുന്നു.<br>(a) നീളം ($x$), വീതി ($y$) എന്നിവ ഉൾപ്പെടുത്തി സമവാക്യജോടി രൂപീകരിക്കുക.<br>(b) സ്ഥലത്തിന്റെ യഥാർത്ഥ നീളവും വീതിയും കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{Let length be } x\\text{ m and breadth be } y\\text{ m.}$$
+$$\\text{Perimeter } = 2(x + y) = 80 \\implies x + y = 40 \\quad \\text{--- (1)}$$
+
+$$\\text{Original area } = xy$$
+$$\\text{New dimensions: } (x - 2) \\text{ and } (y + 2)$$
+$$\\text{New area: } (x - 2)(y + 2) = xy + 16$$
+$$xy + 2x - 2y - 4 = xy + 16 \\implies 2x - 2y = 20 \\implies x - y = 10 \\quad \\text{--- (2)}$$
+
+$$\\text{Adding (1) and (2):}$$
+$$(x + y) + (x - y) = 40 + 10 \\implies 2x = 50 \\implies x = \\mathbf{25\\text{ m}}.$$
+$$\\text{From (1): } 25 + y = 40 \\implies y = 40 - 25 = \\mathbf{15\\text{ m}}.$$
+
+$$\\text{Original dimensions: Length } = 25\\text{ m}, \\text{ Breadth } = 15\\text{ m}.$$`,
+    solution_ml: `$$\\text{നീളം } x\\text{ മീറ്ററും വീതി } y\\text{ മീറ്ററും എന്നിരിക്കട്ടെ.}$$
+$$\\text{ചുറ്റളവ് } = 2(x + y) = 80 \\implies x + y = 40 \\quad \\text{--- (1)}$$
+
+$$\\text{യഥാർത്ഥ പരപ്പളവ് } = xy$$
+$$\\text{പുതിയ അളവുകൾ: } (x - 2), (y + 2)$$
+$$(x - 2)(y + 2) = xy + 16$$
+$$xy + 2x - 2y - 4 = xy + 16 \\implies 2x - 2y = 20 \\implies x - y = 10 \\quad \\text{--- (2)}$$
+
+$$\\text{സമവാക്യം (1)-ഉം (2)-ഉം തമ്മിൽ കൂട്ടുന്നു:}$$
+$$2x = 50 \\implies x = \\mathbf{25\\text{ മീറ്റർ}}.$$
+$$25 + y = 40 \\implies y = 40 - 25 = \\mathbf{15\\text{ മീറ്റർ}}.$$
+
+$$\\text{ഉത്തരം: സ്ഥലത്തിന്റെ നീളം } = 25\\text{ മീറ്റർ}, \\text{ വീതി } = 15\\text{ മീറ്റർ}.$$`
+  },
+
+  {
+    id: 'w.m9.3.6',
+    sec: '9.3.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.3.4.applied-word-problems-pairs',
+    tested_en: 'Rational fraction formulation and simultaneous solution',
+    tested_ml: 'ഭിന്നസംഖ്യാ നിർമ്മാണവും സമവാക്യ പരിഹാരവും',
+    title_en: 'Fraction Formulation from Numerator and Denominator Conditions',
+    title_ml: 'അംശത്തിലും ഛേദത്തിലുമുള്ള മാറ്റങ്ങളിൽ നിന്ന് ഭിന്നസംഖ്യ കണ്ടെത്തൽ',
+    prompt_en: '<p>A fraction becomes $\\frac{1}{3}$ when 1 is subtracted from the numerator, and it becomes $\\frac{1}{4}$ when 8 is added to its denominator. Find the fraction.</p>',
+    prompt_ml: '<p>ഒരു ഭിന്നസംഖ്യയുടെ അംശത്തിൽ നിന്ന് 1 കുറച്ചാൽ അത് $\\frac{1}{3}$ ആകുന്നു. അതിന്റെ ഛേദത്തോട് 8 കൂട്ടിയാൽ അത് $\\frac{1}{4}$ ആകുന്നു. ഭിന്നസംഖ്യ ഏതെന്ന് കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{Let the fraction be } \\frac{x}{y}.$$
+
+$$\\text{Condition 1: } \\frac{x - 1}{y} = \\frac{1}{3}$$
+$$3(x - 1) = y \\implies 3x - 3 = y \\implies 3x - y = 3 \\quad \\text{--- (1)}$$
+
+$$\\text{Condition 2: } \\frac{x}{y + 8} = \\frac{1}{4}$$
+$$4x = y + 8 \\implies 4x - y = 8 \\quad \\text{--- (2)}$$
+
+$$\\text{Subtract (1) from (2):}$$
+$$(4x - y) - (3x - y) = 8 - 3$$
+$$x = \\mathbf{5}$$
+
+$$\\text{Substitute } x = 5 \\text{ into (1):}$$
+$$3(5) - y = 3 \\implies 15 - y = 3 \\implies y = 15 - 3 = \\mathbf{12}$$
+
+$$\\text{The required fraction is } \\mathbf{\\frac{5}{12}}.$$`,
+    solution_ml: `$$\\text{ഭിന്നസംഖ്യ } \\frac{x}{y} \\text{ എന്നിരിക്കട്ടെ.}$$
+
+$$\\text{വ്യവസ്ഥ 1: } \\frac{x - 1}{y} = \\frac{1}{3}$$
+$$3(x - 1) = y \\implies 3x - 3 = y \\implies 3x - y = 3 \\quad \\text{--- (1)}$$
+
+$$\\text{വ്യവസ്ഥ 2: } \\frac{x}{y + 8} = \\frac{1}{4}$$
+$$4x = y + 8 \\implies 4x - y = 8 \\quad \\text{--- (2)}$$
+
+$$\\text{സമവാക്യം (2)-ൽ നിന്ന് (1) കുറയ്ക്കുന്നു:}$$
+$$(4x - y) - (3x - y) = 8 - 3$$
+$$x = \\mathbf{5}$$
+
+$$\\text{സമവാക്യം (1)-ൽ } x = 5 \\text{ നൽകുന്നു:}$$
+$$3(5) - y = 3 \\implies 15 - y = 3 \\implies y = \\mathbf{12}$$
+
+$$\\text{ആവശ്യമായ ഭിന്നസംഖ്യ } = \\mathbf{\\frac{5}{12}}.$$`
   }
 );

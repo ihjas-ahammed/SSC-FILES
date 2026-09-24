@@ -213,6 +213,7 @@ QUESTIONS.push(
     concept: 'm8.2.1.sss-congruence',
     tests: ['m8.2.1.sss-congruence'],
     marks: 3,
+    time: 180,
     title_en: 'Matching Angles in Triangles with Equal Sides',
     title_ml: 'തുല്യവശങ്ങളുള്ള ത്രികോണങ്ങളിലെ കോണുകൾ കണ്ടെത്തൽ',
     prompt_en: `<p>In the triangles below, $AB = 6\\text{ cm}, BC = 5\\text{ cm}, AC = 4\\text{ cm}$ and $PQ = 5\\text{ cm}, QR = 4\\text{ cm}, PR = 6\\text{ cm}$.</p>
@@ -239,6 +240,8 @@ QUESTIONS.push(
         <li>$\\triangle ABC$-യിൽ $\\angle A$ എന്നത് $BC = 5\\text{ cm}$ എന്ന വശത്തിന് എതിരെയുള്ള കോണാണ്. $\\triangle PQR$-ൽ $5\\text{ cm}$ ഉള്ള വശം $PQ$ ആണ്. അതിനെതിരെയുള്ള കോൺ $\\mathbf{\\angle R}$ ആണ്. അതിനാൽ $\\angle A = \\angle R$.</li>
         <li>$\\triangle ABC$-യിൽ $\\angle B$ എന്നത് $AC = 4\\text{ cm}$ എന്ന വശത്തിന് എതിരെയുള്ള കോണാണ്. $\\triangle PQR$-ൽ $4\\text{ cm}$ ഉള്ള വശം $QR$ ആണ്. അതിനെതിരെയുള്ള കോൺ $\\mathbf{\\angle P}$ ആണ്. അതിനാൽ $\\angle B = \\angle P$.</li>
       </ol>`,
+    tested_en: 'Matching angles in triangles with equal sides using SSS congruence.',
+    tested_ml: 'SSS തുല്യത ഉപയോഗിച്ച് കോണുകൾ കണ്ടെത്തൽ.',
     trap_en: 'Do not pair angles simply by their visual orientation; always look at the length of the opposite side.',
     trap_ml: 'ചിത്രത്തിലെ കിടപ്പ് മാത്രം നോക്കി കോണുകൾ തുല്യമാണെന്ന് എഴുതരുത്; എപ്പോഴും എതിർവശത്തിന്റെ നീളം നോക്കി മാത്രം കോണുകൾ നിശ്ചയിക്കുക.'
   },
@@ -249,6 +252,7 @@ QUESTIONS.push(
     concept: 'm8.2.2.asa-congruence',
     tests: ['m8.2.2.asa-congruence'],
     marks: 4,
+    time: 180,
     title_en: 'Finding Unknown Sides and Angles using ASA',
     title_ml: 'ASA നിയമം ഉപയോഗിച്ച് അജ്ഞാത വശങ്ങളും കോണുകളും കണ്ടെത്തൽ',
     prompt_en: `<p>In $\\triangle ABC$, $BC = 6\\text{ cm}, \\angle B = 50^\\circ, \\angle C = 70^\\circ$. In $\\triangle DEF$, $EF = 6\\text{ cm}, \\angle E = 70^\\circ, \\angle F = 50^\\circ$.</p>
@@ -277,6 +281,8 @@ QUESTIONS.push(
         <li><b>അതെ</b>, അവ തുല്യമാണ്. കാരണം ഒരു വശവും ($BC = EF = 6\\text{ cm}$) അതിന്റെ രണ്ടറ്റത്തുമുള്ള കോണുകളും ($50^\\circ, 70^\\circ$) രണ്ട് ത്രികോണങ്ങളിലും തുല്യമാണ് ($ASA$ തത്വം).</li>
         <li>$\\triangle ABC$-യിൽ $AB$ എന്ന വശം $\\angle C = 70^\\circ$-ക്ക് എതിരെയുള്ളതാണ്. $\\triangle DEF$-ൽ $70^\\circ$ ഉള്ള കോൺ $\\angle E$ ആണ്. $\\angle E$-ക്ക് എതിരെയുള്ള വശം $\\mathbf{DF}$ ആണ്. അതിനാൽ $AB = DF$.</li>
       </ol>`,
+    tested_en: 'Calculating unknown angles and sides using ASA congruence criterion.',
+    tested_ml: 'ASA നിയമമുപയോഗിച്ച് അജ്ഞാത കോണുകളും വശങ്ങളും കണ്ടെത്തൽ.',
     trap_en: 'Make sure not to say AB = DE without checking the opposite angles.',
     trap_ml: 'കോണുകൾ പരിശോധിക്കാതെ $AB = DE$ എന്ന് ധൃതിപിടിച്ച് എഴുതരുത്.'
   },
@@ -287,6 +293,7 @@ QUESTIONS.push(
     concept: 'm8.2.4.isosceles-triangles',
     tests: ['m8.2.4.isosceles-triangles'],
     marks: 4,
+    time: 180,
     title_en: 'Perpendicular Bisector in an Isosceles Triangle',
     title_ml: 'സമപാർശ്വ ത്രികോണത്തിലെ ലംബസമഭാജി',
     prompt_en: `<p>In $\\triangle ABC$, $AB = AC = 10\\text{ cm}$ and $BC = 12\\text{ cm}$. $AD$ is drawn perpendicular to $BC$.</p>
@@ -335,6 +342,8 @@ QUESTIONS.push(
           $$AD^2 = 100 - 36 = 64 \\implies AD = \\sqrt{64} = \\mathbf{8\\text{ cm}}.$$
         </li>
       </ol>`,
+    tested_en: 'Properties of altitude in an isosceles triangle.',
+    tested_ml: 'സമപാർശ്വ ത്രികോണത്തിലെ ലംബത്തിന്റെ സവിശേഷതകൾ.',
     trap_en: 'Remember that BC is the entire base, so BD is half of BC (6 cm), not 12 cm.',
     trap_ml: 'BC എന്നത് മുഴുവൻ പാദമാണ്, അതിനാൽ BD എന്നത് അതിന്റെ പകുതിയായ 6 cm ആണ്, 12 cm അല്ല.'
   },
@@ -345,6 +354,7 @@ QUESTIONS.push(
     concept: 'm8.2.6.triangle-applications',
     tests: ['m8.2.6.triangle-applications'],
     marks: 4,
+    time: 200,
     title_en: 'Opposite Sides of a Parallelogram are Equal',
     title_ml: 'സാമാന്തരികത്തിന്റെ എതിർവശങ്ങൾ തുല്യമാണെന്ന് തെളിയിക്കൽ',
     prompt_en: `<p>In quadrilateral $ABCD$, $AB$ is parallel to $CD$, and $AD$ is parallel to $BC$. Diagonal $AC$ is drawn.</p>
@@ -395,6 +405,8 @@ QUESTIONS.push(
           </ul>
         </li>
       </ol>`,
+    tested_en: 'Proof of equality of opposite sides in a parallelogram.',
+    tested_ml: 'സാമാന്തരികത്തിന്റെ എതിർവശങ്ങൾ തുല്യമാണെന്ന് തെളിയിക്കൽ.',
     trap_en: 'Make sure to pair the correct alternate angles: BAC with DCA (from AB || CD), not BAC with DAC.',
     trap_ml: 'സമാന്തര വരകൾ തിരിച്ചറിഞ്ഞ് ശരിയായ മറുകോണുകൾ തന്നെ തിരഞ്ഞെടുക്കുക (AB || CD ആയതിനാൽ BAC-യും DCA-യും ആണ് തുല്യം).'
   },
@@ -405,6 +417,7 @@ QUESTIONS.push(
     concept: 'm8.2.3.sas-congruence',
     tests: ['m8.2.3.sas-congruence'],
     marks: 4,
+    time: 180,
     title_en: 'Two Sides and Included Angle (SAS Congruence)',
     title_ml: 'രണ്ട് വശങ്ങളും അവയ്ക്കിടയിലെ കോണും ($SAS$ തുല്യത)',
     prompt_en: `<p>In $\\triangle ABC$ and $\\triangle PQR$, $AB = PQ = 5\\text{ cm}$, $AC = PR = 7\\text{ cm}$, and the included angle $\\angle A = \\angle P = 60^\\circ$.</p>
@@ -432,7 +445,9 @@ QUESTIONS.push(
         <li>തുല്യവശങ്ങൾക്ക് എതിരെയുള്ള കോണുകൾ തുല്യമായിരിക്കും:<br>
           $\\angle Q = \\angle B = \\mathbf{75^\\circ}$.<br>
           $\\angle R = 180^\\circ - (60^\\circ + 75^\\circ) = 180^\\circ - 135^\\circ = \\mathbf{45^\\circ}$.</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Solving side and angle relationships using SAS congruence.',
+    tested_ml: 'SAS തുല്യത ഉപയോഗിച്ച് വശങ്ങളും കോണുകളും കണക്കാക്കൽ.'
   },
 
   {
@@ -441,6 +456,7 @@ QUESTIONS.push(
     concept: 'm8.2.5.equilateral-triangles',
     tests: ['m8.2.5.equilateral-triangles'],
     marks: 4,
+    time: 180,
     title_en: 'Equilateral Triangles and Altitude Properties',
     title_ml: 'സമഭുജത്രികോണവും ലംബത്തിന്റെ സവിശേഷതകളും',
     prompt_en: `<p>In an equilateral triangle $ABC$, each side has length $6\\text{ cm}$. Altitude $AD$ is drawn from $A$ to base $BC$.</p>
@@ -466,6 +482,8 @@ QUESTIONS.push(
         <li>മട്ടത്രികോണങ്ങളായ $\\triangle ADB, \\triangle ADC$ എന്നിവയിൽ കർണ്ണങ്ങളായ $AB = AC = 6\\text{ cm}$ ഉം $AD$ പൊതുവശവുമാണ്. $RHS$ തുല്യതയനുസരിച്ച് ഇവ തുല്യമാണ്. അതിനാൽ $BD = DC = 3\\text{ cm}$ (പാദത്തെ സമഭാഗം ചെയ്യുന്നു), $\\angle BAD = \\angle CAD = 30^\\circ$ (കോണിനെ സമഭാഗം ചെയ്യുന്നു).</li>
         <li>$\\triangle ADB$-യിൽ പൈതഗോറസ് സിദ്ധാന്തപ്രകാരം:
           $$AD = \\sqrt{6^2 - 3^2} = \\sqrt{36 - 9} = \\sqrt{27} = \\mathbf{3\\sqrt{3}\\text{ cm}} \\approx 5.20\\text{ cm}.$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Properties of equilateral triangles and calculating altitude length.',
+    tested_ml: 'സമഭുജ ത്രികോണത്തിന്റെ സവിശേഷതകളും ലംബ ഉയരവും കണക്കാക്കൽ.'
   }
 );

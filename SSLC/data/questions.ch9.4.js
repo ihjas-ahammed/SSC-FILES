@@ -245,7 +245,12 @@ WRITTEN.push(
   {
     id: 'w.m9.4.1',
     sec: '9.4.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.4.1.diagonal-of-square-and-sqrt2',
+    tested_en: 'Proof by contradiction of the irrationality of sqrt(2)',
+    tested_ml: 'പരോക്ഷരീതി ഉപയോഗിച്ച് √2 അഭിന്നകമാണെന്ന് തെളിയിക്കൽ',
     title_en: 'Proof of the Irrationality of √2',
     title_ml: '√2 ഒരു അഭിന്നക സംഖ്യയാണെന്നതിന്റെ തെളിവ്',
     prompt_en: '<p>Prove by the method of contradiction that there is no fraction $\\frac{p}{q}$ whose square is 2, thereby establishing that $\\sqrt{2}$ is an irrational number.</p>',
@@ -289,7 +294,12 @@ $$\\text{തീരുമാനം: വർഗ്ഗം 2 ആകുന്ന ഭ�
   {
     id: 'w.m9.4.2',
     sec: '9.4.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.4.2.geometric-construction-of-roots',
+    tested_en: 'Spiral of Theodorus construction and Pythagorean justification for sqrt(3)',
+    tested_ml: 'തിയോഡോറസ് സർപ്പിള നിർമ്മിതിയും പൈതഗോറസ് സാധൂകരണവും',
     title_en: 'Construction of Spiral of Theodorus to Locate √3 on Number Line',
     title_ml: 'തിയോഡോറസ് സർപ്പിളം നിർമ്മിച്ച് √3 സംഖ്യാരേഖയിൽ അടയാളപ്പെടുത്തൽ',
     prompt_en: '<p>Describe the step-by-step geometric construction to locate the exact position of $\\sqrt{3}$ on a number line using ruler and compasses. Explain the underlying Pythagorean theorem verification for each step.</p>',
@@ -317,7 +327,12 @@ $$P \\text{ എന്ന ബിന്ദു } \\mathbf{\\sqrt{3}}\\text{-നെ 
   {
     id: 'w.m9.4.3',
     sec: '9.4.3',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.4.3.decimal-approximation-of-roots',
+    tested_en: 'Decimal bounding and approximation of square roots through squaring',
+    tested_ml: 'വർഗ്ഗം കണ്ടുകൊണ്ട് വർഗ്ഗമൂലങ്ങളുടെ ദശാംശ പരിധികളും ഏകദേശ വിലയും കണ്ടെത്തൽ',
     title_en: 'Step-by-Step Bounding of √2 to Two Decimal Places',
     title_ml: '√2-ന്റെ രണ്ട് ദശാംശസ്ഥാനങ്ങളിലേക്കുള്ള ഘട്ടംഘട്ടമായ പരിധി കണ്ടെത്തൽ',
     prompt_en: '<p>Using the method of squaring, find the two consecutive tenths between which $\\sqrt{2}$ lies, and then the two consecutive hundredths between which it lies. Write down the approximation of $\\sqrt{2}$ to two decimal places.</p>',
@@ -359,7 +374,12 @@ $$\\mathbf{\\sqrt{2} \\approx 1.41}$$`
   {
     id: 'w.m9.4.4',
     sec: '9.4.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
     concept: 'm9.4.4.operations-on-surds',
+    tested_en: 'Simplification and linear combination of surds',
+    tested_ml: 'വർഗ്ഗമൂലങ്ങളുടെ കൂട്ടിച്ചേർക്കലും ലഘൂകരണവും',
     title_en: 'Simplification and Rationalisation of Surd Expressions',
     title_ml: 'വർഗ്ഗമൂലങ്ങളുടെ ലഘൂകരണവും ഛേദം ഭിന്നകമാക്കലും',
     prompt_en: '<p>Simplify the expression: $$\\frac{6}{\\sqrt{2}} + \\sqrt{50} - \\sqrt{98}$$ Express the final result in the simplified form $k\\sqrt{2}$ and calculate its decimal value using $\\sqrt{2} \\approx 1.414$.</p>',
@@ -392,5 +412,75 @@ $$3\\sqrt{2} + 5\\sqrt{2} - 7\\sqrt{2} = (3 + 5 - 7)\\sqrt{2} = \\mathbf{\\sqrt{
 
 $$\\text{ഘട്ടം 5: ദശാംശവില}$$
 $$\\sqrt{2} \\approx \\mathbf{1.414}.$$`
+  },
+
+  {
+    id: 'w.m9.4.5',
+    sec: '9.4.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.4.4.operations-on-surds',
+    tested_en: 'Rationalising binomial surd denominators using conjugate pairs',
+    tested_ml: 'അനുബന്ധ ദ്വിപദങ്ങൾ ഉപയോഗിച്ച് ഛേദം ഭിന്നകമാക്കൽ',
+    title_en: 'Rationalising Binomial Surd Denominators',
+    title_ml: 'ദ്വിപദ വർഗ്ഗമൂല ഛേദങ്ങളെ ഭിന്നകമാക്കൽ',
+    prompt_en: '<p>Simplify the expression by rationalising the denominator: $$\\frac{1}{\\sqrt{3} + \\sqrt{2}} + \\frac{1}{\\sqrt{3} - \\sqrt{2}}$$ Then calculate its value using $\\sqrt{3} \\approx 1.732$.</p>',
+    prompt_ml: '<p>ഛേദം ഭിന്നകമാക്കി ലഘൂകരിക്കുക: $$\\frac{1}{\\sqrt{3} + \\sqrt{2}} + \\frac{1}{\\sqrt{3} - \\sqrt{2}}$$ തുടർന്ന് $\\sqrt{3} \\approx 1.732$ നൽകി വില കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{Step 1: Rationalize each term using conjugates:}$$
+$$\\frac{1}{\\sqrt{3} + \\sqrt{2}} = \\frac{\\sqrt{3} - \\sqrt{2}}{(\\sqrt{3} + \\sqrt{2})(\\sqrt{3} - \\sqrt{2})} = \\frac{\\sqrt{3} - \\sqrt{2}}{(\\sqrt{3})^2 - (\\sqrt{2})^2} = \\frac{\\sqrt{3} - \\sqrt{2}}{3 - 2} = \\sqrt{3} - \\sqrt{2}$$
+
+$$\\frac{1}{\\sqrt{3} - \\sqrt{2}} = \\frac{\\sqrt{3} + \\sqrt{2}}{(\\sqrt{3} - \\sqrt{2})(\\sqrt{3} + \\sqrt{2})} = \\frac{\\sqrt{3} + \\sqrt{2}}{(\\sqrt{3})^2 - (\\sqrt{2})^2} = \\frac{\\sqrt{3} + \\sqrt{2}}{3 - 2} = \\sqrt{3} + \\sqrt{2}$$
+
+$$\\text{Step 2: Add the two simplified terms:}$$
+$$(\\sqrt{3} - \\sqrt{2}) + (\\sqrt{3} + \\sqrt{2}) = \\mathbf{2\\sqrt{3}}$$
+
+$$\\text{Step 3: Calculate decimal value:}$$
+$$2\\sqrt{3} \\approx 2 \\times 1.732 = \\mathbf{3.464}.$$`,
+    solution_ml: `$$\\text{ഘട്ടം 1: അനുബന്ധങ്ങൾ ഉപയോഗിച്ച് ഓരോ പദത്തിന്റെയും ഛേദം ഭിന്നകമാക്കുന്നു:}$$
+$$\\frac{1}{\\sqrt{3} + \\sqrt{2}} = \\frac{\\sqrt{3} - \\sqrt{2}}{(\\sqrt{3})^2 - (\\sqrt{2})^2} = \\frac{\\sqrt{3} - \\sqrt{2}}{3 - 2} = \\sqrt{3} - \\sqrt{2}$$
+
+$$\\frac{1}{\\sqrt{3} - \\sqrt{2}} = \\frac{\\sqrt{3} + \\sqrt{2}}{(\\sqrt{3})^2 - (\\sqrt{2})^2} = \\frac{\\sqrt{3} + \\sqrt{2}}{3 - 2} = \\sqrt{3} + \\sqrt{2}$$
+
+$$\\text{ഘട്ടം 2: രണ്ട് പദങ്ങളും തമ്മിൽ കൂട്ടുന്നു:}$$
+$$(\\sqrt{3} - \\sqrt{2}) + (\\sqrt{3} + \\sqrt{2}) = \\mathbf{2\\sqrt{3}}$$
+
+$$\\text{ഘട്ടം 3: ദശാംശവില കണ്ടെത്തുന്നു:}$$
+$$2\\sqrt{3} \\approx 2 \\times 1.732 = \\mathbf{3.464}.$$`
+  },
+
+  {
+    id: 'w.m9.4.6',
+    sec: '9.4.1',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    concept: 'm9.4.1.diagonal-of-square-and-sqrt2',
+    tested_en: 'Geometry of square diagonal and inscribed figures with surd calculations',
+    tested_ml: 'സമചതുരത്തിന്റെ കർണ്ണവും അന്തർവ്യാഖ്യാന രൂപങ്ങളുടെ അളവുകളും',
+    title_en: 'Perimeter and Area of Square Inscribed in Circle with Surds',
+    title_ml: 'വൃത്തത്തിൽ അന്തർവ്യാഖ്യാനം ചെയ്ത സമചതുരത്തിന്റെ അളവുകൾ',
+    prompt_en: '<p>A square is inscribed in a circle of diameter $10\\text{ cm}$.<br>(a) Find the length of each side of the square in surd form.<br>(b) Calculate the area and perimeter of the square.<br>(c) Using $\\sqrt{2} \\approx 1.414$, find the perimeter correct to two decimal places.</p>',
+    prompt_ml: '<p>വ്യാസം $10\\text{ സെന്റീമീറ്റർ}$ ആയ വൃത്തത്തിൽ ഒരു സമചതുരം അന്തർവ്യാഖ്യാനം ചെയ്തിരിക്കുന്നു.<br>(a) സമചതുരത്തിന്റെ ഒരു വശത്തിന്റെ നീളം വർഗ്ഗമൂല രൂപത്തിൽ കണ്ടെത്തുക.<br>(b) സമചതുരത്തിന്റെ പരപ്പളവും ചുറ്റളവും കണക്കാക്കുക.<br>(c) $\\sqrt{2} \\approx 1.414$ ഉപയോഗിച്ച് ചുറ്റളവ് രണ്ട് ദശാംശസ്ഥാനങ്ങളിലേക്ക് കണ്ടെത്തുക.</p>',
+    solution_en: `$$\\text{(a) The diagonal of the inscribed square equals the circle diameter:}$$
+$$d = 10\\text{ cm}.$$
+$$\\text{If } a \\text{ is side length: } a\\sqrt{2} = 10 \\implies a = \\frac{10}{\\sqrt{2}} = \\frac{10\\sqrt{2}}{2} = \\mathbf{5\\sqrt{2}\\text{ cm}}.$$
+
+$$\\text{(b) Area and Perimeter:}$$
+$$\\text{Area } = a^2 = (5\\sqrt{2})^2 = 25 \\times 2 = \\mathbf{50\\text{ sq cm}}.$$
+$$\\text{Perimeter } = 4a = 4(5\\sqrt{2}) = \\mathbf{20\\sqrt{2}\\text{ cm}}.$$
+
+$$\\text{(c) Decimal perimeter:}$$
+$$20\\sqrt{2} \\approx 20 \\times 1.414 = \\mathbf{28.28\\text{ cm}}.$$`,
+    solution_ml: `$$\\text{(a) സമചതുരത്തിന്റെ കർണ്ണം വൃത്തത്തിന്റെ വ്യാസത്തിന് തുല്യമാണ്:}$$
+$$d = 10\\text{ സെന്റീമീറ്റർ}.$$
+$$\\text{ഒരു വശം } a \\text{ ആയാൽ: } a\\sqrt{2} = 10 \\implies a = \\frac{10}{\\sqrt{2}} = \\mathbf{5\\sqrt{2}\\text{ സെന്റീമീറ്റർ}}.$$
+
+$$\\text{(b) പരപ്പളവും ചുറ്റളവും:}$$
+$$\\text{പരപ്പളവ് } = a^2 = (5\\sqrt{2})^2 = 25 \\times 2 = \\mathbf{50\\text{ ചതുരശ്ര സെന്റീമീറ്റർ}}.$$
+$$\\text{ചുറ്റളവ് } = 4a = 4(5\\sqrt{2}) = \\mathbf{20\\sqrt{2}\\text{ സെന്റീമീറ്റർ}}.$$
+
+$$\\text{(c) ദശാംശവില:}$$
+$$20\\sqrt{2} \\approx 20 \\times 1.414 = \\mathbf{28.28\\text{ സെന്റീമീറ്റർ}}.$$`
   }
 );

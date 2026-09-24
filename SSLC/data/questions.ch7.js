@@ -237,6 +237,9 @@ QUESTIONS.push(
     id: 'w.m8.7.1',
     sec: '8.7.1',
     concept: 'm8.7.1.concept-of-ratio',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Simplifying Ratios and Comparing Fractions',
     title_ml: 'അംശബന്ധങ്ങളുടെ ലഘൂകരണവും താരതമ്യവും',
     prompt_en: `<ol type="a">
@@ -260,13 +263,18 @@ QUESTIONS.push(
         <li>ആകെ കുട്ടികൾ $= 45$, പെൺകുട്ടികൾ $= 25$, ആൺകുട്ടികൾ $= 45 - 25 = 20$.<br>
           $$\\text{പെൺകുട്ടികളും ആൺകുട്ടികളും} = 25 : 20 = \\mathbf{5 : 4}$$
           $$\\text{ആൺകുട്ടികളും ആകെ കുട്ടികളും} = 20 : 45 = \\mathbf{4 : 9}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Ratio simplification, unit conversion, and part-to-whole comparisons.',
+    tested_ml: 'അംശബന്ധ ലഘൂകരണം, യൂണിറ്റ് മാറ്റം, ഭാഗ താരതമ്യം.'
   },
 
   {
     id: 'w.m8.7.2',
     sec: '8.7.2',
     concept: 'm8.7.2.dividing-in-ratio',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Dividing Perimeter and Money in Given Ratios',
     title_ml: 'തുകയെയും ചുറ്റളവിനെയും അംശബന്ധത്തിൽ വിഭജിക്കൽ',
     prompt_en: `<ol type="a">
@@ -298,13 +306,18 @@ QUESTIONS.push(
           $$\\text{ഒന്നാമത്തെ ആൾക്ക്} = 2 \\times 20000 = \\mathbf{₹40,000}$$
           $$\\text{രണ്ടാമത്തെ ആൾക്ക്} = 3 \\times 20000 = \\mathbf{₹60,000}$$
           $$\\text{മൂന്നാമത്തെ ആൾക്ക്} = 4 \\times 20000 = \\mathbf{₹80,000}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Partitioning quantities and money according to given multi-part ratios.',
+    tested_ml: 'അളവുകളെയും തുകയെയും തന്നിട്ടുള്ള അംശബന്ധത്തിൽ വിഭജിക്കൽ.'
   },
 
   {
     id: 'w.m8.7.3',
     sec: '8.7.3',
     concept: 'm8.7.3.ratio-change',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Ratio of Ages and Quantity Changes',
     title_ml: 'പ്രായങ്ങളിലെയും അളവുകളിലെയും അംശബന്ധ മാറ്റം',
     prompt_en: `<p>The present ages of a father and his son are in the ratio $7 : 2$.</p>
@@ -336,13 +349,18 @@ QUESTIONS.push(
           അച്ഛന്റെ പ്രായം $= 42 + 10 = 52\\text{ വയസ്സ്}$.<br>
           മകന്റെ പ്രായം $= 12 + 10 = 22\\text{ വയസ്സ്}$.<br>
           $$\\text{പുതിയ അംശബന്ധം} = 52 : 22 = \\frac{52}{22} = \\mathbf{26 : 11}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Linear equations for ratio change with age differences.',
+    tested_ml: 'പ്രായ വ്യത്യാസവും അംശബന്ധ മാറ്റവും ഉപയോഗിച്ചുള്ള സമവാക്യ രൂപീകരണം.'
   },
 
   {
     id: 'w.m8.7.4',
     sec: '8.7.4',
     concept: 'm8.7.4.ratio-geometry',
+    type: 'written',
+    marks: 4,
+    time: 180,
     title_en: 'Rectangle Dimensions and Triangle Area Partition',
     title_ml: 'ചതുരത്തിന്റെ അളവുകളും ത്രികോണ പരപ്പളവ് വിഭജനവും',
     prompt_en: `<ol type="a">
@@ -376,6 +394,100 @@ QUESTIONS.push(
           ഒരു ഭാഗം $= \\frac{75}{5} = 15\\text{ cm}^2$.<br>
           $$\\triangle ABD\\text{-യുടെ പരപ്പളവ്} = 3 \\times 15 = \\mathbf{45\\text{ cm}^2}$$
           $$\\triangle ADC\\text{-യുടെ പരപ്പളവ്} = 2 \\times 15 = \\mathbf{30\\text{ cm}^2}$$</li>
-      </ol>`
+      </ol>`,
+    tested_en: 'Ratio applications in perimeter, area, and triangle base division.',
+    tested_ml: 'ചുറ്റളവ്, പരപ്പളവ്, ത്രികോണ പാദ വിഭജനത്തിലെ അംശബന്ധ പ്രയോഗങ്ങൾ.'
+  },
+
+  {
+    id: 'w.m8.7.5',
+    sec: '8.7.4',
+    concept: 'm8.7.4.ratio-geometry',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Three-Term Ratio and Triangle Geometry',
+    title_ml: 'ത്രിപദ അംശബന്ധവും ത്രികോണ ജ്യാമിതിയും',
+    prompt_en: `<ol type="a">
+        <li>The three angles of a triangle are in the ratio $2 : 3 : 5$. Find the measure of each angle. Is it a right-angled triangle?</li>
+        <li>The sides of a triangle are in the ratio $5 : 12 : 13$ and its perimeter is $60\\text{ cm}$. Find the lengths of the three sides and calculate its area.</li>
+      </ol>`,
+    prompt_ml: `<ol type="a">
+        <li>ഒരു ത്രികോണത്തിലെ മൂന്ന് കോണുകൾ തമ്മിലുള്ള അംശബന്ധം $2 : 3 : 5$ ആണ്. ഓരോ കോണിന്റെയും അളവ് കാണുക. ഇതൊരു മട്ടത്രികോണമാണോ?</li>
+        <li>ഒരു ത്രികോണത്തിന്റെ വശങ്ങൾ തമ്മിലുള്ള അംശബന്ധം $5 : 12 : 13$-ഉം ചുറ്റളവ് $60\\text{ cm}$-ഉം ആണ്. മൂന്ന് വശങ്ങളുടെയും നീളം കണ്ട് ത്രികോണത്തിന്റെ പരപ്പളവ് കണക്കാക്കുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Sum of angles in a triangle $= 180^\\circ$. Total parts $= 2 + 3 + 5 = 10$.<br>
+          One part $= \\frac{180^\\circ}{10} = 18^\\circ$.<br>
+          $$\\text{First angle} = 2 \\times 18^\\circ = \\mathbf{36^\\circ}$$
+          $$\\text{Second angle} = 3 \\times 18^\\circ = \\mathbf{54^\\circ}$$
+          $$\\text{Third angle} = 5 \\times 18^\\circ = \\mathbf{90^\\circ}$$
+          Yes, since one angle is $90^\\circ$, it is a <b>right-angled triangle</b>.</li>
+        <li>Total parts $= 5 + 12 + 13 = 30$.<br>
+          One part $= \\frac{60}{30} = 2\\text{ cm}$.<br>
+          $$a = 5 \\times 2 = \\mathbf{10\\text{ cm}}, \\quad b = 12 \\times 2 = \\mathbf{24\\text{ cm}}, \\quad c = 13 \\times 2 = \\mathbf{26\\text{ cm}}$$
+          Since $10^2 + 24^2 = 100 + 576 = 676 = 26^2$, it is a right-angled triangle with perpendicular sides $10\\text{ cm}$ and $24\\text{ cm}$.<br>
+          $$\\text{Area} = \\frac{1}{2} \\times 10 \\times 24 = \\mathbf{120\\text{ cm}^2}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>ത്രികോണത്തിലെ കോണുകളുടെ തുക $= 180^\\circ$. ആകെ ഭാഗം $= 2 + 3 + 5 = 10$.<br>
+          ഒരു ഭാഗം $= \\frac{180^\\circ}{10} = 18^\\circ$.<br>
+          $$\\text{ഒന്നാം കോൺ} = 2 \\times 18^\\circ = \\mathbf{36^\\circ}$$
+          $$\\text{രണ്ടാം കോൺ} = 3 \\times 18^\\circ = \\mathbf{54^\\circ}$$
+          $$\\text{മൂന്നാം കോൺ} = 5 \\times 18^\\circ = \\mathbf{90^\\circ}$$
+          ഒരു കോൺ $90^\\circ$ ആയതിനാൽ ഇതൊരു <b>മട്ടത്രികോണമാണ്</b>.</li>
+        <li>ആകെ ഭാഗം $= 5 + 12 + 13 = 30$.<br>
+          ഒരു ഭാഗം $= \\frac{60}{30} = 2\\text{ cm}$.<br>
+          $$a = 5 \\times 2 = \\mathbf{10\\text{ cm}}, \\quad b = 12 \\times 2 = \\mathbf{24\\text{ cm}}, \\quad c = 13 \\times 2 = \\mathbf{26\\text{ cm}}$$
+          $10^2 + 24^2 = 100 + 576 = 676 = 26^2$ ആയതിനാൽ ഇതൊരു മട്ടത്രികോണമാണ്.<br>
+          $$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times 10 \\times 24 = \\mathbf{120\\text{ cm}^2}$$</li>
+      </ol>`,
+    tested_en: 'Angle and side ratios, Pythagorean verification, and right triangle area.',
+    tested_ml: 'കോൺ-വശ അംശബന്ധങ്ങൾ, പൈതഗോറസ് ബന്ധം, മട്ടത്രികോണ പരപ്പളവ്.'
+  },
+
+  {
+    id: 'w.m8.7.6',
+    sec: '8.7.3',
+    concept: 'm8.7.3.ratio-change',
+    type: 'written',
+    marks: 4,
+    time: 200,
+    title_en: 'Mixture Invariance and Ratio Change',
+    title_ml: 'മിശ്രിതങ്ങളും അംശബന്ധ മാറ്റവും',
+    prompt_en: `<ol type="a">
+        <li>A mixture of $60\\text{ litres}$ contains milk and water in the ratio $2 : 1$. How many litres of water must be added to make the ratio of milk to water $1 : 2$?</li>
+        <li>Two numbers are in the ratio $3 : 5$. If $8$ is added to each number, the ratio becomes $2 : 3$. Find the original two numbers.</li>
+      </ol>`,
+    prompt_ml: `<ol type="a">
+        <li>$60\\text{ litres}$ ഉള്ള ഒരു മിശ്രിതത്തിൽ പാലും വെള്ളവും $2 : 1$ എന്ന അംശബന്ധത്തിലാണ്. പാലും വെള്ളവും തമ്മിലുള്ള അംശബന്ധം $1 : 2$ ആകാൻ എത്ര ലിറ്റർ വെള്ളം കൂടി ചേർക്കണം?</li>
+        <li>രണ്ട് സംഖ്യകൾ തമ്മിലുള്ള അംശബന്ധം $3 : 5$ ആണ്. രണ്ട് സംഖ്യകളോടും $8$ വീതം കൂട്ടിയപ്പോൾ അംശബന്ധം $2 : 3$ ആയി മാറി. സംഖ്യകൾ കണ്ടെത്തുക.</li>
+      </ol>`,
+    solution_en: `<ol type="a">
+        <li>Total mixture $= 60\\text{ L}$, ratio $= 2 : 1$.<br>
+          Milk $= \\frac{2}{3} \\times 60 = 40\\text{ L}$, Water $= \\frac{1}{3} \\times 60 = 20\\text{ L}$.<br>
+          Let $x$ litres of water be added. Milk remains $40\\text{ L}$.<br>
+          $$\\frac{40}{20 + x} = \\frac{1}{2} \\implies 40 \\times 2 = 20 + x \\implies 80 = 20 + x \\implies x = \\mathbf{60\\text{ litres}}$$
+          Hence, $60\\text{ litres}$ of water must be added.</li>
+        <li>Let the numbers be $3x$ and $5x$.<br>
+          $$\\frac{3x + 8}{5x + 8} = \\frac{2}{3}$$
+          $$3(3x + 8) = 2(5x + 8) \\implies 9x + 24 = 10x + 16 \\implies 10x - 9x = 24 - 16 \\implies x = 8$$
+          $$\\text{First number} = 3 \\times 8 = \\mathbf{24}$$
+          $$\\text{Second number} = 5 \\times 8 = \\mathbf{40}$$</li>
+      </ol>`,
+    solution_ml: `<ol type="a">
+        <li>ആകെ മിശ്രിതം $= 60\\text{ L}$, അംശബന്ധം $= 2 : 1$.<br>
+          പാൽ $= \\frac{2}{3} \\times 60 = 40\\text{ L}$, വെള്ളം $= \\frac{1}{3} \\times 60 = 20\\text{ L}$.<br>
+          $x$ ലിറ്റർ വെള്ളം ചേർക്കുന്നു എന്ന് കരുതുക. പാലിന്റെ അളവ് മാറ്റമില്ലാതെ $40\\text{ L}$ ആയി തുടരുന്നു.<br>
+          $$\\frac{40}{20 + x} = \\frac{1}{2} \\implies 80 = 20 + x \\implies x = \\mathbf{60\\text{ ലിറ്റർ}}$$
+          അതിനാൽ $60\\text{ ലിറ്റർ}$ വെള്ളം കൂടി ചേർക്കണം.</li>
+        <li>സംഖ്യകൾ $3x, 5x$ എന്നിരിക്കട്ടെ.<br>
+          $$\\frac{3x + 8}{5x + 8} = \\frac{2}{3}$$
+          $$3(3x + 8) = 2(5x + 8) \\implies 9x + 24 = 10x + 16 \\implies x = 8$$
+          $$\\text{ആദ്യ സംഖ്യ} = 3 \\times 8 = \\mathbf{24}$$
+          $$\\text{രണ്ടാം സംഖ്യ} = 5 \\times 8 = \\mathbf{40}$$</li>
+      </ol>`,
+    tested_en: 'Ratio alteration in liquid mixtures and algebraic formulation of ratio shifts.',
+    tested_ml: 'മിശ്രിതങ്ങളിലെ അംശബന്ധ മാറ്റവും ബീജഗണിത സമവാക്യ പരിഹാരവും.'
   }
 );

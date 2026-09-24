@@ -249,6 +249,8 @@ WRITTEN.push(
     type: 'written',
     marks: 4,
     time: 180,
+    title_en: 'Right Prism Structure and Euler Formula Verification',
+    title_ml: 'നേർസ്തംഭത്തിന്റെ ഘടനയും ഓയ്‌ലർ സമവാക്യ പരിശോധനയും',
     prompt_en: '<p>(i) Clearly define a right prism and explain how its lateral faces relate to its base edges.</p><p>(ii) For an $n$-sided polygonal prism, write formulas for the number of faces $F$, vertices $V$, and edges $E$, and verify Euler’s formula $F + V - E = 2$ for a hexagonal prism.</p>',
     prompt_ml: '<p>(i) ഒരു നേർസ്തംഭം എന്നാൽ എന്ത് എന്ന് നിർവ്വചിക്കുക. അതിന്റെ പാർശ്വമുഖങ്ങളും പാദത്തിന്റെ വക്കുകളും തമ്മിലുള്ള ബന്ധം വ്യക്തമാക്കുക.</p><p>(ii) $n$ വശങ്ങളുള്ള ബഹുഭുജ പാദമുള്ള സ്തംഭത്തിന് മുഖങ്ങൾ $F$, മൂലകൾ $V$, വക്കുകൾ $E$ എന്നിവ കാണാനുള്ള സൂത്രവാക്യങ്ങൾ എഴുതുക. ഒരു ഷഡ്ഭുജസ്തംഭത്തിന് ഓയ്‌ലറുടെ സമവാക്യമായ $F + V - E = 2$ പരിശോധിക്കുക.</p>',
     solution_en: `<h4>Part (i): Definition and Geometric Structure</h4>
@@ -296,6 +298,8 @@ $$F + V - E = 8 + 12 - 18 = \\mathbf{2}$$
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Right Triangular Prism Volume and Height Inversion',
+    title_ml: 'മട്ടത്രികോണസ്തംഭത്തിന്റെ വ്യാപ്തവും ഉയരം കണ്ടെത്തലും',
     prompt_en: '<p>The base of a prism is a right-angled triangle whose hypotenuse is $17\\text{ cm}$ and one perpendicular side is $8\\text{ cm}$.</p><p>(i) Calculate the length of the other perpendicular side and the area of the base triangle.</p><p>(ii) If the volume of the prism is $1020\\text{ cubic cm}$, find the height of the prism.</p>',
     prompt_ml: '<p>ഒരു മട്ടത്രികോണസ്തംഭത്തിന്റെ പാദമായ ത്രികോണത്തിന്റെ കർണ്ണം $17\\text{ cm}$-ഉം ഒരു ലംബവശം $8\\text{ cm}$-ഉം ആണ്.</p><p>(i) മറ്റേ ലംബവശത്തിന്റെ നീളവും പാദത്രികോണത്തിന്റെ പരപ്പളവും കണക്കാക്കുക.</p><p>(ii) സ്തംഭത്തിന്റെ വ്യാപ്തം $1020\\text{ ഘന സെ.മീ}$ ആയാൽ സ്തംഭത്തിന്റെ ഉയരം കണ്ടെത്തുക.</p>',
     solution_en: `<h4>Step 1: Find the Unknown Leg and Base Area</h4>
@@ -330,6 +334,8 @@ $$1020 = 60 \\times h \\implies h = \\frac{1020}{60} = \\mathbf{17\\text{ cm}}$$
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Regular Hexagonal Prism Lateral and Total Surface Area',
+    title_ml: 'സമഷഡ്ഭുജസ്തംഭത്തിന്റെ പാർശ്വപരപ്പളവും ആകെ പരപ്പളവും',
     prompt_en: '<p>A prism has a regular hexagonal base with side length $6\\text{ cm}$ and height $15\\text{ cm}$.</p><p>(i) Calculate the lateral surface area of the prism.</p><p>(ii) Calculate the total surface area of the prism (giving your answer in exact form with $\\sqrt{3}$).</p>',
     prompt_ml: '<p>വശം $6\\text{ cm}$ ആയ സമഷഡ്ഭുജം പാദമായ ഒരു സ്തംഭത്തിന്റെ ഉയരം $15\\text{ cm}$ ആണ്.</p><p>(i) സ്തംഭത്തിന്റെ പാർശ്വപരപ്പളവ് കണക്കാക്കുക.</p><p>(ii) സ്തംഭത്തിന്റെ ആകെ ഉപരിതല പരപ്പളവ് കണക്കാക്കുക ($\\sqrt{3}$ ഉൾപ്പെടുന്ന കൃത്യമായ രൂപത്തിൽ എഴുതുക).</p>',
     solution_en: `<h4>Step 1: Calculate Lateral Surface Area</h4>
@@ -366,6 +372,8 @@ $$\\text{TSA} = \\text{പാർശ്വപരപ്പളവ്} + 2A = 540 + 
     type: 'written',
     marks: 4,
     time: 200,
+    title_en: 'Cylindrical Tank Capacity and Surface Area Calculation',
+    title_ml: 'വൃത്തസ്തംഭ ടാങ്കിന്റെ സംഭരണശേഷിയും ഉപരിതല പരപ്പളവും',
     prompt_en: '<p>A cylindrical water tank has a base diameter of $1.4\\text{ metres}$ and a height of $2\\text{ metres}$. (take $\\pi = \\frac{22}{7}$)</p><p>(i) Calculate the internal volume of the tank in cubic metres, and find how many litres of water it can hold (1 m³ = 1000 litres).</p><p>(ii) Calculate the total surface area of the closed tank.</p>',
     prompt_ml: '<p>വൃത്താകാരമായ ഒരു വാട്ടർ ടാങ്കിന്റെ പാദവ്യാസം $1.4\\text{ മീറ്റർ}$-ഉം ഉയരം $2\\text{ മീറ്റർ}$-ഉം ആണ്. ($\\pi = \\frac{22}{7}$)</p><p>(i) ടാങ്കിന്റെ ഉൾവ്യാപ്തം ക്യൂബിക് മീറ്ററിൽ കണ്ടെത്തുക. ഇതിൽ എത്ര ലിറ്റർ വെള്ളം കൊള്ളും എന്ന് കണക്കാക്കുക (1 m³ = 1000 ലിറ്റർ).</p><p>(ii) അടച്ച ഈ ടാങ്കിന്റെ ആകെ ഉപരിതല പരപ്പളവ് കണ്ടെത്തുക.</p>',
     solution_en: `<h4>Step 1: Calculate Volume and Water Capacity</h4>
@@ -388,5 +396,74 @@ $$\\text{സംഭരണശേഷി} = 3.08 \\times 1000 = \\mathbf{3080\\text{
 $$\\text{TSA} = 2\\pi r (r + h) = 2 \\times \\frac{22}{7} \\times 0.7 \\times (0.7 + 2) = 4.4 \\times 2.7 = \\mathbf{11.88\\text{ ചതുരശ്ര മീറ്റർ}}$$`,
     tested_en: 'Cylindrical volume, capacity conversion, and total surface area.',
     tested_ml: 'വൃത്തസ്തംഭത്തിന്റെ വ്യാപ്തവും ലിറ്റർ അളവും ആകെ പരപ്പളവും കാണൽ.'
+  },
+
+  {
+    id: 'w.m9.11.5',
+    concept: 'm9.11.2.volume-of-prisms',
+    sec: '9.11.2',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    tested_en: 'Equilateral triangular prism volume and metal block mass computation',
+    tested_ml: 'സമഭുജ ത്രികോണസ്തംഭത്തിന്റെ വ്യാപ്തവും ഭാരവും കണക്കാക്കൽ',
+    title_en: 'Equilateral Triangular Prism Volume and Mass Calculation',
+    title_ml: 'സമഭുജ ത്രികോണസ്തംഭത്തിന്റെ വ്യാപ്തവും ഭാരവും',
+    prompt_en: '<p>A solid metal prism has an equilateral triangular base of side $8\\text{ cm}$ and height $20\\text{ cm}$.<br>(a) Calculate the base area of the prism in terms of $\\sqrt{3}$.<br>(b) Find the volume of the prism.<br>(c) If $1\\text{ cubic cm}$ of the metal weighs $7.5\\text{ grams}$, calculate the mass of the prism in kilograms (take $\\sqrt{3} \\approx 1.732$).</p>',
+    prompt_ml: '<p>പാദം $8\\text{ cm}$ വശമുള്ള സമഭുജ ത്രികോണവും ഉയരം $20\\text{ cm}$-ഉം ആയ ഒരു ലോഹസ്തംഭമുണ്ട്.<br>(a) സ്തംഭത്തിന്റെ പാദപരപ്പളവ് $\\sqrt{3}$ ഉൾപ്പെടുത്തി കണ്ടെത്തുക.<br>(b) സ്തംഭത്തിന്റെ വ്യാപ്തം കണക്കാക്കുക.<br>(c) $1\\text{ ഘന സെ.മീ}$ ലോഹത്തിന് $7.5\\text{ ഗ്രാം}$ ഭാരമുണ്ടെങ്കിൽ സ്തംഭത്തിന്റെ ആകെ ഭാരം കിലോഗ്രാമിൽ കണ്ടെത്തുക ($\\sqrt{3} \\approx 1.732$).</p>',
+    solution_en: `$$\\text{(a) Area of equilateral triangle base:}$$
+$$A = \\frac{\\sqrt{3}}{4} a^2 = \\frac{\\sqrt{3}}{4} \\times 8^2 = \\frac{\\sqrt{3}}{4} \\times 64 = \\mathbf{16\\sqrt{3}\\text{ sq cm}}.$$
+
+$$\\text{(b) Volume of the prism:}$$
+$$V = A \\times h = 16\\sqrt{3} \\times 20 = \\mathbf{320\\sqrt{3}\\text{ cubic cm}}.$$
+$$\\text{Using } \\sqrt{3} \\approx 1.732: \\quad V = 320 \\times 1.732 = \\mathbf{554.24\\text{ cubic cm}}.$$
+
+$$\\text{(c) Mass of the prism:}$$
+$$\\text{Mass} = 554.24 \\times 7.5 = 4156.8\\text{ grams} = \\mathbf{4.1568\\text{ kg}} \\approx \\mathbf{4.16\\text{ kg}}.$$`,
+    solution_ml: `$$\\text{(a) സമഭുജ ത്രികോണ പാദത്തിന്റെ പരപ്പളവ്:}$$
+$$A = \\frac{\\sqrt{3}}{4} \\times 8^2 = \\frac{\\sqrt{3}}{4} \\times 64 = \\mathbf{16\\sqrt{3}\\text{ ച.സെ.മീ}}.$$
+
+$$\\text{(b) സ്തംഭത്തിന്റെ വ്യാപ്തം:}$$
+$$V = 16\\sqrt{3} \\times 20 = \\mathbf{320\\sqrt{3}\\text{ ഘന സെ.മീ}}.$$
+$$320 \\times 1.732 = \\mathbf{554.24\\text{ ഘന സെ.മീ}}.$$
+
+$$\\text{(c) ആകെ ഭാരം:}$$
+$$\\text{ഭാരം} = 554.24 \\times 7.5 = 4156.8\\text{ ഗ്രാം} \\approx \\mathbf{4.16\\text{ കിലോഗ്രാം}}.$$`
+  },
+
+  {
+    id: 'w.m9.11.6',
+    concept: 'm9.11.4.cylinder-as-circular-prism',
+    sec: '9.11.4',
+    type: 'written',
+    marks: 4,
+    time: 180,
+    tested_en: 'Hollow cylinder metal volume and total surface area computation',
+    tested_ml: 'പൊള്ളയായ വൃത്തസ്തംഭത്തിന്റെ വ്യാപ്തവും ആകെ ഉപരിതല പരപ്പളവും കാണൽ',
+    title_en: 'Volume and Surface Area of Hollow Cylindrical Pipe',
+    title_ml: 'പൊള്ളയായ വൃത്തസ്തംഭ പൈപ്പിന്റെ വ്യാപ്തവും ഉപരിതല പരപ്പളവും',
+    prompt_en: '<p>A hollow iron pipe of length $35\\text{ cm}$ has an outer diameter of $10\\text{ cm}$ and an inner diameter of $8\\text{ cm}$. (take $\\pi = \\frac{22}{7}$)<br>(a) Find the outer radius $R$ and inner radius $r$.<br>(b) Calculate the volume of iron used in making the pipe.<br>(c) Calculate the total surface area of the pipe (inner curved surface + outer curved surface + two circular ring ends).</p>',
+    prompt_ml: '<p>$35\\text{ cm}$ നീളമുള്ള ഒരു പൊള്ളയായ ഇരുമ്പ് പൈപ്പിന്റെ പുറംവ്യാസം $10\\text{ cm}$-ഉം ഉൾവ്യാസം $8\\text{ cm}$-ഉം ആണ്. ($\\pi = \\frac{22}{7}$)<br>(a) പുറം ആരം $R$, അകം ആരം $r$ എന്നിവ കണ്ടെത്തുക.<br>(b) പൈപ്പ് നിർമ്മിക്കാൻ ഉപയോഗിച്ച ഇരുമ്പിന്റെ വ്യാപ്തം കണക്കാക്കുക.<br>(c) പൈപ്പിന്റെ ആകെ ഉപരിതല പരപ്പളവ് കണക്കാക്കുക (അകത്തെ വക്രതല പരപ്പളവ് + പുറത്തെ വക്രതല പരപ്പളവ് + ഇരുവശങ്ങളിലെയും വളയങ്ങളുടെ പരപ്പളവ്).</p>',
+    solution_en: `$$\\text{(a) Outer radius } R = \\frac{10}{2} = 5\\text{ cm}, \\quad \\text{Inner radius } r = \\frac{8}{2} = 4\\text{ cm}.$$
+
+$$\\text{(b) Volume of iron used:}$$
+$$V = \\pi(R^2 - r^2)h = \\frac{22}{7} \\times (5^2 - 4^2) \\times 35 = \\frac{22}{7} \\times (25 - 16) \\times 35$$
+$$V = 22 \\times 9 \\times 5 = \\mathbf{990\\text{ cubic cm}}.$$
+
+$$\\text{(c) Total Surface Area:}$$
+$$\\text{Outer CSA} = 2\\pi Rh = 2 \\times \\frac{22}{7} \\times 5 \\times 35 = 1100\\text{ sq cm}.$$
+$$\\text{Inner CSA} = 2\\pi rh = 2 \\times \\frac{22}{7} \\times 4 \\times 35 = 880\\text{ sq cm}.$$
+$$\\text{Area of two end rings} = 2 \\times \\pi(R^2 - r^2) = 2 \\times \\frac{22}{7} \\times 9 = \\frac{396}{7} \\approx 56.57\\text{ sq cm}.$$
+$$\\text{TSA} = 1100 + 880 + 56.57 = \\mathbf{2036.57\\text{ sq cm}}.$$`,
+    solution_ml: `$$\\text{(a) പുറം ആരം } R = \\frac{10}{2} = 5\\text{ cm}, \\quad \\text{അകം ആരം } r = \\frac{8}{2} = 4\\text{ cm}.$$
+
+$$\\text{(b) ഇരുമ്പിന്റെ വ്യാപ്തം:}$$
+$$V = \\pi(R^2 - r^2)h = \\frac{22}{7} \\times (25 - 16) \\times 35 = 22 \\times 9 \\times 5 = \\mathbf{990\\text{ ഘന സെ.മീ}}.$$
+
+$$\\text{(c) ആകെ ഉപരിതല പരപ്പളവ്:}$$
+$$\\text{പുറം വക്രതല പരപ്പളവ്} = 2\\pi Rh = 2 \\times \\frac{22}{7} \\times 5 \\times 35 = 1100\\text{ ച.സെ.മീ}.$$
+$$\\text{അകം വക്രതല പരപ്പളവ്} = 2\\pi rh = 2 \\times \\frac{22}{7} \\times 4 \\times 35 = 880\\text{ ച.സെ.മീ}.$$
+$$\\text{രണ്ട് വളയങ്ങളുടെ പരപ്പളവ്} = 2 \\times \\frac{22}{7} \\times 9 \\approx 56.57\\text{ ച.സെ.മീ}.$$
+$$\\text{ആകെ പരപ്പളവ്} = 1100 + 880 + 56.57 = \\mathbf{2036.57\\text{ ച.സെ.മീ}}.$$`
   }
 );
