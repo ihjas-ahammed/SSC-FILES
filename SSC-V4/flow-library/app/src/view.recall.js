@@ -164,8 +164,7 @@ const ViewRecall = (function () {
       answerHost.appendChild(el('div', { class: 'reveal' }, [
         el('div', { class: 'h' }, [el('span', { text: 'Canonical statement' })]),
         el('div', { class: 'b' }, [
-          el('div', { class: 'prose tight', html: item.a }),
-          RealLine.statement(concept),
+          RealLine.statementInto(el('div', { class: 'prose tight', html: item.a }), concept),
           el('div', { class: 'row', style: { marginTop: '12px' } }, [
             el('a', { class: 'chip', href: Router.href('note/' + item.cid),
               text: 'Full note · ' + concept.title })

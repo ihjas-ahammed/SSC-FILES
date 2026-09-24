@@ -654,8 +654,7 @@ const NoteBody = (function () {
 
       el('div', { class: 'card' }, [
         el('div', { class: 'kicker', text: 'Statement' }),
-        el('div', { style: { marginTop: '10px' } }, [UI.prose(c.statement)]),
-        RealLine.statement(c)
+        el('div', { style: { marginTop: '10px' } }, [RealLine.statementInto(UI.prose(c.statement), c)])
       ]),
 
       Fig.mount(c),

@@ -1103,6 +1103,8 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .rl-lab.last{ transform:translateX(calc(-100% + 12px)); }
 .rl-lab.new{ color:var(--accent); font-weight:700; }
 .rl-lab mjx-container{ margin:0 !important; }
+/* a line threaded into a statement sits between its part and the next */
+.prose .rl-group{ margin:10px 0 18px; }
 
 </style>
 <style>
@@ -16072,7 +16074,7 @@ const RealLine = (function () {
   /* A fact set: points (by key, with a label), order edges, equalities and
      ranges. `mentioned` is what THIS text talks about, in reading order. */
   function Facts() {
-    return { labels: {}, order: [], eqs: [], ranges: [], rays: [], mentioned: [], ell: 0 };
+    return { labels: {}, order: [], eqs: [], ranges: [], rays: [], mentioned: [], quantified: {}, ell: 0 };
   }
 
   function point(F, t) {
@@ -16163,6 +16165,8 @@ const RealLine = (function () {
     c.ops.forEach(function (op, i) {
       if (op === 'in') {
         const iv = interval(c.terms[i + 1]), v = valid(i);
+        /* s \in S: s is what the text ranges over (u \in \mathbb{R} only says u is a number) */
+        if (!iv && v && !/\\mathbb/.test(c.terms[i + 1])) F.quantified[v] = true;
         if (!iv || !v) return;
         const lo = iv.lo ? point(F, iv.lo) : null, hi = iv.hi ? point(F, iv.hi) : null;
         if ((iv.lo && !lo) || (iv.hi && !hi)) return;
@@ -16309,7 +16313,7 @@ const RealLine = (function () {
       out.push({ type: 3, lo: line.pts[0], hi: line.pts[n - 1],
         loOpen: line.gaps[0] === 2, hiOpen: line.gaps[n - 2] === 2,
         pts: line.pts.map((k, i) => ({ k: k, label: line.labels[i], role: i === 0 || i === n - 1 ? 'end' : 'inner' })) });
-      return out;
+      return out.map(numberSet);
     }
     line.ranges.forEach(function (r) {
       if (!r.lo && !r.hi) return;
@@ -16335,7 +16339,27 @@ const RealLine = (function () {
       }
       out.push({ type: type, lo: lo, hi: hi, loOpen: loOpen, hiOpen: hiOpen, pts: pts });
     });
-    return out;
+    return out.map(numberSet);
+  }
+
+  /* ── ℕ, ℤ or ℝ ─────────────────────────────────────────────────────────
+     When every marked quantity is an index or a count (n, k, m, N, K, n_k,
+     K(ε), …) the line is ℕ — or ℤ if a negative integer is on it. In ℕ a
+     set bounded only above starts at 1: n ≤ K is [1, K], never a ray into
+     the negatives. */
+  const INDEX = /^(n|m|k|j|i|N|K|H)(_\{?[a-zA-Z0-9]+(_\{?[a-zA-Z0-9]+\}?)?\}?|_[a-zA-Z0-9])?(\([^()]*\))?('|\^\{?\*\}?)?$/;
+
+  function numberSet(t) {
+    const marked = t.pts.filter(p => p.role === 'var' || p.role === 'inner');
+    const integer = marked.length && marked.every(p => INDEX.test(key(p.label)));
+    if (!integer) { t.set = 'R'; return t; }
+    t.set = t.pts.some(p => /^-\d+$/.test(key(p.label))) ? 'Z' : 'N';
+    if (t.set === 'N' && t.type === 2) {
+      t.type = 3; t.lo = '1'; t.loOpen = false;
+      const one = t.pts.find(p => p.k === '1');
+      if (one) one.role = 'end'; else t.pts.unshift({ k: '1', label: '1', role: 'end' });
+    }
+    return t;
   }
 
   /* one line of text per track — what tools/realline_report.js prints */
@@ -16345,7 +16369,8 @@ const RealLine = (function () {
       : t.type === 2 ? '(−∞, ' + L(t.hi) + (t.hiOpen ? ')' : ']')
       : (t.loOpen ? '(' : '[') + L(t.lo) + ', ' + L(t.hi) + (t.hiOpen ? ')' : ']');
     const marks = t.pts.filter(p => p.role !== 'end').map(p => p.label + (p.role === 'var' ? '' : ' (' + p.role + ')'));
-    return 'Type ' + t.type + ' ' + set + (marks.length ? '  ·  ' + marks.join(', ') : '');
+    return 'Type ' + t.type + ' ' + set + (t.set && t.set !== 'R' ? ' in ' + (t.set === 'N' ? 'ℕ' : 'ℤ') : '')
+      + (marks.length ? '  ·  ' + marks.join(', ') : '');
   }
 
   /* ── drawing ────────────────────────────────────────────────────────── */
@@ -16371,7 +16396,7 @@ const RealLine = (function () {
       return d;
     };
     put('rl-axis', {});
-    put('rl-R', {}, { text: 'ℝ' });
+    put('rl-R', {}, { text: t.set === 'N' ? '\u2115' : t.set === 'Z' ? '\u2124' : '\u211D' });
 
     const pos = {};
     t.pts.forEach((p, i) => { pos[p.k] = x(i); });
@@ -16417,6 +16442,10 @@ const RealLine = (function () {
      which nearly every step repeats. */
   function rayLines(F, rays) {
     const seen = {};
+    /* w \le s "for all s \in S" is about s, not w: the side the text
+       quantifies over is the variable, whichever side it is written on */
+    rays = rays.map(r => (F.quantified[r.bk] && !F.quantified[r.vk])
+      ? { v: F.labels[r.bk], vk: r.bk, bk: r.vk, dir: r.dir === 'r' ? 'l' : 'r', open: r.open } : r);
     return rays.filter(r => { const k = r.vk + '|' + r.bk + '|' + r.dir; if (seen[k]) return false; seen[k] = true; return true; })
       .sort((x, y) => (key(F.labels[x.bk] || '') === '0') - (key(F.labels[y.bk] || '') === '0'))
       .slice(0, MAX_LINES)
@@ -16434,21 +16463,17 @@ const RealLine = (function () {
      it. A step whose facts clash with an earlier one (the same letter
      reused for something else) falls back to its own facts alone, so one
      clash cannot blank the rest of the proof. */
-  function planProof(c) {
-    const rungs = (c && c.proof && c.proof.rungs) || [];
-    if (c.line === false || !rungs.length) return rungs.map(() => null);
-    const ctx = Facts();
-    const stText = source(c, c.statement);
-    if (stText) read(ctx, stText);
-    const shown = {};
-    solve(ctx, ctx.mentioned, ctx.ranges).forEach(l => l.pts.forEach(k => { shown[k] = true; }));
-    return rungs.map(function (r) {
-      const text = rungText(r);
+  /* Plan a sequence of texts (proof steps, or the parts of a statement):
+     each is solved against ctx plus every text before it, falling back to
+     its own facts alone, then to rays. `shown` collects what has been drawn
+     so far, and a point drawn for the first time is `fresh`. */
+  function planSeq(ctx, texts, shown) {
+    return texts.map(function (text) {
       if (!text) return null;
       const before = { m: ctx.mentioned.length, r: ctx.ranges.length, y: ctx.rays.length };
       read(ctx, text);
       let lines = solve(ctx, ctx.mentioned.slice(before.m), ctx.ranges.slice(before.r));
-      if (!lines.length) { const own = read(Facts(), text); lines = solve(own, own.mentioned, own.ranges); }
+      if (!tracksOfAll(lines).length) { const own = read(Facts(), text); lines = solve(own, own.mentioned, own.ranges); }
       if (!tracksOfAll(lines).length) lines = rayLines(ctx, ctx.rays.slice(before.y));
       if (!tracksOfAll(lines).length) return null;
       const fresh = {};
@@ -16459,12 +16484,79 @@ const RealLine = (function () {
     });
   }
 
+  /* A statement in parts, as the reader sees it: each <p>, each list item,
+     and any loose text between them. A line goes right under its part. */
+  function htmlParts(html) {
+    const out = [], re = /<(p|li|div|blockquote)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+    const loose = t => t.replace(/<\/?(ul|ol)\b[^>]*>/gi, '');
+    let last = 0, m;
+    while ((m = re.exec(html))) {
+      const pre = loose(html.slice(last, m.index));
+      if (pre.trim()) out.push(pre);
+      out.push(m[2]);
+      last = re.lastIndex;
+    }
+    const tail = loose(html.slice(last));
+    if (tail.trim()) out.push(tail);
+    return out;
+  }
+
+  /* one entry per part of the statement: { lines, fresh } or null */
+  function planStatementParts(c, parts) {
+    if (!c || c.line === false) return (parts || []).map(() => null);
+    if (c.line !== undefined) return [planSeq(Facts(), [source(c, '')], {})[0]];   /* an override is one block */
+    return planSeq(Facts(), parts || htmlParts(String(c.statement || '')), {});
+  }
+
+  /* every line the statement draws, flat (the report and the proof seed use it) */
   function planStatement(c) {
-    const text = c && source(c, c.statement);
-    if (!text) return [];
-    const F = read(Facts(), text);
-    const lines = solve(F, F.mentioned, F.ranges);
-    return tracksOfAll(lines).length ? lines : rayLines(F, F.rays);
+    return [].concat.apply([], planStatementParts(c).filter(Boolean).map(p => p.lines));
+  }
+
+  function planProof(c) {
+    const rungs = (c && c.proof && c.proof.rungs) || [];
+    if (c.line === false || !rungs.length) return rungs.map(() => null);
+    const ctx = Facts();
+    const stText = source(c, c.statement);
+    if (stText) read(ctx, stText);
+    const shown = {};
+    tracksOfAll(planStatement(c)).forEach(t => t.pts.forEach(p => { shown[p.k] = true; }));
+    return planSeq(ctx, rungs.map(rungText), shown);
+  }
+
+  /* Draw a statement's lines INTO its rendered prose, each one directly under
+     the block it comes from. Blocks are read before MathJax runs, so their
+     text is still the authored TeX. Returns the prose node. */
+  function statementInto(node, c) {
+    if (!enabled() || !c || !node) return node;
+    if (c.line !== undefined) {                       /* override: after the whole statement */
+      const g = c.line === false ? null : render(planStatement(c), null);
+      if (g) node.appendChild(g);
+      return node;
+    }
+    const blocks = [];
+    let run = [];
+    const flush = () => {
+      const text = run.map(n => n.textContent).join('');
+      if (run.length && text.trim()) blocks.push({ after: run[run.length - 1], text: text });
+      run = [];
+    };
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 1 && /^(P|DIV|BLOCKQUOTE|TABLE|H[1-6])$/.test(n.tagName)) { flush(); blocks.push({ after: n, text: n.textContent }); }
+      else if (n.nodeType === 1 && /^(UL|OL)$/.test(n.tagName)) {
+        flush();
+        Array.prototype.slice.call(n.children).forEach(li => blocks.push({ into: li, text: li.textContent }));
+      } else run.push(n);
+    });
+    flush();
+    planStatementParts(c, blocks.map(b => b.text)).forEach(function (p, i) {
+      const g = p && render(p.lines, null);
+      if (!g) return;
+      const b = blocks[i];
+      if (b.into) b.into.appendChild(g);
+      else b.after.parentNode.insertBefore(g, b.after.nextSibling);
+    });
+    return node;
   }
 
   /* One node (or null) per rung. */
@@ -16475,7 +16567,7 @@ const RealLine = (function () {
   }
 
   return { statement: statement, proof: proof, enabled: enabled,
-    planStatement: planStatement, planProof: planProof, tracksOf: tracksOfAll, describe: describe };
+    planStatement: planStatement, planProof: planProof, statementInto: statementInto, tracksOf: tracksOfAll, describe: describe };
 })();
 
 
@@ -18142,8 +18234,7 @@ const NoteBody = (function () {
 
       el('div', { class: 'card' }, [
         el('div', { class: 'kicker', text: 'Statement' }),
-        el('div', { style: { marginTop: '10px' } }, [UI.prose(c.statement)]),
-        RealLine.statement(c)
+        el('div', { style: { marginTop: '10px' } }, [RealLine.statementInto(UI.prose(c.statement), c)])
       ]),
 
       Fig.mount(c),
@@ -19307,8 +19398,7 @@ const ViewRecall = (function () {
       answerHost.appendChild(el('div', { class: 'reveal' }, [
         el('div', { class: 'h' }, [el('span', { text: 'Canonical statement' })]),
         el('div', { class: 'b' }, [
-          el('div', { class: 'prose tight', html: item.a }),
-          RealLine.statement(concept),
+          RealLine.statementInto(el('div', { class: 'prose tight', html: item.a }), concept),
           el('div', { class: 'row', style: { marginTop: '12px' } }, [
             el('a', { class: 'chip', href: Router.href('note/' + item.cid),
               text: 'Full note · ' + concept.title })
