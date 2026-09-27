@@ -12,16 +12,26 @@
    are not built until each one is opened in turn. A section of forty concepts
    costs one row each until you ask for more.
 
-   The vocabulary of the buttons changed with rule 13: a claim is now "Mark as
-   complete", not "Tick level 3". The level still moves — it is just no longer
-   what the button talks about. Reading is level 1, the proof is level 2, the
-   section's exercises are level 3, and a stage that does not exist is skipped
-   rather than held against you.
+   The vocabulary of the buttons: a claim is "Mark as complete", not "Tick
+   level 2". The level still moves — it is just no longer what the button
+   talks about. Reading is level 1, the section's exercises are level 2, the
+   course's past papers are level 3. A derivation, where a result has one, is
+   optional work that feeds the recall reel; it does not gate a level.
+
+   Two things here come straight from the learning research: every exercise
+   opens as Pólya's four steps (understand, plan, solve, look back), and every
+   note ends with "teach it back" — explain it in your own words, which is
+   Chi's self-explanation effect and Feynman's test in one box.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const NoteBody = (function () {
 
   const el = DOM.el;
+
+  /* A one-shot request from a route: open this section when the note builds. */
+  let wanted = null;
+  const wantOpen = what => { wanted = what; };
+  const takeWanted = what => { if (wanted === what) { wanted = null; return true; } return false; };
 
   /* ── a lazy, titled expander ─────────────────────────────────────────────
      The one pattern the whole note is built from: a header you press and a
@@ -152,7 +162,7 @@ const NoteBody = (function () {
       btn.setAttribute('aria-pressed', String(on));
       note.textContent = on
         ? (isMl ? 'പൂർത്തിയായതായി രേഖപ്പെടുത്തി.' : 'Marked complete on this ' + noun + '.')
-        : (isMl ? 'സ്വയം ശ്രമിച്ചു കണ്ടെത്തിയെങ്കിൽ മാത്രം രേഖപ്പെടുത്തുക.' : 'Claim this only if you produced the argument yourself, not if you read it.');
+        : (isMl ? 'സ്വയം ചെയ്തു കണ്ടെത്തിയെങ്കിൽ മാത്രം രേഖപ്പെടുത്തുക; വായിച്ചതിന് അല്ല.' : 'Claim this only if you worked it yourself, not if you read the answer.');
     }
 
     btn.addEventListener('click', function () {
@@ -322,13 +332,11 @@ const NoteBody = (function () {
     const row = taskRow(c.id, { noun: 'proof', onTick: onTick });
     const proofTitle = (typeof I18N !== 'undefined') ? I18N.t('proof_heading') : 'Proof & rigorous argument';
     const stepsCount = (p.rungs ? p.rungs.length : 0);
-    const stepsSub = isMl
-      ? (stepsCount + ' ഘട്ടങ്ങൾ · പൂർത്തിയാക്കിയാൽ ലെവൽ 2')
-      : (stepsCount + ' ' + DOM.plural(stepsCount, 'step') + ' · completing it is level 2');
+    const stepsSub = stepsCount + ' ' + ((typeof I18N !== 'undefined') ? I18N.t('proof_sub') : 'steps · optional, joins the recall reel once worked');
 
     const view = expander({
       cls: 'exp-proof',
-      open: true,
+      open: false,
       title: proofTitle,
       sub: stepsSub,
       build: function () {
@@ -349,17 +357,15 @@ const NoteBody = (function () {
     const t = Progress.secTaskState(c.sec);
     if (!t.total) return null;
 
-    const kickerText = '§' + c.sec + ' ' + (isMl ? 'പരിശീലന ചോദ്യങ്ങൾ · ലെവൽ 3' : 'exercises · level 3');
-    const statusText = t.ready
-      ? (isMl ? 'ഈ ഭാഗത്തിലെ എല്ലാ പരിശീലന ചോദ്യങ്ങളും പൂർത്തിയായി — ലെവൽ 3 ആയി.' : 'Every exercise in this section is worked through — the section is at level 3.')
-      : (isMl ? 'എല്ലാ പരിശീലന ചോദ്യങ്ങളും ചെയ്തതിനു ശേഷം മാത്രമേ ലെവൽ 3 ആകുകയുള്ളൂ.' : 'The whole section has to be worked through before anything in it turns green.');
+    const kickerText = '§' + c.sec + ' ' + I18N.t('sec_exercises_lv');
+    const statusText = t.ready ? I18N.t('sec_ready') : I18N.t('sec_not_ready');
 
     return el('div', { class: 'card tint' }, [
       el('div', { class: 'spread' }, [
         el('div', { class: 'kicker', text: kickerText }),
         el('span', { class: 'count', text: t.done + ' / ' + t.total })
       ]),
-      el('div', { style: { marginTop: '10px' } }, [UI.meter(t.done, t.total, 3)]),
+      el('div', { style: { marginTop: '10px' } }, [UI.meter(t.done, t.total, 2)]),
       el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: statusText })
     ]);
   }
@@ -377,9 +383,7 @@ const NoteBody = (function () {
     const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
     const cards = (c.cards || []);
     if (!cards.length) return null;
-    const subText = isMl
-      ? (cards.length + ' ചോദ്യങ്ങൾ · ഇത് രേഖപ്പെടുത്തില്ല')
-      : (cards.length + ' ' + DOM.plural(cards.length, 'prompt') + ' · nothing here is recorded');
+    const subText = cards.length + ' ' + I18N.t('self_check_sub');
 
     return expander({
       title: (typeof I18N !== 'undefined') ? I18N.t('self_checks') : 'Self-check',
@@ -389,7 +393,7 @@ const NoteBody = (function () {
         return [el('div', { class: 'stack', style: { gap: '14px' } }, cards.map(function (card) {
           return el('div', { class: 'stack', style: { gap: '6px' } }, [
             el('div', { class: 'prose tight', html: card.q }),
-            UI.reveal(card.kind, () => el('div', { class: 'prose tight', html: card.a }),
+            UI.reveal(I18N.kind(card.kind), () => el('div', { class: 'prose tight', html: card.a }),
               {
                 openLabel: (typeof I18N !== 'undefined') ? I18N.t('show_answer') : 'Show answer',
                 closeLabel: (typeof I18N !== 'undefined') ? I18N.t('hide') : 'Hide'
@@ -426,14 +430,13 @@ const NoteBody = (function () {
         }
         paintMark();
 
-        const marksWord = isMl ? 'മാർക്ക്' : DOM.plural(q.marks, 'mark');
         const qKindLabel = (typeof I18N !== 'undefined') ? I18N.kind(q.type) : q.type;
 
         const node = expander({
           cls: 'exp-q',
           open: true,
           mark: mark,
-          title: qKindLabel + ' · ' + q.marks + ' ' + marksWord,
+          title: qKindLabel + ' · ' + I18N.marks(q.marks),
           sub: ' ',
           build: function () {
             return [QuestionCard.build(q, { inNote: true, onLocked: paintMark })];
@@ -468,9 +471,7 @@ const NoteBody = (function () {
     }
     updateHeader();
 
-    const subText = isMl
-      ? (qs.length + ' ചോദ്യങ്ങൾ · പൂർത്തിയാക്കിയാൽ ലെവൽ 3')
-      : (qs.length + ' ' + DOM.plural(qs.length, 'exercise') + ' · completing them is level 3');
+    const subText = qs.length + ' ' + I18N.t('exercises_sub');
 
     const exp = expander({
       cls: 'exp-exercises',
@@ -484,7 +485,7 @@ const NoteBody = (function () {
           el('p', { class: 'small muted', style: { margin: '0 0 10px' },
             text: (typeof I18N !== 'undefined')
               ? I18N.t('exercises_desc')
-              : 'Every exercise in this section has to be worked through before the section turns green. Work it on paper or in the scratchpad, then mark it complete.' }),
+              : 'Every exercise in this section has to be worked through before the section turns amber. Work it on paper or in the scratchpad, then mark it complete.' }),
           el('div', { class: 'stack', style: { gap: '8px' } }, qs.map(function (q) {
             const qMark = el('span', { class: 'ix' });
             function paintQMark() {
@@ -495,28 +496,60 @@ const NoteBody = (function () {
             }
             paintQMark();
 
-            const marksWord = isMl ? 'മാർക്ക്' : DOM.plural(q.marks || 0, 'mark');
-
             return expander({
               cls: 'exp-q',
               open: true,
               mark: qMark,
-              title: q.title || ((isMl ? 'ചോദ്യം ' : 'Exercise ') + q.id),
-              sub: (q.marks || '?') + ' ' + marksWord,
+              title: q.title || (I18N.t('exercise') + ' ' + q.id),
+              sub: I18N.marks(q.marks || 0),
               build: function () {
                 const tryHost = el('div', { class: 'stack', style: { gap: '8px', marginTop: '8px' }, hidden: true });
                 const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
                 let tryBuilt = false, answerBuilt = false;
 
+                /* Pólya's four steps, as a stepper. The approach hint, where
+                   the data has one, belongs to the Plan step and is revealed
+                   there, not before Understand is done. */
                 function buildTry() {
-                  const kids = [];
-                  if (q.approach) {
-                    kids.push(el('div', { class: 'card tint', style: { padding: '10px 14px' } }, [
-                      el('div', { class: 'kicker' }, [DOM.mi('lightbulb', 'xs'), el('span', { text: ' ' + ((typeof I18N !== 'undefined') ? I18N.t('approach') : 'Approach') })]),
-                      el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
+                  const steps = [1, 2, 3, 4];
+                  const host = el('div', { class: 'polya' });
+                  let at = 0;
+                  function paint() {
+                    DOM.clear(host);
+                    host.appendChild(el('div', { class: 'polya-track' }, steps.map((n, i) =>
+                      el('button', { class: 'polya-dot' + (i === at ? ' on' : i < at ? ' done' : ''), type: 'button',
+                        'aria-current': i === at ? 'step' : null, text: I18N.t('polya_' + n),
+                        on: { click: function () { at = i; paint(); } } }))));
+                    const n = steps[at];
+                    const body = el('div', { class: 'polya-body' }, [
+                      el('div', { class: 'kicker', text: (at + 1) + ' · ' + I18N.t('polya_' + n) }),
+                      el('p', { class: 'prose tight', style: { margin: '6px 0 0' }, text: I18N.t('polya_' + n + '_q') })
+                    ]);
+                    if (n === 2 && q.approach) {
+                      body.appendChild(el('div', { class: 'card tint', style: { padding: '10px 14px', marginTop: '10px' } }, [
+                        el('div', { class: 'kicker' }, [DOM.mi('lightbulb', 'xs'), el('span', { text: ' ' + I18N.t('approach') })]),
+                        el('div', { class: 'prose tight', style: { marginTop: '4px' }, html: q.approach })
+                      ]));
+                      UI.math(body);
+                    }
+                    if (n === 3) {
+                      const pad = el('div', { class: 'scratch' });
+                      WriteBox.mount(pad, {
+                        draftKey: 'ex:' + q.id, concept: Pool.concept((q.tests || [])[0] || q.concept),
+                        label: I18N.t('scratchpad_write'),
+                        placeholder: isMl ? 'ഘട്ടം 1…' : 'Step 1…'
+                      });
+                      body.appendChild(pad);
+                    }
+                    body.appendChild(el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
+                      at < steps.length - 1
+                        ? el('button', { class: 'btn sm primary', type: 'button', text: I18N.t('next'), on: { click: function () { at += 1; paint(); } } })
+                        : el('span', { class: 'small muted', text: I18N.t('polya_note') })
                     ]));
+                    host.appendChild(body);
                   }
-                  return kids;
+                  paint();
+                  return [host];
                 }
 
                 function buildAnswer() {
@@ -530,13 +563,13 @@ const NoteBody = (function () {
                   ];
                 }
 
-                const tryBtnText = (typeof I18N !== 'undefined') ? I18N.t('try_hint') : 'Try it (hint)';
-                const hideHintText = (typeof I18N !== 'undefined') ? I18N.t('hide_hint') : 'Hide hint';
+                const tryBtnText = (typeof I18N !== 'undefined') ? I18N.t('try_hint') : 'Work it in four steps';
+                const hideHintText = (typeof I18N !== 'undefined') ? I18N.t('hide_steps') : 'Hide steps';
                 const showAnswerText = (typeof I18N !== 'undefined') ? I18N.t('show_answer') : 'Show answer';
                 const hideAnswerText = (typeof I18N !== 'undefined') ? I18N.t('hide_answer') : 'Hide answer';
 
                 const tryBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
-                  [DOM.mi('lightbulb', 'sm'), el('span', { class: 'lb', text: tryBtnText })]);
+                  [DOM.mi('format_list_numbered', 'sm'), el('span', { class: 'lb', text: tryBtnText })]);
                 const showBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
                   [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: showAnswerText })]);
 
@@ -576,6 +609,38 @@ const NoteBody = (function () {
 
     exp._updateHeader = updateHeader;
     return exp;
+  }
+
+  /* ── teach it back ───────────────────────────────────────────────────────
+     The Feynman test as a box: one plain sentence, one example of your own,
+     one place a classmate would slip. Nothing is graded; the draft is kept
+     so tomorrow's version can be compared with today's. */
+  function teachBack(c) {
+    const open = takeWanted('teach');
+    return expander({
+      cls: 'exp-teach',
+      open: open,
+      mark: el('span', { class: 'ix' }, [DOM.mi('record_voice_over', 'xs')]),
+      title: I18N.t('teach_title'),
+      sub: I18N.t('teach_sub'),
+      build: function () {
+        const pad = el('div', { class: 'scratch' });
+        WriteBox.mount(pad, {
+          draftKey: 'teach:' + c.id, concept: c,
+          label: I18N.t('teach_title'),
+          placeholder: I18N.t('teach_placeholder')
+        });
+        return [
+          el('ol', { class: 'prose tight teach-prompts' }, [
+            el('li', { text: I18N.t('teach_p1') }),
+            el('li', { text: I18N.t('teach_p2') }),
+            el('li', { text: I18N.t('teach_p3') })
+          ]),
+          pad,
+          el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: I18N.t('teach_note') })
+        ];
+      }
+    });
   }
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -638,7 +703,7 @@ const NoteBody = (function () {
         list.appendChild(el('span', { class: 'count', text: '+' + (pending.length - 8) + (isMl ? ' കൂടുതൽ' : ' more') }));
       }
 
-      const cascadeTitle = isMl ? 'അടിസ്ഥാന ആശയങ്ങളും വായിച്ചതായി അടയാളപ്പെടുത്തണോ?' : 'Mark its groundwork as read too?';
+      const cascadeTitle = I18N.t('cascade_title');
       const cascadeBody = isMl
         ? (pending.length + ' അടിസ്ഥാന ആശയങ്ങൾ ഇതുവരെ വായിച്ചിട്ടില്ല. അവയും വായിച്ചതായി അടയാളപ്പെടുത്തണോ?')
         : (pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') + ' of this result have not been read. Mark them read?');
@@ -715,9 +780,10 @@ const NoteBody = (function () {
       prereqPath(c),
       pView,
       traps(c),
+      selfChecks(c),
       wView,
       questionsOn(c),
-      selfChecks(c),
+      teachBack(c),
       sectionTasks(c),
       unlocks(c),
 
@@ -736,5 +802,5 @@ const NoteBody = (function () {
     return root;
   }
 
-  return { build, expander, taskRow };
+  return { build, expander, taskRow, wantOpen };
 })();

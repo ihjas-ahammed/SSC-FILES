@@ -56,7 +56,7 @@ const QuestionCard = (function () {
     if (!withFig) return null;
     const def = Fig.forConcept(withFig)[0].def;
     return el('div', { class: 'stack', style: { gap: '8px' } }, [
-      el('div', { class: 'kicker', text: 'The picture behind it' }),
+      el('div', { class: 'kicker', text: (typeof I18N !== 'undefined') ? I18N.t('picture_behind') : 'The picture behind it' }),
       Fig.frame(def)
     ]);
   }
@@ -222,7 +222,7 @@ const QuestionCard = (function () {
         : verdict === 'partial'
           ? (isMl ? 'ഭാഗികമായി ശരി.' : 'Partially correct.')
           : (isMl ? 'തെറ്റായ ഉത്തരം. പരിഹാരം കാണിച്ചിരിക്കുന്നു.' : 'Incorrect. Worked answer shown.'));
-      if (o.onLocked) o.onLocked(verdict);
+      if (o.onLocked) o.onLocked(verdict, ms);
       const h = resultHost.querySelector('.verdict');
       if (h) h.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
@@ -241,7 +241,7 @@ const QuestionCard = (function () {
           ? ((typeof I18N !== 'undefined') ? I18N.t('partially_correct') : 'Partially correct')
           : ((typeof I18N !== 'undefined') ? I18N.t('not_correct') : 'Not correct');
 
-      const marksWord = isMl ? 'മാർക്ക്' : DOM.plural(Math.abs(marks), 'mark');
+      const marksWord = (typeof I18N !== 'undefined') ? I18N.t(Math.abs(marks) === 1 ? 'mark' : 'marks') : DOM.plural(Math.abs(marks), 'mark');
 
       DOM.add(wrap, [
         el('div', { class: 'verdict ' + cls }, [
@@ -257,6 +257,9 @@ const QuestionCard = (function () {
 
         saved.tries > 1 ? el('p', { class: 'small muted', style: { margin: 0 },
           text: isMl ? ('ആദ്യ ശ്രമം (' + saved.first.verdict + ') മാറ്റിയിട്ടില്ല.') : ('First attempt (' + saved.first.verdict + ') is unchanged — that is the number the stats use.') }) : null,
+
+        /* a miss is only useful once it has a reason */
+        verdict !== 'correct' ? UI.whyRow('q:' + q.id, (q.tests || [])[0] || q.concept || null) : null,
 
         el('div', { class: 'card' }, [
           el('div', { class: 'kicker', text: (typeof I18N !== 'undefined') ? I18N.t('worked_answer') : 'Worked answer' }),
@@ -279,7 +282,7 @@ const QuestionCard = (function () {
         figureFor(q),
 
         q.trap ? el('div', { class: 'card' }, [
-          el('div', { class: 'kicker', text: isMl ? 'ശ്രദ്ധിക്കേണ്ട കാര്യം' : 'The trap' }),
+          el('div', { class: 'kicker', text: (typeof I18N !== 'undefined') ? I18N.t('the_trap') : 'The trap' }),
           el('div', { style: { marginTop: '8px' } }, [UI.prose(q.trap, 'tight')])
         ]) : null,
 
@@ -300,7 +303,8 @@ const QuestionCard = (function () {
       el('div', { class: 'spread' }, [
         el('div', { class: 'row' }, [
           UI.typeBadge(q),
-          q.mock ? el('span', { class: 'badge warn', text: 'draft' }) : null
+          q.mock ? el('span', { class: 'badge warn', text: 'draft' }) : null,
+          o.drill ? el('span', { class: 'badge', text: Pool.sectionTitle(q.sec) }) : null
         ]),
         timer
       ]),

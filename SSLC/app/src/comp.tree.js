@@ -15,9 +15,8 @@
    you where you left off (see `scrollToOpen`).
 
    Colour is the whole vocabulary. A row is RED once everything under it has
-   been read, AMBER once every proof under it has been worked, GREEN once every
-   section exercise under it is done. A course can go one further: VIOLET, level
-   4, once its past exam papers are worked through too.
+   been read, AMBER once every section exercise under it is worked, GREEN once
+   the course's past exam papers are worked through too (core.progress.js).
    ══════════════════════════════════════════════════════════════════════════ */
 
 const Tree = (function () {
@@ -146,12 +145,14 @@ const Tree = (function () {
     if (!pending.length) return;
     const names = pending.slice(0, 5).map(x => '· ' + x.title).join('\n') +
       (pending.length > 5 ? '\n· and ' + (pending.length - 5) + ' more' : '');
-    const ask = pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
-      ' of "' + c.title + '" ' + DOM.plural(pending.length, 'has', 'have') +
-      ' not been read yet:\n\n' + names + '\n\nMark them as read too?';
+    const ask = isMlC()
+      ? ('"' + c.title + '"-ന്റെ ' + pending.length + ' അടിസ്ഥാന ആശയങ്ങൾ ഇതുവരെ വായിച്ചിട്ടില്ല:\n\n' + names + '\n\nഅവയും വായിച്ചതായി അടയാളപ്പെടുത്തണോ?')
+      : (pending.length + ' ' + DOM.plural(pending.length, 'prerequisite') +
+        ' of "' + c.title + '" ' + DOM.plural(pending.length, 'has', 'have') +
+        ' not been read yet:\n\n' + names + '\n\nMark them as read too?');
     if (!window.confirm(ask)) return;
     const n = Progress.raisePrereqs(c.id);
-    DOM.announce('Marked ' + n + ' ' + DOM.plural(n, 'prerequisite') + ' as read.');
+    DOM.announce(isMlC() ? (n + ' അടിസ്ഥാന ആശയങ്ങൾ വായിച്ചതായി രേഖപ്പെടുത്തി.') : ('Marked ' + n + ' ' + DOM.plural(n, 'prerequisite') + ' as read.'));
   }
 
   /* ── a concept: one row, and the whole note under it ─────────────────── */
@@ -172,9 +173,7 @@ const Tree = (function () {
         state: lv >= 1 ? 'true' : 'false', lv: lv,
         label: lv === 0
           ? (isMl ? ('"' + c.title + '" വായിച്ചതായി അടയാളപ്പെടുത്തുക' + extNote) : ('Mark "' + c.title + '" as read' + extNote))
-          : lv === 1
-            ? (isMl ? ('"' + c.title + '"-ന്റെ തെളിവ് പൂർത്തിയായതായി അടയാളപ്പെടുത്തുക' + extNote) : ('Mark the proof of "' + c.title + '" as complete' + extNote))
-            : (isMl ? ('"' + c.title + '" ഒഴിവാക്കുക') : ('Clear "' + c.title + '"'))
+          : (isMl ? ('"' + c.title + '" വായിച്ചു എന്ന അടയാളം മാറ്റുക') : ('Clear the read tick on "' + c.title + '"'))
       };
     }, function () {
       const was = Progress.level(c.id);
@@ -187,8 +186,8 @@ const Tree = (function () {
     registerMark(function () {
       const lv = Progress.level(c.id);
       DOM.clear(tag);
-      if (lv === 1 && Progress.hasProof(c.id)) {
-        tag.appendChild(el('span', { class: 'lvtag', 'data-lv': '1', text: isMl ? 'തെളിവ് ചെയ്യാനുണ്ട്' : 'proof owed' }));
+      if (lv === 1 && Progress.secTaskState(c.sec).total) {
+        tag.appendChild(el('span', { class: 'lvtag', 'data-lv': '1', text: (typeof I18N !== 'undefined') ? I18N.t('exercises_owed') : 'exercises owed' }));
       } else if (lv >= 2) {
         tag.appendChild(el('span', { class: 'lvtag', 'data-lv': String(lv), text: 'L' + lv }));
       }
@@ -246,7 +245,7 @@ const Tree = (function () {
       : [], ctx);
 
     const conceptsWord = isMl ? 'ആശയങ്ങൾ' : DOM.plural(s.concepts.length, 'concept');
-    const exercisesWord = isMl ? 'പരിശീലനം' : 'exercises';
+    const exercisesWord = (typeof I18N !== 'undefined') ? I18N.t('exercises_lc') : 'exercises';
 
     const node = el('div', { class: 'tnode sub sec' + (open ? ' open' : '') }, [
       el('div', { class: 'trow' }, [
@@ -382,10 +381,12 @@ const Tree = (function () {
     ]);
   }
 
-  /* ── level 4: the course's past papers ───────────────────────────────────
-     A JAM question is set on the subject, not on a Bartle section, so it
+  /* ── level 3: the course's past papers ───────────────────────────────────
+     A past-paper question is set on the whole year, not on one section, so it
      cannot hang off a note. It hangs off the COURSE — a sibling of the
-     modules, and the last thing between a green course and a finished one. */
+     chapters, and the last thing between an amber course and a green one. */
+  const isMlC = () => (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
+
   function pyqNode(course, ctx) {
     const qs = Pool.pyq(course.id);
     const nid = 'pyq-' + course.id;
@@ -397,10 +398,10 @@ const Tree = (function () {
           staticTick('hourglass_empty'),
           el('span', { class: 'tlabel', style: { cursor: 'default' } }, [
             el('span', { class: 'tt' }, [
-              el('b', { text: (typeof I18N !== 'undefined' && I18N.lang() === 'ml') ? 'മുൻവർഷ പരീക്ഷാ ചോദ്യങ്ങൾ' : 'Past exam papers' }),
+              el('b', { text: (typeof I18N !== 'undefined') ? I18N.t('past_papers') : 'Past exam papers' }),
               el('span', { text: (typeof I18N !== 'undefined' && I18N.lang() === 'ml') ? ('ലഭ്യമായിട്ടില്ല · ലെവൽ 3: ' + course.title) : ('not delivered yet · level 3 of ' + course.title) })
             ]),
-            el('span', { class: 'badge warn', text: (typeof I18N !== 'undefined' && I18N.lang() === 'ml') ? 'ബാക്കിയുണ്ട്' : 'pending' })
+            el('span', { class: 'badge warn', text: (typeof I18N !== 'undefined') ? I18N.t('pending') : 'pending' })
           ])
         ])
       ]);
@@ -431,7 +432,7 @@ const Tree = (function () {
         cls: 'exp-q',
         mark: mark,
         title: (q.exam || 'PYQ') + ' ' + (q.year || '') + (q.qno ? ' · Q' + q.qno : ''),
-        sub: (q.marks ? q.marks + ' ' + DOM.plural(q.marks, 'mark') : '')
+        sub: (q.marks ? I18N.marks(q.marks) : '')
           + (q.title ? ' · ' + q.title : ''),
         build: function () {
           /* quick OMR past question: once locked, marks p:id done and reveals full answer */
@@ -454,7 +455,7 @@ const Tree = (function () {
           const answerHost = el('div', { class: 'prose tight', style: { marginTop: '8px' }, hidden: true });
           let built = false;
           const showBtn = el('button', { class: 'chip', type: 'button', 'aria-expanded': 'false' },
-            [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: 'Show answer' })]);
+            [DOM.mi('visibility', 'sm'), el('span', { class: 'lb', text: I18N.t('show_answer') })]);
           showBtn.addEventListener('click', function () {
             const on = answerHost.hidden;
             if (on && !built) {
@@ -462,13 +463,13 @@ const Tree = (function () {
               DOM.add(answerHost, [
                 q.approach ? el('div', { html: q.approach }) : null,
                 q.solution ? el('div', { html: q.solution }) : null,
-                q.trap ? el('p', {}, [el('b', { text: 'Trap: ' }), el('span', { html: q.trap })]) : null
+                q.trap ? el('p', {}, [el('b', { text: I18N.t('trap') }), el('span', { html: q.trap })]) : null
               ]);
               UI.math(answerHost);
             }
             answerHost.hidden = !on;
             showBtn.setAttribute('aria-expanded', String(on));
-            showBtn.querySelector('.lb').textContent = on ? 'Hide answer' : 'Show answer';
+            showBtn.querySelector('.lb').textContent = on ? I18N.t('hide_answer') : I18N.t('show_answer');
           });
 
           return [
@@ -504,20 +505,21 @@ const Tree = (function () {
           return {
             state: st.ready ? 'true' : (st.done ? 'mixed' : 'false'),
             lv: st.ready ? 4 : 0,
-            label: st.ready ? 'Every past paper of ' + course.title + ' is complete'
-              : 'Mark every past paper of ' + course.title + ' complete'
+            label: st.ready
+              ? (isMlC() ? course.title + '-ന്റെ എല്ലാ മുൻവർഷ ചോദ്യങ്ങളും പൂർത്തിയായി' : 'Every past paper of ' + course.title + ' is complete')
+              : (isMlC() ? course.title + '-ന്റെ എല്ലാ മുൻവർഷ ചോദ്യങ്ങളും പൂർത്തിയായതായി അടയാളപ്പെടുത്തുക' : 'Mark every past paper of ' + course.title + ' complete')
           };
         }, function () {
           const st = Progress.pyqState(course.id);
           const want = !st.ready;
           st.list.forEach(q => Store.setProofDone('p:' + q.id, want));
           Progress.dropCache();
-          DOM.announce(want ? 'Every past paper marked complete.' : 'Past papers cleared.');
+          DOM.announce(want ? (isMlC() ? 'എല്ലാ മുൻവർഷ ചോദ്യങ്ങളും പൂർത്തിയായതായി രേഖപ്പെടുത്തി.' : 'Every past paper marked complete.') : (isMlC() ? 'മുൻവർഷ ചോദ്യങ്ങളുടെ അടയാളം മാറ്റി.' : 'Past papers cleared.'));
           ctx.repaint({});
         }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
-            el('b', { text: (typeof I18N !== 'undefined' && I18N.lang() === 'ml') ? 'മുൻവർഷ പരീക്ഷാ ചോദ്യങ്ങൾ' : 'Past exam papers' }),
+            el('b', { text: (typeof I18N !== 'undefined') ? I18N.t('past_papers') : 'Past exam papers' }),
             el('span', { text: (typeof I18N !== 'undefined' && I18N.lang() === 'ml') ? (qs.length + ' ചോദ്യങ്ങൾ · ഇവ പൂർത്തിയാക്കിയാൽ ലെവൽ 3') : (qs.length + ' ' + DOM.plural(qs.length, 'question') + ' · finishing them is level 3') })
           ]),
           count,
@@ -547,17 +549,17 @@ const Tree = (function () {
           : tickButton(function () {
               const lv = Progress.courseLevel(course.id);
               return { state: Progress.tickState(ids), lv: lv,
-                label: 'Advance every note of ' + course.title };
+                label: (isMlC() ? course.title + '-ലെ എല്ലാ കുറിപ്പുകളും വായിച്ചതായി അടയാളപ്പെടുത്തുക' : 'Mark every note of ' + course.title + ' as read') };
             }, function () {
               const to = Progress.advanceMany(ids);
-              DOM.announce(to ? course.title + ' at level ' + to + '.' : 'Course cleared.');
+              DOM.announce(to ? course.title + (isMlC() ? ' ലെവൽ ' + to + ' ആയി.' : ' at level ' + to + '.') : (isMlC() ? 'കോഴ്സിന്റെ അടയാളങ്ങൾ മാറ്റി.' : 'Course cleared.'));
               refresh();
             }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
             el('b', {}, [
               el('span', { text: course.title }),
-              course.pending ? el('span', { class: 'badge warn', text: 'pending' }) : null
+              course.pending ? el('span', { class: 'badge warn', text: I18N.t('pending') }) : null
             ]),
             el('span', { text: course.pending ? course.blurb : course.code + ' · ' + course.blurb })
           ]),

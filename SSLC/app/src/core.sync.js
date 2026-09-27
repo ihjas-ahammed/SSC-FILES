@@ -24,13 +24,17 @@ const Sync = (function () {
      into the test build must never appear in, or merge with, the real record.
      This is the only place that mapping is decided.
 
-        live   ssc4_ra_v1        ssc4_users_v1
-        mock   ssc4_ra_mock_v1   ssc4_users_mock_v1
+        live   sslc_v1        sslc_users_v1
+        mock   sslc_mock_v1   sslc_users_mock_v1
 
-     AGY owns the live pair; see "Publishing" in HOOK_agy.md. */
+     SSLC used to share the Real Analysis namespace ('ssc4_ra_v1'), so the
+     same name and roll number in both apps merged two unrelated records into
+     one. The first sync under the new namespace pulls the record left under
+     the old one, once, so nothing already synced is lost. */
   const LIVE = () => (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'live');
-  const NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
-  const USERS = () => LIVE() ? 'ssc4_users_v1' : 'ssc4_users_mock_v1';
+  const NS = () => LIVE() ? 'sslc_v1' : 'sslc_mock_v1';
+  const USERS = () => LIVE() ? 'sslc_users_v1' : 'sslc_users_mock_v1';
+  const LEGACY_NS = () => LIVE() ? 'ssc4_ra_v1' : 'ssc4_ra_mock_v1';
 
   let syncing = false;
   let pushT = 0;
@@ -61,6 +65,7 @@ const Sync = (function () {
 
   const on = () => !!key();
   const url = () => DB + '/' + NS() + '/' + encodeURIComponent(key()) + '.json';
+  const legacyUrl = () => DB + '/' + LEGACY_NS() + '/' + encodeURIComponent(key()) + '.json';
   const userUrl = () => DB + '/' + USERS() + '/' + encodeURIComponent(key()) + '.json';
 
   function announce(ok, msg) {
@@ -84,6 +89,13 @@ const Sync = (function () {
 
     return window.fetch(url(), { cache: 'no-store' })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(function (remote) {
+        /* nothing under the new namespace yet: look once under the old one */
+        if (remote && typeof remote === 'object' && typeof remote.payload === 'string') return remote;
+        return window.fetch(legacyUrl(), { cache: 'no-store' })
+          .then(r => r.ok ? r.json() : null)
+          .catch(() => null);
+      })
       .then(function (remote) {
         let rs = null;
         if (remote && typeof remote === 'object' && typeof remote.payload === 'string') {
@@ -110,7 +122,7 @@ const Sync = (function () {
           };
           const bits = [];
           if (gained.notes > 0) bits.push(gained.notes + ' ' + DOM.plural(gained.notes, 'note'));
-          if (gained.proofs > 0) bits.push(gained.proofs + ' ' + DOM.plural(gained.proofs, 'proof'));
+          if (gained.proofs > 0) bits.push(gained.proofs + ' ' + DOM.plural(gained.proofs, 'task'));
           if (gained.cards > 0) bits.push(gained.cards + ' ' + DOM.plural(gained.cards, 'card'));
           if (gained.omr > 0) bits.push(gained.omr + ' ' + DOM.plural(gained.omr, 'question'));
           const msg = bits.length
