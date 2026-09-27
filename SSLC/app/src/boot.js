@@ -96,13 +96,15 @@ const Shell = (function () {
       if (langText) langText.textContent = isMl ? 'English' : 'മലയാളം';
     }
 
+    /* The brand is the app's, not the first course's: the pool holds four
+       courses and the first one happened to be Class 8. */
     const topTitle = document.getElementById('top-title');
     if (topTitle) {
-      topTitle.textContent = (Pool.courses && Pool.courses()[0] && Pool.courses()[0].title) || ((typeof I18N !== 'undefined') ? I18N.t('app_title') : 'Class 8 Mathematics');
+      topTitle.textContent = (typeof I18N !== 'undefined') ? I18N.t('app_title') : 'SSLC Mathematics';
     }
     const topSub = document.getElementById('top-sub');
     if (topSub && (!topSub.dataset.custom || topSub.dataset.custom === 'false')) {
-      topSub.textContent = (typeof I18N !== 'undefined') ? I18N.t('app_sub') : 'Math Base';
+      topSub.textContent = (typeof I18N !== 'undefined') ? I18N.t('app_sub') : 'Kerala SCERT · Class 8–10';
     }
   }
 
@@ -135,20 +137,23 @@ const App = (function () {
 
   const el = DOM.el;
 
-  /* Three tabs, not five. Questions and Write lost their tabs when the note
-     learned to hold them: answering a question about a theorem belongs under
-     that theorem, not behind a tab that makes you find it again. Both routes
-     still resolve — see view.omr.js and view.write.js — they are simply not
-     places you navigate TO any more. */
+  /* Four tabs. Questions and Write lost their tabs when the note learned to
+     hold them: answering a question about a result belongs under that result,
+     not behind a tab that makes you find it again. Both routes still resolve
+     (view.omr.js, view.write.js); they are simply not places you navigate TO.
+     The timed drill is a tab because the plan sends you there every day; the
+     method page is reached from Today, because it is read once a term. */
   const TABS = [
-    { name: 'home', label: 'Today', icon: 'today', also: [] },
-    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note', 'omr'] },
-    { name: 'recall', label: 'Recall', icon: 'style', also: [] }
+    { name: 'home', label: 'Today', icon: 'today', also: ['method'] },
+    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note', 'omr', 'write'] },
+    { name: 'recall', label: 'Recall', icon: 'style', also: [] },
+    { name: 'drill', label: 'Drill', icon: 'timer', also: [] }
   ];
 
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
-    recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewStudy
+    recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewStudy,
+    drill: () => ViewDrill, method: () => ViewMethod
   };
 
   /* ONE nav element, laid out two ways.
@@ -174,8 +179,8 @@ const App = (function () {
     DOM.clear(nav);
 
     const backLabel = (typeof I18N !== 'undefined') ? I18N.t('back') : 'Back';
-    const appTitle = (Pool.courses && Pool.courses()[0] && Pool.courses()[0].title) || ((typeof I18N !== 'undefined') ? I18N.t('app_title') : 'Class 8 Mathematics');
-    const appSub = (typeof I18N !== 'undefined') ? I18N.t('app_sub') : 'Math Base';
+    const appTitle = (typeof I18N !== 'undefined') ? I18N.t('app_title') : 'SSLC Mathematics';
+    const appSub = (typeof I18N !== 'undefined') ? I18N.t('app_sub') : 'Kerala SCERT · Class 8–10';
 
     nav.appendChild(el('div', { class: 'rail-top' }, [
       railBtn('back', 'arrow_back', backLabel, function () { Router.back(); }),
@@ -230,7 +235,7 @@ const App = (function () {
           el('span', { class: 'mono', text: (err && err.message) || String(err) })
         ])
       ]),
-      el('a', { class: 'btn', href: Router.href('home'), text: 'Back to Today' })
+      el('a', { class: 'btn', href: Router.href('home'), text: (typeof I18N !== 'undefined') ? I18N.t('tab_home') : 'Today' })
     ]);
   }
 
@@ -246,6 +251,8 @@ const App = (function () {
     markNav(r.name);
     Shell.paint();
     if (r.name !== 'study' && r.name !== 'note') Shell.setSubtitle('');
+    /* a note open in the tree widens the column; every other view is narrow */
+    if (r.name !== 'study' && r.name !== 'note') document.body.classList.remove('note-open');
     const h = main.querySelector('#pagetitle');
     if (h) h.focus({ preventScroll: true });
     /* Most views start at the top. Study does not: it restores the row you
@@ -305,8 +312,10 @@ const App = (function () {
     wrap.insertBefore(el('div', { class: 'banner' }, [
       DOM.mi('warning'),
       el('span', {}, [
-        el('b', { text: 'MathJax did not load. ' }),
-        'Formulas will show in plain text format. The app needs the network once to fetch it.'
+        el('b', { text: (typeof I18N !== 'undefined' && I18N.lang() === 'ml') ? 'MathJax ലോഡായില്ല. ' : 'MathJax did not load. ' }),
+        (typeof I18N !== 'undefined' && I18N.lang() === 'ml')
+          ? 'സൂത്രവാക്യങ്ങൾ സാധാരണ അക്ഷരങ്ങളിൽ കാണും. ഇത് ലഭിക്കാൻ ഒരു തവണ നെറ്റ്‌വർക്ക് വേണം.'
+          : 'Formulas will show in plain text format. The app needs the network once to fetch it.'
       ])
     ]), wrap.firstChild);
   }
@@ -367,7 +376,7 @@ const App = (function () {
     if (document.hidden) Store.flushNow();
   });
 
-  return { start: start, route: route };
+  return { start: start, route: route, buildNav: buildNav };
 })();
 
 if (document.readyState === 'loading') {

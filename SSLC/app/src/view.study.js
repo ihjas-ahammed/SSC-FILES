@@ -8,7 +8,7 @@ const ViewStudy = (function () {
   const el = DOM.el;
 
   function levelWord(n) {
-    return (typeof I18N !== 'undefined') ? I18N.levelName(n) : ['not started', 'read', 'proofs worked', 'exercises done', 'all complete'][n || 0];
+    return (typeof I18N !== 'undefined') ? I18N.levelName(n) : ['not started', 'read', 'exercises done', 'past papers done'][n || 0];
   }
 
   function summaryStrip() {
@@ -41,25 +41,25 @@ const ViewStudy = (function () {
 
     DOM.add(root, [
       UI.crumb([{ text: (typeof I18N !== 'undefined') ? I18N.t('tab_study') : 'Study', href: 'study' }, { text: course.title }]),
-      UI.title(course.title, course.code + (course.sem !== '—' ? (isMl ? ' · ഭാഗം ' + course.sem : ' · semester ' + course.sem) : '')),
+      UI.title(course.title, course.code + (course.sem && course.sem !== '—' ? ' · ' + course.sem : '')),
       el('p', { class: 'lede', text: course.blurb }),
       course.pending
         ? el('div', { class: 'banner' }, [
             DOM.mi('hourglass_empty'),
-            el('span', {}, [el('b', { text: isMl ? 'തയ്യാറായിട്ടില്ല. ' : 'Not built yet. ' }), course.pendingNote])
+            el('span', {}, [el('b', { text: isMl ? 'തയ്യാറായിട്ടില്ല. ' : 'Not built yet. ' }), course.pendingNote || I18N.t('not_delivered')])
           ])
         : el('div', { class: 'card tint' }, [
             el('div', { class: 'spread' }, [
-              el('span', { class: 'kicker', text: isMl ? 'പുരോഗതി' : 'Levels reached' }),
+              el('span', { class: 'kicker', text: I18N.t('levels_reached') }),
               el('span', { class: 'count', text: c.l1 + ' / ' + c.l2 + ' / ' + c.l3 + ' of ' + c.total })
             ]),
             el('div', { style: { marginTop: '8px' } }, [UI.levelBar(c)]),
             pyq.total ? el('div', { class: 'spread', style: { marginTop: '12px' } }, [
-              el('span', { class: 'count', text: isMl ? 'പരീക്ഷാ പേപ്പറുകൾ · ലെവൽ 4' : 'past papers · level 4' }),
+              el('span', { class: 'count', text: I18N.t('past_papers_lv') }),
               el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
             ]) : null,
             pyq.total ? el('div', { style: { marginTop: '6px' } },
-              [UI.meter(pyq.done, pyq.total, 4)]) : null
+              [UI.meter(pyq.done, pyq.total, 3)]) : null
           ]),
       host
     ]);

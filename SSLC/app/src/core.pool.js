@@ -277,11 +277,13 @@ const Pool = (function () {
       (neededBy[n] || (neededBy[n] = [])).push(c);
     }));
 
-    /* statement recall deck, ordered the way the courses are ordered */
+    /* the recall deck, ordered the way the courses are ordered. Every kind of
+       card goes in — state, recall, apply, trap — because each is a question
+       with an answer, and a reel of statements alone would leave five sixths
+       of the pool's prompts unused. */
     sections().forEach(s => s.concepts.forEach(c => {
       const rawCards = (c.cards_en || c.cards || []);
       rawCards.forEach(function (card, i) {
-        if (card.kind && card.kind !== 'state') return;
         const dItem = { id: c.id + '#' + i, cid: c.id, sec: c.sec, kind: card.kind || 'state' };
         Object.defineProperty(dItem, 'q', {
           get: function () {
