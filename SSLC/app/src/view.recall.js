@@ -21,7 +21,9 @@
    way back. Nothing repeats within a pass.
 
    The rules are unchanged: nothing is revealed before an attempt, and the
-   first grade is the one that counts.
+   first grade is the one that counts. Two additions from the research: you
+   say how sure you are BEFORE the reveal (calibration), and after a miss you
+   say why (the mistake log). Both are one tap.
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewRecall = (function () {
@@ -35,40 +37,83 @@ const ViewRecall = (function () {
   const BATCH = 6;          /* how many cards to add at a time */
   const LOOKAHEAD = 3;      /* how close to the end before the next batch */
 
-  let onlyNew = false;
+  /* What the reel draws from. 'all' is everything due, mixed across chapters
+     (the default, because interleaving is the point); 'new' is cards never
+     attempted; 'weak' is cards on the concepts you keep missing; 'chapter'
+     is one chapter only, for the first days after reading it. */
+  let mode = 'all';
+  let chapter = null;          /* module id when mode is 'chapter' */
   let startAt = null;          /* concept id to open on, from ?from= */
+  const t = k => I18N.t(k);
+
+  function draw(exclude) {
+    let list = Progress.reel({ onlyNew: mode === 'new', exclude: exclude });
+    if (mode === 'weak') {
+      const weak = Study.weakIds();
+      list = list.filter(x => x.cid && weak[x.cid]);
+    } else if (mode === 'chapter' && chapter) {
+      list = list.filter(function (x) {
+        const m = Pool.moduleOfSec(x.sec);
+        return m && m.id === chapter;
+      });
+    }
+    return list;
+  }
+
+  /* the chapters that have anything in the reel at all */
+  function chaptersInReel() {
+    const seen = {}, out = [];
+    Progress.reel().forEach(function (x) {
+      const m = Pool.moduleOfSec(x.sec);
+      if (m && !seen[m.id]) { seen[m.id] = true; out.push(m); }
+    });
+    return out;
+  }
 
   /* ── intro card ──────────────────────────────────────────────────────────
      The only place the reel is configured, and it says nothing about how much
      is left — that is the point. */
   function introCard(rebuild) {
-    const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
     const chip = (label, on, fn) => el('button', { class: 'chip', type: 'button', text: label,
       'aria-pressed': String(on), on: { click: fn } });
 
     const anything = Progress.reel().length;
+    const d = Study.due();
+    const weakN = Object.keys(Study.weakIds()).length;
+    const chapters = chaptersInReel();
+
+    const select = el('select', { class: 'tin', id: 'reel-chapter', 'aria-label': t('one_chapter') },
+      chapters.map(m => el('option', { value: m.id, text: m.title, selected: chapter === m.id ? true : null })));
+    if (!chapter && chapters[0]) chapter = chapters[0].id;
+    select.addEventListener('change', function () { chapter = select.value; mode = 'chapter'; rebuild(); });
 
     return el('div', { class: 'inner' }, [
       el('div', {}, [
-        el('div', { class: 'kicker', text: (typeof I18N !== 'undefined' ? I18N.t('reel_kicker') : 'Reel · one swipe, one card') }),
-        UI.title(typeof I18N !== 'undefined' ? I18N.t('reel') : 'Recall')
+        el('div', { class: 'kicker', text: t('reel_kicker') }),
+        UI.title(t('reel'))
       ]),
-      el('p', { class: 'lede' },
-        [typeof I18N !== 'undefined' ? I18N.t('reel_lede') : 'Only what you have already met. Each card asks first; nothing is revealed until you have attempted it. What comes next is a surprise.']),
+      el('p', { class: 'lede' }, [t('reel_lede')]),
+
+      anything ? el('div', { class: 'row', style: { gap: '10px' } }, [
+        el('span', { class: 'badge' + (d.due ? ' accent' : ''), text: d.due + ' ' + t('reel_due') }),
+        el('span', { class: 'small muted', text: d.later + ' ' + t('reel_later') })
+      ]) : null,
 
       anything
-        ? el('div', { class: 'row' }, [
-            chip(typeof I18N !== 'undefined' ? I18N.t('everything') : 'Everything', !onlyNew, function () { onlyNew = false; rebuild(); }),
-            chip(typeof I18N !== 'undefined' ? I18N.t('not_yet_attempted') : 'Not yet attempted', onlyNew, function () { onlyNew = true; rebuild(); })
+        ? el('div', { class: 'stack', style: { gap: '10px' } }, [
+            el('div', { class: 'kicker', text: t('reel_mode') }),
+            el('div', { class: 'row' }, [
+              chip(t('everything'), mode === 'all', function () { mode = 'all'; rebuild(); }),
+              chip(t('not_yet_attempted'), mode === 'new', function () { mode = 'new'; rebuild(); }),
+              weakN ? chip(t('weak_only') + ' · ' + weakN, mode === 'weak', function () { mode = 'weak'; rebuild(); }) : null,
+              chapters.length > 1 ? chip(t('one_chapter'), mode === 'chapter', function () { mode = 'chapter'; rebuild(); }) : null
+            ]),
+            mode === 'chapter' && chapters.length > 1 ? el('div', {}, [select]) : null,
+            el('p', { class: 'small muted', style: { margin: 0 },
+              text: mode === 'chapter' ? t('chapter_note') : t('mixed_note') })
           ])
-        : UI.empty(
-            isMl ? 'നിങ്ങൾ വായിച്ച കുറിപ്പുകൾ, സ്വയം കണ്ടെത്തിയ തെളിവുകൾ, പരിശീലിച്ച ചോദ്യങ്ങൾ എന്നിവയിൽ നിന്നാണ് കാർഡുകൾ വരുന്നത് — ഇതുവരെ ഒന്നും പൂർത്തിയാക്കിയിട്ടില്ല.'
-                 : 'The reel draws on notes you have read, proofs you have worked and questions you have answered — and there are none of those yet.',
-            el('a', { class: 'btn primary', href: Router.href('study'), text: typeof I18N !== 'undefined' ? I18N.t('open_syllabus') : 'Open the syllabus' })),
-
-      anything ? el('p', { class: 'small muted', style: { margin: 0 },
-        text: isMl ? 'ശരിയുത്തരം ലഭിച്ച കാർഡുകൾ കൂടുതൽ ദിവസങ്ങൾക്ക് ശേഷം വീണ്ടും വരും, തെറ്റിയവ പെട്ടെന്ന് വരും. പാഠ്യപദ്ധതിയിൽ പുതിയ ഭാഗങ്ങൾ പൂർത്തിയാക്കുമ്പോൾ അവയും ഇതിൽ ഉൾപ്പെടും.'
-                   : 'Cards you get right come back days later, cards you miss come back soon. Tick something new in the syllabus and it joins the reel behind you.' }) : null
+        : UI.empty(t('reel_empty'),
+            el('a', { class: 'btn primary', href: Router.href('study'), text: t('open_syllabus') }))
     ]);
   }
 
@@ -76,7 +121,8 @@ const ViewRecall = (function () {
   function head(item, badge) {
     const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
     const rec = Store.card(item.id);
-    const kindLabel = typeof I18N !== 'undefined' ? I18N.kind(item.conceptKind) : item.conceptKind;
+    const concept = item.cid ? Pool.concept(item.cid) : null;
+    const kindLabel = concept ? I18N.kind(concept.kind) : I18N.kind(item.conceptKind);
     const itemTitle = typeof I18N !== 'undefined' ? I18N.pick(item, 'title') : item.title;
     const gradeWord = rec && rec.first ? (isMl ? (rec.first === 'got' ? 'ശരിയായി' : rec.first === 'missed' ? 'ഓർമ്മവന്നില്ല' : 'ഭാഗികം') : rec.first) : '';
 
@@ -107,6 +153,7 @@ const ViewRecall = (function () {
 
     function commit(grade) {
       const r = Store.gradeCard(item.id, grade);
+      if (item._conf) Store.recordConfidence(item.id, item._conf, grade === 'got', item.cid);
       const gradeWord = isMl ? (grade === 'got' ? 'ശരിയായി' : grade === 'missed' ? 'ഓർമ്മവന്നില്ല' : 'ഭാഗികം') : grade;
       const firstWord = isMl && r.first ? (r.first === 'got' ? 'ശരിയായി' : r.first === 'missed' ? 'ഓർമ്മവന്നില്ല' : 'ഭാഗികം') : r.first;
 
@@ -125,11 +172,12 @@ const ViewRecall = (function () {
               : (r.tries > 1 ? 'First attempt (' + r.first + ') is unchanged.' : 'Completion and recall stay separate numbers.') })
           ])
         ]),
+        grade !== 'got' ? el('div', { style: { marginTop: '12px' } }, [UI.whyRow(item.id, item.cid)]) : null,
         el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
-          el('button', { class: 'btn primary', type: 'button', text: isMl ? 'അടുത്ത കാർഡ്' : 'Next card',
+          el('button', { class: 'btn primary', type: 'button', text: t('next_card'),
             on: { click: goNext } }),
           item.cid ? el('a', { class: 'btn', href: Router.href('note/' + item.cid),
-            text: isMl ? 'കുറിപ്പ് കാണുക' : 'Open the note' }) : null
+            text: t('open_note') }) : null
         ])
       ]);
       DOM.announce(isMl ? 'രേഖപ്പെടുത്തി.' : ('Recorded ' + grade + '.'));
@@ -205,10 +253,12 @@ const ViewRecall = (function () {
     const gateHost = el('div', {});
     const answerHost = el('div', {});
 
+    let conf = 0;
     function reveal(grade) {
       if (revealed) return;
       revealed = true;
       const rec = Store.gradeCard(item.id, grade);
+      if (conf) Store.recordConfidence(item.id, conf, grade === 'got', item.cid);
       DOM.clear(gateHost);
       DOM.clear(answerHost);
 
@@ -222,20 +272,22 @@ const ViewRecall = (function () {
           ])
         ]),
         el('div', { class: 'reveal' }, [
-          el('div', { class: 'h' }, [el('span', { text: isMl ? 'ശരിയായ പ്രസ്താവന' : 'Canonical statement' })]),
+          el('div', { class: 'h' }, [el('span', { text: t('canonical') })]),
           el('div', { class: 'b' }, [
             el('div', { class: 'prose tight', html: typeof I18N !== 'undefined' ? I18N.pick(item, 'a') : item.a }),
             el('div', { class: 'row', style: { marginTop: '12px' } }, [
               el('a', { class: 'chip', href: Router.href('note/' + item.cid),
-                text: (isMl ? 'പൂർണ്ണ കുറിപ്പ് · ' : 'Full note · ') + (typeof I18N !== 'undefined' ? I18N.pick(concept, 'title') : (concept ? concept.title : '')) })
+                text: t('full_note') + (typeof I18N !== 'undefined' ? I18N.pick(concept, 'title') : (concept ? concept.title : '')) })
             ])
           ])
         ]),
+        conf === 3 && !isCorrect ? el('p', { class: 'small', style: { margin: 0 }, text: t('calib_over') }) : null,
+        !isCorrect ? UI.whyRow(item.id, item.cid) : null,
         el('div', { class: 'btn-row', style: { marginTop: '12px' } }, [
-          el('button', { class: 'btn primary', type: 'button', text: isMl ? 'അടുത്ത കാർഡ്' : 'Next card',
+          el('button', { class: 'btn primary', type: 'button', text: t('next_card'),
             on: { click: goNext } }),
           item.cid ? el('a', { class: 'btn', href: Router.href('note/' + item.cid),
-            text: isMl ? 'കുറിപ്പ് കാണുക' : 'Open the note' }) : null
+            text: t('open_note') }) : null
         ])
       ]);
 
@@ -294,21 +346,18 @@ const ViewRecall = (function () {
       ]);
     }
 
-    DOM.add(gateHost, [
-      el('div', { class: 'card tint ask', style: { marginTop: '14px', padding: '12px 14px' } }, [
-        el('p', { class: 'small muted', style: { margin: '0 0 10px' },
-          text: isMl ? 'ഓപ്ഷനുകൾ കണ്ട് ശരിയുത്തരം തിരഞ്ഞെടുക്കുക:' : 'Choose the correct statement from options:' }),
-        el('div', { class: 'btn-row' }, [
-          el('button', { class: 'btn primary', type: 'button', text: isMl ? 'ഓപ്ഷനുകൾ കാണുക' : 'Show options',
-            on: { click: showOptions } }),
-          el('button', { class: 'btn', type: 'button', text: isMl ? 'ഉത്തരം നേരിട്ട് കാണുക' : 'Show answer',
-            on: { click: function () { reveal('missed'); } } })
-        ])
-      ])
-    ]);
+    /* Say how sure you are first. "No idea" is an honest miss and is
+       recorded as one; the other two unlock the options. */
+    gateHost.appendChild(UI.confidenceGate({
+      onPick: function (c) {
+        conf = c;
+        if (c === 1) { reveal('missed'); return; }
+        showOptions();
+      }
+    }));
 
     return el('div', { class: 'inner' }, [
-      head(item, isMl ? 'പ്രസ്താവന' : 'statement'),
+      head(item, I18N.kind(item.conceptKind || 'state')),
       el('div', { class: 'prose', style: { fontSize: '1.12rem' }, html: typeof I18N !== 'undefined' ? I18N.pick(item, 'q') : item.q }),
       gateHost, answerHost
     ]);
@@ -375,12 +424,13 @@ const ViewRecall = (function () {
       UI.math(answerHost);
     }
 
-    gateHost.appendChild(UI.gate({
-      hint: isMl ? 'തെളിവിന്റെ പ്രധാന ആശയം ഓർത്തെടുക്കുക.' : 'Say how the proof goes before you look — the main move, and why it works.',
-      actions: [
-        { label: isMl ? 'യുക്തി മനസ്സിലുണ്ട്' : 'I reasoned it through', primary: true, onClick: function () { unlock(isMl ? 'ശ്രമം രേഖപ്പെടുത്തി — ഇനി തെളിവ് കാണാം.' : 'Attempt registered — you can reveal now.'); } },
-        { label: isMl ? 'ഓർത്തെടുക്കാൻ സാധിക്കുന്നില്ല' : "I can't reconstruct it", onClick: function () { reveal('missed'); } }
-      ]
+    gateHost.appendChild(UI.confidenceGate({
+      hint: isMl ? 'നോക്കും മുൻപ് തെളിവിന്റെ പ്രധാന ആശയവും അത് എന്തുകൊണ്ട് പ്രവർത്തിക്കുന്നു എന്നും പറയുക.' : 'Say how the derivation goes before you look — the main move, and why it works. Then say how sure you are.',
+      onPick: function (c) {
+        item._conf = c;
+        if (c === 1) { reveal('missed'); return; }
+        unlock(isMl ? 'ശ്രമം രേഖപ്പെടുത്തി — ഇനി തെളിവ് കാണാം.' : 'Attempt registered — you can reveal now.');
+      }
     }));
 
     const cTitle = typeof I18N !== 'undefined' ? I18N.pick(concept, 'title') : concept.title;
@@ -398,10 +448,10 @@ const ViewRecall = (function () {
     const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
     const q = item.question;
     const tail = el('div', { class: 'btn-row' }, [
-      el('button', { class: 'btn primary', type: 'button', text: isMl ? 'അടുത്ത കാർഡ്' : 'Next card',
+      el('button', { class: 'btn primary', type: 'button', text: t('next_card'),
         on: { click: goNext } }),
       item.cid ? el('a', { class: 'btn', href: Router.href('note/' + item.cid),
-        text: isMl ? 'കുറിപ്പ് കാണുക' : 'Open the note' }) : null
+        text: t('open_note') }) : null
     ]);
     return el('div', { class: 'inner' }, [
       head(item, isMl ? 'ചോദ്യം' : 'question'),
@@ -456,12 +506,13 @@ const ViewRecall = (function () {
       UI.math(answerHost);
     }
 
-    gateHost.appendChild(UI.gate({
-      hint: isMl ? 'മുൻപ് ചെയ്ത ചോദ്യമാണിത്. ഉത്തരം നോക്കുന്നതിന് മുൻപ് ഒരിക്കൽക്കൂടി സ്വയം ചെയ്തു നോക്കുക.' : 'You have worked this one before. Do the main move again before you look.',
-      actions: [
-        { label: isMl ? 'ഞാൻ സ്വയം ചെയ്തു നോക്കി' : 'I worked it through', primary: true, onClick: function () { unlock(isMl ? 'ശ്രമം രേഖപ്പെടുത്തി — ഇനി ഉത്തരം കാണാം.' : 'Attempt registered — you can reveal now.'); } },
-        { label: isMl ? 'ഇപ്പോൾ ചെയ്യാൻ കഴിയുന്നില്ല' : "I can't do it now", onClick: function () { reveal('missed'); } }
-      ]
+    gateHost.appendChild(UI.confidenceGate({
+      hint: isMl ? 'മുൻപ് ചെയ്ത ചോദ്യമാണിത്. ഉത്തരം നോക്കും മുൻപ് പ്രധാന ഘട്ടം ഒരിക്കൽക്കൂടി സ്വയം ചെയ്യുക; പിന്നെ എത്ര ഉറപ്പുണ്ടെന്ന് പറയുക.' : 'You have worked this one before. Do the main move again before you look, then say how sure you are.',
+      onPick: function (c) {
+        item._conf = c;
+        if (c === 1) { reveal('missed'); return; }
+        unlock(isMl ? 'ശ്രമം രേഖപ്പെടുത്തി — ഇനി ഉത്തരം കാണാം.' : 'Attempt registered — you can reveal now.');
+      }
     }));
 
     return el('div', { class: 'inner' }, [
@@ -477,12 +528,13 @@ const ViewRecall = (function () {
 
   /* ── the reel ────────────────────────────────────────────────────────── */
   function render(args, query) {
-    if (query && query.from) { startAt = query.from; onlyNew = false; }
+    if (query && query.from) { startAt = query.from; mode = 'all'; }
+    if (query && query.mode) { mode = query.mode === 'weak' ? 'weak' : query.mode === 'new' ? 'new' : 'all'; }
     const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
 
     const reel = el('div', { class: 'reel', tabindex: '-1', 'aria-label': isMl ? 'ഓർത്തെടുക്കൽ കാർഡുകൾ' : 'Recall reel' });
     const root = el('div', {}, [
-      el('h1', { id: 'pagetitle', tabindex: '-1', class: 'sr-only', text: typeof I18N !== 'undefined' ? I18N.t('reel') : 'Recall' }),
+      el('h1', { id: 'pagetitle', tabindex: '-1', class: 'sr-only', text: t('reel') }),
       reel
     ]);
 
@@ -497,7 +549,7 @@ const ViewRecall = (function () {
       cards = [];
       placed = {};
       ended = false;
-      queue = Progress.reel({ onlyNew: onlyNew });
+      queue = draw();
 
       push(el('section', { class: 'reel-card' }, [introCard(function () {
         build();
@@ -527,7 +579,7 @@ const ViewRecall = (function () {
     function extend(n) {
       let added = 0;
       while (added < n) {
-        if (!queue.length) queue = Progress.reel({ onlyNew: onlyNew, exclude: placed });
+        if (!queue.length) queue = draw(placed);
         const item = queue.shift();
         if (!item) break;
         if (placed[item.id]) continue;
@@ -543,11 +595,8 @@ const ViewRecall = (function () {
         ended = true;
         push(el('section', { class: 'reel-card' }, [
           el('div', { class: 'inner' }, [
-            UI.empty(onlyNew
-              ? (isMl ? 'എല്ലാ ചോദ്യങ്ങളും ഒരിക്കലെങ്കിലും ശ്രമിച്ചു കഴിഞ്ഞു.' : 'Everything in your material has had a first attempt.')
-              : (isMl ? 'പഠിച്ച എല്ലാ ആശയങ്ങളും കാർഡുകളായി വന്നു കഴിഞ്ഞു. പുതിയവ പഠിക്കുമ്പോൾ ഇവിടെ ലഭ്യമാകും.' : 'That is everything you have met, for now. Read something new and it will be here waiting.'),
-              el('a', { class: 'btn primary', href: Router.href('study'),
-                text: typeof I18N !== 'undefined' ? I18N.t('open_syllabus') : 'Open the syllabus' }))
+            UI.empty(mode === 'new' ? t('reel_end_new') : mode === 'weak' ? t('reel_end_weak') : t('reel_end'),
+              el('a', { class: 'btn primary', href: Router.href('study'), text: t('open_syllabus') }))
           ])
         ]));
       }

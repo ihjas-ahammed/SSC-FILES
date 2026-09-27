@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Real Analysis study system into one self-contained page.
+"""Build the SSLC Mathematics study system into one self-contained page.
 
     python3 build.py            -> build/index.html       from the `live` pool
     python3 build.py --mock     -> build/test/index.html   from the `mock` pool
@@ -104,10 +104,10 @@ def main():
     if mock:
         # A test build must announce itself in the tab as well as on the page,
         # so a stray bookmark can never be mistaken for the real thing.
-        html = html.replace('<title>Class 8 Mathematics · Math Base</title>',
-                            '<title>Class 8 Mathematics · TEST (mock data)</title>')
-        html = html.replace('<b>Class 8 Mathematics</b>',
-                            '<b>Class 8 Mathematics</b><span>test · mock</span>', 1)
+        html = html.replace('<title>SSLC Mathematics</title>',
+                            '<title>SSLC Mathematics · TEST (mock data)</title>')
+        html = html.replace('<b id="top-title">SSLC Mathematics</b>',
+                            '<b id="top-title">SSLC Mathematics</b><span class="mock-tag">test · mock</span>', 1)
 
     for d in out_dirs:
         out_path = os.path.join(d, 'index.html')

@@ -16,9 +16,11 @@ const ViewNote = (function () {
 
   const el = DOM.el;
 
-  function render(args) {
+  function render(args, query) {
     const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
     const id = args && args[0];
+    /* `?teach=1` from the plan opens the note on its teach-back box */
+    if (query && query.teach && typeof NoteBody !== 'undefined' && NoteBody.wantOpen) NoteBody.wantOpen('teach');
     if (!Pool.concept(id)) {
       return el('div', { class: 'stack' }, [
         UI.title(isMl ? 'കണ്ടെത്താനായില്ല' : 'Not found'),

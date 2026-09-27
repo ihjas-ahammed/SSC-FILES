@@ -42,16 +42,14 @@ const UI = (function () {
   };
 
   /* The level a concept has reached, as a badge. One vocabulary everywhere:
-     1 read, 2 proof worked, 3 exercises done — and the colour says which. */
-  /* The level a concept has reached, as a badge. One vocabulary everywhere:
-     1 read, 2 proof worked, 3 exercises done — and the colour says which. */
+     1 read, 2 exercises done, 3 past papers done — and the colour says which. */
   const levelBadge = function (id) {
     const n = Progress.level(id);
     if (!n) return null;
     const c = Pool.concept(id);
     const isFnd = c && (typeof Pool.courseOfSec === 'function') && (Pool.courseOfSec(c.sec) || {}).id === 'foundation';
     const isMax = isFnd ? n >= 2 : n >= 3;
-    const word = (typeof I18N !== 'undefined') ? I18N.levelName(n) : ['not started', 'read', 'exercises done', 'PYQ complete'][n];
+    const word = (typeof I18N !== 'undefined') ? I18N.levelName(n) : ['not started', 'read', 'exercises done', 'past papers done'][n];
     const lvTxt = (typeof I18N !== 'undefined') ? I18N.t('level') : 'level';
     return el('span', { class: 'badge lv' + (isMax ? '3' : n) }, [
       DOM.mi(isMax ? 'workspace_premium' : n >= 2 ? 'assignment_turned_in' : 'check', 'xs'),
@@ -74,7 +72,7 @@ const UI = (function () {
     const isFnd = c.isFnd || c.maxLv === 2 || o.isFnd;
     const readTxt = (typeof I18N !== 'undefined') ? I18N.t('read_lc') : 'read';
     const exTxt = (typeof I18N !== 'undefined') ? I18N.t('exercises_lc') : 'exercises';
-    const pyqTxt = (typeof I18N !== 'undefined') && I18N.lang() === 'ml' ? 'മുൻവർഷ ചോദ്യങ്ങൾ' : 'PYQ';
+    const pyqTxt = (typeof I18N !== 'undefined') ? I18N.t('pyq_lc') : 'past papers';
 
     if (isFnd) {
       const bar = el('div', { class: 'lvbar', role: 'img',
@@ -200,13 +198,58 @@ const UI = (function () {
 
   function mockBanner() {
     if (!Pool.isMock()) return null;
+    const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
     return el('div', { class: 'banner' }, [
       DOM.mi('science'),
       el('span', {}, [
-        el('b', { text: 'Mock content. ' }),
-        'These ten theorems and sixteen questions are placeholders written to test the study loop — ' +
-        'not validated material, and not from any past paper. The real pool arrives through the ' +
-        'data handoff.'
+        el('b', { text: isMl ? 'പരീക്ഷണ ഉള്ളടക്കം. ' : 'Mock content. ' }),
+        isMl
+          ? 'ഇത് പഠനരീതി പരിശോധിക്കാൻ എഴുതിയ താൽക്കാലിക ഉള്ളടക്കമാണ് — പാഠപുസ്തകത്തിൽ നിന്നോ മുൻവർഷ ചോദ്യപേപ്പറിൽ നിന്നോ അല്ല.'
+          : 'This is placeholder material written to test the study loop, not validated content and not from any textbook or past paper.'
+      ])
+    ]);
+  }
+
+  /* ── "why did this go wrong?" ─────────────────────────────────────────────
+     One row of reasons, shown after any miss. One tap files the reason in the
+     mistake log and answers with the fix for that kind of slip. */
+  function whyRow(attemptId, cid) {
+    const t = k => (typeof I18N !== 'undefined') ? I18N.t(k) : k;
+    const host = el('div', { class: 'why' });
+    const existing = Store.err(attemptId);
+    const line = el('p', { class: 'small', style: { margin: '8px 0 0' } });
+
+    function paint(why) {
+      DOM.clear(host);
+      host.appendChild(el('div', { class: 'kicker', text: t('why_ask') }));
+      host.appendChild(el('div', { class: 'row', style: { marginTop: '8px' } }, Study.WHYS.map(function (w) {
+        return el('button', { class: 'chip', type: 'button', 'aria-pressed': String(why === w),
+          text: t('why_' + w),
+          on: { click: function () { Store.tagError(attemptId, w, cid); paint(w); DOM.announce(t('why_saved')); } } });
+      })));
+      if (why) {
+        DOM.clear(line);
+        DOM.add(line, [el('b', { text: t('why_' + why) + ': ' }), el('span', { text: t('why_fix_' + why) })]);
+        host.appendChild(line);
+      }
+    }
+    paint(existing ? existing.why : null);
+    return host;
+  }
+
+  /* ── confidence before the reveal ────────────────────────────────────────
+     Three buttons, one judgement of learning. `onPick(conf)` gets 3 (sure),
+     2 (not sure) or 1 (no idea); the caller decides what each unlocks. */
+  function confidenceGate(opts) {
+    const t = k => (typeof I18N !== 'undefined') ? I18N.t(k) : k;
+    return el('div', { class: 'gate conf' }, [
+      el('div', { class: 'kicker', text: t('conf_ask') }),
+      opts && opts.hint ? el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: opts.hint })
+        : el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('conf_hint') }),
+      el('div', { class: 'btn-row' }, [
+        el('button', { class: 'btn primary', type: 'button', text: t('conf_sure'), on: { click: () => opts.onPick(3) } }),
+        el('button', { class: 'btn', type: 'button', text: t('conf_unsure'), on: { click: () => opts.onPick(2) } }),
+        el('button', { class: 'btn', type: 'button', text: t('conf_none'), on: { click: () => opts.onPick(1) } })
       ])
     ]);
   }
@@ -255,7 +298,7 @@ const UI = (function () {
 
   function metaRow(q) {
     const isMl = typeof I18N !== 'undefined' && I18N.lang() === 'ml';
-    const marksText = isMl ? (q.marks + ' മാർക്ക്') : (q.marks + ' ' + DOM.plural(q.marks, 'mark'));
+    const marksText = (typeof I18N !== 'undefined') ? I18N.marks(q.marks) : (q.marks + ' ' + DOM.plural(q.marks, 'mark'));
     const bits = [marksText];
     if (q.neg) {
       bits.push(q.negLabel ? q.negLabel : (isMl ? (q.neg + ' തെറ്റിയാൽ കുറയും') : (q.neg + ' if wrong')));
@@ -295,6 +338,6 @@ const UI = (function () {
   return {
     title, crumb, prose, math, kindBadge, tierBadge, meter, stat, empty,
     ladder, levelBadge, levelBar, levelRing, ask, pendingPrereqs, mockBanner, gate, reveal,
-    typeBadge, metaRow, clock, ago
+    whyRow, confidenceGate, typeBadge, metaRow, clock, ago
   };
 })();

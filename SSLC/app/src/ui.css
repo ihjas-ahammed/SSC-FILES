@@ -1069,3 +1069,104 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
     padding-right:14px;
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SSLC · the study layer
+   Today's plan, goal and streak, focus timer, weak spots, calibration, the
+   confidence gate, the mistake log, Pólya's stepper, the drill and the method
+   page. Everything below is built from the tokens above; no new colours.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── today ─────────────────────────────────────────────────────────────── */
+.today-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+  flex-wrap:wrap; }
+.stat-chip{ font-family:var(--font-ui); font-weight:600; text-decoration:none; }
+.stat-chip .mi{ color:var(--warn); }
+.stat-chip.on{ background:var(--warn-soft); border-color:var(--warn-line); color:var(--warn); }
+
+.plan-step .ix{ font-family:var(--font-ui); }
+.plan-step .ix .mi{ color:var(--accent); }
+.plan-step .ix.ok .mi{ color:var(--ok); }
+.plan-step.is-done .tt b{ color:var(--ink-3); text-decoration:line-through;
+  text-decoration-color:var(--rule-2); }
+.plan-step.is-idle .tt b{ color:var(--ink-2); }
+.plan-step .count{ flex:0 0 auto; }
+.item .tt b{ white-space:normal; }
+
+.goal-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px; }
+.goal-row{ display:flex; flex-direction:column; gap:6px; }
+@media (max-width:420px){ .goal-grid{ grid-template-columns:1fr; } }
+
+/* ── focus timer ───────────────────────────────────────────────────────── */
+.focus-row{ display:flex; align-items:center; gap:16px; margin-top:10px; }
+.focus-row .grow{ flex:1 1 auto; min-width:0; }
+.focus-ring{ position:relative; width:92px; height:92px; flex:0 0 auto; border-radius:50%;
+  --ring-c:var(--accent); display:grid; place-items:center; transition:--p .9s var(--ease);
+  background:conic-gradient(var(--ring-c) calc(var(--p)*1%), var(--surface-3) 0); }
+.focus-ring[data-phase="break"]{ --ring-c:var(--ok); }
+.focus-ring[data-phase="idle"]{ --ring-c:var(--rule-2); }
+.focus-clock{ width:80px; height:80px; border-radius:50%; background:var(--surface);
+  display:grid; place-items:center; font:600 1.15rem/1 var(--font-mono);
+  letter-spacing:.02em; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+/* ── bars, calibration ─────────────────────────────────────────────────── */
+.bars{ display:flex; flex-direction:column; gap:8px; }
+.bar-row{ display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto; gap:10px;
+  align-items:center; }
+.bar-row .small{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.cal-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.cal-cell{ display:flex; flex-direction:column; gap:2px; padding:10px 12px;
+  border-radius:var(--r-s); border:1px solid var(--rule); background:var(--surface-2); }
+.cal-cell b{ font-size:1.3rem; font-weight:600; letter-spacing:-.02em; line-height:1.1; }
+.cal-cell span{ font-size:.72rem; color:var(--ink-3); }
+.cal-cell.ok{ border-color:var(--ok-line); background:var(--ok-soft); }
+.cal-cell.ok b{ color:var(--ok); }
+.cal-cell.bad{ border-color:var(--bad-line); background:var(--bad-soft); }
+.cal-cell.bad b{ color:var(--bad); }
+.cal-cell.warn{ border-color:var(--warn-line); background:var(--warn-soft); }
+.cal-cell.warn b{ color:var(--warn); }
+
+/* ── the confidence gate and the mistake log ───────────────────────────── */
+.gate.conf{ border-style:solid; border-color:var(--accent-line); background:var(--accent-soft); }
+.gate.conf .kicker{ color:var(--accent); }
+.why{ margin-top:12px; padding:12px 14px; border-radius:var(--r-m);
+  border:1px dashed var(--bad-line); background:var(--bad-soft); }
+.why .kicker{ color:var(--bad); }
+.why .chip[aria-pressed=true]{ background:var(--bad); border-color:var(--bad); color:#fff; }
+
+/* ── Pólya's four steps ────────────────────────────────────────────────── */
+.polya{ margin-top:8px; border:1px solid var(--accent-line); border-radius:var(--r-m);
+  background:var(--surface); overflow:hidden; }
+.polya-track{ display:grid; grid-template-columns:repeat(4,1fr); border-bottom:1px solid var(--rule); }
+.polya-dot{ border:0; background:var(--surface-2); padding:9px 4px; cursor:pointer;
+  font:600 .68rem/1.2 var(--font-ui); letter-spacing:.04em; text-transform:uppercase;
+  color:var(--ink-3); border-bottom:3px solid transparent; transition:color var(--dur-s), border-color var(--dur-s); }
+.polya-dot+.polya-dot{ border-left:1px solid var(--rule); }
+.polya-dot.on{ color:var(--accent); border-bottom-color:var(--accent); background:var(--surface); }
+.polya-dot.done{ color:var(--ok); }
+.polya-body{ padding:12px 14px 14px; }
+.teach-prompts{ padding-left:1.2em; margin:0 0 10px; }
+.exp-teach{ border-color:var(--ok-line); }
+.exp-teach>.exp-h{ background:var(--ok-soft); }
+.exp-teach .ix{ color:var(--ok); border-color:var(--ok-line); }
+
+/* ── the drill ─────────────────────────────────────────────────────────── */
+.drill-clock{ font-size:1rem; font-weight:600; color:var(--ink); padding:6px 12px;
+  border-radius:999px; border:1px solid var(--rule); background:var(--surface); white-space:nowrap; }
+.drill-clock.is-late{ color:var(--bad); border-color:var(--bad-line); background:var(--bad-soft); }
+
+/* ── the method page ───────────────────────────────────────────────────── */
+.method-card h3{ font-size:1rem; }
+.method-ix{ flex:0 0 auto; width:34px; height:34px; border-radius:10px; display:grid;
+  place-items:center; background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent-line); }
+.method-meta{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px;
+  padding-top:12px; border-top:1px solid var(--rule); }
+@media (max-width:520px){ .method-meta{ grid-template-columns:1fr; } }
+.method-list{ margin:0; padding-left:1.15em; }
+.method-list li{ margin:.45em 0; }
+.exp-subject>.exp-h .tt span{ white-space:normal; }
+.method-link .row .mi{ color:var(--accent); }
+
+/* four tabs on a phone: the labels have to fit */
+@media (max-width:899px){ .rail-nav a{ font-size:.62rem; } }

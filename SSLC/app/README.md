@@ -1,82 +1,79 @@
-# Level 1 app
+# SSLC Mathematics · app
 
 Open `app/index.html` in a browser — no build, no server, no install. Works from
-`file://`; the only network call is MathJax from a CDN (the app says so on screen if that
-call fails).
+`file://`; the only network calls are MathJax and fonts from a CDN (the app says so on
+screen if MathJax fails) and the optional progress sync.
 
-## What Level 1 is
+Bilingual throughout: every string the interface says exists in English and Malayalam
+(`src/core.i18n.js`), and every piece of content carries `_en` and `_ml` fields. The
+toggle is in the header.
 
-The five things `HOOK_claude.md` asks for at Level 1, and nothing beyond them:
+## The surfaces
 
 | Surface | What it does |
 | --- | --- |
-| **Today** | Next action in the loop, and the numbers — completion and first-try recall kept apart. |
-| **Study** | The whole syllabus as one page of dropdowns: course → module → section → note, each row with a tick and a progress ring. Nothing is more than one line tall until you open it, and expanded rows keep the full width. Ticking a parent ticks everything under it; a half-done parent shows a mixed tick. Open/closed state is remembered. |
-| **Recall** | A vertical reel — one statement per screen, swiped or arrow-keyed, with a progress rail down the side. The answer stays hidden until you attempt it. |
-| **Questions** | OMR-first MCQ / MSQ / NAT. Lock an answer, then get the full worked solution, what it tests, the figure behind it, the trap, and a changed-version follow-up. |
-| **Write** | LaTeX theorem-writing with live MathJax below the input and a contextual command palette (a bottom sheet on a phone). |
+| **Today** | The plan for the day, built from what is due, what was missed and what comes next, in the order the learning research says pays most: recall first, new material last. Daily goal in three sizes, streak, focus timer, weak spots, why marks were lost, calibration, exam countdown, and the courses. |
+| **Study** | The whole syllabus as one page of dropdowns: course → chapter → section → note. A note opens in place with its statement, figure, plain-language callout, derivation, traps, self-check, exercises (each as Pólya's four steps), objective questions, and a "teach it back" box. |
+| **Recall** | A vertical reel of cards drawn only from material already met, scheduled by Leitner box and shuffled across chapters. You say how sure you are before the reveal; after a miss you say why. Modes: everything due, not yet attempted, weak spots, one chapter. |
+| **Drill** | A short timed paper, chapters interleaved, drawn from what you have read (or your weak spots, or the whole syllabus). Results by chapter, and the notes to review next. |
+| **How to study** | Reached from Today. The research behind the app, what does not work, how each SSLC subject is best studied, and how to sit the paper. |
 
-Every note carries its own navigation: the prerequisite chain rendered as a route to the
-result ("you are here", with ticks), what the result is **used later by**, previous/next
-in reading order, the questions that examine it, and a "write the statement" route.
+`LEARNING_SCIENCE.md` at the project root lists every source.
 
-### Figures
+## Levels
 
-Ten hand-drawn inline-SVG figures (`src/fig.library.js`) — theme-aware, animated on
-entry, and two of them interactive: drag ε and watch δ answer it, or slide a fixed-width
-δ-window along `1/x` and watch the image band explode near zero. They are drawn from the
-mathematics, not pasted in as images, so they scale, recolour with the theme and cost
-nothing to ship. `diagrams/` belongs to AGY and is not read by this app.
+Nothing is switched on; the level is derived from what has been done (`src/core.progress.js`):
 
-## What is deliberately absent
+| Level | Colour | Evidence |
+| --- | --- | --- |
+| 1 | red | the note has been read |
+| 2 | amber | every exercise in its section is worked through |
+| 3 | green | every past-paper question of its course is worked through |
 
-Level 2 and Level 3 work, per the staged plan: no scheduler, no recall levels 2–5, no
-proof ladders, no exam-track weighting, no question generators, no sync, and no entrance
-course content. The mastery ladder is shown with levels 2–5 locked so the shape stays
-visible without pretending to measure them.
+Foundation (Class 1–7) concepts top out at level 2. A chapter or course takes the colour
+of its weakest item. Derivations, where a result has one, are optional: they feed the
+reel but gate nothing.
 
-## The content is mock
+## Progress
 
-`app/mock/` holds ten standard theorems and sixteen OMR questions written only to
-exercise the loop. The mathematics is standard and stated correctly, but it is **not
-validated content and not from any past paper** — the app badges every screen while that
-is true. AGY owns the replacement; the contract is in
-`HOOK_agy.md` → "Runtime data contract". `data/`, `diagrams/` and `pyq/` are AGY's and
-are not read by this app.
+Stored in this browser under the localStorage key `sslc.v1` (a record found under the old
+shared key `ssc4.level1.v1` is adopted once), and merged across devices through the sync
+in `src/core.sync.js` under the `sslc_v1` namespace, keyed by name and roll number. That
+key is a pass key, not a password, and the sign-in screen says so.
 
-Switching to real content is one edit in `app/sources.js`: set `use: 'live'` and list the
-delivered files. Nothing in `app/src/` changes.
+The record holds: read ticks, task ticks (exercises `w:`, past papers `p:`, derivations),
+card and question first attempts, drafts, the day log (streaks and the daily goal), the
+mistake log, and confidence records. Every part merges loss-free and order-independently
+(`Store.mergeStates`); a new field has to be added to the merge as well as the writer.
 
 ## Layout
 
 ```
 app/
-  index.html        shell, MathJax config, script order
+  index.html        shell, MathJax config, script order — ALSO the build order
   sources.js        THE DATA SEAM — mock vs live
   src/
-    ui.css          design tokens, glass/aurora, components, motion, light/dark
+    ui.css          design tokens, glass/aurora, components, motion, light/dark, SSLC tail
+    core.i18n.js    every interface string, in both languages
     core.dom.js     element builder, hash router, live-region announcements
     core.tex.js     MathJax queue; safe rendering of learner LaTeX
-    core.store.js   localStorage: completion, first attempts, drafts, prefs
+    core.md.js      the markdown-with-maths renderer for the writing workspace
+    core.store.js   localStorage: ticks, attempts, drafts, day log, mistakes, confidence, prefs
+    core.sync.js    multi-device merge over Firebase REST
     core.pool.js    indexes the loaded data; inverts question → concept
-    core.latex.js   command catalogue + the contextual palette
-    ui.parts.js     shared view parts (badges, meters, gates, reveals)
+    core.progress.js levels, the Leitner schedule, the reel queue
+    core.study.js   the plan for today, goals, streaks, weak spots, calibration, the focus timer
+    core.latex.js   command catalogue + completions for the writing workspace
+    ui.parts.js     shared view parts (badges, meters, rings, gates, the why row)
     comp.tree.js    the expandable tick tree
-    comp.figure.js  figure engine: coordinate mapping, frame, controls
-    fig.library.js  the ten figures
-    comp.write.js   the theorem-writing workspace component
-    view.*.js       one file per surface
+    comp.note.js    one note, opened inside the tree
+    comp.question.js one objective question, OMR first
+    comp.figure.js  figure engine; fig.library.js the drawn figures
+    comp.write.js   the writing workspace (scratchpads, teach-it-back)
+    view.*.js       one file per surface: home, study, note, recall, drill, method, omr, write, login
     boot.js         theme, data loading, routing, failure surfaces
-  mock/             placeholder content (delete once real data lands)
+  mock/             placeholder content for the test build (do not delete)
 ```
 
-## Reviewing it
-
-Worth judging: whether the tree opens at the right depth and the ticks feel satisfying;
-whether the reel is the right pace for statement recall; whether the figures earn their
-space and the two interactive ones teach anything; whether the attempt gates feel honest
-or annoying; whether the worked answers land at the right length; and whether
-completion-vs-recall being two separate numbers reads clearly.
-
-Progress lives in this browser only, under the localStorage key `ssc4.level1.v1`.
-"Reset progress" is on the Today screen.
+Build with `python3 build.py` (live pool) or `python3 build.py --mock` from the project
+root; see `HOOK_AGY.md` for the data contract and the deploy.

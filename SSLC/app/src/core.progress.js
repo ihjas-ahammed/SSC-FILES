@@ -221,7 +221,7 @@ const Progress = (function () {
      Four kinds of card, and each arrives by a different act — so ticking
      topics, proofs AND questions all feed the reel:
 
-       statement   a ticked concept's 'state' card
+       statement   a ticked concept's cards (state, recall, apply, trap)
        proof       a ticked concept that carries a proof
        question    an objective question whose tested concept has been read
        exercise    a written exercise you have marked complete
@@ -273,9 +273,10 @@ const Progress = (function () {
       });
     });
 
-    /* an objective question joins once anything it examines has been read */
+    /* an objective question joins once anything it examines has been read.
+       The live pool names its target as `concept`; the mock pool as `tests`. */
     Pool.objective().forEach(function (q, i) {
-      const tested = (q.tests || []).filter(id => Pool.concept(id));
+      const tested = (q.tests || []).concat(q.concept ? [q.concept] : []).filter(id => Pool.concept(id));
       if (!tested.length || !tested.some(id => Store.isDone(id))) return;
       const c = Pool.concept(tested[0]);
       out.push({
@@ -287,7 +288,7 @@ const Progress = (function () {
     /* an exercise joins once you have marked it worked through */
     Pool.written().forEach(function (q, i) {
       if (!taskDone(q)) return;
-      const c = Pool.concept((q.tests || [])[0]);
+      const c = Pool.concept((q.tests || [])[0] || q.concept);
       out.push({
         kind: 'exercise', id: 'x:' + q.id, cid: c ? c.id : null, sec: q.sec || (c && c.sec),
         title: q.title || (c ? c.title : q.id), conceptKind: 'exercise',
