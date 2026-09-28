@@ -1326,6 +1326,30 @@ a.card:hover,button.card:hover{ box-shadow:var(--shadow-2), var(--qm-glow); }
   :root[data-theme=dark] body::after{ animation:none; }
 }
 
+/* Compact lesson figures, with an accessible full-screen detail viewer. */
+@media (min-width: 900px) {
+  .fig-img { width: auto; max-width: 100%; max-height: 360px; margin-inline: auto; }
+  .fig svg { max-width: 560px; max-height: 360px; margin-inline: auto; }
+}
+.fig-img { cursor: zoom-in; }
+.fig-img:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.qm-diagram-viewer {
+  box-sizing: border-box; width: 94vw; max-width: 1400px; height: 90vh;
+  max-height: 94dvh; padding: 12px; border: 1px solid var(--rule);
+  border-radius: 12px; background: var(--surface); color: var(--ink);
+}
+.qm-diagram-viewer[open] { display: flex; flex-direction: column; gap: 12px; }
+.qm-diagram-viewer::backdrop { background: rgb(0 0 0 / 72%); }
+.qm-diagram-controls { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.qm-diagram-controls button {
+  min-width: 44px; min-height: 44px; padding: 6px 12px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; cursor: pointer;
+}
+.qm-diagram-controls button:disabled { opacity: .45; cursor: default; }
+.qm-diagram-controls output { min-width: 4ch; text-align: center; }
+.qm-diagram-viewport { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.qm-diagram-viewport img { display: block; max-width: none; height: auto; margin-inline: auto; }
+
 </style>
 
 <script>
@@ -4132,7 +4156,7 @@ CONCEPTS.push(
     id: 'c.3.0.1', sec: '3.0', kind: 'bridge', tier: 'core',
     title: 'Complex Numbers: the extra coordinate quantum amplitudes need',
     oneLine: 'A complex number a + ib has real and imaginary parts; its squared magnitude gives a non-negative relative probability weight.',
-    statement: `You already know real numbers on a number line. Quantum amplitudes need a two-coordinate number, $z=a+ib$, where $i^2=-1$. Think of $a$ as a horizontal coordinate and $b$ as a vertical coordinate. The length of that arrow is the <b>modulus</b> $|z|=\\sqrt{a^2+b^2}$, so $|z|^2=a^2+b^2$ is always real and non-negative. For a normalized state this squared magnitude is a probability; before normalization it is a relative weight.<br><br>
+    statement: `You already know real numbers on a number line. Quantum amplitudes need a two-coordinate number, $z=a+ib$, where $i^2=-1$. Think of $a$ as a horizontal coordinate and $b$ as a vertical coordinate. The length of that arrow is the <b>modulus</b> $|z|=\\sqrt{a^2+b^2}$, so $|z|^2=a^2+b^2$ is always real and non-negative. For a normalized state in a discrete orthonormal basis, the squared magnitude of a component is its outcome probability. For a position wave function, the squared magnitude is a probability density; probability comes from integrating it over a position interval. Before normalization these are relative weights.<br><br>
 For example, if an amplitude is $z=3+4i$, then $|z|=5$ and $|z|^2=25$. The complex conjugate flips the vertical coordinate: $z^*=a-ib$. Thus $z^*z=|z|^2$. In quantum mechanics it is this squared magnitude, rather than the amplitude itself, that becomes a probability density or probability.<br><br>
 Multiplying by $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ rotates an amplitude without changing its length. This is why phase can affect interference while leaving the probability of one isolated amplitude unchanged.`,
     intuition: `Use an arrow on graph paper: real part is the east-west distance and imaginary part is the north-south distance. Conjugation reflects the arrow across the horizontal axis; modulus is its ordinary length. The diagram shows why $z^*z$ removes the phase and leaves a positive real number.`,
@@ -6113,16 +6137,16 @@ The force is the negative slope of the potential: $F(x)=-dV/dx$. A ball rolls to
   },
   {
     id: 'c.4.0.2', sec: '4.0', kind: 'bridge', tier: 'core',
-    title: 'Why every smooth stable valley becomes a parabola nearby',
-    oneLine: 'Close to a smooth minimum, the leading change in potential energy is quadratic in displacement.',
+    title: 'When a smooth stable valley becomes a parabola nearby',
+    oneLine: 'Close to a smooth minimum with positive curvature, the leading change in potential energy is quadratic in displacement.',
     statement: `Let $x_0$ be the bottom of a smooth potential valley and write the small displacement as $q=x-x_0$. The slope is zero at the bottom, so the Taylor expansion begins
 $$V(x_0+q)=V(x_0)+\\tfrac12V''(x_0)q^2+\\text{higher powers of }q.$$
-If $V''(x_0)>0$, define the spring constant $k=V''(x_0)$. For sufficiently small $q$, the higher powers are tiny and $V-V(x_0)\\approx\\tfrac12kq^2$. This is Hooke's-law potential. The corresponding force is $F\\approx-kq$.<br><br>
+If $V''(x_0)>0$, define the spring constant $k=V''(x_0)$. For sufficiently small $q$, the higher powers are tiny and $V-V(x_0)\\approx\\tfrac12kq^2$. This is Hooke's-law potential. A flat-bottomed minimum with zero curvature, such as a positive quartic potential, can also be stable but does not have this quadratic leading term. The corresponding force is $F\\approx-kq$.<br><br>
 For a pendulum with a small angle, a molecule near its equilibrium bond length, and a mass on a spring, the exact physics differs far from equilibrium but the local motion is approximately harmonic. This is why the oscillator is a model of small vibrations, not merely a special spring problem.`,
     intuition: `Zoom in on the bottom of almost any rounded valley: its curve starts to look like a U-shaped parabola. The curvature sets how stiff the valley is.`,
     needs: ['c.4.0.1'], img: ['c.4.0.2_taylor_valley_to_parabola'],
     cards: [
-      { q: 'What condition makes $x_0$ a stable smooth equilibrium?', a: '$dV/dx=0$ and $d^2V/dx^2>0$.', kind: 'recall' },
+      { q: 'What derivative conditions are sufficient for a stable equilibrium with a harmonic approximation?', a: '$dV/dx=0$ and $d^2V/dx^2>0$.', kind: 'recall' },
       { q: 'What is the effective spring constant near the minimum?', a: '$k=d^2V/dx^2$, the curvature of the potential at the minimum.', kind: 'understanding' }
     ]
   },
@@ -10917,7 +10941,7 @@ $$\\boxed{\\frac{d\\sigma}{d\\Omega} = \\frac{b}{\\sin\\theta} \\left| \\frac{db
 The <b>total scattering cross section</b> $\\sigma_{\\text{tot}}$ is the integral over all $4\\pi$ steradians:
 $$\\boxed{\\sigma_{\\text{tot}} = \\int \\frac{d\\sigma}{d\\Omega} \\, d\\Omega = 2\\pi \\int_0^\\pi \\frac{d\\sigma}{d\\Omega} \\sin\\theta \\, d\\theta}$$
 For a hard sphere of radius $a$, $b = a\\cos(\\theta/2) \\implies \\frac{d\\sigma}{d\\Omega} = \\frac{a^2}{4}$ (isotropic), giving total classical cross section $\\sigma_{\\text{tot}} = \\pi a^2$.`,
-    intuition: `What is a cross section physically? It has dimensions of area ($\text{m}^2$ or barns, $1\\text{ barn} = 10^{-28}\\text{ m}^2$). It represents the effective target area presented by the scatterer to the incoming beam. The differential cross section $d\\sigma/d\\Omega$ tells you how that area is distributed over different angles in space.`,
+    intuition: `What is a cross section physically? It has dimensions of area ($\\text{m}^2$ or barns, $1\\text{ barn} = 10^{-28}\\text{ m}^2$). It represents the effective target area presented by the scatterer to the incoming beam. The differential cross section $d\\sigma/d\\Omega$ tells you how that area is distributed over different angles in space.`,
     needs: ['c.5.1.1'],
     traps: [
       `Forgetting the absolute value $|db/d\\theta|$. Because larger impact parameters $b$ typically produce smaller deflection angles $\\theta$, $db/d\\theta < 0$; cross sections must always be positive!`,
@@ -11104,7 +11128,7 @@ Using $E = \\frac{\\hbar^2 k^2}{2m}$:
 $$\\boxed{\\frac{d\\sigma}{d\\Omega} = |f|^2 = \\left( \\frac{q_1 q_2}{16\\pi\\varepsilon_0 E} \\right)^2 \\frac{1}{\\sin^4(\\theta/2)}}$$
 The First Born approximation reproduces the classical <b>Rutherford scattering formula</b> with 100% exact precision!`,
     intuition: `Why does quantum Born scattering for the Coulomb potential produce the exact same formula as classical Newtonian scattering? Because the $1/r$ Coulomb potential has no intrinsic length scale! In $\\hbar \\to 0$, Planck's constant drops out of the differential cross section entirely. Quantum wave diffraction and classical hyperbolic orbital deflection converge to the exact same physical cross section!`,
-    needs: ['c.8.4.2', 'c.8.1.2'],
+    needs: ['c.8.4.2', 'c.8.1.1'],
     traps: [
       `Attempting to calculate the total cross section for pure Coulomb scattering ($\mu = 0$). The total cross section diverges to $\\infty$ because the $1/r$ force has infinite range and deflects particles at arbitrarily large impact parameters!`,
       `Forgetting that the screening parameter $\\mu$ has dimensions of inverse length ($1/\\text{meter}$).`
@@ -12923,6 +12947,89 @@ PROJECT.hooks.home = function (ctx) {
       exp('sections', o.l3)
     ])
   ]);
+};
+
+/* Keep diagram viewing local to QM; the shared figure renderer stays reusable. */
+PROJECT.hooks.ready = function () {
+  if (document.querySelector('.qm-diagram-viewer')) return;
+  const el = DOM.el;
+  let source = null, scale = 1, fitWidth = 1, previousOverflow = '';
+  const picture = el('img', { alt: '', draggable: 'false' });
+  const viewport = el('div', { class: 'qm-diagram-viewport', tabindex: '0',
+    'aria-label': 'Diagram; scroll to explore when zoomed' }, [picture]);
+  const status = el('output', { 'aria-live': 'polite', text: '100%' });
+  const button = (text, label, action) => {
+    const b = el('button', { type: 'button', text: text, 'aria-label': label });
+    b.addEventListener('click', action);
+    return b;
+  };
+  const zoomOut = button('−', 'Zoom out', () => zoom(scale - 0.25));
+  const zoomIn = button('+', 'Zoom in', () => zoom(scale + 0.25));
+  const dialog = el('dialog', { class: 'qm-diagram-viewer', 'aria-label': 'Diagram viewer' }, [
+    el('div', { class: 'qm-diagram-controls' }, [zoomOut, status, zoomIn,
+      button('Reset', 'Reset zoom to fit', () => { zoom(1); viewport.scrollTo(0, 0); }),
+      button('Close', 'Close diagram viewer', () => dialog.close())]), viewport
+  ]);
+  document.body.appendChild(dialog);
+  function zoom(next) {
+    scale = Math.min(4, Math.max(1, next));
+    picture.style.width = (fitWidth * scale) + 'px';
+    status.textContent = Math.round(scale * 100) + '%';
+    zoomOut.disabled = scale <= 1;
+    zoomIn.disabled = scale >= 4;
+  }
+  function fit() {
+    if (!dialog.open || !picture.naturalWidth) return;
+    fitWidth = Math.min(picture.naturalWidth, viewport.clientWidth,
+      viewport.clientHeight * picture.naturalWidth / picture.naturalHeight);
+    zoom(scale);
+  }
+  picture.addEventListener('load', fit);
+  window.addEventListener('resize', fit);
+  function open(img) {
+    source = img;
+    scale = 1;
+    picture.alt = img.alt;
+    picture.src = img.src;
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialog.showModal();
+    fit();
+    viewport.scrollTo(0, 0);
+  }
+  dialog.addEventListener('close', () => {
+    document.body.style.overflow = previousOverflow;
+    if (source && source.isConnected) source.focus({ preventScroll: true });
+    source = null;
+  });
+  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  function enhance(root) {
+    const imgs = root.matches && root.matches('.fig-img') ? [root] :
+      root.querySelectorAll ? root.querySelectorAll('.fig-img') : [];
+    imgs.forEach(img => {
+      img.tabIndex = 0;
+      img.setAttribute('role', 'button');
+      img.setAttribute('aria-haspopup', 'dialog');
+      img.setAttribute('aria-label', 'Enlarge diagram: ' + img.alt);
+      img.title = 'Click to enlarge';
+    });
+  }
+  enhance(document.body);
+  new MutationObserver(records => records.forEach(record =>
+    record.addedNodes.forEach(enhance))).observe(document.body, { childList: true, subtree: true });
+  document.addEventListener('click', event => {
+    if (event.target.matches('.fig-img')) open(event.target);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.target.matches('.fig-img') && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault();
+      open(event.target);
+    }
+  });
+  new MutationObserver(() => {
+    if (source) picture.src = source.src.replace(/\/(light|dark)\//,
+      document.documentElement.dataset.theme === 'dark' ? '/dark/' : '/light/');
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 };
 
 

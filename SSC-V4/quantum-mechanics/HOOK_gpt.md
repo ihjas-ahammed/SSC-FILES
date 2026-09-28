@@ -56,3 +56,11 @@ Before delivery, check that every referenced concept and image exists, module
 sections are ordered correctly, mathematical notation is valid, and the app
 build resolves both light and dark diagrams. Do not publish/deploy unless the
 user explicitly asks for publication.
+
+## Review follow-up — 2026-09-28
+
+- Clarified discrete probabilities versus continuous probability densities in 3.0.1.
+- Restricted the harmonic approximation in 4.0.2 to positive-curvature minima;
+  stable flat minima may have a higher-order leading term.
+- Repaired the missing scattering prerequisite in 8.4.3 and the escaped units in 8.1.1.
+- Added compact desktop diagrams and a keyboard-accessible zoom viewer in the QM project layer.

@@ -20,7 +20,7 @@ $$\\boxed{\\frac{d\\sigma}{d\\Omega} = \\frac{b}{\\sin\\theta} \\left| \\frac{db
 The <b>total scattering cross section</b> $\\sigma_{\\text{tot}}$ is the integral over all $4\\pi$ steradians:
 $$\\boxed{\\sigma_{\\text{tot}} = \\int \\frac{d\\sigma}{d\\Omega} \\, d\\Omega = 2\\pi \\int_0^\\pi \\frac{d\\sigma}{d\\Omega} \\sin\\theta \\, d\\theta}$$
 For a hard sphere of radius $a$, $b = a\\cos(\\theta/2) \\implies \\frac{d\\sigma}{d\\Omega} = \\frac{a^2}{4}$ (isotropic), giving total classical cross section $\\sigma_{\\text{tot}} = \\pi a^2$.`,
-    intuition: `What is a cross section physically? It has dimensions of area ($\text{m}^2$ or barns, $1\\text{ barn} = 10^{-28}\\text{ m}^2$). It represents the effective target area presented by the scatterer to the incoming beam. The differential cross section $d\\sigma/d\\Omega$ tells you how that area is distributed over different angles in space.`,
+    intuition: `What is a cross section physically? It has dimensions of area ($\\text{m}^2$ or barns, $1\\text{ barn} = 10^{-28}\\text{ m}^2$). It represents the effective target area presented by the scatterer to the incoming beam. The differential cross section $d\\sigma/d\\Omega$ tells you how that area is distributed over different angles in space.`,
     needs: ['c.5.1.1'],
     traps: [
       `Forgetting the absolute value $|db/d\\theta|$. Because larger impact parameters $b$ typically produce smaller deflection angles $\\theta$, $db/d\\theta < 0$; cross sections must always be positive!`,
@@ -207,7 +207,7 @@ Using $E = \\frac{\\hbar^2 k^2}{2m}$:
 $$\\boxed{\\frac{d\\sigma}{d\\Omega} = |f|^2 = \\left( \\frac{q_1 q_2}{16\\pi\\varepsilon_0 E} \\right)^2 \\frac{1}{\\sin^4(\\theta/2)}}$$
 The First Born approximation reproduces the classical <b>Rutherford scattering formula</b> with 100% exact precision!`,
     intuition: `Why does quantum Born scattering for the Coulomb potential produce the exact same formula as classical Newtonian scattering? Because the $1/r$ Coulomb potential has no intrinsic length scale! In $\\hbar \\to 0$, Planck's constant drops out of the differential cross section entirely. Quantum wave diffraction and classical hyperbolic orbital deflection converge to the exact same physical cross section!`,
-    needs: ['c.8.4.2', 'c.8.1.2'],
+    needs: ['c.8.4.2', 'c.8.1.1'],
     traps: [
       `Attempting to calculate the total cross section for pure Coulomb scattering ($\mu = 0$). The total cross section diverges to $\\infty$ because the $1/r$ force has infinite range and deflects particles at arbitrarily large impact parameters!`,
       `Forgetting that the screening parameter $\\mu$ has dimensions of inverse length ($1/\\text{meter}$).`

@@ -46,3 +46,7 @@ attempt → feedback → correction → delayed reattempt → transfer
    - MathJax handles `$inline$` and `$$display$$`.
    - `core.dom.js` converts `**bold**` and `*italic*` markdown into HTML tags without corrupting LaTeX math spans.
    - Every file must pass `tools/check_tex.js` with 0 errors.
+
+QM diagram previews are capped at 360px high on desktop. The project layer
+(`app/project/effects.js` and `theme.css`) adds click/Enter/Space to open a
+modal viewer with 100–400% zoom, reset, scrolling, and Escape/Close.

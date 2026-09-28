@@ -25,16 +25,16 @@ The force is the negative slope of the potential: $F(x)=-dV/dx$. A ball rolls to
   },
   {
     id: 'c.4.0.2', sec: '4.0', kind: 'bridge', tier: 'core',
-    title: 'Why every smooth stable valley becomes a parabola nearby',
-    oneLine: 'Close to a smooth minimum, the leading change in potential energy is quadratic in displacement.',
+    title: 'When a smooth stable valley becomes a parabola nearby',
+    oneLine: 'Close to a smooth minimum with positive curvature, the leading change in potential energy is quadratic in displacement.',
     statement: `Let $x_0$ be the bottom of a smooth potential valley and write the small displacement as $q=x-x_0$. The slope is zero at the bottom, so the Taylor expansion begins
 $$V(x_0+q)=V(x_0)+\\tfrac12V''(x_0)q^2+\\text{higher powers of }q.$$
-If $V''(x_0)>0$, define the spring constant $k=V''(x_0)$. For sufficiently small $q$, the higher powers are tiny and $V-V(x_0)\\approx\\tfrac12kq^2$. This is Hooke's-law potential. The corresponding force is $F\\approx-kq$.<br><br>
+If $V''(x_0)>0$, define the spring constant $k=V''(x_0)$. For sufficiently small $q$, the higher powers are tiny and $V-V(x_0)\\approx\\tfrac12kq^2$. This is Hooke's-law potential. A flat-bottomed minimum with zero curvature, such as a positive quartic potential, can also be stable but does not have this quadratic leading term. The corresponding force is $F\\approx-kq$.<br><br>
 For a pendulum with a small angle, a molecule near its equilibrium bond length, and a mass on a spring, the exact physics differs far from equilibrium but the local motion is approximately harmonic. This is why the oscillator is a model of small vibrations, not merely a special spring problem.`,
     intuition: `Zoom in on the bottom of almost any rounded valley: its curve starts to look like a U-shaped parabola. The curvature sets how stiff the valley is.`,
     needs: ['c.4.0.1'], img: ['c.4.0.2_taylor_valley_to_parabola'],
     cards: [
-      { q: 'What condition makes $x_0$ a stable smooth equilibrium?', a: '$dV/dx=0$ and $d^2V/dx^2>0$.', kind: 'recall' },
+      { q: 'What derivative conditions are sufficient for a stable equilibrium with a harmonic approximation?', a: '$dV/dx=0$ and $d^2V/dx^2>0$.', kind: 'recall' },
       { q: 'What is the effective spring constant near the minimum?', a: '$k=d^2V/dx^2$, the curvature of the potential at the minimum.', kind: 'understanding' }
     ]
   },
