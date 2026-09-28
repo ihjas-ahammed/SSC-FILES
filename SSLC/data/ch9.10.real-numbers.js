@@ -42,7 +42,7 @@ CONCEPTS.push(
         { why_ml: 'ചെറിയ സംഖ്യ എപ്പോഴും വലിയ സംഖ്യയുടെ ഇടതുവശത്തായിരിക്കും.', m: 'a < b' }
       ]
     },
-    needs: ['m9.4.1.diagonal-of-square-and-sqrt2', 'p.4.5'],
+    needs: ['m9.4.1.diagonal-of-square-and-sqrt2', 's.integers'],
     traps_en: [
       'Negative numbers with larger absolute values lie further to the left (e.g. -5 < -2, not -2 < -5).',
       'Real numbers include BOTH rational and irrational numbers; they are not just integers.'
@@ -244,7 +244,7 @@ CONCEPTS.push(
         { why_ml: '$a$-ൽ നിന്ന് അകലത്തിന്റെ പകുതി സഞ്ചരിച്ചാൽ മധ്യബിന്ദു ലഭിക്കും.', m: 'M = a + \\frac{b - a}{2} = \\frac{a + b}{2}' }
       ]
     },
-    needs: ['m9.10.3.absolute-value-equations', 'p.1.2'],
+    needs: ['m9.10.3.absolute-value-equations', 's.addition'],
     traps_en: [
       'The midpoint of negative numbers involves algebraic addition: midpoint of -5 and 3 is (-5 + 3)/2 = -1 (not 4).',
       'The interval for |x - a| < k is centered at +a, not -a.'

@@ -57,12 +57,12 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'What is the main difference between simple interest and compound interest?', a: 'In simple interest, the principal never changes; in compound interest, interest is added to the principal for the next year.', kind: 'state' },
-      { q: 'For ₹5000 at 8% per annum, what is the interest in the first year?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = ₹400$.', kind: 'apply' },
+      { q: 'For ₹5000 at 8% per annum, what is the interest in the first year?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = \\text{₹}400$.', kind: 'apply' },
       { q: 'In annual compounding, is first-year simple interest different from compound interest?', a: 'No, they are exactly the same in the first year.', kind: 'trap' }
     ],
     cards_ml: [
       { q: 'ലളിതപലിശയും കൂട്ടുപലിശയും തമ്മിലുള്ള പ്രധാന വ്യത്യാസം എന്താണ്?', a: 'ലളിതപലിശയിൽ മുതൽ മാറുന്നില്ല; കൂട്ടുപലിശയിൽ ഓരോ വർഷത്തെയും പലിശ മുതലിനോട് ചേർക്കപ്പെടുന്നു.', kind: 'state' },
-      { q: '₹5000-ന് 8% നിരക്കിൽ ഒന്നാം വർഷത്തെ പലിശ എത്ര?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = ₹400$.', kind: 'apply' },
+      { q: '₹5000-ന് 8% നിരക്കിൽ ഒന്നാം വർഷത്തെ പലിശ എത്ര?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = \\text{₹}400$.', kind: 'apply' },
       { q: 'വാർഷിക കൂട്ടുപലിശയിൽ ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും വ്യത്യസ്തമാണോ?', a: 'അല്ല, ഒന്നാം വർഷം രണ്ടും തുല്യമാണ്.', kind: 'trap' }
     ]
   },
@@ -76,7 +76,7 @@ CONCEPTS.push(
     title_ml: 'കൂട്ടുപലിശ സൂത്രവാക്യം',
     oneLine_en: 'Amount after n years with annual compounding: A = P(1 + r/100)ⁿ, and CI = A - P.',
     oneLine_ml: 'വാർഷിക കൂട്ടുപലിശയിൽ n വർഷത്തിനു ശേഷമുള്ള തുക: A = P(1 + r/100)ⁿ, കൂട്ടുപലിശ = A - P.',
-    statement_en: `<p>If a principal $P$ is deposited at an annual rate of $r\%$ compounded annually:</p>
+    statement_en: `<p>If a principal $P$ is deposited at an annual rate of $r\\%$ compounded annually:</p>
       <ul>
         <li><b>Amount after 1 year:</b> $A_1 = P\\left(1 + \\frac{r}{100}\\right)$</li>
         <li><b>Amount after 2 years:</b> $A_2 = A_1\\left(1 + \\frac{r}{100}\\right) = P\\left(1 + \\frac{r}{100}\\right)^2$</li>
@@ -85,8 +85,8 @@ CONCEPTS.push(
       <p>The total compound interest earned is:</p>
       $$\\mathbf{CI = A - P = P\\left[\\left(1 + \\frac{r}{100}\\right)^n - 1\\right]}$$
       <p><b>Example:</b> Find the amount and compound interest for ₹8,000 for 2 years at 5% per annum.<br>
-      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$$
-      $$CI = 8820 - 8000 = ₹820.$$</p>`,
+      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$$
+      $$CI = 8820 - 8000 = \\text{₹}820.$$</p>`,
     statement_ml: `<p>$P$ രൂപ മുതൽ $r\\%$ വാർഷിക കൂട്ടുപലിശ നിരക്കിൽ നിക്ഷേപിച്ചാൽ:</p>
       <ul>
         <li><b>1 വർഷത്തിനു ശേഷമുള്ള തുക:</b> $A_1 = P\\left(1 + \\frac{r}{100}\\right)$</li>
@@ -96,8 +96,8 @@ CONCEPTS.push(
       <p>ആകെ ലഭിക്കുന്ന കൂട്ടുപലിശ:</p>
       $$\\mathbf{CI = A - P = P\\left[\\left(1 + \\frac{r}{100}\\right)^n - 1\\right]}$$
       <p><b>ഉദാഹരണം:</b> ₹8,000-ന് 5% വാർഷിക കൂട്ടുപലിശ നിരക്കിൽ 2 വർഷത്തിനു ശേഷമുള്ള തുകയും പലിശയും കാണുക.<br>
-      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$$
-      $$CI = 8820 - 8000 = ₹820.$$</p>`,
+      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$$
+      $$CI = 8820 - 8000 = \\text{₹}820.$$</p>`,
     intuition_en: `<p>Each year, the total amount is scaled by the growth factor $(1 + r/100)$. Over $n$ years, this multiplication happens $n$ times, yielding $(1 + r/100)^n$.</p>`,
     intuition_ml: `<p>ഓരോ വർഷവും തുക $(1 + r/100)$ എന്ന ഗുണകത്താൽ വർദ്ധിക്കുന്നു. $n$ വർഷം കൊണ്ട് ഇത് $n$ തവണ ഗുണിക്കപ്പെട്ട് $(1 + r/100)^n$ ആകുന്നു.</p>`,
     proof: {
@@ -130,12 +130,12 @@ CONCEPTS.push(
     cards_en: [
       { q: 'What is the formula for the total amount in compound interest compounded annually?', a: '$A = P\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'How do you find the compound interest from the total amount?', a: '$CI = A - P$.', kind: 'state' },
-      { q: 'If P = ₹1000, r = 10%, n = 2 years, what is the amount A?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = ₹1210$.', kind: 'apply' }
+      { q: 'If P = ₹1000, r = 10%, n = 2 years, what is the amount A?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = \\text{₹}1210$.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'വാർഷിക കൂട്ടുപലിശയിൽ ആകെ തുക കാണാനുള്ള സൂത്രവാക്യം എന്താണ്?', a: '$A = P\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'ആകെ തുകയിൽ നിന്ന് കൂട്ടുപലിശ എങ്ങനെ കണ്ടെത്താം?', a: '$CI = A - P$.', kind: 'state' },
-      { q: 'P = ₹1000, r = 10%, n = 2 വർഷം ആയാൽ ആകെ തുക എത്ര?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = ₹1210$.', kind: 'apply' }
+      { q: 'P = ₹1000, r = 10%, n = 2 വർഷം ആയാൽ ആകെ തുക എത്ര?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = \\text{₹}1210$.', kind: 'apply' }
     ]
   },
 
@@ -203,15 +203,15 @@ CONCEPTS.push(
     statement_en: `<p>The mathematical principle of compound interest applies to many real-world situations where quantities change by a fixed percentage over regular intervals:</p>
       <ul>
         <li><b>Growth (Population, Bacteria, Production):</b>
-          <p>When a quantity increases at a steady percentage rate $r\%$ per year:</p>
+          <p>When a quantity increases at a steady percentage rate $r\\%$ per year:</p>
           $$\\mathbf{P_n = P_0\\left(1 + \\frac{r}{100}\\right)^n}$$
           where $P_0$ is the initial quantity and $P_n$ is the quantity after $n$ years.</li>
         <li><b>Depreciation (Vehicles, Machinery, Equipment Value):</b>
-          <p>With use and time, the value of machines and vehicles decreases at a steady rate $r\%$ per year (depreciation):</p>
+          <p>With use and time, the value of machines and vehicles decreases at a steady rate $r\\%$ per year (depreciation):</p>
           $$\\mathbf{P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n}$$</li>
       </ul>
       <p><b>Example (Depreciation):</b> A motorcycle bought for ₹60,000 depreciates at 10% per year. What is its value after 2 years?<br>
-      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = ₹48,600.$$</p>`,
+      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = \\text{₹}48,600.$$</p>`,
     statement_ml: `<p>ഒരു നിശ്ചിത ശതമാനം നിരക്കിൽ തുടർച്ചയായി കൂടുകയോ കുറയുകയോ ചെയ്യുന്ന പ്രായോഗിക സന്ദർഭങ്ങളിൽ കൂട്ടുപലിശ തത്വം ഉപയോഗിക്കാം:</p>
       <ul>
         <li><b>വർദ്ധനവ് (ജനസംഖ്യ, ബാക്ടീരിയകൾ, ഉൽപ്പാദനം):</b>
@@ -223,7 +223,7 @@ CONCEPTS.push(
           $$\\mathbf{P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n}$$</li>
       </ul>
       <p><b>ഉദാഹരണം (മൂല്യത്തകർച്ച):</b> ₹60,000-ന് വാങ്ങിയ ഒരു ബൈക്കിന് പ്രതിവർഷം 10% മൂല്യത്തകർച്ചയുണ്ടാകുന്നു. 2 വർഷത്തിനു ശേഷം അതിന്റെ വില എത്ര?<br>
-      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = ₹48,600.$$</p>`,
+      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = \\text{₹}48,600.$$</p>`,
     intuition_en: `<p>Growth multiplies by a number greater than 1 (like 1.10 for +10%). Depreciation multiplies by a number less than 1 (like 0.90 for -10%). The structure of repeated percentage scaling is identical.</p>`,
     intuition_ml: `<p>വർദ്ധനവിൽ 1-ൽ കൂടിയ സംഖ്യകൊണ്ട് ഗുണിക്കുന്നു (ഉദാ: +10% ആകുമ്പോൾ 1.10). മൂല്യത്തകർച്ചയിൽ 1-ൽ കുറഞ്ഞ സംഖ്യകൊണ്ട് ഗുണിക്കുന്നു (ഉദാ: -10% ആകുമ്പോൾ 0.90). അടിസ്ഥാന തത്വം ഒന്നുതന്നെയാണ്.</p>`,
     needs: ['m8.5.2.compound-interest-formula'],
@@ -238,12 +238,12 @@ CONCEPTS.push(
     cards_en: [
       { q: 'What is the formula for the value of an item depreciating at r% per year for n years?', a: '$P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'What is the formula for population increasing at r% per year for n years?', a: '$P_n = P_0\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
-      { q: 'A machine worth ₹10,000 depreciates at 10% for 1 year. What is its value?', a: '$10000 \\times (1 - 0.10) = ₹9000$.', kind: 'apply' }
+      { q: 'A machine worth ₹10,000 depreciates at 10% for 1 year. What is its value?', a: '$10000 \\times (1 - 0.10) = \\text{₹}9000$.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'പ്രതിവർഷം r% മൂല്യത്തകർച്ചയുള്ള ഒരു സാധനത്തിന്റെ n വർഷങ്ങൾക്ക് ശേഷമുള്ള വില കാണാനുള്ള സൂത്രവാക്യം എന്താണ്?', a: '$P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'പ്രതിവർഷം r% നിരക്കിൽ വർദ്ധിക്കുന്ന ജനസംഖ്യ n വർഷങ്ങൾക്ക് ശേഷം കാണാനുള്ള സൂത്രവാക്യം എന്താണ്?', a: '$P_n = P_0\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
-      { q: '₹10,000 വിലയുള്ള ഒരു യന്ത്രത്തിന് 1 വർഷം കൊണ്ട് 10% മൂല്യത്തകർച്ചയുണ്ടായാൽ വില എത്ര?', a: '$10000 \\times (1 - 0.10) = ₹9000$.', kind: 'apply' }
+      { q: '₹10,000 വിലയുള്ള ഒരു യന്ത്രത്തിന് 1 വർഷം കൊണ്ട് 10% മൂല്യത്തകർച്ചയുണ്ടായാൽ വില എത്ര?', a: '$10000 \\times (1 - 0.10) = \\text{₹}9000$.', kind: 'apply' }
     ]
   }
 );

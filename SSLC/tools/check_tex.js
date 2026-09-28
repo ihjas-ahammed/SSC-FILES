@@ -46,7 +46,7 @@ dataFiles().forEach(function (rel) {
 });
 vm.runInContext('globalThis.__P={C:typeof CONCEPTS!=="undefined"?CONCEPTS:[],'
   + 'O:typeof OBJECTIVE!=="undefined"?OBJECTIVE:[],'
-  + 'Q:(typeof WRITTEN!=="undefined"?WRITTEN:[]).concat(typeof QUESTIONS!=="undefined"?QUESTIONS:[]),'
+  + 'Q:Array.from(new Set((typeof WRITTEN!=="undefined"?WRITTEN:[]).concat(typeof QUESTIONS!=="undefined"?QUESTIONS:[]))),'
   + 'P:typeof PYQ!=="undefined"?PYQ:[]};', ctx);
 const pool = ctx.__P;
 
@@ -109,6 +109,9 @@ function check(where, s) {
   if (dollars % 2 !== 0) errors.push([where, 'odd number of $ delimiters (' + dollars + ')', s]);
 
   mathSpans(s).forEach(function (tex) {
+    if (/(?<!\\)%/.test(tex)) errors.push([where, 'unescaped percent sign in a maths span', tex]);
+    const withoutText = tex.replace(/\\text(?:bf|it|rm)?\{[^{}]*\}/g, '');
+    if (withoutText.includes('₹')) errors.push([where, 'rupee symbol in maths must use \\text{₹}', tex]);
     let depth = 0;
     for (let i = 0; i < tex.length; i++) {
       if (tex[i] === '\\') { i += 1; continue; }

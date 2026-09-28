@@ -27,17 +27,19 @@
 
 const Store = (function () {
 
-  /* SSLC keeps its own key. The app was forked from the Real Analysis system,
-     which stores under 'ssc4.level1.v1'; sharing that key on one origin made
-     the two apps write into each other's record. A record found under the old
-     key is adopted once, so nobody loses the work they already did. */
-  const KEY = 'sslc.v1';
+  function isMock() {
+    if (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'mock') return true;
+    if (typeof DATA_SOURCES !== 'undefined' && DATA_SOURCES.use === 'mock') return true;
+    if (typeof window !== 'undefined' && window.location && window.location.pathname.indexOf('-test') >= 0) return true;
+    return false;
+  }
+  const KEY = isMock() ? 'sslc.v1.mock' : 'sslc.v1';
   const LEGACY_KEY = 'ssc4.level1.v1';
   const EMPTY = {
     v: 3,
     done: {}, undone: {},        /* Level 1 completion + tombstones */
     proofs: {}, unproofs: {},    /* exercise, past-paper and derivation work + tombstones */
-    cards: {}, omr: {}, write: {},
+    cards: {}, omr: {}, write: {}, drafts: {}, draftsAt: {},
     days: {},                    /* 'YYYY-MM-DD' -> activity counters (streaks, daily goal) */
     errs: {},                    /* attempt id -> why it went wrong (the mistake log) */
     cal: {},                     /* attempt id -> confidence vs outcome (calibration) */
@@ -55,7 +57,7 @@ const Store = (function () {
      Everything it did have keeps its meaning, so the upgrade is a fill-in. */
   function upgrade(raw) {
     const s = Object.assign(blank(), raw || {});
-    ['done', 'undone', 'proofs', 'unproofs', 'cards', 'omr', 'write', 'days', 'errs', 'cal', 'prefs', 'prefsAt']
+    ['done', 'undone', 'proofs', 'unproofs', 'cards', 'omr', 'write', 'drafts', 'draftsAt', 'days', 'errs', 'cal', 'prefs', 'prefsAt']
       .forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     s.v = 3;
     if (!s.updated) s.updated = Date.now();
@@ -65,7 +67,7 @@ const Store = (function () {
   function load() {
     try {
       let raw = window.localStorage.getItem(KEY);
-      if (!raw) {
+      if (!raw && !isMock()) {
         /* first run under the new key: carry the old record across */
         const old = window.localStorage.getItem(LEGACY_KEY);
         if (old) { raw = old; window.localStorage.setItem(KEY, old); }
@@ -234,6 +236,25 @@ const Store = (function () {
     save();
   }
 
+  /* ── question response drafts (survives language toggle and reload) ──── */
+  function responseDraft(qid) {
+    if (!state.drafts) state.drafts = {};
+    return state.drafts[qid] !== undefined ? state.drafts[qid] : null;
+  }
+  function saveResponseDraft(qid, val) {
+    if (!state.drafts) state.drafts = {};
+    state.draftsAt[qid] = Date.now();
+    if (val === null || val === undefined) {
+      delete state.drafts[qid];
+    } else {
+      state.drafts[qid] = val;
+    }
+    save(true);
+  }
+  function clearResponseDraft(qid) {
+    saveResponseDraft(qid, null);
+  }
+
   /* ── preferences ─────────────────────────────────────────────────────── */
   const pref = (k, d) => (k in state.prefs ? state.prefs[k] : d);
   function setPref(k, v) {
@@ -243,34 +264,65 @@ const Store = (function () {
     return v;
   }
 
-  /* ── the mastery level is no longer stored ────────────────────────
-     It used to be a per-course switch with an unlock, and pressing it moved
-     the goalposts under work that was already finished. The level is now
-     DERIVED from what has actually been done — see core.progress.js — so there
-     is nothing here to set. The old 'level:<course>' and 'level2:<course>'
-     preferences are left where they are: they are inert, and deleting them
-     would only make two devices argue about a key neither of them reads. */
+  /* ── identity and profiles ──────────────────────────────────────────────
+     Local guest profile by default with stable profileId.
+     Remote multi-device sync is optional and explicitly enabled. */
+  function profileId() {
+    let pid = pref('profileId', '');
+    if (!pid) {
+      pid = 'prof_' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36);
+      setPref('profileId', pid);
+    }
+    return pid;
+  }
+  function displayName() {
+    return pref('displayName', '') || pref('syncName', '') || '';
+  }
+  function setDisplayName(n) {
+    setPref('displayName', String(n || '').trim());
+  }
+  function selectedCourse() {
+    const selected = pref('course', 'm10');
+    if (typeof Pool === 'undefined') return selected;
+    const courses = Pool.courses().filter(c => !c.pending);
+    return courses.some(c => c.id === selected) ? selected : (courses[0] || {}).id || selected;
+  }
+  function setSelectedCourse(c) {
+    setPref('course', c || 'm10');
+  }
+  function isOnboarded() {
+    return !!pref('onboarded', false);
+  }
+  function setOnboarded(b) {
+    setPref('onboarded', !!b);
+  }
 
-  /* ── who is signed in ────────────────────────────────────────────────────
-     Name and roll number are the credentials AND the sync key. They are a pass
-     key, not a password, and every surface that shows them says so. */
   const identity = () => ({
     name: pref('syncName', ''),
-    roll: pref('syncRoll', '')
+    roll: pref('syncRoll', ''),
+    displayName: displayName(),
+    profileId: profileId(),
+    syncEnabled: !!pref('syncEnabled', false)
   });
   const signedIn = () => {
     const id = identity();
     return !!(String(id.name).trim() && String(id.roll).trim());
   };
-  function signIn(name, roll) {
+  const syncEnabled = () => signedIn() && !!pref('syncEnabled', false);
+  function signIn(name, roll, dName) {
     setPref('syncName', String(name || '').trim());
     setPref('syncRoll', String(roll || '').trim());
+    if (dName) setPref('displayName', String(dName).trim());
+    else if (!pref('displayName', '')) setPref('displayName', String(name || '').trim());
+    setPref('syncEnabled', true);
+    setPref('onboarded', true);
     flushNow();
     return signedIn();
   }
   function signOut() {
     setPref('syncName', '');
     setPref('syncRoll', '');
+    setPref('syncEnabled', false);
     flushNow();
   }
 
@@ -360,6 +412,25 @@ const Store = (function () {
     const done = mergeFlags(A.done, B.done, A.undone, B.undone);
     const proof = mergeFlags(A.proofs, B.proofs, A.unproofs, B.unproofs);
 
+    /* Response drafts need their own clocks, including deletion stamps. A
+       sync must neither erase an unfinished answer nor revive a cleared one.
+       Existing unstamped drafts inherit the old record's update time. */
+    const drafts = {}, draftsAt = {};
+    const draftIds = new Set(Object.keys(A.drafts).concat(Object.keys(B.drafts),
+      Object.keys(A.draftsAt), Object.keys(B.draftsAt)));
+    draftIds.forEach(function (id) {
+      const a = A.drafts[id], b = B.drafts[id];
+      const at = A.draftsAt[id] || (a !== undefined ? A.updated : 0);
+      const bt = B.draftsAt[id] || (b !== undefined ? B.updated : 0);
+      const av = a === undefined ? '' : JSON.stringify(a);
+      const bv = b === undefined ? '' : JSON.stringify(b);
+      // At equal times a deletion wins; other ties have a stable winner.
+      const useA = at > bt || (at === bt && av <= bv);
+      const value = useA ? a : b;
+      draftsAt[id] = Math.max(at, bt);
+      if (value !== undefined) drafts[id] = JSON.parse(JSON.stringify(value));
+    });
+
     const write = {};
     [A.write, B.write].forEach(function (src) {
       for (const k in (src || {})) {
@@ -410,6 +481,7 @@ const Store = (function () {
       cards: mergeAttempts(A.cards, B.cards),
       omr: mergeAttempts(A.omr, B.omr),
       write: write,
+      drafts: drafts, draftsAt: draftsAt,
       days: daysOut,
       errs: latest(A.errs, B.errs),
       cal: latest(A.cal, B.cal),
@@ -444,11 +516,15 @@ const Store = (function () {
     isDone, setDone, setDoneMany,
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
+    responseDraft, saveResponseDraft, clearResponseDraft,
     dayKey, bump, day, days,
     err, tagError, clearError, errs,
     recordConfidence, cal,
     pref, setPref,
-    identity, signedIn, signIn, signOut,
+    profileId, displayName, setDisplayName,
+    selectedCourse, setSelectedCourse,
+    isOnboarded, setOnboarded,
+    identity, signedIn, syncEnabled, signIn, signOut,
     summary, exportJSON, reset, tally,
     snapshot, adopt, mergeStates, onChange, flushNow,
     isVolatile: () => volatile

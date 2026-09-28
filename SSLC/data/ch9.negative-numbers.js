@@ -52,7 +52,7 @@ CONCEPTS.push(
         { why_ml: 'x - x പൂജ്യമാകുമ്പോൾ ബാക്കി ലഭിക്കുന്നത് -(y - x) ആണ്.', m: 'x - y = -(y - x)' }
       ]
     },
-    needs: ['p.4.5'],
+    needs: ['s.integers'],
     traps_en: [
       'Remember that for negative numbers, a larger numerical magnitude means a smaller value: -10 < -2.',
       '0 is neither positive nor negative; it is the neutral boundary.'

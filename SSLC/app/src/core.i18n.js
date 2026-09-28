@@ -43,7 +43,11 @@ const I18N = (function () {
     if (typeof App !== 'undefined' && App.buildNav) {
       App.buildNav();
     }
-    if (typeof Router !== 'undefined' && Router.reload) {
+    if (typeof App !== 'undefined' && App.isGate && App.isGate()) {
+      if (typeof Login !== 'undefined' && Login.remount) {
+        Login.remount();
+      }
+    } else if (typeof Router !== 'undefined' && Router.reload) {
       Router.reload();
       if (typeof Tex !== 'undefined' && Tex.typeset) {
         const main = document.getElementById('main');
@@ -78,11 +82,13 @@ const I18N = (function () {
   const STRINGS = {
     /* ── shell ─────────────────────────────────────────────────────────── */
     app_title: { en: 'SSLC Mathematics', ml: 'എസ്.എസ്.എൽ.സി ഗണിതം' },
+    app_title_short: { en: 'SSLC Maths', ml: 'എസ്.എസ്.എൽ.സി' },
     app_sub: { en: 'Kerala SCERT · Class 8–10', ml: 'കേരള എസ്.സി.ഇ.ആർ.ടി · ക്ലാസ് 8–10' },
     tab_home: { en: 'Today', ml: 'ഇന്ന്' },
     tab_today: { en: 'Today', ml: 'ഇന്ന്' },
-    tab_study: { en: 'Study', ml: 'പഠനം' },
-    tab_recall: { en: 'Recall', ml: 'ഓർമ്മ' },
+    tab_study: { en: 'Learn', ml: 'പഠനം' },
+    tab_recall: { en: 'Practice', ml: 'പരിശീലനം' },
+    tab_progress: { en: 'Progress', ml: 'പുരോഗതി' },
     tab_drill: { en: 'Drill', ml: 'ടെസ്റ്റ്' },
     tab_method: { en: 'How to study', ml: 'പഠനരീതി' },
     back: { en: 'Back', ml: 'പിന്നോട്ട്' },
@@ -103,6 +109,34 @@ const I18N = (function () {
     of: { en: 'of', ml: '/' },
     minutes: { en: 'min', ml: 'മിനിറ്റ്' },
     days: { en: 'days', ml: 'ദിവസം' },
+
+    /* ── new actions and learner copy ──────────────────────────────────── */
+    continue_cta: { en: 'Continue', ml: 'തുടരുക' },
+    start_cta: { en: 'Start', ml: 'തുടങ്ങാം' },
+    resume_where_left: { en: 'Resume where you left off', ml: 'മുൻപ് നിർത്തിയിടത്തുനിന്ന് തുടരാം' },
+    starter_desc: { en: 'Understand the concept and solve step-by-step', ml: 'ആശയം മനസ്സിലാക്കാം, ഘട്ടങ്ങളായി ചെയ്യാം' },
+    review_today: { en: 'Review today', ml: 'ഇന്ന് ഓർത്തെടുക്കാം' },
+    due_cards_count: { en: 'questions due', ml: 'ചോദ്യങ്ങൾ' },
+    no_reviews_due: { en: 'No reviews due right now — caught up!', ml: 'ഇപ്പോൾ റിവ്യൂ ചെയ്യേണ്ടതില്ല — എല്ലാം കൃത്യമാണ്!' },
+    more_options: { en: 'More options', ml: 'കൂടുതൽ' },
+    settings: { en: 'Settings', ml: 'ക്രമീകരണങ്ങൾ' },
+    change_class: { en: 'Change class', ml: 'ക്ലാസ് മാറ്റുക' },
+    class_10: { en: 'Class 10 (SSLC)', ml: 'ക്ലാസ് 10 (എസ്.എസ്.എൽ.സി)' },
+    class_9: { en: 'Class 9', ml: 'ക്ലാസ് 9' },
+    class_8: { en: 'Class 8 (Math Base)', ml: 'ക്ലാസ് 8 (അടിസ്ഥാനം)' },
+    try_yourself: { en: 'Try it yourself', ml: 'സ്വയം ചെയ്തു നോക്കൂ' },
+    check_answer: { en: 'Check answer', ml: 'ഉത്തരം പരിശോധിക്കാം' },
+    give_hint: { en: 'Give me a hint', ml: 'ഒരു സൂചന തരൂ' },
+    show_steps: { en: 'Show the steps', ml: 'ഘട്ടങ്ങൾ കാണാം' },
+    dont_know_yet: { en: "I don't know yet", ml: 'ഇപ്പോൾ അറിയില്ല' },
+    try_again: { en: 'Try once more', ml: 'ഒരിക്കൽ കൂടി ശ്രമിക്കാം' },
+    review_basics: { en: 'Review the basics', ml: 'അടിസ്ഥാനങ്ങൾ നോക്കാം' },
+    done_for_today: { en: 'Done for today', ml: 'ഇന്നത്തേക്ക് മതി' },
+    next_lesson: { en: 'Next lesson', ml: 'അടുത്ത പാഠം' },
+    saved_on_device: { en: 'Saved on this device', ml: 'ഈ ഉപകരണത്തിൽ സേവ് ചെയ്തു' },
+    start_learning: { en: 'Start learning', ml: 'പഠനം തുടങ്ങാം' },
+    restore_synced: { en: 'Restore synced record', ml: 'പഴയ രേഖ തുറക്കാം' },
+    guest_welcome: { en: 'Start learning immediately, or restore a synced record.', ml: 'ഉടൻ പഠനം തുടങ്ങാം, അല്ലെങ്കിൽ പഴയ രേഖ തുറക്കാം.' },
 
     /* ── sign-in ───────────────────────────────────────────────────────── */
     login_kicker: { en: 'SSLC Mathematics · Kerala SCERT', ml: 'എസ്.എസ്.എൽ.സി ഗണിതം · കേരള എസ്.സി.ഇ.ആർ.ടി' },
@@ -173,14 +207,14 @@ const I18N = (function () {
     streak_none: { en: 'Start a streak today', ml: 'ഇന്ന് തുടർച്ച തുടങ്ങൂ' },
     streak_hint: { en: 'Never miss twice. One card counts.', ml: 'രണ്ട് ദിവസം തുടർച്ചയായി വിടരുത്. ഒരു കാർഡ് മതി.' },
 
-    exam_title: { en: 'SSLC exam', ml: 'എസ്.എസ്.എൽ.സി പരീക്ഷ' },
+    exam_title: { en: 'Study target date', ml: 'പഠനലക്ഷ്യ തീയതി' },
     exam_days_left: { en: 'days left', ml: 'ദിവസം ബാക്കി' },
     exam_today: { en: 'Exam day', ml: 'പരീക്ഷാ ദിവസം' },
     exam_past: { en: 'Set your next exam date', ml: 'അടുത്ത പരീക്ഷാ തീയതി നൽകുക' },
-    exam_set: { en: 'Exam date', ml: 'പരീക്ഷാ തീയതി' },
+    exam_set: { en: 'Your target date', ml: 'നിങ്ങളുടെ ലക്ഷ്യ തീയതി' },
     exam_paper: { en: 'Maths paper: 80 marks · 2 h 30 min + 15 min cool-off', ml: 'ഗണിതം: 80 മാർക്ക് · 2 മണിക്കൂർ 30 മിനിറ്റ് + 15 മിനിറ്റ് കൂൾ-ഓഫ്' },
     exam_pace: { en: 'Pace: under 2 minutes per mark, then check.', ml: 'വേഗത: ഒരു മാർക്കിന് 2 മിനിറ്റിൽ താഴെ, പിന്നെ പരിശോധന.' },
-    exam_per_day: { en: 'notes per day to finish Class 10 once before the exam', ml: 'പരീക്ഷയ്ക്ക് മുൻപ് ക്ലാസ് 10 ഒരു തവണ തീർക്കാൻ ദിവസേന വേണ്ട കുറിപ്പുകൾ' },
+    exam_per_day: { en: 'notes per day to read this class by your target date', ml: 'ലക്ഷ്യ തീയതിക്കകം ഈ ക്ലാസ് വായിച്ചുതീർക്കാൻ ദിവസേന വേണ്ട കുറിപ്പുകൾ' },
 
     weak_title: { en: 'Weak spots', ml: 'ദുർബല ഭാഗങ്ങൾ' },
     weak_desc: {

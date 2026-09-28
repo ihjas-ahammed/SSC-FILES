@@ -54,7 +54,7 @@ CONCEPTS.push(
         { why_ml: 'അതിനാൽ ആകെ ആവശ്യമായ സ്വതന്ത്ര അളവുകൾ 3 + 2 = 5 ആണ്.', m: '3 + 2 = 5' }
       ]
     },
-    needs: ['m8.2.1.congruence-intro', 'm8.2.1.rigidity'],
+    needs: ['m8.2.1.sss-congruence', 'm8.2.1.rigidity'],
     traps_en: [
       'Four sides do NOT determine a unique quadrilateral: infinitely many quadrilaterals have the same 4 side lengths.',
       'The 5 measurements must be independent; for example, four angles alone only determine shape (similarity), not size.'

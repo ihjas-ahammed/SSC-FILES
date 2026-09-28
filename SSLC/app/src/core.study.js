@@ -193,27 +193,16 @@ const Study = (function () {
   }
 
   /* ── the exam ────────────────────────────────────────────────────────── */
-  function defaultExamDate() {
-    /* The data may name the exam; otherwise the SSLC paper is in March. */
-    const tracks = (typeof TRACKS !== 'undefined' && Array.isArray(TRACKS)) ? TRACKS : [];
-    const named = tracks.filter(t => t.required && t.isoDate)[0];
-    const now = new Date();
-    if (named && new Date(named.isoDate) > now) return named.isoDate;
-    const year = now.getMonth() >= 2 ? now.getFullYear() + 1 : now.getFullYear();
-    return year + '-03-10';
-  }
-
   function exam() {
-    const iso = Store.pref('examDate', '') || defaultExamDate();
-    const at = new Date(iso + 'T09:30:00');
-    const days = Math.ceil((at.getTime() - Date.now()) / DAY);
-    /* how much of Class 10 still has to be read once, spread over the days left */
-    const ids = Pool.ids.concepts('m10');
+    const iso = Store.pref('examDate:' + Store.selectedCourse(), Store.selectedCourse() === 'm10' ? Store.pref('examDate', '') : '');
+    const at = iso ? new Date(iso + 'T09:30:00') : null;
+    const days = at && Number.isFinite(at.getTime()) ? Math.ceil((at.getTime() - Date.now()) / DAY) : null;
+    const ids = Pool.ids.concepts(Store.selectedCourse());
     const left = ids.filter(id => Progress.level(id) < 1).length;
     const perDay = days > 0 ? Math.ceil(left / days * 10) / 10 : left;
-    return { iso: iso, at: at, days: days, left: left, perDay: perDay, custom: !!Store.pref('examDate', '') };
+    return { iso: days === null ? '' : iso, at: at, days: days, left: left, perDay: perDay, custom: days !== null };
   }
-  function setExamDate(iso) { Store.setPref('examDate', iso || ''); }
+  function setExamDate(iso) { Store.setPref('examDate:' + Store.selectedCourse(), iso || ''); }
 
   /* The SSLC mathematics paper, as the learner will meet it. */
   const BLUEPRINT = {
@@ -244,7 +233,8 @@ const Study = (function () {
       steps.push({ kind: 'weak', n: weak.length, ready: true, done: false, href: 'recall?mode=weak', items: weak });
     }
 
-    const next = Pool.concepts('m10').filter(c => Progress.level(c.id) === 0)[0]
+    const courseId = (typeof Store !== 'undefined' && Store.selectedCourse) ? Store.selectedCourse() : 'm10';
+    const next = Pool.concepts(courseId).filter(c => Progress.level(c.id) === 0)[0]
       || Pool.concepts().filter(c => Progress.level(c.id) === 0)[0] || null;
     steps.push({
       kind: 'read', concept: next, ready: !!next,
@@ -303,7 +293,7 @@ const Study = (function () {
      The running block is kept in localStorage directly (not in the record):
      it is a property of this device and this hour, and it must never sync. */
   const Focus = (function () {
-    const K = 'sslc.focus';
+    const K = typeof DATA_SOURCES !== 'undefined' && DATA_SOURCES.use === 'mock' ? 'sslc.focus.mock' : 'sslc.focus';
     const PRESETS = { short: [15, 3], normal: [25, 5], long: [45, 10] };
     let tickT = 0;
     const watchers = [];

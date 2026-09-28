@@ -379,8 +379,8 @@ $$\\text{Area} = \\pi(R^2 - r^2) = \\pi(R + r)(R - r)$$
 $$\\text{Area} = \\frac{22}{7} \\times (28 + 21)(28 - 21) = \\frac{22}{7} \\times 49 \\times 7 = 22 \\times 49 = \\mathbf{1078\\text{ sq metres}}$$
 
 $$\\text{Step 3: Total Paving Cost}$$
-$$\\text{Rate per sq metre } = ₹50$$
-$$\\text{Total Cost} = 1078 \\times 50 = \\mathbf{₹53{,}900}$$`,
+$$\\text{Rate per sq metre } = \\text{₹}50$$
+$$\\text{Total Cost} = 1078 \\times 50 = \\mathbf{\\text{₹}53{,}900}$$`,
     solution_ml: `$$\\text{ഘട്ടം 1: ആരങ്ങളും ചുറ്റളവുകളും}$$
 $$\\text{അകം ആരം } r = 21\\text{ m}, \\quad \\text{പുറം ആരം } R = 21 + 7 = 28\\text{ m}$$
 $$\\text{ഉൾച്ചുറ്റളവ്} = 2 \\times \\frac{22}{7} \\times 21 = \\mathbf{132\\text{ മീറ്റർ}}$$
@@ -390,7 +390,7 @@ $$\\text{ഘട്ടം 2: നടപ്പാതയുടെ പരപ്പള
 $$\\text{പരപ്പളവ്} = \\pi(R^2 - r^2) = \\frac{22}{7} \\times (28 + 21)(28 - 21) = \\frac{22}{7} \\times 49 \\times 7 = \\mathbf{1078\\text{ ചതുരശ്ര മീറ്റർ}}$$
 
 $$\\text{ഘട്ടം 3: ആകെ ചെലവ്}$$
-$$\\text{ആകെ ചെലവ്} = 1078 \\times 50 = \\mathbf{₹53{,}900}$$`
+$$\\text{ആകെ ചെലവ്} = 1078 \\times 50 = \\mathbf{\\text{₹}53{,}900}$$`
   },
 
   {

@@ -54,7 +54,7 @@ CONCEPTS.push(
         { why_ml: 'ഗുണനത്തിന്റെ വിപരീതക്രിയ (*a മാറ്റി /a).', m: 'x = \\frac{c - b}{a}' }
       ]
     },
-    needs: ['p.5.3'],
+    needs: ['s.algebraic-terms'],
     traps_en: [
       'Remember to undo operations in REVERSE order (undo addition/subtraction before multiplication/division).',
       'If a sum is divided by 3, first multiply by 3, then undo the sum.'

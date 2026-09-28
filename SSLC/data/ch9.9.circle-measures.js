@@ -50,7 +50,7 @@ CONCEPTS.push(
         { why_ml: 'വ്യാസവുമായുള്ള അംശബന്ധം എപ്പോഴും പൈ ($\\pi$) ആണ്.', m: '\\frac{C}{2r} = \\pi' }
       ]
     },
-    needs: ['m8.4.3.regular-polygons', 'p.4.1'],
+    needs: ['m8.4.3.regular-polygons', 's.fractions'],
     traps_en: [
       'pi is an IRRATIONAL number; 22/7 is only an APPROXIMATION, not the exact value.',
       'Circumference formula uses 2 * pi * r (or pi * d), do not mix with area pi * r^2.'
@@ -122,7 +122,7 @@ CONCEPTS.push(
         { why_ml: 'ചതുരത്തിന്റെ പരപ്പളവ് = നീളം × വീതി.', m: 'A = \\pi r \\times r = \\pi r^2' }
       ]
     },
-    needs: ['m9.9.1.circumference-and-pi', 'p.3.4'],
+    needs: ['m9.9.1.circumference-and-pi', 's.area-rectangle'],
     traps_en: [
       'In pi * r^2, square the RADIUS, not the diameter (if diameter is given, divide by 2 first: r = d/2).',
       'Area scales quadratically: doubling radius quadruples area (not doubles).'

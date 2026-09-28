@@ -2,7 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const ROOT = process.cwd();
+const ROOT = path.resolve(__dirname, '..');
+if (process.argv.length > 2) {
+  console.error('full_audit.js validates the live bilingual curriculum only; use check_tex.js --mock for mock TeX.');
+  process.exit(2);
+}
 
 // Load sources.js
 const sourcesCode = fs.readFileSync(path.join(ROOT, 'app/sources.js'), 'utf8');
@@ -28,11 +32,12 @@ const ctx = {
 vm.createContext(ctx);
 
 for (const relPath of liveFiles) {
-  const code = fs.readFileSync(path.join(ROOT, relPath), 'utf8');
   try {
-    vm.runInContext(code, ctx);
+    const code = fs.readFileSync(path.join(ROOT, relPath), 'utf8');
+    vm.runInContext(code, ctx, { filename: relPath });
   } catch (err) {
     console.error(`Error loading ${relPath}:`, err.message);
+    process.exit(1);
   }
 }
 
@@ -174,6 +179,16 @@ for (const c of CONCEPTS) {
     }
   }
 
+  // Check Prerequisite integrity (needs)
+  if (c.needs) {
+    for (const needId of c.needs) {
+      if (!conceptMap.has(needId)) {
+        console.error(`[DANGLING PREREQUISITE] ${c.id} needs non-existent "${needId}"`);
+        errors++;
+      }
+    }
+  }
+
   // Check Figure Map
   const figIds = c.figs && c.figs.length ? c.figs : (FIGMAP[c.id] || []);
   if (!figIds || figIds.length === 0) {
@@ -187,6 +202,30 @@ for (const c of CONCEPTS) {
       }
     }
   }
+}
+
+// Prerequisite Cycle Check
+const adj = {};
+for (const c of CONCEPTS) { adj[c.id] = c.needs || []; }
+const visited = {}, recStack = {};
+function detectCycle(node, pathArr) {
+  visited[node] = true;
+  recStack[node] = true;
+  for (const neighbor of (adj[node] || [])) {
+    if (!conceptMap.has(neighbor)) continue;
+    if (!visited[neighbor]) {
+      if (detectCycle(neighbor, pathArr.concat(neighbor))) return true;
+    } else if (recStack[neighbor]) {
+      console.error(`[PREREQUISITE CYCLE] ${pathArr.concat(neighbor).join(' -> ')}`);
+      errors++;
+      return true;
+    }
+  }
+  recStack[node] = false;
+  return false;
+}
+for (const c of CONCEPTS) {
+  if (!visited[c.id]) detectCycle(c.id, [c.id]);
 }
 
 // 3. Audit Objective Questions
@@ -255,8 +294,37 @@ for (const q of WRITTEN) {
   }
 }
 
-// 5. Audit Malayalam Purity (check for stray parenthesized English in Malayalam fields)
-console.log('\n── 5. MALAYALAM PURITY CHECK ──');
+// 5. Audit Past Exam Papers (PYQ)
+console.log('\n── 5. PAST EXAM PAPERS (PYQ) INTEGRITY ──');
+const pyqMap = new Map();
+for (const q of PYQ) {
+  if (pyqMap.has(q.id)) {
+    console.error(`[DUPLICATE PYQ ID] ${q.id}`);
+    errors++;
+  }
+  pyqMap.set(q.id, q);
+
+  if (!q.prompt_en || !q.prompt_ml) {
+    console.error(`[PYQ MISSING PROMPT] ${q.id}`);
+    errors++;
+  }
+  if (!q.solution_en || !q.solution_ml) {
+    console.error(`[PYQ MISSING SOLUTION] ${q.id}`);
+    errors++;
+  }
+  if (q.tests) {
+    const tests = Array.isArray(q.tests) ? q.tests : [q.tests];
+    for (const t of tests) {
+      if (!conceptMap.has(t)) {
+        console.error(`[PYQ INVALID CONCEPT REF] ${q.id} tests non-existent "${t}"`);
+        errors++;
+      }
+    }
+  }
+}
+
+// 6. Audit Malayalam Purity (check for stray parenthesized English in Malayalam fields)
+console.log('\n── 6. MALAYALAM PURITY CHECK ──');
 const parenEnglishRegex = /\b[A-Za-z]{3,}\b/;
 
 let parenCount = 0;

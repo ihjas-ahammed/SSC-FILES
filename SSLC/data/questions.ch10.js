@@ -592,7 +592,7 @@ $$\\text{ശതമാനം} = \\frac{13}{40} \\times 100\\% = \\mathbf{32.5\\%}
       </ol>`,
     solution_en: `<ol type="a">
         <li>The highest frequency is $16$, corresponding to interval $3000 - 3500$.<br>
-          $$\\text{Modal Class} = \\mathbf{3000 - 3500}, \\quad \\text{Lower Boundary} = \\mathbf{₹2000}$$</li>
+          $$\\text{Modal Class} = \\mathbf{3000 - 3500}, \\quad \\text{Lower Boundary} = \\mathbf{\\text{₹}2000}$$</li>
         <li>Workers earning less than ₹$3000$ fall in intervals $2000 - 2500$ and $2500 - 3000$:<br>
           $$\\text{Workers} = 8 + 14 = \\mathbf{22\\text{ workers}}$$</li>
         <li>Workers earning ₹$3500$ or more fall in intervals $3500 - 4000$ and $4000 - 4500$:<br>
@@ -602,7 +602,7 @@ $$\\text{ശതമാനം} = \\frac{13}{40} \\times 100\\% = \\mathbf{32.5\\%}
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ഏറ്റവും വലിയ ആവൃത്തി $16$ ആണ്, അതിനാൽ മോഡൽ വിഭാഗം $3000 - 3500$ ആണ്.<br>
-          $$\\text{മോഡൽ വിഭാഗം} = \\mathbf{3000 - 3500}, \\quad \\text{കീഴ്പരിധി} = \\mathbf{₹3000}$$</li>
+          $$\\text{മോഡൽ വിഭാഗം} = \\mathbf{3000 - 3500}, \\quad \\text{കീഴ്പരിധി} = \\mathbf{\\text{₹}3000}$$</li>
         <li>₹$3000$-ൽ താഴെ വേതനമുള്ളവർ ($2000 - 2500$, $2500 - 3000$ വിഭാഗങ്ങൾ):<br>
           $$\\text{തൊഴിലാളികൾ} = 8 + 14 = \\mathbf{22\\text{ പേർ}}$$</li>
         <li>₹$3500$-ഓ അതിൽ കൂടുതലോ വേതനമുള്ളവർ ($3500 - 4000$, $4000 - 4500$ വിഭാഗങ്ങൾ):<br>

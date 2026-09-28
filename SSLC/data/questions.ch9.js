@@ -370,17 +370,17 @@ $$\\text{തുക} = -27 + 4 = \\mathbf{-23}$$`,
     solution_en: `<ol type="a">
         <li>Arithmetic expression:
           $$\\text{Balance} = 12000 + 4500 + 3200 + (-8000) + (-14000) + (-2500)$$</li>
-        <li>$$\\text{Total deposits} = 12000 + 4500 + 3200 = ₹19,700$$
-          $$\\text{Total withdrawals} = 8000 + 14000 + 2500 = ₹24,500$$
-          $$\\text{Final Balance} = 19700 - 24500 = \\mathbf{-₹4,800}$$
+        <li>$$\\text{Total deposits} = 12000 + 4500 + 3200 = \\text{₹}19,700$$
+          $$\\text{Total withdrawals} = 8000 + 14000 + 2500 = \\text{₹}24,500$$
+          $$\\text{Final Balance} = 19700 - 24500 = \\mathbf{-\\text{₹}4,800}$$
           Yes, the account has an overdraft of <b>₹$4,800$</b>.</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ഗണിതവാക്യം:
           $$\\text{നീക്കിയിരിപ്പ്} = 12000 + 4500 + 3200 + (-8000) + (-14000) + (-2500)$$</li>
-        <li>$$\\text{ആകെ നിക്ഷേപം} = 12000 + 4500 + 3200 = ₹19,700$$
-          $$\\text{ആകെ പിൻവലിച്ചത്} = 8000 + 14000 + 2500 = ₹24,500$$
-          $$\\text{അവസാന തുക} = 19700 - 24500 = \\mathbf{-₹4,800}$$
+        <li>$$\\text{ആകെ നിക്ഷേപം} = 12000 + 4500 + 3200 = \\text{₹}19,700$$
+          $$\\text{ആകെ പിൻവലിച്ചത്} = 8000 + 14000 + 2500 = \\text{₹}24,500$$
+          $$\\text{അവസാന തുക} = 19700 - 24500 = \\mathbf{-\\text{₹}4,800}$$
           അക്കൗണ്ടിൽ <b>₹$4,800$</b> രൂപയുടെ ഓവർഡ്രാഫ്റ്റ് (ബാധ്യത) ഉണ്ട്.</li>
       </ol>`,
     tested_en: 'Signed number modeling in financial transactions and overdraft calculation.',

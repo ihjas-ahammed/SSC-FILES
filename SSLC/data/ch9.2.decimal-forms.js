@@ -49,7 +49,7 @@ CONCEPTS.push(
         { why_ml: 'അതിനാൽ q-വിൽ 2, 5 ഘടകങ്ങൾ മാത്രമേ ഉണ്ടാകൂ.', m: 'q = 2^a \\times 5^b' }
       ]
     },
-    needs: ['p.4.3', 'p.4.4'],
+    needs: ['s.decimals', 's.decimal-ops'],
     traps_en: [
       'Always reduce the fraction to lowest terms BEFORE checking prime factors of denominator (e.g. 6/15 = 2/5 has only factor 5, so it terminates).',
       'The number of decimal places equals max(a, b) in 2^a * 5^b.'

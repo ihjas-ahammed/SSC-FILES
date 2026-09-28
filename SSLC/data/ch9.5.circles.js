@@ -54,7 +54,7 @@ CONCEPTS.push(
         { why_ml: '$RHS$ തുല്യത പ്രകാരം ത്രികോണങ്ങൾ തുല്യമാണ്.', m: 'AM = MB' }
       ]
     },
-    needs: ['m8.2.3.sas-congruence', 'p.5.5'],
+    needs: ['m8.2.3.sas-congruence', 's.pythagoras-theorem'],
     traps_en: [
       'In r^2 = d^2 + (c/2)^2, use HALF the chord length (c/2), not the full chord c.',
       'Distance from the centre ALWAYS means the PERPENDICULAR distance.'

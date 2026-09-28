@@ -27,7 +27,10 @@ const Tex = (function () {
   function typeset(nodes) {
     if (!available()) return Promise.resolve();
     const list = Array.isArray(nodes) ? nodes : [nodes];
-    return run(() => window.MathJax.typesetPromise(list));
+    return run(function () {
+      const mounted = list.filter(node => node && node.isConnected);
+      if (mounted.length) return window.MathJax.typesetPromise(mounted);
+    });
   }
 
   /* Render one learner fragment into `target`.

@@ -28,8 +28,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹64' }
     ],
     answer: 'A',
-    solution_en: 'For the first year, simple interest and annual compound interest are always identical. Interest = $\\frac{10000 \\times 1 \\times 8}{100} = ₹800$ in both cases. Difference = ₹0.',
-    solution_ml: 'വാർഷിക കൂട്ടുപലിശയിൽ ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും എപ്പോഴും തുല്യമായിരിക്കും. രണ്ട് രീതിയിലും പലിശ = $\\frac{10000 \\times 1 \\times 8}{100} = ₹800$ ആണ്. അതിനാൽ വ്യത്യാസം = ₹0.',
+    solution_en: 'For the first year, simple interest and annual compound interest are always identical. Interest = $\\frac{10000 \\times 1 \\times 8}{100} = \\text{₹}800$ in both cases. Difference = ₹0.',
+    solution_ml: 'വാർഷിക കൂട്ടുപലിശയിൽ ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും എപ്പോഴും തുല്യമായിരിക്കും. രണ്ട് രീതിയിലും പലിശ = $\\frac{10000 \\times 1 \\times 8}{100} = \\text{₹}800$ ആണ്. അതിനാൽ വ്യത്യാസം = ₹0.',
     tested_en: 'First year equivalence of simple and compound interest.',
     tested_ml: 'ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും തമ്മിലുള്ള തുല്യത.'
   },
@@ -56,8 +56,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹100' }
     ],
     answer: 'A',
-    solution_en: 'Year 1 interest: $10\\% \\text{ of } 5000 = ₹500$. Year 2 principal = $5000 + 500 = ₹5,500$. Year 2 interest: $10\\% \\text{ of } 5500 = ₹550$. Difference = $550 - 500 = ₹50$ (which is $10\\%$ of Year 1 interest ₹500).',
-    solution_ml: 'ഒന്നാം വർഷത്തെ പലിശ: ₹5,000-ന്റെ $10\\% = ₹500$. രണ്ടാം വർഷത്തെ മുതൽ = $5000 + 500 = ₹5,500$. രണ്ടാം വർഷത്തെ പലിശ: ₹5,500-ന്റെ $10\\% = ₹550$. അധികം ലഭിച്ച തുക = $550 - 500 = ₹50$ (ഇത് ഒന്നാം വർഷത്തെ പലിശയായ ₹500-ന്റെ 10% ആണ്).',
+    solution_en: 'Year 1 interest: $10\\% \\text{ of } 5000 = \\text{₹}500$. Year 2 principal = $5000 + 500 = \\text{₹}5,500$. Year 2 interest: $10\\% \\text{ of } 5500 = \\text{₹}550$. Difference = $550 - 500 = \\text{₹}50$ (which is $10\\%$ of Year 1 interest ₹500).',
+    solution_ml: 'ഒന്നാം വർഷത്തെ പലിശ: ₹5,000-ന്റെ $10\\% = \\text{₹}500$. രണ്ടാം വർഷത്തെ മുതൽ = $5000 + 500 = \\text{₹}5,500$. രണ്ടാം വർഷത്തെ പലിശ: ₹5,500-ന്റെ $10\\% = \\text{₹}550$. അധികം ലഭിച്ച തുക = $550 - 500 = \\text{₹}50$ (ഇത് ഒന്നാം വർഷത്തെ പലിശയായ ₹500-ന്റെ 10% ആണ്).',
     tested_en: 'Interest on interest concept.',
     tested_ml: 'പലിശയുടെ പലിശ എന്ന ആശയം.'
   },
@@ -84,8 +84,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹4,800' }
     ],
     answer: 'A',
-    solution_en: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = ₹4,410$.',
-    solution_ml: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = ₹4,410$.',
+    solution_en: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = \\text{₹}4,410$.',
+    solution_ml: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = \\text{₹}4,410$.',
     tested_en: 'Compound interest amount formula.',
     tested_ml: 'കൂട്ടുപലിശ സൂത്രവാക്യം.'
   },
@@ -168,8 +168,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹8,900' }
     ],
     answer: 'A',
-    solution_en: 'Rate = $5\\%$ per half-year, periods $n = 2$. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$. (Notice this is ₹20 more than annual simple interest ₹8,800!).',
-    solution_ml: 'അർദ്ധവാർഷിക നിരക്ക് = $5\\%$, തവണകൾ = 2. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$. (ലളിതപലിശയെക്കാൾ ₹20 അധികമാണ്).',
+    solution_en: 'Rate = $5\\%$ per half-year, periods $n = 2$. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$. (Notice this is ₹20 more than annual simple interest ₹8,800!).',
+    solution_ml: 'അർദ്ധവാർഷിക നിരക്ക് = $5\\%$, തവണകൾ = 2. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$. (ലളിതപലിശയെക്കാൾ ₹20 അധികമാണ്).',
     tested_en: 'Calculating amount with half-yearly compounding.',
     tested_ml: 'അർദ്ധവാർഷിക കൂട്ടുപലിശയിലെ തുക കാണൽ.'
   },
@@ -224,8 +224,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹15,800' }
     ],
     answer: 'A',
-    solution_en: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = ₹16,200$.',
-    solution_ml: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = ₹16,200$.',
+    solution_en: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = \\text{₹}16,200$.',
+    solution_ml: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = \\text{₹}16,200$.',
     tested_en: 'Depreciation calculation.',
     tested_ml: 'മൂല്യത്തകർച്ച കണക്കാക്കൽ.'
   }
@@ -255,22 +255,22 @@ QUESTIONS.push(
       </ol>`,
     solution_en: `<ol type="a">
         <li>Simple Interest:
-          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{₹3,000}$$</li>
+          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{\\text{₹}3,000}$$</li>
         <li>Compound Interest:
-          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = ₹18,150$$
-          $$CI = A - P = 18150 - 15000 = \\mathbf{₹3,150}$$</li>
+          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = \\text{₹}18,150$$
+          $$CI = A - P = 18150 - 15000 = \\mathbf{\\text{₹}3,150}$$</li>
         <li>Difference:
-          $$\\text{Difference} = 3150 - 3000 = \\mathbf{₹150}$$
+          $$\\text{Difference} = 3150 - 3000 = \\mathbf{\\text{₹}150}$$
           (Note: ₹150 is exactly 10% of the first year's interest ₹1,500).</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ലളിതപലിശ:
-          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{₹3,000}$$</li>
+          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{\\text{₹}3,000}$$</li>
         <li>കൂട്ടുപലിശ:
-          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = ₹18,150$$
-          $$CI = A - P = 18150 - 15000 = \\mathbf{₹3,150}$$</li>
+          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = \\text{₹}18,150$$
+          $$CI = A - P = 18150 - 15000 = \\mathbf{\\text{₹}3,150}$$</li>
         <li>വ്യത്യാസം:
-          $$\\text{വ്യത്യാസം} = 3150 - 3000 = \\mathbf{₹150}$$
+          $$\\text{വ്യത്യാസം} = 3150 - 3000 = \\mathbf{\\text{₹}150}$$
           (ഒന്നാം വർഷത്തെ പലിശയായ ₹1,500-ന്റെ 10% പലിശയാണ് ഈ ₹150).</li>
       </ol>`,
     tested_en: 'Comparison between simple and compound interest over two years.',
@@ -298,16 +298,16 @@ QUESTIONS.push(
     solution_en: `<ol type="a">
         <li>Total Amount:
           $$A = P\\left(1 + \\frac{r}{100}\\right)^n = 25000\\left(1 + \\frac{8}{100}\\right)^2 = 25000 \\times \\left(\\frac{27}{25}\\right)^2$$
-          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{₹29,160}$$</li>
+          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{\\text{₹}29,160}$$</li>
         <li>Compound Interest:
-          $$CI = A - P = 29160 - 25000 = \\mathbf{₹4,160}$$</li>
+          $$CI = A - P = 29160 - 25000 = \\mathbf{\\text{₹}4,160}$$</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ആകെ തുക:
           $$A = P\\left(1 + \\frac{r}{100}\\right)^n = 25000\\left(1 + \\frac{8}{100}\\right)^2 = 25000 \\times \\left(\\frac{27}{25}\\right)^2$$
-          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{₹29,160}$$</li>
+          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{\\text{₹}29,160}$$</li>
         <li>കൂട്ടുപലിശ:
-          $$CI = A - P = 29160 - 25000 = \\mathbf{₹4,160}$$</li>
+          $$CI = A - P = 29160 - 25000 = \\mathbf{\\text{₹}4,160}$$</li>
       </ol>`,
     tested_en: 'Calculating maturity amount and compound interest using annual compounding formula.',
     tested_ml: 'വാർഷിക കൂട്ടുപലിശ സൂത്രവാക്യം ഉപയോഗിച്ച് തുകയും പലിശയും കാണൽ.'
@@ -339,8 +339,8 @@ QUESTIONS.push(
         <li>Number of periods:
           $$n = 1\\frac{1}{2} \\times 2 = \\mathbf{3\\text{ half-years}}$$</li>
         <li>Total amount and interest:
-          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{₹23,152.50}$$
-          $$CI = A - P = 23152.50 - 20000 = \\mathbf{₹3,152.50}$$</li>
+          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{\\text{₹}23,152.50}$$
+          $$CI = A - P = 23152.50 - 20000 = \\mathbf{\\text{₹}3,152.50}$$</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>അർദ്ധവർഷ നിരക്ക്:
@@ -348,8 +348,8 @@ QUESTIONS.push(
         <li>തവണകളുടെ എണ്ണം:
           $$n = 1\\frac{1}{2} \\times 2 = \\mathbf{3\\text{ അർദ്ധവർഷങ്ങൾ}}$$</li>
         <li>ആകെ തുകയും പലിശയും:
-          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{₹23,152.50}$$
-          $$CI = A - P = 23152.50 - 20000 = \\mathbf{₹3,152.50}$$</li>
+          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{\\text{₹}23,152.50}$$
+          $$CI = A - P = 23152.50 - 20000 = \\mathbf{\\text{₹}3,152.50}$$</li>
       </ol>`,
     tested_en: 'Computing half-yearly compounding rate, terms, and final amount.',
     tested_ml: 'അർദ്ധവാർഷിക കൂട്ടുപലിശയിൽ പലിശനിരക്കും തുകയും കണക്കാക്കൽ.'
@@ -374,7 +374,7 @@ QUESTIONS.push(
     solution_en: `<ol type="a">
         <li>Depreciation of the car:
           $$P_3 = P_0\\left(1 - \\frac{r}{100}\\right)^3 = 500000\\left(1 - \\frac{10}{100}\\right)^3 = 500000 \\times \\left(\\frac{9}{10}\\right)^3$$
-          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{₹3,64,500}$$</li>
+          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{\\text{₹}3,64,500}$$</li>
         <li>Population growth:
           $$P_2 = P_0\\left(1 + \\frac{r}{100}\\right)^2 = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2$$
           $$P_2 = 8000 \\times \\frac{441}{400} = 20 \\times 441 = \\mathbf{8,820\\text{ people}}$$</li>
@@ -382,7 +382,7 @@ QUESTIONS.push(
     solution_ml: `<ol type="a">
         <li>കാറിന്റെ മൂല്യത്തകർച്ച:
           $$P_3 = P_0\\left(1 - \\frac{r}{100}\\right)^3 = 500000\\left(1 - \\frac{10}{100}\\right)^3 = 500000 \\times \\left(\\frac{9}{10}\\right)^3$$
-          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{₹3,64,500}$$</li>
+          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{\\text{₹}3,64,500}$$</li>
         <li>ജനസംഖ്യാ വർദ്ധനവ്:
           $$P_2 = P_0\\left(1 + \\frac{r}{100}\\right)^2 = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2$$
           $$P_2 = 8000 \\times \\frac{441}{400} = 20 \\times 441 = \\mathbf{8,820\\text{ പേർ}}$$</li>
@@ -417,9 +417,9 @@ QUESTIONS.push(
         <li>Number of periods:
           $$\\frac{9\\text{ months}}{3\\text{ months}} = \\mathbf{3\\text{ quarters}}$$</li>
         <li>Maturity amount:
-          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{₹17,483.63}$$
+          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{\\text{₹}17,483.63}$$
           Compound Interest:
-          $$CI = 17483.63 - 16000 = \\mathbf{₹1,483.63}$$
+          $$CI = 17483.63 - 16000 = \\mathbf{\\text{₹}1,483.63}$$
         </li>
       </ol>`,
     solution_ml: `<ol type="a">
@@ -428,9 +428,9 @@ QUESTIONS.push(
         <li>തവണകളുടെ എണ്ണം:
           $$\\frac{9\\text{ മാസം}}{3\\text{ മാസം}} = \\mathbf{3\\text{ പാദങ്ങൾ}}$$</li>
         <li>ലഭിക്കുന്ന തുക:
-          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{₹17,483.63}$$
+          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{\\text{₹}17,483.63}$$
           കൂട്ടുപലിശ:
-          $$CI = 17483.63 - 16000 = \\mathbf{₹1,483.63}$$
+          $$CI = 17483.63 - 16000 = \\mathbf{\\text{₹}1,483.63}$$
         </li>
       </ol>`,
     tested_en: 'Calculating compound interest for quarterly compounding period.',
@@ -445,13 +445,13 @@ QUESTIONS.push(
     time: 180,
     title_en: 'Bacterial Colony Growth and Compound Appreciation',
     title_ml: 'ബാക്ടീരിയകളുടെ വളർച്ചയും നിരക്കും',
-    prompt_en: `<p>In a laboratory experiment, the count of bacteria in a culture was initially $10,000$. It was observed to increase at the rate of $10\%$ per hour.</p>
+    prompt_en: `<p>In a laboratory experiment, the count of bacteria in a culture was initially $10,000$. It was observed to increase at the rate of $10\\%$ per hour.</p>
       <ol type="a">
         <li>Find the bacteria count after 2 hours.</li>
         <li>Find the bacteria count after 3 hours.</li>
         <li>By what percentage has the colony increased after 2 hours compared to the initial count?</li>
       </ol>`,
-    prompt_ml: `<p>ഒരു ലബോറട്ടറി പരീക്ഷണത്തിൽ തുടക്കത്തിൽ ബാക്ടീരിയകളുടെ എണ്ണം $10,000$ ആയിരുന്നു. ഇത് പ്രതിമണിക്കൂറിൽ $10\%$ നിരക്കിൽ വർദ്ധിക്കുന്നതായി കണ്ടു.</p>
+    prompt_ml: `<p>ഒരു ലബോറട്ടറി പരീക്ഷണത്തിൽ തുടക്കത്തിൽ ബാക്ടീരിയകളുടെ എണ്ണം $10,000$ ആയിരുന്നു. ഇത് പ്രതിമണിക്കൂറിൽ $10\\%$ നിരക്കിൽ വർദ്ധിക്കുന്നതായി കണ്ടു.</p>
       <ol type="a">
         <li>2 മണിക്കൂറിനു ശേഷം ബാക്ടീരിയകളുടെ എണ്ണം കണ്ടെത്തുക.</li>
         <li>3 മണിക്കൂറിനു ശേഷമുള്ള ബാക്ടീരിയകളുടെ എണ്ണം കണ്ടെത്തുക.</li>

@@ -193,21 +193,22 @@ const ViewDrill = (function () {
     }, 500);
     paintClock();
 
-    let answered = false;
+    const result = s.results[s.i];
+    let answered = !!(result && result.verdict);
     const nextBtn = el('button', { class: 'btn primary', type: 'button',
       text: s.i + 1 < s.qs.length ? t('next') : t('drill_results'),
       on: { click: function () {
-        if (!answered) s.results.push({ q: q, verdict: null, ms: 0 });
+        if (!answered) s.results[s.i] = { q: q, verdict: null, ms: 0 };
         if (s.i + 1 < s.qs.length && s.phase !== 'late') { s.i += 1; Router.reload(); }
         else finish();
       } } });
     const tail = el('div', { class: 'btn-row' }, [nextBtn]);
 
     const card = QuestionCard.build(q, {
-      inNote: true, tail: tail, drill: true,
-      onLocked: function (verdict, ms) {
+      inNote: true, tail: tail, drill: true, lockedResult: answered ? result : null,
+      onLocked: function (verdict, ms, given) {
         answered = true;
-        s.results.push({ q: q, verdict: verdict, ms: ms || 0 });
+        s.results[s.i] = { q: q, verdict: verdict, ms: ms || 0, given: given };
       }
     });
 
@@ -224,7 +225,7 @@ const ViewDrill = (function () {
       el('div', { class: 'card' }, [card]),
       el('div', { class: 'btn-row' }, [
         el('button', { class: 'btn quiet', type: 'button', text: t('drill_finish'),
-          on: { click: function () { if (!answered) s.results.push({ q: q, verdict: null, ms: 0 }); finish(); } } })
+          on: { click: function () { if (!answered) s.results[s.i] = { q: q, verdict: null, ms: 0 }; finish(); } } })
       ])
     ]);
     return root;

@@ -118,7 +118,7 @@ CONCEPTS.push(
         { why_ml: 'എല്ലാ ബഹുഭുജ സ്തംഭങ്ങളെയും ത്രികോണസ്തംഭങ്ങളായി ഭാഗിക്കാം.', m: 'V = A \\cdot h' }
       ]
     },
-    needs: ['m9.11.1.prism-definition-and-types', 'p.3.4'],
+    needs: ['m9.11.1.prism-definition-and-types', 's.area-rectangle'],
     traps_en: [
       'Ensure the height is measured perpendicular to the base, not along a slanted edge if tilted.',
       'Units of volume are cubic units (cm³, m³), while area is square units (cm², m²).'

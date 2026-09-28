@@ -52,7 +52,7 @@ CONCEPTS.push(
         { why_ml: 'ഋണ ഘാതമോ ഭിന്നസംഖ്യാ ഘാതമോ വന്നാൽ ബഹുപദമല്ല.', m: '\\frac{1}{x} \\text{ ബഹുപദമല്ല}' }
       ]
     },
-    needs: ['p.5.3', 'p.5.1'],
+    needs: ['s.algebraic-terms', 's.powers-exponents'],
     traps_en: [
       'Coefficients CAN be fractions or square roots (e.g. sqrt(2)*x is a valid polynomial); only the EXPONENTS of x must be non-negative integers.',
       'Terms with 1/x or 1/x^2 are NEVER polynomials because their exponent is negative.'
@@ -287,7 +287,7 @@ CONCEPTS.push(
         { why_ml: 'ഗുണനഫലത്തിന്റെ കൃതി ഘാതങ്ങളുടെ തുകയാകുന്നു.', m: '\\deg(p \\cdot q) = \\deg(p) + \\deg(q)' }
       ]
     },
-    needs: ['m9.8.2.degree-and-classification', 'p.5.4'],
+    needs: ['m9.8.2.degree-and-classification', 's.expanding-brackets'],
     traps_en: [
       'deg(p * q) is the SUM of degrees: deg(p) + deg(q), NOT the product.',
       'In area modeling, do not forget to multiply both length and breadth binomials completely.'

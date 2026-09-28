@@ -118,42 +118,104 @@ const Shell = (function () {
     if (railSub) railSub.textContent = text || ((typeof I18N !== 'undefined') ? I18N.t('app_sub') : '');
   }
 
+  function openMoreModal() {
+    const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
+    const old = document.getElementById('more-sheet-backdrop');
+    if (old) old.remove();
+
+    const backdrop = DOM.el('div', { class: 'more-sheet-backdrop', id: 'more-sheet-backdrop' });
+    const opener = document.activeElement;
+    function close() {
+      backdrop.remove();
+      if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+    }
+    const full = isFull();
+    const theme = Store.pref('theme', 'auto');
+
+    const sheet = DOM.el('div', { class: 'more-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'more-heading' }, [
+      DOM.el('div', { class: 'spread', style: { alignItems: 'center' } }, [
+        DOM.el('h2', { id: 'more-heading', text: isMl ? 'കൂടുതൽ ക്രമീകരണങ്ങൾ' : 'More Options' }),
+        DOM.el('button', { class: 'icon-btn', type: 'button', 'aria-label': isMl ? 'അടയ്ക്കുക' : 'Close', on: { click: close } }, [
+          DOM.mi('close')
+        ])
+      ]),
+
+      DOM.el('button', { class: 'more-item', type: 'button', on: { click: () => { cycleTheme(); close(); } } }, [
+        DOM.mi(theme === 'dark' ? 'dark_mode' : theme === 'light' ? 'light_mode' : 'contrast'),
+        DOM.el('span', { text: (isMl ? 'തീം മാറ്റുക: ' : 'Theme: ') + theme.toUpperCase() })
+      ]),
+
+      DOM.el('button', { class: 'more-item', type: 'button', on: { click: () => { toggleFull(); close(); } } }, [
+        DOM.mi(full ? 'fullscreen_exit' : 'fullscreen'),
+        DOM.el('span', { text: full ? (isMl ? 'ഫുൾ സ്ക്രീൻ ഒഴിവാക്കുക' : 'Exit Full Screen') : (isMl ? 'ഫുൾ സ്ക്രീൻ' : 'Full Screen') })
+      ]),
+
+      DOM.el('a', { class: 'more-item', href: Router.href('progress'), on: { click: close } }, [
+        DOM.mi('insights'),
+        DOM.el('span', { text: isMl ? 'പഠന പുരോഗതിയും ക്രമീകരണങ്ങളും' : 'Progress, Mastery & Settings' })
+      ]),
+
+      DOM.el('a', { class: 'more-item', href: Router.href('method'), on: { click: close } }, [
+        DOM.mi('school'),
+        DOM.el('span', { text: isMl ? 'പഠനരീതി' : 'How to Study (Method)' })
+      ])
+    ]);
+
+    backdrop.addEventListener('click', function (e) {
+      if (e.target === backdrop) close();
+    });
+
+    sheet.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key !== 'Tab') return;
+      const items = Array.from(sheet.querySelectorAll('button, a[href]'));
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    backdrop.appendChild(sheet);
+    document.body.appendChild(backdrop);
+    sheet.querySelector('button').focus();
+  }
+
   function wire() {
     const byId = id => document.getElementById(id);
-    const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn'), lang = byId('lang-btn');
+    const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn'), lang = byId('lang-btn'), more = byId('more-btn');
     if (back) { back.setAttribute('data-chrome', 'back'); back.addEventListener('click', () => Router.back()); }
     if (full) { full.setAttribute('data-chrome', 'full'); full.addEventListener('click', toggleFull); }
     if (theme) { theme.setAttribute('data-chrome', 'theme'); theme.addEventListener('click', cycleTheme); }
     if (lang) { lang.addEventListener('click', () => { if (typeof I18N !== 'undefined') I18N.toggle(); }); }
+    if (more) { more.addEventListener('click', openMoreModal); }
     document.addEventListener('fullscreenchange', paint);
     document.addEventListener('webkitfullscreenchange', paint);
     paint();
   }
 
-  return { isFull, toggleFull, cycleTheme, paint, wire, setSubtitle };
+  return { isFull, toggleFull, cycleTheme, openMoreModal, paint, wire, setSubtitle };
 })();
 
 const App = (function () {
 
   const el = DOM.el;
 
-  /* Four tabs. Questions and Write lost their tabs when the note learned to
-     hold them: answering a question about a result belongs under that result,
-     not behind a tab that makes you find it again. Both routes still resolve
-     (view.omr.js, view.write.js); they are simply not places you navigate TO.
-     The timed drill is a tab because the plan sends you there every day; the
-     method page is reached from Today, because it is read once a term. */
+  /* Four primary destinations:
+     Today / ഇന്ന്: Continue, due review, small wins
+     Learn / പഠനം: Syllabus, chapters, focused lesson
+     Practice / പരിശീലനം: Spaced recall, drills, mixed practice
+     Progress / പുരോഗതി: Mastery, analytics, timer, sync/profile */
   const TABS = [
     { name: 'home', label: 'Today', icon: 'today', also: ['method'] },
-    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note', 'omr', 'write'] },
-    { name: 'recall', label: 'Recall', icon: 'style', also: [] },
-    { name: 'drill', label: 'Drill', icon: 'timer', also: [] }
+    { name: 'study', label: 'Learn', icon: 'menu_book', also: ['note', 'omr', 'write'] },
+    { name: 'recall', label: 'Practice', icon: 'fitness_center', also: ['drill'] },
+    { name: 'progress', label: 'Progress', icon: 'insights', also: [] }
   ];
 
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewStudy,
-    drill: () => ViewDrill, method: () => ViewMethod
+    drill: () => ViewDrill, method: () => ViewMethod,
+    progress: () => ViewProgress
   };
 
   /* ONE nav element, laid out two ways.
@@ -359,7 +421,7 @@ const App = (function () {
 
     loadData().then(function () {
       Pool.build();
-      if (Store.signedIn()) run(); else gate();
+      if (Store.isOnboarded() || Store.signedIn()) run(); else gate();
     }, fatal);
   }
 
@@ -376,7 +438,7 @@ const App = (function () {
     if (document.hidden) Store.flushNow();
   });
 
-  return { start: start, route: route, buildNav: buildNav };
+  return { start: start, route: route, buildNav: buildNav, isGate: () => document.body.classList.contains('signed-out') };
 })();
 
 if (document.readyState === 'loading') {

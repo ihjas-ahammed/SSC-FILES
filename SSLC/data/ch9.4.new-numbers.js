@@ -54,7 +54,7 @@ CONCEPTS.push(
         { why_ml: 'രണ്ടിനും 2 പൊതുഘടകമായി വരുന്നു, ഇത് തെറ്റാണ്.', m: '\\sqrt{2} \\notin \\mathbb{Q}' }
       ]
     },
-    needs: ['m8.1.1.perfect-squares', 'p.5.5'],
+    needs: ['m8.1.1.perfect-squares', 's.pythagoras-theorem'],
     traps_en: [
       'sqrt(2) is NOT 1.414 exactly; 1.414 is only an approximate rational value.',
       'sqrt(2) is a single definite real number representing an exact geometric distance.'

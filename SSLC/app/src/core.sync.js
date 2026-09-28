@@ -41,11 +41,11 @@ const Sync = (function () {
   let last = { at: 0, ok: null, msg: '' };
   const watchers = [];
 
-  const slug = s => String(s || '').toLowerCase().trim()
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const slug = s => String(s || '').normalize('NFC').toLowerCase().trim()
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '');
 
   /* name + roll -> one stable key. Both are required: a roll number alone
-     collides across colleges, a name alone collides across people.
+     collides across schools, a name alone collides across students.
 
      The separator is '--', not '.': a Realtime Database key may not contain
      '.', '$', '#', '[', ']' or '/', and a dotted key is rejected outright with
@@ -63,7 +63,7 @@ const Sync = (function () {
     return keyFor(id.name, id.roll);
   }
 
-  const on = () => !!key();
+  const on = () => (typeof Store !== 'undefined' && Store.syncEnabled && Store.syncEnabled()) && !!key();
   const url = () => DB + '/' + NS() + '/' + encodeURIComponent(key()) + '.json';
   const legacyUrl = () => DB + '/' + LEGACY_NS() + '/' + encodeURIComponent(key()) + '.json';
   const userUrl = () => DB + '/' + USERS() + '/' + encodeURIComponent(key()) + '.json';
@@ -83,25 +83,38 @@ const Sync = (function () {
     if (syncing) return Promise.resolve({ ok: false, msg: 'Already syncing.' });
     if (!window.fetch) return Promise.resolve({ ok: false, msg: 'This browser cannot sync.' });
 
+    const startedKey = key();
+    const target = url(), legacy = legacyUrl();
+    const connected = () => on() && key() === startedKey;
+
     syncing = true;
     announce(null, 'Syncing…');
     const before = Store.tally();
 
-    return window.fetch(url(), { cache: 'no-store' })
+    return window.fetch(target, { cache: 'no-store' })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
       .then(function (remote) {
+        if (!connected()) throw new Error('Sync connection changed.');
         /* nothing under the new namespace yet: look once under the old one */
         if (remote && typeof remote === 'object' && typeof remote.payload === 'string') return remote;
-        return window.fetch(legacyUrl(), { cache: 'no-store' })
+        return window.fetch(legacy, { cache: 'no-store' })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null);
       })
       .then(function (remote) {
+        if (!connected()) throw new Error('Sync connection changed.');
         let rs = null;
         if (remote && typeof remote === 'object' && typeof remote.payload === 'string') {
           try { rs = JSON.parse(remote.payload); } catch (e) { rs = null; }
         }
-        const merged = Store.mergeStates(Store.snapshot(), rs);
+        const local = Store.snapshot();
+        const merged = Store.mergeStates(local, rs);
+        ['profileId', 'syncName', 'syncRoll', 'syncEnabled', 'onboarded'].forEach(function (k) {
+          if (k in local.prefs) merged.prefs[k] = local.prefs[k];
+          else delete merged.prefs[k];
+          if (k in local.prefsAt) merged.prefsAt[k] = local.prefsAt[k];
+          else delete merged.prefsAt[k];
+        });
         Store.adopt(merged, true);   /* quiet: do not re-trigger the auto-push */
 
         const body = JSON.stringify({
@@ -109,10 +122,11 @@ const Sync = (function () {
           updated: Date.now(),
           device: Store.pref('syncName', '') + ' · ' + (navigator.platform || 'device')
         });
-        return window.fetch(url(), {
+        return window.fetch(target, {
           method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: body
         }).then(function (r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
+          if (!connected()) throw new Error('Sync connection changed.');
           const after = Store.tally();
           const gained = {
             notes: after.notes - before.notes,
@@ -137,6 +151,7 @@ const Sync = (function () {
       })
       .catch(function (err) {
         syncing = false;
+        if (!connected()) return { ok: false, msg: 'Sync connection changed.' };
         const msg = /Failed to fetch|NetworkError/i.test(String(err && err.message))
           ? 'Offline — your progress is saved here and will sync when you are back.'
           : 'Sync failed: ' + ((err && err.message) || err);
@@ -201,6 +216,7 @@ const Sync = (function () {
   }
 
   function disconnect() {
+    window.clearTimeout(pushT);
     Store.signOut();
     announce(null, 'Signed out. Progress stays on this device.');
   }

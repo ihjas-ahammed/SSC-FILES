@@ -33,7 +33,7 @@
 :root {
   /* paper-light */
   --paper:#faf8f4; --surface:#fff; --surface-2:#f4f0e9; --surface-3:#e9e2d6;
-  --ink:#191614; --ink-2:#554e46; --ink-3:#847b70;
+  --ink:#191614; --ink-2:#554e46; --ink-3:#585047;
   --rule:#e4dccf; --rule-2:#cec4b3;
   --accent:#2a45c7; --accent-ink:#fff; --accent-soft:#e9ecfd; --accent-line:#b6c0f3;
   --ok:#0d6b49; --ok-soft:#e1f2ea; --ok-line:#a3d4bf;
@@ -75,7 +75,7 @@
 
 :root[data-theme=dark] {
   --paper:#101216; --surface:#191c22; --surface-2:#21252d; --surface-3:#2b313b;
-  --ink:#eae7e1; --ink-2:#aaa39b; --ink-3:#7e7770;
+  --ink:#eae7e1; --ink-2:#aaa39b; --ink-3:#a39c94;
   --rule:#2b3038; --rule-2:#3a414d;
   --accent:#93a8ff; --accent-ink:#0d1020; --accent-soft:#1c2340; --accent-line:#39457a;
   --ok:#5ec79c; --ok-soft:#122a21; --ok-line:#26533e;
@@ -121,7 +121,7 @@ body.lang-ml button, body.lang-ml input, body.lang-ml textarea, body.lang-ml sel
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 36px;
+  min-height: 44px;
   padding: 0 12px;
   border-radius: 999px;
   border: 1px solid var(--rule);
@@ -181,6 +181,12 @@ h1[tabindex="-1"]:focus,main:focus{ outline:none; }
   background:var(--glass); backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   border-bottom:1px solid var(--glass-line);
 }
+@media (max-width: 360px) {
+  .top { padding: 0 8px; gap: 6px; }
+  .brand-titles b { font-size: 0.88rem; }
+  .brand-sub { display: none; }
+  .lang-toggle-btn { padding: 0 8px; min-height: 44px; margin: 0 2px; }
+}
 .brand{ display:flex; align-items:center; gap:8px; min-width:0; overflow:hidden; }
 .brand-titles{ display:flex; flex-direction:column; min-width:0; overflow:hidden; }
 .brand-titles b{ font-weight:600; font-size:.95rem; white-space:nowrap; line-height:1.2; }
@@ -190,7 +196,7 @@ h1[tabindex="-1"]:focus,main:focus{ outline:none; }
 .top .grow{ flex:1 1 auto; }
 .icon-btn{
   display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  min-width:42px; height:42px; padding:0 11px;
+  min-width:44px; min-height:44px; padding:0 11px;
   border:1px solid var(--glass-line); background:var(--glass-2);
   backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
   border-radius:999px; cursor:pointer; font-size:.82rem; color:var(--ink-2);
@@ -232,8 +238,8 @@ nav.tabs{
 .rail-nav{ display:grid; grid-auto-flow:column; grid-auto-columns:1fr; }
 .rail-nav a{
   position:relative; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; gap:3px; height:var(--tab-h); text-decoration:none;
-  color:var(--ink-3); font-size:.66rem; letter-spacing:.02em; font-weight:500;
+  justify-content:center; gap:2px; height:var(--tab-h); min-height:48px; text-decoration:none;
+  color:var(--ink-3); font-size:.82rem; letter-spacing:.01em; font-weight:500;
   transition:color var(--dur-s), background var(--dur-s);
 }
 .rail-nav a .mi{ font-size:22px; transition:transform var(--dur) var(--spring); }
@@ -994,6 +1000,7 @@ body.signed-out .top .back-btn{ display:none !important; }
 .cnode>.acc>.acc-in>.acc-pad{ padding:0; }
 .cnode.open>.acc>.acc-in>.acc-pad{ padding:16px 16px 20px; transition:padding .42s var(--ease); }
 .crow .tlabel{ padding:10px 12px 10px 2px; }
+.crow a.tlabel{ text-decoration:none; }
 .crow .tlabel .tt b{ font-weight:500; font-size:.92rem; }
 .crow .tlabel .tt span{ display:block; font-size:.72rem; color:var(--ink-3);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -1190,8 +1197,132 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .exp-subject>.exp-h .tt span{ white-space:normal; }
 .method-link .row .mi{ color:var(--accent); }
 
-/* four tabs on a phone: the labels have to fit */
-@media (max-width:899px){ .rail-nav a{ font-size:.62rem; } }
+/* four tabs on a phone: readable labels >= 13px and 44-48px targets */
+@media (max-width:899px){ .rail-nav a{ font-size:.82rem; min-height:48px; } }
+@media (max-width:320px){ .rail-nav a{ font-size:.78rem; letter-spacing:0; } }
+
+/* ── math overflow containment ────────────────────────────────────────── */
+.math-overflow {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 0;
+}
+mjx-container {
+  max-width: 100% !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+mjx-container[display="true"] {
+  display: block !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100% !important;
+  padding: 4px 0;
+}
+.omr-opt .t {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* ── more modal sheet ─────────────────────────────────────────────────── */
+.more-sheet-backdrop {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(16, 18, 22, 0.45);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: sweepIn .2s var(--ease) both;
+}
+@media (min-width: 600px) {
+  .more-sheet-backdrop { align-items: center; }
+}
+.more-sheet {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-l) var(--r-l) 0 0;
+  width: 100%; max-width: 480px; max-height: 85vh;
+  overflow-y: auto; padding: 20px 18px calc(24px + env(safe-area-inset-bottom, 0px));
+  box-shadow: var(--shadow-2);
+  display: flex; flex-direction: column; gap: 14px;
+}
+@media (min-width: 600px) {
+  .more-sheet { border-radius: var(--r-l); }
+}
+.more-sheet h2 { font-size: 1.15rem; font-weight: 600; }
+.more-item {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; min-height: 48px; padding: 10px 14px;
+  border-radius: var(--r-m); border: 1px solid var(--rule);
+  background: var(--surface-2); color: var(--ink);
+  font: 500 .9rem var(--font-ui); cursor: pointer; text-decoration: none;
+  transition: all var(--dur-s) var(--ease);
+}
+.more-item:hover { border-color: var(--accent-line); background: var(--surface); }
+.more-item .mi { color: var(--accent); }
+
+/* ── interactive lesson slice (Notice -> Understand -> Worked -> Guided -> Independent -> Finish) ── */
+.lesson-flow { display: flex; flex-direction: column; gap: 18px; margin-top: 14px; }
+.lesson-step {
+  border: 1px solid var(--rule); border-radius: var(--r-l);
+  background: var(--surface); padding: 18px 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.lesson-step.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-line); }
+.lesson-step-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px;
+  border-bottom: 1px solid var(--rule); padding-bottom: 10px;
+}
+.lesson-step-num {
+  font-size: .75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--accent);
+}
+.step-track {
+  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;
+}
+.step-dot-btn {
+  flex: 0 0 auto; min-width: 44px; min-height: 44px; padding: 6px 10px;
+  border: 1px solid var(--rule); border-radius: var(--r-s);
+  background: var(--surface-2); font: 600 .75rem var(--font-ui);
+  color: var(--ink-3); cursor: pointer; text-align: center;
+  transition: all var(--dur-s);
+}
+.step-dot-btn.active {
+  border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 700;
+}
+.step-dot-btn.done {
+  border-color: var(--ok-line); color: var(--ok);
+}
+.worked-box {
+  background: var(--surface-2); border-left: 3px solid var(--accent);
+  padding: 12px 14px; border-radius: 0 var(--r-s) var(--r-s) 0;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.hint-ladder {
+  background: var(--warn-soft); border: 1px solid var(--warn-line);
+  padding: 12px 14px; border-radius: var(--r-m);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.misconception-box {
+  background: var(--bad-soft); border: 1px solid var(--bad-line);
+  padding: 12px 14px; border-radius: var(--r-m); color: var(--bad);
+}
+.today-primary-cta {
+  background: linear-gradient(135deg, var(--accent) 0%, #1e3a8a 100%);
+  color: #fff !important; border: 0 !important;
+  box-shadow: 0 4px 14px -3px rgba(42, 69, 199, .4);
+}
+.today-primary-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 18px -3px rgba(42, 69, 199, .5); }
+.today-primary-cta b { color: #fff; }
+.today-primary-cta .btn span { color: inherit; }
+
+@media (max-width:420px) {
+  .focus-row { flex-wrap:wrap; }
+  .focus-row .grow { flex-basis:150px; }
+  .spread { flex-wrap:wrap; }
+  .badge { max-width:100%; white-space:normal; }
+}
 
 </style>
 
@@ -1235,11 +1366,8 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
     <span class="mi" aria-hidden="true" translate="no">translate</span>
     <span class="lang-text" id="lang-btn-text">മലയാളം</span>
   </button>
-  <button class="icon-btn" type="button" id="full-btn" aria-label="Full screen" aria-pressed="false">
-    <span class="mi" aria-hidden="true" translate="no">fullscreen</span>
-  </button>
-  <button class="icon-btn" type="button" id="theme-btn" aria-label="Change theme">
-    <span class="mi" aria-hidden="true" translate="no">contrast</span>
+  <button class="icon-btn" type="button" id="more-btn" aria-label="More options" aria-haspopup="dialog">
+    <span class="mi" aria-hidden="true" translate="no">more_horiz</span>
   </button>
 </header>
 
@@ -5398,7 +5526,7 @@ CONCEPTS.push(
         { why_ml: 'ഓരോ ത്രികോണത്തിലെയും കോണുകളുടെ തുക 180° ആണ്. അതിനാൽ ആകെ തുക ലഭിക്കുന്നു.', m: 'S = (n - 2) \\times 180^\\circ' }
       ]
     },
-    needs: ['m8.2.1.congruence-intro', 's.area-triangles'],
+    needs: ['m8.2.2.asa-congruence'],
     traps_en: [
       'Do not multiply n by 180°; you must subtract 2 first: (n - 2) × 180°.',
       'Check whether the question asks for sum of angles or each angle in a regular polygon.'
@@ -6160,12 +6288,12 @@ CONCEPTS.push(
     ],
     cards_en: [
       { q: 'What is the main difference between simple interest and compound interest?', a: 'In simple interest, the principal never changes; in compound interest, interest is added to the principal for the next year.', kind: 'state' },
-      { q: 'For ₹5000 at 8% per annum, what is the interest in the first year?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = ₹400$.', kind: 'apply' },
+      { q: 'For ₹5000 at 8% per annum, what is the interest in the first year?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = \\text{₹}400$.', kind: 'apply' },
       { q: 'In annual compounding, is first-year simple interest different from compound interest?', a: 'No, they are exactly the same in the first year.', kind: 'trap' }
     ],
     cards_ml: [
       { q: 'ലളിതപലിശയും കൂട്ടുപലിശയും തമ്മിലുള്ള പ്രധാന വ്യത്യാസം എന്താണ്?', a: 'ലളിതപലിശയിൽ മുതൽ മാറുന്നില്ല; കൂട്ടുപലിശയിൽ ഓരോ വർഷത്തെയും പലിശ മുതലിനോട് ചേർക്കപ്പെടുന്നു.', kind: 'state' },
-      { q: '₹5000-ന് 8% നിരക്കിൽ ഒന്നാം വർഷത്തെ പലിശ എത്ര?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = ₹400$.', kind: 'apply' },
+      { q: '₹5000-ന് 8% നിരക്കിൽ ഒന്നാം വർഷത്തെ പലിശ എത്ര?', a: '$\\frac{5000 \\times 1 \\times 8}{100} = \\text{₹}400$.', kind: 'apply' },
       { q: 'വാർഷിക കൂട്ടുപലിശയിൽ ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും വ്യത്യസ്തമാണോ?', a: 'അല്ല, ഒന്നാം വർഷം രണ്ടും തുല്യമാണ്.', kind: 'trap' }
     ]
   },
@@ -6179,7 +6307,7 @@ CONCEPTS.push(
     title_ml: 'കൂട്ടുപലിശ സൂത്രവാക്യം',
     oneLine_en: 'Amount after n years with annual compounding: A = P(1 + r/100)ⁿ, and CI = A - P.',
     oneLine_ml: 'വാർഷിക കൂട്ടുപലിശയിൽ n വർഷത്തിനു ശേഷമുള്ള തുക: A = P(1 + r/100)ⁿ, കൂട്ടുപലിശ = A - P.',
-    statement_en: `<p>If a principal $P$ is deposited at an annual rate of $r\%$ compounded annually:</p>
+    statement_en: `<p>If a principal $P$ is deposited at an annual rate of $r\\%$ compounded annually:</p>
       <ul>
         <li><b>Amount after 1 year:</b> $A_1 = P\\left(1 + \\frac{r}{100}\\right)$</li>
         <li><b>Amount after 2 years:</b> $A_2 = A_1\\left(1 + \\frac{r}{100}\\right) = P\\left(1 + \\frac{r}{100}\\right)^2$</li>
@@ -6188,8 +6316,8 @@ CONCEPTS.push(
       <p>The total compound interest earned is:</p>
       $$\\mathbf{CI = A - P = P\\left[\\left(1 + \\frac{r}{100}\\right)^n - 1\\right]}$$
       <p><b>Example:</b> Find the amount and compound interest for ₹8,000 for 2 years at 5% per annum.<br>
-      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$$
-      $$CI = 8820 - 8000 = ₹820.$$</p>`,
+      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$$
+      $$CI = 8820 - 8000 = \\text{₹}820.$$</p>`,
     statement_ml: `<p>$P$ രൂപ മുതൽ $r\\%$ വാർഷിക കൂട്ടുപലിശ നിരക്കിൽ നിക്ഷേപിച്ചാൽ:</p>
       <ul>
         <li><b>1 വർഷത്തിനു ശേഷമുള്ള തുക:</b> $A_1 = P\\left(1 + \\frac{r}{100}\\right)$</li>
@@ -6199,8 +6327,8 @@ CONCEPTS.push(
       <p>ആകെ ലഭിക്കുന്ന കൂട്ടുപലിശ:</p>
       $$\\mathbf{CI = A - P = P\\left[\\left(1 + \\frac{r}{100}\\right)^n - 1\\right]}$$
       <p><b>ഉദാഹരണം:</b> ₹8,000-ന് 5% വാർഷിക കൂട്ടുപലിശ നിരക്കിൽ 2 വർഷത്തിനു ശേഷമുള്ള തുകയും പലിശയും കാണുക.<br>
-      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$$
-      $$CI = 8820 - 8000 = ₹820.$$</p>`,
+      $$A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$$
+      $$CI = 8820 - 8000 = \\text{₹}820.$$</p>`,
     intuition_en: `<p>Each year, the total amount is scaled by the growth factor $(1 + r/100)$. Over $n$ years, this multiplication happens $n$ times, yielding $(1 + r/100)^n$.</p>`,
     intuition_ml: `<p>ഓരോ വർഷവും തുക $(1 + r/100)$ എന്ന ഗുണകത്താൽ വർദ്ധിക്കുന്നു. $n$ വർഷം കൊണ്ട് ഇത് $n$ തവണ ഗുണിക്കപ്പെട്ട് $(1 + r/100)^n$ ആകുന്നു.</p>`,
     proof: {
@@ -6233,12 +6361,12 @@ CONCEPTS.push(
     cards_en: [
       { q: 'What is the formula for the total amount in compound interest compounded annually?', a: '$A = P\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'How do you find the compound interest from the total amount?', a: '$CI = A - P$.', kind: 'state' },
-      { q: 'If P = ₹1000, r = 10%, n = 2 years, what is the amount A?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = ₹1210$.', kind: 'apply' }
+      { q: 'If P = ₹1000, r = 10%, n = 2 years, what is the amount A?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = \\text{₹}1210$.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'വാർഷിക കൂട്ടുപലിശയിൽ ആകെ തുക കാണാനുള്ള സൂത്രവാക്യം എന്താണ്?', a: '$A = P\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'ആകെ തുകയിൽ നിന്ന് കൂട്ടുപലിശ എങ്ങനെ കണ്ടെത്താം?', a: '$CI = A - P$.', kind: 'state' },
-      { q: 'P = ₹1000, r = 10%, n = 2 വർഷം ആയാൽ ആകെ തുക എത്ര?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = ₹1210$.', kind: 'apply' }
+      { q: 'P = ₹1000, r = 10%, n = 2 വർഷം ആയാൽ ആകെ തുക എത്ര?', a: '$1000 \\times \\left(\\frac{11}{10}\\right)^2 = 1000 \\times \\frac{121}{100} = \\text{₹}1210$.', kind: 'apply' }
     ]
   },
 
@@ -6306,15 +6434,15 @@ CONCEPTS.push(
     statement_en: `<p>The mathematical principle of compound interest applies to many real-world situations where quantities change by a fixed percentage over regular intervals:</p>
       <ul>
         <li><b>Growth (Population, Bacteria, Production):</b>
-          <p>When a quantity increases at a steady percentage rate $r\%$ per year:</p>
+          <p>When a quantity increases at a steady percentage rate $r\\%$ per year:</p>
           $$\\mathbf{P_n = P_0\\left(1 + \\frac{r}{100}\\right)^n}$$
           where $P_0$ is the initial quantity and $P_n$ is the quantity after $n$ years.</li>
         <li><b>Depreciation (Vehicles, Machinery, Equipment Value):</b>
-          <p>With use and time, the value of machines and vehicles decreases at a steady rate $r\%$ per year (depreciation):</p>
+          <p>With use and time, the value of machines and vehicles decreases at a steady rate $r\\%$ per year (depreciation):</p>
           $$\\mathbf{P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n}$$</li>
       </ul>
       <p><b>Example (Depreciation):</b> A motorcycle bought for ₹60,000 depreciates at 10% per year. What is its value after 2 years?<br>
-      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = ₹48,600.$$</p>`,
+      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = \\text{₹}48,600.$$</p>`,
     statement_ml: `<p>ഒരു നിശ്ചിത ശതമാനം നിരക്കിൽ തുടർച്ചയായി കൂടുകയോ കുറയുകയോ ചെയ്യുന്ന പ്രായോഗിക സന്ദർഭങ്ങളിൽ കൂട്ടുപലിശ തത്വം ഉപയോഗിക്കാം:</p>
       <ul>
         <li><b>വർദ്ധനവ് (ജനസംഖ്യ, ബാക്ടീരിയകൾ, ഉൽപ്പാദനം):</b>
@@ -6326,7 +6454,7 @@ CONCEPTS.push(
           $$\\mathbf{P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n}$$</li>
       </ul>
       <p><b>ഉദാഹരണം (മൂല്യത്തകർച്ച):</b> ₹60,000-ന് വാങ്ങിയ ഒരു ബൈക്കിന് പ്രതിവർഷം 10% മൂല്യത്തകർച്ചയുണ്ടാകുന്നു. 2 വർഷത്തിനു ശേഷം അതിന്റെ വില എത്ര?<br>
-      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = ₹48,600.$$</p>`,
+      $$P_2 = 60000\\left(1 - \\frac{10}{100}\\right)^2 = 60000 \\times \\left(\\frac{9}{10}\\right)^2 = 60000 \\times \\frac{81}{100} = \\text{₹}48,600.$$</p>`,
     intuition_en: `<p>Growth multiplies by a number greater than 1 (like 1.10 for +10%). Depreciation multiplies by a number less than 1 (like 0.90 for -10%). The structure of repeated percentage scaling is identical.</p>`,
     intuition_ml: `<p>വർദ്ധനവിൽ 1-ൽ കൂടിയ സംഖ്യകൊണ്ട് ഗുണിക്കുന്നു (ഉദാ: +10% ആകുമ്പോൾ 1.10). മൂല്യത്തകർച്ചയിൽ 1-ൽ കുറഞ്ഞ സംഖ്യകൊണ്ട് ഗുണിക്കുന്നു (ഉദാ: -10% ആകുമ്പോൾ 0.90). അടിസ്ഥാന തത്വം ഒന്നുതന്നെയാണ്.</p>`,
     needs: ['m8.5.2.compound-interest-formula'],
@@ -6341,12 +6469,12 @@ CONCEPTS.push(
     cards_en: [
       { q: 'What is the formula for the value of an item depreciating at r% per year for n years?', a: '$P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'What is the formula for population increasing at r% per year for n years?', a: '$P_n = P_0\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
-      { q: 'A machine worth ₹10,000 depreciates at 10% for 1 year. What is its value?', a: '$10000 \\times (1 - 0.10) = ₹9000$.', kind: 'apply' }
+      { q: 'A machine worth ₹10,000 depreciates at 10% for 1 year. What is its value?', a: '$10000 \\times (1 - 0.10) = \\text{₹}9000$.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'പ്രതിവർഷം r% മൂല്യത്തകർച്ചയുള്ള ഒരു സാധനത്തിന്റെ n വർഷങ്ങൾക്ക് ശേഷമുള്ള വില കാണാനുള്ള സൂത്രവാക്യം എന്താണ്?', a: '$P_n = P_0\\left(1 - \\frac{r}{100}\\right)^n$.', kind: 'state' },
       { q: 'പ്രതിവർഷം r% നിരക്കിൽ വർദ്ധിക്കുന്ന ജനസംഖ്യ n വർഷങ്ങൾക്ക് ശേഷം കാണാനുള്ള സൂത്രവാക്യം എന്താണ്?', a: '$P_n = P_0\\left(1 + \\frac{r}{100}\\right)^n$.', kind: 'state' },
-      { q: '₹10,000 വിലയുള്ള ഒരു യന്ത്രത്തിന് 1 വർഷം കൊണ്ട് 10% മൂല്യത്തകർച്ചയുണ്ടായാൽ വില എത്ര?', a: '$10000 \\times (1 - 0.10) = ₹9000$.', kind: 'apply' }
+      { q: '₹10,000 വിലയുള്ള ഒരു യന്ത്രത്തിന് 1 വർഷം കൊണ്ട് 10% മൂല്യത്തകർച്ചയുണ്ടായാൽ വില എത്ര?', a: '$10000 \\times (1 - 0.10) = \\text{₹}9000$.', kind: 'apply' }
     ]
   }
 );
@@ -6383,8 +6511,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹64' }
     ],
     answer: 'A',
-    solution_en: 'For the first year, simple interest and annual compound interest are always identical. Interest = $\\frac{10000 \\times 1 \\times 8}{100} = ₹800$ in both cases. Difference = ₹0.',
-    solution_ml: 'വാർഷിക കൂട്ടുപലിശയിൽ ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും എപ്പോഴും തുല്യമായിരിക്കും. രണ്ട് രീതിയിലും പലിശ = $\\frac{10000 \\times 1 \\times 8}{100} = ₹800$ ആണ്. അതിനാൽ വ്യത്യാസം = ₹0.',
+    solution_en: 'For the first year, simple interest and annual compound interest are always identical. Interest = $\\frac{10000 \\times 1 \\times 8}{100} = \\text{₹}800$ in both cases. Difference = ₹0.',
+    solution_ml: 'വാർഷിക കൂട്ടുപലിശയിൽ ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും എപ്പോഴും തുല്യമായിരിക്കും. രണ്ട് രീതിയിലും പലിശ = $\\frac{10000 \\times 1 \\times 8}{100} = \\text{₹}800$ ആണ്. അതിനാൽ വ്യത്യാസം = ₹0.',
     tested_en: 'First year equivalence of simple and compound interest.',
     tested_ml: 'ഒന്നാം വർഷത്തെ ലളിതപലിശയും കൂട്ടുപലിശയും തമ്മിലുള്ള തുല്യത.'
   },
@@ -6411,8 +6539,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹100' }
     ],
     answer: 'A',
-    solution_en: 'Year 1 interest: $10\\% \\text{ of } 5000 = ₹500$. Year 2 principal = $5000 + 500 = ₹5,500$. Year 2 interest: $10\\% \\text{ of } 5500 = ₹550$. Difference = $550 - 500 = ₹50$ (which is $10\\%$ of Year 1 interest ₹500).',
-    solution_ml: 'ഒന്നാം വർഷത്തെ പലിശ: ₹5,000-ന്റെ $10\\% = ₹500$. രണ്ടാം വർഷത്തെ മുതൽ = $5000 + 500 = ₹5,500$. രണ്ടാം വർഷത്തെ പലിശ: ₹5,500-ന്റെ $10\\% = ₹550$. അധികം ലഭിച്ച തുക = $550 - 500 = ₹50$ (ഇത് ഒന്നാം വർഷത്തെ പലിശയായ ₹500-ന്റെ 10% ആണ്).',
+    solution_en: 'Year 1 interest: $10\\% \\text{ of } 5000 = \\text{₹}500$. Year 2 principal = $5000 + 500 = \\text{₹}5,500$. Year 2 interest: $10\\% \\text{ of } 5500 = \\text{₹}550$. Difference = $550 - 500 = \\text{₹}50$ (which is $10\\%$ of Year 1 interest ₹500).',
+    solution_ml: 'ഒന്നാം വർഷത്തെ പലിശ: ₹5,000-ന്റെ $10\\% = \\text{₹}500$. രണ്ടാം വർഷത്തെ മുതൽ = $5000 + 500 = \\text{₹}5,500$. രണ്ടാം വർഷത്തെ പലിശ: ₹5,500-ന്റെ $10\\% = \\text{₹}550$. അധികം ലഭിച്ച തുക = $550 - 500 = \\text{₹}50$ (ഇത് ഒന്നാം വർഷത്തെ പലിശയായ ₹500-ന്റെ 10% ആണ്).',
     tested_en: 'Interest on interest concept.',
     tested_ml: 'പലിശയുടെ പലിശ എന്ന ആശയം.'
   },
@@ -6439,8 +6567,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹4,800' }
     ],
     answer: 'A',
-    solution_en: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = ₹4,410$.',
-    solution_ml: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = ₹4,410$.',
+    solution_en: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = \\text{₹}4,410$.',
+    solution_ml: '$A = P\\left(1 + \\frac{r}{100}\\right)^n = 4000\\left(1 + \\frac{5}{100}\\right)^2 = 4000 \\times \\left(\\frac{21}{20}\\right)^2 = 4000 \\times \\frac{441}{400} = \\text{₹}4,410$.',
     tested_en: 'Compound interest amount formula.',
     tested_ml: 'കൂട്ടുപലിശ സൂത്രവാക്യം.'
   },
@@ -6523,8 +6651,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹8,900' }
     ],
     answer: 'A',
-    solution_en: 'Rate = $5\\%$ per half-year, periods $n = 2$. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$. (Notice this is ₹20 more than annual simple interest ₹8,800!).',
-    solution_ml: 'അർദ്ധവാർഷിക നിരക്ക് = $5\\%$, തവണകൾ = 2. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = ₹8,820$. (ലളിതപലിശയെക്കാൾ ₹20 അധികമാണ്).',
+    solution_en: 'Rate = $5\\%$ per half-year, periods $n = 2$. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$. (Notice this is ₹20 more than annual simple interest ₹8,800!).',
+    solution_ml: 'അർദ്ധവാർഷിക നിരക്ക് = $5\\%$, തവണകൾ = 2. $A = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\frac{441}{400} = \\text{₹}8,820$. (ലളിതപലിശയെക്കാൾ ₹20 അധികമാണ്).',
     tested_en: 'Calculating amount with half-yearly compounding.',
     tested_ml: 'അർദ്ധവാർഷിക കൂട്ടുപലിശയിലെ തുക കാണൽ.'
   },
@@ -6579,8 +6707,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹15,800' }
     ],
     answer: 'A',
-    solution_en: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = ₹16,200$.',
-    solution_ml: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = ₹16,200$.',
+    solution_en: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = \\text{₹}16,200$.',
+    solution_ml: '$P_2 = P_0\\left(1 - \\frac{r}{100}\\right)^2 = 20000\\left(1 - \\frac{10}{100}\\right)^2 = 20000 \\times \\left(\\frac{9}{10}\\right)^2 = 20000 \\times \\frac{81}{100} = \\text{₹}16,200$.',
     tested_en: 'Depreciation calculation.',
     tested_ml: 'മൂല്യത്തകർച്ച കണക്കാക്കൽ.'
   }
@@ -6610,22 +6738,22 @@ QUESTIONS.push(
       </ol>`,
     solution_en: `<ol type="a">
         <li>Simple Interest:
-          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{₹3,000}$$</li>
+          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{\\text{₹}3,000}$$</li>
         <li>Compound Interest:
-          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = ₹18,150$$
-          $$CI = A - P = 18150 - 15000 = \\mathbf{₹3,150}$$</li>
+          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = \\text{₹}18,150$$
+          $$CI = A - P = 18150 - 15000 = \\mathbf{\\text{₹}3,150}$$</li>
         <li>Difference:
-          $$\\text{Difference} = 3150 - 3000 = \\mathbf{₹150}$$
+          $$\\text{Difference} = 3150 - 3000 = \\mathbf{\\text{₹}150}$$
           (Note: ₹150 is exactly 10% of the first year's interest ₹1,500).</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ലളിതപലിശ:
-          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{₹3,000}$$</li>
+          $$I = \\frac{P \\times n \\times r}{100} = \\frac{15000 \\times 2 \\times 10}{100} = \\mathbf{\\text{₹}3,000}$$</li>
         <li>കൂട്ടുപലിശ:
-          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = ₹18,150$$
-          $$CI = A - P = 18150 - 15000 = \\mathbf{₹3,150}$$</li>
+          $$A = P\\left(1 + \\frac{r}{100}\\right)^2 = 15000 \\times \\left(1 + \\frac{10}{100}\\right)^2 = 15000 \\times \\frac{121}{100} = \\text{₹}18,150$$
+          $$CI = A - P = 18150 - 15000 = \\mathbf{\\text{₹}3,150}$$</li>
         <li>വ്യത്യാസം:
-          $$\\text{വ്യത്യാസം} = 3150 - 3000 = \\mathbf{₹150}$$
+          $$\\text{വ്യത്യാസം} = 3150 - 3000 = \\mathbf{\\text{₹}150}$$
           (ഒന്നാം വർഷത്തെ പലിശയായ ₹1,500-ന്റെ 10% പലിശയാണ് ഈ ₹150).</li>
       </ol>`,
     tested_en: 'Comparison between simple and compound interest over two years.',
@@ -6653,16 +6781,16 @@ QUESTIONS.push(
     solution_en: `<ol type="a">
         <li>Total Amount:
           $$A = P\\left(1 + \\frac{r}{100}\\right)^n = 25000\\left(1 + \\frac{8}{100}\\right)^2 = 25000 \\times \\left(\\frac{27}{25}\\right)^2$$
-          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{₹29,160}$$</li>
+          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{\\text{₹}29,160}$$</li>
         <li>Compound Interest:
-          $$CI = A - P = 29160 - 25000 = \\mathbf{₹4,160}$$</li>
+          $$CI = A - P = 29160 - 25000 = \\mathbf{\\text{₹}4,160}$$</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ആകെ തുക:
           $$A = P\\left(1 + \\frac{r}{100}\\right)^n = 25000\\left(1 + \\frac{8}{100}\\right)^2 = 25000 \\times \\left(\\frac{27}{25}\\right)^2$$
-          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{₹29,160}$$</li>
+          $$A = 25000 \\times \\frac{729}{625} = 40 \\times 729 = \\mathbf{\\text{₹}29,160}$$</li>
         <li>കൂട്ടുപലിശ:
-          $$CI = A - P = 29160 - 25000 = \\mathbf{₹4,160}$$</li>
+          $$CI = A - P = 29160 - 25000 = \\mathbf{\\text{₹}4,160}$$</li>
       </ol>`,
     tested_en: 'Calculating maturity amount and compound interest using annual compounding formula.',
     tested_ml: 'വാർഷിക കൂട്ടുപലിശ സൂത്രവാക്യം ഉപയോഗിച്ച് തുകയും പലിശയും കാണൽ.'
@@ -6694,8 +6822,8 @@ QUESTIONS.push(
         <li>Number of periods:
           $$n = 1\\frac{1}{2} \\times 2 = \\mathbf{3\\text{ half-years}}$$</li>
         <li>Total amount and interest:
-          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{₹23,152.50}$$
-          $$CI = A - P = 23152.50 - 20000 = \\mathbf{₹3,152.50}$$</li>
+          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{\\text{₹}23,152.50}$$
+          $$CI = A - P = 23152.50 - 20000 = \\mathbf{\\text{₹}3,152.50}$$</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>അർദ്ധവർഷ നിരക്ക്:
@@ -6703,8 +6831,8 @@ QUESTIONS.push(
         <li>തവണകളുടെ എണ്ണം:
           $$n = 1\\frac{1}{2} \\times 2 = \\mathbf{3\\text{ അർദ്ധവർഷങ്ങൾ}}$$</li>
         <li>ആകെ തുകയും പലിശയും:
-          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{₹23,152.50}$$
-          $$CI = A - P = 23152.50 - 20000 = \\mathbf{₹3,152.50}$$</li>
+          $$A = P\\left(1 + \\frac{5}{100}\\right)^3 = 20000 \\times \\left(\\frac{21}{20}\\right)^3 = 20000 \\times \\frac{9261}{8000} = \\frac{5 \\times 9261}{2} = \\mathbf{\\text{₹}23,152.50}$$
+          $$CI = A - P = 23152.50 - 20000 = \\mathbf{\\text{₹}3,152.50}$$</li>
       </ol>`,
     tested_en: 'Computing half-yearly compounding rate, terms, and final amount.',
     tested_ml: 'അർദ്ധവാർഷിക കൂട്ടുപലിശയിൽ പലിശനിരക്കും തുകയും കണക്കാക്കൽ.'
@@ -6729,7 +6857,7 @@ QUESTIONS.push(
     solution_en: `<ol type="a">
         <li>Depreciation of the car:
           $$P_3 = P_0\\left(1 - \\frac{r}{100}\\right)^3 = 500000\\left(1 - \\frac{10}{100}\\right)^3 = 500000 \\times \\left(\\frac{9}{10}\\right)^3$$
-          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{₹3,64,500}$$</li>
+          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{\\text{₹}3,64,500}$$</li>
         <li>Population growth:
           $$P_2 = P_0\\left(1 + \\frac{r}{100}\\right)^2 = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2$$
           $$P_2 = 8000 \\times \\frac{441}{400} = 20 \\times 441 = \\mathbf{8,820\\text{ people}}$$</li>
@@ -6737,7 +6865,7 @@ QUESTIONS.push(
     solution_ml: `<ol type="a">
         <li>കാറിന്റെ മൂല്യത്തകർച്ച:
           $$P_3 = P_0\\left(1 - \\frac{r}{100}\\right)^3 = 500000\\left(1 - \\frac{10}{100}\\right)^3 = 500000 \\times \\left(\\frac{9}{10}\\right)^3$$
-          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{₹3,64,500}$$</li>
+          $$P_3 = 500000 \\times \\frac{729}{1000} = 500 \\times 729 = \\mathbf{\\text{₹}3,64,500}$$</li>
         <li>ജനസംഖ്യാ വർദ്ധനവ്:
           $$P_2 = P_0\\left(1 + \\frac{r}{100}\\right)^2 = 8000\\left(1 + \\frac{5}{100}\\right)^2 = 8000 \\times \\left(\\frac{21}{20}\\right)^2$$
           $$P_2 = 8000 \\times \\frac{441}{400} = 20 \\times 441 = \\mathbf{8,820\\text{ പേർ}}$$</li>
@@ -6772,9 +6900,9 @@ QUESTIONS.push(
         <li>Number of periods:
           $$\\frac{9\\text{ months}}{3\\text{ months}} = \\mathbf{3\\text{ quarters}}$$</li>
         <li>Maturity amount:
-          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{₹17,483.63}$$
+          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{\\text{₹}17,483.63}$$
           Compound Interest:
-          $$CI = 17483.63 - 16000 = \\mathbf{₹1,483.63}$$
+          $$CI = 17483.63 - 16000 = \\mathbf{\\text{₹}1,483.63}$$
         </li>
       </ol>`,
     solution_ml: `<ol type="a">
@@ -6783,9 +6911,9 @@ QUESTIONS.push(
         <li>തവണകളുടെ എണ്ണം:
           $$\\frac{9\\text{ മാസം}}{3\\text{ മാസം}} = \\mathbf{3\\text{ പാദങ്ങൾ}}$$</li>
         <li>ലഭിക്കുന്ന തുക:
-          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{₹17,483.63}$$
+          $$A = 16000\\left(1 + \\frac{3}{100}\\right)^3 = 16000 \\times (1.03)^3 = 16000 \\times 1.092727 = \\mathbf{\\text{₹}17,483.63}$$
           കൂട്ടുപലിശ:
-          $$CI = 17483.63 - 16000 = \\mathbf{₹1,483.63}$$
+          $$CI = 17483.63 - 16000 = \\mathbf{\\text{₹}1,483.63}$$
         </li>
       </ol>`,
     tested_en: 'Calculating compound interest for quarterly compounding period.',
@@ -6800,13 +6928,13 @@ QUESTIONS.push(
     time: 180,
     title_en: 'Bacterial Colony Growth and Compound Appreciation',
     title_ml: 'ബാക്ടീരിയകളുടെ വളർച്ചയും നിരക്കും',
-    prompt_en: `<p>In a laboratory experiment, the count of bacteria in a culture was initially $10,000$. It was observed to increase at the rate of $10\%$ per hour.</p>
+    prompt_en: `<p>In a laboratory experiment, the count of bacteria in a culture was initially $10,000$. It was observed to increase at the rate of $10\\%$ per hour.</p>
       <ol type="a">
         <li>Find the bacteria count after 2 hours.</li>
         <li>Find the bacteria count after 3 hours.</li>
         <li>By what percentage has the colony increased after 2 hours compared to the initial count?</li>
       </ol>`,
-    prompt_ml: `<p>ഒരു ലബോറട്ടറി പരീക്ഷണത്തിൽ തുടക്കത്തിൽ ബാക്ടീരിയകളുടെ എണ്ണം $10,000$ ആയിരുന്നു. ഇത് പ്രതിമണിക്കൂറിൽ $10\%$ നിരക്കിൽ വർദ്ധിക്കുന്നതായി കണ്ടു.</p>
+    prompt_ml: `<p>ഒരു ലബോറട്ടറി പരീക്ഷണത്തിൽ തുടക്കത്തിൽ ബാക്ടീരിയകളുടെ എണ്ണം $10,000$ ആയിരുന്നു. ഇത് പ്രതിമണിക്കൂറിൽ $10\\%$ നിരക്കിൽ വർദ്ധിക്കുന്നതായി കണ്ടു.</p>
       <ol type="a">
         <li>2 മണിക്കൂറിനു ശേഷം ബാക്ടീരിയകളുടെ എണ്ണം കണ്ടെത്തുക.</li>
         <li>3 മണിക്കൂറിനു ശേഷമുള്ള ബാക്ടീരിയകളുടെ എണ്ണം കണ്ടെത്തുക.</li>
@@ -6895,7 +7023,7 @@ CONCEPTS.push(
         { why_ml: 'അതിനാൽ ആകെ ആവശ്യമായ സ്വതന്ത്ര അളവുകൾ 3 + 2 = 5 ആണ്.', m: '3 + 2 = 5' }
       ]
     },
-    needs: ['m8.2.1.congruence-intro', 'm8.2.1.rigidity'],
+    needs: ['m8.2.1.sss-congruence', 'm8.2.1.rigidity'],
     traps_en: [
       'Four sides do NOT determine a unique quadrilateral: infinitely many quadrilaterals have the same 4 side lengths.',
       'The 5 measurements must be independent; for example, four angles alone only determine shape (similarity), not size.'
@@ -7827,13 +7955,13 @@ CONCEPTS.push(
       'അംശബന്ധവും വിഹിതങ്ങൾ തമ്മിലുള്ള വ്യത്യാസവും തമ്മിൽ ആശയക്കുഴപ്പമുണ്ടാകരുത്.'
     ],
     cards_en: [
-      { q: 'Divide ₹1,200 in the ratio 2 : 3.', a: 'Total parts $= 5$. One part $= ₹240$. Shares are $2 \\times 240 = ₹480$ and $3 \\times 240 = ₹720$.', kind: 'apply' },
-      { q: 'If ₹1,000 is divided in the ratio 1 : 2 : 7, what is the largest share?', a: 'Total parts $= 10$. Largest share $= 7 \\times \\frac{1000}{10} = ₹700$.', kind: 'apply' },
+      { q: 'Divide ₹1,200 in the ratio 2 : 3.', a: 'Total parts $= 5$. One part $= \\text{₹}240$. Shares are $2 \\times 240 = \\text{₹}480$ and $3 \\times 240 = \\text{₹}720$.', kind: 'apply' },
+      { q: 'If ₹1,000 is divided in the ratio 1 : 2 : 7, what is the largest share?', a: 'Total parts $= 10$. Largest share $= 7 \\times \\frac{1000}{10} = \\text{₹}700$.', kind: 'apply' },
       { q: 'In a division of ratio a : b, what represents one part?', a: '$\\frac{\\text{Total}}{a + b}$.', kind: 'state' }
     ],
     cards_ml: [
-      { q: '₹1,200 രൂപയെ 2 : 3 എന്ന അംശബന്ധത്തിൽ വിഭജിക്കുക.', a: 'ആകെ ഭാഗം $= 5$. ഒരു ഭാഗം $= ₹240$. വിഹിതങ്ങൾ $2 \\times 240 = ₹480$, $3 \\times 240 = ₹720$.', kind: 'apply' },
-      { q: '₹1,000 രൂപയെ 1 : 2 : 7 എന്ന അംശബന്ധത്തിൽ വിഭജിച്ചാൽ ഏറ്റവും വലിയ വിഹിതം എത്ര?', a: 'ആകെ ഭാഗം $= 10$. വലിയ വിഹിതം $= 7 \\times \\frac{1000}{10} = ₹700$.', kind: 'apply' },
+      { q: '₹1,200 രൂപയെ 2 : 3 എന്ന അംശബന്ധത്തിൽ വിഭജിക്കുക.', a: 'ആകെ ഭാഗം $= 5$. ഒരു ഭാഗം $= \\text{₹}240$. വിഹിതങ്ങൾ $2 \\times 240 = \\text{₹}480$, $3 \\times 240 = \\text{₹}720$.', kind: 'apply' },
+      { q: '₹1,000 രൂപയെ 1 : 2 : 7 എന്ന അംശബന്ധത്തിൽ വിഭജിച്ചാൽ ഏറ്റവും വലിയ വിഹിതം എത്ര?', a: 'ആകെ ഭാഗം $= 10$. വലിയ വിഹിതം $= 7 \\times \\frac{1000}{10} = \\text{₹}700$.', kind: 'apply' },
       { q: 'a : b അംശബന്ധ വിഭജനത്തിൽ ഒരു ഭാഗത്തിന്റെ അളവ് എങ്ങനെ കാണാം?', a: '$\\frac{\\text{ആകെ തുക}}{a + b}$.', kind: 'state' }
     ]
   },
@@ -8031,8 +8159,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹3,000' }
     ],
     answer: 'A',
-    solution_en: 'Total parts $= 4 + 5 = 9$. One part $= \\frac{4500}{9} = ₹500$. B receives $5 \\times 500 = ₹2,500$.',
-    solution_ml: 'ആകെ ഭാഗം $= 4 + 5 = 9$. ഒരു ഭാഗം $= \\frac{4500}{9} = ₹500$. B-ക്ക് ലഭിക്കുന്നത് $= 5 \\times 500 = ₹2,500$.',
+    solution_en: 'Total parts $= 4 + 5 = 9$. One part $= \\frac{4500}{9} = \\text{₹}500$. B receives $5 \\times 500 = \\text{₹}2,500$.',
+    solution_ml: 'ആകെ ഭാഗം $= 4 + 5 = 9$. ഒരു ഭാഗം $= \\frac{4500}{9} = \\text{₹}500$. B-ക്ക് ലഭിക്കുന്നത് $= 5 \\times 500 = \\text{₹}2,500$.',
     tested_en: 'Dividing total amount in two parts.',
     tested_ml: 'തുകയെ രണ്ട് വിഹിതങ്ങളായി ഭാഗിക്കൽ.'
   },
@@ -8059,8 +8187,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹8,000' }
     ],
     answer: 'A',
-    solution_en: 'Total parts $= 1 + 2 + 3 = 6$. One part $= \\frac{36000}{6} = ₹6,000$. Difference between largest (3 parts) and smallest (1 part) is $3 - 1 = 2$ parts $= 2 \\times 6000 = ₹12,000$.',
-    solution_ml: 'ആകെ ഭാഗം $= 1 + 2 + 3 = 6$. ഒരു ഭാഗം $= \\frac{36000}{6} = ₹6,000$. വലിയ വിഹിതവും (3) ചെറിയ വിഹിതവും (1) തമ്മിലുള്ള വ്യത്യാസം $= 2$ ഭാഗങ്ങൾ $= 2 \\times 6000 = ₹12,000$.',
+    solution_en: 'Total parts $= 1 + 2 + 3 = 6$. One part $= \\frac{36000}{6} = \\text{₹}6,000$. Difference between largest (3 parts) and smallest (1 part) is $3 - 1 = 2$ parts $= 2 \\times 6000 = \\text{₹}12,000$.',
+    solution_ml: 'ആകെ ഭാഗം $= 1 + 2 + 3 = 6$. ഒരു ഭാഗം $= \\frac{36000}{6} = \\text{₹}6,000$. വലിയ വിഹിതവും (3) ചെറിയ വിഹിതവും (1) തമ്മിലുള്ള വ്യത്യാസം $= 2$ ഭാഗങ്ങൾ $= 2 \\times 6000 = \\text{₹}12,000$.',
     tested_en: 'Difference between shares in a three-part ratio.',
     tested_ml: 'മൂന്ന് വിഹിതങ്ങൾ തമ്മിലുള്ള വ്യത്യാസം കാണൽ.'
   },
@@ -8238,10 +8366,10 @@ QUESTIONS.push(
           $$\\text{First piece} = 3 \\times 12 = \\mathbf{36\\text{ cm}}$$
           $$\\text{Second piece} = 4 \\times 12 = \\mathbf{48\\text{ cm}}$$</li>
         <li>Total parts $= 2 + 3 + 4 = 9$.<br>
-          One part $= \\frac{180000}{9} = ₹20,000$.<br>
-          $$\\text{First child} = 2 \\times 20000 = \\mathbf{₹40,000}$$
-          $$\\text{Second child} = 3 \\times 20000 = \\mathbf{₹60,000}$$
-          $$\\text{Third child} = 4 \\times 20000 = \\mathbf{₹80,000}$$</li>
+          One part $= \\frac{180000}{9} = \\text{₹}20,000$.<br>
+          $$\\text{First child} = 2 \\times 20000 = \\mathbf{\\text{₹}40,000}$$
+          $$\\text{Second child} = 3 \\times 20000 = \\mathbf{\\text{₹}60,000}$$
+          $$\\text{Third child} = 4 \\times 20000 = \\mathbf{\\text{₹}80,000}$$</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ആകെ ഭാഗം $= 3 + 4 = 7$.<br>
@@ -8249,10 +8377,10 @@ QUESTIONS.push(
           $$\\text{ആദ്യ കഷണം} = 3 \\times 12 = \\mathbf{36\\text{ cm}}$$
           $$\\text{രണ്ടാം കഷണം} = 4 \\times 12 = \\mathbf{48\\text{ cm}}$$</li>
         <li>ആകെ ഭാഗം $= 2 + 3 + 4 = 9$.<br>
-          ഒരു ഭാഗം $= \\frac{180000}{9} = ₹20,000$.<br>
-          $$\\text{ഒന്നാമത്തെ ആൾക്ക്} = 2 \\times 20000 = \\mathbf{₹40,000}$$
-          $$\\text{രണ്ടാമത്തെ ആൾക്ക്} = 3 \\times 20000 = \\mathbf{₹60,000}$$
-          $$\\text{മൂന്നാമത്തെ ആൾക്ക്} = 4 \\times 20000 = \\mathbf{₹80,000}$$</li>
+          ഒരു ഭാഗം $= \\frac{180000}{9} = \\text{₹}20,000$.<br>
+          $$\\text{ഒന്നാമത്തെ ആൾക്ക്} = 2 \\times 20000 = \\mathbf{\\text{₹}40,000}$$
+          $$\\text{രണ്ടാമത്തെ ആൾക്ക്} = 3 \\times 20000 = \\mathbf{\\text{₹}60,000}$$
+          $$\\text{മൂന്നാമത്തെ ആൾക്ക്} = 4 \\times 20000 = \\mathbf{\\text{₹}80,000}$$</li>
       </ol>`,
     tested_en: 'Partitioning quantities and money according to given multi-part ratios.',
     tested_ml: 'അളവുകളെയും തുകയെയും തന്നിട്ടുള്ള അംശബന്ധത്തിൽ വിഭജിക്കൽ.'
@@ -8985,14 +9113,14 @@ $$\\text{പരപ്പളവ്} = 9 \\times 12 = \\mathbf{108\\text{ cm}^2}$$
 $$\\text{Area} = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 24 \\times 10 = 12 \\times 10 = \\mathbf{120\\text{ m}^2}$$
 
 $$\\text{Step 2: Calculate the cost of leveling}$$
-$$\\text{Rate} = ₹25\\text{ per m}^2$$
-$$\\text{Total Cost} = 120 \\times 25 = \\mathbf{₹3000}$$`,
+$$\\text{Rate} = \\text{₹}25\\text{ per m}^2$$
+$$\\text{Total Cost} = 120 \\times 25 = \\mathbf{\\text{₹}3000}$$`,
     solution_ml: `$$\\text{ഘട്ടം 1: റോംബസിന്റെ പരപ്പളവ് കാണുക}$$
 $$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 24 \\times 10 = 12 \\times 10 = \\mathbf{120\\text{ m}^2}$$
 
 $$\\text{ഘട്ടം 2: നിരപ്പാക്കാനുള്ള ആകെ തുക കണക്കാക്കുക}$$
-$$\\text{നിരക്ക്} = ₹25\\text{ / m}^2$$
-$$\\text{ആകെ ചിലവ്} = 120 \\times 25 = \\mathbf{₹3000}$$`,
+$$\\text{നിരക്ക്} = \\text{₹}25\\text{ / m}^2$$
+$$\\text{ആകെ ചിലവ്} = 120 \\times 25 = \\mathbf{\\text{₹}3000}$$`,
     tested_en: 'Rhombus area from diagonals and practical unitary leveling cost.',
     tested_ml: 'വികർണ്ണങ്ങളിൽ നിന്ന് റോംബസ് പരപ്പളവും നിരപ്പാക്കൽ ചിലവും കാണൽ.'
   },
@@ -9186,7 +9314,7 @@ CONCEPTS.push(
         { why_ml: 'x - x പൂജ്യമാകുമ്പോൾ ബാക്കി ലഭിക്കുന്നത് -(y - x) ആണ്.', m: 'x - y = -(y - x)' }
       ]
     },
-    needs: ['p.4.5'],
+    needs: ['s.integers'],
     traps_en: [
       'Remember that for negative numbers, a larger numerical magnitude means a smaller value: -10 < -2.',
       '0 is neither positive nor negative; it is the neutral boundary.'
@@ -9804,17 +9932,17 @@ $$\\text{തുക} = -27 + 4 = \\mathbf{-23}$$`,
     solution_en: `<ol type="a">
         <li>Arithmetic expression:
           $$\\text{Balance} = 12000 + 4500 + 3200 + (-8000) + (-14000) + (-2500)$$</li>
-        <li>$$\\text{Total deposits} = 12000 + 4500 + 3200 = ₹19,700$$
-          $$\\text{Total withdrawals} = 8000 + 14000 + 2500 = ₹24,500$$
-          $$\\text{Final Balance} = 19700 - 24500 = \\mathbf{-₹4,800}$$
+        <li>$$\\text{Total deposits} = 12000 + 4500 + 3200 = \\text{₹}19,700$$
+          $$\\text{Total withdrawals} = 8000 + 14000 + 2500 = \\text{₹}24,500$$
+          $$\\text{Final Balance} = 19700 - 24500 = \\mathbf{-\\text{₹}4,800}$$
           Yes, the account has an overdraft of <b>₹$4,800$</b>.</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ഗണിതവാക്യം:
           $$\\text{നീക്കിയിരിപ്പ്} = 12000 + 4500 + 3200 + (-8000) + (-14000) + (-2500)$$</li>
-        <li>$$\\text{ആകെ നിക്ഷേപം} = 12000 + 4500 + 3200 = ₹19,700$$
-          $$\\text{ആകെ പിൻവലിച്ചത്} = 8000 + 14000 + 2500 = ₹24,500$$
-          $$\\text{അവസാന തുക} = 19700 - 24500 = \\mathbf{-₹4,800}$$
+        <li>$$\\text{ആകെ നിക്ഷേപം} = 12000 + 4500 + 3200 = \\text{₹}19,700$$
+          $$\\text{ആകെ പിൻവലിച്ചത്} = 8000 + 14000 + 2500 = \\text{₹}24,500$$
+          $$\\text{അവസാന തുക} = 19700 - 24500 = \\mathbf{-\\text{₹}4,800}$$
           അക്കൗണ്ടിൽ <b>₹$4,800$</b> രൂപയുടെ ഓവർഡ്രാഫ്റ്റ് (ബാധ്യത) ഉണ്ട്.</li>
       </ol>`,
     tested_en: 'Signed number modeling in financial transactions and overdraft calculation.',
@@ -10727,7 +10855,7 @@ $$\\text{ശതമാനം} = \\frac{13}{40} \\times 100\\% = \\mathbf{32.5\\%}
       </ol>`,
     solution_en: `<ol type="a">
         <li>The highest frequency is $16$, corresponding to interval $3000 - 3500$.<br>
-          $$\\text{Modal Class} = \\mathbf{3000 - 3500}, \\quad \\text{Lower Boundary} = \\mathbf{₹2000}$$</li>
+          $$\\text{Modal Class} = \\mathbf{3000 - 3500}, \\quad \\text{Lower Boundary} = \\mathbf{\\text{₹}2000}$$</li>
         <li>Workers earning less than ₹$3000$ fall in intervals $2000 - 2500$ and $2500 - 3000$:<br>
           $$\\text{Workers} = 8 + 14 = \\mathbf{22\\text{ workers}}$$</li>
         <li>Workers earning ₹$3500$ or more fall in intervals $3500 - 4000$ and $4000 - 4500$:<br>
@@ -10737,7 +10865,7 @@ $$\\text{ശതമാനം} = \\frac{13}{40} \\times 100\\% = \\mathbf{32.5\\%}
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ഏറ്റവും വലിയ ആവൃത്തി $16$ ആണ്, അതിനാൽ മോഡൽ വിഭാഗം $3000 - 3500$ ആണ്.<br>
-          $$\\text{മോഡൽ വിഭാഗം} = \\mathbf{3000 - 3500}, \\quad \\text{കീഴ്പരിധി} = \\mathbf{₹3000}$$</li>
+          $$\\text{മോഡൽ വിഭാഗം} = \\mathbf{3000 - 3500}, \\quad \\text{കീഴ്പരിധി} = \\mathbf{\\text{₹}3000}$$</li>
         <li>₹$3000$-ൽ താഴെ വേതനമുള്ളവർ ($2000 - 2500$, $2500 - 3000$ വിഭാഗങ്ങൾ):<br>
           $$\\text{തൊഴിലാളികൾ} = 8 + 14 = \\mathbf{22\\text{ പേർ}}$$</li>
         <li>₹$3500$-ഓ അതിൽ കൂടുതലോ വേതനമുള്ളവർ ($3500 - 4000$, $4000 - 4500$ വിഭാഗങ്ങൾ):<br>
@@ -10808,7 +10936,7 @@ CONCEPTS.push(
         { why_ml: 'ഗുണനത്തിന്റെ വിപരീതക്രിയ (*a മാറ്റി /a).', m: 'x = \\frac{c - b}{a}' }
       ]
     },
-    needs: ['p.5.3'],
+    needs: ['s.algebraic-terms'],
     traps_en: [
       'Remember to undo operations in REVERSE order (undo addition/subtraction before multiplication/division).',
       'If a sum is divided by 3, first multiply by 3, then undo the sum.'
@@ -11301,18 +11429,18 @@ WRITTEN.push(
     title_ml: 'വിപരീതക്രിയ വഴി അജ്ഞാതവില കണ്ടെത്തൽ',
     prompt_en: '<p>A person bought 4 kg of okra (lady’s finger) and curry leaves for ₹20. The total bill came to ₹200. Find the price of 1 kg of okra using the inversion method.</p>',
     prompt_ml: '<p>റഷീദ 4 കിലോഗ്രാം വെണ്ടയ്ക്കയും 20 രൂപയ്ക്ക് കറിവേപ്പിലയും വാങ്ങി. ആകെ 200 രൂപയായി. വിപരീതക്രിയാരീതി ഉപയോഗിച്ച് ഒരു കിലോഗ്രാം വെണ്ടയ്ക്കയുടെ വില കണ്ടെത്തുക.</p>',
-    solution_en: `$$\\text{Total amount paid} = ₹200$$
+    solution_en: `$$\\text{Total amount paid} = \\text{₹}200$$
 $$\\text{Step 1: Undo addition of ₹20 for curry leaves}$$
-$$\\text{Cost of 4 kg okra} = 200 - 20 = ₹180$$
+$$\\text{Cost of 4 kg okra} = 200 - 20 = \\text{₹}180$$
 
 $$\\text{Step 2: Undo multiplication by 4 kg}$$
-$$\\text{Price of 1 kg okra} = \\frac{180}{4} = \\mathbf{₹45}$$`,
-    solution_ml: `$$\\text{ആകെ നൽകിയ തുക} = ₹200$$
+$$\\text{Price of 1 kg okra} = \\frac{180}{4} = \\mathbf{\\text{₹}45}$$`,
+    solution_ml: `$$\\text{ആകെ നൽകിയ തുക} = \\text{₹}200$$
 $$\\text{ഘട്ടം 1: കറിവേപ്പിലയുടെ ₹20 കുറയ്ക്കുക (കൂട്ടലിന്റെ വിപരീതം)}$$
-$$4\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = 200 - 20 = ₹180$$
+$$4\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = 200 - 20 = \\text{₹}180$$
 
 $$\\text{ഘട്ടം 2: 4 കൊണ്ട് ഹരിക്കുക (ഗുണനത്തിന്റെ വിപരീതം)}$$
-$$1\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = \\frac{180}{4} = \\mathbf{₹45}$$`,
+$$1\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = \\frac{180}{4} = \\mathbf{\\text{₹}45}$$`,
     tested_en: 'Inversion method to undo operations in real-world retail pricing.',
     tested_ml: 'വിപരീതക്രിയ വഴി നിത്യജീവിത പ്രശ്നങ്ങളുടെ പരിഹാരം കാണൽ.'
   },
@@ -11362,15 +11490,15 @@ $$10x = 100 - 70 = 30$$
 $$x = \\frac{30}{10} = \\mathbf{3}$$
 $$\\text{Number of ₹20 notes} = \\mathbf{3}$$
 $$\\text{Number of ₹10 notes} = 7 - 3 = \\mathbf{4}$$`,
-    solution_ml: `$$₹20\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } x \\text{ എന്നിരിക്കട്ടെ.}$$
-$$₹10\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } 7 - x \\text{ ആയിരിക്കും.}$$
+    solution_ml: `$$\\text{₹}20\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } x \\text{ എന്നിരിക്കട്ടെ.}$$
+$$\\text{₹}10\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } 7 - x \\text{ ആയിരിക്കും.}$$
 $$\\text{ആകെ തുക: } 20x + 10(7 - x) = 100$$
 $$20x + 70 - 10x = 100$$
 $$10x + 70 = 100$$
 $$10x = 100 - 70 = 30$$
 $$x = \\frac{30}{10} = \\mathbf{3}$$
-$$₹20\\text{ നോട്ടുകൾ} = \\mathbf{3 \\text{ എണ്ണം}}$$
-$$₹10\\text{ നോട്ടുകൾ} = 7 - 3 = \\mathbf{4 \\text{ എണ്ണം}}$$`,
+$$\\text{₹}20\\text{ നോട്ടുകൾ} = \\mathbf{3 \\text{ എണ്ണം}}$$
+$$\\text{₹}10\\text{ നോട്ടുകൾ} = 7 - 3 = \\mathbf{4 \\text{ എണ്ണം}}$$`,
     tested_en: 'System modeling with unknown distributions in currency denominations.',
     tested_ml: 'കറൻസി നോട്ടുകളുടെ എണ്ണവും മൂല്യവും അടിസ്ഥാനമാക്കിയുള്ള സമവാക്യ നിർമ്മാണം.'
   },
@@ -12344,7 +12472,7 @@ CONCEPTS.push(
         { why_ml: 'ആകെ മുഖങ്ങൾ = 2 പാദങ്ങൾ + n പാർശ്വമുഖങ്ങൾ.', m: 'F = n + 2, \\quad E = 3n, \\quad V = 2n' }
       ]
     },
-    needs: ['m8.4.1.polygon-angle-sum', 'p.3.4'],
+    needs: ['m8.4.1.polygon-angle-sum', 's.area-rectangle'],
     traps_en: [
       'A cylinder is NOT a prism because its base is a circle (curved), not a polygon.',
       'Remember that lateral faces of a right prism are RECTANGLES, never triangles (that would be a pyramid).'
@@ -12416,7 +12544,7 @@ CONCEPTS.push(
         { why_ml: 'h പൊതുവായി പുറത്തെടുക്കുന്നു.', m: '\\text{LSA} = (a_1 + a_2 + \\dots + a_n)h = P \\times h' }
       ]
     },
-    needs: ['m8.13.1.prism-concept', 'p.2.3'],
+    needs: ['m8.13.1.prism-concept', 's.distributive-law'],
     traps_en: [
       'Do NOT include the two base areas in lateral surface area.',
       'Ensure all lengths (perimeter and height) are in the same unit (cm or m) before multiplying.'
@@ -12895,8 +13023,8 @@ $$\\text{Step 2: Calculate Lateral Surface Area (LSA)}$$
 $$\\text{LSA} = P \\times h = 3\\text{ m} \\times 4\\text{ m} = \\mathbf{12\\text{ m}^2}.$$
 
 $$\\text{Step 3: Calculate cost of painting}$$
-$$\\text{Rate} = ₹50\\text{ per m}^2.$$
-$$\\text{Total Cost} = 12 \\times 50 = \\mathbf{₹600}.$$`,
+$$\\text{Rate} = \\text{₹}50\\text{ per m}^2.$$
+$$\\text{Total Cost} = 12 \\times 50 = \\mathbf{\\text{₹}600}.$$`,
     solution_ml: `$$\\text{നൽകിയിരിക്കുന്നത്: ക്രമഷഡ്ഭുജ പാദവശം } a = 0.5\\text{ m}, \\quad \\text{ഉയരം } h = 4\\text{ m}.$$
 
 $$\\text{ഘട്ടം 1: പാദച്ചുറ്റളവ് } P \\text{ കാണുന്നു:}$$
@@ -12906,8 +13034,8 @@ $$\\text{ഘട്ടം 2: പാർശ്വതല പരപ്പളവ് �
 $$\\text{പാർശ്വതല പരപ്പളവ്} = P \\times h = 3 \\times 4 = \\mathbf{12\\text{ m}^2}.$$
 
 $$\\text{ഘട്ടം 3: പെയിന്റിംഗ് ചെലവ്:}$$
-$$\\text{നിരക്ക്} = ₹50\\text{ / ച.മീ}.$$
-$$\\text{ആകെ ചെലവ്} = 12 \\times 50 = \\mathbf{₹600}.$$`,
+$$\\text{നിരക്ക്} = \\text{₹}50\\text{ / ച.മീ}.$$
+$$\\text{ആകെ ചെലവ്} = 12 \\times 50 = \\mathbf{\\text{₹}600}.$$`,
     tested_en: 'Perimeter, lateral surface area, and unitary painting expenditure of regular hexagonal prism.',
     tested_ml: 'ക്രമഷഡ്ഭുജ സ്തംഭത്തിന്റെ ചുറ്റളവ്, പാർശ്വതല പരപ്പളവ്, പെയിന്റിംഗ് ചിലവ്.'
   },
@@ -13123,7 +13251,7 @@ CONCEPTS.push(
         { why_ml: 'ഇരുവരുടെയും പരപ്പളവ് തുല്യമാണെന്ന് തെളിയുന്നു.', m: '\\text{Area}(\\triangle ABC) = \\text{Area}(\\triangle ABD)' }
       ]
     },
-    needs: ['m8.12.1.parallel-lines-transversal', 'p.3.4'],
+    needs: ['m8.12.1.parallel-lines-transversal', 's.area-rectangle'],
     traps_en: [
       'The triangles must share the SAME base (or bases of equal length) and lie between the SAME parallel lines.',
       'Slant sides can be completely different; equal area does NOT imply congruent or equal perimeter.'
@@ -13938,7 +14066,7 @@ CONCEPTS.push(
         { why_ml: 'അതിനാൽ q-വിൽ 2, 5 ഘടകങ്ങൾ മാത്രമേ ഉണ്ടാകൂ.', m: 'q = 2^a \\times 5^b' }
       ]
     },
-    needs: ['p.4.3', 'p.4.4'],
+    needs: ['s.decimals', 's.decimal-ops'],
     traps_en: [
       'Always reduce the fraction to lowest terms BEFORE checking prime factors of denominator (e.g. 6/15 = 2/5 has only factor 5, so it terminates).',
       'The number of decimal places equals max(a, b) in 2^a * 5^b.'
@@ -14750,12 +14878,12 @@ CONCEPTS.push(
     cards_en: [
       { q: 'The sum of two numbers is 50 and their difference is 16. What is the larger number?', a: '$x = \\frac{50 + 16}{2} = \\frac{66}{2} = \\mathbf{33}$.', kind: 'apply' },
       { q: 'How many equations are required to uniquely determine the values of two independent unknowns?', a: 'Two independent equations.', kind: 'recall' },
-      { q: 'The cost of 1 pen and 1 notebook is ₹35, and 1 pen and 2 notebooks cost ₹55. Find the cost of 1 notebook.', a: 'Subtracting: $(p + 2n) - (p + n) = 55 - 35 \\implies n = \\mathbf{₹20}$.', kind: 'apply' }
+      { q: 'The cost of 1 pen and 1 notebook is ₹35, and 1 pen and 2 notebooks cost ₹55. Find the cost of 1 notebook.', a: 'Subtracting: $(p + 2n) - (p + n) = 55 - 35 \\implies n = \\mathbf{\\text{₹}20}$.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'രണ്ട് സംഖ്യകളുടെ തുക 50-ഉം വ്യത്യാസം 16-ഉം ആയാൽ വലിയ സംഖ്യ ഏതാണ്?', a: '$x = \\frac{50 + 16}{2} = \\frac{66}{2} = \\mathbf{33}$.', kind: 'apply' },
       { q: 'രണ്ട് അജ്ഞാത അളവുകൾ കൃത്യമായി കണ്ടെത്താൻ എത്ര സമവാക്യങ്ങൾ ആവശ്യമാണ്?', a: 'പരസ്പരബന്ധമില്ലാത്ത രണ്ട് സമവാക്യങ്ങൾ.', kind: 'recall' },
-      { q: 'ഒരു പേനയുടെയും ഒരു നോട്ടുപുസ്തകത്തിന്റെയും വില ₹35, ഒരു പേനയുടെയും 2 നോട്ടുപുസ്തകങ്ങളുടെയും വില ₹55 ആയാൽ നോട്ടുപുസ്തകത്തിന്റെ വില എത്ര?', a: 'കുറയ്ക്കുമ്പോൾ: $55 - 35 = \\mathbf{₹20}$.', kind: 'apply' }
+      { q: 'ഒരു പേനയുടെയും ഒരു നോട്ടുപുസ്തകത്തിന്റെയും വില ₹35, ഒരു പേനയുടെയും 2 നോട്ടുപുസ്തകങ്ങളുടെയും വില ₹55 ആയാൽ നോട്ടുപുസ്തകത്തിന്റെ വില എത്ര?', a: 'കുറയ്ക്കുമ്പോൾ: $55 - 35 = \\mathbf{\\text{₹}20}$.', kind: 'apply' }
     ]
   },
 
@@ -15051,8 +15179,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹800' }
     ],
     answer: 'A',
-    solution_en: 'The 3 extra chairs cost $14000 - 11000 = ₹3000$. Hence 1 chair costs $\\frac{3000}{3} = ₹1000$.',
-    solution_ml: '3 അധിക കസേരകളുടെ വില $14000 - 11000 = ₹3000$. അതിനാൽ ഒരു കസേരയുടെ വില $= \\frac{3000}{3} = ₹1000$.',
+    solution_en: 'The 3 extra chairs cost $14000 - 11000 = \\text{₹}3000$. Hence 1 chair costs $\\frac{3000}{3} = \\text{₹}1000$.',
+    solution_ml: '3 അധിക കസേരകളുടെ വില $14000 - 11000 = \\text{₹}3000$. അതിനാൽ ഒരു കസേരയുടെ വില $= \\frac{3000}{3} = \\text{₹}1000$.',
     tested_en: 'Formulating and solving an item cost system.',
     tested_ml: 'വിലകൾ സംബന്ധിച്ച സമവാക്യം രൂപീകരിച്ച് പരിഹരിക്കൽ.'
   },
@@ -15262,10 +15390,10 @@ $$\\text{Multiply (2) by 2: } 6x + 10y = 190 \\quad \\text{--- (Equation 5)}$$
 
 $$\\text{Step 4: Subtract (4) from (5)}$$
 $$(6x + 10y) - (6x + 9y) = 190 - 180$$
-$$y = \\mathbf{₹10} \\quad \\text{(Cost of 1 notebook)}$$
+$$y = \\mathbf{\\text{₹}10} \\quad \\text{(Cost of 1 notebook)}$$
 
 $$\\text{Step 5: Substitute } y = 10 \\text{ into Equation 3}$$
-$$2x + 3(10) = 60 \\implies 2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{₹15} \\quad \\text{(Cost of 1 pen)}$$
+$$2x + 3(10) = 60 \\implies 2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{\\text{₹}15} \\quad \\text{(Cost of 1 pen)}$$
 
 $$\\text{Conclusion: A pen costs ₹15 and a notebook costs ₹10.}$$`,
     solution_ml: `$$\\text{ഒരു പേനയുടെ വില } x \\text{ രൂപയും, ഒരു നോട്ടുപുസ്തകത്തിന്റെ വില } y \\text{ രൂപയും എന്നിരിക്കട്ടെ.}$$
@@ -15282,10 +15410,10 @@ $$\\text{സമവാക്യം (3) } \\times 3: \\quad 6x + 9y = 180 \\quad \
 $$\\text{സമവാക്യം (2) } \\times 2: \\quad 6x + 10y = 190 \\quad \\text{--- (സമവാക്യം 5)}$$
 
 $$\\text{ഘട്ടം 4: സമവാക്യം (5)-ൽ നിന്ന് (4) കുറയ്ക്കുന്നു}$$
-$$y = 190 - 180 = \\mathbf{₹10} \\quad (\\text{നോട്ടുപുസ്തകത്തിന്റെ വില})$$
+$$y = 190 - 180 = \\mathbf{\\text{₹}10} \\quad (\\text{നോട്ടുപുസ്തകത്തിന്റെ വില})$$
 
 $$\\text{ഘട്ടം 5: } y = 10 \\text{ സമവാക്യം (3)-ൽ നൽകുന്നു}$$
-$$2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{₹15} \\quad (\\text{പേനയുടെ വില})$$
+$$2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{\\text{₹}15} \\quad (\\text{പേനയുടെ വില})$$
 
 $$\\text{ഉത്തരം: ഒരു പേനയുടെ വില ₹15, നോട്ടുപുസ്തകത്തിന്റെ വില ₹10.}$$`
   },
@@ -15594,7 +15722,7 @@ CONCEPTS.push(
         { why_ml: 'രണ്ടിനും 2 പൊതുഘടകമായി വരുന്നു, ഇത് തെറ്റാണ്.', m: '\\sqrt{2} \\notin \\mathbb{Q}' }
       ]
     },
-    needs: ['m8.1.1.perfect-squares', 'p.5.5'],
+    needs: ['m8.1.1.perfect-squares', 's.pythagoras-theorem'],
     traps_en: [
       'sqrt(2) is NOT 1.414 exactly; 1.414 is only an approximate rational value.',
       'sqrt(2) is a single definite real number representing an exact geometric distance.'
@@ -16385,7 +16513,7 @@ CONCEPTS.push(
         { why_ml: '$RHS$ തുല്യത പ്രകാരം ത്രികോണങ്ങൾ തുല്യമാണ്.', m: 'AM = MB' }
       ]
     },
-    needs: ['m8.2.3.sas-congruence', 'p.5.5'],
+    needs: ['m8.2.3.sas-congruence', 's.pythagoras-theorem'],
     traps_en: [
       'In r^2 = d^2 + (c/2)^2, use HALF the chord length (c/2), not the full chord c.',
       'Distance from the centre ALWAYS means the PERPENDICULAR distance.'
@@ -18123,7 +18251,7 @@ CONCEPTS.push(
         { why_ml: 'അനുരൂപ വശങ്ങളുടെ അംശബന്ധം എടുക്കുമ്പോൾ.', m: 'CD^2 = AD \\times DB' }
       ]
     },
-    needs: ['m9.7.1.concept-of-similarity-and-aa', 'p.5.5'],
+    needs: ['m9.7.1.concept-of-similarity-and-aa', 's.pythagoras-theorem'],
     traps_en: [
       'The altitude must be dropped from the RIGHT ANGLE vertex onto the hypotenuse.',
       'In CD^2 = AD * DB, AD and DB are the two segments of the HYPOTENUSE, not the legs.'
@@ -18755,7 +18883,7 @@ CONCEPTS.push(
         { why_ml: 'ഋണ ഘാതമോ ഭിന്നസംഖ്യാ ഘാതമോ വന്നാൽ ബഹുപദമല്ല.', m: '\\frac{1}{x} \\text{ ബഹുപദമല്ല}' }
       ]
     },
-    needs: ['p.5.3', 'p.5.1'],
+    needs: ['s.algebraic-terms', 's.powers-exponents'],
     traps_en: [
       'Coefficients CAN be fractions or square roots (e.g. sqrt(2)*x is a valid polynomial); only the EXPONENTS of x must be non-negative integers.',
       'Terms with 1/x or 1/x^2 are NEVER polynomials because their exponent is negative.'
@@ -18990,7 +19118,7 @@ CONCEPTS.push(
         { why_ml: 'ഗുണനഫലത്തിന്റെ കൃതി ഘാതങ്ങളുടെ തുകയാകുന്നു.', m: '\\deg(p \\cdot q) = \\deg(p) + \\deg(q)' }
       ]
     },
-    needs: ['m9.8.2.degree-and-classification', 'p.5.4'],
+    needs: ['m9.8.2.degree-and-classification', 's.expanding-brackets'],
     traps_en: [
       'deg(p * q) is the SUM of degrees: deg(p) + deg(q), NOT the product.',
       'In area modeling, do not forget to multiply both length and breadth binomials completely.'
@@ -19570,7 +19698,7 @@ CONCEPTS.push(
         { why_ml: 'വ്യാസവുമായുള്ള അംശബന്ധം എപ്പോഴും പൈ ($\\pi$) ആണ്.', m: '\\frac{C}{2r} = \\pi' }
       ]
     },
-    needs: ['m8.4.3.regular-polygons', 'p.4.1'],
+    needs: ['m8.4.3.regular-polygons', 's.fractions'],
     traps_en: [
       'pi is an IRRATIONAL number; 22/7 is only an APPROXIMATION, not the exact value.',
       'Circumference formula uses 2 * pi * r (or pi * d), do not mix with area pi * r^2.'
@@ -19642,7 +19770,7 @@ CONCEPTS.push(
         { why_ml: 'ചതുരത്തിന്റെ പരപ്പളവ് = നീളം × വീതി.', m: 'A = \\pi r \\times r = \\pi r^2' }
       ]
     },
-    needs: ['m9.9.1.circumference-and-pi', 'p.3.4'],
+    needs: ['m9.9.1.circumference-and-pi', 's.area-rectangle'],
     traps_en: [
       'In pi * r^2, square the RADIUS, not the diameter (if diameter is given, divide by 2 first: r = d/2).',
       'Area scales quadratically: doubling radius quadruples area (not doubles).'
@@ -20189,8 +20317,8 @@ $$\\text{Area} = \\pi(R^2 - r^2) = \\pi(R + r)(R - r)$$
 $$\\text{Area} = \\frac{22}{7} \\times (28 + 21)(28 - 21) = \\frac{22}{7} \\times 49 \\times 7 = 22 \\times 49 = \\mathbf{1078\\text{ sq metres}}$$
 
 $$\\text{Step 3: Total Paving Cost}$$
-$$\\text{Rate per sq metre } = ₹50$$
-$$\\text{Total Cost} = 1078 \\times 50 = \\mathbf{₹53{,}900}$$`,
+$$\\text{Rate per sq metre } = \\text{₹}50$$
+$$\\text{Total Cost} = 1078 \\times 50 = \\mathbf{\\text{₹}53{,}900}$$`,
     solution_ml: `$$\\text{ഘട്ടം 1: ആരങ്ങളും ചുറ്റളവുകളും}$$
 $$\\text{അകം ആരം } r = 21\\text{ m}, \\quad \\text{പുറം ആരം } R = 21 + 7 = 28\\text{ m}$$
 $$\\text{ഉൾച്ചുറ്റളവ്} = 2 \\times \\frac{22}{7} \\times 21 = \\mathbf{132\\text{ മീറ്റർ}}$$
@@ -20200,7 +20328,7 @@ $$\\text{ഘട്ടം 2: നടപ്പാതയുടെ പരപ്പള
 $$\\text{പരപ്പളവ്} = \\pi(R^2 - r^2) = \\frac{22}{7} \\times (28 + 21)(28 - 21) = \\frac{22}{7} \\times 49 \\times 7 = \\mathbf{1078\\text{ ചതുരശ്ര മീറ്റർ}}$$
 
 $$\\text{ഘട്ടം 3: ആകെ ചെലവ്}$$
-$$\\text{ആകെ ചെലവ്} = 1078 \\times 50 = \\mathbf{₹53{,}900}$$`
+$$\\text{ആകെ ചെലവ്} = 1078 \\times 50 = \\mathbf{\\text{₹}53{,}900}$$`
   },
 
   {
@@ -20314,7 +20442,7 @@ CONCEPTS.push(
         { why_ml: 'ചെറിയ സംഖ്യ എപ്പോഴും വലിയ സംഖ്യയുടെ ഇടതുവശത്തായിരിക്കും.', m: 'a < b' }
       ]
     },
-    needs: ['m9.4.1.diagonal-of-square-and-sqrt2', 'p.4.5'],
+    needs: ['m9.4.1.diagonal-of-square-and-sqrt2', 's.integers'],
     traps_en: [
       'Negative numbers with larger absolute values lie further to the left (e.g. -5 < -2, not -2 < -5).',
       'Real numbers include BOTH rational and irrational numbers; they are not just integers.'
@@ -20516,7 +20644,7 @@ CONCEPTS.push(
         { why_ml: '$a$-ൽ നിന്ന് അകലത്തിന്റെ പകുതി സഞ്ചരിച്ചാൽ മധ്യബിന്ദു ലഭിക്കും.', m: 'M = a + \\frac{b - a}{2} = \\frac{a + b}{2}' }
       ]
     },
-    needs: ['m9.10.3.absolute-value-equations', 'p.1.2'],
+    needs: ['m9.10.3.absolute-value-equations', 's.addition'],
     traps_en: [
       'The midpoint of negative numbers involves algebraic addition: midpoint of -5 and 3 is (-5 + 3)/2 = -1 (not 4).',
       'The interval for |x - a| < k is centered at +a, not -a.'
@@ -21153,7 +21281,7 @@ CONCEPTS.push(
         { why_ml: 'എല്ലാ ബഹുഭുജ സ്തംഭങ്ങളെയും ത്രികോണസ്തംഭങ്ങളായി ഭാഗിക്കാം.', m: 'V = A \\cdot h' }
       ]
     },
-    needs: ['m9.11.1.prism-definition-and-types', 'p.3.4'],
+    needs: ['m9.11.1.prism-definition-and-types', 's.area-rectangle'],
     traps_en: [
       'Ensure the height is measured perpendicular to the base, not along a slanted edge if tilted.',
       'Units of volume are cubic units (cm³, m³), while area is square units (cm², m²).'
@@ -21841,7 +21969,7 @@ CONCEPTS.push(
         { why_ml: '$y$-യും കൃത്യമായി $m$ മടങ്ങായി മാറുന്നു.', m: '\\frac{y\'}{y} = m' }
       ]
     },
-    needs: ['m8.7.1.ratio-concept', 'p.2.1'],
+    needs: ['m8.7.1.concept-of-ratio', 's.multiplication'],
     traps_en: [
       'Proportion requires y = kx, NOT y = kx + c (where c != 0); if there is a non-zero intercept, it is NOT proportional.',
       'Equal differences do not mean proportion: (2, 4) and (4, 6) differ by 2, but 4/2 != 6/4.'
@@ -22632,7 +22760,7 @@ CONCEPTS.push(
         { why_ml: 'വ്യത്യാസം പൂജ്യമാകുന്നു.', m: 'n\\bar{x} - n\\bar{x} = 0' }
       ]
     },
-    needs: ['m8.10.1.data-collection-tally', 'p.1.2'],
+    needs: ['m8.10.1.data-and-tally', 's.addition'],
     traps_en: [
       'The mean does NOT need to be one of the original numbers in the data set.',
       'A change in a single value changes the mean; check total sum when calculating.'
@@ -23436,7 +23564,7 @@ CONCEPTS.push(
       </ul>`,
     intuition_en: `<p>A sequence is simply a list with an order: knowing the position number $n$ allows us, via the rule, to determine the term $x_n$ residing at that position.</p>`,
     intuition_ml: `<p>സ്ഥാനം അറിഞ്ഞാൽ നിയമമുപയോഗിച്ച് ആ സ്ഥാനത്തുള്ള സംഖ്യ കൃത്യമായി കണ്ടെത്താൻ സാധിക്കുന്ന ഒരു ക്രമമാണ് ശ്രേണി.</p>`,
-    needs: ['p.1.1', 'p.1.2'],
+    needs: ['s.counting', 's.addition'],
     traps_en: [
       'A set of numbers is not a sequence unless there is a definite order and position rule: {3, 1, 2} is a set, but 1, 2, 3... is a sequence.',
       'Assuming a pattern from only two terms: 2, 4, ... could continue as 6, 8 (adding 2) or 8, 16 (powers of 2).'
@@ -24950,7 +25078,7 @@ CONCEPTS.push(
         { why_ml: 'സമാന വശങ്ങളുടെ അംശബന്ധം തുല്യമാണ്.', m: '\\frac{PA}{PD} = \\frac{PC}{PB} \\implies PA \\cdot PB = PC \\cdot PD' }
       ]
     },
-    needs: ['m10.2.3.angles-in-same-segment', 'm9.7.1.concept-of-similarity'],
+    needs: ['m10.2.3.angles-in-same-segment', 'm9.7.1.concept-of-similarity-and-aa'],
     traps_en: [
       'When chords intersect OUTSIDE at P, the segments measured from P are PA and PB (where PB is the whole secant, not just the outside part AB).',
       'Do not confuse chord intersection with chord lengths: it is PA · PB, NOT (PA + PB).'
@@ -25706,7 +25834,7 @@ CONCEPTS.push(
         { why_ml: 'അന്യോന്യ വിരുദ്ധ സംഭവങ്ങളുടെ തുക നിയമപ്രകാരം.', m: 'P(E) = k \\times \\frac{1}{n} = \\frac{k}{n} = \\frac{n(E)}{n(S)}' }
       ]
     },
-    needs: ['s.fraction-ops', 's.percentages'],
+    needs: ['s.fraction-ops', 's.decimals'],
     traps_en: [
       'Comparing raw counts instead of fractions when comparing two boxes with different total items.',
       'Assuming outcomes are equally likely when conditions are physically biased or uneven.',
@@ -25789,7 +25917,7 @@ CONCEPTS.push(
         { why_ml: 'അതിനാൽ പരപ്പളവുകളുടെ അനുപാതം ലഭിക്കുന്നു.', m: 'P = \\frac{\\text{Area}(A)}{\\text{Area}(S)}' }
       ]
     },
-    needs: ['m10.3.1.probability-as-measure-of-chance', 's.area-formulae'],
+    needs: ['m10.3.1.probability-as-measure-of-chance', 's.area-rectangle'],
     traps_en: [
       'Using the ratio of perimeters or side lengths instead of the ratio of areas.',
       'Forgetting that when side length is scaled by k, area scales by k².',
@@ -27470,7 +27598,7 @@ CONCEPTS.push(
         { why_ml: 'കർണ്ണം² കൊണ്ട് ഹരിക്കുമ്പോൾ സർവ്വസമവാക്യം ലഭിക്കുന്നു.', m: '\\sin^2\\theta + \\cos^2\\theta = 1' }
       ]
     },
-    needs: ['m9.7.1.concept-of-similarity', 's.pythagoras-theorem'],
+    needs: ['m9.7.1.concept-of-similarity-and-aa', 's.pythagoras-theorem'],
     traps_en: [
       'Swapping opposite and adjacent sides when looking from the other acute angle.',
       'Assuming sin θ + cos θ = 1 instead of sin² θ + cos² θ = 1.',
@@ -34989,7 +35117,7 @@ PYQ.push(
     answer: 'A',
     solution_en: '<p>Arrange in ascending order: $45, 50, 54, 58, 65, 66, 70, 72$.<br>Since $N = 8$ (even), the median is the average of the 4th and 5th values:<br>$$\\text{Median} = \\frac{58 + 65}{2} = \\frac{123}{2} = \\mathbf{61.5}$$</p>',
     solution_ml: '<p>ആരോഹണ ക്രമത്തിൽ എഴുതിയാൽ: $45, 50, 54, 58, 65, 66, 70, 72$.<br>ആകെ 8 എണ്ണം ഉള്ളതിനാൽ നടുവിലെ രണ്ട് സംഖ്യകളുടെ (4, 5 സ്ഥാനങ്ങളിലെ) ശരാശരിയാണ് മധ്യമം:<br>$$\\text{മധ്യമം} = \\frac{58 + 65}{2} = \\mathbf{61.5}$$</p>',
-    tests: ['m9.13.1.concept-of-mean-and-calculations']
+    tests: ['m9.13.1.arithmetic-mean-and-deviations']
   },
   {
     id: 'pyq.m9.2024.q2',
@@ -35080,7 +35208,7 @@ PYQ.push(
     answer: 'A',
     solution_en: '<p>Since $\\angle APB = 110^\\circ > 90^\\circ$, point $P$ lies <b>inside</b> the circle. Since $\\angle AQB = 80^\\circ < 90^\\circ$, point $Q$ lies <b>outside</b> the circle.</p>',
     solution_ml: '<p>$\\angle APB = 110^\\circ > 90^\\circ$ ആയതിനാൽ $P$ വൃത്തത്തിന് <b>അകത്താണ്</b>. $\\angle AQB = 80^\\circ < 90^\\circ$ ആയതിനാൽ $Q$ വൃത്തത്തിന് <b>പുറത്താണ്</b>.</p>',
-    tests: ['m10.2.3.angles-inside-and-outside-circle']
+    tests: ['m10.2.1.angle-in-semicircle']
   },
   {
     id: 'pyq.m10.2024.q2',
@@ -35138,7 +35266,7 @@ PYQ.push(
     answer: 'A',
     solution_en: '<p>Perimeter $= 4 \\times \\text{side}$. For sides $1, 2, 3, \\dots$, perimeters are $4(1) = 4, 4(2) = 8, 4(3) = 12, \\dots$<br>The sequence is $\\mathbf{4, 8, 12, \\dots}$ with common difference $\\mathbf{d = 4}$.</p>',
     solution_ml: '<p>ചുറ്റളവ് $= 4 \\times \\text{വശം}$. വശങ്ങൾ $1, 2, 3, \\dots$ ആകുമ്പോൾ ചുറ്റളവുകൾ $4, 8, 12, \\dots$<br>ശ്രേണി: $\\mathbf{4, 8, 12, \\dots}$, പൊതുവ്യത്യാസം $\\mathbf{d = 4}$.</p>',
-    tests: ['m10.1.1.arithmetic-sequence-definition']
+    tests: ['m10.1.2.arithmetic-sequence-definition']
   },
   {
     id: 'pyq.m10.2024.q4',
@@ -35276,7 +35404,11 @@ const I18N = (function () {
     if (typeof App !== 'undefined' && App.buildNav) {
       App.buildNav();
     }
-    if (typeof Router !== 'undefined' && Router.reload) {
+    if (typeof App !== 'undefined' && App.isGate && App.isGate()) {
+      if (typeof Login !== 'undefined' && Login.remount) {
+        Login.remount();
+      }
+    } else if (typeof Router !== 'undefined' && Router.reload) {
       Router.reload();
       if (typeof Tex !== 'undefined' && Tex.typeset) {
         const main = document.getElementById('main');
@@ -35311,11 +35443,13 @@ const I18N = (function () {
   const STRINGS = {
     /* ── shell ─────────────────────────────────────────────────────────── */
     app_title: { en: 'SSLC Mathematics', ml: 'എസ്.എസ്.എൽ.സി ഗണിതം' },
+    app_title_short: { en: 'SSLC Maths', ml: 'എസ്.എസ്.എൽ.സി' },
     app_sub: { en: 'Kerala SCERT · Class 8–10', ml: 'കേരള എസ്.സി.ഇ.ആർ.ടി · ക്ലാസ് 8–10' },
     tab_home: { en: 'Today', ml: 'ഇന്ന്' },
     tab_today: { en: 'Today', ml: 'ഇന്ന്' },
-    tab_study: { en: 'Study', ml: 'പഠനം' },
-    tab_recall: { en: 'Recall', ml: 'ഓർമ്മ' },
+    tab_study: { en: 'Learn', ml: 'പഠനം' },
+    tab_recall: { en: 'Practice', ml: 'പരിശീലനം' },
+    tab_progress: { en: 'Progress', ml: 'പുരോഗതി' },
     tab_drill: { en: 'Drill', ml: 'ടെസ്റ്റ്' },
     tab_method: { en: 'How to study', ml: 'പഠനരീതി' },
     back: { en: 'Back', ml: 'പിന്നോട്ട്' },
@@ -35336,6 +35470,34 @@ const I18N = (function () {
     of: { en: 'of', ml: '/' },
     minutes: { en: 'min', ml: 'മിനിറ്റ്' },
     days: { en: 'days', ml: 'ദിവസം' },
+
+    /* ── new actions and learner copy ──────────────────────────────────── */
+    continue_cta: { en: 'Continue', ml: 'തുടരുക' },
+    start_cta: { en: 'Start', ml: 'തുടങ്ങാം' },
+    resume_where_left: { en: 'Resume where you left off', ml: 'മുൻപ് നിർത്തിയിടത്തുനിന്ന് തുടരാം' },
+    starter_desc: { en: 'Understand the concept and solve step-by-step', ml: 'ആശയം മനസ്സിലാക്കാം, ഘട്ടങ്ങളായി ചെയ്യാം' },
+    review_today: { en: 'Review today', ml: 'ഇന്ന് ഓർത്തെടുക്കാം' },
+    due_cards_count: { en: 'questions due', ml: 'ചോദ്യങ്ങൾ' },
+    no_reviews_due: { en: 'No reviews due right now — caught up!', ml: 'ഇപ്പോൾ റിവ്യൂ ചെയ്യേണ്ടതില്ല — എല്ലാം കൃത്യമാണ്!' },
+    more_options: { en: 'More options', ml: 'കൂടുതൽ' },
+    settings: { en: 'Settings', ml: 'ക്രമീകരണങ്ങൾ' },
+    change_class: { en: 'Change class', ml: 'ക്ലാസ് മാറ്റുക' },
+    class_10: { en: 'Class 10 (SSLC)', ml: 'ക്ലാസ് 10 (എസ്.എസ്.എൽ.സി)' },
+    class_9: { en: 'Class 9', ml: 'ക്ലാസ് 9' },
+    class_8: { en: 'Class 8 (Math Base)', ml: 'ക്ലാസ് 8 (അടിസ്ഥാനം)' },
+    try_yourself: { en: 'Try it yourself', ml: 'സ്വയം ചെയ്തു നോക്കൂ' },
+    check_answer: { en: 'Check answer', ml: 'ഉത്തരം പരിശോധിക്കാം' },
+    give_hint: { en: 'Give me a hint', ml: 'ഒരു സൂചന തരൂ' },
+    show_steps: { en: 'Show the steps', ml: 'ഘട്ടങ്ങൾ കാണാം' },
+    dont_know_yet: { en: "I don't know yet", ml: 'ഇപ്പോൾ അറിയില്ല' },
+    try_again: { en: 'Try once more', ml: 'ഒരിക്കൽ കൂടി ശ്രമിക്കാം' },
+    review_basics: { en: 'Review the basics', ml: 'അടിസ്ഥാനങ്ങൾ നോക്കാം' },
+    done_for_today: { en: 'Done for today', ml: 'ഇന്നത്തേക്ക് മതി' },
+    next_lesson: { en: 'Next lesson', ml: 'അടുത്ത പാഠം' },
+    saved_on_device: { en: 'Saved on this device', ml: 'ഈ ഉപകരണത്തിൽ സേവ് ചെയ്തു' },
+    start_learning: { en: 'Start learning', ml: 'പഠനം തുടങ്ങാം' },
+    restore_synced: { en: 'Restore synced record', ml: 'പഴയ രേഖ തുറക്കാം' },
+    guest_welcome: { en: 'Start learning immediately, or restore a synced record.', ml: 'ഉടൻ പഠനം തുടങ്ങാം, അല്ലെങ്കിൽ പഴയ രേഖ തുറക്കാം.' },
 
     /* ── sign-in ───────────────────────────────────────────────────────── */
     login_kicker: { en: 'SSLC Mathematics · Kerala SCERT', ml: 'എസ്.എസ്.എൽ.സി ഗണിതം · കേരള എസ്.സി.ഇ.ആർ.ടി' },
@@ -35406,14 +35568,14 @@ const I18N = (function () {
     streak_none: { en: 'Start a streak today', ml: 'ഇന്ന് തുടർച്ച തുടങ്ങൂ' },
     streak_hint: { en: 'Never miss twice. One card counts.', ml: 'രണ്ട് ദിവസം തുടർച്ചയായി വിടരുത്. ഒരു കാർഡ് മതി.' },
 
-    exam_title: { en: 'SSLC exam', ml: 'എസ്.എസ്.എൽ.സി പരീക്ഷ' },
+    exam_title: { en: 'Study target date', ml: 'പഠനലക്ഷ്യ തീയതി' },
     exam_days_left: { en: 'days left', ml: 'ദിവസം ബാക്കി' },
     exam_today: { en: 'Exam day', ml: 'പരീക്ഷാ ദിവസം' },
     exam_past: { en: 'Set your next exam date', ml: 'അടുത്ത പരീക്ഷാ തീയതി നൽകുക' },
-    exam_set: { en: 'Exam date', ml: 'പരീക്ഷാ തീയതി' },
+    exam_set: { en: 'Your target date', ml: 'നിങ്ങളുടെ ലക്ഷ്യ തീയതി' },
     exam_paper: { en: 'Maths paper: 80 marks · 2 h 30 min + 15 min cool-off', ml: 'ഗണിതം: 80 മാർക്ക് · 2 മണിക്കൂർ 30 മിനിറ്റ് + 15 മിനിറ്റ് കൂൾ-ഓഫ്' },
     exam_pace: { en: 'Pace: under 2 minutes per mark, then check.', ml: 'വേഗത: ഒരു മാർക്കിന് 2 മിനിറ്റിൽ താഴെ, പിന്നെ പരിശോധന.' },
-    exam_per_day: { en: 'notes per day to finish Class 10 once before the exam', ml: 'പരീക്ഷയ്ക്ക് മുൻപ് ക്ലാസ് 10 ഒരു തവണ തീർക്കാൻ ദിവസേന വേണ്ട കുറിപ്പുകൾ' },
+    exam_per_day: { en: 'notes per day to read this class by your target date', ml: 'ലക്ഷ്യ തീയതിക്കകം ഈ ക്ലാസ് വായിച്ചുതീർക്കാൻ ദിവസേന വേണ്ട കുറിപ്പുകൾ' },
 
     weak_title: { en: 'Weak spots', ml: 'ദുർബല ഭാഗങ്ങൾ' },
     weak_desc: {
@@ -35826,7 +35988,15 @@ const DOM = (function () {
     return node;
   }
 
-  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); return node; }
+  function clear(node) {
+    // Forget old expressions before detaching them; otherwise MathJax retains
+    // every visited lesson. See docs.mathjax.org/en/v3.1/web/typeset.html.
+    if (window.MathJax && window.MathJax.typesetClear && node.querySelector('mjx-container')) {
+      window.MathJax.typesetClear([node]);
+    }
+    while (node.firstChild) node.removeChild(node.firstChild);
+    return node;
+  }
 
   /* polite screen-reader announcements (route changes, verdicts, saves) */
   function announce(msg) {
@@ -35998,7 +36168,10 @@ const Tex = (function () {
   function typeset(nodes) {
     if (!available()) return Promise.resolve();
     const list = Array.isArray(nodes) ? nodes : [nodes];
-    return run(() => window.MathJax.typesetPromise(list));
+    return run(function () {
+      const mounted = list.filter(node => node && node.isConnected);
+      if (mounted.length) return window.MathJax.typesetPromise(mounted);
+    });
   }
 
   /* Render one learner fragment into `target`.
@@ -36425,17 +36598,19 @@ const Markdown = (function () {
 
 const Store = (function () {
 
-  /* SSLC keeps its own key. The app was forked from the Real Analysis system,
-     which stores under 'ssc4.level1.v1'; sharing that key on one origin made
-     the two apps write into each other's record. A record found under the old
-     key is adopted once, so nobody loses the work they already did. */
-  const KEY = 'sslc.v1';
+  function isMock() {
+    if (typeof DATA_KIND !== 'undefined' && DATA_KIND === 'mock') return true;
+    if (typeof DATA_SOURCES !== 'undefined' && DATA_SOURCES.use === 'mock') return true;
+    if (typeof window !== 'undefined' && window.location && window.location.pathname.indexOf('-test') >= 0) return true;
+    return false;
+  }
+  const KEY = isMock() ? 'sslc.v1.mock' : 'sslc.v1';
   const LEGACY_KEY = 'ssc4.level1.v1';
   const EMPTY = {
     v: 3,
     done: {}, undone: {},        /* Level 1 completion + tombstones */
     proofs: {}, unproofs: {},    /* exercise, past-paper and derivation work + tombstones */
-    cards: {}, omr: {}, write: {},
+    cards: {}, omr: {}, write: {}, drafts: {}, draftsAt: {},
     days: {},                    /* 'YYYY-MM-DD' -> activity counters (streaks, daily goal) */
     errs: {},                    /* attempt id -> why it went wrong (the mistake log) */
     cal: {},                     /* attempt id -> confidence vs outcome (calibration) */
@@ -36453,7 +36628,7 @@ const Store = (function () {
      Everything it did have keeps its meaning, so the upgrade is a fill-in. */
   function upgrade(raw) {
     const s = Object.assign(blank(), raw || {});
-    ['done', 'undone', 'proofs', 'unproofs', 'cards', 'omr', 'write', 'days', 'errs', 'cal', 'prefs', 'prefsAt']
+    ['done', 'undone', 'proofs', 'unproofs', 'cards', 'omr', 'write', 'drafts', 'draftsAt', 'days', 'errs', 'cal', 'prefs', 'prefsAt']
       .forEach(function (k) { if (!s[k] || typeof s[k] !== 'object') s[k] = {}; });
     s.v = 3;
     if (!s.updated) s.updated = Date.now();
@@ -36463,7 +36638,7 @@ const Store = (function () {
   function load() {
     try {
       let raw = window.localStorage.getItem(KEY);
-      if (!raw) {
+      if (!raw && !isMock()) {
         /* first run under the new key: carry the old record across */
         const old = window.localStorage.getItem(LEGACY_KEY);
         if (old) { raw = old; window.localStorage.setItem(KEY, old); }
@@ -36632,6 +36807,25 @@ const Store = (function () {
     save();
   }
 
+  /* ── question response drafts (survives language toggle and reload) ──── */
+  function responseDraft(qid) {
+    if (!state.drafts) state.drafts = {};
+    return state.drafts[qid] !== undefined ? state.drafts[qid] : null;
+  }
+  function saveResponseDraft(qid, val) {
+    if (!state.drafts) state.drafts = {};
+    state.draftsAt[qid] = Date.now();
+    if (val === null || val === undefined) {
+      delete state.drafts[qid];
+    } else {
+      state.drafts[qid] = val;
+    }
+    save(true);
+  }
+  function clearResponseDraft(qid) {
+    saveResponseDraft(qid, null);
+  }
+
   /* ── preferences ─────────────────────────────────────────────────────── */
   const pref = (k, d) => (k in state.prefs ? state.prefs[k] : d);
   function setPref(k, v) {
@@ -36641,34 +36835,65 @@ const Store = (function () {
     return v;
   }
 
-  /* ── the mastery level is no longer stored ────────────────────────
-     It used to be a per-course switch with an unlock, and pressing it moved
-     the goalposts under work that was already finished. The level is now
-     DERIVED from what has actually been done — see core.progress.js — so there
-     is nothing here to set. The old 'level:<course>' and 'level2:<course>'
-     preferences are left where they are: they are inert, and deleting them
-     would only make two devices argue about a key neither of them reads. */
+  /* ── identity and profiles ──────────────────────────────────────────────
+     Local guest profile by default with stable profileId.
+     Remote multi-device sync is optional and explicitly enabled. */
+  function profileId() {
+    let pid = pref('profileId', '');
+    if (!pid) {
+      pid = 'prof_' + Math.random().toString(36).slice(2, 9) + Date.now().toString(36);
+      setPref('profileId', pid);
+    }
+    return pid;
+  }
+  function displayName() {
+    return pref('displayName', '') || pref('syncName', '') || '';
+  }
+  function setDisplayName(n) {
+    setPref('displayName', String(n || '').trim());
+  }
+  function selectedCourse() {
+    const selected = pref('course', 'm10');
+    if (typeof Pool === 'undefined') return selected;
+    const courses = Pool.courses().filter(c => !c.pending);
+    return courses.some(c => c.id === selected) ? selected : (courses[0] || {}).id || selected;
+  }
+  function setSelectedCourse(c) {
+    setPref('course', c || 'm10');
+  }
+  function isOnboarded() {
+    return !!pref('onboarded', false);
+  }
+  function setOnboarded(b) {
+    setPref('onboarded', !!b);
+  }
 
-  /* ── who is signed in ────────────────────────────────────────────────────
-     Name and roll number are the credentials AND the sync key. They are a pass
-     key, not a password, and every surface that shows them says so. */
   const identity = () => ({
     name: pref('syncName', ''),
-    roll: pref('syncRoll', '')
+    roll: pref('syncRoll', ''),
+    displayName: displayName(),
+    profileId: profileId(),
+    syncEnabled: !!pref('syncEnabled', false)
   });
   const signedIn = () => {
     const id = identity();
     return !!(String(id.name).trim() && String(id.roll).trim());
   };
-  function signIn(name, roll) {
+  const syncEnabled = () => signedIn() && !!pref('syncEnabled', false);
+  function signIn(name, roll, dName) {
     setPref('syncName', String(name || '').trim());
     setPref('syncRoll', String(roll || '').trim());
+    if (dName) setPref('displayName', String(dName).trim());
+    else if (!pref('displayName', '')) setPref('displayName', String(name || '').trim());
+    setPref('syncEnabled', true);
+    setPref('onboarded', true);
     flushNow();
     return signedIn();
   }
   function signOut() {
     setPref('syncName', '');
     setPref('syncRoll', '');
+    setPref('syncEnabled', false);
     flushNow();
   }
 
@@ -36758,6 +36983,25 @@ const Store = (function () {
     const done = mergeFlags(A.done, B.done, A.undone, B.undone);
     const proof = mergeFlags(A.proofs, B.proofs, A.unproofs, B.unproofs);
 
+    /* Response drafts need their own clocks, including deletion stamps. A
+       sync must neither erase an unfinished answer nor revive a cleared one.
+       Existing unstamped drafts inherit the old record's update time. */
+    const drafts = {}, draftsAt = {};
+    const draftIds = new Set(Object.keys(A.drafts).concat(Object.keys(B.drafts),
+      Object.keys(A.draftsAt), Object.keys(B.draftsAt)));
+    draftIds.forEach(function (id) {
+      const a = A.drafts[id], b = B.drafts[id];
+      const at = A.draftsAt[id] || (a !== undefined ? A.updated : 0);
+      const bt = B.draftsAt[id] || (b !== undefined ? B.updated : 0);
+      const av = a === undefined ? '' : JSON.stringify(a);
+      const bv = b === undefined ? '' : JSON.stringify(b);
+      // At equal times a deletion wins; other ties have a stable winner.
+      const useA = at > bt || (at === bt && av <= bv);
+      const value = useA ? a : b;
+      draftsAt[id] = Math.max(at, bt);
+      if (value !== undefined) drafts[id] = JSON.parse(JSON.stringify(value));
+    });
+
     const write = {};
     [A.write, B.write].forEach(function (src) {
       for (const k in (src || {})) {
@@ -36808,6 +37052,7 @@ const Store = (function () {
       cards: mergeAttempts(A.cards, B.cards),
       omr: mergeAttempts(A.omr, B.omr),
       write: write,
+      drafts: drafts, draftsAt: draftsAt,
       days: daysOut,
       errs: latest(A.errs, B.errs),
       cal: latest(A.cal, B.cal),
@@ -36842,11 +37087,15 @@ const Store = (function () {
     isDone, setDone, setDoneMany,
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
+    responseDraft, saveResponseDraft, clearResponseDraft,
     dayKey, bump, day, days,
     err, tagError, clearError, errs,
     recordConfidence, cal,
     pref, setPref,
-    identity, signedIn, signIn, signOut,
+    profileId, displayName, setDisplayName,
+    selectedCourse, setSelectedCourse,
+    isOnboarded, setOnboarded,
+    identity, signedIn, syncEnabled, signIn, signOut,
     summary, exportJSON, reset, tally,
     snapshot, adopt, mergeStates, onChange, flushNow,
     isVolatile: () => volatile
@@ -36898,11 +37147,11 @@ const Sync = (function () {
   let last = { at: 0, ok: null, msg: '' };
   const watchers = [];
 
-  const slug = s => String(s || '').toLowerCase().trim()
-    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const slug = s => String(s || '').normalize('NFC').toLowerCase().trim()
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '');
 
   /* name + roll -> one stable key. Both are required: a roll number alone
-     collides across colleges, a name alone collides across people.
+     collides across schools, a name alone collides across students.
 
      The separator is '--', not '.': a Realtime Database key may not contain
      '.', '$', '#', '[', ']' or '/', and a dotted key is rejected outright with
@@ -36920,7 +37169,7 @@ const Sync = (function () {
     return keyFor(id.name, id.roll);
   }
 
-  const on = () => !!key();
+  const on = () => (typeof Store !== 'undefined' && Store.syncEnabled && Store.syncEnabled()) && !!key();
   const url = () => DB + '/' + NS() + '/' + encodeURIComponent(key()) + '.json';
   const legacyUrl = () => DB + '/' + LEGACY_NS() + '/' + encodeURIComponent(key()) + '.json';
   const userUrl = () => DB + '/' + USERS() + '/' + encodeURIComponent(key()) + '.json';
@@ -36940,25 +37189,38 @@ const Sync = (function () {
     if (syncing) return Promise.resolve({ ok: false, msg: 'Already syncing.' });
     if (!window.fetch) return Promise.resolve({ ok: false, msg: 'This browser cannot sync.' });
 
+    const startedKey = key();
+    const target = url(), legacy = legacyUrl();
+    const connected = () => on() && key() === startedKey;
+
     syncing = true;
     announce(null, 'Syncing…');
     const before = Store.tally();
 
-    return window.fetch(url(), { cache: 'no-store' })
+    return window.fetch(target, { cache: 'no-store' })
       .then(r => r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)))
       .then(function (remote) {
+        if (!connected()) throw new Error('Sync connection changed.');
         /* nothing under the new namespace yet: look once under the old one */
         if (remote && typeof remote === 'object' && typeof remote.payload === 'string') return remote;
-        return window.fetch(legacyUrl(), { cache: 'no-store' })
+        return window.fetch(legacy, { cache: 'no-store' })
           .then(r => r.ok ? r.json() : null)
           .catch(() => null);
       })
       .then(function (remote) {
+        if (!connected()) throw new Error('Sync connection changed.');
         let rs = null;
         if (remote && typeof remote === 'object' && typeof remote.payload === 'string') {
           try { rs = JSON.parse(remote.payload); } catch (e) { rs = null; }
         }
-        const merged = Store.mergeStates(Store.snapshot(), rs);
+        const local = Store.snapshot();
+        const merged = Store.mergeStates(local, rs);
+        ['profileId', 'syncName', 'syncRoll', 'syncEnabled', 'onboarded'].forEach(function (k) {
+          if (k in local.prefs) merged.prefs[k] = local.prefs[k];
+          else delete merged.prefs[k];
+          if (k in local.prefsAt) merged.prefsAt[k] = local.prefsAt[k];
+          else delete merged.prefsAt[k];
+        });
         Store.adopt(merged, true);   /* quiet: do not re-trigger the auto-push */
 
         const body = JSON.stringify({
@@ -36966,10 +37228,11 @@ const Sync = (function () {
           updated: Date.now(),
           device: Store.pref('syncName', '') + ' · ' + (navigator.platform || 'device')
         });
-        return window.fetch(url(), {
+        return window.fetch(target, {
           method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: body
         }).then(function (r) {
           if (!r.ok) throw new Error('HTTP ' + r.status);
+          if (!connected()) throw new Error('Sync connection changed.');
           const after = Store.tally();
           const gained = {
             notes: after.notes - before.notes,
@@ -36994,6 +37257,7 @@ const Sync = (function () {
       })
       .catch(function (err) {
         syncing = false;
+        if (!connected()) return { ok: false, msg: 'Sync connection changed.' };
         const msg = /Failed to fetch|NetworkError/i.test(String(err && err.message))
           ? 'Offline — your progress is saved here and will sync when you are back.'
           : 'Sync failed: ' + ((err && err.message) || err);
@@ -37058,6 +37322,7 @@ const Sync = (function () {
   }
 
   function disconnect() {
+    window.clearTimeout(pushT);
     Store.signOut();
     announce(null, 'Signed out. Progress stays on this device.');
   }
@@ -37191,10 +37456,11 @@ const Pool = (function () {
         });
       }
       if (c.cards_en || c.cards_ml || c.cards) {
+        const rawCards = c.cards;
         Object.defineProperty(c, 'cards', {
           get: function () {
             const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
-            const rawList = isMl ? (c.cards_ml || c.cards_en || c.cards) : (c.cards_en || c.cards_ml || c.cards);
+            const rawList = isMl ? (c.cards_ml || c.cards_en || rawCards) : (c.cards_en || c.cards_ml || rawCards);
             if (!Array.isArray(rawList)) return [];
             return rawList.map(function (cd) {
               return {
@@ -37627,12 +37893,12 @@ const Progress = (function () {
   function secTasks(sec) {
     const qs = (sec && Pool.writtenForSec) ? Pool.writtenForSec(sec) : [];
     const done = qs.filter(taskDone).length;
-    /* `ready` is true for an EMPTY set too: nothing owed is nothing owed. */
-    return { total: qs.length, done: done, ready: done === qs.length, list: qs };
+    /* Missing exercises are not evidence that any exercises were solved. */
+    return { total: qs.length, done: done, ready: qs.length > 0 && done === qs.length, list: qs };
   }
 
   function secTaskState(sec) {
-    if (!sec) return { total: 0, done: 0, ready: true, list: [] };
+    if (!sec) return { total: 0, done: 0, ready: false, list: [] };
     if (!secCache[sec]) secCache[sec] = secTasks(sec);
     return secCache[sec];
   }
@@ -38097,27 +38363,16 @@ const Study = (function () {
   }
 
   /* ── the exam ────────────────────────────────────────────────────────── */
-  function defaultExamDate() {
-    /* The data may name the exam; otherwise the SSLC paper is in March. */
-    const tracks = (typeof TRACKS !== 'undefined' && Array.isArray(TRACKS)) ? TRACKS : [];
-    const named = tracks.filter(t => t.required && t.isoDate)[0];
-    const now = new Date();
-    if (named && new Date(named.isoDate) > now) return named.isoDate;
-    const year = now.getMonth() >= 2 ? now.getFullYear() + 1 : now.getFullYear();
-    return year + '-03-10';
-  }
-
   function exam() {
-    const iso = Store.pref('examDate', '') || defaultExamDate();
-    const at = new Date(iso + 'T09:30:00');
-    const days = Math.ceil((at.getTime() - Date.now()) / DAY);
-    /* how much of Class 10 still has to be read once, spread over the days left */
-    const ids = Pool.ids.concepts('m10');
+    const iso = Store.pref('examDate:' + Store.selectedCourse(), Store.selectedCourse() === 'm10' ? Store.pref('examDate', '') : '');
+    const at = iso ? new Date(iso + 'T09:30:00') : null;
+    const days = at && Number.isFinite(at.getTime()) ? Math.ceil((at.getTime() - Date.now()) / DAY) : null;
+    const ids = Pool.ids.concepts(Store.selectedCourse());
     const left = ids.filter(id => Progress.level(id) < 1).length;
     const perDay = days > 0 ? Math.ceil(left / days * 10) / 10 : left;
-    return { iso: iso, at: at, days: days, left: left, perDay: perDay, custom: !!Store.pref('examDate', '') };
+    return { iso: days === null ? '' : iso, at: at, days: days, left: left, perDay: perDay, custom: days !== null };
   }
-  function setExamDate(iso) { Store.setPref('examDate', iso || ''); }
+  function setExamDate(iso) { Store.setPref('examDate:' + Store.selectedCourse(), iso || ''); }
 
   /* The SSLC mathematics paper, as the learner will meet it. */
   const BLUEPRINT = {
@@ -38148,7 +38403,8 @@ const Study = (function () {
       steps.push({ kind: 'weak', n: weak.length, ready: true, done: false, href: 'recall?mode=weak', items: weak });
     }
 
-    const next = Pool.concepts('m10').filter(c => Progress.level(c.id) === 0)[0]
+    const courseId = (typeof Store !== 'undefined' && Store.selectedCourse) ? Store.selectedCourse() : 'm10';
+    const next = Pool.concepts(courseId).filter(c => Progress.level(c.id) === 0)[0]
       || Pool.concepts().filter(c => Progress.level(c.id) === 0)[0] || null;
     steps.push({
       kind: 'read', concept: next, ready: !!next,
@@ -38207,7 +38463,7 @@ const Study = (function () {
      The running block is kept in localStorage directly (not in the record):
      it is a property of this device and this hour, and it must never sync. */
   const Focus = (function () {
-    const K = 'sslc.focus';
+    const K = typeof DATA_SOURCES !== 'undefined' && DATA_SOURCES.use === 'mock' ? 'sslc.focus.mock' : 'sslc.focus';
     const PRESETS = { short: [15, 3], normal: [25, 5], long: [45, 10] };
     let tickT = 0;
     const watchers = [];
@@ -45106,6 +45362,12 @@ const Tree = (function () {
       tag,
       DOM.icon('chev', 18, 'chev')
     ], function (on) {
+      if (on) {
+        const course = Pool.courseOfSec(c.sec);
+        if (course && Store.pref('lastLesson:' + course.id, '') !== c.id) {
+          Store.setPref('lastLesson:' + course.id, c.id);
+        }
+      }
       setSlot('concept', c.id, on);
       ctx.repaint({ scroll: on, isNote: true });
     });
@@ -45569,7 +45831,8 @@ const Tree = (function () {
   /* First visit: open the first course, module and section that still have
      work left, so the tree opens somewhere useful rather than flat. */
   function seedOpen(course) {
-    if (Store.pref(KEY, null) || Store.pref(LEGACY, null)) { path(); return; }
+    const previous = path();
+    if (previous.course && (!course || previous.course === course.id)) return;
     const p = {};
     if (course) {
       p.course = course.id;
@@ -45590,6 +45853,12 @@ const Tree = (function () {
     const c = Pool.concept(conceptId);
     if (!c) return false;
     const course = Pool.courseOfSec(c.sec), mod = Pool.moduleOfSec(c.sec);
+    if (course && Store.setSelectedCourse) {
+      Store.setSelectedCourse(course.id);
+    }
+    if (course && Store.pref('lastLesson:' + course.id, '') !== c.id) {
+      Store.setPref('lastLesson:' + course.id, c.id);
+    }
     savePath({
       course: course ? course.id : null,
       mod: mod ? mod.id : null,
@@ -45680,9 +45949,17 @@ const QuestionCard = (function () {
     const rec = Store.omr(q.id);
     const already = rec && rec.first;
 
-    let given = q.type === 'MSQ' ? [] : (q.type === 'NAT' ? '' : null);
-    let locked = false;
+    const savedDraft = (typeof Store !== 'undefined' && Store.responseDraft) ? Store.responseDraft(q.id) : null;
+    const restored = o.lockedResult || null;
+    let given = restored ? restored.given : savedDraft !== null ? savedDraft : (q.type === 'MSQ' ? [] : (q.type === 'NAT' ? '' : null));
+    let locked = !!restored;
     const started = Date.now();
+
+    function saveDraftState() {
+      if (typeof Store !== 'undefined' && Store.saveResponseDraft) {
+        Store.saveResponseDraft(q.id, given);
+      }
+    }
 
     const sheetHost = el('div', {});
     const actionHost = el('div', {});
@@ -45707,7 +45984,7 @@ const QuestionCard = (function () {
           disabled: locked || null
         });
         input.value = typeof given === 'string' ? given : '';
-        input.addEventListener('input', function () { given = input.value; paintActions(); });
+        input.addEventListener('input', function () { given = input.value; saveDraftState(); paintActions(); });
         sheetHost.appendChild(el('div', { class: 'nat-in' }, [
           input,
           el('span', { class: 'small muted', text: q.answer.dp
@@ -45735,11 +46012,15 @@ const QuestionCard = (function () {
         const isKey = locked && (msq ? q.answer.indexOf(opt.k) >= 0 : q.answer === opt.k);
         const badChoice = locked && chosen && !isKey;
 
+        const plainOptText = opt.t ? opt.t.replace(/<[^>]+>/g, '').replace(/\$/g, '').trim() : '';
+        const optAria = (isMl ? ('ഓപ്ഷൻ ' + opt.k + ': ') : ('Option ' + opt.k + ': ')) + (plainOptText || opt.k);
+
         const row = el('button', {
           class: 'omr-opt' + (msq ? ' msq' : '') + (isKey ? ' key' : '') + (badChoice ? ' chosen-bad' : ''),
           type: 'button',
           role: msq ? 'checkbox' : 'radio',
           'aria-checked': String(chosen),
+          'aria-label': optAria,
           'aria-disabled': locked ? 'true' : null
         }, [
           el('span', { class: 'bub', 'aria-hidden': 'true', text: opt.k }),
@@ -45753,6 +46034,7 @@ const QuestionCard = (function () {
             const i = given.indexOf(opt.k);
             if (i >= 0) given.splice(i, 1); else given.push(opt.k);
           } else given = opt.k;
+          saveDraftState();
           paintSheet(q.options.indexOf(opt));   /* keep focus on the row just used */
           paintActions();
         });
@@ -45804,6 +46086,7 @@ const QuestionCard = (function () {
             text: (typeof I18N !== 'undefined') ? I18N.t('clear') : 'Clear',
             on: { click: function () {
               given = q.type === 'MSQ' ? [] : (q.type === 'NAT' ? '' : null);
+              saveDraftState();
               paintSheet(); paintActions();
             } } }) : null
         ]),
@@ -45817,6 +46100,7 @@ const QuestionCard = (function () {
     function lock() {
       if (locked || !hasAnswer()) return;
       locked = true;
+      if (typeof Store !== 'undefined' && Store.clearResponseDraft) Store.clearResponseDraft(q.id);
       const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
       const verdict = judge(q, given);
       const ms = Date.now() - started;
@@ -45830,7 +46114,7 @@ const QuestionCard = (function () {
         : verdict === 'partial'
           ? (isMl ? 'ഭാഗികമായി ശരി.' : 'Partially correct.')
           : (isMl ? 'തെറ്റായ ഉത്തരം. പരിഹാരം കാണിച്ചിരിക്കുന്നു.' : 'Incorrect. Worked answer shown.'));
-      if (o.onLocked) o.onLocked(verdict, ms);
+      if (o.onLocked) o.onLocked(verdict, ms, given);
       const h = resultHost.querySelector('.verdict');
       if (h) h.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
@@ -45925,6 +46209,9 @@ const QuestionCard = (function () {
 
     paintSheet();
     paintActions();
+    if (restored) {
+      resultHost.appendChild(feedback(q, given, restored.verdict, restored.ms, rec));
+    }
     UI.math(node);
     return node;
   }
@@ -47196,231 +47483,373 @@ const WriteBox = (function () {
 const Login = (function () {
 
   const el = DOM.el;
+  let lastHost = null;
+  let lastOnDone = null;
+  let cachedValues = { name: '', roll: '', course: null, showSync: false };
+
+  function remount() {
+    if (lastHost && lastOnDone) {
+      const focused = document.activeElement;
+      const id = focused && focused.id;
+      const start = focused && focused.selectionStart;
+      const end = focused && focused.selectionEnd;
+      DOM.clear(lastHost);
+      mount(lastHost, lastOnDone);
+      const next = id && document.getElementById(id);
+      if (next) {
+        next.focus({ preventScroll: true });
+        if (next.setSelectionRange && start != null) next.setSelectionRange(start, end);
+      }
+    }
+  }
 
   function mount(host, onDone) {
-    const namePh = (typeof I18N !== 'undefined') ? I18N.t('login_name_ph') : 'e.g. Student Name';
-    const rollPh = (typeof I18N !== 'undefined') ? I18N.t('login_roll_ph') : 'e.g. Roll Number';
+    lastHost = host;
+    lastOnDone = onDone;
+    const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
+
+    let selectedCourse = cachedValues.course || (Store.selectedCourse ? Store.selectedCourse() : 'm10');
+    let showSyncForm = cachedValues.showSync || false;
 
     const nameIn = el('input', {
       class: 'tin', type: 'text', id: 'login-name', autocomplete: 'name',
-      placeholder: namePh, spellcheck: 'false', enterkeyhint: 'next'
+      placeholder: isMl ? 'നിങ്ങളുടെ പേര് (ആവശ്യമെങ്കിൽ)' : 'Your name (optional)',
+      spellcheck: 'false', enterkeyhint: 'go'
     });
+    nameIn.value = cachedValues.name || Store.displayName() || '';
+    nameIn.addEventListener('input', () => { cachedValues.name = nameIn.value; });
+
     const rollIn = el('input', {
       class: 'tin', type: 'text', id: 'login-roll', autocomplete: 'off',
-      placeholder: rollPh, spellcheck: 'false', enterkeyhint: 'go'
+      placeholder: isMl ? 'റോൾ നമ്പർ' : 'Roll Number',
+      spellcheck: 'false', enterkeyhint: 'go'
     });
+    rollIn.value = cachedValues.roll || Store.identity().roll || '';
+    rollIn.addEventListener('input', () => { cachedValues.roll = rollIn.value; });
 
-    const known = Store.identity();
-    nameIn.value = known.name || '';
-    rollIn.value = known.roll || '';
+    const note = el('p', { class: 'small muted', style: { margin: '8px 0 0' } });
 
-    const note = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
-    const go = el('button', {
-      class: 'btn primary', type: 'submit',
-      text: (typeof I18N !== 'undefined') ? I18N.t('login_submit') : 'Open my study record'
-    });
-
-    const keyLine = el('p', { class: 'small mono', style: { margin: '8px 0 0', color: 'var(--ink-3)' } });
-    function paintKey() {
-      const k = Sync.keyFor(nameIn.value, rollIn.value);
-      keyLine.textContent = k ? 'record: ' + k : '';
-    }
-    nameIn.addEventListener('input', paintKey);
-    rollIn.addEventListener('input', paintKey);
-    paintKey();
-
-    let busy = false;
-    function submit(e) {
-      if (e) e.preventDefault();
-      if (busy) return;
-      const name = nameIn.value.trim(), roll = rollIn.value.trim();
-      if (!name || !roll) {
-        note.textContent = (typeof I18N !== 'undefined')
-          ? I18N.t('login_both_needed')
-          : 'Both a name and a roll number are needed — together they are the key.';
-        (name ? rollIn : nameIn).focus();
-        return;
-      }
-      busy = true;
-      go.disabled = true;
-      go.textContent = (typeof I18N !== 'undefined') ? I18N.t('login_opening') : 'Opening…';
-      note.textContent = (typeof I18N !== 'undefined') ? I18N.t('login_looking') : 'Looking for an existing record…';
-
-      Store.signIn(name, roll);
-      Sync.hello().then(function (r) {
-        note.textContent = r.msg || '';
-        onDone(r);
-      }, function () {
-        /* offline is not a reason to lock someone out of their own device */
-        note.textContent = '';
-        onDone({ ok: false, offline: true });
-      });
-    }
-
-    const kickerText = (typeof I18N !== 'undefined') ? I18N.t('login_kicker') : 'Class 8 Mathematics · Math Base';
-    const titleText = (typeof I18N !== 'undefined') ? I18N.t('login_title') : 'Sign in to your record';
-    const ledeText = (typeof I18N !== 'undefined') ? I18N.t('login_lede') : 'Your name and roll number are the key your progress is stored under.';
-    const nameLabel = (typeof I18N !== 'undefined') ? I18N.t('login_name') : 'Name';
-    const rollLabel = (typeof I18N !== 'undefined') ? I18N.t('login_roll') : 'Roll number';
-    const passkeyTitle = (typeof I18N !== 'undefined') ? I18N.t('login_passkey_title') : 'This is a pass key, not a password.';
-    const passkeyDesc = (typeof I18N !== 'undefined') ? I18N.t('login_passkey_desc') : 'Anyone who knows your name and roll number can open this record.';
-
-    const form = el('form', { class: 'stack', style: { gap: '14px' }, on: { submit: submit } }, [
-      el('div', {}, [
-        el('div', { class: 'kicker', text: kickerText }),
-        el('h1', { tabindex: '-1', id: 'pagetitle', text: titleText })
-      ]),
-      el('p', { class: 'lede', text: ledeText }),
-      el('div', { class: 'card' }, [
-        el('label', { class: 'kicker', for: 'login-name', text: nameLabel }),
-        el('div', { style: { margin: '6px 0 14px' } }, [nameIn]),
-        el('label', { class: 'kicker', for: 'login-roll', text: rollLabel }),
-        el('div', { style: { margin: '6px 0 0' } }, [rollIn]),
-        keyLine
-      ]),
-      el('div', { class: 'btn-row' }, [go]),
-      note,
-      el('div', { class: 'banner' }, [
-        DOM.mi('info'),
-        el('span', {}, [
-          el('b', { text: passkeyTitle + ' ' }),
-          el('span', { text: passkeyDesc })
-        ])
-      ]),
-      Pool.isMock() ? el('p', { class: 'small muted', style: { margin: 0 },
-        text: 'Test build: records here are kept in a separate store from the real app, so nothing you do can reach it.' }) : null
+    // Language pills
+    const langRow = el('div', { class: 'btn-row', style: { margin: '0 0 16px', gap: '8px' } }, [
+      el('button', {
+        class: 'btn' + (!isMl ? ' primary' : ''), type: 'button',
+        text: 'English',
+        on: { click: () => { if (isMl) I18N.setLang('en'); } }
+      }),
+      el('button', {
+        class: 'btn' + (isMl ? ' primary' : ''), type: 'button',
+        text: 'മലയാളം',
+        on: { click: () => { if (!isMl) I18N.setLang('ml'); } }
+      })
     ]);
 
-    nameIn.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); rollIn.focus(); }
+    // Class selection chips
+    const classContainer = el('div', { class: 'btn-row', style: { gap: '8px', margin: '6px 0 16px' } });
+    const classes = Pool.courses().filter(c => !c.pending).map(c => ({ id: c.id, label: c.title }));
+
+    function paintClassButtons() {
+      DOM.clear(classContainer);
+      classes.forEach(c => {
+        const active = selectedCourse === c.id;
+        const b = el('button', {
+          class: 'btn' + (active ? ' primary' : ''), type: 'button',
+          style: { flex: '1 1 auto', minHeight: '44px' },
+          text: c.label,
+          on: { click: () => {
+            selectedCourse = c.id;
+            cachedValues.course = c.id;
+            if (Store.setSelectedCourse) Store.setSelectedCourse(c.id);
+            paintClassButtons();
+          } }
+        });
+        classContainer.appendChild(b);
+      });
+    }
+    paintClassButtons();
+
+    // Start learning directly button
+    const startBtn = el('button', {
+      class: 'btn primary lg', type: 'button',
+      style: { width: '100%', minHeight: '48px', fontSize: '1.05rem', margin: '10px 0 4px' },
+      text: isMl ? 'പഠനം തുടങ്ങാം' : 'Start learning',
+      on: { click: () => {
+        if (Store.setSelectedCourse) Store.setSelectedCourse(selectedCourse);
+        if (Store.setDisplayName && nameIn.value.trim()) Store.setDisplayName(nameIn.value.trim());
+        if (Store.setOnboarded) Store.setOnboarded(true);
+        onDone({ ok: true });
+      } }
     });
 
-    host.appendChild(el('div', { class: 'wrap view-in' }, [form]));
-    (nameIn.value ? rollIn : nameIn).focus();
+    // Remote sync section
+    const syncCard = el('div', { class: 'card', style: { marginTop: '12px', display: showSyncForm ? 'block' : 'none' } });
+    const syncKeyLine = el('p', { class: 'small mono', style: { margin: '8px 0 0', color: 'var(--ink-3)' } });
+    function paintSyncKey() {
+      const k = Sync.keyFor(nameIn.value, rollIn.value);
+      syncKeyLine.textContent = k ? 'sync: ' + k : '';
+    }
+    nameIn.addEventListener('input', paintSyncKey);
+    rollIn.addEventListener('input', paintSyncKey);
+    paintSyncKey();
+
+    const syncSubmitBtn = el('button', {
+      class: 'btn primary', type: 'button',
+      style: { minHeight: '44px', width: '100%', marginTop: '8px' },
+      text: isMl ? 'സമന്വയിപ്പിച്ച റെക്കോർഡ് തുറക്കുക' : 'Open synced record',
+      on: { click: () => {
+        const name = nameIn.value.trim(), roll = rollIn.value.trim();
+        if (!name || !roll) {
+          note.textContent = isMl ? 'പേരും റോൾ നമ്പറും ആവശ്യമാണ്.' : 'Both name and roll number are needed to sync.';
+          (name ? rollIn : nameIn).focus();
+          return;
+        }
+        if (!Sync.keyFor(name, roll)) {
+          note.textContent = isMl ? 'പേരിലും റോൾ നമ്പറിലും അക്ഷരങ്ങളോ അക്കങ്ങളോ വേണം.' : 'Use letters or numbers in both the name and roll number.';
+          return;
+        }
+        syncSubmitBtn.disabled = true;
+        note.textContent = isMl ? 'റെക്കോർഡ് പരിശോധിക്കുന്നു…' : 'Checking record…';
+        Store.signIn(name, roll);
+        Sync.hello().then(r => {
+          note.textContent = r.msg || '';
+          onDone(r);
+        }, () => {
+          onDone({ ok: false, offline: true });
+        });
+      } }
+    });
+
+    DOM.add(syncCard, [
+      el('div', { class: 'kicker', text: isMl ? 'മൾട്ടി-ഡിവൈസ് സമന്വയം' : 'Multi-device sync' }),
+      el('p', { class: 'small muted', text: isMl
+        ? 'പേരും റോൾ നമ്പറും നൽകി മുൻപ് സൂക്ഷിച്ച രേഖ തുറക്കാം.'
+        : 'Enter your name and roll number to sync with another phone or laptop.' }),
+      el('p', { class: 'small', text: isMl
+        ? 'മുകളിൽ നൽകിയ പേരാണ് ഉപയോഗിക്കുന്നത്. പേരും റോൾ നമ്പറും അറിയുന്ന ആർക്കും ഈ രേഖ കാണാനും മാറ്റാനും കഴിയും. ഇത് ഒരു പാസ്‌വേഡ് അല്ല.'
+        : 'Uses the name entered above. Anyone who knows that name and roll number can read and change this record. They are not a password.' }),
+      el('label', { class: 'kicker', for: 'login-roll', text: isMl ? 'റോൾ നമ്പർ' : 'Roll number' }),
+      el('div', { style: { margin: '4px 0 6px' } }, [rollIn]),
+      syncKeyLine,
+      syncSubmitBtn,
+      note
+    ]);
+
+    const toggleSyncLink = el('button', {
+      class: 'btn link', type: 'button',
+      style: { width: '100%', textAlign: 'center', marginTop: '12px', fontSize: '0.9rem' },
+      text: showSyncForm
+        ? (isMl ? '▲ സമന്വയ ഫോം മറയ്ക്കുക' : '▲ Hide sync sign-in')
+        : (isMl ? '▼ മറ്റൊരു ഉപകരണത്തിലെ രേഖ തുറക്കണോ? സമന്വയം' : '▼ Restore synced record from another device'),
+      on: { click: () => {
+        showSyncForm = !showSyncForm;
+        cachedValues.showSync = showSyncForm;
+        syncCard.style.display = showSyncForm ? 'block' : 'none';
+        toggleSyncLink.textContent = showSyncForm
+          ? (isMl ? '▲ സമന്വയ ഫോം മറയ്ക്കുക' : '▲ Hide sync sign-in')
+          : (isMl ? '▼ മറ്റൊരു ഉപകരണത്തിലെ രേഖ തുറക്കണോ? സമന്വയം' : '▼ Restore synced record from another device');
+      } }
+    });
+
+    const wrap = el('div', { class: 'wrap view-in' }, [
+      el('div', { class: 'stack', style: { gap: '14px', maxWidth: '440px', margin: '0 auto' } }, [
+        el('div', {}, [
+          el('div', { class: 'kicker', text: isMl ? 'കേരള എസ്.സി.ഇ.ആർ.ടി ഗണിതം' : 'Kerala SCERT Mathematics' }),
+          el('h1', { tabindex: '-1', id: 'pagetitle', text: isMl ? 'പഠനം ആരംഭിക്കാം' : 'Welcome to SSLC Maths' })
+        ]),
+        el('p', { class: 'lede', text: isMl
+          ? 'ലളിതമായി ആശയങ്ങൾ മനസ്സിലാക്കി സ്വന്തമായി ഗണിതം ചെയ്തു പഠിക്കാം.'
+          : 'Understand concepts clearly, solve problems with progressive hints, and retain mastery.' }),
+        langRow,
+        el('div', { class: 'card' }, [
+          el('label', { class: 'kicker', text: isMl ? 'ക്ലാസ് തിരഞ്ഞെടുക്കുക' : 'Select your class' }),
+          classContainer,
+          el('label', { class: 'kicker', for: 'login-name', text: isMl ? 'നിങ്ങളുടെ പേര് (ആവശ്യമെങ്കിൽ)' : 'Your name (optional)' }),
+          el('div', { style: { margin: '6px 0 10px' } }, [nameIn]),
+          startBtn,
+          el('p', { class: 'small muted', style: { margin: '6px 0 0', textAlign: 'center' },
+            text: isMl ? 'രേഖകൾ നിങ്ങളുടെ ഫോണിൽ സുരക്ഷിതമായിരിക്കും.' : 'Your progress is saved right here on this device.' })
+        ]),
+        toggleSyncLink,
+        syncCard
+      ])
+    ]);
+
+    host.appendChild(wrap);
   }
 
-  return { mount };
+  return { mount, remount };
 })();
 
 
 /* ── src/view.home.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
-   Today — the plan for the day, and what the app actually knows about you.
+   Today — an invitation to one short, focused learning session.
 
-   The order of the page is the order of the evidence: the plan first (what to
-   do), then the daily goal and streak (whether you are doing it), then the
-   feedback the research says matters most — weak spots, why marks are lost,
-   and calibration — then the numbers, the exam, and the courses.
-
-   The tiles keep completion, exercises and recall apart on purpose: reading a
-   note is Level 1 and says nothing about recall, so the numbers are never
-   merged into one flattering percentage.
+   Prioritizes action over passive stats:
+   1. Active class selector
+   2. Single primary Start / Continue action in the first viewport
+   3. Spaced recall due card (or encouraging caught-up state)
+   4. Targeted weak-spot practice (if any)
+   5. Calm habit streak and link to full Progress & Diagnostics
    ══════════════════════════════════════════════════════════════════════════ */
 
 const ViewHome = (function () {
 
   const el = DOM.el;
-  const t = k => I18N.t(k);
-  const isMl = () => I18N.lang() === 'ml';
+  const t = k => (typeof I18N !== 'undefined' ? I18N.t(k) : k);
+  const isMl = () => (typeof I18N !== 'undefined' && I18N.lang() === 'ml');
 
-  /* ── greeting row ──────────────────────────────────────────────────────── */
-  function greeting() {
+  /* ── greeting & class switcher ─────────────────────────────────────────── */
+  function greeting(rerender) {
+    const ml = isMl();
     const h = new Date().getHours();
     const word = h < 12 ? t('greeting_morning') : h < 17 ? t('greeting_day') : t('greeting_evening');
-    const name = (Store.identity().name || '').split(' ')[0];
+    const name = Store.displayName() || (Store.identity().name || '').split(' ')[0];
     const st = Study.streak();
-    const ex = Study.exam();
+    const courseId = Store.selectedCourse() || 'm10';
 
-    return el('div', { class: 'today-head' }, [
-      el('div', {}, [
-        el('div', { class: 'kicker', text: word + (name ? ', ' + name : '') }),
-        el('h1', { tabindex: '-1', id: 'pagetitle', text: t('today_title') })
-      ]),
-      el('div', { class: 'row', style: { gap: '6px' } }, [
+    const pill = (cId, label) => el('button', {
+      class: 'chip' + (courseId === cId ? ' on' : ''),
+      type: 'button',
+      text: label,
+      on: { click: () => { Store.setSelectedCourse(cId); rerender(); } }
+    });
+
+    return el('div', { class: 'stack', style: { gap: '8px' } }, [
+      el('div', { class: 'spread', style: { alignItems: 'center' } }, [
+        el('div', {}, [
+          el('div', { class: 'kicker', text: word + (name ? ', ' + name : '') }),
+          el('h1', { tabindex: '-1', id: 'pagetitle', text: t('today_title') })
+        ]),
         el('span', { class: 'chip stat-chip' + (st.today ? ' on' : ''), title: t('streak_hint') }, [
           DOM.mi(st.current ? 'local_fire_department' : 'mode_heat', 'sm'),
           el('span', { text: st.current ? st.current + ' ' + t('streak') : t('streak_none') })
-        ]),
-        ex.days >= 0 ? el('a', { class: 'chip stat-chip', href: '#exam-card' }, [
-          DOM.mi('event', 'sm'),
-          el('span', { text: ex.days === 0 ? t('exam_today') : ex.days + ' ' + t('exam_days_left') })
-        ]) : null
+        ])
+      ]),
+
+      /* Class selector */
+      el('div', { class: 'row', style: { gap: '6px', marginTop: '2px' } }, [
+        ...Pool.courses().filter(c => !c.pending).map(c => pill(c.id,
+          c.id === 'm10' ? (ml ? 'ക്ലാസ് 10 (SSLC)' : 'Class 10 (SSLC)') :
+          c.id === 'm9' ? (ml ? 'ക്ലാസ് 9' : 'Class 9') :
+          c.id === 'm8' ? (ml ? 'ക്ലാസ് 8' : 'Class 8') : c.title))
       ])
     ]);
   }
 
-  /* ── the plan ──────────────────────────────────────────────────────────── */
-  function planStep(i, s) {
+  /* ── primary action card (Continue / Start) ────────────────────────────── */
+  function primaryCard() {
     const ml = isMl();
-    let label, detail, icon;
-    switch (s.kind) {
-      case 'review':
-        icon = 'replay';
-        label = s.n ? t('plan_review') : t('plan_review_none');
-        detail = s.n ? s.n + ' ' + t('plan_review_detail') : t('streak_hint');
-        break;
-      case 'weak':
-        icon = 'fitness_center';
-        label = t('plan_weak');
-        detail = s.items.slice(0, 3).map(x => x.c.title).join(' · ') + (s.items.length > 3 ? ' · +' + (s.items.length - 3) : '');
-        break;
-      case 'read':
-        icon = 'menu_book';
-        label = s.concept ? t('plan_read') + ': ' + s.concept.title : t('plan_read_done');
-        detail = s.concept ? Pool.sectionTitle(s.concept.sec) + ' · ' + t('plan_read_detail') : '';
-        break;
-      case 'exercise':
-        icon = 'edit_square';
-        label = s.q ? t('plan_exercise') + ': ' + (s.q.title || s.q.id) : t('plan_exercise_done');
-        detail = s.concept ? Pool.sectionTitle(s.concept.sec) + ' · ' + t('plan_exercise_detail') : '';
-        break;
-      case 'drill':
-        icon = 'timer';
-        label = t('plan_drill');
-        detail = s.ready ? s.n + ' ' + t('plan_drill_detail') : t('plan_drill_locked');
-        break;
-      case 'teach':
-        icon = 'record_voice_over';
-        label = t('plan_teach') + (s.concept ? ': ' + s.concept.title : '');
-        detail = t('plan_teach_detail');
-        break;
-      default:
-        icon = 'circle'; label = s.kind; detail = '';
+    const courseId = Store.selectedCourse() || 'm10';
+    const concepts = Pool.concepts(courseId);
+
+    /* Look for saved path or concept in progress */
+    const openPref = Store.pref('open4', {});
+    const lastId = Store.pref('lastLesson:' + courseId, openPref.concept);
+    let activeConcept = lastId ? Pool.concept(lastId) : null;
+    let isResume = false;
+
+    if (activeConcept && (Pool.courseOfSec(activeConcept.sec) || {}).id === courseId && !Store.isDone(activeConcept.id)) {
+      isResume = true;
+    } else {
+      /* Find first unread or partially read concept */
+      activeConcept = concepts.find(c => !Store.isDone(c.id)) || null;
     }
-    const cls = 'item plan-step' + (s.done ? ' is-done' : '') + (s.ready ? '' : ' is-idle');
-    return el('a', { class: cls, href: Router.href(s.href) }, [
-      el('span', { class: 'ix' + (s.done ? ' ok' : '') }, [DOM.mi(s.done ? 'check' : icon, 'xs')]),
-      el('span', { class: 'tt' }, [el('b', { text: label }), detail ? el('span', { text: detail }) : null]),
-      s.count ? el('span', { class: 'count', text: s.count }) : null,
-      el('span', { class: 'go', 'aria-hidden': 'true', text: '›' })
+
+    if (!activeConcept) {
+      return el('div', { class: 'card today-primary-cta' }, [
+        el('div', { class: 'kicker', style: { color: 'rgba(255,255,255,.85)' }, text: ml ? 'പാഠങ്ങൾ പൂർത്തിയായി' : 'Curriculum Complete' }),
+        el('h2', { style: { color: '#fff', margin: '4px 0' }, text: ml ? 'എല്ലാ പാഠങ്ങളും വായിച്ചു കഴിഞ്ഞു!' : 'All lessons read!' }),
+        el('a', { class: 'btn', style: { alignSelf: 'flex-start', marginTop: '8px' }, href: Router.href('study/' + courseId), text: t('open_syllabus') })
+      ]);
+    }
+
+    const titleText = I18N.pick(activeConcept, 'title') || activeConcept.title;
+    const secTitle = Pool.sectionTitle(activeConcept.sec);
+    const oneLine = I18N.pick(activeConcept, 'oneLine') || activeConcept.oneLine;
+
+    return el('div', { class: 'card today-primary-cta' }, [
+      el('div', { class: 'kicker', style: { color: 'rgba(255,255,255,.85)' },
+        text: isResume ? (ml ? 'തുടരാം' : 'CONTINUE LEARNING') : (ml ? 'ഇന്ന് പഠിക്കാം' : 'START TODAY’S LESSON') }),
+      el('div', { style: { margin: '6px 0 10px' } }, [
+        el('h2', { style: { color: '#fff', fontSize: '1.25rem', lineHeight: '1.3' }, text: titleText }),
+        el('p', { style: { color: 'rgba(255,255,255,.85)', margin: '4px 0 0', fontSize: '.88rem' },
+          text: secTitle + (oneLine ? ' · ' + oneLine : '') })
+      ]),
+      el('a', {
+        class: 'btn',
+        style: { background: '#fff', color: '#1e3a8a', fontWeight: '700', alignSelf: 'flex-start', border: 0, padding: '10px 18px' },
+        href: Router.href('note/' + activeConcept.id)
+      }, [
+        DOM.mi(isResume ? 'resume' : 'play_arrow', 'sm'),
+        el('span', { text: isResume ? (ml ? 'തുടരുക' : 'Continue Lesson') : (ml ? 'തുടങ്ങാം' : 'Start Lesson') })
+      ])
     ]);
   }
 
-  function planCard() {
-    const steps = Study.plan();
-    return el('div', { class: 'card glass' }, [
-      el('div', { class: 'kicker', text: t('plan_title') }),
-      el('p', { class: 'small muted', style: { margin: '4px 0 12px' }, text: t('plan_desc') }),
-      el('div', { class: 'list' }, steps.map((s, i) => planStep(i, s)))
+  /* ── spaced recall card ────────────────────────────────────────────────── */
+  function recallCard() {
+    const ml = isMl();
+    const d = Study.due();
+
+    if (d.due > 0) {
+      return el('div', { class: 'card' }, [
+        el('div', { class: 'spread' }, [
+          el('div', { class: 'kicker', text: ml ? 'ഇന്ന് ഓർത്തെടുക്കാം' : 'SPACED RECALL' }),
+          el('span', { class: 'badge warn', text: d.due + (ml ? ' ചോദ്യങ്ങൾ' : ' due') })
+        ]),
+        el('p', { class: 'small muted', style: { margin: '6px 0 12px' },
+          text: ml
+            ? 'പഠിച്ച ആശയങ്ങൾ ദീർഘകാലം ഓർമ്മയിൽ നിൽക്കാൻ ഹ്രസ്വമായ റിവ്യൂ.'
+            : 'Strengthen memory with spaced retrieval practice before ideas fade.'
+        }),
+        el('a', { class: 'btn primary', href: Router.href('recall'), style: { alignSelf: 'flex-start' } }, [
+          DOM.mi('replay', 'sm'),
+          el('span', { text: ml ? 'ഓർത്തെടുക്കൽ തുടങ്ങാം' : 'Start Recall Practice' })
+        ])
+      ]);
+    }
+
+    return el('div', { class: 'card tint' }, [
+      el('div', { class: 'row', style: { gap: '10px', alignItems: 'center' } }, [
+        DOM.mi('task_alt', 'md'),
+        el('div', {}, [
+          el('b', { text: ml ? 'ഇന്നത്തെ ഓർത്തെടുക്കൽ പൂർത്തിയായി!' : 'Caught up on recall!' }),
+          el('p', { class: 'small muted', style: { margin: '2px 0 0' },
+            text: ml ? 'ഇന്ന് റിവ്യൂ ചെയ്യേണ്ട കാർഡുകൾ ഒന്നുമില്ല. മികച്ച മുന്നേറ്റം!' : 'No flashcards are overdue right now. Great consistency!' })
+        ])
+      ])
     ]);
   }
 
-  /* ── daily goal and streak ─────────────────────────────────────────────── */
-  function goalCard(rerender) {
-    const g = Study.goalState();
-    const st = Study.streak();
-    const chip = (k, label) => el('button', { class: 'chip', type: 'button', text: label,
-      'aria-pressed': String(g.key === k), on: { click: function () { Study.setGoal(k); rerender(); } } });
+  /* ── weak spots quick card ─────────────────────────────────────────────── */
+  function weakCard() {
+    const ml = isMl();
+    const weak = Study.weakSpots(3);
+    if (!weak.length) return null;
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
-        el('div', { class: 'kicker', text: t('goal_title') }),
+        el('div', { class: 'kicker', text: t('weak_title') }),
+        el('a', { class: 'chip on', href: Router.href('recall?mode=weak'), text: t('weak_drill') })
+      ]),
+      el('p', { class: 'small muted', style: { margin: '4px 0 8px' }, text: t('weak_desc') }),
+      el('div', { class: 'row', style: { gap: '6px' } }, weak.map(w =>
+        el('a', { class: 'chip', href: Router.href('note/' + w.cid), text: w.c.title })
+      ))
+    ]);
+  }
+
+  /* ── small wins & habit tracker ────────────────────────────────────────── */
+  function habitCard() {
+    const ml = isMl();
+    const g = Study.goalState();
+
+    return el('div', { class: 'card tint' }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: ml ? 'ഇന്നത്തെ ലക്ഷ്യം' : 'DAILY GOAL' }),
         el('span', { class: 'badge' + (g.met ? ' ok' : ''), text: g.met ? t('goal_met') : g.pct + '%' })
       ]),
-      el('div', { class: 'row', style: { margin: '10px 0 12px' } }, [
-        chip('light', t('goal_light')), chip('normal', t('goal_normal')), chip('exam', t('goal_exam'))
-      ]),
-      el('div', { class: 'goal-grid' }, g.rows.map(function (r) {
+      el('div', { class: 'goal-grid', style: { marginTop: '8px' } }, g.rows.slice(0, 2).map(function (r) {
         return el('div', { class: 'goal-row' }, [
           el('div', { class: 'spread' }, [
             el('span', { class: 'small', text: t('goal_' + r.key) }),
@@ -47429,347 +47858,27 @@ const ViewHome = (function () {
           UI.meter(r.done, r.want, r.done >= r.want ? true : undefined)
         ]);
       })),
-      el('div', { class: 'row', style: { marginTop: '12px', gap: '10px' } }, [
-        el('span', { class: 'badge' + (st.current ? ' warn' : ''), text: st.current + ' ' + t('streak') }),
-        el('span', { class: 'small muted', text: t('streak_best') + ' ' + st.best + ' · ' + t('streak_hint') })
-      ]),
-      el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: t('goal_note') })
+      el('div', { style: { marginTop: '12px', borderTop: '1px solid var(--rule)', paddingTop: '10px' } }, [
+        el('a', { class: 'row', href: Router.href('progress'), style: { textDecoration: 'none', justifyContent: 'space-between' } }, [
+          el('span', { class: 'small', style: { fontWeight: '600', color: 'var(--accent)' },
+            text: ml ? 'പൂർണ്ണ പുരോഗതിയും പിഴവ് വിശകലനവും കാണുക' : 'View full progress, mastery & mistake notebook' }),
+          DOM.mi('arrow_forward', 'sm')
+        ])
+      ])
     ]);
   }
 
-  /* ── focus timer ───────────────────────────────────────────────────────── */
-  function focusCard() {
-    const F = Study.Focus;
-    const host = el('div', { class: 'card tint focus-card' });
-    const clock = el('div', { class: 'focus-clock', 'aria-live': 'off' });
-    const phase = el('div', { class: 'small muted' });
-    const ring = el('div', { class: 'focus-ring' }, [clock]);
-    const actions = el('div', { class: 'btn-row', style: { marginTop: '12px' } });
-    const presets = el('div', { class: 'row', style: { marginTop: '10px' } });
-    const todayLine = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
-
-    function paintPresets() {
-      DOM.clear(presets);
-      Object.keys(F.PRESETS).forEach(function (k) {
-        const p = F.PRESETS[k];
-        presets.appendChild(el('button', { class: 'chip', type: 'button',
-          'aria-pressed': String(Store.pref('focusPreset', 'normal') === k),
-          text: p[0] + ' + ' + p[1] + ' ' + t('minutes'),
-          on: { click: function () { F.setPreset(k); paintPresets(); paint(F.state()); } } }));
-      });
-    }
-
-    function paint(s) {
-      clock.textContent = UI.clock(s.left);
-      const pct = s.total ? Math.round(100 * (1 - s.left / s.total)) : 0;
-      ring.style.setProperty('--p', String(s.phase === 'idle' ? 0 : pct));
-      ring.setAttribute('data-phase', s.phase);
-      phase.textContent = s.phase === 'idle' ? t('focus_desc')
-        : s.over ? t('focus_done')
-        : s.phase === 'break' ? t('focus_on_break') : t('focus_running');
-      DOM.clear(actions);
-      if (s.phase === 'idle') {
-        actions.appendChild(el('button', { class: 'btn primary', type: 'button',
-          on: { click: function () { F.start('focus'); } } }, [DOM.mi('play_arrow', 'sm'), el('span', { text: t('focus_start') })]));
-      } else if (s.over && s.phase === 'focus') {
-        actions.appendChild(el('button', { class: 'btn primary', type: 'button', text: t('focus_break'),
-          on: { click: function () { F.start('break'); } } }));
-        actions.appendChild(el('button', { class: 'btn', type: 'button', text: t('focus_stop'),
-          on: { click: function () { F.stop(); } } }));
-      } else if (s.over) {
-        actions.appendChild(el('button', { class: 'btn primary', type: 'button', text: t('focus_start'),
-          on: { click: function () { F.start('focus'); } } }));
-        actions.appendChild(el('button', { class: 'btn', type: 'button', text: t('focus_stop'),
-          on: { click: function () { F.stop(); } } }));
-      } else {
-        actions.appendChild(el('button', { class: 'btn', type: 'button', text: t('focus_stop'),
-          on: { click: function () { F.stop(); } } }));
-      }
-      const td = F.today();
-      todayLine.textContent = td.min + ' ' + t('minutes') + ' ' + t('focus_today') + ' · ' + td.blocks + ' ' + t('focus_blocks');
-    }
-
-    const watcher = function (s) { if (!document.body.contains(host)) { F.unwatch(watcher); return; } paint(s); };
-    paint(F.watch(watcher));
-    paintPresets();
-
-    DOM.add(host, [
-      el('div', { class: 'kicker', text: t('focus_title') }),
-      el('div', { class: 'focus-row' }, [ring, el('div', { class: 'grow' }, [phase, actions])]),
-      presets, todayLine
-    ]);
-    return host;
-  }
-
-  /* ── weak spots, mistakes, calibration ─────────────────────────────────── */
-  function weakCard() {
-    const weak = Study.weakSpots(6);
-    if (!weak.length) return null;
-    return el('div', { class: 'card' }, [
-      el('div', { class: 'spread' }, [
-        el('div', { class: 'kicker', text: t('weak_title') }),
-        el('a', { class: 'chip on', href: Router.href('recall?mode=weak'), text: t('weak_drill') })
-      ]),
-      el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('weak_desc') }),
-      el('div', { class: 'list' }, weak.map(function (w) {
-        return el('a', { class: 'item', href: Router.href('note/' + w.cid) }, [
-          el('span', { class: 'ix bad' }, [DOM.mi('priority_high', 'xs')]),
-          el('span', { class: 'tt' }, [
-            el('b', { text: w.c.title }),
-            el('span', { text: Pool.sectionTitle(w.c.sec) })
-          ]),
-          el('span', { class: 'count', text: w.misses + ' ' + t('misses') })
-        ]);
-      }))
-    ]);
-  }
-
-  function mistakesCard() {
-    const m = Study.mistakes();
-    if (!m.n) return null;
-    const max = Math.max.apply(null, m.top.map(x => x.n)) || 1;
-    return el('div', { class: 'card tint' }, [
-      el('div', { class: 'kicker', text: t('mistakes_title') }),
-      el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('mistakes_desc') }),
-      el('div', { class: 'bars' }, m.top.filter(x => x.n).map(function (x) {
-        return el('div', { class: 'bar-row' }, [
-          el('span', { class: 'small', text: t('why_' + x.why) }),
-          el('div', { class: 'meter lv1' }, [el('i', { style: { width: DOM.pct(x.n, max) + '%' } })]),
-          el('span', { class: 'count', text: String(x.n) })
-        ]);
-      })),
-      m.top[0] && m.top[0].n ? el('p', { class: 'small', style: { margin: '12px 0 0' } }, [
-        el('b', { text: t('why_' + m.top[0].why) + ': ' }),
-        el('span', { text: t('why_fix_' + m.top[0].why) })
-      ]) : null
-    ]);
-  }
-
-  function calibrationCard() {
-    const c = Study.calibration();
-    if (!c.n) return null;
-    const cell = (n, key, cls) => el('div', { class: 'cal-cell ' + cls }, [
-      el('b', { text: String(n) }), el('span', { text: t(key) })
-    ]);
-    return el('div', { class: 'card' }, [
-      el('div', { class: 'kicker', text: t('calib_title') }),
-      el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('calib_desc') }),
-      el('div', { class: 'cal-grid' }, [
-        cell(c.sureRight, 'calib_sure_right', 'ok'),
-        cell(c.sureWrong, 'calib_sure_wrong', 'bad'),
-        cell(c.unsureRight, 'calib_unsure_right', 'warn'),
-        cell(c.unsureWrong, 'calib_unsure_wrong', '')
-      ]),
-      el('p', { class: 'small', style: { margin: '10px 0 0' },
-        text: c.verdict === 'over' ? t('calib_over') : c.verdict === 'under' ? t('calib_under')
-          : c.verdict === 'good' ? t('calib_good') : t('calib_few') })
-    ]);
-  }
-
-  /* ── the numbers ───────────────────────────────────────────────────────── */
-  function statTiles() {
-    const all = Pool.ids.concepts();
-    const overall = Progress.count(all);
-    const s = Store.summary(all, Pool.ids.cards(), Pool.ids.objective(), Pool.ids.proofs());
-    const tasks = Pool.ids.written();
-    const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
-    const pyqAll = Pool.pyq();
-    const pyqDone = pyqAll.filter(q => Progress.pyqDone(q)).length;
-    const lvl = t('level');
-
-    return DOM.stagger(el('div', { class: 'stats' }, [
-      UI.stat(overall.l1 + '/' + overall.total, t('stat_read'), lvl + ' 1', UI.levelBar(overall, { key: false })),
-      UI.stat(tasksDone + '/' + tasks.length, t('stat_exercises'), lvl + ' 2', UI.meter(tasksDone, tasks.length, 2)),
-      UI.stat(pyqDone + '/' + pyqAll.length, t('stat_pyq'), lvl + ' 3', UI.meter(pyqDone, pyqAll.length, 3)),
-      UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—', t('stat_recall'),
-        s.cards.tried + ' ' + t('of') + ' ' + s.cards.total + ' ' + t('tried')),
-      UI.stat(s.omr.locked ? DOM.pct(s.omr.correct, s.omr.locked) + '%' : '—', t('stat_correct'),
-        s.omr.locked + ' ' + t('of') + ' ' + s.omr.total + ' ' + t('locked'))
-    ]));
-  }
-
-  /* ── the exam ──────────────────────────────────────────────────────────── */
-  function examCard(rerender) {
-    const ex = Study.exam();
-    const bp = Study.blueprint();
-    const input = el('input', { class: 'tin', type: 'date', id: 'exam-date', value: ex.iso,
-      'aria-label': t('exam_set') });
-    input.addEventListener('change', function () { Study.setExamDate(input.value); rerender(); });
-    const paper = bp.sections.map(s => s.count + '×' + s.marks).join(' + ') + ' = ' + bp.marks;
-
-    return el('div', { class: 'card', id: 'exam-card' }, [
-      el('div', { class: 'spread' }, [
-        el('div', { class: 'kicker', text: t('exam_title') }),
-        el('span', { class: 'badge accent', text: ex.days < 0 ? t('exam_past') : ex.days === 0 ? t('exam_today') : ex.days + ' ' + t('exam_days_left') })
-      ]),
-      el('div', { class: 'row', style: { margin: '10px 0', gap: '10px', alignItems: 'center' } }, [
-        el('label', { class: 'small muted', for: 'exam-date', text: t('exam_set') }), input
-      ]),
-      ex.days > 0 && ex.left > 0 ? el('p', { class: 'small', style: { margin: '0 0 6px' } }, [
-        el('b', { text: ex.perDay + ' ' }), el('span', { text: t('exam_per_day') + ' (' + ex.left + ')' })
-      ]) : null,
-      el('p', { class: 'small muted', style: { margin: 0 }, text: t('exam_paper') + ' · ' + paper }),
-      el('p', { class: 'small muted', style: { margin: '4px 0 0' }, text: t('exam_pace') })
-    ]);
-  }
-
-  /* ── courses ───────────────────────────────────────────────────────────── */
-  function courseCard(course) {
-    if (course.pending) {
-      return el('div', { class: 'card' }, [
-        el('div', { class: 'spread' }, [
-          el('div', { class: 'kicker', text: course.title }),
-          el('span', { class: 'badge warn', text: t('pending') })
-        ]),
-        el('p', { class: 'small muted', style: { margin: '8px 0 0' }, text: course.pendingNote || t('not_delivered') })
-      ]);
-    }
-
-    const ids = Pool.ids.concepts(course.id);
-    const c = Progress.count(ids);
-    const tasks = Pool.ids.written(course.id);
-    const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
-    const pyq = Progress.pyqState(course.id);
-    const lv = Progress.courseLevel(course.id);
-    const ml = isMl();
-
-    const owed = c.min === 0
-      ? (ml ? (c.total - c.l1) + ' എണ്ണം കൂടി വായിക്കാനുണ്ട് (ലെവൽ 1)' : (c.total - c.l1) + ' still to read for a red tick')
-      : c.min === 1
-        ? (ml ? (tasks.length - tasksDone) + ' പരിശീലനച്ചോദ്യങ്ങൾ കൂടി ചെയ്യാനുണ്ട് (ലെവൽ 2)' : (tasks.length - tasksDone) + ' exercises still owed for an amber tick')
-        : c.min === 2 && pyq.total
-          ? (ml ? (pyq.total - pyq.done) + ' മുൻവർഷ ചോദ്യങ്ങൾ കൂടി (ലെവൽ 3)' : (pyq.total - pyq.done) + ' past-paper questions still owed for green')
-          : (ml ? 'എല്ലാ ഘട്ടങ്ങളും പൂർത്തിയായി' : 'every level earned');
-
-    const summary = ml
-      ? c.l1 + ' വായിച്ചു · ' + c.l2 + ' പരിശീലനം · ' + c.l3 + ' പച്ച, ആകെ ' + c.total
-      : c.l1 + ' read · ' + c.l2 + ' exercised · ' + c.l3 + ' green, of ' + c.total;
-
-    return el('div', { class: 'card' }, [
-      el('div', { class: 'spread' }, [
-        el('a', { class: 'kicker', style: { textDecoration: 'none' }, href: Router.href('study/' + course.id), text: course.title }),
-        el('span', { class: 'badge' + (lv ? ' lv' + lv : ''),
-          text: lv ? (t('level') + ' ' + lv + ' · ' + I18N.levelName(lv)) : I18N.levelName(0) })
-      ]),
-      el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
-        UI.levelRing(c, course.title),
-        el('span', { class: 'tt' }, [el('b', { text: summary }), el('span', { text: course.blurb })])
-      ]),
-      el('div', { style: { marginTop: '12px' } }, [UI.levelBar(c)]),
-      tasks.length ? el('div', { style: { marginTop: '12px' } }, [
-        el('div', { class: 'spread' }, [
-          el('span', { class: 'count', text: t('exercises_worked') }),
-          el('span', { class: 'count', text: tasksDone + '/' + tasks.length })
-        ]),
-        el('div', { style: { marginTop: '6px' } }, [UI.meter(tasksDone, tasks.length, 2)])
-      ]) : null,
-      pyq.total ? el('div', { style: { marginTop: '12px' } }, [
-        el('div', { class: 'spread' }, [
-          el('span', { class: 'count', text: t('past_papers_lv') }),
-          el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
-        ]),
-        el('div', { style: { marginTop: '6px' } }, [UI.meter(pyq.done, pyq.total, 3)])
-      ]) : null,
-      el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: owed })
-    ]);
-  }
-
-  /* ── sync ──────────────────────────────────────────────────────────────── */
-  function syncCard() {
-    const id = Store.identity();
-    const ml = isMl();
-    const host = el('div', { class: 'card tint' });
-    const state = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
-    const dot = el('span', { class: 'badge ok', text: Sync.status().key });
-
-    function paint(last) {
-      const s = Sync.status();
-      const when = s.last && s.last.at
-        ? (ml ? ' · അവസാനം പരിശോധിച്ചത് ' + UI.ago(s.last.at) : ' · last checked ' + UI.ago(s.last.at))
-        : '';
-      state.textContent = (last && last.msg)
-        ? last.msg + when
-        : (ml
-            ? id.name + ' · ' + id.roll + ' എന്നതിൽ പ്രവേശിച്ചിരിക്കുന്നു. ഈ പേരും റോൾ നമ്പറും നൽകുന്ന എല്ലാ ഉപകരണങ്ങളിലും പുരോഗതി തനിയെ ലയിക്കും' + when + '. ഇത് ഒരു പാസ്‌വേഡല്ല.'
-            : 'Signed in as ' + id.name + ' · ' + id.roll + '. Progress merges across every device '
-              + 'that signs in with these two, on its own' + when + '. It is a pass key, not a password.');
-    }
-    Sync.watch(paint);
-    paint(Sync.status().last);
-
-    /* The confirmation is inline, not a browser dialog: hosted pages often
-       refuse dialogs, and a question that cannot be answered is a dead button. */
-    const askHost = el('div', {});
-    DOM.add(host, [
-      el('div', { class: 'spread' }, [el('div', { class: 'kicker', text: t('sync_title') }), dot]),
-      el('div', { class: 'btn-row', style: { marginTop: '10px' } }, [
-        el('button', { class: 'btn', type: 'button', text: t('sign_out'),
-          on: { click: function () {
-            DOM.clear(askHost);
-            askHost.appendChild(UI.ask({
-              title: t('sign_out') + '?',
-              body: el('span', { text: ml
-                ? 'പുരോഗതി ഈ ഉപകരണത്തിലും ക്ലൗഡിലും സുരക്ഷിതമായിരിക്കും.'
-                : 'Progress stays on this device and in the cloud record.' }),
-              actions: [
-                { label: t('sign_out'), primary: true, onClick: function () { Store.flushNow(); Sync.disconnect(); location.reload(); } },
-                { label: t('cancel'), onClick: function () { DOM.clear(askHost); } }
-              ]
-            }));
-          } } })
-      ]),
-      askHost,
-      state
-    ]);
-    return host;
-  }
-
-  /* ── the page ──────────────────────────────────────────────────────────── */
+  /* ── render page ──────────────────────────────────────────────────────── */
   function render() {
-    const root = el('div', { class: 'stack' });
+    const root = el('div', { class: 'stack', style: { gap: '14px' } });
     const rerender = () => Router.reload();
-    const lvl = t('level');
 
     DOM.add(root, [
-      greeting(),
-      UI.mockBanner(),
-      planCard(),
-      goalCard(rerender),
-      statTiles(),
+      greeting(rerender),
+      primaryCard(),
+      recallCard(),
       weakCard(),
-      mistakesCard(),
-      calibrationCard(),
-      focusCard(),
-      examCard(rerender),
-
-      el('div', {}, [
-        el('div', { class: 'spread', style: { marginBottom: '10px' } }, [
-          el('h2', { text: t('courses') }),
-          el('a', { class: 'chip', href: Router.href('study'), text: t('open_syllabus') })
-        ]),
-        el('p', { class: 'small muted', style: { margin: '0 0 10px' }, text: t('course_bar_desc') }),
-        el('div', { class: 'stack', style: { gap: '12px' } }, Pool.courses().map(courseCard))
-      ]),
-
-      el('div', { class: 'card tint' }, [
-        el('div', { class: 'kicker', text: t('colours_meaning') }),
-        el('div', { class: 'stack', style: { gap: '8px', marginTop: '10px' } }, [
-          el('div', { class: 'row' }, [el('span', { class: 'badge lv1', text: lvl + ' 1' }), el('span', { class: 'small muted', text: t('lv1_desc') })]),
-          el('div', { class: 'row' }, [el('span', { class: 'badge lv2', text: lvl + ' 2' }), el('span', { class: 'small muted', text: t('lv2_desc') })]),
-          el('div', { class: 'row' }, [el('span', { class: 'badge lv3', text: lvl + ' 3' }), el('span', { class: 'small muted', text: t('lv3_desc') })])
-        ]),
-        el('p', { class: 'small muted', style: { margin: '12px 0 0' }, text: t('colours_foot') })
-      ]),
-
-      el('a', { class: 'card method-link', href: Router.href('method') }, [
-        el('div', { class: 'row', style: { gap: '12px', flexWrap: 'nowrap' } }, [
-          DOM.mi('school', 'lg'),
-          el('span', { class: 'tt' }, [el('b', { text: t('method_link') }), el('span', { text: t('method_link_sub') })]),
-          el('span', { class: 'go', 'aria-hidden': 'true', text: '›' })
-        ])
-      ]),
-
-      syncCard()
+      habitCard()
     ]);
 
     return root;
@@ -47853,12 +47962,16 @@ const ViewStudy = (function () {
   function render(args) {
     if (args && args[0]) {
       const course = Pool.course(args[0]);
-      if (course) return courseView(course);
+      if (course) {
+        if (!course.pending) Store.setSelectedCourse(course.id);
+        Tree.seedOpen(course);
+        return courseView(course);
+      }
     }
 
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
-    Tree.seedOpen(Pool.courses().filter(c => !c.pending)[0]);
+    Tree.seedOpen(Pool.course(Store.selectedCourse()) || Pool.courses().find(c => !c.pending));
 
     DOM.add(root, [
       UI.title((typeof I18N !== 'undefined') ? I18N.t('syllabus') : 'Syllabus',
@@ -49023,21 +49136,22 @@ const ViewDrill = (function () {
     }, 500);
     paintClock();
 
-    let answered = false;
+    const result = s.results[s.i];
+    let answered = !!(result && result.verdict);
     const nextBtn = el('button', { class: 'btn primary', type: 'button',
       text: s.i + 1 < s.qs.length ? t('next') : t('drill_results'),
       on: { click: function () {
-        if (!answered) s.results.push({ q: q, verdict: null, ms: 0 });
+        if (!answered) s.results[s.i] = { q: q, verdict: null, ms: 0 };
         if (s.i + 1 < s.qs.length && s.phase !== 'late') { s.i += 1; Router.reload(); }
         else finish();
       } } });
     const tail = el('div', { class: 'btn-row' }, [nextBtn]);
 
     const card = QuestionCard.build(q, {
-      inNote: true, tail: tail, drill: true,
-      onLocked: function (verdict, ms) {
+      inNote: true, tail: tail, drill: true, lockedResult: answered ? result : null,
+      onLocked: function (verdict, ms, given) {
         answered = true;
-        s.results.push({ q: q, verdict: verdict, ms: ms || 0 });
+        s.results[s.i] = { q: q, verdict: verdict, ms: ms || 0, given: given };
       }
     });
 
@@ -49054,7 +49168,7 @@ const ViewDrill = (function () {
       el('div', { class: 'card' }, [card]),
       el('div', { class: 'btn-row' }, [
         el('button', { class: 'btn quiet', type: 'button', text: t('drill_finish'),
-          on: { click: function () { if (!answered) s.results.push({ q: q, verdict: null, ms: 0 }); finish(); } } })
+          on: { click: function () { if (!answered) s.results[s.i] = { q: q, verdict: null, ms: 0 }; finish(); } } })
       ])
     ]);
     return root;
@@ -49408,6 +49522,400 @@ const ViewMethod = (function () {
 })();
 
 
+/* ── src/view.progress.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Progress — mastery evidence, habit tracking, diagnostics & settings.
+
+   Separates coverage from ability: reading a note, assisted exercises,
+   unassisted past papers, and spaced recall are different evidence.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const ViewProgress = (function () {
+
+  const el = DOM.el;
+  const t = k => (typeof I18N !== 'undefined' ? I18N.t(k) : k);
+  const isMl = () => (typeof I18N !== 'undefined' && I18N.lang() === 'ml');
+
+  /* ── header ───────────────────────────────────────────────────────────── */
+  function header() {
+    const ml = isMl();
+    const id = Store.identity();
+    const name = Store.displayName() || id.name || (ml ? 'അതിഥി പഠിതാവ്' : 'Guest Learner');
+    const courseId = Store.selectedCourse() || 'm10';
+    const cMap = { m10: ml ? 'ക്ലാസ് 10' : 'Class 10', m9: ml ? 'ക്ലാസ് 9' : 'Class 9', m8: ml ? 'ക്ലാസ് 8' : 'Class 8', foundation: ml ? 'അടിസ്ഥാനം' : 'Foundation' };
+
+    return el('div', { class: 'spread', style: { alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' } }, [
+      el('div', {}, [
+        el('div', { class: 'kicker', text: ml ? 'പഠന പുരോഗതിയും ക്രമീകരണങ്ങളും' : 'LEARNER PROGRESS & SETTINGS' }),
+        el('h1', { tabindex: '-1', id: 'pagetitle', text: ml ? 'പുരോഗതി' : 'Progress & Mastery' })
+      ]),
+      el('div', { class: 'row', style: { gap: '6px' } }, [
+        el('span', { class: 'chip on' }, [DOM.mi('person', 'sm'), el('span', { text: name })]),
+        el('span', { class: 'chip' }, [DOM.mi('school', 'sm'), el('span', { text: cMap[courseId] || courseId })])
+      ])
+    ]);
+  }
+
+  /* ── overall stat tiles ────────────────────────────────────────────────── */
+  function statTiles() {
+    const all = Pool.ids.concepts();
+    const overall = Progress.count(all);
+    const s = Store.summary(all, Pool.ids.cards(), Pool.ids.objective(), Pool.ids.proofs());
+    const tasks = Pool.ids.written();
+    const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
+    const pyqAll = Pool.pyq();
+    const pyqDone = pyqAll.filter(q => Progress.pyqDone(q)).length;
+    const lvl = t('level');
+
+    return DOM.stagger(el('div', { class: 'stats' }, [
+      UI.stat(overall.l1 + '/' + overall.total, t('stat_read'), lvl + ' 1', UI.levelBar(overall, { key: false })),
+      UI.stat(tasksDone + '/' + tasks.length, t('stat_exercises'), lvl + ' 2', UI.meter(tasksDone, tasks.length, 2)),
+      UI.stat(pyqDone + '/' + pyqAll.length, t('stat_pyq'), lvl + ' 3', UI.meter(pyqDone, pyqAll.length, 3)),
+      UI.stat(s.cards.tried ? DOM.pct(s.cards.got, s.cards.tried) + '%' : '—', t('stat_recall'),
+        s.cards.tried + ' ' + t('of') + ' ' + s.cards.total + ' ' + t('tried')),
+      UI.stat(s.omr.locked ? DOM.pct(s.omr.correct, s.omr.locked) + '%' : '—', t('stat_correct'),
+        s.omr.locked + ' ' + t('of') + ' ' + s.omr.total + ' ' + t('locked'))
+    ]));
+  }
+
+  /* ── daily goal and streak ─────────────────────────────────────────────── */
+  function goalCard(rerender) {
+    const g = Study.goalState();
+    const st = Study.streak();
+    const chip = (k, label) => el('button', {
+      class: 'chip', type: 'button', text: label,
+      'aria-pressed': String(g.key === k),
+      on: { click: function () { Study.setGoal(k); rerender(); } }
+    });
+
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: t('goal_title') }),
+        el('span', { class: 'badge' + (g.met ? ' ok' : ''), text: g.met ? t('goal_met') : g.pct + '%' })
+      ]),
+      el('div', { class: 'row', style: { margin: '10px 0 12px' } }, [
+        chip('light', t('goal_light')), chip('normal', t('goal_normal')), chip('exam', t('goal_exam'))
+      ]),
+      el('div', { class: 'goal-grid' }, g.rows.map(function (r) {
+        return el('div', { class: 'goal-row' }, [
+          el('div', { class: 'spread' }, [
+            el('span', { class: 'small', text: t('goal_' + r.key) }),
+            el('span', { class: 'count', text: r.raw + '/' + r.want })
+          ]),
+          UI.meter(r.done, r.want, r.done >= r.want ? true : undefined)
+        ]);
+      })),
+      el('div', { class: 'row', style: { marginTop: '12px', gap: '10px' } }, [
+        el('span', { class: 'badge' + (st.current ? ' warn' : ''), text: st.current + ' ' + t('streak') }),
+        el('span', { class: 'small muted', text: t('streak_best') + ' ' + st.best + ' · ' + t('streak_hint') })
+      ]),
+      el('p', { class: 'small muted', style: { margin: '10px 0 0' }, text: t('goal_note') })
+    ]);
+  }
+
+  /* ── courses breakdown ─────────────────────────────────────────────────── */
+  function courseCard(course) {
+    if (course.pending) {
+      return el('div', { class: 'card' }, [
+        el('div', { class: 'spread' }, [
+          el('div', { class: 'kicker', text: course.title }),
+          el('span', { class: 'badge warn', text: t('pending') })
+        ]),
+        el('p', { class: 'small muted', style: { margin: '8px 0 0' }, text: course.pendingNote || t('not_delivered') })
+      ]);
+    }
+
+    const ids = Pool.ids.concepts(course.id);
+    const c = Progress.count(ids);
+    const tasks = Pool.ids.written(course.id);
+    const tasksDone = tasks.filter(id => Store.isProofDone('w:' + id)).length;
+    const pyq = Progress.pyqState(course.id);
+    const lv = Progress.courseLevel(course.id);
+    const ml = isMl();
+
+    const summary = ml
+      ? c.l1 + ' വായിച്ചു · ' + c.l2 + ' പരിശീലനം · ' + c.l3 + ' പച്ച, ആകെ ' + c.total
+      : c.l1 + ' read · ' + c.l2 + ' exercised · ' + c.l3 + ' green, of ' + c.total;
+
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'spread' }, [
+        el('a', { class: 'kicker', style: { textDecoration: 'none' }, href: Router.href('study/' + course.id), text: course.title }),
+        el('span', { class: 'badge' + (lv ? ' lv' + lv : ''),
+          text: lv ? (t('level') + ' ' + lv + ' · ' + I18N.levelName(lv)) : I18N.levelName(0) })
+      ]),
+      el('div', { class: 'row', style: { marginTop: '10px', gap: '12px', alignItems: 'center' } }, [
+        UI.levelRing(c, course.title),
+        el('span', { class: 'tt' }, [el('b', { text: summary }), el('span', { text: course.blurb })])
+      ]),
+      el('div', { style: { marginTop: '12px' } }, [UI.levelBar(c)]),
+      tasks.length ? el('div', { style: { marginTop: '12px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: t('exercises_worked') }),
+          el('span', { class: 'count', text: tasksDone + '/' + tasks.length })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.meter(tasksDone, tasks.length, 2)])
+      ]) : null,
+      pyq.total ? el('div', { style: { marginTop: '12px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: t('past_papers_lv') }),
+          el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.meter(pyq.done, pyq.total, 3)])
+      ]) : null
+    ]);
+  }
+
+  /* ── weak spots, mistakes & calibration ────────────────────────────────── */
+  function weakCard() {
+    const weak = Study.weakSpots(6);
+    if (!weak.length) return null;
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: t('weak_title') }),
+        el('a', { class: 'chip on', href: Router.href('recall?mode=weak'), text: t('weak_drill') })
+      ]),
+      el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('weak_desc') }),
+      el('div', { class: 'list' }, weak.map(function (w) {
+        return el('a', { class: 'item', href: Router.href('note/' + w.cid) }, [
+          el('span', { class: 'ix bad' }, [DOM.mi('priority_high', 'xs')]),
+          el('span', { class: 'tt' }, [
+            el('b', { text: w.c.title }),
+            el('span', { text: Pool.sectionTitle(w.c.sec) })
+          ]),
+          el('span', { class: 'count', text: w.misses + ' ' + t('misses') })
+        ]);
+      }))
+    ]);
+  }
+
+  function mistakesCard() {
+    const m = Study.mistakes();
+    if (!m.n) return null;
+    const max = Math.max.apply(null, m.top.map(x => x.n)) || 1;
+    return el('div', { class: 'card tint' }, [
+      el('div', { class: 'kicker', text: t('mistakes_title') }),
+      el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('mistakes_desc') }),
+      el('div', { class: 'bars' }, m.top.filter(x => x.n).map(function (x) {
+        return el('div', { class: 'bar-row' }, [
+          el('span', { class: 'small', text: t('why_' + x.why) }),
+          el('div', { class: 'meter lv1' }, [el('i', { style: { width: DOM.pct(x.n, max) + '%' } })]),
+          el('span', { class: 'count', text: String(x.n) })
+        ]);
+      })),
+      m.top[0] && m.top[0].n ? el('p', { class: 'small', style: { margin: '12px 0 0' } }, [
+        el('b', { text: t('why_' + m.top[0].why) + ': ' }),
+        el('span', { text: t('why_fix_' + m.top[0].why) })
+      ]) : null
+    ]);
+  }
+
+  function calibrationCard() {
+    const c = Study.calibration();
+    if (!c.n) return null;
+    const cell = (n, key, cls) => el('div', { class: 'cal-cell ' + cls }, [
+      el('b', { text: String(n) }), el('span', { text: t(key) })
+    ]);
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'kicker', text: t('calib_title') }),
+      el('p', { class: 'small muted', style: { margin: '6px 0 10px' }, text: t('calib_desc') }),
+      el('div', { class: 'cal-grid' }, [
+        cell(c.sureRight, 'calib_sure_right', 'ok'),
+        cell(c.sureWrong, 'calib_sure_wrong', 'bad'),
+        cell(c.unsureRight, 'calib_unsure_right', 'warn'),
+        cell(c.unsureWrong, 'calib_unsure_wrong', '')
+      ]),
+      el('p', { class: 'small', style: { margin: '10px 0 0' },
+        text: c.verdict === 'over' ? t('calib_over') : c.verdict === 'under' ? t('calib_under')
+          : c.verdict === 'good' ? t('calib_good') : t('calib_few') })
+    ]);
+  }
+
+  /* ── focus timer ───────────────────────────────────────────────────────── */
+  function focusCard() {
+    const F = Study.Focus;
+    const host = el('div', { class: 'card tint focus-card' });
+    const clock = el('div', { class: 'focus-clock', 'aria-live': 'off' });
+    const phase = el('div', { class: 'small muted' });
+    const ring = el('div', { class: 'focus-ring' }, [clock]);
+    const actions = el('div', { class: 'btn-row', style: { marginTop: '12px' } });
+    const presets = el('div', { class: 'row', style: { marginTop: '10px' } });
+    const todayLine = el('p', { class: 'small muted', style: { margin: '10px 0 0' } });
+
+    function paintPresets() {
+      DOM.clear(presets);
+      Object.keys(F.PRESETS).forEach(function (k) {
+        const p = F.PRESETS[k];
+        presets.appendChild(el('button', {
+          class: 'chip', type: 'button',
+          'aria-pressed': String(Store.pref('focusPreset', 'normal') === k),
+          text: p[0] + ' + ' + p[1] + ' ' + t('minutes'),
+          on: { click: function () { F.setPreset(k); paintPresets(); paint(F.state()); } }
+        }));
+      });
+    }
+
+    function paint(s) {
+      clock.textContent = UI.clock(s.left);
+      const pct = s.total ? Math.round(100 * (1 - s.left / s.total)) : 0;
+      ring.style.setProperty('--p', String(s.phase === 'idle' ? 0 : pct));
+      ring.setAttribute('data-phase', s.phase);
+      phase.textContent = s.phase === 'idle' ? t('focus_desc')
+        : s.over ? t('focus_done')
+        : s.phase === 'break' ? t('focus_on_break') : t('focus_running');
+      DOM.clear(actions);
+      if (s.phase === 'idle') {
+        actions.appendChild(el('button', {
+          class: 'btn primary', type: 'button',
+          on: { click: function () { F.start('focus'); } }
+        }, [DOM.mi('play_arrow', 'sm'), el('span', { text: t('focus_start') })]));
+      } else if (s.over && s.phase === 'focus') {
+        actions.appendChild(el('button', { class: 'btn primary', type: 'button', text: t('focus_break'),
+          on: { click: function () { F.start('break'); } } }));
+        actions.appendChild(el('button', { class: 'btn', type: 'button', text: t('focus_stop'),
+          on: { click: function () { F.stop(); } } }));
+      } else {
+        actions.appendChild(el('button', { class: 'btn', type: 'button', text: t('focus_stop'),
+          on: { click: function () { F.stop(); } } }));
+      }
+      const td = F.today();
+      todayLine.textContent = td.min + ' ' + t('minutes') + ' ' + t('focus_today') + ' · ' + td.blocks + ' ' + t('focus_blocks');
+    }
+
+    const watcher = function (s) { if (!document.body.contains(host)) { F.unwatch(watcher); return; } paint(s); };
+    paint(F.watch(watcher));
+    paintPresets();
+
+    DOM.add(host, [
+      el('div', { class: 'kicker', text: t('focus_title') }),
+      el('div', { class: 'focus-row' }, [ring, el('div', { class: 'grow' }, [phase, actions])]),
+      presets, todayLine
+    ]);
+    return host;
+  }
+
+  /* ── exam countdown ────────────────────────────────────────────────────── */
+  function examCard(rerender) {
+    const ex = Study.exam();
+    const input = el('input', { class: 'tin', type: 'date', id: 'exam-date-pref', value: ex.iso,
+      'aria-label': t('exam_set') });
+    input.addEventListener('change', function () { Study.setExamDate(input.value); rerender(); });
+
+    return el('div', { class: 'card', id: 'exam-card' }, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: t('exam_title') }),
+        ex.days === null ? null : el('span', { class: 'badge accent', text: ex.days < 0 ? t('exam_past') : ex.days === 0 ? t('exam_today') : ex.days + ' ' + t('exam_days_left') })
+      ]),
+      el('div', { class: 'row', style: { margin: '10px 0', gap: '10px', alignItems: 'center' } }, [
+        el('label', { class: 'small muted', for: 'exam-date-pref', text: t('exam_set') }), input
+      ]),
+      ex.days > 0 && ex.left > 0 ? el('p', { class: 'small', style: { margin: '0 0 6px' } }, [
+        el('b', { text: ex.perDay + ' ' }), el('span', { text: t('exam_per_day') + ' (' + ex.left + ')' })
+      ]) : null,
+      el('p', { class: 'small muted', style: { margin: 0 }, text: isMl()
+        ? 'ഇത് നിങ്ങൾ തിരഞ്ഞെടുക്കുന്ന പഠനലക്ഷ്യ തീയതിയാണ്.'
+        : 'Choose your own target date for planning your study.' })
+    ]);
+  }
+
+  /* ── settings, profile & sync ─────────────────────────────────────────── */
+  function profileSettingsCard(rerender) {
+    const ml = isMl();
+    const id = Store.identity();
+    const isGuest = !Store.syncEnabled();
+    const courseId = Store.selectedCourse() || 'm10';
+
+    const classPill = (cId, label) => el('button', {
+      class: 'chip' + (courseId === cId ? ' on' : ''), type: 'button', text: label,
+      on: { click: () => { Store.setSelectedCourse(cId); rerender(); } }
+    });
+
+    const exportBtn = el('button', {
+      class: 'btn', type: 'button',
+      on: { click: () => {
+        const json = Store.exportJSON();
+        const blob = new Blob([json], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'sslc_maths_backup_' + Store.profileId() + '.json';
+        a.click();
+      } }
+    }, [DOM.mi('download', 'sm'), el('span', { text: ml ? 'ബാക്കപ്പ് ഡൗൺലോഡ്' : 'Export Backup' })]);
+
+    const resetBtn = el('button', {
+      class: 'btn', type: 'button',
+      on: { click: () => {
+        if (confirm(ml ? 'ഈ ഉപകരണത്തിലെ പുരോഗതി മുഴുവൻ ഒഴിവാക്കണോ?' : 'Reset all progress on this device?')) {
+          Store.reset();
+          location.reload();
+        }
+      } }
+    }, [DOM.mi('delete', 'sm'), el('span', { text: ml ? 'റെക്കോർഡ് മായ്‌ക്കുക' : 'Reset Record' })]);
+
+    return el('div', { class: 'card tint' }, [
+      el('div', { class: 'kicker', text: ml ? 'പ്രൊഫൈലും ക്രമീകരണങ്ങളും' : 'PROFILE & LOCAL SETTINGS' }),
+      el('div', { style: { marginTop: '8px' } }, [
+        el('label', { class: 'small muted', text: ml ? 'പഠിക്കുന്ന ക്ലാസ് തിരഞ്ഞെടുക്കുക:' : 'Select active class:' }),
+        el('div', { class: 'row', style: { gap: '6px', marginTop: '6px' } }, [
+          ...Pool.courses().filter(c => !c.pending).map(c => classPill(c.id, c.title))
+        ])
+      ]),
+      el('div', { style: { marginTop: '14px', borderTop: '1px solid var(--rule)', paddingTop: '10px' } }, [
+        el('div', { class: 'spread' }, [
+          el('b', { text: isGuest ? (ml ? 'ലോക്കൽ പ്രൊഫൈൽ' : 'Local Guest Profile') : (ml ? 'ക്ലൗഡ് സിങ്ക് പ്രൊഫൈൽ' : 'Sync enabled') })
+        ]),
+        el('p', { class: 'small muted', style: { margin: '4px 0 10px' },
+          text: isGuest
+            ? (ml ? 'പുരോഗതി ഈ ഉപകരണത്തിൽ സുരക്ഷിതമായി സൂക്ഷിക്കുന്നു.' : 'Progress is safely stored on this device without requiring a remote login.')
+            : (ml ? id.name + ' · ' + id.roll + ' എന്നതിൽ സിങ്ക് ചെയ്യുന്നു.' : 'Syncing with remote record for ' + id.name + ' · ' + id.roll)
+        }),
+        el('div', { class: 'btn-row' }, [
+          isGuest ? el('button', {
+            class: 'btn primary', type: 'button',
+            on: { click: () => { Store.setOnboarded(false); location.reload(); } }
+          }, [DOM.mi('sync', 'sm'), el('span', { text: ml ? 'സിങ്ക് ചെയ്യുക / ലോഗിൻ' : 'Enable Sync / Restore' })]) : el('button', {
+            class: 'btn', type: 'button',
+            on: { click: () => { Sync.disconnect(); rerender(); } }
+          }, [DOM.mi('sync_disabled', 'sm'), el('span', { text: ml ? 'സമന്വയം നിർത്തുക' : 'Disable sync' })]),
+          exportBtn,
+          resetBtn
+        ])
+      ])
+    ]);
+  }
+
+  /* ── render page ──────────────────────────────────────────────────────── */
+  function render() {
+    const root = el('div', { class: 'stack' });
+    const rerender = () => Router.reload();
+
+    DOM.add(root, [
+      header(),
+      statTiles(),
+      goalCard(rerender),
+      weakCard(),
+      mistakesCard(),
+      calibrationCard(),
+      focusCard(),
+      examCard(rerender),
+
+      el('div', {}, [
+        el('div', { class: 'spread', style: { marginBottom: '10px' } }, [
+          el('h2', { text: t('courses') }),
+          el('a', { class: 'chip', href: Router.href('study'), text: t('open_syllabus') })
+        ]),
+        el('div', { class: 'stack', style: { gap: '12px' } }, Pool.courses().map(courseCard))
+      ]),
+
+      profileSettingsCard(rerender)
+    ]);
+
+    return root;
+  }
+
+  return { render };
+})();
+
+
 /* ── src/boot.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Boot: theme, data loading, navigation, routing, failure surfaces.
@@ -49529,42 +50037,104 @@ const Shell = (function () {
     if (railSub) railSub.textContent = text || ((typeof I18N !== 'undefined') ? I18N.t('app_sub') : '');
   }
 
+  function openMoreModal() {
+    const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
+    const old = document.getElementById('more-sheet-backdrop');
+    if (old) old.remove();
+
+    const backdrop = DOM.el('div', { class: 'more-sheet-backdrop', id: 'more-sheet-backdrop' });
+    const opener = document.activeElement;
+    function close() {
+      backdrop.remove();
+      if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+    }
+    const full = isFull();
+    const theme = Store.pref('theme', 'auto');
+
+    const sheet = DOM.el('div', { class: 'more-sheet', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'more-heading' }, [
+      DOM.el('div', { class: 'spread', style: { alignItems: 'center' } }, [
+        DOM.el('h2', { id: 'more-heading', text: isMl ? 'കൂടുതൽ ക്രമീകരണങ്ങൾ' : 'More Options' }),
+        DOM.el('button', { class: 'icon-btn', type: 'button', 'aria-label': isMl ? 'അടയ്ക്കുക' : 'Close', on: { click: close } }, [
+          DOM.mi('close')
+        ])
+      ]),
+
+      DOM.el('button', { class: 'more-item', type: 'button', on: { click: () => { cycleTheme(); close(); } } }, [
+        DOM.mi(theme === 'dark' ? 'dark_mode' : theme === 'light' ? 'light_mode' : 'contrast'),
+        DOM.el('span', { text: (isMl ? 'തീം മാറ്റുക: ' : 'Theme: ') + theme.toUpperCase() })
+      ]),
+
+      DOM.el('button', { class: 'more-item', type: 'button', on: { click: () => { toggleFull(); close(); } } }, [
+        DOM.mi(full ? 'fullscreen_exit' : 'fullscreen'),
+        DOM.el('span', { text: full ? (isMl ? 'ഫുൾ സ്ക്രീൻ ഒഴിവാക്കുക' : 'Exit Full Screen') : (isMl ? 'ഫുൾ സ്ക്രീൻ' : 'Full Screen') })
+      ]),
+
+      DOM.el('a', { class: 'more-item', href: Router.href('progress'), on: { click: close } }, [
+        DOM.mi('insights'),
+        DOM.el('span', { text: isMl ? 'പഠന പുരോഗതിയും ക്രമീകരണങ്ങളും' : 'Progress, Mastery & Settings' })
+      ]),
+
+      DOM.el('a', { class: 'more-item', href: Router.href('method'), on: { click: close } }, [
+        DOM.mi('school'),
+        DOM.el('span', { text: isMl ? 'പഠനരീതി' : 'How to Study (Method)' })
+      ])
+    ]);
+
+    backdrop.addEventListener('click', function (e) {
+      if (e.target === backdrop) close();
+    });
+
+    sheet.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key !== 'Tab') return;
+      const items = Array.from(sheet.querySelectorAll('button, a[href]'));
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    backdrop.appendChild(sheet);
+    document.body.appendChild(backdrop);
+    sheet.querySelector('button').focus();
+  }
+
   function wire() {
     const byId = id => document.getElementById(id);
-    const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn'), lang = byId('lang-btn');
+    const back = byId('back-btn'), full = byId('full-btn'), theme = byId('theme-btn'), lang = byId('lang-btn'), more = byId('more-btn');
     if (back) { back.setAttribute('data-chrome', 'back'); back.addEventListener('click', () => Router.back()); }
     if (full) { full.setAttribute('data-chrome', 'full'); full.addEventListener('click', toggleFull); }
     if (theme) { theme.setAttribute('data-chrome', 'theme'); theme.addEventListener('click', cycleTheme); }
     if (lang) { lang.addEventListener('click', () => { if (typeof I18N !== 'undefined') I18N.toggle(); }); }
+    if (more) { more.addEventListener('click', openMoreModal); }
     document.addEventListener('fullscreenchange', paint);
     document.addEventListener('webkitfullscreenchange', paint);
     paint();
   }
 
-  return { isFull, toggleFull, cycleTheme, paint, wire, setSubtitle };
+  return { isFull, toggleFull, cycleTheme, openMoreModal, paint, wire, setSubtitle };
 })();
 
 const App = (function () {
 
   const el = DOM.el;
 
-  /* Four tabs. Questions and Write lost their tabs when the note learned to
-     hold them: answering a question about a result belongs under that result,
-     not behind a tab that makes you find it again. Both routes still resolve
-     (view.omr.js, view.write.js); they are simply not places you navigate TO.
-     The timed drill is a tab because the plan sends you there every day; the
-     method page is reached from Today, because it is read once a term. */
+  /* Four primary destinations:
+     Today / ഇന്ന്: Continue, due review, small wins
+     Learn / പഠനം: Syllabus, chapters, focused lesson
+     Practice / പരിശീലനം: Spaced recall, drills, mixed practice
+     Progress / പുരോഗതി: Mastery, analytics, timer, sync/profile */
   const TABS = [
     { name: 'home', label: 'Today', icon: 'today', also: ['method'] },
-    { name: 'study', label: 'Study', icon: 'menu_book', also: ['note', 'omr', 'write'] },
-    { name: 'recall', label: 'Recall', icon: 'style', also: [] },
-    { name: 'drill', label: 'Drill', icon: 'timer', also: [] }
+    { name: 'study', label: 'Learn', icon: 'menu_book', also: ['note', 'omr', 'write'] },
+    { name: 'recall', label: 'Practice', icon: 'fitness_center', also: ['drill'] },
+    { name: 'progress', label: 'Progress', icon: 'insights', also: [] }
   ];
 
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewStudy,
-    drill: () => ViewDrill, method: () => ViewMethod
+    drill: () => ViewDrill, method: () => ViewMethod,
+    progress: () => ViewProgress
   };
 
   /* ONE nav element, laid out two ways.
@@ -49770,7 +50340,7 @@ const App = (function () {
 
     loadData().then(function () {
       Pool.build();
-      if (Store.signedIn()) run(); else gate();
+      if (Store.isOnboarded() || Store.signedIn()) run(); else gate();
     }, fatal);
   }
 
@@ -49787,7 +50357,7 @@ const App = (function () {
     if (document.hidden) Store.flushNow();
   });
 
-  return { start: start, route: route, buildNav: buildNav };
+  return { start: start, route: route, buildNav: buildNav, isGate: () => document.body.classList.contains('signed-out') };
 })();
 
 if (document.readyState === 'loading') {

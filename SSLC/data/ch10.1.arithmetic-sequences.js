@@ -45,7 +45,7 @@ CONCEPTS.push(
       </ul>`,
     intuition_en: `<p>A sequence is simply a list with an order: knowing the position number $n$ allows us, via the rule, to determine the term $x_n$ residing at that position.</p>`,
     intuition_ml: `<p>സ്ഥാനം അറിഞ്ഞാൽ നിയമമുപയോഗിച്ച് ആ സ്ഥാനത്തുള്ള സംഖ്യ കൃത്യമായി കണ്ടെത്താൻ സാധിക്കുന്ന ഒരു ക്രമമാണ് ശ്രേണി.</p>`,
-    needs: ['p.1.1', 'p.1.2'],
+    needs: ['s.counting', 's.addition'],
     traps_en: [
       'A set of numbers is not a sequence unless there is a definite order and position rule: {3, 1, 2} is a set, but 1, 2, 3... is a sequence.',
       'Assuming a pattern from only two terms: 2, 4, ... could continue as 6, 8 (adding 2) or 8, 16 (powers of 2).'

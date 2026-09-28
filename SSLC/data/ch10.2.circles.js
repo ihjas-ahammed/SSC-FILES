@@ -367,7 +367,7 @@ CONCEPTS.push(
         { why_ml: 'സമാന വശങ്ങളുടെ അംശബന്ധം തുല്യമാണ്.', m: '\\frac{PA}{PD} = \\frac{PC}{PB} \\implies PA \\cdot PB = PC \\cdot PD' }
       ]
     },
-    needs: ['m10.2.3.angles-in-same-segment', 'm9.7.1.concept-of-similarity'],
+    needs: ['m10.2.3.angles-in-same-segment', 'm9.7.1.concept-of-similarity-and-aa'],
     traps_en: [
       'When chords intersect OUTSIDE at P, the segments measured from P are PA and PB (where PB is the whole secant, not just the outside part AB).',
       'Do not confuse chord intersection with chord lengths: it is PA · PB, NOT (PA + PB).'

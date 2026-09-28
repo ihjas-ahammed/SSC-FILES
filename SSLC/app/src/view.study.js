@@ -71,12 +71,16 @@ const ViewStudy = (function () {
   function render(args) {
     if (args && args[0]) {
       const course = Pool.course(args[0]);
-      if (course) return courseView(course);
+      if (course) {
+        if (!course.pending) Store.setSelectedCourse(course.id);
+        Tree.seedOpen(course);
+        return courseView(course);
+      }
     }
 
     const root = el('div', { class: 'stack' });
     const host = el('div', {});
-    Tree.seedOpen(Pool.courses().filter(c => !c.pending)[0]);
+    Tree.seedOpen(Pool.course(Store.selectedCourse()) || Pool.courses().find(c => !c.pending));
 
     DOM.add(root, [
       UI.title((typeof I18N !== 'undefined') ? I18N.t('syllabus') : 'Syllabus',

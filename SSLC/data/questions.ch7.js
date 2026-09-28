@@ -84,8 +84,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹3,000' }
     ],
     answer: 'A',
-    solution_en: 'Total parts $= 4 + 5 = 9$. One part $= \\frac{4500}{9} = ₹500$. B receives $5 \\times 500 = ₹2,500$.',
-    solution_ml: 'ആകെ ഭാഗം $= 4 + 5 = 9$. ഒരു ഭാഗം $= \\frac{4500}{9} = ₹500$. B-ക്ക് ലഭിക്കുന്നത് $= 5 \\times 500 = ₹2,500$.',
+    solution_en: 'Total parts $= 4 + 5 = 9$. One part $= \\frac{4500}{9} = \\text{₹}500$. B receives $5 \\times 500 = \\text{₹}2,500$.',
+    solution_ml: 'ആകെ ഭാഗം $= 4 + 5 = 9$. ഒരു ഭാഗം $= \\frac{4500}{9} = \\text{₹}500$. B-ക്ക് ലഭിക്കുന്നത് $= 5 \\times 500 = \\text{₹}2,500$.',
     tested_en: 'Dividing total amount in two parts.',
     tested_ml: 'തുകയെ രണ്ട് വിഹിതങ്ങളായി ഭാഗിക്കൽ.'
   },
@@ -112,8 +112,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹8,000' }
     ],
     answer: 'A',
-    solution_en: 'Total parts $= 1 + 2 + 3 = 6$. One part $= \\frac{36000}{6} = ₹6,000$. Difference between largest (3 parts) and smallest (1 part) is $3 - 1 = 2$ parts $= 2 \\times 6000 = ₹12,000$.',
-    solution_ml: 'ആകെ ഭാഗം $= 1 + 2 + 3 = 6$. ഒരു ഭാഗം $= \\frac{36000}{6} = ₹6,000$. വലിയ വിഹിതവും (3) ചെറിയ വിഹിതവും (1) തമ്മിലുള്ള വ്യത്യാസം $= 2$ ഭാഗങ്ങൾ $= 2 \\times 6000 = ₹12,000$.',
+    solution_en: 'Total parts $= 1 + 2 + 3 = 6$. One part $= \\frac{36000}{6} = \\text{₹}6,000$. Difference between largest (3 parts) and smallest (1 part) is $3 - 1 = 2$ parts $= 2 \\times 6000 = \\text{₹}12,000$.',
+    solution_ml: 'ആകെ ഭാഗം $= 1 + 2 + 3 = 6$. ഒരു ഭാഗം $= \\frac{36000}{6} = \\text{₹}6,000$. വലിയ വിഹിതവും (3) ചെറിയ വിഹിതവും (1) തമ്മിലുള്ള വ്യത്യാസം $= 2$ ഭാഗങ്ങൾ $= 2 \\times 6000 = \\text{₹}12,000$.',
     tested_en: 'Difference between shares in a three-part ratio.',
     tested_ml: 'മൂന്ന് വിഹിതങ്ങൾ തമ്മിലുള്ള വ്യത്യാസം കാണൽ.'
   },
@@ -291,10 +291,10 @@ QUESTIONS.push(
           $$\\text{First piece} = 3 \\times 12 = \\mathbf{36\\text{ cm}}$$
           $$\\text{Second piece} = 4 \\times 12 = \\mathbf{48\\text{ cm}}$$</li>
         <li>Total parts $= 2 + 3 + 4 = 9$.<br>
-          One part $= \\frac{180000}{9} = ₹20,000$.<br>
-          $$\\text{First child} = 2 \\times 20000 = \\mathbf{₹40,000}$$
-          $$\\text{Second child} = 3 \\times 20000 = \\mathbf{₹60,000}$$
-          $$\\text{Third child} = 4 \\times 20000 = \\mathbf{₹80,000}$$</li>
+          One part $= \\frac{180000}{9} = \\text{₹}20,000$.<br>
+          $$\\text{First child} = 2 \\times 20000 = \\mathbf{\\text{₹}40,000}$$
+          $$\\text{Second child} = 3 \\times 20000 = \\mathbf{\\text{₹}60,000}$$
+          $$\\text{Third child} = 4 \\times 20000 = \\mathbf{\\text{₹}80,000}$$</li>
       </ol>`,
     solution_ml: `<ol type="a">
         <li>ആകെ ഭാഗം $= 3 + 4 = 7$.<br>
@@ -302,10 +302,10 @@ QUESTIONS.push(
           $$\\text{ആദ്യ കഷണം} = 3 \\times 12 = \\mathbf{36\\text{ cm}}$$
           $$\\text{രണ്ടാം കഷണം} = 4 \\times 12 = \\mathbf{48\\text{ cm}}$$</li>
         <li>ആകെ ഭാഗം $= 2 + 3 + 4 = 9$.<br>
-          ഒരു ഭാഗം $= \\frac{180000}{9} = ₹20,000$.<br>
-          $$\\text{ഒന്നാമത്തെ ആൾക്ക്} = 2 \\times 20000 = \\mathbf{₹40,000}$$
-          $$\\text{രണ്ടാമത്തെ ആൾക്ക്} = 3 \\times 20000 = \\mathbf{₹60,000}$$
-          $$\\text{മൂന്നാമത്തെ ആൾക്ക്} = 4 \\times 20000 = \\mathbf{₹80,000}$$</li>
+          ഒരു ഭാഗം $= \\frac{180000}{9} = \\text{₹}20,000$.<br>
+          $$\\text{ഒന്നാമത്തെ ആൾക്ക്} = 2 \\times 20000 = \\mathbf{\\text{₹}40,000}$$
+          $$\\text{രണ്ടാമത്തെ ആൾക്ക്} = 3 \\times 20000 = \\mathbf{\\text{₹}60,000}$$
+          $$\\text{മൂന്നാമത്തെ ആൾക്ക്} = 4 \\times 20000 = \\mathbf{\\text{₹}80,000}$$</li>
       </ol>`,
     tested_en: 'Partitioning quantities and money according to given multi-part ratios.',
     tested_ml: 'അളവുകളെയും തുകയെയും തന്നിട്ടുള്ള അംശബന്ധത്തിൽ വിഭജിക്കൽ.'

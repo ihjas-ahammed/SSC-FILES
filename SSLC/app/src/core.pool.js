@@ -100,10 +100,11 @@ const Pool = (function () {
         });
       }
       if (c.cards_en || c.cards_ml || c.cards) {
+        const rawCards = c.cards;
         Object.defineProperty(c, 'cards', {
           get: function () {
             const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
-            const rawList = isMl ? (c.cards_ml || c.cards_en || c.cards) : (c.cards_en || c.cards_ml || c.cards);
+            const rawList = isMl ? (c.cards_ml || c.cards_en || rawCards) : (c.cards_en || c.cards_ml || rawCards);
             if (!Array.isArray(rawList)) return [];
             return rawList.map(function (cd) {
               return {

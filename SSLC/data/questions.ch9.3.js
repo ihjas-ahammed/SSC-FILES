@@ -59,8 +59,8 @@ OBJECTIVE.push(
       { k: 'D', t: '₹800' }
     ],
     answer: 'A',
-    solution_en: 'The 3 extra chairs cost $14000 - 11000 = ₹3000$. Hence 1 chair costs $\\frac{3000}{3} = ₹1000$.',
-    solution_ml: '3 അധിക കസേരകളുടെ വില $14000 - 11000 = ₹3000$. അതിനാൽ ഒരു കസേരയുടെ വില $= \\frac{3000}{3} = ₹1000$.',
+    solution_en: 'The 3 extra chairs cost $14000 - 11000 = \\text{₹}3000$. Hence 1 chair costs $\\frac{3000}{3} = \\text{₹}1000$.',
+    solution_ml: '3 അധിക കസേരകളുടെ വില $14000 - 11000 = \\text{₹}3000$. അതിനാൽ ഒരു കസേരയുടെ വില $= \\frac{3000}{3} = \\text{₹}1000$.',
     tested_en: 'Formulating and solving an item cost system.',
     tested_ml: 'വിലകൾ സംബന്ധിച്ച സമവാക്യം രൂപീകരിച്ച് പരിഹരിക്കൽ.'
   },
@@ -270,10 +270,10 @@ $$\\text{Multiply (2) by 2: } 6x + 10y = 190 \\quad \\text{--- (Equation 5)}$$
 
 $$\\text{Step 4: Subtract (4) from (5)}$$
 $$(6x + 10y) - (6x + 9y) = 190 - 180$$
-$$y = \\mathbf{₹10} \\quad \\text{(Cost of 1 notebook)}$$
+$$y = \\mathbf{\\text{₹}10} \\quad \\text{(Cost of 1 notebook)}$$
 
 $$\\text{Step 5: Substitute } y = 10 \\text{ into Equation 3}$$
-$$2x + 3(10) = 60 \\implies 2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{₹15} \\quad \\text{(Cost of 1 pen)}$$
+$$2x + 3(10) = 60 \\implies 2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{\\text{₹}15} \\quad \\text{(Cost of 1 pen)}$$
 
 $$\\text{Conclusion: A pen costs ₹15 and a notebook costs ₹10.}$$`,
     solution_ml: `$$\\text{ഒരു പേനയുടെ വില } x \\text{ രൂപയും, ഒരു നോട്ടുപുസ്തകത്തിന്റെ വില } y \\text{ രൂപയും എന്നിരിക്കട്ടെ.}$$
@@ -290,10 +290,10 @@ $$\\text{സമവാക്യം (3) } \\times 3: \\quad 6x + 9y = 180 \\quad \
 $$\\text{സമവാക്യം (2) } \\times 2: \\quad 6x + 10y = 190 \\quad \\text{--- (സമവാക്യം 5)}$$
 
 $$\\text{ഘട്ടം 4: സമവാക്യം (5)-ൽ നിന്ന് (4) കുറയ്ക്കുന്നു}$$
-$$y = 190 - 180 = \\mathbf{₹10} \\quad (\\text{നോട്ടുപുസ്തകത്തിന്റെ വില})$$
+$$y = 190 - 180 = \\mathbf{\\text{₹}10} \\quad (\\text{നോട്ടുപുസ്തകത്തിന്റെ വില})$$
 
 $$\\text{ഘട്ടം 5: } y = 10 \\text{ സമവാക്യം (3)-ൽ നൽകുന്നു}$$
-$$2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{₹15} \\quad (\\text{പേനയുടെ വില})$$
+$$2x + 30 = 60 \\implies 2x = 30 \\implies x = \\mathbf{\\text{₹}15} \\quad (\\text{പേനയുടെ വില})$$
 
 $$\\text{ഉത്തരം: ഒരു പേനയുടെ വില ₹15, നോട്ടുപുസ്തകത്തിന്റെ വില ₹10.}$$`
   },

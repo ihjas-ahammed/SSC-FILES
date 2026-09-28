@@ -124,13 +124,13 @@ CONCEPTS.push(
       'അംശബന്ധവും വിഹിതങ്ങൾ തമ്മിലുള്ള വ്യത്യാസവും തമ്മിൽ ആശയക്കുഴപ്പമുണ്ടാകരുത്.'
     ],
     cards_en: [
-      { q: 'Divide ₹1,200 in the ratio 2 : 3.', a: 'Total parts $= 5$. One part $= ₹240$. Shares are $2 \\times 240 = ₹480$ and $3 \\times 240 = ₹720$.', kind: 'apply' },
-      { q: 'If ₹1,000 is divided in the ratio 1 : 2 : 7, what is the largest share?', a: 'Total parts $= 10$. Largest share $= 7 \\times \\frac{1000}{10} = ₹700$.', kind: 'apply' },
+      { q: 'Divide ₹1,200 in the ratio 2 : 3.', a: 'Total parts $= 5$. One part $= \\text{₹}240$. Shares are $2 \\times 240 = \\text{₹}480$ and $3 \\times 240 = \\text{₹}720$.', kind: 'apply' },
+      { q: 'If ₹1,000 is divided in the ratio 1 : 2 : 7, what is the largest share?', a: 'Total parts $= 10$. Largest share $= 7 \\times \\frac{1000}{10} = \\text{₹}700$.', kind: 'apply' },
       { q: 'In a division of ratio a : b, what represents one part?', a: '$\\frac{\\text{Total}}{a + b}$.', kind: 'state' }
     ],
     cards_ml: [
-      { q: '₹1,200 രൂപയെ 2 : 3 എന്ന അംശബന്ധത്തിൽ വിഭജിക്കുക.', a: 'ആകെ ഭാഗം $= 5$. ഒരു ഭാഗം $= ₹240$. വിഹിതങ്ങൾ $2 \\times 240 = ₹480$, $3 \\times 240 = ₹720$.', kind: 'apply' },
-      { q: '₹1,000 രൂപയെ 1 : 2 : 7 എന്ന അംശബന്ധത്തിൽ വിഭജിച്ചാൽ ഏറ്റവും വലിയ വിഹിതം എത്ര?', a: 'ആകെ ഭാഗം $= 10$. വലിയ വിഹിതം $= 7 \\times \\frac{1000}{10} = ₹700$.', kind: 'apply' },
+      { q: '₹1,200 രൂപയെ 2 : 3 എന്ന അംശബന്ധത്തിൽ വിഭജിക്കുക.', a: 'ആകെ ഭാഗം $= 5$. ഒരു ഭാഗം $= \\text{₹}240$. വിഹിതങ്ങൾ $2 \\times 240 = \\text{₹}480$, $3 \\times 240 = \\text{₹}720$.', kind: 'apply' },
+      { q: '₹1,000 രൂപയെ 1 : 2 : 7 എന്ന അംശബന്ധത്തിൽ വിഭജിച്ചാൽ ഏറ്റവും വലിയ വിഹിതം എത്ര?', a: 'ആകെ ഭാഗം $= 10$. വലിയ വിഹിതം $= 7 \\times \\frac{1000}{10} = \\text{₹}700$.', kind: 'apply' },
       { q: 'a : b അംശബന്ധ വിഭജനത്തിൽ ഒരു ഭാഗത്തിന്റെ അളവ് എങ്ങനെ കാണാം?', a: '$\\frac{\\text{ആകെ തുക}}{a + b}$.', kind: 'state' }
     ]
   },

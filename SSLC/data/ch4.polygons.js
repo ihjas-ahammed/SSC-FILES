@@ -60,7 +60,7 @@ CONCEPTS.push(
         { why_ml: 'ഓരോ ത്രികോണത്തിലെയും കോണുകളുടെ തുക 180° ആണ്. അതിനാൽ ആകെ തുക ലഭിക്കുന്നു.', m: 'S = (n - 2) \\times 180^\\circ' }
       ]
     },
-    needs: ['m8.2.1.congruence-intro', 's.area-triangles'],
+    needs: ['m8.2.2.asa-congruence'],
     traps_en: [
       'Do not multiply n by 180°; you must subtract 2 first: (n - 2) × 180°.',
       'Check whether the question asks for sum of angles or each angle in a regular polygon.'

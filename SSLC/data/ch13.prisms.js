@@ -68,7 +68,7 @@ CONCEPTS.push(
         { why_ml: 'ആകെ മുഖങ്ങൾ = 2 പാദങ്ങൾ + n പാർശ്വമുഖങ്ങൾ.', m: 'F = n + 2, \\quad E = 3n, \\quad V = 2n' }
       ]
     },
-    needs: ['m8.4.1.polygon-angle-sum', 'p.3.4'],
+    needs: ['m8.4.1.polygon-angle-sum', 's.area-rectangle'],
     traps_en: [
       'A cylinder is NOT a prism because its base is a circle (curved), not a polygon.',
       'Remember that lateral faces of a right prism are RECTANGLES, never triangles (that would be a pyramid).'
@@ -140,7 +140,7 @@ CONCEPTS.push(
         { why_ml: 'h പൊതുവായി പുറത്തെടുക്കുന്നു.', m: '\\text{LSA} = (a_1 + a_2 + \\dots + a_n)h = P \\times h' }
       ]
     },
-    needs: ['m8.13.1.prism-concept', 'p.2.3'],
+    needs: ['m8.13.1.prism-concept', 's.distributive-law'],
     traps_en: [
       'Do NOT include the two base areas in lateral surface area.',
       'Ensure all lengths (perimeter and height) are in the same unit (cm or m) before multiplying.'

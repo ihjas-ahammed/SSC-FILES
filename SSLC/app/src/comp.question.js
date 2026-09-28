@@ -72,9 +72,17 @@ const QuestionCard = (function () {
     const rec = Store.omr(q.id);
     const already = rec && rec.first;
 
-    let given = q.type === 'MSQ' ? [] : (q.type === 'NAT' ? '' : null);
-    let locked = false;
+    const savedDraft = (typeof Store !== 'undefined' && Store.responseDraft) ? Store.responseDraft(q.id) : null;
+    const restored = o.lockedResult || null;
+    let given = restored ? restored.given : savedDraft !== null ? savedDraft : (q.type === 'MSQ' ? [] : (q.type === 'NAT' ? '' : null));
+    let locked = !!restored;
     const started = Date.now();
+
+    function saveDraftState() {
+      if (typeof Store !== 'undefined' && Store.saveResponseDraft) {
+        Store.saveResponseDraft(q.id, given);
+      }
+    }
 
     const sheetHost = el('div', {});
     const actionHost = el('div', {});
@@ -99,7 +107,7 @@ const QuestionCard = (function () {
           disabled: locked || null
         });
         input.value = typeof given === 'string' ? given : '';
-        input.addEventListener('input', function () { given = input.value; paintActions(); });
+        input.addEventListener('input', function () { given = input.value; saveDraftState(); paintActions(); });
         sheetHost.appendChild(el('div', { class: 'nat-in' }, [
           input,
           el('span', { class: 'small muted', text: q.answer.dp
@@ -127,11 +135,15 @@ const QuestionCard = (function () {
         const isKey = locked && (msq ? q.answer.indexOf(opt.k) >= 0 : q.answer === opt.k);
         const badChoice = locked && chosen && !isKey;
 
+        const plainOptText = opt.t ? opt.t.replace(/<[^>]+>/g, '').replace(/\$/g, '').trim() : '';
+        const optAria = (isMl ? ('ഓപ്ഷൻ ' + opt.k + ': ') : ('Option ' + opt.k + ': ')) + (plainOptText || opt.k);
+
         const row = el('button', {
           class: 'omr-opt' + (msq ? ' msq' : '') + (isKey ? ' key' : '') + (badChoice ? ' chosen-bad' : ''),
           type: 'button',
           role: msq ? 'checkbox' : 'radio',
           'aria-checked': String(chosen),
+          'aria-label': optAria,
           'aria-disabled': locked ? 'true' : null
         }, [
           el('span', { class: 'bub', 'aria-hidden': 'true', text: opt.k }),
@@ -145,6 +157,7 @@ const QuestionCard = (function () {
             const i = given.indexOf(opt.k);
             if (i >= 0) given.splice(i, 1); else given.push(opt.k);
           } else given = opt.k;
+          saveDraftState();
           paintSheet(q.options.indexOf(opt));   /* keep focus on the row just used */
           paintActions();
         });
@@ -196,6 +209,7 @@ const QuestionCard = (function () {
             text: (typeof I18N !== 'undefined') ? I18N.t('clear') : 'Clear',
             on: { click: function () {
               given = q.type === 'MSQ' ? [] : (q.type === 'NAT' ? '' : null);
+              saveDraftState();
               paintSheet(); paintActions();
             } } }) : null
         ]),
@@ -209,6 +223,7 @@ const QuestionCard = (function () {
     function lock() {
       if (locked || !hasAnswer()) return;
       locked = true;
+      if (typeof Store !== 'undefined' && Store.clearResponseDraft) Store.clearResponseDraft(q.id);
       const isMl = (typeof I18N !== 'undefined') && I18N.lang() === 'ml';
       const verdict = judge(q, given);
       const ms = Date.now() - started;
@@ -222,7 +237,7 @@ const QuestionCard = (function () {
         : verdict === 'partial'
           ? (isMl ? 'ഭാഗികമായി ശരി.' : 'Partially correct.')
           : (isMl ? 'തെറ്റായ ഉത്തരം. പരിഹാരം കാണിച്ചിരിക്കുന്നു.' : 'Incorrect. Worked answer shown.'));
-      if (o.onLocked) o.onLocked(verdict, ms);
+      if (o.onLocked) o.onLocked(verdict, ms, given);
       const h = resultHost.querySelector('.verdict');
       if (h) h.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
@@ -317,6 +332,9 @@ const QuestionCard = (function () {
 
     paintSheet();
     paintActions();
+    if (restored) {
+      resultHost.appendChild(feedback(q, given, restored.verdict, restored.ms, rec));
+    }
     UI.math(node);
     return node;
   }

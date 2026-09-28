@@ -305,8 +305,8 @@ $$\\text{Step 2: Calculate Lateral Surface Area (LSA)}$$
 $$\\text{LSA} = P \\times h = 3\\text{ m} \\times 4\\text{ m} = \\mathbf{12\\text{ m}^2}.$$
 
 $$\\text{Step 3: Calculate cost of painting}$$
-$$\\text{Rate} = ₹50\\text{ per m}^2.$$
-$$\\text{Total Cost} = 12 \\times 50 = \\mathbf{₹600}.$$`,
+$$\\text{Rate} = \\text{₹}50\\text{ per m}^2.$$
+$$\\text{Total Cost} = 12 \\times 50 = \\mathbf{\\text{₹}600}.$$`,
     solution_ml: `$$\\text{നൽകിയിരിക്കുന്നത്: ക്രമഷഡ്ഭുജ പാദവശം } a = 0.5\\text{ m}, \\quad \\text{ഉയരം } h = 4\\text{ m}.$$
 
 $$\\text{ഘട്ടം 1: പാദച്ചുറ്റളവ് } P \\text{ കാണുന്നു:}$$
@@ -316,8 +316,8 @@ $$\\text{ഘട്ടം 2: പാർശ്വതല പരപ്പളവ് �
 $$\\text{പാർശ്വതല പരപ്പളവ്} = P \\times h = 3 \\times 4 = \\mathbf{12\\text{ m}^2}.$$
 
 $$\\text{ഘട്ടം 3: പെയിന്റിംഗ് ചെലവ്:}$$
-$$\\text{നിരക്ക്} = ₹50\\text{ / ച.മീ}.$$
-$$\\text{ആകെ ചെലവ്} = 12 \\times 50 = \\mathbf{₹600}.$$`,
+$$\\text{നിരക്ക്} = \\text{₹}50\\text{ / ച.മീ}.$$
+$$\\text{ആകെ ചെലവ്} = 12 \\times 50 = \\mathbf{\\text{₹}600}.$$`,
     tested_en: 'Perimeter, lateral surface area, and unitary painting expenditure of regular hexagonal prism.',
     tested_ml: 'ക്രമഷഡ്ഭുജ സ്തംഭത്തിന്റെ ചുറ്റളവ്, പാർശ്വതല പരപ്പളവ്, പെയിന്റിംഗ് ചിലവ്.'
   },

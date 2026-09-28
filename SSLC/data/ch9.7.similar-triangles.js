@@ -194,7 +194,7 @@ CONCEPTS.push(
         { why_ml: 'അനുരൂപ വശങ്ങളുടെ അംശബന്ധം എടുക്കുമ്പോൾ.', m: 'CD^2 = AD \\times DB' }
       ]
     },
-    needs: ['m9.7.1.concept-of-similarity-and-aa', 'p.5.5'],
+    needs: ['m9.7.1.concept-of-similarity-and-aa', 's.pythagoras-theorem'],
     traps_en: [
       'The altitude must be dropped from the RIGHT ANGLE vertex onto the hypotenuse.',
       'In CD^2 = AD * DB, AD and DB are the two segments of the HYPOTENUSE, not the legs.'

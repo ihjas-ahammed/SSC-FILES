@@ -67,7 +67,7 @@ CONCEPTS.push(
         { why_ml: 'കർണ്ണം² കൊണ്ട് ഹരിക്കുമ്പോൾ സർവ്വസമവാക്യം ലഭിക്കുന്നു.', m: '\\sin^2\\theta + \\cos^2\\theta = 1' }
       ]
     },
-    needs: ['m9.7.1.concept-of-similarity', 's.pythagoras-theorem'],
+    needs: ['m9.7.1.concept-of-similarity-and-aa', 's.pythagoras-theorem'],
     traps_en: [
       'Swapping opposite and adjacent sides when looking from the other acute angle.',
       'Assuming sin θ + cos θ = 1 instead of sin² θ + cos² θ = 1.',

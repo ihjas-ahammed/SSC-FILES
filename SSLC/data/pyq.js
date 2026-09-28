@@ -310,7 +310,7 @@ PYQ.push(
     answer: 'A',
     solution_en: '<p>Arrange in ascending order: $45, 50, 54, 58, 65, 66, 70, 72$.<br>Since $N = 8$ (even), the median is the average of the 4th and 5th values:<br>$$\\text{Median} = \\frac{58 + 65}{2} = \\frac{123}{2} = \\mathbf{61.5}$$</p>',
     solution_ml: '<p>ആരോഹണ ക്രമത്തിൽ എഴുതിയാൽ: $45, 50, 54, 58, 65, 66, 70, 72$.<br>ആകെ 8 എണ്ണം ഉള്ളതിനാൽ നടുവിലെ രണ്ട് സംഖ്യകളുടെ (4, 5 സ്ഥാനങ്ങളിലെ) ശരാശരിയാണ് മധ്യമം:<br>$$\\text{മധ്യമം} = \\frac{58 + 65}{2} = \\mathbf{61.5}$$</p>',
-    tests: ['m9.13.1.concept-of-mean-and-calculations']
+    tests: ['m9.13.1.arithmetic-mean-and-deviations']
   },
   {
     id: 'pyq.m9.2024.q2',
@@ -401,7 +401,7 @@ PYQ.push(
     answer: 'A',
     solution_en: '<p>Since $\\angle APB = 110^\\circ > 90^\\circ$, point $P$ lies <b>inside</b> the circle. Since $\\angle AQB = 80^\\circ < 90^\\circ$, point $Q$ lies <b>outside</b> the circle.</p>',
     solution_ml: '<p>$\\angle APB = 110^\\circ > 90^\\circ$ ആയതിനാൽ $P$ വൃത്തത്തിന് <b>അകത്താണ്</b>. $\\angle AQB = 80^\\circ < 90^\\circ$ ആയതിനാൽ $Q$ വൃത്തത്തിന് <b>പുറത്താണ്</b>.</p>',
-    tests: ['m10.2.3.angles-inside-and-outside-circle']
+    tests: ['m10.2.1.angle-in-semicircle']
   },
   {
     id: 'pyq.m10.2024.q2',
@@ -459,7 +459,7 @@ PYQ.push(
     answer: 'A',
     solution_en: '<p>Perimeter $= 4 \\times \\text{side}$. For sides $1, 2, 3, \\dots$, perimeters are $4(1) = 4, 4(2) = 8, 4(3) = 12, \\dots$<br>The sequence is $\\mathbf{4, 8, 12, \\dots}$ with common difference $\\mathbf{d = 4}$.</p>',
     solution_ml: '<p>ചുറ്റളവ് $= 4 \\times \\text{വശം}$. വശങ്ങൾ $1, 2, 3, \\dots$ ആകുമ്പോൾ ചുറ്റളവുകൾ $4, 8, 12, \\dots$<br>ശ്രേണി: $\\mathbf{4, 8, 12, \\dots}$, പൊതുവ്യത്യാസം $\\mathbf{d = 4}$.</p>',
-    tests: ['m10.1.1.arithmetic-sequence-definition']
+    tests: ['m10.1.2.arithmetic-sequence-definition']
   },
   {
     id: 'pyq.m10.2024.q4',

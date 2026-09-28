@@ -56,7 +56,7 @@ CONCEPTS.push(
         { why_ml: 'വ്യത്യാസം പൂജ്യമാകുന്നു.', m: 'n\\bar{x} - n\\bar{x} = 0' }
       ]
     },
-    needs: ['m8.10.1.data-collection-tally', 'p.1.2'],
+    needs: ['m8.10.1.data-and-tally', 's.addition'],
     traps_en: [
       'The mean does NOT need to be one of the original numbers in the data set.',
       'A change in a single value changes the mean; check total sum when calculating.'

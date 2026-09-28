@@ -67,12 +67,12 @@ const Progress = (function () {
   function secTasks(sec) {
     const qs = (sec && Pool.writtenForSec) ? Pool.writtenForSec(sec) : [];
     const done = qs.filter(taskDone).length;
-    /* `ready` is true for an EMPTY set too: nothing owed is nothing owed. */
-    return { total: qs.length, done: done, ready: done === qs.length, list: qs };
+    /* Missing exercises are not evidence that any exercises were solved. */
+    return { total: qs.length, done: done, ready: qs.length > 0 && done === qs.length, list: qs };
   }
 
   function secTaskState(sec) {
-    if (!sec) return { total: 0, done: 0, ready: true, list: [] };
+    if (!sec) return { total: 0, done: 0, ready: false, list: [] };
     if (!secCache[sec]) secCache[sec] = secTasks(sec);
     return secCache[sec];
   }

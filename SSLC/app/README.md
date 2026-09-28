@@ -12,11 +12,11 @@ toggle is in the header.
 
 | Surface | What it does |
 | --- | --- |
-| **Today** | The plan for the day, built from what is due, what was missed and what comes next, in the order the learning research says pays most: recall first, new material last. Daily goal in three sizes, streak, focus timer, weak spots, why marks were lost, calibration, exam countdown, and the courses. |
-| **Study** | The whole syllabus as one page of dropdowns: course → chapter → section → note. A note opens in place with its statement, figure, plain-language callout, derivation, traps, self-check, exercises (each as Pólya's four steps), objective questions, and a "teach it back" box. |
-| **Recall** | A vertical reel of cards drawn only from material already met, scheduled by Leitner box and shuffled across chapters. You say how sure you are before the reveal; after a miss you say why. Modes: everything due, not yet attempted, weak spots, one chapter. |
-| **Drill** | A short timed paper, chapters interleaved, drawn from what you have read (or your weak spots, or the whole syllabus). Results by chapter, and the notes to review next. |
-| **How to study** | Reached from Today. The research behind the app, what does not work, how each SSLC subject is best studied, and how to sit the paper. |
+| **Today (`#/home`)** | An actionable single-session invitation fitting 320px/280px phones: active class selector, one primary Start/Continue button, spaced recall count due (or caught-up state), targeted weak spots, and habit streak. |
+| **Learn (`#/study`, `#/note/<id>`)** | The complete browsable syllabus by class and chapter, with links to focused lessons. Two arithmetic-sequence lessons include six interactive stages; other lessons use the full note, diagrams and practice components. |
+| **Practice (`#/recall`, `#/drill`)** | Spaced retrieval practice scheduled by Leitner boxes across chapters; timed mixed drills with chapter-level diagnostics. |
+| **Progress (`#/progress`)** | Full mastery breakdown (read, exercises, past papers, recall accuracy), daily goals, weak spots, error analysis notebook, calibration, focus session timer, and guest profile/sync settings. |
+| **How to study (`#/method`)** | The cognitive science principles behind spaced recall, retrieval practice, error analysis, and SSLC exam strategy. |
 
 `LEARNING_SCIENCE.md` at the project root lists every source.
 
@@ -33,13 +33,17 @@ Nothing is switched on; the level is derived from what has been done (`src/core.
 Foundation (Class 1–7) concepts top out at level 2. A chapter or course takes the colour
 of its weakest item. Derivations, where a result has one, are optional: they feed the
 reel but gate nothing.
+An empty exercise set does not award level 2. Opening a lesson's Finish stage does
+not mark it read; the learner explicitly records that action.
 
 ## Progress
 
-Stored in this browser under the localStorage key `sslc.v1` (a record found under the old
+Guest progress is stored in this browser under the localStorage key `sslc.v1` (a record found under the old
 shared key `ssc4.level1.v1` is adopted once), and merged across devices through the sync
-in `src/core.sync.js` under the `sslc_v1` namespace, keyed by name and roll number. That
-key is a pass key, not a password, and the sign-in screen says so.
+in `src/core.sync.js` only when enabled, under the `sslc_v1` namespace, keyed by name
+and roll number. Anyone who knows those values can read and change the remote record;
+the sign-in screen explains this. Mock builds use `sslc.v1.mock` and their own focus
+timer, and never import the legacy live record.
 
 The record holds: read ticks, task ticks (exercises `w:`, past papers `p:`, derivations),
 card and question first attempts, drafts, the day log (streaks and the daily goal), the
@@ -77,3 +81,18 @@ app/
 
 Build with `python3 build.py` (live pool) or `python3 build.py --mock` from the project
 root; see `HOOK_AGY.md` for the data contract and the deploy.
+
+## Verification
+
+Run `node tools/full_audit.js`, `node tools/check_tex.js`,
+`node tools/check_tex.js --mock`, and `node tools/test_state.js` from the project root.
+The full audit validates the live bilingual curriculum and rejects unsupported flags.
+
+For browser regressions, serve the project with `python3 -m http.server 8765 --bind
+127.0.0.1` and start an isolated Chrome instance with `--headless=new
+--remote-debugging-port=9223 --user-data-dir=/tmp/sslc-browser-test`.
+Run `node tools/browser_audit.mjs --all-lessons`; supply a URL to test a built or
+hosted bundle instead. It uses a fresh incognito context, blocks Firebase, checks
+guest onboarding, lesson completion/resuming, translated drill answers, keyboard
+dialog handling, and layouts at 280/320/768/1280px. `--all-lessons` also renders every
+lesson with MathJax in English and Malayalam. Browser tests require Node 22+.

@@ -253,18 +253,18 @@ WRITTEN.push(
     title_ml: 'വിപരീതക്രിയ വഴി അജ്ഞാതവില കണ്ടെത്തൽ',
     prompt_en: '<p>A person bought 4 kg of okra (lady’s finger) and curry leaves for ₹20. The total bill came to ₹200. Find the price of 1 kg of okra using the inversion method.</p>',
     prompt_ml: '<p>റഷീദ 4 കിലോഗ്രാം വെണ്ടയ്ക്കയും 20 രൂപയ്ക്ക് കറിവേപ്പിലയും വാങ്ങി. ആകെ 200 രൂപയായി. വിപരീതക്രിയാരീതി ഉപയോഗിച്ച് ഒരു കിലോഗ്രാം വെണ്ടയ്ക്കയുടെ വില കണ്ടെത്തുക.</p>',
-    solution_en: `$$\\text{Total amount paid} = ₹200$$
+    solution_en: `$$\\text{Total amount paid} = \\text{₹}200$$
 $$\\text{Step 1: Undo addition of ₹20 for curry leaves}$$
-$$\\text{Cost of 4 kg okra} = 200 - 20 = ₹180$$
+$$\\text{Cost of 4 kg okra} = 200 - 20 = \\text{₹}180$$
 
 $$\\text{Step 2: Undo multiplication by 4 kg}$$
-$$\\text{Price of 1 kg okra} = \\frac{180}{4} = \\mathbf{₹45}$$`,
-    solution_ml: `$$\\text{ആകെ നൽകിയ തുക} = ₹200$$
+$$\\text{Price of 1 kg okra} = \\frac{180}{4} = \\mathbf{\\text{₹}45}$$`,
+    solution_ml: `$$\\text{ആകെ നൽകിയ തുക} = \\text{₹}200$$
 $$\\text{ഘട്ടം 1: കറിവേപ്പിലയുടെ ₹20 കുറയ്ക്കുക (കൂട്ടലിന്റെ വിപരീതം)}$$
-$$4\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = 200 - 20 = ₹180$$
+$$4\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = 200 - 20 = \\text{₹}180$$
 
 $$\\text{ഘട്ടം 2: 4 കൊണ്ട് ഹരിക്കുക (ഗുണനത്തിന്റെ വിപരീതം)}$$
-$$1\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = \\frac{180}{4} = \\mathbf{₹45}$$`,
+$$1\\text{ kg വെണ്ടയ്ക്കയുടെ വില} = \\frac{180}{4} = \\mathbf{\\text{₹}45}$$`,
     tested_en: 'Inversion method to undo operations in real-world retail pricing.',
     tested_ml: 'വിപരീതക്രിയ വഴി നിത്യജീവിത പ്രശ്നങ്ങളുടെ പരിഹാരം കാണൽ.'
   },
@@ -314,15 +314,15 @@ $$10x = 100 - 70 = 30$$
 $$x = \\frac{30}{10} = \\mathbf{3}$$
 $$\\text{Number of ₹20 notes} = \\mathbf{3}$$
 $$\\text{Number of ₹10 notes} = 7 - 3 = \\mathbf{4}$$`,
-    solution_ml: `$$₹20\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } x \\text{ എന്നിരിക്കട്ടെ.}$$
-$$₹10\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } 7 - x \\text{ ആയിരിക്കും.}$$
+    solution_ml: `$$\\text{₹}20\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } x \\text{ എന്നിരിക്കട്ടെ.}$$
+$$\\text{₹}10\\text{-ന്റെ നോട്ടുകളുടെ എണ്ണം } 7 - x \\text{ ആയിരിക്കും.}$$
 $$\\text{ആകെ തുക: } 20x + 10(7 - x) = 100$$
 $$20x + 70 - 10x = 100$$
 $$10x + 70 = 100$$
 $$10x = 100 - 70 = 30$$
 $$x = \\frac{30}{10} = \\mathbf{3}$$
-$$₹20\\text{ നോട്ടുകൾ} = \\mathbf{3 \\text{ എണ്ണം}}$$
-$$₹10\\text{ നോട്ടുകൾ} = 7 - 3 = \\mathbf{4 \\text{ എണ്ണം}}$$`,
+$$\\text{₹}20\\text{ നോട്ടുകൾ} = \\mathbf{3 \\text{ എണ്ണം}}$$
+$$\\text{₹}10\\text{ നോട്ടുകൾ} = 7 - 3 = \\mathbf{4 \\text{ എണ്ണം}}$$`,
     tested_en: 'System modeling with unknown distributions in currency denominations.',
     tested_ml: 'കറൻസി നോട്ടുകളുടെ എണ്ണവും മൂല്യവും അടിസ്ഥാനമാക്കിയുള്ള സമവാക്യ നിർമ്മാണം.'
   },

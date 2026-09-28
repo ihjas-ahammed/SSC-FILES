@@ -218,6 +218,12 @@ const Tree = (function () {
       tag,
       DOM.icon('chev', 18, 'chev')
     ], function (on) {
+      if (on) {
+        const course = Pool.courseOfSec(c.sec);
+        if (course && Store.pref('lastLesson:' + course.id, '') !== c.id) {
+          Store.setPref('lastLesson:' + course.id, c.id);
+        }
+      }
       setSlot('concept', c.id, on);
       ctx.repaint({ scroll: on, isNote: true });
     });
@@ -681,7 +687,8 @@ const Tree = (function () {
   /* First visit: open the first course, module and section that still have
      work left, so the tree opens somewhere useful rather than flat. */
   function seedOpen(course) {
-    if (Store.pref(KEY, null) || Store.pref(LEGACY, null)) { path(); return; }
+    const previous = path();
+    if (previous.course && (!course || previous.course === course.id)) return;
     const p = {};
     if (course) {
       p.course = course.id;
@@ -702,6 +709,12 @@ const Tree = (function () {
     const c = Pool.concept(conceptId);
     if (!c) return false;
     const course = Pool.courseOfSec(c.sec), mod = Pool.moduleOfSec(c.sec);
+    if (course && Store.setSelectedCourse) {
+      Store.setSelectedCourse(course.id);
+    }
+    if (course && Store.pref('lastLesson:' + course.id, '') !== c.id) {
+      Store.setPref('lastLesson:' + course.id, c.id);
+    }
     savePath({
       course: course ? course.id : null,
       mod: mod ? mod.id : null,

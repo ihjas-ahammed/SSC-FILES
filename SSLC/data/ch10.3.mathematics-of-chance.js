@@ -69,7 +69,7 @@ CONCEPTS.push(
         { why_ml: 'അന്യോന്യ വിരുദ്ധ സംഭവങ്ങളുടെ തുക നിയമപ്രകാരം.', m: 'P(E) = k \\times \\frac{1}{n} = \\frac{k}{n} = \\frac{n(E)}{n(S)}' }
       ]
     },
-    needs: ['s.fraction-ops', 's.percentages'],
+    needs: ['s.fraction-ops', 's.decimals'],
     traps_en: [
       'Comparing raw counts instead of fractions when comparing two boxes with different total items.',
       'Assuming outcomes are equally likely when conditions are physically biased or uneven.',
@@ -152,7 +152,7 @@ CONCEPTS.push(
         { why_ml: 'അതിനാൽ പരപ്പളവുകളുടെ അനുപാതം ലഭിക്കുന്നു.', m: 'P = \\frac{\\text{Area}(A)}{\\text{Area}(S)}' }
       ]
     },
-    needs: ['m10.3.1.probability-as-measure-of-chance', 's.area-formulae'],
+    needs: ['m10.3.1.probability-as-measure-of-chance', 's.area-rectangle'],
     traps_en: [
       'Using the ratio of perimeters or side lengths instead of the ratio of areas.',
       'Forgetting that when side length is scaled by k, area scales by k².',

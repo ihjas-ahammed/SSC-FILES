@@ -280,14 +280,14 @@ $$\\text{പരപ്പളവ്} = 9 \\times 12 = \\mathbf{108\\text{ cm}^2}$$
 $$\\text{Area} = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 24 \\times 10 = 12 \\times 10 = \\mathbf{120\\text{ m}^2}$$
 
 $$\\text{Step 2: Calculate the cost of leveling}$$
-$$\\text{Rate} = ₹25\\text{ per m}^2$$
-$$\\text{Total Cost} = 120 \\times 25 = \\mathbf{₹3000}$$`,
+$$\\text{Rate} = \\text{₹}25\\text{ per m}^2$$
+$$\\text{Total Cost} = 120 \\times 25 = \\mathbf{\\text{₹}3000}$$`,
     solution_ml: `$$\\text{ഘട്ടം 1: റോംബസിന്റെ പരപ്പളവ് കാണുക}$$
 $$\\text{പരപ്പളവ്} = \\frac{1}{2} \\times d_1 \\times d_2 = \\frac{1}{2} \\times 24 \\times 10 = 12 \\times 10 = \\mathbf{120\\text{ m}^2}$$
 
 $$\\text{ഘട്ടം 2: നിരപ്പാക്കാനുള്ള ആകെ തുക കണക്കാക്കുക}$$
-$$\\text{നിരക്ക്} = ₹25\\text{ / m}^2$$
-$$\\text{ആകെ ചിലവ്} = 120 \\times 25 = \\mathbf{₹3000}$$`,
+$$\\text{നിരക്ക്} = \\text{₹}25\\text{ / m}^2$$
+$$\\text{ആകെ ചിലവ്} = 120 \\times 25 = \\mathbf{\\text{₹}3000}$$`,
     tested_en: 'Rhombus area from diagonals and practical unitary leveling cost.',
     tested_ml: 'വികർണ്ണങ്ങളിൽ നിന്ന് റോംബസ് പരപ്പളവും നിരപ്പാക്കൽ ചിലവും കാണൽ.'
   },

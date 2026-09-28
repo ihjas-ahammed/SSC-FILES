@@ -83,7 +83,15 @@ const DOM = (function () {
     return node;
   }
 
-  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); return node; }
+  function clear(node) {
+    // Forget old expressions before detaching them; otherwise MathJax retains
+    // every visited lesson. See docs.mathjax.org/en/v3.1/web/typeset.html.
+    if (window.MathJax && window.MathJax.typesetClear && node.querySelector('mjx-container')) {
+      window.MathJax.typesetClear([node]);
+    }
+    while (node.firstChild) node.removeChild(node.firstChild);
+    return node;
+  }
 
   /* polite screen-reader announcements (route changes, verdicts, saves) */
   function announce(msg) {

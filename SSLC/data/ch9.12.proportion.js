@@ -56,7 +56,7 @@ CONCEPTS.push(
         { why_ml: '$y$-യും കൃത്യമായി $m$ മടങ്ങായി മാറുന്നു.', m: '\\frac{y\'}{y} = m' }
       ]
     },
-    needs: ['m8.7.1.ratio-concept', 'p.2.1'],
+    needs: ['m8.7.1.concept-of-ratio', 's.multiplication'],
     traps_en: [
       'Proportion requires y = kx, NOT y = kx + c (where c != 0); if there is a non-zero intercept, it is NOT proportional.',
       'Equal differences do not mean proportion: (2, 4) and (4, 6) differ by 2, but 4/2 != 6/4.'

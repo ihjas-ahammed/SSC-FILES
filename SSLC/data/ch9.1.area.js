@@ -48,7 +48,7 @@ CONCEPTS.push(
         { why_ml: 'ഇരുവരുടെയും പരപ്പളവ് തുല്യമാണെന്ന് തെളിയുന്നു.', m: '\\text{Area}(\\triangle ABC) = \\text{Area}(\\triangle ABD)' }
       ]
     },
-    needs: ['m8.12.1.parallel-lines-transversal', 'p.3.4'],
+    needs: ['m8.12.1.parallel-lines-transversal', 's.area-rectangle'],
     traps_en: [
       'The triangles must share the SAME base (or bases of equal length) and lie between the SAME parallel lines.',
       'Slant sides can be completely different; equal area does NOT imply congruent or equal perimeter.'

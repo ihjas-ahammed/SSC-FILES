@@ -66,12 +66,12 @@ CONCEPTS.push(
     cards_en: [
       { q: 'The sum of two numbers is 50 and their difference is 16. What is the larger number?', a: '$x = \\frac{50 + 16}{2} = \\frac{66}{2} = \\mathbf{33}$.', kind: 'apply' },
       { q: 'How many equations are required to uniquely determine the values of two independent unknowns?', a: 'Two independent equations.', kind: 'recall' },
-      { q: 'The cost of 1 pen and 1 notebook is ₹35, and 1 pen and 2 notebooks cost ₹55. Find the cost of 1 notebook.', a: 'Subtracting: $(p + 2n) - (p + n) = 55 - 35 \\implies n = \\mathbf{₹20}$.', kind: 'apply' }
+      { q: 'The cost of 1 pen and 1 notebook is ₹35, and 1 pen and 2 notebooks cost ₹55. Find the cost of 1 notebook.', a: 'Subtracting: $(p + 2n) - (p + n) = 55 - 35 \\implies n = \\mathbf{\\text{₹}20}$.', kind: 'apply' }
     ],
     cards_ml: [
       { q: 'രണ്ട് സംഖ്യകളുടെ തുക 50-ഉം വ്യത്യാസം 16-ഉം ആയാൽ വലിയ സംഖ്യ ഏതാണ്?', a: '$x = \\frac{50 + 16}{2} = \\frac{66}{2} = \\mathbf{33}$.', kind: 'apply' },
       { q: 'രണ്ട് അജ്ഞാത അളവുകൾ കൃത്യമായി കണ്ടെത്താൻ എത്ര സമവാക്യങ്ങൾ ആവശ്യമാണ്?', a: 'പരസ്പരബന്ധമില്ലാത്ത രണ്ട് സമവാക്യങ്ങൾ.', kind: 'recall' },
-      { q: 'ഒരു പേനയുടെയും ഒരു നോട്ടുപുസ്തകത്തിന്റെയും വില ₹35, ഒരു പേനയുടെയും 2 നോട്ടുപുസ്തകങ്ങളുടെയും വില ₹55 ആയാൽ നോട്ടുപുസ്തകത്തിന്റെ വില എത്ര?', a: 'കുറയ്ക്കുമ്പോൾ: $55 - 35 = \\mathbf{₹20}$.', kind: 'apply' }
+      { q: 'ഒരു പേനയുടെയും ഒരു നോട്ടുപുസ്തകത്തിന്റെയും വില ₹35, ഒരു പേനയുടെയും 2 നോട്ടുപുസ്തകങ്ങളുടെയും വില ₹55 ആയാൽ നോട്ടുപുസ്തകത്തിന്റെ വില എത്ര?', a: 'കുറയ്ക്കുമ്പോൾ: $55 - 35 = \\mathbf{\\text{₹}20}$.', kind: 'apply' }
     ]
   },
 
