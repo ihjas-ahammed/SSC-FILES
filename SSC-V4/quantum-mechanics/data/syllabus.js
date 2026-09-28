@@ -21,11 +21,11 @@ const SYLLABI = [
       },
       {
         id: 'qm1.m3', n: 'III', title: 'Mathematical Tools of Quantum Mechanics', marks: 25,
-        secs: ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7']
+        secs: ['3.0', '3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7']
       },
       {
         id: 'qm1.m4', n: 'IV', title: 'The Quantum Harmonic Oscillator & 3D Potentials', marks: 15,
-        secs: ['4.1', '4.2', '4.3', '4.4']
+        secs: ['4.0', '4.1', '4.2', '4.3', '4.4']
       }
     ]
   },
@@ -120,6 +120,7 @@ const SYLLABI = [
 
 /* Section titles straight from Griffiths 3e and Zettili 2e */
 const SECTITLE = {
+  '3.0': 'Start Here: The Maths Bridge',
   '1.1': 'The Schrödinger Equation',
   '1.2': 'The Statistical Interpretation',
   '1.3': 'Probability Theory',
@@ -143,6 +144,7 @@ const SECTITLE = {
   '3.7': 'Matrix & Wave Mechanics',
 
   '4.1': 'The Quantum Harmonic Oscillator',
+  '4.0': 'Start Here: From High-School Physics to Quantum Oscillators',
   '4.2': '3D Problems in Cartesian Coordinates',
   '4.3': 'The Box Potential & Degeneracy',
   '4.4': 'The 3D Harmonic Oscillator',

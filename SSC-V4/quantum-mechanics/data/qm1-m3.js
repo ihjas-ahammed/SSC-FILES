@@ -1,10 +1,89 @@
 /* ══════════════════════════════════════════════════════════════════════════
    Quantum Mechanics I · Module III — Mathematical Tools of Quantum Mechanics
    Prescribed Text: Nouredine Zettili 2e (Chapter 2: §§2.2–2.7)
-   Sections: 3.1 to 3.7 (23 Core Concepts with full derivation ladders & flashcards)
+   Sections: 3.0 to 3.7 (entry bridge followed by 23 core concepts)
    ══════════════════════════════════════════════════════════════════════════ */
 
 if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
+
+/* A gentle bridge placed before the formalism. These lessons start from high-school
+   algebra, graphs, probability, and mechanics, then introduce the needed calculus. */
+CONCEPTS.push(
+  {
+    id: 'c.3.0.1', sec: '3.0', kind: 'bridge', tier: 'core',
+    title: 'Complex Numbers: the extra coordinate quantum amplitudes need',
+    oneLine: 'A complex number a + ib has real and imaginary parts; its squared magnitude gives a non-negative relative probability weight.',
+    statement: `You already know real numbers on a number line. Quantum amplitudes need a two-coordinate number, $z=a+ib$, where $i^2=-1$. Think of $a$ as a horizontal coordinate and $b$ as a vertical coordinate. The length of that arrow is the <b>modulus</b> $|z|=\\sqrt{a^2+b^2}$, so $|z|^2=a^2+b^2$ is always real and non-negative. For a normalized state this squared magnitude is a probability; before normalization it is a relative weight.<br><br>
+For example, if an amplitude is $z=3+4i$, then $|z|=5$ and $|z|^2=25$. The complex conjugate flips the vertical coordinate: $z^*=a-ib$. Thus $z^*z=|z|^2$. In quantum mechanics it is this squared magnitude, rather than the amplitude itself, that becomes a probability density or probability.<br><br>
+Multiplying by $e^{i\\theta}=\\cos\\theta+i\\sin\\theta$ rotates an amplitude without changing its length. This is why phase can affect interference while leaving the probability of one isolated amplitude unchanged.`,
+    intuition: `Use an arrow on graph paper: real part is the east-west distance and imaginary part is the north-south distance. Conjugation reflects the arrow across the horizontal axis; modulus is its ordinary length. The diagram shows why $z^*z$ removes the phase and leaves a positive real number.`,
+    img: ['c.3.0.1_complex_amplitude_plane'],
+    cards: [
+      { q: 'Find $|2- i|^2$.', a: '$2^2+(-1)^2=5$. Equivalently $(2+i)(2-i)=5$.', kind: 'practice' },
+      { q: 'Why do we use $z^*z$ for probability rather than $z^2$?', a: '$z^*z=|z|^2$ is real and never negative, while $z^2$ can be complex or negative.', kind: 'understanding' }
+    ]
+  },
+  {
+    id: 'c.3.0.2', sec: '3.0', kind: 'bridge', tier: 'core',
+    title: 'Vectors and coordinates: from arrows to quantum states',
+    oneLine: 'A vector is an object with components; changing its coordinates changes the description, not the state itself.',
+    statement: `A two-dimensional arrow can be written as $\\mathbf v=(v_1,v_2)$ once we choose two perpendicular unit directions. Its length is $|\\mathbf v|=\\sqrt{v_1^2+v_2^2}$, and the dot product $\\mathbf u\\cdot\\mathbf v=u_1v_1+u_2v_2$ measures alignment. Perpendicular vectors have dot product zero.<br><br>
+Quantum states follow the same idea, except their components can be complex and the number of independent directions may be much larger than three. In a chosen basis, $|\\psi\\rangle$ is a column of amplitudes. The bra $\\langle\\psi|$ is its conjugate-transpose row, so the inner product is $\\langle\\psi|\\psi\\rangle=\\sum_j |c_j|^2$. A change of basis is like describing the same arrow with different axes.<br><br>
+If $|0\\rangle$ and $|1\\rangle$ are perpendicular unit basis states, then $|\\psi\\rangle=(|0\\rangle+i|1\\rangle)/\\sqrt2$ has unit length because the probabilities add: $1/2+1/2=1$.`,
+    intuition: `Coordinates are labels for components, not the object itself. A map can use north-east coordinates or street names and still locate the same place. Quantum mechanics uses basis states as its coordinate directions.`,
+    needs: ['c.3.0.1'], img: ['c.3.0.2_quantum_state_coordinates'],
+    cards: [
+      { q: 'What is the norm squared of $|\\psi\\rangle=(|0\\rangle+i|1\\rangle)/\\sqrt2$ when the basis states are orthonormal?', a: '$|1/\\sqrt2|^2+|i/\\sqrt2|^2=1/2+1/2=1$.', kind: 'practice' },
+      { q: 'Does changing basis physically change a state?', a: 'No. It changes the components used to describe the same abstract state.', kind: 'understanding' }
+    ]
+  },
+  {
+    id: 'c.3.0.3', sec: '3.0', kind: 'bridge', tier: 'core',
+    title: 'Matrices as input-output rules',
+    oneLine: 'A matrix is a table of coefficients that transforms vector components; multiplying matrices in reverse order can give a different result.',
+    statement: `A matrix acts on a vector just as a set of simultaneous linear equations does. For example, the diagonal matrix $A=\\operatorname{diag}(2,-1)$ acts as
+$$A(x,y)=(2x,-y).$$
+The first coordinate is stretched by two; the second is reflected. The basis directions are especially useful: each column tells where one basis arrow goes.<br><br>
+Order matters. Let $A$ swap the two coordinates and $B$ double the first coordinate. Starting with $(1,0)$, applying $B$ then $A$ gives $(2,0)\\mapsto(0,2)$; applying $A$ then $B$ gives $(0,1)\\mapsto(0,1)$. Therefore $AB\\ne BA$. The difference is measured by the commutator $[A,B]=AB-BA$.<br><br>
+In quantum mechanics, operators are these input-output rules on states. An observable is represented by a special matrix or operator whose eigenvalues are the possible measurement results.`,
+    intuition: `A matrix is a machine: feed it a state and read the output state. Two machines used in different orders need not produce the same output. This ordinary idea leads directly to quantum commutators.`,
+    needs: ['c.3.0.2'], img: ['c.3.0.3_matrix_transformations'],
+    cards: [
+      { q: 'What information does column 1 of a matrix give?', a: 'The output when the first basis vector is used as input.', kind: 'recall' },
+      { q: 'What does $[A,B]=0$ mean?', a: 'The two operations commute: applying A then B gives the same result as B then A.', kind: 'understanding' }
+    ]
+  },
+  {
+    id: 'c.3.0.4', sec: '3.0', kind: 'bridge', tier: 'core',
+    title: 'Functions, slopes, areas, and the derivative notation',
+    oneLine: 'A derivative measures local rate of change; an integral adds contributions over an interval.',
+    statement: `A function assigns an output to each input: $y=f(x)$. On a graph, the slope between two points is $\\Delta y/\\Delta x$. Shrink the interval toward one point and the limiting slope is the derivative $df/dx$. For $f(x)=x^2$, the slope at $x$ is $2x$.<br><br>
+An integral adds many thin contributions. Geometrically, $\\int_a^b f(x)\\,dx$ is signed area under the curve. If the graph is a probability density $|\\psi(x)|^2$, the area between $a$ and $b$ is the probability of finding the particle there. The whole area must be one: $\\int_{-\\infty}^{\\infty}|\\psi(x)|^2dx=1$.<br><br>
+The second derivative $d^2\\psi/dx^2$ describes how sharply a curve bends. The Schrödinger equation from Module II contains this curvature because kinetic energy depends on momentum. Integration by parts is the integral version of the product rule:
+$$\\int_a^b f(x)g'(x)\\,dx=[f(x)g(x)]_a^b-\\int_a^b f'(x)g(x)\\,dx.$$
+If the functions vanish at the boundaries, the bracketed boundary term is zero. This explains why boundary conditions matter when derivatives are moved between functions in proofs about Hermitian operators.`,
+    intuition: `A derivative is the speedometer reading of a graph at one point. An integral is a running total. Quantum mechanics uses the first to express how waves bend and the second to add probability across space.`,
+    img: ['c.3.0.4_slope_and_probability_area'],
+    cards: [
+      { q: 'What does $\\int_a^b |\\psi(x)|^2 dx$ represent?', a: 'The probability of finding the particle between positions $a$ and $b$.', kind: 'understanding' },
+      { q: 'If a wave function is normalized, what is its total probability?', a: 'One: $\\int_{-\\infty}^{\\infty}|\\psi(x)|^2dx=1$.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.3.0.5', sec: '3.0', kind: 'bridge', tier: 'core',
+    title: 'Averages and spread: the familiar statistics behind uncertainty',
+    oneLine: 'An expectation value is a probability-weighted average; variance measures the spread around that average.',
+    statement: `For outcomes $x_j$ with probabilities $p_j$, the average is $\\langle x\\rangle=\\sum_j p_jx_j$. For a continuous position distribution, replace the sum with an integral: $\\langle x\\rangle=\\int x|\\psi(x)|^2dx$. This is a long-run average over many identically prepared measurements, not a promise that one measurement equals the average.<br><br>
+The variance is $\\sigma_x^2=\\sum_j p_j(x_j-\\langle x\\rangle)^2$, or $\\int (x-\\langle x\\rangle)^2|\\psi(x)|^2dx$ in the continuous case. Its square root $\\sigma_x$ is the standard deviation. A narrow distribution has small spread; a broad distribution has large spread.<br><br>
+Module I introduced uncertainty for position and momentum. In Module III we will derive the stronger general statement $\\Delta A\\,\\Delta B\\ge\\tfrac12|\\langle[A,B]\\rangle|$. The statistical meanings of average and spread are exactly the same as in high-school probability; operators supply the quantum measurement outcomes.`,
+    intuition: `Imagine recording the position of the same prepared particle many times. The histogram's centre is the expectation value and its width is the uncertainty. Uncertainty describes spread in outcomes, not carelessness in the measuring instrument.`,
+    img: ['c.3.0.5_expectation_and_spread'],
+    cards: [
+      { q: 'A fair outcome is 0 or 2 with probability 1/2 each. What is its expectation?', a: '$\\langle x\\rangle=(0+2)/2=1$.', kind: 'practice' },
+      { q: 'Does the expectation value have to occur in a single measurement?', a: 'No. It is the probability-weighted average over many measurements.', kind: 'understanding' }
+    ]
+  }
+);
 
 CONCEPTS.push(
   /* ── 3.1 Hilbert Space & Dirac Notation ───────────────────────────────────── */

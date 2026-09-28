@@ -3,6 +3,9 @@
 This file is the implementation brief. Read `HOOK_agy.md` when working on content,
 syllabus extraction, or question data. Claude owns the product design, engine, UX, and
 integration of validated data; Claude does not invent or silently rewrite source data.
+Read [`HOOK_gpt.md`](HOOK_gpt.md) first for the master learning standard and
+integration decisions. Keep bridge sections `3.0` and `4.0` at the start of QM I
+Modules III and IV when changing the study tree or module navigation.
 
 ## Product
 
@@ -37,6 +40,7 @@ attempt → feedback → correction → delayed reattempt → transfer
    - Offline rendered PNG diagrams in `diagrams/light/` and `diagrams/dark/`.
    - Theme swaps dynamically between light and dark modes via `comp.figure.js`.
    - Indexed automatically into `app/project/fig.diagrams.js` via `python3 tools/gen_diagrams.py`.
+   - New Module III/IV entry-bridge figures are generated with `python3 tools/gen_prereq_diagrams.py` before indexing.
 
 4. **TeX and Formatting**:
    - MathJax handles `$inline$` and `$$display$$`.

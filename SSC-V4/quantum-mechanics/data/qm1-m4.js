@@ -7,6 +7,82 @@
 
 if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
 
+/* Classical and mathematical preparation comes first so the oscillator feels
+   like a continuation of familiar mechanics rather than a new vocabulary list. */
+CONCEPTS.push(
+  {
+    id: 'c.4.0.1', sec: '4.0', kind: 'bridge', tier: 'core',
+    title: 'Energy diagrams and potential energy as a landscape',
+    oneLine: 'A potential-energy graph tells us the force, the allowed classical region, and where stable motion can occur.',
+    statement: `In high-school mechanics, total energy is kinetic plus potential: $E=K+V(x)$. Since $K=\\tfrac12mv^2\\ge0$, a classical particle can only be where $E\\ge V(x)$. On a graph of $V$ against $x$, draw a horizontal line at energy $E$: its intersections with the curve are turning points, where the speed momentarily becomes zero.<br><br>
+The force is the negative slope of the potential: $F(x)=-dV/dx$. A ball rolls toward lower height because gravity points downhill; likewise a particle accelerates toward lower potential energy. A stable equilibrium is a valley bottom: a small displacement produces a force back toward the bottom. Quantum mechanics keeps this same energy landscape, but describes the particle with a wave function. The classical turning points remain useful landmarks even though the wave can extend beyond them.`,
+    intuition: `Imagine a marble in a valley. The valley's height is potential energy, its slope determines the restoring force, and the marble trades height for speed. The oscillator is the especially simple smooth valley.`,
+    img: ['c.4.0.1_energy_landscape'],
+    cards: [
+      { q: 'Why is a classical particle forbidden where $V(x)>E$?', a: 'It would require negative kinetic energy, since $K=E-V(x)$ and kinetic energy cannot be negative.', kind: 'understanding' },
+      { q: 'What is the force from a potential-energy curve?', a: '$F(x)=-dV/dx$, the negative slope.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.4.0.2', sec: '4.0', kind: 'bridge', tier: 'core',
+    title: 'Why every smooth stable valley becomes a parabola nearby',
+    oneLine: 'Close to a smooth minimum, the leading change in potential energy is quadratic in displacement.',
+    statement: `Let $x_0$ be the bottom of a smooth potential valley and write the small displacement as $q=x-x_0$. The slope is zero at the bottom, so the Taylor expansion begins
+$$V(x_0+q)=V(x_0)+\\tfrac12V''(x_0)q^2+\\text{higher powers of }q.$$
+If $V''(x_0)>0$, define the spring constant $k=V''(x_0)$. For sufficiently small $q$, the higher powers are tiny and $V-V(x_0)\\approx\\tfrac12kq^2$. This is Hooke's-law potential. The corresponding force is $F\\approx-kq$.<br><br>
+For a pendulum with a small angle, a molecule near its equilibrium bond length, and a mass on a spring, the exact physics differs far from equilibrium but the local motion is approximately harmonic. This is why the oscillator is a model of small vibrations, not merely a special spring problem.`,
+    intuition: `Zoom in on the bottom of almost any rounded valley: its curve starts to look like a U-shaped parabola. The curvature sets how stiff the valley is.`,
+    needs: ['c.4.0.1'], img: ['c.4.0.2_taylor_valley_to_parabola'],
+    cards: [
+      { q: 'What condition makes $x_0$ a stable smooth equilibrium?', a: '$dV/dx=0$ and $d^2V/dx^2>0$.', kind: 'recall' },
+      { q: 'What is the effective spring constant near the minimum?', a: '$k=d^2V/dx^2$, the curvature of the potential at the minimum.', kind: 'understanding' }
+    ]
+  },
+  {
+    id: 'c.4.0.3', sec: '4.0', kind: 'bridge', tier: 'core',
+    title: 'Simple harmonic motion and its frequency',
+    oneLine: 'A restoring force F = −kx produces sinusoidal motion with angular frequency ω = √(k/m).',
+    statement: `Newton's second law with $F=-kx$ gives $m\\,d^2x/dt^2=-kx$, or
+$$\\frac{d^2x}{dt^2}+\\omega^2x=0,\\qquad \\omega=\\sqrt{\\frac{k}{m}}.$$
+The solutions are $x(t)=A\\cos(\\omega t+\\phi)$. The particle repeats one cycle in period $T=2\\pi/\\omega$; the ordinary frequency is $f=1/T$, measured in hertz. Angular frequency is measured in radians per second. A larger mass oscillates more slowly, while a stiffer spring oscillates faster.<br><br>
+In quantum mechanics, the same curvature and mass appear in the potential $V=\\tfrac12m\\omega^2x^2$. We will see that energy comes in evenly spaced steps of $\\hbar\\omega$, and even the lowest state retains energy.`,
+    intuition: `The mass does not move at a constant speed: it slows at the endpoints and moves fastest through the centre. The sinusoidal graph is the time trace of that repeating exchange.`,
+    needs: ['c.4.0.2'], img: ['c.4.0.3_classical_shm_motion'],
+    cards: [
+      { q: 'A spring constant is quadrupled while the mass stays fixed. How does $\\omega$ change?', a: '$\\omega=\\sqrt{k/m}$ doubles.', kind: 'practice' },
+      { q: 'How are period and angular frequency related?', a: '$T=2\\pi/\\omega$.', kind: 'recall' }
+    ]
+  },
+  {
+    id: 'c.4.0.4', sec: '4.0', kind: 'bridge', tier: 'core',
+    title: 'Units and the natural oscillator length',
+    oneLine: 'Dimensional checks catch errors, while ξ = √(ℏ/mω) sets the oscillator’s characteristic position scale.',
+    statement: `A useful habit is to check units before trusting an equation. Energy has units of joules, $[\\hbar]=\\mathrm{J\\,s}$, $[m]=\\mathrm{kg}$, and $[\\omega]=\\mathrm{s^{-1}}$. Therefore $\\hbar\\omega$ has units of energy.<br><br>
+For position, combine these constants into $\\xi=\\sqrt{\\hbar/(m\\omega)}$. Since $\\hbar/(m\\omega)$ has units $\\mathrm{m^2}$, $\\xi$ is a length. A heavier particle or higher frequency gives a smaller quantum length scale. Dimensionless coordinates such as $u=x/\\xi$ remove units from the Schrödinger equation and reveal its universal shape.<br><br>
+This rescaling is not a trick: it separates the general mathematical pattern from the particular mass and stiffness of one physical system.`,
+    intuition: `The length $\\xi$ is the quantum version of a ruler built from the system's own mass and frequency. Expressing position in units of this ruler makes different oscillators directly comparable.`,
+    needs: ['c.4.0.3'], img: ['c.4.0.4_oscillator_length_scale'],
+    cards: [
+      { q: 'What are the units of $\\hbar\\omega$?', a: 'Energy: joules, because $(\\mathrm{J\\,s})(\\mathrm{s^{-1}})=\\mathrm{J}$.', kind: 'practice' },
+      { q: 'What happens to $\\xi=\\sqrt{\\hbar/(m\\omega)}$ when mass increases?', a: '$\\xi$ decreases as $1/\\sqrt m$.', kind: 'understanding' }
+    ]
+  },
+  {
+    id: 'c.4.0.5', sec: '4.0', kind: 'bridge', tier: 'core',
+    title: 'Several coordinates, separation, and degeneracy',
+    oneLine: 'If energy is a sum of independent coordinate contributions, solve each one-dimensional problem and add the energies.',
+    statement: `For a particle in a three-dimensional box with sides $L_x,L_y,L_z$, the potential is zero inside and infinite at the walls. The Schrödinger equation contains separate second derivatives in $x,y,z$. Try a product wave function $\\Psi(x,y,z)=X(x)Y(y)Z(z)$. Dividing the equation by $XYZ$ separates it into three one-dimensional equations, one for each direction.<br><br>
+Each direction contributes its own energy. For a cubic box, $E\\propto n_x^2+n_y^2+n_z^2$. Different triples can give the same sum: $(1,1,2)$ and $(1,2,1)$ have equal energy. The number of distinct states at one energy is its degeneracy. Symmetry explains why swapping equivalent axes does not change the energy.<br><br>
+The same bookkeeping returns for the 3D oscillator, where $E$ depends on $n_x+n_y+n_z$. You will need only algebra, the idea of independent coordinates, and careful counting before learning the formal separation method.`,
+    intuition: `Three independent directions act like three separate energy accounts. The total is their sum; symmetry can make different allocations land on the same total.`,
+    img: ['c.4.0.5_separation_and_degeneracy'],
+    cards: [
+      { q: 'What does degeneracy mean?', a: 'More than one distinct state has the same energy eigenvalue.', kind: 'recall' },
+      { q: 'Why can swapping $n_x$ and $n_y$ leave a cubic-box energy unchanged?', a: 'The sides are equal, so the energy depends symmetrically on $n_x^2+n_y^2+n_z^2$.', kind: 'understanding' }
+    ]
+  }
+);
+
 CONCEPTS.push(
   /* ── 4.1 The Quantum Harmonic Oscillator ─────────────────────────────────── */
   {
