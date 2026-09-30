@@ -1,0 +1,49 @@
+# Module I — written exercises for sections 1.3 and 1.4 (thin lens, Newton's formula).
+# The Ghatak worked examples cover 1.1–1.2; these fill the lens sections.
+
+W('q.op.1.16', '1.3', 4, 'Lens-maker\'s equation and an image', 'Ghatak 6e §4.6 (standard exercise)',
+  r'''<p>A thin equiconvex lens of glass ($n=1.6$) has surfaces of radius $24$ cm. (a) Find its focal length and power. (b) An object is placed $30$ cm in front of it: find the position and magnification of the image.</p>''',
+  ['c.1.3.1', 'c.1.3.2'],
+  r'''<p>In the Cartesian convention $R_1=+24$ cm and $R_2=-24$ cm for an equiconvex lens. Then use $1/v-1/u=1/f$ with $u=-30$ cm.</p>''',
+  r'''<p><b>(a)</b> $$\frac1f=(n-1)\Big(\frac1{R_1}-\frac1{R_2}\Big)=0.6\Big(\frac1{24}+\frac1{24}\Big)=0.05\ \text{cm}^{-1}\Rightarrow f=+20\ \text{cm},$$
+so the power is $P=1/f=0.05\ \text{cm}^{-1}=5.0$ dioptres.</p>
+<p><b>(b)</b> With $u=-30$ cm: $\dfrac1v=\dfrac1f+\dfrac1u=\dfrac1{20}-\dfrac1{30}=\dfrac1{60}$, so $v=+60$ cm (a real image beyond the lens). The magnification is $m=v/u=60/(-30)=-2$: the image is real, inverted and twice as large.</p>''',
+  'Using $R_2=+24$ cm for the second surface: for an equiconvex lens its centre of curvature is on the <i>left</i>, so $R_2<0$.')
+
+W('q.op.1.17', '1.3', 5, 'Two thin lenses separated by a distance', 'CU Optics practical 2 (combination of two lenses)',
+  r'''<p>Two thin convex lenses of focal lengths $10$ cm and $20$ cm are placed on a common axis. Find the equivalent focal length when they are (a) in contact, (b) $5$ cm apart. (c) For what separation does the combination send parallel light out parallel (no net focusing)?</p>''',
+  ['c.1.3.3'],
+  r'''<p>Use $\dfrac1F=\dfrac1{f_1}+\dfrac1{f_2}-\dfrac{d}{f_1f_2}$. The system has no net focusing when $1/F=0$.</p>''',
+  r'''<p><b>(a)</b> $d=0$: $\dfrac1F=\dfrac1{10}+\dfrac1{20}=0.15\Rightarrow F=6.67$ cm.</p>
+<p><b>(b)</b> $d=5$ cm: $\dfrac1F=0.10+0.05-\dfrac{5}{10\times20}=0.15-0.025=0.125\Rightarrow F=8.0$ cm.</p>
+<p><b>(c)</b> $\dfrac1F=0$ requires $\dfrac{d}{f_1f_2}=\dfrac1{f_1}+\dfrac1{f_2}$, i.e. $d=f_1+f_2=30$ cm. Then the second lens's focus coincides with the first lens's: this is a telescope-type (afocal) arrangement.</p>''',
+  'Adding the two focal lengths, or the two powers, without the separation term when the lenses are apart.')
+
+W('q.op.1.18', '1.3', 4, 'Plano-convex lens', 'Ghatak 6e §4.6 (standard exercise)',
+  r'''<p>A thin plano-convex lens ($n=1.5$) has a curved surface of radius $15$ cm. Find its focal length and power, and show that the answer is the same whichever face is turned toward the light.</p>''',
+  ['c.1.3.1'],
+  r'''<p>A plane surface has $R\to\infty$, so it contributes nothing to $1/R$. Compare the two orientations with the Cartesian signs of $R_1$ and $R_2$.</p>''',
+  r'''<p><b>Curved face first:</b> $R_1=+15$ cm, $R_2=\infty$: $\dfrac1f=0.5\Big(\dfrac1{15}-0\Big)=\dfrac1{30}$, so $f=30$ cm, $P=3.3$ D.</p>
+<p><b>Plane face first:</b> $R_1=\infty$, $R_2=-15$ cm: $\dfrac1f=0.5\Big(0-\dfrac1{-15}\Big)=\dfrac1{30}$, again $f=30$ cm.</p>
+<p>The lens-maker's equation depends only on $\dfrac1{R_1}-\dfrac1{R_2}$, which is the same in both orientations, so a thin lens has one focal length whichever way round it is used.</p>''',
+  'Giving the plane surface a radius of 0 instead of infinity, which would make $1/R$ infinite.')
+
+W('q.op.1.19', '1.4', 5, "Newton's formula and magnification", "Ghatak 6e §4.7 (standard exercise)",
+  r'''<p>A thin lens has $f=15$ cm. An object is $45$ cm in front of the lens. Using Newton's formula, find (a) the Newton distances $x$ and $x^{\prime}$, (b) the image distance from the lens, and (c) the lateral magnification. Check with the thin-lens formula.</p>''',
+  ['c.1.4.1', 'c.1.4.2'],
+  r'''<p>$x$ is measured from $F_1$ (which lies $15$ cm to the left of the lens), so $x=u-f_1=u+f$. Then $xx^{\prime}=-f^2$ and $m=f/x$.</p>''',
+  r'''<p><b>(a)</b> $u=-45$ cm and $F_1$ is at $-15$ cm, so $x=-45-(-15)=-30$ cm. Newton's formula gives
+$$x^{\prime}=\frac{-f^2}{x}=\frac{-225}{-30}=+7.5\ \text{cm}.$$</p>
+<p><b>(b)</b> The image is $x^{\prime}$ beyond $F_2$, so $v=f+x^{\prime}=15+7.5=22.5$ cm.</p>
+<p><b>(c)</b> $m=\dfrac fx=\dfrac{15}{-30}=-0.5$ (real, inverted, half-size).</p>
+<p><b>Check:</b> $\dfrac1v=\dfrac1{15}-\dfrac1{45}=\dfrac{2}{45}\Rightarrow v=22.5$ cm, and $m=v/u=22.5/(-45)=-0.5$. ✓</p>''',
+  'Measuring $x$ from the lens instead of from the first focus: the Newton distances start at the foci.')
+
+W('q.op.1.20', '1.4', 4, 'Longitudinal magnification', 'Ghatak 6e §4.7 (standard exercise)',
+  r'''<p>For the lens and object of the previous exercise ($f=15$ cm, object $45$ cm away), a short object of length $2.0$ mm lies along the axis. Find the length of its image and say whether the image is a faithful scale model of the object.</p>''',
+  ['c.1.4.3', 'c.1.4.2'],
+  r'''<p>$m_L=dv/du=m^2$ for a small object; compare with the lateral magnification $m=-0.5$.</p>''',
+  r'''<p>From the previous exercise $m=-0.5$, so
+$$m_L=m^2=0.25\ \Rightarrow\ \text{image length}\approx0.25\times2.0\ \text{mm}=0.5\ \text{mm}.$$</p>
+<p>The image is $0.5$ times as large sideways ($|m|=0.5$) but only $0.25$ times as long in depth: it is squashed along the axis, so a three-dimensional object is not imaged as a faithful scale model (unless $|m|=1$).</p>''',
+  'Using $m_L=m$ (or $|m|$): the axial magnification is the square of the lateral one.')

@@ -16,5 +16,6 @@ const PROJECT = {
     mock: 'ssc4_qm_mock_v1',  usersMock: 'ssc4_qm_users_mock_v1'
   },
   themeColor: { light: '#f3f6fb', dark: '#05080f' },
+  figZoom: true,
   hooks: {}
 };

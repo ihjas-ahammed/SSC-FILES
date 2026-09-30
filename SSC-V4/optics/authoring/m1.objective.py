@@ -1,0 +1,378 @@
+# Module I — Objective Questions (OMR pool)
+# Sections 1.1, 1.2, 1.3, 1.4: 5 questions each (3 MCQ, 1 MSQ, 1 NAT)
+# Sign convention: Cartesian (vertex origin, light travels left to right).
+
+# ── 1.1  Laws of reflection and refraction from Fermat's principle ─────────────
+
+O('o.op.1.1.01', '1.1', 'MCQ',
+  r'''<p>According to Fermat's principle, a light ray traveling between two fixed points $A$ and $B$ chooses a path along which the optical path length $L_{\rm op} = \int_A^B n\,ds$ is stationary ($\delta L_{\rm op} = 0$). In which of the following cases does the actual ray path correspond to a local <b>maximum</b> optical path length compared to neighbouring virtual paths?</p>''',
+  [
+    r'Reflection from a concave mirror whose curvature is greater than that of the confocal ellipsoid touching it at the reflection point',
+    r'Reflection from a plane mirror placed between points $A$ and $B$',
+    r'Refraction across a plane interface separating air and a denser glass medium',
+    r'Propagation through a homogeneous medium with constant refractive index $n$'
+  ],
+  'A',
+  r'''<p>Fermat's principle demands stationarity, which can be a minimum, a maximum, or an inflection point. For an ellipsoid with foci at $A$ and $B$, all paths connecting $A$ and $B$ via any point on the ellipsoid have identical optical path length. A concave mirror that curves more sharply than this ellipsoid lies inside the ellipsoid for all points adjacent to the point of contact $P$; hence neighbouring paths on the mirror are shorter than the actual ray path $APB$, making $L_{\rm op}$ a local maximum.</p>
+<p>In contrast, reflection from a plane mirror (B), refraction at a plane interface (C), and straight-line propagation in a uniform medium (D) all correspond to local minima of the optical path length.</p>''',
+  tested="Fermat's principle of stationary optical path and conditions where the path is a local maximum.",
+  trap="Assuming that Fermat's principle always requires the optical path to be a local minimum (least time).",
+  tests=['c.1.1.1'],
+  twist=(r'What type of extremum is the optical path for reflection from a convex mirror?',
+         r'It is a local minimum, as the convex mirror curves away outside the confocal ellipsoid.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.1.02', '1.1', 'MCQ',
+  r'''<p>In Fermat's derivation of Snell's law, light travels from point $A(0, a)$ in medium 1 (refractive index $n_1$) to point $B(d, -b)$ in medium 2 (refractive index $n_2$) across a planar interface lying along the $x$-axis ($y = 0$). If the ray crosses the interface at $P(x, 0)$, the optical path length is $L(x) = n_1 \sqrt{a^2 + x^2} + n_2 \sqrt{b^2 + (d - x)^2}$. Setting $\frac{dL}{dx} = 0$ leads directly to which condition?</p>''',
+  [
+    r'$n_1 \frac{a}{\sqrt{a^2 + x^2}} = n_2 \frac{b}{\sqrt{b^2 + (d - x)^2}}$',
+    r'$n_1 \frac{x}{\sqrt{a^2 + x^2}} = n_2 \frac{d - x}{\sqrt{b^2 + (d - x)^2}}$',
+    r'$\frac{x}{n_1 \sqrt{a^2 + x^2}} = \frac{d - x}{n_2 \sqrt{b^2 + (d - x)^2}}$',
+    r'$n_1 \sqrt{a^2 + x^2} = n_2 \sqrt{b^2 + (d - x)^2}$'
+  ],
+  'B',
+  r'''<p>Differentiating $L(x)$ with respect to $x$ gives $\frac{dL}{dx} = n_1 \frac{x}{\sqrt{a^2 + x^2}} - n_2 \frac{d - x}{\sqrt{b^2 + (d - x)^2}} = 0$, which yields option B. Recognizing $\frac{x}{\sqrt{a^2 + x^2}} = \sin\theta_1$ and $\frac{d - x}{\sqrt{b^2 + (d - x)^2}} = \sin\theta_2$ (angles measured from the normal at the interface), this is Snell's law $n_1 \sin\theta_1 = n_2 \sin\theta_2$.</p>
+<p>Option A uses the cosines of the angles (measuring from the interface instead of the normal). Option C mistakenly divides by refractive index rather than multiplying. Option D incorrectly equates the optical lengths of the two separate legs.</p>''',
+  tested="Fermat's principle derivation of Snell's law of refraction.",
+  trap="Confusing sines and cosines by measuring angles from the interface boundary rather than from the normal.",
+  tests=['c.1.1.3', 'c.1.1.1'],
+  twist=(r'If $n_1 = n_2$, what does the condition $dL/dx = 0$ reduce to geometrically?',
+         r'It simplifies to $x/a = (d-x)/b$, meaning $A$, $P$, and $B$ are collinear (a single straight line).'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.1.03', '1.1', 'MCQ',
+  r'''<p>A point source $S$ is positioned at the first focus of an ellipsoidal reflecting cavity. All rays emitted by $S$ reflect from the inner ellipsoidal surface and converge at the second focus $S'$. According to Fermat's principle and the theory of perfect imaging, which of the following statements is strictly correct regarding any two distinct rays 1 and 2 traveling from $S$ to $S'$?</p>''',
+  [
+    r'Ray 1 has a strictly shorter optical path length than Ray 2 if its reflection point is closer to the vertex',
+    r'Ray 1 corresponds to a local minimum of path length, whereas Ray 2 corresponds to a local maximum',
+    r'Every ray connecting $S$ to $S\'$ has identically the same optical path length',
+    r'The optical path difference between the two rays must equal an integral number of half-wavelengths ($\lambda / 2$)'
+  ],
+  'C',
+  r'''<p>For a point object to be imaged stigmatically (perfectly) to a point image, all rays connecting the two conjugate points must have identical optical path length: $L_{\rm op}(S \to S') = \text{constant}$. If different rays had different optical path lengths, Fermat's principle would single out only paths of stationary length, preventing a continuous two-dimensional family of rays from focusing at $S'$.</p>
+<p>Distractor A is wrong because an ellipse is defined by the sum of focal distances being constant ($r_1 + r_2 = 2a$). Distractor B is incorrect because all rays are stationary paths with identical path length. Distractor D confuses stigmatic ray imaging with interference minima/maxima.</p>''',
+  tested="Equal optical path criterion for perfect (stigmatic) imaging.",
+  trap="Believing that rays taking different physical trajectories to a perfect image have different optical path lengths.",
+  tests=['c.1.1.4'],
+  twist=(r'Does a spherical mirror satisfy the equal optical path condition for all rays from an on-axis point?',
+         r'No, only paraxial rays satisfy it approximately; marginal rays suffer from spherical aberration.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.1.04', '1.1', 'MSQ',
+  r'''<p>Which of the following statements regarding Fermat's principle, reflection, and refraction are <b>TRUE</b>?</p>''',
+  [
+    r'In a homogeneous and isotropic medium, Fermat\'s principle implies that rays travel along straight lines',
+    r'Fermat\'s principle states that the actual ray path must always be the path of absolute minimum optical transit time',
+    r'The coplanarity of the incident ray, reflected ray, and surface normal follows from Fermat\'s principle by considering out-of-plane variations of the reflection point',
+    r'The optical path length for a ray traveling a geometric distance $d$ in a medium of refractive index $n$ is defined as $L_{\rm op} = d / n$'
+  ],
+  ['A', 'C'],
+  r'''<p>A is true: when $n$ is uniform and constant, $L_{\rm op} = n \int ds$, so stationarity of optical path reduces to stationarity of geometric distance, which in Euclidean space is a straight line. C is true: displacing the point of reflection sideways out of the plane of incidence increases the total path length, so stationarity requires the ray to lie strictly in the plane of incidence.</p>
+<p>B is false: Fermat\'s principle requires the optical path to be stationary ($\delta L_{\rm op} = 0$), which can be a minimum, a maximum, or a point of inflection. D is false: optical path length is defined as $L_{\rm op} = \int n\,ds = n\,d$, whereas $d/n$ is the apparent depth.</p>''',
+  tested="Properties of Fermat's principle, optical path length, and ray coplanarity.",
+  trap="Believing Fermat's path is always a minimum or confusing optical path length $nd$ with reduced thickness $d/n$.",
+  tests=['c.1.1.1', 'c.1.1.2'],
+  twist=(r'In an inhomogeneous medium where $n = n(y)$, does light travel in straight lines?',
+         r'No, the ray curves continuously toward regions of higher refractive index to minimize the optical path.'),
+  marks=2, neg=0, time=60)
+
+O('o.op.1.1.05', '1.1', 'NAT',
+  r'''<p>A parallel beam of light in air ($n_1 = 1.00$) is incident upon the flat horizontal surface of a water tank ($n_2 = 4/3$) at an angle of incidence $\theta_1$ such that $\sin\theta_1 = 0.80$. The depth of water in the tank is $12.0\text{ cm}$. Calculate the optical path length (in cm) traversed by the refracted beam in going from the top surface of the water to the bottom of the tank.</p>''',
+  None,
+  {'value': 20.0, 'tol': 0.1, 'dp': 1},
+  r'''<p>From Snell's law: $n_1 \sin\theta_1 = n_2 \sin\theta_2 \implies 1.00 \times 0.80 = \frac{4}{3} \sin\theta_2$, which yields $\sin\theta_2 = 0.60$.</p>
+<p>The cosine of the angle of refraction is $\cos\theta_2 = \sqrt{1 - \sin^2\theta_2} = \sqrt{1 - 0.36} = 0.80$. The geometric path length traversed through the water is $s = \frac{d}{\cos\theta_2} = \frac{12.0\text{ cm}}{0.80} = 15.0\text{ cm}$.</p>
+<p>The optical path length is $L_{\rm op} = n_2 s = \frac{4}{3} \times 15.0\text{ cm} = 20.0\text{ cm}$.</p>
+<p>Common traps: reporting only the geometric path length ($15.0\text{ cm}$), or computing $n_2 d = \frac{4}{3} \times 12.0 = 16.0\text{ cm}$ which ignores the oblique slant of the refracted ray, or computing apparent depth $d / n_2 = 9.0\text{ cm}$.</p>''',
+  tested="Calculation of optical path length along an oblique refracted ray using Snell's law.",
+  trap="Confusing optical path length $ns$ with geometric path length $s$ or simply multiplying vertical depth by $n$.",
+  tests=['c.1.1.1', 'c.1.1.3'],
+  twist=(r'What is the transit time of the light pulse through this water layer in nanoseconds (with $c = 3.0 \times 10^8\text{ m/s}$)?',
+         r'$\tau = L_{\rm op} / c = 0.20\text{ m} / (3.0 \times 10^8\text{ m/s}) \approx 0.67\text{ ns}$.'),
+  marks=2, neg=0, time=90)
+
+
+# ── 1.2  Refraction and reflection at a single spherical surface ───────────────
+
+O('o.op.1.2.01', '1.2', 'MCQ',
+  r'''<p>A single convex spherical surface of radius of curvature $R = +15\text{ cm}$ separates air ($n_1 = 1.0$) from glass ($n_2 = 1.5$). In the Cartesian sign convention (distances measured from the vertex, positive in the direction of light travel), what are the first focal length $f_1$ and the second focal length $f_2$ of this surface?</p>''',
+  [
+    r'$f_1 = +30\text{ cm},\quad f_2 = +45\text{ cm}$',
+    r'$f_1 = -15\text{ cm},\quad f_2 = +15\text{ cm}$',
+    r'$f_1 = -45\text{ cm},\quad f_2 = +30\text{ cm}$',
+    r'$f_1 = -30\text{ cm},\quad f_2 = +45\text{ cm}$'
+  ],
+  'D',
+  r'''<p>For a single spherical surface, the first focal length $f_1$ is the object distance when the image is at infinity ($v \to \infty$): $f_1 = -\frac{n_1 R}{n_2 - n_1} = -\frac{1.0 \times 15}{1.5 - 1.0} = -30\text{ cm}$. The second focal length $f_2$ is the image distance when the object is at infinity ($u \to -\infty$): $f_2 = \frac{n_2 R}{n_2 - n_1} = \frac{1.5 \times 15}{1.5 - 1.0} = +45\text{ cm}$.</p>
+<p>Note that $f_2 / f_1 = -n_2 / n_1 = -1.5 / 1.0 = -1.5$. Option A drops the essential minus sign on $f_1$. Option B assumes $|f_1| = |f_2| = R$, which is false for a single refracting interface. Option C swaps $n_1$ and $n_2$.</p>''',
+  tested="First and second focal lengths of a single spherical refracting interface.",
+  trap="Assuming $|f_1| = |f_2|$ or omitting the negative sign for the first focal length.",
+  tests=['c.1.2.3'],
+  twist=(r'What is the optical power $P$ of this surface in dioptres (with $R$ in metres)?',
+         r'$P = (n_2 - n_1)/R = 0.5 / 0.15 \approx +3.33\text{ D}$.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.2.02', '1.2', 'MCQ',
+  r'''<p>An object is placed in water ($n_1 = 4/3$) at a distance of $20\text{ cm}$ in front of a convex spherical glass surface ($n_2 = 1.50$, radius of curvature $R = +10\text{ cm}$). Paraxial light rays enter the glass. What is the lateral magnification $m$ of the resulting image?</p>''',
+  [
+    r'$+4/3$',
+    r'$+3/2$',
+    r'$-4/3$',
+    r'$+27/16$'
+  ],
+  'A',
+  r'''<p>In Cartesian convention: $u = -20\text{ cm}$, $R = +10\text{ cm}$, $n_1 = 4/3$, $n_2 = 1.50 = 3/2$. Using the single-surface refraction equation $\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}$:</p>
+<p>$\frac{3/2}{v} - \frac{4/3}{-20} = \frac{3/2 - 4/3}{10} \implies \frac{1.5}{v} + \frac{1}{15} = \frac{1/6}{10} = \frac{1}{60}$. Thus $\frac{1.5}{v} = \frac{1}{60} - \frac{4}{60} = -\frac{3}{60} = -\frac{1}{20}$, giving $v = 1.5 \times (-20) = -30\text{ cm}$ (a virtual image).</p>
+<p>The lateral magnification for a single surface is $m = \frac{n_1 v}{n_2 u} = \frac{(4/3)(-30)}{(3/2)(-20)} = \frac{-40}{-30} = +\frac{4}{3}$.</p>
+<p>Distractor B ($+3/2$) comes from dropping the index ratio and using $m = v/u = -30/(-20) = +1.5$. Distractor C ($-4/3$) has an inverted sign error. Distractor D ($+27/16$) comes from inverting the index ratio to $n_2/n_1$.</p>''',
+  tested="Lateral magnification formula at a single spherical refracting interface.",
+  trap="Dropping the index ratio $n_1/n_2$ and writing $m = v/u$ instead of $m = n_1 v / (n_2 u)$.",
+  tests=['c.1.2.5', 'c.1.2.2'],
+  twist=(r'Is this image real or virtual, erect or inverted?',
+         r'Since $v = -30\text{ cm} < 0$, it is virtual; since $m = +4/3 > 0$, it is erect (upright).'),
+  marks=2, neg=-0.66, time=90)
+
+O('o.op.1.2.03', '1.2', 'MCQ',
+  r'''<p>How is the spherical mirror equation $\frac{1}{v} + \frac{1}{u} = \frac{2}{R}$ derived from the single-surface refraction equation $\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}$?</p>''',
+  [
+    r'By setting $R \to \infty$ and $n_2 = n_1$',
+    r'By setting $n_2 = -n_1$, representing reversal of the direction of light propagation',
+    r'By setting $n_2 = 1/n_1$, representing phase inversion on reflection',
+    r'By setting $n_1 = 0$, representing complete opacity of the reflector'
+  ],
+  'B',
+  r'''<p>Reflection reverses the direction of light travel. In the Cartesian convention, measuring coordinates against the reversed ray is algebraically equivalent to setting $n_2 = -n_1$ in the refraction equation. Substituting $n_2 = -n_1$ into $\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}$ gives $-\frac{n_1}{v} - \frac{n_1}{u} = \frac{-2n_1}{R}$. Dividing by $-n_1$ yields $\frac{1}{v} + \frac{1}{u} = \frac{2}{R}$.</p>
+<p>Distractor A yields $1/v - 1/u = 0$, which describes a plane refracting interface, not a mirror. Distractors C and D have no physical or mathematical basis in paraxial geometric optics.</p>''',
+  tested="Derivation of the spherical mirror formula from the refraction equation using $n_2 = -n_1$.",
+  trap="Failing to recognize that reflection is formally encoded in Cartesian optics by reversing the sign of the refractive index.",
+  tests=['c.1.2.4', 'c.1.2.2'],
+  twist=(r'What is the focal length of a concave mirror of radius of curvature $R = -24\text{ cm}$?',
+         r'$f = R/2 = -12\text{ cm}$.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.2.04', '1.2', 'MSQ',
+  r'''<p>Which of the following statements are <b>TRUE</b> in the Cartesian sign convention and paraxial optics?</p>''',
+  [
+    r'For any real object placed in front of a refracting surface or mirror, the object distance $u$ is negative',
+    r'The focal length of a spherical concave mirror is negative ($f < 0$)',
+    r'The paraxial approximation is valid when rays make large angles with the axis such that $\sin\alpha \approx 1$',
+    r'For a single spherical refracting interface separating medium 1 from medium 2, the focal lengths satisfy $\frac{f_2}{f_1} = -\frac{n_2}{n_1}$'
+  ],
+  ['A', 'B', 'D'],
+  r'''<p>A is true: light travels from left to right, and a real object is placed to the left of the vertex ($u < 0$). B is true: for a concave mirror, the centre of curvature lies in front of the mirror (to the left, $R < 0$), so $f = R/2 < 0$. D is true: by definition, $f_1 = -\frac{n_1 R}{n_2 - n_1}$ and $f_2 = \frac{n_2 R}{n_2 - n_1}$, giving $f_2 / f_1 = -n_2 / n_1$.</p>
+<p>C is false: the paraxial approximation assumes small angles $\alpha$ with the optical axis, where $\sin\alpha \approx \tan\alpha \approx \alpha$ and $\cos\alpha \approx 1$, not $\sin\alpha \approx 1$.</p>''',
+  tested="Cartesian sign conventions, spherical mirror focal signs, and paraxial approximations.",
+  trap="Forgetting that a real object has negative $u$ in Cartesian convention or confusing small-angle approximations.",
+  tests=['c.1.2.1', 'c.1.2.3'],
+  twist=(r'What is the sign of $R$ for a spherical surface that is convex toward the incident light?',
+         r'$R > 0$, because the center of curvature lies to the right of the vertex.'),
+  marks=2, neg=0, time=60)
+
+O('o.op.1.2.05', '1.2', 'NAT',
+  r'''<p>A point object in air ($n_1 = 1.00$) is placed on the principal axis at a distance of $50.0\text{ cm}$ in front of a convex spherical glass surface of radius of curvature $R = +10.0\text{ cm}$ and refractive index $n_2 = 1.50$. Calculate the image distance $v$ (in cm) measured from the vertex of the surface.</p>''',
+  None,
+  {'value': 50.0, 'tol': 0.2, 'dp': 1},
+  r'''<p>In Cartesian convention: $u = -50.0\text{ cm}$, $R = +10.0\text{ cm}$, $n_1 = 1.00$, $n_2 = 1.50$.</p>
+<p>Using the single-surface refraction equation $\frac{n_2}{v} - \frac{n_1}{u} = \frac{n_2 - n_1}{R}$:</p>
+<p>$\frac{1.50}{v} - \frac{1.00}{-50.0} = \frac{1.50 - 1.00}{10.0} \implies \frac{1.50}{v} + \frac{1}{50.0} = \frac{0.50}{10.0} = \frac{1}{20.0}$.</p>
+<p>$\frac{1.50}{v} = \frac{1}{20.0} - \frac{1}{50.0} = \frac{5 - 2}{100.0} = \frac{3}{100.0} = 0.030\text{ cm}^{-1}$.</p>
+<p>Thus $v = \frac{1.50}{0.030} = +50.0\text{ cm}$ (a real image formed inside the glass).</p>
+<p>Common traps: entering $u = +50.0$ which gives $1.5/v = 7/100 \implies v \approx 21.4\text{ cm}$, or omitting $n_2$ on the left side to get $v = 33.3\text{ cm}$, or swapping $n_1$ and $n_2$ which gives $v = -12.5\text{ cm}$.</p>''',
+  tested="Image distance calculation for refraction at a single spherical convex surface.",
+  trap="Treating $u$ as positive or forgetting $n_2$ in the numerator of $n_2/v$.",
+  tests=['c.1.2.2', 'c.1.2.1'],
+  twist=(r'What is the lateral magnification of this image?',
+         r'$m = \frac{n_1 v}{n_2 u} = \frac{1.0 \times 50.0}{1.5 \times (-50.0)} = -\frac{2}{3} \approx -0.67$.'),
+  marks=2, neg=0, time=90)
+
+
+# ── 1.3  The thin lens ─────────────────────────────────────────────────────────
+
+O('o.op.1.3.01', '1.3', 'MCQ',
+  r'''<p>A biconvex thin lens made of glass ($n_g = 1.50$) has faces of equal radii of curvature of magnitude $R = 20\text{ cm}$ ($R_1 = +20\text{ cm}, R_2 = -20\text{ cm}$). When the lens is completely immersed in water ($n_w = 4/3$), what is its new focal length $f_w$?</p>''',
+  [
+    r'$+20\text{ cm}$',
+    r'$+40\text{ cm}$',
+    r'$+80\text{ cm}$',
+    r'$+15\text{ cm}$'
+  ],
+  'C',
+  r'''<p>In air ($n = 1$): $\frac{1}{f_{\rm air}} = (n_g - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right) = (1.5 - 1)\left(\frac{1}{20} - \frac{-1}{20}\right) = 0.5 \times \frac{2}{20} = \frac{1}{20}\text{ cm}^{-1}$, so $f_{\rm air} = +20\text{ cm}$.</p>
+<p>When immersed in water, the relative refractive index is $n_{\rm rel} = \frac{n_g}{n_w} = \frac{1.5}{4/3} = \frac{9}{8}$.</p>
+<p>Using the lens-maker's equation in water: $\frac{1}{f_w} = \left(\frac{n_g}{n_w} - 1\right)\left(\frac{1}{R_1} - \frac{1}{R_2}\right) = \left(\frac{9}{8} - 1\right) \times \frac{1}{10} = \frac{1}{8} \times \frac{1}{10} = \frac{1}{80}\text{ cm}^{-1}$, so $f_w = +80\text{ cm}$.</p>
+<p>Notice $f_w / f_{\rm air} = 80 / 20 = 4$. Distractor A assumes the focal length is unchanged. Distractor B assumes $f$ scales by a factor of 2. Distractor D divides by $n_w$ directly ($20 / (4/3) = 15\text{ cm}$).</p>''',
+  tested="Focal length of a thin lens immersed in a medium using the lens-maker's equation.",
+  trap="Using $n_g - 1$ instead of $n_g/n_w - 1$, or simply multiplying/dividing the air focal length by $n_w$.",
+  tests=['c.1.3.1'],
+  twist=(r'What happens to the focal length if the lens is immersed in a liquid of refractive index $n_L = 1.50$?',
+         r'$1/f = (1.5/1.5 - 1)(1/10) = 0$, so $f \to \infty$ (the lens behaves as a flat glass plate and light is undeviated).'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.3.02', '1.3', 'MCQ',
+  r'''<p>Two thin converging lenses with focal lengths $f_1 = +20\text{ cm}$ and $f_2 = +30\text{ cm}$ are positioned coaxially in air with an axial separation $d = 10\text{ cm}$. What is the equivalent focal length $F$ of this two-lens system?</p>''',
+  [
+    r'$+12\text{ cm}$',
+    r'$+10\text{ cm}$',
+    r'$+25\text{ cm}$',
+    r'$+15\text{ cm}$'
+  ],
+  'D',
+  r'''<p>For two thin lenses separated by distance $d$, the equivalent focal length $F$ is given by $\frac{1}{F} = \frac{1}{f_1} + \frac{1}{f_2} - \frac{d}{f_1 f_2}$.</p>
+<p>Substituting the given values: $\frac{1}{F} = \frac{1}{20} + \frac{1}{30} - \frac{10}{20 \times 30} = \frac{3}{60} + \frac{2}{60} - \frac{1}{60} = \frac{4}{60} = \frac{1}{15}\text{ cm}^{-1}$. Thus $F = +15\text{ cm}$.</p>
+<p>Distractor A ($+12\text{ cm}$) forgets the separation term and erroneously adds powers as if in contact: $1/F = 1/20 + 1/30 = 1/12$. Distractor B ($+10\text{ cm}$) uses a plus sign on the separation term. Distractor C ($+25\text{ cm}$) is the average of $f_1$ and $f_2$.</p>''',
+  tested="Equivalent focal length of two separated thin lenses.",
+  trap="Neglecting the separation term $-d/(f_1 f_2)$ or using the incorrect sign for it.",
+  tests=['c.1.3.3'],
+  twist=(r'At what separation $d$ does this two-lens combination become afocal ($F \to \infty$)?',
+         r'$1/F = 0 \implies d = f_1 + f_2 = 20 + 30 = 50\text{ cm}$.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.3.03', '1.3', 'MCQ',
+  r'''<p>In thin-lens ray construction for locating the image of an off-axis point object, three principal rays are commonly considered. Which of the following statements describes an <b>INCORRECT</b> ray-tracing rule?</p>''',
+  [
+    r'A ray passing through the first focal point $F_1$ emerges from the lens passing through the second focal point $F_2$',
+    r'A ray incident parallel to the optical axis emerges from the lens passing through (or appearing to diverge from) the second focal point $F_2$',
+    r'A ray passing through the optical centre of the thin lens continues along its original path without angular deviation',
+    r'A ray passing through the first focal point $F_1$ emerges from the lens parallel to the optical axis'
+  ],
+  'A',
+  r'''<p>Statement A is incorrect (and hence the correct answer): a ray directed through the first focal point $F_1$ emerges parallel to the principal axis (as stated correctly in D), NOT through $F_2$.</p>
+<p>Statements B, C, and D are standard, correct rules of ray tracing for a thin lens: parallel rays converge to (or diverge from) $F_2$; rays through the optical center pass undeviated because the lens faces are locally parallel there; and rays through $F_1$ emerge parallel to the axis.</p>''',
+  tested="Principal ray construction rules for thin lenses.",
+  trap="Confusing the behavior of a ray through the first focus with that of a ray parallel to the optical axis.",
+  tests=['c.1.3.4', 'c.1.3.2'],
+  twist=(r'Why does a ray through the optical center of a thin lens suffer negligible lateral displacement?',
+         r'Because the lens thickness is negligible, so the parallel displacement across the two surfaces vanishes.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.3.04', '1.3', 'MSQ',
+  r'''<p>Which of the following statements regarding thin lenses and two-lens combinations in air are <b>TRUE</b>?</p>''',
+  [
+    r'For a thin equiconcave lens made of glass ($n = 1.50$) with both faces having radius of magnitude $R$, the focal length is $f = -R$',
+    r'The power of a thin lens in dioptres is given by $P = 1/f$, where $f$ is measured in metres',
+    r'Two thin lenses placed in contact ($d = 0$) have an equivalent power equal to the product of their individual powers ($P = P_1 P_2$)',
+    r'For two separated thin lenses, the equivalent focal length $F$ is measured from the principal planes of the combination, not from either lens vertex'
+  ],
+  ['A', 'B', 'D'],
+  r'''<p>A is true: for an equiconcave lens, $R_1 = -R$ and $R_2 = +R$ in Cartesian convention. Then $\frac{1}{f} = (1.5 - 1)\left(-\frac{1}{R} - \frac{1}{R}\right) = 0.5\left(-\frac{2}{R}\right) = -\frac{1}{R} \implies f = -R$.</p>
+<p>B is true: by definition, power in dioptres is $P = 1/f$ with $f$ in metres. D is true: for separated lenses, $F$ is defined relative to the principal planes $H_1, H_2$ of the system.</p>
+<p>C is false: powers add when thin lenses are placed in contact ($P = P_1 + P_2$), they do not multiply.</p>''',
+  tested="Lens-maker equation for equiconcave lenses, optical power definition, and two-lens systems.",
+  trap="Confusing the sum of powers for lenses in contact with their product, or getting the signs of $R_1, R_2$ wrong for equiconcave lenses.",
+  tests=['c.1.3.1', 'c.1.3.3'],
+  twist=(r'What is the equivalent focal length of a $+4\text{ D}$ lens in contact with a $-2\text{ D}$ lens?',
+         r'$P = +4 - 2 = +2\text{ D}$, so $F = 1/P = +0.5\text{ m} = +50\text{ cm}$.'),
+  marks=2, neg=0, time=60)
+
+O('o.op.1.3.05', '1.3', 'NAT',
+  r'''<p>A thin biconvex glass lens ($n = 1.60$) in air has a front surface with radius of curvature of magnitude $12.0\text{ cm}$ and a rear surface with radius of curvature of magnitude $18.0\text{ cm}$. Using the Cartesian sign convention ($R_1 = +12.0\text{ cm}, R_2 = -18.0\text{ cm}$), calculate the focal length $f$ (in cm) of the lens.</p>''',
+  None,
+  {'value': 12.0, 'tol': 0.1, 'dp': 1},
+  r'''<p>By the lens-maker's equation: $\frac{1}{f} = (n - 1)\left(\frac{1}{R_1} - \frac{1}{R_2}\right)$.</p>
+<p>For a biconvex lens in Cartesian convention, $R_1 = +12.0\text{ cm}$ and $R_2 = -18.0\text{ cm}$.</p>
+<p>$\frac{1}{f} = (1.60 - 1.00)\left(\frac{1}{12.0} - \frac{1}{-18.0}\right) = 0.60 \times \left(\frac{1}{12.0} + \frac{1}{18.0}\right) = 0.60 \times \left(\frac{3 + 2}{36.0}\right) = 0.60 \times \frac{5}{36.0} = \frac{3.0}{36.0} = \frac{1}{12.0}\text{ cm}^{-1}$.</p>
+<p>Therefore, $f = +12.0\text{ cm}$.</p>
+<p>Common traps: taking $R_2 = +18.0\text{ cm}$ (forgetting that the rear convex surface has its center of curvature to the left), which yields $\frac{1}{f} = 0.60 \times \frac{1}{36.0} = \frac{1}{60.0} \implies f = 60.0\text{ cm}$; or forgetting the factor $(n - 1)$, which yields $f = 7.2\text{ cm}$.</p>''',
+  tested="Application of the lens-maker's equation for a biconvex lens with unequal radii.",
+  trap="Failing to apply the negative sign to $R_2$ in the Cartesian convention, which yields $f = 60.0\text{ cm}$.",
+  tests=['c.1.3.1'],
+  twist=(r'If this lens is reversed so light hits the $18\text{ cm}$ radius face first, what is its new focal length?',
+         r'It remains $+12.0\text{ cm}$ because $(1/R_1 - 1/R_2)$ has the same value ($1/18 - (-1/12) = 5/36$).'),
+  marks=2, neg=0, time=90)
+
+
+# ── 1.4  Newton's formula and lateral magnification ────────────────────────────
+
+O('o.op.1.4.01', '1.4', 'MCQ',
+  r'''<p>A thin converging lens in air has a focal length $f = 12\text{ cm}$. A real object is placed on the principal axis at a distance of $18\text{ cm}$ in front of the first focal point $F_1$ (so the Newton coordinate is $x = -18\text{ cm}$). At what distance from the second focal point $F_2$ is the real image formed?</p>''',
+  [
+    r'$6\text{ cm}$ behind $F_2$',
+    r'$8\text{ cm}$ behind $F_2$',
+    r'$20\text{ cm}$ behind $F_2$',
+    r'$12\text{ cm}$ behind $F_2$'
+  ],
+  'B',
+  r'''<p>According to Newton's formula for a thin lens in air: $x\,x' = -f^2$, where $x$ is measured from the first focus $F_1$ and $x'$ is measured from the second focus $F_2$.</p>
+<p>Given $f = 12\text{ cm}$ and $x = -18\text{ cm}$:</p>
+<p>$(-18)\,x' = -(12)^2 = -144 \implies x' = \frac{-144}{-18} = +8\text{ cm}$.</p>
+<p>Since $x' > 0$, the image is formed $8\text{ cm}$ behind (to the right of) $F_2$.</p>
+<p>Distractor C ($20\text{ cm}$) confuses the distance from the focus $x'$ with the distance from the lens vertex $v = f + x' = 12 + 8 = 20\text{ cm}$. Distractor A ($6\text{ cm}$) comes from dividing 144 by 24. Distractor D ($12\text{ cm}$) assumes $x' = f$.</p>''',
+  tested="Newton's formula relating object and image distances measured from the principal foci.",
+  trap="Confusing the image distance from the focus $x'$ with the image distance from the lens $v = f + x'$.",
+  tests=['c.1.4.1'],
+  twist=(r'What is the lateral magnification $m$ in this setup?',
+         r'$m = -x\'/f = -8/12 = -2/3$, or $m = f/x = 12/(-18) = -2/3$.'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.4.02', '1.4', 'MCQ',
+  r'''<p>A small straight needle of length $\delta u = 2.0\text{ mm}$ lies along the principal axis of a thin converging lens of focal length $f = 10\text{ cm}$. The center of the needle is located at $u = -15\text{ cm}$ from the lens. What is the approximate length of the image of the needle along the principal axis?</p>''',
+  [
+    r'$2.0\text{ mm}$',
+    r'$4.0\text{ mm}$',
+    r'$8.0\text{ mm}$',
+    r'$16.0\text{ mm}$'
+  ],
+  'C',
+  r'''<p>First find the image distance $v$: $\frac{1}{v} - \frac{1}{u} = \frac{1}{f} \implies \frac{1}{v} = \frac{1}{10} + \frac{1}{-15} = \frac{1}{30} \implies v = +30\text{ cm}$.</p>
+<p>The lateral magnification is $m = \frac{v}{u} = \frac{30}{-15} = -2$.</p>
+<p>The longitudinal (axial) magnification for a small object is $m_L = \frac{dv}{du} = m^2 = (-2)^2 = 4$.</p>
+<p>Therefore, the image length along the axis is $\delta v \approx m_L\,\delta u = 4 \times 2.0\text{ mm} = 8.0\text{ mm}$.</p>
+<p>Distractor B ($4.0\text{ mm}$) falls directly into the trap of using $m_L = |m| = 2$ instead of $m^2 = 4$. Distractor A ($2.0\text{ mm}$) assumes longitudinal magnification is unity. Distractor D ($16.0\text{ mm}$) squares $m_L$ a second time.</p>''',
+  tested="Longitudinal magnification $m_L = m^2$ for small axial objects.",
+  trap="Confusing longitudinal magnification $m_L = m^2$ with lateral magnification $|m|$, leading to $4.0\text{ mm}$ instead of $8.0\text{ mm}$.",
+  tests=['c.1.4.3', 'c.1.4.2'],
+  twist=(r'If the object needle is oriented perpendicular to the axis, what would be the height of its image?',
+         r'$|h\'| = |m|\,h = 2 \times 2.0\text{ mm} = 4.0\text{ mm}$.'),
+  marks=2, neg=-0.66, time=90)
+
+O('o.op.1.4.03', '1.4', 'MCQ',
+  r'''<p>For a thin lens of focal length $f$ in air forming an image of an object, let $x = u - f_1$ and $x' = v - f_2$ denote the object and image distances measured from the first and second foci, respectively. In the Cartesian sign convention, which of the following expressions for the lateral magnification $m$ is strictly correct?</p>''',
+  [
+    r'$m = +\frac{x}{f}$',
+    r'$m = +\frac{x\'}{f}$',
+    r'$m = \frac{u}{v}$',
+    r'$m = -\frac{x\'}{f} = \frac{f}{x}$'
+  ],
+  'D',
+  r'''<p>From similar triangles formed by the rays passing through the foci: $\frac{h'}{h} = \frac{v}{u}$. In terms of the focal coordinates $u = x - f$ and $v = x' + f$, using Newton's relation $x\,x' = -f^2$, we obtain $m = \frac{f}{x} = -\frac{x'}{f}$.</p>
+<p>For a real object ($x < 0$) forming a real image ($x' > 0$), both expressions yield $m < 0$ (an inverted image), as required. Distractors A and B have inverted ratios and missing minus signs. Distractor C inverts the ratio of image and object distances ($u/v$ instead of $v/u$).</p>''',
+  tested="Expressions for lateral magnification of a thin lens in terms of Newton coordinates.",
+  trap="Omitting the minus sign in $m = -x'/f$ or inverting $f/x$ to $x/f$.",
+  tests=['c.1.4.2', 'c.1.4.1'],
+  twist=(r'If an object is at $x = -2f$ (so $u = -3f$), what is the magnification?',
+         r'$m = f/x = f/(-2f) = -1/2$ (real, inverted, half-size).'),
+  marks=1, neg=-0.33, time=60)
+
+O('o.op.1.4.04', '1.4', 'MSQ',
+  r'''<p>Which of the following statements regarding Newton's formula and magnification for a thin converging lens ($f > 0$) in air are <b>TRUE</b>?</p>''',
+  [
+    r'In Newton\'s formula $x\,x\' = -f^2$, the coordinates $x$ and $x\'$ are measured from the first and second principal foci, respectively',
+    r'For any real object producing a real image, $x$ and $x\'$ must have opposite algebraic signs ($x < 0$ and $x\' > 0$)',
+    r'The longitudinal magnification $m_L$ is negative whenever the image is inverted ($m < 0$)',
+    r'As a real object approaches the first focal point from the left ($x \to 0^-$), the magnitude of the lateral magnification $|m| \to \infty$'
+  ],
+  ['A', 'B', 'D'],
+  r'''<p>A is true: $x = u - f_1$ and $x' = v - f_2$ are measured relative to the foci $F_1$ and $F_2$. B is true: for a real object and real image, $u < -f \implies x = u + f < 0$, and $v > f \implies x' = v - f > 0$, so $x\,x' = -f^2 < 0$. D is true: $|m| = f/|x| \to \infty$ as $x \to 0$.</p>
+<p>C is false: longitudinal magnification is $m_L = \frac{dv}{du} = m^2$, which is strictly positive ($m_L > 0$) for all real values of $m$, meaning the axial orientation of the image is never inverted.</p>''',
+  tested="Newton's formula properties, focal coordinate signs, and longitudinal vs lateral magnification.",
+  trap="Believing that an inverted image ($m < 0$) implies a negative longitudinal magnification $m_L$.",
+  tests=['c.1.4.1', 'c.1.4.3'],
+  twist=(r'If $|m| = 3$, what is the ratio of image depth to object depth for a small axial object?',
+         r'$m_L = m^2 = 9$.'),
+  marks=2, neg=0, time=60)
+
+O('o.op.1.4.05', '1.4', 'NAT',
+  r'''<p>A thin converging lens forms a sharp real image of a real object on a screen. The object is situated at a distance of $16.0\text{ cm}$ in front of the first focal point ($F_1$). The sharp real image is formed on the screen at a distance of $9.0\text{ cm}$ behind the second focal point ($F_2$). Calculate the focal length $f$ (in cm) of the lens.</p>''',
+  None,
+  {'value': 12.0, 'tol': 0.1, 'dp': 1},
+  r'''<p>In Cartesian convention, the distance from the first focus to the object is $x = -16.0\text{ cm}$, and the distance from the second focus to the image is $x' = +9.0\text{ cm}$.</p>
+<p>Applying Newton's formula for a thin lens in air: $x\,x' = -f^2$.</p>
+<p>$(-16.0) \times (+9.0) = -144.0 = -f^2 \implies f^2 = 144.0\text{ cm}^2 \implies f = 12.0\text{ cm}$.</p>
+<p>(Check: $u = x - f = -16 - 12 = -28\text{ cm}$, $v = x' + f = 9 + 12 = 21\text{ cm}$. Then $\frac{1}{v} - \frac{1}{u} = \frac{1}{21} - \frac{1}{-28} = \frac{4 + 3}{84} = \frac{7}{84} = \frac{1}{12}\text{ cm}^{-1}$, which confirms $f = 12.0\text{ cm}$.)</p>
+<p>Common traps: mistaking the focal distances for distances from the lens ($u = -16, v = 9 \implies f = 5.76\text{ cm}$), or taking the arithmetic mean $(16 + 9)/2 = 12.5\text{ cm}$ instead of the geometric mean.</p>''',
+  tested="Determination of thin-lens focal length using Newton's formula $xx' = -f^2$.",
+  trap="Treating distances measured from the foci as if measured from the lens vertex, or taking the arithmetic mean.",
+  tests=['c.1.4.1'],
+  twist=(r'What is the lateral magnification $m$ of the image in this setup?',
+         r'$m = -x\'/f = -9.0/12.0 = -0.75$ (real, inverted, 3/4 size).'),
+  marks=2, neg=0, time=90)

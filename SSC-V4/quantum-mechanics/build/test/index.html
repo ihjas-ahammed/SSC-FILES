@@ -1106,6 +1106,62 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 /* a line threaded into a statement sits between its part and the next */
 .prose .rl-group{ margin:10px 0 18px; }
 
+/* ── Today: the way back, and the pace graph ─────────────────────────────── */
+.resume{ display:flex; flex-direction:column; gap:4px; border-color:var(--accent-line);
+  background:linear-gradient(135deg,var(--accent-soft),var(--surface) 70%); }
+.resume-t{ font-size:1.18rem; font-weight:600; letter-spacing:-.015em; line-height:1.25; margin-top:2px; }
+.resume-n{ display:flex; align-items:center; gap:4px; color:var(--ink-2); font-size:.92rem; }
+.resume .btn{ align-self:flex-start; margin-top:12px; display:inline-flex; align-items:center; gap:4px; }
+
+.pace-big{ font-size:1.35rem; margin-top:2px; letter-spacing:-.02em; }
+.pace-big span{ font-size:.86rem; color:var(--ink-3); }
+.seg{ display:inline-flex; border:1px solid var(--rule); border-radius:999px; overflow:hidden; flex:none; }
+.seg button{ font:inherit; font-size:.74rem; padding:5px 10px; background:transparent; color:var(--ink-2);
+  border:0; cursor:pointer; }
+.seg button.on{ background:var(--accent); color:var(--accent-ink); }
+.pace-plot{ margin:10px -4px 0; }
+.pace-svg{ display:block; width:100%; height:auto; overflow:visible; }
+.pace-grid{ stroke:var(--rule); stroke-width:1; }
+.pace-ax{ fill:var(--ink-3); font:11.5px var(--font-ui); }
+.pace-ax-c{ fill:var(--lv3); }
+.pace-bar{ fill:var(--accent); opacity:.34; }
+.pace-cum{ fill:none; stroke:var(--lv3); stroke-width:2.4; stroke-linejoin:round; stroke-linecap:round; }
+.pace-dot{ fill:var(--lv3); stroke:var(--surface); stroke-width:2; }
+.pace-fit{ stroke:var(--warn); stroke-width:1.6; stroke-dasharray:2 4; stroke-linecap:round; }
+.pace-pred{ fill:none; stroke:var(--lv4); stroke-width:2.2; stroke-dasharray:6 5; stroke-linecap:round; }
+.pace-now{ stroke:var(--rule-2); stroke-width:1; stroke-dasharray:3 3; }
+.pace-key{ display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:6px; }
+.pace-key i{ display:inline-block; vertical-align:middle; margin-right:4px; }
+.k-bar{ width:9px; height:9px; border-radius:2px; background:var(--accent); opacity:.4; }
+.k-cum{ width:14px; height:0; border-top:2.4px solid var(--lv3); }
+.k-fit{ width:14px; height:0; border-top:2px dotted var(--warn); }
+.k-pred{ width:14px; height:0; border-top:2.2px dashed var(--lv4); }
+.pace-cap{ margin:8px 0 0; font-weight:500; }
+
+/* ── figure viewer (comp.zoom.js, opt-in via PROJECT.figZoom) ──────────── */
+@media (min-width: 900px) {
+  body.fig-zoom .fig-img { width: auto; max-width: 100%; max-height: 360px; margin-inline: auto; }
+  body.fig-zoom .fig svg { max-width: 560px; max-height: 360px; margin-inline: auto; }
+}
+.fig-zoom .fig-img { cursor: zoom-in; }
+.fig-zoom .fig-img:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.fig-viewer {
+  box-sizing: border-box; width: 94vw; max-width: 1400px; height: 90vh;
+  max-height: 94dvh; padding: 12px; border: 1px solid var(--rule);
+  border-radius: 12px; background: var(--surface); color: var(--ink);
+}
+.fig-viewer[open] { display: flex; flex-direction: column; gap: 12px; }
+.fig-viewer::backdrop { background: rgb(0 0 0 / 72%); }
+.fig-controls { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.fig-controls button {
+  min-width: 44px; min-height: 44px; padding: 6px 12px; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; cursor: pointer;
+}
+.fig-controls button:disabled { opacity: .45; cursor: default; }
+.fig-controls output { min-width: 4ch; text-align: center; }
+.fig-viewport { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.fig-viewport img { display: block; max-width: none; height: auto; margin-inline: auto; }
+
 </style>
 <style>
 /* ── project/theme.css ── */
@@ -1325,30 +1381,6 @@ a.card:hover,button.card:hover{ box-shadow:var(--shadow-2), var(--qm-glow); }
 @media (prefers-reduced-motion: reduce){
   :root[data-theme=dark] body::after{ animation:none; }
 }
-
-/* Compact lesson figures, with an accessible full-screen detail viewer. */
-@media (min-width: 900px) {
-  .fig-img { width: auto; max-width: 100%; max-height: 360px; margin-inline: auto; }
-  .fig svg { max-width: 560px; max-height: 360px; margin-inline: auto; }
-}
-.fig-img { cursor: zoom-in; }
-.fig-img:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.qm-diagram-viewer {
-  box-sizing: border-box; width: 94vw; max-width: 1400px; height: 90vh;
-  max-height: 94dvh; padding: 12px; border: 1px solid var(--rule);
-  border-radius: 12px; background: var(--surface); color: var(--ink);
-}
-.qm-diagram-viewer[open] { display: flex; flex-direction: column; gap: 12px; }
-.qm-diagram-viewer::backdrop { background: rgb(0 0 0 / 72%); }
-.qm-diagram-controls { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-.qm-diagram-controls button {
-  min-width: 44px; min-height: 44px; padding: 6px 12px; color: var(--ink);
-  background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; cursor: pointer;
-}
-.qm-diagram-controls button:disabled { opacity: .45; cursor: default; }
-.qm-diagram-controls output { min-width: 4ch; text-align: center; }
-.qm-diagram-viewport { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
-.qm-diagram-viewport img { display: block; max-width: none; height: auto; margin-inline: auto; }
 
 </style>
 
@@ -2986,6 +3018,7 @@ const PROJECT = {
     mock: 'ssc4_qm_mock_v1',  usersMock: 'ssc4_qm_users_mock_v1'
   },
   themeColor: { light: '#f3f6fb', dark: '#05080f' },
+  figZoom: true,
   hooks: {}
 };
 
@@ -3171,89 +3204,6 @@ PROJECT.hooks.home = function (ctx) {
   ]);
 };
 
-/* Keep diagram viewing local to QM; the shared figure renderer stays reusable. */
-PROJECT.hooks.ready = function () {
-  if (document.querySelector('.qm-diagram-viewer')) return;
-  const el = DOM.el;
-  let source = null, scale = 1, fitWidth = 1, previousOverflow = '';
-  const picture = el('img', { alt: '', draggable: 'false' });
-  const viewport = el('div', { class: 'qm-diagram-viewport', tabindex: '0',
-    'aria-label': 'Diagram; scroll to explore when zoomed' }, [picture]);
-  const status = el('output', { 'aria-live': 'polite', text: '100%' });
-  const button = (text, label, action) => {
-    const b = el('button', { type: 'button', text: text, 'aria-label': label });
-    b.addEventListener('click', action);
-    return b;
-  };
-  const zoomOut = button('−', 'Zoom out', () => zoom(scale - 0.25));
-  const zoomIn = button('+', 'Zoom in', () => zoom(scale + 0.25));
-  const dialog = el('dialog', { class: 'qm-diagram-viewer', 'aria-label': 'Diagram viewer' }, [
-    el('div', { class: 'qm-diagram-controls' }, [zoomOut, status, zoomIn,
-      button('Reset', 'Reset zoom to fit', () => { zoom(1); viewport.scrollTo(0, 0); }),
-      button('Close', 'Close diagram viewer', () => dialog.close())]), viewport
-  ]);
-  document.body.appendChild(dialog);
-  function zoom(next) {
-    scale = Math.min(4, Math.max(1, next));
-    picture.style.width = (fitWidth * scale) + 'px';
-    status.textContent = Math.round(scale * 100) + '%';
-    zoomOut.disabled = scale <= 1;
-    zoomIn.disabled = scale >= 4;
-  }
-  function fit() {
-    if (!dialog.open || !picture.naturalWidth) return;
-    fitWidth = Math.min(picture.naturalWidth, viewport.clientWidth,
-      viewport.clientHeight * picture.naturalWidth / picture.naturalHeight);
-    zoom(scale);
-  }
-  picture.addEventListener('load', fit);
-  window.addEventListener('resize', fit);
-  function open(img) {
-    source = img;
-    scale = 1;
-    picture.alt = img.alt;
-    picture.src = img.src;
-    previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    dialog.showModal();
-    fit();
-    viewport.scrollTo(0, 0);
-  }
-  dialog.addEventListener('close', () => {
-    document.body.style.overflow = previousOverflow;
-    if (source && source.isConnected) source.focus({ preventScroll: true });
-    source = null;
-  });
-  dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
-  function enhance(root) {
-    const imgs = root.matches && root.matches('.fig-img') ? [root] :
-      root.querySelectorAll ? root.querySelectorAll('.fig-img') : [];
-    imgs.forEach(img => {
-      img.tabIndex = 0;
-      img.setAttribute('role', 'button');
-      img.setAttribute('aria-haspopup', 'dialog');
-      img.setAttribute('aria-label', 'Enlarge diagram: ' + img.alt);
-      img.title = 'Click to enlarge';
-    });
-  }
-  enhance(document.body);
-  new MutationObserver(records => records.forEach(record =>
-    record.addedNodes.forEach(enhance))).observe(document.body, { childList: true, subtree: true });
-  document.addEventListener('click', event => {
-    if (event.target.matches('.fig-img')) open(event.target);
-  });
-  document.addEventListener('keydown', event => {
-    if (event.target.matches('.fig-img') && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      open(event.target);
-    }
-  });
-  new MutationObserver(() => {
-    if (source) picture.src = source.src.replace(/\/(light|dark)\//,
-      document.documentElement.dataset.theme === 'dark' ? '/dark/' : '/light/');
-  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-};
-
 
 /* ── flow-library/app/src/core.project.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
@@ -3273,6 +3223,9 @@ PROJECT.hooks.ready = function () {
        themeColor: { light, dark },   optional — browser chrome colour
        realLine: true,                optional — draw the real-line widget
                                         (comp.realline.js) under inequalities
+       pyqLabel: 'JAM past papers',   optional — what the level-4 rung is called (default shown)
+       figZoom: true,                 optional — click a rendered diagram to open it
+                                        full-screen with zoom (comp.zoom.js)
        hooks: {                       optional — each is called if present
          home(ctx)   -> Node|null     a hero placed above the home dashboard
          theme(dark)                  after light/dark is applied
@@ -3300,6 +3253,7 @@ const Project = (function () {
 
   PROJECT.themeColor = Object.assign({ light: '#faf8f4', dark: '#101216' }, PROJECT.themeColor);
   PROJECT.hooks = PROJECT.hooks || {};
+  PROJECT.pyqLabel = PROJECT.pyqLabel || 'JAM past papers';
   document.documentElement.setAttribute('data-project', PROJECT.id);
 
   /* A broken hook must not take the app down with it: the hooks are
@@ -4111,6 +4065,9 @@ const Store = (function () {
 
   /* ── completion (Level 1) ────────────────────────────────────────────── */
   const isDone = id => !!state.done[id];
+  /* when the note was ticked — what the pace graph is drawn from, so history
+     needs no separate log and merges exactly like the tick itself */
+  const doneAt = id => state.done[id] || 0;
   const setDone = (id, on) => flag('done', 'undone', id, on);
 
   /* Tick a whole list in one write — the prerequisite cascade. Returns the
@@ -4353,7 +4310,7 @@ const Store = (function () {
   }
 
   return {
-    isDone, setDone, setDoneMany,
+    isDone, doneAt, setDone, setDoneMany,
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
     pref, setPref,
@@ -6389,6 +6346,109 @@ const Fig = (function () {
 })();
 
 
+/* ── flow-library/app/src/comp.zoom.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Figure viewer — click a rendered diagram to open it full-screen with
+   100–400% zoom, reset, scrolling, and Escape/Close.
+
+   Opt-in: a project sets `PROJECT.figZoom: true`. boot.js then calls
+   `Zoom.start()` once the signed-in app is up. It also caps a diagram's
+   height on desktop (see `body.fig-zoom` in ui.css), because a preview that
+   fills the screen leaves nothing to enlarge. The dialog follows the theme:
+   when the page swaps a diagram's light/dark file, the open one swaps too.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Zoom = (function () {
+
+  let started = false;
+
+  function start() {
+    if (started) return;
+    started = true;
+    const el = DOM.el;
+    let source = null, scale = 1, fitWidth = 1, previousOverflow = '';
+    const picture = el('img', { alt: '', draggable: 'false' });
+    const viewport = el('div', { class: 'fig-viewport', tabindex: '0',
+      'aria-label': 'Diagram; scroll to explore when zoomed' }, [picture]);
+    const status = el('output', { 'aria-live': 'polite', text: '100%' });
+    const button = (text, label, action) => {
+      const b = el('button', { type: 'button', text: text, 'aria-label': label });
+      b.addEventListener('click', action);
+      return b;
+    };
+    const zoomOut = button('−', 'Zoom out', () => zoom(scale - 0.25));
+    const zoomIn = button('+', 'Zoom in', () => zoom(scale + 0.25));
+    const dialog = el('dialog', { class: 'fig-viewer', 'aria-label': 'Diagram viewer' }, [
+      el('div', { class: 'fig-controls' }, [zoomOut, status, zoomIn,
+        button('Reset', 'Reset zoom to fit', () => { zoom(1); viewport.scrollTo(0, 0); }),
+        button('Close', 'Close diagram viewer', () => dialog.close())]), viewport
+    ]);
+    document.body.appendChild(dialog);
+    function zoom(next) {
+      scale = Math.min(4, Math.max(1, next));
+      picture.style.width = (fitWidth * scale) + 'px';
+      status.textContent = Math.round(scale * 100) + '%';
+      zoomOut.disabled = scale <= 1;
+      zoomIn.disabled = scale >= 4;
+    }
+    function fit() {
+      if (!dialog.open || !picture.naturalWidth) return;
+      fitWidth = Math.min(picture.naturalWidth, viewport.clientWidth,
+        viewport.clientHeight * picture.naturalWidth / picture.naturalHeight);
+      zoom(scale);
+    }
+    picture.addEventListener('load', fit);
+    window.addEventListener('resize', fit);
+    function open(img) {
+      source = img;
+      scale = 1;
+      picture.alt = img.alt;
+      picture.src = img.src;
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      dialog.showModal();
+      fit();
+      viewport.scrollTo(0, 0);
+    }
+    dialog.addEventListener('close', () => {
+      document.body.style.overflow = previousOverflow;
+      if (source && source.isConnected) source.focus({ preventScroll: true });
+      source = null;
+    });
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    function enhance(root) {
+      const imgs = root.matches && root.matches('.fig-img') ? [root] :
+        root.querySelectorAll ? root.querySelectorAll('.fig-img') : [];
+      imgs.forEach(img => {
+        img.tabIndex = 0;
+        img.setAttribute('role', 'button');
+        img.setAttribute('aria-haspopup', 'dialog');
+        img.setAttribute('aria-label', 'Enlarge diagram: ' + img.alt);
+        img.title = 'Click to enlarge';
+      });
+    }
+    enhance(document.body);
+    new MutationObserver(records => records.forEach(record =>
+      record.addedNodes.forEach(enhance))).observe(document.body, { childList: true, subtree: true });
+    document.addEventListener('click', event => {
+      if (event.target.matches('.fig-img')) open(event.target);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.target.matches('.fig-img') && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        open(event.target);
+      }
+    });
+    new MutationObserver(() => {
+      if (source) picture.src = source.src.replace(/\/(light|dark)\//,
+        document.documentElement.dataset.theme === 'dark' ? '/dark/' : '/light/');
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+
+  return { start: start };
+})();
+
+
 /* ── flow-library/app/src/comp.realline.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    The real line: one widget for every inequality.
@@ -7118,9 +7178,42 @@ const Tree = (function () {
 
   let openPath = null;
   const path = () => (openPath || (openPath = readPath() || {}));
-  function savePath(p) {
+  function savePath(p, seeding) {
     openPath = p;
     Store.setPref(KEY, p);
+    if (!seeding) remember(p);
+  }
+
+  /* ── the place you last read ─────────────────────────────────────────────
+     The open path forgets when you close a row. `last4` never does: it is
+     written whenever a section or a note opens and only ever replaced, so
+     Today can always offer the way back. Closing a note keeps the section;
+     reopening the same section keeps the note you were on inside it. */
+  const LAST = 'last4';
+  function remember(p) {
+    if (!p || !p.sec) return;
+    const prev = Store.pref(LAST, null) || {};
+    const concept = p.concept || (prev.sec === p.sec ? prev.concept : null) || null;
+    if (prev.sec === p.sec && (prev.concept || null) === concept) return;
+    Store.setPref(LAST, { course: p.course || null, mod: p.mod || null, sec: p.sec,
+      concept: concept, at: Date.now() });
+  }
+
+  /* what Today shows: only a place that still exists in the loaded pool */
+  function last() {
+    const l = Store.pref(LAST, null);
+    if (!l || !l.sec || !Pool.courseOfSec(l.sec)) return null;
+    const c = l.concept && Pool.concept(l.concept) ? Pool.concept(l.concept) : null;
+    return { sec: l.sec, concept: c, at: l.at || 0,
+      course: Pool.courseOfSec(l.sec), module: Pool.moduleOfSec(l.sec) };
+  }
+
+  /* open the path down to a section — the same jump `revealPath` makes for a note */
+  function revealSection(sec) {
+    const course = Pool.courseOfSec(sec), mod = Pool.moduleOfSec(sec);
+    if (!course) return false;
+    savePath({ course: course.id, mod: mod ? mod.id : null, sec: sec, concept: null, pyq: null });
+    return true;
   }
 
   /* Setting a slot clears everything deeper than it: opening a different
@@ -7450,7 +7543,7 @@ const Tree = (function () {
           staticTick('hourglass_empty'),
           el('span', { class: 'tlabel', style: { cursor: 'default' } }, [
             el('span', { class: 'tt' }, [
-              el('b', { text: 'JAM past papers' }),
+              el('b', { text: PROJECT.pyqLabel }),
               el('span', { text: 'not delivered yet · level 4 of ' + course.title })
             ]),
             el('span', { class: 'badge warn', text: 'pending' })
@@ -7572,7 +7665,7 @@ const Tree = (function () {
         }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
-            el('b', { text: 'JAM past papers' }),
+            el('b', { text: PROJECT.pyqLabel }),
             el('span', { text: qs.length + ' ' + DOM.plural(qs.length, 'question')
               + ' · finishing them is level 4' })
           ]),
@@ -7748,7 +7841,7 @@ const Tree = (function () {
         if (sec) p.sec = sec.sec;
       }
     }
-    savePath(p);
+    savePath(p, true);
   }
 
   /* Open the path down to one concept — what `#/note/<id>` now means. */
@@ -7767,7 +7860,274 @@ const Tree = (function () {
     return true;
   }
 
-  return { mount, mountAll, seedOpen, revealPath, refresh, scrollToOpen, path };
+  return { mount, mountAll, seedOpen, revealPath, revealSection, last, refresh, scrollToOpen, path };
+})();
+
+
+/* ── flow-library/app/src/comp.pace.js ── */
+/* ══════════════════════════════════════════════════════════════════════════
+   Pace — sections completed per day, and where that pace is heading.
+
+   A SECTION IS COMPLETE when every note in it has been read (level 1, the red
+   tick). It became complete on the day its LAST note was ticked. That is
+   derived from the tick timestamps the store already keeps, so the graph needs
+   no log of its own, works on progress made before it existed, and merges
+   across devices for free. Un-ticking a note takes its section back out.
+
+   THE PREDICTION is ordinary least squares on the cumulative curve. With day
+   index t and cumulative sections C over the trailing window, the line
+   C = a + b·t minimises Σ(C − a − b·t)², which is the normal-equation system
+
+        [ n    Σt  ] [a]   [ ΣC  ]
+        [ Σt   Σt² ] [b] = [ ΣtC ]
+
+   solved here by Gaussian elimination with partial pivoting. `b` is sections
+   per day; the finish day is where the line reaches the syllabus total.
+   R² says how straight the recent past actually was, so a jumpy fortnight
+   reads as a weak forecast instead of a confident one.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+const Pace = (function () {
+
+  const el = DOM.el, S = DOM.svg;
+  const DAY = 86400e3;
+
+  /* ── dates, in the learner's own day ─────────────────────────────────── */
+  const dayIndex = ms => {
+    const d = new Date(ms);
+    return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY);
+  };
+  const dayDate = i => new Date(i * DAY + DAY / 2);   /* UTC noon: no DST edge */
+  const fmtDay = i => dayDate(i).toLocaleDateString(undefined, { day: 'numeric', month: 'short', timeZone: 'UTC' });
+
+  /* ── linear algebra ──────────────────────────────────────────────────── */
+  /* solve A x = b for a small dense system; null when singular */
+  function solve(A, b) {
+    const n = b.length;
+    const M = A.map((row, i) => row.slice().concat([b[i]]));
+    for (let c = 0; c < n; c += 1) {
+      let piv = c;
+      for (let r = c + 1; r < n; r += 1) if (Math.abs(M[r][c]) > Math.abs(M[piv][c])) piv = r;
+      if (Math.abs(M[piv][c]) < 1e-12) return null;
+      const t = M[c]; M[c] = M[piv]; M[piv] = t;
+      for (let r = c + 1; r < n; r += 1) {
+        const f = M[r][c] / M[c][c];
+        for (let k = c; k <= n; k += 1) M[r][k] -= f * M[c][k];
+      }
+    }
+    const x = new Array(n);
+    for (let r = n - 1; r >= 0; r -= 1) {
+      let s = M[r][n];
+      for (let k = r + 1; k < n; k += 1) s -= M[r][k] * x[k];
+      x[r] = s / M[r][r];
+    }
+    return x;
+  }
+
+  /* least squares C ≈ a + b·t through the points; returns {a, b, r2} */
+  function fitLine(ts, cs) {
+    const n = ts.length;
+    if (n < 2) return null;
+    let st = 0, stt = 0, sc = 0, stc = 0;
+    for (let i = 0; i < n; i += 1) {
+      st += ts[i]; stt += ts[i] * ts[i]; sc += cs[i]; stc += ts[i] * cs[i];
+    }
+    const beta = solve([[n, st], [st, stt]], [sc, stc]);
+    if (!beta) return null;
+    const mean = sc / n;
+    let ssRes = 0, ssTot = 0;
+    for (let i = 0; i < n; i += 1) {
+      const e = cs[i] - (beta[0] + beta[1] * ts[i]);
+      ssRes += e * e;
+      ssTot += (cs[i] - mean) * (cs[i] - mean);
+    }
+    return { a: beta[0], b: beta[1], r2: ssTot > 1e-12 ? Math.max(0, 1 - ssRes / ssTot) : 0 };
+  }
+
+  /* ── the data: when did each section become complete ─────────────────── */
+  function completions() {
+    const out = [];
+    Pool.sections().forEach(function (s) {
+      const ids = s.concepts.filter(c => !Pool.isExt(c)).map(c => c.id);
+      if (!ids.length || Progress.count(ids).min < 1) return;
+      const at = Math.max.apply(null, ids.map(Store.doneAt));
+      if (at > 0) out.push({ sec: s.sec, at: at });
+    });
+    return out.sort((x, y) => x.at - y.at);
+  }
+
+  function totalSections() {
+    return Pool.sections().filter(s => s.concepts.some(c => !Pool.isExt(c))).length;
+  }
+
+  /* Everything the chart and the caption need, for the last `span` days. */
+  function model(span) {
+    const done = completions();
+    const total = totalSections();
+    const today = dayIndex(Date.now());
+    const first = done.length ? dayIndex(done[0].at) : today;
+    const start = Math.max(today - span + 1, Math.min(first, today));
+    const days = [];
+    for (let d = start; d <= today; d += 1) days.push({ d: d, n: 0, cum: 0 });
+    const before = done.filter(x => dayIndex(x.at) < start).length;
+    done.forEach(function (x) {
+      const i = dayIndex(x.at) - start;
+      if (i >= 0 && i < days.length) days[i].n += 1;
+    });
+    let run = before;
+    days.forEach(function (x) { run += x.n; x.cum = run; });
+
+    /* fit the trailing fortnight (or what exists of it) */
+    const win = days.slice(-14);
+    const fit = win.length >= 3 ? fitLine(win.map(x => x.d - today), win.map(x => x.cum)) : null;
+    const left = total - run;
+    let eta = null;
+    if (fit && fit.b > 0.02 && left > 0) eta = today + Math.ceil((total - fit.a) / fit.b);
+    if (eta != null && eta < today) eta = today;
+
+    return { days: days, total: total, done: run, left: left, fit: fit, today: today, eta: eta,
+      count: done.length, avg7: days.slice(-7).reduce((s, x) => s + x.n, 0) / Math.min(7, days.length) };
+  }
+
+  /* ── drawing ─────────────────────────────────────────────────────────── */
+  const W = 480, H = 230, PL = 26, PR = 30, PT = 12, PB = 28;
+
+  function chart(m) {
+    const n = m.days.length;
+    const horizon = m.fit && m.fit.b > 0.02 && m.left > 0
+      ? Math.max(3, Math.min(14, (m.eta != null ? m.eta - m.today : 7) + 1)) : 0;
+    const cols = n + horizon;  /* forecast columns sit after today */
+    const iw = W - PL - PR, ih = H - PT - PB;
+    const slot = iw / cols;
+    const barMax = Math.max(2, Math.max.apply(null, m.days.map(x => x.n)));
+    const yb = v => PT + ih - (v / barMax) * ih;
+    const yc = v => PT + ih - (Math.min(v, m.total) / Math.max(1, m.total)) * ih;
+    const xc = i => PL + (i + 0.5) * slot;
+
+    const svg = S('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'pace-svg', role: 'img',
+      'aria-label': 'Sections completed per day, with a least-squares forecast' });
+
+    /* gridlines: left axis is per-day, right axis is the cumulative share */
+    [0, 0.5, 1].forEach(function (f) {
+      const y = PT + ih - f * ih;
+      svg.appendChild(S('line', { x1: PL, x2: W - PR, y1: y, y2: y, class: 'pace-grid' }));
+      svg.appendChild(S('text', { x: PL - 6, y: y + 3, class: 'pace-ax', 'text-anchor': 'end',
+        text: String(Math.round(f * barMax * 10) / 10) }));
+      svg.appendChild(S('text', { x: W - PR + 6, y: y + 3, class: 'pace-ax pace-ax-c',
+        text: String(Math.round(f * m.total)) }));
+    });
+
+    /* forecast band first so the real data draws over it */
+    if (horizon && m.fit) {
+      const pts = [];
+      for (let k = 0; k <= horizon; k += 1) {
+        const v = Math.max(0, Math.min(m.total, m.fit.a + m.fit.b * k));
+        pts.push(xc(n - 1 + k).toFixed(1) + ',' + yc(v).toFixed(1));
+      }
+      svg.appendChild(S('polyline', { points: pts.join(' '), class: 'pace-pred' }));
+      svg.appendChild(S('line', { x1: xc(n - 1) + slot / 2, x2: xc(n - 1) + slot / 2, y1: PT, y2: PT + ih,
+        class: 'pace-now' }));
+    }
+
+    m.days.forEach(function (x, i) {
+      if (!x.n) return;
+      svg.appendChild(S('rect', { x: xc(i) - slot * 0.32, width: slot * 0.64, y: yb(x.n),
+        height: PT + ih - yb(x.n), rx: 2, class: 'pace-bar' }, [
+          S('title', { text: fmtDay(x.d) + ': ' + x.n + ' ' + DOM.plural(x.n, 'section') })]));
+    });
+
+    svg.appendChild(S('polyline', {
+      points: m.days.map((x, i) => xc(i).toFixed(1) + ',' + yc(x.cum).toFixed(1)).join(' '),
+      class: 'pace-cum' }));
+    const lastDay = m.days[n - 1];
+    svg.appendChild(S('circle', { cx: xc(n - 1), cy: yc(lastDay.cum), r: 3.4, class: 'pace-dot' }));
+
+    /* the trend the fit sees, over the fitted window */
+    if (m.fit && n >= 3) {
+      const w0 = Math.max(0, n - 14);
+      const v = i => Math.max(0, Math.min(m.total, m.fit.a + m.fit.b * (m.days[i].d - m.today)));
+      svg.appendChild(S('line', { x1: xc(w0), y1: yc(v(w0)), x2: xc(n - 1), y2: yc(v(n - 1)),
+        class: 'pace-fit' }));
+    }
+
+    /* x labels: first, middle, last, and the forecast end */
+    const ticks = [[0, m.days[0].d], [Math.floor((n - 1) / 2), m.days[Math.floor((n - 1) / 2)].d],
+      [n - 1, m.today]];
+    if (horizon) ticks.push([n + horizon - 1, m.today + horizon]);
+    const seen = {};
+    ticks.forEach(function (t, k) {
+      if (seen[t[0]]) return;
+      seen[t[0]] = true;
+      svg.appendChild(S('text', { x: xc(t[0]), y: H - 10, class: 'pace-ax',
+        'text-anchor': k === 0 ? 'start' : (t[0] === n + horizon - 1 && horizon ? 'end' : 'middle'),
+        text: t[1] === m.today ? 'today' : fmtDay(t[1]) }));
+    });
+    return svg;
+  }
+
+  function caption(m) {
+    if (!m.count) {
+      return 'Finish a section — every note in it read — and its day appears here.';
+    }
+    if (m.left <= 0) return 'Every section in the syllabus is complete.';
+    if (!m.fit) return 'A few more days of work and this can start forecasting.';
+    if (m.eta == null) {
+      return 'No steady pace in the last fortnight yet, so there is nothing honest to forecast.';
+    }
+    const gap = m.eta - m.today;
+    const when = gap <= 0 ? 'today' : gap === 1 ? 'tomorrow'
+      : (fmtDay(m.eta) + ' (in ' + gap + ' days)');
+    return 'At ' + (Math.round(m.fit.b * 100) / 100) + ' sections a day, the last of the '
+      + m.left + ' still to go lands ' + when + '.';
+  }
+
+  function confidence(m) {
+    if (!m.fit || m.eta == null) return null;
+    const r = m.fit.r2;
+    return r >= 0.9 ? 'steady' : r >= 0.7 ? 'fairly steady' : 'uneven';
+  }
+
+  /* the card Today drops in */
+  function card() {
+    let span = Store.pref('paceSpan', 14);
+    if ([14, 30, 90].indexOf(span) < 0) span = 14;
+    const host = el('div', { class: 'card pace' });
+
+    function paint() {
+      DOM.clear(host);
+      const m = model(span);
+      const conf = confidence(m);
+      DOM.add(host, [
+        el('div', { class: 'spread' }, [
+          el('div', {}, [
+            el('div', { class: 'kicker', text: 'Pace · sections completed a day' }),
+            el('div', { class: 'pace-big' }, [
+              el('b', { text: m.done + '/' + m.total }),
+              el('span', { text: ' sections complete' })
+            ])
+          ]),
+          el('div', { class: 'seg', role: 'group', 'aria-label': 'Range' },
+            [14, 30, 90].map(v => el('button', { type: 'button', class: v === span ? 'on' : '',
+              text: v + 'd', on: { click: function () { span = Store.setPref('paceSpan', v); paint(); } } })))
+        ]),
+        m.days.length ? el('div', { class: 'pace-plot' }, [chart(m)]) : null,
+        el('div', { class: 'pace-key small muted' }, [
+          el('span', {}, [el('i', { class: 'k-bar' }), ' per day']),
+          el('span', {}, [el('i', { class: 'k-cum' }), ' cumulative']),
+          el('span', {}, [el('i', { class: 'k-fit' }), ' least-squares fit']),
+          m.eta != null ? el('span', {}, [el('i', { class: 'k-pred' }), ' forecast']) : null
+        ]),
+        el('p', { class: 'pace-cap', text: caption(m) }),
+        m.count ? el('p', { class: 'small muted', style: { margin: '4px 0 0' },
+          text: 'Last 7 days: ' + (Math.round(m.avg7 * 10) / 10) + ' a day'
+            + (conf ? ' · trend is ' + conf + ' (R² ' + (Math.round(m.fit.r2 * 100) / 100) + ')' : '') }) : null
+      ]);
+    }
+    paint();
+    return host;
+  }
+
+  return { card, model, fitLine, solve, completions };
 })();
 
 
@@ -9353,6 +9713,57 @@ const ViewHome = (function () {
     return null;
   }
 
+  /* ── the way back ────────────────────────────────────────────────────────
+     The section (and note) you last opened, so a day's work starts with one
+     tap instead of a scroll through the tree. */
+  function resumeCard() {
+    const l = Tree.last();
+    const first = nextUndone();
+    const host = el('div', { class: 'card resume' });
+
+    if (!l) {
+      if (!first) return null;
+      DOM.add(host, [
+        el('div', { class: 'kicker', text: 'Start here' }),
+        el('div', { class: 'resume-t', text: first.title }),
+        el('div', { class: 'small muted', text: '§' + first.sec + ' ' + Pool.sectionTitle(first.sec) }),
+        el('a', { class: 'btn primary', href: Router.href('note/' + first.id) }, [
+          DOM.mi('play_arrow', 'xs'), ' Open the first note'])
+      ]);
+      return host;
+    }
+
+    const ids = (Pool.sections(l.course.id).filter(s => s.sec === l.sec)[0] || { concepts: [] })
+      .concepts.filter(c => !Pool.isExt(c)).map(c => c.id);
+    const c = Progress.count(ids);
+    const where = [l.module ? 'Module ' + l.module.n + ' · ' + l.module.title : null, l.course.title]
+      .filter(Boolean).join(' · ');
+    const go = function () {
+      if (l.concept) Tree.revealPath(l.concept.id); else Tree.revealSection(l.sec);
+      Router.go('study');
+    };
+
+    DOM.add(host, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: 'Pick up where you left off' }),
+        l.at ? el('span', { class: 'count', text: UI.ago(l.at) }) : null
+      ]),
+      el('div', { class: 'resume-t', text: '§' + l.sec + ' ' + Pool.sectionTitle(l.sec) }),
+      l.concept ? el('div', { class: 'resume-n' }, [DOM.mi('article', 'xs'), ' ' + l.concept.title]) : null,
+      el('div', { class: 'small muted', text: where }),
+      ids.length ? el('div', { style: { marginTop: '10px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: 'this section' }),
+          el('span', { class: 'count', text: c.l1 + '/' + c.total + ' read' })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.levelBar(c, { key: false })])
+      ]) : null,
+      el('button', { class: 'btn primary', type: 'button', on: { click: go } }, [
+        DOM.mi('play_arrow', 'xs'), ' Continue'])
+    ]);
+    return host;
+  }
+
   function step(n, label, detail, href, ready) {
     return el('a', { class: 'item', href: Router.href(href) }, [
       ready ? el('span', { class: 'ix', text: String(n) })
@@ -9396,7 +9807,7 @@ const ViewHome = (function () {
       : lv < 4 ? (pyq.total
           ? (pyq.total - pyq.done) + ' past-paper ' + DOM.plural(pyq.total - pyq.done, 'question')
             + ' between this and level 4'
-          : 'level 4 needs the JAM past papers, which are not delivered yet')
+          : 'level 4 needs the ' + PROJECT.pyqLabel + ', which are not delivered yet')
       : 'every level earned, past papers included';
 
     return el('div', { class: 'card' }, [
@@ -9423,7 +9834,7 @@ const ViewHome = (function () {
       ]) : null,
       pyq.total ? el('div', { style: { marginTop: '12px' } }, [
         el('div', { class: 'spread' }, [
-          el('span', { class: 'count', text: 'JAM past papers · level 4' }),
+          el('span', { class: 'count', text: PROJECT.pyqLabel + ' · level 4' }),
           el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
         ]),
         el('div', { style: { marginTop: '6px' } }, [UI.meter(pyq.done, pyq.total, 4)])
@@ -9529,7 +9940,11 @@ const ViewHome = (function () {
       UI.title('Today'),
       UI.mockBanner(),
 
+      resumeCard(),
+
       DOM.stagger(el('div', { class: 'stats' }, tiles)),
+
+      Pace.card(),
 
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'The loop' }),
@@ -9567,7 +9982,7 @@ const ViewHome = (function () {
           el('div', { class: 'row' }, [
             el('span', { class: 'badge lv3', text: 'level 3' }),
             el('span', { class: 'small muted',
-              text: 'every Bartle exercise in its section is worked through' })
+              text: 'every exercise in its section is worked through' })
           ])
         ]),
         el('p', { class: 'small muted', style: { margin: '12px 0 0' },
@@ -10750,7 +11165,11 @@ const App = (function () {
       Tex.typeset(document.getElementById('main'));
       mathjaxWarning();
     });
-    if (!readied) { readied = true; Project.hook('ready'); }
+    if (!readied) {
+      readied = true;
+      if (PROJECT.figZoom) { document.body.classList.add('fig-zoom'); Zoom.start(); }
+      Project.hook('ready');
+    }
   }
 
   /* The record is keyed on a name and a roll number, so there is no sensible

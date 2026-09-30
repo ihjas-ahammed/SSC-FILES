@@ -1,0 +1,745 @@
+# Module II — Interference: Written Exercises (Ghatak 6e)
+
+# ── 2.1 Superposition of Waves ──────────────────────────────────────────────
+
+W('q.op.2.01', '2.1', 4,
+  'Frequency of Standing Waves on String',
+  'Ghatak 6e Problem 13.1',
+  r'''<p>Standing waves are formed on a stretched string under a tension of $1\text{ N}$. The length of the string is $30\text{ cm}$ and it vibrates in $3$ loops. If the mass per unit length of the wire is $10\text{ mg/cm}$, calculate the frequency of the vibrations.</p>''',
+  ['c.2.1.1'],
+  r'''Compute the wave speed on the string using $v = \sqrt{T/\mu}$ with consistent SI units, relate the loop count $p$ to wavelength via $\lambda = 2L/p$, and find the frequency $\nu = v/\lambda$.''',
+  r'''<p>The wave speed on a stretched string is given by:
+$$v = \sqrt{\frac{T}{\mu}}$$
+Converting to SI units:
+$$T = 1\text{ N}$$
+$$\mu = 10\text{ mg/cm} = \frac{10 \times 10^{-6}\text{ kg}}{10^{-2}\text{ m}} = 10^{-3}\text{ kg/m}$$
+$$v = \sqrt{\frac{1}{10^{-3}}} = \sqrt{1000} \approx 31.62\text{ m/s}$$</p>
+<p>A string of length $L$ vibrating in $p$ loops has a wavelength:
+$$\lambda = \frac{2L}{p}$$
+For $L = 30\text{ cm} = 0.3\text{ m}$ and $p = 3$:
+$$\lambda = \frac{2 \times 0.3}{3} = 0.2\text{ m}$$</p>
+<p>The frequency $\nu$ is:
+$$\nu = \frac{v}{\lambda} = \frac{31.62\text{ m/s}}{0.2\text{ m}} \approx 158.1\text{ Hz}$$</p>''',
+  trap=r'Failing to convert linear mass density from $\text{mg/cm}$ to $\text{kg/m}$, which throws the wave speed off by a factor of $10$.')
+
+W('q.op.2.02', '2.1', 4,
+  'Fundamental Mode Frequency of String',
+  'Ghatak 6e Problem 13.2',
+  r'''<p>In Problem 13.1, if the string is made to vibrate in its fundamental mode, what will be the frequency of vibration?</p>''',
+  ['c.2.1.1'],
+  r'''Recall that harmonic frequencies of a stretched string are integer multiples of the fundamental frequency, so $\nu_p = p\,\nu_1$.''',
+  r'''<p>In the fundamental mode ($p = 1$), the frequency is one-third of the frequency for $3$ loops:
+$$\nu_1 = \frac{\nu_3}{3} = \frac{158.1\text{ Hz}}{3} \approx 52.7\text{ Hz}$$</p>''',
+  trap=r'Multiplying by the loop number instead of dividing to obtain the fundamental frequency from a higher harmonic.')
+
+W('q.op.2.03', '2.1', 4,
+  'Beats Between Two Collinear Waves',
+  'Ghatak 6e Problem 13.5 & 13.6',
+  r'''<p>The displacements associated with two collinear waves having the same amplitude but slightly different frequencies are:
+$$y_1 = a \cos\left[2\pi\left(\nu t - \frac{x}{\lambda}\right)\right], \qquad y_2 = a \cos\left[2\pi\left\{(\nu + \Delta\nu)t - \frac{x}{\lambda - \Delta\lambda}\right\}\right]$$
+Show that at a fixed position $x$, the intensity varies with time. For $v = 330\text{ m/s}$, $\nu = 256\text{ s}^{-1}$, $\Delta\nu = 2\text{ s}^{-1}$, and $a = 0.1\text{ cm}$, find the beat frequency and the period of intensity variations.</p>''',
+  ['c.2.1.1'],
+  r'''Use the sum-to-product trigonometric identity on the two waves at fixed $x=0$, isolate the slowly varying envelope, and square it to find the intensity modulation frequency.''',
+  r'''<p>Using the identity $\cos A + \cos B = 2 \cos\left(\frac{A+B}{2}\right)\cos\left(\frac{A-B}{2}\right)$, the resultant displacement $y = y_1 + y_2$ at a fixed location $x = 0$ is:
+$$y(0, t) = 2a \cos(\pi \Delta\nu t) \cos\left[2\pi\left(\nu + \frac{\Delta\nu}{2}\right)t\right]$$
+The intensity is proportional to the square of the slowly varying amplitude:
+$$I(t) \propto 4a^2 \cos^2(\pi \Delta\nu t) = 2a^2 [1 + \cos(2\pi \Delta\nu t)]$$
+The intensity oscillates at the beat frequency:
+$$f_{\text{beat}} = \Delta\nu = 2\text{ s}^{-1}$$
+The time period between successive intensity maxima is:
+$$T_{\text{beat}} = \frac{1}{\Delta\nu} = \frac{1}{2\text{ s}^{-1}} = 0.5\text{ s}$$</p>''',
+  trap=r'Confusing the envelope frequency $\Delta\nu/2$ with the intensity beat frequency $\Delta\nu$, which is twice the envelope oscillation frequency because intensity depends on amplitude squared.')
+
+# ── 2.2 Water surface & phase shift ─────────────────────────────────────────
+
+W('q.op.2.04', '2.2', 4,
+  'Water Surface Interference with Initial Phase',
+  'Ghatak 6e Example 14.4',
+  r'''<p>Assume two point sources $S_1$ and $S_2$ on a water surface vibrate with an intrinsic initial phase difference of $\pi$. Obtain the conditions for nodal (destructive) and antinodal (constructive) lines, and generalize the result for an arbitrary phase difference $\phi$.</p>''',
+  ['c.2.2.1', 'c.2.1.2'],
+  r'''Write the total phase difference at $P$ as the sum of spatial phase difference $k(S_2 P - S_1 P)$ and intrinsic phase difference $\phi$, then equate to $2n\pi$ for maxima and $(2n+1)\pi$ for minima.''',
+  r'''<p>Let the disturbances produced at a point $P$ be:
+$$y_1 = a \cos(\omega t - k S_1 P), \qquad y_2 = a \cos(\omega t - k S_2 P + \phi)$$
+The total phase difference is:
+$$\delta = k(S_2 P - S_1 P) - \phi = \frac{2\pi}{\lambda}(S_2 P - S_1 P) - \phi$$</p>
+<p>1. For an initial phase difference $\phi = \pi$:
+<ul>
+<li><b>Constructive interference (antinodal lines/maxima):</b>
+$$\delta = 2n\pi \implies \frac{2\pi}{\lambda}(S_2 P - S_1 P) - \pi = 2n\pi \implies S_2 P - S_1 P = \left(n + \frac{1}{2}\right)\lambda$$</li>
+<li><b>Destructive interference (nodal lines/minima):</b>
+$$\delta = (2n + 1)\pi \implies \frac{2\pi}{\lambda}(S_2 P - S_1 P) - \pi = (2n + 1)\pi \implies S_2 P - S_1 P = n\lambda$$</li>
+</ul>
+The perpendicular bisector ($S_2 P = S_1 P$) becomes a nodal line (minimum) instead of a maximum.</p>
+<p>2. For an arbitrary phase difference $\phi$:
+<ul>
+<li><b>Maxima:</b>
+$$S_2 P - S_1 P = n\lambda + \frac{\phi}{2\pi}\lambda$$</li>
+<li><b>Minima:</b>
+$$S_2 P - S_1 P = \left(n + \frac{1}{2}\right)\lambda + \frac{\phi}{2\pi}\lambda$$</li>
+</ul></p>''',
+  trap=r'Assuming the central perpendicular bisector is always an antinode (maximum), forgetting that an initial phase difference of $\pi$ swaps nodal and antinodal conditions.')
+
+# ── 2.3 Young's Experiment ──────────────────────────────────────────────────
+
+W('q.op.2.05', '2.3', 4,
+  'Interference of Symmetrical Plane Waves',
+  'Ghatak 6e Example 14.5',
+  r'''<p>Two plane waves of identical amplitude $E_0$ and wavelength $\lambda$ propagate in the $xz$-plane symmetrical to the $z$-axis with wave vectors:
+$$\mathbf{k}_1 = -k\sin\theta\,\hat{\mathbf{x}} + k\cos\theta\,\hat{\mathbf{z}}, \qquad \mathbf{k}_2 = k\sin\theta\,\hat{\mathbf{x}} + k\cos\theta\,\hat{\mathbf{z}}$$
+Assuming both electric fields are polarized along the $y$-axis, obtain the intensity distribution on a screen located at $z = 0$ and the fringe width. Calculate the fringe width for $\theta = \pi/6$ and $\lambda = 5000\text{ \AA}$.</p>''',
+  ['c.2.3.1', 'c.2.3.2'],
+  r'''Superpose the electric fields $E_1+E_2$, set $z=0$ to evaluate time-averaged intensity, and find the fringe period by setting the spatial phase argument change to $\pi$.''',
+  r'''<p>The electric field components are:
+$$E_1 = E_0 \cos(-kx\sin\theta + kz\cos\theta - \omega t)$$
+$$E_2 = E_0 \cos(kx\sin\theta + kz\cos\theta - \omega t)$$
+Superposing the fields:
+$$E = E_1 + E_2 = 2E_0 \cos(kx\sin\theta)\cos(kz\cos\theta - \omega t)$$
+On the screen at $z = 0$, the time-averaged intensity is:
+$$I = 4 I_0 \cos^2(kx\sin\theta)$$
+where $k = 2\pi/\lambda$. The phase argument changes by $\pi$ between consecutive bright fringes:
+$$k \beta \sin\theta = \pi \implies \frac{2\pi}{\lambda}\beta \sin\theta = \pi \implies \beta = \frac{\lambda}{2\sin\theta}$$
+For $\theta = \pi/6$ ($\sin(\pi/6) = 0.5$) and $\lambda = 5000\text{ \AA} = 5 \times 10^{-4}\text{ mm}$:
+$$\beta = \frac{5 \times 10^{-4}\text{ mm}}{2 \times 0.5} = 5 \times 10^{-4}\text{ mm} = 0.5\,\mu\text{m}$$</p>''',
+  trap=r'Using $\beta = \lambda/\sin\theta$ instead of $\beta = \lambda/(2\sin\theta)$ by missing the factor of $2$ arising from the symmetric angle inclination.')
+
+W('q.op.2.06', '2.3', 4,
+  'Double Slit with Oblique Incident Beam',
+  'Ghatak 6e Example 14.8',
+  r'''<p>A parallel beam of light from a distant source $S'$ is incident at an angle $\theta$ on two slits separated by distance $d$. Determine the optical path difference and the resulting intensity distribution on a screen placed at distance $D$.</p>''',
+  ['c.2.3.1', 'c.2.3.2'],
+  r'''Include the initial geometric path difference $d\sin\theta$ before the slits in addition to the path difference $xd/D$ from slits to screen, then express intensity as $I_0 \cos^2(\delta/2)$.''',
+  r'''<p>Before reaching the slits, the incident plane wavefront makes an angle $\theta$ with the slit plane, introducing an initial geometric path difference:
+$$\Delta_{\text{initial}} = d \sin\theta$$
+Between the slit plane and a point $P(x)$ on the screen, the path difference is:
+$$\Delta_{\text{screen}} = S_2 P - S_1 P \approx \frac{xd}{D}$$
+The net path difference at point $P$ is:
+$$\Delta_{\text{net}} = \frac{xd}{D} + d\sin\theta$$
+The corresponding phase difference is:
+$$\delta = \frac{2\pi}{\lambda}\left(\frac{xd}{D} + d\sin\theta\right)$$
+The resulting intensity distribution is:
+$$I = I_0 \cos^2\left(\frac{\delta}{2}\right) = I_0 \cos^2\left[\frac{\pi}{\lambda}\left(\frac{xd}{D} + d\sin\theta\right)\right]$$
+The central maximum ($\delta = 0$) shifts to $x_0 = -D\sin\theta$.</p>''',
+  trap=r'Omitting the pre-slit path difference $d\sin\theta$, which shifts the central zero-order fringe away from the geometric axis.')
+
+W('q.op.2.07', '2.3', 4,
+  'Fringe Width in Young Double Hole',
+  'Ghatak 6e Problem 14.1',
+  r'''<p>In a Young’s double-hole experiment, the distance between the two holes is $0.5\text{ mm}$, $\lambda = 5 \times 10^{-5}\text{ cm}$, and $D = 50\text{ cm}$. What will be the fringe width?</p>''',
+  ['c.2.3.1', 'c.2.3.2'],
+  r'''Apply the fringe width formula $\beta = \lambda D/d$, making sure all parameters are converted to consistent length units.''',
+  r'''<p>The fringe width is:
+$$\beta = \frac{\lambda D}{d}$$
+Given:
+$$\lambda = 5 \times 10^{-5}\text{ cm}$$
+$$D = 50\text{ cm}$$
+$$d = 0.5\text{ mm} = 0.05\text{ cm}$$
+$$\beta = \frac{(5 \times 10^{-5}\text{ cm})(50\text{ cm})}{0.05\text{ cm}} = 0.05\text{ cm} = 0.5\text{ mm}$$</p>''',
+  trap=r'Mixing millimetres and centimetres directly without converting $d = 0.5\text{ mm}$ to $0.05\text{ cm}$.')
+
+W('q.op.2.08', '2.3', 4,
+  'Fringe Disappearance with Sodium Doublet',
+  'Ghatak 6e Problem 14.6',
+  r'''<p>In a Young’s double-hole experiment, interference fringes are formed using sodium light consisting of two wavelengths, $\lambda_1 = 5890\text{ \AA}$ and $\lambda_2 = 5896\text{ \AA}$. Obtain the regions on the screen where the fringe pattern disappears. Assume $d = 0.5\text{ mm}$ and $D = 100\text{ cm}$.</p>''',
+  ['c.2.3.1', 'c.2.3.2'],
+  r'''Set the condition that a bright fringe of $\lambda_1$ coincides with a dark fringe of $\lambda_2$, solve for order $n \approx \bar{\lambda}/(2\Delta\lambda)$, and determine the corresponding distance on the screen.''',
+  r'''<p>Fringe disappearance occurs when the bright fringe of one wavelength coincides with the dark fringe of the other:
+$$x_n = \frac{n \lambda_1 D}{d} = \left(n' + \frac{1}{2}\right)\frac{\lambda_2 D}{d}$$
+For the first disappearance closest to the center, $n' = n - 1$:
+$$n \lambda_1 = \left(n - \frac{1}{2}\right)\lambda_2 \implies n(\lambda_2 - \lambda_1) = \frac{1}{2}\lambda_2$$
+$$n \approx \frac{\bar{\lambda}}{2\Delta\lambda} = \frac{5893\text{ \AA}}{2(6\text{ \AA})} \approx 491$$
+The distance from the center to the first region of disappearance is:
+$$x = \frac{n \lambda_1 D}{d} = \frac{491 \times (5890 \times 10^{-8}\text{ cm}) \times 100\text{ cm}}{0.05\text{ cm}} \approx 5.78\text{ cm}$$
+In general, complete disappearance occurs at:
+$$x_m \approx \left(m + \frac{1}{2}\right)\frac{\bar{\lambda}^2 D}{d\,\Delta\lambda} \approx (2m + 1)(2.89\text{ cm}) \quad (m = 0, 1, 2, \dots)$$</p>''',
+  trap=r'''Equating $n\lambda_1 = n'\lambda_2$ (coincidence of bright fringes) instead of setting a bright fringe equal to a dark fringe for disappearance.''')
+
+W('q.op.2.09', '2.3', 4,
+  'Microwave Double Slit and Paraxial Validity',
+  'Ghatak 6e Problem 14.7',
+  r'''<p>If one carries out the Young’s double-hole interference experiment using microwaves of wavelength $3\text{ cm}$, discuss the nature of the fringe pattern if $d = 0.1\text{ cm}$, $1\text{ cm}$, and $4\text{ cm}$. Assume $D = 100\text{ cm}$. Can you use Eq. (14.21) for the fringe width?</p>''',
+  ['c.2.3.1', 'c.2.3.2'],
+  r'''Examine whether $d \ge \lambda$ to permit maxima within physical angles, and check if angles are small enough ($\sin\theta \approx \theta$) for the standard paraxial formula $\beta = \lambda D/d$ to hold.''',
+  r'''<p>The standard fringe width formula $\beta = \frac{\lambda D}{d}$ requires the paraxial approximation $\sin\theta \approx \tan\theta \approx \theta$, which holds only when $\lambda \ll d$:</p>
+<p>1. For $d = 0.1\text{ cm}$ and $d = 1\text{ cm}$: Here $d < \lambda$ ($0.1\text{ cm} < 3\text{ cm}$ and $1\text{ cm} < 3\text{ cm}$). The maximum possible path difference across all angles is $d \sin\theta \le d < \lambda$. Thus, the path difference cannot even reach $\lambda/2$ (or $\lambda$); no interference fringes form in the field of view. Eq. (14.21) is completely invalid.</p>
+<p>2. For $d = 4\text{ cm}$: Here $d > \lambda$, so maxima can occur at angles satisfying $d \sin\theta = n\lambda$. For $n = 1$:
+$$\sin\theta = \frac{\lambda}{d} = \frac{3}{4} = 0.75 \implies \theta \approx 48.6^\circ$$
+Because $\theta$ is very large, $\tan\theta \neq \sin\theta$. Eq. (14.21) cannot be used; the exact expression $x_n = D \tan[\arcsin(n\lambda/d)]$ must be used instead.</p>''',
+  trap=r'Blindly applying $\beta = \lambda D/d$ when $d < \lambda$ or when diffraction angles are non-paraxial ($\theta \approx 49^\circ$).')
+
+W('q.op.2.10', '2.3', 4,
+  'Intensity Ratio for Path Difference of Lambda/5',
+  'Ghatak 6e Problem 14.16',
+  r'''<p>In the Young’s double-hole experiment, calculate $I/I_{\max}$ where $I$ represents the intensity at a point where the path difference is $\lambda/5$.</p>''',
+  ['c.2.3.1', 'c.2.3.2'],
+  r'''Convert the path difference $\Delta = \lambda/5$ to phase difference $\delta = 2\pi\Delta/\lambda$, then calculate $I/I_{\max} = \cos^2(\delta/2)$.''',
+  r'''<p>The phase difference corresponding to a path difference $\Delta = \lambda/5$ is:
+$$\delta = \frac{2\pi}{\lambda}\Delta = \frac{2\pi}{\lambda}\left(\frac{\lambda}{5}\right) = \frac{2\pi}{5}\text{ rad} = 72^\circ$$
+The intensity distribution for identical slits is:
+$$I = I_{\max} \cos^2\left(\frac{\delta}{2}\right)$$
+$$\frac{I}{I_{\max}} = \cos^2\left(\frac{\pi}{5}\right) = \cos^2(36^\circ)$$
+Using $\cos(36^\circ) = \frac{1 + \sqrt{5}}{4} \approx 0.8090$:
+$$\frac{I}{I_{\max}} = (0.8090)^2 \approx 0.655$$</p>''',
+  trap=r'Evaluating $\cos^2(\delta)$ instead of $\cos^2(\delta/2)$ in the two-beam interference intensity formula.')
+
+# ── 2.3 Circular fringes on perpendicular screen ────────────────────────────
+
+W('q.op.2.11', '2.3', 4,
+  'Circular Fringes on Perpendicular Screen',
+  'Ghatak 6e Example 14.6 & 14.7',
+  r'''<p>Two coherent point sources $S_1$ and $S_2$, separated by distance $d$, are aligned along the $z$-axis perpendicular to an observation screen located at $z = D$ from $S_2$. Show that the fringes are concentric circles. If $d = 0.05\text{ mm}$ and $\lambda = 5000\text{ \AA}$, find the path difference at the center $O$.</p>''',
+  ['c.2.3.3'],
+  r'''Expand the distances from $S_1$ and $S_2$ to a point $(\rho, D)$ on the screen in powers of $\rho/D$ to show that path difference depends only on $\rho$, then evaluate at $\rho=0$.''',
+  r'''<p>Let the origin be at $S_2$, so $S_2 = (0, 0, 0)$ and $S_1 = (0, 0, -d)$. A point $P$ on the screen has coordinates $(x, y, D)$, with radial distance $\rho = \sqrt{x^2 + y^2}$:
+$$S_2 P = \sqrt{D^2 + \rho^2} \approx D\left(1 + \frac{\rho^2}{2D^2}\right) = D + \frac{\rho^2}{2D}$$
+$$S_1 P = \sqrt{(D + d)^2 + \rho^2} \approx (D + d) + \frac{\rho^2}{2(D + d)}$$
+The path difference is:
+$$\Delta = S_1 P - S_2 P \approx d - \frac{\rho^2 d}{2D(D + d)}$$
+Because $\Delta$ depends only on the radial coordinate $\rho$, the loci of constant intensity are concentric circles centered at the axis $\rho = 0$.</p>
+<p>At the central spot $O$ ($\rho = 0$):
+$$\Delta_0 = d = 0.05\text{ mm} = 5 \times 10^{-3}\text{ cm}$$
+With $\lambda = 5000\text{ \AA} = 5 \times 10^{-5}\text{ cm}$:
+$$n = \frac{d}{\lambda} = \frac{5 \times 10^{-3}}{5 \times 10^{-5}} = 100$$
+Because the path difference is an exact integer multiple of $\lambda$, the central spot is bright for all screen distances $D$.</p>''',
+  trap=r'Thinking the fringes are hyperbolas on this screen; they are circular because the observation plane is normal to the axis of cylindrical symmetry.')
+
+W('q.op.2.12', '2.3', 5,
+  'Radii of Circular Fringes for Axial Point Sources',
+  'Ghatak 6e Problem 14.10, 14.11 & 14.12',
+  r'''<p>For two coherent point sources separated by $d$ lying on an axis perpendicular to a screen at distance $D$:
+<ol>
+<li>Show that for $D \gg d$, the ring radius $\rho$ for path difference $\Delta$ is $\rho \approx \frac{D}{\Delta}\sqrt{(d - \Delta)(d + \Delta)}$.</li>
+<li>If $\lambda = 0.5\,\mu\text{m}$, $d = 0.4\text{ mm}$, and $D = 20\text{ cm}$ (so $d = 800\lambda$), calculate the path difference for the first dark ring and first bright ring, and find the radius of the first dark ring for $D = 20\text{ cm}$.</li>
+<li>For $d = 0.5\text{ mm}$, $\lambda = 5 \times 10^{-5}\text{ cm}$, and $D = 100\text{ cm}$ (central spot order $n_0 = 1000$), calculate the radii of the bright rings of order $n = 999$ and $n = 998$.</li>
+</ol></p>''',
+  ['c.2.3.3'],
+  r'''Derive the radial distance from $\sqrt{(D+d)^2+\rho^2} - \sqrt{D^2+\rho^2} = \Delta$, note that path difference decreases outward from $d$ at the center, and substitute the respective orders.''',
+  r'''<p>1. Setting the path difference $S_1 P - S_2 P = \Delta$:
+$$\sqrt{(D + d)^2 + \rho^2} - \sqrt{D^2 + \rho^2} = \Delta$$
+Squaring and collecting terms leads to the exact relation:
+$$\rho = \frac{1}{2\Delta}\sqrt{(d^2 - \Delta^2)[4D^2 + 4Dd + (d^2 - \Delta^2)]}$$
+For $D \gg d > \Delta$:
+$$\rho \approx \frac{D}{\Delta}\sqrt{d^2 - \Delta^2} = \frac{D}{\Delta}\sqrt{(d - \Delta)(d + \Delta)}$$</p>
+<p>2. At the center ($\rho = 0$), $\Delta = d = 800\lambda$. As $\rho$ increases, the path difference decreases from $800\lambda$:
+<ul>
+<li>First dark ring:
+$$\Delta = \left(800 - \frac{1}{2}\right)\lambda = 799.5\lambda = 799.5(0.5 \times 10^{-3}\text{ mm}) = 0.39975\text{ mm}$$</li>
+<li>First bright ring:
+$$\Delta = 799\lambda = 799(0.5 \times 10^{-3}\text{ mm}) = 0.3995\text{ mm}$$</li>
+</ul>
+For $D = 20\text{ cm} = 200\text{ mm}$:
+$$\rho_1 = \frac{200}{0.39975}\sqrt{(0.4)^2 - (0.39975)^2} \approx 500.3 \times \sqrt{0.16 - 0.15980} \approx 500.3 \times 0.01414\text{ mm} \approx 7.08\text{ mm} \approx 0.71\text{ cm}$$</p>
+<p>3. For $d = 0.5\text{ mm} = 500\,\mu\text{m}$, $\lambda = 0.5\,\mu\text{m}$, $D = 1000\text{ mm}$:
+$$\Delta_n = n\lambda$$
+<ul>
+<li>For $n = 999$:
+$$\Delta = 999(0.0005\text{ mm}) = 0.4995\text{ mm}$$
+$$\rho = \frac{1000}{0.4995}\sqrt{(0.5)^2 - (0.4995)^2} \approx 2002 \times \sqrt{0.00049975}\text{ mm} \approx 2002 \times 0.02235\text{ mm} \approx 44.7\text{ mm} = 4.47\text{ cm}$$</li>
+<li>For $n = 998$:
+$$\Delta = 998(0.0005\text{ mm}) = 0.4990\text{ mm}$$
+$$\rho = \frac{1000}{0.4990}\sqrt{(0.5)^2 - (0.4990)^2} \approx 2004 \times \sqrt{0.000999}\text{ mm} \approx 2004 \times 0.0316\text{ mm} \approx 6.33\text{ cm}$$</li>
+</ul></p>''',
+  trap=r'Assuming order increases outward from the center; on a perpendicular screen the path difference is maximum at the center and decreases radially outward.')
+
+# ── 2.4 Fresnel mirror & biprism ────────────────────────────────────────────
+
+W('q.op.2.13', '2.4', 4,
+  'Fresnel Biprism Separation and Base Angle',
+  'Ghatak 6e Problem 14.3',
+  r'''<p>1. In the Fresnel biprism arrangement, show that the separation between the virtual sources is $d = 2(n - 1)a\alpha$, where $a$ is the slit-to-biprism distance, $\alpha$ is the base angle, and $n$ is the refractive index.<br/>
+2. In an arrangement with $b/a = 20$ (where $b$ is the biprism-to-screen distance), the fringe width for sodium light ($\lambda \approx 5893\text{ \AA}$) is $0.1\text{ cm}$. If $n = 1.5$, calculate $\alpha$.</p>''',
+  ['c.2.4.1', 'c.2.4.2'],
+  r'''Use small-angle deviation $\delta_m = (n-1)\alpha$ for each half-prism to find $d = 2a\delta_m$, then substitute into $\beta = \lambda(a+b)/d$ to solve for $\alpha$.''',
+  r'''<p>1. A thin prism with refracting angle $\alpha$ produces an angular deviation $\delta_m = (n - 1)\alpha$. Light from a slit at distance $a$ is refracted into two virtual images, each displaced laterally by $a \delta_m$. The total separation between the two virtual sources is:
+$$d = 2a \delta_m = 2a(n - 1)\alpha$$</p>
+<p>2. The total distance from the source to the screen is $D = a + b$. The fringe width is:
+$$\beta = \frac{\lambda D}{d} = \frac{\lambda (a + b)}{2a(n - 1)\alpha} = \frac{\lambda (1 + b/a)}{2(n - 1)\alpha}$$
+Solving for $\alpha$:
+$$\alpha = \frac{\lambda (1 + b/a)}{2(n - 1)\beta}$$
+Substituting the given values:
+$$\lambda = 5893 \times 10^{-8}\text{ cm}, \quad b/a = 20, \quad n = 1.5, \quad \beta = 0.1\text{ cm}$$
+$$\alpha = \frac{(5893 \times 10^{-8}\text{ cm}) \times (21)}{2(1.5 - 1)(0.1\text{ cm})} = \frac{1.2375 \times 10^{-4}}{0.1} = 1.2375 \times 10^{-2}\text{ rad}$$
+Converting to degrees:
+$$\alpha = 1.2375 \times 10^{-2} \times \frac{180^\circ}{\pi} \approx 0.709^\circ \approx 0.71^\circ$$</p>''',
+  trap=r'Using $D = b$ instead of $D = a + b$ for the total distance from the virtual sources to the observation screen.')
+
+W('q.op.2.14', '2.4', 5,
+  'Displacement Method for Biprism Source Separation',
+  'Ghatak 6e Problem 14.5',
+  r'''<p>In a Fresnel biprism experiment, a convex lens of focal length $f$ is placed between the biprism and the eyepiece.
+<ol>
+<li>Show that if the slit-to-eyepiece distance $D > 4f$, two lens positions form sharp images of the virtual slits at the eyepiece.</li>
+<li>If the measured separations between the image slits are $d_1$ and $d_2$, show that the actual source separation is $d = \sqrt{d_1 d_2}$.</li>
+<li>What occurs if $D < 4f$?</li>
+</ol></p>''',
+  ['c.2.4.1', 'c.2.4.2'],
+  r'''Write the lens equation with $u+v=D$ as a quadratic in $u$, inspect its discriminant for real conjugate roots, and use conjugate magnifications $m_1 m_2 = 1$ to prove $d = \sqrt{d_1 d_2}$.''',
+  r'''<p>1. Let $u$ and $v$ be the object and image distances from the lens:
+$$u + v = D, \qquad \frac{1}{v} - \frac{1}{-u} = \frac{1}{f} \implies \frac{1}{u} + \frac{1}{v} = \frac{1}{f}$$
+$$\frac{u + v}{u v} = \frac{1}{f} \implies u(D - u) = D f \implies u^2 - D u + D f = 0$$
+The roots for $u$ are:
+$$u = \frac{D \pm \sqrt{D^2 - 4Df}}{2}$$
+Real, distinct positions for the lens require a positive discriminant:
+$$D^2 - 4Df > 0 \implies D > 4f$$</p>
+<p>2. Let the two positions correspond to magnifications $m_1$ and $m_2$:
+$$m_1 = \frac{d_1}{d} = \frac{v_1}{u_1}, \qquad m_2 = \frac{d_2}{d} = \frac{v_2}{u_2}$$
+Because the two positions are conjugate, $u_2 = v_1$ and $v_2 = u_1$:
+$$m_1 m_2 = \frac{d_1 d_2}{d^2} = \left(\frac{v_1}{u_1}\right)\left(\frac{u_1}{v_1}\right) = 1 \implies d^2 = d_1 d_2 \implies d = \sqrt{d_1 d_2}$$</p>
+<p>3. If $D < 4f$, the roots are imaginary; the lens cannot form real images of the virtual sources on the crosswires for any lens position.</p>''',
+  trap=r'Confusing the slit-to-lens conjugate distances with the biprism position itself; the biprism merely produces the virtual sources that act as fixed objects for the lens.')
+
+W('q.op.2.15', '2.4', 4,
+  'Geometry of Fresnel Two-Mirror System',
+  'Ghatak 6e Problem 14.8',
+  r'''<p>In Fresnel’s two-mirror arrangement, show that the source slit $S$ and its virtual images $S_1$ and $S_2$ lie on a circle centered at the mirror vertex $M$, and that the source separation is $S_1 S_2 = 2b\theta$, where $b = MS$ and $\theta$ is the angle between the mirrors.</p>''',
+  ['c.2.4.1', 'c.2.4.2'],
+  r'''Show that plane mirror reflections preserve radial distance from the vertex ($MS = MS_1 = MS_2 = b$), and relate the mirror inclination $\theta$ to the angle $2\theta$ subtended by the images.''',
+  r'''<p>Let the intersection point of the mirror surfaces be $M$. By the law of reflection:
+<ul>
+<li>The image $S_1$ produced by mirror 1 satisfies $M S_1 = M S = b$, and line $M S_1$ is rotated by $2\alpha_1$ from $MS$, where $\alpha_1$ is the angle of incidence on mirror 1.</li>
+<li>The image $S_2$ produced by mirror 2 satisfies $M S_2 = M S = b$.</li>
+</ul>
+Because $M S = M S_1 = M S_2 = b$, all three points lie on a common circle of radius $b$ centered at $M$.</p>
+<p>The angle between the normal axes of the two mirrors inclined at angle $\pi - \theta$ is $\theta$. The total angle subtended by the arc $S_1 S_2$ at the center $M$ is:
+$$\angle S_1 M S_2 = 2\theta$$
+For small angles $\theta \ll 1$, the chord length is:
+$$S_1 S_2 = 2b \sin\left(\frac{2\theta}{2}\right) \approx 2b\theta$$</p>''',
+  trap=r'Taking the angle subtended between the virtual images at $M$ to be $\theta$ instead of $2\theta$.')
+
+W('q.op.2.16', '2.4', 4,
+  'Fringes Formed by Lens Behind Double Aperture',
+  'Ghatak 6e Problem 14.14 & 14.15',
+  r'''<p>A plane wave is incident normally on a screen containing two apertures separated by $d$. A convex lens of focal length $f$ is placed behind the apertures.
+<ol>
+<li>Show that the fringe width observed in the back focal plane of the lens is $\beta = f\lambda/d$.</li>
+<li>Explain why parallel straight fringes form when the double-aperture plane is located precisely in the front focal plane of the lens, whereas hyperbolic fringes form if it is placed elsewhere.</li>
+</ol></p>''',
+  ['c.2.4.1', 'c.2.4.2'],
+  r'''Relate diffracted angle $\theta$ to linear position $x = f\tan\theta \approx f\sin\theta$ in the focal plane, and consider how front-focal placement collimates spherical waves into intersecting planar waves.''',
+  r'''<p>1. Parallel bundles of rays diffracted at an angle $\theta$ converge to a point $x$ in the focal plane of the lens:
+$$x = f \tan\theta \approx f \sin\theta$$
+The condition for an interference maximum is $d \sin\theta = n\lambda \implies \sin\theta = \frac{n\lambda}{d}$. Therefore:
+$$x_n = f\left(\frac{n\lambda}{d}\right) \implies \beta = x_{n+1} - x_n = \frac{f\lambda}{d}$$</p>
+<p>2. When the apertures are located precisely at the front focal plane, spherical wavefronts from the slits become planar after passing through the lens. The two interfering fields are plane waves intersecting at an angle $2\theta \approx d/f$, which produces straight-line fringes. When the aperture plane is placed elsewhere, the emerging wavefronts have spherical curvature, producing hyperbolic conic sections on the planar screen.</p>''',
+  trap=r'Thinking the fringe width depends on the aperture-to-lens distance; in the back focal plane the fringe spacing is strictly $f\lambda/d$.')
+
+# ── 2.5 White light ─────────────────────────────────────────────────────────
+
+W('q.op.2.17', '2.5', 4,
+  'White Light Interference at Specific Path Differences',
+  'Ghatak 6e Problem 14.9',
+  r'''<p>In a double-hole experiment illuminated by white light ($4000\text{ \AA} \le \lambda \le 7000\text{ \AA}$), consider two points on the screen: one with an optical path difference of $5000\text{ \AA}$ and the other with an optical path difference of $40000\text{ \AA}$. Find the visible wavelengths that undergo constructive and destructive interference at these two points, and state the resulting color appearance at each point.</p>''',
+  ['c.2.5.1'],
+  r'''Set $\Delta = n\lambda$ for constructive and $\Delta = (n+1/2)\lambda$ for destructive interference, test integer orders $n$, and keep only solutions inside $4000\text{ \AA}$ to $7000\text{ \AA}$.''',
+  r'''<p>1. <b>At $\Delta = 5000\text{ \AA}$:</b>
+<ul>
+<li><b>Constructive interference ($\Delta = n\lambda$):</b>
+$$\lambda = \frac{5000\text{ \AA}}{n}$$
+For $n = 1$: $\lambda = 5000\text{ \AA}$ (visible, blue-green).<br/>
+For $n = 2$: $\lambda = 2500\text{ \AA}$ (ultraviolet, not visible).</li>
+<li><b>Destructive interference ($\Delta = (n + 1/2)\lambda$):</b>
+$$\lambda = \frac{5000\text{ \AA}}{n + 1/2}$$
+For $n = 0$: $\lambda = 10000\text{ \AA}$ (infrared, not visible).<br/>
+For $n = 1$: $\lambda = \frac{5000}{1.5} \approx 3333\text{ \AA}$ (ultraviolet).</li>
+<li><b>Appearance:</b> Strong constructive interference near $5000\text{ \AA}$ with no visible cancellation gives the region a distinct blue-green appearance.</li>
+</ul></p>
+<p>2. <b>At $\Delta = 40000\text{ \AA}$:</b>
+<ul>
+<li><b>Constructive interference ($\lambda = 40000/n\text{ \AA}$):</b>
+<ul>
+<li>$n = 6 \implies \lambda \approx 6667\text{ \AA}$ (red)</li>
+<li>$n = 7 \implies \lambda \approx 5714\text{ \AA}$ (yellow-green)</li>
+<li>$n = 8 \implies \lambda = 5000\text{ \AA}$ (green)</li>
+<li>$n = 9 \implies \lambda \approx 4444\text{ \AA}$ (blue)</li>
+<li>$n = 10 \implies \lambda = 4000\text{ \AA}$ (violet)</li>
+</ul></li>
+<li><b>Destructive interference ($\lambda = 40000/(n + 1/2)\text{ \AA}$):</b>
+<ul>
+<li>$n = 6 \implies \lambda \approx 6154\text{ \AA}$ (orange)</li>
+<li>$n = 7 \implies \lambda \approx 5333\text{ \AA}$ (green)</li>
+<li>$n = 8 \implies \lambda \approx 4706\text{ \AA}$ (blue-cyan)</li>
+<li>$n = 9 \implies \lambda \approx 4211\text{ \AA}$ (violet)</li>
+</ul></li>
+<li><b>Appearance:</b> Multiple constructive and destructive wavelengths alternate across the visible range, resulting in uniform white illumination.</li>
+</ul></p>''',
+  trap=r'Expecting colored fringes at large path differences ($40000\text{ \AA}$); overlapping orders wash out visibility, yielding general white light.')
+
+# ── 2.3 Displacement by thin plate ──────────────────────────────────────────
+
+W('q.op.2.18', '2.3', 4,
+  'Mica Sheet Thickness from Fringe Shift',
+  'Ghatak 6e Example 14.10',
+  r'''<p>In a double-slit interference arrangement, one of the slits is covered by a thin mica sheet of refractive index $1.58$. The slit separation is $d = 0.1\text{ cm}$ and the screen distance is $D = 50\text{ cm}$. Due to the introduction of the mica sheet, the central fringe shifts by $0.2\text{ cm}$. Determine the thickness of the mica sheet.</p>''',
+  ['c.2.3.4'],
+  r'''Use the fringe shift formula $\Delta_{\text{shift}} = \frac{D(n-1)t}{d}$ and solve directly for the plate thickness $t$.''',
+  r'''<p>The displacement of the fringe pattern is:
+$$\Delta_{\text{shift}} = \frac{D(n - 1)t}{d}$$
+Solving for the thickness $t$:
+$$t = \frac{d\,\Delta_{\text{shift}}}{D(n - 1)}$$
+Given:
+$$d = 0.1\text{ cm}, \quad \Delta_{\text{shift}} = 0.2\text{ cm}, \quad D = 50\text{ cm}, \quad n = 1.58$$
+$$t = \frac{0.1 \times 0.2}{50 \times (1.58 - 1)} = \frac{0.02}{50 \times 0.58} = \frac{0.02}{29} \approx 6.9 \times 10^{-4}\text{ cm} \approx 6.9\,\mu\text{m}$$</p>''',
+  trap=r'Using $n$ instead of $(n - 1)$ for the extra optical path introduced by replacing air with the dielectric plate.')
+
+W('q.op.2.19', '2.3', 4,
+  'Mica Sheet Thickness from Fringe Order Shift',
+  'Ghatak 6e Example 14.11',
+  r'''<p>In a double-slit experiment using a sodium lamp ($\lambda = 5893\text{ \AA}$), introducing a mica sheet ($n = 1.58$) causes the central fringe to move to the position previously occupied by the 11th bright fringe. Determine the thickness of the mica sheet.</p>''',
+  ['c.2.3.4'],
+  r'''Equate the additional optical path difference $(n-1)t$ to the path difference of 11 bright fringes, $11\lambda$.''',
+  r'''<p>The position previously occupied by the 11th bright fringe corresponds to a path difference of $11\lambda$:
+$$(n - 1)t = 11\lambda$$
+Solving for $t$:
+$$t = \frac{11\lambda}{n - 1}$$
+Given $\lambda = 5893 \times 10^{-8}\text{ cm}$ and $n = 1.58$:
+$$t = \frac{11 \times 5893 \times 10^{-8}\text{ cm}}{1.58 - 1} = \frac{6.4823 \times 10^{-4}\text{ cm}}{0.58} \approx 1.12 \times 10^{-3}\text{ cm} = 11.2\,\mu\text{m}$$</p>''',
+  trap=r'Using $11\lambda/2$ or $10.5\lambda$ instead of $11\lambda$ for the shift corresponding to the 11th bright fringe.')
+
+W('q.op.2.20', '2.3', 4,
+  'Mica Plate Thickness in Double Hole Setup',
+  'Ghatak 6e Problem 14.4',
+  r'''<p>In a Young’s double-hole experiment, a thin mica sheet ($n = 1.5$) is introduced in the path of one of the beams. If the central fringe shifts by $0.2\text{ cm}$, calculate the thickness of the mica sheet. Assume $d = 0.1\text{ cm}$ and $D = 50\text{ cm}$.</p>''',
+  ['c.2.3.4'],
+  r'''Relate lateral shift $\Delta_{\text{shift}}$ to sheet thickness using $t = d\,\Delta_{\text{shift}}/[D(n-1)]$.''',
+  r'''<p>Using the fringe shift equation:
+$$t = \frac{d\,\Delta_{\text{shift}}}{D(n - 1)}$$
+Substituting the values:
+$$t = \frac{(0.1\text{ cm})(0.2\text{ cm})}{(50\text{ cm})(1.5 - 1)} = \frac{0.02}{25} = 8.0 \times 10^{-4}\text{ cm} = 8.0\,\mu\text{m}$$</p>''',
+  trap=r'Inverting the ratio $d/D$ when rearranging the fringe shift equation.')
+
+# ── 2.5 Lloyd's mirror ──────────────────────────────────────────────────────
+
+W('q.op.2.21', '2.5', 4,
+  'Lloyd Mirror Fringe Extent and Compensation',
+  'Ghatak 6e Problem 14.2',
+  r'''<p>A point source $S$ emitting waves of frequency $\nu = 6 \times 10^{14}\text{ s}^{-1}$ is placed $1\text{ mm}$ above the horizontal plane of a Lloyd's mirror. The mirror extends from $A$ to $B$ with $PA = 5\text{ cm}$ and $AB = 5\text{ cm}$, where $P$ is the projection of $S$ onto the mirror plane. The screen $LOM$ is located $190\text{ cm}$ beyond $B$.
+<ol>
+<li>Determine the extent of the region on the screen where fringes appear, and calculate the total number of visible fringes.</li>
+<li>Calculate the thickness of a mica sheet ($n = 1.5$) that must be placed in the direct beam to bring the lowest fringe to the position of the central fringe. Take $c = 3 \times 10^{10}\text{ cm/s}$.</li>
+</ol></p>''',
+  ['c.2.5.2', 'c.2.5.3'],
+  r'''Trace rays reflected from both mirror edges to find the illuminated region on the screen, compute fringe width $\beta = \lambda D/d$, and equate the required shift of the lowest edge to $D(n-1)t/d$.''',
+  r'''<p>1. <b>Wavelength and geometry:</b>
+$$\lambda = \frac{c}{\nu} = \frac{3 \times 10^{10}\text{ cm/s}}{6 \times 10^{14}\text{ s}^{-1}} = 5 \times 10^{-5}\text{ cm}$$
+The source $S$ is at height $h = 1\text{ mm} = 0.1\text{ cm}$. Its virtual image $S'$ is located $0.1\text{ cm}$ below the mirror line, so:
+$$d = 2h = 0.2\text{ cm}$$
+The screen distance from the source plane is $D = PA + AB + BO = 5 + 5 + 190 = 200\text{ cm}$.
+<ul>
+<li>Ray reflecting from edge $A$ ($x_A = 5\text{ cm}$):<br/>
+The ray from $S'(0, -0.1\text{ cm})$ through $A(5\text{ cm}, 0)$ has slope:
+$$\tan\theta_A = \frac{0.1}{5} = 0.02$$
+On the screen at $x = 200\text{ cm}$, the height is:
+$$y_A = 0.02 \times 200 = 4.0\text{ cm} \quad (\text{or relative to } A: 0.02 \times 195 = 3.9\text{ cm})$$</li>
+<li>Ray reflecting from edge $B$ ($x_B = 10\text{ cm}$):<br/>
+The ray from $S'$ through $B(10\text{ cm}, 0)$ has slope:
+$$\tan\theta_B = \frac{0.1}{10} = 0.01$$
+On the screen at $x = 200\text{ cm}$, the height is:
+$$y_B = 0.01 \times 200 = 2.0\text{ cm} \quad (\text{or relative to } B: 0.01 \times 190 = 1.9\text{ cm})$$</li>
+</ul>
+The region of overlap on the screen is:
+$$\text{Width} = y_A - y_B = 3.9\text{ cm} - 1.9\text{ cm} = 2.0\text{ cm}$$
+The fringe spacing is:
+$$\beta = \frac{\lambda D}{d} = \frac{(5 \times 10^{-5}\text{ cm})(200\text{ cm})}{0.2\text{ cm}} = 0.05\text{ cm}$$
+The total number of fringes in this region is:
+$$N = \frac{2.0\text{ cm}}{0.05\text{ cm}} = 40\text{ fringes}$$</p>
+<p>2. <b>Thickness of the mica sheet:</b><br/>
+The lowest boundary of the fringe system is at $y_B = 1.9\text{ cm}$. For this point to become the central zero-order fringe, the fringe pattern must shift by $\Delta_{\text{shift}} = 1.9\text{ cm}$. Placing the sheet in the direct beam retards that beam, shifting the pattern:
+$$\Delta_{\text{shift}} = \frac{D(n - 1)t}{d} \implies t = \frac{d\,\Delta_{\text{shift}}}{D(n - 1)}$$
+$$t = \frac{(0.2\text{ cm})(1.9\text{ cm})}{(200\text{ cm})(1.5 - 1)} = \frac{0.38}{100} = 3.8 \times 10^{-3}\text{ cm} = 38\,\mu\text{m}$$</p>''',
+  trap=r'Taking $d = h$ instead of $d = 2h$ for the separation between the real source and its virtual image.')
+
+# ── 2.6 Non-reflecting films ────────────────────────────────────────────────
+
+W('q.op.2.22', '2.6', 4,
+  'Reflected and Transmitted Amplitudes in Thin Film',
+  'Ghatak 6e Example 15.1',
+  r'''<p>A dielectric film of refractive index $n_f = 1.36$ is deposited in air ($n_a = 1.0$) on a glass substrate ($n_g = 1.5$). Assuming normal incidence, calculate the amplitudes of the reflected rays $a_1, a_5$ and the transmitted rays $a_4, a_7$. Explain why interference fringes in transmission exhibit poor contrast compared to reflection.</p>''',
+  ['c.2.6.1', 'c.2.6.2', 'c.2.6.3'],
+  r'''Compute Fresnel reflection and transmission coefficients at both interfaces, calculate amplitudes of the first two reflected and transmitted rays, and compare their amplitude ratios.''',
+  r'''<p>The normal-incidence reflection and transmission coefficients are:
+<ul>
+<li>Air-film boundary:
+$$r_1 = \frac{n_a - n_f}{n_a + n_f} = \frac{1 - 1.36}{1 + 1.36} = -\frac{0.36}{2.36} \approx -0.153$$
+$$t_1 = \frac{2n_a}{n_a + n_f} = \frac{2}{2.36} \approx 0.847, \qquad t_1' = \frac{2n_f}{n_a + n_f} = \frac{2.72}{2.36} \approx 1.153$$</li>
+<li>Film-glass boundary:
+$$r_2 = \frac{n_f - n_g}{n_f + n_g} = \frac{1.36 - 1.5}{1.36 + 1.5} = -\frac{0.14}{2.86} \approx -0.049$$
+$$t_2 = \frac{2n_f}{n_f + n_g} = \frac{2.72}{2.86} \approx 0.951$$</li>
+</ul></p>
+<p>For an incident ray of amplitude $a$:
+<ul>
+<li><b>Reflected rays:</b>
+<ul>
+<li>Ray 1 (reflected at top surface):
+$$a_1 = r_1 a = -0.153 a$$</li>
+<li>Ray 5 (internally reflected at lower surface, then transmitted into air):
+$$a_5 = t_1 r_2 t_1' a \approx (0.847)(-0.049)(1.153) a \approx -0.048 a$$</li>
+</ul>
+The two reflected components have comparable amplitudes ($|a_1| \approx 0.15a$, $|a_5| \approx 0.05a$ to $0.1a$), allowing for significant destructive interference and high fringe contrast.</li>
+<li><b>Transmitted rays:</b>
+<ul>
+<li>Ray 4 (directly transmitted):
+$$a_4 = t_1 t_2 a \approx (0.847)(0.951) a \approx 0.806 a$$</li>
+<li>Ray 7 (undergoes two internal reflections before transmitting):
+$$a_7 = t_1 (-r_2)(-r_1) t_2 a \approx a_4 (r_1 r_2) \approx (0.806)(-0.153)(-0.049) a \approx 0.006 a$$</li>
+</ul>
+Because $|a_7| \ll |a_4|$ ($0.006a$ versus $0.806a$), the intensity variation $\sim 4 a_4 a_7$ is negligible compared to the background $a_4^2$, resulting in very poor fringe contrast in transmission.</li>
+</ul></p>''',
+  trap=r'Assuming transmitted fringes have high visibility; because the first transmitted beam carries nearly all the energy, the second beam is far too weak to create significant contrast.')
+
+W('q.op.2.23', '2.6', 5,
+  'Antireflection Coating Thickness and Bandwidth',
+  'Ghatak 6e Problem 15.3',
+  r'''<p>A non-reflecting coating of refractive index $n = 1.38$ is applied to glass.
+<ol>
+<li>If the thickness is $9 \times 10^{-6}\text{ cm}$, calculate the wavelengths in the visible spectrum ($4000\text{ \AA} \le \lambda \le 7000\text{ \AA}$) for which the film is non-reflecting.</li>
+<li>Repeat the calculation for a film thickness of $45 \times 10^{-6}\text{ cm}$.</li>
+<li>Explain why the thinner film is preferred for antireflective coatings.</li>
+</ol></p>''',
+  ['c.2.6.1', 'c.2.6.2'],
+  r'''Apply the destructive condition in reflection $2nd = (m+1/2)\lambda$ for $n_{\text{air}} < n_{\text{film}} < n_{\text{glass}}$, find $\lambda_m$, and consider the sensitivity $d\delta/d\lambda \propto d$.''',
+  r'''<p>For $n_{\text{air}} < n_{\text{film}} < n_{\text{glass}}$, reflections at both interfaces undergo a $\pi$ phase shift. Destructive interference requires:
+$$2 n d = \left(m + \frac{1}{2}\right)\lambda \implies \lambda_m = \frac{4 n d}{2m + 1} \quad (m = 0, 1, 2, \dots)$$</p>
+<p>1. For $d = 9 \times 10^{-6}\text{ cm}$:
+$$4 n d = 4(1.38)(9 \times 10^{-6}\text{ cm}) = 4.968 \times 10^{-5}\text{ cm} = 4968\text{ \AA}$$
+<ul>
+<li>For $m = 0$: $\lambda_0 = 4968\text{ \AA}$ (visible, cyan)</li>
+<li>For $m = 1$: $\lambda_1 = \frac{4968}{3} = 1656\text{ \AA}$ (ultraviolet)</li>
+</ul>
+Only $\lambda = 4968\text{ \AA}$ lies in the visible range.</p>
+<p>2. For $d = 45 \times 10^{-6}\text{ cm}$:
+$$4 n d = 4(1.38)(45 \times 10^{-6}\text{ cm}) = 2.484 \times 10^{-4}\text{ cm} = 24840\text{ \AA}$$
+<ul>
+<li>$m = 1 \implies \lambda_1 = \frac{24840}{3} = 8280\text{ \AA}$ (infrared)</li>
+<li>$m = 2 \implies \lambda_2 = \frac{24840}{5} = 4968\text{ \AA}$ (visible)</li>
+<li>$m = 3 \implies \lambda_3 = \frac{24840}{7} \approx 3549\text{ \AA}$ (ultraviolet)</li>
+</ul>
+Only $\lambda = 4968\text{ \AA}$ lies in the visible range.</p>
+<p>3. <b>Comparison:</b><br/>
+The reflectance varies with phase thickness according to $\cos\left(\frac{4\pi n d}{\lambda}\right)$. The derivative with respect to wavelength is:
+$$\left|\frac{d\delta}{d\lambda}\right| \propto d$$
+A thicker film causes the phase condition to vary much more rapidly with wavelength. Consequently, the reflectance minimum for $d = 45 \times 10^{-6}\text{ cm}$ is extremely narrow, leading to high reflectivity across most of the visible spectrum. The thin film ($d = 9 \times 10^{-6}\text{ cm}$) maintains low reflectance over a broad wavelength band.</p>''',
+  trap=r'Thinking both film thicknesses perform equally well because they have the same center wavelength; the thicker film has much narrower bandwidth and reflects most of the visible spectrum.')
+
+# ── 2.7 Wedge film ──────────────────────────────────────────────────────────
+
+W('q.op.2.24', '2.7', 4,
+  'Air and Oil Wedge Fringe Spacing',
+  'Ghatak 6e Problem 15.1',
+  r'''<p>A glass plate of refractive index $1.6$ is in contact with another glass plate of refractive index $1.8$ along a line, forming an air wedge with an angle of $0.5'$. Light of wavelength $5000\text{ \AA}$ is incident normally, and the film is viewed from above.
+<ol>
+<li>Calculate the fringe spacing.</li>
+<li>The entire apparatus is then immersed in an oil of refractive index $1.7$. Describe the qualitative change in the fringe pattern and compute the new fringe width.</li>
+</ol></p>''',
+  ['c.2.7.1'],
+  r'''Convert the wedge angle to radians, apply $\beta = \lambda/(2n\alpha)$, and inspect the reflection phase changes when the medium between the plates changes from air to oil.''',
+  r'''<p>1. <b>In air ($n_{\text{film}} = 1.0$):</b><br/>
+The wedge angle in radians is:
+$$\alpha = 0.5' = \frac{0.5}{60} \times \frac{\pi}{180}\text{ rad} \approx 1.4544 \times 10^{-4}\text{ rad}$$
+The fringe width for an air wedge is:
+$$\beta = \frac{\lambda}{2 n_{\text{air}} \alpha} = \frac{5000 \times 10^{-8}\text{ cm}}{2(1.0)(1.4544 \times 10^{-4})} \approx 0.1719\text{ cm} \approx 1.72\text{ mm}$$</p>
+<p>2. <b>In oil ($n_{\text{oil}} = 1.7$):</b>
+<ul>
+<li><b>Refractive index condition:</b> The refractive indices now satisfy $n_1 < n_{\text{film}} < n_2$ ($1.6 < 1.7 < 1.8$). Light reflects at both the top (plate 1 to oil) and bottom (oil to plate 2) interfaces from an optically rarer medium toward a denser medium. Both reflections undergo an abrupt phase change of $\pi$. The relative reflection phase change is therefore:
+$$\Delta\phi = \pi - \pi = 0$$
+In an air film, only the bottom reflection undergoes a $\pi$ phase change, producing a dark fringe at the apex ($x = 0$). In the oil film, zero path difference gives constructive interference, so the contact edge becomes a bright fringe.</li>
+<li><b>New fringe width:</b>
+$$\beta' = \frac{\lambda}{2 n_{\text{oil}} \alpha} = \frac{\beta}{n_{\text{oil}}} = \frac{0.1719\text{ cm}}{1.7} \approx 0.1011\text{ cm} \approx 1.01\text{ mm}$$</li>
+</ul></p>''',
+  trap=r'Forgetting that when $n_1 < n_{\text{film}} < n_2$, both reflections introduce a $\pi$ phase shift, which flips the contact edge from dark to bright.')
+
+W('q.op.2.25', '2.7', 4,
+  'Wedge Angle from Fringe Count',
+  'Ghatak 6e Problem 15.2',
+  r'''<p>Two plane glass plates are placed on top of one another. A thin spacer is inserted at one edge to create a wedge-shaped air film. When illuminated normally with $\lambda = 6000\text{ \AA}$, $100$ interference fringes are observed per centimeter. Calculate the wedge angle.</p>''',
+  ['c.2.7.1'],
+  r'''Determine fringe width $\beta$ from the fringe density ($1\text{ cm}/100$), then use $\beta = \lambda/(2\alpha)$ to solve for the wedge angle $\alpha$.''',
+  r'''<p>The fringe width $\beta$ is:
+$$\beta = \frac{1\text{ cm}}{100} = 0.01\text{ cm} = 10^{-4}\text{ m}$$
+From the wedge formula for an air film ($n = 1$):
+$$\beta = \frac{\lambda}{2\alpha} \implies \alpha = \frac{\lambda}{2\beta}$$
+Given $\lambda = 6000 \times 10^{-8}\text{ cm} = 6 \times 10^{-5}\text{ cm}$:
+$$\alpha = \frac{6 \times 10^{-5}\text{ cm}}{2(0.01\text{ cm})} = 3 \times 10^{-3}\text{ rad}$$
+Converting to degrees:
+$$\alpha = 3 \times 10^{-3} \times \frac{180^\circ}{\pi} \approx 0.172^\circ \approx 10.3'$$</p>''',
+  trap=r'Missing the factor of $2$ in the denominator of the wedge angle formula $\alpha = \lambda/(2\beta)$.')
+
+# ── 2.7 Newton's rings ──────────────────────────────────────────────────────
+
+W('q.op.2.26', '2.7', 4,
+  'Newton Rings with Vertically Raised Lens',
+  'Ghatak 6e Example 15.2',
+  r'''<p>In a Newton’s rings arrangement with $\lambda = 6.4 \times 10^{-5}\text{ cm}$ and a plano-convex lens of radius of curvature $R = 100\text{ cm}$:
+<ol>
+<li>Find the radii of the first and second dark rings.</li>
+<li>If the lens is raised vertically by $\Delta h = \lambda/4 = 1.6 \times 10^{-5}\text{ cm}$, describe the change in the pattern at the center and calculate the new radii of the first two dark rings.</li>
+</ol></p>''',
+  ['c.2.7.3'],
+  r'''Use $r_m = \sqrt{m\lambda R}$ in contact, add $2\Delta h$ to the round-trip path difference when raised, and find the new radii where the net path difference is a half-integer multiple of $\lambda$.''',
+  r'''<p>1. <b>Lens in contact:</b><br/>
+The radius of the $m$-th dark ring is:
+$$r_m = \sqrt{m \lambda R}$$
+<ul>
+<li>For $m = 1$:
+$$r_1 = \sqrt{(1)(6.4 \times 10^{-5}\text{ cm})(100\text{ cm})} = \sqrt{6.4 \times 10^{-3}}\text{ cm} = 0.080\text{ cm}$$</li>
+<li>For $m = 2$:
+$$r_2 = \sqrt{(2)(6.4 \times 10^{-5}\text{ cm})(100\text{ cm})} = \sqrt{1.28 \times 10^{-2}}\text{ cm} \approx 0.113\text{ cm}$$</li>
+</ul></p>
+<p>2. <b>Lens raised by $\Delta h = \lambda/4$:</b><br/>
+The film thickness at radial distance $r$ becomes:
+$$t(r) = \Delta h + \frac{r^2}{2R} = \frac{\lambda}{4} + \frac{r^2}{2R}$$
+The total optical path difference in reflection is:
+$$\Delta = 2t + \frac{\lambda}{2} = 2\left(\frac{\lambda}{4} + \frac{r^2}{2R}\right) + \frac{\lambda}{2} = \lambda + \frac{r^2}{R}$$
+<ul>
+<li>At the center ($r = 0$), $\Delta = \lambda$, which satisfies the condition for a maximum; the center changes from dark to bright.</li>
+<li>Dark rings occur where the path difference is a half-integer multiple of $\lambda$:
+$$\lambda + \frac{r^2}{R} = \left(m + \frac{1}{2}\right)\lambda \implies \frac{r^2}{R} = \left(m - \frac{1}{2}\right)\lambda$$
+<ul>
+<li>First dark ring ($m = 1$):
+$$r_1' = \sqrt{\frac{1}{2}\lambda R} = \sqrt{\frac{1}{2}(6.4 \times 10^{-3})}\text{ cm} \approx 0.0566\text{ cm}$$</li>
+<li>Second dark ring ($m = 2$):
+$$r_2' = \sqrt{\frac{3}{2}\lambda R} = \sqrt{1.5(6.4 \times 10^{-3})}\text{ cm} \approx 0.0980\text{ cm}$$</li>
+</ul></li>
+</ul>
+As the lens is raised, the rings contract toward the center.</p>''',
+  trap=r'Assuming raising the lens causes the rings to expand; the added central gap causes rings to contract inward and collapse at the center.')
+
+W('q.op.2.27', '2.7', 4,
+  'Washing Out of Newton Rings for Doublet',
+  'Ghatak 6e Example 15.3, Problem 15.6 & 15.7',
+  r'''<p>A Newton’s rings experiment is illuminated by light containing two closely spaced wavelengths, $\lambda_1 = 4000\text{ \AA}$ and $\lambda_2 = 4002\text{ \AA}$, with $R = 400\text{ cm}$.
+<ol>
+<li>Find the distance from the point of contact where the ring system first washes out.</li>
+<li>If the lens is raised vertically, find the distance the lens must travel upward for the central region of the fringe system to first disappear.</li>
+</ol></p>''',
+  ['c.2.7.3'],
+  r'''Set the path difference condition for coincidence of bright and dark rings $2t \approx \lambda^2/(2\Delta\lambda)$, relate $2t = r^2/R$ for radial position, and equate $2t_0 = \lambda^2/(2\Delta\lambda)$ for central washout.''',
+  r'''<p>1. <b>Radial position of disappearance:</b><br/>
+The rings wash out when the bright rings of $\lambda_1$ fall directly on the dark rings of $\lambda_2$:
+$$2t = m \lambda_1 = \left(m + \frac{1}{2}\right)\lambda_2$$
+$$2t\left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = \frac{1}{2} \implies 2t \frac{\Delta\lambda}{\lambda_1 \lambda_2} = \frac{1}{2} \implies 2t \approx \frac{\lambda^2}{2\Delta\lambda}$$
+For $\lambda \approx 4000\text{ \AA} = 4 \times 10^{-5}\text{ cm}$ and $\Delta\lambda = 2\text{ \AA} = 2 \times 10^{-8}\text{ cm}$:
+$$2t = \frac{(4 \times 10^{-5}\text{ cm})^2}{2(2 \times 10^{-8}\text{ cm})} = \frac{1.6 \times 10^{-9}}{4 \times 10^{-8}} = 0.04\text{ cm}$$
+The film thickness is related to the radial position by $2t = \frac{r^2}{R}$. Therefore:
+$$r^2 = 2t R = (0.04\text{ cm})(400\text{ cm}) = 16\text{ cm}^2 \implies r = 4.0\text{ cm}$$</p>
+<p>2. <b>Vertical displacement of the lens:</b><br/>
+When the lens is raised by $t_0$, the air gap at the center is $t_0$, so the round-trip path length is $2t_0$. The fringes at the center wash out when:
+$$2t_0\left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = \frac{1}{2} \implies t_0 = \frac{\lambda^2}{4\Delta\lambda}$$
+$$t_0 = \frac{(4 \times 10^{-5}\text{ cm})^2}{4(2 \times 10^{-8}\text{ cm})} = \frac{1.6 \times 10^{-9}}{8 \times 10^{-8}} = 0.02\text{ cm} = 0.2\text{ mm}$$</p>''',
+  trap=r'Confusing the round-trip path change $2t_0$ with the vertical displacement of the lens $t_0$, leading to a factor of $2$ error in lens lift.')
+
+W('q.op.2.28', '2.7', 4,
+  'Radii of Newton Bright Rings',
+  'Ghatak 6e Problem 15.4',
+  r'''<p>In a Newton’s rings arrangement, the radius of curvature of the curved surface of the plano-convex lens is $100\text{ cm}$. For $\lambda = 6 \times 10^{-5}\text{ cm}$, what will be the radii of the 9th and 10th bright rings?</p>''',
+  ['c.2.7.3'],
+  r'''Use the bright-ring condition $r_m = \sqrt{(m - 1/2)\lambda R}$ for reflection from an air film with $m=9$ and $m=10$.''',
+  r'''<p>The condition for the $m$-th bright ring is:
+$$2t = \left(m - \frac{1}{2}\right)\lambda \implies r_m^2 = \left(m - \frac{1}{2}\right)\lambda R$$
+Given $\lambda = 6 \times 10^{-5}\text{ cm}$ and $R = 100\text{ cm}$:
+$$\lambda R = (6 \times 10^{-5}\text{ cm})(100\text{ cm}) = 6 \times 10^{-3}\text{ cm}^2$$
+<ul>
+<li>For the 9th bright ring ($m = 9$):
+$$r_9 = \sqrt{\left(9 - \frac{1}{2}\right)\lambda R} = \sqrt{8.5 \times 6 \times 10^{-3}}\text{ cm} = \sqrt{0.051}\text{ cm} \approx 0.2258\text{ cm}$$</li>
+<li>For the 10th bright ring ($m = 10$):
+$$r_{10} = \sqrt{\left(10 - \frac{1}{2}\right)\lambda R} = \sqrt{9.5 \times 6 \times 10^{-3}}\text{ cm} = \sqrt{0.057}\text{ cm} \approx 0.2387\text{ cm}$$</li>
+</ul></p>''',
+  trap=r'Using $m\lambda R$ (the dark ring formula) instead of $(m - 1/2)\lambda R$ for bright rings in reflection.')
+
+W('q.op.2.29', '2.7', 4,
+  'Wavelength from Newton Rings Difference Method',
+  'Ghatak 6e Problem 15.5',
+  r'''<p>In a Newton’s rings experiment, the radius of curvature of the curved lens surface is $50\text{ cm}$. The measured radii of the 9th and 16th dark rings are $0.18\text{ cm}$ and $0.2235\text{ cm}$, respectively. Calculate the wavelength of light. Why does using $r_m^2 = m\lambda R$ directly for a single ring yield an inaccurate result?</p>''',
+  ['c.2.7.3'],
+  r'''Account for the nonzero contact gap $t_0$ at the center, use the difference formula $r_{m+p}^2 - r_m^2 = p\lambda R$ to eliminate $t_0$, and solve for $\lambda$.''',
+  r'''<p>Due to imperfect optical contact, dust particles, or localized surface deformation, the air film thickness at the center is usually nonzero ($t_0 > 0$). The true thickness at radius $r$ is:
+$$t = t_0 + \frac{r^2}{2R}$$
+The condition for the $m$-th dark ring becomes:
+$$2\left(t_0 + \frac{r_m^2}{2R}\right) = m\lambda \implies r_m^2 = m\lambda R - 2R t_0$$
+Because $t_0$ is unknown, applying $r_m^2 = m\lambda R$ directly introduces error.</p>
+<p>Taking the difference between two ring orders eliminates $t_0$:
+$$r_{m+p}^2 - r_m^2 = p \lambda R \implies \lambda = \frac{r_{m+p}^2 - r_m^2}{p R}$$
+Here $m = 9$, $m + p = 16 \implies p = 7$, $R = 50\text{ cm}$:
+$$r_{16}^2 = (0.2235\text{ cm})^2 \approx 0.049952\text{ cm}^2$$
+$$r_9^2 = (0.18\text{ cm})^2 = 0.032400\text{ cm}^2$$
+$$r_{16}^2 - r_9^2 = 0.049952 - 0.032400 = 0.017552\text{ cm}^2$$
+$$\lambda = \frac{0.017552\text{ cm}^2}{7 \times 50\text{ cm}} = \frac{0.017552}{350}\text{ cm} \approx 5.015 \times 10^{-5}\text{ cm} = 5015\text{ \AA}$$</p>''',
+  trap=r'Calculating $\lambda$ directly from a single ring without subtracting a reference ring, which ignores the nonzero central air gap.')
+
+W('q.op.2.30', '2.7', 4,
+  'Newton Rings Between Two Curved Surfaces',
+  'Ghatak 6e Problem 15.8',
+  r'''<p>An equiconvex lens of radius of curvature $50\text{ cm}$ is placed on top of another equiconvex lens of radius of curvature $100\text{ cm}$. The air film formed between them produces Newton's rings. Calculate the radii of the dark rings for $\lambda = 6000\text{ \AA}$.</p>''',
+  ['c.2.7.3'],
+  r'''Combine the curvatures to find the effective radius $1/R_{\text{eff}} = 1/R_1 + 1/R_2$, then use $r_m = \sqrt{m\lambda R_{\text{eff}}}$.''',
+  r'''<p>Let the upper surface have radius $R_1 = 50\text{ cm}$ and the lower surface have radius $R_2 = 100\text{ cm}$. The air gap thickness at radial distance $r$ from the contact point is:
+$$t(r) = t_1(r) + t_2(r) \approx \frac{r^2}{2R_1} + \frac{r^2}{2R_2} = \frac{r^2}{2}\left(\frac{1}{R_1} + \frac{1}{R_2}\right) = \frac{r^2}{2 R_{\text{eff}}}$$
+The effective radius of curvature is:
+$$\frac{1}{R_{\text{eff}}} = \frac{1}{R_1} + \frac{1}{R_2} = \frac{1}{50} + \frac{1}{100} = \frac{3}{100}\text{ cm}^{-1} \implies R_{\text{eff}} = \frac{100}{3}\text{ cm}$$
+The condition for dark rings is:
+$$r_m^2 = m \lambda R_{\text{eff}}$$
+For $\lambda = 6000 \times 10^{-8}\text{ cm} = 6 \times 10^{-5}\text{ cm}$:
+$$r_m = \sqrt{m \left(6 \times 10^{-5}\text{ cm}\right)\left(\frac{100}{3}\text{ cm}\right)} = \sqrt{m \times 2 \times 10^{-3}}\text{ cm} = \sqrt{0.002 m}\text{ cm} \approx 0.0447\sqrt{m}\text{ cm}$$</p>''',
+  trap=r'Subtracting curvatures instead of adding them when two convex surfaces are placed in contact curved toward each other.')
+
+# ── 2.7 Michelson interferometer ────────────────────────────────────────────
+
+W('q.op.2.31', '2.7', 4,
+  'Michelson Fringe Disappearances with Doublet',
+  'Ghatak 6e Example 15.4 & Problem 15.10',
+  r'''<p>1. In a Michelson interferometer illuminated by a sodium lamp ($\lambda \approx 5890\text{ \AA}$), the distance traversed by the movable mirror between two successive positions of fringe disappearance is $0.289\text{ mm}$. Calculate the difference in the wavelengths of the $D_1$ and $D_2$ lines.<br/>
+2. The experiment is repeated with a source containing two wavelengths, $\lambda_1 = 4882\text{ \AA}$ and $\lambda_2 = 4886\text{ \AA}$. Calculate the distance through which the mirror must be moved between consecutive disappearances.</p>''',
+  ['c.2.7.4'],
+  r'''Relate mirror translation $d_0$ to optical path change $\Delta = 2d_0$, and equate $2d_0 \Delta\lambda/\lambda^2 \approx 1$ for consecutive disappearances.''',
+  r'''<p>1. Translating the mirror by $d_0$ changes the optical path by $\Delta = 2d_0$. Successive disappearances occur when:
+$$2d_0 \left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = 1 \implies 2d_0 \frac{\Delta\lambda}{\lambda^2} \approx 1 \implies \Delta\lambda \approx \frac{\lambda^2}{2d_0}$$
+Given $d_0 = 0.289\text{ mm}$ and $\lambda = 5890\text{ \AA} = 5.89 \times 10^{-4}\text{ mm}$:
+$$\Delta\lambda = \frac{(5.89 \times 10^{-4}\text{ mm})^2}{2 \times 0.289\text{ mm}} = \frac{3.469 \times 10^{-7}\text{ mm}^2}{0.578\text{ mm}} \approx 6.0 \times 10^{-7}\text{ mm} = 6.0\text{ \AA}$$</p>
+<p>2. For $\lambda_1 = 4882\text{ \AA}$, $\lambda_2 = 4886\text{ \AA}$:
+$$\bar{\lambda} \approx 4884\text{ \AA} = 4.884 \times 10^{-4}\text{ mm}$$
+$$\Delta\lambda = 4\text{ \AA} = 4.0 \times 10^{-7}\text{ mm}$$
+The mirror displacement between consecutive disappearances is:
+$$d_0 = \frac{\bar{\lambda}^2}{2\Delta\lambda} = \frac{(4.884 \times 10^{-4}\text{ mm})^2}{2(4.0 \times 10^{-7}\text{ mm})} = \frac{2.385 \times 10^{-7}}{8.0 \times 10^{-7}}\text{ mm} \approx 0.298\text{ mm}$$</p>''',
+  trap=r'Forgetting the factor of $2$ from the double-pass in the interferometer arm ($\Delta = 2d_0$).')
+
+W('q.op.2.32', '2.7', 4,
+  'Wavelength from Michelson Mirror Shift',
+  'Ghatak 6e Problem 15.9',
+  r'''<p>In a Michelson interferometer, moving one of the mirrors by a distance of $0.08\text{ mm}$ causes $250$ fringes to cross the field of view. Calculate the wavelength of the light.</p>''',
+  ['c.2.7.4'],
+  r'''Use the mirror displacement relation $2d_0 = N\lambda$ and solve for $\lambda$.''',
+  r'''<p>The displacement $d_0$ of the mirror is related to the number of fringe shifts $N$ by:
+$$2d_0 = N\lambda \implies \lambda = \frac{2d_0}{N}$$
+Given $d_0 = 0.08\text{ mm} = 8 \times 10^{-3}\text{ cm}$ and $N = 250$:
+$$\lambda = \frac{2(8 \times 10^{-3}\text{ cm})}{250} = \frac{1.6 \times 10^{-2}\text{ cm}}{250} = 6.4 \times 10^{-5}\text{ cm} = 6400\text{ \AA}$$</p>''',
+  trap=r'Using $d_0 = N\lambda$ instead of $2d_0 = N\lambda$, which doubles the calculated wavelength.')
+
+W('q.op.2.33', '2.7', 4,
+  'Angular Radii of Michelson Circular Fringes',
+  'Ghatak 6e Problem 15.11',
+  r'''<p>In a Michelson interferometer experiment with $\lambda = 5 \times 10^{-5}\text{ cm}$:
+<ol>
+<li>Calculate the angular positions $\theta$ of the bright rings for an arm separation $d = 5 \times 10^{-3}\text{ cm}$.</li>
+<li>If $d$ is decreased to $4.9975 \times 10^{-3}\text{ cm}$, the ring corresponding to $m = 200$ collapses and disappears at the center. What are the new angular radii for the remaining bright rings?</li>
+</ol></p>''',
+  ['c.2.7.4'],
+  r'''Evaluate the central order $m_0 = 2d/\lambda$, apply the inclination condition $2d\cos\theta = (m - 1/2)\lambda$ for bright rings, and recalculate for the reduced mirror spacing $d'$.''',
+  r'''<p>1. The condition for a bright ring at angle $\theta$ is:
+$$2d \cos\theta = \left(m + \frac{1}{2}\right)\lambda \quad \text{or} \quad 2d \cos\theta = m'\lambda$$
+Following Eq. (15.73) for destructive and constructive rings with a dielectric beam splitter phase shift, the maximum order at the center ($\theta = 0$) for $d = 5 \times 10^{-3}\text{ cm}$ is:
+$$m_0 = \frac{2d}{\lambda} = \frac{2(5 \times 10^{-3}\text{ cm})}{5 \times 10^{-5}\text{ cm}} = 200$$
+For the central spot to be dark, the condition is $2d \cos\theta = m\lambda$. Bright rings satisfy:
+$$2d \cos\theta = \left(m - \frac{1}{2}\right)\lambda \implies \cos\theta_m = \frac{m - 1/2}{m_0} = \frac{m - 0.5}{200}$$
+<ul>
+<li>For the first bright ring ($m = 200$):
+$$\cos\theta_1 = \frac{199.5}{200} = 0.9975 \implies \theta_1 \approx \arccos(0.9975) \approx 4.05^\circ$$</li>
+<li>For the second bright ring ($m = 199$):
+$$\cos\theta_2 = \frac{198.5}{200} = 0.9925 \implies \theta_2 \approx \arccos(0.9925) \approx 7.02^\circ$$</li>
+</ul></p>
+<p>2. When $d$ is reduced to $d' = 4.9975 \times 10^{-3}\text{ cm}$:
+$$m_0' = \frac{2d'}{\lambda} = \frac{2(4.9975 \times 10^{-3}\text{ cm})}{5 \times 10^{-5}\text{ cm}} = 199.9$$
+Because $m_0' < 200$, the $m = 200$ fringe has collapsed into the center. The remaining bright rings have angular positions given by:
+$$\cos\theta_m' = \frac{(m - 0.5)\lambda}{2d'} = \frac{m - 0.5}{199.9}$$
+<ul>
+<li>For $m = 199$:
+$$\cos\theta' = \frac{198.5}{199.9} \approx 0.992996 \implies \theta' \approx 6.78^\circ$$</li>
+</ul></p>''',
+  trap=r'Assuming angular fringe radius increases as $d$ increases; fringes of equal inclination expand outward and vanish as $d \to 0$.')

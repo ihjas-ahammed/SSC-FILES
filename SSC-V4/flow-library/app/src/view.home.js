@@ -44,6 +44,57 @@ const ViewHome = (function () {
     return null;
   }
 
+  /* ── the way back ────────────────────────────────────────────────────────
+     The section (and note) you last opened, so a day's work starts with one
+     tap instead of a scroll through the tree. */
+  function resumeCard() {
+    const l = Tree.last();
+    const first = nextUndone();
+    const host = el('div', { class: 'card resume' });
+
+    if (!l) {
+      if (!first) return null;
+      DOM.add(host, [
+        el('div', { class: 'kicker', text: 'Start here' }),
+        el('div', { class: 'resume-t', text: first.title }),
+        el('div', { class: 'small muted', text: '§' + first.sec + ' ' + Pool.sectionTitle(first.sec) }),
+        el('a', { class: 'btn primary', href: Router.href('note/' + first.id) }, [
+          DOM.mi('play_arrow', 'xs'), ' Open the first note'])
+      ]);
+      return host;
+    }
+
+    const ids = (Pool.sections(l.course.id).filter(s => s.sec === l.sec)[0] || { concepts: [] })
+      .concepts.filter(c => !Pool.isExt(c)).map(c => c.id);
+    const c = Progress.count(ids);
+    const where = [l.module ? 'Module ' + l.module.n + ' · ' + l.module.title : null, l.course.title]
+      .filter(Boolean).join(' · ');
+    const go = function () {
+      if (l.concept) Tree.revealPath(l.concept.id); else Tree.revealSection(l.sec);
+      Router.go('study');
+    };
+
+    DOM.add(host, [
+      el('div', { class: 'spread' }, [
+        el('div', { class: 'kicker', text: 'Pick up where you left off' }),
+        l.at ? el('span', { class: 'count', text: UI.ago(l.at) }) : null
+      ]),
+      el('div', { class: 'resume-t', text: '§' + l.sec + ' ' + Pool.sectionTitle(l.sec) }),
+      l.concept ? el('div', { class: 'resume-n' }, [DOM.mi('article', 'xs'), ' ' + l.concept.title]) : null,
+      el('div', { class: 'small muted', text: where }),
+      ids.length ? el('div', { style: { marginTop: '10px' } }, [
+        el('div', { class: 'spread' }, [
+          el('span', { class: 'count', text: 'this section' }),
+          el('span', { class: 'count', text: c.l1 + '/' + c.total + ' read' })
+        ]),
+        el('div', { style: { marginTop: '6px' } }, [UI.levelBar(c, { key: false })])
+      ]) : null,
+      el('button', { class: 'btn primary', type: 'button', on: { click: go } }, [
+        DOM.mi('play_arrow', 'xs'), ' Continue'])
+    ]);
+    return host;
+  }
+
   function step(n, label, detail, href, ready) {
     return el('a', { class: 'item', href: Router.href(href) }, [
       ready ? el('span', { class: 'ix', text: String(n) })
@@ -87,7 +138,7 @@ const ViewHome = (function () {
       : lv < 4 ? (pyq.total
           ? (pyq.total - pyq.done) + ' past-paper ' + DOM.plural(pyq.total - pyq.done, 'question')
             + ' between this and level 4'
-          : 'level 4 needs the JAM past papers, which are not delivered yet')
+          : 'level 4 needs the ' + PROJECT.pyqLabel + ', which are not delivered yet')
       : 'every level earned, past papers included';
 
     return el('div', { class: 'card' }, [
@@ -114,7 +165,7 @@ const ViewHome = (function () {
       ]) : null,
       pyq.total ? el('div', { style: { marginTop: '12px' } }, [
         el('div', { class: 'spread' }, [
-          el('span', { class: 'count', text: 'JAM past papers · level 4' }),
+          el('span', { class: 'count', text: PROJECT.pyqLabel + ' · level 4' }),
           el('span', { class: 'count', text: pyq.done + '/' + pyq.total })
         ]),
         el('div', { style: { marginTop: '6px' } }, [UI.meter(pyq.done, pyq.total, 4)])
@@ -220,7 +271,11 @@ const ViewHome = (function () {
       UI.title('Today'),
       UI.mockBanner(),
 
+      resumeCard(),
+
       DOM.stagger(el('div', { class: 'stats' }, tiles)),
+
+      Pace.card(),
 
       el('div', { class: 'card glass' }, [
         el('div', { class: 'kicker', text: 'The loop' }),
@@ -258,7 +313,7 @@ const ViewHome = (function () {
           el('div', { class: 'row' }, [
             el('span', { class: 'badge lv3', text: 'level 3' }),
             el('span', { class: 'small muted',
-              text: 'every Bartle exercise in its section is worked through' })
+              text: 'every exercise in its section is worked through' })
           ])
         ]),
         el('p', { class: 'small muted', style: { margin: '12px 0 0' },

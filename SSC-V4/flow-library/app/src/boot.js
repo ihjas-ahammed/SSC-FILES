@@ -289,7 +289,11 @@ const App = (function () {
       Tex.typeset(document.getElementById('main'));
       mathjaxWarning();
     });
-    if (!readied) { readied = true; Project.hook('ready'); }
+    if (!readied) {
+      readied = true;
+      if (PROJECT.figZoom) { document.body.classList.add('fig-zoom'); Zoom.start(); }
+      Project.hook('ready');
+    }
   }
 
   /* The record is keyed on a name and a roll number, so there is no sensible

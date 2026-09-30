@@ -1,0 +1,145 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Optics — theme.  "Optical bench & darkroom".
+
+   Loaded after flow-library/app/src/ui.css and only by this project.
+
+     light  the optical bench — warm lens-paper white, deep ink, a fine
+            ruled grid like a ray-tracing sheet
+     dark   the darkroom — near-black with a faint warm glow; light is the
+            only colour in the room
+
+   The accent is a magenta (the one hue the red/amber/green level colours and
+   the violet of level 4 do not use). The signature is the SPECTRUM: a white
+   ray split into its colours runs along card edges, meters and the hero.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --paper:#fbf6ee; --surface:#ffffff; --surface-2:#f5eee2; --surface-3:#e8dfcf;
+  --ink:#1b1420; --ink-2:#5a4d5e; --ink-3:#8b7d8c;
+  --rule:#e8dfd0; --rule-2:#d3c6b2;
+  --accent:#a3186f; --accent-ink:#ffffff; --accent-soft:#fbe8f3; --accent-line:#e6aacd;
+
+  /* the dispersed ray: violet to red */
+  --sp-1:#7c3aed; --sp-2:#2563eb; --sp-3:#0d9488; --sp-4:#65a30d; --sp-5:#d97706; --sp-6:#dc2626;
+  --spectrum:linear-gradient(90deg,var(--sp-1),var(--sp-2),var(--sp-3),var(--sp-4),var(--sp-5),var(--sp-6));
+  --op-edge:linear-gradient(135deg,rgba(124,58,237,.42),rgba(37,99,235,.28) 22%,rgba(255,255,255,0) 45%,rgba(217,119,6,.22) 75%,rgba(220,38,38,.38));
+  --op-grid:rgba(120,90,60,.06);
+
+  --glass:rgba(255,255,255,.76); --glass-2:rgba(255,255,255,.58);
+  --glass-line:rgba(27,20,32,.08); --blur:saturate(160%) blur(14px);
+
+  --font-prose:'Newsreader',Georgia,'Times New Roman',serif;
+  --font-ui:'Sora',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+
+  --r-s:8px; --r-m:14px; --r-l:22px;
+  --shadow:0 1px 2px rgba(27,20,32,.05),0 10px 28px -14px rgba(27,20,32,.2);
+  --shadow-2:0 2px 6px rgba(27,20,32,.07),0 22px 44px -20px rgba(27,20,32,.3);
+}
+
+:root[data-theme=dark] {
+  --paper:#0b0a10; --surface:#14121b; --surface-2:#1b1824; --surface-3:#282434;
+  --ink:#f1ecf4; --ink-2:#b0a6b8; --ink-3:#7f7488;
+  --rule:#24202f; --rule-2:#352f45;
+  --accent:#ff7cc8; --accent-ink:#22061a; --accent-soft:#2b1023; --accent-line:#6b2a55;
+
+  --sp-1:#a78bfa; --sp-2:#60a5fa; --sp-3:#2dd4bf; --sp-4:#a3e635; --sp-5:#fbbf24; --sp-6:#f87171;
+  --op-edge:linear-gradient(135deg,rgba(167,139,250,.5),rgba(96,165,250,.3) 22%,rgba(255,255,255,0) 45%,rgba(251,191,36,.25) 75%,rgba(248,113,113,.45));
+  --op-grid:rgba(255,220,180,.045);
+
+  --glass:rgba(20,18,27,.72); --glass-2:rgba(27,24,36,.55);
+  --glass-line:rgba(255,230,210,.08); --blur:saturate(140%) blur(18px);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 12px 32px -16px rgba(0,0,0,.8);
+  --shadow-2:0 2px 8px rgba(0,0,0,.5),0 26px 52px -22px rgba(0,0,0,.9);
+}
+
+/* the ruled sheet behind everything; in the dark, two faint beams */
+body{ background:var(--paper); letter-spacing:-.004em; }
+body::before{
+  inset:0; height:auto;
+  background:
+    linear-gradient(var(--op-grid) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, var(--op-grid) 1px, transparent 1px) 0 0 / 32px 32px;
+  -webkit-mask-image:linear-gradient(to bottom,#000,rgba(0,0,0,.35));
+          mask-image:linear-gradient(to bottom,#000,rgba(0,0,0,.35));
+}
+:root[data-theme=dark] body::after{
+  content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(70vw 40vw at -10% 12%, rgba(167,139,250,.10), transparent 60%),
+    radial-gradient(60vw 40vw at 110% 88%, rgba(251,146,60,.09), transparent 62%);
+}
+
+h1{ font-weight:600; letter-spacing:-.03em; }
+:root[data-theme=dark] h1{
+  background:linear-gradient(100deg,#fff 10%,var(--sp-2) 45%,var(--accent) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.kicker{ font-family:var(--font-mono); font-weight:500; letter-spacing:.09em; font-size:.68rem; }
+.kicker::before{ content:''; display:inline-block; width:16px; height:2px; margin-right:8px; vertical-align:middle;
+  background:var(--spectrum); border-radius:2px; }
+.rung-meaning > .kicker::before{ content:none; }
+.stat .n,.count{ font-family:var(--font-mono); }
+.stat .n{ font-weight:500; letter-spacing:-.04em; }
+.stat .l{ font-family:var(--font-mono); letter-spacing:.06em; }
+.badge{ font-family:var(--font-mono); font-weight:500; letter-spacing:.03em; }
+
+/* the brand carries a small prism */
+.top .brand-titles b::before{
+  content:''; display:inline-block; width:15px; height:14px; margin-right:.5em; vertical-align:-1px;
+  background:var(--spectrum);
+  clip-path:polygon(50% 0, 100% 100%, 0 100%);
+}
+
+/* cards: a hairline of dispersed light instead of a flat border */
+.card:where(:not(.tint):not(.flat):not(.glass)),.stat,.tnode:where(:not(.sub)){
+  border:1px solid transparent;
+  background:linear-gradient(var(--surface),var(--surface)) padding-box, var(--op-edge) border-box;
+}
+.card.glass{
+  border:1px solid transparent;
+  background:linear-gradient(var(--glass),var(--glass)) padding-box, var(--op-edge) border-box;
+}
+.card.tint{ background:var(--surface-2); border-color:var(--rule); }
+.resume{ background:linear-gradient(135deg,var(--accent-soft),var(--surface) 68%) padding-box, var(--op-edge) border-box; }
+
+.meter>i{ background:var(--spectrum); background-size:240px 100%; }
+.btn.primary{ background:linear-gradient(100deg,var(--accent),color-mix(in srgb,var(--accent) 55%,var(--sp-1)));
+  border-color:transparent; box-shadow:0 8px 22px -10px var(--accent); }
+.rail-nav a[aria-current=page]::before{ background:var(--spectrum); }
+.rung:not(.compact){ border-left:0; box-shadow:inset 3px 0 0 var(--accent); }
+.rung-why > b{ font-family:var(--font-mono); font-weight:500; color:var(--accent); }
+.rung-meaning{ background:color-mix(in srgb,var(--sp-2) 7%,var(--surface)); border-left-color:var(--sp-2); }
+.rung-meaning > .kicker{ color:var(--sp-2); }
+.omr-opt[aria-checked=true] .bub{ box-shadow:0 0 0 4px var(--accent-soft); }
+
+/* pace chart: the spectrum lends its own colours */
+.pace-bar{ fill:var(--sp-2); opacity:.32; }
+.pace-pred{ stroke:var(--sp-1); }
+
+/* ── the home hero: a prism splitting white light (app/project/effects.js) ─ */
+.op-hero{
+  padding:16px 16px 14px; border-radius:var(--r-l); border:1px solid transparent;
+  background:linear-gradient(var(--surface),var(--surface)) padding-box, var(--op-edge) border-box;
+  box-shadow:var(--shadow-2); overflow:hidden;
+}
+:root[data-theme=dark] .op-hero{
+  background:
+    radial-gradient(110% 90% at 0% 100%, rgba(167,139,250,.10), transparent 55%) padding-box,
+    linear-gradient(var(--surface),var(--surface)) padding-box, var(--op-edge) border-box;
+}
+.op-hero .op-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.op-hero .op-units{ font-family:var(--font-mono); font-size:.7rem; color:var(--ink-3); white-space:nowrap; }
+.op-hero svg{ display:block; width:100%; height:auto; margin:6px 0 2px; }
+.op-hero .beam-in{ stroke:var(--ink); stroke-width:2.6; stroke-linecap:round; opacity:.85; }
+:root[data-theme=dark] .op-hero .beam-in{ stroke:#fff; filter:drop-shadow(0 0 4px rgba(255,255,255,.7)); }
+.op-hero .prism{ fill:color-mix(in srgb,var(--sp-2) 9%,var(--surface)); stroke:var(--rule-2); stroke-width:1.6; }
+.op-hero .ray{ stroke-width:2.2; stroke-linecap:round; opacity:.92; }
+.op-hero .inner{ stroke:var(--ink-3); stroke-width:1.4; stroke-dasharray:3 3; opacity:.7; }
+.op-hero .op-exp{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+.op-hero .op-exp > div{ padding:8px 10px; border-radius:var(--r-s); background:var(--surface-2); border:1px solid var(--rule); }
+.op-hero .op-exp b{ display:block; font-family:var(--font-mono); font-weight:500; font-size:1.05rem; letter-spacing:-.03em; }
+.op-hero .op-exp span{ font-family:var(--font-mono); font-size:.66rem; color:var(--ink-3); }
+.op-hero .op-exp i{ display:block; height:3px; border-radius:3px; margin-top:6px; }
+
+@media (prefers-reduced-motion: reduce){ .op-hero *{ transition:none !important; } }

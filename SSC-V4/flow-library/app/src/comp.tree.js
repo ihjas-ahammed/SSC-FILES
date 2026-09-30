@@ -48,9 +48,42 @@ const Tree = (function () {
 
   let openPath = null;
   const path = () => (openPath || (openPath = readPath() || {}));
-  function savePath(p) {
+  function savePath(p, seeding) {
     openPath = p;
     Store.setPref(KEY, p);
+    if (!seeding) remember(p);
+  }
+
+  /* ── the place you last read ─────────────────────────────────────────────
+     The open path forgets when you close a row. `last4` never does: it is
+     written whenever a section or a note opens and only ever replaced, so
+     Today can always offer the way back. Closing a note keeps the section;
+     reopening the same section keeps the note you were on inside it. */
+  const LAST = 'last4';
+  function remember(p) {
+    if (!p || !p.sec) return;
+    const prev = Store.pref(LAST, null) || {};
+    const concept = p.concept || (prev.sec === p.sec ? prev.concept : null) || null;
+    if (prev.sec === p.sec && (prev.concept || null) === concept) return;
+    Store.setPref(LAST, { course: p.course || null, mod: p.mod || null, sec: p.sec,
+      concept: concept, at: Date.now() });
+  }
+
+  /* what Today shows: only a place that still exists in the loaded pool */
+  function last() {
+    const l = Store.pref(LAST, null);
+    if (!l || !l.sec || !Pool.courseOfSec(l.sec)) return null;
+    const c = l.concept && Pool.concept(l.concept) ? Pool.concept(l.concept) : null;
+    return { sec: l.sec, concept: c, at: l.at || 0,
+      course: Pool.courseOfSec(l.sec), module: Pool.moduleOfSec(l.sec) };
+  }
+
+  /* open the path down to a section — the same jump `revealPath` makes for a note */
+  function revealSection(sec) {
+    const course = Pool.courseOfSec(sec), mod = Pool.moduleOfSec(sec);
+    if (!course) return false;
+    savePath({ course: course.id, mod: mod ? mod.id : null, sec: sec, concept: null, pyq: null });
+    return true;
   }
 
   /* Setting a slot clears everything deeper than it: opening a different
@@ -380,7 +413,7 @@ const Tree = (function () {
           staticTick('hourglass_empty'),
           el('span', { class: 'tlabel', style: { cursor: 'default' } }, [
             el('span', { class: 'tt' }, [
-              el('b', { text: 'JAM past papers' }),
+              el('b', { text: PROJECT.pyqLabel }),
               el('span', { text: 'not delivered yet · level 4 of ' + course.title })
             ]),
             el('span', { class: 'badge warn', text: 'pending' })
@@ -502,7 +535,7 @@ const Tree = (function () {
         }),
         toggler(nid, open, [
           el('span', { class: 'tt' }, [
-            el('b', { text: 'JAM past papers' }),
+            el('b', { text: PROJECT.pyqLabel }),
             el('span', { text: qs.length + ' ' + DOM.plural(qs.length, 'question')
               + ' · finishing them is level 4' })
           ]),
@@ -678,7 +711,7 @@ const Tree = (function () {
         if (sec) p.sec = sec.sec;
       }
     }
-    savePath(p);
+    savePath(p, true);
   }
 
   /* Open the path down to one concept — what `#/note/<id>` now means. */
@@ -697,5 +730,5 @@ const Tree = (function () {
     return true;
   }
 
-  return { mount, mountAll, seedOpen, revealPath, refresh, scrollToOpen, path };
+  return { mount, mountAll, seedOpen, revealPath, revealSection, last, refresh, scrollToOpen, path };
 })();

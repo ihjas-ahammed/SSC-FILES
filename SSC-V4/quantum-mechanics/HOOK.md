@@ -56,6 +56,7 @@ flow-library, so every command below works as before.
   - Built into single-file bundles via `python3 build.py` (`build/index.html`) and `python3 build.py --mock` (`build/test/index.html`).
   - Published via `SSC-V2/SEM5/PHY/apps/tools/deploy.sh --live` to Firebase Hosting at `https://ssc-data-science-qm.web.app/phy/quantum-mechanics`.
 
-QM diagram previews are capped at 360px high on desktop. The project layer
-(`app/project/effects.js` and `theme.css`) adds click/Enter/Space to open a
-modal viewer with 100–400% zoom, reset, scrolling, and Escape/Close.
+QM diagram previews are capped at 360px high on desktop and open in a modal viewer with
+100–400% zoom, reset, scrolling, and Escape/Close. That viewer is now shared
+(`flow-library/app/src/comp.zoom.js`); this project switches it on with `figZoom: true` in
+`app/project/project.js`.

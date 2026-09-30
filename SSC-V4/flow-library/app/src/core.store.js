@@ -93,6 +93,9 @@ const Store = (function () {
 
   /* ── completion (Level 1) ────────────────────────────────────────────── */
   const isDone = id => !!state.done[id];
+  /* when the note was ticked — what the pace graph is drawn from, so history
+     needs no separate log and merges exactly like the tick itself */
+  const doneAt = id => state.done[id] || 0;
   const setDone = (id, on) => flag('done', 'undone', id, on);
 
   /* Tick a whole list in one write — the prerequisite cascade. Returns the
@@ -335,7 +338,7 @@ const Store = (function () {
   }
 
   return {
-    isDone, setDone, setDoneMany,
+    isDone, doneAt, setDone, setDoneMany,
     isProofDone, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
     pref, setPref,

@@ -1,6 +1,6 @@
 # flow-library — the shared study-system engine
 
-Every SSC-V4 study system (`real-analysis`, `quantum-mechanics`, and any added later) is
+Every SSC-V4 study system (`real-analysis`, `quantum-mechanics`, `optics`, and any added later) is
 **one shared app plus one thin project layer**. This folder is the shared app. Read this
 before touching any project's code.
 
@@ -64,6 +64,24 @@ controls, and adds a home hero. Use it as the example of a fully distinct app.
   prints what every statement and step draws, with no browser. The authoring task and
   rules live in `real-analysis/HOOK_agy.md` → "The real-line widget".
 
+## Shared features every project gets
+
+- **Pick up where you left off** (Today, top). `Tree` writes a `last4` preference whenever a
+  section or a note opens and never clears it on close, so Today can always offer the way back
+  (`Tree.last()`, `Tree.revealSection()`, `Tree.revealPath()`). It syncs like any other pref.
+  Before anything has been opened it offers the first unread note instead.
+- **Pace** (Today, under the tiles; `app/src/comp.pace.js`). Sections completed per day, with
+  a least-squares forecast. A section is complete when every note in it is read (level 1); the
+  day comes from the tick timestamps the store already keeps (`Store.doneAt`), so no separate
+  log exists, past progress shows up, and it merges across devices for free. The forecast solves
+  the normal equations `[n Σt; Σt Σt²][a b]ᵀ = [ΣC ΣtC]ᵀ` (Gaussian elimination) on the trailing
+  fortnight's cumulative curve; `b` is sections/day, the finish day is where the line reaches
+  the syllabus total, and R² decides whether the caption calls the trend steady or uneven.
+  The 14/30/90-day range is a `paceSpan` pref.
+- **Diagram viewer** (`app/src/comp.zoom.js`, opt-in with `PROJECT.figZoom: true`): click a
+  rendered diagram for a full-screen, 100–400% zoomable view. It was QM's own; QM and Optics now
+  share this copy.
+
 ## Adding a new project
 
 ```
@@ -88,7 +106,7 @@ pool, the shims, `data/`, `diagrams/light|dark/` and a `HOOK.md`. Then:
 
 - A change here reaches **every** project. After any edit, build and open each project,
   both themes, phone and desktop:
-  `for p in real-analysis quantum-mechanics; do python3 $p/build.py --mock; done`
+  `for p in real-analysis quantum-mechanics optics; do python3 $p/build.py --mock; done`
 - Adding a module means one line in `app/flow.js` → `FLOW_MODULES`. The dev pages and
   `build.py` both read that list.
 - The dev page (`<project>/app/index.html`) loads `../../flow-library/...` directly, so it

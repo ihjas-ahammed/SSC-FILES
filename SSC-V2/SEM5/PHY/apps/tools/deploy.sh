@@ -138,6 +138,38 @@ else
   echo "WARNING: QM missing — deploying without the Quantum Mechanics app." >&2
 fi
 
+# --- SSC-V4 Optics study system ---
+#   /phy/optics       the real thing, built from data/ (committed build/index.html)
+#   /phy/optics-test  the test app on mock data
+OPT="$REPO/SSC-V4/optics"
+if [ -d "$OPT" ] && [ -f "$OPT/build.py" ]; then
+  if [ "$REBUILD_LIVE" = "1" ]; then
+    echo "Rebuilding the LIVE Optics page from data/ ..."
+    python3 "$OPT/build.py" > /dev/null
+  else
+    echo "Live Optics page: republishing the committed build (pass --live to rebuild it)."
+  fi
+  if [ ! -f "$OPT/build/index.html" ]; then
+    echo "ERROR: $OPT/build/index.html is missing and --live was not passed." >&2
+    echo "       Deploying now would delete /phy/optics. Aborting." >&2
+    exit 1
+  fi
+  mkdir -p "$TMP/public/phy/optics"
+  cp "$OPT/build/index.html" "$TMP/public/phy/optics/index.html"
+  if [ -d "$OPT/diagrams" ]; then
+    cp -r "$OPT/diagrams" "$TMP/public/phy/optics/diagrams"
+  fi
+
+  python3 "$OPT/build.py" --mock > /dev/null
+  mkdir -p "$TMP/public/phy/optics-test"
+  cp "$OPT/build/test/index.html" "$TMP/public/phy/optics-test/index.html"
+  if [ -d "$OPT/diagrams" ]; then
+    cp -r "$OPT/diagrams" "$TMP/public/phy/optics-test/diagrams"
+  fi
+else
+  echo "WARNING: Optics missing — deploying without the Optics app." >&2
+fi
+
 # --- SSLC bilingual study app (Kerala SCERT, Class 8-10) ---
 #   /pre/<subject>-test   one page per subject, built from app/mock/
 #   /pre/<subject>        the same page on the validated data/ pool, published
@@ -243,6 +275,10 @@ echo ""
 echo "Quantum Mechanics study system:"
 echo "  → $BASE/phy/quantum-mechanics       (validated data)"
 echo "  → $BASE/phy/quantum-mechanics-test  (mock data — safe to break)"
+echo ""
+echo "Optics study system:"
+echo "  → $BASE/phy/optics       (validated data)"
+echo "  → $BASE/phy/optics-test  (mock data — safe to break)"
 echo ""
 echo "SSLC study apps (Kerala SCERT, EN + മലയാളം):"
 for pair in physics chemistry biology maths; do

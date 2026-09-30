@@ -15,6 +15,9 @@
        themeColor: { light, dark },   optional — browser chrome colour
        realLine: true,                optional — draw the real-line widget
                                         (comp.realline.js) under inequalities
+       pyqLabel: 'JAM past papers',   optional — what the level-4 rung is called (default shown)
+       figZoom: true,                 optional — click a rendered diagram to open it
+                                        full-screen with zoom (comp.zoom.js)
        hooks: {                       optional — each is called if present
          home(ctx)   -> Node|null     a hero placed above the home dashboard
          theme(dark)                  after light/dark is applied
@@ -42,6 +45,7 @@ const Project = (function () {
 
   PROJECT.themeColor = Object.assign({ light: '#faf8f4', dark: '#101216' }, PROJECT.themeColor);
   PROJECT.hooks = PROJECT.hooks || {};
+  PROJECT.pyqLabel = PROJECT.pyqLabel || 'JAM past papers';
   document.documentElement.setAttribute('data-project', PROJECT.id);
 
   /* A broken hook must not take the app down with it: the hooks are
