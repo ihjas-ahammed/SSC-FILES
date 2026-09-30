@@ -25,22 +25,38 @@ CONCEPTS.push(
    {
     "why": "Write $x_1+x_2$ and expand $\\cos(\\omega t-\\phi_i)$.",
     "m": "$$x=(a_1\\cos\\phi_1+a_2\\cos\\phi_2)\\cos\\omega t+(a_1\\sin\\phi_1+a_2\\sin\\phi_2)\\sin\\omega t$$",
-    "meaning": "The $\\cos\\omega t$ and $\\sin\\omega t$ coefficients define one new sinusoid."
+    "meaning": "Each wave is a smooth up-and-down motion. Adding two of them means adding two cosines, and the trick is to split each into a “cosine part” and a “sine part” so we can add like with like.",
+    "fig": {
+     "k": "phasor2",
+     "s": 1
+    }
    },
    {
     "why": "Define the resultant $a\\cos(\\omega t-\\phi)=a\\cos\\phi\\cos\\omega t+a\\sin\\phi\\sin\\omega t$ and compare coefficients.",
     "m": "$$a\\cos\\phi=a_1\\cos\\phi_1+a_2\\cos\\phi_2,\\qquad a\\sin\\phi=a_1\\sin\\phi_1+a_2\\sin\\phi_2$$",
-    "meaning": "Two equations for $a$ and $\\phi$."
+    "meaning": "The sum is again a smooth up-and-down motion of the same frequency, so it can be described by its own amplitude and phase. Matching the cosine and sine parts tells us what those are.",
+    "fig": {
+     "k": "phasor2",
+     "s": 2
+    }
    },
    {
     "why": "Square and add.",
     "m": "$$a^{2}=a_1^{2}+a_2^{2}+2a_1a_2\\cos(\\phi_1-\\phi_2)$$",
-    "meaning": "$\\cos^2+\\sin^2=1$ and the cross terms combine to $\\cos(\\phi_1-\\phi_2)$."
+    "meaning": "Squaring and adding removes the unknown phase and leaves the amplitude alone. The cross term contains the angle between the two waves — that is where interference lives.",
+    "fig": {
+     "k": "phasor2",
+     "s": 3
+    }
    },
    {
     "why": "Intensity is proportional to $a^2$: $I\\propto a^2$, $I_i\\propto a_i^2$.",
     "m": "$$I=I_1+I_2+2\\sqrt{I_1I_2}\\cos\\delta$$",
-    "meaning": "Maximum $(\\sqrt{I_1}+\\sqrt{I_2})^2$ at $\\delta=2m\\pi$; minimum $(\\sqrt{I_1}-\\sqrt{I_2})^2$ at $\\delta=(2m+1)\\pi$."
+    "meaning": "Brightness is proportional to amplitude squared. So the pattern swings between a bright maximum where the waves agree and a minimum where they oppose. The energy is not lost; it is moved from dark places to bright ones.",
+    "fig": {
+     "k": "phasor2",
+     "s": 4
+    }
    }
   ],
   "ends": "The two-wave intensity formula."
@@ -61,7 +77,8 @@ CONCEPTS.push(
    "a": "The average of $I$ over $\\delta$ is $I_1+I_2$: energy is only redistributed from dark to bright places.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "phasors"
 },
 {
  "id": "c.2.1.2",
@@ -121,17 +138,29 @@ CONCEPTS.push(
    {
     "why": "Represent the $k$-th oscillation as the real part of $a_0e^{j(\\omega t-k\\delta)}$ and add.",
     "m": "$$z=a_0e^{j\\omega t}\\sum_{k=0}^{N-1}e^{-jk\\delta}$$",
-    "meaning": "A geometric series."
+    "meaning": "Each wave is an arrow, and each arrow is turned a little more than the one before. Adding N waves means laying the arrows head to tail, one after another.",
+    "fig": {
+     "k": "phasorN",
+     "s": 1
+    }
    },
    {
     "why": "Sum it.",
     "m": "$$\\sum_{k=0}^{N-1}e^{-jk\\delta}=\\frac{1-e^{-jN\\delta}}{1-e^{-j\\delta}}=e^{-j(N-1)\\delta/2}\\,\\frac{\\sin(N\\delta/2)}{\\sin(\\delta/2)}$$",
-    "meaning": "Factor $e^{-jN\\delta/2}$ from the numerator and $e^{-j\\delta/2}$ from the denominator."
+    "meaning": "Because every arrow has the same length and turns by the same angle, the arrows sit on a circle, and the sum of the whole chain is the chord of that circle.",
+    "fig": {
+     "k": "phasorN",
+     "s": 2
+    }
    },
    {
     "why": "Read off the amplitude, the modulus.",
     "m": "$$a=a_0\\frac{\\sin(N\\delta/2)}{\\sin(\\delta/2)},\\qquad I\\propto a^2$$",
-    "meaning": "The leftover phase $-(N-1)\\delta/2$ is just the phase of the centre of the array."
+    "meaning": "The chord and a single arrow are both a circle radius times a sine. Dividing one by the other gives the amplitude formula — the pattern behind a diffraction grating.",
+    "fig": {
+     "k": "phasorN",
+     "s": 3
+    }
    }
   ],
   "ends": "The $N$-wave amplitude $a_0\\sin(N\\delta/2)/\\sin(\\delta/2)$."
@@ -147,7 +176,8 @@ CONCEPTS.push(
    "a": "$I=N^2I_0$ (amplitude $Na_0$), reached at $\\delta=2m\\pi$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "nslit"
 },
 {
  "id": "c.2.2.1",
@@ -238,22 +268,38 @@ CONCEPTS.push(
    {
     "why": "Slits at $y=\\pm d/2$ on the plane $z=0$; screen at $z=D$; $P=(0,x)$.",
     "m": "$$S_1P^{2}=D^{2}+\\big(x-\\tfrac d2\\big)^{2},\\qquad S_2P^{2}=D^{2}+\\big(x+\\tfrac d2\\big)^{2}$$",
-    "meaning": "$S_2$ is the lower slit."
+    "meaning": "We place the slits, the screen and a point on the screen, and write down the two distances from the slits to that point. The whole experiment comes down to these two distances.",
+    "fig": {
+     "k": "young",
+     "s": 1
+    }
    },
    {
     "why": "Subtract and factor.",
     "m": "$$S_2P^{2}-S_1P^{2}=2xd\\;\\Rightarrow\\;\\Delta=S_2P-S_1P=\\frac{2xd}{S_2P+S_1P}$$",
-    "meaning": "Exact expression for the path difference."
+    "meaning": "The difference of the two squared distances is easy: almost everything cancels, and only a product of the slit separation and the screen height is left.",
+    "fig": {
+     "k": "young",
+     "s": 2
+    }
    },
    {
     "why": "For $D\\gg x,d$ the denominator is $\\simeq2D$.",
     "m": "$$\\Delta\\simeq\\frac{xd}{D}$$",
-    "meaning": "Small-angle (paraxial) approximation."
+    "meaning": "On a screen far from the slits the two distances are almost equal, so their difference is simply the slit separation times the tiny angle to the point — which is the screen height divided by the distance to the screen.",
+    "fig": {
+     "k": "young",
+     "s": 3
+    }
    },
    {
     "why": "Impose $\\Delta=m\\lambda$ and take the spacing between neighbouring $m$.",
     "m": "$$x_m=\\frac{m\\lambda D}{d},\\qquad\\beta=x_{m+1}-x_m=\\frac{\\lambda D}{d}$$",
-    "meaning": "Uniform spacing: a series of equally spaced bright bands."
+    "meaning": "A bright fringe appears wherever the path difference is a whole number of wavelengths. Successive bright fringes therefore sit evenly along the screen, and that even spacing is the fringe width.",
+    "fig": {
+     "k": "young",
+     "s": 4
+    }
    }
   ],
   "ends": "The fringe width $\\beta=\\lambda D/d$."
@@ -274,7 +320,8 @@ CONCEPTS.push(
    "a": "The wavelength becomes $\\lambda/n$, so $\\beta\\to\\beta/n$: the fringes shrink.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "young"
 },
 {
  "id": "c.2.3.2",
@@ -301,17 +348,29 @@ CONCEPTS.push(
    {
     "why": "Phase difference at $x$.",
     "m": "$$\\delta=\\frac{2\\pi}{\\lambda}\\Delta=\\frac{2\\pi d\\,x}{\\lambda D}$$",
-    "meaning": "From $\\Delta=dx/D$."
+    "meaning": "The phase difference is just the path difference counted in wavelengths and multiplied by 2π. It grows steadily as you move up the screen.",
+    "fig": {
+     "k": "youngI",
+     "s": 1
+    }
    },
    {
     "why": "Equal intensities $I_1=I_2=I_0$ in $I=I_1+I_2+2\\sqrt{I_1I_2}\\cos\\delta$.",
     "m": "$$I=2I_0(1+\\cos\\delta)=4I_0\\cos^{2}\\frac\\delta2$$",
-    "meaning": "Half-angle identity."
+    "meaning": "With two beams of equal strength the general interference formula simplifies to a squared cosine: the intensity rises to four times one beam alone and falls to exactly zero.",
+    "fig": {
+     "k": "youngI",
+     "s": 2
+    }
    },
    {
     "why": "Substitute $\\delta/2=\\pi dx/(\\lambda D)$.",
     "m": "$$I(x)=4I_0\\cos^{2}\\Big(\\frac{\\pi dx}{\\lambda D}\\Big)$$",
-    "meaning": "Maxima at $x=m\\lambda D/d$, exact zeros halfway between."
+    "meaning": "Putting the screen position back in tells us where the bright and dark bands sit: the squared cosine repeats every fringe width.",
+    "fig": {
+     "k": "youngI",
+     "s": 3
+    }
    }
   ],
   "ends": "The $\\cos^2$ intensity distribution."
@@ -327,7 +386,8 @@ CONCEPTS.push(
    "a": "$2I_0$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "young"
 },
 {
  "id": "c.2.3.3",
@@ -376,17 +436,29 @@ CONCEPTS.push(
    {
     "why": "The plate's optical thickness replaces $t$ of air.",
     "m": "$$\\text{extra optical path}=\\mu t-t=(\\mu-1)t$$",
-    "meaning": "Air has index 1."
+    "meaning": "Light travels slower inside glass, so a slab of glass over one slit delays that beam as if it had travelled extra distance. Only the extra beyond the same thickness of air counts.",
+    "fig": {
+     "k": "plateshift",
+     "s": 1
+    }
    },
    {
     "why": "The central bright fringe is now where the uncovered path is longer by exactly that amount.",
     "m": "$$\\frac{d\\,\\Delta x}{D}=(\\mu-1)t$$",
-    "meaning": "Geometric path difference $dx/D$ compensates the plate."
+    "meaning": "The old central fringe was where both beams had travelled equal distances. Now one beam is delayed, so the place where they balance again has to move toward the delayed beam's slit, where its route is shorter.",
+    "fig": {
+     "k": "plateshift",
+     "s": 2
+    }
    },
    {
     "why": "Solve.",
     "m": "$$\\Delta x=\\frac{(\\mu-1)tD}{d}$$",
-    "meaning": "In units of fringe width, $\\Delta x/\\beta=(\\mu-1)t/\\lambda$."
+    "meaning": "Solving for that shift shows it is proportional to the plate's thickness and to how much the glass slows light. Counting how many fringes the pattern moves therefore measures the plate's thickness.",
+    "fig": {
+     "k": "plateshift",
+     "s": 3
+    }
    }
   ],
   "ends": "$\\Delta x=(\\mu-1)tD/d$."
@@ -402,7 +474,8 @@ CONCEPTS.push(
    "a": "$t=7\\lambda/(\\mu-1)=7\\times590/0.58$ nm $\\approx7.1\\ \\mu$m.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "plate"
 },
 {
  "id": "c.2.4.1",
@@ -429,17 +502,29 @@ CONCEPTS.push(
    {
     "why": "Mirror 1 makes an image $S_1$ with $OS_1=a$ and angle $SOS_1=2\\theta_1$; mirror 2 makes $S_2$ with $SOS_2=2\\theta_2$ on the other side.",
     "m": "$$\\angle S_1OS_2=2(\\theta_1+\\theta_2)=2\\alpha$$",
-    "meaning": "The angle between the mirrors is $\\alpha=\\theta_1+\\theta_2$."
+    "meaning": "Each mirror makes a mirror-image of the slit. An image lies as far behind the mirror as the slit lies in front of it, so both images sit on one circle around the point where the mirrors meet.",
+    "fig": {
+     "k": "fmirrors",
+     "s": 1
+    }
    },
    {
     "why": "For small $\\alpha$ the chord is",
     "m": "$$d=S_1S_2\\simeq a\\cdot2\\alpha=2a\\alpha$$",
-    "meaning": "Arc $\\approx$ chord."
+    "meaning": "The two images sit on that circle a small angle apart — twice the angle between the mirrors — so they are separated by a short chord of the circle.",
+    "fig": {
+     "k": "fmirrors",
+     "s": 2
+    }
    },
    {
     "why": "The screen is at $D=a+b$ from the virtual sources; use $\\beta=\\lambda D/d$.",
     "m": "$$\\beta=\\frac{\\lambda(a+b)}{2a\\alpha}$$",
-    "meaning": "Young's formula applied to the virtual sources."
+    "meaning": "We now have exactly Young's set-up: two coherent point sources a known distance apart and a screen a known distance away. So Young's fringe-width result applies directly.",
+    "fig": {
+     "k": "fmirrors",
+     "s": 3
+    }
    }
   ],
   "ends": "$\\beta=\\lambda(a+b)/(2a\\alpha)$."
@@ -455,7 +540,8 @@ CONCEPTS.push(
    "a": "Both are images of the same slit, so they share whatever phase the slit light has.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "young"
 },
 {
  "id": "c.2.4.2",
@@ -481,22 +567,38 @@ CONCEPTS.push(
    {
     "why": "A ray through a thin prism of angle $\\alpha$ is deviated by",
     "m": "$$\\delta_{\\rm d}=(\\mu-1)\\alpha$$",
-    "meaning": "Small-angle thin-prism result."
+    "meaning": "A very thin prism bends every ray by the same small angle, wherever the ray enters. That angle depends only on the prism's angle and on how strongly the glass bends light.",
+    "fig": {
+     "k": "biprism",
+     "s": 1
+    }
    },
    {
     "why": "Each half of the biprism makes a virtual source displaced sideways from $S$ by",
     "m": "$$a\\,\\delta_{\\rm d}=a(\\mu-1)\\alpha$$",
-    "meaning": "Geometry: the ray appears to come from a point that far to the side."
+    "meaning": "Looking back through each half of the biprism, the rays seem to come from a point shifted sideways from the real slit, by the distance to the biprism times the bending angle.",
+    "fig": {
+     "k": "biprism",
+     "s": 2
+    }
    },
    {
     "why": "Separation of the two virtual sources.",
     "m": "$$d=2a(\\mu-1)\\alpha$$",
-    "meaning": "One on each side of $S$."
+    "meaning": "One half shifts the apparent source up and the other shifts it down, so the two apparent sources are twice that shift apart.",
+    "fig": {
+     "k": "biprism",
+     "s": 3
+    }
    },
    {
     "why": "Screen at $D=a+b$; use $\\beta=\\lambda D/d$.",
     "m": "$$\\beta=\\frac{\\lambda(a+b)}{2a(\\mu-1)\\alpha}$$",
-    "meaning": "Young's formula."
+    "meaning": "Again we have two coherent sources and a screen, so Young's result gives the fringe width. The distance to the screen is measured from the sources, so it is the sum of the two distances.",
+    "fig": {
+     "k": "biprism",
+     "s": 4
+    }
    }
   ],
   "ends": "The biprism fringe width."
@@ -512,7 +614,8 @@ CONCEPTS.push(
    "a": "By placing a convex lens between biprism and screen at two positions (conjugate foci) and measuring the two image separations $d_1,d_2$: $d=\\sqrt{d_1d_2}$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "young"
 },
 {
  "id": "c.2.5.1",
@@ -591,22 +694,38 @@ CONCEPTS.push(
    {
     "why": "A unit-amplitude wave in medium 1 splits into a reflected ray $r$ and a transmitted ray $t$.",
     "m": "$$\\text{incident }1\\;\\to\\;r\\ (\\text{back in 1}),\\quad t\\ (\\text{into 2})$$",
-    "meaning": "Two output rays."
+    "meaning": "A wave hitting a boundary splits into a reflected part and a transmitted part. We give names to how much of the wave's height each part keeps.",
+    "fig": {
+     "k": "stokes",
+     "s": 1
+    }
    },
    {
     "why": "Reverse both. The reversed reflected ray $r$ splits again into $r\\cdot r$ (back) and $r\\cdot t$ (transmitted); the reversed transmitted ray $t$ splits into $t\\,t^{\\prime}$ (into 1) and $t\\,r^{\\prime}$ (reflected inside 2).",
     "m": "$$\\text{outputs in medium 1: }r^{2}+tt^{\\prime};\\quad\\text{in medium 2: }rt+tr^{\\prime}$$",
-    "meaning": "Both bookkeeping lines."
+    "meaning": "Physics works the same forwards and backwards in time. So if we run the two outgoing rays in reverse they must retrace the journey — but each of them splits again at the boundary.",
+    "fig": {
+     "k": "stokes",
+     "s": 2
+    }
    },
    {
     "why": "Reversibility says the outcome must be the original single incident wave, so the medium-2 output cancels and the medium-1 output equals 1.",
     "m": "$$r^{2}+tt^{\\prime}=1,\\qquad rt+tr^{\\prime}=0$$",
-    "meaning": "Two conditions."
+    "meaning": "Running the film backwards must give back exactly the single wave we started with. So the extra waves must cancel each other, and the rest must add up to one.",
+    "fig": {
+     "k": "stokes",
+     "s": 3
+    }
    },
    {
     "why": "Solve for $r^{\\prime}$ and $tt^{\\prime}$.",
     "m": "$$r^{\\prime}=-r,\\qquad tt^{\\prime}=1-r^{2}$$",
-    "meaning": "Stokes' relations."
+    "meaning": "Solving those two conditions shows that the reflection from the other side is exactly the negative of the first. One of the two reflections must turn the wave upside down — the origin of the half-wavelength shift in thin films.",
+    "fig": {
+     "k": "stokes",
+     "s": 4
+    }
    }
   ],
   "ends": "Stokes' relations."
@@ -650,22 +769,38 @@ CONCEPTS.push(
    {
     "why": "Ray 1 reflects at the top at $B$; ray 2 refracts, reflects at the bottom at $C$ and re-emerges at $D$. Let $BD=2t\\tan r$ and $BC+CD=2t/\\cos r$.",
     "m": "$$\\text{ray 2: }\\mu\\,(BC+CD)=\\frac{2\\mu t}{\\cos r}$$",
-    "meaning": "Optical path inside the film."
+    "meaning": "Two beams come back from a thin film: one bounces off the top, the other goes in, bounces off the bottom and comes out. We follow both and compare the two routes.",
+    "fig": {
+     "k": "film",
+     "s": 1
+    }
    },
    {
     "why": "Ray 1 travels in air from $B$ to the perpendicular from $D$: $BN=BD\\sin i$.",
     "m": "$$\\text{ray 1: }BN=2t\\tan r\\,\\sin i$$",
-    "meaning": "The equal-phase point on the wavefront."
+    "meaning": "To compare them fairly we stop the first beam at the point where the second beam re-emerges, because from there on they travel side by side. By then the first beam has covered a little more ground in air.",
+    "fig": {
+     "k": "film",
+     "s": 2
+    }
    },
    {
     "why": "Use Snell's law $\\sin i=\\mu\\sin r$ and subtract.",
     "m": "$$\\Delta=\\frac{2\\mu t}{\\cos r}-2\\mu t\\,\\frac{\\sin^{2}r}{\\cos r}=2\\mu t\\cos r$$",
-    "meaning": "$1-\\sin^2r=\\cos^2r$."
+    "meaning": "Using the law of refraction the two route lengths combine into one neat result: film thickness times the film's index times the cosine of the angle inside the film.",
+    "fig": {
+     "k": "film",
+     "s": 3
+    }
    },
    {
     "why": "Add the $\\pi$ phase change of the top reflection ($\\lambda/2$).",
     "m": "$$\\text{bright: }2\\mu t\\cos r=(m+\\tfrac12)\\lambda;\\quad\\text{dark: }2\\mu t\\cos r=m\\lambda$$",
-    "meaning": "The cosine law with the phase change included."
+    "meaning": "One of the two reflections turns the wave upside down, which counts as an extra half wavelength. It is why a very thin film looks dark rather than bright.",
+    "fig": {
+     "k": "film",
+     "s": 4
+    }
    }
   ],
   "ends": "The cosine law for a thin film."
@@ -681,7 +816,8 @@ CONCEPTS.push(
    "a": "$2\\mu t=\\lambda/2\\Rightarrow t=500/(4\\times1.33)\\approx94$ nm.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "film"
 },
 {
  "id": "c.2.6.2",
@@ -707,17 +843,29 @@ CONCEPTS.push(
    {
     "why": "Air ($1$) → film ($n_f$) → glass ($n_g$), with $1<n_f<n_g$: both reflections are rarer→denser, each with phase $\\pi$.",
     "m": "$$\\text{net relative phase from reflection}=\\pi-\\pi=0$$",
-    "meaning": "The reflections' phase changes cancel each other."
+    "meaning": "In an anti-reflection coating both surfaces reflect from a denser material, so both reflections are flipped in the same way. The flips cancel, and only the extra distance travelled inside the coating matters.",
+    "fig": {
+     "k": "arcoat",
+     "s": 1
+    }
    },
    {
     "why": "So the two beams cancel if the round-trip optical path is half a wavelength (odd multiple).",
     "m": "$$2n_ft=\\frac\\lambda2\\;\\Rightarrow\\;t=\\frac{\\lambda}{4n_f}$$",
-    "meaning": "Normal incidence, $\\cos r=1$."
+    "meaning": "For the two reflections to cancel, the extra round trip must be half a wavelength, so the coating is a quarter of a wavelength thick, measured inside the material.",
+    "fig": {
+     "k": "arcoat",
+     "s": 2
+    }
    },
    {
     "why": "Equal amplitudes: the reflection coefficient at each surface must match.",
     "m": "$$\\frac{n_f-1}{n_f+1}=\\frac{n_g-n_f}{n_g+n_f}\\;\\Rightarrow\\;n_f^{2}=n_g$$",
-    "meaning": "Normal-incidence Fresnel amplitudes."
+    "meaning": "Cancelling completely also needs the two reflected beams to be equally strong. That fixes the coating's index at the geometric mean of the two materials it sits between.",
+    "fig": {
+     "k": "arcoat",
+     "s": 3
+    }
    }
   ],
   "ends": "$t=\\lambda/(4n_f)$ and $n_f=\\sqrt{n_g}$."
@@ -733,7 +881,8 @@ CONCEPTS.push(
    "a": "$t=550/(4\\times1.38)\\approx100$ nm.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "film"
 },
 {
  "id": "c.2.6.3",
@@ -759,17 +908,29 @@ CONCEPTS.push(
    {
     "why": "Reflected amplitudes: the first ray $r_1$, then $tt^{\\prime}r_2e^{-i\\delta}$, then $tt^{\\prime}r_2(r_1^{\\prime}r_2)e^{-2i\\delta}\\ldots$",
     "m": "$$\\rho=r_1+tt^{\\prime}r_2e^{-i\\delta}\\sum_{k=0}^{\\infty}\\big(r_1^{\\prime}r_2e^{-i\\delta}\\big)^{k}$$",
-    "meaning": "A geometric series."
+    "meaning": "Inside a real film the light bounces back and forth many times, and a little escapes upward at each bounce. The first is the plain reflection; every later one has made an extra round trip and is a bit weaker.",
+    "fig": {
+     "k": "filmmulti",
+     "s": 1
+    }
    },
    {
     "why": "Use Stokes ($r_1^{\\prime}=-r_1$, $tt^{\\prime}=1-r_1^2$) and sum.",
     "m": "$$\\rho=r_1+\\frac{(1-r_1^{2})\\,r_2e^{-i\\delta}}{1+r_1r_2e^{-i\\delta}}=\\frac{r_1+r_2e^{-i\\delta}}{1+r_1r_2e^{-i\\delta}}$$",
-    "meaning": "Algebra: $r_1(1+r_1r_2e^{-i\\delta})+(1-r_1^2)r_2e^{-i\\delta}$."
+    "meaning": "Each round trip multiplies the escaping amplitude by the same factor, so the escaping beams form a geometric series that can be added exactly.",
+    "fig": {
+     "k": "filmmulti",
+     "s": 2
+    }
    },
    {
     "why": "Take $R=|\\rho|^2$.",
     "m": "$$R=\\frac{r_1^{2}+r_2^{2}+2r_1r_2\\cos\\delta}{1+r_1^{2}r_2^{2}+2r_1r_2\\cos\\delta}$$",
-    "meaning": "Real coefficients: multiply by the complex conjugate."
+    "meaning": "The strength of the total reflection is the square of that sum. It rises and falls as the phase changes, and its two limits are the values when successive beams reinforce or oppose each other.",
+    "fig": {
+     "k": "filmmulti",
+     "s": 3
+    }
    }
   ],
   "ends": "The multiple-beam reflectivity of a layer."
@@ -785,7 +946,8 @@ CONCEPTS.push(
    "a": "When $r_1r_2\\ll1$ (low reflectivity), so higher-order internal reflections are negligible.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "film"
 },
 {
  "id": "c.2.7.1",
@@ -811,17 +973,29 @@ CONCEPTS.push(
    {
     "why": "At normal incidence the reflected-dark condition (with the $\\pi$ change) is",
     "m": "$$2\\mu t=m\\lambda$$",
-    "meaning": "$m=0$ at the edge, which is dark."
+    "meaning": "At each spot the film is almost flat, so the thin-film condition applies locally: the reflection is dark wherever the thickness is a whole number of half-wavelengths inside the material.",
+    "fig": {
+     "k": "wedge",
+     "s": 1
+    }
    },
    {
     "why": "For a small wedge $t=x\\alpha$.",
     "m": "$$x_m=\\frac{m\\lambda}{2\\mu\\alpha}$$",
-    "meaning": "Position of the $m$th dark fringe."
+    "meaning": "In a wedge the thickness grows steadily as you move away from the thin edge, in proportion to the distance times the wedge's tiny angle.",
+    "fig": {
+     "k": "wedge",
+     "s": 2
+    }
    },
    {
     "why": "Spacing between successive dark fringes.",
     "m": "$$\\beta=x_{m+1}-x_m=\\frac{\\lambda}{2\\mu\\alpha}$$",
-    "meaning": "Uniform straight fringes. For a wire at distance $L$: $\\alpha=t/L$ gives $t=\\lambda L/(2\\beta)$."
+    "meaning": "Since the thickness grows steadily, the dark bands are equally spaced. The spacing is one half-wavelength of extra thickness divided by the wedge angle — which is how something as thin as a hair can be measured.",
+    "fig": {
+     "k": "wedge",
+     "s": 3
+    }
    }
   ],
   "ends": "$\\beta=\\lambda/(2\\mu\\alpha)$."
@@ -837,7 +1011,8 @@ CONCEPTS.push(
    "a": "$t=\\lambda L/(2\\beta)=590\\times10^{-9}\\times0.1/(2\\times5\\times10^{-4})=5.9\\times10^{-5}$ m $=59\\ \\mu$m.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "wedge"
 },
 {
  "id": "c.2.7.2",
@@ -894,22 +1069,38 @@ CONCEPTS.push(
    {
     "why": "At radius $r$, the air gap is $t$; from the circle of radius $R$: $r^2=R^2-(R-t)^2=2Rt-t^2\\simeq2Rt$.",
     "m": "$$t=\\frac{r^{2}}{2R}$$",
-    "meaning": "$t\\ll R$."
+    "meaning": "Under a curved lens the air gap grows as you move away from the centre. Using the geometry of a circle, the gap at a distance r from the centre is simply r squared divided by twice the radius of curvature.",
+    "fig": {
+     "k": "rings",
+     "s": 1
+    }
    },
    {
     "why": "Reflected dark condition with the $\\pi$ change: $2t=n\\lambda$ (normal incidence, air).",
     "m": "$$\\frac{r^{2}}{R}=n\\lambda\\;\\Rightarrow\\;r_n=\\sqrt{n\\lambda R}$$",
-    "meaning": "$n=0$ (centre) dark."
+    "meaning": "A dark ring appears wherever the round trip through the gap is a whole number of wavelengths, once the flip on one of the reflections is accounted for. Putting in the gap gives the ring radii.",
+    "fig": {
+     "k": "rings",
+     "s": 2
+    }
    },
    {
     "why": "Diameters $D=2r$.",
     "m": "$$D_n^{2}=4n\\lambda R$$",
-    "meaning": "Order $n$ dark ring."
+    "meaning": "Rings are usually measured across, not from the centre, so we double the radius. The square of a diameter then grows in equal steps from one ring to the next.",
+    "fig": {
+     "k": "rings",
+     "s": 3
+    }
    },
    {
     "why": "Subtract two rings to eliminate the (unknown) offset from imperfect contact.",
     "m": "$$D_m^{2}-D_n^{2}=4(m-n)\\lambda R\\;\\Rightarrow\\;\\lambda=\\frac{D_m^{2}-D_n^{2}}{4(m-n)R}$$",
-    "meaning": "Independent of the contact error."
+    "meaning": "The contact between lens and plate is never perfect, and that shifts every ring by the same amount. Subtracting two rings cancels that unknown, so the wavelength can be found without knowing the ring numbers exactly.",
+    "fig": {
+     "k": "rings",
+     "s": 4
+    }
    }
   ],
   "ends": "The ring formulae, and the wavelength from two diameters."
@@ -930,7 +1121,8 @@ CONCEPTS.push(
    "a": "$\\lambda=(D_m^2-D_n^2)/[4(m-n)R]$ from two measured diameters, $m-n$ counted.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "rings"
 },
 {
  "id": "c.2.7.4",
@@ -957,22 +1149,38 @@ CONCEPTS.push(
    {
     "why": "Let $M_2^{\\prime}$ be the image of $M_2$ in the beam splitter; the fringes are those of an air film of thickness $d$ between $M_1$ and $M_2^{\\prime}$. At inclination $\\theta$ the path difference is",
     "m": "$$\\Delta=2d\\cos\\theta$$",
-    "meaning": "Cosine law with $\\mu=1$."
+    "meaning": "The mirror in one arm has an image, and the two beams behave as if reflected from a film of air between the first mirror and that image. So the interferometer is a thin film in disguise.",
+    "fig": {
+     "k": "michelson",
+     "s": 1
+    }
    },
    {
     "why": "Bright circular fringes (ignoring the phase constant) satisfy",
     "m": "$$2d\\cos\\theta=m\\lambda$$",
-    "meaning": "Fringes of equal inclination."
+    "meaning": "For rays leaving at different angles the path difference changes with the angle, which gives rings; each ring is one order of interference.",
+    "fig": {
+     "k": "michelson",
+     "s": 2
+    }
    },
    {
     "why": "At the centre $\\theta=0$; changing $d$ by $\\Delta d$ changes the order by $N$.",
     "m": "$$2\\Delta d=N\\lambda\\;\\Rightarrow\\;\\lambda=\\frac{2\\Delta d}{N}$$",
-    "meaning": "Each fringe crossing = $\\lambda/2$ of mirror travel."
+    "meaning": "Moving the mirror changes the film's thickness. Each time it changes by half a wavelength another fringe passes through the centre, so counting fringes measures the distance moved.",
+    "fig": {
+     "k": "michelson",
+     "s": 3
+    }
    },
    {
     "why": "For two lines, fringes of $\\lambda_1$ and $\\lambda_2$ coincide again when the orders differ by one: $2d/\\lambda_1-2d/\\lambda_2=1$.",
     "m": "$$\\Delta\\lambda=\\frac{\\lambda^{2}}{2\\,\\Delta d}$$",
-    "meaning": "Successive disappearances of the fringes are separated by $\\Delta d$."
+    "meaning": "With two nearby wavelengths, each makes its own fringe pattern. Sometimes the two patterns line up and sometimes they cancel, and the mirror distance between two blurrings reveals how close the wavelengths are.",
+    "fig": {
+     "k": "michelson",
+     "s": 4
+    }
    }
   ],
   "ends": "$\\lambda=2\\Delta d/N$ and the doublet formula."
@@ -993,7 +1201,8 @@ CONCEPTS.push(
    "a": "$\\Delta\\lambda=\\lambda^2/(2\\Delta d)=(589.3\\times10^{-9})^2/(2\\times0.29\\times10^{-3})=0.60$ nm.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "michelson"
 },
 {
  "id": "c.2.7.5",

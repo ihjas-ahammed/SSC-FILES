@@ -41,6 +41,8 @@ A project has three levers, weakest to strongest:
      `ctx.overall` holds `{ total, l1, l2, l3 }`.
    - `theme(dark)` runs after light/dark is applied.
    - `ready()` runs once, after the signed-in app is up.
+   - `rungFig(rung, concept, i)` returns a node shown above one proof step (Optics: the step diagram).
+   - `noteSim(concept)` returns a node placed after a note's figures (Optics: the simulation).
 
    Hooks live in `app/project/*.js`, loaded **before** `flow.js`. So they only register
    functions and must not call `DOM`/`UI`/`Pool` at load time. A hook that throws is

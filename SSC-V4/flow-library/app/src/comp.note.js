@@ -228,7 +228,9 @@ const NoteBody = (function () {
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
           (function (lines) {
-            return p.rungs.map(function (r, idx) { return UI.rung(r, idx, { line: lines[idx] }); });
+            return p.rungs.map(function (r, idx) {
+              return UI.rung(r, idx, { line: lines[idx], fig: Project.hook('rungFig', r, c, idx) });
+            });
           })(RealLine.proof(c))
         ));
       }
@@ -658,6 +660,8 @@ const NoteBody = (function () {
       ]),
 
       Fig.mount(c),
+
+      Project.hook('noteSim', c),
 
       c.intuition ? el('div', { class: 'card tint' }, [
         el('div', { class: 'kicker', text: 'What it really says' }),

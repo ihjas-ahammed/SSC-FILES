@@ -55,22 +55,38 @@ CONCEPTS.push(
    {
     "why": "Expand $y$.",
     "m": "$$\\frac yb=\\cos\\omega t\\cos\\delta-\\sin\\omega t\\sin\\delta,\\qquad\\frac xa=\\cos\\omega t$$",
-    "meaning": "$\\cos\\omega t=x/a$, $\\sin\\omega t=\\sqrt{1-x^2/a^2}$."
+    "meaning": "Light is two perpendicular wiggles at once. We write each as a function of time and let the second lag behind the first by a phase δ.",
+    "fig": {
+     "k": "ellipse",
+     "s": 1
+    }
    },
    {
     "why": "Isolate $\\sin\\omega t\\sin\\delta$.",
     "m": "$$\\frac yb-\\frac xa\\cos\\delta=-\\sin\\omega t\\sin\\delta$$",
-    "meaning": "Move the $\\cos$ term."
+    "meaning": "To find the shape they trace out we want to get rid of time. So we isolate the piece of the second wiggle that changes differently from the first.",
+    "fig": {
+     "k": "ellipse",
+     "s": 2
+    }
    },
    {
     "why": "Square and use $\\sin^2\\omega t=1-x^2/a^2$.",
     "m": "$$\\Big(\\frac yb-\\frac xa\\cos\\delta\\Big)^{2}=\\Big(1-\\frac{x^{2}}{a^{2}}\\Big)\\sin^{2}\\delta$$",
-    "meaning": "Eliminates time."
+    "meaning": "Squaring, and using “sine squared plus cosine squared equals one”, removes time altogether and leaves an equation connecting only the two coordinates.",
+    "fig": {
+     "k": "ellipse",
+     "s": 3
+    }
    },
    {
     "why": "Expand and collect.",
     "m": "$$\\frac{x^{2}}{a^{2}}+\\frac{y^{2}}{b^{2}}-\\frac{2xy}{ab}\\cos\\delta=\\sin^{2}\\delta$$",
-    "meaning": "The polarisation ellipse; the cases follow by inspection."
+    "meaning": "That is the equation of an ellipse whose shape is controlled by δ. It flattens to a line, opens into an ellipse, or becomes a circle, depending on the phase difference.",
+    "fig": {
+     "k": "ellipse",
+     "s": 4
+    }
    }
   ],
   "ends": "The polarisation ellipse and its special cases."
@@ -86,7 +102,8 @@ CONCEPTS.push(
    "a": "$\\delta=\\pm\\pi/2$ and $a=b$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "waveplate"
 },
 {
  "id": "c.4.2.1",
@@ -113,17 +130,29 @@ CONCEPTS.push(
    {
     "why": "Reflected angle equals $\\theta_B$; the refracted angle is $\\theta_r$; the perpendicular condition is",
     "m": "$$\\theta_B+90^{\\circ}+\\theta_r=180^{\\circ}\\;\\Rightarrow\\;\\theta_r=90^{\\circ}-\\theta_B$$",
-    "meaning": "Angles on a straight line at the point of incidence."
+    "meaning": "Brewster found that reflected light is completely polarised exactly when the reflected and refracted rays are at right angles to each other. That fixes the angle of refraction in terms of the angle of incidence.",
+    "fig": {
+     "k": "brewster",
+     "s": 1
+    }
    },
    {
     "why": "Snell's law from air into the medium.",
     "m": "$$\\sin\\theta_B=n\\sin\\theta_r=n\\sin(90^{\\circ}-\\theta_B)=n\\cos\\theta_B$$",
-    "meaning": "Substitute $\\theta_r$."
+    "meaning": "The law of refraction links the two angles. With a right angle between the rays, the sine of one angle becomes the cosine of the other.",
+    "fig": {
+     "k": "brewster",
+     "s": 2
+    }
    },
    {
     "why": "Divide.",
     "m": "$$\\tan\\theta_B=n$$",
-    "meaning": "Brewster's law."
+    "meaning": "Dividing the sine by the cosine gives the tangent, so the special angle obeys a very simple rule: its tangent is the refractive index.",
+    "fig": {
+     "k": "brewster",
+     "s": 3
+    }
    }
   ],
   "ends": "Brewster's law."
@@ -139,7 +168,8 @@ CONCEPTS.push(
    "a": "$\\theta_B=\\tan^{-1}1.33\\approx53.1^\\circ$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "brewster"
 },
 {
  "id": "c.4.2.2",
@@ -214,17 +244,29 @@ CONCEPTS.push(
    {
     "why": "Let the incident vibration be $E_0\\cos\\omega t$ along $\\hat p$, and the analyser axis $\\hat a$ at angle $\\theta$ to $\\hat p$.",
     "m": "$$E_\\parallel=E_0\\cos\\theta\\ \\cos\\omega t$$",
-    "meaning": "Component along $\\hat a$."
+    "meaning": "A polariser lets through only the part of the electric field that lies along its axis. So we split the incoming field into a part along the axis and a part across it.",
+    "fig": {
+     "k": "malus",
+     "s": 1
+    }
    },
    {
     "why": "The perpendicular component $E_0\\sin\\theta\\cos\\omega t$ is blocked. Intensity goes as the square.",
     "m": "$$I\\propto E_\\parallel^{2}=E_0^{2}\\cos^{2}\\theta\\cos^{2}\\omega t$$",
-    "meaning": "Time-average $\\cos^2\\omega t=\\tfrac12$ in both $I$ and $I_0$."
+    "meaning": "Only the along-axis part gets through, and brightness is proportional to the square of the field, so brightness goes as the cosine squared of the angle.",
+    "fig": {
+     "k": "malus",
+     "s": 2
+    }
    },
    {
     "why": "Divide by the incident intensity.",
     "m": "$$I=I_0\\cos^{2}\\theta$$",
-    "meaning": "Malus' law."
+    "meaning": "Dividing by the intensity that went in gives Malus's law — a smooth swing from full brightness when the axes are aligned to complete darkness when they are crossed.",
+    "fig": {
+     "k": "malus",
+     "s": 3
+    }
    }
   ],
   "ends": "Malus' law."
@@ -245,7 +287,8 @@ CONCEPTS.push(
    "a": "At $\\theta=90^\\circ,270^\\circ$ (crossed), by $\\cos\\theta=0$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "malus"
 },
 {
  "id": "c.4.3.2",
@@ -367,17 +410,29 @@ CONCEPTS.push(
    {
     "why": "Optical paths of the two components through a plate of thickness $t$.",
     "m": "$$L_o=n_ot,\\qquad L_e=n_et$$",
-    "meaning": "Normal incidence, cut parallel to the axis."
+    "meaning": "Inside a crystal the two components of the light see different refractive indices, so they travel at different speeds. Over the thickness of the plate one component gets ahead of the other.",
+    "fig": {
+     "k": "waveplate",
+     "s": 1
+    }
    },
    {
     "why": "Path difference.",
     "m": "$$\\Delta=(n_o-n_e)t$$",
-    "meaning": "Sign tells which component leads."
+    "meaning": "Both components cross the same thickness, but at different effective speeds, so one ends up ahead by the thickness times the difference between the two refractive indices — the optical path difference.",
+    "fig": {
+     "k": "waveplate",
+     "s": 2
+    }
    },
    {
     "why": "Phase difference and the special cases $\\delta=\\pi/2$, $\\pi$.",
     "m": "$$\\delta=\\frac{2\\pi}{\\lambda}(n_o-n_e)t\\;\\Rightarrow\\;t_{\\rm QWP}=\\frac{\\lambda}{4|n_o-n_e|},\\ t_{\\rm HWP}=\\frac{\\lambda}{2|n_o-n_e|}$$",
-    "meaning": "For the lowest order plate."
+    "meaning": "Turning that path difference into a phase difference — multiplying by 2π over the wavelength — shows that a quarter of a wavelength gives a 90° shift and half a wavelength a 180° shift. Those are the quarter-wave and half-wave plates.",
+    "fig": {
+     "k": "waveplate",
+     "s": 3
+    }
    }
   ],
   "ends": "The wave-plate thickness formulae."
@@ -393,7 +448,8 @@ CONCEPTS.push(
    "a": "$t=589/(4\\times0.0091)\\approx16.2\\ \\mu$m.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "waveplate"
 },
 {
  "id": "c.4.5.2",
@@ -419,22 +475,38 @@ CONCEPTS.push(
    {
     "why": "Take the plate's optic axis along $x$. Components at entry:",
     "m": "$$E_x=E\\cos\\theta\\cos\\omega t,\\qquad E_y=E\\sin\\theta\\cos\\omega t$$",
-    "meaning": "In phase."
+    "meaning": "Choose the plate's fast and slow directions as the coordinate axes. Any straight-line vibration can then be split into a part along one axis and a part along the other.",
+    "fig": {
+     "k": "qwhwp",
+     "s": 1
+    }
    },
    {
     "why": "After the plate the $y$-component lags by $\\delta$.",
     "m": "$$E_x=E\\cos\\theta\\cos\\omega t,\\qquad E_y=E\\sin\\theta\\cos(\\omega t-\\delta)$$",
-    "meaning": "Use the ellipse result with $a=E\\cos\\theta$, $b=E\\sin\\theta$."
+    "meaning": "After the plate the two parts are no longer in step: one is delayed by the plate's phase shift.",
+    "fig": {
+     "k": "qwhwp",
+     "s": 2
+    }
    },
    {
     "why": "QWP: $\\delta=\\pi/2$, so $E_y=E\\sin\\theta\\sin\\omega t$.",
     "m": "$$\\frac{E_x^{2}}{E^{2}\\cos^{2}\\theta}+\\frac{E_y^{2}}{E^{2}\\sin^{2}\\theta}=1$$",
-    "meaning": "Circle when $\\theta=45^{\\circ}$."
+    "meaning": "For a quarter-wave plate the delay is a quarter of a cycle, which turns the two wiggles into an ellipse with axes along the plate's axes. If the two parts are equal, the ellipse is a circle.",
+    "fig": {
+     "k": "qwhwp",
+     "s": 3
+    }
    },
    {
     "why": "HWP: $\\delta=\\pi$, so $E_y\\to-E_y$.",
     "m": "$$\\mathbf E:(\\cos\\theta,\\sin\\theta)\\to(\\cos\\theta,-\\sin\\theta)$$",
-    "meaning": "The plane of vibration is reflected in the optic axis: rotated by $2\\theta$."
+    "meaning": "For a half-wave plate the delay flips the sign of one part. The direction of vibration is reflected in the plate's axis, which turns the plane of vibration through twice the angle it made with the axis.",
+    "fig": {
+     "k": "qwhwp",
+     "s": 4
+    }
    }
   ],
   "ends": "QWP and HWP actions."
@@ -450,7 +522,8 @@ CONCEPTS.push(
    "a": "By a quarter-wave plate with its axis at $45^\\circ$ to the plane of vibration.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "waveplate"
 },
 {
  "id": "c.4.6.1",

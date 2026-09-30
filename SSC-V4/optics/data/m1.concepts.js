@@ -60,22 +60,38 @@ CONCEPTS.push(
    {
     "why": "Put the mirror on the line $y=0$, $A=(0,a)$, $B=(d,b)$, and let the ray touch the mirror at $P=(x,0)$. Write the path length.",
     "m": "$$L(x)=\\sqrt{a^{2}+x^{2}}+\\sqrt{b^{2}+(d-x)^{2}}$$",
-    "meaning": "One free parameter $x$: the point where the ray meets the mirror."
+    "meaning": "We describe the whole journey with a single number — its total length — that depends on just one thing we are free to choose: where on the mirror the ray touches down. Everything that follows asks which touch-down point is special.",
+    "fig": {
+     "k": "reflect",
+     "s": 1
+    }
    },
    {
     "why": "Demand that the path length be stationary.",
     "m": "$$\\frac{dL}{dx}=\\frac{x}{\\sqrt{a^{2}+x^{2}}}-\\frac{d-x}{\\sqrt{b^{2}+(d-x)^{2}}}=0$$",
-    "meaning": "The two terms are exactly $\\sin i$ and $\\sin r$ measured from the vertical normal."
+    "meaning": "If nudging the touch-down point a tiny bit barely changes the total length, we are at the bottom of the curve. That “flat spot” test is how Fermat's principle picks out the path light really takes.",
+    "fig": {
+     "k": "reflect",
+     "s": 2
+    }
    },
    {
     "why": "Read the two fractions as sines of the angles the legs make with the normal.",
     "m": "$$\\sin i=\\sin r\\;\\Longrightarrow\\; i=r$$",
-    "meaning": "Both angles lie in $[0,\\pi/2]$, so equal sines mean equal angles."
+    "meaning": "Each fraction is “sideways distance over slanted distance” for one half of the journey, which is exactly the sine of the angle that leg makes with the vertical. So the flat-spot condition is secretly a statement about angles, and it says the two angles are equal.",
+    "fig": {
+     "k": "reflect",
+     "s": 3
+    }
    },
    {
     "why": "Coplanarity: $A$, $B$ and the normal at $P$ all lie in the vertical plane through $A$ and $B$. Had $P$ been displaced sideways out of that plane, $AP+PB$ would only grow.",
     "m": "$$\\text{plane of incidence}\\ni AP,\\;PB,\\;\\text{normal}$$",
-    "meaning": "So the sideways variation is automatically stationary at zero displacement."
+    "meaning": "Equal angles are not the whole law: the two legs and the vertical must also lie in one flat sheet. If the touch-down point wandered sideways out of that sheet, the path could only get longer, so the real ray never leaves it.",
+    "fig": {
+     "k": "reflect",
+     "s": 4
+    }
    }
   ],
   "ends": "The law of reflection, $i=r$ with all three lines in one plane."
@@ -91,7 +107,8 @@ CONCEPTS.push(
    "a": "Reflect $A$ in the mirror to $A^{\\prime}$. Then $AP=A^{\\prime}P$, and $A^{\\prime}P+PB$ is least when $A^{\\prime},P,B$ are collinear.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "reflect"
 },
 {
  "id": "c.1.1.3",
@@ -119,22 +136,38 @@ CONCEPTS.push(
    {
     "why": "Let the interface be $y=0$, $A=(0,a)$ in medium 1 above it, $B=(d,-b)$ in medium 2 below, and $R=(x,0)$ the crossing point.",
     "m": "$$L(x)=n_1\\sqrt{a^{2}+x^{2}}+n_2\\sqrt{b^{2}+(d-x)^{2}}$$",
-    "meaning": "The optical path is $n_1\\,AR+n_2\\,RB$."
+    "meaning": "The two halves of the journey are now in different materials, and light “pays” more for every centimetre in the denser one. So we add up the cost — length times refractive index for each half — and again let the crossing point be the only free choice.",
+    "fig": {
+     "k": "snell",
+     "s": 1
+    }
    },
    {
     "why": "Stationarity.",
     "m": "$$\\frac{dL}{dx}=n_1\\frac{x}{\\sqrt{a^{2}+x^{2}}}-n_2\\frac{d-x}{\\sqrt{b^{2}+(d-x)^{2}}}=0$$",
-    "meaning": "Each fraction is the sine of the angle its leg makes with the vertical normal."
+    "meaning": "We look for the crossing point where nudging it changes the total cost only at second order: the bottom of the cost curve. Because the two materials charge different rates, that balance point is no longer the straight line.",
+    "fig": {
+     "k": "snell",
+     "s": 2
+    }
    },
    {
     "why": "Identify the sines.",
     "m": "$$\\sin\\theta_1=\\frac{x}{\\sqrt{a^{2}+x^{2}}},\\qquad \\sin\\theta_2=\\frac{d-x}{\\sqrt{b^{2}+(d-x)^{2}}}$$",
-    "meaning": "$\\theta_1$ is the angle in medium 1, $\\theta_2$ in medium 2."
+    "meaning": "Each fraction is the sideways part of one leg divided by the leg itself, which is the sine of that leg's angle to the normal. So the balance condition is really a condition on the two angles.",
+    "fig": {
+     "k": "snell",
+     "s": 3
+    }
    },
    {
     "why": "Substitute.",
     "m": "$$n_1\\sin\\theta_1=n_2\\sin\\theta_2$$",
-    "meaning": "Snell's law. Coplanarity follows as in the reflection case."
+    "meaning": "Putting the sines back in gives the familiar rule: the ray bends until “index × sine of the angle” is the same on both sides. Light arranges its path so that the cost is balanced across the boundary.",
+    "fig": {
+     "k": "snell",
+     "s": 4
+    }
    }
   ],
   "ends": "Snell's law of refraction."
@@ -155,7 +188,8 @@ CONCEPTS.push(
    "a": "$\\sin\\theta_2=\\sin30^\\circ/1.5=1/3$, so $\\theta_2\\approx19.5^\\circ$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "snell"
 },
 {
  "id": "c.1.1.4",
@@ -181,17 +215,29 @@ CONCEPTS.push(
    {
     "why": "A parabola has focus $S$ and directrix $AB$; every point $Q$ on it satisfies $QS=QL^{\\prime}$, where $QL^{\\prime}$ is the perpendicular to the directrix.",
     "m": "$$QS=QL^{\\prime}$$",
-    "meaning": "This is the defining property of the parabola."
+    "meaning": "This is the special property of a parabola: every point on it is exactly as far from the focus as it is from a straight line called the directrix. It lets us swap a slanted distance for a straight one.",
+    "fig": {
+     "k": "parabola",
+     "s": 1
+    }
    },
    {
     "why": "Take a ray parallel to the axis, from a point $P$ on a fixed plane wavefront, striking the mirror at $Q$. The path from $P$ to $S$ is",
     "m": "$$L_{\\rm op}=PQ+QS=PQ+QL^{\\prime}=PL^{\\prime}$$",
-    "meaning": "$P$, $Q$, $L^{\\prime}$ are collinear because the ray is parallel to the axis and $QL^{\\prime}$ is perpendicular to the directrix."
+    "meaning": "Follow a ray that arrives parallel to the axis. After it bounces, its remaining distance to the focus equals the straight-across distance from the mirror point to the directrix, because the parabola's property swaps the two one-for-one.",
+    "fig": {
+     "k": "parabola",
+     "s": 2
+    }
    },
    {
     "why": "$PL^{\\prime}$ is the perpendicular distance from the wavefront to the directrix.",
     "m": "$$PL^{\\prime}=\\text{const, the same for every }Q$$",
-    "meaning": "Every reflection point gives the same optical path to $S$."
+    "meaning": "That straight-across distance runs from a fixed wavefront to a fixed line, so it is the same wherever on the mirror the ray landed. Every ray therefore takes exactly the same optical path to the focus — which is what it means to be focused perfectly.",
+    "fig": {
+     "k": "parabola",
+     "s": 3
+    }
    }
   ],
   "ends": "All parallel rays reach the focus with equal optical path, so the paraboloid images the point at infinity perfectly onto $S$."
@@ -262,22 +308,38 @@ CONCEPTS.push(
    {
     "why": "A ray from the axis point $O_{\\rm b}$ (distance $u$) strikes the surface at height $h$ and meets the axis again at $I$. With the centre of curvature $C$, let the ray make angles $\\alpha$ (with the axis), $\\gamma$ (radius $CP$ with the axis) and $\\beta$ (refracted ray with the axis).",
     "m": "$$\\theta_1=\\alpha+\\gamma,\\qquad \\theta_2=\\gamma-\\beta$$",
-    "meaning": "Exterior angles of the two triangles $O_{\\rm b}PC$ and $PIC$."
+    "meaning": "We track three small angles the ray makes on its way — with the axis, with the radius of the surface, and after refraction — and use the fact that an outside angle of a triangle is the sum of the two inside angles it does not touch. That turns the geometry into simple angle bookkeeping.",
+    "fig": {
+     "k": "sphref",
+     "s": 1
+    }
    },
    {
     "why": "Snell's law in the paraxial limit: $n_1\\theta_1=n_2\\theta_2$.",
     "m": "$$n_1(\\alpha+\\gamma)=n_2(\\gamma-\\beta)$$",
-    "meaning": "$\\sin\\theta\\simeq\\theta$ for every angle here."
+    "meaning": "Snell's law is normally about sines, but when angles are tiny a sine and the angle itself are almost the same number. Near the axis we can use the angles directly, which makes everything linear and easy to combine.",
+    "fig": {
+     "k": "sphref",
+     "s": 2
+    }
    },
    {
     "why": "In the paraxial limit the angles are height over distance, keeping signs.",
     "m": "$$\\alpha\\simeq-\\frac{h}{u},\\qquad \\beta\\simeq\\frac{h}{v},\\qquad \\gamma\\simeq\\frac{h}{R}$$",
-    "meaning": "The minus sign for $\\alpha$ is because $u<0$ while $\\alpha>0$ for a ray inclined toward the axis."
+    "meaning": "For a ray close to the axis an angle is simply “how high the ray is” divided by “how far away it is”. So every angle can be swapped for a height over a distance, with a minus sign where the object lies to the left.",
+    "fig": {
+     "k": "sphref",
+     "s": 3
+    }
    },
    {
     "why": "Substitute and cancel $h$.",
     "m": "$$n_1\\Big(\\frac{h}{R}-\\frac{h}{u}\\Big)=n_2\\Big(\\frac{h}{R}-\\frac{h}{v}\\Big)\\;\\Longrightarrow\\;\\frac{n_2}{v}-\\frac{n_1}{u}=\\frac{n_2-n_1}{R}$$",
-    "meaning": "$h$ cancels, so all paraxial rays from the object converge to the same $v$: a genuine image."
+    "meaning": "The height appears in every term, so it cancels. That is the whole point: it does not matter how high the ray hit the surface — every ray from the object ends at the same place, and that shared place is what we call the image.",
+    "fig": {
+     "k": "sphref",
+     "s": 4
+    }
    }
   ],
   "ends": "The refraction formula for a single spherical surface."
@@ -293,7 +355,8 @@ CONCEPTS.push(
    "a": "$\\dfrac{1.5}{v}=\\dfrac{1}{-30}+\\dfrac{0.5}{10}=0.0167$ cm$^{-1}$, so $v=+90$ cm (real image inside the glass).",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "surface"
 },
 {
  "id": "c.1.2.3",
@@ -347,17 +410,29 @@ CONCEPTS.push(
    {
     "why": "Start from the refraction formula.",
     "m": "$$\\frac{n_2}{v}-\\frac{n_1}{u}=\\frac{n_2-n_1}{R}$$",
-    "meaning": "The formula holds for any two media."
+    "meaning": "We already know how a curved boundary between two materials bends light. A mirror is the same curved surface, so we start from that result instead of beginning again.",
+    "fig": {
+     "k": "mirrorfold",
+     "s": 1
+    }
    },
    {
     "why": "Set $n_2=-n_1$: after reflection the ray travels backward, and $v$ is measured against it.",
     "m": "$$-\\frac{n_1}{v}-\\frac{n_1}{u}=\\frac{-2n_1}{R}$$",
-    "meaning": "The index stays $n_1$ in magnitude because the medium is unchanged."
+    "meaning": "A mirror sends the light back the way it came. The equations can describe that by pretending the second material has the opposite index. It is bookkeeping for “the direction of travel has reversed”, not a real negative material.",
+    "fig": {
+     "k": "mirrorfold",
+     "s": 2
+    }
    },
    {
     "why": "Cancel $-n_1$.",
     "m": "$$\\frac1v+\\frac1u=\\frac2R$$",
-    "meaning": "Set $u\\to-\\infty$ to read off the focal point at $v=R/2$."
+    "meaning": "The common factor drops out, and the formula no longer mentions any refractive index — as it should, because a mirror focuses according to its shape alone, not according to the medium around it.",
+    "fig": {
+     "k": "mirrorfold",
+     "s": 3
+    }
    }
   ],
   "ends": "The mirror formula, and $f=R/2$."
@@ -373,7 +448,8 @@ CONCEPTS.push(
    "a": "Put $n_2=-n_1$: $-n_1/v-n_1/u=-2n_1/R$, i.e. $1/v+1/u=2/R$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "mirror"
 },
 {
  "id": "c.1.2.5",
@@ -398,17 +474,29 @@ CONCEPTS.push(
    {
     "why": "An object of height $h_{\\rm o}$ at distance $u$ sends a ray to the vertex $O$; it makes angle $\\theta_1$ with the axis, and after refraction angle $\\theta_2$.",
     "m": "$$\\theta_1\\simeq\\frac{h_{\\rm o}}{u},\\qquad \\theta_2\\simeq\\frac{h_{\\rm i}}{v}$$",
-    "meaning": "Signed slopes of the incident and refracted rays (both measured from the axis, which is the normal at the vertex); $u<0$ makes $\\theta_1<0$ for an upright object, i.e. the ray descends."
+    "meaning": "To find how big the image is, follow the one ray that is easy to trace: the ray to the centre of the surface, where the surface is simply a flat face turned toward the axis.",
+    "fig": {
+     "k": "surfmag",
+     "s": 1
+    }
    },
    {
     "why": "Paraxial Snell's law at the vertex.",
     "m": "$$n_1\\theta_1=n_2\\theta_2\\;\\Rightarrow\\;n_1\\frac{h_{\\rm o}}{u}=n_2\\frac{h_{\\rm i}}{v}$$",
-    "meaning": "Small angles: $\\sin\\theta\\simeq\\tan\\theta$."
+    "meaning": "At that centre point the ordinary law of refraction applies directly, and because the angles are small it becomes a plain proportion between the ray's slopes on the two sides.",
+    "fig": {
+     "k": "surfmag",
+     "s": 2
+    }
    },
    {
     "why": "Solve for the ratio of heights.",
     "m": "$$m=\\frac{h_{\\rm i}}{h_{\\rm o}}=\\frac{n_1\\,v}{n_2\\,u}$$",
-    "meaning": "For a real object and a real image $v>0>u$, so $m<0$: inverted."
+    "meaning": "Slopes are heights divided by distances, so the proportion becomes a relation between image height and object height. Their ratio is the magnification, and its sign says whether the image is upside down.",
+    "fig": {
+     "k": "surfmag",
+     "s": 3
+    }
    }
   ],
   "ends": "$m=n_1v/(n_2u)$."
@@ -424,7 +512,8 @@ CONCEPTS.push(
    "a": "The image is inverted relative to the object.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "surface"
 },
 {
  "id": "c.1.3.1",
@@ -451,22 +540,38 @@ CONCEPTS.push(
    {
     "why": "Surface 1 (air $\\to$ glass) forms an intermediate image at $v_1$ from the object at $u$.",
     "m": "$$\\frac{n}{v_1}-\\frac{1}{u}=\\frac{n-1}{R_1}$$",
-    "meaning": "First surface: $n_1=1$, $n_2=n$."
+    "meaning": "Treat the lens as two curved surfaces in a row. The first takes light from the object and forms a first image — even though the light never actually gets there, because the second surface is in the way.",
+    "fig": {
+     "k": "thinlens",
+     "s": 1
+    }
    },
    {
     "why": "Surface 2 (glass $\\to$ air) treats that image as its object, at distance $v_1$ (thin lens), and forms the final image at $v$.",
     "m": "$$\\frac{1}{v}-\\frac{n}{v_1}=\\frac{1-n}{R_2}$$",
-    "meaning": "Second surface: $n_1=n$, $n_2=1$."
+    "meaning": "That first image becomes the object for the second surface. In a thin lens the two surfaces are practically in the same place, so we do not need to worry about the gap between them.",
+    "fig": {
+     "k": "thinlens",
+     "s": 2
+    }
    },
    {
     "why": "Add the two equations; the term $n/v_1$ cancels.",
     "m": "$$\\frac1v-\\frac1u=(n-1)\\Big(\\frac1{R_1}-\\frac1{R_2}\\Big)$$",
-    "meaning": "The left side is independent of $u$ except through $u,v$; the right side is constant."
+    "meaning": "Adding the two equations makes the awkward in-between image disappear: it appears with opposite signs and cancels. What is left connects only the real object and the real final image.",
+    "fig": {
+     "k": "thinlens",
+     "s": 3
+    }
    },
    {
     "why": "Define the constant as $1/f$: the image of an object at infinity is at $v=f$.",
     "m": "$$\\frac1v-\\frac1u=\\frac1f,\\qquad \\frac1f=(n-1)\\Big(\\frac1{R_1}-\\frac1{R_2}\\Big)$$",
-    "meaning": "Both the thin-lens and lens-maker's equations."
+    "meaning": "What remains on the right-hand side depends only on the lens — its material and its curvatures — so we give it a name, 1/f. An object at infinity is focused at distance f, which is why f is called the focal length.",
+    "fig": {
+     "k": "thinlens",
+     "s": 4
+    }
    }
   ],
   "ends": "The thin-lens formula and the lens-maker's equation."
@@ -487,7 +592,8 @@ CONCEPTS.push(
    "a": "The image from surface 1 is the object for surface 2 and the thickness between them is negligible, so $1/v-1/u=(n-1)/R_1+(1-n)/R_2$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "lens"
 },
 {
  "id": "c.1.3.2",
@@ -542,22 +648,38 @@ CONCEPTS.push(
    {
     "why": "A ray at height $h_1$ parallel to the axis meets lens 1, which bends it toward its focus. Just after lens 1 its slope is",
     "m": "$$\\alpha_1=-\\frac{h_1}{f_1}$$",
-    "meaning": "A thin lens changes slope by $-h/f$ and leaves height unchanged."
+    "meaning": "Send in a ray parallel to the axis at some height. The first lens bends it toward its own focal point, and how sharply it bends depends on the ray's height and on the lens's strength.",
+    "fig": {
+     "k": "twolens",
+     "s": 1
+    }
    },
    {
     "why": "It travels a distance $d$ to lens 2, so its height there is",
     "m": "$$h_2=h_1+d\\,\\alpha_1=h_1\\Big(1-\\frac{d}{f_1}\\Big)$$",
-    "meaning": "Straight-line propagation between the two lenses."
+    "meaning": "After the first lens the ray simply travels straight for a distance d. Because it is now sloping toward the axis, it reaches the second lens lower down than it started.",
+    "fig": {
+     "k": "twolens",
+     "s": 2
+    }
    },
    {
     "why": "Lens 2 changes the slope again.",
     "m": "$$\\alpha_2=\\alpha_1-\\frac{h_2}{f_2}=-\\frac{h_1}{f_1}-\\frac{h_1}{f_2}\\Big(1-\\frac{d}{f_1}\\Big)$$",
-    "meaning": "Slope after the second lens."
+    "meaning": "The second lens bends the ray again, by an amount that depends on how high the ray is where it arrives — which is lower than before. That is why two separated lenses do not just add their strengths; they would only do that if they touched.",
+    "fig": {
+     "k": "twolens",
+     "s": 3
+    }
    },
    {
     "why": "Define the effective focal length by $\\alpha_2=-h_1/F$.",
     "m": "$$\\frac1F=\\frac1{f_1}+\\frac1{f_2}-\\frac{d}{f_1f_2}$$",
-    "meaning": "The slope of the exit ray for a unit-height parallel input is $-1/F$."
+    "meaning": "Whatever single lens would bend a parallel ray to the same final slope is the “equivalent” lens. Reading its focal length off that final slope gives the combination formula.",
+    "fig": {
+     "k": "twolens",
+     "s": 4
+    }
    }
   ],
   "ends": "The two-lens focal-length formula."
@@ -573,7 +695,8 @@ CONCEPTS.push(
    "a": "$1/F=1/10+1/10-5/100=0.15$, so $F\\approx6.67$ cm.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "twolens"
 },
 {
  "id": "c.1.3.4",
@@ -623,22 +746,34 @@ CONCEPTS.push(
    {
     "why": "For a thin lens in air $f_2=f$, $f_1=-f$. Define the foci-based coordinates.",
     "m": "$$x=u-f_1=u+f,\\qquad x^{\\prime}=v-f_2=v-f$$",
-    "meaning": "Shifting the origin from the lens to the two foci."
+    "meaning": "Newton's trick is to measure distances from the focal points instead of from the lens. We shift the ruler: the object distance becomes its distance from the first focus, and the image distance becomes its distance from the second.",
+    "fig": {
+     "k": "newton",
+     "s": 1
+    }
    },
    {
     "why": "Start from the thin-lens formula and clear denominators.",
     "m": "$$\\frac1v-\\frac1u=\\frac1f\\;\\Longrightarrow\\; f(u-v)=uv$$",
-    "meaning": "Multiply through by $uvf$."
+    "meaning": "We rewrite the ordinary lens formula without fractions — multiplying everything through — so the algebra of the next steps is easy."
    },
    {
     "why": "Express $uv$ and $u-v$ in the new variables: $u=x-f$, $v=x^{\\prime}+f$.",
     "m": "$$f\\big[(x-f)-(x^{\\prime}+f)\\big]=(x-f)(x^{\\prime}+f)$$",
-    "meaning": "Substitute."
+    "meaning": "Now we swap the lens-based distances for the focus-based ones using the shift from the first step. This is the same physics; we are only moving where we put the zero of the ruler.",
+    "fig": {
+     "k": "newton",
+     "s": 3
+    }
    },
    {
     "why": "Expand and cancel the common terms.",
     "m": "$$fx-fx^{\\prime}-2f^2=xx^{\\prime}+fx-fx^{\\prime}-f^2\\;\\Longrightarrow\\; xx^{\\prime}=-f^2$$",
-    "meaning": "Newton's formula, $xx^{\\prime}=f_1f_2$ with $f_1f_2=-f^2$."
+    "meaning": "After expanding, most terms cancel and only a product survives: the two focus-based distances multiply to a constant that depends on the lens alone. That simple product is Newton's formula.",
+    "fig": {
+     "k": "newton",
+     "s": 4
+    }
    }
   ],
   "ends": "Newton's formula."
@@ -654,7 +789,8 @@ CONCEPTS.push(
    "a": "$x=-40$ cm; $xx^{\\prime}=-100$ so $x^{\\prime}=+2.5$ cm (image 2.5 cm beyond $F_2$).",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "lens"
 },
 {
  "id": "c.1.4.2",
@@ -680,17 +816,29 @@ CONCEPTS.push(
    {
     "why": "The ray from the top of the object through the lens centre goes straight; similar triangles on either side of the lens.",
     "m": "$$\\frac{h^{\\prime}}{h}=\\frac{v}{u}$$",
-    "meaning": "Signed heights and distances: an inverted real image has $h^{\\prime}<0$."
+    "meaning": "The ray through the centre of a thin lens goes straight on, and it makes two similar triangles, one on each side of the lens. Similar triangles mean heights are in the same ratio as distances.",
+    "fig": {
+     "k": "lensmag",
+     "s": 1
+    }
    },
    {
     "why": "Express $v$ and $u$ through the Newton distances: $u=x-f$, $v=x^{\\prime}+f$ and $xx^{\\prime}=-f^2$.",
     "m": "$$m=\\frac{x^{\\prime}+f}{x-f}=\\frac{-f^2/x+f}{x-f}=\\frac{f}{x}$$",
-    "meaning": "Simplify: $-f^2/x+f=f(x-f)/x$."
+    "meaning": "We now describe those same distances measured from the focal points, using the shift from the previous result.",
+    "fig": {
+     "k": "lensmag",
+     "s": 2
+    }
    },
    {
     "why": "Use $xx^{\\prime}=-f^2$ again.",
     "m": "$$m=\\frac fx=-\\frac{x^{\\prime}}{f}$$",
-    "meaning": "Two more forms of the same magnification."
+    "meaning": "Using Newton's formula to tidy up, the magnification can be written two neat ways: in terms of the object's distance from the first focus, or of the image's distance from the second.",
+    "fig": {
+     "k": "lensmag",
+     "s": 3
+    }
    }
   ],
   "ends": "$m=v/u=f/x=-x^{\\prime}/f$."
@@ -706,7 +854,8 @@ CONCEPTS.push(
    "a": "$u=-15$: $1/v=1/10-1/15=1/30$, $v=30$; $m=v/u=-2$ (inverted, twice as large).",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "lens"
 },
 {
  "id": "c.1.4.3",
@@ -731,12 +880,20 @@ CONCEPTS.push(
    {
     "why": "Differentiate $1/v-1/u=1/f$ with respect to $u$.",
     "m": "$$-\\frac{1}{v^2}\\,dv+\\frac{1}{u^2}\\,du=0$$",
-    "meaning": "$f$ is a constant."
+    "meaning": "If you move the object a tiny bit along the axis, the image moves too. To find out how much, we ask how a small change in one distance in the lens formula changes the other.",
+    "fig": {
+     "k": "longmag",
+     "s": 1
+    }
    },
    {
     "why": "Solve for the ratio.",
     "m": "$$\\frac{dv}{du}=\\frac{v^2}{u^2}=m^2$$",
-    "meaning": "Since $m=v/u$."
+    "meaning": "The rate at which the image moves compared with the object works out to the square of the sideways magnification. That is why the image of a deep object looks stretched or squashed: depth is magnified by the square, sideways only by the first power.",
+    "fig": {
+     "k": "longmag",
+     "s": 2
+    }
    }
   ],
   "ends": "$m_L=m^2$."
@@ -747,6 +904,7 @@ CONCEPTS.push(
    "a": "$m_L=dv/du=m^2$, always positive.",
    "kind": "state"
   }
- ]
+ ],
+ "sim": "lens"
 }
 );

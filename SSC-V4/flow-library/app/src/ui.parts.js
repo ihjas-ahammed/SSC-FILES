@@ -266,7 +266,9 @@ const UI = (function () {
     };
   }
 
-  /* `line` is an optional RealLine node drawn under the maths.
+  /* `fig` is an optional diagram node a project draws for this step (PROJECT.hooks.rungFig),
+     shown above the maths so the picture is read first.
+     `line` is an optional RealLine node drawn under the maths.
      `compact` is the recall reel's version: the explanation as a quiet
      line under the maths rather than its own labelled block. */
   function rung(r, i, opts) {
@@ -276,6 +278,7 @@ const UI = (function () {
       el('div', { class: 'rung-why small muted' }, [
         el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: p.why })
       ]),
+      o.fig || null,
       p.math ? el('div', { class: 'rung-math', html: p.math }) : null,
       o.line || null,
       p.meaning ? (o.compact

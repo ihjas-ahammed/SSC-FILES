@@ -115,6 +115,22 @@ PROJECT.hooks.home = function (ctx) {
     el('i', { style: { background: color, width: (o.total ? DOM.pct(n, o.total) : 0) + '%' } })
   ]);
 
+  /* how far the student has got with the simulations, and the next one to try */
+  const und = (function () {
+    if (typeof OSIM === 'undefined') return null;
+    const sm = OSIM.summary(), next = OSIM.ids().filter(id => !OSIM.rec(id).e)[0];
+    let link = null;
+    if (next) {
+      const host = Pool.concepts(null, { includeExt: true }).filter(c => c.sim === next)[0];
+      if (host) link = el('a', { href: Router.href('note/' + host.id), text: 'Next: ' + OSIM.get(next).title + ' ›' });
+    }
+    return el('div', { class: 'op-und' }, [
+      el('div', {}, [el('b', { text: 'Understanding · ' }), 'simulations explored ', el('b', { text: sm.explored + '/' + sm.sims }),
+        ' · predictions right first try ', el('b', { text: sm.right + '/' + sm.tasks }), ' (', sm.tried + ' tried', ')']),
+      link
+    ]);
+  })();
+
   return el('section', { class: 'hero op-hero', 'aria-label': 'Optics' }, [
     el('div', { class: 'op-head' }, [
       el('div', { class: 'kicker', text: 'white light, split' }),
@@ -125,6 +141,7 @@ PROJECT.hooks.home = function (ctx) {
       band('read', o.l1, 'var(--sp-6)'),
       band('proofs', o.l2, 'var(--sp-5)'),
       band('sections', o.l3, 'var(--sp-4)')
-    ])
+    ]),
+    und
   ]);
 };

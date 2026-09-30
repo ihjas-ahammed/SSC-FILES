@@ -29,3 +29,11 @@ turns it into `data/*.js` with every string JSON-escaped. Never edit `data/*.js`
 
 `O` types: `'MCQ'` (answer `'B'`), `'MSQ'` (answer `['A','C']`), `'NAT'` (options `None`,
 answer `{'value': 3.2, 'tol': 0.05, 'dp': 2}`). `twist=(question, answer)` is a short changed-version follow-up.
+
+## The teaching layer (authoring/steps.py)
+
+    S(concept_id, diagram_kind, [stage or None per proof step], [meaning per proof step], sim=None)
+    NF(concept_id, step_index, why_no_picture)      NS(concept_id, why_no_simulation)
+
+A meaning explains what the step is doing and why, in plain words: no notation, at least a couple of
+sentences, ending like a sentence. `node tools/audit_optics.js` enforces this and the coverage rules.

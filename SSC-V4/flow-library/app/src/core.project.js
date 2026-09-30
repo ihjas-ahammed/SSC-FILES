@@ -22,6 +22,8 @@
          home(ctx)   -> Node|null     a hero placed above the home dashboard
          theme(dark)                  after light/dark is applied
          ready()                      once, after the signed-in app is up
+         rungFig(rung, concept, i)    -> Node|null  a diagram above one proof step
+         noteSim(concept)             -> Node|null  an interactive panel after a note's figures
        }
      }
 

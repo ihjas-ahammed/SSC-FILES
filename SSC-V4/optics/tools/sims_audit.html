@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- Runs OSIM.audit() and OFIG.audit() with no app around them: every simulation drawn at its
+     extremes and at random settings, every law checked, every task's answer evaluated. -->
+<html lang="en"><head><meta charset="utf-8"><title>Optics simulations audit</title>
+<link rel="stylesheet" href="../../flow-library/app/src/ui.css"><link rel="stylesheet" href="../app/project/theme.css">
+<script>const PROJECT = { hooks: {} }; const Store = { pref: () => null, setPref() {} };</script>
+<script src="../app/project/optics.figs.js"></script>
+<script src="../app/project/optics.figs.m1.js"></script><script src="../app/project/optics.figs.m2.js"></script>
+<script src="../app/project/optics.figs.m3.js"></script><script src="../app/project/optics.figs.m4.js"></script>
+<script src="../app/project/optics.sims.js"></script>
+<script src="../app/project/optics.sims.m1.js"></script><script src="../app/project/optics.sims.m2.js"></script>
+<script src="../app/project/optics.sims.m3.js"></script><script src="../app/project/optics.sims.m4.js"></script>
+</head><body><pre id="o"></pre>
+<script>
+const rep = { sims: OSIM.audit(), figs: OFIG.audit(), reg: { figs: Object.fromEntries(OFIG.kinds().map(k => [k, OFIG.stages(k)])), sims: OSIM.ids() } };
+document.body.dataset.audit = JSON.stringify(rep);
+document.getElementById('o').textContent = JSON.stringify(rep, null, 1);
+if (new URLSearchParams(location.search).get('gallery')) {
+  document.getElementById('o').remove();
+  const host = document.createElement('div'); host.className = 'ofig-row'; host.style.padding = '12px'; document.body.appendChild(host);
+  OSIM.ids().forEach(id => {
+    const d = OSIM.get(id), p = {}; d.params.forEach(q => { p[q.k] = q.value; });
+    const g = OFIG.Canvas({ w: d.w, h: d.h, sc: d.sc, ox: d.ox, oy: d.oy }); d.draw(g, p, {});
+    const f = document.createElement('figure'); f.className = 'ofig'; f.appendChild(g.svg);
+    const c = document.createElement('figcaption'); c.className = 'ofig-cap'; c.textContent = id + ' · ' + d.read(p).map(r => r.join(' ')).join(' · '); f.appendChild(c); host.appendChild(f);
+  });
+}
+</script></body></html>

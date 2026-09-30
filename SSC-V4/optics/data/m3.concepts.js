@@ -59,22 +59,38 @@ CONCEPTS.push(
    {
     "why": "Divide the slit ($-a/2\\le x\\le a/2$) into strips of width $dx$. A strip at $x$ has an extra path $x\\sin\\theta$ relative to the centre, i.e. phase $kx\\sin\\theta$.",
     "m": "$$E(\\theta)\\propto\\int_{-a/2}^{a/2}e^{ikx\\sin\\theta}\\,dx$$",
-    "meaning": "$k=2\\pi/\\lambda$."
+    "meaning": "Light passing through the slit is treated as many tiny sources side by side. Measured from the centre of the slit, each has a slightly different route to a far-away point, and so a different phase.",
+    "fig": {
+     "k": "slit",
+     "s": 1
+    }
    },
    {
     "why": "Integrate.",
     "m": "$$\\int_{-a/2}^{a/2}e^{ikx\\sin\\theta}dx=\\frac{e^{ika\\sin\\theta/2}-e^{-ika\\sin\\theta/2}}{ik\\sin\\theta}=a\\,\\frac{\\sin\\beta}{\\beta}$$",
-    "meaning": "With $\\beta=\\tfrac12ka\\sin\\theta=\\pi a\\sin\\theta/\\lambda$."
+    "meaning": "Adding all these tiny waves with their phases is an integral, and it works out to a sine divided by its own argument.",
+    "fig": {
+     "k": "slit",
+     "s": 2
+    }
    },
    {
     "why": "Intensity is the modulus squared; normalise by the value at $\\beta=0$.",
     "m": "$$I=I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}$$",
-    "meaning": "$\\lim_{\\beta\\to0}\\sin\\beta/\\beta=1$."
+    "meaning": "Brightness is amplitude squared, and we divide by the value straight ahead so that the middle of the pattern is exactly 1.",
+    "fig": {
+     "k": "slit",
+     "s": 3
+    }
    },
    {
     "why": "Zeros of $\\sin\\beta$ with $\\beta\\neq0$.",
     "m": "$$\\beta=m\\pi\\;\\Rightarrow\\;a\\sin\\theta=m\\lambda$$",
-    "meaning": "The condition for the dark bands."
+    "meaning": "The pattern is dark wherever the sine in the top of the fraction is zero — where the little waves, laid head to tail, curl round into a closed circle and cancel exactly.",
+    "fig": {
+     "k": "slit",
+     "s": 4
+    }
    }
   ],
   "ends": "The single-slit intensity and its minima."
@@ -95,7 +111,8 @@ CONCEPTS.push(
    "a": "It extends from $m=-1$ to $m=+1$ (width $2\\lambda D/a$) while the others span one order ($\\lambda D/a$).",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "slit"
 },
 {
  "id": "c.3.1.3",
@@ -120,17 +137,29 @@ CONCEPTS.push(
    {
     "why": "Differentiate.",
     "m": "$$\\frac{d}{d\\beta}\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}=\\frac{2\\sin\\beta\\,(\\beta\\cos\\beta-\\sin\\beta)}{\\beta^{3}}$$",
-    "meaning": "Product/quotient rule."
+    "meaning": "The bright bands between the dark ones are the peaks of the curve, so we look for the places where its slope is zero.",
+    "fig": {
+     "k": "sinc",
+     "s": 1
+    }
    },
    {
     "why": "Set to zero: either $\\sin\\beta=0$ (the minima) or",
     "m": "$$\\beta\\cos\\beta=\\sin\\beta\\;\\Longleftrightarrow\\;\\tan\\beta=\\beta$$",
-    "meaning": "The secondary maxima."
+    "meaning": "One kind of zero slope is the dark spot itself. The other kind is a genuine peak, and it occurs where the tangent of the angle equals the angle.",
+    "fig": {
+     "k": "sinc",
+     "s": 2
+    }
    },
    {
     "why": "The first non-trivial root is $\\beta_1\\approx4.493=1.43\\pi$; evaluate the intensity there.",
     "m": "$$\\frac{I}{I_0}=\\Big(\\frac{\\sin4.493}{4.493}\\Big)^{2}\\approx0.047$$",
-    "meaning": "About 4.7% of the central maximum."
+    "meaning": "That equation cannot be solved with pencil algebra, but its first non-trivial answer is near 4.49. Putting it back into the intensity shows the first side band is only about five percent of the central peak.",
+    "fig": {
+     "k": "sinc",
+     "s": 3
+    }
    }
   ],
   "ends": "Secondary maxima at $\\tan\\beta=\\beta$."
@@ -141,7 +170,8 @@ CONCEPTS.push(
    "a": "$\\tan\\beta=\\beta$; the first secondary maximum at $\\beta\\approx1.43\\pi$ has intensity $\\approx4.7\\%$ of the central maximum.",
    "kind": "state"
   }
- ]
+ ],
+ "sim": "slit"
 },
 {
  "id": "c.3.2.1",
@@ -168,17 +198,29 @@ CONCEPTS.push(
    {
     "why": "Slit 1 centred at $-d/2$, slit 2 at $+d/2$. By the shift theorem each contributes the single-slit field with phase $\\mp\\gamma$.",
     "m": "$$E=E_0\\frac{\\sin\\beta}{\\beta}\\big(e^{-i\\gamma}+e^{i\\gamma}\\big)=2E_0\\frac{\\sin\\beta}{\\beta}\\cos\\gamma$$",
-    "meaning": "$\\gamma=\\tfrac12kd\\sin\\theta$."
+    "meaning": "Each slit sends out the single-slit wave. Because the slits are a distance apart, their waves reach a far point with a small phase difference. Moving a slit only adds a phase; it does not change the shape of its wave.",
+    "fig": {
+     "k": "dslit",
+     "s": 1
+    }
    },
    {
     "why": "Intensity.",
     "m": "$$I=4I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}\\cos^{2}\\gamma$$",
-    "meaning": "Where $I_0$ is the single-slit central intensity."
+    "meaning": "Adding the two gives cosine fringes multiplied by the single-slit result. The bright fringes of two-slit interference are shaped by the wide single-slit hump.",
+    "fig": {
+     "k": "dslit",
+     "s": 2
+    }
    },
    {
     "why": "Missing orders: an interference maximum $d\\sin\\theta=m\\lambda$ that coincides with an envelope zero $a\\sin\\theta=p\\lambda$.",
     "m": "$$\\frac{d}{a}=\\frac{m}{p}\\;\\Rightarrow\\;m=\\frac{d}{a}\\,p$$",
-    "meaning": "For $d/a$ an integer, orders $m=(d/a)p$ vanish."
+    "meaning": "When a bright fringe of the two-slit pattern falls exactly on a dark spot of the single-slit pattern it vanishes — there is no light there to interfere. Those orders are the missing ones.",
+    "fig": {
+     "k": "dslit",
+     "s": 3
+    }
    }
   ],
   "ends": "The two-slit intensity and the missing-order rule."
@@ -194,7 +236,8 @@ CONCEPTS.push(
    "a": "Orders $\\pm3,\\pm6,\\dots$ are missing; the central maximum holds $2d/a-1=5$ fringes.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "dslit"
 },
 {
  "id": "c.3.3.1",
@@ -220,17 +263,29 @@ CONCEPTS.push(
    {
     "why": "Each slit contributes the single-slit amplitude $E_0\\sin\\beta/\\beta$ times a phase that steps by $2\\gamma=kd\\sin\\theta$ from slit to slit.",
     "m": "$$E=E_0\\frac{\\sin\\beta}{\\beta}\\sum_{k=0}^{N-1}e^{2ik\\gamma}$$",
-    "meaning": "A geometric series."
+    "meaning": "With many slits, each slit still sends out the single-slit wave, and neighbouring slits differ by the same phase step each time. So we are adding N equal waves, each turned by an equal angle.",
+    "fig": {
+     "k": "nslit",
+     "s": 1
+    }
    },
    {
     "why": "Sum using the phasor formula.",
     "m": "$$\\Big|\\sum e^{2ik\\gamma}\\Big|=\\Big|\\frac{\\sin N\\gamma}{\\sin\\gamma}\\Big|$$",
-    "meaning": "Same algebra as the $N$-wave superposition."
+    "meaning": "Adding waves whose phases step by the same amount each time is exactly the geometric-series sum we did for N waves earlier, and it gives a ratio of two sines.",
+    "fig": {
+     "k": "nslit",
+     "s": 2
+    }
    },
    {
     "why": "Square.",
     "m": "$$I=I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}\\Big(\\frac{\\sin N\\gamma}{\\sin\\gamma}\\Big)^{2}$$",
-    "meaning": "Principal maxima at $\\gamma=m\\pi$ where the ratio $\\to N$."
+    "meaning": "Squaring gives the intensity. Between the sharp main peaks it produces N − 1 dark spots and N − 2 weak bumps, and the more slits there are, the sharper the peaks become.",
+    "fig": {
+     "k": "nslit",
+     "s": 3
+    }
    }
   ],
   "ends": "The $N$-slit intensity."
@@ -246,7 +301,8 @@ CONCEPTS.push(
    "a": "Its angular half-width is $\\Delta\\theta\\simeq\\lambda/(Nd\\cos\\theta)$, i.e. $\\propto1/N$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "nslit"
 },
 {
  "id": "c.3.3.2",
@@ -273,17 +329,29 @@ CONCEPTS.push(
    {
     "why": "The path difference between light from adjacent slits at angle $\\theta$ is $d\\sin\\theta$; in phase when it is $m\\lambda$.",
     "m": "$$d\\sin\\theta_m=m\\lambda$$",
-    "meaning": "Normal incidence."
+    "meaning": "A bright peak appears where every slit's wave arrives in step with its neighbour's, which means the path difference between neighbours is a whole number of wavelengths.",
+    "fig": {
+     "k": "grating",
+     "s": 1
+    }
    },
    {
     "why": "Differentiate at fixed $m$ and $d$.",
     "m": "$$d\\cos\\theta\\,d\\theta=m\\,d\\lambda$$",
-    "meaning": "Small change of wavelength."
+    "meaning": "We ask how the direction of a peak changes when we change the wavelength slightly, keeping the order fixed.",
+    "fig": {
+     "k": "grating",
+     "s": 2
+    }
    },
    {
     "why": "Solve for the dispersion.",
     "m": "$$\\frac{d\\theta}{d\\lambda}=\\frac{m}{d\\cos\\theta}$$",
-    "meaning": "Larger for higher orders and smaller spacing."
+    "meaning": "Solving gives the angular spread per unit of wavelength: bigger for higher orders and for finer gratings. That is how a grating fans white light out into a spectrum.",
+    "fig": {
+     "k": "grating",
+     "s": 3
+    }
    }
   ],
   "ends": "The grating equation and the angular dispersion."
@@ -304,7 +372,8 @@ CONCEPTS.push(
    "a": "$m<d/\\lambda=3.4$, so $m_{\\max}=3$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "grating"
 },
 {
  "id": "c.3.3.3",
@@ -329,17 +398,29 @@ CONCEPTS.push(
    {
     "why": "First zero beside the $m$th maximum: $N\\gamma$ increases by $\\pi$, i.e. $Nd\\sin\\theta=(mN+1)\\lambda$.",
     "m": "$$d\\sin\\theta^{\\prime}=\\Big(m+\\frac1N\\Big)\\lambda$$",
-    "meaning": "Half-width of the maximum."
+    "meaning": "How sharp a peak is depends on how far you must turn before the waves from all the slits cancel — the first zero next to it.",
+    "fig": {
+     "k": "resolve",
+     "s": 1
+    }
    },
    {
     "why": "The maximum of $\\lambda+\\Delta\\lambda$ in the same order: $d\\sin\\theta^{\\prime}=m(\\lambda+\\Delta\\lambda)$.",
     "m": "$$m(\\lambda+\\Delta\\lambda)=\\Big(m+\\frac1N\\Big)\\lambda$$",
-    "meaning": "Coincidence condition."
+    "meaning": "Two wavelengths are “just resolved” when the peak of one sits exactly on the first zero of the other.",
+    "fig": {
+     "k": "resolve",
+     "s": 2
+    }
    },
    {
     "why": "Solve.",
     "m": "$$\\frac{\\lambda}{\\Delta\\lambda}=mN$$",
-    "meaning": "The resolving power."
+    "meaning": "Setting the peak of the longer line equal to that first zero and solving shows that resolving power is the order times the number of lit lines. More lines, or a higher order, means finer detail.",
+    "fig": {
+     "k": "resolve",
+     "s": 3
+    }
    }
   ],
   "ends": "$R=mN$."
@@ -355,7 +436,8 @@ CONCEPTS.push(
    "a": "$N=\\lambda/(m\\Delta\\lambda)=589.3/0.6\\approx982$ lines.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "grating"
 },
 {
  "id": "c.3.4.1",
@@ -380,17 +462,29 @@ CONCEPTS.push(
    {
     "why": "A point on the wavefront at radius $r$ is at distance $\\sqrt{b^2+r^2}$ from $P$.",
     "m": "$$\\sqrt{b^{2}+r_n^{2}}=b+\\frac{n\\lambda}{2}$$",
-    "meaning": "The $n$th boundary."
+    "meaning": "Cut the wavefront into rings so that each ring is half a wavelength farther from the observer than the one before it. These are the half-period zones.",
+    "fig": {
+     "k": "zones",
+     "s": 1
+    }
    },
    {
     "why": "Square, neglect $\\lambda^2$.",
     "m": "$$r_n^{2}=nb\\lambda+\\frac{n^{2}\\lambda^{2}}{4}\\simeq nb\\lambda$$",
-    "meaning": "$\\lambda\\ll b$."
+    "meaning": "Squaring the distance and ignoring the tiny wavelength-squared term gives the ring radii: they grow like the square root of the ring number.",
+    "fig": {
+     "k": "zones",
+     "s": 2
+    }
    },
    {
     "why": "Area of each zone.",
     "m": "$$\\pi r_{n+1}^{2}-\\pi r_n^{2}=\\pi b\\lambda$$",
-    "meaning": "Independent of $n$."
+    "meaning": "The area between neighbouring circles comes out the same for every ring. Each zone sends about the same amount of light, but in opposite phase to its neighbour.",
+    "fig": {
+     "k": "zones",
+     "s": 3
+    }
    }
   ],
   "ends": "$r_n=\\sqrt{nb\\lambda}$; equal-area zones."
@@ -406,7 +500,8 @@ CONCEPTS.push(
    "a": "$r_1=\\sqrt{1\\times500\\times10^{-9}}=7.1\\times10^{-4}$ m $=0.71$ mm.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "zones"
 },
 {
  "id": "c.3.4.2",
@@ -431,17 +526,29 @@ CONCEPTS.push(
    {
     "why": "Write the total with alternating signs.",
     "m": "$$A=A_1-A_2+A_3-A_4+\\cdots$$",
-    "meaning": "Successive zones are in antiphase."
+    "meaning": "Each zone's light opposes the one before it, so the total is an alternating sum. The contributions get slowly smaller as the zones tilt farther away.",
+    "fig": {
+     "k": "zonespiral",
+     "s": 1
+    }
    },
    {
     "why": "Group: $A_1/2+(A_1/2-A_2+A_3/2)+(A_3/2-A_4+A_5/2)+\\cdots$",
     "m": "$$A=\\frac{A_1}{2}+\\Big(\\frac{A_1}{2}-A_2+\\frac{A_3}{2}\\Big)+\\Big(\\frac{A_3}{2}-A_4+\\frac{A_5}{2}\\Big)+\\cdots$$",
-    "meaning": "Each bracket is nearly zero when $A_n\\approx(A_{n-1}+A_{n+1})/2$."
+    "meaning": "Group the terms so each bracket is a zone minus half of each of its neighbours. Because the contributions change slowly, each bracket is almost zero.",
+    "fig": {
+     "k": "zonespiral",
+     "s": 2
+    }
    },
    {
     "why": "Drop the brackets.",
     "m": "$$A\\simeq\\frac{A_1}{2}$$",
-    "meaning": "The last zone contributes half its (tiny) amplitude, so the series ends smoothly."
+    "meaning": "What survives is only half of the first zone's contribution. An unobstructed wave therefore has half the amplitude of its first zone alone.",
+    "fig": {
+     "k": "zonespiral",
+     "s": 3
+    }
    }
   ],
   "ends": "$A\\simeq A_1/2$ for the free wavefront."
@@ -457,7 +564,8 @@ CONCEPTS.push(
    "a": "A bright spot (Poisson/Arago spot), of intensity nearly $I_0$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "zones"
 },
 {
  "id": "c.3.4.3",
@@ -483,17 +591,29 @@ CONCEPTS.push(
    {
     "why": "Take a point $P$ on the axis at $f$. The $n$th zone boundary of that point satisfies (by definition of a half-period zone)",
     "m": "$$r_n^{2}=nf\\lambda$$",
-    "meaning": "Half-period zones for $P$ at distance $f$."
+    "meaning": "For a chosen point on the axis the half-period zones have known radii. A zone plate is simply built with exactly those radii.",
+    "fig": {
+     "k": "zoneplate",
+     "s": 1
+    }
    },
    {
     "why": "The plate is made with radii $r_n$ fixed; then $P$ is at",
     "m": "$$f_1=\\frac{r_1^{2}}{\\lambda}$$",
-    "meaning": "First-order focus."
+    "meaning": "If the plate blocks every other zone, the wave from every open zone arrives at the focus in step. That fixes the focal length in terms of the first ring's radius and the wavelength.",
+    "fig": {
+     "k": "zoneplate",
+     "s": 2
+    }
    },
    {
     "why": "At $f=f_1/3$ each open zone of the plate covers three half-period zones (odd number), so open zones still add in phase.",
     "m": "$$f_p=\\frac{f_1}{p},\\quad p=1,3,5,\\dots$$",
-    "meaning": "Higher-order foci, weaker by $1/p^2$."
+    "meaning": "At a third of that distance each open zone covers three half-zones, an odd number, so the open zones still add in step and there is a weaker focus there too.",
+    "fig": {
+     "k": "zoneplate",
+     "s": 3
+    }
    }
   ],
   "ends": "$f_1=r_1^2/\\lambda$ and the foci $f_1/p$."
@@ -509,7 +629,8 @@ CONCEPTS.push(
    "a": "$f_1=(0.5\\times10^{-3})^2/(500\\times10^{-9})=0.5$ m; next real focus at $f_1/3\\approx0.17$ m.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "zones"
 },
 {
  "id": "c.3.5.1",
@@ -534,17 +655,29 @@ CONCEPTS.push(
    {
     "why": "The extra path of a wavelet at coordinate $s$ (in dimensionless units $v$) is $\\tfrac{\\pi}{2}v^{2}$ in phase.",
     "m": "$$E(v)\\propto\\int_{-v}^{\\infty}e^{i\\pi s^{2}/2}\\,ds$$",
-    "meaning": "Second-order (parabolic) phase; the shadow side is cut off at $-v$."
+    "meaning": "Close to the edge, the extra distance a wavelet travels grows with the square of how far along the wavefront it starts. That squared growth is what brings in the Fresnel integrals.",
+    "fig": {
+     "k": "cornu",
+     "s": 1
+    }
    },
    {
     "why": "Split into real and imaginary parts and use $\\int_0^\\infty=\\tfrac12$ for both.",
     "m": "$$E\\propto\\Big[C(v)+\\tfrac12\\Big]+i\\Big[S(v)+\\tfrac12\\Big]$$",
-    "meaning": "Since $C(\\infty)=S(\\infty)=\\tfrac12$ and $C,S$ are odd."
+    "meaning": "We split the sum of wavelets into real and imaginary parts, so the total is a point in a plane. As we include more of the wavefront that point traces out the Cornu spiral.",
+    "fig": {
+     "k": "cornu",
+     "s": 2
+    }
    },
    {
     "why": "Take the modulus squared; normalise so that $v\\to\\infty$ gives $I_0$.",
     "m": "$$\\frac{I}{I_0}=\\tfrac12\\Big[\\big(C+\\tfrac12\\big)^{2}+\\big(S+\\tfrac12\\big)^{2}\\Big]$$",
-    "meaning": "At $v\\to\\infty$: $\\tfrac12(1+1)=1$."
+    "meaning": "The brightness is the square of the distance from that point to where the spiral would begin if nothing were blocked. That gives the intensity anywhere near the edge.",
+    "fig": {
+     "k": "cornu",
+     "s": 3
+    }
    }
   ],
   "ends": "The straight-edge intensity."
@@ -560,7 +693,8 @@ CONCEPTS.push(
    "a": "$v=0$: $C=S=0$, so $I=I_0/4$.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "edge"
 },
 {
  "id": "c.3.5.2",
@@ -585,17 +719,29 @@ CONCEPTS.push(
    {
     "why": "Take $v=0$.",
     "m": "$$\\frac I{I_0}=\\tfrac12\\big(\\tfrac14+\\tfrac14\\big)=\\tfrac14$$",
-    "meaning": "The edge of the shadow."
+    "meaning": "Exactly at the edge of the geometric shadow half of the wavefront is blocked, so only half the light amplitude arrives — a quarter of the intensity.",
+    "fig": {
+     "k": "edge",
+     "s": 1
+    }
    },
    {
     "why": "Maxima of $I$ are where the tangent to the spiral is perpendicular to the line to $(-\\tfrac12,-\\tfrac12)$, giving $C+S=$ const conditions; numerically $v\\approx1.22$.",
     "m": "$$C(1.22)\\approx0.72,\\ S(1.22)\\approx0.62\\;\\Rightarrow\\;\\frac I{I_0}\\approx\\tfrac12(1.22^{2}+1.12^{2})\\approx1.37$$",
-    "meaning": "First maximum."
+    "meaning": "As you move into the lit region the spiral point overshoots its final position before settling, which is why the first bright band is brighter than the unobstructed light.",
+    "fig": {
+     "k": "edge",
+     "s": 2
+    }
    },
    {
     "why": "For $v\\to-\\infty$ the point tends to $(-\\tfrac12,-\\tfrac12)$ and the distance to zero.",
     "m": "$$\\frac I{I_0}\\to0\\ \\ (v\\to-\\infty)$$",
-    "meaning": "Smooth decay into the shadow."
+    "meaning": "Deep in the shadow the point sits at the spiral's centre and the amplitude falls smoothly to nothing, with no fringes.",
+    "fig": {
+     "k": "edge",
+     "s": 3
+    }
    }
   ],
   "ends": "The straight-edge fringe structure."
@@ -611,6 +757,7 @@ CONCEPTS.push(
    "a": "The intensity decreases smoothly to zero with no fringes.",
    "kind": "recall"
   }
- ]
+ ],
+ "sim": "edge"
 }
 );
