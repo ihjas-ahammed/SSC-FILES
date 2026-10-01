@@ -1,6 +1,21 @@
-if (typeof QUESTIONS === 'undefined') { var QUESTIONS = []; }
+var QUESTIONS = typeof QUESTIONS !== 'undefined' ? QUESTIONS : [];
 QUESTIONS.push(...
 [
+  {
+    "id": "w.prob.7.5.3",
+    "course": "prob",
+    "sec": "7.5",
+    "marks": 3,
+    "title": "Original drill: conditional variance within a group",
+    "prompt": "A fair coin chooses group A or B. Given A, X is equally likely to be 0 or 2; given B, X is equally likely to be 3 or 5. Find $\\operatorname{Var}(X\\mid Y=A)$ and $\\operatorname{Var}(X\\mid Y=B)$.",
+    "approach": "For each group, center the two possible values at their group average and average the squared distances.",
+    "solution": "In either group the conditional mean is the midpoint of its two values. In A it is 1, so $\\operatorname{Var}(X\\mid Y=A)=((0-1)^2+(2-1)^2)/2=1$. In B it is 4, so $\\operatorname{Var}(X\\mid Y=B)=((3-4)^2+(5-4)^2)/2=1$. The groups have different means but the same within-group variance.",
+    "trap": "Conditional variance measures spread around the conditional mean, not around the overall mean.",
+    "tests": [
+      "c.prob.7.5.3"
+    ],
+    "provenance": "Original item aligned with Ross §7.5."
+  },
   {
     "id": "w.prob.7.2.1",
     "course": "prob",

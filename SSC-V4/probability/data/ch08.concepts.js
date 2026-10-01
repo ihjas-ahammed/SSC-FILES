@@ -1,4 +1,4 @@
-if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
+var CONCEPTS = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
 CONCEPTS.push(...
 [
   {
@@ -9,9 +9,11 @@ CONCEPTS.push(...
     "title": "Law of large numbers versus central limit theorem",
     "oneLine": "LLNs describe convergence of averages; CLTs describe the standardized shape of sums.",
     "statement": "A law of large numbers states conditions under which sample averages converge to their population mean, in probability or almost surely. A central limit theorem describes the limiting distribution of a centered and scaled sum, typically standard normal.",
-    "intuition": "The LLN gives a target and convergence mode; the CLT gives the size and shape of typical fluctuations around that target.",
+    "intuition": "Flip a fair coin many times and record the share of heads; repeat that whole experiment many times. The law of large numbers says each long-run share settles near one-half. The CLT describes the bell-shaped spread of those shares across repeated experiments after centering and rescaling, not a wiggle in one running average.",
     "needs": [],
-    "traps": "Weak and strong laws use different modes of convergence. A CLT is distributional convergence of normalized sums, not almost-sure convergence.",
+    "traps": [
+      "Weak and strong laws use different modes of convergence. A CLT is distributional convergence of normalized sums, not almost-sure convergence."
+    ],
     "cards": [
       {
         "q": "What does an LLN describe, and what does a CLT describe?",
@@ -29,11 +31,13 @@ CONCEPTS.push(...
     "title": "Markov and Chebyshev inequalities",
     "oneLine": "A mean bounds a nonnegative tail; a variance bounds deviations from the mean.",
     "statement": "If $X\\ge0$ and $a>0$, $P(X\\ge a)\\le E[X]/a$. If $E[X]=\\mu$ and $\\operatorname{Var}(X)=\\sigma^2<\\infty$, then for $k>0$, $P(|X-\\mu|\\ge k)\\le\\sigma^2/k^2$.",
-    "intuition": "Markov compares the expectation to the minimum contribution from the tail event. Chebyshev applies Markov to the nonnegative square $(X-\\mu)^2$.",
+    "intuition": "If a nonnegative bill is at least $a$ on some days, those days must contribute at least $a$ each to the average bill. Chebyshev uses the same idea on squared distance from the average to bound far-away values.",
     "needs": [
       "c.prob.7.2.1"
     ],
-    "traps": "Markov requires nonnegativity; Chebyshev uses squared deviation, so no support restriction is needed. Strict versus weak inequality endpoints do not change the standard bound when used consistently.",
+    "traps": [
+      "Markov requires nonnegativity; Chebyshev uses squared deviation, so no support restriction is needed. Strict versus weak inequality endpoints do not change the standard bound when used consistently."
+    ],
     "cards": [
       {
         "q": "State Markov’s and Chebyshev’s inequalities.",
@@ -73,12 +77,14 @@ CONCEPTS.push(...
     "title": "Weak law of large numbers",
     "oneLine": "The sample mean of iid finite-variance variables converges in probability to their common mean.",
     "statement": "If $X_i$ are iid with $E[X_i]=\\mu$ and finite variance $\\sigma^2$, then for every $\\epsilon>0$, $P(|\\bar X_n-\\mu|\\ge\\epsilon)\\to0$. Chebyshev gives the bound $\\sigma^2/(n\\epsilon^2)$. The classical weak law holds under the weaker condition of finite mean alone.",
-    "intuition": "The variance of the average shrinks like 1/n under independence; Chebyshev converts that shrinking variance into a probability bound.",
+    "intuition": "For repeated fair coin flips, the share of heads becomes less jumpy as the number of flips grows. With independent repeats and finite variance, Chebyshev bounds the chance that the share misses its target by a lot.",
     "needs": [
       "c.prob.8.2.1",
       "c.prob.7.4.2"
     ],
-    "traps": "The elementary proof uses finite variance; the general iid finite-mean theorem is stronger. Convergence in probability does not assert that all later sample means stay close on every outcome.",
+    "traps": [
+      "The elementary proof uses finite variance; the general iid finite-mean theorem is stronger. Convergence in probability does not assert that all later sample means stay close on every outcome."
+    ],
     "cards": [
       {
         "q": "State the weak law and the finite-variance Chebyshev bound.",
@@ -118,11 +124,13 @@ CONCEPTS.push(...
     "title": "Classical central limit theorem",
     "oneLine": "Standardized iid sums with finite nonzero variance converge in distribution to the standard normal.",
     "statement": "If $X_i$ are iid with finite mean $\\mu$ and $0<\\sigma^2=\\operatorname{Var}(X_i)<\\infty$, then $Z_n=(\\sum_{i=1}^nX_i-n\\mu)/(\\sigma\\sqrt n)$ converges in distribution to $N(0,1)$. Equivalently, its cdf tends to $\\Phi(a)$ at every real a.",
-    "intuition": "Many small independent contributions, after centering and scaling, have an approximately bell-shaped aggregate even if the individual distribution is not normal.",
+    "intuition": "Add many independent test scores with a finite, nonzero spread, subtract their expected total, and measure in standard-deviation units. For a large group, the result is close to a standard bell curve even if individual scores are not bell-shaped.",
     "needs": [
       "c.prob.7.4.2"
     ],
-    "traps": "The standardization uses $\\sigma\\sqrt n$, not nσ. For finite n this is an approximation, and a continuity correction may improve discrete sums.",
+    "traps": [
+      "The standardization uses $\\sigma\\sqrt n$, not nσ. For finite n this is an approximation, and a continuity correction may improve discrete sums."
+    ],
     "cards": [
       {
         "q": "State the iid central limit theorem standardization.",
@@ -162,11 +170,13 @@ CONCEPTS.push(...
     "title": "Using the CLT for sums and averages",
     "oneLine": "Convert a sum event to a z-score using its exact mean and variance, then use Φ.",
     "statement": "For iid variables with mean μ and variance σ², approximate $P(\\sum_iX_i\\le x)$ by $\\Phi((x-n\\mu)/(\\sigma\\sqrt n))$ for large n. For a sample mean, use standard error $\\sigma/\\sqrt n$. For lattice-valued sums, a half-unit continuity correction is often useful.",
-    "intuition": "The CLT rescales the aggregate to a standard-normal coordinate. The same arithmetic applies whether the question asks about a sum or mean.",
+    "intuition": "For a total, compare with n times the average; for a sample average, compare with the average itself. In either case divide by the matching standard deviation before using the bell curve.",
     "needs": [
       "c.prob.8.3.1"
     ],
-    "traps": "The approximation quality depends on n and the underlying distribution; strong skewness or heavy tails can make small-n approximations poor.",
+    "traps": [
+      "The approximation quality depends on n and the underlying distribution; strong skewness or heavy tails can make small-n approximations poor."
+    ],
     "cards": [
       {
         "q": "What is the CLT standard error of an iid sample mean?",
@@ -184,11 +194,13 @@ CONCEPTS.push(...
     "title": "Strong law of large numbers",
     "oneLine": "Iid integrable variables have sample averages converging almost surely to their common mean.",
     "statement": "If $X_i$ are iid and $E[|X_1|]<\\infty$, then $P(\\lim_{n\\to\\infty}\\bar X_n=\\mu)=1$, where $\\mu=E[X_1]$. In particular, sample proportions of an event in independent replications converge almost surely to the event probability.",
-    "intuition": "Almost-sure convergence says that with probability one, a realized infinite sequence eventually tracks the mean arbitrarily closely. It is stronger than convergence in probability.",
+    "intuition": "Imagine an infinite sequence of fair coin flips. The strong law says that, with probability one, the share of heads eventually stays as close to one-half as you ask; it is stronger than saying large misses merely become unlikely.",
     "needs": [
       "c.prob.8.2.2"
     ],
-    "traps": "The result concerns almost every infinite sample path, not every path. Its assumptions are about iid sampling and finite absolute mean.",
+    "traps": [
+      "The result concerns almost every infinite sample path, not every path. Its assumptions are about iid sampling and finite absolute mean."
+    ],
     "cards": [
       {
         "q": "State the strong law of large numbers.",
@@ -233,11 +245,13 @@ CONCEPTS.push(...
     "title": "One-sided Chebyshev inequality",
     "oneLine": "A one-sided deviation has a sharper variance-only bound than two-sided Chebyshev.",
     "statement": "For $E[X]=\\mu$, $\\operatorname{Var}(X)=\\sigma^2<\\infty$, and $a>0$, $P(X-\\mu\\ge a)\\le\\sigma^2/(\\sigma^2+a^2)$. The same bound holds for $P(X-\\mu\\le-a)$.",
-    "intuition": "A shift by a positive constant lets Markov control a one-sided tail while optimizing the shift yields the sharper denominator.",
+    "intuition": "If you only worry about a score being too high, a one-sided bound uses that focus and can be sharper than a bound that also covers low scores.",
     "needs": [
       "c.prob.8.2.1"
     ],
-    "traps": "Do not use this formula for a two-sided event without accounting for both tails.",
+    "traps": [
+      "Do not use this formula for a two-sided event without accounting for both tails."
+    ],
     "cards": [
       {
         "q": "State the one-sided Chebyshev bound.",
@@ -272,12 +286,14 @@ CONCEPTS.push(...
     "title": "Chernoff bounds from an MGF",
     "oneLine": "An MGF gives exponential upper bounds for tails by Markov’s inequality.",
     "statement": "For t>0, $P(X\\ge a)\\le e^{-ta}M_X(t)$. For t<0, $P(X\\le a)\\le e^{-ta}M_X(t)$. Minimize over allowed t to sharpen the bound; for independent sums, multiply MGFs before optimizing.",
-    "intuition": "Exponentials turn additive thresholds into multiplicative factors; Markov then gives a bound whose parameter can be tuned to the tail.",
+    "intuition": "To bound the chance a sum is unusually large, exaggerate large outcomes with an exponential, then use its average to limit how often they can occur. Tune the exaggeration to get the strongest bound.",
     "needs": [
       "c.prob.7.7.1",
       "c.prob.8.2.1"
     ],
-    "traps": "Use t>0 for upper tails and t<0 for lower tails. A valid MGF domain constrains the optimization.",
+    "traps": [
+      "Use t>0 for upper tails and t<0 for lower tails. A valid MGF domain constrains the optimization."
+    ],
     "cards": [
       {
         "q": "Give the upper-tail Chernoff bound.",
@@ -312,9 +328,11 @@ CONCEPTS.push(...
     "title": "Jensen’s inequality",
     "oneLine": "Convexity puts the function of a mean below the mean of the function.",
     "statement": "If g is convex and the expectations exist, $g(E[X])\\le E[g(X)]$. For concave g, the inequality reverses.",
-    "intuition": "A convex graph lies above each tangent line. Averaging the tangent inequality cancels the centered linear term.",
+    "intuition": "For a bowl-shaped graph, the graph at the average x-value lies below the average height of points on the graph. This is why averaging squared scores is at least the square of the average score.",
     "needs": [],
-    "traps": "Check whether the function is convex or concave before deciding the direction.",
+    "traps": [
+      "Check whether the function is convex or concave before deciding the direction."
+    ],
     "cards": [
       {
         "q": "State Jensen’s inequality for convex g.",
@@ -349,9 +367,11 @@ CONCEPTS.push(...
     "title": "Poisson limit for rare failures before r successes",
     "oneLine": "With success probability tending to one and a fixed mean number of failures, a negative-binomial failure count approaches Poisson.",
     "statement": "Let trials be iid Bernoulli with success probability $p_r=r/(r+\\lambda)$, and let X be the number of failures before the r-th success. For each fixed k, $P(X=k)\\to e^{-\\lambda}\\lambda^k/k!$ as r→∞; hence X converges in distribution to Poisson(λ).",
-    "intuition": "As r grows, each trial’s failure chance is small, while the total expected failures stays near λ. This is the rare-event Poisson regime.",
+    "intuition": "If a long sales run has very few failures, but about 3 failures on average, the failure count can be close to Poisson with mean 3.",
     "needs": [],
-    "traps": "The limiting parameter is λ because $r(1-p_r)/p_r=λ$. Keep the “failures before r successes” convention distinct from total trials.",
+    "traps": [
+      "The limiting parameter is λ because $r(1-p_r)/p_r=λ$. Keep the “failures before r successes” convention distinct from total trials."
+    ],
     "cards": [
       {
         "q": "What Poisson law is the limit for failures before r successes when $p_r=r/(r+\\lambda)$?",
@@ -386,11 +406,13 @@ CONCEPTS.push(...
     "title": "Poisson approximation for sums of independent Bernoulli variables",
     "oneLine": "A sum of independent rare Bernoulli events is close in event probabilities to a Poisson variable with the same mean.",
     "statement": "Let $X_i\\sim\\operatorname{Bernoulli}(p_i)$ be independent, $W=\\sum_iX_i$, and $\\lambda=\\sum_i p_i$. For every set A of nonnegative integers, Ross’s coupling bound gives $|P(W\\in A)-P(Z\\in A)|\\le\\sum_i p_i^2$, where $Z\\sim\\operatorname{Poisson}(\\lambda)$.",
-    "intuition": "When all pᵢ are small, multiple Poisson counts within a component are rare; a coupling makes each Bernoulli component agree with its Poisson counterpart with high probability.",
+    "intuition": "Suppose a thousand people each have a tiny chance of a rare event. Their total count is often close to Poisson; the approximation is strongest when no one person’s chance is large.",
     "needs": [
       "c.prob.8.2.1"
     ],
-    "traps": "The bound depends on sum of squared probabilities, not just the mean. It applies to any event set A and assumes independent Bernoulli summands.",
+    "traps": [
+      "The bound depends on sum of squared probabilities, not just the mean. It applies to any event set A and assumes independent Bernoulli summands."
+    ],
     "cards": [
       {
         "q": "State Ross’s Poisson approximation bound for Bernoulli sums.",
@@ -430,9 +452,11 @@ CONCEPTS.push(...
     "title": "Lorenz curve and population quantiles",
     "oneLine": "The Lorenz curve gives the income share earned by the lowest p fraction of a population.",
     "statement": "For positive income X with finite mean, let $\\xi_p$ be its p-quantile, $F(\\xi_p)=p$. Then $L(p)=E[X\\mathbf1_{\\{X\\le\\xi_p\\}}]/E[X]$ (under a continuous distribution). It is increasing and convex, lies below the equality line L(p)=p, and runs from 0 to 1.",
-    "intuition": "The lower p share of people contributes a fraction L(p) of total income. Equality $L(p)=p$ means proportional income shares and no inequality.",
+    "intuition": "Sort people from lowest income upward. The Lorenz curve at p reports how much of all income the bottom p share receives; under equal incomes, bottom 30% receives 30%.",
     "needs": [],
-    "traps": "At atoms, quantile conventions need care because exactly a fraction p may not lie below the quantile. This chapter’s formula assumes a positive continuous income law.",
+    "traps": [
+      "At atoms, quantile conventions need care because exactly a fraction p may not lie below the quantile. This chapter’s formula assumes a positive continuous income law."
+    ],
     "cards": [
       {
         "q": "Define the Lorenz curve using the p-quantile.",
@@ -450,11 +474,13 @@ CONCEPTS.push(...
     "title": "Gini index from the Lorenz curve",
     "oneLine": "The Gini index is twice the area between equality and the Lorenz curve.",
     "statement": "For Lorenz curve L, $G=1-2\\int_0^1L(p)\\,dp$. It equals 0 under perfect equality and approaches 1 under extreme concentration.",
-    "intuition": "The area under the equality diagonal is 1/2. The area below L measures how much income is earned by the lower population shares; the normalized gap is the Gini index.",
+    "intuition": "Draw the equal-share diagonal and the Lorenz curve. The larger the area between them, the more income is concentrated among fewer people; the Gini index rescales that area.",
     "needs": [
       "c.prob.8.7.1"
     ],
-    "traps": "Larger G means more inequality. It is an aggregate measure and does not identify which parts of the distribution differ.",
+    "traps": [
+      "Larger G means more inequality. It is an aggregate measure and does not identify which parts of the distribution differ."
+    ],
     "cards": [
       {
         "q": "Give the Gini formula in terms of L.",

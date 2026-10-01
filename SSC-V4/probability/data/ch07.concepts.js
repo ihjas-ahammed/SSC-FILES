@@ -1,4 +1,4 @@
-if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
+var CONCEPTS = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
 CONCEPTS.push(...
 [
   {
@@ -9,9 +9,11 @@ CONCEPTS.push(...
     "title": "Bounds and order preservation for expectation",
     "oneLine": "An almost-sure bound on X also bounds its expectation.",
     "statement": "If $a\\le X\\le b$ with probability 1 and $E[|X|]<\\infty$, then $a\\le E[X]\\le b$. More generally, if $X\\le Y$ almost surely and both expectations are finite, then $E[X]\\le E[Y]$.",
-    "intuition": "Expectation is an average weighted by probability. An average cannot fall below a lower bound that every value obeys, or above a common upper bound.",
+    "intuition": "If every bus trip takes between 10 and 30 minutes, the average trip cannot be 8 or 40 minutes. An expectation is just an average that gives more weight to more likely outcomes.",
     "needs": [],
-    "traps": "The inequalities need only hold almost surely, not at outcomes of probability zero. Integrability is needed to make the expectations finite.",
+    "traps": [
+      "The inequalities need only hold almost surely, not at outcomes of probability zero. Integrability is needed to make the expectations finite."
+    ],
     "cards": [
       {
         "q": "What bounds apply if $a\\le X\\le b$ almost surely?",
@@ -46,9 +48,11 @@ CONCEPTS.push(...
     "title": "Expectation of a sum: linearity",
     "oneLine": "Expectation is additive and homogeneous; independence is not required.",
     "statement": "If $X_1,\\ldots,X_n$ are integrable and $a_1,\\ldots,a_n$ are constants, then $E[\\sum_i a_iX_i]=\\sum_i a_iE[X_i]$. In particular, $E[X+Y]=E[X]+E[Y]$, whether or not X and Y are independent.",
-    "intuition": "Linearity follows from linearity of finite sums inside the weighted average or integral. Dependence changes the joint law but not this averaging identity.",
+    "intuition": "If a trip has a walking part and a bus part, average total time is average walking time plus average bus time. This remains true even if a missed connection makes the two parts related.",
     "needs": [],
-    "traps": "Do not impose independence for expectation of a sum. Independence is needed for many variance formulas, not linearity.",
+    "traps": [
+      "Do not impose independence for expectation of a sum. Independence is needed for many variance formulas, not linearity."
+    ],
     "cards": [
       {
         "q": "State linearity of expectation and its independence requirement.",
@@ -83,11 +87,13 @@ CONCEPTS.push(...
     "title": "Expectation of a function of a pair",
     "oneLine": "The expected value of g(X,Y) is computed from the joint law, not by assuming independence.",
     "statement": "For jointly discrete $(X,Y)$ with pmf $p(x,y)$, $E[g(X,Y)]=\\sum_y\\sum_xg(x,y)p(x,y)$. For jointly continuous variables with joint density $f(x,y)$, $E[g(X,Y)]=\\int\\int g(x,y)f(x,y)\\,dx\\,dy$, when the expectation exists.",
-    "intuition": "The joint distribution records which pairs can occur together. Marginals alone do not determine expectations of nonlinear interactions such as $XY$ unless more structure is known.",
+    "intuition": "To average “height times weight,” it matters which heights belong with which weights. Two lists of separate averages do not tell you those pairings.",
     "needs": [
       "c.prob.7.2.1"
     ],
-    "traps": "Do not replace $f(x,y)$ by $f_X(x)f_Y(y)$ unless X and Y are independent.",
+    "traps": [
+      "Do not replace $f(x,y)$ by $f_X(x)f_Y(y)$ unless X and Y are independent."
+    ],
     "cards": [
       {
         "q": "How is $E[g(X,Y)]$ computed in the continuous case?",
@@ -122,11 +128,13 @@ CONCEPTS.push(...
     "title": "Indicator method for the number of events",
     "oneLine": "Represent a count by a sum of indicators; its mean is the sum of event probabilities.",
     "statement": "For events $A_1,\\ldots,A_n$, let $I_i=1$ on $A_i$ and 0 otherwise, and let $X=\\sum_iI_i$, the number of events that occur. Then $E[X]=\\sum_iP(A_i)$, with no independence condition.",
-    "intuition": "Indicators turn a difficult count into a sum of simple 0–1 variables. Linearity then makes the mean depend only on the individual event probabilities.",
+    "intuition": "To find the average number of people who arrive, give each person a switch that is 1 if they arrive and 0 otherwise. Add the switches; the average count is the sum of arrival chances.",
     "needs": [
       "c.prob.7.2.1"
     ],
-    "traps": "The indicators need not be independent for the expectation formula. Independence matters for joint probabilities and variances.",
+    "traps": [
+      "The indicators need not be independent for the expectation formula. Independence matters for joint probabilities and variances."
+    ],
     "cards": [
       {
         "q": "If X counts which of $A_1,\\ldots,A_n$ occur, what is $E[X]$?",
@@ -161,11 +169,13 @@ CONCEPTS.push(...
     "title": "Factorial moments of an event count",
     "oneLine": "Joint event probabilities determine the factorial moments of a count.",
     "statement": "For $X=\\sum_{i=1}^n\\mathbf1_{A_i}$ and integer $k\\ge1$, $(X)_k=X(X-1)\\cdots(X-k+1)$ satisfies $E[(X)_k]=k!\\sum_{i_1<\\cdots<i_k}P(A_{i_1}\\cap\\cdots\\cap A_{i_k})$. For $k=2$, $E[X^2]=E[X]+2\\sum_{i<j}P(A_i\\cap A_j)$ and $\\operatorname{Var}(X)=E[X^2]-E[X]^2$.",
-    "intuition": "The falling factorial counts ordered selections of k distinct occurring events. Each k-subset of events appears in k! orders.",
+    "intuition": "If X events happen, $X(X-1)$ counts ordered pairs among them. For example, when 3 people arrive, there are 6 ordered pairs of arriving people.",
     "needs": [
       "c.prob.7.3.1"
     ],
-    "traps": "Do not replace joint probabilities by products unless independence has been established. For a binomial count, independence makes the intersections factor.",
+    "traps": [
+      "Do not replace joint probabilities by products unless independence has been established. For a binomial count, independence makes the intersections factor."
+    ],
     "cards": [
       {
         "q": "State the second-moment identity for a count X of events.",
@@ -205,11 +215,13 @@ CONCEPTS.push(...
     "title": "Covariance and correlation",
     "oneLine": "Covariance measures centered joint variation; correlation standardizes it.",
     "statement": "For finite second moments, $\\operatorname{Cov}(X,Y)=E[(X-E[X])(Y-E[Y])]=E[XY]-E[X]E[Y]$. If both variances are positive, $\\rho(X,Y)=\\operatorname{Cov}(X,Y)/(\\sigma_X\\sigma_Y)$ and $-1\\le\\rho\\le1$. Independence implies zero covariance, but zero covariance alone does not imply independence.",
-    "intuition": "Covariance is positive when deviations tend to share a sign and negative when they tend to have opposite signs. Correlation removes units and scale.",
+    "intuition": "Covariance is positive when two quantities tend to rise above their own averages together, and negative when one rises as the other falls. Correlation is the same pattern scaled so units like dollars or centimeters do not matter.",
     "needs": [
       "c.prob.7.2.2"
     ],
-    "traps": "Uncorrelated does not generally mean independent; nonlinear dependence can have zero covariance. Correlation is undefined if either variance is zero.",
+    "traps": [
+      "Uncorrelated does not generally mean independent; nonlinear dependence can have zero covariance. Correlation is undefined if either variance is zero."
+    ],
     "cards": [
       {
         "q": "Define covariance and correlation.",
@@ -227,11 +239,13 @@ CONCEPTS.push(...
     "title": "Variance of a sum",
     "oneLine": "The variance of a sum includes every pairwise covariance; independence removes the cross terms.",
     "statement": "For finite second moments, $\\operatorname{Var}(\\sum_{i=1}^nX_i)=\\sum_i\\operatorname{Var}(X_i)+2\\sum_{i<j}\\operatorname{Cov}(X_i,X_j)$. If the variables are pairwise uncorrelated, this reduces to the sum of variances; independence is sufficient for that reduction.",
-    "intuition": "When adding centered variables, the square contains individual squares and cross-products. The covariance terms measure whether those cross-products average positive or negative.",
+    "intuition": "When two waiting times are added, their separate spreads are not always the whole story. If long waits tend to happen together, covariance adds extra spread; if one tends to offset the other, it subtracts spread.",
     "needs": [
       "c.prob.7.4.1"
     ],
-    "traps": "For dependent variables, do not add variances alone. Pairwise independence is sufficient but stronger than the needed pairwise zero covariance.",
+    "traps": [
+      "For dependent variables, do not add variances alone. Pairwise independence is sufficient but stronger than the needed pairwise zero covariance."
+    ],
     "cards": [
       {
         "q": "When does variance of a sum equal the sum of variances?",
@@ -271,11 +285,13 @@ CONCEPTS.push(...
     "title": "Conditional expectation given a random variable",
     "oneLine": "Condition on Y by taking the mean under the conditional distribution at each Y value.",
     "statement": "For discrete X,Y and values y with $P(Y=y)>0$, $E[X\\mid Y=y]=\\sum_xxP(X=x\\mid Y=y)$. In the density case, $E[X\\mid Y=y]=\\int x f_{X\\mid Y}(x\\mid y)dx$ where defined. The random variable $E[X\\mid Y]$ takes this conditional mean at the realized Y.",
-    "intuition": "Observation of Y narrows the relevant probability model. A conditional mean is the best average prediction after that information is known.",
+    "intuition": "After seeing how many hours it rained, your best average guess for traffic time can change. That updated average is the conditional expectation: average after using the new information.",
     "needs": [
       "c.prob.6.4.1"
     ],
-    "traps": "For continuous Y, conditioning on $Y=y$ uses a conditional density, not division by the probability of a zero-probability point event.",
+    "traps": [
+      "For continuous Y, conditioning on $Y=y$ uses a conditional density, not division by the probability of a zero-probability point event."
+    ],
     "cards": [
       {
         "q": "What does $E[X\\mid Y]$ represent?",
@@ -293,11 +309,13 @@ CONCEPTS.push(...
     "title": "Law of total expectation",
     "oneLine": "Average the conditional means over the conditioning variable to recover the unconditional mean.",
     "statement": "If X is integrable, $E[X]=E[E[X\\mid Y]]$. In the discrete case this is $\\sum_y E[X\\mid Y=y]P(Y=y)$; in the continuous case it is the corresponding integral against the law of Y.",
-    "intuition": "Conditioning partitions uncertainty into cases. The overall mean is the weighted average of the case-specific means.",
+    "intuition": "Find the average score among each classroom, then weight those averages by class size. You recover the whole-school average; small and large classes should not count equally.",
     "needs": [
       "c.prob.7.5.1"
     ],
-    "traps": "Do not omit the weights $P(Y=y)$. The identity is not $E[X]=E[X\\mid Y]$ as a constant; the latter is itself a random variable.",
+    "traps": [
+      "Do not omit the weights $P(Y=y)$. The identity is not $E[X]=E[X\\mid Y]$ as a constant; the latter is itself a random variable."
+    ],
     "cards": [
       {
         "q": "State the law of total expectation.",
@@ -331,12 +349,14 @@ CONCEPTS.push(...
     "tier": "core",
     "title": "Law of total variance",
     "oneLine": "Total variance is average within-group variance plus variance between group means.",
-    "statement": "For $E[X^2]<\\infty$, $\\operatorname{Var}(X)=E[\\operatorname{Var}(X\\mid Y)]+\\operatorname{Var}(E[X\\mid Y])$.",
-    "intuition": "Uncertainty remains within each conditioning group, and group means themselves vary across Y. These two sources add.",
+    "statement": "For $E[X^2]<\\infty$, define the conditional variance by $\\operatorname{Var}(X\\mid Y)=E[(X-E[X\\mid Y])^2\\mid Y]=E[X^2\\mid Y]-(E[X\\mid Y])^2$. Then $\\operatorname{Var}(X)=E[\\operatorname{Var}(X\\mid Y)]+\\operatorname{Var}(E[X\\mid Y])$.",
+    "intuition": "Think of test scores in two classrooms. First, within each room, measure how far scores usually sit from that room’s own average; then average those spreads. Add the spread between the room averages, and you get the whole-school spread. For each observed room label Y, conditional variance is the average squared distance from that room’s conditional average.",
     "needs": [
       "c.prob.7.5.2"
     ],
-    "traps": "The first term is the average conditional variance; it is not $E[X\\mid Y]$.",
+    "traps": [
+      "The first term is the average conditional variance; it is not $E[X\\mid Y]$."
+    ],
     "cards": [
       {
         "q": "State the law of total variance.",
@@ -376,11 +396,13 @@ CONCEPTS.push(...
     "title": "Conditional mean minimizes mean squared prediction error",
     "oneLine": "Among predictors based on X, the conditional mean $E[Y\\mid X]$ uniquely minimizes squared-error risk up to almost-sure equality.",
     "statement": "For square-integrable Y and any measurable predictor g(X), $E[(Y-g(X))^2]=E[\\operatorname{Var}(Y\\mid X)]+E[(E[Y\\mid X]-g(X))^2]$. Thus the minimum is attained by $g(X)=E[Y\\mid X]$.",
-    "intuition": "Condition on the information X. The error splits into irreducible conditional noise plus squared distance from the conditional mean.",
+    "intuition": "After measuring X, choose the conditional average of Y if squared prediction mistakes matter. It is the bullseye that makes the average squared miss as small as possible.",
     "needs": [
       "c.prob.7.5.1"
     ],
-    "traps": "The result is for squared-error loss; another loss function generally has a different optimal predictor.",
+    "traps": [
+      "The result is for squared-error loss; another loss function generally has a different optimal predictor."
+    ],
     "cards": [
       {
         "q": "Under squared-error loss, what predictor based on X is optimal for Y?",
@@ -420,11 +442,13 @@ CONCEPTS.push(...
     "title": "Best linear predictor",
     "oneLine": "The best affine predictor of Y from X uses the regression slope Cov(X,Y)/Var(X).",
     "statement": "If $0<\\operatorname{Var}(X)<\\infty$ and $Y$ is square-integrable, the minimizer of $E[(Y-a-bX)^2]$ is $b=\\operatorname{Cov}(X,Y)/\\operatorname{Var}(X)$ and $a=E[Y]-bE[X]$. Its error is $\\operatorname{Var}(Y)(1-\\rho^2)$ when both variances are positive.",
-    "intuition": "Least squares removes the component of Y aligned with centered X; the leftover variance reflects nonlinear structure and noise.",
+    "intuition": "A best-fit straight line is like laying a ruler through a cloud of points to minimize squared vertical misses. If the points bend, the ruler is still the best line but cannot trace the bend.",
     "needs": [
       "c.prob.7.4.1"
     ],
-    "traps": "This is the best predictor among affine functions, not necessarily among all functions; equality with conditional expectation holds when the conditional mean is affine.",
+    "traps": [
+      "This is the best predictor among affine functions, not necessarily among all functions; equality with conditional expectation holds when the conditional mean is affine."
+    ],
     "cards": [
       {
         "q": "Give the slope and intercept of the best linear predictor.",
@@ -459,9 +483,11 @@ CONCEPTS.push(...
     "title": "Moment generating function",
     "oneLine": "The MGF is $M_X(t)=E[e^{tX}]$ where finite; derivatives at zero yield moments.",
     "statement": "For t in a neighborhood where the expectation is finite, $M_X(t)=E[e^{tX}]$. When differentiation and expectation can be interchanged, $M_X^{(k)}(0)=E[X^k]$. If an MGF exists on an open interval containing zero, it uniquely determines the distribution.",
-    "intuition": "Exponentials package every moment into one function. The neighborhood condition controls tails and supports uniqueness.",
+    "intuition": "A moment-generating function is a compact fingerprint of a distribution. When it exists near zero, reading its slopes at zero gives the mean and other moments such as the variance.",
     "needs": [],
-    "traps": "An MGF may be infinite outside its domain; for an exponential(rate λ), it exists only for t<λ. Moments from derivatives require justified differentiation.",
+    "traps": [
+      "An MGF may be infinite outside its domain; for an exponential(rate λ), it exists only for t<λ. Moments from derivatives require justified differentiation."
+    ],
     "cards": [
       {
         "q": "Define the MGF and state its uniqueness condition.",
@@ -479,11 +505,13 @@ CONCEPTS.push(...
     "title": "MGF of a sum of independent variables",
     "oneLine": "Independence turns the MGF of a sum into a product.",
     "statement": "For independent $X,Y$ with MGFs finite at t, $M_{X+Y}(t)=M_X(t)M_Y(t)$. Thus, when uniqueness applies, the distribution of a sum can be identified by matching the product MGF.",
-    "intuition": "Exponentiating a sum factors into a product; independence factors the expectation of that product.",
+    "intuition": "For independent waiting times, the exponential of their total splits into separate pieces, and independence lets each piece be averaged separately. That is why the two fingerprints multiply.",
     "needs": [
       "c.prob.7.7.1"
     ],
-    "traps": "The product formula depends on independence. Equal parameters are not required.",
+    "traps": [
+      "The product formula depends on independence. Equal parameters are not required."
+    ],
     "cards": [
       {
         "q": "State the MGF product rule for independent X and Y.",
@@ -518,12 +546,14 @@ CONCEPTS.push(...
     "title": "MGF formula for a random sum",
     "oneLine": "For an independent count N and iid summands, condition on N to obtain the random-sum MGF.",
     "statement": "Let $N$ be nonnegative integer-valued, independent of iid $X_i$ with MGF $M_X(t)$. For $S=\\sum_{i=1}^N X_i$, $M_S(t)=E[(M_X(t))^N]=M_N(\\log M_X(t))$ where defined. If moments are finite, $E[S]=E[N]E[X]$ and $\\operatorname{Var}(S)=E[N]\\operatorname{Var}(X)+(E[X])^2\\operatorname{Var}(N)$.",
-    "intuition": "Given N=n, the sum has n independent terms. Averaging that conditional law over N yields the composition of MGFs and the moment formulas.",
+    "intuition": "If a shop’s daily sales are the total from a random number of customers, first work out the total for a fixed customer count. Then average over the possible counts.",
     "needs": [
       "c.prob.7.5.2",
       "c.prob.7.5.3"
     ],
-    "traps": "Independence of N from the sequence is needed. If N depends on the summands, the formulas may fail.",
+    "traps": [
+      "Independence of N from the sequence is needed. If N depends on the summands, the formulas may fail."
+    ],
     "cards": [
       {
         "q": "State the mean and variance formulas for an independent random sum.",
@@ -558,11 +588,13 @@ CONCEPTS.push(...
     "title": "Linear combinations of jointly normal variables",
     "oneLine": "Any linear combination of a multivariate normal vector is normal.",
     "statement": "If $Z_1,\\ldots,Z_n$ are independent standard normals and $X_j=a_j+\\sum_i b_{ij}Z_i$, then the vector X is multivariate normal. Every linear combination $c^TX$ is normal; its mean and variance are $c^T\\mu$ and $c^T\\Sigma c$.",
-    "intuition": "A multivariate normal vector is a linear transformation of independent standard normals. Linear transformations preserve that form.",
+    "intuition": "A jointly normal collection is one bell-shaped cloud, possibly tilted. Adding coordinates with fixed weights makes another bell-shaped quantity.",
     "needs": [
       "c.prob.7.7.1"
     ],
-    "traps": "Normal marginals alone do not imply a jointly normal vector; the multivariate-normal assumption is essential.",
+    "traps": [
+      "Normal marginals alone do not imply a jointly normal vector; the multivariate-normal assumption is essential."
+    ],
     "cards": [
       {
         "q": "If X is multivariate normal, what is the law of $c^TX$?",
@@ -597,12 +629,14 @@ CONCEPTS.push(...
     "title": "Normal sample mean and sample variance",
     "oneLine": "For iid normal data, the sample mean and unbiased sample variance are independent with known scaled laws.",
     "statement": "If $X_i\\overset{iid}{\\sim}N(\\mu,\\sigma^2)$, define $\\bar X=n^{-1}\\sum_iX_i$ and $S^2=(n-1)^{-1}\\sum_i(X_i-\\bar X)^2$. Then $\\bar X\\sim N(\\mu,\\sigma^2/n)$, $(n-1)S^2/\\sigma^2\\sim\\chi^2_{n-1}$, and $\\bar X$ and $S^2$ are independent.",
-    "intuition": "An orthogonal change of coordinates separates the projection of the normal data vector onto the all-ones direction from its residual components. The squared residual norm has n−1 independent standard-normal squares.",
+    "intuition": "For normal test scores, the class average points along one direction and deviations from that average point sideways. Those parts are independent, which is why the t and chi-square formulas work.",
     "needs": [
       "c.prob.7.4.2",
       "c.prob.7.7.2"
     ],
-    "traps": "The independence and chi-square conclusion require a normal sample. For a general iid sample, the mean and sample variance are not generally independent.",
+    "traps": [
+      "The independence and chi-square conclusion require a normal sample. For a general iid sample, the mean and sample variance are not generally independent."
+    ],
     "cards": [
       {
         "q": "For an iid normal sample, give the law of $\\bar X$ and the scaled law of $S^2$.",
@@ -642,11 +676,13 @@ CONCEPTS.push(...
     "title": "Expectation with respect to a distribution function",
     "oneLine": "The Lebesgue–Stieltjes integral defines expectation uniformly for discrete, continuous, and mixed laws.",
     "statement": "For a random variable with cdf F, when the positive and negative parts have finite integrals, $E[g(X)]=\\int_{-\\infty}^{\\infty}g(x)\\,dF(x)$. This reduces to $\\sum_xg(x)p(x)$ for a discrete law and $\\int g(x)f(x)dx$ for a density.",
-    "intuition": "The distribution function assigns probability increments to intervals. Integrating against those increments handles atoms and continuous mass in one notation.",
+    "intuition": "A CDF can rise in smooth ramps or jump at a value with a point mass. Integrating against its probability increments counts both kinds of probability without switching formulas.",
     "needs": [
       "c.prob.7.2.2"
     ],
-    "traps": "Do not treat $dF(x)$ as an ordinary density if F has jumps. Finite expectation requires both positive and negative parts not to be infinite together.",
+    "traps": [
+      "Do not treat $dF(x)$ as an ordinary density if F has jumps. Finite expectation requires both positive and negative parts not to be infinite together."
+    ],
     "cards": [
       {
         "q": "How does general expectation relate to discrete and continuous formulas?",
