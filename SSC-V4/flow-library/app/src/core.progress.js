@@ -1,37 +1,11 @@
-/* ══════════════════════════════════════════════════════════════════════════
-   Levels, earned — never switched.
-
-   There is no level control. A learner does not *choose* to be at level 2;
-   they get there by working the proof. The level of a concept is derived, in
-   one place, from what has actually been done:
-
-     level 1   read. You have been through the material.                RED
-     level 2   its proof worked through. A note with NO proof reaches    AMBER
-               level 2 with the tick, because there is no proof to work.
-     level 3   every exercise filed against this concept's SECTION       GREEN
-               worked through. A section with NO exercises reaches
-               level 3 with level 2, because there is nothing to work.
-
-   Nothing is ever held back by a stage that does not exist: a definition with
-   no proof, in a section with no exercises, is green the moment it is read.
-   That is the whole of rule 12 — a missing stage promotes, it does not cap.
-
-   A group (section, module, course) is at the level its *weakest* member has
-   reached — all red before the group is red, all amber before the group is
-   amber. That is what the coloured rings and bars draw.
-
-   LEVEL 4 IS A COURSE RUNG AND ONLY A COURSE RUNG. Concepts, sections and
-   modules top out at 3. A course reaches 4 — "all complete" — when every note
-   in it is green AND every JAM past-paper question filed against it has been
-   worked through. See `courseLevel`.
-
-   `Store` knows four independent facts and nothing about courses: a concept
-   was read, and a task was worked through (a proof, keyed on the concept id;
-   an exercise, keyed 'w:<questionId>'; a past-paper question, keyed
-   'p:<questionId>'). `Pool` knows structure and no progress. This is the one
-   place the two meet, so "done" cannot mean two different things on two
-   screens.
-   ══════════════════════════════════════════════════════════════════════════ */
+/* Learning levels derived from work, never set by the graph selector.
+   L1 reading; L2 proofs; L3 section exercises; L4 past papers; L5 actual
+   Recall followed by correction of missed items. Concept/tree colours remain
+   at L1–L3. Course badges reach L4/L5 only when the corresponding work exists
+   and is complete; L5 includes extensions. Pending content prevents a whole
+   course completion claim. First attempts remain independent measurements.
+   Missing proofs/exercises promote as before; missing PYQ never earns L4.
+*/
 
 const Progress = (function () {
 

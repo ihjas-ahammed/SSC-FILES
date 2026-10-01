@@ -127,7 +127,9 @@ to try a shared-code change safely. `--live` rebuilds the public pages from `dat
 Today → LR selects Reading (L1), Proofs (L2), Textbook questions (L3), PYQ (L4),
 and Recall and fix (L5). Selection is a synced `paceLevel` preference; it never
 changes achievement. Completion dates use `Store.doneAt`, `Store.proofAt` and
-actual Recall grades. L4 needs mapped past papers; missing questions stay pending.
+actual Recall grades. L4 needs mapped past papers; sections without them are excluded from the L4
+forecast and remain explicitly without PYQ coverage. No mapped papers means
+no L4 completion.
 Older course-only papers gate all sections in their course. L5 needs every course
 statement, proof, objective, worked exercise and PYQ recall item last graded
 `got`; correcting a miss preserves the original first grade. Worked PYQs join the
