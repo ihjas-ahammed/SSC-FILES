@@ -12,6 +12,10 @@ for ch in manifest:
  parts.append('<pre>'+html.escape(p.read_text())+'</pre>' if p.exists() else '<p>Authoring and review pending.</p>')
 parts.append('<h2>DA bridge</h2><p>Descriptive summaries, standard error, chi-squared and t sampling laws, confidence intervals, mean/proportion/variance testing and count-based chi-squared tests. Original practice is clearly labelled. Sources: <a href="https://www.itl.nist.gov/div898/handbook/">NIST handbook</a> and <a href="https://gate2027.iitm.ac.in/static/doc/GATE2027_Syllabus/DA_GATE2027_Syllabus.pdf">official DA 2027 syllabus</a>.</p>')
 parts.append('<p>The experiment-first prompts and story proofs draw on <a href="https://stat110.hsites.harvard.edu/strategic-practice-problems">Harvard Stat 110 strategic practice</a>; the lesson–worked problem–independent practice sequence follows <a href="https://www.ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/pages/resource-index/">MIT 6.041SC course materials</a>.</p>')
+reports=sorted((root/'sources').glob('GATE_REVIEW_*.md'))
+if reports:
+ parts.append('<h2>GATE topic coverage review</h2><p>This review maps the named GATE DA topics to lessons. Selected textbook examples and exercises are still documented separately below.</p>')
+ for report in reports:parts.append('<pre>'+html.escape(report.read_text())+'</pre>')
 review=root/'sources/MATH_REVIEW.md'
 if review.exists():parts.append('<h2>Mathematical review and limits</h2><pre>'+html.escape(review.read_text())+'</pre>')
 pyq=root/'sources/pyq-map.md'
