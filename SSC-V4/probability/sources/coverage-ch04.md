@@ -1,0 +1,26 @@
+# Chapter 4 coverage and review
+
+Source: Ross, *A First Course in Probability*, 10th ed., Chapter 4, local source `chapters/ch04.pdf` (whole chapter PDF pp. 130–193); searchable transcription `chapters/ch04.txt`; section page spans from `chapter-manifest.json`. Extraction/authoring: 2026-10-01.
+
+## Section map
+
+| Section | Source coverage | Included | GATE/JAM focus and remaining gaps |
+|---|---|---|---|
+| 4.1 Random variables | PDF 131–134 | RV as a real function, induced law, c.d.f. definition and properties, jump/interval recovery. | High focus: interpret a c.d.f. and recover point probabilities. More complicated transformations and examples are not individually represented. |
+| 4.2 Discrete random variables | PDF 135–137 | Countable support, pmf conditions, event probabilities; written adaptation of Problem 4.1. | High focus: construct/validate a pmf and aggregate masses. Extended pmf families in Problem 4.11 (Benford) are omitted. |
+| 4.3 Expected value | PDF 138–140 | Weighted expectation, linearity, indicator interpretation; written adaptation of Problem 4.28 and direct practice. | High focus: expectation as a sum and expected counts. Convergence edge cases for signed infinite-support variables are flagged but not explored in depth. |
+| 4.4 Expectation of a function | PDF 141–143 | Discrete LOTUS, direct nonlinear moments, source adaptation of Problem 4.2 (product of dice). | High focus: use the pmf of X directly for g(X), and distinguish E[g(X)] from g(E[X]). Conditional expectation material belongs to later chapters. |
+| 4.5 Variance | PDF 144–147 | Centered and second-moment formulas, shift/scale rule, indicator variance. | High focus: moment calculation and affine transformations. No separate written exercise develops variance of an arbitrary transformed finite pmf beyond the practice items. |
+| 4.6 Bernoulli and binomial | PDF 148–155; subsections 4.6.1 PDF 152–153 and 4.6.2 PDF 154–155 | Bernoulli/binomial pmf and assumptions; mean/variance derivation; adjacent-mass recursion and c.d.f. computation. Includes adaptation of Ross Example 6b and practice based on Example 6h. | High focus: model identification, binomial tails, mean/variance, and adjacent-mass calculations. Mode proof, election-power asymptotics, and calculator table Example 6i are not fully taught here. |
+| 4.7 Poisson | PDF 156–162; subsection 4.7.1 PDF 163 | Poisson pmf, parameter as mean/rate, rare-event binomial limit, complement calculations, comparison to exact binomial; normalization and mean practice. | High focus: choose λ=np, compute zero/one or at-least-one event probabilities, and assess approximation conditions. Long applied examples and every c.d.f. table method are not duplicated. |
+| 4.8 Other discrete distributions | PDF 163–166; subsections 4.8.1 Geometric PDF 163–164, 4.8.2 Negative binomial PDF 164–165, 4.8.3 Hypergeometric PDF 165–166, 4.8.4 Zeta PDF 166 | Support conventions and pmf for each named family; geometric/negative-binomial means and variances; hypergeometric moments and finite-population correction; zeta normalization. Written questions cover each subsection. | High focus: identify waiting-time versus fixed-trial counts and with- versus without-replacement sampling. The Zipf family is marked extra; its moment-existence thresholds are only noted, and extensive capture-recapture estimation is omitted. |
+| 4.9 Expected value of sums | PDF 167–170 | Expectation linearity and indicator method without independence; variance-of-sum covariance correction; binomial/hypergeometric dependent-trial interpretation. | High focus: expected counts under dependence and recognizing when covariance is needed for variance. General infinite-sample-space technicalities are not expanded. |
+| 4.10 C.d.f. properties | PDF 171–174 | Monotonicity, tails, right-continuity idea, interval differences and atoms; sample maximum adaptation of Problem 4.10. | High focus: translate interval endpoint conventions and jumps correctly. Full proofs of all tail-limit properties are summarized; source leaves some details as exercises. |
+
+## Content and validation notes
+
+- Twenty-three concepts cover sections 4.1–4.10, including each numbered subsection 4.6.1, 4.6.2, 4.7.1, and 4.8.1–4.8.4. All concepts have recall cards; theorem concepts include a proof idea, proof rungs, and a terminal result.
+- Twenty-three written problems provide at least two per main section, plus targeted coverage of the numbered distribution subsections. Textbook exercise numbers were checked against the supplied PDF/text; every adaptation identifies itself and gives a complete solution. Other items are original drills or derivations.
+- Thirteen objective questions cover definitions, computation, model selection, common traps, and transfer twists. All `needs` and `tests` references remain within chapter 4.
+- “GATE/JAM focus” describes standard problem patterns in a study-priority sense. This note does not claim the supplied material constitutes or exhausts an official syllabus or past-paper corpus.
+- All chapter 4 content remains a draft until maintainer integration and whole-pool validation.
