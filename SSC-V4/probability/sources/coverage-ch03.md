@@ -14,7 +14,7 @@ Source: Ross, *A First Course in Probability*, 10th ed., Chapter 3, local source
 
 ## Content and validation notes
 
-- Twelve concepts cover every section; all have retrieval cards. Three theorem concepts have proof strategy, step rungs, and endpoints.
+- Twelve concepts cover every section; all have retrieval cards. Six theorem concepts have proof strategy, step rungs, and endpoints, including the conditional partition corollary.
 - Five written problems and seven objective questions are included. Source-derived problem numbers are only used where the problem statement and numerical inputs were visible in the supplied transcription; other objective items are labeled original drills.
 - All question `tests` and concept `needs` references remain inside chapter 3. The pool is a draft addition and needs integration-level checks by the maintainer before publication.
 - Coverage is a study-planning judgment, not a claim that every GATE/JAM question is exhausted. Conditional probability, total probability/Bayes, and independence are the priority exam patterns.
