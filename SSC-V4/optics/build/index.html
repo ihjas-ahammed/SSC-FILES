@@ -20373,11 +20373,14 @@ const NoteBody = (function () {
   }
 
   function traps(c) {
-    if (!c.traps || !c.traps.length) return null;
+    // Older lesson pools also store a single warning as a string.
+    const items = (Array.isArray(c.traps) ? c.traps : [c.traps])
+      .filter(t => typeof t === 'string' && t.trim());
+    if (!items.length) return null;
     return el('div', { class: 'card' }, [
       el('div', { class: 'kicker', text: 'Where marks are lost' }),
       el('ul', { class: 'prose tight', style: { marginTop: '10px', paddingLeft: '1.1em' } },
-        c.traps.map(t => el('li', { html: t })))
+        items.map(t => el('li', { html: t })))
     ]);
   }
 
@@ -20734,7 +20737,7 @@ const NoteBody = (function () {
       Project.hook('noteSim', c),
 
       c.intuition ? el('div', { class: 'card tint' }, [
-        el('div', { class: 'kicker', text: 'What it really says' }),
+        el('div', { class: 'kicker', text: 'In everyday words' }),
         el('div', { style: { marginTop: '10px' } }, [UI.prose(c.intuition, 'tight')])
       ]) : null,
 
