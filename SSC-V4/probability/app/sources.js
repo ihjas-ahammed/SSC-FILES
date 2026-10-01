@@ -25,6 +25,12 @@ const DATA_SOURCES = {
   "../data/ch05.concepts.js",
   "../data/ch05.written.js",
   "../data/ch05.objective.js",
+  "../data/ch06.concepts.js",
+  "../data/ch06.written.js",
+  "../data/ch06.objective.js",
+  "../data/ch09.concepts.js",
+  "../data/ch09.written.js",
+  "../data/ch09.objective.js",
   "../data/inference.concepts.js",
   "../data/inference.written.js",
   "../data/inference.objective.js"

@@ -245,8 +245,8 @@ const Pace = (function () {
           el('div', {}, [
             el('div', { class: 'kicker', text: 'LR · ' + LABEL[stage] + ' · sections per day' }),
             el('div', { class: 'pace-big' }, [
-              el('b', { text: m.done + '/' + m.total }),
-              el('span', { text: stage === 4 ? ' mapped sections complete' : ' sections complete' })
+              el('b', { text: m.total ? m.done + '/' + m.total : 'No mapped PYQ sections' }),
+              el('span', { text: !m.total ? '' : stage === 4 ? ' mapped sections complete' : ' sections complete' })
             ])
           ]),
           el('div', { class: 'seg', role: 'group', 'aria-label': 'Range' },
@@ -257,7 +257,7 @@ const Pace = (function () {
           [1, 2, 3, 4, 5].map(v => el('button', { type: 'button', class: v === stage ? 'on' : '',
             'aria-pressed': String(v === stage), text: 'Lv' + v + ' · ' + LABEL[v],
             on: { click: function () { stage = Store.setPref('paceLevel', v); paint(); } } }))),
-        m.days.length ? el('div', { class: 'pace-plot' }, [chart(m)]) : null,
+        m.total && m.days.length ? el('div', { class: 'pace-plot' }, [chart(m)]) : null,
         el('div', { class: 'pace-key small muted' }, [
           el('span', {}, [el('i', { class: 'k-bar' }), ' per day']),
           el('span', {}, [el('i', { class: 'k-cum' }), ' cumulative']),
