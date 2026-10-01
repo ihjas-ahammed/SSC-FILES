@@ -32,6 +32,7 @@ assert.equal(p.courseLevel('c'),4);
 for(const id of ['a#0','b#0','a#proof','x:ex','p:py#recall']) cards[id]={last:'got',lastAt:500,first:'missed'};
 assert.equal(p.courseLevel('c'),5,'correction earns recall while preserving first grade');
 assert.equal(p.stageAt('1',5),500);
+assert.equal(p.stageAt('2',5),500,'recall work can be completed where no section PYQ exists');
 cards['a#0'].last='missed';
 assert.equal(p.courseLevel('c'),4,'a new miss removes recall completion');
 assert.equal(p.stageAt('1',5),0);

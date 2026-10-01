@@ -91,16 +91,17 @@ const Pace = (function () {
     return out.sort((x, y) => x.at - y.at);
   }
 
-  function totalSections() {
+  function totalSections(stage) {
     return Pool.sections().filter(s => !Pool.isExtSec(s.sec)
-      && (s.concepts.some(c => !Pool.isExt(c)) || (s.module && s.module.pending))).length;
+      && (s.concepts.some(c => !Pool.isExt(c)) || (s.module && s.module.pending))
+      && (stage !== 4 || Progress.pyqForSec(s.sec).length > 0)).length;
   }
 
   /* Everything the chart and the caption need, for the last `span` days. */
   function model(span, stage) {
     stage = stage || 1;
     const done = completions(stage);
-    const total = totalSections();
+    const total = totalSections(stage);
     const today = dayIndex(Date.now());
     const first = done.length ? dayIndex(done[0].at) : today;
     const start = Math.max(today - span + 1, Math.min(first, today));
@@ -204,8 +205,9 @@ const Pace = (function () {
 
   function caption(m) {
     if (!m.count) {
+      if (m.stage === 4 && !m.total) return 'No past-paper sections are mapped yet. Add verified PYQs to start this graph.';
       return 'Complete a section at ' + LABEL[m.stage] + ' and its day appears here.'
-        + (m.stage === 4 ? ' Sections without mapped past papers remain pending.' : '')
+        + (m.stage === 4 ? ' Only sections with mapped past papers count in this graph; other sections have no PYQ coverage.' : '')
         + (m.stage === 5 ? ' Use Recall and correct every missed item to Stated it.' : '');
     }
     if (m.left <= 0) return 'Every section in the syllabus is complete.';
@@ -244,7 +246,7 @@ const Pace = (function () {
             el('div', { class: 'kicker', text: 'LR · ' + LABEL[stage] + ' · sections per day' }),
             el('div', { class: 'pace-big' }, [
               el('b', { text: m.done + '/' + m.total }),
-              el('span', { text: ' sections complete' })
+              el('span', { text: stage === 4 ? ' mapped sections complete' : ' sections complete' })
             ])
           ]),
           el('div', { class: 'seg', role: 'group', 'aria-label': 'Range' },

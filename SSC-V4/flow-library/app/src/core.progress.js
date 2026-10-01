@@ -160,7 +160,7 @@ const Progress = (function () {
     if (stage >= 3) secTaskState(sec).list.forEach(q => times.push(Store.proofAt(taskKey(q))));
     if (stage >= 4) {
       const qs = pyqForSec(sec);
-      if (!qs.length || !qs.every(pyqDone)) return 0;
+      if ((stage === 4 && !qs.length) || !qs.every(pyqDone)) return 0;
       qs.forEach(q => times.push(Store.proofAt(pyqKey(q))));
     }
     if (stage >= 5) {
