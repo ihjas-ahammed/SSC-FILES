@@ -24,6 +24,7 @@ const Pace = (function () {
 
   const el = DOM.el, S = DOM.svg;
   const DAY = 86400e3;
+  const LABEL = { 1: 'Reading', 2: 'Proofs', 3: 'Textbook questions', 4: 'PYQ', 5: 'Recall and fix' };
 
   /* ── dates, in the learner's own day ─────────────────────────────────── */
   const dayIndex = ms => {
@@ -78,12 +79,13 @@ const Pace = (function () {
   }
 
   /* ── the data: when did each section become complete ─────────────────── */
-  function completions() {
+  function completions(stage) {
+    stage = stage || 1;
     const out = [];
     Pool.sections().forEach(function (s) {
       const ids = s.concepts.filter(c => !Pool.isExt(c)).map(c => c.id);
-      if (!ids.length || Progress.count(ids).min < 1) return;
-      const at = Math.max.apply(null, ids.map(Store.doneAt));
+      if (!ids.length) return;
+      const at = Progress.stageAt(s.sec, stage);
       if (at > 0) out.push({ sec: s.sec, at: at });
     });
     return out.sort((x, y) => x.at - y.at);
@@ -94,8 +96,9 @@ const Pace = (function () {
   }
 
   /* Everything the chart and the caption need, for the last `span` days. */
-  function model(span) {
-    const done = completions();
+  function model(span, stage) {
+    stage = stage || 1;
+    const done = completions(stage);
     const total = totalSections();
     const today = dayIndex(Date.now());
     const first = done.length ? dayIndex(done[0].at) : today;
@@ -119,7 +122,7 @@ const Pace = (function () {
     if (eta != null && eta < today) eta = today;
 
     return { days: days, total: total, done: run, left: left, fit: fit, today: today, eta: eta,
-      count: done.length, avg7: days.slice(-7).reduce((s, x) => s + x.n, 0) / Math.min(7, days.length) };
+      stage: stage, count: done.length, avg7: days.slice(-7).reduce((s, x) => s + x.n, 0) / Math.min(7, days.length) };
   }
 
   /* ── drawing ─────────────────────────────────────────────────────────── */
@@ -200,7 +203,9 @@ const Pace = (function () {
 
   function caption(m) {
     if (!m.count) {
-      return 'Finish a section — every note in it read — and its day appears here.';
+      return 'Complete a section at ' + LABEL[m.stage] + ' and its day appears here.'
+        + (m.stage === 4 ? ' Sections without mapped past papers remain pending.' : '')
+        + (m.stage === 5 ? ' Use Recall and correct every missed item to Stated it.' : '');
     }
     if (m.left <= 0) return 'Every section in the syllabus is complete.';
     if (!m.fit) return 'A few more days of work and this can start forecasting.';
@@ -222,18 +227,20 @@ const Pace = (function () {
 
   /* the card Today drops in */
   function card() {
+    let stage = Number(Store.pref('paceLevel', 1));
+    if (![1, 2, 3, 4, 5].includes(stage)) stage = 1;
     let span = Store.pref('paceSpan', 14);
     if ([14, 30, 90].indexOf(span) < 0) span = 14;
     const host = el('div', { class: 'card pace' });
 
     function paint() {
       DOM.clear(host);
-      const m = model(span);
+      const m = model(span, stage);
       const conf = confidence(m);
       DOM.add(host, [
         el('div', { class: 'spread' }, [
           el('div', {}, [
-            el('div', { class: 'kicker', text: 'Pace · sections completed a day' }),
+            el('div', { class: 'kicker', text: 'LR · ' + LABEL[stage] + ' · sections per day' }),
             el('div', { class: 'pace-big' }, [
               el('b', { text: m.done + '/' + m.total }),
               el('span', { text: ' sections complete' })
@@ -243,6 +250,10 @@ const Pace = (function () {
             [14, 30, 90].map(v => el('button', { type: 'button', class: v === span ? 'on' : '',
               text: v + 'd', on: { click: function () { span = Store.setPref('paceSpan', v); paint(); } } })))
         ]),
+        el('div', { class: 'pace-levels seg', role: 'group', 'aria-label': 'Learning level' },
+          [1, 2, 3, 4, 5].map(v => el('button', { type: 'button', class: v === stage ? 'on' : '',
+            'aria-pressed': String(v === stage), text: 'Lv' + v + ' · ' + LABEL[v],
+            on: { click: function () { stage = Store.setPref('paceLevel', v); paint(); } } }))),
         m.days.length ? el('div', { class: 'pace-plot' }, [chart(m)]) : null,
         el('div', { class: 'pace-key small muted' }, [
           el('span', {}, [el('i', { class: 'k-bar' }), ' per day']),

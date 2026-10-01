@@ -111,7 +111,7 @@ const ViewHome = (function () {
      weakest note in it, because a course is not at level 2 while something in
      it is still unread — and the bar underneath shows how the three levels are
      spread, which a single percentage cannot. */
-  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done', 'all complete'];
+  const LEVEL_WORD = ['not started', 'reading', 'proofs worked', 'textbook questions', 'PYQ worked', 'recall and fix'];
 
   function courseCard(course) {
     if (course.pending) {
@@ -139,7 +139,9 @@ const ViewHome = (function () {
           ? (pyq.total - pyq.done) + ' past-paper ' + DOM.plural(pyq.total - pyq.done, 'question')
             + ' between this and level 4'
           : 'level 4 needs the ' + PROJECT.pyqLabel + ', which are not delivered yet')
-      : 'every level earned, past papers included';
+      : lv < 5 ? 'Use Recall, then correct missed items: ' + Progress.recallState(course.id).done
+          + '/' + Progress.recallState(course.id).total + ' recalled and fixed'
+      : 'all five levels earned';
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
@@ -299,7 +301,7 @@ const ViewHome = (function () {
       ]),
 
       el('div', { class: 'card tint' }, [
-        el('div', { class: 'kicker', text: 'What the three colours mean' }),
+        el('div', { class: 'kicker', text: 'The five learning levels' }),
         el('div', { class: 'stack', style: { gap: '8px', marginTop: '10px' } }, [
           el('div', { class: 'row' }, [
             el('span', { class: 'badge lv1', text: 'level 1' }),
@@ -313,8 +315,12 @@ const ViewHome = (function () {
           el('div', { class: 'row' }, [
             el('span', { class: 'badge lv3', text: 'level 3' }),
             el('span', { class: 'small muted',
-              text: 'every exercise in its section is worked through' })
-          ])
+              text: 'every textbook exercise in its section is worked through' })
+          ]),
+          el('div', { class: 'row' }, [el('span', { class: 'badge lv4', text: 'level 4' }),
+            el('span', { class: 'small muted', text: 'past-paper questions worked through' })]),
+          el('div', { class: 'row' }, [el('span', { class: 'badge lv5', text: 'level 5' }),
+            el('span', { class: 'small muted', text: 'use Recall across the course and correct every missed item' })])
         ]),
         el('p', { class: 'small muted', style: { margin: '12px 0 0' },
           text: 'A module or a course takes the colour of the weakest thing inside it, so all '

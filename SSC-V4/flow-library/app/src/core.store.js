@@ -120,6 +120,7 @@ const Store = (function () {
      They share a map because they are the same kind of claim and merge the
      same way; core.progress.js is what gives each key its meaning. */
   const isProofDone = id => !!state.proofs[id];
+  const proofAt = id => state.proofs[id] || 0;
   const setProofDone = (id, on) => flag('proofs', 'unproofs', id, on);
 
   /* ── recall cards ────────────────────────────────────────────────────── */
@@ -339,7 +340,7 @@ const Store = (function () {
 
   return {
     isDone, doneAt, setDone, setDoneMany,
-    isProofDone, setProofDone,
+    isProofDone, proofAt, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
     pref, setPref,
     identity, signedIn, signIn, signOut,

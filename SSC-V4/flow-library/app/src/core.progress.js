@@ -106,7 +106,67 @@ const Progress = (function () {
   function courseLevel(courseId) {
     const c = count(Pool.ids.concepts(courseId));
     if (c.min < 3) return c.min;
-    return pyqState(courseId).ready ? 4 : 3;
+    if (!pyqState(courseId).ready) return 3;
+    return recallState(courseId).ready ? 5 : 4;
+  }
+
+  /* The five learning stages share the existing evidence maps. No migration,
+     synthetic completion dates, or rewriting of first attempts is needed. */
+  function pyqForSec(sec) {
+    const course = Pool.courseOfSec(sec);
+    if (!course) return [];
+    return Pool.pyq(course.id).filter(function (q) {
+      const mapped = q.sec ? [q.sec] : [];
+      (q.tests || []).forEach(id => { const c = Pool.concept(id); if (c) mapped.push(c.sec); });
+      // Older courses file papers at course level. They gate all its sections.
+      return !mapped.length || mapped.indexOf(sec) >= 0;
+    });
+  }
+
+  function recallItems(courseId, sec) {
+    const concepts = Pool.concepts(courseId).filter(c => !sec || c.sec === sec);
+    const ids = new Set(concepts.map(c => c.id));
+    const out = [];
+    Pool.deck().filter(c => ids.has(c.cid)).forEach(c => out.push(c.id));
+    concepts.filter(c => c.proof).forEach(c => out.push(c.id + '#proof'));
+    const belongs = q => (sec ? q.sec === sec : q.course === courseId) || (q.tests || []).some(id => ids.has(id));
+    Pool.objective().filter(belongs).forEach(q => out.push('q:' + q.id));
+    Pool.written().filter(belongs).forEach(q => out.push('x:' + q.id));
+    const papers = sec ? pyqForSec(sec) : Pool.pyq(courseId);
+    papers.forEach(q => out.push('p:' + q.id + '#recall'));
+    return Array.from(new Set(out));
+  }
+
+  function recallState(courseId, sec) {
+    const list = recallItems(courseId, sec);
+    const done = list.filter(id => (Store.card(id) || {}).last === 'got');
+    return { list: list, total: list.length, done: done.length,
+      ready: list.length > 0 && done.length === list.length };
+  }
+
+  function stageAt(sec, stage) {
+    const section = Pool.sections().find(s => s.sec === sec);
+    const ids = section ? section.concepts.filter(c => !Pool.isExt(c)).map(c => c.id) : [];
+    if (!ids.length) return 0;
+    const times = [];
+    for (const id of ids) {
+      if (level(id) < Math.min(stage, 3)) return 0;
+      times.push(Store.doneAt(id));
+      if (stage >= 2 && hasProof(id)) times.push(Store.proofAt(id));
+    }
+    if (stage >= 3) secTaskState(sec).list.forEach(q => times.push(Store.proofAt(taskKey(q))));
+    if (stage >= 4) {
+      const qs = pyqForSec(sec);
+      if (!qs.length || !qs.every(pyqDone)) return 0;
+      qs.forEach(q => times.push(Store.proofAt(pyqKey(q))));
+    }
+    if (stage >= 5) {
+      const course = Pool.courseOfSec(sec);
+      const r = recallState(course.id, sec);
+      if (!r.ready) return 0;
+      r.list.forEach(id => times.push(Store.card(id).lastAt));
+    }
+    return Math.max.apply(null, times);
   }
 
   /* ── ticking ─────────────────────────────────────────────────────────────
@@ -299,6 +359,15 @@ const Progress = (function () {
       });
     });
 
+    Pool.courses().forEach(course => Pool.pyq(course.id).forEach(function (q, i) {
+      if (!pyqDone(q)) return;
+      const c = Pool.concept((q.tests || [])[0]);
+      out.push({ kind: q.type && q.answer != null ? 'question' : 'exercise',
+        id: 'p:' + q.id + '#recall', cid: c ? c.id : null, sec: q.sec || (c && c.sec),
+        title: q.title || (q.exam + ' ' + q.year + ' Q' + q.qno),
+        conceptKind: 'past paper', question: q, order: 3000 + i });
+    }));
+
     return out;
   }
 
@@ -337,7 +406,7 @@ const Progress = (function () {
     advance, advanceMany, complete, clear, setTo,
     count, tickState,
     secTaskState, taskKey, taskDone,
-    pyqKey, pyqDone, pyqState,
+    pyqKey, pyqDone, pyqState, pyqForSec, recallState, stageAt,
     prereqTarget, prereqOk, pendingPrereqs, raisePrereqs,
     reel, reelIds, nextBox, dueAt, dropCache
   };
