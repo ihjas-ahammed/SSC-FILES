@@ -20,6 +20,7 @@ for(const [name,items] of Object.entries(d).filter(([,v])=>Array.isArray(v)&&v!=
  walk(x,x.id);
  if(name==='CONCEPTS'){
   for(const key of ['title','statement','intuition','provenance'])if(!x[key])errors.push(x.id+': missing '+key);
+  if(x.traps!=null&&(!Array.isArray(x.traps)||x.traps.some(t=>typeof t!=='string')))errors.push(x.id+': traps must be a list of strings');
   if(!x.cards?.some(c=>c.kind==='state'))errors.push(x.id+': absent from statement Recall');
   if(x.proof&&(!x.proof.idea||!x.proof.rungs?.length))errors.push(x.id+': incomplete proof');
  }else{
