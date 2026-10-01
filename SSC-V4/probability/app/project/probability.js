@@ -2,20 +2,35 @@
 PROJECT.hooks.home = function () {
   const e = DOM.el;
   return e('div', {class:'card prob-hero'}, [
-    e('div',{class:'kicker',text:'Ross 10e · GATE DA 2027'}),
+    e('div',{class:'kicker',text:'Probability · Ross 10e · GATE DA'}),
     e('h2',{text:'Start with the experiment.'}),
-    e('p',{class:'muted',text:'Describe the possible outcomes and their weights before choosing a formula. Read, reconstruct, solve, then recall and repair.'}),
-    e('div',{class:'prob-steps'}, ['Experiment','Support','Condition','Derive','Check'].map(t=>e('span',{text:t}))),
-    e('a',{class:'chip',href:'source-guide.html',text:'Coverage and reading guide'}),
-    e('p',{class:'small muted',text:'Original lessons mapped to Ross sections. Chapters 9–10 are extensions; the DA inference bridge is a separate supplement. Textbook practice is selected, with coverage limits recorded.'})
+    e('p',{class:'prob-hero-copy',text:'First picture what can happen. Then work out how likely it is. Try the reasoning yourself before checking the answer.'}),
+    e('div',{class:'prob-steps','aria-label':'A way to approach each problem'}, ['Picture it','Set it up','Use the clues','Work it out','Check it'].map((t,i)=>e('span',{},[e('b',{text:String(i+1)}),t]))),
+    e('div',{class:'prob-hero-actions'},[
+      e('a',{class:'btn primary',href:'#/study/prob',text:'Open the syllabus'}),
+      e('a',{class:'prob-guide-link',href:'source-guide.html',text:'Coverage and reading guide'})
+    ]),
+    e('p',{class:'prob-hero-foot',text:'DA core + inference bridge · clearly marked extensions · selected textbook practice'})
   ]);
 };
+function probDisclosure(title, content, className) {
+  const e=DOM.el;
+  return e('details',{class:'prob-disclosure '+(className||'')},[
+    e('summary',{text:title}),e('div',{class:'prob-disclosure-body'},content)
+  ]);
+}
 PROJECT.hooks.noteSim = function (c) {
   const e=DOM.el, nodes=[];
-  if(c.provenance) nodes.push(e('p',{class:'small muted',text:c.provenance}));
-  if (c.sec === '3.3' && /\.1$/.test(c.id)) nodes.push(bayesLab());
-  if (c.sec === '4.6' && /\.1$/.test(c.id)) nodes.push(binomialLab());
-  return e('div',{},nodes);
+  if(c.provenance) nodes.push(probDisclosure('Source and reading reference',[
+    e('p',{class:'small muted',text:c.provenance})
+  ],'prob-source'));
+  if (c.sec === '3.3' && /\.1$/.test(c.id)) nodes.push(probDisclosure('Try it: Bayes with a group of people',[
+    e('p',{class:'small muted',text:'See how the chance changes when a test is used in different populations.'}),bayesLab()
+  ]));
+  if (c.sec === '4.6' && /\.1$/.test(c.id)) nodes.push(probDisclosure('Try it: build a binomial distribution',[
+    e('p',{class:'small muted',text:'Change the number of trials and the chance of success. Compare your prediction with the bars.'}),binomialLab()
+  ]));
+  return nodes.length ? e('div',{class:'prob-note-extras'},nodes) : null;
 };
 function probSlider(host, label, value, min, max, step, onChange) {
   const e=DOM.el, num=e('b',{text:String(value)});

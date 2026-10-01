@@ -22,6 +22,7 @@
 const NoteBody = (function () {
 
   const el = DOM.el;
+  let panelNumber = 0;
 
   /* ── a lazy, titled expander ─────────────────────────────────────────────
      The one pattern the whole note is built from: a header you press and a
@@ -29,9 +30,10 @@ const NoteBody = (function () {
   function expander(opts) {
     const o = opts || {};
     const isOpen = !!o.open;
-    const body = el('div', { class: 'exp-b', hidden: !isOpen });
+    const panelId = 'note-panel-' + (++panelNumber);
+    const body = el('div', { id: panelId, class: 'exp-b', hidden: !isOpen });
     const chev = DOM.icon('chev', 18, 'chev');
-    const head = el('button', { class: 'exp-h', type: 'button', 'aria-expanded': String(isOpen) }, [
+    const head = el('button', { class: 'exp-h', type: 'button', 'aria-expanded': String(isOpen), 'aria-controls': panelId }, [
       o.mark || null,
       el('span', { class: 'tt' }, [
         el('b', { text: o.title }),
@@ -657,7 +659,7 @@ const NoteBody = (function () {
         el('p', { class: 'lede', style: { margin: '8px 0 0' }, text: c.oneLine })
       ]),
 
-      el('div', { class: 'card' }, [
+      el('div', { class: 'card note-statement' }, [
         el('div', { class: 'kicker', text: 'Statement' }),
         el('div', { style: { marginTop: '10px' } }, [RealLine.statementInto(UI.prose(c.statement), c)])
       ]),
@@ -666,7 +668,7 @@ const NoteBody = (function () {
 
       Project.hook('noteSim', c),
 
-      c.intuition ? el('div', { class: 'card tint' }, [
+      c.intuition ? el('div', { class: 'card tint note-intuition' }, [
         el('div', { class: 'kicker', text: 'In everyday words' }),
         el('div', { style: { marginTop: '10px' } }, [UI.prose(c.intuition, 'tight')])
       ]) : null,
