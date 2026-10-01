@@ -170,6 +170,30 @@ else
   echo "WARNING: Optics missing — deploying without the Optics app." >&2
 fi
 
+# --- SSC-V4 Probability: chapter checkpoints on shared flow-library ---
+PROB="$REPO/SSC-V4/probability"
+if [ -d "$PROB" ] && [ -f "$PROB/build.py" ]; then
+  if [ "$REBUILD_LIVE" = "1" ]; then
+    node "$PROB/tools/audit.js"
+    node "$PROB/tools/check_tex.js"
+    python3 "$PROB/build.py" > /dev/null
+  fi
+  if [ ! -s "$PROB/build/index.html" ]; then
+    echo "ERROR: Probability live build missing; refusing to remove its hosted route." >&2
+    exit 1
+  fi
+  mkdir -p "$TMP/public/math/probability" "$TMP/public/math/probability-test"
+  cp "$PROB/build/index.html" "$TMP/public/math/probability/index.html"
+  if [ -f "$PROB/build/source-guide.html" ]; then
+    cp "$PROB/build/source-guide.html" "$TMP/public/math/probability/source-guide.html"
+  fi
+  python3 "$PROB/build.py" --mock > /dev/null
+  cp "$PROB/build/test/index.html" "$TMP/public/math/probability-test/index.html"
+  if [ -f "$PROB/build/source-guide.html" ]; then
+    cp "$PROB/build/source-guide.html" "$TMP/public/math/probability-test/source-guide.html"
+  fi
+fi
+
 # --- SSLC bilingual study app (Kerala SCERT, Class 8-10) ---
 #   /pre/<subject>-test   one page per subject, built from app/mock/
 #   /pre/<subject>        the same page on the validated data/ pool, published
@@ -279,6 +303,8 @@ echo ""
 echo "Optics study system:"
 echo "  → $BASE/phy/optics       (validated data)"
 echo "  → $BASE/phy/optics-test  (mock data — safe to break)"
+echo ""
+echo "Probability: $BASE/math/probability (Ross · GATE DA)"
 echo ""
 echo "SSLC study apps (Kerala SCERT, EN + മലയാളം):"
 for pair in physics chemistry biology maths; do

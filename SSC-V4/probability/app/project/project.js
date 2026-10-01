@@ -14,6 +14,8 @@ const PROJECT = {
     live: 'ssc4_prob_v1',       users: 'ssc4_prob_users_v1',
     mock: 'ssc4_prob_mock_v1',  usersMock: 'ssc4_prob_users_mock_v1'
   },
-  themeColor: { light: '#faf8f4', dark: '#101216' },
+  themeColor: { light: '#f6f3ea', dark: '#111d1b' },
+  pyqLabel: 'GATE DA past papers',
+  figZoom: true,
   hooks: {}
 };
