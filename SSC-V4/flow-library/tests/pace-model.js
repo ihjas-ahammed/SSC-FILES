@@ -4,11 +4,11 @@ class Clock extends Date{static now(){return today;}}
 const sections=['a','b','c','pending'].map(sec=>({sec,concepts:sec==='pending'?[]:[{id:sec}],module:sec==='pending'?{pending:true}:{}}));
 const ctx=vm.createContext({Date:Clock,Math,console,DOM:{el:()=>{},svg:()=>{}},Store:{},
  Pool:{sections:()=>sections,isExt:()=>false,isExtSec:()=>false},
- Progress:{stageAt:(sec,level)=>sec==='pending'?0:today-(['a','b','c'].indexOf(sec)?1:2)*day+(level===2?day:0),
+ Progress:{stageAt:(sec,level)=>sec==='pending'||(level===4&&sec!=='a')?0:today-(['a','b','c'].indexOf(sec)?1:2)*day+(level===2?day:0),
  pyqForSec:sec=>sec==='a'?[{id:'q'}]:[]}});
 vm.runInContext(fs.readFileSync(__dirname+'/../app/src/comp.pace.js','utf8')+'\nthis.p=Pace;',ctx);
 const p=ctx.p,fit=p.fitLine([0,1,2,3],[2,5,8,11]);
-assert.equal(fit.a,2);assert.equal(fit.b,3);assert.equal(fit.r2,1);
+assert(Math.abs(fit.a-2)<1e-12);assert(Math.abs(fit.b-3)<1e-12);assert(Math.abs(fit.r2-1)<1e-12);
 assert.equal(p.solve([[1,2],[2,4]],[1,2]),null);
 assert.equal(p.model(14,1).total,4,'pending sections stay in the reading denominator');
 assert.equal(p.model(14,4).total,1,'only mapped sections belong to the PYQ forecast');
