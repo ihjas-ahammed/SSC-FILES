@@ -5,7 +5,7 @@ from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 manifest=json.loads((root/'sources/chapter-manifest.json').read_text())
 # Ross sections beyond DA's probability core are available as extensions.
-ext={'1.5','1.6','2.6','2.7','3.5','4.8','5.6','6.3','6.6','6.7','6.8','7.3','7.6','7.7','7.8','7.9','8.4','8.5','8.6','8.7'}
+ext={'2.6','2.7','3.5','4.8','5.6','6.6','6.7','6.8','7.3','7.6','7.7','7.8','7.9','8.4','8.5','8.6','8.7'}
 titles={};modules=[];files=[]
 for ch in manifest:
  n=ch['chapter'];secs=[]

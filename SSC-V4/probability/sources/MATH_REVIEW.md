@@ -1,5 +1,7 @@
 # Mathematical and provenance review: probability chapters 1–6 and inference bridge
 
+Historical first-pass review, before the final chapter integration and later GATE coverage corrections. The newer `GATE_REVIEW_*.md` reports give the current topic mapping and supersede the residual-gap discussion below.
+
 Reviewed the loaded `ch01`–`ch06` concept, written-practice, and objective modules and the three inference bridge modules against the Ross 10e chapter text/PDFs and the downloaded GATE DA 2027 syllabus. This review targets mathematical hypotheses, solution claims, and source labels; it is not a line-by-line certification of Ross or every item in these files. Parent's separate numeric sanity pass covered objective answer values.
 
 ## Corrections made
