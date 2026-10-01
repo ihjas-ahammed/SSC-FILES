@@ -1,0 +1,12 @@
+# Chapter 1 coverage: Combinatorial Analysis
+
+| Ross section | GATE focus | Authored coverage | Deliberately omitted / gap |
+|---|---|---|---|
+| 1.1 Introduction | Counting as a route to probability in finite equiprobable models | Count-ratio concept; antenna string example described as motivation; MCQ on equiprobability | Antenna problem's full general count and all example-specific variants are not worked here. |
+| 1.2 Basic Principle of Counting | Core: addition/multiplication distinction, product rule, ordered outcomes, function counts | Product rule with proof sketch; functions and position restrictions; adapted Problems 1 and 2; objective checks | Examples 2a–2c and remaining Problems 3–7, 25 are not individually covered. Variable branch-size tree examples omitted. |
+| 1.3 Permutations | Core: factorial, ordered selections, indistinguishable repeated objects | Full and partial permutation formulas; repeated-object formula with proof; adapted Problems 8(c), 10(b) | Examples 3a–3f and remaining permutation Problems 8–13, 19 are not individually worked. Circular permutations are outside this chapter. |
+| 1.4 Combinations | Core: binomial coefficient, subset interpretation, Pascal identity, binomial theorem | Formula and proof; Pascal/binomial theorem with combinatorial explanations; adapted Problems 16 and 21(a); objective checks | Other committee, lattice-path, subset, and poker examples/problems omitted. |
+| 1.5 Multinomial Coefficients | Core: labeled group divisions and multinomial expansion | Group-count formula and theorem with proof outline; adapted Problems 29 and 30 | Example 5d tournament count and further applications (bridge deals, score outcomes) omitted. |
+| 1.6 Number of Integer Solutions | Supporting/optional extension; stars and bars useful in allocation counts | Positive and nonnegative formulas, encoding proof; adapted Problems 34 and 36(a); objective checks | Examples 6a–6d and remaining Problems 35, 37 and starred constrained variants omitted. No upper-bound inclusion-exclusion method supplied. |
+
+Exercise labels in written items refer to the numbered **Problems** at Ross Chapter 1 PDF pp. 31–34, not Theoretical Exercises or Self-Test Problems. The statements and worked solutions are newly written adaptations. Sections marked with an asterisk in Ross remain supporting extension material. This is a targeted course layer, not word-for-word or example-by-example coverage of the full chapter.
