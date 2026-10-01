@@ -96,7 +96,30 @@ const Tex = (function () {
     if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
       return window.MathJax.startup.promise.catch(() => {});
     }
-    return Promise.resolve();
+    if (available()) return Promise.resolve();
+    const script = document.getElementById('MathJax-script');
+    if (!script) return Promise.resolve();
+    // The async script can still be downloading when the study app starts.
+    return new Promise(function (resolve) {
+      let finished = false;
+      let timer;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        script.removeEventListener('load', loaded);
+        script.removeEventListener('error', finish);
+        resolve();
+      }
+      function loaded() {
+        const startup = window.MathJax && window.MathJax.startup;
+        if (startup && startup.promise) startup.promise.then(finish, finish);
+        else finish();
+      }
+      script.addEventListener('load', loaded);
+      script.addEventListener('error', finish);
+      timer = setTimeout(finish, 12000);
+    });
   }
 
   return { typeset, renderFragment, ready, available };

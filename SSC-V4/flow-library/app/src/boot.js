@@ -266,8 +266,8 @@ const App = (function () {
     wrap.insertBefore(el('div', { class: 'banner' }, [
       DOM.mi('warning'),
       el('span', {}, [
-        el('b', { text: 'MathJax did not load. ' }),
-        'Formulas will show as LaTeX source. The app needs the network once to fetch it.'
+        el('b', { text: 'Formulas haven’t loaded yet. ' }),
+        'You can keep reading, or reload after checking your connection.'
       ])
     ]), wrap.firstChild);
   }
