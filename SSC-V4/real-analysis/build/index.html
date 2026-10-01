@@ -1162,6 +1162,11 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .fig-viewport { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; }
 .fig-viewport img { display: block; max-width: none; height: auto; margin-inline: auto; }
 
+/* Learning evidence selector: wraps at phone widths. */
+.pace-levels { display:flex; flex-wrap:wrap; margin:14px 0 8px; gap:4px; }
+.pace-levels button { flex:1 1 auto; min-height:38px; }
+.lv5 { color:var(--accent); }
+
 </style>
 <style>
 /* ── project/theme.css ── */
@@ -29778,6 +29783,8 @@ const DIAGRAM_SHEETS = [
          home(ctx)   -> Node|null     a hero placed above the home dashboard
          theme(dark)                  after light/dark is applied
          ready()                      once, after the signed-in app is up
+         rungFig(rung, concept, i)    -> Node|null  a diagram above one proof step
+         noteSim(concept)             -> Node|null  an interactive panel after a note's figures
        }
      }
 
@@ -30640,6 +30647,7 @@ const Store = (function () {
      They share a map because they are the same kind of claim and merge the
      same way; core.progress.js is what gives each key its meaning. */
   const isProofDone = id => !!state.proofs[id];
+  const proofAt = id => state.proofs[id] || 0;
   const setProofDone = (id, on) => flag('proofs', 'unproofs', id, on);
 
   /* ── recall cards ────────────────────────────────────────────────────── */
@@ -30653,8 +30661,11 @@ const Store = (function () {
   function gradeCard(id, grade) {
     const rec = state.cards[id] || (state.cards[id] = { tries: 0 });
     rec.tries += 1;
+    const now = Date.now();
+    if (grade === 'got') rec.gotAt = rec.last === 'got' ? (rec.gotAt || rec.lastAt || now) : now;
+    else delete rec.gotAt;
     rec.last = grade;
-    rec.lastAt = Date.now();
+    rec.lastAt = now;
     rec.box = Progress.nextBox(rec.box, grade);
     if (!rec.first) { rec.first = grade; rec.firstAt = rec.lastAt; }  /* first attempt is final */
     save();
@@ -30796,6 +30807,7 @@ const Store = (function () {
          by field is what drops anything not named here, so a new field has to
          be added in BOTH places or every sync quietly resets it. */
       if (last.box != null) rec.box = last.box;
+      if (last.last === 'got' && last.gotAt) rec.gotAt = last.gotAt;
       out[id] = rec;
     }
     return out;
@@ -30859,7 +30871,7 @@ const Store = (function () {
 
   return {
     isDone, doneAt, setDone, setDoneMany,
-    isProofDone, setProofDone,
+    isProofDone, proofAt, setProofDone,
     card, gradeCard, omr, lockOmr, draft, saveDraft,
     pref, setPref,
     identity, signedIn, signIn, signOut,
@@ -31314,40 +31326,14 @@ const Pool = (function () {
 
 
 /* ── flow-library/app/src/core.progress.js ── */
-/* ══════════════════════════════════════════════════════════════════════════
-   Levels, earned — never switched.
-
-   There is no level control. A learner does not *choose* to be at level 2;
-   they get there by working the proof. The level of a concept is derived, in
-   one place, from what has actually been done:
-
-     level 1   read. You have been through the material.                RED
-     level 2   its proof worked through. A note with NO proof reaches    AMBER
-               level 2 with the tick, because there is no proof to work.
-     level 3   every exercise filed against this concept's SECTION       GREEN
-               worked through. A section with NO exercises reaches
-               level 3 with level 2, because there is nothing to work.
-
-   Nothing is ever held back by a stage that does not exist: a definition with
-   no proof, in a section with no exercises, is green the moment it is read.
-   That is the whole of rule 12 — a missing stage promotes, it does not cap.
-
-   A group (section, module, course) is at the level its *weakest* member has
-   reached — all red before the group is red, all amber before the group is
-   amber. That is what the coloured rings and bars draw.
-
-   LEVEL 4 IS A COURSE RUNG AND ONLY A COURSE RUNG. Concepts, sections and
-   modules top out at 3. A course reaches 4 — "all complete" — when every note
-   in it is green AND every JAM past-paper question filed against it has been
-   worked through. See `courseLevel`.
-
-   `Store` knows four independent facts and nothing about courses: a concept
-   was read, and a task was worked through (a proof, keyed on the concept id;
-   an exercise, keyed 'w:<questionId>'; a past-paper question, keyed
-   'p:<questionId>'). `Pool` knows structure and no progress. This is the one
-   place the two meet, so "done" cannot mean two different things on two
-   screens.
-   ══════════════════════════════════════════════════════════════════════════ */
+/* Learning levels derived from work, never set by the graph selector.
+   L1 reading; L2 proofs; L3 section exercises; L4 past papers; L5 actual
+   Recall followed by correction of missed items. Concept/tree colours remain
+   at L1–L3. Course badges reach L4/L5 only when the corresponding work exists
+   and is complete; L5 includes extensions. Pending content prevents a whole
+   course completion claim. First attempts remain independent measurements.
+   Missing proofs/exercises promote as before; missing PYQ never earns L4.
+*/
 
 const Progress = (function () {
 
@@ -31422,7 +31408,70 @@ const Progress = (function () {
   function courseLevel(courseId) {
     const c = count(Pool.ids.concepts(courseId));
     if (c.min < 3) return c.min;
-    return pyqState(courseId).ready ? 4 : 3;
+    const course = Pool.course ? Pool.course(courseId) : null;
+    if (course && (course.pending || (course.modules || []).some(m => m.pending && !m.ext))) return 3;
+    if (!pyqState(courseId).ready) return 3;
+    if (course && (course.modules || []).some(m => m.pending)) return 4;
+    return recallState(courseId).ready ? 5 : 4;
+  }
+
+  /* The five learning stages share the existing evidence maps. No migration,
+     synthetic completion dates, or rewriting of first attempts is needed. */
+  function pyqForSec(sec) {
+    const course = Pool.courseOfSec(sec);
+    if (!course) return [];
+    return Pool.pyq(course.id).filter(function (q) {
+      const mapped = q.sec ? [q.sec] : [];
+      (q.tests || []).forEach(id => { const c = Pool.concept(id); if (c) mapped.push(c.sec); });
+      // Older courses file papers at course level. They gate all its sections.
+      return !mapped.length || mapped.indexOf(sec) >= 0;
+    });
+  }
+
+  function recallItems(courseId, sec) {
+    const concepts = Pool.concepts(courseId, { includeExt: !sec }).filter(c => !sec || c.sec === sec);
+    const ids = new Set(concepts.map(c => c.id));
+    const out = [];
+    Pool.deck().filter(c => ids.has(c.cid)).forEach(c => out.push(c.id));
+    concepts.filter(c => c.proof).forEach(c => out.push(c.id + '#proof'));
+    const belongs = q => (sec ? q.sec === sec : q.course === courseId) || (q.tests || []).some(id => ids.has(id));
+    Pool.objective().filter(belongs).forEach(q => out.push('q:' + q.id));
+    Pool.written().filter(belongs).forEach(q => out.push('x:' + q.id));
+    const papers = sec ? pyqForSec(sec) : Pool.pyq(courseId);
+    papers.forEach(q => out.push('p:' + q.id + '#recall'));
+    return Array.from(new Set(out));
+  }
+
+  function recallState(courseId, sec) {
+    const list = recallItems(courseId, sec);
+    const done = list.filter(id => (Store.card(id) || {}).last === 'got');
+    return { list: list, total: list.length, done: done.length,
+      ready: list.length > 0 && done.length === list.length };
+  }
+
+  function stageAt(sec, stage) {
+    const section = Pool.sections().find(s => s.sec === sec);
+    const ids = section ? section.concepts.filter(c => !Pool.isExt(c)).map(c => c.id) : [];
+    if (!ids.length) return 0;
+    const times = [];
+    for (const id of ids) {
+      if (level(id) < Math.min(stage, 3)) return 0;
+      times.push(Store.doneAt(id));
+      if (stage >= 2 && hasProof(id)) times.push(Store.proofAt(id));
+    }
+    if (stage >= 3) secTaskState(sec).list.forEach(q => times.push(Store.proofAt(taskKey(q))));
+    if (stage >= 4) {
+      const qs = pyqForSec(sec);
+      if ((stage === 4 && !qs.length) || !qs.every(pyqDone)) return 0;
+      qs.forEach(q => times.push(Store.proofAt(pyqKey(q))));
+    }
+    if (stage >= 5) {
+      const course = Pool.courseOfSec(sec);
+      const r = recallState(course.id, sec);
+      if (!r.ready) return 0;
+      r.list.forEach(id => times.push(Store.card(id).gotAt || Store.card(id).lastAt));
+    }
+    return Math.max.apply(null, times);
   }
 
   /* ── ticking ─────────────────────────────────────────────────────────────
@@ -31615,6 +31664,15 @@ const Progress = (function () {
       });
     });
 
+    Pool.courses().forEach(course => Pool.pyq(course.id).forEach(function (q, i) {
+      if (!pyqDone(q)) return;
+      const c = Pool.concept((q.tests || [])[0]);
+      out.push({ kind: q.type && q.answer != null ? 'question' : 'exercise',
+        id: 'p:' + q.id + '#recall', cid: c ? c.id : null, sec: q.sec || (c && c.sec),
+        title: q.title || (q.exam + ' ' + q.year + ' Q' + q.qno),
+        conceptKind: 'past paper', question: q, order: 3000 + i });
+    }));
+
     return out;
   }
 
@@ -31653,7 +31711,7 @@ const Progress = (function () {
     advance, advanceMany, complete, clear, setTo,
     count, tickState,
     secTaskState, taskKey, taskDone,
-    pyqKey, pyqDone, pyqState,
+    pyqKey, pyqDone, pyqState, pyqForSec, recallState, stageAt,
     prereqTarget, prereqOk, pendingPrereqs, raisePrereqs,
     reel, reelIds, nextBox, dueAt, dropCache
   };
@@ -32194,7 +32252,9 @@ const UI = (function () {
     };
   }
 
-  /* `line` is an optional RealLine node drawn under the maths.
+  /* `fig` is an optional diagram node a project draws for this step (PROJECT.hooks.rungFig),
+     shown above the maths so the picture is read first.
+     `line` is an optional RealLine node drawn under the maths.
      `compact` is the recall reel's version: the explanation as a quiet
      line under the maths rather than its own labelled block. */
   function rung(r, i, opts) {
@@ -32204,6 +32264,7 @@ const UI = (function () {
       el('div', { class: 'rung-why small muted' }, [
         el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: p.why })
       ]),
+      o.fig || null,
       p.math ? el('div', { class: 'rung-math', html: p.math }) : null,
       o.line || null,
       p.meaning ? (o.compact
@@ -34439,6 +34500,7 @@ const Pace = (function () {
 
   const el = DOM.el, S = DOM.svg;
   const DAY = 86400e3;
+  const LABEL = { 1: 'Reading', 2: 'Proofs', 3: 'Textbook questions', 4: 'PYQ', 5: 'Recall and fix' };
 
   /* ── dates, in the learner's own day ─────────────────────────────────── */
   const dayIndex = ms => {
@@ -34493,25 +34555,29 @@ const Pace = (function () {
   }
 
   /* ── the data: when did each section become complete ─────────────────── */
-  function completions() {
+  function completions(stage) {
+    stage = stage || 1;
     const out = [];
     Pool.sections().forEach(function (s) {
       const ids = s.concepts.filter(c => !Pool.isExt(c)).map(c => c.id);
-      if (!ids.length || Progress.count(ids).min < 1) return;
-      const at = Math.max.apply(null, ids.map(Store.doneAt));
+      if (!ids.length) return;
+      const at = Progress.stageAt(s.sec, stage);
       if (at > 0) out.push({ sec: s.sec, at: at });
     });
     return out.sort((x, y) => x.at - y.at);
   }
 
-  function totalSections() {
-    return Pool.sections().filter(s => s.concepts.some(c => !Pool.isExt(c))).length;
+  function totalSections(stage) {
+    return Pool.sections().filter(s => !Pool.isExtSec(s.sec)
+      && (s.concepts.some(c => !Pool.isExt(c)) || (s.module && s.module.pending))
+      && (stage !== 4 || Progress.pyqForSec(s.sec).length > 0)).length;
   }
 
   /* Everything the chart and the caption need, for the last `span` days. */
-  function model(span) {
-    const done = completions();
-    const total = totalSections();
+  function model(span, stage) {
+    stage = stage || 1;
+    const done = completions(stage);
+    const total = totalSections(stage);
     const today = dayIndex(Date.now());
     const first = done.length ? dayIndex(done[0].at) : today;
     const start = Math.max(today - span + 1, Math.min(first, today));
@@ -34534,7 +34600,7 @@ const Pace = (function () {
     if (eta != null && eta < today) eta = today;
 
     return { days: days, total: total, done: run, left: left, fit: fit, today: today, eta: eta,
-      count: done.length, avg7: days.slice(-7).reduce((s, x) => s + x.n, 0) / Math.min(7, days.length) };
+      stage: stage, count: done.length, avg7: days.slice(-7).reduce((s, x) => s + x.n, 0) / Math.min(7, days.length) };
   }
 
   /* ── drawing ─────────────────────────────────────────────────────────── */
@@ -34615,7 +34681,10 @@ const Pace = (function () {
 
   function caption(m) {
     if (!m.count) {
-      return 'Finish a section — every note in it read — and its day appears here.';
+      if (m.stage === 4 && !m.total) return 'No past-paper sections are mapped yet. Add verified PYQs to start this graph.';
+      return 'Complete a section at ' + LABEL[m.stage] + ' and its day appears here.'
+        + (m.stage === 4 ? ' Only sections with mapped past papers count in this graph; other sections have no PYQ coverage.' : '')
+        + (m.stage === 5 ? ' Use Recall and correct every missed item to Stated it.' : '');
     }
     if (m.left <= 0) return 'Every section in the syllabus is complete.';
     if (!m.fit) return 'A few more days of work and this can start forecasting.';
@@ -34637,28 +34706,34 @@ const Pace = (function () {
 
   /* the card Today drops in */
   function card() {
+    let stage = Number(Store.pref('paceLevel', 1));
+    if (![1, 2, 3, 4, 5].includes(stage)) stage = 1;
     let span = Store.pref('paceSpan', 14);
     if ([14, 30, 90].indexOf(span) < 0) span = 14;
     const host = el('div', { class: 'card pace' });
 
     function paint() {
       DOM.clear(host);
-      const m = model(span);
+      const m = model(span, stage);
       const conf = confidence(m);
       DOM.add(host, [
         el('div', { class: 'spread' }, [
           el('div', {}, [
-            el('div', { class: 'kicker', text: 'Pace · sections completed a day' }),
+            el('div', { class: 'kicker', text: 'LR · ' + LABEL[stage] + ' · sections per day' }),
             el('div', { class: 'pace-big' }, [
-              el('b', { text: m.done + '/' + m.total }),
-              el('span', { text: ' sections complete' })
+              el('b', { text: m.total ? m.done + '/' + m.total : 'No mapped PYQ sections' }),
+              el('span', { text: !m.total ? '' : stage === 4 ? ' mapped sections complete' : ' sections complete' })
             ])
           ]),
           el('div', { class: 'seg', role: 'group', 'aria-label': 'Range' },
             [14, 30, 90].map(v => el('button', { type: 'button', class: v === span ? 'on' : '',
               text: v + 'd', on: { click: function () { span = Store.setPref('paceSpan', v); paint(); } } })))
         ]),
-        m.days.length ? el('div', { class: 'pace-plot' }, [chart(m)]) : null,
+        el('div', { class: 'pace-levels seg', role: 'group', 'aria-label': 'Learning level' },
+          [1, 2, 3, 4, 5].map(v => el('button', { type: 'button', class: v === stage ? 'on' : '',
+            'aria-pressed': String(v === stage), text: 'Lv' + v + ' · ' + LABEL[v],
+            on: { click: function () { stage = Store.setPref('paceLevel', v); paint(); } } }))),
+        m.total && m.days.length ? el('div', { class: 'pace-plot' }, [chart(m)]) : null,
         el('div', { class: 'pace-key small muted' }, [
           el('span', {}, [el('i', { class: 'k-bar' }), ' per day']),
           el('span', {}, [el('i', { class: 'k-cum' }), ' cumulative']),
@@ -35212,7 +35287,9 @@ const NoteBody = (function () {
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
           (function (lines) {
-            return p.rungs.map(function (r, idx) { return UI.rung(r, idx, { line: lines[idx] }); });
+            return p.rungs.map(function (r, idx) {
+              return UI.rung(r, idx, { line: lines[idx], fig: Project.hook('rungFig', r, c, idx) });
+            });
           })(RealLine.proof(c))
         ));
       }
@@ -35642,6 +35719,8 @@ const NoteBody = (function () {
       ]),
 
       Fig.mount(c),
+
+      Project.hook('noteSim', c),
 
       c.intuition ? el('div', { class: 'card tint' }, [
         el('div', { class: 'kicker', text: 'What it really says' }),
@@ -36328,7 +36407,7 @@ const ViewHome = (function () {
      weakest note in it, because a course is not at level 2 while something in
      it is still unread — and the bar underneath shows how the three levels are
      spread, which a single percentage cannot. */
-  const LEVEL_WORD = ['not started', 'read', 'proofs worked', 'exercises done', 'all complete'];
+  const LEVEL_WORD = ['not started', 'reading', 'proofs worked', 'textbook questions', 'PYQ worked', 'recall and fix'];
 
   function courseCard(course) {
     if (course.pending) {
@@ -36356,7 +36435,9 @@ const ViewHome = (function () {
           ? (pyq.total - pyq.done) + ' past-paper ' + DOM.plural(pyq.total - pyq.done, 'question')
             + ' between this and level 4'
           : 'level 4 needs the ' + PROJECT.pyqLabel + ', which are not delivered yet')
-      : 'every level earned, past papers included';
+      : lv < 5 ? 'Use Recall, then correct missed items: ' + Progress.recallState(course.id).done
+          + '/' + Progress.recallState(course.id).total + ' recalled and fixed'
+      : 'all five levels earned';
 
     return el('div', { class: 'card' }, [
       el('div', { class: 'spread' }, [
@@ -36516,7 +36597,7 @@ const ViewHome = (function () {
       ]),
 
       el('div', { class: 'card tint' }, [
-        el('div', { class: 'kicker', text: 'What the three colours mean' }),
+        el('div', { class: 'kicker', text: 'The five learning levels' }),
         el('div', { class: 'stack', style: { gap: '8px', marginTop: '10px' } }, [
           el('div', { class: 'row' }, [
             el('span', { class: 'badge lv1', text: 'level 1' }),
@@ -36530,8 +36611,12 @@ const ViewHome = (function () {
           el('div', { class: 'row' }, [
             el('span', { class: 'badge lv3', text: 'level 3' }),
             el('span', { class: 'small muted',
-              text: 'every exercise in its section is worked through' })
-          ])
+              text: 'every textbook exercise in its section is worked through' })
+          ]),
+          el('div', { class: 'row' }, [el('span', { class: 'badge lv4', text: 'level 4' }),
+            el('span', { class: 'small muted', text: 'past-paper questions worked through' })]),
+          el('div', { class: 'row' }, [el('span', { class: 'badge lv5', text: 'level 5' }),
+            el('span', { class: 'small muted', text: 'use Recall across the course and correct every missed item' })])
         ]),
         el('p', { class: 'small muted', style: { margin: '12px 0 0' },
           text: 'A module or a course takes the colour of the weakest thing inside it, so all '
