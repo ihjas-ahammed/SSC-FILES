@@ -176,6 +176,7 @@ if [ -d "$PROB" ] && [ -f "$PROB/build.py" ]; then
   if [ "$REBUILD_LIVE" = "1" ]; then
     node "$PROB/tools/audit.js"
     node "$PROB/tools/check_tex.js"
+    python3 "$PROB/tools/coverage.py"
     python3 "$PROB/build.py" > /dev/null
   fi
   if [ ! -s "$PROB/build/index.html" ]; then
