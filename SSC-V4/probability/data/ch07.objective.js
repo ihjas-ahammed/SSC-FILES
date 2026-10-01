@@ -15,7 +15,10 @@ OBJECTIVE.push(...
     "solution": "By linearity, $3(2)-2(5)=-4$.",
     "tested": "Linearity of expectation without independence.",
     "trap": "Assuming independence is needed before distributing the expectation.",
-    "twist": "Use the coefficients with their signs.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "Use the coefficients with their signs."
+    },
     "tests": [
       "c.prob.7.2.1"
     ],
@@ -57,7 +60,10 @@ OBJECTIVE.push(...
     "solution": "Each urn is empty with probability $(4/5)^5$. Sum five indicators: $5(4/5)^5=1.6384$, which rounds to 1.638.",
     "tested": "Indicator representation and linearity for a count.",
     "trap": "Treating urn-emptiness events as independent is unnecessary and false.",
-    "twist": "For n balls in n urns the expression is $n(1-1/n)^n$.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "For n balls in n urns the expression is $n(1-1/n)^n$."
+    },
     "tests": [
       "c.prob.7.3.1"
     ],
@@ -80,7 +86,10 @@ OBJECTIVE.push(...
     "solution": "The covariance identity follows by expansion. Variance of a sum includes twice the covariance. Zero covariance does not generally imply independence, and correlation lies in [-1,1].",
     "tested": "Covariance, variance sums, and correlation limits.",
     "trap": "Dropping covariance in a dependent sum.",
-    "twist": "If X and Y are independent and square-integrable, the covariance term vanishes.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "If X and Y are independent and square-integrable, the covariance term vanishes."
+    },
     "tests": [
       "c.prob.7.4.1",
       "c.prob.7.4.2"
@@ -123,7 +132,10 @@ OBJECTIVE.push(...
     "solution": "The conditional means are 1 and 4, each with probability 1/2. The tower property gives $E[X]=(1+4)/2=2.5$.",
     "tested": "Tower property / conditional expectation.",
     "trap": "Averaging the raw outcomes across groups without their conditional weights.",
-    "twist": "The law of total variance for these data gives 2.75.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "The law of total variance for these data gives 2.75."
+    },
     "tests": [
       "c.prob.7.5.1",
       "c.prob.7.5.2"
@@ -144,7 +156,10 @@ OBJECTIVE.push(...
     "solution": "The slope is $\\operatorname{Cov}(X,Y)/\\operatorname{Var}(X)=6/9=2/3$.",
     "tested": "Least-squares linear prediction coefficient.",
     "trap": "Dividing by Var(Y) instead of Var(X).",
-    "twist": "Reverse the prediction direction: the slope for predicting X from Y generally differs.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "Reverse the prediction direction: the slope for predicting X from Y generally differs."
+    },
     "tests": [
       "c.prob.7.6.1"
     ],
@@ -182,7 +197,10 @@ OBJECTIVE.push(...
     "solution": "Independence factors $E[e^{tX}e^{tY}]$ into the product of the two MGFs evaluated at t.",
     "tested": "MGF factorization for independent sums.",
     "trap": "Adding MGFs is not the transform rule for sums.",
-    "twist": "Without independence, the product rule can fail.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "Without independence, the product rule can fail."
+    },
     "tests": [
       "c.prob.7.7.2"
     ],
@@ -223,7 +241,10 @@ OBJECTIVE.push(...
     "solution": "Both statements are normal-sample results; the degrees of freedom are n−1.",
     "tested": "Normal sampling distribution of mean and variance.",
     "trap": "Extending a special normal result to arbitrary iid variables.",
-    "twist": "The sample mean itself is normal with variance σ²/n.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "The sample mean itself is normal with variance σ²/n."
+    },
     "tests": [
       "c.prob.7.8.1",
       "c.prob.7.8.2"
@@ -266,7 +287,10 @@ OBJECTIVE.push(...
     "solution": "The atom contributes zero. The conditional uniform mean is 1, weighted by probability 1/2, so E[X]=1/2.",
     "tested": "Expectation under a mixed distribution.",
     "trap": "Ignoring the mixture probability and using the conditional mean as the unconditional mean.",
-    "twist": "The second moment is 2/3.",
+    "twist": {
+      "q": "What related case or check should be considered?",
+      "a": "The second moment is 2/3."
+    },
     "tests": [
       "c.prob.7.9.1"
     ],
