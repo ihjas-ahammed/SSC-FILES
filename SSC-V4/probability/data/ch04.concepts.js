@@ -866,7 +866,7 @@ CONCEPTS.push(...
     "tier": "core",
     "title": "Discrete uniform law on consecutive integers",
     "oneLine": "If each integer in a fixed consecutive range is equally likely, the mean is the midpoint and the variance depends only on how many values there are.",
-    "statement": "If X is uniform on {a,a+1,...,a+N−1}, where N≥1, then P(X=x)=1/N on this set, E[X]=a+(N−1)/2, and Var(X)=(N²−1)/12.",
+    "statement": "If $X$ is uniform on $\\{a,a+1,\\ldots,a+N-1\\}$, where $a$ is an integer and $N\\ge1$ is the number of values, then $P(X=x)=1/N$ on this set (and 0 outside), $E[X]=a+(N-1)/2$, and $\\operatorname{Var}(X)=(N^2-1)/12$.",
     "intuition": "A fair die is discrete uniform: each face gets the same chance, and the center of faces 1 through 6 is 3.5. The spread depends on the number of faces, not on where the numbering starts.",
     "needs": [
       "c.prob.4.2.1"
