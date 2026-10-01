@@ -1,54 +1,416 @@
 if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
-CONCEPTS.push(
-{
- id:'c.prob.1.1.1',sec:'1.1',kind:'technique',tier:'core',title:'Counting outcomes to obtain probability',oneLine:'When outcomes are equally likely, count the favorable outcomes and divide by the total.',
- statement:'If a finite sample space $S$ has equally likely outcomes and $A\\subseteq S$, then $P(A)=|A|/|S|$. The counting problem is therefore to describe the outcomes correctly, count all of them once, and count those in $A$.',
- intuition:'Probability by counting is a ratio of sizes, but the ratio is valid only after the sample space and its equally likely outcome units have been fixed. In the antenna example, a configuration is a length-$n$ binary string with exactly $m$ zeroes; the event “functional” excludes adjacent zeroes.',
- needs:[],traps:['The equally-likely condition is essential. A list of possibilities is not a probability model by itself.','Do not count labels that the experiment regards as indistinguishable as distinct outcomes.'],cards:[{q:'When may a probability be computed as favorable count divided by total count?',a:'When the finite sample space consists of equally likely outcomes; then $P(A)=|A|/|S|$.',kind:'state'}],provenance:'Ross, A First Course in Probability, 10e, §1.1, PDF p. 17.'
-},
-{
- id:'c.prob.1.2.1',sec:'1.2',kind:'theorem',tier:'core',title:'Basic principle of counting',oneLine:'Successive choices multiply when every partial outcome admits a fixed number of next choices.',
- statement:'For two stages, if stage 1 has $m$ possible outcomes and, for each stage-1 outcome, stage 2 has $n$ possible outcomes, then there are $mn$ ordered pairs. More generally, if stage $i$ has $n_i$ possible choices for every preceding history, the total number of complete outcomes is $\\prod_{i=1}^r n_i$.',
- intuition:'Each first-stage choice starts a row of $n$ second-stage choices. There are $m$ rows, each of length $n$. The conditional uniformity phrase matters: if the number of next choices depends on the earlier result, use a sum of branch counts instead.',
- needs:[],traps:['Add counts for successive stages only when the task branches into alternatives; multiply counts for choices that are all made.','If later choices depend on earlier choices, check whether each branch has the same size before using a simple product.'],proof:{idea:'Enumerate outcome tuples by their first coordinate.',why:'Every complete outcome has a unique first-stage result and a unique continuation.',rungs:[{why:'For each of the $m$ first outcomes, list its $n$ continuations.',m:'(1,1),\\ldots,(1,n);\\;\\ldots;\\;(m,1),\\ldots,(m,n)',meaning:'The possibilities form $m$ disjoint rows.'},{why:'Count the entries in all rows.',m:'m\\cdot n',meaning:'No tuple is missed or counted twice because its coordinates identify its row and position.'}],ends:'The two-stage count is $mn$; induction gives the product rule for finitely many stages.'},cards:[{q:'State the generalized multiplication principle.',a:'If stage $i$ has $n_i$ choices for every preceding history, the number of complete outcomes is $n_1n_2\\cdots n_r$.',kind:'state'}],provenance:'Ross, 10e, §1.2, Basic Principle and generalized version, PDF pp. 18–19.'
-},
-{
- id:'c.prob.1.2.2',sec:'1.2',kind:'technique',tier:'core',title:'Count functions and constrained products',oneLine:'A function on an n-point domain is specified by choosing one allowed value independently at each point.',
- statement:'If $f$ is defined on $n$ specified points and each value $f(i)$ can be any of $q$ values, then there are $q^n$ functions. If positions have different allowed sets of sizes $q_i$, there are $\\prod_i q_i$ functions. For ordered plates without repetition, the successive available counts decrease (e.g. $26\\cdot25\\cdot24$ for three distinct letters).',
- intuition:'A function is a row of outputs indexed by its inputs. The input labels keep positions distinct even when some output values repeat.',needs:['c.prob.1.2.1'],traps:['With repetition allowed, use the same number of choices at each position; without repetition, choices shrink.','A function is determined by its values, not by an ordering of the domain.'],cards:[{q:'How many functions from an n-point set to a q-point set?',a:'$q^n$, because each of the $n$ inputs independently receives one of $q$ values.',kind:'state'}],provenance:'Ross, 10e, §1.2, Examples 2c–2e, PDF pp. 18–19.'
-},
-{
- id:'c.prob.1.3.1',sec:'1.3',kind:'theorem',tier:'core',title:'Permutations of distinct objects',oneLine:'Ordering n distinct objects gives n factorial arrangements; ordering r selected objects gives n falling factorial r.',
- statement:'For $n\\ge1$, $n!=n(n-1)\\cdots 1$, with $0!=1$. The number of ordered arrangements of all $n$ distinct objects is $n!$. The number of ordered selections of $r$ distinct objects from $n$ is $n!/(n-r)!$ for $0\\le r\\le n$.',
- intuition:'Fill positions from left to right. Each filled position removes one available object. Ordering is part of the outcome, so swapping two positions creates a new permutation.',needs:['c.prob.1.2.1'],traps:['A combination is not a permutation: use the falling factorial only when order matters.','The convention $0!=1$ makes endpoint formulas work and counts the unique empty ordering.'],proof:{idea:'Apply the multiplication principle to successive positions.',why:'After each position is filled, exactly one fewer object remains.',rungs:[{why:'Count the choices for the first $r$ positions.',m:'n(n-1)\\cdots(n-r+1)',meaning:'Each ordered partial list is counted once.'},{why:'For a full arrangement, take $r=n$; rewrite the product using factorials.',m:'n(n-1)\\cdots1=n!',meaning:'The final empty set of choices contributes the neutral factor $0!=1$.'}],ends:'There are $n!$ full permutations and $n!/(n-r)!$ ordered $r$-tuples.'},cards:[{q:'How many ways to order r distinct objects selected from n?',a:'$n!/(n-r)!$, for $0\\le r\\le n$. For all $n$, this is $n!$.',kind:'state'}],provenance:'Ross, 10e, §1.3, permutation rule, PDF p. 20.'
-},
-{
- id:'c.prob.1.3.2',sec:'1.3',kind:'theorem',tier:'core',title:'Permutations with repeated indistinguishable objects',oneLine:'Divide n factorial by the factorials of multiplicities when equal items are indistinguishable.',
- statement:'Among $n$ positions containing $n_j$ identical copies of type $j$ ($\\sum_j n_j=n$), the number of distinct linear arrangements is $\\frac{n!}{\\prod_j n_j!}$. The division removes permutations among copies that do not change the visible arrangement.',
- intuition:'Temporarily label identical copies. Each visible arrangement is represented by exactly $n_1!n_2!\\cdots$ labeled arrangements, so this overcount is removed by division.',needs:['c.prob.1.3.1'],traps:['Use this formula only for indistinguishable copies; distinct people from the same country remain distinct unless the outcome records nationality alone.','Do not divide by multiplicity factorials if the objects are individually distinguishable in the experiment.'],proof:{idea:'Count labeled arrangements, then quotient out relabelings within identical classes.',why:'Every visible string has the same number of artificial labelings.',rungs:[{why:'Label copies and arrange all objects.',m:'n!',meaning:'This distinguishes even copies that should look the same.'},{why:'For each fixed visible string, permute each identical class freely.',m:'n_1!n_2!\\cdots n_k!',meaning:'These and only these relabelings leave the string unchanged.'},{why:'Divide the overcount.',m:'\\frac{n!}{n_1!\\cdots n_k!}',meaning:'Each distinct arrangement is counted exactly once.'}],ends:'The multinomial permutation formula follows.'},cards:[{q:'How many arrangements of n objects with multiplicities $n_1,\\ldots,n_k$?',a:'$n!/(n_1!\\cdots n_k!)$, where the repeated items of each class are indistinguishable.',kind:'state'}],provenance:'Ross, 10e, §1.3, Example 3d and general rule, PDF pp. 20–21.'
-},
-{
- id:'c.prob.1.4.1',sec:'1.4',kind:'definition',tier:'core',title:'Combinations and binomial coefficients',oneLine:'Choosing an unordered r-element subset from n objects gives n choose r.',
- statement:'For integers $0\\le r\\le n$, $\\binom nr=\\frac{n!}{r!(n-r)!}$ counts $r$-element subsets of an $n$-element set. Set $\\binom n0=\\binom nn=1$; conventionally $\\binom nr=0$ outside $0\\le r\\le n$. Order does not distinguish a group.',
- intuition:'There are $n!/(n-r)!$ ordered selections, and each chosen subset has exactly $r!$ internal orders. Dividing removes the order.',needs:['c.prob.1.3.1'],traps:['First decide whether the outcome is a subset/group or an ordered list.','For a committee with composition constraints, multiply independent group choices; do not permute members within each group.'],proof:{idea:'Count ordered selections and remove the orderings within each selected group.',why:'Each fixed r-element subset has exactly r! orderings.',rungs:[{why:'Count ordered selections without replacement.',m:'\\frac{n!}{(n-r)!}',meaning:'This counts each subset in every possible order.'},{why:'Divide by the r! orders of each subset.',m:'\\binom nr=\\frac{n!}{r!(n-r)!}',meaning:'Only membership remains relevant.'}],ends:'The quotient is the number of unordered r-subsets.'},cards:[{q:'Define $\\binom nr$ combinatorially and give its formula.',a:'It counts r-element subsets of an n-element set: $\\binom nr=n!/[r!(n-r)!]$ for $0\\le r\\le n$.',kind:'state'}],provenance:'Ross, 10e, §1.4, combinations, PDF p. 22.'
-},
-{
- id:'c.prob.1.4.2',sec:'1.4',kind:'theorem',tier:'core',title:'Pascal identity and binomial theorem',oneLine:'Subsets split according to whether they contain a fixed object; expansion coefficients count selected factors.',
- statement:'For $1\\le r\\le n$, $\\binom nr=\\binom{n-1}{r-1}+\\binom{n-1}r$. For any nonnegative integer $n$, $(x+y)^n=\\sum_{k=0}^n\\binom nk x^k y^{n-k}$. In the product expansion, choosing $k$ factors to contribute $x$ determines a term.',
- intuition:'Pascal partitions the r-subsets into those containing a fixed item and those omitting it. In the expansion, a term with $k$ copies of $x$ corresponds to choosing which $k$ of the $n$ factors supplied $x$.',needs:['c.prob.1.4.1'],traps:['In Pascal’s identity, the first term counts subsets containing the fixed element.','The coefficient of $x^k y^{n-k}$ is $\\binom nk$, not $\\binom n{k-1}$.'],proof:{idea:'Partition subsets for Pascal; count factor selections for the binomial expansion.',why:'Both formulas count the same objects in a way that exposes their coefficient.',rungs:[{why:'Fix one element and partition r-subsets.',m:'\\#(\\text{contains})=\\binom{n-1}{r-1},\\quad\\#(\\text{omits})=\\binom{n-1}{r}',meaning:'The cases are disjoint and exhaustive.'},{why:'In $(x+y)^n$, choose the k factors contributing x.',m:'\\#\\text{choices}=\\binom nk',meaning:'Every such choice contributes the same monomial $x^ky^{n-k}$.'},{why:'Collect equal monomials.',m:'(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}',meaning:'The coefficient is exactly the number of ways to produce that term.'}],ends:'Pascal’s identity and the binomial theorem.'},cards:[{q:'State Pascal’s identity and the binomial theorem.',a:'$\\binom nr=\\binom{n-1}{r-1}+\\binom{n-1}r$; $(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}$.',kind:'state'}],provenance:'Ross, 10e, §1.4, Eq. (4.1), Theorem (4.2), PDF p. 23.'
-},
-{
- id:'c.prob.1.5.1',sec:'1.5',kind:'theorem',tier:'core',title:'Multinomial coefficients and theorem',oneLine:'Partitioning n distinct items into labeled groups of specified sizes gives n! divided by each group-size factorial.',
- statement:'For nonnegative integers $n_1,\\ldots,n_r$ summing to $n$, the number of divisions of $n$ distinct objects into labeled groups of these sizes is $\\binom{n}{n_1,\\ldots,n_r}=\\frac{n!}{n_1!\\cdots n_r!}$. Consequently $(x_1+\\cdots+x_r)^n=\\sum_{n_1+\\cdots+n_r=n}\\frac{n!}{n_1!\\cdots n_r!}\\prod_i x_i^{n_i}$.',
- intuition:'A group assignment can be encoded by an n-letter string over group labels with label i appearing $n_i$ times. The coefficient counts such strings; in an algebraic expansion it counts which factors supplied each variable.',needs:['c.prob.1.3.2','c.prob.1.4.2'],traps:['Groups are labeled when their roles differ (e.g. team A and team B); if the groups themselves are interchangeable, divide for that symmetry separately.','The sum in the theorem ranges over nonnegative integer compositions of n.'],proof:{idea:'Encode assignments as strings with fixed multiplicities, then expand the product factor by factor.',why:'Each item receives exactly one group label, and each factor contributes exactly one variable.',rungs:[{why:'Temporarily order all n labels and remove permutations among equal labels.',m:'\\frac{n!}{n_1!\\cdots n_r!}',meaning:'This counts assignments with prescribed group sizes.'},{why:'Expand $n$ identical sums, selecting one variable from each factor.',m:'(x_1+\\cdots+x_r)^n',meaning:'Each selection gives one label string and thus one monomial.'},{why:'Collect monomials of multiplicities $(n_1,\\ldots,n_r)$.',m:'\\frac{n!}{n_1!\\cdots n_r!}x_1^{n_1}\\cdots x_r^{n_r}',meaning:'The coefficient is the number of ways those variables are selected.'}],ends:'The multinomial coefficient and expansion formula.'},cards:[{q:'State the multinomial coefficient and theorem.',a:'For $\\sum n_i=n$, $\\binom{n}{n_1,\\ldots,n_r}=n!/(\\prod n_i!)$ and $(\\sum_i x_i)^n=\\sum_{\\sum n_i=n}\\binom{n}{n_1,\\ldots,n_r}\\prod_i x_i^{n_i}$.',kind:'state'}],provenance:'Ross, 10e, §1.5, Multinomial Coefficients and theorem, PDF pp. 25–26.'
-},
-{
- id:'c.prob.1.6.1',sec:'1.6',kind:'theorem',tier:'extra',title:'Stars and bars: nonnegative integer solutions',oneLine:'The equation x₁+⋯+xᵣ=n has choose(n+r−1,r−1) nonnegative integer solutions.',
- statement:'For integers $n\\ge0$, $r\\ge1$, the number of vectors $(x_1,\\ldots,x_r)$ of nonnegative integers satisfying $x_1+\\cdots+x_r=n$ is $\\binom{n+r-1}{r-1}$. For positive integer solutions it is $\\binom{n-1}{r-1}$ when $n\\ge r$.',
- intuition:'Place n identical marks in a row and insert r−1 dividers among them; the counts between successive dividers are the coordinates. Empty gaps account for zero coordinates. For positive solutions reserve one mark per coordinate first.',needs:['c.prob.1.4.1'],traps:['Nonnegative allows zero and uses $n+r-1$ positions; positive requires $n\\ge r$ and uses $n-1$ separators positions.','Stars and bars counts solutions, not permutations of indistinguishable objects.'],proof:{idea:'Use a one-to-one encoding by separator placements.',why:'Every vector determines exactly where dividers go, and every divider placement determines one vector.',rungs:[{why:'Represent n units as stars and separate r coordinates with r−1 bars.',m:'\\underbrace{*\\cdots*}_{x_1}|\\underbrace{*\\cdots*}_{x_2}|\\cdots|\\underbrace{*\\cdots*}_{x_r}',meaning:'Adjacent bars or bars at an end represent zero.'},{why:'Choose the bar positions among n+r−1 total slots.',m:'\\binom{n+r-1}{r-1}',meaning:'The remaining positions are stars.'},{why:'For positive coordinates, reserve one star in each part, leaving n−r stars.',m:'\\binom{n-1}{r-1}',meaning:'This is valid only when n≥r.'}],ends:'The formulas for nonnegative and positive integer solutions.'},cards:[{q:'How many nonnegative integer solutions to $x_1+\\cdots+x_r=n$?',a:'$\\binom{n+r-1}{r-1}$. For positive solutions (when $n\\ge r$), $\\binom{n-1}{r-1}$.',kind:'state'}],provenance:'Ross, 10e, §1.6, Propositions 6.1–6.2, PDF pp. 27–28.'}
-,
-{id:'c.prob.1.5.2',sec:'1.5',kind:'technique',tier:'core',title:'Labeled groups versus unlabeled partitions',oneLine:'If equal-size groups have no distinct roles, divide the labeled-group count by the number of group labelings.',statement:'The multinomial coefficient $n!/(n_1!\\cdots n_r!)$ counts divisions into groups with distinct labels. If the group labels are irrelevant and the sizes are all equal to m (so $n=rm$), each unlabeled partition is represented by $r!$ labelings, giving $n!/((m!)^r r!)$ partitions.',intuition:'Ask whether swapping group names changes the outcome. “Team A versus team B” gives distinct outcomes; an unordered division into two teams does not.',needs:['c.prob.1.5.1'],traps:['Divide by $r!$ only when all group labels are interchangeable and the group sizes are equal.','If groups have different sizes, the size itself identifies each block, so there is no additional symmetry factor for swapping roles of different sizes.'],cards:[{q:'How do you count an unlabeled partition into r equal-sized groups of size m?',a:'Count labeled groups by $n!/((m!)^r)$ and divide by $r!$, giving $n!/((m!)^r r!)$.',kind:'state'}],provenance:'Ross, 10e, §1.5, Examples 5b–5c, PDF p. 25.'}
-,
-{id:'c.prob.1.6.2',sec:'1.6',kind:'technique',tier:'extra',title:'Allocations with minimum requirements',oneLine:'Lower bounds are removed by shifting each variable before applying stars and bars.',statement:'For integers $x_i\\ge a_i$ and $\\sum_{i=1}^r x_i=n$, put $y_i=x_i-a_i$. If $n\\ge\\sum_i a_i$, the number of allocations is $\\binom{n-\\sum_i a_i+r-1}{r-1}$. If the $x_i$ are positive, the special case $a_i=1$ recovers the positive-solution formula. The same count gives the number of exponent vectors, hence distinct monomial terms, in $(x_1+\\cdots+x_r)^n$.',intuition:'A minimum is a guaranteed starting amount. Subtract it from every coordinate, then distribute only the leftover units. Each resulting nonnegative vector corresponds to one original allocation.',needs:['c.prob.1.6.1'],traps:['The shift changes the right-hand side by the sum of all minima.','Stars and bars does not enforce upper bounds; additional work is needed when a coordinate has a maximum.'],cards:[{q:'How many solutions to $x_i\\ge a_i$ and $\\sum_i x_i=n$?',a:'For $n\\ge\\sum_i a_i$, shift $y_i=x_i-a_i\\ge0$ and count $\\binom{n-\\sum_i a_i+r-1}{r-1}$.',kind:'state'}],provenance:'Ross, 10e, §1.6, Examples 6b–6c, PDF pp. 28–29.'}
-
+CONCEPTS.push(...
+[
+  {
+    "id": "c.prob.1.1.1",
+    "sec": "1.1",
+    "kind": "technique",
+    "tier": "core",
+    "title": "Counting outcomes to obtain probability",
+    "oneLine": "When outcomes are equally likely, count the favorable outcomes and divide by the total.",
+    "statement": "If a finite sample space $S$ has equally likely outcomes and $A\\subseteq S$, then $P(A)=|A|/|S|$. The counting problem is therefore to describe the outcomes correctly, count all of them once, and count those in $A$.",
+    "intuition": "Think of a sample space as all complete result cards for the experiment. For two named dice, “red shows 2, blue shows 5” and “red shows 5, blue shows 2” are different cards, even though both totals are 7. Favorable cards divided by all cards gives a probability only when every card is equally likely.",
+    "needs": [],
+    "traps": [
+      "The equally-likely condition is essential. A list of possibilities is not a probability model by itself.",
+      "Do not count labels that the experiment regards as indistinguishable as distinct outcomes."
+    ],
+    "cards": [
+      {
+        "q": "When may a probability be computed as favorable count divided by total count?",
+        "a": "When the finite sample space consists of equally likely outcomes; then $P(A)=|A|/|S|$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, A First Course in Probability, 10e, §1.1, PDF p. 17."
+  },
+  {
+    "id": "c.prob.1.2.1",
+    "sec": "1.2",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Basic principle of counting",
+    "oneLine": "Successive choices multiply when every partial outcome admits a fixed number of next choices.",
+    "statement": "For two stages, if stage 1 has $m$ possible outcomes and, for each stage-1 outcome, stage 2 has $n$ possible outcomes, then there are $mn$ ordered pairs. More generally, if stage $i$ has $n_i$ possible choices for every preceding history, the total number of complete outcomes is $\\prod_{i=1}^r n_i$.",
+    "intuition": "A choice diagram branches at each step: pick a shirt, then pick a pair of shoes. If every shirt has the same number of shoe choices, multiply the branch counts. If some first choices leave fewer options than others, count each branch separately and add.",
+    "needs": [],
+    "traps": [
+      "Add counts for successive stages only when the task branches into alternatives; multiply counts for choices that are all made.",
+      "If later choices depend on earlier choices, check whether each branch has the same size before using a simple product."
+    ],
+    "proof": {
+      "idea": "Enumerate outcome tuples by their first coordinate.",
+      "why": "Every complete outcome has a unique first-stage result and a unique continuation.",
+      "rungs": [
+        {
+          "why": "For each of the $m$ first outcomes, list its $n$ continuations.",
+          "m": "(1,1),\\ldots,(1,n);\\;\\ldots;\\;(m,1),\\ldots,(m,n)",
+          "meaning": "The possibilities form $m$ disjoint rows."
+        },
+        {
+          "why": "Count the entries in all rows.",
+          "m": "m\\cdot n",
+          "meaning": "No tuple is missed or counted twice because its coordinates identify its row and position."
+        }
+      ],
+      "ends": "The two-stage count is $mn$; induction gives the product rule for finitely many stages."
+    },
+    "cards": [
+      {
+        "q": "State the generalized multiplication principle.",
+        "a": "If stage $i$ has $n_i$ choices for every preceding history, the number of complete outcomes is $n_1n_2\\cdots n_r$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.2, Basic Principle and generalized version, PDF pp. 18–19."
+  },
+  {
+    "id": "c.prob.1.2.2",
+    "sec": "1.2",
+    "kind": "technique",
+    "tier": "core",
+    "title": "Count functions and constrained products",
+    "oneLine": "A function on an n-point domain is specified by choosing one allowed value independently at each point.",
+    "statement": "If $f$ is defined on $n$ specified points and each value $f(i)$ can be any of $q$ values, then there are $q^n$ functions. If positions have different allowed sets of sizes $q_i$, there are $\\prod_i q_i$ functions. For ordered plates without repetition, the successive available counts decrease (e.g. $26\\cdot25\\cdot24$ for three distinct letters).",
+    "intuition": "A function is like a table with one output slot for each input label. With 3 inputs and 4 allowed output values per slot, there are 4 choices for each of 3 slots, or 4³ tables. Labels keep slots distinct even if two outputs happen to match.",
+    "needs": [
+      "c.prob.1.2.1"
+    ],
+    "traps": [
+      "With repetition allowed, use the same number of choices at each position; without repetition, choices shrink.",
+      "A function is determined by its values, not by an ordering of the domain."
+    ],
+    "cards": [
+      {
+        "q": "How many functions from an n-point set to a q-point set?",
+        "a": "$q^n$, because each of the $n$ inputs independently receives one of $q$ values.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.2, Examples 2c–2e, PDF pp. 18–19."
+  },
+  {
+    "id": "c.prob.1.3.1",
+    "sec": "1.3",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Permutations of distinct objects",
+    "oneLine": "Ordering n distinct objects gives n factorial arrangements; ordering r selected objects gives n falling factorial r.",
+    "statement": "For $n\\ge1$, $n!=n(n-1)\\cdots 1$, with $0!=1$. The number of ordered arrangements of all $n$ distinct objects is $n!$. The number of ordered selections of $r$ distinct objects from $n$ is $n!/(n-r)!$ for $0\\le r\\le n$.",
+    "intuition": "Putting 5 different books in a row gives 5 choices for the first place, then 4, then 3, and so on. A new order counts as a new result because the books have moved to different places.",
+    "needs": [
+      "c.prob.1.2.1"
+    ],
+    "traps": [
+      "A combination is not a permutation: use the falling factorial only when order matters.",
+      "The convention $0!=1$ makes endpoint formulas work and counts the unique empty ordering."
+    ],
+    "proof": {
+      "idea": "Apply the multiplication principle to successive positions.",
+      "why": "After each position is filled, exactly one fewer object remains.",
+      "rungs": [
+        {
+          "why": "Count the choices for the first $r$ positions.",
+          "m": "n(n-1)\\cdots(n-r+1)",
+          "meaning": "Each ordered partial list is counted once."
+        },
+        {
+          "why": "For a full arrangement, take $r=n$; rewrite the product using factorials.",
+          "m": "n(n-1)\\cdots1=n!",
+          "meaning": "The final empty set of choices contributes the neutral factor $0!=1$."
+        }
+      ],
+      "ends": "There are $n!$ full permutations and $n!/(n-r)!$ ordered $r$-tuples."
+    },
+    "cards": [
+      {
+        "q": "How many ways to order r distinct objects selected from n?",
+        "a": "$n!/(n-r)!$, for $0\\le r\\le n$. For all $n$, this is $n!$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.3, permutation rule, PDF p. 20."
+  },
+  {
+    "id": "c.prob.1.3.2",
+    "sec": "1.3",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Permutations with repeated indistinguishable objects",
+    "oneLine": "Divide n factorial by the factorials of multiplicities when equal items are indistinguishable.",
+    "statement": "Among $n$ positions containing $n_j$ identical copies of type $j$ ($\\sum_j n_j=n$), the number of distinct linear arrangements is $\\frac{n!}{\\prod_j n_j!}$. The division removes permutations among copies that do not change the visible arrangement.",
+    "intuition": "For the word LEVEL, first pretend every copy of L and E has a tiny identifying sticker. Then erase the stickers: swapping identical copies did not make a visibly new word, so divide by the number of sticker arrangements that look the same.",
+    "needs": [
+      "c.prob.1.3.1"
+    ],
+    "traps": [
+      "Use this formula only for indistinguishable copies; distinct people from the same country remain distinct unless the outcome records nationality alone.",
+      "Do not divide by multiplicity factorials if the objects are individually distinguishable in the experiment."
+    ],
+    "proof": {
+      "idea": "Count labeled arrangements, then quotient out relabelings within identical classes.",
+      "why": "Every visible string has the same number of artificial labelings.",
+      "rungs": [
+        {
+          "why": "Label copies and arrange all objects.",
+          "m": "n!",
+          "meaning": "This distinguishes even copies that should look the same."
+        },
+        {
+          "why": "For each fixed visible string, permute each identical class freely.",
+          "m": "n_1!n_2!\\cdots n_k!",
+          "meaning": "These and only these relabelings leave the string unchanged."
+        },
+        {
+          "why": "Divide the overcount.",
+          "m": "\\frac{n!}{n_1!\\cdots n_k!}",
+          "meaning": "Each distinct arrangement is counted exactly once."
+        }
+      ],
+      "ends": "The multinomial permutation formula follows."
+    },
+    "cards": [
+      {
+        "q": "How many arrangements of n objects with multiplicities $n_1,\\ldots,n_k$?",
+        "a": "$n!/(n_1!\\cdots n_k!)$, where the repeated items of each class are indistinguishable.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.3, Example 3d and general rule, PDF pp. 20–21."
+  },
+  {
+    "id": "c.prob.1.4.1",
+    "sec": "1.4",
+    "kind": "definition",
+    "tier": "core",
+    "title": "Combinations and binomial coefficients",
+    "oneLine": "Choosing an unordered r-element subset from n objects gives n choose r.",
+    "statement": "For integers $0\\le r\\le n$, $\\binom nr=\\frac{n!}{r!(n-r)!}$ counts $r$-element subsets of an $n$-element set. Set $\\binom n0=\\binom nn=1$; conventionally $\\binom nr=0$ outside $0\\le r\\le n$. Order does not distinguish a group.",
+    "intuition": "A committee of 3 classmates is a group, not a lineup: choosing Ana, Bo, and Chen gives the same committee in any order. Count the lineups first, then divide away the 3! ways to rearrange the same group.",
+    "needs": [
+      "c.prob.1.3.1"
+    ],
+    "traps": [
+      "First decide whether the outcome is a subset/group or an ordered list.",
+      "For a committee with composition constraints, multiply independent group choices; do not permute members within each group."
+    ],
+    "proof": {
+      "idea": "Count ordered selections and remove the orderings within each selected group.",
+      "why": "Each fixed r-element subset has exactly r! orderings.",
+      "rungs": [
+        {
+          "why": "Count ordered selections without replacement.",
+          "m": "\\frac{n!}{(n-r)!}",
+          "meaning": "This counts each subset in every possible order."
+        },
+        {
+          "why": "Divide by the r! orders of each subset.",
+          "m": "\\binom nr=\\frac{n!}{r!(n-r)!}",
+          "meaning": "Only membership remains relevant."
+        }
+      ],
+      "ends": "The quotient is the number of unordered r-subsets."
+    },
+    "cards": [
+      {
+        "q": "Define $\\binom nr$ combinatorially and give its formula.",
+        "a": "It counts r-element subsets of an n-element set: $\\binom nr=n!/[r!(n-r)!]$ for $0\\le r\\le n$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.4, combinations, PDF p. 22."
+  },
+  {
+    "id": "c.prob.1.4.2",
+    "sec": "1.4",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Pascal identity and binomial theorem",
+    "oneLine": "Subsets split according to whether they contain a fixed object; expansion coefficients count selected factors.",
+    "statement": "For $1\\le r\\le n$, $\\binom nr=\\binom{n-1}{r-1}+\\binom{n-1}r$. For any nonnegative integer $n$, $(x+y)^n=\\sum_{k=0}^n\\binom nk x^k y^{n-k}$. In the product expansion, choosing $k$ factors to contribute $x$ determines a term.",
+    "intuition": "To build a group of r people from n, either the group includes one particular person or it does not; those two cases make Pascal’s rule. In (x+y)^n, each term records which of the n factors supplied x and which supplied y.",
+    "needs": [
+      "c.prob.1.4.1"
+    ],
+    "traps": [
+      "In Pascal’s identity, the first term counts subsets containing the fixed element.",
+      "The coefficient of $x^k y^{n-k}$ is $\\binom nk$, not $\\binom n{k-1}$."
+    ],
+    "proof": {
+      "idea": "Partition subsets for Pascal; count factor selections for the binomial expansion.",
+      "why": "Both formulas count the same objects in a way that exposes their coefficient.",
+      "rungs": [
+        {
+          "why": "Fix one element and partition r-subsets.",
+          "m": "\\#(\\text{contains})=\\binom{n-1}{r-1},\\quad\\#(\\text{omits})=\\binom{n-1}{r}",
+          "meaning": "The cases are disjoint and exhaustive."
+        },
+        {
+          "why": "In $(x+y)^n$, choose the k factors contributing x.",
+          "m": "\\#\\text{choices}=\\binom nk",
+          "meaning": "Every such choice contributes the same monomial $x^ky^{n-k}$."
+        },
+        {
+          "why": "Collect equal monomials.",
+          "m": "(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}",
+          "meaning": "The coefficient is exactly the number of ways to produce that term."
+        }
+      ],
+      "ends": "Pascal’s identity and the binomial theorem."
+    },
+    "cards": [
+      {
+        "q": "State Pascal’s identity and the binomial theorem.",
+        "a": "$\\binom nr=\\binom{n-1}{r-1}+\\binom{n-1}r$; $(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.4, Eq. (4.1), Theorem (4.2), PDF p. 23."
+  },
+  {
+    "id": "c.prob.1.5.1",
+    "sec": "1.5",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Multinomial coefficients and theorem",
+    "oneLine": "Partitioning n distinct items into labeled groups of specified sizes gives n! divided by each group-size factorial.",
+    "statement": "For nonnegative integers $n_1,\\ldots,n_r$ summing to $n$, the number of divisions of $n$ distinct objects into labeled groups of these sizes is $\\binom{n}{n_1,\\ldots,n_r}=\\frac{n!}{n_1!\\cdots n_r!}$. Consequently $(x_1+\\cdots+x_r)^n=\\sum_{n_1+\\cdots+n_r=n}\\frac{n!}{n_1!\\cdots n_r!}\\prod_i x_i^{n_i}$.",
+    "intuition": "Suppose 10 students are assigned to named groups with sizes 4, 3, and 3. Write each student’s group letter beside their name; the multinomial number counts the different label strings with exactly those group sizes. The expansion formula counts the same choices while tracking each group’s variable.",
+    "needs": [
+      "c.prob.1.3.2",
+      "c.prob.1.4.2"
+    ],
+    "traps": [
+      "Groups are labeled when their roles differ (e.g. team A and team B); if the groups themselves are interchangeable, divide for that symmetry separately.",
+      "The sum in the theorem ranges over nonnegative integer compositions of n."
+    ],
+    "proof": {
+      "idea": "Encode assignments as strings with fixed multiplicities, then expand the product factor by factor.",
+      "why": "Each item receives exactly one group label, and each factor contributes exactly one variable.",
+      "rungs": [
+        {
+          "why": "Temporarily order all n labels and remove permutations among equal labels.",
+          "m": "\\frac{n!}{n_1!\\cdots n_r!}",
+          "meaning": "This counts assignments with prescribed group sizes."
+        },
+        {
+          "why": "Expand $n$ identical sums, selecting one variable from each factor.",
+          "m": "(x_1+\\cdots+x_r)^n",
+          "meaning": "Each selection gives one label string and thus one monomial."
+        },
+        {
+          "why": "Collect monomials of multiplicities $(n_1,\\ldots,n_r)$.",
+          "m": "\\frac{n!}{n_1!\\cdots n_r!}x_1^{n_1}\\cdots x_r^{n_r}",
+          "meaning": "The coefficient is the number of ways those variables are selected."
+        }
+      ],
+      "ends": "The multinomial coefficient and expansion formula."
+    },
+    "cards": [
+      {
+        "q": "State the multinomial coefficient and theorem.",
+        "a": "For $\\sum n_i=n$, $\\binom{n}{n_1,\\ldots,n_r}=n!/(\\prod n_i!)$ and $(\\sum_i x_i)^n=\\sum_{\\sum n_i=n}\\binom{n}{n_1,\\ldots,n_r}\\prod_i x_i^{n_i}$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.5, Multinomial Coefficients and theorem, PDF pp. 25–26."
+  },
+  {
+    "id": "c.prob.1.6.1",
+    "sec": "1.6",
+    "kind": "theorem",
+    "tier": "core",
+    "title": "Stars and bars: nonnegative integer solutions",
+    "oneLine": "The equation x₁+⋯+xᵣ=n has choose(n+r−1,r−1) nonnegative integer solutions.",
+    "statement": "For integers $n\\ge0$, $r\\ge1$, the number of vectors $(x_1,\\ldots,x_r)$ of nonnegative integers satisfying $x_1+\\cdots+x_r=n$ is $\\binom{n+r-1}{r-1}$. For positive integer solutions it is $\\binom{n-1}{r-1}$ when $n\\ge r$.",
+    "intuition": "Stars and bars turns a pile of identical objects into gaps: 7 identical candies shared among 3 kids can be shown as 7 stars separated by 2 bars. An empty gap means a child gets zero; for a positive share, give each child one candy first.",
+    "needs": [
+      "c.prob.1.4.1"
+    ],
+    "traps": [
+      "Nonnegative allows zero and uses $n+r-1$ positions; positive requires $n\\ge r$ and uses $n-1$ separators positions.",
+      "Stars and bars counts solutions, not permutations of indistinguishable objects."
+    ],
+    "proof": {
+      "idea": "Use a one-to-one encoding by separator placements.",
+      "why": "Every vector determines exactly where dividers go, and every divider placement determines one vector.",
+      "rungs": [
+        {
+          "why": "Represent n units as stars and separate r coordinates with r−1 bars.",
+          "m": "\\underbrace{*\\cdots*}_{x_1}|\\underbrace{*\\cdots*}_{x_2}|\\cdots|\\underbrace{*\\cdots*}_{x_r}",
+          "meaning": "Adjacent bars or bars at an end represent zero."
+        },
+        {
+          "why": "Choose the bar positions among n+r−1 total slots.",
+          "m": "\\binom{n+r-1}{r-1}",
+          "meaning": "The remaining positions are stars."
+        },
+        {
+          "why": "For positive coordinates, reserve one star in each part, leaving n−r stars.",
+          "m": "\\binom{n-1}{r-1}",
+          "meaning": "This is valid only when n≥r."
+        }
+      ],
+      "ends": "The formulas for nonnegative and positive integer solutions."
+    },
+    "cards": [
+      {
+        "q": "How many nonnegative integer solutions to $x_1+\\cdots+x_r=n$?",
+        "a": "$\\binom{n+r-1}{r-1}$. For positive solutions (when $n\\ge r$), $\\binom{n-1}{r-1}$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.6, Propositions 6.1–6.2, PDF pp. 27–28."
+  },
+  {
+    "id": "c.prob.1.5.2",
+    "sec": "1.5",
+    "kind": "technique",
+    "tier": "core",
+    "title": "Labeled groups versus unlabeled partitions",
+    "oneLine": "If equal-size groups have no distinct roles, divide the labeled-group count by the number of group labelings.",
+    "statement": "The multinomial coefficient $n!/(n_1!\\cdots n_r!)$ counts divisions into groups with distinct labels. If the group labels are irrelevant and the sizes are all equal to m (so $n=rm$), each unlabeled partition is represented by $r!$ labelings, giving $n!/((m!)^r r!)$ partitions.",
+    "intuition": "Ask whether the group names matter. “Red team” and “Blue team” are different assignments when the labels are part of the result; if only the two piles matter, swapping their names describes the same split and must be divided out.",
+    "needs": [
+      "c.prob.1.5.1"
+    ],
+    "traps": [
+      "Divide by $r!$ only when all group labels are interchangeable and the group sizes are equal.",
+      "If groups have different sizes, the size itself identifies each block, so there is no additional symmetry factor for swapping roles of different sizes."
+    ],
+    "cards": [
+      {
+        "q": "How do you count an unlabeled partition into r equal-sized groups of size m?",
+        "a": "Count labeled groups by $n!/((m!)^r)$ and divide by $r!$, giving $n!/((m!)^r r!)$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.5, Examples 5b–5c, PDF p. 25."
+  },
+  {
+    "id": "c.prob.1.6.2",
+    "sec": "1.6",
+    "kind": "technique",
+    "tier": "core",
+    "title": "Allocations with minimum requirements",
+    "oneLine": "Lower bounds are removed by shifting each variable before applying stars and bars.",
+    "statement": "For integers $x_i\\ge a_i$ and $\\sum_{i=1}^r x_i=n$, put $y_i=x_i-a_i$. If $n\\ge\\sum_i a_i$, the number of allocations is $\\binom{n-\\sum_i a_i+r-1}{r-1}$. If the $x_i$ are positive, the special case $a_i=1$ recovers the positive-solution formula. The same count gives the number of exponent vectors, hence distinct monomial terms, in $(x_1+\\cdots+x_r)^n$.",
+    "intuition": "If each of 4 jars must get at least 2 marbles, put 2 in every jar first. Then count only how the leftover marbles can move among the jars; this one-to-one change of variables makes the minimum rule disappear.",
+    "needs": [
+      "c.prob.1.6.1"
+    ],
+    "traps": [
+      "The shift changes the right-hand side by the sum of all minima.",
+      "Stars and bars does not enforce upper bounds; additional work is needed when a coordinate has a maximum."
+    ],
+    "cards": [
+      {
+        "q": "How many solutions to $x_i\\ge a_i$ and $\\sum_i x_i=n$?",
+        "a": "For $n\\ge\\sum_i a_i$, shift $y_i=x_i-a_i\\ge0$ and count $\\binom{n-\\sum_i a_i+r-1}{r-1}$.",
+        "kind": "state"
+      }
+    ],
+    "provenance": "Ross, 10e, §1.6, Examples 6b–6c, PDF pp. 28–29."
+  }
+]
 );
