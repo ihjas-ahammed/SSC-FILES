@@ -24,7 +24,8 @@ if (root/'data/inference.concepts.js').exists():
  modules.append(dict(id='prob.inference',n='DA',title='DA inference bridge · beyond Ross',secs=['DA.1','DA.2','DA.3']))
  titles.update({'DA.1':'Descriptive summaries and sampling laws','DA.2':'Confidence intervals','DA.3':'Hypothesis tests'})
  files.extend('../data/inference.'+k+'.js' for k in ('concepts','written','objective'))
-if (root/'data/pyq.js').exists():files.append('../data/pyq.js')
+for name in ('pyq.js','pyq.similar.js'):
+ if (root/'data'/name).exists():files.append('../data/'+name)
 text='const DATA_KIND = "live";\nconst SYLLABI = '+json.dumps([dict(id='prob',title='Probability · GATE DA',code='GATE DA 2027',sem='Ross 10e',book='Sheldon Ross · A First Course in Probability, 10e',blurb='Model the experiment, derive the law, solve and recall. Selected textbook practice; coverage reports record omissions.',modules=modules)],indent=2)+';\nconst SECTITLE = '+json.dumps(titles,indent=2)+';\nconst EXT_SECS = '+json.dumps({sec:True for sec in sorted(ext)})+';\nvar CONCEPTS = [];\nvar QUESTIONS = [];\nvar OBJECTIVE = [];\nvar PYQ = [];\n'
 (root/'data/syllabus.js').write_text(text)
 mock=['../../flow-library/app/mock/mock.'+k+'.js' for k in ('courses','concepts','objective','written','pyq')]

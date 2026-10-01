@@ -137,8 +137,7 @@ const SYLLABI = [
           "7.7",
           "7.8",
           "7.9"
-        ],
-        "pending": true
+        ]
       },
       {
         "id": "prob.ch08",
@@ -158,8 +157,7 @@ const SYLLABI = [
           "8.5",
           "8.6",
           "8.7"
-        ],
-        "pending": true
+        ]
       },
       {
         "id": "prob.ch09",
@@ -185,8 +183,7 @@ const SYLLABI = [
           "10.4"
         ],
         "extSecs": [],
-        "ext": true,
-        "pending": true
+        "ext": true
       },
       {
         "id": "prob.inference",

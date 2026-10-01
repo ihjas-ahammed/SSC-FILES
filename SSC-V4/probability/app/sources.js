@@ -28,11 +28,22 @@ const DATA_SOURCES = {
   "../data/ch06.concepts.js",
   "../data/ch06.written.js",
   "../data/ch06.objective.js",
+  "../data/ch07.concepts.js",
+  "../data/ch07.written.js",
+  "../data/ch07.objective.js",
+  "../data/ch08.concepts.js",
+  "../data/ch08.written.js",
+  "../data/ch08.objective.js",
   "../data/ch09.concepts.js",
   "../data/ch09.written.js",
   "../data/ch09.objective.js",
+  "../data/ch10.concepts.js",
+  "../data/ch10.written.js",
+  "../data/ch10.objective.js",
   "../data/inference.concepts.js",
   "../data/inference.written.js",
-  "../data/inference.objective.js"
+  "../data/inference.objective.js",
+  "../data/pyq.js",
+  "../data/pyq.similar.js"
 ]
 };

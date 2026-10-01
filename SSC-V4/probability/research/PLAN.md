@@ -1,6 +1,6 @@
 # Probability · Ross 10e · GATE DA
 
-Scope assumption: DA primary, pending user's paper choice. Ross section numbers are stable navigation; syllabus mapping is separate. Use official 2027 DA syllabus, not old coaching lists. MA does not have a standalone probability section; do not advertise MA completeness. ST would require a separate scope audit.
+Confirmed scope: DA primary, with MA/ST extensions as requested. Ross section numbers are stable navigation; syllabus mapping is separate. Use official 2027 DA syllabus, not old coaching lists. MA does not have a standalone probability section; do not advertise MA completeness. ST would require a separate scope audit.
 
 ## Revised delivery
 1. Split local Ross PDF into chapter PDFs without modifying it. Keep copyrighted source PDFs/text local, outside published assets. Manifest retains original PDF page numbers. Exact reading stays in the original; lessons are original explanations, not a verbatim replacement.
@@ -23,3 +23,6 @@ Account/session usage percentage is unavailable to this agent. Cannot implement 
 
 ## Existing user edits
 Before work: SSC-V4/quantum-mechanics/build/test/index.html and real-analysis/build/test/index.html modified. Preserve those initial edits; generated builds may be refreshed after source validation but do not stage unrelated user work.
+
+## Final integration checkpoint
+All ten Ross chapter modules and the DA inference bridge are authored. Content remains selected explanations and exercises; chapter reports identify omitted examples and exercises. The course does not replace exact reading of the local book. PYQs cover direct DA probability/statistics questions from official 2024–2026 papers with an exclusion ledger. Mathematical/provenance QA findings are in sources/MATH_REVIEW.md. Shared progress and LR tests cover all five levels, timestamp stability, missing PYQ, and recall correction.
