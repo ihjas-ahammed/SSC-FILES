@@ -9,6 +9,7 @@ const d=ctx.data,errors=[],warnings=[],ids=new Set(),cids=new Set(d.CONCEPTS.map
 function walk(v,loc){
  if(typeof v==='string'){
   if(/\\\\(?:frac|int|sum|sim|sqrt|operatorname|lambda|mu|sigma|Phi|mathbb|alpha|beta|Gamma|binom|le|ge|mid|cap|cup|quad|left|right|text|prod)\b/.test(v))errors.push(loc+': doubled runtime TeX command');
+  if(/(?<!\\)\b(?:operatorname|mathbb|mathrm|mathbf|frac|binom)\{/.test(v))errors.push(loc+': TeX command missing its backslash');
   if(/[\x08\x0b\x0c]/.test(v))errors.push(loc+': escaped control character');
  }else if(Array.isArray(v))v.forEach((x,i)=>walk(x,loc+'['+i+']'));
  else if(v&&typeof v==='object')Object.entries(v).forEach(([k,x])=>walk(x,loc+'.'+k));

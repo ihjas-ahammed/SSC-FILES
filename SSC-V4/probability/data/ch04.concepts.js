@@ -878,7 +878,7 @@ CONCEPTS.push(...
     "cards": [
       {
         "q": "If X is uniform on N consecutive integers starting at a, give its mean and variance.",
-        "a": "$E[X]=a+(N-1)/2$ and $operatorname{Var}(X)=(N^2-1)/12$.",
+        "a": "$E[X]=a+(N-1)/2$ and $\\operatorname{Var}(X)=(N^2-1)/12$.",
         "kind": "state"
       }
     ],

@@ -1,6 +1,6 @@
 # GATE DA Probability & Statistics syllabus audit
 
-Source checked: the downloaded official IIT Madras document `research/GATE_2027_DA_Syllabus.pdf`, Section 1, “Probability and Statistics.” This is a scope map for the current probability course, not a claim that Ross 10e alone supplies all required DA material. The chapter 7–8 IDs below are in the current worktree and depend on those modules being included in the final build.
+Source checked: the downloaded official IIT Madras document `research/GATE_2027_DA_Syllabus.pdf`, Section 1, “Probability and Statistics.” This is a scope map for the current probability course, not a claim that Ross 10e alone supplies all required DA material. All referenced chapter modules are included in the final build.
 
 ## Outcome map
 
@@ -13,7 +13,7 @@ Source checked: the downloaded official IIT Madras document `research/GATE_2027_
 | Mean, median, mode, standard deviation | `c.prob.4.3.1`, `c.prob.4.5.1`, `c.prob.DA.1` | Ross ch. 4 plus DA bridge; DA.1 explicitly distinguishes sample and population spread |
 | Correlation and covariance | `c.prob.7.4.1–7.4.2` | Ross ch. 7 core |
 | Random variables, discrete variables and PMFs | `c.prob.4.1.1–4.2.2` | Ross ch. 4 core |
-| Uniform, Bernoulli, binomial and Poisson distributions | `c.prob.5.3.1–5.3.2`, `c.prob.4.6.1–4.6.3`, `c.prob.4.7.1–4.7.2` | Ross chs. 4–5 core |
+| Uniform, Bernoulli, binomial and Poisson distributions | `c.prob.4.2.3–4.2.4`, `c.prob.5.3.1–5.3.2`, `c.prob.4.6.1–4.6.3`, `c.prob.4.7.1–4.7.2` | Ross chs. 4–5 core |
 | Continuous random variables and PDFs; exponential and normal distributions; standard normal | `c.prob.5.1.1–5.1.2`, `c.prob.5.3.1`, `c.prob.5.4.1–5.4.2`, `c.prob.5.5.1` | Ross ch. 5 core |
 | t and chi-squared distributions | `c.prob.DA.3–DA.4` | DA inference bridge beyond Ross; exact defining assumptions and moments are stated |
 | Cumulative distribution function and conditional PDF | `c.prob.4.1.2`, `c.prob.4.10.1–4.10.2`, `c.prob.5.1.1`, `c.prob.6.5.1–6.5.2` | Ross chs. 4–6 core |
@@ -27,7 +27,7 @@ The original bridge was already a useful overview: it distinguished sample summa
 
 The bridge now explicitly gives the sample standard deviation as the square root of the sample variance and adds practice for it. It adds a pooled two-sample mean confidence interval, large-sample one- and two-proportion z-test formulas, and applied questions for a known-variance z statistic, pooled and paired t statistics, a goodness-of-fit statistic, and a normal-sample variance statistic. Proportion procedures and Welch methods are useful DA-adjacent extensions; the syllabus does not prescribe a specific proportion or two-sample interval variant.
 
-No named item in Section 1 remains without a mapped current concept after these changes, provided the chapters 7–8 modules remain in the final course build. This is a topic-presence audit, not a guarantee of complete exam-depth practice. The bridge does not try to teach every inference variant or detailed small-sample correction.
+No named item in Section 1 remains without a mapped current concept after these changes and the final discrete-uniform and conditional-variance additions. This is a topic-presence audit, not a guarantee of complete exam-depth practice. The bridge does not try to teach every inference variant or detailed small-sample correction.
 
 ## Course boundary
 

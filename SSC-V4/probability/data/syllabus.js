@@ -20,10 +20,7 @@ const SYLLABI = [
           "1.5",
           "1.6"
         ],
-        "extSecs": [
-          "1.5",
-          "1.6"
-        ]
+        "extSecs": []
       },
       {
         "id": "prob.ch02",
@@ -110,7 +107,6 @@ const SYLLABI = [
           "6.8"
         ],
         "extSecs": [
-          "6.3",
           "6.6",
           "6.7",
           "6.8"
@@ -270,7 +266,7 @@ const SECTITLE = {
   "DA.2": "Confidence intervals",
   "DA.3": "Hypothesis tests"
 };
-const EXT_SECS = {"1.5": true, "1.6": true, "10.1": true, "10.2": true, "10.3": true, "10.4": true, "2.6": true, "2.7": true, "3.5": true, "4.8": true, "5.6": true, "6.3": true, "6.6": true, "6.7": true, "6.8": true, "7.3": true, "7.6": true, "7.7": true, "7.8": true, "7.9": true, "8.4": true, "8.5": true, "8.6": true, "8.7": true, "9.1": true, "9.2": true, "9.3": true, "9.4": true};
+const EXT_SECS = {"10.1": true, "10.2": true, "10.3": true, "10.4": true, "2.6": true, "2.7": true, "3.5": true, "4.8": true, "5.6": true, "6.6": true, "6.7": true, "6.8": true, "7.3": true, "7.6": true, "7.7": true, "7.8": true, "7.9": true, "8.4": true, "8.5": true, "8.6": true, "8.7": true, "9.1": true, "9.2": true, "9.3": true, "9.4": true};
 var CONCEPTS = [];
 var QUESTIONS = [];
 var OBJECTIVE = [];
