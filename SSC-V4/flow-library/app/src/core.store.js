@@ -134,8 +134,11 @@ const Store = (function () {
   function gradeCard(id, grade) {
     const rec = state.cards[id] || (state.cards[id] = { tries: 0 });
     rec.tries += 1;
+    const now = Date.now();
+    if (grade === 'got') rec.gotAt = rec.last === 'got' ? (rec.gotAt || rec.lastAt || now) : now;
+    else delete rec.gotAt;
     rec.last = grade;
-    rec.lastAt = Date.now();
+    rec.lastAt = now;
     rec.box = Progress.nextBox(rec.box, grade);
     if (!rec.first) { rec.first = grade; rec.firstAt = rec.lastAt; }  /* first attempt is final */
     save();
@@ -277,6 +280,7 @@ const Store = (function () {
          by field is what drops anything not named here, so a new field has to
          be added in BOTH places or every sync quietly resets it. */
       if (last.box != null) rec.box = last.box;
+      if (last.last === 'got' && last.gotAt) rec.gotAt = last.gotAt;
       out[id] = rec;
     }
     return out;

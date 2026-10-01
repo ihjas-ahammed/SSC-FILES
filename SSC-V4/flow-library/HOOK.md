@@ -128,8 +128,10 @@ Today → LR selects Reading (L1), Proofs (L2), Textbook questions (L3), PYQ (L4
 and Recall and fix (L5). Selection is a synced `paceLevel` preference; it never
 changes achievement. Completion dates use `Store.doneAt`, `Store.proofAt` and
 actual Recall grades. L4 needs mapped past papers; missing questions stay pending.
-Older course-only papers gate all sections in their course. L5 needs every core
+Older course-only papers gate all sections in their course. L5 needs every course
 statement, proof, objective, worked exercise and PYQ recall item last graded
 `got`; correcting a miss preserves the original first grade. Worked PYQs join the
-real Recall reel. A subsequent miss removes the current recall completion.
+real Recall reel. A subsequent miss removes the current recall completion. Repeated successful
+recall preserves the correction date (`gotAt`) rather than moving it to today.
+The course-level L5 includes extensions and cannot be earned with pending chapters.
 Concept/tree colour stays at L1–L3; course badges now reach L5.

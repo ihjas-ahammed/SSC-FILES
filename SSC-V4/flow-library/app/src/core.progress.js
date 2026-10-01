@@ -106,7 +106,10 @@ const Progress = (function () {
   function courseLevel(courseId) {
     const c = count(Pool.ids.concepts(courseId));
     if (c.min < 3) return c.min;
+    const course = Pool.course ? Pool.course(courseId) : null;
+    if (course && (course.pending || (course.modules || []).some(m => m.pending && !m.ext))) return 3;
     if (!pyqState(courseId).ready) return 3;
+    if (course && (course.modules || []).some(m => m.pending)) return 4;
     return recallState(courseId).ready ? 5 : 4;
   }
 
@@ -124,7 +127,7 @@ const Progress = (function () {
   }
 
   function recallItems(courseId, sec) {
-    const concepts = Pool.concepts(courseId).filter(c => !sec || c.sec === sec);
+    const concepts = Pool.concepts(courseId, { includeExt: !sec }).filter(c => !sec || c.sec === sec);
     const ids = new Set(concepts.map(c => c.id));
     const out = [];
     Pool.deck().filter(c => ids.has(c.cid)).forEach(c => out.push(c.id));
@@ -164,7 +167,7 @@ const Progress = (function () {
       const course = Pool.courseOfSec(sec);
       const r = recallState(course.id, sec);
       if (!r.ready) return 0;
-      r.list.forEach(id => times.push(Store.card(id).lastAt));
+      r.list.forEach(id => times.push(Store.card(id).gotAt || Store.card(id).lastAt));
     }
     return Math.max.apply(null, times);
   }

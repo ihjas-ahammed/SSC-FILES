@@ -92,7 +92,8 @@ const Pace = (function () {
   }
 
   function totalSections() {
-    return Pool.sections().filter(s => s.concepts.some(c => !Pool.isExt(c))).length;
+    return Pool.sections().filter(s => !Pool.isExtSec(s.sec)
+      && (s.concepts.some(c => !Pool.isExt(c)) || (s.module && s.module.pending))).length;
   }
 
   /* Everything the chart and the caption need, for the last `span` days. */
