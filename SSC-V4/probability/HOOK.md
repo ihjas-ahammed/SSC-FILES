@@ -22,3 +22,21 @@ Never copy a flow-library file in here to change it. Add a hook or a theme rule.
 
 To publish, add a block to `SSC-V2/SEM5/PHY/apps/tools/deploy.sh` (copy the Quantum
 Mechanics one).
+
+## Chapter workflow and authoring
+
+- `python tools/split_book.py /path/to/Ross-10e.pdf` reproduces local chapter PDFs.
+- `python tools/refresh.py` integrates chapters with all three tracked data files;
+  missing chapters stay visibly pending. No mock lessons enter the live seam.
+- `node tools/audit.js` checks ids, references, Recall cards, marking and escaping.
+- `node tools/check_tex.js` is the shared TeX gate.
+- `python tools/coverage.py` regenerates the public coverage/reading guide.
+- `python build.py` builds the current live checkpoint.
+- `sources/coverage-chNN.md` distinguishes GATE topic coverage from omitted source
+  examples/exercises. Preserve these limits in claims made about the course.
+- Commit each reviewed chapter; publish with the repository's full-site deploy script.
+
+The PDF/text splits are local and ignored by git. The manifest and original lessons
+are tracked; the public guide uses section/page references for exact reading.
+The account's session usage percentage is not exposed, so the requested 90% cutoff
+cannot be measured here. Chapter commits plus this workflow are the resume boundary.
