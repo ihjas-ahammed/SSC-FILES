@@ -23,7 +23,7 @@ OBJECTIVE.push(
   "trap": "The mean of 4 is not the median.",
   "twist": {
     "q": "Which assumption makes this calculation valid?",
-    "a": "For observations $x_1,\\ldots,x_n$, $\\bar x=n^{-1}\\sum_i x_i$. Sort the data to find the median (the central value, or average of the two central values). Modes are values with greatest frequency; there may be several. A population median $m$ satisfies $P(X\\le m)\\ge1/2$ and $P(X\\ge m)\\ge1/2$. Population standard deviation is $\\sqrt{\\operatorname{Var}(X)}$. Sample variance is $s^2=\\sum_i(x_i-\\bar x)^2/(n-1)$ for $n>1$. A continuous density mode maximizes the density when such a maximum exists."
+    "a": "For observations $x_1,\\ldots,x_n$, $\\bar x=n^{-1}\\sum_i x_i$. Sort the data to find the median (the central value, or average of the two central values). Modes are values with greatest frequency; there may be several. A population median $m$ satisfies $P(X\\le m)\\ge1/2$ and $P(X\\ge m)\\ge1/2$. Population standard deviation is $\\sigma=\\sqrt{\\operatorname{Var}(X)}$. Sample variance is $s^2=\\sum_i(x_i-\\bar x)^2/(n-1)$ and sample standard deviation is $s=\\sqrt{s^2}$ for $n>1$. A continuous density mode maximizes the density when such a maximum exists."
   }
 },
 {
@@ -335,6 +335,249 @@ OBJECTIVE.push(
   "twist": {
     "q": "Which assumption makes this calculation valid?",
     "a": "For independent normal samples with a common unknown variance, $S_p^2=[(n_1-1)S_1^2+(n_2-1)S_2^2]/(n_1+n_2-2)$ and $T=(\\bar X_1-\\bar X_2-\\delta_0)/[S_p\\sqrt{1/n_1+1/n_2}]$ has $n_1+n_2-2$ degrees of freedom under the difference null. Without equal variances, use Welch standard error $\\sqrt{S_1^2/n_1+S_2^2/n_2}$ and approximate Welch degrees of freedom. For paired measurements, form each difference $D_i$ and perform a one-sample test on iid normal differences."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.2",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.13"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.13",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "Two independent normal samples have $n_1=n_2=10$, means 12 and 10, and standard deviations $s_1=s_2=2$. Assume equal population variances and use $t_{18,0.975}=2.101$. Find the lower endpoint of the 95% interval for $\\mu_1-\\mu_2$.",
+  "answer": {
+    "value": 0.121,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "The pooled standard deviation is 2 and the standard error is $2\\sqrt{1/10+1/10}=0.8944$. The interval is $2\\pm2.101(0.8944)$, so its lower endpoint is about 0.121.",
+  "tested": "Confidence interval for a difference of means",
+  "trap": "Use the pooled t interval only under independent normal samples with equal unknown variances.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For two independent normal samples with equal unknown variances, a $(1-\\alpha)$ interval for $\\mu_1-\\mu_2$ is $(\\bar X_1-\\bar X_2)\\pm t_{n_1+n_2-2,1-\\alpha/2}S_p\\sqrt{1/n_1+1/n_2}$. For paired data, apply the one-sample t interval to the within-pair differences. Without equal variances, use a Welch interval with approximate degrees of freedom."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.14"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.14",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "In 100 independent trials, 60 are successes. Under $H_0:p=0.5$, find the one-proportion z statistic.",
+  "answer": {
+    "value": 2,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "$\\hat p=0.60$ and the null standard error is $\\sqrt{0.5(0.5)/100}=0.05$. Thus $Z=(0.60-0.50)/0.05=2$.",
+  "tested": "Large-sample z-tests for proportions",
+  "trap": "Use the null value in the standard error; this is a large-sample approximation.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For iid Bernoulli trials, under $H_0:p=p_0$, the one-proportion statistic is $Z=(\\hat p-p_0)/\\sqrt{p_0(1-p_0)/n}$, approximately standard normal when null expected success and failure counts are sufficiently large. For two independent samples under $H_0:p_1=p_2$, use the pooled estimate $\\hat p=(X_1+X_2)/(n_1+n_2)$ in the standard error $\\sqrt{\\hat p(1-\\hat p)(1/n_1+1/n_2)}$."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.11"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.15",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "A four-outcome model predicts equal probabilities. Observed counts are 6, 14, 10, and 10. Find Pearson’s chi-square statistic.",
+  "answer": {
+    "value": 3.2,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "With total 40, each expected count is 10. Thus $X^2=(6-10)^2/10+(14-10)^2/10=3.2$; the two matching counts contribute zero. With no fitted parameters, the reference degrees of freedom are $4-1=3$.",
+  "tested": "Chi-squared tests: variance, goodness of fit and independence",
+  "trap": "Expected counts come from the null model; use the observed total to obtain them.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For a normal-sample variance null $\\sigma^2=\\sigma_0^2$, use $(n-1)S^2/\\sigma_0^2\\sim\\chi^2_{n-1}$ and the specified tail(s). Goodness of fit uses $\\sum_i(O_i-E_i)^2/E_i$, asymptotically $\\chi^2_{k-1-r}$ when k categories have positive expected counts and r parameters are estimated under regular conditions. For an $a\\times b$ independence table, $E_{ij}=O_{i+}O_{+j}/n$ and degrees of freedom $(a-1)(b-1)$. Count tests reject in the upper tail; sparse cells may invalidate the approximation."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.11"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.16",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "A normal sample has size 10 and sample variance 4. Under $H_0:\\sigma^2=2$, find the chi-square test statistic.",
+  "answer": {
+    "value": 18,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "$X^2=(n-1)S^2/\\sigma_0^2=9(4)/2=18$, with 9 degrees of freedom under the null.",
+  "tested": "Chi-squared tests: variance, goodness of fit and independence",
+  "trap": "The exact variance pivot requires a normal population.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For a normal-sample variance null $\\sigma^2=\\sigma_0^2$, use $(n-1)S^2/\\sigma_0^2\\sim\\chi^2_{n-1}$ and the specified tail(s). Goodness of fit uses $\\sum_i(O_i-E_i)^2/E_i$, asymptotically $\\chi^2_{k-1-r}$ when k categories have positive expected counts and r parameters are estimated under regular conditions. For an $a\\times b$ independence table, $E_{ij}=O_{i+}O_{+j}/n$ and degrees of freedom $(a-1)(b-1)$. Count tests reject in the upper tail; sparse cells may invalidate the approximation."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.1",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.1"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.17",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "For the data 1, 2, 3, 4, 5, find the sample standard deviation using denominator $n-1$.",
+  "answer": {
+    "value": 1.581,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "The mean is 3 and the squared deviations sum to 10. Thus $s^2=10/4=2.5$ and $s=\\sqrt{2.5}\\approx1.581$.",
+  "tested": "Mean, median, mode and standard deviation",
+  "trap": "Use denominator n−1 for the sample variance here, then take its square root.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For observations $x_1,\\ldots,x_n$, $\\bar x=n^{-1}\\sum_i x_i$. Sort the data to find the median (the central value, or average of the two central values). Modes are values with greatest frequency; there may be several. A population median $m$ satisfies $P(X\\le m)\\ge1/2$ and $P(X\\ge m)\\ge1/2$. Population standard deviation is $\\sigma=\\sqrt{\\operatorname{Var}(X)}$. Sample variance is $s^2=\\sum_i(x_i-\\bar x)^2/(n-1)$ and sample standard deviation is $s=\\sqrt{s^2}$ for $n>1$. A continuous density mode maximizes the density when such a maximum exists."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.10"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.18",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "An iid normal sample has size 36, mean 52, and known population standard deviation 6. Under $H_0:\\mu=50$, find the one-sample z statistic.",
+  "answer": {
+    "value": 2,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "The standard error is $6/\\sqrt{36}=1$. Therefore $Z=(52-50)/1=2$ under the null.",
+  "tested": "z-test and t-test for a mean",
+  "trap": "Use z when the population standard deviation is known; the given normal model makes the sampling law exact.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For $H_0:\\mu=\\mu_0$, known-sigma normal-sample statistic is $Z=(\\bar X-\\mu_0)/(\\sigma/\\sqrt n)$. With unknown sigma in an iid normal sample, $T=(\\bar X-\\mu_0)/(S/\\sqrt n)\\sim t_{n-1}$ under $H_0$. Two-sided tests reject for $|Z|>z_{1-\\alpha/2}$ or $|T|>t_{n-1,1-\\alpha/2}$; upper/lower alternatives use the corresponding single tail. The two-sided mean interval excludes $\\mu_0$ exactly when the matching test rejects, aside from boundary conventions."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.12"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.19",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "Two independent normal samples have $n_1=n_2=10$, means 12 and 9, and standard deviations 2 in each group. Assume equal population variances and test $H_0:\\mu_1-\\mu_2=0$. Find the pooled t statistic.",
+  "answer": {
+    "value": 3.354,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "The pooled standard deviation is 2. The standard error is $2\\sqrt{1/10+1/10}=0.8944$, so $T=3/0.8944\\approx3.354$ with 18 degrees of freedom.",
+  "tested": "Two samples and paired measurements",
+  "trap": "Pooling requires independent normal samples with equal population variances.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For independent normal samples with a common unknown variance, $S_p^2=[(n_1-1)S_1^2+(n_2-1)S_2^2]/(n_1+n_2-2)$ and $T=(\\bar X_1-\\bar X_2-\\delta_0)/[S_p\\sqrt{1/n_1+1/n_2}]$ has $n_1+n_2-2$ degrees of freedom under the difference null. Without equal variances, use Welch standard error $\\sqrt{S_1^2/n_1+S_2^2/n_2}$ and approximate Welch degrees of freedom. For paired measurements, form each difference $D_i$ and perform a one-sample test on iid normal differences."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.12"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.20",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "Four matched before-and-after differences are 2, 4, 3, and 5. Under a normal-differences model and $H_0:\\mu_D=0$, find the paired t statistic.",
+  "answer": {
+    "value": 5.422,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "The differences have mean 3.5 and sample variance $5/3$, so $s_D=\\sqrt{5/3}$. Thus $T=3.5/(\\sqrt{5/3}/\\sqrt4)\\approx5.422$ with 3 degrees of freedom.",
+  "tested": "Two samples and paired measurements",
+  "trap": "Analyze the four within-pair differences; do not treat the two measurements in each pair as independent.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For independent normal samples with a common unknown variance, $S_p^2=[(n_1-1)S_1^2+(n_2-1)S_2^2]/(n_1+n_2-2)$ and $T=(\\bar X_1-\\bar X_2-\\delta_0)/[S_p\\sqrt{1/n_1+1/n_2}]$ has $n_1+n_2-2$ degrees of freedom under the difference null. Without equal variances, use Welch standard error $\\sqrt{S_1^2/n_1+S_2^2/n_2}$ and approximate Welch degrees of freedom. For paired measurements, form each difference $D_i$ and perform a one-sample test on iid normal differences."
+  }
+},
+{
+  "course": "prob",
+  "sec": "DA.3",
+  "marks": 2,
+  "tests": [
+    "c.prob.DA.14"
+  ],
+  "provenance": "Original DA practice, not a textbook exercise or past paper.",
+  "id": "o.prob.DA.21",
+  "type": "NAT",
+  "neg": 0,
+  "negLabel": "0",
+  "time": 120,
+  "prompt": "Two independent samples have 60 successes in 100 trials and 40 successes in 100 trials. Under $H_0:p_1=p_2$, find the pooled two-proportion z statistic.",
+  "answer": {
+    "value": 2.828,
+    "tol": 0.005,
+    "dp": 3
+  },
+  "solution": "The pooled estimate is $100/200=0.5$. The null standard error is $\\sqrt{0.5(0.5)(1/100+1/100)}=0.07071$. Therefore $Z=(0.60-0.40)/0.07071\\approx2.828$.",
+  "tested": "Large-sample z-tests for proportions",
+  "trap": "Pool successes to estimate the shared null proportion; this is a large-sample z approximation.",
+  "twist": {
+    "q": "Which assumption makes this calculation valid?",
+    "a": "For iid Bernoulli trials, under $H_0:p=p_0$, the one-proportion statistic is $Z=(\\hat p-p_0)/\\sqrt{p_0(1-p_0)/n}$, approximately standard normal when null expected success and failure counts are sufficiently large. For two independent samples under $H_0:p_1=p_2$, use the pooled estimate $\\hat p=(X_1+X_2)/(n_1+n_2)$ in the standard error $\\sqrt{\\hat p(1-\\hat p)(1/n_1+1/n_2)}$."
   }
 }
 );
