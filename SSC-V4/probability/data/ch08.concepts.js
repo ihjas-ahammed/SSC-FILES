@@ -132,26 +132,26 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.3, Theorem 3.1, PDF p. 395.",
     "proof": {
-      "idea": "Use the MGF expansion near zero for the normalized centered sum, then invoke the continuity theorem.",
-      "why": "The independent-sum MGF becomes a power whose limit is the standard normal MGF.",
+      "idea": "Expand the characteristic function near zero for the normalized centered sum, then apply the continuity theorem.",
+      "why": "Finite variance gives a second-order characteristic-function expansion; independence turns it into a power converging to the standard normal characteristic function.",
       "rungs": [
         {
-          "why": "Let $Y=(X-\\mu)/\\sigma$, so E[Y]=0 and Var(Y)=1.",
-          "m": "$M_Y(t)=1+t^2/2+o(t^2)$ as t→0",
-          "meaning": "The first two moments determine the second-order expansion."
+          "why": "Standardize one summand to mean zero and variance one.",
+          "m": "$\\varphi_Y(t)=1-t^2/2+o(t^2)$ as $t\\to0$",
+          "meaning": "The second-order expansion requires only a finite second moment, not an MGF."
         },
         {
-          "why": "Use independence for the normalized sum MGF.",
-          "m": "$M_{n^{-1/2}\\sum_iY_i}(t)=[M_Y(t/\\sqrt n)]^n$",
-          "meaning": "Each factor sees an argument approaching zero."
+          "why": "Use independence to express the characteristic function of the normalized sum.",
+          "m": "$\\varphi_{n^{-1/2}\\sum_iY_i}(t)=[\\varphi_Y(t/\\sqrt n)]^n$",
+          "meaning": "Every factor is evaluated at an argument tending to zero."
         },
         {
-          "why": "Take the limit.",
-          "m": "$[1+t^2/(2n)+o(1/n)]^n\\to e^{t^2/2}$",
-          "meaning": "This is the MGF of the standard normal near zero."
+          "why": "Take the limit of this power.",
+          "m": "$[1-t^2/(2n)+o(1/n)]^n\\to e^{-t^2/2}$",
+          "meaning": "The limit is the standard normal characteristic function."
         }
       ],
-      "ends": "The normalized sum converges in distribution to N(0,1); the full proof handles MGF existence rigorously."
+      "ends": "By the continuity theorem, the normalized sum converges in distribution to N(0,1)."
     }
   },
   {
