@@ -137,3 +137,11 @@ real Recall reel. A subsequent miss removes the current recall completion. Repea
 recall preserves the correction date (`gotAt`) rather than moving it to today.
 The course-level L5 includes extensions and cannot be earned with pending chapters.
 Concept/tree colour stays at L1–L3; course badges now reach L5.
+
+## Lesson styling and formula loading
+The generic `.note-statement` and `.note-intuition` blocks let a project's theme
+distinguish formal content from a plain-language explanation. Note expanders
+use unique panel IDs and `aria-controls`. Probability styles these blocks in its
+project theme and keeps provenance/labs in native disclosures through `noteSim`.
+`Tex.ready()` waits for the async script and startup; failure or a bounded timeout
+can show a connection hint, without declaring a downloading script failed.
