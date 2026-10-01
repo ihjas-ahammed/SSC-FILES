@@ -13426,7 +13426,30 @@ const Tex = (function () {
     if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
       return window.MathJax.startup.promise.catch(() => {});
     }
-    return Promise.resolve();
+    if (available()) return Promise.resolve();
+    const script = document.getElementById('MathJax-script');
+    if (!script) return Promise.resolve();
+    // The async script can still be downloading when the study app starts.
+    return new Promise(function (resolve) {
+      let finished = false;
+      let timer;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        script.removeEventListener('load', loaded);
+        script.removeEventListener('error', finish);
+        resolve();
+      }
+      function loaded() {
+        const startup = window.MathJax && window.MathJax.startup;
+        if (startup && startup.promise) startup.promise.then(finish, finish);
+        else finish();
+      }
+      script.addEventListener('load', loaded);
+      script.addEventListener('error', finish);
+      timer = setTimeout(finish, 12000);
+    });
   }
 
   return { typeset, renderFragment, ready, available };
@@ -18311,6 +18334,7 @@ const QuestionCard = (function () {
 const NoteBody = (function () {
 
   const el = DOM.el;
+  let panelNumber = 0;
 
   /* ── a lazy, titled expander ─────────────────────────────────────────────
      The one pattern the whole note is built from: a header you press and a
@@ -18318,9 +18342,10 @@ const NoteBody = (function () {
   function expander(opts) {
     const o = opts || {};
     const isOpen = !!o.open;
-    const body = el('div', { class: 'exp-b', hidden: !isOpen });
+    const panelId = 'note-panel-' + (++panelNumber);
+    const body = el('div', { id: panelId, class: 'exp-b', hidden: !isOpen });
     const chev = DOM.icon('chev', 18, 'chev');
-    const head = el('button', { class: 'exp-h', type: 'button', 'aria-expanded': String(isOpen) }, [
+    const head = el('button', { class: 'exp-h', type: 'button', 'aria-expanded': String(isOpen), 'aria-controls': panelId }, [
       o.mark || null,
       el('span', { class: 'tt' }, [
         el('b', { text: o.title }),
@@ -18946,7 +18971,7 @@ const NoteBody = (function () {
         el('p', { class: 'lede', style: { margin: '8px 0 0' }, text: c.oneLine })
       ]),
 
-      el('div', { class: 'card' }, [
+      el('div', { class: 'card note-statement' }, [
         el('div', { class: 'kicker', text: 'Statement' }),
         el('div', { style: { marginTop: '10px' } }, [RealLine.statementInto(UI.prose(c.statement), c)])
       ]),
@@ -18955,7 +18980,7 @@ const NoteBody = (function () {
 
       Project.hook('noteSim', c),
 
-      c.intuition ? el('div', { class: 'card tint' }, [
+      c.intuition ? el('div', { class: 'card tint note-intuition' }, [
         el('div', { class: 'kicker', text: 'In everyday words' }),
         el('div', { style: { marginTop: '10px' } }, [UI.prose(c.intuition, 'tight')])
       ]) : null,
@@ -21008,8 +21033,8 @@ const App = (function () {
     wrap.insertBefore(el('div', { class: 'banner' }, [
       DOM.mi('warning'),
       el('span', {}, [
-        el('b', { text: 'MathJax did not load. ' }),
-        'Formulas will show as LaTeX source. The app needs the network once to fetch it.'
+        el('b', { text: 'Formulas haven’t loaded yet. ' }),
+        'You can keep reading, or reload after checking your connection.'
       ])
     ]), wrap.firstChild);
   }
