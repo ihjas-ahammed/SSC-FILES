@@ -203,22 +203,22 @@ CONCEPTS.push(...
       "rungs": [
         {
           "why": "Truncate at level n and use integrability.",
-          "m": "$X_nprime=X_n\\mathbf1_{\\{|X_n|\\le n\\}},\\quad\\sum_nP(X_n\\ne X_nprime)<\\infty$",
+          "m": "$X'_n=X_n\\mathbf1_{\\{|X_n|\\le n\\}},\\quad\\sum_nP(X_n\\ne X'_n)<\\infty$",
           "meaning": "Borel–Cantelli says only finitely many terms are changed almost surely."
         },
         {
           "why": "Center the truncations; their variances are summable after division by n².",
-          "m": "$\\sum_n\\operatorname{Var}(X_nprime)/n^2<\\infty$",
+          "m": "$\\sum_n\\operatorname{Var}(X'_n)/n^2<\\infty$",
           "meaning": "This follows by exchanging sum and expectation and using E|X₁|<∞."
         },
         {
           "why": "Apply the independent-series criterion and Kronecker lemma.",
-          "m": "$n^{-1}\\sum_{i=1}^n(X_iprime-E[X_iprime])\\to0\\quad a.s.$",
+          "m": "$n^{-1}\\sum_{i=1}^n(X'_i-E[X'_i])\\to0\\quad a.s.$",
           "meaning": "The centered truncated averages vanish almost surely."
         },
         {
           "why": "The truncated means converge to μ.",
-          "m": "$E[X_nprime]\\to E[X_1]=\\mu$",
+          "m": "$E[X'_n]\\to E[X_1]=\\mu$",
           "meaning": "Dominated convergence finishes the average limit; finitely many changed terms do not affect it."
         }
       ],
