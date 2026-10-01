@@ -127,21 +127,21 @@
   });
 
   OFIG.add('plateshift', {
-    w: 390, n: 3, alt: s => ['A plate of thickness t and index μ over one slit adds optical path (μ−1)t', 'The central fringe moves to where d·x/D cancels it',
+    w: 390, n: 3, alt: s => ['A plate of thickness t and index n over one slit adds optical path (n−1)t', 'The central fringe moves to where d·x/D cancels it',
       'The whole pattern shifts by Δx toward the covered slit'][s - 1],
     build(g, s) {
       const cy = 85, bx = 60, sx = 270, d = 50, S1 = [bx, cy + d / 2], S2 = [bx, cy - d / 2], sh = 34;
       g.line(bx, 10, bx, cy - d / 2 - 4, 'k thick'); g.line(bx, cy - d / 2 + 4, bx, cy + d / 2 - 4, 'k thick'); g.line(bx, cy + d / 2 + 4, bx, 165, 'k thick');
       g.line(sx, 10, sx, 165, 'k thick'); g.line(bx, cy, sx, cy, 'k dash');
-      g.rect(bx + 4, S1[1] - 9, bx + 26, S1[1] + 9, 'fillk' + (s === 1 ? ' new' : '')); g.text(bx + 15, S1[1] + 16, 'μ', 't sym', 'middle');
+      g.rect(bx + 4, S1[1] - 9, bx + 26, S1[1] + 9, 'fillk' + (s === 1 ? ' new' : '')); g.text(bx + 15, S1[1] + 16, 'n', 't sym', 'middle');
       g.dim(bx + 4, S1[1] + 30, bx + 26, S1[1] + 30, 't', 0, s === 1 ? 'dim new' : 'dim');
       g.dot(S1[0], S1[1], 'pt'); g.dot(S2[0], S2[1], 'pt'); g.text(S1[0] - 12, S1[1], 'S₁', 't sym'); g.text(S2[0] - 12, S2[1], 'S₂', 't sym');
-      if (s === 1) { g.text(200, 140, 'optical path through the plate: μt', 't new', 'middle'); g.text(200, 126, 'through the same t of air: t', 't', 'middle'); g.text(200, 112, 'extra: (μ − 1)t', 't big new', 'middle'); }
+      if (s === 1) { g.text(200, 140, 'optical path through the plate: nt', 't new', 'middle'); g.text(200, 126, 'through the same t of air: t', 't', 'middle'); g.text(200, 112, 'extra: (n − 1)t', 't big new', 'middle'); }
       const P = [sx, cy + sh];
       if (s >= 2) {
         g.arrow(S1[0], S1[1], P[0], P[1], 'r' + N(s, 2), 0.6); g.arrow(S2[0], S2[1], P[0], P[1], 'r2' + N(s, 2), 0.6);
         g.dot(P[0], P[1], 'pt new', 3.6); g.text(P[0] + 10, P[1], 'P′', 't sym new');
-        g.text(200, 152, s === 2 ? 'new centre: d·x/D = (μ − 1)t' : 'Δx = (μ − 1)tD / d', 't big new', 'middle');
+        g.text(200, 152, s === 2 ? 'new centre: d·x/D = (n − 1)t' : 'Δx = (n − 1)tD / d', 't big new', 'middle');
         g.dim(sx + 16, cy, sx + 16, P[1], 'Δx', 0, 'dim new'); g.dot(sx, cy, 'pt'); g.text(sx + 10, cy - 8, 'O', 't sym');
       }
       if (s === 3) {
@@ -181,8 +181,8 @@
   });
 
   OFIG.add('biprism', {
-    w: 340, n: 4, alt: s => ['A thin prism deviates a ray by (μ−1)α', 'Each half makes a virtual source displaced sideways by a(μ−1)α',
-      'The two virtual sources are d = 2a(μ−1)α apart', 'Screen at D = a + b: Young fringes from S₁ and S₂'][s - 1],
+    w: 340, n: 4, alt: s => ['A thin prism deviates a ray by (n−1)α', 'Each half makes a virtual source displaced sideways by a(n−1)α',
+      'The two virtual sources are d = 2a(n−1)α apart', 'Screen at D = a + b: Young fringes from S₁ and S₂'][s - 1],
     build(g, s) {
       const cy = 85, Sx = 48, px = 150, a = px - Sx, dl = 7 * D, sx = 320;
       const S = [Sx, cy], S1 = [Sx, cy + a * Math.tan(dl)], S2 = [Sx, cy - a * Math.tan(dl)];
@@ -199,13 +199,13 @@
         if (s >= 2) g.line(src[0], src[1], px, p[0], 'r dash' + (s === 2 ? ' new' : ''));
         if (s === 1 && k === 0) g.angle(px, p[0], 26, deg(th) + 0, deg(dirOut) + 0 + 0, 'δ', 'ang new');
       });
-      if (s === 1) g.text(230, 152, 'δ = (μ − 1)α', 't big new', 'middle');
+      if (s === 1) g.text(230, 152, 'δ = (n − 1)α', 't big new', 'middle');
       if (s >= 2) { g.dot(S1[0], S1[1], 'pt new'); g.dot(S2[0], S2[1], 'pt new'); g.text(S1[0] + 8, S1[1] + 9, 'S₁', 't sym new', 'start'); g.text(S2[0] + 8, S2[1] - 9, 'S₂', 't sym new', 'start'); }
       if (s === 2) { g.dim(Sx + 22, cy, Sx + 22, S1[1], 'aδ', 0, 'dim new'); g.text(230, 152, 'each source is displaced by a·δ', 't new', 'middle'); }
-      if (s >= 3) { g.dim(Sx - 26, S2[1], Sx - 26, S1[1], 'd', 0, s === 3 ? 'dim new' : 'dim'); if (s === 3) g.text(230, 152, 'd = 2aδ = 2a(μ − 1)α', 't big new', 'middle'); }
+      if (s >= 3) { g.dim(Sx - 26, S2[1], Sx - 26, S1[1], 'd', 0, s === 3 ? 'dim new' : 'dim'); if (s === 3) g.text(230, 152, 'd = 2aδ = 2a(n − 1)α', 't big new', 'middle'); }
       g.dim(Sx, 12, px, 12, 'a', 0, 'dim');
       if (s === 4) {
-        g.line(sx, 15, sx, 165, 'k thick'); g.dim(px, 12, sx, 12, 'b', 0, 'dim new'); g.text(230, 152, 'β = λ(a + b) / 2a(μ − 1)α', 't big new', 'middle');
+        g.line(sx, 15, sx, 165, 'k thick'); g.dim(px, 12, sx, 12, 'b', 0, 'dim new'); g.text(230, 152, 'β = λ(a + b) / 2a(n − 1)α', 't big new', 'middle');
         g.poly([[px, cy + 6], [sx, cy - 42], [sx, cy + 42], [px, cy - 6]], 'fillw');
       }
     }
@@ -237,19 +237,19 @@
   /* ── 2.6  thin film ───────────────────────────────────────────────────── */
   OFIG.add('film', {
     w: 340, n: 4, alt: s => ['Two reflected rays: one from the top surface, one from the bottom', 'The perpendicular DN: equal phase on the way out',
-      'Snell: sin i = μ sin r, and BC = CD = t / cos r', 'The top reflection adds π: bright when 2μt cos r = (m + ½)λ'][s - 1],
+      'Snell: sin i = n sin r, and BC = CD = d / cos r', 'The top reflection adds π: bright when 2nd cos r = (m + ½)λ'][s - 1],
     build(g, s) {
-      const yT = 108, t = 52, yB = yT - t, mu = 1.5, i = 42 * D, r = Math.asin(Math.sin(i) / mu), Bx = 120;
-      const C = [Bx + t * Math.tan(r), yB], Dp = [Bx + 2 * t * Math.tan(r), yT];
+      const yT = 108, d = 52, yB = yT - d, n = 1.5, i = 42 * D, r = Math.asin(Math.sin(i) / n), Bx = 120;
+      const C = [Bx + d * Math.tan(r), yB], Dp = [Bx + 2 * d * Math.tan(r), yT];
       g.rect(20, yB, 320, yT, 'fillw'); g.line(20, yT, 320, yT, 'k thick'); g.line(20, yB, 320, yB, 'k thick');
-      g.text(34, yT + 12, 'air', 't mute', 'start'); g.text(34, (yT + yB) / 2, 'film μ', 't sym', 'start'); g.text(34, yB - 12, 'air', 't mute', 'start');
+      g.text(34, yT + 12, 'air', 't mute', 'start'); g.text(34, (yT + yB) / 2, 'film n', 't sym', 'start'); g.text(34, yB - 12, 'air', 't mute', 'start');
       g.arrow(Bx - 70 * Math.sin(i), yT + 70 * Math.cos(i), Bx, yT, 'r', 0.5);
       g.arrow(Bx, yT, Bx + 70 * Math.sin(i), yT + 70 * Math.cos(i), 'r' + N(s, 1), 0.6);
       g.line(Bx, yT, C[0], C[1], 'r2' + N(s, 1)); g.line(C[0], C[1], Dp[0], Dp[1], 'r2' + N(s, 1));
       g.arrow(Dp[0], Dp[1], Dp[0] + 70 * Math.sin(i), Dp[1] + 70 * Math.cos(i), 'r2' + N(s, 1), 0.6);
       g.dot(Bx, yT, 'pt'); g.dot(C[0], C[1], 'pt'); g.dot(Dp[0], Dp[1], 'pt'); g.text(Bx - 8, yT - 10, 'B', 't sym'); g.text(C[0], yB + 12, 'C', 't sym'); g.text(Dp[0] + 8, yT - 10, 'D', 't sym');
       g.text(Bx + 80, yT + 42, '1', 't sym'); g.text(Dp[0] + 68, yT + 42, '2', 't sym');
-      g.dim(Bx - 34, yB, Bx - 34, yT, 't', 0, 'dim');
+      g.dim(Bx - 34, yB, Bx - 34, yT, 'd', 0, 'dim');
       if (s >= 2) {                                       /* foot of the perpendicular from D onto ray 1 */
         const u = [Math.sin(i), Math.cos(i)], w = [Dp[0] - Bx, 0], pr = w[0] * u[0] + w[1] * u[1], Nn = [Bx + pr * u[0], yT + pr * u[1]];
         g.line(Dp[0], Dp[1], Nn[0], Nn[1], 'k dash'); g.dot(Nn[0], Nn[1], 'pt new'); g.text(Nn[0] + 8, Nn[1] + 8, 'N', 't sym new');
@@ -257,9 +257,9 @@
       }
       if (s >= 3) {
         g.line(Bx, yT - 24, Bx, yB - 6, 'k dash'); g.angle(Bx, yT, 26, 90, 90 + deg(i), 'i', 'ang new'); g.angle(Bx, yT, 20, 270 - deg(r), 270, 'r', 'ang new');
-        if (s === 3) g.text(200, 24, 'sin i = μ sin r;   BC = CD = t / cos r', 't new', 'middle');
+        if (s === 3) g.text(200, 24, 'sin i = n sin r;   BC = CD = d / cos r', 't new', 'middle');
       }
-      if (s === 4) { g.dot(Bx, yT, 'pt new', 4.5); g.text(Bx - 30, yT + 22, '+π', 't big new'); g.text(200, 24, 'Δ = 2μt cos r  (+ λ/2)', 't big new', 'middle'); }
+      if (s === 4) { g.dot(Bx, yT, 'pt new', 4.5); g.text(Bx - 30, yT + 22, '+π', 't big new'); g.text(200, 24, 'Δ = 2nd cos r  (+ λ/2)', 't big new', 'middle'); }
     }
   });
 
@@ -311,7 +311,7 @@
 
   /* ── 2.7  wedge, rings, Michelson ─────────────────────────────────────── */
   OFIG.add('wedge', {
-    w: 340, n: 3, alt: s => ['Dark where the film thickness satisfies 2μt = mλ', 'Thickness grows linearly: t = xα', 'Equal dark fringes of width β = λ/2μα'][s - 1],
+    w: 340, n: 3, alt: s => ['Dark where the film thickness satisfies 2nd = mλ', 'Thickness grows linearly: d = xθ', 'Equal dark fringes of width β = λ/2nθ'][s - 1],
     build(g, s) {
       const yb = 52, x0 = 30, x1 = 300, tw = 26, al = Math.atan2(tw, x1 - x0);
       g.line(x0, yb, x1 + 8, yb, 'k thick'); g.line(x0, yb, x1, yb + tw, 'k thick'); g.text(x0, yb - 10, 'edge', 't mute', 'start');
@@ -320,34 +320,34 @@
       const fx = k => x0 + 20 + k * 46;                        /* fringes seen from above */
       for (let k = 0; k < 6; k += 1) g.rect(fx(k), 132, fx(k) + 24, 160, k % 2 ? 'fillw' : 'fillk' + (s === 1 ? ' new' : ''));
       g.text(x0 + 6, 146, 'plan', 't mute', 'start', 0, 0);
-      if (s >= 2) { g.angle(x0, yb, 52, 0, deg(al), 'α', 'ang new'); g.dim(x0, yb - 16, 200, yb - 16, 'x', 0, 'dim new'); g.dim(200 + 8, yb, 200 + 8, yb + tw * (200 - x0) / (x1 - x0), 't', 0, 'dim new'); }
-      if (s === 1) g.text(170, 12, '2μt = mλ  (m = 0 at the edge: dark)', 't new', 'middle', 0, 0);
-      if (s === 2) g.text(170, 12, 't = x·α   (α small)', 't big new', 'middle', 0, 0);
-      if (s === 3) { g.dim(fx(1), 130, fx(2), 130, 'β', 0, 'dim new'); g.text(170, 12, 'β = λ/2μα;   wire: t = λL/2β', 't big new', 'middle', 0, 0); g.dim(x0, yb - 26, x1, yb - 26, 'L', 0, 'dim new'); }
+      if (s >= 2) { g.angle(x0, yb, 52, 0, deg(al), 'θ', 'ang new'); g.dim(x0, yb - 16, 200, yb - 16, 'x', 0, 'dim new'); g.dim(200 + 8, yb, 200 + 8, yb + tw * (200 - x0) / (x1 - x0), 'd', 0, 'dim new'); }
+      if (s === 1) g.text(170, 12, '2nd = mλ  (m = 0 at the edge: dark)', 't new', 'middle', 0, 0);
+      if (s === 2) g.text(170, 12, 'd = x·θ   (θ small)', 't big new', 'middle', 0, 0);
+      if (s === 3) { g.dim(fx(1), 130, fx(2), 130, 'β', 0, 'dim new'); g.text(170, 12, 'β = λ/2nθ;   wire: d = λL/2β', 't big new', 'middle', 0, 0); g.dim(x0, yb - 26, x1, yb - 26, 'L', 0, 'dim new'); }
     }
   });
 
   OFIG.add('rings', {
-    w: 340, n: 4, alt: s => ['The air gap at radius r: t = r²/2R', 'Dark ring when 2t = nλ', 'Ring diameters D² = 4nλR', 'Two rings remove the unknown offset'][s - 1],
+    w: 340, n: 4, alt: s => ['The air gap at radius r: d = r²/2R', 'Dark ring when 2d = mλ', 'Ring diameters D² = 4mλR/n', 'Two rings remove the unknown offset'][s - 1],
     build(g, s) {
       if (s >= 3) {
         const c = [90, 85]; for (let k = 1; k <= 6; k += 1) g.circle(c[0], c[1], 8 * Math.sqrt(k) * 1.55, 'k' + (k === 3 || (s === 4 && k === 5) ? ' new thick' : '') + ' nofill');
         g.dot(c[0], c[1], 'pt', 3.4); g.text(c[0], c[1] - 12, 'dark', 't mute');
-        const rr = 8 * Math.sqrt(3) * 1.55; g.dim(c[0] - rr, c[1] - 18, c[0] + rr, c[1] - 18, 'Dₙ', 0, 'dim new');
-        if (s === 3) { g.text(245, 104, 'rₙ² = nλR', 't big new', 'middle'); g.text(245, 86, 'Dₙ² = 4nλR', 't big new', 'middle'); g.text(245, 66, 'r ∝ √n: rings crowd outward', 't mute', 'middle'); }
-        if (s === 4) { g.text(245, 108, 'Dₘ² − Dₙ² = 4(m − n)λR', 't new', 'middle'); g.text(245, 90, 'λ = (Dₘ² − Dₙ²)/4(m − n)R', 't new', 'middle'); g.text(245, 68, 'the contact offset cancels', 't mute', 'middle'); }
+        const rr = 8 * Math.sqrt(3) * 1.55; g.dim(c[0] - rr, c[1] - 18, c[0] + rr, c[1] - 18, 'Dₘ', 0, 'dim new');
+        if (s === 3) { g.text(245, 104, 'rₘ² = mλR/n', 't big new', 'middle'); g.text(245, 86, 'Dₘ² = 4mλR/n', 't big new', 'middle'); g.text(245, 66, 'r ∝ √m: rings crowd outward', 't mute', 'middle'); }
+        if (s === 4) { g.text(245, 108, 'Dₘ² − Dₚ² = 4(m − p)λR/n', 't new', 'middle'); g.text(245, 90, 'λ = n(Dₘ² − Dₚ²)/4(m − p)R', 't new', 'middle'); g.text(245, 68, 'the contact offset cancels', 't mute', 'middle'); }
         return;
       }
       const R = 110, cx = 165, yb = 40, top = yb + 1;
       g.rect(30, yb - 12, 310, yb, 'fillk'); g.text(315, yb - 8, 'plate', 't mute', 'end');
       g.arc(cx, yb + R, R, 240, 300, 'surf'); g.dot(cx, yb + R, 'pt', 2.6); g.text(cx + 8, yb + R, 'centre', 't mute', 'start'); g.line(cx, yb, cx, yb + R, 'k dash');
       g.dim(cx, yb + R - 14, cx + 0.001, yb + R - 14, '', 0);
-      const r = 46, t = R - Math.sqrt(R * R - r * r);
-      g.line(cx, yb, cx + r, yb, 'k dash'); g.dim(cx, yb - 14, cx + r, yb - 14, 'r', 0, 'dim new'); g.dim(cx + r + 6, yb, cx + r + 6, yb + t, 't', 0, 'dim new');
-      g.dot(cx + r, yb + t, 'pt new'); g.line(cx + r, yb + t, cx + r, yb, 'r new');
+      const r = 46, d = R - Math.sqrt(R * R - r * r);
+      g.line(cx, yb, cx + r, yb, 'k dash'); g.dim(cx, yb - 14, cx + r, yb - 14, 'r', 0, 'dim new'); g.dim(cx + r + 6, yb, cx + r + 6, yb + d, 'd', 0, 'dim new');
+      g.dot(cx + r, yb + d, 'pt new'); g.line(cx + r, yb + d, cx + r, yb, 'r new');
       g.text(cx - 6, yb + R / 2, 'R', 't sym', 'end');
-      if (s === 1) { g.line(cx, yb + R, cx + r, yb + t, 'k dash'); g.text(235, 130, 'r² = R² − (R − t)² ≈ 2Rt', 't new', 'middle'); g.text(235, 114, 't = r²/2R', 't big new', 'middle'); }
-      if (s === 2) { g.text(235, 130, 'reflected, one π flip:', 't', 'middle'); g.text(235, 114, '2t = nλ  ⇒  r² = nλR', 't new', 'middle'); }
+      if (s === 1) { g.line(cx, yb + R, cx + r, yb + d, 'k dash'); g.text(235, 130, 'r² = R² − (R − d)² ≈ 2Rd', 't new', 'middle'); g.text(235, 114, 'd = r²/2R', 't big new', 'middle'); }
+      if (s === 2) { g.text(235, 130, 'reflected, one π flip:', 't', 'middle'); g.text(235, 114, '2d = mλ  ⇒  r² = mλR', 't new', 'middle'); }
     }
   });
 
@@ -376,6 +376,110 @@
         const th = 26 * D, xb = 130; g.arrow(xb - 70 * Math.sin(th), y2 + 60 * Math.cos(th) + 0 * 1, xb, y1, 'r', 0.5);
         g.arrow(xb, y1, xb + 60 * Math.sin(th), y1 + 60 * Math.cos(th), 'r new', 0.6);
         g.line(xb, y1, xb + (y1 - y2) * Math.tan(th) * -1 * 1, y2, 'r2'); g.text(170, 152, 'Δ = 2d cosθ', 't big new', 'middle'); g.angle(xb, y1, 24, 270 - 26, 270, 'θ', 'ang new');
+      }
+    }
+  });
+
+  /* ── 2.2  spatial coherence and slit width criterion ─────────────────── */
+  OFIG.add('spatial_coherence', {
+    w: 380, n: 4, alt: s => ['Extended source slit of width w at distance Ds illuminating double slit d',
+      'Off-axis source point s shifts central fringe to x₀ = (D/Ds)s',
+      'Edge source points ±w/2 produce fringe patterns shifted by Δx = (D/Ds)w',
+      'Spatial coherence threshold: Δx < β/2 gives wd/Ds < λ/2'][s - 1],
+    build(g, s) {
+      const cy = 82, xS = 35, xD = 150, xScr = 280, d = 40;
+      g.line(15, cy, 365, cy, 'k dash');
+
+      /* Source plane */
+      const w = 30;
+      g.line(xS, 15, xS, cy - w / 2 - 2, 'k thick'); g.line(xS, cy + w / 2 + 2, xS, 155, 'k thick');
+      g.dim(xS - 14, cy - w / 2, xS - 14, cy + w / 2, 'w', 0, 'dim' + N(s, 1));
+      g.text(xS, cy + w / 2 + 12, 'source', 't mute', 'middle');
+
+      /* Double-slit plane */
+      const S1 = [xD, cy + d / 2], S2 = [xD, cy - d / 2];
+      g.line(xD, 15, xD, cy - d / 2 - 3, 'k thick');
+      g.line(xD, cy - d / 2 + 3, xD, cy + d / 2 - 3, 'k thick');
+      g.line(xD, cy + d / 2 + 3, xD, 155, 'k thick');
+      g.dot(S1[0], S1[1], 'pt'); g.dot(S2[0], S2[1], 'pt');
+      g.text(S1[0] - 12, S1[1], 'S₁', 't sym'); g.text(S2[0] - 12, S2[1], 'S₂', 't sym');
+      g.dim(xD + 14, S2[1], xD + 14, S1[1], 'd', 0, 'dim' + N(s, 1));
+
+      /* Screen plane */
+      g.line(xScr, 15, xScr, 155, 'k thick');
+      g.dot(xScr, cy, 'pt'); g.text(xScr - 8, cy - 10, 'O', 't sym');
+
+      /* Dimensions Ds and D */
+      g.dim(xS, 32, xD, 32, 'Dₛ', 0, 'dim');
+      g.dim(xD, 32, xScr, 32, 'D', 0, 'dim');
+
+      if (s === 1 || s === 2) {
+        const sY = 12, ptS = [xS, cy + sY];
+        g.dot(ptS[0], ptS[1], 'pt new', 3.4); g.text(ptS[0] - 10, ptS[1], 's', 't sym new');
+        g.arrow(ptS[0], ptS[1], S1[0], S1[1], 'r' + (s === 1 ? ' new' : ''), 0.55);
+        g.arrow(ptS[0], ptS[1], S2[0], S2[1], 'r2' + (s === 1 ? ' new' : ''), 0.55);
+      }
+
+      if (s === 1) {
+        /* path difference at slits */
+        g.line(S1[0], S1[1], S1[0] - 6, S2[1] + 6, 'k dash');
+        g.text(S1[0] - 18, cy - 2, 'Δr', 't sym new');
+        g.text(180, 156, 'Path difference: Δr = SS₂ − SS₁ ≈ s·d / Dₛ', 't big new', 'middle');
+        g.text(180, 16, 'Source points emit independently.', 't mute', 'middle');
+      }
+
+      if (s === 2) {
+        const x0 = 15, P = [xScr, cy - x0];
+        g.arrow(S1[0], S1[1], P[0], P[1], 'r new', 0.55);
+        g.arrow(S2[0], S2[1], P[0], P[1], 'r2 new', 0.55);
+        g.dot(P[0], P[1], 'pt new', 3.6); g.text(P[0] + 12, P[1], 'P (x₀)', 't sym new');
+        g.dim(xScr + 22, cy, xScr + 22, P[1], 'x₀', 0, 'dim new');
+        g.text(180, 156, 'x₀ = (D / Dₛ) s  (screen axis downward)', 't big new', 'middle');
+        g.text(180, 16, 'Same fringes, shifted by each source point.', 't mute', 'middle');
+      }
+
+      if (s >= 3) {
+        /* Edges at +w/2 and -w/2 */
+        const e1 = [xS, cy + w / 2], e2 = [xS, cy - w / 2];
+        g.dot(e1[0], e1[1], 'pt', 2.8); g.dot(e2[0], e2[1], 'pt', 2.8);
+        g.text(e1[0] - 10, e1[1], '+w/2', 't sym mute'); g.text(e2[0] - 10, e2[1], '−w/2', 't sym mute');
+        g.arrow(e1[0], e1[1], S1[0], S1[1], 'r', 0.5); g.arrow(e2[0], e2[1], S2[0], S2[1], 'r2', 0.5);
+
+        const shift = s === 4 ? 7.5 : 5, beta = 30;
+        /* fringe pattern 1 from +w/2 */
+        const pts1 = [];
+        for (let y = cy - 45; y <= cy + 45; y += 2) {
+          const val = 18 * Math.pow(Math.cos(Math.PI * (y - (cy - shift)) / beta), 2);
+          pts1.push([xScr + 4 + val, y]);
+        }
+        g.poline(pts1, 'curve' + (s === 3 ? ' new' : ' old') + ' nofill');
+
+        /* fringe pattern 2 from -w/2 */
+        const pts2 = [];
+        for (let y = cy - 45; y <= cy + 45; y += 2) {
+          const val = 18 * Math.pow(Math.cos(Math.PI * (y - (cy + shift)) / beta), 2);
+          pts2.push([xScr + 4 + val, y]);
+        }
+        g.poline(pts2, 'curve2' + (s === 3 ? ' new' : ' old') + ' nofill');
+        if (s === 4) {
+          // The two edge patterns differ by half a fringe: their intensity sum is flat.
+          g.line(xScr + 22, cy - 45, xScr + 22, cy + 45, 'curve new');
+        }
+
+        g.dim(xScr + 28, cy - shift, xScr + 28, cy + shift, 'Δx', 0, 'dim new');
+        g.text(xScr + 38, cy - shift - 12, '+w/2', 't sym' + N(s, 3), 'start');
+        g.text(xScr + 38, cy + shift + 12, '−w/2', 't sym', 'start');
+      }
+
+      if (s === 3) {
+        g.text(180, 156, 'Total edge shift: Δx = (D / Dₛ) w', 't big new', 'middle');
+        g.text(180, 16, 'Add intensities of the shifted patterns.', 't mute', 'middle');
+      }
+
+      if (s === 4) {
+        g.text(180, 156, 'Coherence condition: Δx < β/2  ⇒  w < λDₛ / (2d)', 't big new', 'middle');
+        g.text(180, 138, 'wd / Dₛ < λ/2   (angular: Δθₛ < λ/2d)', 't big new', 'middle');
+        g.text(180, 16, 'Edge patterns lose contrast at Δx = β/2.', 't mute', 'middle');
       }
     }
   });

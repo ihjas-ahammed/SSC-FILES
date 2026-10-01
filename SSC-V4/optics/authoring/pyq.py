@@ -38,9 +38,9 @@ P('p.cu.op.04', 2025, 'CU Nov', 4, 2, '2.6', ['c.2.6.1'],
   "Cosine Law in Thin Films",
   r'''<p>What is cosine law in thin film interference?</p>''',
   r'''State the geometric optical path difference between rays reflected from top and bottom surfaces of a parallel film.''',
-  r'''<p>The <b>cosine law</b> states that for a plane-parallel thin film of thickness $t$ and refractive index $\mu$, illuminated by light at an angle of incidence $i$ giving angle of refraction $r$, the geometric optical path difference $\Delta$ between the beams reflected from the upper and lower surfaces is:
-$$\Delta = 2\mu t\cos r$$
-Accounting for the phase change of $\pi$ (equivalent to $\lambda/2$) occurring upon reflection at the rarer-to-denser interface, the effective optical path difference in reflected light is $2\mu t\cos r \pm \lambda/2$.</p>''',
+  r'''<p>The <b>cosine law</b> states that for a plane-parallel thin film of thickness $d$ and refractive index $n$, illuminated by light at an angle of incidence $i$ giving angle of refraction $r$, the geometric optical path difference $\Delta$ between the beams reflected from the upper and lower surfaces is:
+$$\Delta = 2nd\cos r$$
+Accounting for the phase change of $\pi$ (equivalent to $\lambda/2$) occurring upon reflection at the rarer-to-denser interface, the effective optical path difference in reflected light is $2nd\cos r \pm \lambda/2$.</p>''',
   trap=r'''Using the angle of incidence $i$ instead of the angle of refraction $r$ inside the film.''')
 
 P('p.cu.op.05', 2024, 'CU Nov', 5, 2, '2.1', ['c.2.1.2'],
@@ -86,15 +86,15 @@ P('p.cu.op.08', 2020, 'CU Nov', 32, 5, '2.7', ['c.2.7.3', 'c.2.5.3'],
   "Newton's Rings in Reflected Light",
   r'''<p>Explain the formation of Newton's rings in reflected light. Why is the central spot dark?</p>''',
   r'''Describe the wedge-like circular air film formed by a convex lens on a flat glass plate and relate thickness to radius.''',
-  r'''<p><b>Formation of Newton's rings:</b> A plano-convex lens of large radius of curvature $R$ is placed with its convex spherical surface on an optically flat glass plate. This traps a thin air film of circular symmetry whose thickness $t$ increases from zero at the point of contact outward according to:
-$$t \simeq \frac{r^2}{2R}$$
+  r'''<p><b>Formation of Newton's rings:</b> A plano-convex lens of large radius of curvature $R$ is placed with its convex spherical surface on an optically flat glass plate. This traps a thin air film of circular symmetry whose thickness $d$ increases from zero at the point of contact outward according to:
+$$d \simeq \frac{r^2}{2R}$$
 where $r$ is the radial distance from the point of contact.</p>
-<p>When illuminated from above by monochromatic light of wavelength $\lambda$ at near-normal incidence, light reflects from the bottom surface of the lens (glass-to-air) and the top surface of the plate (air-to-glass). These two coherent wave fronts interfere by division of amplitude. Since the locus of constant thickness $t$ is a circle centered at the contact point, the resulting fringes are concentric circular rings (fringes of equal thickness).</p>
+<p>When illuminated from above by monochromatic light of wavelength $\lambda$ at near-normal incidence, light reflects from the bottom surface of the lens (glass-to-air) and the top surface of the plate (air-to-glass). These two coherent wave fronts interfere by division of amplitude. Since the locus of constant thickness $d$ is a circle centered at the contact point, the resulting fringes are concentric circular rings (fringes of equal thickness).</p>
 <p><b>Path difference:</b> The optical path difference in reflection includes an extra $\lambda/2$ phase shift at the lower air-glass boundary:
-$$\Delta = 2t + \frac{\lambda}{2} = \frac{r^2}{R} + \frac{\lambda}{2}$$
-<b>Condition for dark rings:</b> Destructive interference requires $\Delta = (n + \tfrac{1}{2})\lambda$:
-$$\frac{r_n^2}{R} + \frac{\lambda}{2} = (n + \tfrac{1}{2})\lambda \implies r_n^2 = n\lambda R \implies D_n^2 = 4n\lambda R\quad (n = 0, 1, 2, \ldots)$$
-<b>Why the central spot is dark:</b> At the point of contact ($r = 0$), the air film thickness vanishes ($t = 0$). The only contribution to the path difference is the phase change of $\pi$ ($\lambda/2$) occurring upon reflection at the rarer-to-denser interface (air-plate). The two reflected waves are therefore exactly $180^\circ$ out of phase and destructively interfere, producing a dark central spot.</p>''',
+$$\Delta = 2d + \frac{\lambda}{2} = \frac{r^2}{R} + \frac{\lambda}{2}$$
+<b>Condition for dark rings:</b> Destructive interference requires $\Delta = (m + \tfrac{1}{2})\lambda$:
+$$\frac{r_m^2}{R} + \frac{\lambda}{2} = (m + \tfrac{1}{2})\lambda \implies r_m^2 = m\lambda R \implies D_m^2 = 4m\lambda R\quad (m = 0, 1, 2, \ldots)$$
+<b>Why the central spot is dark:</b> At the point of contact ($r = 0$), the air film thickness vanishes ($d = 0$). The only contribution to the path difference is the phase change of $\pi$ ($\lambda/2$) occurring upon reflection at the rarer-to-denser interface (air-plate). The two reflected waves are therefore exactly $180^\circ$ out of phase and destructively interfere, producing a dark central spot.</p>''',
   trap=r'''Forgetting that the $\pi$ phase flip occurs only at the air-to-glass reflection, not at the glass-to-air boundary.''')
 
 P('p.cu.op.09', 2022, 'CU Nov', 33, 5, '2.6', ['c.2.6.1', 'c.2.2.1'],
@@ -102,71 +102,71 @@ P('p.cu.op.09', 2022, 'CU Nov', 33, 5, '2.6', ['c.2.6.1', 'c.2.2.1'],
   r'''<p>Explain the interference of light due to division of amplitude. Derive the path difference for light reflected from a thin parallel film.</p>''',
   r'''Trace two rays split at the top surface and compute their optical path difference up to a common wavefront.''',
   r'''<p><b>Interference by division of amplitude:</b> When an incident light wave strikes a boundary between two media, its amplitude is partially reflected and partially transmitted. The two resulting waves travel along different paths and can subsequently be recombined to produce interference. Since both beams originate from the same incident wavefront, they are mutually coherent.</p>
-<p><b>Derivation for a thin parallel film:</b> Consider a plane-parallel film of refractive index $\mu$ and thickness $t$ bounded by air. A ray of monochromatic light is incident at angle $i$ at point $B$ on the upper surface. Part reflects as ray 1 along $BD$; part refracts at angle $r$, reflects at point $C$ on the lower surface, and re-emerges at $D$ into air as ray 2 parallel to ray 1.</p>
+<p><b>Derivation for a thin parallel film:</b> Consider a plane-parallel film of refractive index $n$ and thickness $d$ bounded by air. A ray of monochromatic light is incident at angle $i$ at point $B$ on the upper surface. Part reflects as ray 1 along $BD$; part refracts at angle $r$, reflects at point $C$ on the lower surface, and re-emerges at $D$ into air as ray 2 parallel to ray 1.</p>
 <p>From $D$, drop a perpendicular $DN$ onto ray 1. Beyond the wavefront $DN$, the rays travel identical optical distances. The optical path difference $\Delta$ between ray 2 and ray 1 is:
-$$\Delta = \mu(BC + CD) - BN$$
+$$\Delta = n(BC + CD) - BN$$
 From the geometry of the film:
-$$BC = CD = \frac{t}{\cos r} \implies BC + CD = \frac{2t}{\cos r}$$
-The distance $BD$ across the top surface is $BD = 2t\tan r$. Thus in air:
-$$BN = BD\sin i = (2t\tan r)\sin i$$
-Using Snell's law, $\sin i = \mu\sin r$:
-$$BN = 2t\,\frac{\sin r}{\cos r}(\mu\sin r) = \frac{2\mu t\sin^2 r}{\cos r}$$
+$$BC = CD = \frac{d}{\cos r} \implies BC + CD = \frac{2d}{\cos r}$$
+The distance $BD$ across the top surface is $BD = 2d\tan r$. Thus in air:
+$$BN = BD\sin i = (2d\tan r)\sin i$$
+Using Snell's law, $\sin i = n\sin r$:
+$$BN = 2d\,\frac{\sin r}{\cos r}(n\sin r) = \frac{2nd\sin^2 r}{\cos r}$$
 Substituting these into the path difference:
-$$\Delta = \frac{2\mu t}{\cos r} - \frac{2\mu t\sin^2 r}{\cos r} = \frac{2\mu t(1 - \sin^2 r)}{\cos r} = 2\mu t\cos r$$
-Accounting for the phase change of $\pi$ (equivalent to path $\lambda/2$) at reflection $B$ (rarer-to-denser medium), the effective path difference is $\Delta_{\text{eff}} = 2\mu t\cos r \pm \lambda/2$.</p>''',
-  trap=r'''Using geometric path difference without multiplying the distance inside the film by refractive index $\mu$.''')
+$$\Delta = \frac{2nd}{\cos r} - \frac{2nd\sin^2 r}{\cos r} = \frac{2nd(1 - \sin^2 r)}{\cos r} = 2nd\cos r$$
+Accounting for the phase change of $\pi$ (equivalent to path $\lambda/2$) at reflection $B$ (rarer-to-denser medium), the effective path difference is $\Delta_{\text{eff}} = 2nd\cos r \pm \lambda/2$.</p>''',
+  trap=r'''Using geometric path difference without multiplying the distance inside the film by refractive index $n$.''')
 
 P('p.cu.op.10', 2023, 'CU Nov', 34, 5, '2.3', ['c.2.3.4', 'c.2.4.2'],
   "Measuring Sheet Thickness with Biprism",
   r'''<p>How can the thickness of a thin transparent sheet be measured using a biprism?</p>''',
   r'''Determine the optical path delay introduced by the sheet in one interfering beam and equate it to fringe shift.''',
-  r'''<p><b>Principle:</b> When a thin transparent sheet of thickness $t$ and refractive index $\mu$ is introduced into the path of one of the two interfering beams in a Fresnel biprism setup, it introduces an extra optical path length without altering the fringe width.</p>
+  r'''<p><b>Principle:</b> When a thin transparent sheet of index $n$ and thickness $t$ is introduced into the path of one of the two interfering beams in a Fresnel biprism setup, it introduces an extra optical path length without altering the fringe width.</p>
 <p><b>Extra optical path:</b> The sheet replaces a thickness $t$ of air (refractive index 1) with thickness $t$ of the medium:
-$$\Delta L_{\text{op}} = \mu t - t = (\mu - 1)t$$
+$$\Delta L_{\text{op}} = nt - t = (n - 1)t$$
 <b>Fringe displacement:</b> The central zero-order fringe shifts from the geometric centre to a new position $x_0$ on the screen where the two optical paths are once again equal. Since a path difference of $\lambda$ corresponds to one fringe width $\beta = \lambda D/d$, the geometric path difference must compensate the plate delay:
-$$\frac{d\,x_0}{D} = (\mu - 1)t \implies x_0 = \frac{(\mu - 1)t D}{d}$$
+$$\frac{d\,x_0}{D} = (n - 1)t \implies x_0 = \frac{(n - 1)t D}{d}$$
 In terms of fringe width $\beta = \lambda D/d$, the number of fringes $N$ by which the central fringe shifts is:
-$$N = \frac{x_0}{\beta} = \frac{(\mu - 1)t}{\lambda}$$
+$$N = \frac{x_0}{\beta} = \frac{(n - 1)t}{\lambda}$$
 <b>Experimental procedure:</b>
 <ol>
 <li>The biprism is illuminated with white light to clearly locate the central achromatic (white) fringe with the crosswire of a micrometer eyepiece.</li>
 <li>Monochromatic light is restored, and the thin transparent sheet is introduced into one beam. The central fringe shifts laterally by a distance $x_0$.</li>
 <li>Using the measured fringe width $\beta$ and shift $x_0$ (or number of shifted fringes $N = x_0/\beta$), the thickness $t$ is calculated by:
-$$t = \frac{N\lambda}{\mu - 1} = \frac{x_0 d}{(\mu - 1)D}$$
-provided $\mu$ and $\lambda$ are known.</li>
+$$t = \frac{N\lambda}{n - 1} = \frac{x_0 d}{(n - 1)D}$$
+provided $n$ and $\lambda$ are known.</li>
 </ol></p>''',
-  trap=r'''Writing $\mu t$ instead of $(\mu - 1)t$ for the extra optical path introduced by the sheet.''')
+  trap=r'''Writing $nt$ instead of $(n - 1)t$ for the extra optical path introduced by the sheet.''')
 
 P('p.cu.op.11', 2021, 'CU Nov', 35, 5, '2.7', ['c.2.7.1'],
   "Wedge-Shaped Thin Film",
   r'''<p>Describe the fringe system produced in a wedge-shaped thin film. Write the formula for fringe width.</p>''',
-  r'''Analyze the varying thickness $t = x\alpha$ of a wedge film and derive the dark fringe positions.''',
-  r'''<p><b>Fringe system in a wedge-shaped film:</b> A wedge-shaped film is formed between two plane glass plates inclined at a small angle $\alpha$. At distance $x$ from the apex (line of contact), the film thickness is $t = x\alpha$. When illuminated by monochromatic light of wavelength $\lambda$ at near-normal incidence, interference occurs between rays reflected from the upper and lower surfaces of the film.</p>
+  r'''Analyze the varying thickness $d = x\theta$ of a wedge film and derive the dark fringe positions.''',
+  r'''<p><b>Fringe system in a wedge-shaped film:</b> A wedge-shaped film is formed between two plane glass plates inclined at a small angle $\theta$. At distance $x$ from the apex (line of contact), the film thickness is $d = x\theta$. When illuminated by monochromatic light of wavelength $\lambda$ at near-normal incidence, interference occurs between rays reflected from the upper and lower surfaces of the film.</p>
 <p>Because the thickness is constant along any line parallel to the edge of the wedge, the fringes are straight, equally spaced bands parallel to the apex. These are <i>fringes of equal thickness</i> (Fizeau fringes), localised in or near the film.</p>
-<p><b>Condition for dark fringes:</b> Including the $\pi$ phase flip on reflection at the lower interface, the path difference for normal incidence in a film of index $\mu$ is $\Delta = 2\mu t + \lambda/2$. Destructive interference occurs when:
-$$2\mu t = m\lambda \implies 2\mu(x_m\alpha) = m\lambda \implies x_m = \frac{m\lambda}{2\mu\alpha}\quad (m = 0, 1, 2, \ldots)$$
-At the edge of contact ($x = 0, t = 0$), $m = 0$, so the edge is <b>dark</b> in reflected light.</p>
+<p><b>Condition for dark fringes:</b> Including the $\pi$ phase flip on reflection at the lower interface, the path difference for normal incidence in a film of index $n$ is $\Delta = 2nd + \lambda/2$. Destructive interference occurs when:
+$$2nd = m\lambda \implies 2n(x_m\theta) = m\lambda \implies x_m = \frac{m\lambda}{2n\theta}\quad (m = 0, 1, 2, \ldots)$$
+At the edge of contact ($x = 0, d = 0$), $m = 0$, so the edge is <b>dark</b> in reflected light.</p>
 <p><b>Fringe width formula:</b> The separation $\beta$ between successive dark fringes is:
-$$\beta = x_{m+1} - x_m = \frac{\lambda}{2\mu\alpha}$$
-For an air wedge ($\mu = 1$), the fringe width is:
-$$\beta = \frac{\lambda}{2\alpha}$$</p>''',
+$$\beta = x_{m+1} - x_m = \frac{\lambda}{2n\theta}$$
+For an air wedge ($n = 1$), the fringe width is:
+$$\beta = \frac{\lambda}{2\theta}$$</p>''',
   trap=r'''Assuming the apex of the wedge is bright in reflected light; it is dark due to the $\pi$ phase change on reflection.''')
 
 P('p.cu.op.12', 2023, 'CU Nov', 40, 5, '2.6', ['c.2.6.2'],
   "Antireflection Coatings",
   r'''<p>Explain the working of antireflection coatings in thin films.</p>''',
   r'''Require destructive interference between reflections from the two boundaries with equal reflection amplitudes.''',
-  r'''<p><b>Principle of antireflection coating:</b> A transparent thin dielectric film of refractive index $n_f$ and thickness $t$ is deposited onto a glass substrate of index $n_g$, where $1 < n_f < n_g$ (e.g., magnesium fluoride $\text{MgF}_2$, $n_f = 1.38$ on crown glass $n_g = 1.52$). Its purpose is to eliminate unwanted surface reflection by destructive interference.</p>
+  r'''<p><b>Principle of antireflection coating:</b> A transparent thin dielectric film of refractive index $n_f$ and thickness $d$ is deposited onto a glass substrate of index $n_g$, where $1 < n_f < n_g$ (e.g., magnesium fluoride $\text{MgF}_2$, $n_f = 1.38$ on crown glass $n_g = 1.52$). Its purpose is to eliminate unwanted surface reflection by destructive interference.</p>
 <p><b>Phase cancellation condition:</b> Light is incident from air ($n_0 = 1$). Both reflections—at the air-film boundary ($1 \to n_f$) and at the film-glass boundary ($n_f \to n_g$)—occur at a boundary from a rarer to a denser medium. Both reflections therefore undergo an identical phase change of $\pi$ radians. The net phase change from reflection is zero ($\pi - \pi = 0$).</p>
 <p>Destructive interference between the two reflected beams at normal incidence requires their round-trip optical path difference $2n_f t$ to equal an odd half-wavelength:
-$$2n_f t = \frac{\lambda}{2} \implies t = \frac{\lambda}{4n_f}$$
+$$2n_f d = \frac{\lambda}{2} \implies d = \frac{\lambda}{4n_f}$$
 Thus, the optical thickness of the coating must be one quarter-wavelength.</p>
 <p><b>Amplitude cancellation condition:</b> For complete cancellation, the amplitudes of the two reflected beams must be equal. At normal incidence, the Fresnel reflection coefficients are:
 $$r_1 = \frac{n_f - 1}{n_f + 1},\qquad r_2 = \frac{n_g - n_f}{n_g + n_f}$$
 Equating $r_1 = r_2$ gives:
 $$n_f^2 = n_g \implies n_f = \sqrt{n_g}$$
-When both conditions ($t = \lambda/4n_f$ and $n_f = \sqrt{n_g}$) are satisfied, the reflected intensity is zero, and by energy conservation, all incident energy is transmitted into the glass.</p>''',
-  trap=r'''Assuming an antireflection coating works for all wavelengths; $t = \lambda/(4n_f)$ is exact only for the design wavelength.''')
+When both conditions ($d = \lambda/4n_f$ and $n_f = \sqrt{n_g}$) are satisfied, the reflected intensity is zero, and by energy conservation, all incident energy is transmitted into the glass.</p>''',
+  trap=r'''Assuming an antireflection coating works for all wavelengths; $d = \lambda/(4n_f)$ is exact only for the design wavelength.''')
 
 P('p.cu.op.13', 2023, 'CU Nov', 44, 5, '2.7', ['c.2.7.4'],
   "Michelson Interferometer and Sodium Doublet",
@@ -199,8 +199,8 @@ P('p.cu.op.15', 2022, 'CU Nov', 62, 2, '3.4', ['c.3.4.1'],
   r'''<p>Define a half-period zone in Fresnel's diffraction.</p>''',
   r'''Describe how a wavefront is divided into concentric annular zones differing in distance to the observation point by $\lambda/2$.''',
   r'''<p>A <b>Fresnel half-period zone</b> is an annular concentric strip into which a primary wavefront is divided, such that the distance from the outer boundary of any zone to an observation point $P$ is greater by half a wavelength ($\lambda/2$) than the distance from its inner boundary.</p>
-<p>For a plane wave at distance $b$ from $P$, the radius of the $n$-th zone is $r_n = \sqrt{n b\lambda}$. Each zone has nearly equal area $\pi b\lambda$, and wavelets from any two consecutive zones arrive at $P$ with an optical path difference of $\lambda/2$ (a phase difference of $\pi$), thereby destructively interfering with each other.</p>''',
-  trap=r'''Believing the zone areas depend strongly on $n$; they are equal to first order in $\lambda/b$.''')
+<p>For a plane wave at distance $d$ from $P$, the radius of the $m$-th zone is $r_m = \sqrt{m\lambda d}$. Each zone has nearly equal area $\pi\lambda d$, and wavelets from any two consecutive zones arrive at $P$ with an optical path difference of $\lambda/2$ (a phase difference of $\pi$), thereby destructively interfering with each other.</p>''',
+  trap=r'''Believing the zone areas depend strongly on $n$; they are equal to first order in $\lambda/d$.''')
 
 P('p.cu.op.16', 2024, 'CU Nov', 63, 2, '3.3', ['c.3.3.2'],
   "Prism vs Grating Spectrum",
@@ -228,27 +228,27 @@ P('p.cu.op.18', 2024, 'CU Nov', 65, 2, '3.2', ['c.3.2.1'],
   r'''<p>In a grating or double slit, an <b>absent spectrum</b> (or missing order) occurs when the condition for an interference principal maximum coincides exactly with the condition for a single-slit diffraction zero for the same angle of diffraction $\theta$.</p>
 <p>The conditions are:
 $$\text{Interference maximum: } d\sin\theta = m\lambda\qquad (m = 1, 2, 3, \ldots)$$
-$$\text{Diffraction minimum: } a\sin\theta = p\lambda\qquad (p = 1, 2, 3, \ldots)$$
-where $a$ is the slit width and $d$ is the grating element (slit separation). Dividing the two equations:
-$$\frac{d}{a} = \frac{m}{p} \implies m = \frac{d}{a}\,p$$
-If the ratio $d/a$ is an integer, the interference orders $m = (d/a), 2(d/a), 3(d/a), \ldots$ have zero intensity and are completely absent from the spectrum.</p>''',
+$$\text{Diffraction minimum: } b\sin\theta = p\lambda\qquad (p = 1, 2, 3, \ldots)$$
+where $b$ is the slit width and $d$ is the grating element ($d = a + b$). Dividing the two equations:
+$$\frac{d}{b} = \frac{m}{p} \implies m = \frac{d}{b}\,p$$
+If the ratio $d/b$ is an integer, the interference orders $m = (d/b), 2(d/b), 3(d/b), \ldots$ have zero intensity and are completely absent from the spectrum.</p>''',
   trap=r'''Saying absent orders occur because light is not transmitted; they vanish because the envelope factor $(\sin\beta/\beta)^2$ is zero.''')
 
 P('p.cu.op.19', 2023, 'CU Nov', 91, 5, '3.1', ['c.3.1.2'],
   "Fraunhofer Diffraction at a Single Slit",
   r'''<p>Derive the expression for the intensity distribution in Fraunhofer diffraction at a single slit.</p>''',
   r'''Integrate the secondary wavelets across the width of the slit in the far-field approximation.''',
-  r'''<p><b>Geometry:</b> Let a plane monochromatic wave of wavelength $\lambda$ fall normally on a narrow rectangular slit of width $a$ extending from $x = -a/2$ to $x = +a/2$. By the Huygens–Fresnel principle, each strip of width $dx$ acts as a coherent source of secondary wavelets.</p>
+  r'''<p><b>Geometry:</b> Let a plane monochromatic wave of wavelength $\lambda$ fall normally on a narrow rectangular slit of width $b$ extending from $x = -b/2$ to $x = +b/2$. By the Huygens–Fresnel principle, each strip of width $dx$ acts as a coherent source of secondary wavelets.</p>
 <p><b>Resultant field:</b> In the direction making an angle $\theta$ with the normal, the path difference between a wavelet from coordinate $x$ and the wavelet from the centre ($x = 0$) is $x\sin\theta$, corresponding to a phase difference $kx\sin\theta = (2\pi/\lambda)x\sin\theta$. The resultant electric field amplitude $E(\theta)$ is obtained by integrating across the aperture:
-$$E(\theta) = C \int_{-a/2}^{a/2} e^{i k x \sin\theta}\,dx = C\left[\frac{e^{i k x \sin\theta}}{i k \sin\theta}\right]_{-a/2}^{a/2} = C a\,\frac{e^{i\beta} - e^{-i\beta}}{2i\beta} = E_0\,\frac{\sin\beta}{\beta}$$
-where $E_0 = Ca$ is the central amplitude at $\theta = 0$, and
-$$\beta = \frac{1}{2} k a \sin\theta = \frac{\pi a\sin\theta}{\lambda}$$
+$$E(\theta) = C \int_{-b/2}^{b/2} e^{i k x \sin\theta}\,dx = C\left[\frac{e^{i k x \sin\theta}}{i k \sin\theta}\right]_{-b/2}^{b/2} = C b\,\frac{e^{i\beta} - e^{-i\beta}}{2i\beta} = E_0\,\frac{\sin\beta}{\beta}$$
+where $E_0 = Cb$ is the central amplitude at $\theta = 0$, and
+$$\beta = \frac{1}{2} k b \sin\theta = \frac{\pi b\sin\theta}{\lambda}$$
 <b>Intensity distribution:</b> The intensity $I(\theta)$ is proportional to $|E(\theta)|^2$:
 $$I(\theta) = I_0\left(\frac{\sin\beta}{\beta}\right)^2$$
 where $I_0$ is the intensity at the central maximum ($\beta \to 0, \sin\beta/\beta \to 1$).</p>
 <p><b>Minima:</b> Minima occur where $\sin\beta = 0$ with $\beta \neq 0$:
-$$\beta = m\pi \implies \frac{\pi a\sin\theta}{\lambda} = m\pi \implies a\sin\theta = m\lambda\quad (m = \pm 1, \pm 2, \ldots)$$
-The central maximum spans from $m = -1$ to $m = +1$ with angular width $2\lambda/a$.</p>''',
+$$\beta = m\pi \implies \frac{\pi b\sin\theta}{\lambda} = m\pi \implies b\sin\theta = m\lambda\quad (m = \pm 1, \pm 2, \ldots)$$
+The central maximum spans from $m = -1$ to $m = +1$ with angular width $2\lambda/b$.</p>''',
   trap=r'''Setting $m = 0$ as a minimum; at $\beta = 0$, $\lim_{\beta\to 0}(\sin\beta/\beta) = 1$, giving the central maximum.''')
 
 P('p.cu.op.20', 2020, 'CU Nov', 92, 5, '3.3', ['c.3.3.3'],
@@ -291,24 +291,24 @@ P('p.cu.op.22', 2023, 'CU Nov', 94, 5, '3.2', ['c.3.2.1'],
   "Double-Slit Diffraction and Envelope",
   r'''<p>Discuss the diffraction pattern produced by a double slit. Distinguish between interference maxima and diffraction envelope.</p>''',
   r'''Write the intensity as the product of the single-slit diffraction envelope and two-slit interference factor.''',
-  r'''<p><b>Double-slit Fraunhofer diffraction:</b> Consider two parallel slits, each of width $a$, separated by centre-to-centre distance $d$. When illuminated normally by a plane monochromatic wave of wavelength $\lambda$, the resultant intensity distribution in direction $\theta$ is:
+  r'''<p><b>Double-slit Fraunhofer diffraction:</b> Consider two parallel slits, each of width $b$, separated by centre-to-centre distance $d = a + b$. When illuminated normally by a plane monochromatic wave of wavelength $\lambda$, the resultant intensity distribution in direction $\theta$ is:
 $$I(\theta) = 4I_0\left(\frac{\sin\beta}{\beta}\right)^2 \cos^2\gamma$$
-where $\beta = \dfrac{\pi a\sin\theta}{\lambda}$ and $\gamma = \dfrac{\pi d\sin\theta}{\lambda}$.</p>
+where $\beta = \dfrac{\pi b\sin\theta}{\lambda}$ and $\gamma = \dfrac{\pi d\sin\theta}{\lambda}$.</p>
 <p>This expression is the product of two distinct physical terms:
 <ul>
 <li><b>Interference factor ($\cos^2\gamma$):</b> Represents the interference between light from the two slits, producing closely spaced, sharp fringes with maxima at:
 $$d\sin\theta = m\lambda\quad (m = 0, \pm 1, \pm 2, \ldots)$$</li>
-<li><b>Diffraction envelope $\big(\frac{\sin\beta}{\beta}\big)^2$:</b> Represents the Fraunhofer diffraction pattern of a single slit of width $a$, with diffraction minima at:
-$$a\sin\theta = p\lambda\quad (p = \pm 1, \pm 2, \ldots)$$</li>
+<li><b>Diffraction envelope $\big(\frac{\sin\beta}{\beta}\big)^2$:</b> Represents the Fraunhofer diffraction pattern of a single slit of width $b$, with diffraction minima at:
+$$b\sin\theta = p\lambda\quad (p = \pm 1, \pm 2, \ldots)$$</li>
 </ul></p>
-<p><b>Distinction and missing orders:</b> The rapid $\cos^2\gamma$ interference fringes are modulated and bound inside the broader single-slit envelope. When a diffraction minimum coincides with an interference maximum ($d\sin\theta = m\lambda$ and $a\sin\theta = p\lambda$), that interference order has zero intensity and is missing ($m = (d/a)p$). The central diffraction maximum contains $(2d/a - 1)$ interference fringes.</p>''',
+<p><b>Distinction and missing orders:</b> The rapid $\cos^2\gamma$ interference fringes are modulated and bound inside the broader single-slit envelope. When a diffraction minimum coincides with an interference maximum ($d\sin\theta = m\lambda$ and $b\sin\theta = p\lambda$), that interference order has zero intensity and is missing ($m = (d/b)p$). The central diffraction maximum contains $(2d/b - 1)$ interference fringes.</p>''',
   trap=r'''Treating double-slit fringes as purely an interference effect, ignoring the modulating single-slit diffraction envelope.''')
 
 P('p.cu.op.23', 2021, 'CU Nov', 95, 5, '3.5', ['c.3.5.1', 'c.3.5.2'],
   "Diffraction by a Straight Edge",
   r'''<p>Describe the Fresnel diffraction due to a straight edge. Explain the occurrence of maxima and minima.</p>''',
   r'''Divide the wavefront into Fresnel zones or use Cornu's spiral to describe illuminated-side oscillations and the shadow region.''',
-  r'''<p><b>Experimental arrangement:</b> A straight, sharp opaque edge is placed perpendicular to the path of light from a monochromatic slit source $S$ of wavelength $\lambda$. A screen is placed at distance $b$ behind the edge to observe the diffraction pattern.</p>
+  r'''<p><b>Experimental arrangement:</b> A straight, sharp opaque edge is placed perpendicular to the path of light from a monochromatic slit source $S$ of wavelength $\lambda$. A screen is placed at distance $d$ behind the edge to observe the diffraction pattern.</p>
 <p><b>Diffraction pattern features:</b>
 <ol>
 <li><b>Geometrical shadow edge:</b> At the edge of the geometrical shadow ($v = 0$), the intensity does not drop abruptly to zero; instead, it is exactly $I_0/4$, where $I_0$ is the unobstructed intensity.</li>
@@ -326,43 +326,43 @@ P('p.cu.op.23', 2021, 'CU Nov', 95, 5, '3.5', ['c.3.5.1', 'c.3.5.2'],
 P('p.cu.op.24', 2023, 'CU Nov', 96, 5, '3.1', ['c.3.1.2'],
   "Width of Central Maximum in Single-Slit",
   r'''<p>Explain why the central maximum in a single slit diffraction has twice the width of secondary maxima.</p>''',
-  r'''Find the angular positions of the first and higher minima from $a\sin\theta = m\lambda$.''',
-  r'''<p><b>Intensity in single-slit diffraction:</b> For a slit of width $a$ illuminated by wavelength $\lambda$, the intensity distribution is:
-$$I(\theta) = I_0\left(\frac{\sin\beta}{\beta}\right)^2,\qquad \beta = \frac{\pi a\sin\theta}{\lambda}$$
+  r'''Find the angular positions of the first and higher minima from $b\sin\theta = m\lambda$.''',
+  r'''<p><b>Intensity in single-slit diffraction:</b> For a slit of width $b$ illuminated by wavelength $\lambda$, the intensity distribution is:
+$$I(\theta) = I_0\left(\frac{\sin\beta}{\beta}\right)^2,\qquad \beta = \frac{\pi b\sin\theta}{\lambda}$$
 Minima occur where $\sin\beta = 0$ with $\beta \neq 0$:
-$$a\sin\theta = m\lambda\quad (m = \pm 1, \pm 2, \pm 3, \ldots)$$
+$$b\sin\theta = m\lambda\quad (m = \pm 1, \pm 2, \pm 3, \ldots)$$
 For small diffraction angles ($\sin\theta \simeq \theta$):
-$$\theta_m = \frac{m\lambda}{a}$$
+$$\theta_m = \frac{m\lambda}{b}$$
 <b>Angular width of the central maximum:</b> The central maximum is bounded by the first minima on either side of the centre ($m = -1$ and $m = +1$):
-$$\theta_{-1} = -\frac{\lambda}{a},\qquad \theta_{+1} = +\frac{\lambda}{a}$$
+$$\theta_{-1} = -\frac{\lambda}{b},\qquad \theta_{+1} = +\frac{\lambda}{b}$$
 Therefore, the total angular width of the central maximum is:
-$$2\theta_1 = \theta_{+1} - \theta_{-1} = \frac{\lambda}{a} - \left(-\frac{\lambda}{a}\right) = \frac{2\lambda}{a}$$
+$$2\theta_1 = \theta_{+1} - \theta_{-1} = \frac{\lambda}{b} - \left(-\frac{\lambda}{b}\right) = \frac{2\lambda}{b}$$
 <b>Angular width of secondary maxima:</b> Any secondary maximum of order $m$ lies between the $m$-th and $(m+1)$-th minima on the same side of the centre:
-$$\Delta\theta_{\text{sec}} = \theta_{m+1} - \theta_m = \frac{(m+1)\lambda}{a} - \frac{m\lambda}{a} = \frac{\lambda}{a}$$
-<b>Conclusion:</b> Since the central maximum spans between the $+1$ and $-1$ order minima across the origin, its angular width $2\lambda/a$ (and linear width $2\lambda D/a$ on a screen at distance $D$) is exactly twice the width $\lambda/a$ of any secondary maximum.</p>''',
-  trap=r'''Confusing half-angular width $\lambda/a$ with the full angular width $2\lambda/a$.''')
+$$\Delta\theta_{\text{sec}} = \theta_{m+1} - \theta_m = \frac{(m+1)\lambda}{b} - \frac{m\lambda}{b} = \frac{\lambda}{b}$$
+<b>Conclusion:</b> Since the central maximum spans between the $+1$ and $-1$ order minima across the origin, its angular width $2\lambda/b$ (and linear width $2\lambda D/b$ on a screen at distance $D$) is exactly twice the width $\lambda/b$ of any secondary maximum.</p>''',
+  trap=r'''Confusing half-angular width $\lambda/a$ with the full angular width $2\lambda/b$.''')
 
 P('p.cu.op.25', 2021, 'CU Nov', 98, 5, '3.4', ['c.3.4.2'],
   "Rectilinear Propagation via Fresnel Zones",
   r'''<p>Explain the rectilinear propagation of light using Fresnel's half-period zones.</p>''',
   r'''Sum the alternating contributions of half-period zones to show that the net amplitude is half of the first zone.''',
-  r'''<p><b>Fresnel's half-period zone construction:</b> Consider a plane wavefront $WW'$ of monochromatic light of wavelength $\lambda$. Let $P$ be an observation point at distance $b$ along the normal passing through the pole $O$ of the wavefront. The wavefront is divided into concentric annular zones such that the distance from $P$ to the outer boundary of the $n$-th zone is $b + n\lambda/2$.</p>
-<p>Each zone has equal area $\pi b\lambda$. Because wavelets from consecutive zones differ in path by $\lambda/2$, their phases differ by $\pi$. Thus, the zone amplitudes $A_1, A_2, A_3, \ldots$ alternate in sign:
+  r'''<p><b>Fresnel's half-period zone construction:</b> Consider a plane wavefront $WW'$ of monochromatic light of wavelength $\lambda$. Let $P$ be an observation point at distance $d$ along the normal passing through the pole $O$ of the wavefront. The wavefront is divided into concentric annular zones such that the distance from $P$ to the outer boundary of the $m$-th zone is $d + m\lambda/2$.</p>
+<p>Each zone has equal area $\pi\lambda d$. Because wavelets from consecutive zones differ in path by $\lambda/2$, their phases differ by $\pi$. Thus, the zone amplitudes $A_1, A_2, A_3, \ldots$ alternate in sign:
 $$A = A_1 - A_2 + A_3 - A_4 + \ldots$$
 Because of the obliquity factor $(1 + \cos\theta)$ and slight increase in distance, the amplitudes decrease continuously and smoothly: $A_1 > A_2 > A_3 > \ldots$</p>
 <p>We can rewrite the series as:
 $$A = \frac{A_1}{2} + \left(\frac{A_1}{2} - A_2 + \frac{A_3}{2}\right) + \left(\frac{A_3}{2} - A_4 + \frac{A_5}{2}\right) + \ldots$$
-Since each term is very nearly the arithmetic mean of its neighbours, $A_n \approx (A_{n-1} + A_{n+1})/2$, each bracketed term vanishes, leaving:
+Since each term is very nearly the arithmetic mean of its neighbours, $A_m \approx (A_{m-1} + A_{m+1})/2$, each bracketed term vanishes, leaving:
 $$A \simeq \frac{A_1}{2}$$
-<b>Rectilinear propagation:</b> The resultant amplitude at $P$ produced by the entire unobstructed wavefront is equal to half the amplitude contributed by the first central zone alone. Since the radius of the first zone $r_1 = \sqrt{b\lambda}$ is exceedingly small (fractions of a millimetre for visible light), light reaching $P$ is effectively confined to a tiny area immediately around the line joining source, pole, and $P$. Any obstacle larger than this small zone casts a distinct shadow, explaining why light appears to travel in straight lines.</p>''',
+<b>Rectilinear propagation:</b> The resultant amplitude at $P$ produced by the entire unobstructed wavefront is equal to half the amplitude contributed by the first central zone alone. Since the radius of the first zone $r_1 = \sqrt{\lambda d}$ is exceedingly small (fractions of a millimetre for visible light), light reaching $P$ is effectively confined to a tiny area immediately around the line joining source, pole, and $P$. Any obstacle larger than this small zone casts a distinct shadow, explaining why light appears to travel in straight lines.</p>''',
   trap=r'''Assuming the total amplitude is the direct sum of all zones without accounting for the alternating phase difference of $\pi$.''')
 
 P('p.cu.op.26', 2021, 'CU Nov', 111, 10, '3.3', ['c.3.3.1', 'c.3.3.2'],
   "Theory of Plane Transmission Grating",
   r'''<p>Describe the theory of plane transmission grating. Obtain the grating equation and show how it is used to measure the wavelength of spectral lines.</p>''',
   r'''Model the grating as an array of $N$ parallel slits, derive the principal maxima condition $d\sin\theta = m\lambda$, and explain spectrometer measurement.''',
-  r'''<p><b>Theory:</b> A plane transmission diffraction grating consists of an array of $N$ parallel, equally spaced slits, each of transparent width $a$ separated by opaque spaces of width $b$. The grating element is $d = a + b$.</p>
-<p>When illuminated normally by a plane monochromatic wave of wavelength $\lambda$, each slit produces a diffracted beam with electric field amplitude $E_1 = E_0(\sin\beta/\beta)$, where $\beta = (\pi a\sin\theta)/\lambda$. The path difference between corresponding points of adjacent slits is $d\sin\theta$, giving a constant phase step between successive slits:
+  r'''<p><b>Theory:</b> A plane transmission diffraction grating consists of an array of $N$ parallel, equally spaced slits, each of transparent width $b$ separated by opaque intervals $a$. The grating element is $d = a + b$.</p>
+<p>When illuminated normally by a plane monochromatic wave of wavelength $\lambda$, each slit produces a diffracted beam with electric field amplitude $E_1 = E_0(\sin\beta/\beta)$, where $\beta = (\pi b\sin\theta)/\lambda$. The path difference between corresponding points of adjacent slits is $d\sin\theta$, giving a constant phase step between successive slits:
 $$2\gamma = \frac{2\pi}{\lambda}d\sin\theta$$
 The resultant complex field from $N$ slits is the sum of a geometric series:
 $$E(\theta) = E_0\left(\frac{\sin\beta}{\beta}\right)\sum_{k=0}^{N-1} e^{2ik\gamma} = E_0\left(\frac{\sin\beta}{\beta}\right) e^{i(N-1)\gamma}\,\frac{\sin N\gamma}{\sin\gamma}$$

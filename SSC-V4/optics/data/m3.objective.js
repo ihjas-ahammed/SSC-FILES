@@ -12,11 +12,11 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "A single slit of width $a = 0.50\\text{ mm}$ is illuminated by parallel monochromatic light of wavelength $\\lambda = 500\\text{ nm}$. For diffraction to be observed strictly in the Fraunhofer (far-field) regime without using any focusing lens, the distance $L$ from the slit to the observation screen must satisfy:",
+ "prompt": "A single slit of width $b = 0.50\\text{ mm}$ is illuminated by parallel monochromatic light of wavelength $\\lambda = 500\\text{ nm}$. For diffraction to be observed strictly in the Fraunhofer (far-field) regime without using any focusing lens, the distance $L$ from the slit to the observation screen must satisfy:",
  "answer": "A",
- "solution": "<p>Fraunhofer diffraction requires the Fresnel number to be much smaller than unity: $N_F = \\frac{a^2}{\\lambda L} \\ll 1$, which implies $L \\gg \\frac{a^2}{\\lambda}$.</p>\n<p>Substituting the given values: $\\frac{a^2}{\\lambda} = \\frac{(5.0\\times 10^{-4}\\text{ m})^2}{5.0\\times 10^{-7}\\text{ m}} = \\frac{2.5\\times 10^{-7}}{5.0\\times 10^{-7}} = 0.50\\text{ m}$. Thus, $L \\gg 0.50\\text{ m}$.</p>\n<p>Distractor B reverses the inequality, which defines the Fresnel near-field regime. Distractors C and D arise from forgetting to square the slit width or introducing an erroneous factor of 2.</p>",
+ "solution": "<p>Fraunhofer diffraction requires the Fresnel number to be much smaller than unity: $N_F = \\frac{b^2}{\\lambda L} \\ll 1$, which implies $L \\gg \\frac{b^2}{\\lambda}$.</p>\n<p>Substituting the given values: $\\frac{b^2}{\\lambda} = \\frac{(5.0\\times 10^{-4}\\text{ m})^2}{5.0\\times 10^{-7}\\text{ m}} = \\frac{2.5\\times 10^{-7}}{5.0\\times 10^{-7}} = 0.50\\text{ m}$. Thus, $L \\gg 0.50\\text{ m}$.</p>\n<p>Distractor B reverses the inequality, which defines the Fresnel near-field regime. Distractors C and D arise from forgetting to square the slit width or introducing an erroneous factor of 2.</p>",
  "tested": "Fraunhofer far-field condition and the Fresnel number",
- "trap": "Inverting the condition ($L \\ll a^2/\\lambda$) or forgetting to square the aperture dimension $a$",
+ "trap": "Inverting the condition ($L \\ll a^2/\\lambda$) or forgetting to square the aperture dimension $b$",
  "tests": [
   "c.3.1.1"
  ],
@@ -40,7 +40,7 @@ OBJECTIVE.push(
  ],
  "twist": {
   "q": "What would be the required distance if the slit width were doubled to 1.0 mm?",
-  "a": "Since $L \\gg a^2/\\lambda \\propto a^2$, the required distance quadruples to $L \\gg 2.0\\text{ m}$."
+  "a": "Since $L \\gg b^2/\\lambda \\propto b^2$, the required distance quadruples to $L \\gg 2.0\\text{ m}$."
  }
 },
 {
@@ -54,7 +54,7 @@ OBJECTIVE.push(
  "time": 60,
  "prompt": "In a single-slit Fraunhofer diffraction setup, the first diffraction minimum for light of vacuum wavelength $\\lambda_1 = 660\\text{ nm}$ occurs at an angle $\\theta_1$. If the entire apparatus is immersed in a transparent liquid of refractive index $n = 1.50$ and illuminated with light of vacuum wavelength $\\lambda_2 = 495\\text{ nm}$, the first minimum shifts to angle $\\theta_2$. In the paraxial approximation, the ratio $\\theta_2 / \\theta_1$ is:",
  "answer": "C",
- "solution": "<p>The condition for the first single-slit minimum is $a\\sin\\theta = \\lambda_{\\text{med}}$, so in the small-angle approximation $\\theta \\approx \\lambda_{\\text{med}} / a$.</p>\n<p>In the first case (air): $\\theta_1 = \\lambda_1 / a$. In the liquid of index $n$: the wavelength becomes $\\lambda' = \\lambda_2 / n$, giving $\\theta_2 = \\frac{\\lambda_2}{n a}$.</p>\n<p>Therefore, the ratio is $\\frac{\\theta_2}{\\theta_1} = \\frac{\\lambda_2}{n \\lambda_1} = \\frac{495\\text{ nm}}{1.50 \\times 660\\text{ nm}} = \\frac{495}{990} = 0.50$.</p>\n<p>Distractor B ($0.75$) ignores the refractive index of the medium ($\\lambda_2/\\lambda_1$). Distractor A ($1.13$) erroneously multiplies by $n$ instead of dividing. Distractor D ($0.25$) squares the ratio.</p>",
+ "solution": "<p>The condition for the first single-slit minimum is $b\\sin\\theta = \\lambda_{\\text{med}}$, so in the small-angle approximation $\\theta \\approx \\lambda_{\\text{med}} / b$.</p>\n<p>In the first case (air): $\\theta_1 = \\lambda_1 / b$. In the liquid of index $n$: the wavelength becomes $\\lambda' = \\lambda_2 / n$, giving $\\theta_2 = \\frac{\\lambda_2}{n b}$.</p>\n<p>Therefore, the ratio is $\\frac{\\theta_2}{\\theta_1} = \\frac{\\lambda_2}{n \\lambda_1} = \\frac{495\\text{ nm}}{1.50 \\times 660\\text{ nm}} = \\frac{495}{990} = 0.50$.</p>\n<p>Distractor B ($0.75$) ignores the refractive index of the medium ($\\lambda_2/\\lambda_1$). Distractor A ($1.13$) erroneously multiplies by $n$ instead of dividing. Distractor D ($0.25$) squares the ratio.</p>",
  "tested": "Angular position of single-slit minima and dependence on medium refractive index",
  "trap": "Forgetting that wavelength scales as $\\lambda/n$ in a refractive medium",
  "tests": [
@@ -92,7 +92,7 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "In the Fraunhofer diffraction pattern of a single slit of width $a$ illuminated by light of wavelength $\\lambda$, let $\\beta = \\frac{\\pi a\\sin\\theta}{\\lambda}$. The positions of the secondary intensity maxima are given by the non-zero solutions to which transcendental equation?",
+ "prompt": "In the Fraunhofer diffraction pattern of a single slit of width $b$ illuminated by light of wavelength $\\lambda$, let $\\beta = \\frac{\\pi b\\sin\\theta}{\\lambda}$. The positions of the secondary intensity maxima are given by the non-zero solutions to which transcendental equation?",
  "answer": "D",
  "solution": "<p>The intensity is given by $I(\\beta) = I_0 \\left(\\frac{\\sin\\beta}{\\beta}\\right)^2$. Setting $\\frac{dI}{d\\beta} = 0$ yields $\\frac{2\\sin\\beta(\\beta\\cos\\beta - \\sin\\beta)}{\\beta^3} = 0$.</p>\n<p>Excluding $\\sin\\beta = 0$ (which corresponds to intensity minima for $\\beta \\neq 0$), the condition for secondary maxima is $\\beta\\cos\\beta - \\sin\\beta = 0 \\iff \\tan\\beta = \\beta$.</p>\n<p>Distractor A ($\\sin\\beta = 0$) gives the diffraction minima. Distractor B ($\\cos\\beta = 0$, giving $\\beta = (m+1/2)\\pi$) is the naive approximation that neglects the variation of the $1/\\beta^2$ envelope. Distractor C has a sign error.</p>",
  "tested": "Condition for secondary maxima in single-slit Fraunhofer diffraction",
@@ -132,13 +132,13 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "Which of the following statements regarding the Fraunhofer diffraction pattern of a single slit of width $a$ on a screen at distance $D$ are correct?",
+ "prompt": "Which of the following statements regarding the Fraunhofer diffraction pattern of a single slit of width $b$ on a screen at distance $D$ are correct?",
  "answer": [
   "A",
   "C",
   "D"
  ],
- "solution": "<p>Statement A is correct: the central maximum has angular half-width $\\Delta\\theta \\approx \\lambda/a$, which is inversely proportional to $a$.</p>\n<p>Statement B is incorrect: the central maximum extends from $m = -1$ to $m = +1$ with linear width $2\\lambda D/a$, which is twice the separation between consecutive secondary minima ($\\lambda D/a$).</p>\n<p>Statement C is correct: the first secondary maximum satisfies $\\tan\\beta = \\beta$, giving $\\beta_1 \\approx 1.43\\pi \\approx 4.493\\text{ rad}$, which is strictly less than $1.5\\pi \\approx 4.712\\text{ rad}$.</p>\n<p>Statement D is correct: the intensity of the first secondary maximum is $I_1 / I_0 = (\\sin\\beta_1 / \\beta_1)^2 \\approx 0.0472$ (approximately $4.7\\%$), which is less than $5\\%$.</p>",
+ "solution": "<p>Statement A is correct: the central maximum has angular half-width $\\Delta\\theta \\approx \\lambda/b$, which is inversely proportional to $b$.</p>\n<p>Statement B is incorrect: the central maximum extends from $m = -1$ to $m = +1$ with linear width $2\\lambda D/b$, which is twice the separation between consecutive secondary minima ($\\lambda D/b$).</p>\n<p>Statement C is correct: the first secondary maximum satisfies $\\tan\\beta = \\beta$, giving $\\beta_1 \\approx 1.43\\pi \\approx 4.493\\text{ rad}$, which is strictly less than $1.5\\pi \\approx 4.712\\text{ rad}$.</p>\n<p>Statement D is correct: the intensity of the first secondary maximum is $I_1 / I_0 = (\\sin\\beta_1 / \\beta_1)^2 \\approx 0.0472$ (approximately $4.7\\%$), which is less than $5\\%$.</p>",
  "tested": "Properties, geometry, and intensity distribution of single-slit Fraunhofer diffraction",
  "trap": "Believing the central maximum has the same width as secondary maxima, or that $\\beta_1 = 1.5\\pi$",
  "tests": [
@@ -148,7 +148,7 @@ OBJECTIVE.push(
  "options": [
   {
    "k": "A",
-   "t": "The angular half-width of the central maximum is inversely proportional to the slit width $a$."
+   "t": "The angular half-width of the central maximum is inversely proportional to the slit width $b$."
   },
   {
    "k": "B",
@@ -177,15 +177,15 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "A single slit of width $a = 0.15\\text{ mm}$ is illuminated normally by a parallel beam of monochromatic light of wavelength $\\lambda = 600\\text{ nm}$. A convex lens of focal length $f = 75\\text{ cm}$ placed immediately after the slit focuses the Fraunhofer diffraction pattern onto a screen in its focal plane. Calculate the linear width of the central diffraction maximum on the screen in millimetres ($\\text{mm}$).",
+ "prompt": "A single slit of width $b = 0.15\\text{ mm}$ is illuminated normally by a parallel beam of monochromatic light of wavelength $\\lambda = 600\\text{ nm}$. A convex lens of focal length $f = 75\\text{ cm}$ placed immediately after the slit focuses the Fraunhofer diffraction pattern onto a screen in its focal plane. Calculate the linear width of the central diffraction maximum on the screen in millimetres ($\\text{mm}$).",
  "answer": {
   "value": 6.0,
   "tol": 0.1,
   "dp": 1
  },
- "solution": "<p>The linear width of the central maximum on the focal plane screen is given by $W = 2 f \\tan\\theta \\approx \\frac{2 f \\lambda}{a}$.</p>\n<p>Substituting the given numerical values:</p>\n<p>$$W = \\frac{2 \\times 0.75\\text{ m} \\times 600\\times 10^{-9}\\text{ m}}{0.15\\times 10^{-3}\\text{ m}} = \\frac{9.0\\times 10^{-7}}{1.5\\times 10^{-4}} = 6.0\\times 10^{-3}\\text{ m} = 6.0\\text{ mm}.$$</p>\n<p>A common error is omitting the factor of 2, which gives the half-width ($3.0\\text{ mm}$) instead of the full linear width between the first minima on either side.</p>",
+ "solution": "<p>The linear width of the central maximum on the focal plane screen is given by $W = 2 f \\tan\\theta \\approx \\frac{2 f \\lambda}{b}$.</p>\n<p>Substituting the given numerical values:</p>\n<p>$$W = \\frac{2 \\times 0.75\\text{ m} \\times 600\\times 10^{-9}\\text{ m}}{0.15\\times 10^{-3}\\text{ m}} = \\frac{9.0\\times 10^{-7}}{1.5\\times 10^{-4}} = 6.0\\times 10^{-3}\\text{ m} = 6.0\\text{ mm}.$$</p>\n<p>A common error is omitting the factor of 2, which gives the half-width ($3.0\\text{ mm}$) instead of the full linear width between the first minima on either side.</p>",
  "tested": "Linear width of the single-slit central maximum with a focusing lens",
- "trap": "Calculating the half-width ($f\\lambda/a = 3.0\\text{ mm}$) instead of the full width ($2f\\lambda/a = 6.0\\text{ mm}$)",
+ "trap": "Calculating the half-width ($f\\lambda/b = 3.0\\text{ mm}$) instead of the full width ($2f\\lambda/b = 6.0\\text{ mm}$)",
  "tests": [
   "c.3.1.2"
  ],
@@ -203,11 +203,11 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "A Fraunhofer double-slit pattern is formed using slits of individual width $a = 0.08\\text{ mm}$ and centre-to-centre separation $d = 0.40\\text{ mm}$. Which of the following interference bright fringe orders $m$ is missing (absent) from the pattern?",
+ "prompt": "A Fraunhofer double-slit pattern is formed using slits of individual width $b = 0.08\\text{ mm}$ and centre-to-centre separation $d = 0.40\\text{ mm}$. Which of the following interference bright fringe orders $m$ is missing (absent) from the pattern?",
  "answer": "B",
- "solution": "<p>Interference maxima occur at $d\\sin\\theta = m\\lambda$, while the single-slit diffraction envelope has zeros at $a\\sin\\theta = p\\lambda$ ($p = \\pm 1, \\pm 2, \\dots$).</p>\n<p>An interference maximum is missing when both conditions coincide: $\\frac{d}{a} = \\frac{m}{p} \\implies m = p\\left(\\frac{d}{a}\\right)$.</p>\n<p>Here $\\frac{d}{a} = \\frac{0.40\\text{ mm}}{0.08\\text{ mm}} = 5$. Thus, missing orders are $m = \\pm 5, \\pm 10, \\pm 15, \\dots$. Therefore, order $m = 5$ is missing.</p>\n<p>Distractors A, C, and D are present with non-zero intensity because their angles do not coincide with any envelope zeros.</p>",
+ "solution": "<p>Interference maxima occur at $d\\sin\\theta = m\\lambda$, while the single-slit diffraction envelope has zeros at $b\\sin\\theta = p\\lambda$ ($p = \\pm 1, \\pm 2, \\dots$).</p>\n<p>An interference maximum is missing when both conditions coincide: $\\frac{d}{b} = \\frac{m}{p} \\implies m = p\\left(\\frac{d}{b}\\right)$.</p>\n<p>Here $\\frac{d}{b} = \\frac{0.40\\text{ mm}}{0.08\\text{ mm}} = 5$. Thus, missing orders are $m = \\pm 5, \\pm 10, \\pm 15, \\dots$. Therefore, order $m = 5$ is missing.</p>\n<p>Distractors A, C, and D are present with non-zero intensity because their angles do not coincide with any envelope zeros.</p>",
  "tested": "Condition for missing orders in a double-slit diffraction pattern",
- "trap": "Confusing the ratio $d/a$ with $d/a - 1$ or calculating $a/d$",
+ "trap": "Confusing the ratio $d/b$ with $d/b - 1$ or calculating $b/d$",
  "tests": [
   "c.3.2.1"
  ],
@@ -230,8 +230,8 @@ OBJECTIVE.push(
   }
  ],
  "twist": {
-  "q": "What would be the first missing order if $a = 0.10\\text{ mm}$ and $d = 0.40\\text{ mm}$?",
-  "a": "$d/a = 4$, so $m = 4$ would be the first missing order."
+  "q": "What would be the first missing order if $b = 0.10\\text{ mm}$ and $d = 0.40\\text{ mm}$?",
+  "a": "$d/b = 4$, so $m = 4$ would be the first missing order."
  }
 },
 {
@@ -243,11 +243,11 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "In a double-slit Fraunhofer diffraction experiment, the slit separation is four times the slit width ($d = 4a$). How many interference bright fringes (including the central zeroth order) appear within the central diffraction envelope?",
+ "prompt": "In a double-slit Fraunhofer diffraction experiment, the slit separation is four times the slit width ($d = 4b$). How many interference bright fringes (including the central zeroth order) appear within the central diffraction envelope?",
  "answer": "D",
- "solution": "<p>The central diffraction maximum extends between the first single-slit diffraction minima at $a\\sin\\theta = \\pm\\lambda$, corresponding to $\\sin\\theta = \\pm \\lambda/a$.</p>\n<p>Interference maxima occur at $\\sin\\theta = m\\lambda/d$. At the boundary of the central envelope, $m = \\frac{d}{a} = 4$.</p>\n<p>Since the envelope vanishes at $m = \\pm 4$, these 4th-order fringes are missing. The bright fringes present within the central envelope are $m = 0, \\pm 1, \\pm 2, \\pm 3$, giving a total of $2(d/a) - 1 = 2(4) - 1 = 7$ fringes.</p>\n<p>Distractor A counts only one side. Distractor B ($8$) forgets that the 4th order is missing and doubles $d/a$. Distractor C ($9$) mistakenly includes the missing $m = \\pm 4$ orders ($2\\times 4 + 1$).</p>",
+ "solution": "<p>The central diffraction maximum extends between the first single-slit diffraction minima at $b\\sin\\theta = \\pm\\lambda$, corresponding to $\\sin\\theta = \\pm \\lambda/b$.</p>\n<p>Interference maxima occur at $\\sin\\theta = m\\lambda/d$. At the boundary of the central envelope, $m = \\frac{d}{b} = 4$.</p>\n<p>Since the envelope vanishes at $m = \\pm 4$, these 4th-order fringes are missing. The bright fringes present within the central envelope are $m = 0, \\pm 1, \\pm 2, \\pm 3$, giving a total of $2(d/b) - 1 = 2(4) - 1 = 7$ fringes.</p>\n<p>Distractor A counts only one side. Distractor B ($8$) forgets that the 4th order is missing and doubles $d/b$. Distractor C ($9$) mistakenly includes the missing $m = \\pm 4$ orders ($2\\times 4 + 1$).</p>",
  "tested": "Number of interference fringes inside the central diffraction envelope",
- "trap": "Using $2(d/a)+1$ and counting the missing boundary orders as visible fringes",
+ "trap": "Using $2(d/b)+1$ and counting the missing boundary orders as visible fringes",
  "tests": [
   "c.3.2.1"
  ],
@@ -270,8 +270,8 @@ OBJECTIVE.push(
   }
  ],
  "twist": {
-  "q": "How many fringes appear in the central envelope if $d = 6a$?",
-  "a": "$2(d/a) - 1 = 2(6) - 1 = 11$ fringes."
+  "q": "How many fringes appear in the central envelope if $d = 6b$?",
+  "a": "$2(d/b) - 1 = 2(6) - 1 = 11$ fringes."
  }
 },
 {
@@ -283,9 +283,9 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "In a double-slit diffraction experiment with slit width $a$ and separation $d = 2a$, what is the ratio of the intensity of the first-order interference maximum ($m = 1$) to the central interference maximum ($m = 0$)?",
+ "prompt": "In a double-slit diffraction experiment with slit width $b$ and separation $d = 2b$, what is the ratio of the intensity of the first-order interference maximum ($m = 1$) to the central interference maximum ($m = 0$)?",
  "answer": "A",
- "solution": "<p>The intensity is $I(\\theta) = 4I_0 \\left(\\frac{\\sin\\beta}{\\beta}\\right)^2 \\cos^2\\gamma$, where $\\beta = \\frac{\\pi a\\sin\\theta}{\\lambda}$ and $\\gamma = \\frac{\\pi d\\sin\\theta}{\\lambda}$.</p>\n<p>At the central maximum ($m = 0$), $\\theta = 0 \\implies \\beta = 0, \\gamma = 0$, so $I(0) = 4I_0$.</p>\n<p>For the first interference maximum ($m = 1$), $d\\sin\\theta = \\lambda \\implies \\sin\\theta = \\frac{\\lambda}{d} = \\frac{\\lambda}{2a}$. This gives $\\gamma = \\pi \\implies \\cos^2\\gamma = 1$, and $\\beta = \\frac{\\pi a}{\\lambda}\\left(\\frac{\\lambda}{2a}\\right) = \\frac{\\pi}{2}$.</p>\n<p>The diffraction envelope factor is $\\left(\\frac{\\sin(\\pi/2)}{\\pi/2}\\right)^2 = \\left(\\frac{1}{\\pi/2}\\right)^2 = \\frac{4}{\\pi^2}$. Therefore, $\\frac{I(1)}{I(0)} = \\frac{4}{\\pi^2} \\approx 0.405$.</p>\n<p>Distractor B misses squaring the denominator factor. Distractor C assumes a naive half-intensity. Distractor D incorrectly incorporates a factor of 2.</p>",
+ "solution": "<p>The intensity is $I(\\theta) = 4I_0 \\left(\\frac{\\sin\\beta}{\\beta}\\right)^2 \\cos^2\\gamma$, where $\\beta = \\frac{\\pi b\\sin\\theta}{\\lambda}$ and $\\gamma = \\frac{\\pi d\\sin\\theta}{\\lambda}$.</p>\n<p>At the central maximum ($m = 0$), $\\theta = 0 \\implies \\beta = 0, \\gamma = 0$, so $I(0) = 4I_0$.</p>\n<p>For the first interference maximum ($m = 1$), $d\\sin\\theta = \\lambda \\implies \\sin\\theta = \\frac{\\lambda}{d} = \\frac{\\lambda}{2a}$. This gives $\\gamma = \\pi \\implies \\cos^2\\gamma = 1$, and $\\beta = \\frac{\\pi a}{\\lambda}\\left(\\frac{\\lambda}{2a}\\right) = \\frac{\\pi}{2}$.</p>\n<p>The diffraction envelope factor is $\\left(\\frac{\\sin(\\pi/2)}{\\pi/2}\\right)^2 = \\left(\\frac{1}{\\pi/2}\\right)^2 = \\frac{4}{\\pi^2}$. Therefore, $\\frac{I(1)}{I(0)} = \\frac{4}{\\pi^2} \\approx 0.405$.</p>\n<p>Distractor B misses squaring the denominator factor. Distractor C assumes a naive half-intensity. Distractor D incorrectly incorporates a factor of 2.</p>",
  "tested": "Intensity modulation of double-slit interference peaks by the single-slit diffraction envelope",
  "trap": "Assuming all interference bright fringes have equal intensity as in idealized Young interference",
  "tests": [
@@ -310,8 +310,8 @@ OBJECTIVE.push(
   }
  ],
  "twist": {
-  "q": "What is the intensity of the second-order interference maximum for $d = 2a$?",
-  "a": "Zero, because $m = 2$ is a missing order since $d/a = 2$."
+  "q": "What is the intensity of the second-order interference maximum for $d = 2b$?",
+  "a": "Zero, because $m = 2$ is a missing order since $d/b = 2$."
  }
 },
 {
@@ -329,7 +329,7 @@ OBJECTIVE.push(
   "C",
   "D"
  ],
- "solution": "<p>Statement A is false: the angular width of the central diffraction envelope is $2\\lambda/a$, which depends solely on $a$ and is independent of $d$.</p>\n<p>Statement B is true: the interference fringe spacing is $\\Delta\\theta = \\lambda/d$, which decreases as $d$ increases, causing more fringes ($2d/a - 1$) to fit within the central envelope.</p>\n<p>Statement C is true: as $a \\to 0$, $\\beta \\to 0 \\implies \\frac{\\sin\\beta}{\\beta} \\to 1$, removing envelope modulation and yielding pure $\\cos^2\\gamma$ fringes of uniform height.</p>\n<p>Statement D is true: with $d/a = 3$, all orders $m = 3p$ ($m = \\pm 3, \\pm 6, \\dots$) coincide with envelope zeros and are missing.</p>",
+ "solution": "<p>Statement A is false: the angular width of the central diffraction envelope is $2\\lambda/b$, which depends solely on $b$ and is independent of $d$.</p>\n<p>Statement B is true: the interference fringe spacing is $\\Delta\\theta = \\lambda/d$, which decreases as $d$ increases, causing more fringes ($2d/b - 1$) to fit within the central envelope.</p>\n<p>Statement C is true: as $a \\to 0$, $\\beta \\to 0 \\implies \\frac{\\sin\\beta}{\\beta} \\to 1$, removing envelope modulation and yielding pure $\\cos^2\\gamma$ fringes of uniform height.</p>\n<p>Statement D is true: with $d/b = 3$, all orders $m = 3p$ ($m = \\pm 3, \\pm 6, \\dots$) coincide with envelope zeros and are missing.</p>",
  "tested": "Distinction between diffraction envelope and interference fringes in double-slit pattern",
  "trap": "Believing that envelope width depends on slit separation $d$",
  "tests": [
@@ -338,24 +338,24 @@ OBJECTIVE.push(
  "options": [
   {
    "k": "A",
-   "t": "Increasing the slit separation $d$ while keeping the slit width $a$ fixed reduces the angular width of the central diffraction envelope."
+   "t": "Increasing the slit separation $d$ while keeping the slit width $b$ fixed reduces the angular width of the central diffraction envelope."
   },
   {
    "k": "B",
-   "t": "Increasing the slit separation $d$ while keeping the slit width $a$ fixed decreases the interference fringe spacing and increases the number of fringes under the central envelope."
+   "t": "Increasing the slit separation $d$ while keeping the slit width $b$ fixed decreases the interference fringe spacing and increases the number of fringes under the central envelope."
   },
   {
    "k": "C",
-   "t": "In the limit where the slit width $a \\to 0$ with $d$ held constant, the pattern approaches the ideal Young double-slit pattern with fringes of uniform intensity."
+   "t": "In the limit where the slit width $b \\to 0$ with $d$ held constant, the pattern approaches the ideal Young double-slit pattern with fringes of uniform intensity."
   },
   {
    "k": "D",
-   "t": "When $d = 3a$, the 3rd and 6th interference maxima are completely missing from the observed pattern."
+   "t": "When $d = 3b$, the 3rd and 6th interference maxima are completely missing from the observed pattern."
   }
  ],
  "twist": {
-  "q": "What happens to the number of fringes under the central envelope if both $a$ and $d$ are doubled?",
-  "a": "The ratio $d/a$ is unchanged, so the number of fringes $2d/a - 1$ remains exactly the same."
+  "q": "What happens to the number of fringes under the central envelope if both $b$ and $d$ are doubled?",
+  "a": "The ratio $d/b$ is unchanged, so the number of fringes $2d/b - 1$ remains exactly the same."
  }
 },
 {
@@ -367,21 +367,21 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "Monochromatic light of wavelength $\\lambda = 500\\text{ nm}$ illuminates a double slit normally. The interference pattern is observed on a screen placed at a distance $D = 2.0\\text{ m}$. The linear fringe spacing between adjacent interference maxima is $\\Delta y = 2.5\\text{ mm}$, and the 4th interference maximum is observed to be the first missing order. Calculate the width of each slit $a$ in micrometres ($\\mu\\text{m}$).",
+ "prompt": "Monochromatic light of wavelength $\\lambda = 500\\text{ nm}$ illuminates a double slit normally. The interference pattern is observed on a screen placed at a distance $D = 2.0\\text{ m}$. The linear fringe spacing between adjacent interference maxima is $\\Delta y = 2.5\\text{ mm}$, and the 4th interference maximum is observed to be the first missing order. Calculate the width of each slit $b$ in micrometres ($\\mu\\text{m}$).",
  "answer": {
   "value": 100.0,
   "tol": 1.0,
   "dp": 1
  },
- "solution": "<p>The interference fringe spacing on the screen is given by $\\Delta y = \\frac{\\lambda D}{d}$.</p>\n<p>Rearranging for the slit separation $d$:</p>\n<p>$$d = \\frac{\\lambda D}{\\Delta y} = \\frac{500\\times 10^{-9}\\text{ m} \\times 2.0\\text{ m}}{2.5\\times 10^{-3}\\text{ m}} = \\frac{1.0\\times 10^{-6}}{2.5\\times 10^{-3}} = 4.0\\times 10^{-4}\\text{ m} = 400\\ \\mu\\text{m}.$$</p>\n<p>Since the 4th interference order is the first missing order, we have $\\frac{d}{a} = 4$, which gives:</p>\n<p>$$a = \\frac{d}{4} = \\frac{400\\ \\mu\\text{m}}{4} = 100\\ \\mu\\text{m}.$$</p>\n<p>Common traps include setting $d/a = 3$ or confusing slit width $a$ with slit separation $d$.</p>",
+ "solution": "<p>The interference fringe spacing on the screen is given by $\\Delta y = \\frac{\\lambda D}{d}$.</p>\n<p>Rearranging for the slit separation $d$:</p>\n<p>$$d = \\frac{\\lambda D}{\\Delta y} = \\frac{500\\times 10^{-9}\\text{ m} \\times 2.0\\text{ m}}{2.5\\times 10^{-3}\\text{ m}} = \\frac{1.0\\times 10^{-6}}{2.5\\times 10^{-3}} = 4.0\\times 10^{-4}\\text{ m} = 400\\ \\mu\\text{m}.$$</p>\n<p>Since the 4th interference order is the first missing order, we have $\\frac{d}{b} = 4$, which gives:</p>\n<p>$$b = \\frac{d}{4} = \\frac{400\\ \\mu\\text{m}}{4} = 100\\ \\mu\\text{m}.$$</p>\n<p>Common traps include setting $d/b = 3$ or confusing slit width $b$ with slit separation $d$.</p>",
  "tested": "Determination of slit dimensions from fringe spacing and missing orders",
- "trap": "Confusing slit separation $d$ with slit width $a$, or using $d/a = 5$",
+ "trap": "Confusing slit separation $d$ with slit width $b$, or using $d/b = 5$",
  "tests": [
   "c.3.2.1"
  ],
  "twist": {
   "q": "What would be the slit width if the 5th order were the first missing order with the same fringe spacing?",
-  "a": "$a = d/5 = 400\\ \\mu\\text{m} / 5 = 80\\ \\mu\\text{m}$."
+  "a": "$b = d/5 = 400\\ \\mu\\text{m} / 5 = 80\\ \\mu\\text{m}$."
  }
 },
 {
@@ -710,9 +710,9 @@ OBJECTIVE.push(
   "C",
   "D"
  ],
- "solution": "<p>Statement A is correct: for a plane wave at distance $b$, $r_n = \\sqrt{n b \\lambda} \\propto \\sqrt{n}$.</p>\n<p>Statement B is incorrect: the area of each zone is $\\Delta S_n = \\pi(r_n^2 - r_{n-1}^2) \\approx \\pi b \\lambda$, which is independent of $n$ to first order.</p>\n<p>Statement C is correct: a zone plate behaves as a lens with multiple foci at $f_p = f_1/p$ for odd integers $p = 1, 3, 5, \\dots$.</p>\n<p>Statement D is correct: by definition of half-period zones, the optical path from adjacent zone boundaries differs by $\\lambda/2$, corresponding to a phase difference of $\\Delta\\phi = \\frac{2\\pi}{\\lambda}\\frac{\\lambda}{2} = \\pi$ radians.</p>",
+ "solution": "<p>Statement A is correct: for a plane wave at distance $d$, $r_m = \\sqrt{m\\lambda d} \\propto \\sqrt{m}$.</p>\n<p>Statement B is incorrect: the area of each zone is $\\Delta S_m = \\pi(r_m^2 - r_{m-1}^2) \\approx \\pi\\lambda d$, which is independent of $m$ to first order.</p>\n<p>Statement C is correct: a zone plate behaves as a lens with multiple foci at $f_p = f_1/p$ for odd integers $p = 1, 3, 5, \\dots$.</p>\n<p>Statement D is correct: by definition of half-period zones, the optical path from adjacent zone boundaries differs by $\\lambda/2$, corresponding to a phase difference of $\\Delta\\phi = \\frac{2\\pi}{\\lambda}\\frac{\\lambda}{2} = \\pi$ radians.</p>",
  "tested": "Structure of Fresnel half-period zones and properties of zone plates",
- "trap": "Believing that zone area increases with radius or zone index $n$",
+ "trap": "Believing that zone area increases with radius or zone index $m$",
  "tests": [
   "c.3.4.1",
   "c.3.4.3"
@@ -720,11 +720,11 @@ OBJECTIVE.push(
  "options": [
   {
    "k": "A",
-   "t": "For a plane incident wavefront, the radii of successive half-period zones are proportional to $\\sqrt{n}$ ($n = 1, 2, 3, \\dots$)."
+   "t": "For a plane incident wavefront, the radii of successive half-period zones are proportional to $\\sqrt{m}$ ($m = 1, 2, 3, \\dots$)."
   },
   {
    "k": "B",
-   "t": "The area of the $n\\text{th}$ Fresnel half-period zone increases linearly with $n$."
+   "t": "The area of the $m\\text{th}$ Fresnel half-period zone increases linearly with $m$."
   },
   {
    "k": "C",
@@ -736,8 +736,8 @@ OBJECTIVE.push(
   }
  ],
  "twist": {
-  "q": "For a spherical wavefront from a source at distance $a$, how do zone radii scale with $a$ and $b$?",
-  "a": "$r_n^2 = \\frac{n\\lambda ab}{a+b}$."
+  "q": "For a spherical wavefront from a source at distance $a$, how do zone radii scale with $a$ and $d$?",
+  "a": "$r_m^2 = \\frac{m\\lambda ad}{a+d}$."
  }
 },
 {

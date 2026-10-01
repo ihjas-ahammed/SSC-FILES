@@ -1,0 +1,21 @@
+You are Antigravity working in the repository /home/ihjas/Documents/GitHub/SSC-FILES on the Optics study app at SSC-V4/optics. Work autonomously; do not ask questions; print ONE short status line after finishing each phase.
+
+GOAL: make the Optics content match the prescribed textbook. Find what the syllabus requires that the app is MISSING or gets INCONSISTENT with the textbook, extract those textbook parts, and update the content — MISSING or INCONSISTENT ONLY. Do not rewrite anything that is already correct.
+
+INPUTS
+- Syllabus: SSC-V2/SEM5/PHY/OPTICS.pdf (use `pdftotext -layout`). Modules I–IV, each unit lists "Sections … of Book 1/Book 2".
+- Book 1 = Ajoy Ghatak, Optics 6e: SSC-V2/SEM5/PHY/books/Optics by Ghatak.pdf (611 pages; printed section numbers like 14.3, 15.9 appear in the text; the PDF page offset differs from the printed page). Book 2 (Subrahmanyam, Brij Lal & Avadhanulu) is NOT available: for Module IV use the polarisation chapters of Ghatak that cover the same units, and say so in the report.
+- The app's current content: SSC-V4/optics/authoring/*.py (concepts m1–m4.concepts.py, exercises, objective, steps.py) and authoring/_concept_index.txt (id, section, kind, title). Read SSC-V4/optics/AUTHORING.md and SSC-V4/optics/HOOK.md first: they define the Python DSL (raw strings, single backslashes), the ids rule (ids are permanent: append, never renumber), the sign convention (Cartesian, as Ghatak), and the plain-language rule for step meanings.
+
+PHASES (work in SSC-V4/optics/sources/, create it if missing)
+1. SYLLABUS MAP. Read the syllabus. Write sources/section_map.md: for every module and unit, the textbook sections required and the PDF page range where each section sits in Ghatak (search the text for the section heading; verify by reading a few lines). Print a status line.
+2. GAP REPORT. For every required textbook section, list what the book teaches (topics, derivations, worked examples, key formulas, numerical constants) and compare with what the app already has. Write sources/gap_report.md with, per syllabus unit: COVERED / PARTIAL / MISSING, and a separate list of INCONSISTENCIES with the textbook (a formula, notation, sign convention, definition or number that differs), each citing the textbook section and page. Only real findings. Also list "Diagrams to draw" for any new derivation.
+3. EXTRACT. Only for sections that have a gap or inconsistency, extract the exact page ranges with `pdftotext -layout -f N -l M` into sources/textbook/<section>.txt (raw text, kept for provenance).
+4. UPDATE CONTENT (missing/inconsistent only).
+   - MISSING topics: add new concepts in NEW files authoring/m1.extra.py … m4.extra.py using C(...) exactly as in authoring/m1.concepts.py (kind, tier 'core', statement, intuition, needs, traps, cards, proof with rungs when the book derives it). New ids continue the numbering of their section (e.g. c.2.3.5). Base every statement, formula and number on the extracted textbook text; quote worked-example numbers accurately.
+   - INCONSISTENCIES: correct them IN PLACE in the existing authoring file, keeping the id, and record each change in sources/SYNC_SUMMARY.md.
+   - For each NEW concept that has a proof, add an S(...) entry to authoring/steps.py: one plain-language meaning per step (1–3 sentences explaining what the step does and why, no restated notation). Use an existing diagram kind only if it truly matches; otherwise use NF(concept_id, step_index, 'needs a new diagram: <what to draw>') and list it under "Diagrams to draw". Use NS(concept_id, reason) when there is no simulation.
+   - Do NOT edit data/*.js (generated), theme, app code or anything outside authoring/ and sources/.
+5. VERIFY. From SSC-V4/optics run `python3 tools/author.py`, `node tools/check_tex.js` (0 errors) and `node tools/audit_optics.js`; fix every failure you caused. Then write sources/SYNC_SUMMARY.md: what was added (ids, titles, sections), what was corrected, what remains (e.g. diagrams to draw, Book 2 unavailable).
+
+RULES: never commit, push or deploy. Never invent physics or numbers that are not in the textbook. Keep the house style (raw strings, plain language). If a phase reveals nothing missing for a module, say so and move on.

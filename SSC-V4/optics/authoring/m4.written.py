@@ -51,9 +51,9 @@ W('q.op.4.06', '4.5', 5, 'Design of quarter- and half-wave plates from quartz', 
   r'''<p>Quartz has $n_e-n_o=0.0091$ at $589$ nm. Find (a) the least thickness of a quarter-wave plate, (b) the least thickness of a half-wave plate, and (c) the thickness of the next (multiple-order) quarter-wave plate that is $5$ quarter-waves thick.</p>''',
   ['c.4.5.1'],
   r'''<p>The path difference is $|n_e-n_o|\,t$; a QWP needs $\lambda/4$ (odd multiples also work), a HWP needs $\lambda/2$.</p>''',
-  r'''<p><b>(a)</b> $t=\dfrac{\lambda}{4|n_e-n_o|}=\dfrac{589\times10^{-9}}{4\times0.0091}=1.62\times10^{-5}$ m $=16\ \mu$m.</p>
-<p><b>(b)</b> $t=\dfrac{\lambda}{2|n_e-n_o|}=32\ \mu$m.</p>
-<p><b>(c)</b> A path difference of $(4m+1)\lambda/4$ still acts as a QWP; the first multiple-order one is $m=1$: $t=5\times16.2=81\ \mu$m (much easier to make and handle, but the retardation now depends far more strongly on wavelength and temperature).</p>''',
+  r'''<p><b>(a)</b> $t=\dfrac{\lambda}{4|n_e-n_o|}=\dfrac{589\times10^{-9}}{4\times0.0091}=1.62\times10^{-5}$ m $=16\ \mu\text{m}$.</p>
+<p><b>(b)</b> $t=\dfrac{\lambda}{2|n_e-n_o|}=32\ \mu\text{m}$.</p>
+<p><b>(c)</b> A path difference of $(4m+1)\lambda/4$ still acts as a QWP; the first multiple-order one is $m=1$: $t=5\times16.2=81\ \mu\text{m}$ (much easier to make and handle, but the retardation now depends far more strongly on wavelength and temperature).</p>''',
   'Using $|n_e-n_o|$ but forgetting the factor $4$ (or $2$): the plate needs a quarter (half) wavelength, not one wavelength.')
 
 W('q.op.4.07', '4.5', 5, 'Half- and quarter-wave plates acting on linear light', 'Subrahmanyam–Brij Lal–Avadhanulu §20.9 (standard exercise)',

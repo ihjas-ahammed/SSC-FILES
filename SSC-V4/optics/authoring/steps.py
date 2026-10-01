@@ -266,8 +266,46 @@ S('c.4.5.2', 'qwhwp', [1, 2, 3, 4], [
   "For a half-wave plate the delay flips the sign of one part. The direction of vibration is reflected in the plate's axis, which turns the plane of vibration through twice the angle it made with the axis."],
   sim='waveplate')
 
+S('c.4.6.3', None, [None, None, None, None], [
+  "We split a straight back-and-forth wiggle into two oppositely spinning wheels of equal radius turning at the same rate. Inside the material one wheel spins forward through space slightly faster than the other, because the material offers different resistance to right-handed and left-handed spirals.",
+  "Adding together the horizontal pushes from the two spinning wheels produces a single horizontal wiggle whose strength is scaled by how far out of step the two wheels have drifted. The rapid back-and-forth vibration continues at the average pace of the two waves.",
+  "Adding the vertical pushes gives another wiggle that vibrates in exact time with the horizontal one, but with an amplitude that depends on the sine of the accumulated drift angle instead of the cosine. Because both axes vibrate completely in synchrony, their combination never opens into an oval; it remains a pure straight line.",
+  "Taking the ratio of the vertical amplitude to the horizontal amplitude shows that the direction of the straight line has tilted by exactly half the phase difference accumulated between the two spinning wheels. Over any distance travelled, this tilt angle is proportional to the distance and to the difference between the two circular refractive indices."])
+
+S('c.1.1.5', 'fermat_stationary', [1, 2, 3, 4], [
+  "We write down the geometric distance travelled through both media as a function of the deflection angle at the center of curvature and expand the cosine up to its second power.",
+  "Differentiating the optical path with respect to the deflection angle gives the rate of change of travel time, which must vanish identically along any genuine physical ray path.",
+  "Setting the first derivative to zero identifies the position of the paraxial image point, and substituting this relation into the second derivative reveals how the path curvature scales with distance.",
+  "Checking the algebraic sign of the second derivative proves that paths before the focus are true minima, paths beyond the focus are local maxima, and paths at the exact conjugate image are perfectly stationary."])
+
+S('c.2.2.3', 'spatial_coherence', [1, 2, 3, 4], [
+  "We consider an independent emitting point displaced laterally across the source slit and compute the additional geometric path difference it introduces between the two primary slits.",
+  "Setting the net path difference to zero locates where the central interference maximum lands on the observation screen, demonstrating that the entire pattern shifts sideways.",
+  "Multiplying this transverse shift rate across the full width of the source slit gives the total displacement between the fringe patterns produced by its two opposite edges.",
+  "Requiring this total fringe displacement to remain strictly smaller than half a fringe width prevents opposing fringes from washing each other out, defining the spatial coherence threshold."])
+
+S('c.3.4.4', 'schuster', [1, 2, 3, 4], [
+  "We express the net optical disturbance at the observation point as an alternating series where each successive half-period zone contributes with an opposing sign.",
+  "We split the first zone contribution in half and regroup every intermediate zone amplitude with half of its two immediately adjacent neighbours in parentheses.",
+  "Because the obliquity factor changes smoothly and continuously, each intermediate zone amplitude closely equals the arithmetic average of its neighbours, causing every parenthesized difference to vanish.",
+  "Dropping the negligible boundary contribution from the distant outer edge leaves exactly half the amplitude of the central zone, meaning the whole unobstructed wavefront yields one quarter the intensity."])
+
+S('c.4.1.3', 'ellipse_axes', [1, 2, 3, 4], [
+  "We define a rotated coordinate system inclined at an unknown angle phi and write the standard transformation relating the original electric field components to the new axes.",
+  "We substitute these rotated components directly into the general second-order equation of the polarisation ellipse to transform the quadratic curve into the new reference frame.",
+  "We collect all terms multiplying the mixed product of the rotated coordinates and demand that this cross-coupling vanishes so that the new axes align with the principal ellipse directions.",
+  "Applying standard trigonometric double-angle formulas simplifies the vanishing cross-term condition into an explicit formula for the tangent of twice the tilt angle in terms of the amplitudes and phase difference."])
+
 # ── steps that need no picture, and proofs with no simulation — each with the reason ─────────────
 NF('c.1.4.1', 1, "clearing the denominators of the thin-lens formula is pure algebra; the picture is the one before and the one after")
+NF('c.4.6.3', 0, "needs a new diagram: Fresnel decomposition of linear polarization into counter-rotating circular components at z=0 and after propagating distance z")
+NF('c.4.6.3', 1, "needs a new diagram: Fresnel decomposition of linear polarization into counter-rotating circular components at z=0 and after propagating distance z")
+NF('c.4.6.3', 2, "needs a new diagram: Fresnel decomposition of linear polarization into counter-rotating circular components at z=0 and after propagating distance z")
+NF('c.4.6.3', 3, "needs a new diagram: Fresnel decomposition of linear polarization into counter-rotating circular components at z=0 and after propagating distance z")
 NS('c.1.1.4', "an exact geometric identity of the parabola (focus–directrix); the stage-by-stage diagram is the whole content")
 NS('c.2.5.3', "Stokes' relations follow from time-reversal of a single split; nothing continuous to vary")
-
+NS('c.4.6.3', "rotatory polarization is a static rotation of the plane of vibration; the stage-by-stage vector diagram is the whole content")
+NS('c.1.1.5', "calculus extremum classification of Fermat optical path length; the geometric ray diagram and derivative sign test provide the complete physics")
+NS('c.2.2.3', "spatial coherence criterion derived from geometric overlap of independent fringe patterns; static ray geometry and visibility threshold provide the complete picture")
+NS('c.3.4.4', "algebraic summation method for Fresnel half-period zones; the geometric zone diagram and algebraic regrouping provide the complete explanation")
+NS('c.4.1.3', "geometric orientation of principal ellipse axes; the rotated coordinate ellipse diagram provides the complete physical intuition")

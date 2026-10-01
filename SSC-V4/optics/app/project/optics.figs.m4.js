@@ -116,4 +116,96 @@
       g.text(245, 102, 'δ = π flips one component:', 't', 'middle'); g.text(245, 86, '(cosθ, sinθ) → (cosθ, −sinθ)', 't new', 'middle'); g.text(245, 64, 'plane turns through 2θ', 't big new', 'middle');
     }
   });
+
+  /* ── 4.1  tilt angle and principal axes of polarisation ellipse ──────── */
+  OFIG.add('ellipse_axes', {
+    w: 360, n: 4, alt: s => ['Polarisation ellipse in (Ex, Ey) frame with rotated coordinates (ξ, η) tilted by ϕ',
+      'General quadratic transformed to rotated frame: A E_ξ² + B E_η² + 2H E_ξ E_η = sin²δ',
+      'Vanishing cross term H = 0 aligns rotated axes with principal ellipse axes',
+      'Tilt angle of principal axes: tan 2ϕ = (2 a₁ a₂ cos δ) / (a₁² − a₂²)'][s - 1],
+    build(g, s) {
+      const O = [100, 82], phiDeg = 26, phiRad = phiDeg * D;
+      const cosP = Math.cos(phiRad), sinP = Math.sin(phiRad);
+      const a = 54, b = 24;
+
+      /* Ellipse points in rotated coordinate system */
+      const pts = [];
+      for (let i = 0; i <= 80; i += 1) {
+        const t = 2 * Math.PI * i / 80;
+        const xi = a * Math.cos(t), eta = b * Math.sin(t);
+        const x = xi * cosP - eta * sinP, y = xi * sinP + eta * cosP;
+        pts.push([O[0] + x, O[1] + y]);
+      }
+
+      /* Original (Ex, Ey) axes */
+      g.line(25, O[1], 175, O[1], 'k dash'); g.text(178, O[1] - 1, 'Eₓ', 't sym mute', 'start');
+      g.line(O[0], 18, O[0], 150, 'k dash'); g.text(O[0], 156, 'E_y', 't sym mute', 'middle');
+
+      /* Rotated (xi, eta) axes */
+      const lenXi = 78, lenEta = 48;
+      g.line(O[0] - lenXi * 0.8 * cosP, O[1] - lenXi * 0.8 * sinP, O[0] + lenXi * cosP, O[1] + lenXi * sinP, 'k' + (s === 1 ? ' new' : ''));
+      g.text(O[0] + (lenXi + 8) * cosP, O[1] + (lenXi + 8) * sinP, 'ξ', 't sym new');
+
+      g.line(O[0] - lenEta * 0.7 * (-sinP), O[1] - lenEta * 0.7 * cosP, O[0] + lenEta * (-sinP), O[1] + lenEta * cosP, 'k' + (s === 1 ? ' new' : ''));
+      g.text(O[0] + (lenEta + 8) * (-sinP), O[1] + (lenEta + 8) * cosP, 'η', 't sym new');
+
+      /* Tilt angle arc */
+      g.angle(O[0], O[1], 34, 0, phiDeg, 'ϕ', 'ang' + (s === 1 ? ' new' : ''));
+
+      /* Ellipse curve */
+      g.poline(pts, 'curve nofill');
+
+      const rx = 265;
+
+      if (s === 1) {
+        g.text(rx, 120, 'Rotated Frame (ϕ):', 't mute', 'middle');
+        g.text(rx, 98, 'Eₓ = E_ξ cosϕ − E_η sinϕ', 't new', 'middle');
+        g.text(rx, 76, 'E_y = E_ξ sinϕ + E_η cosϕ', 't new', 'middle');
+        g.text(rx, 48, 'goal: find angle ϕ to align', 't mute', 'middle');
+        g.text(rx, 34, 'axes with principal axes', 't mute', 'middle');
+        g.text(180, 156, 'Rotate coordinates by angle ϕ to align with ellipse', 't big new', 'middle');
+        g.text(180, 14, 'ellipse principal axes are tilted at angle ϕ to x-axis', 't mute', 'middle');
+      }
+
+      if (s === 2) {
+        /* Show a point on the ellipse */
+        const t0 = Math.PI / 4, xi0 = a * Math.cos(t0), eta0 = b * Math.sin(t0);
+        const pX = O[0] + xi0 * cosP - eta0 * sinP, pY = O[1] + xi0 * sinP + eta0 * cosP;
+        g.dot(pX, pY, 'pt new', 3.4); g.text(pX + 8, pY + 6, 'P', 't sym new');
+
+        g.text(rx, 124, 'General quadratic:', 't mute', 'middle');
+        g.text(rx, 106, 'Eₓ²/a₁² + E_y²/a₂²', 't sym', 'middle');
+        g.text(rx, 90, '− 2EₓE_y cosδ/a₁a₂ = sin²δ', 't sym', 'middle');
+        g.text(rx, 64, 'Rotated quadratic:', 't mute', 'middle');
+        g.text(rx, 46, 'A E_ξ² + B E_η² + 2H E_ξ E_η', 't big new', 'middle');
+        g.text(rx, 30, '= sin²δ  (cross term 2H)', 't new', 'middle');
+        g.text(180, 156, 'Substitute rotated coordinates into ellipse equation', 't big new', 'middle');
+        g.text(180, 14, 'quadratic in rotated frame contains cross term 2H', 't mute', 'middle');
+      }
+
+      if (s === 3) {
+        g.dim(O[0], O[1], O[0] + a * cosP, O[1] + a * sinP, 'a′', 0, 'dim new');
+        g.dim(O[0], O[1], O[0] - b * sinP, O[1] + b * cosP, 'b′', 0, 'dim new');
+
+        g.text(rx, 124, 'Principal axes condition:', 't mute', 'middle');
+        g.text(rx, 104, 'Cross term 2H = 0', 't big new', 'middle');
+        g.text(rx, 80, '(1/a₂² − 1/a₁²) sin 2ϕ', 't sym new', 'middle');
+        g.text(rx, 62, '= (2 cosδ / a₁a₂) cos 2ϕ', 't sym new', 'middle');
+        g.text(rx, 38, 'axes decouple into squares', 't mute', 'middle');
+        g.text(180, 156, 'Demand cross term vanishes: 2H = 0', 't big new', 'middle');
+        g.text(180, 14, 'when 2H = 0, axes align with major and minor axes', 't mute', 'middle');
+      }
+
+      if (s === 4) {
+        g.text(180, 156, 'tan 2ϕ = (2 a₁ a₂ cos δ) / (a₁² − a₂²)', 't big new', 'middle');
+        g.text(rx, 126, 'Special Cases:', 't big new', 'middle');
+        g.text(rx, 104, '• δ = π/2 ⇒ aligned axes', 't', 'middle');
+        g.text(rx, 88, '  axes lie along x and y', 't mute', 'middle');
+        g.text(rx, 66, '• a₁ = a₂ ⇒ axes at ±45°', 't new', 'middle');
+        g.text(rx, 50, '  circle if cosδ = 0', 't mute', 'middle');
+        g.text(rx, 28, '• δ = 0, π ⇒ collapses to line', 't mute', 'middle');
+        g.text(180, 14, 'major axis of ellipse is tilted at angle ϕ to x-axis', 't mute', 'middle');
+      }
+    }
+  });
 })();

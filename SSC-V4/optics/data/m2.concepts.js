@@ -419,15 +419,15 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Displacement of Fringes by a Transparent Plate",
- "oneLine": "A plate of index μ and thickness t over one slit shifts the whole pattern by (μ−1)tD/d toward the plate.",
- "statement": "A thin transparent plate of index $\\mu$ and thickness $t$ placed over one slit adds an optical path $(\\mu-1)t$ to that beam, so the fringe pattern shifts by\n$$\\boxed{\\Delta x=\\frac{(\\mu-1)\\,t\\,D}{d}}\\quad\\text{toward the covered slit.}$$\nThe fringe width $\\beta=\\lambda D/d$ is unchanged, so $\\Delta x/\\beta=(\\mu-1)t/\\lambda$ fringes cross the reference point.",
+ "oneLine": "A plate of index n and thickness t over one slit shifts the whole pattern by (n−1)tD/d toward the plate.",
+ "statement": "A thin transparent plate of index $n$ and thickness $t$ placed over one slit adds an optical path $(n-1)t$ to that beam, so the fringe pattern shifts by\n$$\\boxed{\\Delta y=\\frac{(n-1)\\,t\\,D}{d}}\\quad\\text{toward the covered slit.}$$\nThe fringe width $\\beta=\\lambda D/d$ is unchanged, so $\\Delta y/\\beta=(n-1)t/\\lambda$ fringes cross the reference point.",
  "intuition": "The plate delays one beam, so the point where the two beams are equal in optical path moves to where the other beam's geometric path is longer by the same amount — toward the covered side. This is the standard way to measure the thickness of a film or the index of a plate.",
  "needs": [
   "c.2.3.1"
  ],
  "figs": [],
  "traps": [
-  "Using $\\mu t$ instead of $(\\mu-1)t$: the plate <i>replaces</i> a thickness $t$ of air, so only the excess counts."
+  "Using $nt$ instead of $(n-1)t$: the plate <i>replaces</i> a thickness $t$ of air, so only the excess counts."
  ],
  "proof": {
   "idea": "Count the extra optical path the plate inserts and translate it to a screen displacement.",
@@ -435,7 +435,7 @@ CONCEPTS.push(
   "rungs": [
    {
     "why": "The plate's optical thickness replaces $t$ of air.",
-    "m": "$$\\text{extra optical path}=\\mu t-t=(\\mu-1)t$$",
+    "m": "$$\\text{extra optical path}=nt-t=(n-1)t$$",
     "meaning": "Light travels slower inside glass, so a slab of glass over one slit delays that beam as if it had travelled extra distance. Only the extra beyond the same thickness of air counts.",
     "fig": {
      "k": "plateshift",
@@ -444,7 +444,7 @@ CONCEPTS.push(
    },
    {
     "why": "The central bright fringe is now where the uncovered path is longer by exactly that amount.",
-    "m": "$$\\frac{d\\,\\Delta x}{D}=(\\mu-1)t$$",
+    "m": "$$\\frac{d\\,\\Delta y}{D}=(n-1)t$$",
     "meaning": "The old central fringe was where both beams had travelled equal distances. Now one beam is delayed, so the place where they balance again has to move toward the delayed beam's slit, where its route is shorter.",
     "fig": {
      "k": "plateshift",
@@ -453,7 +453,7 @@ CONCEPTS.push(
    },
    {
     "why": "Solve.",
-    "m": "$$\\Delta x=\\frac{(\\mu-1)tD}{d}$$",
+    "m": "$$\\Delta y=\\frac{(n-1)tD}{d}$$",
     "meaning": "Solving for that shift shows it is proportional to the plate's thickness and to how much the glass slows light. Counting how many fringes the pattern moves therefore measures the plate's thickness.",
     "fig": {
      "k": "plateshift",
@@ -461,17 +461,17 @@ CONCEPTS.push(
     }
    }
   ],
-  "ends": "$\\Delta x=(\\mu-1)tD/d$."
+  "ends": "$\\Delta y=(n-1)tD/d$."
  },
  "cards": [
   {
-   "q": "Give the fringe shift produced by a plate of index $\\mu$ and thickness $t$ over one slit.",
-   "a": "$\\Delta x=(\\mu-1)tD/d$ toward the covered slit, i.e. $(\\mu-1)t/\\lambda$ fringes.",
+   "q": "Give the fringe shift produced by a plate of index $n$ and thickness $t$ over one slit.",
+   "a": "$\\Delta y=(n-1)tD/d$ toward the covered slit, i.e. $(n-1)t/\\lambda$ fringes.",
    "kind": "state"
   },
   {
-   "q": "A mica sheet ($\\mu=1.58$) shifts the central fringe by 7 fringes for $\\lambda=590$ nm. Find its thickness.",
-   "a": "$t=7\\lambda/(\\mu-1)=7\\times590/0.58$ nm $\\approx7.1\\ \\mu$m.",
+   "q": "A mica sheet ($n=1.58$) shifts the central fringe by 7 fringes for $\\lambda=590$ nm. Find its thickness.",
+   "a": "$t=7\\lambda/(n-1)=7\\times590/0.58$ nm $\\approx7.1\\ \\mu\\text{m}$.",
    "kind": "recall"
   }
  ],
@@ -549,24 +549,24 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Fresnel's Biprism",
- "oneLine": "A biprism of angle α and index μ makes two virtual sources 2a(μ−1)α apart, so β = λ(a+b)/[2a(μ−1)α].",
- "statement": "A biprism is two thin prisms of small refracting angle $\\alpha$ base to base. A slit at distance $a$ in front of it is imaged as two virtual sources, each seen after a deviation $\\delta_{\\rm d}=(\\mu-1)\\alpha$:\n$$d=2a(\\mu-1)\\alpha,\\qquad D=a+b,\\qquad \\boxed{\\beta=\\frac{\\lambda(a+b)}{2a(\\mu-1)\\alpha}}$$\nMeasured $\\beta$, $a$, $b$ and $d$ give $\\lambda$; inserting a plate over one half gives its thickness (see the fringe-shift result).",
- "intuition": "A thin prism deviates every ray by the same angle $(\\mu-1)\\alpha$ for small angles, so the two halves look as if they came from two points displaced $a(\\mu-1)\\alpha$ each side of the slit. Nothing else is needed: it is Young's experiment with virtual slits.",
+ "oneLine": "A biprism of angle α and index n makes two virtual sources 2a(n−1)α apart, so β = λ(a+b)/[2a(n−1)α].",
+ "statement": "A biprism is two thin prisms of small refracting angle $\\alpha$ base to base. A slit at distance $a$ in front of it is imaged as two virtual sources, each seen after an angular deviation $\\delta_{\\rm d}=(n-1)\\alpha$:\n$$d=2a(n-1)\\alpha,\\qquad D=a+b,\\qquad \\boxed{\\beta=\\frac{\\lambda(a+b)}{2a(n-1)\\alpha}}$$\nMeasured $\\beta$, $a$, $b$ and $d$ give $\\lambda$; inserting a plate over one half gives its thickness (see the fringe-shift result).",
+ "intuition": "A thin prism deviates every ray by the same angle $(n-1)\\alpha$ for small angles, so the two halves look as if they came from two points displaced $a(n-1)\\alpha$ each side of the slit. Nothing else is needed: it is Young's experiment with virtual slits.",
  "needs": [
   "c.2.3.1",
   "c.2.4.1"
  ],
  "figs": [],
  "traps": [
-  "Using the full prism-deviation formula. It reduces to $(\\mu-1)\\alpha$ only for thin prisms and near-normal incidence."
+  "Using the full prism-deviation formula. It reduces to $(n-1)\\alpha$ only for thin prisms and near-normal incidence."
  ],
  "proof": {
   "idea": "Use the small-angle deviation of a thin prism to place the virtual sources.",
-  "why": "Deviation $(\\mu-1)\\alpha$ shifts each virtual source sideways by $a(\\mu-1)\\alpha$.",
+  "why": "Deviation $(n-1)\\alpha$ shifts each virtual source sideways by $a(n-1)\\alpha$.",
   "rungs": [
    {
     "why": "A ray through a thin prism of angle $\\alpha$ is deviated by",
-    "m": "$$\\delta_{\\rm d}=(\\mu-1)\\alpha$$",
+    "m": "$$\\delta_{\\rm d}=(n-1)\\alpha$$",
     "meaning": "A very thin prism bends every ray by the same small angle, wherever the ray enters. That angle depends only on the prism's angle and on how strongly the glass bends light.",
     "fig": {
      "k": "biprism",
@@ -575,7 +575,7 @@ CONCEPTS.push(
    },
    {
     "why": "Each half of the biprism makes a virtual source displaced sideways from $S$ by",
-    "m": "$$a\\,\\delta_{\\rm d}=a(\\mu-1)\\alpha$$",
+    "m": "$$a\\,\\delta_{\\rm d}=a(n-1)\\alpha$$",
     "meaning": "Looking back through each half of the biprism, the rays seem to come from a point shifted sideways from the real slit, by the distance to the biprism times the bending angle.",
     "fig": {
      "k": "biprism",
@@ -584,7 +584,7 @@ CONCEPTS.push(
    },
    {
     "why": "Separation of the two virtual sources.",
-    "m": "$$d=2a(\\mu-1)\\alpha$$",
+    "m": "$$d=2a(n-1)\\alpha$$",
     "meaning": "One half shifts the apparent source up and the other shifts it down, so the two apparent sources are twice that shift apart.",
     "fig": {
      "k": "biprism",
@@ -593,7 +593,7 @@ CONCEPTS.push(
    },
    {
     "why": "Screen at $D=a+b$; use $\\beta=\\lambda D/d$.",
-    "m": "$$\\beta=\\frac{\\lambda(a+b)}{2a(\\mu-1)\\alpha}$$",
+    "m": "$$\\beta=\\frac{\\lambda(a+b)}{2a(n-1)\\alpha}$$",
     "meaning": "Again we have two coherent sources and a screen, so Young's result gives the fringe width. The distance to the screen is measured from the sources, so it is the sum of the two distances.",
     "fig": {
      "k": "biprism",
@@ -606,7 +606,7 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "Give the source separation and fringe width for Fresnel's biprism.",
-   "a": "$d=2a(\\mu-1)\\alpha$, $\\beta=\\lambda(a+b)/[2a(\\mu-1)\\alpha]$.",
+   "a": "$d=2a(n-1)\\alpha$, $\\beta=\\lambda(a+b)/[2a(n-1)\\alpha]$.",
    "kind": "state"
   },
   {
@@ -749,9 +749,9 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Thin Parallel Film: the Cosine Law",
- "oneLine": "A film of thickness t and index μ gives an optical path difference 2μt cos θ_r between the first two reflected beams.",
- "statement": "For a film of thickness $t$ and index $\\mu$ in air, illuminated at angle of incidence $i$ (refraction angle $r$), the two beams reflected from top and bottom differ in optical path by\n$$\\boxed{\\Delta=2\\mu t\\cos r}$$\nIncluding the $\\pi$ phase change at the top surface:\n$$\\text{reflected bright: }2\\mu t\\cos r=(m+\\tfrac12)\\lambda,\\qquad\\text{reflected dark: }2\\mu t\\cos r=m\\lambda.$$\nThe transmitted pattern is complementary.",
- "intuition": "The beam that enters the film pays $2\\mu t/\\cos r$ for the round trip, but the other beam, reflected at the top, gets a head start along the wavefront. The head start is $2t\\tan r\\sin i$, and the net is the neat $2\\mu t\\cos r$. The additional $\\lambda/2$ is the phase flip on the top reflection.",
+ "oneLine": "A film of thickness d and index n gives an optical path difference 2nd cos r between the first two reflected beams.",
+ "statement": "For a film of thickness $d$ and index $n$ in air, illuminated at angle of incidence $i$ (refraction angle $r$), the two beams reflected from top and bottom differ in optical path by\n$$\\boxed{\\Delta=2nd\\cos r}$$\nIncluding the $\\pi$ phase change ($\\lambda/2$ path difference) at the rarer-to-denser reflection:\n$$\\text{reflected bright: }2nd\\cos r=(m+\\tfrac12)\\lambda,\\qquad\\text{reflected dark: }2nd\\cos r=m\\lambda.$$\nThe transmitted pattern is complementary (bright: $2nd\\cos r=m\\lambda$, dark: $2nd\\cos r=(m+\\tfrac12)\\lambda$).",
+ "intuition": "The beam that enters the film pays $2nd/\\cos r$ for the round trip, but the other beam, reflected at the top, gets a head start along the wavefront. The head start is $2d\\tan r\\sin i$, and the net is the neat $2nd\\cos r$. The additional $\\lambda/2$ is the phase flip on the top reflection.",
  "needs": [
   "c.2.5.3",
   "c.1.1.3"
@@ -767,8 +767,8 @@ CONCEPTS.push(
   "why": "Two rays are in phase if their optical paths to a common wavefront are equal.",
   "rungs": [
    {
-    "why": "Ray 1 reflects at the top at $B$; ray 2 refracts, reflects at the bottom at $C$ and re-emerges at $D$. Let $BD=2t\\tan r$ and $BC+CD=2t/\\cos r$.",
-    "m": "$$\\text{ray 2: }\\mu\\,(BC+CD)=\\frac{2\\mu t}{\\cos r}$$",
+    "why": "Ray 1 reflects at the top at $B$; ray 2 refracts, reflects at the bottom at $C$ and re-emerges at $D$. Let $BD=2d\\tan r$ and $BC+CD=2d/\\cos r$.",
+    "m": "$$\\text{ray 2: }n\\,(BC+CD)=\\frac{2nd}{\\cos r}$$",
     "meaning": "Two beams come back from a thin film: one bounces off the top, the other goes in, bounces off the bottom and comes out. We follow both and compare the two routes.",
     "fig": {
      "k": "film",
@@ -777,7 +777,7 @@ CONCEPTS.push(
    },
    {
     "why": "Ray 1 travels in air from $B$ to the perpendicular from $D$: $BN=BD\\sin i$.",
-    "m": "$$\\text{ray 1: }BN=2t\\tan r\\,\\sin i$$",
+    "m": "$$\\text{ray 1: }BN=2d\\tan r\\,\\sin i$$",
     "meaning": "To compare them fairly we stop the first beam at the point where the second beam re-emerges, because from there on they travel side by side. By then the first beam has covered a little more ground in air.",
     "fig": {
      "k": "film",
@@ -785,8 +785,8 @@ CONCEPTS.push(
     }
    },
    {
-    "why": "Use Snell's law $\\sin i=\\mu\\sin r$ and subtract.",
-    "m": "$$\\Delta=\\frac{2\\mu t}{\\cos r}-2\\mu t\\,\\frac{\\sin^{2}r}{\\cos r}=2\\mu t\\cos r$$",
+    "why": "Use Snell's law $\\sin i=n\\sin r$ and subtract.",
+    "m": "$$\\Delta=\\frac{2nd}{\\cos r}-2nd\\,\\frac{\\sin^{2}r}{\\cos r}=2nd\\cos r$$",
     "meaning": "Using the law of refraction the two route lengths combine into one neat result: film thickness times the film's index times the cosine of the angle inside the film.",
     "fig": {
      "k": "film",
@@ -795,7 +795,7 @@ CONCEPTS.push(
    },
    {
     "why": "Add the $\\pi$ phase change of the top reflection ($\\lambda/2$).",
-    "m": "$$\\text{bright: }2\\mu t\\cos r=(m+\\tfrac12)\\lambda;\\quad\\text{dark: }2\\mu t\\cos r=m\\lambda$$",
+    "m": "$$\\text{bright: }2nd\\cos r=(m+\\tfrac12)\\lambda;\\quad\\text{dark: }2nd\\cos r=m\\lambda$$",
     "meaning": "One of the two reflections turns the wave upside down, which counts as an extra half wavelength. It is why a very thin film looks dark rather than bright.",
     "fig": {
      "k": "film",
@@ -808,12 +808,12 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "State the optical path difference for a thin parallel film and the reflected-light conditions.",
-   "a": "$\\Delta=2\\mu t\\cos r$; bright when $2\\mu t\\cos r=(m+\\tfrac12)\\lambda$, dark when $=m\\lambda$.",
+   "a": "$\\Delta=2nd\\cos r$; bright when $2nd\\cos r=(m+\\tfrac12)\\lambda$, dark when $=m\\lambda$.",
    "kind": "state"
   },
   {
-   "q": "A soap film ($\\mu=1.33$) appears bright green ($500$ nm) at normal incidence. Find the least thickness.",
-   "a": "$2\\mu t=\\lambda/2\\Rightarrow t=500/(4\\times1.33)\\approx94$ nm.",
+   "q": "A soap film ($n=1.33$) appears bright green ($500$ nm) at normal incidence. Find the least thickness.",
+   "a": "$2nd=\\lambda/2\\Rightarrow d=500/(4\\times1.33)\\approx94$ nm.",
    "kind": "recall"
   }
  ],
@@ -826,14 +826,14 @@ CONCEPTS.push(
  "tier": "core",
  "title": "Non-Reflecting (Anti-Reflection) Coatings",
  "oneLine": "A quarter-wave layer of index √n_g cancels reflection at normal incidence.",
- "statement": "A film of index $n_f$ and thickness $t$ on glass of index $n_g$ (with $n_f<n_g$) makes the two reflected beams cancel at normal incidence when\n$$\\boxed{t=\\frac{\\lambda}{4n_f}},\\qquad \\boxed{n_f=\\sqrt{n_g}}$$\n(the second condition equalises the two amplitudes for complete cancellation). Magnesium fluoride ($n_f=1.38$) on crown glass ($n_g=1.52$) is the standard practical choice.",
- "intuition": "Both reflections (air→film and film→glass) are rarer→denser, so both flip and cancel their own phase changes; the round-trip path difference $2n_ft$ then has to be $\\lambda/2$ for destructive interference, giving $t=\\lambda/(4n_f)$. Cancelling the reflection sends the energy into the transmitted beam.",
+ "statement": "A film of index $n_f$ and thickness $d$ on glass of index $n_g$ (with $n_f<n_g$) makes the two reflected beams cancel at normal incidence when\n$$\\boxed{d=\\frac{\\lambda}{4n_f}},\\qquad \\boxed{n_f=\\sqrt{n_g}}$$\n(the second condition equalises the two amplitudes for complete cancellation). Magnesium fluoride ($n_f=1.38$) on crown glass ($n_g=1.52$) is the standard practical choice.",
+ "intuition": "Both reflections (air→film and film→glass) are rarer→denser, so both flip and cancel their own phase changes; the round-trip path difference $2n_fd$ then has to be $\\lambda/2$ for destructive interference, giving $d=\\lambda/(4n_f)$. Cancelling the reflection sends the energy into the transmitted beam.",
  "needs": [
   "c.2.6.1"
  ],
  "figs": [],
  "traps": [
-  "Assuming the coating works for every wavelength. $t=\\lambda/4n_f$ is exact for one design wavelength (green); the residual reflection gives lenses their purple tint.",
+  "Assuming the coating works for every wavelength. $d=\\lambda/(4n_f)$ is exact for one design wavelength (green); the residual reflection gives lenses their purple tint.",
   "Using $n_f>n_g$ (a high-index coating): then the top reflection flips but the bottom does not, and the condition changes."
  ],
  "proof": {
@@ -851,7 +851,7 @@ CONCEPTS.push(
    },
    {
     "why": "So the two beams cancel if the round-trip optical path is half a wavelength (odd multiple).",
-    "m": "$$2n_ft=\\frac\\lambda2\\;\\Rightarrow\\;t=\\frac{\\lambda}{4n_f}$$",
+    "m": "$$2n_fd=\\frac\\lambda2\\;\\Rightarrow\\;d=\\frac{\\lambda}{4n_f}$$",
     "meaning": "For the two reflections to cancel, the extra round trip must be half a wavelength, so the coating is a quarter of a wavelength thick, measured inside the material.",
     "fig": {
      "k": "arcoat",
@@ -868,17 +868,17 @@ CONCEPTS.push(
     }
    }
   ],
-  "ends": "$t=\\lambda/(4n_f)$ and $n_f=\\sqrt{n_g}$."
+  "ends": "$d=\\lambda/(4n_f)$ and $n_f=\\sqrt{n_g}$."
  },
  "cards": [
   {
    "q": "State the conditions for a single-layer non-reflecting coating.",
-   "a": "$t=\\lambda/(4n_f)$ (optical thickness a quarter wave) and $n_f=\\sqrt{n_g}$.",
+   "a": "$d=\\lambda/(4n_f)$ (optical thickness a quarter wave) and $n_f=\\sqrt{n_g}$.",
    "kind": "state"
   },
   {
    "q": "Find the thickness of a MgF$_2$ ($n_f=1.38$) coating for $550$ nm.",
-   "a": "$t=550/(4\\times1.38)\\approx100$ nm.",
+   "a": "$d=550/(4\\times1.38)\\approx100$ nm.",
    "kind": "recall"
   }
  ],
@@ -890,8 +890,8 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Multiple-Beam Reflectivity of a Dielectric Layer",
- "oneLine": "Summing all internal reflections gives R = (r₁² + r₂² + 2r₁r₂ cos δ)/(1 + r₁²r₂² + 2r₁r₂ cos δ), δ = 4πn_f t cos θ/λ.",
- "statement": "For a layer with amplitude reflection coefficients $r_1$ (top) and $r_2$ (bottom), the reflectivity including all internal reflections is\n$$\\boxed{R=\\frac{r_1^{2}+r_2^{2}+2r_1r_2\\cos\\delta}{1+r_1^{2}r_2^{2}+2r_1r_2\\cos\\delta}},\\qquad\\delta=\\frac{4\\pi n_ft\\cos\\theta}{\\lambda}.$$\n$R$ oscillates between $\\big(\\tfrac{r_1-r_2}{1-r_1r_2}\\big)^2$ and $\\big(\\tfrac{r_1+r_2}{1+r_1r_2}\\big)^2$; a quarter-wave layer gives an extremum.",
+ "oneLine": "Summing all internal reflections gives R = (r₁² + r₂² + 2r₁r₂ cos δ)/(1 + r₁²r₂² + 2r₁r₂ cos δ), δ = 4πn_f d cos θ/λ.",
+ "statement": "For a layer with amplitude reflection coefficients $r_1$ (top) and $r_2$ (bottom), the reflectivity including all internal reflections is\n$$\\boxed{R=\\frac{r_1^{2}+r_2^{2}+2r_1r_2\\cos\\delta}{1+r_1^{2}r_2^{2}+2r_1r_2\\cos\\delta}},\\qquad\\delta=\\frac{4\\pi n_fd\\cos\\theta}{\\lambda}.$$\n$R$ oscillates between $\\big(\\tfrac{r_1-r_2}{1-r_1r_2}\\big)^2$ and $\\big(\\tfrac{r_1+r_2}{1+r_1r_2}\\big)^2$; a quarter-wave layer gives an extremum.",
  "intuition": "Each pass through the film sends another ray out of the top, smaller by a factor $r_2r_1'$, and all those rays add as a geometric series in $e^{i\\delta}$. Two-beam theory (only the first two rays) is the $r\\ll1$ approximation.",
  "needs": [
   "c.2.6.1",
@@ -938,7 +938,7 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "Write the multiple-beam reflectivity of a single dielectric layer.",
-   "a": "$R=(r_1^2+r_2^2+2r_1r_2\\cos\\delta)/(1+r_1^2r_2^2+2r_1r_2\\cos\\delta)$ with $\\delta=4\\pi n_ft\\cos\\theta/\\lambda$.",
+   "a": "$R=(r_1^2+r_2^2+2r_1r_2\\cos\\delta)/(1+r_1^2r_2^2+2r_1r_2\\cos\\delta)$ with $\\delta=4\\pi n_fd\\cos\\theta/\\lambda$.",
    "kind": "state"
   },
   {
@@ -955,24 +955,24 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Wedge-Shaped Film: Fringes of Equal Thickness",
- "oneLine": "A thin wedge of angle α gives straight fringes parallel to the edge with width β = λ/(2μα).",
- "statement": "For a thin wedge of small angle $\\alpha$ and index $\\mu$ viewed near normal incidence, the fringes (of equal thickness) are straight bands parallel to the edge with\n$$\\boxed{\\beta=\\frac{\\lambda}{2\\mu\\alpha}}.$$\nIn reflection the edge (zero thickness) is <b>dark</b>. For an air wedge holding a wire of diameter $t$ at distance $L$ from the edge, $\\beta=\\lambda/(2\\alpha)$ and\n$$t=\\frac{\\lambda L}{2\\beta}.$$",
- "intuition": "At each point the film is effectively parallel, so $2\\mu t\\,(x)=m\\lambda$ picks contours of constant thickness. Because $t=x\\alpha$ grows linearly from the edge, the contours are equally spaced parallel lines, and one fringe corresponds to a thickness change of $\\lambda/2\\mu$.",
+ "oneLine": "A thin wedge of angle θ and index n gives straight fringes parallel to the edge with width β = λ/(2nθ).",
+ "statement": "For a thin wedge of small angle $\\theta$ and index $n$ viewed near normal incidence, the fringes (of equal thickness) are straight bands parallel to the edge with\n$$\\boxed{\\beta=\\frac{\\lambda}{2n\\theta}}.$$\nIn reflection the edge (zero thickness) is <b>dark</b>. For an air wedge ($n=1$) holding a wire of diameter $d_{\\rm w}$ at distance $L$ from the edge, $\\theta=d_{\\rm w}/L$, so $\\beta=\\lambda/(2\\theta)$ and\n$$d_{\\rm w}=\\frac{\\lambda L}{2\\beta}.$$",
+ "intuition": "At each point the film is effectively parallel, so $2nd\\,(x)=m\\lambda$ picks contours of constant thickness. Because $d=x\\theta$ grows linearly from the edge, the contours are equally spaced parallel lines, and one fringe corresponds to a thickness change of $\\lambda/2n$.",
  "needs": [
   "c.2.6.1"
  ],
  "figs": [],
  "traps": [
-  "Using $\\lambda$ instead of $\\lambda/\\mu$ for a film of index $\\mu$.",
+  "Using $\\lambda$ instead of $\\lambda/n$ for a film of index $n$.",
   "Forgetting that the edge is dark in reflection (the $\\pi$ from one reflection remains)."
  ],
  "proof": {
-  "idea": "Locate the dark fringes by $2\\mu t=m\\lambda$ with $t=x\\alpha$ and read off the spacing.",
+  "idea": "Locate the dark fringes by $2nd=m\\lambda$ with $d=x\\theta$ and read off the spacing.",
   "why": "Thickness is linear in $x$, so the fringe positions are linear in $m$.",
   "rungs": [
    {
     "why": "At normal incidence the reflected-dark condition (with the $\\pi$ change) is",
-    "m": "$$2\\mu t=m\\lambda$$",
+    "m": "$$2nd=m\\lambda$$",
     "meaning": "At each spot the film is almost flat, so the thin-film condition applies locally: the reflection is dark wherever the thickness is a whole number of half-wavelengths inside the material.",
     "fig": {
      "k": "wedge",
@@ -980,8 +980,8 @@ CONCEPTS.push(
     }
    },
    {
-    "why": "For a small wedge $t=x\\alpha$.",
-    "m": "$$x_m=\\frac{m\\lambda}{2\\mu\\alpha}$$",
+    "why": "For a small wedge $d=x\\theta$.",
+    "m": "$$x_m=\\frac{m\\lambda}{2n\\theta}$$",
     "meaning": "In a wedge the thickness grows steadily as you move away from the thin edge, in proportion to the distance times the wedge's tiny angle.",
     "fig": {
      "k": "wedge",
@@ -990,7 +990,7 @@ CONCEPTS.push(
    },
    {
     "why": "Spacing between successive dark fringes.",
-    "m": "$$\\beta=x_{m+1}-x_m=\\frac{\\lambda}{2\\mu\\alpha}$$",
+    "m": "$$\\beta=x_{m+1}-x_m=\\frac{\\lambda}{2n\\theta}$$",
     "meaning": "Since the thickness grows steadily, the dark bands are equally spaced. The spacing is one half-wavelength of extra thickness divided by the wedge angle — which is how something as thin as a hair can be measured.",
     "fig": {
      "k": "wedge",
@@ -998,17 +998,17 @@ CONCEPTS.push(
     }
    }
   ],
-  "ends": "$\\beta=\\lambda/(2\\mu\\alpha)$."
+  "ends": "$\\beta=\\lambda/(2n\\theta)$."
  },
  "cards": [
   {
    "q": "Give the fringe width for a thin wedge film.",
-   "a": "$\\beta=\\lambda/(2\\mu\\alpha)$ (air wedge: $\\lambda/2\\alpha$).",
+   "a": "$\\beta=\\lambda/(2n\\theta)$ (air wedge: $\\lambda/2\\theta$).",
    "kind": "state"
   },
   {
    "q": "A wire is placed between glass plates to form an air wedge; $L=10$ cm, $\\beta=0.5$ mm, $\\lambda=590$ nm. Find its diameter.",
-   "a": "$t=\\lambda L/(2\\beta)=590\\times10^{-9}\\times0.1/(2\\times5\\times10^{-4})=5.9\\times10^{-5}$ m $=59\\ \\mu$m.",
+   "a": "$d_{\\rm w}=\\lambda L/(2\\beta)=590\\times10^{-9}\\times0.1/(2\\times5\\times10^{-4})=5.9\\times10^{-5}$ m $=59\\ \\mu\\text{m}$.",
    "kind": "recall"
   }
  ],
@@ -1021,19 +1021,19 @@ CONCEPTS.push(
  "tier": "core",
  "title": "Colours of Thin Films",
  "oneLine": "A film in white light shows the colours whose wavelength satisfies the reflection condition at that thickness and angle.",
- "statement": "In white light, a film of thickness $t$ reflects strongly the wavelengths satisfying $2\\mu t\\cos r=(m+\\tfrac12)\\lambda$ and suppresses those with $2\\mu t\\cos r=m\\lambda$. The reflected colour is what remains: it changes with thickness (soap bubbles, oil on water) and with viewing angle. A film thinner than $\\lambda/4$ appears black in reflection because both conditions are dominated by the $\\pi$ phase change.",
+ "statement": "In white light, a film of thickness $d$ reflects strongly the wavelengths satisfying $2nd\\cos r=(m+\\tfrac12)\\lambda$ and suppresses those with $2nd\\cos r=m\\lambda$. The reflected colour is what remains: it changes with thickness (soap bubbles, oil on water) and with viewing angle. A film thinner than $\\lambda/4$ appears black in reflection because both conditions are dominated by the $\\pi$ phase change.",
  "intuition": "A thin film is a wavelength filter whose passband depends on the thickness. Vary the thickness across the film (a draining bubble) and you see bands of continuously changing colour, ending in black where the film is thinnest.",
  "needs": [
   "c.2.6.1"
  ],
  "figs": [],
  "traps": [
-  "Expecting colours from a very thick film: with $t\\gg L_c$ the fringes wash out because different wavelengths overlap over many orders."
+  "Expecting colours from a very thick film: with $d\\gg L_c$ the fringes wash out because different wavelengths overlap over many orders."
  ],
  "cards": [
   {
    "q": "Why does a very thin soap film look black in reflected light?",
-   "a": "For $t\\ll\\lambda$ the path difference $2\\mu t\\cos r\\to0$ and only the $\\pi$ phase change remains, giving destructive interference for all wavelengths.",
+   "a": "For $d\\ll\\lambda$ the path difference $2nd\\cos r\\to0$ and only the $\\pi$ phase change remains, giving destructive interference for all wavelengths.",
    "kind": "state"
   },
   {
@@ -1049,26 +1049,26 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Newton's Rings",
- "oneLine": "In reflected light the dark rings have radii r_n = √(nλR), diameters D_n² = 4nλR, with a dark centre.",
- "statement": "A plano-convex lens of radius of curvature $R$ resting on a flat plate makes a circular air film of thickness $t=r^2/(2R)$ at radius $r$. In reflected light\n$$\\boxed{r_n=\\sqrt{n\\lambda R}},\\qquad D_n^{2}=4n\\lambda R\\quad(\\text{dark rings}),$$\nand the centre ($t=0$) is dark. Bright rings: $r_n^{2}=(n-\\tfrac12)\\lambda R$. Between two dark rings of orders $m>n$,\n$$\\lambda=\\frac{D_m^{2}-D_n^{2}}{4(m-n)R}.$$\nIf the gap is filled with a liquid of index $\\mu$, $\\lambda\\to\\lambda/\\mu$.",
- "intuition": "This is a wedge with a curved profile, so the fringes are contours of equal air thickness — circles. Because $t\\propto r^2$, ring radii grow as $\\sqrt{n}$ and the rings crowd together outward. Measuring the diameters gives $\\lambda$ (if $R$ is known) or $R$ (if $\\lambda$ is known).",
+ "oneLine": "In reflected light the dark rings have radii r_m = √(mλR/n), diameters D_m² = 4mλR/n, with a dark centre.",
+ "statement": "A plano-convex lens of radius of curvature $R$ resting on a flat plate makes a circular film of thickness $d=r^2/(2R)$ at radius $r$. In reflected light in a medium of refractive index $n$ (air: $n=1$),\n$$\\boxed{r_m=\\sqrt{\\frac{m\\lambda R}{n}}},\\qquad D_m^{2}=\\frac{4m\\lambda R}{n}\\quad(\\text{dark rings}, m=0,1,2,\\dots),$$\nand the central point of contact ($m=0$) is dark. Bright rings: $r_m^{2}=(m+\\tfrac12)\\lambda R/n$. Between two dark rings of orders $m>p$,\n$$\\lambda=\\frac{n\\,(D_m^{2}-D_p^{2})}{4(m-p)R}.$$\nIf the gap is filled with a liquid of index $n$, the ring diameters shrink by $\\sqrt{n}$.",
+ "intuition": "This is a wedge with a curved profile, so the fringes are contours of equal air thickness — circles. Because $d\\propto r^2$, ring radii grow as $\\sqrt{m}$ and the rings crowd together outward. Measuring the diameters gives $\\lambda$ (if $R$ is known) or $R$ (if $\\lambda$ is known).",
  "needs": [
   "c.2.6.1",
   "c.2.7.1"
  ],
  "figs": [],
  "traps": [
-  "Using radius where the formula is for diameter: $D_n^2=4n\\lambda R$ and $r_n^2=n\\lambda R$.",
-  "Counting the centre as ring 1: the central spot is $n=0$.",
-  "Forgetting $\\lambda\\to\\lambda/\\mu$ when a liquid fills the gap."
+  "Using radius where the formula is for diameter: $D_m^2=4m\\lambda R/n$ and $r_m^2=m\\lambda R/n$.",
+  "Counting the centre as ring 1: the central spot is $m=0$.",
+  "Forgetting that ring diameters shrink by a factor of $\\sqrt{n}$ when a liquid of index $n$ fills the gap."
  ],
  "proof": {
-  "idea": "Find the air-film thickness at radius $r$ from the lens geometry, then apply the dark-ring condition.",
+  "idea": "Find the film thickness at radius $r$ from the lens geometry, then apply the dark-ring condition.",
   "why": "The film thickness is what sets the path difference at each radius.",
   "rungs": [
    {
-    "why": "At radius $r$, the air gap is $t$; from the circle of radius $R$: $r^2=R^2-(R-t)^2=2Rt-t^2\\simeq2Rt$.",
-    "m": "$$t=\\frac{r^{2}}{2R}$$",
+    "why": "At radius $r$, the film gap is $d$; from the circle of radius $R$: $r^2=R^2-(R-d)^2=2Rd-d^2\\simeq2Rd$.",
+    "m": "$$d=\\frac{r^{2}}{2R}$$",
     "meaning": "Under a curved lens the air gap grows as you move away from the centre. Using the geometry of a circle, the gap at a distance r from the centre is simply r squared divided by twice the radius of curvature.",
     "fig": {
      "k": "rings",
@@ -1076,8 +1076,8 @@ CONCEPTS.push(
     }
    },
    {
-    "why": "Reflected dark condition with the $\\pi$ change: $2t=n\\lambda$ (normal incidence, air).",
-    "m": "$$\\frac{r^{2}}{R}=n\\lambda\\;\\Rightarrow\\;r_n=\\sqrt{n\\lambda R}$$",
+    "why": "Reflected dark condition with the $\\pi$ change: $2nd=m\\lambda$ (normal incidence).",
+    "m": "$$\\frac{nr^{2}}{R}=m\\lambda\\;\\Rightarrow\\;r_m=\\sqrt{\\frac{m\\lambda R}{n}}$$",
     "meaning": "A dark ring appears wherever the round trip through the gap is a whole number of wavelengths, once the flip on one of the reflections is accounted for. Putting in the gap gives the ring radii.",
     "fig": {
      "k": "rings",
@@ -1086,7 +1086,7 @@ CONCEPTS.push(
    },
    {
     "why": "Diameters $D=2r$.",
-    "m": "$$D_n^{2}=4n\\lambda R$$",
+    "m": "$$D_m^{2}=\\frac{4m\\lambda R}{n}$$",
     "meaning": "Rings are usually measured across, not from the centre, so we double the radius. The square of a diameter then grows in equal steps from one ring to the next.",
     "fig": {
      "k": "rings",
@@ -1095,7 +1095,7 @@ CONCEPTS.push(
    },
    {
     "why": "Subtract two rings to eliminate the (unknown) offset from imperfect contact.",
-    "m": "$$D_m^{2}-D_n^{2}=4(m-n)\\lambda R\\;\\Rightarrow\\;\\lambda=\\frac{D_m^{2}-D_n^{2}}{4(m-n)R}$$",
+    "m": "$$D_m^{2}-D_p^{2}=\\frac{4(m-p)\\lambda R}{n}\\;\\Rightarrow\\;\\lambda=\\frac{n(D_m^{2}-D_p^{2})}{4(m-p)R}$$",
     "meaning": "The contact between lens and plate is never perfect, and that shifts every ring by the same amount. Subtracting two rings cancels that unknown, so the wavelength can be found without knowing the ring numbers exactly.",
     "fig": {
      "k": "rings",
@@ -1108,17 +1108,17 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "State the diameters of Newton's dark rings in reflected light.",
-   "a": "$D_n^2=4n\\lambda R$, so $D_n=2\\sqrt{n\\lambda R}$; the centre is dark.",
+   "a": "$D_m^2=4m\\lambda R/n$, so $D_m=2\\sqrt{m\\lambda R/n}$; the centre is dark.",
    "kind": "state"
   },
   {
-   "q": "Find the radius of the 10th dark ring for $R=0.68$ m and $\\lambda=589$ nm.",
+   "q": "Find the radius of the 10th dark ring for $R=0.68$ m and $\\lambda=589$ nm in air ($n=1$).",
    "a": "$r_{10}=\\sqrt{10\\times589\\times10^{-9}\\times0.68}=2.0\\times10^{-3}$ m $=2.0$ mm.",
    "kind": "recall"
   },
   {
    "q": "How is $\\lambda$ found from Newton's rings without knowing the ring order?",
-   "a": "$\\lambda=(D_m^2-D_n^2)/[4(m-n)R]$ from two measured diameters, $m-n$ counted.",
+   "a": "$\\lambda=n(D_m^2-D_p^2)/[4(m-p)R]$ from two measured diameters, $m-p$ counted.",
    "kind": "recall"
   }
  ],
@@ -1143,7 +1143,7 @@ CONCEPTS.push(
   "Forgetting the compensating plate: without it, white-light fringes are lost because the two arms have different glass paths."
  ],
  "proof": {
-  "idea": "Treat the two arms as one equivalent air film and use the parallel-film condition with $\\mu=1$.",
+  "idea": "Treat the two arms as one equivalent air film and use the parallel-film condition with $n=1$.",
   "why": "The interferometer is a thin-film interferometer in disguise.",
   "rungs": [
    {
@@ -1192,7 +1192,7 @@ CONCEPTS.push(
    "kind": "state"
   },
   {
-   "q": "How many fringes shift if the mirror moves $20\\ \\mu$m ($\\lambda=500$ nm)?",
+   "q": "How many fringes shift if the mirror moves 20 µm ($\\lambda=500$ nm)?",
    "a": "$N=2\\times20\\times10^{-6}/(500\\times10^{-9})=80$ fringes.",
    "kind": "recall"
   },
@@ -1211,8 +1211,8 @@ CONCEPTS.push(
  "tier": "core",
  "title": "Fringes of Equal Inclination and Equal Thickness",
  "oneLine": "A parallel film gives circular fringes of equal inclination (Haidinger); a wedge gives fringes of equal thickness.",
- "statement": "<b>Equal inclination (Haidinger fringes):</b> a plane-parallel film ($t$ constant) viewed with an extended source makes rings determined only by $\\cos r$; they are formed at infinity and seen with a lens.\n<b>Equal thickness:</b> a film whose thickness varies (wedge, Newton's rings) makes fringes following contours of constant $t$, seen localised near the film.",
- "intuition": "The condition $2\\mu t\\cos r=m\\lambda$ has two knobs: $t$ and $r$. Fix $t$ and it is a family of cones (rings) in direction; fix $r$ (near normal) and it is a family of contours in thickness. Which one you see is a matter of which of the two changes over the film.",
+ "statement": "<b>Equal inclination (Haidinger fringes):</b> a plane-parallel film ($d$ constant) viewed with an extended source makes rings determined only by $\\cos r$; they are formed at infinity and seen with a lens.\n<b>Equal thickness:</b> a film whose thickness varies (wedge, Newton's rings) makes fringes following contours of constant $d$, seen localised near the film.",
+ "intuition": "The condition $2nd\\cos r=m\\lambda$ has two knobs: $d$ and $r$. Fix $d$ and it is a family of cones (rings) in direction; fix $r$ (near normal) and it is a family of contours in thickness. Which one you see is a matter of which of the two changes over the film.",
  "needs": [
   "c.2.6.1",
   "c.2.7.1"

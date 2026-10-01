@@ -16,7 +16,7 @@
 
   /* ── 3.1  single slit ─────────────────────────────────────────────────── */
   OFIG.add('slit', {
-    w: 340, n: 4, alt: s => ['A slit of width a cut into strips; each strip sends a wavelet at angle θ', 'The strips add as an integral with phase kx sinθ',
+    w: 340, n: 4, alt: s => ['A slit of width b cut into strips; each strip sends a wavelet at angle θ', 'The strips add as an integral with phase kx sinθ',
       'The result: I = I₀ (sin β / β)²', 'Zeros where the phasor arc closes into a full circle'][s - 1],
     build(g, s) {
       if (s === 3) {
@@ -165,23 +165,23 @@
 
   /* ── 3.4  Fresnel zones ───────────────────────────────────────────────── */
   OFIG.add('zones', {
-    w: 340, n: 3, alt: s => ['Circles on the wavefront where the distance to P grows by λ/2', 'The right triangle b, r, b + nλ/2 gives r² ≈ nbλ', 'Every zone has the same area πbλ'][s - 1],
+    w: 340, n: 3, alt: s => ['Circles on the wavefront where the distance to P grows by λ/2', 'The right triangle d, r, d + mλ/2 gives r² ≈ mλd', 'Every zone has the same area πλd'][s - 1],
     build(g, s) {
       if (s === 3) {
         const c = [95, 85]; [1, 2, 3, 4, 5].forEach(k => g.circle(c[0], c[1], 22 * Math.sqrt(k), 'k nofill'));
         [[1, 2], [3, 4], [5, 5]].forEach(() => 0); g.dot(c[0], c[1], 'pt', 2.6);
         [1, 3, 5].forEach(k => g.text(c[0] + 22 * Math.sqrt(k - 0.5) - 2, c[1] + 4, String(k), 't mute')); [2, 4].forEach(k => g.text(c[0] + 22 * Math.sqrt(k - 0.5) - 2, c[1] + 4, String(k), 't mute'));
-        g.text(250, 118, 'rₙ = √(nbλ)', 't big new', 'middle'); g.text(250, 98, 'area of each zone', 't', 'middle'); g.text(250, 80, 'π(rₙ₊₁² − rₙ²) = πbλ', 't big new', 'middle');
+        g.text(250, 118, 'rₘ = √(mλd)', 't big new', 'middle'); g.text(250, 98, 'area of each zone', 't', 'middle'); g.text(250, 80, 'π(rₘ₊₁² − rₘ²) = πλd', 't big new', 'middle');
         return;
       }
       const wx = 70, b = 190, cy = 85;
       g.line(wx, 10, wx, 160, 'k thick'); g.text(wx, 166, 'plane wavefront', 't mute'); g.dot(wx + b, cy, 'pt new', 3.6); g.text(wx + b + 8, cy + 12, 'P', 't sym new');
-      g.line(wx, cy, wx + b, cy, 'k dash'); g.dim(wx, cy - 8, wx + b, cy - 8, 'b', 0, 'dim new');
+      g.line(wx, cy, wx + b, cy, 'k dash'); g.dim(wx, cy - 8, wx + b, cy - 8, 'd', 0, 'dim new');
       [1, 2, 3].forEach(function (n) {
         const rr = 30 * Math.sqrt(n); g.dot(wx, cy + rr, 'pt', 2.6); g.line(wx, cy + rr, wx + b, cy, 'r' + (n === 3 ? ' new' : '')); g.text(wx - 8, cy + rr, 'r' + ['₁', '₂', '₃'][n - 1], 't sym', 'end');
       });
-      if (s === 1) g.text(230, 148, 'b + nλ/2 to the nth circle', 't new', 'middle');
-      if (s === 2) { g.line(wx, cy, wx, cy + 70, 'r2 new'); g.text(230, 148, 'r² = (b + nλ/2)² − b² ≈ nbλ', 't new', 'middle'); }
+      if (s === 1) g.text(230, 148, 'd + mλ/2 to the mth circle', 't new', 'middle');
+      if (s === 2) { g.line(wx, cy, wx, cy + 70, 'r2 new'); g.text(230, 148, 'r² = (d + mλ/2)² − d² ≈ mλd', 't new', 'middle'); }
     }
   });
 
@@ -245,7 +245,7 @@
         g.dot(Pp[0], Pp[1], 'pt new', 3.6); g.text(Pp[0] + 8, Pp[1] - 2, 'P', 't sym new', 'start'); g.line(px, Pp[1], Pp[0], Pp[1], 'k dash');
         [yE - 8, yE + 30, yE + 60, yE + 90].forEach(function (y, k) { g.line(px, y, Pp[0], Pp[1], 'r' + (k === 1 ? ' new' : '')); g.dot(px, y, 'pt', 2.4); });
         g.dim(px + 20, Pp[1], px + 20, yE + 30, 'x', 0, 'dim new');
-        g.text(170, 12, 'extra path ≈ x²/2b: phase πv²/2', 't new', 'middle', 0, 0);
+        g.text(170, 12, 'extra path ≈ x²/2d: phase πv²/2', 't new', 'middle', 0, 0);
         return;
       }
       const org = [170, 85], sc = 88, sp = spiral(g, org, sc, 3.2, 'curve' + (s === 2 ? '' : ' old') + ' nofill');
@@ -270,6 +270,116 @@
       const P0 = s === 1 ? [org[0], org[1]] : P;
       g.arrow(lo[0], lo[1], P0[0], P0[1], 'r new', 1); g.dot(P0[0], P0[1], 'pt new', 4);
       g.text(170, 158, ['v = 0:  I = I₀/4  (distance² = ¼ of the full)', 'v ≈ 1.22:  I ≈ 1.37 I₀  (overshoot)', 'v → −∞:  arrow shrinks to zero, no fringes'][s - 1], 't big new', 'middle');
+    }
+  });
+
+  /* ── 3.4  Schuster's summation for Fresnel half-period zones ─────────── */
+  OFIG.add('schuster', {
+    w: 360, n: 4, alt: s => ['Alternating zone amplitudes u₁ − u₂ + u₃ − u₄ + … with monotonic decrease',
+      'Schuster regrouping: u₁/2 + (u₁/2 − u₂ + u₃/2) + (u₃/2 − u₄ + u₅/2) + …',
+      'Smooth obliquity factor ensures uₙ ≈ (uₙ₋₁ + uₙ₊₁)/2, cancelling each bracket',
+      'Resultant amplitude u = u₁/2 and intensity I = I₁/4 of the first zone'][s - 1],
+    build(g, s) {
+      if (s === 4) {
+        g.text(180, 156, 'Resultant: amplitude u = u₁/2   and   intensity I = I₁/4', 't big new', 'middle');
+
+        /* Panel 1: First zone alone */
+        const p1x = 90;
+        g.text(p1x, 134, 'First Zone Alone', 't mute', 'middle');
+        g.rect(50, 35, 70, 115, 'fillk');
+        g.text(60, 122, 'u₁', 't sym', 'middle');
+        g.dim(40, 35, 40, 115, 'u₁', 0, 'dim');
+        g.rect(90, 45, 140, 95, 'fillw');
+        g.text(115, 70, 'I₁ = u₁²', 't sym', 'middle');
+
+        /* Panel 2: Entire wavefront */
+        const p2x = 250;
+        g.text(p2x, 134, 'Entire Wavefront', 't new', 'middle');
+        g.rect(210, 35, 230, 75, 'fillk new');
+        g.text(220, 82, 'u₁/2', 't sym new', 'middle');
+        g.dim(200, 35, 200, 75, 'u₁/2', 0, 'dim new');
+        g.rect(245, 45, 270, 70, 'fillg new');
+        g.text(296, 58, 'I = I₁/4', 't big new', 'start');
+
+        g.text(180, 16, 'entire wavefront yields u = u₁/2 and I = I₁/4', 't big new', 'middle');
+        return;
+      }
+
+      if (s === 3) {
+        g.text(180, 156, 'uₙ ≈ arithmetic mean of its neighbours', 't big new', 'middle');
+
+        /* Geometry plot on the left showing chord midpoint vs curve */
+        const bx0 = 35, bx1 = 175, by0 = 35, by1 = 125;
+        g.line(bx0, by0, bx1, by0, 'k'); g.line(bx0, by0, bx0, by1 + 5, 'k');
+        g.text(bx1, by0 - 11, 'n', 't sym mute', 'end'); g.text(bx0 - 5, by1 + 5, 'uₙ', 't sym mute', 'end');
+
+        const pts = [];
+        for (let x = 0; x <= 130; x += 3) {
+          const n = 1 + x / 35;
+          const y = by0 + 85 - 18 * (n - 1) + 1.2 * (n - 1) * (n - 1);
+          pts.push([bx0 + x, y]);
+        }
+        g.poline(pts, 'curve old nofill');
+
+        /* 3 consecutive points: n=2, n=3, n=4 */
+        const pA = [bx0 + 35, by0 + 85 - 18 + 1.2], pB = [bx0 + 70, by0 + 85 - 36 + 4.8], pC = [bx0 + 105, by0 + 85 - 54 + 10.8];
+        g.line(pA[0], pA[1], pC[0], pC[1], 'k dash');
+        const chordMidY = (pA[1] + pC[1]) / 2;
+        g.dot(pA[0], pA[1], 'pt', 2.8); g.dot(pC[0], pC[1], 'pt', 2.8);
+        g.dot(pB[0], pB[1], 'pt new', 3.6); g.dot(pB[0], chordMidY, 'pt hollow', 3.2);
+
+        g.text(pA[0], by0 - 10, 'n−1', 't mute'); g.text(pB[0], by0 - 10, 'n', 't new'); g.text(pC[0], by0 - 10, 'n+1', 't mute');
+        g.text(pB[0] + 6, pB[1] + 10, 'uₙ ≈ ½(uₙ₋₁ + uₙ₊₁)', 't sym new', 'start');
+
+        /* Right panel with formulas */
+        const rx = 265;
+        g.text(rx, 122, 'Smooth obliquity factor:', 't mute', 'middle');
+        g.text(rx, 102, 'uₙ ≈ ½(uₙ₋₁ + uₙ₊₁)', 't big new', 'middle');
+        g.text(rx, 78, '⇒ ½uₙ₋₁ − uₙ + ½uₙ₊₁ ≈ 0', 't big new', 'middle');
+        g.text(rx, 54, 'every bracket cancels!', 't new', 'middle');
+
+        g.text(180, 16, 'Each group is approximately zero.', 't mute', 'middle');
+        return;
+      }
+
+      /* Stages 1 and 2: bar representations */
+      const base = 75, amps = [58, 52, 46, 40, 35, 30, 25];
+      g.line(20, base, 340, base, 'k');
+
+      if (s === 1) {
+        amps.forEach(function (a, k) {
+          const sg = k % 2 ? -1 : 1, x = 32 + k * 44;
+          g.rect(x, base, x + 26, base + sg * a, sg > 0 ? 'fillw new' : 'fillg new');
+          g.text(x + 13, base + (sg > 0 ? a + 11 : -a + 6), (sg > 0 ? '+u' : '−u') + (k + 1), 't sym new');
+        });
+        g.text(180, 156, 'u(P) = u₁ − u₂ + u₃ − u₄ + u₅ − …', 't big new', 'middle');
+        g.text(180, 16, 'Adjacent zones contribute opposite phases.', 't mute', 'middle');
+      }
+
+      if (s === 2) {
+        /* First zone split into u1/2 */
+        g.rect(32, base, 32 + 24, base + amps[0] / 2, 'fillk new');
+        g.text(32 + 12, base + amps[0] / 2 + 11, 'u₁/2', 't sym new', 'middle');
+
+        /* Group 1: (u1/2 - u2 + u3/2) */
+        g.rect(72, base - 56, 178, base + 34, 'fillk');
+        g.rect(78, base, 78 + 20, base + amps[0] / 2, 'fillw');
+        g.rect(106, base - amps[1], 106 + 22, base, 'fillg');
+        g.rect(136, base, 136 + 20, base + amps[2] / 2, 'fillw');
+        g.text(125, base + 42, '(u₁/2 − u₂ + u₃/2)', 't sym new', 'middle');
+
+        /* Group 2: (u3/2 - u4 + u5/2) */
+        g.rect(194, base - 46, 300, base + 28, 'fillk');
+        g.rect(200, base, 200 + 20, base + amps[2] / 2, 'fillw');
+        g.rect(228, base - amps[3], 228 + 22, base, 'fillg');
+        g.rect(258, base, 258 + 20, base + amps[4] / 2, 'fillw');
+        g.text(247, base + 36, '(u₃/2 − u₄ + u₅/2)', 't sym new', 'middle');
+
+        g.text(324, base + 14, '+ …', 't sym mute');
+
+        g.text(180, 156, 'u = u₁/2 + (u₁/2 − u₂ + u₃/2) + (u₃/2 − u₄ + u₅/2) + …', 't big new', 'middle');
+        g.text(180, 16, 'Split odd zones; regroup the series.', 't new', 'middle');
+      }
     }
   });
 })();

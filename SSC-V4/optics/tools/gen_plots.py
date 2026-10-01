@@ -77,27 +77,27 @@ def single_slit(theme):
         v = float(sinc2(np.array([s * np.pi]))[0])
         ax.plot([s], [v], 'o', color=t['c'], ms=4)
     ax.text(1.5, 0.085, '4.7%', color=t['c'], ha='center', fontsize=8)
-    ax.set_xlabel('$\\beta/\\pi = a\\sin\\theta/\\lambda$')
+    ax.set_xlabel('$\\beta/\\pi = b\\sin\\theta/\\lambda$')
     ax.set_ylabel('$I/I_0$')
-    ax.set_title('Single slit: $I=I_0(\\sin\\beta/\\beta)^2$, minima at $a\\sin\\theta=m\\lambda$', fontsize=10)
+    ax.set_title('Single slit: $I=I_0(\\sin\\beta/\\beta)^2$, minima at $b\\sin\\theta=m\\lambda$', fontsize=10)
     save(f, 'c.3.1.3', 'single_slit_intensity', theme)
 
 
 def double_slit(theme):
     f, ax, t = fig(theme)
-    s = np.linspace(-4, 4, 4000)              # s = a sin(theta)/lambda ; d = 3a
+    s = np.linspace(-4, 4, 4000)              # s = b sin(theta)/lambda ; d = 3b
     d_over_a = 3
     beta = np.pi * s
     gam = np.pi * d_over_a * s
     I = 4 * sinc2(beta) * np.cos(gam) ** 2
     ax.plot(s, 4 * sinc2(beta), color=t['b'], lw=1.4, ls='--', label='single-slit envelope')
-    ax.plot(s, I, color=t['a'], lw=1.6, label='two slits, $d=3a$')
+    ax.plot(s, I, color=t['a'], lw=1.6, label='two slits, $d=3b$')
     for m in (-1, 1):
         ax.annotate('missing\n$m=\\pm3$', xy=(m, 0.02), xytext=(m * 1.05, 0.9), color=t['c'], fontsize=8,
                     ha='center', arrowprops=dict(arrowstyle='->', color=t['c'], lw=.8))
-    ax.set_xlabel('$a\\sin\\theta/\\lambda$')
+    ax.set_xlabel('$b\\sin\\theta/\\lambda$')
     ax.set_ylabel('$I/I_0$')
-    ax.set_title('Two slits of width $a$, separation $d=3a$: fringes inside the envelope', fontsize=10)
+    ax.set_title('Two slits of width $b$, spacing $d=3b$: fringes inside the envelope', fontsize=10)
     ax.legend(facecolor=t['bg'], edgecolor=t['mute'], labelcolor=t['fg'], fontsize=8)
     save(f, 'c.3.2.1', 'double_slit_envelope', theme)
 

@@ -111,8 +111,8 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Polarisation by Reflection: Brewster's Law",
- "oneLine": "At the polarising angle θ_B, tan θ_B = n and the reflected and refracted rays are at 90°; the reflected light is fully polarised.",
- "statement": "Light incident at the <b>polarising (Brewster) angle</b> $\\theta_B$ on a transparent surface of index $n$ is reflected as completely plane-polarised light, with $\\mathbf E$ perpendicular to the plane of incidence (the reflected light has no component in the plane of incidence). This happens when\n$$\\boxed{\\tan\\theta_B=n},\\qquad\\text{and then }\\ \\theta_B+\\theta_r=90^\\circ$$\n(the reflected and refracted rays are perpendicular). For glass ($n=1.5$), $\\theta_B\\approx56.3^\\circ$.",
+ "oneLine": "At the polarising angle θ_B (or i_p), tan θ_B = tan i_p = n and the reflected and refracted rays are at 90°; the reflected light is fully polarised.",
+ "statement": "Light incident at the <b>polarising (Brewster) angle</b> $\\theta_B$ (also denoted $i_p$ or $\\theta_p$) on a transparent medium of refractive index $n$ is reflected as completely plane-polarised light, with $\\mathbf E$ perpendicular to the plane of incidence (the reflected light has no component in the plane of incidence). This occurs when\n$$\\boxed{\\tan\\theta_B=\\tan i_p=n},\\qquad\\text{and then }\\ \\theta_B+\\theta_r=90^\\circ$$\n(the reflected and refracted rays are perpendicular). For an interface between media of indices $n_1$ and $n_2$, $\\tan\\theta_p=n_2/n_1$. For glass in air ($n=1.5$), $\\theta_B\\approx56.3^\\circ$.",
  "intuition": "The reflected light comes from the oscillating charges in the second medium, and they radiate as dipoles: none is emitted along the dipole's axis. When the refracted ray is perpendicular to the reflected direction, the component of $\\mathbf E$ in the plane of incidence would have to make dipoles that vibrate along the reflected ray — and dipoles cannot radiate along their own axis.",
  "needs": [
   "c.1.1.3",
@@ -160,7 +160,7 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "State Brewster's law and the relation between the reflected and refracted rays at $\\theta_B$.",
-   "a": "$\\tan\\theta_B=n$; the reflected and refracted rays are at $90^\\circ$ to each other.",
+   "a": "$\\tan\\theta_B=\\tan i_p=n$; the reflected and refracted rays are at $90^\\circ$ to each other.",
    "kind": "state"
   },
   {
@@ -392,7 +392,7 @@ CONCEPTS.push(
  "tier": "core",
  "title": "Retardation (Wave) Plates: Quarter- and Half-Wave",
  "oneLine": "A plate cut parallel to the optic axis introduces a phase δ = 2π(n_o − n_e)t/λ; quarter-wave t = λ/(4|n_o−n_e|), half-wave t = λ/(2|n_o−n_e|).",
- "statement": "A crystal plate of thickness $t$ cut <b>parallel to the optic axis</b> transmits normally-incident light as two components (o and e) travelling with different speeds and emerging with phase difference\n$$\\delta=\\frac{2\\pi}{\\lambda}(n_o-n_e)\\,t.$$\nA <b>quarter-wave plate (QWP)</b> has $\\delta=\\pi/2$ (path difference $\\lambda/4$):\n$$t=\\frac{\\lambda}{4|n_o-n_e|};$$\na <b>half-wave plate (HWP)</b> has $\\delta=\\pi$ ($t=\\lambda/(2|n_o-n_e|)$). For quartz ($n_e-n_o=0.009$) at $589$ nm, $t_{\\rm QWP}\\approx16\\ \\mu$m (for the lowest order). A plate is exact for one wavelength.",
+ "statement": "A crystal plate of thickness $t$ cut <b>parallel to the optic axis</b> transmits normally-incident light as two components (o and e) travelling with different speeds and emerging with phase difference\n$$\\delta=\\frac{2\\pi}{\\lambda}(n_o-n_e)\\,t.$$\nA <b>quarter-wave plate (QWP)</b> has $\\delta=\\pi/2$ (path difference $\\lambda/4$):\n$$t=\\frac{\\lambda}{4|n_o-n_e|};$$\na <b>half-wave plate (HWP)</b> has $\\delta=\\pi$ ($t=\\lambda/(2|n_o-n_e|)$). For quartz ($n_e-n_o=0.009$) at $589$ nm, $t_{\\rm QWP}\\approx16\\ \\mu\\text{m}$ (for the lowest order). A plate is exact for one wavelength.",
  "intuition": "The two components of $\\mathbf E$ (along and across the optic axis) are two perpendicular vibrations in step at the entrance. One travels faster, so they emerge with phase difference $\\delta$ — exactly the knob that changes the polarisation ellipse. The plate is a $\\delta$-generator.",
  "needs": [
   "c.4.4.1",
@@ -445,7 +445,7 @@ CONCEPTS.push(
   },
   {
    "q": "Find the minimum thickness of a quartz QWP for $\\lambda=589$ nm ($n_e-n_o=0.0091$).",
-   "a": "$t=589/(4\\times0.0091)\\approx16.2\\ \\mu$m.",
+   "a": "$t=589/(4\\times0.0091)\\approx16.2\\ \\mu\\text{m}$.",
    "kind": "recall"
   }
  ],
@@ -587,28 +587,67 @@ CONCEPTS.push(
 {
  "id": "c.4.6.3",
  "sec": "4.6",
- "kind": "definition",
- "tier": "extra",
+ "kind": "theorem",
+ "tier": "core",
  "title": "Optical Activity and Specific Rotation",
- "oneLine": "Certain substances rotate the plane of polarisation; the rotation is proportional to path length and concentration: [α] = θ/(lc).",
- "statement": "<b>Optical activity</b> is the rotation of the plane of polarisation by a medium (quartz, sugar solutions). It arises because the medium has different indices $n_R,n_L$ for right and left circularly polarised light; the rotation after a length $l$ is\n$$\\theta=\\frac{\\pi l}{\\lambda}(n_L-n_R).$$\nFor a solution, the <b>specific rotation</b> is\n$$[\\alpha]=\\frac{\\theta}{l\\,c},$$\nwith $l$ in decimetres and $c$ in g cm$^{-3}$, at a specified wavelength and temperature.",
- "intuition": "Plane-polarised light is a sum of two counter-rotating circular components. If one travels faster, they get out of step and their sum is a plane that has turned. So optical activity is double refraction for circular rather than linear polarisation.",
+ "oneLine": "Substances rotate the plane of polarisation by θ = (πl/λ)(n_L − n_R); for solutions [α] = θ/(lc).",
+ "statement": "<b>Optical activity</b> (rotatory polarisation) is the rotation of the plane of polarisation by certain substances (such as quartz crystals, turpentine, and sugar solutions).\nFresnel explained this phenomenon by demonstrating that linearly polarised light behaves as a superposition of right-circularly polarised (RCP) and left-circularly polarised (LCP) waves propagating with distinct refractive indices $n_R$ and $n_L$. After traversing a distance $l$, the plane of polarisation rotates through\n$$\\boxed{\\theta = \\frac{\\pi l}{\\lambda_0}(n_L - n_R)}.$$\nIf $n_L > n_R$, the rotation is clockwise looking toward the source (<b>dextrorotatory</b> or right-handed, e.g. turpentine with $\\theta = +37^\\circ$ for $l = 10\\text{ cm}$); if $n_L < n_R$, the rotation is anticlockwise (<b>laevorotatory</b> or left-handed). In quartz along the optic axis, $n_L - n_R \\approx 7\\times 10^{-5}$, rotating sodium/orange light ($\\lambda_0 = 6000\\text{ \\AA}$) by $\\approx 21.0^\\circ$ ($21^\\circ 7'$) per millimetre ($l = 0.1\\text{ cm}$).\nFor an optically active solution, the <b>specific rotation</b> is\n$$[\\alpha]_\\lambda^T = \\frac{\\theta}{l\\,c},$$\nwhere $\\theta$ is the angle of rotation in degrees, $l$ is the length in decimetres ($1\\text{ dm} = 10\\text{ cm}$), and $c$ is the concentration in $\\text{g cm}^{-3}$.",
+ "intuition": "Plane-polarised light is the vector sum of two counter-rotating circular components of equal amplitude. In an optically isotropic medium both components travel at the same speed and their sum remains on the original line. In an optically active medium one circular mode travels faster than the other, introducing a continuous phase difference that rotates the axis along which the two circular vectors meet, turning the plane of polarisation steadily as the light advances.",
  "needs": [
   "c.4.1.2"
  ],
  "figs": [],
  "traps": [
-  "Forgetting that the rotation depends on wavelength (rotatory dispersion) and that the direction (dextro/laevo) is defined looking toward the source."
+  "Confusing decimetres with centimetres in the specific rotation formula $[\\alpha] = \\theta/(lc)$: the standard length unit is decimetres ($1\\text{ dm} = 10\\text{ cm}$).",
+  "Forgetting that the rotation direction (dextro vs laevo) is defined looking toward the source of light.",
+  "Omitting the factor of $1/2$ between the total relative phase difference $\\delta = \\frac{2\\pi l}{\\lambda_0}(n_L - n_R)$ and the geometric rotation of the plane of vibration $\\theta = \\delta/2$."
  ],
+ "proof": {
+  "idea": "Decompose incident linear light into counter-rotating circular modes with wavenumbers $k_R$ and $k_L$, propagate through distance $z$, and recombine.",
+  "why": "The modes of an optically active medium are circularly polarised states; their unequal speeds produce a relative phase delay that rotates the resultant linear plane.",
+  "rungs": [
+   {
+    "why": "Decompose incident linearly polarised light along the $x$-axis into right- and left-circularly polarised components of equal amplitude $E_0$. In the medium they propagate with wavenumbers $k_R = \\omega n_R/c$ and $k_L = \\omega n_L/c$.",
+    "m": "$$\\begin{aligned} E_{xR} &= E_0\\cos(k_R z - \\omega t), & E_{yR} &= E_0\\sin(k_R z - \\omega t) \\\\ E_{xL} &= E_0\\cos(k_L z - \\omega t), & E_{yL} &= -E_0\\sin(k_L z - \\omega t) \\end{aligned}$$",
+    "meaning": "We split a straight back-and-forth wiggle into two oppositely spinning wheels of equal radius turning at the same rate. Inside the material one wheel spins forward through space slightly faster than the other, because the material offers different resistance to right-handed and left-handed spirals."
+   },
+   {
+    "why": "Superpose the $x$-components using the cosine sum-to-product identity.",
+    "m": "$$E_x = E_{xR} + E_{xL} = 2E_0\\cos\\Big[\\frac{1}{2}(k_L - k_R)z\\Big]\\cos\\Big[\\omega t - \\frac{1}{2}(k_R + k_L)z\\Big]$$",
+    "meaning": "Adding together the horizontal pushes from the two spinning wheels produces a single horizontal wiggle whose strength is scaled by how far out of step the two wheels have drifted. The rapid back-and-forth vibration continues at the average pace of the two waves."
+   },
+   {
+    "why": "Superpose the $y$-components using the sine difference identity.",
+    "m": "$$E_y = E_{yR} + E_{yL} = 2E_0\\sin\\Big[\\frac{1}{2}(k_L - k_R)z\\Big]\\cos\\Big[\\omega t - \\frac{1}{2}(k_R + k_L)z\\Big]$$",
+    "meaning": "Adding the vertical pushes gives another wiggle that vibrates in exact time with the horizontal one, but with an amplitude that depends on the sine of the accumulated drift angle instead of the cosine. Because both axes vibrate completely in synchrony, their combination never opens into an oval; it remains a pure straight line."
+   },
+   {
+    "why": "Both components share the exact same time phase $\\cos[\\omega t - \\bar{k} z]$, showing the emergent wave is linearly polarised, with its plane rotated by angle $\\theta(z)$.",
+    "m": "$$\\tan\\theta = \\frac{E_y}{E_x} = \\tan\\Big[\\frac{1}{2}(k_L - k_R)z\\Big]\\;\\implies\\;\\theta = \\frac{1}{2}(k_L - k_R)z = \\frac{\\pi z}{\\lambda_0}(n_L - n_R)$$",
+    "meaning": "Taking the ratio of the vertical amplitude to the horizontal amplitude shows that the direction of the straight line has tilted by exactly half the phase difference accumulated between the two spinning wheels. Over any distance travelled, this tilt angle is proportional to the distance and to the difference between the two circular refractive indices."
+   }
+  ],
+  "ends": "Fresnel's formula for optical rotation."
+ },
  "cards": [
   {
-   "q": "Define specific rotation.",
-   "a": "$[\\alpha]=\\theta/(lc)$: rotation per decimetre of path per g cm$^{-3}$ of concentration.",
+   "q": "Define specific rotation and state its formula and units.",
+   "a": "$[\\alpha]_\\lambda^T = \\frac{\\theta}{l \\cdot c}$, where $\\theta$ is rotation in degrees, $l$ is path length in decimetres ($\\text{dm}$), and $c$ is concentration in $\\text{g cm}^{-3}$. Unit: $\\text{deg}\\cdot\\text{dm}^{-1}\\cdot\\text{g}^{-1}\\text{cm}^3$.",
    "kind": "state"
   },
   {
-   "q": "Why does a medium rotate the plane of polarisation?",
-   "a": "It has different indices for right and left circular components, so their relative phase changes with distance and the resultant plane turns.",
+   "q": "State Fresnel's formula for the angle of optical rotation in terms of circular refractive indices.",
+   "a": "$\\theta = \\frac{\\pi l}{\\lambda_0}(n_L - n_R)$; dextrorotatory if $n_L > n_R$ and laevorotatory if $n_L < n_R$.",
+   "kind": "recall"
+  },
+  {
+   "q": "Why does linearly polarised light rotate in an optically active medium according to Fresnel?",
+   "a": "Linear light resolves into equal RCP and LCP components; since $n_L \\neq n_R$, they travel at different speeds and accumulate a relative phase difference, rotating their resultant vibration plane.",
+   "kind": "recall"
+  },
+  {
+   "q": "For quartz along the optic axis, $n_L - n_R \\approx 7\\times 10^{-5}$ at $\\lambda_0 = 6000\\text{ \\AA}$. What is the rotation per millimetre?",
+   "a": "$\\theta = \\frac{\\pi \\times 10^{-3}}{6\\times 10^{-7}}\\times 7\\times 10^{-5}\\text{ rad} \\approx 0.3665\\text{ rad} \\approx 21.0^\\circ$ ($21^\\circ 7'$).",
    "kind": "recall"
   }
  ]

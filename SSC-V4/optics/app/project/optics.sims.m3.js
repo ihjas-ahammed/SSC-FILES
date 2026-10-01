@@ -8,8 +8,8 @@
   const sY = p => p.lam * 1e-3 / p.a;                                   /* first minimum, mm (λ nm, a mm, D = 1 m) */
   OSIM.add('slit', {
     title: 'diffraction by a single slit',
-    blurb: 'Narrow the slit and the pattern <b>spreads</b>; use longer light and it spreads too. The central bright band is bounded by the first dark spots at <b>a sinθ = λ</b>, so its width is 2λD/a.',
-    params: [{ k: 'a', label: 'slit width a (mm)', min: 0.05, max: 0.5, step: 0.01, value: 0.2, fmt: f2 }, { k: 'lam', label: 'wavelength λ (nm)', min: 400, max: 700, step: 10, value: 600, fmt: f0 }],
+    blurb: 'Narrow the slit and the pattern <b>spreads</b>; use longer light and it spreads too. The central bright band is bounded by the first dark spots at <b>b sinθ = λ</b>, so its width is 2λD/b.',
+    params: [{ k: 'a', label: 'slit width b (mm)', min: 0.05, max: 0.5, step: 0.01, value: 0.2, fmt: f2 }, { k: 'lam', label: 'wavelength λ (nm)', min: 400, max: 700, step: 10, value: 600, fmt: f0 }],
     watch: { k: 'a', from: 0.06, to: 0.45 },
     draw(g, p) {
       const win = 10, box = { x0: 30, x1: 310, y0: 46, y1: 100 }, pts = [], col = U.rgb(p.lam);
@@ -19,42 +19,42 @@
       const y1 = sY(p); if (y1 < win) g.dim(m.px(-y1), box.y0 - 26, m.px(y1), box.y0 - 26, 'central maximum ' + f1(2 * y1) + ' mm', 0, 'dim new');
       [-10, -5, 0, 5, 10].forEach(v => g.text(m.px(v), box.y0 - 12, v + '', 't mute')); g.text(box.x0, 154, 'screen, 1 m away: what you would see', 't mute', 'start'); g.text(box.x1, 106, 'intensity (mm from centre)', 't mute', 'end');
     },
-    read: p => [['first minimum', f2(sY(p)) + ' mm'], ['central width 2λD/a', f2(2 * sY(p)) + ' mm'], ['angle to 1st min', f2(Math.asin(p.lam * 1e-6 / p.a) / D) + '°']],
-    law: p => { const lam = p.lam * 1e-6; let lo = 0, hi = 5000; for (let i = 0; i < 70; i += 1) { const m = (lo + hi) / 2; if (p.a * m / Math.hypot(1000, m) < lam) lo = m; else hi = m; } return { lhs: (lo + hi) / 2, rhs: sY(p), text: 'the exact first zero (a sinθ = λ) is at ' + f3((lo + hi) / 2) + ' mm;  λD/a = ' + f3(sY(p)) + ' mm' }; },
+    read: p => [['first minimum', f2(sY(p)) + ' mm'], ['central width 2λD/b', f2(2 * sY(p)) + ' mm'], ['angle to 1st min', f2(Math.asin(p.lam * 1e-6 / p.a) / D) + '°']],
+    law: p => { const lam = p.lam * 1e-6; let lo = 0, hi = 5000; for (let i = 0; i < 70; i += 1) { const m = (lo + hi) / 2; if (p.a * m / Math.hypot(1000, m) < lam) lo = m; else hi = m; } return { lhs: (lo + hi) / 2, rhs: sY(p), text: 'the exact first zero (b sinθ = λ) is at ' + f3((lo + hi) / 2) + ' mm;  λD/b = ' + f3(sY(p)) + ' mm' }; },
     tasks: [
-      { lv: 1, type: 'num', setup: { a: 0.2, lam: 600 }, q: 'λ = 600 nm, slit a = 0.20 mm, screen 1.0 m away. How wide is the <b>central maximum</b>?', unit: 'mm', tol: { rel: 0.03 }, ans: p => 2 * sY(p),
-        why: (p, a) => 'First minima at ±λD/a = ±3.0 mm, so the central band is <b>' + f1(a) + ' mm</b> wide (twice the other bands).' },
-      { lv: 2, type: 'set', key: 'a', setup: { lam: 600 }, q: 'Drag <b>a</b> so that the central maximum is <b>12 mm</b> wide (λ = 600 nm, D = 1 m).', tol: { abs: 0.02 }, goal: p => 2 * p.lam * 1e-3 / 12,
-        why: (p, a) => 'a = 2λD/width = 2 × 600×10⁻⁹ × 1 / 0.012 = <b>' + f2(a) + ' mm</b>: half the width doubles the spread.' },
+      { lv: 1, type: 'num', setup: { a: 0.2, lam: 600 }, q: 'λ = 600 nm, slit b = 0.20 mm, screen 1.0 m away. How wide is the <b>central maximum</b>?', unit: 'mm', tol: { rel: 0.03 }, ans: p => 2 * sY(p),
+        why: (p, a) => 'First minima at ±λD/b = ±3.0 mm, so the central band is <b>' + f1(a) + ' mm</b> wide (twice the other bands).' },
+      { lv: 2, type: 'set', key: 'a', setup: { lam: 600 }, q: 'Drag <b>b</b> so that the central maximum is <b>12 mm</b> wide (λ = 600 nm, D = 1 m).', tol: { abs: 0.02 }, goal: p => 2 * p.lam * 1e-3 / 12,
+        why: (p, a) => 'b = 2λD/width = 2 × 600×10⁻⁹ × 1 / 0.012 = <b>' + f2(a) + ' mm</b>: half the width doubles the spread.' },
       { lv: 3, type: 'num', q: 'A slit of width 0.10 mm has its first minimum 5.9 mm from the centre on a screen 1.0 m away. What is the wavelength?', unit: 'nm', tol: { rel: 0.02 }, ans: () => 0.1 * 5.9 / 1000 * 1e6,
-        why: (p, a) => 'a sinθ = λ with sinθ ≈ y/D: λ = 0.10×10⁻³ × 5.9×10⁻³ / 1.0 = <b>' + f0(a) + ' nm</b>.' }
+        why: (p, a) => 'b sinθ = λ with sinθ ≈ y/D: λ = 0.10×10⁻³ × 5.9×10⁻³ / 1.0 = <b>' + f0(a) + ' nm</b>.' }
     ]
   });
 
   /* ── two slits under the single-slit envelope ────────────────────────── */
-  const dI = (s, r) => 4 * sinc2(Math.PI * s) * Math.pow(Math.cos(Math.PI * r * s), 2);        /* s = a sinθ/λ, r = d/a */
+  const dI = (s, r) => 4 * sinc2(Math.PI * s) * Math.pow(Math.cos(Math.PI * r * s), 2);        /* s = b sinθ/λ, r = d/b */
   OSIM.add('dslit', {
     title: 'two slits: fringes under an envelope',
-    blurb: 'The slit width <b>a</b> draws the broad envelope; the separation <b>d</b> draws the fine fringes inside it. When a fringe order lands on a dark spot of the envelope, that order is <b>missing</b>.',
-    params: [{ k: 'r', label: 'ratio d / a', min: 1, max: 6, step: 0.5, value: 3, fmt: f1 }],
+    blurb: 'The slit width <b>b</b> draws the broad envelope; the separation <b>d</b> draws the fine fringes inside it. When a fringe order lands on a dark spot of the envelope, that order is <b>missing</b>.',
+    params: [{ k: 'r', label: 'ratio d / b', min: 1, max: 6, step: 0.5, value: 3, fmt: f1 }],
     watch: { k: 'r', from: 1, to: 6 },
     draw(g, p) {
       const box = { x0: 30, x1: 310, y0: 40, y1: 140 }, pts = [], env = []; for (let i = 0; i <= 600; i += 1) { const s = -4 + 8 * i / 600; pts.push([s, dI(s, p.r)]); env.push([s, 4 * sinc2(Math.PI * s)]); }
       const m = U.plot(g, box, env, 'curve2', 4.1, 0); g.poline(pts.map(q => [m.px(q[0]), m.py(q[1])]), 'curve');
       for (let k = 1; k <= 4; k += 1) { const x = k, ok = Math.abs(p.r * x - Math.round(p.r * x)) < 1e-9; if (ok) g.dot(m.px(x), box.y0, 'pt new', 3.4), g.dot(m.px(-x), box.y0, 'pt new', 3.4); }
-      g.text(box.x0, box.y1 + 12, 'a sinθ / λ', 't mute', 'start');
+      g.text(box.x0, box.y1 + 12, 'b sinθ / λ', 't mute', 'start');
       const missing = []; for (let m2 = 1; m2 <= 12; m2 += 1) { const pth = m2 / p.r; if (Math.abs(pth - Math.round(pth)) < 1e-9 && Math.round(pth) >= 1) missing.push(m2); }
-      g.text(170, 24, missing.length ? 'missing orders: ' + missing.slice(0, 4).join(', ') + (missing.length > 4 ? ' …' : '') : 'no order is missing (d/a is not a whole number)', 't new', 'middle');
+      g.text(170, 24, missing.length ? 'missing orders: ' + missing.slice(0, 4).join(', ') + (missing.length > 4 ? ' …' : '') : 'no order is missing (d/b is not a whole number)', 't new', 'middle');
     },
-    read: p => [['d / a', f1(p.r)], ['fringes in the central band', f0(2 * Math.ceil(p.r) - 1)], ['first missing order', Math.abs(p.r - Math.round(p.r)) < 1e-9 ? f0(p.r) : (Math.abs(2 * p.r - Math.round(2 * p.r)) < 1e-9 ? f0(2 * p.r) : 'none nearby')]],
+    read: p => [['d / b', f1(p.r)], ['fringes in the central band', f0(2 * Math.ceil(p.r) - 1)], ['first missing order', Math.abs(p.r - Math.round(p.r)) < 1e-9 ? f0(p.r) : (Math.abs(2 * p.r - Math.round(2 * p.r)) < 1e-9 ? f0(2 * p.r) : 'none nearby')]],
     law: p => { const s = 0.37, K = 300; let re = 0, im = 0; for (const c of [-p.r / 2, p.r / 2]) for (let k = 0; k < K; k += 1) { const x = c + (-0.5 + (k + 0.5) / K); const ph = 2 * Math.PI * x * s; re += Math.cos(ph); im += Math.sin(ph); } return { lhs: (re * re + im * im) / (K * K), rhs: dI(s, p.r), text: 'summing 600 strips: I = ' + f4((re * re + im * im) / (K * K)) + ' = 4 sinc² cos² = ' + f4(dI(s, p.r)) }; },
     tasks: [
-      { lv: 1, type: 'num', setup: { r: 4 }, q: 'Slit separation d = 4a. Which fringe order is the <b>first missing</b>?', unit: 'order', tol: { abs: 0.01 }, ans: p => p.r,
-        why: (p, a) => 'Order m is missing when m = (d/a)·p for a whole number p: the first is p = 1, m = <b>' + f0(a) + '</b>.' },
-      { lv: 2, type: 'num', setup: { r: 5 }, q: 'With d = 5a, how many bright fringes lie inside the <b>central</b> diffraction maximum?', unit: 'fringes', tol: { abs: 0.01 }, ans: p => 2 * p.r - 1,
-        why: (p, a) => 'Orders ±5 fall on the envelope\'s first zeros, so the band holds m = 0, ±1 … ±4: 2d/a − 1 = <b>' + f0(a) + '</b>.' },
-      { lv: 3, type: 'set', key: 'r', q: 'Drag <b>d/a</b> so that the <b>3rd order</b> is the first missing one.', tol: { abs: 0.5 }, goal: () => 3,
-        why: () => 'm = (d/a)p with m = 3 at p = 1 needs <b>d/a = 3</b> — the third fringe then lies exactly on the first envelope zero.' }
+      { lv: 1, type: 'num', setup: { r: 4 }, q: 'Slit separation d = 4b. Which fringe order is the <b>first missing</b>?', unit: 'order', tol: { abs: 0.01 }, ans: p => p.r,
+        why: (p, a) => 'Order m is missing when m = (d/b)·p for a whole number p: the first is p = 1, m = <b>' + f0(a) + '</b>.' },
+      { lv: 2, type: 'num', setup: { r: 5 }, q: 'With d = 5b, how many bright fringes lie inside the <b>central</b> diffraction maximum?', unit: 'fringes', tol: { abs: 0.01 }, ans: p => 2 * p.r - 1,
+        why: (p, a) => 'Orders ±5 fall on the envelope\'s first zeros, so the band holds m = 0, ±1 … ±4: 2d/b − 1 = <b>' + f0(a) + '</b>.' },
+      { lv: 3, type: 'set', key: 'r', q: 'Drag <b>d/b</b> so that the <b>3rd order</b> is the first missing one.', tol: { abs: 0.5 }, goal: () => 3,
+        why: () => 'm = (d/b)p with m = 3 at p = 1 needs <b>d/b = 3</b> — the third fringe then lies exactly on the first envelope zero.' }
     ]
   });
 
@@ -87,11 +87,11 @@
   });
 
   /* ── Fresnel zones and a circular hole ───────────────────────────────── */
-  const zN = p => 2 * p.R * p.R / p.b;                                    /* zones exposed, λ = 500 nm, R mm, b m */
+  const zN = p => 2 * p.R * p.R / p.b;                                    /* zones exposed, λ = 500 nm, R mm, d m */
   OSIM.add('zones', {
     title: 'half-period zones and a circular hole',
-    blurb: 'A round hole lets through <b>n = R²/bλ</b> half-period zones. An odd number of open zones puts you on a bright spot (four times the unobstructed light); an even number puts you on a dark one.',
-    params: [{ k: 'R', label: 'hole radius R (mm)', min: 0.2, max: 2, step: 0.05, value: 1, fmt: f2 }, { k: 'b', label: 'screen distance b (m)', min: 0.2, max: 3, step: 0.05, value: 2, fmt: f2 }],
+    blurb: 'A round hole lets through <b>m = R²/dλ</b> half-period zones. An odd number of open zones puts you on a bright spot (four times the unobstructed light); an even number puts you on a dark one.',
+    params: [{ k: 'R', label: 'hole radius R (mm)', min: 0.2, max: 2, step: 0.05, value: 1, fmt: f2 }, { k: 'b', label: 'screen distance d (m)', min: 0.2, max: 3, step: 0.05, value: 2, fmt: f2 }],
     watch: { k: 'b', from: 0.3, to: 3 },
     draw(g, p) {
       const n = zN(p), c = [90, 85], sc = 60 / 2.0;
@@ -102,14 +102,14 @@
       g.rect(box.x0 - 4, box.y0, box.x0 + 22, box.y0 + I / 4 * (box.y1 - box.y0), 'fillk new'); g.text(box.x0 + 9, box.y1 + 12, 'I / I₀', 't sym'); g.text(box.x0 + 40, box.y0 + I / 4 * (box.y1 - box.y0) - 4, f2(I), 't big new', 'start');
       g.text(box.x0 + 40, box.y0 + 20, n % 2 < 1e-6 || Math.abs(n - Math.round(n)) > 0.05 ? '' : (Math.round(n) % 2 ? 'odd: bright' : 'even: dark'), 't', 'start');
     },
-    read: p => [['zones open n = R²/bλ', f2(zN(p))], ['I / I₀', f2(4 * Math.pow(Math.sin(Math.PI * zN(p) / 2), 2))], ['first zone radius', f2(Math.sqrt(p.b * 5e-7) * 1000) + ' mm']],
-    law: p => { const n = zN(p), K = 6000; let re = 0, im = 0; for (let k = 0; k < K; k += 1) { const v = n * (k + 0.5) / K; re += Math.cos(Math.PI * v) * n / K; im -= Math.sin(Math.PI * v) * n / K; } const I = Math.PI * Math.PI * (re * re + im * im); return { lhs: I, rhs: 4 * Math.pow(Math.sin(Math.PI * n / 2), 2), text: 'summing the wavelets over the hole: I/I₀ = ' + f3(I) + ' = 4 sin²(πn/2) = ' + f3(4 * Math.pow(Math.sin(Math.PI * n / 2), 2)) }; },
+    read: p => [['zones open m = R²/dλ', f2(zN(p))], ['I / I₀', f2(4 * Math.pow(Math.sin(Math.PI * zN(p) / 2), 2))], ['first zone radius', f2(Math.sqrt(p.b * 5e-7) * 1000) + ' mm']],
+    law: p => { const n = zN(p), K = 6000; let re = 0, im = 0; for (let k = 0; k < K; k += 1) { const v = n * (k + 0.5) / K; re += Math.cos(Math.PI * v) * n / K; im -= Math.sin(Math.PI * v) * n / K; } const I = Math.PI * Math.PI * (re * re + im * im); return { lhs: I, rhs: 4 * Math.pow(Math.sin(Math.PI * n / 2), 2), text: 'summing the wavelets over the hole: I/I₀ = ' + f3(I) + ' = 4 sin²(πm/2) = ' + f3(4 * Math.pow(Math.sin(Math.PI * n / 2), 2)) }; },
     tasks: [
-      { lv: 1, type: 'num', setup: { R: 1, b: 2 }, q: 'R = 1 mm, b = 2 m, λ = 500 nm: exactly one zone is open. What is the on-axis intensity relative to the unobstructed light I₀?', unit: '× I₀', tol: { abs: 0.1 }, ans: p => 4 * Math.pow(Math.sin(Math.PI * zN(p) / 2), 2),
-        why: (p, a) => 'n = R²/bλ = 1; the unobstructed wave has half the first zone\'s amplitude, so one zone alone is twice as strong: I = 4I₀ → <b>' + f0(a) + '</b>.' },
+      { lv: 1, type: 'num', setup: { R: 1, b: 2 }, q: 'R = 1 mm, d = 2 m, λ = 500 nm: exactly one zone is open. What is the on-axis intensity relative to the unobstructed light I₀?', unit: '× I₀', tol: { abs: 0.1 }, ans: p => 4 * Math.pow(Math.sin(Math.PI * zN(p) / 2), 2),
+        why: (p, a) => 'm = R²/dλ = 1; the unobstructed wave has half the first zone\'s amplitude, so one zone alone is twice as strong: I = 4I₀ → <b>' + f0(a) + '</b>.' },
       { lv: 2, type: 'set', key: 'b', setup: { R: 1 }, q: 'With R = 1 mm, drag the screen to the distance where <b>exactly two zones</b> are open (a dark centre).', tol: { abs: 0.05 }, goal: p => p.R * p.R * 1e-6 / (2 * 5e-7),
-        why: (p, a) => 'n = 2 → b = R²/(2λ) = <b>' + f2(a) + ' m</b>. The two zones cancel each other.' },
-      { lv: 3, type: 'num', q: 'Now block the light with an <b>opaque disc</b> of radius 1 mm at b = 2 m (λ = 500 nm) instead. What is the on-axis intensity relative to I₀?', unit: '× I₀', tol: { abs: 0.05 }, ans: () => 1,
+        why: (p, a) => 'm = 2 → d = R²/(2λ) = <b>' + f2(a) + ' m</b>. The two zones cancel each other.' },
+      { lv: 3, type: 'num', q: 'Now block the light with an <b>opaque disc</b> of radius 1 mm at d = 2 m (λ = 500 nm) instead. What is the on-axis intensity relative to I₀?', unit: '× I₀', tol: { abs: 0.05 }, ans: () => 1,
         why: () => 'The disc hides the first zone; the rest still add to about half of the next zone\'s amplitude ≈ half of A₁: the shadow\'s centre is as bright as if nothing were there, <b>≈ 1</b> — the Poisson spot.' }
     ]
   });

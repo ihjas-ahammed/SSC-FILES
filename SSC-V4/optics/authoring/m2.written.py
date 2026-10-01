@@ -7,12 +7,12 @@ W('q.op.2.01', '2.1', 4,
   'Ghatak 6e Problem 13.1',
   r'''<p>Standing waves are formed on a stretched string under a tension of $1\text{ N}$. The length of the string is $30\text{ cm}$ and it vibrates in $3$ loops. If the mass per unit length of the wire is $10\text{ mg/cm}$, calculate the frequency of the vibrations.</p>''',
   ['c.2.1.1'],
-  r'''Compute the wave speed on the string using $v = \sqrt{T/\mu}$ with consistent SI units, relate the loop count $p$ to wavelength via $\lambda = 2L/p$, and find the frequency $\nu = v/\lambda$.''',
+  r'''Compute the wave speed on the string using $v = \sqrt{T/\rho}$ ($\rho$ = mass per unit length) with consistent SI units, relate the loop count $p$ to wavelength via $\lambda = 2L/p$, and find the frequency $\nu = v/\lambda$.''',
   r'''<p>The wave speed on a stretched string is given by:
-$$v = \sqrt{\frac{T}{\mu}}$$
+$$v = \sqrt{\frac{T}{\rho}}$$
 Converting to SI units:
 $$T = 1\text{ N}$$
-$$\mu = 10\text{ mg/cm} = \frac{10 \times 10^{-6}\text{ kg}}{10^{-2}\text{ m}} = 10^{-3}\text{ kg/m}$$
+$$\rho = 10\text{ mg/cm} = \frac{10 \times 10^{-6}\text{ kg}}{10^{-2}\text{ m}} = 10^{-3}\text{ kg/m}$$
 $$v = \sqrt{\frac{1}{10^{-3}}} = \sqrt{1000} \approx 31.62\text{ m/s}$$</p>
 <p>A string of length $L$ vibrating in $p$ loops has a wavelength:
 $$\lambda = \frac{2L}{p}$$
@@ -530,19 +530,19 @@ W('q.op.2.24', '2.7', 4,
 <li>The entire apparatus is then immersed in an oil of refractive index $1.7$. Describe the qualitative change in the fringe pattern and compute the new fringe width.</li>
 </ol></p>''',
   ['c.2.7.1'],
-  r'''Convert the wedge angle to radians, apply $\beta = \lambda/(2n\alpha)$, and inspect the reflection phase changes when the medium between the plates changes from air to oil.''',
+  r'''Convert the wedge angle to radians, apply $\beta = \lambda/(2n\theta)$, and inspect the reflection phase changes when the medium between the plates changes from air to oil.''',
   r'''<p>1. <b>In air ($n_{\text{film}} = 1.0$):</b><br/>
 The wedge angle in radians is:
-$$\alpha = 0.5' = \frac{0.5}{60} \times \frac{\pi}{180}\text{ rad} \approx 1.4544 \times 10^{-4}\text{ rad}$$
+$$\theta = 0.5' = \frac{0.5}{60} \times \frac{\pi}{180}\text{ rad} \approx 1.4544 \times 10^{-4}\text{ rad}$$
 The fringe width for an air wedge is:
-$$\beta = \frac{\lambda}{2 n_{\text{air}} \alpha} = \frac{5000 \times 10^{-8}\text{ cm}}{2(1.0)(1.4544 \times 10^{-4})} \approx 0.1719\text{ cm} \approx 1.72\text{ mm}$$</p>
+$$\beta = \frac{\lambda}{2 n_{\text{air}} \theta} = \frac{5000 \times 10^{-8}\text{ cm}}{2(1.0)(1.4544 \times 10^{-4})} \approx 0.1719\text{ cm} \approx 1.72\text{ mm}$$</p>
 <p>2. <b>In oil ($n_{\text{oil}} = 1.7$):</b>
 <ul>
 <li><b>Refractive index condition:</b> The refractive indices now satisfy $n_1 < n_{\text{film}} < n_2$ ($1.6 < 1.7 < 1.8$). Light reflects at both the top (plate 1 to oil) and bottom (oil to plate 2) interfaces from an optically rarer medium toward a denser medium. Both reflections undergo an abrupt phase change of $\pi$. The relative reflection phase change is therefore:
 $$\Delta\phi = \pi - \pi = 0$$
 In an air film, only the bottom reflection undergoes a $\pi$ phase change, producing a dark fringe at the apex ($x = 0$). In the oil film, zero path difference gives constructive interference, so the contact edge becomes a bright fringe.</li>
 <li><b>New fringe width:</b>
-$$\beta' = \frac{\lambda}{2 n_{\text{oil}} \alpha} = \frac{\beta}{n_{\text{oil}}} = \frac{0.1719\text{ cm}}{1.7} \approx 0.1011\text{ cm} \approx 1.01\text{ mm}$$</li>
+$$\beta' = \frac{\lambda}{2 n_{\text{oil}} \theta} = \frac{\beta}{n_{\text{oil}}} = \frac{0.1719\text{ cm}}{1.7} \approx 0.1011\text{ cm} \approx 1.01\text{ mm}$$</li>
 </ul></p>''',
   trap=r'Forgetting that when $n_1 < n_{\text{film}} < n_2$, both reflections introduce a $\pi$ phase shift, which flips the contact edge from dark to bright.')
 
@@ -551,16 +551,16 @@ W('q.op.2.25', '2.7', 4,
   'Ghatak 6e Problem 15.2',
   r'''<p>Two plane glass plates are placed on top of one another. A thin spacer is inserted at one edge to create a wedge-shaped air film. When illuminated normally with $\lambda = 6000\text{ \AA}$, $100$ interference fringes are observed per centimeter. Calculate the wedge angle.</p>''',
   ['c.2.7.1'],
-  r'''Determine fringe width $\beta$ from the fringe density ($1\text{ cm}/100$), then use $\beta = \lambda/(2\alpha)$ to solve for the wedge angle $\alpha$.''',
+  r'''Determine fringe width $\beta$ from the fringe density ($1\text{ cm}/100$), then use $\beta = \lambda/(2\theta)$ to solve for the wedge angle $\theta$.''',
   r'''<p>The fringe width $\beta$ is:
 $$\beta = \frac{1\text{ cm}}{100} = 0.01\text{ cm} = 10^{-4}\text{ m}$$
 From the wedge formula for an air film ($n = 1$):
-$$\beta = \frac{\lambda}{2\alpha} \implies \alpha = \frac{\lambda}{2\beta}$$
+$$\beta = \frac{\lambda}{2\theta} \implies \theta = \frac{\lambda}{2\beta}$$
 Given $\lambda = 6000 \times 10^{-8}\text{ cm} = 6 \times 10^{-5}\text{ cm}$:
-$$\alpha = \frac{6 \times 10^{-5}\text{ cm}}{2(0.01\text{ cm})} = 3 \times 10^{-3}\text{ rad}$$
+$$\theta = \frac{6 \times 10^{-5}\text{ cm}}{2(0.01\text{ cm})} = 3 \times 10^{-3}\text{ rad}$$
 Converting to degrees:
-$$\alpha = 3 \times 10^{-3} \times \frac{180^\circ}{\pi} \approx 0.172^\circ \approx 10.3'$$</p>''',
-  trap=r'Missing the factor of $2$ in the denominator of the wedge angle formula $\alpha = \lambda/(2\beta)$.')
+$$\theta = 3 \times 10^{-3} \times \frac{180^\circ}{\pi} \approx 0.172^\circ \approx 10.3'$$</p>''',
+  trap=r'Missing the factor of $2$ in the denominator of the wedge angle formula $\theta = \lambda/(2\beta)$.')
 
 # ── 2.7 Newton's rings ──────────────────────────────────────────────────────
 
@@ -611,20 +611,20 @@ W('q.op.2.27', '2.7', 4,
 <li>If the lens is raised vertically, find the distance the lens must travel upward for the central region of the fringe system to first disappear.</li>
 </ol></p>''',
   ['c.2.7.3'],
-  r'''Set the path difference condition for coincidence of bright and dark rings $2t \approx \lambda^2/(2\Delta\lambda)$, relate $2t = r^2/R$ for radial position, and equate $2t_0 = \lambda^2/(2\Delta\lambda)$ for central washout.''',
+  r'''Set the path difference condition for coincidence of bright and dark rings $2d \approx \lambda^2/(2\Delta\lambda)$, relate $2d = r^2/R$ for radial position, and equate $2d_0 = \lambda^2/(2\Delta\lambda)$ for central washout.''',
   r'''<p>1. <b>Radial position of disappearance:</b><br/>
 The rings wash out when the bright rings of $\lambda_1$ fall directly on the dark rings of $\lambda_2$:
-$$2t = m \lambda_1 = \left(m + \frac{1}{2}\right)\lambda_2$$
-$$2t\left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = \frac{1}{2} \implies 2t \frac{\Delta\lambda}{\lambda_1 \lambda_2} = \frac{1}{2} \implies 2t \approx \frac{\lambda^2}{2\Delta\lambda}$$
+$$2d = m \lambda_1 = \left(m + \frac{1}{2}\right)\lambda_2$$
+$$2d\left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = \frac{1}{2} \implies 2d \frac{\Delta\lambda}{\lambda_1 \lambda_2} = \frac{1}{2} \implies 2d \approx \frac{\lambda^2}{2\Delta\lambda}$$
 For $\lambda \approx 4000\text{ \AA} = 4 \times 10^{-5}\text{ cm}$ and $\Delta\lambda = 2\text{ \AA} = 2 \times 10^{-8}\text{ cm}$:
-$$2t = \frac{(4 \times 10^{-5}\text{ cm})^2}{2(2 \times 10^{-8}\text{ cm})} = \frac{1.6 \times 10^{-9}}{4 \times 10^{-8}} = 0.04\text{ cm}$$
-The film thickness is related to the radial position by $2t = \frac{r^2}{R}$. Therefore:
-$$r^2 = 2t R = (0.04\text{ cm})(400\text{ cm}) = 16\text{ cm}^2 \implies r = 4.0\text{ cm}$$</p>
+$$2d = \frac{(4 \times 10^{-5}\text{ cm})^2}{2(2 \times 10^{-8}\text{ cm})} = \frac{1.6 \times 10^{-9}}{4 \times 10^{-8}} = 0.04\text{ cm}$$
+The film thickness is related to the radial position by $2d = \frac{r^2}{R}$. Therefore:
+$$r^2 = 2d R = (0.04\text{ cm})(400\text{ cm}) = 16\text{ cm}^2 \implies r = 4.0\text{ cm}$$</p>
 <p>2. <b>Vertical displacement of the lens:</b><br/>
-When the lens is raised by $t_0$, the air gap at the center is $t_0$, so the round-trip path length is $2t_0$. The fringes at the center wash out when:
-$$2t_0\left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = \frac{1}{2} \implies t_0 = \frac{\lambda^2}{4\Delta\lambda}$$
-$$t_0 = \frac{(4 \times 10^{-5}\text{ cm})^2}{4(2 \times 10^{-8}\text{ cm})} = \frac{1.6 \times 10^{-9}}{8 \times 10^{-8}} = 0.02\text{ cm} = 0.2\text{ mm}$$</p>''',
-  trap=r'Confusing the round-trip path change $2t_0$ with the vertical displacement of the lens $t_0$, leading to a factor of $2$ error in lens lift.')
+When the lens is raised by $d_0$, the air gap at the center is $d_0$, so the round-trip path length is $2d_0$. The fringes at the center wash out when:
+$$2d_0\left(\frac{1}{\lambda_1} - \frac{1}{\lambda_2}\right) = \frac{1}{2} \implies d_0 = \frac{\lambda^2}{4\Delta\lambda}$$
+$$d_0 = \frac{(4 \times 10^{-5}\text{ cm})^2}{4(2 \times 10^{-8}\text{ cm})} = \frac{1.6 \times 10^{-9}}{8 \times 10^{-8}} = 0.02\text{ cm} = 0.2\text{ mm}$$</p>''',
+  trap=r'Confusing the round-trip path change $2d_0$ with the vertical displacement of the lens $d_0$, leading to a factor of $2$ error in lens lift.')
 
 W('q.op.2.28', '2.7', 4,
   'Radii of Newton Bright Rings',

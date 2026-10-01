@@ -39,8 +39,8 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Single-Slit Fraunhofer Pattern",
- "oneLine": "For a slit of width a, I(θ) = I₀ (sin β/β)² with β = πa sin θ/λ; minima at a sin θ = mλ.",
- "statement": "A slit of width $a$ illuminated by a plane wave produces, in the far field at angle $\\theta$,\n$$\\boxed{I(\\theta)=I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}},\\qquad\\beta=\\frac{\\pi a\\sin\\theta}{\\lambda}.$$\nMinima: $a\\sin\\theta=m\\lambda$ ($m=\\pm1,\\pm2,\\ldots$). The central maximum has angular half-width $\\sin\\theta\\simeq\\lambda/a$ and linear width $2\\lambda D/a$ on a screen at distance $D$ (twice the width of the other maxima).",
+ "oneLine": "For a slit of width b, I(θ) = I₀ (sin β/β)² with β = πb sin θ/λ; minima at b sin θ = mλ.",
+ "statement": "A slit of width $b$ illuminated by a plane wave produces, in the far field at angle $\\theta$,\n$$\\boxed{I(\\theta)=I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}},\\qquad\\beta=\\frac{\\pi b\\sin\\theta}{\\lambda}.$$\nMinima: $b\\sin\\theta=m\\lambda$ ($m=\\pm1,\\pm2,\\ldots$). The central maximum has angular half-width $\\sin\\theta\\simeq\\lambda/b$ and linear width $2\\lambda D/b$ on a screen at distance $D$ (twice the width of the other maxima).",
  "intuition": "Split the slit into many strips; each contributes a phasor and neighbours differ by a fixed phase step. The phasors curl into an arc: at $\\theta=0$ they line up and give the maximum; when the arc closes into a full circle ($\\beta=m\\pi$) the resultant vanishes. A narrower slit means a larger $\\theta$ is needed to close the circle — the pattern widens.",
  "needs": [
   "c.3.1.1",
@@ -48,17 +48,17 @@ CONCEPTS.push(
  ],
  "figs": [],
  "traps": [
-  "Confusing $a$ (slit width) with $d$ (slit separation) in $a\\sin\\theta=m\\lambda$, which locates <i>minima</i>, not maxima.",
+  "Confusing $b$ (slit width) with $d$ (slit separation) in $b\\sin\\theta=m\\lambda$, which locates <i>minima</i>, not maxima.",
   "Expecting $m=0$ to be a minimum. At $\\beta=0$, $\\sin\\beta/\\beta\\to1$: the central maximum.",
-  "Forgetting that $\\lambda/a\\ll1$ is needed for the small-angle form $\\theta\\simeq\\lambda/a$."
+  "Forgetting that $\\lambda/b\\ll1$ is needed for the small-angle form $\\theta\\simeq\\lambda/b$."
  ],
  "proof": {
   "idea": "Integrate the wavelets across the slit, each with its far-field phase.",
   "why": "In the far field the only difference between wavelets from different points of the slit is their extra path $x\\sin\\theta$.",
   "rungs": [
    {
-    "why": "Divide the slit ($-a/2\\le x\\le a/2$) into strips of width $dx$. A strip at $x$ has an extra path $x\\sin\\theta$ relative to the centre, i.e. phase $kx\\sin\\theta$.",
-    "m": "$$E(\\theta)\\propto\\int_{-a/2}^{a/2}e^{ikx\\sin\\theta}\\,dx$$",
+    "why": "Divide the slit ($-b/2\\le x\\le b/2$) into strips of width $dx$. A strip at $x$ has an extra path $x\\sin\\theta$ relative to the centre, i.e. phase $kx\\sin\\theta$.",
+    "m": "$$E(\\theta)\\propto\\int_{-b/2}^{b/2}e^{ikx\\sin\\theta}\\,dx$$",
     "meaning": "Light passing through the slit is treated as many tiny sources side by side. Measured from the centre of the slit, each has a slightly different route to a far-away point, and so a different phase.",
     "fig": {
      "k": "slit",
@@ -67,7 +67,7 @@ CONCEPTS.push(
    },
    {
     "why": "Integrate.",
-    "m": "$$\\int_{-a/2}^{a/2}e^{ikx\\sin\\theta}dx=\\frac{e^{ika\\sin\\theta/2}-e^{-ika\\sin\\theta/2}}{ik\\sin\\theta}=a\\,\\frac{\\sin\\beta}{\\beta}$$",
+    "m": "$$\\int_{-b/2}^{b/2}e^{ikx\\sin\\theta}dx=\\frac{e^{ikb\\sin\\theta/2}-e^{-ikb\\sin\\theta/2}}{ik\\sin\\theta}=b\\,\\frac{\\sin\\beta}{\\beta}$$",
     "meaning": "Adding all these tiny waves with their phases is an integral, and it works out to a sine divided by its own argument.",
     "fig": {
      "k": "slit",
@@ -85,7 +85,7 @@ CONCEPTS.push(
    },
    {
     "why": "Zeros of $\\sin\\beta$ with $\\beta\\neq0$.",
-    "m": "$$\\beta=m\\pi\\;\\Rightarrow\\;a\\sin\\theta=m\\lambda$$",
+    "m": "$$\\beta=m\\pi\\;\\Rightarrow\\;b\\sin\\theta=m\\lambda$$",
     "meaning": "The pattern is dark wherever the sine in the top of the fraction is zero — where the little waves, laid head to tail, curl round into a closed circle and cancel exactly.",
     "fig": {
      "k": "slit",
@@ -98,17 +98,17 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "Give the intensity distribution and the positions of the minima for single-slit Fraunhofer diffraction.",
-   "a": "$I=I_0(\\sin\\beta/\\beta)^2$ with $\\beta=\\pi a\\sin\\theta/\\lambda$; minima at $a\\sin\\theta=m\\lambda$, $m\\neq0$.",
+   "a": "$I=I_0(\\sin\\beta/\\beta)^2$ with $\\beta=\\pi b\\sin\\theta/\\lambda$; minima at $b\\sin\\theta=m\\lambda$, $m\\neq0$.",
    "kind": "state"
   },
   {
    "q": "Light of $\\lambda=600$ nm falls on a slit $0.2$ mm wide; screen at $2$ m. Find the width of the central maximum.",
-   "a": "$2\\lambda D/a=2\\times600\\times10^{-9}\\times2/(2\\times10^{-4})=1.2\\times10^{-2}$ m $=12$ mm.",
+   "a": "$2\\lambda D/b=2\\times600\\times10^{-9}\\times2/(2\\times10^{-4})=1.2\\times10^{-2}$ m $=12$ mm.",
    "kind": "recall"
   },
   {
    "q": "Why is the central maximum twice as wide as the others?",
-   "a": "It extends from $m=-1$ to $m=+1$ (width $2\\lambda D/a$) while the others span one order ($\\lambda D/a$).",
+   "a": "It extends from $m=-1$ to $m=+1$ (width $2\\lambda D/b$) while the others span one order ($\\lambda D/b$).",
    "kind": "recall"
   }
  ],
@@ -179,9 +179,9 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "Two-Slit Fraunhofer Pattern and Missing Orders",
- "oneLine": "Two slits of width a and separation d give I = 4I₀(sin β/β)² cos²γ, with γ = πd sin θ/λ; orders with d sin θ = mλ = pλ·d/a are missing.",
- "statement": "Two identical slits of width $a$ with centres $d$ apart give\n$$\\boxed{I(\\theta)=4I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}\\cos^{2}\\gamma},\\qquad\\beta=\\frac{\\pi a\\sin\\theta}{\\lambda},\\ \\ \\gamma=\\frac{\\pi d\\sin\\theta}{\\lambda}.$$\nThe $\\cos^2\\gamma$ factor is the two-slit interference fringes (bright at $d\\sin\\theta=m\\lambda$); the $(\\sin\\beta/\\beta)^2$ factor is the single-slit <b>envelope</b>. If $d/a$ is an integer $p$, every $p$-th interference order coincides with a diffraction zero and is <b>missing</b>. The central envelope contains $2d/a-1$ fringes.",
- "intuition": "Each slit throws out the same envelope; the two beams from the slits then interfere inside it, exactly as in Young's experiment. Young's simplification \"infinitely narrow slits\" corresponds to $a\\to0$, where the envelope is flat.",
+ "oneLine": "Two slits of width b and center spacing d = a+b give I = 4I₀(sin β/β)² cos²γ, with γ = πd sin θ/λ; orders with d/b = m/p are missing.",
+ "statement": "Two identical slits of width $b$ separated by an opaque interval $a$ have center-to-center separation $d = a+b$ and produce\n$$\\boxed{I(\\theta)=4I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}\\cos^{2}\\gamma},\\qquad\\beta=\\frac{\\pi b\\sin\\theta}{\\lambda},\\ \\ \\gamma=\\frac{\\pi d\\sin\\theta}{\\lambda}=\\frac{\\pi(a+b)\\sin\\theta}{\\lambda}.$$\nThe $\\cos^2\\gamma$ factor is the two-slit interference fringes (bright at $d\\sin\\theta=m\\lambda$); the $(\\sin\\beta/\\beta)^2$ factor is the single-slit <b>diffraction envelope</b> (zeros at $b\\sin\\theta=p\\lambda$).\n<b>Missing orders</b> occur whenever an interference maximum coincides with a diffraction minimum:\n$$\\frac{d}{b}=\\frac{a+b}{b}=\\frac{m}{p}.$$\nIf $d/b$ is an integer, every $m = p(d/b)$-th interference order is completely absent. The central diffraction maximum contains $2(d/b)-1$ interference fringes.",
+ "intuition": "Each slit throws out the same diffraction envelope; the two beams from the slits then interfere inside it, exactly as in Young's experiment. Young's simplification \"infinitely narrow slits\" corresponds to $b\\to0$, where the envelope is flat.",
  "needs": [
   "c.3.1.2",
   "c.2.3.2"
@@ -189,7 +189,7 @@ CONCEPTS.push(
  "figs": [],
  "traps": [
   "Applying the Young pattern without the envelope for slits of finite width.",
-  "Counting the fringes in the central maximum as $d/a$. It is $2d/a-1$ (from $-m$ to $+m$ excluding the first missing order)."
+  "Counting the fringes in the central maximum as $d/b$. It is $2(d/b)-1$ (from $-m$ to $+m$ excluding the first missing order)."
  ],
  "proof": {
   "idea": "Add the fields from two slit apertures, one shifted by $d$, using the single-slit result.",
@@ -214,8 +214,8 @@ CONCEPTS.push(
     }
    },
    {
-    "why": "Missing orders: an interference maximum $d\\sin\\theta=m\\lambda$ that coincides with an envelope zero $a\\sin\\theta=p\\lambda$.",
-    "m": "$$\\frac{d}{a}=\\frac{m}{p}\\;\\Rightarrow\\;m=\\frac{d}{a}\\,p$$",
+    "why": "Missing orders: an interference maximum $d\\sin\\theta=m\\lambda$ that coincides with an envelope zero $b\\sin\\theta=p\\lambda$.",
+    "m": "$$\\frac{d}{b}=\\frac{a+b}{b}=\\frac{m}{p}\\;\\Rightarrow\\;m=\\frac{d}{b}\\,p$$",
     "meaning": "When a bright fringe of the two-slit pattern falls exactly on a dark spot of the single-slit pattern it vanishes — there is no light there to interfere. Those orders are the missing ones.",
     "fig": {
      "k": "dslit",
@@ -227,13 +227,13 @@ CONCEPTS.push(
  },
  "cards": [
   {
-   "q": "Give the intensity for two slits of width $a$ and separation $d$.",
-   "a": "$I=4I_0(\\sin\\beta/\\beta)^2\\cos^2\\gamma$, $\\beta=\\pi a\\sin\\theta/\\lambda$, $\\gamma=\\pi d\\sin\\theta/\\lambda$.",
+   "q": "Give the intensity for two slits of width $b$ and separation $d=a+b$.",
+   "a": "$I=4I_0(\\sin\\beta/\\beta)^2\\cos^2\\gamma$, $\\beta=\\pi b\\sin\\theta/\\lambda$, $\\gamma=\\pi d\\sin\\theta/\\lambda$.",
    "kind": "state"
   },
   {
-   "q": "For $d=3a$, which orders are missing and how many fringes are in the central maximum?",
-   "a": "Orders $\\pm3,\\pm6,\\dots$ are missing; the central maximum holds $2d/a-1=5$ fringes.",
+   "q": "For $d=3b$, which orders are missing and how many fringes are in the central maximum?",
+   "a": "Orders $\\pm3,\\pm6,\\dots$ are missing; the central maximum holds $2(d/b)-1=5$ fringes.",
    "kind": "recall"
   }
  ],
@@ -246,7 +246,7 @@ CONCEPTS.push(
  "tier": "core",
  "title": "N-Slit Fraunhofer Pattern",
  "oneLine": "N slits give I = I₀(sin β/β)²(sin Nγ/ sin γ)²: principal maxima at d sin θ = mλ, N−1 zeros and N−2 weak maxima between.",
- "statement": "For $N$ identical slits of width $a$ and spacing $d$,\n$$\\boxed{I=I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}\\Big(\\frac{\\sin N\\gamma}{\\sin\\gamma}\\Big)^{2}},\\qquad\\gamma=\\frac{\\pi d\\sin\\theta}{\\lambda}.$$\n<b>Principal maxima</b> at $d\\sin\\theta=m\\lambda$ have $I=N^2I_0(\\sin\\beta/\\beta)^2$. Between neighbours there are $N-1$ zeros ($N\\gamma=p\\pi$) and $N-2$ weak <b>secondary maxima</b>. Increasing $N$ sharpens the principal maxima (half-width $\\propto1/N$).",
+ "statement": "For $N$ identical slits of width $b$ and spacing $d$,\n$$\\boxed{I=I_0\\Big(\\frac{\\sin\\beta}{\\beta}\\Big)^{2}\\Big(\\frac{\\sin N\\gamma}{\\sin\\gamma}\\Big)^{2}},\\qquad\\gamma=\\frac{\\pi d\\sin\\theta}{\\lambda}.$$\n<b>Principal maxima</b> at $d\\sin\\theta=m\\lambda$ have $I=N^2I_0(\\sin\\beta/\\beta)^2$. Between neighbours there are $N-1$ zeros ($N\\gamma=p\\pi$) and $N-2$ weak <b>secondary maxima</b>. Increasing $N$ sharpens the principal maxima (half-width $\\propto1/N$).",
  "intuition": "Two slits give cosine fringes; adding slits makes the fringes narrower and brighter while the light between them is cancelled by ever more phasors pointing in different directions. For large $N$ only the sharp principal maxima survive.",
  "needs": [
   "c.3.2.1",
@@ -310,16 +310,16 @@ CONCEPTS.push(
  "kind": "theorem",
  "tier": "core",
  "title": "The Diffraction Grating: Grating Equation and Dispersion",
- "oneLine": "A grating of spacing d has maxima at d(sin θ ± sin i) = mλ, with angular dispersion dθ/dλ = m/(d cos θ).",
- "statement": "For a grating of spacing $d$ (normal incidence),\n$$\\boxed{d\\sin\\theta_m=m\\lambda},\\qquad m=0,\\pm1,\\pm2,\\dots,\\ \\ |m|<d/\\lambda.$$\nAt oblique incidence $d(\\sin\\theta_m\\pm\\sin i)=m\\lambda$. Differentiating gives the <b>angular dispersion</b>\n$$\\frac{d\\theta}{d\\lambda}=\\frac{m}{d\\cos\\theta}.$$\nWhite light gives a central white maximum and spectra of increasing order; longer wavelengths are deviated more (opposite to a prism). The number of lines per metre is $1/d$.",
+ "oneLine": "A grating of element (a+b) has maxima at (a+b)(sin θ ± sin i) = mλ, with angular dispersion dθ/dλ = m/[(a+b) cos θ].",
+ "statement": "For a plane transmission grating with transparent slit width $b$ and opaque interval $a$, the <b>grating element</b> is $d = a+b$. At normal incidence, principal maxima satisfy\n$$\\boxed{(a+b)\\sin\\theta_m=m\\lambda},\\qquad m=0,\\pm1,\\pm2,\\dots,\\ \\ |m|<(a+b)/\\lambda.$$\nAt oblique incidence $(a+b)(\\sin\\theta_m\\pm\\sin i)=m\\lambda$. Differentiating gives the <b>angular dispersion</b>\n$$\\frac{d\\theta}{d\\lambda}=\\frac{m}{(a+b)\\cos\\theta}.$$\nWhite light gives a central white maximum and spectra of increasing order; longer wavelengths are deviated more (opposite to a prism). The number of lines per unit length is $N_g = 1/(a+b)$.",
  "intuition": "Each order $m$ is a place where the paths from adjacent slits differ by $m$ wavelengths, so every slit is in step. Different $\\lambda$ satisfy that at different angles, so the grating sorts colours: the dispersion says how far apart in angle two nearby wavelengths land.",
  "needs": [
   "c.3.3.1"
  ],
  "figs": [],
  "traps": [
-  "Forgetting the maximum order: $m_{\\max}<d/\\lambda$; beyond that $\\sin\\theta>1$.",
-  "Dispersion grows with the order and with a finer grating (smaller $d$), not with the number of lines alone.",
+  "Forgetting the maximum order: $m_{\\max}\\le(a+b)/\\lambda$; beyond that $\\sin\\theta>1$.",
+  "Dispersion grows with the order and with a finer grating (smaller $a+b$), not with the total number of lines alone.",
   "Assuming the same order overlaps do not occur: $m\\lambda_2=(m+1)\\lambda_1$ makes neighbouring orders overlap."
  ],
  "proof": {
@@ -327,8 +327,8 @@ CONCEPTS.push(
   "why": "Principal maxima are where all $N$ phasors align.",
   "rungs": [
    {
-    "why": "The path difference between light from adjacent slits at angle $\\theta$ is $d\\sin\\theta$; in phase when it is $m\\lambda$.",
-    "m": "$$d\\sin\\theta_m=m\\lambda$$",
+    "why": "The path difference between light from adjacent slits at angle $\\theta$ is $(a+b)\\sin\\theta$; in phase when it is $m\\lambda$.",
+    "m": "$$(a+b)\\sin\\theta_m=m\\lambda$$",
     "meaning": "A bright peak appears where every slit's wave arrives in step with its neighbour's, which means the path difference between neighbours is a whole number of wavelengths.",
     "fig": {
      "k": "grating",
@@ -336,8 +336,8 @@ CONCEPTS.push(
     }
    },
    {
-    "why": "Differentiate at fixed $m$ and $d$.",
-    "m": "$$d\\cos\\theta\\,d\\theta=m\\,d\\lambda$$",
+    "why": "Differentiate at fixed $m$ and grating element $a+b$.",
+    "m": "$$(a+b)\\cos\\theta\\,d\\theta=m\\,d\\lambda$$",
     "meaning": "We ask how the direction of a peak changes when we change the wavelength slightly, keeping the order fixed.",
     "fig": {
      "k": "grating",
@@ -346,7 +346,7 @@ CONCEPTS.push(
    },
    {
     "why": "Solve for the dispersion.",
-    "m": "$$\\frac{d\\theta}{d\\lambda}=\\frac{m}{d\\cos\\theta}$$",
+    "m": "$$\\frac{d\\theta}{d\\lambda}=\\frac{m}{(a+b)\\cos\\theta}$$",
     "meaning": "Solving gives the angular spread per unit of wavelength: bigger for higher orders and for finer gratings. That is how a grating fans white light out into a spectrum.",
     "fig": {
      "k": "grating",
@@ -359,17 +359,17 @@ CONCEPTS.push(
  "cards": [
   {
    "q": "Write the grating equation at normal incidence and the angular dispersion.",
-   "a": "$d\\sin\\theta=m\\lambda$; $d\\theta/d\\lambda=m/(d\\cos\\theta)$.",
+   "a": "$(a+b)\\sin\\theta=m\\lambda$; $d\\theta/d\\lambda=m/[(a+b)\\cos\\theta]$.",
    "kind": "state"
   },
   {
    "q": "A grating has $5000$ lines/cm. Find the angle of the first order for $\\lambda=589$ nm.",
-   "a": "$d=1/5000$ cm $=2\\ \\mu$m; $\\sin\\theta=589\\times10^{-9}/(2\\times10^{-6})=0.2945$, $\\theta\\approx17.1^\\circ$.",
+   "a": "$a+b=1/5000$ cm $=2\\ \\mu\\text{m}$; $\\sin\\theta=589\\times10^{-9}/(2\\times10^{-6})=0.2945$, $\\theta\\approx17.1^\\circ$.",
    "kind": "recall"
   },
   {
-   "q": "What is the highest order visible with $\\lambda=589$ nm on a grating with $d=2\\ \\mu$m?",
-   "a": "$m<d/\\lambda=3.4$, so $m_{\\max}=3$.",
+   "q": "What is the highest order visible with $\\lambda=589$ nm on a grating with $a+b=2\\ \\mu\\text{m}$?",
+   "a": "$m<(a+b)/\\lambda=3.4$, so $m_{\\max}=3$.",
    "kind": "recall"
   }
  ],
@@ -445,23 +445,23 @@ CONCEPTS.push(
  "kind": "definition",
  "tier": "core",
  "title": "Fresnel Half-Period Zones",
- "oneLine": "Circles on the wavefront at r_n² = nbλ (plane wave) cut it into zones of equal area whose contributions alternate in sign.",
- "statement": "For a point $P$ at distance $b$ from a plane wavefront, draw circles about the foot of the perpendicular so that their distance from $P$ increases by $\\lambda/2$ each time. The annuli between them are <b>half-period zones</b>, with radii\n$$\\boxed{r_n=\\sqrt{n\\,b\\,\\lambda}}\\qquad\\text{(and }r_n^2=\\frac{n\\lambda ab}{a+b}\\text{ for a point source at distance }a).$$\nEvery zone has (very nearly) the same area $\\pi b\\lambda$; the wavelets from successive zones arrive with phase difference $\\pi$.",
- "intuition": "The path from the wavefront to $P$ grows as you move outward; cutting it into half-wavelength slices gives zones that are in antiphase with their neighbours. Equal areas means equal strength, but obliquity makes the contributions fall slowly with $n$, so the amplitudes $A_1>A_2>A_3\\dots$ decline.",
+ "oneLine": "Circles on the wavefront at r_m² = mλd (plane wave) cut it into zones of equal area whose contributions alternate in sign.",
+ "statement": "For a point $P$ at distance $d$ from a plane wavefront, draw circles about the pole $O$ so that their distance from $P$ increases by $\\lambda/2$ each time. The concentric annular zones are <b>Fresnel half-period zones</b>, with radii\n$$\\boxed{r_m=\\sqrt{m\\,\\lambda\\,d}}\\qquad\\text{(and }r_m^2=\\frac{m\\lambda a d}{a+d}\\text{ for a point source at distance }a).$$\nEvery zone has (very nearly) the same area $\\pi \\lambda d$; the wavelets from successive zones arrive with a relative phase difference of $\\pi$.",
+ "intuition": "The path from the wavefront to $P$ grows as you move outward; cutting it into half-wavelength slices gives zones that are in antiphase with their neighbours. Equal areas means equal strength, but obliquity makes the contributions fall slowly with $m$, so the amplitudes $u_1>u_2>u_3\\dots$ decline.",
  "needs": [
   "c.3.1.1"
  ],
  "figs": [],
  "traps": [
-  "Saying the zone areas are exactly equal for every $n$: they are equal to first order in $\\lambda/b$."
+  "Saying the zone areas are exactly equal for every $m$: they are equal to first order in $\\lambda/d$."
  ],
  "proof": {
-  "idea": "Find where the distance to $P$ has grown by $n\\lambda/2$ and read off the radius.",
+  "idea": "Find where the distance to $P$ has grown by $m\\lambda/2$ and read off the radius.",
   "why": "A zone boundary is defined by that path increase.",
   "rungs": [
    {
-    "why": "A point on the wavefront at radius $r$ is at distance $\\sqrt{b^2+r^2}$ from $P$.",
-    "m": "$$\\sqrt{b^{2}+r_n^{2}}=b+\\frac{n\\lambda}{2}$$",
+    "why": "A point on the wavefront at radius $r$ is at distance $\\sqrt{d^2+r^2}$ from $P$.",
+    "m": "$$\\sqrt{d^{2}+r_m^{2}}=d+\\frac{m\\lambda}{2}$$",
     "meaning": "Cut the wavefront into rings so that each ring is half a wavelength farther from the observer than the one before it. These are the half-period zones.",
     "fig": {
      "k": "zones",
@@ -470,7 +470,7 @@ CONCEPTS.push(
    },
    {
     "why": "Square, neglect $\\lambda^2$.",
-    "m": "$$r_n^{2}=nb\\lambda+\\frac{n^{2}\\lambda^{2}}{4}\\simeq nb\\lambda$$",
+    "m": "$$r_m^{2}=m\\lambda d+\\frac{m^{2}\\lambda^{2}}{4}\\simeq m\\lambda d$$",
     "meaning": "Squaring the distance and ignoring the tiny wavelength-squared term gives the ring radii: they grow like the square root of the ring number.",
     "fig": {
      "k": "zones",
@@ -479,7 +479,7 @@ CONCEPTS.push(
    },
    {
     "why": "Area of each zone.",
-    "m": "$$\\pi r_{n+1}^{2}-\\pi r_n^{2}=\\pi b\\lambda$$",
+    "m": "$$\\pi r_{m+1}^{2}-\\pi r_m^{2}=\\pi\\lambda d$$",
     "meaning": "The area between neighbouring circles comes out the same for every ring. Each zone sends about the same amount of light, but in opposite phase to its neighbour.",
     "fig": {
      "k": "zones",
@@ -487,16 +487,16 @@ CONCEPTS.push(
     }
    }
   ],
-  "ends": "$r_n=\\sqrt{nb\\lambda}$; equal-area zones."
+  "ends": "$r_m=\\sqrt{m\\lambda d}$; equal-area zones."
  },
  "cards": [
   {
-   "q": "Give the radii and area of the $n$th half-period zone for a plane wave.",
-   "a": "$r_n=\\sqrt{nb\\lambda}$; each zone has area $\\pi b\\lambda$.",
+   "q": "Give the radii and area of the $m$th half-period zone for a plane wave.",
+   "a": "$r_m=\\sqrt{m\\lambda d}$; each zone has area $\\pi\\lambda d$.",
    "kind": "state"
   },
   {
-   "q": "Find the radius of the first zone for $b=1$ m and $\\lambda=500$ nm.",
+   "q": "Find the radius of the first zone for $d=1$ m and $\\lambda=500$ nm.",
    "a": "$r_1=\\sqrt{1\\times500\\times10^{-9}}=7.1\\times10^{-4}$ m $=0.71$ mm.",
    "kind": "recall"
   }
@@ -574,7 +574,7 @@ CONCEPTS.push(
  "tier": "core",
  "title": "The Zone Plate",
  "oneLine": "Blocking alternate zones makes a lens: primary focus f₁ = r₁²/λ, with weaker foci at f₁/3, f₁/5, ….",
- "statement": "A <b>zone plate</b> blocks every other half-period zone. Light from the open zones arrives in phase at the axial point $P$ at distance $f_n$ and adds constructively:\n$$\\boxed{f_n=\\frac{r_n^{2}}{n\\lambda}}\\ \\ (n=1)\\ \\Rightarrow\\ f_1=\\frac{r_1^{2}}{\\lambda},\\qquad r_n=\\sqrt{n f_1\\lambda}.$$\nIt has further real foci at $f_1/3,f_1/5,\\dots$ and virtual foci on the source side. Its focal length varies as $1/\\lambda$ (strong chromatic aberration).",
+ "statement": "A <b>zone plate</b> blocks every other half-period zone. Light from the open zones arrives in phase at the axial point $P$ at distance $f_m$ and adds constructively:\n$$\\boxed{f_m=\\frac{r_m^{2}}{m\\lambda}}\\ \\ (m=1)\\ \\Rightarrow\\ f_1=\\frac{r_1^{2}}{\\lambda},\\qquad r_m=\\sqrt{m f_1\\lambda}.$$\nIt has further real foci at $f_1/3,f_1/5,\\dots$ and virtual foci on the source side. Its focal length varies as $1/\\lambda$ (strong chromatic aberration).",
  "intuition": "Any set of concentric rings with radii $\\propto\\sqrt n$ delivers the open zones to $P$ with phases that differ by whole periods — a diffractive lens. The lens brings a plane wave to a point using diffraction rather than refraction, and $f\\propto1/\\lambda$ is the opposite of a glass lens.",
  "needs": [
   "c.3.4.2"
@@ -589,8 +589,8 @@ CONCEPTS.push(
   "why": "Open zones are separated by one blocked zone, i.e. by one full wavelength of extra path.",
   "rungs": [
    {
-    "why": "Take a point $P$ on the axis at $f$. The $n$th zone boundary of that point satisfies (by definition of a half-period zone)",
-    "m": "$$r_n^{2}=nf\\lambda$$",
+    "why": "Take a point $P$ on the axis at $f$. The $m$th zone boundary of that point satisfies (by definition of a half-period zone)",
+    "m": "$$r_m^{2}=mf\\lambda$$",
     "meaning": "For a chosen point on the axis the half-period zones have known radii. A zone plate is simply built with exactly those radii.",
     "fig": {
      "k": "zoneplate",
@@ -598,7 +598,7 @@ CONCEPTS.push(
     }
    },
    {
-    "why": "The plate is made with radii $r_n$ fixed; then $P$ is at",
+    "why": "The plate is made with radii $r_m$ fixed; then $P$ is at",
     "m": "$$f_1=\\frac{r_1^{2}}{\\lambda}$$",
     "meaning": "If the plate blocks every other zone, the wave from every open zone arrives at the focus in step. That fixes the focal length in terms of the first ring's radius and the wavelength.",
     "fig": {
@@ -639,21 +639,21 @@ CONCEPTS.push(
  "tier": "core",
  "title": "Fresnel Integrals and the Cornu Spiral",
  "oneLine": "Straight-edge diffraction has I = (I₀/2)[(C(v)+½)² + (S(v)+½)²]; the Cornu spiral plots S(v) against C(v).",
- "statement": "Define the Fresnel integrals\n$$C(v)=\\int_0^{v}\\cos\\frac{\\pi s^{2}}{2}\\,ds,\\qquad S(v)=\\int_0^{v}\\sin\\frac{\\pi s^{2}}{2}\\,ds.$$\nThe curve $S$ against $C$ is the <b>Cornu spiral</b>, with limit points $(\\pm\\tfrac12,\\pm\\tfrac12)$ as $v\\to\\pm\\infty$. The intensity behind a straight edge (relative to the unobstructed value $I_0$) is\n$$\\boxed{\\frac{I}{I_0}=\\tfrac12\\Big[\\big(C(v)+\\tfrac12\\big)^{2}+\\big(S(v)+\\tfrac12\\big)^{2}\\Big]},\\qquad v=x\\sqrt{\\frac{2(a+b)}{ab\\lambda}}.$$",
+ "statement": "Define the Fresnel integrals\n$$C(v)=\\int_0^{v}\\cos\\frac{\\pi s^{2}}{2}\\,ds,\\qquad S(v)=\\int_0^{v}\\sin\\frac{\\pi s^{2}}{2}\\,ds.$$\nThe curve $S$ against $C$ is the <b>Cornu spiral</b>, with limit points $(\\pm\\tfrac12,\\pm\\tfrac12)$ as $v\\to\\pm\\infty$. The intensity behind a straight edge (relative to the unobstructed value $I_0$) is\n$$\\boxed{\\frac{I}{I_0}=\\tfrac12\\Big[\\big(C(v)+\\tfrac12\\big)^{2}+\\big(S(v)+\\tfrac12\\big)^{2}\\Big]},\\qquad v=x\\sqrt{\\frac{2(a+d)}{ad\\lambda}}\\quad\\Big(\\text{or }x\\sqrt{\\frac{2}{\\lambda d}}\\text{ for plane waves}\\Big).$$",
  "intuition": "On the Cornu spiral, arc length is the position of the point across the wavefront, and the direction of the tangent is the phase of the wavelet. The field at $P$ is the vector from the \"start\" of the spiral (the shadowed side) to the point $v$: distance from the lower limit point $(-\\tfrac12,-\\tfrac12)$.",
  "needs": [
   "c.3.4.2"
  ],
  "figs": [],
  "traps": [
-  "Reading $x$ as the distance from the edge on the screen and forgetting the scale factor $\\sqrt{2(a+b)/(ab\\lambda)}$ that converts it to $v$."
+  "Reading $x$ as the distance from the edge on the screen and forgetting the scale factor $\\sqrt{2(a+d)/(ad\\lambda)}$ that converts it to $v$."
  ],
  "proof": {
   "idea": "Sum wavelets across the unobstructed half of the wavefront, expanding the path to second order.",
   "why": "Near the edge the path to $P$ grows quadratically with the coordinate $x$ across the wavefront.",
   "rungs": [
    {
-    "why": "The extra path of a wavelet at coordinate $s$ (in dimensionless units $v$) is $\\tfrac{\\pi}{2}v^{2}$ in phase.",
+    "why": "The extra path of a wavelet at coordinate $s$ (in dimensionless units $v$) is $\\tfrac{\\pi}{2}s^{2}$ in phase.",
     "m": "$$E(v)\\propto\\int_{-v}^{\\infty}e^{i\\pi s^{2}/2}\\,ds$$",
     "meaning": "Close to the edge, the extra distance a wavelet travels grows with the square of how far along the wavefront it starts. That squared growth is what brings in the Fresnel integrals.",
     "fig": {

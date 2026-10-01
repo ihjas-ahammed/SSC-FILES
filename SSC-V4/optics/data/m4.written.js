@@ -92,7 +92,7 @@ QUESTIONS.push(
   "c.4.5.1"
  ],
  "approach": "<p>The path difference is $|n_e-n_o|\\,t$; a QWP needs $\\lambda/4$ (odd multiples also work), a HWP needs $\\lambda/2$.</p>",
- "solution": "<p><b>(a)</b> $t=\\dfrac{\\lambda}{4|n_e-n_o|}=\\dfrac{589\\times10^{-9}}{4\\times0.0091}=1.62\\times10^{-5}$ m $=16\\ \\mu$m.</p>\n<p><b>(b)</b> $t=\\dfrac{\\lambda}{2|n_e-n_o|}=32\\ \\mu$m.</p>\n<p><b>(c)</b> A path difference of $(4m+1)\\lambda/4$ still acts as a QWP; the first multiple-order one is $m=1$: $t=5\\times16.2=81\\ \\mu$m (much easier to make and handle, but the retardation now depends far more strongly on wavelength and temperature).</p>",
+ "solution": "<p><b>(a)</b> $t=\\dfrac{\\lambda}{4|n_e-n_o|}=\\dfrac{589\\times10^{-9}}{4\\times0.0091}=1.62\\times10^{-5}$ m $=16\\ \\mu\\text{m}$.</p>\n<p><b>(b)</b> $t=\\dfrac{\\lambda}{2|n_e-n_o|}=32\\ \\mu\\text{m}$.</p>\n<p><b>(c)</b> A path difference of $(4m+1)\\lambda/4$ still acts as a QWP; the first multiple-order one is $m=1$: $t=5\\times16.2=81\\ \\mu\\text{m}$ (much easier to make and handle, but the retardation now depends far more strongly on wavelength and temperature).</p>",
  "trap": "Using $|n_e-n_o|$ but forgetting the factor $4$ (or $2$): the plate needs a quarter (half) wavelength, not one wavelength."
 },
 {

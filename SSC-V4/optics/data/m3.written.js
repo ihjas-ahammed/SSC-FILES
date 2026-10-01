@@ -15,8 +15,8 @@ QUESTIONS.push(
   "c.3.1.2",
   "c.3.1.3"
  ],
- "approach": "<p>Minima are at $a\\sin\\theta=m\\lambda$; for small angles $y_m=m\\lambda D/a$. The central maximum runs from $m=-1$ to $m=+1$. The secondary maxima satisfy $\\tan\\beta=\\beta$.</p>",
- "solution": "<p><b>(a)</b> The first minima are at $y_1=\\lambda D/a=\\dfrac{600\\times10^{-9}\\times2.0}{0.20\\times10^{-3}}=6.0\\times10^{-3}$ m. The central maximum spans $-y_1$ to $+y_1$:\n$$\\text{width}=2y_1=12\\ \\text{mm}.$$</p>\n<p><b>(b)</b> $y_2=2\\lambda D/a=12$ mm from the centre.</p>\n<p><b>(c)</b> The first non-trivial root of $\\tan\\beta=\\beta$ is $\\beta\\simeq4.493$ ($=1.43\\pi$), so\n$$\\frac{I}{I_0}=\\Big(\\frac{\\sin4.493}{4.493}\\Big)^2\\simeq(0.2172)^2\\simeq0.047,$$\nabout $4.7\\%$ of the central maximum.</p>",
+ "approach": "<p>Minima are at $b\\sin\\theta=m\\lambda$; for small angles $y_m=m\\lambda D/b$. The central maximum runs from $m=-1$ to $m=+1$. The secondary maxima satisfy $\\tan\\beta=\\beta$.</p>",
+ "solution": "<p><b>(a)</b> The first minima are at $y_1=\\lambda D/b=\\dfrac{600\\times10^{-9}\\times2.0}{0.20\\times10^{-3}}=6.0\\times10^{-3}$ m. The central maximum spans $-y_1$ to $+y_1$:\n$$\\text{width}=2y_1=12\\ \\text{mm}.$$</p>\n<p><b>(b)</b> $y_2=2\\lambda D/b=12$ mm from the centre.</p>\n<p><b>(c)</b> The first non-trivial root of $\\tan\\beta=\\beta$ is $\\beta\\simeq4.493$ ($=1.43\\pi$), so\n$$\\frac{I}{I_0}=\\Big(\\frac{\\sin4.493}{4.493}\\Big)^2\\simeq(0.2172)^2\\simeq0.047,$$\nabout $4.7\\%$ of the central maximum.</p>",
  "trap": "Quoting the half-width $6$ mm as \"the width of the central maximum\": the central maximum extends to both sides, so its width is twice $\\lambda D/a$."
 },
 {
@@ -30,8 +30,8 @@ QUESTIONS.push(
  "tests": [
   "c.3.1.2"
  ],
- "approach": "<p>Use the first-minimum condition $a\\sin\\theta=\\lambda$ with $\\sin\\theta\\simeq\\tan\\theta=y_1/D$.</p>",
- "solution": "<p>$$a=\\frac{\\lambda D}{y_1}=\\frac{632.8\\times10^{-9}\\times2.00}{3.20\\times10^{-3}}=3.955\\times10^{-4}\\ \\text{m}\\approx0.40\\ \\text{mm}.$$</p>\n<p>The central maximum is $2y_1=6.4$ mm wide. (The small-angle step is justified: $\\theta\\approx1.6\\times10^{-3}$ rad.)</p>",
+ "approach": "<p>Use the first-minimum condition $b\\sin\\theta=\\lambda$ with $\\sin\\theta\\simeq\\tan\\theta=y_1/D$.</p>",
+ "solution": "<p>$$b=\\frac{\\lambda D}{y_1}=\\frac{632.8\\times10^{-9}\\times2.00}{3.20\\times10^{-3}}=3.955\\times10^{-4}\\ \\text{m}\\approx0.40\\ \\text{mm}.$$</p>\n<p>The central maximum is $2y_1=6.4$ mm wide. (The small-angle step is justified: $\\theta\\approx1.6\\times10^{-3}$ rad.)</p>",
  "trap": "Using the distance between the two first minima ($6.4$ mm) as $y_1$: it is half of that."
 },
 {
@@ -41,13 +41,13 @@ QUESTIONS.push(
  "marks": 5,
  "title": "Fringes inside the diffraction envelope",
  "source": "Ghatak 6e §18.6 (standard exercise)",
- "prompt": "<p>Two slits of width $a=0.10$ mm and centre separation $d=0.50$ mm are illuminated by light of $\\lambda=500$ nm. A screen is $1.0$ m away.</p>\n<p>(a) Find the fringe spacing. (b) How many bright fringes lie inside the central diffraction maximum? (c) Which interference orders are missing?</p>",
+ "prompt": "<p>Two slits of width $b=0.10$ mm and centre separation $d=0.50$ mm are illuminated by light of $\\lambda=500$ nm. A screen is $1.0$ m away.</p>\n<p>(a) Find the fringe spacing. (b) How many bright fringes lie inside the central diffraction maximum? (c) Which interference orders are missing?</p>",
  "tests": [
   "c.3.2.1"
  ],
- "approach": "<p>Compare the two zero conditions: interference maxima at $d\\sin\\theta=m\\lambda$ and diffraction minima at $a\\sin\\theta=p\\lambda$. Their ratio $d/a$ tells which orders coincide.</p>",
- "solution": "<p><b>(a)</b> Fringe spacing $\\beta=\\lambda D/d=\\dfrac{500\\times10^{-9}\\times1.0}{0.50\\times10^{-3}}=1.0$ mm.</p>\n<p><b>(b)</b> The central diffraction maximum has half-width $\\lambda D/a=5.0$ mm, i.e. it is $10$ mm wide. Since $d/a=5$, the interference orders $m=\\pm5$ coincide with the first diffraction minima and vanish. The bright fringes inside are $m=0,\\pm1,\\pm2,\\pm3,\\pm4$: <b>9 fringes</b> ($=2d/a-1$).</p>\n<p><b>(c)</b> Interference maximum $m$ coincides with diffraction minimum $p$ when $m=(d/a)\\,p=5p$: the orders $\\pm5,\\pm10,\\pm15,\\dots$ are missing.</p>",
- "trap": "Counting $d/a=5$ fringes instead of $2d/a-1=9$; the fringes on both sides of the centre count, and the missing order itself is not a fringe."
+ "approach": "<p>Compare the two zero conditions: interference maxima at $d\\sin\\theta=m\\lambda$ and diffraction minima at $b\\sin\\theta=p\\lambda$. Their ratio $d/b$ tells which orders coincide.</p>",
+ "solution": "<p><b>(a)</b> Fringe spacing $\\beta=\\lambda D/d=\\dfrac{500\\times10^{-9}\\times1.0}{0.50\\times10^{-3}}=1.0$ mm.</p>\n<p><b>(b)</b> The central diffraction maximum has half-width $\\lambda D/b=5.0$ mm, i.e. it is $10$ mm wide. Since $d/b=5$, the interference orders $m=\\pm5$ coincide with the first diffraction minima and vanish. The bright fringes inside are $m=0,\\pm1,\\pm2,\\pm3,\\pm4$: <b>9 fringes</b> ($=2d/b-1$).</p>\n<p><b>(c)</b> Interference maximum $m$ coincides with diffraction minimum $p$ when $m=(d/b)\\,p=5p$: the orders $\\pm5,\\pm10,\\pm15,\\dots$ are missing.</p>",
+ "trap": "Counting $d/b=5$ fringes instead of $2d/b-1=9$; the fringes on both sides of the centre count, and the missing order itself is not a fringe."
 },
 {
  "id": "q.op.3.04",
@@ -61,7 +61,7 @@ QUESTIONS.push(
   "c.3.3.2"
  ],
  "approach": "<p>The grating spacing is $d=1/(\\text{lines per unit length})$. An order $m$ exists only if $m\\lambda/d\\le1$.</p>",
- "solution": "<p>$d=\\dfrac{1}{6000\\ \\text{cm}^{-1}}=1.667\\times10^{-4}$ cm $=1.667\\ \\mu$m.</p>\n<p><b>(a)</b> $m_{\\max}<d/\\lambda=\\dfrac{1.667\\times10^{-6}}{589\\times10^{-9}}=2.83$, so the highest order is $m=2$.</p>\n<p><b>(b)</b> $\\sin\\theta_m=m\\lambda/d$:\n$$\\sin\\theta_1=\\frac{589\\times10^{-9}}{1.667\\times10^{-6}}=0.3534\\Rightarrow\\theta_1\\approx20.7^\\circ,\\qquad \\sin\\theta_2=0.7068\\Rightarrow\\theta_2\\approx45.0^\\circ.$$\nTogether with the central maximum ($m=0$) there are $5$ maxima in all ($m=0,\\pm1,\\pm2$).</p>",
+ "solution": "<p>$d=\\dfrac{1}{6000\\ \\text{cm}^{-1}}=1.667\\times10^{-4}$ cm $=1.667\\ \\mu\\text{m}$.</p>\n<p><b>(a)</b> $m_{\\max}<d/\\lambda=\\dfrac{1.667\\times10^{-6}}{589\\times10^{-9}}=2.83$, so the highest order is $m=2$.</p>\n<p><b>(b)</b> $\\sin\\theta_m=m\\lambda/d$:\n$$\\sin\\theta_1=\\frac{589\\times10^{-9}}{1.667\\times10^{-6}}=0.3534\\Rightarrow\\theta_1\\approx20.7^\\circ,\\qquad \\sin\\theta_2=0.7068\\Rightarrow\\theta_2\\approx45.0^\\circ.$$\nTogether with the central maximum ($m=0$) there are $5$ maxima in all ($m=0,\\pm1,\\pm2$).</p>",
  "trap": "Computing $d$ from lines per centimetre and forgetting to convert centimetres to metres."
 },
 {
@@ -91,7 +91,7 @@ QUESTIONS.push(
   "c.3.3.2"
  ],
  "approach": "<p>Differentiate the grating equation at fixed order: $d\\theta/d\\lambda=m/(d\\cos\\theta)$. Then the separation on the screen is $f\\,\\Delta\\theta$.</p>",
- "solution": "<p>$d=2.0\\ \\mu$m; $\\sin\\theta_1=589\\times10^{-9}/2.0\\times10^{-6}=0.2945$, so $\\cos\\theta_1=0.9557$.</p>\n<p><b>(a)</b> $$\\frac{d\\theta}{d\\lambda}=\\frac{1}{d\\cos\\theta}=\\frac{1}{2.0\\times10^{-6}\\times0.9557}=5.23\\times10^{5}\\ \\text{rad/m}=5.2\\times10^{-4}\\ \\text{rad/nm}.$$</p>\n<p><b>(b)</b> $\\Delta\\theta=5.23\\times10^{5}\\times0.6\\times10^{-9}=3.1\\times10^{-4}$ rad, so the separation is $f\\,\\Delta\\theta=1.0\\times3.1\\times10^{-4}=0.31$ mm.</p>",
+ "solution": "<p>$d=2.0\\ \\mu\\text{m}$; $\\sin\\theta_1=589\\times10^{-9}/2.0\\times10^{-6}=0.2945$, so $\\cos\\theta_1=0.9557$.</p>\n<p><b>(a)</b> $$\\frac{d\\theta}{d\\lambda}=\\frac{1}{d\\cos\\theta}=\\frac{1}{2.0\\times10^{-6}\\times0.9557}=5.23\\times10^{5}\\ \\text{rad/m}=5.2\\times10^{-4}\\ \\text{rad/nm}.$$</p>\n<p><b>(b)</b> $\\Delta\\theta=5.23\\times10^{5}\\times0.6\\times10^{-9}=3.1\\times10^{-4}$ rad, so the separation is $f\\,\\Delta\\theta=1.0\\times3.1\\times10^{-4}=0.31$ mm.</p>",
  "trap": "Forgetting the $\\cos\\theta$ in the denominator (it matters more for larger angles)."
 },
 {
@@ -105,8 +105,8 @@ QUESTIONS.push(
  "tests": [
   "c.3.4.1"
  ],
- "approach": "<p>Plane wave: $r_n=\\sqrt{nb\\lambda}$. Point source at distance $a$: $r_n^2=n\\lambda ab/(a+b)$.</p>",
- "solution": "<p>Plane wave, $b=1.0$ m: $r_1=\\sqrt{500\\times10^{-9}\\times1.0}=7.07\\times10^{-4}$ m $=0.71$ mm, and $r_{10}=\\sqrt{10}\\,r_1=2.24$ mm.</p>\n<p>Point source, $a=1.0$ m, $b=2.0$ m:\n$$r_1^{2}=\\frac{\\lambda ab}{a+b}=\\frac{500\\times10^{-9}\\times2}{3}=3.33\\times10^{-7}\\ \\text{m}^2\\Rightarrow r_1=0.58\\ \\text{mm}.$$</p>",
+ "approach": "<p>Plane wave: $r_m=\\sqrt{m\\lambda d}$. Point source at distance $a$: $r_m^2=m\\lambda ad/(a+d)$.</p>",
+ "solution": "<p>Plane wave, $d=1.0$ m: $r_1=\\sqrt{500\\times10^{-9}\\times1.0}=7.07\\times10^{-4}$ m $=0.71$ mm, and $r_{10}=\\sqrt{10}\\,r_1=2.24$ mm.</p>\n<p>Point source, $a=1.0$ m, $d=2.0$ m:\n$$r_1^{2}=\\frac{\\lambda ad}{a+d}=\\frac{500\\times10^{-9}\\times2}{3}=3.33\\times10^{-7}\\ \\text{m}^2\\Rightarrow r_1=0.58\\ \\text{mm}.$$</p>",
  "trap": "Using $b\\lambda$ for a point source: the effective distance is $ab/(a+b)$."
 },
 {
@@ -116,13 +116,13 @@ QUESTIONS.push(
  "marks": 5,
  "title": "A circular aperture and the on-axis intensity",
  "source": "Ghatak 6e §20.2 (standard exercise)",
- "prompt": "<p>A circular hole of radius $1.0$ mm is illuminated by a plane wave of wavelength $500$ nm. At which on-axis distances $b$ from the hole is the intensity a maximum of $4I_0$ and at which is it zero? Give the three largest distances.</p>",
+ "prompt": "<p>A circular hole of radius $1.0$ mm is illuminated by a plane wave of wavelength $500$ nm. At which on-axis distances $d$ from the hole is the intensity a maximum of $4I_0$ and at which is it zero? Give the three largest distances.</p>",
  "tests": [
   "c.3.4.1",
   "c.3.4.2"
  ],
- "approach": "<p>The hole exposes $n=r^2/(b\\lambda)$ half-period zones. Odd $n$ gives $A\\simeq A_1$ (intensity $\\simeq4I_0$); even $n$ gives $A\\simeq0$.</p>",
- "solution": "<p>$$n=\\frac{r^{2}}{b\\lambda}=\\frac{(1.0\\times10^{-3})^{2}}{b\\times500\\times10^{-9}}=\\frac{2.0\\ \\text{m}}{b}.$$</p>\n<p>So $b=2.0/n$ metres.</p>\n<ul><li>$n=1$: $b=2.0$ m — bright ($\\approx4I_0$).</li>\n<li>$n=2$: $b=1.0$ m — dark.</li>\n<li>$n=3$: $b=0.67$ m — bright.</li></ul>\n<p>The three largest distances are $2.0$ m (bright), $1.0$ m (dark) and $0.67$ m (bright). Beyond $2.0$ m fewer than one zone is exposed, the pattern is Fraunhofer and the on-axis intensity falls steadily with distance.</p>",
+ "approach": "<p>The hole exposes $m=r^2/(d\\lambda)$ half-period zones. Odd $m$ gives $A\\simeq A_1$ (intensity $\\simeq4I_0$); even $m$ gives $A\\simeq0$.</p>",
+ "solution": "<p>$$m=\\frac{r^{2}}{d\\lambda}=\\frac{(1.0\\times10^{-3})^{2}}{d\\times500\\times10^{-9}}=\\frac{2.0\\ \\text{m}}{d}.$$</p>\n<p>So $d=2.0/m$ metres.</p>\n<ul><li>$m=1$: $d=2.0$ m — bright ($\\approx4I_0$).</li>\n<li>$m=2$: $d=1.0$ m — dark.</li>\n<li>$m=3$: $d=0.67$ m — bright.</li></ul>\n<p>The three largest distances are $2.0$ m (bright), $1.0$ m (dark) and $0.67$ m (bright). Beyond $2.0$ m fewer than one zone is exposed, the pattern is Fraunhofer and the on-axis intensity falls steadily with distance.</p>",
  "trap": "Assuming the intensity is $I_0$ on axis for a hole. For an odd number of zones it is about four times $I_0$; for an even number it is nearly zero."
 },
 {
@@ -136,7 +136,7 @@ QUESTIONS.push(
  "tests": [
   "c.3.4.3"
  ],
- "approach": "<p>$f_1=r_1^2/\\lambda$ and $r_n=\\sqrt n\\,r_1$. The focal length is inversely proportional to the wavelength. Higher real foci lie at $f_1/3$, $f_1/5,\\dots$</p>",
+ "approach": "<p>$f_1=r_1^2/\\lambda$ and $r_m=\\sqrt m\\,r_1$. The focal length is inversely proportional to the wavelength. Higher real foci lie at $f_1/3$, $f_1/5,\\dots$</p>",
  "solution": "<p><b>(a)</b> $r_1=\\sqrt{f_1\\lambda}=\\sqrt{0.50\\times500\\times10^{-9}}=0.50$ mm and $r_{10}=\\sqrt{10}\\times0.50=1.58$ mm.</p>\n<p><b>(b)</b> $f\\propto1/\\lambda$: $f=0.50\\times500/600=0.42$ m.</p>\n<p><b>(c)</b> $f_1/3=0.50/3=0.17$ m.</p>",
  "trap": "Treating a zone plate like a glass lens: its focal length shortens for the <i>longer</i> wavelength (the opposite of refraction)."
 },
@@ -152,8 +152,8 @@ QUESTIONS.push(
   "c.3.5.1",
   "c.3.5.2"
  ],
- "approach": "<p>For a plane wave ($a\\to\\infty$), $v=x\\sqrt{2/(b\\lambda)}$. The intensity at $v=0$ follows from $C(0)=S(0)=0$.</p>",
- "solution": "<p><b>(a)</b> $$\\frac{v}{x}=\\sqrt{\\frac{2}{b\\lambda}}=\\sqrt{\\frac{2}{1.0\\times500\\times10^{-9}}}=2.0\\times10^{3}\\ \\text{m}^{-1}.$$</p>\n<p><b>(b)</b> $x_{\\max}=\\dfrac{1.22}{2000}=0.61$ mm and $x_{\\min}=\\dfrac{1.87}{2000}=0.94$ mm (both on the illuminated side).</p>\n<p><b>(c)</b> $I/I_0=\\tfrac12[(0+\\tfrac12)^2+(0+\\tfrac12)^2]=\\tfrac14$, so the intensity at the geometrical edge is $I_0/4$ (not zero, and not $I_0$).</p>",
+ "approach": "<p>For a plane wave ($a\\to\\infty$), $v=x\\sqrt{2/(\\lambda d)}$. The intensity at $v=0$ follows from $C(0)=S(0)=0$.</p>",
+ "solution": "<p><b>(a)</b> $$\\frac{v}{x}=\\sqrt{\\frac{2}{\\lambda d}}=\\sqrt{\\frac{2}{1.0\\times500\\times10^{-9}}}=2.0\\times10^{3}\\ \\text{m}^{-1}.$$</p>\n<p><b>(b)</b> $x_{\\max}=\\dfrac{1.22}{2000}=0.61$ mm and $x_{\\min}=\\dfrac{1.87}{2000}=0.94$ mm (both on the illuminated side).</p>\n<p><b>(c)</b> $I/I_0=\\tfrac12[(0+\\tfrac12)^2+(0+\\tfrac12)^2]=\\tfrac14$, so the intensity at the geometrical edge is $I_0/4$ (not zero, and not $I_0$).</p>",
  "trap": "Placing the first fringe at the edge of the geometrical shadow. The edge is at $I_0/4$; the first maximum is a distance $0.61$ mm outside it."
 }
 );

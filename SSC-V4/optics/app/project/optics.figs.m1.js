@@ -364,4 +364,104 @@
       g.text(170, 158, s === 1 ? 'δv / δu = ?' : 'δv/δu = v²/u² = m²  (always positive)', 't big new');
     }
   });
+
+  /* ── 1.1  Fermat stationarity and 2nd derivative ─────────────────────── */
+  OFIG.add('fermat_stationary', {
+    w: 360, n: 4, alt: s => ['Spherical refracting surface with ray OSQ at deflection angle θ from center C',
+      'Vanishing first derivative dL/dθ = 0 for stationary ray path obeying Snell\'s law',
+      'Paraxial image point y₀ and second derivative curvature d²L/dθ² = r²n₂(1/y − 1/y₀)',
+      'Curvature classification: minimum for y < y₀, stationary at y = y₀, maximum for y > y₀'][s - 1],
+    build(g, s) {
+      if (s === 4) {
+        g.text(180, 156, 'Curvature d²L/dθ² = r²n₂(1/y − 1/y₀)', 't big new', 'middle');
+        /* Panel 1: y < y0 (minimum) */
+        const p1x = 75;
+        g.text(p1x, 134, 'y < y₀', 't new', 'middle');
+        g.text(p1x, 120, 'd²L/dθ² > 0: min', 't new', 'middle');
+        g.line(30, 55, 120, 55, 'k dash'); g.line(p1x, 40, p1x, 105, 'k dash');
+        const pts1 = [];
+        for (let i = -22; i <= 22; i += 2) pts1.push([p1x + i * 1.5, 55 + (i * i / 484) * 34]);
+        g.poline(pts1, 'curve nofill');
+        g.dot(p1x, 55, 'pt new', 3.4);
+        g.text(p1x, 42, 'min at θ = 0', 't mute', 'middle');
+
+        /* Panel 2: y = y0 (stationary) */
+        const p2x = 180;
+        g.text(p2x, 134, 'y = y₀ (image)', 't new', 'middle');
+        g.text(p2x, 120, 'd²L/dθ² = 0: stat', 't new', 'middle');
+        g.line(135, 75, 225, 75, 'k dash'); g.line(p2x, 40, p2x, 105, 'k dash');
+        g.line(142, 75, 218, 75, 'curve new');
+        g.dot(p2x, 75, 'pt new', 3.4);
+        g.text(p2x, 58, 'flat (equal time)', 't new', 'middle');
+
+        /* Panel 3: y > y0 (maximum) */
+        const p3x = 285;
+        g.text(p3x, 134, 'y > y₀', 't new', 'middle');
+        g.text(p3x, 120, 'd²L/dθ² < 0: max', 't new', 'middle');
+        g.line(240, 55, 330, 55, 'k dash'); g.line(p3x, 40, p3x, 105, 'k dash');
+        const pts3 = [];
+        for (let i = -22; i <= 22; i += 2) pts3.push([p3x + i * 1.5, 89 - (i * i / 484) * 34]);
+        g.poline(pts3, 'curve nofill');
+        g.dot(p3x, 89, 'pt new', 3.4);
+        g.text(p3x, 42, 'max at θ = 0', 't mute', 'middle');
+        return;
+      }
+
+      const cy = 76, r = 50, C = [165, cy], V = [115, cy], O = [35, cy];
+      g.rect(15, 12, 115, 155, 'fillw'); g.rect(115, 12, 345, 155, 'fillg');
+      g.line(15, cy, 345, cy, 'k dash');
+      g.arc(C[0], cy, r, 125, 235, 'surf');
+      g.text(32, 146, 'n₁', 't sym big'); g.text(190, 146, 'n₂ = 3n₁', 't sym big');
+
+      g.dot(O[0], cy, 'pt'); g.text(O[0], cy - 13, 'O', 't sym');
+      g.dot(V[0], cy, 'pt'); g.text(V[0] - 8, cy - 13, 'V', 't sym');
+      g.dot(C[0], cy, 'pt'); g.text(C[0], cy - 13, 'C', 't sym');
+
+      const thDeg = 14, thRad = thDeg * D;
+      const xS = C[0] - r * Math.cos(thRad), yS = cy + r * Math.sin(thRad);
+      g.dot(xS, yS, 'pt' + (s <= 2 ? ' new' : ''), 3.4);
+      g.text(xS - 2, yS + 11, 'S', 't sym' + (s <= 2 ? ' new' : ''));
+
+      /* normal from C through S */
+      g.line(C[0], cy, C[0] + 1.4 * (xS - C[0]), cy + 1.4 * (yS - cy), 'k dash');
+      g.angle(C[0], cy, 26, 180 - thDeg, 180, 'θ', 'ang' + N(s, 1));
+
+      g.arrow(O[0], cy, xS, yS, 'r' + (s === 1 ? ' new' : ''), 0.55);
+
+      const incoming = Math.atan2(yS - cy, xS - O[0]);
+      const normal = -thRad, refracted = normal + Math.asin(Math.sin(incoming - normal) / 3);
+      const xImage = xS - (yS - cy) / Math.tan(refracted);
+      if (s === 1 || s === 2) {
+        const xQ = s === 1 ? 260 : xImage;
+        g.dot(xQ, cy, 'pt' + (s === 1 ? ' new' : ''), 3.4);
+        g.text(xQ, cy - 13, 'Q', 't sym' + (s === 1 ? ' new' : ''));
+        g.arrow(xS, yS, xQ, cy, 'r' + (s === 1 ? ' new' : ''), 0.55);
+      }
+
+      if (s === 1) {
+        g.dim(O[0], cy - 24, V[0], cy - 24, 'x', 0, 'dim new');
+        g.dim(V[0], cy - 24, C[0], cy - 24, 'r', 0, 'dim new');
+        g.dim(V[0], cy - 38, 260, cy - 38, 'y', 0, 'dim new');
+        g.text(180, 156, 'L(θ) = n₁·OS + n₂·SQ', 't big new', 'middle');
+      }
+
+      if (s === 2) {
+        g.angle(xS, yS, 18, 180 - thDeg, 180 + deg(incoming), 'i', 'ang new');
+        g.angle(xS, yS, 20, -thDeg, deg(refracted), 'r′', 'ang new');
+        g.text(180, 156, 'dL/dθ = r²(n₁/x + n₂/y − (n₂ − n₁)/r) θ = 0', 't big new', 'middle');
+        g.text(180, 16, 'stationary ray path satisfies Snell\'s law', 't new', 'middle');
+      }
+
+      if (s === 3) {
+        const xI = V[0] + 3 / (2 / r - 1 / (V[0] - O[0]));
+        g.dot(xI, cy, 'pt new', 3.6); g.text(xI, cy - 13, 'I (y₀)', 't sym new');
+        g.arrow(xS, yS, xI, cy, 'r new', 0.55);
+        g.dot(190, cy, 'pt hollow', 2.8); g.text(190, cy - 13, 'y < y₀', 't mute');
+        g.dot(280, cy, 'pt hollow', 2.8); g.text(280, cy - 13, 'y > y₀', 't mute');
+        g.dim(V[0], cy - 34, xI, cy - 34, 'y₀', 0, 'dim new');
+        g.text(180, 156, 'd²L/dθ² = r²n₂(1/y − 1/y₀)', 't big new', 'middle');
+        g.text(180, 16, 'd²L/dθ² = 0 at paraxial image y₀', 't mute', 'middle');
+      }
+    }
+  });
 })();

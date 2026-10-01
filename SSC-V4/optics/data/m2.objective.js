@@ -512,14 +512,14 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "A thin transparent sheet of mica of thickness $t$ and refractive index $\\mu = 1.5$ is placed in front of one of the slits in a Young's double-slit experiment. Which of the following statements are correct?",
+ "prompt": "A thin transparent sheet of mica of index $n = 1.5$ and thickness $t$ is placed in front of one of the slits in a Young's double-slit experiment. Which of the following statements are correct?",
  "answer": [
   "A",
   "C"
  ],
- "solution": "<p>Statement A is correct: introducing the plate retards light in that beam, so the point of zero optical path difference moves toward the covered slit by $\\Delta x = \\frac{(\\mu - 1)t D}{d}$.</p>\n<p>Statement B is incorrect: the fringe width $\\beta = \\lambda D / d$ depends purely on wavelength and apparatus geometry, and is unaffected by the plate.</p>\n<p>Statement C is correct: the fringe shift in units of fringe width is $N = \\frac{\\Delta x}{\\beta} = \\frac{(\\mu - 1)t}{\\lambda}$.</p>\n<p>Statement D is incorrect: the plate replaces a thickness $t$ of air (index 1), so the extra optical path introduced is $\\mu t - 1\\cdot t = (\\mu - 1)t$, not $\\mu t$.</p>",
+ "solution": "<p>Statement A is correct: introducing the plate retards light in that beam, so the point of zero optical path difference moves toward the covered slit by $\\Delta x = \\frac{(n - 1)t D}{d}$.</p>\n<p>Statement B is incorrect: the fringe width $\\beta = \\lambda D / d$ depends purely on wavelength and apparatus geometry, and is unaffected by the plate.</p>\n<p>Statement C is correct: the fringe shift in units of fringe width is $N = \\frac{\\Delta x}{\\beta} = \\frac{(n - 1)t}{\\lambda}$.</p>\n<p>Statement D is incorrect: the plate replaces a thickness $t$ of air (index 1), so the extra optical path introduced is $nt - 1\\cdot t = (n - 1)t$, not $nt$.</p>",
  "tested": "Effects of a transparent thin plate on fringe shift and fringe width in Young experiment",
- "trap": "Thinking fringe width changes or counting mu*t instead of (mu - 1)*t for the excess path",
+ "trap": "Thinking fringe width changes or counting n*t instead of (n - 1)*t for the excess path",
  "tests": [
   "c.2.3.4"
  ],
@@ -530,19 +530,19 @@ OBJECTIVE.push(
   },
   {
    "k": "B",
-   "t": "The fringe width $\\beta$ increases by a factor of $\\mu$."
+   "t": "The fringe width $\\beta$ increases by a factor of $n$."
   },
   {
    "k": "C",
-   "t": "The number of fringes crossing the central reference point is $(\\mu - 1)t / \\lambda$."
+   "t": "The number of fringes crossing the central reference point is $(n - 1)t / \\lambda$."
   },
   {
    "k": "D",
-   "t": "The additional optical path introduced into the beam by the sheet is $\\mu t$."
+   "t": "The additional optical path introduced into the beam by the sheet is $nt$."
   }
  ],
  "twist": {
-  "q": "What happens if identical sheets of thickness t and index mu are placed over both slits?",
+  "q": "What happens if identical sheets of thickness t and index n are placed over both slits?",
   "a": "The shifts cancel out completely; the fringe pattern remains centered at x = 0"
  }
 },
@@ -555,21 +555,21 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "In a Young's double-slit experiment using light of wavelength $\\lambda = 600\\text{ nm}$, a thin glass plate ($\\mu = 1.50$) is placed in front of one slit. The central bright fringe shifts to the position previously occupied by the 5th bright fringe. Calculate the thickness $t$ of the glass plate in micrometres ($\\mu\\text{m}$).",
+ "prompt": "In a Young's double-slit experiment using light of wavelength $\\lambda = 600\\text{ nm}$, a thin glass plate ($n = 1.50$) is placed in front of one slit. The central bright fringe shifts to the position previously occupied by the 5th bright fringe. Calculate the thickness $t$ of the glass plate in micrometres ($\\mu\\text{m}$).",
  "answer": {
   "value": 6.0,
   "tol": 0.1,
   "dp": 1
  },
- "solution": "<p>The fringe displacement produced by a plate of thickness $t$ and index $\\mu$ is:\n$$\\Delta x = \\frac{(\\mu - 1)t D}{d}$$\nSince the shift corresponds to 5 bright fringes, $\\Delta x = 5\\beta = 5\\frac{\\lambda D}{d}$:\n$$(\\mu - 1)t = 5\\lambda \\implies t = \\frac{5\\lambda}{\\mu - 1}$$\nSubstituting $\\lambda = 600\\text{ nm} = 600 \\times 10^{-9}\\text{ m}$ and $\\mu = 1.50$:\n$$t = \\frac{5 \\times (600 \\times 10^{-9}\\text{ m})}{1.50 - 1.0} = \\frac{3000 \\times 10^{-9}\\text{ m}}{0.50} = 6.0 \\times 10^{-6}\\text{ m} = 6.0\\ \\mu\\text{m}$$</p>\n<p>Using $\\mu t = 5\\lambda$ instead of $(\\mu - 1)t$ is a standard trap that yields $2.0\\ \\mu\\text{m}$.</p>",
+ "solution": "<p>The fringe displacement produced by a plate of index $n$ and thickness $t$ is:\n$$\\Delta x = \\frac{(n - 1)t D}{d}$$\nSince the shift corresponds to 5 bright fringes, $\\Delta x = 5\\beta = 5\\frac{\\lambda D}{d}$:\n$$(n - 1)t = 5\\lambda \\implies t = \\frac{5\\lambda}{n - 1}$$\nSubstituting $\\lambda = 600\\text{ nm} = 600 \\times 10^{-9}\\text{ m}$ and $n = 1.50$:\n$$t = \\frac{5 \\times (600 \\times 10^{-9}\\text{ m})}{1.50 - 1.0} = \\frac{3000 \\times 10^{-9}\\text{ m}}{0.50} = 6.0 \\times 10^{-6}\\text{ m} = 6.0\\ \\mu\\text{m}$$</p>\n<p>Using $nt = 5\\lambda$ instead of $(n - 1)t$ is a standard trap that yields $2.0\\ \\mu\\text{m}$.</p>",
  "tested": "Determination of thin plate thickness from fringe displacement",
- "trap": "Using mu*t = N*lambda instead of (mu - 1)*t = N*lambda",
+ "trap": "Using n*t = N*lambda instead of (n - 1)*t = N*lambda",
  "tests": [
   "c.2.3.4"
  ],
  "twist": {
   "q": "How many fringes would the same plate shift if illuminated by blue light of lambda = 500 nm?",
-  "a": "$N = (\\mu-1)t/\\lambda = (0.50 \\times 6.0\\times 10^{-6}) / (500\\times 10^{-9}) = 6$ fringes"
+  "a": "$N = (n-1)t/\\lambda = (0.50 \\times 6.0\\times 10^{-6}) / (500\\times 10^{-9}) = 6$ fringes"
  }
 },
 {
@@ -661,9 +661,9 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "A Fresnel biprism has refractive index $\\mu$ and a small refracting angle $\\alpha$ for each prism half. A narrow slit is placed at distance $a$ from the biprism. What is the deviation $\\delta_{\\rm d}$ produced by each half of the biprism, and what is the resulting virtual source separation $d$?",
+ "prompt": "A Fresnel biprism has refractive index $n$ and a small refracting angle $\\alpha$ for each prism half. A narrow slit is placed at distance $a$ from the biprism. What is the deviation $\\delta_{\\rm d}$ produced by each half of the biprism, and what is the resulting virtual source separation $d$?",
  "answer": "C",
- "solution": "<p>For a thin prism of small refracting angle $\\alpha$, the deviation at near-normal incidence is:\n$$\\delta_{\\rm d} = (\\mu - 1)\\alpha$$\nEach half of the biprism deflects light by $\\delta_{\\rm d}$, shifting the virtual source sideways by $a\\delta_{\\rm d} = a(\\mu - 1)\\alpha$. Because the two halves deflect in opposite directions, the total separation between the two virtual sources is:\n$$d = 2a\\delta_{\\rm d} = 2a(\\mu - 1)\\alpha$$</p>\n<p>Distractor A incorrectly uses $\\mu\\alpha$ instead of $(\\mu-1)\\alpha$. Distractor B misses the factor of $2$, accounting for only one prism half. Distractor D doubles the deviation angle unnecessarily.</p>",
+ "solution": "<p>For a thin prism of small refracting angle $\\alpha$, the deviation at near-normal incidence is:\n$$\\delta_{\\rm d} = (n - 1)\\alpha$$\nEach half of the biprism deflects light by $\\delta_{\\rm d}$, shifting the virtual source sideways by $a\\delta_{\\rm d} = a(n - 1)\\alpha$. Because the two halves deflect in opposite directions, the total separation between the two virtual sources is:\n$$d = 2a\\delta_{\\rm d} = 2a(n - 1)\\alpha$$</p>\n<p>Distractor A incorrectly uses $n\\alpha$ instead of $(n-1)\\alpha$. Distractor B misses the factor of $2$, accounting for only one prism half. Distractor D doubles the deviation angle unnecessarily.</p>",
  "tested": "Thin-prism deviation and virtual source separation in Fresnel biprism",
  "trap": "Omitting the factor of 2 that accounts for both halves of the biprism",
  "tests": [
@@ -672,23 +672,23 @@ OBJECTIVE.push(
  "options": [
   {
    "k": "A",
-   "t": "$\\delta_{\\rm d} = \\mu\\alpha$, and $d = 2a\\mu\\alpha$"
+   "t": "$\\delta_{\\rm d} = n\\alpha$, and $d = 2an\\alpha$"
   },
   {
    "k": "B",
-   "t": "$\\delta_{\\rm d} = (\\mu - 1)\\alpha$, and $d = a(\\mu - 1)\\alpha$"
+   "t": "$\\delta_{\\rm d} = (n - 1)\\alpha$, and $d = a(n - 1)\\alpha$"
   },
   {
    "k": "C",
-   "t": "$\\delta_{\\rm d} = (\\mu - 1)\\alpha$, and $d = 2a(\\mu - 1)\\alpha$"
+   "t": "$\\delta_{\\rm d} = (n - 1)\\alpha$, and $d = 2a(n - 1)\\alpha$"
   },
   {
    "k": "D",
-   "t": "$\\delta_{\\rm d} = 2(\\mu - 1)\\alpha$, and $d = 4a(\\mu - 1)\\alpha$"
+   "t": "$\\delta_{\\rm d} = 2(n - 1)\\alpha$, and $d = 4a(n - 1)\\alpha$"
   }
  ],
  "twist": {
-  "q": "If a = 0.2 m, mu = 1.5, and alpha = 0.01 rad, what is d?",
+  "q": "If a = 0.2 m, n = 1.5, and alpha = 0.01 rad, what is d?",
   "a": "$d = 2(0.2)(1.5-1)(0.01) = 2.0\\text{ mm}$"
  }
 },
@@ -706,7 +706,7 @@ OBJECTIVE.push(
   "B",
   "D"
  ],
- "solution": "<p>Statement A is incorrect: interference fringes exist only within the geometric region of overlap of the two dividing beams.</p>\n<p>Statement B is correct: both systems produce two virtual copies of a single real slit via division of wavefront.</p>\n<p>Statement C is incorrect: $\\beta = \\frac{\\lambda(a+b)}{2a(\\mu-1)\\alpha}$. Increasing $\\alpha$ increases the separation $d = 2a(\\mu-1)\\alpha$, which decreases the fringe width $\\beta$.</p>\n<p>Statement D is correct: at the perpendicular bisector, the optical path difference is zero. In the two-mirror setup, both beams suffer identical reflections ($\\pi$ phase shifts cancel). In the biprism, both beams undergo refraction without reflection. Hence both have zero net phase difference at the center, making it bright.</p>",
+ "solution": "<p>Statement A is incorrect: interference fringes exist only within the geometric region of overlap of the two dividing beams.</p>\n<p>Statement B is correct: both systems produce two virtual copies of a single real slit via division of wavefront.</p>\n<p>Statement C is incorrect: $\\beta = \\frac{\\lambda(a+b)}{2a(n-1)\\alpha}$. Increasing $\\alpha$ increases the separation $d = 2a(n-1)\\alpha$, which decreases the fringe width $\\beta$.</p>\n<p>Statement D is correct: at the perpendicular bisector, the optical path difference is zero. In the two-mirror setup, both beams suffer identical reflections ($\\pi$ phase shifts cancel). In the biprism, both beams undergo refraction without reflection. Hence both have zero net phase difference at the center, making it bright.</p>",
  "tested": "Wavefront division, fringe localization, and central fringe character in biprism and two mirrors",
  "trap": "Assuming fringes fill the entire field of view or that larger prism angle widens the fringes",
  "tests": [
@@ -745,13 +745,13 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "In a Fresnel biprism experiment, light of wavelength $\\lambda = 500\\text{ nm}$ illuminates a slit located at distance $a = 0.20\\text{ m}$ from a biprism of refractive index $\\mu = 1.50$ and refracting angle $\\alpha = 0.010\\text{ rad}$. The screen is located at distance $b = 0.80\\text{ m}$ from the biprism. Calculate the fringe width $\\beta$ in millimetres ($\\text{mm}$).",
+ "prompt": "In a Fresnel biprism experiment, light of wavelength $\\lambda = 500\\text{ nm}$ illuminates a slit located at distance $a = 0.20\\text{ m}$ from a biprism of refractive index $n = 1.50$ and refracting angle $\\alpha = 0.010\\text{ rad}$. The screen is located at distance $b = 0.80\\text{ m}$ from the biprism. Calculate the fringe width $\\beta$ in millimetres ($\\text{mm}$).",
  "answer": {
   "value": 0.25,
   "tol": 0.01,
   "dp": 2
  },
- "solution": "<p>The total distance from the virtual sources to the screen is:\n$$D = a + b = 0.20 + 0.80 = 1.00\\text{ m}$$\nThe virtual source separation is:\n$$d = 2a(\\mu - 1)\\alpha = 2 \\times 0.20\\text{ m} \\times (1.50 - 1.0) \\times 0.010\\text{ rad} = 0.0020\\text{ m} = 2.0\\text{ mm}$$\nThe fringe width is therefore:\n$$\\beta = \\frac{\\lambda D}{d} = \\frac{500 \\times 10^{-9}\\text{ m} \\times 1.00\\text{ m}}{0.0020\\text{ m}} = 2.50 \\times 10^{-4}\\text{ m} = 0.25\\text{ mm}$$</p>\n<p>A frequent error is setting $D = b = 0.80\\text{ m}$ instead of $a+b = 1.00\\text{ m}$, which yields $0.20\\text{ mm}$.</p>",
+ "solution": "<p>The total distance from the virtual sources to the screen is:\n$$D = a + b = 0.20 + 0.80 = 1.00\\text{ m}$$\nThe virtual source separation is:\n$$d = 2a(n - 1)\\alpha = 2 \\times 0.20\\text{ m} \\times (1.50 - 1.0) \\times 0.010\\text{ rad} = 0.0020\\text{ m} = 2.0\\text{ mm}$$\nThe fringe width is therefore:\n$$\\beta = \\frac{\\lambda D}{d} = \\frac{500 \\times 10^{-9}\\text{ m} \\times 1.00\\text{ m}}{0.0020\\text{ m}} = 2.50 \\times 10^{-4}\\text{ m} = 0.25\\text{ mm}$$</p>\n<p>A frequent error is setting $D = b = 0.80\\text{ m}$ instead of $a+b = 1.00\\text{ m}$, which yields $0.20\\text{ mm}$.</p>",
  "tested": "Numerical calculation of biprism fringe width from optical and geometric parameters",
  "trap": "Using D = b = 0.80 m instead of D = a + b = 1.00 m",
  "tests": [
@@ -961,9 +961,9 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "A plane-parallel dielectric film of refractive index $\\mu$ and uniform thickness $t$ is illuminated in air by light of wavelength $\\lambda$ at angle of refraction $r$. What is the condition for constructive interference (maximum brightness) in the **reflected** light?",
+ "prompt": "A plane-parallel dielectric film of refractive index $n$ and uniform thickness $d$ is illuminated in air by light of wavelength $\\lambda$ at angle of refraction $r$. What is the condition for constructive interference (maximum brightness) in the **reflected** light?",
  "answer": "D",
- "solution": "<p>The geometric optical path difference between the beams reflected from the top and bottom surfaces is $\\Delta = 2\\mu t \\cos r$.</p>\n<p>The reflection at the upper surface (air to film, rarer to denser) undergoes a phase change of $\\pi$ ($\\lambda/2$ path equivalent). The reflection at the bottom surface (film to air, denser to rarer) undergoes no phase change. Thus the effective path difference is $\\Delta_{\\rm eff} = 2\\mu t \\cos r - \\lambda/2$.</p>\n<p>For constructive interference:\n$$2\\mu t \\cos r - \\frac{\\lambda}{2} = m\\lambda \\implies 2\\mu t \\cos r = \\left(m + \\frac{1}{2}\\right)\\lambda$$</p>\n<p>Distractor A is the condition for dark fringes in reflection (or bright in transmission). Distractor B uses $\\sin r$ instead of $\\cos r$. Distractor C uses the angle of incidence $i$ rather than the angle of refraction $r$ inside the film.</p>",
+ "solution": "<p>The geometric optical path difference between the beams reflected from the top and bottom surfaces is $\\Delta = 2nd \\cos r$.</p>\n<p>The reflection at the upper surface (air to film, rarer to denser) undergoes a phase change of $\\pi$ ($\\lambda/2$ path equivalent). The reflection at the bottom surface (film to air, denser to rarer) undergoes no phase change. Thus the effective path difference is $\\Delta_{\\rm eff} = 2nd \\cos r - \\lambda/2$.</p>\n<p>For constructive interference:\n$$2nd \\cos r - \\frac{\\lambda}{2} = m\\lambda \\implies 2nd \\cos r = \\left(m + \\frac{1}{2}\\right)\\lambda$$</p>\n<p>Distractor A is the condition for dark fringes in reflection (or bright in transmission). Distractor B uses $\\sin r$ instead of $\\cos r$. Distractor C uses the angle of incidence $i$ rather than the angle of refraction $r$ inside the film.</p>",
  "tested": "Cosine law and reflection interference condition for thin parallel films",
  "trap": "Forgetting the phase change of pi on reflection or confusing angle i with angle r",
  "tests": [
@@ -972,24 +972,24 @@ OBJECTIVE.push(
  "options": [
   {
    "k": "A",
-   "t": "$2\\mu t \\cos r = m\\lambda$"
+   "t": "$2nd \\cos r = m\\lambda$"
   },
   {
    "k": "B",
-   "t": "$2\\mu t \\sin r = (m + \\frac{1}{2})\\lambda$"
+   "t": "$2nd \\sin r = (m + \\frac{1}{2})\\lambda$"
   },
   {
    "k": "C",
-   "t": "$2\\mu t \\cos i = (m + \\frac{1}{2})\\lambda$"
+   "t": "$2nd \\cos i = (m + \\frac{1}{2})\\lambda$"
   },
   {
    "k": "D",
-   "t": "$2\\mu t \\cos r = (m + \\frac{1}{2})\\lambda$"
+   "t": "$2nd \\cos r = (m + \\frac{1}{2})\\lambda$"
   }
  ],
  "twist": {
   "q": "What is the condition for constructive interference in transmitted light?",
-  "a": "$2\\mu t\\cos r = m\\lambda$ (no relative reflection phase shift)"
+  "a": "$2nd\\cos r = m\\lambda$ (no relative reflection phase shift)"
  }
 },
 {
@@ -1001,9 +1001,9 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "A non-reflecting (anti-reflection) single-layer coating of refractive index $n_f$ and thickness $t$ is deposited on a crown glass substrate of index $n_g = 1.69$ in air ($n_0 = 1.0$). For complete destructive cancellation of reflected light of wavelength $\\lambda = 520\\text{ nm}$ at normal incidence, the ideal index $n_f$ and minimum thickness $t$ are:",
+ "prompt": "A non-reflecting (anti-reflection) single-layer coating of refractive index $n_f$ and thickness $d$ is deposited on a crown glass substrate of index $n_g = 1.69$ in air ($n_0 = 1.0$). For complete destructive cancellation of reflected light of wavelength $\\lambda = 520\\text{ nm}$ at normal incidence, the ideal index $n_f$ and minimum thickness $d$ are:",
  "answer": "A",
- "solution": "<p>For equal amplitudes of the two reflected beams, the refractive index must satisfy:\n$$n_f = \\sqrt{n_0 n_g} = \\sqrt{1.0 \\times 1.69} = 1.30$$\nSince $n_0 < n_f < n_g$, both the air-coating reflection and coating-glass reflection occur at rarer-to-denser boundaries; each suffers a $\\pi$ phase change, giving zero relative phase change from reflection.</p>\n<p>Destructive interference requires the round-trip optical path to equal $\\lambda/2$:\n$$2 n_f t = \\frac{\\lambda}{2} \\implies t = \\frac{\\lambda}{4 n_f} = \\frac{520\\text{ nm}}{4 \\times 1.30} = 100\\text{ nm}$$</p>\n<p>Distractor B uses $t = \\lambda/4 = 130\\text{ nm}$ (forgetting the refractive index in the film). Distractor C sets $n_f = n_g$. Distractor D miscalculates the index.</p>",
+ "solution": "<p>For equal amplitudes of the two reflected beams, the refractive index must satisfy:\n$$n_f = \\sqrt{n_0 n_g} = \\sqrt{1.0 \\times 1.69} = 1.30$$\nSince $n_0 < n_f < n_g$, both the air-coating reflection and coating-glass reflection occur at rarer-to-denser boundaries; each suffers a $\\pi$ phase change, giving zero relative phase change from reflection.</p>\n<p>Destructive interference requires the round-trip optical path to equal $\\lambda/2$:\n$$2 n_f d = \\frac{\\lambda}{2} \\implies d = \\frac{\\lambda}{4 n_f} = \\frac{520\\text{ nm}}{4 \\times 1.30} = 100\\text{ nm}$$</p>\n<p>Distractor B uses $d = \\lambda/4 = 130\\text{ nm}$ (forgetting the refractive index in the film). Distractor C sets $n_f = n_g$. Distractor D miscalculates the index.</p>",
  "tested": "Design criteria for single-layer anti-reflection coatings (refractive index and thickness)",
  "trap": "Omitting the film index in the denominator of the quarter-wave thickness formula",
  "tests": [
@@ -1012,19 +1012,19 @@ OBJECTIVE.push(
  "options": [
   {
    "k": "A",
-   "t": "$n_f = 1.30$, and $t = 100\\text{ nm}$"
+   "t": "$n_f = 1.30$, and $d = 100\\text{ nm}$"
   },
   {
    "k": "B",
-   "t": "$n_f = 1.30$, and $t = 130\\text{ nm}$"
+   "t": "$n_f = 1.30$, and $d = 130\\text{ nm}$"
   },
   {
    "k": "C",
-   "t": "$n_f = 1.69$, and $t = 100\\text{ nm}$"
+   "t": "$n_f = 1.69$, and $d = 100\\text{ nm}$"
   },
   {
    "k": "D",
-   "t": "$n_f = 1.44$, and $t = 90\\text{ nm}$"
+   "t": "$n_f = 1.44$, and $d = 90\\text{ nm}$"
   }
  ],
  "twist": {
@@ -1081,26 +1081,26 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "A thin soap film of refractive index $\\mu = 1.33$ surrounded by air is illuminated normally by light. Which of the following statements are correct?",
+ "prompt": "A thin soap film of refractive index $n = 1.33$ surrounded by air is illuminated normally by light. Which of the following statements are correct?",
  "answer": [
   "B",
   "C",
   "D"
  ],
- "solution": "<p>Statement A is incorrect and Statement B is correct: for $t \\ll \\lambda$, the round-trip path difference $2\\mu t \\to 0$. However, the top reflection has a $\\pi$ phase flip while the bottom reflection has none. The net phase difference is $\\pi$, producing destructive interference (a black film) just before it ruptures.</p>\n<p>Statement C is correct: by conservation of energy in non-absorbing media, whatever light is not reflected is transmitted, making the reflected and transmitted patterns strictly complementary.</p>\n<p>Statement D is correct: for constructive interference in reflection, $2\\mu t = (m + \\frac{1}{2})\\lambda$. For $m = 0$, $t_{\\min} = \\frac{\\lambda}{4\\mu}$.</p>",
- "tested": "Thin film limiting behaviour as t -> 0, energy conservation, and minimum thickness",
- "trap": "Assuming t -> 0 gives constructive interference because path difference approaches zero",
+ "solution": "<p>Statement A is incorrect and Statement B is correct: for $d \\ll \\lambda$, the round-trip path difference $2nd \\to 0$. However, the top reflection has a $\\pi$ phase flip while the bottom reflection has none. The net phase difference is $\\pi$, producing destructive interference (a black film) just before it ruptures.</p>\n<p>Statement C is correct: by conservation of energy in non-absorbing media, whatever light is not reflected is transmitted, making the reflected and transmitted patterns strictly complementary.</p>\n<p>Statement D is correct: for constructive interference in reflection, $2nd = (m + \\frac{1}{2})\\lambda$. For $m = 0$, $d_{\\min} = \\frac{\\lambda}{4n}$.</p>",
+ "tested": "Thin film limiting behaviour as d -> 0, energy conservation, and minimum thickness",
+ "trap": "Assuming d -> 0 gives constructive interference because path difference approaches zero",
  "tests": [
   "c.2.6.1"
  ],
  "options": [
   {
    "k": "A",
-   "t": "A film whose physical thickness $t \\ll \\lambda$ appears brilliantly bright in reflected light."
+   "t": "A film whose physical thickness $d \\ll \\lambda$ appears brilliantly bright in reflected light."
   },
   {
    "k": "B",
-   "t": "As the film drains and its thickness approaches zero ($t \\to 0$), it appears completely black in reflection."
+   "t": "As the film drains and its thickness approaches zero ($d \\to 0$), it appears completely black in reflection."
   },
   {
    "k": "C",
@@ -1108,11 +1108,11 @@ OBJECTIVE.push(
   },
   {
    "k": "D",
-   "t": "The minimum non-zero thickness of the film for maximum reflection of wavelength $\\lambda$ is $t = \\lambda / (4\\mu)$."
+   "t": "The minimum non-zero thickness of the film for maximum reflection of wavelength $\\lambda$ is $d = \\lambda / (4n)$."
   }
  ],
  "twist": {
-  "q": "What would the appearance of a film with t -> 0 be if it had a rarer medium above and a denser medium below?",
+  "q": "What would the appearance of a film with d -> 0 be if it had a rarer medium above and a denser medium below?",
   "a": "Both reflections would undergo a $\\pi$ flip, making the film appear bright"
  }
 },
@@ -1125,13 +1125,13 @@ OBJECTIVE.push(
  "neg": 0,
  "negLabel": "0",
  "time": 90,
- "prompt": "Light of wavelength $\\lambda = 560\\text{ nm}$ in air is incident normally on a thin oil film ($\\mu = 1.40$) floating on water ($\\mu_w = 1.33$). Calculate the minimum thickness $t$ of the oil film in nanometres ($\\text{nm}$) for which the reflected light shows maximum brightness (constructive interference).",
+ "prompt": "Light of wavelength $\\lambda = 560\\text{ nm}$ in air is incident normally on a thin oil film ($n = 1.40$) floating on water ($n_w = 1.33$). Calculate the minimum thickness $d$ of the oil film in nanometres ($\\text{nm}$) for which the reflected light shows maximum brightness (constructive interference).",
  "answer": {
   "value": 100.0,
   "tol": 2.0,
   "dp": 1
  },
- "solution": "<p>Let us analyze the phase changes at both interfaces:\n<ul><li>Top interface (air $n_1 = 1.0$ to oil $n_2 = 1.40$): reflection is from rarer to denser, so a phase change of $\\pi$ occurs.</li>\n<li>Bottom interface (oil $n_2 = 1.40$ to water $n_3 = 1.33$): reflection is from denser to rarer ($1.40 > 1.33$), so NO phase change occurs.</li></ul>\nThe net reflection phase difference is $\\pi$ (equivalent to an optical path difference of $\\lambda/2$).</p>\n<p>For constructive interference in reflection at normal incidence ($\\cos r = 1$):\n$$2\\mu t - \\frac{\\lambda}{2} = m\\lambda \\implies 2\\mu t = \\left(m + \\frac{1}{2}\\right)\\lambda$$\nFor the minimum non-zero thickness, set $m = 0$:\n$$2\\mu t = \\frac{\\lambda}{2} \\implies t = \\frac{\\lambda}{4\\mu} = \\frac{560\\text{ nm}}{4 \\times 1.40} = \\frac{560}{5.60}\\text{ nm} = 100.0\\text{ nm}$$</p>",
+ "solution": "<p>Let us analyze the phase changes at both interfaces:\n<ul><li>Top interface (air $n_1 = 1.0$ to oil $n_2 = 1.40$): reflection is from rarer to denser, so a phase change of $\\pi$ occurs.</li>\n<li>Bottom interface (oil $n_2 = 1.40$ to water $n_3 = 1.33$): reflection is from denser to rarer ($1.40 > 1.33$), so NO phase change occurs.</li></ul>\nThe net reflection phase difference is $\\pi$ (equivalent to an optical path difference of $\\lambda/2$).</p>\n<p>For constructive interference in reflection at normal incidence ($\\cos r = 1$):\n$$2nd - \\frac{\\lambda}{2} = m\\lambda \\implies 2nd = \\left(m + \\frac{1}{2}\\right)\\lambda$$\nFor the minimum non-zero thickness, set $m = 0$:\n$$2nd = \\frac{\\lambda}{2} \\implies d = \\frac{\\lambda}{4n} = \\frac{560\\text{ nm}}{4 \\times 1.40} = \\frac{560}{5.60}\\text{ nm} = 100.0\\text{ nm}$$</p>",
  "tested": "Thin film reflection conditions with asymmetric refractive index boundary steps",
  "trap": "Assuming both reflections have a phase change of pi (oil on water has n_oil > n_water)",
  "tests": [
@@ -1139,7 +1139,7 @@ OBJECTIVE.push(
  ],
  "twist": {
   "q": "If the oil film were on flint glass (n = 1.65) instead of water, what would the minimum thickness be?",
-  "a": "Both reflections would suffer $\\pi$ shifts, so $2\\mu t = \\lambda \\implies t = \\lambda/(2\\mu) = 200.0\\text{ nm}$"
+  "a": "Both reflections would suffer $\\pi$ shifts, so $2nd = \\lambda \\implies d = \\lambda/(2n) = 200.0\\text{ nm}$"
  }
 },
 {
@@ -1151,35 +1151,35 @@ OBJECTIVE.push(
  "neg": -0.33,
  "negLabel": "−1/3",
  "time": 60,
- "prompt": "In a Newton's rings experiment viewed in reflected light, the diameter of the $n$-th dark ring is $D_n$. Which relationship correctly describes how $D_n$ scales with the ring order $n$, wavelength $\\lambda$, and radius of curvature $R$ of the lens?",
+ "prompt": "In a Newton's rings experiment viewed in reflected light, the diameter of the $m$-th dark ring is $D_m$. Which relationship correctly describes how $D_m$ scales with the ring order $m$, wavelength $\\lambda$, and radius of curvature $R$ of the lens?",
  "answer": "C",
- "solution": "<p>For a lens of radius of curvature $R$, the thickness of the circular air film at radius $r$ is $t \\approx r^2 / (2R)$.</p>\n<p>The condition for a dark ring in reflected light (including the $\\pi$ phase flip at the plate) is $2t = n\\lambda$:\n$$\\frac{r_n^2}{R} = n\\lambda \\implies r_n = \\sqrt{n\\lambda R}$$\nSince diameter $D_n = 2r_n$:\n$$D_n = 2\\sqrt{n\\lambda R} \\propto \\sqrt{n\\lambda R}$$</p>\n<p>Distractor A confuses diameter with squared diameter ($D_n^2 \\propto n\\lambda R$). Distractor B inverts the dependence on $R$. Distractor D uses an incorrect quadratic dependence on $n$.</p>",
+ "solution": "<p>For a lens of radius of curvature $R$, the thickness of the circular air film at radius $r$ is $d \\approx r^2 / (2R)$.</p>\n<p>The condition for a dark ring in reflected light (including the $\\pi$ phase flip at the plate) is $2d = m\\lambda$:\n$$\\frac{r_m^2}{R} = m\\lambda \\implies r_m = \\sqrt{m\\lambda R}$$\nSince diameter $D_m = 2r_m$:\n$$D_m = 2\\sqrt{m\\lambda R} \\propto \\sqrt{m\\lambda R}$$</p>\n<p>Distractor A confuses diameter with squared diameter ($D_m^2 \\propto m\\lambda R$). Distractor B inverts the dependence on $R$. Distractor D uses an incorrect quadratic dependence on $m$.</p>",
  "tested": "Scaling behaviour of Newton dark ring diameters with order, wavelength, and curvature",
- "trap": "Confusing diameter D_n with diameter squared D_n^2",
+ "trap": "Confusing diameter D_m with diameter squared D_m^2",
  "tests": [
   "c.2.7.3"
  ],
  "options": [
   {
    "k": "A",
-   "t": "$D_n \\propto n \\lambda R$"
+   "t": "$D_m \\propto m \\lambda R$"
   },
   {
    "k": "B",
-   "t": "$D_n \\propto \\sqrt{\\frac{n\\lambda}{R}}$"
+   "t": "$D_m \\propto \\sqrt{\\frac{m\\lambda}{R}}$"
   },
   {
    "k": "C",
-   "t": "$D_n \\propto \\sqrt{n \\lambda R}$"
+   "t": "$D_m \\propto \\sqrt{m \\lambda R}$"
   },
   {
    "k": "D",
-   "t": "$D_n \\propto n^2 \\lambda R$"
+   "t": "$D_m \\propto m^2 \\lambda R$"
   }
  ],
  "twist": {
-  "q": "What happens to the dark ring diameters if the air gap is filled with water (mu = 4/3)?",
-  "a": "They shrink by a factor of $1/\\sqrt{\\mu} = \\sqrt{3}/2 \\approx 0.866$"
+  "q": "What happens to the dark ring diameters if the air gap is filled with water (n = 4/3)?",
+  "a": "They shrink by a factor of $1/\\sqrt{n} = \\sqrt{3}/2 \\approx 0.866$"
  }
 },
 {
@@ -1233,7 +1233,7 @@ OBJECTIVE.push(
  "time": 60,
  "prompt": "Haidinger fringes formed by a plane-parallel plate and Fizeau fringes formed by a wedge-shaped film are classified respectively as:",
  "answer": "A",
- "solution": "<p><b>Haidinger fringes:</b> in a plane-parallel plate, thickness $t$ is constant across the entire film. The path difference $2\\mu t \\cos r$ varies only with the angle of inclination $r$. Rays of a given inclination form a circle at infinity; these are <b>fringes of equal inclination</b>.</p>\n<p><b>Fizeau fringes:</b> in a wedge-shaped film viewed at a fixed angle (normally $r \\approx 0$), $\\cos r$ is constant and the path difference varies with the local film thickness $t(x)$. The fringes trace contours of constant $t$; these are <b>fringes of equal thickness</b>, localized on the film.</p>",
+ "solution": "<p><b>Haidinger fringes:</b> in a plane-parallel plate, thickness $d$ is constant across the entire film. The path difference $2nd \\cos r$ varies only with the angle of inclination $r$. Rays of a given inclination form a circle at infinity; these are <b>fringes of equal inclination</b>.</p>\n<p><b>Fizeau fringes:</b> in a wedge-shaped film viewed at a fixed angle (normally $r \\approx 0$), $\\cos r$ is constant and the path difference varies with the local film thickness $d(x)$. The fringes trace contours of constant $d$; these are <b>fringes of equal thickness</b>, localized on the film.</p>",
  "tested": "Classification and distinction between fringes of equal inclination and equal thickness",
  "trap": "Swapping the definitions of Haidinger fringes and Fizeau fringes",
  "tests": [
@@ -1277,9 +1277,9 @@ OBJECTIVE.push(
   "B",
   "D"
  ],
- "solution": "<p>Statement A is correct: at the point of contact $t = 0$, but reflection at the lower glass plate introduces a $\\pi$ phase change, causing destructive interference (a dark center).</p>\n<p>Statement B is correct: dark fringes occur at $2t = m\\lambda$ with $t = x\\alpha \\implies x_m = m\\lambda/(2\\alpha)$, so $\\beta = x_{m+1} - x_m = \\lambda/(2\\alpha)$.</p>\n<p>Statement C is incorrect: $r_n = \\sqrt{n\\lambda R}$, so radii are proportional to $\\sqrt{n}$, not $n$.</p>\n<p>Statement D is correct: with liquid of index $\\mu$, $D_n = 2\\sqrt{n\\lambda R / \\mu}$, so every ring diameter shrinks by a factor of $1/\\sqrt{\\mu}$.</p>",
+ "solution": "<p>Statement A is correct: at the point of contact $d = 0$, but reflection at the lower glass plate introduces a $\\pi$ phase change, causing destructive interference (a dark center).</p>\n<p>Statement B is correct: dark fringes occur at $2d = m\\lambda$ with $d = x\\theta \\implies x_m = m\\lambda/(2\\theta)$, so $\\beta = x_{m+1} - x_m = \\lambda/(2\\theta)$.</p>\n<p>Statement C is incorrect: $r_m = \\sqrt{m\\lambda R}$, so radii are proportional to $\\sqrt{m}$, not $m$.</p>\n<p>Statement D is correct: with liquid of index $n$, $D_m = 2\\sqrt{m\\lambda R / n}$, so every ring diameter shrinks by a factor of $1/\\sqrt{n}$.</p>",
  "tested": "Properties, fringe spacing, and scaling laws of Newton rings and wedge films",
- "trap": "Assuming ring radii scale linearly with order n rather than sqrt(n)",
+ "trap": "Assuming ring radii scale linearly with order m rather than sqrt(m)",
  "tests": [
   "c.2.7.1",
   "c.2.7.3"
@@ -1291,15 +1291,15 @@ OBJECTIVE.push(
   },
   {
    "k": "B",
-   "t": "For an air wedge of small angle $\\alpha$, the fringe spacing is given by $\\beta = \\lambda / (2\\alpha)$."
+   "t": "For an air wedge of small angle $\\theta$, the fringe spacing is given by $\\beta = \\lambda / (2\\theta)$."
   },
   {
    "k": "C",
-   "t": "The radii of successive dark Newton's rings are directly proportional to the integer order $n$."
+   "t": "The radii of successive dark Newton's rings are directly proportional to the integer order $m$."
   },
   {
    "k": "D",
-   "t": "If a liquid of refractive index $\\mu > 1$ fills the gap between the lens and the plate, all Newton ring diameters decrease."
+   "t": "If a liquid of refractive index $n > 1$ fills the gap between the lens and the plate, all Newton ring diameters decrease."
   }
  ],
  "twist": {
