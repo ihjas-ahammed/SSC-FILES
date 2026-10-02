@@ -2950,6 +2950,8 @@ const DIAGRAM_SHEETS = [
          home(ctx)   -> Node|null     a hero placed above the home dashboard
          theme(dark)                  after light/dark is applied
          ready()                      once, after the signed-in app is up
+         rungFig(rung, concept, i)    -> Node|null  a diagram above one proof step
+         noteSim(concept)             -> Node|null  an interactive panel after a note's figures
        }
      }
 
@@ -5366,7 +5368,9 @@ const UI = (function () {
     };
   }
 
-  /* `line` is an optional RealLine node drawn under the maths.
+  /* `fig` is an optional diagram node a project draws for this step (PROJECT.hooks.rungFig),
+     shown above the maths so the picture is read first.
+     `line` is an optional RealLine node drawn under the maths.
      `compact` is the recall reel's version: the explanation as a quiet
      line under the maths rather than its own labelled block. */
   function rung(r, i, opts) {
@@ -5376,6 +5380,7 @@ const UI = (function () {
       el('div', { class: 'rung-why small muted' }, [
         el('b', { text: 'Step ' + (i + 1) + ': ' }), el('span', { html: p.why })
       ]),
+      o.fig || null,
       p.math ? el('div', { class: 'rung-math', html: p.math }) : null,
       o.line || null,
       p.meaning ? (o.compact
@@ -8384,7 +8389,9 @@ const NoteBody = (function () {
       if (p.rungs && p.rungs.length) {
         kids.push(el('div', { class: 'stack', style: { gap: '10px' } },
           (function (lines) {
-            return p.rungs.map(function (r, idx) { return UI.rung(r, idx, { line: lines[idx] }); });
+            return p.rungs.map(function (r, idx) {
+              return UI.rung(r, idx, { line: lines[idx], fig: Project.hook('rungFig', r, c, idx) });
+            });
           })(RealLine.proof(c))
         ));
       }
@@ -8814,6 +8821,8 @@ const NoteBody = (function () {
       ]),
 
       Fig.mount(c),
+
+      Project.hook('noteSim', c),
 
       c.intuition ? el('div', { class: 'card tint' }, [
         el('div', { class: 'kicker', text: 'What it really says' }),
