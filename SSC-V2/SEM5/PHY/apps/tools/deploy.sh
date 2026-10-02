@@ -176,6 +176,7 @@ if [ -d "$PROB" ] && [ -f "$PROB/build.py" ]; then
   if [ "$REBUILD_LIVE" = "1" ]; then
     node "$PROB/tools/audit.js"
     node "$PROB/tools/check_tex.js"
+    node "$PROB/tools/audit_ross.js" --strict
     python3 "$PROB/tools/coverage.py"
     python3 "$PROB/build.py" > /dev/null
   fi
@@ -184,6 +185,10 @@ if [ -d "$PROB" ] && [ -f "$PROB/build.py" ]; then
     exit 1
   fi
   mkdir -p "$TMP/public/math/probability" "$TMP/public/math/probability-test"
+  if [ -d "$PROB/diagrams" ]; then
+    cp -r "$PROB/diagrams" "$TMP/public/math/probability/diagrams"
+    cp -r "$PROB/diagrams" "$TMP/public/math/probability-test/diagrams"
+  fi
   cp "$PROB/build/index.html" "$TMP/public/math/probability/index.html"
   if [ -f "$PROB/build/source-guide.html" ]; then
     cp "$PROB/build/source-guide.html" "$TMP/public/math/probability/source-guide.html"

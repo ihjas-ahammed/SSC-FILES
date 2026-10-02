@@ -2908,7 +2908,7 @@ PROJECT.hooks.home = function () {
       e('a',{class:'btn primary',href:'#/study/prob',text:'Open the syllabus'}),
       e('a',{class:'prob-guide-link',href:'source-guide.html',text:'Coverage and reading guide'})
     ]),
-    e('p',{class:'prob-hero-foot',text:'DA core + inference bridge · clearly marked extensions · selected textbook practice'})
+    e('p',{class:'prob-hero-foot',text:'DA core + inference bridge · clearly marked extensions · Ross examples + exercises · illustrated proofs'})
   ]);
 };
 function probDisclosure(title, content, className) {
@@ -2919,6 +2919,12 @@ function probDisclosure(title, content, className) {
 }
 PROJECT.hooks.noteSim = function (c) {
   const e=DOM.el, nodes=[];
+  const figure=probabilityFigure(c);
+  if(figure) nodes.push(figure);
+  const vocabulary=probVocabulary(c);
+  if(vocabulary.length) nodes.push(probDisclosure('Words used here',vocabulary.map(v=>
+    e('p',{},[e('b',{text:v[0]+': '}),v[1]])
+  )));
   if(c.provenance) nodes.push(probDisclosure('Source and reading reference',[
     e('p',{class:'small muted',text:c.provenance})
   ],'prob-source'));
@@ -2930,6 +2936,26 @@ PROJECT.hooks.noteSim = function (c) {
   ]));
   return nodes.length ? e('div',{class:'prob-note-extras'},nodes) : null;
 };
+function probVocabulary(c) {
+  const text=[c.statement,c.oneLine,c.proof&&JSON.stringify(c.proof)].filter(Boolean).join(' ');
+  const words=[
+    [/\biid\b|identically distributed/i,'iid','The observations are independent (one does not affect another), and all follow the same probability rule.'],
+    [/integrab/i,'Integrable','The expected absolute size is finite: E[|X|] < ∞. This ensures that the average in the formula is well defined.'],
+    [/\bpmf\b|probability mass function/i,'Probability mass function (pmf)','A list or formula giving the chance of each separate possible value of a discrete random variable.'],
+    [/\bcdf\b|distribution function/i,'Cumulative distribution function (CDF)','F(x) is the chance that the random value is at most x. As x moves right, this accumulated chance cannot decrease.'],
+    [/\bvariance\b/i,'Variance','The average squared distance from the mean. It measures spread; standard deviation is its square root.'],
+    [/covariance/i,'Covariance','The average product of two deviations from their means. Its sign describes whether the two quantities tend to move together or in opposite directions.'],
+    [/\bpartition\b/i,'Partition','Separate groups that cover every possibility, with each outcome in exactly one group.'],
+    [/almost.sure/i,'Almost surely','The statement holds with probability 1. In a limit theorem, almost every entire infinite sequence has the stated limiting behavior.'],
+    [/converge\w* in probability|convergence in probability/i,'Convergence in probability','For any chosen error margin, the chance of being outside that margin goes to zero as the sample gets larger.'],
+    [/converge\w* in distribution|convergence in distribution/i,'Convergence in distribution','The cumulative probabilities approach those of the limiting distribution at every point where its CDF is continuous.'],
+    [/characteristic.function/i,'Characteristic function','A mathematical summary E[exp(itX)] of a distribution, using the imaginary unit i. It is used to prove the limit theorem; the picture explains the theorem’s meaning.'],
+    [/\bMGF\b|moment.generating/i,'Moment generating function (MGF)','The function E[exp(tX)], when finite near zero. Its derivatives at zero give averages such as E[X] and E[X²].'],
+    [/measurab/i,'Measurable event or set','A collection of outcomes for which the probability model allows us to assign a probability.'],
+    [/Jacobian/i,'Jacobian','The local area or volume scaling factor when changing coordinates. It corrects a density for stretching or shrinking.']
+  ];
+  return words.filter(w=>w[0].test(text)).map(w=>[w[1],w[2]]);
+}
 function probSlider(host, label, value, min, max, step, onChange) {
   const e=DOM.el, num=e('b',{text:String(value)});
   const input=e('input',{type:'range',min:String(min),max:String(max),step:String(step),value:String(value),
@@ -2964,6 +2990,41 @@ function binomialLab(){
   }
   probSlider(host,'Trials n',n,1,30,1,v=>{n=v;paint();});probSlider(host,'Success probability p',p,0,1,.01,v=>{p=v;paint();});DOM.add(host,[plot,result,e('p',{class:'small muted',text:'Now remove independence or let p change between trials. The binomial model no longer applies. Bar heights represent mass, not a continuous density.'})]);paint();return host;
 }
+
+
+/* ── project/probability.figs.js ── */
+/* Generated textbook illustrations, selected explicitly for the argument beside them.
+   The same ivory figures work in both themes. Captions carry the exact teaching point. */
+const PROB_FIGURES = {
+  'c.prob.1.2.1': {asset:'counting', alt:'A choice tree with three first choices and two continuations per choice; ordered and unordered selections.', caption:'Follow each branch to its end. Three first choices, each with two continuations, give six complete outcomes.', steps:{0:'The left panel lists the continuations of each first choice.',1:'Count the six leaves: three groups of two. The picture is a small example of the general m × n rule.'}},
+  'c.prob.1.3.1': {asset:'counting', alt:'Ordered positions contrasted with an unordered selection.', caption:'The middle panel keeps track of positions. Swapping two different objects makes a new arrangement.'},
+  'c.prob.1.4.1': {asset:'counting', alt:'An unordered selection of two objects from four.', caption:'The right panel shows a selection. The chosen objects matter; their order does not.'},
+  'c.prob.2.4.2': {asset:'event-overlap', alt:'Overlapping events A and B: the shared region is counted twice when the event probabilities are added.', caption:'A and B in the picture play the roles of E and F in the formula. Count their shared region once.', steps:{0:'The union contains the whole first circle plus only the part of the second circle outside it.',1:'The second circle splits into the overlap and the outside part. Subtract the overlap to leave the outside part.'}},
+  'c.prob.3.2.1': {asset:'conditional-bayes', alt:'Conditioning restricts the sample space to B; a probability tree shows routes through A and its complement.', caption:'Once B is known, ignore everything outside B. Compare the overlap with the whole remaining B region.'},
+  'c.prob.3.3.1': {asset:'conditional-bayes', alt:'A tree splits the population into A and not A, then into B and not B.', caption:'To find the chance of B, add the probabilities of both routes that end at B. The tree shows a two-case partition.', steps:{1:'The two highlighted routes are separate ways to reach B, so their probabilities add.',2:'Multiply along each route, then add across the routes ending at B.'}},
+  'c.prob.3.3.2': {asset:'conditional-bayes', alt:'A probability tree highlights the two routes to an observed event B.', caption:'Bayes compares the route through A to all routes ending at B. The denominator includes both routes.'},
+  'c.prob.5.1.1': {asset:'density', alt:'A density curve, shaded interval probability between a and b, and an increasing cumulative distribution function.', caption:'Height is density. Area between a and b is probability. The CDF collects all area to the left of x.'},
+  'c.prob.5.1.2': {asset:'density', alt:'Interval probability is area under a density; a CDF accumulates this area.', caption:'For a very narrow interval, the shaded area is approximately its width times the density height.', steps:{0:'The shaded region illustrates the integral: add the probability area across the interval.'}},
+  'c.prob.7.3.1': {asset:'expectation', alt:'Four coin outcomes H T H H become indicator values 1 0 1 1 and add to a count.', caption:'Replace each success by 1 and each failure by 0. Add these indicators to count successes. If each has success chance p, the expected count is 4p, even without independence.', steps:{0:'The first panel turns each yes/no event into a number: 1 for yes, 0 for no.',1:'The final panel adds expected values. In this four-trial example each indicator has mean p, so the expected count is 4p.'}},
+  'c.prob.8.3.1': {asset:'limit-theorem', alt:'Skewed individual observations are repeatedly sampled; the standardized sample mean approaches a bell-shaped distribution.', caption:'The normal approximation describes the standardized mean across repeated samples. It does not change the distribution of each observation.'},
+  'c.prob.8.3.2': {asset:'limit-theorem', alt:'Repeated sample means approach a normal distribution under the central limit theorem conditions.', caption:'Picture many repeated samples. Each contributes one mean; those means form the distribution used for the approximation.'},
+  'c.prob.6.1.2': {asset:'joint-distribution', alt:'A joint probability table with row totals 0.50 and column totals 0.40 and 0.60; conditioning on Y=1 gives probabilities 1/3 and 2/3.', caption:'Add a row to find the chance of that X value. Add a column to find the chance of that Y value. The whole table sums to one.'},
+  'c.prob.6.4.1': {asset:'joint-distribution', alt:'The Y=1 column contains masses 0.20 and 0.40, which become 1/3 and 2/3 after dividing by 0.60.', caption:'Given Y=1, keep only that column. Divide each remaining probability by the column total, 0.60, so the new probabilities sum to one.'},
+  'c.prob.8.2.1': {asset:'tail-bound', alt:'A nonnegative distribution above threshold a illustrates Markov; tails outside mean plus or minus r illustrate Chebyshev.', caption:'A large tail would force a large average. Chebyshev applies this idea to squared distance from the mean.', steps:{0:'In the left shaded tail X is at least a, so its contribution to the average is at least a times the tail probability.',1:'The average of the indicator is the tail probability. Rearrange the displayed inequality to obtain Markov’s bound.',2:'The right picture has two tails. Both make the squared distance at least r², so Markov bounds their combined probability.'}},
+  'c.prob.9.2.1': {asset:'markov-chain', alt:'Dry and Rain states have transition probabilities 0.8, 0.2, 0.4 and 0.6; two routes give a two-day rain chance of 0.28 from Dry.', caption:'Each state has outgoing probabilities adding to one. Starting from Dry, tomorrow is Dry with probability 0.8 and Rain with probability 0.2.'},
+  'c.prob.9.2.2': {asset:'markov-chain', alt:'Two routes from Dry to Rain over two days give 0.8 times 0.2 plus 0.2 times 0.6 equals 0.28.', caption:'Multiply along each route, then add the routes. This is the two-state version of the Chapman–Kolmogorov formula.', steps:{0:'The middle day is either Dry or Rain. Those two separate cases cover every route.',2:'The first route contributes 0.8 × 0.2. The second contributes 0.2 × 0.6. Add them to obtain 0.28.'}},
+  'c.prob.10.2.1': {asset:'inverse-simulation', alt:'A uniform draw U=0.4 on zero to one maps to X=3.2 on two to five through X=2+3U.', caption:'For Uniform(2,5), the inverse CDF is 2 + 3U. A random draw at 40% of the unit interval lands at 40% of the new interval.', steps:{1:'The input is uniform: the chance that U is below any threshold u between 0 and 1 is u.',2:'For 2 ≤ x ≤ 5, P(2+3U ≤ x) = (x−2)/3. This is exactly the CDF of Uniform(2,5).'}}
+};
+function probabilityFigure(c, step) {
+  const f=PROB_FIGURES[c.id];
+  if(!f || (step!=null && !Object.prototype.hasOwnProperty.call(f.steps||{},step))) return null;
+  const base=typeof DIAGRAM_BASE==='undefined'?'diagrams/':DIAGRAM_BASE;
+  return DOM.el('figure',{class:'fig fig-rendered prob-teaching-figure'},[
+    DOM.el('img',{src:base+'teaching/'+f.asset+'.png',alt:f.alt,loading:'lazy',decoding:'async',class:'fig-img'}),
+    DOM.el('figcaption',{class:'fig-cap',text:step==null?f.caption:f.steps[step]})
+  ]);
+}
+PROJECT.hooks.rungFig=function(rung,c,i){return probabilityFigure(c,i);};
 
 
 /* ── flow-library/app/src/core.project.js ── */

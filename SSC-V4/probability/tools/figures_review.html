@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" data-theme="light"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Probability figures review</title>
+<link rel="stylesheet" href="../../flow-library/app/src/ui.css">
+<link rel="stylesheet" href="../app/project/theme.css">
+<style>main{max-width:1000px;margin:auto;padding:20px}article{margin:24px 0}h2{overflow-wrap:anywhere}.fig-img{max-width:100%;height:auto}.proof-review{margin:20px 0;padding:12px;border:1px solid var(--line)}</style>
+<main id="gallery"><h1>Probability teaching figures</h1></main>
+<script src="../../flow-library/app/src/core.dom.js"></script>
+<script src="../app/project/project.js"></script>
+<script src="../data/syllabus.js"></script>
+<script src="../data/ch01.concepts.js"></script>
+<script src="../data/ch02.concepts.js"></script>
+<script src="../data/ch03.concepts.js"></script>
+<script src="../data/ch04.concepts.js"></script>
+<script src="../data/ch05.concepts.js"></script>
+<script src="../data/ch06.concepts.js"></script>
+<script src="../data/ch07.concepts.js"></script>
+<script src="../data/ch08.concepts.js"></script>
+<script src="../data/ch09.concepts.js"></script>
+<script src="../data/ch10.concepts.js"></script>
+<script>const DIAGRAM_BASE='../diagrams/';</script>
+<script src="../app/project/probability.figs.js"></script>
+<script>
+document.documentElement.dataset.theme=new URLSearchParams(location.search).get('theme')||'light';
+const issues=[],host=document.getElementById('gallery');let steps=0;
+for(const [id,f] of Object.entries(PROB_FIGURES)){
+  const c=CONCEPTS.find(c=>c.id===id);
+  if(!c){issues.push('Unknown lesson '+id);continue;}
+  const article=DOM.el('article',{class:'card'},[DOM.el('h2',{text:c.title}),probabilityFigure(c)]);
+  for(const i of Object.keys(f.steps||{})){
+    const rung=c.proof&&c.proof.rungs[Number(i)];
+    if(!rung){issues.push('Unknown proof step '+id+':'+i);continue;}
+    steps++;
+    article.appendChild(DOM.el('div',{class:'proof-review'},[
+      DOM.el('p',{text:'Step '+(Number(i)+1)+': '+rung.why}),PROJECT.hooks.rungFig(rung,c,Number(i))
+    ]));
+  }
+  host.appendChild(article);
+}
+Promise.all(Array.from(document.images).map(img=>new Promise(resolve=>{
+  function done(){if(!img.naturalWidth)issues.push('Failed image '+img.getAttribute('src'));resolve();}
+  if(img.complete)done();else{img.onload=done;img.onerror=done;}
+  img.loading='eager';
+}))).then(()=>{
+  if(document.documentElement.scrollWidth>innerWidth+2)issues.push('Horizontal page overflow');
+  for(const img of document.images)if(!img.alt)issues.push('Missing alt text');
+  document.body.dataset.report=JSON.stringify({lessons:Object.keys(PROB_FIGURES).length,steps,images:document.images.length,issues});
+});
+</script></html>

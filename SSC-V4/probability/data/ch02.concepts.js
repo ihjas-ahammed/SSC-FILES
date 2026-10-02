@@ -1,4 +1,4 @@
-if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
+var CONCEPTS = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
 CONCEPTS.push(...
 [
   {
@@ -7,8 +7,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Probability model begins with outcomes",
-    "oneLine": "Before assigning event probabilities, specify the possible outcomes and what distinctions count as different outcomes.",
-    "statement": "A probability model starts by specifying an experiment and its sample space $S$, then assigning a probability to events (subsets of $S$). Different representations of the same experiment are acceptable when they preserve the events and their probabilities.",
+    "oneLine": "Decide exactly what one outcome records before assigning probabilities.",
+    "statement": "Start by describing the experiment and listing its possible results, the sample space $S$. Then assign probabilities to events, which are groups of results. You can record an experiment in different ways, but each way must give the same probabilities to the questions you want to answer.",
     "intuition": "Before asking for a chance, write down what one full result looks like. For two named coin tosses, HH, HT, TH, and TT keep the toss positions visible; if the question cares about which toss was heads, combining HT and TH too early loses useful information.",
     "needs": [],
     "traps": [
@@ -29,8 +29,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Sample spaces and events",
-    "oneLine": "The sample space contains all possible outcomes; an event is any subset of it.",
-    "statement": "The sample space $S$ is the set of all possible outcomes of an experiment. An event $E$ is a subset of $S$; it occurs exactly when the realized outcome lies in $E$. The sure event is $S$ and the impossible event is $\\varnothing$.",
+    "oneLine": "The sample space lists everything that can happen; an event selects some of those results.",
+    "statement": "The sample space $S$ is the set of possible results. An event $E$ happens when the result is in $E$. For a die, $S=\\{1,2,3,4,5,6\\}$ and “an even result” is $E=\\{2,4,6\\}$. The event $S$ always happens. The empty event $\\varnothing$ has no results and cannot happen.",
     "intuition": "The sample space is the full menu of outcomes; an event is the subset that answers a yes/no question. If you roll a die, “even” is {2,4,6}, while the sure event is {1,2,3,4,5,6} and the impossible one is empty.",
     "needs": [],
     "traps": [
@@ -52,8 +52,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Event algebra and De Morgan laws",
-    "oneLine": "Union means at least one, intersection means both, and complement means not.",
-    "statement": "For events $E,F\\subseteq S$, $E\\cup F$ contains outcomes in at least one, $E\\cap F$ contains outcomes in both, and $E^c=S\\setminus E$. Events are mutually exclusive when $E\\cap F=\\varnothing$. Subset inclusion $E\\subseteq F$ means occurrence of E implies occurrence of F. De Morgan laws: $(\\cup_i E_i)^c=\\cap_i E_i^c$ and $(\\cap_i E_i)^c=\\cup_i E_i^c$.",
+    "oneLine": "Union means “at least one”; intersection means “both”; complement means “does not happen”.",
+    "statement": "For events $E,F$, $E\\cup F$ means at least one happens, $E\\cap F$ means both happen, and $E^c$ means $E$ does not happen. If $E\\cap F=\\varnothing$, they cannot happen together (mutually exclusive). If $E\\subseteq F$, every result in $E$ is also in $F$. De Morgan’s rules translate “none happen” and “not all happen”: $(\\cup_iE_i)^c=\\cap_iE_i^c$ and $(\\cap_iE_i)^c=\\cup_iE_i^c$.",
     "intuition": "For events, union means “E or F,” intersection means “both E and F,” and complement means “not E.” If E is “bus is late” and F is “it rains,” De Morgan’s rule says “neither late nor rain” means “not late and not rain.”",
     "needs": [
       "c.prob.2.2.1"
@@ -77,8 +77,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Axioms of probability",
-    "oneLine": "Probability is a normalized, nonnegative, countably additive set function.",
-    "statement": "A probability assignment $P$ on events satisfies: (1) $0\\le P(E)\\le1$ for every event E; (2) $P(S)=1$; (3) for any countable sequence of pairwise disjoint events $E_1,E_2,\\ldots$, $P(\\cup_{i=1}^\\infty E_i)=\\sum_{i=1}^\\infty P(E_i)$. Pairwise disjoint means $E_i\\cap E_j=\\varnothing$ for $i\\ne j$.",
+    "oneLine": "Probabilities lie between zero and one, total one, and add for events that cannot happen together.",
+    "statement": "The probability rules are: (1) $0\\le P(E)\\le1$; (2) $P(S)=1$, since some possible result must occur; (3) if events never overlap, add their probabilities. This last rule also works for a list $E_1,E_2,\\ldots$ that continues forever: $P(\\cup_{i=1}^{\\infty}E_i)=\\sum_{i=1}^{\\infty}P(E_i)$. Here “never overlap” means $E_i\\cap E_j=\\varnothing$ whenever $i\\ne j$.",
     "intuition": "The probability rules keep every event’s chance between 0 and 1, make the whole sample space certain, and let us add chances for alternatives that cannot happen together. For example, a single card cannot be both a heart and a spade, so those two chances add.",
     "needs": [
       "c.prob.2.2.1"
@@ -102,8 +102,8 @@ CONCEPTS.push(...
     "kind": "corollary",
     "tier": "core",
     "title": "Finite additivity and the null event",
-    "oneLine": "The axioms imply the empty event has probability zero and finite disjoint unions add.",
-    "statement": "From the axioms, $P(\\varnothing)=0$. Consequently, if $E_1,\\ldots,E_n$ are pairwise disjoint, $P(\\cup_{i=1}^n E_i)=\\sum_{i=1}^nP(E_i)$, by appending empty events to apply countable additivity.",
+    "oneLine": "An impossible event has probability zero; finitely many separate cases add.",
+    "statement": "The rules force $P(\\varnothing)=0$. For a finite list of events that cannot happen together, $P(\\cup_{i=1}^nE_i)=\\sum_{i=1}^nP(E_i)$. To get this from the rule for an infinite list, add empty events after the first $n$ events; these add zero.",
     "intuition": "The impossible event has chance zero, and chances add when events cannot overlap. “A roll is 1” and “a roll is 2” are disjoint, so either result has chance 1/6+1/6. In an infinite experiment, a nonempty event can still have probability zero, so “zero chance” need not mean “no possible outcome.”",
     "needs": [
       "c.prob.2.3.1"
@@ -112,8 +112,8 @@ CONCEPTS.push(...
       "The event $\\varnothing$ has probability zero, but an event of probability zero need not be empty in an infinite model."
     ],
     "proof": {
-      "idea": "Apply countable additivity to the sample-space partition $S,\\varnothing,\\varnothing,\\ldots$, then pad a finite list.",
-      "why": "Axiom 3 can be used directly only for a pairwise disjoint sequence.",
+      "idea": "Add empty events to a list; they cannot change which results the list contains.",
+      "why": "The infinite-sum probability rule applies when no result belongs to two events in the list.",
       "rungs": [
         {
           "why": "The union of S followed by empty events is S.",
@@ -126,7 +126,7 @@ CONCEPTS.push(...
           "meaning": "In particular its first term is zero."
         },
         {
-          "why": "Append empty events to any finite disjoint list.",
+          "why": "Append empty events to any finite nonoverlapping list.",
           "m": "P(\\cup_{i=1}^{n}E_i)=\\sum_{i=1}^{n}P(E_i)",
           "meaning": "The added terms contribute zero."
         }
@@ -148,8 +148,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Complement rule and monotonicity",
-    "oneLine": "Complements have probability 1−P(E), and event inclusion preserves probability order.",
-    "statement": "For every event E, $P(E^c)=1-P(E)$. If $E\\subseteq F$, then $P(E)\\le P(F)$. In particular, $P(E)\\in[0,1]$ and $P(E\\setminus F)=P(E)-P(E\\cap F)$.",
+    "oneLine": "“Does not happen” has the leftover probability; adding possible outcomes cannot reduce probability.",
+    "statement": "An event and its opposite cover all results, so $P(E^c)=1-P(E)$. If every result in $E$ is also in $F$ ($E\\subseteq F$), then $P(E)\\le P(F)$. To keep only the part of $E$ outside $F$, subtract their overlap: $P(E\\setminus F)=P(E)-P(E\\cap F)$.",
     "intuition": "An event and “it did not happen” split all possibilities in two, so their chances total 1. If getting 90 or more is one way to pass, then the chance of 90-or-more cannot exceed the chance of passing by any score.",
     "needs": [
       "c.prob.2.3.1"
@@ -159,11 +159,11 @@ CONCEPTS.push(...
       "Monotonicity follows from disjoint additivity and nonnegativity; inclusion alone is not an assertion of independence."
     ],
     "proof": {
-      "idea": "Partition S into E and E complement; partition F into E and its remainder when E is contained in F.",
-      "why": "The component events are disjoint, allowing direct additivity.",
+      "idea": "Partition S into E and E complement; split F into E and its remainder when E is contained in F.",
+      "why": "The component events are nonoverlapping, allowing direct additivity.",
       "rungs": [
         {
-          "why": "Use $S=E\\cup E^c$ as a disjoint union.",
+          "why": "Use $S=E\\cup E^c$ as a nonoverlapping union.",
           "m": "1=P(S)=P(E)+P(E^c)",
           "meaning": "This gives the complement probability."
         },
@@ -190,8 +190,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Inclusion–exclusion",
-    "oneLine": "For two events, add their probabilities and subtract their overlap; the finite formula alternates intersection corrections.",
-    "statement": "For events E and F, $P(E\\cup F)=P(E)+P(F)-P(E\\cap F)$. For $n$ events, $P(\\cup_i E_i)$ is the sum of single-event probabilities, minus all pairwise intersections, plus all triple intersections, alternating signs through $(-1)^{n+1}P(E_1\\cap\\cdots\\cap E_n)$.",
+    "oneLine": "Add the two probabilities, then subtract the overlap counted twice.",
+    "statement": "For two events, $P(E\\cup F)=P(E)+P(F)-P(E\\cap F)$. For $n$ events, add the individual probabilities, subtract all overlaps of two events, add overlaps of three, and continue with alternating signs. The last term is $(-1)^{n+1}P(E_1\\cap\\cdots\\cap E_n)$. These corrections make each result count exactly once.",
     "intuition": "When you add the chances of “takes the bus” and “takes the train,” anyone who uses both got counted twice. Subtract that overlap once. With more events, the same correction continues through triple overlaps, four-way overlaps, and so on.",
     "needs": [
       "c.prob.2.4.1"
@@ -201,13 +201,13 @@ CONCEPTS.push(...
       "For exactly one of E,F, use $P(E)+P(F)-2P(EF)$; this differs from the union."
     ],
     "proof": {
-      "idea": "Split the union into disjoint regions or count each outcome according to how many events contain it.",
-      "why": "A disjoint partition lets the axioms add probabilities without overlap.",
+      "idea": "Split the union into nonoverlapping regions or count each outcome according to how many events contain it.",
+      "why": "A nonoverlapping split lets the axioms add probabilities without overlap.",
       "rungs": [
         {
           "why": "Decompose $E\\cup F$ into $E$ and the part of F outside E.",
           "m": "P(E\\cup F)=P(E)+P(F\\setminus E)",
-          "meaning": "These pieces are disjoint."
+          "meaning": "These pieces are nonoverlapping."
         },
         {
           "why": "Decompose F into its overlap with E and its outside part.",
@@ -215,9 +215,9 @@ CONCEPTS.push(...
           "meaning": "Rearrange to replace the outside part."
         },
         {
-          "why": "For n events, an outcome in exactly k sets is counted with net coefficient 1.",
+          "why": "Suppose one result belongs to exactly $k$ of the events. It appears $k$ times in the single-event sum, $\\binom k2$ times in the subtracted pair sum, and so on.",
           "m": "\\sum_{j=1}^{k}(-1)^{j+1}\\binom{k}{j}=1",
-          "meaning": "This yields the alternating correction formula."
+          "meaning": "Expand $(1-1)^k=0$ and move its first term, 1, to the other side. The remaining alternating sum equals 1, so that result is counted once."
         }
       ],
       "ends": "Two-event and finite inclusion–exclusion identities."
@@ -242,8 +242,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Uniform finite sample spaces",
-    "oneLine": "If a finite sample space has equally likely points, event probability is its fraction of the total points.",
-    "statement": "If $S$ has $N$ outcomes and all singleton probabilities are equal, then each has probability $1/N$. For any event E, $P(E)=|E|/|S|$. This includes either an ordered or unordered representation, provided the represented elementary outcomes are in fact equally likely.",
+    "oneLine": "With equally likely results, probability is the fraction that answers your question.",
+    "statement": "Suppose there are $N$ possible results, all equally likely. Their probabilities add to one, so each has probability $1/N$. An event $E$ containing $|E|$ results has $P(E)=|E|/|S|$. You may count ordered lists or unordered groups, but you must first check that the results you count really have equal chances.",
     "intuition": "If a fair die has six faces, each face gets one-sixth of the chance, so an event containing three faces has chance 3/6. The same fraction works for cards or dice only if the listed elementary outcomes really are equally likely.",
     "needs": [
       "c.prob.2.3.1",
@@ -254,16 +254,16 @@ CONCEPTS.push(...
       "Ordered and unordered outcome descriptions give matching ratios only when their induced probabilities are uniform."
     ],
     "proof": {
-      "idea": "Apply finite additivity to the disjoint singleton outcomes.",
+      "idea": "Apply finite additivity to the nonoverlapping individual results.",
       "why": "Every event in a finite space is the union of its individual points.",
       "rungs": [
         {
-          "why": "Let the common singleton probability be p and add all N points.",
+          "why": "Let the common probability of one result be p and add all N points.",
           "m": "1=P(S)=Np",
-          "meaning": "Normalization forces the mass at each point."
+          "meaning": "the rule that total probability is one forces the mass at each point."
         },
         {
-          "why": "Add singleton probabilities in E.",
+          "why": "Add probabilities of individual results in E.",
           "m": "P(E)=|E|p=\\frac{|E|}{|S|}",
           "meaning": "Each favorable point contributes the same amount."
         }
@@ -285,8 +285,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "Continuity of probability for monotone events",
-    "oneLine": "For increasing or decreasing event sequences, probabilities converge to the probability of the limiting event.",
-    "statement": "If $E_1\\subseteq E_2\\subseteq\\cdots$, define $E_n\\uparrow E=\\cup_{n=1}^\\infty E_n$. If $E_1\\supseteq E_2\\supseteq\\cdots$, define $E_n\\downarrow E=\\cap_{n=1}^\\infty E_n$. Then in either case $P(E_n)\\to P(E)$.",
+    "oneLine": "When events keep growing or shrinking, their probabilities approach that of the final event.",
+    "statement": "If $E_1\\subseteq E_2\\subseteq\\cdots$, the final event contains every result that eventually enters: $E=\\cup_nE_n$. If $E_1\\supseteq E_2\\supseteq\\cdots$, the final event contains only results that never leave: $E=\\cap_nE_n$. In both cases, $P(E_n)\\to P(E)$ as $n$ grows.",
     "intuition": "Imagine E_n means “the first n coin tosses are all heads.” As n grows, these events shrink toward the outcome “every toss is heads”; their probabilities settle to the probability of that limiting event. For increasing events, each new stage adds a fresh, nonoverlapping piece instead.",
     "needs": [
       "c.prob.2.3.1",
@@ -298,13 +298,13 @@ CONCEPTS.push(...
       "Continuity here needs monotonicity; arbitrary sequences of events need not have convergent probabilities matching a set limit."
     ],
     "proof": {
-      "idea": "For increasing events, decompose their union into successive disjoint increments; for decreasing, complement.",
-      "why": "Countable additivity applies to disjoint pieces, not to the original nested sequence.",
+      "idea": "For growing events, count only the new results added at each stage. For shrinking events, look at the growing complements.",
+      "why": "Countable additivity applies to nonoverlapping pieces, not to the original nested sequence.",
       "rungs": [
         {
           "why": "Set $F_1=E_1$ and $F_n=E_n\\setminus E_{n-1}$ for n>1.",
           "m": "E_n=\\bigcup_{i=1}^{n}F_i",
-          "meaning": "The increments are pairwise disjoint and their first n pieces recover E_n."
+          "meaning": "Each result is counted at the first stage where it enters. The new pieces do not overlap, and the first $n$ pieces make $E_n$."
         },
         {
           "why": "Apply countable additivity to all increments and take partial sums.",
@@ -334,8 +334,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "Consequences for infinite unions and intersections",
-    "oneLine": "Countable additivity yields continuity and Boole’s inequality for countable event unions.",
-    "statement": "For arbitrary events $E_i$, $P(\\cup_i E_i)\\le\\sum_iP(E_i)$ (Boole’s inequality). Also, if $E_i$ are pairwise disjoint, the probability of their union equals the sum even for countably many sets. A countably infinite uniform probability distribution on individual points is impossible: equal positive masses sum beyond 1, while equal zero masses sum to 0.",
+    "oneLine": "Adding event probabilities gives an upper bound even when events overlap.",
+    "statement": "For any finite or infinite list of events, $P(\\cup_iE_i)\\le\\sum_iP(E_i)$ (the union bound, also called Boole’s inequality). With no overlap, equality holds. There is no equal-chance probability law on a list of individual points that continues forever: a common positive probability would eventually total more than one, and a common zero probability would total zero.",
     "intuition": "For many possible mishaps, adding their chances gives a safe upper bound on the chance that at least one happens, even if they overlap. But for nonoverlapping cases, the sum is exact. You cannot make countably many points all equally likely with one common positive chance: the total would exceed 1.",
     "needs": [
       "c.prob.2.3.1",
@@ -346,8 +346,8 @@ CONCEPTS.push(...
       "Countably many equally likely points cannot each have the same probability while totaling one."
     ],
     "proof": {
-      "idea": "Replace an arbitrary sequence by disjoint increments contained in the original events, then use countable additivity.",
-      "why": "The increments partition the union while their individual probabilities cannot exceed those of the corresponding original events.",
+      "idea": "Assign each result to the first event containing it. These trimmed events do not overlap.",
+      "why": "Trimming an event cannot increase its probability. The trimmed events still cover exactly the same results as the original list.",
       "rungs": [
         {
           "why": "Define $F_1=E_1$ and $F_n=E_n\\setminus\\cup_{i<n}E_i$ for n>1.",
@@ -355,12 +355,12 @@ CONCEPTS.push(...
           "meaning": "Every point in the union is assigned to its first event, so it appears once."
         },
         {
-          "why": "Apply countable additivity to the disjoint pieces and use inclusion.",
+          "why": "Apply countable additivity to the nonoverlapping pieces and use inclusion.",
           "m": "P(\\cup_iE_i)=\\sum_iP(F_i)\\le\\sum_iP(E_i)",
           "meaning": "Since $F_i\\subseteq E_i$, monotonicity gives each termwise bound."
         },
         {
-          "why": "For countably many singleton outcomes with common mass q, normalization would require the series of q’s to equal one.",
+          "why": "For countably many individual results with common mass q, the rule that total probability is one would require the series of q’s to equal one.",
           "m": "\\sum_{i=1}^{\\infty}q=1",
           "meaning": "If q=0 the sum is 0; if q>0 the partial sums eventually exceed 1, a contradiction."
         }
@@ -382,8 +382,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Subjective probability as coherent belief",
-    "oneLine": "A personal probability represents degree of belief and must obey the same probability axioms.",
-    "statement": "In the subjective interpretation, $P(E)$ quantifies an agent’s degree of belief that event E is true. Coherent assignments still satisfy nonnegativity, normalization and additivity, so beliefs about unions must agree with the probabilities assigned to their disjoint cases (and obey inclusion–exclusion when events overlap).",
+    "oneLine": "A personal probability expresses belief, while following the same probability rules.",
+    "statement": "A personal or subjective probability measures how strongly someone believes an event will happen, given their information. It must still lie between zero and one, give probability one to all possible results together, and add correctly for events that cannot happen together. When events overlap, subtract the overlap using the same inclusion–exclusion rules.",
     "intuition": "A person’s probability can describe how strongly they believe a claim when they do not know the result yet. The numbers still have to fit together: if “rain” and “no rain” cover every possibility, their assigned chances must add to 1.",
     "needs": [
       "c.prob.2.3.1",
@@ -408,8 +408,8 @@ CONCEPTS.push(...
     "kind": "technique",
     "tier": "core",
     "title": "Changing between ordered and unordered samples",
-    "oneLine": "Uniform ordered sampling without replacement induces a uniform distribution on subsets when every subset has the same number of orders.",
-    "statement": "When r distinct objects are drawn uniformly without replacement from N distinct objects, ordered r-tuples are equiprobable. If the order is then ignored, every r-element subset corresponds to exactly $r!$ ordered tuples, so the unordered subsets are also equiprobable. The favorable-count ratio may be computed in either representation.",
+    "oneLine": "Ignoring draw order preserves equal chances when every group has equally many orders.",
+    "statement": "Draw $r$ different objects from $N$, choosing uniformly from those remaining at each step. Every ordered list of $r$ draws has the same chance. Each unordered group occurs in exactly $r!$ orders, so every group also has the same chance. You may count in either way as long as numerator and denominator use the same kind of outcome.",
     "intuition": "If you draw 3 different cards without replacement and then ignore their order, every 3-card hand has the same number of possible draw orders: 3!. So all hands remain equally likely. This would fail if some hands had more ways to be produced than others.",
     "needs": [
       "c.prob.1.4.1",
@@ -420,23 +420,23 @@ CONCEPTS.push(...
       "For distinguishable balls, counting color patterns as if equally likely can be wrong when patterns have different multiplicities."
     ],
     "proof": {
-      "idea": "Group the equiprobable ordered tuples according to their underlying subset.",
+      "idea": "Collect all ordered draws giving the same group of objects.",
       "why": "Every subset has exactly r! permutations.",
       "rungs": [
         {
           "why": "Count ordered draws without replacement.",
           "m": "N(N-1)\\cdots(N-r+1)",
-          "meaning": "Each ordered tuple is one equally likely elementary outcome."
+          "meaning": "Each ordered ordered list is one equally likely elementary outcome."
         },
         {
           "why": "Each fixed subset has r! orderings.",
           "m": "\\frac{N!}{(N-r)!}=r!\\binom Nr",
-          "meaning": "The number of tuples in each subset class is constant."
+          "meaning": "Each group appears in exactly the same number of ordered lists, namely $r!$."
         },
         {
           "why": "Equal-size unions of equally likely points have equal probability.",
           "m": "P(\\text{each subset})=\\frac{r!}{N(N-1)\\cdots(N-r+1)}=\\frac1{\\binom Nr}",
-          "meaning": "The induced unordered sample space is uniform."
+          "meaning": "The resulting list of unordered groups is uniform."
         }
       ],
       "ends": "Uniformity on r-subsets."
@@ -456,8 +456,8 @@ CONCEPTS.push(...
     "kind": "example",
     "tier": "core",
     "title": "Comparing wagers under personal probabilities",
-    "oneLine": "For mutually exclusive outcomes, add the assessed probabilities of the outcomes covered by a wager.",
-    "statement": "If the possible winners $H_1,\\ldots,H_n$ partition the sample space and a person assigns coherent probabilities $p_i=P(H_i)$, then a wager paying evenly on any winner in an index set I succeeds with personal probability $\\sum_{i\\in I}p_i$. Equal-payoff wagers can be compared by these probabilities.",
+    "oneLine": "For separate possible winners, add the probabilities of the winners covered by the bet.",
+    "statement": "Suppose exactly one of $H_1,\\ldots,H_n$ wins, and its personal probability is $p_i=P(H_i)$. A bet covering the winners in a list $I$ succeeds with probability $\\sum_{i\\in I}p_i$. If two bets pay the same amount and cost the same, their chances of winning can be compared directly.",
     "intuition": "For a fair even-money bet on one of several possible winners, add the personal chances assigned to those winners. If the covered winners cannot occur together, the sum is the chance the bet wins; the bet still depends on the stated belief model.",
     "needs": [
       "c.prob.2.3.1",

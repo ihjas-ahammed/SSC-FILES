@@ -7,34 +7,34 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Bounds and order preservation for expectation",
-    "oneLine": "An almost-sure bound on X also bounds its expectation.",
-    "statement": "If $a\\le X\\le b$ with probability 1 and $E[|X|]<\\infty$, then $a\\le E[X]\\le b$. More generally, if $X\\le Y$ almost surely and both expectations are finite, then $E[X]\\le E[Y]$.",
+    "oneLine": "The average stays between the smallest and largest possible values.",
+    "statement": "If $X$ is between $a$ and $b$ except on outcomes of probability zero, its average is also between them: $a\\le E[X]\\le b$. More generally, if $X\\le Y$ except on a zero-probability set and both have finite absolute averages $E[\\lvert X\\rvert],E[\\lvert Y\\rvert]$, then $E[X]\\le E[Y]$.",
     "intuition": "If every bus trip takes between 10 and 30 minutes, the average trip cannot be 8 or 40 minutes. An expectation is just an average that gives more weight to more likely outcomes.",
     "needs": [],
     "traps": [
-      "The inequalities need only hold almost surely, not at outcomes of probability zero. Integrability is needed to make the expectations finite."
+      "The inequalities need only hold except on a set of probability zero, not at outcomes of probability zero. Integrability is needed to make the expectations finite."
     ],
     "cards": [
       {
-        "q": "What bounds apply if $a\\le X\\le b$ almost surely?",
-        "a": "$a\\le E[X]\\le b$, provided X is integrable.",
+        "q": "What bounds apply if $a\\le X\\le b$ except on a set of probability zero?",
+        "a": "$a\\le E[X]\\le b$, provided X has a finite absolute average.",
         "kind": "state"
       }
     ],
     "provenance": "Ross, 10e, §7.1, opening discussion, PDF p. 309.",
     "proof": {
-      "idea": "Take expectations of pointwise nonnegative differences.",
-      "why": "Nonnegative random variables have nonnegative expectations.",
+      "idea": "Subtract the lower bound. What remains cannot be negative, so its average cannot be negative either.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Since $X-a\\ge0$ almost surely, expectation preserves the inequality.",
+          "why": "Subtract the lower bound. What remains cannot be negative, so its average cannot be negative either.",
           "m": "$E[X-a]=E[X]-a\\ge0$",
-          "meaning": "The constant has expectation a."
+          "meaning": "Moving the fixed number a outside the average proves the lower bound."
         },
         {
-          "why": "Apply the same argument to $b-X$.",
+          "why": "Subtract X from the upper bound and use the same nonnegative-average argument.",
           "m": "$E[b-X]=b-E[X]\\ge0$",
-          "meaning": "This gives the upper bound."
+          "meaning": "Rearranging proves the upper bound."
         }
       ],
       "ends": "Expectation lies in [a,b]."
@@ -46,8 +46,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Expectation of a sum: linearity",
-    "oneLine": "Expectation is additive and homogeneous; independence is not required.",
-    "statement": "If $X_1,\\ldots,X_n$ are integrable and $a_1,\\ldots,a_n$ are constants, then $E[\\sum_i a_iX_i]=\\sum_i a_iE[X_i]$. In particular, $E[X+Y]=E[X]+E[Y]$, whether or not X and Y are independent.",
+    "oneLine": "Average the parts, then add them to get the average total.",
+    "statement": "For finitely many random quantities with finite absolute averages, multiplying by fixed numbers and adding can be done before or after averaging: $E[\\sum_i a_iX_i]=\\sum_i a_iE[X_i]$. Thus $E[X+Y]=E[X]+E[Y]$. This works even when the quantities affect each other.",
     "intuition": "If a trip has a walking part and a bus part, average total time is average walking time plus average bus time. This remains true even if a missed connection makes the two parts related.",
     "needs": [],
     "traps": [
@@ -56,27 +56,27 @@ CONCEPTS.push(...
     "cards": [
       {
         "q": "State linearity of expectation and its independence requirement.",
-        "a": "For integrable $X_i$, $E[\\sum_i a_iX_i]=\\sum_i a_iE[X_i]$; no independence assumption is needed.",
+        "a": "For $X_i$ with finite absolute averages, $E[\\sum_i a_iX_i]=\\sum_i a_iE[X_i]$; no independence assumption is needed.",
         "kind": "state"
       }
     ],
     "provenance": "Ross, 10e, §7.2, Proposition 2.1 and Eq. (2.2), PDF pp. 310–311.",
     "proof": {
-      "idea": "Use the joint expectation formula and distribute the finite sum.",
-      "why": "Every summand is integrated against the same joint law; summing first or last gives the same result.",
+      "idea": "Start with the ordinary weighted average of the total for each possible outcome. Here omega is just a label for an outcome.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "In the discrete case, expand and exchange finite sums.",
+          "why": "Start with the ordinary weighted average of the total for each possible outcome. Here omega is just a label for an outcome.",
           "m": "$E[\\sum_i a_iX_i]=\\sum_\\omega(\\sum_i a_iX_i(\\omega))p(\\omega)$",
-          "meaning": "The inner sum can be distributed term by term."
+          "meaning": "Every possible outcome is weighted by its own probability."
         },
         {
-          "why": "Collect each variable’s expectation.",
+          "why": "Distribute the finite sum: collect all contributions from the first variable, then the second, and so on.",
           "m": "$=\\sum_i a_i\\sum_\\omega X_i(\\omega)p(\\omega)=\\sum_i a_iE[X_i]$",
-          "meaning": "Each term is exactly its own marginal expectation."
+          "meaning": "Each collected weighted average is exactly the mean of that variable. The density proof uses the same distribution rule inside an integral."
         }
       ],
-      "ends": "Linearity holds for any integrable variables, independent or dependent."
+      "ends": "Linearity holds for any having a finite absolute average variables, independent or dependent."
     }
   },
   {
@@ -85,8 +85,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Expectation of a function of a pair",
-    "oneLine": "The expected value of g(X,Y) is computed from the joint law, not by assuming independence.",
-    "statement": "For jointly discrete $(X,Y)$ with pmf $p(x,y)$, $E[g(X,Y)]=\\sum_y\\sum_xg(x,y)p(x,y)$. For jointly continuous variables with joint density $f(x,y)$, $E[g(X,Y)]=\\int\\int g(x,y)f(x,y)\\,dx\\,dy$, when the expectation exists.",
+    "oneLine": "Average each possible pair using the chance that the pair occurs.",
+    "statement": "To average a rule $g$ applied to a pair $(X,Y)$, use the probabilities of whole pairs. For separate possible pairs, $E[g(X,Y)]=\\sum_x\\sum_y g(x,y)p(x,y)$, where $p(x,y)=P(X=x,Y=y)$. For a pair with joint density $f$, use $E[g(X,Y)]=\\iint g(x,y)f(x,y)\\,dx\\,dy$. These formulas allow a nonnegative infinite result; for a finite signed result require $E[\\lvert g(X,Y)\\rvert]<\\infty$.",
     "intuition": "To average “height times weight,” it matters which heights belong with which weights. Two lists of separate averages do not tell you those pairings.",
     "needs": [
       "c.prob.7.2.1"
@@ -103,18 +103,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.2, Proposition 2.1, PDF p. 310.",
     "proof": {
-      "idea": "Use the joint law and the definition of expectation.",
-      "why": "The joint pmf or density weights every pair by its probability, so summing/integrating g over pairs is exactly its expectation.",
+      "idea": "For separate possible pairs, group together all pairs that give the same value of g.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Partition by possible pairs (x,y).",
+          "why": "For separate possible pairs, group together all pairs that give the same value of g.",
           "m": "$E[g(X,Y)]=\\sum_y\\sum_xg(x,y)p(x,y)$",
-          "meaning": "Each pair contributes its value times its joint probability."
+          "meaning": "Adding those group probabilities recovers the average of g. The displayed sum keeps the pairs ungrouped but gives the same total."
         },
         {
-          "why": "For a density, replace probability masses by density elements.",
+          "why": "For a nonnegative g, average its tail indicator first, then change the order of the nonnegative integrals.",
           "m": "$E[g(X,Y)]=\\int\\int g(x,y)f_{X,Y}(x,y)\\,dx\\,dy$",
-          "meaning": "The same expectation definition becomes a double integral."
+          "meaning": "The continuous version is rigorous because g(x,y) equals the integral of 1 from zero up to g(x,y). For a signed having a finite absolute average g, apply this argument to its positive and negative parts separately."
         }
       ],
       "ends": "Expectation of a function is computed against the joint distribution."
@@ -126,8 +126,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Indicator method for the number of events",
-    "oneLine": "Represent a count by a sum of indicators; its mean is the sum of event probabilities.",
-    "statement": "For events $A_1,\\ldots,A_n$, let $I_i=1$ on $A_i$ and 0 otherwise, and let $X=\\sum_iI_i$, the number of events that occur. Then $E[X]=\\sum_iP(A_i)$, with no independence condition.",
+    "oneLine": "A yes-or-no switch turns each event into a number you can add.",
+    "statement": "For each event $A_i$, set $I_i=1$ if it happens and zero otherwise. Then the count $X=\\sum_i I_i$ is the number of events that happen. Since the average of a zero-one switch is its chance of being one, $E[X]=\\sum_iP(A_i)$. The events may be related.",
     "intuition": "To find the average number of people who arrive, give each person a switch that is 1 if they arrive and 0 otherwise. Add the switches; the average count is the sum of arrival chances.",
     "needs": [
       "c.prob.7.2.1"
@@ -144,18 +144,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.3, Eq. (3.1), PDF p. 324.",
     "proof": {
-      "idea": "Express the count as a sum of indicators and apply linearity.",
-      "why": "For each outcome, the number of occurring events equals the sum of their 0–1 indicators.",
+      "idea": "Put one switch next to each event and add the switches.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Define one indicator for each event.",
+          "why": "Put one switch next to each event and add the switches.",
           "m": "$I_i=\\mathbf1_{A_i},\\qquad X=\\sum_{i=1}^nI_i$",
-          "meaning": "This identity holds outcome by outcome."
+          "meaning": "Each switch is one for a success and zero otherwise, so their sum really is the count."
         },
         {
-          "why": "Use $E[I_i]=P(A_i)$ and linearity.",
+          "why": "The mean of a switch is the chance of its event. Apply the add-the-means rule.",
           "m": "$E[X]=\\sum_iE[I_i]=\\sum_iP(A_i)$",
-          "meaning": "Each indicator’s expectation is its event probability."
+          "meaning": "This uses no assumption about events being independent."
         }
       ],
       "ends": "The expected count is the sum of event probabilities."
@@ -167,8 +167,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "Factorial moments of an event count",
-    "oneLine": "Joint event probabilities determine the factorial moments of a count.",
-    "statement": "For $X=\\sum_{i=1}^n\\mathbf1_{A_i}$ and integer $k\\ge1$, $(X)_k=X(X-1)\\cdots(X-k+1)$ satisfies $E[(X)_k]=k!\\sum_{i_1<\\cdots<i_k}P(A_{i_1}\\cap\\cdots\\cap A_{i_k})$. For $k=2$, $E[X^2]=E[X]+2\\sum_{i<j}P(A_i\\cap A_j)$ and $\\operatorname{Var}(X)=E[X^2]-E[X]^2$.",
+    "oneLine": "Count successful pairs or groups to find higher moments of a count.",
+    "statement": "If $X$ counts which of $n$ events happen, $(X)_k=X(X-1)\\cdots(X-k+1)$ counts ways to pick and order $k$ different successful events. Hence $E[(X)_k]=k!\\sum_{i_1<\\cdots<i_k}P(A_{i_1}\\cap\\cdots\\cap A_{i_k})$. For pairs this gives $E[X^2]=E[X]+2\\sum_{i<j}P(A_i\\cap A_j)$. Then $\\operatorname{Var}(X)=E[X^2]-E[X]^2$.",
     "intuition": "If X events happen, $X(X-1)$ counts ordered pairs among them. For example, when 3 people arrive, there are 6 ordered pairs of arriving people.",
     "needs": [
       "c.prob.7.3.1"
@@ -185,23 +185,23 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.3, Eqs. (3.2)–(3.4), PDF pp. 324–325.",
     "proof": {
-      "idea": "Count ordered selections among the events that occur.",
-      "why": "The falling factorial counts ordered k-tuples of distinct successes.",
+      "idea": "If X events happened, choosing k of them and then ordering them gives the falling product.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "For each fixed outcome with X occurring events, count ordered k-tuples.",
+          "why": "If X events happened, choosing k of them and then ordering them gives the falling product.",
           "m": "$(X)_k=k!\\binom Xk$",
-          "meaning": "Every k-subset of occurring events has k! orders."
+          "meaning": "There are k! different orders for each chosen group."
         },
         {
-          "why": "Write the subset count as a sum of intersection indicators and take expectations.",
+          "why": "A chosen group is successful exactly when the product of its switches is one. Add these products and average.",
           "m": "$E[(X)_k]=k!\\sum_{i_1<\\cdots<i_k}E[\\mathbf1_{A_{i_1}}\\cdots\\mathbf1_{A_{i_k}}]$",
-          "meaning": "The product indicator equals one exactly when all k events occur."
+          "meaning": "Each group contributes once before the factor k! accounts for all its orders."
         },
         {
-          "why": "Replace each product expectation by its intersection probability.",
+          "why": "The average of the product switch is the chance that every event in its group happens.",
           "m": "$=k!\\sum_{i_1<\\cdots<i_k}P(A_{i_1}\\cap\\cdots\\cap A_{i_k})$",
-          "meaning": "This gives the factorial moment formula."
+          "meaning": "The formula therefore needs joint probabilities, which may reflect dependence."
         }
       ],
       "ends": "The pair case gives the second-moment and variance identities."
@@ -213,8 +213,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Covariance and correlation",
-    "oneLine": "Covariance measures centered joint variation; correlation standardizes it.",
-    "statement": "For finite second moments, $\\operatorname{Cov}(X,Y)=E[(X-E[X])(Y-E[Y])]=E[XY]-E[X]E[Y]$. If both variances are positive, $\\rho(X,Y)=\\operatorname{Cov}(X,Y)/(\\sigma_X\\sigma_Y)$ and $-1\\le\\rho\\le1$. Independence implies zero covariance, but zero covariance alone does not imply independence.",
+    "oneLine": "Covariance measures whether two quantities tend to be above their averages together.",
+    "statement": "Assume $E[X^2]$ and $E[Y^2]$ are finite. Covariance averages the product of the departures from their means: $\\operatorname{Cov}(X,Y)=E[(X-E[X])(Y-E[Y])]=E[XY]-E[X]E[Y]$. Positive covariance means these departures tend to have the same sign. Correlation divides out the units: $\\rho=\\operatorname{Cov}(X,Y)/(\\sigma_X\\sigma_Y)$, where the standard deviations must be positive. It lies between $-1$ and $1$. Independent variables have zero covariance; zero covariance can still occur for dependent variables.",
     "intuition": "Covariance is positive when two quantities tend to rise above their own averages together, and negative when one rises as the other falls. Correlation is the same pattern scaled so units like dollars or centimeters do not matter.",
     "needs": [
       "c.prob.7.2.2"
@@ -237,8 +237,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Variance of a sum",
-    "oneLine": "The variance of a sum includes every pairwise covariance; independence removes the cross terms.",
-    "statement": "For finite second moments, $\\operatorname{Var}(\\sum_{i=1}^nX_i)=\\sum_i\\operatorname{Var}(X_i)+2\\sum_{i<j}\\operatorname{Cov}(X_i,X_j)$. If the variables are pairwise uncorrelated, this reduces to the sum of variances; independence is sufficient for that reduction.",
+    "oneLine": "The spread of a total includes how its parts move together.",
+    "statement": "For a finite collection with finite second moments, $\\operatorname{Var}(\\sum_i X_i)=\\sum_i\\operatorname{Var}(X_i)+2\\sum_{i<j}\\operatorname{Cov}(X_i,X_j)$. The first sum measures each part's spread. The second measures how pairs move together. If each different pair has zero covariance, the second sum vanishes and the variances add. Independence guarantees this zero-covariance condition.",
     "intuition": "When two waiting times are added, their separate spreads are not always the whole story. If long waits tend to happen together, covariance adds extra spread; if one tends to offset the other, it subtracts spread.",
     "needs": [
       "c.prob.7.4.1"
@@ -255,23 +255,23 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.4, Proposition 4.2(iv) and Eq. (4.1), PDF pp. 331–332.",
     "proof": {
-      "idea": "Expand the square of the centered sum.",
-      "why": "Each cross term is exactly twice a covariance when unordered pairs are used.",
+      "idea": "Subtract each variable's average before adding. The average of the resulting sum is zero.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Center each summand and expand.",
+          "why": "Subtract each variable's average before adding. The average of the resulting sum is zero.",
           "m": "$\\operatorname{Var}(\\sum_iX_i)=E[(\\sum_i(X_i-E[X_i]))^2]$",
-          "meaning": "Variance is the second moment of the centered sum."
+          "meaning": "The variance of the total is the average square of these combined departures."
         },
         {
-          "why": "Separate diagonal and off-diagonal products.",
+          "why": "Expand the square just as you would expand (a+b)^2.",
           "m": "$=\\sum_i\\operatorname{Var}(X_i)+2\\sum_{i<j}E[(X_i-E[X_i])(X_j-E[X_j])]$",
-          "meaning": "Each unordered pair occurs twice in the full double sum."
+          "meaning": "Each squared departure gives its own variance. Each product of two different departures appears twice."
         },
         {
-          "why": "Recognize the cross terms.",
+          "why": "Each cross-product average is the covariance of that pair.",
           "m": "$=\\sum_i\\operatorname{Var}(X_i)+2\\sum_{i<j}\\operatorname{Cov}(X_i,X_j)$",
-          "meaning": "The formula follows directly from the definition."
+          "meaning": "This explains both the covariance correction and the simpler formula when every such correction is zero."
         }
       ],
       "ends": "If covariances vanish, variance adds."
@@ -283,8 +283,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Conditional expectation given a random variable",
-    "oneLine": "Condition on Y by taking the mean under the conditional distribution at each Y value.",
-    "statement": "For discrete X,Y and values y with $P(Y=y)>0$, $E[X\\mid Y=y]=\\sum_xxP(X=x\\mid Y=y)$. In the density case, $E[X\\mid Y=y]=\\int x f_{X\\mid Y}(x\\mid y)dx$ where defined. The random variable $E[X\\mid Y]$ takes this conditional mean at the realized Y.",
+    "oneLine": "A conditional mean averages only within the group described by the information.",
+    "statement": "When you learn $Y=y$, average $X$ using its updated probabilities: $E[X\\mid Y=y]=\\sum_x xP(X=x\\mid Y=y)$ for discrete values, provided $P(Y=y)>0$. With a conditional density, use $\\int x f_{X\\mid Y}(x\\mid y)dx$ where that density is defined. The expression $E[X\\mid Y]$ means the function that looks up the appropriate group mean for whichever $Y$ occurs. It is itself a random quantity.",
     "intuition": "After seeing how many hours it rained, your best average guess for traffic time can change. That updated average is the conditional expectation: average after using the new information.",
     "needs": [
       "c.prob.6.4.1"
@@ -307,8 +307,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Law of total expectation",
-    "oneLine": "Average the conditional means over the conditioning variable to recover the unconditional mean.",
-    "statement": "If X is integrable, $E[X]=E[E[X\\mid Y]]$. In the discrete case this is $\\sum_y E[X\\mid Y=y]P(Y=y)$; in the continuous case it is the corresponding integral against the law of Y.",
+    "oneLine": "Average each group first, then average the group averages using their sizes.",
+    "statement": "If $E[\\lvert X\\rvert]<\\infty$, averaging the conditional averages recovers the overall mean: $E[X]=E[E[X\\mid Y]]$. For discrete groups this means $E[X]=\\sum_y E[X\\mid Y=y]P(Y=y)$. With a density for $Y$, replace the weighted sum by $\\int E[X\\mid Y=y]f_Y(y)dy$.",
     "intuition": "Find the average score among each classroom, then weight those averages by class size. You recover the whole-school average; small and large classes should not count equally.",
     "needs": [
       "c.prob.7.5.1"
@@ -325,18 +325,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.5.2, Proposition 5.1, PDF p. 337.",
     "proof": {
-      "idea": "Average the conditional mean using the marginal distribution of Y.",
-      "why": "The joint law factors into a conditional law of X given Y and the marginal law of Y.",
+      "idea": "Write out the average within each Y-group, then weight it by the chance of that group.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "For discrete X,Y, substitute the conditional pmf.",
+          "why": "Write out the average within each Y-group, then weight it by the chance of that group.",
           "m": "$\\sum_yE[X\\mid Y=y]P(Y=y)=\\sum_y\\sum_xxP(X=x\\mid Y=y)P(Y=y)$",
-          "meaning": "Each weight converts a conditional probability into a joint probability."
+          "meaning": "Conditional probability times the chance of the conditioning group is joint probability."
         },
         {
-          "why": "Sum the joint probabilities over y.",
+          "why": "For a fixed x, add the joint probabilities across all the Y-groups.",
           "m": "$=\\sum_xx\\sum_yP(X=x,Y=y)=\\sum_xxP(X=x)$",
-          "meaning": "The inner sum is the marginal pmf of X."
+          "meaning": "This gives the ordinary probability that X equals x. We have recovered the usual average of X."
         }
       ],
       "ends": "The same result holds by integrating in continuous and general cases."
@@ -348,8 +348,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Law of total variance",
-    "oneLine": "Total variance is average within-group variance plus variance between group means.",
-    "statement": "For $E[X^2]<\\infty$, define the conditional variance by $\\operatorname{Var}(X\\mid Y)=E[(X-E[X\\mid Y])^2\\mid Y]=E[X^2\\mid Y]-(E[X\\mid Y])^2$. Then $\\operatorname{Var}(X)=E[\\operatorname{Var}(X\\mid Y)]+\\operatorname{Var}(E[X\\mid Y])$.",
+    "oneLine": "Total spread equals spread within groups plus spread between their averages.",
+    "statement": "When $E[X^2]<\\infty$, the variance within the group described by $Y$ is $\\operatorname{Var}(X\\mid Y)=E[(X-E[X\\mid Y])^2\\mid Y]=E[X^2\\mid Y]-(E[X\\mid Y])^2$. Overall variance splits into two parts: $\\operatorname{Var}(X)=E[\\operatorname{Var}(X\\mid Y)]+\\operatorname{Var}(E[X\\mid Y])$. The first averages the within-group spread; the second measures how far apart group means are.",
     "intuition": "Think of test scores in two classrooms. First, within each room, measure how far scores usually sit from that room’s own average; then average those spreads, giving each room a weight matching its share of students. Add the spread between the room averages, and you get the whole-school spread. For each observed room label Y, conditional variance is the average squared distance from that room’s conditional average.",
     "needs": [
       "c.prob.7.5.2"
@@ -366,23 +366,23 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.5.4, Proposition 5.2, PDF p. 347.",
     "proof": {
-      "idea": "Expand conditional variance and use the tower property.",
-      "why": "The formula separates the second moment into conditional spread and spread of conditional means.",
+      "idea": "Within each group, variance is its mean square minus its squared mean. Average that identity across groups.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Use $\\operatorname{Var}(X\\mid Y)=E[X^2\\mid Y]-(E[X\\mid Y])^2$.",
+          "why": "Within each group, variance is its mean square minus its squared mean. Average that identity across groups.",
           "m": "$E[\\operatorname{Var}(X\\mid Y)]=E[X^2]-E[(E[X\\mid Y])^2]$",
-          "meaning": "The tower property turns the first term into $E[X^2]$."
+          "meaning": "Averaging the group means of X squared gives the overall mean of X squared."
         },
         {
-          "why": "Expand variance of the conditional mean.",
+          "why": "Use the same variance identity on the group means themselves.",
           "m": "$\\operatorname{Var}(E[X\\mid Y])=E[(E[X\\mid Y])^2]-(E[X])^2$",
-          "meaning": "The mean of the conditional mean is $E[X]$."
+          "meaning": "Their overall average is the average of X by the total-expectation rule."
         },
         {
-          "why": "Add and cancel the squared conditional-mean term.",
+          "why": "Add the two identities. Their middle terms cancel.",
           "m": "$E[X^2]-(E[X])^2=\\operatorname{Var}(X)$",
-          "meaning": "The two components reconstruct total variance."
+          "meaning": "What remains is the ordinary overall variance, proving the two-part split."
         }
       ],
       "ends": "Within-condition and between-condition variance sum to total variance."
@@ -394,8 +394,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Conditional mean minimizes mean squared prediction error",
-    "oneLine": "Among predictors based on X, the conditional mean $E[Y\\mid X]$ uniquely minimizes squared-error risk up to almost-sure equality.",
-    "statement": "For square-integrable Y and any measurable predictor g(X), $E[(Y-g(X))^2]=E[\\operatorname{Var}(Y\\mid X)]+E[(E[Y\\mid X]-g(X))^2]$. Thus the minimum is attained by $g(X)=E[Y\\mid X]$.",
+    "oneLine": "After seeing X, its group average gives the best squared-error guess for Y.",
+    "statement": "Assume $E[Y^2]<\\infty$. A prediction $g(X)$ uses only the observed $X$. Its average squared error is $E[(Y-g(X))^2]=E[\\operatorname{Var}(Y\\mid X)]+E[(E[Y\\mid X]-g(X))^2]$. The first part does not depend on your prediction. The second is smallest, namely zero, when you predict the conditional average $g(X)=E[Y\\mid X]$.",
     "intuition": "After measuring X, choose the conditional average of Y if squared prediction mistakes matter. It is the bullseye that makes the average squared miss as small as possible.",
     "needs": [
       "c.prob.7.5.1"
@@ -412,23 +412,23 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.6, Proposition 6.1, PDF p. 349.",
     "proof": {
-      "idea": "Condition on X and expand around the conditional mean.",
-      "why": "The cross term vanishes conditionally because the residual has conditional mean zero.",
+      "idea": "Split your prediction error at the conditional mean.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Write error as residual plus conditional-mean bias.",
+          "why": "Split your prediction error at the conditional mean.",
           "m": "$Y-g(X)=(Y-E[Y\\mid X])+(E[Y\\mid X]-g(X))$",
-          "meaning": "The second term is determined by X."
+          "meaning": "The first piece is random variation around the group average; the second is how far your guess is from that average."
         },
         {
-          "why": "Square and condition on X.",
+          "why": "Square both pieces and average within a fixed X-group.",
           "m": "$E[(Y-g(X))^2\\mid X]=\\operatorname{Var}(Y\\mid X)+(E[Y\\mid X]-g(X))^2$",
-          "meaning": "The mixed term is zero since $E[Y-E[Y\\mid X]\\mid X]=0$."
+          "meaning": "The cross term is zero: within this group the first piece has mean zero and the second piece is a fixed number."
         },
         {
-          "why": "Take expectations.",
+          "why": "Average the group errors.",
           "m": "$E[(Y-g(X))^2]=E[\\operatorname{Var}(Y\\mid X)]+E[(E[Y\\mid X]-g(X))^2]$",
-          "meaning": "The final term is nonnegative and vanishes at the conditional mean."
+          "meaning": "The extra error from missing the conditional mean is an average of squares, so it can never improve the prediction."
         }
       ],
       "ends": "Conditional expectation is the minimum mean-square predictor."
@@ -440,8 +440,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "Best linear predictor",
-    "oneLine": "The best affine predictor of Y from X uses the regression slope Cov(X,Y)/Var(X).",
-    "statement": "If $0<\\operatorname{Var}(X)<\\infty$ and $Y$ is square-integrable, the minimizer of $E[(Y-a-bX)^2]$ is $b=\\operatorname{Cov}(X,Y)/\\operatorname{Var}(X)$ and $a=E[Y]-bE[X]$. Its error is $\\operatorname{Var}(Y)(1-\\rho^2)$ when both variances are positive.",
+    "oneLine": "The best straight-line guess uses covariance to choose its slope.",
+    "statement": "Assume $X$ has positive finite variance and $E[Y^2]<\\infty$. Among guesses of the form $a+bX$, the smallest average squared error occurs at $b=\\operatorname{Cov}(X,Y)/\\operatorname{Var}(X)$ and $a=E[Y]-bE[X]$. If both variables have positive variance, the resulting error is $\\operatorname{Var}(Y)(1-\\rho^2)$. Thus a stronger linear relationship gives a more accurate straight-line guess.",
     "intuition": "A best-fit straight line is like laying a ruler through a cloud of points to minimize squared vertical misses. If the points bend, the ruler is still the best line but cannot trace the bend.",
     "needs": [
       "c.prob.7.4.1"
@@ -458,18 +458,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.6, best linear predictor derivation, PDF pp. 351–352.",
     "proof": {
-      "idea": "Minimize the quadratic prediction error.",
-      "why": "The zero-derivative equations force the residual to have zero mean and zero covariance with X.",
+      "idea": "Choose the intercept so that the average prediction error is zero. This follows by differentiating the error quadratic in a.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Differentiate over the intercept a.",
+          "why": "Choose the intercept so that the average prediction error is zero. This follows by differentiating the error quadratic in a.",
           "m": "$E[Y-a-bX]=0$",
-          "meaning": "This implies a=E[Y]−bE[X]."
+          "meaning": "The fitted line passes through the point of the two averages."
         },
         {
-          "why": "Differentiate over b and use the first equation.",
+          "why": "Differentiate in the slope, then substitute that intercept.",
           "m": "$E[X(Y-a-bX)]=0,\\quad b=\\operatorname{Cov}(X,Y)/\\operatorname{Var}(X)$",
-          "meaning": "Positive variance makes the unique slope well-defined."
+          "meaning": "Solving gives covariance divided by predictor variance. The error is a convex quadratic, so these equations give its minimum."
         }
       ],
       "ends": "The affine least-squares predictor has the stated slope and intercept."
@@ -481,8 +481,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "extra",
     "title": "Moment generating function",
-    "oneLine": "The MGF is $M_X(t)=E[e^{tX}]$ where finite; derivatives at zero yield moments.",
-    "statement": "For t in a neighborhood where the expectation is finite, $M_X(t)=E[e^{tX}]$. When differentiation and expectation can be interchanged, $M_X^{(k)}(0)=E[X^k]$. If an MGF exists on an open interval containing zero, it uniquely determines the distribution.",
+    "oneLine": "One exponential average can encode many moments and even the whole distribution.",
+    "statement": "The moment generating function, or MGF, is $M_X(t)=E[e^{tX}]$. Suppose this average is finite throughout an open interval around zero. Then differentiating $k$ times and setting $t=0$ gives $M_X^{(k)}(0)=E[X^k]$. Also, two variables with the same MGF near zero have the same distribution. The finiteness condition matters: some distributions have moments but no MGF on such an interval.",
     "intuition": "A moment-generating function is a compact fingerprint of a distribution. When it exists near zero, reading its slopes at zero gives the mean and other moments such as the variance.",
     "needs": [],
     "traps": [
@@ -503,8 +503,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "MGF of a sum of independent variables",
-    "oneLine": "Independence turns the MGF of a sum into a product.",
-    "statement": "For independent $X,Y$ with MGFs finite at t, $M_{X+Y}(t)=M_X(t)M_Y(t)$. Thus, when uniqueness applies, the distribution of a sum can be identified by matching the product MGF.",
+    "oneLine": "Independent parts turn the MGF of a sum into a product.",
+    "statement": "For independent $X,Y$, $M_{X+Y}(t)=M_X(t)M_Y(t)$ wherever these averages are finite. If they are finite near zero, match that product to a known MGF to identify the sum's distribution. For example, independent Poisson counts combine into another Poisson count.",
     "intuition": "For independent waiting times, the exponential of their total splits into separate pieces, and independence lets each piece be averaged separately. That is why the two fingerprints multiply.",
     "needs": [
       "c.prob.7.7.1"
@@ -521,18 +521,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.7, independent-sum property, PDF p. 355.",
     "proof": {
-      "idea": "Factor the exponential and use independence.",
-      "why": "Independence gives factorization of expectations for functions of separate variables.",
+      "idea": "Use the exponent rule that an exponential of a sum is a product.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Rewrite the exponential of the sum.",
+          "why": "Use the exponent rule that an exponential of a sum is a product.",
           "m": "$e^{t(X+Y)}=e^{tX}e^{tY}$",
-          "meaning": "The algebra separates the two random variables."
+          "meaning": "This separates the expression into one factor using X and another using Y."
         },
         {
-          "why": "Apply independence.",
+          "why": "Because X and Y are independent, the average of these two factors equals the product of their averages.",
           "m": "$E[e^{tX}e^{tY}]=E[e^{tX}]E[e^{tY}]$",
-          "meaning": "This is the factorization property of independent variables."
+          "meaning": "Those averages are precisely the two individual MGFs."
         }
       ],
       "ends": "The MGF of the independent sum is the product."
@@ -544,8 +544,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "MGF formula for a random sum",
-    "oneLine": "For an independent count N and iid summands, condition on N to obtain the random-sum MGF.",
-    "statement": "Let $N$ be nonnegative integer-valued, independent of iid $X_i$ with MGF $M_X(t)$. For $S=\\sum_{i=1}^N X_i$, $M_S(t)=E[(M_X(t))^N]=M_N(\\log M_X(t))$ where defined. If moments are finite, $E[S]=E[N]E[X]$ and $\\operatorname{Var}(S)=E[N]\\operatorname{Var}(X)+(E[X])^2\\operatorname{Var}(N)$.",
+    "oneLine": "First fix how many terms are added, then average over that random count.",
+    "statement": "Let $N$ be a nonnegative integer count, independent of values $X_i$ that are independent of each other and share one distribution. For $S=\\sum_{i=1}^N X_i$, $M_S(t)=E[M_X(t)^N]=M_N(\\log M_X(t))$ wherever finite. If the required moments are finite, $E[S]=E[N]E[X]$ and $\\operatorname{Var}(S)=E[N]\\operatorname{Var}(X)+(E[X])^2\\operatorname{Var}(N)$. An empty sum when $N=0$ equals zero.",
     "intuition": "If a shop’s daily sales are the total from a random number of customers, first work out the total for a fixed customer count. Then average over the possible counts.",
     "needs": [
       "c.prob.7.5.2",
@@ -563,18 +563,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.7, Example 7j and Eqs. (7.2)–(7.3), PDF pp. 357–358.",
     "proof": {
-      "idea": "Condition on the random number of summands.",
-      "why": "Given N=n, independence makes the sum MGF the nth power; averaging over N gives the composition.",
+      "idea": "Temporarily suppose the count is the fixed value n. Then use the MGF product rule for n independent terms.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Condition on N.",
-          "m": "$E[e^{tS}mid N=n]=M_X(t)^n$",
-          "meaning": "The summands are iid and independent of N."
+          "why": "Temporarily suppose the count is the fixed value n. Then use the MGF product rule for n independent terms.",
+          "m": "$E[e^{tS}\\mid N=n]=M_X(t)^n$",
+          "meaning": "Independence of N ensures that learning its value does not change any term's distribution."
         },
         {
-          "why": "Average over the distribution of N.",
+          "why": "Average these fixed-count answers using the probabilities of the different counts.",
           "m": "$M_S(t)=E[M_X(t)^N]=M_N(\\log M_X(t))$",
-          "meaning": "The identity holds wherever these expectations are finite."
+          "meaning": "The logarithm is simply a way of rewriting M_X(t) to the power N as an exponential for the count MGF."
         }
       ],
       "ends": "The random-sum MGF is a composition of MGFs."
@@ -586,14 +586,14 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "Linear combinations of jointly normal variables",
-    "oneLine": "Any linear combination of a multivariate normal vector is normal.",
-    "statement": "If $Z_1,\\ldots,Z_n$ are independent standard normals and $X_j=a_j+\\sum_i b_{ij}Z_i$, then the vector X is multivariate normal. Every linear combination $c^TX$ is normal; its mean and variance are $c^T\\mu$ and $c^T\\Sigma c$.",
+    "oneLine": "Normal quantities built from the same independent normal ingredients stay normal when added.",
+    "statement": "Take independent standard normal values $Z_1,\\ldots,Z_n$. If each $X_j$ is a fixed number plus a weighted sum of those ingredients, the collection is called multivariate normal. Every weighted sum of the $X_j$ is normal, even though the $X_j$ may be dependent. For weights $c_j$ its mean is $\\sum_jc_jE[X_j]$ and variance is $\\sum_{i,j}c_ic_j\\operatorname{Cov}(X_i,X_j)$. The means and covariances specify the whole joint normal law.",
     "intuition": "A jointly normal collection is one bell-shaped cloud, possibly tilted. Adding coordinates with fixed weights makes another bell-shaped quantity.",
     "needs": [
       "c.prob.7.7.1"
     ],
     "traps": [
-      "Normal marginals alone do not imply a jointly normal vector; the multivariate-normal assumption is essential."
+      "Normal individuals alone do not imply a jointly normal vector; the multivariate-normal assumption is essential."
     ],
     "cards": [
       {
@@ -604,18 +604,18 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §7.8.1, multivariate normal distribution, PDF pp. 360–361.",
     "proof": {
-      "idea": "Write a linear combination as a sum of independent normal variables.",
-      "why": "The MGF of independent normal summands multiplies to the MGF of a normal variable.",
+      "idea": "Rewrite the weighted sum in terms of the independent standard normal ingredients Z, rather than assuming the X variables are independent.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Use independence to factor the MGF.",
-          "m": "$M_{\\sum_i a_iX_i}(t)=\\prod_iM_{X_i}(a_it)$",
-          "meaning": "Each scaled normal summand has a normal MGF."
+          "why": "Rewrite the weighted sum in terms of the independent standard normal ingredients Z, rather than assuming the X variables are independent.",
+          "m": "$X_j=\\mu_j+\\sum_k b_{kj}Z_k,\\quad \\sum_jc_jX_j=\\sum_jc_j\\mu_j+\\sum_k(\\sum_jc_jb_{kj})Z_k$",
+          "meaning": "A weighted sum of the X variables may share ingredients. The Z variables are the ones whose MGFs can be multiplied."
         },
         {
-          "why": "Collect the exponents.",
-          "m": "$M(t)=\\exp\\{t\\sum_i a_i\\mu_i+\\tfrac12t^2\\sum_{i,j}a_ia_j\\operatorname{Cov}(X_i,X_j)\\}$",
-          "meaning": "This is the MGF of a normal law with the resulting mean and variance."
+          "why": "Collect the linear and quadratic terms in that product's exponent.",
+          "m": "$M(t)=\\exp\\{t\\sum_j c_j\\mu_j+\\tfrac12t^2\\sum_k(\\sum_jc_jb_{kj})^2\\},\\quad \\operatorname{Var}(\\sum_jc_jX_j)=\\sum_{i,j}c_ic_j\\operatorname{Cov}(X_i,X_j)$",
+          "meaning": "The result has the form of a normal MGF; its quadratic coefficient is the variance, including all covariance terms."
         }
       ],
       "ends": "Every linear combination of a jointly normal vector is normal."
@@ -627,42 +627,42 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "extra",
     "title": "Normal sample mean and sample variance",
-    "oneLine": "For iid normal data, the sample mean and unbiased sample variance are independent with known scaled laws.",
-    "statement": "If $X_i\\overset{iid}{\\sim}N(\\mu,\\sigma^2)$, define $\\bar X=n^{-1}\\sum_iX_i$ and $S^2=(n-1)^{-1}\\sum_i(X_i-\\bar X)^2$. Then $\\bar X\\sim N(\\mu,\\sigma^2/n)$, $(n-1)S^2/\\sigma^2\\sim\\chi^2_{n-1}$, and $\\bar X$ and $S^2$ are independent.",
+    "oneLine": "For a normal sample, its average and its measured spread are independent.",
+    "statement": "Take $n\\ge2$ independent observations, each normal with mean $\\mu$ and positive variance $\\sigma^2$. Let $\\bar X=\\sum_iX_i/n$ and $S^2=\\sum_i(X_i-\\bar X)^2/(n-1)$. Then $\\bar X$ is normal with mean $\\mu$ and variance $\\sigma^2/n$. The scaled spread $(n-1)S^2/\\sigma^2$ has a chi-square distribution with $n-1$ degrees of freedom. Also $\\bar X$ and $S^2$ are independent. This last property depends on the normal model.",
     "intuition": "For normal test scores, the class average points along one direction and deviations from that average point sideways. Those parts are independent, which is why the t and chi-square formulas work.",
     "needs": [
       "c.prob.7.4.2",
       "c.prob.7.7.2"
     ],
     "traps": [
-      "The independence and chi-square conclusion require a normal sample. For a general iid sample, the mean and sample variance are not generally independent."
+      "The independence and chi-square conclusion require a normal sample. For a general independent and identically distributed sample, the mean and sample variance are not generally independent."
     ],
     "cards": [
       {
-        "q": "For an iid normal sample, give the law of $\\bar X$ and the scaled law of $S^2$.",
+        "q": "For an independent and identically distributed normal sample, give the law of $\\bar X$ and the scaled law of $S^2$.",
         "a": "$\\bar X\\sim N(\\mu,\\sigma^2/n)$ and $(n-1)S^2/\\sigma^2\\sim\\chi^2_{n-1}$; they are independent.",
         "kind": "state"
       }
     ],
     "provenance": "Ross, 10e, §7.8.2 and Proposition 8.1, PDF pp. 362–363.",
     "proof": {
-      "idea": "Rotate the standardized normal sample into mean and residual coordinates.",
-      "why": "Orthogonal transformations preserve independent standard-normal coordinates; the mean direction is orthogonal to the n−1 dimensional residual space.",
+      "idea": "The standardized average is the component of the sample in the all-equal direction.",
+      "why": "Each step uses the definition of an average or an explicitly stated property. Read the explanation beside each formula.",
       "rungs": [
         {
-          "why": "Project onto the all-ones direction.",
+          "why": "The standardized average is the component of the sample in the all-equal direction.",
           "m": "$\\bar X\\sim N(\\mu,\\sigma^2/n)$",
-          "meaning": "The projection has variance σ²/n."
+          "meaning": "Adding independent normals shows that the average has the stated mean and variance."
         },
         {
-          "why": "Project onto the orthogonal residual subspace.",
+          "why": "Choose n-1 perpendicular directions for the differences from the average. Express the standardized sample in this orthogonal coordinate system.",
           "m": "$(n-1)S^2/\\sigma^2=\\sum_{j=1}^{n-1}Z_j^2\\sim\\chi^2_{n-1}$",
-          "meaning": "The residual coordinates are independent standard normals."
+          "meaning": "The joint standard-normal density depends only on the sum of coordinate squares, which rotation preserves. Thus the new coordinates remain independent standard normals, and the residual sum of squares is chi-square."
         },
         {
-          "why": "Use orthogonality of Gaussian coordinates.",
+          "why": "The average coordinate is independent of all the perpendicular residual coordinates.",
           "m": "$\\bar X\\mathrel{\\perp\\!\\!\\!\\perp}S^2$",
-          "meaning": "Uncorrelated orthogonal Gaussian projections are independent."
+          "meaning": "The sample variance is a function of those residual coordinates only, so it is independent of the average."
         }
       ],
       "ends": "The classical sample mean/variance laws and independence follow."
@@ -674,8 +674,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "extra",
     "title": "Expectation with respect to a distribution function",
-    "oneLine": "The Lebesgue–Stieltjes integral defines expectation uniformly for discrete, continuous, and mixed laws.",
-    "statement": "For a random variable with cdf F, when the positive and negative parts have finite integrals, $E[g(X)]=\\int_{-\\infty}^{\\infty}g(x)\\,dF(x)$. This reduces to $\\sum_xg(x)p(x)$ for a discrete law and $\\int g(x)f(x)dx$ for a density.",
+    "oneLine": "Use probability as the weight whether outcomes are discrete, continuous, or a mixture.",
+    "statement": "For a variable with cumulative distribution function $F$, write its average transformed value as $E[g(X)]=\\int g(x)\\,dF(x)$. Here $dF$ means probability weight: a jump contributes its point probability and a density contributes $f(x)dx$. If $E[\\lvert g(X)\\rvert]<\\infty$, the signed average is finite. More generally it can have a one-sided infinite value, but it is undefined if its positive and negative contributions are both infinite. The notation gives the usual discrete sum $\\sum_xg(x)p(x)$ and density integral $\\int g(x)f(x)dx$.",
     "intuition": "A CDF can rise in smooth ramps or jump at a value with a point mass. Integrating against its probability increments counts both kinds of probability without switching formulas.",
     "needs": [
       "c.prob.7.2.2"

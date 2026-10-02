@@ -4,7 +4,14 @@ from pathlib import Path
 import html,json,re,subprocess
 root=Path(__file__).resolve().parents[1]
 manifest=json.loads((root/'sources/chapter-manifest.json').read_text())
-parts=['<h1>Probability · coverage and reading guide</h1><p>DA is the primary syllabus. Ross 10e supplies probability; the separate DA bridge supplies inference. Extensions support further study but do not claim full GATE ST preparation. MA has no standalone probability section in its current syllabus.</p><p>These are original explanations and selected worked exercises, not a word-for-word or example-by-example replacement for Ross. Read the original at the section and PDF pages recorded below whenever exact wording is needed. The chapter PDFs are local source files and are not hosted here.</p><p><a href="./">Return to the course</a> · <a href="#gate-review">GATE topic audit</a></p><h2>How to study</h2><p>Read the section, describe its experiment and support, reconstruct its proof, attempt the selected textbook exercises, solve mapped PYQs, then use Recall and correct missed items. First attempts stay on record after correction.</p>']
+parts=['<h1>Probability · coverage and reading guide</h1><p>DA is the primary syllabus. Ross 10e supplies probability; the separate DA bridge supplies inference. Extensions support further study but do not claim full GATE ST preparation. MA has no standalone probability section in its current syllabus.</p><p>These are original explanations and worked teaching adaptations linked to the Ross source-item inventory below. Read the original at the recorded section and PDF pages when exact wording is needed. The chapter PDFs are local source files and are not hosted here.</p><p><a href="./">Return to the course</a> · <a href="#gate-review">GATE topic audit</a></p><h2>How to study</h2><p>Read the section, describe its experiment and support, reconstruct its proof, attempt the mapped textbook exercises, solve mapped PYQs, then use Recall and correct missed items. First attempts stay on record after correction.</p>']
+subprocess.run(['node',str(root/'tools/audit_ross.js')],check=True)
+subprocess.run(['node',str(root/'tools/reading_inventory.js')],check=True)
+item_report=json.loads((root/'sources/ross-item-coverage.json').read_text())
+parts.append('<h2>Ross item audit</h2><p>The local source inventory records examples, Problems, Theoretical Exercises and Self-Test items. The table counts explicit item mappings in the expanded exercise bank. A mapping does not by itself verify every subpart or the mathematics of its solution. Earlier selected adaptations may cover additional items or subparts.</p><table><thead><tr><th>Chapter</th><th>Source items</th><th>Explicit mappings</th><th>Unmapped items</th></tr></thead><tbody>')
+for ch in item_report['chapters']:
+ parts.append('<tr>'+''.join('<td>'+str(v)+'</td>' for v in (ch['chapter'],ch['expected'],ch['mapped'],len(ch['missing'])))+'</tr>')
+parts.append('</tbody></table>')
 for ch in manifest:
  n=ch['chapter'];parts.append('<h2>'+html.escape(ch['title'])+'</h2>')
  parts.append('<p>Original PDF pages '+str(ch['pdfStart'])+'–'+str(ch['pdfEnd'])+('. Extension to DA.' if n>=9 else '.')+'</p>')
@@ -14,7 +21,7 @@ parts.append('<h2>DA bridge</h2><p>Descriptive summaries, standard error, chi-sq
 parts.append('<p>The experiment-first prompts and story proofs draw on <a href="https://stat110.hsites.harvard.edu/strategic-practice-problems">Harvard Stat 110 strategic practice</a>; the lesson–worked problem–independent practice sequence follows <a href="https://www.ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/pages/resource-index/">MIT 6.041SC course materials</a>.</p>')
 reports=sorted((root/'sources').glob('GATE_REVIEW_*.md'))
 if reports:
- parts.append('<h2 id="gate-review">GATE topic coverage review</h2><p>This review maps the named GATE DA topics to lessons. Selected textbook examples and exercises are still documented separately below.</p>')
+ parts.append('<h2 id="gate-review">GATE topic coverage review</h2><p>This review maps the named GATE DA topics to lessons. The source-item index below documents the textbook adaptations separately.</p>')
  for report in reports:parts.append('<pre>'+html.escape(report.read_text())+'</pre>')
 review=root/'sources/MATH_REVIEW.md'
 if review.exists():parts.append('<h2>Mathematical review and limits</h2><pre>'+html.escape(review.read_text())+'</pre>')

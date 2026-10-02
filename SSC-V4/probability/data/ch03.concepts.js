@@ -7,8 +7,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Conditional probability as a reduced model",
-    "oneLine": "Conditioning on F restricts attention to F and renormalizes its probability.",
-    "statement": "For events $E,F$ with $P(F)>0$, $P(E\\mid F)=P(E\\cap F)/P(F)$. In a finite equally likely model, this is $|E\\cap F|/|F|$.",
+    "oneLine": "“Given F” means keep only outcomes where F happens, then recalculate the chance.",
+    "statement": "Suppose event $F$ has positive probability. Among the outcomes in $F$, the fraction of probability also belonging to $E$ is $P(E\\mid F)=P(E\\cap F)/P(F)$. Here $E\\cap F$ means both events happen. If all original outcomes are equally likely, this is $|E\\cap F|/|F|$: favorable remaining outcomes divided by all remaining outcomes.",
     "intuition": "“Given that the bus arrived” means cross off every outcome where the bus did not arrive, then look only at what remains. Within that smaller set, count how often the event of interest also happened and divide by the remaining total chance.",
     "needs": [],
     "traps": [
@@ -35,8 +35,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Multiplication rule and chain rule",
-    "oneLine": "An intersection probability factors into a first event and successive conditional probabilities.",
-    "statement": "If $P(F)>0$, then $P(E\\cap F)=P(F)P(E\\mid F)$. More generally, when each conditioning event has positive probability, $P(\\cap_{i=1}^n E_i)=P(E_1)\\prod_{k=2}^n P(E_k\\mid E_1\\cap\\cdots\\cap E_{k-1})$.",
+    "oneLine": "For several events in sequence, multiply each next-event chance given what has already happened.",
+    "statement": "The chance that both $E$ and $F$ happen is $P(E\\cap F)=P(F)P(E\\mid F)$ when $P(F)>0$. For a longer sequence, $P(\\cap_{i=1}^nE_i)=P(E_1)\\prod_{k=2}^nP(E_k\\mid E_1\\cap\\cdots\\cap E_{k-1})$. Each factor is the chance of the next event after all earlier events have happened. Each conditioning event must have positive probability.",
     "intuition": "For a sequence like “draw a red marble, then another red,” the chance of the whole sequence is the first chance times the chance of red on the next draw given what the first draw did. After taking a marble out, the jar has changed, so the second chance changes too.",
     "needs": [
       "c.prob.3.2.1"
@@ -53,19 +53,19 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Apply the conditional-probability definition successively and cancel intermediate denominators.",
-      "why": "The rule exposes the sequential structure of a joint event and prevents an unjustified independence assumption.",
+      "idea": "For several events in sequence, multiply each next-event chance given what has already happened.",
+      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
       "rungs": [
         {
-          "why": "Use the definition on the full intersection.",
+          "why": "Start by writing “all n events” as a conditional chance times the chance of the first n−1.",
           "m": "P(E_1\\cdots E_n)=P(E_1\\cdots E_n\\mid E_1\\cdots E_{n-1})P(E_1\\cdots E_{n-1})"
         },
         {
-          "why": "The first conditional event simplifies because the prefix is already known.",
+          "why": "Once the first n−1 events are known, only the last event still needs to happen.",
           "m": "P(E_1\\cdots E_n\\mid E_1\\cdots E_{n-1})=P(E_n\\mid E_1\\cdots E_{n-1})"
         },
         {
-          "why": "Repeat on the shorter intersection until only the first event remains.",
+          "why": "Apply the same rule to the shorter list, continuing until only the first event remains.",
           "m": "P(\\cap_iE_i)=P(E_1)\\prod_{k=2}^nP(E_k\\mid E_1\\cap\\cdots\\cap E_{k-1})"
         }
       ],
@@ -79,8 +79,8 @@ CONCEPTS.push(...
     "kind": "technique",
     "tier": "core",
     "title": "Reduced sample space and sequential sampling",
-    "oneLine": "For equally likely outcomes, conditioning often turns a problem into counting within the evidence set.",
-    "statement": "If a finite sample space is uniform and $F$ is observed, then each outcome in F has conditional probability $1/|F|$. For sequential draws, use the chain rule with each draw conditioned on the preceding draws.",
+    "oneLine": "Cross out outcomes that contradict the information, and keep the original relative weights.",
+    "statement": "If a finite list of outcomes is equally likely and we learn $F$ happened, its remaining $|F|$ outcomes each have chance $1/|F|$. If draws are made one after another, the next draw uses the contents left after the previous draws. Multiply these conditional chances; replacing a ball and keeping a ball out give different next-draw models.",
     "intuition": "If all outcomes started equally likely, learning that F happened leaves the outcomes inside F equally likely. In a no-replacement draw, update the contents after every draw; the jar you face on draw two is not the jar you started with.",
     "needs": [
       "c.prob.3.2.1",
@@ -105,8 +105,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Law of total probability",
-    "oneLine": "Partition the sample space into cases, compute within each case, then weight by the case probability.",
-    "statement": "If $F_1,\\ldots,F_n$ partition $S$ and $P(F_i)>0$, then $P(E)=\\sum_iP(E\\mid F_i)P(F_i)$. For a two-case split, $P(E)=P(E|F)P(F)+P(E|F^c)P(F^c)$.",
+    "oneLine": "Split a question into separate cases, calculate each case’s contribution, and add.",
+    "statement": "Suppose $F_1,\\ldots,F_n$ are separate cases covering all possible outcomes: exactly one happens. This is called a partition. If every case has positive probability, $P(E)=\\sum_iP(E\\mid F_i)P(F_i)$. For just $F$ and “not $F$,” $P(E)=P(E\\mid F)P(F)+P(E\\mid F^c)P(F^c)$. A case with probability zero contributes zero and can be left out.",
     "intuition": "Break the ways an event can happen into separate cases that cover every possibility. For example, a package might come from one of two factories; add “from this factory and defective” across factories to get the overall defective chance.",
     "needs": [
       "c.prob.3.2.1"
@@ -123,19 +123,19 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Split E across the partition and add the disjoint pieces.",
-      "why": "It makes explicit that every occurrence of E lies in exactly one case.",
+      "idea": "Split a question into separate cases, calculate each case’s contribution, and add.",
+      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
       "rungs": [
         {
-          "why": "Intersect E with every partition cell.",
+          "why": "Every outcome in E belongs to exactly one of the separate cases F_i.",
           "m": "E=\\bigcup_i(E\\cap F_i)"
         },
         {
-          "why": "The pieces are disjoint, so add their probabilities.",
+          "why": "Because the pieces cannot happen together, their probabilities add.",
           "m": "P(E)=\\sum_iP(E\\cap F_i)"
         },
         {
-          "why": "Factor each term using conditional probability.",
+          "why": "Each piece requires its case to happen and then E to happen within that case. Multiply those two chances.",
           "m": "P(E)=\\sum_iP(E|F_i)P(F_i)"
         }
       ],
@@ -149,8 +149,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Bayes formula",
-    "oneLine": "Bayes reverses a conditional probability by combining likelihood with prior weight.",
-    "statement": "For a finite partition $(F_i)$ with $P(F_i)>0$ for every cell and $P(E)>0$, $P(F_j\\mid E)=\\dfrac{P(E\\mid F_j)P(F_j)}{\\sum_iP(E\\mid F_i)P(F_i)}$. For two complementary cases, divide $P(E|F)P(F)$ by $P(E)$.",
+    "oneLine": "To work backward from evidence, compare how much each possible cause contributes to it.",
+    "statement": "Suppose exactly one of the cases $F_i$ happens, each with positive probability, and evidence $E$ has positive probability. Bayes’ formula is $P(F_j\\mid E)=\\dfrac{P(E\\mid F_j)P(F_j)}{\\sum_iP(E\\mid F_i)P(F_i)}$. The top is the chance of both the chosen case and the evidence. The bottom is the evidence’s total chance, adding every possible case.",
     "intuition": "Bayes’ rule works backward from an observation to its possible causes. A positive test may be much more likely if someone is ill, but if the illness is rare, many positive results can still come from the much larger healthy group.",
     "needs": [
       "c.prob.3.2.1",
@@ -168,19 +168,19 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Write the joint event two ways and normalize by the total probability of the evidence.",
-      "why": "The numerator measures evidence generated by the target case; the denominator gathers evidence from every case.",
+      "idea": "To work backward from evidence, compare how much each possible cause contributes to it.",
+      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
       "rungs": [
         {
-          "why": "Express the target posterior through the joint event.",
+          "why": "Within the evidence E, count the part that also came from F_j.",
           "m": "P(F_j|E)=P(E\\cap F_j)/P(E)"
         },
         {
-          "why": "Factor the numerator by conditioning on the case.",
+          "why": "That part requires F_j first, then evidence E; multiply the two chances.",
           "m": "P(E\\cap F_j)=P(E|F_j)P(F_j)"
         },
         {
-          "why": "Expand P(E) over the partition.",
+          "why": "Find all the evidence by adding the contributions from every separate case.",
           "m": "P(E)=\\sum_iP(E|F_i)P(F_i)"
         }
       ],
@@ -194,8 +194,8 @@ CONCEPTS.push(...
     "kind": "technique",
     "tier": "core",
     "title": "Bayesian updating and evidence",
-    "oneLine": "A posterior is a normalized prior-times-likelihood score.",
-    "statement": "For hypotheses $H_i$ and evidence E, compute unnormalized weights $w_i=P(E|H_i)P(H_i)$, then normalize: $P(H_i|E)=w_i/\\sum_jw_j$.",
+    "oneLine": "Update a possibility by multiplying its starting chance by how well it predicts the evidence.",
+    "statement": "For possible explanations $H_i$ covering all outcomes without overlap, first compute $w_i=P(E\\mid H_i)P(H_i)$. These are contributions to the evidence, rather than final probabilities. Divide each by the total: $P(H_i\\mid E)=w_i/\\sum_jw_j$, provided that total is positive. Starting chances are called prior probabilities; the updated chances are posterior probabilities.",
     "intuition": "Start with how common each explanation was before seeing the evidence. Multiply each starting chance by how likely the evidence would be under that explanation, then rescale the scores so they add to 1.",
     "needs": [
       "c.prob.3.3.2"
@@ -219,8 +219,8 @@ CONCEPTS.push(...
     "kind": "definition",
     "tier": "core",
     "title": "Independence of two events",
-    "oneLine": "E and F are independent when learning one leaves the probability of the other unchanged.",
-    "statement": "Events E,F are independent iff $P(E\\cap F)=P(E)P(F)$. If $P(F)>0$, this is equivalent to $P(E|F)=P(E)$.",
+    "oneLine": "Two events are independent when knowing one occurred does not change the other’s chance.",
+    "statement": "Events $E,F$ are independent exactly when $P(E\\cap F)=P(E)P(F)$. If $P(F)>0$, dividing by $P(F)$ gives the equivalent statement $P(E\\mid F)=P(E)$. Use the product definition when an event has probability zero, since its conditional probability would be undefined.",
     "intuition": "Two events are independent when learning one gives no change to the chance of the other. For separate fair coin tosses, the first toss being heads does not change the chance that the second is heads.",
     "needs": [
       "c.prob.3.2.1"
@@ -249,8 +249,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Complement closure for independent events",
-    "oneLine": "Independence of E and F implies independence of their complements and mixed complements.",
-    "statement": "If E and F are independent, then each pair among $E,E^c$ and $F,F^c$ is independent; in particular $P(E\\cap F^c)=P(E)P(F^c)$ and $P(E^c\\cap F^c)=P(E^c)P(F^c)$.",
+    "oneLine": "If two events are independent, replacing either with “does not happen” keeps independence.",
+    "statement": "If $E,F$ are independent, the pairs $(E,F^c)$, $(E^c,F)$, and $(E^c,F^c)$ are also independent. The superscript $c$ means the event does not happen. For example $P(E\\cap F^c)=P(E)P(F^c)$ and $P(E^c\\cap F^c)=P(E^c)P(F^c)$.",
     "intuition": "If knowing that it rained does not change the chance the bus is late, then knowing that it did not rain does not change it either. Independence keeps working when you switch either event to its opposite.",
     "needs": [
       "c.prob.3.4.1"
@@ -267,19 +267,19 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Subtract the known joint probability from the marginal probability, then use complements.",
-      "why": "The total probability of E splits into its parts inside F and outside F.",
+      "idea": "If two events are independent, replacing either with “does not happen” keeps independence.",
+      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
       "rungs": [
         {
-          "why": "Use the disjoint split of E.",
+          "why": "E happens either with F or without F. These two possibilities are separate.",
           "m": "P(E)=P(EF)+P(EF^c)"
         },
         {
-          "why": "Substitute independence into the first term.",
+          "why": "Subtract the known chance of both events from E’s whole chance.",
           "m": "P(EF^c)=P(E)-P(E)P(F)"
         },
         {
-          "why": "Factor the complement probability.",
+          "why": "Factor out P(E). The leftover factor is exactly the chance F does not happen.",
           "m": "P(EF^c)=P(E)[1-P(F)]=P(E)P(F^c)"
         }
       ],
@@ -293,8 +293,8 @@ CONCEPTS.push(...
     "kind": "counterexample",
     "tier": "core",
     "title": "Pairwise independence is weaker than mutual independence",
-    "oneLine": "Every pair in a collection can be independent while the whole collection is not mutually independent.",
-    "statement": "Mutual independence of $E_1,\\ldots,E_n$ requires $P(\\cap_{i\\in I}E_i)=\\prod_{i\\in I}P(E_i)$ for every subset I of size at least 2, not only for pairs.",
+    "oneLine": "Checking every pair does not check how three or more events work together.",
+    "statement": "For mutual independence of $E_1,\\ldots,E_n$, every group of at least two events must satisfy $P(\\cap_{i\\in I}E_i)=\\prod_{i\\in I}P(E_i)$. The index set $I$ chooses the group. For three events, check each pair and also the triple. Pairwise independence checks only the pairs and can miss a dependence involving all three.",
     "intuition": "Checking pairs is like checking that every two students in a group can get along: it does not prove the whole group has no hidden rule. With three coin outcomes formed from two fair tosses, the pairwise relationships can look independent while all three together still obey a constraint.",
     "needs": [
       "c.prob.3.4.1"
@@ -318,8 +318,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Conditional probability is a probability measure",
-    "oneLine": "Fixing a positive-probability condition F makes E ↦ P(E|F) satisfy the probability axioms.",
-    "statement": "For $P(F)>0$, $Q(E)=P(E|F)$ satisfies $0\\le Q(E)\\le1$, $Q(S)=1$, and for disjoint $E_i$, $Q(\\cup_iE_i)=\\sum_iQ(E_i)$.",
+    "oneLine": "After restricting to known information, the ordinary probability rules still work.",
+    "statement": "Fix $F$ with $P(F)>0$ and write $Q(E)=P(E\\mid F)$. Then $Q$ is a probability rule for the updated model: every chance is between 0 and 1, $Q(S)=1$ for the full outcome set $S$, and probabilities of separate cases add: $Q(\\cup_iE_i)=\\sum_iQ(E_i)$ for disjoint events, including a countably infinite list.",
     "intuition": "After fixing what we know, such as “the first roll was even,” probabilities inside that condition follow the usual rules: the possible cases still total 1, and nonoverlapping cases still add.",
     "needs": [
       "c.prob.3.2.1"
@@ -336,19 +336,19 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Substitute $Q(E)=P(E\\cap F)/P(F)$ into each probability axiom.",
-      "why": "The common positive denominator preserves inequalities and distributes over disjoint unions.",
+      "idea": "After restricting to known information, the ordinary probability rules still work.",
+      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
       "rungs": [
         {
-          "why": "Bounds follow from containment.",
+          "why": "The part where both E and F happen lies inside F, so its probability is between zero and P(F). Divide by positive P(F).",
           "m": "\\varnothing\\subseteq E\\cap F\\subseteq F\\Rightarrow0\\le P(E\\cap F)/P(F)\\le1"
         },
         {
-          "why": "The sure event conditioned on F is F itself.",
+          "why": "The full outcome set S and F happen together exactly when F happens.",
           "m": "Q(S)=P(S\\cap F)/P(F)=P(F)/P(F)=1"
         },
         {
-          "why": "Intersect a disjoint union with F and use countable additivity.",
+          "why": "Restricting separate events to F keeps them separate. Add their original probabilities and divide every term by the same P(F).",
           "m": "Q(\\cup_iE_i)=P((\\cup_iE_i)F)/P(F)=\\sum_iP(E_iF)/P(F)=\\sum_iQ(E_i)"
         }
       ],
@@ -362,8 +362,8 @@ CONCEPTS.push(...
     "kind": "theorem",
     "tier": "core",
     "title": "Total probability and Bayes within a condition",
-    "oneLine": "The partition and Bayes rules remain valid after conditioning on an event of positive probability.",
-    "statement": "Let Q(E)=P(E|F), with P(F)>0. For a partition $(E_i)$, $Q(A)=\\sum_{i:Q(E_i)>0} Q(A|E_i)Q(E_i)$. If Q(A)>0 and Q(E_i)>0 for each cell whose posterior is stated, then Bayes gives $Q(E_i|A)=Q(A|E_i)Q(E_i)/\\sum_jQ(A|E_j)Q(E_j)$, with zero-mass cells omitted from the sum.",
+    "oneLine": "Keep the original information in every case when splitting or updating again.",
+    "statement": "Suppose $F$ is known, with $P(F)>0$, and abbreviate $Q(E)=P(E\\mid F)$. For separate cases $E_i$ covering all outcomes, $Q(A)=\\sum_{i:Q(E_i)>0}Q(A\\mid E_i)Q(E_i)$. Here $Q(A\\mid E_i)=P(A\\mid E_i\\cap F)$: both pieces of information stay in the condition. If $Q(A)>0$, $Q(E_i\\mid A)=Q(A\\mid E_i)Q(E_i)/\\sum_{j:Q(E_j)>0}Q(A\\mid E_j)Q(E_j)$ for a positive-probability case. Zero-probability cases contribute zero.",
     "intuition": "Even after you learn F, you can split the remaining possibilities into cases and add their weighted chances. Bayes also works inside this smaller world, as long as the case being conditioned on can actually occur there.",
     "needs": [
       "c.prob.3.5.1",
@@ -382,19 +382,19 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Treat Q(E)=P(E|F) as an ordinary probability measure and apply the partition identities under Q.",
-      "why": "The conditional-measure proposition supplies all axioms required by the earlier total-probability and Bayes derivations.",
+      "idea": "Keep the original information in every case when splitting or updating again.",
+      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
       "rungs": [
         {
-          "why": "Partition the target event in the conditional model; zero-mass cells contribute zero.",
+          "why": "Inside the model where F is known, split A into its separate case pieces. Leave out pieces with zero chance.",
           "m": "Q(A)=\\sum_{i:Q(E_i)>0}Q(A\\cap E_i)"
         },
         {
-          "why": "Factor each positive-mass term using conditional probability within Q.",
+          "why": "For each remaining piece, multiply the case chance by A’s chance within it, keeping F in the condition.",
           "m": "Q(A\\cap E_i)=Q(A|E_i)Q(E_i)"
         },
         {
-          "why": "For a posterior with Q(A)>0, divide each joint term by Q(A).",
+          "why": "To find a case’s updated share after A, divide its contribution by the sum of every case’s contribution.",
           "m": "Q(E_i|A)=Q(A|E_i)Q(E_i)/\\sum_{j:Q(E_j)>0}Q(A|E_j)Q(E_j)"
         }
       ],
@@ -408,8 +408,8 @@ CONCEPTS.push(...
     "kind": "technique",
     "tier": "core",
     "title": "Model partial information by conditioning",
-    "oneLine": "When evidence narrows the possible outcomes, recompute probability inside the evidence set; use conditioning also as a calculation strategy.",
-    "statement": "If partial information is represented by an event F with P(F)>0, the updated probability of E is P(E|F)=P(E∩F)/P(F). A useful model-first step is to state the original outcomes, the information event, and the target event before counting or applying a rule.",
+    "oneLine": "Name what you know and what you want before calculating a chance.",
+    "statement": "Let $F$ describe information you know is true and $E$ the event you are asking about. If $P(F)>0$, the updated chance is $P(E\\mid F)=P(E\\cap F)/P(F)$. First name the original possible outcomes, then $F$, then $E$. This prevents confusing “both happen” with “one happens given the other.”",
     "intuition": "When a question gives a clue such as “at least one child is a boy,” write down exactly which family outcomes fit that clue before counting. That small step prevents you from treating outcomes inside the clue as equally likely when they are not.",
     "needs": [],
     "traps": [

@@ -6,7 +6,7 @@ const SYLLABI = [
     "code": "GATE DA 2027",
     "sem": "Ross 10e",
     "book": "Sheldon Ross \u00b7 A First Course in Probability, 10e",
-    "blurb": "Model the experiment, derive the law, solve and recall. Selected textbook practice; coverage reports record omissions.",
+    "blurb": "Model the experiment, derive the law, solve and recall. Ross examples and exercises, plain-language explanations, and illustrated proof steps. The source index records item mappings.",
     "modules": [
       {
         "id": "prob.ch01",

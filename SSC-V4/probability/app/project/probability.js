@@ -10,7 +10,7 @@ PROJECT.hooks.home = function () {
       e('a',{class:'btn primary',href:'#/study/prob',text:'Open the syllabus'}),
       e('a',{class:'prob-guide-link',href:'source-guide.html',text:'Coverage and reading guide'})
     ]),
-    e('p',{class:'prob-hero-foot',text:'DA core + inference bridge · clearly marked extensions · selected textbook practice'})
+    e('p',{class:'prob-hero-foot',text:'DA core + inference bridge · clearly marked extensions · Ross examples + exercises · illustrated proofs'})
   ]);
 };
 function probDisclosure(title, content, className) {
@@ -21,6 +21,12 @@ function probDisclosure(title, content, className) {
 }
 PROJECT.hooks.noteSim = function (c) {
   const e=DOM.el, nodes=[];
+  const figure=probabilityFigure(c);
+  if(figure) nodes.push(figure);
+  const vocabulary=probVocabulary(c);
+  if(vocabulary.length) nodes.push(probDisclosure('Words used here',vocabulary.map(v=>
+    e('p',{},[e('b',{text:v[0]+': '}),v[1]])
+  )));
   if(c.provenance) nodes.push(probDisclosure('Source and reading reference',[
     e('p',{class:'small muted',text:c.provenance})
   ],'prob-source'));
@@ -32,6 +38,26 @@ PROJECT.hooks.noteSim = function (c) {
   ]));
   return nodes.length ? e('div',{class:'prob-note-extras'},nodes) : null;
 };
+function probVocabulary(c) {
+  const text=[c.statement,c.oneLine,c.proof&&JSON.stringify(c.proof)].filter(Boolean).join(' ');
+  const words=[
+    [/\biid\b|identically distributed/i,'iid','The observations are independent (one does not affect another), and all follow the same probability rule.'],
+    [/integrab/i,'Integrable','The expected absolute size is finite: E[|X|] < ∞. This ensures that the average in the formula is well defined.'],
+    [/\bpmf\b|probability mass function/i,'Probability mass function (pmf)','A list or formula giving the chance of each separate possible value of a discrete random variable.'],
+    [/\bcdf\b|distribution function/i,'Cumulative distribution function (CDF)','F(x) is the chance that the random value is at most x. As x moves right, this accumulated chance cannot decrease.'],
+    [/\bvariance\b/i,'Variance','The average squared distance from the mean. It measures spread; standard deviation is its square root.'],
+    [/covariance/i,'Covariance','The average product of two deviations from their means. Its sign describes whether the two quantities tend to move together or in opposite directions.'],
+    [/\bpartition\b/i,'Partition','Separate groups that cover every possibility, with each outcome in exactly one group.'],
+    [/almost.sure/i,'Almost surely','The statement holds with probability 1. In a limit theorem, almost every entire infinite sequence has the stated limiting behavior.'],
+    [/converge\w* in probability|convergence in probability/i,'Convergence in probability','For any chosen error margin, the chance of being outside that margin goes to zero as the sample gets larger.'],
+    [/converge\w* in distribution|convergence in distribution/i,'Convergence in distribution','The cumulative probabilities approach those of the limiting distribution at every point where its CDF is continuous.'],
+    [/characteristic.function/i,'Characteristic function','A mathematical summary E[exp(itX)] of a distribution, using the imaginary unit i. It is used to prove the limit theorem; the picture explains the theorem’s meaning.'],
+    [/\bMGF\b|moment.generating/i,'Moment generating function (MGF)','The function E[exp(tX)], when finite near zero. Its derivatives at zero give averages such as E[X] and E[X²].'],
+    [/measurab/i,'Measurable event or set','A collection of outcomes for which the probability model allows us to assign a probability.'],
+    [/Jacobian/i,'Jacobian','The local area or volume scaling factor when changing coordinates. It corrects a density for stretching or shrinking.']
+  ];
+  return words.filter(w=>w[0].test(text)).map(w=>[w[1],w[2]]);
+}
 function probSlider(host, label, value, min, max, step, onChange) {
   const e=DOM.el, num=e('b',{text:String(value)});
   const input=e('input',{type:'range',min:String(min),max:String(max),step:String(step),value:String(value),
