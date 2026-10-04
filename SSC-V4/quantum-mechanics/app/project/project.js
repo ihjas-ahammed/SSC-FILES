@@ -17,5 +17,13 @@ const PROJECT = {
   },
   themeColor: { light: '#f3f6fb', dark: '#05080f' },
   figZoom: true,
+  studyMaps: [{
+    title: 'Module 3',
+    description: 'Mathematical Tools of Quantum Mechanics',
+    summary: '32 questions · 155 concepts · 3D prerequisite map',
+    href: location.pathname.startsWith('/phy/')
+      ? '/phy/quantum-mechanics/study-map/module-3/'
+      : '../study-map/build/index.html'
+  }],
   hooks: {}
 };

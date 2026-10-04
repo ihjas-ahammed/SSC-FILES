@@ -44,6 +44,7 @@ const FLOW_MODULES = [
   'view.recall.js',
   'view.omr.js',
   'view.write.js',
+  'view.study-map.js',
 
   /* boot last: loads the data files listed in sources.js, then routes */
   'boot.js'

@@ -148,8 +148,8 @@ const Progress = (function () {
 
   /* ── ticking ─────────────────────────────────────────────────────────────
      One press advances one step, so the tick always has somewhere to go.
-     Level 3 is deliberately NOT reachable from here: it is earned by working
-     the section's exercises, not by pressing a box. */
+     At level 2, the next press records the corresponding section exercises
+     as complete. A level-3 press clears the note as before. */
   function advance(id) {
     const at = level(id);
     if (at === 0) {
@@ -157,6 +157,8 @@ const Progress = (function () {
       if (!hasProof(id)) Store.setProofDone(id, true);
     } else if (at === 1) {
       Store.setProofDone(id, true);
+    } else if (at === 2) {
+      setTo([id], 3);
     } else {
       clear(id);
     }
@@ -179,18 +181,24 @@ const Progress = (function () {
     dropCache();
   }
 
-  /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
+  /* Put a list of concepts AT a given level (0, 1, 2 or 3). Bulk ticking a
      section or a module runs through here, and so does the prerequisite
      cascade — which is why it takes a level rather than a boolean. */
   function setTo(ids, n) {
     const list = ids || [];
-    const want = Math.max(0, Math.min(2, n));
+    const want = Math.max(0, Math.min(3, n));
     Store.setDoneMany(list, want >= 1);
     list.forEach(function (id) {
       const proof = hasProof(id);
       const on = want >= 2 || (want >= 1 && !proof);
       if (Store.isProofDone(id) !== on) Store.setProofDone(id, on);
     });
+    if (want >= 3) {
+      const sections = new Set(list.map(id => Pool.concept(id)?.sec).filter(Boolean));
+      const tasks = new Map();
+      sections.forEach(sec => secTaskState(sec).list.forEach(q => tasks.set(taskKey(q), q)));
+      tasks.forEach((q, key) => { if (!taskDone(q)) Store.setProofDone(key, true); });
+    }
     dropCache();
   }
 
@@ -200,6 +208,7 @@ const Progress = (function () {
     if (!c.total) return 0;
     if (c.min === 0) setTo(ids, 1);
     else if (c.min === 1) setTo(ids, 2);
+    else if (c.min === 2) setTo(ids, 3);
     else setTo(ids, 0);
     return count(ids).min;
   }

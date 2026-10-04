@@ -88,8 +88,8 @@ CONCEPTS.push(
   {
     id: 'c.4.1.1', sec: '4.1', kind: 'law', tier: 'core',
     title: 'The Harmonic Oscillator Hamiltonian & Classical Correspondence',
-    oneLine: 'Any potential near a stable equilibrium is approximately harmonic: V(x) ≈ ½ m ω² x² with classical frequency ω = √(k/m).',
-    statement: `The <b>one-dimensional Quantum Harmonic Oscillator (SHO)</b> is governed by the Hamiltonian:
+    oneLine: "The oscillator is the quantum version of a mass on a spring.",
+    statement: `<b>Start here.</b> The oscillator is the quantum version of a mass on a spring. Its energy operator adds kinetic energy to a parabolic potential. Near a smooth stable minimum with positive curvature, other potentials look approximately like this parabola.<br><br>The <b>one-dimensional Quantum Harmonic Oscillator (SHO)</b> is governed by the Hamiltonian:
 $$\\boxed{\\hat{H} = \\frac{\\hat{p}^2}{2m} + \\frac{1}{2}m\\omega^2 \\hat{x}^2 = -\\frac{\\hbar^2}{2m}\\frac{d^2}{dx^2} + \\frac{1}{2}m\\omega^2 x^2}$$
 where $m$ is the particle mass and $\\omega = \\sqrt{k/m}$ is the classical angular frequency of oscillation.<br>
 For a classical particle with energy $E$, the motion is strictly confined between the <b>classical turning points</b>:
@@ -111,8 +111,8 @@ Since $V'(x_0) = 0$ at equilibrium and setting $V(x_0) = 0$, $V(x) \\approx \\fr
   {
     id: 'c.4.1.2', sec: '4.1', kind: 'definition', tier: 'core',
     title: 'The Algebraic Ladder Operators â and â†',
-    oneLine: 'Non-Hermitian ladder operators factorize the Hamiltonian: [â, â†] = 1 and Ĥ = ħω(â†â + ½).',
-    statement: `Define the dimensionless, mutually adjoint <b>annihilation (lowering)</b> operator $\\hat{a}$ and <b>creation (raising)</b> operator $\\hat{a}^\\dagger$:
+    oneLine: "The lowering matrix moves a component down one energy level; the raising matrix moves it up.",
+    statement: `<b>Start here.</b> The lowering matrix moves a component down one energy level; the raising matrix moves it up. The square-root factors set the new vector’s length. These matrices continue through infinitely many levels.<br><br>Define the dimensionless, mutually adjoint <b>annihilation (lowering)</b> operator $\\hat{a}$ and <b>creation (raising)</b> operator $\\hat{a}^\\dagger$:
 $$\\boxed{\\hat{a} = \\sqrt{\\frac{m\\omega}{2\\hbar}}\\hat{x} + \\frac{i}{\\sqrt{2m\\hbar\\omega}}\\hat{p}, \\qquad \\hat{a}^\\dagger = \\sqrt{\\frac{m\\omega}{2\\hbar}}\\hat{x} - \\frac{i}{\\sqrt{2m\\hbar\\omega}}\\hat{p}}$$
 In terms of $\\hat{a}$ and $\\hat{a}^\\dagger$, position and momentum are:
 $$\\boxed{\\hat{x} = \\sqrt{\\frac{\\hbar}{2m\\omega}}(\\hat{a} + \\hat{a}^\\dagger), \\qquad \\hat{p} = -i\\sqrt{\\frac{m\\hbar\\omega}{2}}(\\hat{a} - \\hat{a}^\\dagger)}$$
@@ -172,8 +172,8 @@ $$\\boxed{\\hat{H} = \\hbar\\omega\\left(\\hat{a}^\\dagger \\hat{a} + \\frac{1}{
   {
     id: 'c.4.1.3', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'The Number Operator and Energy Quantization En = (n + ½)ħω',
-    oneLine: 'The eigenvalues of N̂ = â†â are non-negative integers n = 0, 1, 2, ... giving equispaced energy levels En = (n + ½)ħω.',
-    statement: `Define the Hermitian <b>number operator</b>:
+    oneLine: "The number matrix has 0, 1, 2, … on its diagonal.",
+    statement: `<b>Start here.</b> The number matrix has 0, 1, 2, … on its diagonal. Each level has energy (n + 1/2)ℏω. Lowering must stop at n = 0 because a squared length cannot be negative.<br><br>Define the Hermitian <b>number operator</b>:
 $$\\boxed{\\hat{N} = \\hat{a}^\\dagger \\hat{a}}$$
 The number operator satisfies the fundamental ladder commutators:
 $$[\\hat{N}, \\hat{a}] = -\\hat{a}, \\qquad [\\hat{N}, \\hat{a}^\\dagger] = +\\hat{a}^\\dagger$$
@@ -208,7 +208,7 @@ Every energy level is strictly non-degenerate and equispaced by $\\Delta E = \\h
         {
           why: 'Action of N on Lowered State',
           m: '$$\\hat{N}(\\hat{a}|n\\rangle) = (\\hat{a}\\hat{N} + [\\hat{N}, \\hat{a}])|n\\rangle = (\\hat{a}n - \\hat{a})|n\\rangle = (n - 1)(\\hat{a}|n\\rangle)$$',
-          meaning: 'What this really means: a|n⟩ is an eigenstate of N with eigenvalue n - 1.',
+          meaning: 'Unless the output is zero, a|n⟩ has level number n − 1. In a column, the occupied entry moves one row upward in the ordered energy basis.',
           label: 'Action of N on Lowered State',
           math: '\\hat{N}(\\hat{a}|n\\rangle) = (n - 1)(\\hat{a}|n\\rangle)',
           note: 'Eigenvalue decreases by 1.'
@@ -224,7 +224,7 @@ Every energy level is strictly non-degenerate and equispaced by $\\Delta E = \\h
         {
           why: 'Termination Condition',
           m: '$$\\hat{a}|0\\rangle = 0 \\implies \\hat{N}|0\\rangle = \\hat{a}^\\dagger \\hat{a} |0\\rangle = 0 \\implies n \\in \\{0, 1, 2, \\dots\\}$$',
-          meaning: 'What this really means: Ground state has eigenvalue 0, so all eigenvalues are non-negative integers.',
+          meaning: 'Repeated lowering subtracts one from n each time. If n were not an integer, it would eventually produce a nonzero state with negative squared norm. Therefore the ladder must stop at n = 0, and all allowed n are non-negative integers.',
           label: 'Termination Condition',
           math: '\\hat{a}|0\\rangle = 0 \\implies n \\in \\{0, 1, 2, \\dots\\}',
           note: 'En = (n + 1/2)ħω.'
@@ -239,8 +239,8 @@ Every energy level is strictly non-degenerate and equispaced by $\\Delta E = \\h
   {
     id: 'c.4.1.4', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'Ground State Wave Function in Position Space ψ₀(x)',
-    oneLine: 'The ground state wavefunction is a Gaussian ψ₀(x) = (mω/πħ)^{1/4} exp(-mω x² / 2ħ) determined by â|0⟩ = 0.',
-    statement: `The spatial wave function of the ground state $\\psi_0(x) = \\langle x|0\\rangle$ satisfies the first-order differential equation given by the annihilation condition $\\hat{a}|0\\rangle = 0$:
+    oneLine: "The lowest oscillator state is a smooth Gaussian wave.",
+    statement: `<b>Start here.</b> The lowest oscillator state is a smooth Gaussian wave. Solve the equation saying that lowering this state gives the zero vector, then choose its size so the total probability is one.<br><br>The spatial wave function of the ground state $\\psi_0(x) = \\langle x|0\\rangle$ satisfies the first-order differential equation given by the annihilation condition $\\hat{a}|0\\rangle = 0$:
 $$\\left( \\sqrt{\\frac{m\\omega}{2\\hbar}}x + \\frac{\\hbar}{\\sqrt{2m\\hbar\\omega}}\\frac{d}{dx} \\right) \\psi_0(x) = 0 \\implies \\frac{d\\psi_0}{dx} = -\\left(\\frac{m\\omega}{\\hbar}\\right)x \\psi_0(x)$$
 Integrating and normalizing yields the Gaussian wave function:
 $$\\boxed{\\psi_0(x) = \\left( \\frac{m\\omega}{\\pi\\hbar} \\right)^{1/4} \\exp\\left( -\\frac{m\\omega}{2\\hbar}x^2 \\right)}$$
@@ -290,8 +290,8 @@ $$\\psi_0(\\xi) = \\left( \\frac{m\\omega}{\\pi\\hbar} \\right)^{1/4} e^{-\\xi^2
   {
     id: 'c.4.1.5', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'Excited States, Hermite Polynomials & Parity',
-    oneLine: 'Higher states are generated by |n⟩ = (1/√n!) (â†)ⁿ|0⟩, yielding Hermite polynomial wavefunctions ψₙ(x) with n nodes.',
-    statement: `The normalized stationary states $|n\\rangle$ are systematically generated by repeated application of the creation operator $\\hat{a}^\\dagger$:
+    oneLine: "Higher oscillator waves have more nodes and are built by repeatedly raising the ground state.",
+    statement: `<b>Start here.</b> Higher oscillator waves have more nodes and are built by repeatedly raising the ground state. Their symmetry alternates: even n gives an even function and odd n gives an odd function.<br><br>The normalized stationary states $|n\\rangle$ are systematically generated by repeated application of the creation operator $\\hat{a}^\\dagger$:
 $$\\boxed{|n\\rangle = \\frac{1}{\\sqrt{n!}} (\\hat{a}^\\dagger)^n |0\\rangle}$$
 The action of the ladder operators on normalized states is:
 $$\\boxed{\\hat{a}^\\dagger |n\\rangle = \\sqrt{n+1} |n+1\\rangle, \\qquad \\hat{a}|n\\rangle = \\sqrt{n}|n-1\\rangle}$$
@@ -317,8 +317,8 @@ Even $n$ states are even functions; odd $n$ states are odd functions with a node
   {
     id: 'c.4.1.6', sec: '4.1', kind: 'definition', tier: 'core',
     title: 'Matrix Representation of Harmonic Oscillator Operators',
-    oneLine: 'In the {|n⟩} basis, â has non-zero elements only on the superdiagonal and â† on the subdiagonal.',
-    statement: `In the orthonormal basis of energy eigenstates $\{|0\\rangle, |1\\rangle, |2\\rangle, \\dots\}$, the matrix elements $O_{mn} = \\langle m|\\hat{O}|n\\rangle$ are:
+    oneLine: "In the energy basis, the oscillator’s number and energy matrices are diagonal.",
+    statement: `<b>Start here.</b> In the energy basis, the oscillator’s number and energy matrices are diagonal. Position and momentum connect neighbouring levels. The dots in their tables mean infinitely many more rows and columns.<br><br>In the orthonormal basis of energy eigenstates $\{|0\\rangle, |1\\rangle, |2\\rangle, \\dots\}$, the matrix elements $O_{mn} = \\langle m|\\hat{O}|n\\rangle$ are:
 1. <b>Annihilation Operator $\\hat{a}$:</b>
 $$\\langle m|\\hat{a}|n\\rangle = \\sqrt{n} \\, \\delta_{m, n-1} \\implies a = \\begin{pmatrix} 0 & \\sqrt{1} & 0 & 0 & \\dots \\\\ 0 & 0 & \\sqrt{2} & 0 & \\dots \\\\ 0 & 0 & 0 & \\sqrt{3} & \\dots \\\\ \\vdots & \\vdots & \\vdots & \\vdots & \\ddots \\end{pmatrix}$$
 2. <b>Creation Operator $\\hat{a}^\\dagger$:</b>
@@ -340,8 +340,8 @@ $$\\langle m|\\hat{a}^\\dagger|n\\rangle = \\sqrt{n+1} \\, \\delta_{m, n+1} \\im
   {
     id: 'c.4.1.7', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'Expectation Values, Virial Theorem & Uncertainty Product',
-    oneLine: 'In any stationary state |n⟩, ⟨T⟩ = ⟨V⟩ = ½ En (virial theorem) and Δx Δp = (n + ½)ħ.',
-    statement: `For any harmonic oscillator energy eigenstate $|n\\rangle$:
+    oneLine: "For an oscillator energy state, the averages of x and p are zero, but their spreads are not.",
+    statement: `<b>Start here.</b> For an oscillator energy state, the averages of x and p are zero, but their spreads are not. The average kinetic and potential energies are equal. Only the ground state reaches the minimum uncertainty product among these energy states.<br><br>For any harmonic oscillator energy eigenstate $|n\\rangle$:
 1. <b>Averages of Odd Powers Vanish:</b>
 $$\\langle n|\\hat{x}|n\\rangle = 0, \\qquad \\langle n|\\hat{p}|n\\rangle = 0$$
 2. <b>Second Moments:</b>
@@ -368,8 +368,8 @@ Energy is partitioned equally on average between kinetic and potential energy in
   {
     id: 'c.4.1.8', sec: '4.1', kind: 'definition', tier: 'core',
     title: 'Coherent States of the Harmonic Oscillator',
-    oneLine: 'Coherent states |α⟩ are eigenstates of â with Poissonian number statistics that oscillate without spreading.',
-    statement: `A <b>coherent state</b> $|\\alpha\\rangle$ is defined as an eigenstate of the non-Hermitian annihilation operator $\\hat{a}$:
+    oneLine: "A coherent state is a special mixture of oscillator energy states.",
+    statement: `<b>Start here.</b> A coherent state is a special mixture of oscillator energy states. Its average position and momentum follow the classical oscillation, while its wave packet keeps the ground-state-sized uncertainty.<br><br>A <b>coherent state</b> $|\\alpha\\rangle$ is defined as an eigenstate of the non-Hermitian annihilation operator $\\hat{a}$:
 $$\\boxed{\\hat{a}|\\alpha\\rangle = \\alpha|\\alpha\\rangle, \\qquad \\alpha \\in \\mathbb{C}}$$
 In the energy Fock basis $\{|n\\rangle\}$, the normalized coherent state is:
 $$\\boxed{|\\alpha\\rangle = e^{-|\\alpha|^2/2} \\sum_{n=0}^\\infty \\frac{\\alpha^n}{\\sqrt{n!}} |n\\rangle}$$
@@ -395,8 +395,8 @@ with mean $\\langle \\hat{N} \\rangle = |\\alpha|^2$ and variance $\\Delta N^2 =
   {
     id: 'c.4.2.1', sec: '4.2', kind: 'law', tier: 'core',
     title: '3D Schrödinger Equation & Cartesian Separation of Variables',
-    oneLine: 'For separable potentials V(x,y,z) = Vx(x) + Vy(y) + Vz(z), the 3D TISE separates into three independent 1D ODEs.',
-    statement: `The Time-Independent Schrödinger Equation for a particle of mass $m$ moving in three spatial dimensions is:
+    oneLine: "When the potential separates into x, y and z parts, try a wave function that is a product of three one-dimensional waves.",
+    statement: `<b>Start here.</b> When the potential separates into x, y and z parts, try a wave function that is a product of three one-dimensional waves. Each coordinate has its own equation; their energies add.<br><br>The Time-Independent Schrödinger Equation for a particle of mass $m$ moving in three spatial dimensions is:
 $$-\\frac{\\hbar^2}{2m}\\nabla^2 \\psi(x,y,z) + V(x,y,z)\\psi(x,y,z) = E\\psi(x,y,z)$$
 where the Laplacian in Cartesian coordinates is $\\nabla^2 = \\frac{\\partial^2}{\\partial x^2} + \\frac{\\partial^2}{\\partial y^2} + \\frac{\\partial^2}{\\partial z^2}$.<br>
 If the potential energy is <b>separable</b>:
@@ -451,8 +451,8 @@ $$\\boxed{E = E_x + E_y + E_z}$$`,
   {
     id: 'c.4.2.2', sec: '4.2', kind: 'theorem', tier: 'core',
     title: '3D Probability Density & Statistical Independence',
-    oneLine: 'In separable 3D states, the probability density factorizes: ρ(x,y,z) = ρx(x) ρy(y) ρz(z), making measurements statistically independent.',
-    statement: `For a factored stationary state $\\psi(x,y,z) = X(x)Y(y)Z(z)$, the three-dimensional probability density factors identically:
+    oneLine: "For a product state, the probability density is the product of the three coordinate densities.",
+    statement: `<b>Start here.</b> For a product state, the probability density is the product of the three coordinate densities. This means the coordinate outcomes are independent in that state. General three-dimensional states need not be products.<br><br>For a factored stationary state $\\psi(x,y,z) = X(x)Y(y)Z(z)$, the three-dimensional probability density factors identically:
 $$\\boxed{\\rho(x, y, z) = |\\psi(x,y,z)|^2 = |X(x)|^2 |Y(y)|^2 |Z(z)|^2 = \\rho_x(x) \\rho_y(y) \\rho_z(z)}$$
 The normalization condition is:
 $$\\int_{-\\infty}^\\infty dx \\int_{-\\infty}^\\infty dy \\int_{-\\infty}^\\infty dz \\, |\\psi(x,y,z)|^2 = \\left(\\int |X|^2 dx\\right) \\left(\\int |Y|^2 dy\\right) \\left(\\int |Z|^2 dz\\right) = 1 \\times 1 \\times 1 = 1$$
@@ -474,8 +474,8 @@ $$\\langle f(x) g(y) h(z) \\rangle = \\langle f(x) \\rangle \\langle g(y) \\rang
   {
     id: 'c.4.3.1', sec: '4.3', kind: 'theorem', tier: 'core',
     title: 'The 3D Rectangular Potential Box',
-    oneLine: 'A particle confined to an Lx × Ly × Lz box has quantized energies Enx,ny,nz = (π²ħ²/2m) (nx²/Lx² + ny²/Ly² + nz²/Lz²).',
-    statement: `A particle of mass $m$ is confined inside a rigid 3D rectangular box of side lengths $L_x, L_y, L_z$:
+    oneLine: "A particle in a rectangular box must have zero wave function at every wall.",
+    statement: `<b>Start here.</b> A particle in a rectangular box must have zero wave function at every wall. Each direction supports standing waves. Add the three one-dimensional energies to get the total energy.<br><br>A particle of mass $m$ is confined inside a rigid 3D rectangular box of side lengths $L_x, L_y, L_z$:
 $$V(x, y, z) = \\begin{cases} 0 & \\text{if } 0 < x < L_x, \\; 0 < y < L_y, \\; 0 < z < L_z \\\\ \\infty & \\text{otherwise} \\end{cases}$$
 The wave functions must vanish at all six walls. The normalized stationary wave functions are:
 $$\\boxed{\\psi_{n_x, n_y, n_z}(x, y, z) = \\sqrt{\\frac{8}{L_x L_y L_z}} \\sin\\left(\\frac{n_x \\pi x}{L_x}\\right) \\sin\\left(\\frac{n_y \\pi y}{L_y}\\right) \\sin\\left(\\frac{n_z \\pi z}{L_z}\\right)}$$
@@ -497,8 +497,8 @@ $$\\boxed{E_{n_x, n_y, n_z} = \\frac{\\pi^2 \\hbar^2}{2m} \\left( \\frac{n_x^2}{
   {
     id: 'c.4.3.2', sec: '4.3', kind: 'theorem', tier: 'core',
     title: 'The 3D Cubic Box Potential & Symmetry-Induced Degeneracy',
-    oneLine: 'In a cubic box (L = Lx = Ly = Lz), permutation symmetry causes energy levels to exhibit 1-fold, 3-fold, or 6-fold degeneracy.',
-    statement: `For a <b>cubic box</b> where $L_x = L_y = L_z = L$:
+    oneLine: "In a cubic box, swapping the three quantum numbers leaves the energy unchanged.",
+    statement: `<b>Start here.</b> In a cubic box, swapping the three quantum numbers leaves the energy unchanged. Different independent states can therefore have the same energy. This is called degeneracy.<br><br>For a <b>cubic box</b> where $L_x = L_y = L_z = L$:
 $$\\boxed{E_{n_x, n_y, n_z} = \\frac{\\pi^2 \\hbar^2}{2m L^2}(n_x^2 + n_y^2 + n_z^2) = E_1 (n_x^2 + n_y^2 + n_z^2)}$$
 where $E_1 = \\frac{\\pi^2 \\hbar^2}{2m L^2}$.<br>
 Because the sum of squares $n_x^2 + n_y^2 + n_z^2$ is invariant under permutations of $(n_x, n_y, n_z)$, energy levels exhibit <b>geometric (symmetry-induced) degeneracy</b>:
@@ -524,8 +524,8 @@ Because the sum of squares $n_x^2 + n_y^2 + n_z^2$ is invariant under permutatio
   {
     id: 'c.4.3.3', sec: '4.3', kind: 'definition', tier: 'core',
     title: 'Accidental vs. Geometric Degeneracy in 3D Wells',
-    oneLine: 'Accidental degeneracy occurs when different sets of quantum numbers share the same sum of squares, e.g. 3²+3²+3² = 5²+1²+1² = 27.',
-    statement: `In quantum mechanics, degeneracies are classified into two fundamental categories:
+    oneLine: "Some equal energies follow from the box’s symmetry; others arise because different combinations of squared quantum numbers happen to give the same sum.",
+    statement: `<b>Start here.</b> Some equal energies follow from the box’s symmetry; others arise because different combinations of squared quantum numbers happen to give the same sum. These are two different sources of degeneracy.<br><br>In quantum mechanics, degeneracies are classified into two fundamental categories:
 1. <b>Geometric (Essential / Symmetry) Degeneracy:</b> Arises directly from the geometric symmetry of the Hamiltonian (e.g., permutation of coordinates in a cubic box or rotational invariance in central potentials).
 2. <b>Accidental Degeneracy:</b> Occurs when two completely different sets of quantum numbers $(n_x, n_y, n_z)$ share the identical energy eigenvalue by numerical coincidence, without being related by any apparent geometric symmetry.<br>
 <b>Example in a Cubic Box:</b> Consider energy $E = 27 E_1$:
@@ -552,8 +552,8 @@ The state $(3,3,3)$ and the states $(5,1,1)$ have identical energy $27 E_1$ desp
   {
     id: 'c.4.4.1', sec: '4.4', kind: 'law', tier: 'core',
     title: 'The 3D Anisotropic Harmonic Oscillator',
-    oneLine: 'With distinct frequencies ωx, ωy, ωz, the energy is Enx,ny,nz = (nx + ½)ħωx + (ny + ½)ħωy + (nz + ½)ħωz.',
-    statement: `The Hamiltonian of a <b>3D anisotropic harmonic oscillator</b> with unequal spring constants along the three axes is:
+    oneLine: "A three-dimensional oscillator with different frequencies behaves like three independent quantum springs.",
+    statement: `<b>Start here.</b> A three-dimensional oscillator with different frequencies behaves like three independent quantum springs. Add their energies; the different frequencies usually remove the large degeneracies of the equal-frequency case.<br><br>The Hamiltonian of a <b>3D anisotropic harmonic oscillator</b> with unequal spring constants along the three axes is:
 $$\\hat{H} = \\frac{\\hat{p}_x^2 + \\hat{p}_y^2 + \\hat{p}_z^2}{2m} + \\frac{1}{2}m(\\omega_x^2 x^2 + \\omega_y^2 y^2 + \\omega_z^2 z^2)$$
 Since the Hamiltonian separates into three independent 1D harmonic oscillators $\\hat{H} = \\hat{H}_x + \\hat{H}_y + \\hat{H}_z$, we define three independent sets of ladder operators:
 $$[\\hat{a}_j, \\hat{a}_k^\\dagger] = \\delta_{jk} \\hat{I}, \\qquad [\\hat{a}_j, \\hat{a}_k] = [\\hat{a}_j^\\dagger, \\hat{a}_k^\\dagger] = 0 \\quad (j, k \\in \\{x, y, z\\})$$
@@ -576,8 +576,8 @@ $$E_{0,0,0} = \\frac{1}{2}\\hbar(\\omega_x + \\omega_y + \\omega_z)$$`,
   {
     id: 'c.4.4.2', sec: '4.4', kind: 'theorem', tier: 'core',
     title: 'The 3D Isotropic Harmonic Oscillator',
-    oneLine: 'When ωx = ωy = ωz = ω, the energy depends only on the principal quantum number N = nx + ny + nz: EN = (N + 3/2)ħω.',
-    statement: `For a <b>3D isotropic harmonic oscillator</b>, the potential is spherically symmetric:
+    oneLine: "When all three oscillator frequencies are equal, energy depends only on the sum of the three level numbers.",
+    statement: `<b>Start here.</b> When all three oscillator frequencies are equal, energy depends only on the sum of the three level numbers. Different triples with the same sum share the same energy.<br><br>For a <b>3D isotropic harmonic oscillator</b>, the potential is spherically symmetric:
 $$V(r) = \\frac{1}{2}m\\omega^2 (x^2 + y^2 + z^2) = \\frac{1}{2}m\\omega^2 r^2$$
 All three frequencies are identical: $\\omega_x = \\omega_y = \\omega_z = \\omega$.<br>
 The energy eigenvalues depend strictly on the total (principal) vibrational quantum number:
@@ -601,8 +601,8 @@ Each spatial dimension contributes $\\frac{1}{2}\\hbar\\omega$ to the minimum gr
   {
     id: 'c.4.4.3', sec: '4.4', kind: 'theorem', tier: 'core',
     title: 'Exact Degeneracy Formula gN = (N+1)(N+2)/2 for 3D Isotropic Oscillator',
-    oneLine: 'The degeneracy of level EN in a 3D isotropic oscillator is gN = ½ (N + 1)(N + 2), arising from the SU(3) dynamical symmetry.',
-    statement: `The degree of degeneracy $g_N$ of the energy level $E_N = \\left(N + \\frac{3}{2}\\right)\\hbar\\omega$ is the number of distinct partitions of the non-negative integer $N$ into three non-negative integers $(n_x, n_y, n_z)$:
+    oneLine: "Count all non-negative triples whose sum is N.",
+    statement: `<b>Start here.</b> Count all non-negative triples whose sum is N. Imagine N identical marks split into three groups by two separators. The count is (N + 1)(N + 2)/2.<br><br>The degree of degeneracy $g_N$ of the energy level $E_N = \\left(N + \\frac{3}{2}\\right)\\hbar\\omega$ is the number of distinct partitions of the non-negative integer $N$ into three non-negative integers $(n_x, n_y, n_z)$:
 $$n_x + n_y + n_z = N, \\qquad n_x, n_y, n_z \\ge 0$$
 Using the stars and bars combinatorial theorem:
 $$\\boxed{g_N = \\binom{N + 3 - 1}{3 - 1} = \\binom{N + 2}{2} = \\frac{(N + 1)(N + 2)}{2}}$$

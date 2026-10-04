@@ -145,3 +145,7 @@ use unique panel IDs and `aria-controls`. Probability styles these blocks in its
 project theme and keeps provenance/labs in native disclosures through `noteSim`.
 `Tex.ready()` waits for the async script and startup; failure or a bounded timeout
 can show a connection hint, without declaring a downloading script failed.
+
+## Optional prerequisite study map
+
+`study-map/` is the shared 3D prerequisite-map engine. It is imported by a thin project entry with subject-owned content and configuration; see [study-map/README.md](study-map/README.md). The parent app adds a catalogue tab only when `PROJECT.studyMaps` contains modules. Absence of that field preserves existing tabs. Subject data, symbols, storage keys, source PDFs, vault and generated standalone pages stay in the project.

@@ -1,0 +1,178 @@
+/* Shared WebGL surface and projected, keyboard-accessible star labels. */
+.stellar-map {
+  background: #030710;
+  isolation: isolate;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+  height: 640px;
+  touch-action: none;
+}
+.stellar-map > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  outline-offset: -3px;
+}
+.stellar-map:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 90px #0005;
+}
+.stellar-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.stellar-labels button {
+  position: absolute;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  border: 0;
+  touch-action: none;
+}
+.stellar-labels button[hidden] {
+  display: none;
+}
+.stellar-skill {
+  background: transparent;
+  color: #c0e0e8;
+  padding: 0;
+  overflow: visible;
+}
+.stellar-skill .skill-glyph {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  font-size: var(--glyph-size, 19px);
+}
+.stellar-skill .katex {
+  font-size: 1em;
+}
+.stellar-skill.selected .skill-glyph:not(.distant) {
+  visibility: visible;
+  color: white;
+  filter: drop-shadow(0 0 5px #00ddee);
+}
+.skill-name {
+  position: absolute;
+  bottom: calc(50% + 13px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--label-width, 126px);
+  padding: 3px 5px;
+  background: #030710b5;
+  color: var(--star-color);
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+.stellar-skill.selected .skill-name {
+  background: #12243ae8;
+  border: 1px solid #82c8ed80;
+  color: #fff;
+}
+.skill-name.distant {
+  display: none;
+}
+.stellar-skill:hover .skill-name.distant,
+.stellar-skill:focus-visible .skill-name.distant {
+  display: block;
+}
+.skill-name i {
+  display: block;
+  font: 7px var(--mono);
+  color: #57aebb;
+  letter-spacing: 0.7px;
+  margin-top: 3px;
+}
+.constellation-label {
+  background: #060e1bbb;
+  border: 1px solid #ffffff20 !important;
+  border-radius: 20px;
+  padding: 6px 11px !important;
+  color: #bad3ec;
+  font: 10px var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  white-space: nowrap;
+}
+.constellation-label small {
+  display: none;
+}
+.itinerary-map .constellation-label {
+  display: none;
+}
+.stellar-map .graph-controls {
+  right: 14px;
+  bottom: 14px;
+  background: #0a1929e8;
+  z-index: 5;
+  padding: 3px;
+  border: 1px solid #ffffff1c;
+  border-radius: 7px;
+  gap: 1px;
+}
+.stellar-map .graph-controls button {
+  width: 32px;
+  min-height: 32px;
+  padding: 6px;
+}
+.map-fallback {
+  padding: 25px 20px;
+  max-height: 100%;
+  overflow: auto;
+}
+.map-fallback button {
+  margin: 4px;
+  padding: 8px;
+}
+.skill-stop {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font: 8px var(--mono);
+  background: #071b27;
+  border: 1px solid #287e8d;
+  color: #94dce6;
+  min-width: 15px;
+  padding: 2px;
+  border-radius: 3px;
+}
+.stellar-skill.visited .skill-stop {
+  color: #00edcc;
+  border-color: #00a98e;
+}
+.reset-confirmation {
+  margin-top: 20px;
+  border-top: 1px solid #734657;
+  padding-top: 18px;
+}
+.reset-confirmation button {
+  width: 100%;
+  margin: 6px 0;
+}
+@media (max-width: 760px) {
+  .stellar-map .graph-controls {
+    right: 8px;
+    bottom: 10px;
+  }
+  .stellar-map .graph-controls button {
+    width: 34px;
+    min-height: 36px;
+  }
+  .stellar-skill .skill-name {
+    font-size: 11px;
+  }
+  .constellation-label {
+    font-size: 9px;
+    letter-spacing: 0.7px;
+  }
+}

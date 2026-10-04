@@ -1,0 +1,239 @@
+.graph-canvas {
+  height: clamp(380px, calc(100dvh - 389px), 620px);
+  position: relative;
+  background:
+    radial-gradient(ellipse at 45% 45%, #172f3225, transparent 70%), #0c1721;
+  cursor: grab;
+  overflow: hidden;
+  touch-action: none;
+}
+.graph-canvas:active {
+  cursor: grabbing;
+}
+.graph-canvas > svg {
+  width: 100%;
+  height: 100%;
+  padding: 48px 3px 65px;
+}
+.canvas-coordinates {
+  position: absolute;
+  top: 18px;
+  color: #7c95a6;
+  font-family: var(--mono);
+  font-size: 7px;
+  letter-spacing: 1.1px;
+  line-height: 1.8;
+  pointer-events: none;
+  z-index: 1;
+}
+.canvas-coordinates span {
+  display: block;
+  font-size: 6px;
+  color: #3f5b6f;
+  letter-spacing: 1.3px;
+}
+.top-left {
+  left: 19px;
+}
+.top-right {
+  right: 19px;
+  text-align: right;
+}
+.graph-edge {
+  stroke: #2d4350;
+  stroke-dasharray: 4 5;
+  transition: stroke 0.4s;
+  opacity: 0.65;
+}
+.graph-edge.active {
+  stroke: #5fa990;
+  stroke-dasharray: none;
+  opacity: 0.9;
+}
+.graph-edge.learned {
+  stroke: var(--mint);
+  stroke-dasharray: none;
+  opacity: 0.6;
+}
+.graph-node {
+  cursor: pointer;
+  outline: none;
+  animation: node-entry 0.8s backwards;
+  transition: opacity 0.3s;
+}
+.node-hex {
+  fill: #14242e;
+  stroke: #4a6877;
+  stroke-width: 1;
+  transition:
+    fill 0.25s,
+    stroke 0.25s,
+    filter 0.25s;
+}
+.node-glyph {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 26px;
+  fill: var(--node-color);
+  transition: fill 0.2s;
+}
+.node-label {
+  font-size: 13px;
+  fill: #9eb3c1;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+}
+.node-caption {
+  font-size: 7px;
+  fill: #587587;
+  letter-spacing: 1.4px;
+  font-family: var(--mono);
+}
+.graph-node:hover .node-hex,
+.graph-node:focus .node-hex {
+  fill: #1b3940;
+  stroke: var(--node-color);
+  filter: drop-shadow(0 0 5px #79dfc538);
+}
+.graph-node:hover .node-label,
+.graph-node.selected .node-label {
+  fill: #e1f6ee;
+}
+.graph-node.selected .node-hex {
+  fill: #184339;
+  stroke: #8bf0cf;
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 10px #79dfc535);
+}
+.graph-node.selected .node-glyph {
+  fill: #b6f6dc;
+}
+.graph-node.selected .node-caption {
+  fill: #83bba9;
+}
+.graph-node.known .node-hex {
+  fill: #143e33;
+  stroke: #68bea4;
+}
+.graph-node.known .node-glyph {
+  fill: var(--mint);
+  font-family: inherit;
+}
+.selection-ring {
+  fill: none;
+  stroke: #74dfc444;
+  stroke-width: 1;
+}
+.orbit-ring {
+  fill: none;
+  stroke: #74dfc429;
+  stroke-dasharray: 2 7;
+  stroke-width: 0.8;
+  animation: orbit 45s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.target-point {
+  fill: #b5e9d9;
+  stroke: #10271f;
+  stroke-width: 2;
+}
+.graph-legend {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  display: flex;
+  gap: 13px;
+  font-size: 7px;
+  color: #7893a3;
+  pointer-events: none;
+}
+.graph-legend span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.legend-dot {
+  width: 5px;
+  height: 5px;
+  border: 1px solid #7893a3;
+  border-radius: 50%;
+  display: inline-block;
+}
+.legend-dot.known {
+  border-color: #79dfc5;
+  background: #79dfc5;
+}
+.legend-dot.target {
+  background: #b5e9d9;
+  border-color: #b5e9d9;
+}
+.graph-controls {
+  position: absolute;
+  right: 15px;
+  bottom: 13px;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border: 1px solid #344855;
+  background: #14222dea;
+  backdrop-filter: blur(10px);
+  border-radius: 5px;
+  gap: 2px;
+}
+.graph-controls button {
+  height: 25px;
+  width: 25px;
+  padding: 0;
+  color: #adc0cb;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+}
+.graph-controls button:hover {
+  background: #ffffff0a;
+}
+.graph-controls > span {
+  font-family: var(--mono);
+  font-size: 8px;
+  min-width: 31px;
+  text-align: center;
+  color: #aec3ce;
+}
+.graph-controls i {
+  width: 1px;
+  height: 15px;
+  background: #344855;
+  margin: 0 4px;
+}
+.pan-hint {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 7px;
+  color: #486578;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  color: #789cac;
+}
+.empty-state h3 {
+  font-size: 16px;
+}
+.empty-state p {
+  font-size: 11px;
+}
+.graph-node {
+  animation-duration: 0.55s !important;
+}

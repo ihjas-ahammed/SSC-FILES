@@ -11,8 +11,8 @@ CONCEPTS.push(
   {
     id: 'c.8.1.1', sec: '8.1', kind: 'law', tier: 'core',
     title: 'Classical Scattering Theory: Impact Parameter & Cross Section',
-    oneLine: 'In classical scattering, particles incident with impact parameter b in range db scatter into solid angle dΩ, defining differential cross section dσ/dΩ = (b/sinθ)|db/dθ|.',
-    statement: `In classical mechanics, a beam of identical particles with uniform cross-sectional intensity $I$ is fired at a target potential $V(\\mathbf{r})$.<br>
+    oneLine: "The impact parameter is how far an incoming straight path misses the target’s centre.",
+    statement: `<b>Start here.</b> The impact parameter is how far an incoming straight path misses the target’s centre. A cross section is an effective area describing how likely scattering is; it need not equal the target’s geometric area.<br><br>In classical mechanics, a beam of identical particles with uniform cross-sectional intensity $I$ is fired at a target potential $V(\\mathbf{r})$.<br>
 Let $b$ be the <b>impact parameter</b> (the perpendicular distance of the initial trajectory from the center of force), and $\\theta$ be the <b>scattering angle</b>.<br>
 Particles incident in an annular strip $d\\sigma = 2\\pi b \\, db$ are scattered into solid angle $d\\Omega = 2\\pi \\sin\\theta \\, d\\theta$.<br>
 The <b>differential scattering cross section</b> is:
@@ -36,8 +36,8 @@ For a hard sphere of radius $a$, $b = a\\cos(\\theta/2) \\implies \\frac{d\\sigm
   {
     id: 'c.8.2.1', sec: '8.2', kind: 'definition', tier: 'core',
     title: 'The Quantum Scattering Wave Function & Scattering Amplitude',
-    oneLine: 'In quantum scattering, the asymptotic wavefunction decomposes into an incident plane wave e^{ikz} and an outgoing spherical wave f(θ, φ) e^{ikr}/r.',
-    statement: `For a localized scattering potential $V(\\mathbf{r})$ that falls off faster than $1/r$ as $r \\to \\infty$, the stationary scattering state satisfies the asymptotic boundary condition:
+    oneLine: "Far from a localized target, write the wave as an incoming plane wave plus an outgoing spherical wave.",
+    statement: `<b>Start here.</b> Far from a localized target, write the wave as an incoming plane wave plus an outgoing spherical wave. The scattering amplitude sets how much outgoing wave travels in each direction.<br><br>For a localized scattering potential $V(\\mathbf{r})$ that falls off faster than $1/r$ as $r \\to \\infty$, the stationary scattering state satisfies the asymptotic boundary condition:
 $$\\boxed{\\psi(\\mathbf{r}) \\xrightarrow{r \\to \\infty} A \\left( e^{ikz} + f(\\theta, \\phi) \\frac{e^{ikr}}{r} \\right)}$$
 where $k = \\frac{\\sqrt{2mE}}{\\hbar}$ is the wave number, $e^{ikz}$ is the <b>incident plane wave</b> propagating along the $+z$ axis, and $\\frac{e^{ikr}}{r}$ is an <b>outgoing spherical wave</b>.<br>
 The complex angular coefficient $f(\\theta, \\phi)$ is the <b>scattering amplitude</b>.<br>
@@ -64,8 +64,8 @@ $$\\boxed{\\sigma_{\\text{tot}} = \\int |f(\\theta, \\phi)|^2 d\\Omega}$$`,
   {
     id: 'c.8.3.1', sec: '8.3', kind: 'theorem', tier: 'core',
     title: 'Partial Wave Analysis & Phase Shifts',
-    oneLine: 'Expanding the scattering amplitude in Legendre polynomials decomposes the wave into partial waves: f(θ) = (1/k) ∑_{l=0}^∞ (2l+1) e^{iδ_l} sin δ_l P_l(cos θ).',
-    statement: `For a spherically symmetric potential $V(r)$, the scattering is azimuthally symmetric ($f(\\theta)$ independent of $\\phi$).<br>
+    oneLine: "Split the incoming wave into angular-momentum channels.",
+    statement: `<b>Start here.</b> Split the incoming wave into angular-momentum channels. The target changes each channel’s phase. Combining those phase shifts gives the full scattering pattern.<br><br>For a spherically symmetric potential $V(r)$, the scattering is azimuthally symmetric ($f(\\theta)$ independent of $\\phi$).<br>
 The scattering amplitude is expanded in a complete series of Legendre polynomials:
 $$\\boxed{f(\\theta) = \\sum_{l=0}^\\infty (2l + 1) f_l(k) P_l(\\cos\\theta)}$$
 where $f_l(k)$ is the <b>partial wave amplitude</b> for orbital angular momentum $l$.<br>
@@ -90,8 +90,8 @@ Higher partial waves ($p, d, \\dots$) are repelled by the centrifugal barrier an
   {
     id: 'c.8.3.2', sec: '8.3', kind: 'law', tier: 'core',
     title: 'Total Cross Section & The Optical Theorem',
-    oneLine: 'Integrating over all angles yields σ_tot = (4π/k²) ∑ (2l+1) sin² δ_l, leading directly to the Optical Theorem: σ_tot = (4π/k) Im[f(0)].',
-    statement: `Integrating $|f(\\theta)|^2$ over the sphere and using the orthogonality of Legendre polynomials $\\int_{-1}^1 P_l(\\cos\\theta)P_{l'}(\\cos\\theta)d(\\cos\\theta) = \\frac{2}{2l+1}\\delta_{ll'}$:
+    oneLine: "The total cross section adds scattering into all directions.",
+    statement: `<b>Start here.</b> The total cross section adds scattering into all directions. For purely elastic scattering, the optical theorem relates it to the imaginary part of the forward scattering amplitude.<br><br>Integrating $|f(\\theta)|^2$ over the sphere and using the orthogonality of Legendre polynomials $\\int_{-1}^1 P_l(\\cos\\theta)P_{l'}(\\cos\\theta)d(\\cos\\theta) = \\frac{2}{2l+1}\\delta_{ll'}$:
 $$\\boxed{\\sigma_{\\text{tot}} = \\frac{4\\pi}{k^2} \\sum_{l=0}^\\infty (2l + 1) \\sin^2\\delta_l}$$
 Notice that each partial wave contributes a maximum cross section (<b>unitarity limit</b>):
 $$\\sigma_l^{\\text{max}} = \\frac{4\\pi(2l+1)}{k^2} \\quad (\\text{when } \\delta_l = \\pi/2, 3\\pi/2, \\dots)$$
@@ -116,8 +116,8 @@ $$\\boxed{\\sigma_{\\text{tot}} = \\frac{4\\pi}{k} \\text{Im}[f(0)]}$$`,
   {
     id: 'c.8.3.3', sec: '8.3', kind: 'theorem', tier: 'core',
     title: 'Low-Energy Hard Sphere Scattering: Quantum vs Classical Cross Section',
-    oneLine: 'At low energies (ka ≪ 1), quantum hard-sphere scattering gives σ_tot = 4πa², which is exactly FOUR TIMES the classical geometric cross section πa².',
-    statement: `For an impenetrable hard sphere of radius $a$:
+    oneLine: "At low energy a hard sphere mainly scatters the lowest angular-momentum channel.",
+    statement: `<b>Start here.</b> At low energy a hard sphere mainly scatters the lowest angular-momentum channel. Its quantum cross section tends to four times its geometric area; wave interference changes the classical picture.<br><br>For an impenetrable hard sphere of radius $a$:
 $$V(r) = \\begin{cases} \\infty & r \\le a \\\\ 0 & r > a \\end{cases}$$
 The wavefunction vanishes at the hard surface: $\\psi(a) = 0$.<br>
 In the <b>low-energy limit ($ka \\ll 1$)</b>, only the $s$-wave ($l = 0$) contributes:
@@ -148,8 +148,8 @@ As $k \\to \\infty$, $\\sigma_{\\text{tot}} \\to 2\\pi a^2$ (one $\\pi a^2$ from
   {
     id: 'c.8.4.1', sec: '8.4', kind: 'law', tier: 'core',
     title: 'Integral Form of the Schrödinger Equation & Green\'s Function',
-    oneLine: 'The Schrödinger scattering PDE is reformulated as the Lippmann-Schwinger integral equation ψ(r) = e^{ikz} + ∫ G(r, r\') V(r\') ψ(r\') d³r\' using the Helmholtz Green\'s function.',
-    statement: `The time-independent Schrödinger equation $(\\nabla^2 + k^2)\\psi = \\frac{2m}{\\hbar^2}V(\\mathbf{r})\\psi$ is converted into an exact integral equation using the outgoing <b>Helmholtz Green\'s function</b>:
+    oneLine: "A Green’s function tells how a point disturbance spreads.",
+    statement: `<b>Start here.</b> A Green’s function tells how a point disturbance spreads. The integral equation adds the incoming wave to the wave produced when the potential acts on the full state.<br><br>The time-independent Schrödinger equation $(\\nabla^2 + k^2)\\psi = \\frac{2m}{\\hbar^2}V(\\mathbf{r})\\psi$ is converted into an exact integral equation using the outgoing <b>Helmholtz Green\'s function</b>:
 $$(\\nabla^2 + k^2)G(\\mathbf{r}, \\mathbf{r}') = \\delta^3(\\mathbf{r} - \\mathbf{r}') \\implies \\boxed{G(\\mathbf{r}, \\mathbf{r}') = -\\frac{1}{4\\pi} \\frac{e^{ik|\\mathbf{r} - \\mathbf{r}'|}}{|\\mathbf{r} - \\mathbf{r}'|}}$$
 The exact <b>Lippmann-Schwinger integral equation</b> is:
 $$\\boxed{\\psi(\\mathbf{r}) = e^{ikz} - \\frac{m}{2\\pi\\hbar^2} \\int \\frac{e^{ik|\\mathbf{r} - \\mathbf{r}'|}}{|\\mathbf{r} - \\mathbf{r}'|} V(\\mathbf{r}') \\psi(\\mathbf{r}') \\, d^3\\mathbf{r}'}$$
@@ -170,8 +170,8 @@ where $\\mathbf{k}_f = k\\hat{\\mathbf{r}}$ is the wavevector in the observation
   {
     id: 'c.8.4.2', sec: '8.4', kind: 'theorem', tier: 'core',
     title: 'The First Born Approximation: Fourier Transform of the Potential',
-    oneLine: 'Replacing the unknown wave inside the integral by the incident plane wave yields the First Born Approximation: f^{(1)}(θ, φ) = -(m / 2πħ²) ∫ V(r) e^{-iq · r} d³r.',
-    statement: `In the <b>First Born Approximation</b>, the exact wavefunction inside the integral is approximated by the unperturbed incident plane wave $\\psi(\\mathbf{r}') \\approx e^{i\\mathbf{k}_i \\cdot \\mathbf{r}'}$ ($e^{ikz'}$):
+    oneLine: "The first Born approximation uses the incoming wave inside the scattering integral.",
+    statement: `<b>Start here.</b> The first Born approximation uses the incoming wave inside the scattering integral. It is useful when the potential causes weak scattering. The amplitude samples the Fourier transform of the potential at the momentum transfer.<br><br>In the <b>First Born Approximation</b>, the exact wavefunction inside the integral is approximated by the unperturbed incident plane wave $\\psi(\\mathbf{r}') \\approx e^{i\\mathbf{k}_i \\cdot \\mathbf{r}'}$ ($e^{ikz'}$):
 $$\\boxed{f^{(1)}(\\theta, \\phi) = -\\frac{m}{2\\pi\\hbar^2} \\int V(\\mathbf{r}') e^{-i(\\mathbf{k}_f - \\mathbf{k}_i) \\cdot \\mathbf{r}'} \\, d^3\\mathbf{r}'}$$
 Define the <b>momentum transfer vector</b> $\\mathbf{q}$:
 $$\\boxed{\\mathbf{q} \\equiv \\mathbf{k}_f - \\mathbf{k}_i}$$
@@ -193,8 +193,8 @@ $$\\boxed{f^{(1)}(\\theta, \\phi) = -\\frac{m}{2\\pi\\hbar^2} \\tilde{V}(\\mathb
   {
     id: 'c.8.4.3', sec: '8.4', kind: 'theorem', tier: 'core',
     title: 'Born Approximation for Spherically Symmetric Potentials & Yukawa Scattering',
-    oneLine: 'For central potentials V(r), f(θ) = -(2m / ħ²q) ∫ r V(r) sin(qr) dr; for Yukawa potential V(r) = V₀ e^{-μr}/r it derives the screened Coulomb amplitude.',
-    statement: `For a spherically symmetric potential $V(r)$, the angular integral in the Fourier transform evaluates to:
+    oneLine: "For a spherical potential the Born integral simplifies because direction is symmetric.",
+    statement: `<b>Start here.</b> For a spherical potential the Born integral simplifies because direction is symmetric. A Yukawa potential includes a decaying factor that sets the interaction range and changes the angular scattering pattern.<br><br>For a spherically symmetric potential $V(r)$, the angular integral in the Fourier transform evaluates to:
 $$\\boxed{f^{(1)}(\\theta) = -\\frac{2m}{\\hbar^2 q} \\int_0^\\infty r V(r) \\sin(qr) \\, dr}$$
 <b>Yukawa (Screened Coulomb) Potential:</b>
 $$V(r) = V_0 \\frac{e^{-\\mu r}}{r}$$

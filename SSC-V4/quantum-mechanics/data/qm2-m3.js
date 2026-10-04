@@ -12,8 +12,8 @@ CONCEPTS.push(
   {
     id: 'c.7.1.1', sec: '7.1', kind: 'law', tier: 'core',
     title: 'Non-Degenerate Perturbation Theory: First-Order Energy Correction',
-    oneLine: 'In non-degenerate perturbation theory Ĥ = Ĥ₀ + λĤ\', the first-order energy shift is the expectation value of the perturbation in the unperturbed state E_n^{(1)} = ⟨n^{(0)}|Ĥ\'|n^{(0)}⟩.',
-    statement: `When a quantum system with known exactly solvable Hamiltonian $\\hat{H}_0$ ($H_0|n^{(0)}\\rangle = E_n^{(0)}|n^{(0)}\\rangle$) is subjected to a weak perturbation $\\hat{H}'$:
+    oneLine: "Start with a system you can solve, then add a small extra energy operator.",
+    statement: `<b>Start here.</b> Start with a system you can solve, then add a small extra energy operator. The first-order energy shift is its average in the original state: the corresponding diagonal matrix entry.<br><br>When a quantum system with known exactly solvable Hamiltonian $\\hat{H}_0$ ($H_0|n^{(0)}\\rangle = E_n^{(0)}|n^{(0)}\\rangle$) is subjected to a weak perturbation $\\hat{H}'$:
 $$\\boxed{\\hat{H} = \\hat{H}_0 + \\lambda \\hat{H}'}$$
 where $\\lambda \\in [0, 1]$ is a dimensionless expansion parameter. Expanding eigenvalues and eigenstates in a Taylor perturbation series:
 $$E_n = E_n^{(0)} + \\lambda E_n^{(1)} + \\lambda^2 E_n^{(2)} + \\dots$$
@@ -36,8 +36,8 @@ $$E_n \\approx E_n^{(0)} + \\langle n^{(0)} | \\hat{H}' | n^{(0)} \\rangle$$`,
   {
     id: 'c.7.1.2', sec: '7.1', kind: 'theorem', tier: 'core',
     title: 'First-Order State Correction & Second-Order Energy Shift (Level Repulsion)',
-    oneLine: 'The second-order energy correction E_n^{(2)} = ∑_{m≠n} |⟨m^{(0)}|Ĥ\'|n^{(0)}⟩|² / (E_n^{(0)} - E_m^{(0)}) causes quantum level repulsion and always lowers the ground state energy.',
-    statement: `Expanding the first-order state correction in the complete unperturbed basis $|n^{(1)}\\rangle = \\sum_{m \\neq n} c_m^{(n)}|m^{(0)}\\rangle$ yields:
+    oneLine: "Off-diagonal perturbation entries mix the original states.",
+    statement: `<b>Start here.</b> Off-diagonal perturbation entries mix the original states. At second order they also shift energies; a nearby level usually has a larger effect because the energy denominator is smaller.<br><br>Expanding the first-order state correction in the complete unperturbed basis $|n^{(1)}\\rangle = \\sum_{m \\neq n} c_m^{(n)}|m^{(0)}\\rangle$ yields:
 $$\\boxed{|n^{(1)}\\rangle = \\sum_{m \\neq n} \\frac{\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle}{E_n^{(0)} - E_m^{(0)}} |m^{(0)}\\rangle}$$
 The corresponding <b>second-order energy correction</b> is:
 $$\\boxed{E_n^{(2)} = \\sum_{m \\neq n} \\frac{|\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle|^2}{E_n^{(0)} - E_m^{(0)}}}$$
@@ -62,8 +62,8 @@ $$\\boxed{E_n^{(2)} = \\sum_{m \\neq n} \\frac{|\\langle m^{(0)} | \\hat{H}' | n
   {
     id: 'c.7.1.3', sec: '7.1', kind: 'law', tier: 'core',
     title: 'Validity Criterion for Perturbation Theory',
-    oneLine: 'Perturbation theory converges only when the matrix elements of Ĥ\' are much smaller than the unperturbed energy level spacings: |⟨m|Ĥ\'|n⟩| ≪ |E_n^{(0)} - E_m^{(0)}|.',
-    statement: `For non-degenerate perturbation theory to be reliable and convergent, the perturbation must be small compared to the energy gaps between unperturbed states:
+    oneLine: "“Small” means the perturbation matrix entries are small compared with the separation between the relevant original energies.",
+    statement: `<b>Start here.</b> “Small” means the perturbation matrix entries are small compared with the separation between the relevant original energies. A numerically small perturbation can still fail near a degeneracy.<br><br>For non-degenerate perturbation theory to be reliable and convergent, the perturbation must be small compared to the energy gaps between unperturbed states:
 $$\\boxed{|\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle| \\ll |E_n^{(0)} - E_m^{(0)}| \\quad \\forall m \\neq n}$$
 <b>Consequences of Breakdown:</b>
 - If two states have identical unperturbed energies ($E_n^{(0)} = E_m^{(0)}$), the denominator vanishes and the non-degenerate formula diverges catastrophically to $\\infty$.
@@ -84,8 +84,8 @@ $$\\boxed{|\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle| \\ll |E_n^{(0)} - E_
   {
     id: 'c.7.2.1', sec: '7.2', kind: 'theorem', tier: 'core',
     title: 'Degenerate Perturbation Theory & The Secular Equation',
-    oneLine: 'For a d-fold degenerate level, the first-order energy corrections are the eigenvalues of the d × d perturbation matrix W_ij = ⟨i|Ĥ\'|j⟩ found via det(W - E^{(1)}I) = 0.',
-    statement: `Let $\{|\\psi_1^{(0)}\\rangle, |\\psi_2^{(0)}\\rangle, \\dots, |\\psi_d^{(0)}\\rangle\}$ span a $d$-fold degenerate subspace with common unperturbed energy $E_0$.<br>
+    oneLine: "If several original states share one energy, first form the perturbation matrix inside that group.",
+    statement: `<b>Start here.</b> If several original states share one energy, first form the perturbation matrix inside that group. Diagonalize this small matrix to find the correct state combinations and first-order shifts.<br><br>Let $\{|\\psi_1^{(0)}\\rangle, |\\psi_2^{(0)}\\rangle, \\dots, |\\psi_d^{(0)}\\rangle\}$ span a $d$-fold degenerate subspace with common unperturbed energy $E_0$.<br>
 Construct the $d \\times d$ <b>perturbation matrix</b> $W$:
 $$W_{ij} = \\langle \\psi_i^{(0)} | \\hat{H}' | \\psi_j^{(0)} \\rangle$$
 The first-order energy corrections $E^{(1)}$ are the roots of the <b>secular equation</b>:
@@ -109,8 +109,8 @@ If $E_+^{(1)} \\neq E_-^{(1)}$, the perturbation completely lifts the degeneracy
   {
     id: 'c.7.2.2', sec: '7.2', kind: 'law', tier: 'core',
     title: 'Fine Structure of Hydrogen: Relativistic Correction & Spin-Orbit Coupling',
-    oneLine: 'Fine structure combines relativistic kinetic correction H_rel and spin-orbit coupling H_SO, shifting hydrogen levels by E_FS^{(1)} = (E_n²/2mc²)[3 - 4n/(j + ½)].',
-    statement: `The <b>fine structure</b> of hydrogen ($E_{\\text{FS}} \\sim \\alpha^2 |E_n| \\sim 10^{-4} |E_n|$) consists of two relativistic corrections:
+    oneLine: "Hydrogen’s fine structure comes from small relativistic and spin effects.",
+    statement: `<b>Start here.</b> Hydrogen’s fine structure comes from small relativistic and spin effects. Treat them as extra terms in the Hamiltonian; they split some energies that the simpler Coulomb model makes equal.<br><br>The <b>fine structure</b> of hydrogen ($E_{\\text{FS}} \\sim \\alpha^2 |E_n| \\sim 10^{-4} |E_n|$) consists of two relativistic corrections:
 $$\\hat{H}_{\\text{FS}} = \\hat{H}_{\\text{rel}} + \\hat{H}_{\\text{SO}}$$
 <ol>
   <li><b>Relativistic Kinetic Correction:</b>
@@ -136,8 +136,8 @@ where $\\alpha = \\frac{e^2}{4\\pi\\varepsilon_0 \\hbar c} \\approx \\frac{1}{13
   {
     id: 'c.7.2.3', sec: '7.2', kind: 'law', tier: 'core',
     title: 'The Zeeman Effect: Weak-Field vs Strong-Field (Paschen-Back) Regimes',
-    oneLine: 'In a magnetic field B, the Zeeman Hamiltonian Ĥ_Z = (μ_B/ħ)(L̂ + 2Ŝ) · B splits levels into Landé multiplets (weak field) or uncoupled Paschen-Back states (strong field).',
-    statement: `When an atom is placed in a uniform external magnetic field $\\mathbf{B} = B \\hat{\\mathbf{z}}$, the interaction Hamiltonian is:
+    oneLine: "A magnetic field splits atomic energies.",
+    statement: `<b>Start here.</b> A magnetic field splits atomic energies. In weak fields the internal angular-momentum coupling dominates; in strong fields the field can dominate and change the useful state labels.<br><br>When an atom is placed in a uniform external magnetic field $\\mathbf{B} = B \\hat{\\mathbf{z}}$, the interaction Hamiltonian is:
 $$\\boxed{\\hat{H}_Z = -(\\boldsymbol{\\mu}_L + \\boldsymbol{\\mu}_S) \\cdot \\mathbf{B} = \\frac{\\mu_B}{\\hbar}(\\hat{L}_z + 2\\hat{S}_z)B}$$
 where $\\mu_B = \\frac{e\\hbar}{2m}$ is the Bohr magneton.<br>
 <b>1. Weak-Field Zeeman Effect ($B \\ll B_{\\text{int}} \\sim 1\\text{ Tesla}$, $\\mu_B B \\ll E_{\\text{FS}}$):</b>
@@ -165,8 +165,8 @@ $$\\boxed{E_Z^{(1)} = \\mu_B B (m_l + 2m_s)}$$`,
   {
     id: 'c.7.2.4', sec: '7.2', kind: 'theorem', tier: 'core',
     title: 'The Stark Effect: Linear vs Quadratic Splitting in Hydrogen',
-    oneLine: 'The Stark perturbation Ĥ\' = eEz causes no first-order shift for non-degenerate states like 1s (quadratic Stark), but produces a linear Stark splitting in the degenerate n=2 manifold.',
-    statement: `When an atom is placed in a uniform electric field $\\mathbf{E} = \\mathcal{E}\\hat{\\mathbf{z}}$, the perturbation is:
+    oneLine: "An electric field adds a perturbation that can mix states of different parity.",
+    statement: `<b>Start here.</b> An electric field adds a perturbation that can mix states of different parity. In degenerate hydrogen levels this can give a shift proportional to the field; an isolated nondegenerate state with definite parity has no first-order dipole shift.<br><br>When an atom is placed in a uniform electric field $\\mathbf{E} = \\mathcal{E}\\hat{\\mathbf{z}}$, the perturbation is:
 $$\\hat{H}' = -\\mathbf{d} \\cdot \\mathbf{E} = e \\mathcal{E} z = e \\mathcal{E} r\\cos\\theta$$
 <b>1. The Parity Theorem & Quadratic Stark Effect:</b>
 Because $z$ is odd under spatial parity ($\\hat{\\Pi} z \\hat{\\Pi}^{-1} = -z$), its diagonal matrix element in any state of definite parity vanishes identically:
@@ -196,8 +196,8 @@ $$\\boxed{E^{(1)} = \\pm 3 e \\mathcal{E} a_0 \\quad (\\text{two non-degenerate 
   {
     id: 'c.7.3.1', sec: '7.3', kind: 'law', tier: 'core',
     title: 'The Variational Principle: Upper Bound to Ground State Energy',
-    oneLine: 'For any normalizable trial wavefunction ψ_trial, the energy expectation value provides a rigorous upper bound to the true ground state energy: ⟨Ĥ⟩ ≥ E_gs.',
-    statement: `Let $\\hat{H}$ be a time-independent Hamiltonian with true ground state energy $E_{\\text{gs}}$. For <i>any</i> arbitrary normalizable trial wave function $|\\psi_{\\text{trial}}\\rangle$:
+    oneLine: "Try a normalized guess for the ground-state wave function and calculate its average energy.",
+    statement: `<b>Start here.</b> Try a normalized guess for the ground-state wave function and calculate its average energy. That value cannot be below the true ground-state energy. Adjust the guess to lower the estimate.<br><br>Let $\\hat{H}$ be a time-independent Hamiltonian with true ground state energy $E_{\\text{gs}}$. For <i>any</i> arbitrary normalizable trial wave function $|\\psi_{\\text{trial}}\\rangle$:
 $$\\boxed{\\langle H \\rangle_{\\text{trial}} = \\frac{\\langle \\psi_{\\text{trial}} | \\hat{H} | \\psi_{\\text{trial}} \\rangle}{\\langle \\psi_{\\text{trial}} | \\psi_{\\text{trial}} \\rangle} \\ge E_{\\text{gs}}}$$
 The equality holds if and only if $|\\psi_{\\text{trial}}\\rangle$ is an exact ground state eigenstate.<br>
 <b>Ritz Variational Method:</b>
@@ -249,8 +249,8 @@ The optimal parameters $\\alpha_i^*$ yield the tightest upper bound $\\langle H 
   {
     id: 'c.7.3.2', sec: '7.3', kind: 'theorem', tier: 'core',
     title: 'Variational Ground State of the Helium Atom & Screening',
-    oneLine: 'A variational trial function with effective nuclear charge Z_eff = 2 - 5/16 = 1.6875 accounts for electron-electron shielding and predicts E_He ≈ -77.5 eV (within 2% of experiment).',
-    statement: `The Hamiltonian of the neutral <b>Helium atom</b> ($Z = 2$) with two electrons at positions $\\mathbf{r}_1, \\mathbf{r}_2$:
+    oneLine: "For helium, each electron partly screens the nucleus from the other.",
+    statement: `<b>Start here.</b> For helium, each electron partly screens the nucleus from the other. A trial wave with an adjustable effective nuclear charge models this screening; minimize its average energy.<br><br>The Hamiltonian of the neutral <b>Helium atom</b> ($Z = 2$) with two electrons at positions $\\mathbf{r}_1, \\mathbf{r}_2$:
 $$\\hat{H} = -\\frac{\\hbar^2}{2m}\\nabla_1^2 - \\frac{\\hbar^2}{2m}\\nabla_2^2 - \\frac{2e^2}{4\\pi\\varepsilon_0 r_1} - \\frac{2e^2}{4\\pi\\varepsilon_0 r_2} + \\frac{e^2}{4\\pi\\varepsilon_0 |\\mathbf{r}_1 - \\mathbf{r}_2|}$$
 Without electron repulsion, $E^{(0)} = 2(-13.6 \\times 2^2) = -108.8\\text{ eV}$.<br>
 Experimental ground state energy is $E_{\\text{exp}} = -78.975\\text{ eV}$.<br>
@@ -279,8 +279,8 @@ This variational estimate matches the experimental value within $1.9\\%$!`,
   {
     id: 'c.7.4.1', sec: '7.4', kind: 'law', tier: 'core',
     title: 'The WKB Semiclassical Approximation & Validity Condition',
-    oneLine: 'The WKB method approximates wavefunctions when the de Broglie wavelength λ(x) varies slowly compared to distance: |dƛ/dx| = ħm|V\'|/p³ ≪ 1, breaking down at classical turning points.',
-    statement: `The <b>WKB (Wentzel-Kramers-Brillouin) approximation</b> applies to the 1D Schrödinger equation $-\\frac{\\hbar^2}{2m}\\frac{d^2\\psi}{dx^2} + V(x)\\psi = E\\psi$ when the potential $V(x)$ is slowly varying compared to the reduced de Broglie wavelength $\\bar{\\lambda}(x) = \\frac{\\hbar}{p(x)}$, where:
+    oneLine: "WKB treats the wave locally like a wave with momentum determined by the local potential.",
+    statement: `<b>Start here.</b> WKB treats the wave locally like a wave with momentum determined by the local potential. It works when the potential changes slowly over a wavelength, and needs special care at turning points.<br><br>The <b>WKB (Wentzel-Kramers-Brillouin) approximation</b> applies to the 1D Schrödinger equation $-\\frac{\\hbar^2}{2m}\\frac{d^2\\psi}{dx^2} + V(x)\\psi = E\\psi$ when the potential $V(x)$ is slowly varying compared to the reduced de Broglie wavelength $\\bar{\\lambda}(x) = \\frac{\\hbar}{p(x)}$, where:
 $$p(x) \\equiv \\sqrt{2m(E - V(x))}$$
 <b>WKB Validity Condition:</b>
 $$\\boxed{\\left| \\frac{d\\bar{\\lambda}}{dx} \\right| = \\left| \\frac{d}{dx}\\left( \\frac{\\hbar}{p(x)} \\right) \\right| = \\frac{\\hbar m |V'(x)|}{p(x)^3} \\ll 1}$$
@@ -302,8 +302,8 @@ The validity condition is catastrophically violated at every classical turning p
   {
     id: 'c.7.4.2', sec: '7.4', kind: 'theorem', tier: 'core',
     title: 'WKB Wavefunctions in Classical and Tunneling Regions',
-    oneLine: 'WKB wavefunctions are oscillatory with amplitude 1/√p(x) in classical regions (E > V), and exponentially growing/decaying with amplitude 1/√|p(x)| in tunneling regions (E < V).',
-    statement: `<b>1. Classical Allowed Region ($E > V(x)$, $p(x) = \\sqrt{2m(E - V(x))} > 0$):</b>
+    oneLine: "Where energy exceeds potential, the WKB wave oscillates.",
+    statement: `<b>Start here.</b> Where energy exceeds potential, the WKB wave oscillates. Inside a forbidden region it grows or decays exponentially. Boundary conditions decide which pieces can appear in the physical solution.<br><br><b>1. Classical Allowed Region ($E > V(x)$, $p(x) = \\sqrt{2m(E - V(x))} > 0$):</b>
 The wavefunction is oscillatory:
 $$\\boxed{\\psi(x) \\approx \\frac{C_1}{\\sqrt{p(x)}} \\exp\\left( \\frac{i}{\\hbar}\\int p(x)dx \\right) + \\frac{C_2}{\\sqrt{p(x)}} \\exp\\left( -\\frac{i}{\\hbar}\\int p(x)dx \\right)}$$
 The probability density $|\\psi(x)|^2 \\propto \\frac{1}{p(x)} \\propto \\frac{1}{v(x)}$ matches the classical probability of finding a particle in $dx$, which is inversely proportional to its classical speed $v(x)$!<br>
@@ -324,8 +324,8 @@ $$\\boxed{\\psi(x) \\approx \\frac{D_1}{\\sqrt{|p(x)|}} \\exp\\left( \\frac{1}{\
   {
     id: 'c.7.4.3', sec: '7.4', kind: 'theorem', tier: 'core',
     title: 'WKB Bound-State Quantization & Phase Shifts',
-    oneLine: 'Integrating the classical action between turning points yields quantized energies: ∫_{x₁}^{x₂} p(x)dx = (n - γ)πħ, where γ = ½ for two smooth walls and γ = ¼ for one vertical wall.',
-    statement: `Matching WKB wavefunctions across turning points using the Airy function connection formulas yields the <b>WKB Quantization Condition</b> (generalized Bohr-Sommerfeld condition):
+    oneLine: "A bound WKB wave must match across its turning points.",
+    statement: `<b>Start here.</b> A bound WKB wave must match across its turning points. The matching gives a phase condition, selecting a discrete set of approximate energies.<br><br>Matching WKB wavefunctions across turning points using the Airy function connection formulas yields the <b>WKB Quantization Condition</b> (generalized Bohr-Sommerfeld condition):
 $$\\boxed{\\int_{x_1}^{x_2} p(x) \\, dx = \\left( n - \\gamma \\right) \\pi \\hbar, \\qquad n = 1, 2, 3, \\dots}$$
 where $x_1, x_2$ are the classical turning points ($E = V(x_1) = V(x_2)$), and the phase parameter $\\gamma$ depends strictly on the boundary walls:
 <ol>
@@ -354,8 +354,8 @@ where $x_1, x_2$ are the classical turning points ($E = V(x_1) = V(x_2)$), and t
   {
     id: 'c.7.4.4', sec: '7.4', kind: 'law', tier: 'core',
     title: 'WKB Barrier Tunneling & Gamow Theory of Alpha Decay',
-    oneLine: 'The WKB barrier transmission coefficient is T ≈ exp(-2γ) where γ = (1/ħ)∫_{x₁}^{x₂} √(2m(V(x)-E)) dx, explaining the Geiger-Nuttall law for nuclear alpha decay.',
-    statement: `For a particle of energy $E$ incident on a broad, high potential barrier $V(x) > E$ between classical turning points $x_1$ and $x_2$, the <b>WKB transmission coefficient (tunneling probability)</b> is:
+    oneLine: "A wave can pass through a barrier even when its energy is too low to cross classically.",
+    statement: `<b>Start here.</b> A wave can pass through a barrier even when its energy is too low to cross classically. WKB estimates this tunnelling from the accumulated exponential decay inside the barrier.<br><br>For a particle of energy $E$ incident on a broad, high potential barrier $V(x) > E$ between classical turning points $x_1$ and $x_2$, the <b>WKB transmission coefficient (tunneling probability)</b> is:
 $$\\boxed{T \\approx \\exp\\left( -2\\gamma \\right) = \\exp\\left( -\\frac{2}{\\hbar}\\int_{x_1}^{x_2} \\sqrt{2m(V(x) - E)} \\, dx \\right)}$$
 This holds when $\\gamma = \\frac{1}{\\hbar}\\int_{x_1}^{x_2}|p(x)|dx \\gg 1$ (thick barrier).<br>
 <b>Gamow Theory of Alpha Decay (1928):</b>

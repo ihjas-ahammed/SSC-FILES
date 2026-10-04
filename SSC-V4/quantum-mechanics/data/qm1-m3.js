@@ -90,12 +90,12 @@ CONCEPTS.push(
   {
     id: 'c.3.1.1', sec: '3.1', kind: 'definition', tier: 'core',
     title: 'Linear Vector Spaces and Hilbert Space',
-    oneLine: 'Quantum states inhabit a complex Hilbert space: a complete linear vector space endowed with an inner product.',
-    statement: `A <b>Hilbert space</b> $\\mathcal{H}$ is a complex vector space equipped with an inner product $\\langle \\cdot | \\cdot \\rangle$ that is <b>complete</b> under the norm induced by the inner product (every Cauchy sequence converges to an element in $\\mathcal{H}$).
+    oneLine: "A Hilbert space is a place to do vector maths with quantum states.",
+    statement: `<b>Start here.</b> A Hilbert space is a place to do vector maths with quantum states. You can add states, multiply them by numbers and measure their lengths. “Complete” means that a sequence which converges in length has its limit in the same space; an arbitrary infinite sum need not converge.<br><br>A <b>Hilbert space</b> $\\mathcal{H}$ is a complex vector space equipped with an inner product $\\langle \\cdot | \\cdot \\rangle$ that is <b>complete</b> under the norm induced by the inner product (every Cauchy sequence converges to an element in $\\mathcal{H}$).
 In quantum mechanics, the space of square-integrable wave functions:
 $$\\mathcal{H} = L^2(\\mathbb{R}) = \\left\\{ \\psi(x) : \\int_{-\\infty}^\\infty |\\psi(x)|^2 dx < \\infty \\right\\}$$
 forms an infinite-dimensional complex Hilbert space. Every physical state is represented by a ray (unit-norm vector) in $\\mathcal{H}$.`,
-    intuition: `Think of Hilbert space as regular 3D Euclidean geometry elevated to infinite dimensions with complex coordinates. Just as any arrow in 3D can be expanded in $\\hat{i}, \\hat{j}, \\hat{k}$, any quantum state can be expanded in basis eigenstates. Completeness ensures that there are no "holes" or missing limit states: if you superpose an infinite series of states, the resulting state still lives inside the physical universe.`,
+    intuition: `Think of Hilbert space as regular 3D Euclidean geometry elevated to infinite dimensions with complex coordinates. Just as any arrow in 3D can be expanded in $\\hat{i}, \\hat{j}, \\hat{k}$, any quantum state can be expanded in basis eigenstates. Completeness ensures that there are no "holes" or missing limit states: if the partial sums of a state series form a Cauchy sequence in the norm, their limit belongs to the same space. An arbitrary infinite series need not converge.`,
     needs: ['c.1.1.1'],
     traps: [
       `Confusing Hilbert space with physical 3D coordinate space. A particle moves in 3D real space $\\mathbb{R}^3$, but its wave function lives in an infinite-dimensional abstract function space $\\mathcal{H}$.`,
@@ -103,14 +103,14 @@ forms an infinite-dimensional complex Hilbert space. Every physical state is rep
     ],
     cards: [
       { q: 'What is the definition of a Hilbert space in quantum mechanics?', a: 'A complete linear vector space over the complex numbers equipped with an inner product.', kind: 'state' },
-      { q: 'Why is the condition of completeness essential for quantum mechanics?', a: 'It guarantees that infinite linear superpositions of physical states always converge to a valid state within the same space.', kind: 'recall' }
+      { q: 'Why is the condition of completeness essential for quantum mechanics?', a: 'It guarantees that every Cauchy sequence converges in the same space. It does not guarantee convergence of every infinite series.', kind: 'recall' }
     ]
   },
   {
     id: 'c.3.1.2', sec: '3.1', kind: 'definition', tier: 'core',
     title: 'Dirac Notation: Kets, Bras, and Dual Space',
-    oneLine: 'A state vector is a ket |ψ⟩ in ℋ; its dual vector is a bra ⟨ψ| in the dual space ℋ*, related by antilinear correspondence.',
-    statement: `P.A.M. Dirac introduced the bracket formalism unifying wave and matrix mechanics:
+    oneLine: "A ket is a column of amplitudes once you choose a basis.",
+    statement: `<b>Start here.</b> A ket is a column of amplitudes once you choose a basis. A bra is the matching row, with every entry complex-conjugated. Row times column gives one number.<br><br>P.A.M. Dirac introduced the bracket formalism unifying wave and matrix mechanics:
 1. <b>Ket Vector $|\\psi\\rangle \\in \\mathcal{H}$:</b> Represents a physical quantum state vector (abstract state).
 2. <b>Bra Vector $\\langle\\phi| \\in \\mathcal{H}^*$:</b> A continuous linear functional belonging to the dual space $\\mathcal{H}^*$ that maps kets to complex numbers: $\\langle\\phi|: |\\psi\\rangle \\mapsto \\langle\\phi|\\psi\\rangle \\in \\mathbb{C}$.
 3. <b>Antilinear Dual Correspondence:</b>
@@ -130,61 +130,61 @@ Taking the dual of a ket vector conjugates all complex scalar coefficients.`,
   {
     id: 'c.3.1.3', sec: '3.1', kind: 'theorem', tier: 'core',
     title: 'The Inner Product and Cauchy–Schwarz Inequality',
-    oneLine: 'For any two states, |⟨ϕ|ψ⟩|² ≤ ⟨ϕ|ϕ⟩⟨ψ|ψ⟩; equality holds if and only if |ϕ⟩ and |ψ⟩ are linearly dependent.',
-    statement: `The inner product on $\\mathcal{H}$ satisfies:
+    oneLine: "The overlap of two vectors cannot be larger than the product of their lengths.",
+    statement: `<b>Start here.</b> The overlap of two vectors cannot be larger than the product of their lengths. To see why, subtract the part of one vector pointing along the other; the leftover squared length cannot be negative.<br><br>The inner product on $\\mathcal{H}$ satisfies:
 1. <b>Skew-symmetry (Hermitian property):</b> $\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle^*$
 2. <b>Linearity in ket, antilinearity in bra:</b> $\\langle\\phi| c_1\\psi_1 + c_2\\psi_2 \\rangle = c_1\\langle\\phi|\\psi_1\\rangle + c_2\\langle\\phi|\\psi_2\\rangle$
 3. <b>Positive definiteness:</b> $\\langle\\psi|\\psi\\rangle \\ge 0$, with $\\langle\\psi|\\psi\\rangle = 0 \\iff |\\psi\\rangle = 0$.
 <b>Cauchy–Schwarz Inequality:</b>
 $$\\boxed{|\\langle\\phi|\\psi\\rangle|^2 \\le \\langle\\phi|\\phi\\rangle \\langle\\psi|\\psi\\rangle}$$
 Equality holds if and only if $|\\psi\\rangle = c |\\phi\\rangle$ for some scalar $c \\in \\mathbb{C}$.`,
-    intuition: `This is the quantum version of the dot product inequality $|\mathbf{u} \\cdot \\mathbf{v}| \\le |\\mathbf{u}| |\\mathbf{v}|$. The overlap between two quantum states can never exceed the product of their lengths. If normalized, $|\\langle\\phi|\\psi\\rangle| \\le 1$. The Cauchy–Schwarz inequality is the mathematical bedrock from which every quantum uncertainty relation is derived!`,
+    intuition: `This is the quantum version of the dot product inequality $|\\mathbf{u} \\cdot \\mathbf{v}| \\le |\\mathbf{u}| |\\mathbf{v}|$. The overlap between two quantum states can never exceed the product of their lengths. If normalized, $|\\langle\\phi|\\psi\\rangle| \\le 1$. The Cauchy–Schwarz inequality is the mathematical bedrock from which every quantum uncertainty relation is derived!`,
     needs: ['c.3.1.2'],
     traps: [
       `Assuming $\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle$. Because the field is complex, reversing the order conjugates the result: $\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle^*$.`,
       `Forgetting that the norm is always non-negative. $\\langle\\psi|\\psi\\rangle = \\int |\\psi(x)|^2 dx \\ge 0$; an imaginary or negative norm is mathematically impossible in a Hilbert space.`
     ],
     proof: {
-      idea: 'Consider the state |χ⟩ = |ψ⟩ - (⟨ϕ|ψ⟩ / ⟨ϕ|ϕ⟩)|ϕ⟩ and use positive definiteness ⟨χ|χ⟩ ≥ 0.',
+      idea: 'If |ϕ⟩ is zero, the inequality is immediate. Otherwise subtract the projection of |ψ⟩ along |ϕ⟩ and use the fact that the leftover squared length is non-negative.',
       why: 'Show that the squared norm of any vector must be greater than or equal to zero.',
       rungs: [
         {
-          why: 'Construct Orthogonal Remainder Vector',
+          why: 'Subtract the part along ϕ',
           m: '$$|\\chi\\rangle = |\\psi\\rangle - \\lambda |\\phi\\rangle, \\quad \\text{where } \\lambda = \\frac{\\langle\\phi|\\psi\\rangle}{\\langle\\phi|\\phi\\rangle}$$',
           meaning: 'What this really means: We subtract from |ψ⟩ its shadow along |ϕ⟩, leaving only the perpendicular component.',
-          label: 'Construct Orthogonal Remainder Vector',
+          label: 'Subtract the part along ϕ',
           math: '|\\chi\\rangle = |\\psi\\rangle - \\lambda |\\phi\\rangle, \\quad \\text{where } \\lambda = \\frac{\\langle\\phi|\\psi\\rangle}{\\langle\\phi|\\phi\\rangle}',
           note: 'Subtract the projection along |ϕ⟩.'
         },
         {
-          why: 'Compute Norm of Remainder Vector',
+          why: 'Find the leftover squared length',
           m: '$$\\langle\\chi|\\chi\\rangle = \\langle\\psi - \\lambda\\phi | \\psi - \\lambda\\phi\\rangle = \\langle\\psi|\\psi\\rangle - \\lambda^* \\langle\\phi|\\psi\\rangle - \\lambda \\langle\\psi|\\phi\\rangle + |\\lambda|^2 \\langle\\phi|\\phi\\rangle$$',
           meaning: 'What this really means: Expand the inner product of the remainder vector with itself.',
-          label: 'Compute Norm of Remainder Vector',
+          label: 'Find the leftover squared length',
           math: '\\langle\\chi|\\chi\\rangle = \\langle\\psi - \\lambda\\phi | \\psi - \\lambda\\phi\\rangle = \\langle\\psi|\\psi\\rangle - \\lambda^* \\langle\\phi|\\psi\\rangle - \\lambda \\langle\\psi|\\phi\\rangle + |\\lambda|^2 \\langle\\phi|\\phi\\rangle',
           note: 'Expand using antilinearity of the bra.'
         },
         {
-          why: 'Substitute Value of λ',
+          why: 'Put the chosen λ into the expression',
           m: '$$\\lambda^* \\langle\\phi|\\psi\\rangle = \\frac{\\langle\\psi|\\phi\\rangle \\langle\\phi|\\psi\\rangle}{\\langle\\phi|\\phi\\rangle} = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}, \\quad |\\lambda|^2 \\langle\\phi|\\phi\\rangle = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}$$',
-          meaning: 'What this really means: The middle cross-terms and the final term simplify into identical quotients.',
-          label: 'Substitute Value of λ',
+          meaning: 'Each of these terms contains the same overlap squared divided by the length squared of ϕ. Two subtractions and one addition leave one subtraction.',
+          label: 'Put the chosen λ into the expression',
           math: '\\lambda^* \\langle\\phi|\\psi\\rangle = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}, \\quad |\\lambda|^2 \\langle\\phi|\\phi\\rangle = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}',
           note: 'Cross-terms combine.'
         },
         {
-          why: 'Apply Positive Definiteness',
+          why: 'Use the fact that squared length is non-negative',
           m: '$$\\langle\\chi|\\chi\\rangle = \\langle\\psi|\\psi\\rangle - \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle} \\ge 0$$',
           meaning: 'What this really means: A squared vector length can never be negative.',
-          label: 'Apply Positive Definiteness',
+          label: 'Use the fact that squared length is non-negative',
           math: '\\langle\\psi|\\psi\\rangle - \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle} \\ge 0',
           note: 'Norm of |χ⟩ must be ≥ 0.'
         },
         {
-          why: 'Conclude Cauchy-Schwarz Inequality',
+          why: 'Multiply to get the bound',
           m: '$$|\\langle\\phi|\\psi\\rangle|^2 \\le \\langle\\phi|\\phi\\rangle \\langle\\psi|\\psi\\rangle$$',
-          meaning: 'What this really means: Multiplying by ⟨ϕ|ϕ⟩ produces the fundamental bound.',
-          label: 'Conclude Cauchy-Schwarz Inequality',
+          meaning: 'Multiply by the positive squared length of ϕ. The inequality keeps its direction, giving the required overlap bound.',
+          label: 'Multiply to get the bound',
           math: '|\\langle\\phi|\\psi\\rangle|^2 \\le \\langle\\phi|\\phi\\rangle \\langle\\psi|\\psi\\rangle',
           note: 'Exact statement of the Schwarz inequality.'
         }
@@ -198,8 +198,8 @@ Equality holds if and only if $|\\psi\\rangle = c |\\phi\\rangle$ for some scala
   {
     id: 'c.3.1.4', sec: '3.1', kind: 'property', tier: 'core',
     title: 'Orthonormal Basis and Completeness (Closure) Relation',
-    oneLine: 'A set of orthonormal states {|ϕ_n⟩} forms a complete basis if and only if ∑_n |ϕ_n⟩⟨ϕ_n| = Î.',
-    statement: `A discrete set of states $\{ |\\phi_n\\rangle \}$ is an <b>orthonormal basis</b> of $\\mathcal{H}$ if:
+    oneLine: "Basis states are the coordinate directions for your state column.",
+    statement: `<b>Start here.</b> Basis states are the coordinate directions for your state column. “Orthonormal” means each direction has length one and different directions have zero overlap. Adding all their projectors gives the identity.<br><br>A discrete set of states $\{ |\\phi_n\\rangle \}$ is an <b>orthonormal basis</b> of $\\mathcal{H}$ if:
 1. <b>Orthonormality:</b> $\\langle \\phi_m | \\phi_n \\rangle = \\delta_{mn}$
 2. <b>Completeness (Closure Relation):</b>
 $$\\boxed{\\sum_{n} |\\phi_n\\rangle \\langle\\phi_n| = \\hat{I}}$$
@@ -223,8 +223,8 @@ where $c_n = \\langle\\phi_n|\\psi\\rangle$ is the probability amplitude of stat
   {
     id: 'c.3.2.1', sec: '3.2', kind: 'definition', tier: 'core',
     title: 'Linear Operators and Projection Operators',
-    oneLine: 'An operator Â maps kets to kets; a projection operator P̂_n = |ϕ_n⟩⟨ϕ_n| is idempotent: P̂_n² = P̂_n.',
-    statement: `A <b>linear operator</b> $\\hat{A}$ maps kets to kets: $\\hat{A}(c_1|\\psi_1\\rangle + c_2|\\psi_2\\rangle) = c_1\\hat{A}|\\psi_1\\rangle + c_2\\hat{A}|\\psi_2\\rangle$.
+    oneLine: "An operator is a rule that turns an input state into an output state.",
+    statement: `<b>Start here.</b> An operator is a rule that turns an input state into an output state. In a chosen basis, a linear operator is a matrix. A projector keeps only the part pointing along a chosen state or subspace.<br><br>A <b>linear operator</b> $\\hat{A}$ maps kets to kets: $\\hat{A}(c_1|\\psi_1\\rangle + c_2|\\psi_2\\rangle) = c_1\\hat{A}|\\psi_1\\rangle + c_2\\hat{A}|\\psi_2\\rangle$.
 The <b>projection operator</b> $\\hat{P}_\\psi$ onto a normalized state $|\\psi\\rangle$ is the outer product:
 $$\\hat{P}_\\psi = |\\psi\\rangle \\langle\\psi|$$
 <b>Properties of Projectors:</b>
@@ -245,8 +245,8 @@ $$\\hat{P}_\\psi = |\\psi\\rangle \\langle\\psi|$$
   {
     id: 'c.3.2.2', sec: '3.2', kind: 'definition', tier: 'core',
     title: 'The Hermitian Adjoint (Conjugate Transpose)',
-    oneLine: 'The adjoint Â† satisfies ⟨ϕ|Â|ψ⟩* = ⟨ψ|Â†|ϕ⟩, with properties (ÂB̂)† = B̂†Â† and (cÂ)† = c*Â†.',
-    statement: `For any linear operator $\\hat{A}$, its <b>Hermitian adjoint</b> (or adjoint) $\\hat{A}^\\dagger$ is uniquely defined by the inner product relation:
+    oneLine: "The dagger tells you to swap rows and columns and conjugate the entries.",
+    statement: `<b>Start here.</b> The dagger tells you to swap rows and columns and conjugate the entries. For example, an i above the diagonal becomes a −i below it. This is called the adjoint.<br><br>For any linear operator $\\hat{A}$, its <b>Hermitian adjoint</b> (or adjoint) $\\hat{A}^\\dagger$ is uniquely defined by the inner product relation:
 $$\\boxed{\\langle \\phi | \\hat{A} | \\psi \\rangle^* = \\langle \\psi | \\hat{A}^\\dagger | \\phi \\rangle} \\quad \\text{for all } |\\phi\\rangle, |\\psi\\rangle \\in \\mathcal{H}$$
 <b>Algebraic Properties of Adjoints:</b>
 1. $(\\hat{A}^\\dagger)^\\dagger = \\hat{A}$
@@ -268,8 +268,8 @@ $$\\boxed{\\langle \\phi | \\hat{A} | \\psi \\rangle^* = \\langle \\psi | \\hat{
   {
     id: 'c.3.2.3', sec: '3.2', kind: 'theorem', tier: 'core',
     title: 'Hermitian Operators and Physical Observables',
-    oneLine: 'An operator is Hermitian if Â† = Â; physical observables are represented by Hermitian operators to guarantee real measurement outcomes.',
-    statement: `An operator $\\hat{A}$ is <b>Hermitian</b> (or self-adjoint) if it equals its own adjoint:
+    oneLine: "A Hermitian matrix equals its conjugate transpose.",
+    statement: `<b>Start here.</b> A Hermitian matrix equals its conjugate transpose. Its eigenvalues are real, which lets them represent measurement results. Multiplying two Hermitian matrices gives a Hermitian result only when they commute.<br><br>An operator $\\hat{A}$ is <b>Hermitian</b> (or self-adjoint) if it equals its own adjoint:
 $$\\boxed{\\hat{A}^\\dagger = \\hat{A}} \\quad \\Longleftrightarrow \\quad \\langle \\phi | \\hat{A} | \\psi \\rangle = \\langle \\hat{A}\\phi | \\psi \\rangle$$
 <b>Postulate of Quantum Mechanics:</b> Every measurable physical observable (position, momentum, energy, angular momentum) is represented by a linear Hermitian operator whose eigenvalues represent all possible outcomes of experimental measurements.`,
     intuition: `In the real physical world, measurement instruments display real numbers (pointers on a meter, digital readouts in volts or joules), never imaginary numbers like $2 + 3i$. Hermitian operators are the exact mathematical class of operators guaranteed to produce 100% purely real eigenvalues.`,
@@ -316,8 +316,8 @@ $$\\boxed{\\hat{A}^\\dagger = \\hat{A}} \\quad \\Longleftrightarrow \\quad \\lan
   {
     id: 'c.3.2.4', sec: '3.2', kind: 'property', tier: 'core',
     title: 'Expectation Value and Variance in Dirac Formalism',
-    oneLine: 'In Dirac notation, ⟨A⟩ = ⟨ψ|Â|ψ⟩/⟨ψ|ψ⟩ and variance ΔA² = ⟨(Â - ⟨A⟩)²⟩ = ⟨A²⟩ - ⟨A⟩².',
-    statement: `For a system in state $|\\psi\\rangle$:
+    oneLine: "An expectation value is the average result of many measurements on identically prepared systems.",
+    statement: `<b>Start here.</b> An expectation value is the average result of many measurements on identically prepared systems. Multiply bra × operator × ket to calculate it. Variance measures how widely the results spread around that average.<br><br>For a system in state $|\\psi\\rangle$:
 1. The <b>expectation value</b> of an observable $\\hat{A}$ is:
 $$\\langle \\hat{A} \\rangle = \\frac{\\langle\\psi|\\hat{A}|\\psi\\rangle}{\\langle\\psi|\\psi\\rangle}$$
 For a normalized state ($\\langle\\psi|\\psi\\rangle = 1$), $\\langle \\hat{A} \\rangle = \\langle\\psi|\\hat{A}|\\psi\\rangle$.
@@ -340,8 +340,8 @@ $\\Delta A = 0$ if and only if $|\\psi\\rangle$ is an eigenstate of $\\hat{A}$.`
   {
     id: 'c.3.3.1', sec: '3.3', kind: 'definition', tier: 'core',
     title: 'The Commutator and Fundamental Operator Identities',
-    oneLine: 'The commutator [Â, B̂] = ÂB̂ - B̂Â measures failure of commutativity and obeys Leibniz product rules.',
-    statement: `The <b>commutator</b> of two operators $\\hat{A}$ and $\\hat{B}$ is defined by:
+    oneLine: "Do two operations in one order, then in the opposite order.",
+    statement: `<b>Start here.</b> Do two operations in one order, then in the opposite order. Subtract the results. The matrix AB − BA records this difference and is called the commutator.<br><br>The <b>commutator</b> of two operators $\\hat{A}$ and $\\hat{B}$ is defined by:
 $$\\boxed{[\\hat{A}, \\hat{B}] = \\hat{A}\\hat{B} - \\hat{B}\\hat{A}}$$
 <b>Key Algebraic Identities:</b>
 1. <b>Antisymmetry:</b> $[\\hat{A}, \\hat{B}] = -[\\hat{B}, \\hat{A}]$
@@ -364,8 +364,8 @@ $$\\boxed{[\\hat{A}\\hat{B}, \\hat{C}] = \\hat{A}[\\hat{B}, \\hat{C}] + [\\hat{A
   {
     id: 'c.3.3.2', sec: '3.3', kind: 'theorem', tier: 'core',
     title: 'The Jacobi Identity and Power Commutator Formula',
-    oneLine: 'Operators obey the cyclic Jacobi identity [Â, [B̂, Ĉ]] + [B̂, [Ĉ, Â]] + [Ĉ, [Â, B̂]] = 0, and [x̂, p̂ⁿ] = iħ n p̂ⁿ⁻¹.',
-    statement: `1. <b>Jacobi Identity:</b> For any three linear operators $\\hat{A}, \\hat{B}, \\hat{C}$:
+    oneLine: "Commutator identities are shortcuts for expanding products.",
+    statement: `<b>Start here.</b> Commutator identities are shortcuts for expanding products. You can check them by replacing each bracket with AB − BA and cancelling matching terms; keep the multiplication order unchanged.<br><br>1. <b>Jacobi Identity:</b> For any three linear operators $\\hat{A}, \\hat{B}, \\hat{C}$:
 $$\\boxed{[\\hat{A}, [\\hat{B}, \\hat{C}]] + [\\hat{B}, [\\hat{C}, \\hat{A}]] + [\\hat{C}, [\\hat{A}, \\hat{B}]] = 0}$$
 2. <b>Power Commutator Formulas:</b> If $[\\hat{A}, [\\hat{A}, \\hat{B}]] = 0$ (such as for $\\hat{x}$ and $\\hat{p}$ where $[\\hat{x}, \\hat{p}] = i\\hbar$):
 $$\\boxed{[\\hat{x}, \\hat{p}^n] = i\\hbar \\, n \\hat{p}^{n-1}} \\qquad \\boxed{[\\hat{x}^n, \\hat{p}] = i\\hbar \\, n \\hat{x}^{n-1}}$$
@@ -415,8 +415,8 @@ $$[\\hat{x}, F(\\hat{p})] = i\\hbar \\frac{dF}{d\\hat{p}}, \\qquad [F(\\hat{x}),
   {
     id: 'c.3.3.3', sec: '3.3', kind: 'law', tier: 'core',
     title: 'The Canonical Commutation Relation [x̂, p̂] = iħ',
-    oneLine: 'The fundamental quantum commutation relation [x̂, p̂] = iħ Î drives all quantum uncertainty and non-commutativity.',
-    statement: `The foundational dynamic postulate of quantum mechanics for a particle with position $\\hat{x}$ and momentum $\\hat{p} = -i\\hbar \\frac{d}{dx}$ is the <b>Canonical Commutation Relation (CCR)</b>:
+    oneLine: "Position multiplies a wave function by x; momentum differentiates it and multiplies by −iℏ.",
+    statement: `<b>Start here.</b> Position multiplies a wave function by x; momentum differentiates it and multiplies by −iℏ. Reversing their order leaves an extra iℏ times the original function. Exact position and momentum cannot both be finite matrices.<br><br>The foundational dynamic postulate of quantum mechanics for a particle with position $\\hat{x}$ and momentum $\\hat{p} = -i\\hbar \\frac{d}{dx}$ is the <b>Canonical Commutation Relation (CCR)</b>:
 $$\\boxed{[\\hat{x}, \\hat{p}] = i\\hbar \\, \\hat{I}}$$
 In three dimensions:
 $$[\\hat{r}_j, \\hat{p}_k] = i\\hbar \\, \\delta_{jk} \\hat{I}, \\qquad [\\hat{r}_j, \\hat{r}_k] = 0, \\qquad [\\hat{p}_j, \\hat{p}_k] = 0$$
@@ -475,8 +475,8 @@ Position and momentum along the same axis do not commute, whereas coordinates al
   {
     id: 'c.3.4.1', sec: '3.4', kind: 'theorem', tier: 'core',
     title: 'The Robertson–Schrödinger Generalized Uncertainty Relation',
-    oneLine: 'For any two observables Â and B̂, ΔA ΔB ≥ (1/2)|⟨[Â, B̂]⟩|; non-commuting observables cannot be simultaneously determined.',
-    statement: `For any two Hermitian operators $\\hat{A}$ and $\\hat{B}$ and any physical state $|\\psi\\rangle$, the product of their standard deviations obeys the <b>Robertson generalized uncertainty relation</b>:
+    oneLine: "Uncertainty is the spread of measurement results.",
+    statement: `<b>Start here.</b> Uncertainty is the spread of measurement results. Subtract each observable’s average, apply the resulting operators to the state, then compare the lengths and overlap of those two new vectors.<br><br>For any two Hermitian operators $\\hat{A}$ and $\\hat{B}$ and any physical state $|\\psi\\rangle$, the product of their standard deviations obeys the <b>Robertson generalized uncertainty relation</b>:
 $$\\boxed{\\Delta A \\, \\Delta B \\ge \\frac{1}{2} |\\langle [\\hat{A}, \\hat{B}] \\rangle|}$$
 For the canonical pair $\\hat{x}$ and $\\hat{p}$, where $[\\hat{x}, \\hat{p}] = i\\hbar$:
 $$\\Delta x \\, \\Delta p \\ge \\frac{1}{2} |\\langle i\\hbar \\rangle| = \\frac{\\hbar}{2}$$
@@ -549,8 +549,8 @@ which rigorously proves Heisenberg's uncertainty principle for any arbitrary qua
   {
     id: 'c.3.4.2', sec: '3.4', kind: 'property', tier: 'core',
     title: 'Compatible vs. Incompatible Observables',
-    oneLine: 'Compatible observables commute ([Â, B̂] = 0) and share a common eigenbasis; incompatible observables ([Â, B̂] ≠ 0) cannot be simultaneously measured.',
-    statement: `1. <b>Compatible Observables:</b> Two observables $\\hat{A}$ and $\\hat{B}$ are compatible if they commute:
+    oneLine: "Commuting observables can share measurement states under the assumptions used here.",
+    statement: `<b>Start here.</b> Commuting observables can share measurement states under the assumptions used here. In a common eigenbasis, both matrices are diagonal. Noncommuting observables do not have a complete common eigenbasis.<br><br>1. <b>Compatible Observables:</b> Two observables $\\hat{A}$ and $\\hat{B}$ are compatible if they commute:
 $$[\\hat{A}, \\hat{B}] = 0$$
 They can be measured simultaneously without mutual interference, share a complete common eigenbasis, and have zero fundamental uncertainty limit ($\\Delta A \\Delta B \\ge 0$).
 2. <b>Incompatible Observables:</b> Two observables are incompatible if they do not commute:
@@ -572,8 +572,8 @@ Measuring one inevitably disturbs the state and destroys knowledge of the other 
   {
     id: 'c.3.5.1', sec: '3.5', kind: 'definition', tier: 'core',
     title: 'Functions of Operators and the Baker–Campbell–Hausdorff (BCH) Formula',
-    oneLine: 'An operator function F(Â) is defined via Taylor series; if [Â, [Â, B̂]] = [B̂, [Â, B̂]] = 0, then e^{Â} e^{B̂} = e^{Â + B̂ + (1/2)[Â, B̂]}.',
-    statement: `For any analytic function $F(z) = \\sum_{n=0}^\\infty c_n z^n$, the operator function $F(\\hat{A})$ is defined by the power series:
+    oneLine: "A function of a matrix uses the same idea as a function of a number.",
+    statement: `<b>Start here.</b> A function of a matrix uses the same idea as a function of a number. For an exponential, add I + A + A²/2! and so on when the series is defined. Matrix order still matters.<br><br>For any analytic function $F(z) = \\sum_{n=0}^\\infty c_n z^n$, the operator function $F(\\hat{A})$ is defined by the power series:
 $$F(\\hat{A}) = \\sum_{n=0}^\\infty c_n \\hat{A}^n$$
 In an eigenbasis where $\\hat{A}|a_n\\rangle = a_n |a_n\\rangle$, $F(\\hat{A})|a_n\\rangle = F(a_n)|a_n\\rangle$.
 <b>Baker–Campbell–Hausdorff (BCH) Formula:</b>
@@ -593,8 +593,8 @@ $$\\boxed{e^{\\hat{A}} e^{\\hat{B}} = e^{\\hat{A} + \\hat{B} + \\frac{1}{2}[\\ha
   {
     id: 'c.3.5.2', sec: '3.5', kind: 'theorem', tier: 'core',
     title: 'Unitary Operators and Isometries in Hilbert Space',
-    oneLine: 'An operator Û is unitary if Û† Û = Û Û† = Î; unitary transformations preserve inner products ⟨Ûϕ|Ûψ⟩ = ⟨ϕ|ψ⟩ and state norms.',
-    statement: `A linear operator $\\hat{U}$ is <b>unitary</b> if its adjoint equals its inverse:
+    oneLine: "A unitary matrix keeps a state’s length unchanged.",
+    statement: `<b>Start here.</b> A unitary matrix keeps a state’s length unchanged. Its inverse is its dagger. This preserves total probability while allowing the components and phases to change.<br><br>A linear operator $\\hat{U}$ is <b>unitary</b> if its adjoint equals its inverse:
 $$\\boxed{\\hat{U}^\\dagger = \\hat{U}^{-1} \\quad \\Longleftrightarrow \\quad \\hat{U}^\\dagger \\hat{U} = \\hat{U} \\hat{U}^\\dagger = \\hat{I}}$$
 <b>Core Properties of Unitary Operators:</b>
 1. <b>Preservation of Inner Products (Isometry):</b>
@@ -655,8 +655,8 @@ $$\\langle \\hat{U}\\phi | \\hat{U}\\psi \\rangle = \\langle \\phi | \\hat{U}^\\
   {
     id: 'c.3.6.1', sec: '3.6', kind: 'definition', tier: 'core',
     title: 'Matrix Representation of Kets, Bras, and Operators',
-    oneLine: 'In an orthonormal basis {|ϕ_n⟩}, kets are column vectors c_i = ⟨ϕ_i|ψ⟩, bras are row vectors, and operators are square matrices A_ij = ⟨ϕ_i|Â|ϕ_j⟩.',
-    statement: `Given an orthonormal basis $\{|\\phi_n\\rangle\}$:
+    oneLine: "Write the state as a column, its bra as a conjugated row, and each operator as a table.",
+    statement: `<b>Start here.</b> Write the state as a column, its bra as a conjugated row, and each operator as a table. Column j of the table tells you what happens to basis state j.<br><br>Given an orthonormal basis $\{|\\phi_n\\rangle\}$:
 1. <b>Ket as a Column Vector:</b>
 $$|\\psi\\rangle \\doteq \\begin{pmatrix} c_1 \\\\ c_2 \\\\ \\vdots \\end{pmatrix}, \\qquad c_i = \\langle \\phi_i | \\psi \\rangle$$
 2. <b>Bra as a Row Vector:</b>
@@ -678,8 +678,8 @@ The action of an operator $|\\psi\'\\rangle = \\hat{A}|\\psi\\rangle$ becomes st
   {
     id: 'c.3.6.2', sec: '3.6', kind: 'theorem', tier: 'core',
     title: 'Theorems 2.1 & 2.2: Reality of Spectra and Orthogonality of Eigenstates',
-    oneLine: 'Hermitian operators have strictly real eigenvalues (Theorem 2.1), and eigenvectors corresponding to distinct eigenvalues are mutually orthogonal (Theorem 2.2).',
-    statement: `For any linear Hermitian operator $\\hat{A} = \\hat{A}^\\dagger$:
+    oneLine: "A Hermitian matrix has real eigenvalues.",
+    statement: `<b>Start here.</b> A Hermitian matrix has real eigenvalues. Eigenvectors with different eigenvalues have zero overlap. If an eigenvalue is repeated, choose perpendicular unit vectors within that subspace.<br><br>For any linear Hermitian operator $\\hat{A} = \\hat{A}^\\dagger$:
 1. <b>Theorem 2.1 (Real Eigenvalues):</b> All eigenvalues of $\\hat{A}$ are strictly real:
 $$\\hat{A}|a_n\\rangle = a_n |a_n\\rangle \\implies a_n \\in \\mathbb{R}$$
 2. <b>Theorem 2.2 (Orthogonality of Eigenstates):</b> Eigenvectors corresponding to different eigenvalues are mutually orthogonal:
@@ -737,8 +737,8 @@ Degenerate eigenstates sharing the same eigenvalue can always be orthogonalized 
   {
     id: 'c.3.6.3', sec: '3.6', kind: 'theorem', tier: 'core',
     title: 'Theorem 2.3: Commuting Observables and Simultaneous Diagonalization',
-    oneLine: 'If [Â, B̂] = 0, Â and B̂ share a complete common set of simultaneous eigenstates and can be simultaneously diagonalized.',
-    statement: `<b>Theorem 2.3 (Simultaneous Eigenstates):</b>
+    oneLine: "If two Hermitian matrices commute, you can choose a basis that makes both diagonal.",
+    statement: `<b>Start here.</b> If two Hermitian matrices commute, you can choose a basis that makes both diagonal. If an eigenvalue is repeated, first diagonalize the second matrix inside that repeated-eigenvalue subspace.<br><br><b>Theorem 2.3 (Simultaneous Eigenstates):</b>
 If two Hermitian operators $\\hat{A}$ and $\\hat{B}$ commute ($[\\hat{A}, \\hat{B}] = 0$), there exists a complete orthonormal basis of common (simultaneous) eigenvectors:
 $$\\boxed{\\hat{A}|a_n, b_m\\rangle = a_n |a_n, b_m\\rangle \\quad \\text{and} \\quad \\hat{B}|a_n, b_m\\rangle = b_m |a_n, b_m\\rangle}$$
 In this common eigenbasis, both matrix representations are simultaneously diagonal. If $\\hat{A}$ has non-degenerate eigenvalues, every eigenvector of $\\hat{A}$ is automatically an eigenvector of $\\hat{B}$.`,
@@ -786,8 +786,8 @@ In this common eigenbasis, both matrix representations are simultaneously diagon
   {
     id: 'c.3.6.4', sec: '3.6', kind: 'theorem', tier: 'core',
     title: 'Theorems 2.4 & 2.5: Anti-Hermitian and Unitary Spectra',
-    oneLine: 'Anti-Hermitian operators have purely imaginary or zero eigenvalues (Theorem 2.4); unitary operators have eigenvalues of unit modulus e^{iθ} (Theorem 2.5).',
-    statement: `1. <b>Theorem 2.4 (Anti-Hermitian Spectrum):</b>
+    oneLine: "An anti-Hermitian matrix has purely imaginary eigenvalues, including zero.",
+    statement: `<b>Start here.</b> An anti-Hermitian matrix has purely imaginary eigenvalues, including zero. A unitary matrix has eigenvalues of magnitude one. These follow by comparing a vector’s length before and after the matrix acts.<br><br>1. <b>Theorem 2.4 (Anti-Hermitian Spectrum):</b>
 If $\\hat{A}^\\dagger = -\\hat{A}$, then all eigenvalues of $\\hat{A}$ are either purely imaginary or zero:
 $$\\hat{A}|a_n\\rangle = a_n |a_n\\rangle \\implies \\text{Re}(a_n) = 0 \\quad (a_n = i\\beta_n, \\, \\beta_n \\in \\mathbb{R})$$
 2. <b>Theorem 2.5 (Unitary Spectrum):</b>
@@ -843,8 +843,8 @@ and eigenvectors corresponding to distinct eigenvalues are mutually orthogonal: 
   {
     id: 'c.3.7.1', sec: '3.7', kind: 'definition', tier: 'core',
     title: 'Continuous Bases and Dirac Delta Function Normalization',
-    oneLine: 'Continuous eigenstates {|x⟩} and {|p⟩} satisfy Dirac delta normalization ⟨x|x\'⟩ = δ(x - x\') and resolution ∫ |x⟩⟨x| dx = Î.',
-    statement: `For observables with a continuous spectrum (like position $\\hat{x}$ and momentum $\\hat{p}$):
+    oneLine: "A continuous basis has one label for every position or momentum, rather than a short list of directions.",
+    statement: `<b>Start here.</b> A continuous basis has one label for every position or momentum, rather than a short list of directions. Sums become integrals, and the Dirac delta replaces the ordinary index-matching delta.<br><br>For observables with a continuous spectrum (like position $\\hat{x}$ and momentum $\\hat{p}$):
 1. <b>Continuous Eigenvalue Equations:</b>
 $$\\hat{x}|x\\rangle = x|x\\rangle, \\qquad \\hat{p}|p\\rangle = p|p\\rangle$$
 2. <b>Dirac Delta Normalization:</b>
@@ -865,8 +865,8 @@ $$\\boxed{\\int_{-\\infty}^\\infty |x\\rangle \\langle x| \\, dx = \\hat{I}, \\q
   {
     id: 'c.3.7.2', sec: '3.7', kind: 'property', tier: 'core',
     title: 'Position and Momentum Wave Function Representations',
-    oneLine: 'ψ(x) = ⟨x|ψ⟩ is the state in position representation where p̂ ≐ -iħ d/dx; ϕ(p) = ⟨p|ψ⟩ is the state in momentum representation where x̂ ≐ iħ d/dp.',
-    statement: `Inserting the completeness relations yields the wave functions in coordinate and momentum space:
+    oneLine: "The same state can be described using position components or momentum components.",
+    statement: `<b>Start here.</b> The same state can be described using position components or momentum components. Changing the basis changes its description. It does not create a different physical state.<br><br>Inserting the completeness relations yields the wave functions in coordinate and momentum space:
 1. <b>Position Representation:</b>
 $$\\psi(x) = \\langle x | \\psi \\rangle, \\qquad \\hat{x} \\doteq x, \\qquad \\boxed{\\hat{p} \\doteq -i\\hbar \\frac{\\partial}{\\partial x}}$$
 Matrix element: $\\langle x | \\hat{p} | \\psi \\rangle = -i\\hbar \\frac{\\partial \\psi(x)}{\\partial x}$.
@@ -887,8 +887,8 @@ Matrix element: $\\langle p | \\hat{x} | \\psi \\rangle = i\\hbar \\frac{\\parti
   {
     id: 'c.3.7.3', sec: '3.7', kind: 'theorem', tier: 'core',
     title: 'The Plane Wave Transformation Kernel ⟨x|p⟩ and Fourier Transformation',
-    oneLine: 'The overlap ⟨x|p⟩ = (1/√(2πħ)) e^{ipx/ħ} connects position and momentum representations via Fourier transformation.',
-    statement: `The transformation kernel connecting position space to momentum space is the inner product $\\langle x | p \\rangle$:
+    oneLine: "A Fourier transform rewrites a wave as a mixture of waves with definite momentum.",
+    statement: `<b>Start here.</b> A Fourier transform rewrites a wave as a mixture of waves with definite momentum. Its kernel tells you the overlap between a position basis state and a momentum basis state.<br><br>The transformation kernel connecting position space to momentum space is the inner product $\\langle x | p \\rangle$:
 $$\\boxed{\\langle x | p \\rangle = \\frac{1}{\\sqrt{2\\pi\\hbar}} e^{ipx/\\hbar}}$$
 Using identity resolutions, the wave functions are related by Fourier transforms:
 $$\\psi(x) = \\langle x | \\psi \\rangle = \\int_{-\\infty}^\\infty \\langle x | p \\rangle \\langle p | \\psi \\rangle \\, dp = \\boxed{\\frac{1}{\\sqrt{2\\pi\\hbar}} \\int_{-\\infty}^\\infty \\phi(p) e^{ipx/\\hbar} \\, dp}$$
@@ -945,8 +945,8 @@ $$\\phi(p) = \\langle p | \\psi \\rangle = \\int_{-\\infty}^\\infty \\langle p |
   {
     id: 'c.3.7.4', sec: '3.7', kind: 'theorem', tier: 'core',
     title: 'Equivalence of Schrödinger Wave Mechanics and Heisenberg Matrix Mechanics',
-    oneLine: 'Wave mechanics (differential equations on ψ(x)) and matrix mechanics (matrix operators on state vectors) are isomorphic representations of identical physical reality.',
-    statement: `In 1925–1926, two seemingly contradictory formulations of quantum theory emerged:
+    oneLine: "Wave mechanics and matrix mechanics describe the same quantum predictions.",
+    statement: `<b>Start here.</b> Wave mechanics and matrix mechanics describe the same quantum predictions. A wave function is a state written in a continuous basis; a matrix acts on that state’s components in a chosen basis.<br><br>In 1925–1926, two seemingly contradictory formulations of quantum theory emerged:
 1. <b>Heisenberg's Matrix Mechanics:</b> Formulated in terms of discrete matrix tables, commutators, and algebraic operator equations.
 2. <b>Schrödinger's Wave Mechanics:</b> Formulated in terms of continuous differential equations and spatial wave functions $\\psi(x,t)$.
 <b>Dirac–von Neumann Equivalence Theorem:</b> Both formalisms are mathematically isomorphic representations of the same underlying abstract Hilbert space $\\mathcal{H}$:

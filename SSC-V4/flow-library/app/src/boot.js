@@ -117,8 +117,13 @@ const App = (function () {
     { name: 'recall', label: 'Recall', icon: 'style', also: [] }
   ];
 
+  if (PROJECT.studyMaps && PROJECT.studyMaps.length) {
+    TABS.push({ name: 'study-map', label: 'Study Map', icon: 'hub', also: [] });
+  }
+
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
+    'study-map': () => PROJECT.studyMaps && PROJECT.studyMaps.length ? ViewStudyMap : ViewHome,
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewWrite
   };
 

@@ -12,8 +12,8 @@ CONCEPTS.push(
   {
     id: 'c.6.1.1', sec: '6.1', kind: 'law', tier: 'core',
     title: 'Orbital Angular Momentum Operator & Lie Algebra',
-    oneLine: 'Orbital angular momentum L̂ = r̂ × p̂ generates rotations and satisfies the fundamental Lie commutator algebra [L̂_i, L̂_j] = iħ ε_ijk L̂_k.',
-    statement: `The quantum mechanical <b>orbital angular momentum operator</b> $\\hat{\\mathbf{L}}$ is defined in direct correspondence with classical mechanics:
+    oneLine: "Orbital angular momentum comes from position and momentum, like r × p in classical mechanics.",
+    statement: `<b>Start here.</b> Orbital angular momentum comes from position and momentum, like r × p in classical mechanics. Its three component operators do not commute, so they cannot all have sharp values at once.<br><br>The quantum mechanical <b>orbital angular momentum operator</b> $\\hat{\\mathbf{L}}$ is defined in direct correspondence with classical mechanics:
 $$\\boxed{\\hat{\\mathbf{L}} = \\hat{\\mathbf{r}} \\times \\hat{\\mathbf{p}}}$$
 In Cartesian components:
 $$\\hat{L}_x = \\hat{y}\\hat{p}_z - \\hat{z}\\hat{p}_y, \\quad \\hat{L}_y = \\hat{z}\\hat{p}_x - \\hat{x}\\hat{p}_z, \\quad \\hat{L}_z = \\hat{x}\\hat{p}_y - \\hat{y}\\hat{p}_x$$
@@ -72,8 +72,8 @@ Measuring $L_z$ with absolute certainty introduces complete quantum uncertainty 
   {
     id: 'c.6.1.2', sec: '6.1', kind: 'definition', tier: 'core',
     title: 'General Angular Momentum & Dirac Ladder Operators Ĵ±',
-    oneLine: 'General angular momentum Ĵ is defined purely by [Ĵ_i, Ĵ_j] = iħ ε_ijk Ĵ_k, factorized by ladder operators Ĵ± = Ĵ_x ± i Ĵ_y.',
-    statement: `A set of three Hermitian operators $\\hat{\\mathbf{J}} = (\\hat{J}_x, \\hat{J}_y, \\hat{J}_z)$ defines a <b>general angular momentum</b> if and only if they satisfy the Lie algebra:
+    oneLine: "Angular-momentum ladder operators move the m label up or down while keeping j fixed.",
+    statement: `<b>Start here.</b> Angular-momentum ladder operators move the m label up or down while keeping j fixed. In a matrix, they move a component to a neighbouring row with a known coefficient.<br><br>A set of three Hermitian operators $\\hat{\\mathbf{J}} = (\\hat{J}_x, \\hat{J}_y, \\hat{J}_z)$ defines a <b>general angular momentum</b> if and only if they satisfy the Lie algebra:
 $$\\boxed{[\\hat{J}_i, \\hat{J}_j] = i\\hbar\\varepsilon_{ijk}\\hat{J}_k}$$
 Define the non-Hermitian <b>ladder (raising and lowering) operators</b>:
 $$\\boxed{\\hat{J}_+ = \\hat{J}_x + i\\hat{J}_y, \\qquad \\hat{J}_- = \\hat{J}_x - i\\hat{J}_y = (\\hat{J}_+) ^\\dagger}$$
@@ -97,8 +97,8 @@ $$\\boxed{\\hat{J}_\\mp \\hat{J}_\\pm = \\hat{J}^2 - \\hat{J}_z^2 \\mp \\hbar\\h
   {
     id: 'c.6.1.3', sec: '6.1', kind: 'theorem', tier: 'core',
     title: 'Angular Momentum Eigenvalue Spectrum & Ladder Action',
-    oneLine: 'Algebraic ladder termination forces j to be an integer or half-integer j ∈ {0, ½, 1, 3/2, ...} with 2j+1 projections m ∈ {-j, ..., +j}.',
-    statement: `Let $|j, m\\rangle$ be the normalized simultaneous eigenstates of $\\hat{J}^2$ and $\\hat{J}_z$:
+    oneLine: "The angular-momentum ladder has a top and a bottom.",
+    statement: `<b>Start here.</b> The angular-momentum ladder has a top and a bottom. These limits restrict j and give m = −j, −j + 1, …, j, so there are 2j + 1 basis states.<br><br>Let $|j, m\\rangle$ be the normalized simultaneous eigenstates of $\\hat{J}^2$ and $\\hat{J}_z$:
 $$\\boxed{\\hat{J}^2|j, m\\rangle = j(j+1)\\hbar^2|j, m\\rangle, \\qquad \\hat{J}_z|j, m\\rangle = m\\hbar|j, m\\rangle}$$
 Because $\\hat{J}^2 - \\hat{J}_z^2 = \\hat{J}_x^2 + \\hat{J}_y^2 \\ge 0$, the magnetic quantum number is bounded: $m^2 \\le j(j+1)$.<br>
 Repeated application of $\\hat{J}_+$ and $\\hat{J}_-$ must terminate at top rung $m = +j$ and bottom rung $m = -j$:
@@ -123,8 +123,8 @@ $$\\boxed{\\hat{J}_\\pm|j, m\\rangle = \\hbar\\sqrt{j(j+1) - m(m \\pm 1)} |j, m 
   {
     id: 'c.6.2.1', sec: '6.2', kind: 'definition', tier: 'core',
     title: 'Matrix Representation of Angular Momentum Operators',
-    oneLine: 'In the {|j, m⟩} orthonormal basis, angular momentum operators are represented by finite (2j+1) × (2j+1) Hermitian matrices.',
-    statement: `In the ordered orthonormal basis $\{|j, j\\rangle, |j, j-1\\rangle, \\dots, |j, -j\\rangle\}$, the matrix elements are:
+    oneLine: "Choose states with definite j and m.",
+    statement: `<b>Start here.</b> Choose states with definite j and m. Jz is then diagonal; the raising and lowering matrices have entries next to the diagonal. Build Jx and Jy by adding and subtracting those two matrices.<br><br>In the ordered orthonormal basis $\{|j, j\\rangle, |j, j-1\\rangle, \\dots, |j, -j\\rangle\}$, the matrix elements are:
 $$\\boxed{\\langle j, m'|\\hat{J}_z|j, m\\rangle = m\\hbar \\delta_{m'm}}$$
 $$\\boxed{\\langle j, m'|\\hat{J}_\\pm|j, m\\rangle = \\hbar\\sqrt{j(j+1) - m(m\\pm 1)} \\delta_{m', m\\pm 1}}$$
 The transverse matrices are formed via:
@@ -148,8 +148,8 @@ $$J_x = \\frac{\\hbar}{\\sqrt{2}}\\begin{pmatrix} 0 & 1 & 0 \\\\ 1 & 0 & 1 \\\\ 
   {
     id: 'c.6.2.2', sec: '6.2', kind: 'law', tier: 'core',
     title: 'Geometrical Vector Model & Precession Cones',
-    oneLine: 'The angular momentum vector has length |J| = ħ√(j(j+1)) and precesses around the z-axis on a cone with angle cos θ = m / √(j(j+1)) < 1.',
-    statement: `In the semi-classical <b>vector model</b> of angular momentum:
+    oneLine: "The vector model is a picture for angular momentum, not a literal hidden arrow with three definite components.",
+    statement: `<b>Start here.</b> The vector model is a picture for angular momentum, not a literal hidden arrow with three definite components. The length and one component can be sharp; the other components still have spread.<br><br>In the semi-classical <b>vector model</b> of angular momentum:
 <ol>
   <li>The total length (magnitude) of the vector $\\mathbf{J}$ is fixed:
   $$\\boxed{|\\mathbf{J}| = \\hbar\\sqrt{j(j+1)}}$$</li>
@@ -179,8 +179,8 @@ Because $\\sqrt{j(j+1)} > j \\ge |m|$ for all $j > 0$, $\\cos\\theta < 1$.<br>
   {
     id: 'c.6.3.1', sec: '6.3', kind: 'law', tier: 'core',
     title: 'Differential Operator Form of Orbital Angular Momentum in Spherical Coordinates',
-    oneLine: 'In spherical polar coordinates, L̂z = -iħ ∂/∂φ and L̂± = ħ e^{±iφ}(± ∂/∂θ + i cot θ ∂/∂φ).',
-    statement: `Transforming Cartesian derivatives into spherical polar coordinates $(r, \\theta, \\phi)$, the orbital angular momentum operators take the differential form:
+    oneLine: "In an angular wave function, angular momentum acts through derivatives with respect to angles.",
+    statement: `<b>Start here.</b> In an angular wave function, angular momentum acts through derivatives with respect to angles. These differential rules describe the same operators as the matrices in a discrete angular-momentum basis.<br><br>Transforming Cartesian derivatives into spherical polar coordinates $(r, \\theta, \\phi)$, the orbital angular momentum operators take the differential form:
 $$\\boxed{\\hat{L}_z = -i\\hbar\\frac{\\partial}{\\partial\\phi}}$$
 $$\\boxed{\\hat{L}_\\pm = \\hbar e^{\\pm i\\phi} \\left( \\pm \\frac{\\partial}{\\partial\\theta} + i\\cot\\theta\\frac{\\partial}{\\partial\\phi} \\right)}$$
 $$\\boxed{\\hat{L}_x = i\\hbar\\left( \\sin\\phi\\frac{\\partial}{\\partial\\theta} + \\cot\\theta\\cos\\phi\\frac{\\partial}{\\partial\\phi} \\right)}$$
@@ -200,8 +200,8 @@ $$\\boxed{\\hat{L}^2 = -\\hbar^2 \\left[ \\frac{1}{\\sin\\theta}\\frac{\\partial
   {
     id: 'c.6.3.2', sec: '6.3', kind: 'theorem', tier: 'core',
     title: 'Construction of Spherical Harmonics via Ladder Operators',
-    oneLine: 'Setting L̂+|l, l⟩ = 0 uniquely determines the top spherical harmonic Y_l^l ∝ sin^l θ e^{ilφ}, from which all Y_l^m are generated by lowering with L̂-.',
-    statement: `The highest state $|l, l\\rangle$ in an angular momentum multiplet must be annihilated by the raising operator $\\hat{L}_+$:
+    oneLine: "Start from a spherical harmonic at the top of the m ladder, then apply lowering repeatedly.",
+    statement: `<b>Start here.</b> Start from a spherical harmonic at the top of the m ladder, then apply lowering repeatedly. This generates the other angular patterns for the same l.<br><br>The highest state $|l, l\\rangle$ in an angular momentum multiplet must be annihilated by the raising operator $\\hat{L}_+$:
 $$\\hat{L}_+ Y_l^l(\\theta, \\phi) = 0$$
 Using the differential form of $\\hat{L}_+$ and separating $Y_l^l(\\theta, \\phi) = \\Theta(\\theta)e^{il\\phi}$:
 $$\\hbar e^{i\\phi}\\left( \\frac{\\partial}{\\partial\\theta} + i\\cot\\theta\\frac{\\partial}{\\partial\\phi} \\right) \\Theta(\\theta)e^{il\\phi} = 0 \\implies \\frac{d\\Theta}{d\\theta} - l\\cot\\theta \\, \\Theta = 0$$
@@ -227,8 +227,8 @@ $$\\boxed{Y_l^m(\\theta, \\phi) = \\sqrt{\\frac{(l+m)!}{(2l)!(l-m)!}} \\left( \\
   {
     id: 'c.6.4.1', sec: '6.4', kind: 'law', tier: 'core',
     title: 'Experimental Evidence of Spin & The Stern-Gerlach Experiment',
-    oneLine: 'The 1922 Stern-Gerlach experiment with neutral silver atoms revealed spatial quantization into exactly two discrete beams, proving electron spin s = ½.',
-    statement: `In 1922, Otto Stern and Walther Gerlach passed a beam of neutral silver ($^{107}\\text{Ag}$) atoms in their ground state ($5s^1$, orbital angular momentum $L=0$) through an <b>inhomogeneous magnetic field</b> $\\mathbf{B} \\approx (B_0 + z \\frac{\\partial B_z}{\\partial z})\\hat{\\mathbf{z}}$.<br>
+    oneLine: "A Stern–Gerlach apparatus separates a beam according to a spin component.",
+    statement: `<b>Start here.</b> A Stern–Gerlach apparatus separates a beam according to a spin component. The two outcomes for spin one-half show that spin is quantized; it is not a small ball literally rotating.<br><br>In 1922, Otto Stern and Walther Gerlach passed a beam of neutral silver ($^{107}\\text{Ag}$) atoms in their ground state ($5s^1$, orbital angular momentum $L=0$) through an <b>inhomogeneous magnetic field</b> $\\mathbf{B} \\approx (B_0 + z \\frac{\\partial B_z}{\\partial z})\\hat{\\mathbf{z}}$.<br>
 <b>Force on a Magnetic Dipole:</b>
 $$\\mathbf{F} = \\nabla(\\boldsymbol{\\mu} \\cdot \\mathbf{B}) \\approx \\mu_z \\frac{\\partial B_z}{\\partial z} \\hat{\\mathbf{z}}$$
 <b>Classical Prediction:</b>
@@ -255,8 +255,8 @@ where $\\mu_B = \\frac{e\\hbar}{2m_e} \\approx 9.274 \\times 10^{-24} \\text{ J/
   {
     id: 'c.6.4.2', sec: '6.4', kind: 'definition', tier: 'core',
     title: 'Spin 1/2 Formalism & The Pauli Spin Matrices',
-    oneLine: 'The spin operators for a spin-½ particle are Ŝ = (ħ/2) σ, where σ are the Hermitian, traceless, unitary Pauli matrices.',
-    statement: `For a spin-$1/2$ system, the Hilbert space is $\\mathbb{C}^2$ spanned by the orthonormal basis vectors:
+    oneLine: "One spin-one-half needs just two amplitudes: up and down along a chosen axis.",
+    statement: `<b>Start here.</b> One spin-one-half needs just two amplitudes: up and down along a chosen axis. Its spin operators are exact 2 × 2 matrices, equal to ℏ/2 times the Pauli matrices.<br><br>For a spin-$1/2$ system, the Hilbert space is $\\mathbb{C}^2$ spanned by the orthonormal basis vectors:
 $$|\\uparrow\\rangle \\equiv |\\tfrac{1}{2}, +\\tfrac{1}{2}\\rangle = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}, \\qquad |\\downarrow\\rangle \\equiv |\\tfrac{1}{2}, -\\tfrac{1}{2}\\rangle = \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix}$$
 The spin operator is:
 $$\\boxed{\\hat{\\mathbf{S}} = \\frac{\\hbar}{2}\\boldsymbol{\\sigma}, \\qquad \\hat{S}_x = \\frac{\\hbar}{2}\\sigma_x, \\quad \\hat{S}_y = \\frac{\\hbar}{2}\\sigma_y, \\quad \\hat{S}_z = \\frac{\\hbar}{2}\\sigma_z}$$
@@ -286,8 +286,8 @@ $$\\boxed{\\sigma_x = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\qquad 
   {
     id: 'c.6.4.3', sec: '6.4', kind: 'theorem', tier: 'core',
     title: 'Spinors, Measurement Probabilities & The Bloch Sphere',
-    oneLine: 'Any pure spin-½ state is a spinor χ = (a, b)ᵀ mapped onto the unit Bloch sphere by |χ⟩ = cos(θ/2)|↑⟩ + e^{iφ} sin(θ/2)|↓⟩.',
-    statement: `An arbitrary pure spin-$1/2$ state is represented by a two-component <b>spinor</b>:
+    oneLine: "A spinor is the two-entry state column.",
+    statement: `<b>Start here.</b> A spinor is the two-entry state column. The squared magnitudes give up and down probabilities in the chosen basis. A relative phase affects measurements along other axes.<br><br>An arbitrary pure spin-$1/2$ state is represented by a two-component <b>spinor</b>:
 $$\\chi = \\begin{pmatrix} a \\\\ b \\end{pmatrix} = a|\\uparrow\\rangle + b|\\downarrow\\rangle, \\qquad |a|^2 + |b|^2 = 1$$
 <b>Measurement Probabilities along the z-axis:</b>
 - Measuring $S_z$ yields $+\\hbar/2$ with probability $P(\\uparrow) = |a|^2$.
@@ -316,8 +316,8 @@ Spinors do NOT return to their original state under a $360^\\circ$ rotation—th
   {
     id: 'c.6.4.4', sec: '6.4', kind: 'law', tier: 'core',
     title: 'Spin Dynamics & Larmor Precession in a Magnetic Field',
-    oneLine: 'A spin-½ magnetic dipole in a magnetic field B = B₀ ẑ precesses around B at the Larmor frequency ω_L = γ B₀.',
-    statement: `The interaction of a magnetic dipole $\\boldsymbol{\\mu} = \\gamma \\hat{\\mathbf{S}}$ with an external magnetic field $\\mathbf{B} = B_0 \\hat{\\mathbf{z}}$ is governed by the Zeeman Hamiltonian:
+    oneLine: "A magnetic field gives spin states different energies.",
+    statement: `<b>Start here.</b> A magnetic field gives spin states different energies. Their relative phase changes with time, causing the average transverse spin to precess around the field direction.<br><br>The interaction of a magnetic dipole $\\boldsymbol{\\mu} = \\gamma \\hat{\\mathbf{S}}$ with an external magnetic field $\\mathbf{B} = B_0 \\hat{\\mathbf{z}}$ is governed by the Zeeman Hamiltonian:
 $$\\boxed{\\hat{H} = -\\boldsymbol{\\mu} \\cdot \\mathbf{B} = -\\gamma B_0 \\hat{S}_z = -\\frac{\\hbar\\omega_L}{2}\\sigma_z}$$
 where $\\gamma$ is the gyromagnetic ratio and $\\omega_L$ is the <b>Larmor precession frequency</b>:
 $$\\boxed{\\omega_L = \\gamma B_0 = \\frac{g e B_0}{2m}}$$
@@ -344,8 +344,8 @@ The spin vector precesses uniformly in the $xy$-plane perpendicular to $\\mathbf
   {
     id: 'c.6.5.1', sec: '6.5', kind: 'definition', tier: 'core',
     title: 'Addition of Two Angular Momenta: Uncoupled vs Coupled Bases',
-    oneLine: 'Adding Ĵ = Ĵ₁ + Ĵ₂ connects the uncoupled tensor product basis {|j₁, m₁; j₂, m₂⟩} to the coupled total angular momentum basis {|J, M; j₁, j₂⟩}.',
-    statement: `Consider two independent quantum systems with angular momenta $\\hat{\\mathbf{J}}_1$ and $\\hat{\\mathbf{J}}_2$ acting in Hilbert spaces $\\mathcal{H}_1$ (dim $2j_1+1$) and $\\mathcal{H}_2$ (dim $2j_2+1$). Since they act on different degrees of freedom:
+    oneLine: "Two angular momenta can be described separately or by their total.",
+    statement: `<b>Start here.</b> Two angular momenta can be described separately or by their total. These are different bases for the same combined state. A change-of-basis matrix connects the two descriptions.<br><br>Consider two independent quantum systems with angular momenta $\\hat{\\mathbf{J}}_1$ and $\\hat{\\mathbf{J}}_2$ acting in Hilbert spaces $\\mathcal{H}_1$ (dim $2j_1+1$) and $\\mathcal{H}_2$ (dim $2j_2+1$). Since they act on different degrees of freedom:
 $$[\\hat{\\mathbf{J}}_1, \\hat{\\mathbf{J}}_2] = 0$$
 The <b>total angular momentum operator</b> is:
 $$\\boxed{\\hat{\\mathbf{J}} = \\hat{\\mathbf{J}}_1 + \\hat{\\mathbf{J}}_2 = \\hat{\\mathbf{J}}_1 \\otimes I_2 + I_1 \\otimes \\hat{\\mathbf{J}}_2}$$
@@ -373,8 +373,8 @@ $$\\boxed{N = (2j_1 + 1)(2j_2 + 1)}$$`,
   {
     id: 'c.6.5.2', sec: '6.5', kind: 'theorem', tier: 'core',
     title: 'The Triangle Selection Rule for Total Angular Momentum',
-    oneLine: 'The total angular momentum quantum number J takes values in integer steps from |j₁ - j₂| to j₁ + j₂, with M = m₁ + m₂.',
-    statement: `For the addition of two angular momenta $j_1$ and $j_2$, the allowed values of the total angular momentum quantum number $J$ are given by the <b>Triangle Inequality</b>:
+    oneLine: "When j₁ and j₂ combine, the total j ranges from |j₁ − j₂| to j₁ + j₂ in steps of one.",
+    statement: `<b>Start here.</b> When j₁ and j₂ combine, the total j ranges from |j₁ − j₂| to j₁ + j₂ in steps of one. This resembles the allowed lengths when adding two arrows, with quantum restrictions.<br><br>For the addition of two angular momenta $j_1$ and $j_2$, the allowed values of the total angular momentum quantum number $J$ are given by the <b>Triangle Inequality</b>:
 $$\\boxed{|j_1 - j_2| \\le J \\le j_1 + j_2, \\qquad J \\in \\{|j_1 - j_2|, \\; |j_1 - j_2| + 1, \\; \\dots, \\; j_1 + j_2\\}}$$
 For each allowed value of $J$, the total magnetic quantum number $M$ satisfies:
 $$\\boxed{M = m_1 + m_2, \\qquad M \\in \\{-J, -J+1, \\dots, +J\\}}$$
@@ -403,8 +403,8 @@ $$\\sum_{J=|j_1 - j_2|}^{j_1 + j_2}(2J + 1) = (2j_1 + 1)(2j_2 + 1)$$
   {
     id: 'c.6.5.3', sec: '6.5', kind: 'law', tier: 'core',
     title: 'Clebsch-Gordan Coefficients & Selection Rules',
-    oneLine: 'Clebsch-Gordan coefficients ⟨j₁, m₁; j₂, m₂|J, M⟩ are the unitary expansion elements connecting uncoupled and coupled bases.',
-    statement: `The transformation between the uncoupled basis and the coupled basis is given by the <b>Clebsch-Gordan (CG) expansion</b>:
+    oneLine: "Clebsch–Gordan coefficients are the entries of the matrix that changes from separate angular-momentum labels to total-angular-momentum labels.",
+    statement: `<b>Start here.</b> Clebsch–Gordan coefficients are the entries of the matrix that changes from separate angular-momentum labels to total-angular-momentum labels. They are amplitudes; squared magnitudes give probabilities.<br><br>The transformation between the uncoupled basis and the coupled basis is given by the <b>Clebsch-Gordan (CG) expansion</b>:
 $$\\boxed{|J, M\\rangle = \\sum_{m_1=-j_1}^{j_1} \\sum_{m_2=-j_2}^{j_2} C_{m_1 m_2 M}^{j_1 j_2 J} |j_1, m_1; j_2, m_2\\rangle}$$
 where the real expansion coefficients are the <b>Clebsch-Gordan coefficients</b>:
 $$C_{m_1 m_2 M}^{j_1 j_2 J} \\equiv \\langle j_1, m_1; j_2, m_2 | J, M \\rangle$$
@@ -433,8 +433,8 @@ $$\\sum_{J, M} \\langle j_1, m_1; j_2, m_2 | J, M \\rangle \\langle J, M | j_1, 
   {
     id: 'c.6.5.4', sec: '6.5', kind: 'theorem', tier: 'core',
     title: 'Addition of Two Spin-1/2 Particles: Singlet and Triplet States',
-    oneLine: 'Coupling two spin-½ particles yields a symmetric Triplet (S = 1, M = 1, 0, -1) and an antisymmetric Singlet (S = 0, M = 0).',
-    statement: `When adding the spins of two spin-$1/2$ particles ($s_1 = 1/2, s_2 = 1/2$), the total spin quantum number can be $S = 1$ or $S = 0$:
+    oneLine: "Two spin-one-half particles have four basis states.",
+    statement: `<b>Start here.</b> Two spin-one-half particles have four basis states. Three combinations form the total-spin-one triplet; one forms the total-spin-zero singlet. The singlet mixes up-down and down-up with a minus sign.<br><br>When adding the spins of two spin-$1/2$ particles ($s_1 = 1/2, s_2 = 1/2$), the total spin quantum number can be $S = 1$ or $S = 0$:
 $$\\frac{1}{2} \\otimes \\frac{1}{2} = 1 \\oplus 0$$
 <b>1. The Triplet States ($S = 1$, Symmetric under particle exchange $1 \\leftrightarrow 2$):</b>
 $$\\boxed{|1, +1\\rangle = |\\uparrow\\uparrow\\rangle}$$
@@ -462,8 +462,8 @@ By the Pauli Exclusion Principle, two identical fermions (like electrons in heli
   {
     id: 'c.6.5.5', sec: '6.5', kind: 'law', tier: 'core',
     title: 'Spin-Orbit Coupling & Addition of Orbital and Spin Angular Momenta',
-    oneLine: 'Coupling orbital L and spin S yields J = l ± ½, splitting spectral levels via the spin-orbit Hamiltonian H_SO ∝ L̂ · Ŝ = ½(Ĵ² - L̂² - Ŝ²).',
-    statement: `When an electron with orbital angular momentum $\\hat{\\mathbf{L}}$ and spin $\\hat{\\mathbf{S}}$ moves in an atomic potential, the relativistic <b>spin-orbit interaction</b> couples them:
+    oneLine: "Spin-orbit coupling makes energy depend on how orbital and spin angular momenta combine.",
+    statement: `<b>Start here.</b> Spin-orbit coupling makes energy depend on how orbital and spin angular momenta combine. Use total J to organize the states because L and S are coupled.<br><br>When an electron with orbital angular momentum $\\hat{\\mathbf{L}}$ and spin $\\hat{\\mathbf{S}}$ moves in an atomic potential, the relativistic <b>spin-orbit interaction</b> couples them:
 $$\\hat{H}_{\\text{SO}} = \\xi(r) \\hat{\\mathbf{L}} \\cdot \\hat{\\mathbf{S}}$$
 The total angular momentum is:
 $$\\hat{\\mathbf{J}} = \\hat{\\mathbf{L}} + \\hat{\\mathbf{S}}$$

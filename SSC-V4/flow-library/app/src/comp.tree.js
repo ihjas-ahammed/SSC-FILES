@@ -204,7 +204,8 @@ const Tree = (function () {
         state: lv >= 1 ? 'true' : 'false', lv: lv,
         label: lv === 0 ? 'Mark "' + c.title + '" as read' + extNote
           : lv === 1 ? 'Mark the proof of "' + c.title + '" as complete' + extNote
-            : 'Clear "' + c.title + '"'
+            : lv === 2 ? 'Mark all exercises in §' + c.sec + ' as complete'
+              : 'Clear "' + c.title + '"'
       };
     }, function () {
       const was = Progress.level(c.id);

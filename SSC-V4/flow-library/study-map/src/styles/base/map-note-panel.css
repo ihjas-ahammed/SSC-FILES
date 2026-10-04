@@ -1,0 +1,130 @@
+/* Desktop side reader and precise world-projected selection surfaces. */
+
+.stellar-map-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+.stellar-map-body > .stellar-map-screen {
+  min-width: 0;
+}
+.map-note-panel {
+  flex: 0 0 clamp(340px, 32vw, 480px);
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: #0b1521;
+  border-right: 1px solid #253b4e;
+  padding: 18px 22px 30px;
+}
+.map-note-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.map-note-heading .eyebrow {
+  font-size: 9px;
+}
+.map-note-panel .concept-note h2 {
+  font-size: 30px;
+  overflow-wrap: anywhere;
+}
+.map-note-panel .concept-note p,
+.map-note-panel .example-card {
+  font-size: 17px;
+  line-height: 1.8;
+}
+.map-note-panel .note-meta {
+  flex-wrap: wrap;
+}
+.map-note-panel .reader-tabs {
+  padding: 0;
+}
+/* Round, depth-sorted hit areas track each projected sphere; visible frames are WebGL. */
+.stellar-labels .stellar-skill {
+  border-radius: 50%;
+  outline: none;
+}
+.stellar-skill .skill-glyph,
+.stellar-skill .skill-stop {
+  pointer-events: none;
+}
+.stellar-skill.selected .skill-name {
+  border: 0;
+}
+.stellar-path:focus-visible {
+  outline: none;
+}
+@media (max-width: 760px) {
+  .stellar-map-body {
+    display: block;
+  }
+}
+
+.map-note-window-actions {
+  display: flex;
+  gap: 3px;
+  flex: none;
+}
+.map-panel-resize {
+  flex: 0 0 7px;
+  cursor: col-resize;
+  touch-action: none;
+  background: #102333;
+  position: relative;
+}
+.map-panel-resize:hover,
+.map-panel-resize:focus-visible {
+  background: #377286;
+}
+.map-panel-resize::after {
+  content: "";
+  position: absolute;
+  top: 45%;
+  height: 36px;
+  left: 3px;
+  border-left: 1px solid #7397a7;
+}
+.focused-reader-modal {
+  width: min(1100px, calc(100vw - 48px));
+  height: calc(100dvh - 48px);
+  max-height: calc(100dvh - 48px);
+  max-width: calc(100vw - 48px);
+  min-width: 340px;
+  min-height: 360px;
+  resize: both;
+}
+.focused-reader-modal > .reader-wrapper {
+  flex: 1;
+}
+.note-transition-hint {
+  margin: 0 0 12px;
+  color: #81b9c9;
+  font-size: 12px;
+}
+@media (max-width: 760px) {
+  .map-panel-resize {
+    display: none;
+  }
+  .focused-reader-modal {
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    resize: none;
+  }
+}
+
+.route-screen::after,
+.mobile-stellar-content::after {
+  content: "";
+  display: block;
+  height: var(--note-scroll-tail, 0px);
+}
+.map-note-panel .note-heading > div {
+  min-width: 0;
+}

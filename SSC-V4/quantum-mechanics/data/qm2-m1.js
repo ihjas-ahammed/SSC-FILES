@@ -12,8 +12,8 @@ CONCEPTS.push(
   {
     id: 'c.5.1.1', sec: '5.1', kind: 'law', tier: 'core',
     title: 'Spherical Polar Coordinates & The Laplacian Operator',
-    oneLine: 'In spherical polar coordinates (r, θ, φ), the 3D Laplacian separates cleanly into a radial derivative and the orbital angular momentum operator ∇² = (1/r²)(∂/∂r)(r² ∂/∂r) - L̂²/(ħ² r²).',
-    statement: `In <b>spherical polar coordinates</b> $(r, \\theta, \\phi)$ related to Cartesian coordinates by:
+    oneLine: "For a force that depends only on distance from a centre, use distance r and two angles.",
+    statement: `<b>Start here.</b> For a force that depends only on distance from a centre, use distance r and two angles. The Laplacian is the three-dimensional curvature rule written in these coordinates.<br><br>In <b>spherical polar coordinates</b> $(r, \\theta, \\phi)$ related to Cartesian coordinates by:
 $$x = r\\sin\\theta\\cos\\phi, \\quad y = r\\sin\\theta\\sin\\phi, \\quad z = r\\cos\\theta$$
 where $r \\in [0, \\infty)$, $\\theta \\in [0, \\pi]$, and $\\phi \\in [0, 2\\pi)$, the <b>Laplacian operator</b> $\\nabla^2$ is:
 $$\\boxed{\\nabla^2 = \\frac{1}{r^2}\\frac{\\partial}{\\partial r}\\left(r^2\\frac{\\partial}{\\partial r}\\right) + \\frac{1}{r^2\\sin\\theta}\\frac{\\partial}{\\partial \\theta}\\left(\\sin\\theta\\frac{\\partial}{\\partial \\theta}\\right) + \\frac{1}{r^2\\sin^2\\theta}\\frac{\\partial^2}{\\partial\\phi^2}}$$
@@ -38,8 +38,8 @@ This proves that the angular kinetic energy of a quantum particle in 3D is preci
   {
     id: 'c.5.1.2', sec: '5.1', kind: 'theorem', tier: 'core',
     title: 'Separation of Variables for Central Potentials',
-    oneLine: 'For any spherically symmetric potential V(r), the time-independent Schrödinger equation separates into a radial ODE and an angular PDE with separation constant l(l+1).',
-    statement: `For a <b>central potential</b> $V(\\mathbf{r}) = V(r)$, the time-independent Schrödinger equation:
+    oneLine: "Try writing the wave as a radial part times an angular part.",
+    statement: `<b>Start here.</b> Try writing the wave as a radial part times an angular part. A central potential lets the equation split into distance and direction problems, linked by an angular-momentum constant.<br><br>For a <b>central potential</b> $V(\\mathbf{r}) = V(r)$, the time-independent Schrödinger equation:
 $$-\\frac{\\hbar^2}{2m}\\nabla^2\\psi(r, \\theta, \\phi) + V(r)\\psi(r, \\theta, \\phi) = E\\psi(r, \\theta, \\phi)$$
 admits separable solutions of the product form:
 $$\\boxed{\\psi(r, \\theta, \\phi) = R(r) Y(\\theta, \\phi)}$$
@@ -94,8 +94,8 @@ Substituting into the Schrödinger equation and dividing by $R(r)Y(\\theta, \\ph
   {
     id: 'c.5.1.3', sec: '5.1', kind: 'law', tier: 'core',
     title: 'Complete Set of Commuting Observables (CSCO) for Central Potentials',
-    oneLine: 'In any central field, {Ĥ, L̂², L̂z} forms a Complete Set of Commuting Observables, with stationary states uniquely labelled by |n, l, m⟩.',
-    statement: `For any spherically symmetric Hamiltonian $\\hat{H} = \\frac{\\hat{p}^2}{2m} + V(r)$, the Hamiltonian commutes with all components of orbital angular momentum:
+    oneLine: "Energy, total orbital angular momentum squared and its z component can label the same state.",
+    statement: `<b>Start here.</b> Energy, total orbital angular momentum squared and its z component can label the same state. Their common eigenvalues are the labels n, l and m used for central-potential states.<br><br>For any spherically symmetric Hamiltonian $\\hat{H} = \\frac{\\hat{p}^2}{2m} + V(r)$, the Hamiltonian commutes with all components of orbital angular momentum:
 $$\\boxed{[\\hat{H}, \\hat{\\mathbf{L}}] = 0, \\qquad [\\hat{H}, \\hat{L}^2] = 0, \\qquad [\\hat{H}, \\hat{L}_z] = 0}$$
 Because $[\\hat{L}_x, \\hat{L}_y] = i\\hbar\\hat{L}_z \\neq 0$, the components $\\hat{L}_x, \\hat{L}_y, \\hat{L}_z$ do not commute with each other. Therefore, the maximal set of mutually commuting operators is the <b>Complete Set of Commuting Observables (CSCO)</b>:
 $$\\boxed{\\text{CSCO} = \\{ \\hat{H}, \\hat{L}^2, \\hat{L}_z \\}}$$
@@ -117,8 +117,8 @@ $$\\hat{H}\\psi_{nlm} = E_{nl}\\psi_{nlm}, \\quad \\hat{L}^2\\psi_{nlm} = l(l+1)
   {
     id: 'c.5.2.1', sec: '5.2', kind: 'theorem', tier: 'core',
     title: 'Separation of the Angular Equation & Azimuthal Quantization',
-    oneLine: 'The angular equation separates into Y(θ, φ) = Θ(θ)Φ(φ), where single-valuedness of Φ(φ) = e^{imφ} requires m to be an integer: m ∈ ℤ.',
-    statement: `The angular eigenvalue equation $\\hat{L}^2 Y(\\theta, \\phi) = l(l+1)\\hbar^2 Y(\\theta, \\phi)$ expands explicitly as:
+    oneLine: "The wave must match itself after a full turn around the z axis.",
+    statement: `<b>Start here.</b> The wave must match itself after a full turn around the z axis. That matching rule makes the azimuthal label m an integer.<br><br>The angular eigenvalue equation $\\hat{L}^2 Y(\\theta, \\phi) = l(l+1)\\hbar^2 Y(\\theta, \\phi)$ expands explicitly as:
 $$-\\left[ \\frac{1}{\\sin\\theta}\\frac{\\partial}{\\partial\\theta}\\left(\\sin\\theta\\frac{\\partial Y}{\\partial\\theta}\\right) + \\frac{1}{\\sin^2\\theta}\\frac{\\partial^2 Y}{\\partial\\phi^2} \\right] = l(l+1)Y$$
 Assuming a product solution:
 $$\\boxed{Y(\\theta, \\phi) = \\Theta(\\theta) \\Phi(\\phi)}$$
@@ -146,8 +146,8 @@ $$\\Phi(\\phi + 2\\pi) = \\Phi(\\phi) \\implies e^{i 2\\pi m} = 1 \\implies \\bo
   {
     id: 'c.5.2.2', sec: '5.2', kind: 'definition', tier: 'core',
     title: 'Associated Legendre Functions & Orbital Angular Momentum Quantization',
-    oneLine: 'Requiring Θ(θ) to be finite at θ = 0 and θ = π forces l to be a non-negative integer l ∈ {0, 1, 2, ...} with |m| ≤ l.',
-    statement: `With the substitution $\\xi = \\cos\\theta \\in [-1, 1]$, the polar equation becomes the <b>associated Legendre differential equation</b>:
+    oneLine: "The angular wave must remain acceptable at both poles.",
+    statement: `<b>Start here.</b> The angular wave must remain acceptable at both poles. This restricts l to non-negative integers and m to the integers from −l to l.<br><br>With the substitution $\\xi = \\cos\\theta \\in [-1, 1]$, the polar equation becomes the <b>associated Legendre differential equation</b>:
 $$\\boxed{(1 - \\xi^2)\\frac{d^2\\Theta}{d\\xi^2} - 2\\xi\\frac{d\\Theta}{d\\xi} + \\left[ l(l+1) - \\frac{m^2}{1 - \\xi^2} \\right]\\Theta = 0}$$
 The non-singular solutions on the interval $\\xi \\in [-1, 1]$ are the <b>associated Legendre functions</b> $P_l^m(\\cos\\theta)$, defined from the standard <b>Legendre polynomials</b> $P_l(\\xi)$ via:
 $$\\boxed{P_l^m(\\xi) = (-1)^m (1 - \\xi^2)^{m/2} \\frac{d^m}{d\\xi^m}P_l(\\xi) \\quad (m \\ge 0)}$$
@@ -170,8 +170,8 @@ $$\\boxed{l = 0, 1, 2, 3, \\dots, \\qquad m = -l, -l+1, \\dots, +l \\quad (2l+1 
   {
     id: 'c.5.2.3', sec: '5.2', kind: 'law', tier: 'core',
     title: 'Spherical Harmonics Y_l^m(θ, φ) & Spatial Parity',
-    oneLine: 'Spherical harmonics form an orthonormal basis on the unit sphere, with definite spatial parity Π̂ Y_l^m(θ, φ) = (-1)^l Y_l^m(θ, φ).',
-    statement: `The normalized simultaneous eigenfunctions of $\\hat{L}^2$ and $\\hat{L}_z$ are the <b>Spherical Harmonics</b> $Y_l^m(\\theta, \\phi)$:
+    oneLine: "Spherical harmonics are the standard angular wave patterns.",
+    statement: `<b>Start here.</b> Spherical harmonics are the standard angular wave patterns. They describe direction, while the radial function describes distance. Their parity is set by whether l is even or odd.<br><br>The normalized simultaneous eigenfunctions of $\\hat{L}^2$ and $\\hat{L}_z$ are the <b>Spherical Harmonics</b> $Y_l^m(\\theta, \\phi)$:
 $$\\boxed{Y_l^m(\\theta, \\phi) = (-1)^m \\sqrt{\\frac{2l+1}{4\\pi}\\frac{(l-m)!}{(l+m)!}} P_l^m(\\cos\\theta) e^{im\\phi} \\quad (m \\ge 0)}$$
 For negative $m$, $Y_l^{-m}(\\theta, \\phi) = (-1)^m [Y_l^m(\\theta, \\phi)]^*$.<br>
 <b>Lowest Spherical Harmonics:</b>
@@ -198,8 +198,8 @@ $$\\boxed{\\hat{\\Pi} Y_l^m(\\theta, \\phi) = Y_l^m(\\pi-\\theta, \\phi+\\pi) = 
   {
     id: 'c.5.2.4', sec: '5.2', kind: 'theorem', tier: 'core',
     title: 'Completeness & Angular Function Expansions',
-    oneLine: 'Any square-integrable angular function f(θ, φ) on the unit sphere can be expanded as a generalized Fourier series in spherical harmonics.',
-    statement: `Because the spherical harmonics $\{Y_l^m\}$ form a complete orthonormal basis on the sphere $S^2$, any arbitrary angular wavefunction $f(\\theta, \\phi)$ can be uniquely expanded as:
+    oneLine: "An acceptable angular function can be expanded in spherical harmonics, just as a vector can be expanded in coordinate directions.",
+    statement: `<b>Start here.</b> An acceptable angular function can be expanded in spherical harmonics, just as a vector can be expanded in coordinate directions. The expansion coefficients form its component list.<br><br>Because the spherical harmonics $\{Y_l^m\}$ form a complete orthonormal basis on the sphere $S^2$, any arbitrary angular wavefunction $f(\\theta, \\phi)$ can be uniquely expanded as:
 $$\\boxed{f(\\theta, \\phi) = \\sum_{l=0}^\\infty \\sum_{m=-l}^l c_{lm} Y_l^m(\\theta, \\phi)}$$
 where the expansion coefficients are computed via the projection integral:
 $$\\boxed{c_{lm} = \\langle Y_l^m | f \\rangle = \\int_0^{2\\pi} d\\phi \\int_0^\\pi \\sin\\theta \\, d\\theta \\; Y_l^m(\\theta, \\phi)^* f(\\theta, \\phi)}$$
@@ -223,8 +223,8 @@ $$\\boxed{P(l, m) = |c_{lm}|^2}$$`,
   {
     id: 'c.5.3.1', sec: '5.3', kind: 'law', tier: 'core',
     title: 'The Radial Equation & Centrifugal Potential Barrier',
-    oneLine: 'Substituting u(r) = r R(r) transforms the radial ODE into an effective 1D Schrödinger equation with centrifugal barrier V_eff(r) = V(r) + ħ²l(l+1)/(2mr²).',
-    statement: `The radial equation for $R(r)$:
+    oneLine: "Writing u = rR makes the radial equation look like a one-dimensional wave equation.",
+    statement: `<b>Start here.</b> Writing u = rR makes the radial equation look like a one-dimensional wave equation. Angular momentum adds an effective barrier that makes reaching the centre harder when l is nonzero.<br><br>The radial equation for $R(r)$:
 $$\\frac{1}{r^2}\\frac{d}{dr}\\left(r^2\\frac{dR}{dr}\\right) - \\frac{2m}{\\hbar^2}\\left[V(r) - E\\right]R(r) = \\frac{l(l+1)}{r^2}R(r)$$
 is transformed by introducing the <b>modified radial function</b>:
 $$\\boxed{u(r) \\equiv r R(r)}$$
@@ -277,8 +277,8 @@ The additional term $\\frac{\\hbar^2 l(l+1)}{2mr^2}$ is the <b>centrifugal poten
   {
     id: 'c.5.3.2', sec: '5.3', kind: 'theorem', tier: 'core',
     title: 'Boundary Conditions & Behavior of Radial Functions Near the Origin',
-    oneLine: 'Physical normalizability requires u(0) = 0, and for r → 0 the radial function scales as R(r) ~ r^l while u(r) ~ r^{l+1}.',
-    statement: `<b>Boundary Condition at the Origin:</b>
+    oneLine: "A radial solution must obey the physical boundary conditions at the centre and at large distance or the wall.",
+    statement: `<b>Start here.</b> A radial solution must obey the physical boundary conditions at the centre and at large distance or the wall. A formula that solves the differential equation can still be rejected by these conditions.<br><br><b>Boundary Condition at the Origin:</b>
 Because $R(r) = u(r)/r$, for the 3D wave function $\\psi$ to remain finite and avoid a delta-function singularity in $\\nabla^2(1/r) = -4\\pi\\delta^3(\\mathbf{r})$:
 $$\\boxed{u(0) = 0}$$
 <b>Normalization Condition:</b>
@@ -305,8 +305,8 @@ $$\\boxed{R(r) \\propto r^l \\quad (r \\to 0)}$$`,
   {
     id: 'c.5.3.3', sec: '5.3', kind: 'law', tier: 'core',
     title: 'The Infinite Spherical Well & Spherical Bessel Functions',
-    oneLine: 'Inside an infinite spherical well of radius a, the radial solutions are spherical Bessel functions R(r) = A j_l(kr), with quantized energies E_nl = ħ²β_nl²/(2ma²).',
-    statement: `The <b>Infinite Spherical Well</b> potential is:
+    oneLine: "Inside a spherical box the potential is constant; at its wall the wave must vanish.",
+    statement: `<b>Start here.</b> Inside a spherical box the potential is constant; at its wall the wave must vanish. The zeros of spherical Bessel functions select the allowed energies.<br><br>The <b>Infinite Spherical Well</b> potential is:
 $$V(r) = \\begin{cases} 0 & r \\le a \\\\ \\infty & r > a \\end{cases}$$
 Inside the well ($r \\le a$), with $k = \\frac{\\sqrt{2mE}}{\\hbar}$, the radial equation is the <b>spherical Bessel differential equation</b>:
 $$\\boxed{\\frac{d^2 R}{dr^2} + \\frac{2}{r}\\frac{dR}{dr} + \\left[ k^2 - \\frac{l(l+1)}{r^2} \\right]R = 0}$$
@@ -333,8 +333,8 @@ $$\\boxed{E_{nl} = \\frac{\\hbar^2 \\beta_{nl}^2}{2m a^2}}$$`,
   {
     id: 'c.5.3.4', sec: '5.3', kind: 'theorem', tier: 'core',
     title: 'Zero Angular Momentum (l = 0) States & Degeneracy Spectrum',
-    oneLine: 'For s-states (l = 0), the infinite spherical well spectrum E_n0 = n²π²ħ²/(2ma²) exactly reproduces the 1D infinite square well.',
-    statement: `For spherically symmetric $s$-states ($l = 0$), the spherical Bessel function is:
+    oneLine: "When l = 0, the centrifugal barrier is absent and the radial standing wave is especially simple.",
+    statement: `<b>Start here.</b> When l = 0, the centrifugal barrier is absent and the radial standing wave is especially simple. The radial label starts at one, and its energy grows as that label squared.<br><br>For spherically symmetric $s$-states ($l = 0$), the spherical Bessel function is:
 $$\\boxed{j_0(kr) = \\frac{\\sin(kr)}{kr}}$$
 The boundary condition $j_0(ka) = 0$ requires $\\sin(ka) = 0$, giving exact zeros:
 $$\\boxed{\\beta_{n0} = n\\pi, \\qquad n = 1, 2, 3, \\dots}$$
@@ -364,8 +364,8 @@ Comparing roots across different $l$:
   {
     id: 'c.5.4.1', sec: '5.4', kind: 'law', tier: 'core',
     title: 'The Two-Body Coulomb Hamiltonian & Reduced Mass Reduction',
-    oneLine: 'The two-body electron-proton Coulomb system separates into center-of-mass translation and relative motion with reduced mass μ = m_e m_p / (m_e + m_p) ≈ m_e.',
-    statement: `The <b>Hydrogen Atom</b> consists of a proton of mass $m_p$ and charge $+e$ and an electron of mass $m_e$ and charge $-e$ interacting via the attractive <b>Coulomb potential</b>:
+    oneLine: "The electron and nucleus both move.",
+    statement: `<b>Start here.</b> The electron and nucleus both move. Separate the motion of their centre of mass from their relative motion; the relative problem uses the reduced mass.<br><br>The <b>Hydrogen Atom</b> consists of a proton of mass $m_p$ and charge $+e$ and an electron of mass $m_e$ and charge $-e$ interacting via the attractive <b>Coulomb potential</b>:
 $$\\boxed{V(r) = -\\frac{e^2}{4\\pi\\varepsilon_0 r} = -\\frac{k e^2}{r}}$$
 Transforming from laboratory coordinates $(\\mathbf{r}_p, \\mathbf{r}_e)$ to center-of-mass $\\mathbf{R} = \\frac{m_p\\mathbf{r}_p + m_e\\mathbf{r}_e}{m_p + m_e}$ and relative position $\\mathbf{r} = \\mathbf{r}_e - \\mathbf{r}_p$, the total Hamiltonian separates:
 $$\\hat{H}_{\\text{tot}} = -\\frac{\\hbar^2}{2M}\\nabla_R^2 - \\frac{\\hbar^2}{2\\mu}\\nabla_r^2 + V(r)$$
@@ -387,8 +387,8 @@ $$\\boxed{-\\frac{\\hbar^2}{2\\mu}\\nabla^2\\psi(\\mathbf{r}) - \\frac{e^2}{4\\p
   {
     id: 'c.5.4.2', sec: '5.4', kind: 'theorem', tier: 'core',
     title: 'Asymptotic Analysis & Series Solution of the Radial Coulomb Equation',
-    oneLine: 'Asymptotic limits u(ρ) ~ ρ^{l+1} (ρ→0) and u(ρ) ~ e^{-ρ/2} (ρ→∞) peel off the divergent factors, leaving a terminating polynomial v(ρ).',
-    statement: `For bound states ($E < 0$), define the wave number $\\kappa = \\frac{\\sqrt{-2\\mu E}}{\\hbar}$ and dimensionless radial variable:
+    oneLine: "To solve the hydrogen radial equation, first find how the wave behaves near the centre and far away.",
+    statement: `<b>Start here.</b> To solve the hydrogen radial equation, first find how the wave behaves near the centre and far away. Factor out those behaviours, then solve for the remaining series.<br><br>For bound states ($E < 0$), define the wave number $\\kappa = \\frac{\\sqrt{-2\\mu E}}{\\hbar}$ and dimensionless radial variable:
 $$\\rho \\equiv 2\\kappa r, \\qquad \\rho_0 \\equiv \\frac{2\\mu}{\\hbar^2 \\kappa}\\left(\\frac{e^2}{4\\pi\\varepsilon_0}\\right)$$
 The radial equation for $u(\\rho) = r R(r)$ becomes:
 $$\\frac{d^2 u}{d\\rho^2} = \\left[ \\frac{1}{4} - \\frac{\\rho_0}{\\rho} + \\frac{l(l+1)}{\\rho^2} \\right]u$$
@@ -415,8 +415,8 @@ $$\\boxed{c_{j+1} = \\frac{j + l + 1 - \\rho_0 / 2}{(j + 1)(j + 2l + 2)} c_j}$$`
   {
     id: 'c.5.4.3', sec: '5.4', kind: 'law', tier: 'core',
     title: 'Hydrogen Energy Eigenvalues, Bohr Radius & The Rydberg Formula',
-    oneLine: 'Series termination truncates at j_max, defining the principal quantum number n = j_max + l + 1 and yielding Bohr energy levels E_n = -13.6 eV / n².',
-    statement: `The series terminates at $j = j_{\\text{max}}$ when the numerator of the recursion relation vanishes:
+    oneLine: "Hydrogen’s bound energies are negative and proportional to −1/n².",
+    statement: `<b>Start here.</b> Hydrogen’s bound energies are negative and proportional to −1/n². The Bohr radius sets the size scale. Energy differences determine the wavelengths of emitted or absorbed light.<br><br>The series terminates at $j = j_{\\text{max}}$ when the numerator of the recursion relation vanishes:
 $$j_{\\text{max}} + l + 1 - \\frac{\\rho_0}{2} = 0$$
 Define the <b>principal quantum number</b> $n$:
 $$\\boxed{n \\equiv j_{\\text{max}} + l + 1 = \\frac{\\rho_0}{2} \\in \\{1, 2, 3, \\dots\\}}$$
@@ -443,8 +443,8 @@ $$\\frac{1}{\\lambda} = R_\\infty \\left( \\frac{1}{n_f^2} - \\frac{1}{n_i^2} \\
   {
     id: 'c.5.4.4', sec: '5.4', kind: 'theorem', tier: 'core',
     title: 'Orbital & Spin Degeneracy of Hydrogen Energy Levels',
-    oneLine: 'Each hydrogen energy level E_n has an exact n²-fold orbital degeneracy (2n² including electron spin), reflecting the hidden SO(4) symmetry of the 1/r Coulomb potential.',
-    statement: `For a given principal quantum number $n$, the energy $E_n$ depends solely on $n$, and is completely independent of $l$ and $m$.<br>
+    oneLine: "In the nonrelativistic Coulomb model, many different angular states share one energy.",
+    statement: `<b>Start here.</b> In the nonrelativistic Coulomb model, many different angular states share one energy. Counting them gives n² spatial states; including the electron’s two spin states doubles this count.<br><br>For a given principal quantum number $n$, the energy $E_n$ depends solely on $n$, and is completely independent of $l$ and $m$.<br>
 <b>Total Orbital Degeneracy $g_n$:</b>
 Summing the $(2l+1)$ magnetic substates over all allowed values of $l \\in \\{0, 1, \\dots, n-1\\}$:
 $$\\boxed{g_n = \\sum_{l=0}^{n-1}(2l + 1) = 2\\sum_{l=0}^{n-1}l + \\sum_{l=0}^{n-1}1 = 2\\frac{(n-1)n}{2} + n = n^2}$$
@@ -468,8 +468,8 @@ $$\\boxed{g_n^{\\text{total}} = 2n^2}$$
   {
     id: 'c.5.4.5', sec: '5.4', kind: 'definition', tier: 'core',
     title: 'Hydrogen Radial Wave Functions & Associated Laguerre Polynomials',
-    oneLine: 'The radial wave functions R_nl(r) are expressed analytically via associated Laguerre polynomials L_{n-l-1}^{2l+1}(2r/na₀), having n - l - 1 radial nodes.',
-    statement: `The normalized <b>radial wave functions</b> of hydrogen are:
+    oneLine: "Hydrogen’s radial waves combine a decaying exponential with a polynomial.",
+    statement: `<b>Start here.</b> Hydrogen’s radial waves combine a decaying exponential with a polynomial. The polynomial determines radial nodes; n and l determine which pattern is allowed.<br><br>The normalized <b>radial wave functions</b> of hydrogen are:
 $$\\boxed{R_{nl}(r) = -\\left( \\frac{2}{n a_0} \\right)^{3/2} \\sqrt{\\frac{(n-l-1)!}{2n [(n+l)!]^3}} e^{-r/n a_0} \\left( \\frac{2r}{n a_0} \\right)^l L_{n+l}^{2l+1}\\left( \\frac{2r}{n a_0} \\right)}$$
 <b>Explicit Low-Lying Radial Wave Functions:</b>
 <ul>
@@ -504,8 +504,8 @@ Nodes in the radial wavefunction represent points where the electron has zero pr
   {
     id: 'c.5.4.6', sec: '5.4', kind: 'law', tier: 'core',
     title: 'Radial Probability Density & Expectation Values for Hydrogen',
-    oneLine: 'The probability of finding the electron between r and r+dr is P(r)dr = r²|R_nl(r)|²dr, peaking at r = a₀ for the 1s ground state.',
-    statement: `The probability of finding the electron in a spherical shell of radius $r$ and thickness $dr$ (integrated over all angles $\\theta, \\phi$) is the <b>radial probability density</b> $P(r)$:
+    oneLine: "A thin spherical shell contains more volume at larger r.",
+    statement: `<b>Start here.</b> A thin spherical shell contains more volume at larger r. Therefore the radial probability uses r² times the squared radial wave, rather than the squared wave alone.<br><br>The probability of finding the electron in a spherical shell of radius $r$ and thickness $dr$ (integrated over all angles $\\theta, \\phi$) is the <b>radial probability density</b> $P(r)$:
 $$\\boxed{P_{nl}(r) = r^2 |R_{nl}(r)|^2}$$
 For the $1s$ ground state:
 $$P_{10}(r) = r^2 \\left( 2 a_0^{-3/2} e^{-r/a_0} \\right)^2 = \\frac{4}{a_0^3} r^2 e^{-2r/a_0}$$

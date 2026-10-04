@@ -16,6 +16,8 @@
        realLine: true,                optional — draw the real-line widget
                                         (comp.realline.js) under inequalities
        pyqLabel: 'JAM past papers',   optional — what the level-4 rung is called (default shown)
+       studyMaps: [{ title, href,     optional — adds Study Map tab; absent by default
+                     description, summary }],   only configured modules are listed
        figZoom: true,                 optional — click a rendered diagram to open it
                                         full-screen with zoom (comp.zoom.js)
        hooks: {                       optional — each is called if present

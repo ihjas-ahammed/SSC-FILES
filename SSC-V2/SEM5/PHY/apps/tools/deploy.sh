@@ -8,7 +8,15 @@
 set -e
 APPS="$(cd "$(dirname "$0")/.." && pwd)"
 REPO="$(cd "$(dirname "$0")/../../../../.." && pwd)"
-TMP="$(mktemp -d)"; mkdir -p "$TMP/public"
+# Keep staging beside the checkout, and optionally prepare without publishing.
+PREPARE_DIR=""
+for ((i=1; i<=$#; i++)); do
+  if [ "${!i}" = "--prepare" ]; then
+    j=$((i+1)); PREPARE_DIR="${!j}"
+    [ -n "$PREPARE_DIR" ] || { echo "--prepare needs a directory" >&2; exit 1; }
+  fi
+done
+TMP="$(mktemp -d "$REPO/.deploy-stage.XXXXXX")"; mkdir -p "$TMP/public"
 trap 'rm -rf "$TMP"' EXIT
 
 # Stage a page that is committed but missing from the working tree.
@@ -127,6 +135,21 @@ if [ -n "$QM" ] && [ -f "$QM/build.py" ]; then
   if [ -d "$QM/diagrams" ]; then
     cp -r "$QM/diagrams" "$TMP/public/phy/quantum-mechanics/diagrams"
   fi
+
+  # The module is an offline bundle built from flow-library/study-map. Stage it
+  # with both QM entry points so the catalogue never points to a missing page.
+  if [ "$REBUILD_LIVE" = "1" ]; then
+    echo "Rebuilding the LIVE Module 3 study map from the shared engine ..."
+    (cd "$QM/study-map" && npm run build)
+  fi
+  STUDY_MAP="$QM/study-map/build/index.html"
+  if [ ! -s "$STUDY_MAP" ]; then
+    echo "ERROR: QM study-map bundle missing. Run npm run build in $QM/study-map." >&2
+    exit 1
+  fi
+  mkdir -p "$TMP/public/phy/quantum-mechanics/study-map/module-3"
+  cp "$STUDY_MAP" "$TMP/public/phy/quantum-mechanics/study-map/module-3/index.html"
+  cp "$QM/study-map/THIRD-PARTY-NOTICES.txt" "$TMP/public/phy/quantum-mechanics/study-map/module-3/THIRD-PARTY-NOTICES.txt"
 
   python3 "$QM/build.py" --mock > /dev/null
   mkdir -p "$TMP/public/phy/quantum-mechanics-test"
@@ -285,6 +308,13 @@ cat > "$TMP/firebase.json" <<'JSON'
 JSON
 echo '{ "projects": { "default": "data-science-ef878" } }' > "$TMP/.firebaserc"
 
+if [ -n "$PREPARE_DIR" ]; then
+  mkdir -p "$PREPARE_DIR"
+  cp -r "$TMP/." "$PREPARE_DIR/"
+  echo "Prepared hosting files in $PREPARE_DIR (no deployment)."
+  exit 0
+fi
+
 echo "Publishing $(ls "$TMP/public" | wc -l) files..."
 cd "$TMP"
 firebase deploy --only hosting:ssc-data-science-qm --project data-science-ef878
@@ -305,6 +335,7 @@ echo ""
 echo "Quantum Mechanics study system:"
 echo "  → $BASE/phy/quantum-mechanics       (validated data)"
 echo "  → $BASE/phy/quantum-mechanics-test  (mock data — safe to break)"
+echo "  → $BASE/phy/quantum-mechanics/study-map/module-3/  (offline study map)"
 echo ""
 echo "Optics study system:"
 echo "  → $BASE/phy/optics       (validated data)"

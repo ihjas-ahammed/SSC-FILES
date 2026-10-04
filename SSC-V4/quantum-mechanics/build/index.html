@@ -1167,6 +1167,15 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .pace-levels button { flex:1 1 auto; min-height:38px; }
 .lv5 { color:var(--accent); }
 
+/* Optional study-map catalogue; does not change other views. */
+.study-map-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.study-map-entry { display: flex; align-items: center; gap: 16px; padding: 22px; border: 1px solid var(--rule); border-radius: var(--r-m); color: var(--ink); background: var(--surface); text-decoration: none; min-width: 0; }
+.study-map-entry:hover { border-color: var(--accent); }
+.study-map-entry:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.study-map-entry-copy { display: grid; gap: 6px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.study-map-entry-copy b { font-size: 1.2rem; }
+@media (max-width: 600px) { .study-map-entry { padding: 18px 14px; gap: 10px; } }
+
 </style>
 <style>
 /* ── project/theme.css ── */
@@ -1386,6 +1395,15 @@ a.card:hover,button.card:hover{ box-shadow:var(--shadow-2), var(--qm-glow); }
 @media (prefers-reduced-motion: reduce){
   :root[data-theme=dark] body::after{ animation:none; }
 }
+
+/* Direct matrix previews; no formula buttons or instruction panels. */
+.qm-tappable-symbol { cursor:pointer; border-bottom:1px dotted var(--accent); }
+.qm-tappable-symbol:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.qm-matrix-popover { position:fixed; z-index:10000; width:max-content; max-width:calc(100vw - 16px); max-height:calc(100dvh - 16px); overflow:auto; padding:20px 24px 12px; border:1px solid var(--rule); border-radius:10px; background:var(--paper); color:var(--ink); box-shadow:0 8px 28px #0004; }
+.qm-matrix-formula { overflow-x:auto; max-width:360px; }
+.qm-matrix-popover small { display:block; margin-top:8px; color:var(--ink-2); font-size:11px; }
+.qm-matrix-close { position:absolute; top:2px; right:5px; border:0; background:transparent; color:var(--ink-2); font-size:20px; cursor:pointer; padding:0 4px; }
+.qm-learning-figure img { background:#fff; }
 
 </style>
 
@@ -4270,12 +4288,12 @@ CONCEPTS.push(
   {
     id: 'c.3.1.1', sec: '3.1', kind: 'definition', tier: 'core',
     title: 'Linear Vector Spaces and Hilbert Space',
-    oneLine: 'Quantum states inhabit a complex Hilbert space: a complete linear vector space endowed with an inner product.',
-    statement: `A <b>Hilbert space</b> $\\mathcal{H}$ is a complex vector space equipped with an inner product $\\langle \\cdot | \\cdot \\rangle$ that is <b>complete</b> under the norm induced by the inner product (every Cauchy sequence converges to an element in $\\mathcal{H}$).
+    oneLine: "A Hilbert space is a place to do vector maths with quantum states.",
+    statement: `<b>Start here.</b> A Hilbert space is a place to do vector maths with quantum states. You can add states, multiply them by numbers and measure their lengths. “Complete” means that a sequence which converges in length has its limit in the same space; an arbitrary infinite sum need not converge.<br><br>A <b>Hilbert space</b> $\\mathcal{H}$ is a complex vector space equipped with an inner product $\\langle \\cdot | \\cdot \\rangle$ that is <b>complete</b> under the norm induced by the inner product (every Cauchy sequence converges to an element in $\\mathcal{H}$).
 In quantum mechanics, the space of square-integrable wave functions:
 $$\\mathcal{H} = L^2(\\mathbb{R}) = \\left\\{ \\psi(x) : \\int_{-\\infty}^\\infty |\\psi(x)|^2 dx < \\infty \\right\\}$$
 forms an infinite-dimensional complex Hilbert space. Every physical state is represented by a ray (unit-norm vector) in $\\mathcal{H}$.`,
-    intuition: `Think of Hilbert space as regular 3D Euclidean geometry elevated to infinite dimensions with complex coordinates. Just as any arrow in 3D can be expanded in $\\hat{i}, \\hat{j}, \\hat{k}$, any quantum state can be expanded in basis eigenstates. Completeness ensures that there are no "holes" or missing limit states: if you superpose an infinite series of states, the resulting state still lives inside the physical universe.`,
+    intuition: `Think of Hilbert space as regular 3D Euclidean geometry elevated to infinite dimensions with complex coordinates. Just as any arrow in 3D can be expanded in $\\hat{i}, \\hat{j}, \\hat{k}$, any quantum state can be expanded in basis eigenstates. Completeness ensures that there are no "holes" or missing limit states: if the partial sums of a state series form a Cauchy sequence in the norm, their limit belongs to the same space. An arbitrary infinite series need not converge.`,
     needs: ['c.1.1.1'],
     traps: [
       `Confusing Hilbert space with physical 3D coordinate space. A particle moves in 3D real space $\\mathbb{R}^3$, but its wave function lives in an infinite-dimensional abstract function space $\\mathcal{H}$.`,
@@ -4283,14 +4301,14 @@ forms an infinite-dimensional complex Hilbert space. Every physical state is rep
     ],
     cards: [
       { q: 'What is the definition of a Hilbert space in quantum mechanics?', a: 'A complete linear vector space over the complex numbers equipped with an inner product.', kind: 'state' },
-      { q: 'Why is the condition of completeness essential for quantum mechanics?', a: 'It guarantees that infinite linear superpositions of physical states always converge to a valid state within the same space.', kind: 'recall' }
+      { q: 'Why is the condition of completeness essential for quantum mechanics?', a: 'It guarantees that every Cauchy sequence converges in the same space. It does not guarantee convergence of every infinite series.', kind: 'recall' }
     ]
   },
   {
     id: 'c.3.1.2', sec: '3.1', kind: 'definition', tier: 'core',
     title: 'Dirac Notation: Kets, Bras, and Dual Space',
-    oneLine: 'A state vector is a ket |ψ⟩ in ℋ; its dual vector is a bra ⟨ψ| in the dual space ℋ*, related by antilinear correspondence.',
-    statement: `P.A.M. Dirac introduced the bracket formalism unifying wave and matrix mechanics:
+    oneLine: "A ket is a column of amplitudes once you choose a basis.",
+    statement: `<b>Start here.</b> A ket is a column of amplitudes once you choose a basis. A bra is the matching row, with every entry complex-conjugated. Row times column gives one number.<br><br>P.A.M. Dirac introduced the bracket formalism unifying wave and matrix mechanics:
 1. <b>Ket Vector $|\\psi\\rangle \\in \\mathcal{H}$:</b> Represents a physical quantum state vector (abstract state).
 2. <b>Bra Vector $\\langle\\phi| \\in \\mathcal{H}^*$:</b> A continuous linear functional belonging to the dual space $\\mathcal{H}^*$ that maps kets to complex numbers: $\\langle\\phi|: |\\psi\\rangle \\mapsto \\langle\\phi|\\psi\\rangle \\in \\mathbb{C}$.
 3. <b>Antilinear Dual Correspondence:</b>
@@ -4310,61 +4328,61 @@ Taking the dual of a ket vector conjugates all complex scalar coefficients.`,
   {
     id: 'c.3.1.3', sec: '3.1', kind: 'theorem', tier: 'core',
     title: 'The Inner Product and Cauchy–Schwarz Inequality',
-    oneLine: 'For any two states, |⟨ϕ|ψ⟩|² ≤ ⟨ϕ|ϕ⟩⟨ψ|ψ⟩; equality holds if and only if |ϕ⟩ and |ψ⟩ are linearly dependent.',
-    statement: `The inner product on $\\mathcal{H}$ satisfies:
+    oneLine: "The overlap of two vectors cannot be larger than the product of their lengths.",
+    statement: `<b>Start here.</b> The overlap of two vectors cannot be larger than the product of their lengths. To see why, subtract the part of one vector pointing along the other; the leftover squared length cannot be negative.<br><br>The inner product on $\\mathcal{H}$ satisfies:
 1. <b>Skew-symmetry (Hermitian property):</b> $\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle^*$
 2. <b>Linearity in ket, antilinearity in bra:</b> $\\langle\\phi| c_1\\psi_1 + c_2\\psi_2 \\rangle = c_1\\langle\\phi|\\psi_1\\rangle + c_2\\langle\\phi|\\psi_2\\rangle$
 3. <b>Positive definiteness:</b> $\\langle\\psi|\\psi\\rangle \\ge 0$, with $\\langle\\psi|\\psi\\rangle = 0 \\iff |\\psi\\rangle = 0$.
 <b>Cauchy–Schwarz Inequality:</b>
 $$\\boxed{|\\langle\\phi|\\psi\\rangle|^2 \\le \\langle\\phi|\\phi\\rangle \\langle\\psi|\\psi\\rangle}$$
 Equality holds if and only if $|\\psi\\rangle = c |\\phi\\rangle$ for some scalar $c \\in \\mathbb{C}$.`,
-    intuition: `This is the quantum version of the dot product inequality $|\mathbf{u} \\cdot \\mathbf{v}| \\le |\\mathbf{u}| |\\mathbf{v}|$. The overlap between two quantum states can never exceed the product of their lengths. If normalized, $|\\langle\\phi|\\psi\\rangle| \\le 1$. The Cauchy–Schwarz inequality is the mathematical bedrock from which every quantum uncertainty relation is derived!`,
+    intuition: `This is the quantum version of the dot product inequality $|\\mathbf{u} \\cdot \\mathbf{v}| \\le |\\mathbf{u}| |\\mathbf{v}|$. The overlap between two quantum states can never exceed the product of their lengths. If normalized, $|\\langle\\phi|\\psi\\rangle| \\le 1$. The Cauchy–Schwarz inequality is the mathematical bedrock from which every quantum uncertainty relation is derived!`,
     needs: ['c.3.1.2'],
     traps: [
       `Assuming $\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle$. Because the field is complex, reversing the order conjugates the result: $\\langle\\phi|\\psi\\rangle = \\langle\\psi|\\phi\\rangle^*$.`,
       `Forgetting that the norm is always non-negative. $\\langle\\psi|\\psi\\rangle = \\int |\\psi(x)|^2 dx \\ge 0$; an imaginary or negative norm is mathematically impossible in a Hilbert space.`
     ],
     proof: {
-      idea: 'Consider the state |χ⟩ = |ψ⟩ - (⟨ϕ|ψ⟩ / ⟨ϕ|ϕ⟩)|ϕ⟩ and use positive definiteness ⟨χ|χ⟩ ≥ 0.',
+      idea: 'If |ϕ⟩ is zero, the inequality is immediate. Otherwise subtract the projection of |ψ⟩ along |ϕ⟩ and use the fact that the leftover squared length is non-negative.',
       why: 'Show that the squared norm of any vector must be greater than or equal to zero.',
       rungs: [
         {
-          why: 'Construct Orthogonal Remainder Vector',
+          why: 'Subtract the part along ϕ',
           m: '$$|\\chi\\rangle = |\\psi\\rangle - \\lambda |\\phi\\rangle, \\quad \\text{where } \\lambda = \\frac{\\langle\\phi|\\psi\\rangle}{\\langle\\phi|\\phi\\rangle}$$',
           meaning: 'What this really means: We subtract from |ψ⟩ its shadow along |ϕ⟩, leaving only the perpendicular component.',
-          label: 'Construct Orthogonal Remainder Vector',
+          label: 'Subtract the part along ϕ',
           math: '|\\chi\\rangle = |\\psi\\rangle - \\lambda |\\phi\\rangle, \\quad \\text{where } \\lambda = \\frac{\\langle\\phi|\\psi\\rangle}{\\langle\\phi|\\phi\\rangle}',
           note: 'Subtract the projection along |ϕ⟩.'
         },
         {
-          why: 'Compute Norm of Remainder Vector',
+          why: 'Find the leftover squared length',
           m: '$$\\langle\\chi|\\chi\\rangle = \\langle\\psi - \\lambda\\phi | \\psi - \\lambda\\phi\\rangle = \\langle\\psi|\\psi\\rangle - \\lambda^* \\langle\\phi|\\psi\\rangle - \\lambda \\langle\\psi|\\phi\\rangle + |\\lambda|^2 \\langle\\phi|\\phi\\rangle$$',
           meaning: 'What this really means: Expand the inner product of the remainder vector with itself.',
-          label: 'Compute Norm of Remainder Vector',
+          label: 'Find the leftover squared length',
           math: '\\langle\\chi|\\chi\\rangle = \\langle\\psi - \\lambda\\phi | \\psi - \\lambda\\phi\\rangle = \\langle\\psi|\\psi\\rangle - \\lambda^* \\langle\\phi|\\psi\\rangle - \\lambda \\langle\\psi|\\phi\\rangle + |\\lambda|^2 \\langle\\phi|\\phi\\rangle',
           note: 'Expand using antilinearity of the bra.'
         },
         {
-          why: 'Substitute Value of λ',
+          why: 'Put the chosen λ into the expression',
           m: '$$\\lambda^* \\langle\\phi|\\psi\\rangle = \\frac{\\langle\\psi|\\phi\\rangle \\langle\\phi|\\psi\\rangle}{\\langle\\phi|\\phi\\rangle} = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}, \\quad |\\lambda|^2 \\langle\\phi|\\phi\\rangle = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}$$',
-          meaning: 'What this really means: The middle cross-terms and the final term simplify into identical quotients.',
-          label: 'Substitute Value of λ',
+          meaning: 'Each of these terms contains the same overlap squared divided by the length squared of ϕ. Two subtractions and one addition leave one subtraction.',
+          label: 'Put the chosen λ into the expression',
           math: '\\lambda^* \\langle\\phi|\\psi\\rangle = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}, \\quad |\\lambda|^2 \\langle\\phi|\\phi\\rangle = \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle}',
           note: 'Cross-terms combine.'
         },
         {
-          why: 'Apply Positive Definiteness',
+          why: 'Use the fact that squared length is non-negative',
           m: '$$\\langle\\chi|\\chi\\rangle = \\langle\\psi|\\psi\\rangle - \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle} \\ge 0$$',
           meaning: 'What this really means: A squared vector length can never be negative.',
-          label: 'Apply Positive Definiteness',
+          label: 'Use the fact that squared length is non-negative',
           math: '\\langle\\psi|\\psi\\rangle - \\frac{|\\langle\\phi|\\psi\\rangle|^2}{\\langle\\phi|\\phi\\rangle} \\ge 0',
           note: 'Norm of |χ⟩ must be ≥ 0.'
         },
         {
-          why: 'Conclude Cauchy-Schwarz Inequality',
+          why: 'Multiply to get the bound',
           m: '$$|\\langle\\phi|\\psi\\rangle|^2 \\le \\langle\\phi|\\phi\\rangle \\langle\\psi|\\psi\\rangle$$',
-          meaning: 'What this really means: Multiplying by ⟨ϕ|ϕ⟩ produces the fundamental bound.',
-          label: 'Conclude Cauchy-Schwarz Inequality',
+          meaning: 'Multiply by the positive squared length of ϕ. The inequality keeps its direction, giving the required overlap bound.',
+          label: 'Multiply to get the bound',
           math: '|\\langle\\phi|\\psi\\rangle|^2 \\le \\langle\\phi|\\phi\\rangle \\langle\\psi|\\psi\\rangle',
           note: 'Exact statement of the Schwarz inequality.'
         }
@@ -4378,8 +4396,8 @@ Equality holds if and only if $|\\psi\\rangle = c |\\phi\\rangle$ for some scala
   {
     id: 'c.3.1.4', sec: '3.1', kind: 'property', tier: 'core',
     title: 'Orthonormal Basis and Completeness (Closure) Relation',
-    oneLine: 'A set of orthonormal states {|ϕ_n⟩} forms a complete basis if and only if ∑_n |ϕ_n⟩⟨ϕ_n| = Î.',
-    statement: `A discrete set of states $\{ |\\phi_n\\rangle \}$ is an <b>orthonormal basis</b> of $\\mathcal{H}$ if:
+    oneLine: "Basis states are the coordinate directions for your state column.",
+    statement: `<b>Start here.</b> Basis states are the coordinate directions for your state column. “Orthonormal” means each direction has length one and different directions have zero overlap. Adding all their projectors gives the identity.<br><br>A discrete set of states $\{ |\\phi_n\\rangle \}$ is an <b>orthonormal basis</b> of $\\mathcal{H}$ if:
 1. <b>Orthonormality:</b> $\\langle \\phi_m | \\phi_n \\rangle = \\delta_{mn}$
 2. <b>Completeness (Closure Relation):</b>
 $$\\boxed{\\sum_{n} |\\phi_n\\rangle \\langle\\phi_n| = \\hat{I}}$$
@@ -4403,8 +4421,8 @@ where $c_n = \\langle\\phi_n|\\psi\\rangle$ is the probability amplitude of stat
   {
     id: 'c.3.2.1', sec: '3.2', kind: 'definition', tier: 'core',
     title: 'Linear Operators and Projection Operators',
-    oneLine: 'An operator Â maps kets to kets; a projection operator P̂_n = |ϕ_n⟩⟨ϕ_n| is idempotent: P̂_n² = P̂_n.',
-    statement: `A <b>linear operator</b> $\\hat{A}$ maps kets to kets: $\\hat{A}(c_1|\\psi_1\\rangle + c_2|\\psi_2\\rangle) = c_1\\hat{A}|\\psi_1\\rangle + c_2\\hat{A}|\\psi_2\\rangle$.
+    oneLine: "An operator is a rule that turns an input state into an output state.",
+    statement: `<b>Start here.</b> An operator is a rule that turns an input state into an output state. In a chosen basis, a linear operator is a matrix. A projector keeps only the part pointing along a chosen state or subspace.<br><br>A <b>linear operator</b> $\\hat{A}$ maps kets to kets: $\\hat{A}(c_1|\\psi_1\\rangle + c_2|\\psi_2\\rangle) = c_1\\hat{A}|\\psi_1\\rangle + c_2\\hat{A}|\\psi_2\\rangle$.
 The <b>projection operator</b> $\\hat{P}_\\psi$ onto a normalized state $|\\psi\\rangle$ is the outer product:
 $$\\hat{P}_\\psi = |\\psi\\rangle \\langle\\psi|$$
 <b>Properties of Projectors:</b>
@@ -4425,8 +4443,8 @@ $$\\hat{P}_\\psi = |\\psi\\rangle \\langle\\psi|$$
   {
     id: 'c.3.2.2', sec: '3.2', kind: 'definition', tier: 'core',
     title: 'The Hermitian Adjoint (Conjugate Transpose)',
-    oneLine: 'The adjoint Â† satisfies ⟨ϕ|Â|ψ⟩* = ⟨ψ|Â†|ϕ⟩, with properties (ÂB̂)† = B̂†Â† and (cÂ)† = c*Â†.',
-    statement: `For any linear operator $\\hat{A}$, its <b>Hermitian adjoint</b> (or adjoint) $\\hat{A}^\\dagger$ is uniquely defined by the inner product relation:
+    oneLine: "The dagger tells you to swap rows and columns and conjugate the entries.",
+    statement: `<b>Start here.</b> The dagger tells you to swap rows and columns and conjugate the entries. For example, an i above the diagonal becomes a −i below it. This is called the adjoint.<br><br>For any linear operator $\\hat{A}$, its <b>Hermitian adjoint</b> (or adjoint) $\\hat{A}^\\dagger$ is uniquely defined by the inner product relation:
 $$\\boxed{\\langle \\phi | \\hat{A} | \\psi \\rangle^* = \\langle \\psi | \\hat{A}^\\dagger | \\phi \\rangle} \\quad \\text{for all } |\\phi\\rangle, |\\psi\\rangle \\in \\mathcal{H}$$
 <b>Algebraic Properties of Adjoints:</b>
 1. $(\\hat{A}^\\dagger)^\\dagger = \\hat{A}$
@@ -4448,8 +4466,8 @@ $$\\boxed{\\langle \\phi | \\hat{A} | \\psi \\rangle^* = \\langle \\psi | \\hat{
   {
     id: 'c.3.2.3', sec: '3.2', kind: 'theorem', tier: 'core',
     title: 'Hermitian Operators and Physical Observables',
-    oneLine: 'An operator is Hermitian if Â† = Â; physical observables are represented by Hermitian operators to guarantee real measurement outcomes.',
-    statement: `An operator $\\hat{A}$ is <b>Hermitian</b> (or self-adjoint) if it equals its own adjoint:
+    oneLine: "A Hermitian matrix equals its conjugate transpose.",
+    statement: `<b>Start here.</b> A Hermitian matrix equals its conjugate transpose. Its eigenvalues are real, which lets them represent measurement results. Multiplying two Hermitian matrices gives a Hermitian result only when they commute.<br><br>An operator $\\hat{A}$ is <b>Hermitian</b> (or self-adjoint) if it equals its own adjoint:
 $$\\boxed{\\hat{A}^\\dagger = \\hat{A}} \\quad \\Longleftrightarrow \\quad \\langle \\phi | \\hat{A} | \\psi \\rangle = \\langle \\hat{A}\\phi | \\psi \\rangle$$
 <b>Postulate of Quantum Mechanics:</b> Every measurable physical observable (position, momentum, energy, angular momentum) is represented by a linear Hermitian operator whose eigenvalues represent all possible outcomes of experimental measurements.`,
     intuition: `In the real physical world, measurement instruments display real numbers (pointers on a meter, digital readouts in volts or joules), never imaginary numbers like $2 + 3i$. Hermitian operators are the exact mathematical class of operators guaranteed to produce 100% purely real eigenvalues.`,
@@ -4496,8 +4514,8 @@ $$\\boxed{\\hat{A}^\\dagger = \\hat{A}} \\quad \\Longleftrightarrow \\quad \\lan
   {
     id: 'c.3.2.4', sec: '3.2', kind: 'property', tier: 'core',
     title: 'Expectation Value and Variance in Dirac Formalism',
-    oneLine: 'In Dirac notation, ⟨A⟩ = ⟨ψ|Â|ψ⟩/⟨ψ|ψ⟩ and variance ΔA² = ⟨(Â - ⟨A⟩)²⟩ = ⟨A²⟩ - ⟨A⟩².',
-    statement: `For a system in state $|\\psi\\rangle$:
+    oneLine: "An expectation value is the average result of many measurements on identically prepared systems.",
+    statement: `<b>Start here.</b> An expectation value is the average result of many measurements on identically prepared systems. Multiply bra × operator × ket to calculate it. Variance measures how widely the results spread around that average.<br><br>For a system in state $|\\psi\\rangle$:
 1. The <b>expectation value</b> of an observable $\\hat{A}$ is:
 $$\\langle \\hat{A} \\rangle = \\frac{\\langle\\psi|\\hat{A}|\\psi\\rangle}{\\langle\\psi|\\psi\\rangle}$$
 For a normalized state ($\\langle\\psi|\\psi\\rangle = 1$), $\\langle \\hat{A} \\rangle = \\langle\\psi|\\hat{A}|\\psi\\rangle$.
@@ -4520,8 +4538,8 @@ $\\Delta A = 0$ if and only if $|\\psi\\rangle$ is an eigenstate of $\\hat{A}$.`
   {
     id: 'c.3.3.1', sec: '3.3', kind: 'definition', tier: 'core',
     title: 'The Commutator and Fundamental Operator Identities',
-    oneLine: 'The commutator [Â, B̂] = ÂB̂ - B̂Â measures failure of commutativity and obeys Leibniz product rules.',
-    statement: `The <b>commutator</b> of two operators $\\hat{A}$ and $\\hat{B}$ is defined by:
+    oneLine: "Do two operations in one order, then in the opposite order.",
+    statement: `<b>Start here.</b> Do two operations in one order, then in the opposite order. Subtract the results. The matrix AB − BA records this difference and is called the commutator.<br><br>The <b>commutator</b> of two operators $\\hat{A}$ and $\\hat{B}$ is defined by:
 $$\\boxed{[\\hat{A}, \\hat{B}] = \\hat{A}\\hat{B} - \\hat{B}\\hat{A}}$$
 <b>Key Algebraic Identities:</b>
 1. <b>Antisymmetry:</b> $[\\hat{A}, \\hat{B}] = -[\\hat{B}, \\hat{A}]$
@@ -4544,8 +4562,8 @@ $$\\boxed{[\\hat{A}\\hat{B}, \\hat{C}] = \\hat{A}[\\hat{B}, \\hat{C}] + [\\hat{A
   {
     id: 'c.3.3.2', sec: '3.3', kind: 'theorem', tier: 'core',
     title: 'The Jacobi Identity and Power Commutator Formula',
-    oneLine: 'Operators obey the cyclic Jacobi identity [Â, [B̂, Ĉ]] + [B̂, [Ĉ, Â]] + [Ĉ, [Â, B̂]] = 0, and [x̂, p̂ⁿ] = iħ n p̂ⁿ⁻¹.',
-    statement: `1. <b>Jacobi Identity:</b> For any three linear operators $\\hat{A}, \\hat{B}, \\hat{C}$:
+    oneLine: "Commutator identities are shortcuts for expanding products.",
+    statement: `<b>Start here.</b> Commutator identities are shortcuts for expanding products. You can check them by replacing each bracket with AB − BA and cancelling matching terms; keep the multiplication order unchanged.<br><br>1. <b>Jacobi Identity:</b> For any three linear operators $\\hat{A}, \\hat{B}, \\hat{C}$:
 $$\\boxed{[\\hat{A}, [\\hat{B}, \\hat{C}]] + [\\hat{B}, [\\hat{C}, \\hat{A}]] + [\\hat{C}, [\\hat{A}, \\hat{B}]] = 0}$$
 2. <b>Power Commutator Formulas:</b> If $[\\hat{A}, [\\hat{A}, \\hat{B}]] = 0$ (such as for $\\hat{x}$ and $\\hat{p}$ where $[\\hat{x}, \\hat{p}] = i\\hbar$):
 $$\\boxed{[\\hat{x}, \\hat{p}^n] = i\\hbar \\, n \\hat{p}^{n-1}} \\qquad \\boxed{[\\hat{x}^n, \\hat{p}] = i\\hbar \\, n \\hat{x}^{n-1}}$$
@@ -4595,8 +4613,8 @@ $$[\\hat{x}, F(\\hat{p})] = i\\hbar \\frac{dF}{d\\hat{p}}, \\qquad [F(\\hat{x}),
   {
     id: 'c.3.3.3', sec: '3.3', kind: 'law', tier: 'core',
     title: 'The Canonical Commutation Relation [x̂, p̂] = iħ',
-    oneLine: 'The fundamental quantum commutation relation [x̂, p̂] = iħ Î drives all quantum uncertainty and non-commutativity.',
-    statement: `The foundational dynamic postulate of quantum mechanics for a particle with position $\\hat{x}$ and momentum $\\hat{p} = -i\\hbar \\frac{d}{dx}$ is the <b>Canonical Commutation Relation (CCR)</b>:
+    oneLine: "Position multiplies a wave function by x; momentum differentiates it and multiplies by −iℏ.",
+    statement: `<b>Start here.</b> Position multiplies a wave function by x; momentum differentiates it and multiplies by −iℏ. Reversing their order leaves an extra iℏ times the original function. Exact position and momentum cannot both be finite matrices.<br><br>The foundational dynamic postulate of quantum mechanics for a particle with position $\\hat{x}$ and momentum $\\hat{p} = -i\\hbar \\frac{d}{dx}$ is the <b>Canonical Commutation Relation (CCR)</b>:
 $$\\boxed{[\\hat{x}, \\hat{p}] = i\\hbar \\, \\hat{I}}$$
 In three dimensions:
 $$[\\hat{r}_j, \\hat{p}_k] = i\\hbar \\, \\delta_{jk} \\hat{I}, \\qquad [\\hat{r}_j, \\hat{r}_k] = 0, \\qquad [\\hat{p}_j, \\hat{p}_k] = 0$$
@@ -4655,8 +4673,8 @@ Position and momentum along the same axis do not commute, whereas coordinates al
   {
     id: 'c.3.4.1', sec: '3.4', kind: 'theorem', tier: 'core',
     title: 'The Robertson–Schrödinger Generalized Uncertainty Relation',
-    oneLine: 'For any two observables Â and B̂, ΔA ΔB ≥ (1/2)|⟨[Â, B̂]⟩|; non-commuting observables cannot be simultaneously determined.',
-    statement: `For any two Hermitian operators $\\hat{A}$ and $\\hat{B}$ and any physical state $|\\psi\\rangle$, the product of their standard deviations obeys the <b>Robertson generalized uncertainty relation</b>:
+    oneLine: "Uncertainty is the spread of measurement results.",
+    statement: `<b>Start here.</b> Uncertainty is the spread of measurement results. Subtract each observable’s average, apply the resulting operators to the state, then compare the lengths and overlap of those two new vectors.<br><br>For any two Hermitian operators $\\hat{A}$ and $\\hat{B}$ and any physical state $|\\psi\\rangle$, the product of their standard deviations obeys the <b>Robertson generalized uncertainty relation</b>:
 $$\\boxed{\\Delta A \\, \\Delta B \\ge \\frac{1}{2} |\\langle [\\hat{A}, \\hat{B}] \\rangle|}$$
 For the canonical pair $\\hat{x}$ and $\\hat{p}$, where $[\\hat{x}, \\hat{p}] = i\\hbar$:
 $$\\Delta x \\, \\Delta p \\ge \\frac{1}{2} |\\langle i\\hbar \\rangle| = \\frac{\\hbar}{2}$$
@@ -4729,8 +4747,8 @@ which rigorously proves Heisenberg's uncertainty principle for any arbitrary qua
   {
     id: 'c.3.4.2', sec: '3.4', kind: 'property', tier: 'core',
     title: 'Compatible vs. Incompatible Observables',
-    oneLine: 'Compatible observables commute ([Â, B̂] = 0) and share a common eigenbasis; incompatible observables ([Â, B̂] ≠ 0) cannot be simultaneously measured.',
-    statement: `1. <b>Compatible Observables:</b> Two observables $\\hat{A}$ and $\\hat{B}$ are compatible if they commute:
+    oneLine: "Commuting observables can share measurement states under the assumptions used here.",
+    statement: `<b>Start here.</b> Commuting observables can share measurement states under the assumptions used here. In a common eigenbasis, both matrices are diagonal. Noncommuting observables do not have a complete common eigenbasis.<br><br>1. <b>Compatible Observables:</b> Two observables $\\hat{A}$ and $\\hat{B}$ are compatible if they commute:
 $$[\\hat{A}, \\hat{B}] = 0$$
 They can be measured simultaneously without mutual interference, share a complete common eigenbasis, and have zero fundamental uncertainty limit ($\\Delta A \\Delta B \\ge 0$).
 2. <b>Incompatible Observables:</b> Two observables are incompatible if they do not commute:
@@ -4752,8 +4770,8 @@ Measuring one inevitably disturbs the state and destroys knowledge of the other 
   {
     id: 'c.3.5.1', sec: '3.5', kind: 'definition', tier: 'core',
     title: 'Functions of Operators and the Baker–Campbell–Hausdorff (BCH) Formula',
-    oneLine: 'An operator function F(Â) is defined via Taylor series; if [Â, [Â, B̂]] = [B̂, [Â, B̂]] = 0, then e^{Â} e^{B̂} = e^{Â + B̂ + (1/2)[Â, B̂]}.',
-    statement: `For any analytic function $F(z) = \\sum_{n=0}^\\infty c_n z^n$, the operator function $F(\\hat{A})$ is defined by the power series:
+    oneLine: "A function of a matrix uses the same idea as a function of a number.",
+    statement: `<b>Start here.</b> A function of a matrix uses the same idea as a function of a number. For an exponential, add I + A + A²/2! and so on when the series is defined. Matrix order still matters.<br><br>For any analytic function $F(z) = \\sum_{n=0}^\\infty c_n z^n$, the operator function $F(\\hat{A})$ is defined by the power series:
 $$F(\\hat{A}) = \\sum_{n=0}^\\infty c_n \\hat{A}^n$$
 In an eigenbasis where $\\hat{A}|a_n\\rangle = a_n |a_n\\rangle$, $F(\\hat{A})|a_n\\rangle = F(a_n)|a_n\\rangle$.
 <b>Baker–Campbell–Hausdorff (BCH) Formula:</b>
@@ -4773,8 +4791,8 @@ $$\\boxed{e^{\\hat{A}} e^{\\hat{B}} = e^{\\hat{A} + \\hat{B} + \\frac{1}{2}[\\ha
   {
     id: 'c.3.5.2', sec: '3.5', kind: 'theorem', tier: 'core',
     title: 'Unitary Operators and Isometries in Hilbert Space',
-    oneLine: 'An operator Û is unitary if Û† Û = Û Û† = Î; unitary transformations preserve inner products ⟨Ûϕ|Ûψ⟩ = ⟨ϕ|ψ⟩ and state norms.',
-    statement: `A linear operator $\\hat{U}$ is <b>unitary</b> if its adjoint equals its inverse:
+    oneLine: "A unitary matrix keeps a state’s length unchanged.",
+    statement: `<b>Start here.</b> A unitary matrix keeps a state’s length unchanged. Its inverse is its dagger. This preserves total probability while allowing the components and phases to change.<br><br>A linear operator $\\hat{U}$ is <b>unitary</b> if its adjoint equals its inverse:
 $$\\boxed{\\hat{U}^\\dagger = \\hat{U}^{-1} \\quad \\Longleftrightarrow \\quad \\hat{U}^\\dagger \\hat{U} = \\hat{U} \\hat{U}^\\dagger = \\hat{I}}$$
 <b>Core Properties of Unitary Operators:</b>
 1. <b>Preservation of Inner Products (Isometry):</b>
@@ -4835,8 +4853,8 @@ $$\\langle \\hat{U}\\phi | \\hat{U}\\psi \\rangle = \\langle \\phi | \\hat{U}^\\
   {
     id: 'c.3.6.1', sec: '3.6', kind: 'definition', tier: 'core',
     title: 'Matrix Representation of Kets, Bras, and Operators',
-    oneLine: 'In an orthonormal basis {|ϕ_n⟩}, kets are column vectors c_i = ⟨ϕ_i|ψ⟩, bras are row vectors, and operators are square matrices A_ij = ⟨ϕ_i|Â|ϕ_j⟩.',
-    statement: `Given an orthonormal basis $\{|\\phi_n\\rangle\}$:
+    oneLine: "Write the state as a column, its bra as a conjugated row, and each operator as a table.",
+    statement: `<b>Start here.</b> Write the state as a column, its bra as a conjugated row, and each operator as a table. Column j of the table tells you what happens to basis state j.<br><br>Given an orthonormal basis $\{|\\phi_n\\rangle\}$:
 1. <b>Ket as a Column Vector:</b>
 $$|\\psi\\rangle \\doteq \\begin{pmatrix} c_1 \\\\ c_2 \\\\ \\vdots \\end{pmatrix}, \\qquad c_i = \\langle \\phi_i | \\psi \\rangle$$
 2. <b>Bra as a Row Vector:</b>
@@ -4858,8 +4876,8 @@ The action of an operator $|\\psi\'\\rangle = \\hat{A}|\\psi\\rangle$ becomes st
   {
     id: 'c.3.6.2', sec: '3.6', kind: 'theorem', tier: 'core',
     title: 'Theorems 2.1 & 2.2: Reality of Spectra and Orthogonality of Eigenstates',
-    oneLine: 'Hermitian operators have strictly real eigenvalues (Theorem 2.1), and eigenvectors corresponding to distinct eigenvalues are mutually orthogonal (Theorem 2.2).',
-    statement: `For any linear Hermitian operator $\\hat{A} = \\hat{A}^\\dagger$:
+    oneLine: "A Hermitian matrix has real eigenvalues.",
+    statement: `<b>Start here.</b> A Hermitian matrix has real eigenvalues. Eigenvectors with different eigenvalues have zero overlap. If an eigenvalue is repeated, choose perpendicular unit vectors within that subspace.<br><br>For any linear Hermitian operator $\\hat{A} = \\hat{A}^\\dagger$:
 1. <b>Theorem 2.1 (Real Eigenvalues):</b> All eigenvalues of $\\hat{A}$ are strictly real:
 $$\\hat{A}|a_n\\rangle = a_n |a_n\\rangle \\implies a_n \\in \\mathbb{R}$$
 2. <b>Theorem 2.2 (Orthogonality of Eigenstates):</b> Eigenvectors corresponding to different eigenvalues are mutually orthogonal:
@@ -4917,8 +4935,8 @@ Degenerate eigenstates sharing the same eigenvalue can always be orthogonalized 
   {
     id: 'c.3.6.3', sec: '3.6', kind: 'theorem', tier: 'core',
     title: 'Theorem 2.3: Commuting Observables and Simultaneous Diagonalization',
-    oneLine: 'If [Â, B̂] = 0, Â and B̂ share a complete common set of simultaneous eigenstates and can be simultaneously diagonalized.',
-    statement: `<b>Theorem 2.3 (Simultaneous Eigenstates):</b>
+    oneLine: "If two Hermitian matrices commute, you can choose a basis that makes both diagonal.",
+    statement: `<b>Start here.</b> If two Hermitian matrices commute, you can choose a basis that makes both diagonal. If an eigenvalue is repeated, first diagonalize the second matrix inside that repeated-eigenvalue subspace.<br><br><b>Theorem 2.3 (Simultaneous Eigenstates):</b>
 If two Hermitian operators $\\hat{A}$ and $\\hat{B}$ commute ($[\\hat{A}, \\hat{B}] = 0$), there exists a complete orthonormal basis of common (simultaneous) eigenvectors:
 $$\\boxed{\\hat{A}|a_n, b_m\\rangle = a_n |a_n, b_m\\rangle \\quad \\text{and} \\quad \\hat{B}|a_n, b_m\\rangle = b_m |a_n, b_m\\rangle}$$
 In this common eigenbasis, both matrix representations are simultaneously diagonal. If $\\hat{A}$ has non-degenerate eigenvalues, every eigenvector of $\\hat{A}$ is automatically an eigenvector of $\\hat{B}$.`,
@@ -4966,8 +4984,8 @@ In this common eigenbasis, both matrix representations are simultaneously diagon
   {
     id: 'c.3.6.4', sec: '3.6', kind: 'theorem', tier: 'core',
     title: 'Theorems 2.4 & 2.5: Anti-Hermitian and Unitary Spectra',
-    oneLine: 'Anti-Hermitian operators have purely imaginary or zero eigenvalues (Theorem 2.4); unitary operators have eigenvalues of unit modulus e^{iθ} (Theorem 2.5).',
-    statement: `1. <b>Theorem 2.4 (Anti-Hermitian Spectrum):</b>
+    oneLine: "An anti-Hermitian matrix has purely imaginary eigenvalues, including zero.",
+    statement: `<b>Start here.</b> An anti-Hermitian matrix has purely imaginary eigenvalues, including zero. A unitary matrix has eigenvalues of magnitude one. These follow by comparing a vector’s length before and after the matrix acts.<br><br>1. <b>Theorem 2.4 (Anti-Hermitian Spectrum):</b>
 If $\\hat{A}^\\dagger = -\\hat{A}$, then all eigenvalues of $\\hat{A}$ are either purely imaginary or zero:
 $$\\hat{A}|a_n\\rangle = a_n |a_n\\rangle \\implies \\text{Re}(a_n) = 0 \\quad (a_n = i\\beta_n, \\, \\beta_n \\in \\mathbb{R})$$
 2. <b>Theorem 2.5 (Unitary Spectrum):</b>
@@ -5023,8 +5041,8 @@ and eigenvectors corresponding to distinct eigenvalues are mutually orthogonal: 
   {
     id: 'c.3.7.1', sec: '3.7', kind: 'definition', tier: 'core',
     title: 'Continuous Bases and Dirac Delta Function Normalization',
-    oneLine: 'Continuous eigenstates {|x⟩} and {|p⟩} satisfy Dirac delta normalization ⟨x|x\'⟩ = δ(x - x\') and resolution ∫ |x⟩⟨x| dx = Î.',
-    statement: `For observables with a continuous spectrum (like position $\\hat{x}$ and momentum $\\hat{p}$):
+    oneLine: "A continuous basis has one label for every position or momentum, rather than a short list of directions.",
+    statement: `<b>Start here.</b> A continuous basis has one label for every position or momentum, rather than a short list of directions. Sums become integrals, and the Dirac delta replaces the ordinary index-matching delta.<br><br>For observables with a continuous spectrum (like position $\\hat{x}$ and momentum $\\hat{p}$):
 1. <b>Continuous Eigenvalue Equations:</b>
 $$\\hat{x}|x\\rangle = x|x\\rangle, \\qquad \\hat{p}|p\\rangle = p|p\\rangle$$
 2. <b>Dirac Delta Normalization:</b>
@@ -5045,8 +5063,8 @@ $$\\boxed{\\int_{-\\infty}^\\infty |x\\rangle \\langle x| \\, dx = \\hat{I}, \\q
   {
     id: 'c.3.7.2', sec: '3.7', kind: 'property', tier: 'core',
     title: 'Position and Momentum Wave Function Representations',
-    oneLine: 'ψ(x) = ⟨x|ψ⟩ is the state in position representation where p̂ ≐ -iħ d/dx; ϕ(p) = ⟨p|ψ⟩ is the state in momentum representation where x̂ ≐ iħ d/dp.',
-    statement: `Inserting the completeness relations yields the wave functions in coordinate and momentum space:
+    oneLine: "The same state can be described using position components or momentum components.",
+    statement: `<b>Start here.</b> The same state can be described using position components or momentum components. Changing the basis changes its description. It does not create a different physical state.<br><br>Inserting the completeness relations yields the wave functions in coordinate and momentum space:
 1. <b>Position Representation:</b>
 $$\\psi(x) = \\langle x | \\psi \\rangle, \\qquad \\hat{x} \\doteq x, \\qquad \\boxed{\\hat{p} \\doteq -i\\hbar \\frac{\\partial}{\\partial x}}$$
 Matrix element: $\\langle x | \\hat{p} | \\psi \\rangle = -i\\hbar \\frac{\\partial \\psi(x)}{\\partial x}$.
@@ -5067,8 +5085,8 @@ Matrix element: $\\langle p | \\hat{x} | \\psi \\rangle = i\\hbar \\frac{\\parti
   {
     id: 'c.3.7.3', sec: '3.7', kind: 'theorem', tier: 'core',
     title: 'The Plane Wave Transformation Kernel ⟨x|p⟩ and Fourier Transformation',
-    oneLine: 'The overlap ⟨x|p⟩ = (1/√(2πħ)) e^{ipx/ħ} connects position and momentum representations via Fourier transformation.',
-    statement: `The transformation kernel connecting position space to momentum space is the inner product $\\langle x | p \\rangle$:
+    oneLine: "A Fourier transform rewrites a wave as a mixture of waves with definite momentum.",
+    statement: `<b>Start here.</b> A Fourier transform rewrites a wave as a mixture of waves with definite momentum. Its kernel tells you the overlap between a position basis state and a momentum basis state.<br><br>The transformation kernel connecting position space to momentum space is the inner product $\\langle x | p \\rangle$:
 $$\\boxed{\\langle x | p \\rangle = \\frac{1}{\\sqrt{2\\pi\\hbar}} e^{ipx/\\hbar}}$$
 Using identity resolutions, the wave functions are related by Fourier transforms:
 $$\\psi(x) = \\langle x | \\psi \\rangle = \\int_{-\\infty}^\\infty \\langle x | p \\rangle \\langle p | \\psi \\rangle \\, dp = \\boxed{\\frac{1}{\\sqrt{2\\pi\\hbar}} \\int_{-\\infty}^\\infty \\phi(p) e^{ipx/\\hbar} \\, dp}$$
@@ -5125,8 +5143,8 @@ $$\\phi(p) = \\langle p | \\psi \\rangle = \\int_{-\\infty}^\\infty \\langle p |
   {
     id: 'c.3.7.4', sec: '3.7', kind: 'theorem', tier: 'core',
     title: 'Equivalence of Schrödinger Wave Mechanics and Heisenberg Matrix Mechanics',
-    oneLine: 'Wave mechanics (differential equations on ψ(x)) and matrix mechanics (matrix operators on state vectors) are isomorphic representations of identical physical reality.',
-    statement: `In 1925–1926, two seemingly contradictory formulations of quantum theory emerged:
+    oneLine: "Wave mechanics and matrix mechanics describe the same quantum predictions.",
+    statement: `<b>Start here.</b> Wave mechanics and matrix mechanics describe the same quantum predictions. A wave function is a state written in a continuous basis; a matrix acts on that state’s components in a chosen basis.<br><br>In 1925–1926, two seemingly contradictory formulations of quantum theory emerged:
 1. <b>Heisenberg's Matrix Mechanics:</b> Formulated in terms of discrete matrix tables, commutators, and algebraic operator equations.
 2. <b>Schrödinger's Wave Mechanics:</b> Formulated in terms of continuous differential equations and spatial wave functions $\\psi(x,t)$.
 <b>Dirac–von Neumann Equivalence Theorem:</b> Both formalisms are mathematically isomorphic representations of the same underlying abstract Hilbert space $\\mathcal{H}$:
@@ -6237,8 +6255,8 @@ CONCEPTS.push(
   {
     id: 'c.4.1.1', sec: '4.1', kind: 'law', tier: 'core',
     title: 'The Harmonic Oscillator Hamiltonian & Classical Correspondence',
-    oneLine: 'Any potential near a stable equilibrium is approximately harmonic: V(x) ≈ ½ m ω² x² with classical frequency ω = √(k/m).',
-    statement: `The <b>one-dimensional Quantum Harmonic Oscillator (SHO)</b> is governed by the Hamiltonian:
+    oneLine: "The oscillator is the quantum version of a mass on a spring.",
+    statement: `<b>Start here.</b> The oscillator is the quantum version of a mass on a spring. Its energy operator adds kinetic energy to a parabolic potential. Near a smooth stable minimum with positive curvature, other potentials look approximately like this parabola.<br><br>The <b>one-dimensional Quantum Harmonic Oscillator (SHO)</b> is governed by the Hamiltonian:
 $$\\boxed{\\hat{H} = \\frac{\\hat{p}^2}{2m} + \\frac{1}{2}m\\omega^2 \\hat{x}^2 = -\\frac{\\hbar^2}{2m}\\frac{d^2}{dx^2} + \\frac{1}{2}m\\omega^2 x^2}$$
 where $m$ is the particle mass and $\\omega = \\sqrt{k/m}$ is the classical angular frequency of oscillation.<br>
 For a classical particle with energy $E$, the motion is strictly confined between the <b>classical turning points</b>:
@@ -6260,8 +6278,8 @@ Since $V'(x_0) = 0$ at equilibrium and setting $V(x_0) = 0$, $V(x) \\approx \\fr
   {
     id: 'c.4.1.2', sec: '4.1', kind: 'definition', tier: 'core',
     title: 'The Algebraic Ladder Operators â and â†',
-    oneLine: 'Non-Hermitian ladder operators factorize the Hamiltonian: [â, â†] = 1 and Ĥ = ħω(â†â + ½).',
-    statement: `Define the dimensionless, mutually adjoint <b>annihilation (lowering)</b> operator $\\hat{a}$ and <b>creation (raising)</b> operator $\\hat{a}^\\dagger$:
+    oneLine: "The lowering matrix moves a component down one energy level; the raising matrix moves it up.",
+    statement: `<b>Start here.</b> The lowering matrix moves a component down one energy level; the raising matrix moves it up. The square-root factors set the new vector’s length. These matrices continue through infinitely many levels.<br><br>Define the dimensionless, mutually adjoint <b>annihilation (lowering)</b> operator $\\hat{a}$ and <b>creation (raising)</b> operator $\\hat{a}^\\dagger$:
 $$\\boxed{\\hat{a} = \\sqrt{\\frac{m\\omega}{2\\hbar}}\\hat{x} + \\frac{i}{\\sqrt{2m\\hbar\\omega}}\\hat{p}, \\qquad \\hat{a}^\\dagger = \\sqrt{\\frac{m\\omega}{2\\hbar}}\\hat{x} - \\frac{i}{\\sqrt{2m\\hbar\\omega}}\\hat{p}}$$
 In terms of $\\hat{a}$ and $\\hat{a}^\\dagger$, position and momentum are:
 $$\\boxed{\\hat{x} = \\sqrt{\\frac{\\hbar}{2m\\omega}}(\\hat{a} + \\hat{a}^\\dagger), \\qquad \\hat{p} = -i\\sqrt{\\frac{m\\hbar\\omega}{2}}(\\hat{a} - \\hat{a}^\\dagger)}$$
@@ -6321,8 +6339,8 @@ $$\\boxed{\\hat{H} = \\hbar\\omega\\left(\\hat{a}^\\dagger \\hat{a} + \\frac{1}{
   {
     id: 'c.4.1.3', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'The Number Operator and Energy Quantization En = (n + ½)ħω',
-    oneLine: 'The eigenvalues of N̂ = â†â are non-negative integers n = 0, 1, 2, ... giving equispaced energy levels En = (n + ½)ħω.',
-    statement: `Define the Hermitian <b>number operator</b>:
+    oneLine: "The number matrix has 0, 1, 2, … on its diagonal.",
+    statement: `<b>Start here.</b> The number matrix has 0, 1, 2, … on its diagonal. Each level has energy (n + 1/2)ℏω. Lowering must stop at n = 0 because a squared length cannot be negative.<br><br>Define the Hermitian <b>number operator</b>:
 $$\\boxed{\\hat{N} = \\hat{a}^\\dagger \\hat{a}}$$
 The number operator satisfies the fundamental ladder commutators:
 $$[\\hat{N}, \\hat{a}] = -\\hat{a}, \\qquad [\\hat{N}, \\hat{a}^\\dagger] = +\\hat{a}^\\dagger$$
@@ -6357,7 +6375,7 @@ Every energy level is strictly non-degenerate and equispaced by $\\Delta E = \\h
         {
           why: 'Action of N on Lowered State',
           m: '$$\\hat{N}(\\hat{a}|n\\rangle) = (\\hat{a}\\hat{N} + [\\hat{N}, \\hat{a}])|n\\rangle = (\\hat{a}n - \\hat{a})|n\\rangle = (n - 1)(\\hat{a}|n\\rangle)$$',
-          meaning: 'What this really means: a|n⟩ is an eigenstate of N with eigenvalue n - 1.',
+          meaning: 'Unless the output is zero, a|n⟩ has level number n − 1. In a column, the occupied entry moves one row upward in the ordered energy basis.',
           label: 'Action of N on Lowered State',
           math: '\\hat{N}(\\hat{a}|n\\rangle) = (n - 1)(\\hat{a}|n\\rangle)',
           note: 'Eigenvalue decreases by 1.'
@@ -6373,7 +6391,7 @@ Every energy level is strictly non-degenerate and equispaced by $\\Delta E = \\h
         {
           why: 'Termination Condition',
           m: '$$\\hat{a}|0\\rangle = 0 \\implies \\hat{N}|0\\rangle = \\hat{a}^\\dagger \\hat{a} |0\\rangle = 0 \\implies n \\in \\{0, 1, 2, \\dots\\}$$',
-          meaning: 'What this really means: Ground state has eigenvalue 0, so all eigenvalues are non-negative integers.',
+          meaning: 'Repeated lowering subtracts one from n each time. If n were not an integer, it would eventually produce a nonzero state with negative squared norm. Therefore the ladder must stop at n = 0, and all allowed n are non-negative integers.',
           label: 'Termination Condition',
           math: '\\hat{a}|0\\rangle = 0 \\implies n \\in \\{0, 1, 2, \\dots\\}',
           note: 'En = (n + 1/2)ħω.'
@@ -6388,8 +6406,8 @@ Every energy level is strictly non-degenerate and equispaced by $\\Delta E = \\h
   {
     id: 'c.4.1.4', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'Ground State Wave Function in Position Space ψ₀(x)',
-    oneLine: 'The ground state wavefunction is a Gaussian ψ₀(x) = (mω/πħ)^{1/4} exp(-mω x² / 2ħ) determined by â|0⟩ = 0.',
-    statement: `The spatial wave function of the ground state $\\psi_0(x) = \\langle x|0\\rangle$ satisfies the first-order differential equation given by the annihilation condition $\\hat{a}|0\\rangle = 0$:
+    oneLine: "The lowest oscillator state is a smooth Gaussian wave.",
+    statement: `<b>Start here.</b> The lowest oscillator state is a smooth Gaussian wave. Solve the equation saying that lowering this state gives the zero vector, then choose its size so the total probability is one.<br><br>The spatial wave function of the ground state $\\psi_0(x) = \\langle x|0\\rangle$ satisfies the first-order differential equation given by the annihilation condition $\\hat{a}|0\\rangle = 0$:
 $$\\left( \\sqrt{\\frac{m\\omega}{2\\hbar}}x + \\frac{\\hbar}{\\sqrt{2m\\hbar\\omega}}\\frac{d}{dx} \\right) \\psi_0(x) = 0 \\implies \\frac{d\\psi_0}{dx} = -\\left(\\frac{m\\omega}{\\hbar}\\right)x \\psi_0(x)$$
 Integrating and normalizing yields the Gaussian wave function:
 $$\\boxed{\\psi_0(x) = \\left( \\frac{m\\omega}{\\pi\\hbar} \\right)^{1/4} \\exp\\left( -\\frac{m\\omega}{2\\hbar}x^2 \\right)}$$
@@ -6439,8 +6457,8 @@ $$\\psi_0(\\xi) = \\left( \\frac{m\\omega}{\\pi\\hbar} \\right)^{1/4} e^{-\\xi^2
   {
     id: 'c.4.1.5', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'Excited States, Hermite Polynomials & Parity',
-    oneLine: 'Higher states are generated by |n⟩ = (1/√n!) (â†)ⁿ|0⟩, yielding Hermite polynomial wavefunctions ψₙ(x) with n nodes.',
-    statement: `The normalized stationary states $|n\\rangle$ are systematically generated by repeated application of the creation operator $\\hat{a}^\\dagger$:
+    oneLine: "Higher oscillator waves have more nodes and are built by repeatedly raising the ground state.",
+    statement: `<b>Start here.</b> Higher oscillator waves have more nodes and are built by repeatedly raising the ground state. Their symmetry alternates: even n gives an even function and odd n gives an odd function.<br><br>The normalized stationary states $|n\\rangle$ are systematically generated by repeated application of the creation operator $\\hat{a}^\\dagger$:
 $$\\boxed{|n\\rangle = \\frac{1}{\\sqrt{n!}} (\\hat{a}^\\dagger)^n |0\\rangle}$$
 The action of the ladder operators on normalized states is:
 $$\\boxed{\\hat{a}^\\dagger |n\\rangle = \\sqrt{n+1} |n+1\\rangle, \\qquad \\hat{a}|n\\rangle = \\sqrt{n}|n-1\\rangle}$$
@@ -6466,8 +6484,8 @@ Even $n$ states are even functions; odd $n$ states are odd functions with a node
   {
     id: 'c.4.1.6', sec: '4.1', kind: 'definition', tier: 'core',
     title: 'Matrix Representation of Harmonic Oscillator Operators',
-    oneLine: 'In the {|n⟩} basis, â has non-zero elements only on the superdiagonal and â† on the subdiagonal.',
-    statement: `In the orthonormal basis of energy eigenstates $\{|0\\rangle, |1\\rangle, |2\\rangle, \\dots\}$, the matrix elements $O_{mn} = \\langle m|\\hat{O}|n\\rangle$ are:
+    oneLine: "In the energy basis, the oscillator’s number and energy matrices are diagonal.",
+    statement: `<b>Start here.</b> In the energy basis, the oscillator’s number and energy matrices are diagonal. Position and momentum connect neighbouring levels. The dots in their tables mean infinitely many more rows and columns.<br><br>In the orthonormal basis of energy eigenstates $\{|0\\rangle, |1\\rangle, |2\\rangle, \\dots\}$, the matrix elements $O_{mn} = \\langle m|\\hat{O}|n\\rangle$ are:
 1. <b>Annihilation Operator $\\hat{a}$:</b>
 $$\\langle m|\\hat{a}|n\\rangle = \\sqrt{n} \\, \\delta_{m, n-1} \\implies a = \\begin{pmatrix} 0 & \\sqrt{1} & 0 & 0 & \\dots \\\\ 0 & 0 & \\sqrt{2} & 0 & \\dots \\\\ 0 & 0 & 0 & \\sqrt{3} & \\dots \\\\ \\vdots & \\vdots & \\vdots & \\vdots & \\ddots \\end{pmatrix}$$
 2. <b>Creation Operator $\\hat{a}^\\dagger$:</b>
@@ -6489,8 +6507,8 @@ $$\\langle m|\\hat{a}^\\dagger|n\\rangle = \\sqrt{n+1} \\, \\delta_{m, n+1} \\im
   {
     id: 'c.4.1.7', sec: '4.1', kind: 'theorem', tier: 'core',
     title: 'Expectation Values, Virial Theorem & Uncertainty Product',
-    oneLine: 'In any stationary state |n⟩, ⟨T⟩ = ⟨V⟩ = ½ En (virial theorem) and Δx Δp = (n + ½)ħ.',
-    statement: `For any harmonic oscillator energy eigenstate $|n\\rangle$:
+    oneLine: "For an oscillator energy state, the averages of x and p are zero, but their spreads are not.",
+    statement: `<b>Start here.</b> For an oscillator energy state, the averages of x and p are zero, but their spreads are not. The average kinetic and potential energies are equal. Only the ground state reaches the minimum uncertainty product among these energy states.<br><br>For any harmonic oscillator energy eigenstate $|n\\rangle$:
 1. <b>Averages of Odd Powers Vanish:</b>
 $$\\langle n|\\hat{x}|n\\rangle = 0, \\qquad \\langle n|\\hat{p}|n\\rangle = 0$$
 2. <b>Second Moments:</b>
@@ -6517,8 +6535,8 @@ Energy is partitioned equally on average between kinetic and potential energy in
   {
     id: 'c.4.1.8', sec: '4.1', kind: 'definition', tier: 'core',
     title: 'Coherent States of the Harmonic Oscillator',
-    oneLine: 'Coherent states |α⟩ are eigenstates of â with Poissonian number statistics that oscillate without spreading.',
-    statement: `A <b>coherent state</b> $|\\alpha\\rangle$ is defined as an eigenstate of the non-Hermitian annihilation operator $\\hat{a}$:
+    oneLine: "A coherent state is a special mixture of oscillator energy states.",
+    statement: `<b>Start here.</b> A coherent state is a special mixture of oscillator energy states. Its average position and momentum follow the classical oscillation, while its wave packet keeps the ground-state-sized uncertainty.<br><br>A <b>coherent state</b> $|\\alpha\\rangle$ is defined as an eigenstate of the non-Hermitian annihilation operator $\\hat{a}$:
 $$\\boxed{\\hat{a}|\\alpha\\rangle = \\alpha|\\alpha\\rangle, \\qquad \\alpha \\in \\mathbb{C}}$$
 In the energy Fock basis $\{|n\\rangle\}$, the normalized coherent state is:
 $$\\boxed{|\\alpha\\rangle = e^{-|\\alpha|^2/2} \\sum_{n=0}^\\infty \\frac{\\alpha^n}{\\sqrt{n!}} |n\\rangle}$$
@@ -6544,8 +6562,8 @@ with mean $\\langle \\hat{N} \\rangle = |\\alpha|^2$ and variance $\\Delta N^2 =
   {
     id: 'c.4.2.1', sec: '4.2', kind: 'law', tier: 'core',
     title: '3D Schrödinger Equation & Cartesian Separation of Variables',
-    oneLine: 'For separable potentials V(x,y,z) = Vx(x) + Vy(y) + Vz(z), the 3D TISE separates into three independent 1D ODEs.',
-    statement: `The Time-Independent Schrödinger Equation for a particle of mass $m$ moving in three spatial dimensions is:
+    oneLine: "When the potential separates into x, y and z parts, try a wave function that is a product of three one-dimensional waves.",
+    statement: `<b>Start here.</b> When the potential separates into x, y and z parts, try a wave function that is a product of three one-dimensional waves. Each coordinate has its own equation; their energies add.<br><br>The Time-Independent Schrödinger Equation for a particle of mass $m$ moving in three spatial dimensions is:
 $$-\\frac{\\hbar^2}{2m}\\nabla^2 \\psi(x,y,z) + V(x,y,z)\\psi(x,y,z) = E\\psi(x,y,z)$$
 where the Laplacian in Cartesian coordinates is $\\nabla^2 = \\frac{\\partial^2}{\\partial x^2} + \\frac{\\partial^2}{\\partial y^2} + \\frac{\\partial^2}{\\partial z^2}$.<br>
 If the potential energy is <b>separable</b>:
@@ -6600,8 +6618,8 @@ $$\\boxed{E = E_x + E_y + E_z}$$`,
   {
     id: 'c.4.2.2', sec: '4.2', kind: 'theorem', tier: 'core',
     title: '3D Probability Density & Statistical Independence',
-    oneLine: 'In separable 3D states, the probability density factorizes: ρ(x,y,z) = ρx(x) ρy(y) ρz(z), making measurements statistically independent.',
-    statement: `For a factored stationary state $\\psi(x,y,z) = X(x)Y(y)Z(z)$, the three-dimensional probability density factors identically:
+    oneLine: "For a product state, the probability density is the product of the three coordinate densities.",
+    statement: `<b>Start here.</b> For a product state, the probability density is the product of the three coordinate densities. This means the coordinate outcomes are independent in that state. General three-dimensional states need not be products.<br><br>For a factored stationary state $\\psi(x,y,z) = X(x)Y(y)Z(z)$, the three-dimensional probability density factors identically:
 $$\\boxed{\\rho(x, y, z) = |\\psi(x,y,z)|^2 = |X(x)|^2 |Y(y)|^2 |Z(z)|^2 = \\rho_x(x) \\rho_y(y) \\rho_z(z)}$$
 The normalization condition is:
 $$\\int_{-\\infty}^\\infty dx \\int_{-\\infty}^\\infty dy \\int_{-\\infty}^\\infty dz \\, |\\psi(x,y,z)|^2 = \\left(\\int |X|^2 dx\\right) \\left(\\int |Y|^2 dy\\right) \\left(\\int |Z|^2 dz\\right) = 1 \\times 1 \\times 1 = 1$$
@@ -6623,8 +6641,8 @@ $$\\langle f(x) g(y) h(z) \\rangle = \\langle f(x) \\rangle \\langle g(y) \\rang
   {
     id: 'c.4.3.1', sec: '4.3', kind: 'theorem', tier: 'core',
     title: 'The 3D Rectangular Potential Box',
-    oneLine: 'A particle confined to an Lx × Ly × Lz box has quantized energies Enx,ny,nz = (π²ħ²/2m) (nx²/Lx² + ny²/Ly² + nz²/Lz²).',
-    statement: `A particle of mass $m$ is confined inside a rigid 3D rectangular box of side lengths $L_x, L_y, L_z$:
+    oneLine: "A particle in a rectangular box must have zero wave function at every wall.",
+    statement: `<b>Start here.</b> A particle in a rectangular box must have zero wave function at every wall. Each direction supports standing waves. Add the three one-dimensional energies to get the total energy.<br><br>A particle of mass $m$ is confined inside a rigid 3D rectangular box of side lengths $L_x, L_y, L_z$:
 $$V(x, y, z) = \\begin{cases} 0 & \\text{if } 0 < x < L_x, \\; 0 < y < L_y, \\; 0 < z < L_z \\\\ \\infty & \\text{otherwise} \\end{cases}$$
 The wave functions must vanish at all six walls. The normalized stationary wave functions are:
 $$\\boxed{\\psi_{n_x, n_y, n_z}(x, y, z) = \\sqrt{\\frac{8}{L_x L_y L_z}} \\sin\\left(\\frac{n_x \\pi x}{L_x}\\right) \\sin\\left(\\frac{n_y \\pi y}{L_y}\\right) \\sin\\left(\\frac{n_z \\pi z}{L_z}\\right)}$$
@@ -6646,8 +6664,8 @@ $$\\boxed{E_{n_x, n_y, n_z} = \\frac{\\pi^2 \\hbar^2}{2m} \\left( \\frac{n_x^2}{
   {
     id: 'c.4.3.2', sec: '4.3', kind: 'theorem', tier: 'core',
     title: 'The 3D Cubic Box Potential & Symmetry-Induced Degeneracy',
-    oneLine: 'In a cubic box (L = Lx = Ly = Lz), permutation symmetry causes energy levels to exhibit 1-fold, 3-fold, or 6-fold degeneracy.',
-    statement: `For a <b>cubic box</b> where $L_x = L_y = L_z = L$:
+    oneLine: "In a cubic box, swapping the three quantum numbers leaves the energy unchanged.",
+    statement: `<b>Start here.</b> In a cubic box, swapping the three quantum numbers leaves the energy unchanged. Different independent states can therefore have the same energy. This is called degeneracy.<br><br>For a <b>cubic box</b> where $L_x = L_y = L_z = L$:
 $$\\boxed{E_{n_x, n_y, n_z} = \\frac{\\pi^2 \\hbar^2}{2m L^2}(n_x^2 + n_y^2 + n_z^2) = E_1 (n_x^2 + n_y^2 + n_z^2)}$$
 where $E_1 = \\frac{\\pi^2 \\hbar^2}{2m L^2}$.<br>
 Because the sum of squares $n_x^2 + n_y^2 + n_z^2$ is invariant under permutations of $(n_x, n_y, n_z)$, energy levels exhibit <b>geometric (symmetry-induced) degeneracy</b>:
@@ -6673,8 +6691,8 @@ Because the sum of squares $n_x^2 + n_y^2 + n_z^2$ is invariant under permutatio
   {
     id: 'c.4.3.3', sec: '4.3', kind: 'definition', tier: 'core',
     title: 'Accidental vs. Geometric Degeneracy in 3D Wells',
-    oneLine: 'Accidental degeneracy occurs when different sets of quantum numbers share the same sum of squares, e.g. 3²+3²+3² = 5²+1²+1² = 27.',
-    statement: `In quantum mechanics, degeneracies are classified into two fundamental categories:
+    oneLine: "Some equal energies follow from the box’s symmetry; others arise because different combinations of squared quantum numbers happen to give the same sum.",
+    statement: `<b>Start here.</b> Some equal energies follow from the box’s symmetry; others arise because different combinations of squared quantum numbers happen to give the same sum. These are two different sources of degeneracy.<br><br>In quantum mechanics, degeneracies are classified into two fundamental categories:
 1. <b>Geometric (Essential / Symmetry) Degeneracy:</b> Arises directly from the geometric symmetry of the Hamiltonian (e.g., permutation of coordinates in a cubic box or rotational invariance in central potentials).
 2. <b>Accidental Degeneracy:</b> Occurs when two completely different sets of quantum numbers $(n_x, n_y, n_z)$ share the identical energy eigenvalue by numerical coincidence, without being related by any apparent geometric symmetry.<br>
 <b>Example in a Cubic Box:</b> Consider energy $E = 27 E_1$:
@@ -6701,8 +6719,8 @@ The state $(3,3,3)$ and the states $(5,1,1)$ have identical energy $27 E_1$ desp
   {
     id: 'c.4.4.1', sec: '4.4', kind: 'law', tier: 'core',
     title: 'The 3D Anisotropic Harmonic Oscillator',
-    oneLine: 'With distinct frequencies ωx, ωy, ωz, the energy is Enx,ny,nz = (nx + ½)ħωx + (ny + ½)ħωy + (nz + ½)ħωz.',
-    statement: `The Hamiltonian of a <b>3D anisotropic harmonic oscillator</b> with unequal spring constants along the three axes is:
+    oneLine: "A three-dimensional oscillator with different frequencies behaves like three independent quantum springs.",
+    statement: `<b>Start here.</b> A three-dimensional oscillator with different frequencies behaves like three independent quantum springs. Add their energies; the different frequencies usually remove the large degeneracies of the equal-frequency case.<br><br>The Hamiltonian of a <b>3D anisotropic harmonic oscillator</b> with unequal spring constants along the three axes is:
 $$\\hat{H} = \\frac{\\hat{p}_x^2 + \\hat{p}_y^2 + \\hat{p}_z^2}{2m} + \\frac{1}{2}m(\\omega_x^2 x^2 + \\omega_y^2 y^2 + \\omega_z^2 z^2)$$
 Since the Hamiltonian separates into three independent 1D harmonic oscillators $\\hat{H} = \\hat{H}_x + \\hat{H}_y + \\hat{H}_z$, we define three independent sets of ladder operators:
 $$[\\hat{a}_j, \\hat{a}_k^\\dagger] = \\delta_{jk} \\hat{I}, \\qquad [\\hat{a}_j, \\hat{a}_k] = [\\hat{a}_j^\\dagger, \\hat{a}_k^\\dagger] = 0 \\quad (j, k \\in \\{x, y, z\\})$$
@@ -6725,8 +6743,8 @@ $$E_{0,0,0} = \\frac{1}{2}\\hbar(\\omega_x + \\omega_y + \\omega_z)$$`,
   {
     id: 'c.4.4.2', sec: '4.4', kind: 'theorem', tier: 'core',
     title: 'The 3D Isotropic Harmonic Oscillator',
-    oneLine: 'When ωx = ωy = ωz = ω, the energy depends only on the principal quantum number N = nx + ny + nz: EN = (N + 3/2)ħω.',
-    statement: `For a <b>3D isotropic harmonic oscillator</b>, the potential is spherically symmetric:
+    oneLine: "When all three oscillator frequencies are equal, energy depends only on the sum of the three level numbers.",
+    statement: `<b>Start here.</b> When all three oscillator frequencies are equal, energy depends only on the sum of the three level numbers. Different triples with the same sum share the same energy.<br><br>For a <b>3D isotropic harmonic oscillator</b>, the potential is spherically symmetric:
 $$V(r) = \\frac{1}{2}m\\omega^2 (x^2 + y^2 + z^2) = \\frac{1}{2}m\\omega^2 r^2$$
 All three frequencies are identical: $\\omega_x = \\omega_y = \\omega_z = \\omega$.<br>
 The energy eigenvalues depend strictly on the total (principal) vibrational quantum number:
@@ -6750,8 +6768,8 @@ Each spatial dimension contributes $\\frac{1}{2}\\hbar\\omega$ to the minimum gr
   {
     id: 'c.4.4.3', sec: '4.4', kind: 'theorem', tier: 'core',
     title: 'Exact Degeneracy Formula gN = (N+1)(N+2)/2 for 3D Isotropic Oscillator',
-    oneLine: 'The degeneracy of level EN in a 3D isotropic oscillator is gN = ½ (N + 1)(N + 2), arising from the SU(3) dynamical symmetry.',
-    statement: `The degree of degeneracy $g_N$ of the energy level $E_N = \\left(N + \\frac{3}{2}\\right)\\hbar\\omega$ is the number of distinct partitions of the non-negative integer $N$ into three non-negative integers $(n_x, n_y, n_z)$:
+    oneLine: "Count all non-negative triples whose sum is N.",
+    statement: `<b>Start here.</b> Count all non-negative triples whose sum is N. Imagine N identical marks split into three groups by two separators. The count is (N + 1)(N + 2)/2.<br><br>The degree of degeneracy $g_N$ of the energy level $E_N = \\left(N + \\frac{3}{2}\\right)\\hbar\\omega$ is the number of distinct partitions of the non-negative integer $N$ into three non-negative integers $(n_x, n_y, n_z)$:
 $$n_x + n_y + n_z = N, \\qquad n_x, n_y, n_z \\ge 0$$
 Using the stars and bars combinatorial theorem:
 $$\\boxed{g_N = \\binom{N + 3 - 1}{3 - 1} = \\binom{N + 2}{2} = \\frac{(N + 1)(N + 2)}{2}}$$
@@ -8492,8 +8510,8 @@ CONCEPTS.push(
   {
     id: 'c.5.1.1', sec: '5.1', kind: 'law', tier: 'core',
     title: 'Spherical Polar Coordinates & The Laplacian Operator',
-    oneLine: 'In spherical polar coordinates (r, θ, φ), the 3D Laplacian separates cleanly into a radial derivative and the orbital angular momentum operator ∇² = (1/r²)(∂/∂r)(r² ∂/∂r) - L̂²/(ħ² r²).',
-    statement: `In <b>spherical polar coordinates</b> $(r, \\theta, \\phi)$ related to Cartesian coordinates by:
+    oneLine: "For a force that depends only on distance from a centre, use distance r and two angles.",
+    statement: `<b>Start here.</b> For a force that depends only on distance from a centre, use distance r and two angles. The Laplacian is the three-dimensional curvature rule written in these coordinates.<br><br>In <b>spherical polar coordinates</b> $(r, \\theta, \\phi)$ related to Cartesian coordinates by:
 $$x = r\\sin\\theta\\cos\\phi, \\quad y = r\\sin\\theta\\sin\\phi, \\quad z = r\\cos\\theta$$
 where $r \\in [0, \\infty)$, $\\theta \\in [0, \\pi]$, and $\\phi \\in [0, 2\\pi)$, the <b>Laplacian operator</b> $\\nabla^2$ is:
 $$\\boxed{\\nabla^2 = \\frac{1}{r^2}\\frac{\\partial}{\\partial r}\\left(r^2\\frac{\\partial}{\\partial r}\\right) + \\frac{1}{r^2\\sin\\theta}\\frac{\\partial}{\\partial \\theta}\\left(\\sin\\theta\\frac{\\partial}{\\partial \\theta}\\right) + \\frac{1}{r^2\\sin^2\\theta}\\frac{\\partial^2}{\\partial\\phi^2}}$$
@@ -8518,8 +8536,8 @@ This proves that the angular kinetic energy of a quantum particle in 3D is preci
   {
     id: 'c.5.1.2', sec: '5.1', kind: 'theorem', tier: 'core',
     title: 'Separation of Variables for Central Potentials',
-    oneLine: 'For any spherically symmetric potential V(r), the time-independent Schrödinger equation separates into a radial ODE and an angular PDE with separation constant l(l+1).',
-    statement: `For a <b>central potential</b> $V(\\mathbf{r}) = V(r)$, the time-independent Schrödinger equation:
+    oneLine: "Try writing the wave as a radial part times an angular part.",
+    statement: `<b>Start here.</b> Try writing the wave as a radial part times an angular part. A central potential lets the equation split into distance and direction problems, linked by an angular-momentum constant.<br><br>For a <b>central potential</b> $V(\\mathbf{r}) = V(r)$, the time-independent Schrödinger equation:
 $$-\\frac{\\hbar^2}{2m}\\nabla^2\\psi(r, \\theta, \\phi) + V(r)\\psi(r, \\theta, \\phi) = E\\psi(r, \\theta, \\phi)$$
 admits separable solutions of the product form:
 $$\\boxed{\\psi(r, \\theta, \\phi) = R(r) Y(\\theta, \\phi)}$$
@@ -8574,8 +8592,8 @@ Substituting into the Schrödinger equation and dividing by $R(r)Y(\\theta, \\ph
   {
     id: 'c.5.1.3', sec: '5.1', kind: 'law', tier: 'core',
     title: 'Complete Set of Commuting Observables (CSCO) for Central Potentials',
-    oneLine: 'In any central field, {Ĥ, L̂², L̂z} forms a Complete Set of Commuting Observables, with stationary states uniquely labelled by |n, l, m⟩.',
-    statement: `For any spherically symmetric Hamiltonian $\\hat{H} = \\frac{\\hat{p}^2}{2m} + V(r)$, the Hamiltonian commutes with all components of orbital angular momentum:
+    oneLine: "Energy, total orbital angular momentum squared and its z component can label the same state.",
+    statement: `<b>Start here.</b> Energy, total orbital angular momentum squared and its z component can label the same state. Their common eigenvalues are the labels n, l and m used for central-potential states.<br><br>For any spherically symmetric Hamiltonian $\\hat{H} = \\frac{\\hat{p}^2}{2m} + V(r)$, the Hamiltonian commutes with all components of orbital angular momentum:
 $$\\boxed{[\\hat{H}, \\hat{\\mathbf{L}}] = 0, \\qquad [\\hat{H}, \\hat{L}^2] = 0, \\qquad [\\hat{H}, \\hat{L}_z] = 0}$$
 Because $[\\hat{L}_x, \\hat{L}_y] = i\\hbar\\hat{L}_z \\neq 0$, the components $\\hat{L}_x, \\hat{L}_y, \\hat{L}_z$ do not commute with each other. Therefore, the maximal set of mutually commuting operators is the <b>Complete Set of Commuting Observables (CSCO)</b>:
 $$\\boxed{\\text{CSCO} = \\{ \\hat{H}, \\hat{L}^2, \\hat{L}_z \\}}$$
@@ -8597,8 +8615,8 @@ $$\\hat{H}\\psi_{nlm} = E_{nl}\\psi_{nlm}, \\quad \\hat{L}^2\\psi_{nlm} = l(l+1)
   {
     id: 'c.5.2.1', sec: '5.2', kind: 'theorem', tier: 'core',
     title: 'Separation of the Angular Equation & Azimuthal Quantization',
-    oneLine: 'The angular equation separates into Y(θ, φ) = Θ(θ)Φ(φ), where single-valuedness of Φ(φ) = e^{imφ} requires m to be an integer: m ∈ ℤ.',
-    statement: `The angular eigenvalue equation $\\hat{L}^2 Y(\\theta, \\phi) = l(l+1)\\hbar^2 Y(\\theta, \\phi)$ expands explicitly as:
+    oneLine: "The wave must match itself after a full turn around the z axis.",
+    statement: `<b>Start here.</b> The wave must match itself after a full turn around the z axis. That matching rule makes the azimuthal label m an integer.<br><br>The angular eigenvalue equation $\\hat{L}^2 Y(\\theta, \\phi) = l(l+1)\\hbar^2 Y(\\theta, \\phi)$ expands explicitly as:
 $$-\\left[ \\frac{1}{\\sin\\theta}\\frac{\\partial}{\\partial\\theta}\\left(\\sin\\theta\\frac{\\partial Y}{\\partial\\theta}\\right) + \\frac{1}{\\sin^2\\theta}\\frac{\\partial^2 Y}{\\partial\\phi^2} \\right] = l(l+1)Y$$
 Assuming a product solution:
 $$\\boxed{Y(\\theta, \\phi) = \\Theta(\\theta) \\Phi(\\phi)}$$
@@ -8626,8 +8644,8 @@ $$\\Phi(\\phi + 2\\pi) = \\Phi(\\phi) \\implies e^{i 2\\pi m} = 1 \\implies \\bo
   {
     id: 'c.5.2.2', sec: '5.2', kind: 'definition', tier: 'core',
     title: 'Associated Legendre Functions & Orbital Angular Momentum Quantization',
-    oneLine: 'Requiring Θ(θ) to be finite at θ = 0 and θ = π forces l to be a non-negative integer l ∈ {0, 1, 2, ...} with |m| ≤ l.',
-    statement: `With the substitution $\\xi = \\cos\\theta \\in [-1, 1]$, the polar equation becomes the <b>associated Legendre differential equation</b>:
+    oneLine: "The angular wave must remain acceptable at both poles.",
+    statement: `<b>Start here.</b> The angular wave must remain acceptable at both poles. This restricts l to non-negative integers and m to the integers from −l to l.<br><br>With the substitution $\\xi = \\cos\\theta \\in [-1, 1]$, the polar equation becomes the <b>associated Legendre differential equation</b>:
 $$\\boxed{(1 - \\xi^2)\\frac{d^2\\Theta}{d\\xi^2} - 2\\xi\\frac{d\\Theta}{d\\xi} + \\left[ l(l+1) - \\frac{m^2}{1 - \\xi^2} \\right]\\Theta = 0}$$
 The non-singular solutions on the interval $\\xi \\in [-1, 1]$ are the <b>associated Legendre functions</b> $P_l^m(\\cos\\theta)$, defined from the standard <b>Legendre polynomials</b> $P_l(\\xi)$ via:
 $$\\boxed{P_l^m(\\xi) = (-1)^m (1 - \\xi^2)^{m/2} \\frac{d^m}{d\\xi^m}P_l(\\xi) \\quad (m \\ge 0)}$$
@@ -8650,8 +8668,8 @@ $$\\boxed{l = 0, 1, 2, 3, \\dots, \\qquad m = -l, -l+1, \\dots, +l \\quad (2l+1 
   {
     id: 'c.5.2.3', sec: '5.2', kind: 'law', tier: 'core',
     title: 'Spherical Harmonics Y_l^m(θ, φ) & Spatial Parity',
-    oneLine: 'Spherical harmonics form an orthonormal basis on the unit sphere, with definite spatial parity Π̂ Y_l^m(θ, φ) = (-1)^l Y_l^m(θ, φ).',
-    statement: `The normalized simultaneous eigenfunctions of $\\hat{L}^2$ and $\\hat{L}_z$ are the <b>Spherical Harmonics</b> $Y_l^m(\\theta, \\phi)$:
+    oneLine: "Spherical harmonics are the standard angular wave patterns.",
+    statement: `<b>Start here.</b> Spherical harmonics are the standard angular wave patterns. They describe direction, while the radial function describes distance. Their parity is set by whether l is even or odd.<br><br>The normalized simultaneous eigenfunctions of $\\hat{L}^2$ and $\\hat{L}_z$ are the <b>Spherical Harmonics</b> $Y_l^m(\\theta, \\phi)$:
 $$\\boxed{Y_l^m(\\theta, \\phi) = (-1)^m \\sqrt{\\frac{2l+1}{4\\pi}\\frac{(l-m)!}{(l+m)!}} P_l^m(\\cos\\theta) e^{im\\phi} \\quad (m \\ge 0)}$$
 For negative $m$, $Y_l^{-m}(\\theta, \\phi) = (-1)^m [Y_l^m(\\theta, \\phi)]^*$.<br>
 <b>Lowest Spherical Harmonics:</b>
@@ -8678,8 +8696,8 @@ $$\\boxed{\\hat{\\Pi} Y_l^m(\\theta, \\phi) = Y_l^m(\\pi-\\theta, \\phi+\\pi) = 
   {
     id: 'c.5.2.4', sec: '5.2', kind: 'theorem', tier: 'core',
     title: 'Completeness & Angular Function Expansions',
-    oneLine: 'Any square-integrable angular function f(θ, φ) on the unit sphere can be expanded as a generalized Fourier series in spherical harmonics.',
-    statement: `Because the spherical harmonics $\{Y_l^m\}$ form a complete orthonormal basis on the sphere $S^2$, any arbitrary angular wavefunction $f(\\theta, \\phi)$ can be uniquely expanded as:
+    oneLine: "An acceptable angular function can be expanded in spherical harmonics, just as a vector can be expanded in coordinate directions.",
+    statement: `<b>Start here.</b> An acceptable angular function can be expanded in spherical harmonics, just as a vector can be expanded in coordinate directions. The expansion coefficients form its component list.<br><br>Because the spherical harmonics $\{Y_l^m\}$ form a complete orthonormal basis on the sphere $S^2$, any arbitrary angular wavefunction $f(\\theta, \\phi)$ can be uniquely expanded as:
 $$\\boxed{f(\\theta, \\phi) = \\sum_{l=0}^\\infty \\sum_{m=-l}^l c_{lm} Y_l^m(\\theta, \\phi)}$$
 where the expansion coefficients are computed via the projection integral:
 $$\\boxed{c_{lm} = \\langle Y_l^m | f \\rangle = \\int_0^{2\\pi} d\\phi \\int_0^\\pi \\sin\\theta \\, d\\theta \\; Y_l^m(\\theta, \\phi)^* f(\\theta, \\phi)}$$
@@ -8703,8 +8721,8 @@ $$\\boxed{P(l, m) = |c_{lm}|^2}$$`,
   {
     id: 'c.5.3.1', sec: '5.3', kind: 'law', tier: 'core',
     title: 'The Radial Equation & Centrifugal Potential Barrier',
-    oneLine: 'Substituting u(r) = r R(r) transforms the radial ODE into an effective 1D Schrödinger equation with centrifugal barrier V_eff(r) = V(r) + ħ²l(l+1)/(2mr²).',
-    statement: `The radial equation for $R(r)$:
+    oneLine: "Writing u = rR makes the radial equation look like a one-dimensional wave equation.",
+    statement: `<b>Start here.</b> Writing u = rR makes the radial equation look like a one-dimensional wave equation. Angular momentum adds an effective barrier that makes reaching the centre harder when l is nonzero.<br><br>The radial equation for $R(r)$:
 $$\\frac{1}{r^2}\\frac{d}{dr}\\left(r^2\\frac{dR}{dr}\\right) - \\frac{2m}{\\hbar^2}\\left[V(r) - E\\right]R(r) = \\frac{l(l+1)}{r^2}R(r)$$
 is transformed by introducing the <b>modified radial function</b>:
 $$\\boxed{u(r) \\equiv r R(r)}$$
@@ -8757,8 +8775,8 @@ The additional term $\\frac{\\hbar^2 l(l+1)}{2mr^2}$ is the <b>centrifugal poten
   {
     id: 'c.5.3.2', sec: '5.3', kind: 'theorem', tier: 'core',
     title: 'Boundary Conditions & Behavior of Radial Functions Near the Origin',
-    oneLine: 'Physical normalizability requires u(0) = 0, and for r → 0 the radial function scales as R(r) ~ r^l while u(r) ~ r^{l+1}.',
-    statement: `<b>Boundary Condition at the Origin:</b>
+    oneLine: "A radial solution must obey the physical boundary conditions at the centre and at large distance or the wall.",
+    statement: `<b>Start here.</b> A radial solution must obey the physical boundary conditions at the centre and at large distance or the wall. A formula that solves the differential equation can still be rejected by these conditions.<br><br><b>Boundary Condition at the Origin:</b>
 Because $R(r) = u(r)/r$, for the 3D wave function $\\psi$ to remain finite and avoid a delta-function singularity in $\\nabla^2(1/r) = -4\\pi\\delta^3(\\mathbf{r})$:
 $$\\boxed{u(0) = 0}$$
 <b>Normalization Condition:</b>
@@ -8785,8 +8803,8 @@ $$\\boxed{R(r) \\propto r^l \\quad (r \\to 0)}$$`,
   {
     id: 'c.5.3.3', sec: '5.3', kind: 'law', tier: 'core',
     title: 'The Infinite Spherical Well & Spherical Bessel Functions',
-    oneLine: 'Inside an infinite spherical well of radius a, the radial solutions are spherical Bessel functions R(r) = A j_l(kr), with quantized energies E_nl = ħ²β_nl²/(2ma²).',
-    statement: `The <b>Infinite Spherical Well</b> potential is:
+    oneLine: "Inside a spherical box the potential is constant; at its wall the wave must vanish.",
+    statement: `<b>Start here.</b> Inside a spherical box the potential is constant; at its wall the wave must vanish. The zeros of spherical Bessel functions select the allowed energies.<br><br>The <b>Infinite Spherical Well</b> potential is:
 $$V(r) = \\begin{cases} 0 & r \\le a \\\\ \\infty & r > a \\end{cases}$$
 Inside the well ($r \\le a$), with $k = \\frac{\\sqrt{2mE}}{\\hbar}$, the radial equation is the <b>spherical Bessel differential equation</b>:
 $$\\boxed{\\frac{d^2 R}{dr^2} + \\frac{2}{r}\\frac{dR}{dr} + \\left[ k^2 - \\frac{l(l+1)}{r^2} \\right]R = 0}$$
@@ -8813,8 +8831,8 @@ $$\\boxed{E_{nl} = \\frac{\\hbar^2 \\beta_{nl}^2}{2m a^2}}$$`,
   {
     id: 'c.5.3.4', sec: '5.3', kind: 'theorem', tier: 'core',
     title: 'Zero Angular Momentum (l = 0) States & Degeneracy Spectrum',
-    oneLine: 'For s-states (l = 0), the infinite spherical well spectrum E_n0 = n²π²ħ²/(2ma²) exactly reproduces the 1D infinite square well.',
-    statement: `For spherically symmetric $s$-states ($l = 0$), the spherical Bessel function is:
+    oneLine: "When l = 0, the centrifugal barrier is absent and the radial standing wave is especially simple.",
+    statement: `<b>Start here.</b> When l = 0, the centrifugal barrier is absent and the radial standing wave is especially simple. The radial label starts at one, and its energy grows as that label squared.<br><br>For spherically symmetric $s$-states ($l = 0$), the spherical Bessel function is:
 $$\\boxed{j_0(kr) = \\frac{\\sin(kr)}{kr}}$$
 The boundary condition $j_0(ka) = 0$ requires $\\sin(ka) = 0$, giving exact zeros:
 $$\\boxed{\\beta_{n0} = n\\pi, \\qquad n = 1, 2, 3, \\dots}$$
@@ -8844,8 +8862,8 @@ Comparing roots across different $l$:
   {
     id: 'c.5.4.1', sec: '5.4', kind: 'law', tier: 'core',
     title: 'The Two-Body Coulomb Hamiltonian & Reduced Mass Reduction',
-    oneLine: 'The two-body electron-proton Coulomb system separates into center-of-mass translation and relative motion with reduced mass μ = m_e m_p / (m_e + m_p) ≈ m_e.',
-    statement: `The <b>Hydrogen Atom</b> consists of a proton of mass $m_p$ and charge $+e$ and an electron of mass $m_e$ and charge $-e$ interacting via the attractive <b>Coulomb potential</b>:
+    oneLine: "The electron and nucleus both move.",
+    statement: `<b>Start here.</b> The electron and nucleus both move. Separate the motion of their centre of mass from their relative motion; the relative problem uses the reduced mass.<br><br>The <b>Hydrogen Atom</b> consists of a proton of mass $m_p$ and charge $+e$ and an electron of mass $m_e$ and charge $-e$ interacting via the attractive <b>Coulomb potential</b>:
 $$\\boxed{V(r) = -\\frac{e^2}{4\\pi\\varepsilon_0 r} = -\\frac{k e^2}{r}}$$
 Transforming from laboratory coordinates $(\\mathbf{r}_p, \\mathbf{r}_e)$ to center-of-mass $\\mathbf{R} = \\frac{m_p\\mathbf{r}_p + m_e\\mathbf{r}_e}{m_p + m_e}$ and relative position $\\mathbf{r} = \\mathbf{r}_e - \\mathbf{r}_p$, the total Hamiltonian separates:
 $$\\hat{H}_{\\text{tot}} = -\\frac{\\hbar^2}{2M}\\nabla_R^2 - \\frac{\\hbar^2}{2\\mu}\\nabla_r^2 + V(r)$$
@@ -8867,8 +8885,8 @@ $$\\boxed{-\\frac{\\hbar^2}{2\\mu}\\nabla^2\\psi(\\mathbf{r}) - \\frac{e^2}{4\\p
   {
     id: 'c.5.4.2', sec: '5.4', kind: 'theorem', tier: 'core',
     title: 'Asymptotic Analysis & Series Solution of the Radial Coulomb Equation',
-    oneLine: 'Asymptotic limits u(ρ) ~ ρ^{l+1} (ρ→0) and u(ρ) ~ e^{-ρ/2} (ρ→∞) peel off the divergent factors, leaving a terminating polynomial v(ρ).',
-    statement: `For bound states ($E < 0$), define the wave number $\\kappa = \\frac{\\sqrt{-2\\mu E}}{\\hbar}$ and dimensionless radial variable:
+    oneLine: "To solve the hydrogen radial equation, first find how the wave behaves near the centre and far away.",
+    statement: `<b>Start here.</b> To solve the hydrogen radial equation, first find how the wave behaves near the centre and far away. Factor out those behaviours, then solve for the remaining series.<br><br>For bound states ($E < 0$), define the wave number $\\kappa = \\frac{\\sqrt{-2\\mu E}}{\\hbar}$ and dimensionless radial variable:
 $$\\rho \\equiv 2\\kappa r, \\qquad \\rho_0 \\equiv \\frac{2\\mu}{\\hbar^2 \\kappa}\\left(\\frac{e^2}{4\\pi\\varepsilon_0}\\right)$$
 The radial equation for $u(\\rho) = r R(r)$ becomes:
 $$\\frac{d^2 u}{d\\rho^2} = \\left[ \\frac{1}{4} - \\frac{\\rho_0}{\\rho} + \\frac{l(l+1)}{\\rho^2} \\right]u$$
@@ -8895,8 +8913,8 @@ $$\\boxed{c_{j+1} = \\frac{j + l + 1 - \\rho_0 / 2}{(j + 1)(j + 2l + 2)} c_j}$$`
   {
     id: 'c.5.4.3', sec: '5.4', kind: 'law', tier: 'core',
     title: 'Hydrogen Energy Eigenvalues, Bohr Radius & The Rydberg Formula',
-    oneLine: 'Series termination truncates at j_max, defining the principal quantum number n = j_max + l + 1 and yielding Bohr energy levels E_n = -13.6 eV / n².',
-    statement: `The series terminates at $j = j_{\\text{max}}$ when the numerator of the recursion relation vanishes:
+    oneLine: "Hydrogen’s bound energies are negative and proportional to −1/n².",
+    statement: `<b>Start here.</b> Hydrogen’s bound energies are negative and proportional to −1/n². The Bohr radius sets the size scale. Energy differences determine the wavelengths of emitted or absorbed light.<br><br>The series terminates at $j = j_{\\text{max}}$ when the numerator of the recursion relation vanishes:
 $$j_{\\text{max}} + l + 1 - \\frac{\\rho_0}{2} = 0$$
 Define the <b>principal quantum number</b> $n$:
 $$\\boxed{n \\equiv j_{\\text{max}} + l + 1 = \\frac{\\rho_0}{2} \\in \\{1, 2, 3, \\dots\\}}$$
@@ -8923,8 +8941,8 @@ $$\\frac{1}{\\lambda} = R_\\infty \\left( \\frac{1}{n_f^2} - \\frac{1}{n_i^2} \\
   {
     id: 'c.5.4.4', sec: '5.4', kind: 'theorem', tier: 'core',
     title: 'Orbital & Spin Degeneracy of Hydrogen Energy Levels',
-    oneLine: 'Each hydrogen energy level E_n has an exact n²-fold orbital degeneracy (2n² including electron spin), reflecting the hidden SO(4) symmetry of the 1/r Coulomb potential.',
-    statement: `For a given principal quantum number $n$, the energy $E_n$ depends solely on $n$, and is completely independent of $l$ and $m$.<br>
+    oneLine: "In the nonrelativistic Coulomb model, many different angular states share one energy.",
+    statement: `<b>Start here.</b> In the nonrelativistic Coulomb model, many different angular states share one energy. Counting them gives n² spatial states; including the electron’s two spin states doubles this count.<br><br>For a given principal quantum number $n$, the energy $E_n$ depends solely on $n$, and is completely independent of $l$ and $m$.<br>
 <b>Total Orbital Degeneracy $g_n$:</b>
 Summing the $(2l+1)$ magnetic substates over all allowed values of $l \\in \\{0, 1, \\dots, n-1\\}$:
 $$\\boxed{g_n = \\sum_{l=0}^{n-1}(2l + 1) = 2\\sum_{l=0}^{n-1}l + \\sum_{l=0}^{n-1}1 = 2\\frac{(n-1)n}{2} + n = n^2}$$
@@ -8948,8 +8966,8 @@ $$\\boxed{g_n^{\\text{total}} = 2n^2}$$
   {
     id: 'c.5.4.5', sec: '5.4', kind: 'definition', tier: 'core',
     title: 'Hydrogen Radial Wave Functions & Associated Laguerre Polynomials',
-    oneLine: 'The radial wave functions R_nl(r) are expressed analytically via associated Laguerre polynomials L_{n-l-1}^{2l+1}(2r/na₀), having n - l - 1 radial nodes.',
-    statement: `The normalized <b>radial wave functions</b> of hydrogen are:
+    oneLine: "Hydrogen’s radial waves combine a decaying exponential with a polynomial.",
+    statement: `<b>Start here.</b> Hydrogen’s radial waves combine a decaying exponential with a polynomial. The polynomial determines radial nodes; n and l determine which pattern is allowed.<br><br>The normalized <b>radial wave functions</b> of hydrogen are:
 $$\\boxed{R_{nl}(r) = -\\left( \\frac{2}{n a_0} \\right)^{3/2} \\sqrt{\\frac{(n-l-1)!}{2n [(n+l)!]^3}} e^{-r/n a_0} \\left( \\frac{2r}{n a_0} \\right)^l L_{n+l}^{2l+1}\\left( \\frac{2r}{n a_0} \\right)}$$
 <b>Explicit Low-Lying Radial Wave Functions:</b>
 <ul>
@@ -8984,8 +9002,8 @@ Nodes in the radial wavefunction represent points where the electron has zero pr
   {
     id: 'c.5.4.6', sec: '5.4', kind: 'law', tier: 'core',
     title: 'Radial Probability Density & Expectation Values for Hydrogen',
-    oneLine: 'The probability of finding the electron between r and r+dr is P(r)dr = r²|R_nl(r)|²dr, peaking at r = a₀ for the 1s ground state.',
-    statement: `The probability of finding the electron in a spherical shell of radius $r$ and thickness $dr$ (integrated over all angles $\\theta, \\phi$) is the <b>radial probability density</b> $P(r)$:
+    oneLine: "A thin spherical shell contains more volume at larger r.",
+    statement: `<b>Start here.</b> A thin spherical shell contains more volume at larger r. Therefore the radial probability uses r² times the squared radial wave, rather than the squared wave alone.<br><br>The probability of finding the electron in a spherical shell of radius $r$ and thickness $dr$ (integrated over all angles $\\theta, \\phi$) is the <b>radial probability density</b> $P(r)$:
 $$\\boxed{P_{nl}(r) = r^2 |R_{nl}(r)|^2}$$
 For the $1s$ ground state:
 $$P_{10}(r) = r^2 \\left( 2 a_0^{-3/2} e^{-r/a_0} \\right)^2 = \\frac{4}{a_0^3} r^2 e^{-2r/a_0}$$
@@ -9454,8 +9472,8 @@ CONCEPTS.push(
   {
     id: 'c.6.1.1', sec: '6.1', kind: 'law', tier: 'core',
     title: 'Orbital Angular Momentum Operator & Lie Algebra',
-    oneLine: 'Orbital angular momentum L̂ = r̂ × p̂ generates rotations and satisfies the fundamental Lie commutator algebra [L̂_i, L̂_j] = iħ ε_ijk L̂_k.',
-    statement: `The quantum mechanical <b>orbital angular momentum operator</b> $\\hat{\\mathbf{L}}$ is defined in direct correspondence with classical mechanics:
+    oneLine: "Orbital angular momentum comes from position and momentum, like r × p in classical mechanics.",
+    statement: `<b>Start here.</b> Orbital angular momentum comes from position and momentum, like r × p in classical mechanics. Its three component operators do not commute, so they cannot all have sharp values at once.<br><br>The quantum mechanical <b>orbital angular momentum operator</b> $\\hat{\\mathbf{L}}$ is defined in direct correspondence with classical mechanics:
 $$\\boxed{\\hat{\\mathbf{L}} = \\hat{\\mathbf{r}} \\times \\hat{\\mathbf{p}}}$$
 In Cartesian components:
 $$\\hat{L}_x = \\hat{y}\\hat{p}_z - \\hat{z}\\hat{p}_y, \\quad \\hat{L}_y = \\hat{z}\\hat{p}_x - \\hat{x}\\hat{p}_z, \\quad \\hat{L}_z = \\hat{x}\\hat{p}_y - \\hat{y}\\hat{p}_x$$
@@ -9514,8 +9532,8 @@ Measuring $L_z$ with absolute certainty introduces complete quantum uncertainty 
   {
     id: 'c.6.1.2', sec: '6.1', kind: 'definition', tier: 'core',
     title: 'General Angular Momentum & Dirac Ladder Operators Ĵ±',
-    oneLine: 'General angular momentum Ĵ is defined purely by [Ĵ_i, Ĵ_j] = iħ ε_ijk Ĵ_k, factorized by ladder operators Ĵ± = Ĵ_x ± i Ĵ_y.',
-    statement: `A set of three Hermitian operators $\\hat{\\mathbf{J}} = (\\hat{J}_x, \\hat{J}_y, \\hat{J}_z)$ defines a <b>general angular momentum</b> if and only if they satisfy the Lie algebra:
+    oneLine: "Angular-momentum ladder operators move the m label up or down while keeping j fixed.",
+    statement: `<b>Start here.</b> Angular-momentum ladder operators move the m label up or down while keeping j fixed. In a matrix, they move a component to a neighbouring row with a known coefficient.<br><br>A set of three Hermitian operators $\\hat{\\mathbf{J}} = (\\hat{J}_x, \\hat{J}_y, \\hat{J}_z)$ defines a <b>general angular momentum</b> if and only if they satisfy the Lie algebra:
 $$\\boxed{[\\hat{J}_i, \\hat{J}_j] = i\\hbar\\varepsilon_{ijk}\\hat{J}_k}$$
 Define the non-Hermitian <b>ladder (raising and lowering) operators</b>:
 $$\\boxed{\\hat{J}_+ = \\hat{J}_x + i\\hat{J}_y, \\qquad \\hat{J}_- = \\hat{J}_x - i\\hat{J}_y = (\\hat{J}_+) ^\\dagger}$$
@@ -9539,8 +9557,8 @@ $$\\boxed{\\hat{J}_\\mp \\hat{J}_\\pm = \\hat{J}^2 - \\hat{J}_z^2 \\mp \\hbar\\h
   {
     id: 'c.6.1.3', sec: '6.1', kind: 'theorem', tier: 'core',
     title: 'Angular Momentum Eigenvalue Spectrum & Ladder Action',
-    oneLine: 'Algebraic ladder termination forces j to be an integer or half-integer j ∈ {0, ½, 1, 3/2, ...} with 2j+1 projections m ∈ {-j, ..., +j}.',
-    statement: `Let $|j, m\\rangle$ be the normalized simultaneous eigenstates of $\\hat{J}^2$ and $\\hat{J}_z$:
+    oneLine: "The angular-momentum ladder has a top and a bottom.",
+    statement: `<b>Start here.</b> The angular-momentum ladder has a top and a bottom. These limits restrict j and give m = −j, −j + 1, …, j, so there are 2j + 1 basis states.<br><br>Let $|j, m\\rangle$ be the normalized simultaneous eigenstates of $\\hat{J}^2$ and $\\hat{J}_z$:
 $$\\boxed{\\hat{J}^2|j, m\\rangle = j(j+1)\\hbar^2|j, m\\rangle, \\qquad \\hat{J}_z|j, m\\rangle = m\\hbar|j, m\\rangle}$$
 Because $\\hat{J}^2 - \\hat{J}_z^2 = \\hat{J}_x^2 + \\hat{J}_y^2 \\ge 0$, the magnetic quantum number is bounded: $m^2 \\le j(j+1)$.<br>
 Repeated application of $\\hat{J}_+$ and $\\hat{J}_-$ must terminate at top rung $m = +j$ and bottom rung $m = -j$:
@@ -9565,8 +9583,8 @@ $$\\boxed{\\hat{J}_\\pm|j, m\\rangle = \\hbar\\sqrt{j(j+1) - m(m \\pm 1)} |j, m 
   {
     id: 'c.6.2.1', sec: '6.2', kind: 'definition', tier: 'core',
     title: 'Matrix Representation of Angular Momentum Operators',
-    oneLine: 'In the {|j, m⟩} orthonormal basis, angular momentum operators are represented by finite (2j+1) × (2j+1) Hermitian matrices.',
-    statement: `In the ordered orthonormal basis $\{|j, j\\rangle, |j, j-1\\rangle, \\dots, |j, -j\\rangle\}$, the matrix elements are:
+    oneLine: "Choose states with definite j and m.",
+    statement: `<b>Start here.</b> Choose states with definite j and m. Jz is then diagonal; the raising and lowering matrices have entries next to the diagonal. Build Jx and Jy by adding and subtracting those two matrices.<br><br>In the ordered orthonormal basis $\{|j, j\\rangle, |j, j-1\\rangle, \\dots, |j, -j\\rangle\}$, the matrix elements are:
 $$\\boxed{\\langle j, m'|\\hat{J}_z|j, m\\rangle = m\\hbar \\delta_{m'm}}$$
 $$\\boxed{\\langle j, m'|\\hat{J}_\\pm|j, m\\rangle = \\hbar\\sqrt{j(j+1) - m(m\\pm 1)} \\delta_{m', m\\pm 1}}$$
 The transverse matrices are formed via:
@@ -9590,8 +9608,8 @@ $$J_x = \\frac{\\hbar}{\\sqrt{2}}\\begin{pmatrix} 0 & 1 & 0 \\\\ 1 & 0 & 1 \\\\ 
   {
     id: 'c.6.2.2', sec: '6.2', kind: 'law', tier: 'core',
     title: 'Geometrical Vector Model & Precession Cones',
-    oneLine: 'The angular momentum vector has length |J| = ħ√(j(j+1)) and precesses around the z-axis on a cone with angle cos θ = m / √(j(j+1)) < 1.',
-    statement: `In the semi-classical <b>vector model</b> of angular momentum:
+    oneLine: "The vector model is a picture for angular momentum, not a literal hidden arrow with three definite components.",
+    statement: `<b>Start here.</b> The vector model is a picture for angular momentum, not a literal hidden arrow with three definite components. The length and one component can be sharp; the other components still have spread.<br><br>In the semi-classical <b>vector model</b> of angular momentum:
 <ol>
   <li>The total length (magnitude) of the vector $\\mathbf{J}$ is fixed:
   $$\\boxed{|\\mathbf{J}| = \\hbar\\sqrt{j(j+1)}}$$</li>
@@ -9621,8 +9639,8 @@ Because $\\sqrt{j(j+1)} > j \\ge |m|$ for all $j > 0$, $\\cos\\theta < 1$.<br>
   {
     id: 'c.6.3.1', sec: '6.3', kind: 'law', tier: 'core',
     title: 'Differential Operator Form of Orbital Angular Momentum in Spherical Coordinates',
-    oneLine: 'In spherical polar coordinates, L̂z = -iħ ∂/∂φ and L̂± = ħ e^{±iφ}(± ∂/∂θ + i cot θ ∂/∂φ).',
-    statement: `Transforming Cartesian derivatives into spherical polar coordinates $(r, \\theta, \\phi)$, the orbital angular momentum operators take the differential form:
+    oneLine: "In an angular wave function, angular momentum acts through derivatives with respect to angles.",
+    statement: `<b>Start here.</b> In an angular wave function, angular momentum acts through derivatives with respect to angles. These differential rules describe the same operators as the matrices in a discrete angular-momentum basis.<br><br>Transforming Cartesian derivatives into spherical polar coordinates $(r, \\theta, \\phi)$, the orbital angular momentum operators take the differential form:
 $$\\boxed{\\hat{L}_z = -i\\hbar\\frac{\\partial}{\\partial\\phi}}$$
 $$\\boxed{\\hat{L}_\\pm = \\hbar e^{\\pm i\\phi} \\left( \\pm \\frac{\\partial}{\\partial\\theta} + i\\cot\\theta\\frac{\\partial}{\\partial\\phi} \\right)}$$
 $$\\boxed{\\hat{L}_x = i\\hbar\\left( \\sin\\phi\\frac{\\partial}{\\partial\\theta} + \\cot\\theta\\cos\\phi\\frac{\\partial}{\\partial\\phi} \\right)}$$
@@ -9642,8 +9660,8 @@ $$\\boxed{\\hat{L}^2 = -\\hbar^2 \\left[ \\frac{1}{\\sin\\theta}\\frac{\\partial
   {
     id: 'c.6.3.2', sec: '6.3', kind: 'theorem', tier: 'core',
     title: 'Construction of Spherical Harmonics via Ladder Operators',
-    oneLine: 'Setting L̂+|l, l⟩ = 0 uniquely determines the top spherical harmonic Y_l^l ∝ sin^l θ e^{ilφ}, from which all Y_l^m are generated by lowering with L̂-.',
-    statement: `The highest state $|l, l\\rangle$ in an angular momentum multiplet must be annihilated by the raising operator $\\hat{L}_+$:
+    oneLine: "Start from a spherical harmonic at the top of the m ladder, then apply lowering repeatedly.",
+    statement: `<b>Start here.</b> Start from a spherical harmonic at the top of the m ladder, then apply lowering repeatedly. This generates the other angular patterns for the same l.<br><br>The highest state $|l, l\\rangle$ in an angular momentum multiplet must be annihilated by the raising operator $\\hat{L}_+$:
 $$\\hat{L}_+ Y_l^l(\\theta, \\phi) = 0$$
 Using the differential form of $\\hat{L}_+$ and separating $Y_l^l(\\theta, \\phi) = \\Theta(\\theta)e^{il\\phi}$:
 $$\\hbar e^{i\\phi}\\left( \\frac{\\partial}{\\partial\\theta} + i\\cot\\theta\\frac{\\partial}{\\partial\\phi} \\right) \\Theta(\\theta)e^{il\\phi} = 0 \\implies \\frac{d\\Theta}{d\\theta} - l\\cot\\theta \\, \\Theta = 0$$
@@ -9669,8 +9687,8 @@ $$\\boxed{Y_l^m(\\theta, \\phi) = \\sqrt{\\frac{(l+m)!}{(2l)!(l-m)!}} \\left( \\
   {
     id: 'c.6.4.1', sec: '6.4', kind: 'law', tier: 'core',
     title: 'Experimental Evidence of Spin & The Stern-Gerlach Experiment',
-    oneLine: 'The 1922 Stern-Gerlach experiment with neutral silver atoms revealed spatial quantization into exactly two discrete beams, proving electron spin s = ½.',
-    statement: `In 1922, Otto Stern and Walther Gerlach passed a beam of neutral silver ($^{107}\\text{Ag}$) atoms in their ground state ($5s^1$, orbital angular momentum $L=0$) through an <b>inhomogeneous magnetic field</b> $\\mathbf{B} \\approx (B_0 + z \\frac{\\partial B_z}{\\partial z})\\hat{\\mathbf{z}}$.<br>
+    oneLine: "A Stern–Gerlach apparatus separates a beam according to a spin component.",
+    statement: `<b>Start here.</b> A Stern–Gerlach apparatus separates a beam according to a spin component. The two outcomes for spin one-half show that spin is quantized; it is not a small ball literally rotating.<br><br>In 1922, Otto Stern and Walther Gerlach passed a beam of neutral silver ($^{107}\\text{Ag}$) atoms in their ground state ($5s^1$, orbital angular momentum $L=0$) through an <b>inhomogeneous magnetic field</b> $\\mathbf{B} \\approx (B_0 + z \\frac{\\partial B_z}{\\partial z})\\hat{\\mathbf{z}}$.<br>
 <b>Force on a Magnetic Dipole:</b>
 $$\\mathbf{F} = \\nabla(\\boldsymbol{\\mu} \\cdot \\mathbf{B}) \\approx \\mu_z \\frac{\\partial B_z}{\\partial z} \\hat{\\mathbf{z}}$$
 <b>Classical Prediction:</b>
@@ -9697,8 +9715,8 @@ where $\\mu_B = \\frac{e\\hbar}{2m_e} \\approx 9.274 \\times 10^{-24} \\text{ J/
   {
     id: 'c.6.4.2', sec: '6.4', kind: 'definition', tier: 'core',
     title: 'Spin 1/2 Formalism & The Pauli Spin Matrices',
-    oneLine: 'The spin operators for a spin-½ particle are Ŝ = (ħ/2) σ, where σ are the Hermitian, traceless, unitary Pauli matrices.',
-    statement: `For a spin-$1/2$ system, the Hilbert space is $\\mathbb{C}^2$ spanned by the orthonormal basis vectors:
+    oneLine: "One spin-one-half needs just two amplitudes: up and down along a chosen axis.",
+    statement: `<b>Start here.</b> One spin-one-half needs just two amplitudes: up and down along a chosen axis. Its spin operators are exact 2 × 2 matrices, equal to ℏ/2 times the Pauli matrices.<br><br>For a spin-$1/2$ system, the Hilbert space is $\\mathbb{C}^2$ spanned by the orthonormal basis vectors:
 $$|\\uparrow\\rangle \\equiv |\\tfrac{1}{2}, +\\tfrac{1}{2}\\rangle = \\begin{pmatrix} 1 \\\\ 0 \\end{pmatrix}, \\qquad |\\downarrow\\rangle \\equiv |\\tfrac{1}{2}, -\\tfrac{1}{2}\\rangle = \\begin{pmatrix} 0 \\\\ 1 \\end{pmatrix}$$
 The spin operator is:
 $$\\boxed{\\hat{\\mathbf{S}} = \\frac{\\hbar}{2}\\boldsymbol{\\sigma}, \\qquad \\hat{S}_x = \\frac{\\hbar}{2}\\sigma_x, \\quad \\hat{S}_y = \\frac{\\hbar}{2}\\sigma_y, \\quad \\hat{S}_z = \\frac{\\hbar}{2}\\sigma_z}$$
@@ -9728,8 +9746,8 @@ $$\\boxed{\\sigma_x = \\begin{pmatrix} 0 & 1 \\\\ 1 & 0 \\end{pmatrix}, \\qquad 
   {
     id: 'c.6.4.3', sec: '6.4', kind: 'theorem', tier: 'core',
     title: 'Spinors, Measurement Probabilities & The Bloch Sphere',
-    oneLine: 'Any pure spin-½ state is a spinor χ = (a, b)ᵀ mapped onto the unit Bloch sphere by |χ⟩ = cos(θ/2)|↑⟩ + e^{iφ} sin(θ/2)|↓⟩.',
-    statement: `An arbitrary pure spin-$1/2$ state is represented by a two-component <b>spinor</b>:
+    oneLine: "A spinor is the two-entry state column.",
+    statement: `<b>Start here.</b> A spinor is the two-entry state column. The squared magnitudes give up and down probabilities in the chosen basis. A relative phase affects measurements along other axes.<br><br>An arbitrary pure spin-$1/2$ state is represented by a two-component <b>spinor</b>:
 $$\\chi = \\begin{pmatrix} a \\\\ b \\end{pmatrix} = a|\\uparrow\\rangle + b|\\downarrow\\rangle, \\qquad |a|^2 + |b|^2 = 1$$
 <b>Measurement Probabilities along the z-axis:</b>
 - Measuring $S_z$ yields $+\\hbar/2$ with probability $P(\\uparrow) = |a|^2$.
@@ -9758,8 +9776,8 @@ Spinors do NOT return to their original state under a $360^\\circ$ rotation—th
   {
     id: 'c.6.4.4', sec: '6.4', kind: 'law', tier: 'core',
     title: 'Spin Dynamics & Larmor Precession in a Magnetic Field',
-    oneLine: 'A spin-½ magnetic dipole in a magnetic field B = B₀ ẑ precesses around B at the Larmor frequency ω_L = γ B₀.',
-    statement: `The interaction of a magnetic dipole $\\boldsymbol{\\mu} = \\gamma \\hat{\\mathbf{S}}$ with an external magnetic field $\\mathbf{B} = B_0 \\hat{\\mathbf{z}}$ is governed by the Zeeman Hamiltonian:
+    oneLine: "A magnetic field gives spin states different energies.",
+    statement: `<b>Start here.</b> A magnetic field gives spin states different energies. Their relative phase changes with time, causing the average transverse spin to precess around the field direction.<br><br>The interaction of a magnetic dipole $\\boldsymbol{\\mu} = \\gamma \\hat{\\mathbf{S}}$ with an external magnetic field $\\mathbf{B} = B_0 \\hat{\\mathbf{z}}$ is governed by the Zeeman Hamiltonian:
 $$\\boxed{\\hat{H} = -\\boldsymbol{\\mu} \\cdot \\mathbf{B} = -\\gamma B_0 \\hat{S}_z = -\\frac{\\hbar\\omega_L}{2}\\sigma_z}$$
 where $\\gamma$ is the gyromagnetic ratio and $\\omega_L$ is the <b>Larmor precession frequency</b>:
 $$\\boxed{\\omega_L = \\gamma B_0 = \\frac{g e B_0}{2m}}$$
@@ -9786,8 +9804,8 @@ The spin vector precesses uniformly in the $xy$-plane perpendicular to $\\mathbf
   {
     id: 'c.6.5.1', sec: '6.5', kind: 'definition', tier: 'core',
     title: 'Addition of Two Angular Momenta: Uncoupled vs Coupled Bases',
-    oneLine: 'Adding Ĵ = Ĵ₁ + Ĵ₂ connects the uncoupled tensor product basis {|j₁, m₁; j₂, m₂⟩} to the coupled total angular momentum basis {|J, M; j₁, j₂⟩}.',
-    statement: `Consider two independent quantum systems with angular momenta $\\hat{\\mathbf{J}}_1$ and $\\hat{\\mathbf{J}}_2$ acting in Hilbert spaces $\\mathcal{H}_1$ (dim $2j_1+1$) and $\\mathcal{H}_2$ (dim $2j_2+1$). Since they act on different degrees of freedom:
+    oneLine: "Two angular momenta can be described separately or by their total.",
+    statement: `<b>Start here.</b> Two angular momenta can be described separately or by their total. These are different bases for the same combined state. A change-of-basis matrix connects the two descriptions.<br><br>Consider two independent quantum systems with angular momenta $\\hat{\\mathbf{J}}_1$ and $\\hat{\\mathbf{J}}_2$ acting in Hilbert spaces $\\mathcal{H}_1$ (dim $2j_1+1$) and $\\mathcal{H}_2$ (dim $2j_2+1$). Since they act on different degrees of freedom:
 $$[\\hat{\\mathbf{J}}_1, \\hat{\\mathbf{J}}_2] = 0$$
 The <b>total angular momentum operator</b> is:
 $$\\boxed{\\hat{\\mathbf{J}} = \\hat{\\mathbf{J}}_1 + \\hat{\\mathbf{J}}_2 = \\hat{\\mathbf{J}}_1 \\otimes I_2 + I_1 \\otimes \\hat{\\mathbf{J}}_2}$$
@@ -9815,8 +9833,8 @@ $$\\boxed{N = (2j_1 + 1)(2j_2 + 1)}$$`,
   {
     id: 'c.6.5.2', sec: '6.5', kind: 'theorem', tier: 'core',
     title: 'The Triangle Selection Rule for Total Angular Momentum',
-    oneLine: 'The total angular momentum quantum number J takes values in integer steps from |j₁ - j₂| to j₁ + j₂, with M = m₁ + m₂.',
-    statement: `For the addition of two angular momenta $j_1$ and $j_2$, the allowed values of the total angular momentum quantum number $J$ are given by the <b>Triangle Inequality</b>:
+    oneLine: "When j₁ and j₂ combine, the total j ranges from |j₁ − j₂| to j₁ + j₂ in steps of one.",
+    statement: `<b>Start here.</b> When j₁ and j₂ combine, the total j ranges from |j₁ − j₂| to j₁ + j₂ in steps of one. This resembles the allowed lengths when adding two arrows, with quantum restrictions.<br><br>For the addition of two angular momenta $j_1$ and $j_2$, the allowed values of the total angular momentum quantum number $J$ are given by the <b>Triangle Inequality</b>:
 $$\\boxed{|j_1 - j_2| \\le J \\le j_1 + j_2, \\qquad J \\in \\{|j_1 - j_2|, \\; |j_1 - j_2| + 1, \\; \\dots, \\; j_1 + j_2\\}}$$
 For each allowed value of $J$, the total magnetic quantum number $M$ satisfies:
 $$\\boxed{M = m_1 + m_2, \\qquad M \\in \\{-J, -J+1, \\dots, +J\\}}$$
@@ -9845,8 +9863,8 @@ $$\\sum_{J=|j_1 - j_2|}^{j_1 + j_2}(2J + 1) = (2j_1 + 1)(2j_2 + 1)$$
   {
     id: 'c.6.5.3', sec: '6.5', kind: 'law', tier: 'core',
     title: 'Clebsch-Gordan Coefficients & Selection Rules',
-    oneLine: 'Clebsch-Gordan coefficients ⟨j₁, m₁; j₂, m₂|J, M⟩ are the unitary expansion elements connecting uncoupled and coupled bases.',
-    statement: `The transformation between the uncoupled basis and the coupled basis is given by the <b>Clebsch-Gordan (CG) expansion</b>:
+    oneLine: "Clebsch–Gordan coefficients are the entries of the matrix that changes from separate angular-momentum labels to total-angular-momentum labels.",
+    statement: `<b>Start here.</b> Clebsch–Gordan coefficients are the entries of the matrix that changes from separate angular-momentum labels to total-angular-momentum labels. They are amplitudes; squared magnitudes give probabilities.<br><br>The transformation between the uncoupled basis and the coupled basis is given by the <b>Clebsch-Gordan (CG) expansion</b>:
 $$\\boxed{|J, M\\rangle = \\sum_{m_1=-j_1}^{j_1} \\sum_{m_2=-j_2}^{j_2} C_{m_1 m_2 M}^{j_1 j_2 J} |j_1, m_1; j_2, m_2\\rangle}$$
 where the real expansion coefficients are the <b>Clebsch-Gordan coefficients</b>:
 $$C_{m_1 m_2 M}^{j_1 j_2 J} \\equiv \\langle j_1, m_1; j_2, m_2 | J, M \\rangle$$
@@ -9875,8 +9893,8 @@ $$\\sum_{J, M} \\langle j_1, m_1; j_2, m_2 | J, M \\rangle \\langle J, M | j_1, 
   {
     id: 'c.6.5.4', sec: '6.5', kind: 'theorem', tier: 'core',
     title: 'Addition of Two Spin-1/2 Particles: Singlet and Triplet States',
-    oneLine: 'Coupling two spin-½ particles yields a symmetric Triplet (S = 1, M = 1, 0, -1) and an antisymmetric Singlet (S = 0, M = 0).',
-    statement: `When adding the spins of two spin-$1/2$ particles ($s_1 = 1/2, s_2 = 1/2$), the total spin quantum number can be $S = 1$ or $S = 0$:
+    oneLine: "Two spin-one-half particles have four basis states.",
+    statement: `<b>Start here.</b> Two spin-one-half particles have four basis states. Three combinations form the total-spin-one triplet; one forms the total-spin-zero singlet. The singlet mixes up-down and down-up with a minus sign.<br><br>When adding the spins of two spin-$1/2$ particles ($s_1 = 1/2, s_2 = 1/2$), the total spin quantum number can be $S = 1$ or $S = 0$:
 $$\\frac{1}{2} \\otimes \\frac{1}{2} = 1 \\oplus 0$$
 <b>1. The Triplet States ($S = 1$, Symmetric under particle exchange $1 \\leftrightarrow 2$):</b>
 $$\\boxed{|1, +1\\rangle = |\\uparrow\\uparrow\\rangle}$$
@@ -9904,8 +9922,8 @@ By the Pauli Exclusion Principle, two identical fermions (like electrons in heli
   {
     id: 'c.6.5.5', sec: '6.5', kind: 'law', tier: 'core',
     title: 'Spin-Orbit Coupling & Addition of Orbital and Spin Angular Momenta',
-    oneLine: 'Coupling orbital L and spin S yields J = l ± ½, splitting spectral levels via the spin-orbit Hamiltonian H_SO ∝ L̂ · Ŝ = ½(Ĵ² - L̂² - Ŝ²).',
-    statement: `When an electron with orbital angular momentum $\\hat{\\mathbf{L}}$ and spin $\\hat{\\mathbf{S}}$ moves in an atomic potential, the relativistic <b>spin-orbit interaction</b> couples them:
+    oneLine: "Spin-orbit coupling makes energy depend on how orbital and spin angular momenta combine.",
+    statement: `<b>Start here.</b> Spin-orbit coupling makes energy depend on how orbital and spin angular momenta combine. Use total J to organize the states because L and S are coupled.<br><br>When an electron with orbital angular momentum $\\hat{\\mathbf{L}}$ and spin $\\hat{\\mathbf{S}}$ moves in an atomic potential, the relativistic <b>spin-orbit interaction</b> couples them:
 $$\\hat{H}_{\\text{SO}} = \\xi(r) \\hat{\\mathbf{L}} \\cdot \\hat{\\mathbf{S}}$$
 The total angular momentum is:
 $$\\hat{\\mathbf{J}} = \\hat{\\mathbf{L}} + \\hat{\\mathbf{S}}$$
@@ -10337,8 +10355,8 @@ CONCEPTS.push(
   {
     id: 'c.7.1.1', sec: '7.1', kind: 'law', tier: 'core',
     title: 'Non-Degenerate Perturbation Theory: First-Order Energy Correction',
-    oneLine: 'In non-degenerate perturbation theory Ĥ = Ĥ₀ + λĤ\', the first-order energy shift is the expectation value of the perturbation in the unperturbed state E_n^{(1)} = ⟨n^{(0)}|Ĥ\'|n^{(0)}⟩.',
-    statement: `When a quantum system with known exactly solvable Hamiltonian $\\hat{H}_0$ ($H_0|n^{(0)}\\rangle = E_n^{(0)}|n^{(0)}\\rangle$) is subjected to a weak perturbation $\\hat{H}'$:
+    oneLine: "Start with a system you can solve, then add a small extra energy operator.",
+    statement: `<b>Start here.</b> Start with a system you can solve, then add a small extra energy operator. The first-order energy shift is its average in the original state: the corresponding diagonal matrix entry.<br><br>When a quantum system with known exactly solvable Hamiltonian $\\hat{H}_0$ ($H_0|n^{(0)}\\rangle = E_n^{(0)}|n^{(0)}\\rangle$) is subjected to a weak perturbation $\\hat{H}'$:
 $$\\boxed{\\hat{H} = \\hat{H}_0 + \\lambda \\hat{H}'}$$
 where $\\lambda \\in [0, 1]$ is a dimensionless expansion parameter. Expanding eigenvalues and eigenstates in a Taylor perturbation series:
 $$E_n = E_n^{(0)} + \\lambda E_n^{(1)} + \\lambda^2 E_n^{(2)} + \\dots$$
@@ -10361,8 +10379,8 @@ $$E_n \\approx E_n^{(0)} + \\langle n^{(0)} | \\hat{H}' | n^{(0)} \\rangle$$`,
   {
     id: 'c.7.1.2', sec: '7.1', kind: 'theorem', tier: 'core',
     title: 'First-Order State Correction & Second-Order Energy Shift (Level Repulsion)',
-    oneLine: 'The second-order energy correction E_n^{(2)} = ∑_{m≠n} |⟨m^{(0)}|Ĥ\'|n^{(0)}⟩|² / (E_n^{(0)} - E_m^{(0)}) causes quantum level repulsion and always lowers the ground state energy.',
-    statement: `Expanding the first-order state correction in the complete unperturbed basis $|n^{(1)}\\rangle = \\sum_{m \\neq n} c_m^{(n)}|m^{(0)}\\rangle$ yields:
+    oneLine: "Off-diagonal perturbation entries mix the original states.",
+    statement: `<b>Start here.</b> Off-diagonal perturbation entries mix the original states. At second order they also shift energies; a nearby level usually has a larger effect because the energy denominator is smaller.<br><br>Expanding the first-order state correction in the complete unperturbed basis $|n^{(1)}\\rangle = \\sum_{m \\neq n} c_m^{(n)}|m^{(0)}\\rangle$ yields:
 $$\\boxed{|n^{(1)}\\rangle = \\sum_{m \\neq n} \\frac{\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle}{E_n^{(0)} - E_m^{(0)}} |m^{(0)}\\rangle}$$
 The corresponding <b>second-order energy correction</b> is:
 $$\\boxed{E_n^{(2)} = \\sum_{m \\neq n} \\frac{|\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle|^2}{E_n^{(0)} - E_m^{(0)}}}$$
@@ -10387,8 +10405,8 @@ $$\\boxed{E_n^{(2)} = \\sum_{m \\neq n} \\frac{|\\langle m^{(0)} | \\hat{H}' | n
   {
     id: 'c.7.1.3', sec: '7.1', kind: 'law', tier: 'core',
     title: 'Validity Criterion for Perturbation Theory',
-    oneLine: 'Perturbation theory converges only when the matrix elements of Ĥ\' are much smaller than the unperturbed energy level spacings: |⟨m|Ĥ\'|n⟩| ≪ |E_n^{(0)} - E_m^{(0)}|.',
-    statement: `For non-degenerate perturbation theory to be reliable and convergent, the perturbation must be small compared to the energy gaps between unperturbed states:
+    oneLine: "“Small” means the perturbation matrix entries are small compared with the separation between the relevant original energies.",
+    statement: `<b>Start here.</b> “Small” means the perturbation matrix entries are small compared with the separation between the relevant original energies. A numerically small perturbation can still fail near a degeneracy.<br><br>For non-degenerate perturbation theory to be reliable and convergent, the perturbation must be small compared to the energy gaps between unperturbed states:
 $$\\boxed{|\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle| \\ll |E_n^{(0)} - E_m^{(0)}| \\quad \\forall m \\neq n}$$
 <b>Consequences of Breakdown:</b>
 - If two states have identical unperturbed energies ($E_n^{(0)} = E_m^{(0)}$), the denominator vanishes and the non-degenerate formula diverges catastrophically to $\\infty$.
@@ -10409,8 +10427,8 @@ $$\\boxed{|\\langle m^{(0)} | \\hat{H}' | n^{(0)} \\rangle| \\ll |E_n^{(0)} - E_
   {
     id: 'c.7.2.1', sec: '7.2', kind: 'theorem', tier: 'core',
     title: 'Degenerate Perturbation Theory & The Secular Equation',
-    oneLine: 'For a d-fold degenerate level, the first-order energy corrections are the eigenvalues of the d × d perturbation matrix W_ij = ⟨i|Ĥ\'|j⟩ found via det(W - E^{(1)}I) = 0.',
-    statement: `Let $\{|\\psi_1^{(0)}\\rangle, |\\psi_2^{(0)}\\rangle, \\dots, |\\psi_d^{(0)}\\rangle\}$ span a $d$-fold degenerate subspace with common unperturbed energy $E_0$.<br>
+    oneLine: "If several original states share one energy, first form the perturbation matrix inside that group.",
+    statement: `<b>Start here.</b> If several original states share one energy, first form the perturbation matrix inside that group. Diagonalize this small matrix to find the correct state combinations and first-order shifts.<br><br>Let $\{|\\psi_1^{(0)}\\rangle, |\\psi_2^{(0)}\\rangle, \\dots, |\\psi_d^{(0)}\\rangle\}$ span a $d$-fold degenerate subspace with common unperturbed energy $E_0$.<br>
 Construct the $d \\times d$ <b>perturbation matrix</b> $W$:
 $$W_{ij} = \\langle \\psi_i^{(0)} | \\hat{H}' | \\psi_j^{(0)} \\rangle$$
 The first-order energy corrections $E^{(1)}$ are the roots of the <b>secular equation</b>:
@@ -10434,8 +10452,8 @@ If $E_+^{(1)} \\neq E_-^{(1)}$, the perturbation completely lifts the degeneracy
   {
     id: 'c.7.2.2', sec: '7.2', kind: 'law', tier: 'core',
     title: 'Fine Structure of Hydrogen: Relativistic Correction & Spin-Orbit Coupling',
-    oneLine: 'Fine structure combines relativistic kinetic correction H_rel and spin-orbit coupling H_SO, shifting hydrogen levels by E_FS^{(1)} = (E_n²/2mc²)[3 - 4n/(j + ½)].',
-    statement: `The <b>fine structure</b> of hydrogen ($E_{\\text{FS}} \\sim \\alpha^2 |E_n| \\sim 10^{-4} |E_n|$) consists of two relativistic corrections:
+    oneLine: "Hydrogen’s fine structure comes from small relativistic and spin effects.",
+    statement: `<b>Start here.</b> Hydrogen’s fine structure comes from small relativistic and spin effects. Treat them as extra terms in the Hamiltonian; they split some energies that the simpler Coulomb model makes equal.<br><br>The <b>fine structure</b> of hydrogen ($E_{\\text{FS}} \\sim \\alpha^2 |E_n| \\sim 10^{-4} |E_n|$) consists of two relativistic corrections:
 $$\\hat{H}_{\\text{FS}} = \\hat{H}_{\\text{rel}} + \\hat{H}_{\\text{SO}}$$
 <ol>
   <li><b>Relativistic Kinetic Correction:</b>
@@ -10461,8 +10479,8 @@ where $\\alpha = \\frac{e^2}{4\\pi\\varepsilon_0 \\hbar c} \\approx \\frac{1}{13
   {
     id: 'c.7.2.3', sec: '7.2', kind: 'law', tier: 'core',
     title: 'The Zeeman Effect: Weak-Field vs Strong-Field (Paschen-Back) Regimes',
-    oneLine: 'In a magnetic field B, the Zeeman Hamiltonian Ĥ_Z = (μ_B/ħ)(L̂ + 2Ŝ) · B splits levels into Landé multiplets (weak field) or uncoupled Paschen-Back states (strong field).',
-    statement: `When an atom is placed in a uniform external magnetic field $\\mathbf{B} = B \\hat{\\mathbf{z}}$, the interaction Hamiltonian is:
+    oneLine: "A magnetic field splits atomic energies.",
+    statement: `<b>Start here.</b> A magnetic field splits atomic energies. In weak fields the internal angular-momentum coupling dominates; in strong fields the field can dominate and change the useful state labels.<br><br>When an atom is placed in a uniform external magnetic field $\\mathbf{B} = B \\hat{\\mathbf{z}}$, the interaction Hamiltonian is:
 $$\\boxed{\\hat{H}_Z = -(\\boldsymbol{\\mu}_L + \\boldsymbol{\\mu}_S) \\cdot \\mathbf{B} = \\frac{\\mu_B}{\\hbar}(\\hat{L}_z + 2\\hat{S}_z)B}$$
 where $\\mu_B = \\frac{e\\hbar}{2m}$ is the Bohr magneton.<br>
 <b>1. Weak-Field Zeeman Effect ($B \\ll B_{\\text{int}} \\sim 1\\text{ Tesla}$, $\\mu_B B \\ll E_{\\text{FS}}$):</b>
@@ -10490,8 +10508,8 @@ $$\\boxed{E_Z^{(1)} = \\mu_B B (m_l + 2m_s)}$$`,
   {
     id: 'c.7.2.4', sec: '7.2', kind: 'theorem', tier: 'core',
     title: 'The Stark Effect: Linear vs Quadratic Splitting in Hydrogen',
-    oneLine: 'The Stark perturbation Ĥ\' = eEz causes no first-order shift for non-degenerate states like 1s (quadratic Stark), but produces a linear Stark splitting in the degenerate n=2 manifold.',
-    statement: `When an atom is placed in a uniform electric field $\\mathbf{E} = \\mathcal{E}\\hat{\\mathbf{z}}$, the perturbation is:
+    oneLine: "An electric field adds a perturbation that can mix states of different parity.",
+    statement: `<b>Start here.</b> An electric field adds a perturbation that can mix states of different parity. In degenerate hydrogen levels this can give a shift proportional to the field; an isolated nondegenerate state with definite parity has no first-order dipole shift.<br><br>When an atom is placed in a uniform electric field $\\mathbf{E} = \\mathcal{E}\\hat{\\mathbf{z}}$, the perturbation is:
 $$\\hat{H}' = -\\mathbf{d} \\cdot \\mathbf{E} = e \\mathcal{E} z = e \\mathcal{E} r\\cos\\theta$$
 <b>1. The Parity Theorem & Quadratic Stark Effect:</b>
 Because $z$ is odd under spatial parity ($\\hat{\\Pi} z \\hat{\\Pi}^{-1} = -z$), its diagonal matrix element in any state of definite parity vanishes identically:
@@ -10521,8 +10539,8 @@ $$\\boxed{E^{(1)} = \\pm 3 e \\mathcal{E} a_0 \\quad (\\text{two non-degenerate 
   {
     id: 'c.7.3.1', sec: '7.3', kind: 'law', tier: 'core',
     title: 'The Variational Principle: Upper Bound to Ground State Energy',
-    oneLine: 'For any normalizable trial wavefunction ψ_trial, the energy expectation value provides a rigorous upper bound to the true ground state energy: ⟨Ĥ⟩ ≥ E_gs.',
-    statement: `Let $\\hat{H}$ be a time-independent Hamiltonian with true ground state energy $E_{\\text{gs}}$. For <i>any</i> arbitrary normalizable trial wave function $|\\psi_{\\text{trial}}\\rangle$:
+    oneLine: "Try a normalized guess for the ground-state wave function and calculate its average energy.",
+    statement: `<b>Start here.</b> Try a normalized guess for the ground-state wave function and calculate its average energy. That value cannot be below the true ground-state energy. Adjust the guess to lower the estimate.<br><br>Let $\\hat{H}$ be a time-independent Hamiltonian with true ground state energy $E_{\\text{gs}}$. For <i>any</i> arbitrary normalizable trial wave function $|\\psi_{\\text{trial}}\\rangle$:
 $$\\boxed{\\langle H \\rangle_{\\text{trial}} = \\frac{\\langle \\psi_{\\text{trial}} | \\hat{H} | \\psi_{\\text{trial}} \\rangle}{\\langle \\psi_{\\text{trial}} | \\psi_{\\text{trial}} \\rangle} \\ge E_{\\text{gs}}}$$
 The equality holds if and only if $|\\psi_{\\text{trial}}\\rangle$ is an exact ground state eigenstate.<br>
 <b>Ritz Variational Method:</b>
@@ -10574,8 +10592,8 @@ The optimal parameters $\\alpha_i^*$ yield the tightest upper bound $\\langle H 
   {
     id: 'c.7.3.2', sec: '7.3', kind: 'theorem', tier: 'core',
     title: 'Variational Ground State of the Helium Atom & Screening',
-    oneLine: 'A variational trial function with effective nuclear charge Z_eff = 2 - 5/16 = 1.6875 accounts for electron-electron shielding and predicts E_He ≈ -77.5 eV (within 2% of experiment).',
-    statement: `The Hamiltonian of the neutral <b>Helium atom</b> ($Z = 2$) with two electrons at positions $\\mathbf{r}_1, \\mathbf{r}_2$:
+    oneLine: "For helium, each electron partly screens the nucleus from the other.",
+    statement: `<b>Start here.</b> For helium, each electron partly screens the nucleus from the other. A trial wave with an adjustable effective nuclear charge models this screening; minimize its average energy.<br><br>The Hamiltonian of the neutral <b>Helium atom</b> ($Z = 2$) with two electrons at positions $\\mathbf{r}_1, \\mathbf{r}_2$:
 $$\\hat{H} = -\\frac{\\hbar^2}{2m}\\nabla_1^2 - \\frac{\\hbar^2}{2m}\\nabla_2^2 - \\frac{2e^2}{4\\pi\\varepsilon_0 r_1} - \\frac{2e^2}{4\\pi\\varepsilon_0 r_2} + \\frac{e^2}{4\\pi\\varepsilon_0 |\\mathbf{r}_1 - \\mathbf{r}_2|}$$
 Without electron repulsion, $E^{(0)} = 2(-13.6 \\times 2^2) = -108.8\\text{ eV}$.<br>
 Experimental ground state energy is $E_{\\text{exp}} = -78.975\\text{ eV}$.<br>
@@ -10604,8 +10622,8 @@ This variational estimate matches the experimental value within $1.9\\%$!`,
   {
     id: 'c.7.4.1', sec: '7.4', kind: 'law', tier: 'core',
     title: 'The WKB Semiclassical Approximation & Validity Condition',
-    oneLine: 'The WKB method approximates wavefunctions when the de Broglie wavelength λ(x) varies slowly compared to distance: |dƛ/dx| = ħm|V\'|/p³ ≪ 1, breaking down at classical turning points.',
-    statement: `The <b>WKB (Wentzel-Kramers-Brillouin) approximation</b> applies to the 1D Schrödinger equation $-\\frac{\\hbar^2}{2m}\\frac{d^2\\psi}{dx^2} + V(x)\\psi = E\\psi$ when the potential $V(x)$ is slowly varying compared to the reduced de Broglie wavelength $\\bar{\\lambda}(x) = \\frac{\\hbar}{p(x)}$, where:
+    oneLine: "WKB treats the wave locally like a wave with momentum determined by the local potential.",
+    statement: `<b>Start here.</b> WKB treats the wave locally like a wave with momentum determined by the local potential. It works when the potential changes slowly over a wavelength, and needs special care at turning points.<br><br>The <b>WKB (Wentzel-Kramers-Brillouin) approximation</b> applies to the 1D Schrödinger equation $-\\frac{\\hbar^2}{2m}\\frac{d^2\\psi}{dx^2} + V(x)\\psi = E\\psi$ when the potential $V(x)$ is slowly varying compared to the reduced de Broglie wavelength $\\bar{\\lambda}(x) = \\frac{\\hbar}{p(x)}$, where:
 $$p(x) \\equiv \\sqrt{2m(E - V(x))}$$
 <b>WKB Validity Condition:</b>
 $$\\boxed{\\left| \\frac{d\\bar{\\lambda}}{dx} \\right| = \\left| \\frac{d}{dx}\\left( \\frac{\\hbar}{p(x)} \\right) \\right| = \\frac{\\hbar m |V'(x)|}{p(x)^3} \\ll 1}$$
@@ -10627,8 +10645,8 @@ The validity condition is catastrophically violated at every classical turning p
   {
     id: 'c.7.4.2', sec: '7.4', kind: 'theorem', tier: 'core',
     title: 'WKB Wavefunctions in Classical and Tunneling Regions',
-    oneLine: 'WKB wavefunctions are oscillatory with amplitude 1/√p(x) in classical regions (E > V), and exponentially growing/decaying with amplitude 1/√|p(x)| in tunneling regions (E < V).',
-    statement: `<b>1. Classical Allowed Region ($E > V(x)$, $p(x) = \\sqrt{2m(E - V(x))} > 0$):</b>
+    oneLine: "Where energy exceeds potential, the WKB wave oscillates.",
+    statement: `<b>Start here.</b> Where energy exceeds potential, the WKB wave oscillates. Inside a forbidden region it grows or decays exponentially. Boundary conditions decide which pieces can appear in the physical solution.<br><br><b>1. Classical Allowed Region ($E > V(x)$, $p(x) = \\sqrt{2m(E - V(x))} > 0$):</b>
 The wavefunction is oscillatory:
 $$\\boxed{\\psi(x) \\approx \\frac{C_1}{\\sqrt{p(x)}} \\exp\\left( \\frac{i}{\\hbar}\\int p(x)dx \\right) + \\frac{C_2}{\\sqrt{p(x)}} \\exp\\left( -\\frac{i}{\\hbar}\\int p(x)dx \\right)}$$
 The probability density $|\\psi(x)|^2 \\propto \\frac{1}{p(x)} \\propto \\frac{1}{v(x)}$ matches the classical probability of finding a particle in $dx$, which is inversely proportional to its classical speed $v(x)$!<br>
@@ -10649,8 +10667,8 @@ $$\\boxed{\\psi(x) \\approx \\frac{D_1}{\\sqrt{|p(x)|}} \\exp\\left( \\frac{1}{\
   {
     id: 'c.7.4.3', sec: '7.4', kind: 'theorem', tier: 'core',
     title: 'WKB Bound-State Quantization & Phase Shifts',
-    oneLine: 'Integrating the classical action between turning points yields quantized energies: ∫_{x₁}^{x₂} p(x)dx = (n - γ)πħ, where γ = ½ for two smooth walls and γ = ¼ for one vertical wall.',
-    statement: `Matching WKB wavefunctions across turning points using the Airy function connection formulas yields the <b>WKB Quantization Condition</b> (generalized Bohr-Sommerfeld condition):
+    oneLine: "A bound WKB wave must match across its turning points.",
+    statement: `<b>Start here.</b> A bound WKB wave must match across its turning points. The matching gives a phase condition, selecting a discrete set of approximate energies.<br><br>Matching WKB wavefunctions across turning points using the Airy function connection formulas yields the <b>WKB Quantization Condition</b> (generalized Bohr-Sommerfeld condition):
 $$\\boxed{\\int_{x_1}^{x_2} p(x) \\, dx = \\left( n - \\gamma \\right) \\pi \\hbar, \\qquad n = 1, 2, 3, \\dots}$$
 where $x_1, x_2$ are the classical turning points ($E = V(x_1) = V(x_2)$), and the phase parameter $\\gamma$ depends strictly on the boundary walls:
 <ol>
@@ -10679,8 +10697,8 @@ where $x_1, x_2$ are the classical turning points ($E = V(x_1) = V(x_2)$), and t
   {
     id: 'c.7.4.4', sec: '7.4', kind: 'law', tier: 'core',
     title: 'WKB Barrier Tunneling & Gamow Theory of Alpha Decay',
-    oneLine: 'The WKB barrier transmission coefficient is T ≈ exp(-2γ) where γ = (1/ħ)∫_{x₁}^{x₂} √(2m(V(x)-E)) dx, explaining the Geiger-Nuttall law for nuclear alpha decay.',
-    statement: `For a particle of energy $E$ incident on a broad, high potential barrier $V(x) > E$ between classical turning points $x_1$ and $x_2$, the <b>WKB transmission coefficient (tunneling probability)</b> is:
+    oneLine: "A wave can pass through a barrier even when its energy is too low to cross classically.",
+    statement: `<b>Start here.</b> A wave can pass through a barrier even when its energy is too low to cross classically. WKB estimates this tunnelling from the accumulated exponential decay inside the barrier.<br><br>For a particle of energy $E$ incident on a broad, high potential barrier $V(x) > E$ between classical turning points $x_1$ and $x_2$, the <b>WKB transmission coefficient (tunneling probability)</b> is:
 $$\\boxed{T \\approx \\exp\\left( -2\\gamma \\right) = \\exp\\left( -\\frac{2}{\\hbar}\\int_{x_1}^{x_2} \\sqrt{2m(V(x) - E)} \\, dx \\right)}$$
 This holds when $\\gamma = \\frac{1}{\\hbar}\\int_{x_1}^{x_2}|p(x)|dx \\gg 1$ (thick barrier).<br>
 <b>Gamow Theory of Alpha Decay (1928):</b>
@@ -10969,8 +10987,8 @@ CONCEPTS.push(
   {
     id: 'c.8.1.1', sec: '8.1', kind: 'law', tier: 'core',
     title: 'Classical Scattering Theory: Impact Parameter & Cross Section',
-    oneLine: 'In classical scattering, particles incident with impact parameter b in range db scatter into solid angle dΩ, defining differential cross section dσ/dΩ = (b/sinθ)|db/dθ|.',
-    statement: `In classical mechanics, a beam of identical particles with uniform cross-sectional intensity $I$ is fired at a target potential $V(\\mathbf{r})$.<br>
+    oneLine: "The impact parameter is how far an incoming straight path misses the target’s centre.",
+    statement: `<b>Start here.</b> The impact parameter is how far an incoming straight path misses the target’s centre. A cross section is an effective area describing how likely scattering is; it need not equal the target’s geometric area.<br><br>In classical mechanics, a beam of identical particles with uniform cross-sectional intensity $I$ is fired at a target potential $V(\\mathbf{r})$.<br>
 Let $b$ be the <b>impact parameter</b> (the perpendicular distance of the initial trajectory from the center of force), and $\\theta$ be the <b>scattering angle</b>.<br>
 Particles incident in an annular strip $d\\sigma = 2\\pi b \\, db$ are scattered into solid angle $d\\Omega = 2\\pi \\sin\\theta \\, d\\theta$.<br>
 The <b>differential scattering cross section</b> is:
@@ -10994,8 +11012,8 @@ For a hard sphere of radius $a$, $b = a\\cos(\\theta/2) \\implies \\frac{d\\sigm
   {
     id: 'c.8.2.1', sec: '8.2', kind: 'definition', tier: 'core',
     title: 'The Quantum Scattering Wave Function & Scattering Amplitude',
-    oneLine: 'In quantum scattering, the asymptotic wavefunction decomposes into an incident plane wave e^{ikz} and an outgoing spherical wave f(θ, φ) e^{ikr}/r.',
-    statement: `For a localized scattering potential $V(\\mathbf{r})$ that falls off faster than $1/r$ as $r \\to \\infty$, the stationary scattering state satisfies the asymptotic boundary condition:
+    oneLine: "Far from a localized target, write the wave as an incoming plane wave plus an outgoing spherical wave.",
+    statement: `<b>Start here.</b> Far from a localized target, write the wave as an incoming plane wave plus an outgoing spherical wave. The scattering amplitude sets how much outgoing wave travels in each direction.<br><br>For a localized scattering potential $V(\\mathbf{r})$ that falls off faster than $1/r$ as $r \\to \\infty$, the stationary scattering state satisfies the asymptotic boundary condition:
 $$\\boxed{\\psi(\\mathbf{r}) \\xrightarrow{r \\to \\infty} A \\left( e^{ikz} + f(\\theta, \\phi) \\frac{e^{ikr}}{r} \\right)}$$
 where $k = \\frac{\\sqrt{2mE}}{\\hbar}$ is the wave number, $e^{ikz}$ is the <b>incident plane wave</b> propagating along the $+z$ axis, and $\\frac{e^{ikr}}{r}$ is an <b>outgoing spherical wave</b>.<br>
 The complex angular coefficient $f(\\theta, \\phi)$ is the <b>scattering amplitude</b>.<br>
@@ -11022,8 +11040,8 @@ $$\\boxed{\\sigma_{\\text{tot}} = \\int |f(\\theta, \\phi)|^2 d\\Omega}$$`,
   {
     id: 'c.8.3.1', sec: '8.3', kind: 'theorem', tier: 'core',
     title: 'Partial Wave Analysis & Phase Shifts',
-    oneLine: 'Expanding the scattering amplitude in Legendre polynomials decomposes the wave into partial waves: f(θ) = (1/k) ∑_{l=0}^∞ (2l+1) e^{iδ_l} sin δ_l P_l(cos θ).',
-    statement: `For a spherically symmetric potential $V(r)$, the scattering is azimuthally symmetric ($f(\\theta)$ independent of $\\phi$).<br>
+    oneLine: "Split the incoming wave into angular-momentum channels.",
+    statement: `<b>Start here.</b> Split the incoming wave into angular-momentum channels. The target changes each channel’s phase. Combining those phase shifts gives the full scattering pattern.<br><br>For a spherically symmetric potential $V(r)$, the scattering is azimuthally symmetric ($f(\\theta)$ independent of $\\phi$).<br>
 The scattering amplitude is expanded in a complete series of Legendre polynomials:
 $$\\boxed{f(\\theta) = \\sum_{l=0}^\\infty (2l + 1) f_l(k) P_l(\\cos\\theta)}$$
 where $f_l(k)$ is the <b>partial wave amplitude</b> for orbital angular momentum $l$.<br>
@@ -11048,8 +11066,8 @@ Higher partial waves ($p, d, \\dots$) are repelled by the centrifugal barrier an
   {
     id: 'c.8.3.2', sec: '8.3', kind: 'law', tier: 'core',
     title: 'Total Cross Section & The Optical Theorem',
-    oneLine: 'Integrating over all angles yields σ_tot = (4π/k²) ∑ (2l+1) sin² δ_l, leading directly to the Optical Theorem: σ_tot = (4π/k) Im[f(0)].',
-    statement: `Integrating $|f(\\theta)|^2$ over the sphere and using the orthogonality of Legendre polynomials $\\int_{-1}^1 P_l(\\cos\\theta)P_{l'}(\\cos\\theta)d(\\cos\\theta) = \\frac{2}{2l+1}\\delta_{ll'}$:
+    oneLine: "The total cross section adds scattering into all directions.",
+    statement: `<b>Start here.</b> The total cross section adds scattering into all directions. For purely elastic scattering, the optical theorem relates it to the imaginary part of the forward scattering amplitude.<br><br>Integrating $|f(\\theta)|^2$ over the sphere and using the orthogonality of Legendre polynomials $\\int_{-1}^1 P_l(\\cos\\theta)P_{l'}(\\cos\\theta)d(\\cos\\theta) = \\frac{2}{2l+1}\\delta_{ll'}$:
 $$\\boxed{\\sigma_{\\text{tot}} = \\frac{4\\pi}{k^2} \\sum_{l=0}^\\infty (2l + 1) \\sin^2\\delta_l}$$
 Notice that each partial wave contributes a maximum cross section (<b>unitarity limit</b>):
 $$\\sigma_l^{\\text{max}} = \\frac{4\\pi(2l+1)}{k^2} \\quad (\\text{when } \\delta_l = \\pi/2, 3\\pi/2, \\dots)$$
@@ -11074,8 +11092,8 @@ $$\\boxed{\\sigma_{\\text{tot}} = \\frac{4\\pi}{k} \\text{Im}[f(0)]}$$`,
   {
     id: 'c.8.3.3', sec: '8.3', kind: 'theorem', tier: 'core',
     title: 'Low-Energy Hard Sphere Scattering: Quantum vs Classical Cross Section',
-    oneLine: 'At low energies (ka ≪ 1), quantum hard-sphere scattering gives σ_tot = 4πa², which is exactly FOUR TIMES the classical geometric cross section πa².',
-    statement: `For an impenetrable hard sphere of radius $a$:
+    oneLine: "At low energy a hard sphere mainly scatters the lowest angular-momentum channel.",
+    statement: `<b>Start here.</b> At low energy a hard sphere mainly scatters the lowest angular-momentum channel. Its quantum cross section tends to four times its geometric area; wave interference changes the classical picture.<br><br>For an impenetrable hard sphere of radius $a$:
 $$V(r) = \\begin{cases} \\infty & r \\le a \\\\ 0 & r > a \\end{cases}$$
 The wavefunction vanishes at the hard surface: $\\psi(a) = 0$.<br>
 In the <b>low-energy limit ($ka \\ll 1$)</b>, only the $s$-wave ($l = 0$) contributes:
@@ -11106,8 +11124,8 @@ As $k \\to \\infty$, $\\sigma_{\\text{tot}} \\to 2\\pi a^2$ (one $\\pi a^2$ from
   {
     id: 'c.8.4.1', sec: '8.4', kind: 'law', tier: 'core',
     title: 'Integral Form of the Schrödinger Equation & Green\'s Function',
-    oneLine: 'The Schrödinger scattering PDE is reformulated as the Lippmann-Schwinger integral equation ψ(r) = e^{ikz} + ∫ G(r, r\') V(r\') ψ(r\') d³r\' using the Helmholtz Green\'s function.',
-    statement: `The time-independent Schrödinger equation $(\\nabla^2 + k^2)\\psi = \\frac{2m}{\\hbar^2}V(\\mathbf{r})\\psi$ is converted into an exact integral equation using the outgoing <b>Helmholtz Green\'s function</b>:
+    oneLine: "A Green’s function tells how a point disturbance spreads.",
+    statement: `<b>Start here.</b> A Green’s function tells how a point disturbance spreads. The integral equation adds the incoming wave to the wave produced when the potential acts on the full state.<br><br>The time-independent Schrödinger equation $(\\nabla^2 + k^2)\\psi = \\frac{2m}{\\hbar^2}V(\\mathbf{r})\\psi$ is converted into an exact integral equation using the outgoing <b>Helmholtz Green\'s function</b>:
 $$(\\nabla^2 + k^2)G(\\mathbf{r}, \\mathbf{r}') = \\delta^3(\\mathbf{r} - \\mathbf{r}') \\implies \\boxed{G(\\mathbf{r}, \\mathbf{r}') = -\\frac{1}{4\\pi} \\frac{e^{ik|\\mathbf{r} - \\mathbf{r}'|}}{|\\mathbf{r} - \\mathbf{r}'|}}$$
 The exact <b>Lippmann-Schwinger integral equation</b> is:
 $$\\boxed{\\psi(\\mathbf{r}) = e^{ikz} - \\frac{m}{2\\pi\\hbar^2} \\int \\frac{e^{ik|\\mathbf{r} - \\mathbf{r}'|}}{|\\mathbf{r} - \\mathbf{r}'|} V(\\mathbf{r}') \\psi(\\mathbf{r}') \\, d^3\\mathbf{r}'}$$
@@ -11128,8 +11146,8 @@ where $\\mathbf{k}_f = k\\hat{\\mathbf{r}}$ is the wavevector in the observation
   {
     id: 'c.8.4.2', sec: '8.4', kind: 'theorem', tier: 'core',
     title: 'The First Born Approximation: Fourier Transform of the Potential',
-    oneLine: 'Replacing the unknown wave inside the integral by the incident plane wave yields the First Born Approximation: f^{(1)}(θ, φ) = -(m / 2πħ²) ∫ V(r) e^{-iq · r} d³r.',
-    statement: `In the <b>First Born Approximation</b>, the exact wavefunction inside the integral is approximated by the unperturbed incident plane wave $\\psi(\\mathbf{r}') \\approx e^{i\\mathbf{k}_i \\cdot \\mathbf{r}'}$ ($e^{ikz'}$):
+    oneLine: "The first Born approximation uses the incoming wave inside the scattering integral.",
+    statement: `<b>Start here.</b> The first Born approximation uses the incoming wave inside the scattering integral. It is useful when the potential causes weak scattering. The amplitude samples the Fourier transform of the potential at the momentum transfer.<br><br>In the <b>First Born Approximation</b>, the exact wavefunction inside the integral is approximated by the unperturbed incident plane wave $\\psi(\\mathbf{r}') \\approx e^{i\\mathbf{k}_i \\cdot \\mathbf{r}'}$ ($e^{ikz'}$):
 $$\\boxed{f^{(1)}(\\theta, \\phi) = -\\frac{m}{2\\pi\\hbar^2} \\int V(\\mathbf{r}') e^{-i(\\mathbf{k}_f - \\mathbf{k}_i) \\cdot \\mathbf{r}'} \\, d^3\\mathbf{r}'}$$
 Define the <b>momentum transfer vector</b> $\\mathbf{q}$:
 $$\\boxed{\\mathbf{q} \\equiv \\mathbf{k}_f - \\mathbf{k}_i}$$
@@ -11151,8 +11169,8 @@ $$\\boxed{f^{(1)}(\\theta, \\phi) = -\\frac{m}{2\\pi\\hbar^2} \\tilde{V}(\\mathb
   {
     id: 'c.8.4.3', sec: '8.4', kind: 'theorem', tier: 'core',
     title: 'Born Approximation for Spherically Symmetric Potentials & Yukawa Scattering',
-    oneLine: 'For central potentials V(r), f(θ) = -(2m / ħ²q) ∫ r V(r) sin(qr) dr; for Yukawa potential V(r) = V₀ e^{-μr}/r it derives the screened Coulomb amplitude.',
-    statement: `For a spherically symmetric potential $V(r)$, the angular integral in the Fourier transform evaluates to:
+    oneLine: "For a spherical potential the Born integral simplifies because direction is symmetric.",
+    statement: `<b>Start here.</b> For a spherical potential the Born integral simplifies because direction is symmetric. A Yukawa potential includes a decaying factor that sets the interaction range and changes the angular scattering pattern.<br><br>For a spherically symmetric potential $V(r)$, the angular integral in the Fourier transform evaluates to:
 $$\\boxed{f^{(1)}(\\theta) = -\\frac{2m}{\\hbar^2 q} \\int_0^\\infty r V(r) \\sin(qr) \\, dr}$$
 <b>Yukawa (Screened Coulomb) Potential:</b>
 $$V(r) = V_0 \\frac{e^{-\\mu r}}{r}$$
@@ -12802,6 +12820,14 @@ const PROJECT = {
   },
   themeColor: { light: '#f3f6fb', dark: '#05080f' },
   figZoom: true,
+  studyMaps: [{
+    title: 'Module 3',
+    description: 'Mathematical Tools of Quantum Mechanics',
+    summary: '32 questions · 155 concepts · 3D prerequisite map',
+    href: location.pathname.startsWith('/phy/')
+      ? '/phy/quantum-mechanics/study-map/module-3/'
+      : '../study-map/build/index.html'
+  }],
   hooks: {}
 };
 
@@ -12988,6 +13014,294 @@ PROJECT.hooks.home = function (ctx) {
 };
 
 
+/* ── project/matrix-view.js ── */
+/* QM-only, direct matrix previews. Scalars and unknown notation are never
+   enhanced. Lesson examples are labelled; physical operators keep their basis. */
+const QMMatrix = (() => {
+  const M = rows => '\\begin{pmatrix}'+rows.map(r=>r.join('&')).join('\\\\')+'\\end{pmatrix}';
+  const column = (...values) => M(values.map(v=>[v]));
+  // Symbolic entries are deliberately scoped to the lesson that defines them.
+  // Numeric fixtures remain only where the lesson itself gives that example.
+  const fixtures = {
+    'c.3.0.2': {psi: ['1/\\sqrt2','i/\\sqrt2']},
+    'c.3.0.3': {A:[[0,1],[1,0]],B:[[2,0],[0,1]]},
+    'c.3.1.2': {psi:['c_1 p_{11}+c_2 p_{12}','c_1 p_{21}+c_2 p_{22}'],phi:['d_1','d_2'],indexedStates:{psi:{'1':['p_{11}','p_{21}'],'2':['p_{12}','p_{22}']}},stateVectors:{u:['u_1','u_2'],v:['v_1','v_2']}},
+    'c.3.1.3': {psi:['c_1','c_2'],phi:['d_1','d_2'],chi:['c_1-\\lambda d_1','c_2-\\lambda d_2'],indexedStates:{psi:{'1':['p_{11}','p_{21}'],'2':['p_{12}','p_{22}']}}},
+    'c.3.1.4': {psi:['c_1','c_2'],I:[[1,0],[0,1]],basisStates:{phi:''}},
+    'c.3.2.1': {psi:['c_1','c_2'],A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],P:[['|c_1|^2','c_1 c_2^*'],['c_2 c_1^*','|c_2|^2']],indexedStates:{psi:{'1':['p_{11}','p_{21}'],'2':['p_{12}','p_{22}']}}},
+    'c.3.2.2': {psi:['c_1','c_2'],phi:['d_1','d_2'],A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']]},
+    'c.3.2.3': {A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']],B:[['b_{11}','b_{12}'],['b_{12}^*','b_{22}']]},
+    'c.3.2.4': {psi:['c_1','c_2'],A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']]},
+    'c.3.3.1': {A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']]},
+    'c.3.3.2': {A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']],C:[['c_{11}','c_{12}'],['c_{21}','c_{22}']]},
+    'c.3.4.1': {psi:['c_1','c_2'],A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']],B:[['b_{11}','b_{12}'],['b_{12}^*','b_{22}']]},
+    'c.3.4.2': {A:[['a_1',0],[0,'a_2']],B:[['b_1',0],[0,'b_2']]},
+    'c.3.5.1': {A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']]},
+    'c.3.5.2': {U:[['u_{11}','u_{12}'],['u_{21}','u_{22}']],psi:['c_1','c_2'],phi:['d_1','d_2']},
+    'c.3.6.1': {A:[['A_{11}','A_{12}','\\cdots'],['A_{21}','A_{22}','\\cdots'],['\\vdots','\\vdots','\\ddots']],psi:['c_1','c_2','\\vdots'],phi:['d_1','d_2','\\vdots'],basisStates:{phi:''}},
+    'c.3.6.2': {A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']],psi:['c_1','c_2'],phi:['d_1','d_2'],indexedStates:{a:{n:['v_{1n}^{(a)}','v_{2n}^{(a)}'],m:['v_{1m}^{(a)}','v_{2m}^{(a)}']}}},
+    'c.3.6.3': {A:[['a_1',0],[0,'a_2']],B:[['b_1',0],[0,'b_2']],psi:['c_1','c_2']},
+    'c.3.6.4': {A:[['i\\alpha','z'],['-z^*','i\\beta']],U:[['u_{11}','u_{12}'],['u_{21}','u_{22}']],indexedStates:{a:{n:['v_{1n}^{(a)}','v_{2n}^{(a)}']},u:{n:['v_{1n}^{(u)}','v_{2n}^{(u)}']}},stateVectors:{U:['U_1','U_2']}},
+    'c.3.7.4': {A:[['A_{11}','A_{12}'],['A_{21}','A_{22}']],psi:['c_1','c_2']},
+    'c.7.1.1': {H:[['E_1^{(0)}+\\lambda H_{11}^{\\prime}','\\lambda H_{12}^{\\prime}'],['\\lambda H_{21}^{\\prime}','E_2^{(0)}+\\lambda H_{22}^{\\prime}']],H0:[['E_1^{(0)}',0],[0,'E_2^{(0)}']],Hprime:[['H_{11}^{\\prime}','H_{12}^{\\prime}'],['H_{21}^{\\prime}','H_{22}^{\\prime}']],basisStates:{n:'(0)',m:'(0)'}},
+    'c.7.1.2': {H:[['E_1^{(0)}+\\lambda H_{11}^{\\prime}','\\lambda H_{12}^{\\prime}'],['\\lambda H_{21}^{\\prime}','E_2^{(0)}+\\lambda H_{22}^{\\prime}']],H0:[['E_1^{(0)}',0],[0,'E_2^{(0)}']],Hprime:[['H_{11}^{\\prime}','H_{12}^{\\prime}'],['H_{21}^{\\prime}','H_{22}^{\\prime}']],basisStates:{m:'(0)',n:'(0)'}},
+    'c.7.1.3': {H:[['E_1^{(0)}+\\lambda H_{11}^{\\prime}','\\lambda H_{12}^{\\prime}'],['\\lambda H_{21}^{\\prime}','E_2^{(0)}+\\lambda H_{22}^{\\prime}']],H0:[['E_1^{(0)}',0],[0,'E_2^{(0)}']],Hprime:[['H_{11}^{\\prime}','H_{12}^{\\prime}'],['H_{21}^{\\prime}','H_{22}^{\\prime}']],basisStates:{n:'(0)',m:'(0)'}},
+    'c.7.2.1': {W:[['W_{11}','W_{12}'],['W_{21}','W_{22}']],basisStates:{psi:'(0)'}}
+  };
+  const greek = {ψ:'psi',ϕ:'phi',φ:'phi',χ:'chi'};
+  const normalize = s => String(s).normalize('NFKC').replace(/\s/g,'');
+  const conjugate = v => {
+    if (typeof v === 'number' || /^(?:[0-9]+|\\cdots|\\vdots|\\ddots)$/.test(String(v))) return v;
+    const value=String(v);
+    if (/^\|[^|]+\|\^2$/.test(value) || value.startsWith('\\delta_{')) return value;
+    const product=value.match(/^([a-z]_[0-9]+) ([a-z]_[0-9]+)\^\*$/);
+    if (product) return product[2]+' '+product[1]+'^*';
+    if (/^[+-]?(?:[A-Za-z](?:_\{[^}]+\}|_[A-Za-z0-9]+)?|\\[A-Za-z]+)\^\{?\*\}?$/.test(value)) return value.replace(/\^\{?\*\}?$/,'');
+    if (/^-?i(?:\\[A-Za-z]+)?(?:\/\\sqrt[0-9]+)?$/.test(value)) return value.startsWith('-')?value.slice(1):'-'+value;
+    if (/^-?[0-9]+\\?\/(?:[0-9]+|\\sqrt[0-9]+)$/.test(value)) return value;
+    return '\\overline{'+value+'}';
+  };
+  const transpose = rows => rows[0].map((_,j)=>rows.map(r=>conjugate(r[j])));
+  const numberBasis = '|0⟩, |1⟩, |2⟩, …';
+  const ladder = up => up
+    ? [[0,0,0,'\\cdots'],[1,0,0,'\\cdots'],[0,'\\sqrt2',0,'\\cdots'],['\\vdots','\\vdots','\\sqrt3','\\ddots']]
+    : [[0,1,0,'\\cdots'],[0,0,'\\sqrt2','\\cdots'],[0,0,0,'\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']];
+  const preview = (formula,basis,example=false,note='') => ({formula,basis,example,note});
+  function resolve(c, symbol, options={}) {
+    if (!c) return null;
+    const f = fixtures[c.id] || {};
+    const osc = /^4\.1(?:\.|$)/.test(c.sec);
+    const {sub='',sup='',state='',hat=false,tex=''} = options;
+    const name = normalize(symbol);
+    const label = greek[name];
+    const matrix = options.matrix || c.id==='c.3.0.3' && ['A','B'].includes(name) && !sub;
+    if (['χ'].includes(name) && /^6\.4\.[34]$/.test(c.id.replace('c.',''))) {
+      return preview(c.id==='c.6.4.4' ? column('a e^{i\\omega_L t/2}','b e^{-i\\omega_L t/2}') : /theta/.test(tex) ? column('\\cos(\\theta/2)','e^{i\\phi}\\sin(\\theta/2)') : column('a','b'),'|↑z⟩, |↓z⟩');
+    }
+    if (state) {
+      // Only named, lesson-scoped vectors enter this branch; operator tables do not.
+      if (hat || ['x','p'].includes(name)) return null;
+      const stateLabel=label||name;
+      const vector=(values,basis,note='',example=false) => {
+        if (!Array.isArray(values) || values.some(Array.isArray)) return null;
+        return preview(state==='bra'?M([values.map(v=>v==='\\vdots'?'\\cdots':conjugate(v))]):column(...values),basis,example,note);
+      };
+      const basisVector=(index,basis,dimension='') => {
+        const entry=k=>/^[12]$/.test(index)&&/^[12]$/.test(k)?Number(k===index):`\\delta_{${k}${index}}`;
+        return vector([entry('1'),entry('2'),'\\vdots',...(dimension?[entry(dimension)]:[])],basis,
+          'δ = 1 for matching indices, 0 otherwise');
+      };
+      if (/^c\.7\.1\./.test(c.id) && ['n','m'].includes(name) && !sub && sup==='(0)')
+        return basisVector(name,'|1⁽⁰⁾⟩, |2⁽⁰⁾⟩, … · unperturbed energy basis');
+      if (c.id==='c.7.2.1' && label==='psi' && /^[12ijd]$/.test(sub) && sup==='(0)')
+        return basisVector(sub,'|ψ₁⁽⁰⁾⟩, |ψ₂⁽⁰⁾⟩, …, |ψ_d⁽⁰⁾⟩ · d-dimensional subspace','d');
+      if (['c.3.1.4','c.3.6.1'].includes(c.id) && label==='phi' && /^[12ijmn]$/.test(sub) && !sup)
+        return basisVector(sub,'|φ₁⟩, |φ₂⟩, …');
+      if (osc) {
+        if (sub || sup) return null;
+        if (/^[012]$/.test(name)) return vector([0,0,0,'\\vdots'].map((v,i)=>i===Number(name)?1:v),numberBasis);
+        if (name==='n') return vector(['\\delta_{0n}','\\delta_{1n}','\\delta_{2n}','\\vdots'],numberBasis,'δ = 1 for matching indices, 0 otherwise');
+        if (label) return vector(['c_0','c_1','c_2','\\vdots'],numberBasis);
+        return null;
+      }
+      if (/^6\.4/.test(c.sec) && ['↑','↓'].includes(name) && !sup)
+        return vector(name==='↑'?[1,0]:[0,1],'|↑z⟩, |↓z⟩');
+      if (sup) {
+        if (c.id==='c.3.6.1' && label==='psi' && !sub && ['′',"'"].includes(sup))
+          return vector(['\\sum_j A_{1j}c_j','\\sum_j A_{2j}c_j','\\vdots'],'|φ₁⟩, |φ₂⟩, …');
+        return null;
+      }
+      const values=sub?f.indexedStates?.[stateLabel]?.[sub]:f.stateVectors?.[stateLabel]||f[stateLabel];
+      let basis='|e₁⟩, |e₂⟩ · two-coordinate view';
+      if (c.id==='c.3.6.1' && label) basis='|φ₁⟩, |φ₂⟩, …';
+      if (c.id==='c.3.1.4' && label==='psi')
+        return vector(['c_1','c_2','\\vdots'],'|φ₁⟩, |φ₂⟩, …');
+      return vector(values,basis,'',['c.3.0.2','c.3.0.3'].includes(c.id));
+    }
+    // A matrix element (A_ij), an eigenvalue and a coefficient are numbers.
+    if (/^(?:ij|mn|nm|ii|jj|nn|mm|[0-9]+)$/.test(sub) && !(name==='H' && hat && sub==='0' && f.H0)) return null;
+    if (hat && /^3\./.test(c.sec) && ['x','p'].includes(name) && !sub) {
+      const rows = name==='x' ? [[0,1,0,'\\cdots'],[1,0,'\\sqrt2','\\cdots'],[0,'\\sqrt2',0,'\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']] : [[0,'-i',0,'\\cdots'],['i',0,'-i\\sqrt2','\\cdots'],[0,'i\\sqrt2',0,'-i\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      return preview((name==='x'?'\\frac{\\ell}{\\sqrt2}':'\\frac{\\hbar}{\\sqrt2\\ell}')+M(rows),'Hermite basis |0⟩, |1⟩, … · ℓ > 0');
+    }
+    if (name==='I' && hat && c.id==='c.3.3.3') return preview(M([[1,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,1,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),'Hermite basis |0⟩, |1⟩, …');
+    if (name==='I' && !sub && !osc && (hat || /^6\.4/.test(c.sec))) return preview(M([[1,0],[0,1]]),'|e₁⟩, |e₂⟩',!/^6\.4/.test(c.sec));
+    if (name==='H' && hat && c.id==='c.6.4.4') return preview('-\\frac{\\hbar\\omega_L}{2}'+M([[1,0],[0,-1]]),'|↑z⟩, |↓z⟩');
+    if (osc && ['a','N','H','x','p','I'].includes(name) && hat) {
+      if (name==='a') return preview(M(ladder(sup.includes('†'))),numberBasis);
+      if (name==='N') return preview(M([[0,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,2,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='H') return preview('\\hbar\\omega'+M([['1/2',0,0,'\\cdots'],[0,'3/2',0,'\\cdots'],[0,0,'5/2','\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='I') return preview(M([[1,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,1,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='x') return preview('\\sqrt{\\frac{\\hbar}{2m\\omega}}'+M([[0,1,0,'\\cdots'],[1,0,'\\sqrt2','\\cdots'],[0,'\\sqrt2',0,'\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='p') return preview('\\sqrt{\\frac{m\\hbar\\omega}{2}}'+M([[0,'-i',0,'\\cdots'],['i',0,'-i\\sqrt2','\\cdots'],[0,'i\\sqrt2',0,'-i\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+    }
+    if (hat && name==='S' && sup==='2' && /^6\.4/.test(c.sec)) return preview('\\frac{3\\hbar^2}{4}'+M([[1,0],[0,1]]),'|↑z⟩, |↓z⟩');
+    if (hat && ['J','L'].includes(name) && sup==='2' && /^6\.[123]/.test(c.sec)) {
+      const q=name==='L'?'l':'j';
+      return preview('\\hbar^2 '+q+'('+q+'+1)'+M([[1,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,1,'\\ddots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),`|${q},${q}⟩, |${q},${q}−1⟩, …, |${q},−${q}⟩`,false,'Angular-momentum multiplet identity');
+    }
+    if (['S','σ'].includes(name) && /^[xyz]$/.test(sub) && /^6\.4/.test(c.sec)) {
+      const rows = sub==='x'?[[0,1],[1,0]]:sub==='y'?[[0,'-i'],['i',0]]:[[1,0],[0,-1]];
+      return preview((name==='S'?'\\frac{\\hbar}{2}':'')+M(rows),'|↑z⟩, |↓z⟩');
+    }
+    if (['J','L'].includes(name) && hat && /^[xyz+−-]$/.test(sub) && /^6\.[123]/.test(c.sec)) {
+      const q=name==='L'?'l':'j';
+      const basis=`|${q},${q}⟩, |${q},${q}−1⟩, …, |${q},−${q}⟩`;
+      const k=['\\kappa_0','\\kappa_1','\\kappa_2'];
+      const ladderUp=[[0,k[0],0,'\\cdots'],[0,0,k[1],'\\cdots'],[0,0,0,k[2]],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      const ladderDown=[[0,0,0,'\\cdots'],[k[0],0,0,'\\cdots'],[0,k[1],0,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      const rows=sub==='z'
+        ? [[q,0,0,'\\cdots'],[0,`${q}-1`,0,'\\cdots'],[0,0,`${q}-2`,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]
+        : sub==='+' ? ladderUp
+        : ['−','-'].includes(sub) ? ladderDown
+        : sub==='x'
+          ? [[0,k[0],0,'\\cdots'],[k[0],0,k[1],'\\cdots'],[0,k[1],0,k[2]],['\\vdots','\\vdots','\\vdots','\\ddots']]
+          : [[0,k[0],0,'\\cdots'],[`-${k[0]}`,0,k[1],'\\cdots'],[0,`-${k[1]}`,0,k[2]],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      const scale=sub==='z'?'\\hbar':sub==='+'||['−','-'].includes(sub)?'\\hbar':'\\frac{\\hbar}{2}';
+      const formula=sub==='y'?'\\frac{\\hbar}{2i}'+M(rows):scale+M(rows);
+      return preview(formula,basis,false,`κ_r = √[(r+1)(2${q}−r)]`);
+    }
+    const rows=name==='H' && /[′']/.test(sup) ? f.Hprime : name==='H' && sub==='0' ? f.H0 : f[name];
+    if (!Array.isArray(rows?.[0])) return null;
+    if (sub && !(name==='P' && ['ψ','ϕ','φ'].includes(sub)) && !(name==='H' && sub==='0' && f.H0)) return null;
+    // No fixture is applied to ordinary scalar occurrences of the same letter.
+    if (!hat && !matrix) return null;
+    const actual = c.id==='c.3.0.3' && name==='A' && /2x|diag/.test(tex) ? [[2,0],[0,-1]] : rows;
+    const caption = {
+      'c.3.2.1': name==='P' ? 'Normalized state: |c₁|² + |c₂|² = 1' : '',
+      'c.3.2.3': name==='A' ? 'Hermitian: a₁₁, a₂₂ ∈ ℝ' : 'Hermitian: b₁₁, b₂₂ ∈ ℝ',
+      'c.3.2.4': 'Hermitian observable: a₁₁, a₂₂ ∈ ℝ',
+      'c.3.4.1': name==='A' ? 'Hermitian: a₁₁, a₂₂ ∈ ℝ' : 'Hermitian: b₁₁, b₂₂ ∈ ℝ',
+      'c.3.4.2': 'Common eigenbasis when [A,B] = 0',
+      'c.3.5.2': 'Unitary condition: U†U = UU† = I',
+      'c.3.6.2': 'Hermitian: a₁₁, a₂₂ ∈ ℝ',
+      'c.3.6.3': 'Shared eigenbasis for commuting Hermitian operators',
+      'c.3.6.4': name==='A' ? 'Anti-Hermitian: α, β ∈ ℝ' : 'Unitary condition: U†U = UU† = I'
+    }[c.id] || '';
+    const basis = c.id==='c.3.6.1'?'|φ₁⟩, |φ₂⟩, …':name==='H' && /^7\.1/.test(c.sec) ? '|1⁽⁰⁾⟩, |2⁽⁰⁾⟩' : name==='W' && c.id==='c.7.2.1' ? '|ψ₁⁽⁰⁾⟩, |ψ₂⁽⁰⁾⟩' : actual.length===3?'|e₁⟩, |e₂⟩, |e₃⟩':'|e₁⟩, |e₂⟩';
+    const energy = name==='H' && /^7\.1/.test(c.sec)?' · unperturbed energy basis':name==='W'?' · two-fold degenerate subspace':'';
+    const example = c.id==='c.3.0.3';
+    return preview(M(sup.includes('†')?transpose(actual):actual),basis+energy,example,caption);
+  }
+  let panel, anchor;
+  function close() {
+    if (!panel) return; panel.remove(); panel=null;
+    if (anchor?.isConnected) { anchor.setAttribute('aria-expanded','false'); anchor.removeAttribute('aria-controls'); }
+    if (anchor?.isConnected) anchor.focus({preventScroll:true});
+  }
+  function open(value,trigger) {
+    close(); anchor=trigger;
+    panel=document.createElement('div'); panel.className='qm-matrix-popover';
+    panel.id='qm-matrix-preview'; trigger.setAttribute('aria-expanded','true'); trigger.setAttribute('aria-controls',panel.id);
+    panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Matrix representation');
+    const math=document.createElement('div');math.className='qm-matrix-formula'; math.textContent='$$'+value.formula+'$$';
+    const caption=document.createElement('small');caption.textContent=(value.example?'Example · ':'')+value.basis+(value.note?' · '+value.note:'');
+    const dismiss=document.createElement('button');dismiss.type='button';dismiss.className='qm-matrix-close';dismiss.textContent='×';dismiss.setAttribute('aria-label','Close matrix');dismiss.onclick=close;
+    panel.append(dismiss,math,caption);document.body.append(panel);
+    const box=trigger.getBoundingClientRect();
+    panel.style.left=Math.max(8,Math.min(box.left,innerWidth-panel.offsetWidth-8))+'px';
+    panel.style.top=Math.max(8,Math.min(box.bottom+8,innerHeight-panel.offsetHeight-8))+'px';
+    Tex.typeset(panel).then(()=>{
+      if (!panel) return;
+      panel.style.left=Math.max(8,Math.min(box.left,innerWidth-panel.offsetWidth-8))+'px';
+      panel.style.top=Math.max(8,Math.min(box.bottom+8,innerHeight-panel.offsetHeight-8))+'px';
+    });
+  }
+  function text(node) {
+    if (!node) return '';
+    if (node.getText) return normalize(node.getText());
+    return normalize((node.childNodes||[]).map(text).join(''));
+  }
+  function tokens(node,out=[]) {
+    if (node.kind==='mi' || node.kind==='mn' || node.kind==='mo' && ['↑','↓'].includes(text(node))) out.push(node);
+    else (node.childNodes||[]).forEach(child=>tokens(child,out));
+    return out;
+  }
+  function attributes(node) {
+    let base=node, parent=node.parent,hat=false,sub='',sup='';
+    while(parent && (['mover','munder','msub','msup','msubsup','TeXAtom'].includes(parent.kind) || parent.kind==='inferredMrow' && parent.childNodes.length===1) && parent.childNodes[0]===base) {
+      if (parent.kind==='mover' && /[ˆ^\u0302]/.test(text(parent.childNodes[1]))) hat=true;
+      if (parent.kind==='msub' || parent.kind==='msubsup') sub=text(parent.childNodes[1]);
+      if (parent.kind==='msup') sup=text(parent.childNodes[1]);
+      if (parent.kind==='msubsup') sup=text(parent.childNodes[2]);
+      base=parent;parent=parent.parent;
+    }
+    const siblings=parent?.childNodes||[];const index=siblings.indexOf(base);
+    const before=text(siblings[index-1]),after=text(siblings[index+1]);
+    const state=(before==='|' && after.startsWith('⟩'))?'ket':(before==='⟨' && after==='|')?'bra':'';
+    return {hat,sub,sup,state};
+  }
+  function decorate() {
+    const main=document.getElementById('main');const doc=window.MathJax?.startup?.document;
+    if (!main || !doc) return;
+    for(const item of doc.getMathItemsWithin(main)) {
+      const root=item.typesetRoot;
+      if(!root?.isConnected || root.dataset.qmMatrix) continue;
+      root.dataset.qmMatrix='1';
+      const marker=root.closest('.notebody')?.querySelector('[data-qm-concept]');
+      const c=marker && Pool.concept(marker.dataset.qmConcept);if(!c) continue;
+      const source=tokens(item.root);const painted=[...root.querySelectorAll('mjx-math mjx-mi, mjx-math mjx-mn, mjx-math mjx-mo')].filter(n=>n.tagName.toLowerCase()!=='mjx-mo' || /mjx-c(?:2191|2193)(?:\s|$)/.test(n.querySelector('mjx-c')?.className||''));
+      // Fail closed when MathJax's source and painted tokens cannot be paired.
+      if(source.length!==painted.length) continue;
+      source.forEach((node,i)=>{
+        const symbol=text(node);const opts=attributes(node);opts.tex=item.math;
+        const value=resolve(c,symbol,opts);if(!value) return;
+        const target=painted[i];
+        const stateSuffix=opts.state?(opts.sub?'_'+opts.sub:'')+(opts.sup?'^'+opts.sup:''):'';
+        target.classList.add('qm-tappable-symbol');target.tabIndex=0;target.setAttribute('aria-haspopup','dialog');target.setAttribute('aria-expanded','false');target.setAttribute('role','button');target.setAttribute('aria-label',symbol+stateSuffix+': matrix representation');
+        target.onclick=event=>{event.stopPropagation();open(value,target);};
+        target.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open(value,target);}};
+      });
+    }
+  }
+  const oldNote=PROJECT.hooks.noteSim;
+  PROJECT.hooks.noteSim=c=>{
+    const marker=DOM.el('span',{'data-qm-concept':c.id,hidden:true});
+    const prior=oldNote?.(c);if(prior) marker.append(prior);return marker;
+  };
+  const oldReady=PROJECT.hooks.ready;
+  PROJECT.hooks.ready=()=>{
+    oldReady?.();let pending=false;
+    new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;decorate();});}).observe(document.getElementById('main'),{childList:true,subtree:true});
+    document.addEventListener('pointerdown',event=>{if(panel && !panel.contains(event.target) && !event.target.closest('.qm-tappable-symbol'))close();});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&panel){event.preventDefault();close();}});
+    window.addEventListener('resize',close);decorate();
+  };
+  return {resolve,fixtures,decorate,open,close,attributes,tokens};
+})();
+
+
+/* ── project/learning-diagrams.js ── */
+/* Unique, inspected GPT-image diagrams, placed at the exact teaching moment. */
+(() => {
+  const descriptions = {
+    order: ['Order changes the answer', 'A swaps two coordinates. B doubles the first. Starting from (1,0), AB gives (0,2), while BA gives (0,1). Read products from right to left.'],
+    projection: ['Subtract the shadow', 'For real teaching vectors ψ = (2,2) and ϕ = (3,0), the projection is (2,0). Subtract it to get χ = (0,2). Its squared length is 4, which cannot be negative.'],
+    ladder: ['A lowering matrix in action', 'In the oscillator energy basis, multiply the displayed three-by-three corner by the column for |2⟩. The output is √2 times the column for |1⟩. The full operator is infinite.']
+  };
+  function figure(key) {
+    const [title,caption] = descriptions[key];
+    return DOM.el('figure',{class:'fig rendered qm-learning-figure'},[
+      DOM.el('div',{class:'kicker',text:title}),
+      DOM.el('img',{class:'fig-img',src:DIAGRAM_BASE+'generated/matrix-'+key+'.png',alt:caption,loading:'lazy'}),
+      DOM.el('figcaption',{text:caption})
+    ]);
+  }
+  const previous = PROJECT.hooks.noteSim;
+  PROJECT.hooks.noteSim = c => {
+    const guide = previous?.(c);
+    if (c.id === 'c.3.3.1') { const node = DOM.el('div',{}); if (guide) node.append(guide); node.append(figure('order')); return node; }
+    return guide;
+  };
+  const previousRung = PROJECT.hooks.rungFig;
+  PROJECT.hooks.rungFig = (r,c,i) => {
+    if (c.id === 'c.3.1.3' && i === 0) return figure('projection');
+    if (c.id === 'c.4.1.3' && i === 1) return figure('ladder');
+    return previousRung?.(r,c,i);
+  };
+})();
+
+
 /* ── flow-library/app/src/core.project.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    The project seam: the one place flow-library learns WHICH app it is.
@@ -13007,6 +13321,8 @@ PROJECT.hooks.home = function (ctx) {
        realLine: true,                optional — draw the real-line widget
                                         (comp.realline.js) under inequalities
        pyqLabel: 'JAM past papers',   optional — what the level-4 rung is called (default shown)
+       studyMaps: [{ title, href,     optional — adds Study Map tab; absent by default
+                     description, summary }],   only configured modules are listed
        figZoom: true,                 optional — click a rendered diagram to open it
                                         full-screen with zoom (comp.zoom.js)
        hooks: {                       optional — each is called if present
@@ -14729,8 +15045,8 @@ const Progress = (function () {
 
   /* ── ticking ─────────────────────────────────────────────────────────────
      One press advances one step, so the tick always has somewhere to go.
-     Level 3 is deliberately NOT reachable from here: it is earned by working
-     the section's exercises, not by pressing a box. */
+     At level 2, the next press records the corresponding section exercises
+     as complete. A level-3 press clears the note as before. */
   function advance(id) {
     const at = level(id);
     if (at === 0) {
@@ -14738,6 +15054,8 @@ const Progress = (function () {
       if (!hasProof(id)) Store.setProofDone(id, true);
     } else if (at === 1) {
       Store.setProofDone(id, true);
+    } else if (at === 2) {
+      setTo([id], 3);
     } else {
       clear(id);
     }
@@ -14760,18 +15078,24 @@ const Progress = (function () {
     dropCache();
   }
 
-  /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
+  /* Put a list of concepts AT a given level (0, 1, 2 or 3). Bulk ticking a
      section or a module runs through here, and so does the prerequisite
      cascade — which is why it takes a level rather than a boolean. */
   function setTo(ids, n) {
     const list = ids || [];
-    const want = Math.max(0, Math.min(2, n));
+    const want = Math.max(0, Math.min(3, n));
     Store.setDoneMany(list, want >= 1);
     list.forEach(function (id) {
       const proof = hasProof(id);
       const on = want >= 2 || (want >= 1 && !proof);
       if (Store.isProofDone(id) !== on) Store.setProofDone(id, on);
     });
+    if (want >= 3) {
+      const sections = new Set(list.map(id => Pool.concept(id)?.sec).filter(Boolean));
+      const tasks = new Map();
+      sections.forEach(sec => secTaskState(sec).list.forEach(q => tasks.set(taskKey(q), q)));
+      tasks.forEach((q, key) => { if (!taskDone(q)) Store.setProofDone(key, true); });
+    }
     dropCache();
   }
 
@@ -14781,6 +15105,7 @@ const Progress = (function () {
     if (!c.total) return 0;
     if (c.min === 0) setTo(ids, 1);
     else if (c.min === 1) setTo(ids, 2);
+    else if (c.min === 2) setTo(ids, 3);
     else setTo(ids, 0);
     return count(ids).min;
   }
@@ -17196,7 +17521,8 @@ const Tree = (function () {
         state: lv >= 1 ? 'true' : 'false', lv: lv,
         label: lv === 0 ? 'Mark "' + c.title + '" as read' + extNote
           : lv === 1 ? 'Mark the proof of "' + c.title + '" as complete' + extNote
-            : 'Clear "' + c.title + '"'
+            : lv === 2 ? 'Mark all exercises in §' + c.sec + ' as complete'
+              : 'Clear "' + c.title + '"'
       };
     }, function () {
       const was = Progress.level(c.id);
@@ -20764,6 +21090,35 @@ const ViewWrite = (function () {
 })();
 
 
+/* ── flow-library/app/src/view.study-map.js ── */
+/* Optional module catalogue. Projects opt in by supplying PROJECT.studyMaps. */
+const ViewStudyMap = (function () {
+  function render() {
+    const el = DOM.el;
+    const list = el('ul', { class: 'study-map-list', 'aria-label': 'Study map modules' });
+    (PROJECT.studyMaps || []).forEach(function (module) {
+      list.appendChild(el('li', {}, [
+        el('a', { class: 'study-map-entry', href: module.href }, [
+          DOM.mi('hub'),
+          el('div', { class: 'study-map-entry-copy' }, [
+            el('b', { text: module.title }),
+            el('span', { class: 'muted', text: module.description || '' }),
+            module.summary ? el('small', { class: 'muted', text: module.summary }) : null
+          ]),
+          DOM.mi('arrow_forward')
+        ])
+      ]));
+    });
+    return el('div', { class: 'stack' }, [
+      UI.title('Study Map', PROJECT.name),
+      el('p', { class: 'lede', text: 'Choose a module to explore its prerequisites and practise the answer one step at a time.' }),
+      list
+    ]);
+  }
+  return { render };
+})();
+
+
 /* ── flow-library/app/src/boot.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Boot: theme, data loading, navigation, routing, failure surfaces.
@@ -20884,8 +21239,13 @@ const App = (function () {
     { name: 'recall', label: 'Recall', icon: 'style', also: [] }
   ];
 
+  if (PROJECT.studyMaps && PROJECT.studyMaps.length) {
+    TABS.push({ name: 'study-map', label: 'Study Map', icon: 'hub', also: [] });
+  }
+
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
+    'study-map': () => PROJECT.studyMaps && PROJECT.studyMaps.length ? ViewStudyMap : ViewHome,
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewWrite
   };
 

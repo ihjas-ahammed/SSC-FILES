@@ -1167,6 +1167,15 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .pace-levels button { flex:1 1 auto; min-height:38px; }
 .lv5 { color:var(--accent); }
 
+/* Optional study-map catalogue; does not change other views. */
+.study-map-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.study-map-entry { display: flex; align-items: center; gap: 16px; padding: 22px; border: 1px solid var(--rule); border-radius: var(--r-m); color: var(--ink); background: var(--surface); text-decoration: none; min-width: 0; }
+.study-map-entry:hover { border-color: var(--accent); }
+.study-map-entry:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.study-map-entry-copy { display: grid; gap: 6px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.study-map-entry-copy b { font-size: 1.2rem; }
+@media (max-width: 600px) { .study-map-entry { padding: 18px 14px; gap: 10px; } }
+
 </style>
 <style>
 /* ── project/theme.css ── */
@@ -1386,6 +1395,15 @@ a.card:hover,button.card:hover{ box-shadow:var(--shadow-2), var(--qm-glow); }
 @media (prefers-reduced-motion: reduce){
   :root[data-theme=dark] body::after{ animation:none; }
 }
+
+/* Direct matrix previews; no formula buttons or instruction panels. */
+.qm-tappable-symbol { cursor:pointer; border-bottom:1px dotted var(--accent); }
+.qm-tappable-symbol:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.qm-matrix-popover { position:fixed; z-index:10000; width:max-content; max-width:calc(100vw - 16px); max-height:calc(100dvh - 16px); overflow:auto; padding:20px 24px 12px; border:1px solid var(--rule); border-radius:10px; background:var(--paper); color:var(--ink); box-shadow:0 8px 28px #0004; }
+.qm-matrix-formula { overflow-x:auto; max-width:360px; }
+.qm-matrix-popover small { display:block; margin-top:8px; color:var(--ink-2); font-size:11px; }
+.qm-matrix-close { position:absolute; top:2px; right:5px; border:0; background:transparent; color:var(--ink-2); font-size:20px; cursor:pointer; padding:0 4px; }
+.qm-learning-figure img { background:#fff; }
 
 </style>
 
@@ -3024,6 +3042,14 @@ const PROJECT = {
   },
   themeColor: { light: '#f3f6fb', dark: '#05080f' },
   figZoom: true,
+  studyMaps: [{
+    title: 'Module 3',
+    description: 'Mathematical Tools of Quantum Mechanics',
+    summary: '32 questions · 155 concepts · 3D prerequisite map',
+    href: location.pathname.startsWith('/phy/')
+      ? '/phy/quantum-mechanics/study-map/module-3/'
+      : '../study-map/build/index.html'
+  }],
   hooks: {}
 };
 
@@ -3210,6 +3236,294 @@ PROJECT.hooks.home = function (ctx) {
 };
 
 
+/* ── project/matrix-view.js ── */
+/* QM-only, direct matrix previews. Scalars and unknown notation are never
+   enhanced. Lesson examples are labelled; physical operators keep their basis. */
+const QMMatrix = (() => {
+  const M = rows => '\\begin{pmatrix}'+rows.map(r=>r.join('&')).join('\\\\')+'\\end{pmatrix}';
+  const column = (...values) => M(values.map(v=>[v]));
+  // Symbolic entries are deliberately scoped to the lesson that defines them.
+  // Numeric fixtures remain only where the lesson itself gives that example.
+  const fixtures = {
+    'c.3.0.2': {psi: ['1/\\sqrt2','i/\\sqrt2']},
+    'c.3.0.3': {A:[[0,1],[1,0]],B:[[2,0],[0,1]]},
+    'c.3.1.2': {psi:['c_1 p_{11}+c_2 p_{12}','c_1 p_{21}+c_2 p_{22}'],phi:['d_1','d_2'],indexedStates:{psi:{'1':['p_{11}','p_{21}'],'2':['p_{12}','p_{22}']}},stateVectors:{u:['u_1','u_2'],v:['v_1','v_2']}},
+    'c.3.1.3': {psi:['c_1','c_2'],phi:['d_1','d_2'],chi:['c_1-\\lambda d_1','c_2-\\lambda d_2'],indexedStates:{psi:{'1':['p_{11}','p_{21}'],'2':['p_{12}','p_{22}']}}},
+    'c.3.1.4': {psi:['c_1','c_2'],I:[[1,0],[0,1]],basisStates:{phi:''}},
+    'c.3.2.1': {psi:['c_1','c_2'],A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],P:[['|c_1|^2','c_1 c_2^*'],['c_2 c_1^*','|c_2|^2']],indexedStates:{psi:{'1':['p_{11}','p_{21}'],'2':['p_{12}','p_{22}']}}},
+    'c.3.2.2': {psi:['c_1','c_2'],phi:['d_1','d_2'],A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']]},
+    'c.3.2.3': {A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']],B:[['b_{11}','b_{12}'],['b_{12}^*','b_{22}']]},
+    'c.3.2.4': {psi:['c_1','c_2'],A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']]},
+    'c.3.3.1': {A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']]},
+    'c.3.3.2': {A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']],C:[['c_{11}','c_{12}'],['c_{21}','c_{22}']]},
+    'c.3.4.1': {psi:['c_1','c_2'],A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']],B:[['b_{11}','b_{12}'],['b_{12}^*','b_{22}']]},
+    'c.3.4.2': {A:[['a_1',0],[0,'a_2']],B:[['b_1',0],[0,'b_2']]},
+    'c.3.5.1': {A:[['a_{11}','a_{12}'],['a_{21}','a_{22}']],B:[['b_{11}','b_{12}'],['b_{21}','b_{22}']]},
+    'c.3.5.2': {U:[['u_{11}','u_{12}'],['u_{21}','u_{22}']],psi:['c_1','c_2'],phi:['d_1','d_2']},
+    'c.3.6.1': {A:[['A_{11}','A_{12}','\\cdots'],['A_{21}','A_{22}','\\cdots'],['\\vdots','\\vdots','\\ddots']],psi:['c_1','c_2','\\vdots'],phi:['d_1','d_2','\\vdots'],basisStates:{phi:''}},
+    'c.3.6.2': {A:[['a_{11}','a_{12}'],['a_{12}^*','a_{22}']],psi:['c_1','c_2'],phi:['d_1','d_2'],indexedStates:{a:{n:['v_{1n}^{(a)}','v_{2n}^{(a)}'],m:['v_{1m}^{(a)}','v_{2m}^{(a)}']}}},
+    'c.3.6.3': {A:[['a_1',0],[0,'a_2']],B:[['b_1',0],[0,'b_2']],psi:['c_1','c_2']},
+    'c.3.6.4': {A:[['i\\alpha','z'],['-z^*','i\\beta']],U:[['u_{11}','u_{12}'],['u_{21}','u_{22}']],indexedStates:{a:{n:['v_{1n}^{(a)}','v_{2n}^{(a)}']},u:{n:['v_{1n}^{(u)}','v_{2n}^{(u)}']}},stateVectors:{U:['U_1','U_2']}},
+    'c.3.7.4': {A:[['A_{11}','A_{12}'],['A_{21}','A_{22}']],psi:['c_1','c_2']},
+    'c.7.1.1': {H:[['E_1^{(0)}+\\lambda H_{11}^{\\prime}','\\lambda H_{12}^{\\prime}'],['\\lambda H_{21}^{\\prime}','E_2^{(0)}+\\lambda H_{22}^{\\prime}']],H0:[['E_1^{(0)}',0],[0,'E_2^{(0)}']],Hprime:[['H_{11}^{\\prime}','H_{12}^{\\prime}'],['H_{21}^{\\prime}','H_{22}^{\\prime}']],basisStates:{n:'(0)',m:'(0)'}},
+    'c.7.1.2': {H:[['E_1^{(0)}+\\lambda H_{11}^{\\prime}','\\lambda H_{12}^{\\prime}'],['\\lambda H_{21}^{\\prime}','E_2^{(0)}+\\lambda H_{22}^{\\prime}']],H0:[['E_1^{(0)}',0],[0,'E_2^{(0)}']],Hprime:[['H_{11}^{\\prime}','H_{12}^{\\prime}'],['H_{21}^{\\prime}','H_{22}^{\\prime}']],basisStates:{m:'(0)',n:'(0)'}},
+    'c.7.1.3': {H:[['E_1^{(0)}+\\lambda H_{11}^{\\prime}','\\lambda H_{12}^{\\prime}'],['\\lambda H_{21}^{\\prime}','E_2^{(0)}+\\lambda H_{22}^{\\prime}']],H0:[['E_1^{(0)}',0],[0,'E_2^{(0)}']],Hprime:[['H_{11}^{\\prime}','H_{12}^{\\prime}'],['H_{21}^{\\prime}','H_{22}^{\\prime}']],basisStates:{n:'(0)',m:'(0)'}},
+    'c.7.2.1': {W:[['W_{11}','W_{12}'],['W_{21}','W_{22}']],basisStates:{psi:'(0)'}}
+  };
+  const greek = {ψ:'psi',ϕ:'phi',φ:'phi',χ:'chi'};
+  const normalize = s => String(s).normalize('NFKC').replace(/\s/g,'');
+  const conjugate = v => {
+    if (typeof v === 'number' || /^(?:[0-9]+|\\cdots|\\vdots|\\ddots)$/.test(String(v))) return v;
+    const value=String(v);
+    if (/^\|[^|]+\|\^2$/.test(value) || value.startsWith('\\delta_{')) return value;
+    const product=value.match(/^([a-z]_[0-9]+) ([a-z]_[0-9]+)\^\*$/);
+    if (product) return product[2]+' '+product[1]+'^*';
+    if (/^[+-]?(?:[A-Za-z](?:_\{[^}]+\}|_[A-Za-z0-9]+)?|\\[A-Za-z]+)\^\{?\*\}?$/.test(value)) return value.replace(/\^\{?\*\}?$/,'');
+    if (/^-?i(?:\\[A-Za-z]+)?(?:\/\\sqrt[0-9]+)?$/.test(value)) return value.startsWith('-')?value.slice(1):'-'+value;
+    if (/^-?[0-9]+\\?\/(?:[0-9]+|\\sqrt[0-9]+)$/.test(value)) return value;
+    return '\\overline{'+value+'}';
+  };
+  const transpose = rows => rows[0].map((_,j)=>rows.map(r=>conjugate(r[j])));
+  const numberBasis = '|0⟩, |1⟩, |2⟩, …';
+  const ladder = up => up
+    ? [[0,0,0,'\\cdots'],[1,0,0,'\\cdots'],[0,'\\sqrt2',0,'\\cdots'],['\\vdots','\\vdots','\\sqrt3','\\ddots']]
+    : [[0,1,0,'\\cdots'],[0,0,'\\sqrt2','\\cdots'],[0,0,0,'\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']];
+  const preview = (formula,basis,example=false,note='') => ({formula,basis,example,note});
+  function resolve(c, symbol, options={}) {
+    if (!c) return null;
+    const f = fixtures[c.id] || {};
+    const osc = /^4\.1(?:\.|$)/.test(c.sec);
+    const {sub='',sup='',state='',hat=false,tex=''} = options;
+    const name = normalize(symbol);
+    const label = greek[name];
+    const matrix = options.matrix || c.id==='c.3.0.3' && ['A','B'].includes(name) && !sub;
+    if (['χ'].includes(name) && /^6\.4\.[34]$/.test(c.id.replace('c.',''))) {
+      return preview(c.id==='c.6.4.4' ? column('a e^{i\\omega_L t/2}','b e^{-i\\omega_L t/2}') : /theta/.test(tex) ? column('\\cos(\\theta/2)','e^{i\\phi}\\sin(\\theta/2)') : column('a','b'),'|↑z⟩, |↓z⟩');
+    }
+    if (state) {
+      // Only named, lesson-scoped vectors enter this branch; operator tables do not.
+      if (hat || ['x','p'].includes(name)) return null;
+      const stateLabel=label||name;
+      const vector=(values,basis,note='',example=false) => {
+        if (!Array.isArray(values) || values.some(Array.isArray)) return null;
+        return preview(state==='bra'?M([values.map(v=>v==='\\vdots'?'\\cdots':conjugate(v))]):column(...values),basis,example,note);
+      };
+      const basisVector=(index,basis,dimension='') => {
+        const entry=k=>/^[12]$/.test(index)&&/^[12]$/.test(k)?Number(k===index):`\\delta_{${k}${index}}`;
+        return vector([entry('1'),entry('2'),'\\vdots',...(dimension?[entry(dimension)]:[])],basis,
+          'δ = 1 for matching indices, 0 otherwise');
+      };
+      if (/^c\.7\.1\./.test(c.id) && ['n','m'].includes(name) && !sub && sup==='(0)')
+        return basisVector(name,'|1⁽⁰⁾⟩, |2⁽⁰⁾⟩, … · unperturbed energy basis');
+      if (c.id==='c.7.2.1' && label==='psi' && /^[12ijd]$/.test(sub) && sup==='(0)')
+        return basisVector(sub,'|ψ₁⁽⁰⁾⟩, |ψ₂⁽⁰⁾⟩, …, |ψ_d⁽⁰⁾⟩ · d-dimensional subspace','d');
+      if (['c.3.1.4','c.3.6.1'].includes(c.id) && label==='phi' && /^[12ijmn]$/.test(sub) && !sup)
+        return basisVector(sub,'|φ₁⟩, |φ₂⟩, …');
+      if (osc) {
+        if (sub || sup) return null;
+        if (/^[012]$/.test(name)) return vector([0,0,0,'\\vdots'].map((v,i)=>i===Number(name)?1:v),numberBasis);
+        if (name==='n') return vector(['\\delta_{0n}','\\delta_{1n}','\\delta_{2n}','\\vdots'],numberBasis,'δ = 1 for matching indices, 0 otherwise');
+        if (label) return vector(['c_0','c_1','c_2','\\vdots'],numberBasis);
+        return null;
+      }
+      if (/^6\.4/.test(c.sec) && ['↑','↓'].includes(name) && !sup)
+        return vector(name==='↑'?[1,0]:[0,1],'|↑z⟩, |↓z⟩');
+      if (sup) {
+        if (c.id==='c.3.6.1' && label==='psi' && !sub && ['′',"'"].includes(sup))
+          return vector(['\\sum_j A_{1j}c_j','\\sum_j A_{2j}c_j','\\vdots'],'|φ₁⟩, |φ₂⟩, …');
+        return null;
+      }
+      const values=sub?f.indexedStates?.[stateLabel]?.[sub]:f.stateVectors?.[stateLabel]||f[stateLabel];
+      let basis='|e₁⟩, |e₂⟩ · two-coordinate view';
+      if (c.id==='c.3.6.1' && label) basis='|φ₁⟩, |φ₂⟩, …';
+      if (c.id==='c.3.1.4' && label==='psi')
+        return vector(['c_1','c_2','\\vdots'],'|φ₁⟩, |φ₂⟩, …');
+      return vector(values,basis,'',['c.3.0.2','c.3.0.3'].includes(c.id));
+    }
+    // A matrix element (A_ij), an eigenvalue and a coefficient are numbers.
+    if (/^(?:ij|mn|nm|ii|jj|nn|mm|[0-9]+)$/.test(sub) && !(name==='H' && hat && sub==='0' && f.H0)) return null;
+    if (hat && /^3\./.test(c.sec) && ['x','p'].includes(name) && !sub) {
+      const rows = name==='x' ? [[0,1,0,'\\cdots'],[1,0,'\\sqrt2','\\cdots'],[0,'\\sqrt2',0,'\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']] : [[0,'-i',0,'\\cdots'],['i',0,'-i\\sqrt2','\\cdots'],[0,'i\\sqrt2',0,'-i\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      return preview((name==='x'?'\\frac{\\ell}{\\sqrt2}':'\\frac{\\hbar}{\\sqrt2\\ell}')+M(rows),'Hermite basis |0⟩, |1⟩, … · ℓ > 0');
+    }
+    if (name==='I' && hat && c.id==='c.3.3.3') return preview(M([[1,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,1,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),'Hermite basis |0⟩, |1⟩, …');
+    if (name==='I' && !sub && !osc && (hat || /^6\.4/.test(c.sec))) return preview(M([[1,0],[0,1]]),'|e₁⟩, |e₂⟩',!/^6\.4/.test(c.sec));
+    if (name==='H' && hat && c.id==='c.6.4.4') return preview('-\\frac{\\hbar\\omega_L}{2}'+M([[1,0],[0,-1]]),'|↑z⟩, |↓z⟩');
+    if (osc && ['a','N','H','x','p','I'].includes(name) && hat) {
+      if (name==='a') return preview(M(ladder(sup.includes('†'))),numberBasis);
+      if (name==='N') return preview(M([[0,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,2,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='H') return preview('\\hbar\\omega'+M([['1/2',0,0,'\\cdots'],[0,'3/2',0,'\\cdots'],[0,0,'5/2','\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='I') return preview(M([[1,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,1,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='x') return preview('\\sqrt{\\frac{\\hbar}{2m\\omega}}'+M([[0,1,0,'\\cdots'],[1,0,'\\sqrt2','\\cdots'],[0,'\\sqrt2',0,'\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+      if (name==='p') return preview('\\sqrt{\\frac{m\\hbar\\omega}{2}}'+M([[0,'-i',0,'\\cdots'],['i',0,'-i\\sqrt2','\\cdots'],[0,'i\\sqrt2',0,'-i\\sqrt3'],['\\vdots','\\vdots','\\vdots','\\ddots']]),numberBasis);
+    }
+    if (hat && name==='S' && sup==='2' && /^6\.4/.test(c.sec)) return preview('\\frac{3\\hbar^2}{4}'+M([[1,0],[0,1]]),'|↑z⟩, |↓z⟩');
+    if (hat && ['J','L'].includes(name) && sup==='2' && /^6\.[123]/.test(c.sec)) {
+      const q=name==='L'?'l':'j';
+      return preview('\\hbar^2 '+q+'('+q+'+1)'+M([[1,0,0,'\\cdots'],[0,1,0,'\\cdots'],[0,0,1,'\\ddots'],['\\vdots','\\vdots','\\vdots','\\ddots']]),`|${q},${q}⟩, |${q},${q}−1⟩, …, |${q},−${q}⟩`,false,'Angular-momentum multiplet identity');
+    }
+    if (['S','σ'].includes(name) && /^[xyz]$/.test(sub) && /^6\.4/.test(c.sec)) {
+      const rows = sub==='x'?[[0,1],[1,0]]:sub==='y'?[[0,'-i'],['i',0]]:[[1,0],[0,-1]];
+      return preview((name==='S'?'\\frac{\\hbar}{2}':'')+M(rows),'|↑z⟩, |↓z⟩');
+    }
+    if (['J','L'].includes(name) && hat && /^[xyz+−-]$/.test(sub) && /^6\.[123]/.test(c.sec)) {
+      const q=name==='L'?'l':'j';
+      const basis=`|${q},${q}⟩, |${q},${q}−1⟩, …, |${q},−${q}⟩`;
+      const k=['\\kappa_0','\\kappa_1','\\kappa_2'];
+      const ladderUp=[[0,k[0],0,'\\cdots'],[0,0,k[1],'\\cdots'],[0,0,0,k[2]],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      const ladderDown=[[0,0,0,'\\cdots'],[k[0],0,0,'\\cdots'],[0,k[1],0,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      const rows=sub==='z'
+        ? [[q,0,0,'\\cdots'],[0,`${q}-1`,0,'\\cdots'],[0,0,`${q}-2`,'\\cdots'],['\\vdots','\\vdots','\\vdots','\\ddots']]
+        : sub==='+' ? ladderUp
+        : ['−','-'].includes(sub) ? ladderDown
+        : sub==='x'
+          ? [[0,k[0],0,'\\cdots'],[k[0],0,k[1],'\\cdots'],[0,k[1],0,k[2]],['\\vdots','\\vdots','\\vdots','\\ddots']]
+          : [[0,k[0],0,'\\cdots'],[`-${k[0]}`,0,k[1],'\\cdots'],[0,`-${k[1]}`,0,k[2]],['\\vdots','\\vdots','\\vdots','\\ddots']];
+      const scale=sub==='z'?'\\hbar':sub==='+'||['−','-'].includes(sub)?'\\hbar':'\\frac{\\hbar}{2}';
+      const formula=sub==='y'?'\\frac{\\hbar}{2i}'+M(rows):scale+M(rows);
+      return preview(formula,basis,false,`κ_r = √[(r+1)(2${q}−r)]`);
+    }
+    const rows=name==='H' && /[′']/.test(sup) ? f.Hprime : name==='H' && sub==='0' ? f.H0 : f[name];
+    if (!Array.isArray(rows?.[0])) return null;
+    if (sub && !(name==='P' && ['ψ','ϕ','φ'].includes(sub)) && !(name==='H' && sub==='0' && f.H0)) return null;
+    // No fixture is applied to ordinary scalar occurrences of the same letter.
+    if (!hat && !matrix) return null;
+    const actual = c.id==='c.3.0.3' && name==='A' && /2x|diag/.test(tex) ? [[2,0],[0,-1]] : rows;
+    const caption = {
+      'c.3.2.1': name==='P' ? 'Normalized state: |c₁|² + |c₂|² = 1' : '',
+      'c.3.2.3': name==='A' ? 'Hermitian: a₁₁, a₂₂ ∈ ℝ' : 'Hermitian: b₁₁, b₂₂ ∈ ℝ',
+      'c.3.2.4': 'Hermitian observable: a₁₁, a₂₂ ∈ ℝ',
+      'c.3.4.1': name==='A' ? 'Hermitian: a₁₁, a₂₂ ∈ ℝ' : 'Hermitian: b₁₁, b₂₂ ∈ ℝ',
+      'c.3.4.2': 'Common eigenbasis when [A,B] = 0',
+      'c.3.5.2': 'Unitary condition: U†U = UU† = I',
+      'c.3.6.2': 'Hermitian: a₁₁, a₂₂ ∈ ℝ',
+      'c.3.6.3': 'Shared eigenbasis for commuting Hermitian operators',
+      'c.3.6.4': name==='A' ? 'Anti-Hermitian: α, β ∈ ℝ' : 'Unitary condition: U†U = UU† = I'
+    }[c.id] || '';
+    const basis = c.id==='c.3.6.1'?'|φ₁⟩, |φ₂⟩, …':name==='H' && /^7\.1/.test(c.sec) ? '|1⁽⁰⁾⟩, |2⁽⁰⁾⟩' : name==='W' && c.id==='c.7.2.1' ? '|ψ₁⁽⁰⁾⟩, |ψ₂⁽⁰⁾⟩' : actual.length===3?'|e₁⟩, |e₂⟩, |e₃⟩':'|e₁⟩, |e₂⟩';
+    const energy = name==='H' && /^7\.1/.test(c.sec)?' · unperturbed energy basis':name==='W'?' · two-fold degenerate subspace':'';
+    const example = c.id==='c.3.0.3';
+    return preview(M(sup.includes('†')?transpose(actual):actual),basis+energy,example,caption);
+  }
+  let panel, anchor;
+  function close() {
+    if (!panel) return; panel.remove(); panel=null;
+    if (anchor?.isConnected) { anchor.setAttribute('aria-expanded','false'); anchor.removeAttribute('aria-controls'); }
+    if (anchor?.isConnected) anchor.focus({preventScroll:true});
+  }
+  function open(value,trigger) {
+    close(); anchor=trigger;
+    panel=document.createElement('div'); panel.className='qm-matrix-popover';
+    panel.id='qm-matrix-preview'; trigger.setAttribute('aria-expanded','true'); trigger.setAttribute('aria-controls',panel.id);
+    panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Matrix representation');
+    const math=document.createElement('div');math.className='qm-matrix-formula'; math.textContent='$$'+value.formula+'$$';
+    const caption=document.createElement('small');caption.textContent=(value.example?'Example · ':'')+value.basis+(value.note?' · '+value.note:'');
+    const dismiss=document.createElement('button');dismiss.type='button';dismiss.className='qm-matrix-close';dismiss.textContent='×';dismiss.setAttribute('aria-label','Close matrix');dismiss.onclick=close;
+    panel.append(dismiss,math,caption);document.body.append(panel);
+    const box=trigger.getBoundingClientRect();
+    panel.style.left=Math.max(8,Math.min(box.left,innerWidth-panel.offsetWidth-8))+'px';
+    panel.style.top=Math.max(8,Math.min(box.bottom+8,innerHeight-panel.offsetHeight-8))+'px';
+    Tex.typeset(panel).then(()=>{
+      if (!panel) return;
+      panel.style.left=Math.max(8,Math.min(box.left,innerWidth-panel.offsetWidth-8))+'px';
+      panel.style.top=Math.max(8,Math.min(box.bottom+8,innerHeight-panel.offsetHeight-8))+'px';
+    });
+  }
+  function text(node) {
+    if (!node) return '';
+    if (node.getText) return normalize(node.getText());
+    return normalize((node.childNodes||[]).map(text).join(''));
+  }
+  function tokens(node,out=[]) {
+    if (node.kind==='mi' || node.kind==='mn' || node.kind==='mo' && ['↑','↓'].includes(text(node))) out.push(node);
+    else (node.childNodes||[]).forEach(child=>tokens(child,out));
+    return out;
+  }
+  function attributes(node) {
+    let base=node, parent=node.parent,hat=false,sub='',sup='';
+    while(parent && (['mover','munder','msub','msup','msubsup','TeXAtom'].includes(parent.kind) || parent.kind==='inferredMrow' && parent.childNodes.length===1) && parent.childNodes[0]===base) {
+      if (parent.kind==='mover' && /[ˆ^\u0302]/.test(text(parent.childNodes[1]))) hat=true;
+      if (parent.kind==='msub' || parent.kind==='msubsup') sub=text(parent.childNodes[1]);
+      if (parent.kind==='msup') sup=text(parent.childNodes[1]);
+      if (parent.kind==='msubsup') sup=text(parent.childNodes[2]);
+      base=parent;parent=parent.parent;
+    }
+    const siblings=parent?.childNodes||[];const index=siblings.indexOf(base);
+    const before=text(siblings[index-1]),after=text(siblings[index+1]);
+    const state=(before==='|' && after.startsWith('⟩'))?'ket':(before==='⟨' && after==='|')?'bra':'';
+    return {hat,sub,sup,state};
+  }
+  function decorate() {
+    const main=document.getElementById('main');const doc=window.MathJax?.startup?.document;
+    if (!main || !doc) return;
+    for(const item of doc.getMathItemsWithin(main)) {
+      const root=item.typesetRoot;
+      if(!root?.isConnected || root.dataset.qmMatrix) continue;
+      root.dataset.qmMatrix='1';
+      const marker=root.closest('.notebody')?.querySelector('[data-qm-concept]');
+      const c=marker && Pool.concept(marker.dataset.qmConcept);if(!c) continue;
+      const source=tokens(item.root);const painted=[...root.querySelectorAll('mjx-math mjx-mi, mjx-math mjx-mn, mjx-math mjx-mo')].filter(n=>n.tagName.toLowerCase()!=='mjx-mo' || /mjx-c(?:2191|2193)(?:\s|$)/.test(n.querySelector('mjx-c')?.className||''));
+      // Fail closed when MathJax's source and painted tokens cannot be paired.
+      if(source.length!==painted.length) continue;
+      source.forEach((node,i)=>{
+        const symbol=text(node);const opts=attributes(node);opts.tex=item.math;
+        const value=resolve(c,symbol,opts);if(!value) return;
+        const target=painted[i];
+        const stateSuffix=opts.state?(opts.sub?'_'+opts.sub:'')+(opts.sup?'^'+opts.sup:''):'';
+        target.classList.add('qm-tappable-symbol');target.tabIndex=0;target.setAttribute('aria-haspopup','dialog');target.setAttribute('aria-expanded','false');target.setAttribute('role','button');target.setAttribute('aria-label',symbol+stateSuffix+': matrix representation');
+        target.onclick=event=>{event.stopPropagation();open(value,target);};
+        target.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open(value,target);}};
+      });
+    }
+  }
+  const oldNote=PROJECT.hooks.noteSim;
+  PROJECT.hooks.noteSim=c=>{
+    const marker=DOM.el('span',{'data-qm-concept':c.id,hidden:true});
+    const prior=oldNote?.(c);if(prior) marker.append(prior);return marker;
+  };
+  const oldReady=PROJECT.hooks.ready;
+  PROJECT.hooks.ready=()=>{
+    oldReady?.();let pending=false;
+    new MutationObserver(()=>{if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;decorate();});}).observe(document.getElementById('main'),{childList:true,subtree:true});
+    document.addEventListener('pointerdown',event=>{if(panel && !panel.contains(event.target) && !event.target.closest('.qm-tappable-symbol'))close();});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&panel){event.preventDefault();close();}});
+    window.addEventListener('resize',close);decorate();
+  };
+  return {resolve,fixtures,decorate,open,close,attributes,tokens};
+})();
+
+
+/* ── project/learning-diagrams.js ── */
+/* Unique, inspected GPT-image diagrams, placed at the exact teaching moment. */
+(() => {
+  const descriptions = {
+    order: ['Order changes the answer', 'A swaps two coordinates. B doubles the first. Starting from (1,0), AB gives (0,2), while BA gives (0,1). Read products from right to left.'],
+    projection: ['Subtract the shadow', 'For real teaching vectors ψ = (2,2) and ϕ = (3,0), the projection is (2,0). Subtract it to get χ = (0,2). Its squared length is 4, which cannot be negative.'],
+    ladder: ['A lowering matrix in action', 'In the oscillator energy basis, multiply the displayed three-by-three corner by the column for |2⟩. The output is √2 times the column for |1⟩. The full operator is infinite.']
+  };
+  function figure(key) {
+    const [title,caption] = descriptions[key];
+    return DOM.el('figure',{class:'fig rendered qm-learning-figure'},[
+      DOM.el('div',{class:'kicker',text:title}),
+      DOM.el('img',{class:'fig-img',src:DIAGRAM_BASE+'generated/matrix-'+key+'.png',alt:caption,loading:'lazy'}),
+      DOM.el('figcaption',{text:caption})
+    ]);
+  }
+  const previous = PROJECT.hooks.noteSim;
+  PROJECT.hooks.noteSim = c => {
+    const guide = previous?.(c);
+    if (c.id === 'c.3.3.1') { const node = DOM.el('div',{}); if (guide) node.append(guide); node.append(figure('order')); return node; }
+    return guide;
+  };
+  const previousRung = PROJECT.hooks.rungFig;
+  PROJECT.hooks.rungFig = (r,c,i) => {
+    if (c.id === 'c.3.1.3' && i === 0) return figure('projection');
+    if (c.id === 'c.4.1.3' && i === 1) return figure('ladder');
+    return previousRung?.(r,c,i);
+  };
+})();
+
+
 /* ── flow-library/app/src/core.project.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    The project seam: the one place flow-library learns WHICH app it is.
@@ -3229,6 +3543,8 @@ PROJECT.hooks.home = function (ctx) {
        realLine: true,                optional — draw the real-line widget
                                         (comp.realline.js) under inequalities
        pyqLabel: 'JAM past papers',   optional — what the level-4 rung is called (default shown)
+       studyMaps: [{ title, href,     optional — adds Study Map tab; absent by default
+                     description, summary }],   only configured modules are listed
        figZoom: true,                 optional — click a rendered diagram to open it
                                         full-screen with zoom (comp.zoom.js)
        hooks: {                       optional — each is called if present
@@ -4951,8 +5267,8 @@ const Progress = (function () {
 
   /* ── ticking ─────────────────────────────────────────────────────────────
      One press advances one step, so the tick always has somewhere to go.
-     Level 3 is deliberately NOT reachable from here: it is earned by working
-     the section's exercises, not by pressing a box. */
+     At level 2, the next press records the corresponding section exercises
+     as complete. A level-3 press clears the note as before. */
   function advance(id) {
     const at = level(id);
     if (at === 0) {
@@ -4960,6 +5276,8 @@ const Progress = (function () {
       if (!hasProof(id)) Store.setProofDone(id, true);
     } else if (at === 1) {
       Store.setProofDone(id, true);
+    } else if (at === 2) {
+      setTo([id], 3);
     } else {
       clear(id);
     }
@@ -4982,18 +5300,24 @@ const Progress = (function () {
     dropCache();
   }
 
-  /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
+  /* Put a list of concepts AT a given level (0, 1, 2 or 3). Bulk ticking a
      section or a module runs through here, and so does the prerequisite
      cascade — which is why it takes a level rather than a boolean. */
   function setTo(ids, n) {
     const list = ids || [];
-    const want = Math.max(0, Math.min(2, n));
+    const want = Math.max(0, Math.min(3, n));
     Store.setDoneMany(list, want >= 1);
     list.forEach(function (id) {
       const proof = hasProof(id);
       const on = want >= 2 || (want >= 1 && !proof);
       if (Store.isProofDone(id) !== on) Store.setProofDone(id, on);
     });
+    if (want >= 3) {
+      const sections = new Set(list.map(id => Pool.concept(id)?.sec).filter(Boolean));
+      const tasks = new Map();
+      sections.forEach(sec => secTaskState(sec).list.forEach(q => tasks.set(taskKey(q), q)));
+      tasks.forEach((q, key) => { if (!taskDone(q)) Store.setProofDone(key, true); });
+    }
     dropCache();
   }
 
@@ -5003,6 +5327,7 @@ const Progress = (function () {
     if (!c.total) return 0;
     if (c.min === 0) setTo(ids, 1);
     else if (c.min === 1) setTo(ids, 2);
+    else if (c.min === 2) setTo(ids, 3);
     else setTo(ids, 0);
     return count(ids).min;
   }
@@ -7418,7 +7743,8 @@ const Tree = (function () {
         state: lv >= 1 ? 'true' : 'false', lv: lv,
         label: lv === 0 ? 'Mark "' + c.title + '" as read' + extNote
           : lv === 1 ? 'Mark the proof of "' + c.title + '" as complete' + extNote
-            : 'Clear "' + c.title + '"'
+            : lv === 2 ? 'Mark all exercises in §' + c.sec + ' as complete'
+              : 'Clear "' + c.title + '"'
       };
     }, function () {
       const was = Progress.level(c.id);
@@ -10986,6 +11312,35 @@ const ViewWrite = (function () {
 })();
 
 
+/* ── flow-library/app/src/view.study-map.js ── */
+/* Optional module catalogue. Projects opt in by supplying PROJECT.studyMaps. */
+const ViewStudyMap = (function () {
+  function render() {
+    const el = DOM.el;
+    const list = el('ul', { class: 'study-map-list', 'aria-label': 'Study map modules' });
+    (PROJECT.studyMaps || []).forEach(function (module) {
+      list.appendChild(el('li', {}, [
+        el('a', { class: 'study-map-entry', href: module.href }, [
+          DOM.mi('hub'),
+          el('div', { class: 'study-map-entry-copy' }, [
+            el('b', { text: module.title }),
+            el('span', { class: 'muted', text: module.description || '' }),
+            module.summary ? el('small', { class: 'muted', text: module.summary }) : null
+          ]),
+          DOM.mi('arrow_forward')
+        ])
+      ]));
+    });
+    return el('div', { class: 'stack' }, [
+      UI.title('Study Map', PROJECT.name),
+      el('p', { class: 'lede', text: 'Choose a module to explore its prerequisites and practise the answer one step at a time.' }),
+      list
+    ]);
+  }
+  return { render };
+})();
+
+
 /* ── flow-library/app/src/boot.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Boot: theme, data loading, navigation, routing, failure surfaces.
@@ -11106,8 +11461,13 @@ const App = (function () {
     { name: 'recall', label: 'Recall', icon: 'style', also: [] }
   ];
 
+  if (PROJECT.studyMaps && PROJECT.studyMaps.length) {
+    TABS.push({ name: 'study-map', label: 'Study Map', icon: 'hub', also: [] });
+  }
+
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
+    'study-map': () => PROJECT.studyMaps && PROJECT.studyMaps.length ? ViewStudyMap : ViewHome,
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewWrite
   };
 
