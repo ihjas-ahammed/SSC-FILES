@@ -32,7 +32,7 @@ export function createPathFlow(scene, edges, positions) {
         dot.visible = !reduced && (edge.active || edge.complete || edge.route);
         if (!dot.visible) continue;
         dot.material.color.set(
-          edge.complete ? completedColor() : activeColor(),
+          edge.complete ? completedColor() : (edge.color ?? activeColor()),
         );
         dot.position.lerpVectors(a, b, (now / 6500 + phase) % 1);
         moving = true;

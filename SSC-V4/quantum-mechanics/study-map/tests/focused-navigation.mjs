@@ -37,7 +37,9 @@ assert.equal(
 );
 
 const browser = await chromium.launch({
-  executablePath: process.env.STUDY_MAP_CHROME || ".browser-cache/chromium-1243/chrome-linux64/chrome",
+  executablePath:
+    process.env.STUDY_MAP_CHROME ||
+    ".browser-cache/chromium-1243/chrome-linux64/chrome",
   args: ["--enable-unsafe-swiftshader"],
 });
 const errors = [];
@@ -47,7 +49,9 @@ try {
   });
   page.setDefaultTimeout(15000);
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto((process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1");
+  await page.goto(
+    (process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1",
+  );
   await page
     .locator(".topbar nav")
     .getByRole("button", { name: "Knowledge map", exact: true })
@@ -168,6 +172,11 @@ try {
     await path.getAttribute("data-complete"),
     "true",
     "Completed connection tracks both passed endpoints",
+  );
+  assert.equal(
+    await path.getAttribute("data-color"),
+    "#59f9bd",
+    "Completed paths override incoming/outgoing colors",
   );
   await page.screenshot({ path: "artifacts/completed-stars-path.png" });
   await button(page, "Search and map controls").click();

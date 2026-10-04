@@ -1,7 +1,8 @@
-import { meta } from "../lib/course.js";
+import { meta, byName } from "../lib/course.js";
 import { useEffect, useRef, useState } from "react";
 import { Orbit, Search, BookOpen, ArrowLeft } from "lucide-react";
 import { useAtlas } from "../app/AtlasContext";
+import MathText from "../components/ui/MathText";
 import KnowledgeGraph from "../components/graph/KnowledgeGraph";
 import {
   naturalPause,
@@ -101,11 +102,14 @@ export default function AtlasPage() {
     >
       {mobile && (
         <header className="mobile-stellar-heading">
-          <span className="eyebrow">
-            {meta.module.toUpperCase()} · YOUR LEARNING UNIVERSE
-          </span>
-          <h1>Follow the stars.</h1>
-          <p>Select a concept or follow a path, then study it below.</p>
+          <span className="eyebrow">{meta.module.toUpperCase()}</span>
+          <h1>{selected}</h1>
+          <p>
+            <MathText
+              text={byName[selected]?.meaning || ""}
+              onLink={selectStar}
+            />
+          </p>
         </header>
       )}
       {!mobile && (

@@ -1,6 +1,12 @@
 import * as T from "three";
 import { createOrbitalMotion } from "./orbits.js";
-import { lightMap, mapColor, completedColor, activeColor } from "./theme.js";
+import {
+  lightMap,
+  mapColor,
+  completedColor,
+  pathColor,
+  pathDirection,
+} from "./theme.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { buildScene } from "./scene";
 import { createFlights } from "./flight";
@@ -18,6 +24,7 @@ export function createStellarEngine(
   onFrame,
   readingFocus = false,
 ) {
+  const zoomScale = () => (matchMedia("(max-width: 760px)").matches ? 1.2 : 1);
   const renderer = new T.WebGLRenderer({
     antialias: true,
     powerPreference: "low-power",
@@ -30,7 +37,7 @@ export function createStellarEngine(
   const controls = new OrbitControls(camera, host);
   controls.enableDamping = true;
   controls.dampingFactor = 0.12;
-  controls.minDistance = 230;
+  controls.minDistance = 230 / zoomScale();
   controls.maxDistance = 13000;
   controls.rotateSpeed = 0.55;
   controls.touches = { ONE: T.TOUCH.ROTATE, TWO: T.TOUCH.DOLLY_PAN };
@@ -77,10 +84,12 @@ export function createStellarEngine(
       camera.aspect;
     flights.travel(
       center,
-      Math.max(650, vertical, horizontal) * 1.2 + (b.maxZ - b.minZ) / 2,
+      (Math.max(650, vertical, horizontal) * 1.2 + (b.maxZ - b.minZ) / 2) /
+        zoomScale(),
     );
   }
   const resize = new ResizeObserver(() => {
+    controls.minDistance = 230 / zoomScale();
     width = Math.max(1, host.clientWidth);
     height = Math.max(1, host.clientHeight);
     renderer.setSize(width, height);
@@ -236,7 +245,7 @@ export function createStellarEngine(
       focused,
       flowActive: !reduced(),
       orbiting,
-      zoom: readingFocus || itinerary ? 100 : null,
+      zoom: readingFocus || itinerary ? Math.round(100 * zoomScale()) : null,
       nodes: Object.fromEntries(
         nodes.map((n) => [
           n.name,
@@ -253,7 +262,7 @@ export function createStellarEngine(
       })),
       width,
       height,
-      paths: edges.map(({ a, b, route, complete }) => {
+      paths: edges.map(({ a, b, route, complete, edge }) => {
         const clipped = projectPath(
           layout.positions[a],
           layout.positions[b],
@@ -269,6 +278,8 @@ export function createStellarEngine(
           b,
           route,
           complete,
+          direction: pathDirection({ a, b }, selected),
+          color: `#${edge.material.color.getHexString()}`,
           ax: pa.x,
           ay: pa.y,
           bx: pb.x,
@@ -285,11 +296,11 @@ export function createStellarEngine(
   raf = requestAnimationFrame(frame);
   function focusDistance(name) {
     if (itinerary || readingFocus) {
-      // Standard reading scale: frame the focused star at a 64-pixel diameter.
+      // Mobile starts at 20% greater scale: 76.8 pixels versus the desktop 64-pixel diameter.
       return Math.max(
         controls.minDistance,
         (meshes.get(name).encoding.radius * height) /
-          (64 * Math.tan(T.MathUtils.degToRad(21.5))),
+          (64 * zoomScale() * Math.tan(T.MathUtils.degToRad(21.5))),
       );
     }
     const cluster = layout.blocks.find((b) =>
@@ -300,7 +311,7 @@ export function createStellarEngine(
       (cluster?.radius || 200) * 2.15,
     );
     return Math.min(
-      contextDistance,
+      contextDistance / zoomScale(),
       Math.max(
         controls.minDistance,
         camera.position.distanceTo(controls.target),
@@ -316,10 +327,11 @@ export function createStellarEngine(
       pb = layout.positions[b];
     followedPath = { a: edge.a, b: edge.b };
     focused = b;
+    update({ ...lastState, selected: b });
     edges.forEach((e) => {
       if (e === edge) {
         e.edge.material.opacity = 0.8;
-        e.edge.material.color.set(e.complete ? completedColor() : 0x6fffea);
+        e.edge.material.color.set(pathColor(e, b));
         e.arrow.material.opacity = 1;
       }
     });
@@ -350,7 +362,7 @@ export function createStellarEngine(
       if (b)
         flights.travel(
           b.center,
-          Math.max(b.height, b.width / camera.aspect) * 1.65,
+          (Math.max(b.height, b.width / camera.aspect) * 1.65) / zoomScale(),
         );
     },
     fit,
@@ -410,18 +422,9 @@ export function createStellarEngine(
         (followedPath?.a === a && followedPath?.b === b);
       entry.active = active;
       entry.completionGlow.visible = complete;
-      edge.material.color.set(
-        complete
-          ? completedColor()
-          : active
-            ? activeColor()
-            : route
-              ? 0x009eaf
-              : 0x237484,
-      );
-      arrow.material.color.set(
-        complete ? completedColor() : active ? activeColor() : 0x237484,
-      );
+      entry.color = pathColor(entry, selected);
+      edge.material.color.set(entry.color);
+      arrow.material.color.set(entry.color);
       arrow.visible = active || route;
       arrow.material.opacity = active ? 0.9 : route ? 0.7 : same ? 0.35 : 0.12;
       edge.material.opacity = complete

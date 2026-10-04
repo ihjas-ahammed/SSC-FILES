@@ -1,5 +1,4 @@
 import * as T from "three";
-import { activeColor } from "./theme.js";
 
 // A single, fine world-space frame. Never leave empty frames around other stars.
 export function createHover(scene, meshes, edges, wake) {
@@ -49,7 +48,7 @@ export function createHover(scene, meshes, edges, wake) {
           color: e.edge.material.color.clone(),
           opacity: e.edge.material.opacity,
         };
-        e.edge.material.color.set(activeColor());
+        // Hover increases visibility without changing direction/completion color.
         e.edge.material.opacity = 0.8;
       }
       wake();

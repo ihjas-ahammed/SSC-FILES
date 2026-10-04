@@ -9,12 +9,20 @@ import {
   Settings2,
 } from "lucide-react";
 import { meta } from "../../lib/course.js";
+import useMobileLayout from "../../hooks/useMobileLayout";
 import { useAtlas } from "../../app/AtlasContext";
 
 export default function Header() {
   const { vaultSaved, nav, setNav, setMobileMenu, downloadVault, setModal } =
     useAtlas();
   const { bookmarks } = useAtlas();
+  const mobile = useMobileLayout();
+  const title = {
+    atlas: mobile ? "Map" : "Knowledge map",
+    bank: mobile ? "Questions" : "Question bank",
+    bookmarks: "Bookmarks",
+    progress: mobile ? "Progress" : "My progress",
+  }[nav];
   return (
     <header className="topbar">
       <BackButton />
@@ -25,12 +33,16 @@ export default function Header() {
       >
         <Menu size={21} />
       </button>
-      <button className="brand" onClick={() => setNav("bank")}>
+      <button
+        className="brand"
+        title={title}
+        aria-label={title}
+        onClick={() => setNav("bank")}
+      >
         <span className="brand-mark">
           <span aria-hidden="true">{meta.emblem || "✦"}</span>
         </span>
-        {meta.brand}
-        <span>{meta.brandSuffix}</span>
+        <span className="brand-title">{title}</span>
       </button>
       {meta.parentUrl && (
         <a className="study-parent-link" href={meta.parentUrl}>

@@ -20,6 +20,10 @@ export default function MapLegend({ selected }) {
         known. A ring marks selection. Reading alone is tracked separately.
       </p>
       <p>
+        Paths into the selected concept are blue; paths to concepts that depend
+        on it are soft red. Completed connections stay green.
+      </p>
+      <p>
         The most depended-on foundation constellation stays central. Topics
         orbit slowly around it; motion pauses while you focus on a concept.
       </p>
