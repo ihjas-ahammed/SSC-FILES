@@ -1,4 +1,6 @@
 import * as T from "three";
+import { createOrbitalMotion } from "./orbits.js";
+import { lightMap, mapColor, completedColor, activeColor } from "./theme.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { buildScene } from "./scene";
 import { createFlights } from "./flight";
@@ -35,11 +37,8 @@ export function createStellarEngine(
   controls.screenSpacePanning = true;
   controls.listenToKeyEvents(renderer.domElement);
   const gestures = trackMapGestures(host);
-  const { scene, meshes, edges, texture } = buildScene(
-    layout,
-    nodes,
-    itinerary,
-  );
+  const { scene, meshes, edges, texture, envelopes, backgroundStars } =
+    buildScene(layout, nodes, itinerary);
   let width = 1,
     height = 1,
     raf,
@@ -47,8 +46,12 @@ export function createStellarEngine(
     disposed = false,
     selected = null,
     lastDraw = 0,
+    lastOrbit = 0,
+    interacting = false,
     followedPath = null,
     focused = null;
+  const orbitalMotion = createOrbitalMotion(layout);
+  let lastState = { selected: null, statuses: {}, read: [] };
   const pathFlow = createPathFlow(scene, edges, layout.positions);
   const vector = new T.Vector3();
   const reduced = () =>
@@ -92,7 +95,7 @@ export function createStellarEngine(
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  camera.position.set(250, 280, 2000);
+  camera.position.set(1400, 3000, 2300);
   fit();
   const wake = () => {
     dirty = 6;
@@ -102,13 +105,94 @@ export function createStellarEngine(
     hover.clear();
     flights.cancel();
   };
-  controls.addEventListener("start", cancel);
+  controls.addEventListener("start", () => {
+    interacting = true;
+    cancel();
+  });
+  controls.addEventListener("end", () => {
+    interacting = false;
+    wake();
+  });
   controls.addEventListener("change", wake);
+  function syncPositions() {
+    meshes.forEach((m, name) => {
+      const p = layout.positions[name];
+      m.group.position.set(p.x, p.y, p.z);
+    });
+    layout.blocks.forEach((b) =>
+      envelopes.get(b.id).position.set(b.center.x, b.center.y, b.center.z),
+    );
+    for (const { a, b, edge, arrow, completionGlow } of edges) {
+      const pa = layout.positions[a],
+        pb = layout.positions[b];
+      const from = new T.Vector3(pa.x, pa.y, pa.z),
+        to = new T.Vector3(pb.x, pb.y, pb.z);
+      const buffer = edge.geometry.attributes.position;
+      buffer.setXYZ(0, pa.x, pa.y, pa.z);
+      buffer.setXYZ(1, pb.x, pb.y, pb.z);
+      buffer.needsUpdate = true;
+      edge.geometry.computeBoundingSphere();
+      arrow.position.copy(from).lerp(to, 0.68);
+      arrow.quaternion.setFromUnitVectors(
+        new T.Vector3(0, 1, 0),
+        to.clone().sub(from).normalize(),
+      );
+      completionGlow.position.copy(from).lerp(to, 0.5);
+      completionGlow.quaternion.copy(arrow.quaternion);
+      const oldLength = completionGlow.geometry.parameters.height;
+      completionGlow.scale.y = from.distanceTo(to) / oldLength;
+    }
+  }
+  function applyTheme() {
+    const light = lightMap();
+    scene.background.set(light ? 0xeff4fa : 0x030710);
+    backgroundStars.material.color.set(light ? 0x607eaa : 0x7f92c5);
+    backgroundStars.material.opacity = light ? 0.45 : 0.6;
+    layout.blocks.forEach((b) =>
+      envelopes.get(b.id).children.forEach((o) => {
+        o.material.color.set(mapColor(b.color));
+        o.material.opacity = light ? 0.22 : 0.13;
+      }),
+    );
+    meshes.forEach((m) => {
+      m.color = mapColor(m.encoding.color);
+      m.completionGlow.material.color.set(completedColor());
+      m.completionGlow.material.blending = light
+        ? T.NormalBlending
+        : T.AdditiveBlending;
+    });
+    edges.forEach((e) => {
+      e.completionGlow.material.color.set(completedColor());
+      e.completionGlow.material.blending = light
+        ? T.NormalBlending
+        : T.AdditiveBlending;
+    });
+    update(lastState);
+  }
+  const themeObserver = new MutationObserver(applyTheme);
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
   function frame(now) {
     if (disposed) return;
     raf = requestAnimationFrame(frame);
     if (document.hidden) return;
     if (flights.tick(now)) dirty = 6;
+    const orbiting =
+      !reduced() &&
+      !focused &&
+      !itinerary &&
+      !flights.flying &&
+      !interacting &&
+      !hover.active;
+    if (!orbiting || now - lastOrbit >= 100) {
+      if (orbitalMotion.tick(now, !orbiting)) {
+        syncPositions();
+        dirty = 6;
+      }
+      lastOrbit = now;
+    }
     if (pathFlow.tick(now, reduced())) dirty = 6;
     controls.enableDamping = !reduced();
     controls.update();
@@ -151,6 +235,7 @@ export function createStellarEngine(
     onFrame({
       focused,
       flowActive: !reduced(),
+      orbiting,
       zoom: readingFocus || itinerary ? 100 : null,
       nodes: Object.fromEntries(
         nodes.map((n) => [
@@ -234,7 +319,7 @@ export function createStellarEngine(
     edges.forEach((e) => {
       if (e === edge) {
         e.edge.material.opacity = 0.8;
-        e.edge.material.color.set(e.complete ? 0x59f9bd : 0x6fffea);
+        e.edge.material.color.set(e.complete ? completedColor() : 0x6fffea);
         e.arrow.material.opacity = 1;
       }
     });
@@ -242,6 +327,7 @@ export function createStellarEngine(
     wake();
     return true;
   }
+  applyTheme();
   return {
     follow,
     setReadingFocus(value) {
@@ -268,66 +354,11 @@ export function createStellarEngine(
         );
     },
     fit,
-    update(state) {
-      hover.clear();
-      selected = state.selected;
-      meshes.forEach((m, name) => {
-        const active = name === selected,
-          known = state.statuses[name] === "known",
-          read = state.read.includes(name);
-        m.star.material.color.set(m.color);
-        m.star.material.emissive.set(m.color);
-        m.star.material.emissiveIntensity = m.encoding.emissive;
-        m.glow.material.color.set(m.color);
-        m.glow.material.opacity = m.encoding.glowOpacity;
-        m.completionGlow.visible = known;
-        m.ring.visible = active || known || read;
-        m.ring.material.color.set(
-          active ? 0xffffff : known ? 0x59f9bd : 0x8395ae,
-        );
-        m.ring.material.opacity = active ? 1 : known ? 0.85 : 0.35;
-      });
-      edges.forEach((entry) => {
-        const { a, b, edge, arrow, route, same } = entry;
-        const complete = (entry.complete = isPathComplete(
-          entry,
-          state.statuses,
-        ));
-        const active =
-          a === selected ||
-          b === selected ||
-          (followedPath?.a === a && followedPath?.b === b);
-        entry.active = active;
-        entry.completionGlow.visible = complete;
-        edge.material.color.set(
-          complete ? 0x59f9bd : active ? 0x00eaff : route ? 0x009eaf : 0x237484,
-        );
-        arrow.material.color.set(
-          complete ? 0x59f9bd : active ? 0x00eaff : 0x237484,
-        );
-        arrow.visible = active || route;
-        arrow.material.opacity = active
-          ? 0.9
-          : route
-            ? 0.7
-            : same
-              ? 0.35
-              : 0.12;
-        edge.material.opacity = complete
-          ? 0.62
-          : active
-            ? 0.68
-            : route
-              ? 0.38
-              : same
-                ? 0.2
-                : 0.045;
-      });
-      wake();
-    },
+    update,
     dispose() {
       disposed = true;
       cancelAnimationFrame(raf);
+      themeObserver.disconnect();
       resize.disconnect();
       controls.dispose();
       gestures.dispose();
@@ -344,4 +375,65 @@ export function createStellarEngine(
       renderer.domElement.remove();
     },
   };
+  function update(state) {
+    lastState = state;
+    hover.clear();
+    selected = state.selected;
+    meshes.forEach((m, name) => {
+      const active = name === selected,
+        known = state.statuses[name] === "known",
+        read = state.read.includes(name);
+      m.star.material.color.set(m.color);
+      m.star.material.emissive.set(m.color);
+      m.star.material.emissiveIntensity = m.encoding.emissive;
+      m.glow.material.color.set(m.color);
+      m.glow.material.opacity = m.encoding.glowOpacity;
+      m.completionGlow.visible = known;
+      m.ring.visible = active || known || read;
+      m.ring.material.color.set(
+        active
+          ? lightMap()
+            ? 0x214768
+            : 0xffffff
+          : known
+            ? completedColor()
+            : 0x8395ae,
+      );
+      m.ring.material.opacity = active ? 1 : known ? 0.85 : 0.35;
+    });
+    edges.forEach((entry) => {
+      const { a, b, edge, arrow, route, same } = entry;
+      const complete = (entry.complete = isPathComplete(entry, state.statuses));
+      const active =
+        a === selected ||
+        b === selected ||
+        (followedPath?.a === a && followedPath?.b === b);
+      entry.active = active;
+      entry.completionGlow.visible = complete;
+      edge.material.color.set(
+        complete
+          ? completedColor()
+          : active
+            ? activeColor()
+            : route
+              ? 0x009eaf
+              : 0x237484,
+      );
+      arrow.material.color.set(
+        complete ? completedColor() : active ? activeColor() : 0x237484,
+      );
+      arrow.visible = active || route;
+      arrow.material.opacity = active ? 0.9 : route ? 0.7 : same ? 0.35 : 0.12;
+      edge.material.opacity = complete
+        ? 0.62
+        : active
+          ? 0.68
+          : route
+            ? 0.38
+            : same
+              ? 0.2
+              : 0.045;
+    });
+    wake();
+  }
 }

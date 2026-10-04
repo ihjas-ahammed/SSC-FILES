@@ -4,7 +4,9 @@ import GraphPaths from "./GraphPaths";
 import { starEncoding } from "../../graph/three/encoding";
 import { constellationLayout } from "../../graph/three/layout";
 import { createStellarEngine } from "../../graph/three/engine";
-import MathText from "../ui/MathText";
+import MathIcon from "../ui/MathIcon";
+import { mapColor } from "../../graph/three/theme";
+import { useAtlas } from "../../app/AtlasContext";
 import { skillGlyph } from "../../graph/three/glyph";
 
 export default function KnowledgeGraph({
@@ -21,6 +23,7 @@ export default function KnowledgeGraph({
   focusInitially = false,
   readingFocus = false,
 }) {
+  const { preferences } = useAtlas();
   const layout = useMemo(() => constellationLayout(nodes), [nodes]);
   const previous = useRef(selected);
   const firstSelection = useRef(true),
@@ -109,6 +112,8 @@ export default function KnowledgeGraph({
       data-flying={view.flying}
       data-focused={view.focused || ""}
       data-flow-active={view.flowActive}
+      data-orbiting={view.orbiting}
+      data-base-constellation={layout.blocks[0]?.id}
       data-zoom={view.zoom}
     >
       {!fallback && (
@@ -166,9 +171,14 @@ export default function KnowledgeGraph({
                   width: Math.max(16, (p?.radius || 8) * 2),
                   height: Math.max(16, (p?.radius || 8) * 2),
                   zIndex: Math.max(1, Math.round(18000 - (p?.depth || 18000))),
-                  "--star-color": layout.blocks.find((b) => b.id === n.group)
-                    ?.color,
-                  "--glyph-size": `${(p?.radius || 22) * 0.8}px`,
+                  "--star-color": `#${mapColor(
+                    layout.blocks.find((b) => b.id === n.group)?.color,
+                    preferences.theme === "light",
+                  )
+                    .toString(16)
+                    .padStart(6, "0")}`,
+                  "--glyph-size": `${(p?.radius || 22) * 0.56}px`,
+                  "--icon-padding": `${Math.max(3, (p?.radius || 22) * 0.3)}px`,
                   "--label-width": `${Math.max(80, Math.min(126, (p?.radius || 22) * 5))}px`,
                 }}
                 onPointerEnter={(e) => {
@@ -187,7 +197,7 @@ export default function KnowledgeGraph({
                 <span
                   className={`skill-glyph ${view.distance > 1500 ? "distant" : ""}`}
                 >
-                  <MathText text={`$${skillGlyph(n)}$`} />
+                  <MathIcon formula={skillGlyph(n)} />
                 </span>
                 {itinerary && (
                   <span className="skill-stop">{nodes.indexOf(n) + 1}</span>

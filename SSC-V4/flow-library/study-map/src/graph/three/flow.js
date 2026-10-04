@@ -1,4 +1,5 @@
 import * as T from "three";
+import { completedColor, activeColor } from "./theme.js";
 
 // Small circulating particles communicate prerequisite direction without clicks.
 export function createPathFlow(scene, edges, positions) {
@@ -26,9 +27,13 @@ export function createPathFlow(scene, edges, positions) {
     tick(now, reduced) {
       let moving = false;
       for (const { edge, dot, phase, a, b } of particles) {
+        a.set(positions[edge.a].x, positions[edge.a].y, positions[edge.a].z);
+        b.set(positions[edge.b].x, positions[edge.b].y, positions[edge.b].z);
         dot.visible = !reduced && (edge.active || edge.complete || edge.route);
         if (!dot.visible) continue;
-        dot.material.color.set(edge.complete ? 0x59f9bd : 0x78d9e7);
+        dot.material.color.set(
+          edge.complete ? completedColor() : activeColor(),
+        );
         dot.position.lerpVectors(a, b, (now / 6500 + phase) % 1);
         moving = true;
       }

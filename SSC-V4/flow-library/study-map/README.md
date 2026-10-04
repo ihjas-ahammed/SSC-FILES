@@ -35,6 +35,12 @@ Run `npm test` here to test the subject seam with an unrelated example course. E
 
 ## Review and navigation
 
-`useNavigation` keeps screen changes in browser history; Back buttons, browser Back/Forward and Android Back traverse the same screens. Navigation snapshots exclude learned statuses and bookmarks. Opening a question uses a fresh attempt while saved practice history and completion remain intact. Prerequisite study can be switched off/on during a question, and note understanding switches stay editable.
+`useNavigation` keeps screen changes in browser history; Back buttons, browser Back/Forward and Android Back traverse the same screens. Navigation snapshots exclude learned statuses and bookmarks. Opening a question uses a fresh attempt while saved practice history and completion remain intact. Prerequisite study is configured in Settings; note understanding switches stay editable.
 
-`useBookmarks` and `lib/bookmarks.js` provide an insertion-ordered review notebook with personal notes. Bookmark data is validated with progress, included in backups/imports and cleared by whole-app reset. The shared Bookmarks page renders the configured subject's concept notes and exports the review in Markdown.
+`useBookmarks` and `lib/bookmarks.js` provide an insertion-ordered review notebook with personal notes. Bookmark data is validated with progress, included in backups/imports and cleared by whole-app reset. The shared Bookmarks page renders the configured subject's concept notes and exports the review as a compact two-column A4 PDF. The PDF uses a white background, embedded rendered equations, section labels and numbered pages. Export works offline.
+
+## Appearance
+
+Settings stores the light/dark theme independently of progress. Component colors use role-based light palette tokens with existing dark fallbacks, including the WebGL scene and node labels. Math icons fit measured KaTeX width and height inside padded bounds.
+
+Constellations are ordered by how many concepts depend on their prerequisites. The most depended-on topic stays at the center; inner and outer rings orbit over 30 and 45 minutes. Topic volumes stay separated. Orbits stop during camera flights, focused reading, prerequisite routes, reduced motion and disabled animations.

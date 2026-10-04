@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { RotateCcw, Download, Sparkles } from "lucide-react";
+import { RotateCcw, Download, Sparkles, Sun } from "lucide-react";
 import { meta } from "../../lib/course.js";
 import { useAtlas } from "../../app/AtlasContext";
 import KnowledgeSwitch from "../ui/KnowledgeSwitch";
@@ -13,10 +13,44 @@ export default function SettingsDialog() {
       <div className="settings-row">
         <div>
           <h3>
+            <Sun size={17} /> Light theme
+          </h3>
+          <p>Bright pages, clear equations and a daylight stellar map.</p>
+        </div>
+        <KnowledgeSwitch
+          name="light theme"
+          checked={preferences.theme === "light"}
+          onChange={(on) =>
+            setPreferences((p) => ({ ...p, theme: on ? "light" : "dark" }))
+          }
+        />
+      </div>
+      <div className="settings-row">
+        <div>
+          <h3>Study prerequisites</h3>
+          <p>
+            Include your gap checklist and reading route when studying a
+            question.
+          </p>
+        </div>
+        <KnowledgeSwitch
+          name="prerequisite study"
+          checked={preferences.prerequisites !== false}
+          onChange={(on) =>
+            setPreferences((p) => ({ ...p, prerequisites: on }))
+          }
+        />
+      </div>
+      <div className="settings-row">
+        <div>
+          <h3>
             <Sparkles size={17} />
             Stellar animations
           </h3>
-          <p>Smooth camera travel between constellation blocks.</p>
+          <p>
+            Slow constellation orbits and smooth camera travel. Motion pauses
+            when a star is focused.
+          </p>
         </div>
         <KnowledgeSwitch
           name="stellar animations"

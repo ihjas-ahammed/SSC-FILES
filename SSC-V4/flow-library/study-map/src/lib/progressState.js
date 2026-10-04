@@ -111,6 +111,7 @@ export function normalizeProgress(input = {}) {
     ),
     updatedAt: Number(input.updatedAt) || 0,
     preferences: {
+      theme: input.preferences?.theme === "light" ? "light" : "dark",
       animations: input.preferences?.animations !== false,
       prerequisites: input.preferences?.prerequisites !== false,
       ...(Number.isFinite(input.preferences?.notePanelWidth)

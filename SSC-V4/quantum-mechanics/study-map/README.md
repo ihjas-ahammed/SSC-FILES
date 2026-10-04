@@ -34,6 +34,8 @@ The initial publication preserves the newer hosted QM explanations, matrix previ
 
 ## Navigation and final review
 
-Opening a question always starts at its attempt screen. Read/known statuses, completed questions and practice history stay saved. The Study prerequisites switch is available throughout a question; Edit prerequisite switches reopens its checklist. Every concept note also has an understanding switch. Back controls use browser history, so browser Back and Android Back return through the app screens.
+Opening a question always starts at its attempt screen. Read/known statuses, completed questions and practice history stay saved. Prerequisite study can be configured in Settings without a bar above question content. Every concept note also has an understanding switch. Back controls use browser history, so browser Back and Android Back return through the app screens.
 
-Bookmarks in the header (and mobile navigation) form an ordered review notebook: first saved, first reviewed. Each bookmarked concept has personal revision notes, previous/next review controls and a Markdown download. Bookmarks and revision notes are included in progress backups; whole-app reset clears them. `npm run test:navigation` checks these flows at desktop, 390px and 320px widths.
+Bookmarks in the header (and mobile navigation) form an ordered review notebook: first saved, first reviewed. Each bookmarked concept has personal revision notes, previous/next review controls and a two-column, light-theme A4 PDF download. Bookmarks and revision notes are included in progress backups; whole-app reset clears them. `npm run test:navigation` checks these flows at desktop, 390px and 320px widths.
+
+`npm run test:appearance` verifies theme persistence, compact symbol padding, the central foundation constellation, slow/paused orbits, mobile width, and a real PDF download. Light theme is available in App settings. Both themes and the PDF exporter are included in the standalone offline HTML.

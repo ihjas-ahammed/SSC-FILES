@@ -112,31 +112,8 @@ try {
         JSON.parse(localStorage.getItem("quantum-atlas-v1")).statuses.Scalar ===
         "unknown",
     );
-    const prereq = p.getByRole("switch", {
-      name: "Understanding of prerequisite study",
-      exact: true,
-    });
-    await prereq.click();
-    await p.locator(".solution-hints").waitFor();
-    assert.equal(await prereq.getAttribute("aria-checked"), "false");
-    await prereq.click();
-    await p.locator(".term-checklist").waitFor();
-    assert.equal(await scalar.getAttribute("aria-checked"), "false");
+    assert.equal(await p.locator(".study-prerequisite-controls").count(), 0);
     await scalar.click();
-    await p.goBack();
-    await p.locator(".solution-hints").waitFor();
-    await p.goBack();
-    await p.locator(".term-checklist").waitFor();
-    assert.equal(
-      await scalar.getAttribute("aria-checked"),
-      "true",
-      "Back uses the latest knowledge switches",
-    );
-    assert.equal(
-      await prereq.getAttribute("aria-checked"),
-      "true",
-      "Back into prerequisites enables prerequisite study",
-    );
     await button(p, "Close dialog").click();
     await p.waitForFunction(() => !document.querySelector('[role="dialog"]'));
     await button(p, "Study Q-A-1").click();
@@ -263,7 +240,7 @@ try {
     );
     const downloaded = p.waitForEvent("download");
     await button(p, "Download review notes").click();
-    assert((await downloaded).suggestedFilename().endsWith("-bookmarks.md"));
+    assert((await downloaded).suggestedFilename().endsWith("-bookmarks.pdf"));
     await button(p, "App settings").click();
     const backup = p.waitForEvent("download");
     await button(p, "Back up before resetting").click();

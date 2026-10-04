@@ -1,4 +1,5 @@
 import * as T from "three";
+import { activeColor } from "./theme.js";
 
 // A single, fine world-space frame. Never leave empty frames around other stars.
 export function createHover(scene, meshes, edges, wake) {
@@ -24,6 +25,9 @@ export function createHover(scene, meshes, edges, wake) {
     highlighted = saved = null;
   }
   return {
+    get active() {
+      return frame.visible || !!highlighted;
+    },
     star(name) {
       clearPath();
       const m = meshes.get(name);
@@ -45,7 +49,7 @@ export function createHover(scene, meshes, edges, wake) {
           color: e.edge.material.color.clone(),
           opacity: e.edge.material.opacity,
         };
-        e.edge.material.color.set(0x9cf9ee);
+        e.edge.material.color.set(activeColor());
         e.edge.material.opacity = 0.8;
       }
       wake();

@@ -1,6 +1,9 @@
+import { useAtlas } from "../../app/AtlasContext";
+import { mapColor } from "../../graph/three/theme";
 import { groups, byName, questions } from "../../lib/course";
 import { starEncoding, maxLearningDepth } from "../../graph/three/encoding";
 export default function MapLegend({ selected }) {
+  const { preferences } = useAtlas();
   const c = byName[selected],
     encoding = c && starEncoding(c);
   return (
@@ -14,8 +17,11 @@ export default function MapLegend({ selected }) {
         Brighter halos mean the concept supports more of the {questions.length}{" "}
         exam questions. Colors stay with their topic. An extra green halo marks
         a passed self-check; a connection glows green when both concepts are
-        known. A white ring marks selection. Reading alone is tracked
-        separately.
+        known. A ring marks selection. Reading alone is tracked separately.
+      </p>
+      <p>
+        The most depended-on foundation constellation stays central. Topics
+        orbit slowly around it; motion pauses while you focus on a concept.
       </p>
       {c && (
         <div className="selected-star-metrics">
@@ -31,7 +37,13 @@ export default function MapLegend({ selected }) {
       <div className="map-color-key">
         {groups.map((g) => (
           <span key={g.id}>
-            <i style={{ background: g.color }} />
+            <i
+              style={{
+                background: `#${mapColor(g.color, preferences.theme === "light")
+                  .toString(16)
+                  .padStart(6, "0")}`,
+              }}
+            />
             {g.short}
           </span>
         ))}

@@ -1,19 +1,13 @@
-import katex from "katex";
+import MathIcon from "./MathIcon";
 import { CheckCircle2, CircleHelp } from "lucide-react";
 export function Pill({ children, color = "green" }) {
   return <span className={`pill ${color}`}>{children}</span>;
 }
 export function Symbol({ concept, large = false }) {
   return (
-    <span
+    <MathIcon
+      formula={concept.symbol}
       className={`concept-symbol ${large ? "large" : ""}`}
-      dangerouslySetInnerHTML={{
-        __html: katex.renderToString(concept.symbol, {
-          throwOnError: false,
-          strict: false,
-          output: "html",
-        }),
-      }}
     />
   );
 }

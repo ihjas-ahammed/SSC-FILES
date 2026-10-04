@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bookmark, ArrowLeft, ArrowRight, Download } from "lucide-react";
 import { useAtlas } from "../app/AtlasContext";
 import { byName, meta } from "../lib/course.js";
-import { bookmarkMarkdown } from "../lib/bookmarks.js";
+import { reviewPdf } from "../lib/review-pdf/export";
 import ConceptNote from "../components/study/ConceptNote";
 
 export default function BookmarksPage() {
@@ -14,8 +14,23 @@ export default function BookmarksPage() {
     setRead,
     read,
     download,
+    setToast,
   } = useAtlas();
   const article = useRef(null);
+  const [exporting, setExporting] = useState(false);
+  async function exportReview() {
+    setExporting(true);
+    try {
+      download(
+        await reviewPdf(bookmarks),
+        `${meta.exportPrefix}-bookmarks.pdf`,
+      );
+    } catch {
+      setToast("PDF export could not finish. Please try again.");
+    } finally {
+      setExporting(false);
+    }
+  }
   const index = Math.min(bookmarkIndex, Math.max(0, bookmarks.length - 1));
   const entry = bookmarks[index];
   useEffect(() => {
@@ -39,16 +54,12 @@ export default function BookmarksPage() {
         {!!bookmarks.length && (
           <button
             className="secondary"
-            onClick={() =>
-              download(
-                new Blob([bookmarkMarkdown(bookmarks)], {
-                  type: "text/markdown;charset=utf-8",
-                }),
-                `${meta.exportPrefix}-bookmarks.md`,
-              )
-            }
+            onClick={exportReview}
+            disabled={exporting}
+            aria-busy={exporting}
           >
-            <Download size={16} /> Download review notes
+            <Download size={16} />{" "}
+            {exporting ? "Preparing PDF…" : "Download review notes"}
           </button>
         )}
       </header>

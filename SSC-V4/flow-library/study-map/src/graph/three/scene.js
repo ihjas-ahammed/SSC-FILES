@@ -46,7 +46,12 @@ export function buildScene(layout, nodes, itinerary) {
   const key = new T.DirectionalLight(0xffffff, 3);
   key.position.set(500, 900, 1600);
   scene.add(key);
-  layout.blocks.forEach((b) => scene.add(clusterEnvelope(b)));
+  const envelopes = new Map();
+  layout.blocks.forEach((b) => {
+    const envelope = clusterEnvelope(b);
+    envelopes.set(b.id, envelope);
+    scene.add(envelope);
+  });
   const stars = [];
   for (let i = 0; i < 650; i++)
     stars.push(
@@ -56,17 +61,16 @@ export function buildScene(layout, nodes, itinerary) {
     );
   const starGeometry = new T.BufferGeometry();
   starGeometry.setAttribute("position", new T.Float32BufferAttribute(stars, 3));
-  scene.add(
-    new T.Points(
-      starGeometry,
-      new T.PointsMaterial({
-        color: 0x7f92c5,
-        size: 2.5,
-        transparent: true,
-        opacity: 0.6,
-      }),
-    ),
+  const backgroundStars = new T.Points(
+    starGeometry,
+    new T.PointsMaterial({
+      color: 0x7f92c5,
+      size: 2.5,
+      transparent: true,
+      opacity: 0.6,
+    }),
   );
+  scene.add(backgroundStars);
   const meshes = new Map(),
     edges = [],
     texture = glowTexture();
@@ -210,5 +214,5 @@ export function buildScene(layout, nodes, itinerary) {
   nodes.forEach((n) => n.prerequisites.forEach((p) => connect(p, n.name)));
   if (itinerary)
     nodes.slice(1).forEach((n, i) => connect(nodes[i].name, n.name, true));
-  return { scene, meshes, edges, texture };
+  return { scene, meshes, edges, texture, envelopes, backgroundStars };
 }

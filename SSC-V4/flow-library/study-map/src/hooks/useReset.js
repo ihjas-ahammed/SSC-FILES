@@ -5,6 +5,10 @@ import { STORAGE } from "../lib/storage";
 export default function useReset(state) {
   const { preferences } = state;
   useEffect(() => {
+    document.documentElement.dataset.theme =
+      preferences.theme === "light" ? "light" : "dark";
+  }, [preferences.theme]);
+  useEffect(() => {
     document.documentElement.dataset.motion = preferences.animations
       ? "on"
       : "off";
@@ -39,7 +43,11 @@ export default function useReset(state) {
     state.setReaderTab("note");
     state.setReaderResult(null);
     state.setMobileMenu(false);
-    state.setPreferences({ animations: true, prerequisites: true });
+    state.setPreferences({
+      animations: true,
+      prerequisites: true,
+      theme: "dark",
+    });
     state.setToast(
       "App reset. Your study progress is clear and every knowledge switch starts off.",
     );
