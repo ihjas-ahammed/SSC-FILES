@@ -5,7 +5,11 @@ export function appendMath(parent, text) {
   for (const part of String(text).split(
     /(\$\$[\s\S]*?\$\$|\$[^$]*?\$|\[\[[^\]]+\]\])/g,
   )) {
-    if (part.startsWith("$")) {
+    if (
+      part.startsWith("$") &&
+      part.endsWith("$") &&
+      part.length > (part.startsWith("$$") ? 4 : 2)
+    ) {
       const display = part.startsWith("$$"),
         el = document.createElement("span");
       el.className = display ? "review-equation" : "review-inline-equation";
@@ -19,7 +23,7 @@ export function appendMath(parent, text) {
         },
       );
       parent.append(el);
-    } else if (part.startsWith("[[")) {
+    } else if (part.startsWith("[[") && part.endsWith("]]")) {
       const [name, label] = part.slice(2, -2).split("|");
       const el = document.createElement("span");
       el.className = "review-term";
@@ -32,7 +36,7 @@ export function appendMath(parent, text) {
 function chunks(text) {
   const tokens =
     String(text).match(
-      /\$\$[\s\S]*?\$\$|\$[^$]*?\$|\[\[[^\]]+\]\]|[^\s$]+|\s+/g,
+      /\$\$[\s\S]*?\$\$|\$[^$]*?\$|\[\[[^\]]+\]\]|[^\s$]+|\s+|\$/g,
     ) || [];
   const result = [];
   let buffer = "";

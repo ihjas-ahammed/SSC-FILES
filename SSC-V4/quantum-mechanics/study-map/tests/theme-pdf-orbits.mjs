@@ -65,7 +65,7 @@ try {
               createdAt: index + 1,
               note:
                 index === 0
-                  ? "Recall cue: " +
+                  ? "Unfinished notation: $\\psi.\nRecall cue: " +
                     "Explain one example and avoid confusing magnitude with direction. ".repeat(
                       120,
                     )
@@ -166,6 +166,12 @@ try {
           }),
         );
       assert.deepEqual(overflow, [], "PDF math stays inside its column");
+      assert(
+        (
+          await page.locator(".review-print-column").first().textContent()
+        ).includes("$\\psi"),
+        "Unfinished notation remains visible in the PDF",
+      );
       const file = await download;
       assert(file.suggestedFilename().endsWith(".pdf"));
       await file.saveAs("artifacts/review-notes.pdf");
