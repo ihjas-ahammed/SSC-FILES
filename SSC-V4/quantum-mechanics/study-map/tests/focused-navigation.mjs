@@ -75,7 +75,7 @@ try {
         "Hermitian Adjoint" &&
       document.querySelector(".stellar-map")?.dataset.flying === "false",
   );
-  assert.equal(await map.getAttribute("data-zoom"), "100");
+  assert.equal(await map.getAttribute("data-zoom"), "110");
   const panel = page.locator(".map-note-panel");
   assert.equal(
     await panel.locator(".concept-note h2").innerText(),
@@ -192,7 +192,7 @@ try {
   }
   assert.deepEqual(errors, []);
   console.log(
-    "PASS: focused-only connected paths, reverse endpoint travel, circulating particles, reduced motion, 100% note focus, drag/keyboard resize, focused reader, and green completion for stars/paths.",
+    "PASS: focused-only connected paths, reverse endpoint travel, circulating particles, reduced motion, 110% desktop note focus, drag/keyboard resize, focused reader, and green completion for stars/paths.",
   );
 } finally {
   await browser.close();

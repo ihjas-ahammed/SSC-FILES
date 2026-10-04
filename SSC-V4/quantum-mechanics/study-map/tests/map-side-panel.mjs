@@ -3,7 +3,9 @@ import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import { state, button } from "./study-helpers.mjs";
 const browser = await chromium.launch({
-  executablePath: process.env.STUDY_MAP_CHROME || ".browser-cache/chromium-1243/chrome-linux64/chrome",
+  executablePath:
+    process.env.STUDY_MAP_CHROME ||
+    ".browser-cache/chromium-1243/chrome-linux64/chrome",
   args: ["--enable-unsafe-swiftshader"],
 });
 const errors = [];
@@ -13,7 +15,9 @@ try {
   });
   page.setDefaultTimeout(12000);
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto((process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1");
+  await page.goto(
+    (process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1",
+  );
   await page
     .locator(".topbar nav")
     .getByRole("button", { name: "Knowledge map", exact: true })
@@ -151,7 +155,7 @@ try {
       await p
         .locator(".journey-map-shell .stellar-map")
         .getAttribute("data-zoom"),
-      "100",
+      mobile ? "165" : "110",
     );
     assert.equal((await state(p)).flow.readIndex, 1);
     await p.screenshot({
@@ -167,7 +171,9 @@ try {
   });
   phone.setDefaultTimeout(12000);
   phone.on("pageerror", (e) => errors.push(e.message));
-  await phone.goto((process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1");
+  await phone.goto(
+    (process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1",
+  );
   await routeHandoff(phone, true);
   assert.deepEqual(errors, []);
   console.log(

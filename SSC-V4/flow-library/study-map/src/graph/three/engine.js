@@ -24,9 +24,9 @@ export function createStellarEngine(
   onFrame,
   readingFocus = false,
 ) {
-  // Bring the previous mobile camera (1.2× scale) 20% closer.
+  // Increase stellar-map magnification another 10% on both layouts.
   const zoomScale = () =>
-    matchMedia("(max-width: 760px)").matches ? 1.2 / 0.8 : 1;
+    (matchMedia("(max-width: 760px)").matches ? 1.5 : 1) * 1.1;
   const renderer = new T.WebGLRenderer({
     antialias: true,
     powerPreference: "low-power",
@@ -298,7 +298,7 @@ export function createStellarEngine(
   raf = requestAnimationFrame(frame);
   function focusDistance(name) {
     if (itinerary || readingFocus) {
-      // Mobile reading focus: 96 pixels; desktop remains at 64 pixels.
+      // Reading focus: 105.6 pixels on mobile, 70.4 pixels on desktop.
       return Math.max(
         controls.minDistance,
         (meshes.get(name).encoding.radius * height) /
