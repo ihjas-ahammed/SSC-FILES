@@ -32,3 +32,9 @@ For development, `scripts/dev.mjs` uses the project's `course.js`, starts port 5
 The parent engine offers an optional module catalogue through `PROJECT.studyMaps = [{title, description, summary, href}]`. With that field absent, existing navigation stays Today / Study / Recall. Enabling a study map must be an explicit project-layer choice.
 
 Run `npm test` here to test the subject seam with an unrelated example course. Each actual project owns its content validation and browser tests.
+
+## Review and navigation
+
+`useNavigation` keeps screen changes in browser history; Back buttons, browser Back/Forward and Android Back traverse the same screens. Navigation snapshots exclude learned statuses and bookmarks. Opening a question uses a fresh attempt while saved practice history and completion remain intact. Prerequisite study can be switched off/on during a question, and note understanding switches stay editable.
+
+`useBookmarks` and `lib/bookmarks.js` provide an insertion-ordered review notebook with personal notes. Bookmark data is validated with progress, included in backups/imports and cleared by whole-app reset. The shared Bookmarks page renders the configured subject's concept notes and exports the review in Markdown.

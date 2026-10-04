@@ -2,7 +2,7 @@ import { Compass, ArrowRight, Lightbulb } from "lucide-react";
 import { useAtlas } from "../../../app/AtlasContext";
 import MathText from "../../ui/MathText";
 export default function SolutionHints() {
-  const { question, flow, setFlow } = useAtlas();
+  const { question, flow, setFlow, togglePrerequisites } = useAtlas();
   const unlocked = flow.unlocked || [];
   return (
     <div className="solution-hints">
@@ -52,10 +52,7 @@ export default function SolutionHints() {
         {unlocked.length ? "Continue unlocking" : "Start the first checkpoint"}
         <ArrowRight size={17} />
       </button>
-      <button
-        className="text-button"
-        onClick={() => setFlow((f) => ({ ...f, phase: "checklist" }))}
-      >
+      <button className="text-button" onClick={() => togglePrerequisites(true)}>
         Explore my prerequisite gaps
       </button>
     </div>

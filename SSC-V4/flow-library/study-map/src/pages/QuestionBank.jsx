@@ -21,7 +21,6 @@ export default function QuestionBank() {
     history,
     sessions,
     flow,
-    setModal,
   } = useAtlas();
   const [query, setQuery] = useState("");
   const list = questions.filter(
@@ -47,20 +46,6 @@ export default function QuestionBank() {
         <span>{questions.length} questions · Sections A, B & C</span>
         <span>{completed.length} completed</span>
       </div>
-      {flow.phase !== "attempt" && (
-        <div className="resume-card">
-          <div>
-            <span className="eyebrow">PICK UP WHERE YOU LEFT OFF</span>
-            <h3>
-              {question.id} · {question.title}
-            </h3>
-          </div>
-          <button className="primary" onClick={() => setModal("study")}>
-            Continue
-            <ArrowRight size={15} />
-          </button>
-        </div>
-      )}
       <div className="bank-tabs">
         {["A", "B", "C"].map((s) => {
           const count = questions.filter((q) => q.section === s).length;
@@ -108,7 +93,10 @@ export default function QuestionBank() {
       </div>
       <div className="bank-grid">
         {list.map((q) => {
-          const session = q.id === question.id ? { flow } : sessions[q.id];
+          const session =
+            q.id === question.id && flow.phase !== "attempt"
+              ? { flow }
+              : sessions[q.id];
           const stats = questionSummary(q, history, completed, session);
           return (
             <article

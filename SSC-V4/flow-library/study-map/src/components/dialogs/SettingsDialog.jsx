@@ -40,9 +40,10 @@ export default function SettingsDialog() {
         </h3>
         <p>
           This clears understanding, read notes, completed questions, solution
-          unlocks, attempts, routes, practice history, and settings on this
-          device. When running locally, it also resets the synced vault
-          progress. Your question bank and study notes remain available.
+          unlocks, attempts, routes, practice history, bookmarks, revision
+          notes, and settings on this device. When running locally, it also
+          resets the synced vault progress. Your question bank and study notes
+          remain available.
         </p>
         <button className="secondary" onClick={backup}>
           <Download size={16} />

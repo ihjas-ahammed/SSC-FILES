@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 export default function useDialogAccessibility(state) {
   const {
+    closeDialog,
     modal,
     reader,
     mobileMenu,
@@ -22,11 +23,7 @@ export default function useDialogAccessibility(state) {
     }
     const listener = (e) => {
       if (e.key === "Escape") {
-        if (reader) setReader(null);
-        else {
-          setModal(null);
-          setMobileMenu(false);
-        }
+        closeDialog();
       }
       if (e.key === "Tab" && dialog) {
         const items = [

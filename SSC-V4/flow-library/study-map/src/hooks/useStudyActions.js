@@ -1,3 +1,5 @@
+import { archiveSession } from "../lib/sessionArchive.js";
+import { initialFlow } from "../lib/progressState.js";
 import { useRef } from "react";
 import {
   naturalPause,
@@ -36,13 +38,14 @@ export default function useStudyActions(state) {
     setCompleted,
     setToast,
     reader,
-    sessions,
     setSessions,
   } = state;
   function selectQuestion(q, { open = true } = {}) {
-    setSessions((old) => ({ ...old, [questionId]: { flow, plan, checks } }));
-    const restored =
-      q.id === questionId ? { flow, plan, checks } : sessions[q.id];
+    if (flow.phase !== "attempt" || flow.attempt)
+      setSessions((old) => ({
+        ...old,
+        [questionId]: archiveSession(old[questionId], flow, plan, checks),
+      }));
     setQuestionId(q.id);
     setSelected(q.terms[0]);
     setSection(q.section);
@@ -54,21 +57,9 @@ export default function useStudyActions(state) {
     setReader(null);
     setMobileMenu(false);
     setNav(open ? "bank" : "atlas");
-    setPlan(restored?.plan || []);
-    setChecks(restored?.checks || {});
-    setFlow(
-      restored?.flow || {
-        questionId: q.id,
-        phase: "attempt",
-        attempt: "",
-        step: 0,
-        results: [],
-        idk: [],
-        readIndex: 0,
-        retestIndex: 0,
-        retestResults: [],
-      },
-    );
+    setPlan([]);
+    setChecks({});
+    setFlow(initialFlow(q.id));
   }
   function nextQuestion() {
     const next = questions[questions.findIndex((q) => q.id === questionId) + 1];
@@ -81,6 +72,10 @@ export default function useStudyActions(state) {
   }
   function updateStatus(name, status) {
     setStatuses((old) => ({ ...old, [name]: status }));
+    setChecks((old) => ({
+      ...old,
+      [name]: status === "known" ? "know" : "idk",
+    }));
   }
   function openReader(name) {
     setReader(name);
@@ -88,14 +83,14 @@ export default function useStudyActions(state) {
     setReaderResult(null);
     setMobileMenu(false);
   }
-  function closeDialog() {
-    if (reader) setReader(null);
-    else setModal(null);
-  }
   function makeChecklist(results = flow.results) {
     const failed = results
       .flatMap((ok, i) => (ok ? [] : [question.steps[i].term]))
       .filter(Boolean);
+    if (state.preferences.prerequisites === false) {
+      setFlow((f) => ({ ...f, phase: "hints" }));
+      return;
+    }
     setChecks(
       Object.fromEntries(
         checklist(question).map((name) => [
@@ -190,6 +185,7 @@ export default function useStudyActions(state) {
     setFlow((f) => ({ ...f, phase: "hints" }));
   }
   function buildSingleRoute(name) {
+    state.setPreferences((p) => ({ ...p, prerequisites: true }));
     setReaderTab("note");
     setReaderResult(null);
     const nextRoute = readingRoute([name], statuses);
@@ -206,12 +202,35 @@ export default function useStudyActions(state) {
     setReader(null);
   }
 
+  function editPrerequisites() {
+    makeChecklist([]);
+  }
+  function togglePrerequisites(enabled) {
+    state.setPreferences((p) => ({ ...p, prerequisites: enabled }));
+    setReader(null);
+    if (enabled) {
+      setChecks(
+        Object.fromEntries(
+          checklist(question).map((name) => [
+            name,
+            statuses[name] === "known" ? "know" : "idk",
+          ]),
+        ),
+      );
+      setFlow((f) => ({ ...f, phase: "checklist" }));
+    } else if (
+      ["checklist", "route", "review", "retest"].includes(flow.phase)
+    ) {
+      setFlow((f) => ({ ...f, phase: "hints" }));
+    }
+  }
   return {
+    editPrerequisites,
+    togglePrerequisites,
     selectQuestion,
     nextQuestion,
     updateStatus,
     openReader,
-    closeDialog,
     makeChecklist,
     beginRoute,
     finishReading,

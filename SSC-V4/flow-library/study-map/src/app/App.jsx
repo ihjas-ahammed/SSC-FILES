@@ -1,3 +1,5 @@
+import BackButton from "../components/ui/BackButton";
+import BookmarksPage from "../pages/BookmarksPage";
 import { X, CheckCircle2 } from "lucide-react";
 import { useAtlas } from "./AtlasContext";
 import Header from "../components/layout/Header";
@@ -8,7 +10,7 @@ import AtlasPage from "../pages/AtlasPage";
 import QuestionBank from "../pages/QuestionBank";
 import ProgressPage from "../pages/ProgressPage";
 export default function App() {
-  const { nav, mobileMenu, setMobileMenu, toast } = useAtlas();
+  const { nav, mobileMenu, setMobileMenu, toast, closeDialog } = useAtlas();
   return (
     <div className={`app-shell ${nav === "atlas" ? "map-shell" : ""}`}>
       <Header />
@@ -18,6 +20,8 @@ export default function App() {
       <main className="main-content">
         {nav === "atlas" ? (
           <AtlasPage />
+        ) : nav === "bookmarks" ? (
+          <BookmarksPage />
         ) : nav === "progress" ? (
           <ProgressPage />
         ) : (
@@ -26,17 +30,18 @@ export default function App() {
       </main>
       <MobileNav />
       {mobileMenu && (
-        <div className="overlay" onClick={() => setMobileMenu(false)}>
+        <div className="overlay" onClick={closeDialog}>
           <aside
             className="mobile-sidebar"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mobile-sidebar-title">
+              <BackButton />
               Your question bank
               <button
                 className="icon-btn"
                 aria-label="Close question menu"
-                onClick={() => setMobileMenu(false)}
+                onClick={closeDialog}
               >
                 <X />
               </button>

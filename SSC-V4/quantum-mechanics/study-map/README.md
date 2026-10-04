@@ -31,3 +31,9 @@ Browser tests accept `STUDY_MAP_URL` and `STUDY_MAP_CHROME`; set `PLAYWRIGHT_BRO
 `npm run test:publishing` tests the prepared hosting folder at port 5174 (override with `INTEGRATION_URL`): desktop/mobile catalogue, redirect, progress persistence, reset isolation and both themes of existing subjects. Use `deploy.sh --prepare <directory>` to stage the full site without publishing, then serve its `public/` folder. `STUDY_MAP_TMPDIR` can select a short workspace-local path for Chrome profiles in deeply nested checkouts.
 
 The initial publication preserves the newer hosted QM explanations, matrix previews and teaching diagrams. Existing pages on other subjects were snapshotted and retained byte for byte in the release staging folder; no Study Map configuration was added to them. The release was checked with all 32 learner journeys and all 96 solution checkpoints.
+
+## Navigation and final review
+
+Opening a question always starts at its attempt screen. Read/known statuses, completed questions and practice history stay saved. The Study prerequisites switch is available throughout a question; Edit prerequisite switches reopens its checklist. Every concept note also has an understanding switch. Back controls use browser history, so browser Back and Android Back return through the app screens.
+
+Bookmarks in the header (and mobile navigation) form an ordered review notebook: first saved, first reviewed. Each bookmarked concept has personal revision notes, previous/next review controls and a Markdown download. Bookmarks and revision notes are included in progress backups; whole-app reset clears them. `npm run test:navigation` checks these flows at desktop, 390px and 320px widths.

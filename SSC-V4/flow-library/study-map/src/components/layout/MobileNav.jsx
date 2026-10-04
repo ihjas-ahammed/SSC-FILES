@@ -1,8 +1,14 @@
-import { BookOpen, Network, Target, GraduationCap } from "lucide-react";
+import {
+  Bookmark,
+  BookOpen,
+  Network,
+  Target,
+  GraduationCap,
+} from "lucide-react";
 import { useAtlas } from "../../app/AtlasContext";
 
 export default function MobileNav() {
-  const { nav, setNav, setModal } = useAtlas();
+  const { nav, setNav, selectQuestion, question } = useAtlas();
   return (
     <nav className="mobile-nav" aria-label="Mobile navigation">
       <button
@@ -19,9 +25,19 @@ export default function MobileNav() {
         <BookOpen size={19} />
         Questions
       </button>
-      <button className="mobile-study-button" onClick={() => setModal("study")}>
+      <button
+        className="mobile-study-button"
+        onClick={() => selectQuestion(question)}
+      >
         <GraduationCap size={20} />
         Study
+      </button>
+      <button
+        className={nav === "bookmarks" ? "active" : ""}
+        onClick={() => setNav("bookmarks")}
+      >
+        <Bookmark size={19} />
+        Bookmarks
       </button>
       <button
         className={nav === "progress" ? "active" : ""}

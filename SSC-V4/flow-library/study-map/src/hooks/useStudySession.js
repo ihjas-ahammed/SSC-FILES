@@ -1,3 +1,6 @@
+import useSessionArchive from "./useSessionArchive";
+import useNavigation from "./useNavigation";
+import useBookmarks from "./useBookmarks";
 import { useEffect, useMemo } from "react";
 import { concepts, questions, closure } from "../graph";
 import useSessionState from "./useSessionState";
@@ -19,8 +22,10 @@ export function useStudySession() {
     setToast,
     section,
   } = state;
+  const navigation = useNavigation(state);
+  useSessionArchive(state);
   usePersistence(state);
-  useDialogAccessibility(state);
+  useDialogAccessibility({ ...state, ...navigation });
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(""), 4000);
@@ -45,7 +50,9 @@ export function useStudySession() {
     ...useStudyActions(state),
     ...useExports(state),
     ...useLearningHistory(state),
-    ...useReset(state),
+    ...useReset({ ...state, ...navigation }),
+    ...useBookmarks(state),
+    ...navigation,
     nodes,
     sectionList,
   };

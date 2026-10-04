@@ -156,7 +156,7 @@ export function buildScene(layout, nodes, itinerary) {
       new T.LineBasicMaterial({
         color: route ? 0x6fffea : colors[byName[b]?.group],
         transparent: true,
-        opacity: route ? 0.8 : same ? 0.3 : 0.055,
+        opacity: route ? 0.6 : same ? 0.2 : 0.045,
         depthWrite: false,
       }),
     );

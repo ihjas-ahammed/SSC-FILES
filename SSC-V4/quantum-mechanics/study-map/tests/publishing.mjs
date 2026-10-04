@@ -95,15 +95,8 @@ for (const viewport of [
   );
   await button(p, "Close dialog").click();
   await button(p, "Study Q-A-1").click();
-  // The unfinished checklist survives reopening. Return to attempt explicitly.
-  const hints = button(p, "Try the solution with hints");
-  if (!(await hints.count())) {
-    await button(p, "Close dialog").click();
-    await button(p, "App settings").click();
-    await button(p, "Reset all progress and settings").click();
-    await button(p, "Confirm reset").click();
-    await button(p, "Study Q-A-1").click();
-  }
+  // Reopening always starts at the attempt, while learned progress stays saved.
+  assert.equal((await state(p)).flow.phase, "attempt");
   await button(p, "Try the solution with hints").click();
   await unlock(p, questions[0], { missFirst: true });
   assert((await state(p)).completed.includes("Q-A-1"));

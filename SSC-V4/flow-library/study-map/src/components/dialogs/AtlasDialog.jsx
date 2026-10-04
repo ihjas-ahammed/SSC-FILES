@@ -1,3 +1,5 @@
+import { meta } from "../../lib/course.js";
+import BackButton from "../ui/BackButton";
 import { Atom, X } from "lucide-react";
 import { useAtlas } from "../../app/AtlasContext";
 import StudySession from "../study/StudySession";
@@ -45,6 +47,7 @@ export default function AtlasDialog() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-top">
+          <BackButton />
           <span>
             <Atom size={16} />
             {reader
@@ -53,7 +56,9 @@ export default function AtlasDialog() {
                 ? "GUIDED STUDY · " + question.id
                 : modal === "source"
                   ? "ORIGINAL QUESTION BANK"
-                  : "QUANTUM ATLAS"}
+                  : `${meta.brand} ${meta.brandSuffix || ""}`
+                      .trim()
+                      .toUpperCase()}
           </span>
           <button
             className="icon-btn"

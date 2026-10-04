@@ -5,11 +5,15 @@ import { useAtlas } from "../../../app/AtlasContext";
 import KnowledgeSwitch from "../../ui/KnowledgeSwitch";
 
 export default function ConceptChecklist() {
-  const { question, flow, checks, setChecks, beginRoute } = useAtlas();
+  const { question, flow, checks, setChecks, beginRoute, updateStatus } =
+    useAtlas();
   const terms = checklist(question);
   const gaps = terms.filter((name) => checks[name] !== "know").length;
   function setAll(value) {
     setChecks(Object.fromEntries(terms.map((name) => [name, value])));
+    terms.forEach((name) =>
+      updateStatus(name, value === "know" ? "known" : "unknown"),
+    );
   }
   return (
     <div className="checklist-screen">
@@ -44,9 +48,7 @@ export default function ConceptChecklist() {
             <KnowledgeSwitch
               name={name}
               checked={checks[name] === "know"}
-              onChange={(on) =>
-                setChecks((old) => ({ ...old, [name]: on ? "know" : "idk" }))
-              }
+              onChange={(on) => updateStatus(name, on ? "known" : "unknown")}
             />
           </div>
         ))}

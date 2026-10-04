@@ -1,3 +1,4 @@
+import { initialFlow } from "../lib/progressState.js";
 import { useState, useMemo } from "react";
 import { concepts, questions, byName, readingRoute, meta } from "../graph";
 import { readSaved, OFFLINE } from "../lib/storage";
@@ -25,22 +26,8 @@ export default function useSessionState() {
     [reader, setReader] = useState(null),
     [readerTab, setReaderTab] = useState("note"),
     [readerResult, setReaderResult] = useState(null);
-  const [flow, setFlow] = useState(
-    saved.flow && saved.flow.questionId === questionId
-      ? saved.flow
-      : {
-          questionId,
-          phase: "attempt",
-          attempt: "",
-          step: 0,
-          results: [],
-          idk: [],
-          readIndex: 0,
-          retestIndex: 0,
-          retestResults: [],
-        },
-  );
-  const [checks, setChecks] = useState(saved.checks || {}),
+  const [flow, setFlow] = useState(() => initialFlow(questionId));
+  const [checks, setChecks] = useState({}),
     [toast, setToast] = useState("");
   const known = concepts.filter((c) => statuses[c.name] === "known").length,
     selectedConcept = byName[selected];
@@ -58,17 +45,29 @@ export default function useSessionState() {
   );
   // Freeze each planned route: passing a check should not remove the currently open
   // note from underneath the learner while advancing through the queue.
-  const [plan, setPlan] = useState(saved.plan || []);
+  const [plan, setPlan] = useState([]);
   const isolated =
     (meta.localOnly !== false && !globalThis.STUDY_MAP_VAULT_ENABLED) ||
     OFFLINE ||
     new URLSearchParams(window.location.search).has("isolated");
+  const [bookmarks, setBookmarks] = useState(saved.bookmarks || []);
+  const [bookmarkIndex, setBookmarkIndex] = useState(0);
+  const [mapScreen, setMapScreen] = useState("map"),
+    [mapPanelOpen, setMapPanelOpen] = useState(false);
   const [history, setHistory] = useState(saved.history || []);
   const [sessions, setSessions] = useState(saved.sessions || {});
   const [preferences, setPreferences] = useState(
     saved.preferences || { animations: true },
   );
   return {
+    bookmarks,
+    setBookmarks,
+    bookmarkIndex,
+    setBookmarkIndex,
+    mapScreen,
+    setMapScreen,
+    mapPanelOpen,
+    setMapPanelOpen,
     preferences,
     setPreferences,
     history,

@@ -6,7 +6,8 @@ import { meta } from "../../../lib/course.js";
 import { useAtlas } from "../../../app/AtlasContext";
 
 export default function Attempt() {
-  const { question, setModal, flow, setFlow, makeChecklist } = useAtlas();
+  const { question, setModal, flow, setFlow, makeChecklist, preferences } =
+    useAtlas();
   return (
     <div className="attempt-screen">
       <div className="eyebrow">
@@ -51,7 +52,9 @@ export default function Attempt() {
       </div>
       <div className="attempt-actions">
         <button className="secondary" onClick={() => makeChecklist([])}>
-          Skip · find my gaps
+          {preferences.prerequisites === false
+            ? "Skip · solution hints"
+            : "Skip · find my gaps"}
         </button>
         <button
           className="primary"

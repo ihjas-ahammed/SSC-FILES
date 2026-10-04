@@ -11,6 +11,7 @@ export default function useReset(state) {
   }, [preferences.animations]);
   function resetApp() {
     const q = questions[0];
+    state.resetNavigation();
     try {
       localStorage.removeItem(STORAGE);
     } catch {}
@@ -18,6 +19,10 @@ export default function useReset(state) {
     state.setCompleted([]);
     state.setRead([]);
     state.setHistory([]);
+    state.setBookmarks([]);
+    state.setBookmarkIndex(0);
+    state.setMapScreen("map");
+    state.setMapPanelOpen(false);
     state.setSessions({});
     state.setQuestionId(q.id);
     state.setSection(q.section);
@@ -34,7 +39,7 @@ export default function useReset(state) {
     state.setReaderTab("note");
     state.setReaderResult(null);
     state.setMobileMenu(false);
-    state.setPreferences({ animations: true });
+    state.setPreferences({ animations: true, prerequisites: true });
     state.setToast(
       "App reset. Your study progress is clear and every knowledge switch starts off.",
     );

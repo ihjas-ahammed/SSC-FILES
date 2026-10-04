@@ -1,3 +1,4 @@
+import { meta } from "../lib/course.js";
 import { useEffect, useRef, useState } from "react";
 import { Orbit, Search, BookOpen, ArrowLeft } from "lucide-react";
 import { useAtlas } from "../app/AtlasContext";
@@ -28,14 +29,17 @@ export default function AtlasPage() {
     setFilter,
     nodes,
     read,
+    mapScreen: screen,
+    setMapScreen: setScreen,
+    mapPanelOpen: panelOpen,
+    setMapPanelOpen: setPanelOpen,
+    setReaderTab,
   } = useAtlas();
   const mobile = useMobileLayout();
   const panel = useRef(null),
     navigationTicket = useRef(0);
-  const [panelOpen, setPanelOpen] = useState(false);
   const [path, setPath] = useState(null);
-  const [screen, setScreen] = useState("map"),
-    [navigation, setNavigation] = useState(null);
+  const [navigation, setNavigation] = useState(null);
   useEffect(() => {
     setScope("all");
     setFilter("all");
@@ -51,6 +55,7 @@ export default function AtlasPage() {
     await naturalPause(280);
     if (ticket !== navigationTicket.current) return;
     setSelected(name);
+    setReaderTab("note");
     setPath(null);
     setNavigation({ type: "star", value: name, stamp: Date.now() });
     setPanelOpen(true);
@@ -70,6 +75,7 @@ export default function AtlasPage() {
   function selectStar(name) {
     navigationTicket.current++;
     setSelected(name);
+    setReaderTab("note");
     setPath(null);
     setPanelOpen(true);
     if (panel.current) panel.current.scrollTop = 0;
@@ -95,7 +101,9 @@ export default function AtlasPage() {
     >
       {mobile && (
         <header className="mobile-stellar-heading">
-          <span className="eyebrow">MODULE 03 · YOUR LEARNING UNIVERSE</span>
+          <span className="eyebrow">
+            {meta.module.toUpperCase()} · YOUR LEARNING UNIVERSE
+          </span>
           <h1>Follow the stars.</h1>
           <p>Select a concept or follow a path, then study it below.</p>
         </header>

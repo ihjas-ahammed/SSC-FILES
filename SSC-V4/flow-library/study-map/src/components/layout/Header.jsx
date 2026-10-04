@@ -1,4 +1,6 @@
+import BackButton from "../ui/BackButton";
 import {
+  Bookmark,
   BookOpen,
   Network,
   Download,
@@ -12,8 +14,10 @@ import { useAtlas } from "../../app/AtlasContext";
 export default function Header() {
   const { vaultSaved, nav, setNav, setMobileMenu, downloadVault, setModal } =
     useAtlas();
+  const { bookmarks } = useAtlas();
   return (
     <header className="topbar">
+      <BackButton />
       <button
         className="mobile-menu icon-btn"
         aria-label="Open question menu"
@@ -37,6 +41,11 @@ export default function Header() {
         {[
           { id: "atlas", icon: Network, label: "Knowledge map" },
           { id: "bank", icon: BookOpen, label: "Question bank" },
+          {
+            id: "bookmarks",
+            icon: Bookmark,
+            label: `Bookmarks (${bookmarks.length})`,
+          },
           { id: "progress", icon: Target, label: "My progress" },
         ].map((n) => (
           <button
@@ -50,6 +59,13 @@ export default function Header() {
         ))}
       </nav>
       <div className="topbar-right">
+        <button
+          className={`mobile-bookmarks icon-btn ${nav === "bookmarks" ? "active" : ""}`}
+          aria-label={`Bookmarks (${bookmarks.length})`}
+          onClick={() => setNav("bookmarks")}
+        >
+          <Bookmark size={19} />
+        </button>
         <button
           className="icon-btn settings-launch"
           aria-label="App settings"

@@ -1,3 +1,4 @@
+import BackButton from "../ui/BackButton";
 import { X, Maximize2 } from "lucide-react";
 import { useAtlas } from "../../app/AtlasContext";
 import usePanelResize from "../../hooks/usePanelResize";
@@ -23,6 +24,7 @@ export default function MapNotePanel({
         style={width ? { flexBasis: width } : undefined}
       >
         <header className="map-note-heading">
+          <BackButton label="Back to map" onClick={onClose} />
           <span className="eyebrow">SELECTED STAR · CONCEPT NOTE</span>
           <div className="map-note-window-actions">
             <button

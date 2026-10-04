@@ -1,3 +1,5 @@
+import { initialFlow } from "../lib/progressState.js";
+import { normalizeBookmarks } from "../lib/bookmarks.js";
 import { useEffect } from "react";
 import { byName, questions } from "../graph";
 import { STORAGE } from "../lib/storage";
@@ -29,6 +31,8 @@ export default function usePersistence(state) {
     setSessions,
     checks,
     setChecks,
+    bookmarks,
+    setBookmarks,
     preferences,
     setPreferences,
   } = state;
@@ -63,13 +67,14 @@ export default function usePersistence(state) {
             setQuestionId(q.id);
             setSelected(q.terms[0]);
             setSection(q.section);
-            if (remote.flow?.questionId === q.id) setFlow(remote.flow);
+            setFlow(initialFlow(q.id));
           }
-          if (Array.isArray(remote.plan))
-            setPlan(remote.plan.filter((n) => byName[n]));
+          setPlan([]);
+          setChecks({});
+          setBookmarks(normalizeBookmarks(remote.bookmarks));
           if (Array.isArray(remote.history)) setHistory(remote.history);
           if (remote.sessions) setSessions(remote.sessions);
-          if (remote.checks) setChecks(remote.checks);
+
           if (remote.preferences) setPreferences(remote.preferences);
         }
         setVaultSaved(true);
@@ -85,10 +90,11 @@ export default function usePersistence(state) {
   useEffect(() => {
     if (!hydrated) return;
     const snapshot = {
+      bookmarks,
       preferences,
       history,
       checks,
-      sessions: { ...sessions, [questionId]: { flow, plan, checks } },
+      sessions,
       statuses,
       completed,
       read,
@@ -127,5 +133,6 @@ export default function usePersistence(state) {
     sessions,
     checks,
     preferences,
+    bookmarks,
   ]);
 }

@@ -1,3 +1,4 @@
+import BackButton from "../ui/BackButton";
 import { useState } from "react";
 import { BookOpen, Check, Target } from "lucide-react";
 import { useAtlas } from "../../app/AtlasContext";
@@ -5,15 +6,26 @@ import { byName } from "../../lib/course";
 import ConceptNote from "../study/ConceptNote";
 import Objective from "../study/Objective";
 export default function InlineConcept({ name, travel }) {
-  const { setRead, updateStatus, buildSingleRoute, read } = useAtlas();
-  const [check, setCheck] = useState(false),
-    [result, setResult] = useState(null);
+  const {
+    setRead,
+    updateStatus,
+    buildSingleRoute,
+    read,
+    readerTab,
+    setReaderTab,
+  } = useAtlas();
+  const check = readerTab === "check";
+  const setCheck = (on) => setReaderTab(on ? "check" : "note");
+  const [result, setResult] = useState(null);
   const markRead = () => setRead((old) => [...new Set([...old, name])]);
   return (
     <section
       className="inline-star-content"
       aria-label="Selected concept content"
     >
+      {check && (
+        <BackButton label="Back to note" onClick={() => setCheck(false)} />
+      )}
       <nav className="reader-tabs">
         <button
           className={!check ? "active" : ""}

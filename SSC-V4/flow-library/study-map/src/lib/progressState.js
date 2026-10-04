@@ -1,3 +1,4 @@
+import { normalizeBookmarks } from "./bookmarks.js";
 import { byName, questions } from "./course.js";
 import { safeHistory } from "./learning.js";
 
@@ -102,6 +103,7 @@ export function normalizeProgress(input = {}) {
       : [],
     read: names(input.read),
     history: safeHistory(input.history),
+    bookmarks: normalizeBookmarks(input.bookmarks),
     sessions: Object.fromEntries(
       Object.entries(input.sessions || {})
         .filter(([id]) => hasQuestion(id))
@@ -110,6 +112,7 @@ export function normalizeProgress(input = {}) {
     updatedAt: Number(input.updatedAt) || 0,
     preferences: {
       animations: input.preferences?.animations !== false,
+      prerequisites: input.preferences?.prerequisites !== false,
       ...(Number.isFinite(input.preferences?.notePanelWidth)
         ? {
             notePanelWidth: Math.max(

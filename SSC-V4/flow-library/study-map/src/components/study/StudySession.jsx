@@ -1,3 +1,4 @@
+import KnowledgeSwitch from "../ui/KnowledgeSwitch";
 import { useEffect, useRef } from "react";
 import { useAtlas } from "../../app/AtlasContext";
 import Attempt from "./phases/Attempt";
@@ -22,7 +23,8 @@ const phases = {
   unlock: SolutionUnlock,
 };
 export default function StudySession() {
-  const { flow } = useAtlas();
+  const { flow, preferences, togglePrerequisites, editPrerequisites } =
+    useAtlas();
   const body = useRef(null);
   useEffect(() => {
     if (body.current) body.current.scrollTop = 0;
@@ -30,6 +32,21 @@ export default function StudySession() {
   const Phase = phases[flow.phase] || Attempt;
   return (
     <div className="study-body" ref={body}>
+      <div className="study-prerequisite-controls">
+        <label>
+          Study prerequisites{" "}
+          <KnowledgeSwitch
+            name="prerequisite study"
+            checked={preferences.prerequisites !== false}
+            onChange={togglePrerequisites}
+          />
+        </label>
+        {preferences.prerequisites !== false && (
+          <button className="text-button" onClick={editPrerequisites}>
+            Edit prerequisite switches
+          </button>
+        )}
+      </div>
       <Phase />
     </div>
   );

@@ -4,7 +4,10 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
-import { questions, concepts } from "../../../flow-library/study-map/src/graph.js";
+import {
+  questions,
+  concepts,
+} from "../../../flow-library/study-map/src/graph.js";
 import { button, state, unlock } from "./study-helpers.mjs";
 const html = fs.readFileSync("Quantum-Atlas-offline.html", "utf8");
 assert(!/<(?:script|link)[^>]+(?:src|href)="(?:\.\/|\/assets\/)/.test(html));
@@ -64,7 +67,13 @@ await button(p, "Close dialog").click();
 await p.reload();
 await p.locator(".bank-card").first().waitFor();
 assert((await state(p)).completed.includes("Q-A-1"));
-assert((await state(p)).flow.examDraft.includes("scalar multiplication"));
+assert.equal((await state(p)).flow.phase, "attempt", "Reload starts fresh");
+assert(
+  (await state(p)).sessions["Q-A-1"].flow.examDraft.includes(
+    "scalar multiplication",
+  ),
+  "Earlier written practice remains saved",
+);
 await p
   .locator(".topbar nav")
   .getByRole("button", { name: "Knowledge map", exact: true })

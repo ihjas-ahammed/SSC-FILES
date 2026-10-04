@@ -1,8 +1,10 @@
 import { questions, byName, exportVault, meta } from "../graph";
-import { normalizeProgress } from "../lib/progressState";
+import { initialFlow, normalizeProgress } from "../lib/progressState";
 import { makeZip } from "../zip";
 export default function useExports(state) {
   const {
+    bookmarks,
+    setBookmarks,
     statuses,
     completed,
     read,
@@ -46,6 +48,7 @@ export default function useExports(state) {
         [
           JSON.stringify(
             {
+              bookmarks,
               statuses,
               completed,
               read,
@@ -88,9 +91,10 @@ export default function useExports(state) {
         setRead(Array.isArray(v.read) ? v.read.filter((n) => byName[n]) : []);
         setHistory(v.history);
         setPreferences(v.preferences);
-        setChecks(v.checks);
-        setPlan(v.plan);
-        setFlow(v.flow);
+        setBookmarks(v.bookmarks);
+        setChecks({});
+        setPlan([]);
+        setFlow(initialFlow(v.questionId));
         setQuestionId(v.questionId);
         setSection(questions.find((q) => q.id === v.questionId).section);
         setSelected(questions.find((q) => q.id === v.questionId).terms[0]);

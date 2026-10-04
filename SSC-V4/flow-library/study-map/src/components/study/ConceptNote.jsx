@@ -1,10 +1,12 @@
+import BookmarkButton from "../ui/BookmarkButton";
+import KnowledgeSwitch from "../ui/KnowledgeSwitch";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { byName, groups, questions, meta } from "../../graph";
 import { useAtlas } from "../../app/AtlasContext";
 import MathText from "../ui/MathText";
 import { Symbol, Pill, StatusIcon } from "../ui/Primitives";
 export default function ConceptNote({ name, compact = false, navigate }) {
-  const { statuses, openReader, selectQuestion } = useAtlas();
+  const { statuses, openReader, selectQuestion, updateStatus } = useAtlas();
   const visit = navigate || openReader;
   const c = byName[name];
   if (!c) return null;
@@ -24,6 +26,17 @@ export default function ConceptNote({ name, compact = false, navigate }) {
             {statuses[c.name] || "unknown"}
           </div>
         </div>
+      </div>
+      <div className="note-controls">
+        <BookmarkButton name={c.name} />
+        <label>
+          I understand this{" "}
+          <KnowledgeSwitch
+            name={c.name}
+            checked={statuses[c.name] === "known"}
+            onChange={(on) => updateStatus(c.name, on ? "known" : "unknown")}
+          />
+        </label>
       </div>
       <div className="meaning-card">
         <span className="eyebrow">THE IDEA</span>

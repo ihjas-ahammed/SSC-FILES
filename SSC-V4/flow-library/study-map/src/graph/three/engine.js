@@ -233,7 +233,7 @@ export function createStellarEngine(
     focused = b;
     edges.forEach((e) => {
       if (e === edge) {
-        e.edge.material.opacity = 1;
+        e.edge.material.opacity = 0.8;
         e.edge.material.color.set(e.complete ? 0x59f9bd : 0x6fffea);
         e.arrow.material.opacity = 1;
       }
@@ -314,14 +314,14 @@ export function createStellarEngine(
               ? 0.35
               : 0.12;
         edge.material.opacity = complete
-          ? 0.85
+          ? 0.62
           : active
-            ? 0.95
+            ? 0.68
             : route
-              ? 0.5
+              ? 0.38
               : same
-                ? 0.28
-                : 0.065;
+                ? 0.2
+                : 0.045;
       });
       wake();
     },

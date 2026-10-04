@@ -46,7 +46,7 @@ export function createHover(scene, meshes, edges, wake) {
           opacity: e.edge.material.opacity,
         };
         e.edge.material.color.set(0x9cf9ee);
-        e.edge.material.opacity = 1;
+        e.edge.material.opacity = 0.8;
       }
       wake();
     },
