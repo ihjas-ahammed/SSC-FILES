@@ -76,7 +76,7 @@ try {
     const p = await ctx.newPage(),
       errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
-    await p.goto(base);
+    await p.goto(base, { waitUntil: "domcontentloaded" });
     await p.locator(".bank-card").first().waitFor();
     assert.equal(await p.locator(".resume-card").count(), 0);
     await button(p, "Study Q-A-1").click();
@@ -233,7 +233,7 @@ try {
       ),
       false,
     );
-    await p.reload();
+    await p.reload({ waitUntil: "domcontentloaded" });
     await p.locator(".bank-card").first().waitFor();
     await p
       .locator(".bank-tabs")
