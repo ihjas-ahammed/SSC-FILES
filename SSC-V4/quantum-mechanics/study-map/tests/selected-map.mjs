@@ -115,13 +115,26 @@ try {
         document.querySelector(".stellar-map")?.dataset.flying === "false",
     );
     const map = page.locator(".stellar-map");
-    assert.equal(await map.getAttribute("data-zoom"), mobile ? "120" : "100");
+    assert.equal(await map.getAttribute("data-zoom"), mobile ? "150" : "100");
     const star = map.locator('[data-name="Hermitian Adjoint"]');
     assert(
-      Math.abs((await star.boundingBox()).width - (mobile ? 76.8 : 64)) < 1,
-      "Actual rendered star scale must match the 20% zoom increase",
+      Math.abs((await star.boundingBox()).width - (mobile ? 96 : 64)) < 1,
+      "Actual rendered star scale must match the closer mobile camera",
     );
     if (mobile) {
+      const height = await map.evaluate((el) => el.clientHeight);
+      const radius = Number(await star.getAttribute("data-radius"));
+      const previousDistance = Math.max(
+        230 / 1.2,
+        (radius * height) / (76.8 * Math.tan((21.5 * Math.PI) / 180)),
+      );
+      assert(
+        Math.abs(
+          Number(await map.getAttribute("data-distance")) -
+            previousDistance * 0.8,
+        ) < 1,
+        "Mobile camera must be 20% closer than the previous view",
+      );
       assert.equal(
         await page.locator(".mobile-stellar-heading h1").innerText(),
         "Hermitian Adjoint",
@@ -191,7 +204,7 @@ try {
     await context.close();
   }
   console.log(
-    "PASS: selected tab/node headings, live concept subtitle, actual 20% mobile zoom, incoming/outgoing colors in both themes, hover/particle colors, travel direction updates, completion green, and no overflow at 320/390/1440.",
+    "PASS: selected tab/node headings, live concept subtitle, mobile camera 20% closer, incoming/outgoing colors in both themes, hover/particle colors, travel direction updates, completion green, and no overflow at 320/390/1440.",
   );
 } finally {
   await browser.close();
