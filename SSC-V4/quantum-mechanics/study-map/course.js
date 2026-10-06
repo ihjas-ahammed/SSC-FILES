@@ -113,7 +113,7 @@ export default {
   },
   meta: {
     id: "quantum-mechanics-module-3",
-    storageKey: "quantum-atlas-v1",
+    storageKey: "quantum-atlas-v2",
     emblem: "⚛",
     brand: "quantum",
     brandSuffix: "atlas",
@@ -126,6 +126,11 @@ export default {
     sourceName: "Module3.pdf",
     sourcePages: 4,
     localOnly: true,
+    sections: [
+      { id: "A", label: "Part A", title: "Spaces and operators", tag: "FOUNDATIONS", hint: "Linear spaces, inner products, operators" },
+      { id: "B", label: "Part B", title: "Inequalities and spectra", tag: "PROOFS", hint: "Schwarz, uncertainty, Hermitian theorems" },
+      { id: "C", label: "Part C", title: "Matrices and continuous bases", tag: "REPRESENTATIONS", hint: "Matrices, basis change, x and p" },
+    ],
     offlineDownload: "./index.html",
     parentUrl: "/phy/quantum-mechanics/#/study-map",
   },

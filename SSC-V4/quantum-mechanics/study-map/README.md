@@ -1,6 +1,6 @@
 # Quantum Atlas — Module 3
 
-This is the quantum-mechanics content layer for the shared Flow study-map engine. It includes the exact uploaded `Module3.pdf`, all 32 questions (A: 15, B: 13, C: 4), 155 prerequisite notes, 96 answer checkpoints, reviewed LaTeX and the markdown vault. Five source qualifications remain visible. Formal solutions unlock step by step after hidden-option objective checks.
+This is the quantum-mechanics content layer for the shared Flow study-map engine. It includes the exact uploaded `Module3.pdf`, 16 unique problems (A: 6, B: 5, C: 5; the 32 printed questions overlapped, so repeats are merged and each problem is its own concept with a full proof, FAQs, a warm-up, guided steps and a keyword try-again), 137 prerequisite notes, reviewed LaTeX and the markdown vault. Five source qualifications remain visible. Formal solutions unlock step by step after hidden-option objective checks.
 
 Reusable UI, graph, animation, navigation, progress, math rendering and offline build code live in `../../flow-library/study-map`; this folder imports them rather than keeping copies. `course.js` supplies the subject labels, groups, compact glyphs, symbols, storage key and links. `src/data/` holds the small topic and question files. `src/main.jsx` is the thin entry. Content authoring/review tools remain in `scripts/` and original extraction/review inputs in `source/`.
 
@@ -24,7 +24,7 @@ Progress is private to this browser under the existing `quantum-atlas-v1` key, s
 
 - `npm test`: curriculum counts, 1,354 formulas, symbols, no dead links/cycles, ordered deduplicated routes, progress migration and complete formal answer fragments.
 - `npm run test:offline`: real Chromium with networking disabled, embedded PDF, persisted progress and 3D notes panel.
-- `npm run test:learner`: deterministic simulated learner through all 32 questions (flow verification, not a claim about human memory or marks).
+- `npm run test:learner`: deterministic simulated learner (written for the old 32-question set; needs updating) (flow verification, not a claim about human memory or marks).
 
 Browser tests accept `STUDY_MAP_URL` and `STUDY_MAP_CHROME`; set `PLAYWRIGHT_BROWSERS_PATH` if using a workspace-local Chrome installation. `tests/setup-course.mjs` configures the shared engine before Node tests import it.
 
