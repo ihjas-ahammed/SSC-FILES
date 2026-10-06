@@ -193,6 +193,21 @@ else
   echo "WARNING: Optics missing — deploying without the Optics app." >&2
 fi
 
+# --- SSC-V4 Probability: Ross Ch. 1 (Module 1) stellar map, offline bundle ---
+PROB_MAP="$REPO/SSC-V4/probability/study-map"
+if [ -d "$PROB_MAP" ]; then
+  if [ "$REBUILD_LIVE" = "1" ]; then
+    echo "Rebuilding the LIVE Probability Module 1 study map from the shared engine ..."
+    (cd "$PROB_MAP" && npm run build > /dev/null)
+  fi
+  if [ ! -s "$PROB_MAP/build/index.html" ]; then
+    echo "ERROR: Probability study-map bundle missing. Run npm run build in $PROB_MAP." >&2
+    exit 1
+  fi
+  mkdir -p "$TMP/public/math/probability/study-map/module-1"
+  cp "$PROB_MAP/build/index.html" "$TMP/public/math/probability/study-map/module-1/index.html"
+fi
+
 # --- SSC-V4 Probability: chapter checkpoints on shared flow-library ---
 PROB="$REPO/SSC-V4/probability"
 if [ -d "$PROB" ] && [ -f "$PROB/build.py" ]; then
@@ -342,6 +357,7 @@ echo "  → $BASE/phy/optics       (validated data)"
 echo "  → $BASE/phy/optics-test  (mock data — safe to break)"
 echo ""
 echo "Probability: $BASE/math/probability (Ross · GATE DA)"
+echo "  → $BASE/math/probability/study-map/module-1/  (Ross Ch. 1 stellar map)"
 echo ""
 echo "SSLC study apps (Kerala SCERT, EN + മലയാളം):"
 for pair in physics chemistry biology maths; do

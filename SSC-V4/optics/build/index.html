@@ -1167,6 +1167,15 @@ body.note-open .cnode.open > .acc > .acc-in > .acc-pad{
 .pace-levels button { flex:1 1 auto; min-height:38px; }
 .lv5 { color:var(--accent); }
 
+/* Optional study-map catalogue; does not change other views. */
+.study-map-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.study-map-entry { display: flex; align-items: center; gap: 16px; padding: 22px; border: 1px solid var(--rule); border-radius: var(--r-m); color: var(--ink); background: var(--surface); text-decoration: none; min-width: 0; }
+.study-map-entry:hover { border-color: var(--accent); }
+.study-map-entry:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.study-map-entry-copy { display: grid; gap: 6px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.study-map-entry-copy b { font-size: 1.2rem; }
+@media (max-width: 600px) { .study-map-entry { padding: 18px 14px; gap: 10px; } }
+
 </style>
 <style>
 /* ── project/theme.css ── */
@@ -14788,6 +14797,8 @@ PROJECT.hooks.noteSim = function (concept) {
        realLine: true,                optional — draw the real-line widget
                                         (comp.realline.js) under inequalities
        pyqLabel: 'JAM past papers',   optional — what the level-4 rung is called (default shown)
+       studyMaps: [{ title, href,     optional — adds Study Map tab; absent by default
+                     description, summary }],   only configured modules are listed
        figZoom: true,                 optional — click a rendered diagram to open it
                                         full-screen with zoom (comp.zoom.js)
        hooks: {                       optional — each is called if present
@@ -16510,8 +16521,8 @@ const Progress = (function () {
 
   /* ── ticking ─────────────────────────────────────────────────────────────
      One press advances one step, so the tick always has somewhere to go.
-     Level 3 is deliberately NOT reachable from here: it is earned by working
-     the section's exercises, not by pressing a box. */
+     At level 2, the next press records the corresponding section exercises
+     as complete. A level-3 press clears the note as before. */
   function advance(id) {
     const at = level(id);
     if (at === 0) {
@@ -16519,6 +16530,8 @@ const Progress = (function () {
       if (!hasProof(id)) Store.setProofDone(id, true);
     } else if (at === 1) {
       Store.setProofDone(id, true);
+    } else if (at === 2) {
+      setTo([id], 3);
     } else {
       clear(id);
     }
@@ -16541,18 +16554,24 @@ const Progress = (function () {
     dropCache();
   }
 
-  /* Put a list of concepts AT a given level (0, 1 or 2). Bulk ticking a
+  /* Put a list of concepts AT a given level (0, 1, 2 or 3). Bulk ticking a
      section or a module runs through here, and so does the prerequisite
      cascade — which is why it takes a level rather than a boolean. */
   function setTo(ids, n) {
     const list = ids || [];
-    const want = Math.max(0, Math.min(2, n));
+    const want = Math.max(0, Math.min(3, n));
     Store.setDoneMany(list, want >= 1);
     list.forEach(function (id) {
       const proof = hasProof(id);
       const on = want >= 2 || (want >= 1 && !proof);
       if (Store.isProofDone(id) !== on) Store.setProofDone(id, on);
     });
+    if (want >= 3) {
+      const sections = new Set(list.map(id => Pool.concept(id)?.sec).filter(Boolean));
+      const tasks = new Map();
+      sections.forEach(sec => secTaskState(sec).list.forEach(q => tasks.set(taskKey(q), q)));
+      tasks.forEach((q, key) => { if (!taskDone(q)) Store.setProofDone(key, true); });
+    }
     dropCache();
   }
 
@@ -16562,6 +16581,7 @@ const Progress = (function () {
     if (!c.total) return 0;
     if (c.min === 0) setTo(ids, 1);
     else if (c.min === 1) setTo(ids, 2);
+    else if (c.min === 2) setTo(ids, 3);
     else setTo(ids, 0);
     return count(ids).min;
   }
@@ -18977,7 +18997,8 @@ const Tree = (function () {
         state: lv >= 1 ? 'true' : 'false', lv: lv,
         label: lv === 0 ? 'Mark "' + c.title + '" as read' + extNote
           : lv === 1 ? 'Mark the proof of "' + c.title + '" as complete' + extNote
-            : 'Clear "' + c.title + '"'
+            : lv === 2 ? 'Mark all exercises in §' + c.sec + ' as complete'
+              : 'Clear "' + c.title + '"'
       };
     }, function () {
       const was = Progress.level(c.id);
@@ -22545,6 +22566,35 @@ const ViewWrite = (function () {
 })();
 
 
+/* ── flow-library/app/src/view.study-map.js ── */
+/* Optional module catalogue. Projects opt in by supplying PROJECT.studyMaps. */
+const ViewStudyMap = (function () {
+  function render() {
+    const el = DOM.el;
+    const list = el('ul', { class: 'study-map-list', 'aria-label': 'Study map modules' });
+    (PROJECT.studyMaps || []).forEach(function (module) {
+      list.appendChild(el('li', {}, [
+        el('a', { class: 'study-map-entry', href: module.href }, [
+          DOM.mi('hub'),
+          el('div', { class: 'study-map-entry-copy' }, [
+            el('b', { text: module.title }),
+            el('span', { class: 'muted', text: module.description || '' }),
+            module.summary ? el('small', { class: 'muted', text: module.summary }) : null
+          ]),
+          DOM.mi('arrow_forward')
+        ])
+      ]));
+    });
+    return el('div', { class: 'stack' }, [
+      UI.title('Study Map', PROJECT.name),
+      el('p', { class: 'lede', text: 'Choose a module to explore its prerequisites and practise the answer one step at a time.' }),
+      list
+    ]);
+  }
+  return { render };
+})();
+
+
 /* ── flow-library/app/src/boot.js ── */
 /* ══════════════════════════════════════════════════════════════════════════
    Boot: theme, data loading, navigation, routing, failure surfaces.
@@ -22665,8 +22715,13 @@ const App = (function () {
     { name: 'recall', label: 'Recall', icon: 'style', also: [] }
   ];
 
+  if (PROJECT.studyMaps && PROJECT.studyMaps.length) {
+    TABS.push({ name: 'study-map', label: 'Study Map', icon: 'hub', also: [] });
+  }
+
   const VIEWS = {
     home: () => ViewHome, study: () => ViewStudy, note: () => ViewNote,
+    'study-map': () => PROJECT.studyMaps && PROJECT.studyMaps.length ? ViewStudyMap : ViewHome,
     recall: () => ViewRecall, omr: () => ViewOmr, write: () => ViewWrite
   };
 
