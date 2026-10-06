@@ -7,17 +7,28 @@ import { StatusIcon } from "../../ui/Primitives";
 import { useAtlas } from "../../../app/AtlasContext";
 
 import SymbolKey from "../SymbolKey";
+import NewTerms from "../NewTerms";
+import { PenLine } from "lucide-react";
 export default function Answer() {
   const [examMode, setExamMode] = useState(false);
-  const { statuses, question, flow, setFlow, nextQuestion, openReader } =
-    useAtlas();
+  const {
+    statuses,
+    question,
+    flow,
+    setFlow,
+    nextQuestion,
+    showTerm,
+    mastered,
+  } = useAtlas();
   return (
     <div className="answer-screen">
       <div className="eyebrow">
         <CheckCircle2 size={15} /> {question.id} · COMPLETE
       </div>
       <h2>{question.title}</h2>
-      <div className="source-question">{question.text}</div>
+      <div className="source-question">
+        <MathText text={question.text} />
+      </div>
       {question.verify && (
         <div className="source-qualification">
           <Flag size={16} />
@@ -39,9 +50,10 @@ export default function Answer() {
           )}
           <h3>Formal answer</h3>
           <div className="formal-answer">
-            <MathText text={question.linkedAnswer} onLink={openReader} />
+            <MathText text={question.linkedAnswer} onLink={showTerm} />
           </div>
           <SymbolKey names={question.symbols} />
+          <NewTerms text={question.linkedAnswer} title="Words to look up" />
           {flow.attempt && (
             <details>
               <summary>Your original attempt</summary>
@@ -52,7 +64,7 @@ export default function Answer() {
             <h4>Key terms</h4>
             <div className="prerequisite-chips">
               {question.terms.map((t) => (
-                <button key={t} onClick={() => openReader(t)}>
+                <button key={t} onClick={() => showTerm(t)}>
                   <StatusIcon status={statuses[t]} />
                   {t}
                 </button>
@@ -74,6 +86,15 @@ export default function Answer() {
           }}
         >
           Practice steps again
+        </button>
+        <button
+          className="secondary"
+          onClick={() => setFlow((f) => ({ ...f, phase: "retry" }))}
+        >
+          <PenLine size={15} />
+          {mastered.includes(question.id)
+            ? "Try again myself · mastered"
+            : "Try again myself"}
         </button>
         <button className="primary" onClick={nextQuestion}>
           {question.id === questions.at(-1).id

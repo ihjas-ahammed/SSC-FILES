@@ -1,5 +1,5 @@
 import { ArrowUpRight, Check, Flag } from "lucide-react";
-import { questions, meta } from "../../graph";
+import { questions, meta, sections } from "../../graph";
 import { useAtlas } from "../../app/AtlasContext";
 
 export default function Sidebar() {
@@ -53,26 +53,20 @@ export default function Sidebar() {
         QUESTION BANK <span>{questions.length}</span>
       </div>
       <div className="section-tabs">
-        {["A", "B", "C"].map((s) => (
+        {sections.map((s) => (
           <button
-            className={section === s ? "active" : ""}
-            onClick={() => setSection(s)}
-            key={s}
+            className={section === s.id ? "active" : ""}
+            onClick={() => setSection(s.id)}
+            key={s.id}
           >
-            Section {s}
-            <span>{questions.filter((q) => q.section === s).length}</span>
+            {s.label}
+            <span>{questions.filter((q) => q.section === s.id).length}</span>
           </button>
         ))}
       </div>
       <div className="section-description">
-        {section === "A"
-          ? "The building blocks"
-          : section === "B"
-            ? "Work through the reasoning"
-            : "Bring it all together"}
-        <span>
-          {section === "A" ? "SHORT" : section === "B" ? "MEDIUM" : "LONG"}
-        </span>
+        {sections.find((s) => s.id === section)?.hint}
+        <span>{sections.find((s) => s.id === section)?.tag}</span>
       </div>
       <div className="question-list">
         {sectionList.map((q) => (

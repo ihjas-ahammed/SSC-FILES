@@ -4,6 +4,7 @@ import MathText from "../../ui/MathText";
 export default function SolutionHints() {
   const { question, flow, setFlow, togglePrerequisites } = useAtlas();
   const unlocked = flow.unlocked || [];
+  const hints = question.hints || [];
   return (
     <div className="solution-hints">
       <div className="eyebrow">
@@ -11,23 +12,25 @@ export default function SolutionHints() {
         YOUR SOLUTION MISSION · {question.id}
       </div>
       <h2>Find your way to the answer.</h2>
-      <div className="source-question">{question.text}</div>
+      <div className="source-question"><MathText text={question.text} /></div>
       <p>
         Think first. Each correct checkpoint unlocks another part of the
         complete formal solution. A missed answer gives you a hint and another
         try.
       </p>
-      <ol className="hint-cards">
-        {question.hints.map((hint, i) => (
-          <li key={i}>
-            <Lightbulb size={18} />
-            <div>
-              <span>HINT {i + 1}</span>
-              <MathText text={hint} />
-            </div>
-          </li>
-        ))}
-      </ol>
+      {hints.length > 0 && (
+        <ol className="hint-cards">
+          {hints.map((hint, i) => (
+            <li key={i}>
+              <Lightbulb size={18} />
+              <div>
+                <span>HINT {i + 1}</span>
+                <MathText text={hint} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
       <div className="mission-summary">
         {unlocked.length} / {question.solutionBlocks.length} solution steps
         unlocked

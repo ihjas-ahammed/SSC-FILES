@@ -42,7 +42,7 @@ export default function LearningDashboard() {
         {metrics.sections.map((s) => (
           <div key={s.section}>
             <span>
-              Section {s.section}
+              {s.label}
               <b>
                 {s.done} / {s.total}
               </b>

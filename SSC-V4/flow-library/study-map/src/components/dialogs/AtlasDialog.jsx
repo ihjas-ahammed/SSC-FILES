@@ -9,6 +9,7 @@ import ModuleRoute from "./ModuleRoute";
 import HelpDialog from "./HelpDialog";
 import SourceAudit from "./SourceAudit";
 import SettingsDialog from "./SettingsDialog";
+import TermAlert from "./TermAlert";
 const screens = {
   settings: SettingsDialog,
   study: StudySession,
@@ -69,6 +70,7 @@ export default function AtlasDialog() {
           </button>
         </div>
         {Screen && <Screen />}
+        <TermAlert />
       </section>
     </div>
   );

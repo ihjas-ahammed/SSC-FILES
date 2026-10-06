@@ -4,8 +4,9 @@ import { useAtlas } from "../../../app/AtlasContext";
 import MathText from "../../ui/MathText";
 import Objective from "../Objective";
 import SymbolKey from "../SymbolKey";
+import NewTerms from "../NewTerms";
 export default function SolutionUnlock() {
-  const { question, flow, setFlow, openReader, setCompleted } = useAtlas();
+  const { question, flow, setFlow, showTerm, setCompleted } = useAtlas();
   const [retry, setRetry] = useState(0);
   const unlocked = flow.unlocked || [],
     index = flow.unlockIndex || 0;
@@ -55,10 +56,11 @@ export default function SolutionUnlock() {
             <details className="unlocked-line" key={i} open={index === i}>
               <summary>
                 <CheckCircle2 size={17} />
-                {b.title} · unlocked
+                <MathText text={b.title} /> · unlocked
               </summary>
-              <MathText text={b.text} onLink={openReader} />
+              <MathText text={b.text} onLink={showTerm} />
               <SymbolKey names={b.symbols} />
+              <NewTerms text={b.text} />
             </details>
           ) : (
             <div
@@ -66,7 +68,9 @@ export default function SolutionUnlock() {
               key={i}
             >
               <LockKeyhole size={16} />
-              <span>{b.title}</span>
+              <span>
+                <MathText text={b.title} />
+              </span>
               <small>{index === i ? "CURRENT CHECKPOINT" : "LOCKED"}</small>
             </div>
           ),

@@ -1,4 +1,9 @@
-import { concepts, questions, byName } from "./course.js";
+import {
+  concepts,
+  questions,
+  byName,
+  sections as allSections,
+} from "./course.js";
 
 /** Answer history is evidence of recall; checklist switches are self-reports. */
 export function learningSummary(
@@ -16,10 +21,12 @@ export function learningSummary(
       .filter((e) => e.correct && e.term && e.kind !== "step")
       .map((e) => e.term),
   );
-  const sections = ["A", "B", "C"].map((section) => {
+  const sections = allSections.map((info) => {
+    const section = info.id;
     const list = questions.filter((q) => q.section === section);
     return {
       section,
+      label: info.label,
       done: list.filter((q) => completed.includes(q.id)).length,
       total: list.length,
     };

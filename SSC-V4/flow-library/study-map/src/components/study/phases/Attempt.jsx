@@ -2,8 +2,12 @@ import { ArrowRight, Flag, ExternalLink, LockKeyhole } from "lucide-react";
 
 import { Pill } from "../../ui/Primitives";
 
-import { meta } from "../../../lib/course.js";
+import { meta, sections } from "../../../lib/course.js";
+const sectionLabelOf = (id) =>
+  sections.find((s) => s.id === id)?.label || `Section ${id}`;
 import { useAtlas } from "../../../app/AtlasContext";
+import MathText from "../../ui/MathText";
+import FaqList from "../FaqList";
 
 export default function Attempt() {
   const { question, setModal, flow, setFlow, makeChecklist, preferences } =
@@ -11,20 +15,28 @@ export default function Attempt() {
   return (
     <div className="attempt-screen">
       <div className="eyebrow">
-        <Pill>SECTION {question.section}</Pill>
+        <Pill>{sectionLabelOf(question.section).toUpperCase()}</Pill>
         <span>
           {question.marks_style.toUpperCase()} ANSWER ·{" "}
           {question.type.toUpperCase()}
         </span>
       </div>
       <h2>{question.title}</h2>
-      <div className="source-question">{question.text}</div>
+      <div className="source-question">
+        <MathText text={question.text} />
+      </div>
+      <FaqList
+        items={question.faq}
+        title="Before you start: questions you might be asking"
+      />
       <div className="source-line">
         <span>
-          Verbatim visual source: {meta.sourceName} · p. {question.page}
+          {meta.sourcePdf ? "Verbatim visual source" : "Source"}: {meta.sourceName}{" "}
+          · {question.sourceLabel || `p. ${question.page}`}
         </span>
         <button onClick={() => setModal("source")}>
-          View original <ExternalLink size={12} />
+          {meta.sourcePdf ? "View original" : "View exact text"}{" "}
+          <ExternalLink size={12} />
         </button>
       </div>
       {question.verify && (

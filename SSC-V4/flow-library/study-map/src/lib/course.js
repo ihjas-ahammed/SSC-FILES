@@ -10,8 +10,17 @@ export let concepts = [],
   topicGlyphs = {},
   glyphs = {},
   storageKey = "",
+  sections = [],
   maxLearningDepth = 1;
 let configured = false;
+/** Question groups. A course may supply meta.sections; otherwise A/B/C short, medium, long. */
+const defaultSections = [
+  { id: "A", title: "Short answers", tag: "SHORT", hint: "The building blocks" },
+  { id: "B", title: "Derivations & problems", tag: "MEDIUM", hint: "Work through the reasoning" },
+  { id: "C", title: "Long answers & proofs", tag: "LONG", hint: "Bring it all together" },
+];
+export const sectionLabel = (section) =>
+  section.label || `Section ${section.id}`;
 export function configureCourse(course) {
   if (configured) throw new Error("Mount one study course per page.");
   if (
@@ -49,6 +58,14 @@ export function configureCourse(course) {
   }
   concepts.forEach((c) => visit(c.name));
   questions.forEach((q) => q.terms.forEach(visit));
+  sections = (course.meta.sections || defaultSections).map((s) => ({
+    ...s,
+    label: sectionLabel(s),
+  }));
+  questions.forEach((q) => {
+    if (!sections.some((s) => s.id === q.section))
+      throw new Error("Question " + q.id + " uses an unknown section.");
+  });
   symbolNotes = course.symbolNotes || {};
   topicGlyphs = course.topicGlyphs || {};
   glyphs = course.glyphs || {};

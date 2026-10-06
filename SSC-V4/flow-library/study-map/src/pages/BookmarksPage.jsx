@@ -119,7 +119,7 @@ export default function BookmarksPage() {
                 Next <ArrowRight size={15} />
               </button>
             </div>
-            <ConceptNote key={entry.name} name={entry.name} />
+            <ConceptNote key={entry.name} name={entry.name} warmUp={false} />
             <label className="bookmark-memo">
               My revision notes
               <textarea

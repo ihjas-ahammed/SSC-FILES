@@ -35,6 +35,10 @@ export default function usePersistence(state) {
     setBookmarks,
     preferences,
     setPreferences,
+    pretest,
+    setPretest,
+    mastered,
+    setMastered,
   } = state;
   useEffect(() => {
     if (isolated) {
@@ -74,6 +78,16 @@ export default function usePersistence(state) {
           setBookmarks(normalizeBookmarks(remote.bookmarks));
           if (Array.isArray(remote.history)) setHistory(remote.history);
           if (remote.sessions) setSessions(remote.sessions);
+          if (remote.pretest && typeof remote.pretest === "object")
+            setPretest(
+              Object.fromEntries(
+                Object.entries(remote.pretest).filter(([n]) => byName[n]),
+              ),
+            );
+          if (Array.isArray(remote.mastered))
+            setMastered(
+              remote.mastered.filter((id) => questions.some((q) => q.id === id)),
+            );
 
           if (remote.preferences) setPreferences(remote.preferences);
         }
@@ -98,6 +112,8 @@ export default function usePersistence(state) {
       statuses,
       completed,
       read,
+      pretest,
+      mastered,
       questionId,
       flow,
       plan,
@@ -134,5 +150,7 @@ export default function usePersistence(state) {
     checks,
     preferences,
     bookmarks,
+    pretest,
+    mastered,
   ]);
 }

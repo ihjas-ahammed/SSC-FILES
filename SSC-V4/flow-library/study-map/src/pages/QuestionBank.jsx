@@ -7,7 +7,7 @@ import {
   Flag,
   BookOpen,
 } from "lucide-react";
-import { questions, meta } from "../lib/course";
+import { questions, meta, sections } from "../lib/course";
 import { questionSummary } from "../lib/learning";
 import { useAtlas } from "../app/AtlasContext";
 
@@ -43,11 +43,14 @@ export default function QuestionBank() {
       </p>
       <div className="question-bank-summary">
         <BookOpen size={16} />
-        <span>{questions.length} questions · Sections A, B & C</span>
+        <span>
+          {questions.length} questions · {sections.map((s) => s.label).join(", ")}
+        </span>
         <span>{completed.length} completed</span>
       </div>
       <div className="bank-tabs">
-        {["A", "B", "C"].map((s) => {
+        {sections.map((info) => {
+          const s = info.id;
           const count = questions.filter((q) => q.section === s).length;
           const done = questions.filter(
             (q) => q.section === s && completed.includes(q.id),
@@ -58,7 +61,7 @@ export default function QuestionBank() {
               onClick={() => setSection(s)}
               className={section === s ? "active" : ""}
             >
-              Section {s}
+              {info.label}
               <span>
                 {done} / {count}
               </span>
@@ -68,17 +71,12 @@ export default function QuestionBank() {
       </div>
       <div className="bank-list-heading">
         <div>
-          <h2>
-            {section === "A"
-              ? "Short answers"
-              : section === "B"
-                ? "Derivations & problems"
-                : "Long answers & proofs"}
-          </h2>
+          <h2>{sections.find((s) => s.id === section)?.title}</h2>
           <p>
-            {section === "A"
-              ? "Start here to build your foundations."
-              : "Use guided steps to build the complete answer."}
+            {sections.find((s) => s.id === section)?.description ||
+              (section === "A"
+                ? "Start here to build your foundations."
+                : "Use guided steps to build the complete answer.")}
           </p>
         </div>
         <label className="search-box">

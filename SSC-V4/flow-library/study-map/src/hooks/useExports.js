@@ -28,6 +28,10 @@ export default function useExports(state) {
     setSection,
     preferences,
     setPreferences,
+    pretest,
+    setPretest,
+    mastered,
+    setMastered,
   } = state;
   function downloadVault() {
     const files = exportVault(statuses, completed);
@@ -52,6 +56,8 @@ export default function useExports(state) {
               statuses,
               completed,
               read,
+              pretest,
+              mastered,
               questionId,
               flow,
               plan,
@@ -89,6 +95,8 @@ export default function useExports(state) {
           v.completed.filter((id) => questions.some((q) => q.id === id)),
         );
         setRead(Array.isArray(v.read) ? v.read.filter((n) => byName[n]) : []);
+        setPretest(v.pretest);
+        setMastered(v.mastered);
         setHistory(v.history);
         setPreferences(v.preferences);
         setBookmarks(v.bookmarks);

@@ -9,6 +9,7 @@ import Ready from "./phases/Ready";
 import Answer from "./phases/Answer";
 import SolutionHints from "./phases/SolutionHints";
 import SolutionUnlock from "./phases/SolutionUnlock";
+import TryMyself from "./phases/TryMyself";
 const phases = {
   attempt: Attempt,
   steps: GuidedSteps,
@@ -20,6 +21,7 @@ const phases = {
   answer: Answer,
   hints: SolutionHints,
   unlock: SolutionUnlock,
+  retry: TryMyself,
 };
 export default function StudySession() {
   const { flow } = useAtlas();

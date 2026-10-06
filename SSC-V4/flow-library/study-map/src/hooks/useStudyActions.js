@@ -7,7 +7,7 @@ import {
   settleOnNote,
 } from "../lib/noteJourney";
 import { scrollBeforeNavigate } from "../lib/scrollBeforeNavigate";
-import { questions, readingRoute, checklist } from "../graph";
+import { questions, readingRoute, checklist, byName } from "../graph";
 export default function useStudyActions(state) {
   const advancing = useRef(false),
     current = useRef(state);
@@ -39,6 +39,9 @@ export default function useStudyActions(state) {
     setToast,
     reader,
     setSessions,
+    setTermAlert,
+    setPretest,
+    setMastered,
   } = state;
   function selectQuestion(q, { open = true } = {}) {
     if (flow.phase !== "attempt" || flow.attempt)
@@ -46,6 +49,7 @@ export default function useStudyActions(state) {
         ...old,
         [questionId]: archiveSession(old[questionId], flow, plan, checks),
       }));
+    setTermAlert([]);
     setQuestionId(q.id);
     setSelected(q.terms[0]);
     setSection(q.section);
@@ -59,7 +63,10 @@ export default function useStudyActions(state) {
     setNav(open ? "bank" : "atlas");
     setPlan([]);
     setChecks({});
-    setFlow(initialFlow(q.id));
+    // A new attempt starts clean, but the learner's written retry is their own work: keep it.
+    const prior = q.id === questionId ? flow : state.sessions?.[q.id]?.flow;
+    const fresh = initialFlow(q.id);
+    setFlow({ ...fresh, retry: prior?.retry || fresh.retry });
   }
   function nextQuestion() {
     const next = questions[questions.findIndex((q) => q.id === questionId) + 1];
@@ -82,6 +89,30 @@ export default function useStudyActions(state) {
     setReaderTab("note");
     setReaderResult(null);
     setMobileMenu(false);
+  }
+  /** Peek at a linked word: a small alert with its definition, no navigation. */
+  function showTerm(name) {
+    if (!byName[name]) return;
+    setTermAlert((stack) =>
+      stack[stack.length - 1] === name ? stack : [...stack, name].slice(-6),
+    );
+  }
+  const hideTerm = () => setTermAlert([]);
+  const backTerm = () => setTermAlert((stack) => stack.slice(0, -1));
+  function moveToTerm(name) {
+    setTermAlert([]);
+    openReader(name);
+  }
+  function recordPretest(name, value) {
+    setPretest((old) => (old[name] ? old : { ...old, [name]: value }));
+  }
+  /** Jump straight to the written retry of a finished question. */
+  function startRetry(q) {
+    selectQuestion(q);
+    setFlow((f) => ({ ...f, phase: "retry" }));
+  }
+  function masterQuestion(id) {
+    setMastered((old) => [...new Set([...old, id])]);
   }
   function makeChecklist(results = flow.results) {
     const failed = results
@@ -231,6 +262,13 @@ export default function useStudyActions(state) {
     nextQuestion,
     updateStatus,
     openReader,
+    showTerm,
+    hideTerm,
+    backTerm,
+    moveToTerm,
+    recordPretest,
+    startRetry,
+    masterQuestion,
     makeChecklist,
     beginRoute,
     finishReading,

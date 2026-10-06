@@ -28,6 +28,9 @@ export default function useReset(state) {
     state.setMapScreen("map");
     state.setMapPanelOpen(false);
     state.setSessions({});
+    state.setPretest({});
+    state.setMastered([]);
+    state.setTermAlert([]);
     state.setQuestionId(q.id);
     state.setSection(q.section);
     state.setSelected(q.terms[0]);

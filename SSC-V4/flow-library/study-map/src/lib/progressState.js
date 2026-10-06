@@ -13,6 +13,7 @@ const phases = new Set([
   "answer",
   "hints",
   "unlock",
+  "retry",
 ]);
 const statuses = new Set(["unknown", "known", "shaky"]);
 const hasQuestion = (id) => questions.some((q) => q.id === id);
@@ -26,6 +27,33 @@ const checks = (input) =>
   );
 const flags = (input) =>
   Array.isArray(input) ? input.slice(0, 200).map(Boolean) : [];
+const text = (value, max = 50000) =>
+  typeof value === "string" ? value.slice(0, max) : "";
+/** Written retry: own words, LaTeX, and which recall keywords have been unlocked. */
+const retryOf = (input, q) => {
+  const count = Array.isArray(q.keywords) ? q.keywords.length : 0;
+  return {
+    text: text(input?.text),
+    latex: text(input?.latex),
+    unlocked: Array.isArray(input?.unlocked)
+      ? [
+          ...new Set(
+            input.unlocked.filter(
+              (i) => Number.isInteger(i) && i >= 0 && i < count,
+            ),
+          ),
+        ]
+      : [],
+    revealed: input?.revealed === true,
+  };
+};
+/** Warm-up record: whether the first, unseen question was answered correctly. */
+const pretests = (input) =>
+  Object.fromEntries(
+    Object.entries(input || {}).filter(
+      ([n, v]) => byName[n] && ["right", "wrong", "skipped"].includes(v),
+    ),
+  );
 const clamp = (value, max) =>
   Math.max(0, Math.min(Math.floor(Number(value) || 0), Math.max(0, max)));
 
@@ -42,6 +70,7 @@ export function initialFlow(questionId) {
     retestResults: [],
     unlocked: [],
     unlockIndex: 0,
+    retry: { text: "", latex: "", unlocked: [], revealed: false },
   };
 }
 
@@ -80,6 +109,7 @@ function session(questionId, input = {}) {
       unlockIndex: clamp(f.unlockIndex, q.solutionBlocks.length - 1),
       examDraft:
         typeof f.examDraft === "string" ? f.examDraft.slice(0, 50000) : "",
+      retry: retryOf(f.retry, q),
     },
   };
 }
@@ -102,6 +132,10 @@ export function normalizeProgress(input = {}) {
       ? [...new Set(input.completed.filter((id) => hasQuestion(id)))]
       : [],
     read: names(input.read),
+    pretest: pretests(input.pretest),
+    mastered: Array.isArray(input.mastered)
+      ? [...new Set(input.mastered.filter((id) => hasQuestion(id)))]
+      : [],
     history: safeHistory(input.history),
     bookmarks: normalizeBookmarks(input.bookmarks),
     sessions: Object.fromEntries(

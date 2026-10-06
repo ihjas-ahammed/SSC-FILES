@@ -54,12 +54,21 @@ export default function useSessionState() {
   const [bookmarkIndex, setBookmarkIndex] = useState(0);
   const [mapScreen, setMapScreen] = useState("map"),
     [mapPanelOpen, setMapPanelOpen] = useState(false);
+  const [pretest, setPretest] = useState(saved.pretest || {}),
+    [mastered, setMastered] = useState(saved.mastered || []),
+    [termAlert, setTermAlert] = useState([]);
   const [history, setHistory] = useState(saved.history || []);
   const [sessions, setSessions] = useState(saved.sessions || {});
   const [preferences, setPreferences] = useState(
     saved.preferences || { animations: true },
   );
   return {
+    pretest,
+    setPretest,
+    mastered,
+    setMastered,
+    termAlert,
+    setTermAlert,
     bookmarks,
     setBookmarks,
     bookmarkIndex,
