@@ -151,6 +151,20 @@ if [ -n "$QM" ] && [ -f "$QM/build.py" ]; then
   cp "$STUDY_MAP" "$TMP/public/phy/quantum-mechanics/study-map/module-3/index.html"
   cp "$QM/study-map/THIRD-PARTY-NOTICES.txt" "$TMP/public/phy/quantum-mechanics/study-map/module-3/THIRD-PARTY-NOTICES.txt"
 
+  # Module 4: Schrödinger equation for 3D problems (same engine, own bundle).
+  if [ "$REBUILD_LIVE" = "1" ]; then
+    echo "Rebuilding the LIVE Module 4 study map from the shared engine ..."
+    (cd "$QM/study-map-4" && npm run build > /dev/null)
+  fi
+  STUDY_MAP4="$QM/study-map-4/build/index.html"
+  if [ ! -s "$STUDY_MAP4" ]; then
+    echo "ERROR: QM Module 4 study-map bundle missing. Run npm run build in $QM/study-map-4." >&2
+    exit 1
+  fi
+  mkdir -p "$TMP/public/phy/quantum-mechanics/study-map/module-4"
+  cp "$STUDY_MAP4" "$TMP/public/phy/quantum-mechanics/study-map/module-4/index.html"
+  cp "$QM/study-map-4/THIRD-PARTY-NOTICES.txt" "$TMP/public/phy/quantum-mechanics/study-map/module-4/THIRD-PARTY-NOTICES.txt"
+
   python3 "$QM/build.py" --mock > /dev/null
   mkdir -p "$TMP/public/phy/quantum-mechanics-test"
   cp "$QM/build/test/index.html" "$TMP/public/phy/quantum-mechanics-test/index.html"
@@ -366,6 +380,7 @@ echo "Quantum Mechanics study system:"
 echo "  → $BASE/phy/quantum-mechanics       (validated data)"
 echo "  → $BASE/phy/quantum-mechanics-test  (mock data — safe to break)"
 echo "  → $BASE/phy/quantum-mechanics/study-map/module-3/  (offline study map)"
+echo "  → $BASE/phy/quantum-mechanics/study-map/module-4/  (offline study map)"
 echo ""
 echo "Optics study system:"
 echo "  → $BASE/phy/optics       (validated data)"
