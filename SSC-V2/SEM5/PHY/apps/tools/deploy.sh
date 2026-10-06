@@ -208,6 +208,21 @@ if [ -d "$PROB_MAP" ]; then
   cp "$PROB_MAP/build/index.html" "$TMP/public/math/probability/study-map/module-1/index.html"
 fi
 
+# --- SSC-V4 Probability: Ross Ch. 2 (Module 2) stellar map, offline bundle ---
+PROB_MAP2="$REPO/SSC-V4/probability/study-map-2"
+if [ -d "$PROB_MAP2" ]; then
+  if [ "$REBUILD_LIVE" = "1" ]; then
+    echo "Rebuilding the LIVE Probability Module 2 study map from the shared engine ..."
+    (cd "$PROB_MAP2" && npm run build > /dev/null)
+  fi
+  if [ ! -s "$PROB_MAP2/build/index.html" ]; then
+    echo "ERROR: Probability Module 2 study-map bundle missing. Run npm run build in $PROB_MAP2." >&2
+    exit 1
+  fi
+  mkdir -p "$TMP/public/math/probability/study-map/module-2"
+  cp "$PROB_MAP2/build/index.html" "$TMP/public/math/probability/study-map/module-2/index.html"
+fi
+
 # --- SSC-V4 Probability: chapter checkpoints on shared flow-library ---
 PROB="$REPO/SSC-V4/probability"
 if [ -d "$PROB" ] && [ -f "$PROB/build.py" ]; then
@@ -358,6 +373,7 @@ echo "  → $BASE/phy/optics-test  (mock data — safe to break)"
 echo ""
 echo "Probability: $BASE/math/probability (Ross · GATE DA)"
 echo "  → $BASE/math/probability/study-map/module-1/  (Ross Ch. 1 stellar map)"
+echo "  → $BASE/math/probability/study-map/module-2/  (Ross Ch. 2 stellar map)"
 echo ""
 echo "SSLC study apps (Kerala SCERT, EN + മലയാളം):"
 for pair in physics chemistry biology maths; do
