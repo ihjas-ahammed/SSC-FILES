@@ -1385,11 +1385,16 @@ PROOFS['c.prob.4.7.2']['rungs'].extend([
 ])
 PROOFS['c.prob.4.7.2']['ends'] = 'Every positive-integer falling-factorial moment is λ^r; in particular the mean and variance are λ.'
 
-# Corrections found while deriving the proofs. Do not overwrite unrelated lesson fields.
-STATEMENTS = {
-    'c.prob.5.5.2': r'<p>The hazard describes the risk of failure per unit time among items still working. A high hazard after a given age means survivors are more likely to fail soon.</p><p>For a nonnegative lifetime with density $f$ and survival $S(t)=P(X>t)>0$, its hazard rate is $h(t)=f(t)/S(t)$. Since $S\prime(t)=-f(t)$ almost everywhere, $S(t)=\exp[-\int_0^t h(u)du]$ on intervals where survival is positive and $h$ is locally integrable. For a density lifetime $S(0)=1$; if survival reaches zero at a finite endpoint, the formula is interpreted by its limiting value there.</p>',
-    'c.prob.6.5.2': r'<p>For a jointly normal pair, knowing $Y$ shifts the predicted average of $X$ along a straight line. The remaining uncertainty is normal.</p><p>Assume $\sigma_X,\sigma_Y>0$. For $|\rho|<1$, $X\mid Y=y$ is normal with mean $\mu_X+\rho(\sigma_X/\sigma_Y)(y-\mu_Y)$ and variance $\sigma_X^2(1-\rho^2)$. When $|\rho|=1$, the same center describes a point-mass conditional law of variance zero; the nonsingular joint-density calculation does not apply.</p>',
-}
+# Enriched statements with Mathematical terms and Reasons for all 128 concepts.
+try:
+    from apply_statements import ALL_STATEMENTS
+    STATEMENTS = dict(ALL_STATEMENTS)
+except ImportError:
+    try:
+        from authoring.apply_statements import ALL_STATEMENTS
+        STATEMENTS = dict(ALL_STATEMENTS)
+    except ImportError:
+        STATEMENTS = {}
 
 ADVANCED = {
     'c.prob.8.3.1': 'The full proof uses Taylor expansion, dominated convergence and the characteristic-function continuity theorem. The standardization and algebra are derived here; the named analysis theorems are prerequisites beyond high school mathematics.',
