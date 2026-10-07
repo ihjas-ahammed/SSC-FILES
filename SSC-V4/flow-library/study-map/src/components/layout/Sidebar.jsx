@@ -69,17 +69,17 @@ export default function Sidebar() {
         <span>{sections.find((s) => s.id === section)?.tag}</span>
       </div>
       <div className="question-list">
-        {sectionList.map((q) => (
+        {sectionList.map((q, index) => (
           <button
             key={q.id}
             className={`question-item ${q.id === questionId ? "active" : ""}`}
             onClick={() => selectQuestion(q)}
           >
-            <span className="question-number">
+            <span className="question-number" title={`Source: ${q.number}`}>
               {completed.includes(q.id) ? (
                 <Check size={13} />
               ) : (
-                String(q.number).padStart(2, "0")
+                String(index + 1).padStart(2, "0")
               )}
             </span>
             <span>{q.title}</span>
