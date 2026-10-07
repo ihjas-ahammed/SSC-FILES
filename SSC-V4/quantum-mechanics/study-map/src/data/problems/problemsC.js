@@ -10,7 +10,7 @@ export default [
     symbol: r`A_{mn}=\langle m|\hat A|n\rangle`,
     prerequisites: ["Matrix Representation", "Orthonormal Basis", "Ket", "Bra", "Linear Operator", "Completeness Relation", "Matrix", "Coordinate"],
     ross: { n: "B8+B9+C3", label: "Module 3 · Section B Q8, Q9 and Section C Q3 (first bullet)", section: "C", page: 2 },
-    title: "Kets as columns, operators as square matrices",
+    title: "Kets as columns, operators as square tables of numbers",
     statement: r`In a discrete orthonormal basis $\{|\phi_n\rangle\}$, explain how a ket $|\psi\rangle$ is represented as a column matrix and an operator $\hat A$ as a square matrix. In particular: (a) write the matrix representation of $|\psi\rangle=a|1\rangle+b|2\rangle$ in the basis $\{|1\rangle,|2\rangle\}$; (b) find the matrix representation of $\hat A=2|1\rangle\langle1|+3|2\rangle\langle2|$.`,
     meaning: r`Once you fix an orthonormal basis, a ket is just a column of numbers and an operator is just a square table of numbers. Operators acting on kets become matrices multiplying columns.`,
     linkedFormal: r`Fix an ordered [[Orthonormal Basis|orthonormal basis]] $\{|\phi_1\rangle,\ldots,|\phi_n\rangle\}$. A [[Ket|ket]] is represented by the column of its [[Coordinate|coordinates]] $c_j=\langle\phi_j|\psi\rangle$. A [[Linear Operator|linear operator]] is represented by the square [[Matrix|matrix]] with entries $A_{mn}=\langle\phi_m|\hat A|\phi_n\rangle$, whose column $n$ holds the coordinates of $\hat A|\phi_n\rangle$. Then $\hat A|\psi\rangle$ is represented by the column $Ac$.`,
@@ -69,6 +69,7 @@ export default [
       },
     },
     question: {
+      plain: r`Explain how, after you choose a basis, a state becomes a column of numbers and an operator becomes a square table of numbers. Do it for the state $a|1\rangle+b|2\rangle$ and for the operator $2|1\rangle\langle1|+3|2\rangle\langle2|$.`,
       faq: [
         { q: r`What does "matrix representation" mean?`, a: r`A way of writing a ket or operator as numbers once an ordered basis is chosen. See [[Matrix Representation|Matrix Representation]].` },
         { q: r`Is the ket equal to its column?`, a: r`Not exactly. The ket is a vector in an abstract space; the column lists its coefficients in one chosen basis. A different basis gives a different column for the same ket.` },
@@ -109,7 +110,7 @@ export default [
     symbol: r`\begin{pmatrix}2&-i\\i&3\end{pmatrix}`,
     prerequisites: ["Matrix Representation of Kets and Operators", "Hermitian Operator", "Hermitian Adjoint", "Eigenvalue", "Secular Equation", "Determinant", "Trace", "Complex Number Arithmetic", "Polynomial Root"],
     ross: { n: "B12", label: "Module 3 · Section B Q12", section: "C", page: 2 },
-    title: "Matrix, Hermiticity and eigenvalues of a two-level operator",
+    title: "A worked example with a two-level operator",
     statement: r`In a two-dimensional Hilbert space spanned by the orthonormal basis $\{|1\rangle,|2\rangle\}$ an operator $\hat A$ acts as $\hat A|1\rangle=2|1\rangle+i|2\rangle$ and $\hat A|2\rangle=-i|1\rangle+3|2\rangle$. (The printed source repeats $\hat A|1\rangle$ in the second equation; the second equation can only be about $|2\rangle$.) (a) Construct the $2\times2$ matrix representation of $\hat A$. (b) Determine whether $\hat A$ is Hermitian. (c) Find the eigenvalues of $\hat A$.`,
     meaning: r`Turn the two rules into a matrix, test whether it equals its conjugate transpose, and solve $\det(A-\lambda I)=0$.`,
     linkedFormal: r`The matrix is $A=\begin{pmatrix}2&-i\\i&3\end{pmatrix}$ (columns are the images of $|1\rangle$ and $|2\rangle$). It is a [[Hermitian Operator|Hermitian]] matrix, $A^\dagger=A$, so its [[Eigenvalue|eigenvalues]] are real. The [[Secular Equation|secular equation]] $\det(A-\lambda I)=\lambda^2-5\lambda+5=0$ gives $\lambda_\pm=\dfrac{5\pm\sqrt5}2$, with sum $5=\operatorname{tr}A$ and product $5=\det A$.`,
@@ -138,7 +139,7 @@ export default [
       steps: [
         {
           title: "Build the matrix",
-          text: r`Column $1$ holds the coordinates of $\hat A|1\rangle=2|1\rangle+i|2\rangle$, which are $(2,\ i)$. Column $2$ holds the coordinates of $\hat A|2\rangle=-i|1\rangle+3|2\rangle$, which are $(-i,\ 3)$. Hence $A=\begin{pmatrix}2&-i\\i&3\end{pmatrix}$.`,
+          text: r`Column $1$ holds the coordinates of $\hat A|1\rangle=2|1\rangle+i|2\rangle$, which are $(2,\ i)$. Column $2$ holds the coordinates of $\hat A|2\rangle=-i|1\rangle+3|2\rangle$, which are $(-i,\ 3)$. So $A=\begin{pmatrix}2&-i\\i&3\end{pmatrix}$.`,
           check: chk(r`Which matrix has the images $\hat A|1\rangle$ and $\hat A|2\rangle$ as its columns?`, r`$\begin{pmatrix}2&-i\\i&3\end{pmatrix}$`, r`$\begin{pmatrix}2&i\\-i&3\end{pmatrix}$`, r`$\begin{pmatrix}2&-i\\3&i\end{pmatrix}$`, r`The first column is $(2,i)$ and the second is $(-i,3)$; the entries $i$ and $-i$ sit in the places they have in the rules. The second option has the images as rows instead.`, "Matrix Representation"),
         },
         {
@@ -148,7 +149,7 @@ export default [
         },
         {
           title: "Write the secular equation",
-          text: r`A nonzero eigenvector needs $\det(A-\lambda I)=0$. Here $A-\lambda I=\begin{pmatrix}2-\lambda&-i\\i&3-\lambda\end{pmatrix}$, so $\det(A-\lambda I)=(2-\lambda)(3-\lambda)-(-i)(i)$. Now $(-i)(i)=-i^2=1$. Therefore $\det(A-\lambda I)=\lambda^2-5\lambda+6-1=\lambda^2-5\lambda+5$.`,
+          text: r`A non-zero eigenvector needs $\det(A-\lambda I)=0$. Here $A-\lambda I=\begin{pmatrix}2-\lambda&-i\\i&3-\lambda\end{pmatrix}$, so $\det(A-\lambda I)=(2-\lambda)(3-\lambda)-(-i)(i)$. Now $(-i)(i)=-i^2=1$. Therefore $\det(A-\lambda I)=\lambda^2-5\lambda+6-1=\lambda^2-5\lambda+5$.`,
           check: chk(r`What is the product $(-i)(i)$?`, r`$1$`, r`$-1$`, r`$i$`, r`$(-i)(i)=-i^2$ and $i^2=-1$, so the product is $+1$.`, "Complex Number Arithmetic"),
         },
         {
@@ -168,6 +169,7 @@ export default [
       },
     },
     question: {
+      plain: r`An operator $\hat A$ is given by what it does to $|1\rangle$ and to $|2\rangle$. Write it as a $2\times2$ table of numbers, check whether it is Hermitian, and find its eigenvalues.`,
       faq: [
         { q: r`What does "matrix representation" mean here?`, a: r`The $2\times2$ table of numbers $A_{mn}=\langle m|\hat A|n\rangle$ that describes $\hat A$ in the basis $\{|1\rangle,|2\rangle\}$.` },
         { q: r`What does "Hermitian" mean for a matrix?`, a: r`The matrix equals its conjugate transpose, $A^\dagger=A$. See [[Hermitian Operator|Hermitian Operator]].` },
@@ -208,7 +210,7 @@ export default [
     symbol: r`A'=U^\dagger AU`,
     prerequisites: ["Matrix Representation of Kets and Operators", "Change of Basis", "Unitary Operator", "Orthonormal Basis", "Secular Equation", "Spectral Theorem", "Diagonal Matrix", "Trace Cyclicity", "Determinant", "Eigenvalue", "Hermitian Operator"],
     ross: { n: "B10+C3", label: "Module 3 · Section B Q10 and Section C Q3 (second to fourth bullets)", section: "C", page: 2 },
-    title: "How matrices change with the basis, and why eigenvalues do not",
+    title: "How the numbers change with the basis, and why eigenvalues do not",
     statement: r`(a) Show how the matrix of an operator transforms under a change of orthonormal basis. (b) Formulate the matrix eigenvalue problem $\hat A|\psi\rangle=\lambda|\psi\rangle$ as the secular equation $\det(A-\lambda I)=0$, and show that a unitary transformation $U$ diagonalizes a Hermitian matrix. (c) Prove that the trace and the eigenvalues of an operator are invariant under unitary transformations.`,
     meaning: r`The same operator has different matrices in different bases, related by $A'=U^\dagger AU$. A good choice of basis, the eigenbasis, makes the matrix diagonal. Trace and eigenvalues survive every such change.`,
     linkedFormal: r`If the new orthonormal basis vectors, written in the old basis, are the columns of $U$, then $U$ is [[Unitary Operator|unitary]] ($U^\dagger U=I$), coordinates change by $c'=U^\dagger c$, and matrices change by $A'=U^\dagger AU$. For a Hermitian $A$ with orthonormal eigenvectors as the columns of $U$, $U^\dagger AU=\operatorname{diag}(\lambda_1,\ldots,\lambda_n)$. Moreover $\operatorname{tr}A'=\operatorname{tr}A$ and $\det(A'-\lambda I)=\det(A-\lambda I)$, so all [[Eigenvalue|eigenvalues]] and their multiplicities are unchanged. See [[Change of Basis|Change of Basis]].`,
@@ -247,8 +249,8 @@ export default [
         },
         {
           title: "The eigenvalue problem gives the secular equation",
-          text: r`An eigenvector satisfies $Ac=\lambda c$, that is $(A-\lambda I)c=0$ with $c\ne0$. A nonzero vector is sent to zero only if the matrix $A-\lambda I$ is singular, and a square matrix is singular exactly when its determinant is zero. Hence $\det(A-\lambda I)=0$. This is the secular equation; its roots are the eigenvalues $\lambda_1,\ldots,\lambda_n$.`,
-          check: chk(r`Why must $\det(A-\lambda I)=0$ when $c\ne0$ solves $Ac=\lambda c$?`, r`$A-\lambda I$ sends a nonzero vector to zero, so it is singular`, r`Because $\lambda$ must be zero`, r`Because $A$ is unitary`, r`A matrix that kills a nonzero vector has no inverse, and only matrices with zero determinant have no inverse.`, "Secular Equation"),
+          text: r`An eigenvector satisfies $Ac=\lambda c$, that is $(A-\lambda I)c=0$ with $c\ne0$. A non-zero vector is sent to zero only if the matrix $A-\lambda I$ is singular, and a square matrix is singular exactly when its determinant is zero. So $\det(A-\lambda I)=0$. This is the secular equation; its roots are the eigenvalues $\lambda_1,\ldots,\lambda_n$.`,
+          check: chk(r`Why must $\det(A-\lambda I)=0$ when $c\ne0$ solves $Ac=\lambda c$?`, r`$A-\lambda I$ sends a non-zero vector to zero, so it is singular`, r`Because $\lambda$ must be zero`, r`Because $A$ is unitary`, r`A matrix that kills a non-zero vector has no inverse, and only matrices with zero determinant have no inverse.`, "Secular Equation"),
         },
         {
           title: "Diagonalize a Hermitian matrix",
@@ -272,6 +274,7 @@ export default [
       },
     },
     question: {
+      plain: r`(a) How does the table of numbers for an operator change when you switch to a different set of right-angled unit vectors? (b) Show how finding eigenvalues turns into solving $\det(A-\lambda I)=0$, and how a unitary matrix turns a Hermitian matrix into a diagonal one. (c) Show that the trace and the eigenvalues do not change under this switch.`,
       faq: [
         { q: r`What does "change of basis" mean?`, a: r`Describing the same vectors and operators with a different set of orthonormal basis vectors. The numbers in columns and matrices change, but the physics does not. See [[Change of Basis|Change of Basis]].` },
         { q: r`What does "unitary" mean?`, a: r`A matrix with $U^\dagger U=UU^\dagger=I$, so $U^{-1}=U^\dagger$ and inner products are preserved. See [[Unitary Operator|Unitary Operator]].` },
@@ -291,7 +294,7 @@ export default [
         "eigenvalue problem|eigenvalue equation",
         "secular equation|characteristic equation",
         "determinant zero|singular matrix|det of A minus lambda I",
-        "nonzero eigenvector",
+        "non-zero eigenvector",
         "hermitian matrix|hermitian",
         "orthonormal eigenvectors|eigenvectors as columns",
         "spectral theorem",
@@ -312,9 +315,9 @@ export default [
     name: "Position and Momentum Basis States",
     group: "waves",
     symbol: r`\langle x|p\rangle=\dfrac{e^{ipx/\hbar}}{\sqrt{2\pi\hbar}}`,
-    prerequisites: ["Continuous Basis", "Delta Function", "Completeness Relation", "Position Operator", "Momentum Operator", "Separable Differential Equation", "Plane Wave", "Commutator", "Planck Constant"],
+    prerequisites: ["Continuous Basis", "Delta Function", "Completeness Relation", "Position Operator", "Momentum Operator", "Separable Differential Equation", "Plane Wave", "Commutator", "Planck Constant", "Canonical Commutation Relation"],
     ross: { n: "C4", label: "Module 3 · Section C Q4", section: "C", page: 4 },
-    title: "Deriving the transformation function and the action of $\\hat x$ and $\\hat p$",
+    title: "Where the plane wave comes from, and what x and p do to wave functions",
     statement: r`(a) Define the continuous position basis $\{|x\rangle\}$ and momentum basis $\{|p\rangle\}$, stating their delta-function normalization and completeness relations. (b) By solving the momentum eigenvalue equation $\hat p|p\rangle=p|p\rangle$ in the position representation, derive the scalar product $\langle x|p\rangle=\dfrac{1}{\sqrt{2\pi\hbar}}e^{ipx/\hbar}$. (c) Using this result, prove that in position space $\hat x$ acts as multiplication by $x$ and $\hat p$ acts as $-i\hbar\,\partial/\partial x$. (The printed equation in the source is garbled; the intended starting point is the position-space momentum eigenvalue equation, stated below.)`,
     meaning: r`Position kets are labelled by a continuous number $x$, momentum kets by a continuous number $p$. The overlap between them is a plane wave, and this single formula turns $\hat p$ into a derivative.`,
     linkedFormal: r`The [[Continuous Basis|continuous bases]] satisfy $\langle x|x'\rangle=\delta(x-x')$, $\langle p|p'\rangle=\delta(p-p')$ and $\int|x\rangle\langle x|dx=I=\int|p\rangle\langle p|dp$. In position space the momentum eigenvalue equation is $-i\hbar\,u_p'(x)=p\,u_p(x)$ for $u_p(x)=\langle x|p\rangle$. It is a [[Separable Differential Equation|separable equation]] with solution $u_p=Ce^{ipx/\hbar}$, a [[Plane Wave|plane wave]]. The [[Delta Function|delta]] normalization fixes $|C|=1/\sqrt{2\pi\hbar}$. Then $\langle x|\hat x|\psi\rangle=x\psi(x)$ and $\langle x|\hat p|\psi\rangle=-i\hbar\,\psi'(x)$, which gives $[\hat x,\hat p]=i\hbar$.`,
@@ -337,14 +340,14 @@ export default [
       { q: r`Isn't it circular to use $-i\hbar\,d/dx$ to prove $\hat p=-i\hbar\,d/dx$?`, a: r`The position-space form of $\hat p$ is the postulate that fixes how momentum generates translations. What the derivation adds is a consistent, complete set of momentum eigenstates $\langle x|p\rangle$ with delta normalization. Then we check that expanding any state in them reproduces the same action, and that $[\hat x,\hat p]=i\hbar$ holds.` },
       { q: r`Why is $\langle x|p\rangle$ not normalized to $1$?`, a: r`Continuous basis states are not ordinary vectors of finite length; their "length" is a delta function. We normalize them to a delta function instead. See [[Continuous Basis|Continuous Basis]].` },
       { q: r`What is the phase of the constant $C$?`, a: r`It is a convention. Only $|C|$ is fixed. The usual choice makes $C$ real and positive, which is what we use.` },
-      { q: r`What conditions do we need for the final step?`, a: r`The state $\psi$ must be smooth enough for the derivative and the integral to be swapped, and its boundary terms must vanish when we integrate by parts to check that $\hat p$ is symmetric. We assume this, as in the source solution.` },
+      { q: r`What conditions do we need for the final step?`, a: r`The state $\psi$ must be smooth enough for the derivative and the integral to be swapped, and its boundary terms must be zero when we integrate by parts to check that $\hat p$ is symmetric. We assume this, as in the source solution.` },
     ],
     proof: {
       idea: r`Write the momentum eigenvalue equation in position space; it is a first-order equation whose solution is a plane wave. The delta normalization of the momentum states fixes the constant. Then expand any state in momentum states to see how $\hat x$ and $\hat p$ act.`,
       steps: [
         {
           title: "Define the continuous bases",
-          text: r`The position states $|x\rangle$ and momentum states $|p\rangle$ are labelled by real numbers. Instead of $\langle m|n\rangle=\delta_{mn}$ they satisfy $\langle x|x'\rangle=\delta(x-x')$ and $\langle p|p'\rangle=\delta(p-p')$. Instead of sums, completeness uses integrals: $\int_{-\infty}^{\infty}|x\rangle\langle x|\,dx=I=\int_{-\infty}^{\infty}|p\rangle\langle p|\,dp$. These kets are idealized: they are not normalizable vectors of the Hilbert space.`,
+          text: r`The position states $|x\rangle$ and momentum states $|p\rangle$ are labelled by real numbers. Instead of $\langle m|n\rangle=\delta_{mn}$ they satisfy $\langle x|x'\rangle=\delta(x-x')$ and $\langle p|p'\rangle=\delta(p-p')$. Instead of sums, completeness uses integrals: $\int_{-\infty}^{\infty}|x\rangle\langle x|\,dx=I=\int_{-\infty}^{\infty}|p\rangle\langle p|\,dp$. These kets are simplified, made-up: they are not normalizable vectors of the Hilbert space.`,
           check: chk(r`What does $\langle x|x'\rangle=\delta(x-x')$ express?`, r`Position states at different points are orthogonal, normalized to a delta function`, r`Every $|x\rangle$ has length exactly $1$`, r`The probability of finding the particle at $x'$ is $1$`, r`The delta function is zero for $x\ne x'$ and has unit integral, replacing the Kronecker delta of a discrete basis.`, "Continuous Basis"),
         },
         {
@@ -369,7 +372,7 @@ export default [
         },
         {
           title: "How the momentum operator acts",
-          text: r`Expand an arbitrary state with the momentum completeness relation: $\psi(x)=\int\langle x|p\rangle\langle p|\psi\rangle\,dp=\frac1{\sqrt{2\pi\hbar}}\int e^{ipx/\hbar}\phi(p)\,dp$. Since $\hat p|p\rangle=p|p\rangle$, $\langle x|\hat p|\psi\rangle=\int p\,\langle x|p\rangle\,\phi(p)\,dp=\frac1{\sqrt{2\pi\hbar}}\int p\,e^{ipx/\hbar}\phi(p)\,dp$. But $p\,e^{ipx/\hbar}=-i\hbar\,\frac d{dx}e^{ipx/\hbar}$, and the derivative can be taken outside the integral. So $\langle x|\hat p|\psi\rangle=-i\hbar\,\frac{d}{dx}\psi(x)$.`,
+          text: r`Expand an any state with the momentum completeness relation: $\psi(x)=\int\langle x|p\rangle\langle p|\psi\rangle\,dp=\frac1{\sqrt{2\pi\hbar}}\int e^{ipx/\hbar}\phi(p)\,dp$. Since $\hat p|p\rangle=p|p\rangle$, $\langle x|\hat p|\psi\rangle=\int p\,\langle x|p\rangle\,\phi(p)\,dp=\frac1{\sqrt{2\pi\hbar}}\int p\,e^{ipx/\hbar}\phi(p)\,dp$. But $p\,e^{ipx/\hbar}=-i\hbar\,\frac d{dx}e^{ipx/\hbar}$, and the derivative can be taken outside the integral. So $\langle x|\hat p|\psi\rangle=-i\hbar\,\frac{d}{dx}\psi(x)$.`,
           check: chk(r`Why can the factor $p$ inside the integral be replaced by $-i\hbar\,d/dx$ outside?`, r`Because $-i\hbar\,\dfrac d{dx}e^{ipx/\hbar}=p\,e^{ipx/\hbar}$ and $x$ is not integrated over`, r`Because $\phi(p)$ is a Gaussian`, r`Because $p$ is always equal to $\hbar$`, r`The $x$-dependence sits only in $e^{ipx/\hbar}$, and differentiating it with respect to $x$ and multiplying by $-i\hbar$ brings out exactly the factor $p$.`, "Exponential Function"),
         },
         {
@@ -384,6 +387,7 @@ export default [
       },
     },
     question: {
+      plain: r`Explain the position states $|x\rangle$ and the momentum states $|p\rangle$ and their rules. Then solve the equation $\hat p|p\rangle=p|p\rangle$ for wave functions of $x$ to find the overlap $\langle x|p\rangle=e^{ipx/\hbar}/\sqrt{2\pi\hbar}$. Finally show that in position language $\hat x$ means \"multiply by $x$\" and $\hat p$ means $-i\hbar\,d/dx$.`,
       faq: [
         { q: r`What is a continuous basis?`, a: r`A set of kets labelled by a continuous number, such as $|x\rangle$, normalized with a delta function instead of a Kronecker delta. See [[Continuous Basis|Continuous Basis]].` },
         { q: r`What does "completeness relation" say here?`, a: r`Integrating $|x\rangle\langle x|$ over all $x$ gives the identity operator, so you may insert it anywhere. The same holds for $|p\rangle\langle p|$. See [[Completeness Relation|Completeness Relation]].` },
@@ -397,7 +401,7 @@ export default [
         "momentum states|momentum eigenstates|p ket",
         "delta function normalization|dirac delta",
         "completeness relation|completeness|resolution of identity",
-        "not normalizable|generalized states|idealized kets",
+        "not normalizable|generalized states|simplified kets",
         "momentum eigenvalue equation|eigenvalue equation",
         "position representation|position space",
         "first-order differential equation|differential equation|separable equation",
@@ -423,9 +427,9 @@ export default [
     name: "Position and Momentum Wave Functions",
     group: "waves",
     symbol: r`\psi(x)\leftrightarrow\phi(p)`,
-    prerequisites: ["Position Representation", "Momentum Representation", "Continuous Basis", "Completeness Relation", "Conjugate Symmetry", "Fourier Transform", "Probability Density", "Planck Constant", "Wave Function", "Position and Momentum Basis States"],
+    prerequisites: ["Position Representation", "Momentum Representation", "Continuous Basis", "Completeness Relation", "Conjugate Symmetry", "Fourier Transform", "Probability Density", "Planck Constant", "Wave Function", "Position and Momentum Basis States", "Plancherel Theorem"],
     ross: { n: "A12-A15+B11+B13", label: "Module 3 · Section A Q12-Q15 and Section B Q11, Q13", section: "C", page: 3 },
-    title: "ψ(x) and φ(p) are a Fourier pair",
+    title: "The position and momentum wave functions are a Fourier pair",
     statement: r`For a state $|\psi\rangle$ define the position-space wave function $\psi(x)=\langle x|\psi\rangle$ and the momentum-space wave function $\phi(p)=\langle p|\psi\rangle$. Using the continuous completeness relation, show that $\psi(x)$ and $\phi(p)$ form a Fourier transform pair. Write the integral transformation from $\psi(x)$ to $\phi(p)$ and explain the physical meaning of $|\psi(x)|^2$ and $|\phi(p)|^2$.`,
     meaning: r`The same state can be described by a function of position or a function of momentum. The two functions are Fourier transforms of each other, and their squares are the probability densities for position and for momentum.`,
     linkedFormal: r`With $\langle x|p\rangle=(2\pi\hbar)^{-1/2}e^{ipx/\hbar}$, inserting [[Completeness Relation|completeness]] gives $\phi(p)=\dfrac1{\sqrt{2\pi\hbar}}\displaystyle\int_{-\infty}^{\infty}e^{-ipx/\hbar}\psi(x)\,dx$ and $\psi(x)=\dfrac1{\sqrt{2\pi\hbar}}\displaystyle\int_{-\infty}^{\infty}e^{ipx/\hbar}\phi(p)\,dp$. These are the forward and inverse [[Fourier Transform|Fourier transform]]. The [[Probability Density|probability densities]] are $|\psi(x)|^2$ for position and $|\phi(p)|^2$ for momentum; for a normalized state each integrates to $1$.`,
@@ -489,6 +493,7 @@ export default [
       },
     },
     question: {
+      plain: r`A state has a position wave function $\psi(x)$ and a momentum wave function $\phi(p)$. Show that each one is the Fourier transform of the other, write the formula that gives $\phi(p)$ from $\psi(x)$, and say what $|\psi(x)|^2$ and $|\phi(p)|^2$ mean.`,
       faq: [
         { q: r`What is the position-space wave function?`, a: r`The function $\psi(x)=\langle x|\psi\rangle$, the coefficient of the state along the position state $|x\rangle$. See [[Position Representation|Position Representation]].` },
         { q: r`What is the momentum-space wave function?`, a: r`The function $\phi(p)=\langle p|\psi\rangle$. See [[Momentum Representation|Momentum Representation]].` },

@@ -53,7 +53,7 @@ export default [
         },
         {
           title: "The lowering must stop, so the value is a whole number",
-          text: r`Start from an eigenvector $\psi$ with value $\lambda$ and apply $a$ again and again. As long as $a^k\psi\ne0$, it is an eigenvector with value $\lambda-k$, and by step 2 that value must be $\ge0$. So after at most $\lambda$ steps we reach a $k$ with $a^k\psi\ne0$ but $a^{k+1}\psi=0$. For that vector $0=\|a\,a^k\psi\|^2=(\lambda-k)\|a^k\psi\|^2$, which gives $\lambda=k$. Hence every eigenvalue of $N$ is a whole number $0,1,2,\dots$, and the vector $a^k\psi$ at the bottom satisfies $a|0\rangle=0$. Conversely, starting from this bottom state and applying $a^\dagger$ again and again never gives zero, so every whole number $n$ does occur.`,
+          text: r`Start from an eigenvector $\psi$ with value $\lambda$ and apply $a$ again and again. As long as $a^k\psi\ne0$, it is an eigenvector with value $\lambda-k$, and by step 2 that value must be $\ge0$. So after at most $\lambda$ steps we reach a $k$ with $a^k\psi\ne0$ but $a^{k+1}\psi=0$. For that vector $0=\|a\,a^k\psi\|^2=(\lambda-k)\|a^k\psi\|^2$, which gives $\lambda=k$. So every eigenvalue of $N$ is a whole number $0,1,2,\dots$, and the vector $a^k\psi$ at the bottom satisfies $a|0\rangle=0$. Conversely, starting from this bottom state and applying $a^\dagger$ again and again never gives zero, so every whole number $n$ does occur.`,
           check: chk(r`Why can the eigenvalue $\lambda$ of $a^\dagger a$ not be a non-integer such as $2.5$?`, r`Lowering by $a$ would reach $0.5$ and then $-0.5$, which is negative and impossible`, r`Because $a$ raises the value by one each time`, r`Because $\lambda$ must be an even number`, r`The lowering chain must end exactly at zero. A non-integer value would step past zero into a negative number.`, "Eigenvalue"),
         },
         {
@@ -73,6 +73,7 @@ export default [
       },
     },
     question: {
+      plain: r`Write the energy of a mass on a spring in quantum mechanics and list the allowed energies. Explain what the ground state and an excited state are. Use the ladder operators to work out the energies, and explain why the lowest energy is $\hbar\omega/2$ and never zero.`,
       faq: [
         { q: r`What is the potential-energy function of the harmonic oscillator?`, a: r`$V(x)=\tfrac12m\omega^2x^2=\tfrac12kx^2$ with $k=m\omega^2$. See [[Harmonic Oscillator Potential|harmonic oscillator potential]].` },
         { q: r`What does "ground state" mean, and what does "excited state" mean?`, a: r`The ground state is the lowest-energy state ($n=0$). An excited state is any state with higher energy ($n\ge1$).` },
@@ -158,9 +159,10 @@ export default [
       },
     },
     question: {
+      plain: r`Define the ladder operators $a$ and $a^\dagger$ and their commutator. Write position and momentum using them, say what each does to the state $|n\rangle$, and write the energy operator with them.`,
       faq: [
         { q: r`What is the definition of the ladder operators?`, a: r`$a=\sqrt{\tfrac{m\omega}{2\hbar}}(\hat X+\tfrac{i\hat P}{m\omega})$ and $a^\dagger$ is its adjoint, with $\hat X$ replaced as given. They satisfy $[a,a^\dagger]=1$.` },
-        { q: r`What is the commutation relation to state?`, a: r`$[a,a^\dagger]=1$, equivalently $aa^\dagger-a^\dagger a=1$.` },
+        { q: r`What is the commutation relation to state?`, a: r`$[a,a^\dagger]=1$, in other words $aa^\dagger-a^\dagger a=1$.` },
         { q: r`How do I write $\hat X$ and $\hat P$?`, a: r`$\hat X=\sqrt{\tfrac{\hbar}{2m\omega}}(a+a^\dagger)$ and $\hat P=i\sqrt{\tfrac{m\hbar\omega}{2}}(a^\dagger-a)$. The printed sign in the question is a typo.` },
         { q: r`Why are there square roots in $a|n\rangle=\sqrt n|n-1\rangle$?`, a: r`They keep the states normalized: the squared length of $a|n\rangle$ is $n$, so the factor must be $\sqrt n$.` },
         { q: r`How do the operators "connect the different energy eigenstates"?`, a: r`Each application of $a$ moves down one level and each application of $a^\dagger$ moves up one level. Starting from $|0\rangle$ and raising repeatedly reaches every state. See [[Number Operator|number operator]].` },
@@ -236,12 +238,13 @@ export default [
           check: chk(r`Using $\psi_0''=(\alpha^2x^2-\alpha)\psi_0$, what is the eigenvalue of $H$ on $\psi_0$?`, r`$\tfrac12\hbar\omega$`, r`$\hbar\omega$`, r`$0$`, r`The $x^2$ terms cancel and only $-\dfrac{\hbar^2}{2m}\cdot(-\alpha)=\tfrac12\hbar\omega$ is left.`, "Time-Independent Schrödinger Equation"),
         },
       ],
-      conclusion: r`The condition $a|0\rangle=0$ becomes $\psi_0'=-\tfrac{m\omega}{\hbar}x\,\psi_0$. Its solution is $C\,e^{-m\omega x^2/2\hbar}$, and normalization fixes $C=(m\omega/\pi\hbar)^{1/4}$. Hence $\psi_0(x)=\left(\tfrac{m\omega}{\pi\hbar}\right)^{1/4}e^{-m\omega x^2/2\hbar}$, which satisfies $H\psi_0=\tfrac12\hbar\omega\,\psi_0$. $\blacksquare$`,
+      conclusion: r`The condition $a|0\rangle=0$ becomes $\psi_0'=-\tfrac{m\omega}{\hbar}x\,\psi_0$. Its solution is $C\,e^{-m\omega x^2/2\hbar}$, and normalization fixes $C=(m\omega/\pi\hbar)^{1/4}$. So $\psi_0(x)=\left(\tfrac{m\omega}{\pi\hbar}\right)^{1/4}e^{-m\omega x^2/2\hbar}$, which satisfies $H\psi_0=\tfrac12\hbar\omega\,\psi_0$. $\blacksquare$`,
       example: {
         text: r`With $m\omega/\hbar=1$: $\psi_0=\pi^{-1/4}e^{-x^2/2}$, and $\int e^{-x^2}dx=\sqrt\pi$ gives $\int|\psi_0|^2dx=\pi^{-1/2}\sqrt\pi=1$. Also $\psi_0'=-x\psi_0$: at $x=1$ the slope is $-0.456$, which equals $-1\cdot\psi_0(1)$.`,
       },
     },
     question: {
+      plain: r`The lowest state is the one that the lowering operator turns into zero, $a|0\rangle=0$. Turn this into an equation for the wave function, solve it, and fix the constant so that the total probability is $1$.`,
       faq: [
         { q: r`What is the normalized ground-state wave function?`, a: r`$\psi_0(x)=\left(\tfrac{m\omega}{\pi\hbar}\right)^{1/4}e^{-m\omega x^2/2\hbar}$, a Gaussian centred at $x=0$.` },
         { q: r`What differential equation does $a|0\rangle=0$ give?`, a: r`$\Big(x+\tfrac{\hbar}{m\omega}\tfrac{d}{dx}\Big)\psi_0=0$, i.e. $\psi_0'=-\tfrac{m\omega}{\hbar}x\,\psi_0$.` },
@@ -270,7 +273,7 @@ export default [
     ross: { n: "A2·A3·A6·B2·B3·B5·C2", label: "Module 4 · Part A Q2, Q3, Q6 · Part B Q2, Q3, Q5 · Part C Q2", section: "A", page: 1 },
     title: "The first excited state: wave function, parity, nodes, orthogonality and probability density",
     statement: r`Write the normalized first-excited-state wave function in position space and obtain it by applying the creation operator $\hat a^\dagger$ to $\psi_0(x)$. State the parity of the ground state and of the first excited state, and the number of nodes of each. Sketch their qualitative forms and indicate the nodes. Show that $\psi_1$ is orthogonal to $\psi_0$. Compare the probability densities of the ground state and the first excited state, and explain their parity and node structure.`,
-    meaning: r`The first excited state is the ground-state Gaussian multiplied by $x$. It is odd, it vanishes at the centre, it has two humps, and it is automatically orthogonal to the even ground state.`,
+    meaning: r`The first excited state is the ground-state Gaussian multiplied by $x$. It is odd, it is zero at the centre, it has two humps, and it is automatically orthogonal to the even ground state.`,
     linkedFormal: r`With $\alpha=m\omega/\hbar$, $\psi_0=(\alpha/\pi)^{1/4}e^{-\alpha x^2/2}$ and $\psi_1=a^\dagger\psi_0=\left(\tfrac{\alpha}{\pi}\right)^{1/4}\sqrt{2\alpha}\;x\,e^{-\alpha x^2/2}$. The [[Parity of a Function|parity]] of $\psi_0$ is even ($+$) and of $\psi_1$ is odd ($-$). The ground state has no [[Node of a Wave Function|nodes]] and the first excited state has one, at $x=0$. Also $\int\psi_0\psi_1\,dx=0$, and $|\psi_1|^2$ has its two maxima at $x=\pm1/\sqrt\alpha=\pm\sqrt{\hbar/m\omega}$.`,
     example: r`With $\alpha=1$: $\psi_0=\pi^{-1/4}e^{-x^2/2}$ and $\psi_1=\pi^{-1/4}\sqrt2\,x\,e^{-x^2/2}$. At $x=1$, $\psi_1=0.751\cdot1.414\cdot0.607\approx0.644$, at $x=-1$ it is $-0.644$, and at $x=0$ it is $0$.`,
     pretest: {
@@ -306,8 +309,8 @@ export default [
         },
         {
           title: "Parity and nodes",
-          text: r`$\psi_0(-x)=\psi_0(x)$, so $\psi_0$ is even (parity $+1$), and $\psi_1(-x)=-\psi_1(x)$, so $\psi_1$ is odd (parity $-1$). The factor $e^{-\alpha x^2/2}$ is never zero, so the zeros of $\psi_0$ and $\psi_1$ come only from the other factors: $\psi_0$ has none (no [[Node of a Wave Function|nodes]]) and $\psi_1\propto x$ vanishes only at $x=0$, one node.`,
-          check: chk(r`Where are the nodes of $\psi_1(x)\propto x\,e^{-\alpha x^2/2}$?`, r`Only at $x=0$`, r`At $x=\pm1/\sqrt\alpha$`, r`There are none`, r`The exponential never vanishes, so the zero must come from the factor $x$.`, "Node of a Wave Function"),
+          text: r`$\psi_0(-x)=\psi_0(x)$, so $\psi_0$ is even (parity $+1$), and $\psi_1(-x)=-\psi_1(x)$, so $\psi_1$ is odd (parity $-1$). The factor $e^{-\alpha x^2/2}$ is never zero, so the zeros of $\psi_0$ and $\psi_1$ come only from the other factors: $\psi_0$ has none (no [[Node of a Wave Function|nodes]]) and $\psi_1\propto x$ is zero only at $x=0$, one node.`,
+          check: chk(r`Where are the nodes of $\psi_1(x)\propto x\,e^{-\alpha x^2/2}$?`, r`Only at $x=0$`, r`At $x=\pm1/\sqrt\alpha$`, r`There are none`, r`The exponential is never zero, so the zero must come from the factor $x$.`, "Node of a Wave Function"),
         },
         {
           title: "Orthogonality",
@@ -320,12 +323,13 @@ export default [
           check: chk(r`Where does $|\psi_1(x)|^2\propto x^2e^{-\alpha x^2}$ have its two maxima?`, r`At $x=\pm1/\sqrt\alpha=\pm\sqrt{\hbar/m\omega}$`, r`At $x=0$`, r`At $x=\pm\sqrt{2/\alpha}$`, r`The derivative of $x^2e^{-\alpha x^2}$ is $2x(1-\alpha x^2)e^{-\alpha x^2}$, which is zero at $x=0$ (a minimum) and $x=\pm1/\sqrt\alpha$ (the maxima).`, "Probability Density"),
         },
       ],
-      conclusion: r`Applying $a^\dagger$ to $\psi_0$ gives $\psi_1=\left(\tfrac{m\omega}{\pi\hbar}\right)^{1/4}\sqrt{\tfrac{2m\omega}{\hbar}}\;x\,e^{-m\omega x^2/2\hbar}$, which is normalized. The ground state is even with no nodes and the first excited state is odd with one node at $x=0$. Their product is odd, so the two states are orthogonal. $|\psi_0|^2$ has one peak at the centre, while $|\psi_1|^2$ vanishes at the centre and has two peaks at $x=\pm\sqrt{\hbar/m\omega}$. $\blacksquare$`,
+      conclusion: r`Applying $a^\dagger$ to $\psi_0$ gives $\psi_1=\left(\tfrac{m\omega}{\pi\hbar}\right)^{1/4}\sqrt{\tfrac{2m\omega}{\hbar}}\;x\,e^{-m\omega x^2/2\hbar}$, which is normalized. The ground state is even with no nodes and the first excited state is odd with one node at $x=0$. Their product is odd, so the two states are orthogonal. $|\psi_0|^2$ has one peak at the centre, while $|\psi_1|^2$ is zero at the centre and has two peaks at $x=\pm\sqrt{\hbar/m\omega}$. $\blacksquare$`,
       example: {
         text: r`With $\alpha=1$: $\psi_0(1)=\psi_0(-1)\approx0.456$, so $\psi_0(1)\psi_1(1)\approx0.456\cdot0.644$ and $\psi_0(-1)\psi_1(-1)\approx0.456\cdot(-0.644)$. These two values cancel in the integral, one pair at a time, which is why the total is $0$. For the densities, $|\psi_0(0)|^2\approx0.564$ but $|\psi_1(0)|^2=0$, while $|\psi_1(\pm1)|^2\approx0.415$ is larger than $|\psi_0(\pm1)|^2\approx0.208$.`,
       },
     },
     question: {
+      plain: r`Get the wave function of the first excited state by applying the raising operator to the ground state. Say whether each state is even or odd, where its zeros are, and show the two are at right angles. Compare their probability pictures.`,
       faq: [
         { q: r`What is the normalized first-excited-state wave function?`, a: r`$\psi_1(x)=\left(\tfrac{m\omega}{\pi\hbar}\right)^{1/4}\sqrt{\tfrac{2m\omega}{\hbar}}\;x\,e^{-m\omega x^2/2\hbar}$.` },
         { q: r`How many nodes do the ground and first excited states have?`, a: r`Zero and one. In general the $n$-th state has $n$ nodes.` },
@@ -337,7 +341,7 @@ export default [
         "first excited state|psi one|n equals one", "creation operator on the ground state|a dagger psi zero|raising operator", "x times a gaussian|x e to the minus m omega x squared over two h bar|odd times gaussian",
         "normalization constant|square root of 2 m omega over h bar|normalized", "parity|even or odd|symmetry under x to minus x", "ground state is even|even parity|plus one", "first excited state is odd|odd parity|minus one",
         "nodes|zeros of the wave function|number of nodes", "ground state has no nodes|zero nodes", "one node at the origin|node at x equals zero", "orthogonal|orthogonality|inner product is zero",
-        "odd integrand|integral of an odd function is zero|cancels", "probability density|absolute value squared|psi squared", "ground state density peaks at the centre|single hump", "first excited density vanishes at the origin|two humps",
+        "odd integrand|integral of an odd function is zero|cancels", "probability density|absolute value squared|psi squared", "ground state density peaks at the centre|single hump", "first excited density is zero at the origin|two humps",
         "maxima at plus or minus root h bar over m omega|x equals plus or minus 1 over root alpha", "sketch|qualitative shape", "different energies|distinct eigenvalues",
       ],
       retryPrompt: r`Without looking, obtain $\psi_1$ from $\psi_0$ with the creation operator, then explain its parity, nodes, orthogonality to $\psi_0$ and the shape of $|\psi_1|^2$ compared with $|\psi_0|^2$. Write the key formulas in the LaTeX box and recall the key words.`,

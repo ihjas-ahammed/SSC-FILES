@@ -39,8 +39,8 @@ export default [
       steps: [
         {
           title: "Write the equation and the walls",
-          text: r`Inside the box $V=0$, so the [[Time-Independent Schrödinger Equation|Schrödinger equation]] reads $-\dfrac{\hbar^2}{2m}\left(\dfrac{\partial^2\psi}{\partial x^2}+\dfrac{\partial^2\psi}{\partial y^2}+\dfrac{\partial^2\psi}{\partial z^2}\right)=E\psi$. Outside the box $V=\infty$, so $\psi=0$ there. Since $\psi$ is continuous, it must also vanish on every wall: [[Boundary Condition|boundary conditions]] $\psi=0$ at $x=0,L_x$, $y=0,L_y$ and $z=0,L_z$.`,
-          check: chk(r`Why must the wave function vanish on the walls of an infinite box?`, r`It is zero outside and the wave function is continuous`, r`The particle sits exactly on the wall`, r`The energy is zero on the wall`, r`An infinite potential forbids the particle outside. A continuous function that is zero just outside must be zero on the wall.`, "Boundary Condition"),
+          text: r`Inside the box $V=0$, so the [[Time-Independent Schrödinger Equation|Schrödinger equation]] reads $-\dfrac{\hbar^2}{2m}\left(\dfrac{\partial^2\psi}{\partial x^2}+\dfrac{\partial^2\psi}{\partial y^2}+\dfrac{\partial^2\psi}{\partial z^2}\right)=E\psi$. Outside the box $V=\infty$, so $\psi=0$ there. Since $\psi$ is continuous, it must also be zero on every wall: [[Boundary Condition|boundary conditions]] $\psi=0$ at $x=0,L_x$, $y=0,L_y$ and $z=0,L_z$.`,
+          check: chk(r`Why must the wave function be zero on the walls of an infinite box?`, r`It is zero outside and the wave function is continuous`, r`The particle sits exactly on the wall`, r`The energy is zero on the wall`, r`An infinite potential forbids the particle outside. A continuous function that is zero just outside must be zero on the wall.`, "Boundary Condition"),
         },
         {
           title: "Separate the variables",
@@ -74,8 +74,9 @@ export default [
       },
     },
     question: {
+      plain: r`A particle is trapped in a rectangular box with impenetrable walls. Find its allowed energies and wave functions, say which whole numbers are allowed, and check that the total probability is $1$.`,
       faq: [
-        { q: r`What does "infinite box" mean physically?`, a: r`The potential is zero inside and infinitely large outside, so the particle can never leave. The only condition is that the wave function vanishes on the walls.` },
+        { q: r`What does "infinite box" mean physically?`, a: r`The potential is zero inside and infinitely large outside, so the particle can never leave. The only condition is that the wave function is zero on the walls.` },
         { q: r`Do I have to solve a three-dimensional partial differential equation?`, a: r`No. The potential separates, so the problem breaks into three one-dimensional equations that you already know.` },
         { q: r`Which values of the quantum numbers are allowed?`, a: r`Each of $n_x,n_y,n_z$ is a positive integer, $1,2,3,\ldots$. Zero is excluded because it gives no wave function.` },
         { q: r`What does "verify the normalization" ask me to do?`, a: r`Integrate $|\psi|^2$ over the whole box and show the answer is $1$. Use the fact that the integral splits into three single integrals.` },
@@ -83,7 +84,7 @@ export default [
       ],
       keywords: [
         "rectangular box|three-dimensional box|3D box", "infinite potential|infinite walls|hard walls", "potential zero inside|V=0 inside|zero inside",
-        "wave function vanishes at walls|boundary conditions|psi equals zero at walls", "separation of variables|product wave function|X(x)Y(y)Z(z)",
+        "wave function is zero at walls|boundary conditions|psi equals zero at walls", "separation of variables|product wave function|X(x)Y(y)Z(z)",
         "separation constants|Ex Ey Ez|three constants", "energies add|total energy is the sum|E=Ex+Ey+Ez", "sine standing waves|sin(n pi x/L)|standing wave",
         "quantization condition|k L = n pi|kL=n pi", "quantum numbers|nx ny nz|three quantum numbers", "n starts at one|n=0 excluded|zero is not allowed",
         "energy eigenvalues|allowed energies|energy levels", "pi squared hbar squared over 2m|pi^2 hbar^2/2m", "normalization|normalised|probability one",
@@ -140,7 +141,7 @@ export default [
         },
         {
           title: "The cube",
-          text: r`For a cube $L_x=L_y=L_z=L$, so $E=\dfrac{\pi^2\hbar^2}{2mL^2}\left(n_x^2+n_y^2+n_z^2\right)$. This formula does not care about the order of the three numbers. Hence every reordering of $(n_x,n_y,n_z)$ gives the same energy. The reordered wave functions are different functions, since the sines in $x$, $y$, $z$ have different numbers of nodes. So $(1,1,2)$, $(1,2,1)$ and $(2,1,1)$, all with $E=6\epsilon$, are three states of one level. A triple with three different entries, like $(1,2,3)$, has six reorderings, and $(1,2,3)$ and $(3,2,1)$ are degenerate with $E=14\epsilon$.`,
+          text: r`For a cube $L_x=L_y=L_z=L$, so $E=\dfrac{\pi^2\hbar^2}{2mL^2}\left(n_x^2+n_y^2+n_z^2\right)$. This formula does not care about the order of the three numbers. So every reordering of $(n_x,n_y,n_z)$ gives the same energy. The reordered wave functions are different functions, since the sines in $x$, $y$, $z$ have different numbers of nodes. So $(1,1,2)$, $(1,2,1)$ and $(2,1,1)$, all with $E=6\epsilon$, are three states of one level. A triple with three different entries, like $(1,2,3)$, has six reorderings, and $(1,2,3)$ and $(3,2,1)$ are degenerate with $E=14\epsilon$.`,
           check: chk(r`In a cubic box, are the states $(1,2,3)$ and $(3,2,1)$ degenerate?`, r`Yes, both have $n_x^2+n_y^2+n_z^2=14$`, r`No, their quantum numbers differ`, r`No, because $3>1$`, r`Degeneracy means equal energy. Both sums of squares equal $14$, so the states are degenerate.`, "Eigenvalue"),
         },
         {
@@ -160,6 +161,7 @@ export default [
       },
     },
     question: {
+      plain: r`What does it mean for an energy level to be degenerate? Explain why a cube has more degenerate levels than a box with unequal sides, show the lowest state is not degenerate, and decide whether $(1,2,3)$ and $(3,2,1)$ share the same energy in a cube.`,
       faq: [
         { q: r`What does degeneracy mean?`, a: r`Several independent states with exactly the same energy. See [[Degeneracy|degeneracy]].` },
         { q: r`How many questions am I answering?`, a: r`Four parts: define degeneracy, explain cube versus rectangle, show the ground state is nondegenerate, and give example states in a cube.` },
@@ -249,6 +251,7 @@ export default [
       },
     },
     question: {
+      plain: r`For a cubic box find the lowest energy and the next three different energy levels with how many states each has. Find how many states have $n_x^2+n_y^2+n_z^2=14$ and why $(1,1,2)$, $(1,2,1)$, $(2,1,1)$ have equal energy.`,
       faq: [
         { q: r`Why is the energy written in units of $\pi^2\hbar^2/2mL^2$?`, a: r`Then the energy of each state is just the integer $S=n_x^2+n_y^2+n_z^2$, which is easy to list and compare.` },
         { q: r`Is "first three levels" the same as "first three states"?`, a: r`No. A level is one energy value, and it may contain several states. The first three levels have $1+3+3=7$ states in all.` },
@@ -308,7 +311,7 @@ export default [
         },
         {
           title: "Three one-dimensional equations",
-          text: r`With $\psi=X(x)Y(y)Z(z)$ the equation $H\psi=E\psi$ becomes $H_xX=E_xX$, $H_yY=E_yY$, $H_zZ=E_zZ$ with $E=E_x+E_y+E_z$. Each is a one-dimensional harmonic oscillator, of frequency $\omega_x$, $\omega_y$, $\omega_z$ respectively.`,
+          text: r`With $\psi=X(x)Y(y)Z(z)$ the equation $H\psi=E\psi$ becomes $H_xX=E_xX$, $H_yY=E_yY$, $H_zZ=E_zZ$ with $E=E_x+E_y+E_z$. Each is a one-dimensional harmonic oscillator, of frequency $\omega_x$, $\omega_y$, $\omega_z$ (in that order).`,
           check: chk(r`After separation, which frequency does the $y$-equation use?`, r`$\omega_y$`, r`$\omega_x$`, r`The average of the three frequencies`, r`Each direction keeps its own spring, so $Y$ solves the oscillator equation with $\omega_y$.`, "Hamiltonian"),
         },
         {
@@ -338,6 +341,7 @@ export default [
       },
     },
     question: {
+      plain: r`A 3D oscillator has a different spring strength in each direction. Write its potential, find its energies from the 1D energies, write its wave functions as products, and say what $n_x,n_y,n_z$ mean.`,
       faq: [
         { q: r`What does anisotropic mean?`, a: r`The spring constants, or frequencies, differ between directions. If all three are equal the oscillator is isotropic.` },
         { q: r`Do I need to solve a new differential equation?`, a: r`No. The potential is a sum, so the equation separates into three one-dimensional oscillator equations that are already solved.` },
@@ -428,6 +432,7 @@ export default [
       },
     },
     question: {
+      plain: r`For a 3D oscillator with the same spring in every direction, show the energy is $\hbar\omega(N+\tfrac32)$ and that there are $\tfrac{(N+1)(N+2)}2$ states at level $N$. List the lowest levels and compare with the cube and the unequal-spring oscillator.`,
       faq: [
         { q: r`What does isotropic mean?`, a: r`The same in all directions: the three frequencies are equal, $V=\tfrac12m\omega^2r^2$.` },
         { q: r`How do I get the degeneracy formula?`, a: r`Count the ordered triples of non-negative integers with sum $N$. A direct sum over $n_x$ or stars and bars gives $\frac{(N+1)(N+2)}{2}$.` },

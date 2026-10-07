@@ -1,13 +1,15 @@
 import { strip } from "./dsl.js";
-import ground from "./concepts/ground.json" with { type: "json" };
-import spaces from "./concepts/spaces.json" with { type: "json" };
-import states from "./concepts/states.json" with { type: "json" };
-import operators from "./concepts/operators.json" with { type: "json" };
-import eigen from "./concepts/eigen.json" with { type: "json" };
-import matrices from "./concepts/matrices.json" with { type: "json" };
-import waves from "./concepts/waves.json" with { type: "json" };
-import uncertainty from "./concepts/uncertainty.json" with { type: "json" };
-import notation from "./concepts/notation.json" with { type: "json" };
+import ground from "./notes/ground.js";
+import spacesA from "./notes/spacesA.js";
+import spacesB from "./notes/spacesB.js";
+import states from "./notes/states.js";
+import operators from "./notes/operators.js";
+import eigen from "./notes/eigen.js";
+import matrices from "./notes/matrices.js";
+import wavesA from "./notes/wavesA.js";
+import wavesB from "./notes/wavesB.js";
+import uncertainty from "./notes/uncertainty.js";
+import notation from "./notes/notation.js";
 import supportsA from "./problems/supportsA.js";
 import supportsB from "./problems/supportsB.js";
 import supportsC from "./problems/supportsC.js";
@@ -20,8 +22,8 @@ import metadata from "./metadata.json" with { type: "json" };
 // 16 unique problems. Each problem is its own concept; its question, guided
 // steps and unlockable solution are all derived from it and cannot disagree.
 const base = [
-  ...ground, ...spaces, ...states, ...operators, ...eigen,
-  ...matrices, ...waves, ...uncertainty, ...notation,
+  ...ground, ...spacesA, ...spacesB, ...states, ...operators, ...eigen,
+  ...matrices, ...wavesA, ...wavesB, ...uncertainty, ...notation,
 ];
 const supports = [...supportsA, ...supportsB, ...supportsC];
 const problems = [...problemsA, ...problemsB, ...problemsC];

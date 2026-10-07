@@ -1,13 +1,18 @@
 import { strip } from "./dsl.js";
-import ground from "../../../study-map/src/data/concepts/ground.json" with { type: "json" };
-import spaces from "../../../study-map/src/data/concepts/spaces.json" with { type: "json" };
-import states from "../../../study-map/src/data/concepts/states.json" with { type: "json" };
-import operators from "../../../study-map/src/data/concepts/operators.json" with { type: "json" };
-import eigen from "../../../study-map/src/data/concepts/eigen.json" with { type: "json" };
-import matrices from "../../../study-map/src/data/concepts/matrices.json" with { type: "json" };
-import waves from "../../../study-map/src/data/concepts/waves.json" with { type: "json" };
-import uncertainty from "../../../study-map/src/data/concepts/uncertainty.json" with { type: "json" };
-import notation from "../../../study-map/src/data/concepts/notation.json" with { type: "json" };
+// The foundations are the Module 3 notes, shared rather than copied, so a note fixed there is fixed here.
+import ground from "../../../study-map/src/data/notes/ground.js";
+import spacesA from "../../../study-map/src/data/notes/spacesA.js";
+import spacesB from "../../../study-map/src/data/notes/spacesB.js";
+import states from "../../../study-map/src/data/notes/states.js";
+import operators from "../../../study-map/src/data/notes/operators.js";
+import eigen from "../../../study-map/src/data/notes/eigen.js";
+import matrices from "../../../study-map/src/data/notes/matrices.js";
+import wavesA from "../../../study-map/src/data/notes/wavesA.js";
+import wavesB from "../../../study-map/src/data/notes/wavesB.js";
+import uncertainty from "../../../study-map/src/data/notes/uncertainty.js";
+import notation from "../../../study-map/src/data/notes/notation.js";
+import sharedPowerSeries from "../../../study-map/src/data/problems/supportsA.js";
+import sharedSeparable from "../../../study-map/src/data/problems/supportsC.js";
 import supportsBase from "./problems/supportsBase.js";
 import supportsP1 from "./problems/supportsP1.js";
 import supportsP5 from "./problems/supportsP5.js";
@@ -21,8 +26,9 @@ import metadata from "./metadata.json" with { type: "json" };
 // course is 13 unique problems. Each problem is its own concept; its question, guided
 // steps and unlockable solution are all derived from it and cannot disagree.
 const base = [
-  ...ground, ...spaces, ...states, ...operators, ...eigen,
-  ...matrices, ...waves, ...uncertainty, ...notation,
+  ...ground, ...spacesA, ...spacesB, ...states, ...operators, ...eigen,
+  ...matrices, ...wavesA, ...wavesB, ...uncertainty, ...notation,
+  ...sharedPowerSeries, ...sharedSeparable,
 ];
 const supports = [...supportsBase, ...supportsP1, ...supportsP5, ...supportsP9];
 const problems = [...problemsA, ...problemsB, ...problemsC];

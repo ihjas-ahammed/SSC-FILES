@@ -4,14 +4,14 @@ import katex from "katex";
 import base from "../src/data/problems/supportsBase.js";
 import { linkedNames } from "../../../flow-library/study-map/src/lib/glossary.js";
 
-const dir = "../study-map/src/data/concepts/";
-const existing = fs.readdirSync(dir).flatMap((f) => JSON.parse(fs.readFileSync(dir + f, "utf8")));
+import { sharedNotes } from "./shared-notes.mjs";
+const existing = sharedNotes;
 const names = new Set(existing.map((c) => c.name));
 const prompts = new Set(existing.map((c) => c.check.prompt));
 let n = 0;
 const ok = (c, m) => (assert.ok(c, m), n++);
 
-const wanted = ["Hamiltonian", "Time-Independent Schrödinger Equation", "Stationary State", "Harmonic Oscillator Potential", "Gaussian Integral", "Parity of a Function", "Node of a Wave Function", "Infinite Square Well", "Separation of Variables", "Zero-Point Energy", "Number Operator", "Counting Solutions of a Sum"];
+const wanted = ["Hamiltonian", "Time-Independent Schrödinger Equation", "Stationary State", "Harmonic Oscillator Potential", "Gaussian Integral", "Parity of a Function", "Node of a Wave Function", "Infinite Square Well", "Separation of Variables", "Zero-Point Energy", "Number Operator", "Counting Solutions of a Sum", "Boundary Condition"];
 ok(base.map((c) => c.name).join("|") === wanted.join("|"), "names match the brief exactly");
 const mine = new Set(base.map((c) => c.name));
 const groups = new Set(["notation", "spaces", "states", "operators", "eigen", "matrices", "waves", "uncertainty", "ground"]);

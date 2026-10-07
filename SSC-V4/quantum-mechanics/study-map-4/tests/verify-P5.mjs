@@ -9,9 +9,10 @@ import { strip } from "../src/data/dsl.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(here, "../../study-map/src/data/concepts");
-const existing = fs.readdirSync(dir).filter((f) => f.endsWith(".json")).flatMap((f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")));
+import { sharedNotes } from "./shared-notes.mjs";
+const existing = sharedNotes;
 // Names written by the other Module 4 forks (agreed interface).
-const shared = ["Hamiltonian", "Time-Independent Schrödinger Equation", "Stationary State", "Harmonic Oscillator Potential", "Gaussian Integral", "Parity of a Function", "Node of a Wave Function", "Infinite Square Well", "Separation of Variables", "Zero-Point Energy", "Number Operator", "Counting Solutions of a Sum"];
+const shared = ["Hamiltonian", "Time-Independent Schrödinger Equation", "Stationary State", "Harmonic Oscillator Potential", "Gaussian Integral", "Parity of a Function", "Node of a Wave Function", "Infinite Square Well", "Separation of Variables", "Zero-Point Energy", "Number Operator", "Counting Solutions of a Sum", "Boundary Condition"];
 const earlier = ["Oscillator Energy Levels from Ladder Operators", "Ladder Operator Action on Number States", "Oscillator Ground State from the Lowering Condition", "First Excited State of the Oscillator"];
 const names = new Set([...existing.map((c) => c.name), ...supports.map((c) => c.name), ...shared, ...earlier]);
 const ownNames = new Set(problems.map((p) => p.name));

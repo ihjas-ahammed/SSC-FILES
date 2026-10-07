@@ -41,3 +41,23 @@ Bookmarks in the header (and mobile navigation) form an ordered review notebook:
 `npm run test:appearance` verifies theme persistence, compact symbol padding, the central foundation constellation, slow/paused orbits, mobile width, and a real PDF download. Light theme is available in App settings. Both themes and the PDF exporter are included in the standalone offline HTML.
 
 The header follows the selected tab. On mobile, the map heading and subtitle follow the selected concept, and the stellar map starts another 10% more zoomed in on both mobile and desktop (105.6px mobile reading focus and 70.4px desktop). Incoming dependencies are blue, outgoing dependencies are soft red, and completed connections stay green, including hover and circulating particles. `npm run test:selected-map` checks these behaviors at 320px, 390px and desktop widths, in both themes; it also runs against the standalone HTML with networking disabled.
+
+
+## Notes: how they are written and checked (October 2026 rewrite)
+
+All foundation notes now live in `src/data/notes/*.js` (one file per topic group) instead of the old `concepts/*.json`. Module 4 imports the same files, so a note fixed here is fixed there.
+
+Rules for every note:
+
+- Plain English a beginner can follow. No unexplained jargon; each symbol is explained where it appears.
+- A separate warm-up (`pretest`, asked before reading) and after-reading `check`. They must be different questions with different right answers.
+- At least two FAQs.
+- A `proof` for every theorem-type note, written down to the smallest step. A smaller theorem a proof leans on is its own note with its own proof (for example Basis Size Theorem, Rules for the Adjoint, Commutator Identities, Plancherel Theorem). Proofs follow Griffiths 3e and Zettili 2e (Theorems 2.1-2.5, the Robertson relation, Plancherel) and say which facts are accepted without proof.
+- Notes shared with Module 4 must not link to Module 3 exercise notes.
+- Every exercise has `question.plain`, shown as "In simple words", and a title with no LaTeX.
+
+Checks: `npm run test:notes` (math renders, warm-up differs from check, FAQ and proof present, hard words and long sentences flagged), `npm run test:numbers` (59 numeric checks of the worked examples), `npm run test:walkthrough` (real Chrome walkthrough; set `STUDY_MAP_TMPDIR=/tmp/x` on deep paths).
+
+## Study route
+
+After the learner switches concepts off, the reading route holds only those concepts plus ancestors the learner also judged as not known. Untouched ancestors and everything under a known concept are skipped (`readingRoute(..., { focused: true })` in the shared engine). Switching off five concepts used to give routes of 43-86 notes; it now gives 5.

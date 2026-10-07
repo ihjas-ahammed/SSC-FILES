@@ -8,6 +8,7 @@ const sectionLabelOf = (id) =>
 import { useAtlas } from "../../../app/AtlasContext";
 import MathText from "../../ui/MathText";
 import FaqList from "../FaqList";
+import PlainWords from "../PlainWords";
 
 export default function Attempt() {
   const { question, setModal, flow, setFlow, makeChecklist, preferences } =
@@ -25,6 +26,7 @@ export default function Attempt() {
       <div className="source-question">
         <MathText text={question.text} />
       </div>
+      <PlainWords text={question.plain} />
       <FaqList
         items={question.faq}
         title="Before you start: questions you might be asking"

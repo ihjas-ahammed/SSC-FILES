@@ -1,4 +1,4 @@
-import { idea } from "../dsl.js";
+import { idea, chk } from "../dsl.js";
 const r = String.raw;
 
 // Shared ideas for Module 4 (the oscillator, boxes and separation of variables).
@@ -29,6 +29,16 @@ export default [
       { q: r`Why is the energy an operator?`, a: r`In quantum mechanics every measurable quantity is an operator, and its eigenvalues are the values a measurement can give. For energy, the operator is $\hat H$.` },
       { q: r`Is $\hat H$ always $\hat p^2/2m+V$?`, a: r`For one particle moving in a potential, yes. The kinetic part never changes; only the potential $V$ differs from one problem to the next.` },
     ],
+    proof: {
+      idea: r`$\hat H$ is a sum of two parts. Show that each part is Hermitian, then use that a sum of Hermitian operators is Hermitian.`,
+      steps: [
+        { title: "The kinetic part", text: r`$\hat p$ is Hermitian, so $(\hat p^2)^\dagger=(\hat p\hat p)^\dagger=\hat p^\dagger\hat p^\dagger=\hat p\hat p=\hat p^2$, using the rule $(AB)^\dagger=B^\dagger A^\dagger$ ([[Rules for the Adjoint|Rules for the Adjoint]]). Dividing by the real number $2m$ keeps this true.` },
+        { title: "The potential part", text: r`$V(\hat x)$ multiplies the wave function by the real number $V(x)$. Since $V(x)^*=V(x)$, $\langle\phi|V\psi\rangle=\int\phi^*V\psi\,dx=\int(V\phi)^*\psi\,dx=\langle V\phi|\psi\rangle$.` },
+        { title: "Add them", text: r`$(\hat A+\hat B)^\dagger=\hat A^\dagger+\hat B^\dagger$. So $\hat H^\dagger=\tfrac{\hat p^2}{2m}+V(\hat x)=\hat H$.` },
+      ],
+      conclusion: r`$\hat H$ is Hermitian, so its eigenvalues, the possible energies, are real numbers. $\blacksquare$`,
+      example: { text: r`For a free particle $V=0$ and $\hat H=\hat p^2/2m$. Its eigenvalue on $e^{ikx}$ is $\hbar^2k^2/2m$, which is real, as the result says.` },
+    },
   }),
 
   idea({
@@ -57,6 +67,18 @@ export default [
       { q: r`Why "time-independent"?`, a: r`It describes states of definite energy, whose probabilities do not change with time. The full time-dependent equation only adds the factor $e^{-iEt/\hbar}$.` },
       { q: r`Why are only some energies allowed?`, a: r`Most solutions blow up or do not fit the boundary conditions. Only special values of $E$ give a wave function that stays finite and can be normalised.` },
     ],
+    proof: {
+      idea: r`Start from the full equation that has time in it. Try a product of a function of $x$ and a function of $t$. Both sides must equal the same constant, and that constant is the energy.`,
+      steps: [
+        { title: "The full equation", text: r`$i\hbar\,\dfrac{\partial\Psi}{\partial t}=\hat H\Psi$, where $\hat H$ acts on $x$ only and does not depend on time.` },
+        { title: "Try a product", text: r`Put $\Psi(x,t)=\psi(x)\,\varphi(t)$. Then $i\hbar\,\psi\,\varphi'=\varphi\,\hat H\psi$.` },
+        { title: "Divide by $\\psi\\varphi$", text: r`$i\hbar\,\dfrac{\varphi'(t)}{\varphi(t)}=\dfrac{\hat H\psi(x)}{\psi(x)}$. The left side depends on $t$ only and the right side on $x$ only.` },
+        { title: "Both sides are the same constant", text: r`A function of $t$ that always equals a function of $x$ must be a constant, called $E$ (see [[Separation Constant|Separation Constant]]). So $\hat H\psi=E\psi$.` },
+        { title: "The time part", text: r`$i\hbar\,\varphi'=E\varphi$, so $\varphi(t)=e^{-iEt/\hbar}$ (see [[Separable Differential Equation|Separable Differential Equation]] with $k=-iE/\hbar$).` },
+      ],
+      conclusion: r`A state of definite energy obeys $\hat H\psi=E\psi$, and in time it is $\psi(x)e^{-iEt/\hbar}$. $\blacksquare$`,
+      example: { text: r`For a free particle, $\psi=e^{ikx}$ and $E=\hbar^2k^2/2m$. The full solution is $e^{ikx-iEt/\hbar}$. Check: $i\hbar\partial_t$ gives $E\Psi$ and $\hat H$ gives $\tfrac{\hbar^2k^2}{2m}\Psi$.` },
+    },
   }),
 
   idea({
@@ -85,6 +107,17 @@ export default [
       { q: r`Does "stationary" mean the particle is at rest?`, a: r`No. It means the probability density and all expectation values stay fixed. The phase still turns.` },
       { q: r`What is not stationary?`, a: r`A superposition of two different energies. Its density changes with time because the two phases turn at different rates.` },
     ],
+    proof: {
+      idea: r`Write the time factor next to its conjugate. Its size is $1$, so it cancels in any probability or average.`,
+      steps: [
+        { title: "Set up", text: r`$\Psi_n(x,t)=\psi_n(x)\,e^{-iE_nt/\hbar}$ with real $E_n$.` },
+        { title: "The probability density", text: r`$|\Psi_n|^2=\Psi_n^*\Psi_n=\psi_n^*e^{+iE_nt/\hbar}\;\psi_ne^{-iE_nt/\hbar}=|\psi_n|^2$, because $e^{+i\theta}e^{-i\theta}=1$.` },
+        { title: "An average of a quantity that does not depend on time", text: r`Let $\hat A$ act only on $x$. Then $\langle\hat A\rangle=\int\Psi_n^*\hat A\Psi_n\,dx=\int\psi_n^*e^{iE_nt/\hbar}\,\hat A\psi_n\,e^{-iE_nt/\hbar}\,dx$. The two phase factors are numbers (they do not depend on $x$), so they come out of $\hat A$ and cancel.` },
+        { title: "Result", text: r`$\langle\hat A\rangle=\int\psi_n^*\hat A\psi_n\,dx$, with no $t$ left in it.` },
+      ],
+      conclusion: r`In a stationary state, the probability density and every expectation value are constant in time. $\blacksquare$`,
+      example: { text: r`For the oscillator ground state, $\langle x^2\rangle=\tfrac{\hbar}{2m\omega}$ at every time $t$.` },
+    },
   }),
 
   idea({
@@ -113,6 +146,17 @@ export default [
       { q: r`Why is this potential so important?`, a: r`Near the bottom of almost any smooth well the potential looks like a parabola. So small vibrations of molecules, crystals and fields are all oscillators.` },
       { q: r`What is $\omega$ here?`, a: r`It is the angular frequency a classical mass would have on the spring, $\omega=\sqrt{k/m}$. In quantum mechanics it sets the energy spacing $\hbar\omega$.` },
     ],
+    proof: {
+      idea: r`Near the bottom of a smooth well, replace the potential by the first terms of its power series. The slope there is zero, so what remains is a parabola.`,
+      steps: [
+        { title: "Expand around the bottom", text: r`Let $V$ have its lowest point at $x_0$. For small $x-x_0$, $V(x)\approx V(x_0)+V'(x_0)(x-x_0)+\tfrac12V''(x_0)(x-x_0)^2$ (a [[Power Series|power series]] cut short).` },
+        { title: "The slope at the bottom is zero", text: r`At a minimum of a smooth function, $V'(x_0)=0$. So the middle term is gone.` },
+        { title: "Shift the zero of energy and position", text: r`Measure energy from $V(x_0)$ and position from $x_0$. Then $V(x)\approx\tfrac12k\,x^2$ with $k=V''(x_0)$, and $k>0$ for a true minimum.` },
+        { title: "Match with a spring", text: r`Writing $k=m\omega^2$ gives $V(x)=\tfrac12m\omega^2x^2$ with $\omega=\sqrt{k/m}$.` },
+      ],
+      conclusion: r`Every smooth well with a curved bottom looks like a harmonic oscillator for small motions. $\blacksquare$`,
+      example: { text: r`For $V(x)=1-\cos x$ near $x=0$: $V''(0)=1$, so $V\approx\tfrac12x^2$. At $x=0.1$: $1-\cos0.1=0.004996$ and $\tfrac12(0.1)^2=0.005$.` },
+    },
   }),
 
   idea({
@@ -141,6 +185,19 @@ export default [
       { q: r`Why does the answer have $\sqrt\pi$ in it?`, a: r`The usual proof squares the integral and switches to polar coordinates, where a circle brings in $\pi$. The square root of that is $\sqrt\pi$.` },
       { q: r`Do I have to memorise the formula?`, a: r`Remember $\int e^{-ax^2}dx=\sqrt{\pi/a}$. Scale to any $a$ by the substitution $u=\sqrt a\,x$.` },
     ],
+    proof: {
+      idea: r`Square the integral. A product of two such integrals is a double integral over the whole plane, and in polar coordinates it can be done exactly.`,
+      steps: [
+        { title: "Call the integral $I$ and square it", text: r`$I=\int_{-\infty}^{\infty}e^{-ax^2}dx$. Then $I^2=\int e^{-ax^2}dx\int e^{-ay^2}dy=\iint e^{-a(x^2+y^2)}\,dx\,dy$ over the whole plane.` },
+        { title: "Go to polar coordinates", text: r`With $x^2+y^2=r^2$ and area element $r\,dr\,d\theta$: $I^2=\int_0^{2\pi}d\theta\int_0^\infty e^{-ar^2}\,r\,dr$.` },
+        { title: "Do the two integrals", text: r`The angle integral gives $2\pi$. For the other, a function whose derivative is $re^{-ar^2}$ is $-\tfrac1{2a}e^{-ar^2}$, so $\int_0^\infty re^{-ar^2}dr=\tfrac1{2a}$. So $I^2=2\pi\cdot\tfrac1{2a}=\tfrac\pi a$.` },
+        { title: "Take the square root", text: r`$I>0$, so $I=\sqrt{\pi/a}$.` },
+        { title: "The second moment", text: r`Differentiate $\int e^{-ax^2}dx=\sqrt\pi\,a^{-1/2}$ with respect to $a$. Inside the integral this brings down $-x^2$, and on the right it gives $-\tfrac12\sqrt\pi\,a^{-3/2}$ (we accept that the derivative can be taken inside the integral). So $\int x^2e^{-ax^2}dx=\tfrac12\sqrt\pi\,a^{-3/2}=\tfrac1{2a}\sqrt{\pi/a}$.` },
+        { title: "Odd integrands", text: r`$xe^{-ax^2}$ is odd, so the part for $x<0$ cancels the part for $x>0$, and the integral is $0$.` },
+      ],
+      conclusion: r`$\int e^{-ax^2}dx=\sqrt{\pi/a}$ and $\int x^2e^{-ax^2}dx=\tfrac1{2a}\sqrt{\pi/a}$. $\blacksquare$`,
+      example: { text: r`For $a=1$: $I^2=\pi$, so $I\approx1.7725$. And $\int x^2e^{-x^2}dx=\tfrac12\sqrt\pi\approx0.8862$.` },
+    },
   }),
 
   idea({
@@ -160,15 +217,26 @@ export default [
       explanation: r`$f(-x)=(-x)e^{-x^2}=-f(x)$. An odd factor times an even factor is odd.`,
     },
     check: {
-      prompt: r`$f$ is even and $g$ is odd. What is the parity of the product $fg$?`,
-      options: [r`Odd`, r`Even`, r`Neither in general`],
+      prompt: r`$f$ and $g$ are both odd. What is the parity of the product $fg$?`,
+      options: [r`Even`, r`Odd`, r`Neither in general`],
       correct: 0,
-      explanation: r`$(fg)(-x)=f(-x)g(-x)=f(x)\cdot(-g(x))=-(fg)(x)$.`,
+      explanation: r`$(fg)(-x)=f(-x)g(-x)=(-f(x))(-g(x))=(fg)(x)$, so the product is even.`,
     },
     faq: [
       { q: r`Is every function even or odd?`, a: r`No. $e^x$ is neither. But any function can be split into an even part and an odd part.` },
-      { q: r`Why do physicists care?`, a: r`If a state has definite parity, many integrals vanish at once, for example $\langle x\rangle=0$, because $x|\psi|^2$ is odd.` },
+      { q: r`Why do physicists care?`, a: r`If a state has definite parity, many integrals are zero at once, for example $\langle x\rangle=0$, because $x|\psi|^2$ is odd.` },
     ],
+    proof: {
+      idea: r`Multiply the two defining rules to get the parity of a product. For the integral, cut it at $0$ and flip the left half.`,
+      steps: [
+        { title: "A product of even and odd", text: r`If $f(-x)=f(x)$ and $g(-x)=-g(x)$, then $(fg)(-x)=f(-x)g(-x)=f(x)\cdot(-g(x))=-(fg)(x)$. So $fg$ is odd. In the same way, even times even and odd times odd are even.` },
+        { title: "Cut the integral at zero", text: r`For an odd $f$: $\int_{-L}^{L}f\,dx=\int_{-L}^{0}f\,dx+\int_0^Lf\,dx$.` },
+        { title: "Flip the left half", text: r`In $\int_{-L}^{0}f(x)\,dx$ put $x=-u$. As $x$ goes from $-L$ to $0$, $u$ goes from $L$ to $0$, so $\int_{-L}^{0}f(x)\,dx=\int_L^0f(-u)(-du)=\int_0^Lf(-u)\,du=-\int_0^Lf(u)\,du$, because $f$ is odd.` },
+        { title: "Add", text: r`The two halves are $-\int_0^Lf+\int_0^Lf=0$.` },
+      ],
+      conclusion: r`The integral of an odd function over $[-L,L]$ is $0$. $\blacksquare$`,
+      example: { text: r`$\int_{-1}^{1}x^3dx=\tfrac{1}{4}-\tfrac14=0$. And $x\,e^{-x^2}$ is odd (odd times even), so its integral over the whole line is $0$.` },
+    },
   }),
 
   idea({
@@ -207,7 +275,7 @@ export default [
     prerequisites: ["Time-Independent Schrödinger Equation", "Normalization", "Boundary Condition"],
     minutes: 4,
     meaning: r`A particle trapped between two impenetrable walls. Its allowed energies are $n^2$ times the smallest one.`,
-    linkedFormal: r`A particle in a one-dimensional box has $V=0$ for $0<x<L$ and $V=\infty$ outside. The wave function must vanish at the walls ([[Boundary Condition|boundary conditions]]), so $\psi_n(x)=\sqrt{\dfrac2L}\sin\dfrac{n\pi x}{L}$ and $E_n=\dfrac{n^2\pi^2\hbar^2}{2mL^2}$ for $n=1,2,3,\dots$. The factor $\sqrt{2/L}$ is fixed by [[Normalization|normalisation]]. The value $n=0$ is not allowed because it gives $\psi=0$ everywhere.`,
+    linkedFormal: r`A particle in a one-dimensional box has $V=0$ for $0<x<L$ and $V=\infty$ outside. The wave function must be zero at the walls ([[Boundary Condition|boundary conditions]]), so $\psi_n(x)=\sqrt{\dfrac2L}\sin\dfrac{n\pi x}{L}$ and $E_n=\dfrac{n^2\pi^2\hbar^2}{2mL^2}$ for $n=1,2,3,\dots$. The factor $\sqrt{2/L}$ is fixed by [[Normalization|normalisation]]. The value $n=0$ is not allowed because it gives $\psi=0$ everywhere.`,
     example: r`Ground state ($n=1$): $E_1=\dfrac{\pi^2\hbar^2}{2mL^2}$. The second level is $E_2=4E_1$ and the third is $E_3=9E_1$.`,
     pretest: {
       prompt: r`A particle is in an infinite one-dimensional box. If the ground-state energy is $E_1$, what is the energy of the second level?`,
@@ -217,14 +285,28 @@ export default [
     },
     check: {
       prompt: r`Why must $\psi_n(x)=A\sin(kx)$ obey $kL=n\pi$?`,
-      options: [r`It must vanish at $x=L$, and $\sin(kL)=0$ only when $kL$ is a multiple of $\pi$`, r`Because $\sin$ is periodic with period $L$`, r`Because the energy is $n\pi$`],
+      options: [r`It must are zero at $x=L$, and $\sin(kL)=0$ only when $kL$ is a multiple of $\pi$`, r`Because $\sin$ is periodic with period $L$`, r`Because the energy is $n\pi$`],
       correct: 0,
       explanation: r`The wall at $x=L$ forces $\psi(L)=0$. The sine is zero exactly at whole multiples of $\pi$.`,
     },
     faq: [
-      { q: r`Why does the wave function vanish at the walls?`, a: r`Outside the box the potential is infinite, so there is no chance of finding the particle there. The wave function cannot jump, so it must reach $0$ at the wall.` },
+      { q: r`Why is the wave function zero at the walls?`, a: r`Outside the box the potential is infinite, so there is no chance of finding the particle there. The wave function cannot jump, so it must reach $0$ at the wall.` },
       { q: r`Why $\sqrt{2/L}$?`, a: r`Because $\int_0^L\sin^2(n\pi x/L)\,dx=L/2$. Multiplying by $2/L$ makes the total probability $1$.` },
     ],
+    proof: {
+      idea: r`Solve the equation inside the box, then make the solution fit the walls. Only certain energies fit.`,
+      steps: [
+        { title: "The equation inside", text: r`For $0<x<L$, $V=0$, so $-\dfrac{\hbar^2}{2m}\psi''=E\psi$.` },
+        { title: "Energies that are zero or negative do not work", text: r`If $E<0$ the solutions are $Ae^{\kappa x}+Be^{-\kappa x}$. Then $\psi(0)=0$ gives $B=-A$, and $\psi(L)=2A\sinh\kappa L=0$ forces $A=0$. If $E=0$, $\psi=Ax+B$ and the two walls force $A=B=0$. So $E>0$.` },
+        { title: "Solve for $E>0$", text: r`Put $k=\sqrt{2mE}/\hbar$. Then $\psi''=-k^2\psi$ and $\psi=A\sin kx+B\cos kx$.` },
+        { title: "Fit the left wall", text: r`$\psi(0)=0$ gives $B=0$. So $\psi=A\sin kx$.` },
+        { title: "Fit the right wall", text: r`$\psi(L)=A\sin kL=0$ with $A\ne0$ needs $kL=n\pi$, so $k=\dfrac{n\pi}L$ with $n=1,2,3,\ldots$ ($n=0$ gives $\psi=0$, and negative $n$ gives the same state with a minus sign).` },
+        { title: "The energies", text: r`$E_n=\dfrac{\hbar^2k^2}{2m}=\dfrac{n^2\pi^2\hbar^2}{2mL^2}$.` },
+        { title: "Normalize", text: r`$\int_0^LA^2\sin^2\dfrac{n\pi x}L\,dx=A^2\dfrac L2=1$, so $A=\sqrt{2/L}$. (We use $\sin^2\theta=\tfrac12(1-\cos2\theta)$, and the cosine part integrates to $0$.)` },
+      ],
+      conclusion: r`$\psi_n=\sqrt{\tfrac2L}\sin\tfrac{n\pi x}L$ and $E_n=\tfrac{n^2\pi^2\hbar^2}{2mL^2}$ for $n=1,2,3,\ldots$ $\blacksquare$`,
+      example: { text: r`For $L=1$ and $n=2$: $\psi_2=\sqrt2\sin2\pi x$ is zero at $x=\tfrac12$ (one node), and $E_2=4E_1$.` },
+    },
   }),
 
   idea({
@@ -253,6 +335,18 @@ export default [
       { q: r`Does separation always work?`, a: r`No. It works when the equation splits into pieces, for example when $V=V_x+V_y+V_z$ in Cartesian coordinates. For other potentials a product guess fails.` },
       { q: r`Are all solutions products?`, a: r`Not every solution, but sums of products give all of them, and the products are the stationary states of definite $E_x,E_y,E_z$.` },
     ],
+    proof: {
+      idea: r`Put the product into the equation and divide by $\psi$. Each part now depends on one variable only, so each part is a constant.`,
+      steps: [
+        { title: "The equation", text: r`$-\dfrac{\hbar^2}{2m}\bigl(\psi_{xx}+\psi_{yy}+\psi_{zz}\bigr)+\bigl(V_x+V_y+V_z\bigr)\psi=E\psi$.` },
+        { title: "Substitute the product", text: r`With $\psi=XYZ$, $\psi_{xx}=X''YZ$ and so on.` },
+        { title: "Divide by $XYZ$", text: r`$\Bigl[-\tfrac{\hbar^2}{2m}\tfrac{X''}{X}+V_x\Bigr]+\Bigl[-\tfrac{\hbar^2}{2m}\tfrac{Y''}{Y}+V_y\Bigr]+\Bigl[-\tfrac{\hbar^2}{2m}\tfrac{Z''}{Z}+V_z\Bigr]=E$. The three brackets depend on $x$ only, $y$ only and $z$ only.` },
+        { title: "Each bracket is a constant", text: r`Change $x$ alone. The total stays $E$, and only the first bracket can move, so it cannot move. The same holds for the others (see [[Separation Constant|Separation Constant]]). Call the constants $E_x,E_y,E_z$.` },
+        { title: "Three one-dimensional equations", text: r`$-\tfrac{\hbar^2}{2m}X''+V_xX=E_xX$, and the same for $Y$ and $Z$. Adding the three constants gives $E=E_x+E_y+E_z$.` },
+      ],
+      conclusion: r`A problem with $V=V_x+V_y+V_z$ splits into three one-dimensional problems, and the energies add. $\blacksquare$`,
+      example: { text: r`For a box, each direction gives $E_{n}=\tfrac{n^2\pi^2\hbar^2}{2mL^2}$ with its own length. Adding gives $E=E_{n_x}+E_{n_y}+E_{n_z}$.` },
+    },
   }),
 
   idea({
@@ -262,7 +356,7 @@ export default [
     symbol: r`E_0=\tfrac12\hbar\omega`,
     prerequisites: ["Heisenberg Uncertainty Principle", "Harmonic Oscillator Potential"],
     minutes: 4,
-    meaning: r`The lowest energy a quantum system can have is not zero. Squeezing a particle to a point costs momentum, hence energy.`,
+    meaning: r`The lowest energy a quantum system can have is not zero. Squeezing a particle to a point costs momentum, so energy.`,
     linkedFormal: r`For the [[Harmonic Oscillator Potential|oscillator]] the ground-state energy is $E_0=\tfrac12\hbar\omega$, not $0$. The reason is the [[Heisenberg Uncertainty Principle|uncertainty principle]]: $\Delta x\,\Delta p\ge\hbar/2$. Zero energy would need $\Delta x=0$ and $\Delta p=0$ together, which is forbidden. Using $\langle x\rangle=\langle p\rangle=0$, $E=\dfrac{(\Delta p)^2}{2m}+\tfrac12m\omega^2(\Delta x)^2\ge\dfrac{\hbar^2}{8m(\Delta x)^2}+\tfrac12m\omega^2(\Delta x)^2\ge\tfrac12\hbar\omega$.`,
     example: r`For $\omega=10^{14}\ \mathrm{s^{-1}}$ (a molecular vibration), $E_0=\tfrac12\hbar\omega\approx5\times10^{-21}$ J, which is small but never zero.`,
     pretest: {
@@ -281,6 +375,18 @@ export default [
       { q: r`Can we extract the zero-point energy as heat?`, a: r`No. It is the lowest energy the system can have, so there is nothing lower to fall to.` },
       { q: r`Is the zero-point energy real or only a convention?`, a: r`It is real. It shows up in measurable effects such as the fact that helium stays liquid at absolute zero and in the shifts of molecular vibration spectra.` },
     ],
+    proof: {
+      idea: r`Write the energy in terms of the two spreads. The uncertainty principle ties the spreads together, and a short inequality then gives the smallest possible energy.`,
+      steps: [
+        { title: "Energy in terms of averages", text: r`$E=\dfrac{\langle p^2\rangle}{2m}+\tfrac12m\omega^2\langle x^2\rangle$.` },
+        { title: "Averages are at least the spreads", text: r`$\langle p^2\rangle=(\Delta p)^2+\langle p\rangle^2\ge(\Delta p)^2$ and in the same way $\langle x^2\rangle\ge(\Delta x)^2$. So $E\ge\dfrac{(\Delta p)^2}{2m}+\tfrac12m\omega^2(\Delta x)^2$.` },
+        { title: "Use the uncertainty principle", text: r`$\Delta p\ge\dfrac{\hbar}{2\Delta x}$, so $E\ge\dfrac{\hbar^2}{8m(\Delta x)^2}+\tfrac12m\omega^2(\Delta x)^2$.` },
+        { title: "A small inequality", text: r`For any two positive numbers, $A+B\ge2\sqrt{AB}$ (because $(\sqrt A-\sqrt B)^2\ge0$). Here $AB=\dfrac{\hbar^2}{8m(\Delta x)^2}\cdot\tfrac12m\omega^2(\Delta x)^2=\dfrac{\hbar^2\omega^2}{16}$, which does not depend on $\Delta x$.` },
+        { title: "The bound", text: r`$E\ge2\sqrt{\dfrac{\hbar^2\omega^2}{16}}=\tfrac12\hbar\omega$. Equality needs $A=B$, that is $(\Delta x)^2=\dfrac{\hbar}{2m\omega}$.` },
+      ],
+      conclusion: r`Every state of the oscillator has $E\ge\tfrac12\hbar\omega>0$. The energy can never be zero. $\blacksquare$`,
+      example: { text: r`With $\hbar=m=\omega=1$: $E\ge\tfrac12$. The bound is reached when $(\Delta x)^2=\tfrac12$. Try $\Delta x=1$: $\tfrac18+\tfrac12=0.625\ge0.5$.` },
+    },
   }),
 
   idea({
@@ -309,6 +415,18 @@ export default [
       { q: r`Why call it a "number" operator?`, a: r`Its eigenvalue $n$ is the number of quanta of energy $\hbar\omega$ above the ground state.` },
       { q: r`Why are the eigenvalues whole numbers?`, a: r`Because $a$ lowers $n$ by one at a time, and the ladder must stop at $0$. A non-integer would let the ladder go negative, which is impossible since $\langle n|a^\dagger a|n\rangle=\|a|n\rangle\|^2\ge0$.` },
     ],
+    proof: {
+      idea: r`Use the commutator rules and $[a,a^\dagger]=1$ to get the commutators of $\hat N$ with $a$ and $a^\dagger$. Then use the adjoint rules to see that $\hat N$ is Hermitian with eigenvalues that are not negative.`,
+      steps: [
+        { title: "$\\hat N$ with $a$", text: r`By the product rule ([[Commutator Identities|Commutator Identities]]), $[a^\dagger a,a]=a^\dagger[a,a]+[a^\dagger,a]\,a$. Here $[a,a]=0$ and $[a^\dagger,a]=-[a,a^\dagger]=-1$. So $[\hat N,a]=-a$.` },
+        { title: "$\\hat N$ with $a^\\dagger$", text: r`$[a^\dagger a,a^\dagger]=a^\dagger[a,a^\dagger]+[a^\dagger,a^\dagger]\,a=a^\dagger\cdot1+0=a^\dagger$. So $[\hat N,a^\dagger]=a^\dagger$.` },
+        { title: "$\\hat N$ is Hermitian", text: r`$(a^\dagger a)^\dagger=a^\dagger(a^\dagger)^\dagger=a^\dagger a$, using $(AB)^\dagger=B^\dagger A^\dagger$ and $(a^\dagger)^\dagger=a$.` },
+        { title: "Eigenvalues are not negative", text: r`If $\hat N|n\rangle=n|n\rangle$ and $\langle n|n\rangle=1$, then $n=\langle n|a^\dagger a|n\rangle=\langle a\,n|a\,n\rangle=\|a|n\rangle\|^2\ge0$.` },
+        { title: "What $a$ does to an eigenvector", text: r`From $[\hat N,a]=-a$: $\hat N\,a|n\rangle=(a\hat N-a)|n\rangle=(n-1)\,a|n\rangle$. So $a|n\rangle$ has eigenvalue $n-1$ (or is the zero vector). In the same way $a^\dagger|n\rangle$ has eigenvalue $n+1$.` },
+      ],
+      conclusion: r`$[\hat N,a]=-a$, $[\hat N,a^\dagger]=a^\dagger$, $\hat N$ is Hermitian and its eigenvalues are $\ge0$. $\blacksquare$`,
+      example: { text: r`If $\hat N|3\rangle=3|3\rangle$ then $\hat N\,a|3\rangle=2\,a|3\rangle$ and $\hat N\,a^\dagger|3\rangle=4\,a^\dagger|3\rangle$.` },
+    },
   }),
 
   idea({
@@ -337,5 +455,57 @@ export default [
       { q: r`Why is the order important?`, a: r`Because $(2,0,0)$ and $(0,2,0)$ are different states of the three-dimensional oscillator even though both add to $2$.` },
       { q: r`What is the formula for $k$ numbers instead of $3$?`, a: r`$\binom{N+k-1}{k-1}$. For $k=3$ that is $\binom{N+2}{2}$.` },
     ],
+    proof: {
+      idea: r`Turn each solution into a row of stars and bars. Counting the rows is the same as choosing where the bars go.`,
+      steps: [
+        { title: "Draw a solution", text: r`For $(n_x,n_y,n_z)$ draw $n_x$ stars, then a bar, then $n_y$ stars, then a bar, then $n_z$ stars. For example $(2,0,1)$ is $\star\star\,|\,|\,\star$.` },
+        { title: "Every row has the same length", text: r`There are $N$ stars and $2$ bars, so every row has $N+2$ symbols.` },
+        { title: "Rows and solutions match", text: r`Each solution gives exactly one row. Each row with $N$ stars and $2$ bars gives exactly one solution, by counting the stars before the first bar, between the bars and after the second bar.` },
+        { title: "Count the rows", text: r`A row is fixed by choosing which $2$ of the $N+2$ places hold bars. There are $\dbinom{N+2}{2}=\dfrac{(N+2)(N+1)}{2}$ ways.` },
+      ],
+      conclusion: r`The number of solutions is $\dfrac{(N+1)(N+2)}{2}$. $\blacksquare$`,
+      example: { text: r`For $N=3$: $\tfrac{4\cdot5}2=10$. By hand: $(3,0,0)$ in $3$ orders, $(2,1,0)$ in $6$ orders and $(1,1,1)$ in $1$ order: $3+6+1=10$.` },
+    },
+  }),
+
+  idea({
+    id: "boundary-condition",
+    name: "Boundary Condition",
+    group: "waves",
+    symbol: r`\psi(0)=\psi(L)=0`,
+    prerequisites: ["Wave Function", "Continuity", "Probability Density"],
+    minutes: 4,
+    meaning: r`A boundary condition is a rule that a wave function must obey at the edge of its region. For example, at the wall of a box it must be zero.`,
+    linkedFormal: r`The Schrödinger equation has many solutions. Boundary conditions pick out the ones that make physical sense. At an impenetrable wall the [[Wave Function|wave function]] must be $0$. Far away from the particle, $\psi\to0$ so that the total probability can be $1$. The wave function must also be [[Continuity|continuous]], so it cannot jump. It is the boundary conditions that make the allowed energies come out as separate values.`,
+    example: r`For a box $0<x<L$, the conditions are $\psi(0)=0$ and $\psi(L)=0$. The function $\sin\tfrac{n\pi x}{L}$ obeys them, and $\cos\tfrac{n\pi x}L$ does not.`,
+    pretest: chk(
+      r`A guitar string is held fixed at both ends. What must the height of the string be at each end?`,
+      r`Zero: the ends cannot move`,
+      r`As large as possible`,
+      r`Equal to the length of the string`,
+      r`The ends are held, so the displacement there is $0$. A wave function in a box has the same kind of condition at the walls.`,
+    ),
+    check: chk(
+      r`Which function obeys the boundary conditions $\psi(0)=0$ and $\psi(L)=0$?`,
+      r`$\sin\dfrac{2\pi x}{L}$`,
+      r`$\cos\dfrac{2\pi x}{L}$`,
+      r`$e^{x}$`,
+      r`$\sin\tfrac{2\pi x}L$ is $0$ at $x=0$ and at $x=L$. The cosine equals $1$ at both walls, and $e^x$ is never zero.`,
+    ),
+    faq: [
+      { q: r`Why must the wave function be zero at an infinite wall?`, a: r`The particle can never be found inside the wall, so $\psi=0$ there. The wave function cannot jump, so it must already be $0$ when it reaches the wall. The proof below shows this step by step.` },
+      { q: r`Do boundary conditions come from the equation?`, a: r`No. The equation has solutions for every energy. The boundary conditions are extra information that comes from the physical situation, and they are what leave only certain energies.` },
+    ],
+    proof: {
+      idea: r`Outside the wall the particle cannot be found, so the wave function is zero there. A continuous function that is $0$ on one side must be $0$ at the edge.`,
+      steps: [
+        { title: "Outside the wall", text: r`For $x<0$ the potential is infinite. The chance of finding the particle there is $0$, so $|\psi(x)|^2=0$ and $\psi(x)=0$ for all $x<0$.` },
+        { title: "The wave function cannot jump", text: r`$\psi$ is [[Continuity|continuous]]: a sudden jump would make the second derivative in the Schrödinger equation infinite where the potential is finite.` },
+        { title: "Use continuity at $x=0$", text: r`Continuity means $\psi(0)=\lim_{x\to0^-}\psi(x)$. The limit from the left is $0$, since $\psi=0$ for $x<0$.` },
+        { title: "Conclude", text: r`So $\psi(0)=0$. The same argument at $x=L$ gives $\psi(L)=0$.` },
+      ],
+      conclusion: r`At an infinite wall the wave function must be $0$. $\blacksquare$`,
+      example: { text: r`In a box of length $L$: $\psi_1=\sqrt{2/L}\sin(\pi x/L)$ has $\psi_1(0)=0$ and $\psi_1(L)=\sqrt{2/L}\sin\pi=0$.` },
+    },
   }),
 ];

@@ -48,12 +48,12 @@ export default [
         },
         {
           title: "The matrix of the raising operator",
-          text: r`The raising operator is the [[Hermitian Adjoint|Hermitian adjoint]] of $a$, so its matrix is the conjugate transpose of the matrix of $a$. Equivalently $a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle$ gives $\langle m|a^\dagger|n\rangle=\sqrt{n+1}\,\delta_{m,n+1}$: the numbers $1,\sqrt2,\sqrt3,\dots$ now sit directly below the diagonal.`,
+          text: r`The raising operator is the [[Hermitian Adjoint|Hermitian adjoint]] of $a$, so its matrix is the conjugate transpose of the matrix of $a$. In other words $a^\dagger|n\rangle=\sqrt{n+1}\,|n+1\rangle$ gives $\langle m|a^\dagger|n\rangle=\sqrt{n+1}\,\delta_{m,n+1}$: the numbers $1,\sqrt2,\sqrt3,\dots$ now sit directly below the diagonal.`,
           check: chk(r`How do you get the matrix of $a^\dagger$ from the matrix of $a$?`, r`Take the conjugate transpose (here simply the transpose)`, r`Take the inverse matrix`, r`Multiply every entry by $\hbar\omega$`, r`The matrix of the Hermitian adjoint is the conjugate transpose. The entries of $a$ are real, so the transpose is enough.`, "Hermitian Adjoint"),
         },
         {
           title: "Position and momentum",
-          text: r`Substituting, $X_{mn}=\sqrt{\tfrac{\hbar}{2m\omega}}\big(\sqrt n\,\delta_{m,n-1}+\sqrt{n+1}\,\delta_{m,n+1}\big)$ and $P_{mn}=i\sqrt{\tfrac{m\hbar\omega}{2}}\big(\sqrt{n+1}\,\delta_{m,n+1}-\sqrt n\,\delta_{m,n-1}\big)$. Both are non-zero only for $m=n\pm1$. Hence $\langle m|X|n\rangle=0$ unless $m$ and $n$ differ by exactly one. The sign in $P$ is the standard one: it gives $[X,P]=i\hbar$.`,
+          text: r`Substituting, $X_{mn}=\sqrt{\tfrac{\hbar}{2m\omega}}\big(\sqrt n\,\delta_{m,n-1}+\sqrt{n+1}\,\delta_{m,n+1}\big)$ and $P_{mn}=i\sqrt{\tfrac{m\hbar\omega}{2}}\big(\sqrt{n+1}\,\delta_{m,n+1}-\sqrt n\,\delta_{m,n-1}\big)$. Both are non-zero only for $m=n\pm1$. So $\langle m|X|n\rangle=0$ unless $m$ and $n$ differ by exactly one. The sign in $P$ is the standard one: it gives $[X,P]=i\hbar$.`,
           check: chk(r`Which pairs of energy states have a non-zero matrix element $\langle m|\hat X|n\rangle$?`, r`Those with $m=n\pm1$`, r`Only those with $m=n$`, r`All pairs of states`, r`$X$ is a sum of $a$ and $a^\dagger$, which move $n$ by one step down or up, so only neighbouring states are connected.`, "Position Operator"),
         },
         {
@@ -73,6 +73,7 @@ export default [
       },
     },
     question: {
+      plain: r`Write the oscillator operators $a$, $a^\dagger$, $X$, $P$ and $H$ as tables of numbers in the energy basis. Then keep only the first three states and write the $3\times3$ tables.`,
       faq: [
         { q: r`What is a matrix representation of an operator?`, a: r`A table of numbers $\langle m|A|n\rangle$. Multiplying the table by the column of a state gives the column of the new state. See [[Matrix Representation|matrix representation]].` },
         { q: r`Why does the question ask about $\langle m|X|n\rangle$ "qualitatively"?`, a: r`The point is the pattern: only neighbouring levels $m=n\pm1$ are connected, with strength proportional to $\sqrt n$ or $\sqrt{n+1}$.` },
@@ -114,7 +115,7 @@ export default [
       prompt: r`In an energy state $|n\rangle$ of the oscillator, what are the mean position $\langle X\rangle$ and mean momentum $\langle P\rangle$?`,
       options: [r`Both are $0$`, r`$\langle X\rangle=\sqrt{\hbar/m\omega}$ and $\langle P\rangle=0$`, r`Both equal $\hbar$`],
       correct: 0,
-      explanation: r`The oscillator is symmetric about the origin and $X$, $P$ only link $|n\rangle$ to its neighbours, so both averages vanish.`,
+      explanation: r`The oscillator is symmetric about the origin and $X$, $P$ only link $|n\rangle$ to its neighbours, so both averages are zero.`,
     },
     faq: [
       { q: r`Why is the mean position zero but the spread not?`, a: r`The probability density is symmetric about $x=0$, so left and right cancel in the mean. But $x^2$ is always positive, so $\langle X^2\rangle$ cannot cancel.` },
@@ -125,9 +126,9 @@ export default [
       idea: r`Write $X$ and $P$ with $a$ and $a^\dagger$, and use that $a|n\rangle$ and $a^\dagger|n\rangle$ are different energy states. Anything that changes $n$ gives zero when sandwiched between $\langle n|$ and $|n\rangle$. Only terms that put $n$ back survive.`,
       steps: [
         {
-          title: "The means vanish",
-          text: r`$X=\sqrt{\hbar/2m\omega}\,(a+a^\dagger)$, so $X|n\rangle$ is a mixture of $|n-1\rangle$ and $|n+1\rangle$. These are orthogonal to $|n\rangle$, hence $\langle n|X|n\rangle=0$. The same holds for $P$, which is also made of $a$ and $a^\dagger$. This is also what the matrices of the previous problem show: the diagonal of $X$ and $P$ is empty.`,
-          check: chk(r`Why is $\langle n|\hat X|n\rangle$ equal to zero?`, r`$X|n\rangle$ only contains $|n\pm1\rangle$, which are orthogonal to $|n\rangle$`, r`Because $X$ is always zero on energy states`, r`Because the energy of $|n\rangle$ is zero`, r`The diagonal matrix elements of $X$ vanish because $a$ and $a^\dagger$ change the level by one.`, "Orthonormal Basis"),
+          title: "The means are zero",
+          text: r`$X=\sqrt{\hbar/2m\omega}\,(a+a^\dagger)$, so $X|n\rangle$ is a mixture of $|n-1\rangle$ and $|n+1\rangle$. These are orthogonal to $|n\rangle$, so $\langle n|X|n\rangle=0$. The same holds for $P$, which is also made of $a$ and $a^\dagger$. This is also what the matrices of the previous problem show: the diagonal of $X$ and $P$ is empty.`,
+          check: chk(r`Why is $\langle n|\hat X|n\rangle$ equal to zero?`, r`$X|n\rangle$ only contains $|n\pm1\rangle$, which are orthogonal to $|n\rangle$`, r`Because $X$ is always zero on energy states`, r`Because the energy of $|n\rangle$ is zero`, r`The diagonal matrix elements of $X$ are zero because $a$ and $a^\dagger$ change the level by one.`, "Orthonormal Basis"),
         },
         {
           title: "The mean square position",
@@ -161,10 +162,11 @@ export default [
       },
     },
     question: {
+      plain: r`For the $n$-th energy state, show that the average position and momentum are zero, work out the averages of $X^2$ and $P^2$, link them to the energy, and show that $\Delta x\,\Delta p$ obeys the uncertainty principle.`,
       faq: [
         { q: r`Do I need the wave functions to do this?`, a: r`No. The ladder-operator method gives every expectation value by pure algebra, with no integrals.` },
         { q: r`What is $\Delta x$ here?`, a: r`$\Delta x=\sqrt{\langle X^2\rangle-\langle X\rangle^2}$. Because $\langle X\rangle=0$ it equals $\sqrt{\langle X^2\rangle}$. See [[Standard Deviation|standard deviation]].` },
-        { q: r`How can $aa^\dagger$ and $a^\dagger a$ both appear?`, a: r`$X$ and $P$ are made of $a$ and $a^\dagger$, so their squares contain both orders. They give $n+1$ and $n$ respectively, because $a^\dagger a=\hat N$ and $aa^\dagger=\hat N+1$.` },
+        { q: r`How can $aa^\dagger$ and $a^\dagger a$ both appear?`, a: r`$X$ and $P$ are made of $a$ and $a^\dagger$, so their squares contain both orders. They give $n+1$ and $n$ (in that order), because $a^\dagger a=\hat N$ and $aa^\dagger=\hat N+1$.` },
         { q: r`What does "verify the uncertainty relation" mean?`, a: r`Compute $\Delta x\,\Delta p$ for the ground state and check that it is at least $\hbar/2$. Here it equals $\hbar/2$ exactly.` },
         { q: r`Is $\langle H\rangle$ the same as the energy $E_n$?`, a: r`Yes. $|n\rangle$ is an energy eigenstate, so measuring the energy always gives $E_n=\hbar\omega(n+\tfrac12)$ and the mean equals it, with no spread.` },
       ],
@@ -175,7 +177,7 @@ export default [
         "variance|mean square deviation", "standard deviation|uncertainty", "delta x delta p|product of uncertainties", "hbar over two|minimum uncertainty", "ground state saturates|equality for n equals zero",
       ],
       retryPrompt: r`Without looking, explain why $\langle X\rangle=\langle P\rangle=0$ in an energy state, outline how $\langle X^2\rangle$ and $\langle P^2\rangle$ come out, and finish with $\Delta x\,\Delta p$. Write the key formulas in the LaTeX box and recall the key words.`,
-      sourcePageText: r`23. What are the values of <X> and <P> in any energy eigenstate of a one-dimensional harmonic oscillator? 24. State the relationship between <X^2>, <P^2>, and the energy of a harmonic oscillator. (Part B) 10. Show that <n|X|n> = 0, for any energy eigenstate of the harmonic oscillator. 11. Calculate <X^2> and <P^2> for the ground state and verify the uncertainty relation. 12. Show that the expectation value of the Hamiltonian in the nth energy eigen state is <H> = hbar omega (n + 1/2). (Part C) 4. Derive the expectation values <X>, <P>, <X^2>, and <P^2> for the nth stationary state of the harmonic oscillator. Calculate the product (Delta x Delta p) and hence obtain the uncertainty principle.`,
+      sourcePageText: r`23. What are the values of <X> and <P> in any energy eigenstate of a one-dimensional harmonic oscillator? 24. State the relationship between <X^2>, <P^2>, and the energy of a harmonic oscillator. (Part B) 10. Show that <n|X|n> = 0, for any energy eigenstate of the harmonic oscillator. 11. Calculate <X^2> and <P^2> for the ground state and verify the uncertainty relation. 12. Show that the expectation value of the Hamiltonian in the nth energy eigen state is <H> = hbar omega (n + 1/2). (Part C) 4. Derive the expectation values <X>, <P>, <X^2>, and <P^2> for the nth stationary state of the harmonic oscillator. Calculate the product (Delta x Delta p) and so obtain the uncertainty principle.`,
     },
   }),
 
@@ -189,7 +191,7 @@ export default [
     title: "⟨X⟩ for the state (|0⟩ + |1⟩)/√2",
     statement: r`For the harmonic oscillator state $|\psi\rangle=\dfrac1{\sqrt2}\left(|0\rangle+|1\rangle\right)$, calculate $\langle\hat X\rangle$.`,
     meaning: r`Each energy state alone is centred at zero, but mixing two neighbouring ones shifts the average position, because the two states interfere.`,
-    linkedFormal: r`For $|\psi\rangle=\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$: $\langle X\rangle=\tfrac12\big(\langle0|X|0\rangle+\langle0|X|1\rangle+\langle1|X|0\rangle+\langle1|X|1\rangle\big)=\langle0|X|1\rangle=\sqrt{\dfrac{\hbar}{2m\omega}}$. The diagonal terms vanish; the whole answer comes from the cross terms.`,
+    linkedFormal: r`For $|\psi\rangle=\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$: $\langle X\rangle=\tfrac12\big(\langle0|X|0\rangle+\langle0|X|1\rangle+\langle1|X|0\rangle+\langle1|X|1\rangle\big)=\langle0|X|1\rangle=\sqrt{\dfrac{\hbar}{2m\omega}}$. The diagonal terms are zero; the whole answer comes from the cross terms.`,
     example: r`With $\hbar=m=\omega=1$, $\langle X\rangle=1/\sqrt2\approx0.71$. The state $\tfrac1{\sqrt2}(|0\rangle-|1\rangle)$ gives $-1/\sqrt2$.`,
     pretest: {
       prompt: r`$|\psi\rangle=\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$ with $|0\rangle,|1\rangle$ orthonormal. What is $\langle\psi|\psi\rangle$?`,
@@ -209,12 +211,12 @@ export default [
       { q: r`Does $\langle X\rangle$ stay constant in time?`, a: r`No. The state evolves with the [[Energy Phase Factor|energy phase factors]] and $\langle X\rangle(t)=\sqrt{\hbar/2m\omega}\,\cos\omega t$, so the mean position oscillates at the oscillator frequency. $\langle P\rangle(t)=-\sqrt{m\hbar\omega/2}\,\sin\omega t$, as for a classical oscillator.` },
     ],
     proof: {
-      idea: r`Expand the bra and the ket, so $\langle X\rangle$ splits into four matrix elements. Two of them vanish by the neighbour rule, and the other two are equal.`,
+      idea: r`Expand the bra and the ket, so $\langle X\rangle$ splits into four matrix elements. Two of them are zero by the neighbour rule, and the other two are equal.`,
       steps: [
         {
           title: "Check the state is normalized",
           text: r`$\langle\psi|\psi\rangle=\tfrac12\left(\langle0|0\rangle+\langle0|1\rangle+\langle1|0\rangle+\langle1|1\rangle\right)=\tfrac12(1+0+0+1)=1$, since $|0\rangle$ and $|1\rangle$ are orthonormal. The expectation value is therefore $\langle X\rangle=\langle\psi|X|\psi\rangle$ with no division needed.`,
-          check: chk(r`Why is the state $\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$ already normalized?`, r`The two terms are orthonormal, so $\tfrac12(1+1)=1$`, r`Because the coefficients are real`, r`Because $|0\rangle$ and $|1\rangle$ have the same energy`, r`Cross terms vanish by orthogonality and each state contributes its norm $1$, times the factor $\tfrac12$.`, "Normalization"),
+          check: chk(r`Why is the state $\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$ already normalized?`, r`The two terms are orthonormal, so $\tfrac12(1+1)=1$`, r`Because the coefficients are real`, r`Because $|0\rangle$ and $|1\rangle$ have the same energy`, r`Cross terms are zero by orthogonality and each state contributes its norm $1$, times the factor $\tfrac12$.`, "Normalization"),
         },
         {
           title: "Expand the expectation value",
@@ -222,7 +224,7 @@ export default [
           check: chk(r`How many matrix elements of $\hat X$ appear when $\langle\psi|\hat X|\psi\rangle$ is expanded for a two-state superposition?`, r`Four: two diagonal and two cross terms`, r`Two: only the diagonal ones`, r`One: only $\langle0|X|1\rangle$`, r`Both the bra and the ket contain two terms, so we get $2\times2=4$ products.`, "Superposition"),
         },
         {
-          title: "Diagonal terms vanish",
+          title: "Diagonal terms are zero",
           text: r`$X=\sqrt{\hbar/2m\omega}\,(a+a^\dagger)$ moves a state one step up or down, so $X|0\rangle\propto|1\rangle$ and $X|1\rangle$ is a mixture of $|0\rangle$ and $|2\rangle$. Both are orthogonal to the original state, so $\langle0|X|0\rangle=\langle1|X|1\rangle=0$.`,
           check: chk(r`Why is $\langle1|\hat X|1\rangle=0$?`, r`$X|1\rangle$ is a mix of $|0\rangle$ and $|2\rangle$, orthogonal to $|1\rangle$`, r`$X|1\rangle=0$`, r`$X$ is zero on every state`, r`$X$ changes the level by one, so it can never return $|1\rangle$ to itself.`, "Orthonormal Basis"),
         },
@@ -237,12 +239,13 @@ export default [
           check: chk(r`What is $\langle X\rangle$ for $\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$?`, r`$\sqrt{\hbar/2m\omega}$`, r`$0$`, r`$2\sqrt{\hbar/2m\omega}$`, r`The two equal cross terms add up to $2\sqrt{\hbar/2m\omega}$ and the factor $\tfrac12$ in front brings it back to $\sqrt{\hbar/2m\omega}$.`, "Expectation Value"),
         },
       ],
-      conclusion: r`$\langle X\rangle=\sqrt{\hbar/2m\omega}$ for $|\psi\rangle=\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$: the diagonal terms vanish and the two equal cross terms $\langle0|X|1\rangle$ and $\langle1|X|0\rangle$ give the whole result. $\blacksquare$`,
+      conclusion: r`$\langle X\rangle=\sqrt{\hbar/2m\omega}$ for $|\psi\rangle=\tfrac1{\sqrt2}(|0\rangle+|1\rangle)$: the diagonal terms are zero and the two equal cross terms $\langle0|X|1\rangle$ and $\langle1|X|0\rangle$ give the whole result. $\blacksquare$`,
       example: {
         text: r`Take $\hbar=m=\omega=1$. Then $X_{01}=X_{10}=1/\sqrt2$ and $\langle X\rangle=\tfrac12\left(\tfrac1{\sqrt2}+\tfrac1{\sqrt2}\right)=\tfrac1{\sqrt2}\approx0.707$. For the other combination $\tfrac1{\sqrt2}(|0\rangle-|1\rangle)$ the cross terms flip sign and $\langle X\rangle\approx-0.707$.`,
       },
     },
     question: {
+      plain: r`A state is an equal mix of the lowest two energy states. Work out its average position.`,
       faq: [
         { q: r`Do I need to know the wave functions?`, a: r`Not necessarily. The ladder-operator route needs only $a|1\rangle=|0\rangle$ and orthonormality. You can also integrate $\int\psi_0\,x\,\psi_1\,dx$ and get the same value.` },
         { q: r`Why is the answer not zero when each state has zero mean position?`, a: r`The average of a superposition is not the average of the averages: cross terms appear, and they represent interference between the two states.` },
@@ -251,7 +254,7 @@ export default [
       ],
       keywords: [
         "superposition|linear combination", "normalized|normalization|one over root two", "bra and ket|bra ket", "expectation value|mean value", "expand four terms|four matrix elements",
-        "diagonal terms zero|diagonal terms vanish", "cross terms|off-diagonal terms|interference", "X in terms of a and a dagger|a plus a dagger", "lowering operator on one|a on state one gives state zero",
+        "diagonal terms zero|diagonal terms are zero", "cross terms|off-diagonal terms|interference", "X in terms of a and a dagger|a plus a dagger", "lowering operator on one|a on state one gives state zero",
         "orthonormal|orthogonality", "root hbar over two m omega|sqrt hbar over 2 m omega", "neighbouring levels|adjacent levels", "Hermitian|real cross terms", "minus sign gives negative|relative phase",
         "time dependence|oscillates in time", "cosine omega t|cos omega t", "position wave function integral|integral of psi zero x psi one",
       ],
@@ -279,7 +282,7 @@ export default [
       explanation: r`The partial derivative in $x$ treats $h(y)$ as a constant, so only $g$ is differentiated, twice.`,
     },
     check: {
-      prompt: r`Which condition on the potential allows the Cartesian product ansatz to separate the Schrödinger equation?`,
+      prompt: r`Which condition on the potential allows the Cartesian product guess to separate the Schrödinger equation?`,
       options: [r`$V=V_x(x)+V_y(y)+V_z(z)$, a sum of one-coordinate terms`, r`$V=\lambda\,xy$, mixing $x$ and $y$`, r`$V$ must be zero everywhere`],
       correct: 0,
       explanation: r`Only a sum of terms that each depend on one coordinate lets us group every term with its own variable. A mixed term such as $xy$ cannot be assigned to just one of $X,Y$.`,
@@ -329,15 +332,16 @@ export default [
       },
     },
     question: {
+      plain: r`Show how a 3D Schrödinger equation splits into three 1D equations when the answer is a product and the potential is a sum. Explain the three constants and why the energies add.`,
       faq: [
         { q: r`What does "separation of variables" mean?`, a: r`Turning one equation in several variables into several equations that each contain a single variable, by assuming a product solution and showing each factor obeys its own equation.` },
         { q: r`What are the three separation constants?`, a: r`They are $E_x$, $E_y$ and $E_z$, the energies of the motions along each axis, and they add up to the total energy $E$.` },
-        { q: r`Why divide by $XYZ$?`, a: r`Dividing turns each second derivative term into $X''/X$, $Y''/Y$ or $Z''/Z$, which each depend on a single variable. Solutions that vanish somewhere are handled at those points by continuity.` },
+        { q: r`Why divide by $XYZ$?`, a: r`Dividing turns each second derivative term into $X''/X$, $Y''/Y$ or $Z''/Z$, which each depend on a single variable. Solutions that are zero somewhere are handled at those points by continuity.` },
         { q: r`Is the sum of the three energies the energy of a different problem?`, a: r`No. It is the energy of the 3D problem. The three $E$'s are the parts of the energy stored in the three directions.` },
         { q: r`What is the general form of a separable eigenfunction?`, a: r`$\psi_{n_xn_yn_z}(x,y,z)=X_{n_x}(x)\,Y_{n_y}(y)\,Z_{n_z}(z)$ with $E=E_{n_x}+E_{n_y}+E_{n_z}$.` },
       ],
       keywords: [
-        "separation of variables|separable", "product wave function|product form|product ansatz", "three dimensional Schrodinger equation|3D Schrodinger equation", "Laplacian|second partial derivatives",
+        "separation of variables|separable", "product wave function|product form|product guess", "three dimensional Schrodinger equation|3D Schrodinger equation", "Laplacian|second partial derivatives",
         "divide by X Y Z|divide by XYZ", "each term depends on one variable|single variable", "constant|separation constant", "E x plus E y plus E z|sum of energies|additive energies",
         "three one dimensional equations|ordinary differential equations", "potential is a sum|V x plus V y plus V z", "mixed term cannot separate|coupling term", "quantum numbers n x n y n z|three quantum numbers",
         "boundary conditions|walls of the box", "general eigenfunction|product of eigenfunctions", "complete set|superposition of products", "independent motions|motion along each axis", "energy of x motion|energy of motion along x",

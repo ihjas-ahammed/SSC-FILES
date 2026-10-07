@@ -149,3 +149,9 @@ can show a connection hint, without declaring a downloading script failed.
 ## Optional prerequisite study map
 
 `study-map/` is the shared 3D prerequisite-map engine. It is imported by a thin project entry with subject-owned content and configuration; see [study-map/README.md](study-map/README.md). The parent app adds a catalogue tab only when `PROJECT.studyMaps` contains modules. Absence of that field preserves existing tabs. Subject data, symbols, storage keys, source PDFs, vault and generated standalone pages stay in the project.
+
+## Study-map additions (October 2026)
+
+- `readingRoute(idk, statuses, { focused: true })`: route = switched-off concepts plus ancestors the learner judged as not known. Used for every learner route; the combined module route and vault export keep the full closure.
+- Optional `question.plain` renders as an "In simple words" box (`PlainWords.jsx`) on the attempt, hints, answer, note and question-bank screens. Courses without it are unchanged.
+- `tests/notes-audit.mjs`: shared note audit. Run from a course folder with `node --import ./tests/setup-course.mjs ../../flow-library/study-map/tests/notes-audit.mjs` (both QM maps expose it as `npm run test:notes`).

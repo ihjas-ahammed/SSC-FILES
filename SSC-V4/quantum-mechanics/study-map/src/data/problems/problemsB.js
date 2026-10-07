@@ -8,7 +8,7 @@ export default [
     name: "Proving the Schwarz Inequality",
     group: "uncertainty",
     symbol: r`|\langle\varphi|\psi\rangle|^2`,
-    prerequisites: ["Inner Product", "Conjugate Symmetry", "Positive Definiteness", "Orthogonality", "Complex Conjugate", "Absolute Value"],
+    prerequisites: ["Inner Product", "Conjugate Symmetry", "Positive Definiteness", "Orthogonality", "Complex Conjugate", "Absolute Value", "Pythagoras for Orthogonal Vectors"],
     ross: { n: "B3", label: "Module 3 · Section B Q3", section: "B", page: 2 },
     title: "The Schwarz inequality",
     statement: r`Prove the Schwarz inequality: $$|\langle\varphi|\psi\rangle|^2\le\langle\varphi|\varphi\rangle\,\langle\psi|\psi\rangle.$$`,
@@ -73,11 +73,12 @@ export default [
       },
     },
     question: {
+      plain: r`Prove that the overlap of two vectors is never bigger than the product of their lengths. In symbols, $|\langle\varphi|\psi\rangle|^2\le\langle\varphi|\varphi\rangle\langle\psi|\psi\rangle$: the same statement with everything squared, so that no square roots are needed.`,
       faq: [
         { q: r`What is $\langle\varphi|\psi\rangle$?`, a: r`The [[Inner Product|inner product]] (scalar product) of the two vectors. It is a complex number that measures how much $\psi$ points along $\varphi$.` },
         { q: r`Why is the right side a product of two lengths squared?`, a: r`$\langle\varphi|\varphi\rangle$ and $\langle\psi|\psi\rangle$ are the squared [[Norm|lengths]] of the vectors, so the right side is (length of $\varphi$)$^2$ times (length of $\psi$)$^2$.` },
         { q: r`Do I need to know the vectors explicitly?`, a: r`No. The proof uses only the rules of the inner product, so it holds for every pair of vectors in any space that has one.` },
-        { q: r`What if one of the vectors is zero?`, a: r`Then both sides are $0$ and the inequality is trivially true. Treat this case separately before dividing by $\langle\varphi|\varphi\rangle$.` },
+        { q: r`What if one of the vectors is zero?`, a: r`Then both sides are $0$ and the inequality is obviously true. Treat this case separately before dividing by $\langle\varphi|\varphi\rangle$.` },
         { q: r`How do I know my proof is complete?`, a: r`You should deal with the zero vector, build the perpendicular vector $\chi$ and show it is perpendicular, expand $\langle\psi|\psi\rangle$, use $\langle\chi|\chi\rangle\ge0$, and say when equality holds.` },
       ],
       keywords: [
@@ -96,12 +97,12 @@ export default [
     name: "Products of Hermitian Operators",
     group: "operators",
     symbol: r`\hat A\hat B`,
-    prerequisites: ["Hermitian Operator", "Hermitian Adjoint", "Operator Product", "Commutator", "Inner Product", "Positive Definiteness"],
+    prerequisites: ["Hermitian Operator", "Hermitian Adjoint", "Operator Product", "Commutator", "Inner Product", "Positive Definiteness", "Rules for the Adjoint"],
     ross: { n: "B4", label: "Module 3 · Section B Q4", section: "B", page: 2 },
     title: "When is a product of Hermitian operators Hermitian?",
     statement: r`Show that if $\hat A$ and $\hat B$ are Hermitian, then $\hat A\hat B$ is Hermitian only if $\hat A$ and $\hat B$ commute. (We prove both directions: $\hat A\hat B$ is Hermitian exactly when $[\hat A,\hat B]=0$.)`,
     meaning: r`Two observables multiplied together give another observable only when their order does not matter.`,
-    linkedFormal: r`If $\hat A=\hat A^\dagger$ and $\hat B=\hat B^\dagger$, then $(\hat A\hat B)^\dagger=\hat B\hat A$. Hence $\hat A\hat B$ is [[Hermitian Operator|Hermitian]] if and only if $\hat A\hat B=\hat B\hat A$, that is, if and only if the [[Commutator|commutator]] $[\hat A,\hat B]=0$.`,
+    linkedFormal: r`If $\hat A=\hat A^\dagger$ and $\hat B=\hat B^\dagger$, then $(\hat A\hat B)^\dagger=\hat B\hat A$. So $\hat A\hat B$ is [[Hermitian Operator|Hermitian]] if and only if $\hat A\hat B=\hat B\hat A$, that is, if and only if the [[Commutator|commutator]] $[\hat A,\hat B]=0$.`,
     example: r`With $\sigma_x=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ and $\sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$ (both Hermitian), $\sigma_x\sigma_z=\begin{pmatrix}0&-1\\1&0\end{pmatrix}$, which is not equal to its adjoint $\begin{pmatrix}0&1\\-1&0\end{pmatrix}$. They do not commute.`,
     pretest: {
       prompt: r`The matrices $A=\begin{pmatrix}0&1\\1&0\end{pmatrix}$ and $B=\begin{pmatrix}1&0\\0&-1\end{pmatrix}$ are Hermitian. Is $AB$ Hermitian?`,
@@ -119,7 +120,7 @@ export default [
     faq: [
       { q: r`Is the "only if" in the question the whole story?`, a: r`No. The statement can be turned around: if the operators do commute, the product is Hermitian. Together these give an "if and only if".` },
       { q: r`Why do I care in physics?`, a: r`A measurable quantity needs a Hermitian operator. The product of two observables is a measurable quantity only if the observables commute, which is why $\hat x\hat p$ is not an observable but $\tfrac12(\hat x\hat p+\hat p\hat x)$ is.` },
-      { q: r`What does Hermitian mean for matrices?`, a: r`A matrix equal to its conjugate transpose, written $A=A^\dagger$. Equivalently $\langle u|Av\rangle=\langle Au|v\rangle$ for all vectors $u,v$.` },
+      { q: r`What does Hermitian mean for matrices?`, a: r`A matrix equal to its conjugate transpose, written $A=A^\dagger$. In other words $\langle u|Av\rangle=\langle Au|v\rangle$ for all vectors $u,v$.` },
     ],
     proof: {
       idea: r`Move the operators across the inner product one at a time. Moving $\hat B$ and then $\hat A$ turns $\hat A\hat B$ into $\hat B\hat A$, so the question becomes whether $\hat A\hat B=\hat B\hat A$.`,
@@ -141,7 +142,7 @@ export default [
         },
         {
           title: "Hermitian forces commuting",
-          text: r`If $\hat A\hat B$ is Hermitian, then also $\langle u|\hat A\hat Bv\rangle=\langle\hat A\hat Bu|v\rangle$. Subtracting the two expressions gives $\langle(\hat B\hat A-\hat A\hat B)u\,|\,v\rangle=0$ for every $v$. Choose $v=(\hat B\hat A-\hat A\hat B)u$: then the length of that vector is $0$, so it is the zero vector. Hence $(\hat B\hat A-\hat A\hat B)u=0$ for every $u$, which says $[\hat A,\hat B]=0$.`,
+          text: r`If $\hat A\hat B$ is Hermitian, then also $\langle u|\hat A\hat Bv\rangle=\langle\hat A\hat Bu|v\rangle$. Subtracting the two expressions gives $\langle(\hat B\hat A-\hat A\hat B)u\,|\,v\rangle=0$ for every $v$. Choose $v=(\hat B\hat A-\hat A\hat B)u$: then the length of that vector is $0$, so it is the zero vector. So $(\hat B\hat A-\hat A\hat B)u=0$ for every $u$, which says $[\hat A,\hat B]=0$.`,
           check: chk(r`Why may we choose $v=(\hat B\hat A-\hat A\hat B)u$?`, r`The equation holds for every $v$, and a vector orthogonal to itself is the zero vector`, r`Because $v$ must be an eigenvector of $\hat A$`, r`Because $u$ and $v$ are orthogonal`, r`The equation holds for all $v$, so it holds for this one. Then $\langle w|w\rangle=0$ forces $w=0$ by [[Positive Definiteness|positive definiteness]].`, "Positive Definiteness"),
         },
         {
@@ -156,6 +157,7 @@ export default [
       },
     },
     question: {
+      plain: r`Two Hermitian operators $\hat A$ and $\hat B$ are given. Show that their product $\hat A\hat B$ is Hermitian exactly when the order of multiplying does not matter ($\hat A\hat B=\hat B\hat A$).`,
       faq: [
         { q: r`What does "$\hat A$ is Hermitian" mean?`, a: r`$\hat A=\hat A^\dagger$: the operator equals its [[Hermitian Adjoint|adjoint]]. In terms of inner products, $\langle u|\hat Av\rangle=\langle\hat Au|v\rangle$.` },
         { q: r`What does it mean that two operators commute?`, a: r`Their [[Commutator|commutator]] is zero: $\hat A\hat B-\hat B\hat A=0$, so the order of multiplication does not matter.` },
@@ -179,7 +181,7 @@ export default [
     name: "Deriving the Uncertainty Relation",
     group: "uncertainty",
     symbol: r`\Delta A\,\Delta B\ge\tfrac12|\langle[A,B]\rangle|`,
-    prerequisites: ["Proving the Schwarz Inequality", "Expectation Value", "Variance", "Commutator", "Anticommutator", "Hermitian Operator", "Covariance", "Position Operator", "Momentum Operator"],
+    prerequisites: ["Proving the Schwarz Inequality", "Expectation Value", "Variance", "Commutator", "Anticommutator", "Hermitian Operator", "Covariance", "Position Operator", "Momentum Operator", "Commutator of Hermitian Operators"],
     ross: { n: "B5 · C2", label: "Module 3 · Section B Q5 and Section C Q2", section: "B", page: 2 },
     title: "From Schwarz to the uncertainty principle",
     statement: r`Starting from the Schwarz inequality for $|\alpha\rangle=(\hat A-\langle\hat A\rangle)|\psi\rangle$ and $|\beta\rangle=(\hat B-\langle\hat B\rangle)|\psi\rangle$, derive the general uncertainty relation for two Hermitian operators $$\Delta\hat A\,\Delta\hat B\ge\tfrac12\big|\langle[\hat A,\hat B]\rangle\big|.$$ Show also the stronger Robertson–Schrödinger form, and apply it to $\hat x$ and $\hat p_x$ to obtain $\Delta x\,\Delta p_x\ge\hbar/2$.`,
@@ -224,7 +226,7 @@ export default [
         },
         {
           title: "Split A′B′ into a real and an imaginary part",
-          text: r`Write $A\prime B\prime=\tfrac12\{A\prime,B\prime\}+\tfrac12[A\prime,B\prime]$. The anticommutator is Hermitian, so its expectation value is real. The commutator satisfies $[A,B]^\dagger=BA-AB=-[A,B]$, so its expectation value is purely imaginary. Hence $\langle A\prime B\prime\rangle=x+iy$ with $x=\tfrac12\langle\{A\prime,B\prime\}\rangle=\mathrm{Cov}(A,B)$ and $iy=\tfrac12\langle[A,B]\rangle$.`,
+          text: r`Write $A\prime B\prime=\tfrac12\{A\prime,B\prime\}+\tfrac12[A\prime,B\prime]$. The anticommutator is Hermitian, so its expectation value is real. The commutator satisfies $[A,B]^\dagger=BA-AB=-[A,B]$, so its expectation value is purely imaginary. So $\langle A\prime B\prime\rangle=x+iy$ with $x=\tfrac12\langle\{A\prime,B\prime\}\rangle=\mathrm{Cov}(A,B)$ and $iy=\tfrac12\langle[A,B]\rangle$.`,
           check: chk(r`Which part of $\langle A\prime B\prime\rangle$ comes from the commutator?`, r`The imaginary part, $\tfrac12\langle[A,B]\rangle$`, r`The real part`, r`None of it`, r`The commutator of Hermitian operators is anti-Hermitian, so its expectation value is [[Expectation Value|purely imaginary]]. The anticommutator gives the real covariance part.`, "Anticommutator"),
         },
         {
@@ -238,12 +240,13 @@ export default [
           check: chk(r`What is $|\langle[\hat x,\hat p]\rangle|$ for a normalized state?`, r`$\hbar$`, r`$\hbar/2$`, r`$0$`, r`The commutator is the constant $i\hbar$, whose absolute value is $\hbar$. The $\tfrac12$ comes from the general relation.`, "Momentum Operator"),
         },
       ],
-      conclusion: r`We obtained $(\Delta A)^2(\Delta B)^2\ge\mathrm{Cov}(A,B)^2+\tfrac14|\langle[A,B]\rangle|^2$, hence $\Delta A\,\Delta B\ge\tfrac12|\langle[A,B]\rangle|$, and for $\hat x,\hat p$ this is the Heisenberg bound $\Delta x\,\Delta p\ge\hbar/2$. $\blacksquare$`,
+      conclusion: r`We obtained $(\Delta A)^2(\Delta B)^2\ge\mathrm{Cov}(A,B)^2+\tfrac14|\langle[A,B]\rangle|^2$, so $\Delta A\,\Delta B\ge\tfrac12|\langle[A,B]\rangle|$, and for $\hat x,\hat p$ this is the Heisenberg bound $\Delta x\,\Delta p\ge\hbar/2$. $\blacksquare$`,
       example: {
         text: r`Spin-$\tfrac12$, state $|\uparrow\rangle$, $A=\sigma_x$, $B=\sigma_y$: $\Delta\sigma_x=\Delta\sigma_y=1$, $\mathrm{Cov}=\tfrac12\langle\sigma_x\sigma_y+\sigma_y\sigma_x\rangle=0$ and $\tfrac12|\langle[\sigma_x,\sigma_y]\rangle|=\tfrac12|2i|=1$. The relation $1\cdot1\ge1$ is an equality here.`,
       },
     },
     question: {
+      plain: r`Use the rule that the overlap of two vectors is at most the product of their lengths, on the two vectors $(\hat A-\langle\hat A\rangle)|\psi\rangle$ and $(\hat B-\langle\hat B\rangle)|\psi\rangle$. This proves the uncertainty relation: the product of the two spreads is at least half the size of the average of $[\hat A,\hat B]$. Then use it for position and momentum to get $\Delta x\,\Delta p\ge\hbar/2$.`,
       faq: [
         { q: r`What is $\Delta A$?`, a: r`The standard deviation of $A$ in the state: $\Delta A=\sqrt{\langle A^2\rangle-\langle A\rangle^2}$. See [[Variance|variance]].` },
         { q: r`Why start from the Schwarz inequality?`, a: r`Because $\langle\alpha|\alpha\rangle$ and $\langle\beta|\beta\rangle$ are exactly the variances, and $\langle\alpha|\beta\rangle$ contains the commutator. Schwarz links these three.` },
@@ -267,9 +270,9 @@ export default [
     name: "Three Theorems of Hermitian Operators",
     group: "eigen",
     symbol: r`A=A^\dagger`,
-    prerequisites: ["Hermitian Operator", "Eigenvalue", "Eigenvector", "Orthogonality", "Inner Product", "Invariant Subspace", "Orthogonal Complement", "Orthonormal Basis", "Fundamental Theorem of Algebra", "Secular Equation", "Mathematical Induction"],
+    prerequisites: ["Hermitian Operator", "Eigenvalue", "Eigenvector", "Orthogonality", "Inner Product", "Invariant Subspace", "Orthogonal Complement", "Orthonormal Basis", "Fundamental Theorem of Algebra", "Secular Equation", "Mathematical Induction", "Real Eigenvalues of Hermitian Operators", "Orthogonal Eigenvectors", "Orthogonal Complement of an Invariant Subspace"],
     ross: { n: "B6 · B7 · C1", label: "Module 3 · Section B Q6, Q7 and Section C Q1", section: "B", page: 2 },
-    title: "Real eigenvalues, orthogonal eigenvectors, complete basis",
+    title: "Why Hermitian operators have real eigenvalues and right-angled eigenvectors",
     statement: r`Hermitian operators represent physical observables. Prove: (1) the eigenvalues of a Hermitian operator are real; (2) eigenvectors belonging to distinct eigenvalues are orthogonal; (3) the eigenvectors form a complete orthonormal basis of the space (we prove this for a finite-dimensional space).`,
     meaning: r`Measured values are real numbers, different measured values come from perpendicular states, and every state can be built from these special states.`,
     linkedFormal: r`Let $A=A^\dagger$ act on an $n$-dimensional complex space. (1) Every [[Eigenvalue|eigenvalue]] is real. (2) If $A|v\rangle=\lambda|v\rangle$ and $A|w\rangle=\mu|w\rangle$ with $\lambda\ne\mu$, then $\langle w|v\rangle=0$. (3) There is an orthonormal basis $|e_1\rangle,\ldots,|e_n\rangle$ of eigenvectors of $A$.`,
@@ -332,9 +335,10 @@ export default [
       },
     },
     question: {
+      plain: r`Hermitian operators describe things we can measure. Prove three facts about them: (1) their eigenvalues are real numbers; (2) eigenvectors that belong to different eigenvalues are at right angles; (3) their eigenvectors give a full set of right-angled unit vectors (a basis) for the space.`,
       faq: [
-        { q: r`What is a Hermitian operator?`, a: r`An operator with $A=A^\dagger$, equivalently $\langle u|Av\rangle=\langle Au|v\rangle$ for all vectors. See [[Hermitian Operator|Hermitian operator]].` },
-        { q: r`What is an eigenvalue and an eigenvector?`, a: r`A nonzero vector $|v\rangle$ with $A|v\rangle=\lambda|v\rangle$ is an [[Eigenvector|eigenvector]], and the number $\lambda$ is its [[Eigenvalue|eigenvalue]].` },
+        { q: r`What is a Hermitian operator?`, a: r`An operator with $A=A^\dagger$, in other words $\langle u|Av\rangle=\langle Au|v\rangle$ for all vectors. See [[Hermitian Operator|Hermitian operator]].` },
+        { q: r`What is an eigenvalue and an eigenvector?`, a: r`A non-zero vector $|v\rangle$ with $A|v\rangle=\lambda|v\rangle$ is an [[Eigenvector|eigenvector]], and the number $\lambda$ is its [[Eigenvalue|eigenvalue]].` },
         { q: r`What does "complete orthonormal basis" mean?`, a: r`The vectors have length 1, are mutually perpendicular, and every vector in the space can be written as a combination of them.` },
         { q: r`Why do the three theorems matter for physics?`, a: r`Real eigenvalues are the possible measurement results, orthogonal eigenvectors are mutually exclusive outcomes, and completeness means every state can be expanded in the outcomes.` },
         { q: r`How do I know my proof is complete?`, a: r`Prove reality (compute $\langle v|Av\rangle$ two ways), orthogonality (compute $\langle w|Av\rangle$ two ways), and completeness (base case, one eigenvector, invariant perpendicular space, induction).` },
@@ -355,11 +359,11 @@ export default [
     name: "Commuting Operators and Common Eigenvectors",
     group: "eigen",
     symbol: r`[A,B]=0`,
-    prerequisites: ["Three Theorems of Hermitian Operators", "Eigenspace", "Eigenvalue", "Eigenvector", "Commutator", "Invariant Subspace", "Operator Restriction", "Hermitian Operator", "Orthonormal Basis"],
+    prerequisites: ["Three Theorems of Hermitian Operators", "Eigenspace", "Eigenvalue", "Eigenvector", "Commutator", "Invariant Subspace", "Operator Restriction", "Hermitian Operator", "Orthonormal Basis", "Gram-Schmidt Process"],
     ross: { n: "A10 · A11", label: "Module 3 · Section A Q10 and Q11", section: "B", page: 1 },
-    title: "Simultaneous eigenvectors and degeneracy",
+    title: "States that are eigenvectors of two operators at once",
     statement: r`(a) What can be said about simultaneous eigenvectors of commuting operators? (b) What is a degenerate eigenvalue? We prove for commuting Hermitian operators $\hat A,\hat B$ on a finite-dimensional space that there is an orthonormal basis of vectors that are eigenvectors of both, and we explain why degeneracy forces us to choose them carefully.`,
-    meaning: r`Two observables that commute can be known exactly at the same time, because there are states that are eigenstates of both. When an eigenvalue is repeated (degenerate), not every eigenvector of one operator works for the other.`,
+    meaning: r`Two quantities whose operators commute can both have exact values at the same time, because some states are eigenvectors of both. When an eigenvalue is repeated (we say degenerate), not every eigenvector of one operator is also an eigenvector of the other.`,
     linkedFormal: r`If $[\hat A,\hat B]=0$ for Hermitian $\hat A,\hat B$, there is an orthonormal basis of common eigenvectors. An eigenvalue $\lambda$ of $\hat A$ is degenerate if its [[Eigenspace|eigenspace]] $E_\lambda=\{v:\hat Av=\lambda v\}$ has dimension greater than $1$ (two or more independent eigenvectors share it). Conversely, a common eigenbasis forces $[\hat A,\hat B]=0$.`,
     example: r`Let $A=\mathrm{diag}(2,2,5)$ and $B=\mathrm{diag}(1,3,4)$. They commute. The eigenvalue $2$ of $A$ is degenerate with eigenspace spanned by $e_1,e_2$, and $B$ separates this plane into the two eigenvectors $e_1$ (value $1$) and $e_2$ (value $3$). Together $e_1,e_2,e_3$ are common eigenvectors.`,
     pretest: {
@@ -385,7 +389,7 @@ export default [
       steps: [
         {
           title: "What degenerate means",
-          text: r`The set $E_\lambda=\{v:\hat Av=\lambda v\}$ is a vector space, the eigenspace of $\lambda$. If $\dim E_\lambda=1$ the eigenvalue is nondegenerate; if $\dim E_\lambda>1$ it is degenerate: then there are many different eigenvectors for the same eigenvalue (every nonzero vector of $E_\lambda$).`,
+          text: r`The set $E_\lambda=\{v:\hat Av=\lambda v\}$ is a vector space: the eigenspace of $\lambda$. If it is just a line ($\dim E_\lambda=1$), the eigenvalue is called nondegenerate. If it is bigger ($\dim E_\lambda>1$), the eigenvalue is degenerate. Then many different vectors, all the vectors of $E_\lambda$ that are not zero, are eigenvectors for the same eigenvalue.`,
           check: chk(r`If $\hat A=\mathrm{diag}(2,2,5)$, which eigenvalue is degenerate?`, r`$2$, because its eigenspace is a plane`, r`$5$, because it is the largest`, r`None of them`, r`Eigenvalue $2$ has eigenvectors $(x,y,0)$ forming a two-dimensional [[Eigenspace|eigenspace]]. Eigenvalue $5$ has only multiples of $(0,0,1)$.`, "Eigenspace"),
         },
         {
@@ -395,7 +399,7 @@ export default [
         },
         {
           title: "Nondegenerate eigenvalue: done",
-          text: r`If $E_\lambda$ is a line (nondegenerate), then $\hat Bv$ lies in this line, so $\hat Bv=\mu v$ for some number $\mu$. Hence $v$ is an eigenvector of $\hat B$ as well, and no choice has to be made.`,
+          text: r`If $E_\lambda$ is a line (nondegenerate), then $\hat Bv$ lies in this line, so $\hat Bv=\mu v$ for some number $\mu$. So $v$ is an eigenvector of $\hat B$ as well, and no choice has to be made.`,
           check: chk(r`If $E_\lambda$ is a line spanned by $v$ and $\hat Bv\in E_\lambda$, what follows?`, r`$\hat Bv=\mu v$ for some number $\mu$`, r`$\hat Bv=0$`, r`$v$ is not an eigenvector of $\hat A$`, r`Every vector in a line is a multiple of $v$, so $\hat Bv=\mu v$.`, "Eigenvector"),
         },
         {
@@ -405,13 +409,13 @@ export default [
         },
         {
           title: "Put all eigenspaces together",
-          text: r`The eigenspaces of $\hat A$ for distinct eigenvalues are mutually perpendicular and together span the whole space (the three theorems). Choosing in each one an orthonormal basis of common eigenvectors, as in the previous steps, gives an orthonormal basis of the whole space made of vectors that are eigenvectors of both $\hat A$ and $\hat B$.`,
+          text: r`The eigenspaces of $\hat A$ for different eigenvalues are at right angles to each other, and together they fill the whole space (the three theorems). Inside each eigenspace we pick right-angled unit vectors that are eigenvectors of both operators, as in the steps above. Putting all of them together gives a basis of the whole space made of vectors that are eigenvectors of both $\hat A$ and $\hat B$.`,
           check: chk(r`Why do the common eigenvectors from different eigenspaces of $\hat A$ remain perpendicular?`, r`Eigenvectors of $\hat A$ with different eigenvalues are orthogonal`, r`Because we normalise them`, r`Because $\hat B$ is the zero operator`, r`This is Theorem 2 for the Hermitian operator $\hat A$, see [[Orthonormal Basis|orthonormal basis]].`, "Orthonormal Basis"),
         },
         {
           title: "Why degeneracy needs care, and the converse",
-          text: r`Take $\hat A=I$ (everything is degenerate): every vector is an eigenvector of $\hat A$, yet for $\hat B=\sigma_x$ only $(1,1)$ and $(1,-1)$ (up to multiples) are eigenvectors. So with a degenerate eigenvalue an arbitrary eigenvector of $\hat A$ need not be an eigenvector of $\hat B$: commuting only guarantees that a good choice exists. Conversely, if $e_k$ are common eigenvectors with $\hat Ae_k=a_ke_k$ and $\hat Be_k=b_ke_k$, then $\hat A\hat Be_k=a_kb_ke_k=\hat B\hat Ae_k$ for every basis vector, so $[\hat A,\hat B]=0$.`,
-          check: chk(r`For $\hat A=I$ and $\hat B=\sigma_x$, is every eigenvector of $\hat A$ an eigenvector of $\hat B$?`, r`No, only the vectors along $(1,1)$ and $(1,-1)$ are`, r`Yes, every vector is an eigenvector of $\sigma_x$`, r`No, $I$ has no eigenvectors`, r`$I$ has the eigenvalue $1$ with every vector, but $\sigma_x$ only keeps the directions of $(1,\pm1)$. In a degenerate eigenspace one must choose the basis adapted to $\hat B$.`, "Eigenvector"),
+          text: r`Take $\hat A=I$ (here everything is degenerate): every vector is an eigenvector of $\hat A$. But for $\hat B=\sigma_x$ only the directions $(1,1)$ and $(1,-1)$ are eigenvectors. So when an eigenvalue is degenerate, an eigenvector of $\hat A$ is not always an eigenvector of $\hat B$. Commuting only promises that a good choice exists. Now the other way round: if $e_k$ are common eigenvectors, with $\hat Ae_k=a_ke_k$ and $\hat Be_k=b_ke_k$, then $\hat A\hat Be_k=a_kb_ke_k=\hat B\hat Ae_k$ for every basis vector. So $[\hat A,\hat B]=0$.`,
+          check: chk(r`For $\hat A=I$ and $\hat B=\sigma_x$, is every eigenvector of $\hat A$ an eigenvector of $\hat B$?`, r`No, only the vectors along $(1,1)$ and $(1,-1)$ are`, r`Yes, every vector is an eigenvector of $\sigma_x$`, r`No, $I$ has no eigenvectors`, r`$I$ has the eigenvalue $1$ with every vector, but $\sigma_x$ only keeps the directions of $(1,\pm1)$. Inside a degenerate eigenspace we must choose the basis that suits $\hat B$.`, "Eigenvector"),
         },
       ],
       conclusion: r`Commuting Hermitian operators have a common orthonormal eigenbasis, and conversely. For a degenerate eigenvalue of $\hat A$ the second operator must be used to choose the basis inside its eigenspace. $\blacksquare$`,
@@ -420,6 +424,7 @@ export default [
       },
     },
     question: {
+      plain: r`What can you say about a state that is an eigenvector of two operators at the same time, when the two operators commute? And what is a degenerate eigenvalue (one that has more than one independent eigenvector)? Prove that two commuting Hermitian operators share a full set of right-angled unit eigenvectors.`,
       faq: [
         { q: r`What does "simultaneous eigenvector" mean?`, a: r`A vector $v$ that is an eigenvector of both operators at once: $\hat Av=a v$ and $\hat Bv=b v$.` },
         { q: r`What does "commuting operators" mean?`, a: r`$[\hat A,\hat B]=\hat A\hat B-\hat B\hat A=0$: the order of applying them does not matter. See [[Commutator|commutator]].` },

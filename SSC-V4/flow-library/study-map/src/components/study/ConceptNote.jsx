@@ -8,6 +8,7 @@ import { Symbol, Pill, StatusIcon } from "../ui/Primitives";
 import FaqList from "./FaqList";
 import ProofBlock from "./ProofBlock";
 import PreExposure from "./PreExposure";
+import PlainWords from "./PlainWords";
 
 export default function ConceptNote({
   name,
@@ -75,6 +76,7 @@ export default function ConceptNote({
         <div className="exercise-card">
           <span className="eyebrow">THE EXERCISE · {exercise.sourceLabel}</span>
           <MathText text={exercise.text} />
+          <PlainWords text={exercise.plain} onLink={visit} />
         </div>
       )}
       <div className="meaning-card">

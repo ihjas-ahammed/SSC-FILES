@@ -1,6 +1,7 @@
 import { Compass, ArrowRight, Lightbulb } from "lucide-react";
 import { useAtlas } from "../../../app/AtlasContext";
 import MathText from "../../ui/MathText";
+import PlainWords from "../PlainWords";
 export default function SolutionHints() {
   const { question, flow, setFlow, togglePrerequisites } = useAtlas();
   const unlocked = flow.unlocked || [];
@@ -13,6 +14,7 @@ export default function SolutionHints() {
       </div>
       <h2>Find your way to the answer.</h2>
       <div className="source-question"><MathText text={question.text} /></div>
+      <PlainWords text={question.plain} />
       <p>
         Think first. Each correct checkpoint unlocks another part of the
         complete formal solution. A missed answer gives you a hint and another

@@ -8,6 +8,7 @@ import { useAtlas } from "../../../app/AtlasContext";
 
 import SymbolKey from "../SymbolKey";
 import NewTerms from "../NewTerms";
+import PlainWords from "../PlainWords";
 import { PenLine } from "lucide-react";
 export default function Answer() {
   const [examMode, setExamMode] = useState(false);
@@ -29,6 +30,7 @@ export default function Answer() {
       <div className="source-question">
         <MathText text={question.text} />
       </div>
+      <PlainWords text={question.plain} />
       {question.verify && (
         <div className="source-qualification">
           <Flag size={16} />

@@ -29,6 +29,16 @@ export default [
       { q: r`Why does the bra go on the left and the ket on the right?`, a: r`Reading right to left: first $A$ acts on the ket $|n\rangle$, then the bra $\langle m|$ measures how much of $|m\rangle$ is in the result. The ket labels the column and the bra labels the row.` },
       { q: r`Why do we need an orthonormal basis?`, a: r`Only then does $\langle m|\big(\sum_k c_k|k\rangle\big)$ pick out exactly $c_m$. In a non-orthogonal basis the formula would mix different entries.` },
     ],
+    proof: {
+      idea: r`Write what the operator gives as a sum of basis states, then take the inner product with $\langle m|$. Orthonormality leaves just one coefficient.`,
+      steps: [
+        { title: "Expand the result", text: r`$A|n\rangle=\sum_kc_k|k\rangle$ for some numbers $c_k$, because $\{|k\rangle\}$ is a basis.` },
+        { title: "Take the inner product with $\\langle m|$", text: r`$\langle m|A|n\rangle=\sum_kc_k\langle m|k\rangle$.` },
+        { title: "Use orthonormality", text: r`$\langle m|k\rangle=\delta_{mk}$, so only $k=m$ survives: $\langle m|A|n\rangle=c_m$.` },
+      ],
+      conclusion: r`$\langle m|A|n\rangle$ is the coefficient of $|m\rangle$ in $A|n\rangle$. It is the entry in row $m$ and column $n$. $\blacksquare$`,
+      example: { text: r`If $A|1\rangle=3|0\rangle+2|1\rangle$, then $c_0=3$ and $c_1=2$. So $\langle0|A|1\rangle=3$ and $\langle1|A|1\rangle=2$.` },
+    },
   }),
 
   idea({
@@ -57,6 +67,17 @@ export default [
       { q: r`Is the truncated matrix wrong?`, a: r`It is exact for every matrix element between kept states. What is lost is whatever needs a discarded state, which is why operator identities can fail near the edge of the kept block.` },
       { q: r`When is truncation a good idea?`, a: r`When the physics you care about involves only the lowest states, for example low temperature or weak driving. Then the missing states hardly matter.` },
     ],
+    proof: {
+      idea: r`Use $\operatorname{tr}(AB)=\operatorname{tr}(BA)$ for finite matrices. A commutator then always has trace $0$, but the identity does not.`,
+      steps: [
+        { title: "A commutator has trace zero", text: r`For $N\times N$ matrices, $\operatorname{tr}(AB-BA)=\operatorname{tr}(AB)-\operatorname{tr}(BA)=0$ ([[Trace Cyclicity|Trace Cyclicity]]).` },
+        { title: "The identity does not", text: r`The $N\times N$ identity matrix has $N$ ones on its diagonal, so its trace is $N\ne0$.` },
+        { title: "Conclude", text: r`So no pair of $N\times N$ matrices can satisfy $aa^\dagger-a^\dagger a=I$ exactly.` },
+        { title: "What goes wrong", text: r`In the true infinite matrices the relation holds. When we cut to $N$ states, one entry near the edge is lost, and the identity fails there.` },
+      ],
+      conclusion: r`A truncated oscillator can only satisfy $[a,a^\dagger]=1$ approximately. $\blacksquare$`,
+      example: { text: r`With three states, $a=\begin{pmatrix}0&1&0\\0&0&\sqrt2\\0&0&0\end{pmatrix}$ gives $aa^\dagger-a^\dagger a=\operatorname{diag}(1,1,-2)$. The last entry should be $1$, and the trace is $0$, not $3$.` },
+    },
   }),
 
   idea({
@@ -85,6 +106,17 @@ export default [
       { q: r`Why a minus sign in the exponent?`, a: r`It is the convention that follows from the time-dependent Schrödinger equation $i\hbar\,\partial_t\psi=H\psi$. The sign decides only which way the phase turns.` },
       { q: r`Is the phase observable?`, a: r`The overall phase of one state is not. The relative phase between two terms of a superposition is, because it shows up in interference terms.` },
     ],
+    proof: {
+      idea: r`Check that $\psi_n(x)e^{-iE_nt/\hbar}$ solves the full equation. Then see what happens when two such terms are added.`,
+      steps: [
+        { title: "Differentiate in time", text: r`$i\hbar\,\partial_t\bigl(\psi_ne^{-iE_nt/\hbar}\bigr)=i\hbar\cdot\bigl(-\tfrac{iE_n}\hbar\bigr)\psi_ne^{-iE_nt/\hbar}=E_n\psi_ne^{-iE_nt/\hbar}$.` },
+        { title: "Compare with $\\hat H$", text: r`$\hat H\bigl(\psi_ne^{-iE_nt/\hbar}\bigr)=E_n\psi_ne^{-iE_nt/\hbar}$, because $\hat H\psi_n=E_n\psi_n$ and $\hat H$ does not touch $t$. The two sides agree.` },
+        { title: "Add two energies", text: r`Take $\Psi=c_0\psi_0e^{-iE_0t/\hbar}+c_1\psi_1e^{-iE_1t/\hbar}$. Then $|\Psi|^2=|c_0\psi_0|^2+|c_1\psi_1|^2+2\operatorname{Re}\bigl(c_0^*c_1\psi_0^*\psi_1\,e^{-i(E_1-E_0)t/\hbar}\bigr)$.` },
+        { title: "Read off the oscillation", text: r`The cross term turns at the angular frequency $(E_1-E_0)/\hbar$. The other two terms do not depend on $t$.` },
+      ],
+      conclusion: r`A single-energy state only turns its phase. A mix of two energies oscillates at $(E_1-E_0)/\hbar$. $\blacksquare$`,
+      example: { text: r`For the oscillator, $E_1-E_0=\hbar\omega$, so the mix of $\psi_0$ and $\psi_1$ oscillates at the angular frequency $\omega$.` },
+    },
   }),
 
   idea({
@@ -95,7 +127,7 @@ export default [
     prerequisites: ["Function", "Derivative", "Partial Derivative Symbol"],
     minutes: 3,
     meaning: r`If a quantity that depends only on $x$ always equals a quantity that depends only on $y$, both must be the same constant. That constant is a separation constant.`,
-    linkedFormal: r`Suppose $f(x)=g(y)$ for all $x$ and all $y$. Changing $x$ alone leaves the right-hand side untouched, so $f$ cannot change with $x$. The same argument shows $g$ cannot change with $y$. Hence $f(x)=g(y)=k$ for one number $k$, the separation constant. Splitting a many-variable equation into one-variable equations produces such constants.`,
+    linkedFormal: r`Suppose $f(x)=g(y)$ for all $x$ and all $y$. Changing $x$ alone leaves the right-hand side untouched, so $f$ cannot change with $x$. The same argument shows $g$ cannot change with $y$. So $f(x)=g(y)=k$ for one number $k$, the separation constant. Splitting a many-variable equation into one-variable equations produces such constants.`,
     example: r`The statement $x^2=y+4$ for all $x$ and $y$ is impossible: moving $x$ changes only the left side. But if $X''(x)/X(x)=-Y''(y)/Y(y)$ for all $x$ and $y$, then both sides must equal the same constant $k$, which gives two separate equations $X''=kX$ and $Y''=-kY$.`,
     pretest: {
       prompt: r`A function of $x$ only is always equal to a function of $y$ only, for all $x$ and $y$. What can be said about them?`,
@@ -104,14 +136,24 @@ export default [
       explanation: r`Moving $x$ cannot change the $y$-side, so the $x$-side never changes. The same holds for the other side, so each is a constant, and the constant is the same.`,
     },
     check: {
-      prompt: r`Why can a sum of three terms depending on $x$, on $y$ and on $z$ respectively equal a fixed number only if each term is itself constant?`,
+      prompt: r`Why can a sum of three terms depending on $x$, on $y$ and on $z$ (one each) equal a fixed number only if each term is itself constant?`,
       options: [r`Changing one variable changes only its own term, so that term cannot vary`, r`Because the three terms are always equal to each other`, r`Because every term equals zero`],
       correct: 0,
       explanation: r`If $x$ is changed with $y,z$ fixed, only the $x$-term can move, yet the total stays fixed. So the $x$-term is constant, and likewise the others.`,
     },
     faq: [
-      { q: r`Can the separation constants be negative?`, a: r`Yes, any real number is possible mathematically. For the Schrödinger equation boundary conditions later limit which constants (energies) are allowed.` },
+      { q: r`Can the separation constants be negative?`, a: r`Yes, any real number is possible in the maths. For the Schrödinger equation boundary conditions later limit which constants (energies) are allowed.` },
       { q: r`Is a separation constant the same as an eigenvalue?`, a: r`When the one-variable equation is an eigenvalue equation, yes. The allowed constants are then the eigenvalues, for example the energy $E_x$ of motion along $x$.` },
     ],
+    proof: {
+      idea: r`Fix one variable and let the other one move. A function that cannot change is a constant.`,
+      steps: [
+        { title: "State the claim", text: r`Suppose $f(x)=g(y)$ for every $x$ and every $y$. We show that both are the same constant.` },
+        { title: "Fix $y$", text: r`Choose one value $y_0$. Then $f(x)=g(y_0)$ for every $x$. The right side is a number that does not depend on $x$, so $f$ is a constant. Call it $k$.` },
+        { title: "Fix $x$", text: r`Choose one value $x_0$. Then $g(y)=f(x_0)=k$ for every $y$.` },
+      ],
+      conclusion: r`$f(x)=g(y)=k$ for one number $k$. $\blacksquare$`,
+      example: { text: r`If $X''/X=-Y''/Y$ for all $x$ and $y$, then both equal one constant $k$, so $X''=kX$ and $Y''=-kY$.` },
+    },
   }),
 ];

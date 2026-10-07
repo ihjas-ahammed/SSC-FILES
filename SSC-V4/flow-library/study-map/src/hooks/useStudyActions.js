@@ -141,7 +141,7 @@ export default function useStudyActions(state) {
     list.forEach(
       (name) => (nextStatuses[name] = idk.includes(name) ? "unknown" : "known"),
     );
-    const r = readingRoute(idk, nextStatuses);
+    const r = readingRoute(idk, nextStatuses, { focused: true });
     setStatuses(nextStatuses);
     setPlan(r.map((c) => c.name));
     setFlow((f) => ({
@@ -207,7 +207,7 @@ export default function useStudyActions(state) {
     if (failures.length) {
       setReaderTab("note");
       setReaderResult(null);
-      const r = readingRoute(failures, statuses);
+      const r = readingRoute(failures, statuses, { focused: true });
       setPlan(r.map((c) => c.name));
       setFlow((f) => ({ ...f, idk: failures, phase: "review", readIndex: 0 }));
     } else setFlow((f) => ({ ...f, phase: "ready" }));
@@ -219,7 +219,7 @@ export default function useStudyActions(state) {
     state.setPreferences((p) => ({ ...p, prerequisites: true }));
     setReaderTab("note");
     setReaderResult(null);
-    const nextRoute = readingRoute([name], statuses);
+    const nextRoute = readingRoute([name], statuses, { focused: true });
     setPlan(nextRoute.map((c) => c.name));
     setFlow((f) => ({
       ...f,

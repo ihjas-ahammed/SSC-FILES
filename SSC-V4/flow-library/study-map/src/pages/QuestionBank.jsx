@@ -1,4 +1,5 @@
 import { useState } from "react";
+import MathText from "../components/ui/MathText";
 import {
   ArrowRight,
   Network,
@@ -122,8 +123,14 @@ export default function QuestionBank() {
                   </span>
                 </div>
                 <h3>{q.title}</h3>
-                <p>
-                  {q.text.length > 170 ? q.text.slice(0, 170) + "…" : q.text}
+                <p className={q.plain ? "plain-preview" : undefined}>
+                  {q.plain ? (
+                    <MathText text={q.plain} />
+                  ) : q.text.length > 170 ? (
+                    q.text.slice(0, 170) + "…"
+                  ) : (
+                    q.text
+                  )}
                 </p>
                 <div className="question-card-track">
                   <div className="progress-track">

@@ -1,0 +1,165 @@
+import { idea, chk } from "../dsl.js";
+const r = String.raw;
+
+// Three symbols that appear everywhere in the module.
+export default [
+  idea({
+    id: "dagger-symbol",
+    name: "Dagger Symbol",
+    group: "notation",
+    symbol: r`\dagger`,
+    prerequisites: ["Hermitian Adjoint"],
+    minutes: 2,
+    meaning: r`The small cross $\dagger$ (called "dagger") means "take the adjoint". For a matrix, that means flip rows and columns and conjugate every entry.`,
+    linkedFormal: r`$A^\dagger$ is the [[Hermitian Adjoint|Hermitian adjoint]] of $A$. For a [[Matrix|matrix]], $(A^\dagger)_{ij}=A_{ji}^*$. For a ket, $|\psi\rangle^\dagger=\langle\psi|$, which is its [[Bra|bra]], and for a bra, $\langle\psi|^\dagger=|\psi\rangle$. So the dagger swaps kets and bras. It reverses the order of a product: $(AB)^\dagger=B^\dagger A^\dagger$.`,
+    example: r`$\begin{pmatrix}1&i\end{pmatrix}^{\dagger}=\begin{pmatrix}1\\-i\end{pmatrix}$: the row becomes a column, and $i$ becomes $-i$.`,
+    pretest: chk(
+      r`In some books a bar or a star is written on a number to mean "the mirror image across the real axis". If a little cross is written on a whole matrix, what do you think it asks you to do to every entry?`,
+      r`Flip the matrix over its diagonal and take the mirror image of every number`,
+      r`Square every entry`,
+      r`Delete the matrix`,
+      r`The dagger is the matrix version of the conjugate: transpose and conjugate.`,
+    ),
+    check: chk(
+      r`What is $|\psi\rangle^\dagger$?`,
+      r`The bra $\langle\psi|$`,
+      r`The ket $|\psi\rangle$ again`,
+      r`The number $\langle\psi|\psi\rangle$`,
+      r`The dagger turns a ket into the matching bra, and a bra into the matching ket.`,
+    ),
+    faq: [
+      { q: r`Is the dagger the same as the star $^*$?`, a: r`No. The star conjugates a single number. The dagger does transposing and conjugating together, so it is used for matrices and operators.` },
+      { q: r`What is $(A^\dagger)^\dagger$?`, a: r`$A$ itself. Doing it twice returns to the start. See [[Rules for the Adjoint|Rules for the Adjoint]].` },
+    ],
+  }),
+
+  idea({
+    id: "hbar-symbol",
+    name: "Hbar Symbol",
+    group: "notation",
+    symbol: r`\hbar`,
+    prerequisites: ["Planck Constant"],
+    minutes: 2,
+    meaning: r`The symbol $\hbar$ (read "h-bar") is the reduced Planck constant, $h$ divided by $2\pi$. It appears in most quantum formulas.`,
+    linkedFormal: r`$\hbar=h/(2\pi)$, where $h$ is the [[Planck Constant|Planck constant]]. It sets the size of quantum effects in the [[Commutator|commutator]] $[\hat x,\hat p]=i\hbar$ and in the [[Heisenberg Uncertainty Principle|uncertainty principle]], where $\hbar/2$ is the lower limit. It is a number with units of energy times time.`,
+    example: r`The uncertainty principle has the lower bound $\Delta x\,\Delta p\ge\hbar/2$.`,
+    pretest: chk(
+      r`A line is drawn through the letter $h$ to make $\hbar$. If $h$ is some number, what simple operation do you guess gives $\hbar$?`,
+      r`Dividing $h$ by $2\pi$`,
+      r`Multiplying $h$ by $2\pi$`,
+      r`Squaring $h$`,
+      r`$\hbar=h/2\pi$. The bar through the $h$ reminds us that the $2\pi$ has been divided out.`,
+    ),
+    check: chk(
+      r`Which formula has $\hbar$ in it?`,
+      r`$[\hat x,\hat p]=i\hbar$`,
+      r`$[\hat x,\hat p]=0$`,
+      r`$\hat x=x$`,
+      r`The basic commutation relation between position and momentum contains $\hbar$.`,
+    ),
+    faq: [
+      { q: r`Why is $\hbar$ written with a bar?`, a: r`To tell it apart from $h$. The two differ by the factor $2\pi$.` },
+      { q: r`Do I have to remember the number?`, a: r`Not for this module. It is about $1.05\times10^{-34}$ J s, but the formulas are usually kept in terms of the symbol $\hbar$.` },
+    ],
+  }),
+
+  idea({
+    id: "imaginary-unit",
+    name: "Imaginary Unit",
+    group: "notation",
+    symbol: r`i`,
+    prerequisites: ["Complex Number Arithmetic"],
+    minutes: 2,
+    meaning: r`The letter $i$ stands for the number whose square is $-1$. In this course it is always this number, not a counting label.`,
+    linkedFormal: r`The imaginary unit satisfies $i^2=-1$ (see [[Complex Number Arithmetic|Complex Number Arithmetic]]). The same letter is also often used as a counting label (an index), as in $v_i$ or $\sum_i$. The context tells you which meaning is used: if it appears as a subscript or under a sum, it is a label. If it appears by itself in a formula with numbers, it is the imaginary unit.`,
+    example: r`$(-i)\cdot i=-i^2=1$. In $\sum_i|v_i|^2$ the letter $i$ is a counting label.`,
+    pretest: chk(
+      r`What is $i\cdot i$, if $i$ is the number defined by $i^2=-1$?`,
+      r`$-1$`,
+      r`$1$`,
+      r`$2i$`,
+      r`That is how $i$ is defined: its square is $-1$.`,
+    ),
+    check: chk(
+      r`In $\sum_{i=1}^{n}|v_i|^2$, what does the letter $i$ mean?`,
+      r`A counting label that runs from $1$ to $n$`,
+      r`The number with $i^2=-1$`,
+      r`The number $1$`,
+      r`Under a sum sign, and as a subscript, $i$ is a label. The context separates the two meanings.`,
+    ),
+    faq: [
+      { q: r`Is there a way to avoid the clash?`, a: r`Some books use $j$ for the imaginary unit and $i$ for labels. Here the letter $i$ is used for both, so always check the context.` },
+      { q: r`What is $-i$?`, a: r`The other square root of $-1$. Both $i$ and $-i$ satisfy the equation $z^2=-1$.` },
+    ],
+  }),
+
+  idea({
+    id: "kronecker-delta",
+    name: "Kronecker Delta",
+    group: "notation",
+    symbol: r`\delta_{ij}`,
+    prerequisites: ["Integer"],
+    minutes: 2,
+    meaning: r`The Kronecker delta $\delta_{ij}$ is the number $1$ when the two labels $i$ and $j$ are the same, and $0$ when they are different.`,
+    linkedFormal: r`$\delta_{ij}=1$ if $i=j$ and $\delta_{ij}=0$ if $i\ne j$, where $i$ and $j$ are [[Integer|integers]] used as labels. It is the entry in row $i$ and column $j$ of the identity matrix. Its main use is to say that basis vectors are orthonormal: $\langle e_i|e_j\rangle=\delta_{ij}$. When it appears inside a sum, it picks out a single term: $\sum_j\delta_{ij}a_j=a_i$.`,
+    example: r`$\delta_{22}=1$, $\delta_{23}=0$. And $\sum_{j=1}^{3}\delta_{2j}a_j=0\cdot a_1+1\cdot a_2+0\cdot a_3=a_2$.`,
+    pretest: chk(
+      r`The identity matrix has $1$ on its main diagonal and $0$ everywhere else. What is its entry in row $2$, column $3$?`,
+      r`$0$`,
+      r`$1$`,
+      r`$2$`,
+      r`Row $2$, column $3$ is not on the main diagonal, so the entry is $0$. The Kronecker delta is exactly this rule: $1$ if the row and column labels agree, otherwise $0$.`,
+    ),
+    check: chk(
+      r`What is $\sum_{j=1}^{3}\delta_{2j}\,b_j$ when $b_1=5$, $b_2=7$, $b_3=9$?`,
+      r`$7$`,
+      r`$21$`,
+      r`$0$`,
+      r`Only the term with $j=2$ survives, and it is multiplied by $\delta_{22}=1$. So the sum is $b_2=7$.`,
+    ),
+    faq: [
+      { q: r`Is $\delta_{ij}$ the same as the Dirac delta $\delta(x)$?`, a: r`No, but it is the discrete cousin. $\delta_{ij}$ is used for labels $i,j$ that are whole numbers. The Dirac delta $\delta(x-a)$ is used for a continuous label. See [[Delta Function|Delta Function]].` },
+      { q: r`Why are two small numbers written under the $\delta$?`, a: r`They are the two labels being compared. The symbol has one value for each pair of labels, like an entry in a table.` },
+    ],
+    proof: {
+      idea: r`Write out the sum term by term. Every term has a factor $\delta_{ij}$ that is zero, except one.`,
+      steps: [
+        { title: "Write out the sum", text: r`$\sum_j\delta_{ij}a_j=\delta_{i1}a_1+\delta_{i2}a_2+\cdots+\delta_{in}a_n$.` },
+        { title: "Zero out the terms with $j\ne i$", text: r`For each $j\ne i$, $\delta_{ij}=0$, so that term is $0\cdot a_j=0$.` },
+        { title: "Keep the term $j=i$", text: r`For $j=i$, $\delta_{ii}=1$, so that term is $1\cdot a_i=a_i$.` },
+      ],
+      conclusion: r`$\sum_j\delta_{ij}a_j=a_i$. $\blacksquare$`,
+      example: { text: r`For $a=(4,6,8)$ and $i=3$: the terms are $0\cdot4+0\cdot6+1\cdot8=8=a_3$.` },
+    },
+  }),
+
+  idea({
+    id: "partial-derivative-symbol",
+    name: "Partial Derivative Symbol",
+    group: "notation",
+    symbol: r`\partial`,
+    prerequisites: ["Derivative"],
+    minutes: 3,
+    meaning: r`The curly symbol $\partial$ means "the derivative with respect to one variable, while all the other variables are held fixed".`,
+    linkedFormal: r`If $f$ depends on several variables, such as $f(x,y)$, then $\dfrac{\partial f}{\partial x}$ is the [[Derivative|derivative]] of $f$ with respect to $x$, treating $y$ as a fixed number. We write $\partial_x f$ for short. Taking it twice gives $\partial_x^2f$. In three dimensions, $\nabla^2=\partial_x^2+\partial_y^2+\partial_z^2$.`,
+    example: r`For $f(x,y)=x^2y$: $\dfrac{\partial f}{\partial x}=2xy$ (treat $y$ as a number) and $\dfrac{\partial f}{\partial y}=x^2$.`,
+    pretest: chk(
+      r`The height of a hill is $h(x,y)=3x+5y$. If you walk east (increase $x$) and stay at the same $y$, how fast does the height change per unit of $x$?`,
+      r`$3$`,
+      r`$5$`,
+      r`$8$`,
+      r`Only the $x$ part changes, and it changes by $3$ for each unit of $x$. That rate is the partial derivative with respect to $x$.`,
+    ),
+    check: chk(
+      r`What is $\dfrac{\partial}{\partial y}\bigl(x^2y\bigr)$?`,
+      r`$x^2$`,
+      r`$2xy$`,
+      r`$x^2y$`,
+      r`Treat $x$ as a fixed number, so $x^2$ is a constant multiplier. The derivative of $y$ with respect to $y$ is $1$.`,
+    ),
+    faq: [
+      { q: r`How is $\partial$ different from $d$?`, a: r`$d/dx$ is used when there is only one variable. $\partial/\partial x$ is used when there are several variables and the others are held fixed.` },
+      { q: r`Where do we need it?`, a: r`For wave functions of several variables, such as $\psi(x,y,z)$ in three dimensions, and for the time-dependent equation, where $\psi$ depends on both $x$ and $t$.` },
+    ],
+  }),
+];

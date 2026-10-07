@@ -32,7 +32,7 @@ export default function useSessionState() {
   const known = concepts.filter((c) => statuses[c.name] === "known").length,
     selectedConcept = byName[selected];
   const route = useMemo(
-    () => readingRoute(flow.idk, statuses),
+    () => readingRoute(flow.idk, statuses, { focused: true }),
     [flow.idk, statuses],
   );
   const combinedRoute = useMemo(

@@ -9,12 +9,13 @@ import { strip } from "../src/data/dsl.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dir = path.join(here, "../../study-map/src/data/concepts");
-const existing = fs.readdirSync(dir).filter((f) => f.endsWith(".json")).flatMap((f) => JSON.parse(fs.readFileSync(path.join(dir, f), "utf8")));
+import { sharedNotes } from "./shared-notes.mjs";
+const existing = sharedNotes;
 // Written by the other forks / shared base: allowed as prerequisites, links and step terms.
 const external = [
   "Hamiltonian", "Time-Independent Schrödinger Equation", "Stationary State", "Harmonic Oscillator Potential", "Gaussian Integral",
   "Parity of a Function", "Node of a Wave Function", "Infinite Square Well", "Separation of Variables", "Zero-Point Energy", "Number Operator",
-  "Counting Solutions of a Sum", "Separation of Variables in Three Dimensions", "Oscillator Energy Levels from Ladder Operators",
+  "Counting Solutions of a Sum", "Boundary Condition", "Separation of Variables in Three Dimensions", "Oscillator Energy Levels from Ladder Operators",
 ];
 const names = new Set([...existing.map((c) => c.name), ...supports.map((c) => c.name), ...external]);
 const ownNames = new Set(problems.map((p) => p.name));

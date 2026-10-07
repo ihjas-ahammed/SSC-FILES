@@ -1,0 +1,165 @@
+import { idea, chk } from "../dsl.js";
+const r = String.raw;
+
+// States and bra-ket notation.
+export default [
+  idea({
+    id: "ket",
+    name: "Ket",
+    group: "states",
+    symbol: r`|\psi\rangle`,
+    prerequisites: ["Vector", "Hilbert Space", "Quantum State"],
+    minutes: 3,
+    meaning: r`A ket, written $|\psi\rangle$, is the symbol physicists use for a quantum state. It is a vector. Once you pick a basis, you can write it as a column of numbers.`,
+    linkedFormal: r`The symbol $|\psi\rangle$ stands for a [[Vector|vector]] in the [[Hilbert Space|Hilbert space]], and the letter inside is just a name for the state. In a chosen [[Basis|basis]], a ket is the column of its coordinates. For example $|\psi\rangle=\dfrac1{\sqrt2}\begin{pmatrix}1\\i\end{pmatrix}$. The name comes from splitting the word "bracket": the left half $\langle\ |$ is a [[Bra|bra]] and the right half $|\ \rangle$ is a ket.`,
+    example: r`If the basis states are $|1\rangle$ and $|2\rangle$, the state $|\psi\rangle=\tfrac1{\sqrt2}\bigl(|1\rangle+i|2\rangle\bigr)$ is the column $\tfrac1{\sqrt2}\begin{pmatrix}1\\i\end{pmatrix}$.`,
+    pretest: chk(
+      r`A system can be in two basis states $|1\rangle$ and $|2\rangle$. A state is "$3$ parts $|1\rangle$ and $4$ parts $|2\rangle$". As a column of numbers, in that order, what is it?`,
+      r`$\begin{pmatrix}3\\4\end{pmatrix}$`,
+      r`$\begin{pmatrix}4\\3\end{pmatrix}$`,
+      r`$\begin{pmatrix}7\end{pmatrix}$`,
+      r`The first entry is the amount of $|1\rangle$ and the second is the amount of $|2\rangle$. Adding them ($7$) loses information.`,
+    ),
+    check: chk(
+      r`In the basis $\{|1\rangle,|2\rangle\}$ which column describes $|\psi\rangle=\dfrac{|1\rangle-i|2\rangle}{\sqrt2}$?`,
+      r`$\dfrac1{\sqrt2}\begin{pmatrix}1\\-i\end{pmatrix}$`,
+      r`$\dfrac1{\sqrt2}\begin{pmatrix}1\\i\end{pmatrix}$`,
+      r`$\dfrac1{\sqrt2}\begin{pmatrix}-i\\1\end{pmatrix}$`,
+      r`Copy the coefficients in basis order, keeping their signs: $1$ for $|1\rangle$ and $-i$ for $|2\rangle$.`,
+    ),
+    faq: [
+      { q: r`Is a ket the same as a wave function?`, a: r`Not exactly. The ket $|\psi\rangle$ is the abstract state. The wave function $\psi(x)=\langle x|\psi\rangle$ is the list of its coordinates in the position basis.` },
+      { q: r`Why do we use $|\ \rangle$ at all?`, a: r`It makes it easy to see what kind of object we have: a ket is a vector and a bra is its partner. It also makes inner products look like brackets, $\langle\phi|\psi\rangle$.` },
+    ],
+  }),
+
+  idea({
+    id: "bra",
+    name: "Bra",
+    group: "states",
+    symbol: r`\langle\psi|`,
+    prerequisites: ["Ket", "Inner Product", "Complex Conjugate", "Conjugate Linearity of the First Slot"],
+    minutes: 4,
+    meaning: r`The bra $\langle\psi|$ is the partner of the ket $|\psi\rangle$. It takes any ket and gives back the inner product with $|\psi\rangle$. As a row of numbers, it is the column turned on its side, with every entry conjugated.`,
+    linkedFormal: r`The bra $\langle\psi|$ is the rule that takes a ket $|\phi\rangle$ and returns the number $\langle\psi|\phi\rangle$. If the ket is the column $\begin{pmatrix}a\\b\end{pmatrix}$, the bra is the row $\begin{pmatrix}a^*&b^*\end{pmatrix}$. Taking the bra of a combination conjugates its scalars: the bra of $a|1\rangle+b|2\rangle$ is $a^*\langle1|+b^*\langle2|$. Multiplying the row by a column gives the inner product.`,
+    example: r`The ket $\begin{pmatrix}1\\i\end{pmatrix}$ has the bra $\begin{pmatrix}1&-i\end{pmatrix}$. The product is $\begin{pmatrix}1&-i\end{pmatrix}\begin{pmatrix}1\\i\end{pmatrix}=1+(-i)(i)=2$.`,
+    pretest: chk(
+      r`Turn the column $\begin{pmatrix}1\\i\end{pmatrix}$ on its side into a row, and flip the sign of every $i$ (conjugate). What row do you get?`,
+      r`$\begin{pmatrix}1&-i\end{pmatrix}$`,
+      r`$\begin{pmatrix}1&i\end{pmatrix}$`,
+      r`$\begin{pmatrix}-1&-i\end{pmatrix}$`,
+      r`Turning on its side keeps the order, and conjugating flips $i$ to $-i$ but leaves the real number $1$ alone.`,
+    ),
+    check: chk(
+      r`What is the bra of the ket $|\psi\rangle=a|\Phi_1\rangle+b|\Phi_2\rangle$?`,
+      r`$a^*\langle\Phi_1|+b^*\langle\Phi_2|$`,
+      r`$a\langle\Phi_1|+b\langle\Phi_2|$`,
+      r`$\langle\Phi_1|a^*+\langle\Phi_2|b$`,
+      r`The conjugates $a^*$ and $b^*$ appear, because scalars in the first slot of an inner product come out conjugated.`,
+    ),
+    faq: [
+      { q: r`Why must the entries be conjugated?`, a: r`So that the row times the column, $\langle\psi|\psi\rangle=\sum|c_j|^2$, is a real number that is never negative.` },
+      { q: r`Is a bra a vector?`, a: r`It lives in a "mirror" space, called the dual space. Every ket has one matching bra and vice versa, so we can treat them as partners.` },
+    ],
+    proof: {
+      idea: r`The bra of $|\psi\rangle$ is defined by what it does to every ket $|\phi\rangle$: it returns $\langle\psi|\phi\rangle$. Use the conjugate-linear first slot to read off the bra of a combination.`,
+      steps: [
+        { title: "Start with the ket", text: r`$|\psi\rangle=a|\Phi_1\rangle+b|\Phi_2\rangle$. Its bra is the rule $|\phi\rangle\mapsto\langle\psi|\phi\rangle$.` },
+        { title: "Split the first slot", text: r`$\langle\psi|\phi\rangle=\langle a\Phi_1+b\Phi_2|\phi\rangle=a^*\langle\Phi_1|\phi\rangle+b^*\langle\Phi_2|\phi\rangle$, by [[Conjugate Linearity of the First Slot|conjugate linearity]].` },
+        { title: "Read off the rule", text: r`The rule "multiply the inner product with $\Phi_1$ by $a^*$, the one with $\Phi_2$ by $b^*$, and add" is the bra $a^*\langle\Phi_1|+b^*\langle\Phi_2|$.` },
+      ],
+      conclusion: r`The bra of $a|\Phi_1\rangle+b|\Phi_2\rangle$ is $a^*\langle\Phi_1|+b^*\langle\Phi_2|$. $\blacksquare$`,
+      example: { text: r`For $|\psi\rangle=|1\rangle+i|2\rangle$ the bra is $\langle1|-i\langle2|$. Acting on $|\phi\rangle=|2\rangle$ it gives $-i$, and directly $\langle\psi|\phi\rangle=\langle1|2\rangle+i^*\langle2|2\rangle=0+(-i)\cdot1=-i$. The two agree.` },
+    },
+  }),
+
+  idea({
+    id: "generalized-state",
+    name: "Generalized State",
+    group: "states",
+    symbol: r`|x\rangle`,
+    prerequisites: ["Ket", "Distribution"],
+    minutes: 4,
+    meaning: r`A generalized state is a simplified, made-up "state" such as "exactly at position $x$". It is not a proper state, because it cannot be normalized, but it is a very useful building block.`,
+    linkedFormal: r`The kets $|x\rangle$ (a particle exactly at $x$) and $|p\rangle$ (exactly momentum $p$) are generalized states. They have infinite length, so they cannot be [[Normalization|normalized]] to $1$ and are not in the ordinary [[Hilbert Space|Hilbert space]]. Their overlaps are written with the delta function: $\langle x|x'\rangle=\delta(x-x')$. We never find a particle "exactly at $x$", but any real state can be built as a sum (an integral) of such pieces.`,
+    example: r`A real, spread-out state is $|\psi\rangle=\int\psi(x)\,|x\rangle\,dx$: a blend of position states, weighted by the wave function.`,
+    pretest: chk(
+      r`Suppose a particle is "exactly at $x=2$". Its probability density would have to be zero everywhere except at that one point, yet the total probability must still be $1$. Is there an ordinary function like that?`,
+      r`No, an ordinary function that is zero except at one point has total area $0$`,
+      r`Yes, any tall spike will do`,
+      r`Yes, the function $f(x)=x$`,
+      r`A function that differs from $0$ at a single point has zero area under it. So "exactly at a point" cannot be an ordinary wave function, and needs a generalized object.`,
+    ),
+    check: chk(
+      r`Why is an exact position ket $|x\rangle$ not a normal, normalized state?`,
+      r`Its length is infinite: $\langle x|x\rangle=\delta(0)$ cannot be made equal to $1$`,
+      r`Because particles cannot have positions`,
+      r`Because it has the wrong units`,
+      r`The overlap $\langle x|x'\rangle=\delta(x-x')$ is a delta function. At $x=x'$ it is infinite, not $1$, so $|x\rangle$ cannot be a unit vector.`,
+    ),
+    faq: [
+      { q: r`If these states do not exist, why use them?`, a: r`Because they make calculations simple. We never use a single one alone. We always combine them in integrals, and those integrals are proper states.` },
+      { q: r`What is the difference from a normal state?`, a: r`A normal state has $\langle\psi|\psi\rangle=1$. For $|x\rangle$ the overlaps are described by the [[Delta Function|delta function]].` },
+    ],
+  }),
+
+  idea({
+    id: "superposition",
+    name: "Superposition",
+    group: "states",
+    symbol: r`a|u\rangle+b|v\rangle`,
+    prerequisites: ["Linear Combination", "Ket"],
+    minutes: 3,
+    meaning: r`A superposition is a state made by adding other states, each multiplied by a number. It is a linear combination of kets.`,
+    linkedFormal: r`If $|u\rangle$ and $|v\rangle$ are states, then $a|u\rangle+b|v\rangle$ is also a state, called a superposition. The numbers $a$ and $b$ are complex and tell how much of each state is present. To use it as a physical state it must be [[Normalization|normalized]]. If $|u\rangle$ and $|v\rangle$ are orthonormal, that means $|a|^2+|b|^2=1$.`,
+    example: r`If $|1\rangle,|2\rangle$ are orthonormal, then $\tfrac1{\sqrt2}\bigl(|1\rangle+|2\rangle\bigr)$ is normalized, because $\bigl(\tfrac1{\sqrt2}\bigr)^2+\bigl(\tfrac1{\sqrt2}\bigr)^2=1$.`,
+    pretest: chk(
+      r`A coin-like system has two states, "up" and "down". A new state is made as "half up plus half down" in the sense of adding the two kets together. Is it one of the two original states?`,
+      r`No, it is a new state built from both`,
+      r`Yes, it equals "up"`,
+      r`Yes, it equals "down"`,
+      r`Adding kets gives a different vector, which is neither of the two. That is a superposition.`,
+    ),
+    check: chk(
+      r`$|1\rangle,|2\rangle$ are orthonormal. For which $a$ is $a\bigl(|1\rangle+|2\rangle\bigr)$ normalized?`,
+      r`$a=\tfrac1{\sqrt2}$`,
+      r`$a=\tfrac12$`,
+      r`$a=1$`,
+      r`The squared length is $|a|^2+|a|^2=2|a|^2$. This equals $1$ when $|a|=\tfrac1{\sqrt2}$.`,
+    ),
+    faq: [
+      { q: r`Is a superposition "being in two states at once"?`, a: r`That is a common way of speaking. More exactly, the state is a vector with parts along both basis states, and a measurement will give one outcome or the other with probabilities $|a|^2$ and $|b|^2$.` },
+      { q: r`Can any state be written as a superposition?`, a: r`Yes. Every state is a combination of basis states, and a basis can be chosen in many ways.` },
+    ],
+  }),
+
+  idea({
+    id: "quantum-state",
+    name: "Quantum State",
+    group: "states",
+    symbol: r`\psi`,
+    prerequisites: ["Hilbert Space", "Normalization", "Phase"],
+    minutes: 4,
+    meaning: r`A quantum state is the full description of how a system was prepared. It lets us predict the chances of every measurement outcome. We represent it by a vector of length $1$.`,
+    linkedFormal: r`A pure state is represented by a [[Normalization|normalized]] vector $|\psi\rangle$ in a [[Hilbert Space|Hilbert space]]. Two vectors that differ only by a common factor $e^{i\theta}$ (a global [[Phase|phase]]) describe the same state, because they give the same probabilities. This module uses pure states only. A system for which we are unsure which state it is in needs a more general description, which we do not use here.`,
+    example: r`$\begin{pmatrix}1\\0\end{pmatrix}$ and $i\begin{pmatrix}1\\0\end{pmatrix}$ are different vectors but the same physical state.`,
+    pretest: chk(
+      r`A state vector is multiplied by the number $i$ (which has size $1$). Do you expect the chances of the measurement results to change?`,
+      r`No, a common factor of size $1$ changes nothing that can be measured`,
+      r`Yes, they all double`,
+      r`Yes, they all become zero`,
+      r`The factor $i$ has absolute value $1$, so every probability $|c|^2$ stays the same.`,
+    ),
+    check: chk(
+      r`Do the normalized vectors $|\psi\rangle$ and $e^{i\theta}|\psi\rangle$ describe different pure states?`,
+      r`No, a global phase does not change the probabilities`,
+      r`Yes, because the numbers are different`,
+      r`Yes, but only when $\theta=\pi$`,
+      r`Every probability is $|\text{amplitude}|^2$, and $|e^{i\theta}c|^2=|c|^2$. So the predictions are identical.`,
+    ),
+    faq: [
+      { q: r`Why must the length be $1$?`, a: r`Because the probabilities of all possible outcomes must add to $1$. See [[Parseval Identity|Parseval Identity]].` },
+      { q: r`What about phase differences between the parts of a superposition?`, a: r`Those matter. A global phase does not, but a relative phase between two components changes interference effects.` },
+    ],
+  }),
+];

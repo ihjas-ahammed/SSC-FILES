@@ -10,10 +10,10 @@ export default [
     symbol: r`V,\ u+v,\ av`,
     prerequisites: ["Set", "Field", "Scalar", "Vector", "Axiom", "Closure", "Commutativity", "Associativity", "Zero Vector", "Additive Inverse", "Distributivity"],
     ross: { n: "A1", label: "Module 3 · Section A Q1", section: "A", page: 1 },
-    title: "Linear vector space",
+    title: "What a vector space is",
     statement: r`Define a linear vector space and list any three properties that its vectors must satisfy.`,
     meaning: r`A vector space is a set where you can add two vectors and stretch a vector by a number, and the usual rules of arithmetic keep working.`,
-    linkedFormal: r`A [[Vector Space|vector space]] $V$ over a [[Field|field]] $F$ (here the real or complex numbers) is a [[Set|set]] with two operations, vector addition $u+v$ and multiplication by a [[Scalar|scalar]] $av$, that obey the [[Axiom|axioms]]: closure, commutativity $u+v=v+u$, associativity $(u+v)+w=u+(v+w)$, a zero vector with $v+0=v$, an additive inverse $v+(-v)=0$, and the distributive laws $a(u+v)=au+av$ and $(a+b)v=av+bv$, plus $(ab)v=a(bv)$ and $1v=v$.`,
+    linkedFormal: r`A [[Vector Space|vector space]] $V$ over a [[Field|field]] $F$ (here the real or complex numbers) is a [[Set|set]] with two operations: vector addition $u+v$ and multiplication by a [[Scalar|scalar]] $av$. They obey these [[Axiom|axioms]]. Closure: the results stay in $V$. Commutativity: $u+v=v+u$. Associativity: $(u+v)+w=u+(v+w)$. A zero vector exists with $v+0=v$. Each vector has an additive inverse with $v+(-v)=0$. The distributive laws hold: $a(u+v)=au+av$ and $(a+b)v=av+bv$. Finally $(ab)v=a(bv)$ and $1v=v$.`,
     example: r`All pairs of complex numbers $(z_1,z_2)$, added entry by entry and multiplied by a number entry by entry, form a vector space. This is the space used for the spin of an electron.`,
     pretest: {
       prompt: r`Is the set of all positive real numbers a vector space under ordinary addition and ordinary multiplication by real scalars?`,
@@ -67,6 +67,7 @@ export default [
       },
     },
     question: {
+      plain: r`A vector space is a collection of things (called vectors) that you can add together and stretch by a number. Say what that means, and give any three of the rules that the vectors must follow.`,
       faq: [
         { q: r`What exactly is the question asking me to define?`, a: r`A set with adding and scaling that obeys the standard rules. Say the two operations, then name the rules.` },
         { q: r`Do I need to list all the axioms?`, a: r`No. The question says any three. Give three clearly, with their equations.` },
@@ -90,9 +91,9 @@ export default [
     name: "Hilbert Space and the Scalar Product",
     group: "spaces",
     symbol: r`\langle\phi|\psi\rangle`,
-    prerequisites: ["Vector Space", "Complex Conjugate", "Inner Product", "Conjugate Symmetry", "Positive Definiteness", "Norm", "Cauchy Sequence", "Complete Space", "Ket", "Bra", "Linear Combination", "Orthonormal Basis"],
+    prerequisites: ["Vector Space", "Complex Conjugate", "Inner Product", "Conjugate Symmetry", "Positive Definiteness", "Norm", "Cauchy Sequence", "Complete Space", "Ket", "Bra", "Linear Combination", "Orthonormal Basis", "Conjugate Linearity of the First Slot"],
     ross: { n: "A2-A5", label: "Module 3 · Section A Q2–Q5", section: "A", page: 1 },
-    title: "Hilbert space, scalar product and the bra of a ket",
+    title: "Hilbert space, the scalar product, and the bra of a ket",
     statement: r`(Q2) What is a Hilbert space? Mention the role of the scalar product in defining a Hilbert space. (Q3) Define the scalar product of two state vectors $|\psi\rangle$ and $|\phi\rangle$. (Q4) State the conjugate symmetry property of the scalar product. (Q5) Write the bra corresponding to the ket $|\psi\rangle=a|\Phi_1\rangle+b|\Phi_2\rangle$.`,
     meaning: r`A Hilbert space is a vector space where you can measure overlaps, lengths and distances, and in which a sequence that keeps getting closer always lands on a vector of the space.`,
     linkedFormal: r`A [[Hilbert Space|Hilbert space]] is a [[Vector Space|vector space]] with a scalar product $\langle\phi|\psi\rangle$ that is complete for the length $\|\psi\|=\sqrt{\langle\psi|\psi\rangle}$. The [[Inner Product|scalar product]] is a complex number that is linear in the second slot, satisfies [[Conjugate Symmetry|conjugate symmetry]] $\langle\phi|\psi\rangle=\langle\psi|\phi\rangle^*$, and is [[Positive Definiteness|positive definite]]: $\langle\psi|\psi\rangle>0$ unless $\psi=0$. The [[Bra|bra]] of $|\psi\rangle=a|\Phi_1\rangle+b|\Phi_2\rangle$ is $\langle\psi|=a^*\langle\Phi_1|+b^*\langle\Phi_2|$.`,
@@ -105,7 +106,7 @@ export default [
     },
     check: {
       prompt: r`Which property must the scalar product have so that $\langle\psi|\psi\rangle$ can be a length squared?`,
-      options: [r`It must be real and positive for every nonzero $\psi$`, r`It must be purely imaginary`, r`It must equal $\langle\phi|\phi\rangle$`],
+      options: [r`It must be real and positive for every non-zero $\psi$`, r`It must be purely imaginary`, r`It must equal $\langle\phi|\phi\rangle$`],
       correct: 0,
       explanation: r`A length squared is a positive real number. That is the positive-definite property.`,
     },
@@ -139,7 +140,7 @@ export default [
         },
         {
           title: "Why the conjugate cannot be left out",
-          text: r`Take $a=1$, $b=i$ and orthonormal $|\Phi_1\rangle,|\Phi_2\rangle$. The correct bra gives $\langle\psi|\psi\rangle=a^*a+b^*b=1+1=2>0$. If we forgot the conjugates we would get $a^2+b^2=1+i^2=0$ for a nonzero vector, which breaks positivity.`,
+          text: r`Take $a=1$, $b=i$ and orthonormal $|\Phi_1\rangle,|\Phi_2\rangle$. The correct bra gives $\langle\psi|\psi\rangle=a^*a+b^*b=1+1=2>0$. If we forgot the conjugates we would get $a^2+b^2=1+i^2=0$ for a non-zero vector, which breaks positivity.`,
           check: chk(r`With $a=1$, $b=i$ and orthonormal $\Phi_1,\Phi_2$, what is $\langle\psi|\psi\rangle$ using the correct bra?`, r`$2$`, r`$0$`, r`$1+i$`, r`$a^*a+b^*b=|a|^2+|b|^2=1+1=2$.`, "Orthonormal Basis"),
         },
       ],
@@ -149,6 +150,7 @@ export default [
       },
     },
     question: {
+      plain: r`Explain what a Hilbert space is, and why the scalar product (a way to compare two vectors with one number) is needed for it. Then say how the scalar product of two states is written, what happens when you swap the two states, and what the bra of the ket $a|\Phi_1\rangle+b|\Phi_2\rangle$ is.`,
       faq: [
         { q: r`What is a Hilbert space in one sentence?`, a: r`A vector space with a scalar product, complete for the length that the scalar product defines.` },
         { q: r`Why do I have to mention the scalar product?`, a: r`Because it creates length and distance. Without it we cannot talk about completeness.` },
@@ -174,7 +176,7 @@ export default [
     symbol: r`\int|\psi|^2dx<\infty`,
     prerequisites: ["Wave Function", "Probability Density", "Integral", "Absolute Value", "Exponential Function", "Normalization", "Vector Space", "Inner Product", "Complete Space", "Almost Everywhere"],
     ross: { n: "B1-B2", label: "Module 3 · Section B Q1–Q2", section: "A", page: 2 },
-    title: "Why square-integrable functions, and normalizing $Ae^{-a|x|}$",
+    title: "Why wave functions need a finite total, and finding the constant A",
     statement: r`(Q1) Explain why the set of square-integrable functions is suitable for representing wave functions. (Q2) Show that the function $\psi(x)=Ae^{-a|x|}$, $a>0$, is square-integrable. Find the normalization constant $A$.`,
     meaning: r`A wave function must have a finite total probability, so $\int|\psi|^2dx$ has to be a finite number. Functions with this property form a Hilbert space.`,
     linkedFormal: r`A function is [[Square-Integrable Function|square-integrable]] if $\int_{-\infty}^{\infty}|\psi(x)|^2dx<\infty$. The [[Probability Density|probability density]] is $|\psi|^2$, so finiteness lets us rescale $\psi$ to make the total probability 1 ([[Normalization|normalization]]). These functions (identified when they differ only [[Almost Everywhere|almost everywhere]]) form a [[Vector Space|vector space]] with the scalar product $\langle\phi|\psi\rangle=\int\phi^*\psi\,dx$, and this space $L^2$ is a [[Complete Space|complete]] Hilbert space.`,
@@ -192,8 +194,8 @@ export default [
       explanation: r`$|\psi|^2$ is the probability density, and integrating it over all positions gives the total probability.`,
     },
     faq: [
-      { q: r`Why must the total be finite?`, a: r`A probability total can only be rescaled to 1 if it is a finite nonzero number. If it is infinite there is no constant that fixes it.` },
-      { q: r`What about plane waves $e^{ikx}$?`, a: r`Their integral of $|\psi|^2$ is infinite, so they are not normalizable states. They are used as idealized (generalized) states and in wave packets.` },
+      { q: r`Why must the total be finite?`, a: r`A probability total can only be rescaled to 1 if it is a finite non-zero number. If it is infinite there is no constant that fixes it.` },
+      { q: r`What about plane waves $e^{ikx}$?`, a: r`Their integral of $|\psi|^2$ is infinite, so they are not normalizable states. They are used as simplified (generalized) states and in wave packets.` },
       { q: r`Why do we say "almost everywhere"?`, a: r`Changing a function at a few points does not change the integral of $|\psi|^2$, so such functions describe the same state.` },
     ],
     proof: {
@@ -206,12 +208,12 @@ export default [
         },
         {
           title: "Sums and multiples stay square-integrable",
-          text: r`For numbers $s,t$ we have $|s+t|^2\le2|s|^2+2|t|^2$, because $0\le(|s|-|t|)^2$ and $|s+t|\le|s|+|t|$. Hence if $\int|\phi|^2$ and $\int|\psi|^2$ are finite then $\int|\phi+\psi|^2\le2\int|\phi|^2+2\int|\psi|^2$ is finite. Also $\int|c\psi|^2=|c|^2\int|\psi|^2$ is finite. So the set is closed under addition and scaling. It is a [[Vector Space|vector space]], and superposition of states is allowed.`,
+          text: r`For numbers $s,t$ we have $|s+t|^2\le2|s|^2+2|t|^2$, because $0\le(|s|-|t|)^2$ and $|s+t|\le|s|+|t|$. So if $\int|\phi|^2$ and $\int|\psi|^2$ are finite then $\int|\phi+\psi|^2\le2\int|\phi|^2+2\int|\psi|^2$ is finite. Also $\int|c\psi|^2=|c|^2\int|\psi|^2$ is finite. So the set is closed under addition and scaling. It is a [[Vector Space|vector space]], and superposition of states is allowed.`,
           check: chk(r`If $\phi$ and $\psi$ are square-integrable, why is $\phi+\psi$ square-integrable too?`, r`Because $|\phi+\psi|^2\le2|\phi|^2+2|\psi|^2$ and both integrals are finite`, r`Because $\phi+\psi$ is always zero`, r`Because square-integrable functions never overlap`, r`This pointwise inequality bounds the integral of the sum by a finite number.`, "Vector Space"),
         },
         {
           title: "The scalar product is always finite",
-          text: r`We define $\langle\phi|\psi\rangle=\int\phi^*(x)\psi(x)\,dx$. For each $x$, $|\phi^*\psi|\le\tfrac12(|\phi|^2+|\psi|^2)$, because $(|\phi|-|\psi|)^2\ge0$. So $\int|\phi^*\psi|\,dx\le\tfrac12\big(\int|\phi|^2+\int|\psi|^2\big)<\infty$: the [[Inner Product|scalar product]] is a well-defined finite number, and $\langle\psi|\psi\rangle=\int|\psi|^2dx>0$ for a nonzero state (when functions equal almost everywhere are identified).`,
+          text: r`We define $\langle\phi|\psi\rangle=\int\phi^*(x)\psi(x)\,dx$. For each $x$, $|\phi^*\psi|\le\tfrac12(|\phi|^2+|\psi|^2)$, because $(|\phi|-|\psi|)^2\ge0$. So $\int|\phi^*\psi|\,dx\le\tfrac12\big(\int|\phi|^2+\int|\psi|^2\big)<\infty$: the [[Inner Product|scalar product]] is a proper, finite number, and $\langle\psi|\psi\rangle=\int|\psi|^2dx>0$ for a non-zero state (when functions equal almost everywhere are identified).`,
           check: chk(r`Why is $\int\phi^*\psi\,dx$ finite for square-integrable $\phi,\psi$?`, r`Because $|\phi^*\psi|\le\tfrac12(|\phi|^2+|\psi|^2)$, which has a finite integral`, r`Because $\phi^*\psi$ is always 1`, r`Because $\phi$ and $\psi$ are real`, r`The bound from $(|\phi|-|\psi|)^2\ge0$ turns two finite integrals into a finite bound.`, "Inner Product"),
         },
         {
@@ -236,6 +238,7 @@ export default [
       },
     },
     question: {
+      plain: r`Why do we ask that wave functions have a finite total when we add up $|\psi|^2$ over all positions? Then, for the function $\psi(x)=Ae^{-a|x|}$, show that this total is finite, and find the number $A$ that makes the total probability equal to $1$.`,
       faq: [
         { q: r`What does square-integrable mean?`, a: r`The integral of $|\psi|^2$ over all space is a finite number.` },
         { q: r`Why is that the right set for wave functions?`, a: r`Because $|\psi|^2$ is a probability density and the total probability must be 1. Also this set is a complete vector space with a scalar product.` },
@@ -259,12 +262,12 @@ export default [
     name: "Hermitian Adjoint and Hermitian Operators",
     group: "operators",
     symbol: r`A^\dagger,\ A=A^\dagger`,
-    prerequisites: ["Linear Operator", "Inner Product", "Complex Conjugate", "Conjugate Symmetry", "Orthonormal Basis", "Matrix Representation", "Transpose", "Operator Domain", "Self-adjoint Operator", "Dagger Symbol"],
+    prerequisites: ["Linear Operator", "Inner Product", "Complex Conjugate", "Conjugate Symmetry", "Orthonormal Basis", "Matrix Representation", "Transpose", "Operator Domain", "Self-adjoint Operator", "Dagger Symbol", "Rules for the Adjoint"],
     ross: { n: "A6", label: "Module 3 · Section A Q6", section: "A", page: 1 },
-    title: "Hermitian adjoint and the condition for a Hermitian operator",
+    title: "The Hermitian adjoint, and when an operator is Hermitian",
     statement: r`Define the Hermitian adjoint $\hat A^\dagger$ of a linear operator $\hat A$ in terms of inner products. State the condition under which an operator is strictly Hermitian.`,
     meaning: r`The adjoint $A^\dagger$ is the operator that gives the same scalar product when you move $A$ from one side to the other. A Hermitian operator is its own adjoint.`,
-    linkedFormal: r`For a [[Linear Operator|linear operator]] $A$ the [[Hermitian Adjoint|Hermitian adjoint]] $A^\dagger$ is the operator with $\langle u|Av\rangle=\langle A^\dagger u|v\rangle$ for all vectors $u,v$. In an [[Orthonormal Basis|orthonormal basis]] its matrix is the conjugate transpose, $(A^\dagger)_{mn}=(A_{nm})^*$. The operator is [[Hermitian Operator|Hermitian]] if $A=A^\dagger$, that is $\langle u|Av\rangle=\langle Au|v\rangle$ for all $u,v$. For unbounded operators it must also have the same [[Operator Domain|domain]] as $A^\dagger$ to be strictly [[Self-adjoint Operator|self-adjoint]].`,
+    linkedFormal: r`For a [[Linear Operator|linear operator]] $A$ the [[Hermitian Adjoint|Hermitian adjoint]] $A^\dagger$ is the operator with $\langle u|Av\rangle=\langle A^\dagger u|v\rangle$ for all vectors $u,v$. In an [[Orthonormal Basis|orthonormal basis]] its matrix is the conjugate transpose, $(A^\dagger)_{mn}=(A_{nm})^*$. The operator is [[Hermitian Operator|Hermitian]] if $A=A^\dagger$, that is $\langle u|Av\rangle=\langle Au|v\rangle$ for all $u,v$. For operators like the derivative (which act on infinite-dimensional spaces) it must also have the same [[Operator Domain|domain]] as $A^\dagger$ to be strictly [[Self-adjoint Operator|self-adjoint]].`,
     example: r`$A=\begin{pmatrix}0&-i\\ i&0\end{pmatrix}$ has $A^\dagger=\begin{pmatrix}0&-i\\ i&0\end{pmatrix}=A$, so it is Hermitian. $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ has $B^\dagger=\begin{pmatrix}0&0\\1&0\end{pmatrix}\neq B$.`,
     pretest: {
       prompt: r`What is the Hermitian adjoint of the matrix $\begin{pmatrix}1&2i\\3&4\end{pmatrix}$?`,
@@ -307,21 +310,22 @@ export default [
           check: chk(r`What must be true of the diagonal entries of a Hermitian matrix?`, r`They are real numbers`, r`They are all zero`, r`They are all equal`, r`For $m=n$ the condition $A_{nn}=(A_{nn})^*$ says that each diagonal entry equals its own conjugate, so it is real.`, "Hermitian Operator"),
         },
         {
-          title: "The strict version for unbounded operators",
+          title: "The strict version for operators like the derivative",
           text: r`In infinite dimensions an operator is only defined on a part of the space, its [[Operator Domain|domain]]. Then $A=A^\dagger$ must include equal domains, $D(A)=D(A^\dagger)$. This is the condition for a strictly [[Self-adjoint Operator|self-adjoint]] operator. If only $\langle u|Av\rangle=\langle Au|v\rangle$ holds on the domain of $A$ the operator is called symmetric, which is weaker.`,
-          check: chk(r`What extra requirement makes an unbounded operator strictly Hermitian (self-adjoint)?`, r`Its domain must equal the domain of its adjoint`, r`Its eigenvalues must all be positive`, r`It must be a finite matrix`, r`Self-adjointness means $A=A^\dagger$ including the domains. Positivity is unrelated.`, "Operator Domain"),
+          check: chk(r`What extra requirement makes an operator on an infinite-dimensional space strictly Hermitian (self-adjoint)?`, r`Its domain must equal the domain of its adjoint`, r`Its eigenvalues must all be positive`, r`It must be a finite matrix`, r`Self-adjointness means $A=A^\dagger$ including the domains. Positivity is unrelated.`, "Operator Domain"),
         },
       ],
-      conclusion: r`The Hermitian adjoint $A^\dagger$ is defined by $\langle u|Av\rangle=\langle A^\dagger u|v\rangle$ for all $u,v$; in an orthonormal basis it is the conjugate transpose. An operator is Hermitian when $A=A^\dagger$, that is $\langle u|Av\rangle=\langle Au|v\rangle$ for all $u,v$ (with equal domains in the unbounded case). $\blacksquare$`,
+      conclusion: r`The Hermitian adjoint $A^\dagger$ is defined by $\langle u|Av\rangle=\langle A^\dagger u|v\rangle$ for all $u,v$; in an orthonormal basis it is the conjugate transpose. An operator is Hermitian when $A=A^\dagger$, that is $\langle u|Av\rangle=\langle Au|v\rangle$ for all $u,v$ (with equal domains in the infinite-dimensional case). $\blacksquare$`,
       example: {
         text: r`For $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$ and the vectors $u=(1,0)$, $v=(0,1)$: $\langle u|Bv\rangle=\langle(1,0)|(1,0)\rangle=1$, while $\langle Bu|v\rangle=\langle(0,0)|(0,1)\rangle=0$. They differ, so $B$ is not Hermitian. Its adjoint $B^\dagger=\begin{pmatrix}0&0\\1&0\end{pmatrix}$ gives $\langle B^\dagger u|v\rangle=\langle(0,1)|(0,1)\rangle=1$ as required.`,
       },
     },
     question: {
+      plain: r`The Hermitian adjoint $\hat A^\dagger$ of an operator is its partner: it does the same job on the other side of a scalar product. Define it. Then say when an operator is equal to its own partner (we call it Hermitian).`,
       faq: [
         { q: r`What does the dagger mean?`, a: r`$A^\dagger$ is the Hermitian adjoint of $A$. For a matrix it is the transpose with all entries complex-conjugated.` },
         { q: r`Do I have to show the matrix formula too?`, a: r`The question asks for the inner-product definition. The matrix form is a good extra line.` },
-        { q: r`Is "Hermitian" the same as "self-adjoint"?`, a: r`For finite matrices yes. For unbounded operators self-adjoint is stronger because the domains must agree.` },
+        { q: r`Is "Hermitian" the same as "self-adjoint"?`, a: r`For finite matrices yes. For operators like the derivative, self-adjoint is stronger because the domains must agree.` },
         { q: r`Why is the condition called "strictly" Hermitian?`, a: r`Because equality $A=A^\dagger$ must hold exactly, including the domain, and not only the scalar-product identity on the domain of $A$.` },
         { q: r`Give a quick test for a matrix to be Hermitian.`, a: r`Real diagonal, and $A_{mn}=A_{nm}^*$ for the rest.` },
       ],
@@ -329,7 +333,7 @@ export default [
         "Hermitian adjoint|adjoint|dagger", "linear operator", "inner product|scalar product", "inner product with A moved across|u A v equals A dagger u v", "for all vectors|for every u and v",
         "unique|uniqueness", "conjugate transpose|transpose and conjugate", "matrix element|matrix entries", "orthonormal basis", "Hermitian operator|Hermitian",
         "A equals A dagger|self adjoint equals adjoint", "real diagonal|real diagonal entries", "domain", "self-adjoint|strictly Hermitian", "symmetric operator",
-        "unbounded operator", "finite dimensional", "complex conjugate",
+        "operator on an infinite-dimensional space", "finite dimensional", "complex conjugate",
       ],
       retryPrompt: r`Without looking, define the Hermitian adjoint with inner products, say how its matrix is found and state when an operator is strictly Hermitian. Write the defining identity in the LaTeX box and recall the key words.`,
       sourcePageText: r`6. Define the Hermitian adjoint A-dagger of a linear operator A in terms of inner products. State the condition under which an operator is strictly Hermitian.`,
@@ -341,9 +345,9 @@ export default [
     name: "Commutators of Position and Momentum Powers",
     group: "operators",
     symbol: r`[x,p^2],\ [x^2,p]`,
-    prerequisites: ["Commutator", "Operator Product", "Position Operator", "Momentum Operator", "Identity Operator", "Hbar Symbol", "Imaginary Unit", "Derivative", "Linear Operator"],
+    prerequisites: ["Commutator", "Operator Product", "Position Operator", "Momentum Operator", "Identity Operator", "Hbar Symbol", "Imaginary Unit", "Derivative", "Linear Operator", "Commutator Identities", "Canonical Commutation Relation"],
     ross: { n: "A7", label: "Module 3 · Section A Q7", section: "A", page: 1 },
-    title: "Evaluating $[x,p^2]$ and $[x^2,p]$",
+    title: "Two commutators of position and momentum",
     statement: r`Using the basic commutation relation $[x,p]=i\hbar$, evaluate $[x,p^2]$ and $[x^2,p]$.`,
     meaning: r`Because $x$ and $p$ do not commute, squaring one of them changes the commutator in a predictable way: each factor in a product contributes its own commutator.`,
     linkedFormal: r`The [[Commutator|commutator]] is $[A,B]=AB-BA$. Two product rules hold for any operators: $[A,BC]=[A,B]C+B[A,C]$ and $[AB,C]=A[B,C]+[A,C]B$. With $[x,p]=i\hbar I$ they give $[x,p^2]=2i\hbar\,p$ and $[x^2,p]=2i\hbar\,x$.`,
@@ -400,6 +404,7 @@ export default [
       },
     },
     question: {
+      plain: r`You are told that $x$ and $p$ do not commute: $xp-px=i\hbar$. Use only this fact to work out $xp^2-p^2x$ and $x^2p-px^2$.`,
       faq: [
         { q: r`Do I need to prove the product rule?`, a: r`It is better to state it and, if there is time, expand it in one line. Then the answer is fully justified.` },
         { q: r`Why not just treat $x$ and $p$ as numbers?`, a: r`They are operators that do not commute, so $[x,p^2]$ is not zero. Treating them as numbers would give 0.` },
@@ -424,7 +429,7 @@ export default [
     symbol: r`f(\hat A)`,
     prerequisites: ["Linear Operator", "Operator Product", "Identity Operator", "Eigenvector", "Eigenvalue", "Polynomial", "Power Series", "Mathematical Induction", "Exponential Function", "Linear Combination"],
     ross: { n: "A8-A9", label: "Module 3 · Section A Q8–Q9", section: "A", page: 1 },
-    title: "What is $f(\hat A)$, and what is $f(\hat A)|\alpha\rangle$?",
+    title: "What it means to put an operator inside a function",
     statement: r`(Q8) What is meant by a function $f(\hat A)$ of an operator? (Q9) If $\hat A|\alpha\rangle=\alpha|\alpha\rangle$, what is $f(\hat A)|\alpha\rangle$?`,
     meaning: r`To apply a function to an operator, put the operator into the function's polynomial or power series. On an eigenvector the operator just acts like its eigenvalue.`,
     linkedFormal: r`For a polynomial $f(t)=\sum_{n=0}^{N}c_nt^n$ define $f(A)=\sum_{n=0}^{N}c_nA^n$ with $A^0=I$. For a [[Power Series|power series]] $f(t)=\sum_{n=0}^{\infty}c_nt^n$ define $f(A)=\sum c_nA^n$ where the series converges. If $A|\alpha\rangle=\alpha|\alpha\rangle$ then $A^n|\alpha\rangle=\alpha^n|\alpha\rangle$ and so $f(A)|\alpha\rangle=f(\alpha)|\alpha\rangle$.`,
@@ -476,6 +481,7 @@ export default [
       },
     },
     question: {
+      plain: r`What does it mean to put an operator inside a function, like $f(\hat A)$ or $e^{\hat A}$? And if $|\alpha\rangle$ is a state that $\hat A$ only stretches by the number $\alpha$, what does $f(\hat A)$ do to it?`,
       faq: [
         { q: r`What does "a function of an operator" mean?`, a: r`An operator built by putting $A$ into a polynomial or power series, using powers of $A$ and $A^0=I$.` },
         { q: r`Why is $f(A)|\alpha\rangle=f(\alpha)|\alpha\rangle$ useful?`, a: r`It lets us compute $f(A)$ on its eigenvectors just by evaluating the ordinary function at the eigenvalue.` },

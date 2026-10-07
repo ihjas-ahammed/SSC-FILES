@@ -21,6 +21,9 @@ assert.equal(meta.storageKey, "computing.example.v1");
 assert.equal(byName.Loop.name, "Loop");
 assert.deepEqual(readingRoute(["Loop"], {}).map(c=>c.name), ["Counting", "Loop"]);
 assert.deepEqual(readingRoute(["Loop"], { Counting: "known" }).map(c=>c.name), ["Loop"]);
+// Focused routes keep only switched-off concepts and ancestors the learner judged.
+assert.deepEqual(readingRoute(["Loop"], {}, { focused: true }).map(c=>c.name), ["Loop"]);
+assert.deepEqual(readingRoute(["Loop"], { Counting: "unknown" }, { focused: true }).map(c=>c.name), ["Counting", "Loop"]);
 assert.deepEqual(checklist(course.questions[0]), ["Loop", "Counting"]);
 assert.equal(normalizeProgress().questionId, "task-1");
 assert.deepEqual(normalizeProgress({ completed: ["task-1", "foreign"] }).completed, ["task-1"]);
