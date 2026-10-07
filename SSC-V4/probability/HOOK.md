@@ -30,6 +30,10 @@ Mechanics one).
   missing chapters stay visibly pending. No mock lessons enter the live seam.
 - `node tools/audit.js` checks ids, references, Recall cards, marking and escaping.
 - `node tools/check_tex.js` is the shared TeX gate.
+- `python3 authoring/proofs_update2.py` restores the explained proof/derivation
+  ladders for all 161 concepts after any generator that rewrites concept files.
+  See `sources/PROOFS_UPDATE2_REVIEW.md` for coverage, mathematical corrections,
+  prerequisite limits, and validation.
 - `python tools/coverage.py` regenerates the public coverage/reading guide.
 - `python build.py` builds the current live checkpoint.
 - `sources/coverage-chNN.md` distinguishes GATE topic coverage from omitted source

@@ -23,23 +23,46 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Treat each run as a 0-or-1 success flag, then average the flags.",
-      "why": "A success flag averages to the chance of success. Independence makes the variances add, and the strong law makes the running average settle.",
+      "idea": "Treat simulation runs as a sample of independent Bernoulli flags.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "A flag is 1 with chance $p$, and its square equals itself. Thus its mean is $p$ and its variance is $p-p^2$.",
-          "m": "E[I_j]=p,\\quad Var(I_j)=p(1-p)"
+          "why": "Let I_j be 1 if the target event occurs in run j and 0 otherwise, and let its true probability be p.",
+          "m": "$$E[I_j]=1\\cdot p+0\\cdot(1-p)=p$$",
+          "meaning": "Independent runs must reproduce the same intended model."
         },
         {
-          "why": "Add the $k$ means and variances, then divide the sum by $k$. Dividing by $k$ divides variance by $k^2$.",
-          "m": "E[\\hat p_k]=p,\\quad Var(\\hat p_k)=p(1-p)/k"
+          "why": "A flag equals its own square.",
+          "m": "$$E[I_j^2]=p,\\quad\\operatorname{Var}(I_j)=p-p^2=p(1-p)$$",
+          "meaning": "This is second moment minus squared mean."
         },
         {
-          "why": "Apply the strong law of large numbers.",
-          "m": "\\hat p_k\\to p\\quad\\text{almost surely}"
+          "why": "The success fraction is the average of k run flags.",
+          "m": "$$\\hat p_k=\\frac1k\\sum_{j=1}^kI_j$$",
+          "meaning": "It is observable even when the exact probability p is unknown."
+        },
+        {
+          "why": "Average the fraction by linearity.",
+          "m": "$$E[\\hat p_k]=\\frac{kp}{k}=p$$",
+          "meaning": "This explains unbiasedness: across repeated batches, the average estimate equals p."
+        },
+        {
+          "why": "Independence makes the sum variance k p(1−p); averaging rescales it by 1/k².",
+          "m": "$$\\operatorname{Var}(\\hat p_k)=\\frac{p(1-p)}k$$",
+          "meaning": "A single batch can still differ from p despite being unbiased."
+        },
+        {
+          "why": "Take the square root to find the standard error.",
+          "m": "$$\\operatorname{SE}(\\hat p_k)=\\sqrt{p(1-p)/k}\\le\\frac1{2\\sqrt k}$$",
+          "meaning": "The last bound follows from p(1−p)=1/4−(p−1/2)²≤1/4."
+        },
+        {
+          "why": "The iid flags are bounded, so E[|I_j|]=p is finite and the strong law applies.",
+          "m": "$$\\hat p_k\\longrightarrow p\\quad\\text{almost surely}$$",
+          "meaning": "This invokes the already justified strong law; it does not claim zero error for a finite simulation."
         }
       ],
-      "ends": "Simulation is useful when the target probability is hard to count analytically but the experiment is easy to reproduce."
+      "ends": "Monte Carlo success fractions are unbiased, have variance p(1−p)/k, and settle almost surely under independent repetition."
     },
     "provenance": "Ross, 10th ed., §10.1, PDF pp. 449–450."
   },
@@ -67,23 +90,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Fix one target order and ask how likely the shuffle is to choose it.",
-      "why": "Every target order requires the same sequence of uniform-choice chances.",
+      "idea": "Fix one desired permutation and compute its successive conditional chances.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "The last position is assigned one of n items uniformly.",
-          "m": "P(\\text{specified item in position }n)=1/n"
+          "why": "At stage i, choose J_i uniformly among positions 1 through i and swap it into position i.",
+          "m": "$$P(J_i=j)=1/i\\quad(1\\le j\\le i)$$",
+          "meaning": "Use fresh independent choices, so each choice is uniform even conditional on previous stages."
         },
         {
-          "why": "After fixing the last position, the same algorithm shuffles the other $n-1$ items. Starting from the one-item case, induction gives chance $1/(n-1)!$ for any specified remaining order.",
-          "m": "P(\\text{specified remaining order})=1/(n-1)!"
+          "why": "For a fixed target order, its desired last item occupies exactly one of the n current positions.",
+          "m": "$$P(\\text{correct item in position }n)=1/n$$",
+          "meaning": "The swap selects each remaining item with the same chance."
         },
         {
-          "why": "Multiply the stage probabilities.",
-          "m": "P(\\text{specified permutation})=(1/n)(1/(n-1)!)=1/n!"
+          "why": "After the last position is fixed, it is never selected again.",
+          "m": "$$P(\\text{correct item in position }n-1\\mid\\text{last correct})=1/(n-1)$$",
+          "meaning": "The desired next item lies in one of the n−1 still open positions, whatever their current arrangement."
+        },
+        {
+          "why": "Continue this argument until only one unfilled position remains.",
+          "m": "$$\\frac1n,\\frac1{n-1},\\ldots,\\frac12,1$$",
+          "meaning": "The final item is forced; it needs no new random choice."
+        },
+        {
+          "why": "Multiply these conditional chances by the chain rule.",
+          "m": "$$P(\\text{specified target order})=\\frac1n\\frac1{n-1}\\cdots\\frac12=\\frac1{n!}$$",
+          "meaning": "Multiplying conditional probabilities is valid even though the evolving arrangements are dependent."
+        },
+        {
+          "why": "There are n! target permutations, each with this same probability.",
+          "m": "$$n!\\cdot\\frac1{n!}=1$$",
+          "meaning": "Thus all outcomes are accounted for and the shuffle is uniform, including the one-item case."
         }
       ],
-      "ends": "Uniform permutations support unbiased shuffling and random assignment of subjects to treatment groups."
+      "ends": "The successive-swap shuffle is uniform because every fixed final order requires the same sequence of conditional chances."
     },
     "provenance": "Ross, 10th ed., §10.1, PDF pp. 450–451, Example 1a."
   },
@@ -109,23 +150,51 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "A returned value is at most $x$ exactly when the uniform draw has reached no farther than $F(x)$ on the probability scale.",
-      "why": "A uniform draw falls in $(0,a]$ with probability $a$ for $0\\le a\\le1$.",
+      "idea": "Use the generalized inverse’s first crossing to equate two cutoff events.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "The cumulative distribution never decreases and is right-continuous. Its first crossing of level $U$ is at most $x$ exactly when the level is no greater than $F(x)$.",
-          "m": "F^{-1}(U)\\le x\\iff U\\le F(x)"
+          "why": "For 0<u<1, define the generalized inverse q(u) of a CDF F.",
+          "m": "$$q(u)=\\inf\\{z:F(z)\\ge u\\}$$",
+          "meaning": "Infimum means greatest lower bound; the CDF’s limits 0 and 1 ensure this crossing is finite for interior u."
         },
         {
-          "why": "Use the uniform distribution.",
-          "m": "P(X\\le x)=P(U\\le F(x))"
+          "why": "Right continuity makes the crossing value itself reach the level u.",
+          "m": "$$F(q(u))\\ge u$$",
+          "meaning": "There are crossing points arbitrarily close on the right; right continuity carries their ≥u bound to q(u)."
         },
         {
-          "why": "Evaluate that probability.",
-          "m": "P(X\\le x)=F(x)"
+          "why": "If u≤F(x), then x belongs to the crossing set, so its infimum is at most x.",
+          "m": "$$u\\le F(x)\\ \\Longrightarrow\\ q(u)\\le x$$",
+          "meaning": "This direction follows from the meaning of an infimum."
+        },
+        {
+          "why": "Conversely, if q(u)≤x, monotonicity and the preceding crossing bound give the reverse implication.",
+          "m": "$$q(u)\\le x\\ \\Longrightarrow\\ F(x)\\ge F(q(u))\\ge u$$",
+          "meaning": "Thus the two cutoff conditions are equivalent, even with jumps and flat CDF pieces."
+        },
+        {
+          "why": "Draw U uniformly on (0,1) and set X=q(U).",
+          "m": "$$\\{X\\le x\\}=\\{U\\le F(x)\\}$$",
+          "meaning": "Apply the equivalence to the random interior probability level U."
+        },
+        {
+          "why": "A uniform value falls in an interval of length a with probability a.",
+          "m": "$$P(U\\le a)=a\\quad(0\\le a\\le1)$$",
+          "meaning": "This is the uniform rectangle-area rule."
+        },
+        {
+          "why": "Take probabilities of the equivalent events.",
+          "m": "$$P(X\\le x)=P(U\\le F(x))=F(x)$$",
+          "meaning": "The generated variable therefore has exactly the target CDF."
+        },
+        {
+          "why": "If F is continuous and strictly increasing, q is its ordinary inverse.",
+          "m": "$$F(x)=1-e^{-\\lambda x}\\ \\Longrightarrow\\ X=-\\log(1-U)/\\lambda$$",
+          "meaning": "Solve u=1−e^(−λx) by subtraction and logarithms; 1−U is also uniform, so −log(U)/λ is an equivalent generator."
         }
       ],
-      "ends": "Therefore the transformed variable has the target distribution; generalized inverses handle jumps."
+      "ends": "Inverse transform sampling matches each target cutoff to an interval of the same probability length."
     },
     "provenance": "Ross, 10th ed., §10.2.1, PDF pp. 452–453, Proposition 2.1 and Example 2a."
   },
@@ -153,23 +222,46 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Find the density of proposals that get kept, then divide by the total chance of being kept.",
-      "why": "Multiplying proposal density by acceptance chance cancels $g$, leaving $f/c$.",
+      "idea": "Multiply proposal density by acceptance chance, then normalize the accepted sample.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "At value y, multiply proposal density by acceptance chance.",
-          "m": "g(y)\\cdot\\frac{f(y)}{cg(y)}=f(y)/c"
+          "why": "Let f be the target density and g a proposal density, with f(y)≤c g(y) and c finite.",
+          "m": "$$r(y)=\\frac{f(y)}{cg(y)}\\quad(g(y)>0)$$",
+          "meaning": "Require f=0 wherever g=0; values of r on those zero-probability proposal points may be defined arbitrarily."
         },
         {
-          "why": "Integrate to find the total acceptance probability.",
-          "m": "P(accept)=\\int f(y)/c\\,dy=1/c"
+          "why": "Both densities are nonnegative and integrate to 1, so integrate the envelope inequality.",
+          "m": "$$1\\le c,\\quad0\\le r(y)\\le1$$",
+          "meaning": "Thus r(y) is a valid probability of acceptance."
         },
         {
-          "why": "Among accepted proposals, divide the density $f(y)/c$ by the acceptance probability $1/c$.",
-          "m": "f_{Y|accept}(y)=(f(y)/c)/(1/c)=f(y)"
+          "why": "Draw Y from g and an independent U uniform on (0,1); accept when U≤r(Y).",
+          "m": "$$P(\\text{accept}\\mid Y=y)=r(y)$$",
+          "meaning": "Uniform interval length gives the conditional acceptance probability."
+        },
+        {
+          "why": "For any set A of proposal values, multiply and accumulate the joint acceptance contribution.",
+          "m": "$$P(Y\\in A,\\text{accept})=\\int_Ag(y)r(y)dy=\\frac1c\\int_Af(y)dy$$",
+          "meaning": "The factor g cancels its denominator in r."
+        },
+        {
+          "why": "Set A to the entire support to get the acceptance rate.",
+          "m": "$$P(\\text{accept})=1/c$$",
+          "meaning": "The target density has total integral 1."
+        },
+        {
+          "why": "Divide the joint acceptance probability by this positive acceptance rate.",
+          "m": "$$P(Y\\in A\\mid\\text{accept})=\\int_Af(y)dy$$",
+          "meaning": "This is ordinary conditional probability, proving the accepted density is f."
+        },
+        {
+          "why": "Repeat with fresh independent attempts until acceptance.",
+          "m": "$$P(\\text{first acceptance at attempt }k)=(1-1/c)^{k-1}/c$$",
+          "meaning": "This geometric trial count has mean c by the previously derived geometric mean, and eventual acceptance has probability 1."
         }
       ],
-      "ends": "The number of proposals through the first acceptance is geometric with mean c."
+      "ends": "Rejection sampling corrects proposal weights by the acceptance ratio and returns the exact target law when the finite envelope condition holds."
     },
     "provenance": "Ross, 10th ed., §10.2.2, PDF pp. 453–455, Proposition 2.2."
   },
@@ -197,23 +289,46 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "The chance of landing in each uniform interval is its length.",
-      "why": "A uniform variable lands in an interval with probability equal to that interval’s length.",
+      "idea": "Partition the unit interval into pieces having the requested discrete probabilities.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Add the first $j$ probabilities to get endpoint $c_j$; let $c_0=0$. Interval $j$ runs between two consecutive endpoints.",
-          "m": "I_j=(c_{j-1},c_j]"
+          "why": "List target values x_j with masses p_j≥0 summing to 1.",
+          "m": "$$c_0=0,\\quad c_j=\\sum_{i=1}^jp_i$$",
+          "meaning": "The cumulative endpoints never decrease and tend to 1 for a countably infinite list."
         },
         {
-          "why": "The interval length equals the j-th mass.",
-          "m": "P(U\\in I_j)=c_j-c_{j-1}=p_j"
+          "why": "Assign value x_j to the interval between successive endpoints.",
+          "m": "$$I_j=(c_{j-1},c_j]$$",
+          "meaning": "A zero mass gives an empty interval."
         },
         {
-          "why": "Map every interval to its support value.",
-          "m": "P(X=x_j)=p_j"
+          "why": "Two different intervals do not overlap except for endpoints assigned to only one interval by this convention.",
+          "m": "$$I_i\\cap I_j=\\varnothing\\quad(i\\ne j)$$",
+          "meaning": "The right-closed, left-open rule prevents double assignments."
+        },
+        {
+          "why": "Subtract neighboring cumulative sums to get the interval width.",
+          "m": "$$c_j-c_{j-1}=p_j$$",
+          "meaning": "All earlier masses cancel, leaving exactly the j-th one."
+        },
+        {
+          "why": "For uniform U on (0,1), interval probability equals interval length.",
+          "m": "$$P(U\\in I_j)=p_j$$",
+          "meaning": "Single endpoints have probability zero, so implementation endpoint conventions do not change the law."
+        },
+        {
+          "why": "Return X=x_j when U is in I_j.",
+          "m": "$$P(X=x_j)=p_j$$",
+          "meaning": "For every U<1 in a countable distribution, a cumulative endpoint eventually reaches U; thus a return value exists almost surely."
+        },
+        {
+          "why": "As a check, masses 0.2,0.5,0.3 produce endpoints 0,0.2,0.7,1.",
+          "m": "$$(0,0.2],\\ (0.2,0.7],\\ (0.7,1]$$",
+          "meaning": "Their lengths are exactly the requested probabilities."
         }
       ],
-      "ends": "The method works for every discrete law and requires only cumulative masses."
+      "ends": "Discrete inverse transform assigns intervals on the probability scale to support values."
     },
     "provenance": "Ross, 10th ed., §10.3, PDF p. 458."
   },
@@ -245,7 +360,49 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §10.3, PDF pp. 459–460, Examples 3b–3c."
+    "provenance": "Ross, 10th ed., §10.3, PDF pp. 459–460, Examples 3b–3c.",
+    "proof": {
+      "idea": "Translate uniform draws into Bernoulli flags or exponential waits, then identify the generated count.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "For a Bernoulli success chance p, draw U uniform on (0,1).",
+          "m": "$$I=\\mathbf1_{\\{U\\le p\\}},\\quad P(I=1)=p$$",
+          "meaning": "Uniform interval length produces exactly the desired success probability."
+        },
+        {
+          "why": "Add n independent flags generated from fresh independent uniforms.",
+          "m": "$$B=\\sum_{i=1}^nI_i\\sim\\operatorname{Bin}(n,p)$$",
+          "meaning": "The binomial pattern-count proof applies to these independent identical trials."
+        },
+        {
+          "why": "For the Poisson algorithm with λ>0, turn each fresh uniform into an exponential wait.",
+          "m": "$$E_i=-\\log U_i,\\quad P(E_i>t)=P(U_i<e^{-t})=e^{-t}$$",
+          "meaning": "The decreasing log inequality gives the event translation; the uniform probability yields an exponential(1) survival."
+        },
+        {
+          "why": "Taking the negative logarithm converts a product stopping condition into a sum stopping condition.",
+          "m": "$$\\prod_{i=1}^NU_i<e^{-\\lambda}\\ \\Longleftrightarrow\\ \\sum_{i=1}^NE_i>\\lambda$$",
+          "meaning": "Apply −log, which reverses the product comparison and changes products into sums."
+        },
+        {
+          "why": "The algorithm stops at the first wait sum past time λ.",
+          "m": "$$N-1=\\#\\text{ completed arrivals by time }\\lambda$$",
+          "meaning": "Continuous waits hit the boundary exactly with probability zero, so either strict comparison convention has the same law."
+        },
+        {
+          "why": "The exponential-wait arrival process is a rate-1 Poisson process, giving the return count.",
+          "m": "$$N-1\\sim\\operatorname{Poisson}(\\lambda)$$",
+          "meaning": "Equivalently, integrate the gamma arrival density against the final exponential survival: for k≥1, ∫_0^λ e^(−s)s^(k−1)/(k−1)! ·e^(−(λ−s))ds=e^(−λ)λ^k/k!; k=0 is e^(−λ)."
+        },
+        {
+          "why": "For numerical stability accumulate waits instead of a tiny product; for λ=0 return zero.",
+          "m": "$$\\text{stop when }\\sum_i(-\\log U_i)>\\lambda$$",
+          "meaning": "This retains the exact mathematical condition while avoiding floating-point product underflow."
+        }
+      ],
+      "ends": "Specialized generators are justified by uniform interval probabilities and the logarithm’s conversion of products into exponential waiting times."
+    }
   },
   {
     "id": "c.prob.10.4.1",
@@ -271,7 +428,54 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §10.4.1, PDF pp. 460–461."
+    "provenance": "Ross, 10th ed., §10.4.1, PDF pp. 460–461.",
+    "proof": {
+      "idea": "Compute the variance of a paired estimate and prove why monotone functions give negative covariance.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Let U be uniform on (0,1), and suppose g(U) has finite variance v and mean m.",
+          "m": "$$1-U\\sim\\operatorname{Unif}(0,1)$$",
+          "meaning": "Reflecting a uniform interval preserves its lengths, so g(1−U) has the same mean and variance."
+        },
+        {
+          "why": "The antithetic pair average uses two outputs from one reflected input pair.",
+          "m": "$$A=\\frac{g(U)+g(1-U)}2,\\quad E[A]=m$$",
+          "meaning": "Linearity preserves the mean even though the pair is dependent."
+        },
+        {
+          "why": "Expand the variance of the weighted sum.",
+          "m": "$$\\operatorname{Var}(A)=\\frac14[2v+2c]=\\frac{v+c}{2},\\quad c=\\operatorname{Cov}(g(U),g(1-U))$$",
+          "meaning": "Each component contributes v; two cross terms contribute 2c."
+        },
+        {
+          "why": "Two independently generated outputs instead have covariance zero.",
+          "m": "$$\\operatorname{Var}(A_{\\text{independent}})=v/2$$",
+          "meaning": "The reflected pair improves variance for the same two outputs exactly when c<0."
+        },
+        {
+          "why": "Let U' be an independent copy of U and set a(u)=g(u), b(u)=g(1−u).",
+          "m": "$$2\\operatorname{Cov}(a(U),b(U))=E[(a(U)-a(U'))(b(U)-b(U'))]$$",
+          "meaning": "Expand the product: the two same-input terms equal E[ab], and the independent-input terms equal E[a]E[b]."
+        },
+        {
+          "why": "If g is monotone, a and b change in opposite directions as u grows.",
+          "m": "$$(a(u)-a(v))(b(u)-b(v))\\le0$$",
+          "meaning": "This is an ordering argument for every pair u,v, including constant portions of g."
+        },
+        {
+          "why": "Average that sign inequality in the covariance identity.",
+          "m": "$$c\\le0$$",
+          "meaning": "Monotonicity guarantees nonpositive covariance, with strict reduction when it is negative; it need not be strictly negative for constant g."
+        },
+        {
+          "why": "For k independent pairs, averaging their A outputs divides paired variance by k.",
+          "m": "$$\\operatorname{Var}(\\bar A_k)=\\frac{v+c}{2k}$$",
+          "meaning": "Independence is required across pairs, not within each reflected pair."
+        }
+      ],
+      "ends": "Antithetic averaging preserves the mean and reduces variance when reflection creates negative covariance; the monotone-case sign follows from a simple product-of-differences identity."
+    }
   },
   {
     "id": "c.prob.10.4.2",
@@ -297,23 +501,46 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Separate the overall spread into spread remaining within each fixed $Z$ and spread of the averages across different $Z$ values.",
-      "why": "The overall mean is the average of the conditional means. The overall variance is the sum of these two nonnegative spread contributions.",
+      "idea": "Preserve the average while removing the within-group variance component.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Average the averages for all possible $Z$ values; each result receives its original probability.",
-          "m": "E[E(Y|Z)]=E[Y]"
+          "why": "Assume E[Y²]<∞ and define m(Z)=E[Y given Z].",
+          "m": "$$E[m(Z)]=E[Y]$$",
+          "meaning": "The law of total expectation proves the replacement is unbiased for the same mean."
         },
         {
-          "why": "Write $Y-E[Y]=(Y-E[Y\\mid Z])+(E[Y\\mid Z]-E[Y])$, square, and average. The cross term is zero because $E[Y-E[Y\\mid Z]\\mid Z]=0$.",
-          "m": "Var(Y)=E[Var(Y|Z)]+Var(E[Y|Z])"
+          "why": "Subtract the overall mean and split the deviation at the conditional mean.",
+          "m": "$$Y-E[Y]=[Y-m(Z)]+[m(Z)-E[Y]]$$",
+          "meaning": "Adding and subtracting m(Z) does not change the observation."
         },
         {
-          "why": "The first term, $E[\\operatorname{Var}(Y\\mid Z)]$, cannot be negative. Removing it leaves a variance no larger than the original.",
-          "m": "Var(E[Y|Z])\\le Var(Y)"
+          "why": "Within a fixed Z-group, the first bracket averages to zero.",
+          "m": "$$E[Y-m(Z)\\mid Z]=0$$",
+          "meaning": "The second bracket is a fixed number inside that group."
+        },
+        {
+          "why": "Expand the squared brackets and average; the cross-product term disappears.",
+          "m": "$$\\operatorname{Var}(Y)=E[(Y-m(Z))^2]+E[(m(Z)-E[Y])^2]$$",
+          "meaning": "Total expectation carries the conditional-zero cross term to zero overall."
+        },
+        {
+          "why": "Identify the within-group and between-group terms.",
+          "m": "$$\\operatorname{Var}(Y)=E[\\operatorname{Var}(Y\\mid Z)]+\\operatorname{Var}(m(Z))$$",
+          "meaning": "This also rederives total variance in the simulation notation."
+        },
+        {
+          "why": "The removed within-group term is an average of nonnegative squared deviations.",
+          "m": "$$\\operatorname{Var}(m(Z))\\le\\operatorname{Var}(Y)$$",
+          "meaning": "Replacing Y by its computable conditional mean removes this source of noise."
+        },
+        {
+          "why": "For k independent repetitions, both estimate variances divide by k.",
+          "m": "$$\\operatorname{Var}\\left(\\frac1k\\sum_jm(Z_j)\\right)=\\frac{\\operatorname{Var}(m(Z))}k\\le\\frac{\\operatorname{Var}(Y)}k$$",
+          "meaning": "Equality occurs when the removed conditional variance is zero almost surely; computational cost still affects practical efficiency."
         }
       ],
-      "ends": "This is the Rao–Blackwell variance reduction principle used by the chapter’s conditional estimator."
+      "ends": "Conditioning preserves the target mean and reduces variance by the average within-group variance."
     },
     "provenance": "Ross, 10th ed., §10.4.2, PDF pp. 461–462."
   },
@@ -341,23 +568,46 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Write the corrected output’s variance as a quadratic in $a$, then find the bottom of that parabola.",
-      "why": "The correction has mean zero, so it preserves the answer. The positive coefficient $\\operatorname{Var}(Z)$ makes the quadratic have a unique minimum.",
+      "idea": "Use a zero-mean correction and minimize its variance by completing a square.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Expand Var(Y+a(Z−μ_Z)).",
-          "m": "Var(W)=Var(Y)+a^2Var(Z)+2aCov(Y,Z)"
+          "why": "Assume finite second moments and a known mean μ_Z=E[Z].",
+          "m": "$$W=Y+a(Z-\\mu_Z)$$",
+          "meaning": "The coefficient a is fixed, and the centered control averages to zero."
         },
         {
-          "why": "The minimum of a quadratic occurs where its slope is zero. Alternatively, complete the square.",
-          "m": "2aVar(Z)+2Cov(Y,Z)=0"
+          "why": "Use linearity to find the corrected mean.",
+          "m": "$$E[W]=E[Y]+a(E[Z]-\\mu_Z)=E[Y]$$",
+          "meaning": "The correction therefore preserves the target mean for every fixed a."
         },
         {
-          "why": "Solve for the minimizing value.",
-          "m": "a^*=-Cov(Y,Z)/Var(Z)"
+          "why": "Write V=Var(Z) and C=Cov(Y,Z), and expand the variance of a sum.",
+          "m": "$$\\operatorname{Var}(W)=\\operatorname{Var}(Y)+a^2V+2aC$$",
+          "meaning": "Centering Z does not change its variance or its covariance with Y."
+        },
+        {
+          "why": "For V>0, complete the square in a.",
+          "m": "$$\\operatorname{Var}(W)=\\operatorname{Var}(Y)-\\frac{C^2}V+V\\left(a+\\frac CV\\right)^2$$",
+          "meaning": "Expanding the last square returns a²V+2aC+C²/V, whose constant cancels."
+        },
+        {
+          "why": "A positive multiple of a square is smallest when the square is zero.",
+          "m": "$$a^*=-\\frac CV=-\\frac{\\operatorname{Cov}(Y,Z)}{\\operatorname{Var}(Z)}$$",
+          "meaning": "This gives the optimum without differentiation."
+        },
+        {
+          "why": "Substitute the optimal coefficient and, when both variances are positive, express C through correlation.",
+          "m": "$$\\operatorname{Var}(W^*)=\\operatorname{Var}(Y)-\\frac{C^2}V=\\operatorname{Var}(Y)(1-\\rho^2)$$",
+          "meaning": "A stronger linear correlation gives a larger reduction."
+        },
+        {
+          "why": "If V=0, the centered control is zero almost surely and provides no correction.",
+          "m": "$$Z-\\mu_Z=0\\quad\\text{almost surely}$$",
+          "meaning": "The displayed division by V must then be avoided. Estimating a from the same simulation data also needs separate analysis; this proof assumes a fixed coefficient."
         }
       ],
-      "ends": "At this coefficient, variance is $Var(Y)-Cov(Y,Z)^2/Var(Z)$, which cannot exceed Var(Y)."
+      "ends": "Control variates preserve the mean through a centered correction and reduce variance through the optimal completed-square coefficient."
     },
     "provenance": "Ross, 10th ed., §10.4.3, PDF pp. 462–463, equations (4.1)–(4.3)."
   }

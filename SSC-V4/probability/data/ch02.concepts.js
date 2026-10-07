@@ -21,7 +21,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §2.1, PDF p. 41."
+    "provenance": "Ross, 10e, §2.1, PDF p. 41.",
+    "proof": {
+      "idea": "Separate the experiment, its possible outcomes, and the probability model.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Describe what one complete run records before asking for its chance.",
+          "m": "$$S=\\{\\text{all complete possible outcomes}\\}$$",
+          "meaning": "This defines the sample space; it is a modeling choice."
+        },
+        {
+          "why": "An event is a collection of outcomes answering the question.",
+          "m": "$$A\\subseteq S$$",
+          "meaning": "For a coin, S={H,T} and the heads event is {H}."
+        },
+        {
+          "why": "Choose numerical probabilities consistent with the axioms.",
+          "m": "$$P(A)\\ge0,\\quad P(S)=1$$",
+          "meaning": "The model’s weights are assumptions or estimates, not consequences of the outcome labels alone."
+        },
+        {
+          "why": "For a two-outcome coin write p=P(H) and use the complement rule.",
+          "m": "$$P(T)=1-p$$",
+          "meaning": "The two event weights sum to 1 because the events are disjoint and exhaustive."
+        },
+        {
+          "why": "Only the additional fair-coin assumption sets p to one-half.",
+          "m": "$$p=1/2\\quad\\text{if the coin is modeled as fair}$$",
+          "meaning": "A biased coin has the same outcome set but different probabilities."
+        }
+      ],
+      "ends": "Definitions specify what is recorded; assumptions specify how probability is assigned. They should not be presented as theorems proved by listing outcomes."
+    }
   },
   {
     "id": "c.prob.2.2.1",
@@ -44,7 +76,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §2.2, definitions and Examples 1–5, PDF pp. 42–43."
+    "provenance": "Ross, 10e, §2.2, definitions and Examples 1–5, PDF pp. 42–43.",
+    "proof": {
+      "idea": "Translate event notation into membership of an outcome.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Let s be the actual outcome from sample space S.",
+          "m": "$$A\\subseteq S$$",
+          "meaning": "A happens when s belongs to A."
+        },
+        {
+          "why": "The union records that at least one of two events occurs.",
+          "m": "$$s\\in A\\cup B\\ \\Longleftrightarrow\\ s\\in A\\text{ or }s\\in B$$",
+          "meaning": "Or includes the possibility that both occur."
+        },
+        {
+          "why": "The intersection records simultaneous occurrence.",
+          "m": "$$s\\in A\\cap B\\ \\Longleftrightarrow\\ s\\in A\\text{ and }s\\in B$$",
+          "meaning": "An outcome must satisfy both conditions."
+        },
+        {
+          "why": "The complement records failure of an event relative to the chosen sample space.",
+          "m": "$$A^c=S\\setminus A$$",
+          "meaning": "Changing S can change what the complement includes."
+        },
+        {
+          "why": "An empty intersection means the events cannot both occur.",
+          "m": "$$A\\cap B=\\varnothing$$",
+          "meaning": "This is mutual exclusion, which is different from probabilistic independence."
+        }
+      ],
+      "ends": "Set operations express ordinary or, and, and failure statements about the recorded outcome."
+    }
   },
   {
     "id": "c.prob.2.2.2",
@@ -69,7 +133,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §2.2, event operations and De Morgan laws, PDF pp. 43–47."
+    "provenance": "Ross, 10e, §2.2, event operations and De Morgan laws, PDF pp. 43–47.",
+    "proof": {
+      "idea": "Prove De Morgan’s laws by checking membership of one arbitrary outcome.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "An outcome outside A∪B belongs to neither A nor B.",
+          "m": "$$s\\in(A\\cup B)^c\\ \\Longleftrightarrow\\ s\\notin A\\text{ and }s\\notin B$$",
+          "meaning": "Negating at least one means both conditions fail."
+        },
+        {
+          "why": "Being in neither is the same as being in both complements.",
+          "m": "$$(A\\cup B)^c=A^c\\cap B^c$$",
+          "meaning": "The two sets have identical membership conditions for every outcome."
+        },
+        {
+          "why": "An outcome outside A∩B fails at least one of the two membership tests.",
+          "m": "$$s\\in(A\\cap B)^c\\ \\Longleftrightarrow\\ s\\notin A\\text{ or }s\\notin B$$",
+          "meaning": "Negating both means at least one fails."
+        },
+        {
+          "why": "Translate the failures into complements.",
+          "m": "$$(A\\cap B)^c=A^c\\cup B^c$$",
+          "meaning": "This is the second De Morgan identity."
+        },
+        {
+          "why": "The same membership reasoning applies to any indexed family.",
+          "m": "$$(\\bigcup_iA_i)^c=\\bigcap_iA_i^c,\\quad(\\bigcap_iA_i)^c=\\bigcup_iA_i^c$$",
+          "meaning": "Failing every possible union member means lying in every complement; failing an intersection means at least one complement occurs."
+        }
+      ],
+      "ends": "Set identities are proved by identical outcome membership, without assumptions about probabilities."
+    }
   },
   {
     "id": "c.prob.2.3.1",
@@ -94,7 +190,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §2.3, three axioms, PDF pp. 48–49."
+    "provenance": "Ross, 10e, §2.3, three axioms, PDF pp. 48–49.",
+    "proof": {
+      "idea": "Explain the probability axioms and derive simple consequences without claiming to prove the axioms.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "A probability model first requires nonnegative event weights.",
+          "m": "$$P(A)\\ge0$$",
+          "meaning": "This is an axiom: negative probability would not describe a chance."
+        },
+        {
+          "why": "The complete list of possibilities has total probability 1.",
+          "m": "$$P(S)=1$$",
+          "meaning": "This normalization defines the probability scale, where 1 means certainty under the model."
+        },
+        {
+          "why": "For a countable disjoint list of events, the assigned weight of the union is their sum.",
+          "m": "$$P\\left(\\bigcup_iA_i\\right)=\\sum_iP(A_i)$$",
+          "meaning": "Countable additivity is an axiom; disjoint means no outcome lies in two listed events."
+        },
+        {
+          "why": "The empty event must have zero weight by adding it to S.",
+          "m": "$$P(S)=P(S)+P(\\varnothing)\\ \\Longrightarrow\\ P(\\varnothing)=0$$",
+          "meaning": "This conclusion is derived from additivity, unlike the assumed axioms themselves."
+        },
+        {
+          "why": "Split S into A and its complement and subtract.",
+          "m": "$$P(A)+P(A^c)=1\\ \\Longrightarrow\\ 0\\le P(A)\\le1$$",
+          "meaning": "The upper bound follows because the complement probability is nonnegative."
+        }
+      ],
+      "ends": "Axioms are the starting assumptions; null-event, complement and range rules are consequences of them."
+    }
   },
   {
     "id": "c.prob.2.3.2",
@@ -112,26 +240,41 @@ CONCEPTS.push(...
       "The event $\\varnothing$ has probability zero, but an event of probability zero need not be empty in an infinite model."
     ],
     "proof": {
-      "idea": "Add empty events to a list; they cannot change which results the list contains.",
-      "why": "The infinite-sum probability rule applies when no result belongs to two events in the list.",
+      "idea": "Extract finite additivity from the probability axioms.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "The union of S followed by empty events is S.",
-          "m": "1=P(S)=P(S)+\\sum_{i=2}^{\\infty}P(\\varnothing)",
-          "meaning": "The equality is valid by countable additivity."
+          "why": "The whole sample space S has probability 1 by the normalization axiom.",
+          "m": "$$P(S)=1$$",
+          "meaning": "This is an assumption of a probability model, not a theorem proved from counting."
         },
         {
-          "why": "All probabilities are nonnegative, so the remaining sum must vanish.",
-          "m": "P(\\varnothing)=0",
-          "meaning": "In particular its first term is zero."
+          "why": "The list S, empty set, empty set, and so on consists of disjoint sets whose union is S.",
+          "m": "$$S=S\\cup\\varnothing\\cup\\varnothing\\cup\\cdots$$",
+          "meaning": "Empty sets contain no outcomes, so no outcome appears in two entries."
         },
         {
-          "why": "Append empty events to any finite nonoverlapping list.",
-          "m": "P(\\cup_{i=1}^{n}E_i)=\\sum_{i=1}^{n}P(E_i)",
-          "meaning": "The added terms contribute zero."
+          "why": "Use countable additivity on that list.",
+          "m": "$$1=1+\\sum_{i=2}^{\\infty}P(\\varnothing)$$",
+          "meaning": "Every term on the right is nonnegative by the first axiom."
+        },
+        {
+          "why": "A nonnegative extra term would make the right side larger than 1.",
+          "m": "$$P(\\varnothing)=0$$",
+          "meaning": "Subtracting the initial 1 forces every remaining term to be zero."
+        },
+        {
+          "why": "Now let E_1 through E_n be a finite disjoint list and append empty sets.",
+          "m": "$$\\bigcup_{i=1}^{\\infty}E_i=\\bigcup_{i=1}^nE_i\\quad(E_i=\\varnothing\\text{ for }i>n)$$",
+          "meaning": "This gives a countably infinite list to which the axiom applies."
+        },
+        {
+          "why": "The appended terms have zero probability, so the infinite sum reduces to a finite sum.",
+          "m": "$$P\\left(\\bigcup_{i=1}^nE_i\\right)=\\sum_{i=1}^nP(E_i)$$",
+          "meaning": "Only mutually exclusive events may be added this way without an overlap correction."
         }
       ],
-      "ends": "Null-event probability zero and finite additivity."
+      "ends": "The null event has probability zero, and probabilities of finite disjoint unions add."
     },
     "cards": [
       {
@@ -159,21 +302,41 @@ CONCEPTS.push(...
       "Monotonicity follows from disjoint additivity and nonnegativity; inclusion alone is not an assertion of independence."
     ],
     "proof": {
-      "idea": "Partition S into E and E complement; split F into E and its remainder when E is contained in F.",
-      "why": "The component events are nonoverlapping, allowing direct additivity.",
+      "idea": "Split sets into nonoverlapping pieces before adding probabilities.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Use $S=E\\cup E^c$ as a nonoverlapping union.",
-          "m": "1=P(S)=P(E)+P(E^c)",
-          "meaning": "This gives the complement probability."
+          "why": "The complement E^c contains exactly the outcomes in S outside E.",
+          "m": "$$E\\cap E^c=\\varnothing,\\quad E\\cup E^c=S$$",
+          "meaning": "Each outcome belongs to one of the two pieces."
         },
         {
-          "why": "Write $F=E\\cup(F\\setminus E)$ for $E\\subseteq F$.",
-          "m": "P(F)=P(E)+P(F\\setminus E)",
-          "meaning": "The extra region has nonnegative probability."
+          "why": "Add their probabilities by finite additivity.",
+          "m": "$$P(E)+P(E^c)=P(S)=1$$",
+          "meaning": "The final equality is normalization."
+        },
+        {
+          "why": "Subtract P(E) from both sides.",
+          "m": "$$P(E^c)=1-P(E)$$",
+          "meaning": "This explains why probabilities of an event and its failure sum to 1."
+        },
+        {
+          "why": "Suppose E is contained in F; separate F into E and its extra part.",
+          "m": "$$F=E\\cup(F\\setminus E)$$",
+          "meaning": "The symbol setminus removes all elements of E from F."
+        },
+        {
+          "why": "The pieces are disjoint, so add their probabilities.",
+          "m": "$$P(F)=P(E)+P(F\\setminus E)$$",
+          "meaning": "No overlap is counted twice."
+        },
+        {
+          "why": "The extra piece has nonnegative probability.",
+          "m": "$$P(E)\\le P(F)$$",
+          "meaning": "Containment therefore gives monotonicity of probability."
         }
       ],
-      "ends": "$P(E^c)=1-P(E)$ and $P(E)\\le P(F)$. "
+      "ends": "Complementation uses subtraction from 1; containment uses a nonnegative extra piece."
     },
     "cards": [
       {
@@ -201,26 +364,46 @@ CONCEPTS.push(...
       "For exactly one of E,F, use $P(E)+P(F)-2P(EF)$; this differs from the union."
     ],
     "proof": {
-      "idea": "Split the union into nonoverlapping regions or count each outcome according to how many events contain it.",
-      "why": "A nonoverlapping split lets the axioms add probabilities without overlap.",
+      "idea": "Correct double counts, then check the general formula one outcome at a time.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Decompose $E\\cup F$ into $E$ and the part of F outside E.",
-          "m": "P(E\\cup F)=P(E)+P(F\\setminus E)",
-          "meaning": "These pieces are nonoverlapping."
+          "why": "Split the union into all of E and only the part of F outside E.",
+          "m": "$$P(E\\cup F)=P(E)+P(F\\setminus E)$$",
+          "meaning": "These are disjoint pieces, so their probabilities add."
         },
         {
-          "why": "Decompose F into its overlap with E and its outside part.",
-          "m": "P(F)=P(E\\cap F)+P(F\\setminus E)",
-          "meaning": "Rearrange to replace the outside part."
+          "why": "Split F into the overlapping and nonoverlapping parts.",
+          "m": "$$P(F)=P(E\\cap F)+P(F\\setminus E)$$",
+          "meaning": "These parts also form a disjoint union."
         },
         {
-          "why": "Suppose one result belongs to exactly $k$ of the events. It appears $k$ times in the single-event sum, $\\binom k2$ times in the subtracted pair sum, and so on.",
-          "m": "\\sum_{j=1}^{k}(-1)^{j+1}\\binom{k}{j}=1",
-          "meaning": "Expand $(1-1)^k=0$ and move its first term, 1, to the other side. The remaining alternating sum equals 1, so that result is counted once."
+          "why": "Solve the second equation for the outside part and substitute into the first.",
+          "m": "$$P(E\\cup F)=P(E)+P(F)-P(E\\cap F)$$",
+          "meaning": "Adding P(E) and P(F) counted the overlap twice; subtraction leaves it once."
+        },
+        {
+          "why": "For m events, let a particular outcome occur in exactly k of them.",
+          "m": "$$\\binom k1-\\binom k2+\\cdots+(-1)^{k+1}\\binom kk$$",
+          "meaning": "It appears in each j-fold intersection exactly k choose j times."
+        },
+        {
+          "why": "Expand (1−1)^k by the binomial theorem when k≥1.",
+          "m": "$$0=1+\\sum_{j=1}^k(-1)^j\\binom kj$$",
+          "meaning": "This is an algebraic identity already established in Chapter 1."
+        },
+        {
+          "why": "Move 1 to the left and change signs.",
+          "m": "$$\\sum_{j=1}^k(-1)^{j+1}\\binom kj=1$$",
+          "meaning": "Each outcome inside the union has net coefficient 1; outcomes outside have coefficient 0."
+        },
+        {
+          "why": "Average this identity of membership flags over outcomes.",
+          "m": "$$P\\left(\\bigcup_{i=1}^mE_i\\right)=\\sum_{\\varnothing\\ne I\\subseteq\\{1,\\ldots,m\\}}(-1)^{|I|+1}P\\left(\\bigcap_{i\\in I}E_i\\right)$$",
+          "meaning": "A membership flag averages to its event probability; the finite sum can be distributed."
         }
       ],
-      "ends": "Two-event and finite inclusion–exclusion identities."
+      "ends": "Inclusion–exclusion counts every outcome of a finite union exactly once."
     },
     "cards": [
       {
@@ -254,21 +437,41 @@ CONCEPTS.push(...
       "Ordered and unordered outcome descriptions give matching ratios only when their induced probabilities are uniform."
     ],
     "proof": {
-      "idea": "Apply finite additivity to the nonoverlapping individual results.",
-      "why": "Every event in a finite space is the union of its individual points.",
+      "idea": "Use equal probabilities and total probability 1 to derive the counting formula.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Let the common probability of one result be p and add all N points.",
-          "m": "1=P(S)=Np",
-          "meaning": "the rule that total probability is one forces the mass at each point."
+          "why": "Let the finite sample space contain N outcomes, all with probability p.",
+          "m": "$$N=|S|,\\quad P(\\{s\\})=p$$",
+          "meaning": "Vertical bars around a finite set mean its number of elements."
         },
         {
-          "why": "Add probabilities of individual results in E.",
-          "m": "P(E)=|E|p=\\frac{|E|}{|S|}",
-          "meaning": "Each favorable point contributes the same amount."
+          "why": "The singleton events are disjoint and cover S.",
+          "m": "$$S=\\bigcup_{s\\in S}\\{s\\}$$",
+          "meaning": "A singleton contains only the named outcome."
+        },
+        {
+          "why": "Add their equal probabilities.",
+          "m": "$$1=P(S)=\\underbrace{p+\\cdots+p}_{N\\text{ terms}}=Np$$",
+          "meaning": "This uses normalization and finite additivity."
+        },
+        {
+          "why": "Since N is positive, divide by N.",
+          "m": "$$p=\\frac1N$$",
+          "meaning": "Equal likelihood fixes the probability of each outcome."
+        },
+        {
+          "why": "An event E consists of |E| such singleton outcomes.",
+          "m": "$$P(E)=|E|p$$",
+          "meaning": "Add one equal contribution for each favorable outcome."
+        },
+        {
+          "why": "Substitute the value of p.",
+          "m": "$$P(E)=\\frac{|E|}{|S|}$$",
+          "meaning": "For a fair die, E={2,4,6} gives 3/6=1/2; unequal outcome probabilities would require adding their individual masses instead."
         }
       ],
-      "ends": "The favorable-outcome ratio for a finite uniform space."
+      "ends": "Favorable count divided by total count is valid only for a finite, equally likely outcome model."
     },
     "cards": [
       {
@@ -298,26 +501,46 @@ CONCEPTS.push(...
       "Continuity here needs monotonicity; arbitrary sequences of events need not have convergent probabilities matching a set limit."
     ],
     "proof": {
-      "idea": "For growing events, count only the new results added at each stage. For shrinking events, look at the growing complements.",
-      "why": "Countable additivity applies to nonoverlapping pieces, not to the original nested sequence.",
+      "idea": "Turn growing events into disjoint new pieces; use complements for shrinking events.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Set $F_1=E_1$ and $F_n=E_n\\setminus E_{n-1}$ for n>1.",
-          "m": "E_n=\\bigcup_{i=1}^{n}F_i",
-          "meaning": "Each result is counted at the first stage where it enters. The new pieces do not overlap, and the first $n$ pieces make $E_n$."
+          "why": "Assume E_1 is contained in E_2, which is contained in E_3, and so on.",
+          "m": "$$F_1=E_1,\\quad F_n=E_n\\setminus E_{n-1}\\ (n\\ge2)$$",
+          "meaning": "F_n records the outcomes entering for the first time at step n."
         },
         {
-          "why": "Apply countable additivity to all increments and take partial sums.",
-          "m": "P(\\bigcup_iE_i)=\\sum_iP(F_i)=\\lim_nP(E_n)",
-          "meaning": "The partial sum is exactly the probability of E_n."
+          "why": "No outcome can enter for the first time twice.",
+          "m": "$$F_i\\cap F_j=\\varnothing\\quad(i\\ne j)$$",
+          "meaning": "The increments are disjoint."
         },
         {
-          "why": "For decreasing events, apply the increasing result to complements.",
-          "m": "P(E_n)=1-P(E_n^c)\\longrightarrow1-P(\\bigcup_n E_n^c)=P(\\bigcap_nE_n)",
-          "meaning": "De Morgan converts the union of complements to the intersection."
+          "why": "After n stages, the first n increments recover the whole current event.",
+          "m": "$$E_n=\\bigcup_{i=1}^nF_i$$",
+          "meaning": "Taking all increments gives the union of every E_n as well."
+        },
+        {
+          "why": "Use finite and countable additivity on the increments.",
+          "m": "$$P(E_n)=\\sum_{i=1}^nP(F_i),\\quad P\\left(\\bigcup_nE_n\\right)=\\sum_{i=1}^{\\infty}P(F_i)$$",
+          "meaning": "A nonnegative infinite sum is defined as the limit of its partial sums."
+        },
+        {
+          "why": "Take the limit of the finite sums.",
+          "m": "$$\\lim_{n\\to\\infty}P(E_n)=P\\left(\\bigcup_nE_n\\right)$$",
+          "meaning": "This proves continuity for increasing events from an axiom."
+        },
+        {
+          "why": "If instead E_n decreases, its complement increases.",
+          "m": "$$E_n^c\\subseteq E_{n+1}^c,\\quad\\bigcup_nE_n^c=\\left(\\bigcap_nE_n\\right)^c$$",
+          "meaning": "The second equality is De Morgan’s law: failing at least one E_n means failing their intersection."
+        },
+        {
+          "why": "Apply the increasing result and the complement rule.",
+          "m": "$$\\lim_nP(E_n)=1-\\lim_nP(E_n^c)=P\\left(\\bigcap_nE_n\\right)$$",
+          "meaning": "All quantities are probabilities between 0 and 1, so subtraction is valid."
         }
       ],
-      "ends": "Continuity from below and from above."
+      "ends": "Nested increasing or decreasing events have probabilities that converge to the probability of the corresponding limiting event."
     },
     "cards": [
       {
@@ -346,26 +569,46 @@ CONCEPTS.push(...
       "Countably many equally likely points cannot each have the same probability while totaling one."
     ],
     "proof": {
-      "idea": "Assign each result to the first event containing it. These trimmed events do not overlap.",
-      "why": "Trimming an event cannot increase its probability. The trimmed events still cover exactly the same results as the original list.",
+      "idea": "Assign each outcome to its first event and compare the resulting disjoint pieces.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Define $F_1=E_1$ and $F_n=E_n\\setminus\\cup_{i<n}E_i$ for n>1.",
-          "m": "F_i\\cap F_j=\\varnothing,\\qquad\\cup_iF_i=\\cup_iE_i",
-          "meaning": "Every point in the union is assigned to its first event, so it appears once."
+          "why": "The events E_n need not be nested or disjoint.",
+          "m": "$$F_1=E_1,\\quad F_n=E_n\\setminus\\bigcup_{i<n}E_i$$",
+          "meaning": "Remove outcomes already recorded in earlier events."
         },
         {
-          "why": "Apply countable additivity to the nonoverlapping pieces and use inclusion.",
-          "m": "P(\\cup_iE_i)=\\sum_iP(F_i)\\le\\sum_iP(E_i)",
-          "meaning": "Since $F_i\\subseteq E_i$, monotonicity gives each termwise bound."
+          "why": "Every outcome in the union has a first positive-integer index at which it appears.",
+          "m": "$$\\bigcup_nF_n=\\bigcup_nE_n,\\quad F_i\\cap F_j=\\varnothing\\ (i\\ne j)$$",
+          "meaning": "This explains both complete coverage and absence of double counting."
         },
         {
-          "why": "For countably many individual results with common mass q, the rule that total probability is one would require the series of q’s to equal one.",
-          "m": "\\sum_{i=1}^{\\infty}q=1",
-          "meaning": "If q=0 the sum is 0; if q>0 the partial sums eventually exceed 1, a contradiction."
+          "why": "Add the probabilities of the disjoint pieces.",
+          "m": "$$P\\left(\\bigcup_nE_n\\right)=\\sum_nP(F_n)$$",
+          "meaning": "Countable additivity applies because the F_n are disjoint."
+        },
+        {
+          "why": "Each new piece lies inside its original event.",
+          "m": "$$F_n\\subseteq E_n\\ \\Longrightarrow\\ P(F_n)\\le P(E_n)$$",
+          "meaning": "Monotonicity was established by adding a nonnegative extra piece."
+        },
+        {
+          "why": "Add these termwise comparisons.",
+          "m": "$$P\\left(\\bigcup_nE_n\\right)\\le\\sum_nP(E_n)$$",
+          "meaning": "This is the union bound, even if the sum on the right is infinite."
+        },
+        {
+          "why": "Now suppose a countably infinite list of individual outcomes all had common probability q.",
+          "m": "$$1=\\sum_{n=1}^{\\infty}q$$",
+          "meaning": "Their disjoint union is the whole sample space."
+        },
+        {
+          "why": "If q=0 the sum is zero; if q>0 choose an integer M>1/q.",
+          "m": "$$q=0\\Rightarrow\\sum_nq=0,\\quad q>0\\Rightarrow Mq>1$$",
+          "meaning": "Neither choice can give total probability 1, so a countably infinite uniform model is impossible."
         }
       ],
-      "ends": "Boole’s inequality and impossibility of a uniform probability law on a countably infinite set of points."
+      "ends": "The union bound does not require independence. Equal singleton probabilities cannot describe a countably infinite sample space."
     },
     "cards": [
       {
@@ -400,7 +643,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §2.7, probability as measure of belief, PDF p. 68."
+    "provenance": "Ross, 10e, §2.7, probability as measure of belief, PDF p. 68.",
+    "proof": {
+      "idea": "Explain coherence through a complementary pair of fair-priced unit bets.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Interpret p(A) as the fair price of a ticket paying 1 if A occurs and 0 otherwise.",
+          "m": "$$\\text{payoff}=\\mathbf1_A$$",
+          "meaning": "This is a subjective betting interpretation of assigned probability."
+        },
+        {
+          "why": "A ticket for A and one for A^c together pay exactly one in every outcome.",
+          "m": "$$\\mathbf1_A+\\mathbf1_{A^c}=1$$",
+          "meaning": "Exactly one of an event and its complement occurs."
+        },
+        {
+          "why": "Their combined fair price must therefore be 1.",
+          "m": "$$p(A)+p(A^c)=1$$",
+          "meaning": "Otherwise, buying or selling the pair against a sure unit payoff permits a guaranteed gain under this betting setup."
+        },
+        {
+          "why": "For disjoint events A and B, their two tickets equal a ticket for their union.",
+          "m": "$$\\mathbf1_A+\\mathbf1_B=\\mathbf1_{A\\cup B}$$",
+          "meaning": "Disjointness prevents a combined payout of 2."
+        },
+        {
+          "why": "Consistent prices must respect the same equality.",
+          "m": "$$p(A\\cup B)=p(A)+p(B)$$",
+          "meaning": "This illustrates finite additivity. Countable additivity requires an additional continuity assumption; finite betting coherence alone does not establish it."
+        }
+      ],
+      "ends": "Subjective probabilities can represent beliefs while obeying coherent finite probability rules; a probability model’s full axioms must still be specified."
+    }
   },
   {
     "id": "c.prob.2.5.2",
@@ -420,26 +695,41 @@ CONCEPTS.push(...
       "For distinguishable balls, counting color patterns as if equally likely can be wrong when patterns have different multiplicities."
     ],
     "proof": {
-      "idea": "Collect all ordered draws giving the same group of objects.",
-      "why": "Every subset has exactly r! permutations.",
+      "idea": "Prove that forgetting draw order preserves equal likelihood when every group has r! orders.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Count ordered draws without replacement.",
-          "m": "N(N-1)\\cdots(N-r+1)",
-          "meaning": "Each ordered ordered list is one equally likely elementary outcome."
+          "why": "Draw r distinct objects successively from N, uniformly among those remaining.",
+          "m": "$$P(\\text{one specified sequence})=\\frac1N\\frac1{N-1}\\cdots\\frac1{N-r+1}$$",
+          "meaning": "The conditional chance at each stage is the reciprocal of the remaining count."
         },
         {
-          "why": "Each fixed subset has r! orderings.",
-          "m": "\\frac{N!}{(N-r)!}=r!\\binom Nr",
-          "meaning": "Each group appears in exactly the same number of ordered lists, namely $r!$."
+          "why": "Multiply and rewrite the denominator as a factorial ratio.",
+          "m": "$$P(\\text{sequence})=\\frac{(N-r)!}{N!}$$",
+          "meaning": "This probability is the same for every ordered sequence."
         },
         {
-          "why": "Equal-size unions of equally likely points have equal probability.",
-          "m": "P(\\text{each subset})=\\frac{r!}{N(N-1)\\cdots(N-r+1)}=\\frac1{\\binom Nr}",
-          "meaning": "The resulting list of unordered groups is uniform."
+          "why": "Fix an unordered group of r objects.",
+          "m": "$$r!\\text{ sequences produce this group}$$",
+          "meaning": "Its elements can be drawn in every possible internal order."
+        },
+        {
+          "why": "Different sequences are mutually exclusive outcomes, so their probabilities add.",
+          "m": "$$P(\\text{group})=r!\\frac{(N-r)!}{N!}$$",
+          "meaning": "The probability of a group is the sum over its sequence outcomes."
+        },
+        {
+          "why": "The combination formula gives the reciprocal of this expression.",
+          "m": "$$\\binom Nr=\\frac{N!}{r!(N-r)!},\\quad P(\\text{group})=\\frac1{\\binom Nr}$$",
+          "meaning": "Every unordered group is therefore equally likely."
+        },
+        {
+          "why": "Check that these probabilities sum to one.",
+          "m": "$$\\binom Nr\\frac1{\\binom Nr}=1$$",
+          "meaning": "Equal-sized groups of equally likely sequences justify changing the sample-space description."
         }
       ],
-      "ends": "Uniformity on r-subsets."
+      "ends": "The argument depends on uniform sampling without replacement; forgetting order alone does not always create a uniform model."
     },
     "cards": [
       {
@@ -474,7 +764,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §2.7, Example 7a, PDF p. 68."
+    "provenance": "Ross, 10e, §2.7, Example 7a, PDF p. 68.",
+    "proof": {
+      "idea": "Compute expected wager payoffs from the person’s stated probability model.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Let a wager pay w_A if event A happens and w_c otherwise.",
+          "m": "$$p=P(A),\\quad P(A^c)=1-p$$",
+          "meaning": "These are the bettor’s model probabilities, not necessarily equal-likelihood counts."
+        },
+        {
+          "why": "Form the weighted average of its two payoffs.",
+          "m": "$$E[W]=pw_A+(1-p)w_c$$",
+          "meaning": "Expected payoff uses all mutually exclusive possibilities and their assigned weights."
+        },
+        {
+          "why": "If buying the wager costs c, subtract that fixed price.",
+          "m": "$$E[W-c]=pw_A+(1-p)w_c-c$$",
+          "meaning": "The price does not depend on the outcome, so its average is still c."
+        },
+        {
+          "why": "For a unit-win, zero-otherwise ticket this simplifies immediately.",
+          "m": "$$E[W-c]=p-c$$",
+          "meaning": "A positive expected gain means the subjective chance exceeds the ticket price."
+        },
+        {
+          "why": "Compare wagers using their respective payoff distributions and the same probability model.",
+          "m": "$$E[W_1-W_2]=E[W_1]-E[W_2]$$",
+          "meaning": "Expected-money comparison does not by itself model risk preferences; it derives the arithmetic payoff criterion only."
+        }
+      ],
+      "ends": "A wager’s expected net payoff is its probability-weighted payoff minus its fixed cost."
+    }
   }
 ]
 );

@@ -21,7 +21,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §8.1, introduction, PDF p. 391."
+    "provenance": "Ross, 10e, §8.1, introduction, PDF p. 391.",
+    "proof": {
+      "idea": "Use sample-average moments to explain what LLN and CLT statements measure.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Let X_i be iid with mean μ and finite positive variance σ², and let bar(X_n) be their average.",
+          "m": "$$E[\\bar X_n]=\\mu,\\quad\\operatorname{Var}(\\bar X_n)=\\sigma^2/n$$",
+          "meaning": "Linearity, independence and the variance scale rule give these equations."
+        },
+        {
+          "why": "Chebyshev bounds any fixed error margin ε>0.",
+          "m": "$$P(|\\bar X_n-\\mu|\\ge\\epsilon)\\le\\sigma^2/(n\\epsilon^2)\\to0$$",
+          "meaning": "This proves the weak law under finite variance: a large error becomes unlikely."
+        },
+        {
+          "why": "The strong law describes an entire infinite sequence’s eventual limit.",
+          "m": "$$P(\\lim_n\\bar X_n=\\mu)=1$$",
+          "meaning": "Its fuller finite-absolute-mean proof is given in the strong-law note; it is a stronger statement than the preceding probability-at-each-n limit."
+        },
+        {
+          "why": "To retain the shrinking fluctuations, measure them in their own shrinking standard-deviation units.",
+          "m": "$$Z_n=\\frac{\\bar X_n-\\mu}{\\sigma/\\sqrt n}$$",
+          "meaning": "The numerator’s spread is σ/sqrt(n), so this scale gives variance 1."
+        },
+        {
+          "why": "The CLT describes the limiting distribution of those normalized fluctuations.",
+          "m": "$$P(Z_n\\le a)\\to\\Phi(a)$$",
+          "meaning": "This invokes the CLT proved in its own note; it does not claim the raw observations or the raw sum converge almost surely to a normal variable."
+        }
+      ],
+      "ends": "LLN explains closeness to the mean; CLT explains the probability shape of centered fluctuations measured in the correct units."
+    }
   },
   {
     "id": "c.prob.8.2.1",
@@ -47,26 +79,51 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.2, Propositions 2.1–2.2, PDF p. 392.",
     "proof": {
-      "idea": "Use a 0-or-1 flag for a large value. Compare this flag to $X/a$, then average both sides.",
-      "why": "If one quantity is never bigger than another for any result, its average cannot be bigger either.",
+      "idea": "Bound a large-value flag, then apply that same bound to squared deviations.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "The flag $\\mathbf1_{\\{X\\ge a\\}}$ is 1 when $X\\ge a$ and 0 otherwise. In either case it is at most $X/a$.",
-          "m": "$\\mathbf1_{\\{X\\ge a\\}}\\le X/a$",
-          "meaning": "Outside the event, the left side is zero; inside, X/a≥1."
+          "why": "Let X≥0 and a>0, and set I=1 when X≥a and 0 otherwise.",
+          "m": "$$I=\\mathbf1_{\\{X\\ge a\\}}$$",
+          "meaning": "This flag identifies the tail event we want to bound."
         },
         {
-          "why": "Take expectations.",
-          "m": "$P(X\\ge a)\\le E[X]/a$",
-          "meaning": "The average of a success flag is the probability of success. This turns the comparison into Markov’s bound."
+          "why": "If X≥a then aI=a≤X; if X<a then aI=0≤X.",
+          "m": "$$aI\\le X$$",
+          "meaning": "Checking both cases proves the inequality at every allowed outcome."
         },
         {
-          "why": "Apply Markov to $(X-\\mu)^2$ at threshold $k^2$.",
-          "m": "$P((X-\\mu)^2\\ge k^2)\\le E[(X-\\mu)^2]/k^2=\\sigma^2/k^2$",
-          "meaning": "Squaring removes the sign: $(X-\\mu)^2\\ge k^2$ means exactly $|X-\\mu|\\ge k$. Its average is the variance."
+          "why": "Averaging preserves an inequality between nonnegative quantities.",
+          "m": "$$aE[I]\\le E[X]$$",
+          "meaning": "This is order preservation of expectation, proved from nonnegative weights."
+        },
+        {
+          "why": "The flag’s weighted average is its success probability.",
+          "m": "$$E[I]=1P(X\\ge a)+0P(X<a)=P(X\\ge a)$$",
+          "meaning": "Substitute this into the preceding comparison."
+        },
+        {
+          "why": "Divide by the positive threshold a.",
+          "m": "$$P(X\\ge a)\\le\\frac{E[X]}a$$",
+          "meaning": "This is Markov’s inequality; if the mean is infinite the bound is true but uninformative."
+        },
+        {
+          "why": "For a variable with mean μ and finite variance σ², choose a new nonnegative quantity Y.",
+          "m": "$$Y=(X-\\mu)^2,\\quad E[Y]=\\sigma^2$$",
+          "meaning": "Squaring makes Y nonnegative, and its mean is the definition of variance."
+        },
+        {
+          "why": "For k>0, taking squares is equivalent to comparing absolute distances.",
+          "m": "$$\\{|X-\\mu|\\ge k\\}=\\{Y\\ge k^2\\}$$",
+          "meaning": "Both sides describe deviations at least k in either direction."
+        },
+        {
+          "why": "Apply Markov to Y with threshold k².",
+          "m": "$$P(|X-\\mu|\\ge k)\\le\\frac{E[Y]}{k^2}=\\frac{\\sigma^2}{k^2}$$",
+          "meaning": "This proves Chebyshev’s inequality without a distribution-specific formula."
         }
       ],
-      "ends": "Markov and Chebyshev bounds."
+      "ends": "Markov bounds nonnegative upper tails; Chebyshev applies it to squared distance from the mean."
     }
   },
   {
@@ -94,26 +151,46 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.2, Theorem 2.1, PDF p. 394.",
     "proof": {
-      "idea": "Compute mean and variance of the average, then apply Chebyshev.",
-      "why": "Independence makes variances add and the factor 1/n² reduces total variance to σ²/n.",
+      "idea": "Compute the sample average’s mean and variance explicitly, then use Chebyshev.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Use the rule that averages of sums add for the mean.",
-          "m": "$E[\\bar X_n]=\\mu$",
-          "meaning": "The average is centered at the common mean."
+          "why": "Take n independent identically distributed observations with finite variance σ² and mean μ.",
+          "m": "$$\\bar X_n=\\frac1n\\sum_{i=1}^nX_i$$",
+          "meaning": "Identically distributed means the same probability law; independent means the joint law factors."
         },
         {
-          "why": "Use independence for its variance.",
-          "m": "$\\operatorname{Var}(\\bar X_n)=\\sigma^2/n$",
-          "meaning": "Each variance contributes σ²/n²."
+          "why": "Apply linearity to the average.",
+          "m": "$$E[\\bar X_n]=\\frac1n\\sum_{i=1}^n\\mu=\\frac{n\\mu}{n}=\\mu$$",
+          "meaning": "The estimator is centered at the true mean for every n."
         },
         {
-          "why": "Apply Chebyshev at distance ε.",
-          "m": "$P(|\\bar X_n-\\mu|\\ge\\epsilon)\\le\\sigma^2/(n\\epsilon^2)$",
-          "meaning": "The upper bound tends to zero."
+          "why": "Independence makes all distinct-pair covariances zero, so variances of the sum add.",
+          "m": "$$\\operatorname{Var}\\left(\\sum_{i=1}^nX_i\\right)=n\\sigma^2$$",
+          "meaning": "This is where the independence assumption enters."
+        },
+        {
+          "why": "Dividing a variable by n divides its variance by n².",
+          "m": "$$\\operatorname{Var}(\\bar X_n)=\\frac{n\\sigma^2}{n^2}=\\frac{\\sigma^2}{n}$$",
+          "meaning": "The scale rule follows from squaring centered deviations."
+        },
+        {
+          "why": "Choose any fixed error tolerance ε>0 and apply Chebyshev to the average.",
+          "m": "$$P(|\\bar X_n-\\mu|\\ge\\epsilon)\\le\\frac{\\sigma^2}{n\\epsilon^2}$$",
+          "meaning": "Its mean and variance were computed in the preceding steps."
+        },
+        {
+          "why": "For any desired probability bound δ>0, choose n greater than σ²/(δε²).",
+          "m": "$$n>\\frac{\\sigma^2}{\\delta\\epsilon^2}\\ \\Longrightarrow\\ P(|\\bar X_n-\\mu|\\ge\\epsilon)<\\delta$$",
+          "meaning": "Solving the upper-bound inequality shows quantitatively why the error chance tends to zero."
+        },
+        {
+          "why": "Since δ can be made arbitrarily small, this is convergence in probability.",
+          "m": "$$P(|\\bar X_n-\\mu|\\ge\\epsilon)\\longrightarrow0$$",
+          "meaning": "It concerns the error chance at each n; it does not yet establish convergence of entire infinite sample paths."
         }
       ],
-      "ends": "Convergence in probability of the sample mean to μ."
+      "ends": "This elementary finite-variance proof gives the weak law with an explicit error-probability bound."
     }
   },
   {
@@ -140,26 +217,56 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.3, Theorem 3.1, PDF p. 395.",
     "proof": {
-      "idea": "Advanced proof: encode a distribution by its characteristic function $\\varphi_Y(t)=E[e^{itY}]$, then show the encoding of the sum approaches that of a normal variable. Here $i$ is the imaginary unit.",
-      "why": "This proof uses two results from more advanced mathematics: a finite second moment gives the expansion near zero, and the continuity theorem turns convergence of characteristic functions into convergence of distributions.",
+      "idea": "Explain the standardization, then give the characteristic-function proof with its advanced prerequisites stated.",
+      "why": "The full proof uses Taylor expansion, dominated convergence and the characteristic-function continuity theorem. The standardization and algebra are derived here; the named analysis theorems are prerequisites beyond high school mathematics.",
       "rungs": [
         {
-          "why": "Set $Y=(X-\\mu)/\\sigma$. Its mean is 0 and variance is 1. The characteristic-function expansion therefore starts with these two terms.",
-          "m": "$\\varphi_Y(t)=1-t^2/2+o(t^2)$ as $t\\to0$",
-          "meaning": "The notation $o(t^2)$ means a remainder whose ratio to $t^2$ tends to zero. A finite second moment is enough; an exponential moment is not required."
+          "why": "Take iid X_i with mean μ and finite positive variance σ², and standardize each observation.",
+          "m": "$$Y_i=\\frac{X_i-\\mu}{\\sigma},\\quad E[Y_i]=0,\\quad E[Y_i^2]=1$$",
+          "meaning": "Subtracting the mean centers values; division by σ makes variance 1."
         },
         {
-          "why": "Use independence to express the characteristic function of the normalized sum.",
-          "m": "$\\varphi_{n^{-1/2}\\sum_iY_i}(t)=[\\varphi_Y(t/\\sqrt n)]^n$",
-          "meaning": "For independent variables, the characteristic function of a sum is the product of their characteristic functions. Dividing the sum by $\\sqrt n$ divides the argument by $\\sqrt n$."
+          "why": "The sum of the standardized observations has variance n, so divide by sqrt(n).",
+          "m": "$$Z_n=\\frac1{\\sqrt n}\\sum_iY_i=\\frac{\\sum_iX_i-n\\mu}{\\sigma\\sqrt n}$$",
+          "meaning": "This explains both the centering nμ and the scale σsqrt(n) using earlier mean and variance rules."
         },
         {
-          "why": "Take the limit of this power.",
-          "m": "$[1-t^2/(2n)+o(1/n)]^n\\to e^{-t^2/2}$",
-          "meaning": "This uses the familiar exponential limit $(1+b/n)^n\\to e^b$, with a remainder smaller than $1/n$. The result $e^{-t^2/2}$ is the normal distribution’s characteristic function."
+          "why": "Encode a distribution by its characteristic function ψ.",
+          "m": "$$\\psi_Y(t)=E[e^{itY}],\\quad i^2=-1$$",
+          "meaning": "By Euler’s identity e^(iu)=cos(u)+i sin(u), its absolute value is 1, so this average exists even when an MGF does not."
+        },
+        {
+          "why": "The second-order exponential expansion has an error controlled by u².",
+          "m": "$$e^{iu}=1+iu-u^2/2+r(u),\\quad r(u)/u^2\\to0,\\quad|r(u)|\\le C u^2$$",
+          "meaning": "Taylor’s theorem proves the small-u limit; for large |u| the bound follows from |e^(iu)|=1 and the polynomial terms. C is a fixed finite constant."
+        },
+        {
+          "why": "Put u=tY and average the expansion.",
+          "m": "$$\\psi_Y(t)=1+itE[Y]-\\frac{t^2}2E[Y^2]+E[r(tY)]=1-\\frac{t^2}2+o(t^2)$$",
+          "meaning": "Dominated convergence applies to r(tY)/t², bounded by CY² with finite mean. Taylor’s theorem and dominated convergence are calculus prerequisites, not high school algebra."
+        },
+        {
+          "why": "Independence factors the encoding of the sum, and scaling changes its argument.",
+          "m": "$$\\psi_{Z_n}(t)=\\prod_{i=1}^n\\psi_Y(t/\\sqrt n)=[\\psi_Y(t/\\sqrt n)]^n$$",
+          "meaning": "This follows from e^(itΣY_i/sqrt(n)) being the product of the individual exponentials."
+        },
+        {
+          "why": "Insert the small-argument expansion at fixed t.",
+          "m": "$$\\psi_{Z_n}(t)=[1-t^2/(2n)+o(1/n)]^n\\longrightarrow e^{-t^2/2}$$",
+          "meaning": "The exponential limit follows by taking the local logarithm: n log(1+u_n)=nu_n+O(n|u_n|²)→−t²/2."
+        },
+        {
+          "why": "Verify this limiting encoding belongs to a standard normal G with density φ.",
+          "m": "$$\\psi_G'(t)=-t\\psi_G(t),\\quad\\psi_G(0)=1\\ \\Longrightarrow\\ \\psi_G(t)=e^{-t^2/2}$$",
+          "meaning": "Differentiate the normal integral and integrate by parts using φ'(x)=−xφ(x); boundary terms vanish, giving the displayed differential equation."
+        },
+        {
+          "why": "Apply the characteristic-function continuity theorem.",
+          "m": "$$P(Z_n\\le a)\\longrightarrow\\Phi(a)\\quad\\text{for every real }a$$",
+          "meaning": "This advanced theorem says pointwise convergence of characteristic functions to one continuous at zero implies convergence in distribution; the normal CDF is continuous everywhere."
         }
       ],
-      "ends": "By the continuity theorem, the normalized sum converges in distribution to N(0,1)."
+      "ends": "The mean/variance standardization is elementary. The full finite-variance CLT also uses Taylor expansion, dominated convergence and the characteristic-function continuity theorem, each identified at its point of use."
     }
   },
   {
@@ -184,7 +291,44 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §8.3, Examples 3a–3e, PDF pp. 396–400."
+    "provenance": "Ross, 10e, §8.3, Examples 3a–3e, PDF pp. 396–400.",
+    "proof": {
+      "idea": "Translate a total or average cutoff into the same standardized sum.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "For iid observations define total T_n and average bar(X_n).",
+          "m": "$$T_n=\\sum_iX_i,\\quad\\bar X_n=T_n/n$$",
+          "meaning": "Use finite positive variance σ² and mean μ."
+        },
+        {
+          "why": "Compute their centers and spreads.",
+          "m": "$$E[T_n]=n\\mu,\\quad\\operatorname{SD}(T_n)=\\sigma\\sqrt n,\\quad\\operatorname{SD}(\\bar X_n)=\\sigma/\\sqrt n$$",
+          "meaning": "Independence adds total variance nσ²; dividing by n rescales standard deviation by 1/n."
+        },
+        {
+          "why": "Subtract the center and divide by spread for a total cutoff x.",
+          "m": "$$P(T_n\\le x)=P\\left(\\frac{T_n-n\\mu}{\\sigma\\sqrt n}\\le\\frac{x-n\\mu}{\\sigma\\sqrt n}\\right)$$",
+          "meaning": "Positive spread preserves the cutoff inequality."
+        },
+        {
+          "why": "Replace the standardized sum’s CDF by the CLT’s standard-normal limit for a large sample.",
+          "m": "$$P(T_n\\le x)\\approx\\Phi\\left(\\frac{x-n\\mu}{\\sigma\\sqrt n}\\right)$$",
+          "meaning": "This is an approximation, not an equality; the CLT alone supplies no finite-sample error bound."
+        },
+        {
+          "why": "For an average cutoff a, use the average’s own center and spread.",
+          "m": "$$P(\\bar X_n\\le a)\\approx\\Phi\\left(\\frac{a-\\mu}{\\sigma/\\sqrt n}\\right)$$",
+          "meaning": "Algebraically this is the same normalized sum since T_n=n bar(X_n)."
+        },
+        {
+          "why": "For a count on a grid of spacing d, a bar centered at k extends half a grid step to either side.",
+          "m": "$$P(T_n\\le k)\\approx\\Phi\\left(\\frac{k+d/2-n\\mu}{\\sigma\\sqrt n}\\right)$$",
+          "meaning": "This explains the usual half-unit correction when d=1; choose the boundary matching the event and actual grid."
+        }
+      ],
+      "ends": "Use the mean and standard deviation of the quantity being compared, then translate its cutoff before consulting a normal CDF."
+    }
   },
   {
     "id": "c.prob.8.4.1",
@@ -210,31 +354,81 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.4, Theorem 4.1, PDF p. 401.",
     "proof": {
-      "idea": "Advanced proof: temporarily cut off exceptionally large observations. Prove the average of the cut-off values settles, then show the cuts do not change the final answer.",
-      "why": "Three advanced results are used: Borel–Cantelli (a finite total probability means only finitely many exceptional events happen), the independent-series convergence theorem, and Kronecker’s lemma (a weighted-series limit gives an average limit). The steps below show where each is needed.",
+      "idea": "Cut off rare extreme values, control the resulting variances, and explain how a convergent series gives a convergent average.",
+      "why": "The full finite-absolute-mean argument uses nonnegative integration, dominated convergence and the independent-series convergence theorem. The counting, telescoping bound and needed averaging lemma are derived here; the independent-series theorem remains an advanced prerequisite.",
       "rungs": [
         {
-          "why": "Truncate at level n and use the finite absolute mean.",
-          "m": "$X'_n=X_n\\mathbf1_{\\{|X_n|\\le n\\}},\\quad\\sum_nP(X_n\\ne X'_n)<\\infty$",
-          "meaning": "Set an observation to zero only when its size exceeds its index. Since $\\sum_{n\\ge1}P(|X_1|>n)\\le E|X_1|$, the total chance of these cuts is finite. Borel–Cantelli says that, with probability one, only finitely many cuts occur."
+          "why": "Assume iid real X_n with E[|X_1|]<∞ and mean μ, and discard only observations larger in size than their index.",
+          "m": "$$X'_n=X_n\\mathbf1_{\\{|X_n|\\le n\\}}$$",
+          "meaning": "The truncated variables remain independent because each uses only its own X_n."
         },
         {
-          "why": "Center the truncations; their variances are summable after division by n².",
-          "m": "$\\sum_n\\operatorname{Var}(X'_n)/n^2<\\infty$",
-          "meaning": "Variance is at most the second moment. For a fixed size $z$, $z^2\\sum_{n\\ge\\max(1,\\lceil z\\rceil)}n^{-2}$ is at most a constant times $z$. Averaging this bound gives a finite sum because $E|X_1|$ is finite."
+          "why": "For a fixed nonnegative z, the number of positive integers below z is at most z.",
+          "m": "$$\\sum_{n\\ge1}\\mathbf1_{\\{z>n\\}}\\le z$$",
+          "meaning": "For z=3.4, the counted integers are 1,2,3."
         },
         {
-          "why": "Apply the independent-series criterion and Kronecker lemma.",
-          "m": "$n^{-1}\\sum_{i=1}^n(X'_i-E[X'_i])\\to0\\quad a.s.$",
-          "meaning": "The cut-off observations remain independent. The series theorem makes $\\sum_i(X_i\\prime-E[X_i\\prime])/i$ converge with probability one; Kronecker’s lemma then makes their centered averages tend to zero."
+          "why": "Average this counting bound at z=|X_1| using nonnegative summation.",
+          "m": "$$\\sum_{n\\ge1}P(X_n\\ne X'_n)=\\sum_{n\\ge1}P(|X_1|>n)\\le E[|X_1|]<\\infty$$",
+          "meaning": "Identical distribution gives the middle equality; Tonelli’s theorem justifies adding the nonnegative indicator averages."
         },
         {
-          "why": "The truncated means converge to μ.",
-          "m": "$E[X'_n]\\to E[X_1]=\\mu$",
-          "meaning": "Because $|X_1|$ has finite mean, the averages of the cut-off values approach $\\mu$ by dominated convergence. Their own running averages of means also approach $\\mu$. The finitely many altered observations contribute an amount divided by $n$, which tends to zero."
+          "why": "The probability of any cut after index m is bounded by the remaining sum of cut probabilities.",
+          "m": "$$P\\left(\\bigcup_{n\\ge m}\\{X_n\\ne X'_n\\}\\right)\\le\\sum_{n\\ge m}P(|X_1|>n)\\longrightarrow0$$",
+          "meaning": "The union bound proves the first Borel–Cantelli conclusion here: with probability one, there are only finitely many cuts."
+        },
+        {
+          "why": "Variance is second moment minus a nonnegative squared mean.",
+          "m": "$$\\operatorname{Var}(X'_n)\\le E[(X'_n)^2]=E[X_1^2\\mathbf1_{\\{|X_1|\\le n\\}}]$$",
+          "meaning": "The original second moment may be infinite; truncation makes each separate truncated second moment finite."
+        },
+        {
+          "why": "For integer n≥1, compare reciprocal squares with a telescoping fraction.",
+          "m": "$$\\frac1{n^2}\\le\\frac2{n(n+1)}=2\\left(\\frac1n-\\frac1{n+1}\\right)$$",
+          "meaning": "The inequality is equivalent to n+1≤2n."
+        },
+        {
+          "why": "For z>0, start summing at m=max(1,ceil(z)); the telescoping bound controls the weighted tail.",
+          "m": "$$z^2\\sum_{n\\ge m}\\frac1{n^2}\\le\\frac{2z^2}{m}\\le2z$$",
+          "meaning": "Here ceil(z) is the smallest integer at least z, so m≥z; for z=0 both sides are zero."
+        },
+        {
+          "why": "Sum the variance bounds and average the preceding bound at z=|X_1|.",
+          "m": "$$\\sum_{n\\ge1}\\frac{\\operatorname{Var}(X'_n)}{n^2}\\le2E[|X_1|]<\\infty$$",
+          "meaning": "Nonnegative summation permits interchanging the expectation and sum."
+        },
+        {
+          "why": "Set D_n=X'_n−E[X'_n]. The independent-series convergence theorem applies to the centered variables D_n/n.",
+          "m": "$$\\sum_{n\\ge1}\\frac{D_n}{n}\\quad\\text{converges almost surely}$$",
+          "meaning": "The theorem requires independent zero-mean terms with summable variances, exactly established above. Its proof uses Kolmogorov’s maximal inequality and is an advanced probability prerequisite."
+        },
+        {
+          "why": "For any sample path where that series converges, let s_n be its partial sums and s_0=0.",
+          "m": "$$D_i=i(s_i-s_{i-1}),\\quad\\frac1n\\sum_{i=1}^nD_i=s_n-\\frac1n\\sum_{i=1}^{n-1}s_i$$",
+          "meaning": "Expand the finite sum and cancel consecutive coefficients; this is summation by parts, proved by direct algebra."
+        },
+        {
+          "why": "If s_n tends to s, the running average of its earlier values also tends to s.",
+          "m": "$$s_n\\to s\\ \\Longrightarrow\\ \\frac1n\\sum_{i=1}^{n-1}s_i\\to s$$",
+          "meaning": "Split the average into a fixed finite initial segment and the later terms within ε of s; the initial segment divided by n vanishes. Thus the centered truncated average tends to 0. This derives the needed case of Kronecker’s lemma."
+        },
+        {
+          "why": "Truncated means approach μ because their removed absolute tail has vanishing mean.",
+          "m": "$$|E[X'_n]-\\mu|\\le E[|X_1|\\mathbf1_{\\{|X_1|>n\\}}]\\longrightarrow0$$",
+          "meaning": "Dominated convergence applies since the tail tends pointwise to zero and is bounded by the integrable |X_1|."
+        },
+        {
+          "why": "The same running-average argument gives the limit of the means.",
+          "m": "$$\\frac1n\\sum_{i=1}^nE[X'_i]\\to\\mu$$",
+          "meaning": "Adding this to the centered-average limit proves that the truncated sample average tends to μ almost surely."
+        },
+        {
+          "why": "Only finitely many observations were cut on almost every path; their total difference is then a fixed finite number.",
+          "m": "$$\\frac1n\\sum_{i=1}^n(X_i-X'_i)\\longrightarrow0$$",
+          "meaning": "A fixed numerator divided by growing n tends to zero, so restoring those observations leaves the limit unchanged."
         }
       ],
-      "ends": "The sample averages converge to μ almost surely under the finite-absolute-mean assumption."
+      "ends": "Thus the original sample average converges to μ almost surely under finite absolute mean. The independent-series theorem and dominated convergence remain explicit advanced prerequisites; the other bounds and averaging steps have been derived here."
     }
   },
   {
@@ -261,21 +455,46 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.5, Proposition 5.1 and Corollary 5.1, PDF pp. 406–407.",
     "proof": {
-      "idea": "Apply Markov to a shifted square and optimize the shift.",
-      "why": "A one-sided event can be included inside a nonnegative squared-tail event whose expectation is controlled by the variance.",
+      "idea": "Shift a squared deviation and choose the best shift by completing a square.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "For c>0, if X−μ≥a then (X−μ+c)²≥(a+c)².",
-          "m": "$P(X-\\mu\\ge a)\\le E[(X-\\mu+c)^2]/(a+c)^2=(\\sigma^2+c^2)/(a+c)^2$",
-          "meaning": "The centered cross term has expectation zero."
+          "why": "Write Y=X−μ, so E[Y]=0 and E[Y²]=σ².",
+          "m": "$$Y\\ge a\\ \\Longrightarrow\\ Y+c\\ge a+c>0\\quad(c\\ge0,a>0)$$",
+          "meaning": "Adding c preserves order and makes both compared quantities positive on this event."
         },
         {
-          "why": "If $\\sigma^2>0$, choose $c=\\sigma^2/a$. When $\\sigma^2=0$, $X=\\mu$ with probability one and the claimed tail probability is already zero.",
-          "m": "$\\frac{\\sigma^2+\\sigma^4/a^2}{(a+\\sigma^2/a)^2}=\\frac{\\sigma^2}{\\sigma^2+a^2}$",
-          "meaning": "For positive variance, differentiation or completing the square shows this is the smallest bound among $c>0$."
+          "why": "Square these positive quantities to get an event containment.",
+          "m": "$$\\{Y\\ge a\\}\\subseteq\\{(Y+c)^2\\ge(a+c)^2\\}$$",
+          "meaning": "The squared event can contain other outcomes too, so only containment is claimed."
+        },
+        {
+          "why": "Apply Markov to the nonnegative squared quantity.",
+          "m": "$$P(Y\\ge a)\\le\\frac{E[(Y+c)^2]}{(a+c)^2}$$",
+          "meaning": "The denominator is positive."
+        },
+        {
+          "why": "Expand the square and use E[Y]=0.",
+          "m": "$$E[(Y+c)^2]=\\sigma^2+2cE[Y]+c^2=\\sigma^2+c^2$$",
+          "meaning": "The centered cross term vanishes."
+        },
+        {
+          "why": "Compare this family of bounds with σ²/(a²+σ²) using a common denominator.",
+          "m": "$$\\frac{\\sigma^2+c^2}{(a+c)^2}-\\frac{\\sigma^2}{a^2+\\sigma^2}=\\frac{(ac-\\sigma^2)^2}{(a+c)^2(a^2+\\sigma^2)}\\ge0$$",
+          "meaning": "Expanding the numerator shows the equality; it is a square divided by a positive number."
+        },
+        {
+          "why": "If σ²>0, choose c=σ²/a to make the square zero.",
+          "m": "$$P(X-\\mu\\ge a)\\le\\frac{\\sigma^2}{a^2+\\sigma^2}$$",
+          "meaning": "This choice is therefore optimal among these shifted-square bounds without differentiating."
+        },
+        {
+          "why": "If σ²=0, Y=0 almost surely; to obtain the lower-tail version replace Y by −Y.",
+          "m": "$$P(X-\\mu\\le-a)\\le\\frac{\\sigma^2}{a^2+\\sigma^2}$$",
+          "meaning": "A mean-zero variable with zero mean square is zero almost surely; −Y has the same mean and variance as Y."
         }
       ],
-      "ends": "The one-sided Chebyshev (Cantelli) inequality follows."
+      "ends": "Cantelli’s one-sided bound follows from Markov and a completed square."
     }
   },
   {
@@ -303,21 +522,41 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.5, Proposition 5.2, PDF pp. 407–408.",
     "proof": {
-      "idea": "Apply Markov to the nonnegative variable $e^{tX}$.",
-      "why": "For t>0, the event X≥a implies the exponential exceeds $e^{ta}$.",
+      "idea": "Turn a tail event into an exponential tail and apply Markov.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Use the event implication.",
-          "m": "$\\{X\\ge a\\}\\subseteq\\{e^{tX}\\ge e^{ta}\\}$",
-          "meaning": "The exponential is increasing when t>0."
+          "why": "Fix t>0 with finite M_X(t)=E[e^(tX)].",
+          "m": "$$x\\ge a\\ \\Longleftrightarrow\\ e^{tx}\\ge e^{ta}$$",
+          "meaning": "The exponential is strictly increasing and multiplication by positive t preserves order."
         },
         {
-          "why": "Apply Markov.",
-          "m": "$P(e^{tX}\\ge e^{ta})\\le E[e^{tX}]/e^{ta}$",
-          "meaning": "The expectation is the MGF."
+          "why": "The random quantity e^(tX) is nonnegative at every outcome.",
+          "m": "$$P(X\\ge a)=P(e^{tX}\\ge e^{ta})$$",
+          "meaning": "This exact event equality lets us use Markov with threshold e^(ta)>0."
+        },
+        {
+          "why": "Insert its expectation into Markov’s bound.",
+          "m": "$$P(X\\ge a)\\le\\frac{E[e^{tX}]}{e^{ta}}=e^{-ta}M_X(t)$$",
+          "meaning": "Dividing by an exponential is multiplying by its reciprocal e^(−ta)."
+        },
+        {
+          "why": "Each admissible positive t gives a valid upper bound.",
+          "m": "$$P(X\\ge a)\\le\\inf_{t>0:M_X(t)<\\infty}e^{-ta}M_X(t)$$",
+          "meaning": "Infimum means the greatest lower limit of all these upper bounds, or their smallest achievable limiting value."
+        },
+        {
+          "why": "For t<0, multiplication reverses the original order before exponentiation.",
+          "m": "$$x\\le a\\ \\Longleftrightarrow\\ e^{tx}\\ge e^{ta}$$",
+          "meaning": "The same Markov argument now bounds the lower tail."
+        },
+        {
+          "why": "For an independent sum, factor the exponential expectations.",
+          "m": "$$P\\left(\\sum_iX_i\\ge a\\right)\\le e^{-ta}\\prod_iM_{X_i}(t)\\quad(t>0)$$",
+          "meaning": "Independence gives the product rule proved earlier; use only t where all necessary factors are finite."
         }
       ],
-      "ends": "The upper-tail Chernoff bound; t<0 gives the lower-tail version."
+      "ends": "Chernoff bounds are Markov bounds after exponential transformation, optimized over allowed t."
     }
   },
   {
@@ -342,21 +581,46 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.5, Proposition 5.3, PDF p. 409.",
     "proof": {
-      "idea": "Draw a straight supporting line below the convex graph at the mean. Average the vertical comparison.",
-      "why": "The line has the same value as the function at the mean. Its positive and negative horizontal deviations average to zero.",
+      "idea": "Explain the tangent-line comparison, then average it; cover nondifferentiable convex functions too.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "For differentiable convex g, use the tangent bound at μ=E[X].",
-          "m": "$g(x)\\ge g(\\mu)+g\\prime(\\mu)(x-\\mu)$",
-          "meaning": "A convex function lies above its tangent."
+          "why": "A convex function satisfies the chord inequality for any two inputs and 0≤θ≤1.",
+          "m": "$$g(\\theta x+(1-\\theta)y)\\le\\theta g(x)+(1-\\theta)g(y)$$",
+          "meaning": "This is the definition of a graph lying below each joining chord."
         },
         {
-          "why": "Take expectations.",
-          "m": "$E[g(X)]\\ge g(\\mu)+g\\prime(\\mu)(E[X]-\\mu)=g(E[X])$",
-          "meaning": "The linear term vanishes."
+          "why": "At an interior point μ of its domain, a convex function has a supporting line of slope s.",
+          "m": "$$g(x)\\ge g(\\mu)+s(x-\\mu)$$",
+          "meaning": "For differentiable g, s=g'(μ). More generally slopes of left chords are no larger than slopes of right chords, so choosing s between them gives this inequality on both sides."
+        },
+        {
+          "why": "Set μ=E[X] and assume the support lies in the convex domain, with the required averages defined.",
+          "m": "$$g(X)\\ge g(\\mu)+s(X-\\mu)$$",
+          "meaning": "The supporting-line inequality applies separately to each observation."
+        },
+        {
+          "why": "Average both sides using order preservation.",
+          "m": "$$E[g(X)]\\ge g(\\mu)+s(E[X]-\\mu)$$",
+          "meaning": "The supporting line is affine, so its average is found by linearity."
+        },
+        {
+          "why": "The bracket equals zero by the choice of μ.",
+          "m": "$$E[g(X)]\\ge g(E[X])$$",
+          "meaning": "This proves Jensen’s inequality; if the mean is a domain endpoint, the supported variable must equal that endpoint almost surely and the conclusion is immediate."
+        },
+        {
+          "why": "For g(x)=x², the supporting-line gap can be checked without calculus.",
+          "m": "$$x^2-[\\mu^2+2\\mu(x-\\mu)]=(x-\\mu)^2\\ge0$$",
+          "meaning": "Averaging yields E[X²]≥E[X]², the same nonnegativity behind variance."
+        },
+        {
+          "why": "If g is concave, −g is convex, so apply the proved inequality to −g and reverse signs.",
+          "m": "$$E[g(X)]\\le g(E[X])\\quad\\text{for concave }g$$",
+          "meaning": "This handles cap-shaped functions such as log on positive inputs."
         }
       ],
-      "ends": "This proves Jensen’s inequality when a tangent exists. At an interior mean where the graph has a corner, choose any supporting-line slope in place of the derivative; the same calculation works. A mean at an endpoint of the range makes $X$ equal that endpoint with probability one."
+      "ends": "Averaging a convex graph stays above its value at the average input; supporting lines justify the result even without a derivative."
     }
   },
   {
@@ -381,21 +645,46 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.5, Example 5h, PDF pp. 410–411.",
     "proof": {
-      "idea": "Write the negative-binomial pmf and take its fixed-k limit.",
-      "why": "For fixed k, its combinatorial factor and success/failure powers approach the Poisson mass.",
+      "idea": "Separate the large-number choosing factor from the small-probability factor.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "For k failures before r successes, use the negative-binomial probability.",
-          "m": "$P(X=k)=\\binom{r+k-1}{k}p_r^r(1-p_r)^k$",
-          "meaning": "There are the stated trial sequences with the last success fixed."
+          "why": "Let λ>0 and p_r=r/(r+λ), and count failures X before the r-th success.",
+          "m": "$$q_r=1-p_r=\\frac\\lambda{r+\\lambda}$$",
+          "meaning": "Failures become rare as r grows."
         },
         {
-          "why": "Substitute $p_r=r/(r+λ)$ and take r→∞.",
-          "m": "$\\binom{r+k-1}{k}p_r^r(1-p_r)^k\\to e^{-\\lambda}\\lambda^k/k!$",
-          "meaning": "Combine the growing factor with the shrinking one: $\\binom{r+k-1}{k}(\\lambda/(r+\\lambda))^k\\to\\lambda^k/k!$. Separately, $(r/(r+\\lambda))^r\\to e^{-\\lambda}$. Multiplying gives the claimed probability."
+          "why": "For X=k, the last trial is a success and the first r+k−1 trials contain k failures.",
+          "m": "$$P(X=k)=\\binom{r+k-1}k p_r^r q_r^k$$",
+          "meaning": "The choosing coefficient locates those k failures; independent trial probabilities multiply."
+        },
+        {
+          "why": "Write the choosing coefficient as a product of k consecutive factors.",
+          "m": "$$\\binom{r+k-1}k q_r^k=\\frac{\\lambda^k}{k!}\\prod_{j=0}^{k-1}\\frac{r+j}{r+\\lambda}$$",
+          "meaning": "All denominators r+λ are combined with the growing numerator factors."
+        },
+        {
+          "why": "Keep k fixed while r tends to infinity.",
+          "m": "$$\\prod_{j=0}^{k-1}\\frac{r+j}{r+\\lambda}\\longrightarrow1$$",
+          "meaning": "This is a finite product of factors tending to 1; for k=0 the empty product is 1."
+        },
+        {
+          "why": "Take logs of the success factor.",
+          "m": "$$\\log(p_r^r)=-r\\log(1+\\lambda/r)\\longrightarrow-\\lambda$$",
+          "meaning": "The elementary-calculus limit log(1+u)/u→1 gives the exponent limit."
+        },
+        {
+          "why": "Exponentiate and multiply the two limits.",
+          "m": "$$P(X=k)\\longrightarrow e^{-\\lambda}\\frac{\\lambda^k}{k!}$$",
+          "meaning": "Continuity of the exponential turns the log limit into p_r^r→e^(−λ)."
+        },
+        {
+          "why": "These limiting masses sum to 1 by the exponential series.",
+          "m": "$$\\sum_{k=0}^{\\infty}e^{-\\lambda}\\frac{\\lambda^k}{k!}=1$$",
+          "meaning": "Thus the fixed-count limits describe a complete Poisson distribution, rather than losing probability at infinity."
         }
       ],
-      "ends": "The point probabilities converge to those of Poisson(λ), hence the limit law."
+      "ends": "The failure count approaches Poisson(λ) as r increases with the specified success probabilities."
     }
   },
   {
@@ -422,26 +711,56 @@ CONCEPTS.push(...
     ],
     "provenance": "Ross, 10e, §8.6, coupling argument and final bound, PDF pp. 412–413.",
     "proof": {
-      "idea": "Construct each Bernoulli and Poisson count together so they disagree rarely, then add the disagreement chances.",
-      "why": "Constructing two variables on the same experiment is called coupling. If their counts agree, they answer every question about the count in the same way.",
+      "idea": "Construct close Bernoulli and Poisson counts, then bound the probability that the sums disagree.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "For each i, couple Bᵢ~Bernoulli(pᵢ) with Pᵢ~Poisson(pᵢ).",
-          "m": "$P(B_i\\ne P_i)\\le p_i^2$",
-          "meaning": "For Poisson $P_i$, $P(P_i\\ge1)=1-e^{-p_i}\\le p_i$. Set $B_i=1$ whenever $P_i\\ge1$, and sometimes also when $P_i=0$, until $P(B_i=1)=p_i$. The disagreement chance is $p_i(1-e^{-p_i})\\le p_i^2$. Use independent constructions for different $i$."
+          "why": "For each i draw an independent P_i~Poisson(p_i) and an independent uniform U_i, with 0≤p_i≤1.",
+          "m": "$$P(P_i=0)=e^{-p_i},\\quad P(P_i\\ge1)=1-e^{-p_i}$$",
+          "meaning": "These auxiliary variables will construct a Bernoulli B_i on the same probability space; this is called a coupling."
         },
         {
-          "why": "Use a union bound over components.",
-          "m": "$P(\\sum_iB_i\\ne\\sum_iP_i)\\le\\sum_ip_i^2$",
-          "meaning": "Different sums require at least one mismatched pair. The union bound adds their mismatch probabilities. Also, the probability difference for any count set $A$ is at most the chance that the two sums disagree."
+          "why": "The inequality e^(−p)≥1−p gives a nonnegative missing success mass.",
+          "m": "$$d_i=p_i-(1-e^{-p_i})\\ge0$$",
+          "meaning": "For example, the inequality follows from the exponential graph lying above its tangent at zero."
         },
         {
-          "why": "The Poisson components add.",
-          "m": "$\\sum_iP_i\\sim\\operatorname{Poisson}(\\sum_ip_i)$",
-          "meaning": "Independent Poisson variables have a Poisson sum."
+          "why": "When P_i≥1 set B_i=1; when P_i=0 set B_i=1 with chance d_i/e^(−p_i).",
+          "m": "$$B_i=1\\text{ if }P_i\\ge1\\text{ or }[P_i=0,\\ U_i\\le d_i/e^{-p_i}]$$",
+          "meaning": "The latter chance is between 0 and 1 because 0≤d_i≤e^(−p_i), using p_i≤1."
+        },
+        {
+          "why": "Calculate the total success probability of this constructed flag.",
+          "m": "$$P(B_i=1)=1-e^{-p_i}+e^{-p_i}\\frac{d_i}{e^{-p_i}}=p_i$$",
+          "meaning": "Thus B_i is Bernoulli(p_i); constructions for different indices are independent."
+        },
+        {
+          "why": "The pair disagrees only when P_i≥2 or when P_i=0 and the extra flag is set.",
+          "m": "$$P(B_i\\ne P_i)=1-e^{-p_i}(1+p_i)+d_i=p_i(1-e^{-p_i})$$",
+          "meaning": "Substitute d_i=p_i−1+e^(−p_i) to verify the cancellation."
+        },
+        {
+          "why": "Since 1−e^(−p_i)≤p_i, the pairwise disagreement has a simple bound.",
+          "m": "$$P(B_i\\ne P_i)\\le p_i^2$$",
+          "meaning": "This is the same exponential tangent inequality used earlier."
+        },
+        {
+          "why": "If all pairs agree, their sums agree; use the union bound on possible mismatches.",
+          "m": "$$P\\left(\\sum_iB_i\\ne\\sum_iP_i\\right)\\le\\sum_ip_i^2$$",
+          "meaning": "A mismatch can sometimes cancel in the sum, which is why this is an upper bound."
+        },
+        {
+          "why": "The independent Poisson counts sum to a Poisson with rate λ=Σp_i.",
+          "m": "$$Z=\\sum_iP_i\\sim\\operatorname{Poisson}(\\lambda),\\quad W=\\sum_iB_i$$",
+          "meaning": "W has exactly the target independent-Bernoulli sum law."
+        },
+        {
+          "why": "For any set A of counts, membership flags differ only when the counts differ.",
+          "m": "$$|P(W\\in A)-P(Z\\in A)|\\le E[|\\mathbf1_{\\{W\\in A\\}}-\\mathbf1_{\\{Z\\in A\\}}|]\\le\\sum_ip_i^2$$",
+          "meaning": "The first inequality is the triangle inequality for an average; the second uses the disagreement bound."
         }
       ],
-      "ends": "For every set A, the absolute probability difference is at most Σpᵢ²."
+      "ends": "The approximation error is bounded uniformly over count events by the sum of squared individual success probabilities."
     }
   },
   {
@@ -464,7 +783,49 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §8.7, definition and Eq. (7.1), PDF pp. 414–415."
+    "provenance": "Ross, 10e, §8.7, definition and Eq. (7.1), PDF pp. 414–415.",
+    "proof": {
+      "idea": "Add the incomes of the poorest population fraction using quantiles.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Assume nonnegative incomes with finite positive mean μ and define their quantile q(u).",
+          "m": "$$q(u)=\\inf\\{x:F(x)\\ge u\\}\\quad(0<u<1)$$",
+          "meaning": "The generalized inverse works with tied incomes as well as continuous laws."
+        },
+        {
+          "why": "A uniform population rank U produces income q(U) with the original law.",
+          "m": "$$X\\text{ has the law of }q(U),\\quad\\mu=\\int_0^1q(u)du$$",
+          "meaning": "Inverse-transform sampling justifies the first fact; uniform LOTUS gives the mean integral."
+        },
+        {
+          "why": "The lowest population fraction p occupies ranks 0 through p.",
+          "m": "$$L(p)=\\frac1\\mu\\int_0^pq(u)du$$",
+          "meaning": "This defines its share of total income, correctly splitting any tied-income group by rank."
+        },
+        {
+          "why": "For a continuous law without atoms, the lowest p incomes are those below ξ_p=q(p), with F(ξ_p)=p.",
+          "m": "$$L(p)=\\frac{E[X\\mathbf1_{\\{X\\le\\xi_p\\}}]}{E[X]}$$",
+          "meaning": "The quantile-rank and cutoff formulations then select the same population mass."
+        },
+        {
+          "why": "Because q(u) is nonnegative and nondecreasing, accumulated income is increasing and has nondecreasing slope.",
+          "m": "$$L'(p)=q(p)/\\mu\\quad\\text{where differentiable}$$",
+          "meaning": "This yields an increasing convex curve; the endpoints are L(0)=0 and L(1)=1."
+        },
+        {
+          "why": "The poorest p ranks have mean income no larger than the whole-population mean.",
+          "m": "$$\\frac1p\\int_0^pq(u)du\\le\\mu\\quad(0<p\\le1)$$",
+          "meaning": "Nondecreasing q makes the remaining ranks’ mean at least the lower ranks’ mean; the overall mean is their weighted average."
+        },
+        {
+          "why": "Multiply the preceding inequality by p/μ.",
+          "m": "$$L(p)\\le p$$",
+          "meaning": "Thus the Lorenz curve lies at or below the equal-income line; if everyone earns μ then q(u)=μ and L(p)=p."
+        }
+      ],
+      "ends": "The Lorenz curve accumulates quantile-ranked income, and its geometry follows from the nondecreasing income quantile."
+    }
   },
   {
     "id": "c.prob.8.7.2",
@@ -488,7 +849,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §8.7, Gini index formula, PDF p. 416."
+    "provenance": "Ross, 10e, §8.7, Gini index formula, PDF p. 416.",
+    "proof": {
+      "idea": "Normalize the area gap from the equal-income line.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "The equal-income Lorenz curve is the straight line L_equal(p)=p.",
+          "m": "$$\\int_0^1p\\,dp=1/2$$",
+          "meaning": "The area under this line is a right triangle of base and height 1, or the integral of p."
+        },
+        {
+          "why": "The actual Lorenz curve lies between 0 and that line.",
+          "m": "$$A=\\int_0^1[p-L(p)]dp\\ge0$$",
+          "meaning": "A is the area between the two curves."
+        },
+        {
+          "why": "Define Gini as this gap divided by the equality-line area.",
+          "m": "$$G=\\frac A{1/2}=2A$$",
+          "meaning": "This chooses a scale on which the largest possible gap has limiting value 1."
+        },
+        {
+          "why": "Distribute the integral and insert the equality-line area.",
+          "m": "$$G=2\\left[\\frac12-\\int_0^1L(p)dp\\right]=1-2\\int_0^1L(p)dp$$",
+          "meaning": "This derives the usual formula from the geometric definition."
+        },
+        {
+          "why": "Use 0≤L(p)≤p to bound the area and index.",
+          "m": "$$0\\le G\\le1$$",
+          "meaning": "Equal incomes give L=p and G=0; increasing concentration can make the curve area approach zero and G approach 1."
+        }
+      ],
+      "ends": "The Gini formula is twice the Lorenz area gap, because the equality-line triangle has area one-half."
+    }
   }
 ]
 );

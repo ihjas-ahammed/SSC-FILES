@@ -22,7 +22,44 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, A First Course in Probability, 10e, §1.1, PDF p. 17."
+    "provenance": "Ross, A First Course in Probability, 10e, §1.1, PDF p. 17.",
+    "proof": {
+      "idea": "Derive favorable-over-total counting from the assumption of equally likely outcomes.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "List every complete outcome of the experiment in a finite sample space S.",
+          "m": "$$N=|S|$$",
+          "meaning": "An outcome must include everything that distinguishes one result from another."
+        },
+        {
+          "why": "Assume every complete outcome has the same probability p.",
+          "m": "$$P(\\{s\\})=p\\quad(s\\in S)$$",
+          "meaning": "Equal likelihood is a model assumption; merely listing outcomes does not establish it."
+        },
+        {
+          "why": "The N disjoint outcomes cover the whole experiment.",
+          "m": "$$Np=P(S)=1$$",
+          "meaning": "Probabilities add for disjoint possibilities and total probability is 1."
+        },
+        {
+          "why": "Divide by N to obtain the probability per outcome.",
+          "m": "$$p=1/N$$",
+          "meaning": "N is positive because there is at least one possible result."
+        },
+        {
+          "why": "An event A with M=|A| favorable outcomes is their disjoint union.",
+          "m": "$$P(A)=Mp=M/N=|A|/|S|$$",
+          "meaning": "This derives the counting formula and explains its denominator."
+        },
+        {
+          "why": "For two named fair independent dice there are 6·6 complete pairs and 6 pairs totaling 7.",
+          "m": "$$P(\\text{total }7)=6/36=1/6$$",
+          "meaning": "Independence and fairness make those pairs equally likely; totals themselves are not equally likely."
+        }
+      ],
+      "ends": "Counting gives probabilities only after the finite equal-likelihood assumption is justified."
+    }
   },
   {
     "id": "c.prob.1.2.1",
@@ -39,21 +76,41 @@ CONCEPTS.push(...
       "If later choices depend on earlier choices, check whether each branch has the same size before using a simple product."
     ],
     "proof": {
-      "idea": "Make one row for each first choice, then count the entries in all rows.",
-      "why": "Every complete outcome has a unique first-stage result and a unique continuation.",
+      "idea": "Build a table of complete choices, then count its rows.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "For each of the $m$ first outcomes, list its $n$ continuations.",
-          "m": "(1,1),\\ldots,(1,n);\\;\\ldots;\\;(m,1),\\ldots,(m,n)",
-          "meaning": "The possibilities form $m$ nonoverlapping rows."
+          "why": "Name the first-stage options 1 through m and the second-stage options 1 through n.",
+          "m": "$$(i,j)$$",
+          "meaning": "A pair records both choices; changing either entry changes the complete outcome."
         },
         {
-          "why": "Count the entries in all rows.",
-          "m": "m\\cdot n",
-          "meaning": "A complete result tells us its row and its position in that row. So every result is listed once."
+          "why": "Fix one first choice i; exactly n second choices remain by the hypothesis.",
+          "m": "$$(i,1),(i,2),\\ldots,(i,n)$$",
+          "meaning": "This is one row containing n complete outcomes."
+        },
+        {
+          "why": "Different first choices create disjoint rows, since their first entries differ.",
+          "m": "$$n+n+\\cdots+n\\quad(m\\text{ terms})$$",
+          "meaning": "Adding row sizes counts every outcome once."
+        },
+        {
+          "why": "Multiplication is repeated addition of equal numbers.",
+          "m": "$$n+\\cdots+n=mn$$",
+          "meaning": "For 3 shirts and 2 shoes, the table has 3 rows of 2, giving 6 outfits."
+        },
+        {
+          "why": "After k stages, each existing outcome has n_{k+1} continuations.",
+          "m": "$$(n_1\\cdots n_k)n_{k+1}$$",
+          "meaning": "Multiplying the old total by the new branch size proves the rule one stage at a time."
+        },
+        {
+          "why": "Start with the first stage and repeat the previous step.",
+          "m": "$$N=n_1n_2\\cdots n_r=\\prod_{i=1}^r n_i$$",
+          "meaning": "The product symbol is shorthand for multiplying all listed choice counts."
         }
       ],
-      "ends": "For two stages the answer is $mn$. For another stage, multiply each complete result by its number of continuations; repeating this gives the rule for any finite number of stages."
+      "ends": "The multiplication rule requires the same number of continuations after every history at a given stage; unequal rows must instead be added separately."
     },
     "cards": [
       {
@@ -87,7 +144,44 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §1.2, Examples 2c–2e, PDF pp. 18–19."
+    "provenance": "Ross, 10e, §1.2, Examples 2c–2e, PDF pp. 18–19.",
+    "proof": {
+      "idea": "Treat a function as one output choice for each specified input.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Label the n inputs a_1,...,a_n and list q allowed outputs.",
+          "m": "$$f\\leftrightarrow(f(a_1),\\ldots,f(a_n))$$",
+          "meaning": "This correspondence identifies a function with its complete output table."
+        },
+        {
+          "why": "Each input needs exactly one output and all q values are allowed at each position.",
+          "m": "$$q\\text{ choices per position}$$",
+          "meaning": "Different input labels create different slots, even if their outputs coincide."
+        },
+        {
+          "why": "Apply the multiplication principle to all n slots.",
+          "m": "$$N=\\underbrace{q\\cdot q\\cdots q}_{n\\text{ factors}}=q^n$$",
+          "meaning": "This is a counting product, not a probability independence assertion."
+        },
+        {
+          "why": "If slot i has a fixed allowed count q_i for every preceding history, multiply those counts instead.",
+          "m": "$$N=\\prod_{i=1}^nq_i$$",
+          "meaning": "The factors may differ between positions, but not between earlier histories at the same position."
+        },
+        {
+          "why": "If outputs cannot repeat, the available count decreases after each choice.",
+          "m": "$$N=q(q-1)\\cdots(q-n+1)\\quad(n\\le q)$$",
+          "meaning": "This counts injective functions; if n>q there are no such functions."
+        },
+        {
+          "why": "For three distinct English letters, use q=26,n=3.",
+          "m": "$$N=26\\cdot25\\cdot24$$",
+          "meaning": "The second slot excludes the first letter and the third excludes both preceding letters."
+        }
+      ],
+      "ends": "Function counts follow from filling labeled slots under explicit repetition rules."
+    }
   },
   {
     "id": "c.prob.1.3.1",
@@ -106,21 +200,46 @@ CONCEPTS.push(...
       "The convention $0!=1$ makes endpoint formulas work and counts the unique empty ordering."
     ],
     "proof": {
-      "idea": "Apply the multiplication principle to successive positions.",
-      "why": "After each position is filled, exactly one fewer object remains.",
+      "idea": "Fill positions one at a time and explain the factorial cancellation.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Count the choices for the first $r$ positions.",
-          "m": "n(n-1)\\cdots(n-r+1)",
-          "meaning": "Each ordered partial list is counted once."
+          "why": "There are n distinct objects and r ordered positions, with 0≤r≤n.",
+          "m": "$$n\\text{ choices in position }1$$",
+          "meaning": "Objects are used at most once."
         },
         {
-          "why": "For a full arrangement, take $r=n$; rewrite the product using factorials.",
-          "m": "n(n-1)\\cdots1=n!",
-          "meaning": "For a full list we use every object. For a shorter list, cancel the unused factors from $n!$ to obtain $n!/(n-r)!$. The case $r=0$ has one empty list."
+          "why": "Using one object removes exactly one option for the next position.",
+          "m": "$$n-1\\text{ choices in position }2$$",
+          "meaning": "This count is the same whichever first object was chosen."
+        },
+        {
+          "why": "Before position j, exactly j−1 objects have been used.",
+          "m": "$$n-(j-1)=n-j+1$$",
+          "meaning": "At position r the count is n−r+1, not n−r."
+        },
+        {
+          "why": "Multiply the position counts by the counting principle.",
+          "m": "$$N=n(n-1)\\cdots(n-r+1)$$",
+          "meaning": "Every ordered list follows one path through these choices."
+        },
+        {
+          "why": "Factorial n! means the product of all integers from n down to 1.",
+          "m": "$$n!=[n(n-1)\\cdots(n-r+1)](n-r)!$$",
+          "meaning": "The unused final factors are precisely (n−r)!."
+        },
+        {
+          "why": "Divide by the unused product, which is positive.",
+          "m": "$$N=\\frac{n!}{(n-r)!}$$",
+          "meaning": "For n=5,r=2, this is 5!/3!=5·4=20."
+        },
+        {
+          "why": "For a full arrangement r=n; for r=0 there is one empty list.",
+          "m": "$$N_{r=n}=n!,\\qquad 0!=1$$",
+          "meaning": "The convention 0!=1 makes the same formula work at both endpoints."
         }
       ],
-      "ends": "There are $n!$ full permutations and $n!/(n-r)!$ ordered $r$-ordered lists."
+      "ends": "There are n! full orders and n!/(n−r)! ordered selections."
     },
     "cards": [
       {
@@ -148,26 +267,41 @@ CONCEPTS.push(...
       "Do not divide by multiplicity factorials if the objects are individually distinguishable in the experiment."
     ],
     "proof": {
-      "idea": "Put temporary labels on equal copies, count all orders, then remove the extra counts caused by those labels.",
-      "why": "Every visible arrangement has the same number of temporary labelings, so division removes the extra counts fairly.",
+      "idea": "Give identical copies temporary labels, then remove the resulting repeated counts.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Label copies and arrange all objects.",
-          "m": "n!",
-          "meaning": "This distinguishes even copies that should look the same."
+          "why": "Let type j have n_j copies; altogether there are n objects.",
+          "m": "$$n_1+\\cdots+n_k=n$$",
+          "meaning": "Types differ visibly, but copies of one type do not."
         },
         {
-          "why": "In one fixed visible arrangement, swap the temporary labels among copies of each type.",
-          "m": "n_1!n_2!\\cdots n_k!",
-          "meaning": "These and only these relabelings leave the string unchanged."
+          "why": "Temporarily label every copy so all n objects become distinct.",
+          "m": "$$N_{\\text{labeled}}=n!$$",
+          "meaning": "The ordinary permutation rule now applies."
         },
         {
-          "why": "Divide the overcount.",
-          "m": "\\frac{n!}{n_1!\\cdots n_k!}",
-          "meaning": "Each distinct arrangement is counted exactly once."
+          "why": "Fix one visible arrangement and permute only the labels of type j.",
+          "m": "$$n_j!$$",
+          "meaning": "All these assignments leave the visible type in every position unchanged."
+        },
+        {
+          "why": "Choose label assignments for every type independently as a counting task.",
+          "m": "$$D=n_1!\\cdots n_k!$$",
+          "meaning": "Each visible arrangement has exactly D labeled versions."
+        },
+        {
+          "why": "If V is the number of visible arrangements, counting labeled versions gives an equation.",
+          "m": "$$VD=n!$$",
+          "meaning": "This is division of equally sized groups, rather than a guessed correction."
+        },
+        {
+          "why": "Solve that equation for V.",
+          "m": "$$V=\\frac{n!}{n_1!\\cdots n_k!}$$",
+          "meaning": "For AAB, the 6 labeled orders form 3 groups of 2, giving 3 visible strings."
         }
       ],
-      "ends": "The multinomial permutation formula follows."
+      "ends": "Divide by internal permutations only when the copies are indistinguishable in the recorded outcome."
     },
     "cards": [
       {
@@ -195,21 +329,41 @@ CONCEPTS.push(...
       "For a committee with composition constraints, multiply independent group choices; do not permute members within each group."
     ],
     "proof": {
-      "idea": "Count ordered selections and remove the orderings within each selected group.",
-      "why": "Each fixed r-element subset has exactly r! orderings.",
+      "idea": "Count ordered selections first; each unordered group produces the same number of orders.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Count ordered selections without replacement.",
-          "m": "\\frac{n!}{(n-r)!}",
-          "meaning": "This counts each subset in every possible order."
+          "why": "A combination records a group of r objects from n distinct objects.",
+          "m": "$$0\\le r\\le n$$",
+          "meaning": "ABC and BAC describe the same group."
         },
         {
-          "why": "Divide by the r! orders of each subset.",
-          "m": "\\binom nr=\\frac{n!}{r!(n-r)!}",
-          "meaning": "For example, ABC and BAC select the same three objects. Dividing removes all different orders of the same group."
+          "why": "Choose and order the r objects without replacement.",
+          "m": "$$N_{\\text{ordered}}=n(n-1)\\cdots(n-r+1)$$",
+          "meaning": "Position by position, the choice counts decrease by one."
+        },
+        {
+          "why": "Write the product using factorial cancellation.",
+          "m": "$$N_{\\text{ordered}}=\\frac{n!}{(n-r)!}$$",
+          "meaning": "The final n−r factors of n! are not used."
+        },
+        {
+          "why": "One fixed r-object group can be placed in r! different orders.",
+          "m": "$$N_{\\text{ordered}}=r!N_{\\text{groups}}$$",
+          "meaning": "Every group has the same size r, so the overcount is uniform."
+        },
+        {
+          "why": "Divide both sides by r!.",
+          "m": "$$\\binom nr=N_{\\text{groups}}=\\frac{n!}{r!(n-r)!}$$",
+          "meaning": "The symbol binomial n choose r names this group count."
+        },
+        {
+          "why": "Check a small example directly.",
+          "m": "$$\\binom42=\\frac{4\\cdot3}{2\\cdot1}=6$$",
+          "meaning": "The pairs are AB, AC, AD, BC, BD and CD."
         }
       ],
-      "ends": "The quotient is the number of unordered r-subsets."
+      "ends": "The endpoint values are n choose 0 = n choose n = 1: the empty group and the full group are unique."
     },
     "cards": [
       {
@@ -237,26 +391,46 @@ CONCEPTS.push(...
       "The coefficient of $x^k y^{n-k}$ is $\\binom nk$, not $\\binom n{k-1}$."
     ],
     "proof": {
-      "idea": "For Pascal’s rule, separate groups by one object. For the expansion, count which brackets contribute each letter.",
-      "why": "Both formulas count the same objects in a way that exposes their coefficient.",
+      "idea": "Use two disjoint cases for Pascal’s identity, and distributive multiplication for the binomial theorem.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Fix one element and split r-subsets.",
-          "m": "\\#(\\text{contains})=\\binom{n-1}{r-1},\\quad\\#(\\text{omits})=\\binom{n-1}{r}",
-          "meaning": "The cases are nonoverlapping and cover all possibilities."
+          "why": "Choose r objects from n and distinguish one particular object.",
+          "m": "$$1\\le r\\le n-1$$",
+          "meaning": "Every group either contains that object or omits it."
         },
         {
-          "why": "In $(x+y)^n$, choose the k factors contributing x.",
-          "m": "\\#\\text{choices}=\\binom nk",
-          "meaning": "Every such choice contributes the same term $x^ky^{n-k}$."
+          "why": "If the object is included, select the other r−1 objects from the other n−1.",
+          "m": "$$N_{\\text{in}}=\\binom{n-1}{r-1}$$",
+          "meaning": "The distinguished object has already been chosen."
         },
         {
-          "why": "Collect equal terms.",
-          "m": "(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}",
-          "meaning": "The coefficient is exactly the number of ways to produce that term."
+          "why": "If it is omitted, all r objects must come from the other n−1.",
+          "m": "$$N_{\\text{out}}=\\binom{n-1}{r}$$",
+          "meaning": "These groups cannot overlap the included case."
+        },
+        {
+          "why": "Add the two cases to count all groups.",
+          "m": "$$\\binom nr=\\binom{n-1}{r-1}+\\binom{n-1}{r}$$",
+          "meaning": "This is Pascal’s identity; endpoint cases can use out-of-range coefficients equal to zero."
+        },
+        {
+          "why": "Write a power as n identical factors and use the distributive law.",
+          "m": "$$(x+y)^n=(x+y)\\cdots(x+y)$$",
+          "meaning": "Each expanded term chooses either x or y from each factor."
+        },
+        {
+          "why": "To obtain x^k y^{n−k}, choose which k factors supply x.",
+          "m": "$$\\binom nk x^ky^{n-k}$$",
+          "meaning": "All those choices yield the same monomial, so their count becomes its coefficient."
+        },
+        {
+          "why": "Sum over all possible counts k of x choices.",
+          "m": "$$(x+y)^n=\\sum_{k=0}^n\\binom nkx^ky^{n-k}$$",
+          "meaning": "For n=2 the choices xx, xy, yx, yy give x²+2xy+y²."
         }
       ],
-      "ends": "Pascal’s identity and the binomial theorem."
+      "ends": "Both identities come from counting complete, disjoint possibilities."
     },
     "cards": [
       {
@@ -285,26 +459,46 @@ CONCEPTS.push(...
       "The sum in the theorem ranges over nonnegative integer compositions of n."
     ],
     "proof": {
-      "idea": "Attach one group name to each object, then count lists with the required number of each name.",
-      "why": "Each object goes to exactly one group. In the algebra expansion, each bracket similarly contributes exactly one variable.",
+      "idea": "Assign labeled objects to groups, then use the same count in an algebraic expansion.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Temporarily order all n labels and remove permutations among equal labels.",
-          "m": "\\frac{n!}{n_1!\\cdots n_r!}",
-          "meaning": "This counts assignments with prescribed group sizes."
+          "why": "There are n distinct objects and r labeled groups of specified sizes.",
+          "m": "$$n_1+\\cdots+n_r=n$$",
+          "meaning": "The group labels distinguish assignments, even if sizes agree."
         },
         {
-          "why": "Expand $n$ identical sums, selecting one variable from each factor.",
-          "m": "(x_1+\\cdots+x_r)^n",
-          "meaning": "Each selection gives one label string and thus one term."
+          "why": "Choose the first group, then the second from the remaining objects, and continue.",
+          "m": "$$\\binom n{n_1}\\binom{n-n_1}{n_2}\\cdots\\binom{n_r}{n_r}$$",
+          "meaning": "The final group is forced; its binomial coefficient is 1."
         },
         {
-          "why": "Collect terms of copy counts $(n_1,\\ldots,n_r)$.",
-          "m": "\\frac{n!}{n_1!\\cdots n_r!}x_1^{n_1}\\cdots x_r^{n_r}",
-          "meaning": "The coefficient is the number of ways those variables are selected."
+          "why": "Expand each choosing coefficient into factorials.",
+          "m": "$$\\frac{n!}{n_1!(n-n_1)!}\\frac{(n-n_1)!}{n_2!(n-n_1-n_2)!}\\cdots$$",
+          "meaning": "Each remaining-population factorial cancels with the numerator of the next factor."
+        },
+        {
+          "why": "After cancellation only n! and the group-size factorials remain.",
+          "m": "$$N=\\frac{n!}{n_1!\\cdots n_r!}$$",
+          "meaning": "This is the multinomial coefficient for these specified sizes."
+        },
+        {
+          "why": "Expand n factors, choosing one variable from each factor.",
+          "m": "$$(x_1+\\cdots+x_r)^n$$",
+          "meaning": "Assigning a factor to variable x_j is the same as assigning an object to group j."
+        },
+        {
+          "why": "For specified choice counts, collect identical monomials.",
+          "m": "$$\\frac{n!}{n_1!\\cdots n_r!}x_1^{n_1}\\cdots x_r^{n_r}$$",
+          "meaning": "The coefficient counts all assignments producing that monomial."
+        },
+        {
+          "why": "Add the terms for every nonnegative size list summing to n.",
+          "m": "$$(x_1+\\cdots+x_r)^n=\\sum_{n_1+\\cdots+n_r=n}\\frac{n!}{n_1!\\cdots n_r!}\\prod_{j=1}^r x_j^{n_j}$$",
+          "meaning": "Every expanded term has exactly one such list, so none is missed or counted twice."
         }
       ],
-      "ends": "The multinomial coefficient and expansion formula."
+      "ends": "Labeled groups use the multinomial count; unordered groups may need a further correction that must be justified separately."
     },
     "cards": [
       {
@@ -332,26 +526,41 @@ CONCEPTS.push(...
       "Stars and bars counts solutions, not permutations of indistinguishable objects."
     ],
     "proof": {
-      "idea": "Translate each share into one unique line of stars and bars.",
-      "why": "Count the stars between consecutive bars to read back the amount in each group. This works in both directions, so no share is lost or counted twice.",
+      "idea": "Encode each allocation by a row of stars separated by bars.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Represent n units as stars and separate r entries with r−1 bars.",
-          "m": "\\underbrace{*\\cdots*}_{x_1}|\\underbrace{*\\cdots*}_{x_2}|\\cdots|\\underbrace{*\\cdots*}_{x_r}",
-          "meaning": "Adjacent bars or bars at an end represent zero."
+          "why": "Let x_j be the number of identical units in box j, with r≥1 and n≥0.",
+          "m": "$$x_1+\\cdots+x_r=n,\\quad x_j\\ge0$$",
+          "meaning": "The boxes are labeled, but the units are not."
         },
         {
-          "why": "Choose the bar positions among n+r−1 total slots.",
-          "m": "\\binom{n+r-1}{r-1}",
-          "meaning": "The remaining positions are stars."
+          "why": "Write x_1 stars, a bar, x_2 stars, and so on.",
+          "m": "$$\\underbrace{*\\cdots*}_{x_1}|\\underbrace{*\\cdots*}_{x_2}|\\cdots|\\underbrace{*\\cdots*}_{x_r}$$",
+          "meaning": "Adjacent bars or a bar at an end give an empty box."
         },
         {
-          "why": "For positive entries, reserve one star in each part, leaving n−r stars.",
-          "m": "\\binom{n-1}{r-1}",
-          "meaning": "This is valid only when n≥r."
+          "why": "Count the symbols in this row.",
+          "m": "$$n+(r-1)=n+r-1$$",
+          "meaning": "There are n stars and r−1 separators."
+        },
+        {
+          "why": "Choosing the separator positions fixes every star position.",
+          "m": "$$N=\\binom{n+r-1}{r-1}$$",
+          "meaning": "Reading counts between the bars recovers exactly one allocation; the encoding works both ways."
+        },
+        {
+          "why": "For positive box sizes, first put one unit in every box.",
+          "m": "$$y_j=x_j-1\\ge0,\\quad\\sum_j y_j=n-r$$",
+          "meaning": "This subtraction turns a positive-size problem into the nonnegative one."
+        },
+        {
+          "why": "Apply the previous formula to n−r remaining units.",
+          "m": "$$N_+=\\binom{(n-r)+r-1}{r-1}=\\binom{n-1}{r-1}$$",
+          "meaning": "This requires n≥r; otherwise positive allocations are impossible."
         }
       ],
-      "ends": "The formulas for nonnegative and positive integer solutions."
+      "ends": "The formula counts integer allocations, not permutations of distinguishable objects."
     },
     "cards": [
       {
@@ -385,7 +594,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §1.5, Examples 5b–5c, PDF p. 25."
+    "provenance": "Ross, 10e, §1.5, Examples 5b–5c, PDF p. 25.",
+    "proof": {
+      "idea": "Explain exactly when forgetting group labels produces an equal overcount.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "First assign n distinct objects to labeled groups of specified sizes.",
+          "m": "$$N_{\\text{labeled}}=\\frac{n!}{\\prod_jn_j!}$$",
+          "meaning": "Internal order is irrelevant, so each group-size factorial removes repeated object orders."
+        },
+        {
+          "why": "If k groups all have the same positive size, forget their labels.",
+          "m": "$$k!\\text{ labelings per unlabeled partition}$$",
+          "meaning": "Distinct nonempty groups can receive the k labels in every order."
+        },
+        {
+          "why": "The labeled partitions therefore fall into equal groups of k! versions.",
+          "m": "$$N_{\\text{unlabeled}}=N_{\\text{labeled}}/k!$$",
+          "meaning": "Division is justified by the equal number of versions, not by the mere presence of k groups."
+        },
+        {
+          "why": "If positive group sizes differ, a group’s size already identifies its size role.",
+          "m": "$$n_1\\ne n_2\\ \\Longrightarrow\\ \\text{no extra factor }2!\\text{ for those roles}$$",
+          "meaning": "Swapping a small and a large group changes the labeled-size requirements."
+        },
+        {
+          "why": "For repeated positive sizes, let m_s count how many groups have size s.",
+          "m": "$$N_{\\text{unlabeled, fixed sizes}}=\\frac{n!}{\\prod_jn_j!\\prod_sm_s!}$$",
+          "meaning": "Only labels attached to equal-sized groups can be interchanged while preserving the size specification. Empty groups require separate care because they are not distinct blocks."
+        }
+      ],
+      "ends": "Always identify the exact equal-size labeling multiplicity before dividing an assignment count."
+    }
   },
   {
     "id": "c.prob.1.6.2",
@@ -410,7 +651,44 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10e, §1.6, Examples 6b–6c, PDF pp. 28–29."
+    "provenance": "Ross, 10e, §1.6, Examples 6b–6c, PDF pp. 28–29.",
+    "proof": {
+      "idea": "Remove the minimum required allocation before applying stars and bars.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Let box j require at least a_j units, where each a_j is a nonnegative integer.",
+          "m": "$$x_j\\ge a_j,\\quad\\sum_{j=1}^rx_j=n$$",
+          "meaning": "Units are identical and boxes are labeled."
+        },
+        {
+          "why": "Give every box its minimum allocation first.",
+          "m": "$$y_j=x_j-a_j\\ge0$$",
+          "meaning": "This subtraction is reversible: x_j=y_j+a_j."
+        },
+        {
+          "why": "Sum the residual counts.",
+          "m": "$$\\sum_jy_j=n-\\sum_ja_j=M$$",
+          "meaning": "M is the number of units left to distribute freely."
+        },
+        {
+          "why": "If M<0, there are not enough units even for the minima.",
+          "m": "$$M<0\\ \\Longrightarrow\\ N=0$$",
+          "meaning": "No nonnegative residual solution can have a negative sum."
+        },
+        {
+          "why": "If M≥0, apply the nonnegative stars-and-bars formula.",
+          "m": "$$N=\\binom{M+r-1}{r-1}$$",
+          "meaning": "The residual allocation is in one-to-one correspondence with the original constrained allocation."
+        },
+        {
+          "why": "For n=10 and three boxes each needing 2, only four units remain.",
+          "m": "$$M=10-6=4,\\quad N=\\binom62=15$$",
+          "meaning": "Minimum requirements change the total available stars, not the number of boxes."
+        }
+      ],
+      "ends": "Shifting by each minimum reduces the problem to ordinary nonnegative allocations."
+    }
   }
 ]
 );

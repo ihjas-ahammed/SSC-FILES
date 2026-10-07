@@ -1,4 +1,4 @@
-if (typeof CONCEPTS === 'undefined') { var CONCEPTS = []; }
+var CONCEPTS = typeof CONCEPTS !== 'undefined' ? CONCEPTS : [];
 CONCEPTS.push(...
 [
   {
@@ -27,7 +27,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, A First Course in Probability, 10th ed., §3.2, PDF pp. 82–83 (source: sources/chapters/ch03.pdf; local transcription: ch03.txt)."
+    "provenance": "Ross, A First Course in Probability, 10th ed., §3.2, PDF pp. 82–83 (source: sources/chapters/ch03.pdf; local transcription: ch03.txt).",
+    "proof": {
+      "idea": "Renormalize the part of the original event inside the known condition.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Suppose event F is known to have occurred and P(F)>0.",
+          "m": "$$\\text{remaining outcomes lie in }F$$",
+          "meaning": "All outcomes outside F are excluded from the reduced model."
+        },
+        {
+          "why": "The part of target event E still possible is its intersection with F.",
+          "m": "$$E\\cap F$$",
+          "meaning": "Only outcomes satisfying both requirements count as success now."
+        },
+        {
+          "why": "Divide this original probability by the total remaining probability.",
+          "m": "$$P(E\\mid F)=\\frac{P(E\\cap F)}{P(F)}$$",
+          "meaning": "This is the definition of conditioning, chosen so the remaining space F has total weight 1."
+        },
+        {
+          "why": "Check that conditioning assigns certainty to F itself.",
+          "m": "$$P(F\\mid F)=P(F)/P(F)=1$$",
+          "meaning": "The denominator’s role is normalization."
+        },
+        {
+          "why": "For a fair die, let F={2,4,6} and E={4,5,6}.",
+          "m": "$$P(E\\mid F)=\\frac{2/6}{3/6}=2/3$$",
+          "meaning": "The reduced equally likely list has two successful results, 4 and 6, out of three remaining results."
+        }
+      ],
+      "ends": "The conditional formula is a definition of the reduced model, with normalization explained and checked."
+    }
   },
   {
     "id": "c.prob.3.2.2",
@@ -53,23 +85,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "For several events in sequence, multiply each next-event chance given what has already happened.",
-      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
+      "idea": "Rearrange the definition of conditional probability, then repeat it.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Start by writing “all n events” as a conditional chance times the chance of the first n−1.",
-          "m": "P(E_1\\cdots E_n)=P(E_1\\cdots E_n\\mid E_1\\cdots E_{n-1})P(E_1\\cdots E_{n-1})"
+          "why": "For P(F)>0, conditional probability is the fraction of F also in E.",
+          "m": "$$P(E\\mid F)=\\frac{P(E\\cap F)}{P(F)}$$",
+          "meaning": "The denominator is the probability of the reduced sample space."
         },
         {
-          "why": "Once the first n−1 events are known, only the last event still needs to happen.",
-          "m": "P(E_1\\cdots E_n\\mid E_1\\cdots E_{n-1})=P(E_n\\mid E_1\\cdots E_{n-1})"
+          "why": "Multiply both sides by the positive denominator.",
+          "m": "$$P(E\\cap F)=P(F)P(E\\mid F)$$",
+          "meaning": "This is the two-event multiplication rule; it does not assume independence."
         },
         {
-          "why": "Apply the same rule to the shorter list, continuing until only the first event remains.",
-          "m": "P(\\cap_iE_i)=P(E_1)\\prod_{k=2}^nP(E_k\\mid E_1\\cap\\cdots\\cap E_{k-1})"
+          "why": "For three events, condition the last event on both earlier events.",
+          "m": "$$P(E_1\\cap E_2\\cap E_3)=P(E_1\\cap E_2)P(E_3\\mid E_1\\cap E_2)$$",
+          "meaning": "This requires the earlier intersection to have positive probability."
+        },
+        {
+          "why": "Apply the two-event rule to that earlier intersection.",
+          "m": "$$P(E_1\\cap E_2)=P(E_1)P(E_2\\mid E_1)$$",
+          "meaning": "Substitute this expression into the preceding equation."
+        },
+        {
+          "why": "The three-event expansion now lists all sequential conditional chances.",
+          "m": "$$P(E_1\\cap E_2\\cap E_3)=P(E_1)P(E_2\\mid E_1)P(E_3\\mid E_1\\cap E_2)$$",
+          "meaning": "The third factor must retain both earlier conditions."
+        },
+        {
+          "why": "Repeat the same substitution for n events.",
+          "m": "$$P\\left(\\bigcap_{i=1}^nE_i\\right)=P(E_1)\\prod_{k=2}^nP\\left(E_k\\mid\\bigcap_{i=1}^{k-1}E_i\\right)$$",
+          "meaning": "If an earlier intersection has probability zero, the full intersection has probability zero; do not form an undefined conditional ratio."
         }
       ],
-      "ends": "For n=2 this is the ordinary multiplication rule; for n=3 it reads $P(ABC)=P(A)P(B|A)P(C|AB)$. "
+      "ends": "The chain rule is successive conditioning. Independence is needed only when replacing conditional factors by unconditional probabilities."
     },
     "provenance": "Ross, 10th ed., §3.2, PDF pp. 82–84; chain-rule discussion and examples 2e–2g."
   },
@@ -97,7 +147,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §3.2, PDF pp. 82–84, examples 2b, 2c, 2e, 2g."
+    "provenance": "Ross, 10th ed., §3.2, PDF pp. 82–84, examples 2b, 2c, 2e, 2g.",
+    "proof": {
+      "idea": "Use the reduced sample space or updated draw pool after each observation.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "For a finite equally likely original sample space, condition on a nonempty event F.",
+          "m": "$$P(E\\mid F)=\\frac{|E\\cap F|/|S|}{|F|/|S|}$$",
+          "meaning": "Insert the equal-likelihood counting probabilities into the conditional ratio."
+        },
+        {
+          "why": "Cancel the common original-space factor.",
+          "m": "$$P(E\\mid F)=\\frac{|E\\cap F|}{|F|}$$",
+          "meaning": "This justifies counting within a reduced sample space."
+        },
+        {
+          "why": "For sequential draws without replacement, update the pool after the observed draw.",
+          "m": "$$P(\\text{marked second}\\mid\\text{marked first})=\\frac{m-1}{N-1}$$",
+          "meaning": "One marked object and one total object have been removed."
+        },
+        {
+          "why": "Multiply by the first-draw chance to compute both marked.",
+          "m": "$$P(\\text{both marked})=\\frac mN\\frac{m-1}{N-1}$$",
+          "meaning": "The multiplication rule uses a conditional second factor."
+        },
+        {
+          "why": "If draws are with replacement and independently repeated, restore the original pool.",
+          "m": "$$P(\\text{both marked})=(m/N)^2$$",
+          "meaning": "This different formula follows only from the changed sampling rule."
+        }
+      ],
+      "ends": "Conditioning changes the allowed outcomes or remaining population; the next denominator must describe that updated model."
+    }
   },
   {
     "id": "c.prob.3.3.1",
@@ -123,23 +205,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Split a question into separate cases, calculate each case’s contribution, and add.",
-      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
+      "idea": "Split the target event among all the possible cases.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Every outcome in E belongs to exactly one of the separate cases F_i.",
-          "m": "E=\\bigcup_i(E\\cap F_i)"
+          "why": "Let F_i be disjoint cases covering S, with P(F_i)>0 for the cases used.",
+          "m": "$$\\bigcup_iF_i=S,\\quad F_i\\cap F_j=\\varnothing\\ (i\\ne j)$$",
+          "meaning": "Such a list is a partition: every outcome has exactly one case."
         },
         {
-          "why": "Because the pieces cannot happen together, their probabilities add.",
-          "m": "P(E)=\\sum_iP(E\\cap F_i)"
+          "why": "Keep only the outcomes where the target event E also occurs.",
+          "m": "$$E=\\bigcup_i(E\\cap F_i)$$",
+          "meaning": "Every outcome of E still has one and only one case."
         },
         {
-          "why": "Each piece requires its case to happen and then E to happen within that case. Multiply those two chances.",
-          "m": "P(E)=\\sum_iP(E|F_i)P(F_i)"
+          "why": "These restricted pieces are disjoint, so add their probabilities.",
+          "m": "$$P(E)=\\sum_iP(E\\cap F_i)$$",
+          "meaning": "This addition requires disjointness, not independence."
+        },
+        {
+          "why": "Use the conditional-probability definition within case F_i.",
+          "m": "$$P(E\\mid F_i)=\\frac{P(E\\cap F_i)}{P(F_i)}$$",
+          "meaning": "The probability inside a case can differ from the overall probability."
+        },
+        {
+          "why": "Multiply by P(F_i) and replace each joint probability in the sum.",
+          "m": "$$P(E)=\\sum_iP(E\\mid F_i)P(F_i)$$",
+          "meaning": "Each contribution is case probability times success probability within that case."
+        },
+        {
+          "why": "For two cases the formula is an ordinary weighted average.",
+          "m": "$$P(E)=P(E\\mid F)P(F)+P(E\\mid F^c)P(F^c)$$",
+          "meaning": "Zero-probability cases contribute zero joint probability and are omitted to avoid undefined conditionals."
         }
       ],
-      "ends": "For two cases, the formula is the familiar weighted average across F and its complement."
+      "ends": "The law of total probability adds contributions from exhaustive, disjoint cases."
     },
     "provenance": "Ross, 10th ed., §3.3, PDF pp. 85–86, equation (3.1) and examples 3a–3c."
   },
@@ -168,23 +268,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "To work backward from evidence, compare how much each possible cause contributes to it.",
-      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
+      "idea": "Compute the share of the observed evidence contributed by a particular case.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Within the evidence E, count the part that also came from F_j.",
-          "m": "P(F_j|E)=P(E\\cap F_j)/P(E)"
+          "why": "Use disjoint exhaustive cases F_i, and suppose evidence E has P(E)>0.",
+          "m": "$$P(F_j\\mid E)=\\frac{P(F_j\\cap E)}{P(E)}$$",
+          "meaning": "This is the definition of the updated case probability."
         },
         {
-          "why": "That part requires F_j first, then evidence E; multiply the two chances.",
-          "m": "P(E\\cap F_j)=P(E|F_j)P(F_j)"
+          "why": "Intersections are symmetric: both events happening is the same regardless of order.",
+          "m": "$$F_j\\cap E=E\\cap F_j$$",
+          "meaning": "We may compute the same joint probability in the other conditional direction."
         },
         {
-          "why": "Find all the evidence by adding the contributions from every separate case.",
-          "m": "P(E)=\\sum_iP(E|F_i)P(F_i)"
+          "why": "The multiplication rule gives the contribution from case j.",
+          "m": "$$P(E\\cap F_j)=P(E\\mid F_j)P(F_j)$$",
+          "meaning": "The factors are the likelihood of the evidence and the prior case probability."
+        },
+        {
+          "why": "Add the contributions from all cases to get all evidence.",
+          "m": "$$P(E)=\\sum_iP(E\\mid F_i)P(F_i)$$",
+          "meaning": "This is total probability, derived by splitting E into disjoint pieces."
+        },
+        {
+          "why": "Substitute the numerator and denominator into the first ratio.",
+          "m": "$$P(F_j\\mid E)=\\frac{P(E\\mid F_j)P(F_j)}{\\sum_iP(E\\mid F_i)P(F_i)}$$",
+          "meaning": "The denominator is positive by the assumption on E."
+        },
+        {
+          "why": "All updated case shares add to 1 because their numerators sum to the denominator.",
+          "m": "$$\\sum_jP(F_j\\mid E)=1$$",
+          "meaning": "Bayes’ formula normalizes the evidence contributions rather than reversing a conditional by guesswork."
         }
       ],
-      "ends": "Substitution yields Bayes formula; the denominator also verifies posterior probabilities sum to one."
+      "ends": "A case’s posterior is its contribution to the evidence divided by all evidence contributions."
     },
     "provenance": "Ross, 10th ed., §3.3, PDF pp. 85–93, equations (3.1)–(3.3) and examples 3a–3o."
   },
@@ -211,7 +329,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §3.3, PDF pp. 85–93, examples 3a, 3f, 3h, 3k, 3n."
+    "provenance": "Ross, 10th ed., §3.3, PDF pp. 85–93, examples 3a, 3f, 3h, 3k, 3n.",
+    "proof": {
+      "idea": "Turn prior and likelihood information into normalized evidence contributions.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "For each case F_i assign prior probability π_i and evidence likelihood ℓ_i.",
+          "m": "$$\\pi_i=P(F_i),\\quad\\ell_i=P(E\\mid F_i)$$",
+          "meaning": "Cases must be disjoint and exhaustive for this sum calculation."
+        },
+        {
+          "why": "Multiply the prior by its within-case evidence chance.",
+          "m": "$$w_i=\\pi_i\\ell_i=P(F_i\\cap E)$$",
+          "meaning": "Each w_i is the case’s contribution to observed evidence."
+        },
+        {
+          "why": "Add all case contributions.",
+          "m": "$$P(E)=\\sum_iw_i$$",
+          "meaning": "Total probability explains this evidence denominator."
+        },
+        {
+          "why": "Provided that sum is positive, divide each contribution by it.",
+          "m": "$$P(F_i\\mid E)=\\frac{w_i}{\\sum_jw_j}$$",
+          "meaning": "Bayes’ formula is normalization of the evidence weights."
+        },
+        {
+          "why": "For two cases of positive prior and posterior probabilities, divide their posterior probabilities.",
+          "m": "$$\\frac{P(F_1\\mid E)}{P(F_2\\mid E)}=\\frac{\\pi_1}{\\pi_2}\\frac{\\ell_1}{\\ell_2}$$",
+          "meaning": "The common evidence denominator cancels; posterior odds equal prior odds times the likelihood ratio."
+        }
+      ],
+      "ends": "Updating weights requires all evidence contributions, including contributions from alternative cases."
+    }
   },
   {
     "id": "c.prob.3.4.1",
@@ -241,7 +391,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §3.4, PDF pp. 93–94, definition and examples 4a–4e."
+    "provenance": "Ross, 10th ed., §3.4, PDF pp. 93–94, definition and examples 4a–4e.",
+    "proof": {
+      "idea": "Distinguish the independence assumption from its conditional consequence.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Independence of E and F is defined by factorization of their joint probability.",
+          "m": "$$P(E\\cap F)=P(E)P(F)$$",
+          "meaning": "This equation is a property to check or a justified model assumption."
+        },
+        {
+          "why": "If P(F)>0, write the conditional-probability ratio.",
+          "m": "$$P(E\\mid F)=\\frac{P(E\\cap F)}{P(F)}$$",
+          "meaning": "Division is valid only for a positive conditioning probability."
+        },
+        {
+          "why": "Substitute the independence product and cancel P(F).",
+          "m": "$$P(E\\mid F)=P(E)$$",
+          "meaning": "Knowing F does not change E’s chance."
+        },
+        {
+          "why": "Conversely, multiply this unchanged-chance equation by P(F).",
+          "m": "$$P(E\\mid F)=P(E)\\ \\Longrightarrow\\ P(E\\cap F)=P(E)P(F)$$",
+          "meaning": "Thus the conditional characterization is equivalent when its denominator exists."
+        },
+        {
+          "why": "Disjoint positive-probability events fail the product condition.",
+          "m": "$$P(E\\cap F)=0<P(E)P(F)$$",
+          "meaning": "Mutually exclusive positive-probability events are dependent, since learning one rules out the other."
+        }
+      ],
+      "ends": "Independence is joint factorization; unchanged conditional probabilities are its consequence when defined."
+    }
   },
   {
     "id": "c.prob.3.4.2",
@@ -267,23 +449,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "If two events are independent, replacing either with “does not happen” keeps independence.",
-      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
+      "idea": "Use subtraction and factoring to extend independence to complements.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "E happens either with F or without F. These two possibilities are separate.",
-          "m": "P(E)=P(EF)+P(EF^c)"
+          "why": "Assume E and F are independent.",
+          "m": "$$P(E\\cap F)=P(E)P(F)$$",
+          "meaning": "This product equation is the definition, including zero-probability events."
         },
         {
-          "why": "Subtract the known chance of both events from E’s whole chance.",
-          "m": "P(EF^c)=P(E)-P(E)P(F)"
+          "why": "Split E according to whether F occurs.",
+          "m": "$$E=(E\\cap F)\\cup(E\\cap F^c)$$",
+          "meaning": "The pieces are disjoint."
         },
         {
-          "why": "Factor out P(E). The leftover factor is exactly the chance F does not happen.",
-          "m": "P(EF^c)=P(E)[1-P(F)]=P(E)P(F^c)"
+          "why": "Add the two pieces and isolate the second.",
+          "m": "$$P(E\\cap F^c)=P(E)-P(E\\cap F)$$",
+          "meaning": "This uses finite additivity followed by subtraction."
+        },
+        {
+          "why": "Insert the independence product and factor P(E).",
+          "m": "$$P(E\\cap F^c)=P(E)[1-P(F)]$$",
+          "meaning": "The distributive identity a−ab=a(1−b) is high school algebra."
+        },
+        {
+          "why": "Use the complement rule on the bracket.",
+          "m": "$$P(E\\cap F^c)=P(E)P(F^c)$$",
+          "meaning": "This proves E and F^c are independent."
+        },
+        {
+          "why": "Interchange E and F to obtain independence of E^c and F, then complement F once more.",
+          "m": "$$P(E^c\\cap F^c)=P(E^c)P(F^c)$$",
+          "meaning": "The same argument applies to the newly established independent pair."
         }
       ],
-      "ends": "Apply the same argument after swapping E and F, then take complements again to obtain all mixed pairs."
+      "ends": "Independence is preserved when either or both events are replaced by their complements."
     },
     "provenance": "Ross, 10th ed., §3.4, PDF pp. 93–94, Proposition 4.1."
   },
@@ -310,7 +510,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §3.4, PDF pp. 94–96, examples 4e–4h."
+    "provenance": "Ross, 10th ed., §3.4, PDF pp. 94–96, examples 4e–4h.",
+    "proof": {
+      "idea": "Check a two-coin example pair by pair, then test the triple intersection.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Take two independent fair coins with four equally likely outcomes.",
+          "m": "$$S=\\{HH,HT,TH,TT\\}$$",
+          "meaning": "Each complete outcome has probability 1/4."
+        },
+        {
+          "why": "Define A as first coin heads, B as second coin heads, and C as matching coins.",
+          "m": "$$A=\\{HH,HT\\},\\quad B=\\{HH,TH\\},\\quad C=\\{HH,TT\\}$$",
+          "meaning": "Each event contains two outcomes, so each has probability 1/2."
+        },
+        {
+          "why": "Every pairwise intersection is the singleton HH.",
+          "m": "$$P(A\\cap B)=P(A\\cap C)=P(B\\cap C)=1/4$$",
+          "meaning": "This equals (1/2)(1/2), so all event pairs are independent."
+        },
+        {
+          "why": "The triple intersection is also HH.",
+          "m": "$$P(A\\cap B\\cap C)=1/4$$",
+          "meaning": "Once the first two coins are heads, matching is certain, not another independent one-half chance."
+        },
+        {
+          "why": "Mutual independence would require the product of all three individual probabilities.",
+          "m": "$$P(A)P(B)P(C)=1/8\\ne1/4$$",
+          "meaning": "The triple condition fails despite all pair conditions passing."
+        }
+      ],
+      "ends": "Mutual independence requires every finite subcollection’s intersection probability to factor; checking only pairs is insufficient."
+    }
   },
   {
     "id": "c.prob.3.5.1",
@@ -336,23 +568,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "After restricting to known information, the ordinary probability rules still work.",
-      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
+      "idea": "Check every probability axiom for the model in which F is known.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "The part where both E and F happen lies inside F, so its probability is between zero and P(F). Divide by positive P(F).",
-          "m": "\\varnothing\\subseteq E\\cap F\\subseteq F\\Rightarrow0\\le P(E\\cap F)/P(F)\\le1"
+          "why": "Fix an event F with positive probability and define a new event-weight function.",
+          "m": "$$Q(E)=\\frac{P(E\\cap F)}{P(F)}$$",
+          "meaning": "All original probabilities are measured first, then divided by the same positive number."
         },
         {
-          "why": "The full outcome set S and F happen together exactly when F happens.",
-          "m": "Q(S)=P(S\\cap F)/P(F)=P(F)/P(F)=1"
+          "why": "The restricted event is contained in F.",
+          "m": "$$\\varnothing\\subseteq E\\cap F\\subseteq F$$",
+          "meaning": "Monotonicity bounds its probability between 0 and P(F)."
         },
         {
-          "why": "Restricting separate events to F keeps them separate. Add their original probabilities and divide every term by the same P(F).",
-          "m": "Q(\\cup_iE_i)=P((\\cup_iE_i)F)/P(F)=\\sum_iP(E_iF)/P(F)=\\sum_iQ(E_i)"
+          "why": "Divide those bounds by P(F)>0.",
+          "m": "$$0\\le Q(E)\\le1$$",
+          "meaning": "Division by a positive number preserves inequality signs."
+        },
+        {
+          "why": "The full sample space includes every outcome of F.",
+          "m": "$$Q(S)=\\frac{P(S\\cap F)}{P(F)}=1$$",
+          "meaning": "This checks normalization in the reduced model."
+        },
+        {
+          "why": "If E_i are disjoint, their restrictions to F are still disjoint.",
+          "m": "$$\\left(\\bigcup_iE_i\\right)\\cap F=\\bigcup_i(E_i\\cap F)$$",
+          "meaning": "Intersection distributes over union."
+        },
+        {
+          "why": "Use original countable additivity and divide the sum by P(F).",
+          "m": "$$Q\\left(\\bigcup_iE_i\\right)=\\frac{\\sum_iP(E_i\\cap F)}{P(F)}=\\sum_iQ(E_i)$$",
+          "meaning": "This checks the remaining axiom, so all probability rules apply to Q."
         }
       ],
-      "ends": "Consequently, standard probability formulas may be applied under a fixed condition F."
+      "ends": "Conditional probability is a complete probability model when the conditioning event has positive probability."
     },
     "provenance": "Ross, 10th ed., §3.5, PDF pp. 102–103, Proposition 5.1."
   },
@@ -382,23 +632,41 @@ CONCEPTS.push(...
       }
     ],
     "proof": {
-      "idea": "Keep the original information in every case when splitting or updating again.",
-      "why": "Each equation below translates a separate-case or conditional-chance step into symbols.",
+      "idea": "Apply ordinary total probability and Bayes inside a previously restricted model.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
       "rungs": [
         {
-          "why": "Inside the model where F is known, split A into its separate case pieces. Leave out pieces with zero chance.",
-          "m": "Q(A)=\\sum_{i:Q(E_i)>0}Q(A\\cap E_i)"
+          "why": "Assume P(F)>0 and write Q(A)=P(A given F).",
+          "m": "$$Q(A)=\\frac{P(A\\cap F)}{P(F)}$$",
+          "meaning": "Q is a probability model by the preceding proof."
         },
         {
-          "why": "For each remaining piece, multiply the case chance by A’s chance within it, keeping F in the condition.",
-          "m": "Q(A\\cap E_i)=Q(A|E_i)Q(E_i)"
+          "why": "For a case E_i of positive Q-probability, define conditioning within Q.",
+          "m": "$$Q(A\\mid E_i)=\\frac{Q(A\\cap E_i)}{Q(E_i)}$$",
+          "meaning": "This is ordinary conditional probability but with Q in place of P."
         },
         {
-          "why": "To find a case’s updated share after A, divide its contribution by the sum of every case’s contribution.",
-          "m": "Q(E_i|A)=Q(A|E_i)Q(E_i)/\\sum_{j:Q(E_j)>0}Q(A|E_j)Q(E_j)"
+          "why": "Substitute the two P-ratios and cancel their common denominator.",
+          "m": "$$Q(A\\mid E_i)=\\frac{P(A\\cap E_i\\cap F)}{P(E_i\\cap F)}=P(A\\mid E_i\\cap F)$$",
+          "meaning": "Learning E_i inside F means keeping both conditions."
+        },
+        {
+          "why": "Split A among disjoint exhaustive cases E_i.",
+          "m": "$$Q(A)=\\sum_{i:Q(E_i)>0}Q(A\\mid E_i)Q(E_i)$$",
+          "meaning": "Total probability is valid because Q satisfies the axioms."
+        },
+        {
+          "why": "When Q(A)>0, write the reverse conditional ratio.",
+          "m": "$$Q(E_j\\mid A)=\\frac{Q(E_j\\cap A)}{Q(A)}$$",
+          "meaning": "The joint numerator is Q(A given E_j) times Q(E_j)."
+        },
+        {
+          "why": "Substitute that product and the total-probability denominator.",
+          "m": "$$P(E_j\\mid A\\cap F)=\\frac{P(A\\mid E_j\\cap F)P(E_j\\mid F)}{\\sum_iP(A\\mid E_i\\cap F)P(E_i\\mid F)}$$",
+          "meaning": "Only positive-probability cases are included; every factor retains the original F condition."
         }
       ],
-      "ends": "The conditioning event F remains part of Q throughout; dropping it would require a separate independence argument."
+      "ends": "Bayes and total probability work inside a condition, provided all the relevant conditional denominators are positive."
     },
     "provenance": "Ross, 10th ed., §3.5, PDF pp. 102–105, equation (5.1) and examples 5a–5e."
   },
@@ -423,7 +691,39 @@ CONCEPTS.push(...
         "kind": "state"
       }
     ],
-    "provenance": "Ross, 10th ed., §3.1 introduction and §3.2, PDF pp. 81–82."
+    "provenance": "Ross, 10th ed., §3.1 introduction and §3.2, PDF pp. 81–82.",
+    "proof": {
+      "idea": "Specify how the information was generated before conditioning on it.",
+      "why": "Read each equation together with its reason. Symbols are introduced before they are used; an integral means accumulated area and an expectation means a probability-weighted average.",
+      "rungs": [
+        {
+          "why": "Let A be the event of interest and F the event describing received information.",
+          "m": "$$P(A\\mid F)=\\frac{P(A\\cap F)}{P(F)}$$",
+          "meaning": "This formula is usable only after the observation event F has been defined precisely and has positive probability."
+        },
+        {
+          "why": "For two fair coins, learning that at least one is heads excludes only TT.",
+          "m": "$$F=\\{HH,HT,TH\\}$$",
+          "meaning": "The three remaining complete outcomes still have equal conditional probability."
+        },
+        {
+          "why": "Within that information, both heads has one favorable outcome.",
+          "m": "$$P(HH\\mid F)=\\frac{1/4}{3/4}=1/3$$",
+          "meaning": "The original likelihood factors cancel."
+        },
+        {
+          "why": "Learning instead that the first coin is heads leaves only HH and HT.",
+          "m": "$$G=\\{HH,HT\\},\\quad P(HH\\mid G)=\\frac{1/4}{2/4}=1/2$$",
+          "meaning": "A more specific observation produces a different reduced model."
+        },
+        {
+          "why": "If information is delivered through a selective reporting procedure, include that procedure’s likelihood.",
+          "m": "$$P(A\\mid\\text{report})\\propto P(\\text{report}\\mid A)P(A)$$",
+          "meaning": "The proportionality is made into an equality by dividing by the sum of all report contributions, as in Bayes’ formula."
+        }
+      ],
+      "ends": "Partial-information problems depend on the observation or reporting mechanism, not merely on a phrase that sounds similar."
+    }
   }
 ]
 );

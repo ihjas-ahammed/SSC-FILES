@@ -143,6 +143,9 @@ if [ -n "$QM" ] && [ -f "$QM/build.py" ]; then
     (cd "$QM/study-map" && npm run build)
   fi
   STUDY_MAP="$QM/study-map/build/index.html"
+  if [ ! -s "$STUDY_MAP" ] && [ -s "$QM/study-map/Quantum-Atlas-offline.html" ]; then
+    STUDY_MAP="$QM/study-map/Quantum-Atlas-offline.html"
+  fi
   if [ ! -s "$STUDY_MAP" ]; then
     echo "ERROR: QM study-map bundle missing. Run npm run build in $QM/study-map." >&2
     exit 1
@@ -157,6 +160,9 @@ if [ -n "$QM" ] && [ -f "$QM/build.py" ]; then
     (cd "$QM/study-map-4" && npm run build > /dev/null)
   fi
   STUDY_MAP4="$QM/study-map-4/build/index.html"
+  if [ ! -s "$STUDY_MAP4" ] && [ -s "$QM/study-map-4/Quantum-Atlas-4-offline.html" ]; then
+    STUDY_MAP4="$QM/study-map-4/Quantum-Atlas-4-offline.html"
+  fi
   if [ ! -s "$STUDY_MAP4" ]; then
     echo "ERROR: QM Module 4 study-map bundle missing. Run npm run build in $QM/study-map-4." >&2
     exit 1
@@ -214,12 +220,16 @@ if [ -d "$PROB_MAP" ]; then
     echo "Rebuilding the LIVE Probability Module 1 study map from the shared engine ..."
     (cd "$PROB_MAP" && npm run build > /dev/null)
   fi
-  if [ ! -s "$PROB_MAP/build/index.html" ]; then
+  STUDY_MAP_PROB1="$PROB_MAP/build/index.html"
+  if [ ! -s "$STUDY_MAP_PROB1" ] && [ -s "$PROB_MAP/Probability-Atlas-offline.html" ]; then
+    STUDY_MAP_PROB1="$PROB_MAP/Probability-Atlas-offline.html"
+  fi
+  if [ ! -s "$STUDY_MAP_PROB1" ]; then
     echo "ERROR: Probability study-map bundle missing. Run npm run build in $PROB_MAP." >&2
     exit 1
   fi
   mkdir -p "$TMP/public/math/probability/study-map/module-1"
-  cp "$PROB_MAP/build/index.html" "$TMP/public/math/probability/study-map/module-1/index.html"
+  cp "$STUDY_MAP_PROB1" "$TMP/public/math/probability/study-map/module-1/index.html"
 fi
 
 # --- SSC-V4 Probability: Ross Ch. 2 (Module 2) stellar map, offline bundle ---
@@ -229,12 +239,16 @@ if [ -d "$PROB_MAP2" ]; then
     echo "Rebuilding the LIVE Probability Module 2 study map from the shared engine ..."
     (cd "$PROB_MAP2" && npm run build > /dev/null)
   fi
-  if [ ! -s "$PROB_MAP2/build/index.html" ]; then
+  STUDY_MAP_PROB2="$PROB_MAP2/build/index.html"
+  if [ ! -s "$STUDY_MAP_PROB2" ] && [ -s "$PROB_MAP2/Probability-Atlas-2-offline.html" ]; then
+    STUDY_MAP_PROB2="$PROB_MAP2/Probability-Atlas-2-offline.html"
+  fi
+  if [ ! -s "$STUDY_MAP_PROB2" ]; then
     echo "ERROR: Probability Module 2 study-map bundle missing. Run npm run build in $PROB_MAP2." >&2
     exit 1
   fi
   mkdir -p "$TMP/public/math/probability/study-map/module-2"
-  cp "$PROB_MAP2/build/index.html" "$TMP/public/math/probability/study-map/module-2/index.html"
+  cp "$STUDY_MAP_PROB2" "$TMP/public/math/probability/study-map/module-2/index.html"
 fi
 
 # --- SSC-V4 Probability: chapter checkpoints on shared flow-library ---
