@@ -25,6 +25,7 @@ export default function ConceptNote({
     read,
     completed,
     startRetry,
+    showTerm: showTermAlert,
   } = useAtlas();
   const visit = navigate || openReader;
   const c = byName[name];
@@ -75,7 +76,7 @@ export default function ConceptNote({
       {exercise && (
         <div className="exercise-card">
           <span className="eyebrow">THE EXERCISE · {exercise.sourceLabel}</span>
-          <MathText text={exercise.text} />
+          <MathText text={exercise.text} onLink={showTermAlert} />
           <PlainWords text={exercise.plain} onLink={visit} />
         </div>
       )}

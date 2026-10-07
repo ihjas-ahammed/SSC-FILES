@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { questions, meta, sections } from "../lib/course";
 import { questionSummary } from "../lib/learning";
+import { plainText } from "../lib/glossary";
 import { useAtlas } from "../app/AtlasContext";
 
 export default function QuestionBank() {
@@ -27,7 +28,7 @@ export default function QuestionBank() {
   const list = questions.filter(
     (q) =>
       q.section === section &&
-      `${q.title} ${q.text}`.toLowerCase().includes(query.toLowerCase()),
+      `${q.title} ${plainText(q.text)}`.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (
@@ -126,10 +127,10 @@ export default function QuestionBank() {
                 <p className={q.plain ? "plain-preview" : undefined}>
                   {q.plain ? (
                     <MathText text={q.plain} />
-                  ) : q.text.length > 170 ? (
-                    q.text.slice(0, 170) + "…"
+                  ) : plainText(q.text).length > 170 ? (
+                    plainText(q.text).slice(0, 170) + "…"
                   ) : (
-                    q.text
+                    plainText(q.text)
                   )}
                 </p>
                 <div className="question-card-track">

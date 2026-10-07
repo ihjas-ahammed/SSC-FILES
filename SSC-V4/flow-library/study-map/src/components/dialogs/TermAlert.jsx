@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
-import { byName } from "../../lib/course.js";
+import { byName, questions } from "../../lib/course.js";
 import { useAtlas } from "../../app/AtlasContext";
 import MathText from "../ui/MathText";
 import { Symbol } from "../ui/Primitives";
@@ -43,6 +43,10 @@ export default function TermAlert() {
   }, [name]);
   if (!concept) return null;
   const known = statuses[name] === "known";
+  const exercise =
+    concept.kind === "problem"
+      ? questions.find((q) => q.id === concept.questionId)
+      : null;
   return (
     <aside
       className="term-alert"
@@ -57,7 +61,11 @@ export default function TermAlert() {
         <Symbol concept={concept} />
         <div>
           <span className="eyebrow">
-            {known ? "A WORD YOU KNOW" : "NEW WORD IN THIS SOLUTION"}
+            {exercise
+              ? "ANOTHER EXERCISE"
+              : known
+                ? "A WORD YOU KNOW"
+                : "NEW WORD IN THIS SOLUTION"}
           </span>
           <h3 id="term-alert-title">{concept.name}</h3>
         </div>
@@ -79,6 +87,12 @@ export default function TermAlert() {
         </button>
       </header>
       <div id="term-alert-body" className="term-alert-body">
+        {exercise && (
+          <p className="term-alert-exercise">
+            <b>The exercise · {exercise.sourceLabel} </b>
+            <MathText text={exercise.text} onLink={showTerm} />
+          </p>
+        )}
         <p className="term-alert-idea">
           <MathText text={concept.meaning} />
         </p>

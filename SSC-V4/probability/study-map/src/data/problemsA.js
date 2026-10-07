@@ -98,7 +98,7 @@ export default [
     prerequisites: ["Vandermonde's Identity", "Choosing Is Leaving Out", "Summation Notation"],
     ross: { n: 9, section: "A", page: 3 },
     title: "C(2n, n) as a sum of squares",
-    statement: r`Use Theoretical Exercise 8 to prove that $$\binom{2n}{n}=\sum_{k=0}^{n}\binom{n}{k}^2.$$`,
+    statement: r`Use [[Vandermonde's Identity|Theoretical Exercise 8]] to prove that $$\binom{2n}{n}=\sum_{k=0}^{n}\binom{n}{k}^2.$$`,
     meaning: r`Choosing $n$ people from $2n$ equals the sum of the squares of one whole row of binomial coefficients.`,
     linkedFormal: r`$\displaystyle\binom{2n}{n}=\sum_{k=0}^{n}\binom nk^2$. It follows from [[Vandermonde's Identity|Vandermonde's identity]] with $m=r=n$ and the symmetry [[Choosing Is Leaving Out|$\binom nk=\binom n{n-k}$]].`,
     example: r`$n=3$: $\binom63=20$ and $\binom30^2+\binom31^2+\binom32^2+\binom33^2=1+9+9+1=20$.`,
@@ -110,8 +110,8 @@ export default [
     },
     check: chk(r`Which step turns $\binom ni\binom n{n-i}$ into $\binom ni^2$?`, r`$\binom n{n-i}=\binom ni$`, r`$\binom ni=\binom{n}{i+1}$`, r`$\binom ni\binom ni=\binom{2n}{2i}$`, r`Choosing $n-i$ to take is the same as choosing $i$ to leave out.`),
     faq: [
-      { q: r`Why may I use Exercise 8?`, a: r`The exercise tells you to. Exercise 8 is true for all $n,m,r$, so you may pick the values you like.` },
-      { q: r`Which values do I choose in Exercise 8?`, a: r`Take $m=n$ and $r=n$, so that $n+m=2n$.` },
+      { q: r`Why may I use [[Vandermonde's Identity|Exercise 8]]?`, a: r`The exercise tells you to. [[Vandermonde's Identity|Exercise 8]] is true for all $n,m,r$, so you may pick the values you like.` },
+      { q: r`Which values do I choose in [[Vandermonde's Identity|Exercise 8]]?`, a: r`Take $m=n$ and $r=n$, so that $n+m=2n$.` },
       { q: r`Where do the squares come from?`, a: r`Each term becomes "the same number times itself" once you swap $\binom n{n-k}$ for $\binom nk$.` },
     ],
     proof: {
@@ -147,9 +147,9 @@ export default [
       faq: [
         { q: r`What does $\binom{2n}{n}$ mean?`, a: r`The ways to choose $n$ things from $2n$ things. It is the biggest number in row $2n$ of Pascal's triangle.` },
         { q: r`What is the sum asking for?`, a: r`Take every number in row $n$ of Pascal's triangle, square it, and add.` },
-        { q: r`How can Exercise 8 help?`, a: r`Its right side already has products $\binom ni\binom m{r-i}$. Choosing $m$ and $r$ well turns them into squares.` },
+        { q: r`How can [[Vandermonde's Identity|Exercise 8]] help?`, a: r`Its right side already has products $\binom ni\binom m{r-i}$. Choosing $m$ and $r$ well turns them into squares.` },
         { q: r`What is the symmetry rule?`, a: r`$\binom nk=\binom n{n-k}$. See [[Choosing Is Leaving Out|Choosing Is Leaving Out]].` },
-        { q: r`Is a new story needed?`, a: r`No. A short chain of substitutions from Exercise 8 proves it.` },
+        { q: r`Is a new story needed?`, a: r`No. A short chain of substitutions from [[Vandermonde's Identity|Exercise 8]] proves it.` },
       ],
       keywords: [
         "Vandermonde's identity|Vandermonde|Exercise 8", "substitute m equals n|m equals n|set m=n", "r equals n|set r=n", "2n choose n|central binomial coefficient|C(2n,n)",
@@ -405,7 +405,7 @@ export default [
     prerequisites: ["Alternating Binomial Sum", "Binomial Theorem", "Counting Two Ways", "Combination", "Summation Notation"],
     ross: { n: 14, section: "A", page: 4 },
     title: "A committee with a subcommittee inside it",
-    statement: r`From a set of $n$ people, a committee of size $j$ is to be chosen, and from this committee, a subcommittee of size $i$, $i\le j$, is also to be chosen. (a) Derive a combinatorial identity by computing, in two ways, the number of possible choices of the committee and subcommittee: first by supposing that the committee is chosen first and then the subcommittee is chosen, and second by supposing that the subcommittee is chosen first and then the remaining members of the committee are chosen. (b) Use part (a) to prove the following combinatorial identity: $$\sum_{j=i}^{n}\binom nj\binom ji=\binom ni2^{n-i},\qquad i\le n.$$ (c) Use part (a) and Theoretical Exercise 13 to show that $$\sum_{j=i}^{n}\binom nj\binom ji(-1)^{n-j}=0,\qquad i<n.$$`,
+    statement: r`From a set of $n$ people, a committee of size $j$ is to be chosen, and from this committee, a subcommittee of size $i$, $i\le j$, is also to be chosen. (a) Derive a combinatorial identity by computing, in two ways, the number of possible choices of the committee and subcommittee: first by supposing that the committee is chosen first and then the subcommittee is chosen, and second by supposing that the subcommittee is chosen first and then the remaining members of the committee are chosen. (b) Use part (a) to prove the following combinatorial identity: $$\sum_{j=i}^{n}\binom nj\binom ji=\binom ni2^{n-i},\qquad i\le n.$$ (c) Use part (a) and [[Alternating Binomial Sum|Theoretical Exercise 13]] to show that $$\sum_{j=i}^{n}\binom nj\binom ji(-1)^{n-j}=0,\qquad i<n.$$`,
     meaning: r`Count pairs (committee, subcommittee inside it) in two orders, then add over all committee sizes.`,
     linkedFormal: r`(a) $\displaystyle\binom nj\binom ji=\binom ni\binom{n-i}{j-i}$. (b) $\displaystyle\sum_{j=i}^{n}\binom nj\binom ji=\binom ni2^{n-i}$. (c) $\displaystyle\sum_{j=i}^{n}\binom nj\binom ji(-1)^{n-j}=0$ for $i<n$.`,
     example: r`$n=3,\ i=1$. (a) with $j=2$: $\binom32\binom21=6=\binom31\binom21$. (b) $3+6+3=12=\binom31\,2^2$. (c) $3-6+3=0$.`,
@@ -419,7 +419,7 @@ export default [
     faq: [
       { q: r`Why is the subcommittee inside the committee?`, a: r`Every subcommittee member must also be a committee member, so pairs are nested: subcommittee $\subseteq$ committee.` },
       { q: r`Where does the factor $2^{n-i}$ come from in (b)?`, a: r`Fix the subcommittee. Each of the other $n-i$ people is independently in the committee or not, which gives $2^{n-i}$ committees of any size containing it.` },
-      { q: r`What is the sign $(-1)^{n-j}$ doing in (c)?`, a: r`It alternates plus and minus as $j$ grows. After factoring out $\binom ni$ the alternating sum is the one from Exercise 13, which is 0.` },
+      { q: r`What is the sign $(-1)^{n-j}$ doing in (c)?`, a: r`It alternates plus and minus as $j$ grows. After factoring out $\binom ni$ the alternating sum is the one from [[Alternating Binomial Sum|Exercise 13]], which is 0.` },
     ],
     proof: {
       idea: r`Count (committee, subcommittee) pairs in two orders for (a); add over all committee sizes for (b); put alternating signs in for (c) and use the zero alternating sum.`,

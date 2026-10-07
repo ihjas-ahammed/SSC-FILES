@@ -28,7 +28,7 @@ export default function Answer() {
       </div>
       <h2>{question.title}</h2>
       <div className="source-question">
-        <MathText text={question.text} />
+        <MathText text={question.text} onLink={showTerm} />
       </div>
       <PlainWords text={question.plain} />
       {question.verify && (

@@ -3,7 +3,7 @@ import { useAtlas } from "../../../app/AtlasContext";
 import MathText from "../../ui/MathText";
 import PlainWords from "../PlainWords";
 export default function SolutionHints() {
-  const { question, flow, setFlow, togglePrerequisites } = useAtlas();
+  const { question, flow, setFlow, togglePrerequisites, showTerm } = useAtlas();
   const unlocked = flow.unlocked || [];
   const hints = question.hints || [];
   return (
@@ -13,7 +13,7 @@ export default function SolutionHints() {
         YOUR SOLUTION MISSION · {question.id}
       </div>
       <h2>Find your way to the answer.</h2>
-      <div className="source-question"><MathText text={question.text} /></div>
+      <div className="source-question"><MathText text={question.text} onLink={showTerm} /></div>
       <PlainWords text={question.plain} />
       <p>
         Think first. Each correct checkpoint unlocks another part of the

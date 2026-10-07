@@ -11,7 +11,7 @@ import FaqList from "../FaqList";
 import PlainWords from "../PlainWords";
 
 export default function Attempt() {
-  const { question, setModal, flow, setFlow, makeChecklist, preferences } =
+  const { question, setModal, flow, setFlow, makeChecklist, preferences, showTerm } =
     useAtlas();
   return (
     <div className="attempt-screen">
@@ -24,7 +24,7 @@ export default function Attempt() {
       </div>
       <h2>{question.title}</h2>
       <div className="source-question">
-        <MathText text={question.text} />
+        <MathText text={question.text} onLink={showTerm} />
       </div>
       <PlainWords text={question.plain} />
       <FaqList
