@@ -8,6 +8,7 @@ import MathIcon from "../ui/MathIcon";
 import { mapColor } from "../../graph/three/theme";
 import { useAtlas } from "../../app/AtlasContext";
 import { skillGlyph } from "../../graph/three/glyph";
+import { starState } from "../../graph/starState.js";
 
 export default function KnowledgeGraph({
   nodes,
@@ -152,6 +153,7 @@ export default function KnowledgeGraph({
             const p = view.nodes[n.name];
             const active = selected === n.name,
               known = statuses[n.name] === "known";
+            const { locked } = starState(n, statuses);
             return (
               <button
                 key={n.id}
@@ -161,6 +163,8 @@ export default function KnowledgeGraph({
                 data-importance={starEncoding(n).importance}
                 data-color={starEncoding(n).color}
                 data-complete={known}
+                data-locked={locked}
+                data-glowing={known}
                 aria-label={`Travel to ${n.name}`}
                 aria-pressed={active}
                 hidden={!p?.visible}

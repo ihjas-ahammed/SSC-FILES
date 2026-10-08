@@ -1,6 +1,7 @@
 import "./workspace-test-env.mjs";
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
+import { concepts, meta } from "../../../flow-library/study-map/src/lib/course.js";
 
 const browser = await chromium.launch({
   executablePath: process.env.STUDY_MAP_CHROME,
@@ -10,6 +11,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const errors = [];
   page.on("pageerror", e => errors.push(e.message));
+  page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
   await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
   await page.locator(".topbar nav").getByRole("button", { name: "Knowledge map", exact: true }).click();
   await page.getByRole("button", { name: "Selected concept details", exact: true }).click();
@@ -30,6 +32,7 @@ try {
     const context = await browser.newContext({ viewport: { width, height: 900 }, isMobile: mobile, hasTouch: mobile });
     const page = await context.newPage();
     page.on("pageerror", e => errors.push(e.message));
+    page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
     await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
     await page.locator(mobile ? ".mobile-nav" : ".topbar nav").getByRole("button", { name: mobile ? "Map" : "Knowledge map", exact: true }).click();
     if (!mobile) await page.getByRole("button", { name: "2D map screen", exact: true }).click();
@@ -63,6 +66,26 @@ try {
     await context.close();
   }
   console.log("PASS: mobile-default 2D, disabled locks, single selection, grey dotted links, full-screen map, adjacent questions, dimension switching and no overflow at 320/390/1440px.");
+  for (const theme of ["light", "dark"]) {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const statuses = Object.fromEntries(concepts.filter((_, i) => i % 3 === 0).map(n => [n.name, "known"]));
+    await context.addInitScript(({ theme, statuses, storageKey }) => localStorage.setItem(storageKey, JSON.stringify({ statuses, preferences: { theme, animations: false } })), { theme, statuses, storageKey: meta.storageKey });
+    const page = await context.newPage();
+    page.on("pageerror", e => errors.push(e.message));
+    page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
+    await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
+    await page.locator(".topbar nav").getByRole("button", { name: "Knowledge map", exact: true }).click();
+    const map = page.locator('.stellar-map[data-renderer="webgl-3d"]');
+    await map.locator("canvas").waitFor();
+    await page.waitForFunction(() => document.querySelector('.stellar-map')?.dataset.flying === "false");
+    assert(await map.locator('[data-glowing="true"]').count() > 0);
+    assert(await map.locator('[data-glowing="false"]').count() > 0);
+    assert.equal(await map.locator('[data-locked="true"][data-glowing="true"]').count(), 0);
+    await page.screenshot({ path: `artifacts/stellar-3d-${theme}.png` });
+    assert.deepEqual(errors, [], "3D shaders compile and render without errors in both themes");
+    await context.close();
+  }
+  console.log("PASS: mixed understood/locked 3D stars render in both themes without shader or browser errors.");
 } finally {
   await browser.close();
 }

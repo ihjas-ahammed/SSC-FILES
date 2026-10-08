@@ -8,24 +8,31 @@ export default function MapLegend({ selected }) {
     encoding = c && starEncoding(c);
   return (
     <details className="map-legend">
-      <summary>Size = learning depth · Glow = exam use · Color = topic</summary>
+      <summary>
+        Size = learning depth · Glow = understood · Color = topic
+      </summary>
       <p>
         Difficulty is estimated from prerequisite depth. Deeper concepts have
         larger stars. This is a study guide, not a measured difficulty rating.
       </p>
       <p>
-        Brighter halos mean the concept supports more of the {questions.length}{" "}
-        exam questions. Colors stay with their topic. An extra green halo marks
-        a passed self-check; a connection glows green when both concepts are
-        known. A ring marks selection. Reading alone is tracked separately.
+        Only understood stars glow. Their brightness reflects how many of the{" "}
+        {questions.length} exam questions they support. Grey stars with unmet
+        prerequisites are disabled in 2D. In 3D, dim stars only reflect nearby
+        understood stars. A ring marks the selected concept. Reading alone does
+        not light a star.
       </p>
       <p>
         Paths into the selected concept are blue; paths to concepts that depend
-        on it are soft red. Completed connections stay green.
+        on it are soft red. Dotted connections are grey. Only the selected
+        star's connections are shown. In 2D, solid lines reach direct neighbours
+        and dotted lines reach concepts two connections away. In 3D, dotted
+        lines connect different topic constellations.
       </p>
       <p>
-        The most depended-on foundation constellation stays central. Topics
-        orbit slowly around it; motion pauses while you focus on a concept.
+        The 2D map centres the selected star. In 3D, the most depended-on
+        foundation constellation stays central. Topics orbit slowly around it;
+        motion pauses while you focus on a concept.
       </p>
       {c && (
         <div className="selected-star-metrics">

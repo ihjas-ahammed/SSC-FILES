@@ -1,18 +1,14 @@
 import * as T from "three";
 import { createOrbitalMotion } from "./orbits.js";
-import {
-  lightMap,
-  mapColor,
-  completedColor,
-  pathColor,
-  pathDirection,
-} from "./theme.js";
+import { lightMap, mapColor, pathColor, pathDirection } from "./theme.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { buildScene } from "./scene";
 import { createFlights } from "./flight";
 import { projectPath } from "./projectPath";
 import { createPathFlow } from "./flow";
 import { isPathComplete } from "../pathNavigation";
+import { starState } from "../starState.js";
+import { updateStarlight } from "./starlight.js";
 import { createHover } from "./hover";
 import { trackMapGestures } from "./gestures";
 
@@ -57,7 +53,6 @@ export function createStellarEngine(
     lastDraw = 0,
     lastOrbit = 0,
     interacting = false,
-    followedPath = null,
     focused = null;
   const orbitalMotion = createOrbitalMotion(layout);
   let lastState = { selected: null, statuses: {}, read: [] };
@@ -97,6 +92,7 @@ export function createStellarEngine(
     renderer.setSize(width, height);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    if (focused) flights.travel(layout.positions[focused], focusDistance(focused));
     dirty = 6;
   });
   resize.observe(host);
@@ -133,7 +129,7 @@ export function createStellarEngine(
     layout.blocks.forEach((b) =>
       envelopes.get(b.id).position.set(b.center.x, b.center.y, b.center.z),
     );
-    for (const { a, b, edge, arrow, completionGlow } of edges) {
+    for (const { a, b, edge, arrow } of edges) {
       const pa = layout.positions[a],
         pb = layout.positions[b];
       const from = new T.Vector3(pa.x, pa.y, pa.z),
@@ -143,17 +139,16 @@ export function createStellarEngine(
       buffer.setXYZ(1, pb.x, pb.y, pb.z);
       buffer.needsUpdate = true;
       edge.geometry.computeBoundingSphere();
+      edge.computeLineDistances();
       arrow.position.copy(from).lerp(to, 0.68);
       arrow.quaternion.setFromUnitVectors(
         new T.Vector3(0, 1, 0),
         to.clone().sub(from).normalize(),
       );
-      completionGlow.position.copy(from).lerp(to, 0.5);
-      completionGlow.quaternion.copy(arrow.quaternion);
-      const oldLength = completionGlow.geometry.parameters.height;
-      completionGlow.scale.y = from.distanceTo(to) / oldLength;
     }
+    updateStarlight(meshes);
   }
+
   function applyTheme() {
     const light = lightMap();
     scene.background.set(light ? 0xeff4fa : 0x030710);
@@ -167,16 +162,6 @@ export function createStellarEngine(
     );
     meshes.forEach((m) => {
       m.color = mapColor(m.encoding.color);
-      m.completionGlow.material.color.set(completedColor());
-      m.completionGlow.material.blending = light
-        ? T.NormalBlending
-        : T.AdditiveBlending;
-    });
-    edges.forEach((e) => {
-      e.completionGlow.material.color.set(completedColor());
-      e.completionGlow.material.blending = light
-        ? T.NormalBlending
-        : T.AdditiveBlending;
     });
     update(lastState);
   }
@@ -286,7 +271,11 @@ export function createStellarEngine(
           ay: pa.y,
           bx: pb.x,
           by: pb.y,
-          visible: !!clipped && Math.hypot(pa.x - pb.x, pa.y - pb.y) > 25,
+          visible:
+            edge.visible &&
+            !!clipped &&
+            Math.hypot(pa.x - pb.x, pa.y - pb.y) > 25,
+          dashed: edge.material.gapSize > 0,
         };
       }),
       distance,
@@ -327,7 +316,6 @@ export function createStellarEngine(
     if (!edge) return false;
     const pa = layout.positions[a],
       pb = layout.positions[b];
-    followedPath = { a: edge.a, b: edge.b };
     focused = b;
     update({ ...lastState, selected: b });
     edges.forEach((e) => {
@@ -394,50 +382,40 @@ export function createStellarEngine(
     hover.clear();
     selected = state.selected;
     meshes.forEach((m, name) => {
-      const active = name === selected,
-        known = state.statuses[name] === "known",
-        read = state.read.includes(name);
-      m.star.material.color.set(m.color);
-      m.star.material.emissive.set(m.color);
-      m.star.material.emissiveIntensity = m.encoding.emissive;
+      const active = name === selected;
+      const { understood, locked } = starState(
+        nodes.find((n) => n.name === name),
+        state.statuses,
+      );
+      m.understood = understood;
+      m.locked = locked;
+      m.star.material.uniforms.baseColor.value.set(
+        understood ? m.color : 0x8b929e,
+      );
+      m.star.material.uniforms.emission.value = understood
+        ? 0.7 + m.encoding.emissive
+        : 0;
       m.glow.material.color.set(m.color);
       m.glow.material.opacity = m.encoding.glowOpacity;
-      m.completionGlow.visible = known;
-      m.ring.visible = active || known || read;
-      m.ring.material.color.set(
-        active
-          ? lightMap()
-            ? 0x214768
-            : 0xffffff
-          : known
-            ? completedColor()
-            : 0x8395ae,
-      );
-      m.ring.material.opacity = active ? 1 : known ? 0.85 : 0.35;
+      m.glow.visible = understood;
+      m.ring.visible = active;
+      m.ring.material.color.set(lightMap() ? 0x214768 : 0xffffff);
+      m.ring.material.opacity = 1;
     });
+    updateStarlight(meshes);
     edges.forEach((entry) => {
-      const { a, b, edge, arrow, route, same } = entry;
-      const complete = (entry.complete = isPathComplete(entry, state.statuses));
-      const active =
-        a === selected ||
-        b === selected ||
-        (followedPath?.a === a && followedPath?.b === b);
+      const { a, b, edge, arrow, same, route } = entry;
+      entry.complete = isPathComplete(entry, state.statuses);
+      const active = a === selected || b === selected;
       entry.active = active;
-      entry.completionGlow.visible = complete;
+      entry.dashed = !same && !route;
       entry.color = pathColor(entry, selected);
       edge.material.color.set(entry.color);
       arrow.material.color.set(entry.color);
-      arrow.visible = active || route;
-      arrow.material.opacity = active ? 0.9 : route ? 0.7 : same ? 0.35 : 0.12;
-      edge.material.opacity = complete
-        ? 0.62
-        : active
-          ? 0.68
-          : route
-            ? 0.38
-            : same
-              ? 0.2
-              : 0.045;
+      edge.visible = active;
+      arrow.visible = active;
+      arrow.material.opacity = 0.8;
+      edge.material.opacity = 0.65;
     });
     wake();
   }

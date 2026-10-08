@@ -1,5 +1,6 @@
 import * as T from "three";
-import { starEncoding } from "./encoding";
+import { createStarMaterial } from "./starlight.js";
+import { starEncoding } from "./encoding.js";
 
 function clusterEnvelope(block) {
   const group = new T.Group();
@@ -42,10 +43,6 @@ function glowTexture() {
 export function buildScene(layout, nodes, itinerary) {
   const scene = new T.Scene();
   scene.background = new T.Color(0x030710);
-  scene.add(new T.AmbientLight(0xc6d5ff, 1.5));
-  const key = new T.DirectionalLight(0xffffff, 3);
-  key.position.set(500, 900, 1600);
-  scene.add(key);
   const envelopes = new Map();
   layout.blocks.forEach((b) => {
     const envelope = clusterEnvelope(b);
@@ -82,15 +79,7 @@ export function buildScene(layout, nodes, itinerary) {
     group.position.set(p.x, p.y, p.z);
     const encoding = starEncoding(n),
       color = encoding.color;
-    const star = new T.Mesh(
-      geometry,
-      new T.MeshPhongMaterial({
-        color,
-        emissive: color,
-        emissiveIntensity: encoding.emissive,
-        shininess: 90,
-      }),
-    );
+    const star = new T.Mesh(geometry, createStarMaterial(color));
     const glow = new T.Sprite(
       new T.SpriteMaterial({
         map: texture,
@@ -112,30 +101,13 @@ export function buildScene(layout, nodes, itinerary) {
       }),
     );
     ring.visible = false;
-    const completionGlow = new T.Sprite(
-      new T.SpriteMaterial({
-        map: texture,
-        color: 0x59f9bd,
-        transparent: true,
-        opacity: 0.4,
-        depthWrite: false,
-        blending: T.AdditiveBlending,
-      }),
-    );
-    completionGlow.scale.set(
-      encoding.glowSize * 1.3,
-      encoding.glowSize * 1.3,
-      1,
-    );
-    completionGlow.visible = false;
-    group.add(star, glow, ring, completionGlow);
+    group.add(star, glow, ring);
     scene.add(group);
     meshes.set(n.name, {
       group,
       star,
       glow,
       ring,
-      completionGlow,
       color,
       encoding,
     });
@@ -149,6 +121,7 @@ export function buildScene(layout, nodes, itinerary) {
     const existing = edges.find((e) => e.a === a && e.b === b);
     if (existing) {
       existing.route ||= route;
+      if (route) existing.edge.material.gapSize = 0;
       return;
     }
     const same = byName[a]?.group === byName[b]?.group;
@@ -157,13 +130,16 @@ export function buildScene(layout, nodes, itinerary) {
         new T.Vector3(pa.x, pa.y, pa.z),
         new T.Vector3(pb.x, pb.y, pb.z),
       ]),
-      new T.LineBasicMaterial({
+      new T.LineDashedMaterial({
+        dashSize: 7,
+        gapSize: same || route ? 0 : 12,
         color: route ? 0x6fffea : colors[byName[b]?.group],
         transparent: true,
         opacity: route ? 0.6 : same ? 0.2 : 0.045,
         depthWrite: false,
       }),
     );
+    edge.computeLineDistances();
     scene.add(edge);
     const direction = new T.Vector3(
       pb.x - pa.x,
@@ -186,30 +162,7 @@ export function buildScene(layout, nodes, itinerary) {
       ),
     );
     scene.add(arrow);
-    const length = new T.Vector3(
-      pb.x - pa.x,
-      pb.y - pa.y,
-      pb.z - pa.z,
-    ).length();
-    const completionGlow = new T.Mesh(
-      new T.CylinderGeometry(2.5, 2.5, length, 6),
-      new T.MeshBasicMaterial({
-        color: 0x59f9bd,
-        transparent: true,
-        opacity: 0.12,
-        depthWrite: false,
-        blending: T.AdditiveBlending,
-      }),
-    );
-    completionGlow.position.set(
-      (pa.x + pb.x) / 2,
-      (pa.y + pb.y) / 2,
-      (pa.z + pb.z) / 2,
-    );
-    completionGlow.quaternion.copy(arrow.quaternion);
-    completionGlow.visible = false;
-    scene.add(completionGlow);
-    edges.push({ a, b, edge, arrow, completionGlow, route, same });
+    edges.push({ a, b, edge, arrow, route, same });
   }
   nodes.forEach((n) => n.prerequisites.forEach((p) => connect(p, n.name)));
   if (itinerary)

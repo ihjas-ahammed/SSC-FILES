@@ -72,8 +72,9 @@ export default function AtlasPage() {
   }
   function visitTopic(id) {
     if (mapDimension === "2d") {
-      const members = nodes.filter(n => n.group === id);
-      const first = members.find(n => !starState(n, statuses).locked) || members[0];
+      const members = nodes.filter((n) => n.group === id);
+      const first =
+        members.find((n) => !starState(n, statuses).locked) || members[0];
       if (first) travel(first.name);
       return;
     }

@@ -33,6 +33,7 @@ export default function GraphPaths({
             data-complete={p.complete}
             data-direction={p.direction}
             data-color={p.color}
+            data-dashed={p.dashed}
             d={`M ${p.ax} ${p.ay} L ${p.bx} ${p.by}`}
             role="button"
             tabIndex={p.route || p.a === selected || p.b === selected ? 0 : -1}
