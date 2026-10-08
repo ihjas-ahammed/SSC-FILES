@@ -2,6 +2,7 @@ import BackButton from "../ui/BackButton";
 import { X, Maximize2 } from "lucide-react";
 import { useAtlas } from "../../app/AtlasContext";
 import usePanelResize from "../../hooks/usePanelResize";
+import useMobileLayout from "../../hooks/useMobileLayout";
 import InlineConcept from "./InlineConcept";
 import PathExplanation from "./PathExplanation";
 import MapLegend from "./MapLegend";
@@ -15,13 +16,14 @@ export default function MapNotePanel({
 }) {
   const { openReader, readerTab } = useAtlas();
   const { width, separator } = usePanelResize();
+  const mobile = useMobileLayout();
   return (
     <>
       <aside
         className="map-note-panel"
         aria-label="Concept side panel"
         ref={panelRef}
-        style={width ? { flexBasis: width } : undefined}
+        style={!mobile && width ? { flexBasis: width } : undefined}
       >
         <header className="map-note-heading">
           <BackButton label="Back to map" onClick={onClose} />

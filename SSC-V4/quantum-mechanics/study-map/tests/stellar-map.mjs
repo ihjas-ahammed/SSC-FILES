@@ -3,16 +3,18 @@ import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import { concepts, meta } from "../../../flow-library/study-map/src/lib/course.js";
 
+const base = process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/";
+const offline = base.startsWith("file:");
 const browser = await chromium.launch({
   executablePath: process.env.STUDY_MAP_CHROME,
   args: ["--enable-unsafe-swiftshader"],
 });
 try {
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const page = await browser.newPage({ offline, viewport: { width: 1440, height: 1000 } });
   const errors = [];
   page.on("pageerror", e => errors.push(e.message));
   page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
-  await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
+  await page.goto(base);
   await page.locator(".topbar nav").getByRole("button", { name: "Knowledge map", exact: true }).click();
   await page.getByRole("button", { name: "Selected concept details", exact: true }).click();
   const panel = page.getByRole("complementary", { name: "Concept side panel" });
@@ -29,11 +31,12 @@ try {
   await page.close();
   for (const width of [320, 390, 1440]) {
     const mobile = width < 500;
-    const context = await browser.newContext({ viewport: { width, height: 900 }, isMobile: mobile, hasTouch: mobile });
+    const context = await browser.newContext({ offline, viewport: { width, height: 900 }, isMobile: mobile, hasTouch: mobile });
+    await context.addInitScript(({ storageKey }) => localStorage.setItem(storageKey, JSON.stringify({ preferences: { notePanelWidth: 450 } })), { storageKey: meta.storageKey });
     const page = await context.newPage();
     page.on("pageerror", e => errors.push(e.message));
     page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
-    await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
+    await page.goto(base);
     await page.locator(mobile ? ".mobile-nav" : ".topbar nav").getByRole("button", { name: mobile ? "Map" : "Knowledge map", exact: true }).click();
     if (!mobile) await page.getByRole("button", { name: "2D map screen", exact: true }).click();
     const map = page.locator('.stellar-map[data-renderer="svg-2d"]');
@@ -67,13 +70,13 @@ try {
   }
   console.log("PASS: mobile-default 2D, disabled locks, single selection, grey dotted links, full-screen map, adjacent questions, dimension switching and no overflow at 320/390/1440px.");
   for (const theme of ["light", "dark"]) {
-    const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    const context = await browser.newContext({ offline, viewport: { width: 1280, height: 900 } });
     const statuses = Object.fromEntries(concepts.filter((_, i) => i % 3 === 0).map(n => [n.name, "known"]));
     await context.addInitScript(({ theme, statuses, storageKey }) => localStorage.setItem(storageKey, JSON.stringify({ statuses, preferences: { theme, animations: false } })), { theme, statuses, storageKey: meta.storageKey });
     const page = await context.newPage();
     page.on("pageerror", e => errors.push(e.message));
     page.on("console", msg => { if (msg.type() === "error") errors.push(msg.text()); });
-    await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
+    await page.goto(base);
     await page.locator(".topbar nav").getByRole("button", { name: "Knowledge map", exact: true }).click();
     const map = page.locator('.stellar-map[data-renderer="webgl-3d"]');
     await map.locator("canvas").waitFor();

@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { normalizeProgress } from "../../../flow-library/study-map/src/lib/progressState.js";
 import { bookmarkMarkdown } from "../../../flow-library/study-map/src/lib/bookmarks.js";
+import { meta } from "../../../flow-library/study-map/src/lib/course.js";
 import { button, state } from "./study-helpers.mjs";
 const sample = normalizeProgress({
   bookmarks: [
@@ -54,10 +55,10 @@ try {
       isMobile: width < 500,
       reducedMotion: "reduce",
     });
-    await ctx.addInitScript(() => {
-      if (!localStorage.getItem("quantum-atlas-v1"))
+    await ctx.addInitScript(({ storageKey }) => {
+      if (!localStorage.getItem(storageKey))
         localStorage.setItem(
-          "quantum-atlas-v1",
+          storageKey,
           JSON.stringify({
             statuses: { Scalar: "known" },
             read: ["Scalar"],
@@ -72,7 +73,7 @@ try {
             },
           }),
         );
-    });
+    }, { storageKey: meta.storageKey });
     const p = await ctx.newPage(),
       errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
@@ -108,9 +109,10 @@ try {
     assert.equal(await scalar.getAttribute("aria-checked"), "true");
     await scalar.click();
     await p.waitForFunction(
-      () =>
-        JSON.parse(localStorage.getItem("quantum-atlas-v1")).statuses.Scalar ===
+      (key) =>
+        JSON.parse(localStorage.getItem(key)).statuses.Scalar ===
         "unknown",
+      meta.storageKey,
     );
     assert.equal(await p.locator(".study-prerequisite-controls").count(), 0);
     await scalar.click();
@@ -268,8 +270,9 @@ try {
     await button(p, "Confirm reset").click();
     await p.locator(".bank-card").first().waitFor();
     await p.waitForFunction(
-      () =>
-        !JSON.parse(localStorage.getItem("quantum-atlas-v1")).bookmarks.length,
+      (key) =>
+        !JSON.parse(localStorage.getItem(key)).bookmarks.length,
+      meta.storageKey,
     );
     assert.deepEqual((await state(p)).statuses, {});
     assert.equal(

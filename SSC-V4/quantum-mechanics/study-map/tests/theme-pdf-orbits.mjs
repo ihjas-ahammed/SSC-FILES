@@ -6,6 +6,7 @@ import {
   concepts,
   byName,
   questions,
+  meta,
 } from "../../../flow-library/study-map/src/graph.js";
 import { unlock } from "./study-helpers.mjs";
 import { constellationLayout } from "../../../flow-library/study-map/src/graph/three/layout.js";
@@ -55,9 +56,9 @@ try {
       isMobile: width < 500,
     });
     await context.addInitScript(
-      ({ names }) =>
+      ({ names, storageKey }) =>
         localStorage.setItem(
-          "quantum-atlas-v1",
+          storageKey,
           JSON.stringify({
             preferences: { theme: "light", animations: true },
             bookmarks: names.map((name, index) => ({
@@ -73,7 +74,7 @@ try {
             })),
           }),
         ),
-      { names },
+      { names, storageKey: meta.storageKey },
     );
     const page = await context.newPage();
     page.setDefaultTimeout(30000);

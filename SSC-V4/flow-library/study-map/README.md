@@ -44,3 +44,13 @@ Run `npm test` here to test the subject seam with an unrelated example course. E
 Settings stores the light/dark theme independently of progress. Component colors use role-based light palette tokens with existing dark fallbacks, including the WebGL scene and node labels. Math icons fit measured KaTeX width and height inside padded bounds.
 
 Constellations are ordered by how many concepts depend on their prerequisites. The most depended-on topic stays at the center; inner and outer rings orbit over 30 and 45 minutes. Topic volumes stay separated. Orbits stop during camera flights, focused reading, prerequisite routes, reduced motion and disabled animations.
+
+## 2D and 3D stellar maps
+
+The map opens in 2D on phones and 3D on desktop; the toolbar switches between them. The 2D night sky fills the available mobile viewport and uses native scrolling, zoom buttons and one selected star. The selected concept is the hub: direct neighbours have solid blue (prerequisite) or soft red (dependent) links, and concepts two connections away have grey dotted links. Other connections stay hidden. Search and topic controls remain available.
+
+Understood concepts (`known`) glow. Concepts with unmet prerequisites are grey disabled placeholders in 2D; available concepts remain selectable so a fresh learner can begin. Search still opens any note. In 3D, non-understood spheres have zero emission and reflect only the four nearest understood stars within a local radius, with distance falloff. There is no ambient/key light or green completion halo. Only selected-star links and particles remain visible; cross-topic links are dotted grey. Reading routes keep their existing navigable 3D sequence.
+
+Questions and notes share one panel beside the map on desktop and below it on mobile, without covering the graph. The panel scrolls independently. Objective checks and warm-ups offer at most three choices and always retain the correct answer. The map does not add module-specific IC/My/Q controls or pre-placing behavior.
+
+`npm test` covers the subject seam, answer selection, 2D geometry/locks and local starlight. The Quantum Module 3 app supplies real browser tests (`test:stellar`, `test:selected-map`, `test:map-panel`, `test:offline`).

@@ -15,6 +15,7 @@ try {
   });
   page.setDefaultTimeout(12000);
   page.on("pageerror", (e) => errors.push(e.message));
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(
     (process.env.STUDY_MAP_URL || "http://localhost:5175/") + "?isolated=1",
   );
@@ -57,6 +58,8 @@ try {
     await panel.locator(".concept-note h2").innerText(),
     "Hermitian Adjoint",
   );
+  if (await panel.getByRole("button", { name: "Skip the warm-up", exact: true }).count())
+    await panel.getByRole("button", { name: "Skip the warm-up", exact: true }).click();
   assert((await panel.innerText()).includes("Formal definition"));
   assert.equal(await page.locator('[aria-label="Close dialog"]').count(), 0);
   assert(
@@ -80,6 +83,7 @@ try {
     .getByRole("button", { name: "Question bank", exact: true })
     .click();
   async function routeHandoff(p, mobile) {
+    await p.emulateMedia({ reducedMotion: "no-preference" });
     await button(p, "Study Q-A-1").click();
     await button(p, "Skip · find my gaps").click();
     await button(p, "Build my shortest route").click();

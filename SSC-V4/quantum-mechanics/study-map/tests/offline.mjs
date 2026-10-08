@@ -8,10 +8,11 @@ import {
   questions,
   concepts,
 } from "../../../flow-library/study-map/src/graph.js";
+import { sections } from "../../../flow-library/study-map/src/lib/course.js";
 import { button, state, unlock } from "./study-helpers.mjs";
 const html = fs.readFileSync("Quantum-Atlas-offline.html", "utf8");
 assert(!/<(?:script|link)[^>]+(?:src|href)="(?:\.\/|\/assets\/)/.test(html));
-const b = await chromium.launch({ args: ["--enable-unsafe-swiftshader"] });
+const b = await chromium.launch({ executablePath: process.env.STUDY_MAP_CHROME, args: ["--enable-unsafe-swiftshader"] });
 const ctx = await b.newContext({
     offline: true,
     viewport: { width: 1280, height: 900 },
@@ -25,20 +26,20 @@ p.on("request", (r) => {
 });
 await p.goto(pathToFileURL(resolve("Quantum-Atlas-offline.html")).href);
 await p.locator(".bank-card").first().waitFor();
-assert.equal(await p.locator(".bank-card").count(), 15);
-for (const s of ["A", "B", "C"]) {
+assert.equal(await p.locator(".bank-card").count(), questions.filter(q => q.section === "A").length);
+for (const s of sections) {
   await p
     .locator(".bank-tabs")
-    .getByRole("button", { name: new RegExp(`Section ${s}`) })
+    .getByRole("button", { name: new RegExp(s.label) })
     .click();
   assert.equal(
     await p.locator(".bank-card").count(),
-    questions.filter((q) => q.section === s).length,
+    questions.filter((q) => q.section === s.id).length,
   );
 }
 await p
   .locator(".bank-tabs")
-  .getByRole("button", { name: /Section A/ })
+  .getByRole("button", { name: new RegExp(sections[0].label) })
   .click();
 await button(p, "Study Q-A-1").click();
 await button(p, "View original").click();
@@ -121,5 +122,5 @@ assert.deepEqual(network, []);
 assert.deepEqual(errors, []);
 await b.close();
 console.log(
-  "PASS: single file:// with internet disabled; embedded PDF, all 32 questions, 155 nodes, actual WebGL 3D, wrong-check gating, full solution, saved written recall, vault ZIP and zero HTTP requests.",
+  "PASS: single file:// with internet disabled; embedded PDF, current course questions/nodes, actual WebGL 3D, wrong-check gating, full solution, saved written recall, vault ZIP and zero HTTP requests.",
 );

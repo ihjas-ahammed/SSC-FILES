@@ -200,6 +200,7 @@ export default function AtlasPage() {
             <ArrowLeft size={15} /> Return to {mapDimension.toUpperCase()} map
           </button>
           <MapControlsScreen
+            dimension={mapDimension}
             travel={travel}
             visitTopic={visitTopic}
             onOverview={() => {
