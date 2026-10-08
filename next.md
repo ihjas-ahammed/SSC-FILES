@@ -6,7 +6,7 @@ The user's latest instruction to commit each successful step overrides the brief
 ## Progress
 
 - [x] 1. Read both app READMEs and sketches; install pinned dependencies; establish passing baseline.
-- [ ] 2. Keep questions in one adjacent panel and limit objective choices to 2–3.
+- [x] 2. Keep questions in one adjacent panel and limit objective choices to 2–3.
 - [ ] 3. Add a 2D stellar map, default on mobile, with single selection, grey locked placeholders, selected-star links and a full-screen mobile layout.
 - [ ] 4. Remove green completion effects; give locked 3D stars no emission and local reflected light; keep link styling consistent.
 - [ ] 5. Run relevant browser/offline checks, refresh build and documentation, record final results.
@@ -27,3 +27,5 @@ Step 1: `npm ci --no-audit --no-fund` in both apps completed. Shared `npm test` 
 ## Resume
 
 Start at the first unchecked step. Inspect `git status` and recent commits before editing. Update this file in every step commit with tests, decisions and remaining work. Never label a step errorless without reporting the actual checks performed.
+
+Step 2: shared and Quantum `npm test` and Quantum build pass. New `npm run test:stellar` verifies the adjacent question panel and 2–3 choices in real Chrome. Existing `test:map-panel` reaches the panel but fails because it expects the formal note before the current warm-up; this is an outdated pre-existing test assumption, not a panel regression. Use `STUDY_MAP_TMPDIR=/tmp/ssc-map STUDY_MAP_CHROME=/usr/bin/google-chrome` for browser checks. Production build served at http://127.0.0.1:5180/. The dev server has pre-existing dependency scanning warnings, so verification uses the built app.
