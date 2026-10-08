@@ -26,7 +26,9 @@ export default function MapNotePanel({
         <header className="map-note-heading">
           <BackButton label="Back to map" onClick={onClose} />
           <span className="eyebrow">
-            {readerTab === "check" ? "SELECTED STAR · QUESTION" : "SELECTED STAR · CONCEPT NOTE"}
+            {readerTab === "check"
+              ? "SELECTED STAR · QUESTION"
+              : "SELECTED STAR · CONCEPT NOTE"}
           </span>
           <div className="map-note-window-actions">
             <button

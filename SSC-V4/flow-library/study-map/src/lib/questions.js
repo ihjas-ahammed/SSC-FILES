@@ -15,5 +15,5 @@ export function optionsFor(item, salt = 0) {
     options.find((option) => option.correct),
     ...options.filter((option) => !option.correct).slice(0, 2),
   ];
-  return choices.map((_, i) => choices[(i + hash % 3) % 3]);
+  return choices.map((_, i) => choices[(i + (hash % 3)) % 3]);
 }

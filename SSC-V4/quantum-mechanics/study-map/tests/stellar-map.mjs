@@ -24,6 +24,45 @@ try {
   assert.match(await panel.locator(".map-note-heading").innerText(), /QUESTION/);
   assert.deepEqual(errors, []);
   console.log("PASS: a single adjacent question panel, hidden answers, 2–3 revealed choices and no browser errors.");
+  await page.close();
+  for (const width of [320, 390, 1440]) {
+    const mobile = width < 500;
+    const context = await browser.newContext({ viewport: { width, height: 900 }, isMobile: mobile, hasTouch: mobile });
+    const page = await context.newPage();
+    page.on("pageerror", e => errors.push(e.message));
+    await page.goto(process.env.STUDY_MAP_URL || "http://127.0.0.1:5180/");
+    await page.locator(mobile ? ".mobile-nav" : ".topbar nav").getByRole("button", { name: mobile ? "Map" : "Knowledge map", exact: true }).click();
+    if (!mobile) await page.getByRole("button", { name: "2D map screen", exact: true }).click();
+    const map = page.locator('.stellar-map[data-renderer="svg-2d"]');
+    await map.waitFor();
+    assert.equal(await map.locator("canvas").count(), 0);
+    assert.equal(await map.locator('.sky-star[aria-pressed="true"]').count(), 1);
+    const locked = map.locator('.sky-star[data-locked="true"]').first();
+    assert(await locked.isDisabled());
+    const selected = await map.getAttribute("data-focused");
+    const paths = await map.locator("[data-path]").evaluateAll(els => els.map(e => ({ from: e.dataset.from, dashed: e.dataset.dashed, color: getComputedStyle(e).stroke })));
+    assert(paths.length > 0);
+    assert(paths.every(p => p.from === selected));
+    assert(paths.some(p => p.dashed === "true" && p.color === "rgb(130, 137, 149)"));
+    if (mobile) assert((await map.boundingBox()).height > 600, "Map fills the available phone viewport");
+    await map.locator('.sky-star[aria-pressed="true"]').click();
+    const panel = page.locator(".map-note-panel");
+    await panel.getByRole("button", { name: "Self-check", exact: true }).click();
+    await panel.getByRole("button", { name: "Reveal options" }).click();
+    assert([2, 3].includes(await panel.locator(".option").count()));
+    const pb = await panel.boundingBox(), mb = await map.boundingBox();
+    assert(mobile ? mb.y + mb.height <= pb.y + 1 : pb.x + pb.width <= mb.x + 1, "Questions never overlap the map");
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
+    await page.screenshot({ path: `artifacts/stellar-2d-${width}.png` });
+    await page.getByRole("button", { name: "Close concept side panel", exact: true }).click();
+    await page.getByRole("button", { name: "3D map screen", exact: true }).click();
+    await page.locator('.stellar-map[data-renderer="webgl-3d"] canvas').waitFor();
+    await page.getByRole("button", { name: "2D map screen", exact: true }).click();
+    assert.equal(await map.getAttribute("data-focused"), selected);
+    assert.deepEqual(errors, []);
+    await context.close();
+  }
+  console.log("PASS: mobile-default 2D, disabled locks, single selection, grey dotted links, full-screen map, adjacent questions, dimension switching and no overflow at 320/390/1440px.");
 } finally {
   await browser.close();
 }
