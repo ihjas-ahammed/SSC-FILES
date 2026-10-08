@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Minus, Plus, LocateFixed } from "lucide-react";
-import { skyLayout } from "../../graph/skyLayout.js";
+import { constellationLayout } from "../../graph/three/layout.js";
+import { createSkyEngine } from "../../graph/canvas/sky.js";
 import { starState } from "../../graph/starState.js";
-import { starEncoding } from "../../graph/three/encoding.js";
-import { skillGlyph } from "../../graph/three/glyph.js";
-import MathIcon from "../ui/MathIcon";
 
 export default function SkyMap({
   nodes,
@@ -12,144 +10,121 @@ export default function SkyMap({
   statuses,
   onSelect,
   navigation,
+  onPath,
 }) {
-  const layout = useMemo(() => skyLayout(nodes, selected), [nodes, selected]);
-  const host = useRef(null);
-  const [zoom, setZoom] = useState(1);
-  const [centerStamp, setCenterStamp] = useState(0);
+  const layout = useMemo(() => constellationLayout(nodes), [nodes]);
+  const canvas = useRef(null),
+    engine = useRef(null);
+  const latest = useRef({ selected, statuses, onSelect, onPath });
+  latest.current = { selected, statuses, onSelect, onPath };
+  function explainPath(path) {
+    latest.current.onPath?.(
+      path.direction === "incoming" && !path.distant
+        ? { ...path, a: path.b, b: path.a }
+        : path,
+    );
+  }
+  const [view, setView] = useState({ nodes: {}, links: [] });
   useEffect(() => {
-    const element = host.current;
-    const center = () =>
-      element.scrollTo({
-        left: layout.center * zoom - element.clientWidth / 2,
-        top: layout.center * zoom - element.clientHeight / 2,
-        behavior: "instant",
-      });
-    center();
-    const observer = new ResizeObserver(center);
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [layout, zoom, centerStamp]);
+    engine.current = createSkyEngine(
+      canvas.current,
+      nodes,
+      layout,
+      (name) => latest.current.onSelect(name),
+      setView,
+      explainPath,
+    );
+    engine.current.update(latest.current);
+    engine.current.focus(latest.current.selected);
+    return () => {
+      engine.current.dispose();
+      engine.current = null;
+    };
+  }, [layout]);
   useEffect(() => {
-    if (navigation?.type === "overview") {
-      const el = host.current;
-      setZoom(
-        Math.max(0.15, Math.min(el.clientWidth, el.clientHeight) / layout.size),
-      );
-    } else if (navigation) {
-      setZoom(1);
-      setCenterStamp((s) => s + 1);
-    }
-  }, [navigation]);
+    engine.current?.update({ selected, statuses });
+    engine.current?.focus(selected);
+  }, [selected]);
+  useEffect(() => engine.current?.update({ selected, statuses }), [statuses]);
+  useEffect(() => {
+    if (navigation?.type === "overview") engine.current?.fit();
+    if (navigation?.type === "block") engine.current?.block(navigation.value);
+    if (navigation?.type === "star") engine.current?.focus(navigation.value);
+  }, [navigation, layout]);
   return (
     <div
       className="graph-canvas stellar-map sky-map"
-      data-renderer="svg-2d"
-      data-focused={layout.hub}
+      data-renderer="canvas-2d"
+      data-focused={selected}
       data-flying="false"
+      data-scale={view.scale}
       role="group"
       aria-label="Interactive prerequisite graph"
     >
-      <div
-        className="sky-viewport"
-        ref={host}
+      <canvas
+        ref={canvas}
+        className="sky-canvas"
         tabIndex={0}
-        aria-label="2D night sky; scroll to explore"
-      >
-        <div
-          className="sky-field"
-          style={{ width: layout.size * zoom, height: layout.size * zoom }}
-        >
-          <svg
-            className="sky-links"
-            width="100%"
-            height="100%"
-            aria-label="Selected star connections"
+        aria-label="2D constellation map; drag to pan, pinch or scroll to zoom, arrow keys to select stars"
+        data-view={JSON.stringify(view)}
+      />
+      <div className="sky-accessible" aria-label="Accessible map navigation">
+        {nodes.map((node) => {
+          const state = starState(node, statuses);
+          return (
+            <button
+              key={node.id}
+              data-node={node.id}
+              data-name={node.name}
+              data-locked={state.locked}
+              data-understood={state.understood}
+              disabled={state.locked}
+              aria-pressed={selected === node.name}
+              onFocus={() => engine.current?.hover(node.name)}
+              onBlur={() => engine.current?.hover(null)}
+              onClick={() => onSelect(node.name)}
+            >
+              {state.locked ? "Locked" : "Select"} {node.name}
+            </button>
+          );
+        })}
+        {view.links.map((link) => (
+          <button
+            key={link.b}
+            data-path="true"
+            data-from={link.a}
+            data-to={link.b}
+            data-distant={link.distant}
+            data-dashed="false"
+            data-color={link.color}
+            disabled={view.nodes[link.b]?.locked}
+            onClick={() => {
+              onSelect(link.b);
+              explainPath(link);
+            }}
           >
-            {layout.links.map((link) => {
-              const a = layout.positions[link.a],
-                b = layout.positions[link.b];
-              return (
-                <line
-                  key={link.b}
-                  data-path="true"
-                  data-from={link.a}
-                  data-to={link.b}
-                  data-dashed={link.dashed}
-                  x1={a.x * zoom}
-                  y1={a.y * zoom}
-                  x2={b.x * zoom}
-                  y2={b.y * zoom}
-                  className={
-                    link.dashed ? "distant-link" : `near-link ${link.direction}`
-                  }
-                >
-                  <title>
-                    {link.dashed
-                      ? "Two connections away"
-                      : "Direct prerequisite connection"}
-                    : {link.b}
-                  </title>
-                </line>
-              );
-            })}
-          </svg>
-          {nodes.map((n) => {
-            const p = layout.positions[n.name],
-              state = starState(n, statuses),
-              active = n.name === layout.hub;
-            return (
-              <button
-                key={n.id}
-                className={`sky-star ${active ? "selected" : ""}`}
-                data-name={n.name}
-                data-node={n.id}
-                data-locked={state.locked}
-                data-understood={state.understood}
-                disabled={state.locked}
-                aria-pressed={active}
-                aria-label={`${state.locked ? "Locked" : "Select"} ${n.name}`}
-                title={`${n.name}${state.locked ? " · Understand its prerequisites first" : ""}`}
-                style={{
-                  left: p.x * zoom,
-                  top: p.y * zoom,
-                  "--sky-color": starEncoding(n).color,
-                }}
-                onClick={() => onSelect(n.name)}
-              >
-                <span className="sky-star-core">
-                  {active && <MathIcon formula={skillGlyph(n)} />}
-                </span>
-                <span className="sky-star-name">{n.name}</span>
-              </button>
-            );
-          })}
-        </div>
+            Travel from {selected} to {link.b}
+            {link.distant ? "; two connections away" : "; direct connection"}
+          </button>
+        ))}
       </div>
       <div className="sky-controls" aria-label="2D map controls">
-        <button
-          aria-label="Zoom out"
-          onClick={() => setZoom((z) => Math.max(0.15, z / 1.25))}
-        >
+        <button aria-label="Zoom out" onClick={() => engine.current?.zoom(0.8)}>
           <Minus size={17} />
         </button>
         <button
           aria-label="Center selected star"
-          onClick={() => {
-            setZoom(1);
-            setCenterStamp((s) => s + 1);
-          }}
+          onClick={() => engine.current?.focus(selected)}
         >
           <LocateFixed size={17} />
         </button>
-        <button
-          aria-label="Zoom in"
-          onClick={() => setZoom((z) => Math.min(1.8, z * 1.25))}
-        >
+        <button aria-label="Zoom in" onClick={() => engine.current?.zoom(1.25)}>
           <Plus size={17} />
         </button>
       </div>
-      <p className="sky-hint">Select one star · Scroll to explore</p>
+      <p className="sky-hint">
+        Select a star · Drag to pan · Pinch or scroll to zoom
+      </p>
     </div>
   );
 }

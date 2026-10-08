@@ -92,7 +92,8 @@ export function createStellarEngine(
     renderer.setSize(width, height);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
-    if (focused) flights.travel(layout.positions[focused], focusDistance(focused));
+    if (focused)
+      flights.travel(layout.positions[focused], focusDistance(focused));
     dirty = 6;
   });
   resize.observe(host);
@@ -249,7 +250,7 @@ export function createStellarEngine(
       })),
       width,
       height,
-      paths: edges.map(({ a, b, route, complete, edge }) => {
+      paths: edges.map(({ a, b, route, complete, distant, edge }) => {
         const clipped = projectPath(
           layout.positions[a],
           layout.positions[b],
@@ -275,7 +276,8 @@ export function createStellarEngine(
             edge.visible &&
             !!clipped &&
             Math.hypot(pa.x - pb.x, pa.y - pb.y) > 25,
-          dashed: edge.material.gapSize > 0,
+          dashed: false,
+          distant,
         };
       }),
       distance,
@@ -404,18 +406,18 @@ export function createStellarEngine(
     });
     updateStarlight(meshes);
     edges.forEach((entry) => {
-      const { a, b, edge, arrow, same, route } = entry;
+      const { a, b, edge, arrow } = entry;
       entry.complete = isPathComplete(entry, state.statuses);
       const active = a === selected || b === selected;
       entry.active = active;
-      entry.dashed = !same && !route;
+      entry.dashed = false;
       entry.color = pathColor(entry, selected);
       edge.material.color.set(entry.color);
       arrow.material.color.set(entry.color);
       edge.visible = active;
-      arrow.visible = active;
       arrow.material.opacity = 0.8;
-      edge.material.opacity = 0.65;
+      edge.material.opacity = entry.distant ? 0.9 : 0.65;
+      arrow.visible = active && !entry.distant;
     });
     wake();
   }

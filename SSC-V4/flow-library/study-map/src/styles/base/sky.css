@@ -1,127 +1,41 @@
-/* A single plane with native touch scrolling and a separate question reader. */
+/* Canvas projection of the shared constellation layout. */
 .sky-map {
   color: #dce8ff;
   background: #050b19;
 }
-.sky-viewport {
-  position: absolute;
-  inset: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  touch-action: pan-x pan-y;
-  scrollbar-width: thin;
-  scrollbar-color: #344155 #050b19;
-}
-.sky-field {
-  position: relative;
-  min-width: 100%;
-  min-height: 100%;
-  background-image:
-    radial-gradient(circle, #b7c6e33b 1px, transparent 1.4px),
-    radial-gradient(circle, #b7c6e31f 1px, transparent 1.4px);
-  background-size:
-    83px 97px,
-    131px 151px;
-  background-position:
-    17px 31px,
-    57px 71px;
-}
-.sky-links {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.sky-links line {
-  stroke-width: 1.2;
-}
-.sky-links .near-link.incoming {
-  stroke: #75b8ef;
-}
-.sky-links .near-link.outgoing {
-  stroke: #e69ba8;
-}
-.sky-links .distant-link {
-  stroke: #828995;
-  stroke-dasharray: 3 7;
-  opacity: 0.7;
-}
-.sky-star {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border-radius: 50%;
-  color: #c9d4e8;
-  background: #0b1322;
-  border: 1px solid #526078;
-  touch-action: pan-x pan-y;
-}
-.sky-star-core {
-  display: grid;
-  place-items: center;
-  width: 12px;
-  height: 12px;
-  background: #8a96aa;
-  border-radius: 50%;
-}
-.sky-star[data-understood="true"] .sky-star-core {
-  background: var(--sky-color);
-  box-shadow: 0 0 14px 4px color-mix(in srgb, var(--sky-color), transparent 45%);
-}
-.sky-star[data-locked="true"] {
-  color: #9298a4;
-  border-color: #555b67;
-  background: #171c27;
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-.sky-star[data-locked="true"] .sky-star-core {
-  background: #737b88;
-  box-shadow: none;
-}
-.sky-star.selected {
-  width: 62px;
-  height: 62px;
-  border: 2px solid #dce8ff;
-  outline: 5px solid #c7d9fc15;
-}
-.sky-star.selected .sky-star-core {
-  width: 42px;
-  height: 42px;
-  background: #17263e;
-}
-.sky-star.selected .fitted-symbol {
+.sky-canvas {
+  display: block;
   width: 100%;
   height: 100%;
-  font-size: 22px;
-  --glyph-size: 22px;
-  --icon-padding: 7px;
+  touch-action: none;
+  cursor: grab;
 }
-.sky-star:focus-visible {
-  outline: 3px solid #e3ecff;
-  outline-offset: 4px;
+.sky-canvas:focus-visible {
+  outline: 2px solid #75b8ef;
+  outline-offset: -3px;
 }
-.sky-star-name {
+/* Screen-reader controls describe the canvas; they do not position map stars. */
+.sky-accessible {
   position: absolute;
-  top: calc(100% + 7px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 98px;
-  font-size: 11px;
-  line-height: 1.3;
-  color: inherit;
-  pointer-events: none;
-  text-wrap: balance;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.sky-star:not(.selected) .sky-star-name {
-  display: none;
+.sky-accessible:focus-within {
+  clip-path: none;
+  width: auto;
+  height: auto;
+  max-height: 100px;
+  inset: auto 8px 60px;
+  overflow: auto;
+  background: #101b2f;
+  z-index: 3;
 }
-.sky-star:hover .sky-star-name,
-.sky-star:focus-visible .sky-star-name {
+.sky-accessible button {
   display: block;
+  padding: 8px;
 }
 .sky-controls {
   position: absolute;

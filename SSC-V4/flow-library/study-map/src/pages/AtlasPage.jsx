@@ -71,13 +71,6 @@ export default function AtlasPage() {
     if (panel.current) panel.current.scrollTop = 0;
   }
   function visitTopic(id) {
-    if (mapDimension === "2d") {
-      const members = nodes.filter((n) => n.group === id);
-      const first =
-        members.find((n) => !starState(n, statuses).locked) || members[0];
-      if (first) travel(first.name);
-      return;
-    }
     setScope("all");
     setFilter("all");
     setNavigation({ type: "block", value: id, stamp: Date.now() });
@@ -162,6 +155,7 @@ export default function AtlasPage() {
               statuses={statuses}
               onSelect={selectStar}
               navigation={navigation}
+              onPath={setPath}
             />
           ) : (
             <KnowledgeGraph

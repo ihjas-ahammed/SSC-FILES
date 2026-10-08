@@ -1,6 +1,7 @@
 import * as T from "three";
 import { createStarMaterial } from "./starlight.js";
 import { starEncoding } from "./encoding.js";
+import { selectedConnections } from "../skyLayout.js";
 
 function clusterEnvelope(block) {
   const group = new T.Group();
@@ -114,14 +115,14 @@ export function buildScene(layout, nodes, itinerary) {
   });
   const byName = Object.fromEntries(nodes.map((n) => [n.name, n]));
   const colorFor = (name) => colors[byName[name]?.group] || 0x6fffea;
-  function connect(a, b, route = false) {
+  function connect(a, b, route = false, distant = false) {
     const pa = layout.positions[a],
       pb = layout.positions[b];
     if (!pa || !pb) return;
     const existing = edges.find((e) => e.a === a && e.b === b);
     if (existing) {
       existing.route ||= route;
-      if (route) existing.edge.material.gapSize = 0;
+      if (route) existing.distant = false;
       return;
     }
     const same = byName[a]?.group === byName[b]?.group;
@@ -130,9 +131,7 @@ export function buildScene(layout, nodes, itinerary) {
         new T.Vector3(pa.x, pa.y, pa.z),
         new T.Vector3(pb.x, pb.y, pb.z),
       ]),
-      new T.LineDashedMaterial({
-        dashSize: 7,
-        gapSize: same || route ? 0 : 12,
+      new T.LineBasicMaterial({
         color: route ? 0x6fffea : colors[byName[b]?.group],
         transparent: true,
         opacity: route ? 0.6 : same ? 0.2 : 0.045,
@@ -162,9 +161,19 @@ export function buildScene(layout, nodes, itinerary) {
       ),
     );
     scene.add(arrow);
-    edges.push({ a, b, edge, arrow, route, same });
+    edges.push({ a, b, edge, arrow, route, same, distant });
   }
   nodes.forEach((n) => n.prerequisites.forEach((p) => connect(p, n.name)));
+  if (!itinerary) {
+    const pairs = new Set(edges.map((e) => [e.a, e.b].sort().join("\0")));
+    for (const node of nodes)
+      for (const link of selectedConnections(nodes, node.name)) {
+        const pair = [link.a, link.b].sort().join("\0");
+        if (!link.distant || pairs.has(pair)) continue;
+        pairs.add(pair);
+        connect(link.a, link.b, false, true);
+      }
+  }
   if (itinerary)
     nodes.slice(1).forEach((n, i) => connect(nodes[i].name, n.name, true));
   return { scene, meshes, edges, texture, envelopes, backgroundStars };

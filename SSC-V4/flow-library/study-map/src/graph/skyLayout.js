@@ -1,71 +1,70 @@
-// A flat, selected-centred graph: direct neighbours form the inner ring.
-// Further concepts occupy successive rings. There is no depth hit-testing.
-export function skyLayout(nodes, selected) {
+import { Vector3 } from "three";
+
+// The same initial viewing direction as the 3D map, with depth flattened.
+const normal = new Vector3(1400, 3000, 2300).normalize();
+const right = new Vector3(0, 1, 0).cross(normal).normalize();
+const up = normal.clone().cross(right).normalize();
+export function projectSkyPosition(position) {
+  const point = new Vector3(position.x, position.y, position.z);
+  return { x: point.dot(right), y: -point.dot(up) };
+}
+
+export function selectedConnections(nodes, selected) {
   const byName = new Map(nodes.map((n) => [n.name, n]));
-  const hub = byName.has(selected) ? selected : nodes[0]?.name;
+  if (!byName.has(selected)) return [];
   const neighbours = new Map(nodes.map((n) => [n.name, new Set()]));
-  nodes.forEach((n) =>
-    n.prerequisites.forEach((p) => {
-      if (!byName.has(p)) return;
-      neighbours.get(n.name).add(p);
-      neighbours.get(p).add(n.name);
-    }),
-  );
-  const distances = new Map(hub ? [[hub, 0]] : []),
-    queue = hub ? [hub] : [];
+  for (const node of nodes)
+    for (const name of node.prerequisites) {
+      if (!byName.has(name)) continue;
+      neighbours.get(node.name).add(name);
+      neighbours.get(name).add(node.name);
+    }
+  const distances = new Map([[selected, 0]]),
+    queue = [selected];
   for (let i = 0; i < queue.length; i++) {
+    const distance = distances.get(queue[i]);
+    if (distance === 2) continue;
     for (const name of neighbours.get(queue[i])) {
       if (distances.has(name)) continue;
-      distances.set(name, distances.get(queue[i]) + 1);
+      distances.set(name, distance + 1);
       queue.push(name);
     }
   }
-  const ordered = nodes
-    .filter((n) => n.name !== hub)
-    .sort(
-      (a, b) =>
-        (distances.get(a.name) ?? Infinity) -
-          (distances.get(b.name) ?? Infinity) || a.name.localeCompare(b.name),
-    );
-  const positions = hub ? { [hub]: { x: 0, y: 0 } } : {};
-  let radius = 155,
-    index = 0,
-    lastRadius = radius;
-  while (index < ordered.length) {
-    const distance = distances.get(ordered[index].name);
-    const peers = [];
-    const capacity = Math.floor((2 * Math.PI * radius) / 105);
-    while (
-      index < ordered.length &&
-      peers.length < capacity &&
-      distances.get(ordered[index].name) === distance
-    )
-      peers.push(ordered[index++]);
-    peers.forEach((n, i) => {
-      const angle = -Math.PI / 2 + (i * Math.PI * 2) / peers.length;
-      positions[n.name] = {
-        x: Math.cos(angle) * radius,
-        y: Math.sin(angle) * radius,
-      };
-    });
-    lastRadius = radius;
-    radius += 135;
-  }
-  const center = lastRadius + 90,
-    size = center * 2;
-  Object.values(positions).forEach((p) => {
-    p.x += center;
-    p.y += center;
-  });
-  const links = ordered
-    .filter((n) => distances.get(n.name) <= 2)
-    .map((n) => ({
-      a: hub,
-      b: n.name,
-      dashed: distances.get(n.name) > 1,
-      direction: byName.get(hub).prerequisites.includes(n.name)
-        ? "incoming"
-        : "outgoing",
-    }));
-  return { positions, links, size, center, hub };
+  return queue.slice(1).map((name) => ({
+    a: selected,
+    b: name,
+    distant: distances.get(name) === 2,
+    direction: byName.get(selected).prerequisites.includes(name)
+      ? "incoming"
+      : "outgoing",
+  }));
+}
+
+export function skyLayout(nodes, selected, constellation) {
+  const hub = nodes.some((n) => n.name === selected)
+    ? selected
+    : nodes[0]?.name;
+  const positions = Object.fromEntries(
+    Object.entries(constellation.positions).map(([name, point]) => [
+      name,
+      projectSkyPosition(point),
+    ]),
+  );
+  const points = Object.values(positions);
+  const bounds = {
+    minX: Math.min(0, ...points.map((p) => p.x)) - 70,
+    maxX: Math.max(0, ...points.map((p) => p.x)) + 70,
+    minY: Math.min(0, ...points.map((p) => p.y)) - 70,
+    maxY: Math.max(0, ...points.map((p) => p.y)) + 70,
+  };
+  return {
+    positions,
+    bounds,
+    hub,
+    links: selectedConnections(nodes, hub),
+    blocks: constellation.blocks.map((block) => ({
+      ...block,
+      ...projectSkyPosition(block.center),
+    })),
+  };
 }

@@ -19,7 +19,7 @@ export function pathDirection(edge, selected) {
       : null;
 }
 export function pathColor(edge, selected) {
-  if (edge.dashed) return distantColor();
+  if (edge.distant) return distantColor();
   const direction = pathDirection(edge, selected);
   if (direction === "incoming") return activeColor();
   if (direction === "outgoing") return outgoingColor();

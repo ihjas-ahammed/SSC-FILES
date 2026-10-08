@@ -34,10 +34,11 @@ export default function GraphPaths({
             data-direction={p.direction}
             data-color={p.color}
             data-dashed={p.dashed}
+            data-distant={p.distant}
             d={`M ${p.ax} ${p.ay} L ${p.bx} ${p.by}`}
             role="button"
             tabIndex={p.route || p.a === selected || p.b === selected ? 0 : -1}
-            aria-label={`Travel from ${selected} to ${p.a === selected ? p.b : p.a} along ${p.route ? "reading" : "prerequisite"} path`}
+            aria-label={`Travel from ${selected} to ${p.a === selected ? p.b : p.a} along ${p.route ? "reading" : p.distant ? "two-step connection" : "prerequisite"} path`}
             onPointerEnter={(e) => {
               if (e.pointerType === "mouse") onHover?.(p);
             }}
@@ -56,7 +57,11 @@ export default function GraphPaths({
           >
             <title>
               {p.a} → {p.b}:{" "}
-              {p.route ? "next reading stop" : "needed for this concept"}
+              {p.route
+                ? "next reading stop"
+                : p.distant
+                  ? "two connections away"
+                  : "needed for this concept"}
             </title>
           </path>
         ))}

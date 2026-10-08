@@ -40,7 +40,7 @@ assert.equal(pathColor(edge, "A"), outgoingColor());
 assert.equal(pathColor(edge, "B"), activeColor());
 flow.tick(2000, false);
 assert.equal(scene.children.at(-1).material.color.getHex(), outgoingColor());
-edge.dashed = true;
+edge.distant = true;
 assert.equal(pathColor(edge, "A"), distantColor());
 edge.active = false;
 flow.tick(3000, false);
@@ -158,14 +158,16 @@ try {
         direction: e.dataset.direction,
         color: e.dataset.color,
         dashed: e.dataset.dashed === "true",
+        distant: e.dataset.distant === "true",
       })),
     );
     assert(paths.some((p) => p.direction === "incoming"));
     assert(paths.some((p) => p.direction === "outgoing"));
+    assert(paths.every(p => !p.dashed), "All stellar links are solid");
     for (const p of paths)
       assert.equal(
         p.color,
-        p.dashed ? (theme === "light" ? "#687382" : "#828995") : p.direction === "incoming"
+        p.distant ? (theme === "light" ? "#687382" : "#828995") : p.direction === "incoming"
           ? theme === "light"
             ? "#0b638f"
             : "#00eaff"
@@ -207,7 +209,7 @@ try {
     await context.close();
   }
   console.log(
-    "PASS: selected tab/node headings, 3D focus scale, incoming/outgoing and grey dashed colors in both themes, hover/particle colors, travel direction updates, no completion green, and no overflow at 320/390/1440.",
+    "PASS: selected tab/node headings, 3D focus scale, incoming/outgoing and solid grey two-step colors in both themes, hover/particle colors, travel direction updates, no completion green, and no overflow at 320/390/1440.",
   );
 } finally {
   await browser.close();

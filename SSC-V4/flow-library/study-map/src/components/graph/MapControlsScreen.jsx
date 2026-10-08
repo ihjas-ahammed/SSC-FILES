@@ -68,8 +68,9 @@ export default function MapControlsScreen({
         {dimension === "2d" ? (
           <>
             <p>
-              Scroll or swipe to explore the night sky. Use + and − to zoom, or
-              the centre control to return to the selected star.
+              Drag to pan the night sky. Scroll or pinch to zoom; move two
+              fingers together to pan. Use + and − to zoom, or the centre
+              control to return to the selected star.
             </p>
             <p>
               Select one star to see its connections and open the adjacent note
@@ -79,7 +80,8 @@ export default function MapControlsScreen({
             </p>
             <p>
               Keyboard: Tab to an available star and press Enter. Focus the sky
-              and use arrow keys to scroll.
+              and use arrow keys to select available stars, + and − to zoom, or
+              Home to center the selection.
             </p>
           </>
         ) : (

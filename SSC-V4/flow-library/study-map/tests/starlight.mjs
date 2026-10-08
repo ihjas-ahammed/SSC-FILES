@@ -46,7 +46,7 @@ assert(
 const edge = { a: "a", b: "b", complete: true, active: true };
 assert.equal(pathColor(edge, "a"), outgoingColor());
 assert.equal(pathColor(edge, "b"), activeColor());
-assert.equal(pathColor({ ...edge, dashed: true }, "b"), distantColor());
+assert.equal(pathColor({ ...edge, distant: true }, "b"), distantColor());
 const scene = new T.Scene();
 const flow = createPathFlow(scene, [edge], {
   a: { x: 0, y: 0, z: 0 },
