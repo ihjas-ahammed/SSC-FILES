@@ -2,14 +2,20 @@ import { meta, byName } from "../lib/course.js";
 import { useEffect, useRef, useState } from "react";
 import { Orbit, Search, BookOpen, ArrowLeft } from "lucide-react";
 import { useAtlas } from "../app/AtlasContext";
-import SkyMap from "../components/graph/SkyMap";
-import { starState } from "../graph/starState.js";
+import MathText from "../components/ui/MathText";
 import KnowledgeGraph from "../components/graph/KnowledgeGraph";
-import { naturalPause } from "../lib/noteJourney";
+import {
+  naturalPause,
+  waitForMapArrival,
+  settleOnNote,
+} from "../lib/noteJourney";
 import { scrollBeforeNavigate } from "../lib/scrollBeforeNavigate";
 import MapControlsScreen from "../components/graph/MapControlsScreen";
 import useMobileLayout from "../hooks/useMobileLayout";
+import InlineConcept from "../components/graph/InlineConcept";
 import MapNotePanel from "../components/graph/MapNotePanel";
+import MapLegend from "../components/graph/MapLegend";
+import PathExplanation from "../components/graph/PathExplanation";
 
 export default function AtlasPage() {
   const {
@@ -31,8 +37,6 @@ export default function AtlasPage() {
     setReaderTab,
   } = useAtlas();
   const mobile = useMobileLayout();
-  const [dimension, setDimension] = useState(null);
-  const mapDimension = dimension || (mobile ? "2d" : "3d");
   const panel = useRef(null),
     navigationTicket = useRef(0);
   const [path, setPath] = useState(null);
@@ -40,16 +44,12 @@ export default function AtlasPage() {
   useEffect(() => {
     setScope("all");
     setFilter("all");
-    if (byName[selected] && starState(byName[selected], statuses).locked) {
-      const first =
-        nodes.find((n) => statuses[n.name] === "known") ||
-        nodes.find((n) => !starState(n, statuses).locked);
-      if (first) setSelected(first.name);
-    }
   }, []);
   async function travel(name) {
     const ticket = ++navigationTicket.current;
-    const ready = await scrollBeforeNavigate(panel.current || window);
+    const ready = await scrollBeforeNavigate(
+      mobile ? window : panel.current || window,
+    );
     if (!ready || ticket !== navigationTicket.current) return;
     setScope("all");
     setFilter("all");
@@ -61,6 +61,17 @@ export default function AtlasPage() {
     setNavigation({ type: "star", value: name, stamp: Date.now() });
     setPanelOpen(true);
     setScreen("map");
+    if (mobile) {
+      await waitForMapArrival(
+        document.querySelector(".stellar-map-screen .stellar-map"),
+      );
+      await naturalPause(420);
+      if (ticket === navigationTicket.current)
+        await settleOnNote(
+          window,
+          document.querySelector(".mobile-stellar-content .concept-note h2"),
+        );
+    }
   }
   function selectStar(name) {
     navigationTicket.current++;
@@ -85,32 +96,32 @@ export default function AtlasPage() {
       });
   }
   return (
-    <section className="stellar-workspace" data-screen={screen}>
+    <section
+      className="stellar-workspace"
+      data-screen={mobile ? "inline" : screen}
+    >
       {mobile && (
         <header className="mobile-stellar-heading">
           <span className="eyebrow">{meta.module.toUpperCase()}</span>
           <h1>{selected}</h1>
+          <p>
+            <MathText
+              text={byName[selected]?.meaning || ""}
+              onLink={selectStar}
+            />
+          </p>
         </header>
       )}
-      {
+      {!mobile && (
         <nav className="map-screen-nav" aria-label="Map screens">
-          {["2d", "3d"].map((value) => (
-            <button
-              key={value}
-              className={
-                screen === "map" && mapDimension === value ? "active" : ""
-              }
-              aria-label={`${value.toUpperCase()} map screen`}
-              aria-pressed={mapDimension === value}
-              onClick={() => {
-                setDimension(value);
-                setScreen("map");
-              }}
-            >
-              <Orbit size={16} />
-              <span>{value.toUpperCase()} map</span>
-            </button>
-          ))}
+          <button
+            className={screen === "map" ? "active" : ""}
+            onClick={() => setScreen("map")}
+            aria-label="3D map screen"
+          >
+            <Orbit size={16} />
+            <span>3D map</span>
+          </button>
           <button
             className={screen === "controls" ? "active" : ""}
             onClick={() => setScreen("controls")}
@@ -132,9 +143,9 @@ export default function AtlasPage() {
           </button>
           <small>{nodes.length} stars</small>
         </nav>
-      }
+      )}
       <div className="stellar-map-body">
-        {panelOpen && (
+        {!mobile && panelOpen && (
           <MapNotePanel
             selected={selected}
             path={path}
@@ -145,34 +156,23 @@ export default function AtlasPage() {
         )}
         <div
           className="stellar-map-screen"
-          inert={screen !== "map" ? true : undefined}
-          aria-hidden={screen !== "map"}
+          inert={!mobile && screen !== "map" ? true : undefined}
+          aria-hidden={!mobile && screen !== "map"}
         >
-          {mapDimension === "2d" ? (
-            <SkyMap
-              nodes={nodes}
-              selected={selected}
-              statuses={statuses}
-              onSelect={selectStar}
-              navigation={navigation}
-              onPath={setPath}
-            />
-          ) : (
-            <KnowledgeGraph
-              nodes={nodes}
-              selected={selected}
-              onSelect={selectStar}
-              statuses={statuses}
-              read={read}
-              targets={question.terms}
-              mode={`${scope}-${questionId}-${filter}`}
-              navigation={navigation}
-              onPath={setPath}
-              focusInitially={mobile}
-              readingFocus={mobile || panelOpen}
-            />
-          )}
-          {!panelOpen && (
+          <KnowledgeGraph
+            nodes={nodes}
+            selected={selected}
+            onSelect={selectStar}
+            statuses={statuses}
+            read={read}
+            targets={question.terms}
+            mode={`${scope}-${questionId}-${filter}`}
+            navigation={navigation}
+            onPath={setPath}
+            focusInitially={mobile}
+            readingFocus={mobile || panelOpen}
+          />
+          {!mobile && !panelOpen && (
             <button
               className="selected-star-chip"
               onClick={() => {
@@ -188,13 +188,37 @@ export default function AtlasPage() {
           )}
         </div>
       </div>
-      {screen === "controls" && (
+      {mobile && (
+        <div className="mobile-stellar-content">
+          <PathExplanation path={path} onSelect={travel} />
+          <MapLegend selected={selected} />
+          <details className="inline-map-tools">
+            <summary>Search & map options</summary>
+            <MapControlsScreen
+              embedded
+              onOverview={() => {
+                setNavigation({ type: "overview", stamp: Date.now() });
+                window.scrollTo({
+                  top: 0,
+                  behavior:
+                    document.documentElement.dataset.motion === "off"
+                      ? "instant"
+                      : "smooth",
+                });
+              }}
+              travel={travel}
+              visitTopic={visitTopic}
+            />
+          </details>
+          <InlineConcept key={selected} name={selected} travel={travel} />
+        </div>
+      )}
+      {!mobile && screen === "controls" && (
         <div className="map-aux-screen">
           <button className="map-back" onClick={() => setScreen("map")}>
-            <ArrowLeft size={15} /> Return to {mapDimension.toUpperCase()} map
+            <ArrowLeft size={15} /> Return to 3D map
           </button>
           <MapControlsScreen
-            dimension={mapDimension}
             travel={travel}
             visitTopic={visitTopic}
             onOverview={() => {

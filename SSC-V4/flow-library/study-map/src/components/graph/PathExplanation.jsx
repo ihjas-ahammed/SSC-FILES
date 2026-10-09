@@ -10,9 +10,7 @@ export default function PathExplanation({ path, onSelect }) {
       <p>
         {path.route
           ? "The next stop in your reading route. This line shows reading order."
-          : path.distant
-            ? "These ideas are two connections apart in the prerequisite graph."
-            : `${path.a} is a prerequisite for ${path.b}. Understand the first idea to build the second.`}
+          : `${path.a} is a prerequisite for ${path.b}. Understand the first idea to build the second.`}
       </p>
     </div>
   );

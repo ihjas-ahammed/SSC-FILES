@@ -6,7 +6,7 @@ export function mapColor(color = "#a6bdf1", light = lightMap()) {
   if (light) value.lerp(new T.Color(0x153c55), 0.58);
   return value.getHex();
 }
-export const distantColor = () => (lightMap() ? 0x687382 : 0x828995);
+export const completedColor = () => (lightMap() ? 0x087c51 : 0x59f9bd);
 export const activeColor = () => (lightMap() ? 0x0b638f : 0x00eaff);
 
 export const outgoingColor = () => (lightMap() ? 0xb95567 : 0xf28c98);
@@ -19,7 +19,7 @@ export function pathDirection(edge, selected) {
       : null;
 }
 export function pathColor(edge, selected) {
-  if (edge.distant) return distantColor();
+  if (edge.complete) return completedColor();
   const direction = pathDirection(edge, selected);
   if (direction === "incoming") return activeColor();
   if (direction === "outgoing") return outgoingColor();

@@ -55,13 +55,13 @@ for (const viewport of [
   await p.locator("#tab-study-map").waitFor();
   await p.getByRole("link", { name: "Study Map", exact: true }).click();
   await p.locator(".study-map-list").waitFor();
-  assert.equal(await p.locator(".study-map-list li").count(), 2);
+  assert.equal(await p.locator(".study-map-list li").count(), 1);
   for (const theme of ["light", "dark"]) {
     await p.evaluate((t) => {
       Store.setPref("theme", t);
       Theme.apply();
     }, theme);
-    assert.equal(await p.locator(".study-map-list li").count(), 2);
+    assert.equal(await p.locator(".study-map-list li").count(), 1);
     assert.equal(
       await p.evaluate(
         () => document.documentElement.scrollWidth > innerWidth + 1,
@@ -73,15 +73,12 @@ for (const viewport of [
       fullPage: true,
     });
   }
-  const module = p.locator(".study-map-entry").first();
+  const module = p.locator(".study-map-entry");
   assert((await module.innerText()).startsWith("hub\nModule 3"));
   await module.click();
   await p.locator(".bank-card").first().waitFor();
   assert(p.url().includes("/phy/quantum-mechanics/study-map/module-3/"));
-  assert.equal(
-    await p.locator(".bank-card").count(),
-    questions.filter((q) => q.section === "A").length,
-  );
+  assert.equal(await p.locator(".bank-card").count(), 15);
   assert.equal(await p.locator(".formal-answer").count(), 0);
   assert.deepEqual((await state(p)).statuses, {});
   assert.equal(
@@ -143,9 +140,8 @@ for (const viewport of [
         Store.setPref("theme", t);
         Theme.apply();
       }, theme);
-      const hasStudyMap = route === "/math/probability-test/";
-      assert.equal(await p.locator(".rail-nav a").count(), hasStudyMap ? 4 : 3);
-      assert.equal(await p.locator("#tab-study-map").count(), hasStudyMap ? 1 : 0);
+      assert.equal(await p.locator(".rail-nav a").count(), 3);
+      assert.equal(await p.locator("#tab-study-map").count(), 0);
       assert.equal(
         await p.evaluate(
           () => document.documentElement.scrollWidth > innerWidth + 1,
@@ -158,7 +154,7 @@ for (const viewport of [
   results.push({
     viewport,
     pass: true,
-    catalogueModules: 2,
+    catalogueModules: 1,
     hostedApiRequests: api.length,
   });
   await ctx.close();

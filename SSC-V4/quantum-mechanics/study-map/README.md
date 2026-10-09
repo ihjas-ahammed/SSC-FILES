@@ -18,7 +18,7 @@ npm run dev
 
 The quantum-mechanics parent app opts in to Study Map and lists only Module 3. Other existing projects do not opt in. Published URL: `/phy/quantum-mechanics/study-map/module-3/`.
 
-Progress is private to this browser under the configured `quantum-atlas-v2` key, separate from the parent QM study record (`ssc4.qm.v1`). All knowledge switches start off on a fresh device. Reading, objective recall, solution unlocks and question completion remain separate. Export a progress backup to move devices; reset clears this study map only. The development server can synchronize progress to this folder's vault; hosted and offline builds never contact that local API.
+Progress is private to this browser under the existing `quantum-atlas-v1` key, separate from the parent QM study record (`ssc4.qm.v1`). All knowledge switches start off on a fresh device. Reading, objective recall, solution unlocks and question completion remain separate. Export a progress backup to move devices; reset clears this study map only. The development server can synchronize progress to this folder's vault; hosted and offline builds never contact that local API.
 
 ## Verification
 
@@ -40,9 +40,7 @@ Bookmarks in the header (and mobile navigation) form an ordered review notebook:
 
 `npm run test:appearance` verifies theme persistence, compact symbol padding, the central foundation constellation, slow/paused orbits, mobile width, and a real PDF download. Light theme is available in App settings. Both themes and the PDF exporter are included in the standalone offline HTML.
 
-The header follows the selected tab. The shared stellar map now defaults to a full-screen 2D night sky on mobile, with a 2D/3D switch on all devices. Its heading shows Module 3 and the selected concept. Questions stay in one separate panel below the mobile map or beside the desktop map and show at most three answers. Only the selected star’s links are drawn: direct 2D neighbours use solid incoming blue/outgoing soft red lines; two-hop neighbours use solid grey lines with greater opacity. Both dimensions use the same 3D constellation geometry, with an orthographic canvas projection in 2D; direct cross-topic links retain their direction colors. The canvas supports drag panning, wheel/pinch zoom, topic focus and keyboard navigation. Completion no longer adds green effects. Understood stars glow; unmet-prerequisite stars are grey/disabled in 2D and non-emitting in 3D, reflecting nearby understood stars. Ready-to-learn concepts and search keep notes accessible on a fresh device. Reading routes retain their 3D sequence. The conditional Module 2 IC/My/Q sketch is not applied to this Module 3 app, and pre-placing is not implemented.
-
-`npm run test:stellar` verifies 2D/3D switching, mobile defaults, locks, selected-only links, panel placement and shader rendering at 320px, 390px and desktop widths. `npm run test:selected-map` checks 3D focus, direction/grey colors and keyboard path travel in both themes. `npm run test:offline` checks the standalone file with networking disabled. Example browser environment: `STUDY_MAP_TMPDIR=/tmp/ssc-map STUDY_MAP_CHROME=/usr/bin/google-chrome STUDY_MAP_URL=http://127.0.0.1:5180/`; serve `build/` on that port after building.
+The header follows the selected tab. On mobile, the map heading and subtitle follow the selected concept, and the stellar map starts another 10% more zoomed in on both mobile and desktop (105.6px mobile reading focus and 70.4px desktop). Incoming dependencies are blue, outgoing dependencies are soft red, and completed connections stay green, including hover and circulating particles. `npm run test:selected-map` checks these behaviors at 320px, 390px and desktop widths, in both themes; it also runs against the standalone HTML with networking disabled.
 
 
 ## Notes: how they are written and checked (October 2026 rewrite)

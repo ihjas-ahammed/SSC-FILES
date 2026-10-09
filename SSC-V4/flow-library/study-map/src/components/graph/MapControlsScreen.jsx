@@ -9,18 +9,17 @@ export default function MapControlsScreen({
   visitTopic,
   embedded = false,
   onOverview,
-  dimension = "3d",
 }) {
   const { setModal, nodes, statuses, selected } = useAtlas();
   return (
     <section className="map-settings-screen" aria-label="Map controls screen">
       {!embedded && (
         <header>
-          <span className="eyebrow">MAP CONTROLS</span>
+          <span className="eyebrow">FLIGHT CONSOLE</span>
           <h1>Choose your next star.</h1>
           <p>
-            Search a concept or choose a topic constellation. The map keeps your
-            position while you’re here.
+            Search a concept or fly into a topic constellation. The map keeps
+            your camera position while you’re here.
           </p>
         </header>
       )}
@@ -64,44 +63,20 @@ export default function MapControlsScreen({
         </div>
       </details>
       <section className="map-gesture-guide">
-        <h2>Explore the map</h2>
-        {dimension === "2d" ? (
-          <>
-            <p>
-              Drag to pan the night sky. Scroll or pinch to zoom; move two
-              fingers together to pan. Use + and − to zoom, or the centre
-              control to return to the selected star.
-            </p>
-            <p>
-              Select one star to see its connections and open the adjacent note
-              or question panel. Grey locked stars become selectable after you
-              understand their prerequisites. You can still read their notes
-              through search.
-            </p>
-            <p>
-              Keyboard: Tab to an available star and press Enter. Focus the sky
-              and use arrow keys to select available stars, + and − to zoom, or
-              Home to center the selection.
-            </p>
-          </>
-        ) : (
-          <>
-            <p>
-              Mouse: drag to orbit, scroll to zoom, right-drag or Shift-drag to
-              pan.
-            </p>
-            <p>
-              Touch: one finger to orbit; pinch to zoom; move two fingers
-              together to pan. Focus a star first, then tap one of its
-              connections to travel to the other endpoint. Arrows show
-              prerequisite direction; travel works both ways.
-            </p>
-            <p>
-              Keyboard: Tab to a star and press Enter. Focus the canvas and use
-              arrow keys to pan.
-            </p>
-          </>
-        )}
+        <h2>Fly around</h2>
+        <p>
+          Mouse: drag to orbit, scroll to zoom, right-drag or Shift-drag to pan.
+        </p>
+        <p>
+          Touch: one finger to orbit; pinch to zoom; move two fingers together
+          to pan. Focus a star first, then tap one of its connections to travel
+          to the other endpoint. Arrows show prerequisite direction; travel
+          works both ways.
+        </p>
+        <p>
+          Keyboard: Tab to a star and press Enter. Focus the canvas and use
+          arrow keys to pan.
+        </p>
         <button className="secondary" onClick={() => setModal("help")}>
           <CircleHelp size={16} />
           Study help

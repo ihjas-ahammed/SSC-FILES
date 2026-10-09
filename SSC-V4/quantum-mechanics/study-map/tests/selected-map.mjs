@@ -2,13 +2,13 @@ import "./workspace-test-env.mjs";
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import * as T from "three";
-import { meta } from "../../../flow-library/study-map/src/graph.js";
+import { byName } from "../../../flow-library/study-map/src/graph.js";
 import {
   pathColor,
   pathDirection,
   activeColor,
   outgoingColor,
-  distantColor,
+  completedColor,
 } from "../../../flow-library/study-map/src/graph/three/theme.js";
 import { createHover } from "../../../flow-library/study-map/src/graph/three/hover.js";
 import { createPathFlow } from "../../../flow-library/study-map/src/graph/three/flow.js";
@@ -36,15 +36,10 @@ const flow = createPathFlow(scene, [edge], {
 flow.tick(1000, false);
 assert.equal(scene.children.at(-1).material.color.getHex(), outgoingColor());
 edge.complete = true;
-assert.equal(pathColor(edge, "A"), outgoingColor());
-assert.equal(pathColor(edge, "B"), activeColor());
+assert.equal(pathColor(edge, "A"), completedColor());
+assert.equal(pathColor(edge, "B"), completedColor());
 flow.tick(2000, false);
-assert.equal(scene.children.at(-1).material.color.getHex(), outgoingColor());
-edge.distant = true;
-assert.equal(pathColor(edge, "A"), distantColor());
-edge.active = false;
-flow.tick(3000, false);
-assert.equal(scene.children.at(-1).visible, false, "Unselected completed paths have no particles");
+assert.equal(scene.children.at(-1).material.color.getHex(), completedColor());
 
 const base =
   process.env.STUDY_MAP_URL ||
@@ -67,12 +62,12 @@ try {
       offline: base.startsWith("file:"),
     });
     await context.addInitScript(
-      ({ theme, storageKey }) =>
+      ({ theme }) =>
         localStorage.setItem(
-          storageKey,
+          "quantum-atlas-v1",
           JSON.stringify({ preferences: { theme, animations: true } }),
         ),
-      { theme, storageKey: meta.storageKey },
+      { theme },
     );
     const page = await context.newPage(),
       errors = [];
@@ -104,8 +99,9 @@ try {
       await page.locator(".brand-title").innerText(),
       mobile ? "Map" : "Knowledge map",
     );
-    if (mobile) await page.getByRole("button", { name: "3D map screen", exact: true }).click();
-    await page
+    if (mobile) await page.locator(".inline-map-tools > summary").click();
+    else
+      await page
         .getByRole("button", { name: "Search and map controls", exact: true })
         .click();
     await page
@@ -145,6 +141,10 @@ try {
         await page.locator(".mobile-stellar-heading h1").innerText(),
         "Hermitian Adjoint",
       );
+      assert.equal(
+        await page.locator(".mobile-stellar-heading p").innerText(),
+        byName["Hermitian Adjoint"].meaning,
+      );
       assert(
         !/Learning Universe|Follow the stars/i.test(
           await page.locator(".mobile-stellar-heading").innerText(),
@@ -157,17 +157,14 @@ try {
         to: e.dataset.to,
         direction: e.dataset.direction,
         color: e.dataset.color,
-        dashed: e.dataset.dashed === "true",
-        distant: e.dataset.distant === "true",
       })),
     );
     assert(paths.some((p) => p.direction === "incoming"));
     assert(paths.some((p) => p.direction === "outgoing"));
-    assert(paths.every(p => !p.dashed), "All stellar links are solid");
     for (const p of paths)
       assert.equal(
         p.color,
-        p.distant ? (theme === "light" ? "#687382" : "#828995") : p.direction === "incoming"
+        p.direction === "incoming"
           ? theme === "light"
             ? "#0b638f"
             : "#00eaff"
@@ -209,7 +206,7 @@ try {
     await context.close();
   }
   console.log(
-    "PASS: selected tab/node headings, 3D focus scale, incoming/outgoing and solid grey two-step colors in both themes, hover/particle colors, travel direction updates, no completion green, and no overflow at 320/390/1440.",
+    "PASS: selected tab/node headings, live concept subtitle, stellar map 10% more zoomed in on mobile and desktop, incoming/outgoing colors in both themes, hover/particle colors, travel direction updates, completion green, and no overflow at 320/390/1440.",
   );
 } finally {
   await browser.close();

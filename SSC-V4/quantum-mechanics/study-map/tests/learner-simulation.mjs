@@ -6,7 +6,6 @@ import {
   questions,
   byName,
   report,
-  meta,
 } from "../../../flow-library/study-map/src/graph.js";
 import { state, button, answer, unlock } from "./study-helpers.mjs";
 
@@ -23,13 +22,13 @@ const page = await browser.newPage({
   reducedMotion: "reduce",
 });
 page.setDefaultTimeout(15000);
-await page.addInitScript(({ storageKey }) => {
-  if (!localStorage.getItem(storageKey))
+await page.addInitScript(() => {
+  if (!localStorage.getItem("quantum-atlas-v1"))
     localStorage.setItem(
-      storageKey,
+      "quantum-atlas-v1",
       JSON.stringify({ preferences: { animations: false } }),
     );
-}, { storageKey: meta.storageKey });
+});
 const errors = [],
   runs = [];
 page.on("pageerror", (e) => errors.push(e.message));
@@ -40,9 +39,8 @@ await page.locator(".bank-card").first().waitFor();
 await button(page, "Study Q-A-1").click();
 for (let qi = 0; qi < questions.length; qi++) {
   const q = questions[qi];
-  assert.equal(await page.locator(".attempt-screen").count(), 1);
-  const promptText = await page.locator(".source-question").innerText();
-  assert(promptText.includes(q.text.split("$")[0].trim()));
+  await page.locator(".attempt-screen").waitFor();
+  assert.equal(await page.locator(".source-question").innerText(), q.text);
   await page
     .getByRole("textbox", { name: "Your answer attempt" })
     .fill(
@@ -74,11 +72,10 @@ for (let qi = 0; qi < questions.length; qi++) {
         .click();
   }
   await button(page, "Build my shortest route").click();
-  await page.waitForFunction((key) =>
+  await page.waitForFunction(() =>
     ["route", "retest", "ready"].includes(
-      JSON.parse(localStorage.getItem(key)).flow.phase,
+      JSON.parse(localStorage.getItem("quantum-atlas-v1")).flow.phase,
     ),
-    meta.storageKey,
   );
   let snapshot = await state(page),
     notes = snapshot.plan.length,
@@ -144,13 +141,13 @@ for (let qi = 0; qi < questions.length; qi++) {
       () => !document.querySelector(".study-body")?.dataset.journey,
     );
     await page.waitForFunction((before) => {
-      const current = JSON.parse(localStorage.getItem(before.storageKey)).flow;
+      const current = JSON.parse(localStorage.getItem("quantum-atlas-v1")).flow;
       return (
         current.phase !== before.phase ||
         current.readIndex !== before.readIndex ||
         current.retestIndex !== before.retestIndex
       );
-    }, { ...snapshot.flow, storageKey: meta.storageKey });
+    }, snapshot.flow);
     snapshot = await state(page);
   }
   assert.equal(snapshot.flow.phase, "ready");
@@ -169,13 +166,10 @@ for (let qi = 0; qi < questions.length; qi++) {
   );
   if (q.section === "C")
     await page.screenshot({ path: `artifacts/learner-${q.id}.png` });
-  await button(
-    page,
-    qi === questions.length - 1 ? "See my progress" : "Next question",
-  ).click();
+  await button(page, qi === 31 ? "See my progress" : "Next question").click();
 }
 const final = await state(page);
-assert.equal(final.completed.length, questions.length);
+assert.equal(final.completed.length, 32);
 assert.deepEqual(errors, []);
 await page.screenshot({
   path: "artifacts/learner-complete-progress.png",
