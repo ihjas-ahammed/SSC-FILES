@@ -1,0 +1,1 @@
+../SSC-V2/SEM5/PHY/apps/tools/deploy.sh

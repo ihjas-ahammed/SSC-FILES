@@ -6,8 +6,10 @@
 # disappears from the live site. Add new pages to repo trackers/ and they ship
 # automatically.
 set -e
-APPS="$(cd "$(dirname "$0")/.." && pwd)"
-REPO="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# Resolve symlinks first, so this works when run through a link (e.g. SSC-V4/deploy.sh).
+SELF="$(readlink -f "$0")"
+APPS="$(cd "$(dirname "$SELF")/.." && pwd)"
+REPO="$(cd "$(dirname "$SELF")/../../../../.." && pwd)"
 # Keep staging beside the checkout, and optionally prepare without publishing.
 PREPARE_DIR=""
 for ((i=1; i<=$#; i++)); do
