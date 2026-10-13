@@ -1,0 +1,206 @@
+<!-- T13 -->
+<section class="page">
+  <div class="kicker" style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNITS 4–5 · BARTLE §5.4</div>
+  <h1>One δ for the whole set</h1>
+  <hr>
+  <div class="topic-head"><span class="tid">T13</span><h2>Uniform continuity</h2></div>
+  <p class="oneline">The definition (PYQ MAT-22 Q1, MAT-21 Q2, old MCQs).</p>
+  <div class="box def"><span class="lab">Definition 5.4.1 · say it word for word</span>Let $A \subseteq \mathbb R$ and let $f : A \to \mathbb R$. We say that f is <b>uniformly continuous on A</b> if for each $\varepsilon&gt;0$ there is a $\delta(\varepsilon)&gt;0$ such that if $x, u \in A$ are any numbers satisfying $|x - u| &lt; \delta(\varepsilon)$, then $|f(x) - f(u)| &lt; \varepsilon$.
+    <span class="say">In plain words: one δ, chosen from ε alone, works at every point. Picture: a box of width 2δ and height 2ε slides along the whole graph and the curve leaves only through its sides.</span></div>
+  {{fig:uc_sine}}
+</section>
+
+<section class="page">
+  <div class="box result"><span class="lab">Result</span>Uniformly continuous on A ⇒ continuous at every point of A (use the same δ at each point). The converse is <b>false</b>: $g(x) = 1/x$ on $(0, \infty)$ is continuous but not uniformly continuous.</div>
+  {{fig:uc_recip}}
+  <div class="box idea"><span class="lab">Why 1/x fails (Bartle's discussion)</span>At a point u the best δ is about $u^2\varepsilon$ (Bartle uses $\delta = \min\{\frac u2, \frac{u^2\varepsilon}{2}\}$). As $u \to 0$ this shrinks to 0, so no single positive δ serves every u.</div>
+  {{fig:uc_square}}
+  <div class="box trap"><span class="lab">Exam trap</span>"Uniform continuity fails only on unbounded sets." No: 1/x and sin(1/x) on the bounded set (0, 1) are not uniformly continuous. The trouble is an open end where f blows up or wiggles.</div>
+  <p class="small">In the model paper: <span class="chip q">Q14</span> (PYQ MAT-22 Q1, also MAT-21 Q2, MAT-22 MCQ 13).</p>
+</section>
+
+<!-- T14 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T14</span><h2>Proving "not uniformly continuous"</h2></div>
+  <p class="oneline">Nonuniform Continuity Criteria 5.4.2 (PYQ MAT-21 Q16; MTS-22 MCQ 2).</p>
+  <div class="box def"><span class="lab">5.4.2 Nonuniform Continuity Criteria</span>Let $A \subseteq \mathbb R$ and let $f : A \to \mathbb R$. Then the following statements are equivalent:
+    <p>(i) f is not uniformly continuous on A.</p>
+    <p>(ii) There exists an $\varepsilon_0&gt;0$ such that for every $\delta&gt;0$ there are points $x_\delta, u_\delta$ in A such that $|x_\delta - u_\delta| &lt; \delta$ and $|f(x_\delta) - f(u_\delta)| \ge \varepsilon_0$.</p>
+    <p>(iii) There exists an $\varepsilon_0&gt;0$ and two sequences $(x_n)$ and $(u_n)$ in A such that $\lim(x_n - u_n) = 0$ and $|f(x_n) - f(u_n)| \ge \varepsilon_0$ for all $n \in \mathbb N$.</p></div>
+  <div class="box skel"><span class="lab">Skeleton · use (iii)</span>Take $\varepsilon_0 = $ <span class="gap">?</span>, $x_n = $ <span class="gap">?</span>, $u_n = $ <span class="gap">?</span> in A. Then $x_n - u_n = $ <span class="gap">?</span> $\to 0$ and $|f(x_n) - f(u_n)| = $ <span class="gap">?</span> $\ge \varepsilon_0$ for all n. By 5.4.2, f is not uniformly continuous on A. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">The standard pairs</span>
+    <div class="kv">
+      <span>1/x on (0, ∞)</span><span>$x_n = \frac1n$, $u_n = \frac1{n+1}$: gap in x is $\frac{1}{n(n+1)} \to 0$, gap in value $|n - (n+1)| = 1 = \varepsilon_0$</span>
+      <span>x² on ℝ</span><span>$x_n = n$, $u_n = n + \frac1n$: values differ by $2 + \frac1{n^2} \ge 2$</span>
+      <span>sin(1/x) on (0, ∞)</span><span>$x_n = \frac{1}{2n\pi + \pi/2}$ (value 1), $u_n = \frac{1}{2n\pi}$ (value 0): gap 1</span>
+    </div>
+  </div>
+  {{fig:nonuc_pairs}}
+  <div class="box proof"><span class="lab">Why (i) ⇔ (iii) (Bartle leaves it to you)</span>(i) ⇒ (ii) is the negation of Definition 5.4.1 (M3). (ii) ⇒ (iii): take δ = 1/n to get $x_n, u_n$ with $|x_n - u_n| &lt; \frac1n$. (iii) ⇒ (i): if f were uniformly continuous, the δ for $\varepsilon_0$ would eventually exceed $|x_n - u_n|$, forcing $|f(x_n) - f(u_n)| &lt; \varepsilon_0$: contradiction.</div>
+  <div class="box trap"><span class="lab">Exam trap</span>One sequence is not enough here: you need a <b>pair</b> of sequences getting closer together, with values staying a fixed $\varepsilon_0$ apart.</div>
+  <p class="small">In the model paper: <span class="chip q">Q30</span> (PYQ MAT-21 Q16, also MTS-22 MCQ 2).</p>
+</section>
+
+<!-- T15 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T15</span><h2>The Uniform Continuity Theorem</h2></div>
+  <p class="oneline">Asked in three papers (PYQ MTS-26 Q24a, MAT-22 Q28, MAT-21 Q27).</p>
+  <div class="box def"><span class="lab">Theorem 5.4.3 · Uniform Continuity Theorem</span>Let I be a closed bounded interval and let $f : I \to \mathbb R$ be continuous on I. Then f is uniformly continuous on I.</div>
+  <div class="kw"><span>Know</span><span>f continuous at every point of I = [a, b].</span><span>Want</span><span>one δ(ε) for the whole of I.</span></div>
+  <div class="box proof"><span class="lab">Proof (contradiction, pattern M5)</span>
+    <div class="steps">
+      <div class="step">Suppose f is not uniformly continuous on I. By 5.4.2 there are $\varepsilon_0&gt;0$ and $x_n, u_n \in I$ with $|x_n - u_n| &lt; 1/n$ and $|f(x_n) - f(u_n)| \ge \varepsilon_0$.<span class="why">Criterion (ii) with δ = 1/n.</span></div>
+      <div class="step">I is bounded, so by BW a subsequence $x_{n_k} \to z$; I is closed, so $z \in I$.<span class="why">P7, order theorem.</span></div>
+      <div class="step">$|u_{n_k} - z| \le |u_{n_k} - x_{n_k}| + |x_{n_k} - z| &lt; \frac1{n_k} + |x_{n_k} - z| \to 0$, so $u_{n_k} \to z$ too.<span class="why">Triangle inequality: the partners follow.</span></div>
+      <div class="step">f is continuous at z: $f(x_{n_k}) \to f(z)$ and $f(u_{n_k}) \to f(z)$.<span class="why">Sequential criterion.</span></div>
+      <div class="step">So $|f(x_{n_k}) - f(u_{n_k})| \to 0$, contradicting $\ge \varepsilon_0$. Hence f is uniformly continuous. <span class="qed">∎</span><span class="why">Limit of a difference.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>closed<span class="fails">1/x on (0, 1]; sin(1/x) on (0, 1] <span class="cx">C2</span> <span class="cx">C3</span></span></li>
+    <li>bounded<span class="fails">x² on [0, ∞) <span class="cx">C1</span></span></li>
+    <li>continuous<span class="fails">a jump: no δ works across it</span></li>
+  </ul></div>
+  <p class="small">In the model paper: <span class="chip q">Q39</span> (PYQ MTS-26 Q24a, also MAT-22 Q28, MAT-21 Q27).</p>
+</section>
+
+<!-- T16 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T16</span><h2>Lipschitz functions</h2></div>
+  <p class="oneline">A bound on every chord slope (PYQ MTS-26 Q3, MAT-21 Q28, MTS-25 Q2, MAT-22 Q15).</p>
+  <div class="box def"><span class="lab">Definition 5.4.4 · say it word for word</span>Let $A \subseteq \mathbb R$ and let $f : A \to \mathbb R$. If there exists a constant $K&gt;0$ such that $|f(x) - f(u)| \le K|x - u|$ for all $x, u \in A$, then f is said to be a <b>Lipschitz function</b> (or to satisfy a Lipschitz condition) on A.
+    <span class="say">On an interval: every chord has slope between −K and K.</span></div>
+  {{fig:lipschitz}}
+  <div class="box def"><span class="lab">Theorem 5.4.5</span>If $f : A \to \mathbb R$ is a Lipschitz function, then f is uniformly continuous on A.</div>
+  <div class="box proof"><span class="lab">Proof</span>Given ε &gt; 0 take $\delta = \varepsilon/K$. If $x, u \in A$ and $|x - u| &lt; \delta$, then $|f(x) - f(u)| \le K|x - u| &lt; K\cdot\frac{\varepsilon}{K} = \varepsilon$. δ uses only ε and the constant K. <span class="qed">∎</span></div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Examples</span>
+    <div class="kv">
+      <span>$3x + 1$</span><span>$|f(x) - f(u)| = 3|x - u|$: K = 3</span>
+      <span>$\sin x$ on ℝ</span><span>$|\sin x - \sin u| \le |x - u|$: K = 1, so δ = ε</span>
+      <span>$x^2$ on [0, b]</span><span>$|x^2 - u^2| = |x + u||x - u| \le 2b|x - u|$: K = 2b</span>
+      <span>$\frac1{1+x^2}$ on ℝ</span><span>$|f(x) - f(u)| = \frac{|u - x||u + x|}{(1+x^2)(1+u^2)} \le |x - u|$, using $\frac{|x|}{1+x^2} \le \frac12$ (M1): K = 1</span>
+    </div>
+  </div>
+  <div class="box result"><span class="lab">Result · uniformly continuous but not Lipschitz (PYQ MTS-25 Q2, MAT-22 Q15)</span>$g(x) = \sqrt x$ on [0, 2] is uniformly continuous (5.4.3) but not Lipschitz: for any K, the point $x = \frac{1}{(K+1)^2}$ gives $\sqrt x = \frac1{K+1} &gt; \frac{K}{(K+1)^2} = Kx$, so $|g(x) - g(0)| &gt; K|x - 0|$.</div>
+  {{fig:sqrt_fig}}
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Sums and products of Lipschitz functions (old MCQ)</span>If f, g are Lipschitz with constants $K_1, K_2$ then $f + g$ is Lipschitz with $K_1 + K_2$, and $cf$ with $|c|K_1$. But $f^2$ need not be: $f(x) = x$ on $[0,\infty)$ is Lipschitz, while $x^2$ has chord slopes $x + u$, unbounded. (Products are fine if f and g are also bounded.)</div>
+  <p class="small">In the model paper: <span class="chip q">Q15</span> (PYQ MTS-26 Q3, also MAT-21 Q28a), <span class="chip q">Q16</span> (PYQ MTS-25 Q2, also MAT-22 Q15), <span class="chip q">Q17</span> (MTS-22 MCQ 3), <span class="chip q">Q18</span> (MTS-22 MCQ 4), <span class="chip q">Q31</span> (PYQ MAT-21 Q28b).</p>
+</section>
+
+<!-- T17 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T17</span><h2>√x is uniformly continuous on [0, ∞)</h2></div>
+  <p class="oneline">Bartle 5.4.6(c) (PYQ MTS-26 Q24b, MAT-22 Q36b).</p>
+  <div class="box proof"><span class="lab">Proof 1 · Bartle's route</span>
+    <div class="steps">
+      <div class="step">On $I = [0,2]$: g is continuous on a closed bounded interval, so uniformly continuous; let $\delta_I(\varepsilon)$ be its δ.<span class="why">Theorem 5.4.3.</span></div>
+      <div class="step">On $J = [1,\infty)$: $|\sqrt x - \sqrt u| = \dfrac{|x - u|}{\sqrt x + \sqrt u} \le \frac12|x - u|$. Lipschitz with $K = \frac12$; $\delta_J = 2\varepsilon$.<span class="why">Conjugate (M1); $\sqrt x + \sqrt u \ge 2$ on J.</span></div>
+      <div class="step">Put $\delta = \min\{1, \delta_I(\varepsilon), \delta_J(\varepsilon)\}$. If $|x - u| &lt; \delta$, both points lie in I or both lie in J, so $|\sqrt x - \sqrt u| &lt; \varepsilon$. <span class="qed">∎</span><span class="why">The "1" matters: if $x &lt; 1 \le u$ and $|x - u| &lt; 1$ then $u &lt; 2$, so both are in [0, 2].</span></div>
+    </div>
+  </div>
+  <div class="box proof"><span class="lab">Proof 2 · one line (general knowledge)</span>For $x \ge u \ge 0$: $(\sqrt u + \sqrt{x - u})^2 = x + 2\sqrt{u(x-u)} \ge x$, so $\sqrt x - \sqrt u \le \sqrt{x - u}$. Hence $|\sqrt x - \sqrt u| \le \sqrt{|x - u|}$ and $\delta = \varepsilon^2$ works on all of $[0,\infty)$. <span class="qed">∎</span></div>
+  <p class="small">In the model paper: <span class="chip q">Q32</span> (PYQ MTS-26 Q24b, also MAT-22 Q36b).</p>
+</section>
+
+<!-- T18 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T18</span><h2>Sums and products of uniformly continuous functions</h2></div>
+  <p class="oneline">PYQ MAT-21 Q22.</p>
+  <div class="box result"><span class="lab">Result (Bartle Exercises 5.4.5–5.4.7)</span>If f, g are uniformly continuous on A, so is $f + g$ (take $\delta = \min\{\delta_f(\varepsilon/2), \delta_g(\varepsilon/2)\}$). The product need not be; it is if f and g are also bounded on A.</div>
+  <div class="box idea"><span class="lab">Counterexample</span>$f(x) = g(x) = x$ on ℝ are uniformly continuous (Lipschitz, K = 1). Their product $x^2$ is not: $x_n = n$, $u_n = n + \frac1n$ have $x_n - u_n \to 0$ but $|x_n^2 - u_n^2| = 2 + \frac1{n^2} \ge 2$. Another: $x \sin x$ <span class="cx">N4</span>.</div>
+  <p class="small">In the model paper: <span class="chip q">Q33</span> (PYQ MAT-21 Q22).</p>
+</section>
+
+<!-- T19 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T19</span><h2>Uniform continuity keeps Cauchy sequences Cauchy</h2></div>
+  <p class="oneline">Theorem 5.4.7 (PYQ MAT-21 Q36a, MTS-22 Q3).</p>
+  <div class="box def"><span class="lab">Theorem 5.4.7</span>If $f : A \to \mathbb R$ is uniformly continuous on a subset A of ℝ and if $(x_n)$ is a Cauchy sequence in A, then $(f(x_n))$ is a Cauchy sequence in ℝ.</div>
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">Let ε &gt; 0 and take δ = δ(ε) from uniform continuity.<span class="why">One δ for every pair of points.</span></div>
+      <div class="step">$(x_n)$ is Cauchy: there is H with $|x_n - x_m| &lt; \delta$ for $n, m &gt; H$.<span class="why">Definition of Cauchy, used with δ (P8).</span></div>
+      <div class="step">So $|f(x_n) - f(x_m)| &lt; \varepsilon$ for $n, m &gt; H$: $(f(x_n))$ is Cauchy. <span class="qed">∎</span><span class="why">Step 1 with $x = x_n$, $u = x_m$.</span></div>
+    </div>
+  </div>
+  <div class="box trap"><span class="lab">Mere continuity is not enough</span>$f(x) = 1/x$ on (0, 1) is continuous; $x_n = \frac1{n+1}$ is Cauchy, but $f(x_n) = n + 1$ is unbounded, not Cauchy. (This also proves 1/x is not uniformly continuous on (0, 1).)</div>
+  <p class="small">In the model paper: <span class="chip q">Q34</span> (PYQ MAT-21 Q36a, also MTS-22 Q3).</p>
+</section>
+
+<!-- T20 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T20</span><h2>The Continuous Extension Theorem</h2></div>
+  <p class="oneline">A 7–10 mark question (PYQ MAT-22 Q29).</p>
+  <div class="box def"><span class="lab">Theorem 5.4.8 · Continuous Extension Theorem</span>A function f is uniformly continuous on the interval (a, b) if and only if it can be defined at the endpoints a and b such that the extended function is continuous on [a, b].</div>
+  {{fig:extension}}
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof</span>
+    <p><b>(⇐)</b> The extension is continuous on the closed bounded [a, b], hence uniformly continuous there (5.4.3), hence on the smaller set (a, b) (the same δ works).</p>
+    <p><b>(⇒)</b> We define f(a); f(b) is similar.</p>
+    <div class="steps">
+      <div class="step">Let $x_n \in (a,b)$, $x_n \to a$. It converges, so it is Cauchy.<span class="why">P8.</span></div>
+      <div class="step">By Theorem 5.4.7, $(f(x_n))$ is Cauchy, so it converges to some L.<span class="why">Uniform continuity is used here; Cauchy ⇒ convergent (3.5.5).</span></div>
+      <div class="step">L does not depend on the sequence: if also $u_n \to a$, then $u_n - x_n \to 0$, so by uniform continuity $f(u_n) - f(x_n) \to 0$, and $f(u_n) \to L$.<span class="why">Pair argument (M6).</span></div>
+      <div class="step">By the sequential criterion for limits, $\lim_{x\to a} f(x) = L$. Define $f(a) := L$; f is then continuous at a.<span class="why">P9, Remark 5.1.7 (T7).</span></div>
+      <div class="step">Likewise at b. The extended f is continuous on [a, b]. <span class="qed">∎</span><span class="why">Interior points were already fine.</span></div>
+    </div>
+  </div>
+  <div class="box idea"><span class="lab">Using it</span>sin(1/x) has no limit at 0, so it is <b>not</b> uniformly continuous on (0, b] <span class="cx">C3</span>. $x\sin(1/x)$ has limit 0 at 0, so it <b>is</b> uniformly continuous on (0, b].</div>
+  <p class="small">In the model paper: <span class="chip q">Q40</span> (PYQ MAT-22 Q29).</p>
+</section>
+
+<!-- T21 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T21</span><h2>Step functions and piecewise linear approximation</h2></div>
+  <p class="oneline">Bartle 5.4.9–5.4.13 (PYQ MAT-22 Q5, MAT-21 Q3, MTS-26 Q17).</p>
+  <div class="box def"><span class="lab">Definition 5.4.9 · step function</span>A function $s : [a,b] \to \mathbb R$ is called a <b>step function</b> if [a, b] is the union of a finite number of nonoverlapping intervals $I_1, I_2, \ldots, I_n$ such that s is constant on each interval $I_k$.</div>
+  <div class="box def"><span class="lab">Theorem 5.4.10</span>Let I be a closed bounded interval and let $f : I \to \mathbb R$ be continuous on I. If ε &gt; 0, then there exists a step function $s_\varepsilon : I \to \mathbb R$ such that $|f(x) - s_\varepsilon(x)| &lt; \varepsilon$ for all $x \in I$.</div>
+  {{fig:step_approx}}
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">f is uniformly continuous on I = [a, b]: take δ(ε).<span class="why">Theorem 5.4.3: the only place continuity enters.</span></div>
+      <div class="step">Choose m with $h = (b-a)/m &lt; \delta$. Cut I into $I_1 = [a, a + h]$, $I_k = (a + (k-1)h, a + kh]$.<span class="why">Archimedes; the pieces do not overlap.</span></div>
+      <div class="step">Let $s_\varepsilon(x) = f(a + kh)$ for $x \in I_k$: a step function.<span class="why">Constant on each piece.</span></div>
+      <div class="step">For $x \in I_k$, $|x - (a + kh)| \le h &lt; \delta$, so $|f(x) - s_\varepsilon(x)| &lt; \varepsilon$. <span class="qed">∎</span><span class="why">Uniform continuity.</span></div>
+    </div>
+  </div>
+  <div class="box trap"><span class="lab">Exam trap</span>h must be <b>strictly</b> less than δ. For f(x) = x on [0, 1], ε = 0.1 (so δ = 0.1): m = 10 gives h = 0.1 and fails at x = 0; m = 11 works (error ≤ 1/11).</div>
+  <div class="box def"><span class="lab">Definition 5.4.12 and Theorem 5.4.13 · piecewise linear</span>g is <b>piecewise linear</b> on [a, b] if [a, b] is a union of finitely many disjoint intervals on each of which g is linear. If f is continuous on a closed bounded I and ε &gt; 0, there is a continuous piecewise linear $g_\varepsilon$ with $|f(x) - g_\varepsilon(x)| &lt; \varepsilon$ for all $x \in I$.</div>
+</section>
+
+<section class="page">
+  {{fig:pl_approx}}
+  <div class="box proof"><span class="lab">Proof idea (the step Bartle skips)</span>Join the points $(x_k, f(x_k))$, $x_k = a + kh$, by chords. For x between $x_{k-1}$ and $x_k$, write $x = (1-\lambda)x_{k-1} + \lambda x_k$; then $g(x) = (1-\lambda)f(x_{k-1}) + \lambda f(x_k)$ and $$f(x) - g(x) = (1-\lambda)[f(x) - f(x_{k-1})] + \lambda[f(x) - f(x_k)],$$ where both brackets are less than ε in size. So $|f(x) - g(x)| &lt; \varepsilon$.</div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">$f(x) = x^2$ on [0, 1] with nodes 0, ¼, ½, ¾, 1. Largest error of the broken line?</div>
+    <div class="a">On each piece of width h the chord of x² lies above it by at most $h^2/4$ (at the midpoint): $\frac{1}{64} \approx 0.0156$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q19</span> (PYQ MAT-22 Q5, also MAT-21 Q3), <span class="chip q">Q35</span> (PYQ MTS-26 Q17), <span class="chip q">Q36</span>.</p>
+</section>
+
+<!-- T22 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T22</span><h2>Weierstrass Approximation Theorem</h2></div>
+  <p class="oneline">Statement only (PYQ MTS-25 Q3, MAT-22 Q2).</p>
+  <div class="box def"><span class="lab">Theorem 5.4.14 · say it word for word</span>Let $I = [a,b]$ and let $f : I \to \mathbb R$ be a continuous function. If $\varepsilon&gt;0$ is given, then there exists a polynomial function $p_\varepsilon$ such that $|f(x) - p_\varepsilon(x)| &lt; \varepsilon$ for all $x \in I$.
+    <span class="say">The proof is optional in the syllabus (Bartle omits it).</span></div>
+  <div class="box idea"><span class="lab">Why "closed bounded" is needed</span>$1/x$ on (0, 1] cannot be approximated within 1 by a polynomial p: p is bounded on [0, 1], and $|1/x - p| &lt; 1$ would make 1/x bounded too.</div>
+  <p class="small">In the model paper: <span class="chip q">Q20</span> (PYQ MTS-25 Q3, also MAT-22 Q2).</p>
+</section>

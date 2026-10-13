@@ -1,0 +1,137 @@
+<!-- T22 -->
+<section class="page">
+  <div class="kicker" style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNIT 2 · BARTLE §6.2 (END)</div>
+  <h1>Derivatives never jump</h1>
+  <hr>
+  <div class="topic-head"><span class="tid">T22</span><h2>The local sign lemma</h2></div>
+  <p class="oneline">The engine inside Darboux's Theorem (Bartle Lemma 6.2.11).</p>
+  <div class="hook"><span class="lab">Puzzle</span>If the slope at c is positive, are the points just to the right of c <i>higher</i> than f(c)? Are they higher than <i>each other</i> as you move right? One is true, one is not.</div>
+  <div class="box idea"><span class="lab">Picture in words</span>
+    <div class="kv">
+      <span>f′(c) &gt; 0</span><span>just right of c: values above f(c) ↗ (and just left: below)</span>
+      <span>f′(c) &lt; 0</span><span>just left of c: values above f(c) ↖ (and just right: below)</span>
+    </div>
+    A positive slope at c means the tangent climbs; the graph follows its tangent closely enough, for a short distance, to stay above (right) or below (left) the height f(c).</div>
+  <div class="box def"><span class="lab">Lemma 6.2.11 · local sign lemma</span>Let $I$ be an interval, $f : I \to \mathbb R$, $c \in I$, and suppose $f$ has a derivative at $c$.
+    <p>(a) If $f'(c) &gt; 0$, then there is $\delta &gt; 0$ such that $f(x) &gt; f(c)$ for $x \in I$ with $c &lt; x &lt; c + \delta$.</p>
+    <p>(b) If $f'(c) &lt; 0$, then there is $\delta &gt; 0$ such that $f(x) &gt; f(c)$ for $x \in I$ with $c - \delta &lt; x &lt; c$.</p>
+    <span class="say">Note (b): the values are <b>above</b> f(c) on the <b>left</b> (the graph is falling through c). Darboux needs exactly this.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · (a)</span>The quotient $\dfrac{f(x) - f(c)}{x - c}$ tends to $f'(c) &gt; 0$, so for $0 &lt; |x - c| &lt; \delta$ it is <span class="gap">?</span>. For $c &lt; x &lt; c + \delta$: $f(x) - f(c) = (x - c) \cdot$ <span class="gap">?</span> $&gt; 0$. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">(a) $\displaystyle\lim_{x \to c}\frac{f(x) - f(c)}{x - c} = f'(c) &gt; 0$. By the local sign property of limits there is $\delta &gt; 0$ such that $\dfrac{f(x) - f(c)}{x - c} &gt; 0$ for $x \in I$, $0 &lt; |x - c| &lt; \delta$.<span class="why">Theorem 4.2.9 (a positive limit forces positive values nearby; Module 1).</span></div>
+      <div class="step">For $c &lt; x &lt; c + \delta$: $x - c &gt; 0$, so $f(x) - f(c) = (x - c)\cdot\dfrac{f(x) - f(c)}{x - c} &gt; 0$.<span class="why">Positive times positive.</span></div>
+      <div class="step">(b) $f'(c) &lt; 0$: choose $\delta$ so the quotient is $&lt; 0$ for $0 &lt; |x - c| &lt; \delta$. For $c - \delta &lt; x &lt; c$: $x - c &lt; 0$ and quotient $&lt; 0$, so $f(x) - f(c) = (x - c)\cdot(\text{quotient}) &gt; 0$. <span class="qed">∎</span><span class="why">Negative times negative is positive.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>$f'(c) \ne 0$ (strict sign)<span class="fails">$f(x) = -x^2$ at 0: $f'(0) = 0$ and $f(x) &lt; f(0)$ on both sides</span></li>
+    <li>$f'(c)$ <b>exists</b> (two-sided at an interior point)<span class="fails">$f(x) = -|x|$ at 0: left quotient is $+1$, right quotient is $-1$; the right values are <i>below</i> f(0), so (a)'s conclusion fails <span class="cx">C5</span></span></li>
+    <li>(a) says <i>right</i> of c, not "everywhere near c"<span class="fails">left of c the values are lower: $f(x) &lt; f(c)$</span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Existence of $f'(c)$: the limit whose sign is read. $f'(c) &gt; 0$: starts the sign argument. $x \in I$: the points compared stay in the domain, so it also works at an endpoint of I (that is how Darboux uses it).</p></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "positive slope ⇒ increasing near c"</span>The lemma compares $f(x)$ only with the <b>single value</b> $f(c)$. It does not say f is increasing on $(c - \delta, c + \delta)$. For $g(x) = x + 2x^2\sin(1/x)$, $g(0) = 0$, $g'(0) = 1 &gt; 0$ and indeed $g(x) &gt; 0$ just right of 0, but $g'(x) = -1$ at $x = \frac1{2n\pi}$: g goes down inside every window (T14).</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>$f(x) = 3x + x^2$ at $c = 0$. $f'(0) = 3 &gt; 0$. The quotient is $\dfrac{3x + x^2 - 0}{x} = 3 + x$, which is $&gt; 0$ for $-3 &lt; x &lt; 3$, $x \ne 0$. So $\delta = 3$ works: for $0 &lt; x &lt; 3$, $f(x) = x(3 + x) &gt; 0 = f(0)$. (And for $-3 &lt; x &lt; 0$ the values are below.)</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$f(x) = x^2 - 2x$ at $c = 0$. $f'(0) = $ <span class="gap">?</span> $&lt; 0$. Quotient $= x - 2$, which is $&lt; 0$ for $x &lt; $ <span class="gap">?</span>. By (b), for $-\delta &lt; x &lt; 0$ we get $f(x) &gt; $ <span class="gap">?</span>. Here $\delta = $ <span class="gap">?</span>.
+    <span class="say">Answer: $-2$; $x &lt; 2$; $f(x) &gt; f(0) = 0$; $\delta = 2$. Check $x = -1$: $1 + 2 = 3 &gt; 0$ ✓.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">$f'(c) &gt; 0$. Does the lemma let you conclude $f(x_1) &lt; f(x_2)$ for $c &lt; x_1 &lt; x_2 &lt; c + \delta$? Why or why not?</div>
+    <div class="a">No. It only compares each x with $f(c)$. Two points both to the right of c are not compared. Counterexample: $x + 2x^2\sin(1/x)$ at 0 (in the trap box).</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q20</span> (state and prove (a)).</p>
+</section>
+
+<!-- T23 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T23</span><h2>Darboux's Theorem</h2></div>
+  <p class="oneline">A derivative has the intermediate value property, even when it is not continuous.</p>
+  <div class="hook"><span class="lab">Puzzle</span>You know $f'(0) = 0$ and $f'(2) = 4$. Does f′ have to take the value 1 somewhere between? You are <i>not</i> told f′ is continuous. (Yes: this theorem.)</div>
+  <div class="box def"><span class="lab">Theorem 6.2.12 · Darboux's Theorem</span>If $f$ is differentiable on $I = [a, b]$ and if $k$ is a number between $f'(a)$ and $f'(b)$, then there is at least one point $c$ in $(a, b)$ such that $f'(c) = k$.
+    <span class="say">"Between" means either $f'(a) &lt; k &lt; f'(b)$ <b>or</b> $f'(a) &gt; k &gt; f'(b)$. Bartle writes out only the first case; the exam wants both.</span></div>
+  <div class="box idea"><span class="lab">Proof picture · in numbers</span>
+    $f(x) = x^2$ on $[0, 2]$, $f'(a) = f'(0) = 0$, $f'(b) = f'(2) = 4$, $k = 1$. The auxiliary function $g(x) = kx - f(x) = x - x^2$ has $g'(0) = 1 &gt; 0$ (rising at the left end) and $g'(2) = -3 &lt; 0$ (falling at the right end).
+    <div class="kv">
+      <span>x</span><span>0 · 0.5 · 1 · 2</span>
+      <span>g(x)</span><span>0 · 0.25 · 0 · −2</span>
+    </div>
+    The maximum of g on [0, 2] is at the <b>interior</b> point $x = \frac12$, where $g' = 0$, i.e. $f'(\frac12) = 1 = k$.</div>
+  <div class="box skel"><span class="lab">Skeleton · case $f'(a) &lt; k &lt; f'(b)$</span>Let $g(x) = kx - f(x)$. g is continuous on [a, b], so it has a maximum at some $c \in [a, b]$ (Max–Min). Since $g'(a) = k - f'(a) &gt; 0$, the maximum is not at <span class="gap">?</span> (Lemma 6.2.11(a)). Since $g'(b) = k - f'(b) &lt; 0$, it is not at <span class="gap">?</span> (Lemma (b)). So c is interior and $g'(c) = 0$, i.e. <span class="gap">?</span>. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Scratch · how to find g (never copied into the exam)</span>
+    Want a point where $f'(c) = k$, i.e. $k - f'(c) = 0$.<br>
+    "derivative equals 0" is what happens at an <b>interior extremum</b>. So we need a function whose derivative is $k - f'$: that is $g(x) = kx - f(x)$.<br>
+    Is there an extremum? g is continuous on [a, b], so yes, a maximum exists. Is it inside? The signs of $g'$ at the ends say the graph climbs away from a and falls into b, so the top is not at the ends.</div>
+  <div class="box proof"><span class="lab">Proof (Bartle, with the missing case written out)</span>
+    <div class="steps">
+      <div class="step"><b>Case 1: $f'(a) &lt; k &lt; f'(b)$.</b> Let $g(x) = kx - f(x)$ on $[a, b]$.<span class="why">$g' = k - f'$, so $f'(c) = k$ iff $g'(c) = 0$.</span></div>
+      <div class="step">g is continuous on [a, b], so g attains a maximum at some $c \in [a, b]$.<span class="why">Differentiable ⇒ continuous; Max–Min Theorem 5.3.4.</span></div>
+      <div class="step">$g'(a) = k - f'(a) &gt; 0$, so by Lemma 6.2.11(a) there are x just to the right of a with $g(x) &gt; g(a)$. Hence the maximum is not at a: $c \ne a$.<span class="why">A maximum value cannot be exceeded.</span></div>
+      <div class="step">$g'(b) = k - f'(b) &lt; 0$, so by Lemma 6.2.11(b) there are x just to the left of b with $g(x) &gt; g(b)$. Hence $c \ne b$.<span class="why">Lemma (b): values <b>above</b> g(b) on the left. This is why (b) is stated that way.</span></div>
+      <div class="step">So $c \in (a, b)$ is an interior maximum of g, and $g'(c)$ exists. By the Interior Extremum Theorem, $0 = g'(c) = k - f'(c)$, so $f'(c) = k$.<span class="why">Theorem 6.2.1 (T10).</span></div>
+      <div class="step"><b>Case 2: $f'(a) &gt; k &gt; f'(b)$.</b> Put $F = -f$ and $K = -k$. Then $F'(a) = -f'(a) &lt; -k = K$ and $K &lt; -f'(b) = F'(b)$, which is Case 1 for F and K. So there is $c \in (a, b)$ with $F'(c) = K$, i.e. $f'(c) = k$. <span class="qed">∎</span><span class="why">Multiplying by −1 reverses the order, turning case 2 into case 1. (Equivalently, maximise $f(x) - kx$.) The case Bartle omits.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f differentiable at <b>every</b> point of [a, b] (one-sided at the ends)<span class="fails">$f(x) = |x|$ on $[-1, 1]$: $f'(-1) = -1 &lt; 0 &lt; 1 = f'(1)$ but $f' = \pm 1$ never 0, since f′(0) does not exist <span class="cx">C5</span></span></li>
+    <li>the domain is an <b>interval</b><span class="fails">$f(x) = -|x|$ on $[-1, 0) \cup (0, 1]$ (the point 0 removed): $f'(-1) = 1$, $f'(1) = -1$, and $f' = \pm 1$ never 0</span></li>
+    <li>f′ <b>continuous</b>: <i>not</i> needed<span class="fails">$f(x) = x^2\sin(1/x)$, $f(0) = 0$: $f'$ is discontinuous at 0 yet has the property <span class="cx">C6</span></span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Differentiable on [a, b]: g continuous (Max–Min), and $g'(a)$, $g'(b)$ exist for the lemma. Interval: all of [a, b] is the domain, so the maximum exists. Interior Extremum: converts "max at interior c" into $g'(c) = 0$.</p></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "no continuity of f′, so no IVP"</span>The Intermediate Value Theorem for <i>continuous</i> functions (Module 1) is one reason a function can have the IVP, not the only one. Derivatives can wiggle ($\cos\frac1x$ terms in f′ of $x^2\sin\frac1x$ near 0 <span class="cx">C6</span>) but cannot jump. Darboux is one-way: it can <b>rule a function out</b> as a derivative; it does not by itself prove a function is a derivative.</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>$f(x) = x^2$ on $[0, 2]$, $k = 1$. $f'(0) = 0 &lt; 1 &lt; 4 = f'(2)$. $g(x) = x - x^2$, $g'(x) = 1 - 2x$. $g(0) = 0$, $g(\frac12) = \frac14$, $g(2) = -2$. The maximum is at $c = \frac12 \in (0, 2)$, and $f'(\frac12) = 1 = k$ ✓.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$f(x) = x^3$ on $[0, 2]$, $k = 3$. $f'(0) = $ <span class="gap">?</span>, $f'(2) = $ <span class="gap">?</span>, so $k$ is between. $g(x) = 3x - x^3$, $g' = $ <span class="gap">?</span> $= 0$ at $x = $ <span class="gap">?</span>. Check $g(0), g(1), g(2)$: <span class="gap">?</span>. So $c = $ <span class="gap">?</span>.
+    <span class="say">Answer: $0$; $12$; $3 - 3x^2$; $x = 1$; $0, 2, -2$ (max at 1); $c = 1$, and $f'(1) = 3$ ✓.</span></div>
+  <div class="box check"><span class="lab">Check yourself · the second ordering</span>
+    <div class="q">$f(x) = \sin x$ on $[0, \pi]$, $k = \frac12$. Here $f'(0) = 1 &gt; \frac12 &gt; -1 = f'(\pi)$. Which function do you maximise, and what c do you get?</div>
+    <div class="a">Case 2: maximise $g(x) = f(x) - kx = \sin x - \frac x2$ (the Case 1 function for $-f$, $-k$). $g'(x) = \cos x - \frac12 = 0$ at $x = \frac\pi3$. $g(0) = 0$, $g(\frac\pi3) = \frac{\sqrt3}2 - \frac\pi6 \approx 0.342$, $g(\pi) = -\frac\pi2$: max at $\frac\pi3 \in (0, \pi)$, and $f'(\frac\pi3) = \cos\frac\pi3 = \frac12$ ✓.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q39</span> (state and prove, both orderings).</p>
+</section>
+
+<!-- T24 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T24</span><h2>A function that is not a derivative</h2></div>
+  <p class="oneline">Jumps are impossible for derivatives (Bartle 6.2.13, Ex 6.2.12).</p>
+  <div class="hook"><span class="lab">Puzzle</span>The function that is $-1$ left of 0 and $+1$ right of 0 is perfectly simple. Is there <i>any</i> function whose derivative is it? Darboux says no, with no calculation at all.</div>
+  {{fig:darboux_jump}}
+  <div class="box def"><span class="lab">Bartle 6.2.13 and Ex 6.2.12</span>The function $g : [-1, 1] \to \mathbb R$ defined by $g(x) = -1$ for $-1 \le x &lt; 0$, $g(0) = 0$, $g(x) = 1$ for $0 &lt; x \le 1$ is <b>not</b> the derivative on $[-1, 1]$ of any function.
+    <span class="say">The test: a derivative must take every value between any two of its values (Darboux). g takes −1 and 1 but never $\frac12$.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · "show g is not a derivative"</span>Suppose $g = F'$ on $[a, b]$ for some differentiable F. Pick two values $g(p) &lt; g(q)$ and a number $k$ strictly between them. By Darboux there is $c$ between p and q with $g(c) = k$. But <span class="gap">?</span>. Contradiction. ∎</div>
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">Suppose $g = F'$ for a function F differentiable on $[-1, 1]$.<span class="why">Contradiction method (M10).</span></div>
+      <div class="step">$F'(-1) = g(-1) = -1$ and $F'(1) = g(1) = 1$, and $-1 &lt; \frac12 &lt; 1$.<span class="why">Read the values off g.</span></div>
+      <div class="step">By Darboux there is $c \in (-1, 1)$ with $F'(c) = g(c) = \frac12$.<span class="why">Theorem 6.2.12 (T23); F is differentiable on [−1, 1].</span></div>
+      <div class="step">But g takes only the values $-1, 0, 1$. Contradiction. <span class="qed">∎</span><span class="why">$\frac12$ is not one of them.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist (what the argument needs)</span><ul>
+    <li>F differentiable on the <b>whole</b> interval<span class="fails">$F(x) = |x|$ has $F' = \operatorname{sgn} x$ for $x \ne 0$ but is not differentiable at 0, so sgn is not "$F'$ on [−1, 1]" <span class="cx">C9</span></span></li>
+    <li>a value $k$ strictly between two values of g, never taken<span class="fails">$\sin(1/x)$ with value 0 at 0 takes every value between any two of its values: Darboux gives no contradiction <span class="cx">C10</span></span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "it fails continuity, so it is not a derivative"</span>Wrong reason. Many derivatives are discontinuous: f′ for $x^2\sin(1/x)$ <span class="cx">C6</span>. The right test is the <b>intermediate value property</b>. And $h(x) = \sin(1/x)$, $h(0) = 0$, is discontinuous at 0 but <i>does</i> have the IVP on [0, 1]; Darboux does not rule it out. It is in fact a derivative (it is $F' - 2x\cos\frac1x$ with $F = x^2\cos\frac1x$, and $2x\cos\frac1x$ is continuous, so has an antiderivative: Module 3) <span class="cx">C10</span>.</div>
+  <div class="box idea"><span class="lab">Same derivative, different functions (Ex 6.2.12)</span>
+    $h(x) = 0$ for $x &lt; 0$ and $h(x) = 1$ for $x \ge 0$. By Darboux no F has $F' = h$ everywhere (h takes 0 and 1 but not $\frac12$). Yet $f_1(x) = \max(x, 0)$ and $f_2(x) = 0$ for $x \le 0$, $f_2(x) = x + 1$ for $x &gt; 0$ both have derivative $h(x)$ for every $x \ne 0$ ($0$ on the left, $1$ on the right), and $f_2 - f_1 = 0$ for $x \le 0$, $= 1$ for $x &gt; 0$: <b>not</b> a constant. The corollary "equal derivatives ⇒ differ by a constant" needs one <i>interval</i> and differentiability at <i>every</i> point (T13).</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Heaviside: $H(x) = 0$ ($x &lt; 0$), $H(x) = 1$ ($x \ge 0$) on $[-1, 1]$. $H(-1) = 0$, $H(1) = 1$. Take $k = \frac12$. $H$ never equals $\frac12$ (values 0, 1 only). By Darboux, H is not the derivative of any function on $[-1, 1]$.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$g(x) = \lfloor x \rfloor$ (greatest integer) on $[0, 2]$. $g(0) = $ <span class="gap">?</span>, $g(2) = $ <span class="gap">?</span>. Take $k = $ <span class="gap">?</span>. The values of g are only <span class="gap">?</span>, so $k$ is skipped: not a derivative.
+    <span class="say">Answer: $0$; $2$; $k = \frac12$ (or $\frac32$); $\{0, 1, 2\}$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">$f$ is differentiable on $[0, 1]$ and $f'(x) \ne 0$ for every x. Why must $f'$ have the same sign throughout, and what follows for f?</div>
+    <div class="a">If $f'(p) &lt; 0 &lt; f'(q)$ for some p, q, Darboux (on [p, q] or [q, p]) gives a point where $f' = 0$: contradiction. So $f' &gt; 0$ everywhere or $f' &lt; 0$ everywhere, and f is strictly monotone (T14).</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q36</span> (not a derivative; two functions with the same derivative off 0).</p>
+</section>

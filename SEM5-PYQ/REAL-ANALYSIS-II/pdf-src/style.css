@@ -1,0 +1,201 @@
+/* Phone-first study PDFs. Page ~ one phone screen wide (100 mm ≈ 378 css px). */
+@page { size: 100mm 200mm; margin: 7mm 6mm 9mm 6mm;
+  @bottom-center { content: counter(page); font: 8pt 'Inter Variable', sans-serif; color: #8a8f98; } }
+@font-face { font-family: 'UI'; src: local('Inter Variable'); }
+
+:root {
+  --ink: #1d2330; --soft: #4a5263; --mute: #8a8f98; --line: #e3e6ec; --paper: #ffffff;
+  --blue: #0072B2; --orange: #D55E00; --amber: #E69F00; --green: #009E73; --pink: #CC79A7;
+  --sky: #56B4E9; --purple: #6a4fb3; --red: #c0392b;
+  --remind: #fff6db; --remind-b: #e9b949;
+  --maths: #f1ecfc; --maths-b: #8b6fd6;
+  --idea: #e8f3fb; --idea-b: #3b8fd0;
+  --trap: #fdecea; --trap-b: #d9534f;
+  --check: #eaf7f1; --check-b: #2ea877;
+  --exam: #f4f5f7; --exam-b: #9aa1ad;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: 'Inter Variable', 'Noto Sans', sans-serif; font-size: 10.5pt; line-height: 1.5;
+  color: var(--ink); background: var(--paper); hyphens: none; text-align: left; }
+p { margin: 0 0 2.2mm; }
+b, strong { font-weight: 650; }
+h1 { font-size: 19pt; line-height: 1.15; margin: 0 0 2mm; letter-spacing: -0.01em; }
+h2 { font-size: 14pt; line-height: 1.2; margin: 0 0 2mm; }
+h3 { font-size: 11.5pt; margin: 4mm 0 1.5mm; }
+h4 { font-size: 10.5pt; margin: 3mm 0 1mm; color: var(--soft); }
+ul, ol { margin: 0 0 2mm; padding-left: 5mm; }
+li { margin-bottom: 1mm; }
+small, .small { font-size: 8.5pt; color: var(--soft); }
+.mute { color: var(--mute); }
+hr { border: 0; border-top: 1px solid var(--line); margin: 3mm 0; }
+.katex { font-size: 1.04em; }
+.katex-display { margin: 1.6mm 0; overflow: hidden; }
+
+/* page control */
+.page { break-before: page; }
+.keep { break-inside: avoid; }
+.nobreak-after { break-after: avoid; }
+
+/* cover */
+.cover { height: 182mm; display: flex; flex-direction: column; justify-content: space-between; }
+.cover .kicker { font-size: 8.5pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+.cover h1 { font-size: 24pt; margin-top: 3mm; }
+.cover .sub { font-size: 11pt; color: var(--soft); }
+.cover .band { height: 3mm; border-radius: 2mm; background: linear-gradient(90deg, var(--blue), var(--green), var(--amber), var(--orange)); }
+
+/* topic header */
+.topic-head { display: flex; align-items: center; gap: 2.5mm; margin: 0 0 2.5mm; }
+.tid { flex: none; font-weight: 800; font-size: 9pt; color: #fff; background: var(--blue); border-radius: 1.6mm; padding: 0.8mm 2mm; letter-spacing: .02em; }
+.tid.pre { background: var(--amber); color: #3a2a00; }
+.tid.math { background: var(--purple); }
+.topic-head h2 { margin: 0; }
+.oneline { font-size: 10pt; color: var(--soft); border-left: 1mm solid var(--line); padding-left: 2.5mm; margin: 0 0 3mm; }
+
+/* boxes */
+.box { border-radius: 2.2mm; padding: 2.4mm 3mm 1.2mm; margin: 0 0 3mm; border-left: 1.2mm solid; break-inside: avoid; }
+.box > .lab { display: block; font-size: 7.6pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 1mm; }
+.remind { background: var(--remind); border-color: var(--remind-b); } .remind > .lab { color: #9a6b00; }
+.maths  { background: var(--maths);  border-color: var(--maths-b); }  .maths > .lab { color: var(--purple); }
+.idea   { background: var(--idea);   border-color: var(--idea-b); }   .idea > .lab { color: #1f6aa5; }
+.trap   { background: var(--trap);   border-color: var(--trap-b); }   .trap > .lab { color: #b02a26; }
+.check  { background: var(--check);  border-color: var(--check-b); }  .check > .lab { color: #1d7a52; }
+.exam   { background: var(--exam);   border-color: var(--exam-b); }   .exam > .lab { color: #5b6270; }
+.result { background: #fff; border: 0.5mm solid var(--blue); border-left-width: 1.2mm; }
+.result > .lab { color: var(--blue); }
+
+/* step-by-step derivations: equation, then plain words */
+.steps { counter-reset: st; margin: 0 0 3mm; }
+.step { position: relative; padding: 1.2mm 0 1.6mm 7mm; border-bottom: 1px dashed var(--line); break-inside: avoid; }
+.step:last-child { border-bottom: 0; }
+.step::before { counter-increment: st; content: counter(st); position: absolute; left: 0; top: 1.6mm; width: 4.8mm; height: 4.8mm;
+  border-radius: 50%; background: var(--ink); color: #fff; font-size: 7.5pt; font-weight: 700; text-align: center; line-height: 4.8mm; }
+.step .why { display: block; font-size: 9pt; color: var(--soft); margin-top: 0.4mm; }
+.step .katex-display { margin: 0.6mm 0; text-align: left; }
+.step .katex-display > .katex { text-align: left; }
+.hl { background: #ffe9a8; border-radius: 1mm; padding: 0 0.6mm; }
+.chg { color: var(--orange); }
+
+/* question / answer reveal style for self checks */
+.q { font-weight: 600; margin-bottom: 0.6mm; }
+.a { color: var(--soft); font-size: 9.5pt; border-top: 1px dotted #b8c9bf; padding-top: 0.8mm; margin-bottom: 2mm; }
+
+/* figures */
+figure { margin: 0 0 3mm; break-inside: avoid; }
+figure svg { width: 100%; height: auto; display: block; }
+figcaption { font-size: 8.5pt; color: var(--soft); margin-top: 0.8mm; }
+
+/* key-value stacked (no wide tables on phones) */
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 0.8mm 3mm; margin: 0 0 3mm; font-size: 10pt; }
+.kv > :nth-child(odd) { font-weight: 650; white-space: nowrap; }
+table.t { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 0 0 3mm; }
+table.t th, table.t td { border-bottom: 1px solid var(--line); padding: 1mm 1.2mm; text-align: left; vertical-align: top; }
+table.t th { font-size: 7.6pt; text-transform: uppercase; letter-spacing: .06em; color: var(--soft); }
+
+/* chips: links to topics */
+.chip { display: inline-block; font-size: 8pt; font-weight: 700; border-radius: 1.4mm; padding: 0.1mm 1.4mm; margin: 0 0.6mm 0.8mm 0;
+  background: #e7eefb; color: #1f4f99; white-space: nowrap; }
+.chip.pre { background: #fbefd0; color: #7a5600; }
+.chip.math { background: #ece5fb; color: var(--purple); }
+.src { display: inline-block; font-size: 7.6pt; font-weight: 800; border-radius: 1.2mm; padding: 0.1mm 1.4mm; background: #1d2330; color: #fff; letter-spacing: .04em; }
+.marks { float: right; font-size: 8pt; font-weight: 700; color: var(--soft); }
+
+/* question paper */
+.qp-head { text-align: center; border-bottom: 0.5mm solid var(--ink); padding-bottom: 2mm; margin-bottom: 3mm; }
+.qp-head .t1 { font-size: 8pt; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
+.qp-head h1 { font-size: 15pt; margin: 1mm 0; }
+.section-head { background: var(--ink); color: #fff; border-radius: 1.6mm; padding: 1.6mm 3mm; margin: 3mm 0 2mm; break-after: avoid; }
+.section-head b { font-size: 10.5pt; } .section-head small { display: block; color: #cfd5df; font-size: 8pt; }
+.qq { display: grid; grid-template-columns: 7mm 1fr; gap: 0 1mm; padding: 1.8mm 0; border-bottom: 1px solid var(--line); break-inside: avoid; }
+.qq .n { font-weight: 800; }
+.qq .meta { margin-top: 0.8mm; }
+.or { text-align: center; font-weight: 800; font-size: 8.5pt; color: var(--soft); margin: 0.6mm 0; letter-spacing: .1em; }
+
+/* answer key */
+.ans-head { display: flex; align-items: baseline; gap: 2mm; border-bottom: 0.5mm solid var(--ink); padding-bottom: 1mm; margin-bottom: 2mm; }
+.ans-head .n { font-size: 14pt; font-weight: 800; }
+.need { background: #f6f7f9; border-radius: 2mm; padding: 1.6mm 2.4mm; margin-bottom: 2.5mm; font-size: 9pt; }
+.need b { font-size: 7.6pt; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); display: block; margin-bottom: 0.6mm; }
+.final { border: 0.5mm solid var(--green); border-radius: 2mm; padding: 1.4mm 2.4mm; margin: 0 0 3mm; font-weight: 600; break-inside: avoid; }
+.final::before { content: "ANSWER  "; font-size: 7.6pt; font-weight: 800; letter-spacing: .1em; color: var(--green); }
+.marking { font-size: 8.5pt; color: var(--soft); margin: -1mm 0 3mm; }
+
+/* toc */
+.toc a, .toc div { display: flex; justify-content: space-between; text-decoration: none; color: var(--ink); padding: 1mm 0; border-bottom: 1px dotted var(--line); font-size: 9.5pt; }
+a { color: inherit; text-decoration: none; }
+.chip.q { background: #1d2330; color: #fff; }
+h3 { break-after: avoid; }
+
+.lab .katex { text-transform: none; }
+.box .katex-display { font-size: 0.97em; }
+.result .katex-display, .final .katex-display { overflow: visible; }
+.a .katex, .kv .katex { font-size: 1em; }
+
+/* answer key: "Know first" chips with their topic titles (added by build.py) */
+.need .dep { display: inline; font-size: 8.8pt; margin: 0 2.4mm 0 0; line-height: 1.55; }
+.need .dep .chip { margin: 0 0.8mm 0 0; }
+
+
+/* answer-key flow (see build.py) */
+.newpage { break-before: page; }
+.need { break-inside: avoid; }
+
+/* ───── Real Analysis additions ───── */
+/* definition / theorem statement to learn word for word */
+.def { background: #fff; border: 0.5mm solid var(--ink); border-left-width: 1.2mm; }
+.def > .lab { color: var(--ink); }
+.def .say { display: block; font-size: 8.5pt; color: var(--soft); margin-top: 1mm; border-top: 1px dotted var(--line); padding-top: 0.8mm; }
+/* skeleton: the lines you can write before you have any idea */
+.skel { background: #f3f7f2; border-color: #6b9a62; font-family: 'Noto Sans', sans-serif; }
+.skel > .lab { color: #3f6e37; }
+.skel .gap { display: inline-block; min-width: 9mm; border-bottom: 1.2px dashed #6b9a62; color: #6b9a62; text-align: center; }
+/* scratch work (how we FIND delta) vs proof (what we WRITE) */
+.scratch { background: repeating-linear-gradient(0deg, #f7f7f4, #f7f7f4 5.2mm, #ecece6 5.2mm, #ecece6 5.3mm); border-color: #b5b5a8; color: #3b3f47; }
+.scratch > .lab { color: #74746a; }
+.proof { background: #fff; border: 0.4mm solid #c9ced8; border-left: 1.2mm solid var(--ink); }
+.proof > .lab { color: var(--ink); }
+.proof .qed { float: right; font-weight: 800; }
+/* hypotheses checklist: theorem → each hypothesis → what breaks without it */
+.hyp { background: #fbf6ee; border-color: #c98a2b; }
+.hyp > .lab { color: #8a5a10; }
+.hyp ul { list-style: none; padding-left: 0; }
+.hyp li::before { content: "☐ "; font-weight: 700; color: #8a5a10; }
+.hyp .fails { display: block; font-size: 9pt; color: #9c3d2b; padding-left: 4mm; }
+/* counterexample library tag */
+.cx { display: inline-block; font-size: 7.6pt; font-weight: 800; border-radius: 1.2mm; padding: 0.1mm 1.3mm; background: #f6dff0; color: #8a2f6f; white-space: nowrap; }
+/* quantifier game table */
+.game td:first-child { font-weight: 700; white-space: nowrap; }
+.dep-on { color: var(--orange); font-weight: 700; }
+.indep { color: var(--green); font-weight: 700; }
+/* why-this-line already .why; KNOW / WANT header */
+.kw { display: grid; grid-template-columns: auto 1fr; gap: 0.4mm 2.5mm; font-size: 9.5pt; background: #f6f7f9; border-radius: 2mm; padding: 1.4mm 2.4mm; margin: 0 0 2.5mm; break-inside: avoid; }
+.kw > :nth-child(odd) { font-size: 7.6pt; font-weight: 800; letter-spacing: .1em; color: var(--soft); padding-top: 0.6mm; }
+.tid.cx-id { background: var(--pink); }
+
+/* ───── continuous prepare flow + linked index (build.py add_index) ───── */
+.cover { break-after: page; }
+.index { break-after: page; }
+.index h2.ix { font-size: 16pt; margin-bottom: 1mm; }
+.toc a { display: flex; align-items: baseline; justify-content: space-between; gap: 2mm; padding: 0.6mm 0; border-bottom: 1px dotted var(--line); font-size: 9.2pt; break-inside: avoid; }
+.toc a .tt { flex: 1; }
+.toc a .pg { flex: none; font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; min-width: 6mm; text-align: right; }
+.toc a.l1 { font-weight: 750; font-size: 9.8pt; margin-top: 2mm; border-bottom: 0.4mm solid var(--ink); }
+.toc a.l2 { padding-left: 2mm; }
+.toc .tid { font-size: 7.4pt; padding: 0.3mm 1.4mm; }
+.topic-head .up { margin-left: auto; flex: none; font-size: 7pt; font-weight: 700; color: var(--mute); letter-spacing: .04em; white-space: nowrap; }
+a.chip { text-decoration: none; }
+/* flowing pages: a clear divider instead of a page break */
+.flow > .topic-head:first-child, .flow > .kicker:first-child { margin-top: 5mm; padding-top: 3mm; border-top: 0.7mm solid var(--line); }
+.flow > h2:first-child { margin-top: 5mm; padding-top: 3mm; border-top: 0.7mm solid var(--line); }
+.flow .topic-head, .flow .kicker, .flow h1, .flow h2 { break-after: avoid; }
+.flow .oneline { break-before: avoid; }
+/* boxes stay whole (the .box rule above); a box label never sits alone at the foot of a page */
+.box > .lab { break-after: avoid; }
+/* engagement boxes (Module 2 onwards) */
+.hook { background: linear-gradient(90deg, #fff3e6, #fff); border-left: 1.2mm solid var(--orange); border-radius: 2.2mm; padding: 2mm 3mm; margin: 0 0 3mm; font-size: 10pt; break-inside: avoid; }
+.hook > .lab { display: block; font-size: 7.6pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.8mm; }
+.predict { background: #f0f4ff; border: 0.4mm dashed #6a85d6; border-radius: 2.2mm; padding: 2mm 3mm; margin: 0 0 3mm; break-inside: avoid; }
+.predict > .lab { display: block; font-size: 7.6pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #3d5bb5; margin-bottom: 0.8mm; }
+.story { font-size: 9.2pt; color: var(--soft); font-style: italic; border-left: 0.8mm solid var(--amber); padding-left: 2.5mm; margin: 0 0 3mm; }
+.recall { background: #eef8f3; border-radius: 2.2mm; padding: 2mm 3mm; margin: 0 0 3mm; font-size: 9.5pt; break-inside: avoid; }
+.recall > .lab { display: block; font-size: 7.6pt; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #1d7a52; margin-bottom: 0.8mm; }

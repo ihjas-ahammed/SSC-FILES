@@ -118,7 +118,7 @@ const App = (function () {
   ];
 
   if (PROJECT.studyMaps && PROJECT.studyMaps.length) {
-    TABS.push({ name: 'study-map', label: 'Study Map', icon: 'hub', also: [] });
+    TABS.push({ name: 'study-map', label: PROJECT.studyMapLabel || 'Study Map', icon: 'hub', also: [] });
   }
 
   const VIEWS = {

@@ -17,7 +17,7 @@ const ViewStudyMap = (function () {
       ]));
     });
     return el('div', { class: 'stack' }, [
-      UI.title('Study Map', PROJECT.name),
+      UI.title(PROJECT.studyMapLabel || 'Study Map', PROJECT.name),
       el('p', { class: 'lede', text: 'Choose a module to explore its prerequisites and practise the answer one step at a time.' }),
       list
     ]);

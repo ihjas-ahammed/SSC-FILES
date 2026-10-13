@@ -581,3 +581,149 @@ For a positive crystal ($n_e > n_o$), $t = \lambda/[4(n_e - n_o)]$; for a negati
 $$|n_o - n_e|t = \frac{\lambda}{2} \implies t_{\text{HWP}} = \frac{\lambda}{2|n_o - n_e|}$$
 A half-wave plate rotates the plane of vibration of incident linearly polarized light through an angle $2\theta$, where $\theta$ is the angle between the incident vibration and the optic axis.</p>''',
   trap=r'''Using a plate cut perpendicular to the optic axis; light propagating along the optic axis experiences no double refraction.''')
+
+# ── Module I: Geometrical optics (from module1.md; PYQ items A and B, then the 10-mark practice session) ──
+
+P('p.cu.op.39', 2024, 'CU Nov', 1, 2, '1.3', ['c.1.3.1', 'c.1.3.2'],
+  "Definition of a Thin Lens",
+  r'''<p>Define a thin lens.</p>''',
+  r'''Ask which dimension of the lens must be negligible compared with the radii of curvature and the object and image distances.''',
+  r'''<p>A <b>thin lens</b> is a transparent refracting medium bounded by two spherical surfaces (or one plane and one spherical surface), in which the thickness of the lens is negligible compared with the radii of curvature of its surfaces and with the object and image distances. All distances can then be measured from a single plane through the optical centre.</p>''',
+  trap=r'''Describing a thin lens by small radii of curvature. It is the thickness that must be negligible.''')
+
+P('p.cu.op.40', 2024, 'CU Nov', 2, 2, '1.3', ['c.1.3.2'],
+  "First Principal Focus of a Lens",
+  r'''<p>Define first principal focus of a lens.</p>''',
+  r'''Trace a ray through the point F1 and find where it emerges.''',
+  r'''<p>The <b>first principal focus</b> $F_1$ of a thin lens is the point on the principal axis such that an object placed at $F_1$ gives an image at infinity. Equivalently, a ray passing through $F_1$ emerges from the lens parallel to the principal axis. Its distance from the optical centre is the first focal length, $f_1 = OF_1$.</p>''',
+  trap=r'''Confusing it with the second principal focus, where rays parallel to the axis converge.''')
+
+P('p.cu.op.41', 2024, 'CU Nov', 3, 2, '1.4', ['c.1.4.2'],
+  "Lateral Magnification",
+  r'''<p>Define lateral magnification.</p>''',
+  r'''Compare the image height with the object height, both measured perpendicular to the axis.''',
+  r'''<p>The <b>lateral (transverse) magnification</b> $m$ is the ratio of the height of the image to the height of the object, both measured perpendicular to the axis:
+$$m=\frac{h_i}{h_o}.$$
+For a thin lens with object distance $u$ and image distance $v$ this is $m=v/u$. The sign shows orientation: $m>0$ for an erect image and $m<0$ for an inverted image.</p>''',
+  trap=r'''Using the ratio of the axial lengths instead of the transverse heights.''')
+
+P('p.cu.op.42', 2025, 'CU Nov', 1, 2, '1.3', ['c.1.3.1'],
+  "Biconvex Glass Lens Immersed in Water",
+  r'''<p>Refractive index of glass is $1.5$ and that of water is $1.33$. If a biconvex lens of glass is immersed in water, will it act as a converging lens? Justify your answer.</p>''',
+  r'''Use the lens-maker's equation with the medium index $n_m$ in place of air. The sign of the power depends on the ratio $n_g/n_m$.''',
+  r'''<p>The lens-maker's equation in a medium of refractive index $n_m$ is
+$$\frac{1}{f}=\left(\frac{n_g}{n_m}-1\right)\left(\frac{1}{R_1}-\frac{1}{R_2}\right).$$
+For a biconvex lens $\frac{1}{R_1}-\frac{1}{R_2}>0$, so the sign of $f$ depends only on $\frac{n_g}{n_m}-1$. Here $\frac{n_g}{n_m}=\frac{1.5}{1.33}\approx 1.13>1$. Hence $\frac{1}{f}>0$, and the lens is still <b>converging</b>. Its power is much weaker than in air, so its focal length is longer. It would become diverging only if $n_g<n_m$.</p>''',
+  trap=r'''Arguing that glass in water must diverge because it is no longer denser than its surroundings. Only the ratio $n_g/n_m$ matters, and it is still above 1.''')
+
+P('p.cu.op.43', 2019, 'CU Nov', 11, 2, '1.1', ['c.1.1.1', 'c.1.1.4'],
+  "Fermat's Principle and the Elliptical Reflector",
+  r'''<p>State Fermat's principle of stationary time. Explain with respect to an elliptical reflector.</p>''',
+  r'''Use the defining property of an ellipse: the sum of the distances from the two foci is constant.''',
+  r'''<p><b>Fermat's principle:</b> light travelling between two points takes a path for which the time of travel is stationary (an extremum) with respect to small variations of the path.</p>
+<p><b>Elliptical reflector:</b> place a point source at one focus $F_1$ of an ellipse. Every ray from $F_1$ reflects off the ellipse at some point $P$ and passes through the second focus $F_2$. The total path $F_1PF_2$ equals the major axis $2a$ for every point $P$ on the ellipse, so all such rays take the same time. The time is therefore stationary for each reflected path, and each path is a valid ray. This is why a source at one focus of an elliptical reflector is imaged at the other focus.</p>''',
+  trap=r'''Saying the time is always a minimum. Here the time is stationary and equal for all reflected paths, which is not a minimum in general.''')
+
+P('p.cu.op.44', 2020, 'CU Nov', 11, 2, '1.1', ['c.1.1.1', 'c.1.1.2', 'c.1.1.3'],
+  "Three Results of Fermat's Principle",
+  r'''<p>Write down the three results obtained from Fermat's principle.</p>''',
+  r'''Apply stationarity of the optical path to a straight path, a reflected path and a refracted path.''',
+  r'''<p>Fermat's principle gives:</p>
+<ol>
+<li><b>Rectilinear propagation:</b> in a homogeneous medium the stationary optical path is a straight line, so light travels in straight lines.</li>
+<li><b>Law of reflection:</b> the angle of incidence equals the angle of reflection, $\theta_i=\theta_r$.</li>
+<li><b>Law of refraction (Snell's law):</b> $n_1\sin\theta_1=n_2\sin\theta_2$.</li>
+</ol>''',
+  trap=r'''Listing only the reflection and refraction laws and omitting rectilinear propagation.''')
+
+P('p.cu.op.45', 2022, 'CU Nov', 11, 2, '1.1', ['c.1.1.1', 'c.1.1.5'],
+  "Fermat's Principle of Extremum Path",
+  r'''<p>Explain Fermat's principle of extremum path.</p>''',
+  r'''Write the optical path as $\int n\,ds$ and ask what happens to it under a small change of the path.''',
+  r'''<p>Fermat's principle of extremum path states that the actual path followed by light between two points is one along which the optical path length $L=\int n\,ds$ is an <b>extremum</b> (stationary) with respect to small variations of the path. The extremum may be a minimum, a maximum or a point of inflection, so it is not necessarily a minimum. The condition is $\delta L=0$ for the actual ray.</p>''',
+  trap=r'''Writing that the path is always the minimum (least time).''')
+
+P('p.cu.op.46', 2019, 'CU Nov', 18, 4, '1.2', ['c.1.2.1', 'c.1.2.2'],
+  "Image Condition for a Refracting Surface",
+  r'''<p>Derive the condition for image plane with respect to a refracting surface.</p>''',
+  r'''Expand the optical path of a paraxial ray to second order in its height $h$ above the axis, then require the $h^2$ terms to cancel.''',
+  r'''<p>Take the pole $V$ as origin, with the axis along the direction of light. The centre of curvature lies at distance $R$, and the surface separates media of index $n_1$ (object side) and $n_2$ (image side). An axial object $O$ lies at distance $u$ before $V$, and an axial image $I$ at distance $v$ after $V$. Take a ray from $O$ that meets the surface at $P$, at height $h$. By Fermat's principle, the optical path $n_1\,OP+n_2\,PI$ must be the same for all paraxial rays from $O$ that reach $I$.</p>
+<p>The sagitta of the surface is $z_P\simeq h^2/2R$. Expanding each leg in the paraxial limit $h\ll u,v,R$:
+$$OP\simeq u+\frac{h^2}{2}\left(\frac{1}{u}+\frac{1}{R}\right),\qquad PI\simeq v+\frac{h^2}{2}\left(\frac{1}{v}-\frac{1}{R}\right).$$
+So
+$$n_1\,OP+n_2\,PI=\text{const}+\frac{h^2}{2}\left[n_1\left(\frac{1}{u}+\frac{1}{R}\right)+n_2\left(\frac{1}{v}-\frac{1}{R}\right)\right].$$
+The optical path must not depend on $h$, so the coefficient of $h^2$ must vanish:
+$$\frac{n_1}{u}+\frac{n_2}{v}=\frac{n_2-n_1}{R}.$$
+This is the image condition for a single refracting surface.</p>''',
+  trap=r'''Dropping the $h^2$ terms before expanding, or taking the wrong sign for the sagitta $h^2/2R$.''')
+
+P('p.cu.op.47', 2020, 'CU Nov', 25, 4, '1.2', ['c.1.2.4', 'c.1.1.4'],
+  "Mirror Equation for an Object Inside R/2",
+  r'''<p>Use Fermat's principle to determine the mirror equation for an object point at a distance less than $R/2$ from a concave mirror of radius of curvature $R$.</p>''',
+  r'''Use the paraxial expansion of the reflected path. For an object inside the focus, the image is virtual and lies behind the mirror.''',
+  r'''<p>Let the pole of the concave mirror be the origin. The object $O$ is at distance $u<R/2$ from the pole. A ray from $O$ reflects at $P$, a point on the mirror at height $h$, and the reflected ray appears to come from a virtual image $I$ at distance $v$ behind the mirror. Fermat's principle requires the path $OP+PI$ to be stationary with respect to the position of $P$.</p>
+<p>Expanding each leg to second order in $h$, with the sagitta $h^2/2R$ of the concave surface, the path becomes a constant plus a term in $h^2$. Equal optical path for all paraxial rays requires the $h^2$ coefficient to vanish. For a real image this gives
+$$\frac{1}{u}+\frac{1}{v}=\frac{2}{R}.$$
+For an object inside the focus ($u<R/2$), the image is virtual and lies behind the mirror. With $v$ taken as a positive distance behind the mirror, the mirror equation becomes
+$$\frac{1}{u}-\frac{1}{v}=\frac{2}{R}\qquad\left(f=\frac{R}{2}\right).$$
+Check: for $u=R/4$, $v=R/2$ gives $\frac{4}{R}-\frac{2}{R}=\frac{2}{R}$, and $m=v/u=2$, which matches a magnified virtual image.</p>''',
+  trap=r'''Using the real-image formula $1/u+1/v=2/R$ for an object inside the focus, which gives a negative and wrong image distance.''')
+
+P('p.cu.op.48', 2025, 'CU Nov', 13, 5, '1.3', ['c.1.3.1', 'c.1.3.2'],
+  "Object Distance for a Given Image Distance",
+  r'''<p>A biconvex lens of refractive index $1.5$ has radii of curvatures of $50$ cm and $100$ cm. Find the distance to the object if the image has to be formed at $60$ cm from the lens.</p>''',
+  r'''Find $f$ from the lens-maker's equation first. Then decide whether an image at $60$ cm can be real before applying the thin-lens formula.''',
+  r'''<p><b>Step 1, focal length.</b> Take $R_1=+50$ cm for the first surface, and $R_2=-100$ cm for the second surface, whose centre lies on the incident side. Then
+$$\frac{1}{f}=(1.5-1)\left(\frac{1}{50}-\frac{1}{-100}\right)=0.5\times 0.03=0.015\ \text{cm}^{-1},\qquad f\approx 66.7\ \text{cm}.$$
+<b>Step 2, the image.</b> A real image of a converging lens lies beyond $f$ on the far side. An image at $60$ cm is closer than $f$, so it cannot be real. It must be virtual, on the same side as the object, so $v=-60$ cm in Cartesian signs. The thin-lens formula gives
+$$\frac{1}{v}-\frac{1}{u}=\frac{1}{f}\;\Rightarrow\;\frac{1}{-60}-\frac{1}{u}=0.015\;\Rightarrow\;\frac{1}{u}=-0.0317\;\Rightarrow\;u\approx-31.6\ \text{cm}.$$
+<b>Answer:</b> the object must be about <b>31.6 cm</b> in front of the lens, inside the focal length, and the image is virtual. If a real image at $60$ cm was intended, no solution exists with these radii.</p>''',
+  trap=r'''Taking $R_2=+100$ cm. That gives $f=200$ cm and a wrong answer.''')
+
+P('p.cu.op.49', 0, 'Module I practice (10 marks)', 1, 2, '1.1', ['c.1.1.2', 'c.1.1.1'],
+  "Law of Reflection from Fermat's Principle",
+  r'''<p>State Fermat's principle of stationary time. Using this principle, derive the law of reflection for a ray reflected at a plane surface.</p>''',
+  r'''Write the travel time as a function of the reflection point along the mirror, then set its derivative to zero.''',
+  r'''<p><b>Principle.</b> The actual path of light between two points makes the travel time stationary with respect to small variations of the path.</p>
+<p><b>Derivation.</b> Let a source $A$ and a point $B$ lie in the same medium, with $A$ at height $a$ above a plane mirror and $B$ at height $b$ above it. Their horizontal separation is $d$. A ray reflects at a point $P$ at horizontal distance $x$ from the foot of $A$'s perpendicular. The travel time is proportional to
+$$L(x)=\sqrt{a^2+x^2}+\sqrt{b^2+(d-x)^2}.$$
+Stationarity requires $dL/dx=0$:
+$$\frac{x}{\sqrt{a^2+x^2}}=\frac{d-x}{\sqrt{b^2+(d-x)^2}}.$$
+The left side is $\sin\theta_i$ and the right side is $\sin\theta_r$, where the angles are measured from the normal. Hence $\sin\theta_i=\sin\theta_r$. Both angles are acute, so $\theta_i=\theta_r$. This is the law of reflection.</p>''',
+  trap=r'''A sign error in the derivative, which gives $\sin\theta_i=-\sin\theta_r$.''')
+
+P('p.cu.op.50', 0, 'Module I practice (10 marks)', 2, 3, '1.2', ['c.1.2.2', 'c.1.2.1'],
+  "Refraction at a Convex Spherical Surface",
+  r'''<p>A point object $O$ lies on the axis of a convex spherical surface of radius $R$ which separates a medium of refractive index $n_1$ (containing $O$) from a medium of refractive index $n_2$. The object is at distance $u$ from the pole of the surface and its image is formed at distance $v$ from the pole. Using the paraxial approximation, derive the relation
+$$\frac{n_1}{u}+\frac{n_2}{v}=\frac{n_2-n_1}{R}.$$
+Draw a labelled ray diagram for the refraction.</p>''',
+  r'''Use the same steps as the image condition: expand the optical path to second order in the height of the ray, then require the coefficient of that height to vanish.''',
+  r'''<p><b>Diagram.</b> Draw the axis, the pole $V$ and the centre of curvature $C$ at distance $R$ on the far side. Mark $O$ at distance $u$ on the left, $I$ at distance $v$ on the right, a ray from $O$ meeting the surface at $P$ at height $h$, the normal $CP$, and the refracted ray $PI$. Label the incidence and refraction angles.</p>
+<p><b>Derivation.</b> Let $P$ be at height $h$, so the sagitta is $h^2/2R$. In the paraxial limit,
+$$n_1\,OP+n_2\,PI=\text{const}+\frac{h^2}{2}\left[n_1\left(\frac{1}{u}+\frac{1}{R}\right)+n_2\left(\frac{1}{v}-\frac{1}{R}\right)\right].$$
+Equal optical path for all paraxial rays needs the $h^2$ coefficient to vanish:
+$$\frac{n_1}{u}+\frac{n_2}{v}=\frac{n_2-n_1}{R}.$$</p>''',
+  trap=r'''Drawing the surface centre on the object side. With light travelling left to right and a convex surface, $C$ lies on the image side.''')
+
+P('p.cu.op.51', 0, 'Module I practice (10 marks)', 3, 2, '1.3', ['c.1.3.2', 'c.1.3.1'],
+  "Principal Foci and Focal Length of a Thin Biconvex Lens",
+  r'''<p>Define the first principal focus and the second principal focus of a thin lens. A thin biconvex lens made of glass of refractive index $1.5$ has both surfaces of radius of curvature $20$ cm and is placed in air. Find its focal length.</p>''',
+  r'''Apply the lens-maker's equation with $R_1=+20$ cm and $R_2=-20$ cm.''',
+  r'''<p><b>First principal focus $F_1$:</b> the point on the object side such that an object placed there gives an image at infinity. <b>Second principal focus $F_2$:</b> the point on the image side at which the image of an object at infinity is formed.</p>
+<p><b>Focal length.</b> With $R_1=+20$ cm and $R_2=-20$ cm for a biconvex lens,
+$$\frac{1}{f}=(1.5-1)\left(\frac{1}{20}+\frac{1}{20}\right)=0.05\ \text{cm}^{-1}\;\Rightarrow\;f=20\ \text{cm}.$$</p>''',
+  trap=r'''Using $R_2=+20$ cm. That gives $1/f=0$, which is wrong for a biconvex lens.''')
+
+P('p.cu.op.52', 0, 'Module I practice (10 marks)', 4, 3, '1.4', ['c.1.4.1', 'c.1.4.2'],
+  "Newton's Formula",
+  r'''<p>For a thin converging lens of focal length $f$, let an object be at distance $x_1$ from the first principal focus and let its image be at distance $x_2$ from the second principal focus. Derive Newton's formula $$x_1x_2=f^2$$ and show that the lateral magnification is $$m=\frac{f}{x_1}=\frac{x_2}{f}.$$</p>''',
+  r'''Draw two rays from the top of the object. Use one that passes through $F_1$ and one parallel to the axis that passes through $F_2$, then compare two pairs of similar triangles.''',
+  r'''<p>Let the object have height $h_o$ and the image height $h_i$.</p>
+<p><b>Ray through $F_1$.</b> A ray from the top of the object that passes through $F_1$ emerges parallel to the axis. The similar triangles formed with the lens give
+$$\frac{h_i}{h_o}=\frac{f}{x_1}.$$
+<b>Ray parallel to the axis.</b> A ray from the top of the object parallel to the axis passes through $F_2$. The similar triangles give
+$$\frac{h_i}{h_o}=\frac{x_2}{f}.$$
+Equating the two expressions for the magnification,
+$$\frac{f}{x_1}=\frac{x_2}{f}\;\Rightarrow\;x_1x_2=f^2.$$
+The lateral magnification is therefore $m=\dfrac{h_i}{h_o}=\dfrac{f}{x_1}=\dfrac{x_2}{f}$.</p>''',
+  trap=r'''Measuring $x_1$ from the lens instead of from $F_1$, which breaks the symmetry of Newton's formula.''')

@@ -1,0 +1,193 @@
+<section class="page">
+  <div class="section-head"><b>Section B · Paragraph / problem</b><small>6 marks each.</small></div>
+
+  <div class="ans-head"><span class="n">21</span><span class="src">Bartle Thm 6.1.2</span><span class="src">related MAT-22 MCQ 4, MAT-21 MCQ 3</span></div>
+  <p class="q">Differentiable at c implies continuous at c; the converse is false.</p>
+  <div class="need"><b>Know first</b><span class="chip">T02</span><span class="chip">T01</span><span class="chip pre">P06</span><span class="chip math">M04</span></div>
+  <p><b>Theorem 6.1.2.</b> If $f : I \to \mathbb R$ has a derivative at $c \in I$, then f is continuous at c.</p>
+  <div class="box skel"><span class="lab">Skeleton</span>
+    <p>Want $f(x) \to f(c)$, i.e. $f(x) - f(c) \to 0$. Write $f(x) - f(c) = \dfrac{f(x) - f(c)}{x - c}\cdot(x - c)$ and use the limit of a product: $f'(c)\cdot 0$ <span class="gap">?</span></p>
+  </div>
+  <p><b>Proof.</b> For $x \in I$, $x \ne c$:
+  $$f(x) - f(c) = \frac{f(x) - f(c)}{x - c}\cdot(x - c).$$
+  As $x \to c$ the first factor tends to $f'(c)$ (hypothesis) and the second to 0. By the limit theorem for products, $\lim_{x\to c}\big(f(x) - f(c)\big) = f'(c)\cdot0 = 0$, so $\lim_{x\to c} f(x) = f(c)$. This is continuity at c. <span class="qed">∎</span></p>
+  <p><b>Converse false.</b> $f(x) = |x|$ is continuous at 0 ($||x| - 0| = |x - 0|$, so δ = ε). But $\dfrac{|x| - 0}{x - 0} = +1$ for $x &gt; 0$ and $-1$ for $x &lt; 0$: with $x_n = 1/n$ the quotients are $1$, with $y_n = -1/n$ they are $-1$, both $\to0$. The limits differ, so $f'(0)$ does not exist.</p>
+  <div class="final">Differentiable ⇒ continuous; $|x|$ is continuous at 0 but not differentiable there.</div>
+  <p class="marking">Marks: statement 1 · factor identity 1 · limit product 2 · conclusion 1 · example 1.</p>
+
+  <div class="ans-head"><span class="n">22</span><span class="src">CALC-24 Q13 · related FYUGP</span></div>
+  <p class="q">$f = x^2$ ($x \le 1$), $4\sqrt x$ ($x &gt; 1$): differentiability at 1; the fixed-up F and G.</p>
+  <div class="need"><b>Know first</b><span class="chip">T02</span><span class="chip">T01</span><span class="chip math">M03</span><span class="chip pre">P10</span></div>
+  <p><b>(a)</b> $f(1) = 1$, but $\lim_{x\to1^+}4\sqrt x = 4 \ne 1$. So f is <b>not continuous</b> at 1 (e.g. $x_n = 1 + \frac1n$: $f(x_n) = 4\sqrt{1 + 1/n} \to 4$). By Theorem 6.1.2 (contrapositive) f is not differentiable at 1. Directly: $\dfrac{4\sqrt x - 1}{x - 1}$ at $x = 1.01$ is $\dfrac{4.0200 - 1}{0.01} \approx 302$ and grows without bound. (The left derivative alone would be 2: the "find the value" is a trap.)</p>
+  <p><b>(b)</b> F must be continuous at 1: $a\cdot1 + b = 1$. Left derivative $= 2\cdot1 = 2$; right derivative $= a$. So $a = 2$, $b = -1$, $F(x) = 2x - 1$ for $x &gt; 1$ (the tangent line of $x^2$ at 1), and $F'(1) = 2$.</p>
+  <p><b>(c)</b> $G(1) = 1 = \lim_{x\to1^+}\sqrt x$, so G is continuous at 1. Left derivative $\lim\dfrac{x^2 - 1}{x - 1} = 2$. Right derivative $\lim\dfrac{\sqrt x - 1}{x - 1} = \lim\dfrac{1}{\sqrt x + 1} = \dfrac12$. Since $2 \ne \frac12$, G is not differentiable at 1.</p>
+  <div class="final">(a) No. (b) $a = 2$, $b = -1$. (c) No (left 2, right ½).</div>
+  <p class="marking">Marks: (a) discontinuity and theorem 2 · (b) 2 · (c) 2.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">23</span><span class="src">Bartle Thm 6.1.3(c)</span></div>
+  <p class="q">State and prove the product rule; deduce $(1/g)'$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T03</span><span class="chip">T02</span><span class="chip">T01</span></div>
+  <p><b>Theorem 6.1.3(c).</b> Let $f, g : I \to \mathbb R$ be differentiable at $c \in I$. Then the product $fg$ is differentiable at c and $(fg)'(c) = f'(c)g(c) + f(c)g'(c)$.</p>
+  <p><b>Proof.</b> For $x \ne c$, adding and subtracting $f(c)g(x)$:
+  $$\frac{f(x)g(x) - f(c)g(c)}{x - c} = \frac{f(x) - f(c)}{x - c}\,g(x) + f(c)\,\frac{g(x) - g(c)}{x - c}.$$
+  Since g is differentiable at c it is continuous at c (Thm 6.1.2), so $g(x) \to g(c)$. By the limit laws the right side tends to $f'(c)g(c) + f(c)g'(c)$. <span class="qed">∎</span></p>
+  <p><b>Reciprocal.</b> Let $g(c) \ne 0$. g is continuous at c, so $g \ne 0$ on a neighbourhood of c (local sign, Thm 4.2.9) and $1/g$ is defined there. For x in it, $x \ne c$:
+  $$\frac{1/g(x) - 1/g(c)}{x - c} = \frac{-1}{g(x)g(c)}\cdot\frac{g(x) - g(c)}{x - c} \longrightarrow \frac{-g'(c)}{g(c)^2}.$$</p>
+  <div class="final">$(1/g)'(c) = -\dfrac{g'(c)}{g(c)^2}$. Check $g = x$, c = 2: $-1/4$, and $(1/x)' = -1/x^2 = -0.25$ ✓.</div>
+  <p class="marking">Marks: statement 1 · add-and-subtract identity 2 · continuity of g 1 · reciprocal 2.</p>
+
+  <div class="ans-head"><span class="n">24</span><span class="src">Bartle Thm 6.1.5</span></div>
+  <p class="q">Carathéodory's Theorem; $\varphi$ for $x^3$; none for $|x|$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T05</span><span class="chip">T01</span><span class="chip pre">P06</span><span class="chip math">M09</span></div>
+  <p><b>Theorem 6.1.5 (Carathéodory).</b> Let f be defined on an interval I containing the point c. Then f is differentiable at c if and only if there exists a function $\varphi$ on I that is continuous at c and satisfies $f(x) - f(c) = \varphi(x)(x - c)$ for $x \in I$. In this case $\varphi(c) = f'(c)$.</p>
+  <div class="steps">
+    <div class="step"><b>(⇒)</b> Define $\varphi(x) = \dfrac{f(x) - f(c)}{x - c}$ for $x \ne c$, and $\varphi(c) = f'(c)$.<span class="why">The only possible candidate: the difference quotient, completed at c.</span></div>
+    <div class="step">$\lim_{x\to c}\varphi(x) = f'(c) = \varphi(c)$, so $\varphi$ is continuous at c.<span class="why">Definition of $f'(c)$.</span></div>
+    <div class="step">For $x \ne c$ multiply by $x - c$; for $x = c$ both sides are 0. So $f(x) - f(c) = \varphi(x)(x - c)$ on all of I.<span class="why">Check every x, including c.</span></div>
+    <div class="step"><b>(⇐)</b> Given such a $\varphi$: for $x \ne c$, $\dfrac{f(x) - f(c)}{x - c} = \varphi(x)$.<span class="why">Divide by $x - c \ne 0$.</span></div>
+    <div class="step">$\varphi$ is continuous at c, so $\lim_{x\to c}\varphi(x) = \varphi(c)$. Hence $f'(c)$ exists and equals $\varphi(c)$. <span class="qed">∎</span><span class="why">Definition 6.1.1.</span></div>
+  </div>
+  <p><b>$f(x) = x^3$.</b> $x^3 - c^3 = (x^2 + cx + c^2)(x - c)$, so $\varphi(x) = x^2 + cx + c^2$, which is continuous everywhere, and $f'(c) = \varphi(c) = 3c^2$.</p>
+  <p><b>$|x|$ at 0.</b> $|x| - 0 = \varphi(x)\cdot x$ forces $\varphi(x) = |x|/x = \operatorname{sgn}x$ for $x \ne 0$; its limits at 0 are $+1$ (right) and $-1$ (left), so no value $\varphi(0)$ makes $\varphi$ continuous. Hence $|x|$ is not differentiable at 0.</p>
+  <p class="marking">Marks: statement 1 · (⇒) 2 · (⇐) 1 · $x^3$ 1 · $|x|$ 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">25</span><span class="src">Bartle Ex 6.1.7(e)</span></div>
+  <p class="q">$x^2\sin(1/x)$: differentiable everywhere, $f'$ not continuous at 0.</p>
+  <div class="need"><b>Know first</b><span class="chip">T09</span><span class="chip">T01</span><span class="chip math">M04</span><span class="chip math">M07</span></div>
+  <p><b>$x \ne 0$.</b> Product and chain rules: $f'(x) = 2x\sin\frac1x + x^2\cos\frac1x\cdot\left(-\frac{1}{x^2}\right) = 2x\sin\frac1x - \cos\frac1x$.</p>
+  <p><b>$x = 0$</b> (the rules cannot be used: $\sin(1/x)$ is undefined at 0). From the definition: $\dfrac{f(x) - f(0)}{x - 0} = x\sin\frac1x$, and $|x\sin\frac1x| \le |x| \to 0$ (δ = ε). So $f'(0) = 0$.</p>
+  <p><b>$f'$ not continuous at 0.</b> $x_n = \dfrac{1}{2n\pi} \to 0$: $f'(x_n) = 0 - \cos(2n\pi) = -1$. $y_n = \dfrac{1}{(2n+1)\pi} \to 0$: $f'(y_n) = 0 - \cos((2n+1)\pi) = +1$. The limits $-1 \ne +1$, and neither equals $f'(0) = 0$, so $f'$ has no limit at 0.</p>
+  <div class="final">$f'(x) = 2x\sin\frac1x - \cos\frac1x$ ($x \ne 0$), $f'(0) = 0$; $f'$ is discontinuous at 0.</div>
+  <p class="small">Numerical check: n = 1: $f'(1/2\pi) = -1$, $f'(1/3\pi) = +1$.</p>
+  <p class="marking">Marks: x ≠ 0 1 · $f'(0)$ with squeeze 2 · two sequences 2 · conclusion 1.</p>
+
+  <div class="ans-head"><span class="n">26</span><span class="src">Bartle Thm 6.2.1</span></div>
+  <p class="q">Interior Extremum Theorem; "interior", "differentiable", converse.</p>
+  <div class="need"><b>Know first</b><span class="chip">T10</span><span class="chip">T22</span><span class="chip pre">P08</span></div>
+  <p><b>Definition 6.2.1.</b> f has a <b>relative maximum</b> at $c \in I$ if there is a neighbourhood $V = V_\delta(c)$ with $f(x) \le f(c)$ for all $x \in V \cap I$ (relative minimum: $f(c) \le f(x)$).</p>
+  <p><b>Theorem 6.2.1.</b> Let c be an interior point of the interval I at which $f : I \to \mathbb R$ has a relative extremum. If the derivative of f at c exists, then $f'(c) = 0$.</p>
+  <div class="box skel"><span class="lab">Skeleton</span>
+    <p>Max case; min by applying it to $-f$. Assume $f'(c) \ne 0$ and produce points arbitrarily near c with $f(x) &gt; f(c)$ <span class="gap">?</span> (contradiction).</p>
+  </div>
+  <p><b>Proof</b> (relative maximum at c). Suppose $f'(c) &gt; 0$. Put $\varepsilon = f'(c)/2$; there is $\delta_1 &gt; 0$ with $\frac{f(x) - f(c)}{x - c} &gt; \frac{f'(c)}{2} &gt; 0$ for $0 &lt; |x - c| &lt; \delta_1$. Because c is <i>interior</i> we may choose $\delta \le \min\{\delta_1, \delta_0\}$ ($\delta_0$ the radius of the maximum neighbourhood) with $(c - \delta, c + \delta) \subseteq I$. Take x with $c &lt; x &lt; c + \delta$: then $f(x) - f(c) = (x - c)(\text{positive}) &gt; 0$, contradicting $f(x) \le f(c)$.</p>
+  <p>Suppose $f'(c) &lt; 0$: the quotient is $&lt; 0$ near c, so for $c - \delta &lt; x &lt; c$ we have $(x - c) &lt; 0$ and $f(x) - f(c) &gt; 0$, again a contradiction. Hence $f'(c) = 0$. <span class="qed">∎</span></p>
+  <p><b>Hypotheses.</b> Interior: $f(x) = x$ on $[0, 1]$ has extrema at 0 and 1, but $f' = 1$. Differentiable: $|x|$ on $[-1, 1]$ has a minimum at 0 where $f'(0)$ does not exist. Converse: $f(x) = x^3$ has $f'(0) = 0$ but no extremum at 0 (negative to the left, positive to the right).</p>
+  <p class="marking">Marks: definition and statement 1 · contradiction setup 1 · f′ &gt; 0 2 · f′ &lt; 0 1 · examples 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">27</span><span class="src">Bartle Thm 6.2.3</span></div>
+  <p class="q">Rolle's Theorem; verify for $x(x - 1)(x - 2)$ on $[0, 2]$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T11</span><span class="chip">T10</span><span class="chip pre">P07</span></div>
+  <p><b>Theorem 6.2.3 (Rolle).</b> Suppose that f is continuous on a closed interval $I = [a, b]$, that the derivative $f'$ exists at every point of the interior $(a, b)$, and that $f(a) = f(b) = 0$. Then there exists at least one point c in $(a, b)$ such that $f'(c) = 0$.</p>
+  <div class="steps">
+    <div class="step">If $f \equiv 0$ on $[a, b]$, any $c \in (a, b)$ works.<span class="why">$f' = 0$ everywhere.</span></div>
+    <div class="step">Otherwise f takes a nonzero value; replacing f by $-f$ (which has the same critical points) we may assume f takes a positive value.<span class="why">$(-f)'(c) = 0 \iff f'(c) = 0$.</span></div>
+    <div class="step">f is continuous on the closed bounded interval, so it attains a maximum $M &gt; 0$ at some $c \in [a, b]$.<span class="why">Max–Min Theorem 5.3.4.</span></div>
+    <div class="step">$f(a) = f(b) = 0 &lt; M$, so $c \ne a, b$: $c \in (a, b)$, and $f'(c)$ exists.<span class="why">Differentiable on the open interval.</span></div>
+    <div class="step">f has a relative maximum at the interior point c, hence $f'(c) = 0$. <span class="qed">∎</span><span class="why">Interior Extremum Theorem 6.2.1.</span></div>
+  </div>
+  <p><b>Verification.</b> $f(x) = x^3 - 3x^2 + 2x$ is a polynomial; $f(0) = f(1) = f(2) = 0$. $f'(x) = 3x^2 - 6x + 2 = 0$ gives $x = 1 \pm \dfrac{1}{\sqrt3}$.</p>
+  <div class="final">$c_1 = 1 - \frac{1}{\sqrt3} \approx 0.4226$, $c_2 = 1 + \frac{1}{\sqrt3} \approx 1.5774$, both in $(0, 2)$; $f(c_{1,2}) = \pm\frac{2}{3\sqrt3} \approx \pm0.3849$. c need not be unique.</div>
+  <p class="marking">Marks: statement 1 · reduction 1 · max attained and interior 2 · conclusion 1 · verification 1.</p>
+
+  <div class="ans-head"><span class="n">28</span><span class="src">Bartle Thm 6.2.5, Cor 6.2.6</span></div>
+  <p class="q">$f' = 0$ implies constant; equal derivatives differ by a constant.</p>
+  <div class="need"><b>Know first</b><span class="chip">T13</span><span class="chip">T12</span></div>
+  <p><b>Theorem 6.2.5.</b> Suppose f is continuous on the closed interval $I = [a, b]$, differentiable on $(a, b)$, and $f'(x) = 0$ for $x \in (a, b)$. Then f is constant on I.</p>
+  <p><b>Proof.</b> Fix $x \in (a, b]$. f is continuous on $[a, x]$ and differentiable on $(a, x)$, so by the Mean Value Theorem there is $c \in (a, x)$ with $f(x) - f(a) = f'(c)(x - a) = 0\cdot(x - a) = 0$. So $f(x) = f(a)$ for every $x \in I$. <span class="qed">∎</span></p>
+  <p><b>Corollary 6.2.6.</b> If $f, g$ are continuous on $[a, b]$, differentiable on $(a, b)$ and $f' = g'$ there, then $f = g + C$. <i>Proof.</i> $h = f - g$ is continuous, differentiable, $h' = f' - g' = 0$ on $(a, b)$; by 6.2.5 $h \equiv C$. <span class="qed">∎</span></p>
+  <p><b>Why an interval is needed.</b> On $(0,1) \cup (2,3)$ let $f = 0$ on $(0,1)$ and $f = 1$ on $(2,3)$. Then $f' = 0$ everywhere but f is not constant. The MVT needs the whole segment $[a, x]$ inside the domain; here the segment from $\frac12$ to $\frac52$ leaves it.</p>
+  <p class="small">Example: $\sin^2x + \cos^2x$ has derivative $2\sin x\cos x - 2\cos x\sin x = 0$ and equals 1 at x = 0, so it equals 1 everywhere.</p>
+  <p class="marking">Marks: statement 1 · MVT application 2 · conclusion 1 · corollary 1 · counterexample 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">29</span><span class="src">Bartle Thm 6.2.8</span></div>
+  <p class="q">First Derivative Test, part (a); $x^3 - 3x$; $|x|$ at 0.</p>
+  <div class="need"><b>Know first</b><span class="chip">T15</span><span class="chip">T12</span><span class="chip math">M05</span></div>
+  <p><b>Theorem 6.2.8 (a).</b> Let f be continuous on the interval $I = [a, b]$ and let c be an interior point of I. Assume f is differentiable on $(a, c)$ and $(c, b)$. If there is a neighbourhood $(c - \delta, c + \delta) \subseteq I$ such that $f'(x) \ge 0$ for $c - \delta &lt; x &lt; c$ and $f'(x) \le 0$ for $c &lt; x &lt; c + \delta$, then f has a relative maximum at c.</p>
+  <p><b>Proof.</b> <i>Left side.</i> For $c - \delta &lt; x &lt; c$, f is continuous on $[x, c]$ and differentiable on $(x, c)$. MVT: $f(c) - f(x) = f'(\xi)(c - x)$ with $\xi \in (x, c)$, $f'(\xi) \ge 0$, $c - x &gt; 0$; so $f(x) \le f(c)$. <i>Right side.</i> For $c &lt; x &lt; c + \delta$, MVT on $[c, x]$: $f(x) - f(c) = f'(\xi)(x - c)$ with $f'(\xi) \le 0$, $x - c &gt; 0$; so $f(x) \le f(c)$. Thus $f(x) \le f(c)$ on $(c - \delta, c + \delta)$: a relative maximum. <span class="qed">∎</span> ((b) is the same with signs reversed.)</p>
+  <p><b>$f = x^3 - 3x$.</b> $f' = 3(x^2 - 1)$: $\ge0$ on $(-\infty, -1)$, $\le0$ on $(-1, 1)$, $\ge 0$ on $(1, \infty)$. Relative maximum at $-1$ ($f = 2$); relative minimum at 1 ($f = -2$).</p>
+  <p><b>$|x|$ at 0.</b> $f' = -1$ for $x &lt; 0$, $+1$ for $x &gt; 0$: part (b) gives a relative minimum at 0, although $f'(0)$ does not exist (so the test does not need $f'(c)$).</p>
+  <p class="marking">Marks: statement 1 · left side 1.5 · right side 1.5 · examples 2.</p>
+
+  <div class="ans-head"><span class="n">30</span><span class="src">Bartle 6.2.9(a)</span><span class="src">related MAT-21 Q17</span></div>
+  <p class="q">Zero of $\cos$ between zeros of $\sin$; $x^3 + 3x + 1$ has exactly one real root.</p>
+  <div class="need"><b>Know first</b><span class="chip">T16</span><span class="chip">T11</span><span class="chip pre">P07</span></div>
+  <p><b>(a)</b> Zeros of $\sin$ are $k\pi$. On $[k\pi, (k + 1)\pi]$, $\sin$ is continuous, differentiable, and $\sin(k\pi) = \sin((k + 1)\pi) = 0$. By Rolle's Theorem there is c in $(k\pi, (k+1)\pi)$ with $\sin'(c) = \cos c = 0$ (indeed $c = k\pi + \frac\pi2$).</p>
+  <p><b>(b) At least one root.</b> $p(x) = x^3 + 3x + 1$ is continuous, $p(-1) = -3 &lt; 0 &lt; 1 = p(0)$, so by the Location of Roots Theorem p has a root in $(-1, 0)$.</p>
+  <p><b>At most one root.</b> Suppose $p(r_1) = p(r_2) = 0$, $r_1 &lt; r_2$. By Rolle (for $[r_1, r_2]$) some c has $p'(c) = 3c^2 + 3 = 0$, impossible since $p'(x) \ge 3 &gt; 0$. So exactly one root.</p>
+  <p><b>Location.</b> $p(-\frac12) = -\frac18 - \frac32 + 1 = -\frac58 &lt; 0$ and $p(-\frac14) = -\frac{1}{64} - \frac34 + 1 = \frac{15}{64} &gt; 0$.</p>
+  <div class="final">Exactly one real root, in $(-\frac12, -\frac14)$ (length $\frac14$); numerically $\approx -0.3222$.</div>
+  <p class="marking">Marks: (a) 2 · existence 1 · uniqueness by Rolle 2 · location 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">31</span><span class="src">Bartle 6.2.9(b)</span></div>
+  <p class="q">MVT for $\sqrt x$ on $[100, 105]$: bounds for $\sqrt{105}$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T17</span><span class="chip">T12</span><span class="chip math">M06</span></div>
+  <p>$f(x) = \sqrt x$ is continuous on $[100, 105]$, differentiable on $(100, 105)$, $f'(x) = \dfrac{1}{2\sqrt x}$. MVT: there is $c \in (100, 105)$ with
+  $$\sqrt{105} - 10 = \frac{105 - 100}{2\sqrt c} = \frac{5}{2\sqrt c}.$$</p>
+  <p><b>First bounds.</b> $10 &lt; \sqrt c &lt; \sqrt{105} &lt; \sqrt{121} = 11$, so $\dfrac{5}{22} &lt; \sqrt{105} - 10 &lt; \dfrac{5}{20}$, i.e. $10.2272 &lt; \sqrt{105} &lt; 10.25$ (5/22 = 0.22727).</p>
+  <p><b>Sharpen.</b> $10.25^2 = 105.0625 &gt; 105$, so $\sqrt{105} &lt; 10.25$ and hence $\sqrt c &lt; 10.25$. Then $\sqrt{105} - 10 &gt; \dfrac{5}{2\cdot10.25} = \dfrac{5}{20.5} = 0.243902\ldots$</p>
+  <div class="final">$10.2439 &lt; \sqrt{105} &lt; 10.25$. True value $\sqrt{105} = 10.24695$ ✓.</div>
+  <p class="marking">Marks: MVT 1 · setup and hypotheses 1 · first bounds 2 · sharpening 2.</p>
+
+  <div class="ans-head"><span class="n">32</span><span class="src">Bartle 6.2.10(a), Ex 6.2.7</span></div>
+  <p class="q">$e^x \ge 1 + x$; $\frac{x - 1}{x} &lt; \ln x &lt; x - 1$ for $x &gt; 1$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T18</span><span class="chip">T12</span><span class="chip math">M06</span><span class="chip pre">P12</span></div>
+  <p><b>(a)</b> $x = 0$: equality. <b>$x &gt; 0$:</b> MVT for $e^t$ on $[0, x]$: $e^x - 1 = e^c\,x$ with $0 &lt; c &lt; x$. Since $e^c &gt; 1$ and $x &gt; 0$, $e^x - 1 &gt; x$.</p>
+  <p><b>$x &lt; 0$:</b> MVT on $[x, 0]$: $1 - e^x = e^c(0 - x) = -x\,e^c$ with $x &lt; c &lt; 0$, so $e^c &lt; 1$ and $-x &gt; 0$: $1 - e^x &lt; -x$, i.e. $e^x &gt; 1 + x$. So $e^x \ge 1 + x$ with equality only at 0.</p>
+  <p><b>(b)</b> $x &gt; 1$: MVT for $\ln t$ on $[1, x]$: $\ln x - \ln 1 = \dfrac{1}{c}(x - 1)$ with $1 &lt; c &lt; x$. Then $\dfrac1x &lt; \dfrac1c &lt; 1$; multiply by $x - 1 &gt; 0$: $\dfrac{x - 1}{x} &lt; \ln x &lt; x - 1$.</p>
+  <div class="final">Checks: x = −1: $0.368 &gt; 0$; x = 1: $2.718 &gt; 2$; x = 2: $0.5 &lt; 0.693 &lt; 1$.</div>
+  <p class="marking">Marks: MVT setup 1 · x &gt; 0 1 · x &lt; 0 1.5 · (b) bound on $1/c$ 1.5 · conclusion 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">33</span><span class="src">Bartle 6.2.10(b), Ex 6.2.15</span><span class="src">related MTS-22 MCQ 4</span></div>
+  <p class="q">$-x \le \sin x \le x$; $\sin$ is 1-Lipschitz; bounded derivative implies Lipschitz.</p>
+  <div class="need"><b>Know first</b><span class="chip">T19</span><span class="chip">T12</span><span class="chip math">M06</span></div>
+  <p><b>(c) general.</b> Let f be differentiable on the interval I with $|f'(t)| \le K$ for $t \in I$. For $x &lt; u$ in I, f is continuous on $[x, u]$ and differentiable inside, so MVT gives $\xi \in (x, u)$ with
+  $$|f(x) - f(u)| = |f'(\xi)|\,|x - u| \le K|x - u|.$$
+  That is the definition of <b>Lipschitz</b> (constant K). Such an f is uniformly continuous on I (take δ = ε/K).</p>
+  <p><b>(b)</b> $f = \sin$, $f' = \cos$, $|\cos| \le 1$, so $K = 1$: $|\sin x - \sin y| \le |x - y|$ for all $x, y$.</p>
+  <p><b>(a)</b> Take $y = 0$ in (b): $|\sin x| \le |x| = x$ for $x \ge 0$, i.e. $-x \le \sin x \le x$. <span class="qed">∎</span></p>
+  <div class="final">Check: x = 1, y = 0.5: $|\sin1 - \sin0.5| = 0.362 \le 0.5$ ✓; x = π/2: $1 \le 1.571$ ✓.</div>
+  <p class="marking">Marks: MVT with bound 2 · Lipschitz definition 1 · (b) 1 · (a) 1 · remark 1.</p>
+
+  <div class="ans-head"><span class="n">34</span><span class="src">Bartle 6.2.10(c)</span></div>
+  <p class="q">Bernoulli: $(1 + x)^\alpha \ge 1 + \alpha x$ for $\alpha &gt; 1$, $x &gt; -1$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T20</span><span class="chip">T12</span><span class="chip math">M06</span></div>
+  <p>Let $h(t) = (1 + t)^\alpha$ on $(-1, \infty)$; $h'(t) = \alpha(1 + t)^{\alpha-1}$ (standard derivative of a power; rational α in Bartle 6.1.10(d), real α in §8.3). Note $\alpha - 1 &gt; 0$.</p>
+  <p><b>$x = 0$:</b> equality $1 = 1$.</p>
+  <p><b>$x &gt; 0$:</b> MVT on $[0, x]$: $(1 + x)^\alpha - 1 = \alpha(1 + c)^{\alpha-1}x$, $0 &lt; c &lt; x$. As $1 + c &gt; 1$ and $\alpha - 1 &gt; 0$, $(1 + c)^{\alpha-1} &gt; 1$, so $(1 + x)^\alpha - 1 &gt; \alpha x$.</p>
+  <p><b>$-1 &lt; x &lt; 0$:</b> MVT on $[x, 0]$: $1 - (1 + x)^\alpha = \alpha(1 + c)^{\alpha-1}(-x)$, $x &lt; c &lt; 0$. Now $0 &lt; 1 + c &lt; 1$ so $(1 + c)^{\alpha-1} &lt; 1$; with $-x &gt; 0$, $1 - (1 + x)^\alpha &lt; -\alpha x$, i.e. $(1 + x)^\alpha &gt; 1 + \alpha x$. <span class="qed">∎</span></p>
+  <div class="final">Equality iff $x = 0$. Check $\alpha = \frac32$: x = 1: $2.828 &gt; 2.5$; x = −0.5: $0.354 &gt; 0.25$.</div>
+  <p class="marking">Marks: h and h′ 1 · x &gt; 0 2 · x &lt; 0 2 · equality 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">35</span><span class="src">Bartle 6.2.10(d)</span></div>
+  <p class="q">$x^\alpha \le \alpha x + (1 - \alpha)$; weighted AM–GM; $\sqrt{ab} \le (a + b)/2$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T21</span><span class="chip">T15</span><span class="chip">T20</span></div>
+  <p>Let $0 &lt; \alpha &lt; 1$ and $g(x) = \alpha x - x^\alpha$ for $x \ge 0$. Then $g$ is continuous on $[0, \infty)$ and $g'(x) = \alpha(1 - x^{\alpha-1})$ for $x &gt; 0$. Since $\alpha - 1 &lt; 0$: for $0 &lt; x &lt; 1$, $x^{\alpha-1} &gt; 1$ so $g' &lt; 0$; for $x &gt; 1$, $x^{\alpha-1} &lt; 1$ so $g' &gt; 0$.</p>
+  <p>So g decreases on $[0, 1]$ and increases on $[1, \infty)$ (6.2.7); g has its absolute minimum at 1: $g(x) \ge g(1) = \alpha - 1$. That is $\alpha x - x^\alpha \ge \alpha - 1$, i.e.
+  $$x^\alpha \le \alpha x + (1 - \alpha),\qquad x \ge 0,$$ with equality iff $x = 1$.</p>
+  <p><b>Deduction.</b> For $a, b &gt; 0$ put $x = a/b$: $(a/b)^\alpha \le \alpha\frac ab + (1 - \alpha)$. Multiply by $b &gt; 0$: $a^\alpha b^{1-\alpha} \le \alpha a + (1 - \alpha)b$, equality iff $a = b$.</p>
+  <div class="final">$\alpha = \frac12$: $\sqrt{ab} \le \dfrac{a + b}{2}$. Check $\alpha = \frac13$, a = 8, b = 1: $2 \le \frac83 + \frac23 = \frac{10}{3}$ ✓.</div>
+  <p class="marking">Marks: g and g′ 1 · sign analysis 2 · minimum and inequality 1 · deduction 1 · AM–GM 1.</p>
+
+  <div class="ans-head"><span class="n">36</span><span class="src">Bartle Cor 6.2.13, Ex 6.2.12</span></div>
+  <p class="q">A function that is not a derivative; two functions with derivative h.</p>
+  <div class="need"><b>Know first</b><span class="chip">T24</span><span class="chip">T23</span></div>
+  <p><b>Darboux's Theorem 6.2.12.</b> If f is differentiable on $I = [a, b]$ and k is a number between $f'(a)$ and $f'(b)$, then there is at least one point c in $(a, b)$ with $f'(c) = k$.</p>
+  <p><b>g is not a derivative.</b> Suppose $g = f'$ on $[-1, 1]$ for some differentiable f. Then $f'(-1) = -1 &lt; \frac12 &lt; 1 = f'(1)$, so by Darboux there is $c \in (-1, 1)$ with $g(c) = \frac12$. But g takes only the values $-1, 0, 1$. Contradiction.</p>
+  <p><b>Two functions.</b> $f_1(x) = \max\{x, 0\}$ ($= 0$ for $x \le 0$, $x$ for $x &gt; 0$) and $f_2(x) = 0$ for $x \le 0$, $f_2(x) = x + 1$ for $x &gt; 0$. For $x &lt; 0$ both have derivative 0; for $x &gt; 0$ both have derivative 1; so both have derivative $h(x)$ at every $x \ne 0$. But $f_2 - f_1 = 0$ on $(-\infty, 0]$ and $= 1$ on $(0, \infty)$: not constant.</p>
+  <div class="final">Equal derivatives off 0 need not give a constant difference, because $\mathbb R \setminus \{0\}$ is not an interval. (Whatever value h is given at 0, no function has $f' = h$ at every point: $h$ takes 0 and 1 but not $\frac12$, so Darboux fails.)</div>
+  <p class="marking">Marks: Darboux statement 1 · contradiction 2 · $f_1$ 1 · $f_2$ 1 · not constant 1.</p>
+</section>

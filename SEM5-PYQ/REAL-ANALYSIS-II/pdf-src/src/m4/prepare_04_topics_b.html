@@ -1,0 +1,167 @@
+<!-- T9 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T9</span><h2>Uniform depends on the set</h2></div>
+  <p class="oneline">The same sequence can be uniform on one set and not on another (PYQ MAT-21 Q37b).</p>
+  <div class="box idea"><span class="lab">The idea</span>Uniformity fails because of a <b>bad place</b>: far out towards ∞, or near a point where the limit jumps. Cut the bad place out of the set and uniformity comes back.</div>
+  <table class="t">
+    <tr><th>$f_n$</th><th>uniform on</th><th>not uniform on</th></tr>
+    <tr><td>$x/n$</td><td>[0, 1]: norm $1/n$; any $[-b, b]$: $b/n$</td><td>ℝ</td></tr>
+    <tr><td>$x^n$</td><td>$[0, b]$, $b&lt;1$: norm $b^n$</td><td>[0, 1], and even [0, 1)</td></tr>
+    <tr><td>$(x^2+nx)/n$</td><td>[0, 8]: norm $64/n$</td><td>ℝ</td></tr>
+    <tr><td>$nx/(1+n^2x^2)$</td><td>$[a, \infty)$, $a&gt;0$</td><td>$[0, \infty)$</td></tr>
+  </table>
+  {{fig:parab}}
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example · $x^n$ on three sets</span>
+    <p><b>On [0, b], b &lt; 1.</b> $x^n$ increases in x, so $\lVert x^n - 0\rVert_{[0,b]} = b^n \to 0$. Uniform. (For $b = \frac12$: norm $2^{-n}$.)</p>
+    <p><b>On [0, 1).</b> The limit is 0 (continuous!), but $\sup\{x^n : 0 \le x &lt; 1\} = 1$ for every n. Not uniform <span class="cx">C25</span>.</p>
+    <p><b>On [0, 1].</b> Gap $|x^n - g(x)|$ is $x^n$ on [0, 1) and 0 at 1, so the norm is 1. Not uniform.</p>
+  </div>
+  <div class="box trap"><span class="lab">Exam trap</span>"The limit is continuous, so the convergence is uniform." False: $x^n$ on [0, 1) has the continuous limit 0 and is still not uniform.</div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Is $x/n \to 0$ uniform on [−5, 5]?</div>
+    <div class="a">Yes: $|x/n| \le 5/n$ for all $x \in [-5, 5]$, so the norm is $5/n \to 0$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q17</span> <span class="chip q">Q19</span> <span class="chip q">Q28</span> <span class="chip q">Q40</span> (PYQ MAT-21 Q37b).</p>
+</section>
+
+<!-- T10 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T10</span><h2>The Cauchy criterion (Theorem 8.1.10)</h2></div>
+  <p class="oneline">A 10–15 mark favourite (PYQ MTS-25 Q26, MAT-21 Q38a).</p>
+  <div class="box def"><span class="lab">Theorem 8.1.10 · say it word for word</span>Let $(f_n)$ be a sequence of bounded functions on $A \subseteq \mathbb R$. Then this sequence converges uniformly on A to a bounded function f if and only if for each $\varepsilon &gt; 0$ there is a number $H(\varepsilon)$ in ℕ such that for all $m, n \ge H(\varepsilon)$, then $\lVert f_m - f_n\rVert_A \le \varepsilon$.
+    <span class="say">In plain words: late frames are uniformly close <b>to each other</b>. Like P4, but for whole graphs. You never need to know f.</span></div>
+  <div class="kw"><span>Know</span><span>Lemma 8.1.8 (T6); Cauchy Criterion 3.5.5 for numbers (P4); order limit 3.2.6 (P2); triangle inequality (M1).</span><span>Want</span><span>(⇒) uniform ⇒ uniformly Cauchy. (⇐) uniformly Cauchy ⇒ there is a bounded f with $f_n \to f$ uniformly.</span></div>
+  <div class="box proof"><span class="lab">Proof (⇒)</span>
+    <div class="steps">
+      <div class="step">Let $\varepsilon&gt;0$. By Lemma 8.1.8 there is $K = K(\varepsilon/2)$ with $\lVert f_n - f\rVert_A \le \varepsilon/2$ for $n \ge K$.<span class="why">Use ε/2 so two pieces add to ε (M1).</span></div>
+      <div class="step">For $m, n \ge K$ and every $x \in A$: $|f_m(x) - f_n(x)| \le |f_m(x) - f(x)| + |f(x) - f_n(x)| \le \frac\varepsilon2 + \frac\varepsilon2 = \varepsilon$.<span class="why">Add and subtract f(x); triangle inequality.</span></div>
+      <div class="step">Taking sup over x: $\lVert f_m - f_n\rVert_A \le \varepsilon$ for $m, n \ge H(\varepsilon) := K(\varepsilon/2)$.<span class="why">ε bounds every value, so it bounds the sup (T5).</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof (⇐)</span>
+    <div class="steps">
+      <div class="step">Fix $x \in A$. For $m, n \ge H(\varepsilon)$: $|f_m(x) - f_n(x)| \le \lVert f_m - f_n\rVert_A \le \varepsilon$. So $(f_n(x))$ is a Cauchy sequence of numbers.<span class="why">Each value ≤ the sup; definition of Cauchy (P4).</span></div>
+      <div class="step">By the Cauchy Convergence Criterion 3.5.5 it converges. Define $f(x) := \lim_n f_n(x)$ for each $x \in A$.<span class="why">ℝ is complete. This is our candidate f.</span></div>
+      <div class="step">In $|f_m(x) - f_n(x)| \le \varepsilon$ (m fixed, $m \ge H$) let $n \to \infty$: $|f_m(x) - f(x)| \le \varepsilon$ for all $x \in A$, $m \ge H(\varepsilon)$.<span class="why">Order limit theorem 3.2.6: limits keep ≤. <b>The same H works for every x</b>: this is the heart of the proof.</span></div>
+      <div class="step">f is bounded: with $m = H(1)$, $|f(x)| \le |f_m(x)| + 1 \le \lVert f_m\rVert_A + 1$ for all x.<span class="why">Step 3 with ε = 1; $f_m$ is bounded. (Bartle leaves this line out; write it.)</span></div>
+      <div class="step">So $\lVert f_m - f\rVert_A \le \varepsilon$ for $m \ge H(\varepsilon)$, i.e. $f_n \to f$ uniformly. <span class="qed">∎</span><span class="why">Lemma 8.1.8.</span></div>
+    </div>
+  </div>
+  <div class="box trap"><span class="lab">Exam trap</span>"$\lVert f_{n+1} - f_n\rVert \to 0$" is <b>not</b> the Cauchy condition. You need <b>all</b> pairs $m, n \ge H$. (Constant functions $f_n = 1 + \frac12 + \dots + \frac1n$ have neighbours closer and closer, but they never converge.)</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Using the criterion · Bartle-style</span>Show $(x^n)$ is not uniformly convergent on [0, 1] <b>without</b> finding its limit. Put $t = x^n \in [0, 1]$: $$x^n - x^{2n} = t - t^2 \le \tfrac14,$$ with equality at $t = \frac12$, i.e. $x = 2^{-1/n}$. So $\lVert f_n - f_{2n}\rVert = \frac14$ for every n. With $\varepsilon = \frac18$ no H works (take m = H, n = 2H). Not uniformly Cauchy, so not uniform.</div>
+  {{fig:cauchy_fig}}
+  <p class="small">In the model paper: <span class="chip q">Q31</span>, <span class="chip q">Q37</span> (PYQ MTS-25 Q26, also MAT-21 Q38a).</p>
+</section>
+
+<!-- T11 -->
+<section class="page">
+  <div class="kicker" style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNITS 21–22 · BARTLE §8.2.1–8.2.2</div>
+  <h1>What survives the limit?</h1>
+  <hr>
+  <div class="topic-head"><span class="tid">T11</span><h2>Pointwise limits can break continuity</h2></div>
+  <p class="oneline">Bartle 8.2.1(a), (b) (PYQ MTS-22 MCQ 11).</p>
+  <div class="box idea"><span class="lab">The idea</span>Every $g_n(x) = x^n$ is continuous (even smooth) on [0, 1]. Their pointwise limit g is 0 on [0, 1) and 1 at x = 1: it <b>jumps</b>. So a pointwise limit of continuous functions need not be continuous, and need not be differentiable.</div>
+  {{fig:interchange_xn}}
+  <div class="box result"><span class="lab">Result · two limits in the wrong order</span>$$\lim_{x \to 1^-}\Big(\lim_{n} x^n\Big) = 0, \qquad \lim_{n}\Big(\lim_{x\to1^-} x^n\Big) = 1.$$ "Continuity of the limit" is exactly the statement that these two orders agree.</div>
+</section>
+
+<section class="page">
+  <div class="box check"><span class="lab">Check yourself · past MCQ</span>
+    <div class="q">$g_n(x) = x^n$. On which of (−1, 1], (−2, 1], (0, 1], (−1, 1) does $(g_n)$ converge to a <b>continuous</b> function?</div>
+    <div class="a">Only (−1, 1): there the limit is 0. On (−1, 1] and (0, 1] the limit jumps at 1; on (−2, 1] there is no limit at x ≤ −1.</div>
+  </div>
+  <div class="box trap"><span class="lab">Exam trap</span>Derivatives are worse still: $\frac1n \sin nx \to 0$ uniformly on ℝ, but the derivatives $\cos nx$ do not converge (at $x = \pi$ they are $(-1)^n$). Uniform convergence of $f_n$ alone does not let you differentiate the limit term by term.</div>
+  <p class="small">In the model paper: <span class="chip q">Q11</span> (PYQ MTS-22 MCQ 11), <span class="chip q">Q25</span>, <span class="chip q">Q32</span>.</p>
+</section>
+
+<!-- T12 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T12</span><h2>Limits and integrals</h2></div>
+  <p class="oneline">$\lim \int f_n$ need not equal $\int \lim f_n$ (Bartle 8.2.1(c), (d); PYQ MTS-22 Q10).</p>
+  <div class="box idea"><span class="lab">Example 1 · spikes (8.2.1(c))</span>$f_n$ is the triangle with corners (0, 0), (1/n, n), (2/n, 0), and 0 on [2/n, 1]. Area = ½ · (2/n) · n = 1 for every n. At a fixed $x&gt;0$, once $2/n &lt; x$ the spike has passed and $f_n(x) = 0$; also $f_n(0) = 0$. Limit f = 0, $\int_0^1 f = 0 \ne 1$.</div>
+  {{fig:spikes}}
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Example 2 · $h_n(x) = 2nx\,e^{-nx^2}$ on [0, 1] (PYQ MTS-22 Q10)</span>
+    <p><b>Integral.</b> $H_n(x) = -e^{-nx^2}$ has $H_n' = h_n$ (P6), so $\int_0^1 h_n = H_n(1) - H_n(0) = 1 - e^{-n} \to 1$.</p>
+    <p><b>Limit.</b> $h_n(0) = 0$. For $x &gt; 0$: $e^{nx^2} &gt; \frac{(nx^2)^2}{2}$ (one term of the exponential series), so $0 &lt; h_n(x) &lt; \frac{2nx \cdot 2}{n^2x^4} = \frac{4}{nx^3} \to 0$. So $h = 0$ and $\int_0^1 h = 0$.</p>
+    <p>$\lim \int h_n = 1 \ne 0 = \int \lim h_n$.</p>
+  </div>
+  {{fig:hn_fig}}
+  <div class="box trap"><span class="lab">Exam trap</span>Uniform convergence is <b>enough</b> to swap limit and integral (Theorem 8.2.4, practicum), but it is not <b>needed</b>: $\frac{nx}{1+nx}$ on [0, 1] is not uniform, yet $\int_0^1 f_n = 1 - \frac{\ln(1+n)}{n} \to 1 = \int_0^1 f$ <span class="cx">C26</span>.</div>
+  <p class="small">In the model paper: <span class="chip q">Q10</span> (PYQ MTS-22 Q10), <span class="chip q">Q27</span>, <span class="chip q">Q35</span>.</p>
+</section>
+
+<!-- T13 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T13</span><h2>Uniform limit of continuous functions is continuous</h2></div>
+  <p class="oneline">Theorem 8.2.2, the main theorem of §8.2 (PYQ MTS-25 Q20).</p>
+  <div class="box def"><span class="lab">Theorem 8.2.2 · say it word for word</span>Let $(f_n)$ be a sequence of continuous functions on a set $A \subseteq \mathbb R$ and suppose that $(f_n)$ converges uniformly on A to a function $f : A \to \mathbb R$. Then f is continuous on A.</div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>every $f_n$ continuous on A<span class="fails">without it nothing is inherited: constant step functions converging to a step function.</span></li>
+    <li>convergence is <b>uniform</b> on A<span class="fails">pointwise is not enough: $x^n$ on [0, 1] has a jump limit <span class="cx">C12</span>.</span></li>
+  </ul></div>
+  {{fig:eps3}}
+</section>
+
+<section class="page">
+  <div class="kw"><span>Know</span><span>uniform: one H with $|f_H(x) - f(x)| &lt; \varepsilon/3$ for <b>all</b> x; $f_H$ continuous at c.</span><span>Want</span><span>for each $c \in A$ and ε &gt; 0, a δ with $|f(x) - f(c)| &lt; \varepsilon$ when $|x - c| &lt; \delta$, $x \in A$.</span></div>
+  <div class="box proof"><span class="lab">Proof (Bartle's ε/3 argument)</span>
+    <div class="steps">
+      <div class="step">Let $\varepsilon&gt;0$ and $c \in A$.<span class="why">To show continuity at an arbitrary c (P5).</span></div>
+      <div class="step">By uniform convergence there is $H = H(\varepsilon/3)$ with $|f_H(x) - f(x)| &lt; \varepsilon/3$ for <b>all</b> $x \in A$.<span class="why">Definition 8.1.4 with ε/3. Fix this one function $f_H$.</span></div>
+      <div class="step">For $x \in A$: $|f(x) - f(c)| \le |f(x) - f_H(x)| + |f_H(x) - f_H(c)| + |f_H(c) - f(c)| &lt; \frac\varepsilon3 + |f_H(x) - f_H(c)| + \frac\varepsilon3$.<span class="why">Add and subtract $f_H(x)$ and $f_H(c)$ (M1). Uniformity is used at <b>two</b> points, x and c.</span></div>
+      <div class="step">$f_H$ is continuous at c, so there is $\delta&gt;0$ with $|f_H(x) - f_H(c)| &lt; \varepsilon/3$ when $x \in A$, $|x - c| &lt; \delta$.<span class="why">Continuity of the single function $f_H$.</span></div>
+      <div class="step">Then $|f(x) - f(c)| &lt; \frac\varepsilon3 + \frac\varepsilon3 + \frac\varepsilon3 = \varepsilon$ for those x. c was arbitrary, so f is continuous on A. <span class="qed">∎</span><span class="why">Steps 3 and 4 together.</span></div>
+    </div>
+  </div>
+  <div class="box idea"><span class="lab">Where pointwise would fail</span>In step 2 we need one H that works at x <b>and</b> at c, for every x near c. With only pointwise convergence, H would depend on x, and x moves as δ shrinks.</div>
+  <p class="small">In the model paper: <span class="chip q">Q38</span> (PYQ MTS-25 Q20).</p>
+</section>
+
+<!-- T14 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T14</span><h2>Using Theorem 8.2.2</h2></div>
+  <p class="oneline">The quickest proof of "not uniform" (PYQ MAT-22 Q31).</p>
+  <div class="box skel"><span class="lab">Skeleton · contrapositive</span>Each $f_n$ is continuous on A (<span class="gap">reason</span>). The pointwise limit is f = <span class="gap">?</span>, which is <b>not</b> continuous at <span class="gap">c</span>. If $f_n \to f$ uniformly on A, Theorem 8.2.2 would make f continuous. Hence the convergence is not uniform on A. ∎</div>
+  <div class="box idea"><span class="lab">Worked example · $f_n(x) = \dfrac{x^n}{x^n+1}$ on [0, 2] (PYQ MAT-22 Q31)</span>
+    <div class="kv">
+      <span>$0 \le x &lt; 1$</span><span>$x^n \to 0$, so $f_n(x) \to 0$</span>
+      <span>$x = 1$</span><span>$f_n(1) = \frac12$</span>
+      <span>$1 &lt; x \le 2$</span><span>$f_n(x) = \dfrac{1}{1 + x^{-n}} \to 1$</span>
+    </div>
+    <p>The $f_n$ are continuous; the limit jumps at 1. So <b>not uniform</b> on [0, 2]. (Directly: $\lVert f_n - f\rVert = \frac12$ for every n.) On $[0, b]$ with $b&lt;1$ the norm is $\le b^n \to 0$: uniform there.</p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box trap"><span class="lab">Exam trap · the converse is false</span>"The limit is continuous, so the convergence is uniform." <b>No.</b> $x/n \to 0$ on ℝ: limit continuous, convergence not uniform. Theorem 8.2.2 can only <b>disprove</b> uniformity (when the limit is discontinuous); it can never prove it.</div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Show $\arctan(nx) \to \frac\pi2 \operatorname{sgn} x$ and that the convergence is not uniform on ℝ.</div>
+    <div class="a">x &gt; 0: $nx \to \infty$, $\arctan \to \pi/2$. x &lt; 0: $-\pi/2$. x = 0: 0. The $f_n$ are continuous but the limit jumps at 0, so not uniform (8.2.2). On $[a, \infty)$, a &gt; 0, it is uniform: gap $\le \frac\pi2 - \arctan(na) \to 0$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q15</span> <span class="chip q">Q20</span> <span class="chip q">Q23</span> (PYQ MAT-22 Q31) <span class="chip q">Q30</span>.</p>
+</section>
+
+<!-- T15 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T15</span><h2>Sums and products</h2></div>
+  <p class="oneline">Bartle Exercises 8.1.21–23 (PYQ MTS-22 MCQ 13).</p>
+  <div class="box result"><span class="lab">Result</span>If $f_n \to f$ and $g_n \to g$ uniformly on A, then $f_n + g_n \to f + g$ and $c f_n \to c f$ uniformly. If also every $f_n$ and $g_n$ is <b>bounded</b>, then $f_n g_n \to fg$ uniformly.</div>
+  <div class="box proof"><span class="lab">Proof idea</span>
+    <p><b>Sum:</b> $|(f_n + g_n) - (f + g)| \le |f_n - f| + |g_n - g|$, so $\lVert \cdot\rVert \le \lVert f_n - f\rVert + \lVert g_n - g\rVert \to 0$.</p>
+    <p><b>Product:</b> $f_ng_n - fg = f_n(g_n - g) + g(f_n - f)$. With $\lVert f_n\rVert \le M$ for all large n, $\lVert f_ng_n - fg\rVert \le M\lVert g_n - g\rVert + \lVert g\rVert\,\lVert f_n - f\rVert \to 0$.</p>
+  </div>
+  <div class="box trap"><span class="lab">Without boundedness, products fail</span>$f_n = x + \frac1n \to x$ uniformly on ℝ (norm 1/n). But $f_n^2 - x^2 = \frac{2x}{n} + \frac1{n^2}$; at $x = n$ this is $\ge 2$. So $f_n^2 \not\to x^2$ uniformly on ℝ <span class="cx">C23</span>.</div>
+  <p class="small">In the model paper: <span class="chip q">Q12</span> (PYQ MTS-22 MCQ 13), <span class="chip q">Q29</span>, <span class="chip q">Q36</span>.</p>
+</section>

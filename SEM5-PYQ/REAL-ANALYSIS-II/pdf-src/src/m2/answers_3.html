@@ -1,0 +1,91 @@
+<section class="page">
+  <div class="section-head"><b>Section C · Essays</b><small>10 marks each.</small></div>
+
+  <div class="ans-head"><span class="n">37</span><span class="src">Bartle Thm 6.1.6</span></div>
+  <p class="q">The Chain Rule via Carathéodory; why the naive proof fails; $\sin(x^2)$ and $|x^2 - 1|$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T06</span><span class="chip">T05</span><span class="chip">T02</span><span class="chip math">M08</span></div>
+  <p><b>Theorem 6.1.6 (Chain Rule).</b> Let I, J be intervals in ℝ, let $g : I \to \mathbb R$ and $f : J \to \mathbb R$ be functions such that $f(J) \subseteq I$, and let $c \in J$. If f is differentiable at c and if g is differentiable at $f(c)$, then the composite function $g \circ f$ is differentiable at c and $(g \circ f)'(c) = g'(f(c))\cdot f'(c)$.</p>
+  <p><b>Why the naive proof fails.</b> One writes $\dfrac{g(f(x)) - g(f(c))}{x - c} = \dfrac{g(f(x)) - g(f(c))}{f(x) - f(c)}\cdot\dfrac{f(x) - f(c)}{x - c}$, which divides by $f(x) - f(c)$. That can be 0 for $x \ne c$ arbitrarily near c: for $f(x) = x^2\sin(1/x)$, $f(0) = 0$, $f(x) = 0$ at $x = \frac{1}{n\pi} \to 0$. Carathéodory's theorem removes the division.</p>
+  <div class="box skel"><span class="lab">Skeleton</span>
+    <p>(1) Carathéodory for f at c: $f(x) - f(c) = \varphi(x)(x - c)$. (2) Carathéodory for g at $d = f(c)$: $g(y) - g(d) = \psi(y)(y - d)$. (3) Substitute $y = f(x)$ and multiply out; the coefficient of $(x - c)$ is $\Phi(x) = \psi(f(x))\varphi(x)$ <span class="gap">?</span> (continuous at c).</p>
+  </div>
+  <div class="steps">
+    <div class="step">f differentiable at c: there is $\varphi$ on J, continuous at c, with $f(x) - f(c) = \varphi(x)(x - c)$ for $x \in J$, and $\varphi(c) = f'(c)$.<span class="why">Carathéodory (⇒) for f.</span></div>
+    <div class="step">With $d = f(c)$, g differentiable at d: there is $\psi$ on I, continuous at d, with $g(y) - g(d) = \psi(y)(y - d)$ for $y \in I$, and $\psi(d) = g'(d)$.<span class="why">Carathéodory (⇒) for g.</span></div>
+    <div class="step">For $x \in J$, put $y = f(x) \in I$: $g(f(x)) - g(f(c)) = \psi(f(x))\big(f(x) - f(c)\big) = \big[\psi(f(x))\,\varphi(x)\big](x - c)$.<span class="why">Substitute 2, then 1. Pure algebra, no division.</span></div>
+    <div class="step">Let $\Phi(x) = \psi(f(x))\varphi(x)$. f is continuous at c (Thm 6.1.2) and $\psi$ is continuous at $f(c)$, so $\psi \circ f$ is continuous at c; $\varphi$ is continuous at c; hence $\Phi$ is continuous at c.<span class="why">Composite and product of continuous functions (Module 1).</span></div>
+    <div class="step">$\Phi(c) = \psi(f(c))\varphi(c) = g'(f(c))\,f'(c)$.<span class="why">Values from steps 1 and 2.</span></div>
+    <div class="step">By Carathéodory (⇐), $g \circ f$ is differentiable at c and $(g \circ f)'(c) = \Phi(c) = g'(f(c))f'(c)$. <span class="qed">∎</span><span class="why">$g\circ f(x) - g\circ f(c) = \Phi(x)(x-c)$ with $\Phi$ continuous at c.</span></div>
+  </div>
+</section>
+
+<section class="page">
+  <p><b>Applications.</b></p>
+  <p><b>$\sin(x^2)$.</b> Inner $f(x) = x^2$, $f' = 2x$; outer $g = \sin$, $g'(y) = \cos y$ evaluated at $y = x^2$.</p>
+  <div class="final">$\dfrac{d}{dx}\sin(x^2) = 2x\cos(x^2)$. Check x = 1: $2\cos1 = 1.0806$.</div>
+  <p><b>$|x^2 - 1|$.</b> Inner $f(x) = x^2 - 1$, $f' = 2x$; outer $g(y) = |y|$, differentiable for $y \ne 0$ with $g'(y) = \operatorname{sgn}y$. So for $x \ne \pm1$:</p>
+  <div class="final">$\dfrac{d}{dx}|x^2 - 1| = 2x\operatorname{sgn}(x^2 - 1)$: $= 2x$ for $|x| &gt; 1$, $= -2x$ for $|x| &lt; 1$.</div>
+  <p>At $x = \pm1$ the outer function $|y|$ is not differentiable at $y = f(\pm1) = 0$, so the rule is not available; directly, $f(\pm1) = 0$ and $f'(\pm1) = \pm2 \ne 0$, so $|f|$ is not differentiable at $\pm1$ (one-sided quotients $+2$ and $-2$ at $x = 1$). Checks: x = 2: $|x^2 - 1|' = 4$; x = 0.5: $|f| = 1 - x^2$ gives $-1$ ✓.</p>
+  <p class="marking">Marks: statement 2 · naive failure 1 · Carathéodory for f and g 2 · identity 2 · continuity of Φ and conclusion 2 · examples 1.</p>
+
+  <div class="ans-head"><span class="n">38</span><span class="src">Bartle Thm 6.2.4</span></div>
+  <p class="q">The Mean Value Theorem; geometric meaning; hypotheses cannot be dropped.</p>
+  <div class="need"><b>Know first</b><span class="chip">T12</span><span class="chip">T11</span><span class="chip pre">P07</span></div>
+  <p><b>Theorem 6.2.4 (Mean Value Theorem).</b> Suppose that f is continuous on a closed interval $I = [a, b]$, and that f has a derivative in the open interval $(a, b)$. Then there exists at least one point c in $(a, b)$ such that $f(b) - f(a) = f'(c)(b - a)$.</p>
+  <div class="box skel"><span class="lab">Skeleton</span>
+    <p>Subtract the chord from f to get a function that is 0 at both ends, then use Rolle: $\varphi(x) = f(x) - (\text{chord line})$; $\varphi(a) = \varphi(b) = 0$; $\varphi'(c) = 0$ <span class="gap">?</span></p>
+  </div>
+  <div class="steps">
+    <div class="step">Define $\varphi(x) = f(x) - f(a) - \dfrac{f(b) - f(a)}{b - a}(x - a)$ on $[a, b]$.<span class="why">f minus the chord through $(a, f(a))$ and $(b, f(b))$.</span></div>
+    <div class="step">$\varphi$ is continuous on $[a, b]$ and differentiable on $(a, b)$.<span class="why">f is, and the subtracted term is a linear function.</span></div>
+    <div class="step">$\varphi(a) = 0$ and $\varphi(b) = f(b) - f(a) - \big(f(b) - f(a)\big) = 0$.<span class="why">Direct substitution.</span></div>
+    <div class="step">By Rolle's Theorem there is $c \in (a, b)$ with $\varphi'(c) = 0$.<span class="why">All Rolle hypotheses checked in 2 and 3.</span></div>
+    <div class="step">$\varphi'(c) = f'(c) - \dfrac{f(b) - f(a)}{b - a} = 0$, so $f(b) - f(a) = f'(c)(b - a)$. <span class="qed">∎</span><span class="why">Differentiate $\varphi$ and rearrange.</span></div>
+  </div>
+  <p><b>Geometric meaning.</b> $\frac{f(b) - f(a)}{b - a}$ is the slope of the chord; some point of the graph between a and b has a tangent parallel to the chord. Example: $f(x) = x^3$ on $[0, 2]$: chord slope 4, $3c^2 = 4$, $c = \frac{2}{\sqrt3} \approx 1.155 \in (0, 2)$.</p>
+</section>
+
+<section class="page">
+  <p><b>Differentiability on $(a, b)$ cannot be dropped.</b> $f(x) = |x|$ on $[-1, 1]$ is continuous; chord slope $\frac{1 - 1}{2} = 0$, but $f'(x) = \pm1 \ne 0$ wherever it exists, and $f'(0)$ does not exist. No c exists.</p>
+  <p><b>Continuity on $[a, b]$ cannot be dropped.</b> $f(x) = x$ for $0 \le x &lt; 1$, $f(1) = 0$: f is differentiable on $(0, 1)$ with $f' = 1$, but is discontinuous at the endpoint 1. Chord slope $\frac{0 - 0}{1 - 0} = 0 \ne 1 = f'(c)$ for every $c$.</p>
+  <p class="small">Consequence used later: if $f' = 0$ on an interval, f is constant; if $f' \ge 0$, f is increasing; if $|f'| \le K$, f is Lipschitz.</p>
+  <p class="marking">Marks: statement 2 · φ and its properties 2 · Rolle and conclusion 2 · geometric meaning 1 · two counterexamples 2 · check 1.</p>
+
+  <div class="ans-head"><span class="n">39</span><span class="src">Bartle Thm 6.2.12</span></div>
+  <p class="q">Darboux's Theorem, both orderings of $f'(a), k, f'(b)$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T23</span><span class="chip">T22</span><span class="chip">T10</span><span class="chip pre">P07</span></div>
+  <p><b>Theorem 6.2.12 (Darboux).</b> If f is differentiable on $I = [a, b]$ and if k is a number between $f'(a)$ and $f'(b)$, then there is at least one point c in $(a, b)$ such that $f'(c) = k$.</p>
+  <p><b>Lemma 6.2.11 (used).</b> Let $f : I \to \mathbb R$ have a derivative at $c \in I$. (a) If $f'(c) &gt; 0$, there is $\delta &gt; 0$ with $f(x) &gt; f(c)$ for $x \in I$, $c &lt; x &lt; c + \delta$. (b) If $f'(c) &lt; 0$, there is $\delta &gt; 0$ with $f(x) &gt; f(c)$ for $x \in I$, $c - \delta &lt; x &lt; c$.</p>
+  <div class="box skel"><span class="lab">Skeleton</span>
+    <p>Turn "$f' = k$" into "$g' = 0$" with $g(x) = kx - f(x)$; a maximum of g on $[a, b]$ exists, and it cannot sit at an endpoint because of the signs of $g'(a), g'(b)$. Then it is an interior extremum and $g' = 0$ <span class="gap">?</span></p>
+  </div>
+  <p><b>Case 1: $f'(a) &lt; k &lt; f'(b)$.</b></p>
+  <div class="steps">
+    <div class="step">Let $g(x) = kx - f(x)$ on $[a, b]$. Then g is differentiable, $g'(x) = k - f'(x)$.<span class="why">$g'(c) = 0 \iff f'(c) = k$.</span></div>
+    <div class="step">g is continuous on $[a, b]$, so it attains a maximum at some $c \in [a, b]$.<span class="why">Max–Min Theorem 5.3.4 (g continuous because differentiable).</span></div>
+    <div class="step">$g'(a) = k - f'(a) &gt; 0$. By Lemma 6.2.11(a) there are x just right of a with $g(x) &gt; g(a)$, so the maximum is not at a.<span class="why">An endpoint max would need $g(x) \le g(a)$ nearby.</span></div>
+    <div class="step">$g'(b) = k - f'(b) &lt; 0$. By Lemma 6.2.11(b) there are x just left of b with $g(x) &gt; g(b)$, so the maximum is not at b.<span class="why">Same argument at b.</span></div>
+    <div class="step">Hence $c \in (a, b)$: an interior relative maximum, and $g'(c)$ exists, so $g'(c) = 0$ and $f'(c) = k$.<span class="why">Interior Extremum Theorem 6.2.1.</span></div>
+  </div>
+  <p><b>Case 2: $f'(a) &gt; k &gt; f'(b)$.</b> Put $F = -f$ and $K = -k$. Then $F'(a) = -f'(a) &lt; -k = K &lt; -f'(b) = F'(b)$, which is Case 1. So there is $c \in (a, b)$ with $F'(c) = K$, i.e. $f'(c) = k$. <span class="qed">∎</span></p>
+  <p><b>Illustration.</b> $f(x) = x^2$ on $[0, 2]$, $k = 1$: $f'(0) = 0 &lt; 1 &lt; 4 = f'(2)$. $g(x) = x - x^2$ has $g(0) = 0$, $g(2) = -2$, maximum $g(\frac12) = \frac14$ at $c = \frac12$, and indeed $f'(\frac12) = 1 = k$. For Case 2 use $-x^2$: $f'(0) = 0 &gt; -1 &gt; -4 = f'(2)$, again $c = \frac12$.</p>
+  <p class="marking">Marks: statement 2 · g and maximum 2 · endpoints excluded via Lemma 3 · interior ⇒ g′ = 0 2 · Case 2 1.</p>
+</section>
+
+<section class="page">
+  <div class="ans-head"><span class="n">40</span><span class="src">Bartle Thm 6.2.7, Ex 6.2.10, 6.2.13</span></div>
+  <p class="q">Monotonicity criterion; strict version; one-point positive derivative; $x - \sin x$.</p>
+  <div class="need"><b>Know first</b><span class="chip">T14</span><span class="chip">T12</span><span class="chip">T09</span><span class="chip pre">P04</span></div>
+  <p><b>Theorem 6.2.7.</b> Let $f : I \to \mathbb R$ be differentiable on the interval I. (a) f is increasing on I iff $f'(x) \ge 0$ for all $x \in I$. (b) f is decreasing on I iff $f'(x) \le 0$ for all $x \in I$. (Increasing: $x_1 &lt; x_2$ implies $f(x_1) \le f(x_2)$.)</p>
+  <div class="box skel"><span class="lab">Skeleton</span>
+    <p>(⇐) take $x_1 &lt; x_2$ and write $f(x_2) - f(x_1)$ with the MVT; sign of $f'(\xi)(x_2 - x_1)$ <span class="gap">?</span>. (⇒) the difference quotient is $\ge 0$; keep it in the limit.</p>
+  </div>
+  <p><b>(⇐) $f' \ge 0$ on I implies increasing.</b> Let $x_1 &lt; x_2$ in I. f is differentiable, hence continuous, on $[x_1, x_2]$. MVT: $f(x_2) - f(x_1) = f'(\xi)(x_2 - x_1)$ with $\xi \in (x_1, x_2)$. Since $f'(\xi) \ge 0$ and $x_2 - x_1 &gt; 0$, $f(x_2) \ge f(x_1)$.</p>
+  <p><b>(⇒) increasing implies $f' \ge 0$.</b> Let $c \in I$. For $x \in I$, $x \ne c$: $x &gt; c$ gives $f(x) \ge f(c)$ and $x - c &gt; 0$; $x &lt; c$ gives $f(x) \le f(c)$ and $x - c &lt; 0$. In both cases $\dfrac{f(x) - f(c)}{x - c} \ge 0$. Letting $x \to c$, the order theorem for limits (4.2.6) gives $f'(c) \ge 0$. <span class="qed">∎</span> (b) follows by applying (a) to $-f$.</p>
+  <p><b>Strict version.</b> If $f' &gt; 0$ on I, then in the MVT line above $f'(\xi)(x_2 - x_1) &gt; 0$, so $f(x_1) &lt; f(x_2)$: strictly increasing. <b>Converse false:</b> $f(x) = x^3$ is strictly increasing but $f'(0) = 0$.</p>
+  <p><b>One point is not enough.</b> $g(x) = x + 2x^2\sin(1/x)$, $g(0) = 0$. $g'(0) = \lim\left(1 + 2x\sin\frac1x\right) = 1 &gt; 0$ (squeeze). For $x \ne 0$: $g'(x) = 1 + 4x\sin\frac1x - 2\cos\frac1x$. At $x_n = \frac{1}{2n\pi}$: $g' = 1 + 0 - 2 = -1 &lt; 0$; at $y_n = \frac{1}{(2n+1)\pi}$: $g' = 1 + 0 + 2 = 3 &gt; 0$. Both sequences tend to 0, so every neighbourhood of 0 contains points where $g' &lt; 0$. By (⇒), g is not increasing on any neighbourhood of 0, although $g'(0) = 1 &gt; 0$.</p>
+  <p><b>Application: $f(x) = x - \sin x$ on ℝ.</b> $f'(x) = 1 - \cos x \ge 0$ for all x. By (a), f is increasing.</p>
+  <p><b>Strictly.</b> Suppose $f(x_1) = f(x_2)$ for some $x_1 &lt; x_2$. Increasing forces f constant on $[x_1, x_2]$, so $f' = 0$ on that whole interval; but $1 - \cos x = 0$ only at $x = 2k\pi$ (isolated points). Contradiction.</p>
+  <div class="final">$x - \sin x$ is strictly increasing on ℝ. Check: f(0) = 0, f(1) = 0.158, f(2) = 1.091, f(4) = 4.757.</div>
+  <p class="marking">Marks: statement 1 · (⇐) 2 · (⇒) 2 · strict and $x^3$ 1 · single point example 2 · application 2.</p>
+</section>

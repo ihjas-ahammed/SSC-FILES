@@ -1,0 +1,422 @@
+<!-- T01 -->
+<section class="page">
+  <div class="kicker" style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNIT 2 · BARTLE §6.1</div>
+  <h1>The derivative at a point</h1>
+  <hr>
+  <div class="topic-head"><span class="tid">T01</span><h2>The derivative: a limit of chord slopes</h2></div>
+  <p class="oneline">From the tangent of Plus Two to the ε–δ definition (related FYUGP CALC-24 Q5).</p>
+  {{fig:secant_tangent}}
+  <div class="box def"><span class="lab">Definition 6.1.1 · say it word for word</span>Let $I \subseteq \mathbb R$ be an interval, let $f : I \to \mathbb R$, and let $c \in I$. We say that a real number $L$ is the <b>derivative of f at c</b> if, given any $\varepsilon&gt;0$, there exists $\delta(\varepsilon)&gt;0$ such that if $x \in I$ satisfies $0 &lt; |x - c| &lt; \delta(\varepsilon)$, then $$\left|\frac{f(x) - f(c)}{x - c} - L\right| &lt; \varepsilon.$$ In this case we say f is <b>differentiable at c</b> and write $f'(c) = L$.
+    <span class="say">In plain words: the slope of the chord from $(c, f(c))$ to $(x, f(x))$ can be forced as close to L as anyone demands, just by taking x close enough to c (and not equal to c). Equivalent short form: $f'(c) = \lim_{x\to c} \frac{f(x) - f(c)}{x - c}$. If c is an endpoint of I the limit is one-sided.</span></div>
+  <div class="box idea"><span class="lab">Plus Two said h, Bartle says x − c</span>Plus Two: $\frac{f(c + h) - f(c)}{h}$ as $h \to 0$. Put $h = x - c$ and it is the same limit. Why "0 &lt; |x − c|"? At $x = c$ the quotient would be 0/0, so $x = c$ is never allowed.</div>
+</section>
+
+<section class="page">
+  <div class="box def"><span class="lab">The game (same shape as continuity, M02 in Module 1)</span>
+    <table class="t game">
+      <tr><th>Who</th><th>Moves</th></tr>
+      <tr><td>Opponent</td><td>picks a band of half-height ε round L</td></tr>
+      <tr><td>You</td><td>pick a window δ round c (leaving out c itself)</td></tr>
+      <tr><td>Test</td><td>every chord slope inside the window lies in the band</td></tr>
+      <tr><td>δ may depend on</td><td><span class="dep-on">ε, f and c</span>; it must <span class="indep">not</span> depend on x</td></tr>
+    </table>
+  </div>
+  <div class="box skel"><span class="lab">Skeleton · prove f′(c) = L from the definition</span>Let $\varepsilon&gt;0$. For $x \ne c$ simplify $\dfrac{f(x) - f(c)}{x - c} = $ <span class="gap">?</span>. Choose $\delta = $ <span class="gap">?</span>. If $0 &lt; |x - c| &lt; \delta$ then $\left|\dfrac{f(x) - f(c)}{x - c} - L\right| = $ <span class="gap">?</span> $&lt; \varepsilon$. Hence $f'(c) = L$. ∎</div>
+  <div class="kw"><span>Know</span><span>$f(x) = x^2$, $c = 2$, claim $L = 4$.</span><span>Want</span><span>for every ε a δ with $\left|\frac{x^2 - 4}{x - 2} - 4\right| &lt; \varepsilon$ when $0 &lt; |x - 2| &lt; \delta$.</span></div>
+  <div class="box scratch"><span class="lab">Scratch · worked example 1 (never copied)</span>
+    <p>For $x \ne 2$: $\frac{x^2 - 4}{x - 2} = x + 2$. So the distance to L is $|x + 2 - 4| = |x - 2|$.</p>
+    <p>Want $|x - 2| &lt; \varepsilon \Leftarrow |x - 2| &lt; \delta$ with $\delta = \varepsilon$.</p>
+  </div>
+  <div class="box proof"><span class="lab">Proof · what you write</span>Let $\varepsilon&gt;0$ and put $\delta = \varepsilon$. If $0 &lt; |x - 2| &lt; \delta$, then $\frac{x^2 - 4}{x - 2} = x + 2$, so $\left|\frac{x^2 - 4}{x - 2} - 4\right| = |x - 2| &lt; \varepsilon$. Hence $f'(2) = 4$. <span class="qed">∎</span><br><small>Check: ε = 0.01, δ = 0.01, x = 2.005: quotient $= (4.020025 - 4)/0.005 = 4.005$, and $|4.005 - 4| = 0.005 &lt; 0.01$.</small></div>
+  <p class="small">In the model paper: <span class="chip q">Q1</span> (this example).</p>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 2 · fill the gaps (Bartle Ex 6.1.1(b), 1/x)</span>
+    <p>$g(x) = 1/x$, $c \ne 0$. For $x \ne c$, $x \ne 0$: $\dfrac{1/x - 1/c}{x - c} = \dfrac{(c - x)/(xc)}{x - c} = $ <span class="gap">?</span>.</p>
+    <p>As $x \to c$ the quotient tends to <span class="gap">?</span>. So $g'(c) = $ <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> the quotient is $\dfrac{-1}{xc}$, the limit is $-\dfrac1{c^2}$. (At c = 2: $-1/4$; at x = 2.5 the chord slope is $-1/5$, nearby.)</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself · CALC-24 Q5</span>
+    <div class="q">From the definition, find $f'(c)$ for $f(x) = 3x$.</div>
+    <div class="a">$\frac{3x - 3c}{x - c} = 3$ for every $x \ne c$, so $\left|3 - 3\right| = 0 &lt; \varepsilon$ with any δ. $f'(c) = 3$ for every c.</div>
+  </div>
+  <div class="box result"><span class="lab">Result · sequence form (Bartle Ex 6.1.13)</span>If f is differentiable at c then $f'(c) = \lim_{n\to\infty} n\{f(c + \tfrac1n) - f(c)\}$. Reason: $x_n = c + \frac1n \to c$ with $x_n \ne c$, and $n\{f(x_n) - f(c)\} = \frac{f(x_n) - f(c)}{x_n - c}$ (sequential criterion for limits).
+    <p><b>The converse is false.</b> $f = |x|$, $c = 0$: $n\{\,|1/n| - 0\,\} = 1$, so the sequence converges to 1, yet $f'(0)$ does not exist (T02).</p></div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist (what the definition demands)</span><ul>
+    <li>the quotient has a limit<span class="fails">$|x|/x$ is +1 on the right, −1 on the left: no limit <span class="cx">C5</span></span></li>
+    <li>that limit is a real number (finite)<span class="fails">$x^{1/3}$ at 0: the quotient $x^{-2/3} \to \infty$, vertical tangent, no derivative</span></li>
+    <li>c belongs to the interval I<span class="fails">at an endpoint only a one-sided derivative makes sense</span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition will lie to you here</span>"The derivative is the slope of the tangent line, found by the rules." The rules (T03 to T08) hold only at points where the pieces are differentiable. At a joint or at a point where an inner piece is undefined (T09) you must go back to the limit of the quotient.</div>
+  <p class="small">In the model paper: <span class="chip q">Q2</span> (CALC-24 Q5), <span class="chip q">Q3</span>, <span class="chip q">Q4</span>.</p>
+</section>
+
+<!-- T02 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T02</span><h2>Differentiable ⇒ continuous (and not conversely)</h2></div>
+  <p class="oneline">The first theorem of the unit; the piecewise trap (related FYUGP CALC-24 Q13).</p>
+  {{fig:abs_corner}}
+  <div class="box def"><span class="lab">Theorem 6.1.2</span>If $f : I \to \mathbb R$ has a derivative at $c \in I$, then f is continuous at c.
+    <span class="say">In plain words: no jumps and no holes at a point where there is a tangent. Contrapositive: if f is <b>not</b> continuous at c, then f′(c) does not exist. That is the quickest way to answer a piecewise question.</span></div>
+  <div class="box skel"><span class="lab">Skeleton</span>For $x \ne c$ write $f(x) - f(c) = $ <span class="gap">?</span> $\cdot (x - c)$. Let $x \to c$: the first factor tends to <span class="gap">?</span>, the second to <span class="gap">?</span>. So $f(x) \to f(c)$. ∎</div>
+</section>
+
+<section class="page">
+  <div class="kw"><span>Know</span><span>The quotient $\frac{f(x) - f(c)}{x - c}$ has limit $f'(c)$ as $x \to c$.</span><span>Want</span><span>$\lim_{x\to c} f(x) = f(c)$, that is, $\lim (f(x) - f(c)) = 0$.</span></div>
+  <div class="box proof"><span class="lab">Proof of 6.1.2</span>
+    <div class="steps">
+      <div class="step">For $x \ne c$: $f(x) - f(c) = \dfrac{f(x) - f(c)}{x - c}\,(x - c)$.<span class="why">Multiply and divide by $x - c \ne 0$. This is only algebra, and it needs $x \ne c$.</span></div>
+      <div class="step">Let $x \to c$: the first factor tends to $f'(c)$, the second to 0.<span class="why">Hypothesis for the first factor; $x - c \to 0$ is trivial.</span></div>
+      <div class="step">So $\lim_{x\to c}(f(x) - f(c)) = f'(c)\cdot 0 = 0$.<span class="why">Product of limits (Theorem 4.2.4): both limits exist.</span></div>
+      <div class="step">Hence $\lim_{x\to c} f(x) = f(c)$, so f is continuous at c. <span class="qed">∎</span><span class="why">Definition of continuity at a cluster point (5.1.2).</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist · "the converse is false"</span><ul>
+    <li>f′(c) must exist<span class="fails">$|x|$ is continuous at 0 but has no derivative there <span class="cx">C5</span></span></li>
+    <li>the derivative must be finite<span class="fails">$x^{1/3}$ is continuous at 0, quotient $x^{-2/3}$; at $x_n = n^{-3}$ it equals $n^2 \to \infty$</span></li>
+    <li>the same point c everywhere<span class="fails">differentiable at c says nothing about continuity at other points (N4)</span></li>
+  </ul></div>
+  <div class="box result"><span class="lab">Where each hypothesis was used</span>Step 2 uses the existence of the limit $f'(c)$ (a real number). Nothing else is needed: no continuity near c, no interval beyond c ∈ I.</div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Worked example 1 · |x| at 0</span>
+    <p>$\dfrac{|x| - |0|}{x - 0} = \dfrac{|x|}{x} = \begin{cases} +1 &amp; x&gt;0 \\ -1 &amp; x&lt;0 \end{cases}$. Two sequences $x_n = \frac1n$ and $y_n = -\frac1n$ both tend to 0, but the quotient gives $1$ and $-1$.</p>
+    <p>So no limit: $f'(0)$ does not exist, although $|x|$ is continuous. <span class="cx">C5</span> (The same quotient is the old MCQ "$\lim_{x\to0}|x|/x$": answer, no limit.)</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · piecewise at a joint (CALC-24 Q13, fill the gaps)</span>
+    <p>$f(x) = x^2$ for $x \le 1$, $f(x) = 4\sqrt x$ for $x&gt;1$. Is f differentiable at 1?</p>
+    <p>$f(1) = $ <span class="gap">?</span>. $\lim_{x\to1^+} 4\sqrt x = $ <span class="gap">?</span>. Equal? <span class="gap">?</span> So f is <span class="gap">?</span> at 1, hence by 6.1.2 <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> $f(1) = 1$, right limit $= 4$. Not equal, so f is discontinuous at 1 and $f'(1)$ does <b>not</b> exist. The question "if so, find the value" is a trap.</p>
+    <p>Making it work: $F(x) = x^2$ ($x \le 1$), $ax + b$ ($x&gt;1$). Continuity: $a + b = 1$. Left derivative: $\frac{x^2 - 1}{x - 1} = x + 1 \to 2$. Right derivative (with $b = 1 - a$): $\frac{a(x-1)}{x - 1} = a$. So $a = 2$, $b = -1$, $F'(1) = 2$.</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">$G(x) = x^2$ for $x \le 1$, $G(x) = \sqrt x$ for $x&gt;1$. Differentiable at 1?</div>
+    <div class="a">Continuous: both sides give 1. Left derivative: $x + 1 \to 2$. Right derivative: $\frac{\sqrt x - 1}{x - 1} = \frac1{\sqrt x + 1} \to \frac12$. Different, so <b>not</b> differentiable at 1.</div>
+  </div>
+  <div class="box trap"><span class="lab">Exam trap · piecewise functions</span>Always in this order: (1) values equal at the joint? (continuity); (2) one-sided derivatives equal? Matching values alone are not enough (G above); matching values <b>and</b> slopes give differentiability.</div>
+  <p class="small">In the model paper: <span class="chip q">Q5</span> ($x^{1/3}$), <span class="chip q">Q21</span>, <span class="chip q">Q22</span> (CALC-24 Q13).</p>
+</section>
+
+<!-- T03 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T03</span><h2>Algebra of derivatives: sum, product, quotient</h2></div>
+  <p class="oneline">The rules you know from Plus Two, now with proofs (Bartle 6.1.3).</p>
+  <div class="hook"><span class="lab">Picture · a rectangle that grows</span>Let f be the width and g the height. Nudge x: the width grows by $\Delta f$ and the height by $\Delta g$. The new area is the old one plus a strip $g\,\Delta f$, plus a strip $f\,\Delta g$, plus a tiny corner $\Delta f\,\Delta g$. Divide by $\Delta x$: the corner disappears because $\Delta f \to 0$. That is $(fg)' = f'g + fg'$.</div>
+  <div class="box def"><span class="lab">Theorem 6.1.3</span>Let $f, g : I \to \mathbb R$ be differentiable at $c \in I$. Then:<br>
+    (a) for $\alpha \in \mathbb R$, $(\alpha f)'(c) = \alpha f'(c)$;<br>
+    (b) $(f + g)'(c) = f'(c) + g'(c)$;<br>
+    (c) <b>Product Rule</b>: $(fg)'(c) = f'(c)g(c) + f(c)g'(c)$;<br>
+    (d) <b>Quotient Rule</b>: if $g(c) \ne 0$, then $\left(\dfrac fg\right)'(c) = \dfrac{f'(c)g(c) - f(c)g'(c)}{(g(c))^2}$.
+    <span class="say">In plain words: differentiate one piece at a time. Product: "first-prime second plus first second-prime". Quotient: "bottom times top-prime, minus top times bottom-prime, over bottom squared".</span></div>
+  <div class="box skel"><span class="lab">Skeleton · product rule</span>For $x \ne c$: $\dfrac{f(x)g(x) - f(c)g(c)}{x - c} = \dfrac{f(x) - f(c)}{x - c}\,\cdot$ <span class="gap">?</span> $+$ <span class="gap">?</span> $\cdot\dfrac{g(x) - g(c)}{x - c}$. Let $x \to c$ using that g is <span class="gap">?</span> at c. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof of (a), (b), (c), (d)</span>
+    <p><b>(a), (b).</b> $\frac{(\alpha f)(x) - (\alpha f)(c)}{x - c} = \alpha\frac{f(x) - f(c)}{x - c}$, and the quotient of a sum is the sum of quotients. Apply the limit laws (4.2.4).</p>
+    <p><b>(c)</b></p>
+    <div class="steps">
+      <div class="step">For $x \ne c$: $\dfrac{f(x)g(x) - f(c)g(c)}{x - c} = \dfrac{f(x) - f(c)}{x - c}\,g(x) + f(c)\,\dfrac{g(x) - g(c)}{x - c}$.<span class="why">Add and subtract $f(c)g(x)$ in the numerator. This one trick is the whole proof.</span></div>
+      <div class="step">g is continuous at c, so $g(x) \to g(c)$.<span class="why">Theorem 6.1.2 (T02): g is differentiable at c. Without it the first term has no limit.</span></div>
+      <div class="step">Let $x \to c$: the limit is $f'(c)g(c) + f(c)g'(c)$. <span class="qed">∎</span><span class="why">Limit laws: the four factors have limits $f'(c)$, $g(c)$, $f(c)$, $g'(c)$.</span></div>
+    </div>
+    <p><b>(d)</b></p>
+    <div class="steps">
+      <div class="step">Since g is continuous at c and $g(c) \ne 0$, $g \ne 0$ on a neighbourhood J of c.<span class="why">Local sign (Theorem 4.2.9). This is what makes $f/g$ defined near c.</span></div>
+      <div class="step">For $x \in J$, $x \ne c$: $\dfrac{f(x)/g(x) - f(c)/g(c)}{x - c} = \dfrac{1}{g(x)g(c)}\left[\dfrac{f(x) - f(c)}{x - c}\,g(c) - f(c)\,\dfrac{g(x) - g(c)}{x - c}\right]$.<span class="why">Common denominator, then add and subtract $f(c)g(c)$.</span></div>
+      <div class="step">Let $x \to c$ (using $g(x) \to g(c)$): the limit is $\dfrac{f'(c)g(c) - f(c)g'(c)}{g(c)^2}$. <span class="qed">∎</span><span class="why">Limit laws.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>both f and g differentiable at c<span class="fails">$|x|\cdot|x| = x^2$ is differentiable at 0 although $|x|$ is not: the rule does not apply, and the converse is false <span class="cx">C5</span></span></li>
+    <li>$g(c) \ne 0$ for the quotient<span class="fails">$f = 1$, $g = x$ at 0: $1/x$ is not even defined at 0</span></li>
+    <li>same point c, and f, g both on I<span class="fails">pieces defined on different intervals cannot be combined</span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Exam trap</span>$(fg)' \ne f'g'$. With $f = g = x$: $(x^2)' = 2x$, but $f'g' = 1$. Likewise $(f/g)' \ne f'/g'$.</div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Worked example 1 · quotient rule (Bartle Ex 6.1.5(a); related CALC-24)</span>
+    <p>$f(x) = \dfrac{x}{1 + x^2}$. Top $u = x$, $u' = 1$; bottom $v = 1 + x^2 \ge 1 \ne 0$, $v' = 2x$.</p>
+    <p>$f'(x) = \dfrac{1\cdot(1 + x^2) - x\cdot 2x}{(1 + x^2)^2} = \dfrac{1 - x^2}{(1 + x^2)^2}$.</p>
+    <p>Check: $f'(0) = 1$ and $f'(1) = 0$ (the top of the hump, $f(1) = \frac12$).</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · product rule, fill the gaps</span>
+    <p>$h(x) = (2x + 1)(x^2 - 3)$. Let $u = 2x + 1$, $u' = $ <span class="gap">?</span>; $v = x^2 - 3$, $v' = $ <span class="gap">?</span>. Then $h' = u'v + uv' = $ <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> $u' = 2$, $v' = 2x$, $h' = 2(x^2 - 3) + (2x + 1)2x = 6x^2 + 2x - 6$. Check by expanding: $2x^3 + x^2 - 6x - 3$ differentiates to the same.</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find $\left(\dfrac{x^2 + 1}{x - 2}\right)'$ at $x = 3$. Where is it not defined?</div>
+    <div class="a">$\dfrac{2x(x - 2) - (x^2 + 1)}{(x - 2)^2} = \dfrac{x^2 - 4x - 1}{(x - 2)^2}$. At 3: $\dfrac{9 - 12 - 1}{1} = -4$. Not defined at $x = 2$ ($g(2) = 0$).</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q6</span>, <span class="chip q">Q23</span> (also the special case $(1/g)' = -g'/g^2$, Bartle Ex 6.1.7(b), which needs only $g(c) \ne 0$).</p>
+</section>
+
+<!-- T04 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T04</span><h2>Sums, products of many functions; the power rule</h2></div>
+  <p class="oneline">Induction on the product rule (Bartle 6.1.4).</p>
+  <div class="hook"><span class="lab">Picture · a box with n sides</span>A product of n factors changes by letting <b>one factor at a time</b> change while the others stand still: n terms, each with one prime.</div>
+  <div class="box def"><span class="lab">Corollary 6.1.4</span>Let $f_1, \dots, f_n$ be functions on I, differentiable at $c \in I$.<br>
+    (a) $(f_1 + \cdots + f_n)'(c) = f_1'(c) + \cdots + f_n'(c)$.<br>
+    (b) $(f_1 f_2 \cdots f_n)'(c) = f_1'(c)f_2(c)\cdots f_n(c) + \cdots + f_1(c)\cdots f_{n-1}(c)f_n'(c)$.<br>
+    In particular, $(f^n)'(c) = n\,(f(c))^{n-1}f'(c)$, and taking $f(x) = x$: $D\,x^n = n x^{n-1}$ for $n \in \mathbb N$.
+    <span class="say">In plain words: bring the power down, lower it by one, and multiply by the derivative of what is inside (the last factor is the one students forget).</span></div>
+  <div class="box skel"><span class="lab">Skeleton · induction</span>Base $n = 1$: <span class="gap">?</span>. Step: assume true for n; write $f_1\cdots f_{n+1} = (f_1\cdots f_n)\cdot f_{n+1}$ and apply the <span class="gap">?</span> rule. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof (power rule by induction)</span>
+    <div class="steps">
+      <div class="step">$n = 1$: $D\,x = 1 = 1\cdot x^0$.<span class="why">The quotient $\frac{x - c}{x - c} = 1$.</span></div>
+      <div class="step">Assume $D\,x^k = kx^{k-1}$. Write $x^{k+1} = x^k\cdot x$.<span class="why">So the product rule (T03(c)) applies with $f = x^k$, $g = x$, both differentiable.</span></div>
+      <div class="step">$D\,x^{k+1} = kx^{k-1}\cdot x + x^k\cdot 1 = (k + 1)x^k$. <span class="qed">∎</span><span class="why">Add the two terms: $kx^k + x^k$.</span></div>
+    </div>
+  </div>
+  <div class="box result"><span class="lab">Result · negative powers (quotient rule)</span>$x^{-n} = 1/x^n$ with $g(x) = x^n \ne 0$ for $x \ne 0$: $D\,x^{-n} = \dfrac{0 - nx^{n-1}}{x^{2n}} = -nx^{-n-1}$. At $x = 2$, $n = 3$: $-3/16 = -0.1875$.</div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>n is a natural number (finite product)<span class="fails">real powers $x^r$ come later (Bartle §8.3); quote $D\,x^r = rx^{r-1}$ as a known fact</span></li>
+    <li>each $f_i$ differentiable at c<span class="fails">$f = |x|$: $f^2 = x^2$ has derivative 0 at 0, but $2f f'$ has no meaning because $f'(0)$ does not exist <span class="cx">C5</span></span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Exam trap</span>$(f^n)' = n f^{n-1}f'$, not $nf^{n-1}$. Test with $f = x^2$, $n = 3$: $x^6$ has derivative $6x^5$; "$3f^2$" gives $3x^4$ only, and the missing factor $f' = 2x$ gives $3x^4\cdot 2x = 6x^5$.</div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Differentiate $(x^2 + 1)^3$ and evaluate at $x = 1$.</div>
+    <div class="a">$3(x^2 + 1)^2\cdot 2x = 6x(x^2 + 1)^2$. At 1: $6\cdot 4 = 24$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q7</span>.</p>
+</section>
+
+<!-- T05 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T05</span><h2>Carathéodory's characterisation</h2></div>
+  <p class="oneline">"Fill the hole in the chord-slope" (Bartle 6.1.5); the tool that proves the chain rule.</p>
+  {{fig:caratheodory}}
+  <div class="box def"><span class="lab">Theorem 6.1.5 · Carathéodory</span>Let f be defined on an interval I containing the point c. Then f is differentiable at c if and only if there exists a function $\varphi$ on I that is continuous at c and satisfies $$f(x) - f(c) = \varphi(x)\,(x - c) \quad \text{for } x \in I.$$ In this case, $\varphi(c) = f'(c)$.
+    <span class="say">In plain words: write the difference $f(x) - f(c)$ as "something times $(x - c)$". Differentiable means you can choose that "something" so that it behaves nicely (is continuous) at c. Its value at c is the derivative.</span></div>
+  <div class="box skel"><span class="lab">Skeleton</span>(⇒) Define $\varphi(x) = $ <span class="gap">?</span> for $x \ne c$ and $\varphi(c) = $ <span class="gap">?</span>. Check continuity at c and the identity at every x. (⇐) For $x \ne c$ divide to get $\frac{f(x) - f(c)}{x - c} = $ <span class="gap">?</span>; let $x \to c$. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof of 6.1.5</span>
+    <p><b>(⇒)</b> Assume $f'(c)$ exists.</p>
+    <div class="steps">
+      <div class="step">Define $\varphi(x) = \dfrac{f(x) - f(c)}{x - c}$ for $x \ne c$ and $\varphi(c) = f'(c)$.<span class="why">The difference quotient is the only possible choice for $x \ne c$; the hole at c is filled with the derivative.</span></div>
+      <div class="step">$\varphi$ is continuous at c: $\lim_{x\to c}\varphi(x) = f'(c) = \varphi(c)$.<span class="why">Definition of $f'(c)$.</span></div>
+      <div class="step">$f(x) - f(c) = \varphi(x)(x - c)$ for every $x \in I$.<span class="why">For $x \ne c$ multiply out. For $x = c$ both sides are 0, so check c too.</span></div>
+    </div>
+    <p><b>(⇐)</b> Assume $\varphi$ exists, continuous at c.</p>
+    <div class="steps">
+      <div class="step">For $x \ne c$: $\dfrac{f(x) - f(c)}{x - c} = \varphi(x)$.<span class="why">Divide by $x - c \ne 0$.</span></div>
+      <div class="step">$\lim_{x\to c}\varphi(x) = \varphi(c)$.<span class="why">$\varphi$ is continuous at c.</span></div>
+      <div class="step">So the quotient has a limit: $f'(c)$ exists and equals $\varphi(c)$. <span class="qed">∎</span><span class="why">Definition 6.1.1.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>$\varphi$ continuous <b>at c</b> (not everywhere)<span class="fails">$|x|$ at 0: $\varphi(x) = \operatorname{sgn} x$ for $x \ne 0$ is forced, with no continuous value at 0 <span class="cx">C5</span></span></li>
+    <li>the identity holds for <b>all</b> $x \in I$, including c<span class="fails">$\varphi$ is determined for $x \ne c$ by the quotient; only its value at c is free</span></li>
+    <li>I an interval containing c<span class="fails">$\varphi$ must be defined on all of I, otherwise the chain rule argument cannot compose</span></li>
+  </ul></div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Worked example 1 · $f(x) = x^3$ (Bartle's illustration)</span>
+    <p>$x^3 - c^3 = (x^2 + cx + c^2)(x - c)$. So $\varphi(x) = x^2 + cx + c^2$, a polynomial, continuous everywhere.</p>
+    <p>$f'(c) = \varphi(c) = c^2 + c^2 + c^2 = 3c^2$. Check at $c = 1$: $\varphi(x) = x^2 + x + 1$, $\varphi(1) = 3$, and $\varphi(2) = 7 = \frac{8 - 1}{2 - 1}$.</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · $\sqrt x$ at $c &gt; 0$, fill the gaps</span>
+    <p>$\sqrt x - \sqrt c = \dfrac{x - c}{\sqrt x + \sqrt c}$ (multiply top and bottom by $\sqrt x + \sqrt c$). So $\varphi(x) = $ <span class="gap">?</span> for $x \ne c$, and $\varphi(c) = $ <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> $\varphi(x) = \dfrac1{\sqrt x + \sqrt c}$, continuous at c since $\sqrt x + \sqrt c \to 2\sqrt c \ne 0$ (this needs $c&gt;0$). $f'(c) = \dfrac1{2\sqrt c}$; at $c = 4$: $\frac14$. At $c = 0$ there is no $\varphi$ ($\varphi(x) = x^{-1/2}$ blows up).</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find $\varphi$ for $f(x) = x^2 + 3x$ at c and deduce $f'(c)$.</div>
+    <div class="a">$f(x) - f(c) = (x^2 - c^2) + 3(x - c) = (x + c + 3)(x - c)$. So $\varphi(x) = x + c + 3$ and $f'(c) = 2c + 3$.</div>
+  </div>
+  <div class="box trap"><span class="lab">Your intuition will lie to you here</span>"$\varphi$ is the derivative function." No: $\varphi$ depends on the point c <b>and</b> on x. It is the chord slope from c, whose value <b>at x = c</b> is $f'(c)$.</div>
+  <p class="small">In the model paper: <span class="chip q">Q24</span>.</p>
+</section>
+
+<!-- T06 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T06</span><h2>The chain rule</h2></div>
+  <p class="oneline">Derivative of a composite (Bartle 6.1.6; 10-mark proof).</p>
+  <div class="hook"><span class="lab">Picture · gears</span>If y changes 3 times as fast as u, and u changes 2 times as fast as x, then y changes 6 times as fast as x. The rates multiply. The only care: the outer rate is measured at the <b>inner value</b> $f(c)$, not at c.</div>
+  <div class="box def"><span class="lab">Theorem 6.1.6 · Chain Rule</span>Let I, J be intervals in $\mathbb R$, let $g : I \to \mathbb R$ and $f : J \to \mathbb R$ be functions such that $f(J) \subseteq I$, and let $c \in J$. If f is differentiable at c and g is differentiable at $f(c)$, then the composite $g \circ f$ is differentiable at c and $$(g \circ f)'(c) = g'(f(c))\cdot f'(c).$$
+    <span class="say">In plain words: differentiate the outside (leave the inside alone), then multiply by the derivative of the inside.</span></div>
+  <div class="box trap"><span class="lab">Why the quick proof fails (N1)</span>Quick idea: $\frac{g(f(x)) - g(f(c))}{x - c} = \frac{g(f(x)) - g(f(c))}{f(x) - f(c)}\cdot\frac{f(x) - f(c)}{x - c}$. But $f(x) = f(c)$ may happen at points x arbitrarily close to c (for $x^2\sin(1/x)$ at 0, $f(\frac1{n\pi}) = 0$), so you would divide by zero. Carathéodory avoids all division.</div>
+  <div class="box skel"><span class="lab">Skeleton</span>Get $\varphi$ for f at c. Get $\psi$ for g at $d = f(c)$. Substitute $y = f(x)$: $g(f(x)) - g(f(c)) = $ <span class="gap">?</span> $\cdot (x - c)$. Show the bracket is continuous at c with value <span class="gap">?</span>. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof of 6.1.6</span>
+    <div class="steps">
+      <div class="step">There is $\varphi$ on J, continuous at c, with $f(x) - f(c) = \varphi(x)(x - c)$ and $\varphi(c) = f'(c)$.<span class="why">Carathéodory (⇒) for f at c (T05).</span></div>
+      <div class="step">With $d = f(c)$ there is $\psi$ on I, continuous at d, with $g(y) - g(d) = \psi(y)(y - d)$ and $\psi(d) = g'(d)$.<span class="why">Carathéodory again, for the outer function g at d.</span></div>
+      <div class="step">Put $y = f(x)$ ($x \in J$, allowed since $f(J) \subseteq I$): $g(f(x)) - g(f(c)) = \psi(f(x))\,[f(x) - f(c)] = \big[\psi(f(x))\,\varphi(x)\big](x - c)$.<span class="why">Substitute the identity of step 2, then of step 1. Pure algebra, no division.</span></div>
+      <div class="step">$\Phi(x) = \psi(f(x))\,\varphi(x)$ is continuous at c.<span class="why">f is continuous at c (6.1.2); $\psi$ is continuous at $f(c)$, so $\psi\circ f$ is continuous at c (composite theorem, Module 1); $\varphi$ is continuous at c; products of continuous functions are continuous.</span></div>
+      <div class="step">$\Phi(c) = \psi(f(c))\varphi(c) = g'(f(c))\,f'(c)$.<span class="why">$\psi(d) = g'(d)$ and $\varphi(c) = f'(c)$.</span></div>
+      <div class="step">By Carathéodory (⇐), $g\circ f$ is differentiable at c with $(g\circ f)'(c) = \Phi(c)$. <span class="qed">∎</span><span class="why">Step 3 is exactly the Carathéodory identity for $g \circ f$.</span></div>
+    </div>
+    <small>Marks (10): statement 2 · Carathéodory for f 2 · for g 2 · composition identity 2 · continuity of Φ and conclusion 2.</small>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f differentiable at c<span class="fails">$f = |x|$ at 0 with $g(y) = y^2$: $(g\circ f)(x) = x^2$ happens to work, but $2|x|\,f'$ is meaningless</span></li>
+    <li>g differentiable at the point <b>$f(c)$</b>, not at c<span class="fails">$g = |y|$, $f(x) = x$ at $c = 0$: $g\circ f = |x|$ has no derivative <span class="cx">C5</span></span></li>
+    <li>$f(J) \subseteq I$ (composite defined)<span class="fails">$g = \sqrt y$ on $[0,\infty)$, $f(x) = x - 1$ on $\mathbb R$: $g(f(x))$ is undefined for $x&lt;1$</span></li>
+  </ul></div>
+  <div class="box result"><span class="lab">Note</span>The hypotheses are sufficient, not necessary: $g = |y|$, $f = x^2$ at 0 gives $g \circ f = x^2$, differentiable although g is not differentiable at $f(0) = 0$.</div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Worked example 1 · Bartle Ex 6.1.5(b)</span>
+    <p>$h(x) = \sqrt{x^2 - 2x + 5}$. Name the inner $f(x) = x^2 - 2x + 5$ and outer $g(y) = \sqrt y$.</p>
+    <p>Inner value $f(x) = (x - 1)^2 + 4 \ge 4 &gt; 0$, so g is differentiable at $f(x)$ for every x.</p>
+    <p>$g'(y) = \frac1{2\sqrt y}$ evaluated at $y = f(x)$, times $f'(x) = 2x - 2$: $$h'(x) = \frac{2x - 2}{2\sqrt{x^2 - 2x + 5}} = \frac{x - 1}{\sqrt{x^2 - 2x + 5}}.$$ Check at $x = 3$: $\frac{2}{\sqrt8} = 0.7071$.</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · fill the gaps</span>
+    <p>$k(x) = (x^2 + 1)^{10}$. Inner $f = $ <span class="gap">?</span>, outer $g(y) = $ <span class="gap">?</span>. $k'(x) = g'(f(x))f'(x) = $ <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> $f = x^2 + 1$, $g = y^{10}$; $k'(x) = 10(x^2 + 1)^9\cdot 2x = 20x(x^2 + 1)^9$. At $x = 1$: $20\cdot 2^9 = 10240$.</p>
+  </div>
+  <div class="box result"><span class="lab">Result · even and odd (Bartle Ex 6.1.9)</span>If f is differentiable and <b>even</b> ($f(-x) = f(x)$) then $f'$ is <b>odd</b>; if f is <b>odd</b> then $f'$ is <b>even</b>.
+    <p>Proof: differentiate $f(-x) = f(x)$ with the chain rule (inner $-x$, derivative $-1$): $-f'(-x) = f'(x)$, i.e. $f'(-x) = -f'(x)$. For odd f: $-f'(-x) = -f'(x)$, i.e. $f'(-x) = f'(x)$. Check: $x^2 \to 2x$ (odd); $x^3 \to 3x^2$ (even).</p></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Differentiate $\tan(x^2)$ for $|x| &lt; \sqrt{\pi/2}$, and evaluate at $x = 0$.</div>
+    <div class="a">Outer $\tan y$, $D\tan y = \sec^2 y$ (T08), inner $x^2$: $2x\sec^2(x^2)$. At 0: $0$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q8</span>, <span class="chip q">Q9</span>, <span class="chip q">Q37</span>.</p>
+</section>
+
+<!-- T07 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T07</span><h2>The derivative of |f| and of sgn</h2></div>
+  <p class="oneline">Where absolute-value functions have corners (Bartle Example 6.1.7(c), Ex 6.1.7, 6.1.8).</p>
+  <div class="hook"><span class="lab">Picture · folding the graph</span>$|f|$ is the graph of f with every part below the x-axis folded up. Smooth parts stay smooth; only where f crosses the axis with a non-zero slope does the fold make a <b>corner</b>. Example $|x^2 - 1|$: corners (cusps) at $(\pm1, 0)$, a hump of height 1 at $x = 0$, and the two sides rising like $x^2 - 1$ for $|x|&gt;1$.</div>
+  <div class="box def"><span class="lab">Example 6.1.7(c) and Exercise 6.1.7</span>$g(x) = |x|$ is differentiable at every $x \ne 0$ with $g'(x) = \operatorname{sgn} x$ (where $\operatorname{sgn} x = 1, 0, -1$ for $x &gt; 0, = 0, &lt; 0$); $g'(0)$ does not exist. Consequently, if f is differentiable at c and $f(c) \ne 0$, then $$|f|'(c) = \operatorname{sgn}(f(c))\,f'(c).$$ If $f(c) = 0$, then $|f|$ is differentiable at c <b>if and only if</b> $f'(c) = 0$.
+    <span class="say">In plain words: away from zeros, $|f|$ has slope $+f'$ where f is positive and $-f'$ where f is negative. At a zero of f the fold is smooth only if f is already flat there.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · $f(c) = 0$</span>For $x \ne c$: $\dfrac{|f(x)| - 0}{x - c} = \pm\left|\dfrac{f(x)}{x - c}\right|$ with sign <span class="gap">?</span> for $x&gt;c$ and <span class="gap">?</span> for $x&lt;c$. Right limit $= $ <span class="gap">?</span>, left limit $= $ <span class="gap">?</span>. Equal iff <span class="gap">?</span>. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof (f(c) = 0 case)</span>
+    <div class="steps">
+      <div class="step">For $x&gt;c$: $\dfrac{|f(x)| - |f(c)|}{x - c} = \dfrac{|f(x)|}{x - c} = \left|\dfrac{f(x)}{x - c}\right|$. For $x&lt;c$: it equals $-\left|\dfrac{f(x)}{x - c}\right|$.<span class="why">$f(c) = 0$; the sign of $x - c$ is + on the right and − on the left, and $|x - c|$ is the absolute value of the denominator.</span></div>
+      <div class="step">As $x \to c$, $\left|\dfrac{f(x)}{x - c}\right| \to |f'(c)|$.<span class="why">$\frac{f(x)}{x - c} = \frac{f(x) - f(c)}{x - c} \to f'(c)$, and $|\cdot|$ is continuous.</span></div>
+      <div class="step">So the right limit is $+|f'(c)|$ and the left limit is $-|f'(c)|$.<span class="why">Step 1 and 2 combined.</span></div>
+      <div class="step">They agree iff $|f'(c)| = 0$, that is $f'(c) = 0$. <span class="qed">∎</span><span class="why">One-sided limits must be equal for the limit to exist (M03, Module 1).</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f differentiable at c<span class="fails">$f = |x|$ itself: $||x||$ = $|x|$, no derivative at 0 <span class="cx">C5</span></span></li>
+    <li>$f(c) \ne 0$ for the formula $\operatorname{sgn}(f)f'$<span class="fails">$|\sin x|$ at 0: the formula gives $\operatorname{sgn}(0)\cos 0 = 0$, but the true answer is "no derivative"</span></li>
+    <li>zero of f needs $f'(c) = 0$<span class="fails">$f = x^2$ at 0: $f' = 0$, and $|x^2| = x^2$ is differentiable. $f = \sin x$ at $k\pi$: $f' = \pm1 \ne 0$, corner</span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition will lie to you here</span>"$|f|$ has a corner wherever $f = 0$." False: $|x^2| = x^2$ has none. A corner appears only if the zero is a <b>crossing</b> ($f' \ne 0$ there).</div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Worked example 1 · $|x^2 - 1|$ (Bartle Ex 6.1.7(c) figure)</span>
+    <p>$f = x^2 - 1$, $f' = 2x$, zeros at $\pm1$ with $f'(\pm1) = \pm2 \ne 0$.</p>
+    <p>Away from $\pm1$: $|f|' = \operatorname{sgn}(x^2 - 1)\cdot 2x$, i.e. $2x$ for $|x|&gt;1$ and $-2x$ for $|x|&lt;1$. At $\pm1$: <b>not differentiable</b>.</p>
+    <p>Check: at $x = 2$, $|f| = 3$ and slope $4$; at $x = 0.5$, $|f| = 0.75$ and slope $-1$ (the graph falls from the hump at 0 toward the cusp at 1).</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · $h(x) = x|x|$ (Ex 6.1.8(c)), fill the gaps</span>
+    <p>For $x&gt;0$: $h = $ <span class="gap">?</span>, $h' = $ <span class="gap">?</span>. For $x&lt;0$: $h = $ <span class="gap">?</span>, $h' = $ <span class="gap">?</span>. At 0: $\dfrac{h(x) - h(0)}{x} = $ <span class="gap">?</span> $\to $ <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> $x^2 \to 2x$; $-x^2 \to -2x$; $\frac{x|x|}{x} = |x| \to 0$. So h is differentiable everywhere with $h'(x) = 2|x|$.</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Is $|\sin x|$ differentiable at $x = \pi$? At $x = \pi/2$?</div>
+    <div class="a">At $\pi$: $\sin\pi = 0$ and $\cos\pi = -1 \ne 0$: <b>not</b> differentiable (corner). At $\pi/2$: $\sin = 1 \ne 0$, derivative $\operatorname{sgn}(1)\cos(\pi/2) = 0$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q10</span>, <span class="chip q">Q11</span>.</p>
+</section>
+
+<!-- T08 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T08</span><h2>Derivatives of tan, sec, cot, csc</h2></div>
+  <p class="oneline">The quotient rule applied to sin and cos (Bartle Example 6.1.7(d)).</p>
+  <div class="hook"><span class="lab">Picture</span>$\tan x$ climbs between its vertical asymptotes at $\pm\pi/2$; its slope is never below 1 (it is $\sec^2 x \ge 1$) and shoots to infinity near the asymptotes. At $x = \pi/4$ the slope is $\sec^2\frac\pi4 = 2$.</div>
+  <div class="box def"><span class="lab">Example 6.1.7(d) · use $\sin' = \cos$, $\cos' = -\sin$ (Plus Two facts)</span>$D\tan x = \sec^2 x$ and $D\sec x = \sec x\tan x$ for $x \ne (2k + 1)\pi/2$;<br>$D\cot x = -\csc^2 x$ and $D\csc x = -\csc x\cot x$ for $x \ne k\pi$.
+    <span class="say">Rule of thumb: the "co-" functions get a minus sign.</span></div>
+  <div class="box skel"><span class="lab">Skeleton</span>Write the function as a quotient: $\tan x = \dfrac{\sin x}{\cos x}$. Apply (d) of Theorem 6.1.3, valid where the bottom is <span class="gap">?</span>. Simplify using <span class="gap">?</span>. ∎</div>
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">$\tan x = \sin x/\cos x$, with $\cos x \ne 0$ for $x \ne (2k+1)\pi/2$.<span class="why">Quotient rule needs $g(c) \ne 0$.</span></div>
+      <div class="step">$D\tan x = \dfrac{\cos x\cdot\cos x - \sin x\cdot(-\sin x)}{\cos^2 x} = \dfrac{\cos^2 x + \sin^2 x}{\cos^2 x} = \sec^2 x$.<span class="why">Theorem 6.1.3(d); then $\sin^2 + \cos^2 = 1$.</span></div>
+      <div class="step">$D\sec x = D\dfrac{1}{\cos x} = \dfrac{0\cdot\cos x - 1\cdot(-\sin x)}{\cos^2 x} = \dfrac{\sin x}{\cos^2 x} = \sec x\tan x$. <span class="qed">∎</span><span class="why">$f = 1$, $f' = 0$ in the quotient rule.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>$\cos x \ne 0$ (for tan, sec) or $\sin x \ne 0$ (for cot, csc)<span class="fails">at $x = \pi/2$ the function $\tan x$ is not defined, so there is nothing to differentiate</span></li>
+    <li>$\sin' = \cos$, $\cos' = -\sin$ known<span class="fails">Bartle proves these later; in the exam quote them as standard Plus Two facts</span></li>
+  </ul></div>
+  <div class="box scratch"><span class="lab">Worked example 1 · cot</span>
+    <p>$\cot x = \cos x/\sin x$: $D\cot x = \dfrac{-\sin x\cdot\sin x - \cos x\cdot\cos x}{\sin^2 x} = \dfrac{-1}{\sin^2 x} = -\csc^2 x$, for $x \ne k\pi$.</p>
+    <p>Check at $x = \pi/4$: $-\csc^2\frac\pi4 = -(\sqrt2)^2 = -2$; and numerically $\cot 0.8 = 0.9712$, $\cot 0.7854 = 1$, slope $\approx (0.9712 - 1)/0.0146 = -1.97$.</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · csc, fill the gaps</span>
+    <p>$\csc x = 1/\sin x$. $D\csc x = \dfrac{0\cdot\sin x - 1\cdot(\ \ ?\ \ )}{\sin^2 x} = $ <span class="gap">?</span>.</p>
+    <p><b>Answer:</b> $\dfrac{-\cos x}{\sin^2 x} = -\csc x\cot x$.</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find $\dfrac d{dx}\big(x\tan x\big)$ and evaluate at $x = \pi/4$.</div>
+    <div class="a">Product rule: $\tan x + x\sec^2 x$. At $\pi/4$: $1 + \frac\pi4\cdot 2 = 1 + \frac\pi2 \approx 2.571$.</div>
+  </div>
+  <div class="box trap"><span class="lab">Exam trap</span>$D\sec x = \sec x\tan x$ (positive); $D\csc x = -\csc x\cot x$ (negative). And $D\tan x = \sec^2 x$, <b>not</b> $\sec x$ and not $1/\cos^2$ left unsimplified without saying so.</div>
+  <p class="small">In the model paper: <span class="chip q">Q12</span>.</p>
+</section>
+
+<!-- T09 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T09</span><h2>x² sin(1/x): differentiable, but f′ is not continuous</h2></div>
+  <p class="oneline">The most famous example of the unit (Bartle Example 6.1.7(e), Ex 6.1.10, 6.1.12).</p>
+  {{fig:xsin_deriv}}
+  <div class="box def"><span class="lab">Example 6.1.7(e)</span>Let $f(x) = x^2\sin(1/x)$ for $x \ne 0$ and $f(0) = 0$. Then f is differentiable at every $x \in \mathbb R$, with $$f'(x) = 2x\sin\frac1x - \cos\frac1x \ (x \ne 0), \qquad f'(0) = 0,$$ but $f'$ has no limit at 0, so $f'$ is <b>not continuous</b> at 0.
+    <span class="say">In plain words: a function can have a derivative everywhere and still have a derivative that wiggles with the same height $\pm1$ no matter how close you get to 0. The tangent exists at 0 (it is the x-axis), but the slopes next to 0 do not settle on 0.</span></div>
+  <div class="box skel"><span class="lab">Skeleton</span>(1) For $x \ne 0$: product and chain rule. (2) At 0 use <span class="gap">?</span> (rules do not apply). Quotient $\frac{f(x) - 0}{x} = $ <span class="gap">?</span>; squeeze with $|\cdot| \le$ <span class="gap">?</span>. (3) Two sequences $x_n \to 0$ with $f'(x_n) \to$ <span class="gap">?</span> and <span class="gap">?</span>. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">For $x \ne 0$: $f'(x) = 2x\sin\frac1x + x^2\cos\frac1x\cdot\left(-\frac1{x^2}\right) = 2x\sin\frac1x - \cos\frac1x$.<span class="why">Product rule, with the chain rule for $\sin(1/x)$ (inner $1/x$, derivative $-1/x^2$). Valid because $1/x$ is differentiable at $x \ne 0$.</span></div>
+      <div class="step">At 0: $\dfrac{f(x) - f(0)}{x - 0} = x\sin\dfrac1x$.<span class="why">Definition 6.1.1. The rules cannot be used: $\sin(1/x)$ is not even defined at 0 (N2).</span></div>
+      <div class="step">$\left|x\sin\frac1x\right| \le |x| \to 0$, so $f'(0) = 0$.<span class="why">$|\sin| \le 1$ and squeeze: for ε take $\delta = \varepsilon$.</span></div>
+      <div class="step">Let $x_n = \dfrac1{2n\pi}$: $f'(x_n) = 2x_n\cdot 0 - \cos 2n\pi = -1$. Let $y_n = \dfrac1{(2n + 1)\pi}$: $f'(y_n) = 0 - \cos(2n + 1)\pi = +1$.<span class="why">$\sin(2n\pi) = \sin(2n+1)\pi = 0$; $\cos 2n\pi = 1$; $\cos(2n + 1)\pi = -1$.</span></div>
+      <div class="step">$x_n \to 0$, $y_n \to 0$, but $f'(x_n) \to -1$ and $f'(y_n) \to +1$. So $\lim_{x\to0}f'(x)$ does not exist; in particular it is not $f'(0) = 0$. <span class="qed">∎</span><span class="why">Two sequences with different limits (M07); discontinuity criterion 5.1.4.</span></div>
+    </div>
+    <small>Check: n = 1: $x_1 = \frac1{2\pi} = 0.159$, $f'(x_1) = -1$; $y_1 = \frac1{3\pi} = 0.106$, $f'(y_1) = +1$. Also $|f'(x)| \le 2|x| + 1 \le 3$ on $[-1, 1]$: bounded.</small>
+  </div>
+  <div class="box hyp"><span class="lab">What can and cannot be used here</span><ul>
+    <li>rules (product, chain) at $x \ne 0$<span class="fails">fine: $1/x$ is differentiable there</span></li>
+    <li>rules at $x = 0$<span class="fails">$\sin(1/x)$ is undefined at 0: you must use the limit of the quotient (N2)</span></li>
+    <li>"differentiable ⇒ $f'$ continuous"<span class="fails">false: this example <span class="cx">C6</span></span></li>
+  </ul></div>
+  <div class="box result"><span class="lab">Result · which powers work (Bartle Ex 6.1.12)</span>$f(x) = x^r\sin(1/x)$, $f(0) = 0$, $r&gt;0$. The quotient at 0 is $x^{r-1}\sin(1/x)$.
+    <div class="kv">
+      <span>$r&gt;1$</span><span>$|x^{r-1}\sin\frac1x| \le |x|^{r-1} \to 0$: $f'(0) = 0$ exists.</span>
+      <span>$r = 1$</span><span>quotient $\sin\frac1x$, no limit (two sequences): $f'(0)$ does not exist.</span>
+      <span>$0&lt;r&lt;1$</span><span>$|x|^{r-1} \to \infty$, unbounded: no derivative.</span>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Worked example 1 · done above; extension $x^2\sin(1/x^2)$ (Ex 6.1.10, <span class="cx">C19</span>)</span>
+    <p>$g(x) = x^2\sin(1/x^2)$, $g(0) = 0$. At 0: quotient $x\sin(1/x^2) \to 0$. For $x \ne 0$: $g'(x) = 2x\sin\frac1{x^2} - \frac2x\cos\frac1{x^2}$.</p>
+    <p>At $x_n = \dfrac1{\sqrt{2n\pi}}$: $\sin\frac1{x_n^2} = \sin 2n\pi = 0$, $\cos = 1$, so $g'(x_n) = -2\sqrt{2n\pi}$. For $n = 1$: $-2\sqrt{2\pi} = -5.013$; for $n = 8$: $-2\sqrt{16\pi} = -14.18$. Unbounded: $g'$ is not even bounded on $[-1,1]$.</p>
+  </div>
+  <div class="box idea"><span class="lab">Worked example 2 · $x^3\sin(1/x)$, fill the gaps</span>
+    <p>$f(0) = 0$. Quotient at 0: $x^2\sin\frac1x \to$ <span class="gap">?</span>. For $x \ne 0$: $f'(x) = 3x^2\sin\frac1x + x^3\cos\frac1x\cdot$ <span class="gap">?</span> $=$ <span class="gap">?</span>. Is $f'$ continuous at 0?</p>
+    <p><b>Answer:</b> $f'(0) = 0$; $f'(x) = 3x^2\sin\frac1x - x\cos\frac1x$, and $|f'(x)| \le 3x^2 + |x| \to 0 = f'(0)$. Yes, continuous. So $r = 2$ is the borderline: $f'$ exists but is discontinuous; $r = 3$ is smoother.</p>
+  </div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">$F(x) = x\sin(1/x)$, $F(0) = 0$. Continuous at 0? Differentiable at 0?</div>
+    <div class="a">Continuous: $|F(x)| \le |x| \to 0$. Not differentiable: the quotient is $\sin(1/x)$; $x_n = \frac1{n\pi}$ gives 0 and $y_n = \frac2{(4n+1)\pi}$ gives 1, so no limit.</div>
+  </div>
+  <div class="box trap"><span class="lab">Your intuition will lie to you here</span>"If f is differentiable everywhere, then $f'$ is a nice continuous function." False (this example). Derivatives can be discontinuous, but (Darboux, later in this module) they can never have a <b>jump</b>.</div>
+  <p class="small">In the model paper: <span class="chip q">Q13</span> (Ex 6.1.12), <span class="chip q">Q25</span>.</p>
+</section>

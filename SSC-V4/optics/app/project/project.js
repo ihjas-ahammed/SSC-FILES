@@ -16,6 +16,13 @@ const PROJECT = {
   },
   themeColor: { light: '#fbf6ee', dark: '#0b0a10' },
   pyqLabel: 'Question bank',
+  studyMapLabel: 'Stellar Map',
+  studyMaps: [{
+    title: 'Module I: Geometrical Optics',
+    description: "Fermat's principle, spherical surfaces and the thin lens",
+    summary: '14 PYQs · 17 concepts · 3D prerequisite map',
+    href: location.pathname.includes('/build/') ? '../study-map/build/index.html' : 'study-map/build/index.html'
+  }],
   figZoom: true,
   hooks: {}
 };

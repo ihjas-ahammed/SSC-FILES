@@ -1,0 +1,489 @@
+<!-- T10 -->
+<section class="page">
+  <div class="kicker" style="font-size:8pt;font-weight:800;letter-spacing:.12em;color:#0072B2">UNIT 2 · BARTLE §6.2</div>
+  <h1>Mean values, extrema and monotonicity</h1>
+  <hr>
+  <div class="topic-head"><span class="tid">T10</span><h2>Relative extrema; the Interior Extremum Theorem</h2></div>
+  <p class="oneline">Where can a hill-top or valley-bottom be? (related: CALC-24 Q10 critical points.)</p>
+  <div class="hook"><span class="lab">Puzzle</span>A smooth hill has a top. What must the slope be exactly at the top? Now ask the same of $f(x) = x$ on [0, 1], whose top is at x = 1. Same answer? Find out why not.</div>
+  {{fig:interior_ext}}
+  <div class="box def"><span class="lab">Definition · relative extremum (Bartle §6.2)</span>Let $f : I \to \mathbb R$. f has a <b>relative maximum</b> at $c \in I$ if there is a neighbourhood $V = V_\delta(c)$ such that $f(x) \le f(c)$ for all $x \in V \cap I$. f has a <b>relative minimum</b> at $c$ if $f(c) \le f(x)$ for all $x \in V \cap I$. A <b>relative extremum</b> is either.
+    <span class="say">"Relative" = best among the points near c only. Absolute = best on the whole domain.</span></div>
+  <div class="box def"><span class="lab">Theorem 6.2.1 · Interior Extremum Theorem</span>Let $c$ be an interior point of the interval $I$ at which $f : I \to \mathbb R$ has a relative extremum. If the derivative of $f$ at $c$ exists, then $f'(c) = 0$.
+    <span class="say">Corollary 6.2.2: if f is continuous on I and has a relative extremum at an interior point c, then either $f'(c)$ does not exist or $f'(c) = 0$. These are the only places to look.</span></div>
+</section>
+
+<section class="page">
+  <div class="box skel"><span class="lab">Skeleton · Interior Extremum (maximum case)</span>Let f have a relative maximum at the interior point c and let $f'(c)$ exist. Suppose $f'(c) &gt; 0$. Then <span class="gap">?</span> for x just right of c, so $f(x) &gt; f(c)$: contradiction. Suppose $f'(c) &lt; 0$. Then <span class="gap">?</span> for x just left of c: contradiction. So $f'(c) = 0$. ∎ (Minimum: apply to $-f$.)</div>
+  <div class="kw"><span>Know</span><span>c interior; $f(x) \le f(c)$ for x near c; the quotient $\frac{f(x) - f(c)}{x - c}$ has a limit $f'(c)$.</span><span>Want</span><span>$f'(c) = 0$. We show "$&gt; 0$" and "$&lt; 0$" are impossible.</span></div>
+  <div class="box proof"><span class="lab">Proof (relative maximum)</span>
+    <div class="steps">
+      <div class="step">Suppose $f'(c) &gt; 0$.<span class="why">Proof by contradiction (M10): we kill both strict signs.</span></div>
+      <div class="step">The quotient $\frac{f(x) - f(c)}{x - c}$ has limit $f'(c) &gt; 0$, so there is a neighbourhood $V \subseteq I$ of c in which the quotient is $&gt; 0$ for $x \ne c$.<span class="why">Local sign of a limit (Thm 4.2.9). "$V \subseteq I$" is possible because c is <b>interior</b>.</span></div>
+      <div class="step">Take $x \in V$ with $x &gt; c$. Then $f(x) - f(c) = (x - c) \cdot (\text{positive}) &gt; 0$, i.e. $f(x) &gt; f(c)$.<span class="why">Positive times positive.</span></div>
+      <div class="step">Such x exist arbitrarily near c, which contradicts "$f(x) \le f(c)$ near c".<span class="why">Definition of relative maximum.</span></div>
+      <div class="step">Suppose $f'(c) &lt; 0$. In the same V (shrunk), the quotient is $&lt; 0$. Take $x &lt; c$: $(x - c) &lt; 0$ and quotient $&lt; 0$ give $f(x) - f(c) &gt; 0$. Contradiction again.<span class="why">Bartle writes "similarly"; this is the "how": the left side is where it breaks.</span></div>
+      <div class="step">Hence $f'(c) = 0$. <span class="qed">∎</span><span class="why">Neither $&gt; 0$ nor $&lt; 0$ is possible.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist (what fails without each)</span><ul>
+    <li>c is <b>interior</b><span class="fails">$f(x) = x$ on [0, 1]: max at 1, min at 0, but $f' = 1$ <span class="cx">N7</span></span></li>
+    <li>$f'(c)$ <b>exists</b><span class="fails">$f(x) = |x|$ on [−1, 1]: min at 0, no derivative there <span class="cx">C5</span></span></li>
+    <li>(converse) $f'(c) = 0$ ⇒ extremum?<span class="fails">$x^3$ at 0: $f'(0) = 0$ but no extremum <span class="cx">C17</span></span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Interior: the neighbourhood V lies inside I, so points on both sides of c exist. Derivative exists: gives the limit whose sign we read. Extremum: forbids $f(x) &gt; f(c)$ nearby.</p></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "critical point = extremum"</span>A critical point is only a <b>candidate</b>. $x^3$ at 0 has slope 0 and no extremum <span class="cx">C17</span>. $|x|$ at 0 has no slope and is a minimum <span class="cx">C5</span>. Endpoints are never interior, so check them separately.</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 1 · full (CALC-24 Q10)</span>
+    <p>Find all critical points of $f(x) = x^3 - 3x + 1$ and decide which are extrema.</p>
+    <p>$f'(x) = 3x^2 - 3 = 3(x - 1)(x + 1)$, zero at $x = \pm 1$. f' exists everywhere, so any relative extremum is at $\pm 1$ (Thm 6.2.1). Values: $f(-1) = -1 + 3 + 1 = 3$, $f(1) = 1 - 3 + 1 = -1$. Sign of $f'$: $+$ on $(-\infty, -1)$, $-$ on $(-1, 1)$, $+$ on $(1, \infty)$, so a relative <b>max 3 at −1</b> and a relative <b>min −1 at 1</b> (First Derivative Test, T15).</p>
+    <p>On $[-2, 2]$ also test the ends: $f(-2) = -8 + 6 + 1 = -1$, $f(2) = 8 - 6 + 1 = 3$. Absolute max 3 (at −1 and at 2), absolute min −1 (at 1 and at −2).</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$f(x) = x^2 - 3x + 5$. $f'(x) = $ <span class="gap">?</span>, zero at $x = $ <span class="gap">?</span>. $f$ at that point $= $ <span class="gap">?</span>. Since $f'$ is $-$ before and $+$ after, it is a relative <span class="gap">?</span>.
+    <span class="say">Answer: $f' = 2x - 3$, $x = \frac32$, $f(\frac32) = \frac94 - \frac92 + 5 = \frac{11}4$, a minimum.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find the absolute maximum and minimum of $g(x) = x^3 - 12x$ on $[-3, 3]$.</div>
+    <div class="a">$g' = 3x^2 - 12 = 0$ at $x = \pm 2$. Compare $g(-3) = 9$, $g(-2) = 16$, $g(2) = -16$, $g(3) = -9$. Absolute max 16 at −2, absolute min −16 at 2.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q26</span> (state and prove 6.2.1), <span class="chip q">Q14</span> (CALC-24 Q10).</p>
+</section>
+
+<!-- T11 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T11</span><h2>Rolle's Theorem</h2></div>
+  <p class="oneline">Same height at both ends, so the tangent is flat somewhere between.</p>
+  <div class="hook"><span class="lab">Puzzle</span>You leave home and return home. Was there a moment when your height above sea level was not changing?</div>
+  {{fig:rolle}}
+  <div class="box def"><span class="lab">Theorem 6.2.3 · Rolle's Theorem</span>Suppose that $f$ is continuous on a closed interval $I = [a, b]$, that the derivative $f'$ exists at every point of the open interval $(a, b)$, and that $f(a) = f(b) = 0$. Then there exists at least one point $c$ in $(a, b)$ such that $f'(c) = 0$.
+    <span class="say">"At least one": there may be several. If $f(a) = f(b) = h \ne 0$, apply the theorem to $f - h$.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · Rolle</span>If $f \equiv 0$, any c works. Otherwise f takes a positive (say) value. By the Max–Min Theorem f has a maximum at some $c \in [a,b]$ with $f(c) &gt;$ <span class="gap">?</span>. Then $c \ne a, b$ because <span class="gap">?</span>. So c is interior and f has a relative maximum there, hence <span class="gap">?</span>. ∎</div>
+</section>
+
+<section class="page">
+  <div class="kw"><span>Know</span><span>f continuous on [a, b]; differentiable on (a, b); $f(a) = f(b) = 0$.</span><span>Want</span><span>a point $c \in (a, b)$ with $f'(c) = 0$.</span></div>
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">If $f(x) = 0$ for all x, then $f' = 0$ and any $c \in (a, b)$ works.<span class="why">Trivial case first.</span></div>
+      <div class="step">Otherwise f takes a nonzero value. Replacing f by $-f$ if necessary, assume f takes a positive value.<span class="why">$f'(c) = 0 \iff (-f)'(c) = 0$, so nothing is lost.</span></div>
+      <div class="step">f is continuous on the closed bounded interval [a, b], so it attains a maximum $M = f(c)$ at some $c \in [a, b]$; and $M &gt; 0$.<span class="why">Max–Min Theorem 5.3.4 (Module 1, T9). Needs closed, bounded, continuous.</span></div>
+      <div class="step">$c \ne a$ and $c \ne b$, since $f(a) = f(b) = 0 &lt; M$. So $c \in (a, b)$.<span class="why">This is why the equal end values are in the hypotheses.</span></div>
+      <div class="step">f is differentiable at the interior point c and has a relative (indeed absolute) maximum there, so $f'(c) = 0$. <span class="qed">∎</span><span class="why">Interior Extremum Theorem 6.2.1 (T10). Differentiability is needed only on the open interval.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f continuous on the <b>closed</b> [a, b]<span class="fails">$f(x) = x$ on $[0, 1)$, $f(1) = 0$: differentiable inside, ends both 0, but $f' = 1$ <span class="cx">C18</span></span></li>
+    <li>f differentiable on (a, b)<span class="fails">$f(x) = 1 - |x|$ on $[-1, 1]$: ends 0, slope only $\pm 1$ <span class="cx">C18</span></span></li>
+    <li>$f(a) = f(b)$<span class="fails">$f(x) = x$ on $[0, 1]$: $f' = 1$ <span class="cx">C18</span></span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Continuity on [a, b]: Max–Min gives the maximum point. Equal ends: the maximum is not at an end. Differentiability on (a, b): $f'(c)$ exists at the interior maximum, so 6.2.1 applies.</p></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "c is the top"</span>Rolle gives <i>some</i> flat point, not necessarily the highest point, and not only one. It may be a hill-top, a valley or a flat shoulder.</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Verify Rolle's Theorem for $f(x) = x(x - 1)(x - 2)$ on $[0, 2]$.</p>
+    <p>f is a polynomial: continuous and differentiable everywhere. $f(0) = 0 = f(2)$. $f(x) = x^3 - 3x^2 + 2x$, so $f'(x) = 3x^2 - 6x + 2$. $f'(c) = 0$ gives $c = \dfrac{6 \pm \sqrt{36 - 24}}{6} = 1 \pm \dfrac1{\sqrt3}$, that is $c \approx 0.4226$ and $c \approx 1.5774$. Both lie in $(0, 2)$. Values $f(c) = \pm\dfrac{2}{3\sqrt3} \approx \pm 0.3849$. Two points, not one.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$f(x) = x^3 - 3x$ on $[0, \sqrt3]$. $f(0) = $ <span class="gap">?</span> and $f(\sqrt3) = $ <span class="gap">?</span>. $f'(x) = $ <span class="gap">?</span> $= 0$ at $c = $ <span class="gap">?</span> $\in (0, \sqrt3)$.
+    <span class="say">Answer: $0$ and $3\sqrt3 - 3\sqrt3 = 0$; $f' = 3x^2 - 3$; $c = 1$ (reject −1, outside the interval).</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Does Rolle's Theorem apply to $f(x) = 1 - x^{2/3}$ on $[-1, 1]$? Is there a c with $f'(c) = 0$?</div>
+    <div class="a">$f(\pm 1) = 0$ and f is continuous, but $f'(x) = -\frac23 x^{-1/3}$ does not exist at 0 (vertical tangent, a cusp). So the hypothesis "differentiable on (−1, 1)" fails, and indeed $f' \ne 0$ everywhere it exists. The theorem is silent here.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q27</span> (state, prove, verify for $x(x-1)(x-2)$).</p>
+</section>
+
+<!-- T12 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T12</span><h2>The Mean Value Theorem</h2></div>
+  <p class="oneline">The most useful theorem of the module: Rolle, tilted.</p>
+  <div class="hook"><span class="lab">Puzzle</span>A car covers 120 km in exactly 2 hours. Must the speedometer have read exactly 60 km/h at some instant? (Yes. Why?)</div>
+  {{fig:mvt}}
+  <div class="box def"><span class="lab">Theorem 6.2.4 · Mean Value Theorem</span>Suppose that $f$ is continuous on a closed interval $I = [a, b]$, and that $f$ has a derivative in the open interval $(a, b)$. Then there exists at least one point $c$ in $(a, b)$ such that
+    $$f(b) - f(a) = f'(c)(b - a).$$
+    <span class="say">Reading: the average slope over [a, b] equals the instantaneous slope at some c. Geometrically: some tangent is parallel to the chord.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · MVT</span>Define $\varphi(x) = f(x) - f(a) - $ <span class="gap">?</span> $\cdot (x - a)$ (f minus the chord). Then $\varphi$ is continuous on [a, b], differentiable on (a, b), and $\varphi(a) = $ <span class="gap">?</span>, $\varphi(b) = $ <span class="gap">?</span>. By Rolle there is c with $\varphi'(c) = 0$, which says <span class="gap">?</span>. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box scratch"><span class="lab">Scratch · how to find φ (never copied into the exam)</span>
+    Want: a function that is 0 at both ends, so Rolle applies.<br>
+    The chord is the line through $(a, f(a))$ and $(b, f(b))$: $y = f(a) + m(x - a)$ with $m = \dfrac{f(b) - f(a)}{b - a}$.<br>
+    Take the <b>gap</b> $\varphi = f - \text{chord}$: it is 0 at a and at b automatically. Differentiate: $\varphi' = f' - m$, and $\varphi' = 0$ is exactly "$f' = m$".</div>
+  {{fig:mvt_proof}}
+  <div class="box proof"><span class="lab">Proof (Bartle)</span>
+    <div class="steps">
+      <div class="step">Let $\varphi(x) = f(x) - f(a) - \dfrac{f(b) - f(a)}{b - a}(x - a)$ for $x \in [a, b]$.<span class="why">f minus the chord: the vertical gap in the picture.</span></div>
+      <div class="step">$\varphi$ is continuous on [a, b] and differentiable on (a, b).<span class="why">f is, and the subtracted term is a straight line.</span></div>
+      <div class="step">$\varphi(a) = 0$, and $\varphi(b) = f(b) - f(a) - (f(b) - f(a)) = 0$.<span class="why">Substitute $x = a$ and $x = b$.</span></div>
+      <div class="step">By Rolle there is $c \in (a, b)$ with $\varphi'(c) = 0$.<span class="why">Theorem 6.2.3 applied to $\varphi$.</span></div>
+      <div class="step">$0 = \varphi'(c) = f'(c) - \dfrac{f(b) - f(a)}{b - a}$, so $f(b) - f(a) = f'(c)(b - a)$. <span class="qed">∎</span><span class="why">Rearrange.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f continuous on [a, b], <i>including the ends</i><span class="fails">$f(x) = x$ on $[0, 1)$, $f(1) = 0$: chord slope 0, $f' = 1$ <span class="cx">C18</span></span></li>
+    <li>f differentiable on (a, b)<span class="fails">$|x|$ on $[-1, 1]$: chord slope 0, $f' = \pm 1$ <span class="cx">C18</span></span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Both only enter through Rolle for $\varphi$: continuity on [a, b] makes $\varphi$ continuous on [a, b] (Max–Min); differentiability on (a, b) makes $\varphi'(c)$ exist at the interior maximum.</p></div>
+  {{fig:mvt_fail}}
+  <div class="box trap"><span class="lab">Your intuition lies · "c is the midpoint"</span>c is some point in (a, b); it is not unique and it is not the midpoint. Only for a quadratic is it the midpoint ($x^2$ on [1, 3]: $2c = 4$, $c = 2$). For $x^3$ on [0, 2] below, $c \approx 1.155 \ne 1$ <span class="cx">N12</span>.</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Verify the MVT for $f(x) = x^3$ on $[0, 2]$ and find c.</p>
+    <p>f is a polynomial. Chord slope $\dfrac{f(2) - f(0)}{2 - 0} = \dfrac{8}{2} = 4$. Solve $f'(c) = 3c^2 = 4$: $c = \pm\dfrac{2}{\sqrt3} \approx \pm 1.1547$. Only $c = \dfrac2{\sqrt3} \approx 1.1547$ lies in $(0, 2)$. Check: $f(c) \approx 1.5396$ and tangent slope 4 there, parallel to the chord $y = 4x$.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$f(x) = \sqrt x$ on $[1, 4]$. Chord slope $= \dfrac{f(4) - f(1)}{4 - 1} = $ <span class="gap">?</span>. $f'(c) = \dfrac{1}{2\sqrt c} = $ <span class="gap">?</span> gives $\sqrt c = $ <span class="gap">?</span>, so $c = $ <span class="gap">?</span> $\in (1, 4)$.
+    <span class="say">Answer: $\frac{2 - 1}3 = \frac13$; $\frac1{2\sqrt c} = \frac13$; $\sqrt c = \frac32$; $c = \frac94$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find the number c promised by the MVT for $f(x) = \ln x$ on $[1, e]$.</div>
+    <div class="a">Chord slope $\frac{\ln e - \ln 1}{e - 1} = \frac1{e - 1}$. $f'(c) = \frac1c = \frac1{e - 1}$, so $c = e - 1 \approx 1.718 \in (1, e)$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q38</span> (state and prove, 10 marks), <span class="chip q">Q16</span> (verify for $x^3$).</p>
+</section>
+
+<!-- T13 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T13</span><h2>Zero derivative means constant</h2></div>
+  <p class="oneline">If the speed is 0 all the time, you did not move.</p>
+  <div class="hook"><span class="lab">Puzzle</span>$\sin^2 x + \cos^2 x$ has derivative $2\sin x\cos x - 2\cos x\sin x = 0$. What does that tell you without any trigonometry?</div>
+  <div class="box def"><span class="lab">Theorem 6.2.5</span>If $f$ is continuous on the closed interval $I = [a, b]$, differentiable on $(a, b)$, and $f'(x) = 0$ for all $x \in (a, b)$, then $f$ is constant on $I$.
+    <span class="say">Picture: a graph with horizontal tangent everywhere cannot go up or down.</span></div>
+  <div class="box def"><span class="lab">Corollary 6.2.6</span>If $f, g$ are continuous on $[a, b]$, differentiable on $(a, b)$ and $f'(x) = g'(x)$ for all $x \in (a, b)$, then there is a constant $C$ with $f = g + C$ on $[a, b]$.</div>
+  <div class="box skel"><span class="lab">Skeleton</span>Fix $x \in (a, b]$. Apply the MVT to f on <span class="gap">?</span>. Then $f(x) - f(a) = f'(c)(x - a) = $ <span class="gap">?</span>. So $f(x) = f(a)$ for every x: constant. For the corollary apply this to $h = $ <span class="gap">?</span>. ∎</div>
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">Let $x \in (a, b]$. f is continuous on $[a, x]$ and differentiable on $(a, x)$.<span class="why">Restrict the hypotheses of [a, b] to the smaller closed interval.</span></div>
+      <div class="step">By the MVT, $f(x) - f(a) = f'(c)(x - a)$ for some $c \in (a, x) \subseteq (a, b)$.<span class="why">Theorem 6.2.4 (T12).</span></div>
+      <div class="step">$f'(c) = 0$, so $f(x) = f(a)$. This holds for every $x$: f is constant. <span class="qed">∎</span><span class="why">$c$ lies in $(a, b)$ where $f' = 0$.</span></div>
+      <div class="step">Corollary: put $h = f - g$. Then $h' = f' - g' = 0$ on $(a, b)$, so $h \equiv C$.<span class="why">Apply the theorem to h.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>domain is one <b>interval</b><span class="fails">$f = 0$ on $(0, 1)$, $f = 1$ on $(2, 3)$: $f' = 0$ but not constant <span class="cx">N5</span></span></li>
+    <li>f continuous at the ends<span class="fails">$f(0) = 5$, $f(x) = 0$ for $0 &lt; x \le 1$: $f' = 0$ on (0, 1) but not constant</span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Interval: MVT needs $[a, x] \subseteq I$. Continuity at the ends: MVT is used on $[a, x]$, which includes a.</p></div>
+  <div class="box trap"><span class="lab">Your intuition lies · two pieces</span>$g(x) = |x|/x$ has $g'(x) = 0$ for every $x \ne 0$, yet $g = -1$ on $(-\infty, 0)$ and $+1$ on $(0, \infty)$. "Constant" is only claimed on an interval <span class="cx">N5</span>. Likewise $F' = 1/x$ on $\mathbb R \setminus \{0\}$ gives $\ln|x| + C_1$ on one side and $\ln|x| + C_2$ on the other.</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Show $\sin^2 x + \cos^2 x = 1$ for all x using only derivatives.</p>
+    <p>Let $h(x) = \sin^2 x + \cos^2 x$. $h'(x) = 2\sin x\cos x + 2\cos x(-\sin x) = 0$ for all x ($\sin' = \cos$, $\cos' = -\sin$, Plus Two facts). h is differentiable, hence continuous, on every $[0, x]$ (or $[x, 0]$). By Thm 6.2.5, $h(x) = h(0) = 0 + 1 = 1$.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>If $f'(x) = 2x$ for all $x \in \mathbb R$ and $f(0) = 3$, find f. Let $g(x) = x^2$; $g' = $ <span class="gap">?</span> $= f'$, so $f - g = $ <span class="gap">?</span>. At $x = 0$: $C = $ <span class="gap">?</span>. Hence $f(x) = $ <span class="gap">?</span>.
+    <span class="say">Answer: $2x$; a constant C; $C = 3 - 0 = 3$; $f(x) = x^2 + 3$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">$g(x) = |x|/x$ has $g' = 0$ at every point where it is defined. Why is this not a contradiction with Theorem 6.2.5?</div>
+    <div class="a">Its domain $\mathbb R \setminus \{0\}$ is not an interval, so the MVT cannot join the two pieces (there is no point 0 to differentiate through).</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q28</span> (prove, deduce $f = g + C$, explain failure on $(0,1) \cup (2,3)$).</p>
+</section>
+
+<!-- T14 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T14</span><h2>Increasing and decreasing: the sign of f′</h2></div>
+  <p class="oneline">Intervals of increase and decrease (CALC-24 Q9, Q20(1); old MCQ MTS-22 MCQ 5).</p>
+  <div class="hook"><span class="lab">Puzzle</span>$x^3$ is always climbing, yet its derivative is 0 at x = 0. And $f'(0) &gt; 0$ at a single point does not make a function climb near that point. Both are true: see below.</div>
+  {{fig:increasing}}
+  <div class="box def"><span class="lab">Definition · increasing, decreasing (Bartle)</span>$f : I \to \mathbb R$ is <b>increasing</b> on I if $x_1, x_2 \in I$, $x_1 &lt; x_2$ imply $f(x_1) \le f(x_2)$; <b>strictly increasing</b> if $f(x_1) &lt; f(x_2)$. <b>Decreasing</b>: $f(x_1) \ge f(x_2)$; strictly decreasing: $&gt;$.
+    <span class="say">Bartle's "increasing" is non-strict, so a constant function is both increasing and decreasing <span class="cx">N14</span>.</span></div>
+  <div class="box def"><span class="lab">Theorem 6.2.7 · Monotonicity</span>Let $f : I \to \mathbb R$ be differentiable on the interval $I$. Then (a) $f$ is increasing on I if and only if $f'(x) \ge 0$ for all $x \in I$; (b) $f$ is decreasing on I if and only if $f'(x) \le 0$ for all $x \in I$.
+    <span class="say">Strict version: if $f' &gt; 0$ on I then f is strictly increasing. The converse is false ($x^3$).</span></div>
+</section>
+
+<section class="page">
+  <div class="box skel"><span class="lab">Skeleton · (a), two directions</span>(⇐) Let $f' \ge 0$ on I and $x_1 &lt; x_2$ in I. By the <span class="gap">?</span> on $[x_1, x_2]$, $f(x_2) - f(x_1) = f'(c)(x_2 - x_1) \ge $ <span class="gap">?</span>. (⇒) Let f be increasing and $c \in I$. For $x \ne c$ the quotient $\frac{f(x) - f(c)}{x - c}$ is <span class="gap">?</span>, so its limit $f'(c)$ is <span class="gap">?</span>. ∎</div>
+  <div class="box proof"><span class="lab">Proof of (a) (correct labelling: Bartle's text swaps the arrows)</span>
+    <div class="steps">
+      <div class="step"><b>(⇐)</b> Suppose $f'(x) \ge 0$ on I. Let $x_1 &lt; x_2$ in I.<span class="why">We prove "f' ≥ 0 gives increasing".</span></div>
+      <div class="step">f is differentiable on I, hence continuous on $[x_1, x_2]$ and differentiable on $(x_1, x_2)$. The MVT gives $c \in (x_1, x_2)$ with $f(x_2) - f(x_1) = f'(c)(x_2 - x_1)$.<span class="why">Differentiable ⇒ continuous (Thm 6.1.2); MVT 6.2.4.</span></div>
+      <div class="step">$f'(c) \ge 0$ and $x_2 - x_1 &gt; 0$, so $f(x_2) - f(x_1) \ge 0$.<span class="why">Sign of a product. This is the step that is strict if $f' &gt; 0$.</span></div>
+      <div class="step"><b>(⇒)</b> Suppose f is increasing and $c \in I$. For $x \in I$, $x \ne c$: numerator and denominator of $\frac{f(x) - f(c)}{x - c}$ have the same sign (or the numerator is 0), so the quotient is $\ge 0$.<span class="why">Definition of increasing, both sides of c.</span></div>
+      <div class="step">Let $x \to c$: $f'(c) \ge 0$. <span class="qed">∎</span><span class="why">Order Theorem 4.2.6: "≥ 0" survives a limit (it would not stay "&gt; 0").</span></div>
+    </div>
+    Part (b): apply (a) to $-f$.</div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f differentiable at <b>every</b> point of I<span class="fails">$f = 1$ for $x &lt; 0$, $f = 0$ for $x \ge 0$: $f' = 0 \ge 0$ wherever it exists, yet f decreases (no derivative at 0)</span></li>
+    <li>I is one <b>interval</b><span class="fails">$f(x) = -1/x$ on $\mathbb R \setminus \{0\}$: $f' = 1/x^2 &gt; 0$, but $f(-1) = 1 &gt; -1 = f(1)$ <span class="cx">N6</span></span></li>
+    <li>(strict) $f' &gt; 0$ is only <i>sufficient</i><span class="fails">$x^3$ is strictly increasing with $f'(0) = 0$ <span class="cx">C17</span></span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Interval: the MVT needs $[x_1, x_2] \subseteq I$. Differentiable at every point: continuity for the MVT and a quotient limit for (⇒).</p></div>
+</section>
+
+<section class="page">
+  <div class="box trap"><span class="lab">Your intuition lies · "f′(c) &gt; 0 ⇒ f increases near c"</span>False. $g(x) = x + 2x^2\sin(1/x)$, $g(0) = 0$. Then $g'(0) = \lim\,(1 + 2x\sin\frac1x) = 1 &gt; 0$. For $x \ne 0$, $g'(x) = 1 + 4x\sin\frac1x - 2\cos\frac1x$. At $x = \frac1{2n\pi}$: $g' = 1 + 0 - 2 = -1 &lt; 0$. At $x = \frac1{(2n+1)\pi}$: $g' = 1 + 0 + 2 = 3 &gt; 0$. Both kinds of points crowd into 0, so g is not monotone in any neighbourhood of 0. (Bartle Ex 6.2.10.) The local sign lemma (T22) only compares $g(x)$ with $g(0)$.</div>
+  <div class="box idea"><span class="lab">Method M05 · sign analysis of f′</span>1. Compute $f'$ and factorise. 2. Solve $f' = 0$ (and note where $f'$ is undefined). 3. Mark these points on a number line. 4. Test one point in each gap, write + or −. 5. Write the intervals <b>including endpoints</b> (Bartle's definition is non-strict).</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full (CALC-24 Q20(1))</span>
+    <p>Where is $f(x) = x^4 - 5x^3 + 9x^2$ increasing and decreasing?</p>
+    <p>$f'(x) = 4x^3 - 15x^2 + 18x = x(4x^2 - 15x + 18)$. The quadratic has discriminant $15^2 - 4\cdot 4\cdot 18 = 225 - 288 = -63 &lt; 0$ and leading coefficient $4 &gt; 0$, so it is always positive. Therefore $f'$ has the sign of x: $f' \le 0$ on $(-\infty, 0]$, $f' \ge 0$ on $[0, \infty)$. <b>Decreasing on $(-\infty, 0]$, increasing on $[0, \infty)$</b>; minimum $f(0) = 0$.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$f(x) = 3x - 4x^2$. $f'(x) = $ <span class="gap">?</span> $= 0$ at $x = $ <span class="gap">?</span>. $f' &gt; 0$ for $x &lt;$ <span class="gap">?</span>. So f is increasing on <span class="gap">?</span> and decreasing on <span class="gap">?</span>; maximum value <span class="gap">?</span>.
+    <span class="say">Answer: $3 - 8x$; $\frac38$; $\frac38$; $(-\infty, \frac38]$; $[\frac38, \infty)$; $f(\frac38) = \frac98 - \frac9{16} = \frac9{16}$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find the intervals of increase and decrease of $f(x) = 2x^3 - 9x^2 + 12x$.</div>
+    <div class="a">$f' = 6x^2 - 18x + 12 = 6(x - 1)(x - 2)$. Increasing on $(-\infty, 1]$, decreasing on $[1, 2]$, increasing on $[2, \infty)$. (Values: $f(1) = 5$ local max, $f(2) = 4$ local min.)</div>
+  </div>
+  <div class="box idea"><span class="lab">Old MCQ · adapted</span>Which of $1 - x^3$, $x^2 + x$, $1/x^2$ increase on $(0, 1)$? Derivatives $-3x^2 &lt; 0$, $2x + 1 &gt; 0$, $-2/x^3 &lt; 0$ on (0, 1). Only $x^2 + x$.</div>
+  <p class="small">In the model paper: <span class="chip q">Q40</span> (prove and apply to $x - \sin x$), <span class="chip q">Q17</span> (CALC-24 Q9), <span class="chip q">Q18</span> (CALC-24 Q20(1)), <span class="chip q">Q19</span> (MTS-22 MCQ 5, adapted).</p>
+</section>
+
+<!-- T15 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T15</span><h2>The First Derivative Test</h2></div>
+  <p class="oneline">Sign change of f′ means an extremum (CALC-24 Q18).</p>
+  <div class="hook"><span class="lab">Puzzle</span>$|x|$ has a minimum at 0 but no derivative there. What does the test need instead of $f'(0)$?</div>
+  {{fig:first_test}}
+  <div class="box def"><span class="lab">Theorem 6.2.8 · First Derivative Test</span>Let $f$ be continuous on the interval $I = [a, b]$ and let $c$ be an interior point of I. Assume that $f$ is differentiable on $(a, c)$ and $(c, b)$.
+    <p>(a) If there is a neighbourhood $(c - \delta, c + \delta) \subseteq I$ such that $f'(x) \ge 0$ for $c - \delta &lt; x &lt; c$ and $f'(x) \le 0$ for $c &lt; x &lt; c + \delta$, then $f$ has a relative maximum at $c$.</p>
+    <p>(b) If $f'(x) \le 0$ for $c - \delta &lt; x &lt; c$ and $f'(x) \ge 0$ for $c &lt; x &lt; c + \delta$, then $f$ has a relative minimum at $c$.</p>
+    <span class="say">Up then down = hill-top; down then up = valley. $f'(c)$ itself need not exist.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · (a)</span>Left of c: for $x \in (c - \delta, c)$ apply the MVT on <span class="gap">?</span> to get $f(c) - f(x) = f'(\xi)(c - x) \ge 0$. Right of c: for $x \in (c, c + \delta)$ apply MVT on <span class="gap">?</span> to get $f(x) - f(c) = f'(\xi)(x - c) \le 0$. So $f(x) \le f(c)$ on the whole neighbourhood. ∎</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof of (a)</span>
+    <div class="steps">
+      <div class="step">Let $x \in (c - \delta, c)$. f is continuous on $[x, c]$ and differentiable on $(x, c)$.<span class="why">Differentiable on $(a, c)$, and continuous at c by hypothesis.</span></div>
+      <div class="step">MVT: $f(c) - f(x) = f'(\xi)(c - x)$ for some $\xi \in (x, c)$. Here $f'(\xi) \ge 0$ and $c - x &gt; 0$, so $f(c) \ge f(x)$.<span class="why">$\xi$ lies in $(c - \delta, c)$ where $f' \ge 0$.</span></div>
+      <div class="step">Let $x \in (c, c + \delta)$. MVT on $[c, x]$: $f(x) - f(c) = f'(\xi)(x - c)$, $\xi \in (c, x)$, and $f'(\xi) \le 0$, so $f(x) \le f(c)$.<span class="why">Bartle says "how?"; this is how. Now $\xi$ lies in $(c, c + \delta)$.</span></div>
+      <div class="step">So $f(x) \le f(c)$ for all x in $(c - \delta, c + \delta)$: relative maximum at c. <span class="qed">∎</span><span class="why">Definition of relative maximum. (b): apply (a) to $-f$.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f <b>continuous at c</b><span class="fails">$f(x) = -x^2$ for $x \ne 0$, $f(0) = -1$: $f' \ge 0$ left, $\le 0$ right, but 0 is a strict <i>minimum</i></span></li>
+    <li>sign of f′ on <b>both</b> sides<span class="fails">$f' \ge 0$ on both sides: $x^3$ at 0, no extremum <span class="cx">C17</span></span></li>
+    <li>(converse) extremum ⇒ sign change?<span class="fails">$f(x) = 2x^4 + x^4\sin(1/x)$, $f(0) = 0$: minimum at 0 but $f'$ changes sign infinitely often near 0 <span class="cx">N9</span></span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> Continuity at c: lets the MVT use the closed interval $[x, c]$. Signs of f′ on each side: bound the MVT slope. Differentiability off c: the MVT's open interval.</p></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "an extremum must have f′ changing sign"</span>For $f(x) = 2x^4 + x^4\sin(1/x)$: $f \ge x^4 \ge 0 = f(0)$, so 0 is an absolute minimum, and $f'(0) = 0$. But $f'(x) = 8x^3 + 4x^3\sin\frac1x - x^2\cos\frac1x$ equals $x^2(8x - 1) &lt; 0$ at $x = \frac1{2n\pi}$ and $x^2(8x + 1) &gt; 0$ at $x = \frac1{(2n+1)\pi}$ (and likewise for negative x). The sign of f′ flips arbitrarily close to 0 on both sides. (Bartle Ex 6.2.9.)</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Relative extrema of $f(x) = x^3 - 3x$ (and of $|x|$ at 0).</p>
+    <p>$f'(x) = 3(x^2 - 1) = 3(x - 1)(x + 1)$. For $x &lt; -1$: $f' &gt; 0$; for $-1 &lt; x &lt; 1$: $f' &lt; 0$; for $x &gt; 1$: $f' &gt; 0$. At −1 the sign goes + to −: relative <b>max</b> $f(-1) = -1 + 3 = 2$. At 1 it goes − to +: relative <b>min</b> $f(1) = 1 - 3 = -2$. For $|x|$: $f' = -1$ for $x &lt; 0$, $+1$ for $x &gt; 0$: minimum at 0, although $f'(0)$ does not exist.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps (CALC-24 Q18)</span>$f(x) = \dfrac{x^2}{x^4 + 16}$. $f'(x) = \dfrac{2x(16 - x^4)}{(x^4 + 16)^2}$. Zeros: <span class="gap">?</span>. Sign of $f'$ on $(-\infty, -2)$, $(-2, 0)$, $(0, 2)$, $(2, \infty)$: <span class="gap">?</span>. So maxima at <span class="gap">?</span> with value <span class="gap">?</span> and a minimum at <span class="gap">?</span> with value <span class="gap">?</span>.
+    <span class="say">Answer: zeros $0, \pm 2$. Signs $+, -, +, -$. Maxima at $x = \pm 2$, $f(\pm 2) = \frac4{32} = \frac18$; minimum at 0, $f(0) = 0$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Find the relative extrema of $f(x) = x^2 e^{-x}$.</div>
+    <div class="a">$f'(x) = (2x - x^2)e^{-x} = x(2 - x)e^{-x}$. Signs: $-$ on $(-\infty, 0)$, $+$ on $(0, 2)$, $-$ on $(2, \infty)$. Minimum at 0 ($f = 0$), maximum at 2 ($f = 4e^{-2} \approx 0.541$).</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q29</span> (prove (a), apply to $x^3 - 3x$ and $|x|$), <span class="chip q">Q15</span> (CALC-24 Q18).</p>
+</section>
+
+<!-- T16 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T16</span><h2>Rolle for roots: location, interlacing, counting</h2></div>
+  <p class="oneline">"Show the equation has exactly one real root" (MAT-21 Q17 style).</p>
+  <div class="hook"><span class="lab">Puzzle</span>The roots of $\sin x$ are $0, \pm\pi, \pm 2\pi, \dots$ and the roots of $\cos x$ are $\pm\frac\pi2, \pm\frac{3\pi}2, \dots$ They alternate. Is that an accident?</div>
+  {{fig:rolle_roots}}
+  <div class="box def"><span class="lab">Consequence of Rolle's Theorem (Bartle 6.2.9(a))</span>Let f be continuous on $[r_1, r_2]$ and differentiable on $(r_1, r_2)$. If $f(r_1) = f(r_2) = 0$ (two roots), then $f'$ has a root in $(r_1, r_2)$.
+    <span class="say">Equivalently: if $f' \ne 0$ on an interval, f has <b>at most one</b> root there. If $f'$ has at most k roots there, f has at most $k + 1$.</span></div>
+  <div class="box skel"><span class="lab">Skeleton · "exactly one root"</span><b>Existence:</b> f is continuous; $f(a) = $ <span class="gap">?</span> $&lt; 0$ and $f(b) = $ <span class="gap">?</span> $&gt; 0$, so by the Location of Roots Theorem (Module 1) f has a root in (a, b). <b>Uniqueness:</b> suppose f had two roots $r_1 &lt; r_2$. By Rolle $f'(c) = 0$ for some c between them. But $f'(x) = $ <span class="gap">?</span> $\ne 0$ for all x. Contradiction. ∎</div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>f differentiable <i>between</i> the two roots<span class="fails">$f(x) = |x| - 1$ has roots ±1, but $f' = \pm 1 \ne 0$: not differentiable at 0 <span class="cx">C18</span></span></li>
+    <li>(uniqueness part) $f' \ne 0$ on the <b>whole</b> interval<span class="fails">$x^3 - x$ has $f'(\pm\frac1{\sqrt3}) = 0$ and three roots</span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "f′ ≠ 0 means no root"</span>$f' \ne 0$ limits f to <i>at most</i> one root. To show it has one, you still need a sign change (Location of Roots, T10 of Module 1).</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Show $p(x) = x^3 + 3x + 1$ has exactly one real root and locate it.</p>
+    <p><b>Existence.</b> $p(-1) = -1 - 3 + 1 = -3 &lt; 0$ and $p(0) = 1 &gt; 0$; p is continuous, so a root lies in $(-1, 0)$. <b>Uniqueness.</b> $p'(x) = 3x^2 + 3 \ge 3 &gt; 0$ for all x. Two roots would give $c$ with $p'(c) = 0$ by Rolle: impossible. <b>Locating.</b> $p(-0.5) = -0.125 - 1.5 + 1 = -0.625 &lt; 0$ and $p(-0.25) = -0.015625 - 0.75 + 1 = 0.234375 &gt; 0$, so the root is in $(-0.5, -0.25)$ (it is about $-0.3222$).</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps (MAT-21 Q17)</span>$f(x) = xe^x - 2$. $f(0) = $ <span class="gap">?</span>, $f(1) = $ <span class="gap">?</span> $&gt; 0$, so a root in (0, 1). $f'(x) = $ <span class="gap">?</span> $&gt; 0$ on (0, 1), so there is <span class="gap">?</span> root in (0, 1).
+    <span class="say">Answer: $f(0) = -2$; $f(1) = e - 2 \approx 0.718$; $f' = (x + 1)e^x$; exactly one (it is about 0.8526).</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Show that $x^5 + x - 1 = 0$ has exactly one real root, and say in which interval of length 1 it lies.</div>
+    <div class="a">$f(0) = -1 &lt; 0 &lt; 1 = f(1)$: a root in (0, 1). $f'(x) = 5x^4 + 1 \ge 1 &gt; 0$, so by Rolle at most one root. Exactly one, in (0, 1).</div>
+  </div>
+  <div class="box idea"><span class="lab">Interlacing</span>$\sin' = \cos$: between two roots of sin there is a root of cos. $\cos' = -\sin$: between two roots of cos there is a root of sin. So the roots alternate. (Plus Two facts for $\sin'$ and $\cos'$.)</div>
+  <p class="small">In the model paper: <span class="chip q">Q30</span> (interlacing and exactly one root of $x^3 + 3x + 1$).</p>
+</section>
+
+<!-- T17 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T17</span><h2>MVT for approximate calculation</h2></div>
+  <p class="oneline">Trap a number between two decimals (Bartle 6.2.9(b)).</p>
+  <div class="hook"><span class="lab">Puzzle</span>Without a calculator, how close can you pin down $\sqrt{105}$ knowing only $\sqrt{100} = 10$ and $\sqrt{121} = 11$?</div>
+  <div class="box def"><span class="lab">Method M06 · bounds from the MVT</span>To estimate $F(b)$ from the known $F(a)$: apply the MVT to $F$ on $[a, b]$, so $F(b) - F(a) = F'(c)(b - a)$ for some $c \in (a, b)$; then bound $F'(c)$ using $a &lt; c &lt; b$.</div>
+  <div class="box skel"><span class="lab">Skeleton</span>Let $f(x) = $ <span class="gap">?</span> on $[a, b] = $ <span class="gap">?</span>. f is continuous on [a, b] and differentiable on (a, b). By the MVT, $f(b) - f(a) = f'(c)(b - a)$ with $a &lt; c &lt; b$. Since $f'$ is <span class="gap">?</span>, $f'(c)$ lies between <span class="gap">?</span> and <span class="gap">?</span>. Multiply by $b - a &gt; 0$ (direction kept). ∎</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full (Bartle 6.2.9(b))</span>
+    <p>Bound $\sqrt{105}$.</p>
+    <p>Let $f(x) = \sqrt x$ on $[100, 105]$; $f'(x) = \dfrac1{2\sqrt x}$. MVT: $\sqrt{105} - 10 = \dfrac{5}{2\sqrt c}$ with $100 &lt; c &lt; 105$.</p>
+    <p><b>First pass.</b> $10 &lt; \sqrt c &lt; \sqrt{105} &lt; \sqrt{121} = 11$, so $\dfrac5{22} &lt; \sqrt{105} - 10 &lt; \dfrac5{20}$, i.e. $10.2272 &lt; \sqrt{105} &lt; 10.25$.</p>
+    <p><b>Sharpen.</b> Since $10.25^2 = 105.0625 &gt; 105$, we know $\sqrt{105} &lt; 10.25$, so $\sqrt c &lt; 10.25$ and $\dfrac5{2\sqrt c} &gt; \dfrac5{20.5} = 0.2439$. Therefore $10.2439 &lt; \sqrt{105} &lt; 10.25$. (True value 10.24695.)</p></div>
+</section>
+
+<section class="page">
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>Bound $\sqrt[3]{28}$. $f(x) = x^{1/3}$ on $[27, 28]$, $f' = \frac13 x^{-2/3}$. $\sqrt[3]{28} - 3 = \dfrac1{3c^{2/3}}$, $27 &lt; c &lt; 28$. Then $c^{2/3} &gt; 27^{2/3} = $ <span class="gap">?</span>, so $\sqrt[3]{28} - 3 &lt; $ <span class="gap">?</span>. Also $c^{2/3} &lt; 28^{2/3} &lt; 3.1^2 = $ <span class="gap">?</span> (as $3.1^3 = 29.791 &gt; 28$), so $\sqrt[3]{28} - 3 &gt; $ <span class="gap">?</span>.
+    <span class="say">Answer: $9$; $\frac1{27} \approx 0.0370$; $9.61$; $\frac1{28.83} \approx 0.0347$. So $3.0346 &lt; \sqrt[3]{28} &lt; 3.0371$ (true value 3.03659).</span></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "c is known"</span>The MVT does not tell you c, only that $a &lt; c &lt; b$. All the work is in a <b>bound</b> on $f'$ over the whole interval <span class="cx">N12</span>. Using $c \approx b$ or $c \approx a$ gives a one-sided answer only if you say which.</div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Use the MVT for $\ln$ on $[1, 1.1]$ to show $0.0909 &lt; \ln 1.1 &lt; 0.1$.</div>
+    <div class="a">$\ln 1.1 - \ln 1 = \frac1c(0.1)$, $1 &lt; c &lt; 1.1$. So $\frac1{1.1} &lt; \frac1c &lt; 1$ and $\frac{0.1}{1.1} = 0.0909\ldots &lt; \ln 1.1 &lt; 0.1$. (True value 0.09531.)</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q31</span> ($\sqrt{105}$ and sharpening).</p>
+</section>
+
+<!-- T18 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T18</span><h2>Inequalities from the MVT: exponential and logarithm</h2></div>
+  <p class="oneline">$e^x \ge 1 + x$ and $\frac{x - 1}x &lt; \ln x &lt; x - 1$ (Bartle 6.2.10(a), Ex 6.2.6, 6.2.7).</p>
+  {{fig:ineq_exp}}
+  <div class="box def"><span class="lab">Results (Bartle 6.2.10(a) and Ex 6.2.7)</span>(a) $e^x \ge 1 + x$ for all $x \in \mathbb R$, with equality only at $x = 0$. (b) For $x &gt; 1$: $\dfrac{x - 1}{x} &lt; \ln x &lt; x - 1$.
+    <span class="say">(Plus Two facts: $(e^x)' = e^x$, $(\ln x)' = \frac1x$, $e^x &gt; 1$ for $x &gt; 0$, $e^x &lt; 1$ for $x &lt; 0$.)</span></div>
+  <div class="box skel"><span class="lab">Skeleton · template for every MVT inequality</span>1. Name f and the interval. 2. State: f continuous on closed, differentiable on open. 3. Write $f(b) - f(a) = f'(c)(b - a)$. 4. Bound $f'(c)$ using the position of c. 5. Multiply by $b - a &gt; 0$; strict if the bound is strict. 6. Treat $x = a$ and the other side separately.</div>
+  <div class="box scratch"><span class="lab">Scratch · which function, which interval?</span>
+    Want $e^x \ge 1 + x$, i.e. $e^x - e^0 \ge x - 0$.<br>
+    Take $f = \exp$ on $[0, x]$ (or $[x, 0]$). Then $e^x - 1 = e^c\cdot x$.<br>
+    The size of $e^c$ versus 1 depends on the sign of c, so split $x &gt; 0$ and $x &lt; 0$.</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof of (a)</span>
+    <div class="steps">
+      <div class="step"><b>x = 0:</b> both sides equal 1.<span class="why">Equality case.</span></div>
+      <div class="step"><b>x &gt; 0:</b> MVT for $e^t$ on $[0, x]$: $e^x - 1 = e^c\,x$ with $0 &lt; c &lt; x$. Since $c &gt; 0$, $e^c &gt; 1$, so $e^x - 1 &gt; x$.<span class="why">$x &gt; 0$, so multiplying $e^c &gt; 1$ by x keeps "&gt;".</span></div>
+      <div class="step"><b>x &lt; 0:</b> MVT on $[x, 0]$: $1 - e^x = e^c(0 - x) = (-x)e^c$ with $x &lt; c &lt; 0$. Since $c &lt; 0$, $e^c &lt; 1$ and $-x &gt; 0$, so $1 - e^x &lt; -x$.<span class="why">Multiply $e^c &lt; 1$ by the positive number $-x$.</span></div>
+      <div class="step">Rearranging: $e^x &gt; 1 + x$. <span class="qed">∎</span><span class="why">Equality only at $x = 0$.</span></div>
+    </div>
+  </div>
+  <div class="box proof"><span class="lab">Proof of (b)</span>
+    <div class="steps">
+      <div class="step">Let $x &gt; 1$ and apply the MVT to $\ln$ on $[1, x]$: $\ln x - \ln 1 = \dfrac1c(x - 1)$ for some $c \in (1, x)$.<span class="why">$\ln$ is continuous on [1, x] and differentiable on (1, x).</span></div>
+      <div class="step">$1 &lt; c &lt; x$ gives $\dfrac1x &lt; \dfrac1c &lt; 1$.<span class="why">Reciprocal reverses inequalities for positive numbers.</span></div>
+      <div class="step">Multiply by $x - 1 &gt; 0$: $\dfrac{x - 1}x &lt; \ln x &lt; x - 1$. <span class="qed">∎</span><span class="why">Direction kept.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist (for this use of the MVT)</span><ul>
+    <li>f continuous on the closed [a, b]<span class="fails">$\ln$ on $[0, x]$: $\ln 0$ undefined; start at 1, not 0</span></li>
+    <li>a bound for $f'$ on the whole open interval<span class="fails">knowing $f'(c)$ for one c is not enough <span class="cx">N12</span></span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "strict or not strict?"</span>The bound on $f'(c)$ is strict ($e^c &gt; 1$ because $c &gt; 0$), so the inequality is strict for $x \ne 0$. At $x = 0$ the interval has length 0, so treat it apart.</div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 1 · full (numeric check)</span>
+    <p>Check the bounds at $x = 2$: $\frac{2 - 1}2 = 0.5 &lt; \ln 2 = 0.6931 &lt; 1$. At $x = e$: $\frac{e - 1}e = 0.632 &lt; 1 = \ln e &lt; e - 1 = 1.718$. For (a) at $x = 1$: $e = 2.718 &gt; 2$; at $x = -1$: $e^{-1} = 0.368 &gt; 0$.</p>
+    <p>The MVT point for $e^x$ on $[0, 1]$: $e - 1 = e^c$, so $c = \ln(e - 1) \approx 0.5413 \in (0, 1)$.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>Show $\ln x &lt; x - 1$ for $x &gt; 1$ in two lines. By the MVT on <span class="gap">?</span>, $\ln x = \dfrac{x - 1}{c}$ with $1 &lt; c &lt; x$. Since $c &gt; 1$, $\dfrac1c &lt; $ <span class="gap">?</span>, so $\ln x &lt; $ <span class="gap">?</span>.
+    <span class="say">Answer: $[1, x]$; $\frac1c &lt; 1$; $\ln x &lt; x - 1$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Use part (b) with $x$ replaced by $1 + t$ to show $\dfrac{t}{1 + t} &lt; \ln(1 + t) &lt; t$ for $t &gt; 0$.</div>
+    <div class="a">Put $x = 1 + t &gt; 1$ in (b): $\frac{x - 1}x = \frac t{1 + t}$ and $x - 1 = t$. At $t = 1$: $0.5 &lt; 0.693 &lt; 1$. ✓</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q32</span> (prove (a), (b)).</p>
+</section>
+
+<!-- T19 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T19</span><h2>Inequalities from the MVT: sine, and Lipschitz</h2></div>
+  <p class="oneline">$|\sin x - \sin y| \le |x - y|$ and "bounded derivative ⇒ Lipschitz" (MTS-25 Q2, MTS-26 Q3, MTS-22 MCQ 4).</p>
+  {{fig:ineq_sin}}
+  <div class="box def"><span class="lab">Results (Bartle 6.2.10(b), Ex 6.2.6, 6.2.15)</span>(a) $-x \le \sin x \le x$ for all $x \ge 0$; (b) $|\sin x - \sin y| \le |x - y|$ for all $x, y$; (c) if $f$ is differentiable on an interval I and $|f'(x)| \le K$ for all $x \in I$, then $|f(x) - f(u)| \le K|x - u|$ for all $x, u \in I$: f is <b>Lipschitz</b> with constant K.
+    <span class="say">(c) is the master statement; (a) and (b) are special cases with $f = \sin$, $K = 1$.</span></div>
+  <div class="box skel"><span class="lab">Skeleton</span>Let $x, u \in I$ with $x &lt; u$. f is continuous on $[x, u]$ and differentiable on $(x, u)$. By the MVT, $f(x) - f(u) = f'(c)(x - u)$ for some c between. Take absolute values: $|f(x) - f(u)| = |f'(c)||x - u| \le$ <span class="gap">?</span>. ∎</div>
+  <div class="box proof"><span class="lab">Proof of (a), (b), (c)</span>
+    <div class="steps">
+      <div class="step">(c) For $x \ne u$ in I, the MVT gives c between x and u with $f(x) - f(u) = f'(c)(x - u)$.<span class="why">f is differentiable on all of I, so continuous on $[x, u]$.</span></div>
+      <div class="step">$|f(x) - f(u)| = |f'(c)|\,|x - u| \le K|x - u|$.<span class="why">$|ab| = |a||b|$, then $|f'(c)| \le K$ (P09).</span></div>
+      <div class="step">(b) $f = \sin$, $f' = \cos$, $|\cos| \le 1$: take $K = 1$.<span class="why">Plus Two fact $\sin' = \cos$.</span></div>
+      <div class="step">(a) Put $y = 0$ in (b): $|\sin x| \le x$ for $x \ge 0$, i.e. $-x \le \sin x \le x$. <span class="qed">∎</span><span class="why">$\sin 0 = 0$ and $|\sin x| \le x \iff -x \le \sin x \le x$.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>$|f'| \le K$ on the whole interval<span class="fails">$\sqrt x$ on $[0, 1]$: $f' = \frac1{2\sqrt x}$ unbounded, not Lipschitz (but uniformly continuous) <span class="cx">C4</span></span></li>
+    <li>f differentiable <i>everywhere</i> on I<span class="fails">$|x|$ is Lipschitz (K = 1) but not differentiable at 0, so the converse (Lipschitz ⇒ bounded f′) is not claimed</span></li>
+    <li>I an interval<span class="fails">MVT needs the whole segment $[x, u]$ inside I</span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "Lipschitz ⇔ bounded derivative"</span>Only ⇐ is proved. A Lipschitz function can fail to be differentiable ($|x|$). And "bounded derivative" gives uniform continuity <i>on every interval</i>, bounded or not: $|\sin x - \sin y| \le |x - y|$ on all of ℝ, so $\sin$ is uniformly continuous on ℝ.</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>Check (a) at $x = \pi/2$: $\sin x = 1 &lt; 1.5708 = x$. The MVT point: $\sin\frac\pi2 - 0 = \cos c\cdot\frac\pi2$ gives $\cos c = \frac2\pi \approx 0.6366$, so $c = \arccos\frac2\pi \approx 0.8807 \in (0, \frac\pi2)$.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps (MTS-22 MCQ 4)</span>Show $f(x) = \dfrac1{1 + x^2}$ is Lipschitz on ℝ. $f'(x) = $ <span class="gap">?</span>. $|f'(x)| = \dfrac{2|x|}{(1 + x^2)^2}$. Its largest value is at $x^2 = $ <span class="gap">?</span> and equals <span class="gap">?</span> $&lt; 1$. So $K = $ <span class="gap">?</span> works and f is uniformly continuous on ℝ.
+    <span class="say">Answer: $-\frac{2x}{(1 + x^2)^2}$; $x^2 = \frac13$; $\frac{3\sqrt3}8 \approx 0.6495$; $K = \frac{3\sqrt3}8$ (or simply $K = 1$).</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Show $|\arctan x - \arctan y| \le |x - y|$ for all $x, y$.</div>
+    <div class="a">$f = \arctan$ has $f'(t) = \frac1{1 + t^2} \in (0, 1]$, so $|f'| \le 1$. By (c) with $K = 1$.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q33</span> (prove (a), (b), (c)). Link: Module 1, T16 (Lipschitz ⇒ uniformly continuous).</p>
+</section>
+
+<!-- T20 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T20</span><h2>Bernoulli's Inequality</h2></div>
+  <p class="oneline">$(1 + x)^\alpha \ge 1 + \alpha x$ (Bartle 6.2.10(c)).</p>
+  <div class="hook"><span class="lab">Puzzle</span>Is $1.01^{100}$ bigger than 2, without a calculator? ($1.01^{100} \ge 1 + 100(0.01) = 2$.)</div>
+  <div class="box def"><span class="lab">Bernoulli's Inequality (Bartle 6.2.10(c))</span>If $\alpha &gt; 1$, then $(1 + x)^\alpha \ge 1 + \alpha x$ for all $x &gt; -1$, with equality if and only if $x = 0$.
+    <span class="say">Picture: the curve $y = (1 + x)^\alpha$ lies above its tangent line $y = 1 + \alpha x$ at $x = 0$. For $0 &lt; \alpha &lt; 1$ the inequality reverses.</span></div>
+  <div class="box skel"><span class="lab">Skeleton</span>Let $h(t) = (1 + t)^\alpha$, so $h'(t) = \alpha(1 + t)^{\alpha - 1}$ for $t &gt; -1$. <b>Case $x &gt; 0$:</b> MVT on <span class="gap">?</span>. <b>Case $-1 &lt; x &lt; 0$:</b> MVT on <span class="gap">?</span>. In each case compare $(1 + c)^{\alpha - 1}$ with <span class="gap">?</span>. <b>Case $x = 0$:</b> equality. ∎</div>
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">$h(t) = (1 + t)^\alpha$, $h'(t) = \alpha(1 + t)^{\alpha - 1}$ for $t &gt; -1$.<span class="why">Known derivative, quoted (Plus Two; Bartle Ex 6.1.10(d), misprinted "(c)" in Ex 6.2.10).</span></div>
+      <div class="step"><b>$x &gt; 0$.</b> MVT on $[0, x]$: $(1 + x)^\alpha - 1 = \alpha(1 + c)^{\alpha - 1}x$, $0 &lt; c &lt; x$. As $1 + c &gt; 1$ and $\alpha - 1 &gt; 0$, $(1 + c)^{\alpha - 1} &gt; 1$, so $(1 + x)^\alpha - 1 &gt; \alpha x$.<span class="why">A number $&gt; 1$ to a positive power stays $&gt; 1$; multiply by $\alpha x &gt; 0$.</span></div>
+      <div class="step"><b>$-1 &lt; x &lt; 0$.</b> MVT on $[x, 0]$: $1 - (1 + x)^\alpha = \alpha(1 + c)^{\alpha - 1}(-x)$, $x &lt; c &lt; 0$. Now $0 &lt; 1 + c &lt; 1$ and $\alpha - 1 &gt; 0$, so $(1 + c)^{\alpha - 1} &lt; 1$ and $1 - (1 + x)^\alpha &lt; -\alpha x$.<span class="why">A number in (0, 1) to a positive power is in (0, 1). Here $-x &gt; 0$ keeps the direction.</span></div>
+      <div class="step">Rearranging gives $(1 + x)^\alpha &gt; 1 + \alpha x$ for $x \ne 0$; equality at $x = 0$. <span class="qed">∎</span><span class="why">Both cases are strict.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>$\alpha &gt; 1$<span class="fails">$\alpha = \frac12$: $\sqrt{1 + x} \le 1 + \frac x2$, the reverse (T21)</span></li>
+    <li>$x &gt; -1$<span class="fails">$\alpha = \frac32$, $x = -2$: $(1 + x)^{3/2} = (-1)^{3/2}$ is not a real number</span></li>
+  </ul>
+  <p class="small"><b>Where each was used.</b> $\alpha - 1 &gt; 0$: makes "$&gt; 1$ stays $&gt; 1$, $&lt; 1$ stays $&lt; 1$". $x &gt; -1$: keeps $1 + c &gt; 0$ so $h$ is differentiable on the interval.</p></div>
+</section>
+
+<section class="page">
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>$\alpha = \frac32$, $x = 1$: $2^{3/2} = 2.828 \ge 1 + 1.5 = 2.5$. $x = -0.5$: $0.5^{3/2} = 0.3536 \ge 1 - 0.75 = 0.25$. Both hold.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$\alpha = 3$, $x = -\frac12$: left side $(1 + x)^3 = $ <span class="gap">?</span>; right side $1 + 3x = $ <span class="gap">?</span>. Inequality holds? <span class="gap">?</span> The proof used the MVT on <span class="gap">?</span>.
+    <span class="say">Answer: $(\frac12)^3 = \frac18$; $1 - \frac32 = -\frac12$; yes, $\frac18 &gt; -\frac12$; on $[x, 0] = [-\frac12, 0]$.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Use Bernoulli to show $(1.01)^{100} &gt; 2$.</div>
+    <div class="a">$\alpha = 100 &gt; 1$, $x = 0.01 \ne 0$, so $(1.01)^{100} &gt; 1 + 100(0.01) = 2$ (strict, since $x \ne 0$). True value ≈ 2.7048.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q34</span> (prove Bernoulli, check $\alpha = \frac32$).</p>
+</section>
+
+<!-- T21 -->
+<section class="page">
+  <div class="topic-head"><span class="tid">T21</span><h2>Weighted AM–GM inequality</h2></div>
+  <p class="oneline">$a^\alpha b^{1 - \alpha} \le \alpha a + (1 - \alpha)b$ (Bartle 6.2.10(d)).</p>
+  <div class="hook"><span class="lab">Puzzle</span>The average of 2 and 8 is 5. Their geometric mean $\sqrt{2\cdot8}$ is 4. The geometric mean is always the smaller. Can calculus prove it?</div>
+  <div class="box def"><span class="lab">Bartle 6.2.10(d)</span>If $0 &lt; \alpha &lt; 1$ and $x \ge 0$, then $x^\alpha \le \alpha x + (1 - \alpha)$. Consequently, for $a, b &gt; 0$:
+    $$a^\alpha b^{1 - \alpha} \le \alpha a + (1 - \alpha)b,$$
+    with equality if and only if $a = b$.
+    <span class="say">With $\alpha = \frac12$ this is $\sqrt{ab} \le \frac{a + b}2$: geometric mean ≤ arithmetic mean.</span></div>
+  <div class="box scratch"><span class="lab">Scratch · find the function and its minimum</span>
+    Want $x^\alpha \le \alpha x + 1 - \alpha$, i.e. $\alpha x - x^\alpha \ge \alpha - 1$.<br>
+    Let $g(x) = \alpha x - x^\alpha$ on $[0, \infty)$. Equality seems to happen at $x = 1$: $g(1) = \alpha - 1$. So claim: <b>g has its minimum at 1</b>.<br>
+    $g'(x) = \alpha(1 - x^{\alpha - 1})$. Sign: for $0 &lt; x &lt; 1$, $x^{\alpha - 1} &gt; 1$ (negative exponent), so $g' &lt; 0$; for $x &gt; 1$, $x^{\alpha - 1} &lt; 1$, so $g' &gt; 0$.</div>
+</section>
+
+<section class="page">
+  <div class="box proof"><span class="lab">Proof</span>
+    <div class="steps">
+      <div class="step">Let $g(x) = \alpha x - x^\alpha$ for $x \ge 0$. g is continuous on $[0, \infty)$ and differentiable on $(0, \infty)$ with $g'(x) = \alpha(1 - x^{\alpha - 1})$.<span class="why">Power rule for $x &gt; 0$; at 0 only continuity is needed.</span></div>
+      <div class="step">For $0 &lt; x &lt; 1$: $x^{\alpha - 1} &gt; 1$, so $g'(x) &lt; 0$. For $x &gt; 1$: $x^{\alpha - 1} &lt; 1$, so $g'(x) &gt; 0$.<span class="why">$\alpha - 1 &lt; 0$, so $x \mapsto x^{\alpha - 1}$ is decreasing.</span></div>
+      <div class="step">So g is strictly decreasing on $[0, 1]$ and strictly increasing on $[1, \infty)$: $g(x) \ge g(1) = \alpha - 1$, with equality only at $x = 1$.<span class="why">Monotonicity Theorem (T14), strict version; or the First Derivative Test (T15).</span></div>
+      <div class="step">$\alpha x - x^\alpha \ge \alpha - 1$ gives $x^\alpha \le \alpha x + (1 - \alpha)$.<span class="why">Rearrange.</span></div>
+      <div class="step">Let $a, b &gt; 0$ and $x = a/b$: $\dfrac{a^\alpha}{b^\alpha} \le \alpha\dfrac ab + (1 - \alpha)$. Multiply by $b &gt; 0$: $a^\alpha b^{1 - \alpha} \le \alpha a + (1 - \alpha)b$, with equality iff $a/b = 1$. <span class="qed">∎</span><span class="why">$b \cdot b^{-\alpha} = b^{1 - \alpha}$.</span></div>
+    </div>
+  </div>
+  <div class="box hyp"><span class="lab">Hypotheses checklist</span><ul>
+    <li>$0 &lt; \alpha &lt; 1$<span class="fails">$\alpha = 2$: $x^2 \le 2x - 1$ is false ($x^2 - 2x + 1 = (x-1)^2 \ge 0$ gives the reverse, Bernoulli)</span></li>
+    <li>$a, b &gt; 0$<span class="fails">$b = 0$: $x = a/b$ undefined; $a = 0$ gives $0 \le (1 - \alpha)b$, true but not strict</span></li>
+  </ul></div>
+  <div class="box trap"><span class="lab">Your intuition lies · "g′ = 0 at 1, so done"</span>$g'(1) = 0$ makes 1 a <b>candidate</b> only. The sign change of $g'$ (− then +) is what proves a minimum, and monotonicity on each side shows it is the <i>absolute</i> minimum <span class="cx">N8</span>.</div>
+  <div class="box idea"><span class="lab">Worked example 1 · full</span>
+    <p>$\alpha = \frac13$, $a = 8$, $b = 1$: $8^{1/3}\cdot1^{2/3} = 2 \le \frac13(8) + \frac23(1) = \frac{10}3 \approx 3.33$. ✓. $\alpha = \frac12$, $a = 1$, $b = 4$: $\sqrt{4} = 2 \le \frac52 = 2.5$ ✓.</p></div>
+  <div class="box skel"><span class="lab">Worked example 2 · with gaps</span>$\alpha = \frac23$, $a = 27$, $b = 8$: $a^{2/3} = $ <span class="gap">?</span>, $b^{1/3} = $ <span class="gap">?</span>, product $= $ <span class="gap">?</span>. Right side $\frac23\cdot27 + \frac13\cdot8 = $ <span class="gap">?</span>. Check $\le$.
+    <span class="say">Answer: $9$; $2$; $18$; $18 + \frac83 = \frac{62}3 \approx 20.67$. $18 \le 20.67$ ✓.</span></div>
+  <div class="box check"><span class="lab">Check yourself</span>
+    <div class="q">Show $\sqrt[3]{x} \le \dfrac x3 + \dfrac23$ for $x \ge 0$. When is there equality?</div>
+    <div class="a">Take $\alpha = \frac13$ in $x^\alpha \le \alpha x + (1 - \alpha)$. Equality iff $x = 1$. Check $x = 8$: $2 \le \frac83 + \frac23 = \frac{10}3$ ✓.</div>
+  </div>
+  <p class="small">In the model paper: <span class="chip q">Q35</span> (prove, deduce $\sqrt{ab} \le \frac{a + b}2$).</p>
+</section>
